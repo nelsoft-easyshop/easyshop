@@ -1,0 +1,48 @@
+<?xml version='1.0' ?>
+<map>
+	
+
+<select id="get_address">
+	SELECT
+	   `streetno`
+	  , `streetname`
+	  , `barangay`
+	  , `citytown`
+	  , `country`
+	  , `postalcode`
+	  , `type`
+	  , `telephone`
+	  , `mobile`
+	  , `consignee`
+	FROM `es_address`
+	WHERE TYPE = 1
+	AND id_member = :id_member
+	limit 1
+</select>
+
+<select id="payment_transaction">
+	CALL es_sp_Payment_order(
+		:invoice_no,
+		:total_amt,
+		:ip,
+		:product_in_cart,
+		:product_counter,
+		:product_option,
+		:product_option_counter,
+		:member_id,
+		:payment_type,
+		:payment_items,
+		:payment_data,
+		:consignee,
+		:streetno,
+		:street,
+		:city,
+		:brgy,
+		:country,
+		:zipcode,
+		:phone,
+		:cellphone
+	)
+</select>
+
+</map>

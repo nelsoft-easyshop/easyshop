@@ -1,0 +1,63 @@
+delimiter $$
+
+CREATE TABLE `es_order` (
+  `id_order` int(10) NOT NULL AUTO_INCREMENT,
+  `invoice_no` int(10) DEFAULT '0',
+  `seller_id` int(10) NOT NULL DEFAULT '0',
+  `buyer_id` int(10) NOT NULL,
+  `payment_address_id` int(10) NOT NULL,
+  `shipping_address_id` int(10) NOT NULL,
+  `payment_method_id` int(10) NOT NULL DEFAULT '0',
+  `total` decimal(15,2) DEFAULT '0.00',
+  `order_status_id` int(10) DEFAULT '0',
+  `dateadded` datetime DEFAULT '0000-00-00 00:00:00',
+  `datemodified` datetime DEFAULT '0000-00-00 00:00:00',
+  `ip` varchar(45) DEFAULT '0',
+  PRIMARY KEY (`id_order`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8$$
+
+
+delimiter $$
+
+CREATE TABLE `es_order_history` (
+  `id_order_history` int(10) NOT NULL AUTO_INCREMENT,
+  `order_id` int(10) NOT NULL,
+  `date_added` datetime DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`id_order_history`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8$$
+
+
+delimiter $$
+
+CREATE TABLE `es_order_option` (
+  `id_order_option` int(10) NOT NULL AUTO_INCREMENT,
+  `order_product_id` varchar(45) NOT NULL,
+  `attr_id` int(10) NOT NULL,
+  `product_attr_id` int(10) NOT NULL,
+  PRIMARY KEY (`id_order_option`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8$$
+
+
+delimiter $$
+
+CREATE TABLE `es_order_status` (
+  `id_order_status` int(10) NOT NULL AUTO_INCREMENT,
+  `status` varchar(45) DEFAULT '',
+  PRIMARY KEY (`id_order_status`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8$$
+
+
+delimiter $$
+
+CREATE TABLE `es_order_product` (
+  `id_order_product` int(10) NOT NULL AUTO_INCREMENT,
+  `order_id` int(10) NOT NULL,
+  `product_id` int(10) NOT NULL,
+  `order_quantity` int(4) DEFAULT '0',
+  `price` decimal(15,2) DEFAULT '0.00',
+  `tax` decimal(15,2) DEFAULT '0.00',
+  `total` decimal(15,2) DEFAULT '0.00',
+  PRIMARY KEY (`id_order_product`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8$$
+
+

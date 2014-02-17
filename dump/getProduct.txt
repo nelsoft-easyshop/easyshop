@@ -1,0 +1,54 @@
+delimiter $$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `es_sp_getProduct`(
+	IN i_productid INT(10)
+)
+BEGIN
+	DECLARE o_success BOOLEAN;
+	DECLARE	o_message VARCHAR(50);
+	
+	DECLARE o_productid INT(10);
+
+	
+	START TRANSACTION;
+
+	SET o_success = FALSE;
+	SET o_message = 'An error occured.';
+
+	SELECT id_product INTO o_productid
+		FROM es_product
+		WHERE id_product = i_productid;
+
+	IF o_productid IS NOT NULL THEN
+		UPDATE `es_product` SET `clickcount`=`clickcount`+1 WHERE `id_product` = o_productid;
+		SET o_success = TRUE;
+		SET o_message = '';
+	
+	ELSE
+		SET o_success = FALSE;
+
+	END IF;
+
+	COMMIT;
+
+	IF o_success = TRUE THEN
+		SELECT p.id_product as id_product, p.name as product_name, p.description as description, 
+			  p.cat_id as cat_id, p.price as price, p.quantity as quantity, p.brief as brief, p.sku as sku,
+			  s.name as style_name, b.name as brand_name, p.member_id as sellerid, m.nickname as sellernickname, m.username as sellerusername, o_success, o_message
+			  FROM es_product p 
+			  LEFT JOIN es_style s ON p.style_id = s.id_style
+			  LEFT JOIN es_brand b ON p.brand_id = b.id_brand
+			  LEFT JOIN es_member m on p.member_id = m.id_member 
+			  WHERE p.id_product = o_productid AND p.is_delete = 0;		
+	ELSE
+		SELECT o_message, o_success;
+	END IF;
+
+	
+
+
+
+
+
+END$$
+

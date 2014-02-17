@@ -1,0 +1,362 @@
+
+#main_search_container{
+  display: table;
+  padding-top: 10px;
+}
+
+.search_left_panel {
+  float: left;
+}
+
+.left_attribute {
+  float: left;
+  width:186px;
+  margin-right: 10px;
+  min-height: 1px;
+  background-color: #F8F7F7;
+}
+
+.right_product{
+  display: inline-block;
+  width: 784px;
+}
+
+.right_product select {
+  padding: 5px 5px 5px 2px;
+}
+
+.search_result {
+  float: left;
+  line-height: 45px;
+}
+
+#product_content {
+  border-top: 1px solid #b0b0b0;
+  margin-top: 10px;
+  width: 100%;
+}
+
+.bread_crumbs {
+  margin-left: 195px;
+}
+
+.filters {
+  position: relative;
+    margin: 0 0 10px !important;
+}
+
+.left_attribute a {
+  display: block;
+  margin-bottom: 8px;
+  margin-right: 5px;
+}
+
+.left_attribute h3 {
+  background-color: #EBE9E9;
+  display: block;
+  font-size: 12px;
+  text-transform: uppercase;
+  padding:8px 5px;
+  margin: 10px 0px 5px 0px;
+}
+
+.left_attribute h3:first-child {
+  margin-top: 0;
+}
+
+.left_attribute input {
+  margin-right: 3px;
+  vertical-align: middle;
+  border:none;
+}
+
+.left_attribute input[type="text"] {
+  border:1px solid #cecece;
+  margin-left: 3px;
+  width: 51px;
+}
+
+.left_attribute input[type="text"]:focus {
+  border: 1px solid #ff4400;
+}
+
+.left_attribute input[type="button"] {
+  background-color: #bcbbbb;
+  color: #fff;
+  cursor: pointer;
+}
+
+.left_attribute input[type="button"]:hover {
+  background-color: #ff4400;
+}
+
+.left_attribute a[href*="Color"] {
+  display: inline-block;
+  width: 80px;
+}
+
+nav {
+  display: none;
+  position: absolute;
+  z-index: 9999;
+  background-color: #fff;
+}
+
+.prod_categories {
+  margin-bottom: 10px;
+}
+
+.slide_arrows {
+  max-width: none !important;
+}
+
+.bx-wrapper {
+  width: auto !important;
+}
+.side_menu_slides {
+  margin: 0 auto;
+}
+
+/*.side_menu_nav_arrow {
+  margin-left: 0px !important;
+}*/
+
+.product {
+  width: 237px !important;
+/*  width: 29.5% !important;*/
+  min-height: 114px;
+}
+
+div.product-list {
+  width: 745px;
+/*  width: 958px;*/
+}
+
+.product img {
+  padding-left: 9px;
+/*  width: 92%;*/
+}
+
+.product_info_bottom {
+  margin: 0 10px 10px;
+}
+
+div.product-list .price-cnt {
+  float: right;
+}
+
+.product-list .price {
+  float: right;
+}
+
+.product-list p {
+  width: 575px;
+}
+
+.product-list div.product_info_bottom div:first-child {
+  width: 420px;
+}
+
+div.cc2_wrapper {
+  height: 245px !important;
+}
+
+#cat_name{
+    margin-bottom: 10px;
+    width: 166px;
+}
+
+div.category_carousel {
+  border:none;
+    margin-left: 37px;
+    width: 702px;
+    height: 175px;
+}
+
+a.category_carousel_prev,
+a.category_carousel_next,
+a.category_carousel2_prev,
+a.category_carousel2_next {
+  position: none;
+  background: #F7F6F6;
+  box-shadow: none;
+  text-shadow:none;
+  color: #494949;
+}
+
+a.category_carousel_prev:hover,
+a.category_carousel_next:hover,
+a.category_carousel2_prev:hover,
+a.category_carousel2_next:hover {
+  color: #FF4400;
+}
+
+a.category_carousel_prev {
+  left: 0;
+  top: 140px;
+}
+
+a.category_carousel_next {
+    right: 0;
+    top: 140px;
+}
+
+a.category_carousel2_prev {
+  left: 0;
+    top: 135px;
+}
+
+a.category_carousel2_next {
+    right: 0;
+    top: 135px;
+}
+
+div.cc2 {
+  width: 20000em;
+  position: relative;
+}
+
+div.cc2 > div {
+    float: left;
+    height: 210px;
+    margin: 0 5px;
+    text-align: center;
+    width: 165px;
+}
+
+div.cc2 > div + div {
+  margin-top: 0;
+}
+
+div.cc2 > div img {
+  width: 100px;
+  height:100px;
+}
+
+.cc2_title {
+    border-bottom: 1px dotted #CECECE;
+    display: table !important;
+    font-family: 'Roboto',sans-serif;
+    font-size: 13px;
+    font-weight: 300;
+    height: 47px;
+    margin-bottom: 10px;
+    padding: 5px 0;
+    text-transform: uppercase;
+    width: 165px;
+}
+
+.cc2_title span {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.cc2_title:first-letter {
+  text-transform: uppercase;
+}
+
+.cc2_prod_name {
+  height: 45px;
+  line-height: 19px;
+  word-wrap:break-word;
+  width: 170px;
+  padding:5px 0;
+  text-transform: lowercase;
+  overflow: hidden;
+}
+
+.cc2_prod_name:first-letter {
+  text-transform: uppercase;  
+}
+
+.recommended_product_price {
+  font-size: 16px;
+  font-weight: 300;
+  font-family: 'Roboto',sans-serif;
+  color: #FF4400;
+}
+
+
+/***** Filter category more button ******/
+.more_attr,
+.less_attr {
+  color: #ff4400;
+  border: 1px solid #ff4400;
+  cursor: pointer;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.less_attr {
+  display: none;
+}
+
+.more_attr:hover,
+.less_attr:hover {
+  border: 1px solid #ff8800;
+  color: #ff8800;
+}
+
+.more_attr:hover::after {
+
+border-color: #ff8800 transparent transparent transparent;
+_border-color: #ff8800 #ff4400 #ff4400 #ff4400;
+_filter: progid:DXImageTransform.Microsoft.Chroma(color='#ff8800');
+}
+
+.more_attr:after {
+  position: relative;
+  left: 15px;
+top: 10px; 
+  content: '';
+width: 0px;
+height: 0px;
+border-style: solid;
+border-width: 5px 5px 0 5px;
+border-color: #ff4400 transparent transparent transparent;
+line-height: 0px;
+_border-color: #ff4400 #000000 #000000 #000000;
+_filter: progid:DXImageTransform.Microsoft.Chroma(color='#ff4400');
+}
+
+.less_attr:after {
+    content: "";
+    position: relative;
+    right: -10px;
+    top: -10px;
+    width: 0px;
+height: 0px;
+border-style: solid;
+border-width: 0 5px 5px 5px;
+border-color: transparent transparent #ff4400 transparent;
+line-height: 0px;
+_border-color: #000000 #000000 #ff4400 #000000;
+_filter: progid:DXImageTransform.Microsoft.Chroma(color='#000000');
+}
+
+.less_attr:hover::after {
+    border-bottom: 5px solid #ff8800;
+}
+
+
+#scrollUp {
+  background:#cecece url(../images/img_scroll_up_arrow.png) center 10px no-repeat;
+  color: #494949;
+  bottom: 20px;
+  right: 100px;
+  padding:35px 5px 5px 5px;
+  width: 65px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+    -webkit-transition: all 0.2s;
+  -moz-transition: all 0.2s;
+  -ms-transition: all 0.2s;
+  -o-transition: all 0.2s;
+  transition: all 0.2s;
+}
+
+#scrollUp:hover {
+  background:#ff4400 url(../images/img_scroll_up_arrow2.png) center 10px no-repeat;
+  color: #fff;
+}

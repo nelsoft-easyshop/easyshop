@@ -1,0 +1,242 @@
+<?xml version='1.0' ?>
+<map>
+
+<select id="user_logout">
+	CALL `es_sp_Logout_user`(:user_session , :id_member)
+</select>
+	
+<select id="user_login">
+	CALL `es_sp_Login_user`(:username ,:password, :ip)
+</select>
+	
+<select id="changepass">
+	CALL `es_sp_ChangePass_User`(:username, :cur_password, :password)
+</select>
+
+<select id="forgotpass">
+	CALL `es_sp_ForgotPass_User`(:username, :password)
+</select>
+
+<select id="getUserName">
+	SELECT username from `es_member` WHERE `id_member` = :id
+</select>
+
+<select id="getUserID">
+	SELECT id_member from `es_member` where username = :username
+</select>
+
+<select id="getEmail">
+	SELECT id_member, username FROM `es_member` WHERE email = :email LIMIT 1;
+</select>
+
+<!-- Used for vendor details - memberpage -->
+<select id="get_member_by_username">
+	SELECT m.id_member, m.username, m.contactno, m.email, a.citytown as city, m.region, DATE_FORMAT(datecreated, "%M %Y") as datecreated
+	FROM es_member m
+	LEFT JOIN es_address a on m.id_member = a.id_member AND a.type=0
+	where m.username=:username
+</select>
+
+<select id="getUserDetails">
+	SELECT id_member, is_contactno_verify, is_email_verify
+	FROM es_member
+	WHERE id_member = :id
+</select>
+
+<select id="getUserRating">
+	SELECT rating1, rating2, rating3
+	FROM es_member_feedback
+	WHERE for_memberid = :id
+</select>
+
+<select id="signup_member">
+	CALL `es_sp_Signup_user` (:username, :password, :contactno, :email, :region)
+</select>
+
+<select id="check_contactinfo">
+	SELECT id_member, contactno, email
+	FROM es_member
+	WHERE (contactno = :contactno OR email = :email)
+		AND id_member != :member_id
+</select>
+
+<select id="store_verifcode">
+	CALL `es_sp_storeVerifcode` (:member_id, :emailcode, :mobilecode, :mobile, :email)
+</select>
+
+<select id="get_verifcode">
+	SELECT v.member_id, m.username, m.email, m.is_email_verify, v.emailcode, m.contactno, v.mobilecode, v.emailcount, v.mobilecount, TIMESTAMPDIFF(MINUTE, v.`date`,NOW()) as time
+	FROM es_verifcode v
+	LEFT JOIN  es_member m
+	ON m.id_member = v.member_id 
+	WHERE v.member_id = :member_id
+</select>
+
+<select id="update_mobileverif_status">
+	UPDATE es_member
+	SET is_contactno_verify = :is_contactno_verify
+	WHERE id_member = :member_id
+</select>
+
+<select id="update_emailverif_status">
+	UPDATE es_member
+	SET is_email_verify = :is_email_verify
+	WHERE id_member = :member_id
+</select>
+
+<select id="get_member">
+	SELECT m.`id_member`, m.`nickname`, m.`fullname`, m.`gender`, m.`birthday`, m.contactno, m.is_contactno_verify, m.email, m.is_email_verify,
+	COALESCE(a0.`streetno`, '') as streetno, COALESCE(a0.`streetname`, '') as streetname, COALESCE(a0.`barangay`, '') as barangay, 
+	COALESCE(a0.`citytown`, '') as citytown, COALESCE(a0.`country`, '') as country, COALESCE(a0.`postalcode`, '') as postalcode,
+	COALESCE(a1.`streetno`, '') as c_streetno, COALESCE(a1.`streetname`, '') as c_streetname, COALESCE(a1.`barangay`, '') as c_barangay, 
+	COALESCE(a1.`citytown`, '') as c_citytown, COALESCE(a1.`country`, '') as c_country, COALESCE(a1.`postalcode`, '') as c_postalcode,
+	COALESCE(a1.`telephone`, '') as c_telephone, COALESCE(a1.`mobile`, '') as c_mobile, COALESCE(a1.`consignee`, '') as consignee
+	from es_member m 
+	LEFT JOIN es_address a0 ON m.id_member=a0.id_member AND a0.`type`=0
+	LEFT JOIN es_address a1 ON m.id_member=a1.id_member AND a1.`type`=1
+	where m.id_member=:id_member
+</select>	
+
+<select id="get_school">
+	SELECT 
+	COALESCE(s.`schoolname`,'') as `schoolname`, COALESCE(s.`year`,'') as `schoolyear`,COALESCE(s.`level`,'') as `schoollevel`,
+	COALESCE(s.`count`,'') as `schoolcount` 
+	FROM es_school s 
+	WHERE id_member=:id_member
+</select>
+
+<select id="get_work">
+		SELECT
+		COALESCE(w.`companyname`, '') as companyname, COALESCE(w.`designation`, '') as designation, COALESCE(w.`year`, '') as `year`, COALESCE(w.`count`,'') as `count`
+		FROM es_work w
+		WHERE w.id_member = :id_member
+</select>
+
+<select id="edit_member">
+	UPDATE es_member set fullname=:fullname, nickname=:nickname,gender = :gender,birthday = :birthday, contactno = :contactno, email = :email, is_contactno_verify = :is_contactno_verify, is_email_verify = :is_email_verify, lastmodifieddate = NOW()
+	WHERE id_member = :id_member
+</select>
+
+<select id="edit_address">
+	INSERT INTO `es_address` (`id_member`, `streetno`, `streetname`, `barangay`, `citytown`, `postalcode`, `country`, `type`, `telephone`, `mobile`, `consignee`) 
+	VALUES (:id_member,:streetno,:streetname,:barangay,:citytown,:postalcode,:country, :type, :telephone, :mobile, :consignee)
+	ON DUPLICATE KEY UPDATE streetno=:streetno,streetname=:streetname,barangay=:barangay,citytown=:citytown,postalcode=:postalcode,country = :country,telephone=:telephone,mobile=:mobile,consignee=:consignee
+</select>
+
+
+<select id="edit_school">
+	INSERT INTO `es_school`(`id_member`, `schoolname`, `year`, `level`, `count`) 
+	VALUES (:id_member, :schoolname, :year, :level, :school_count) 
+	ON DUPLICATE KEY UPDATE `schoolname` = :schoolname, `year` = :year, `level` = :level;
+</select>
+
+<select id="edit_work">
+	INSERT INTO `es_work` (`id_member`, `companyname`, `designation`, `year`, `count`)
+	VALUES (:id_member, :companyname, :designation, :year, :count)
+	ON DUPLICATE KEY UPDATE companyname = :companyname, designation = :designation, year = :year
+</select>
+
+<select id="delete_address">
+	DELETE from es_address
+	WHERE id_member = :id AND type = 0
+</select>
+
+<select id="delete_school">
+	DELETE from es_school
+	WHERE id_member = :id
+</select>
+
+<select id="delete_work">
+	DELETE from es_work
+	WHERE id_member = :id
+</select>
+
+<select id="update_imgurl">
+	UPDATE `es_member` set `imgurl`=:path WHERE `id_member` = :id_member
+</select>
+
+<select id="get_image">
+	SELECT `imgurl`, `id_member`, `username` FROM `es_member` WHERE `id_member` = :id
+</select>
+	
+	
+<select id="store_cookie_keeplogin">
+	CALL `es_sp_CreateCookie_Keeplogin` (:id_member, :ip, :useragent, :usersession)
+</select>
+
+<!-- 
+<select id="get_cookie_keeplogin">
+	SELECT id_member, last_ip, useragent, token
+	FROM `es_keeplogin`
+	WHERE token = :token
+</select>
+-->
+
+<select id="cookie_login">	
+	CALL `es_sp_CookieLogin_user` (:userip, :useragent, :token, :usersession)
+</select>
+
+<select id="delete_cookie_keeplogin">
+	DELETE FROM `es_keeplogin`
+	WHERE id_member = :id_member AND last_ip = :ip AND useragent = :useragent AND token = :token
+</select>
+
+<select id="get_address">
+	SELECT
+	   `streetno`
+	  , `streetname`
+	  , `barangay`
+	  , `citytown`
+	  , `country`
+	  , `postalcode`
+	  , `type`
+	  , `telephone`
+	  , `mobile`
+	  , `consignee`
+	FROM `es_address`
+	WHERE TYPE = 1
+	AND id_member = :id_member
+	limit 1
+</select>
+
+<select id="addFeedback">
+	INSERT INTO `es_member_feedback` (`member_id`, `for_memberid`, `feedb_msg`, `feedb_kind`, `order_id`, `dateadded`, `rating1`, `rating2`, `rating3`)
+	VALUES (:member_id, :for_memberid, :feedb_msg, :feedb_kind, :order_id, NOW(), :rating1, :rating2, :rating3)
+</select>
+
+<select id="getFeedback">
+	SELECT fb.member_id, from.username as member_name, fb.for_memberid, for.username as for_membername, fb.feedb_msg, DATE_FORMAT(fb.dateadded, "%D %M %Y") as dateadded, fb.rating1, fb.rating2, fb.rating3, fb.feedb_kind, fb.order_id
+	FROM `es_member_feedback` fb
+	LEFT JOIN `es_member` `from`
+		ON from.id_member = fb.member_id
+	LEFT JOIN `es_member` `for`
+		ON for.id_member = fb.for_memberid
+	WHERE fb.member_id = :id OR fb.for_memberid = :id
+	ORDER BY fb.dateadded
+</select>
+
+<select id="getTransactionDetails">
+	SELECT o.id_order, o.buyer_id, buyer.username as buyer, DATE_FORMAT(o.dateadded, "%D %M %Y") as dateadded, fb.for_memberid, fb.feedb_kind, fb.feedb_msg, DATE_FORMAT(fb.dateadded, "%D %M %Y") as fbdateadded, fb.rating1, fb.rating2, fb.rating3, op.id_order_product, op.product_id, op.seller_id, seller.username as seller, p.name, op.order_quantity, op.total as price, pi.product_image_path, attr.name as attr_name, pattr.attr_value
+	FROM es_order o
+	INNER JOIN es_order_product op 
+		ON op.order_id = o.id_order AND (op.seller_id = :id OR o.buyer_id = :id)
+	INNER JOIN es_product p
+		ON op.product_id = p.id_product
+	LEFT JOIN es_order_option opt
+		ON opt.order_product_id = op.id_order_product
+	LEFT JOIN es_product_attr pattr
+		ON pattr.id_product_attr = opt.product_attr_id 
+	LEFT JOIN es_attr attr
+		ON opt.attr_id = attr.id_attr
+	LEFT JOIN es_product_image pi
+		ON op.product_id = pi.product_id AND pi.is_primary = 1
+	LEFT JOIN es_member seller
+		ON op.seller_id = seller.id_member
+	LEFT JOIN es_member buyer
+		ON o.buyer_id = buyer.id_member
+	LEFT JOIN es_member_feedback fb
+		ON fb.order_id = o.id_order AND (fb.for_memberid = op.seller_id OR fb.for_memberid = o.buyer_id) AND fb.member_id = :id
+	ORDER BY o.id_order desc, op.product_id asc
+</select>
+
+</map>

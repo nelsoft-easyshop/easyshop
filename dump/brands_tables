@@ -1,0 +1,50 @@
+CREATE  TABLE IF NOT EXISTS `easyshop`.`es_cat` (
+  `id_cat` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT ,
+  `name` VARCHAR(255) NOT NULL DEFAULT '' ,
+  `description` VARCHAR(512) NOT NULL DEFAULT '' ,
+  `keywords` VARCHAR(512) NOT NULL DEFAULT '' ,
+  `parent_id` INT(10) UNSIGNED NOT NULL ,
+  `sort_order` TINYINT(3) UNSIGNED NOT NULL ,
+  `is_main` SMALLINT(5) UNSIGNED NOT NULL ,
+  `design1` VARCHAR(255) NOT NULL DEFAULT '' ,
+  `design2` VARCHAR(255) NOT NULL DEFAULT '' ,
+  `design3` VARCHAR(255) NOT NULL DEFAULT '' ,
+  `cat_brand_id` INT(10) UNSIGNED NOT NULL ,
+  PRIMARY KEY (`id_cat`) ,
+  INDEX `fk_es_cat_es_cat1_idx` (`parent_id` ASC) ,
+  INDEX `dfgdfg_idx` (`cat_brand_id` ASC) ,
+  CONSTRAINT `fk_es_cat_es_cat1`
+    FOREIGN KEY (`parent_id` )
+    REFERENCES `easyshop`.`es_cat` (`id_cat` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_cat_branditem`
+    FOREIGN KEY (`cat_brand_id` )
+    REFERENCES `easyshop`.`es_cat_brand` (`id_brand` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+AUTO_INCREMENT = 92
+DEFAULT CHARACTER SET = utf8;
+
+
+
+
+CREATE  TABLE IF NOT EXISTS `easyshop`.`es_cat_brand` (
+  `id_brand` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT ,
+  `name` VARCHAR(45) NULL DEFAULT '' ,
+  PRIMARY KEY (`id_brand`) )
+ENGINE = InnoDB
+AUTO_INCREMENT = 9
+DEFAULT CHARACTER SET = utf8;
+
+
+
+
+CREATE  TABLE IF NOT EXISTS `easyshop`.`es_cat_brand` (
+  `id_brand` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT ,
+  `name` VARCHAR(45) NULL DEFAULT '' ,
+  PRIMARY KEY (`id_brand`) )
+ENGINE = InnoDB
+AUTO_INCREMENT = 9
+DEFAULT CHARACTER SET = utf8

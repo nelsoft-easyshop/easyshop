@@ -1,0 +1,24 @@
+<!--Member page CSS Janz-->
+
+/* Overlay */
+#simplemodal-overlay {
+	background-color:#bcbcbc;
+}
+
+/* Container */
+#simplemodal-container {
+	height: auto !important;
+	width: auto !important; 
+	background-color:#0000;
+	padding: 5px;
+}
+
+.jcrop-holder{
+	margin: auto !important;
+}
+
+
+#user_image_prev{
+	display: block;
+	margin: auto !important;
+}

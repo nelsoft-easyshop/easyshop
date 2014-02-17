@@ -1,0 +1,49 @@
+<?xml version='1.0' ?>
+	<map>
+		<panel id = "homeMessage">
+			<header></header>
+			<text></text>
+		</panel>
+		
+		<panel id = "mainSlide">
+			<img_url></img_url>
+			<img_url></img_url>
+			<img_url></img_url>
+			<img_url></img_url>
+		</panel>
+		
+		<panel id = "productSlide">
+			<title></title>
+			<product_id></product_id>
+			<product_id></product_id>
+			<product_id></product_id>
+			<product_id></product_id>
+			<product_id></product_id>
+			<product_id></product_id>
+		</panel>
+		
+		<panel id = "category1">
+			<category_id></category_id>
+			<main_img_url></main_img_url>
+			<product_id><product_id>
+			<product_id><product_id>
+			<product_id><product_id>
+			<product_id><product_id>
+			<product_id><product_id>
+			<product_id><product_id>
+		</panel>
+		
+		<panel id = "category2">
+			<category_id></category_id>
+			<product_id><product_id>
+			<product_id><product_id>
+			<product_id><product_id>
+			<product_id><product_id>
+			<img_url></img_url>
+			<img_url></img_url>
+			<img_url></img_url>
+			<img_url></img_url>
+		</panel>
+		
+	</map>
+</xml>
