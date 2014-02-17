@@ -73,7 +73,7 @@
           <div>
             <ul class="options" name="<?php echo $key;?>">
               <?php foreach($product_option as $i):?>
-              <?php if((trim($i['img_path'])!=='')&&(trim($i['img_file'])!=='')): ?>
+              <?php if((trim($i['img_path'])!=='')&&(trim($i['img_file'])!=='')): ?>       
               <a href="#" rel="{gallery: 'gal1', smallimage: '<?=base_url()?><?php echo $i['img_path'].'small/'.$i['img_file']; ?>',largeimage: '<?=base_url()?><?php echo $i['img_path'].$i['img_file']; ?>'}">
               <?php endif; ?>
               <li class="" id="<?php echo html_escape($i['value']);?>" data-price="<?php echo $i['price'];?>" data-attrid="<?php echo $i['value_id'];?>"><?php echo html_escape($i['value']);?></li>

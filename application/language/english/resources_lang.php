@@ -13,6 +13,12 @@ $lang['success_email_verification'] = 'You have successfully verified your email
 $lang['success_mobile_verification'] = 'You have successfully verified your mobile number.';
 $lang['expired_email_verification'] = 'Link expired. This email was already verified.';
 
-$lang['email_subject'] = "Easyshop.ph - Please verify your email address."
+$lang['email_subject'] = "Easyshop.ph - Please verify your email address.";
+
+#Forgot Password - forgotpass.php
+$lang['msg1'] = "Password reset successfully sent!";
+$lang['msg2'] = "Sorry, the email you provided is unregistered.";
+$lang['msg3'] = "Unable to send, please try again later.";
+
 
 ?>

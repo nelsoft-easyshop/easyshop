@@ -19,7 +19,7 @@
     <section>
       <div class="wrapper">
         <div class="logo">
-          <a href="<?php echo base_url() ?>"><img src="<?php echo base_url() ?>assets/images/img_logo.png" alt="Logo"></a>
+          <a href="<?php echo base_url().'home'; ?>"><img src="<?php echo base_url() ?>assets/images/img_logo.png" alt="Logo"></a>
         </div>
     </section>
     <div class="clear"></div>
@@ -35,7 +35,7 @@
       </p>
       </div>
      
-      <h2 style="font-size:34px;">Im a Seller</h2>
+      <h2 style="font-size:34px;">I'm a Seller</h2>
       <input class="comming_soon_register" onclick="window.location='register'" type="submit" style="width:130px" value="Register Here">
       <div class="bottom_content">
         <div>

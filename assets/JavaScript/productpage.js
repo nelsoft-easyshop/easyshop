@@ -211,13 +211,18 @@ $(function(){
         $('.product_option').find('li').each(function(){
             if(($.inArray($(this).attr('data-attrid'), show_ids) === -1)&&(isOptionAvailable)){
                 //added this if condition in order to keep same row attributes enabled
-                if($(this).parent()[0]!==$(event.target).parent()[0]){
+                if(($(this).closest('ul')[0]!==$(event.target).closest('ul')[0])){
                     $(this).addClass('disable');
+                    if($(this).parent().prop('tagName').toLowerCase() === 'a'){
+                       $(this).parent().data('enable', 'false');
+                    }
                 }
-      
             }
             else{
                 $(this).removeClass('disable');
+                if($(this).parent().prop('tagName').toLowerCase() === 'a'){
+                    $(this).parent().data('enable', 'true');
+                }
             }
         });
         if(!isActiveBool){

@@ -2,13 +2,13 @@
     error_reporting(0);
 	switch ($toggle_view){
 		case "1":
-			$msg = "Password reset successfully sent!";
+			$msg = $this->lang->line('msg1');
 			break;
 		case "2":
-			$msg = "Sorry, the email you provided is unregistered. ";
+			$msg = $this->lang->line('msg2');
 			break;
 		case "3":
-			$msg = "Unable to send, please try again later. ";
+			$msg = $this->lang->line('msg3');
 			break;							
 		default:
 			$msg = form_error('email');

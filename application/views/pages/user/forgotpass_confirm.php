@@ -41,14 +41,7 @@
           </div>
         </form>
         <?php else: ?>
-			<div class="register_prompt_box">
-			  <div>
-				<strong>
-					<p>You are currently signed-in. </p>
-				</strong> 
-			  </div>
-			</div>
-			<div class="clear"></div>
+			<?php redirect(base_url().'home');?>
         <?php endif; ?>
       </div>
 </section>

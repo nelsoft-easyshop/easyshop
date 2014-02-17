@@ -17,6 +17,9 @@
  *       derived from this software without specific prior written permission.
  *
  * Date: 03 May 2011 22:16:00
+ *
+ * Easyshop Revision 1.0: swapimage function - added option to disable image swapping
+ *
  */
 (function ($) {	
     //GLOBAL VARIABLES
@@ -226,6 +229,14 @@
                 el.zoom_active = false;
             },
             swapimage: function (link) {
+                /* Disable image swap if link data-enable = false
+                 * Sam Gavinio, Easyshop.ph
+                 * February 17, 2014
+                 */
+                if($(link).data('enable')==='false'){
+                    return false;
+                }
+                
                 el.largeimageloading = false;
                 el.largeimageloaded = false;
                 var options = new Object();
