@@ -211,11 +211,12 @@ class product extends MY_Controller
 
 	function load_product() # ROUTING: category/load_other_product
 	{
-		$category_id = $_POST['id_cat'];
-		$start = $_POST['page_number'];
-		$type = $_POST['type'];
-		$response['typeofview'] = $type;				  
+		$category_id = $_POST['id_cat'];				  
 		$per_page = $this->per_page;
+		$start = $_POST['page_number'] * $per_page;
+		 
+		$type = $_POST['type'];
+		$response['typeofview'] = $type;
 		$extra_string = "";
 		$count = 0;
 		$condition_price_string = "";
@@ -353,7 +354,7 @@ class product extends MY_Controller
 				array_push($down_cat, $category_id);
 				$catlist_down = implode(",", $down_cat);
 				$response['items'] = $this->product_model->getProductInCategoryAndUnder($category_id,$usable_string,$catlist_down,$start,$per_page,$item_brand_string_1.$string_sort_a);
-
+				echo '<pre>',print_r($response['items']);exit();
 				if(count($response['items']) <= 0)
 				{
 					$data = json_encode('0');
@@ -511,10 +512,10 @@ class product extends MY_Controller
 	function sch_scroll() ##ROUTING : search/load_search_other_product
 	{
 		$string_sort = "";
-		$category_id = $_POST['id_cat']; 
-		$start = $_POST['page_number'];
-		$type = $_POST['type'];	
 		$per_page = $this->per_page;
+		$category_id = $_POST['id_cat']; 
+		$start = $_POST['page_number'] * $per_page;
+		$type = $_POST['type'];	
 
 		$string = ' '.ltrim($_POST['parameters']['q_str']);
 		$category = $_POST['parameters']['q_cat'];
