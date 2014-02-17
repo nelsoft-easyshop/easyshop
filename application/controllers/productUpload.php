@@ -498,6 +498,14 @@ class productUpload extends MY_Controller
 		$this->load->view('pages/product/product_upload_step3_view');
 		$this->load->view('templates/footer'); 
 	}
+	
+	function step3Submit(){
+
+		$fdata = $this->input->post('fdata');
+		print_r($fdata);
+		die();
+
+	}
 
 	function step4() # uploading of product is successful.
 	{	

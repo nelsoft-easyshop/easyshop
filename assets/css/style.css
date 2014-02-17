@@ -3269,7 +3269,6 @@ span.transac_title_date:after {
     text-align: center;
     min-width: 36px;
     padding:0 3px;
-
 }
 
 .product_combination.active {
@@ -3277,8 +3276,7 @@ span.transac_title_date:after {
 	color: #fff;
 }
 
-.tablehide, .cloningfield,
-.edit_del, .accept_cancel{
+.tablehide, .cloningfield, .buttonhide{
 	display:none;
 }
 
@@ -3294,8 +3292,23 @@ span.transac_title_date:after {
 	padding: 3px;
 }
 
-.delete_row, .edit_del, .accept_cancel{
+.button{
 	cursor: pointer;
-	
 }
 
+#btnShippingDetailsSubmit{
+	background-color: #FF4400;
+    width: 120px;
+    color: #FFFFFF;
+    padding: 5px 10px;
+    border: medium none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.delete_locrow{
+	margin-left: 3px;
+}
+.delete_locrow:hover{
+	color: #FF4400;
+}
