@@ -369,13 +369,24 @@ class product extends MY_Controller
 
 	function sch_onpress()
 	{
-		$items = $this->product_model->itemKeySearch();
-		$json = 'var tipuedrop = {"pages": [';
-		foreach ($items as $key => $value) {
-			$json .= '{"title": "'.html_escape($value).'","loc":"sch?q_str='.urlencode($value).'&q_cat=0"},';
+		$html = "";
+		$stringData =  $this->input->post('data');
+		$string = ' '.ltrim($stringData); 
+		$words = "+".implode("*,+",explode(" ",trim($string)))."*"; 
+
+		$keywords = $this->product_model->itemKeySearch($words);
+
+		$html .= "<ul>";
+		if(count($keywords) <= 0){
+			$html .= "<li>No Record Found!</li>";
+		}else{
+			foreach ($keywords as $value) {
+				$html .= "<li><a href='search/search.html?q_str=".urlencode($value)."&q_cat=1'>".$value."</a></li>";
+			}
 		}
-		$json .= ']};';
-		echo $json ;
+		$html .= "</ul>";
+		echo $html;
+
 	}
 
 	function sch($string="search.html") # ROUTING: search/(:any)

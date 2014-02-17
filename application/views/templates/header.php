@@ -134,3 +134,32 @@
     </div>
   </section>
 </form>
+
+<script type="text/javascript">
+
+$(document).ready(function() {
+
+  $( "#main_search" ).keyup(function() {
+
+
+    var searchQuery = $(this).val();
+    if(searchQuery != ""){
+      $.ajax({
+        type: "POST",
+        url: '<?php echo base_url();?>product/sch_onpress', 
+        cache: false,
+        data: "data="+searchQuery , 
+        beforeSend: function(jqxhr, settings) { 
+          $("#main_search_drop_content").empty();
+        },
+        success: function(html) {
+         $("#main_search_drop_content").html(html).show();
+       }
+     });
+    }else{
+      $("#main_search_drop_content").hide();
+    }
+  });
+});
+
+</script>

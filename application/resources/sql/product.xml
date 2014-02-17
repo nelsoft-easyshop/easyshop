@@ -481,7 +481,7 @@
  
 
 <select id="itemKeySearch">
-        SELECT DISTINCT(`keywords`) FROM `es_product`
+        SELECT DISTINCT(`keywords`) FROM `es_product` WHERE MATCH(`name`, keywords) AGAINST (:words IN BOOLEAN MODE) 
 </select>
 
     <select id="fullDeleteItem">
