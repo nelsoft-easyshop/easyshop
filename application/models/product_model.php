@@ -945,19 +945,19 @@ class product_model extends CI_Model
             $sth->bindParam(':sort_order',$sort_order, PDO::PARAM_INT);
             $sth->bindParam(':is_main',$is_main, PDO::PARAM_INT);
             $sth->execute();
-            $data = $this->lastInsertData("es_cat",$id,"parent_id");
+            $data = $this->lastInsertData("es_cat",$id." AND id_cat > 1 ORDER BY sort_order ASC","parent_id");
             
             return $data;
             
         }
         
-        function lastInsertData($tbl_name,$id,$field){
-            $query = "SELECT * FROM $tbl_name WHERE $field = $id AND id_cat > 1 ORDER BY sort_order ASC ";
+        function lastInsertData($tbl_name, $id, $field) {
+            $query = "SELECT * FROM $tbl_name WHERE $field = $id ";
             $sth = $this->db->conn_id->prepare($query);
             $sth->execute();
-            
+
             $row = $sth->fetchAll(PDO::FETCH_ASSOC);
-            
+
             return $row;
         }
         
