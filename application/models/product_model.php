@@ -977,42 +977,6 @@ class product_model extends CI_Model
             endif;
         }
 	
- 		function getLocation()
-        {
-        	$query = $this->sqlmap->getFilenameID('product','getLocation');
-            $sth = $this->db->conn_id->prepare($query);
-            $sth->execute();
-            $row = $sth->fetchAll(PDO::FETCH_ASSOC);
-            $data = array();
-
-            foreach($row as $r){
-            	$data['area'][$r['location']][$r['region']][$r['id_cityprov']] = $r['cityprov'];
-            	$data['islandkey'][$r['location']] = $r['id_location'];
-            	$data['regionkey'][$r['region']] = $r['id_region'];
-            }
-
-            //print('<pre>');
-            //print_r($data);
-            //print('</pre>');
-
-            return $data;
-        }
-
-		function getPrdShippingAttr($prd_id)
-		{
-			$query = $this->sqlmap->getFilenameID('product','getPrdShippingAttr');
-            $sth = $this->db->conn_id->prepare($query);
-            $sth->bindParam(":id", $prd_id);
-            $sth->execute();
-            $row = $sth->fetchAll(PDO::FETCH_ASSOC);
-            $data = array();
-
-            foreach($row as $r){
-            	$data[$r['product_item_id']][] = $r['attr_value'];
-            }
-
-            return $data;
-		}
         
     public function getProductQuantity($product_id, $verbose = false){
         if($verbose){
@@ -1074,6 +1038,80 @@ class product_model extends CI_Model
 		$sth->execute();
         $rows = $sth->fetchAll(PDO::FETCH_ASSOC);
         return $rows;
+    }
+
+
+    /********************************************************************************/
+    /***********************	STEP 3 PRODUCT UPLOAD 	*****************************/
+    /********************************************************************************/
+
+    /**
+    *	Fetch Locations from location lookup table to fill dropdown listbox
+    */
+	public function getLocation()
+    {
+    	$query = $this->sqlmap->getFilenameID('product','getLocation');
+        $sth = $this->db->conn_id->prepare($query);
+        $sth->execute();
+        $row = $sth->fetchAll(PDO::FETCH_ASSOC);
+        $data = array();
+
+        foreach($row as $r){
+        	$data['area'][$r['location']][$r['region']][$r['id_cityprov']] = $r['cityprov'];
+        	$data['islandkey'][$r['location']] = $r['id_location'];
+        	$data['regionkey'][$r['region']] = $r['id_region'];
+        }
+
+        return $data;
+    }
+
+    /**
+    *	Fetch Product Attr Combinations based on product ID and from Product Upload Step 2
+    */
+	public function getPrdShippingAttr($prd_id)
+	{
+		$query = $this->sqlmap->getFilenameID('product','getPrdShippingAttr');
+        $sth = $this->db->conn_id->prepare($query);
+        $sth->bindParam(":id", $prd_id);
+        $sth->execute();
+        $row = $sth->fetchAll(PDO::FETCH_ASSOC);
+        $data = array();
+
+        foreach($row as $r){
+        	$data[$r['product_item_id']][] = $r['attr_value'];
+        }
+
+        return $data;
+	}
+
+	/**
+    *	Store Shipping Price in `es_shipping_price`
+    *	Table contains -> Location ID vs Price
+    */
+    public function storeShippingPrice ($locationKey, $price)
+    {
+    	$query = $this->sqlmap->getFilenameID('product','storeShippingPrice');
+    	$sth = $this->db->conn_id->prepare($query);
+    	$sth->bindParam(':location_id', $locationKey, PDO::PARAM_INT);
+    	$sth->bindParam(':price', $price, PDO::PARAM_INT);
+    	$sth->execute();
+
+    	return $this->db->conn_id->lastInsertId('id_shipping');
+    }
+
+    /**
+    *	Store Product Shipping Mapping in `es_product_shipping_map`
+    *	Table contains -> Mapping of ShippingID vs ProductItemAttrID
+    */
+    public function storeProductShippingMap($shippingId, $attrCombinationId)
+    {
+		$query = $this->sqlmap->getFilenameID('product','storeProductShippingMap');
+    	$sth = $this->db->conn_id->prepare($query);
+    	$sth->bindParam(':shipping_id', $shippingId, PDO::PARAM_INT);
+    	$sth->bindParam(':product_item_id', $attrCombinationId, PDO::PARAM_INT);
+    	$result = $sth->execute();	
+
+    	return $result;
     }
  
 }

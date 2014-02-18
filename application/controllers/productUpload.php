@@ -484,10 +484,15 @@ class productUpload extends MY_Controller
 		imagejpeg($nm, $path_to_small_directory . $filename);  
 	}  
 
+
+	/**
+	*	View function for Product Upload Step 3
+	*/
 	function step3()
 	{
-		//DEV CODE
+		//DEV CODE - temporarily set product id to fetch attribute combinations
 		$id = 4;
+
 		$data = array(
 			'shiploc' => $this->product_model->getLocation(),
 			'attr' => $this->product_model->getPrdShippingAttr($id)
@@ -499,12 +504,21 @@ class productUpload extends MY_Controller
 		$this->load->view('templates/footer'); 
 	}
 	
+	/**
+	*	Function used when shipping details are submitted in Product Upload Step 3. 
+	*	Stores shipping data in `es_shipping_price` and `es_product_shipping_map`
+	*/
 	function step3Submit(){
-
 		$fdata = $this->input->post('fdata');
-		print_r($fdata);
-		die();
 
+		foreach($fdata as $group){
+			foreach($group as $attrCombinationId=>$attrGroup){
+				foreach($attrGroup as $locationKey=>$price){
+					$shippingId = $this->product_model->storeShippingPrice($locationKey,$price);
+					$this->product_model->storeProductShippingMap($shippingId, $attrCombinationId);
+				}
+			}
+		}
 	}
 
 	function step4() # uploading of product is successful.

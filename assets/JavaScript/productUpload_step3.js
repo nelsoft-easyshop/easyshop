@@ -24,7 +24,8 @@ $(function(){
     var locCount = parseInt(shipLocCount.val());
     shipLocCount.val(locCount-1);
   });
-});// CLOSE DOCUMENT READY FUNCTION
+});
+/********** CLOSE DOCUMENT READY FUNCTION *********/
 
 
 /**
@@ -34,14 +35,14 @@ $(function(){
 * No data is sent to the server until the submit button is hit
 *
 * fdata - contains final data to be sent to the server
-* displaygroup - temporary object to contain attributes per group(row) in the summary field.
-*                      - used to easily identify where to insert location vs price if attr already exists in summary table
+* displaygroup - temporary object to contain attributes per group(row) in the Shipping Summary Table.
+*              - used to easily identify where to insert location vs price if attr(group) already exists in summary table
 *
 */
 $(function(){
   var fdata = {};
   var displaygroup = {};
-  var spanerror = '<span class="error red">Unable to select same location for same attribute</span>';
+  var spanerror = '<span class="error red samelocerror">Unable to select same location for same attribute</span>';
   var shiplocselectiontbl = $('#shiploc_selectiontbl');
   
   /**
@@ -108,6 +109,7 @@ $(function(){
         $('#summaryrowcount').val(+i+1);
       }
 
+      //Show table and submit button
       if($('#shipping_summary').hasClass('tablehide')){
         $('#shipping_summary').removeClass('tablehide');
         $('#btnShippingDetailsSubmit').removeClass('tablehide');
@@ -117,16 +119,16 @@ $(function(){
       var nesttable = row.find('table.shiplocprice_summary > tbody');
       var nesttabletr = nesttable.find('tr.cloningfield').clone();
       nesttabletr.removeClass('cloningfield');
-
       jQuery.each(shipObj.loc, function(k,v){
         nesttabletr.children('td:first').html(v);
+        nesttabletr.children('td:last').hide();
         var PriceField = nesttabletr.children('td:nth-child(2)');
         PriceField.attr('data-value', shipObj.price[k]);
         PriceField.html(shipObj.price[k]);
         nesttable.append('<tr data-idlocation='+k+' data-groupkey='+groupkey+'>'+nesttabletr.html()+'</tr>');
       });
 
-      //Append new summary details - CREATES NEW ROW
+      //Append new summary details as new row if summary does not exist
       if(!summaryExists){
         addDispGroup = true;
         $('#summaryrowcount').val(+i+1);
@@ -170,9 +172,7 @@ $(function(){
   
 
   /**
-  * 
   * Submit Handler function
-  *
   */
   $('#btnShippingDetailsSubmit').on('click', function(){
     if(getObjectSize(fdata) > 0){
@@ -187,7 +187,6 @@ $(function(){
   */
   $('#shiploc_selectiontbl').on('change', '.shiploc', function(){
     var currval = $(this).find('option:selected').val();
-    var thisobj = $(this);
     var thistr = $(this).closest('tr');
     var hasDuplicate = false;
 
@@ -216,7 +215,7 @@ $(function(){
     if(hasDuplicate){
       thistr.find('input[name^="shipprice"]').val('');
       thistr.append(spanerror);
-      thisobj.val(0);
+      $(this).val(0);
     }
 
   });
@@ -226,21 +225,21 @@ $(function(){
   */ 
   $('.product_combination').on('click', function(){
 
+    $('span.samelocerror').remove();
+
     if($(this).hasClass('active')){
       $(this).removeClass('active');
     }
     else{
-      $(this).addClass('active');
-    }
-
-    if($(this).hasClass('active')){
       var attrk = $(this).val();
-      
+      $(this).addClass('active');
+
       jQuery.each(fdata, function(groupkey,attrObj){
         if(attrk in attrObj){
           $('.shiploc').each(function(){
             var lock = $(this).find('option:selected').val();
             var thistr = $(this).closest('tr');
+
             if(lock in attrObj[attrk]){
               thistr.find('input[name^="shipprice"]').val('');
               thistr.append(spanerror);
@@ -249,8 +248,8 @@ $(function(){
           });
         }
       });
-
     }
+
   });
 
   /**
@@ -282,7 +281,6 @@ $(function(){
     PriceLocRows.each(function(){
       var inputPriceField = $(this).find('td:nth-child(2)').find('input');
       var newPrice = parseInt($.trim(inputPriceField.val()));
-
       if(isNaN(newPrice) || newPrice === 0){
         inputPriceField.effect('pulsate',{times:3},800);
         isFilled = false;
@@ -322,6 +320,7 @@ $(function(){
       PriceField.next('td').hide();
     });
   })
+  // Delete button per Location VS Price
   .on('click', '.delete_priceloc', function(){
     var parentTr = $(this).closest('tr');
     var groupkey = parentTr.attr('data-groupkey');
@@ -341,6 +340,10 @@ $(function(){
     parentTr.remove();
   });
 
+  /**
+  * Function to hide Summary Table and Submit Button.
+  * Checks if DisplayGroup Object is empty - meaning nothing displayed - before execution
+  */
   function hideTable(){
     if(getObjectSize(displaygroup) === 0){
       $('#shipping_summary').addClass('tablehide');
@@ -348,7 +351,9 @@ $(function(){
     }
   }
 
-}); //CLOSE DOCUMENT READY FUNCTION WITH DATA VARIABLES
+});
+
+/********** CLOSE DOCUMENT READY FUNCTION WITH DATA variables *********/
 
 
 /*

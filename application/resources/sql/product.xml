@@ -559,28 +559,6 @@
     DELETE FROM es_optional_attrhead WHERE id_optional_attrhead = :head_id;
 </select>
 
-<!-- Product_upload step 3 -->
-<select id="getLocation">
-    SELECT e1.id_location, e1.location, e2.id_location as id_region, e2.location as region, e3.id_location as id_cityprov, e3.location as cityprov
-    FROM es_location e1
-    LEFT JOIN es_location e2
-        ON e2.parent_id = e1.id_location AND e1.type = 1 AND e2.type = 2
-    LEFT JOIN es_location e3
-        ON e3.parent_id = e2.id_location AND e3.type = 3 AND e2.type = 2
-    WHERE e1.type = 1
-</select>
-
-<select id="getPrdShippingAttr">
-    SELECT piattr.product_item_id, pattr.attr_value
-    FROM es_product_item pitm
-    LEFT JOIN es_product_item_attr piattr
-        ON pitm.id_product_item = piattr.product_item_id
-    LEFT JOIN es_product_attr pattr
-        ON piattr.product_attr_id = pattr.id_product_attr
-    WHERE pitm.product_id = :id
-
-</select>
-
 <select id="getProductQuantity">
     SELECT a.id_product_item, a.quantity, COALESCE(b.product_attr_id,0) as product_attr_id  FROM es_product_item a
     LEFT JOIN es_product_item_attr b ON b.product_id_item = a.id_product_item 
@@ -607,6 +585,39 @@
     LEFT JOIN es_cat c ON c.parent_id = b.id_cat
     LEFT JOIN es_cat_img d ON d.id_cat = a.id_cat
     WHERE a.parent_id = 1 AND a.id_cat != 1 AND a.is_main = 1
+</select>
+
+
+<!-- Product_upload step 3 -->
+
+<select id="getLocation">
+    SELECT e1.id_location, e1.location, e2.id_location as id_region, e2.location as region, e3.id_location as id_cityprov, e3.location as cityprov
+    FROM es_location_lookup e1
+    LEFT JOIN es_location_lookup e2
+        ON e2.parent_id = e1.id_location AND e1.type = 1 AND e2.type = 2
+    LEFT JOIN es_location_lookup e3
+        ON e3.parent_id = e2.id_location AND e3.type = 3 AND e2.type = 2
+    WHERE e1.type = 1
+</select>
+
+<select id="getPrdShippingAttr">
+    SELECT piattr.product_item_id, pattr.attr_value
+    FROM es_product_item pitm
+    LEFT JOIN es_product_item_attr piattr
+        ON pitm.id_product_item = piattr.product_item_id
+    LEFT JOIN es_product_attr pattr
+        ON piattr.product_attr_id = pattr.id_product_attr
+    WHERE pitm.product_id = :id
+</select>
+
+<select id="storeShippingPrice">
+    INSERT INTO es_shipping_price (location_id, price)
+    VALUES (:location_id, :price)
+</select>
+
+<select id="storeProductShippingMap">
+    INSERT INTO es_product_shipping_map (shipping_id, product_item_id)
+    VALUES (:shipping_id, :product_item_id)
 </select>
 
 </map>
