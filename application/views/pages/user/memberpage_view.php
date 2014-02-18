@@ -832,7 +832,7 @@
 						<!--
 							<span class="verify toverify" style="<?php echo $is_contactno_verify == 0 && trim($contactno) !== ''?'':'display:none;'?>">
 								<span class="verify_now">Verify</span>
-								<img src="<?=base_url()?>/assets/images/bx_loader.gif" class="verify_img" style="position: relative; top:12px; left:15px; display:none"/>
+								<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" class="verify_img" style="display:none;"/>
 							</span>
 							<span class="verify doneverify" style="<?php echo $is_contactno_verify == 0?'display:none;':''?>">
 								<img src="<?=base_url()?>/assets/images/check_icon.png"><span><strong>Verified</strong></span>
@@ -869,7 +869,7 @@
 							
 							<span class="verify toverify" style="<?php echo $is_email_verify == 0 && trim($email) !== ''?'':'display:none;'?>">
 								<span class="verify_now">Verify</span>
-								<img src="<?=base_url()?>/assets/images/bx_loader.gif" class="verify_img" style="position: relative; top:12px; left:15px; display:none"/>
+								<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" class="verify_img" style="display:none"/>
 							</span>	
 							<span class="verify doneverify" style="<?php echo $is_email_verify == 0?'display:none;':''?>">
 								<img src="<?=base_url()?>/assets/images/check_icon.png"><span><strong>Verified</strong></span>
@@ -891,9 +891,9 @@
 							<span></span>
 						</div>
 						
-						<div>
+						<div class="save_con">
 							<input type="submit" name="personal_profile_main" value="Save" id="ppm_btn"/>
-							<img src="<?=base_url()?>/assets/images/bx_loader.gif" id="load_personalinfo" style="position: relative; top:12px; left:15px; display:none"/>
+							<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" id="load_personalinfo" style="display:none"/>
 						</div>
 						<input type="hidden" class="progress_update_hidden" value="">
 					</div>
@@ -977,7 +977,7 @@
 							<div class="clear"></div>
 							<input type="submit" name="personal_profile_address_btn" class="save_address" value="save">
 							<span class="cancel" name="cancel_address">Cancel</span>
-							<img src="<?=base_url()?>/assets/images/bx_loader.gif" id="load_address" style="position: relative; left:440px; display:none"/>
+							<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" id="load_address" style="position: relative; left:440px; display:none"/>
 						</div>
 						<div class="clear"></div>
 						<div class="error_container" style="padding-left:100px"></div>
@@ -1083,7 +1083,7 @@
 							<div class="clear"></div>							
 							<input type="submit" class="save_school" name="personal_profile_school" value="Save"/>
 							<span class="cancel" name="cancel_school">Cancel</span>
-							<img src="<?=base_url()?>/assets/images/bx_loader.gif" id="load_school" style="position: relative; left:440px; display:none"/>
+							<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" id="load_school" style="position: relative; left:440px; display:none"/>
 						</div>
 						<div class="clear"></div>
 					</form>
@@ -1166,7 +1166,7 @@
 							<div class="clear"></div>
 							<input type="submit" name="personal_profile_work_btn" value="Save" class="save_work">
 							<span class="cancel" name="cancel_work">Cancel</span>
-							<img src="<?=base_url()?>/assets/images/bx_loader.gif" id="load_work" style="position: relative; left:440px; display:none"/>
+							<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" id="load_work" style="position: relative; left:440px; display:none"/>
 						</div>
 					</div>
 				</form>
@@ -1247,7 +1247,7 @@
 							<div class="clear"></div>
 							<div class="bottom_save">
 								<input type="submit" name="c_deliver_address_btn" value="Save">
-									<img src="<?=base_url()?>/assets/images/bx_loader.gif" id="load_deliver_address" style="position: relative; top:12px; left:15px;  display:none"/>
+									<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" id="load_deliver_address" style="position: relative; top:12px; left:15px;  display:none"/>
 							</div>	
 					</form>
 				</div>	
