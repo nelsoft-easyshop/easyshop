@@ -1262,7 +1262,7 @@
 					</ul>
 				</div>
 				
-				<div id="bought" class="transactions-buy">
+				<div id="bought" class="transactions-buy dashboard_table">
 					<?php if(count($transaction['buy'])===0):?>
 						<br/>
                         <div><strong>You have not bought any items yet.</strong></div>
@@ -1370,7 +1370,7 @@
 					<?php endif; ?>
 				</div>
 				
-				<div id="sold" class="transactions-sell">
+				<div id="sold" class="transactions-sell dashboard_table">
 					<?php if(count($transaction['sell'])===0):?>
                         <br/>
 						<div><strong>You have not sold any items yet.</strong></div>
