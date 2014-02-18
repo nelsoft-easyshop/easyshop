@@ -1,3 +1,4 @@
+
 <script type='text/javascript' src='<?=base_url()?>assets/JavaScript/register.js'></script>
 
 <div class="clear"></div>
@@ -76,6 +77,7 @@
           </div>
 		  <div class="field" style="padding-top:25px">
 			<input type="submit" name="register_page1" value="Agree and Continue"/>
+			<img src="<?=base_url()?>/assets/images/bx_loader.gif" id="register_form1_loadingimg" style="position: relative; top:10px; left:20px; display:none"/>
 		  </div>
 
 	  </div>
@@ -88,6 +90,6 @@
 
 <!-- password strength checker -->
 <?php if(!$logged_in): ?>
-	<script type="text/javascript" src="<?=base_url()?>assets/JavaScript/js/mootools-core-1.4.5-full-compat.js"></script>
+	<script type="text/javascript" src="<?=base_url()?>assets/JavaScript/js/mootools-core-1.4.5-full-compat.js"></script> 
 	<script type="text/javascript" src="<?=base_url()?>assets/JavaScript/js/password_meter.js"></script>
 <?php endif; ?>

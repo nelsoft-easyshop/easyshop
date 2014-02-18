@@ -174,7 +174,11 @@ $(document).ready(function(){
 					added_span.insertBefore(element.next());}
 				else
 					error.appendTo(element.parent());
-		 }	
+		 },
+		 submitHandler: function(form){
+		 	$('#register_form1_loadingimg').show();
+		 	form.submit();
+		 }
 	 });
 	 
 	 
@@ -289,25 +293,7 @@ $(document).ready(function(){
 	
 	$("#register_mobile").numeric({negative : false});
 	$("#cregister_mobile").numeric({negative : false});
-	
-	function showcheck(element){
-		var name = element.attr('name');
-		$('#'+name+'_check').show();
-		$('#'+name+'_x').hide();
-	}
-	
-	function showx(element){
-		var name = element.attr('name');
-		$('#'+name+'_check').hide();
-		$('#'+name+'_x').show();
-	}
-	
-	function hidecheckx(element){
-		var name = element.attr('name');
-		$('#'+name+'_check').hide();
-		$('#'+name+'_x').hide();
-	}
-	
+
 	$("#register_mobile").on('input paste',function(e){
 		$('#err_mobilespan').hide();
 		if( $.trim($(this).val()).length == 11 ){
@@ -548,25 +534,42 @@ $(document).ready(function(){
 		}
 	});
 	
-	function username_check(){
-		var username = $('#username').val();
-		
-		$.post(config.base_url+'register/username_check', {username: username}, function(result){
-			if(result == 1){
-				showcheck($('#username'));
-				$('.username_availability').html('Username available');
-			}
-			else{
-				showx($('#username'));
-				$('.username_availability').html('Username already exists');
-			}
-		});
-	}
+	
 
 }); //CLOSE DOCUMENT READY
 
+function username_check(){
+	var username = $('#username').val();
+	
+	$.post(config.base_url+'register/username_check', {username: username}, function(result){
+		if(result == 1){
+			showcheck($('#username'));
+			$('.username_availability').html('Username available');
+		}
+		else{
+			showx($('#username'));
+			$('.username_availability').html('Username already exists');
+		}
+	});
+}
 
+function showcheck(element){
+	var name = element.attr('name');
+	$('#'+name+'_check').show();
+	$('#'+name+'_x').hide();
+}
 
+function showx(element){
+	var name = element.attr('name');
+	$('#'+name+'_check').hide();
+	$('#'+name+'_x').show();
+}
+
+function hidecheckx(element){
+	var name = element.attr('name');
+	$('#'+name+'_check').hide();
+	$('#'+name+'_x').hide();
+}
 
 function submitcountdown(){
 	var count=5;

@@ -52,7 +52,7 @@ class Register extends MY_Controller
 			$data['image'] = $image;
 			$temp['reg_username'] = $this->input->post('username');
 		}
-		$this->load->view('templates/header', $data);
+		$this->load->view('templates/header_plain', $data);
 		$this->load->view("pages/user/".$view, $temp);
 		$this->load->view('templates/footer');
 	}
