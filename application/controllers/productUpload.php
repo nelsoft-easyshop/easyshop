@@ -741,19 +741,21 @@ class productUpload extends MY_Controller
 
 			$rowCount = $this->product_model->editProduct($product_details, $member_id);
 
+          
+            
 			if($rowCount>0){
 				foreach($explode_inputs as $input){
 					$explode_id = explode('/', $input);
 					$explode_value = $explode_id[0];
 					$attribute_id = $explode_id[1];
 					$post_attributes = $this->input->post($explode_value);
+                    $rowCount = $this->product_model->deleteAttributeByProduct($product_id, $attribute_id);
 					if($post_attributes){
 						if(is_array($post_attributes)){
 							$post_attributes_arr = $post_attributes;
 						}else{
 							$post_attributes_arr = (strlen(trim($post_attributes)) === 0)?array():array(0=>$post_attributes);
 						}
-						$rowCount = $this->product_model->deleteAttributeByProduct($product_id, $attribute_id);
 						foreach($post_attributes_arr as $attribute){
 							$this->product_model->addNewAttributeByProduct($product_id, $attribute_id, $attribute, '0');
 						}
@@ -779,11 +781,12 @@ class productUpload extends MY_Controller
 						$newarray[$prod_other_name[$i]] = array();
 					}
 					
+                    $other_name = "--no name";
 					$other_price = "0.00";
-					$other_image = "no image";
-					$other_image_type = "no type";
-					$other_tmp = "no temp";
-					$other_id = "no id";
+					$other_image = "--no image";
+					$other_image_type = "--no type";
+					$other_tmp = "--no temp";
+					$other_id = "--no id";
 
 					if(strlen(trim($prod_other_price[$i])) != 0 || $prod_other_price[$i] != "") 
 					{
@@ -802,11 +805,15 @@ class productUpload extends MY_Controller
 					if(isset($prod_other_id[$i])){
 						$other_id = $prod_other_id[$i];
 					}
+                    
+                    if(strlen(trim($prod_other[$i])) != 0 ||  trim($_POST['prod_other'][$i]) != ""){
+                            $other_name = $prod_other[$i];
+                    }
 
-					array_push($newarray[$prod_other_name[$i]], $prod_other[$i] .'|'.$other_price.'|'.$other_image.'|'.$other_image_type.'|'.$other_tmp.'|'.$other_id);
+					array_push($newarray[$prod_other_name[$i]], $other_name .'|'.$other_price.'|'.$other_image.'|'.$other_image_type.'|'.$other_tmp.'|'.$other_id);
 				}
-
-				
+                
+ 				
 				$attr_opt_head = array();
 				$attr_opt_det_idx = array();
 				
@@ -830,12 +837,25 @@ class productUpload extends MY_Controller
 				$is_primary = 0;
 
 				foreach ($newarray as $key => $valuex) {
+                    //If OTHER GROUP NAME is empty: skip 
+                    if(trim($key) == "" || strlen(trim($key)) <= 0 ){
+                            continue;
+                    }
+                    //If FIRST OTHER ATTRIBUTE is empty: skip (assumption here is that there is always one
+                    //attribute that is passed)
+                    if(count($valuex) <= 1 && $valuex[0] == '--no name|0.00|--no image|--no type|--no temp|--no id'){
+                        continue;
+                    }
 					$others_id = $this->product_model->addNewAttributeByProduct_others_name($product_id,$key);
 					foreach ($valuex as $keyvalue => $value) {
 						$eval = explode("|", $value);  
+                        //IF OTHER ATTRIBUTE is empty, skip the rest
+                        if(trim($eval[0]) == "--no name"){
+							continue;
+                        }
 						$imageid = 0;
-						if($eval[2] != "no image"){
-							if($eval[5] != "no id"){
+						if($eval[2] != "--no image"){
+							if($eval[5] != "--no id"){
 								$int_img_id = intval($eval[5]);
 								if(isset($attr_opt_det_idx[$int_img_id])){
 									$this->product_model->deleteProductImage($product_id, $attr_opt_det_idx[$int_img_id]['img_id']);
@@ -846,8 +866,8 @@ class productUpload extends MY_Controller
 							$this->createThumbnail($eval[2],$other_path_directory);
 							$this->createSmallSize($eval[2],$other_path_directory);
 						}
-						else if($eval[2] == "no image"){
-							if($eval[5] != "no id"){
+						else if($eval[2] == "--no image"){
+							if($eval[5] != "--no id"){
 								$int_img_id = intval($eval[5]);
 								if(isset($attr_opt_det_idx[$int_img_id])){
 									$imageid = $attr_opt_det_idx[$int_img_id]['img_id'];
