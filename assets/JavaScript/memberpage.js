@@ -116,14 +116,26 @@ $(document).ready(function(){
 							$('#cont_mobilediv').show();
 						}
 						else{
-							$('#mobile').attr('disabled', true);
+							var mobileField = $('#mobile');
+							if( $.trim(mobileField.prop('value')) !== '' ){
+								mobileField.attr('disabled', true);
+							}
+							else{
+								mobileField.attr('disabled', false);
+							}
 						}
 						if(obj['email'] == 1){
 							$('#cont_emaildiv span:first').html('Email already used.');
 							$('#cont_emaildiv').show();
 						}
 						else{
-							$('#email').attr('disabled', true);
+							var emailField = $('#email');
+							if( $.trim(emailField.prop('value')) !== '' ){
+								emailField.attr('disabled', true);
+							}
+							else{
+								emailField.attr('disabled', false);
+							}
 						}
 					}
 				});
