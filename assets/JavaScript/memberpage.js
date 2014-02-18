@@ -289,6 +289,7 @@ $(document).ready(function(){
 							//$('#emaildiv').find('span.doneverify span:first').html('<strong>Email sent.</strong>');
 							parentdiv.find('span.doneverify').show();
 							parentdiv.find('span.doneverify span:first').html('<strong>Email sent.</strong>');
+							errorspan.html('');
 							contdiv.hide();
 						}
 						else if(obj ==='error'){
