@@ -611,7 +611,7 @@
 </select>
 
 <select id="storeShippingPrice">
-    INSERT INTO es_shipping_price (location_id, price)
+    INSERT INTO es_product_shipping_price (location_id, price)
     VALUES (:location_id, :price)
 </select>
 
