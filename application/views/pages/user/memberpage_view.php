@@ -819,7 +819,7 @@
 						</div>
 						<div>
 							<label for="dateofbirth">Birthday:</label>
-							<input type="text" name="dateofbirth" id="datepicker" value="<?php echo ($birthday=='0000-00-00'?'':$birthday)?>">
+							<input type="text" name="dateofbirth" id="datepicker" value="<?php echo ($birthday=='0000-00-00' || $birthday == '0001-01-01' ?'':$birthday)?>">
 							<span class="red ci_form_validation_error"><?php echo form_error('dateofbirth'); ?></span>
 						</div>	
 
