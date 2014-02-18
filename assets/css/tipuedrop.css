@@ -26,15 +26,22 @@ http://www.tipue.com/drop
 }
 
 #main_search_drop_content {
-    background-color: #E2E2E2;
-    border-radius: 1px;
+    background-color: #FFFFFF;
+    border-bottom: 1px solid #FF4400;
+    border-left: 1px solid #FF4400;
+    border-right: 1px solid #FF4400;
     display: none;
-    margin: 13px 20px 0 0;
-    padding: 0 1px 1px;
+    margin: 0px 20px 0 0;
+    padding: 10px 5px;
     position: absolute;
-    width: 620px;
+    width: 610px;
     z-index: 1000;
 }
+
+#main_search_drop_content ul {
+    list-style: none;
+}
+
 #main_search_drop_content a {
      text-decoration: none;
 }
