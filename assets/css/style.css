@@ -1765,6 +1765,10 @@ padding: 8px 0;
 	float: none !important;
 }
 
+.personal_info_title > img {
+    vertical-align: middle;
+}
+
 #container_work{
 	display:inline-block;
 }
@@ -1837,6 +1841,14 @@ padding: 8px 0;
 .errordiv{
 	margin-left: 5em;
 	color: red;
+}
+
+.save_con {
+	height: 35px;
+}
+
+.save_con > img {
+	vertical-align: middle;
 }
 
 /** personal information school style **/
@@ -2007,8 +2019,8 @@ padding: 8px 0;
 
 .address_information, .school_information, .work_information {
 	display: none;
-	height: 25px;
-	line-height: 18px;
+	height: 20px;
+	line-height: 20px;
     margin-bottom: 8px;
     margin-top: 8px;
     margin-left: 115px;
