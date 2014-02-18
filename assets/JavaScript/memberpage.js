@@ -234,8 +234,10 @@ $(document).ready(function(){
 		var $thisspan = $(this);
 		var loadingimg = $(this).siblings('img.verify_img');
 		var verifyspan = $(this).parent('span.verify');
-		var contdiv = $(this).closest('div').next('div[id^="cont_"]');
 		var parentdiv = $(this).closest('div');
+		var contdiv = parentdiv.next('div[id^="cont_"]');
+		var errorspan = contdiv.children('span:first');
+		
 		
 		$thisspan.hide();
 		loadingimg.show();
@@ -267,30 +269,38 @@ $(document).ready(function(){
 				}
 				else{
 					if(field==='mobile'){
-						if(obj === 'success')
+						if(obj === 'success'){
 							$('#verifcode_div').dialog('open');
+						}
 						else if(obj === 'error'){
 							$thisspan.show();
 							parentdiv.removeClass('fired');
 							verifyspan.siblings('span.personal_contact_cont').show();
-							$('#cont_mobilediv span:first').html('An error was encountered. Please try again later');
+							//$('#cont_mobilediv span:first').html('An error was encountered. Please try again later');
+							errorspan.html('An error was encountered. Please try again later');
 						}
 						else if(obj === 'exceed')
-							$('#cont_mobilediv span:first').html('You have exceeded the number of times to verify your mobile. Try again after 30 mins.');
+							//$('#cont_mobilediv span:first').html('You have exceeded the number of times to verify your mobile. Try again after 30 mins.');
+							errorspan.html('You have exceeded the number of times to verify your mobile. Try again after 30 mins.');
 					}
 					else if(field==='email'){
 						if(obj === 'success'){
-							$('#emaildiv').find('span.doneverify').show();
-							$('#emaildiv').find('span.doneverify span:first').html('<strong>Email sent.</strong>');
+							//$('#emaildiv').find('span.doneverify').show();
+							//$('#emaildiv').find('span.doneverify span:first').html('<strong>Email sent.</strong>');
+							parentdiv.find('span.doneverify').show();
+							parentdiv.find('span.doneverify span:first').html('<strong>Email sent.</strong>');
+							contdiv.hide();
 						}
 						else if(obj ==='error'){
 							$thisspan.show();
 							parentdiv.removeClass('fired');
 							verifyspan.siblings('span.personal_contact_cont').show();
-							$('#cont_emaildiv span:first').html('An error was encountered. Please try again later');
+							//$('#cont_emaildiv span:first').html('An error was encountered. Please try again later');
+							errorspan.html('An error was encountered. Please try again later');
 						}
 						else if(obj === 'exceed')
-							$('#cont_emaildiv span:first').html('You have exceeded the number of times to verify your email. Try again after 30 mins.');
+							//$('#cont_emaildiv span:first').html('You have exceeded the number of times to verify your email. Try again after 30 mins.');
+							errorspan.html('You have exceeded the number of times to verify your email. Try again after 30 mins.');
 					}
 				}
 			}
