@@ -237,7 +237,7 @@
         </tr>
         <tr>
           <td valign="top">Description <font color="red">*</font></td><!-- Main Description of the product --> 
-          <td colspan="3"><textarea style="width: 100%;height:100%" name="prod_description"  id="prod_description" placeholder="Enter description..."><?php echo (isset($product_details['description']))?$product_details['description']:'';?></textarea></td>
+          <td colspan="3"><textarea style="width: 100%;height:100%" name="prod_description" class="mceEditor"  id="prod_description" placeholder="Enter description..."><?php echo (isset($product_details['description']))?$product_details['description']:'';?></textarea></td>
         </tr> 
         <tr>
           <td>Item Code (can be anything) <font color="red">*</font></td> <!-- SKU of the product -->
@@ -1048,7 +1048,9 @@
     <script src="<?php echo base_url(); ?>assets/tinymce/tinymce.min.js" type="text/javascript"></script>
     <script type="text/javascript">
     tinymce.init({
-      selector: "textarea",
+      mode : "specific_textareas",
+        editor_selector : "mceEditor",
+
       plugins: [
       "advlist autolink lists link image charmap print preview anchor",
       "searchreplace visualblocks code fullscreen",
