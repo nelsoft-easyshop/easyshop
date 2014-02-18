@@ -85,7 +85,7 @@
 					</div>
 					<div class="profile_completeness">
 						<span>Profile Completeness</span>
-						<span id="profprog_percentage" value="">57%</span>
+						<span id="profprog_percentage" value=""></span>
 						<div id="progressbar" class="profile_progress"></div>
 					</div>
 				</div>
