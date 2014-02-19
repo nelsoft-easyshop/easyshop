@@ -214,7 +214,7 @@
 								</div>
 								<div class="post_item_content_right">
 									<div class="product_title_container">
-										<p class="post_item_product_title fm1"><a href="<?=base_url();?>item/<?php echo $active_product['id_product']."/".$function->clean($active_product['name']);?>"><?php echo html_escape($active_product['name']);?></a></p>
+										<p class="post_item_product_title fm1"><a href="<?=base_url();?>item/<?php echo $active_product['id_product']."/".es_url_clean($active_product['name']);?>"><?php echo html_escape($active_product['name']);?></a></p>
 								  		
 										<div class="post_item_button">
 								  		    <?php echo form_open('sell/edit'); ?>
@@ -320,7 +320,7 @@
 								<div class="post_item_content_right">
 									<div class="product_title_container">
 										<p class="post_item_product_title">
-											<a href="<?=base_url();?>item/<?php echo $deleted_product['id_product']."/".$function->clean($deleted_product['name']);?>"><?php echo html_escape($deleted_product['name']);?></a>
+											<a href="<?=base_url();?>item/<?php echo $deleted_product['id_product']."/".es_url_clean($deleted_product['name']);?>"><?php echo html_escape($deleted_product['name']);?></a>
 										</p>
 								  		<div class="post_item_button">
                                             <?php echo form_open('product/changeDelete'); ?>
@@ -1297,7 +1297,7 @@
 											<img src="<?=base_url()?><?php echo $product['product_image_path'];?>">
 											<div>
 												<p class="transac_prod_name">
-													<a href="<?php echo base_url();?>item/<?php echo $product['product_id'];?>/<?php echo $function->clean($product['name']);?>"><?php echo $product['name'];?></a><br />
+													<a href="<?php echo base_url();?>item/<?php echo $product['product_id'];?>/<?php echo es_url_clean($product['name']);?>"><?php echo $product['name'];?></a><br />
 													<span><?php echo $product['attr'];?></span>
 												</p>
 												<p>Bought from: <a href="<?php echo base_url();?>vendor/<?php echo $product['seller'];?>"><?php echo $product['seller'];?></a></p>
@@ -1409,7 +1409,7 @@
 												<img src="<?=base_url()?><?php echo $product['product_image_path'];?>">
 												<div>
 													<p class="transac_prod_name">
-													<a href="<?php echo base_url();?>item/<?php echo $product['product_id'];?>/<?php echo $function->clean($product['name']);?>"><?php echo $product['name'];?></a>
+													<a href="<?php echo base_url();?>item/<?php echo $product['product_id'];?>/<?php echo es_url_clean($product['name']);?>"><?php echo $product['name'];?></a>
 													<span><?php echo $product['attr'];?></span>
 													</p>
 													<p>Quantity:<span class="fm1 f18"><?php echo $product['order_quantity']?></span></p>

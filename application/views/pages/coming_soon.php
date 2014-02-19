@@ -15,7 +15,6 @@
 
 <body>
 
-
     <section>
       <div class="wrapper">
         <div class="logo">

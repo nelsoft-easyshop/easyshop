@@ -43,7 +43,7 @@ foreach ($arrayofparams as $keyparam_r => $value) {  # this loop to remove the o
                 <ul>
 <?php foreach ($main_categories as $category): ?>
                         <li class = <?php echo (($category['id_cat'] === $breadcrumbs[0]['id_cat']) ? "active" : ""); ?>>
-                            <a href="<?= base_url() ?>category/<?php echo $category['id_cat']; ?>/<?php echo $function->clean($category['name']); ?>.html">
+                            <a href="<?= base_url() ?>category/<?php echo $category['id_cat']; ?>/<?php echo es_url_clean($category['name']); ?>.html">
     <?php echo $category['name']; ?>
                             </a>
                         </li>
@@ -57,7 +57,7 @@ foreach ($arrayofparams as $keyparam_r => $value) {  # this loop to remove the o
                 <li class=""><a href="<?= base_url() ?>home">Home</a></li>
 <?php foreach ($breadcrumbs as $crumbs): ?>
                     <li>
-                        <a href="<?= base_url() ?>category/<?php echo $crumbs['id_cat'] ?>/<?php echo $function->clean($crumbs['name']) ?>.html">
+                        <a href="<?= base_url() ?>category/<?php echo $crumbs['id_cat'] ?>/<?php echo es_url_clean($crumbs['name']) ?>.html">
     <?php echo $crumbs['name'] ?>
                         </a>
                     </li> 
@@ -127,11 +127,11 @@ if (isset($arrayofparams)) {
                 <div class="cc2">
                     <?PHP foreach ($subcategories as $rows): ?>
                     <div class="">
-                        <a class="cc2_title" href="<?=base_url()?>category/<?php echo $rows['id_cat'];?>/<?php echo $function->clean($rows['name']);?>.html">
+                        <a class="cc2_title" href="<?=base_url()?>category/<?php echo $rows['id_cat'];?>/<?php echo es_url_clean($rows['name']);?>.html">
                         <span><?php echo $rows['name'];?></span></a>
                         <?PHP if(count($rows['popular'])>0): ?>
                         <img src="<?= base_url().$rows['popular'][0]['path'].'categoryview/'.$rows['popular'][0]['file']; ?>"><br />
-                        <div class="cc2_prod_name"><a href="<?PHP echo base_url()."item/".$rows['popular'][0]['id_product']."/".$function->clean($rows['popular'][0]['product']); ?>.html" title="<?PHP echo $rows['popular'][0]['product']; ?>"><span><?PHP echo $rows['popular'][0]['product']; ?></span></a></div>
+                        <div class="cc2_prod_name"><a href="<?PHP echo base_url()."item/".$rows['popular'][0]['id_product']."/".es_url_clean($rows['popular'][0]['product']); ?>.html" title="<?PHP echo $rows['popular'][0]['product']; ?>"><span><?PHP echo $rows['popular'][0]['product']; ?></span></a></div>
                         <span class="recommended_product_price">PHP <?php echo number_format($rows['popular'][0]['price'],2,'.',',');?></span>
                         <?PHP endif; ?>
                     </div>
@@ -193,13 +193,13 @@ if (isset($arrayofparams)) {
                 $pic = explode('/', $items[$i]['product_image_path']);
                 ?>
                 <div class="product">
-                    <a href="<?= base_url() ?>item/<?php echo $items[$i]['product_id']; ?>/<?php echo $function->clean($items[$i]['product_name']); ?>.html"><img alt="<?php echo $items[$i]['product_name']; ?>" src="<?php echo base_url() . $pic[0] . '/' . $pic[1] . '/' . $pic[2] . '/' . $pic[3] . '/' . 'categoryview' . '/' . $pic[4]; ?>"></a>
+                    <a href="<?= base_url() ?>item/<?php echo $items[$i]['product_id']; ?>/<?php echo es_url_clean($items[$i]['product_name']); ?>.html"><img alt="<?php echo $items[$i]['product_name']; ?>" src="<?php echo base_url() . $pic[0] . '/' . $pic[1] . '/' . $pic[2] . '/' . $pic[3] . '/' . 'categoryview' . '/' . $pic[4]; ?>"></a>
                     <h3 style="  -o-text-overflow: ellipsis;    
                         text-overflow:    ellipsis;   
                         overflow:hidden;             
                         white-space:nowrap;  
                         width: 225px; ">
-                        <a href="<?= base_url() ?>item/<?php echo $items[$i]['product_id']; ?>/<?php echo $function->clean($items[$i]['product_name']); ?>.html"><?php echo html_escape($items[$i]['product_name']); ?></a>
+                        <a href="<?= base_url() ?>item/<?php echo $items[$i]['product_id']; ?>/<?php echo es_url_clean($items[$i]['product_name']); ?>.html"><?php echo html_escape($items[$i]['product_name']); ?></a>
                     </h3>
 
                     <div class="price-cnt">

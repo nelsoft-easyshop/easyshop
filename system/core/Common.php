@@ -560,5 +560,28 @@ if ( ! function_exists('html_escape'))
 	}
 }
 
+/**
+* Strips unwanted characters for title url encoding
+* 
+* @access	public
+* @param	mixed
+* @return	mixed
+*/
+if ( ! function_exists('es_url_clean'))
+{
+	function es_url_clean($string)
+	{
+		$string = preg_replace("/\s+/", " ", $string);
+		$string = str_replace('-', ' ', trim($string)); 
+		$string = preg_replace("/\s+/", " ", $string);
+		$string = str_replace(' ', '-', trim($string));  
+		$string = preg_replace('/[^A-Za-z0-9\-]/', '', $string);  
+
+		$string = str_replace('-', ' ', $string); 
+		$string = str_replace(' ', '-', $string);  
+		return preg_replace('/[^A-Za-z0-9\-]/', '', $string);
+	}	
+}
+
 /* End of file Common.php */
 /* Location: ./system/core/Common.php */

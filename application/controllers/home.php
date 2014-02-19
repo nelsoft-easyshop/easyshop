@@ -10,7 +10,7 @@ class Home extends MY_Controller {
 		$this->load->library('cart');
         $this->load->library('home_xml');
 		$this->load->vars(
-            array('category_navigation' => $this->load->view('templates/category_navigation',array('cat_items' =>  $this->getcat(),'function' => new MY_Controller()), TRUE ),)
+            array('category_navigation' => $this->load->view('templates/category_navigation',array('cat_items' =>  $this->getcat(),), TRUE ),)
 		);
     }
 

@@ -159,7 +159,7 @@ class Memberpage extends MY_Controller
                 'title' => 'Easyshop.ph - Member Profile', 
 				'image_profile' => $this->memberpage_model->get_image($uid), 
 				'active_products' => $user_products['active'],
-				'deleted_products' => $user_products['deleted']
+				'deleted_products' => $user_products['deleted'],
                 ); 
 		$data = array_merge($data, $this->fill_header());
 		$data = array_merge($data,$this->memberpage_model->get_member_by_id($uid));

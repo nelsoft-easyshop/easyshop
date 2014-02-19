@@ -28,7 +28,7 @@
             <h2><?=$data['productSlide_title'] ?></h2>
             <ul class="mid_slide2">
                 <?PHP foreach ($data['productSlide_id'] as $rows): ?>
-                  <li><a href ="<?=base_url()."item/".$rows['id_product']."/".$function->clean($rows['product']); ?>.html" ><img style="height:90px; width: 90px;" src="<?=  base_url().$rows['path'].'categoryview/'.$rows['file']; ?>" /><br /><?=html_escape($rows['product']); ?></a></li> 
+                  <li><a href ="<?=base_url()."item/".$rows['id_product']."/".es_url_clean($rows['product']); ?>.html" ><img style="height:90px; width: 90px;" src="<?=  base_url().$rows['path'].'categoryview/'.$rows['file']; ?>" /><br /><?=html_escape($rows['product']); ?></a></li> 
                 <?PHP endforeach; ?>
             </ul>
 
@@ -89,7 +89,7 @@
             <div>
                 <img id="cat1_main_prod" src="<?=base_url().$data['category1_pid_main'][0]['path'].'small/'.$data['category1_pid_main'][0]['file']; ?>">
                 <div id="cat_1_main_details">
-                    <a href="<?= base_url()."item/".$data['category1_pid_main'][0]['id_product']."/".$function->clean($data['category1_pid_main'][0]['product']); ?>.html">
+                    <a href="<?= base_url()."item/".$data['category1_pid_main'][0]['id_product']."/".es_url_clean($data['category1_pid_main'][0]['product']); ?>.html">
                         <h2><?=html_escape($data['category1_pid_main'][0]['product']);?></h2>
                     </a>
               
@@ -98,14 +98,14 @@
             </div>
                 <div class="products border2">
                     <div>
-                        <a href="<?= base_url()."item/".$data['category1_pid'][0]['id_product']."/".$function->clean($data['category1_pid'][0]['product']); ?>.html">
+                        <a href="<?= base_url()."item/".$data['category1_pid'][0]['id_product']."/".es_url_clean($data['category1_pid'][0]['product']); ?>.html">
                             <img src="<?= base_url().$data['category1_pid'][0]['path'].'categoryview/'.$data['category1_pid'][0]['file']; ?>">
                             <h2><?=html_escape($data['category1_pid'][0]['product']);?></h2>
                         </a>
                         <p>Price: <span>&#8369;<?php echo number_format($data['category1_pid'][0]['price'],2,'.',',');?> </span> onwards</p>
                     </div>
                     <div>
-                        <a href="<?= base_url()."item/".$data['category1_pid'][1]['id_product']."/".$function->clean($data['category1_pid'][1]['product']); ?>.html">
+                        <a href="<?= base_url()."item/".$data['category1_pid'][1]['id_product']."/".es_url_clean($data['category1_pid'][1]['product']); ?>.html">
                             <img src="<?= base_url().$data['category1_pid'][1]['path'].'categoryview/'.$data['category1_pid'][1]['file'] ?>">
                             <h2><?=html_escape($data['category1_pid'][1]['product']);?></h2>
                         </a>
@@ -114,14 +114,14 @@
                 </div>
                 <div class="products border2">
                     <div>
-                        <a href="<?= base_url()."item/".$data['category1_pid'][2]['id_product']."/".$function->clean($data['category1_pid'][2]['product']); ?>.html">
+                        <a href="<?= base_url()."item/".$data['category1_pid'][2]['id_product']."/".es_url_clean($data['category1_pid'][2]['product']); ?>.html">
                             <img src="<?= base_url().$data['category1_pid'][2]['path'].'categoryview/'.$data['category1_pid'][2]['file'] ?>">
                             <h2><?=html_escape($data['category1_pid'][2]['product']);?></h2>
                         </a>
                         <p>Price: <span>&#8369;<?php echo number_format($data['category1_pid'][2]['price'],2,'.',',');?></span> onwards</p>
                     </div>
                     <div>
-                        <a href="<?= base_url()."item/".$data['category1_pid'][3]['id_product']."/".$function->clean($data['category1_pid'][3]['product']); ?>.html">
+                        <a href="<?= base_url()."item/".$data['category1_pid'][3]['id_product']."/".es_url_clean($data['category1_pid'][3]['product']); ?>.html">
                             <img src="<?= base_url().$data['category1_pid'][3]['path'].'categoryview/'.$data['category1_pid'][3]['file']?>">
                             <h2><?=html_escape($data['category1_pid'][3]['product']);?></h2>
                         </a>
@@ -130,14 +130,14 @@
                 </div>
                 <div class="products">
                     <div>
-                        <a href="<?= base_url()."item/".$data['category1_pid'][4]['id_product']."/".$function->clean($data['category1_pid'][4]['product']); ?>.html">
+                        <a href="<?= base_url()."item/".$data['category1_pid'][4]['id_product']."/".es_url_clean($data['category1_pid'][4]['product']); ?>.html">
                             <img src="<?= base_url().$data['category1_pid'][4]['path'].'categoryview/'.$data['category1_pid'][4]['file'] ?>">
                             <h2><?=html_escape($data['category1_pid'][4]['product']);?></h2>
                         </a>
                         <p>Price: <span>&#8369;<?php echo number_format($data['category1_pid'][4]['price'],2,'.',',');?></span> onwards</p>
                     </div>
                     <div>
-                        <a href="<?= base_url()."item/".$data['category1_pid'][5]['id_product']."/".$function->clean($data['category1_pid'][5]['product']); ?>.html">
+                        <a href="<?= base_url()."item/".$data['category1_pid'][5]['id_product']."/".es_url_clean($data['category1_pid'][5]['product']); ?>.html">
                             <img src="<?= base_url().$data['category1_pid'][5]['path'].'categoryview/'.$data['category1_pid'][5]['file'] ?>">
                             <h2><?=html_escape($data['category1_pid'][5]['product']);?></h2>
                         </a>
@@ -158,14 +158,14 @@
         <div class="border">
             <div class="electronics_product_sides products border2">
                 <div>
-                    <a href="<?= base_url()."item/".$data['category2_pid'][1]['id_product']."/".$function->clean($data['category2_pid'][1]['product']); ?>.html">
+                    <a href="<?= base_url()."item/".$data['category2_pid'][1]['id_product']."/".es_url_clean($data['category2_pid'][1]['product']); ?>.html">
                         <img src="<?= base_url().$data['category2_pid'][1]['path'].'categoryview/'.$data['category2_pid'][1]['file']; ?>">
                         <h2><?=html_escape($data['category2_pid'][1]['product']);?></h2>
                     </a>
                     <p>Price: <span>&#8369;<?php echo number_format($data['category2_pid'][1]['price'],2,'.',',');?></span> onwards</p>
                 </div>
                 <div>
-                    <a href="<?= base_url()."item/".$data['category2_pid'][2]['id_product']."/".$function->clean($data['category2_pid'][2]['product']); ?>.html">
+                    <a href="<?= base_url()."item/".$data['category2_pid'][2]['id_product']."/".es_url_clean($data['category2_pid'][2]['product']); ?>.html">
                         <img src="<?= base_url().$data['category2_pid'][2]['path'].'categoryview/'.$data['category2_pid'][2]['file']; ?>">
                         <h2><?=html_escape($data['category2_pid'][2]['product']);?></h2>
                     </a>
@@ -174,21 +174,21 @@
             </div>           
             <div class="product_slide">
                 <ul class="slider3">
-                    <li><a href="<?=base_url()."item/".$data['category2_pid_mainslide'][0]['id_product']."/".$function->clean($data['category2_pid_mainslide'][0]['product']); ?>.html"><img class="cat2_slide_prod" src="<?=base_url().$data['category2_pid_mainslide'][0]['product_image_path'] ?>" /></a></li>
-                    <li><a href="<?=base_url()."item/".$data['category2_pid_mainslide'][1]['id_product']."/".$function->clean($data['category2_pid_mainslide'][1]['product']); ?>.html"><img class="cat2_slide_prod" src="<?=base_url().$data['category2_pid_mainslide'][1]['product_image_path'] ?>" /></a></li>
-                    <li><a href="<?=base_url()."item/".$data['category2_pid_mainslide'][2]['id_product']."/".$function->clean($data['category2_pid_mainslide'][2]['product']); ?>.html"><img class="cat2_slide_prod" src="<?=base_url().$data['category2_pid_mainslide'][2]['product_image_path'] ?>" /></a></li>
+                    <li><a href="<?=base_url()."item/".$data['category2_pid_mainslide'][0]['id_product']."/".es_url_clean($data['category2_pid_mainslide'][0]['product']); ?>.html"><img class="cat2_slide_prod" src="<?=base_url().$data['category2_pid_mainslide'][0]['product_image_path'] ?>" /></a></li>
+                    <li><a href="<?=base_url()."item/".$data['category2_pid_mainslide'][1]['id_product']."/".es_url_clean($data['category2_pid_mainslide'][1]['product']); ?>.html"><img class="cat2_slide_prod" src="<?=base_url().$data['category2_pid_mainslide'][1]['product_image_path'] ?>" /></a></li>
+                    <li><a href="<?=base_url()."item/".$data['category2_pid_mainslide'][2]['id_product']."/".es_url_clean($data['category2_pid_mainslide'][2]['product']); ?>.html"><img class="cat2_slide_prod" src="<?=base_url().$data['category2_pid_mainslide'][2]['product_image_path'] ?>" /></a></li>
                 </ul>
             </div>
             <div class="electronics_product_sides products border3">
                 <div>
-                    <a href="<?= base_url()."item/".$data['category2_pid'][3]['id_product']."/".$function->clean($data['category2_pid'][3]['product']); ?>.html">
+                    <a href="<?= base_url()."item/".$data['category2_pid'][3]['id_product']."/".es_url_clean($data['category2_pid'][3]['product']); ?>.html">
                         <img src="<?= base_url().$data['category2_pid'][3]['path'].'categoryview/'.$data['category2_pid'][3]['file'];  ?>">
                         <h2><?=html_escape($data['category2_pid'][3]['product']);?></h2>
                     </a>
                     <p>Price: <span>&#8369;<?php echo number_format($data['category2_pid'][3]['price'],2,'.',',');?></span> onwards</p>
                 </div>
                 <div>
-                    <a href="<?= base_url()."item/".$data['category2_pid'][0]['id_product']."/".$function->clean($data['category2_pid'][0]['product']); ?>.html">
+                    <a href="<?= base_url()."item/".$data['category2_pid'][0]['id_product']."/".es_url_clean($data['category2_pid'][0]['product']); ?>.html">
                         <img src="<?= base_url().$data['category2_pid'][0]['path'].'categoryview/'.$data['category2_pid'][0]['file'];  ?>">
                         <h2><?=html_escape($data['category2_pid'][0]['product']);?></h2>
                     </a>

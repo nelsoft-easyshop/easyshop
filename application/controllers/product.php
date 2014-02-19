@@ -10,9 +10,7 @@ class product extends MY_Controller
 		$this->load->helper('htmlpurifier');
 		$this->load->model("product_model");
 		$this->load->vars(
-			array('category_navigation' => $this->load->view('templates/category_navigation',
-				array('cat_items' =>  $this->getcat(),
-				'function' => new MY_Controller()), TRUE ))
+			array('category_navigation' => $this->load->view('templates/category_navigation',array('cat_items' =>  $this->getcat(),), TRUE ))
 		);
 	}
 

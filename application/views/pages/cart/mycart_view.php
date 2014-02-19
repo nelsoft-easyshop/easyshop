@@ -22,7 +22,7 @@
                     <div>
                         <input type="checkbox" class="rad" value="<?PHP echo $row['rowid']; ?>" checked="checked">
              
-                        <a href="<?=base_url().'item/'.$row['id'].'/'.$function->clean($row['name']);?>" class="has-tooltip" data-image="<?=base_url()?><?php echo $row['img'][0]['path']; ?>categoryview/<?php echo $row['img'][0]['file']; ?>"><img style="height:60px;width: 60px" src="<?=base_url()?><?php echo $row['img'][0]['path']; ?>thumbnail/<?php echo $row['img'][0]['file']; ?>"></a>
+                        <a href="<?=base_url().'item/'.$row['id'].'/'.es_url_clean($row['name']);?>" class="has-tooltip" data-image="<?=base_url()?><?php echo $row['img'][0]['path']; ?>categoryview/<?php echo $row['img'][0]['file']; ?>"><img style="height:60px;width: 60px" src="<?=base_url()?><?php echo $row['img'][0]['path']; ?>thumbnail/<?php echo $row['img'][0]['file']; ?>"></a>
                         <p class="product_title"><?PHP echo html_escape($row['name']); ?></p>
                         <p class="attr_container">
                             <table>
