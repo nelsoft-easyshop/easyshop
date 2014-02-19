@@ -126,8 +126,8 @@ class productUpload extends MY_Controller
 		$product_condition = $this->input->post('prod_condition');
 		$sku = trim($this->input->post('prod_sku'));
 		
-		$keyword = trim($product_title).' '.trim($this->input->post('prod_keyword'));
-		
+		$keyword = $this->clean(trim($product_title).' '.trim($this->input->post('prod_keyword')));
+		$keyword = str_replace('-', ' ',$keyword);
 		$style_id = 1;
 		$member_id =  $this->session->userdata('member_id');
 		

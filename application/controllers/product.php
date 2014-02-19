@@ -10,7 +10,9 @@ class product extends MY_Controller
 		$this->load->helper('htmlpurifier');
 		$this->load->model("product_model");
 		$this->load->vars(
-			array('category_navigation' => $this->load->view('templates/category_navigation',array('cat_items' =>  $this->getcat()), TRUE ),)
+			array('category_navigation' => $this->load->view('templates/category_navigation',
+				array('cat_items' =>  $this->getcat(),
+				'function' => new MY_Controller()), TRUE ))
 		);
 	}
 
@@ -195,7 +197,7 @@ class product extends MY_Controller
 				$response['main_categories'] = $this->product_model->getFirstLevelNodeAlphabetical(true);
 				$data = array( 
 					'title' => substr($url_string,0,-5).' | Easyshop.ph',
-					);
+					); 
 				$data = array_merge($data, $this->fill_header());
 				$this->load->view('templates/header', $data); 
 				$this->load->view('pages/product/product_search_by_category',$response);
@@ -369,6 +371,7 @@ class product extends MY_Controller
 
 	function sch_onpress()
 	{
+		if($this->input->post('data')){
 		$html = "";
 		$stringData =  $this->input->post('data');
 		$string = ' '.ltrim($stringData); 
@@ -381,11 +384,12 @@ class product extends MY_Controller
 			$html .= "<li>No Record Found!</li>";
 		}else{
 			foreach ($keywords as $value) {
-				$html .= "<li><a href='search/search.html?q_str=".urlencode($value)."&q_cat=1'>".$value."</a></li>";
+			$html .= "<li><a href='search/search.html?q_str=".$this->clean($value)."&q_cat=1'>".$value."</a></li>";
 			}
 		}
 		$html .= "</ul>";
 		echo $html;
+		}
 
 	}
 
@@ -415,7 +419,7 @@ class product extends MY_Controller
 				}
 
 				$string = ' '.ltrim($_GET['q_str']); 
-				$words = "+".implode("*,+",explode(" ",trim($string)))."*"; 
+				$words = "+".implode("*,+",explode("-",trim($string)))."*"; 
 				$checkifexistcategory = $this->product_model->checkifexistcategory($category);
 				
 					if($checkifexistcategory == 0 || $category == 1)
@@ -549,7 +553,7 @@ class product extends MY_Controller
 	 
 		
 		$response['typeofview'] = $type;
-		$response['id_cat'] = $category;
+		$response['id_cat'] = $category; 
 		if(count($response['items']) <= 0)
 		{
 			$data = json_encode('0');
@@ -588,7 +592,8 @@ class product extends MY_Controller
 				'allowed_reviewers' => $this->product_model->getAllowedReviewers($id),
 				//userdetails --- email/mobile verification info
 				'userdetails' => $this->product_model->getCurrUserDetails($uid),
-                'product_quantity' => $this->product_model->getProductQuantity($id), 
+                'product_quantity' => $this->product_model->getProductQuantity($id)
+                
 				));
 
 			$data['vendorrating'] = $this->product_model->getVendorRating($data['product']['sellerid']);
@@ -753,8 +758,8 @@ class product extends MY_Controller
 
 		$data = array( 
 			'title' => 'Easyshop.ph - All Categories',  
-			'categories' => $categories,
-			);
+			'categories' => $categories
+			); 
 		$data = array_merge($data, $this->fill_header());
 		$this->load->view('templates/header', $data); 
 		$this->load->view('pages/product/all_categories_view', $data); 

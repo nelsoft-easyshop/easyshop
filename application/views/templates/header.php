@@ -111,7 +111,7 @@
       <div class="logo"> <a href="<?=base_url()?>home"><img src="<?=base_url()?>assets/images/img_logo.png" alt="Logo"></a> </div>
       <div class="search_box prob_search_box">
         <div>
-          <input name="q_str" type="text" id="main_search" value="<?php if(isset($_GET['q_str'])) echo $_GET['q_str']; ?>" autocomplete="off">
+          <input name="q_str" type="text" id="main_search" value="<?php if(isset($_GET['q_str'])) echo str_replace('-', ' ', $_GET['q_str']); ?>" autocomplete="off">
           <select name="q_cat" id="q_cat">
             <option value="1">All Categories</option>
             <?php

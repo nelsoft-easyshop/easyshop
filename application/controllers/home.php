@@ -10,7 +10,7 @@ class Home extends MY_Controller {
 		$this->load->library('cart');
         $this->load->library('home_xml');
 		$this->load->vars(
-            array('category_navigation' => $this->load->view('templates/category_navigation',array('cat_items' =>  $this->getcat()), TRUE ),)
+            array('category_navigation' => $this->load->view('templates/category_navigation',array('cat_items' =>  $this->getcat(),'function' => new MY_Controller()), TRUE ),)
 		);
     }
 
@@ -19,6 +19,7 @@ class Home extends MY_Controller {
 		$data = array('title' => 'Home | Easyshop.ph',
                 'page_javascript' => 'assets/JavaScript/home.js',
                 'data' => $this->home_xml->getFilenameID('home_files')
+
 				);
         $data = array_merge($data, $this->fill_header());
 		$this->load->view('templates/header', $data);

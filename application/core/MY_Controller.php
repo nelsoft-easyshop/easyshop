@@ -2,15 +2,15 @@
 class MY_Controller extends CI_Controller 
 {
 	function __construct()
-    {
-        parent::__construct();
-                
+	{
+		parent::__construct();
+
 		$this->config->set_item('base_url',"https://".$_SERVER["SERVER_NAME"].":".$_SERVER["SERVER_PORT"]."/");
         #$this->config->set_item('base_url',"http://".$_SERVER["SERVER_NAME"].":".$_SERVER["SERVER_PORT"]."/");
 		$this->load->model("user_model");
 		$this->load->model("cart_model");
 		$this->load->model("product_model");
-    }
+	}
 	
 	function fill_header()
 	{	
@@ -20,18 +20,18 @@ class MY_Controller extends CI_Controller
 		else{
             #if user_cur_loc session is empty, set it to home else leave it as is
             #Fixes a bug that makes the user_cur_loc session variable contain rubbish URIs
-            if(!$this->session->userdata('user_cur_loc')){
-               $this->session->set_userdata('user_cur_loc','home');
-            }
+			if(!$this->session->userdata('user_cur_loc')){
+				$this->session->set_userdata('user_cur_loc','home');
+			}
 		}
 
 
 		$usersession = $this->session->userdata('usersession');
 		if(!empty($usersession) || $this->check_cookie()){
-        
-            $uid = $this->session->userdata('member_id'); 
-	    	$row = $this->user_model->getUsername($uid);
-        
+
+			$uid = $this->session->userdata('member_id'); 
+			$row = $this->user_model->getUsername($uid);
+
 			$logged_in = true;
 			$uname = $row['username'];
 		}
@@ -59,7 +59,7 @@ class MY_Controller extends CI_Controller
 				'useragent' => $this->session->userdata('user_agent'),
 				'token' => $cookieval,
 				'usersession' => $this->session->userdata('session_id')
-			);
+				);
 			$cookielogin = $this->user_model->cookie_login($data);
 			if($cookielogin['o_success'] >= 1){
 				$this->session->set_userdata('member_id', $cookielogin['o_memberid']);
@@ -73,11 +73,11 @@ class MY_Controller extends CI_Controller
 		}
 		else
 			return false;
-			
+
 	}
-        
-    function getcat() {
-        
+
+	function getcat() {
+
 		$row = $this->getdatafromcat(1);
 		$arr_data = array();
 		for($i=0;$i < count($row);$i++)
@@ -108,41 +108,53 @@ class MY_Controller extends CI_Controller
 			}
 		}
 		return $row;
-        
+
 	}
 	
 	function getdatafromcat($id){
 		$row = $this->product_model-> getCatItemsWithImage($id);
 		return $row;
 	}
-    
+
 
     #Experimental
-    function getcatfast(){
-        $rows = $this->product_model->getCatFast();
-        $data = array();
-        $x = 0;
-        $y = $x;
-        foreach($rows as $row){
-            if(!isset($data[$x])){
-                $data[$x] = array();
-                $f = 1;
-           }
-           
-            if(!in_array($row['level1_id'], $data[$x])){
-                $data[$x]['id_cat'] = $row['level1_id'];
-                $data[$x]['NAME'] = $row['level1_name'];
-                $data[$x]['path'] = $row['img_level1'];
-                $data[$x][0] = array();
-                if($f === 0)
-                    $x++;
-            }
-            else{
-                $f = 0;                
-            }
-        }
-        return $data;
-    }
+	function getcatfast(){
+		$rows = $this->product_model->getCatFast();
+		$data = array();
+		$x = 0;
+		$y = $x;
+		foreach($rows as $row){
+			if(!isset($data[$x])){
+				$data[$x] = array();
+				$f = 1;
+			}
+
+			if(!in_array($row['level1_id'], $data[$x])){
+				$data[$x]['id_cat'] = $row['level1_id'];
+				$data[$x]['NAME'] = $row['level1_name'];
+				$data[$x]['path'] = $row['img_level1'];
+				$data[$x][0] = array();
+				if($f === 0)
+					$x++;
+			}
+			else{
+				$f = 0;                
+			}
+		}
+		return $data;
+	}
+
+	function clean($string){
+		$string = preg_replace("/\s+/", " ", $string);
+		$string = str_replace('-', ' ', trim($string)); 
+		$string = preg_replace("/\s+/", " ", $string);
+		$string = str_replace(' ', '-', trim($string));  
+		$string = preg_replace('/[^A-Za-z0-9\-]/', '', $string);  
+
+		$string = str_replace('-', ' ', $string); 
+		$string = str_replace(' ', '-', $string);  
+		return preg_replace('/[^A-Za-z0-9\-]/', '', $string);
+	}
 
 }
 
