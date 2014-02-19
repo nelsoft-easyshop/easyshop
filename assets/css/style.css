@@ -2219,7 +2219,8 @@ padding: 8px 0;
 }
 
 /**** Member page Dashboard panel *****/
-#active_items h2, #latest_post_item h2, #deleted_items h2 {
+#active_items h2, #latest_post_item h2, #deleted_items h2, 
+#dashboard-feedbacks h2 {
     margin-top: 20px;
     margin-bottom: 10px;
 }

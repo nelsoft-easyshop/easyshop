@@ -279,7 +279,10 @@
 				
 			
 				<div class="dashboard_table" id="deleted_items">
-				
+					<h2>Deleted Items</h2>
+					<?php if(count($deleted_products) == 0):?>
+						<p><strong>No deleted items.</strong></p>
+					<?php else:?>
 					<div class="pagination" id="pagination_deleted">
 						<a href="#" class="first" data-action="first">&laquo;</a>
 						<a href="#" class="previous" data-action="previous">&lsaquo;</a>
@@ -288,7 +291,6 @@
 						<a href="#" class="last" data-action="last">&raquo;</a>
 					</div>
 					
-				
 					<div class="paging">
 					<?php $product_counter =0; ?>
 					<?php foreach($deleted_products as $deleted_product):?>
@@ -369,7 +371,7 @@
 						<?php endif;  ?>
 					<?php endforeach; ?>
 					</div>
-					
+					<?php endif;?>
 				</div>
 				
 				<div class="dashboard_table" id="dashboard-feedbacks">
