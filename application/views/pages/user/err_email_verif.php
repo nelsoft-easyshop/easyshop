@@ -1,11 +1,3 @@
-<script language="javascript" type="text/javascript">
-
-	$(document).ready(function(){
-		$('.search_wrapper').css('display','none');
-	});
-
-</script>
-
 
 <div class="clear"></div>
     <section>

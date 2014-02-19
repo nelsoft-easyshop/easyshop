@@ -1,4 +1,3 @@
-<script type='text/javascript' src='<?=base_url()?>assets/JavaScript/register.js'></script>
 
 <div id="register_form2_view">
 
@@ -152,3 +151,9 @@
 </section>
 
 </div>
+
+
+<script type='text/javascript' src='<?=base_url()?>assets/JavaScript/js/jquery.simplemodal.js'></script>
+<script type='text/javascript' src='<?=base_url()?>assets/JavaScript/js/jquery.numeric.js'></script>
+<script type='text/javascript' src='<?=base_url()?>assets/JavaScript/js/jquery.validate.js'></script>
+<script type='text/javascript' src='<?=base_url()?>assets/JavaScript/register.js'></script>

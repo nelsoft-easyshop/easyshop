@@ -267,7 +267,7 @@ class Register extends MY_Controller
 		$member_id = $this->register_model->get_memberid($username)['id_member'];
 
 		if($member_id === 0){
-			$this->load->view('templates/header', $data);
+			$this->load->view('templates/header_topnavsolo', $data);
 			$this->load->view('pages/user/err_email_verif', $data);
 			$this->load->view('templates/footer');
 			return;
@@ -281,7 +281,7 @@ class Register extends MY_Controller
 		
 			if($data_val['is_email_verify'] == 1){
 				$data['verification_msg'] = $this->lang->line('expired_email_verification');
-				$this->load->view('templates/header', $data);
+				$this->load->view('templates/header_topnavsolo', $data);
 				$this->load->view('pages/user/register_form3_view', $data);
 				$this->load->view('templates/footer');
 				return;
@@ -295,12 +295,12 @@ class Register extends MY_Controller
 			$this->register_model->update_verification_status($temp);
 			
 			$data['verification_msg'] = $this->lang->line('success_email_verification');
-			$this->load->view('templates/header', $data);
+			$this->load->view('templates/header_topnavsolo', $data);
 			$this->load->view('pages/user/register_form3_view', $data);
 			$this->load->view('templates/footer');
 		}
 		else{
-			$this->load->view('templates/header', $data);
+			$this->load->view('templates/header_topnavsolo', $data);
 			$this->load->view('pages/user/err_email_verif', $data);
 			$this->load->view('templates/footer');
 		}

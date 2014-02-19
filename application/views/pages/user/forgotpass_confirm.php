@@ -45,7 +45,9 @@
         <?php endif; ?>
       </div>
 </section>
+
 <!-- password strength checker -->
 <script type="text/javascript" src="<?=base_url()?>assets/JavaScript/js/mootools-core-1.4.5-full-compat.js"></script> 
 <script type="text/javascript" src="<?=base_url()?>assets/JavaScript/js/password_meter.js"></script>
-
+<script type='text/javascript' src='<?=base_url()?>assets/JavaScript/js/jquery.numeric.js'></script>
+<script type='text/javascript' src='<?=base_url()?>assets/JavaScript/js/jquery.validate.js'></script>

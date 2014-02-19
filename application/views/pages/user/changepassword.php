@@ -1,4 +1,4 @@
-<script type='text/javascript' src='<?=base_url()?>assets/JavaScript/register.js'></script>
+
 <div class="clear"></div>
 <section>
 	<div class="wrapper"> <span class="reg_title">Change Password</span></div>
@@ -61,6 +61,8 @@
         <?php endif; ?>
       </div>
 </section>
+
+<script type='text/javascript' src='<?=base_url()?>assets/JavaScript/register.js'></script>
 <!-- password strength checker -->
 <?php if($logged_in):?>
 	<script type="text/javascript" src="<?=base_url()?>assets/JavaScript/js/mootools-core-1.4.5-full-compat.js"></script> 

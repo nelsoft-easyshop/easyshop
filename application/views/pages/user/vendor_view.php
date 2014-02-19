@@ -7,27 +7,18 @@
 }
 </style>
 <![endif]-->
-<script type='text/javascript' src='<?=base_url()?>assets/JavaScript/js/jquery.Jcrop.min.js'></script>
-<link type="text/css" href="<?=base_url()?>assets/css/jquery.Jcrop.min.css" rel="stylesheet" media='screen'/>
+
 <!-- ProgressBar / Widget CSS file TEMPORARY-->
-<link type="text/css" href="<?=base_url()?>assets/css/jquery-ui.css" rel="stylesheet" />
+<!-- <link type="text/css" href="<?=base_url()?>assets/css/jquery-ui.css" rel="stylesheet" /> -->
+
 <!--Memberpage Modal custom CSS-->
 <link type="text/css" href="<?=base_url()?>assets/css/memberpage.css" rel="stylesheet" media='screen'/>
-
-<script src="<?=base_url()?>assets/JavaScript/js/jquery.raty.min.js" type="text/javascript"></script>
-
-<script type='text/javascript' src='<?=base_url()?>assets/JavaScript/js/jquery.jqpagination.min.js'></script>
+<!--Pagination CSS-->
 <link  type="text/css"  href='<?=base_url()?>assets/css/jqpagination.css' rel="stylesheet" media='screen'/>
-
-
-<!-- MEMBERPAGE JS-->
-<script type="text/javascript" src="<?=base_url()?>assets/JavaScript/memberpage.js"></script>
-<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=&sensor=false"></script>
-
+<!--Jcrop CSS-->
+<link type="text/css" href="<?=base_url()?>assets/css/jquery.Jcrop.min.css" rel="stylesheet" media='screen'/>
 
 <div id = "member_page_body">
-	<script src="<?=base_url()?>assets/JavaScript/js/jquery.idTabs.min.js" type="text/javascript"></script>
-	<script src="<?=base_url()?>assets/JavaScript/js/jquery.knob.js" type="text/javascript"></script>
 	<div class="clear"></div>
 	<section>
 		<div class="wrapper profile_content">
@@ -470,3 +461,12 @@
 				</div>
 
 			</div>
+
+		
+<script src="<?=base_url()?>assets/JavaScript/js/jquery.raty.min.js" type="text/javascript"></script>
+<script type='text/javascript' src='<?=base_url()?>assets/JavaScript/js/jquery.jqpagination.min.js'></script>
+<script src="<?=base_url()?>assets/JavaScript/js/jquery.idTabs.min.js" type="text/javascript"></script>
+<script src="<?=base_url()?>assets/JavaScript/js/jquery.knob.js" type="text/javascript"></script>
+
+<!-- MEMBERPAGE JS-->
+<script type="text/javascript" src="<?=base_url()?>assets/JavaScript/memberpage.js"></script>
