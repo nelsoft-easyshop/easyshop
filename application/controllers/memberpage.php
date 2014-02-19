@@ -19,7 +19,7 @@ class Memberpage extends MY_Controller
 		if(!$this->session->userdata('member_id'))
 		    redirect(base_url().'home', 'refresh');
 		$data = $this->fill_view();
-        $this->load->view('templates/header', $data); 
+        $this->load->view('templates/header_plain', $data); 
         $this->load->view('pages/user/memberpage_view', $data); 
         $this->load->view('templates/footer'); 
     } 
