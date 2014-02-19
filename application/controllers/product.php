@@ -772,10 +772,17 @@ class product extends MY_Controller
 		return $row;
 	}
 	
-	function updateIsDelete($productid=0, $is_delete){
-		$memberid = $this->session->userdata('member_id');
-		$this->product_model->updateIsDelete($productid, $memberid, $is_delete);
-		redirect('memberpage', 'refresh');
+	function changeDelete(){
+        if($this->input->post('p_id') && $this->input->post('action')){
+            $memberid = $this->session->userdata('member_id');
+            $productid = $this->input->post('p_id');
+            $action = $this->input->post('action');
+            if($action === 'delete')
+                $this->product_model->updateIsDelete($productid, $memberid, 1);
+            else if($action === 'restore')
+                $this->product_model->updateIsDelete($productid, $memberid, 0);
+        }
+		redirect('me', 'refresh');
 	}
     
 }

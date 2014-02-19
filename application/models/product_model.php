@@ -741,9 +741,9 @@ class product_model extends CI_Model
 		$query = $this->sqlmap->getFIlenameID('product', 'updateIsDelete');
 
 		$sth = $this->db->conn_id->prepare($query);
-		$sth->bindParam(':productid',$productid);
-		$sth->bindParam(':memberid',$memberid);
-        $sth->bindParam(':is_delete', $is_delete);
+		$sth->bindParam(':productid',$productid,PDO::PARAM_INT);
+		$sth->bindParam(':memberid',$memberid,PDO::PARAM_INT);
+        $sth->bindParam(':is_delete', $is_delete,PDO::PARAM_INT);
 
 		$sth->execute();
 	}

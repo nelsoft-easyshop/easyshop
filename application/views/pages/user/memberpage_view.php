@@ -220,9 +220,16 @@
 								  		    <?php echo form_open('sell/edit'); ?>
 												<input type="hidden" name="p_id" value ="<?php echo $active_product['id_product'];?>" /> 
 												<input class="manage_lnk" type = "submit" value="Edit Item"> </input>
-											<?php echo form_close(); ?> <span class="border_white">|</span>
-											<a href="<?=base_url()?>product/updateIsDelete/<?php echo $active_product['id_product'];?>/1" class="delete_lnk">Delete item</a>	
-								  		</div>
+											<?php echo form_close(); ?> 
+                                            <span class="border_white">|</span>
+                                       
+                                            <?php echo form_open('product/changeDelete'); ?>
+                                                <input type="hidden" name="p_id" value ="<?php echo $active_product['id_product'];?>" /> 
+                                                <input type="hidden" name="action" value ="delete" /> 
+                                                <input class="manage_lnk" type = "submit" value="Delete Item"> </input>
+                                            <?php echo form_close(); ?>
+                                            
+                                        </div>
 								  	</div>
 									<div class="price_container">
 										<p><span class="fm1 f24 orange">Php <?php echo number_format($active_product['price'],2,'.',',');?></span><br />Price</p>
@@ -283,6 +290,7 @@
 					<?php if(count($deleted_products) == 0):?>
 						<p><strong>No deleted items.</strong></p>
 					<?php else:?>
+
 					<div class="pagination" id="pagination_deleted">
 						<a href="#" class="first" data-action="first">&laquo;</a>
 						<a href="#" class="previous" data-action="previous">&lsaquo;</a>
@@ -315,7 +323,11 @@
 											<a href="<?=base_url();?>item/<?php echo $deleted_product['id_product']."/".$function->clean($deleted_product['name']);?>"><?php echo html_escape($deleted_product['name']);?></a>
 										</p>
 								  		<div class="post_item_button">
-											<a href="<?=base_url()?>product/updateIsDelete/<?php echo $active_product['id_product'];?>/0" class="delete_lnk">Restore</a>
+                                            <?php echo form_open('product/changeDelete'); ?>
+                                                <input type="hidden" name="p_id" value ="<?php echo $deleted_product['id_product'];?>" /> 
+                                                <input type="hidden" name="action" value ="restore" /> 
+                                                <input class="manage_lnk" type = "submit" value="Restore Item"> </input>
+                                            <?php echo form_close(); ?>
 										</div>
 									</div>
 								  	<div class="price_container"> 
@@ -821,7 +833,7 @@
 						</div>
 						<div>
 							<label for="dateofbirth">Birthday:</label>
-							<input type="text" name="dateofbirth" id="datepicker" value="<?php echo ($birthday=='0000-00-00' || $birthday == '0001-01-01' ?'':$birthday)?>">
+							<input type="text" name="dateofbirth" id="datepicker" value="<?php echo ($birthday == '0000-00-00' || $birthday == '0001-01-01'?'':$birthday)?>">
 							<span class="red ci_form_validation_error"><?php echo form_error('dateofbirth'); ?></span>
 						</div>	
 
