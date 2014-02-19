@@ -240,10 +240,10 @@
           <td colspan="3"><textarea style="width: 100%;height:100%" name="prod_description" class="mceEditor"  id="prod_description" placeholder="Enter description..."><?php echo (isset($product_details['description']))?$product_details['description']:'';?></textarea></td>
         </tr> 
         <tr>
-          <td>Item Code (can be anything) <font color="red">*</font></td> <!-- SKU of the product -->
+          <td>SKU Code <font color="red">*</font></td> <!-- SKU of the product -->
           <td colspan="2">
             <input type="text" autocomplete="off" placeholder="Enter SKU" id="prod_sku" name="prod_sku" value="<?php echo (isset($product_details['sku']))?$product_details['sku']:'';?>">
-            <a class="tooltips" href="#"><img src="<?= base_url() ?>assets/images/icon_qmark.png" alt=""><span>Tooltip</span></a>
+            <a class="tooltips" href="#"><img src="<?= base_url() ?>assets/images/icon_qmark.png" alt=""><span>Stock Keeping Unit: you can assign any code in order keep track of your items</span></a>
           </td>
         </tr>
 
