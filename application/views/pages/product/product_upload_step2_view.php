@@ -283,7 +283,7 @@
     </tr>
     <tr>
       <td>Keywords (separated by spaces)</td>
-      <td colspan="2"><input type="text" autocomplete="off" name="prod_keyword" id="prod_price" placeholder="Enter keyword for you item" value="<?php echo (isset($product_details['keywords']))?$product_details['keywords']:'';?>"></td>
+      <td colspan="2"><input type="text" autocomplete="off" name="prod_keyword" id="prod_keyword" placeholder="Enter keyword for you item" value="<?php echo (isset($product_details['keywords']))?$product_details['keywords']:'';?>"></td>
     </tr>
     <tr>
       <td colspan="3">
