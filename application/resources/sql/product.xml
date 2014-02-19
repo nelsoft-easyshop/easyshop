@@ -198,6 +198,7 @@
 	</select>
 	
     <select id="getUserItems">
+        <!-- Didn't work in mysql 5.6 
         SELECT p.`id_product`,p.`name`, p.`brief`, p.`price`, p.`member_id`, p.`price`,
         AVG(COALESCE((r.`rating`),0)) as average_rating, COUNT(r.`rating`) as review_count,
         COALESCE(i.product_image_path,'') as product_image_path, p.`cat_id`, p.`is_delete`
@@ -206,6 +207,16 @@
         LEFT JOIN es_product_image i ON i.`product_id` = p.`id_product` AND i.`is_primary` = 1
         WHERE p.member_id = :id
         GROUP BY p.`id_product` ORDER BY p.lastmodifieddate DESC
+        -->
+         SELECT p.`id_product`,p.`name`, p.`brief`, p.`price`, p.`member_id`, 
+         AVG(COALESCE((r.`rating`),0)) as average_rating, COUNT(r.`rating`) as review_count, 
+         COALESCE(i.product_image_path,'') as product_image_path, p.`cat_id`, p.`is_delete` 
+         FROM es_product p 
+         LEFT JOIN es_product_review r ON p.`id_product` = r.`product_id` AND r.`is_show` = 1 
+         LEFT JOIN es_product_image i ON i.`product_id` = p.`id_product` AND i.`is_primary` = 1 
+         WHERE p.member_id = :id
+         GROUP BY p.`id_product`, p.`name`, p.`brief`, p.`price`, p.`member_id`, i.product_image_path, p.`is_delete`,p.`cat_id`,p.lastmodifieddate 
+         ORDER BY p.lastmodifieddate DESC 
     </select>
 	
     <select id="getCatItemsWithImage">
@@ -581,8 +592,8 @@
     COALESCE(c.name,'') as level3_name,COALESCE(c.id_cat,'') as level3_id,
     d.path as img_level1
     FROM es_cat a
-    LEFT JOIN es_cat b ON b.parent_id = a.id_cat
-    LEFT JOIN es_cat c ON c.parent_id = b.id_cat
+    LEFT JOIN es_cat b ON b.parent_id = a.id_cat AND b.is_main = 1
+    LEFT JOIN es_cat c ON c.parent_id = b.id_cat AND c.is_main = 1
     LEFT JOIN es_cat_img d ON d.id_cat = a.id_cat
     WHERE a.parent_id = 1 AND a.id_cat != 1 AND a.is_main = 1
 </select>
