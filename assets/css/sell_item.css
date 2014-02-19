@@ -369,7 +369,9 @@ div.sell_steps4 ul li:nth-child(4) a {
 }
 
 .form_input input[type="checkbox"] {
-    padding: 0px 15px 15px 0px;
+    border:none;
+    padding: 0px;
+    vertical-align: middle;
 }
 
 .form_input input[type="radio"] {
@@ -416,9 +418,15 @@ div.sell_steps4 ul li:nth-child(4) a {
     width: 250px;
 }
 
-.step4_2 input[name="prod_other_img[]"],
-.step4_2 input[type="file"] {
+.step4_2 input[name="prod_other_img[]"] {
     border: none;
+}
+
+.ie9 .step4_2 input[type="file"],
+.ie8 .step4_2 input[type="file"],
+.ie7 .step4_2 input[type="file"] {
+    border: 1px solid #B3B3B3;
+    background-color: #fff;
 }
 
 .step4_2 input {
@@ -637,6 +645,62 @@ div.sell_steps4 ul li:nth-child(4) a {
 .form_input .proceed_form:hover {
     border: 1px solid #ff4400;
     background-color: #ff9600;
+}
+
+
+
+a.tooltips {
+  position: relative;
+  display: inline;
+}
+a.tooltips span {
+  color: #494949;
+  background: #FFFFFF;
+  border: 1px solid #CECECE;
+  border-radius: 0px;
+  height: auto;
+  line-height: 30px;
+  position: absolute;
+  padding: 8px;
+  text-align: center;
+  width:auto;
+  visibility: hidden; 
+}
+
+a.tooltips span:before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: 100%;
+  margin-top: -12px;
+  width: 0; height: 0;
+  border-right: 12px solid #CECECE;
+  border-top: 12px solid transparent;
+  border-bottom: 12px solid transparent;
+}
+a.tooltips span:after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: 100%;
+  margin-top: -10px;
+  width: 0; height: 0;
+  border-right: 10px solid #FFFFFF;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+}
+a:hover.tooltips span {
+  visibility: visible;
+  opacity: 1;
+  left: 100%;
+  top: 50%;
+  margin-top: -21px;
+  margin-left: 15px;
+  z-index: 999;
+}
+
+.tooltips > img {
+    vertical-align: middle;
 }
 
 /***** Admin upload step 2 ****/
