@@ -176,6 +176,7 @@ $(document).ready(function(){
 					error.appendTo(element.parent());
 		 },
 		 submitHandler: function(form){
+			$('#register_page1').attr('disabled', true);
 		 	$('#register_form1_loadingimg').show();
 		 	form.submit();
 		 }

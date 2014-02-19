@@ -76,7 +76,7 @@
 			<span class="red ci_form_validation_error"><?php echo form_error('captcha_word'); ?></span>
           </div>
 		  <div class="field" style="padding-top:25px">
-			<input type="submit" name="register_page1" value="Agree and Continue"/>
+			<input type="submit" id="register_page1" name="register_page1" value="Agree and Continue"/>
 			<img src="<?=base_url()?>/assets/images/bx_loader.gif" id="register_form1_loadingimg" style="position: relative; top:10px; left:20px; display:none"/>
 		  </div>
 
