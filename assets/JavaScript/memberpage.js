@@ -1,9 +1,4 @@
 
-
-$(document).ready(function(){
-	$('.search_wrapper').css('display','none');
-});
-
 //Progress update
 $(window).load(function(){
 	progress_update('');
