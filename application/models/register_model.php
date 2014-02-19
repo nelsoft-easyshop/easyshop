@@ -178,7 +178,10 @@ class Register_model extends CI_Model
 		$this->email->to($email);
 		$this->email->from('noreply@easyshop.ph', 'Easyshop.ph');
 		$this->email->subject($this->lang->line('email_subject'));
-		$this->email->attach(getcwd() . "\assets\images\img_logo.png", "inline");
+		//Windows code
+		//$this->email->attach(getcwd() . "\assets\images\img_logo.png", "inline");
+		//CentOS code
+		$this->email->attach(getcwd() . "/assets/images/img_logo.png", "inline");
 
 		$data = array(
 			'site_url' => site_url('register/email_verification'),
