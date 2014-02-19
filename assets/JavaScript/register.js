@@ -542,7 +542,7 @@ function username_check(){
 	var username = $('#username').val();
 	
 	$.post(config.base_url+'register/username_check', {username: username}, function(result){
-		if(result == 1){
+		if(result === '1'){
 			showcheck($('#username'));
 			$('.username_availability').html('Username available');
 		}
