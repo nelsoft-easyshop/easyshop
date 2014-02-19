@@ -33,11 +33,6 @@
           <div>
             <p>Failed to verify account information.</p>
           </div>
-          <div>
-            <h2>User: <?php echo $member_username;?></h2>
-			<br>
-			<h2>Email: <?php echo $email;?></h2>
-          </div> 
         </div>
       </div>
     </section>
