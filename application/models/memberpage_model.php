@@ -49,7 +49,8 @@ class memberpage_model extends CI_Model
 	function edit_member_by_id($member_id, $data=array())
 	{
 		if(strlen($data['birthday']) == 0)
-			$data['birthday']='0000-00-00';
+			//$data['birthday']='0000-00-00';
+			$data['birthday']='0001-01-01';
 		$query = $this->sqlmap->getFilenameID('users', 'edit_member');
         $sth = $this->db->conn_id->prepare($query);	
         $sth->bindParam(':fullname', $data['fullname']);
