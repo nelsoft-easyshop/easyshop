@@ -70,12 +70,12 @@
             <input id="captcha_word" type="text" size="6" maxlength="6" name="captcha_word"/>
 			<span id = "captcha_img" style="position: relative; top:10px"><?php echo $image?></span>
 			<img src="<?=base_url()?>/assets/images/imgrefresh.png" id="captcha_refresh" style="position: relative; top:5px">
-			<img src="<?=base_url()?>/assets/images/bx_loader.gif" id="captcha_loading" style="position: relative; top:10px; left:20px; display:none"/>
+			<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" id="captcha_loading" style="position: relative; top:10px; left:20px; display:none"/>
 			<span class="red ci_form_validation_error"><?php echo form_error('captcha_word'); ?></span>
           </div>
 		  <div class="field" style="padding-top:25px">
 			<input type="submit" id="register_page1" name="register_page1" value="Agree and Continue"/>
-			<img src="<?=base_url()?>/assets/images/bx_loader.gif" id="register_form1_loadingimg" style="position: relative; top:10px; left:20px; display:none"/>
+			<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" id="register_form1_loadingimg" style="position: relative; top:10px; left:20px; display:none"/>
 		  </div>
 
 	  </div>
