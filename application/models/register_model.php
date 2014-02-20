@@ -334,7 +334,7 @@ class Register_model extends CI_Model
 	
 		$this->email->set_newline("\r\n");
 		$this->email->to($email);
-		$this->email->from('easyshop.nelsoft@gmail.com', 'Easyshop');
+		$this->email->from('noreply@easyshop.ph', 'Easyshop.ph');
 		$this->email->subject('Password reset on Easyshop.ph');
 		
 		$data = array(
