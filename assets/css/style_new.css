@@ -288,7 +288,6 @@ span.seller-name span:hover {
 .buy_box span {
 	font-family: 'Roboto', sans-serif;
 	font-size: 10px;
-	margin-top: 8px;
 	display: block;
 }
 
@@ -348,6 +347,14 @@ span.seller-name span:hover {
 	color: #0072ff;
 }
 
+.add_to_cart span {
+	background: url('../images/global_sprite.png') -48px -259px no-repeat;
+    display: inline-block;
+    height: 18px;
+    vertical-align: middle;
+    width: 22px;
+}
+
 /*** Main Product Content style ***/
 .category_nav.product_content {
 /*	width: 100%;*/
@@ -405,8 +412,13 @@ span.seller-name span:hover {
 	color: #01ab25;
 }
 
-.product_content_payment img {
-	padding:10px 8px;
+.product_content_payment span {
+	background-image: url('../images/global_sprite.png');
+	background-repeat: no-repeat;
+	border:1px solid #E7E7E7;
+	display: inline-block;
+	height: 50px;
+	width: 60px;
 }
 
 /** product tab **/
