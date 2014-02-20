@@ -187,7 +187,7 @@
                   <td>SKU Code <font color="red">*</font></td> <!-- SKU of the product -->
                   <td colspan="2">
                     <input type="text" autocomplete="off" placeholder="Enter SKU" id="prod_sku" name="prod_sku" value="<?php echo (isset($product_details['sku']))?$product_details['sku']:'';?>">
-                    <a class="tooltips" href="javascript:void(0)"><img src="<?= base_url() ?>assets/images/icon_qmark.png" alt=""><span>Stock Keeping Unit: you can assign any code in order keep track of your items</span></a>
+                    <a class="tooltips" href="javascript:void(0)"><img src="<?= base_url() ?>assets/images/icon_qmark.png" alt=""><span>Stock Keeping Unit: you can assign any code in order to keep track of your items</span></a>
                   </td>
                 </tr>
 
