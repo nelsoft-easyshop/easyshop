@@ -140,7 +140,8 @@ $(document).ready(function(){
                 required: true,
                 minlength: 5,
                 maxlength:25,
-				alphanumeric_underscore: true
+				alphanumeric_underscore: true,
+				equalTo: '#usernamecheck'
 				},
 			password: {
 				required: true,
@@ -161,6 +162,9 @@ $(document).ready(function(){
 				}
 		 },
 		 messages:{
+			username:{
+				equalTo: ''
+			},
 			cpassword:{
 				equalTo: ''
 			}
@@ -540,6 +544,7 @@ function username_check(){
 		if(result === '1'){
 			showcheck($('#username'));
 			$('.username_availability').html('Username available');
+			$('#usernamecheck').attr('value', $('#username').val());
 		}
 		else{
 			showx($('#username'));

@@ -36,6 +36,7 @@
 		  <div class="field">
             <label for="username">Username:</label>
             <input id="username" name="username" type="text" maxlength="25" autocomplete="off" value="<?php echo $reg_username?>"/>
+			<input type="hidden" id="usernamecheck" value="">
 			<div id="username_status" style="display:inline;">
 				<img src="<?=base_url()?>/assets/images/check_icon.png" id="username_check" style="position: relative;display:none;vertical-align:middle"/>
 				<img src="<?=base_url()?>/assets/images/x_icon.png" id="username_x" style="position: relative;display:none;vertical-align:middle"/>
