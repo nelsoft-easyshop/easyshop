@@ -2,6 +2,7 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <?php require_once("assets/includes/css.php"); ?>
+    <?php require_once("assets/includes/js.php"); ?>
 <meta charset="utf-8" />
 <meta name="description" content="" />
 <meta name="keywords" content=""/>
