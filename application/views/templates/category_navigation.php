@@ -1,9 +1,10 @@
 
 <nav>                
 	<ul>                    
+
 	<?PHP for($x=0;$x < sizeof($cat_items);$x++): ?>                
 		<li  class="category_item">
-			<p style="background:url('assets/<?PHP echo $cat_items[$x]['path']; ?>') no-repeat scroll left center #fff">
+			<p style="background:url('<?php echo base_url()?>assets/<?PHP echo $cat_items[$x]['path']; ?>') no-repeat scroll left center #fff">
 				<a href="<?=base_url()?>category/<?PHP echo $cat_items[$x]['id_cat']; ?>/<?PHP echo es_url_clean($cat_items[$x]['NAME']); ?>.html">
 					<span><?PHP echo $cat_items[$x]['NAME']; ?></span>
 				</a>
