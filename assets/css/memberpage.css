@@ -22,3 +22,7 @@
 	display: block;
 	margin: auto !important;
 }
+
+.ui-dialog-titlebar-close{
+	display:none;
+}

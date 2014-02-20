@@ -194,6 +194,7 @@ $(document).ready(function(){
 		autoOpen: false,
 		title: "Enter confirmation code",
 		modal: true,
+		closeOnEscape: false,
 		buttons:{
 			Submit: function(){
 				var $dialog = $(this);
@@ -209,13 +210,15 @@ $(document).ready(function(){
 				})
 			},
 			Cancel: function(){
+				var mobilediv = $('#mobilediv');
+				
 				$('#verifcode').val('');
 				$('#mobile').attr('disabled', true);
-				$('#mobilediv').find('span.verify_now').show();
-				$('#mobilediv').removeClass('fired');
-				$('#mobilediv').find('span.personal_contact_cont').show();
+				mobilediv.find('span.verify_now').show();
+				mobilediv.removeClass('fired');
+				mobilediv.find('span.personal_contact_cont').show();
 				$('#cont_mobilediv').hide();
-				$('#mobilediv').find('span.edit_personal_contact').hide();
+				mobilediv.find('span.edit_personal_contact').hide();
 				$(this).dialog( "close" );
 			}
 		},
@@ -265,6 +268,7 @@ $(document).ready(function(){
 				else{
 					if(field==='mobile'){
 						if(obj === 'success'){
+							contdiv.hide();
 							$('#verifcode_div').dialog('open');
 						}
 						else if(obj === 'error'){
