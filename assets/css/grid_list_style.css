@@ -1,7 +1,7 @@
 /*** Product View list & Grid ***/
 .grid, .list {
-	width: 35px; 
-	height:35px; 
+	width: 20px; 
+	height:20px; 
 	margin-left: 10px; 
 	float: right; 
 	cursor:  pointer; 
@@ -9,23 +9,23 @@
 }
 
 .grid {
-	background:#b0b0b0 url(../images/icon_grid.png) 50% no-repeat;
+	background:#b0b0b0 url(../images/global_sprite.png) -237px -298px no-repeat;
 }
 .grid:hover {
-	background: #ff4400 url(../images/icon_grid.png) 50% no-repeat;
+	background: #ff4400 url(../images/global_sprite.png) -237px -298px no-repeat;
 }
 .grid-active { 
-	background: #ff4400 url(../images/icon_grid.png) 50% no-repeat; 
+	background: #ff4400 url(../images/global_sprite.png) -237px -298px no-repeat; 
 }
 
 .list {
-	background: #b0b0b0  url(../images/icon_list.png) 50% no-repeat;
+	background: #b0b0b0  url(../images/global_sprite.png) -292px -298px no-repeat;
 }
 .list:hover {
-	background: #ff4400 url(../images/icon_list.png) 50% no-repeat;
+	background: #ff4400 url(../images/global_sprite.png) -292px -298px no-repeat;
 }
 .list-active{
-	background: #ff4400 url(../images/icon_list.png) 50% no-repeat;
+	background: #ff4400 url(../images/global_sprite.png) -292px -298px no-repeat;
 }
 
 
