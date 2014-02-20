@@ -629,24 +629,43 @@ $(document).on('change','.qtyTextClass',function(){
 
 $(document).on('change','.other_name_class',function(){
 
- $('.combinationContainer').empty();
- arraySelected = {};  
-  
-  var cnt = $(this).data('cnt');
-  var formatOldValue = $(this).data('oldValue');
-  var oldValue = formatOldValue;
-  var formatHeadValue = $(this).val();
+  $('.combinationContainer').empty();
+  arraySelected = {};  
+
+  var formatHeadValue = $.trim($(this).val());
   var headValue = formatHeadValue.toLowerCase().replace(/\b[a-z]/g, function(letter) {
     return letter.toUpperCase();
   }); 
-  $(this).data('oldValue', headValue);
+  var formatOldValue = $(this).data('oldValue');
+  var oldValue = formatOldValue;
+  var cnt = $(this).data('cnt');
+  var headCount = 0;
 
+  $('.other_name_class').each(function(){
+    var thisValue = $.trim($(this).val());
+    var thisValue = thisValue.toLowerCase().replace(/\b[a-z]/g, function(letter) {
+    return letter.toUpperCase();
+  });  
+    if(headValue == thisValue){
+      headCount++;
+    }
+  }); 
+
+  if(headCount > 1){
+    alert('Value '+headValue+' already exist!');
+     $('.prod_'+cnt).val(oldValue);
+    return false;
+  }
+
+  
+
+  $(this).data('oldValue', headValue);
 
   if(!$.trim( $('#'+headValue+'Combination').html()).length <= 0){
 
-    // console.log(false);
+    console.log(false);
         // $('#'+oldValue+'Combination option[data-value=1]').remove().appendTo('#'+headValue+'Combination');  
-
+      
         $('#'+oldValue+'Combination option[data-value=1]').each(function(){
           var value = $(this).val();
           var dataValue = 1;
@@ -671,7 +690,7 @@ $(document).on('change','.other_name_class',function(){
 
         }else{
 
-          // console.log(true);
+          console.log(true); 
           // $('#'+oldValue+'Combination option[data-value=1]').remove().appendTo('#'+headValue+'Combination');  
 
           $('#'+oldValue+'Combination option[data-value=1]').each(function(){
