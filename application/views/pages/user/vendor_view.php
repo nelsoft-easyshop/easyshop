@@ -467,6 +467,7 @@
 <script type='text/javascript' src='<?=base_url()?>assets/JavaScript/js/jquery.jqpagination.min.js'></script>
 <script src="<?=base_url()?>assets/JavaScript/js/jquery.idTabs.min.js" type="text/javascript"></script>
 <script src="<?=base_url()?>assets/JavaScript/js/jquery.knob.js" type="text/javascript"></script>
+<script type='text/javascript' src='<?=base_url()?>assets/JavaScript/js/jquery.numeric.js'></script>
 
 <!-- MEMBERPAGE JS-->
 <script type="text/javascript" src="<?=base_url()?>assets/JavaScript/memberpage.js"></script>
