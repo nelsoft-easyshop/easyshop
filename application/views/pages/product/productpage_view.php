@@ -283,6 +283,7 @@
 <script src="<?=base_url()?>assets/JavaScript/js/jquery.idTabs.min.js" type="text/javascript"></script>
 <script src="<?=base_url()?>assets/JavaScript/js/jquery.raty.min.js" type="text/javascript"></script>
 <script src="<?= base_url() ?>assets/JavaScript/categorynavigation.js" type="text/javascript"></script>
+<script type='text/javascript' src='<?=base_url()?>assets/JavaScript/js/jquery.numeric.js'></script>
 <script src="<?=base_url().$page_javascript?>" type="text/javascript"></script>
 
 <style type="text/css">
