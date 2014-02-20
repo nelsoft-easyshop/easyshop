@@ -60,9 +60,9 @@
 			</div>
 			
 			<div class="filler"><span class="error red" id="err_mobilespan">Mobile No. already used.</span></div>
-		<!--
+		
 			<div class="filler"><label><strong>OR</strong></label></div>
-		-->
+		
 			<div class="field">			
 					<label for="register_email">Email Address:</label>
 					<input type="text" name="register_email" class="contactinfo" id="register_email" maxlength="40">
@@ -96,7 +96,7 @@
 				<span class="verification-span-error">Failed to send verification code.</span>
 				<div class="verification-msg"></div>
 
-				<!--
+				
 					<div class="verification_field_mobile">
 						<form method="post" id="register_form2_b" name="register_form2_b">
 							<div class="verification_field_mobile_set">
@@ -127,7 +127,7 @@
 							<strong>OR</strong>
 						</p>
 					</div>
-				-->
+				
 
 					<div class="verification_field_email">
 						<p class="emailstat"></p>

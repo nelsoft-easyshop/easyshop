@@ -350,11 +350,9 @@ $(document).ready(function(){
 		},
 		rules:{
 			register_mobile:{
-				/*
 				required: function(element){
 					return(($('#register_mobile').val().length)==0 && ($('#register_email').val().length==0));
 				},
-				*/
 				number: true,
 				minlength: 11
 			},
@@ -366,11 +364,9 @@ $(document).ready(function(){
 				equalTo: '#register_mobile'
 			},
 			register_email:{
-				/*
 				required: function(element){
 					return(($('#register_mobile').val().length)==0 && ($('#register_email').val().length==0));
 				},
-				*/
 				required: true,
 				email: true,
 				minlength: 6
@@ -388,7 +384,7 @@ $(document).ready(function(){
 		},
 		messages:{
 			register_mobile:{
-				//required: '*Please enter a valid mobile number OR email address',
+				required: '*Please enter a valid mobile number OR email address',
 				number: '*This field should be numeric',
 				minlength: '*Mobile number too short'
 			},
@@ -398,8 +394,7 @@ $(document).ready(function(){
 				number: ''
 			},
 			register_email:{
-				//required: '*Please enter a valid mobile number OR email address',
-				required: "Please enter a valid email address",
+				required: '*Please enter a valid mobile number OR email address',
 				email: '*Please enter a valid email address',
 				minlength: '*Email too short'
 			},

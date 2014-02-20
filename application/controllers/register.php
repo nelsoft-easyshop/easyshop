@@ -161,9 +161,6 @@ class Register extends MY_Controller
 					}
 					else
 						$data['mobilestat'] = 'exceed';
-					
-					//SOFT RELEASE CODE 
-					$data['mobilestat'] = '';
 				}
 				
 				if($this->input->post('register_email') ){
@@ -353,8 +350,6 @@ class Register extends MY_Controller
 		$username = $this->input->post('username');
 		$pass = $this->input->post('pass');	
 		$dataval = array('login_username' => $username, 'login_password' => $pass);
-		
-		// print_r($dataval);
 		
 		$row = $this->user_model->verify_member($dataval);
 

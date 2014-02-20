@@ -38,9 +38,7 @@ $config = array(
 				   array(
 						 'field'   => 'register_mobile',
 						 'label'   => 'Mobile number',
-						 //'rules' => 'trim|numeric|max_length[11]|matches[cregister_mobile]|callback_external_callbacks[register_model,checkifrequired,register_email]'
-						 //soft release code
-						 'rules' => 'trim|numeric|max_length[11]|matches[cregister_mobile]'
+						 'rules' => 'trim|numeric|max_length[11]|matches[cregister_mobile]|callback_external_callbacks[register_model,checkifrequired,register_email]'
 					  ),
 				   array(
 						 'field' => 'cregister_mobile',
@@ -50,9 +48,7 @@ $config = array(
 				   array(
 						'field' => 'register_email',
 						'label' => 'Email Address',
-						//'rules' => 'trim|valid_email|matches[cregister_email]|callback_external_callbacks[register_model,checkifrequired,register_mobile]'
-						//soft release code
-						'rules' => 'trim|required|valid_email|matches[cregister_email]'
+						'rules' => 'trim|valid_email|matches[cregister_email]|callback_external_callbacks[register_model,checkifrequired,register_mobile]'
 				   ),
 				   array(
 						 'field' => 'cregister_email',
