@@ -128,13 +128,14 @@ class Register_model extends CI_Model
 	{
 		//$result = $this->register_model->register_mobile($username, $mobile, $confirmation_code);
 		$result['sms_result'] ='201';
-		
+
 		if(array_key_exists('error', $result)||($result['sms_result'] != '201'))
 			return 'error';
 		else
 			return 'success';
 	}
 
+	
 	function register_mobile($username, $mobile, $confirmation_code)
 	{
 		$data=array();
@@ -154,6 +155,29 @@ class Register_model extends CI_Model
 		$data['sms_result'] = $sms_result;
 		return $data;
 	}
+	
+	
+	/*
+	function register_mobile($username, $mobile, $confirmation_code)
+	{
+		$fields = array();
+		$fields["api"] = "dgsMQ8q77hewW766aqxK";
+		$fields["number"] = 9177050441; //safe use 63
+		$fields["message"] = 'hello Janz from semaphore';
+		$fields["from"] = 'semaphore';
+		$fields_string = http_build_query($fields);
+		$outbound_endpoint = "http://api.semaphore.co/api/sms";
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, $outbound_endpoint);
+		curl_setopt($ch,CURLOPT_POST, count($fields));
+		curl_setopt($ch,CURLOPT_POSTFIELDS, $fields_string);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		$output = curl_exec($ch);
+		curl_close($ch);
+		
+		return $output;
+	}
+	*/
 	
 	function send_email_msg($email, $username, $hash)
 	{

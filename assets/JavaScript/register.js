@@ -367,7 +367,6 @@ $(document).ready(function(){
 				required: function(element){
 					return(($('#register_mobile').val().length)==0 && ($('#register_email').val().length==0));
 				},
-				required: true,
 				email: true,
 				minlength: 6
 			},
