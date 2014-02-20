@@ -39,13 +39,16 @@
         <!-- Start Right -->
 
         <div class="right_panel">
+            
             <div class="right_panel_box">
                 <div class="sign_in_register">
                     <div>
-                        <a href="<?=base_url()?>login" class="orange_btn"><img src="<?= base_url() ?>assets/images/icon_login.png"> Sign In</a>
+                        <a href="<?=base_url()?>login" class="orange_btn">
+                            <!-- <img src="<?= base_url() ?>assets/images/icon_login.png" alt="Sign In"> --> Sign In</a>
                     </div>
                     <div>
-                        <a href="<?=base_url()?>register" class="orange_btn">Register</a>
+                        <a href="<?=base_url()?>register" class="orange_btn">
+                            <!-- <img src="<?= base_url() ?>assets/images/img_register2.png" alt="Register"> --> Register</a>
                     </div>
                 </div>
                 <div class="clear"></div>
@@ -67,9 +70,10 @@
             <div class="secure_payment">
                 <p>Global secure payment by:</p>
                 <div>
-                    <img src="<?= base_url() ?>assets/images/img_mastercard.png">
-                    <img src="<?= base_url() ?>assets/images/img_visa.png">
-                    <img src="<?= base_url() ?>assets/images/img_jcb.png">
+                    <img src="<?= base_url() ?>assets/images/img_mastercard.png" alt="mastercard">
+                    <img src="<?= base_url() ?>assets/images/img_visa.png" alt="visa">
+                    <img src="<?= base_url() ?>assets/images/img_jcb.png" alt="jcb">
+                     <img src="<?= base_url() ?>assets/images/img_paypal.png" alt="paypal">
                 </div>
             </div>
         </div>
