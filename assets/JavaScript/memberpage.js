@@ -221,7 +221,7 @@ $(document).ready(function(){
 				mobilediv.find('span.edit_personal_contact').hide();
 				$(this).dialog( "close" );
 			}
-		},
+		}
 	});
 	
 	//Verify button
@@ -442,7 +442,7 @@ $(document).ready(function(){
 			},
 			country: {
 				required: '* Country required'
-			},
+			}
 		},
 		errorElement: 'span',
 		errorPlacement: function(error, element){
@@ -535,7 +535,7 @@ $(document).ready(function(){
 			},
 			schoolyear1:{
 				required: true,
-				is_numeric: true,
+				is_numeric: true
 			},
 			schoollevel1:{
 				select_is_set: '0'
