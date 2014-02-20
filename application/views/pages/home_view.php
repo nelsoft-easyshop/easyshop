@@ -54,26 +54,26 @@
                 <div class="clear"></div>
                 <div class="guides_panel">
                     <div>
-                        <a href="<?= base_url() ?>home/under_construction"><img src="<?= base_url() ?>assets/images/img_shopping_guide.png"><br />Shopping Guide</a>
+                        <a href="<?= base_url() ?>home/under_construction"><span class="shopping_guide"></span>Shopping Guide</a>
                     </div>
                     <div>
-                        <a href="<?= base_url() ?>home/under_construction"><img src="<?= base_url() ?>assets/images/img_q_and_a.png"><br />Q &amp; A</a>
+                        <a href="<?= base_url() ?>home/under_construction"><span class="q_and_a"></span>Q &amp; A</a>
                     </div>
                     <div>
-                        <a href="<?= base_url() ?>home/under_construction"><img src="<?= base_url() ?>assets/images/img_shipping.png"><br />Shipping</a>
+                        <a href="<?= base_url() ?>home/under_construction"><span class="shipping"></span>Shipping</a>
                     </div>
                     <div>
-                        <a href="<?= base_url() ?>home/under_construction"><img src="<?= base_url() ?>assets/images/img_secure_payment.png"><br />Secure Payment</a>
+                        <a href="<?= base_url() ?>home/under_construction"><span class="secure_payment"></span>Secure Payment</a>
                     </div>
                 </div>
             </div>
-            <div class="secure_payment">
+            <div class="global_secure_payment">
                 <p>Global secure payment by:</p>
                 <div>
-                    <img src="<?= base_url() ?>assets/images/img_mastercard.png" alt="mastercard">
-                    <img src="<?= base_url() ?>assets/images/img_visa.png" alt="visa">
-                    <img src="<?= base_url() ?>assets/images/img_jcb.png" alt="jcb">
-                     <img src="<?= base_url() ?>assets/images/img_paypal.png" alt="paypal">
+                    <span class="mastercard"></span>
+                    <span class="visa"></span>
+                    <span class="jcb"></span>
+                    <span class="paypal"></span>
                 </div>
             </div>
         </div>
