@@ -15,7 +15,7 @@ class Ios extends MY_Controller {
 
     public function url(){
 
-        $ipAddress = "192.168.1.59";
+        $ipAddress = "192.168.1.50:81";
         echo 'LIST OF URL';
         echo '<br><br>';
         echo 'LOGIN: <a  style="font-weight:bold;color:maroon" href="http://'. $ipAddress.'/ios/authenticate?uname=&upwd=">http://'. $ipAddress.'/ios/authenticate?uname=&upwd=</a>';
