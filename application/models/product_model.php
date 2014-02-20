@@ -328,12 +328,25 @@ class product_model extends CI_Model
 		return $rows['id_product_attr'];	
 	}
 
-	function addNewCombinationAttribute($product_id_item,$product_attr_id)
+	function selectProductAttributeOther($other_value,$product_id)
+	{
+		$query = $this->sqlmap->getFilenameID('product','selectProductAttributeOther');
+		$sth = $this->db->conn_id->prepare($query);
+		$sth->bindParam(':valueName',$other_value,PDO::PARAM_STR);
+		$sth->bindParam(':productID',$product_id,PDO::PARAM_INT);	
+		$sth->execute();
+		$rows = $sth->fetch(PDO::FETCH_ASSOC);
+
+		return $rows['id_optional_attrdetail'];
+	}
+
+	function addNewCombinationAttribute($product_id_item,$product_attr_id,$other_identifier)
 	{
 		$query = $this->sqlmap->getFilenameID('product','addNewCombinationAtrribute');
 		$sth = $this->db->conn_id->prepare($query);
-		$sth->bindParam(':product_id_item',$product_id_item);
-		$sth->bindParam(':product_attr_id',$product_attr_id);	
+		$sth->bindParam(':product_id_item',$product_id_item,PDO::PARAM_INT);
+		$sth->bindParam(':product_attr_id',$product_attr_id,PDO::PARAM_INT);
+		$sth->bindParam(':is_other',$other_identifier,PDO::PARAM_INT);	
 		$sth->execute();
 		return $this->db->conn_id->lastInsertId('id_product_item_attr');
 	}

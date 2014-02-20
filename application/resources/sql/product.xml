@@ -422,14 +422,27 @@
           LIMIT 0,1
     </select>
 
+    <select id="selectProductAttributeOther">
+        SELECT 
+          b.`id_optional_attrdetail` 
+        FROM
+          `es_optional_attrhead` a
+          , `es_optional_attrdetail` b 
+        WHERE a.`id_optional_attrhead` = b.`head_id` 
+          AND a.`product_id` = :productID
+          AND b.`value_name` = :valueName
+    </select>
+
     <select id="addNewCombinationAtrribute">
 
         INSERT INTO `es_product_item_attr`
         (  `product_id_item`
-        , `product_attr_id`)
+        , `product_attr_id`
+        ,`is_other`)
         VALUES ( 
         :product_id_item
-        , :product_attr_id);
+        , :product_attr_id
+        ,:is_other);
 
     </select>
 

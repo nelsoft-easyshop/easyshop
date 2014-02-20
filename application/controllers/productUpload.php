@@ -17,6 +17,7 @@ class productUpload extends MY_Controller
 	{
 		$data = array(
 			'title' => 'Sell Product | Easyshop.ph',
+			'function' =>new MY_Controller()
 			);
 		$data = array_merge($data, $this->fill_header());
 
@@ -126,7 +127,7 @@ class productUpload extends MY_Controller
 		$product_condition = $this->input->post('prod_condition');
 		$sku = trim($this->input->post('prod_sku'));
 		
-		$keyword = $this->clean(trim($product_title).' '.trim($this->input->post('prod_keyword')));
+		$keyword = es_url_clean(trim($product_title).' '.trim($this->input->post('prod_keyword')));
 		$keyword = str_replace('-', ' ',$keyword);
 		$style_id = 1;
 		$member_id =  $this->session->userdata('member_id');
@@ -336,6 +337,7 @@ class productUpload extends MY_Controller
 						}
 
 					# end of other
+					  
 
 					# start of saving combination
 						if($checkIfCombination == 'true'){
@@ -358,13 +360,29 @@ class productUpload extends MY_Controller
 
 									$explodeCombination = explode("-",  $keyCombination->value);
 									foreach ($explodeCombination as $value) {
-										$productAttributeId = $this->product_model->selectProductAttribute($value,$product_id);
-										$this->product_model->addNewCombinationAttribute($idProductItem,$productAttributeId);
+
+										$explodeOther = explode(":",  $value);
+										$otherAttrIdentifier = $explodeOther[0];
+										$otherAttrValue = $explodeOther[1];
+										if($otherAttrIdentifier == 1){
+											$productAttributeId = $this->product_model->selectProductAttributeOther($otherAttrValue,$product_id);
+										}else{
+											$productAttributeId = $this->product_model->selectProductAttribute($otherAttrValue,$product_id);
+										}
+
+										$this->product_model->addNewCombinationAttribute($idProductItem,$productAttributeId,$otherAttrIdentifier);
 									}
 								}else{
-
-									$productAttributeId = $this->product_model->selectProductAttribute($keyCombination->value,$product_id);
-									$this->product_model->addNewCombinationAttribute($idProductItem,$productAttributeId);
+									$explodeOther = explode(":",  $keyCombination->value);
+									$otherAttrIdentifier = $explodeOther[0];
+									$otherAttrValue = $explodeOther[1];
+									if($otherAttrIdentifier == 1){
+										$productAttributeId = $this->product_model->selectProductAttributeOther($otherAttrValue,$product_id);
+									}else{
+										$productAttributeId = $this->product_model->selectProductAttribute($otherAttrValue,$product_id);
+									}
+									
+									$this->product_model->addNewCombinationAttribute($idProductItem,$productAttributeId,$otherAttrIdentifier);
 								}	
 							}
 							
