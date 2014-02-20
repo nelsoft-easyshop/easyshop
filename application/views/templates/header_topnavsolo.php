@@ -28,9 +28,7 @@
 <title>
 	<?php echo $title?>
 </title>
-<script src="<?=base_url()?>product/sch_onpress"></script>
-<link href="<?=base_url()?>assets/css/tipuedrop.css" rel="stylesheet">
-<script src="<?=base_url()?>assets/JavaScript/js/tipuedrop.js"></script>
+
 
 <!--  <script>
 	$(document).ready(function() {
