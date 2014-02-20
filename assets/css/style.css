@@ -401,9 +401,13 @@ header {
 
 }
 
-.top_nav img {
+.top_nav .cart {
+	background: url('../images/global_sprite.png') no-repeat -5px -259px;	
+	display: inline-block;
 	vertical-align: middle;
 	padding-right: 5px;
+	height: 18px;
+	width: 22px;
 }
 
 /*** end of header ***/
@@ -411,6 +415,13 @@ header {
 /**** Logo ***/
 .logo {
 	float: left;
+}
+
+.logo span {
+	background: url('../images/global_sprite.png') no-repeat 0px 5px;	
+	display: inline-block;
+	height: 79px;
+	width: 240px;
 }
 
 /*** search box ***/
@@ -442,6 +453,7 @@ header {
 	background-color: #ff4400;
 	border: none;
 	color: #fff;
+	cursor: pointer;
 	font-weight: bold;
 	height: 41px;
 	margin-left: -5px;
@@ -847,26 +859,27 @@ nav ul > li:hover > div {
 }
 
 .guides_panel span {
+	background: url('../images/global_sprite.png') no-repeat;
 	display: block;
 	height: 60px;
 	margin: 0 auto;
 	width: 85px;
 }
 
-.shopping_guide {
-	background: url('../images/global_sprite.png') no-repeat 0px -114px;    
+span.shopping_guide {
+	background-position: 0px -114px;    
 }
 
-.q_and_a {
-	background: url('../images/global_sprite.png') no-repeat -87px -114px;    
+span.q_and_a {
+	background-position: -87px -114px;    
 }
 
-.shipping {
-	background: url('../images/global_sprite.png') no-repeat -170px -114px;
+span.shipping {
+	background-position: -170px -114px;
 }
 
-.secure_payment {
-	background: url('../images/global_sprite.png') no-repeat -260px -114px;	
+span.secure_payment {
+	background-position: -260px -114px;	
 }
 
 .guides_panel div {
@@ -1154,55 +1167,109 @@ footer {
 }
 
 .footer_panel {
-	border-top: 1px solid #ff4400;
+	border-top: 1px solid #d9d9d9;
 }
 
-.footer_panel div {
+.social_media {
+	border-right: 1px solid #d9d9d9;
 	float: left;
-	width: 140px;
 	margin-right: 30px;
+	margin-top: 10px;
+	width: 240px;
+	
 }
 
-.footer_panel div + div + div + div {
-	width: 470px;
-	margin-right: 0px;
+.social_media h2 {
+	font-weight: normal;
+	font-size: 14px;
+	text-transform: uppercase;
+	margin-bottom: 10px;
 }
 
-.footer_panel div + div + div + div > div {
-	width: auto;
+.social_media span {
+	background: url('../images/global_sprite.png') no-repeat;	
+	display: inline-block;
+	height: 45px;
+	width: 45px;
+	margin-right: 5px;
 }
 
-.footer_panel h2 {
-	font-size: 16px;
-	font-weight: bold;
-	padding:8px 0;
-	margin-bottom: 8px;
-
+span.facebook {
+	background-position: -6px -360px;	
 }
 
-.footer_panel ul {
+span.twitter {
+	background-position: -61px -360px;	
+}
+
+span.youtube {
+	background-position: -116px -360px;	
+}
+span.pinterest {
+	background-position: -171px -360px;		
+}
+
+.signup {
+	margin-top: 30px;
+}
+
+.signup input {
+	height: 25px;
+	border:2px solid #ff4400;
+}
+
+.signup input[type="submit"] {
+    background-color: #FF4400;
+    color: #FFFFFF;
+    cursor: pointer;
+    height: 39px;
+    line-height: 25px;
+    padding: 0 5px;
+    text-transform: uppercase;
+}
+
+.about_footer {
+	margin-top: 10px;
+}
+
+.about_footer h2,
+.footer_payment h2 {
+	font-weight: normal;
+	font-size: 14px;
+	text-transform: uppercase;
+	margin-bottom: 10px;	
+}
+
+.about_footer ul {
 	list-style: none;
 }
-.footer_panel ul li {
-	padding:5px 0;
-	font-size: 12px;
-}
 
-.footer_panel div + div img:nth-child(odd) {
-	padding-right: 11px;
-}
-
-.footer_panel div:last-child div {
+.about_footer ul li {
 	float: left;
+	padding:5px 10px;
 }
 
-.footer_panel div:last-child div:first-child {
-	width: 180px;
+.about_footer ul li a:hover {
+	text-decoration: underline;
+}
+
+.footer_payment {
+	display: inline-block;
+	margin-top: 20px;
+}
+
+.footer_payment span {
+	background-image: url('../images/global_sprite.png');
+	background-repeat: no-repeat;	
+	border:1px solid #E7E7E7;
+	display: inline-block;
+	height: 50px;
+	width: 60px;
+	vertical-align: middle;
 }
 
 .copyright {
 	border-top: 1px solid #d9d9d9;
-	width: 940px !important;
 	text-align: center;
 	padding:20px;
 	margin-top: 20px;
