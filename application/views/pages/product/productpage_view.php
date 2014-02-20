@@ -112,7 +112,7 @@
             <a href="JavaScript:void(0)" id="send" class="orange_btn3 disabled">Buy Now</a> <br/>
             <!-- <img src="<?=base_url()?>assets/images/img_cart2.jpg"> Add to Cart</a> <br /> -->
             <?php else: ?>
-            <a href="<?PHP echo base_url();echo $logged_in?'memberpage':'login';?>" id="unablesend" class="add_to_cart"><img src="<?=base_url()?>assets/images/img_cart2.jpg"> Buy Now</a> <br />
+            <a href="<?PHP echo base_url();echo $logged_in?'memberpage':'login';?>" id="unablesend" class="add_to_cart"><span></span> Buy Now</a> <br />
             <p style="color:red;font-size: 9px">LOG IN AND VERIFY CONTACT INFO TO USE THIS FUNCTION</p>
             <?php endif; ?>
             <span>Delivers in 5-8 business days*</span> </div>
@@ -120,7 +120,11 @@
         <br />
         <br />
         <p class="product_content_payment"> <strong>Payment:</strong><br />
-          <img src="<?=base_url()?>assets/images/img_mastercard.png"> <img src="<?=base_url()?>assets/images/img_visa.png"> <img src="<?=base_url()?>assets/images/img_jcb.png"> </p>
+          <span class="mastercard"></span>
+          <span class="visa"></span>
+          <span class="jcb"></span>
+          <span class="paypal"></span>
+        </p>
       </div>
       <div class="clear"></div>
       <div id="tabs">
