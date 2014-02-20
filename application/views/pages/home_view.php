@@ -201,13 +201,6 @@
 
 <div class="clear"></div>
 
-<script src="<?= base_url() ?>assets/javascript/js/cufon-yui.js" type="text/javascript"></script>
 <script src="<?= base_url() ?>assets/JavaScript/js/jquery.bxslider.min.js" type="text/javascript"></script>
 <script src="<?= base_url() ?>assets/JavaScript/categorynavigation.js" type="text/javascript"></script>
 <script src="<?= base_url().$page_javascript ?>" type="text/javascript"></script>
-
-<script type="text/javascript">
-    Cufon.replace('ul.oe_menu div a', {hover: true});
-    Cufon.replace('h1,h2,.oe_heading');
-</script>
-
