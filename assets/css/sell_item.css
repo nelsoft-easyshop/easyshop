@@ -418,7 +418,8 @@ div.sell_steps4 ul li:nth-child(4) a {
     width: 250px;
 }
 
-.step4_2 input[name="prod_other_img[]"] {
+.step4_2 input[name="prod_other_img[]"],
+.step4_2 input[type="file"] {
     border: none;
 }
 
@@ -656,14 +657,14 @@ a.tooltips {
 a.tooltips span {
   color: #494949;
   background: #FFFFFF;
-  border: 1px solid #CECECE;
+  border: 1px solid #f4b525;
   border-radius: 0px;
   height: auto;
   line-height: 30px;
   position: absolute;
   padding: 8px;
   text-align: center;
-  width:auto;
+  width: 440px;
   visibility: hidden; 
 }
 
@@ -674,7 +675,7 @@ a.tooltips span:before {
   right: 100%;
   margin-top: -12px;
   width: 0; height: 0;
-  border-right: 12px solid #CECECE;
+  border-right: 12px solid #f4b525;
   border-top: 12px solid transparent;
   border-bottom: 12px solid transparent;
 }
