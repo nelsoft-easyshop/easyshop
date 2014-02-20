@@ -40,4 +40,5 @@
     </div>
     </footer>
 	</body>
+    <?php require_once("assets/includes/js.php"); ?>
 </html>
