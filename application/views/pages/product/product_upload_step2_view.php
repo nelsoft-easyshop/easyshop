@@ -641,6 +641,8 @@ $(document).on('change','.other_name_class',function(){
   var cnt = $(this).data('cnt');
   var headCount = 0;
 
+  if(!headValue <= 0){
+ 
   $('.other_name_class').each(function(){
     var thisValue = $.trim($(this).val());
     var thisValue = thisValue.toLowerCase().replace(/\b[a-z]/g, function(letter) {
@@ -649,7 +651,8 @@ $(document).on('change','.other_name_class',function(){
     if(headValue == thisValue){
       headCount++;
     }
-  }); 
+  });
+  } 
 
   if(headCount > 1){
     alert('Value '+headValue+' already exist!');
