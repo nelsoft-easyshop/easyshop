@@ -1002,16 +1002,16 @@ $(".proceed_form").unbind("click").click(function(){
           dataType: "json",
           beforeSend: function(jqxhr, settings) { 
             $('.description_hidden').val(description);
-                // $( ".button_div" ).hide();
-                // $( ".loader_div" ).show();
+                $( ".button_div" ).hide();
+                $( ".loader_div" ).show();
               },
               success: function(d) {
                 if (d.e == 1) {
                   $('#prod_h_id').val(d.d);
-                  // $('#hidden_form').submit();
+                  $('#hidden_form').submit();
                 } else {
-                  // $( ".button_div" ).show();
-                  // $( ".loader_div" ).hide();
+                  $( ".button_div" ).show();
+                  $( ".loader_div" ).hide();
                   alert(d.d);
                 }
               }
