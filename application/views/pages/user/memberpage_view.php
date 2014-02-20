@@ -834,7 +834,7 @@
 							<span class="red ci_form_validation_error"><?php echo form_error('mobile'); ?></span>
 							<input type="hidden" name="mobile_orig" value="<?php echo $contactno;?>">
 							<input type="hidden" name="is_contactno_verify" value="<?php echo $is_contactno_verify;?>">
-						<!--
+						
 							<span class="verify toverify" style="<?php echo $is_contactno_verify == 0 && trim($contactno) !== ''?'':'display:none;'?>">
 								<span class="verify_now">Verify</span>
 								<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" class="verify_img" style="display:none;"/>
@@ -842,7 +842,7 @@
 							<span class="verify doneverify" style="<?php echo $is_contactno_verify == 0?'display:none;':''?>">
 								<img src="<?=base_url()?>/assets/images/check_icon.png"><span><strong>Verified</strong></span>
 							</span>
-						-->
+						
 							<span class="personal_contact_cont" style="<?php echo trim($contactno)!==''?'':'display:none;' ?>">
 								<span class="edit_personal_contact">
 									<img src="<?=base_url()?>/assets/images/icon_edit.png"><span>Edit</span>
@@ -858,13 +858,13 @@
 						<div id="cont_mobilediv" class="errordiv" style="display:none;">
 							<span></span>
 						</div>
-					<!--
+					
 						<div id="verifcode_div" style="display:none;">
 							<p>Verification code sent. Please enter the verification code below:</p>
 							<input type="text" name="verifcode" id="verifcode">
 							<p class="verifcode_error error red" style="display:none;">Incorrect verification code.</p>
 						</div>
-					-->
+					
 						<div id="emaildiv">
 							<label for="email">Email:</label>
 							<input type="text" name="email" id="email" value="<?php echo $email;?>" <?php echo (trim($email)==''?'':'disabled');?>>
