@@ -354,7 +354,6 @@ class product extends MY_Controller
 				array_push($down_cat, $category_id);
 				$catlist_down = implode(",", $down_cat);
 				$response['items'] = $this->product_model->getProductInCategoryAndUnder($category_id,$usable_string,$catlist_down,$start,$per_page,$item_brand_string_1.$string_sort_a);
-				echo '<pre>',print_r($response['items']);exit();
 				if(count($response['items']) <= 0)
 				{
 					$data = json_encode('0');
