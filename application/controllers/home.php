@@ -19,7 +19,6 @@ class Home extends MY_Controller {
 		$data = array('title' => 'Home | Easyshop.ph',
                 'page_javascript' => 'assets/JavaScript/home.js',
                 'data' => $this->home_xml->getFilenameID('home_files')
-
 				);
         $data = array_merge($data, $this->fill_header());
 		$this->load->view('templates/header', $data);
@@ -39,10 +38,9 @@ class Home extends MY_Controller {
 	public function getfirstlevel() {
         $row = $this->home_model->get_firstlevel();
         echo json_encode($row);
-        }
+    }
 
-	
-	
+
 	public function pagenotfound(){
 		$data = array('title' => 'Page Not Found | Easyshop.ph',);
 				$data = array_merge($data, $this->fill_header());
@@ -55,7 +53,7 @@ class Home extends MY_Controller {
         $this->load->view('pages/coming_soon');
 	}
 	
-	
+
 }
 
 /* End of file home.php */

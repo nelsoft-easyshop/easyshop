@@ -138,6 +138,17 @@ $(function(){
 
 
 $(function(){
+    //Loads the defaults quantity
+    var qty = JSON.parse($('#p_qty').val());
+    $.each(qty, function(index, value){
+        if((value.product_attribute_ids.length == 1)&&(parseInt(value.product_attribute_ids[0])==0)){
+            $('.quantity').data('qty',value.quantity);
+            $('.quantity')[0].innerHTML = value.quantity;
+        }
+    });       
+});
+
+$(function(){
     $('.options, .options a').on('click', function(event){
     
         if($(event.target).hasClass('disable'))
@@ -180,12 +191,13 @@ $(function(){
         $.each(qty, function(index, value){        
             if(value.product_attribute_ids.sort().join(',') === sel_id.sort().join(',')){
                $('.quantity')[0].innerHTML = value.quantity;
-               //$('.orange_btn3').removeClass("disabled").addClass("enabled");
+               //$('.orange_btn3').removeClass("disabled").addClass("enabled"); REMOVED TO DISABLE BUY NOW BUTTON ACTIVATION
                return false;
             }
             else{
                $('.orange_btn3').removeClass("enabled").addClass("disabled");
-               $('.quantity')[0].innerHTML = '';
+               //$('.quantity')[0].innerHTML = '';
+               $('.quantity')[0].innerHTML = $('.quantity').data('qty');
             }
         });
         

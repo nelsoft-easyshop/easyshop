@@ -104,7 +104,7 @@
           </div>
           <div class="availability">
             <p> Availability <br />
-                <span class="quantity"></span>
+                <span class="quantity" data-qty="" id="p_availability"></span>
             </p>
           </div>
           <div class="buy_box"> 
