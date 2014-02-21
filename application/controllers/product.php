@@ -655,8 +655,6 @@ class product extends MY_Controller
 				$i++;
 			}
 		}
-		
-		
 		return $recent;
 	}
 

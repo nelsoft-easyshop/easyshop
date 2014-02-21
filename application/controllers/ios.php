@@ -22,6 +22,8 @@ class Ios extends MY_Controller {
         echo '<br><br>'; 
         echo 'HOME: <a  style="font-weight:bold;color:maroon" href="http://'. $ipAddress.'/ios/home">http://'. $ipAddress.'/ios/home</a>';
         echo '<br><br>'; 
+        echo 'PRODUCT PAGE: <a  style="font-weight:bold;color:maroon" href="http://'. $ipAddress.'/ios/getProduct?p_id=">http://'. $ipAddress.'/ios/getProduct?p_id=</a>';
+        echo '<br><br>';
         echo 'http://www.google.fr/url?sa=t&rct=j&q=&esrc=s&source=web&cd=1&cad=rja&ved=0CB4QFjAA&url=http%3A%2F%2Fallseeing-i.com%2FASIHTTPRequest%2F&ei=-dFZULfKO7SU0QW-1YGoAw&usg=AFQjCNFpUZprrMAY9mTk0aGzEzwSG8L9sg';
 
     }
@@ -56,6 +58,31 @@ class Ios extends MY_Controller {
         echo json_encode($row,JSON_PRETTY_PRINT);
 
     }
+    
+    public function getProduct(){
+        $id = $this->input->get('p_id');   
+        $this->load->model('product_model');
+        $product_row = $this->product_model->getProduct($id);
+        $product_options = $this->product_model->getProductAttributes($id, 'NAME');
+        $product_options = $this->product_model->implodeAttributesByName($product_options);
+        $data = array();
+        if($product_row['o_success'] >= 1){
+            $product_catid = $product_row['cat_id'];
+            $data = array_merge($data,array( 
+				'product' => $product_row,
+				'product_options' => $product_options,
+				'product_images' => $this->product_model->getProductImages($id),
+				//'reviews' => $this->getReviews($id,$product_row['sellerid']),
+				//'recommended_items'=> $this->product_model->getRecommendeditem($product_catid,5,$id),
+				//'allowed_reviewers' => $this->product_model->getAllowedReviewers($id),
+				//userdetails --- email/mobile verification info
+				//'userdetails' => $this->product_model->getCurrUserDetails($uid),
+                'product_quantity' => $this->product_model->getProductQuantity($id)
+				));
+		}
+        echo json_encode($data,JSON_PRETTY_PRINT);
+    }
+
 }
 
 /* End of file ios.php */
