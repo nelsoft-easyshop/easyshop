@@ -873,7 +873,7 @@
 							<input type="hidden" name="is_email_verify" value="<?php echo $is_email_verify;?>">
 							
 							<span class="verify toverify" style="<?php echo $is_email_verify == 0 && trim($email) !== ''?'':'display:none;'?>">
-								<span class="verify_now orange_btn3">Verify</span>
+								<span class="verify_now">Verify</span>
 								<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" class="verify_img" style="display:none"/>
 							</span>	
 							<span class="verify doneverify" style="<?php echo $is_email_verify == 0?'display:none;':''?>">
@@ -906,7 +906,7 @@
 				<div>
 				<form method="post" id="personal_profile_address" name="personal_profile_address" class="dropdownform">
 					<div class="personal_info_title">
-						<span class="address_img"></span> Address
+						<span class="personal_info_icon address_img"></span> Address
 					</div>
 					<div class="edit_profile">
 						<h2>+ Add an Address</h2>
@@ -993,7 +993,7 @@
 				<div>
 					<form method="post" id="personal_profile_school" name="personal_profile_school" class="dropdownform">
 						<div class="personal_info_title">
-							<img src="<?=base_url()?>assets/images/icon_school.png" alt="add"> School
+							<span class="personal_info_icon school_img"></span> School
 						</div>
 						<div class="edit_profile">
 							<h2>+ Add a School</h2>
@@ -1098,7 +1098,7 @@
 				<form method="post" id="personal_profile_work" name="personal_profile_work" class="dropdownform">
 					<div>
 						<div class="personal_info_title">
-							<img src="<?=base_url()?>assets/images/icon_work.png" alt="add"> Work
+							<span class="personal_info_icon work_img"></span> Work
 						</div>
 						<div class="edit_profile">
 							<h2>+ Add Work</h2>
