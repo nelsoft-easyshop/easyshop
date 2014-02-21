@@ -418,7 +418,6 @@ class product extends MY_Controller
 				$string = ' '.ltrim($_GET['q_str']); 
 				$words = "+".implode("*,+",explode("-",trim($string)))."*"; 
 				$checkifexistcategory = $this->product_model->checkifexistcategory($category);
-				
 					if($checkifexistcategory == 0 || $category == 1)
 					{
 						$usable_string = " AND  MATCH(a.name,keywords) AGAINST('".$words."' IN BOOLEAN MODE)";
@@ -571,8 +570,8 @@ class product extends MY_Controller
 		$uid = $this->session->userdata('member_id');
 		$data = array_merge($data,$this->fill_header());
 		$this->load->view('templates/header', $data); 
-        
-    
+		$product_options = $this->product_model->getProductAttributes($id, 'NAME');
+		$product_options = $this->product_model->implodeAttributesByName($product_options);
 		if($product_row['o_success'] >= 1){
 			$this->session->set_userdata('product_id', $id);
 			$product_catid = $product_row['cat_id'];
@@ -580,7 +579,7 @@ class product extends MY_Controller
 				'page_javascript' => 'assets/JavaScript/productpage.js',
 				'breadcrumbs' =>  $this->product_model->getParentId($product_row['cat_id']),
 				'product' => $product_row,
-				'product_options' => $this->product_model->getProductAttributes($id, 'NAME'),
+				'product_options' => $product_options,
 				'product_images' => $this->product_model->getProductImages($id),
 				'main_categories' => $this->product_model->getFirstLevelNodeAlphabetical(TRUE),
 				'reviews' => $this->getReviews($id,$product_row['sellerid']),

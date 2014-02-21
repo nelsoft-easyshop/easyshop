@@ -238,17 +238,19 @@
               </td>
             </tr>
 
+            
+            
             <?php 
             $j = 1;
             if(!isset($product_attributes_opt))
               $product_attributes_opt = array();  
-
+            
             foreach($product_attributes_opt as $key=>$opt_attr): ?>
 
-            <tr>
+            <tr id="<?php echo ($j === 1)?'':'main'.$j; ?>">
               <td> <?php echo ($j===1)?'Others: (Optional)':''; ?></td>  
               <td colspan="3">
-                <input type="text" name="prod_other_name[]" data-cnt="<?php echo $j; ?>" class="prod_<?php echo $j;?>" autocomplete="off" placeholder="Enter name" value="<?php echo $key;?>"> 
+                <input type="text" name="prod_other_name[]" data-cnt="<?php echo $j; ?>" class="prod_<?php echo $j;?> other_name_class" autocomplete="off" placeholder="Enter name" value="<?php echo str_replace("'", '', $key);?>"> 
               </td>
             </tr>
 
@@ -259,12 +261,12 @@
               <?php if($k > 0):?>
               <td style="display:none">
                 <span >
-                  <input type="text" value ="<?php echo $key;?>" data-cnt="<?php echo $j;?>" class="prod_<?php echo $j;?>" name="prod_other_name[]">
+                  <input type="text" value ="<?php echo str_replace("'", '',$key);?>" data-cnt="<?php echo $j;?>" class="prod_<?php echo $j;?>" name="prod_other_name[]">
                 </span>
               </td>
             <?php endif; ?>
             <td>
-              <input type="text" name="prod_other[]" autocomplete="off" placeholder="Enter description" value="<?php echo $prod_attr['value']?>">
+              <input type="text"  class="other_name_value otherNameValue<?php echo $j?>" data-cnt="<?php echo $j;?>" name="prod_other[]" autocomplete="off" data-otherid="<?php echo $prod_attr['value_id'];?>" placeholder="Enter description" value="<?php echo $prod_attr['value']?>">
             </td>
             <td style="display:none">
               <input type="text" name="prod_other_id[]" value="<?php echo $prod_attr['value_id']; ?>">
@@ -286,9 +288,9 @@
           </td>
         </tr>
         <?php $k++; endforeach; ?>
-        <tr id="<?php echo 'main'.$j;?>">
+        <tr id="<?php echo 'main1';?>">
           <td></td>
-          <td colspan="3"><a class="add_more_link_value" data-value="1" href="javascript:void(0)">+Add more value</a></td>
+          <td colspan="3"><a class="add_more_link_value" data-value="<?php echo $j;?>" href="javascript:void(0)">+Add more value</a></td>
         </tr>     
         <?php $j++; endforeach;?>
 
@@ -403,7 +405,7 @@ $(document).ready(function(){
   var combination = []; 
   var arrayCombination = []; 
   var arraySelected = {};  
-  var cnt_o = <?php echo $j; ?>;
+  var cnt_o = <?php echo json_encode($j-1); ?>;
   $(".hdv").css("display", "none");
   $( ".loader_div" ).hide();
   $('.quantity_attr_done').hide();
@@ -666,7 +668,7 @@ $(document).on('change','.other_name_class',function(){
 
   if(!$.trim( $('#'+headValue+'Combination').html()).length <= 0){
 
-    console.log(false);
+        console.log(false);
         // $('#'+oldValue+'Combination option[data-value=1]').remove().appendTo('#'+headValue+'Combination');  
       
         $('#'+oldValue+'Combination option[data-value=1]').each(function(){
@@ -723,8 +725,10 @@ $(document).on('change','.other_name_class',function(){
 
               $(".otherNameValue"+cnt).each(function(){  
                 var attrVal = $(this).val();
+                var attrID = $(this).data('otherid');
                 if(attrVal.length > 0){
-                 $('#'+headValue+'Combination').append('<option value="'+attrVal+'" data-temp="'+attrVal+headValue+'" data-value="1" data-group="'+headValue+'">'+attrVal+'</option>');
+                    //added additional data attribute to option for edit option
+                    $('#'+headValue+'Combination').append('<option value="'+attrVal+'" data-temp="'+attrVal+headValue+'" data-value="1" data-group="'+headValue+'" data-otherid="'+attrID+'">'+attrVal+'</option>');
                }
              });
             }
@@ -753,6 +757,7 @@ $(document).on('change','.other_name_class',function(){
 
 $(document).on('change','.other_name_value',function(){
 
+    
          $('.combinationContainer').empty();
          arraySelected = {};  
 
@@ -766,13 +771,11 @@ $(document).on('change','.other_name_value',function(){
         $(this).data('temp',value);
         var attrVal = $(this).val();
         var idHtmlId = headValue.replace(' ','')+'Combination';
-
         if(formatHeadValue.length >0){
             $("#"+idHtmlId+" option[data-temp="+temp+"]").remove();
             if(!$('#'+idHtmlId).length){
               $('.quantity_attrs_content').append('<div id="div'+idHtmlId+'" style="position:relative">'+headValue+':<br> <select id="'+idHtmlId+'" ></select><br></div>');   
             }
-
             if(!attrVal.length <= 0){
               $('#'+idHtmlId).append('<option value="'+attrVal+'" data-temp="'+value+'" data-value="1" data-group="'+headValue+'">'+attrVal+'</option>');
             } 
@@ -788,6 +791,7 @@ $(document).on('change','.other_name_value',function(){
               $('.quantity_attr_done').show();
             }
         }
+
 
 }); 
 
@@ -1025,123 +1029,141 @@ $(".proceed_form").unbind("click").click(function(){
   }
 });
 
-
-    //Edit JS
-    $('.checkbox_itemattr').each(function(){
-     if($(this).is(":checked")){
-      addAttrQtySelection($(this));
-    }
-  });
+    /*
+     * Product Edit javascript
+     * Sam Gavinio
+     */
     
+    //Add previously checked attributes to the quantity select elements
+    $('.checkbox_itemattr').each(function(){
+        if($(this).is(":checked")){
+            addAttrQtySelection($(this));
+        }
+    });
+
+    //Add previously entered optional attributes to the quantity select elements
+    $('.other_name_class').each(function(){
+        $(this).change();
+    });
+
+    //Submits previously configured quantity attribute combinations 
     var qty_obj =  JSON.parse($('#qty_details').val());
     var html_item_selection = $('#quantity_attrs_content2').find('option');
     var prev_combination_count = 1;
     $.each(qty_obj,function(){
-     var $this = this;
-     $('.qtyTextClass').val($this.quantity);
-     $.each(html_item_selection,function(){
-      $(this).attr("selected",false);
-      if($.inArray($(this).val(), $this.attr_lookuplist_item_id) !== -1){
-        $(this).attr("selected",true);
-      }
+        var $this = this;
+        $('.qtyTextClass').val($this.quantity);
+        $.each(html_item_selection,function(){
+            $(this).attr("selected",false);
+            //Category specific attributes
+            if($.inArray($(this).val(), $this.attr_lookuplist_item_id) !== -1){
+                $(this).attr("selected",true);
+            }
+            //Optional product attributes
+            else if($(this).attr('data-otherid')!=='undefined'){
+                var idx = $.inArray($(this).attr('data-otherid'), $this.product_attribute_ids);
+                if(idx !== -1){
+                   if(parseInt($this.attr_lookuplist_item_id[idx]) === 0){
+                        $(this).attr("selected",true);
+                   }
+                }
+            }            
+        });
+        addAttrQtyCombination(prev_combination_count++);
     });
-     addAttrQtyCombination(prev_combination_count++);
-   });
-
+    
+    //Function that adds obj to the quantity select html elements
     function addAttrQtySelection(obj){
-      var attrIdVal = obj.data( "attrid" );
-      var attrVal = obj.data('value');
-      var attrGroup = obj.data('group'); 
-      var idHtmlId = attrGroup.replace(' ','')+'Combination';
-      var attrValNoSpace = attrVal.replace(' ','');
+        var attrIdVal = obj.data( "attrid" );
+        var attrVal = obj.data('value');
+        var attrGroup = obj.data('group'); 
+        var idHtmlId = attrGroup.replace(' ','')+'Combination';
+        var attrValNoSpace = attrVal.replace(' ','');
 
-      $('.combinationContainer').empty();
-      arraySelected = {};  
+        $('.combinationContainer').empty();
+        arraySelected = {};  
 
-      if (obj.is(":checked")) {
-       if(!$('#'+idHtmlId).length){
-        $('.quantity_attrs_content').append('<div id="div'+idHtmlId+'" style="position:relative">'+attrGroup+':<br> <select id="'+idHtmlId+'" ></select><br></div>');   
-      }
-      $('#'+idHtmlId).append('<option value="'+attrIdVal+'" data-value="0" data-group="'+attrGroup+'">'+attrVal+'</option>');
-    }else{
-     $('#'+idHtmlId +' option[value="'+attrIdVal+'"]').remove();
-     if( !$.trim( $('#'+idHtmlId).html() ).length ) {
-      $('#div'+idHtmlId).remove();
+        if (obj.is(":checked")) {
+            if(!$('#'+idHtmlId).length){
+                $('.quantity_attrs_content').append('<div id="div'+idHtmlId+'" style="position:relative">'+attrGroup+':<br> <select id="'+idHtmlId+'" ></select><br></div>');   
+            }
+            $('#'+idHtmlId).append('<option value="'+attrIdVal+'" data-value="0" data-group="'+attrGroup+'">'+attrVal+'</option>');
+        }else{
+            $('#'+idHtmlId +' option[value="'+attrIdVal+'"]').remove();
+            if( !$.trim( $('#'+idHtmlId).html() ).length ) {
+                $('#div'+idHtmlId).remove();
+            }
+        } 
+
+        if( !$.trim( $('.quantity_attrs_content').html() ).length ) {
+            $('.quantity_attr_done').hide();
+            noCombination == true
+        }else{
+            $('.quantity_attr_done').show();
+        }
     }
-  } 
 
-  if( !$.trim( $('.quantity_attrs_content').html() ).length ) {
-    $('.quantity_attr_done').hide();
-    noCombination == true
-  }else{
-    $('.quantity_attr_done').show();
-  }
-
-}
-
-    //function to be changed later on
+    //Marked for refactoring
+    //Duplicate code: see $('.quantity_attr_done') click handler
+	//$(function(){}) removed
     function addAttrQtyCombination(count){
-      var qtyTextbox = $('.qtyTextClass');
-      var qtyTextboxValue = parseInt(qtyTextbox.val());
-      var dataCombination = {};     
-      var combinationVal = [];
-      var sortCombination = [];
-      var arrayCombinationString = "";
-      var thisValueCount = count;
-      var htmlEach  = "";
-      var alreadyExist  = false;
-      var haveValue = false;
-      htmlEach += '<div><input type="textbox" class="quantityText" value="'+qtyTextbox.val()+'" data-cnt="'+thisValueCount+'"></div>';
+		var qtyTextbox = $('.qtyTextClass');
+		var qtyTextboxValue = parseInt(qtyTextbox.val());
+		var dataCombination = {};     
+		var combinationVal = [];
+		var sortCombination = [];
+		var arrayCombinationString = "";
+		var thisValueCount = count;
+		var htmlEach  = "";
+		var alreadyExist  = false;
+		var haveValue = false;
+		htmlEach += '<div><input type="textbox" class="quantityText" value="'+qtyTextbox.val()+'" data-cnt="'+thisValueCount+'"></div>';
 
-      $('.quantity_attrs_content option').each(function(){
+		$('.quantity_attrs_content option:selected').each(function(){
+			haveValue = true;
+			noCombination = false;
+			var eachValue = $(this).val();
+			var eachValueString = $(this).text();
+			var eachGroup = $(this).data('group');  
+			var eachDataValue = $(this).data('value');  
+			combinationVal.push(eachDataValue+':'+eachValue);
+			htmlEach += '<div>'+ eachGroup +': ' + eachValueString +'</div>';
+		});
 
-        if($(this).attr('selected')){
-          haveValue = true;
-          noCombination = false;
-          var eachValue = $(this).val();
-          var eachValueString = $(this).text();
-          var eachGroup = $(this).data('group'); 
+		if(isNaN(qtyTextboxValue) ||  qtyTextboxValue <= 0){ 
+			qtyTextbox.val('1');
+		}
 
-          combinationVal.push(eachValue);
-          htmlEach += '<div>'+ eachGroup +': ' + eachValueString +'</div>';
-        }
+		sortCombination = combinationVal.sort();
 
-      });
+		for (var i = 0; i < sortCombination.length; i++) {
+			arrayCombinationString += sortCombination[i] + '-';
+		};
 
-      if(isNaN(qtyTextboxValue) ||  qtyTextboxValue <= 0){ 
-        qtyTextbox.val('1');
-      }
+		for (var key in arraySelected) { 
+			if (arraySelected.hasOwnProperty(key))
+				if(arraySelected[key]['value'] === arrayCombinationString.slice(0, - 1)){
+				 alreadyExist = true;
+				 break;
+			}
+		}
 
-      sortCombination = combinationVal.sort();
+		if(haveValue === true){
+			if(alreadyExist === false){			
+				$('.combinationContainer').append('<div class="inner_quantity_list innerContainer'+thisValueCount+'"> '+ htmlEach +' <a href="javascript:void(0)" class="removeSelected" data-row="'+thisValueCount+'"   style="color:Red">Remove</a></div>');
+				dataCombination['quantity'] = qtyTextbox.val();
+				dataCombination['value'] = arrayCombinationString.slice(0, - 1);
+				arraySelected[thisValueCount] = dataCombination;
+				thisValueCount++;
+				$('.quantity_attr_done.orange_btn3').data('value', thisValueCount);
+			}else{
+				alert('Combination Already Selected!');
+			return false;
+			}
+		}
+    }
 
-      for (var i = 0; i < sortCombination.length; i++) {
-        arrayCombinationString += sortCombination[i] + '-';
-      };
-
-      for (var key in arraySelected) { 
-        if (arraySelected.hasOwnProperty(key))
-          if(arraySelected[key]['value'] === arrayCombinationString.slice(0, - 1)){
-            alreadyExist = true;
-            break;
-          }
-        }   
-
-        if(haveValue === true){
-          if(alreadyExist === false){
-            $('.combinationContainer').append('<div class="inner_quantity_list innerContainer'+thisValueCount+'"> '+ htmlEach +' <a href="javascript:void(0)" class="removeSelected" data-row="'+thisValueCount+'"   style="color:Red">Remove</a></div>');
-            dataCombination['quantity'] = qtyTextbox.val();
-            dataCombination['value'] = arrayCombinationString.slice(0, - 1);
-            arraySelected[thisValueCount] = dataCombination;
-            thisValueCount++;
-            $('.quantity_attr_done.orange_btn3').data('value', thisValueCount);
-          }else{
-            alert('Combination Already Selected!');
-            return false;
-          } 
-        }
-      }
-
-    }); 
+}); 
 </script>
 <script src="<?php echo base_url(); ?>assets/tinymce/tinymce.min.js" type="text/javascript"></script>
 <script type="text/javascript">

@@ -69,7 +69,7 @@
         
         <?php foreach($product_options as $key=>$product_option):?>
         <?php if(count($product_option)>1): ?>
-        <div class="product_option"> <span><?php echo html_escape($key);?></span>
+        <div class="product_option"> <span><?php echo html_escape(str_replace("'", '', $key));?></span>
           <div>
             <ul class="options" name="<?php echo $key;?>">
               <?php foreach($product_option as $i):?>
@@ -147,7 +147,7 @@
           <div> <span>SKU</span> <span><?php echo html_escape($product['sku']);?></span> </div>
           <?php foreach($product_options as $key=>$product_option):?>
           <?php if(count($product_option)===1): ?>
-          <div> <span><?php echo html_escape($key);?></span> <span><?php echo html_escape($product_option[0]['value']);?></span> </div>
+          <div> <span><?php echo html_escape(str_replace("'", '', $key));?></span> <span><?php echo html_escape($product_option[0]['value']);?></span> </div>
           <?php endif; ?>
           <?php endforeach;?>
         </div>

@@ -121,7 +121,10 @@ class product_model extends CI_Model
 	}
 
 
-
+    /*
+     * Feb 20, 2014 Edit: Enclosed name key with single quotes. This is to prevent the id keys from 
+     * being mixed-up with numeric name keys when using $key = 'ALL'
+     */
 	function getProductAttributes($id, $key = 'ALL') # getting the product attirbute using product ID
 	{	
 		$query = $this->sqlmap->getFilenameID('product', 'getProductAttributes');
@@ -131,10 +134,10 @@ class product_model extends CI_Model
 		$sth->execute();
 		$rows = $sth->fetchAll(PDO::FETCH_ASSOC);	
 		$data = array();
-		
+        		        
 		foreach($rows as $row){			
-			if((!array_key_exists($row['name'], $data))&&(($key === 'NAME')||($key === 'ALL')))
-				$data[$row['name']] = array();
+			if((!array_key_exists("'".$row['name']."'", $data))&&(($key === 'NAME')||($key === 'ALL')))
+				$data["'".$row['name']."'"] = array();
 			if((!array_key_exists($row['name_id'], $data))&&(($key === 'ID')||($key === 'ALL')))
 				$data[$row['name_id']] = array();
 				
@@ -143,17 +146,41 @@ class product_model extends CI_Model
 			$row = $temp[0];
 			
 			if($key === 'NAME')
-				array_push($data[$row['name']],array('value' => $row['attr_value'], 'value_id' => $row['attr_value_id'],  'price'=>$row['attr_price'],'img_path'=>$row['path'], 'img_file'=>$row['file'], 'type'=>$row['type'], 'img_id' => $row['img_id']  ));
+				array_push($data["'".$row['name']."'"],array('value' => $row['attr_value'], 'value_id' => $row['attr_value_id'],  'price'=>$row['attr_price'],'img_path'=>$row['path'], 'img_file'=>$row['file'], 'type'=>$row['type'], 'img_id' => $row['img_id']  ));
 			else if($key === 'ID')
 				array_push($data[$row['name_id']],array('value' => $row['attr_value'], 'value_id' => $row['attr_value_id'],  'price'=>$row['attr_price'],'img_path'=>$row['path'], 'img_file'=>$row['file'], 'type'=>$row['type'], 'img_id' => $row['img_id']   ));
 			else{
-				array_push($data[$row['name']],array('value' => $row['attr_value'], 'value_id' => $row['attr_value_id'],  'price'=>$row['attr_price'],'img_path'=>$row['path'], 'img_file'=>$row['file'], 'type'=>$row['type'], 'img_id' => $row['img_id']   ));
+				array_push($data["'".$row['name']."'"],array('value' => $row['attr_value'], 'value_id' => $row['attr_value_id'],  'price'=>$row['attr_price'],'img_path'=>$row['path'], 'img_file'=>$row['file'], 'type'=>$row['type'], 'img_id' => $row['img_id']   ));
 				array_push($data[$row['name_id']],array('value' => $row['attr_value'], 'value_id' => $row['attr_value_id'],  'price'=>$row['attr_price'],'img_path'=>$row['path'], 'img_file'=>$row['file'], 'type'=>$row['type'], 'img_id' => $row['img_id']   ));
 			}
 		}
 		return $data;
 	}
-
+	
+	/*
+	 *  Combines similar names indexes in the same array element
+	 *  Attributes should be indexed by "name" otherwise an empty array is returned
+	 *  Case is ignored.
+	 */
+	function implodeAttributesByName($attributes){
+		$data = array();
+		foreach($attributes as $key=>$row){
+			if(!is_string($key)){
+				return array();
+			}
+			else{
+				if(!array_key_exists(strtolower($key), $data)){
+					$data[strtolower($key)] = array();
+				}
+				foreach($row as $x){
+				    array_push($data[strtolower($key)],$x);
+				}
+			}
+		}
+		return $data;
+	}
+	
+	
 	function getProductImages($id, $getById = false) # getting the product image using product ID
 	{
 		$query = $this->sqlmap->getFilenameID('product', 'getProductImages');
@@ -477,6 +504,44 @@ class product_model extends CI_Model
 		$row = $sth->fetchAll(PDO::FETCH_ASSOC);
 		return $row;
 	}
+	
+	function selectAllProductWithCategoryFiltered($id_cat,$condition_price_string,$start,$per_page,$catlist_down,$product_id)
+	{
+	
+		$start = (int)$start;
+	 	$per_page = (int)$per_page;		  
+	 	$query ="
+	 	     SELECT 
+          a.`id_product` AS `product_id`
+          , a.`name` AS product_name
+          , a.`price` AS product_price
+          , a.`brief` AS product_brief
+          , a.`condition` AS product_condition
+          , b.`product_image_path`
+          , c.`name` AS product_brand 
+          , a.`brand_id`
+        FROM
+          `es_product` a
+          , `es_product_image` b 
+          ,`es_brand` c
+        WHERE a.`id_product` = b.`product_id` 
+          AND b.`is_primary` = 1 
+          AND a.`brand_id` = c.`id_brand`
+          AND `cat_id` IN (". $catlist_down .")
+		  AND a.`is_delete` = 0
+		  AND a.`id_product` NOT IN (". implode(',', $product_id) . ")
+		  ".$condition_price_string." 
+        LIMIT :start, :per_page
+	 	"; 
+
+
+		$sth = $this->db->conn_id->prepare($query);  
+		$sth->bindParam(':start',$start,PDO::PARAM_INT);
+		$sth->bindParam(':per_page',$per_page,PDO::PARAM_INT);
+		$sth->execute();
+		$row = $sth->fetchAll(PDO::FETCH_ASSOC);
+		return $row;
+	}	
 
 	function getProductInCategoryAndUnder($category,$usable_string,$items,$start,$per_page,$string_sort)
 	{
@@ -515,6 +580,45 @@ class product_model extends CI_Model
 
 		return $row;
 	}
+
+	function getProductInCategoryAndUnderFiltered($category,$usable_string,$items,$start,$per_page,$product_id,$string_sort)
+	{
+		$start = (int)$start;
+	 	$per_page = (int)$per_page;
+		 
+		$query = "
+		SELECT 
+		  a.`id_product` AS product_id
+		  , a.`name` AS product_name
+		  , a.`price` AS product_price
+		  , a.`brief` AS product_brief
+		  , a.`condition` AS product_condition
+		  , b.product_image_path 
+		  , c.`name` AS product_brand
+		  , a.`brand_id`
+		FROM
+		  `es_product` a
+		  , `es_product_image` b
+		  ,`es_brand` c 
+		WHERE a.`id_product` = b.`product_id` 
+		  AND a.is_delete = 0 
+		  AND b.`is_primary` = 1 
+		  AND a.`brand_id` = c.`id_brand`
+		  ".$usable_string." 
+		  AND a.`cat_id` IN (".$items.") 
+		  AND a.`id_product` NOT IN (". implode(',', $product_id) . ")
+		   ". $string_sort ."   
+		  LIMIT :start, :per_page
+		";   
+
+		$sth = $this->db->conn_id->prepare($query);
+		$sth->bindParam(':start',$start,PDO::PARAM_INT); 
+		$sth->bindParam(':per_page',$per_page,PDO::PARAM_INT);
+		$sth->execute();
+		$row = $sth->fetchAll(PDO::FETCH_ASSOC);
+
+		return $row;
+	}	
 
 	function getAttributesWithParam($id,$datas)
 	{
@@ -1052,6 +1156,14 @@ class product_model extends CI_Model
         $rows = $sth->fetchAll(PDO::FETCH_ASSOC);
         return $rows;
     }
+	
+	public function getParentCategory(){
+		$query = "SELECT id_cat, name FROM es_cat WHERE parent_id = 1 AND id_cat > 1 ";
+		$sth = $this->db->conn_id->prepare($query);
+		$sth->execute();
+        $rows = $sth->fetchAll();
+        return $rows;			
+	}
 
 
     /********************************************************************************/
