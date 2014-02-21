@@ -1141,7 +1141,7 @@ $(".proceed_form").unbind("click").click(function(){
 
     //Marked for refactoring
     //Duplicate code: see $('.quantity_attr_done') click handler
-	//$(function(){}) removed
+	//$(function(){}) removed and $('.quantity_attrs_content option :select') replaced with if statement
     function addAttrQtyCombination(count){
 		var qtyTextbox = $('.qtyTextClass');
 		var qtyTextboxValue = parseInt(qtyTextbox.val());
