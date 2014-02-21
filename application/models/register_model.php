@@ -217,7 +217,7 @@ class Register_model extends CI_Model
 		$result = $this->email->send();
 
 		$errmsg = $this->email->print_debugger();
-
+		
 		return $result;
 	}
 

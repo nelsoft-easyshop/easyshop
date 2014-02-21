@@ -466,11 +466,13 @@ $(document).ready(function(){
 
 						if(obj['mobilestat'] !== ''){
 							$('#verification-content .verification_field_mobile').show();
+							$('.verification_field_mobile_set').hide();
 							if(obj['mobilestat'] === 'error')
 								$('.mobilestat').html($('.mobilestat-error').html().replace('%%',obj['mobile']));
 							else if(obj['mobilestat'] === 'success'){
 								mobile_msg += "Mobile: " + obj['mobile'] + "<br>";
 								$('.mobilestat').html($('.mobilestat-success').html());
+								$('.verification_field_mobile_set').show();
 							}
 							else if(obj['mobilestat'] === 'exceed')
 								$('.mobilestat').html($('.mobilestat-exceed').html());
@@ -492,10 +494,12 @@ $(document).ready(function(){
 							$('.verification-span-error').hide(); 
 							$('.verification-span').show();
 							$('#verification-content .verification-msg').html("<strong>" + mobile_msg + email_msg + "</strong>" + "<br>");
+							/*
 							if((obj['mobilestat']=='success')&&(obj['emailstat']=='success'))
 								$('.or_separator').css('display','inline');
 							}
-
+							*/
+							
 						if(obj['mobilestat'] !== 'exists' && obj['emailstat'] !== 'exists'){
 							$('#verification-content').modal({
 								position: ["25%","25%"],

@@ -121,13 +121,13 @@
 							</p>
 						</form>
 					</div>
-					
+				<!--
 					<div class="or_separator" style="display:none">
 						<p>
 							<strong>OR</strong>
 						</p>
 					</div>
-				
+				-->
 
 					<div class="verification_field_email">
 						<p class="emailstat"></p>
