@@ -808,7 +808,9 @@ $(document).on('change','.other_name_value',function(){
               $('.quantity_attrs_content').append('<div id="div'+idHtmlId+'" style="position:relative">'+headValue+':<br> <select id="'+idHtmlId+'" ></select><br></div>');   
             }
             if(!attrVal.length <= 0){
-              $('#'+idHtmlId).append('<option value="'+attrVal+'" data-temp="'+value+'" data-value="1" data-group="'+headValue+'">'+attrVal+'</option>');
+              //added additional data attribute to option for edit option
+              var attrID = $(this).data('otherid');
+              $('#'+idHtmlId).append('<option value="'+attrVal+'" data-temp="'+value+'" data-value="1" data-group="'+headValue+'" data-otherid="'+attrID+'">'+attrVal+'</option>');
             } 
 
             if($('#'+idHtmlId).has('option').length <= 0){
@@ -1076,6 +1078,9 @@ $(".proceed_form").unbind("click").click(function(){
     $('.other_name_class').each(function(){
         $(this).change();
     });
+    $('.other_name_value').each(function(){
+        $(this).change();
+    });
 
     //Submits previously configured quantity attribute combinations 
     var qty_obj =  JSON.parse($('#qty_details').val());
@@ -1150,15 +1155,19 @@ $(".proceed_form").unbind("click").click(function(){
 		var haveValue = false;
 		htmlEach += '<div><input type="textbox" class="quantityText" value="'+qtyTextbox.val()+'" data-cnt="'+thisValueCount+'"></div>';
 
-		$('.quantity_attrs_content option:selected').each(function(){
-			haveValue = true;
-			noCombination = false;
-			var eachValue = $(this).val();
-			var eachValueString = $(this).text();
-			var eachGroup = $(this).data('group');  
-			var eachDataValue = $(this).data('value');  
-			combinationVal.push(eachDataValue+':'+eachValue);
-			htmlEach += '<div>'+ eachGroup +': ' + eachValueString +'</div>';
+		
+        $('.quantity_attrs_content option').each(function(){
+            
+            if($(this).attr('selected')){
+                haveValue = true;
+                noCombination = false;
+                var eachValue = $(this).val();
+                var eachValueString = $(this).text();
+                var eachGroup = $(this).data('group');  
+                var eachDataValue = $(this).data('value');  
+                combinationVal.push(eachDataValue+':'+eachValue);
+                htmlEach += '<div>'+ eachGroup +': ' + eachValueString +'</div>';
+             }
 		});
 
 		if(isNaN(qtyTextboxValue) ||  qtyTextboxValue <= 0){ 

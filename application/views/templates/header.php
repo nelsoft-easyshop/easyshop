@@ -48,6 +48,9 @@
               <!-- <li><a href="<?=base_url()?>home/under_construction">Visiting a new Shop</a></li> -->
               <!-- <li><a href="<?=base_url()?>home/under_construction">Discounts</a></li> -->
               <li><a href="<?=base_url()?>category/all">Shopping Categories</a></li>
+			  <!-- Removed: not part of branch release. Keep edits like this in the trunk -->
+              <!-- <li><a href="<?=base_url()?>product_search/advance">Advance Search</a></li> -->
+			  
             </ul>
           </li>
           <li class="top_nav_main">Seller Center
@@ -91,6 +94,7 @@
         </ul>
       </div>
     </div>
+    <?php #echo uri_string();?>
     <?php if(!$logged_in): ?>
     <div  class="top_links_right"> <a href="<?=base_url()?>login" class="top_border">Login</a> <a href="<?=base_url()?>register">Register</a> </div>
     <?php else: ?>
@@ -133,7 +137,6 @@
 $(document).ready(function() {
 
   $( "#main_search" ).keyup(function() {
-
 
     var searchQuery = $(this).val();
     if(searchQuery != ""){
