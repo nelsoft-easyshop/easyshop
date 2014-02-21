@@ -123,10 +123,19 @@ class Register extends MY_Controller
 				//Check if email or mobile already used by other users
 				//User will not be registered until valid contact info is/are provided
 				$checkdata = array(
-					'member_id' => 0,
+					//'member_id' => 0,
 					'contactno' => html_escape($this->input->post('register_mobile')),
 					'email' => html_escape($this->input->post('register_email'))
 				);
+				
+				if($this->session->userdata('temp_memberid')){
+					$checkdata['member_id'] = $this->session->userdata('temp_memberid');
+				}
+				else{
+					$checkdata['member_id'] = 0;
+				}
+
+				
 				$check = $this->register_model->check_contactinfo($checkdata);
 				if($check['mobile'] !== 0 || $check['email'] !== 0){
 					$data['mobilestat'] = $check['mobile'] == 0 ? '' : 'exists';
@@ -137,7 +146,8 @@ class Register extends MY_Controller
 
 				//REGISTER MEMBER IN DATABASE
 				$member_id = $this->register_model->signup_member($data_val)['id_member'];
-
+				$this->session->set_userdata('temp_memberid', $member_id);
+				
 				$temp = array(
 					'member_id' => $member_id,
 					'mobilecode' => $confirmation_code,
@@ -155,7 +165,7 @@ class Register extends MY_Controller
 						
 						if($data['mobilestat'] === 'success'){
 							$this->session->set_userdata('confirmation_code', $confirmation_code);
-							$this->session->set_userdata('temp_memberid' , $member_id);
+							//$this->session->set_userdata('temp_memberid' , $member_id);
 							$temp['mobile'] = 1;
 						}
 					}
@@ -243,6 +253,7 @@ class Register extends MY_Controller
 		//UNSET REGISTER SESSION VARIABLES
 		$this->session->unset_userdata('register_username');
 		$this->session->unset_userdata('register_password');
+		$this->session->unset_userdata('temp_memberid');
 
 		//Decrypt and re-assign data
 		$enc = html_escape($this->input->get('h'));
