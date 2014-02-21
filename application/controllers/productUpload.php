@@ -29,7 +29,7 @@ class productUpload extends MY_Controller
 	{ 			
 		$usersession = $this->session->userdata('usersession');	
 		$uid = $this->session->userdata('member_id');
-		$data_item['firstlevel'] = $this->product_model->getFirstLevelNodeAlphabetical(); # getting first category level from database.
+		$data_item['firstlevel'] = $this->product_model->getFirstLevelNode(); # getting first category level from database.
 		$userdetails = $this->product_model->getCurrUserDetails($uid);
 		$data = $this->fill_view();
 		$this->load->view('templates/header', $data); 
@@ -64,6 +64,7 @@ class productUpload extends MY_Controller
 
 		echo json_encode($data);
 	}
+    
 	function step2()
 	{
 		$data = $this->fill_view();

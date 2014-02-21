@@ -44,7 +44,7 @@ class MY_Controller extends CI_Controller
 			'logged_in' => $logged_in,
 			'uname' => $uname,
 			'total_items'=> $this->cart_model->cart_size(),
-			'category_search' => $this->product_model->getFirstLevelNodeAlphabetical(),
+			'category_search' => $this->product_model->getFirstLevelNode(),
 			'user_cur_loc' => $this->session->userdata('user_cur_loc'),
 			);
 		return $data;
@@ -75,9 +75,10 @@ class MY_Controller extends CI_Controller
 			return false;
 
 	}
-
-	function getcat() {
-
+    
+    
+    function getcat_old() {
+        
 		$row = $this->getdatafromcat(1);
 		$arr_data = array();
 		for($i=0;$i < count($row);$i++)
@@ -107,6 +108,7 @@ class MY_Controller extends CI_Controller
 				}
 			}
 		}
+        
 		return $row;
 
 	}
@@ -116,33 +118,64 @@ class MY_Controller extends CI_Controller
 		return $row;
 	}
 
+    //THIS METHOD IS 0.3 seconds faster than the original one
+    function getcat(){
+        $rows = $this->product_model->getCatFast();
+        $data = array();
+        $idx_lvl1 = 0;
+        $idx_lvl2 = 0;
+        foreach($rows as $row){
+            if((strlen(trim($row['level1_id']) > 0))&&(!array_key_exists($row['level1_id'], $data))){
+                $data[$row['level1_id']] = array(
+                        'id_cat' => $row['level1_id'],
+                        'NAME' => $row['level1_name'],
+                        'path' => $row['img_level1'],
+                        0 => array(),
+                    );
+                $idx_lvl1 = $row['level1_id'];
+            }
+            if((strlen(trim($row['level2_id']) > 0))&&(!array_key_exists($row['level2_id'], $data[$idx_lvl1][0]))){
+                //start popular items : this is the slowest part of this function
+                $down_cat = $this->product_model->selectChild($row['level2_id']);	
+                //$down_cat = Array ( 0 => 18, 1 => 19, 2 => 20, 3 => 21, 4 => 22, 5 => 23);
+				if((count($down_cat) === 1)&&(trim($down_cat[0]) === ''))
+					$down_cat = array();
+				array_push($down_cat, $row['level2_id']);
+				$pitem = $this->product_model->getPopularitem($down_cat,6);		
+                //end popular items                
+                
+                $data[$idx_lvl1][0][$row['level2_id']] =  array(
+                        'id_cat' => $row['level2_id'],
+                        'name' => $row['level2_name'],
+                        6 => array(),
+                        'popular' => $pitem,
+                    );
+                $idx_lvl2 = $row['level2_id'];
+            }
+            if(strlen(trim($row['level3_id']) > 0)){
+                array_push($data[$idx_lvl1][0][$idx_lvl2][6], array(
+                        'id_cat' => $row['level3_id'],
+                        'name' => $row['level3_name'],));
+            }
+        }
+        foreach($data as $key=>$x){
+            $this->map_array($x[0]);
+            $data[$key][0] = $x[0];
+        }
+        $this->map_array($data);
 
-    #Experimental
-	function getcatfast(){
-		$rows = $this->product_model->getCatFast();
-		$data = array();
-		$x = 0;
-		$y = $x;
-		foreach($rows as $row){
-			if(!isset($data[$x])){
-				$data[$x] = array();
-				$f = 1;
-			}
-
-			if(!in_array($row['level1_id'], $data[$x])){
-				$data[$x]['id_cat'] = $row['level1_id'];
-				$data[$x]['NAME'] = $row['level1_name'];
-				$data[$x]['path'] = $row['img_level1'];
-				$data[$x][0] = array();
-				if($f === 0)
-					$x++;
-			}
-			else{
-				$f = 0;                
-			}
-		}
-		return $data;
-	}
+        return $data;
+    }
+    
+    
+    private function map_array(&$array){
+        $temp = array();
+        foreach($array as $x){
+            array_push($temp, $x);
+        }
+        $array = $temp; 
+    }    
+		
 
 
 }

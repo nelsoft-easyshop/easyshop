@@ -192,7 +192,7 @@ class product extends MY_Controller
 				}
 
 				$response['breadcrumbs'] = $breadcrumbs;
-				$response['main_categories'] = $this->product_model->getFirstLevelNodeAlphabetical(true);
+				$response['main_categories'] = $this->product_model->getFirstLevelNode(true);
 				$data = array( 
 					'title' => substr($url_string,0,-5).' | Easyshop.ph',
 					); 
@@ -581,7 +581,7 @@ class product extends MY_Controller
 				'product' => $product_row,
 				'product_options' => $product_options,
 				'product_images' => $this->product_model->getProductImages($id),
-				'main_categories' => $this->product_model->getFirstLevelNodeAlphabetical(TRUE),
+				'main_categories' => $this->product_model->getFirstLevelNode(TRUE),
 				'reviews' => $this->getReviews($id,$product_row['sellerid']),
 				'uid' => $uid,
 				'recommended_items'=> $this->product_model->getRecommendeditem($product_catid,5,$id),
@@ -736,7 +736,7 @@ class product extends MY_Controller
 	
 	function categories_all() # ROUTING: category/all
 	{
-		$categories = $this->product_model->getFirstLevelNodeAlphabetical();
+		$categories = $this->product_model->getFirstLevelNode(false, true);
 		foreach($categories as $index=>$category){
 			$categories[$index]['subcategories'] = $this->product_model->getDownLevelNode($category['id_cat']);
 			foreach($categories[$index]['subcategories'] as $inner_index=>$subcategory){

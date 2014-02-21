@@ -780,13 +780,19 @@ class product_model extends CI_Model
 		return $data;
 	}
 
-	function getFirstLevelNodeAlphabetical($is_main = false) # get all main/parent/first level category from database
+	function getFirstLevelNode($is_main = false, $is_alpha = false) # get all main/parent/first level category from database
 	{
-        if($is_main){
+        if(($is_main)&&(!$is_alpha)){
             $query = $this->sqlmap->getFilenameID('product', 'selectFirstLevelIsMain');
         }
-        else{
-            $query = $this->sqlmap->getFilenameID('product', 'selectFirstLevelAlphabetical');
+        else if((!$is_main)&&(!$is_alpha)){
+            $query = $this->sqlmap->getFilenameID('product', 'selectFirstLevel');
+        }
+        else if(($is_main)&&($is_alpha)){
+            $query = $this->sqlmap->getFilenameID('product', 'selectFirstLevelIsMainAlpha');
+        }
+        else if((!$is_main)&&($is_alpha)){
+            $query = $this->sqlmap->getFilenameID('product', 'selectFirstLevelAlpha');
         }
 		
 		$sth = $this->db->conn_id->prepare($query);
@@ -832,7 +838,6 @@ class product_model extends CI_Model
 	function itemKeySearch($words)
 	{
 		$query = $this->sqlmap->getFilenameID('product','itemKeySearch');
-
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':words',$words);
 		$sth->execute();

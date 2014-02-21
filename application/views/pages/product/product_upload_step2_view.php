@@ -1155,7 +1155,6 @@ $(".proceed_form").unbind("click").click(function(){
 		var haveValue = false;
 		htmlEach += '<div><input type="textbox" class="quantityText" value="'+qtyTextbox.val()+'" data-cnt="'+thisValueCount+'"></div>';
 
-		
         $('.quantity_attrs_content option').each(function(){
             
             if($(this).attr('selected')){

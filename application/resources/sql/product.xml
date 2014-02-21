@@ -16,7 +16,7 @@
         LIMIT 1
     </select>
 	
-    <select id="selectFirstLevelAlphabetical">
+    <select id="selectFirstLevel">
         SELECT
         name,
         description,
@@ -47,6 +47,39 @@
         AND id_cat != 1
         AND is_main = 1
         ORDER BY sort_order ASC
+    </select>
+    
+    <select id="selectFirstLevelAlpha">
+        SELECT
+        name,
+        description,
+        keywords,
+        id_cat,
+        sort_order,
+        parent_id,
+        is_main
+
+        FROM es_cat
+        WHERE parent_id = 1
+        AND id_cat != 1
+        ORDER BY name ASC
+    </select>
+    
+    <select id="selectFirstLevelIsMainAlpha">
+        SELECT
+        name,
+        description,
+        keywords,
+        id_cat,
+        sort_order,
+        parent_id,
+        is_main
+
+        FROM es_cat
+        WHERE parent_id = 1
+        AND id_cat != 1
+        AND is_main = 1
+        ORDER BY name ASC
     </select>
 
     <select id="selectDownLevel">
