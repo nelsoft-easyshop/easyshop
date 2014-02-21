@@ -406,6 +406,12 @@ $(document).ready(function(){
   var arrayCombination = []; 
   var arraySelected = {};  
   var cnt_o = <?php echo json_encode($j-1); ?>;
+  <?php if(isset($sell)){
+    ?>
+   var cnt_o = <?php echo json_encode($j); ?>;
+    <?php 
+  } ?>
+ 
   $(".hdv").css("display", "none");
   $( ".loader_div" ).hide();
   $('.quantity_attr_done').hide();
@@ -524,7 +530,13 @@ $(document).ready(function(){
       }
       return true;
     }
-
+function escapes(string){
+if(string != undefined){
+  return string.replace(/([;&,\.\+\*\~':"\!\^#$%@\[\]\(\)=>\|])/g, '\\$1');
+}else{
+  return "";
+}
+}
 
     document.getElementById('files').addEventListener('change', handleFileSelect, false);
 
@@ -600,7 +612,7 @@ if(haveValue === true){
   return false;
 } 
 }
-console.log(arraySelected);
+// console.log(arraySelected);
 
 });
 
@@ -634,15 +646,26 @@ $(document).on('change','.other_name_class',function(){
   $('.combinationContainer').empty();
   arraySelected = {};  
 
-  var formatHeadValue = $.trim($(this).val());
+  var formatHeadValue = $.trim($(this).val().replace(/[^a-z0-9\s]/gi, '').replace(/[_\s]/g, ' '));
+
   var headValue = formatHeadValue.toLowerCase().replace(/\b[a-z]/g, function(letter) {
     return letter.toUpperCase();
   }); 
+  
   var formatOldValue = $(this).data('oldValue');
+  if (formatOldValue == undefined){
+    formatOldValue ="";
+     
+  }
   var oldValue = formatOldValue;
+
   var cnt = $(this).data('cnt');
   var headCount = 0;
 
+  var idHeadValue = escapes(headValue.replace(/ /g,''));
+  var idOldValue = escapes(oldValue.replace(/ /g,''));
+
+ 
   if(!headValue <= 0){
  
   $('.other_name_class').each(function(){
@@ -654,8 +677,7 @@ $(document).on('change','.other_name_class',function(){
       headCount++;
     }
   });
-  } 
-
+  }  
   if(headCount > 1){
     alert('Value '+headValue+' already exist!');
      $('.prod_'+cnt).val(oldValue);
@@ -666,50 +688,50 @@ $(document).on('change','.other_name_class',function(){
 
   $(this).data('oldValue', headValue);
 
-  if(!$.trim( $('#'+headValue+'Combination').html()).length <= 0){
+  if(!$.trim( $('#'+idHeadValue+'Combination').html()).length <= 0){
 
-        console.log(false);
+ 
         // $('#'+oldValue+'Combination option[data-value=1]').remove().appendTo('#'+headValue+'Combination');  
       
-        $('#'+oldValue+'Combination option[data-value=1]').each(function(){
+        $('#'+idOldValue+'Combination option[data-value=1]').each(function(){
           var value = $(this).val();
           var dataValue = 1;
           var dataGroup = headValue;
           var dataTemp = value+headValue;
           var html = '<option value="'+value+'" data-temp="'+dataTemp+'" data-value="1" data-group="'+dataGroup+'">'+value+'</option>'
-          $('#'+headValue+'Combination').append(html);
+          $('#'+idHeadValue+'Combination').append(html);
           $(this).remove();
         });
 
-        if($('#'+oldValue+'Combination').has('option').length <= 0 ){
-          $('#div'+oldValue+'Combination').remove();
+        if($('#'+idOldValue+'Combination').has('option').length <= 0 ){
+          $('#div'+idOldValue+'Combination').remove();
         }
 
       }else{
 
         if(headValue.length <= 0){
-          $('#'+oldValue+'Combination option[data-value=1]').remove();  
-          if($('#'+oldValue+'Combination').has('option').length <= 0){
-            $('#div'+oldValue+'Combination').remove();
+          $('#'+idOldValue+'Combination option[data-value=1]').remove();  
+          if($('#'+idOldValue+'Combination').has('option').length <= 0){
+            $('#div'+idOldValue+'Combination').remove();
           }
 
         }else{
 
-          console.log(true); 
+          // console.log(true); 
           // $('#'+oldValue+'Combination option[data-value=1]').remove().appendTo('#'+headValue+'Combination');  
 
-          $('#'+oldValue+'Combination option[data-value=1]').each(function(){
+          $('#'+idOldValue+'Combination option[data-value=1]').each(function(){
             var value = $(this).val();
             var dataValue = 1;
             var dataGroup = headValue;
             var dataTemp = value+headValue;
             var html = '<option value="'+value+'" data-temp="'+dataTemp+'" data-value="1" data-group="'+dataGroup+'">'+value+'</option>'
-            $('#'+headValue+'Combination').append(html);
+            $('#'+idHeadValue+'Combination').append(html);
             $(this).remove();
           });
 
-          if($('#'+oldValue+'Combination').has('option').length <= 0){
-            $('#div'+oldValue+'Combination').remove();
+          if($('#'+idOldValue+'Combination').has('option').length <= 0){
+            $('#div'+idOldValue+'Combination').remove();
           }
 
           if(!headValue.length <= 0){
@@ -721,16 +743,21 @@ $(document).on('change','.other_name_class',function(){
                 }
             });
             if(haveValue > 0){
-              $('.quantity_attrs_content').append('<div id="div'+headValue+'Combination" style="position:relative">'+headValue+':<br> <select id="'+headValue+'Combination" ></select><br></div>');   
+              $('.quantity_attrs_content').append('<div id="div'+idHeadValue+'Combination" style="position:relative">'+headValue+':<br> <select id="'+idHeadValue+'Combination" ></select><br></div>');   
 
               $(".otherNameValue"+cnt).each(function(){  
+               
                 var attrVal = $(this).val();
                 var attrID = $(this).data('otherid');
                 if(attrVal.length > 0){
-                    //added additional data attribute to option for edit option
-                    $('#'+headValue+'Combination').append('<option value="'+attrVal+'" data-temp="'+attrVal+headValue+'" data-value="1" data-group="'+headValue+'" data-otherid="'+attrID+'">'+attrVal+'</option>');
+ 
+                
+                 $('[id='+idHeadValue+'Combination]').append('<option value="'+attrVal+'" data-temp="'+attrVal+headValue+'" data-value="1" data-group="'+headValue+'" data-otherid="'+attrID+'">'+attrVal+'</option>');
+ 
                }
              });
+
+              
             }
          }
 
@@ -740,7 +767,7 @@ $(document).on('change','.other_name_class',function(){
      $('.prod_'+cnt).val(headValue);
      $(".otherNameValue"+cnt).each(function(){
       var value = $(this).val()+headValue;
-      $(this).data('temp',value);
+      $(this).data('temp','"'+value+'"');
     });
 
      if( !$.trim( $('.quantity_attrs_content').html() ).length ) {
@@ -762,15 +789,19 @@ $(document).on('change','.other_name_value',function(){
          arraySelected = {};  
 
         var cnt = $(this).data('cnt');
-        var formatHeadValue = $('.prod_'+cnt).val();
+        var formatHeadValue = $.trim($('.prod_'+cnt).val().replace(/[^a-z0-9\s]/gi, '').replace(/[_\s]/g, ' '));
         var headValue = formatHeadValue.toLowerCase().replace(/\b[a-z]/g, function(letter) {
           return letter.toUpperCase();
         }); 
         var temp = $(this).data('temp'); 
-        var value = $(this).val()+''+headValue;
-        $(this).data('temp',value);
+        var selfValue = $.trim($(this).val());
+        var value = selfValue+headValue;
+        $(this).data('temp','"'+value+'"');
         var attrVal = $(this).val();
-        var idHtmlId = headValue.replace(' ','')+'Combination';
+ 
+        var idHtmlId = headValue.replace(/ /g,'')+'Combination';
+ 
+ 
         if(formatHeadValue.length >0){
             $("#"+idHtmlId+" option[data-temp="+temp+"]").remove();
             if(!$('#'+idHtmlId).length){
@@ -780,8 +811,8 @@ $(document).on('change','.other_name_value',function(){
               $('#'+idHtmlId).append('<option value="'+attrVal+'" data-temp="'+value+'" data-value="1" data-group="'+headValue+'">'+attrVal+'</option>');
             } 
 
-            if($('#'+headValue+'Combination').has('option').length <= 0){
-              $('#div'+headValue+'Combination').remove();
+            if($('#'+idHtmlId).has('option').length <= 0){
+              $('#div'+idHtmlId).remove();
             }
 
             if( !$.trim( $('.quantity_attrs_content').html() ).length ) {

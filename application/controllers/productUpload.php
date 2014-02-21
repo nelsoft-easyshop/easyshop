@@ -92,6 +92,7 @@ class productUpload extends MY_Controller
 			}
 
 			$response['attribute'] = $attribute;
+			$response['sell'] = true;
 			$this->load->view('pages/product/product_upload_step2_view',$response);
 			$this->load->view('templates/footer'); 
 		}else{
