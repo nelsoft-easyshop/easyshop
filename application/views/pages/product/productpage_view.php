@@ -68,23 +68,31 @@
         <div class="clear prod_inner_border"></div>
         
         <?php foreach($product_options as $key=>$product_option):?>
-        <?php if(count($product_option)>1): ?>
-        <div class="product_option"> <span><?php echo html_escape(str_replace("'", '', $key));?></span>
-          <div>
-            <ul class="options" name="<?php echo $key;?>">
-              <?php foreach($product_option as $i):?>
-              <?php if((trim($i['img_path'])!=='')&&(trim($i['img_file'])!=='')): ?>       
-              <a href="#" rel="{gallery: 'gal1', smallimage: '<?=base_url()?><?php echo $i['img_path'].'small/'.$i['img_file']; ?>',largeimage: '<?=base_url()?><?php echo $i['img_path'].$i['img_file']; ?>'}">
-              <?php endif; ?>
-              <li class="" id="<?php echo html_escape($i['value']);?>" data-price="<?php echo $i['price'];?>" data-attrid="<?php echo $i['value_id'];?>"><?php echo html_escape($i['value']);?></li>
-              <?php if((trim($i['img_path'])!=='')&&(trim($i['img_file'])!=='')): ?>
-              </a>
-              <?php endif; ?>
-              <?php endforeach;?>
-            </ul>
-          </div>
-        </div>
-        <?php endif; ?>
+            <?php if(count($product_option)>1): ?>
+            <div class="product_option"> <span><?php echo html_escape(str_replace("'", '', $key));?></span>
+              <div>
+                <ul class="options" name="<?php echo $key;?>">
+                  <?php foreach($product_option as $i):?>
+                  <?php if((trim($i['img_path'])!=='')&&(trim($i['img_file'])!=='')): ?>       
+                  <a href="#" rel="{gallery: 'gal1', smallimage: '<?=base_url()?><?php echo $i['img_path'].'small/'.$i['img_file']; ?>',largeimage: '<?=base_url()?><?php echo $i['img_path'].$i['img_file']; ?>'}">
+                  <?php endif; ?>
+                  <li class="" id="<?php echo html_escape($i['value']);?>" data-price="<?php echo $i['price'];?>" data-attrid="<?php echo $i['value_id'];?>"><?php echo html_escape($i['value']);?></li>
+                  <?php if((trim($i['img_path'])!=='')&&(trim($i['img_file'])!=='')): ?>
+                  </a>
+                  <?php endif; ?>
+                  <?php endforeach;?>
+                </ul>
+              </div>
+            </div>
+            <?php else: ?>
+            <div class="product_option" style="display:none"> <span><?php echo html_escape(str_replace("'", '', $key));?></span>
+              <div>
+                <ul class="options" name="<?php echo $key;?>">
+                  <li class="active" id="<?php echo html_escape($product_option[0]['value']);?>" data-price="<?php echo $product_option[0]['price'];?>" data-attrid="<?php echo $product_option[0]['value_id'];?>"><?php echo html_escape($product_option[0]['value']);?></li>
+                </ul>
+              </div>
+            </div>
+            <?php endif; ?>
         <?php endforeach;?>
         
         <!-- Quantity -->
