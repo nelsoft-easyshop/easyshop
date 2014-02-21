@@ -557,7 +557,7 @@ class productUpload extends MY_Controller
 			$product_id = $this->input->post('p_id');
 		else
 			redirect('me', 'refresh');
-        
+
 		$member_id = $this->session->userdata('member_id');
 		$data = array('title'=>'Edit Product');
 		$data = array_merge($data,$this->fill_header());
@@ -597,7 +597,7 @@ class productUpload extends MY_Controller
 		
 		$response['product_attributes_opt'] = array();
 		$response['product_attributes_spe'] = array();
-		
+        		
 		foreach($this->product_model->getProductAttributes($product_id, 'ALL') as $key=>$attribute){
 			if(strtolower(gettype($key)) === 'string'){ 		#OPTIONAL ATTRIBUTES: BY NAME
 				foreach($attribute as $product_attribute){
