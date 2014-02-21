@@ -59,7 +59,7 @@
 			<div class="profile_left_nav">
 				<div>
 					<div class="avatar">
-						<div class="avatar_edit" style="width:45px; position: relative; float:right"><img name='avatar_edit_icon' src="<?=base_url()?>assets/images/img_edit.png">Edit</div>
+						<div class="avatar_edit" style="width:45px; position: relative; float:right"><span name='avatar_edit_icon'></span>Edit</div>
 						<?php echo $image_profile?>	
 						<?php echo form_open_multipart('memberpage/upload_img', 'id="form_image"');?>
 							<input type="file" style="display:none" id="imgupload" name="userfile"/>
@@ -191,16 +191,16 @@
 								
 								<div class="post_item_content_left">
 									<img src="<?php echo base_url().$active_product['path'].'categoryview/'.$active_product['file']; ?>" class="product_img">
-									<p>
+									<p class="star_rating_reviews">
                                         <?php $rounded_score = round($active_product['average_rating']); ?>
 										<?php for($i = 0; $i < $rounded_score;$i++): ?>
-											<img src="<?=base_url()?>assets/images/star-on.png">
+											<span class="star_on"></span>
 										<?php endfor; ?>
 										<?php for($i = 0; $i < 5-$rounded_score;$i++): ?>
-											<img src="<?=base_url()?>assets/images/star-off.png">
+											<span class="star_off"></span>
 										<?php endfor; ?>
 										<br />
-										<img src="<?=base_url()?>assets/images/img_icon_review.png" class="reviews"><?php echo $active_product['review_count']; ?> Reviews
+										<span class="reviews"></span><?php echo $active_product['review_count']; ?> Reviews
 									</p>
 								</div>
 								<div class="post_item_content_right">
@@ -217,7 +217,7 @@
                                             <?php echo form_open('product/changeDelete'); ?>
                                                 <input type="hidden" name="p_id" value ="<?php echo $active_product['id_product'];?>" /> 
                                                 <input type="hidden" name="action" value ="delete" /> 
-                                                <input class="manage_lnk" type = "submit" value="Delete Item"> </input>
+                                                <input class="delete_lnk" type = "submit" value="Delete Item"> </input>
                                             <?php echo form_close(); ?>
                                             
                                         </div>
@@ -241,7 +241,7 @@
 									<?php endforeach; ?>
 								  </p>
 									
-									<div class="show_more_options blue"><p>View Features and Specifications</p></div>
+									<div class="show_more_options blue"><span></span><p>View Features and Specifications</p></div>
 									<div class="attr_hide">
 								    	<?php $i = 0; 
 									      foreach($active_product['data_attr'] as $key=>$data_attr): ?>								
@@ -873,7 +873,7 @@
 							<input type="hidden" name="is_email_verify" value="<?php echo $is_email_verify;?>">
 							
 							<span class="verify toverify" style="<?php echo $is_email_verify == 0 && trim($email) !== ''?'':'display:none;'?>">
-								<span class="verify_now">Verify</span>
+								<span class="verify_now orange_btn3">Verify</span>
 								<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" class="verify_img" style="display:none"/>
 							</span>	
 							<span class="verify doneverify" style="<?php echo $is_email_verify == 0?'display:none;':''?>">
@@ -906,7 +906,7 @@
 				<div>
 				<form method="post" id="personal_profile_address" name="personal_profile_address" class="dropdownform">
 					<div class="personal_info_title">
-						<img src="<?=base_url()?>assets/images/icon_add.png" alt="add"> Address
+						<span class="address_img"></span> Address
 					</div>
 					<div class="edit_profile">
 						<h2>+ Add an Address</h2>
@@ -1235,7 +1235,7 @@
 									<div>
 										<label></label>
 										<input type="checkbox" name="c_def_address" id="c_def_address"> <span>Set as Default Address</span>
-										<img src="<?=base_url()?>/assets/images/icon_qmark.gif" title="Setting as default updates address in Personal Information">
+										<a class="tooltips" href="#"><img src="<?=base_url()?>/assets/images/icon_qmark.png"><span>Setting as default updates address in Personal Information</span></a>
 									</div>
 									<br>
 									<div style="padding-left:100px">
