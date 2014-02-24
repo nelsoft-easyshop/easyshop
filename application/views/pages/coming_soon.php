@@ -35,10 +35,10 @@
       </div>
      
       <h2>I'm a Seller</h2>
-      <input onclick="window.location='register'" type="submit" style="width:130px" value="Register Here">
-      <br />
-      <a href="/login" class="coming_soon_sign_in blue">Already Have an Account? - Sign In</a>
-      
+      <input onclick="window.location='<?=base_url()?>register'" type="submit" style="width:130px" value="Register Here">
+      <br/>
+      <a href="<?=base_url()?>login" class="coming_soon_sign_in blue">Already Have an Account? - Sign In</a>
+
       <div class="bottom_content">
         <div>
           <h3>About Us</h3>
