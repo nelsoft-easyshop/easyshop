@@ -71,7 +71,7 @@
             <?php if(count($product_option)>1): ?>
             <div class="product_option"> <span><?php echo html_escape(str_replace("'", '', $key));?></span>
               <div>
-                <ul class="options" name="<?php echo $key;?>">
+                <ul class="options" name="<?php echo str_replace("'", '', $key);?>">
                   <?php foreach($product_option as $i):?>
                   <?php if((trim($i['img_path'])!=='')&&(trim($i['img_file'])!=='')): ?>       
                   <a href="#" rel="{gallery: 'gal1', smallimage: '<?=base_url()?><?php echo $i['img_path'].'small/'.$i['img_file']; ?>',largeimage: '<?=base_url()?><?php echo $i['img_path'].$i['img_file']; ?>'}">
@@ -87,7 +87,7 @@
             <?php else: ?>
             <div class="product_option" style="display:none"> <span><?php echo html_escape(str_replace("'", '', $key));?></span>
               <div>
-                <ul class="options" name="<?php echo $key;?>">
+                <ul class="options" name="<?php echo str_replace("'", '', $key);?>">
                   <li class="active" id="<?php echo html_escape($product_option[0]['value']);?>" data-price="<?php echo $product_option[0]['price'];?>" data-attrid="<?php echo $product_option[0]['value_id'];?>"><?php echo html_escape($product_option[0]['value']);?></li>
                 </ul>
               </div>

@@ -84,6 +84,11 @@
               </div>         
             </div>  -->
             <div class="clear"></div>
+            
+            <div>
+                <input type="text" class="box" id="cat_sch">
+            </div>
+            
             <div class="add_product_category">
                 <div class="main_product_category">
                     <input type="text" class="box" id="box">

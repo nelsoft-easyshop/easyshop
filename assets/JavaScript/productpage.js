@@ -191,7 +191,7 @@ $(function(){
         $.each(qty, function(index, value){        
             if(value.product_attribute_ids.sort().join(',') === sel_id.sort().join(',')){
                $('.quantity')[0].innerHTML = value.quantity;
-               //$('.orange_btn3').removeClass("disabled").addClass("enabled"); //REMOVED TO DISABLE BUY NOW BUTTON ACTIVATION
+               $('.orange_btn3').removeClass("disabled").addClass("enabled"); //REMOVED TO DISABLE BUY NOW BUTTON ACTIVATION
                return false;
             }
             else{
