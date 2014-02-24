@@ -497,8 +497,9 @@ $(document).ready(function(){
 							/*
 							if((obj['mobilestat']=='success')&&(obj['emailstat']=='success'))
 								$('.or_separator').css('display','inline');
-							}
 							*/
+							}
+							
 							
 						if(obj['mobilestat'] !== 'exists' && obj['emailstat'] !== 'exists'){
 							$('#verification-content').modal({
