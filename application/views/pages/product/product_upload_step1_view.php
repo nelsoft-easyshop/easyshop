@@ -107,13 +107,15 @@
                             </div>
                             <div class="sub_cat_loading_container loading_img">
                             </div>
+
+                             <div class="loading_category_list loading_img"></div>
                         </div>
  
                         <!-- Controls -->
                         <a href="#" class="jcarousel-control-prev inactive">&lsaquo;</a>
                         <a href="#" class="jcarousel-control-next inactive">&rsaquo;</a>
  
-                        <div class="loading_category_list loading_img"></div>
+                       
  
                     </div>
                 </div>
@@ -217,6 +219,7 @@
                     data: "cat_id=" + D.cat_id + "&level=" + nlevel + "&name=" + D.name,
                     dataType: "json",
                     cache: false,
+                    onLoading:jQuery(".loading_category_list").html('<img src="<?= base_url() ?>assets/images/orange_loader.gif" />').show(),
                     beforeSend: function(jqxhr, settings) {
                         $(".product_sub_items" + nlevel).remove();
                         $(".product_sub_items" + parseInt(D.level) + 1).remove();
@@ -224,6 +227,7 @@
                     },
                     success: function(d) {
                         $(".product_sub_category").append(d);
+                        jQuery(".loading_category_list").hide();  
                     }
                 });
             });
