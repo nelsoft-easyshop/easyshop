@@ -194,6 +194,12 @@ div.sell_steps4 ul li:nth-child(4) a {
     margin-left: 10px;
 }
 
+.loading_img { /** loading gif **/
+    overflow-y: hidden !important;
+    padding-top: 135px;
+    height: auto !important;
+}
+
 .add_product_category > div {
     float: left;
 }
