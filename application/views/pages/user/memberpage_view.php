@@ -805,7 +805,11 @@
             -->
 			
 			<div class="profile_main_content" id="personal_information">
-				<form method="post" id="personal_profile_main" name="personal_profile_main">
+				<!--<form method="post" id="personal_profile_main" name="personal_profile_main">-->
+				<?php 
+					$attr=array('id'=>'personal_profile_main', 'name'=>'personal_profile_main');
+					echo form_open('',$attr);
+				?>
 					<h2>Personal Information</h2>
 					<div class="clear"></div>
 					<div class="profile_fields progress_update update_all" >
@@ -902,9 +906,14 @@
 						</div>
 						<input type="hidden" class="progress_update_hidden" value="">
 					</div>
-				</form>
+				<?php echo form_close();?>
+				
 				<div>
-				<form method="post" id="personal_profile_address" name="personal_profile_address" class="dropdownform">
+				<!--<form method="post" id="personal_profile_address" name="personal_profile_address" class="dropdownform">-->
+				<?php
+					$attr = array('id'=>'personal_profile_address','name'=>'personal_profile_address', 'class'=>'dropdownform');
+					echo form_open('',$attr);
+				?>
 					<div class="personal_info_title">
 						<span class="personal_info_icon address_img"></span> Address
 					</div>
@@ -987,11 +996,15 @@
 						<div class="clear"></div>
 						<div class="error_container" style="padding-left:100px"></div>
 					</div>
-				</form>
+				<?php echo form_close();?>
 					
 				<div class="clear"></div>
 				<div>
-					<form method="post" id="personal_profile_school" name="personal_profile_school" class="dropdownform">
+					<!--<form method="post" id="personal_profile_school" name="personal_profile_school" class="dropdownform">-->
+					<?php
+						$attr = array('id'=>'personal_profile_school', 'name'=>'personal_profile_school', 'class'=>'dropdownform');
+						echo form_open('', $attr);
+					?>
 						<div class="personal_info_title">
 							<span class="personal_info_icon school_img"></span> School
 						</div>
@@ -1091,11 +1104,16 @@
 							<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" id="load_school" style="position: relative; left:440px; display:none"/>
 						</div>
 						<div class="clear"></div>
-					</form>
+					<?php echo form_close();?>
 				</div>
+				
 				<div class="clear"></div>
 				
-				<form method="post" id="personal_profile_work" name="personal_profile_work" class="dropdownform">
+				<!--<form method="post" id="personal_profile_work" name="personal_profile_work" class="dropdownform">-->
+				<?php 
+					$attr = array('id'=>'personal_profile_work', 'name'=>'personal_profile_work', 'class'=>'dropdownform');
+					echo form_open('',$attr);
+				?>
 					<div>
 						<div class="personal_info_title">
 							<span class="personal_info_icon work_img"></span> Work
@@ -1174,13 +1192,17 @@
 							<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" id="load_work" style="position: relative; left:440px; display:none"/>
 						</div>
 					</div>
-				</form>
+				<?php echo form_close();?>
 				
 			</div>
 			</div>
 		
 				<div class="profile_main_content" id="delivery_address">
-					<form method="post" id="c_deliver_address" name="c_deliver_address">	
+					<!--<form method="post" id="c_deliver_address" name="c_deliver_address">	-->
+					<?php
+						$attr = array('id'=>'c_deliver_address', 'name'=>'c_deliver_address');
+						echo form_open('',$attr);
+					?>
 							<h2>Delivery Address</h2>
 							<div class="profile_fields">
 								<div class="inner_profile_fields progress_update update_once">
@@ -1254,7 +1276,7 @@
 								<input type="submit" name="c_deliver_address_btn" value="Save">
 									<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" id="load_deliver_address" style="position: relative; top:12px; left:15px;  display:none"/>
 							</div>	
-					</form>
+					<?php echo form_close();?>
 				</div>	
 
 			<div class="profile_main_content" id="transactions">
@@ -1336,7 +1358,11 @@
 											<?php else: ?>
 												<p class="transac-feedback-btn"> + Feedback for <?php echo $user['name'];?></p>
 												<div class="transac-feedback-container">
-													<form class="transac-feedback-form">
+													<!--<form class="transac-feedback-form">-->
+													<?php
+														$attr = array('class'=>'transac-feedback-form');
+														echo form_open('',$attr);
+													?>
 														<input type="hidden" name="feedb_kind" value="0">
 														<input type="hidden" name="order_id" value="<?php echo $tk;?>">
 														<input type="hidden" name="for_memberid" value="<?php echo $uk;?>">
@@ -1350,7 +1376,7 @@
 														<span class="red ci_form_validation_error"><?php echo form_error('rating3'); ?></span>
 														<span class="raty-error error red"></span>
 														<span class="feedback-submit">Submit</span><span class="feedback-cancel">Cancel</span>
-													</form>
+													<?php echo form_close();?>
 												</div>
 											<?php endif;?>
 										</div>
@@ -1447,7 +1473,11 @@
 										<?php else: ?>
 											<p class="transac-feedback-btn"> + Feedback for <?php echo $user['name'];?></p>
 											<div class="transac-feedback-container">
-												<form class="transac-feedback-form">	
+												<!--<form class="transac-feedback-form">-->
+												<?php
+													$attr = array('class'=>'transac-feedback-form');
+													echo form_open('',$attr);
+												?>
 													<input type="hidden" name="feedb_kind" value="1">
 													<input type="hidden" name="order_id" value="<?php echo $tk;?>">
 													<input type="hidden" name="for_memberid" value="<?php echo $uk;?>">
@@ -1461,7 +1491,7 @@
 													<span class="red ci_form_validation_error"><?php echo form_error('rating3'); ?></span>
 													<span class="raty-error error red"></span>
 													<span class="feedback-submit">Submit</span> <span class="feedback-cancel">Cancel</span>
-												</form>
+												<?php echo form_close();?>
 											</div>
 										<?php endif;?>
 									</div>

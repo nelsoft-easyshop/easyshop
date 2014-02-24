@@ -11,6 +11,12 @@ $(window).load(function(){
 
 $(document).ready(function(){
 	$(".year").numeric({negative : false});
+	$('#mobile').numeric({negative : false});
+	
+	$('#mobile, #email').on('keydown', function(e){
+		return e.which !== 32;
+	});
+	
 	$.datepicker.setDefaults({dateFormat: 'yy-mm-dd'}, $.extend($.datepicker.regional['']));
 
 	$( "#datepicker" ).datepicker({
