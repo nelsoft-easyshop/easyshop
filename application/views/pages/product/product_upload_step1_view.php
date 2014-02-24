@@ -107,8 +107,6 @@
                     <div class="jcarousel">
                         <div class="product_sub_category">
                             <div class="sub_cat_loading_container loading_img">
-                                <!-- <img src="<?= base_url() ?>assets/images/orange_loader.gif"> -->
-
                             </div>
                         </div>
                         <div class="loading_category_list loading_img"></div>
