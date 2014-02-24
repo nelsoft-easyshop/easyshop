@@ -247,7 +247,8 @@
               <?php if( ($uid == $product['sellerid'] || $review['is_reviewer'] == 1) && $logged_in ) : ?>
               <span class="reply_btn">Reply</span>
               <div class="reply_area">
-                <form method="post">
+                <!--<form method="post">-->
+				<?php echo form_open(); ?>
                   <input type="hidden" name="p_reviewid" value="<?php echo $review['id_review']?>">
                   <input type="hidden" name="id_product" value="<?php echo $product['id_product']?>">
                   <textarea class="reply_field" name="reply_field" cols=50 rows=4></textarea>
@@ -255,7 +256,7 @@
                   <span class="reply_save orange_btn3">Save</span> 
                   <img src="<?=base_url()?>/assets/images/bx_loader.gif" id="savereply_loadingimg" style="position: relative; top:12px; left:15px; display:none"/>
                   <span class="reply_cancel">Cancel</span>
-                </form>
+                <?php echo form_close();?>
               </div>
               <?php endif;?>
             </div>
