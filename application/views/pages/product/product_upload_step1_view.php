@@ -91,7 +91,7 @@
                 <input type="text" class="box" id="box">
                 <ul class="navList" style="list-style-type:none">  
                     <?php
- 
+
                         foreach ($firstlevel as $row) { # generate all parent category.
                             ?>
 
@@ -110,13 +110,13 @@
 
                              <div class="loading_category_list loading_img"></div>
                         </div>
- 
+
                         <!-- Controls -->
                         <a href="#" class="jcarousel-control-prev inactive">&lsaquo;</a>
                         <a href="#" class="jcarousel-control-next inactive">&rsaquo;</a>
- 
+
                        
- 
+
                     </div>
                 </div>
 
@@ -132,8 +132,10 @@
 
     <script>
     $(document).ready(function() {
+
         var globalParent;
         var globalLevel;
+
         $(document).on('click','.product-list li a',function () { 
             $(this).addClass('active').parent().siblings().children('a').removeClass('active');
         });
@@ -142,94 +144,91 @@
             $(this).addClass('active').parent().siblings().children('a').removeClass('active');
         });
 
-            $("#box").unbind("click").click(function() {  // this function is for searching item on the list box every category
-                $('#box').keyup(function() {
-                    var valThis = $(this).val().toLowerCase();
-                    $('.navList>li').each(function() {
-                        var text = $(this).text().toLowerCase();
-                        (!text.contains(valThis) == 0) ? $(this).show() : $(this).hide();
-                    });
+        $("#box").unbind("click").click(function() {  // this function is for searching item on the list box every category
+            $('#box').keyup(function() {
+                var valThis = $(this).val().toLowerCase();
+                $('.navList>li').each(function() {
+                    var text = $(this).text().toLowerCase();
+                    (!text.contains(valThis) == 0) ? $(this).show() : $(this).hide();
                 });
             });
+        });
+
+        $(document).on('click','.select',function () { // requesting the child category from selected first level parent category
+            $(".add_category_submit").empty();
+            var D = eval('(' + $(this).attr('data') + ')');
+            var action = 'productUpload/getChild';
+            $.ajax({
+                async: false,
+                type: "POST",
+                url: '<?php echo base_url(); ?>' + action,
+                data: "cat_id=" + D.cat_id + "&level=" + D.level + "&name=" + D.name,
+                dataType: "json",
+                cache: false,
+                onLoading:jQuery(".sub_cat_loading_container").html('<img src="<?= base_url() ?>assets/images/orange_loader.gif" />').show(),
+                beforeSend: function(jqxhr, settings) {
+                    $(".product_sub_items0").nextAll().remove();
+                    $(".product_sub_items0").remove();
+                },
+                success: function(d) {
+                    $(d).appendTo($('.product_sub_category'));
+                    jQuery(".sub_cat_loading_container").hide();
+                }
+
+            });
+        });
+
+        $(document).on('click','.othercategory a',function () {
+            selfAttrParent = $(this).data('parent');
+            selfLevel = $(this).data('level'); 
+            globalParent = selfAttrParent;
+            globalLevel = selfLevel;
+            $('.othercategory'+selfLevel).empty();
+            $('.othercategory'+selfLevel).append('<input type="text" id="otherNameCategory" class="otherNameCategoryClass'+selfLevel+'" autocomplete="off" name="othernamecategory" />');
+            $('.otherNameCategoryClass'+selfLevel).focus();
+            $(".add_category_submit").empty();
+        });
+
+        $(document).on('blur change','#otherNameCategory',function () {
+            var otherName = $(this).val();
+
+            if(otherName.length == 0){
+                $('.othercategory').empty();
+                $('.othercategory').append('<a href="javascript:void(0)" class="select2" data-level="'+globalLevel+'" data-parent="'+globalParent+'">Other</a>');
+            }else{
+               $(".add_category_submit").empty();
+               $(".add_category_submit").append('<input type="hidden" name="hidden_attribute" value="'+globalParent+'" class="hidden_attribute"><input class="proceed_form" id="proceed_form" type="submit" value="Proceed with '+otherName+'">');    
+           }
+
+        });
 
  
-            $(document).on('click','.select',function () { // requesting the child category from selected first level parent category
-                $(".add_category_submit").empty();
-                var D = eval('(' + $(this).attr('data') + ')');
-                var action = 'productUpload/getChild';
-                $.ajax({
-                    async: false,
-                    type: "POST",
-                    url: '<?php echo base_url(); ?>' + action,
-                    data: "cat_id=" + D.cat_id + "&level=" + D.level + "&name=" + D.name,
-                    dataType: "json",
-                    cache: false,
-                     onLoading:jQuery(".sub_cat_loading_container").html('<img src="<?= base_url() ?>assets/images/orange_loader.gif" />').show(),
-                    beforeSend: function(jqxhr, settings) {
-                        $(".product_sub_items0").nextAll().remove();
-                        $(".product_sub_items0").remove();
-                    },
-                    success: function(d) {
-                        $(d).appendTo($('.product_sub_category'));
-                        jQuery(".sub_cat_loading_container").hide();
-                    }
+        $(document).on('click','.child',function () { // requesting the child category from selected category
+            var D = eval('(' + $(this).attr('data') + ')');
+            var nlevel = parseInt(D.level) + 1;
+            var action = 'productUpload/getChild';
+            $(".add_category_submit").empty();
+            $(".product_sub_items" + parseInt(D.level) + 1).remove();
+            $(".product_sub_items" + nlevel).nextAll().remove();
+            $.ajax({
+                async: false,
+                type: "POST",
+                url: '<?php echo base_url(); ?>' +  action,
+                data: "cat_id=" + D.cat_id + "&level=" + nlevel + "&name=" + D.name,
+                dataType: "json",
+                cache: false,
+                onLoading:jQuery(".sub_cat_loading_container").html('<img src="<?= base_url() ?>assets/images/orange_loader.gif" />').show(),
+                beforeSend: function(jqxhr, settings) {
+                    $(".product_sub_items" + nlevel).remove();
+                    $(".product_sub_items" + parseInt(D.level) + 1).remove();
+                    $(".product_sub_items" + nlevel).nextAll().remove();
+                },
+                success: function(d) {
+                    $(".product_sub_category").append(d);
+                    jQuery(".sub_cat_loading_container").hide();
+                }
  
-                });
             });
-
-            $(document).on('click','.othercategory a',function () {
-                selfAttrParent = $(this).data('parent');
-                selfLevel = $(this).data('level'); 
-                globalParent = selfAttrParent;
-                globalLevel = selfLevel;
-                $('.othercategory'+selfLevel).empty();
-                $('.othercategory'+selfLevel).append('<input type="text" id="otherNameCategory" class="otherNameCategoryClass'+selfLevel+'" autocomplete="off" name="othernamecategory" />');
-                $('.otherNameCategoryClass'+selfLevel).focus();
-                $(".add_category_submit").empty();
-
-
-            });
-
-            $(document).on('blur change','#otherNameCategory',function () {
-
-                var otherName = $(this).val();
-
-                if(otherName.length == 0){
-                    $('.othercategory').empty();
-                    $('.othercategory').append('<a href="javascript:void(0)" class="select2" data-level="'+globalLevel+'" data-parent="'+globalParent+'">Other</a>');
-                }else{
-                   $(".add_category_submit").empty();
-                   $(".add_category_submit").append('<input type="hidden" name="hidden_attribute" value="'+globalParent+'" class="hidden_attribute"><input class="proceed_form" id="proceed_form" type="submit" value="Proceed with '+otherName+'">');    
-               }
-
-           });
-
-
-            $(document).on('click','.child',function () { // requesting the child category from selected category
-                var D = eval('(' + $(this).attr('data') + ')');
-                var nlevel = parseInt(D.level) + 1;
-                var action = 'productUpload/getChild';
-                $(".add_category_submit").empty();
-                $(".product_sub_items" + parseInt(D.level) + 1).remove();
-                $(".product_sub_items" + nlevel).nextAll().remove();
-                $.ajax({
-                    async: false,
-                    type: "POST",
-                    url: '<?php echo base_url(); ?>' +  action,
-                    data: "cat_id=" + D.cat_id + "&level=" + nlevel + "&name=" + D.name,
-                    dataType: "json",
-                    cache: false,
-                    onLoading:jQuery(".loading_category_list").html('<img src="<?= base_url() ?>assets/images/orange_loader.gif" />').show(),
-                    beforeSend: function(jqxhr, settings) {
-                        $(".product_sub_items" + nlevel).remove();
-                        $(".product_sub_items" + parseInt(D.level) + 1).remove();
-                        $(".product_sub_items" + nlevel).nextAll().remove();
-                    },
-                    success: function(d) {
-                        $(".product_sub_category").append(d);
-                        jQuery(".loading_category_list").hide();  
-                    }
-                });
-            });
+        });
 });
 </script>
