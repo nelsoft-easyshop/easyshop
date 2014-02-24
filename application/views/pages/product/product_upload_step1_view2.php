@@ -24,6 +24,7 @@
                 url: '<?php echo base_url(); ?>' +  action,
                 data: "cat_id=" + D.cat_id + "&level=" + nlevel,
                 dataType: "json",
+                onLoading:jQuery(".loading_category_list").html('<img src="<?= base_url() ?>assets/images/orange_loader.gif" />').show(),
                 beforeSend: function(jqxhr, settings) {
                     $(".product_sub_items" + nlevel).remove();
                     $(".product_sub_items" + parseInt(D.level) + 1).remove();
@@ -31,6 +32,7 @@
                 },
                 success: function(d) {
                     $(".product_sub_category").append(d);
+                    jQuery(".loading_category_list").hide();  
                 }
             });
         });
@@ -74,6 +76,8 @@
                 $(this).removeClass('active');
             })
                     .jcarouselPagination();
+
+            $('.jcarousel').jcarousel('reload');
         });
     })(jQuery);
 </script>
@@ -112,9 +116,12 @@ if (empty($node)) { # if no more available item on selected category the button 
 
                 <?php }
             ?>
+
         </ul>
     <?php
     }
     ?>
 </div>
+
+
 

@@ -106,7 +106,12 @@
                 <div class="carousel_container">
                     <div class="jcarousel">
                         <div class="product_sub_category">
+                            <div class="sub_cat_loading_container loading_img">
+                                <!-- <img src="<?= base_url() ?>assets/images/orange_loader.gif"> -->
+
+                            </div>
                         </div>
+                        <div class="loading_category_list loading_img"></div>
                     </div>
                     <!-- Controls -->
                     <a href="#" class="jcarousel-control-prev inactive">&lsaquo;</a>
@@ -148,12 +153,15 @@
                         url: '<?php echo base_url(); ?>' + action,
                         data: "cat_id=" + D.cat_id + "&level=" + D.level,
                         dataType: "json",
+                        onLoading:jQuery(".sub_cat_loading_container").html('<img src="<?= base_url() ?>assets/images/orange_loader.gif" />').show(),
                         beforeSend: function(jqxhr, settings) {
                             $(".product_sub_items0").nextAll().remove();
                             $(".product_sub_items0").remove();
                         },
                         success: function(d) {
+                            
                             $(d).appendTo($('.product_sub_category'));
+                            jQuery(".sub_cat_loading_container").hide();  
                         }
                     });
                 });
