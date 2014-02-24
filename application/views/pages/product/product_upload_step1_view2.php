@@ -1,3 +1,5 @@
+<?php 
+        header('Content-Type: application/json'); ?>
 <script>
     $(document).ready(function() {
 
@@ -10,35 +12,7 @@
             });
         });
 
-
-        $(".select2").unbind("click").click(function() { // requesting the child category from selected category
-            var D = eval('(' + $(this).attr('data') + ')');
-            var nlevel = parseInt(D.level) + 1;
-             var action = 'productUpload/getChild';
-            $(".add_category_submit").hide();
-            $(".product_sub_items" + parseInt(D.level) + 1).remove();
-            $(".product_sub_items" + nlevel).nextAll().remove();
-            $.ajax({
-                async: false,
-                type: "POST",
-                url: '<?php echo base_url(); ?>' +  action,
-                data: "cat_id=" + D.cat_id + "&level=" + nlevel,
-                dataType: "json",
-                onLoading:jQuery(".loading_category_list").html('<img src="<?= base_url() ?>assets/images/orange_loader.gif" />').show(),
-                beforeSend: function(jqxhr, settings) {
-                    $(".product_sub_items" + nlevel).remove();
-                    $(".product_sub_items" + parseInt(D.level) + 1).remove();
-                    $(".product_sub_items" + nlevel).nextAll().remove();
-                },
-                success: function(d) {
-                    $(".product_sub_category").append(d);
-                    jQuery(".loading_category_list").hide();  
-                }
-            });
-        });
-
-
-
+ 
     });
 </script>
 <script type="text/javascript">
@@ -81,25 +55,21 @@
         });
     })(jQuery);
 </script>
-<script>
-    $(document).ready(function() { // make the category selected highlighted
-        $('.product-list li a').on('click', function() {
-            $(this).addClass('active').parent().siblings().children('a').removeClass('active');
-        });
-    });
-</script>
-
 
 <?php
 if (empty($node)) { # if no more available item on selected category the button procedd will show 
     ?>
+    <div class='product_sub_items<?php echo $level; ?>'>
+        <input type="text" class="box<?php echo $level; ?>" id="box<?php echo $level; ?>">
+        <ul class="product-list navList<?php echo $level; ?>" style="list-style-type:none">
+           
+                <li  class="othercategory othercategory<?php echo $level; ?> <?php echo $cat_id; ?>"><a href="javascript:void(0)" class="select2" data-level="<?php echo $level; ?>" data-parent="<?php echo $cat_id; ?>">Other</a></li>
+            </ul>
+        </div>
 
     <script type="text/javascript">
         $(document).ready(function() {
-            $(".add_category_submit").show();
-            $('#proceed_form').attr('data', <?php echo $cat_id; ?>);
-            $('.hidden_attribute').val(<?php echo $cat_id ?>);
-
+            $(".add_category_submit").append('<input type="hidden" name="hidden_attribute" value="'+<?php echo $cat_id ?>+'" class="hidden_attribute"><input class="proceed_form" id="proceed_form" type="submit" value="Proceed with <?php echo $name ?>">');
         });     
     </script>
     <?php
@@ -111,17 +81,16 @@ if (empty($node)) { # if no more available item on selected category the button 
             <?php
             foreach ($node as $row) { # generating all child category base on selected parent category from product_upload_step3_view
                 ?>
-
-                <li  class="<?php echo $row['parent_id']; ?>"><a href="javascript:void(0)" data="{cat_id:'<?php echo $row['id_cat']; ?>',level:'<?php echo $level ?>'}" class="select2"><?php echo $row['name']; ?></a></li>
-
+                <li  class="<?php echo $row['parent_id']; ?>"><a href="javascript:void(0)" data="{cat_id:'<?php echo $row['id_cat']; ?>',level:'<?php echo $level ?>',name:'<?php echo addslashes ($row['name']); ?>'}" class="child select2"><?php echo $row['name']; ?></a></li>
                 <?php }
             ?>
-
+ 
+           <li  class="othercategory othercategory<?php echo $level; ?> <?php echo $row['parent_id']; ?>"><a href="javascript:void(0)" class="select2" data-level="<?php echo $level; ?>" data-parent="<?php echo $row['parent_id']; ?>">Other</a></li>
+ 
         </ul>
+        </div>
     <?php
     }
     ?>
-</div>
 
-
-
+ 

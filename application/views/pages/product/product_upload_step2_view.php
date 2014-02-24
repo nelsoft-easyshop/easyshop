@@ -882,7 +882,7 @@ $(document).on('change',"#prod_condition,#prod_brand",function () {
 
 
 $(".proceed_form").unbind("click").click(function(){
-
+  
   var description = tinyMCE.activeEditor.getContent();
   var id = "<?php echo $id; ?>"
   $('.description_hidden').val(description);
@@ -892,10 +892,13 @@ $(".proceed_form").unbind("click").click(function(){
   var brief = $("#prod_brief_desc"); 
   var formData = new FormData(document.getElementById("form_product"));
   var combinationSelected = JSON.stringify(arraySelected);
+  var otherCategory = "<?php echo $otherCategory; ?>";
   formData.append("inputs", input_name);
   formData.append("id", id);
   formData.append("combination",combinationSelected);
   formData.append("noCombination",noCombination);
+  formData.append("otherCategory",otherCategory);
+ 
   var price = $("#prod_price");
   var other_price = $("#price_field");
   var sku = $("#prod_sku");  
