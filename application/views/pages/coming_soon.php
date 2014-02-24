@@ -36,6 +36,9 @@
      
       <h2 style="font-size:34px;">I'm a Seller</h2>
       <input class="comming_soon_register" onclick="window.location='register'" type="submit" style="width:130px" value="Register Here">
+      
+      <a href="/login">Already Have an Account? - Sign In</a>
+      
       <div class="bottom_content">
         <div>
           <h3>About Us</h3>
