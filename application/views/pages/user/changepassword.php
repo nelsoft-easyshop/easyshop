@@ -7,7 +7,11 @@
 <section>
       <div class="wrapper">
         <?php if($logged_in):?>
-        <form method="post" id="changepass" autocomplete="off">
+        <!--<form method="post" id="changepass" autocomplete="off">-->
+		<?php
+			$attr = array('id'=>'changepass', 'autocomplete'=>'off');
+			echo form_open('',$attr);
+		?>
           <div class="fill_out_form">
 				<?php if ($toggle_view == "1"): ?>
                     <div class="field">
@@ -47,7 +51,7 @@
                     Password is successfully updated! <a href='<?=base_url()?>memberpage'>click HERE</a> to return.		        
                 <?php endif; ?>            
           </div>
-        </form>
+        <?php echo form_close();?>
         <?php else: ?>
 			<div class="register_prompt_box">
 			  <div>

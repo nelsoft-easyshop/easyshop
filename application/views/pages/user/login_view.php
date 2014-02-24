@@ -12,7 +12,11 @@
 					</div>
 				</div>
 			<?php else: ?>
-				<form id="login_form">
+				<!--<form id="login_form">-->
+				<?php
+					$attr = array('id'=>'login_form');
+					echo form_open('', $attr);
+				?>
 					<div class="login_box">
 						<div>
                             <label for="login_username">Username:</label>
@@ -54,7 +58,7 @@
 					</div>
                     <input id="redirect" type="hidden" value="<?php echo $user_cur_loc;?>"/> 
                     
-				</form>
+				<?php echo form_close();?>
 				
 			<?php endif; ?>
       </div>

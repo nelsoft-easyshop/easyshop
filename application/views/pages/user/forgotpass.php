@@ -17,7 +17,11 @@
 
 <div class="clear"></div>
 <div class="wrapper login_content">
-  <form id="identify_form" method="post">
+  <!--<form id="identify_form" method="post">-->
+  <?php
+	$attr = array('id'=>'identify_form');
+	echo form_open('',$attr);
+  ?>
     <div class="login_box">
       <div>
         <label for="email">Email Address: </label>
@@ -28,7 +32,7 @@
       </div>
       <span class="red" id="login_error"><center><?php echo $msg; ?></center></span>
     </div>
-  </form>
+  <?php echo form_close();?>
 </div>
 </section>
 <div class="clear"></div>

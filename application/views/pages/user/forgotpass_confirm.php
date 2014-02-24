@@ -7,7 +7,11 @@
 <section>
       <div class="wrapper">
         <?php if(!$logged_in):?>
-        <form method="post" id="forgotpass" autocomplete="off">
+        <!--<form method="post" id="forgotpass" autocomplete="off">-->
+		<?php 
+			$attr = array('id'=>'forgotpass', 'autocomplete'=>'off');
+			echo form_open('', $attr);
+		?>
           <div class="fill_out_form">
 				<?php if ($toggle_view == "1"): ?>
                     <div class="field">
@@ -39,7 +43,7 @@
                     Password is successfully updated! <a href='<?=base_url()?>memberpage'>click HERE</a> to return.		        
                 <?php endif; ?>            
           </div>
-        </form>
+        <?php echo form_close();?>
         <?php else: ?>
 			<?php redirect(base_url().'home');?>
         <?php endif; ?>
