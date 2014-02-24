@@ -845,10 +845,10 @@
 						
 							<span class="personal_contact_cont" style="<?php echo trim($contactno)!==''?'':'display:none;' ?>">
 								<span class="edit_personal_contact">
-									<img src="<?=base_url()?>/assets/images/icon_edit.png"><span>Edit</span>
+									<span class="span_bg edit_btn"></span><span>Edit</span>
 								</span>
 								<span  class="cancel_personal_contact">
-									<img src="<?=base_url()?>/assets/images/x_icon.png"><span>Cancel</span>
+									<span class="span_bg cancel_btn"></span><span>Cancel</span>
 								</span>
 							</span>
 							
@@ -882,10 +882,10 @@
 							
 							<span class="personal_contact_cont" style="<?php echo trim($email)!==''?'':'display:none;' ?>">
 								<span class="edit_personal_contact">
-									<img src="<?=base_url()?>/assets/images/icon_edit.png"><span>Edit</span>
+									<span class="span_bg edit_btn"></span><span>Edit</span>
 								</span>
 								<span  class="cancel_personal_contact">
-									<img src="<?=base_url()?>/assets/images/x_icon.png"><span>Cancel</span>
+									<span class="span_bg cancel_btn"></span><span>Cancel</span>
 								</span>
 							</span>
 							
@@ -917,10 +917,10 @@
 								<?php echo $citytown?> <?php echo $country?> <?php echo $postalcode?>
 						</div>
 						<div class="edit_address edit_info_btn">
-							<span><img src="<?=base_url()?>assets/images/icon_edit.png"> Edit</span>
+							<span><span class="span_bg edit_btn"></span> Edit</span>
 						</div>
 						<div class="delete_information" name="del_address">
-							<span><img src="<?=base_url()?>assets/images/icon_delete.png">Delete</span>
+							<span><span class="span_bg delete_btn"></span> Delete</span>
 						</div>
 						<div class="clear"></div>
 					</div>
@@ -1017,10 +1017,10 @@
 								?> 
 							</div>
 							<div class="edit_school edit_info_btn">
-								<span><img src="<?=base_url()?>assets/images/icon_edit.png"> Edit</span>
+								<span><span class="span_bg edit_btn"></span> Edit</span>
 							</div>
 							<div class="delete_information" name="del_school">
-								<span><img src="<?=base_url()?>assets/images/icon_delete.png">Delete</span>
+								<span><span class="span_bg delete_btn"></span> Delete</span>
 							</div>
 							<div class="clear"></div>
 						</div>
@@ -1113,10 +1113,10 @@
 								?>
 							</div>
 							<div class="edit_work edit_info_btn">
-								<span><img src="<?=base_url()?>assets/images/icon_edit.png"> Edit</span>
+								<span><span class="span_bg edit_btn"></span> Edit</span>
 							</div>
 							<div class="delete_information" name="del_work">
-								<span><img src="<?=base_url()?>assets/images/icon_delete.png">Delete</span>
+								<span><span class="span_bg delete_btn"></span> Delete</span>
 							</div>
 							<div class="clear"></div>
 						</div>
