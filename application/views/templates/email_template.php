@@ -1,9 +1,4 @@
 <html>
-  <head>
-    <style>
-    </style>
-  </head>
-
   <body>
     <table style="width:600px; text-align:center; margin:0px auto; border-top:5px solid #ff4400; border-left:1px solid #ffa382;border-right:1px solid #ffa382;border-bottom:1px solid #ffa382;">
       <thead>
@@ -14,6 +9,11 @@
         </tr>
       </thead>
       <tbody>
+    <tr>
+      <td>
+      Dear {user},
+      </td>
+    </tr>
         <tr>
           <td>
             <h2 style="color:#ff4400;">Thank you for registering to Easyshop.ph!</h2>
@@ -21,16 +21,25 @@
         </tr>
         <tr>
           <td>
-            Please click the link to verify your email address:<br />
-            <a href="{site_url}?h={hash}" style="background-color:#0191C8; color:#ffffff; display:inline-block; font-size:14px; padding:10px 20px; margin-top:20px;">Click here</a>
-   
+            Please click below to verify your email address:<br />
+            <a href="{site_url}?h={hash}" style="background-color:#0191C8; color:#ffffff; display:inline-block; font-size:14px; padding:10px 20px; margin-top:20px;">Verify email</a>
           </td>
         </tr>
         <tr>
           <td>
+      By verifying your email address, you are made eligible to transact through Easyshop.ph! <br>
+      Easyshop.ph aims to provide its users a unique and user-friendly experience in online shopping. <br>
+      Easyshop.ph - Your store, made easy. 
             &nbsp;
           </td>
         </tr>
+    <tr>
+       <td>
+       Contact Us: <br>
+       Unit 8-C 8th floor Marc Tower 2000, <br>
+       1973 Taft Avenue, San Andres Malate Manila <br>
+       </td>
+    </tr>
       </tbody>
     </table>
 

@@ -184,7 +184,7 @@ class Register_model extends CI_Model
 		$this->load->library('encrypt');
 		$enc = $this->encrypt->encode($email.'|'.$username.'|'.$hash);
 
-		$x = $this->register_email($email, $enc);
+		$x = $this->register_email($email, $enc, $username);
 		if($x){
 			return 'success';
 		}
@@ -193,7 +193,7 @@ class Register_model extends CI_Model
 		}
 	}
 
-	function register_email($email, $enc){
+	function register_email($email, $enc, $username){
 
 		$this->load->library('email');	
 		$this->load->library('parser');
@@ -209,7 +209,8 @@ class Register_model extends CI_Model
 
 		$data = array(
 			'site_url' => site_url('register/email_verification'),
-			'hash' => $enc
+			'hash' => $enc,
+			'user' => $username
 		);
 		
 		$msg = $this->parser->parse('templates/email_template',$data,true);
