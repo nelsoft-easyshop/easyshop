@@ -25,7 +25,11 @@
 	<div><strong>You can complete the registration by verifying either your mobile number or your e-mail address.</strong></div>
 	<div class="fill_out_form">	
 
-		<form method="post" id="register_form2_a" name="register_form2_a">
+		<!--<form method="post" id="register_form2_a" name="register_form2_a">-->
+		<?php 
+			$attr = array('id'=>'register_form2_a','name'=>'register_form2_a');
+			echo form_open('',$attr);
+		?>
 			<div class="field">
 					<label for="register_region">Region:</label>
 					<select id="register_region" name="register_region">
@@ -84,7 +88,8 @@
 			<input type="submit" class="verify" name="register_form2_a_btn" value="submit" id="register_form2_a_btn">
 			<strong><span class="countdown_submit"></span></strong>
 			<img src="<?=base_url()?>/assets/images/bx_loader.gif" id="register_loading" style="position: relative; top:12px; left:15px; display:none"/>
-		</form>	  
+		<!--</form>	  -->
+		<?php echo form_close();?>
 		
 		<!-- GENERIC success modal content -->
 		<div id="verification-content">

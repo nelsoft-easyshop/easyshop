@@ -31,7 +31,11 @@
 			</div>
 			<div class="clear"></div>
    <?php else: ?>
-		<form method="post" id="register_form1" autocomplete="off">
+		<!--<form method="post" id="register_form1" autocomplete="off">-->
+		<?php 
+			$attr = array('id'=>'register_form1','autocomplete'=>'off');
+			echo form_open('',$attr);
+		?>
 	  <div class="fill_out_form">
 		  <div class="field">
             <label for="username">Username:</label>
@@ -80,10 +84,8 @@
 		  </div>
 
 	  </div>
-	</form>
+	<?php echo form_close();?>
    <?php endif; ?>
-   
-   
   </div>
 </section>
 
