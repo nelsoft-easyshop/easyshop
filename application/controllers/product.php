@@ -589,9 +589,7 @@ class product extends MY_Controller
 				//userdetails --- email/mobile verification info
 				'userdetails' => $this->product_model->getCurrUserDetails($uid),
                 'product_quantity' => $this->product_model->getProductQuantity($id)
-                
 				));
-
 			$data['vendorrating'] = $this->product_model->getVendorRating($data['product']['sellerid']);
 			$this->load->view('pages/product/productpage_view', $data); 
 		}
