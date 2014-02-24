@@ -173,6 +173,10 @@ p {
 	font-size: 36px;
 }
 
+.f30 {
+	font-size: 30px;
+}
+
 .f24 {
 	font-size: 24px;
 }
@@ -1966,6 +1970,32 @@ padding: 8px 0;
 	vertical-align: middle;
 }
 
+.span_bg {
+	background-image: url('../images/global_sprite.png');
+	background-repeat: no-repeat;
+	display: inline-block;
+	vertical-align: middle;
+}
+
+.edit_btn {
+	background-position: -125px -263px;
+    height: 10px;
+    width: 11px;	
+}
+
+.delete_btn {
+	background-position: -167px -262px;
+    height: 11px;
+    width: 13px;	
+}
+
+.cancel_btn {
+	background-position: -340px -260px;
+    height: 13px;
+    width: 13px;
+    margin-right: 3px;		
+}
+
 
 /** PERSONAL INFORMATION MAIN - CONTACT INFO (EMAIL MOBILE)**/
 
@@ -2967,7 +2997,18 @@ div.post_item_content_left {
 
 .page_underconstruction_container .bottom_content div:last-child a {
 	margin-left: 10px;
+}
+
+.coming_soon_sign_in {
+    height: 52px;
+    line-height: 52px;
+    margin-left: 10px;
 } 
+
+.coming_soon_sign_in:hover {
+	text-decoration: none;
+	border-bottom: 1px dotted #0191C8;
+}
 
 
 .register_prompt_box {
