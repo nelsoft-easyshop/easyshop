@@ -403,7 +403,7 @@ class productUpload extends MY_Controller
 		}
 		echo $data;
 	}
-
+	/*
 	function createThumbnail($filename,$path_directory) # this function is for creating thumbnail from uploaded picture (60x60)
 	{ 
 		$final_width_of_image = 60; 
@@ -439,7 +439,33 @@ class productUpload extends MY_Controller
 		}  
 		imagejpeg($nm, $path_to_thumbs_directory . $filename);  
 	}
+	*/
+	
+	function createThumbnail($filename,$path_directory)
+	{
+		$filename = strtolower($filename);
+		$path_to_thumbs_directory = $path_directory.'thumbnail/'; 
+		$path_to_image_directory = $path_directory;
+	
+		$config['image_library'] = 'gd2';
+		$config['source_image'] = $path_to_image_directory . $filename;
+		$config['maintain_ratio'] = true;
+		
+		$config['new_image'] = $path_to_thumbs_directory . $filename;
+		$config['width'] = 60;
+		$config['height'] = 80;
+		
+		if(!file_exists($path_to_thumbs_directory)) {  
+			if(!mkdir($path_to_thumbs_directory)) {  
+				die("There was a problem. Please try again!");  
+			}   
+		}
+		
+		$this->image_lib->initialize($config); 
+		$this->image_lib->resize();	
+	}
 
+	/*
 	function createSmallSize($filename,$path_directory) # this function is for creating normal picture from uploaded picture (400x400)
 	{ 
 		$filename = strtolower($filename);
@@ -471,7 +497,33 @@ class productUpload extends MY_Controller
 		}  	
 		imagejpeg($nm, $path_to_small_directory . $filename);  
 	}
-
+	*/
+	
+	function createSmallSize($filename,$path_directory) # this function is for creating normal picture from uploaded picture (400x400)
+	{
+		$filename = strtolower($filename);
+		$path_to_small_directory = $path_directory.'small/';  
+		$path_to_image_directory = $path_directory;
+	
+		$config['image_library'] = 'gd2';
+		$config['source_image'] = $path_to_image_directory . $filename;
+		$config['maintain_ratio'] = true;
+		
+		$config['new_image'] = $path_to_small_directory . $filename;
+		$config['width'] = 400;
+		$config['height'] = 535;
+		
+		if(!file_exists($path_to_small_directory)) {  
+			if(!mkdir($path_to_small_directory)) {  
+				die("There was a problem. Please try again!");  
+			}   
+		} 
+		
+		$this->image_lib->initialize($config); 
+		$this->image_lib->resize();	
+	}
+	
+	/*
 	function createCategorySize($filename,$path_directory) # this function is for creating normal picture from uploaded picture (220x220)
 	{ 
 		$filename = strtolower($filename);
@@ -503,7 +555,32 @@ class productUpload extends MY_Controller
 		}  
 		imagejpeg($nm, $path_to_small_directory . $filename);  
 	}  
-
+	*/
+	
+	function createCategorySize($filename,$path_directory)
+	{
+		$filename = strtolower($filename);
+		$path_to_categview_directory = $path_directory.'categoryview/'; 
+		$path_to_image_directory = $path_directory;
+	
+		$config['image_library'] = 'gd2';
+		$config['source_image'] = $path_to_image_directory . $filename;
+		$config['maintain_ratio'] = true;
+		
+		$config['new_image'] = $path_to_categview_directory . $filename;
+		$config['width'] = 220;
+		$config['height'] = 294;
+	
+		if(!file_exists($path_to_categview_directory)) {  
+			if(!mkdir($path_to_categview_directory)) {  
+				die("There was a problem. Please try again!");  
+			}   
+		}
+		
+		$this->image_lib->initialize($config); 
+		$this->image_lib->resize();	
+	
+	}
 
 	/**
 	*	View function for Product Upload Step 3
