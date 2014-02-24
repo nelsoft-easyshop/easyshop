@@ -258,10 +258,16 @@
                         success: function(response) {
                             var obj = jQuery.parseJSON(response);
                             var html = '<ul>';
-                            jQuery.each(obj,function(){
-                                html += '<li>'+$(this)[0].name+'</li>' 
-                            });
-                             html += '</ul>';
+                            console.log(obj.length);
+                            if((obj.length)>0){
+                                jQuery.each(obj,function(){
+                                    html += '<li>'+$(this)[0].name+'</li>' 
+                                });
+                            }
+                            else{
+                                html += '<li> No results found </li>' 
+                            }
+                            html += '</ul>';
                             $("#cat_search_drop_content").html(html);
                         }
                     });
