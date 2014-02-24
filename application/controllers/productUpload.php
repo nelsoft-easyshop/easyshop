@@ -43,8 +43,12 @@ class productUpload extends MY_Controller
 
 	function getChild() # this function for getting the under category from selected category 
 	{	
+
+		header('Content-Type: application/json');
 		$id = $this->input->post('cat_id'); 
+		$name = $this->input->post('name'); 
 		$response['cat_id'] = $id;
+		$response['name'] = $name;
 		$response['node'] = $this->product_model->getDownLevelNode($id); # get all down level category based on selected parent category
 		$response['level'] = $this->input->post('level');
 		$data = json_encode($this->load->view('pages/product/product_upload_step1_view2',$response,TRUE));
@@ -67,11 +71,14 @@ class productUpload extends MY_Controller
     
 	function step2()
 	{
+
 		$data = $this->fill_view();
 		$this->load->view('templates/header', $data); 
 		if(isset($_POST['hidden_attribute'])){ # if no item selected cant go to the link. it will redirect to step 1
 			$id = $this->input->post('hidden_attribute'); 
+			$otherCategory = $this->input->post('othernamecategory');
 			$response['id'] = $id; # id is the selected category
+			$response['otherCategory'] = $otherCategory; # id is the selected category
 			$parents = $this->product_model->getParentId($id); # getting all the parent from selected category
 			$attribute = $this->product_model->getAttributesByParent($parents); # getting all attribute from all parent from selected category
 			$str_parents_to_last = "";
@@ -117,6 +124,7 @@ class productUpload extends MY_Controller
 		
 		$data = $this->input->post('data');
 		$cat_id = $this->input->post('id');
+		$otherCategory = $this->input->post('otherCategory');
 		$availableBrand = $this->product_model->getAvailableBrand($cat_id);
 		$brand_id =  $this->input->post('prod_brand'); 
 		$found = FALSE;
@@ -186,7 +194,7 @@ class productUpload extends MY_Controller
 				$x++;
 			}
 
-			$product_id = $this->product_model->addNewProduct($product_title,$sku,$product_brief,$product_description,$keyword,$brand_id,$cat_id,$style_id,$member_id,$product_price,$product_condition);
+			$product_id = $this->product_model->addNewProduct($product_title,$sku,$product_brief,$product_description,$keyword,$brand_id,$cat_id,$style_id,$member_id,$product_price,$product_condition,$otherCategory);
 			# product_id = is the id_product for the new item. if 0 no new item added process will stop
 
 			$this->load->library('upload');
