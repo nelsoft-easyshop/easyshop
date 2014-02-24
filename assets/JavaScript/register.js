@@ -95,7 +95,8 @@ $(document).ready(function(){
 	  });
 	  
 	  function pass_check(){
-			var username = '<?php echo strtolower($uname); ?>';		  
+			//var username = '<?php echo strtolower($uname); ?>';		  
+			var username = $('#changepass_username').val();
 			var pass 	 = $('#cur_password').val();
 			
 			$.post(config.base_url+'register/pass_check', {username: username, pass: pass}, function(result){
@@ -298,6 +299,10 @@ $(document).ready(function(){
 	
 	$("#register_mobile").numeric({negative : false});
 	$("#cregister_mobile").numeric({negative : false});
+	
+	$('#register_mobile, #register_email').on('keydown', function(e){
+		return e.which !== 32;
+	});
 
 	$("#register_mobile").on('input paste',function(e){
 		$('#err_mobilespan').hide();

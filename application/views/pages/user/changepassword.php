@@ -47,6 +47,7 @@
                     <div class="field" style="padding-top:0px">
                           <input type="submit" name="changepass_btn" value="Save"/>
                     </div>
+					<input type="hidden" value="<?php echo strtolower($uname);?>" id="changepass_username">
                 <?php else: ?>
                     Password is successfully updated! <a href='<?=base_url()?>memberpage'>click HERE</a> to return.		        
                 <?php endif; ?>            
@@ -66,9 +67,15 @@
       </div>
 </section>
 
-<script type='text/javascript' src='<?=base_url()?>assets/JavaScript/register.js'></script>
+
+
 <!-- password strength checker -->
 <?php if($logged_in):?>
 	<script type="text/javascript" src="<?=base_url()?>assets/JavaScript/js/mootools-core-1.4.5-full-compat.js"></script> 
     <script type="text/javascript" src="<?=base_url()?>assets/JavaScript/js/password_meter.js"></script>
 <?php endif; ?>
+
+<script type="text/javascript" src="<?=base_url()?>assets/JavaScript/js/password_meter.js"></script>
+<script type='text/javascript' src='<?=base_url()?>assets/JavaScript/js/jquery.numeric.js'></script>
+<script type='text/javascript' src='<?=base_url()?>assets/JavaScript/js/jquery.validate.js'></script>
+<script type='text/javascript' src='<?=base_url()?>assets/JavaScript/register.js'></script>

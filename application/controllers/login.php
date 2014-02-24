@@ -110,8 +110,8 @@ class Login extends MY_Controller {
 	function resetconfirm(){
 
 		$data = array(
-			'title' => 'Reset Password | Easyshop.ph',
-			'page_javascript' => 'assets/JavaScript/register_js.php',
+			'title' => 'Reset Password | Easyshop.ph'
+			//'page_javascript' => 'assets/JavaScript/register_js.php',
 		);
 		$data = array_merge($data, $this->fill_header());
 		$this->load->view('templates/header', $data);		

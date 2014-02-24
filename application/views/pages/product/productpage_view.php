@@ -173,7 +173,11 @@
           <div id="write_review_content">
             <h3>Write a Review</h3>
             <div id="review_container">
-              <form method="post" action="" id="review_form"> 
+              <!--<form method="post" action="" id="review_form"> -->
+			  <?php 
+				$attr = array('id'=>'review_form');
+				echo form_open('',$attr);
+			  ?>
               <?php #echo form_open('', array('id' => "review_form")); ?>
                 <div>
                   <label>Subject *</label>
@@ -296,6 +300,8 @@
 <script src="<?=base_url()?>assets/JavaScript/js/jquery.raty.min.js" type="text/javascript"></script>
 <script src="<?= base_url() ?>assets/JavaScript/categorynavigation.js" type="text/javascript"></script>
 <script type='text/javascript' src='<?=base_url()?>assets/JavaScript/js/jquery.numeric.js'></script>
+<script type='text/javascript' src='<?=base_url()?>assets/JavaScript/js/jquery.simplemodal.js'></script>
+<script type='text/javascript' src='<?=base_url()?>assets/JavaScript/js/jquery.validate.js'></script>
 <script src="<?=base_url().$page_javascript?>" type="text/javascript"></script>
 
 <style type="text/css">
