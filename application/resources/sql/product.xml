@@ -48,7 +48,7 @@
         AND is_main = 1
         ORDER BY sort_order ASC
     </select>
-    
+
     <select id="selectFirstLevelAlpha">
         SELECT
         name,
@@ -679,4 +679,8 @@
     VALUES (:shipping_id, :product_item_id)
 </select>
 
+<select id="searchCategory">
+    SELECT `id_cat`, `name` FROM `es_cat` WHERE MATCH(`name`) AGAINST (CONCAT(:sch_string,'*') IN BOOLEAN MODE)
+</select>
+    
 </map>

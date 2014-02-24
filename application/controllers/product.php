@@ -777,6 +777,12 @@ class product extends MY_Controller
 		redirect('me', 'refresh');
 	}
     
+    function searchCategory(){
+        $string = $this->input->post('data');
+        $rows = $this->product_model->searchCategory($string);
+        echo json_encode($rows);
+    }
+    
 }
 
   

@@ -838,6 +838,7 @@ class product_model extends CI_Model
 
 	function itemKeySearch($words)
 	{
+    
 		$query = $this->sqlmap->getFilenameID('product','itemKeySearch');
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':words',$words);
@@ -1243,6 +1244,19 @@ class product_model extends CI_Model
     	$result = $sth->execute();	
 
     	return $result;
+    }
+    
+    /*
+     * Use fulltext search to find strings in es_cat.name 
+     * Returns all matched category names.
+     */
+    public function searchCategory($string){
+        $query = $this->sqlmap->getFilenameID('product','searchCategory');
+    	$sth = $this->db->conn_id->prepare($query);
+    	$sth->bindParam(':sch_string', $string, PDO::PARAM_STR);
+        $sth->execute();
+    	$result = $sth->fetchAll(PDO::FETCH_ASSOC);
+        return $result;
     }
  
 }

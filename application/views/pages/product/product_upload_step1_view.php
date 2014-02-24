@@ -83,15 +83,18 @@
                 <input type="text">
                 <button class="search_btn">SEARCH</button>
               </div>         
- 
-          </div>  -->
-          <div class="clear"></div>
-          <div class="add_product_category">
-            <div class="main_product_category">
-                <input type="text" class="box" id="box">
-                <ul class="navList" style="list-style-type:none">  
-                    <?php
-
+            </div>  -->
+            <div class="clear"></div>
+            <div>
+                <input type="text" class="box" id="cat_sch">
+            </div>
+            <div id="cat_search_drop_content"></div>
+            
+            <div class="add_product_category">
+                <div class="main_product_category">
+                    <input type="text" class="box" id="box">
+                    <ul class="navList" style="list-style-type:none">  
+                        <?php
                         foreach ($firstlevel as $row) { # generate all parent category.
                             ?>
 
@@ -129,6 +132,7 @@
     </div>
 
     <div class="clear"></div>  
+
 
     <script>
     $(document).ready(function() {
@@ -232,3 +236,36 @@
         });
 });
 </script>
+    </script>
+    
+    <script>
+
+        $(document).ready(function() { 
+            var currentRequest = null;
+            $( "#cat_sch" ).keyup(function() {
+                var searchQuery = $(this).val();
+                if(searchQuery != ""){
+                    currentRequest = jQuery.ajax({
+                        type: "POST",
+                        url: '<?php echo base_url();?>product/searchCategory', 
+                        data: "data="+searchQuery, 
+                        beforeSend : function(){       
+                            $("#cat_search_drop_content").empty();
+                            if(currentRequest != null) {
+                                currentRequest.abort();
+                            }
+                        },
+                        success: function(response) {
+                            var obj = jQuery.parseJSON(response);
+                            var html = '<ul>';
+                            jQuery.each(obj,function(){
+                                html += '<li>'+$(this)[0].name+'</li>' 
+                            });
+                             html += '</ul>';
+                            $("#cat_search_drop_content").html(html);
+                        }
+                    });
+                }
+            });
+        });
+    </script>
