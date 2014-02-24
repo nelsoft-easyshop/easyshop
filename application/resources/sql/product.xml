@@ -329,7 +329,8 @@
         , `price`
         , `condition`
         ,`createddate`
-        ,`lastmodifieddate`)
+        ,`lastmodifieddate`
+        ,`cat_other_name`)
         VALUES 
         (
         :name
@@ -344,7 +345,8 @@
         , :price
         , :condition
         ,NOW()
-        ,NOW())
+        ,NOW()
+        , :cat_other_name)
     </select>
 
     <select id="addNewAttribute">

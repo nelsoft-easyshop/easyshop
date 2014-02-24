@@ -253,7 +253,7 @@ class product_model extends CI_Model
 		return $rows;	
 	}
 
-	function addNewProduct($product_title,$sku,$product_brief,$product_description,$keyword,$brand_id,$cat_id,$style_id,$member_id,$product_price,$product_condition)
+	function addNewProduct($product_title,$sku,$product_brief,$product_description,$keyword,$brand_id,$cat_id,$style_id,$member_id,$product_price,$product_condition,$other_category_name)
 	{
 		# this function for adding new product to es_product table.
 		$query = $this->sqlmap->getFilenameID('product','addNewProduct_es_product');
@@ -270,6 +270,7 @@ class product_model extends CI_Model
 		$sth->bindParam(':member_id',$member_id);
 		$sth->bindParam(':price',$product_price);
 		$sth->bindParam(':condition',$product_condition);
+		$sth->bindParam(':cat_other_name',$other_category_name);
 		$sth->execute();
         
 		return $this->db->conn_id->lastInsertId('id_product');
