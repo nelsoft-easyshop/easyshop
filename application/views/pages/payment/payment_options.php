@@ -8,7 +8,11 @@
     <h2 class="checkout_title">Payment</h2>
     <div class="shipping_info_content">
       <div>
-        <form id="shipping-form" method="POST">
+        <!--<form id="shipping-form" method="POST">-->
+		<?php 
+			$attr = array('id'=>'shipping-form');
+			echo form_open('',$attr);
+		?>
           <h2><span>Ship to:</span> <!-- <a href=""><img src="images/img_edit2.jpg"> Edit</a> --></h2>
           <div class="shipping_info_title"><h4>Consignee Name:</h4></div>
           <div class="shipping_info_inner_content">
@@ -32,7 +36,7 @@
             <div><span>Telephone No:</span>  <input type="text" id="u_telephone" name="u_telephone" value="<?php echo $address['telephone']; ?>"></div>
           </div>
           <div class="clear"></div>
-        </form>
+        <?php echo form_close();?>
       </div>
     </div>
     <div class="payment_wrapper">

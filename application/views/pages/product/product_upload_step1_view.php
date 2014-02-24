@@ -64,7 +64,8 @@
         </div> -->
 
         
-        <form action="<?php echo base_url() . 'sell/step2'; ?>" method="POST">
+        <!--<form action="<?php //echo base_url() . 'sell/step2'; ?>" method="POST">-->
+		<?php echo form_open('sell/step2'); ?>
 
             <div class="inner_seller_product_content">
                 <h2 class="f24">Sell an Item</h2>
@@ -128,7 +129,7 @@
                 <div class="add_category_submit"></div>
                 
             </div>
-        </form>
+        <?php echo form_close();?>
     </div>
 
     <div class="clear"></div>  
