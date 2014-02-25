@@ -23,15 +23,13 @@
 	<div class="clear"></div>
 	<section>
 		<div class="wrapper profile_content">
-			<div class="logo">
-			    <a href="<?=base_url()?>home"><img src="<?=base_url()?>assets/images/img_logo.png" alt="Logo"></a>
-			</div>
+			<div class="logo"> <a href="<?=base_url()?>home"><span></span></a> </div>
 			<div class="profile_top_nav">
 				<div>
 					<ul>
 						<li><a href="<?=base_url()?>home">Home</a></li>
 						<li>
-							<span style="color: #FFFFFF;padding: 9px;">Setup</span>
+							<span>Setup</span>
 							<ul>
 								<li><a href="javascript:void(0)" onclick="triggerTab('dashboard');">Dashboard</a></li>
                                 <!-- <li><a href="javascript:void(0)" onclick="triggerTab('wishlist');">Wishlist</a></li> -->
@@ -47,8 +45,8 @@
 					</ul>
 				</div>
 				<div>
-					<input type="text">
-					<button class="search_btn2"> </button>
+					<input type="text" class="span_bg">
+					<input type="submit" value="Search">
 				</div>         	
 			</div>
 		</div>
@@ -59,7 +57,7 @@
 			<div class="profile_left_nav">
 				<div>
 					<div class="avatar">
-						<div class="avatar_edit" style="width:45px; position: relative; float:right"><span name='avatar_edit_icon'></span>Edit</div>
+						<div class="avatar_edit" style="width:45px; position: relative; float:right"><span class="span_bg" name='avatar_edit_icon'></span>Edit</div>
 						<?php echo $image_profile?>	
 						<?php echo form_open_multipart('memberpage/upload_img', 'id="form_image"');?>
 							<input type="file" style="display:none" id="imgupload" name="userfile"/>
@@ -194,13 +192,13 @@
 									<p class="star_rating_reviews">
                                         <?php $rounded_score = round($active_product['average_rating']); ?>
 										<?php for($i = 0; $i < $rounded_score;$i++): ?>
-											<span class="star_on"></span>
+											<span class="span_bg star_on"></span>
 										<?php endfor; ?>
 										<?php for($i = 0; $i < 5-$rounded_score;$i++): ?>
-											<span class="star_off"></span>
+											<span class="span_bg star_off"></span>
 										<?php endfor; ?>
 										<br />
-										<span class="reviews"></span><?php echo $active_product['review_count']; ?> Reviews
+										<span class="span_bg reviews"></span><?php echo $active_product['review_count']; ?> Reviews
 									</p>
 								</div>
 								<div class="post_item_content_right">
@@ -241,7 +239,7 @@
 									<?php endforeach; ?>
 								  </p>
 									
-									<div class="show_more_options blue"><span></span><p>View Features and Specifications</p></div>
+									<div class="show_more_options blue"><span class="span_bg"></span><p>View Features and Specifications</p></div>
 									<div class="attr_hide">
 								    	<?php $i = 0; 
 									      foreach($active_product['data_attr'] as $key=>$data_attr): ?>								
@@ -299,13 +297,13 @@
 								  <p>
                                     <?php $rounded_score = round($deleted_product['average_rating']); ?>
 									<?php for($i = 0; $i < $rounded_score ;$i++): ?>
-										<img src="<?=base_url()?>assets/images/star-on.png">
+										<span class="span_bg star_on"></span>
 									<?php endfor; ?>
 									<?php for($i = 0; $i < 5-$rounded_score;$i++): ?>
-										<img src="<?=base_url()?>assets/images/star-off.png">
+										<span class="span_bg star_off"></span>
 									<?php endfor; ?>
 									<br />
-									<img src="<?=base_url()?>assets/images/img_icon_review.png" class="reviews"><?php echo $deleted_product['review_count']; ?>
+									<span class="span_bg reviews"></span><?php echo $deleted_product['review_count']; ?> Reviews
 								  </p>
 								</div>
 								<div class="post_item_content_right">
@@ -344,7 +342,7 @@
 										<?php echo $parent;?><?php echo (end($deleted_product['parents'])===$parent)?'':'<img src="assets/images/img_arrow_right.png">'; ?>
 									<?php endforeach; ?>
 								  </p>
-								  <div class="show_more_options blue"><p>View Features and Specifications</p></div>
+								  <div class="show_more_options blue"><span class="span_bg"></span><p>View Features and Specifications</p></div>
 									<div class="attr_hide">
 								
 								    <?php $i = 0; 
@@ -404,26 +402,26 @@
 												<p>"<?php echo $afb['feedb_msg']?>"</p>
 												<p>Rating 1: 
 													<?php for($i = 0; $i < $afb['rating1']; $i++):?>
-														<img src="<?=base_url()?>assets/images/star-on.png">
+														<span class="span_bg star_on"></span>
 													<?php endfor;?>
 													<?php for($i = 0; $i < 5-$afb['rating1']; $i++):?>
-														<img src="<?=base_url()?>assets/images/star-off.png">
+														<span class="span_bg star_off"></span>
 													<?php endfor;?>
 												</p>
 												<p>Rating 2: 
 													<?php for($i = 0; $i < $afb['rating2']; $i++):?>
-														<img src="<?=base_url()?>assets/images/star-on.png">
+														<span class="span_bg star_on"></span>
 													<?php endfor;?>
 													<?php for($i = 0; $i < 5-$afb['rating2']; $i++):?>
-														<img src="<?=base_url()?>assets/images/star-off.png">
+														<span class="span_bg star_off"></span>
 													<?php endfor;?>
 												</p>
 												<p>Rating 3: 
 													<?php for($i = 0; $i < $afb['rating3']; $i++):?>
-														<img src="<?=base_url()?>assets/images/star-on.png">
+														<span class="span_bg star_on"></span>
 													<?php endfor;?>
 													<?php for($i = 0; $i < 5-$afb['rating3']; $i++):?>
-														<img src="<?=base_url()?>assets/images/star-off.png">
+														<span class="span_bg star_off"></span>
 													<?php endfor;?>
 												</p>
 												<?php endforeach;?>
@@ -462,26 +460,26 @@
 												<p>"<?php echo $afb['feedb_msg']?>"</p>
 												<p>Rating 1: 
 													<?php for($i = 0; $i < $afb['rating1']; $i++):?>
-														<img src="<?=base_url()?>assets/images/star-on.png">
+														<span class="span_bg star_on"></span>
 													<?php endfor;?>
 													<?php for($i = 0; $i < 5-$afb['rating1']; $i++):?>
-														<img src="<?=base_url()?>assets/images/star-off.png">
+														<span class="span_bg star_off"></span>
 													<?php endfor;?>
 												</p>
 												<p>Rating 2: 
 													<?php for($i = 0; $i < $afb['rating2']; $i++):?>
-														<img src="<?=base_url()?>assets/images/star-on.png">
+														<span class="span_bg star_on"></span>
 													<?php endfor;?>
 													<?php for($i = 0; $i < 5-$afb['rating2']; $i++):?>
-														<img src="<?=base_url()?>assets/images/star-off.png">
+														<span class="span_bg star_off"></span>
 													<?php endfor;?>
 												</p>
 												<p>Rating 3: 
 													<?php for($i = 0; $i < $afb['rating3']; $i++):?>
-														<img src="<?=base_url()?>assets/images/star-on.png">
+														<span class="span_bg star_on"></span>
 													<?php endfor;?>
 													<?php for($i = 0; $i < 5-$afb['rating3']; $i++):?>
-														<img src="<?=base_url()?>assets/images/star-off.png">
+														<span class="span_bg star_off"></span>
 													<?php endfor;?>
 												</p>
 												<?php endforeach;?>
@@ -516,26 +514,26 @@
 										<p>"<?php echo $afb['feedb_msg']?>"</p>
 										<p>Rating 1: 
 											<?php for($i = 0; $i < $afb['rating1']; $i++):?>
-												<img src="<?=base_url()?>assets/images/star-on.png">
+												<span class="span_bg star_on"></span>
 											<?php endfor;?>
 											<?php for($i = 0; $i < 5-$afb['rating1']; $i++):?>
-												<img src="<?=base_url()?>assets/images/star-off.png">
+												<span class="span_bg star_off"></span>
 											<?php endfor;?>
 										</p>
 										<p>Rating 2: 
 											<?php for($i = 0; $i < $afb['rating2']; $i++):?>
-												<img src="<?=base_url()?>assets/images/star-on.png">
+												<span class="span_bg star_on"></span>
 											<?php endfor;?>
 											<?php for($i = 0; $i < 5-$afb['rating2']; $i++):?>
-												<img src="<?=base_url()?>assets/images/star-off.png">
+												<span class="span_bg star_off"></span>
 											<?php endfor;?>
 										</p>
 										<p>Rating 3: 
 											<?php for($i = 0; $i < $afb['rating3']; $i++):?>
-												<img src="<?=base_url()?>assets/images/star-on.png">
+												<span class="span_bg star_on"></span>
 											<?php endfor;?>
 											<?php for($i = 0; $i < 5-$afb['rating3']; $i++):?>
-												<img src="<?=base_url()?>assets/images/star-off.png">
+												<span class="span_bg star_off"></span>
 											<?php endfor;?>
 										</p>
 										<?php endforeach;?>
@@ -570,26 +568,26 @@
 											<p>"<?php echo $afb['feedb_msg']?>"</p>
 											<p>Rating 1: 
 												<?php for($i = 0; $i < $afb['rating1']; $i++):?>
-													<img src="<?=base_url()?>assets/images/star-on.png">
+													<span class="span_bg star_on"></span>
 												<?php endfor;?>
 												<?php for($i = 0; $i < 5-$afb['rating1']; $i++):?>
-													<img src="<?=base_url()?>assets/images/star-off.png">
+													<span class="span_bg star_off"></span>
 												<?php endfor;?>
 											</p>
 											<p>Rating 2: 
 												<?php for($i = 0; $i < $afb['rating2']; $i++):?>
-													<img src="<?=base_url()?>assets/images/star-on.png">
+													<span class="span_bg star_on"></span>
 												<?php endfor;?>
 												<?php for($i = 0; $i < 5-$afb['rating2']; $i++):?>
-													<img src="<?=base_url()?>assets/images/star-off.png">
+													<span class="span_bg star_off"></span>
 												<?php endfor;?>
 											</p>
 											<p>Rating 3: 
 												<?php for($i = 0; $i < $afb['rating3']; $i++):?>
-													<img src="<?=base_url()?>assets/images/star-on.png">
+													<span class="span_bg star_on"></span>
 												<?php endfor;?>
 												<?php for($i = 0; $i < 5-$afb['rating3']; $i++):?>
-													<img src="<?=base_url()?>assets/images/star-off.png">
+													<span class="span_bg star_off"></span>
 												<?php endfor;?>
 											</p>
 											<?php endforeach;?>
@@ -844,7 +842,7 @@
 								<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" class="verify_img" style="display:none;"/>
 							</span>
 							<span class="verify doneverify" style="<?php echo $is_contactno_verify == 0?'display:none;':''?>">
-								<img src="<?=base_url()?>/assets/images/check_icon.png"><span><strong>Verified</strong></span>
+								<span class="span_bg chk_img"></span><span><strong>Verified</strong></span>
 							</span>
 						
 							<span class="personal_contact_cont" style="<?php echo trim($contactno)!==''?'':'display:none;' ?>">
@@ -881,7 +879,7 @@
 								<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" class="verify_img" style="display:none"/>
 							</span>	
 							<span class="verify doneverify" style="<?php echo $is_email_verify == 0?'display:none;':''?>">
-								<img src="<?=base_url()?>/assets/images/check_icon.png"><span><strong>Verified</strong></span>
+								<span class="span_bg chk_img"></span><span><strong>Verified</strong></span>
 							</span>
 							
 							<span class="personal_contact_cont" style="<?php echo trim($email)!==''?'':'display:none;' ?>">
@@ -915,7 +913,7 @@
 					echo form_open('',$attr);
 				?>
 					<div class="personal_info_title">
-						<span class="personal_info_icon address_img"></span> Address
+						<span class="personal_info_icon address_img span_bg"></span> Address
 					</div>
 					<div class="edit_profile">
 						<h2>+ Add an Address</h2>
@@ -1006,7 +1004,7 @@
 						echo form_open('', $attr);
 					?>
 						<div class="personal_info_title">
-							<span class="personal_info_icon school_img"></span> School
+							<span class="personal_info_icon school_img span_bg"></span> School
 						</div>
 						<div class="edit_profile">
 							<h2>+ Add a School</h2>
@@ -1116,7 +1114,7 @@
 				?>
 					<div>
 						<div class="personal_info_title">
-							<span class="personal_info_icon work_img"></span> Work
+							<span class="personal_info_icon work_img span_bg"></span> Work
 						</div>
 						<div class="edit_profile">
 							<h2>+ Add Work</h2>
@@ -1257,7 +1255,7 @@
 									<div>
 										<label></label>
 										<input type="checkbox" name="c_def_address" id="c_def_address"> <span>Set as Default Address</span>
-										<a class="tooltips" href="#"><img src="<?=base_url()?>/assets/images/icon_qmark.png"><span>Setting as default updates address in Personal Information</span></a>
+										<a class="tooltips" href="javascript:void(0)"><p class="span_bg"></p><!-- <img src="<?=base_url()?>/assets/images/icon_qmark.png"> --><span>Setting as default updates address in Personal Information</span></a>
 									</div>
 									<br>
 									<div style="padding-left:100px">
@@ -1331,27 +1329,27 @@
 												<p> Rating 1: 
 													<?php for($x=0;$x<5;$x++):?>
 														<?php if($x<$user['rating1']):?>
-															<img src="<?=base_url()?>assets/images/star-on.png" alt="*" title="">
+															<span class="span_bg star_on"></span>
 														<?php else:?>
-															<img src="<?=base_url()?>assets/images/star-off.png" alt="*" title="">
+															<span class="span_bg star_off"></span>
 														<?php endif;?>
 													<?php endfor;?>
 												</p>
 												<p> Rating 2: 
 													<?php for($x=0;$x<5;$x++):?>
 														<?php if($x<$user['rating2']):?>
-															<img src="<?=base_url()?>assets/images/star-on.png" alt="*" title="">
+															<span class="span_bg star_on"></span>
 														<?php else:?>
-															<img src="<?=base_url()?>assets/images/star-off.png" alt="*" title="">
+															<span class="span_bg star_off"></span>
 														<?php endif;?>
 													<?php endfor;?>
 												</p>
 												<p> Rating 3: 
 													<?php for($x=0;$x<5;$x++):?>
 														<?php if($x<$user['rating3']):?>
-															<img src="<?=base_url()?>assets/images/star-on.png" alt="*" title="">
+															<span class="span_bg star_on"></span>
 														<?php else:?>
-															<img src="<?=base_url()?>assets/images/star-off.png" alt="*" title="">
+															<span class="span_bg star_off"></span>
 														<?php endif;?>
 													<?php endfor;?>
 												</p>
@@ -1446,27 +1444,27 @@
 											<p> Rating 1: 
 												<?php for($x=0;$x<5;$x++):?>
 													<?php if($x<$user['rating1']):?>
-														<img src="<?=base_url()?>assets/images/star-on.png" alt="*" title="">
+														<span class="span_bg star_on"></span>
 													<?php else:?>
-														<img src="<?=base_url()?>assets/images/star-off.png" alt="*" title="">
+														<span class="span_bg star_off"></span>
 													<?php endif;?>
 												<?php endfor;?>
 											</p>
 											<p> Rating 2: 
 												<?php for($x=0;$x<5;$x++):?>
 													<?php if($x<$user['rating2']):?>
-														<img src="<?=base_url()?>assets/images/star-on.png" alt="*" title="">
+														<span class="span_bg star_on"></span>
 													<?php else:?>
-														<img src="<?=base_url()?>assets/images/star-off.png" alt="*" title="">
+														<span class="span_bg star_off"></span>
 													<?php endif;?>
 												<?php endfor;?>
 											</p>
 											<p> Rating 3: 
 												<?php for($x=0;$x<5;$x++):?>
 													<?php if($x<$user['rating3']):?>
-														<img src="<?=base_url()?>assets/images/star-on.png" alt="*" title="">
+														<span class="span_bg star_on"></span>
 													<?php else:?>
-														<img src="<?=base_url()?>assets/images/star-off.png" alt="*" title="">
+														<span class="span_bg star_off"></span>
 													<?php endif;?>
 												<?php endfor;?>
 											</p>
