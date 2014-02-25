@@ -201,7 +201,7 @@
 
             if(otherName.length == 0){
                 $('.othercategory').empty();
-                $('.othercategory').append('<a href="javascript:void(0)" class="select2" data-level="'+globalLevel+'" data-parent="'+globalParent+'">Other</a>');
+                $('.othercategory').append('<a href="javascript:void(0)" class="select2" data-level="'+globalLevel+'" data-parent="'+globalParent+'"><b>Add a Category</b></a>');
             }else{
                $(".add_category_submit").empty();
                $(".add_category_submit").append('<input type="hidden" name="hidden_attribute" value="'+globalParent+'" class="hidden_attribute"><input class="proceed_form" id="proceed_form" type="submit" value="Proceed with '+ otherName.replace(/'/g, "\\'") +'">');    

@@ -63,7 +63,7 @@ if (empty($node)) { # if no more available item on selected category the button 
         <input type="text" class="box<?php echo $level; ?>" id="box<?php echo $level; ?>">
         <ul class="product-list navList<?php echo $level; ?>" style="list-style-type:none">
            
-                <li  class="othercategory othercategory<?php echo $level; ?> <?php echo $cat_id; ?>"><a href="javascript:void(0)" class="select2" data-level="<?php echo $level; ?>" data-parent="<?php echo $cat_id; ?>">Other</a></li>
+                <li  class="othercategory othercategory<?php echo $level; ?> <?php echo $cat_id; ?>"><a href="javascript:void(0)" class="select2" data-level="<?php echo $level; ?>" data-parent="<?php echo $cat_id; ?>"><b>Add a Category</b></a></li>
             </ul>
         </div>
 
@@ -85,7 +85,7 @@ if (empty($node)) { # if no more available item on selected category the button 
                 <?php }
             ?>
  
-           <li  class="othercategory othercategory<?php echo $level; ?> <?php echo $row['parent_id']; ?>"><a href="javascript:void(0)" class="select2" data-level="<?php echo $level; ?>" data-parent="<?php echo $row['parent_id']; ?>">Other</a></li>
+           <li  class="othercategory othercategory<?php echo $level; ?> <?php echo $row['parent_id']; ?>"><a href="javascript:void(0)" class="select2" data-level="<?php echo $level; ?>" data-parent="<?php echo $row['parent_id']; ?>"><b>Add a Category</b></a></li>
  
         </ul>
         </div>
