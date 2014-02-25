@@ -291,6 +291,7 @@
                         var obj = jQuery.parseJSON(response);
                         var html = '<ul>';
                         var data_content, data_id, cnt;
+                        var delim_img = ' <img src = "<?=base_url()?>assets/images/img_bullet2.jpg"/> ';
                         if((obj.length)>0){
                             jQuery.each(obj,function(){
                                 data_content = '';
@@ -301,7 +302,7 @@
                                 jQuery.each($(this)[0].parent,function(){
                                     count++;
                                     if(count !== length){
-                                        data_content += $(this)[0].name + ' > ';
+                                        data_content += $(this)[0].name + delim_img;
                                         data_id += $(this)[0].id_cat+",";
                                     }
                                     else{
