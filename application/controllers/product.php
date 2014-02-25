@@ -197,6 +197,7 @@ class product extends MY_Controller
 					'title' => substr($url_string,0,-5).' | Easyshop.ph',
 					); 
 				$data = array_merge($data, $this->fill_header());
+				
 				$this->load->view('templates/header', $data); 
 				$this->load->view('pages/product/product_search_by_category',$response);
 				$this->load->view('templates/footer_full'); 
