@@ -105,7 +105,7 @@
 <form action="<?php echo base_url(); ?>search/search.html" name="search_form" method="get">
   <section>
     <div class="wrapper search_wrapper">
-      <div class="logo"> <a href="<?=base_url()?>home"><span></span></a> </div>
+      <div class="logo"> <a href="<?=base_url()?>home"><span class="span_bg"></span></a> </div>
       <div class="search_box prob_search_box">
         <div>
           <input name="q_str" type="text" id="main_search" value="<?php if(isset($_GET['q_str'])) echo str_replace('-', ' ', $_GET['q_str']); ?>" autocomplete="off">

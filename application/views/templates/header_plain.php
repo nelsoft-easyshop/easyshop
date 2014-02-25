@@ -60,7 +60,7 @@
               <!-- <li><a href="<?=base_url()?>home/under_construction">Training Center</a></li> -->
             </ul>
           </li>
-          <li class="top_nav_main"><img src="<?=base_url()?>assets/images/img_cart.jpg">Shopping Cart <span class="cart_no"><?PHP echo isset($total_items)?$total_items:0; ?></span> items
+          <li class="top_nav_main"><span class="span_bg cart"></span>Shopping Cart <span class="cart_no"><?PHP echo isset($total_items)?$total_items:0; ?></span> items
             <ul>
               <li><a href="<?php echo base_url()."cart/"; ?>">View my Cart</a></li>
             </ul>
@@ -102,6 +102,6 @@
 </header>
 <section>
 	<div class="wrapper search_wrapper">
-		<div class="logo"> <a href="<?=base_url()?>home"><img src="<?=base_url()?>assets/images/img_logo.png" alt="Logo"></a></div>
+		<div class="logo"> <a href="<?=base_url()?>home"><span class="span_bg"></span></a></div>
 	</div>
 </section>
