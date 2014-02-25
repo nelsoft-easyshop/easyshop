@@ -54,7 +54,7 @@
                 <div class="clear"></div>
                 <div class="guides_panel">
                     <div>
-                        <a href="<?= base_url() ?>home/under_construction"><span class="shopping_guide"></span>Shopping Guide</a>
+                        <a href="<?= base_url() ?>home/under_construction"><span class="span_bg shopping_guide"></span>Shopping Guide</a>
                     </div>
                     <div>
                         <a href="<?= base_url() ?>home/under_construction"><span class="q_and_a"></span>Q &amp; A</a>
