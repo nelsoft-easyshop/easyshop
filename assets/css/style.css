@@ -407,9 +407,7 @@ header {
 }
 
 .top_nav .cart {
-	background: url('../images/global_sprite.png') no-repeat -5px -259px;	
-	display: inline-block;
-	vertical-align: middle;
+	background-image: -5px -259px;	
 	padding-right: 5px;
 	height: 18px;
 	width: 22px;
