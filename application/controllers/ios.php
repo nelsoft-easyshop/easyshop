@@ -83,8 +83,11 @@ class Ios extends MY_Controller {
         echo json_encode($data,JSON_PRETTY_PRINT); 
     }
 	
-	function searchbycategory($categoryId = 0,$url_string="string") # ROUTING: category/(:num)/(:any)
+	//function searchbycategory($categoryId = 0,$url_string="string") # ROUTING: category/(:num)/(:any)
+	public function searchbycategory()
 	{
+		$categoryId = $this->input->get('id_cat');
+	
         //  Increase user preference for category
         $this->load->library("MemberCategoryPreferenceUtility");
         $memberCategoryPreferenceUtility = new MemberCategoryPreferenceUtility();
@@ -136,7 +139,8 @@ class Ios extends MY_Controller {
 					unset($_GET['item_brand']);
 				} 
 
-				if(count($_GET) >= 1){
+				//if(count($_GET) >= 1){
+				if(count($_GET) >= 2){
 
 					foreach($_GET as $parameter => $value){
 						if($parameter == "condition") continue; 
@@ -151,13 +155,15 @@ class Ios extends MY_Controller {
 					array_push($down_cat, $categoryId);
 					$catlist_down = implode(",", $down_cat);
 
-					if(count($_GET) == 1 && isset($_GET['condition'])){
+					//if(count($_GET) == 1 && isset($_GET['condition'])){
+					if(count($_GET) == 2 && isset($_GET['condition'])){
 						// echo '1--------------------------'; 
 						$condition_price_string = $item_brand_string_1 ." AND a.condition = '".$_GET['condition']."'" .$string_sort_a;
 						$response['items'] = $items = $this->product_model->selectAllProductWithCategory($categoryId,$condition_price_string,$start,$per_page,$catlist_down);
 						$itemparam = $items = $this->product_model->selectAllProductWithCategory($categoryId,$condition_price_string,0,9999999,$catlist_down);
 
-					}elseif(count($_GET) == 1 && isset($_GET['price'])) {
+					//}elseif(count($_GET) == 1 && isset($_GET['price'])) {
+					}elseif(count($_GET) == 2 && isset($_GET['price'])) {
 						 
 						if(strpos( $_GET['price'], 'to') !== false)
 						{
@@ -170,7 +176,8 @@ class Ios extends MY_Controller {
 						$response['items'] = $items = $this->product_model->selectAllProductWithCategory($categoryId,$condition_price_string,$start,$per_page,$catlist_down);
 						$itemparam = $items = $this->product_model->selectAllProductWithCategory($categoryId,$condition_price_string,0,9999999,$catlist_down);
 
-					}elseif (count($_GET) == 2 && isset($_GET['condition']) && isset($_GET['price'])) {
+					//}elseif (count($_GET) == 2 && isset($_GET['condition']) && isset($_GET['price'])) {
+					}elseif (count($_GET) == 3 && isset($_GET['condition']) && isset($_GET['price'])) {
 						// echo '3---------------------';
 						if(strpos( $_GET['price'], 'to') !== false)
 						{
@@ -182,14 +189,16 @@ class Ios extends MY_Controller {
 						$response['items'] = $items = $this->product_model->selectAllProductWithCategory($categoryId,$condition_price_string,$start,$per_page,$catlist_down);
 						$itemparam = $items = $this->product_model->selectAllProductWithCategory($categoryId,$condition_price_string,0,9999999,$catlist_down);
 
-					}elseif(count($_GET) >= 2 && isset($_GET['condition']) && !isset($_GET['price']) ){
+					//}elseif(count($_GET) >= 2 && isset($_GET['condition']) && !isset($_GET['price']) ){
+					}elseif(count($_GET) >= 3 && isset($_GET['condition']) && !isset($_GET['price']) ){
 						// echo '4-----------------------------';
 						$condition_price_string = " AND c.condition = '".$_GET['condition']."'" .$string_sort_c;		
 						$extra_string = substr($extra_string, 2);	
 						$response['items'] = $this->product_model->getProductByCategoryIdWithDistinct($categoryId,$condition_price_string,$extra_string,$count,$start,$per_page,$catlist_down,$item_brand_string_2);
 						$itemparam = $this->product_model->getProductByCategoryIdWithDistinct($categoryId,$condition_price_string,$extra_string,$count,0,9999999,$catlist_down,$item_brand_string_2);
 
-					}elseif(count($_GET) >= 2 && !isset($_GET['condition']) && isset($_GET['price']) ){
+					//}elseif(count($_GET) >= 2 && !isset($_GET['condition']) && isset($_GET['price']) ){
+					}elseif(count($_GET) >= 3 && !isset($_GET['condition']) && isset($_GET['price']) ){
 						// echo '5-------------------------';
 						if(strpos( $_GET['price'], 'to') !== false)
 						{
@@ -286,14 +295,14 @@ class Ios extends MY_Controller {
 		
 	}
 	
-	function load_product() # ROUTING: category/load_product
+	public function load_product() # ROUTING: category/load_product
 	{
-		$category_id = $_POST['id_cat'];				  
+		$category_id = $this->input->get('id_cat');				  
 		//$per_page = $this->per_page;
 		$per_page = 6;
-		$start = $_POST['page_number'] * $per_page;
-		 
-		$type = $_POST['type'];
+		$start = $this->input->get('page_number') * $per_page;
+		
+		$type = $this->input->get('type');
 		$response['typeofview'] = $type;
 		$extra_string = "";
 		$count = 0;
@@ -306,9 +315,9 @@ class Ios extends MY_Controller {
         
 		if($category_id != 0)
 		{
-			if(isset($_POST['parameters']['sop']))
+			if(isset($_GET['parameters']['sop']))
 			{
-				$sort = $_POST['parameters']['sop'];
+				$sort = $_GET['parameters']['sop'];
 				if($sort == "hot"){
 					$string_sort_a = " ORDER BY a.is_hot desc,(`cat_id` = ".$category_id.") DESC ";
 					$string_sort_c = " ORDER BY c.is_hot desc,(`cat_id` = ".$category_id.") DESC ";
@@ -323,22 +332,22 @@ class Ios extends MY_Controller {
 					$string_sort_a = " ORDER BY (`cat_id` = ".$category_id.") DESC";
 					$string_sort_c = " ORDER BY (`cat_id` = ".$category_id.") DESC";
 				}
-				unset($_POST['parameters']['sop']);
+				unset($_GET['parameters']['sop']);
 			}
-			if (isset($_POST['parameters']['item_brand'])) {
-				$item_brand = $_POST['parameters']['item_brand'];
+			if (isset($_GET['parameters']['item_brand'])) {
+				$item_brand = $_GET['parameters']['item_brand'];
 				if($item_brand != ""){
 					$item_brand_string_1 =" AND c.name = '".$item_brand."' ";
 					$item_brand_string_2 = " AND `es_brand`.`name` = '".$item_brand."' ";
 				}
-				unset($_POST['parameters']['item_brand']);
+				unset($_GET['parameters']['item_brand']);
 			}
 
-			if(isset($_POST['parameters']) && !count($_POST['parameters']) <= 0)
+			if(isset($_GET['parameters']) && !count($_GET['parameters']) <= 0)
 			{	
-				if(!count($_POST['parameters']) <= 0)
+				if(!count($_GET['parameters']) <= 0)
 				{
-					foreach($_POST['parameters'] as $parameter => $value){
+					foreach($_GET['parameters'] as $parameter => $value){
 						if($parameter == "condition") continue; 
 						if($parameter == "price") continue; 
 						if($parameter == "sop") continue; 
@@ -351,16 +360,16 @@ class Ios extends MY_Controller {
 					array_push($down_cat, $category_id);
 					$catlist_down = implode(",", $down_cat);
 
-					if(count($_POST['parameters']) == 1 && isset($_POST['parameters']['condition'])){
+					if(count($_GET['parameters']) == 1 && isset($_GET['parameters']['condition'])){
 
-						$condition_price_string =$item_brand_string_1. " AND a.condition = '".$_POST['parameters']['condition']."'".$string_sort_a;
+						$condition_price_string =$item_brand_string_1. " AND a.condition = '".$_GET['parameters']['condition']."'".$string_sort_a;
 						$response['items'] = $items = $this->product_model->selectAllProductWithCategory($category_id,$condition_price_string,$start,$per_page,$catlist_down);
 
-					}elseif(count($_POST['parameters']) == 1 && isset($_POST['parameters']['price'])) {
+					}elseif(count($_GET['parameters']) == 1 && isset($_GET['parameters']['price'])) {
 						
-						if(strpos( $_POST['parameters']['price'], 'to') !== false)
+						if(strpos( $_GET['parameters']['price'], 'to') !== false)
 						{
-							$price = explode('to', $_POST['parameters']['price']);
+							$price = explode('to', $_GET['parameters']['price']);
 						} else {
 							$price = explode('to', '0to99999999');
 						}
@@ -368,30 +377,30 @@ class Ios extends MY_Controller {
 						$condition_price_string =$item_brand_string_1. " AND a.price BETWEEN ".(double)$price[0]." AND ".(double)$price[1].$string_sort_a;
 						$response['items'] = $items = $this->product_model->selectAllProductWithCategory($category_id,$condition_price_string,$start,$per_page,$catlist_down);
 
-					}elseif (count($_POST['parameters']) == 2 && isset($_POST['parameters']['condition']) && isset($_POST['parameters']['price'])) {
+					}elseif (count($_GET['parameters']) == 2 && isset($_GET['parameters']['condition']) && isset($_GET['parameters']['price'])) {
 
 						
-						if(strpos( $_POST['parameters']['price'], 'to') !== false)
+						if(strpos( $_GET['parameters']['price'], 'to') !== false)
 						{
-							$price = explode('to', $_POST['parameters']['price']);
+							$price = explode('to', $_GET['parameters']['price']);
 						} else {
 							$price = explode('to', '0to99999999');
 						}
 
-						$condition_price_string =$item_brand_string_1. "AND a.condition = '".$_POST['parameters']['condition']."' AND a.price BETWEEN ".(double)$price[0]." AND ".(double)$price[1].$string_sort_a;		
+						$condition_price_string =$item_brand_string_1. "AND a.condition = '".$_GET['parameters']['condition']."' AND a.price BETWEEN ".(double)$price[0]." AND ".(double)$price[1].$string_sort_a;		
 						$response['items'] = $items = $this->product_model->selectAllProductWithCategory($category_id,$condition_price_string,$start,$per_page,$catlist_down);
 
-					}elseif(count($_POST['parameters']) >= 2 && isset($_POST['parameters']['condition']) && !isset($_POST['parameters']['price']) ){
+					}elseif(count($_GET['parameters']) >= 2 && isset($_GET['parameters']['condition']) && !isset($_GET['parameters']['price']) ){
 
-						$condition_price_string = "AND c.condition = '".$_POST['parameters']['condition']."'".$string_sort_c;		
+						$condition_price_string = "AND c.condition = '".$_GET['parameters']['condition']."'".$string_sort_c;		
 						$extra_string = substr($extra_string, 2);	
 						$response['items'] = $this->product_model->getProductByCategoryIdWithDistinct($category_id,$condition_price_string,$extra_string,$count,$start,$per_page,$catlist_down,$item_brand_string_2);
 
-					}elseif(count($_POST['parameters']) >= 2 && !isset($_POST['parameters']['condition']) && isset($_POST['parameters']['price']) ){
+					}elseif(count($_GET['parameters']) >= 2 && !isset($_GET['parameters']['condition']) && isset($_GET['parameters']['price']) ){
  
-						if(strpos( $_POST['parameters']['price'], 'to') !== false)
+						if(strpos( $_GET['parameters']['price'], 'to') !== false)
 						{
-							$price = explode('to', $_POST['parameters']['price']);
+							$price = explode('to', $_GET['parameters']['price']);
 						} else {
 							$price = explode('to', '0to99999999');
 						}
