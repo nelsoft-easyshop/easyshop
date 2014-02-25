@@ -2,10 +2,10 @@
       <div class="wrapper footer_panel">
         <div class="social_media">
           <h2>Stay in Touch</h2>
-          <span class="facebook"></span>
-          <span class="twitter"></span>
-          <span class="youtube"></span>
-          <span class="pinterest"></span>
+          <span class="span_bg facebook"></span>
+          <span class="span_bg twitter"></span>
+          <span class="span_bg youtube"></span>
+          <span class="span_bg pinterest"></span>
           <div class="signup">
             <h2>Signup for Newsletter</h2>
             <input type="text"><input type="submit" value="Submit">
@@ -27,10 +27,10 @@
 
         <div class="footer_payment">
           <h2>Payment</h2>
-            <span class="mastercard"></span>
-            <span class="visa"></span>
-            <span class="jcb"></span>
-            <span class="paypal"></span>
+            <span class="span_bg mastercard"></span>
+            <span class="span_bg visa"></span>
+            <span class="span_bg jcb"></span>
+            <span class="span_bg paypal"></span>
         </div>   
       </div>
       <div class="clear"></div>
