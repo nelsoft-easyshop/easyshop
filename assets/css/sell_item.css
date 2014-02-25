@@ -294,6 +294,23 @@ div.sell_steps4 ul li:nth-child(4) a {
         margin-bottom: 10px;
 }
 
+.othercategory a {
+    color: #fff;
+    background-color: #f28300;
+}
+
+.othercategory a:hover {
+    color: #fff !important;
+}
+
+.add_cat {
+    background-position: -336px -311px;
+    width: 17px;
+    height: 17px;
+    padding-left: 10px;
+}
+
+
 .product_sub_category > div a.active,
 .product_sub_category > div a:hover {
     color: #ff4400;
