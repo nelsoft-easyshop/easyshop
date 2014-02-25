@@ -187,6 +187,40 @@ div.sell_steps4 ul li:nth-child(4) a {
     margin-top: 20px;
 }
 
+.cat_sch_container {
+    margin-top: 20px;
+}
+
+#cat_sch {
+    width: 200px;
+    height: 25px;
+}
+
+.cat_sch_loading {
+    margin-left: 10px;
+    display: inline-block;
+}
+
+.cat_sch_loading img {
+    vertical-align: middle;
+}
+
+#cat_search_drop_content {
+    background: none repeat scroll 0 0 #FFFFFF;
+    border: 1px solid #CECECE;
+    margin-left: 97px;
+    min-width: 190px;
+    padding: 10px;
+    position: absolute;
+    z-index: 1;
+    display: none;
+
+}
+
+#cat_search_drop_content ul {
+    list-style: none;
+}
+
 /**** Carousel styles ****/
 .carousel_container {
     float: none;

@@ -355,6 +355,7 @@ header {
     border-width: 0px 6px 6px 6px;
 }
 .top_nav ul li ul {
+	min-width: 130px;
   padding: 0;
   position: absolute;
   top: 25px;
