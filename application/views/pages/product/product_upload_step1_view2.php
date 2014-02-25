@@ -15,7 +15,7 @@
  
     });
 </script>
-<script type="text/javascript">
+ <script type="text/javascript">
     (function($) {  // generating the carousel for better view
         $(function() {
             $('.jcarousel').jcarousel();
@@ -59,23 +59,28 @@
 <?php
 if (empty($node)) { # if no more available item on selected category the button procedd will show 
     ?>
-    <div class='product_sub_items<?php echo $level; ?>'>
+    <div class='product_sub_items<?php echo $level; ?> parent<?php echo $cat_id ?>' data-final="true">
         <input type="text" class="box<?php echo $level; ?>" id="box<?php echo $level; ?>">
         <ul class="product-list navList<?php echo $level; ?>" style="list-style-type:none">
-           
-                <li  class="othercategory othercategory<?php echo $level; ?> <?php echo $cat_id; ?>"><a href="javascript:void(0)" class="select2" data-level="<?php echo $level; ?>" data-parent="<?php echo $cat_id; ?>"><b>Add a Category</b></a></li>
+ 
+                <li  class="othercategory othercategory<?php echo $level; ?>"><a href="javascript:void(0)" class="select2" data-level="<?php echo $level; ?>" data-parent="<?php echo $cat_id; ?>" data-parentname="<?php echo addslashes($name)?>" data-final="true">Other</a></li>
+ 
             </ul>
         </div>
 
     <script type="text/javascript">
         $(document).ready(function() {
-            $(".add_category_submit").append('<input type="hidden" name="hidden_attribute" value="'+<?php echo $cat_id ?>+'" class="hidden_attribute"><input class="proceed_form" id="proceed_form" type="submit" value="Proceed with <?php echo html_escape($name) ?>">');
+ 
+           $(".add_category_submit").empty();
+           $(".add_category_submit").append('<input type="hidden" name="hidden_attribute" value="'+<?php echo $cat_id ?>+'" class="hidden_attribute"><input class="proceed_form" id="proceed_form" type="submit" value="Proceed with <?php echo html_escape($name) ?>">');
+ 
         });     
     </script>
     <?php
 } else {  # if there is more available item on selected category the list will generate
     ?>
-    <div class='product_sub_items<?php echo $level; ?>'>
+        
+    <div class='product_sub_items<?php echo $level; ?> parent<?php echo $cat_id; ?>' data-final="false">
         <input type="text" class="box<?php echo $level; ?>" id="box<?php echo $level; ?>">
         <ul class="product-list navList<?php echo $level; ?>" style="list-style-type:none">
             <?php
@@ -85,7 +90,9 @@ if (empty($node)) { # if no more available item on selected category the button 
                 <?php }
             ?>
  
-           <li  class="othercategory othercategory<?php echo $level; ?> <?php echo $row['parent_id']; ?>"><a href="javascript:void(0)" class="select2" data-level="<?php echo $level; ?>" data-parent="<?php echo $row['parent_id']; ?>"><b>Add a Category</b></a></li>
+ 
+           <li  class="othercategory othercategory<?php echo $level; ?> "><a href="javascript:void(0)" class="select2" data-level="<?php echo $level; ?>" data-parent="<?php echo $row['parent_id']; ?>" data-parentname="<?php echo addslashes($name)?>" data-final="false">Other</a></li>
+ 
  
         </ul>
         </div>

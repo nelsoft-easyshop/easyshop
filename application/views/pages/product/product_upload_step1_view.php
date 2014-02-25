@@ -65,15 +65,15 @@
 
         
         <!--<form action="<?php //echo base_url() . 'sell/step2'; ?>" method="POST">-->
-		<?php echo form_open('sell/step2'); ?>
+        <?php echo form_open('sell/step2'); ?>
 
-            <div class="inner_seller_product_content">
-                <h2 class="f24">Sell an Item</h2>
-                <div class="sell_steps sell_steps1">
-                    <ul>
-                        <li><a href="#">Step 1 : Select Category</a></li>
-                        <li><a href="#">Step 2 : Upload Item</a></li>
-                        <li><a href="#">Step 3: Success</a></li>                    
+        <div class="inner_seller_product_content">
+            <h2 class="f24">Sell an Item</h2>
+            <div class="sell_steps sell_steps1">
+                <ul>
+                    <li><a href="#">Step 1 : Select Category</a></li>
+                    <li><a href="#">Step 2 : Upload Item</a></li>
+                    <li><a href="#">Step 3: Success</a></li>                    
                     <!-- <li><a href="#">Step 3: Select Shipping Courier</a></li>
                     <li><a href="#">Step 4: Success</a></li> -->
                 </ul>
@@ -84,20 +84,22 @@
                 <input type="text">
                 <button class="search_btn">SEARCH</button>
               </div>         
+
             </div>  -->
             <div class="clear"></div>
             <div class="cat_sch_container">
                <b>Search for category: &nbsp;</b><input type="text" class="box" id="cat_sch"><div class="cat_sch_loading" autocomplete="off"></div>
              <div id="cat_search_drop_content" class="cat_sch_drop_content"></div>
 
-            </div>
-           
-            
-            <div class="add_product_category">
-                <div class="main_product_category">
-                    <input type="text" class="box" id="box">
-                    <ul class="navList" style="list-style-type:none">  
-                        <?php
+
+       </div>
+
+
+       <div class="add_product_category">
+        <div class="main_product_category">
+            <input type="text" class="box" id="box">
+            <ul class="navList" style="list-style-type:none">  
+                <?php
                         foreach ($firstlevel as $row) { # generate all parent category.
                             ?>
 
@@ -114,14 +116,14 @@
                             <div class="sub_cat_loading_container loading_img">
                             </div>
 
-                             <div class="loading_category_list loading_img"></div>
+                            <div class="loading_category_list loading_img"></div>
                         </div>
 
                         <!-- Controls -->
                         <a href="#" class="jcarousel-control-prev inactive">&lsaquo;</a>
                         <a href="#" class="jcarousel-control-next inactive">&rsaquo;</a>
 
-                       
+
 
                     </div>
                 </div>
@@ -131,25 +133,25 @@
                 <div class="add_category_submit"></div>
                 
             </div>
-        <?php echo form_close();?>
-    </div>
+            <?php echo form_close();?>
+        </div>
 
-    <div class="clear"></div>  
+        <div class="clear"></div>  
 
 
-    <script>
-    $(document).ready(function() {
+        <script>
+        $(document).ready(function() {
 
-        var globalParent;
-        var globalLevel;
+            var globalParent;
+            var globalLevel;
 
-        $(document).on('click','.product-list li a',function () { 
-            $(this).addClass('active').parent().siblings().children('a').removeClass('active');
-        });
+            $(document).on('click','.product-list li a',function () { 
+                $(this).addClass('active').parent().siblings().children('a').removeClass('active');
+            });
 
-        $(document).on('click','.navList li a',function () { 
-            $(this).addClass('active').parent().siblings().children('a').removeClass('active');
-        });
+            $(document).on('click','.navList li a',function () { 
+                $(this).addClass('active').parent().siblings().children('a').removeClass('active');
+            });
 
         $("#box").unbind("click").click(function() {  // this function is for searching item on the list box every category
             $('#box').keyup(function() {
@@ -165,84 +167,168 @@
             $(".add_category_submit").empty();
             var D = eval('(' + $(this).attr('data') + ')');
             var action = 'productUpload/getChild';
-            $.ajax({
-                async: false,
-                type: "POST",
-                url: '<?php echo base_url(); ?>' + action,
-                data: "cat_id=" + D.cat_id + "&level=" + D.level + "&name=" + D.name,
-                dataType: "json",
-                cache: false,
-                onLoading:jQuery(".sub_cat_loading_container").html('<img src="<?= base_url() ?>assets/images/orange_loader.gif" />').show(),
-                beforeSend: function(jqxhr, settings) {
-                    $(".product_sub_items0").nextAll().remove();
-                    $(".product_sub_items0").remove();
-                },
-                success: function(d) {
-                    $(d).appendTo($('.product_sub_category'));
-                    jQuery(".sub_cat_loading_container").hide();
+            var catId = D.cat_id;
+            var level =  D.level;
+            var name = D.name;
+
+            $(".product_sub_category .product_sub_items0").nextAll().remove();
+            $(".product_sub_category .product_sub_items0").remove();
+
+            if($('#storeValue .parent'+catId).length == 0) {
+                $.ajax({
+                    async: false,
+                    type: "POST",
+                    url: '<?php echo base_url(); ?>' + action,
+                    data: "cat_id=" + catId + "&level=" + level + "&name=" + name,
+                    dataType: "json",
+                    cache: false,
+                    onLoading:jQuery(".sub_cat_loading_container").html('<img src="<?= base_url() ?>assets/images/orange_loader.gif" />').show(),
+                    success: function(d) {
+                        $(".product_sub_category").append(d);
+                        $("#storeValue").append(d);
+
+                        jQuery(".sub_cat_loading_container").hide();
+                    }
+                });
+            }else{
+               var clone = $('#storeValue .parent'+catId).clone();
+               $('.product_sub_category').append(clone);
+           }
+       });
+
+        $(document).on('click','.child',function () { // requesting the child category from selected category
+            var D = eval('(' + $(this).attr('data') + ')');
+            var nlevel = parseInt(D.level) + 1;
+            var action = 'productUpload/getChild';
+            var catId = D.cat_id;
+            var name = D.name;
+
+            $(".add_category_submit").empty();
+            $(".product_sub_category .product_sub_items" + D.level).nextAll().remove(); 
+            $(".product_sub_category .product_sub_items" + nlevel).nextAll().remove(); 
+            if($('#storeValue .parent'+catId).length == 0) {
+                $.ajax({
+                    async: false,
+                    type: "POST",
+                    url: '<?php echo base_url(); ?>' +  action,
+                    data: "cat_id=" + catId + "&level=" + nlevel + "&name=" + name,
+                    dataType: "json",
+                    cache: false,
+                    onLoading:$(".sub_cat_loading_container").html('<img src="<?= base_url() ?>assets/images/orange_loader.gif" />').show(),
+                    success: function(d) {
+                        $(".product_sub_category").append(d);
+                        $("#storeValue").append(d);
+                        $(".sub_cat_loading_container").hide();
+                    }
+                });
+            }else{ 
+                var finalValue = $('#storeValue .parent'+catId).data('final');
+                var clone = $('#storeValue .parent'+catId).clone();
+                $('.product_sub_category').append(clone);
+
+                if(finalValue == true){
+                    $(".add_category_submit").empty();
+                    $(".add_category_submit").append('<input type="hidden" name="hidden_attribute" value="'+catId+'" class="hidden_attribute"><input class="proceed_form" id="proceed_form" type="submit" value="Proceed with '+name+'">');
                 }
 
-            });
-        });
+         }
+
+           // $('.jcarousel').jcarousel('scroll', '+=1');
+       });
+
 
         $(document).on('click','.othercategory a',function () {
-            selfAttrParent = $(this).data('parent');
-            selfLevel = $(this).data('level'); 
+            var selfAttrParent = $(this).data('parent');
+            var selfLevel = $(this).data('level'); 
+            var finalValue = $(this).data('final');
+            var parentName = $(this).data('parentname');
             globalParent = selfAttrParent;
             globalLevel = selfLevel;
             $('.othercategory'+selfLevel).empty();
-            $('.othercategory'+selfLevel).append('<input type="text" id="otherNameCategory" class="otherNameCategoryClass'+selfLevel+'" autocomplete="off" name="othernamecategory" />');
-            $('.otherNameCategoryClass'+selfLevel).focus();
+            $(".product_sub_category .product_sub_items" + selfLevel).nextAll().remove(); 
+            $('.product_sub_items'+selfLevel+' .othercategory'+selfLevel).append('<input type="text" id="otherNameCategory" class="otherNameCategoryClass'+selfLevel+'" data-parentname="'+parentName+'" data-level="'+selfLevel+'" data-final="'+finalValue+'" autocomplete="off" name="othernamecategory" />');
+            $('.product_sub_items'+selfLevel+' .otherNameCategoryClass'+selfLevel).focus();
             $(".add_category_submit").empty();
         });
 
         $(document).on('blur change','#otherNameCategory',function () {
             var otherName = $(this).val();
-
-            if(otherName.length == 0){
-                $('.othercategory').empty();
-                $('.othercategory').append('<a href="javascript:void(0)" class="select2" data-level="'+globalLevel+'" data-parent="'+globalParent+'"><b>Add a Category</b></a>');
-            }else{
-               $(".add_category_submit").empty();
-               $(".add_category_submit").append('<input type="hidden" name="hidden_attribute" value="'+globalParent+'" class="hidden_attribute"><input class="proceed_form" id="proceed_form" type="submit" value="Proceed with '+ otherName.replace(/'/g, "\\'") +'">');    
-           }
-
-        });
+            var finalValue = $(this).data('final');
+            var parentName = $(this).data('parentname');
+            
 
  
-        $(document).on('click','.child',function () { // requesting the child category from selected category
-            var D = eval('(' + $(this).attr('data') + ')');
-            var nlevel = parseInt(D.level) + 1;
-            var action = 'productUpload/getChild';
             $(".add_category_submit").empty();
-            $(".product_sub_items" + parseInt(D.level) + 1).remove();
-            $(".product_sub_items" + nlevel).nextAll().remove();
-            $.ajax({
-                async: false,
+            if(otherName.length == 0){ 
+
+                $('.product_sub_items'+globalLevel+' .othercategory').empty();
+                $('.product_sub_items'+globalLevel+' .othercategory').append('<a href="javascript:void(0)" class="select2" data-level="'+globalLevel+'" data-parent="'+globalParent+'">Other</a>');
+                if(finalValue == true){ 
+                  $(".add_category_submit").append('<input type="hidden" name="hidden_attribute" value="'+globalParent+'" class="hidden_attribute"><input class="proceed_form" id="proceed_form" type="submit" value="Proceed with '+parentName+'">');    
+                }
+
+            }else{  
+                $(".add_category_submit").append('<input type="hidden" name="hidden_attribute" value="'+globalParent+'" class="hidden_attribute"><input class="proceed_form" id="proceed_form" type="submit" value="Proceed with '+otherName.replace(/'/g, "\\'")+'">');    
+ 
+           }
+        });
+
+        $(document).on('focus','#otherNameCategory',function () {
+            var level = $(this).data('level');
+            $(".product_sub_category .product_sub_items" + level).nextAll().remove();    
+        });
+
+});
+</script> 
+<div id="storeValue" style="display:none">
+
+
+
+</div>
+
+<script>
+
+$(document).ready(function() { 
+    var currentRequest = null;
+    $( "#cat_sch" ).keyup(function() {
+
+        var searchQuery = $(this).val();
+        if(searchQuery != ""){
+            currentRequest = jQuery.ajax({
                 type: "POST",
-                url: '<?php echo base_url(); ?>' +  action,
-                data: "cat_id=" + D.cat_id + "&level=" + nlevel + "&name=" + D.name,
-                dataType: "json",
-                cache: false,
-                onLoading:jQuery(".sub_cat_loading_container").html('<img src="<?= base_url() ?>assets/images/orange_loader.gif" />').show(),
-                beforeSend: function(jqxhr, settings) {
-                    $(".product_sub_items" + nlevel).remove();
-                    $(".product_sub_items" + parseInt(D.level) + 1).remove();
-                    $(".product_sub_items" + nlevel).nextAll().remove();
+                url: '<?php echo base_url();?>product/searchCategory', 
+                data: "data="+searchQuery, 
+                onLoading:jQuery(".cat_sch_loading").html('<img src="<?= base_url() ?>assets/images/orange_loader_small.gif" />').show(),
+                beforeSend : function(){       
+                    $("#cat_search_drop_content").empty();
+                    if(currentRequest != null) {
+                        currentRequest.abort();
+                    }
                 },
-                success: function(d) {
-                    $(".product_sub_category").append(d);
-                    jQuery(".sub_cat_loading_container").hide();
+                success: function(response) {
+                    var obj = jQuery.parseJSON(response);
+                    var html = '<ul>';
+                    console.log(obj.length);
+                    if((obj.length)>0){
+                        jQuery.each(obj,function(){
+                            html += '<li>'+$(this)[0].name+'</li>' 
+                        });
+                    }
+                    else{
+                        html += '<li> No results found </li>' 
+                    }
+                    html += '</ul>';
+                    $("#cat_search_drop_content").html(html);
+                    jQuery(".cat_sch_loading").hide();
                 }
             });
-
-            $('.jcarousel').jcarousel('scroll', '+=1');
-        });
+}
         
         
      
         
 });
+ 
 </script>
 <script>        
     $(document).ready(function() {
@@ -269,7 +355,9 @@
                     }
                 });
             });
+ 
 
+ 
         });
         
         var currentRequest = null;
@@ -323,6 +411,7 @@
                 });
             }
         });
+ 
     });
     
     function scrollToElement(selector, container, time) {
@@ -337,6 +426,7 @@
         }, xtime);
     }
 
+ 
   
 </script>
 
@@ -350,9 +440,13 @@
                 $('#cat_search_drop_content').hide();
                 });
              });
+ 
             $('#cat_search_drop_content').hide();
+        });
+    });
+    $('#cat_search_drop_content').hide();
 
-         }); 
+}); 
 
 
 </script>
