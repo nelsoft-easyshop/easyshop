@@ -84,6 +84,7 @@ class Ios extends MY_Controller {
     }
 	
 	//function searchbycategory($categoryId = 0,$url_string="string") # ROUTING: category/(:num)/(:any)
+	public $per_page = 20;
 	public function searchbycategory()
 	{
 		$categoryId = $this->input->get('id_cat');
@@ -104,8 +105,7 @@ class Ios extends MY_Controller {
 		$count = 0;
 		$values = array();
 		$start = 0;
-		//$per_page = $this->per_page;
-		$per_page = 6;
+		$per_page = $this->per_page;
 
 		$checkifexistcategory = $this->product_model->checkifexistcategory($categoryId);
 		$response['subcategories'] = $this->product_model->getDownLevelNode($categoryId);
@@ -298,8 +298,7 @@ class Ios extends MY_Controller {
 	public function load_product() # ROUTING: category/load_product
 	{
 		$category_id = $this->input->get('id_cat');				  
-		//$per_page = $this->per_page;
-		$per_page = 6;
+		$per_page = $this->per_page;
 		$start = $this->input->get('page_number') * $per_page;
 		
 		$type = $this->input->get('type');
