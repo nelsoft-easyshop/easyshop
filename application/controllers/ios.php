@@ -278,11 +278,12 @@ class Ios extends MY_Controller {
 			/*
 			else{
 				redirect('/category/all', 'refresh');
-			}
-		}else{
-			redirect('/category/all', 'refresh');
+			}*/
 		}
-		*/
+		/*else{
+			redirect('/category/all', 'refresh');
+		}*/
+		
 	}
 	
 	function load_product() # ROUTING: category/load_product
