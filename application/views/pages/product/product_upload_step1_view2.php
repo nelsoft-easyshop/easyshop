@@ -69,7 +69,7 @@ if (empty($node)) { # if no more available item on selected category the button 
 
     <script type="text/javascript">
         $(document).ready(function() {
-            $(".add_category_submit").append('<input type="hidden" name="hidden_attribute" value="'+<?php echo $cat_id ?>+'" class="hidden_attribute"><input class="proceed_form" id="proceed_form" type="submit" value="Proceed with <?php echo $name ?>">');
+            $(".add_category_submit").append('<input type="hidden" name="hidden_attribute" value="'+<?php echo $cat_id ?>+'" class="hidden_attribute"><input class="proceed_form" id="proceed_form" type="submit" value="Proceed with <?php echo html_escape($name) ?>">');
         });     
     </script>
     <?php

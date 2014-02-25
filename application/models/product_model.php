@@ -1256,6 +1256,7 @@ class product_model extends CI_Model
     	$sth->bindParam(':sch_string', $string, PDO::PARAM_STR);
         $sth->execute();
     	$result = $sth->fetchAll(PDO::FETCH_ASSOC);
+        
         return $result;
     }
  

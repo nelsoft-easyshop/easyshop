@@ -780,6 +780,9 @@ class product extends MY_Controller
     function searchCategory(){
         $string = $this->input->post('data');
         $rows = $this->product_model->searchCategory($string);
+        foreach($rows as $idx=>$row){
+            $rows[$idx]['parent'] = $this->product_model->getParentId($row['id_cat']);
+        }
         echo json_encode($rows);
     }
     

@@ -9,7 +9,7 @@ class productUpload extends MY_Controller
 		parent::__construct(); 
 		$this->load->model("product_model");
 		$this->load->library('cart');
-		if(!$this->session->userdata('usersession'))
+		if(!$this->session->userdata('usersession') && !$this->check_cookie())
 			redirect(base_url().'login', 'refresh');
 	}
 
@@ -17,7 +17,6 @@ class productUpload extends MY_Controller
 	{
 		$data = array(
 			'title' => 'Sell Product | Easyshop.ph',
-			'function' =>new MY_Controller()
 			);
 		$data = array_merge($data, $this->fill_header());
 

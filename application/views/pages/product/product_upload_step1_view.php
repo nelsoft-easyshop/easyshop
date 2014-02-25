@@ -87,7 +87,7 @@
             </div>  -->
             <div class="clear"></div>
             <div class="cat_sch_container">
-               Search Category: <input type="text" class="box" id="cat_sch"><div class="cat_sch_loading"></div>
+               <b>Search for category: &nbsp;</b><input type="text" class="box" id="cat_sch"><div class="cat_sch_loading" autocomplete="off"></div>
              <div id="cat_search_drop_content" class="cat_sch_drop_content"></div>
 
             </div>
@@ -204,7 +204,7 @@
                 $('.othercategory').append('<a href="javascript:void(0)" class="select2" data-level="'+globalLevel+'" data-parent="'+globalParent+'">Other</a>');
             }else{
                $(".add_category_submit").empty();
-               $(".add_category_submit").append('<input type="hidden" name="hidden_attribute" value="'+globalParent+'" class="hidden_attribute"><input class="proceed_form" id="proceed_form" type="submit" value="Proceed with '+otherName+'">');    
+               $(".add_category_submit").append('<input type="hidden" name="hidden_attribute" value="'+globalParent+'" class="hidden_attribute"><input class="proceed_form" id="proceed_form" type="submit" value="Proceed with '+ otherName.replace(/'/g, "\\'") +'">');    
            }
 
         });
@@ -238,52 +238,108 @@
 
             $('.jcarousel').jcarousel('scroll', '+=1');
         });
+        
+        
+     
+        
 });
 </script>
-    </script>
-    
-    <script>
-
-        $(document).ready(function() { 
-            var currentRequest = null;
-            $( "#cat_sch" ).keyup(function() {
-                
-
-                var searchQuery = $(this).val();
-                if(searchQuery != ""){
-                    currentRequest = jQuery.ajax({
-                        type: "POST",
-                        url: '<?php echo base_url();?>product/searchCategory', 
-                        data: "data="+searchQuery, 
-                        onLoading:jQuery(".cat_sch_loading").html('<img src="<?= base_url() ?>assets/images/orange_loader_small.gif" />').show(),
-                        beforeSend : function(){       
-                            $("#cat_search_drop_content").empty();
-                            if(currentRequest != null) {
-                                currentRequest.abort();
-                            }
-                        },
-                        success: function(response) {
-                            var obj = jQuery.parseJSON(response);
-                            var html = '<ul>';
-                            console.log(obj.length);
-                            if((obj.length)>0){
-                                jQuery.each(obj,function(){
-                                    html += '<li>'+$(this)[0].name+'</li>' 
-                                });
-                            }
-                            else{
-                                html += '<li> No results found </li>' 
-                            }
-                            html += '</ul>';
-                            $("#cat_search_drop_content").html(html);
-                            jQuery(".cat_sch_loading").hide();
-                        }
-                    });
+<script>        
+    $(document).ready(function() {
+       $('#cat_search_drop_content').on('click', 'li.cat_result', function(){
+            var parent_ids = eval('('+$(this).attr('data-parent')+')');
+            $('li .select').each(function(){
+                var D = eval('(' + $(this).attr('data') + ')');
+                if( parseInt(D.cat_id) === parent_ids[0]){
+                    $(this).click();
+                    scrollToElement(this, '.main_product_category');
+                    return false;
                 }
             });
+            var cnt = 0;
+            $.each(parent_ids, function(){
+                var id  = parent_ids.shift();
+                $('li.'+ id+' .select2.child').each(function(){
+                    var D = eval('(' + $(this).attr('data') + ')');
+                    if( parseInt(D.cat_id) === parent_ids[0]){
+                        $(this).click(); 
+                        scrollToElement(this, '.product_sub_items' +cnt);
+                        cnt++;
+                        return false;
+                    }
+                });
+            });
+
         });
+        
+        var currentRequest = null;
+        $( "#cat_sch" ).keyup(function() {
+            var searchQuery = $(this).val();
+            if(searchQuery != ""){
+                currentRequest = jQuery.ajax({
+                    type: "POST",
+                    url: '<?php echo base_url();?>product/searchCategory', 
+                    data: "data="+searchQuery, 
+                    onLoading:jQuery(".cat_sch_loading").html('<img src="<?= base_url() ?>assets/images/orange_loader_small.gif" />').show(),
+                    beforeSend : function(){       
+                        $("#cat_search_drop_content").empty();
+                        if(currentRequest != null) {
+                            currentRequest.abort();
+                        }
+                    },
+                    success: function(response) {
+                        var obj = jQuery.parseJSON(response);
+                        var html = '<ul>';
+                        var data_content, data_id, cnt;
+                        if((obj.length)>0){
+                            jQuery.each(obj,function(){
+                                data_content = '';
+                                data_id = '[';
+                                count = 0;
+                                var length = $(this)[0].parent.length;
+                                //Iterate through the parent categories
+                                jQuery.each($(this)[0].parent,function(){
+                                    count++;
+                                    if(count !== length){
+                                        data_content += $(this)[0].name + ' > ';
+                                        data_id += $(this)[0].id_cat+",";
+                                    }
+                                    else{
+                                        data_content += '<b>' + $(this)[0].name + '</b>';
+                                        data_id +=  $(this)[0].id_cat + "]";
+                                    }
+                                });
+                                html += '<li class="cat_result" data-parent="'+data_id+'"><a href="javascript:void(0)">'+data_content+'</a></li>' ;                             
+                            });
+                        }
+                        else{
+                            html += '<li"> No results found </li>' 
+                        }
+                        html += '</ul>';
+                        $("#cat_search_drop_content").html(html);
+                        jQuery(".cat_sch_loading").hide();
+                    }
+                });
+            }
+        });
+    });
+    
+    function scrollToElement(selector, container, time) {
+        var xtime = typeof(time) != 'undefined' ? time : 100;
+        var container = typeof(container) != 'undefined' ? container : 'html, body';
+        var verticalOffset = $(container).offset().top;
+        var element = $(selector);
+        var offset = element.offset();
+        var offsetTop = offset.top - verticalOffset;
+        $(container).animate({
+            scrollTop: offsetTop
+        }, xtime);
+    }
 
+  
+</script>
 
+<script>
          $(document).ready(function() { 
 
             $('#cat_sch').focus(function() {
@@ -298,4 +354,4 @@
          }); 
 
 
-    </script>
+</script>
