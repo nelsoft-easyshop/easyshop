@@ -233,7 +233,7 @@
 
          }
 
-           // $('.jcarousel').jcarousel('scroll', '+=1');
+           $('.jcarousel').jcarousel('scroll', '+=1');
        });
 
 
