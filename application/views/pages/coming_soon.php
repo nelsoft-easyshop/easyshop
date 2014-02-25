@@ -17,8 +17,8 @@
 
     <section>
       <div class="wrapper">
-        <div class="logo">
-          <a href="<?php echo base_url().'home'; ?>"><img src="<?php echo base_url() ?>assets/images/img_logo.png" alt="Logo"></a>
+        <div class="logo cs_logo">
+          <a href="<?php echo base_url().'home'; ?>"><span class="span_bg"></span></a>
         </div>
     </section>
     <div class="clear"></div>
