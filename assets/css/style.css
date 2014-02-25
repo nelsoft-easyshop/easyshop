@@ -422,9 +422,13 @@ header {
 	float: left;
 }
 
+.logo.cs_logo {
+    float: none;
+    text-align: center;
+}
+
 .logo span {
-	background: url('../images/global_sprite.png') no-repeat 0px 5px;	
-	display: inline-block;
+	background-position: 0px 5px;	
 	height: 79px;
 	width: 240px;
 }
