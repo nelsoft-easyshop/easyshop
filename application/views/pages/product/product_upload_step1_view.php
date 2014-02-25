@@ -262,7 +262,7 @@
             if(otherName.length == 0){ 
 
                 $('.product_sub_items'+globalLevel+' .othercategory').empty();
-                $('.product_sub_items'+globalLevel+' .othercategory').append('<a href="javascript:void(0)" class="select2" data-level="'+globalLevel+'" data-parent="'+globalParent+'">Other</a>');
+                $('.product_sub_items'+globalLevel+' .othercategory').append('<a href="javascript:void(0)" class="select2" data-level="'+globalLevel+'" data-parent="'+globalParent+'"><b>Add a Category</b></a>');
                 if(finalValue == true){ 
                   $(".add_category_submit").append('<input type="hidden" name="hidden_attribute" value="'+globalParent+'" class="hidden_attribute"><input class="proceed_form" id="proceed_form" type="submit" value="Proceed with '+parentName+'">');    
                 }
@@ -322,11 +322,8 @@ $(document).ready(function() {
                     jQuery(".cat_sch_loading").hide();
                 }
             });
-}
-        
-        
-     
-        
+        }
+    });
 });
  
 </script>
@@ -426,7 +423,6 @@ $(document).ready(function() {
         }, xtime);
     }
 
- 
   
 </script>
 
@@ -443,10 +439,9 @@ $(document).ready(function() {
  
             $('#cat_search_drop_content').hide();
         });
-    });
-    $('#cat_search_drop_content').hide();
 
-}); 
+
+
 
 
 </script>
