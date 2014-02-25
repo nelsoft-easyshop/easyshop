@@ -86,10 +86,12 @@
               </div>         
             </div>  -->
             <div class="clear"></div>
-            <div>
-                <input type="text" class="box" id="cat_sch">
+            <div class="cat_sch_container">
+               Search Category: <input type="text" class="box" id="cat_sch"><div class="cat_sch_loading"></div>
+             <div id="cat_search_drop_content" class="cat_sch_drop_content"></div>
+
             </div>
-            <div id="cat_search_drop_content"></div>
+           
             
             <div class="add_product_category">
                 <div class="main_product_category">
@@ -232,8 +234,9 @@
                     $(".product_sub_category").append(d);
                     jQuery(".sub_cat_loading_container").hide();
                 }
- 
             });
+
+            $('.jcarousel').jcarousel('scroll', '+=1');
         });
 });
 </script>
@@ -244,12 +247,15 @@
         $(document).ready(function() { 
             var currentRequest = null;
             $( "#cat_sch" ).keyup(function() {
+                
+
                 var searchQuery = $(this).val();
                 if(searchQuery != ""){
                     currentRequest = jQuery.ajax({
                         type: "POST",
                         url: '<?php echo base_url();?>product/searchCategory', 
                         data: "data="+searchQuery, 
+                        onLoading:jQuery(".cat_sch_loading").html('<img src="<?= base_url() ?>assets/images/orange_loader_small.gif" />').show(),
                         beforeSend : function(){       
                             $("#cat_search_drop_content").empty();
                             if(currentRequest != null) {
@@ -270,9 +276,26 @@
                             }
                             html += '</ul>';
                             $("#cat_search_drop_content").html(html);
+                            jQuery(".cat_sch_loading").hide();
                         }
                     });
                 }
             });
         });
+
+
+         $(document).ready(function() { 
+
+            $('#cat_sch').focus(function() {
+            $('#cat_search_drop_content').show();
+            $(document).bind('focusin.cat_sch_drop_content click.cat_sch_drop_content',function(e) {
+                if ($(e.target).closest('#cat_search_drop_content, #cat_sch').length) return;
+                $('#cat_search_drop_content').hide();
+                });
+             });
+            $('#cat_search_drop_content').hide();
+
+         }); 
+
+
     </script>
