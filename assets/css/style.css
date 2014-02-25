@@ -1451,48 +1451,59 @@ div.pass-hint {
 /*** PROFILE STYLE ***/
 .profile_top_nav {
 	float: left;
-	background-color: #ff4400;
+/*	background-color: #ff4400;*/
 	width: 720px;
-	margin: 30px 0px 0px 20px;
+	margin: 20px 0px 0px 20px;
+}
+
+.profile_top_nav > div {
+	float: left;
 }
 
 .profile_top_nav ul {
-	list-style: none;
+    border-bottom: 3px solid #CECECE;
+    display: inline-block;
+    list-style: none;
+    width: 456px;
 }
 
 .profile_top_nav ul li {
 	float: left;
-	height: 25px;
-	padding:5px 10px;
-	line-height: 25px;
+	margin-bottom: -3px;
+	border-bottom: 3px solid #cecece;
 }
 .profile_top_nav ul li:hover {
-	background-color: #ffae00;
+/*	background-color: #ffae00;*/
+	border-bottom: 3px solid #ff4400;
 }
 
 .profile_top_nav ul li:hover a {
-	color: #fff;	
+	color: #494949;
 }
 
-.profile_top_nav ul li a {
-	color: #fff;
-	padding: 9px;
+.profile_top_nav ul li a,
+.profile_top_nav ul li span {
+	color: #494949;
+	display: inline-block;
+	padding: 15px;
+	text-transform: uppercase;
+	cursor: pointer;
 }
 
 .profile_top_nav ul li ul {
     display: none;
     position: absolute;
-    margin-top: 5px;
+    margin-top: 3px;
+    min-width: 180px;
+    width: auto;
     z-index: 999;
 }
 
 .profile_top_nav ul li:hover ul {
 	display: block;
-	background-color: #ffae00;
-	margin-left:-10px;
-	border-left: 1px solid #c0bfbf;
-	border-right: 1px solid #c0bfbf;
-	border-bottom: 1px solid #c0bfbf;
+	background-color: #fff;
+	margin-left:0px;
+	border: 1px solid #ff4400;
 }
 
 .profile_top_nav ul li:hover ul li {
@@ -1501,52 +1512,56 @@ div.pass-hint {
 
 .profile_top_nav ul li ul li {
 	float: none;
+	padding:5px 8px;
 }
 
 .profile_top_nav ul li ul li a {
 	color: #494949;
+	display: block;
 	padding:5px;
+	border-bottom: 1px dotted #cecece;
+	text-transform: none;
 }
 
 .profile_top_nav ul li ul li a:hover {
+	color: #ff4400;
 	border-bottom: 1px dotted #ff4400;
 }
 
 .profile_top_nav div:last-child {
-    float: right;
-    height: 35px;
-    line-height: 35px;
-    position: relative;
-    right: -20px;
+    border-bottom: 3px solid #CECECE;
+    padding-bottom: 9px;
 }
 
-.profile_top_nav_inner {
+/*.profile_top_nav_inner {
 	background: url(../images/img_arrow_down_white.png) 65px center no-repeat;
     width: 70px;
 }
 
 .profile_top_nav_inner:hover {
 	background: url(../images/img_arrow_down_white2.png) 65px center no-repeat;
+}*/
+
+.profile_top_nav input[type="text"] {
+	background-position: -250px -9px; 
+	border: 1px solid #ff4400;
+	width: 163px;
+	padding:8px 2px 8px 30px;
+	height: 18px;	
 }
 
-.profile_top_nav input {
-	border: none;
-	width: 200px;
-	padding-left:3px;
-	border-radius: 3px;
-	
+.profile_top_nav input[type="submit"] {
+	cursor: pointer;
+	background-color: #ff4400;
+	color: #fff;
+	border: 1px solid #ff4400;
+	padding:8px 5px;
+	vertical-align: middle;
 }
 
-.search_btn2 {
-    background:url("../images/img_search2.png") no-repeat;
-    border: 0 none;
-    height: 18px;
-    left: -26px;
-    position: relative;
-    width: 26px;
-    vertical-align: middle;
-    cursor: pointer;
-    top: -2px;
+.profile_top_nav input[type="submit"]:hover {
+	background-color: #ff8800;
+	border: 1px solid #ff8800;
 }
 
 .profile_wrapper {
@@ -1585,11 +1600,9 @@ div.pass-hint {
 }
 
 .avatar_edit span {
-	background: url('../images/global_sprite.png') -143px -263px no-repeat;
-	vertical-align: middle;
+	background-position: -143px -263px;
 	width: 20px;
 	height: 20px;
-	display: inline-block;
 }
 
 .avatar_edit_show {
@@ -1928,10 +1941,6 @@ padding: 8px 0;
 }
 
 .personal_info_icon {
-	background-image: url('../images/global_sprite.png');
-	background-repeat: no-repeat;
-    display: inline-block;	
-    vertical-align: middle;
     height: 20px;
     width: 20px;
 }
@@ -1976,6 +1985,13 @@ padding: 8px 0;
 	background-repeat: no-repeat;
 	display: inline-block;
 	vertical-align: middle;
+}
+
+.chk_img {
+    background-position: -92px -260px;
+    height: 16px;
+    margin-right: 5px;
+    width: 16px;
 }
 
 .edit_btn {
@@ -2324,8 +2340,10 @@ a:hover.tooltips span {
   z-index: 999;
 }
 
-.tooltips > img {
-    vertical-align: middle;
+.tooltips > p {
+	background-position: -186px -257px;
+	height: 20px;
+	width: 20px;
 }
 
 
@@ -2581,11 +2599,6 @@ div.post_item_content_left {
 	width: 140px;
 }
 
-.star_rating_reviews span {
-	background-image: url('../images/global_sprite.png');
-	background-repeat: no-repeat;
-}
-
 .star_on {
 	background-position: -293px -259px;
 	width: 16px;
@@ -2793,11 +2806,9 @@ div.post_item_content_left {
 }
 
 .show_more_options span {
-	background: url('../images/global_sprite.png') -145px -317px no-repeat;
-	display: inline-block;
+	background-position: -145px -317px;
 	height: 15px;
 	margin-right: 5px;
-	vertical-align: middle;
 	width: 15px;
 }
 
