@@ -85,10 +85,11 @@
               </div>
             </div>
             <?php else: ?>
+ 
             <div class="product_option" style="display:none"> <span><?php echo html_escape(str_replace("'", '', $key));?></span>
               <div>
                 <ul class="options" name="<?php echo str_replace("'", '', $key);?>">
-                  <li class="active" id="<?php echo html_escape($product_option[0]['value']);?>" data-price="<?php echo $product_option[0]['price'];?>" data-attrid="<?php echo $product_option[0]['value_id'];?>"><?php echo html_escape($product_option[0]['value']);?></li>
+                  <li class="active" data-hidden="true" id="<?php echo html_escape($product_option[0]['value']);?>" data-price="<?php echo $product_option[0]['price'];?>" data-attrid="<?php echo $product_option[0]['value_id'];?>"><?php echo html_escape($product_option[0]['value']);?></li>
                 </ul>
               </div>
             </div>

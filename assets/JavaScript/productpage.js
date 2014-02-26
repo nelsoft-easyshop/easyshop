@@ -54,19 +54,19 @@ $(function(){
     $("#review_form").validate({
         rules: {
             subject: {
-                required: true,
+                required: true
                 },
             comment: {
-                required: true,
-                },
+                required: true
+                }
          },
          messages: {
             subject: {
-                required: '* Required',
+                required: '* Required'
                 },
             comment: {
-                required: '* Required',
-                },
+                required: '* Required'
+                }
          },
          errorElement: "span",
          errorPlacement: function(error, element) {
@@ -148,9 +148,9 @@ $(function(){
     });       
 });
 
+
 $(function(){
     $('.options, .options a').on('click', function(event){
-    
         if($(event.target).hasClass('disable'))
             return false;
     
@@ -180,7 +180,9 @@ $(function(){
             else{
                 sel_id.push(actv.attr('data-attrid'))
                 price += parseFloat(actv.attr('data-price'));
-                isOptionAvailable = true;
+                //Added this if condition so that hidden active attributes are ignored for attribute display enabling
+                if(actv.attr('data-hidden') !== 'true')
+                    isOptionAvailable = true;
             }
         });
         $('.current_price')[0].innerHTML = price.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -196,7 +198,7 @@ $(function(){
             }
             else{
                $('.orange_btn3').removeClass("enabled").addClass("disabled");
-               //$('.quantity')[0].innerHTML = '';
+              //$('.quantity')[0].innerHTML = '';
                $('.quantity')[0].innerHTML = $('.quantity').data('qty');
             }
         });
@@ -206,20 +208,21 @@ $(function(){
         
         //** disable attributes with no quantity option
         var show_ids = new Array();
-        
+
         //get ids of attributes to display
         $.each(qty, function(index, value){
             if(containsAll(sel_id, value.product_attribute_ids)){  
                 $.each(value.product_attribute_ids, function(r,s){
+                    //if attr_id is not yet in show_ids, push it in
                     if($.inArray(s, show_ids) == -1){
                         show_ids.push(s);
                     }
                 });
             }
         });
-  
+
         //Disabled/enable attributes accordingly (if no option is selected, just display everything)
-        
+
         $('.product_option').find('li').each(function(){
             if(($.inArray($(this).attr('data-attrid'), show_ids) === -1)&&(isOptionAvailable)){
                 //added this if condition in order to keep same row attributes enabled
