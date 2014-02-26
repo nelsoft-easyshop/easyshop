@@ -170,7 +170,6 @@ class Payment extends MY_Controller{
             }
         }
 
-
         $member_id =  $this->session->userdata('member_id'); 
         $data['cat_item'] = $this->cart->contents();
         $data['title'] = 'Payment | Easyshop.ph';
@@ -206,7 +205,6 @@ class Payment extends MY_Controller{
 			$sellerData['products'] = $seller['products'];
 			$sellerResult = $this->payment_model->sendNotificationEmail($sellerData, $sellerEmail, 'seller');
 		}
-		
 	}
 	
     function paypal_setexpresscheckout()
