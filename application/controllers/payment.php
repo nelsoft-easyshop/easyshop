@@ -180,10 +180,10 @@ class Payment extends MY_Controller{
         $this->load->view('templates/footer_full'); 
     }
 
-	//public function sendNotification($data)
-	public function sendNotification()
+	public function sendNotification($data)
+	//public function sendNotification()
 	{
-		$data = array();
+		//$data = array();
 		$transactionData = $this->payment_model->getTransactionDetails($data);
 		
 		//Send email to buyer

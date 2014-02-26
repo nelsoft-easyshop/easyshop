@@ -90,8 +90,8 @@ class payment_model extends CI_Model
 	public function getTransactionDetails($data)
 	{
 		//devcode
-		$data['member_id'] = 1;
-		$data['order_id'] = 4;
+		//$data['member_id'] = 1;
+		//$data['order_id'] = 4;
 		
 		$query = $this->sqlmap->getFilenameID('payment','getTransactionDetails');
         $sth = $this->db->conn_id->prepare($query);
