@@ -20,5 +20,8 @@ $lang['msg1'] = "Password reset successfully sent!";
 $lang['msg2'] = "Sorry, the email you provided is unregistered.";
 $lang['msg3'] = "Unable to send, please try again later.";
 
+#Purchase Notification
+$lang['notification_subject'] = "Easyshop.ph - You have Purchased an Item"
+
 
 ?>

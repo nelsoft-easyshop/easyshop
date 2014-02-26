@@ -56,6 +56,76 @@ class payment_model extends CI_Model
         return $row;
         
     }
+	
+	
+	public function sendNotificationEmail($data)
+	{
+		$this->load->library('email');	
+		$this->load->library('parser');
+		
+		$this->email->set_newline("\r\n");
+		$this->email->to($data['email']);
+		//$this->email->to('janz.stephen@gmail.com');
+		$this->email->from('noreply@easyshop.ph', 'Easyshop.ph');
+		$this->email->subject($this->lang->line('notification_subject'));
+		$msg = $this->parser->parse('templates/email_purchase_notification',$data,true);
+		
+		//print($msg);
+		//die();
+		
+		$this->email->message($msg);
+		$result = $this->email->send();
+
+		$errmsg = $this->email->print_debugger();
+		
+		return $result;
+	}
+	
+	public function getTransactionDetails($data)
+	{
+		//devcode
+		//$data['member_id'] = 1;
+		//$data['order_id'] = 4;
+		
+		$query = $this->sqlmap->getFilenameID('payment','getTransactionDetails');
+        $sth = $this->db->conn_id->prepare($query);
+        $sth->bindParam(':buyer_id',$data['member_id']);
+        $sth->bindParam(':order_id',$data['order_id']);
+		$sth->execute();
+        $row = $sth->fetchAll(PDO::FETCH_ASSOC);
+		
+		/*
+		print('<pre>');
+		print_r($row);
+		print('</pre>');
+		*/
+		
+		$data = array(
+			'id_order' => $row[0]['id_order'],
+			'dateadded' => $row[0]['dateadded'],
+			'email' => $row[0]['email'],
+			'totalprice' => $row[0]['totalprice'],
+			'products' => array()
+		);
+		
+		foreach($row as $value){
+			$temp = $value;
+			if(!isset($data['products'][$value['id_order_product']])){
+				$data['products'][$value['id_order_product']] = array();
+				$data['products'][$value['id_order_product']] = array_slice($temp,5,6);
+			}
+			$data['products'][$value['id_order_product']]['attr'][] = array_slice($temp,11,2);
+		}
+		
+		/*
+		print('<pre>');
+		print_r($data);
+		print('</pre>');
+		*/
+				
+		return $data;
+
+	}
 }
 
 

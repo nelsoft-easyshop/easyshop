@@ -154,6 +154,11 @@ class Payment extends MY_Controller{
                        $response['message'] = '<div style="color:red"><b>Error 3: </b>'.$return['o_message'].'</div>'; 
                   }else{
                         $response['message'] = '';
+						$notificationData = array(
+							'order_id' => $return['order_id'],
+							'member_id' => $return['member_id']
+						);
+						$this->sendNotification($notificationData);
                   }
 
                 }else{
@@ -175,6 +180,14 @@ class Payment extends MY_Controller{
         $this->load->view('templates/footer_full'); 
     }
 
+	public function sendNotification($data)
+	//public function sendNotification()
+	{
+		//$data = array();
+		$transactionData = $this->payment_model->getTransactionDetails($data);
+		$result = $this->payment_model->sendNotificationEmail($transactionData);
+	}
+	
     function paypal_setexpresscheckout()
     {
 
@@ -284,6 +297,8 @@ class Payment extends MY_Controller{
         echo '<pre>',print_r($carts['checkitem']),'</pre>';
                    
     }
+	
+	
 }
 
   
