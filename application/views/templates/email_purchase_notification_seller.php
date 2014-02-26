@@ -1,10 +1,14 @@
 <html>
 	<body>
-		<h2 style="color:red;">Thank you for purchasing from Easyshop.ph!</h2>
+		<h2 style="color:red;">{buyer_name} purchased from you!</h2>
 		<p>
+			Dear {seller_name},
+		</p>
+		<p>
+			Thank you for selling through Easyshop.ph! Below are the transaction details for the item you sold.
 		</p>
 		<table style="border:1px solid black;">
-			<th>Purchase Summary</th>
+			<th>Summary of Sold Items</th>
 			<tr>
 				<td>
 					Transaction # : {id_order} <br>
@@ -14,13 +18,12 @@
 			</tr>
 			<tr>
 				<td>
-					PURCHASED ITEMS: <br>	
+					SOLD ITEMS:<br>	
 				</td>
 			</tr>
 			{products}
 			<tr>
 				<td>
-					Sold by : {seller} <br>
 					Product : {name} <br>
 					Qty : {order_quantity} <br>
 					Base Price : {baseprice} <br>

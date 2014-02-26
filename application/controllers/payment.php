@@ -180,12 +180,33 @@ class Payment extends MY_Controller{
         $this->load->view('templates/footer_full'); 
     }
 
-	public function sendNotification($data)
-	//public function sendNotification()
+	//public function sendNotification($data)
+	public function sendNotification()
 	{
-		//$data = array();
+		$data = array();
 		$transactionData = $this->payment_model->getTransactionDetails($data);
-		$result = $this->payment_model->sendNotificationEmail($transactionData);
+		
+		//Send email to buyer
+		$buyerEmail = $transactionData['buyer_email'];
+		$buyerData = $transactionData;
+		unset($buyerData['seller']);
+		unset($buyerData['buyer_email']);
+		$buyerResult = $this->payment_model->sendNotificationEmail($buyerData, $buyerEmail, 'buyer');
+		
+		//Send email to seller of each product - once per seller
+		$sellerData = array(
+			'id_order' => $transactionData['id_order'],
+			'dateadded' => $transactionData['dateadded'],
+			'buyer_name' => $transactionData['buyer_name']
+		);
+		foreach($transactionData['seller'] as $seller){
+			$sellerEmail = $seller['email'];
+			$sellerData['totalprice'] = $seller['totalprice'];
+			$sellerData['seller_name'] = $seller['seller_name'];
+			$sellerData['products'] = $seller['products'];
+			$sellerResult = $this->payment_model->sendNotificationEmail($sellerData, $sellerEmail, 'seller');
+		}
+		
 	}
 	
     function paypal_setexpresscheckout()

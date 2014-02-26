@@ -46,7 +46,7 @@
 </select>
 
 <select id="getTransactionDetails">
-	SELECT o.id_order, buyer.email, DATE_FORMAT(o.dateadded, "%D %M %Y") as dateadded, o.total as totalprice, op.id_order_product, seller.username as seller, p.name, op.order_quantity, op.price as baseprice, op.tax, op.total as finalprice, attr.name as attr_name, pattr.attr_value
+	SELECT o.id_order, buyer.username as buyer, buyer.email as buyer_email, DATE_FORMAT(o.dateadded, "%D %M %Y") as dateadded, o.total as totalprice, op.id_order_product, seller.id_member as seller_id, seller.username as seller, seller.email as seller_email, p.name, op.order_quantity, op.price as baseprice, op.tax, op.total as finalprice, attr.name as attr_name, pattr.attr_value
 	FROM es_order o
 	INNER JOIN es_order_product op 
 		ON op.order_id = o.id_order AND o.buyer_id = :buyer_id AND o.id_order = :order_id
