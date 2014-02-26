@@ -28,6 +28,8 @@ $(document).ready(function(){
                 error.appendTo($('#login_error').parent());
          },
          submitHandler: function(form) {
+			$('#loading_img').show();
+			$('#login').hide();
             $.ajax({
                 async: false,
                 type : "POST",
@@ -38,6 +40,8 @@ $(document).ready(function(){
                     if(data.o_success <= 0){
                         $("#login_error").empty();
                         $("#login_error").append("<span style='color:red'>"+data[3]+"</span>");
+						$('#loading_img').hide();
+						$('#login').show();
                     }
                     else{
                         var url = $('#redirect').val();
