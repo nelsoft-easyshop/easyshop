@@ -8,24 +8,25 @@ $(document).ready(function(){
    $("#login_form").validate({
          rules: {
             login_username: {
-                required: true,
+                required: true
                 },
             login_password: {
-                required: true,
-                },
+                required: true
+                }
          },
          messages: {
             login_username: {
                 required: 'Username is required.'
                 },
             login_password: {
-                required: 'Password is required.',
-                },
+                required: 'Password is required.'
+                }
          },
-         errorElement: "p",
+         errorElement: "span",
          errorPlacement: function(error, element) {
-                error.addClass('red_center');
-                error.appendTo($('#login_error').parent());
+                //error.addClass('red_center');
+                //error.appendTo($('#login_error').parent());
+				error.appendTo($('#login_error'));
          },
          submitHandler: function(form) {
 			$('#loading_img').show();
@@ -39,7 +40,7 @@ $(document).ready(function(){
                 success:function(data){
                     if(data.o_success <= 0){
                         $("#login_error").empty();
-                        $("#login_error").append("<span style='color:red'>"+data[3]+"</span>");
+                        $("#login_error").html(data[3]);
 						$('#loading_img').hide();
 						$('#login').show();
                     }
