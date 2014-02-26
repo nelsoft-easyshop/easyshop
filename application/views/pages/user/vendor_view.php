@@ -33,8 +33,8 @@
 					</ul>
 				</div>
 				<div>
-					<input type="text">
-					<button class="search_btn2"> </button>
+					<input type="text" class="span_bg">
+					<input type="submit" value="Search">
 				</div>         	
 			</div>
 		</div>
