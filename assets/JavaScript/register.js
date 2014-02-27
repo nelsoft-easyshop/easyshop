@@ -58,7 +58,8 @@ $(document).ready(function(){
 	  
 	  $('#captcha_refresh').click(function(){
 		   $('#captcha_loading').css('display','inline');
-		   $.post(config.base_url+"register/recreate_captcha", function(data){
+		   var csrftoken = $('#register_form1').find('input[name^="es_csrf"]').val();
+		   $.post(config.base_url+"register/recreate_captcha", {es_csrf_token : csrftoken}, function(data){
 			  $('#captcha_loading').css('display','none');
 			  $('#captcha_img').children().attr('src', data);
 		   });	
@@ -98,8 +99,9 @@ $(document).ready(function(){
 			//var username = '<?php echo strtolower($uname); ?>';		  
 			var username = $('#changepass_username').val();
 			var pass 	 = $('#cur_password').val();
+			var csrftoken = $('form#changepass').find('input[name^="es_csrf"]').val();
 			
-			$.post(config.base_url+'register/pass_check', {username: username, pass: pass}, function(result){
+			$.post(config.base_url+'register/pass_check', {username: username, pass: pass, es_csrf_token : csrftoken}, function(result){
 				if(result == 1){
 					showcheck($('#username'));
 					$('#username_check').hide();
@@ -549,8 +551,9 @@ $(document).ready(function(){
 
 function username_check(){
 	var username = $('#username').val();
+	var csrftoken = $('#register_form1').find('input[name^="es_csrf"]').val();
 	
-	$.post(config.base_url+'register/username_check', {username: username}, function(result){
+	$.post(config.base_url+'register/username_check', {username: username, es_csrf_token : csrftoken}, function(result){
 		if(result === '1'){
 			showcheck($('#username'));
 			$('.username_availability').html('Username available');
@@ -630,8 +633,9 @@ function form2validation(){
 				$.post(config.base_url+'register/mobile_verification', $('#register_form2_b').serializeArray(),function(data){
 					if(data){
 						$('#verification_code').addClass('verified');
+						var csrftoken = $('#register_form2_b').find('input[name^="es_csrf"]').val();
 						$.modal.close();
-						$.post(config.base_url+'register/success_mobile_verification',{mobile_verify: 'submit_mobilenum'}, function(data){
+						$.post(config.base_url+'register/success_mobile_verification',{mobile_verify: 'submit_mobilenum', es_csrf_token : csrftoken}, function(data){
 							if(data){
 								$('#verification_code').removeClass('verified');
 								$('#register_form2_view').html(data);

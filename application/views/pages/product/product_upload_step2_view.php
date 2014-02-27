@@ -7,6 +7,7 @@
 
     <div class="inner_seller_product_content">
       <h2 class="f24">Sell an Item</h2>
+	  <input type="hidden" id="uploadstep2_csrf" name="<?php echo $my_csrf['csrf_name'];?>" value="<?php echo $my_csrf['csrf_hash'];?>">
       <div class="sell_steps sell_steps2">
         <ul>
           <li class="steps_item"><a href="#">Step 1 : Select Category</a></li>
@@ -907,6 +908,9 @@ $(".proceed_form").unbind("click").click(function(){
   formData.append("combination",combinationSelected);
   formData.append("noCombination",noCombination);
   formData.append("otherCategory",otherCategory);
+  
+  var csrftoken = $('#uploadstep2_csrf').val();
+  formData.append('es_csrf_token', csrftoken);
  
   var price = $("#prod_price");
   var other_price = $("#price_field");
@@ -1013,6 +1017,7 @@ $(".proceed_form").unbind("click").click(function(){
 
 
       if(<?php echo json_encode((isset($is_edit))?$is_edit:false); ?>){
+		
         $.ajax({
           async: false,
           type: "POST",

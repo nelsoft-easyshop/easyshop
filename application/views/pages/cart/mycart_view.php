@@ -5,6 +5,7 @@
         <section>
             <div class="wrapper">
                 <h2 class="my_cart_title">My Cart</h2>
+				<input type="hidden" id="mycart" name="<?php echo $my_csrf['csrf_name'];?>" value="<?php echo $my_csrf['csrf_hash'];?>">
                 <div class="my_cart_header">
                     <div><input type="checkbox" id="checkAll" checked="checked"> Buy all</div>
                     <div>Price</div>
@@ -89,6 +90,7 @@
         });
         $("#proceed_payment").click(function(event){
             event.preventDefault();
+			var csrftoken = $('#mycart').val();
             var data1 = $(".wrapper input:checkbox:not(:checked)").map(function(){
                 return $(this).val();
             }).toArray();
@@ -107,7 +109,7 @@
                         async:true,
                         url:"<?=base_url()?>payment/cart_items",
                         type:"POST",
-                        data:{itm:data1},
+                        data:{itm:data1, es_csrf_token:csrftoken},
                         success:function(data){
                             window.location.replace("<?=base_url()?>payment/shipping");
                         }

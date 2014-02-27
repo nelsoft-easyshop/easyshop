@@ -69,6 +69,7 @@
 
         <div class="inner_seller_product_content">
             <h2 class="f24">Sell an Item</h2>
+			<input type="hidden" id="uploadstep1_csrf" name="<?php echo $my_csrf['csrf_name'];?>" value="<?php echo $my_csrf['csrf_hash'];?>">
             <div class="sell_steps sell_steps1">
                 <ul>
                     <li><a href="#">Step 1 : Select Category</a></li>
@@ -170,6 +171,7 @@
             var catId = D.cat_id;
             var level =  D.level;
             var name = D.name;
+			var csrftoken = $('#uploadstep1_csrf').val();
 
             $(".product_sub_category .product_sub_items0").nextAll().remove();
             $(".product_sub_category .product_sub_items0").remove();
@@ -179,7 +181,7 @@
                     async: false,
                     type: "POST",
                     url: '<?php echo base_url(); ?>' + action,
-                    data: "cat_id=" + catId + "&level=" + level + "&name=" + name,
+                    data: "cat_id=" + catId + "&level=" + level + "&name=" + name + "&es_csrf_token=" + csrftoken,
                     dataType: "json",
                     cache: false,
                     onLoading:jQuery(".sub_cat_loading_container").html('<img src="<?= base_url() ?>assets/images/orange_loader.gif" />').show(),
@@ -202,7 +204,8 @@
             var action = 'productUpload/getChild';
             var catId = D.cat_id;
             var name = D.name;
-
+			var csrftoken = $('#uploadstep1_csrf').val();
+			
             $(".add_category_submit").empty();
             $(".product_sub_category .product_sub_items" + D.level).nextAll().remove(); 
             $(".product_sub_category .product_sub_items" + nlevel).nextAll().remove(); 
@@ -211,7 +214,7 @@
                     async: false,
                     type: "POST",
                     url: '<?php echo base_url(); ?>' +  action,
-                    data: "cat_id=" + catId + "&level=" + nlevel + "&name=" + name,
+                    data: "cat_id=" + catId + "&level=" + nlevel + "&name=" + name + "&es_csrf_token=" + csrftoken,
                     dataType: "json",
                     cache: false,
                     onLoading:$(".sub_cat_loading_container").html('<img src="<?= base_url() ?>assets/images/orange_loader.gif" />').show(),

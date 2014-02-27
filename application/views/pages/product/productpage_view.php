@@ -118,7 +118,8 @@
           </div>
           <div class="buy_box"> 
             <?PHP if($logged_in && ($userdetails['is_contactno_verify'] == 1 || $userdetails['is_email_verify'] == 1) ): ?>
-            <a href="JavaScript:void(0)" id="send" class="orange_btn3 disabled">Buy Now</a> <br/>
+            <input type="hidden" id="buynow_csrf" name="<?php echo $my_csrf['csrf_name'];?>" value="<?php echo $my_csrf['csrf_hash'];?>">
+			<a href="JavaScript:void(0)" id="send" class="orange_btn3 disabled">Buy Now</a> <br/>
             <!-- <img src="<?=base_url()?>assets/images/img_cart2.jpg"> Add to Cart</a> <br /> -->
             <?php else: ?>
             <a href="<?PHP echo base_url();echo $logged_in?'memberpage':'login';?>" id="unablesend" class="add_to_cart"><span></span> Buy Now</a> <br />
@@ -207,6 +208,7 @@
             </div>
           </div>
           <div class="reviews_content">
+			<input type="hidden" id="reviews_csrf" name="<?php echo $my_csrf['csrf_name'];?>" value="<?php echo $my_csrf['csrf_hash'];?>">
             <?php if(count($reviews) === 0): ?>
             <div> <strong>This product has 0 reviews so far. Be the first to review it.</strong> </div>
             <?php else: ?>

@@ -218,8 +218,10 @@
     <div class="clear"><br></div>
 
     <h2>Shipping Summary</h2>
+	<input type="hidden" id="shippingsummary_csrf" name="<?php echo $my_csrf['csrf_name'];?>" value="<?php echo $my_csrf['csrf_hash'];?>">
     <table id="shipping_summary" class="tablehide">
       <input type="hidden" id="summaryrowcount" value="0">
+	  
       <tr class="cloningfield">
         <td>
         </td>

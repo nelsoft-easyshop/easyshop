@@ -195,6 +195,12 @@ $(document).ready(function(){
 		$('.verifcode_error').fadeOut();
 	});
 	
+	/**
+	*	CSRF TOKEN
+	*/
+	var csrftoken = $('#personal_information').find('input[name^="es_csrf"]').val();
+	
+	
 	//Mobile verification dialog box
 	$('#verifcode_div').dialog({
 		autoOpen: false,
@@ -205,7 +211,7 @@ $(document).ready(function(){
 			Submit: function(){
 				var $dialog = $(this);
 				var val = $('#verifcode').val();
-				$.post(config.base_url+'memberpage/verify_mobilecode',{data:val, mobileverify:'true'}, function(data){
+				$.post(config.base_url+'memberpage/verify_mobilecode',{data:val, mobileverify:'true', es_csrf_token : csrftoken}, function(data){
 					if(data == 1){
 						$('#mobilediv').find('span.doneverify').show();
 						$dialog.dialog( 'close' );
@@ -249,7 +255,7 @@ $(document).ready(function(){
 		verifyspan.siblings('span.personal_contact_cont').hide();
 		$('#ppm_btn').attr('disabled', true);
 		
-		$.post(config.base_url+'memberpage/verify', {field:field, data:data, reverify:'true'}, function(data){
+		$.post(config.base_url+'memberpage/verify', {field:field, data:data, reverify:'true', es_csrf_token : csrftoken}, function(data){
 			loadingimg.hide();
 			contdiv.show();
 			$('#ppm_btn').attr('disabled', false);
@@ -293,7 +299,7 @@ $(document).ready(function(){
 							//$('#emaildiv').find('span.doneverify').show();
 							//$('#emaildiv').find('span.doneverify span:first').html('<strong>Email sent.</strong>');
 							parentdiv.find('span.doneverify').show();
-							parentdiv.find('span.doneverify span:first').html('<strong>Email sent.</strong>');
+							parentdiv.find('span.doneverify span:nth-child(2)').html('<strong>Email sent.</strong>');
 							errorspan.html('');
 							contdiv.hide();
 						}
@@ -329,8 +335,9 @@ $(document).ready(function(){
 		var editfields = parentinfocont.siblings('div.edit_fields');
 		var echoedinfo = $(this).siblings('.echoed_info');
 		var form = $(this).closest('form');
+		var csrftoken = form.find('input[name^="es_csrf"]').val();
 		
-		$.post(config.base_url+"memberpage/deletePersonalInfo", {field : name}, function(data){
+		$.post(config.base_url+"memberpage/deletePersonalInfo", {field : name, es_csrf_token : csrftoken}, function(data){
 			if(data === '1'){
 				editprofilebtn.show();
 				parentinfocont.hide();

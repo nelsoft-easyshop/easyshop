@@ -103,7 +103,14 @@
 
 				
 					<div class="verification_field_mobile">
-						<form method="post" id="register_form2_b" name="register_form2_b">
+						<!--<form method="post" id="register_form2_b" name="register_form2_b">-->
+						<?php
+							$attr = array(
+										'id' => 'register_form2_b',
+										'name' => 'register_form2_b'
+									);
+							echo form_open('',$attr);
+						?>
 							<div class="verification_field_mobile_set">
 								<label for="verification_code">Mobile Verification Code:</label>
 								<input id="verification_code" name="verification_code" type="text" maxlength="6" />
@@ -124,7 +131,7 @@
 							<p class="mobilestat-exceed statresult">
 							  <span class="staterror">You have exceeded the number of times to verify your mobile. Try again after 30 mins.</span>
 							</p>
-						</form>
+						<?php echo form_close(); ?>
 					</div>
 				<!--
 					<div class="or_separator" style="display:none">

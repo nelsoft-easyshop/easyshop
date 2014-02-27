@@ -51,6 +51,7 @@ echo $category_cnt;
     <div id="list" class="list "></div>
     <div id="grid" class="grid grid-active"></div>
     <div class="clear"></div>
+	<input type="hidden" id="scroll_csrf" name="<?php echo $my_csrf['csrf_name'];?>" value="<?php echo $my_csrf['csrf_hash'];?>">
     <div id="product_content">     
       <?php
       if(isset($items))
@@ -108,6 +109,7 @@ $(document).ready(function(){
   var objHeight=$(window).height()-50;  
   var last_scroll_top = 0;
   var type = 0;
+  var csrftoken = $('#scroll_csrf').val();
   $(window).scroll(function(event) {
     var st = $(this).scrollTop();
 
@@ -117,7 +119,7 @@ $(document).ready(function(){
           ajax_is_on = true;
           $.ajax({
             url: base_url + 'search/load_search_other_product',
-            data:{page_number:offset,id_cat:<?php echo $id_cat ?>,type:type,parameters:<?php echo json_encode($_GET); ?>},
+            data:{page_number:offset,id_cat:<?php echo $id_cat ?>,type:type,parameters:<?php echo json_encode($_GET); ?>, es_csrf_token : csrftoken},
             type: 'post',
             async: false,
             dataType: 'json',

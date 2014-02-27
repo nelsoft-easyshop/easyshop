@@ -176,7 +176,8 @@ $(function(){
   */
   $('#btnShippingDetailsSubmit').on('click', function(){
     if(getObjectSize(fdata) > 0){
-      $.post(config.base_url+'productUpload/step3Submit', {fdata : fdata}, function(data){
+	  var csrftoken = $('#shippingsummary_csrf').val();
+      $.post(config.base_url+'productUpload/step3Submit', {fdata : fdata, es_csrf_token : csrftoken}, function(data){
 
       });
     }
