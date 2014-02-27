@@ -257,8 +257,10 @@ div.cc2 > div + div {
 }
 
 div.cc2 > div img {
-  width: 100px;
-  height:100px;
+    max-width:100px;
+    max-height:100px;
+    width: auto;
+    height: auto;
 }
 
 .cc2_title {
@@ -284,10 +286,10 @@ div.cc2 > div img {
 }
 
 .cc2_prod_name {
-  height: 45px;
+  height: 35px;
   line-height: 19px;
   word-wrap:break-word;
-  width: 170px;
+  width: 165px;
   padding:5px 0;
   text-transform: lowercase;
   overflow: hidden;
