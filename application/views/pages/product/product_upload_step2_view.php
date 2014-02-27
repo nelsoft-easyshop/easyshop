@@ -21,16 +21,16 @@
                 <div class="clear"></div>
 
                 <div class="upload_input_form form_input">
-                  <form class="form_product" id="form_product" name="form_product" enctype="multipart/form-data" method="POST" action="upload_step4_2">
+                  <!--<form class="form_product" id="form_product" name="form_product" enctype="multipart/form-data" method="POST" action="upload_step4_2">-->
 				  <?php 
-					/*$attr = array(
+					$attr = array(
 								'class' => 'form_product',
 								'id' => 'form_product',
 								'name' => 'form_product',
 								'enctype' => 'multipart/form-data',
 								'action' => 'upload_step4_2'
 							);
-					echo form_open('', $attr);*/
+					echo form_open('', $attr);
 				  ?>
 
 

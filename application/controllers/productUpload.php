@@ -195,7 +195,6 @@ class productUpload extends MY_Controller
 
 			$product_id = $this->product_model->addNewProduct($product_title,$sku,$product_brief,$product_description,$keyword,$brand_id,$cat_id,$style_id,$member_id,$product_price,$product_condition,$otherCategory);
 			# product_id = is the id_product for the new item. if 0 no new item added process will stop
-
 			$this->load->library('upload');
 			$filenames_ar = array();
 			$file_type = array();
