@@ -529,6 +529,34 @@ header {
 
 /*** end of search box ***/
 
+/**** Page Error(no longer available) ****/
+.alert_content {
+	margin-top: 50px;
+}
+
+
+.wrapper.alert_content > div {
+    background-color: #FFEBD4;
+    padding: 0 10px;
+}
+
+.alert_content img {
+	vertical-align: middle;
+    margin-right: 15px;
+}
+
+.wrapper.alert_content h2 {
+    display: inline-block;
+}
+
+.alert_content ul {
+	margin: 40px 0px 0px 20px;
+}
+
+.alert_content ul li {
+	margin-bottom: 10px;
+	line-height: 25px;
+}
 
 /*** section ***/
 section {

@@ -165,6 +165,13 @@ div.product-list {
   float: none;
 }
 
+.product-list .prod_img_wrapper {
+  display: inline-block;
+  width: 150px;
+  height: 150px;
+  text-align: center;
+}
+
 .product_info_bottom {
   margin: 0 10px 10px;
 }
