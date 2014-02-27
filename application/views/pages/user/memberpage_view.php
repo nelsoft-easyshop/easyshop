@@ -235,7 +235,7 @@
 								  <p class="post_item_category">
 									<strong>Category:</strong><br />
 									<?php foreach($active_product['parents'] as $parent):?>
-										<?php echo $parent;?><?php echo (end($active_product['parents'])===$parent)?'':'<img src="'.base_url().'assets/images/img_arrow_right.png">'; ?>
+										<?php echo $parent;?><?php echo (end($active_product['parents'])===$parent)?'':'<span class="span_bg img_arrow_right"></span>'; ?>
 									<?php endforeach; ?>
 								  </p>
 									
@@ -339,7 +339,7 @@
 								  <p class="post_item_category">
 									<strong>Category:</strong><br />
 									<?php foreach($deleted_product['parents'] as $parent):?>
-										<?php echo $parent;?><?php echo (end($deleted_product['parents'])===$parent)?'':'<img src="assets/images/img_arrow_right.png">'; ?>
+										<?php echo $parent;?><?php echo (end($deleted_product['parents'])===$parent)?'':'<span class="span_bg img_arrow_right"></span>'; ?>
 									<?php endforeach; ?>
 								  </p>
 								  <div class="show_more_options blue"><span class="span_bg"></span><p>View Features and Specifications</p></div>
@@ -1281,7 +1281,7 @@
 				<h2>Transactions</h2>
 				
 				<div>
-					<ul class="idTabs post_items">
+					<ul class="idTabs transact_tabs">
 						<li><a href="#bought">Bought <span><?php echo count($transaction['buy']);?></span></a> </li>
 						<li><a href="#sold">Sold 	<span><?php echo count($transaction['sell']);?></span></a> </li>
 					</ul>
