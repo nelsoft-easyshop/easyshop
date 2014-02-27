@@ -861,12 +861,24 @@ $('.upload_input_form').on('click', '.add_more_link_value', function() {
 });
 
 $(document).on('change',"#price_field,#prod_price, .price_text",function () {
-  var v = parseFloat(this.value);
+  //var priceval = this.value.replace(',','');
+  var priceval = this.value.replace(new RegExp(",", "g"), '');
+  var v = parseFloat(priceval);
   if (isNaN(v)) {
     this.value = '';
   } else {
-    this.value = v.toFixed(2)
+    this.value = ReplaceNumberWithCommas(v.toFixed(2));
   }
+  
+  function ReplaceNumberWithCommas(thisnumber){
+	//Seperates the components of the number
+    var n= thisnumber.toString().split(".");
+    //Comma-fies the first part
+    n[0] = n[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    //Combines the two sections
+    return n.join(".");
+  }
+  
 });
 
 $( "#prod_brand,#prod_title,#prod_brief_desc,#prod_price,#prod_sku,#prod_condition" ).blur(function() {
