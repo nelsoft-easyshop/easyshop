@@ -583,7 +583,7 @@ class productUpload extends MY_Controller
 		
 		$config['new_image'] = $path_to_categview_directory . $filename;
 		$config['width'] = 220;
-		$config['height'] = 294;
+		$config['height'] = 220;
 	
 		if(!file_exists($path_to_categview_directory)) {  
 			if(!mkdir($path_to_categview_directory)) {  
