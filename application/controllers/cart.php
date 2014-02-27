@@ -22,10 +22,6 @@ class Cart extends MY_Controller{
 		$data['page_javascript'] = 'assets/JavaScript/cart.js';
 		$data['cart_items'] = $carts;
 		$data['total'] = number_format( $this->cart->total(),2,'.',',');
-		$data['my_csrf'] = array(
-			'csrf_name' => $this->security->get_csrf_token_name(),
-			'csrf_hash' => $this->security->get_csrf_hash()
-		);
 		$data = array_merge($data,$this->fill_header());
 		$this->load->view('templates/header', $data);
 		$this->load->view('pages/cart/mycart_view', $data);

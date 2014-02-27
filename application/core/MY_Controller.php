@@ -10,6 +10,13 @@ class MY_Controller extends CI_Controller
 		$this->load->model("user_model");
 		$this->load->model("cart_model");
 		$this->load->model("product_model");
+		$this->load->vars(
+			array('my_csrf' => array(
+				'csrf_name' => $this->security->get_csrf_token_name(),
+				'csrf_hash' => $this->security->get_csrf_hash()
+				)
+			)
+		);
 	}
 	
 	function fill_header()
@@ -46,6 +53,9 @@ class MY_Controller extends CI_Controller
 			'total_items'=> $this->cart_model->cart_size(),
 			'category_search' => $this->product_model->getFirstLevelNode(),
 			'user_cur_loc' => $this->session->userdata('user_cur_loc'),
+			'header_csrf' => array(
+					'csrf_'
+				)
 			);
 		return $data;
 	}

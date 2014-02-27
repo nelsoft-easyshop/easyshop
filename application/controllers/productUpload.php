@@ -29,10 +29,6 @@ class productUpload extends MY_Controller
 		$usersession = $this->session->userdata('usersession');	
 		$uid = $this->session->userdata('member_id');
 		$data_item['firstlevel'] = $this->product_model->getFirstLevelNode(); # getting first category level from database.
-		$data_item['my_csrf'] = array(
-			'csrf_name' => $this->security->get_csrf_token_name(),
-			'csrf_hash' => $this->security->get_csrf_hash()
-		);
 		$userdetails = $this->product_model->getCurrUserDetails($uid);
 		$data = $this->fill_view();
 		$this->load->view('templates/header', $data); 
@@ -104,10 +100,7 @@ class productUpload extends MY_Controller
 
 			$response['attribute'] = $attribute;
 			$response['sell'] = true;
-			$response['my_csrf'] = array(
-				'csrf_name' => $this->security->get_csrf_token_name(),
-				'csrf_hash' => $this->security->get_csrf_hash()
-			);
+			
 			$this->load->view('pages/product/product_upload_step2_view',$response);
 			$this->load->view('templates/footer'); 
 		}else{
@@ -607,10 +600,7 @@ class productUpload extends MY_Controller
 		$data = array(
 			'shiploc' => $this->product_model->getLocation(),
 			'attr' => $this->product_model->getPrdShippingAttr($id),
-			'my_csrf' => array(
-					'csrf_name' => $this->security->get_csrf_token_name(),
-					'csrf_hash' => $this->security->get_csrf_hash()
-				)
+			
 			);
 		$data = array_merge($data, $this->fill_view());
 
@@ -718,10 +708,6 @@ class productUpload extends MY_Controller
 
 		$response['main_images'] = $main_images;	
         $response['item_quantity'] =  $this->product_model->getProductQuantity($product_id, true);
-        $response['my_csrf'] = array(
-			'csrf_name' => $this->security->get_csrf_token_name(),
-			'csrf_hash' => $this->security->get_csrf_hash()
-		);
 		$this->load->view('pages/product/product_upload_step2_view', $response);
 		$this->load->view('templates/footer'); 
 

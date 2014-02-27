@@ -195,10 +195,6 @@ class product extends MY_Controller
 				$response['main_categories'] = $this->product_model->getFirstLevelNode(true);
 				$data = array( 
 					'title' => substr($url_string,0,-5).' | Easyshop.ph',
-					'my_csrf' => array(
-							'csrf_name' => $this->security->get_csrf_token_name(),
-							'csrf_hash' => $this->security->get_csrf_hash()
-						)
 					); 
 				$data = array_merge($data, $this->fill_header());
 				
@@ -489,10 +485,6 @@ class product extends MY_Controller
 				$response['id_cat'] = $category;
 				$data = array(
 					'title' => 'Easyshop.ph',
-					'my_csrf' => array(
-							'csrf_name' => $this->security->get_csrf_token_name(),
-							'csrf_hash' => $this->security->get_csrf_hash()
-						)
 					);
 				$data = array_merge($data, $this->fill_header());
 				$this->load->view('templates/header', $data); 
@@ -600,10 +592,6 @@ class product extends MY_Controller
                 'product_quantity' => $this->product_model->getProductQuantity($id)
 				));
 			$data['vendorrating'] = $this->product_model->getVendorRating($data['product']['sellerid']);
-			$data['my_csrf'] = array(
-				'csrf_name' => $this->security->get_csrf_token_name(),
-				'csrf_hash' => $this->security->get_csrf_hash()
-			);
 			$this->load->view('pages/product/productpage_view', $data); 
 		}
 		else
