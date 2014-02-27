@@ -26,10 +26,11 @@
             
 
             <div class="clear"></div>
-            <form action="<?php echo base_url() . 'productUpload/step2'; ?>" method="POST">
+            <!--<form action="<?php echo base_url() . 'productUpload/step2'; ?>" method="POST">-->
+            <?php echo form_open('productUpload/step2');?>
 
                 <div class="add_category_submit"> <input type="hidden" name="hidden_attribute" class="hidden_attribute"><input class="proceed_form" id="proceed_form" type="submit" value="Proceed"></div>
-            </form>
+            <?php echo form_close();?>
         </div>
     </div>
 
