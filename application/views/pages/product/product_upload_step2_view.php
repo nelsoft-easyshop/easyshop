@@ -27,8 +27,7 @@
 								'class' => 'form_product',
 								'id' => 'form_product',
 								'name' => 'form_product',
-								'enctype' => 'multipart/form-data',
-								'action' => 'upload_step4_2'
+								'enctype' => 'multipart/form-data'
 							);
 					echo form_open('', $attr);
 				  ?>
