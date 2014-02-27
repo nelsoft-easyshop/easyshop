@@ -272,7 +272,6 @@ class product_model extends CI_Model
 		$sth->bindParam(':condition',$product_condition);
 		$sth->bindParam(':cat_other_name',$other_category_name);
 		$sth->execute();
-		
         
 		return $this->db->conn_id->lastInsertId('id_product');
 	}

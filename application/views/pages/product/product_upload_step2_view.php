@@ -978,8 +978,9 @@ $(".proceed_form").unbind("click").click(function(){
     alert("Fill (*) All Required Fields Properly!");
     return false;
   }else{
-
-    if(price.val() <= 0 || !$.isNumeric(price.val())){
+	var pricevalue = price.val().replace(new RegExp(",", "g"), '');
+    //if(price.val() <= 0 || !$.isNumeric(price.val())){
+	if(pricevalue <= 0 || !$.isNumeric(pricevalue)){
       alert("Invalid Price. Price should be numeric!");
       validateRedTextBox("#prod_price");
       return false;
