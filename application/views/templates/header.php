@@ -125,6 +125,7 @@
             ?>
           </select>
           <button onclick="search_form.submit();" class="search_btn">SEARCH</button>
+		  <input type="hidden" id="header_search" name="<?php echo $my_csrf['csrf_name'];?>" value="<?php echo $my_csrf['csrf_hash'];?>">
         </div>
         <div id="main_search_drop_content"></div>
       </div>
@@ -139,12 +140,13 @@ $(document).ready(function() {
   $( "#main_search" ).keyup(function() {
 
     var searchQuery = $(this).val();
+	var csrftoken = $('#header_search').val();
     if(searchQuery != ""){
       $.ajax({
         type: "POST",
         url: '<?php echo base_url();?>product/sch_onpress', 
         cache: false,
-        data: "data="+searchQuery , 
+        data: "data="+searchQuery+"&es_csrf_token="+csrftoken , 
         beforeSend: function(jqxhr, settings) { 
           $("#main_search_drop_content").empty();
         },
