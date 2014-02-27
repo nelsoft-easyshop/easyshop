@@ -134,21 +134,21 @@ p.active {
 }
 
 .sell_steps {
-    background: url(../images/bg_sell_steps.jpg) 0 0 no-repeat;
+    background: url(../images/global_sprite.png) 0 0 no-repeat;
     height: 35px;
     margin-top: 20px;
 }
 
 .sell_steps1 {
-    background-position: 0 0;
+    background-position: 0 -557px;
 }
 
 .sell_steps2 {
-    background-position: 0 -41px;
+    background-position: 0 -597px;
 }
 
 .sell_steps3 {
-    background-position: 0 -81px;
+    background-position: 0 -637px;
 }
 
 .sell_steps4 {

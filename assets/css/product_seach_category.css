@@ -125,6 +125,7 @@ nav {
   width: 237px !important;
 /*  width: 29.5% !important;*/
   min-height: 114px;
+  height: 400px;
 }
 
 div.product-list {
@@ -137,13 +138,13 @@ div.product-list {
   width: 92%;
 }*/
 
-.prod_img_wrapper {
+/*.prod_img_wrapper {
   display: table;
-}
+}*/
 
 .prod_img_container {
   display: table-cell;
-  height: 294px;
+  height: 220px;
   line-height: 220px;
   width: 220px;
   overflow: hidden;
@@ -153,6 +154,10 @@ div.product-list {
 
 .prod_img_container img {
   vertical-align: middle;
+    max-width:220px;
+    max-height:220px;
+    width: auto;
+    height: auto;
 }
 
 .product-list .prod_img_container {

@@ -1299,20 +1299,20 @@ span.pinterest {
 	font-size: 24px;
 }
 .reg_steps {
-	background: url(../images/bg_reg_steps.jpg) 0 0 no-repeat;
+	background: url(../images/global_sprite.png) 0 0 no-repeat;
 	height: 35px;
 }
 
 .reg_step1 {
-	background-position: 0 0;
+	background-position:0px -413px;
 }
 
 .reg_step2 {
-	background-position: 0 -48px;
+	background-position: 0 -458px;
 }
 
 .reg_step3 {
-	background-position: 0 -94px;
+	background-position: 0 -503px;
 }
 
 div.reg_step1 ul li:first-child,
@@ -1381,9 +1381,15 @@ div.reg_step3 ul li:nth-child(3) {
     padding-left:3px;
 }
 
+.fill_out_form input[type="text"]:focus,
+.fill_out_form input[type="password"]:focus,
+.fill_out_form select:focus {
+	border:1px solid #f18200;
+}
+
 .fill_out_form select {
-	width: 165px;
-	height: 25px;
+	width: 175px;
+	height: 35px;
 	color: #494949;
 	padding:3px;
 }
