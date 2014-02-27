@@ -259,7 +259,7 @@ div.sell_steps4 ul li:nth-child(4) a {
 .main_product_category a.active,
 .main_product_category a:hover {
     color: #fff;
-    background-color: #ff4400;
+    background-color: #f18200;
 }
 
 .main_product_category li.active:after {
@@ -285,22 +285,22 @@ div.sell_steps4 ul li:nth-child(4) a {
     float: left;
 }
 
+.othercategory a {
+    color: #0191C8 !important;
+}
+
+.othercategory a:hover {
+    background-color: #fff !important;
+    color: #0191C8 !important;
+}
+
 .select2 {
     display: block;
     border-bottom: 1px dotted #d9d9d9;
     margin-right: 8px;
-    padding:5px;
-        width: 166px;    
-        margin-bottom: 10px;
-}
-
-.othercategory a {
-    color: #fff;
-    background-color: #f28300;
-}
-
-.othercategory a:hover {
-    color: #fff !important;
+    padding:8px 5px;
+    width: 166px;    
+/*        margin-bottom: 10px;*/
 }
 
 .add_cat {
@@ -313,17 +313,22 @@ div.sell_steps4 ul li:nth-child(4) a {
 
 .product_sub_category > div a.active,
 .product_sub_category > div a:hover {
-    color: #ff4400;
-/*  border-bottom: 1px dotted #FF3000;*/
+    background-color: #f18200;
+    color: #fff;
+}
+
+.product_sub_category > div a:hover {
+    background-color: #f18200;
+    color: #fff;
 }
 
 .product_sub_category > div a.active:after,
 .product_sub_category > div a:hover:after {
-    color: #FF4400;
+    color: #fff;
     content: "►";
     display: block;
     height: 0;
-    left: 160px;
+    left: 157px;
     margin: 0 8px 0 0;
     padding:0;
     position: relative;

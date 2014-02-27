@@ -132,9 +132,32 @@ div.product-list {
 /*  width: 958px;*/
 }
 
-.product img {
+/*.product img {
   padding-left: 9px;
-/*  width: 92%;*/
+  width: 92%;
+}*/
+
+.prod_img_wrapper {
+  display: table;
+}
+
+.prod_img_container {
+  display: table-cell;
+  height: 294px;
+  line-height: 220px;
+  width: 220px;
+  overflow: hidden;
+  position: relative;
+  vertical-align: middle;
+}
+
+.prod_img_container img {
+  vertical-align: middle;
+}
+
+.product-list .prod_img_container {
+  display: inline;
+  float: none;
 }
 
 .product_info_bottom {

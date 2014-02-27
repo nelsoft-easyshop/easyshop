@@ -91,9 +91,9 @@ p {
 
 /** buttons **/
 .orange_btn {
-	background-color: #ff4400;
-	border: 2px solid #ff4400;
-	border-radius: 3px;
+	background-color: #f48000;
+	border: 2px solid #f48000;
+	border-radius: 2px;
 /*	border-bottom: 4px solid #C53500;*/
 	color: #fff;
 	display: block;
@@ -110,8 +110,8 @@ p {
 }
 
 .orange_btn:hover {
-	background-color: #cc1300;
-	border-color: #b81201;
+	background-color: #ff4400;
+	border-color: #ff4400;
 	color: #fff;
 }
 
@@ -129,7 +129,7 @@ p {
 
 .orange_btn2 {
 	border-radius: 3px;
-	background-color: #ff4400;
+	background-color: #f48000;
 	color: #fff;
 	display: inline-block;
 	font-size: 20px;
@@ -152,7 +152,7 @@ p {
 
 .orange_btn3 {
 	border-radius: 3px;
-	background-color: #ff4400;
+	background-color: #f48000;
 	color: #fff;
 	display: inline-block;
 	padding:8px 10px;
@@ -164,7 +164,7 @@ p {
 }
 
 .orange_btn3:hover {
-	background-color: #ff8800;
+	background-color: #ff4400;
 	color: #fff;
 }
 
@@ -214,7 +214,7 @@ p {
 }
 
 .orange {
-	color: #ff4400;
+	color: #f48000;
 }
 
 .orange2 {
@@ -222,7 +222,7 @@ p {
 }
 
 a.orange2:hover {
-	color: #ff4400;
+	color: #f48000;
 	border-bottom: 1px dotted #ff4400;
 }
 
@@ -251,21 +251,22 @@ textarea:focus {
 /*** header ***/
 
 header {
+	color: #fff;
 	margin: 0;
 	padding: 0;
 	width: 100%;
 	display: block;
-	background-color: #fff;
+	background-color: #003e91;
 	height: 25px;
 	line-height: 25px;
-	-webkit-box-shadow: 0px 0px 10px 0px #494949;
-	box-shadow: 		0px 0px 10px 0px #494949;
+/*	-webkit-box-shadow: 0px 0px 10px 0px #494949;
+	box-shadow: 		0px 0px 10px 0px #494949;*/
 /*	position: fixed;
 	margin-top: -10px;*/
 	z-index: 10000;
 }
 
-.ie8 header,
+/*.ie8 header,
 .ie7 header,
 .ie6 header {
 		filter:
@@ -278,7 +279,7 @@ header {
           progid:DXImageTransform.Microsoft.Shadow(color=#dddddd,direction=270,strength=2),
           progid:DXImageTransform.Microsoft.Shadow(color=#dddddd,direction=315,strength=1);
 
-}
+}*/
 
 .top_links_left {
 	float: left;
@@ -292,10 +293,20 @@ header {
 	float: right;
 }
 
+.top_links_right a {
+	color: #fff;
+}
+
+.top_links_right a:hover {
+	color: #fff;
+	text-decoration: underline;
+}
+
+
 .top_border {
 	padding-right: 10px;
 	margin-right: 10px;
-	border-right: 1px dotted #494949;
+	border-right: 1px dotted #fff;
 }
 
 .cart_no {
@@ -342,14 +353,14 @@ header {
     margin-left: 10px;
     border-width: 6px 6px 0 6px;
     border-style: solid;
-    border-color: grey transparent;
+    border-color: #fff transparent;
     display: inline-block;
 
 }
 
 .top_nav ul li:hover {
  	
-	color: #484848;
+	color: #fff;
 }
 .top_nav ul li:hover:after {
     border-width: 0px 6px 6px 6px;
@@ -374,8 +385,11 @@ header {
   border-bottom: 1px solid #cecece;
 }
 .top_nav ul li ul li { 
-  background: #fff; 
-  display: block; 
+	/* default fallback */
+	background: rgb(0, 62, 145) transparent;
+	/* nice browsers */
+	background: rgba(0, 62, 145, 0.8);
+ 	display: block; 
     border-left:1px solid #cecece;
     border-right:1px solid #cecece;
     padding:4px 10px;
@@ -393,10 +407,13 @@ header {
     text-align: left;
 }
 
+.top_nav ul li ul li a {
+	color: #fff;
+}
 
 .top_nav ul li ul li a:hover {
-	color: #ff4400; 
-	border-bottom: 1px dotted #ff4400;
+	color: #fff; 
+	border-bottom: 1px dotted #fff;
 }
 
 .top_nav ul li:hover ul {
@@ -407,7 +424,7 @@ header {
 }
 
 .top_nav .cart {
-	background-image: -5px -259px;	
+	background-position: -5px -259px;	
 	padding-right: 5px;
 	height: 18px;
 	width: 22px;
@@ -457,7 +474,7 @@ header {
 }*/
 
 .search_box button {
-	background-color: #ff4400;
+	background-color: #f48000;
 	border: none;
 	color: #fff;
 	cursor: pointer;
@@ -476,7 +493,7 @@ header {
 	height: 41px;
 	line-height: 31px;
 	width: 150px;
-	border: 3px solid #ff4400;
+	border: 3px solid #f48000;
 	margin-left: -5px;
 	vertical-align: middle;
 	padding:7px 3px 3px;
@@ -484,7 +501,7 @@ header {
 
 #main_search {     
      background: #fff url('../images/global_sprite.png') no-repeat -249px -8px;    
-     border: 3px solid #ff4400;
+     border: 3px solid #f48000;
      color: #333;
 	height: 30px;
      padding:5px 35px 0px;
@@ -494,9 +511,9 @@ header {
 
 #main_search_drop_content {
     background-color: #FFFFFF;
-    border-bottom: 1px solid #FF4400;
-    border-left: 1px solid #FF4400;
-    border-right: 1px solid #FF4400;
+    border-bottom: 1px solid #f48000;
+    border-left: 1px solid #f48000;
+    border-right: 1px solid #f48000;
     display: none;
     margin: 0px 20px 0 0;
     padding: 10px 5px;
@@ -533,7 +550,7 @@ section {
 
 .middle_content h2 {
 	font-size: 18px;
-	color: #ff4400;
+	color: #f18200;
 	position: relative;
 	top: 0;
 	left: 0;
@@ -549,7 +566,7 @@ section {
     float: left;
 }
 .nav_title {
-	background-color: #ff4400;
+	background-color: #f28300;
 	color: #fff;
 	font-size: 16px;
 	font-weight: bold;
@@ -874,11 +891,11 @@ nav ul > li:hover > div {
 }
 
 span.shopping_guide {
-	background-position: 0px -114px;    
+	background-position: -5px -120px;   
 }
 
 span.q_and_a {
-	background-position: -87px -114px;    
+	background-position: -87px -120px;    
 }
 
 span.shipping {
@@ -886,12 +903,12 @@ span.shipping {
 }
 
 span.secure_payment {
-	background-position: -260px -114px;	
+	background-position: -260px -120px;	
 }
 
 .guides_panel div {
-	background-color: #4F4F4F;
-	color: #fff;
+	background-color: #5FC7B6;
+	border-radius: 3px;
 	width: 97px;
 	height: 88px;
 	float: left;
@@ -902,7 +919,7 @@ span.secure_payment {
 }
 
 .guides_panel a {
-	color: #fff;
+	color: #494949;
 	display: block;
 /*	opacity: .5;
 	-webkit-backface-visibility: hidden;
@@ -1000,7 +1017,7 @@ span.paypal {
 .product_title h2 {
 	font-size: 18px;
 	font-weight: normal;
-	color:#ff4400;
+	color:#f18200;
 	padding:8px 0;
 }
 
@@ -1031,7 +1048,7 @@ span.paypal {
 .products span {
 	font-size: 14px;
 	font-weight: normal;
-	color:#ff4400;
+	color:#f18200;
 }
 
 .products div {
@@ -1158,11 +1175,11 @@ div.electronics_product_sides {
 }
 
 .category_nav ul li a:hover {
-	background-color: #ff4400;
+	background-color: #f48000;
 }
 
 .category_nav ul li.active {
-	background-color: #ff4400;
+	background-color: #f48000;
 }
 
 
@@ -1194,8 +1211,6 @@ footer {
 }
 
 .social_media span {
-	background: url('../images/global_sprite.png') no-repeat;	
-	display: inline-block;
 	height: 45px;
 	width: 45px;
 	margin-right: 5px;
@@ -1265,14 +1280,10 @@ span.pinterest {
 	margin-top: 20px;
 }
 
-.footer_payment span {
-	background-image: url('../images/global_sprite.png');
-	background-repeat: no-repeat;	
+.footer_payment span {	
 	border:1px solid #E7E7E7;
-	display: inline-block;
 	height: 50px;
 	width: 60px;
-	vertical-align: middle;
 }
 
 .copyright {
@@ -1476,7 +1487,7 @@ div.pass-hint {
 }
 .profile_top_nav ul li:hover {
 /*	background-color: #ffae00;*/
-	border-bottom: 3px solid #ff4400;
+	border-bottom: 3px solid #f18200;
 }
 
 .profile_top_nav ul li:hover a {
@@ -1505,7 +1516,7 @@ div.pass-hint {
 	display: block;
 	background-color: #fff;
 	margin-left:0px;
-	border: 1px solid #ff4400;
+	border: 1px solid #f18200;
 }
 
 .profile_top_nav ul li:hover ul li {
@@ -1526,13 +1537,14 @@ div.pass-hint {
 }
 
 .profile_top_nav ul li ul li a:hover {
-	color: #ff4400;
-	border-bottom: 1px dotted #ff4400;
+	color: #f18200;
+	border-bottom: 1px dotted #f18200;
 }
 
 .profile_top_nav div:last-child {
     border-bottom: 3px solid #CECECE;
     padding-bottom: 9px;
+    width: 264px;
 }
 
 /*.profile_top_nav_inner {
@@ -1546,7 +1558,7 @@ div.pass-hint {
 
 .profile_top_nav input[type="text"] {
 	background-position: -250px -9px; 
-	border: 1px solid #ff4400;
+	border: 1px solid #f18200;
 	width: 163px;
 	padding:8px 2px 8px 30px;
 	height: 18px;	
@@ -1554,11 +1566,13 @@ div.pass-hint {
 
 .profile_top_nav input[type="submit"] {
 	cursor: pointer;
-	background-color: #ff4400;
+	background-color: #f18200;
 	color: #fff;
-	border: 1px solid #ff4400;
+	border: 1px solid #f18200;
 	padding:8px 5px;
 	vertical-align: middle;
+	width: 64px;
+	display: inline-block;
 }
 
 .profile_top_nav input[type="submit"]:hover {
@@ -1701,7 +1715,7 @@ div.pass-hint {
 }
 
 .member_side_nav li a.selected  {
-	color: #ff4400;
+	color: #f18200;
 	font-weight: bold;
 }
 
@@ -2540,8 +2554,8 @@ a:hover.tooltips span {
 .post_items li a.selected {
     background-color: #fff;
     border-bottom: 1px solid #fff;
-    color: #ff4400;
-    border-top: 3px solid #ff4400;
+    color: #f18200;
+    border-top: 3px solid #f18200;
 }
 
 .post_items li a:hover {
@@ -2551,12 +2565,12 @@ a:hover.tooltips span {
 
 .post_items li a.selected span,
 .post_items li a:hover span {
-	border-color:#ff4400;
-	color: #ff4400;
+	border-color:#f18200;
+	color: #f18200;
 }
 
 .post_items li a span {
-	color: #ff4400;
+	color: #f18200;
 	display: inline-block;
 	font-size: 10px;
 	padding:3px;
@@ -2786,6 +2800,13 @@ div.post_item_content_left {
 
 .post_item_category {
 	margin-bottom: 10px;
+}
+
+.img_arrow_right {
+	background-position: -355px -259px;
+	width: 8px;
+	height: 13px;
+	margin:0px 5px;
 }
 
 .attr_hide {
@@ -3071,6 +3092,68 @@ div.post_item_content_left {
 }
 
 /** TRANSACTIONS CSS **/
+.transact_tabs {
+	list-style: none;
+	display: inline-block;
+	width: 100%;
+}
+
+.transact_tabs li {
+    display: inline-block;
+    float: left;
+    margin-bottom: 10px;
+}
+
+.transact_tabs li a {
+	background-color: #f5f5f5;
+	border-left:1px solid #cecece;
+	border-top: 1px solid #cecece;
+	border-bottom: 1px solid #cecece;
+	font-family: 'Roboto',sans-serif;
+	font-size: 16px;
+    font-weight: 300;
+    padding: 10px 15px;
+}
+
+.transact_tabs li:last-child a {
+	border-right: 1px solid #cecece;	
+}
+
+.transact_tabs li a.selected {
+    background-color: #fff;
+    border-bottom: 1px solid #fff;
+    color: #f18200;
+    border-top: 3px solid #f18200;
+}
+
+.transact_tabs li a:hover {
+    background-color: #fff;
+    color: #ff4400;	
+}
+
+.transact_tabs li a.selected span,
+.transact_tabs li a:hover span {
+	border-color:#f18200;
+	color: #f18200;
+}
+
+.transact_tabs li a span {
+	color: #f18200;
+	padding: 3px 7px;
+	font-size: 10px;
+	min-width: 17px;
+	text-align: center;
+	border:1px solid #ff4400;
+	margin-left: 5px;
+	margin-bottom: -3px;
+
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+}
+
+
+
 .transac-container{
 	background-color: #F8F7F7;
 	margin-bottom: 10px;
