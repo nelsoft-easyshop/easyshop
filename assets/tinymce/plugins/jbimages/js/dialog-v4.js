@@ -61,7 +61,7 @@ var jbImagesDialog = {
 		{
 			document.getElementById("upload_in_progress").style.display = 'none';
 			document.getElementById("upload_infobar").style.display = 'block';
-			document.getElementById("upload_infobar").innerHTML = 'Upload Complete';
+			//document.getElementById("upload_infobar").innerHTML = 'Upload Complete';
 			
 			var w = this.getWin();
 			tinymce = w.tinymce;
@@ -70,6 +70,7 @@ var jbImagesDialog = {
 			
 			//Added condition
 			if(result.status == 'last'){
+				document.getElementById("upload_infobar").innerHTML = 'Upload Complete';
 				this.close();
 			}
 			
