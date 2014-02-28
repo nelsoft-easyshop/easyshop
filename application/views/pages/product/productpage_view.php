@@ -34,7 +34,7 @@
   <div class="wrapper">
     <div class="content_wrapper">
       <div  id="product_content_gallery">
-        <div> <a href="<?=base_url()?><?php echo $product_images[0]['path']; ?><?php echo $product_images[0]['file']; ?>" class="jqzoom" rel='gal1'  title="Brand: <?php echo $product['brand_name'];?>" > <img src="<?=base_url()?><?php echo $product_images[0]['path']; ?>small/<?php echo $product_images[0]['file']; ?>"  title="triumph"> </a> </div>
+        <div> <a href="<?=base_url()?><?php echo $product_images[0]['path']; ?><?php echo $product_images[0]['file']; ?>" class="jqzoom" rel='gal1'  title="Brand: <?php echo $product['brand_name'];?>" > <img src="<?=base_url()?><?php echo $product_images[0]['path']; ?>small/<?php echo $product_images[0]['file']; ?>"  title="product"> </a> </div>
         <br/>
         <div class="jcarousel">
           <ul id="thumblist">
@@ -281,7 +281,9 @@
             <?PHP foreach ($recommended_items as $row): ?>                
             <li>
               <a href="<?=base_url()."item/".$row['id_product'].'/'.es_url_clean($row['product']); ?>.html">
-                <img class="rec_item_img" src="<?=base_url().$row['path'].'categoryview/'.$row['file']?>">
+                <span class="rec_item_container">
+                  <img class="rec_item_img" src="<?=base_url().$row['path'].'categoryview/'.$row['file']?>">
+                </span>
                 <p>
                   <?php echo html_escape($row['product']);?><br />
                   <span class="price"> PHP <?=number_format($row['price'],2,'.',',');?></span>

@@ -10,7 +10,7 @@
         $pic = explode('/', $items[$i]['product_image_path']);
         ?>
         <div class="product<?php echo $class; ?>">
-         <a href="<?=base_url()?>item/<?php echo $items[$i]['product_id']; ?>/<?php echo es_url_clean($items[$i]['product_name']); ?>.html"><img alt="<?php echo $items[$i]['product_name']; ?>" src="<?php echo base_url().$pic[0].'/'.$pic[1].'/'.$pic[2].'/'.$pic[3].'/'.'categoryview'.'/'.$pic[4];;?>"></a>
+         <a href="<?=base_url()?>item/<?php echo $items[$i]['product_id']; ?>/<?php echo es_url_clean($items[$i]['product_name']); ?>.html"><span class="prod_img_wrapper"><span class="prod_img_container"><img alt="<?php echo $items[$i]['product_name']; ?>" src="<?php echo base_url().$pic[0].'/'.$pic[1].'/'.$pic[2].'/'.$pic[3].'/'.'categoryview'.'/'.$pic[4];;?>"></span></span></a>
          
 		 
 		 
