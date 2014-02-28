@@ -1,15 +1,23 @@
 .zoomPad{
 	position:relative;
-	float:left;
+	float:center;
+  text-align: center;
 	z-index:0;
 	cursor:crosshair;
 }
 
-.zoomPad img[src*="small"] {
-  height: 400px;
-  width: 400px;
+#product_content_gallery > div {
+    display: table;
+    margin: 0 auto;
+    text-align: center;
 }
 
+.zoomPad img[src*="small"] {
+    max-width:400px;
+    max-height:400px;
+    width: auto;
+    height: auto;
+}
 
 .zoomPreload{
    -moz-opacity:0.8;
@@ -43,7 +51,6 @@
 	-moz-opacity:0.6;
 	opacity: 0.6;
 	filter: alpha(opacity = 60);
-	z-index:120;
 	position:absolute;
 	border:1px solid #CCC;
   z-index:101;
