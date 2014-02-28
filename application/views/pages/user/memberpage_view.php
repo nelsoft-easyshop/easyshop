@@ -175,6 +175,9 @@
 					<?php if(count($active_products) == 0):?>
 						<p><strong>No items on sale.</strong></p>
 					<?php else:?>
+					<input type="text" class="box" id="schbox_active">
+					<span id="active_schbtn" class="sch_btn">Search</span>
+					
 					<div class="pagination" id="pagination_active">
 						<a href="#" class="first" data-action="first">&laquo;</a>
 						<a href="#" class="previous" data-action="previous">&lsaquo;</a>
@@ -182,7 +185,19 @@
 						<a href="#" class="next" data-action="next">&rsaquo;</a>
 						<a href="#" class="last" data-action="last">&raquo;</a>
 					</div>
-					<div class="paging">					
+					
+					<div class="pagination" id="schpagination_active" style="display:none;">
+						<a href="#" class="first" data-action="first">&laquo;</a>
+						<a href="#" class="previous" data-action="previous">&lsaquo;</a>
+						<input type="text" readonly="readonly"/>
+						<a href="#" class="next" data-action="next">&rsaquo;</a>
+						<a href="#" class="last" data-action="last">&raquo;</a>
+					</div>
+					
+					<div class="filter_result" style="display:none;">
+					</div>
+					
+					<div class="paging fired">					
 					<?php $product_counter = 0; 
 					     foreach($active_products as $active_product): ?>
 							<div class="post_items_content">

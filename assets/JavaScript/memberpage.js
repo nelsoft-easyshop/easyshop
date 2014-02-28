@@ -1141,8 +1141,8 @@ $(document).ready(function(){
 	
 	$('#pagination_active').jqPagination({
 		paged: function(page) {
-		    $('#active_items .paging').hide();
-			$($('#active_items .paging')[page - 1]).show();
+		    $('#active_items .paging').hide().removeClass('fired');
+			$($('#active_items .paging')[page - 1]).show().addClass('fired');
 		}
 	});
 	
@@ -1211,6 +1211,83 @@ $(document).ready(function(){
 	 });
 		
 
+/******************	ACTIVE TAB Search Box	********************/
+
+$(function(){
+	var schResult = [];
+	var schValue = '';
+	
+	$('#active_schbtn').on('click', function(){
+		var filterDiv = $(this).siblings('div.filter_result');
+		var schCounter = 0;
+		var resultCounter = 0;
+		$(this).siblings('div.filter_result').children('div.resultpaging').remove();
+		
+		var schValue = $.trim($('#schbox_active').val().toLowerCase());
+		//var schResult = [];
+		
+		if(schValue !== ''){
+			filterDiv.append('<div class="resultpaging"></div>');
+			$('#active_items .paging, #pagination_active').hide();
+			
+			//cycle through each Product Title and push to schResult
+			$(this).siblings('div.paging').children('div.post_items_content').each(function(){
+				var prodTitle = $(this).find('div.post_item_content_right').find('.post_item_product_title a').text();
+				prodTitle = $.trim(prodTitle.toLowerCase());
+				// Search for search string in product title
+				if(prodTitle.indexOf(schValue) != -1){
+					//schResult.push($(this));
+					if(schCounter === 10){
+						filterDiv.append('<div class="resultpaging"></div>');
+						schCounter = 0;
+					}
+					filterDiv.find('div.resultpaging:last').append('<div class="post_items_content">'+$(this).html()+'</div>');
+					schCounter++;
+					resultCounter++;
+				}
+			});
+		
+			//filterDiv.append('<div class="resultpaging"></div>');
+			//$('#active_items .paging, #pagination_active').hide();
+			
+			/*
+			jQuery.each(schResult, function(i,v){
+				if(schCounter === 10){
+					filterDiv.append('<div class="resultpaging"></div>');
+					schCounter = 0;
+				}
+				filterDiv.find('div.resultpaging:last').append('<div class="post_items_content">'+v.html()+'</div>');
+				schCounter++;
+			});
+			*/
+			
+			$('#schpagination_active').jqPagination({
+				max_page: Math.ceil((resultCounter===0 ? 10:resultCounter)  / 10),
+				paged: function(page) {
+					var filterChildren = filterDiv.children('div.resultpaging');
+					filterChildren.hide();
+					
+					$(filterChildren[page-1]).show();
+				}
+			});
+			
+			$('#active_items .filter_result, #schpagination_active').show();
+
+		}
+		else if(schResult.length === 0 && schValue === ''){
+			$(this).siblings('div.paging').each(function(){
+				if($(this).hasClass('fired')){
+					$(this).show();
+				}
+			});
+			$(this).siblings('#pagination_active').show();
+			$(this).siblings('div.filter_result, #schpagination_active').hide();
+		}
+	});
+
+});
+
+		
 /*
 $(document).ready(function(){
 	$("#view_map").click(function(){       
