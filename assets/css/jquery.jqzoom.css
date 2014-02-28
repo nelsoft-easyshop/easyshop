@@ -10,6 +10,7 @@
     display: table;
     margin: 0 auto;
     text-align: center;
+    table-layout: fixed;
 }
 
 .zoomPad img[src*="small"] {
