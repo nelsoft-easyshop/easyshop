@@ -323,11 +323,12 @@
         var currentRequest = null;
         $( "#cat_sch" ).keyup(function() {
             var searchQuery = $(this).val();
+			var csrftoken = $('#uploadstep1_csrf').val();
             if(searchQuery != ""){
                 currentRequest = jQuery.ajax({
                     type: "POST",
                     url: '<?php echo base_url();?>product/searchCategory', 
-                    data: "data="+searchQuery, 
+                    data: "data="+searchQuery+"&es_csrf_token="+csrftoken, 
                     onLoading:jQuery(".cat_sch_loading").html('<img src="<?= base_url() ?>assets/images/orange_loader_small.gif" />').show(),
                     beforeSend : function(){       
                         $("#cat_search_drop_content").empty();
@@ -340,7 +341,7 @@
                         var html = '<ul>';
                         var data_content, data_id, cnt;
                         var delim_img = ' <img src = "<?=base_url()?>assets/images/img_bullet2.jpg"/> ';
-                        if((obj.length)>0){
+						if((obj.length)>0){
                             jQuery.each(obj,function(){
                                 data_content = '';
                                 data_id = '[';
