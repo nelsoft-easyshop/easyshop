@@ -11,6 +11,11 @@
  * Version: 2.3 released 23/06/2013
  */
  
+ /**
+ *	Modified by Janz - 2/27/2014
+ *	Added check for status in uploadFinish to trigger this.close()
+ *
+ */
 var jbImagesDialog = {
 	
 	resized : false,
@@ -63,7 +68,11 @@ var jbImagesDialog = {
 		
 			tinymce.EditorManager.activeEditor.insertContent('<img src="' + result.filename +'">');
 			
-			this.close();
+			//Added condition
+			if(result.status == 'last'){
+				this.close();
+			}
+			
 		}
 	},
 	

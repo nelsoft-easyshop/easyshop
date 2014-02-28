@@ -1,4 +1,5 @@
 ﻿<!DOCTYPE html>
+<!--Modified by Janz - input #uploader to handle multiple files-->
 <html lang="en">
   <head>
     <meta charset="utf-8">
@@ -13,8 +14,9 @@
 		<div id="upload_in_progress" class="upload_infobar"><img src="img/spinner.gif" width="16" height="16" class="spinner">Upload in progress&hellip; <div id="upload_additional_info"></div></div>
 		<div id="upload_infobar" class="upload_infobar"></div>	
 		
+		<!--Modified name of input from userfile to descriptionfile[]; also added multiple attr-->
 		<p id="upload_form_container">
-			<input id="uploader" name="userfile" type="file" class="jbFileBox" onChange="document.upl.submit(); jbImagesDialog.inProgress();">
+			<input id="uploader" name="descriptionfile[]" type="file" class="jbFileBox" onChange="document.upl.submit(); jbImagesDialog.inProgress();" multiple="">
 		</p>
 		
 		<p id="the_plugin_name"><a href="http://easyshop.com/" target="_blank" title="easyshop.com">Easyshop</a></p>

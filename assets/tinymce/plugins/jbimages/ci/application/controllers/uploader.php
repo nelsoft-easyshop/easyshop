@@ -1,5 +1,15 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-
+/**
+*
+*	Changes by Janz - 2/27/2014
+*	Function : upload
+*		-	Edited function to be able to upload multiple pictures
+*		-	Input name "userfile" (CI default) changed to "descriptionfile"
+*		-	Each data from descriptionfile passed on to "userfile" to avoid 
+*				changes in CI upload library
+*		-	Part of code placed inside for loop
+*		-	Added "status" to result to indicate last image and close jbdialog box
+*/
 class Uploader extends CI_Controller {
 	
 	/* Constructor */
@@ -69,47 +79,68 @@ class Uploader extends CI_Controller {
 		// Load uploader
 		$this->load->library('upload', $config);
 		
-		if ($this->upload->do_upload()) // Success
-		{
-			// General result data
-			$result = $this->upload->data();
-			
-			// Shall we resize an image?
-			if ($conf['allow_resize'] and $conf['max_width'] > 0 and $conf['max_height'] > 0 and (($result['image_width'] > $conf['max_width']) or ($result['image_height'] > $conf['max_height'])))
-			{				
-				// Resizing parameters
-				$resizeParams = array
-				(
-					'source_image'	=> $result['full_path'],
-					'new_image'		=> $result['full_path'],
-					'width'			=> $conf['max_width'],
-					'height'		=> $conf['max_height']
-				);
-				
-				// Load resize library
-				$this->load->library('image_lib', $resizeParams);
-				
-				// Do resize
-				$this->image_lib->resize();
+		//Added by Janz
+		$filecount = count($_FILES['descriptionfile']['name']);
+		
+		// For loop and foreach loop added to cycle through each image
+		// Code to upload not changed
+		for($fx = 0; $fx < $filecount; $fx++){
+			//cycles through name, type, tmp_name, error, and size
+			foreach($_FILES['descriptionfile'] as $fieldname=>$fieldvalue){
+				$_FILES['userfile'][$fieldname] = $fieldvalue[$fx];
 			}
 			
-			// Add our stuff
-			$result['result']		= "file_uploaded";
-			$result['resultcode']	= 'ok';
-			$result['file_name']	= $conf['img_path'] . '/' . $result['file_name'];
-			
-			// Output to user
-			$this->load->view('ajax_upload_result', $result);
+			if ($this->upload->do_upload()) // Success
+			{
+				// General result data
+				$result = $this->upload->data();
+				
+				// Shall we resize an image?
+				if ($conf['allow_resize'] and $conf['max_width'] > 0 and $conf['max_height'] > 0 and (($result['image_width'] > $conf['max_width']) or ($result['image_height'] > $conf['max_height'])))
+				{				
+					// Resizing parameters
+					$resizeParams = array
+					(
+						'source_image'	=> $result['full_path'],
+						'new_image'		=> $result['full_path'],
+						'width'			=> $conf['max_width'],
+						'height'		=> $conf['max_height']
+					);
+					
+					// Load resize library
+					$this->load->library('image_lib', $resizeParams);
+					
+					// Do resize
+					$this->image_lib->resize();
+				}
+				
+				// Add our stuff
+				$result['result']		= "file_uploaded";
+				$result['resultcode']	= 'ok';
+				$result['file_name']	= $conf['img_path'] . '/' . $result['file_name'];
+				
+				// Added status to trigger jbdialog close
+				if($filecount-1 === $fx){
+					$result['status'] = 'last';
+				}
+				else{
+					$result['status'] = 'notlast';
+				}
+				
+				// Output to user
+				$this->load->view('ajax_upload_result', $result);
+			}
+			else // Failure
+			{
+				// Compile data for output
+				$result['result']		= $this->upload->display_errors(' ', ' ');
+				$result['resultcode']	= 'failed';
+				
+				// Output to user
+				$this->load->view('ajax_upload_result', $result);
+			}
 		}
-		else // Failure
-		{
-			// Compile data for output
-			$result['result']		= $this->upload->display_errors(' ', ' ');
-			$result['resultcode']	= 'failed';
-			
-			// Output to user
-			$this->load->view('ajax_upload_result', $result);
-		}
+
 	}
 	
 	/* Blank Page (default source for iframe) */
