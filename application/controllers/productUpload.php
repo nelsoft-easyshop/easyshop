@@ -51,7 +51,6 @@ class productUpload extends MY_Controller
 		$response['node'] = $this->product_model->getDownLevelNode($id); # get all down level category based on selected parent category
 		$response['level'] = $this->input->post('level');
 		$data = json_encode($this->load->view('pages/product/product_upload_step1_view2',$response,TRUE));
-        
 		echo $data;
 	}
     
@@ -69,8 +68,7 @@ class productUpload extends MY_Controller
 	}
     
 	function step2()
-	{
-
+	{    
 		$data = $this->fill_view();
 		$this->load->view('templates/header', $data); 
 		if(isset($_POST['hidden_attribute'])){ # if no item selected cant go to the link. it will redirect to step 1
@@ -110,18 +108,19 @@ class productUpload extends MY_Controller
 	}
 
 	function step2_2() # function for processing the adding of new item
-	{	
+	{	    
 		$combination = json_decode($this->input->post('combination'));
 
 		$checkIfCombination = $this->input->post('noCombination');
 
 		$inputs = $this->input->post('inputs'); 
+        
 		$inputs_exp = false;
 		if(strpos($inputs, '|') !== false) {
 			$explode_inputs = explode("|", substr($inputs, 1));
 			$inputs_exp = true;
 		}
-		
+        		
 		$data = $this->input->post('data');
 		$cat_id = $this->input->post('id');
 		$otherCategory = $this->input->post('otherCategory');
@@ -152,12 +151,12 @@ class productUpload extends MY_Controller
 		}
 
 		if($found === FALSE){
-			echo '{"e":"0","d":"Brand selected not available. Please select other."}';	 
+			echo '{"e":"0","d":"Brand selected not available. Please select another."}';	 
 			exit();
 		} 
 		if (!in_array($product_condition, $this->lang->line('product_condition')))
 		{
-			echo '{"e":"0","d":"Condition selected not available. Please select other."}';	 
+			echo '{"e":"0","d":"Condition selected not available. Please select another."}';	 
 			exit();
 		}
 
@@ -170,13 +169,12 @@ class productUpload extends MY_Controller
 			$data = '{"e":"0","d":"Fill (*) All Required Fields Properly!"}';		
 		}else{
 
-
 			if(empty($_FILES['files']['name'][0])){ 
-				echo '{"e":"0","d":"Select alteast 1 photo for your item."}';
+				echo '{"e":"0","d":"Select at least 1 photo for your item."}';
 				exit();
 			}
 
-			$allowed =  array('gif','png' ,'jpg','jpeg'); # avaialable format only for image
+			$allowed =  array('gif','png' ,'jpg','jpeg'); # available format only for image
 			$x = 0;
 			foreach($_FILES['files']['name'] as $k) { # validating image format.
 				$filename = $_FILES['files']['name'][$x];
@@ -257,25 +255,46 @@ class productUpload extends MY_Controller
 								$explode_value = $explode_id[0];
 								$attribute_id = $explode_id[1];
 								$extraPrice = '0';
-								switch (substr($explode_value,0,4)) {
-								# if the input type is checkbox possible many item will insert to the database.
-									case 'CHEC': 
-									if(isset($_POST[$explode_value])){
-										for ($x=0; $x < sizeof($_POST[$explode_value]) ; $x++) {
-											$attributeCount = count($this->product_model->selectAttributeNameWithNameAndId($_POST[$explode_value][$x],$attribute_id));
-											if($attributeCount > 0){
-												$prod_attr_id = $this->product_model->addNewAttributeByProduct($product_id,$attribute_id,$_POST[$explode_value][$x],$extraPrice);
-											}
-										}
-									}
+                                $dataType = substr($explode_value,0,strpos($explode_value,'_'));
+                                
+								switch ($dataType) {
+                                    # if the input type is checkbox possible many item will insert to the database.
+									case 'CHECKBOX': 
+                                        if(isset($_POST[$explode_value])){
+                                            for ($x=0; $x < sizeof($_POST[$explode_value]) ; $x++) {
+                                                $attributeCount = count($this->product_model->selectAttributeNameWithNameAndId($_POST[$explode_value][$x],$attribute_id));
+                                                if($attributeCount > 0){
+                                                    $prod_attr_id = $this->product_model->addNewAttributeByProduct($product_id,$attribute_id,$_POST[$explode_value][$x],$extraPrice);
+                                                }
+                                            }
+                                        }
 									break;
-
-								default: # default input type will containg 1 item only
-								if(isset($_POST[$explode_value]) && strlen(trim($_POST[$explode_value])) != 0 ){
-									$attributeCount = count($this->product_model->selectAttributeNameWithNameAndId($_POST[$explode_value],$attribute_id));
-									if($attributeCount > 0){
-										$prod_attr_id = $this->product_model->addNewAttributeByProduct($product_id,$attribute_id,$_POST[$explode_value],$extraPrice);
-									}	}
+                                    #input type is textarea
+                                    case 'TEXTAREA':
+                                        if(isset($_POST[$explode_value])){
+                                            $attributeCount = count($this->product_model->selectAttributeNameWithTypeAndId($attribute_id,2));
+                                            if($attributeCount > 0){
+                                                $prod_attr_id = $this->product_model->addNewAttributeByProduct($product_id,$attribute_id,$_POST[$explode_value],$extraPrice);
+                                            }
+                                        }
+                                    break;
+                                    #input type is simple textbox
+                                    case 'TEXT':
+                                        if(isset($_POST[$explode_value])){
+                                            $attributeCount = count($this->product_model->selectAttributeNameWithTypeAndId($attribute_id,1));
+                                            if($attributeCount > 0){
+                                                $prod_attr_id = $this->product_model->addNewAttributeByProduct($product_id,$attribute_id,$_POST[$explode_value],$extraPrice);
+                                            }
+                                        }
+                                    break;
+                                        
+                                    default: # default input type (SELECT& RADIO)
+                                        if(isset($_POST[$explode_value]) && strlen(trim($_POST[$explode_value])) != 0 ){
+                                        $attributeCount = count($this->product_model->selectAttributeNameWithNameAndId($_POST[$explode_value],$attribute_id));
+                                        if($attributeCount > 0){
+                                            $prod_attr_id = $this->product_model->addNewAttributeByProduct($product_id,$attribute_id,$_POST[$explode_value],$extraPrice);
+                                            }	
+                                        }
 									break;	
 								}			
 							}
@@ -410,43 +429,6 @@ class productUpload extends MY_Controller
 		}
 		echo $data;
 	}
-	/*
-	function createThumbnail($filename,$path_directory) # this function is for creating thumbnail from uploaded picture (60x60)
-	{ 
-		$final_width_of_image = 60; 
-		$filename = strtolower($filename);
-		$path_to_thumbs_directory = $path_directory.'thumbnail/'; 
-		$path_to_image_directory = $path_directory;
-
-		if(preg_match('/[.](jpg)$/', $filename)) {  
-			$im = imagecreatefromjpeg($path_to_image_directory . $filename);  
-		} else if (preg_match('/[.](gif)$/', $filename)) {  
-			$im = imagecreatefromgif($path_to_image_directory . $filename);  
-		} else if (preg_match('/[.](png)$/', $filename)) {  
-
-			$im = imagecreatefrompng($path_to_image_directory . $filename);  
-		} else if (preg_match('/[.](jpeg)$/', $filename)) {  
-
-			$im = imagecreatefromjpeg($path_to_image_directory . $filename);  
-		}  
-
-
-		$ox = imagesx($im);  
-		$oy = imagesy($im);  
-		$nx = $final_width_of_image;  
-		$ny = 80; 
-		$nm = imagecreatetruecolor($nx, $ny);  
-
-		imagecopyresized($nm, $im, 0,0,0,0,$nx,$ny,$ox,$oy);  
-
-		if(!file_exists($path_to_thumbs_directory)) {  
-			if(!mkdir($path_to_thumbs_directory)) {  
-				die("There was a problem. Please try again!");  
-			}   
-		}  
-		imagejpeg($nm, $path_to_thumbs_directory . $filename);  
-	}
-	*/
 	
 	function createThumbnail($filename,$path_directory)
 	{
@@ -472,40 +454,6 @@ class productUpload extends MY_Controller
 		$this->image_lib->resize();	
 	}
 
-	/*
-	function createSmallSize($filename,$path_directory) # this function is for creating normal picture from uploaded picture (400x400)
-	{ 
-		$filename = strtolower($filename);
-		$final_width_of_image = 400; 
-		$path_to_small_directory = $path_directory.'small/'; 
-		$path_to_image_directory = $path_directory;
-		if(preg_match('/[.](jpg)$/', $filename)) {  
-			$im = imagecreatefromjpeg($path_to_image_directory . $filename);  
-		} else if (preg_match('/[.](gif)$/', $filename)) {  
-			$im = imagecreatefromgif($path_to_image_directory . $filename);  
-		} else if (preg_match('/[.](png)$/', $filename)) {  
-			$im = imagecreatefrompng($path_to_image_directory . $filename);  
-		}   else if (preg_match('/[.](jpeg)$/', $filename)) {  
-			$im = imagecreatefromjpeg($path_to_image_directory . $filename);  
-		}  
-
-		$ox = imagesx($im);  
-		$oy = imagesy($im);  
-		$nx = $final_width_of_image;  
-		$ny = 535; 
-		$nm = imagecreatetruecolor($nx, $ny);  
-
-		imagecopyresized($nm, $im, 0,0,0,0,$nx,$ny,$ox,$oy);  
-
-		if(!file_exists($path_to_small_directory)) {  
-			if(!mkdir($path_to_small_directory)) {  
-				die("There was a problem. Please try again!");  
-			}   
-		}  	
-		imagejpeg($nm, $path_to_small_directory . $filename);  
-	}
-	*/
-	
 	function createSmallSize($filename,$path_directory) # this function is for creating normal picture from uploaded picture (400x400)
 	{
 		$filename = strtolower($filename);
@@ -530,39 +478,6 @@ class productUpload extends MY_Controller
 		$this->image_lib->resize();	
 	}
 	
-	/*
-	function createCategorySize($filename,$path_directory) # this function is for creating normal picture from uploaded picture (220x220)
-	{ 
-		$filename = strtolower($filename);
-		$final_width_of_image = 220; 
-		$path_to_small_directory = $path_directory.'categoryview/'; 
-		$path_to_image_directory = $path_directory;
-		if(preg_match('/[.](jpg)$/', $filename)) {  
-			$im = imagecreatefromjpeg($path_to_image_directory . $filename);  
-		} else if (preg_match('/[.](gif)$/', $filename)) {  
-			$im = imagecreatefromgif($path_to_image_directory . $filename);  
-		} else if (preg_match('/[.](png)$/', $filename)) {  
-			$im = imagecreatefrompng($path_to_image_directory . $filename);  
-		}   else if (preg_match('/[.](jpeg)$/', $filename)) {  
-			$im = imagecreatefromjpeg($path_to_image_directory . $filename);  
-		}  
-
-		$ox = imagesx($im);  
-		$oy = imagesy($im);  
-		$nx = $final_width_of_image;  
-		$ny = 294; 
-		$nm = imagecreatetruecolor($nx, $ny);  
-
-		imagecopyresized($nm, $im, 0,0,0,0,$nx,$ny,$ox,$oy);  
-
-		if(!file_exists($path_to_small_directory)) {  
-			if(!mkdir($path_to_small_directory)) {  
-				die("There was a problem. Please try again!");  
-			}   
-		}  
-		imagejpeg($nm, $path_to_small_directory . $filename);  
-	}  
-	*/
 	
 	function createCategorySize($filename,$path_directory)
 	{
@@ -716,13 +631,13 @@ class productUpload extends MY_Controller
 
 	public function editProductSubmit()
 	{
-		$product_title = $this->input->post('prod_title');
-		$product_brief = $this->input->post('prod_brief_desc');
-		$product_description = $this->input->post('desc') ;
+		$product_title = trim($this->input->post('prod_title'));
+		$product_brief = trim($this->input->post('prod_brief_desc'));
+		$product_description = trim($this->input->post('desc')) ;
 		$product_price = $this->input->post('prod_price') ;
 		$product_condition = $this->input->post('prod_condition');
-		$sku = $this->input->post('prod_sku');
-		$keyword = trim($product_title).' '.trim($this->input->post('prod_keyword'));
+		$sku = trim($this->input->post('prod_sku'));
+		$keyword = es_url_clean(trim($product_title).' '.trim($this->input->post('prod_keyword')));
 		$keyword = str_replace('-', ' ',$keyword);
 		$product_id = $this->input->post('p_id');
 		$brand_id =  intval($this->input->post('prod_brand'),10);
@@ -732,15 +647,34 @@ class productUpload extends MY_Controller
 		$explode_inputs = explode("|", substr($inputs, 1));
         $combination = json_decode($this->input->post('combination'));
 		$checkIfCombination = $this->input->post('noCombination');
-        
+
+        $found = FALSE;
+        $cat_id = $this->input->post('id');
+        $availableBrand = $this->product_model->getAvailableBrand($cat_id);
 		$date = date("Ymd");
+
+        foreach ($availableBrand as $brandKey => $brandValue) {
+			if($brand_id === intval($brandValue['brand_id'],10)){
+				$found = TRUE;
+				break;
+			}
+		}
+
+		if($found === FALSE){
+			echo '{"e":"0","d":"Brand selected not available. Please select another."}';	 
+			exit();
+		} 
+        if (!in_array($product_condition, $this->lang->line('product_condition')))
+		{
+			echo '{"e":"0","d":"Condition selected not available. Please select another."}';	 
+			exit();
+		}
 
 		if(strlen(trim($product_title)) == 0 || $product_title == "" 
 			|| strlen(trim($product_brief)) == 0 || $product_brief == "" 
 			|| strlen(trim($product_description)) <= 4
 			|| strlen(trim($product_price)) == 0 || $product_price <= 0
-			|| strlen(trim($sku)) == 0 || $sku == ""
-			|| strlen(trim($brand_id)) === 0 || $brand_id === 0)
+			|| strlen(trim($sku)) == 0 || $sku == "")
 		{
 			$data = '{"e":"0","d":"Fill (*) All Required Fields Properly!"}';		
 		}else{
@@ -854,6 +788,7 @@ class productUpload extends MY_Controller
 					$explode_value = $explode_id[0];
 					$attribute_id = $explode_id[1];
 					$post_attributes = $this->input->post($explode_value);
+                    $dataType = substr($explode_value,0,strpos($explode_value,'_'));
                     $rowCount = $this->product_model->deleteAttributeByProduct($product_id, $attribute_id);
 					if($post_attributes){
 						if(is_array($post_attributes)){
@@ -862,7 +797,22 @@ class productUpload extends MY_Controller
 							$post_attributes_arr = (strlen(trim($post_attributes)) === 0)?array():array(0=>$post_attributes);
 						}
 						foreach($post_attributes_arr as $attribute){
-							$this->product_model->addNewAttributeByProduct($product_id, $attribute_id, $attribute, '0');
+                            //validate information before inserting
+                            $valid = false;
+                            switch($dataType){
+                                case 'TEXT':
+                                    $valid = (count($this->product_model->selectAttributeNameWithTypeAndId($attribute_id,1))>0);
+                                    break;
+                                case 'TEXTAREA':
+                                    $valid = (count($this->product_model->selectAttributeNameWithTypeAndId($attribute_id,2))>0);
+                                    break;
+                                default: 
+                                    $valid = (count($this->product_model->selectAttributeNameWithNameAndId($attribute,$attribute_id))>0);
+                                    break;
+                            }
+                            if($valid){
+                                $this->product_model->addNewAttributeByProduct($product_id, $attribute_id, $attribute, '0');
+                            }
 						}
 					}                    
 				}

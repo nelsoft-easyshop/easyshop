@@ -149,13 +149,13 @@
   
 	
     <select id="getProductAttributes">
-		SELECT h.field_name as name, h.id_optional_attrhead as 'name_id', d.value_name as attr_value, d.id_optional_attrdetail as 'attr_value_id' , d.value_price as attr_price, COALESCE(i.product_image_path,'') as product_image_path, 'option' as 'type', i.id_product_image as 'img_id'
+        SELECT h.field_name as name, h.id_optional_attrhead as 'name_id', d.value_name as attr_value, d.id_optional_attrdetail as 'attr_value_id' , d.value_price as attr_price, COALESCE(i.product_image_path,'') as product_image_path, 'option' as 'type', i.id_product_image as 'img_id', '0' as 'datatype_id'
         FROM es_optional_attrhead h 
         LEFT JOIN es_optional_attrdetail d ON h.id_optional_attrhead = d.head_id
         LEFT JOIN es_product_image i ON d.product_img_id = i.id_product_image
         WHERE h.product_id=:id
         UNION
-        SELECT  b.name, b.id_attr,  a.attr_value, a.id_product_attr, a.attr_price, '', 'specific', '0'
+        SELECT  b.name, b.id_attr,  a.attr_value, a.id_product_attr, a.attr_price, '', 'specific', '0', b.datatype_id
         FROM es_product_attr a 
         LEFT JOIN  es_attr b on a.attr_id = b.id_attr
         WHERE a.product_id =:id
@@ -313,6 +313,13 @@
           AND main_tbl.id_attr = :id
 
     </select>
+    
+    <select id="selectAttributeNameWithTypeAndId">
+        SELECT 'NO LIST ITEM' as `name`, a.id_attr FROM es_attr a
+        LEFT JOIN es_attr_lookuplist b ON b.id_attr_lookuplist = a.attr_lookuplist_id
+        WHERE id_attr = :id_attr AND a.datatype_id = :datatype_id
+    </select>
+    
 
     <select id="addNewProduct_es_product">
         INSERT INTO `es_product`
@@ -682,5 +689,6 @@
 <select id="searchCategory">
     SELECT `id_cat`, `name` FROM `es_cat` WHERE MATCH(`name`) AGAINST (CONCAT(:sch_string,'*') IN BOOLEAN MODE)
 </select>
-    
+
+
 </map>

@@ -125,7 +125,7 @@ class product_model extends CI_Model
      * Feb 20, 2014 Edit: Enclosed name key with single quotes. This is to prevent the id keys from 
      * being mixed-up with numeric name keys when using $key = 'ALL'
      */
-	function getProductAttributes($id, $key = 'ALL') # getting the product attirbute using product ID
+	function getProductAttributes($id, $key = 'ALL') # getting the product attribute using product ID
 	{	
 		$query = $this->sqlmap->getFilenameID('product', 'getProductAttributes');
 
@@ -133,6 +133,7 @@ class product_model extends CI_Model
 		$sth->bindParam(':id',$id);
 		$sth->execute();
 		$rows = $sth->fetchAll(PDO::FETCH_ASSOC);	
+        
 		$data = array();
         		        
 		foreach($rows as $row){			
@@ -146,12 +147,12 @@ class product_model extends CI_Model
 			$row = $temp[0];
 			
 			if($key === 'NAME')
-				array_push($data["'".$row['name']."'"],array('value' => $row['attr_value'], 'value_id' => $row['attr_value_id'],  'price'=>$row['attr_price'],'img_path'=>$row['path'], 'img_file'=>$row['file'], 'type'=>$row['type'], 'img_id' => $row['img_id']  ));
+				array_push($data["'".$row['name']."'"],array('value' => $row['attr_value'], 'value_id' => $row['attr_value_id'],  'price'=>$row['attr_price'],'img_path'=>$row['path'], 'img_file'=>$row['file'], 'type'=>$row['type'], 'img_id' => $row['img_id'], 'datatype' => $row['datatype_id']  ));
 			else if($key === 'ID')
-				array_push($data[$row['name_id']],array('value' => $row['attr_value'], 'value_id' => $row['attr_value_id'],  'price'=>$row['attr_price'],'img_path'=>$row['path'], 'img_file'=>$row['file'], 'type'=>$row['type'], 'img_id' => $row['img_id']   ));
+				array_push($data[$row['name_id']],array('value' => $row['attr_value'], 'value_id' => $row['attr_value_id'],  'price'=>$row['attr_price'],'img_path'=>$row['path'], 'img_file'=>$row['file'], 'type'=>$row['type'], 'img_id' => $row['img_id'], 'datatype' => $row['datatype_id']   ));
 			else{
-				array_push($data["'".$row['name']."'"],array('value' => $row['attr_value'], 'value_id' => $row['attr_value_id'],  'price'=>$row['attr_price'],'img_path'=>$row['path'], 'img_file'=>$row['file'], 'type'=>$row['type'], 'img_id' => $row['img_id']   ));
-				array_push($data[$row['name_id']],array('value' => $row['attr_value'], 'value_id' => $row['attr_value_id'],  'price'=>$row['attr_price'],'img_path'=>$row['path'], 'img_file'=>$row['file'], 'type'=>$row['type'], 'img_id' => $row['img_id']   ));
+				array_push($data["'".$row['name']."'"],array('value' => $row['attr_value'], 'value_id' => $row['attr_value_id'],  'price'=>$row['attr_price'],'img_path'=>$row['path'], 'img_file'=>$row['file'], 'type'=>$row['type'], 'img_id' => $row['img_id'], 'datatype' => $row['datatype_id']   ));
+				array_push($data[$row['name_id']],array('value' => $row['attr_value'], 'value_id' => $row['attr_value_id'],  'price'=>$row['attr_price'],'img_path'=>$row['path'], 'img_file'=>$row['file'], 'type'=>$row['type'], 'img_id' => $row['img_id'], 'datatype' => $row['datatype_id']   ));
 			}
 		}
 		return $data;
@@ -252,6 +253,20 @@ class product_model extends CI_Model
 		
 		return $rows;	
 	}
+    
+    function selectAttributeNameWithTypeAndId($groupID,$datatypeID)
+	{
+		$query = $this->sqlmap->getFilenameID('product', 'selectAttributeNameWithTypeAndId');
+		$sth = $this->db->conn_id->prepare($query);
+		$sth->bindParam(':id_attr',$groupID, PDO::PARAM_INT);
+		$sth->bindParam(':datatype_id',$datatypeID,PDO::PARAM_INT);
+		$sth->execute();
+       
+		$rows = $sth->fetchAll(PDO::FETCH_ASSOC);
+		
+		return $rows;	
+	}
+
 
 	function addNewProduct($product_title,$sku,$product_brief,$product_description,$keyword,$brand_id,$cat_id,$style_id,$member_id,$product_price,$product_condition,$other_category_name)
 	{

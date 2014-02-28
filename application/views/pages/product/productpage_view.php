@@ -84,15 +84,17 @@
                 </ul>
               </div>
             </div>
-            <?php else: ?>
- 
-            <div class="product_option" style="display:none"> <span><?php echo html_escape(str_replace("'", '', $key));?></span>
-              <div>
-                <ul class="options" name="<?php echo str_replace("'", '', $key);?>">
-                  <li class="active" data-hidden="true" id="<?php echo html_escape($product_option[0]['value']);?>" data-price="<?php echo $product_option[0]['price'];?>" data-attrid="<?php echo $product_option[0]['value_id'];?>"><?php echo html_escape($product_option[0]['value']);?></li>
-                </ul>
-              </div>
-            </div>
+            <!-- Only display hidden attribute if the attribute datatype is a checkbox or an optional attribute -->
+            <?php elseif((count($product_option) === 1)&&(($product_option[0]['datatype'] === '5'))||($product_option[0]['type'] === 'option')):  ?>
+            
+                <div class="product_option" style="display:none"> <span><?php echo html_escape(str_replace("'", '', $key));?></span>
+                    <div>
+                        <ul class="options" name="<?php echo $key;?>">
+                            <li data-hidden="true" id="<?php echo html_escape($product_option[0]['value']);?>" data-price="<?php echo $product_option[0]['price'];?>" data-attrid="<?php echo $product_option[0]['value_id'];?>"><?php echo html_escape($product_option[0]['value']);?></li>
+                        </ul>
+                    </div>
+                </div>
+
             <?php endif; ?>
         <?php endforeach;?>
         

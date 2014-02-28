@@ -415,13 +415,13 @@ $(document).ready(function(){
   var combination = []; 
   var arrayCombination = []; 
   var arraySelected = {};  
-  var cnt_o = <?php echo json_encode($j-1); ?>;
-  <?php if(isset($sell)){
-    ?>
-   var cnt_o = <?php echo json_encode($j); ?>;
-    <?php 
-  } ?>
- 
+  
+  var cnt_o = <?php echo json_encode($j); ?>;
+  //For edit: cnt_o is greater than 1 whenever an optional attribute is already present
+  if(cnt_o > 1){
+    cnt_o--;
+  }
+    
   $(".hdv").css("display", "none");
   $( ".loader_div" ).hide();
   $('.quantity_attr_done').hide();
@@ -540,18 +540,19 @@ $(document).ready(function(){
       }
       return true;
     }
-function escapes(string){
-if(string != undefined){
-  return string.replace(/([;&,\.\+\*\~':"\!\^#$%@\[\]\(\)=>\|])/g, '\\$1');
-}else{
-  return "";
-}
-}
+    
+    function escapes(string){
+        if(string != undefined){
+            return string.replace(/([;&,\.\+\*\~':"\!\^#$%@\[\]\(\)=>\|])/g, '\\$1');
+        }else{
+            return "";
+        }
+    }
 
     document.getElementById('files').addEventListener('change', handleFileSelect, false);
 
     $( ".option_image_input" ).change(function(){
-      $(this).siblings(".option_image").css('display','none');
+        $(this).siblings(".option_image").css('display','none');
     });
 
     $(document).on('click',".removeSelected",function (){
@@ -654,6 +655,7 @@ $(document).on('change','.qtyTextClass',function(){
 $(document).on('change','.other_name_class',function(){
 
   $('.combinationContainer').empty();
+   noCombination = true;
   arraySelected = {};  
 
   var formatHeadValue = $.trim($(this).val().replace(/[^a-z0-9\s]/gi, '').replace(/[_\s]/g, ' '));
@@ -796,6 +798,7 @@ $(document).on('change','.other_name_value',function(){
 
     
          $('.combinationContainer').empty();
+		  noCombination = true;
          arraySelected = {};  
 
         var cnt = $(this).data('cnt');
@@ -914,7 +917,7 @@ $(".proceed_form").unbind("click").click(function(){
   var brief = $("#prod_brief_desc"); 
   var formData = new FormData(document.getElementById("form_product"));
   var combinationSelected = JSON.stringify(arraySelected);
-  var otherCategory = "<?php echo $otherCategory; ?>";
+  var otherCategory = "<?php echo isset($otherCategory)?$otherCategory:''; ?>";
   formData.append("inputs", input_name);
   formData.append("id", id);
   formData.append("combination",combinationSelected);
@@ -1027,7 +1030,6 @@ $(".proceed_form").unbind("click").click(function(){
         }
         formData.append("quantitySolo",quantity.val());
       }
-
 
       if(<?php echo json_encode((isset($is_edit))?$is_edit:false); ?>){
 		
@@ -1147,6 +1149,7 @@ $(".proceed_form").unbind("click").click(function(){
         var attrValNoSpace = attrVal.replace(' ','');
 
         $('.combinationContainer').empty();
+        noCombination = true;
         arraySelected = {};  
 
         if (obj.is(":checked")) {

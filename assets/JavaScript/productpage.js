@@ -149,11 +149,12 @@ $(function(){
 });
 
 
+
 $(function(){
     $('.options, .options a').on('click', function(event){
+
         if($(event.target).hasClass('disable'))
             return false;
-    
         //** Highlight selected attribute
         //It is important that the evaluation for isActiveBool happens before the active class is removed
         var isActiveBool = ($(event.target).attr('class') === 'active')?true:false; 
@@ -167,7 +168,7 @@ $(function(){
         if(!isActiveBool){
             $(event.target).addClass("active");
         }
-        
+                
         var isOptionAvailable = false;
         //** calculate price
         var sel_id = new Array();
@@ -247,6 +248,13 @@ $(function(){
         
     });
 });
+
+$(function(){
+    $('li[data-hidden="true"]').each(function(){
+        $(this).trigger( "click" );
+    });
+});
+
  
 $(function(){
     jQuery(document).on('click', '#send.enabled', function(){
