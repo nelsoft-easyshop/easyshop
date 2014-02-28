@@ -12,20 +12,20 @@
 	background:#b0b0b0 url(../images/global_sprite.png) -237px -298px no-repeat;
 }
 .grid:hover {
-	background: #ff4400 url(../images/global_sprite.png) -237px -298px no-repeat;
+	background: #f48000 url(../images/global_sprite.png) -237px -298px no-repeat;
 }
 .grid-active { 
-	background: #ff4400 url(../images/global_sprite.png) -237px -298px no-repeat; 
+	background: #f48000 url(../images/global_sprite.png) -237px -298px no-repeat; 
 }
 
 .list {
 	background: #b0b0b0  url(../images/global_sprite.png) -292px -298px no-repeat;
 }
 .list:hover {
-	background: #ff4400 url(../images/global_sprite.png) -292px -298px no-repeat;
+	background: #f48000 url(../images/global_sprite.png) -292px -298px no-repeat;
 }
 .list-active{
-	background: #ff4400 url(../images/global_sprite.png) -292px -298px no-repeat;
+	background: #f48000 url(../images/global_sprite.png) -292px -298px no-repeat;
 }
 
 
@@ -51,9 +51,9 @@
 	        box-shadow: 0 14px 14px -10px #bab6b6;
 }
 
-.product img:first-child, .product-list img:first-child{
+/*.product-list img:first-child{
 	float: left;
-}
+}*/
 .product h3 a{
 	text-decoration: none;
 	margin: 10px 0;
@@ -122,13 +122,19 @@
 	transition:         all 0.5s ease-in-out;*/
 }
 
+.product-list > a {
+	float: left;
+}
+
 .product-list:hover {
 	border: 1px solid #ff4400;
 }
 
 .product-list img {
-	width: 150px;
-	height: 150px;
+    max-width:150px;
+    max-height:150px;
+    width: auto;
+    height: auto;
 }
 
 .product-list h3 a{

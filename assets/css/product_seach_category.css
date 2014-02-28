@@ -138,9 +138,10 @@ div.product-list {
   width: 92%;
 }*/
 
-/*.prod_img_wrapper {
+.prod_img_wrapper {
   display: table;
-}*/
+  width: 237px;
+}
 
 .prod_img_container {
   display: table-cell;

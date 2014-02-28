@@ -41,7 +41,7 @@ a {
 }
 
 a:hover {
-	color: #ff4400;
+	color: #f18200;
 }
 
 p {
@@ -1624,8 +1624,8 @@ div.pass-hint {
 
 .bottom_save input[type="submit"] {
 	color: #fff;
-	background-color: #ff4400;
-	border: 1px solid #FF3000;
+	background-color: #f18200;
+	border: 1px solid #f18200;
 	padding:10px;
 	width: 150px;
 	border-radius: 3px;
@@ -1797,13 +1797,13 @@ div.pass-hint {
 #personal_profile_main input[type="submit"] {
 	width: 120px;
 	margin-left: 113px;
-	background-color: #ff4400;
+	background-color: #f18200;
 }
 
 #personal_profile_main input[type="submit"]:hover {
 	width: 120px;
 	margin-left: 113px;
-	background-color: #ff6600;
+	background-color: #ff4400;
 }
 
 .profile_fields label {
@@ -2610,7 +2610,7 @@ a:hover.tooltips span {
 	padding:3px;
 	min-width: 17px;
 	text-align: center;
-	border:1px solid #ff4400;
+	border:1px solid #f18200;
 	margin-left: 5px;
 	margin-bottom: -3px;
 
@@ -3111,14 +3111,24 @@ div.post_item_content_left {
 
 .vendor-profile{
 	background:white;
-	border-radius:3px;
-	border:1px solid #FF4400;
+/*	border-radius:3px;*/
+/*	border:1px solid #FF4400;*/
 }
 
 .vendor-profile > p:nth-child(2) > img{
 	width: 20px;
 	height: 20px;
 	vertical-align: text-bottom;
+}
+
+.vendor_map {
+	background-position: -368px -311px;
+	width: 20px;
+	height: 20px;
+}
+
+.vendor-profile > p {
+	word-wrap:break-word;
 }
 
 .vendor-profile > *{
@@ -3432,7 +3442,7 @@ span.transac_title_date:after {
 }
 
 .transac-product-container img + div p + p + p span {
-		color: #FF4400;
+		color: #f18200;
 }
 
 .feedb-star{
