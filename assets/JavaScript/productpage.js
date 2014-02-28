@@ -151,10 +151,12 @@ $(function(){
 
 
 $(function(){
+    var foo = new Array();
     $('.options, .options a').on('click', function(event){
-
+        //If clicked attribute is disabled, exit immediately
         if($(event.target).hasClass('disable'))
             return false;
+
         //** Highlight selected attribute
         //It is important that the evaluation for isActiveBool happens before the active class is removed
         var isActiveBool = ($(event.target).attr('class') === 'active')?true:false; 
@@ -168,7 +170,7 @@ $(function(){
         if(!isActiveBool){
             $(event.target).addClass("active");
         }
-                
+      
         var isOptionAvailable = false;
         //** calculate price
         var sel_id = new Array();
@@ -186,6 +188,8 @@ $(function(){
                     isOptionAvailable = true;
             }
         });
+        
+        
         $('.current_price')[0].innerHTML = price.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         
         //**Calculate quantity          
@@ -199,7 +203,6 @@ $(function(){
             }
             else{
                $('.orange_btn3').removeClass("enabled").addClass("disabled");
-              //$('.quantity')[0].innerHTML = '';
                $('.quantity')[0].innerHTML = $('.quantity').data('qty');
             }
         });
@@ -212,7 +215,8 @@ $(function(){
 
         //get ids of attributes to display
         $.each(qty, function(index, value){
-            if(containsAll(sel_id, value.product_attribute_ids)){  
+            //if(containsAll(sel_id, value.product_attribute_ids)){ 
+            if(containsOne(sel_id, value.product_attribute_ids)){
                 $.each(value.product_attribute_ids, function(r,s){
                     //if attr_id is not yet in show_ids, push it in
                     if($.inArray(s, show_ids) == -1){
@@ -222,12 +226,13 @@ $(function(){
             }
         });
 
-        //Disabled/enable attributes accordingly (if no option is selected, just display everything)
 
+        //Disabled/enable attributes accordingly (if no option is selected, just display everything)
+        
         $('.product_option').find('li').each(function(){
             if(($.inArray($(this).attr('data-attrid'), show_ids) === -1)&&(isOptionAvailable)){
-                //added this if condition in order to keep same row attributes enabled
-                if(($(this).closest('ul')[0]!==$(event.target).closest('ul')[0])){
+               //added this if condition in order to keep same row attributes enabled: useful for products with no combinations
+               if(($(this).closest('ul')[0]!==$(event.target).closest('ul')[0])){
                     $(this).addClass('disable');
                     if($(this).parent().prop('tagName').toLowerCase() === 'a'){
                        $(this).parent().data('enable', 'false');
@@ -244,6 +249,7 @@ $(function(){
         if(!isActiveBool){
             $(event.target).removeClass('disable');
         }
+        
 
         
     });
@@ -367,9 +373,30 @@ $(function(){
     });
 });
 
+/*
+ * This function checks if all elements in array needles exists in
+ * array haystack. This does not compare if two arrays are equal.
+ */
+
 function containsAll(needles, haystack){ 
     for(var i = 0 , len = needles.length; i < len; i++){
-        if($.inArray(needles[i], haystack) == -1) return false;
+        if($.inArray(needles[i], haystack) == -1){
+            return false;
+        }
     }
     return true;
+}
+
+/*
+ * This function checks if at least one elements in array needles exists in
+ * array haystack. This does not compare if two arrays are equal.
+ */
+ 
+function containsOne(needles, haystack){ 
+    for(var i = 0 , len = needles.length; i < len; i++){
+        if($.inArray(needles[i], haystack) != -1){
+            return true;
+        }
+    }
+    return false;
 }
