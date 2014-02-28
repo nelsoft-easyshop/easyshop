@@ -24,9 +24,12 @@ $(document).ready(function(){
          },
          errorElement: "span",
          errorPlacement: function(error, element) {
-                //error.addClass('red_center');
-                //error.appendTo($('#login_error').parent());
-				error.appendTo($('#login_error'));
+				if(element.attr('name') === 'login_username'){
+					error.appendTo($('#username_error'));
+				}
+				else{
+					error.appendTo($('#passw_error'));
+				}
          },
          submitHandler: function(form) {
 			$('#loading_img').show();
@@ -39,8 +42,10 @@ $(document).ready(function(){
                 data : $(form).serializeArray(),
                 success:function(data){
                     if(data.o_success <= 0){
-                        $("#login_error").empty();
-                        $("#login_error").html(data[3]);
+                        //$("#login_error").empty();
+                        //$("#login_error").html(data[3]);
+						$("#passw_error").empty();
+                        $("#passw_error").html(data[3]);
 						$('#loading_img').hide();
 						$('#login').show();
                     }
@@ -61,7 +66,8 @@ $(document).ready(function(){
     });
      
     $('.login_box input').on('click', function(){
-        $('#login_error').text('');
+        //$('.error_cont').text('');
+		$(this).siblings('.error_cont').text('');
     });
 
 });
