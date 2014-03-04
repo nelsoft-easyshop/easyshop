@@ -13,6 +13,11 @@
     table-layout: fixed;
 }
 
+.prod_con_gal {
+  height: 400px;
+  width: 400px;
+}
+
 .zoomPad img[src*="small"] {
     max-width:400px;
     max-height:400px;
