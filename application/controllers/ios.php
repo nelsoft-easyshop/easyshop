@@ -24,7 +24,10 @@ class Ios extends MY_Controller {
         echo '<br><br>'; 
         echo 'PRODUCT PAGE: <a  style="font-weight:bold;color:maroon" href="http://'. $ipAddress.'/ios/getProduct?p_id=">http://'. $ipAddress.'/ios/getProduct?p_id=</a>';
         echo '<br><br>';
+        echo 'PRODUCT PAGE: <a  style="font-weight:bold;color:maroon" href="http://'. $ipAddress.'/ios/getMainCategories">http://'. $ipAddress.'/ios/getMainCategories</a>';
+        echo '<br><br>';
         echo 'http://www.google.fr/url?sa=t&rct=j&q=&esrc=s&source=web&cd=1&cad=rja&ved=0CB4QFjAA&url=http%3A%2F%2Fallseeing-i.com%2FASIHTTPRequest%2F&ei=-dFZULfKO7SU0QW-1YGoAw&usg=AFQjCNFpUZprrMAY9mTk0aGzEzwSG8L9sg';
+      
 
     }
 
@@ -57,6 +60,11 @@ class Ios extends MY_Controller {
         }  
         echo json_encode($row,JSON_PRETTY_PRINT);
 
+    }
+    
+    function getMainCategories(){
+        $categories = $this->product_model->getCatItemsWithImage(1);
+        echo json_encode($categories,JSON_PRETTY_PRINT);
     }
     
     public function getProduct(){
