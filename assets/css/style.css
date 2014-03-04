@@ -214,7 +214,7 @@ p {
 }
 
 .orange {
-	color: #f48000;
+	color: #f18200;
 }
 
 .orange2 {
@@ -821,7 +821,7 @@ nav ul > li:hover > div {
 
 .inner_category p {
 	font-size: 11px;
-	color: #ff4400;
+	color: #f18200;
 	padding-bottom: 10px;
 	-webkit-box-shadow: none !important;
 	-moz-box-shadow:    none !important;
@@ -1087,13 +1087,22 @@ span.paypal {
 	padding: 10px 0;
 }
 
-#cat_1_main_details{
+#cat_1_main_details {
+	background: none repeat scroll center rgba(255, 255, 255, 0.7);
     float: none;
-    margin: 0 10px;
+    margin: -88px 0px 0;
     padding: 10px 0;
+    position: absolute;
     text-align: center;
-    width: 220px;
+    width: 240px;
 }
+
+#cat_1_main_details span {
+	color: #F18200;
+    font-size: 14px;
+    font-weight: normal;
+}
+
 .products div:first-child{
 	border-bottom: 1px solid #cecece;
 }
@@ -2263,11 +2272,11 @@ padding: 8px 0;
 .login_box input[type="submit"] {
 	font-weight: bold;
 	border-radius: 2px;
-	border: 1px solid #ff6600;
+	border: 1px solid #f18200;
 	color: #fff;
 	cursor: pointer;
-	background-color: #ff4400;
-	display: block;
+	background-color: #f18200;
+/*	display: block;*/
 	height: 30px;
 	line-height: 22px;
 	margin: 10px auto;
@@ -2283,8 +2292,13 @@ padding: 8px 0;
 }
 
 .login_box input[type="submit"]:hover {
-	border: 1px solid #ff4400;
-	background-color: #ff6600;	
+	border: 1px solid #f18200;
+	background-color: #ff4400;	
+}
+
+.login_loading_img {
+	margin:10px auto;
+	vertical-align: middle;
 }
 
 
@@ -2594,7 +2608,7 @@ a:hover.tooltips span {
 
 .post_items li a:hover {
     background-color: #fff;
-    color: #ff4400;	
+    color: #f18200;	
 }
 
 .post_items li a.selected span,
@@ -3480,8 +3494,8 @@ span.transac_title_date:after {
 
 .feedbacks_tabs li a.selected {
 	background-color: #fff;
-	border-top: 2px solid #ff4400;
-	color: #ff4400;
+	border-top: 2px solid #f18200;
+	color: #f18200;
 	border-left: 1px solid #EBE9E9;	
 	border-right: 1px solid #EBE9E9;
 	border-bottom: 1px solid #fff;
