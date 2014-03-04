@@ -150,27 +150,26 @@ $(function(){
 
 
 
-$(function(){
-    var foo = new Array();
-    $('.options, .options a').on('click', function(event){
+function attrClick(target, $this){
         //If clicked attribute is disabled, exit immediately
-        if($(event.target).hasClass('disable'))
+        if(target.hasClass('disable'))
             return false;
 
         //** Highlight selected attribute
         //It is important that the evaluation for isActiveBool happens before the active class is removed
-        var isActiveBool = ($(event.target).attr('class') === 'active')?true:false; 
+        var isActiveBool = (target.attr('class') === 'active')?true:false; 
          //".option a" and the first if condition is added in order to account for product options with images
-        if($(this).prop('tagName').toLowerCase() != 'ul' ){                          
-            $(this).parent().find('.active').removeClass("active");
+        if($this.prop('tagName').toLowerCase() != 'ul' ){                          
+            $this.parent().find('.active').removeClass("active");
         }
         else{
-            $(this).find('.active').removeClass("active");
+            $this.find('.active').removeClass("active");
         }
+        
         if(!isActiveBool){
-            $(event.target).addClass("active");
+            target.addClass("active");
         }
-      
+        
         var isOptionAvailable = false;
         //** calculate price
         var sel_id = new Array();
@@ -194,7 +193,6 @@ $(function(){
         
         //**Calculate quantity          
         var qty = JSON.parse($('#p_qty').val());
-        console.log(qty);
         $.each(qty, function(index, value){        
             if(value.product_attribute_ids.sort().join(',') === sel_id.sort().join(',')){
                $('.quantity')[0].innerHTML = value.quantity;
@@ -213,10 +211,27 @@ $(function(){
         //** disable attributes with no quantity option
         var show_ids = new Array();
 
-        //get ids of attributes to display
+        /*  The algorithm determines the attributes to be displayed using the following steps:
+         *  1. If the combination contains all of the selected attributes, enable the other attributes in the combination
+         *  2. Get combinations wherein each attribute to be displayed is included:
+         *     If an attribute in the combination is in the same row as a currently active attribute    
+         *     AND the selected attributes (minus the first element) PLUS the attribute in question are present together 
+         *     in the combination: enable the attribute. The relevance of the removing the first element of the selected
+         *     attributes array is to give the algorithm a row to consider as the "free-est" row (the row wherein the user
+         *     can move about the most without violating the combinations). This can be any row, but it has been arbitrarily 
+         *     decided to consider the row of the top most selected attribute as the "free-est" row.
+         *  3. If an attribute is not included in the attributes to be displayed AND is in the same row as the currently 
+         *     selected attribute, do not disable it even if it does not pass conditions 1 & 2. Note that this step does 
+         *     not enable such attributes but simply prevents them from being disabled. They simply maintain their state.
+         */
+        
+        /*
+         *  @Step 1: Get ids of attributes to display based on available combination and selected attributes: 
+         *  This step is actually sufficient to meet the purpose of this feature. However, using this alone 
+         *  restricts the user's freedom to change attributes.
+         */
         $.each(qty, function(index, value){
-            //if(containsAll(sel_id, value.product_attribute_ids)){ 
-            if(containsOne(sel_id, value.product_attribute_ids)){
+            if(containsAll(sel_id, value.product_attribute_ids)){
                 $.each(value.product_attribute_ids, function(r,s){
                     //if attr_id is not yet in show_ids, push it in
                     if($.inArray(s, show_ids) == -1){
@@ -225,15 +240,43 @@ $(function(){
                 });
             }
         });
-
-
-        //Disabled/enable attributes accordingly (if no option is selected, just display everything)
-        
-        $('.product_option').find('li').each(function(){
-            if(($.inArray($(this).attr('data-attrid'), show_ids) === -1)&&(isOptionAvailable)){
-               //added this if condition in order to keep same row attributes enabled: useful for products with no combinations
-               if(($(this).closest('ul')[0]!==$(event.target).closest('ul')[0])){
+		
+        /*
+         * @Step 2: Get ids of PROBABLE attributes based on available combinations, selected attributes, and
+         * currently enabled attributes.
+         */
+         
+        $.each(show_ids, function(idx, id){
+            $.each(qty, function(index, value){
+                if((containsAll([id], value.product_attribute_ids)) )  {        
+                    $.each(value.product_attribute_ids, function(r,s){
+                        if(($('.product_option li[data-attrid='+s+']').siblings('.active')[0] !== undefined)){
+                            //Remove element from the "free-est" row
+                            var arr = [].concat(sel_id);
+                            arr.shift();  
+                            var n_arr = [s].concat(arr);
+                            if((containsAll(n_arr, value.product_attribute_ids))){
+                                //if attr_id is not yet in show_ids, push it in
+                                if($.inArray(s, show_ids) == -1) 
+                                {
+                                    show_ids.push(s);
+                                }
+                            }
+                        }
+                    });
+                }
+            })
+        });
+  
+        //Disabled/enable attributes accordingly (if no option is selected, just enable everything)
+        $('.product_option li').each(function(){
+            if(($.inArray($(this).attr('data-attrid'), show_ids) === -1)&&(isOptionAvailable))
+            {
+               //@Step 3: added this if condition in order to keep same row attributes from being disabled
+               if(($(this).closest('ul')[0]!==target.closest('ul')[0]))
+               {
                     $(this).addClass('disable');
+                    //$(this).removeClass('active'); //useful in the event of a bug
                     if($(this).parent().prop('tagName').toLowerCase() === 'a'){
                        $(this).parent().data('enable', 'false');
                     }
@@ -242,18 +285,42 @@ $(function(){
             else{
                 $(this).removeClass('disable');
                 if($(this).parent().prop('tagName').toLowerCase() === 'a'){
+                    //data-enable added in order to disabled jqzoom swapping, see jqzoomer.js
                     $(this).parent().data('enable', 'true');
                 }
             }
         });
         if(!isActiveBool){
-            $(event.target).removeClass('disable');
+            target.removeClass('disable');
         }
-        
+        return isActiveBool;
+}
 
-        
+$(function(){
+    $('.options, .options a').on('click', function(event){
+        var $this = $(this);
+        console.log($(event.target));
+		if(attrClick($(event.target), $this)){
+            var active = new Array();
+            $('.product_option li').each(function(){
+                if($(this).hasClass('active')){
+                    active.push($(this).attr('data-attrid'));
+                }
+                $(this).removeClass('disable');
+                $(this).removeClass('active');
+            });
+            $.each(active, function(p, q){
+                var target = $('.product_option li[data-attrid='+q+']');
+                attrClick(target,$this);
+            });
+            
+        }
     });
+   
 });
+
+
+
 
 $(function(){
     $('li[data-hidden="true"]').each(function(){
@@ -371,6 +438,7 @@ $(function(){
         );
         return false;
     });
+    
 });
 
 /*
@@ -393,6 +461,7 @@ function containsAll(needles, haystack){
  */
  
 function containsOne(needles, haystack){ 
+  
     for(var i = 0 , len = needles.length; i < len; i++){
         if($.inArray(needles[i], haystack) != -1){
             return true;
