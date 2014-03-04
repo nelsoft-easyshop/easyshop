@@ -34,7 +34,7 @@
   <div class="wrapper">
     <div class="content_wrapper">
       <div  id="product_content_gallery">
-        <div> <a href="<?=base_url()?><?php echo $product_images[0]['path']; ?><?php echo $product_images[0]['file']; ?>" class="jqzoom" rel='gal1'  title="Brand: <?php echo $product['brand_name'];?>" > <img src="<?=base_url()?><?php echo $product_images[0]['path']; ?>small/<?php echo $product_images[0]['file']; ?>"  title="product"> </a> </div>
+        <div class="prod_con_gal"> <a href="<?=base_url()?><?php echo $product_images[0]['path']; ?><?php echo $product_images[0]['file']; ?>" class="jqzoom" rel='gal1'  title="Brand: <?php echo $product['brand_name'];?>" > <img src="<?=base_url()?><?php echo $product_images[0]['path']; ?>small/<?php echo $product_images[0]['file']; ?>"  title="product"> </a> </div>
         <br/>
         <div class="jcarousel">
           <ul id="thumblist">
