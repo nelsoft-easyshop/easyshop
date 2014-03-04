@@ -37,7 +37,7 @@
 						</div>
 						<div>
 						  <input id="login" type="submit" name="login_form" value="Login"/>
-						  <img src="<?=base_url()?>/assets/images/orange_loader_small.gif" id="loading_img" style="display:none"/>
+						  <img src="<?=base_url()?>/assets/images/orange_loader_small.gif" id="loading_img" class="login_loading_img" style="display:none"/>
 						  <br>
 						  <p>
 							<a href="<?=base_url()?>register">Don't have an account? Register now</a>
