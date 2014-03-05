@@ -175,6 +175,7 @@
 					<?php if(count($active_products) == 0):?>
 						<p><strong>No items on sale.</strong></p>
 					<?php else:?>
+
 					<input type="text" class="box" id="schbox_active">
 					<span id="active_schbtn" class="sch_btn">Search</span>
 					<select name="active_sort" id="active_sort">

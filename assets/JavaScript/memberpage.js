@@ -1274,8 +1274,8 @@ $(function(){
 			$('#active_sort').removeClass('hasSearch');
 		}
 		
-		
 	});
+	
 
 	$('#schbox_active').on('keydown', function(e){
 		var code = e.keyCode || e.which;
