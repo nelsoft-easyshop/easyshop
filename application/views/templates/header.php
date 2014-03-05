@@ -108,7 +108,9 @@
       <div class="logo"> <a href="<?=base_url()?>home"><span class="span_bg"></span></a> </div>
       <div class="search_box prob_search_box">
         <div>
+          <span class="main_srch_img_con"></span>
           <input name="q_str" type="text" id="main_search" value="<?php if(isset($_GET['q_str'])) echo str_replace('-', ' ', $_GET['q_str']); ?>" autocomplete="off">
+          
           <select name="q_cat" id="q_cat">
             <option value="1">All Categories</option>
             <?php
@@ -145,6 +147,7 @@ $(document).ready(function() {
       $.ajax({
         type: "POST",
         url: '<?php echo base_url();?>product/sch_onpress', 
+        onLoading:jQuery(".main_srch_img_con").html('<img src="<?= base_url() ?>assets/images/orange_loader_small.gif" />').show(),
         cache: false,
         data: "data="+searchQuery+"&es_csrf_token="+csrftoken , 
         beforeSend: function(jqxhr, settings) { 
@@ -152,6 +155,7 @@ $(document).ready(function() {
         },
         success: function(html) {
          $("#main_search_drop_content").html(html).show();
+          jQuery(".main_srch_img_con").hide();
        }
      });
     }else{
