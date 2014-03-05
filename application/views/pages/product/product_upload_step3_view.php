@@ -77,93 +77,8 @@
      </div>
 
     <!-- Content -->
-
+	
     <div>
-      
-      <table>
-        <tr>
-          <td>
-            Shipping Service
-          </td>
-          <td>
-            <select name="shipService1" id="shipService1"><option selected="" value="0">-</option>
-              <optgroup label="Economy services">
-              <option value="14">    Economy Shipping</option>
-              <option value="8">    USPS Parcel Select</option>
-              <option value="32">    USPS Standard Post</option>
-              <option value="9">    USPS Media Mail</option>
-              <option value="63">    FedEx SmartPost</option>
-              </optgroup> 
-              <optgroup label="Standard services">
-              <option value="1">    Standard Shipping</option>
-              <option value="3">    UPS Ground</option>
-              <option value="10">    USPS First Class Package</option>
-              <option value="62">    FedEx Ground or FedEx Home Delivery</option>
-              </optgroup>
-              <optgroup label="Expedited services">
-              <option value="2">    Expedited Shipping</option>
-              <option value="7">    USPS Priority Mail</option>
-              <option value="19">    USPS Priority Mail Flat Rate Envelope</option>
-              <option value="23">    USPS Priority Mail Small Flat Rate Box</option>
-              <option value="20">    USPS Priority Mail Medium Flat Rate Box</option>
-              <option value="22">    USPS Priority Mail Large Flat Rate Box</option>
-              <option value="24">    USPS Priority Mail Padded Flat Rate Envelope</option>
-              <option value="25">    USPS Priority Mail Legal Flat Rate Envelope</option>
-              <option value="4">    UPS 3 Day Select</option>
-              <option value="5">    UPS 2nd Day Air</option>
-              <option value="64">    FedEx Express Saver</option>
-              <option value="65">    FedEx 2Day</option>
-              </optgroup>
-              <optgroup label="One-day services">
-              <option value="18">    One-day Shipping</option>
-              <option value="11">    USPS Priority Mail Express</option>
-              <option value="21">    USPS Priority Mail Express Flat Rate Envelope</option>
-              <option value="26">    USPS Priority Mail Express Legal Flat Rate Envelope</option>
-              <option value="6">    UPS Next Day Air Saver</option>
-              <option value="12">    UPS Next Day Air</option>
-              <option value="66">    FedEx Priority Overnight</option>
-              <option value="67">    FedEx Standard Overnight</option>
-              </optgroup>
-              <optgroup label="Other services">
-              <option value="161">    Economy Shipping from outside US</option>
-              <option value="162">    Standard Shipping from outside US</option>
-              <option value="163">    Expedited Shipping from outside US</option>
-              <option value="167">    FedEx International Economy</option>
-              <option value="150">    Local Pickup</option>
-              </optgroup>
-            </select>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            Estimated Weight (g)
-          </td>
-          <td>
-            <input type="text" size="28" name="weight">
-          </td>
-        </tr>
-<!--
-        <tr>
-          <td>
-            Dimension
-          </td> 
-          <td>
-            <input type="text" placeholder="Length" size="5">  x
-             <input type="text" placeholder="Width" size="5"> x
-           <input type="text" placeholder="Height" size="5"> 
-          </td>
-          <tr>
-             <td>
-            Total
-          </td>
-          <td>
-            <input type="text" size="28">
-          </td>
-          </tr> 
-        </tr>
--->
-      </table>
-
       <table>
       <tr>
         <td>Product Attribute Combinations</td>
@@ -185,6 +100,7 @@
         <tr>
           <td>Location</td>
           <td>Price</td>
+		  <td>Courier</td>
         </tr>
         <input type="hidden" value="1" id="shiploc_count">
         <tr>
@@ -205,6 +121,14 @@
           <td>
             ₱<input type="text" name="shipprice1" class="shipprice">
           </td>
+		  <td>
+			<select name="courier1" class="courier">
+				<option selected="" value="0">Select Courier</option>
+				<?php foreach($courier as $couriers):?>
+					<option value="<?php echo $couriers['id_courier'];?>"><?php echo $couriers['courier_name'];?></option>
+				<?php endforeach;?>
+			</select>
+		  </td>
         </tr>
         <tr>
           <td>
@@ -221,7 +145,6 @@
 	<input type="hidden" id="shippingsummary_csrf" name="<?php echo $my_csrf['csrf_name'];?>" value="<?php echo $my_csrf['csrf_hash'];?>">
     <table id="shipping_summary" class="tablehide">
       <input type="hidden" id="summaryrowcount" value="0">
-	  
       <tr class="cloningfield">
         <td>
         </td>
@@ -231,6 +154,7 @@
               <tr class="cloningfield" data-idlocation="" data-groupkey="">
                 <td></td>
                 <td data-value=""></td>
+				<td data-value=""></td>
                 <td class="tablehide">
                   <span class="button delete_priceloc">
                     <img src="<?php echo base_url();?>assets/images/icon_delete.png"> Delete
@@ -250,14 +174,19 @@
           <span class="accept_summaryrow buttonhide button accept_cancel">
             <img src="<?php echo base_url();?>assets/images/check_icon.png"> Accept
           </span>
-          <span class="cancel_summaryrow buttonhide button accept_cancel">
+        <!--
+		  <span class="cancel_summaryrow buttonhide button accept_cancel">
             <img src="<?php echo base_url();?>assets/images/x_icon.png"> Cancel
           </span>
+		-->
         </td>
       </tr>
     </table>
     <span id="btnShippingDetailsSubmit" class="tablehide">Submit</span>
-
+	
+	<?php echo form_open('sell/step4', array('id'=>'step4_form'));?>
+		<input type="hidden" name="prod_h_id" id="prod_h_id" value="<?php echo $product_id;?>">
+	<?php echo form_close();?>
   </div>
 </div>
 

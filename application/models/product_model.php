@@ -1212,6 +1212,16 @@ class product_model extends CI_Model
         return $data;
     }
 
+	public function getCourier()
+	{
+		$query = $this->sqlmap->getFilenameID('product', 'getCourier');
+		$sth = $this->db->conn_id->prepare($query);
+		$sth->execute();
+		$row = $sth->fetchAll(PDO::FETCH_ASSOC);
+		
+		return $row;
+	}
+	
     /**
     *	Fetch Product Attr Combinations based on product ID and from Product Upload Step 2
     */
@@ -1225,7 +1235,8 @@ class product_model extends CI_Model
         $data = array();
 
         foreach($row as $r){
-        	$data[$r['product_item_id']][] = $r['attr_value'];
+        	//$data[$r['product_item_id']][] = $r['attr_value'];
+			$data[$r['product_id_item']][] = $r['attr_value'];
         }
 
         return $data;
@@ -1250,12 +1261,13 @@ class product_model extends CI_Model
     *	Store Product Shipping Mapping in `es_product_shipping_map`
     *	Table contains -> Mapping of ShippingID vs ProductItemAttrID
     */
-    public function storeProductShippingMap($shippingId, $attrCombinationId)
+    public function storeProductShippingMap($shippingId, $attrCombinationId, $courierId)
     {
 		$query = $this->sqlmap->getFilenameID('product','storeProductShippingMap');
     	$sth = $this->db->conn_id->prepare($query);
     	$sth->bindParam(':shipping_id', $shippingId, PDO::PARAM_INT);
     	$sth->bindParam(':product_item_id', $attrCombinationId, PDO::PARAM_INT);
+		$sth->bindParam(':courier_id', $courierId, PDO::PARAM_INT);
     	$result = $sth->execute();	
 
     	return $result;

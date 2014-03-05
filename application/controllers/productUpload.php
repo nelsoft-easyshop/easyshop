@@ -512,12 +512,14 @@ class productUpload extends MY_Controller
 	function step3()
 	{
 		//DEV CODE - temporarily set product id to fetch attribute combinations
-		$id = 4;
+		//$id = 4;
+		$id = $this->input->post('prod_h_id');
 
 		$data = array(
 			'shiploc' => $this->product_model->getLocation(),
+			'courier' => $this->product_model->getCourier(),
 			'attr' => $this->product_model->getPrdShippingAttr($id),
-			
+			'product_id' => $id
 			);
 		$data = array_merge($data, $this->fill_view());
 
@@ -532,12 +534,11 @@ class productUpload extends MY_Controller
 	*/
 	function step3Submit(){
 		$fdata = $this->input->post('fdata');
-
 		foreach($fdata as $group){
 			foreach($group as $attrCombinationId=>$attrGroup){
-				foreach($attrGroup as $locationKey=>$price){
-					$shippingId = $this->product_model->storeShippingPrice($locationKey,$price);
-					$this->product_model->storeProductShippingMap($shippingId, $attrCombinationId);
+				foreach($attrGroup as $locationKey=>$locgroup){
+					$shippingId = $this->product_model->storeShippingPrice($locationKey, $locgroup['price']);
+					$this->product_model->storeProductShippingMap($shippingId, $attrCombinationId, $locgroup['courier']);
 				}
 			}
 		}
