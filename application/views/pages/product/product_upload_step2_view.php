@@ -135,7 +135,7 @@
 
                             case 'TEXTAREA':
                             $value = (isset($cat_attr[0]))?$cat_attr[0]['value']:'';
-                            echo "<span><textarea name='".$input_type.'_'.$input_cat_name."'>".$value."</textarea></span>";
+                            echo "<span><textarea style='height:141px' cols=98 rows='98' name='".$input_type.'_'.$input_cat_name."'>".$value."</textarea></span>";
                             break;
 
                             case 'RADIO':
@@ -209,11 +209,11 @@
                 <tr>
 
                   <td colspan="4">
-                    <input type="file" id="files" name="files[]" multiple accept="image/*" required = "required"  /><br/>
 
+                    <input type="file" id="files" name="files[]" multiple accept="image/*" required = "required"  /><br/>
                     <div style="display:inline">
 
-                      <?php if(isset($main_images)):?>
+                      <?php if(isset($main_images)):?> <!-- IF EDIT FUNCTION -->
                       <div>
                         <?php foreach($main_images as $main_image): ?>
                         <div class="prod_upload_img_container">
@@ -494,6 +494,8 @@ $(document).ready(function(){
       return dumpedText;
     }
 
+
+    document.getElementById('files').addEventListener('change', handleFileSelect, false);
     function handleFileSelect(evt)
     {
       var files = evt.target.files;  
@@ -552,7 +554,6 @@ $(document).ready(function(){
         }
     }
 
-    document.getElementById('files').addEventListener('change', handleFileSelect, false);
 
     $( ".option_image_input" ).change(function(){
         $(this).siblings(".option_image").css('display','none');
