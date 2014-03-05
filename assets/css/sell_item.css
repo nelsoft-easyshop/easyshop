@@ -362,8 +362,8 @@ div.sell_steps4 ul li:nth-child(4) a {
 
 .add_category_submit input {
     color: #fff;
-    background-color: #ff4400;
-    border: 1px solid #FF3000;
+    background-color: #f18200;
+    border: 1px solid #f18200;
     padding:10px;
     width: auto;
     border-radius: 3px;
@@ -376,7 +376,7 @@ div.sell_steps4 ul li:nth-child(4) a {
 }
 
 .add_category_submit input:hover {
-    background-color: #FF6600;
+    background-color: #ff4400;
     border: 1px solid #FF4400;  
 }
 
@@ -624,16 +624,8 @@ div.sell_steps4 ul li:nth-child(4) a {
     width: 50px;
 }
 
-.qty_title {
-    float: left;
-}
-
 .qty_title input {
     margin-top: 8px;
-}
-
-.quantity_attrs_content {
-    float: left;
 }
 
 .quantity_attrs_content select {
@@ -641,6 +633,7 @@ div.sell_steps4 ul li:nth-child(4) a {
     line-height: 38px;
     margin-top: 8px;
     padding: 8px 0;
+    width: 190px;
 }
 
 .quantity_attrs_content div {
@@ -649,23 +642,25 @@ div.sell_steps4 ul li:nth-child(4) a {
 }
 
 .quantity_attr_done {
-    margin-top: 23px;
-    padding: 10px 30px;
+    padding: 11px 30px;
+    vertical-align: bottom;
 }
+
+.qty_tooltip span {
+    width: 570px !important;
+}
+
 .removeSelected {
-    display: inline-block;
+    display: table-cell;
     vertical-align: middle;
     text-align: center;
     width: 75px;
 }
 
-
-
-.combinationContainer > div > div {
-    display: inline-block;
-    height: 25px;
+.combinationContainer {
+    border-top: 1px solid #B6B6B6;
+    margin-top: 10px;
 }
-
 .quantityText {
     text-align: center;
     width: 50px;
@@ -673,25 +668,36 @@ div.sell_steps4 ul li:nth-child(4) a {
 
 .inner_quantity_list {
     border-bottom: 1px solid #CECECE;
-    height: 45px;
-    line-height: 45px;
+/*    height: 45px;
+    line-height: 45px;*/
+    display: table;
+    padding: 15px 0;
 }
 
 .inner_quantity_list:nth-child(odd) {
     background-color: #F8F7F7;
 }
 
-.inner_quantity_list div:nth-child(2),
-.inner_quantity_list div:nth-child(3),
-.inner_quantity_list div:nth-child(4) {
-    width: 207px;
-    margin-right: 10px;
+.input_qty {
+    display: table-cell;
+    padding: 0 15px;
+    vertical-align: middle;
 }
 
+.mid_inner_con_list {
+    width: 640px;
+}
+
+.mid_inner_con_list > div {
+    float: left;
+    line-height: 25px;
+    width: 200px;
+    word-wrap: break-word;
+}
 
 .form_input .proceed_form {
-    border: 1px solid #ff3000;
-    background-color: #ff4400;
+    border: 1px solid #f18200;
+    background-color: #f18200;
     color: #fff;
     cursor: pointer;
     width: 200px;
@@ -707,7 +713,7 @@ div.sell_steps4 ul li:nth-child(4) a {
 
 .form_input .proceed_form:hover {
     border: 1px solid #ff4400;
-    background-color: #ff9600;
+    background-color: #ff4400;
 }
 
 
