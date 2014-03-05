@@ -1,4 +1,4 @@
-
+﻿
 /****************** Global Upload product style ****************/
 /**************************************************************/
 
@@ -517,7 +517,7 @@ div.sell_steps4 ul li:nth-child(4) a {
     padding: 0px 15px 15px 0px;
 }
 
-.step4 tbody tr td span {
+.step4 tbody tr td > span {
     display: inline-block;
     padding-bottom: 5px;
     vertical-align: middle;
