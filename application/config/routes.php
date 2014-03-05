@@ -63,6 +63,7 @@ $route['sell/step1'] = 'productUpload/step1'; # ryan vasquez
 $route['sell/step2'] = 'productUpload/step2'; # ryan vasquez
 $route['sell/processing'] = 'productUpload/step2_2'; # ryan vasquez
 $route['sell/step3'] = 'productUpload/step3'; # ryan vasquez
+$route['sell/shippinginfo'] = 'productUpload/step3Submit';
 $route['sell/step4'] = 'productUpload/step4'; # ryan vasquez
 
 #User and Vendor

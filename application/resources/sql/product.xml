@@ -671,18 +671,6 @@
 	FROM es_courier_lookup
 </select>
 
-<!--
-<select id="getPrdShippingAttr">
-    SELECT piattr.product_item_id, pattr.attr_value
-    FROM es_product_item pitm
-    LEFT JOIN es_product_item_attr piattr
-        ON pitm.id_product_item = piattr.product_item_id
-    LEFT JOIN es_product_attr pattr
-        ON piattr.product_attr_id = pattr.id_product_attr
-    WHERE pitm.product_id = :id
-</select>
--->
-
 <select id="getPrdShippingAttr">
 	SELECT piattr.product_id_item, pattr.attr_value
     FROM es_product_item pitm
