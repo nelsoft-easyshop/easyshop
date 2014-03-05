@@ -135,8 +135,9 @@
 
                             case 'TEXTAREA':
                             $value = (isset($cat_attr[0]))?$cat_attr[0]['value']:'';
-                            echo "<span><textarea style='height:141px' cols=98 rows='98' name='".$input_type.'_'.$input_cat_name."'>".$value."</textarea></span>";
-                            break;
+                            // echo "<span><textarea style='height:141px' cols=98 rows='98' name='".$input_type.'_'.$input_cat_name."'>".$value."</textarea></span>";
+                             echo "<textarea name='".$input_type.'_'.$input_cat_name."' style='width: 100%;height:100%' class='mceEditor' >".$value."</textarea></span>";
+                             break;
 
                             case 'RADIO':
                             foreach ($itemattribute as $list) {
@@ -1244,12 +1245,15 @@ $(".proceed_form").unbind("click").click(function(){
 <script src="<?php echo base_url(); ?>assets/tinymce/tinymce.min.js" type="text/javascript"></script>
 <script type="text/javascript">
 tinymce.init({
-  mode : "specific_textareas",
-  editor_selector : "mceEditor",
+  // mode : "specific_textareas",
+  // editor_selector : "mceEditor",
+  selector: "textarea",
+ menubar: "table format view insert edit",
+
+    statusbar: false,
   height: 300,
   plugins: [
   "lists link preview ",
-  "searchreplace ",
   "table jbimages"
   ],  
   toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | jbimages | image_advtab: true ",  
