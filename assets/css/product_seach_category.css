@@ -95,6 +95,10 @@
   width: 80px;
 }
 
+.left_attribute ul {
+  list-style: none;
+}
+
 nav {
   display: none;
   position: absolute;
