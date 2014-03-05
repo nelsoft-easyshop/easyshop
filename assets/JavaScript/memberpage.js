@@ -1409,3 +1409,9 @@ $(document).ready(function(){
 });
 
 */
+
+
+/******* rotate sort arrow when click *****/
+$(".arrow_sort").on("click", function () {
+    $(this).toggleClass("rotate_arrow");
+});
