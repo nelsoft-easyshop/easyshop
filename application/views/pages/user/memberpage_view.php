@@ -175,15 +175,6 @@
 					<?php if(count($active_products) == 0):?>
 						<p><strong>No items on sale.</strong></p>
 					<?php else:?>
-
-					<input type="text" class="box" id="schbox_active">
-					<span id="active_schbtn" class="sch_btn">Search</span>
-					<select name="active_sort" id="active_sort">
-						<option value="date">Date of Entry</option>
-						<option value="name">Name</option>
-						<option value="price">Price</option>
-					</select>
-					<label for="active_sort">Sort By</label>
 					
 					<div class="pagination" id="pagination_active">
 						<a href="#" class="first" data-action="first">&laquo;</a>
@@ -192,6 +183,18 @@
 						<a href="#" class="next" data-action="next">&rsaquo;</a>
 						<a href="#" class="last" data-action="last">&raquo;</a>
 					</div>
+
+					<div class="post_item_srch_container">
+						<input type="text" class="box" id="schbox_active" placeholder="Search" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Search'" />
+						<span id="active_schbtn" class="span_bg sch_btn"></span>
+						<label for="active_sort">Sort By</label>
+						<select name="active_sort" id="active_sort" class="post_active_sort">
+							<option value="date">Date of Entry</option>
+							<option value="name">Name</option>
+							<option value="price">Price</option>
+						</select>
+						<span class="span_bg arrow_sort"></span>
+					</div>
 				
 					<div class="paging active_product_display">					
 					<?php $product_counter = 0; 
@@ -199,7 +202,9 @@
 							<div class="post_items_content">
 								
 								<div class="post_item_content_left">
-									<img src="<?php echo base_url().$active_product['path'].'categoryview/'.$active_product['file']; ?>" class="product_img">
+									<span class="post_item_img_con">
+										<img src="<?php echo base_url().$active_product['path'].'categoryview/'.$active_product['file']; ?>" class="product_img">
+									</span>
 									<p class="star_rating_reviews">
                                         <?php $rounded_score = round($active_product['average_rating']); ?>
 										<?php for($i = 0; $i < $rounded_score;$i++): ?>
