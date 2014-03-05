@@ -44,7 +44,7 @@
                       <tr>
                         <td colspan="3">
                           <p class="notification"> <img src="<?= base_url() ?>assets/images/img_notification.png"> (<strong >*</strong>) required fields</p>
-                          <h3  style="color:#FF4400"> Describe your item</h3> 
+                          <h3  class="orange"> Describe your item</h3> 
                         </td>
 
                       </tr>
@@ -83,7 +83,7 @@
 
                       <tr>
                         <td colspan="3">
-                          <h3 style="color:#FF4400"> Add item specifics</h3> 
+                          <h3 class="orange"> Add item specifics</h3> 
                         </td>
                       </tr>
                       <?php 
@@ -183,7 +183,7 @@
               <table class="step4_2" style="width:100%">
                 <tr>
                   <td colspan="3" >
-                    <h3 style="color:#FF4400"> Add a description</h3> 
+                    <h3 class="orange"> Add a description</h3> 
                   </td>
                 </tr>
                 <tr>
@@ -204,7 +204,7 @@
 
                 <tr>
                   <td colspan="3"> 
-                    <h3 style="color:#FF4400"> Image of your item</h3> (Select Multiple)
+                    <h3 class="orange"> Image of your item</h3> (Select Multiple)
                   </td>
                 </tr>
                 <tr>
@@ -232,7 +232,7 @@
             </tr>
             <tr>
               <td colspan="3">
-                <h3 style="color:#FF4400"> Price</h3> 
+                <h3 class="orange"> Price</h3> 
               </td>
             </tr>
             <tr>
@@ -245,7 +245,7 @@
             </tr>
             <tr>
               <td colspan="3">
-                <h3  style="color:#FF4400"> Additional Information to your Item</h3> 
+                <h3  class="orange"> Additional Information to your Item</h3> 
               </td>
             </tr>
 
@@ -351,9 +351,8 @@
       </tr>
       
       <tr>
-        <td colspan="4">
-            <h3 style="color:#FF4400">Quantity</h3>
-        </td>
+        <td colspan="4"><h3 class="orange">Quantity</h3></td>
+
       </tr>
       <tr>
         <td></td>
@@ -363,10 +362,11 @@
               <div class="qty_title">
                 <span>Quantity:</span><br />
                 <input type="text" class="qtyTextClass" id="qtyTextClass" name="quantity"> 
+                <a href="javascript:void(0)" data-value="1" class="quantity_attr_done orange_btn3">Add</a>
+                <a class="tooltips qty_tooltip" href="javascript:void(0)" style="display:inline"><img src="<?= base_url() ?>assets/images/icon_qmark.png" alt=""> <span> You can also set the availability of different attribute combinations of your item by clicking the Add button</span></a> 
               </div>
               <div class="quantity_attrs_content" id="quantity_attrs_content2"></div>
-              <a href="javascript:void(0)" data-value="1" class="quantity_attr_done orange_btn3">Add</a>
-              <a class="tooltips quantity_attr_done" href="javascript:void(0)" style="display:inline"><img src="<?= base_url() ?>assets/images/icon_qmark.png" alt=""> <span> You can also set the availability of different attribute combinations of your item by clicking the Add button</span></a>
+             
             </div>
           </div>
           <div class="clear"></div>
@@ -581,7 +581,7 @@ $(document).ready(function(){
       var htmlEach  = "";
       var alreadyExist  = false;
       var haveValue = false;
-      htmlEach += '<div><input type="textbox" class="quantityText" value="'+qtyTextbox.val()+'" data-cnt="'+thisValueCount+'"></div>';
+      htmlEach += '<div class="input_qty"><input type="textbox" class="quantityText" value="'+qtyTextbox.val()+'" data-cnt="'+thisValueCount+'"></div><div class="mid_inner_con_list">';
 
       $(function() { 
         $('.quantity_attrs_content option:selected').each(function(){
@@ -617,7 +617,7 @@ $(document).ready(function(){
 if(haveValue === true){
   if(alreadyExist === false){
 
-   $('.combinationContainer').append('<div class="inner_quantity_list innerContainer'+thisValueCount+'"> '+ htmlEach +' <a href="javascript:void(0)" class="removeSelected" data-row="'+thisValueCount+'"   style="color:Red">Remove</a></div>');
+   $('.combinationContainer').append('<div class="inner_quantity_list innerContainer'+thisValueCount+'"> '+ htmlEach +'</div> <a href="javascript:void(0)" class="removeSelected" data-row="'+thisValueCount+'"   style="color:Red">Remove</a></div>');
    dataCombination['quantity'] = qtyTextbox.val();
    dataCombination['value'] = arrayCombinationString.slice(0, - 1);
    arraySelected[thisValueCount] = dataCombination;
