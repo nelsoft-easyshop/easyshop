@@ -2587,8 +2587,22 @@ a:hover.tooltips span {
 	border-top:1px solid #f08e1c;
 	border-bottom:1px solid #f08e1c;
 	border-right:1px solid #f5d4ad;
-	color: #a15700;
-	height: 25px;
+	color: #353535;
+	height: 24px;
+	vertical-align: middle;
+}
+
+.post_item_srch_container input[type="text"]::-webkit-input-placeholder { /* WebKit browsers */
+    color: #515151;
+}
+.post_item_srch_container input[type="text"]:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+    color: #353535;
+}
+.post_item_srch_container input[type="text"]::-moz-placeholder { /* Mozilla Firefox 19+ */
+    color: #353535;
+}
+.post_item_srch_container input[type="text"]:-ms-input-placeholder { /* Internet Explorer 10+ */
+    color: #353535;
 }
 
 .post_item_srch_container input[type="text"]:focus {
@@ -2601,11 +2615,41 @@ a:hover.tooltips span {
 	cursor: pointer;
 	color: #fff;
 	display: inline-block;
-	height: 35px;
-	line-height: 35px;
+	height: 34px;
+	line-height: 34px;
 	margin-left: -3px;
+	margin-right: 10px;
 	padding:0 10px;
-	vertical-align: top;
+	width: 20px;
+	background-position: -364px -248px;
+}
+
+.post_item_srch_container .sch_btn:hover {
+	background-color: #f48400;
+}
+
+.post_active_sort {
+	border: 1px solid #CECECE;
+	padding:8px 2px;
+	vertical-align: middle;
+	width: 130px;
+}
+
+.arrow_sort {
+    background-position: -401px -248px;
+    border: 1px solid #CECECE;
+    cursor: pointer;
+    display: inline-block;
+    height: 34px;
+    margin-left: 10px;
+    width: 34px;
+}
+
+.rotate_arrow {
+    -moz-transform: rotate(-180deg);
+       -webkit-transform: rotate(-180deg);
+        -ms-transform: rotate(-180deg);
+        -o-transform: rotate(-180deg);
 }
 
 .post_items {
