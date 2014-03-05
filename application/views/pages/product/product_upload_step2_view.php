@@ -350,7 +350,9 @@
       </tr>
       
       <tr>
-        <td colspan="4"><h3 style="color:#FF4400">Quantity</h3></td>
+        <td colspan="4">
+            <h3 style="color:#FF4400">Quantity</h3>
+        </td>
       </tr>
       <tr>
         <td></td>
@@ -362,7 +364,8 @@
                 <input type="text" class="qtyTextClass" id="qtyTextClass" name="quantity"> 
               </div>
               <div class="quantity_attrs_content" id="quantity_attrs_content2"></div>
-              <a href="javascript:void(0)" data-value="1" class="quantity_attr_done orange_btn3">Done</a>
+              <a href="javascript:void(0)" data-value="1" class="quantity_attr_done orange_btn3">Add</a>
+              <a class="tooltips quantity_attr_done" href="javascript:void(0)" style="display:inline"><img src="<?= base_url() ?>assets/images/icon_qmark.png" alt=""> <span> You can also set the availability of different attribute combinations of your item by clicking the Add button</span></a>
             </div>
           </div>
           <div class="clear"></div>
