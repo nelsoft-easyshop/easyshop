@@ -253,6 +253,8 @@ class productUpload extends MY_Controller
 							for ($i=0; $i < sizeof($explode_inputs) ; $i++) {
 								$explode_id = explode('/', $explode_inputs[$i]);
 								$explode_value = $explode_id[0];
+                                
+                                
 								$attribute_id = $explode_id[1];
 								$extraPrice = '0';
                                 $dataType = substr($explode_value,0,strpos($explode_value,'_'));
@@ -271,7 +273,7 @@ class productUpload extends MY_Controller
 									break;
                                     #input type is textarea
                                     case 'TEXTAREA':
-                                        if(isset($_POST[$explode_value])){
+                                        if(isset($_POST[$explode_value]) && (strlen(trim($_POST[$explode_value])) != 0 )){
                                             $attributeCount = count($this->product_model->selectAttributeNameWithTypeAndId($attribute_id,2));
                                             if($attributeCount > 0){
                                                 $prod_attr_id = $this->product_model->addNewAttributeByProduct($product_id,$attribute_id,$_POST[$explode_value],$extraPrice);
@@ -280,7 +282,7 @@ class productUpload extends MY_Controller
                                     break;
                                     #input type is simple textbox
                                     case 'TEXT':
-                                        if(isset($_POST[$explode_value])){
+                                        if(isset($_POST[$explode_value]) && (strlen(trim($_POST[$explode_value])) != 0 )){
                                             $attributeCount = count($this->product_model->selectAttributeNameWithTypeAndId($attribute_id,1));
                                             if($attributeCount > 0){
                                                 $prod_attr_id = $this->product_model->addNewAttributeByProduct($product_id,$attribute_id,$_POST[$explode_value],$extraPrice);
@@ -780,8 +782,6 @@ class productUpload extends MY_Controller
 
 			$rowCount = $this->product_model->editProduct($product_details, $member_id);
 
-          
-            
 			if($rowCount>0){
 				foreach($explode_inputs as $input){
 					$explode_id = explode('/', $input);
