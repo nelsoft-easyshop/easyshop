@@ -282,7 +282,7 @@ span.seller-name span:hover {
 	font-size: 26px;
 	padding: 0;
 	margin: 0;
-	color: #ff4400;
+	color: #f18200;
 }
 
 .buy_box span {
@@ -457,8 +457,8 @@ span.seller-name span:hover {
 	padding:10px;
     background-color: #FFFFFF !important;
     border-bottom: 1px solid #FFFFFF;
-    border-top: 3px solid #ff4400 !important;
-    color: #FF4400;
+    border-top: 3px solid #f18200 !important;
+    color: #f18200;
     margin-bottom: -1px;
 
 }
@@ -466,7 +466,7 @@ span.seller-name span:hover {
 .ui-state-hover a {
 	padding:10px;
 	background-color: #fff;
-	color:#ff4400;	
+	color:#f18200;	
 
 }
 
@@ -811,7 +811,11 @@ div.reply_content_shown > p {
 
 
 
-/***** Main product carousel ********/
+/***** Product View Gallery Thumbnail carousel ********/
+.thumbnails_container {
+	width: 400px;
+}
+
 .jcarousel {
 	border: none;
     height: 70px;
@@ -836,23 +840,16 @@ div.reply_content_shown > p {
 
 .jcarousel-control-prev, 
 .jcarousel-control-next {
-	top: 610px;
-}
-
-.jcarousel-control-prev {
-	margin-left: 0px;
-}
-
-.jcarousel-control-next {
-    margin-left: 360px;
-}
-
-.jcarousel-control-prev, 
-.jcarousel-control-next {
-    background: none repeat scroll 0 0 #fff;
+	background: none repeat scroll 0 0 #fff;
     box-shadow: none;
     color: #494949;
+    position: relative;
+    top: -55px;
     text-shadow: none;
+}
+
+.jcarousel-control-next {
+     margin-left: 340px;
 }
 
 .jcarousel-control-prev:hover, 
