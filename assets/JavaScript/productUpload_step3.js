@@ -43,7 +43,7 @@ $(function(){
 $(function(){
   var fdata = {};
   var displaygroup = {};
-  var spanerror = '<span class="error red samelocerror">Unable to select same location for same attribute</span>';
+  var spanerror = '<td class="error red samelocerror">Unable to select same location for same attribute</td>';
   var shiplocselectiontbl = $('#shiploc_selectiontbl');
   
   /**
