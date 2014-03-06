@@ -50,7 +50,7 @@
                       </tr>
                       <tr>
                         <td  style="width:130px">Title <font color="red">*</font></td> <!-- Title of the product -->
-                        <td colspan="2"><input type="text" placeholder="Enter title" autocomplete="off" id="prod_title" name="prod_title" value="<?php echo (isset($product_details['name']))?$product_details['name']:'';?>"></td>
+                        <td colspan="2"><input type="text" placeholder="Enter title" autocomplete="off" id="prod_title" maxlength="255" name="prod_title" value="<?php echo (isset($product_details['name']))?$product_details['name']:'';?>"></td>
                       </tr>
                       <tr>
 
@@ -136,8 +136,10 @@
                             case 'TEXTAREA':
                             $value = (isset($cat_attr[0]))?$cat_attr[0]['value']:'';
                             // echo "<span><textarea style='height:141px' cols=98 rows='98' name='".$input_type.'_'.$input_cat_name."'>".$value."</textarea></span>";
-                             echo "<textarea name='".$input_type.'_'.$input_cat_name."' style='width: 100%;height:100%' class='mceEditor' >".$value."</textarea></span>";
-                             break;
+                            echo "<textarea name='".$input_type.'_'.$input_cat_name."' style='width: 100%;height:100%' class='mceEditor_attr' >".$value."</textarea></span>";
+
+                             
+                            break;
 
                             case 'RADIO':
                             foreach ($itemattribute as $list) {
@@ -188,7 +190,7 @@
                 </tr>
                 <tr>
                   <td  style="width:130px">Brief description <font color="red"> *</font></td><!-- Brief of the product -->
-                  <td colspan="2"><input type="text" autocomplete="off" placeholder="Enter brief description" id="prod_brief_desc" name="prod_brief_desc"  value="<?php echo (isset($product_details['brief']))?$product_details['brief']:'';?>"></td>
+                  <td colspan="2"><input type="text" autocomplete="off" maxlength="255" placeholder="Enter brief description" id="prod_brief_desc" name="prod_brief_desc"  value="<?php echo (isset($product_details['brief']))?$product_details['brief']:'';?>"></td>
                 </tr>
                 <tr>
                   <td valign="top">Description <font color="red">*</font></td><!-- Main Description of the product --> 
@@ -197,7 +199,7 @@
                 <tr>
                   <td>SKU Code <font color="red">*</font></td> <!-- SKU of the product -->
                   <td colspan="2">
-                    <input type="text" autocomplete="off" placeholder="Enter SKU" id="prod_sku" name="prod_sku" value="<?php echo (isset($product_details['sku']))?$product_details['sku']:'';?>">
+                    <input type="text" autocomplete="off"  maxlength="45" placeholder="Enter SKU" id="prod_sku" name="prod_sku" value="<?php echo (isset($product_details['sku']))?$product_details['sku']:'';?>">
                     <a class="tooltips" href="javascript:void(0)"><img src="<?= base_url() ?>assets/images/icon_qmark.png" alt=""><span>Stock Keeping Unit: you can assign any code in order to keep track of your items</span></a>
                   </td>
                 </tr>
@@ -241,7 +243,7 @@
             </tr>
             <tr>
               <td>Keywords (separated by spaces)</td>
-              <td colspan="2"><input type="text" autocomplete="off" name="prod_keyword" id="prod_keyword" placeholder="Enter keyword for you item" value="<?php echo (isset($product_details['keywords']))?$product_details['keywords']:'';?>"></td>
+              <td colspan="2"><input type="text" autocomplete="off" maxlength="1024" name="prod_keyword" id="prod_keyword" placeholder="Enter keyword for you item" value="<?php echo (isset($product_details['keywords']))?$product_details['keywords']:'';?>"></td>
             </tr>
             <tr>
               <td colspan="3">
@@ -363,7 +365,7 @@
                 <span>Quantity:</span><br />
                 <input type="text" class="qtyTextClass" id="qtyTextClass" name="quantity"> 
                 <a href="javascript:void(0)" data-value="1" class="quantity_attr_done orange_btn3">Add</a>
-                <a class="tooltips qty_tooltip" href="javascript:void(0)" style="display:inline"><img src="<?= base_url() ?>assets/images/icon_qmark.png" alt=""> <span> You can also set the availability of different attribute combinations of your item by clicking the Add button</span></a> 
+                <a class="tooltips qty_tooltip quantity_attr_done" href="javascript:void(0)" style="display:inline"><img src="<?= base_url() ?>assets/images/icon_qmark.png" alt=""> <span> You can also set the availability of different attribute combinations of your item by clicking the Add button</span></a> 
               </div>
               <div class="quantity_attrs_content" id="quantity_attrs_content2"></div>
              
@@ -628,7 +630,7 @@ if(haveValue === true){
   return false;
 } 
 }
-// console.log(arraySelected);
+
 
 });
 
@@ -912,8 +914,8 @@ $(document).on('change',"#prod_condition,#prod_brand",function () {
 
 
 $(".proceed_form").unbind("click").click(function(){
-  
-  var description = tinyMCE.activeEditor.getContent();
+  tinyMCE.triggerSave();
+  var description = tinyMCE.get('prod_description').getContent();
   var id = "<?php echo $id; ?>"
   $('.description_hidden').val(description);
   var input_name = "<?php echo (string)$array_name_inputs; ?>";
@@ -1245,9 +1247,13 @@ $(".proceed_form").unbind("click").click(function(){
 <script src="<?php echo base_url(); ?>assets/tinymce/tinymce.min.js" type="text/javascript"></script>
 <script type="text/javascript">
 tinymce.init({
-  // mode : "specific_textareas",
-  // editor_selector : "mceEditor",
-  selector: "textarea",
+   mode : "specific_textareas",
+   editor_selector : "mceEditor",
+  //selector: "textarea",
+ menubar: "table format view insert edit",
+
+    statusbar: false,
+  //selector: "textarea",
  menubar: "table format view insert edit",
 
     statusbar: false,
@@ -1259,12 +1265,26 @@ tinymce.init({
   toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | jbimages | image_advtab: true ",  
   relative_urls: false
 });
+
+tinymce.init({
+ mode : "specific_textareas",
+ editor_selector : "mceEditor_attr",
+ //selector: "textarea",
+ menubar: "table format view insert edit",
+
+  statusbar: false,
+  height: 200,
+  plugins: [
+  "lists link preview ",
+  "table jbimages"
+  ],  
+  toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | jbimages | image_advtab: true ",  
+  relative_urls: false
+});
+
+
 </script> 
-  <!-- <script type="text/javascript" src="<?php echo base_url(); ?>assets/ckeditor/ckeditor.js"></script> 
-<script type="text/javascript">
-CKEDITOR.replace( 'prod_description' );
-</script>
--->
+
 
 <div class="clear"></div>  
 
