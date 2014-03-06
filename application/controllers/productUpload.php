@@ -512,7 +512,7 @@ class productUpload extends MY_Controller
 	function step3()
 	{
 		//DEV CODE - temporarily set product id to fetch attribute combinations
-		//$id = 4;
+		//$id = 118;
 		$id = $this->input->post('prod_h_id');
 
 		$data = array(

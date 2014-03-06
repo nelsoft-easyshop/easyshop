@@ -86,12 +86,7 @@ $(document).ready(function(){
 	$('#yp_buyer .paging:not(:first)').hide();
 	$('#yp_seller .paging:not(:first)').hide();
 	
-	$('#pagination_active').jqPagination({
-		paged: function(page) {
-		    $('#active_items .paging').hide();
-			$($('#active_items .paging')[page - 1]).show();
-		}
-	});
+	setDefaultActivePagination();
 	
 	$('#pagination_deleted').jqPagination({
 		paged: function(page) {
@@ -146,6 +141,28 @@ function triggerTab(x){
 	$('.idTabs a[href="#'+x+'"]').trigger('click');
 }
 
+function setDefaultActivePagination() {
+	$('#pagination_active').jqPagination({
+		paged: function(page) {
+		    $('#active_items .paging').hide();
+			$($('#active_items .paging')[page - 1]).show();
+		}
+	});
+	$('#pagination_active').jqPagination('option','current_page', 1);
+}
+
+function setFilterResultActivePagination(resultCounter){
+	$('#pagination_active').jqPagination('destroy');
+	$('#pagination_active').jqPagination({
+		max_page: Math.ceil((resultCounter===0 ? 10:resultCounter) / 10),
+		paged: function(page) {
+			$('#active_items div.filter_result').hide();
+			$($('#active_items div.filter_result')[page-1]).show();
+		}
+	});
+	$('#pagination_active').jqPagination('option', 'current_page', 1);
+	$('#active_items div.filter_result:first').show();
+}
 
 /***** create wishlist modal *****/
 
@@ -155,7 +172,160 @@ $(document).ready(function(){
 		$('#create_wishlist').parent().removeAttr('style');
 		});
 
-	 });
+});
+
+
+/******************	DASHBOARD - ACTIVE TAB Search Box	********************/
+$(function(){
+	var schResult = [];
+	var schValue = '';
+	
+	$('#active_schbtn').on('click', function(){
+		// Remove filter result and re-append new one
+		var divActiveItems = $('#active_items');
+		divActiveItems.children('div.filter_result').remove();
+		divActiveItems.append('<div class="filter_result" style="display:none;"></div>');
+		var filterDiv = divActiveItems.children('div.filter_result:last');
+		
+		var resultCounter = 0;
+		var schValue = $('#schbox_active').val().toLowerCase().replace(/\s/g,'');
+		$('#active_sort').val('date');
+		$('#active_sortorder').removeClass('rotate_arrow');
+		
+		if(schValue !== ''){
+			var divPaging = divActiveItems.children('div.paging');
+			divPaging.hide();
+			
+			//cycle through each Product Title
+			divPaging.children('div.post_items_content').each(function(){
+				var prodTitle = $(this).find('div.post_item_content_right').find('.post_item_product_title a').text();
+				prodTitle = prodTitle.toLowerCase().replace(/\s/g,'');
+				
+				// Search for search string in product title
+				if(prodTitle.indexOf(schValue) != -1){
+					if(resultCounter % 10 === 0 && resultCounter !== 0){
+						$('#active_items').append('<div class="filter_result" style="display:none;"></div>');
+						filterDiv = $('#active_items div.filter_result:last');
+					}
+					filterDiv.append($(this).clone());
+					resultCounter++;
+				}
+			});
+			setFilterResultActivePagination(resultCounter);
+			
+			if( !$('#active_sort').hasClass('hasSearch') ) {
+				$('#active_sort').addClass('hasSearch');
+			}
+		}
+		else if(schValue === ''){
+			divActiveItems.children('div.filter_result').remove();
+			divActiveItems.children('div.paging:first').show();
+			$('#pagination_active').jqPagination('destroy');
+			setDefaultActivePagination();
+			$('#active_sort').removeClass('hasSearch');
+		}
+		
+	});
+	
+	// Trigger Search on 'Enter' key press
+	$('#schbox_active').on('keydown', function(e){
+		var code = e.keyCode || e.which;
+		if(code===13){
+			$('#active_schbtn').trigger('click');
+		}
+	});
+	
+});
+
+
+/*******************	ACTIVE SORT	**************************/
+$(function(){
+	
+	function sortNameDesc(a,b){
+		return $(a).find('.product_title_container').find('a').text().toLowerCase() < $(b).find('.product_title_container').find('a').text().toLowerCase() ? 1 : -1;
+	}
+	
+	function sortPriceDesc(a,b){
+		var pricea = parseFloat($(a).find('.price_container').attr('data-prodprice'));
+		var priceb = parseFloat($(b).find('.price_container').attr('data-prodprice'));
+		return priceb-pricea;
+	}
+	
+	function sortDateDesc(a,b){
+		var datea = $(a).attr('data-order');
+		var dateb = $(b).attr('data-order');
+		return datea-dateb;
+	}
+	
+	$('#active_sort').on('change', function(){
+		var selectedOption = $(this).find('option:selected');
+		var sortVals = [];
+		var resultCounter = 0;
+		
+		if( $(this).hasClass('hasSearch') ){
+			var parentDiv = $('#active_items div.filter_result').find('div.post_items_content');
+			var contDiv = $('#active_items div.filter_result');
+		}
+		else{
+			var parentDiv = $('#active_items div.paging').find('div.post_items_content');
+			var contDiv = $('#active_items div.paging');
+		}
+		
+		switch(selectedOption.val()){
+			case 'date':
+				sortVals = parentDiv.sort(sortDateDesc);
+				break;
+			case 'name':
+				sortVals = parentDiv.sort(sortNameDesc);
+				break;
+			case 'price':
+				sortVals = parentDiv.sort(sortPriceDesc);
+				break;
+			default:
+				break;
+		}
+		
+		if( $('#active_sortorder').hasClass('rotate_arrow') ){
+			sortVals = $(sortVals.get().reverse());
+		}
+		
+		// Re-order results
+		var resultCounter = divPosition = 0;
+		contDiv.children().remove();
+		$.each(sortVals, function(k,v){
+			if(resultCounter === 10){
+				resultCounter = 0;
+				divPosition++;
+			}
+			contDiv.eq(divPosition).append($(v));
+			resultCounter++;
+		});
+		
+	});
+	
+	$('#active_sortorder').on('click', function(){
+		if( $('#active_items div.filter_result').length !==0 ){
+			var divPostItems = $('#active_items div.filter_result div.post_items_content');
+			var divCont = $('#active_items div.filter_result');
+		}
+		else{
+			var divPostItems = $('#active_items div.paging div.post_items_content');
+			var divCont = $('#active_items div.paging');
+		}
+		var resultCounter = divPosition = 0;
+		$(divPostItems.get().reverse()).each(function(){
+			if(resultCounter === 10){
+				resultCounter = 0;
+				divPosition++;
+			}
+			divCont.eq(divPosition).append($(this).clone());
+			$(this).remove();
+			resultCounter++;
+		});
+	});
+	
+});
+
 		
 
 /*

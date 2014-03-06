@@ -140,10 +140,22 @@
 						<a href="#" class="next" data-action="next">&rsaquo;</a>
 						<a href="#" class="last" data-action="last">&raquo;</a>
 					</div>
+					<div class="post_item_srch_container">
+						<input type="text" class="box" id="schbox_active" placeholder="Search" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Search'" />
+						<span id="active_schbtn" class="span_bg sch_btn"></span>
+						<label for="active_sort">Sort By</label>
+						<select name="active_sort" id="active_sort" class="post_active_sort">
+							<option value="date">Date of Entry</option>
+							<option value="name">Name</option>
+							<option value="price">Price</option>
+						</select>
+						<span id="active_sortorder" class="span_bg arrow_sort"></span>
+					</div>
+					
 					<div class="paging">					
-					<?php $product_counter = 0; 
+					<?php $product_counter = $mycounter = 0; 
 					     foreach($active_products as $active_product): ?>
-							<div class="post_items_content">
+							<div class="post_items_content" data-order = "<?php echo $mycounter;?>">
 								
 								<div class="post_item_content_left">
 									<img src="<?php echo base_url().$active_product['path'].'categoryview/'.$active_product['file']; ?>" class="product_img">
@@ -163,7 +175,7 @@
 									<div class="product_title_container">
 										<p class="post_item_product_title fm1"><a href="<?=base_url();?>item/<?php echo $active_product['id_product']."/".es_url_clean($active_product['name']);?>"><?php echo html_escape($active_product['name']);?></a></p>
 								  	</div>
-									<div class="price_container">
+									<div class="price_container" data-prodprice="<?php echo $active_product['price'];?>">
 										<p><span class="fm1 f24 orange">Php <?php echo number_format($active_product['price'],2,'.',',');?></span><br />Price</p>
 										<p><span class="fm1 f24 grn">xx</span><br />Sold Items</p>
 										<p><span class="fm1 f24">xx</span><br />Available Stock</p>
@@ -205,7 +217,7 @@
 								</div>
 							</div>
 							
-							<?php $product_counter++; ?>
+							<?php $product_counter++;$mycounter++; ?>
 							<?php if($product_counter === $items_per_page): $product_counter = 0; ?>
 								</div><div class="paging">
 							<?php endif;  ?>
