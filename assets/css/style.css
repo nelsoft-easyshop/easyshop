@@ -168,6 +168,23 @@ p {
 	color: #fff;
 }
 
+.grey_btn {
+	cursor: pointer;
+	background-color: #393939;
+	border:1px solid #393939;
+	border-radius: 2px;
+	color: #FFFFFF;
+	margin-left: 3px;
+	margin-right: 5px 8px;
+	padding: 5px 10px;
+}
+
+.grey_btn:hover {
+	background-color: #f18200;
+    border:1px solid #f18200;
+}
+
+
 /****** Font sizes ******/
 .f36 {
 	font-size: 36px;
@@ -3846,28 +3863,28 @@ span.transac_title_date:after {
 
 .shiplocprice_summary td{
 	border: none !important;
-	padding-right: 3px;
-	padding-left: 3px;
+/*	padding-right: 3px;
+	padding-left: 3px;*/
 }
 
-#shipping_summary,
+/*#shipping_summary,
 #shipping_summary td{
 	border: 1px solid black;
 	padding: 3px;
 }
-
+*/
 .button{
 	cursor: pointer;
 }
 
 #btnShippingDetailsSubmit{
-	background-color: #FF4400;
-    width: 120px;
-    color: #FFFFFF;
-    padding: 5px 10px;
     border: medium none;
-    border-radius: 3px;
     cursor: pointer;
+    display: block;
+    margin: 50px auto 0;
+    padding: 10px 15px;
+    text-transform: uppercase;
+    width: 120px;
 }
 
 .delete_locrow{
