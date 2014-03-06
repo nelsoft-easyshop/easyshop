@@ -19,7 +19,7 @@ class Login extends MY_Controller {
 			);
 		$data = array_merge($data, $this->fill_header());
         $view = 'login_view';
-        $this->load->view('templates/header', $data);
+        $this->load->view('templates/header_plain', $data);
         $this->load->view('pages/user/login_view');
         $this->load->view('templates/footer');
     }
@@ -84,7 +84,7 @@ class Login extends MY_Controller {
             'page_javascript' => 'assets/JavaScript/login.js',
 		);
 		$data = array_merge($data, $this->fill_header());
-        $this->load->view('templates/header', $data);
+        $this->load->view('templates/header_plain', $data);
 		
 		$temp['toggle_view'] = "";
 		if(($this->input->post('identify_btn'))&& ($this->form_validation->run('identify_form'))){
@@ -114,7 +114,7 @@ class Login extends MY_Controller {
 			//'page_javascript' => 'assets/JavaScript/register_js.php',
 		);
 		$data = array_merge($data, $this->fill_header());
-		$this->load->view('templates/header', $data);		
+		$this->load->view('templates/header_plain', $data);		
         
 		$hash = html_escape($this->input->get('confirm'));
         
