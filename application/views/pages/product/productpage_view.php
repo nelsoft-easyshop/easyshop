@@ -117,7 +117,7 @@
           </div>
           <div class="availability">
             <p> Availability <br />
-                <span class="quantity" data-qty="" id="p_availability"></span>
+                <span class="quantity" data-qty="" data-default="false" id="p_availability"></span>
             </p>
           </div>
           <div class="buy_box"> 
@@ -152,7 +152,7 @@
           <p> <strong>Description: </strong><?php echo html_purify($product['description']);?> </p>
           <ul>
             <li><strong>Brand: </strong><?php echo html_escape($product['brand_name']);?></li>
-            <li><strong>Style: </strong><?php echo html_escape($product['style_name']);?></li>
+            <!-- <li><strong>Style: </strong><?php echo html_escape($product['style_name']);?></li> -->
             <li><strong>Additional description: </strong><?php echo html_escape($product['brief']);?></li>
           </ul>
         </div>
