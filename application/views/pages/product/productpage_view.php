@@ -161,7 +161,17 @@
           <div> <span>SKU</span> <span><?php echo html_escape($product['sku']);?></span> </div>
           <?php foreach($product_options as $key=>$product_option):?>
           <?php if(count($product_option)===1): ?>
-          <div> <span><?php echo html_escape(str_replace("'", '', $key));?></span> <span><?php echo html_escape($product_option[0]['value']);?></span> </div>
+              <?php if(intval($product_option[0]['datatype'],10) === 2): ?>
+                    <div>
+                        <strong><?php echo html_escape(str_replace("'", '', $key));?> </strong>
+                        <?php echo html_purify($product_option[0]['value']);?>
+                    </div>
+               <?php else: ?>   
+                    <div> 
+                        <span><?php echo html_escape(str_replace("'", '', $key));?></span> 
+                        <span><?php echo html_escape($product_option[0]['value']);?></span>
+                    </div>
+               <?php endif; ?>
           <?php endif; ?>
           <?php endforeach;?>
         </div>
