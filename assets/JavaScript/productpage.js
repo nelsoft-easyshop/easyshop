@@ -140,11 +140,16 @@ $(function(){
 $(function(){
     //Loads the defaults quantity
     var qty = JSON.parse($('#p_qty').val());
+    var first = true;
     $.each(qty, function(index, value){
         if((value.product_attribute_ids.length == 1)&&(parseInt(value.product_attribute_ids[0])==0)){
             $('.quantity').data('qty',value.quantity);
             $('.quantity')[0].innerHTML = value.quantity;
+            if(first){
+                $('.quantity').data('default','true');
+            }
         }
+        first = false;
     });       
 });
 
@@ -154,7 +159,7 @@ function attrClick(target, $this){
         //If clicked attribute is disabled, exit immediately
         if(target.hasClass('disable'))
             return false;
-
+            
         //** Highlight selected attribute
         //It is important that the evaluation for isActiveBool happens before the active class is removed
         var isActiveBool = (target.attr('class') === 'active')?true:false; 
@@ -191,8 +196,30 @@ function attrClick(target, $this){
         
         $('.current_price')[0].innerHTML = price.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         
+        /*
+         *  If only the default quantity is set, skip attribute checking and quantity recalculation
+         *  Enable buy button if an attribute is selected in all the rows.
+         */
+        if($('.quantity').data('default') === 'true'){
+            var defaultBuyEnable = true;
+            $('.product_option .options').each(function(){
+                if($(this).find('.active')[0] === undefined){
+                    defaultBuyEnable = false;
+                }
+            });
+            if(defaultBuyEnable){
+                $('.orange_btn3').removeClass("disabled").addClass("enabled");
+            }
+            else{
+                $('.orange_btn3').removeClass("enabled").addClass("disabled");
+            }
+            return false;
+        }
+        
         //**Calculate quantity          
         var qty = JSON.parse($('#p_qty').val());
+        var foo = true;
+        var sam = false;
         $.each(qty, function(index, value){        
             if(value.product_attribute_ids.sort().join(',') === sel_id.sort().join(',')){
                $('.quantity')[0].innerHTML = value.quantity;
