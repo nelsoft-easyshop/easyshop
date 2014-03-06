@@ -116,9 +116,11 @@
             <?php
                 foreach ($category_search as $keyrow) {
                   $selected = "";
-                  if($_GET['q_cat'] == $keyrow['id_cat'])
-                  {
-                    $selected = "selected";
+                  if(isset($_GET['q_cat'])){
+                      if($_GET['q_cat'] == $keyrow['id_cat'])
+                      {
+                        $selected = "selected";
+                      }
                   }
              ?>
             <option <?php  echo $selected ?> value="<?php  echo $keyrow['id_cat'] ?>"><?php echo $keyrow['name']; ?></option>
