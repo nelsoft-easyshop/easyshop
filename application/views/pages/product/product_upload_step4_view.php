@@ -64,13 +64,12 @@
     </div> -->
     <div class="inner_seller_product_content">
       <h2 class="f24">Sell an Item</h2>
-           <div class="sell_steps sell_steps3">
+           <div class="sell_steps sell_steps4">
                 <ul>
-                    <li class="steps_item"><a href="#">Step 1 : Select Category</a></li>
-                    <li><a href="#">Step 2 : Upload Item</a></li>
-                    <li><a href="#">Step 3: Success</a></li>                    
-                    <!-- <li><a href="#">Step 3: Select Shipping Courier</a></li>
-                    <li><a href="#">Step 4: Success</a></li> -->
+                    <li><a href="#">Step 1 : Select Category</a></li>
+                    <li><a href="#">Step 2 : Upload Item</a></li>                   
+                    <li><a href="#">Step 3: Select Shipping Courier</a></li>
+                    <li><a href="#">Step 4: Success</a></li>
                 </ul>
             </div>
 

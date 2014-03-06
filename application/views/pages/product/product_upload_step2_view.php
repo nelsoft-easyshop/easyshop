@@ -9,14 +9,13 @@
       <h2 class="f24">Sell an Item</h2>
 	  <input type="hidden" id="uploadstep2_csrf" name="<?php echo $my_csrf['csrf_name'];?>" value="<?php echo $my_csrf['csrf_hash'];?>">
       <div class="sell_steps sell_steps2">
-        <ul>
-          <li class="steps_item"><a href="#">Step 1 : Select Category</a></li>
-          <li><a href="#">Step 2 : Upload Item</a></li>
-          <li><a href="#">Step 3: Success</a></li>                    
-                    <!-- <li><a href="#">Step 3: Select Shipping Courier</a></li>
-                    <li><a href="#">Step 4: Success</a></li> -->
-                  </ul>
-                </div>
+          <ul>
+              <li><a href="#">Step 1 : Select Category</a></li>
+              <li><a href="#">Step 2 : Upload Item</a></li>                   
+              <li><a href="#">Step 3: Select Shipping Courier</a></li>
+              <li><a href="#">Step 4: Success</a></li>
+          </ul>
+      </div>
 
 
                 <div class="clear"></div>

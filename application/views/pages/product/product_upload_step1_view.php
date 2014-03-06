@@ -1,5 +1,5 @@
 <link type="text/css" href="<?=base_url()?>assets/css/sell_item.css" rel="stylesheet" />
-<div class="wrapper">
+<div class="wrapper"> 
 
     <div class="clear"></div>
 
@@ -73,10 +73,9 @@
             <div class="sell_steps sell_steps1">
                 <ul>
                     <li><a href="#">Step 1 : Select Category</a></li>
-                    <li><a href="#">Step 2 : Upload Item</a></li>
-                    <li><a href="#">Step 3: Success</a></li>                    
-                    <!-- <li><a href="#">Step 3: Select Shipping Courier</a></li>
-                    <li><a href="#">Step 4: Success</a></li> -->
+                    <li><a href="#">Step 2 : Upload Item</a></li>                   
+                    <li><a href="#">Step 3: Select Shipping Courier</a></li>
+                    <li><a href="#">Step 4: Success</a></li>
                 </ul>
             </div>
 
