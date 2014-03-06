@@ -1261,13 +1261,13 @@ class product_model extends CI_Model
     *	Store Product Shipping Mapping in `es_product_shipping_map`
     *	Table contains -> Mapping of ShippingID vs ProductItemAttrID
     */
-    public function storeProductShippingMap($shippingId, $attrCombinationId, $courierId)
+    public function storeProductShippingMap($shippingId, $attrCombinationId)
     {
 		$query = $this->sqlmap->getFilenameID('product','storeProductShippingMap');
     	$sth = $this->db->conn_id->prepare($query);
     	$sth->bindParam(':shipping_id', $shippingId, PDO::PARAM_INT);
     	$sth->bindParam(':product_item_id', $attrCombinationId, PDO::PARAM_INT);
-		$sth->bindParam(':courier_id', $courierId, PDO::PARAM_INT);
+		//$sth->bindParam(':courier_id', $courierId, PDO::PARAM_INT);
     	$result = $sth->execute();	
 
     	return $result;

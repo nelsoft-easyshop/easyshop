@@ -538,7 +538,7 @@ class productUpload extends MY_Controller
 			foreach($group as $attrCombinationId=>$attrGroup){
 				foreach($attrGroup as $locationKey=>$locgroup){
 					$shippingId = $this->product_model->storeShippingPrice($locationKey, $locgroup['price']);
-					$this->product_model->storeProductShippingMap($shippingId, $attrCombinationId, $locgroup['courier']);
+					$this->product_model->storeProductShippingMap($shippingId, $attrCombinationId);
 				}
 			}
 		}

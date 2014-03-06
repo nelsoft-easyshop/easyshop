@@ -685,10 +685,15 @@
     INSERT INTO es_product_shipping_price (location_id, price)
     VALUES (:location_id, :price)
 </select>
-
+<!--
 <select id="storeProductShippingMap">
     INSERT INTO es_product_shipping_map (shipping_id, product_item_id, courier_id)
     VALUES (:shipping_id, :product_item_id, :courier_id)
+</select>
+-->
+<select id="storeProductShippingMap">
+    INSERT INTO es_product_shipping_map (shipping_id, product_item_id)
+    VALUES (:shipping_id, :product_item_id)
 </select>
 
 <select id="searchCategory">
