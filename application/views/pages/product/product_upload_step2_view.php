@@ -1193,8 +1193,8 @@ $(".proceed_form").unbind("click").click(function(){
 		var htmlEach  = "";
 		var alreadyExist  = false;
 		var haveValue = false;
-		htmlEach += '<div><input type="textbox" class="quantityText" value="'+qtyTextbox.val()+'" data-cnt="'+thisValueCount+'"></div>';
-
+        htmlEach += '<div class="input_qty"><input type="textbox" class="quantityText" value="'+qtyTextbox.val()+'" data-cnt="'+thisValueCount+'"></div><div class="mid_inner_con_list">';
+        
         $('.quantity_attrs_content option').each(function(){
             
             if($(this).attr('selected')){
@@ -1229,8 +1229,8 @@ $(".proceed_form").unbind("click").click(function(){
 
 		if(haveValue === true){
 			if(alreadyExist === false){			
-				$('.combinationContainer').append('<div class="inner_quantity_list innerContainer'+thisValueCount+'"> '+ htmlEach +' <a href="javascript:void(0)" class="removeSelected" data-row="'+thisValueCount+'"   style="color:Red">Remove</a></div>');
-				dataCombination['quantity'] = qtyTextbox.val();
+                 $('.combinationContainer').append('<div class="inner_quantity_list innerContainer'+thisValueCount+'"> '+ htmlEach +'</div> <a href="javascript:void(0)" class="removeSelected" data-row="'+thisValueCount+'"   style="color:Red">Remove</a></div>');
+                dataCombination['quantity'] = qtyTextbox.val();
 				dataCombination['value'] = arrayCombinationString.slice(0, - 1);
 				arraySelected[thisValueCount] = dataCombination;
 				thisValueCount++;
