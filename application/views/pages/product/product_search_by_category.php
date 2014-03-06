@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="<?= base_url() ?>assets/css/product_seach_category.css" type="text/css"  media="screen"/> 
+<link rel="stylesheet" href="<?= base_url() ?>assets/css/product_search_category.css" type="text/css"  media="screen"/> 
 <link rel="stylesheet" href="<?= base_url() ?>assets/css/grid_list_style.css" type="text/css"  media="screen"/> 
 <link rel="stylesheet" href="<?= base_url() ?>assets/css/style_new.css" type="text/css" media="screen"/>
 <link rel="stylesheet" href="<?= base_url() ?>assets/css/jquery.bxslider.css" type="text/css" media="screen"/> 
