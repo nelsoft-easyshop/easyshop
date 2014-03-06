@@ -1234,29 +1234,32 @@ $(function(){
 	
 	$('#active_schbtn').on('click', function(){
 		// Remove filter result and re-append new one
-		$(this).siblings('div.filter_result').remove();
-		$('#active_items').append('<div class="filter_result active_product_display" style="display:none;"></div>');
-		var filterDiv = $(this).siblings('div.filter_result:last');
+		var divActiveItems = $('#active_items');
+		divActiveItems.children('div.filter_result').remove();
+		divActiveItems.append('<div class="filter_result" style="display:none;"></div>');
+		var filterDiv = divActiveItems.children('div.filter_result:last');
 		
 		var resultCounter = 0;
 		var schValue = $('#schbox_active').val().toLowerCase().replace(/\s/g,'');
 		$('#active_sort').val('date');
+		$('#active_sortorder').removeClass('rotate_arrow');
 		
 		if(schValue !== ''){
-			$('#active_items .paging').hide();
+			var divPaging = divActiveItems.children('div.paging');
+			divPaging.hide();
 			
 			//cycle through each Product Title
-			$(this).siblings('div.paging').children('div.post_items_content').each(function(){
+			divPaging.children('div.post_items_content').each(function(){
 				var prodTitle = $(this).find('div.post_item_content_right').find('.post_item_product_title a').text();
 				prodTitle = prodTitle.toLowerCase().replace(/\s/g,'');
 				
 				// Search for search string in product title
 				if(prodTitle.indexOf(schValue) != -1){
 					if(resultCounter % 10 === 0 && resultCounter !== 0){
-						$('#active_items').append('<div class="filter_result active_product_display" style="display:none;"></div>');
+						$('#active_items').append('<div class="filter_result" style="display:none;"></div>');
 						filterDiv = $('#active_items div.filter_result:last');
 					}
-					filterDiv.append('<div class="post_items_content">'+$(this).html()+'</div>');
+					filterDiv.append($(this).clone());
 					resultCounter++;
 				}
 			});
@@ -1267,8 +1270,8 @@ $(function(){
 			}
 		}
 		else if(schValue === ''){
-			$(this).siblings('div.filter_result').remove();
-			$('#active_items .paging:first').show();
+			divActiveItems.children('div.filter_result').remove();
+			divActiveItems.children('div.paging:first').show();
 			$('#pagination_active').jqPagination('destroy');
 			setDefaultActivePagination();
 			$('#active_sort').removeClass('hasSearch');
@@ -1276,7 +1279,7 @@ $(function(){
 		
 	});
 	
-
+	// Trigger Search on 'Enter' key press
 	$('#schbox_active').on('keydown', function(e){
 		var code = e.keyCode || e.which;
 		if(code===13){
@@ -1290,14 +1293,20 @@ $(function(){
 /*******************	ACTIVE SORT	**************************/
 $(function(){
 	
-	function sortNameAsc(a,b){
-		return $(a).find('.product_title_container').find('a').text().toLowerCase() > $(b).find('.product_title_container').find('a').text().toLowerCase() ? 1 : -1;
+	function sortNameDesc(a,b){
+		return $(a).find('.product_title_container').find('a').text().toLowerCase() < $(b).find('.product_title_container').find('a').text().toLowerCase() ? 1 : -1;
 	}
 	
-	function sortPriceAsc(a,b){
+	function sortPriceDesc(a,b){
 		var pricea = parseFloat($(a).find('.price_container').attr('data-prodprice'));
 		var priceb = parseFloat($(b).find('.price_container').attr('data-prodprice'));
-		return pricea-priceb;
+		return priceb-pricea;
+	}
+	
+	function sortDateDesc(a,b){
+		var datea = $(a).attr('data-order');
+		var dateb = $(b).attr('data-order');
+		return datea-dateb;
 	}
 	
 	$('#active_sort').on('change', function(){
@@ -1307,40 +1316,64 @@ $(function(){
 		
 		if( $(this).hasClass('hasSearch') ){
 			var parentDiv = $('#active_items div.filter_result').find('div.post_items_content');
+			var contDiv = $('#active_items div.filter_result');
 		}
 		else{
 			var parentDiv = $('#active_items div.paging').find('div.post_items_content');
+			var contDiv = $('#active_items div.paging');
 		}
 		
 		switch(selectedOption.val()){
 			case 'date':
-				sortVals = parentDiv;
+				sortVals = parentDiv.sort(sortDateDesc);
 				break;
 			case 'name':
-				sortVals = parentDiv.sort(sortNameAsc);
+				sortVals = parentDiv.sort(sortNameDesc);
 				break;
 			case 'price':
-				sortVals = parentDiv.sort(sortPriceAsc);
+				sortVals = parentDiv.sort(sortPriceDesc);
 				break;
 			default:
 				break;
 		}
 		
-		// Append results to filter_div
-		$('#active_items div.filter_result').remove();
-		$('#active_items').append('<div class="filter_result" style="display:none;"></div>');
-		var filterDiv = $('#active_items div.filter_result:last');
+		if( $('#active_sortorder').hasClass('rotate_arrow') ){
+			sortVals = $(sortVals.get().reverse());
+		}
+		
+		// Re-order results
+		var resultCounter = divPosition = 0;
+		contDiv.children().remove();
 		$.each(sortVals, function(k,v){
-			if( resultCounter % 10 === 0 && resultCounter !== 0) {
-				$('#active_items').append('<div class="filter_result" style="display:none;"></div>');
-				filterDiv = $('#active_items div.filter_result:last');
+			if(resultCounter === 10){
+				resultCounter = 0;
+				divPosition++;
 			}
-			filterDiv.append('<div class="post_items_content">' + $(v).html() + '</div>');
+			contDiv.eq(divPosition).append($(v));
 			resultCounter++;
 		});
 		
-		setFilterResultActivePagination(resultCounter);
-		$('#active_items .paging').hide();
+	});
+	
+	$('#active_sortorder').on('click', function(){
+		if( $('#active_items div.filter_result').length !==0 ){
+			var divPostItems = $('#active_items div.filter_result div.post_items_content');
+			var divCont = $('#active_items div.filter_result');
+		}
+		else{
+			var divPostItems = $('#active_items div.paging div.post_items_content');
+			var divCont = $('#active_items div.paging');
+		}
+		var resultCounter = divPosition = 0;
+		$(divPostItems.get().reverse()).each(function(){
+			if(resultCounter === 10){
+				resultCounter = 0;
+				divPosition++;
+			}
+			divCont.eq(divPosition).append($(this).clone());
+			$(this).remove();
+			resultCounter++;
+		});
 	});
 	
 });

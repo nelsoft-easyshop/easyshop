@@ -193,13 +193,13 @@
 							<option value="name">Name</option>
 							<option value="price">Price</option>
 						</select>
-						<span class="span_bg arrow_sort"></span>
+						<span id="active_sortorder" class="span_bg arrow_sort"></span>
 					</div>
 				
-					<div class="paging active_product_display">					
-					<?php $product_counter = 0; 
+					<div class="paging">					
+					<?php $product_counter = $mycounter = 0; 
 					     foreach($active_products as $active_product): ?>
-							<div class="post_items_content">
+							<div class="post_items_content" data-order = "<?php echo $mycounter;?>">
 								
 								<div class="post_item_content_left">
 									<span class="post_item_img_con">
@@ -278,9 +278,9 @@
 								</div>
 							</div>
 							
-							<?php $product_counter++; ?>
+							<?php $product_counter++;$mycounter++; ?>
 							<?php if($product_counter === $items_per_page): $product_counter = 0; ?>
-								</div><div class="paging active_product_display">
+								</div><div class="paging">
 							<?php endif;  ?>
 							
 					<?php endforeach; ?>
