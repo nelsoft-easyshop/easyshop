@@ -150,7 +150,7 @@ $(function(){
             }
         }
         first = false;
-    });       
+    });      
 });
 
 
@@ -174,7 +174,7 @@ function attrClick(target, $this){
         if(!isActiveBool){
             target.addClass("active");
         }
-        
+     
         var isOptionAvailable = false;
         //** calculate price
         var sel_id = new Array();
@@ -326,7 +326,6 @@ function attrClick(target, $this){
 $(function(){
     $('.options, .options a').on('click', function(event){
         var $this = $(this);
-        console.log($(event.target));
 		if(attrClick($(event.target), $this)){
             var active = new Array();
             $('.product_option li').each(function(){
