@@ -188,6 +188,7 @@ $(function(){
 
     }//close hasloc hasactive hasprice
 	else{
+		alert('Select an attribute combination, location, and price');
 		return;
 	}
   });//close on click of adding ship details to summary
@@ -356,19 +357,6 @@ $(function(){
       });
     }
   })
-  /*.on('click', '.cancel_summaryrow', function(){
-    var PriceLocRows = $(this).parent('td').prev('td').find('tr:not(".cloningfield")');
-    $(this).hide();
-    $(this).siblings('.edit_del').show();
-    $(this).siblings('.accept_cancel').hide();
-
-    PriceLocRows.each(function(){
-      var PriceField = $(this).find('td:nth-child(2)');
-      var origValue = PriceField.attr('data-value');
-      PriceField.html(origValue);
-      PriceField.next('td').hide();
-    });
-  })*/
   // Delete button per Location VS Price
   .on('click', '.delete_priceloc', function(){
     var parentTr = $(this).closest('tr');
