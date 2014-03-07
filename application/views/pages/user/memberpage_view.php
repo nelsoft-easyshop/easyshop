@@ -185,15 +185,15 @@
 					</div>
 
 					<div class="post_item_srch_container">
-						<input type="text" class="box" id="schbox_active" placeholder="Search" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Search'" />
-						<span id="active_schbtn" class="span_bg sch_btn"></span>
+						<input type="text" class="box sch_box" placeholder="Search" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Search'" />
+						<span class="span_bg sch_btn"></span>
 						<label for="active_sort">Sort By</label>
-						<select name="active_sort" id="active_sort" class="post_active_sort">
+						<select name="active_sort" class="post_active_sort sort_select">
 							<option value="date">Date of Entry</option>
 							<option value="name">Name</option>
 							<option value="price">Price</option>
 						</select>
-						<span id="active_sortorder" class="span_bg arrow_sort"></span>
+						<span class="span_bg arrow_sort"></span>
 					</div>
 				
 					<div class="paging">					
@@ -304,10 +304,22 @@
 						<a href="#" class="last" data-action="last">&raquo;</a>
 					</div>
 					
+					<div class="post_item_srch_container">
+						<input type="text" class="box sch_box" placeholder="Search" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Search'" />
+						<span class="span_bg sch_btn"></span>
+						<label for="active_sort">Sort By</label>
+						<select name="active_sort" class="post_active_sort sort_select">
+							<option value="date">Date of Entry</option>
+							<option value="name">Name</option>
+							<option value="price">Price</option>
+						</select>
+						<span class="span_bg arrow_sort"></span>
+					</div>
+					
 					<div class="paging">
-					<?php $product_counter =0; ?>
+					<?php $product_counter =0; $mycounter = 0;?>
 					<?php foreach($deleted_products as $deleted_product):?>
-							<div class="post_items_content">
+							<div class="post_items_content" data-order = "<?php echo $mycounter;?>">
 								<div class="post_item_content_left">
 								  <img src="<?php echo base_url().$deleted_product['path'].'categoryview/'.$deleted_product['file']; ?>" class="product_img">
 								  <p>
@@ -382,7 +394,7 @@
 							
 							
 							
-						<?php $product_counter++;?>
+						<?php $product_counter++;$mycounter++;?>
 						<?php if($product_counter === $items_per_page): $product_counter = 0; ?>
 							</div><div class="paging">
 						<?php endif;  ?>
