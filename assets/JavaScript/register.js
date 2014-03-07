@@ -58,8 +58,7 @@ $(document).ready(function(){
 	  
 	  $('#captcha_refresh').click(function(){
 		   $('#captcha_loading').css('display','inline');
-		   var csrftoken = $('#register_form1').find('input[name^="es_csrf"]').val();
-		   $.post(config.base_url+"register/recreate_captcha", {es_csrf_token : csrftoken}, function(data){
+		   $.post(config.base_url+"register/recreate_captcha", function(data){
 			  $('#captcha_loading').css('display','none');
 			  $('#captcha_img').children().attr('src', data);
 		   });	
@@ -96,12 +95,10 @@ $(document).ready(function(){
 	  });
 	  
 	  function pass_check(){
-			//var username = '<?php echo strtolower($uname); ?>';		  
-			var username = $('#changepass_username').val();
+			var username = $("#wsx").val();		  
 			var pass 	 = $('#cur_password').val();
-			var csrftoken = $('form#changepass').find('input[name^="es_csrf"]').val();
 			
-			$.post(config.base_url+'register/pass_check', {username: username, pass: pass, es_csrf_token : csrftoken}, function(result){
+			$.post(config.base_url+'register/pass_check', {username: username, pass: pass}, function(result){
 				if(result == 1){
 					showcheck($('#username'));
 					$('#username_check').hide();
@@ -165,7 +162,7 @@ $(document).ready(function(){
 				}
 		 },
 		 messages:{
-			username:{
+		 	username:{
 				equalTo: ''
 			},
 			cpassword:{
@@ -183,7 +180,6 @@ $(document).ready(function(){
 					error.appendTo(element.parent());
 		 },
 		 submitHandler: function(form){
-			$('#register_page1').attr('disabled', true);
 		 	$('#register_form1_loadingimg').show();
 		 	form.submit();
 		 }
@@ -206,7 +202,7 @@ $(document).ready(function(){
 			cur_password: {
 				required: true,
                 minlength: 5,
-                maxlength:25,
+                maxlength:25
 				//alphanumeric: true,
 				//case_all: true
 				},				
@@ -301,10 +297,6 @@ $(document).ready(function(){
 	
 	$("#register_mobile").numeric({negative : false});
 	$("#cregister_mobile").numeric({negative : false});
-	
-	$('#register_mobile, #register_email').on('keydown', function(e){
-		return e.which !== 32;
-	});
 
 	$("#register_mobile").on('input paste',function(e){
 		$('#err_mobilespan').hide();
@@ -361,9 +353,11 @@ $(document).ready(function(){
 		},
 		rules:{
 			register_mobile:{
+				/*
 				required: function(element){
 					return(($('#register_mobile').val().length)==0 && ($('#register_email').val().length==0));
 				},
+				*/
 				number: true,
 				minlength: 11
 			},
@@ -375,9 +369,12 @@ $(document).ready(function(){
 				equalTo: '#register_mobile'
 			},
 			register_email:{
+				/*
 				required: function(element){
 					return(($('#register_mobile').val().length)==0 && ($('#register_email').val().length==0));
 				},
+				*/
+				required: true,
 				email: true,
 				minlength: 6
 			},
@@ -394,7 +391,7 @@ $(document).ready(function(){
 		},
 		messages:{
 			register_mobile:{
-				required: '*Please enter a valid mobile number OR email address',
+				//required: '*Please enter a valid mobile number OR email address',
 				number: '*This field should be numeric',
 				minlength: '*Mobile number too short'
 			},
@@ -404,7 +401,8 @@ $(document).ready(function(){
 				number: ''
 			},
 			register_email:{
-				required: '*Please enter a valid mobile number OR email address',
+				//required: '*Please enter a valid mobile number OR email address',
+				required: "Please enter a valid email address",
 				email: '*Please enter a valid email address',
 				minlength: '*Email too short'
 			},
@@ -473,13 +471,11 @@ $(document).ready(function(){
 
 						if(obj['mobilestat'] !== ''){
 							$('#verification-content .verification_field_mobile').show();
-							$('.verification_field_mobile_set').hide();
 							if(obj['mobilestat'] === 'error')
 								$('.mobilestat').html($('.mobilestat-error').html().replace('%%',obj['mobile']));
 							else if(obj['mobilestat'] === 'success'){
 								mobile_msg += "Mobile: " + obj['mobile'] + "<br>";
 								$('.mobilestat').html($('.mobilestat-success').html());
-								$('.verification_field_mobile_set').show();
 							}
 							else if(obj['mobilestat'] === 'exceed')
 								$('.mobilestat').html($('.mobilestat-exceed').html());
@@ -501,13 +497,10 @@ $(document).ready(function(){
 							$('.verification-span-error').hide(); 
 							$('.verification-span').show();
 							$('#verification-content .verification-msg').html("<strong>" + mobile_msg + email_msg + "</strong>" + "<br>");
-							/*
 							if((obj['mobilestat']=='success')&&(obj['emailstat']=='success'))
 								$('.or_separator').css('display','inline');
-							*/
 							}
-							
-							
+
 						if(obj['mobilestat'] !== 'exists' && obj['emailstat'] !== 'exists'){
 							$('#verification-content').modal({
 								position: ["25%","25%"],
@@ -551,9 +544,8 @@ $(document).ready(function(){
 
 function username_check(){
 	var username = $('#username').val();
-	var csrftoken = $('#register_form1').find('input[name^="es_csrf"]').val();
 	
-	$.post(config.base_url+'register/username_check', {username: username, es_csrf_token : csrftoken}, function(result){
+	$.post(config.base_url+'register/username_check', {username: username}, function(result){
 		if(result === '1'){
 			showcheck($('#username'));
 			$('.username_availability').html('Username available');
@@ -633,9 +625,8 @@ function form2validation(){
 				$.post(config.base_url+'register/mobile_verification', $('#register_form2_b').serializeArray(),function(data){
 					if(data){
 						$('#verification_code').addClass('verified');
-						var csrftoken = $('#register_form2_b').find('input[name^="es_csrf"]').val();
 						$.modal.close();
-						$.post(config.base_url+'register/success_mobile_verification',{mobile_verify: 'submit_mobilenum', es_csrf_token : csrftoken}, function(data){
+						$.post(config.base_url+'register/success_mobile_verification',{mobile_verify: 'submit_mobilenum'}, function(data){
 							if(data){
 								$('#verification_code').removeClass('verified');
 								$('#register_form2_view').html(data);
