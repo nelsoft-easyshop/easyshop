@@ -167,3 +167,19 @@ $(document).ready(function() {
 });
 
 </script>
+
+<script>
+         $(document).ready(function() { 
+
+            $('#main_search').focus(function() {
+            $('#main_search_drop_content').show();
+            $(document).bind('focusin.main_search_drop_content click.main_search_drop_content',function(e) {
+                if ($(e.target).closest('#main_search_drop_content, #main_search').length) return;
+                $('#main_search_drop_content').hide();
+                });
+             });
+ 
+            $('#main_search_drop_content').hide();
+        });
+
+</script>
