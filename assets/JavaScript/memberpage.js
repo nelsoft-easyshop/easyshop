@@ -1279,6 +1279,7 @@ $(function(){
 		var schValue = $(this).siblings('input.sch_box').val().toLowerCase().replace(/\s/g,'');
 		sortSelect.val('date');
 		sortArrow.removeClass('rotate_arrow');
+		$(this).siblings('img.loading_img').show();
 		
 		if(schValue !== ''){
 			divPaging.hide();
@@ -1313,7 +1314,7 @@ $(function(){
 			setDefaultPagination(paginationButton, divPaging);
 			sortSelect.removeClass('hasSearch');
 		}
-		
+		$(this).siblings('img.loading_img').hide();
 	});
 	
 	// Trigger Search on 'Enter' key press
@@ -1350,6 +1351,7 @@ $(function(){
 		var selectedOption = $(this).find('option:selected');
 		var sortVals = [];
 		var resultCounter = 0;
+		$(this).siblings('img.loading_img').show();
 		
 		if( $(this).hasClass('hasSearch') ){
 			var parentDiv = $(this).closest('div.dashboard_table').children('div.filter_result').find('div.post_items_content');
@@ -1390,10 +1392,12 @@ $(function(){
 			resultCounter++;
 		});
 		
+		$(this).siblings('img.loading_img').hide();
 	});
 	
 	$('.arrow_sort').on('click', function(){
 		var parentDiv = $(this).closest('div.dashboard_table');
+		$(this).siblings('img.loading_img').show();
 		if( parentDiv.children('div.filter_result').length !==0 ){
 			var divPostItems = parentDiv.children('div.filter_result').children('div.post_items_content');
 			var divCont = parentDiv.children('div.filter_result');
@@ -1412,6 +1416,7 @@ $(function(){
 			$(this).remove();
 			resultCounter++;
 		});
+		$(this).siblings('img.loading_img').hide();
 	});
 	
 });

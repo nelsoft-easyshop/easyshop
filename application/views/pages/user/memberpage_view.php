@@ -194,6 +194,7 @@
 							<option value="price">Price</option>
 						</select>
 						<span class="span_bg arrow_sort"></span>
+						<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" class="loading_img" style="display:none;"/>
 					</div>
 				
 					<div class="paging">					
@@ -314,6 +315,7 @@
 							<option value="price">Price</option>
 						</select>
 						<span class="span_bg arrow_sort"></span>
+						<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" class="loading_img" style="display:none;"/>
 					</div>
 					
 					<div class="paging">
