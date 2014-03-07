@@ -1,6 +1,6 @@
 <html>
   <body>
-    <table style="width:600px; text-align:center; margin:0px auto; border-top:5px solid #ff4400; border-left:1px solid #ffa382;border-right:1px solid #ffa382;border-bottom:1px solid #ffa382; font-family:arial">
+    <table style="width:600px; text-align:center; margin:0px auto; border-top:5px solid #f18200; border-left:1px solid #f18200;border-right:1px solid #f18200;border-bottom:1px solid #f18200; font-family:arial">
       <thead>
         <tr>
           <td style="height:60px;">
@@ -16,7 +16,7 @@
       </tr>
       <tr>
         <td>
-          <h2 style="color:#ff4400;">Thank you for registering to Easyshop.ph!</h2>
+          <h2 style="color:#f18200;">Thank you for registering to Easyshop.ph!</h2>
         </td>
       </tr>
       <tr>
@@ -27,9 +27,9 @@
       </tr>
       <tr>
         <td style="text-align:left;font-size:12px;padding-top:50px;">
-          By verifying your email address, you are made eligible to transact through <span style="color:#ff4400;font-weight:bold;">Easyshop.ph!</span> <br>
-          <span style="color:#ff4400;font-weight:bold;">Easyshop.ph</span> aims to provide its users a unique and user-friendly experience in online shopping. <br>
-          <span style="color:#ff4400;font-weight:bold;">Easyshop.ph</span> - Your store, made easy. 
+          By verifying your email address, you are made eligible to transact through <span style="color:#f18200;font-weight:bold;">Easyshop.ph!</span> <br>
+          <span style="color:#f18200;font-weight:bold;">Easyshop.ph</span> aims to provide its users a unique and user-friendly experience in online shopping. <br>
+          <span style="color:#f18200;font-weight:bold;">Easyshop.ph</span> - Your store, made easy. 
         </td>
       </tr>
       <tr>
