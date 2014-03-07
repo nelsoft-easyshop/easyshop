@@ -1,4 +1,6 @@
-
+$(function(){
+	$('.shipprice').numeric({negative : false});
+});
 /**
  *
  *  Add location on click - adds new select field for delivery location
@@ -14,9 +16,9 @@ $(function(){
     var selecttrnew = $('#shiploc_selectiontbl').find('select[name="shiploc1"]').closest('tr').clone();
     selecttrnew.find('select[name^="shiploc"]')[0].name = "shiploc"+ (+datacount+1);
     selecttrnew.find('input[name^="shipprice"]')[0].name = "shipprice"+ (+datacount+1);
-	//selecttrnew.find('select[name^="courier"]')[0].name = "courier"+ (+datacount+1);
     selecttrnew.append('<td><span class="delete_locrow button">Remove</td>');
     $('#shiploc_selectiontbl').find('tr:last').before('<tr>' + selecttrnew.html() + '</tr>');
+	$('.shipprice').numeric({negative : false});
   });
 
   $('#shiploc_selectiontbl').on('click', '.delete_locrow', function(){
@@ -50,6 +52,12 @@ $(function(){
   * Add Shipping Details to Summary list on-click event
   */
   $('#add_shipping_details').on('click', function(){
+  
+	if(checkIfEdit()){
+		alert('Please accept changes in Summary Table.');
+		return;
+	}
+	
     var hasActive = hasLoc = hasPrice = hasCourier = hasLPC = false;
     var noDuplicate = true;
     //var shipObj = { 'attr' : {},'loc' : {},'price' : {}, 'courier_key' : {}, 'courier_name' : {} };   
@@ -66,18 +74,16 @@ $(function(){
     $('.shiploc').each(function(){
       var selopt = $(this).find('option:selected');
       var price = $(this).parent('td').next('td').children('input[name^="shipprice"]');
-	  //var courier = $(this).parent('td').next('td').next('td').children('select').find('option:selected');
       
-	  hasPrice = price.val() !== 0 && price.val() !== '' ? true : false;
-	  hasLoc = selopt.val() !== 0 ? true : false;
-	  //hasCourier = courier.val() != 0 ? true : false;
+	  hasPrice = $.trim(price.val()) !== '' ? true : false;
+	  hasLoc = selopt.val() !== 0 ? true : false;	  
 	  
 	  //if(hasLoc && hasPrice && hasCourier){
 	  if(hasLoc && hasPrice){
-		shipObj.loc[selopt.val()] = selopt.text();
-        shipObj.price[selopt.val()] = price.val();
-		//shipObj.courier_name[selopt.val()] = courier.text();
-		//shipObj.courier_key[selopt.val()] = courier.val();
+		var priceVal = price.val().replace(new RegExp(",", "g"), '');
+		priceVal = parseFloat(priceVal).toFixed(2);
+		shipObj.price[selopt.val()] = priceVal;
+		shipObj.loc[selopt.val()] = $.trim(selopt.text());
 		hasLPC = true;
 	  }
 	  
@@ -134,11 +140,9 @@ $(function(){
       jQuery.each(shipObj.loc, function(k,v){
         nesttabletr.children('td:first').html(v);
         nesttabletr.children('td:last').hide();
-		//nesttabletr.children('td:nth-child(3)').html(shipObj.courier_name[k]);
-		//nesttabletr.children('td:nth-child(3)').attr('data-value', shipObj.courier_key[k]);
         var PriceField = nesttabletr.children('td:nth-child(2)');
         PriceField.attr('data-value', shipObj.price[k]);
-        PriceField.html(shipObj.price[k]);
+        PriceField.html(ReplaceNumberWithCommas(shipObj.price[k]));
         nesttable.append('<tr data-idlocation='+k+' data-groupkey='+groupkey+'>'+nesttabletr.html()+'</tr>');
       });
 
@@ -161,7 +165,6 @@ $(function(){
       });
       shiplocselectiontbl.find('select[name="shiploc1"]').val(0);
       shiplocselectiontbl.find('input[name="shipprice1"]').val('');
-	  //shiplocselectiontbl.find('select[name="courier1"]').val(0);
       $('#shiploc_count').val(1);
       
 
@@ -179,7 +182,6 @@ $(function(){
 			fdata[groupkey][attrk][lock] = {};
 		  }
 		  fdata[groupkey][attrk][lock]['price'] = shipObj.price[lock];
-		  //fdata[groupkey][attrk][lock]['courier'] = shipObj.courier_key[lock];
         });
       });
 
@@ -198,6 +200,10 @@ $(function(){
   * Submit Handler function
   */
   $('#btnShippingDetailsSubmit').on('click', function(){
+	if(checkIfEdit()){
+		alert('Please accept changes in Summary Table.');
+		return;
+	}
     if(getObjectSize(fdata) > 0){
 	  var csrftoken = $('#shippingsummary_csrf').val();
 	  $.post(config.base_url+'sell/shippinginfo', {fdata : fdata, es_csrf_token : csrftoken}, function(data){
@@ -214,7 +220,7 @@ $(function(){
     var thistr = $(this).closest('tr');
     var hasDuplicate = false;
 
-    $(this).parent('td').siblings('span.error.red').remove();
+    $(this).parent('td').siblings('td.samelocerror').remove();
 
     $('.shiploc').not(this).each(function(){
       var otherval = $(this).find('option:selected').val();
@@ -249,7 +255,7 @@ $(function(){
   */ 
   $('.product_combination').on('click', function(){
 
-    $('span.samelocerror').remove();
+    $('td.samelocerror').remove();
 
     if($(this).hasClass('active')){
       $(this).removeClass('active');
@@ -290,18 +296,13 @@ $(function(){
     $(this).hide();
     $(this).siblings('.edit_del').hide();
     $(this).siblings('.accept_cancel').show();
-
+	$(this).closest('tr').addClass('inedit');
+	
     $(this).parent('td').prev('td').find('tr').each(function(){
       var PriceField = $(this).find('td:nth-child(2)');
-      var PriceValue = PriceField.text();
-      PriceField.html('<input type="text" value="'+PriceValue+'">');
-	  
-	  //var CourierField = $(this).find('td:nth-child(3)');
-	  //var CourierValue = CourierField.attr('data-value');
-      //var tempSelection = shiplocselectiontbl.find('select[name="courier1"]');
-	  //CourierField.html('<select>' + tempSelection.html() + '</select>');
-	  //CourierField.children('select').val(CourierValue);
-	  
+	  var PriceValue = PriceField.attr('data-value');
+      PriceField.html('<input type="text" class="shipprice" value="'+PriceValue+'">');
+	  $('.shipprice').numeric({negative : false});
 	  $(this).children('td:last').show();
     });
   })
@@ -311,49 +312,39 @@ $(function(){
 
     PriceLocRows.each(function(){
       var inputPriceField = $(this).find('td:nth-child(2)').find('input');
-      var newPrice = parseInt($.trim(inputPriceField.val()));
+      var newPrice = $.trim(inputPriceField.val()).replace(new RegExp(",", "g"), '');
+	  newPrice = parseFloat(newPrice).toFixed(2);
 	  var selectCourierField = $(this).find('td:nth-child(3)').find('select');
-	  //var CourierName = selectCourierField.find('option:selected').text();
-	  //var CourierValue = selectCourierField.find('option:selected').val();
-	  
-      if(isNaN(newPrice) || newPrice === 0){
+
+      if(isNaN(newPrice)){
         inputPriceField.effect('pulsate',{times:3},800);
         isFilled = false;
         return;
       }
-	  /*if(selectCourierField.val() == 0){
-		selectCourierField.effect('pulsate',{times:3},800);
-		isFilled = false;
-		return;
-	  }*/
     });
 
     if(isFilled){
       $(this).hide();
       $(this).siblings('.edit_del').show();
       $(this).siblings('.accept_cancel').hide();
+	  $(this).closest('tr').removeClass('inedit');
 
       PriceLocRows.each(function(){
         var PriceField = $(this).find('td:nth-child(2)');
-        var newPrice = parseInt(PriceField.find('input').val());
+        var newPrice = $.trim(PriceField.find('input').val()).replace(new RegExp(",", "g"), '');
+		newPrice = parseFloat(newPrice).toFixed(2);
         var groupkey = $(this).attr('data-groupkey');
         var idlocation = $(this).attr('data-idlocation');
-		//var CourierField = $(this).find('td:nth-child(3)');
-		//var CourierKey = CourierField.find('option:selected').val();
-		//var CourierName = CourierField.find('option:selected').text();
 		
         PriceField.attr('data-value', newPrice);
-        PriceField.html(newPrice);
-        //PriceField.next('td').hide();
-		//CourierField.attr('data-value', CourierKey);
-		//CourierField.html(CourierName);
-		
+        PriceField.html(ReplaceNumberWithCommas(newPrice));
+        
 		$(this).find('td:last').hide();
 		
         jQuery.each(fdata[groupkey], function(attrk, attrObj){
           attrObj[idlocation]['price'] = newPrice;
-		  //attrObj[idlocation]['courier'] = CourierKey;
         });
+		
       });
     }
   })
@@ -386,6 +377,15 @@ $(function(){
       $('#shipping_summary').addClass('tablehide');
       $('#btnShippingDetailsSubmit').addClass('tablehide');
     }
+  }
+  
+  function ReplaceNumberWithCommas(thisnumber){
+	//Seperates the components of the number
+    var n = thisnumber.toString().split(".");
+    //Comma-fies the first part
+    n[0] = n[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    //Combines the two sections
+    return n.join(".");
   }
 
 });
@@ -420,3 +420,14 @@ function getObjectSize(obj) {
     }
     return len;
 };
+
+function checkIfEdit(){
+	var hasEdit = false;
+	$('#shipping_summary').find('tr.tr_shipping_summary').each(function(){
+		if( $(this).hasClass('inedit') ){
+			hasEdit = true;
+			return;
+		}
+	});
+	return hasEdit;
+}

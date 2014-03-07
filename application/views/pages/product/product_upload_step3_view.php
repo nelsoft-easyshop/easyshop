@@ -1,6 +1,5 @@
 
 <link type="text/css" href="<?=base_url()?>assets/css/sell_item.css" rel="stylesheet" />
-<script type="text/javascript" src="<?=base_url()?>assets/JavaScript/productUpload_step3.js"></script>
 
 <div class="wrapper">
 
@@ -104,7 +103,6 @@
           <tr>
             <td width="170px">Location</td>
             <td width="200px">Price</td>
-  		    <!--<td width="170px">Courier</td>-->
             <td width="242px">&nbsp;</td>
           </tr>
         </thead>
@@ -116,10 +114,10 @@
               <?php foreach($shiploc['area'] as $island=>$loc):?>
                 <option value="<?php echo $shiploc['islandkey'][$island];?>"><?php echo $island;?></option>
                 <?php foreach($loc as $region=>$subloc):?>
-                  <option value="<?php echo $shiploc['regionkey'][$region];?>"><?php echo $region;?></option>
+                  <option value="<?php echo $shiploc['regionkey'][$region];?>" style="margin-left:15px;">&nbsp;&nbsp;&nbsp;<?php echo $region;?></option>
                   <?php foreach($subloc as $id_cityprov=>$cityprov):?>
-                    <option value="<?php echo $id_cityprov;?>"><?php echo $cityprov;?></option>
-                  <?php endforeach;?>
+					<option value="<?php echo $id_cityprov;?>" style="margin-left:30px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $cityprov;?></option>
+				  <?php endforeach;?>
                 <?php endforeach;?>
               <?php endforeach;?>
             </select>
@@ -127,16 +125,6 @@
           <td>
             Php <input type="text" name="shipprice1" class="shipprice">
           </td>
-			<!--
-		      <td>
-      			<select name="courier1" class="courier">
-      				<option selected="" value="0">Select Courier</option>
-      				<?php foreach($courier as $couriers):?>
-      					<option value="<?php echo $couriers['id_courier'];?>"><?php echo $couriers['courier_name'];?></option>
-      				<?php endforeach;?>
-      			</select>
-    		  </td>
-			-->
         </tr>
         <tr>
           <td>
@@ -172,7 +160,6 @@
               <tr class="cloningfield" data-idlocation="" data-groupkey="">
                 <td width="100px"></td>
                 <td width="170px" data-value=""></td>
-				<!--<td width="170px" data-value=""></td>-->
                 <td class="tablehide">
                   <span class="button delete_priceloc">
                     <img src="<?php echo base_url();?>assets/images/icon_delete.png"> Delete
@@ -192,11 +179,6 @@
           <span class="accept_summaryrow buttonhide button accept_cancel">
             <img src="<?php echo base_url();?>assets/images/check_icon.png"> Accept
           </span>
-        <!--
-		  <span class="cancel_summaryrow buttonhide button accept_cancel">
-            <img src="<?php echo base_url();?>assets/images/x_icon.png"> Cancel
-          </span>
-		-->
         </td>
       </tr>
     </table>
@@ -210,3 +192,5 @@
 
 <div class="clear"></div>  
 
+<script type="text/javascript" src="<?=base_url()?>assets/JavaScript/productUpload_step3.js"></script>
+<script type="text/javascript" src="<?=base_url()?>assets/JavaScript/js/jquery.numeric.js"></script>
