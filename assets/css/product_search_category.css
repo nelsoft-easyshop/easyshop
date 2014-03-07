@@ -142,10 +142,10 @@ div.product-list {
   width: 92%;
 }*/
 
-.prod_img_wrapper {
+/*.prod_img_wrapper {
   display: table;
   width: 237px;
-}
+}*/
 
 .prod_img_container {
   display: table-cell;
@@ -211,6 +211,11 @@ div.category_carousel {
     margin-left: 37px;
     width: 702px;
     height: 175px;
+}
+
+.jcarousel-control-prev, 
+.jcarousel-control-next {
+  position: absolute !important;
 }
 
 a.category_carousel_prev,
