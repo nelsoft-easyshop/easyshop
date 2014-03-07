@@ -544,8 +544,8 @@ $(document).ready(function(){
 
 function username_check(){
 	var username = $('#username').val();
-	
-	$.post(config.base_url+'register/username_check', {username: username}, function(result){
+	var csrftoken = $('#register_form1').find('input[name^="es_csrf"]').val();
+	$.post(config.base_url+'register/username_check', {username: username, es_csrf_token : csrftoken}, function(result){
 		if(result === '1'){
 			showcheck($('#username'));
 			$('.username_availability').html('Username available');
