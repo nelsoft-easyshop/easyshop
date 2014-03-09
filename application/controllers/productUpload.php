@@ -193,7 +193,26 @@ class productUpload extends MY_Controller
 			}
 
 			$product_id = $this->product_model->addNewProduct($product_title,$sku,$product_brief,$product_description,$keyword,$brand_id,$cat_id,$style_id,$member_id,$product_price,$product_condition,$otherCategory);
-			# product_id = is the id_product for the new item. if 0 no new item added process will stop
+			
+            #ERROR TRACKING: SAM
+            if(intval($product_id,10) === 0){
+                log_message('error', 'Add new: title=>'. $product_title);
+                log_message('error', 'Add new: sku=>'. $sku); 
+                log_message('error', 'Add new: brief=>'. $product_brief);
+                log_message('error', 'Add new: desc=>'. $product_description);
+                log_message('error', 'Add new: keyword=>'. $keyword);
+                log_message('error', 'Add new: brand_id=>'. $brand_id);
+                log_message('error', 'Add new: cat_id=>'. $cat_id);
+                log_message('error', 'Add new: style_id=>'. $style_id);
+                log_message('error', 'Add new: member_id=>'. $member_id);
+                log_message('error', 'Add new: price=>'. $product_price);
+                log_message('error', 'Add new: condition=>'. $product_condition);
+                log_message('error', 'Add new: other_cat=>'. $otherCategory);
+            }
+            
+            
+            
+            # product_id = is the id_product for the new item. if 0 no new item added process will stop
 			$this->load->library('upload');
 			$filenames_ar = array();
 			$file_type = array();
@@ -258,7 +277,6 @@ class productUpload extends MY_Controller
 								$attribute_id = $explode_id[1];
 								$extraPrice = '0';
                                 $dataType = substr($explode_value,0,strpos($explode_value,'_'));
-                                
 								switch ($dataType) {
                                     # if the input type is checkbox possible many item will insert to the database.
 									case 'CHECKBOX': 
@@ -292,10 +310,10 @@ class productUpload extends MY_Controller
                                         
                                     default: # default input type (SELECT& RADIO)
                                         if(isset($_POST[$explode_value]) && strlen(trim($_POST[$explode_value])) != 0 ){
-                                        $attributeCount = count($this->product_model->selectAttributeNameWithNameAndId($_POST[$explode_value],$attribute_id));
-                                        if($attributeCount > 0){
-                                            $prod_attr_id = $this->product_model->addNewAttributeByProduct($product_id,$attribute_id,$_POST[$explode_value],$extraPrice);
-                                            }	
+                                            $attributeCount = count($this->product_model->selectAttributeNameWithNameAndId($_POST[$explode_value],$attribute_id));
+                                            if($attributeCount > 0){
+                                                $prod_attr_id = $this->product_model->addNewAttributeByProduct($product_id,$attribute_id,$_POST[$explode_value],$extraPrice);
+                                                }	
                                         }
 									break;	
 								}			
@@ -637,7 +655,7 @@ class productUpload extends MY_Controller
 		$product_title = trim($this->input->post('prod_title'));
 		$product_brief = trim($this->input->post('prod_brief_desc'));
 		$product_description = trim($this->input->post('desc')) ;
-		$product_price = $this->input->post('prod_price') ;
+        $product_price = str_replace(',', '', $this->input->post('prod_price')) ;
 		$product_condition = $this->input->post('prod_condition');
 		$sku = trim($this->input->post('prod_sku'));
 		$keyword = es_url_clean(trim($product_title).' '.trim($this->input->post('prod_keyword')));
@@ -782,6 +800,17 @@ class productUpload extends MY_Controller
 				);
 
 			$rowCount = $this->product_model->editProduct($product_details, $member_id);
+            
+            
+            #ERROR TRACKING: SAM
+            if(intval($rowCount,10) === 0){
+                foreach($product_details as $idx=>$value){
+                    log_message('error', 'edit: '.$idx. '=>'.$value);
+                }
+                log_message('error', 'edit: member_id=>'.$member_id);
+            }
+            
+            
 
 			if($rowCount>0){
 				foreach($explode_inputs as $input){
@@ -791,6 +820,7 @@ class productUpload extends MY_Controller
 					$post_attributes = $this->input->post($explode_value);
                     $dataType = substr($explode_value,0,strpos($explode_value,'_'));
                     $rowCount = $this->product_model->deleteAttributeByProduct($product_id, $attribute_id);
+                    
 					if($post_attributes){
 						if(is_array($post_attributes)){
 							$post_attributes_arr = $post_attributes;
