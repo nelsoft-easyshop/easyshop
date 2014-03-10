@@ -25,7 +25,7 @@ var jbImagesDialog = {
 	inProgress : function() {
 		document.getElementById("upload_infobar").style.display = 'none';
 		document.getElementById("upload_additional_info").innerHTML = '';
-		//document.getElementById("upload_form_container").style.display = 'none';
+		document.getElementById("upload_form_container").style.display = 'none';
 		document.getElementById("upload_in_progress").style.display = 'block';
 		this.timeoutStore = window.setTimeout(function(){
 			document.getElementById("upload_additional_info").innerHTML = 'This is taking longer than usual.' + '<br />' + 'An error may have occurred.' + '<br /><a href="#" onClick="jbImagesDialog.showIframe()">' + 'View script\'s output' + '</a>';
@@ -71,7 +71,7 @@ var jbImagesDialog = {
 			//Added condition
 			if(result.status == 'last'){
 				document.getElementById("upload_infobar").innerHTML = 'Upload Complete';
-				//this.close();
+				this.close();
 			}
 			
 		}
