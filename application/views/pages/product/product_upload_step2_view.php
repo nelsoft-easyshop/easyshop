@@ -972,6 +972,7 @@ $(".proceed_form").unbind("click").click(function(){
   formData.append("inputs", input_name);
   formData.append("id", id);
   formData.append("combination",combinationSelected);
+  formData.append("desc",description);
   formData.append("noCombination",noCombination);
   formData.append("otherCategory",otherCategory);
   formData.append("removeThisPictures",JSON.stringify(removeThisPictures));
