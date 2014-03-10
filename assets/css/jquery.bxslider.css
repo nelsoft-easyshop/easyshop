@@ -49,7 +49,7 @@
 
 .bx-wrapper .bx-loading {
 	min-height: 50px;
-	background: url(../images/bx_loader.gif) center center no-repeat #fff;
+	background: url(../images/orange_loader_small.gif) center center no-repeat #fff;
 	height: 100%;
 	width: 100%;
 	position: absolute;
@@ -230,9 +230,31 @@
 	width: 510px !important;
 }
 
+.mid_bottom_slides .bx-controls .bx-controls-direction .bx-next {
+	right: -3px;
+}
+
+.mid_bottom_slides .bx-controls .bx-controls-direction .bx-prev {
+	left: 1px;
+}
+
 .mid_bottom_slides {
 	max-width: none !important;
+	display: inline-block;
 }
+
+.mid_bottom_slides a {
+
+	width: 140px;
+}
+
+.mid_bottom_slides a img {
+	max-height: 90px;
+	max-width: 90px;
+	height: auto;
+	width: auto;
+}
+
 .inner_mid_bottom_slides {
     margin-left: 24px;
     width: 458px;
@@ -250,7 +272,7 @@
 }
 
 .product_slides {
-	height: 105px !important;
+	height: 102px !important;
 	margin-bottom: 5px !important;
 }
 
@@ -301,10 +323,10 @@ ul.slides_prod li a:hover {
 }
 
 .slide_arrows .bx-prev {
-	background: url(../images/img_slider_arrow.jpg) no-repeat !important;
+	background: url(../images/img_slider_arrow.png) no-repeat !important;
 }
 .slide_arrows .bx-next {
-	background: url(../images/img_slider_arrow.jpg) no-repeat scroll -23px 0px rgba(0, 0, 0, 0) !important;
+	background: url(../images/img_slider_arrow.png) no-repeat scroll -23px 0px rgba(0, 0, 0, 0) !important;
 }
 
 .slide_arrows .bx-prev:hover {

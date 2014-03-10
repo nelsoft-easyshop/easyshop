@@ -1056,9 +1056,22 @@ span.paypal {
 	float: left;
 	width: 244px;
 }
-.border > div img {
-	width: 160px;
-        height: 160px;
+
+.home_product_img_container {
+    display: table-cell;
+    height: 160px;
+    line-height: 160px;
+    overflow: hidden;
+    position: relative;
+    vertical-align: middle;
+    width: 160px;
+}
+
+.home_product_img_container img {
+	max-width: 160px;
+    max-height: 160px;
+	height: auto;
+	width: auto;      
 }
 .product_title {
 	width: 100% !important;
@@ -1105,15 +1118,19 @@ span.paypal {
 .products div {
 	float: none;
 	text-align: center;
-	width: 220px;
+	width: 192px;
 	margin:0 10px;
 	padding: 10px 0;
+}
+
+.products div a {
+	text-align: -webkit-center;
 }
 
 #cat_1_main_details {
 	background: none repeat scroll center rgba(255, 255, 255, 0.7);
     float: none;
-    margin: -88px 0px 0;
+    margin: -89px 0px 0;
     padding: 10px 0;
     position: absolute;
     text-align: center;
@@ -1130,6 +1147,11 @@ span.paypal {
 	border-bottom: 1px solid #cecece;
 }
 
+.fashion_products .products div {
+    margin: 0 auto;
+    width: 212px;
+}
+
 
 /*** Electronics Panel ***/
 .electronics_products div {
@@ -1142,7 +1164,7 @@ div.electronics_product_sides {
 }
 
 .electronics_product_sides > div {
-	width: 222px;
+	width: 212px;
 	text-align: center;	
 }
 
@@ -1206,11 +1228,14 @@ div.electronics_product_sides {
 }
 
 .category_nav {
-	display: inline-block;
-    margin: 0px 0px 10px 5px;
-    position: relative;
+    background-color: #B0B0B0;
+    display: inline-block;
+    height: 35px;
+    margin: 0 0 10px 5px;
+    overflow: hidden;
+    position: absolute;
     width: 784px;
-    background-color: #b0b0b0;
+    z-index: 1;
 }
 .category_nav ul {
 	list-style: none;
@@ -1242,6 +1267,35 @@ div.electronics_product_sides {
 	background-color: #f48000;
 }
 
+.category_nav_plus {
+	height: auto;
+}
+
+.category_nav_minus {
+	height: 35px;
+}
+
+.prod_cat_drop {
+  background-position: -406px -297px;
+  cursor: pointer;
+  height: 35px;
+  position: absolute;
+  right: 0;
+  width: 25px;
+}
+
+.active_prod_cat_drop_arrow {
+  background-position: -511px -297px; 
+  cursor: pointer;
+  height: 35px;
+  position: absolute;
+  right: 0;
+  width: 25px;
+}
+
+.prod_cat_drop_arrow:hover {
+  background-position: -476px -297px; 
+}
 
 
 /*** Footer Panel ***/
