@@ -16,6 +16,7 @@
           <li class = <?php echo (($category['id_cat'] === $breadcrumbs[0]['id_cat'])?"active":"");?>> <a href="<?=base_url()?>category/<?php echo $category['id_cat'];?>/<?php echo es_url_clean($category['name']); ?>.html"> <?php echo $category['name'];?> </a> </li>
           <?php endforeach;?>
         </ul>
+        <span class="span_bg prod_cat_drop"></span>
       </div>
     </div>
     <div class="clear"></div>
@@ -340,6 +341,7 @@
       }
       .bread_crumbs {
         margin-left: 195px;
+        margin-top: 10px;
       }
 </style>
 
@@ -381,4 +383,19 @@
         });
     })(jQuery);
 
+</script>
+<script type="text/javascript">
+
+$(document).on('click','.prod_cat_drop',function() {
+     $(".category_nav").toggleClass("category_nav_plus");
+     $(".prod_cat_drop").toggleClass("prod_cat_drop_arrow active_prod_cat_drop_arrow");
+                 $(document).bind('focusin.prod_cat_drop_arrow click.prod_cat_drop_arrow',function(e) {
+                if ($(e.target).closest('.prod_cat_drop, .category_nav').length) return;
+                $('.category_nav').removeClass('category_nav_plus');
+                $('.prod_cat_drop').removeClass('active_prod_cat_drop_arrow');
+                });
+             });
+ 
+              $('.category_nav').removeClass('category_nav_plus');
+              $('.prod_cat_drop').removeClass('active_prod_cat_drop_arrow');
 </script>
