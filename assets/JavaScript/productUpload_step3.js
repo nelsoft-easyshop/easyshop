@@ -379,6 +379,9 @@ $(function(){
     }
   }
   
+  /**
+   * Function to handle display of Price Value
+   **/
   function ReplaceNumberWithCommas(thisnumber){
 	//Seperates the components of the number
     var n = thisnumber.toString().split(".");
@@ -393,9 +396,9 @@ $(function(){
 /********** CLOSE DOCUMENT READY FUNCTION WITH DATA variables *********/
 
 
-/*
-* Compares if two objects are identical
-*/
+/**
+ * Compares if two objects are identical
+ */
 function objectCompare(o1, o2){
   for(var p in o1){
     if(o1[p] !== o2[p]){
@@ -410,9 +413,9 @@ function objectCompare(o1, o2){
   return true;
 }
 
-/*
-* Get object size
-*/
+/**
+ * Get object size
+ */
 function getObjectSize(obj) {
     var len = 0, key;
     for (key in obj) {
