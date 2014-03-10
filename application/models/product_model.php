@@ -41,8 +41,10 @@ class product_model extends CI_Model
 		$sth->bindParam(':cat_id', $id);
 		$sth->execute();
 		$row = $sth->fetchAll(PDO::FETCH_COLUMN, 0);
-
-		return explode(',', $row[0]);	
+	
+		if (isset($row[0])){ // Added - Rain 02/25/14
+			return explode(',', $row[0]);
+		}	
 	}
 	
 	function getParentId($id) #get all parent category from selected id.
@@ -68,7 +70,6 @@ class product_model extends CI_Model
 		}
 		$value = implode(',',$keys);
 
-
 		$query = " 
 		SELECT DISTINCT
 		  a.name AS cat_name
@@ -82,7 +83,8 @@ class product_model extends CI_Model
 		  , es_attr_lookuplist c 
 		WHERE a.datatype_id = b.id_datatype 
 		  AND a.attr_lookuplist_id = c.id_attr_lookuplist 
-		  AND a.cat_id IN (" .$value .") 
+		  AND a.cat_id IN (" .$value .")
+		  GROUP BY cat_name, a.id_attr, a.attr_lookuplist_id, input_type, input_name
 		ORDER BY cat_name ASC ";
 
 		$sth = $this->db->conn_id->prepare($query);
@@ -286,8 +288,15 @@ class product_model extends CI_Model
 		$sth->bindParam(':price',$product_price);
 		$sth->bindParam(':condition',$product_condition);
 		$sth->bindParam(':cat_other_name',$other_category_name);
-		$sth->execute();
-        
+		$bool = $sth->execute();
+
+        if(!$bool){
+            $errorInfo = $sth->errorInfo();
+            log_message('error', 'PDO::ADD: 0=>'. $errorInfo[0]);
+            log_message('error', 'PDO::ADD: 1=>'. $errorInfo[1]);
+            log_message('error', 'PDO::ADD: 2=>'. $errorInfo[2]);
+        }
+
 		return $this->db->conn_id->lastInsertId('id_product');
 	}
 
@@ -345,7 +354,7 @@ class product_model extends CI_Model
 		$sth->bindParam(':product_id',$product_id);
 		$sth->bindParam(':is_primary',$is_primary);
 		$sth->execute();
-
+        
 		return $this->db->conn_id->lastInsertId('id_product_image');
 	}
 
@@ -426,55 +435,47 @@ class product_model extends CI_Model
 	function getProductByCategoryIdWithDistinct($id,$condition_price_string,$string,$cnt,$start,$per_page,$catlist_down,$item_brand_string_2)
 	{
 		$start = (int)$start;
-	 	$per_page = (int)$per_page;
-		 
-			 $query = " 
-			SELECT mother_tbl.*,`es_brand`.`name` AS product_brand
-			FROM `es_brand`
+		$per_page = (int)$per_page;
+				 
+		$query = " 
+			SELECT mother_tbl.*,`es_brand`.`name` AS product_brand FROM `es_brand`
 			LEFT JOIN (SELECT 
-			  main_tbl.*
-			  , es_product_image.product_image_path 
-			FROM
-			  `es_product_image` 
-			  LEFT JOIN 
-			    (SELECT 
-			      `product_id`
-			      , `brand_id` 
-			      , `name` AS product_name
-			      , `price` AS product_price
-			      , `brief` AS product_brief
-			      , `condition` AS product_condition 
-			    FROM
-			      `es_product` 
-			      INNER JOIN 
-			        (SELECT 
-			          product_id 
-			        FROM
-			          (SELECT 
-			            a.product_id
-			            , a.attr_value
-			            , b.name 
-			          FROM
-			            `es_product_attr` a
-			            , `es_attr` b
-			            , `es_product` c 
-			          WHERE a.`attr_id` = b.`id_attr` 
-			            AND a.`product_id` = c.`id_product` 
-			            AND c.is_delete = 0 
-			            AND c.`cat_id` IN (".$catlist_down.") ".$condition_price_string." ) AS sub_main_tbl 
-			        WHERE ".$string." 
-			        GROUP BY product_id 
-			        HAVING COUNT(*) = :cnt) AS product_id_table 
-			        ON es_product.`id_product` = product_id_table.product_id) AS main_tbl 
-			    ON main_tbl.product_id = es_product_image.`product_id` 
-			WHERE `es_product_image`.`is_primary` = 1 
-			  AND main_tbl.product_id = es_product_image.`product_id` ) AS mother_tbl 
-			ON mother_tbl.brand_id = `es_brand`.`id_brand` 
-			WHERE mother_tbl.brand_id = `es_brand`.`id_brand` ".$item_brand_string_2."
+				main_tbl.*
+				, es_product_image.product_image_path 
+				FROM `es_product_image` 
+				LEFT JOIN (SELECT 
+					`product_id`
+					, `brand_id` 
+					, `name` AS product_name
+					, `price` AS product_price
+					, `brief` AS product_brief
+					, `condition` AS product_condition 
+					FROM `es_product` 
+					INNER JOIN (SELECT 
+						product_id 
+						FROM (SELECT 
+							a.product_id
+							, a.attr_value
+							, b.name 
+							FROM `es_product_attr` a, `es_attr` b , `es_product` c 
+							WHERE a.`attr_id` = b.`id_attr` 
+							AND a.`product_id` = c.`id_product` 
+							AND c.is_delete = 0 
+							AND c.`cat_id` IN (".$catlist_down.") 
+							".$condition_price_string." 
+						) AS sub_main_tbl 
+						WHERE ".$string." GROUP BY product_id 
+						/* HAVING COUNT(*) = :cnt */
+					) AS product_id_table ON es_product.`id_product` = product_id_table.product_id
+				) AS main_tbl ON main_tbl.product_id = es_product_image.`product_id` 
+				WHERE `es_product_image`.`is_primary` = 1 
+				AND main_tbl.product_id = es_product_image.`product_id` 
+			) AS mother_tbl ON mother_tbl.brand_id = `es_brand`.`id_brand` 
+			WHERE mother_tbl.brand_id = `es_brand`.`id_brand` 
+			".$item_brand_string_2."
 			ORDER BY product_name 
 			LIMIT :start, :per_page
-			 ";	
-		   
+		";	   
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':cnt',$cnt,PDO::PARAM_INT);  
 		$sth->bindParam(':start',$start,PDO::PARAM_INT);
@@ -511,7 +512,6 @@ class product_model extends CI_Model
 		  ".$condition_price_string." 
         LIMIT :start, :per_page
 	 	"; 
-
 
 		$sth = $this->db->conn_id->prepare($query);  
 		$sth->bindParam(':start',$start,PDO::PARAM_INT);
@@ -636,55 +636,51 @@ class product_model extends CI_Model
 		return $row;
 	}	
 
+	///// Advance Search: Updated SQL query - Rain 02/25/14 //////
 	function getAttributesWithParam($id,$datas)
 	{
-		$query = '
-		SELECT DISTINCT 
-		  (b.name) 
-		FROM
-		  `es_product_attr` a
-		  , `es_attr` b
-		  , `es_product` c 
-		WHERE a.`attr_id` = b.`id_attr` 
-		  AND c.`cat_id` = :cat_id 
-		  AND product_id IN('. implode(',', $datas) .') ORDER BY NAME';
+		if(is_array($id)){
+			$cid = implode(',', $id);
+		}else{
+			$cid = $id;
+		}
 		
-		$sth = $this->db->conn_id->prepare($query);
-		$sth->bindParam(':cat_id',$id);  
+		$query = 'SELECT DISTINCT ea.`name` FROM `es_product_attr` epa
+			LEFT JOIN `es_attr` ea ON epa.`attr_id` = ea.`id_attr`
+			LEFT JOIN `es_product` ep ON epa.`product_id` = ep.`id_product`
+			WHERE ep.`cat_id` IN ('. $cid .')
+			AND epa.`product_id` IN ('. implode(',', $datas) .') ORDER BY ea.`name`';
+		$sth = $this->db->conn_id->prepare($query); 
 		$sth->execute();
 
 		$row = $sth->fetchAll(PDO::FETCH_ASSOC);
 
 		return $row;
-	}	
+	} /// end
 
+	///// Advance Search: Updated SQL query - Rain 02/25/14 //////
 	function getAttributesWithParamAndName($id,$datas,$name)
 	{
-	
-		$query = '
-		SELECT 
-		attr_value 
-		FROM
-		(SELECT DISTINCT 
-			(b.name)
-			, a.`attr_value` 
-			FROM
-			`es_product_attr` a
-			, `es_attr` b
-			, `es_product` c 
-			WHERE a.`attr_id` = b.`id_attr` 
-			AND c.`cat_id` = :cat_id 
+		if(is_array($id)){
+			$cid = implode(',', $id);
+		}else{
+			$cid = $id;
+		}
+		
+		$query = 'SELECT DISTINCT epa.`attr_value` FROM `es_product_attr` epa
+			LEFT JOIN `es_attr` ea ON epa.`attr_id` = ea.`id_attr`
+			LEFT JOIN `es_product` ep ON epa.`product_id` = ep.`id_product`
+			WHERE ep.cat_id IN ('. $cid .')
 			AND product_id IN ('. implode(', ', $datas) .') 
-			ORDER BY NAME) AS new_table 
-		WHERE NAME = "'.$name.'" ';
+			AND ea.`name` = :name ORDER BY ea.`name` ';
 		$sth = $this->db->conn_id->prepare($query);
-		$sth->bindParam(':cat_id',$id);  
+		$sth->bindParam(':name',$name);
 		$sth->execute();
 
 		$row = $sth->fetchAll(PDO::FETCH_COLUMN, 0);
 
 		return $row;
-	}
+	} /// end
 
 	function addProductReview($memberid, $productid, $rating, $title, $review)
 	{
@@ -836,8 +832,6 @@ class product_model extends CI_Model
 		return $row;
 	}
 
- 
-
 	function getCatItemsWithImage($cat_id)
 	{	
 
@@ -872,7 +866,7 @@ class product_model extends CI_Model
 		$sth->bindParam(':product_id',$data['product_id']);
 		$sth->bindParam('member_id',$data['member_id']);
 		$sth->execute();
-			//print_r($sth->errorInfo());
+		//print_r($sth->errorInfo());
 	}
 	
 	#Set is_delete of es_product to 1
@@ -986,7 +980,14 @@ class product_model extends CI_Model
         $sth->bindParam(':p_id',$product_details['product_id']);
 		$sth->bindParam(':member_id',$member_id);
         
-		$sth->execute();
+        $bool = $sth->execute();
+        
+        if(!$bool){
+            $errorInfo = $sth->errorInfo();
+            log_message('error', 'PDO::EDIT: 0=>'. $errorInfo[0]);
+            log_message('error', 'PDO::EDIT: 1=>'. $errorInfo[1]);
+            log_message('error', 'PDO::EDIT: 2=>'. $errorInfo[2]);
+        }
 		
 		return $sth->rowCount();
     }
@@ -1041,8 +1042,6 @@ class product_model extends CI_Model
 		$sth->execute();
 	}
     
-	
-
 	#Separates img path and img file from product_image_path
 	#Result is stored back to the original array by reference
 	#Arguments: $array: 1D array data from database fetch
@@ -1272,7 +1271,7 @@ class product_model extends CI_Model
 
     	return $result;
     }
-    
+	
     /*
      * Use fulltext search to find strings in es_cat.name 
      * Returns all matched category names.
@@ -1285,6 +1284,5 @@ class product_model extends CI_Model
     	$result = $sth->fetchAll(PDO::FETCH_ASSOC);
         
         return $result;
-    }
- 
+    } 
 }
