@@ -90,30 +90,32 @@ $(document).ready(function(){
 		  $('.username_availability').html('');
 	  }).on('blur', function(){
 		if($.trim($('#cur_password').val()).length > 1){
-			setTimeout(pass_check,1000);
+            pass_check();
 		}
 	  });
 	  
 	  function pass_check(){
 			var username = $("#wsx").val();		  
 			var pass 	 = $('#cur_password').val();
-			
-			$.post(config.base_url+'register/pass_check', {username: username, pass: pass}, function(result){
+            
+            var csrftoken = $('#changepass').find('input[name^="es_csrf"]').val();
+
+			$.post(config.base_url+'register/pass_check', {username: username, pass: pass, es_csrf_token : csrftoken}, function(result){
 				if(result == 1){
 					showcheck($('#username'));
 					$('#username_check').hide();
+                    $('#cur_password_status').val('disapprove');
 					$('#username_x').show();
-					$('#cur_password').val('');
 					$('.username_availability').html('Incorrect Password');
 				}
 				else{
 					showx($('#username'));
 					$('#username_check').show();
+                    $('#cur_password_status').val('approve');
 					$('#username_x').hide();
 					$('.username_availability').html('Password Correct');
 				}
 			});		
-			
 	  }	  	 	 
 });
 
@@ -196,16 +198,22 @@ $(document).ready(function(){
 /**********************************************************************************************/
 $(document).ready(function(){
 
-
+    jQuery.validator.addMethod("equals", function(value, element, param) {
+      return this.optional(element) || value === param; 
+    }, jQuery.format(""));
+ 
 	 $("#changepass").validate({
+         ignore: "",
 		 rules: {
 			cur_password: {
 				required: true,
                 minlength: 5,
                 maxlength:25
-				//alphanumeric: true,
-				//case_all: true
-				},				
+				},		
+            cur_password_status: {
+				required: true,
+                equals: "approve"
+				},	
 			password: {
 				required: true,
                 minlength: 6,
@@ -226,7 +234,7 @@ $(document).ready(function(){
 			}
 		 },
 		 errorElement: "span",
-		 errorPlacement: function(error, element) {
+		 errorPlacement: function(error, element) {     
 				error.addClass('red');
 				if(element.attr('name') == 'password'){
 					var added_span = $('<span/>',{'class':"red"});

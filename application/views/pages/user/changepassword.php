@@ -17,10 +17,11 @@
                     <div class="field">
                         <label for="cur_password">Current Password:</label>
                         <input id="cur_password" name="cur_password" type="password" maxlength="25"/>
+                        <input type="hidden" id="cur_password_status" name="cur_password_status" value="disapprove"/>
                         <div id="username_status" style="display:inline;">
                             <img src="<?=base_url()?>/assets/images/check_icon.png" id="username_check" style="position: relative;display:none;vertical-align:middle"/>
                             <img src="<?=base_url()?>/assets/images/x_icon.png" id="username_x" style="position: relative;display:none;vertical-align:middle"/>
-                            <span class="username_availability"></span>
+                            <span class="username_availability error red"></span>
                         </div>
                         <span class="red ci_form_validation_error"><?php echo form_error('password'); ?></span>
                     </div>
@@ -43,13 +44,20 @@
                           <span class="red ci_form_validation_error"><?php echo form_error('cpassword'); ?></span>
                           <input id="wsx" name="wsx" type="hidden" value="<?php echo $uname; ?>"/>
                     </div>
+                    <div class="field">
+                        <span class="red ci_form_validation_error">
+                            <strong><?php echo (!$result)?'The account password you entered is incorrect.':''?></strong>
+                        </span>
+                    </div>
+                    
+                    
                     <div class="clear"></div>
                     <div class="field" style="padding-top:0px">
                           <input type="submit" name="changepass_btn" value="Save"/>
-                    </div>
+                    </div>        
 					<input type="hidden" value="<?php echo strtolower($uname);?>" id="changepass_username">
                 <?php else: ?>
-                    Password is successfully updated! <a href='<?=base_url()?>memberpage'>click HERE</a> to return.		        
+                    <strong>Password successfully updated. <br/><a href='<?=base_url()?>me' style="color: #0191C8">Click here </a> to return the your page. 	 </strong>	   
                 <?php endif; ?>            
           </div>
         <?php echo form_close();?>
@@ -58,7 +66,7 @@
 			  <div>
 				<strong>
 					<p>You are not currently signed-in. </p>
-					<p>If you wish to login, <a href='<?=base_url()?>login'>click here.</a> </p>
+					<p><a href='<?=base_url()?>login'>Click here to sign-in.</a> </p>
 				</strong> 
 			  </div>
 			</div>
@@ -73,7 +81,7 @@
 
 
 <!-- password strength checker -->
-<?php if($logged_in):?>
+<?php if(($logged_in)&&($toggle_view == "1")):?>
 	<script type="text/javascript" src="<?=base_url()?>assets/JavaScript/js/mootools-core-1.4.5-full-compat.js"></script> 
     <script type="text/javascript" src="<?=base_url()?>assets/JavaScript/js/password_meter.js"></script>
 <?php endif; ?>

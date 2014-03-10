@@ -331,26 +331,24 @@ class Register extends MY_Controller
 		);
 		$data = array_merge($data, $this->fill_header());
 		
-		$this->load->view('templates/header', $data);
-		
-		if(($this->input->post('changepass_btn')) && ($this->form_validation->run('changepass'))){
+		$this->load->view('templates/header_plain', $data);
+		$temp['toggle_view'] = "1";
+        $result = true;
+
+		if(($this->input->post('changepass_btn')) && ($this->form_validation->run('changepass'))){  
 			$data = array(
 				'username' => $this->input->post('wsx'),
 				'cur_password' => $this->input->post('cur_password'),
 				'password' => $this->input->post('password')
 			);
-			
-			$this->register_model->changepass($data);	
-			
-			$temp['toggle_view'] = "";
-			$this->load->view('pages/user/changepassword', $temp);
+            $result = $this->register_model->changepass($data);       
+			if($result){
+                $temp['toggle_view'] = "";
+            }
 			$this->session->unset_userdata('user_cur_loc');
 		}
-		else{
-			$temp['toggle_view'] = "1";
-			$this->load->view('pages/user/changepassword', $temp);
-		}
-		
+        $temp['result'] = $result;
+		$this->load->view('pages/user/changepassword', $temp);
 		$this->load->view('templates/footer');		
 		
 	}

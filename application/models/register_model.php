@@ -56,6 +56,8 @@ class Register_model extends CI_Model
 		$sth->bindParam(':cur_password', $data['cur_password']);
 		$sth->bindParam(':password', $data['password']);
         $sth->execute();	
+        $result = $sth->fetch(PDO::FETCH_ASSOC);        
+        return ($result['o_success']==='true'?true:false);
 	}	
 		
 	function validate_captcha($user_captcha, $data)
@@ -204,7 +206,7 @@ class Register_model extends CI_Model
 		$this->email->subject($this->lang->line('email_subject'));
 		//Windows code
 		//$this->email->attach(getcwd() . "\assets\images\img_logo.png", "inline");
-		//CentOS code
+		//CentOS code - working for windows as well
 		$this->email->attach(getcwd() . "/assets/images/img_logo.png", "inline");
 
 		$data = array(
@@ -219,6 +221,9 @@ class Register_model extends CI_Model
 
 		$errmsg = $this->email->print_debugger();
 		
+		//print_r($errmsg);
+		//die();
+
 		return $result;
 	}
 
@@ -361,6 +366,7 @@ class Register_model extends CI_Model
 		$this->email->to($email);
 		$this->email->from('noreply@easyshop.ph', 'Easyshop.ph');
 		$this->email->subject('Password reset on Easyshop.ph');
+		$this->email->attach(getcwd() . "/assets/images/img_logo.png", "inline");
 		
 		$data = array(
 			'site_url' => site_url('login/success_email_verification'),
