@@ -62,7 +62,7 @@
                   <?php 
                   foreach ($brand as $key) {
                     ?>
-                    <option value="<?php echo $key['brand_id'] ?>" <?php if(isset($product_details['brand_id'])){echo ($product_details['brand_id'])===$key['brand_id']?'selected':'';}?>><?php echo $key['name'] ?></option>
+                    <option value="<?php echo $key['brand_id'] ?>" <?php if(isset($product_details['brand_id'])){echo ($product_details['brand_id'])===$key['brand_id']?'selected':'';}?>><?php echo ucfirst(strtolower($key['name'])); ?></option>
                     <?php } ?>
                   </select>
                 </td>

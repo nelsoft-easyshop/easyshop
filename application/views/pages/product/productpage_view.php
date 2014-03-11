@@ -152,7 +152,7 @@
         <div id="tabs-1">
           <p> <strong>Description: </strong><?php echo html_purify($product['description']);?> </p>
           <ul>
-            <li><strong>Brand: </strong><?php echo html_escape($product['brand_name']);?></li>
+            <li><strong>Brand: </strong><?php echo html_escape(ucfirst(strtolower($product['brand_name'])));?></li>
             <!-- <li><strong>Style: </strong><?php echo html_escape($product['style_name']);?></li> -->
             <li><strong>Additional description: </strong><?php echo html_escape($product['brief']);?></li>
           </ul>
