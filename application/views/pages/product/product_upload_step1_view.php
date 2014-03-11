@@ -403,8 +403,4 @@
             $('#cat_search_drop_content').hide();
         });
 
-
-
-
-
 </script>
