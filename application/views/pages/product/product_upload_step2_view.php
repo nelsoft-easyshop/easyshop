@@ -203,16 +203,16 @@
 
     <tr>
       <td colspan="3"> 
-        <h3 class="orange"> Image of your item</h3> (Select Multiple)
+        <h3 class="orange"> Image of your item</h3> (You Can Select Multiple)
       </td>
     </tr>
     <tr>
 
       <td colspan="4">
 
-
-        <div class="inputfiles">
-          <input type="file" id="files" class="files" name="files[]" multiple accept="image/*" required = "required"  /><br/>
+        <div class="inputfiles"> 
+          <label for="files" class="labelfiles">Click to upload picture</label>
+          <input type="file" id="files" class="files" name="files[]" multiple accept="image/*" required = "required"  /><br/><br/>
 
         </div> 
 
@@ -236,6 +236,7 @@
 </tr>
 <tr>
   <td colspan="3">
+
     <h3 class="orange"> Price</h3> 
   </td>
 </tr>

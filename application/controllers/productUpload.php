@@ -355,7 +355,6 @@ class productUpload extends MY_Controller
 									break;
 
                                     default: # default input type (SELECT& RADIO)
- 
                                     if(isset($_POST[$explode_value]) && strlen(trim($_POST[$explode_value])) != 0 ){
                                     	$attributeCount = count($this->product_model->selectAttributeNameWithNameAndId($_POST[$explode_value],$attribute_id));
                                     	if($attributeCount > 0){

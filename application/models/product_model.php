@@ -290,7 +290,14 @@ class product_model extends CI_Model
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':id_attr',$groupID, PDO::PARAM_INT);
 		$sth->bindParam(':datatype_id',$datatypeID,PDO::PARAM_INT);
-		$sth->execute();
+		
+		if($sth->execute()){
+			$errorInfo = json_encode($sth->errorInfo());
+			log_message('error', 'Textare PDO::SELL:SELECT BEFORE ADD => '.$errorInfo);
+			log_message('error', 'Textare PDO::QUERY => '.$query);
+			log_message('error', 'Textare PDO::VARIABLE(id_attr) => '.$groupID);
+			log_message('error', 'Textare PDO::VARIABLE(datatype_id) => '.$datatypeID);
+		}
        
 		$rows = $sth->fetchAll(PDO::FETCH_ASSOC);
 		
@@ -334,11 +341,19 @@ class product_model extends CI_Model
 		$query = $this->sqlmap->getFilenameID('product','addNewAttribute');
 
 		$sth = $this->db->conn_id->prepare($query);
-		$sth->bindParam(':product_id',$product_id);
-		$sth->bindParam(':attr_id',$attribute_id);
-		$sth->bindParam(':attr_value',$value);
-		$sth->bindParam(':attr_price',$price);
-		$sth->execute();
+		$sth->bindParam(':product_id',$product_id , PDO::PARAM_INT);
+		$sth->bindParam(':attr_id',$attribute_id , PDO::PARAM_INT);
+		$sth->bindParam(':attr_value',$value , PDO::PARAM_STR);
+		$sth->bindParam(':attr_price',$price , PDO::PARAM_STR);
+		if(!$sth->execute()){
+			$errorInfo = json_encode($sth->errorInfo());
+			log_message('error', 'Textare PDO::SELL:ADD => '.$errorInfo);
+			log_message('error', 'Textare PDO::QUERY => '.$query);
+			log_message('error', 'Textare PDO::VARIABLE(product_id) => '.$product_id);
+			log_message('error', 'Textare PDO::VARIABLE(attr_id) => '.$attribute_id);
+			log_message('error', 'Textare PDO::VARIABLE(attr_value) => '.$value);
+			log_message('error', 'Textare PDO::VARIABLE(attr_price) => '.$price);
+		}
 
 		return $this->db->conn_id->lastInsertId('id_product_attr');
 	}

@@ -997,3 +997,23 @@ tr.tr_shipping_summary:nth-child(odd) td {
 .tr_shipping_summary td:last-child {
     text-align: center;
 }
+
+#files {
+  position: absolute;
+  left: -9999px;z-index: -1900;
+}
+.labelfiles{
+   background-color: #F18200;
+   border: 1px solid #F18200;
+   border-radius: 3px;
+   color: #FFFFFF;
+   cursor: pointer;
+   text-transform: uppercase;
+   transition: all 0.3s ease-in-out 0s;
+   width: 200px;
+   padding: 10px;    margin: 40px 0;
+}
+.labelfiles:hover{
+   background-color: #FF4400;
+   border: 1px solid #FF4400;
+}
