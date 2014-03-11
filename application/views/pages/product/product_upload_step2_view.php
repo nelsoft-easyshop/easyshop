@@ -344,8 +344,7 @@ foreach($opt_attr as $prod_attr): ?>
 <tfoot>
   <tr>
     <td>&nbsp;</td>
-    <td colspan="3">
-      <input type="hidden" value="" name="desc" class="description_hidden"> 
+    <td colspan="3">  
       <a class="add_more_link" href="javascript:void(0)">+ Add More</a>
 
       <?php if(isset($product_details)): ?>
@@ -971,8 +970,7 @@ $(document).on('change',"#prod_condition,#prod_brand",function () {
 $(".proceed_form").unbind("click").click(function(){
   tinyMCE.triggerSave();
   var description = tinyMCE.get('prod_description').getContent();
-  var id = "<?php echo $id; ?>"
-  $('.description_hidden').val(description);
+  var id = "<?php echo $id; ?>"; 
   var input_name = "<?php echo (string)$array_name_inputs; ?>";
   var action = "sell/processing"; 
   var title = $("#prod_title");
@@ -1108,8 +1106,7 @@ $(".proceed_form").unbind("click").click(function(){
           processData:false,
           data: formData, 
           dataType: "json",
-          beforeSend: function(jqxhr, settings) { 
-            $('.description_hidden').val(description);
+          beforeSend: function(jqxhr, settings) {  
             $( ".button_div" ).hide();
             $( ".loader_div" ).show();
           },
@@ -1137,8 +1134,7 @@ $(".proceed_form").unbind("click").click(function(){
           processData:false,
           data: formData , 
           dataType: "json",
-          beforeSend: function(jqxhr, settings) { 
-            $('.description_hidden').val(description);
+          beforeSend: function(jqxhr, settings) {  
             $( ".button_div" ).hide();
             $( ".loader_div" ).show();
           },
