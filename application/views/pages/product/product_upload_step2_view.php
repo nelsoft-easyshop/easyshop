@@ -211,7 +211,7 @@
       <td colspan="4">
 
         <div class="inputfiles"> 
-          <label for="files" class="labelfiles">Click to upload picture</label>
+          <label for="files" class="labelfiles">Click to browse picture</label>
           <input type="file" id="files" class="files" name="files[]" multiple accept="image/*" required = "required"  /><br/><br/>
 
         </div> 
