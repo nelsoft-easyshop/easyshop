@@ -129,12 +129,12 @@ class Uploader extends CI_Controller {
 				$result['file_name']	= $conf['img_path'] . '/' . $result['file_name'];
 				
 				// Added status to trigger jbdialog close
-				if($filecount-1 === $fx && !$hasInvalidFile){
+				/*if($filecount-1 === $fx && !$hasInvalidFile){
 					$result['status'] = 'last';
 				}
 				else{
 					$result['status'] = 'notlast';
-				}
+				}*/
 				
 				// Output to user
 				$this->load->view('ajax_upload_result', $result);
@@ -153,7 +153,6 @@ class Uploader extends CI_Controller {
 				
 			}
 		}
-
 	}
 	
 	/* Blank Page (default source for iframe) */

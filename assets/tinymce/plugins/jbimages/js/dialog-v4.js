@@ -21,16 +21,43 @@ var jbImagesDialog = {
 	resized : false,
 	iframeOpened : false,
 	timeoutStore : false,
+	myformdata : [],
+	isInProgress : false,
+	uploadCounter : 1,
+	hasError : false,
+	hasSuccess : false,
 	
 	inProgress : function() {
 		document.getElementById("upload_infobar").style.display = 'none';
 		document.getElementById("upload_additional_info").innerHTML = '';
-		document.getElementById("upload_form_container").style.display = 'none';
+		//document.getElementById("upload_form_container").style.display = 'none';
 		document.getElementById("upload_in_progress").style.display = 'block';
+		if(this.isInProgress) {
+			var origForm = document.getElementById("upl" + this.uploadCounter);			
+			this.myformdata.push(origForm);
+			this.uploadCounter++;
+		} else {
+			this.isInProgress = true;
+			var origForm = document.getElementById("upl");
+			origForm.submit();
+		}
+		var newForm = origForm.cloneNode(true);
+		origForm.style.display = 'none';
+		newForm.id = "upl" + this.uploadCounter;
+		origForm.parentNode.appendChild(newForm);
+		var filenames = origForm.children[0].children[0].files;
+		for (var i = 0; i<filenames.length; i++){
+			var fileExtension = filenames[i].name.split('.').pop()
+			var allowedFileType = ['jpg', 'gif', 'png'];
+			if ( allowedFileType.join('|').indexOf(fileExtension) != -1 ){
+				document.getElementById("fileupload_list").innerHTML += filenames[i].name + '<br>';
+			}
+		}
+		
 		this.timeoutStore = window.setTimeout(function(){
 			document.getElementById("upload_additional_info").innerHTML = 'This is taking longer than usual.' + '<br />' + 'An error may have occurred.' + '<br /><a href="#" onClick="jbImagesDialog.showIframe()">' + 'View script\'s output' + '</a>';
 			// tinyMCEPopup.editor.windowManager.resizeBy(0, 30, tinyMCEPopup.id);
-		}, 20000);
+		}, 20000);		
 	},
 	
 	showIframe : function() {
@@ -45,11 +72,12 @@ var jbImagesDialog = {
 	uploadFinish : function(result) {
 		if (result.resultCode == 'failed')
 		{
-			window.clearTimeout(this.timeoutStore);
-			document.getElementById("upload_in_progress").style.display = 'none';
-			document.getElementById("upload_infobar").style.display = 'block';
-			document.getElementById("upload_infobar").innerHTML = result.result;
-			document.getElementById("upload_form_container").style.display = 'block';
+			//window.clearTimeout(this.timeoutStore);
+			//document.getElementById("upload_in_progress").style.display = 'none';
+			//document.getElementById("upload_infobar").style.display = 'block';
+			//document.getElementById("upload_infobar").innerHTML = result.result;
+			//document.getElementById("upload_form_container").style.display = 'block';
+			this.hasError = true;
 			
 			if (this.resized == false)
 			{
@@ -59,21 +87,41 @@ var jbImagesDialog = {
 		}
 		else
 		{
-			document.getElementById("upload_in_progress").style.display = 'none';
-			document.getElementById("upload_infobar").style.display = 'block';
+			//document.getElementById("upload_in_progress").style.display = 'none';
+			//document.getElementById("upload_infobar").style.display = 'block';
 			//document.getElementById("upload_infobar").innerHTML = 'Upload Complete';
 			
 			var w = this.getWin();
 			tinymce = w.tinymce;
-		
+			
 			tinymce.EditorManager.activeEditor.insertContent('<img src="' + result.filename +'">');
 			
+			this.hasSuccess = true;
 			//Added condition
-			if(result.status == 'last'){
+			/*if(result.status == 'last'){
 				document.getElementById("upload_infobar").innerHTML = 'Upload Complete';
-				this.close();
-			}
+				//this.close();
+			}*/
 			
+		}
+		if ( this.myformdata.length !== 0 ) {
+			(this.myformdata)[0].submit();
+			this.myformdata.shift();
+			document.getElementById("upload_infobar").style.display = 'none';
+			document.getElementById("upload_infobar").innerHTML = '';
+		} else {
+			this.isInProgress = false;
+			document.getElementById("upload_in_progress").style.display = 'none';
+			document.getElementById("upload_infobar").style.display = 'block';
+			if(this.hasSuccess && !this.hasError){
+				document.getElementById("upload_infobar").innerHTML = 'Upload Complete';
+			}
+			else if(!this.hasSuccess && this.hasError){
+				document.getElementById("upload_infobar").innerHTML = result.result;
+			}
+			else if(this.hasSuccess && this.hasError){
+				document.getElementById("upload_infobar").innerHTML = 'Upload Complete. One or more files failed to upload.';
+			}
 		}
 	},
 	
