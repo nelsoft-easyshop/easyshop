@@ -89,7 +89,6 @@ class Uploader extends CI_Controller {
 		
 		// Get total # of files
 		$filecount = count($_FILES['descriptionfile']['name']);
-		$hasInvalidFile = false;
 		
 		// For loop and foreach loop added to cycle through each image
 		// Code to upload not changed
@@ -127,33 +126,22 @@ class Uploader extends CI_Controller {
 				$result['result']		= "file_uploaded";
 				$result['resultcode']	= 'ok';
 				$result['file_name']	= $conf['img_path'] . '/' . $result['file_name'];
-				
-				// Added status to trigger jbdialog close
-				/*if($filecount-1 === $fx && !$hasInvalidFile){
-					$result['status'] = 'last';
-				}
-				else{
-					$result['status'] = 'notlast';
-				}*/
-				
-				// Output to user
-				$this->load->view('ajax_upload_result', $result);
 			}
 			else // Failure
 			{
 				// Compile data for output
 				$result['result']		= $this->upload->display_errors(' ', ' ');
 				$result['resultcode']	= 'failed';
-				
-				// Output to user
-				if(!$hasInvalidFile){
-					$this->load->view('ajax_upload_result', $result);
-					$hasInvalidFile = true;
-				}
-				
 			}
+			if($filecount-1 === $fx){
+				$result['status'] = 'last';
+			}
+			else{
+				$result['status'] = 'notlast';
+			}
+			// Output to user
+			$this->load->view('ajax_upload_result', $result);
 		}
-		sleep(10);
 	}
 	
 	/* Blank Page (default source for iframe) */

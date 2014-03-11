@@ -8,9 +8,9 @@
 	window.parent.window.jbImagesDialog.uploadFinish({
 		filename:'<?php echo $file_name; ?>',
 		result: '<?php echo $result; ?>',
-		resultCode: '<?php echo $resultcode; ?>'
+		resultCode: '<?php echo $resultcode; ?>',
 		<!--Added code-->
-		//status: '<?php echo $status?>'
+		status: '<?php echo $status?>'
 	});
 </script>
 <style type="text/css">

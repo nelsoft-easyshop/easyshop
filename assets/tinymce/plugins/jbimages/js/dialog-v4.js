@@ -103,34 +103,32 @@ var jbImagesDialog = {
 			tinymce.EditorManager.activeEditor.insertContent('<img src="' + result.filename +'">');
 			
 			this.hasSuccess = true;
-			//Added condition
-			/*if(result.status == 'last'){
-				document.getElementById("upload_infobar").innerHTML = 'Upload Complete';
-				//this.close();
-			}*/
-			
 		}
-		if ( this.myformdata.length !== 0 ) {
-			window.clearTimeout(this.timeoutStore);
-			(this.myformdata)[0].submit();
-			this.myformdata.shift();
-			document.getElementById("upload_infobar").style.display = 'none';
-			document.getElementById("upload_infobar").innerHTML = '';
-		} else {
-			this.isInProgress = false;
-			document.getElementById("upload_in_progress").style.display = 'none';
-			document.getElementById("upload_infobar").style.display = 'block';
-			if(this.hasSuccess && !this.hasError){
-				document.getElementById("upload_infobar").innerHTML = 'Upload Complete';
+		//Added condition
+		if(result.status == 'last'){
+			if ( this.myformdata.length !== 0 ) {
+				window.clearTimeout(this.timeoutStore);
+				(this.myformdata)[0].submit();
+				this.myformdata.shift();
+				document.getElementById("upload_infobar").style.display = 'none';
+				document.getElementById("upload_infobar").innerHTML = '';
+			} else {
+				this.isInProgress = false;
+				document.getElementById("upload_in_progress").style.display = 'none';
+				document.getElementById("upload_infobar").style.display = 'block';
+				if(this.hasSuccess && !this.hasError){
+					document.getElementById("upload_infobar").innerHTML = 'Upload Complete';
+				}
+				else if(!this.hasSuccess && this.hasError){
+					document.getElementById("upload_infobar").innerHTML = result.result;
+				}
+				else if(this.hasSuccess && this.hasError){
+					document.getElementById("upload_infobar").innerHTML = 'Upload Complete. One or more files failed to upload.';
+				}
+				this.hasError = this.hasSuccess = false;
 			}
-			else if(!this.hasSuccess && this.hasError){
-				document.getElementById("upload_infobar").innerHTML = result.result;
-			}
-			else if(this.hasSuccess && this.hasError){
-				document.getElementById("upload_infobar").innerHTML = 'Upload Complete. One or more files failed to upload.';
-			}
-			this.hasError = this.hasSuccess = false;
 		}
+		
 	},
 	
 	getWin : function() {
