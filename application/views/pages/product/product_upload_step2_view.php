@@ -404,7 +404,7 @@ foreach($opt_attr as $prod_attr): ?>
 <input type="hidden" id="qty_details" value='<?php echo (isset($item_quantity))?json_encode($item_quantity):json_encode(array());  ;?>'></input>
 </form>
 
-<div class="loader_div"><br><br><center><img src='<?php echo base_url().'assets/images/es_loader.gif' ?>'><br><br><br><br><br></center></div>
+<div class="loader_div"><br><br><center><img src='<?php echo base_url().'assets/images/orange_loader.gif' ?>'><br><br><br><br><br></center></div>
 </div>
 </div>
 </div>
@@ -574,7 +574,7 @@ $(document).ready(function(){
         primaryText = "Your Primary";
         primaryPicture = pictureCount;
       }
-      $('#list').append('<div id="previewList'+pictureCount+'"><img src="'+objectUrl+'" height=100 ><a href="javascript:void(0)" class="removepic" data-number="'+pictureCount+'">[x]</a><br><a href="javascript:void(0)" class="makeprimary photoprimary'+pictureCount+'" data-number="'+pictureCount+'">'+primaryText+'</a></div>');
+      $('#list').append('<div id="previewList'+pictureCount+'" class="upload_img_div"><span class="upload_img_con"><img src="'+objectUrl+'"></span><a href="javascript:void(0)" class="removepic" data-number="'+pictureCount+'">x</a><br><a href="javascript:void(0)" class="makeprimary photoprimary'+pictureCount+'" data-number="'+pictureCount+'">'+primaryText+'</a></div>');
       window.URL.revokeObjectURL(fileList[i]);
       pictureCount++;
     }
@@ -593,8 +593,7 @@ $(document).ready(function(){
         $('#previewList'+idNumber).remove();
         removeThisPictures.push(idNumber);
         primaryPicture = $("#list > div:first-child > .makeprimary" ).data('number');
-        $("#list > div:first-child > .makeprimary").text('Your Primary');
-        
+        $("#list > div:first-child > .makeprimary").text('Your Primary');      
       }else{
         $('#previewList'+idNumber).remove();
         removeThisPictures.push(idNumber);
@@ -607,7 +606,6 @@ $(document).ready(function(){
       primaryPicture = idNumber;  
       $(".makeprimary").text('Make Primary');
       $(".photoprimary"+idNumber).text('Your Primary');
-
     });
 
     // ES_UPLOAER BETA END
@@ -625,7 +623,8 @@ $(document).ready(function(){
       } 
     });
 
-    $('.quantity_table_row , .quantity_table2').on('click', '.quantity_attr_done', function () {  
+
+      $('.quantity_table_row , .quantity_table2').on('click', '.quantity_attr_done', function () {  
 
       var qtyTextbox = $('.qtyTextClass');
       var qtyTextboxValue = parseInt(qtyTextbox.val());
