@@ -77,7 +77,7 @@ class productUpload extends MY_Controller
 			$response['id'] = $id; # id is the selected category
 			$response['otherCategory'] = $otherCategory; # id is the selected category
 			$parents = $this->product_model->getParentId($id); # getting all the parent from selected category
-			$attribute = $this->product_model->getAttributesByParent($parents,$id); # getting all attribute from all parent from selected category
+			$attribute = $this->product_model->getAttributesBySelf($id); # getting all attribute from all parent from selected category
 			$str_parents_to_last = "";
 
 			$lastElement = end($parents);	
@@ -653,8 +653,8 @@ class productUpload extends MY_Controller
 				array_push($main_images, $image);
 		}
 		
-		$parents = $this->product_model->getParentId($product['cat_id']); # getting all the parent from selected category
-		$attribute = $this->product_model->getAttributesByParent($parents,$product['cat_id']); # getting all attribute from all parent from selected category
+	
+		$attribute = $this->product_model->getAttributesBySelf($product['cat_id']); # getting all attribute from all parent from selected category
 		for ($i=0 ; $i < sizeof($attribute) ; $i++ ) {  # getting all lookuplist from item attribute
 			$lookuplist = $this->product_model->getLookItemListById($attribute[$i]['attr_lookuplist_id']);
 			array_push($attribute[$i],$lookuplist);

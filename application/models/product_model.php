@@ -59,7 +59,7 @@ class product_model extends CI_Model
 		return $row;
 	}
 
-	function getAttributesByParent($parents,$selfCategory) # get all attributes from all parents from to the last selected category
+	function getAttributesByParent($parents) # get all attributes from all parents from to the last selected category
 	{
 		$array = $parents;
 
@@ -83,19 +83,46 @@ class product_model extends CI_Model
 		  , es_attr_lookuplist c 
 		WHERE a.datatype_id = b.id_datatype 
 		  AND a.attr_lookuplist_id = c.id_attr_lookuplist 
-		  AND a.cat_id = :cat_id
+		  AND a.cat_id IN (" .$value .")
 		  GROUP BY cat_name, a.id_attr, a.attr_lookuplist_id, input_type, input_name
 		ORDER BY cat_name ASC ";
 
 		$sth = $this->db->conn_id->prepare($query);
-		$sth->bindParam(':cat_id', $selfCategory, PDO::PARAM_INT);
 		$sth->execute();
 		$row = $sth->fetchAll(PDO::FETCH_ASSOC);
 		return $row;
 
 	}
 
+	function getAttributesBySelf($selfId) # get all attributes from all parents from to the last selected category
+	{
 
+		$query = " 
+		SELECT DISTINCT
+		  a.name AS cat_name
+		  , a.id_attr
+		  , a.attr_lookuplist_id
+		  , b.name AS input_type
+		  , c.name AS input_name 
+		FROM
+		  es_attr a
+		  , es_datatype b
+		  , es_attr_lookuplist c 
+		WHERE a.datatype_id = b.id_datatype 
+		  AND a.attr_lookuplist_id = c.id_attr_lookuplist 
+		  AND a.cat_id = :cat_id
+		  GROUP BY cat_name, a.id_attr, a.attr_lookuplist_id, input_type, input_name
+		ORDER BY cat_name ASC ";
+
+		$sth = $this->db->conn_id->prepare($query);
+		$sth->bindParam(':cat_id',$selfId,PDO::PARAM_INT);
+		$sth->execute();
+		$row = $sth->fetchAll(PDO::FETCH_ASSOC);
+		return $row;
+
+	## need to loop so i do it manual to generate dynamic query (but not advisable please dont do this)
+	## - Prepared by: Ryan Vasquez
+	}
 
 	function getLookItemListById($id) # getting item list from database. EG: Color -- (White,Blue,Yellow)
 	{
