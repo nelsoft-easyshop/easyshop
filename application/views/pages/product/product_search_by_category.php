@@ -493,8 +493,8 @@ else {
 
 $(document).on('click','.prod_cat_drop',function() {
      $(".category_nav").toggleClass("category_nav_plus");
-     $(".prod_cat_drop").toggleClass("prod_cat_drop_arrow active_prod_cat_drop_arrow");
-                 $(document).bind('focusin.prod_cat_drop_arrow click.prod_cat_drop_arrow',function(e) {
+     $(".prod_cat_drop").toggleClass("active_prod_cat_drop_arrow");
+                 $(document).bind('focusin.prod_cat_drop click.prod_cat_drop',function(e) {
                 if ($(e.target).closest('.prod_cat_drop, .category_nav').length) return;
                 $('.category_nav').removeClass('category_nav_plus');
                 $('.prod_cat_drop').removeClass('active_prod_cat_drop_arrow');
