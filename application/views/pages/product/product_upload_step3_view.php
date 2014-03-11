@@ -135,26 +135,28 @@
       <input type="button" id="add_shipping_details" value="Add to Shipping List" class="grey_btn">
     </div>   
 
-    <div class="clear"><br></div>
+    <div class="clear"></div>
 
-    <h2>Shipping Summary</h2>
-	<input type="hidden" id="shippingsummary_csrf" name="<?php echo $my_csrf['csrf_name'];?>" value="<?php echo $my_csrf['csrf_hash'];?>">
+    <!-- start of shipping summary -->
+    <div class="shipping_summary_container">
+    <h2 class="f20">Shipping Summary</h2>
+	  <input type="hidden" id="shippingsummary_csrf" name="<?php echo $my_csrf['csrf_name'];?>" value="<?php echo $my_csrf['csrf_hash'];?>">
     <table id="shipping_summary" class="tablehide shipping_table3" width="980px" cellspacing="0" cellpadding="0">
       <input type="hidden" id="summaryrowcount" value="0">
       
       <thead>
         <tr>
-          <td width="360px">Product Attribute Combinations</td>
-          <td><span>Location</span><span>Price</span></td>
+          <td width="415px" class="f14">Product Attribute Combinations</td>
+          <td><span class="f14">Location</span><span class="f14">Price</span></td>
           <td></td>
           
         </tr>
       </thead>
 
       <tr class="cloningfield">
-        <td>
+        <td class="prod_att_pad">
         </td>
-        <td>
+        <td width="350px">
           <table class="shiplocprice_summary">
             <tbody>
               <tr class="cloningfield" data-idlocation="" data-groupkey="">
@@ -169,7 +171,7 @@
             </tbody>
           </table>
         </td>
-        <td>
+        <td width="200px">
           <span class="edit_summaryrow button edit_del">
             <img src="<?php echo base_url();?>assets/images/icon_edit.png"> Edit
           </span>
@@ -182,11 +184,14 @@
         </td>
       </tr>
     </table>
+    </div>
+    <!-- end of shipping summary -->
     <span id="btnShippingDetailsSubmit" class="tablehide orange_btn3">Submit</span>
-	
+	 
 	<?php echo form_open('sell/step4', array('id'=>'step4_form'));?>
 		<input type="hidden" name="prod_h_id" id="prod_h_id" value="<?php echo $product_id;?>">
 	<?php echo form_close();?>
+    
   </div>
 </div>
 
