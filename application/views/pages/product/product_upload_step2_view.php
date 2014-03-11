@@ -569,12 +569,15 @@ $(document).ready(function(){
      for(var i = 0; i < fileList.length; i++){
       var objectUrl = anyWindow.createObjectURL(fileList[i]);
       var primaryText = "Make Primary";
+      var activeText = "";
       pictureInDiv = $("#list > div").length;
       if(pictureInDiv == 0){
         primaryText = "Your Primary";
+        activeText = "active_img";
         primaryPicture = pictureCount;
+
       }
-      $('#list').append('<div id="previewList'+pictureCount+'" class="upload_img_div"><span class="upload_img_con"><img src="'+objectUrl+'"></span><a href="javascript:void(0)" class="removepic" data-number="'+pictureCount+'">x</a><br><a href="javascript:void(0)" class="makeprimary photoprimary'+pictureCount+'" data-number="'+pictureCount+'">'+primaryText+'</a></div>');
+      $('#list').append('<div id="previewList'+pictureCount+'" class="upload_img_div '+activeText+'"><span class="upload_img_con"><img src="'+objectUrl+'"></span><a href="javascript:void(0)" class="removepic" data-number="'+pictureCount+'">x</a><br><a href="javascript:void(0)" class="makeprimary photoprimary'+pictureCount+'" data-number="'+pictureCount+'">'+primaryText+'</a></div>');
       window.URL.revokeObjectURL(fileList[i]);
       pictureCount++;
     }
@@ -593,7 +596,9 @@ $(document).ready(function(){
         $('#previewList'+idNumber).remove();
         removeThisPictures.push(idNumber);
         primaryPicture = $("#list > div:first-child > .makeprimary" ).data('number');
-        $("#list > div:first-child > .makeprimary").text('Your Primary');      
+        $("#list > div:first-child > .makeprimary").text('Your Primary');     
+
+      $("#list > div:first-child").addClass("active_img"); 
       }else{
         $('#previewList'+idNumber).remove();
         removeThisPictures.push(idNumber);
@@ -606,6 +611,9 @@ $(document).ready(function(){
       primaryPicture = idNumber;  
       $(".makeprimary").text('Make Primary');
       $(".photoprimary"+idNumber).text('Your Primary');
+
+      $(".upload_img_div").removeClass("active_img");
+      $("#previewList"+idNumber).addClass("active_img");
     });
 
     // ES_UPLOAER BETA END
