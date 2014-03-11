@@ -1047,10 +1047,10 @@ span.paypal {
     width:240px;height:462px
 }
 
-.cat2_slide_prod {
+/*.cat2_slide_prod {
     width:440px !important;
     height:462px !important;
-}
+}*/
 
 .border > div {
 	float: left;
@@ -1178,7 +1178,8 @@ div.electronics_product_sides {
 }
 
 .product_slide div.bx-viewport {
-	height: 462px !important;
+/*	height: 462px !important;*/    
+	height: 451px !important;
 }
 
 
@@ -1186,6 +1187,44 @@ div.electronics_product_sides {
 .product_slide ul li {
 	height: 462px;
 	line-height: 462px;
+	text-align: center;
+	width: 456px !important;
+}
+
+.elec_slide_img_con {
+	background-color: #fff;
+    display: table-cell;
+    height: 420px;
+    vertical-align: middle;
+    width: 456px;
+}
+
+.elec_slide_img_con img {
+	height: auto;
+    max-height: 420px;
+    max-width: 440px;
+    width: auto;
+}
+
+.electronics_slider_price_con {
+	background: none repeat scroll center rgba(255, 255, 255, 0.7);
+    bottom: 0;
+    display: inline-block;
+    left: 0;
+    line-height: normal;
+    padding: 10px 0;
+    position: absolute;
+    text-align: center;
+    width: 446px;
+}
+
+.electronics_slider_price_con h2 {
+	font-size: 18px;
+	font-weight: normal;
+}
+
+.electronics_slider_price_con span {
+	color: #f18200;
 }
 
 /*** Filters ***/

@@ -579,6 +579,11 @@ span.seller-name span:hover {
 	width: 552px;
 }
 
+.tabs2_html_con {
+    display: inline !important;
+    width: 745px;
+    word-wrap: break-word;
+}
 
 /*** Reviews Tab ***/
 .reviews_title {
