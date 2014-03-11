@@ -870,11 +870,11 @@ a:hover.tooltips span {
     margin-top:30px;
 }
 
-.shipping_table3 {
-    margin-top: 30px;
+tr.tr_shipping_summary:nth-child(even) td {
+    background-color: #fff;
 }
 
-tr.tr_shipping_summary:nth-child(even) td {
+tr.tr_shipping_summary:nth-child(odd) td {
     background-color: #F8F7F7;
 }
 
@@ -901,5 +901,35 @@ tr.tr_shipping_summary:nth-child(even) td {
     vertical-align: middle;
 }
 
+.shipping_summary_container {
+    margin-top: 50px;
+    background-color: #e2e1e1;
+}
 
+.shipping_summary_container h2 {
+    border-bottom: 1px solid #fff;
+    font-weight: 300;
+    padding: 5px;
+}
 
+.shipping_summary_container table thead {
+    background-color: #EBE9E9;
+    font-size: 14px;
+}
+
+.shipping_summary_container table thead tr td {
+    font-weight: 300;
+    padding:10px 5px;
+}
+
+.shipping_summary_container table tr td.prod_att_pad {
+    padding-right: 20px;
+}
+
+.edit_del {
+    margin-right: 10px;
+}
+
+.tr_shipping_summary td:last-child {
+    text-align: center;
+}
