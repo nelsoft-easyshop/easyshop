@@ -132,7 +132,7 @@ class productUpload extends MY_Controller
 		$_FILES['files']['size'] = array_values($_FILES['files']['size']);
 	 	 
 	 	$key = array_search ($primaryName, $_FILES['files']['name']);
-	 	 
+	 	if(isset($_FILES['files']['name'][0])){
 	 	$temp = $_FILES['files']['name'][0];
 	 	$_FILES['files']['name'][0] = $_FILES['files']['name'][$key];
 	 	$_FILES['files']['name'][$key] = $temp;
@@ -152,14 +152,13 @@ class productUpload extends MY_Controller
 	 	$temp = $_FILES['files']['size'][0];
 	 	$_FILES['files']['size'][0] = $_FILES['files']['size'][$key];
 	 	$_FILES['files']['size'][$key] = $temp;
+	 	}
 
 		$combination = json_decode($this->input->post('combination'));
-
 		$checkIfCombination = $this->input->post('noCombination');
-
 		$inputs = $this->input->post('inputs'); 
-
 		$inputs_exp = false;
+
 		if(strpos($inputs, '|') !== false) {
 			$explode_inputs = explode("|", substr($inputs, 1));
 			$inputs_exp = true;
