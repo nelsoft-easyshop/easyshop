@@ -153,6 +153,7 @@ class Uploader extends CI_Controller {
 				
 			}
 		}
+		sleep(10);
 	}
 	
 	/* Blank Page (default source for iframe) */
