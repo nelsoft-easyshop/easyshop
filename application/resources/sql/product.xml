@@ -682,7 +682,7 @@
 </select>
 	
 <select id="storeShippingPrice">
-    INSERT INTO es_product_shipping_price (location_id, price)
+    INSERT INTO es_product_shipping_head (location_id, price)
     VALUES (:location_id, :price)
 </select>
 <!--
@@ -692,7 +692,7 @@
 </select>
 -->
 <select id="storeProductShippingMap">
-    INSERT INTO es_product_shipping_map (shipping_id, product_item_id)
+    INSERT INTO es_product_shipping_detail (shipping_id, product_item_id)
     VALUES (:shipping_id, :product_item_id)
 </select>
 
