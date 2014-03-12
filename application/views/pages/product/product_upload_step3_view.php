@@ -76,34 +76,38 @@
                 </ul>
             </div>
     <div class="clear"></div>
-    <!-- Content -->
-	
+
+    <!-- Start of top Shipping Content -->   
+    <div class="shipping_wrapper">
+    <!-- Start of Shipping Container --> 
     <div class="shipping_container">
       <table>
       <tr>
-        <td><strong>Product Attribute Combinations</strong></td>
+        <td><strong class="f14">Select Product Attribute Combinations</strong></td>
       </tr>
       <tr>
         <td>
           <ul id="product_combination_list">
             <?php foreach($attr as $attrkey=>$temp):?>
               <li class="product_combination" value="<?php echo $attrkey;?>">
-              <?php foreach($temp as $pattr):?>
-                <?php echo $pattr;?> &nbsp;
-              <?php endforeach;?>
+                
+                  <?php foreach($temp as $pattr):?>
+                    <p>&bull; <?php echo $pattr;?> </p>
+                  <?php endforeach;?>
+               
               </li>
             <?php endforeach;?>
           </ul>
         </td>
       </tr>
       </table>
-
-      <table id="shiploc_selectiontbl" class="shipping_table2" width="790px" cellspacing="0" cellpadding="0">
+      <div class="shipping_border"></div>
+      <table id="shiploc_selectiontbl" class="shipping_table2" width="526px" cellspacing="0" cellpadding="0">
         <thead>
           <tr>
             <td width="170px">Location</td>
-            <td width="200px">Price</td>
-            <td width="242px">&nbsp;</td>
+            <td width="230px">Price</td>
+            <td width="136px">&nbsp;</td>
           </tr>
         </thead>
         <input type="hidden" value="1" id="shiploc_count">
@@ -128,13 +132,26 @@
         </tr>
         <tr>
           <td>
-            <a href="javascript:void(0)" id="add_location">+ Add Location</a>
+            <a href="javascript:void(0)" id="add_location" class="blue">+ Add Location</a>
           </td>
         </tr>
       </table>
-      <input type="button" id="add_shipping_details" value="Add to Shipping List" class="grey_btn">
+      <input type="button" id="add_shipping_details" value="Add to Shipping List" class="orange_btn3">
     </div>   
+    <!-- End of Shipping Container --> 
 
+    <!-- Start of Shipping Courier -->
+    <div class="shipping_courier_container">
+
+      <a href=""><img src="<?=base_url()?>assets/images/img_logo_air21.jpg"> Air21</a>
+      <a href=""><img src="<?=base_url()?>assets/images/img_logo_lbc.jpg"> LBC</a>
+      <a href=""><img src="<?=base_url()?>assets/images/img_logo_jrs.jpg"> JRS</a>
+    </div>
+    <!-- End of Shipping Courier -->
+
+    </div>
+
+    <!-- End of top Shipping Content -->
     <div class="clear"></div>
 
     <!-- start of shipping summary -->
