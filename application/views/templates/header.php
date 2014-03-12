@@ -147,11 +147,11 @@ $(document).ready(function() {
 	var csrftoken = $('#header_search').val();
     if(searchQuery != ""){
       $.ajax({
-        type: "POST",
+        type: "GET",
         url: '<?php echo base_url();?>product/sch_onpress', 
         onLoading:jQuery(".main_srch_img_con").html('<img src="<?= base_url() ?>assets/images/orange_loader_small.gif" />').show(),
         cache: false,
-        data: "data="+searchQuery+"&es_csrf_token="+csrftoken , 
+        data: "q="+searchQuery+"&es_csrf_token="+csrftoken , 
         beforeSend: function(jqxhr, settings) { 
           $("#main_search_drop_content").empty();
         },

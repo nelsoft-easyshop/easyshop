@@ -368,25 +368,29 @@ class product extends MY_Controller
 	}
 
 	function sch_onpress()
-	{
-		if($this->input->post('data')){
-		$html = "";
-		$stringData =  $this->input->post('data');
-		$string = ' '.ltrim($stringData); 
-		$words = "+".implode("*,+",explode(" ",trim($string)))."*"; 
+	{ 
 
-		$keywords = $this->product_model->itemKeySearch($words);
+		header('Content-Type: text/plain'); 	 
+		if($this->input->get('q')){
 
-		$html .= "<ul>";
-		if(count($keywords) <= 0){
-			$html .= "<li>No Record Found!</li>";
-		}else{
-			foreach ($keywords as $value) {
-			$html .= "<li><a href='search/search.html?q_str=".es_url_clean($value)."&q_cat=1'>".$value."</a></li>";
+			$html = "";
+			$stringData =  $this->input->get('q');
+			$string = ' '.ltrim($stringData); 
+			$words = "+".implode("*,+",explode(" ",trim($string)))."*"; 
+
+			$keywords = $this->product_model->itemKeySearch($words);
+
+			$html .= "<ul>";
+			if(count($keywords) <= 0){
+				$html .= "<li>No Record Found!</li>";
+			}else{
+				foreach ($keywords as $value) {
+					$html .= "<li><a href='search/search.html?q_str=".es_url_clean($value)."&q_cat=1'>".$value."</a></li>";
+				}
+
 			}
-		}
-		$html .= "</ul>";
-		echo $html;
+			$html .= "</ul>";
+			echo $html;
 		}
 
 	}
