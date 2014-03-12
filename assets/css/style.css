@@ -1446,6 +1446,19 @@ span.pinterest {
 	margin-top: 20px;
 }
 
+.notification_container {
+    background-color: #CECECE;
+    bottom: 0;
+    display: none;
+    float: right;
+    margin-right: 20px;
+    padding: 10px;
+    position: fixed;
+    right: 0;
+    text-align: justify;
+    width: 200px;
+}
+
 
 /*** Registration style ***/
 .reg_title {
@@ -3927,62 +3940,3 @@ span.transac_title_date:after {
 	color: #fff;
 }
 
-/*************	Shipping Product Upload Step 3 ****************/
-#product_combination_list{
-	list-style: none;
-}
-
-.product_combination {
-    border: 1px solid #DBD8D7;
-    cursor: pointer;
-    float: left;
-    font-size: 10px;
-    height: 36px;
-   	line-height: 35px;
-    margin:0px 0px 5px 3px;
-    text-align: center;
-    min-width: 36px;
-    padding:0 3px;
-}
-
-.product_combination.active {
-	background-color: #ff4400;
-	color: #fff;
-}
-
-.tablehide, .cloningfield, .buttonhide{
-	display:none;
-}
-
-.shiplocprice_summary td{
-	border: none !important;
-/*	padding-right: 3px;
-	padding-left: 3px;*/
-}
-
-/*#shipping_summary,
-#shipping_summary td{
-	border: 1px solid black;
-	padding: 3px;
-}
-*/
-.button{
-	cursor: pointer;
-}
-
-#btnShippingDetailsSubmit{
-    border: medium none;
-    cursor: pointer;
-    display: block;
-    margin: 50px auto 0;
-    padding: 10px 15px;
-    text-transform: uppercase;
-    width: 120px;
-}
-
-.delete_locrow{
-	margin-left: 3px;
-}
-.delete_locrow:hover{
-	color: #FF4400;
-}
