@@ -71,8 +71,8 @@
                 <ul>
                     <li><a href="#">Step 1 : Select Category</a></li>
                     <li><a href="#">Step 2 : Upload Item</a></li>                   
-                    <li><a href="#">Step 3: Select Shipping Locations</a></li>
-                    <li><a href="#">Step 4: Success</a></li>
+                    <li><a href="#">Step 3 : Select Shipping Locations</a></li>
+                    <li><a href="#">Step 4 : Success</a></li>
                 </ul>
             </div>
     <div class="clear"></div>
