@@ -258,6 +258,7 @@
 .inner_mid_bottom_slides {
     margin-left: 24px;
     width: 458px;
+    height: auto !important
 }
 
 .inner_mid_bottom_slides ul li {
