@@ -100,8 +100,10 @@ var jbImagesDialog = {
 			var w = this.getWin();
 			tinymce = w.tinymce;
 			
-			tinymce.EditorManager.activeEditor.insertContent(' <img src="' + result.filename +'"> ');
-			
+			var mybaseurl = tinymce.activeEditor.baseURI.source.replace('/assets/tinymce', '');
+
+			tinymce.EditorManager.activeEditor.insertContent(' <img src="' + mybaseurl + result.filename +'"> ');
+
 			this.hasSuccess = true;
 
 		}
