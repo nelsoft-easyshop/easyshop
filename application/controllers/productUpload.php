@@ -577,13 +577,13 @@ class productUpload extends MY_Controller
 	function step3()
 	{
 		//DEV CODE - temporarily set product id to fetch attribute combinations
-
 		$id = 118;
-
+		//$id = $this->input->post('prod_h_id');
+		
 		$data = array(
 			'shiploc' => $this->product_model->getLocation(),
 			'attr' => $this->product_model->getPrdShippingAttr($id),
-			
+			'product_id' => $id
 			);
 		$data = array_merge($data, $this->fill_view());
 
