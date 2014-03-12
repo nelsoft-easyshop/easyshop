@@ -862,6 +862,12 @@ class productUpload extends MY_Controller
             
 
 			if($rowCount>0){
+            
+                    
+                # DELETE FROM es_product_item_attr AND es_product_item
+                # MOVED BEFORE DELETE PRODUCT ATTRIBUTE FK CONSTRAINT
+                $this->product_model->deleteProductQuantityCombination($product_id);
+                
 				foreach($explode_inputs as $input){
 					$explode_id = explode('/', $input);
 					$explode_value = $explode_id[0];
@@ -1036,7 +1042,6 @@ class productUpload extends MY_Controller
 				}
 
                 # start of saving combination qty
-				$this->product_model->deleteProductQuantityCombination($product_id);
 
 				if($checkIfCombination == 'true'){
 					$quantitySolo = 1;
