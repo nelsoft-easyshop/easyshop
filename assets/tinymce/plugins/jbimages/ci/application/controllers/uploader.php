@@ -52,6 +52,7 @@ class Uploader extends CI_Controller {
 		// Get configuartion data (we fill up 2 arrays - $config and $conf)
 		
 		$conf['img_path']			= $this->config->item('img_path',		'uploader_settings');
+		$conf['full_img_path']		= $this->config->item('full_img_path',	'uploader_settings');
 		$conf['allow_resize']		= $this->config->item('allow_resize',	'uploader_settings');
 		
 		$config['allowed_types']	= $this->config->item('allowed_types',	'uploader_settings');
