@@ -872,6 +872,91 @@ a:hover.tooltips span {
 
 /****************** Upload product step 3 ****************/
 /*********************************************************/
+/*************  Shipping Product Upload Step 3 ****************/
+#product_combination_list{
+    list-style: none;
+    position: relative;
+}
+
+.product_combination {
+    border: 1px solid #DBD8D7;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 10px;
+    height: auto;
+    line-height: 35px;
+    margin: 0 0 10px 5px;
+    min-height: 25px;
+    padding: 0 3px 0 25px;
+    width: 485px;
+}
+
+.product_combination p {
+    float: left;
+    width: 161px;
+}
+
+.product_combination.active {
+    border: 1px solid #f18200;
+}
+
+.product_combination.active:before {
+    background: url('../images/global_sprite.png') -589px -308px no-repeat;
+    content: "";
+    display: inline-block;
+    height: 25px;
+    left: 5px;
+    position: absolute;
+    width: 25px;
+}
+
+.shipping_border {
+    border-bottom: 1px dotted #b3b3b3;
+    margin-top: 20px;
+}
+
+.shipping_container input[type="button"] {
+    border:1px solid #f18200;
+    cursor: pointer;
+}
+
+.tablehide, .cloningfield, .buttonhide{
+    display:none;
+}
+
+.shiplocprice_summary td{
+    border: none !important;
+/*  padding-right: 3px;
+    padding-left: 3px;*/
+}
+
+/*#shipping_summary,
+#shipping_summary td{
+    border: 1px solid black;
+    padding: 3px;
+}
+*/
+.button{
+    cursor: pointer;
+}
+
+#btnShippingDetailsSubmit{
+    border: medium none;
+    cursor: pointer;
+    display: block;
+    margin: 50px auto 0;
+    padding: 10px 15px;
+    text-transform: uppercase;
+    width: 120px;
+}
+
+.delete_locrow{
+    margin-left: 3px;
+}
+.delete_locrow:hover{
+    color: #FF4400;
+}
+
 .product_option{
 	border: 1px solid #DBD8D7;
     cursor: pointer;
@@ -895,8 +980,35 @@ a:hover.tooltips span {
 	margin-right: 10px;
 }
 
-.shipping_container {
+.shipping_wrapper {
     margin-top: 30px;
+}
+
+.shipping_container {
+    background-color: #F7F6F6;
+    float: left;
+    padding: 8px;
+    width: 526px;
+}
+
+.shipping_courier_container {
+    display: inline-block;
+    padding-left: 40px;
+    width: 398px;
+}
+
+.shipping_courier_container a {
+    display: block;
+}
+
+.shipping_courier_container img {
+    vertical-align: middle;
+    border:1px solid #DBD8D7;
+    margin-bottom: 10px;
+}
+
+.shipping_container table tr:first-child td {
+    height: 30px;
 }
 
 .delete_locrow {
