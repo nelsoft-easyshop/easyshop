@@ -1,6 +1,4 @@
-$(function(){
-	$('.shipprice').numeric({negative : false});
-});
+
 /**
  *
  *  Add location on click - adds new select field for delivery location
@@ -18,7 +16,6 @@ $(function(){
     selecttrnew.find('input[name^="shipprice"]')[0].name = "shipprice"+ (+datacount+1);
     selecttrnew.append('<td><span class="delete_locrow button">Remove</td>');
     $('#shiploc_selectiontbl').find('tr:last').before('<tr>' + selecttrnew.html() + '</tr>');
-	$('.shipprice').numeric({negative : false});
   });
 
   $('#shiploc_selectiontbl').on('click', '.delete_locrow', function(){
@@ -75,8 +72,9 @@ $(function(){
       var selopt = $(this).find('option:selected');
       var price = $(this).parent('td').next('td').children('input[name^="shipprice"]');
       
+	  console.log(selopt.val());
 	  hasPrice = $.trim(price.val()) !== '' ? true : false;
-	  hasLoc = selopt.val() !== 0 ? true : false;	  
+	  hasLoc = selopt.val() != 0 ? true : false;	  
 	  
 	  //if(hasLoc && hasPrice && hasCourier){
 	  if(hasLoc && hasPrice){
@@ -302,7 +300,6 @@ $(function(){
       var PriceField = $(this).find('td:nth-child(2)');
 	  var PriceValue = PriceField.attr('data-value');
       PriceField.html('<input type="text" class="shipprice" value="'+PriceValue+'">');
-	  $('.shipprice').numeric({negative : false});
 	  $(this).children('td:last').show();
     });
   })
