@@ -68,9 +68,13 @@ class Ios extends MY_Controller {
     }
     
     public function getProduct(){
+    
         $id = $this->input->get('p_id');   
         $this->load->model('product_model');
         $product_row = $this->product_model->getProduct($id);
+        if(isset($product_row['description'])){
+            $product_row['description'] = html_escape($product_row['description']);
+        }
         $product_options = $this->product_model->getProductAttributes($id, 'NAME');
         $product_options = $this->product_model->implodeAttributesByName($product_options);
         $data = array();
