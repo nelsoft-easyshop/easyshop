@@ -57,13 +57,18 @@ $(function(){
 	
     var hasActive = hasLoc = hasPrice = hasCourier = hasLPC = false;
     var noDuplicate = true;
-    //var shipObj = { 'attr' : {},'loc' : {},'price' : {}, 'courier_key' : {}, 'courier_name' : {} };   
 	var shipObj = { 'attr' : {},'loc' : {},'price' : {} };   
     var i = parseInt($('#summaryrowcount').val());
 
     //Get Product Attribute Options
     $('.product_combination.active').each(function(){
-      shipObj.attr[$(this).val()] = $.trim($(this).text());
+	  var attrText = $(this).text();
+	  attrText = attrText.replace(/[^\w\s]/gi, '-');
+	  attrText = $.trim(attrText.replace(/\r?\n|\r/g, ''));
+	  attrText = attrText.replace(/\s+/g,' ');
+	  var myarray = attrText.split('- ');
+      //shipObj.attr[$(this).val()] = $.trim($(this).text());
+	  shipObj.attr[$(this).val()] = myarray;
       hasActive = true;
     });
 
@@ -72,7 +77,6 @@ $(function(){
       var selopt = $(this).find('option:selected');
       var price = $(this).parent('td').next('td').children('input[name^="shipprice"]');
       
-	  console.log(selopt.val());
 	  hasPrice = $.trim(price.val()) !== '' ? true : false;
 	  hasLoc = selopt.val() != 0 ? true : false;	  
 	  
@@ -148,8 +152,13 @@ $(function(){
       if(!summaryExists){
         addDispGroup = true;
         $('#summaryrowcount').val(+i+1);
-        jQuery.each(shipObj.attr, function(k,v){
-          row.children('td:first').append(v + "<br />");
+        jQuery.each(shipObj.attr, function(arrkey,arr){
+			jQuery.each(arr, function(k,v){
+				if(v !== ''){
+					row.children('td:first').append('<span>' + v + "</span>");
+				}
+			});
+			row.children('td:first').append('<br />');
         }); 
         $('table#shipping_summary').append('<tr class="tr_shipping_summary" data-group="'+i+'">' + row.html() + '</tr>');
       }
