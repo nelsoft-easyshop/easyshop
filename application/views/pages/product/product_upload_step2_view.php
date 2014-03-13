@@ -62,7 +62,7 @@
                   <?php 
                   foreach ($brand as $key) {
                     ?>
-                    <option value="<?php echo $key['brand_id'] ?>" <?php if(isset($product_details['brand_id'])){echo ($product_details['brand_id'])===$key['brand_id']?'selected':'';}?>><?php echo ucfirst(strtolower($key['name'])); ?></option>
+                    <option value="<?php echo $key['brand_id'] ?>" <?php if(isset($product_details['brand_id'])){echo ($product_details['brand_id'])===$key['brand_id']?'selected':'';}?>><?php echo $key['name'] ?></option>
                     <?php } ?>
                   </select>
                 </td>
@@ -219,10 +219,11 @@
         <div style="display:inline">
 
           <?php if(isset($main_images)):?> <!-- IF EDIT FUNCTION -->
-          <div>
+          <div class="edit_img_container">
             <?php foreach($main_images as $main_image): ?>
-            <div class="prod_upload_img_container">
-              <img src =<?php echo base_url().$main_image['path'].'thumbnail/'.$main_image['file'];?> >
+            <div class="prod_upload_img_container active_img">
+              <a href="" class="edit_img_remove">x</a>
+              <span class="upload_img_con"><img src =<?php echo base_url().$main_image['path'].'thumbnail/'.$main_image['file'];?> ></span>
               <input type="checkbox" class="prev_img" name="main_image[<?php echo $main_image['id_product_image'];?>]"/> Remove
             </div> 
           <?php endforeach; ?>
@@ -345,7 +346,8 @@ foreach($opt_attr as $prod_attr): ?>
 <tfoot>
   <tr>
     <td>&nbsp;</td>
-    <td colspan="3">  
+    <td colspan="3">
+      <input type="hidden" value="" name="desc" class="description_hidden"> 
       <a class="add_more_link" href="javascript:void(0)">+ Add More</a>
 
       <?php if(isset($product_details)): ?>
@@ -632,8 +634,7 @@ $(document).ready(function(){
       } 
     });
 
-
-      $('.quantity_table_row , .quantity_table2').on('click', '.quantity_attr_done', function () {  
+    $('.quantity_table_row , .quantity_table2').on('click', '.quantity_attr_done', function () {  
 
       var qtyTextbox = $('.qtyTextClass');
       var qtyTextboxValue = parseInt(qtyTextbox.val());
@@ -978,7 +979,8 @@ $(document).on('change',"#prod_condition,#prod_brand",function () {
 $(".proceed_form").unbind("click").click(function(){
   tinyMCE.triggerSave();
   var description = tinyMCE.get('prod_description').getContent();
-  var id = "<?php echo $id; ?>"; 
+  var id = "<?php echo $id; ?>"
+  $('.description_hidden').val(description);
   var input_name = "<?php echo (string)$array_name_inputs; ?>";
   var action = "sell/processing"; 
   var title = $("#prod_title");
@@ -1114,7 +1116,8 @@ $(".proceed_form").unbind("click").click(function(){
           processData:false,
           data: formData, 
           dataType: "json",
-          beforeSend: function(jqxhr, settings) {  
+          beforeSend: function(jqxhr, settings) { 
+            $('.description_hidden').val(description);
             $( ".button_div" ).hide();
             $( ".loader_div" ).show();
           },
@@ -1142,7 +1145,8 @@ $(".proceed_form").unbind("click").click(function(){
           processData:false,
           data: formData , 
           dataType: "json",
-          beforeSend: function(jqxhr, settings) {  
+          beforeSend: function(jqxhr, settings) { 
+            $('.description_hidden').val(description);
             $( ".button_div" ).hide();
             $( ".loader_div" ).show();
           },
