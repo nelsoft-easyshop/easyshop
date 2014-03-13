@@ -582,11 +582,35 @@ div.sell_steps4 ul li:nth-child(4) a {
     text-decoration: underline;
 }
 
-.prod_upload_img_container {    
+.edit_img_container {
+    padding-left: 5px;
+}
+
+.prod_upload_img_container { 
+    border:1px solid #7E7E7E;   
     display: inline-block;
-    width: 100px;
     text-align: center;
     padding:5px;
+    position: relative;
+}
+
+.edit_img_container div.active_img {
+    border:1px solid #f18200;
+}
+
+.edit_img_container div.active_img .edit_img_remove {
+    background-color: #f18200;
+}
+
+.edit_img_remove {
+    background-color: #7E7E7E;
+    color: #FFFFFF;
+    height: 15px;
+    position: absolute;
+    right: 0;
+    text-align: center;
+    top: 0;
+    width: 15px;
 }
 
 .thumb {
