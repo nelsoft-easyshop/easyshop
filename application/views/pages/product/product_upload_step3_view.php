@@ -81,26 +81,33 @@
     <div class="shipping_wrapper">
     <!-- Start of Shipping Container --> 
     <div class="shipping_container">
-      <table>
-      <tr>
-        <td><strong class="f14">Select Product Attribute Combinations</strong></td>
-      </tr>
-      <tr>
-        <td>
-          <ul id="product_combination_list">
-            <?php foreach($attr as $attrkey=>$temp):?>
-              <li class="product_combination" value="<?php echo $attrkey;?>">
-                
-                  <?php foreach($temp as $pattr):?>
-                    <p>&bull; <?php echo $pattr;?> </p>
-                  <?php endforeach;?>
-               
-              </li>
-            <?php endforeach;?>
-          </ul>
-        </td>
-      </tr>
-      </table>
+	  <?php if(count($attr) > 0 && $has_attr == 1):?>
+		  <table>
+		  <tr>
+			<td><strong class="f14">Select Product Attribute Combination, Location, and Price</strong></td>
+		  </tr>
+		  <tr>
+			<td>
+			  <ul id="product_combination_list">				
+				<?php foreach($attr as $attrkey=>$temp):?>
+				  <li class="product_combination" value="<?php echo $attrkey;?>">
+					
+					  <?php foreach($temp as $pattr):?>
+						<p>&bull; <?php echo $pattr;?> </p>
+					  <?php endforeach;?>
+				   
+				  </li>
+				<?php endforeach;?>
+			  </ul>
+			</td>
+		  </tr>
+		  </table>
+	  <?php else:?>
+		<span><strong class="f14">Select Delivery Location and Price</strong></span>
+		<input type="hidden" id="product_item_id" value="<?php echo $product_item_id;?>">
+	  <?php endif;?>
+	  <input type="hidden" id="has_attr" value="<?php echo $has_attr;?>">
+	  
       <div class="shipping_border"></div>
       <table id="shiploc_selectiontbl" class="shipping_table2" width="526px" cellspacing="0" cellpadding="0">
         <thead>

@@ -89,7 +89,7 @@ $config = array(
 					array(
 						'field' => 'streetno',
 						'label' => 'Street or Building Number',
-						'rules' => 'required|is_numeric'
+						'rules' => 'required'
 					),
 					array(
 						'field' => 'streetname',
@@ -160,7 +160,7 @@ $config = array(
 					array(
 						'field' => 'c_streetno',
 						'label' => 'Street or Building Number',
-						'rules' => 'required|is_numeric'
+						'rules' => 'required'
 					),
 					array(
 						'field' => 'c_streetname',

@@ -1275,12 +1275,16 @@ class product_model extends CI_Model
         $sth->execute();
         $row = $sth->fetchAll(PDO::FETCH_ASSOC);
         $data = array();
-
-        foreach($row as $r){
-        	//$data[$r['product_item_id']][] = $r['attr_value'];
-			$data[$r['product_id_item']][] = $r['attr_value'];
-        }
-
+		
+		if(count($row) === 1 && $row[0]['product_id_item'] == ''){
+			$data['no_attr'] = 'true';
+		}
+		else{
+			foreach($row as $r){
+				$data[$r['product_id_item']][] = $r['attr_value'];
+			}
+		}
+		
         return $data;
 	}
 
@@ -1295,7 +1299,7 @@ class product_model extends CI_Model
     	$sth->bindParam(':location_id', $locationKey, PDO::PARAM_INT);
     	$sth->bindParam(':price', $price, PDO::PARAM_INT);
     	$sth->execute();
-
+		
     	return $this->db->conn_id->lastInsertId('id_shipping');
     }
 
@@ -1314,6 +1318,17 @@ class product_model extends CI_Model
 
     	return $result;
     }
+	
+	public function getPrdItemId($prd_id)
+	{
+		$query = $this->sqlmap->getFilenameID('product','getPrdItemId');
+    	$sth = $this->db->conn_id->prepare($query);
+    	$sth->bindParam(':id', $prd_id, PDO::PARAM_INT);
+    	$result = $sth->execute();	
+		$row = $sth->fetch(PDO::FETCH_ASSOC);
+		
+    	return $row;
+	}
 	
     /*
      * Use fulltext search to find strings in es_cat.name 

@@ -578,6 +578,7 @@ class productUpload extends MY_Controller
 	{
 		//DEV CODE - temporarily set product id to fetch attribute combinations
 		//$id = 118;
+		//$id = 123;
 		$id = $this->input->post('prod_h_id');
 		
 		$data = array(
@@ -586,7 +587,15 @@ class productUpload extends MY_Controller
 			'product_id' => $id
 			);
 		$data = array_merge($data, $this->fill_view());
-
+		
+		if( isset($data['attr']['no_attr']) ){
+			$data['product_item_id'] = $this->product_model->getPrdItemId($id)['id_product_item'];
+			$data['has_attr'] = 0;
+		}
+		else{
+			$data['has_attr'] = 1;
+		}
+		
 		$this->load->view('templates/header', $data); 
 		$this->load->view('pages/product/product_upload_step3_view', $data);
 		$this->load->view('templates/footer'); 
@@ -598,14 +607,11 @@ class productUpload extends MY_Controller
 	*/
 	function step3Submit(){
 		$fdata = $this->input->post('fdata');
-
 		foreach($fdata as $group){
 			foreach($group as $attrCombinationId=>$attrGroup){
-
 				foreach($attrGroup as $locationKey=>$locgroup){
 					$shippingId = $this->product_model->storeShippingPrice($locationKey, $locgroup['price']);
 					$this->product_model->storeProductShippingMap($shippingId, $attrCombinationId);
-
 				}
 			}
 		}

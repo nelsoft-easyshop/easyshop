@@ -1,4 +1,3 @@
-
 /**
  *
  *  Add location on click - adds new select field for delivery location
@@ -14,8 +13,9 @@ $(function(){
     var selecttrnew = $('#shiploc_selectiontbl').find('select[name="shiploc1"]').closest('tr').clone();
     selecttrnew.find('select[name^="shiploc"]')[0].name = "shiploc"+ (+datacount+1);
     selecttrnew.find('input[name^="shipprice"]')[0].name = "shipprice"+ (+datacount+1);
+	selecttrnew.find('td.samelocerror').remove();
     selecttrnew.append('<td><span class="delete_locrow button">Remove</td>');
-    $('#shiploc_selectiontbl').find('tr:last').before('<tr>' + selecttrnew.html() + '</tr>');
+    $('#shiploc_selectiontbl').find('tr:last').before('<tr class="newlocrow">' + selecttrnew.html() + '</tr>');
   });
 
   $('#shiploc_selectiontbl').on('click', '.delete_locrow', function(){
@@ -44,10 +44,12 @@ $(function(){
   var displaygroup = {};
   var spanerror = '<td class="error red samelocerror">Unable to select same location for same attribute</td>';
   var shiplocselectiontbl = $('#shiploc_selectiontbl');
+  var hasAttr = parseInt($('#has_attr').val());
+  var prdItemId = parseInt($('#product_item_id').val());
   
   /**
-  * Add Shipping Details to Summary list on-click event
-  */
+   * Add Shipping Details to Summary list on-click event
+   */
   $('#add_shipping_details').on('click', function(){
   
 	if(checkIfEdit()){
@@ -55,23 +57,29 @@ $(function(){
 		return;
 	}
 	
-    var hasActive = hasLoc = hasPrice = hasCourier = hasLPC = false;
+    var hasActive = hasLoc = hasPrice = hasLPC = false;
     var noDuplicate = true;
 	var shipObj = { 'attr' : {},'loc' : {},'price' : {} };   
     var i = parseInt($('#summaryrowcount').val());
 
     //Get Product Attribute Options
-    $('.product_combination.active').each(function(){
-	  var attrText = $(this).text();
-	  attrText = attrText.replace(/[^\w\s]/gi, '-');
-	  attrText = $.trim(attrText.replace(/\r?\n|\r/g, ''));
-	  attrText = attrText.replace(/\s+/g,' ');
-	  var myarray = attrText.split('- ');
-      //shipObj.attr[$(this).val()] = $.trim($(this).text());
-	  shipObj.attr[$(this).val()] = myarray;
-      hasActive = true;
-    });
-
+	if(hasAttr === 1){
+		$('.product_combination.active').each(function(){
+		  var attrText = $(this).text();
+		  attrText = attrText.replace(/[^\w\s]/gi, '-');
+		  attrText = $.trim(attrText.replace(/\r?\n|\r/g, ''));
+		  attrText = attrText.replace(/\s+/g,' ');
+		  shipObj.attr[$(this).val()] = attrText;
+		  //var myarray = attrText.split('- ');
+		  //shipObj.attr[$(this).val()] = myarray;
+		  hasActive = true;
+		});
+	}
+	else if(hasAttr === 0){
+		shipObj.attr[prdItemId] = 'All Attribute Combinations';
+		hasActive = true;
+	}
+    
     //Get Shipping Location Select(s) and corresponding Price
     $('.shiploc').each(function(){
       var selopt = $(this).find('option:selected');
@@ -152,7 +160,8 @@ $(function(){
       if(!summaryExists){
         addDispGroup = true;
         $('#summaryrowcount').val(+i+1);
-        jQuery.each(shipObj.attr, function(arrkey,arr){
+        jQuery.each(shipObj.attr, function(arrkey,rawString){
+			arr = rawString.split('- ');
 			jQuery.each(arr, function(k,v){
 				if(v !== ''){
 					row.children('td:first').append('<span>' + v + "</span>");
@@ -174,7 +183,6 @@ $(function(){
       shiplocselectiontbl.find('input[name="shipprice1"]').val('');
       $('#shiploc_count').val(1);
       
-
       if(!(groupkey in fdata)){
         fdata[groupkey] = {};
       }
@@ -213,6 +221,7 @@ $(function(){
 	}
     if(getObjectSize(fdata) > 0){
 	  var csrftoken = $('#shippingsummary_csrf').val();
+	  console.log(fdata);
 	  $.post(config.base_url+'sell/shippinginfo', {fdata : fdata, es_csrf_token : csrftoken}, function(data){
 		$('#step4_form').submit();
       });
@@ -228,7 +237,8 @@ $(function(){
     var hasDuplicate = false;
 
     $(this).parent('td').siblings('td.samelocerror').remove();
-
+	
+	//Check if same location is selected among its select siblings
     $('.shiploc').not(this).each(function(){
       var otherval = $(this).find('option:selected').val();
       if(currval === otherval){
@@ -236,23 +246,39 @@ $(function(){
         return;
       }
     });
-    $('.product_combination.active').each(function(){
-      var attrk = $(this).val();
-      
-      jQuery.each(fdata, function(groupkey,attrObj){
-        if(attrk in attrObj){
-          if(currval in attrObj[attrk]){
-            hasDuplicate = true;
-            return;
-          }
-        }
-      });
-    });
-
+	
+	//Check if location already used for selected attribute
+	if(hasAttr === 1){
+		$('.product_combination.active').each(function(){
+		  var attrk = $(this).val();
+		  jQuery.each(fdata, function(groupkey,attrObj){
+			if(attrk in attrObj){
+			  if(currval in attrObj[attrk]){
+				hasDuplicate = true;
+				return;
+			  }
+			}
+		  });
+		});
+	} else {
+		jQuery.each(fdata, function(groupkey,attrObj){
+			if(prdItemId in attrObj){
+			  if(currval in attrObj[prdItemId]){
+				hasDuplicate = true;
+				return;
+			  }
+			}
+		});
+	}
+    
     if(hasDuplicate){
       thistr.find('input[name^="shipprice"]').val('');
-      thistr.append(spanerror);
       $(this).val(0);
+	  if(thistr.hasClass('newlocrow')){
+		thistr.children('td:last').before(spanerror);
+	  } else {
+		thistr.append(spanerror);
+	  }
     }
 
   });
@@ -374,32 +400,10 @@ $(function(){
     parentTr.remove();
   });
 
-  /**
-  * Function to hide Summary Table and Submit Button.
-  * Checks if DisplayGroup Object is empty - meaning nothing displayed - before execution
-  */
-  function hideTable(){
-    if(getObjectSize(displaygroup) === 0){
-      $('#shipping_summary').addClass('tablehide');
-      $('#btnShippingDetailsSubmit').addClass('tablehide');
-    }
-  }
-  
-  /**
-   * Function to handle display of Price Value
-   **/
-  function ReplaceNumberWithCommas(thisnumber){
-	//Seperates the components of the number
-    var n = thisnumber.toString().split(".");
-    //Comma-fies the first part
-    n[0] = n[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    //Combines the two sections
-    return n.join(".");
-  }
 
 });
-
 /********** CLOSE DOCUMENT READY FUNCTION WITH DATA variables *********/
+
 
 
 /**
@@ -430,6 +434,9 @@ function getObjectSize(obj) {
     return len;
 };
 
+/**
+ *	Check if any field in summary table is in edit mode
+ */
 function checkIfEdit(){
 	var hasEdit = false;
 	$('#shipping_summary').find('tr.tr_shipping_summary').each(function(){
@@ -439,4 +446,27 @@ function checkIfEdit(){
 		}
 	});
 	return hasEdit;
+}
+
+/**
+* Function to hide Summary Table and Submit Button.
+* Checks if DisplayGroup Object is empty - meaning nothing displayed - before execution
+*/
+function hideTable(){
+if(getObjectSize(displaygroup) === 0){
+  $('#shipping_summary').addClass('tablehide');
+  $('#btnShippingDetailsSubmit').addClass('tablehide');
+}
+}
+
+/**
+* Function to handle display of Price Value
+**/
+function ReplaceNumberWithCommas(thisnumber){
+//Seperates the components of the number
+var n = thisnumber.toString().split(".");
+//Comma-fies the first part
+n[0] = n[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+//Combines the two sections
+return n.join(".");
 }
