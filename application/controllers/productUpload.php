@@ -636,7 +636,7 @@ class productUpload extends MY_Controller
 		$this->load->view('templates/header',$data); 
 		$product = $this->product_model->getProductEdit($product_id, $member_id);
 		
-		$product['keywords'] = substr($product['keywords'],(strpos($product['keywords'], $product['name']) + strlen($product['name']) + 1));
+		#$product['keywords'] = substr($product['keywords'],(strpos($product['keywords'], $product['name']) + strlen($product['name']) + 1));
 		$parents = $this->product_model->getParentId($product['cat_id']); # getting all the parent from selected category
 		$lastElement = end($parents);	
 		$str_parents_to_last = "";
@@ -707,7 +707,8 @@ class productUpload extends MY_Controller
         $product_price = str_replace(',', '', $this->input->post('prod_price')) ;
 		$product_condition = $this->input->post('prod_condition');
 		$sku = trim($this->input->post('prod_sku'));
-		$keyword = es_url_clean(trim($product_title).' '.trim($this->input->post('prod_keyword')));
+		#$keyword = es_url_clean(trim($product_title).' '.trim($this->input->post('prod_keyword')));
+        $keyword = es_url_clean(trim($this->input->post('prod_keyword')));
 		$keyword = str_replace('-', ' ',$keyword);
 		$product_id = $this->input->post('p_id');
 		$brand_id =  intval($this->input->post('prod_brand'),10);
@@ -859,14 +860,12 @@ class productUpload extends MY_Controller
                 log_message('error', 'edit: member_id=>'.$member_id);
             }
             
-            
-
 			if($rowCount>0){
             
-                    
                 # DELETE FROM es_product_item_attr AND es_product_item
                 # MOVED BEFORE DELETE PRODUCT ATTRIBUTE FK CONSTRAINT
                 $this->product_model->deleteProductQuantityCombination($product_id);
+                
                 
 				foreach($explode_inputs as $input){
 					$explode_id = explode('/', $input);
@@ -989,12 +988,12 @@ class productUpload extends MY_Controller
 					}
 					$others_id = $this->product_model->addNewAttributeByProduct_others_name($product_id,$key);
 					foreach ($valuex as $keyvalue => $value) {
-						$eval = explode("|", $value);  
+						$imageid = 0;
+                        $eval = explode("|", $value);  
                         //IF OTHER ATTRIBUTE is empty, skip the rest
 						if(trim($eval[0]) == "--no name"){
 							continue;
 						}
-						$imageid = 0;
 						if($eval[2] != "--no image"){
 							if($eval[5] != "--no id"){
 								$int_img_id = intval($eval[5]);
@@ -1042,21 +1041,20 @@ class productUpload extends MY_Controller
 				}
 
                 # start of saving combination qty
-
-				if($checkIfCombination == 'true'){
-					$quantitySolo = 1;
-					if($this->input->post('quantitySolo')){
-						$quantitySolo = $this->input->post('quantitySolo');
-					}
-					$idProductItem = $this->product_model->addNewCombination($product_id,$quantitySolo);
-				}else{
-					foreach ($combination as $keyCombination) {
-						$quantitycombination = 1;
-						if(!$quantitycombination <= 0){
-							$quantitycombination = $keyCombination->quantity;
-						}
-						$idProductItem = $this->product_model->addNewCombination($product_id,$quantitycombination);
-						if(strpos($keyCombination->value, '-') !== false) {
+                if($checkIfCombination == 'true'){
+                    $quantitySolo = 1;
+                    if($this->input->post('quantitySolo')){
+                        $quantitySolo = $this->input->post('quantitySolo');
+                    }
+                    $idProductItem = $this->product_model->addNewCombination($product_id,$quantitySolo);
+                }else{
+                    foreach ($combination as $keyCombination) {
+                        $quantitycombination = 1;
+                        if(!$quantitycombination <= 0){
+                            $quantitycombination = $keyCombination->quantity;
+                        }
+                        $idProductItem = $this->product_model->addNewCombination($product_id,$quantitycombination);
+                        if(strpos($keyCombination->value, '-') !== false) {
 							$explodeCombination = explode("-",  $keyCombination->value);
 							foreach ($explodeCombination as $value) {
 
@@ -1082,11 +1080,10 @@ class productUpload extends MY_Controller
 							}
 							$this->product_model->addNewCombinationAttribute($idProductItem,$productAttributeId,$otherAttrIdentifier);
 						}
-					}
-				} 
-
+                    }
+                } 
                 #end combination qty
-				
+
 				$data = '{"e":"1","d":"'.$product_id.'"}';
 				if(!empty($_FILES['files']['name'][0])){
 					#upload new product images
