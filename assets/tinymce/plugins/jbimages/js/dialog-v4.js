@@ -16,6 +16,20 @@
  *	Added check for status in uploadFinish to trigger this.close()
  *
  */
+
+var OnProgress = function(myvars){
+	return function(event, position, total, percentComplete){
+		var progressbar = $('#progressbar');
+		var statustxt = $('#statustxt');
+		progressbar.width(percentComplete + '%') //update progressbar percent complete
+		statustxt.html(percentComplete + '%'); //update status text
+		if(percentComplete>50)
+			{
+				statustxt.css('color','#fff'); //change status text to white after 50%
+			}
+	}
+}
+ 
 var jbImagesDialog = {
 	
 	resized : false,
@@ -30,33 +44,39 @@ var jbImagesDialog = {
 	inProgress : function() {
 		document.getElementById("upload_infobar").style.display = 'none';
 		document.getElementById("upload_additional_info").innerHTML = '';
-		//document.getElementById("upload_form_container").style.display = 'none';
 		document.getElementById("upload_in_progress").style.display = 'block';
-		if(this.isInProgress) {
-			var origForm = document.getElementById("upl" + (this.uploadCounter-1));	
+
+		var origForm = document.getElementById('upl' + this.uploadCounter);
+		if(this.isInProgress){
 			this.myformdata.push(origForm);
 		} else {
 			this.isInProgress = true;
-			if(this.uploadCounter !== 1){
-				var origForm = document.getElementById("upl" + (this.uploadCounter-1));	
-			} else {
-				var origForm = document.getElementById("upl");
-			}
-			origForm.submit();
+			var options = {
+				target: '#upload_target',
+				uploadProgress: OnProgress('test')
+			};
+			$(origForm).ajaxSubmit(options);
+			document.getElementById('progressbox').style.display = 'block';
 		}
 		var newForm = origForm.cloneNode(true);
+		this.uploadCounter++;
 		origForm.style.display = 'none';
 		newForm.id = "upl" + this.uploadCounter;
 		origForm.parentNode.appendChild(newForm);
 		var filenames = origForm.children[0].children[0].files;
+		var uploadlist = document.getElementById("fileupload_list");
 		for (var i = 0; i<filenames.length; i++){
 			var fileExtension = filenames[i].name.split('.').pop()
 			var allowedFileType = ['jpg', 'gif', 'png'];
 			if ( allowedFileType.join('|').indexOf(fileExtension) != -1 ){
-				document.getElementById("fileupload_list").innerHTML += filenames[i].name + '<br>';
+				uploadlist.innerHTML += filenames[i].name + ' ';
+			}
+			if ( filenames.length-1 == i ) {
+				//uploadlist.innerHTML += '<br>' + $('.progressbox').html();
+				uploadlist.innerHTML += '<br>';
 			}
 		}
-		this.uploadCounter++;
+		
 		if(!this.timeoutStore){
 			this.timeoutStore = window.setTimeout(function(){
 				document.getElementById("upload_additional_info").innerHTML = 'This is taking longer than usual.' + '<br />' + 'An error may have occurred.' + '<br /><a href="#" onClick="jbImagesDialog.showIframe()">' + 'View script\'s output' + '</a>';
@@ -78,11 +98,6 @@ var jbImagesDialog = {
 	uploadFinish : function(result) {
 		if (result.resultCode == 'failed')
 		{
-			//window.clearTimeout(this.timeoutStore);
-			//document.getElementById("upload_in_progress").style.display = 'none';
-			//document.getElementById("upload_infobar").style.display = 'block';
-			//document.getElementById("upload_infobar").innerHTML = result.result;
-			//document.getElementById("upload_form_container").style.display = 'block';
 			this.hasError = true;
 			
 			if (this.resized == false)
@@ -93,26 +108,26 @@ var jbImagesDialog = {
 		}
 		else
 		{
-			//document.getElementById("upload_in_progress").style.display = 'none';
-			//document.getElementById("upload_infobar").style.display = 'block';
-			//document.getElementById("upload_infobar").innerHTML = 'Upload Complete';
-			
 			var w = this.getWin();
 			tinymce = w.tinymce;
-			
 			var mybaseurl = tinymce.activeEditor.baseURI.source.replace('/assets/tinymce', '');
 
-			tinymce.EditorManager.activeEditor.insertContent(' <img src="' + mybaseurl + result.filename +'"> ');
+			tinymce.EditorManager.activeEditor.insertContent('<img src="' + mybaseurl + result.filename +'">');
 
 			this.hasSuccess = true;
-
 		}
 
 		//Added condition
 		if(result.status == 'last'){
+			$('#progressbar').width('100%');
+			$('#statustxt').html('100%');
 			if ( this.myformdata.length !== 0 ) {
 				window.clearTimeout(this.timeoutStore);
-				(this.myformdata)[0].submit();
+				var options = {
+					target: '#upload_target',
+					uploadProgress: OnProgress('test')
+				};
+				$((this.myformdata)[0]).ajaxSubmit(options);
 				this.myformdata.shift();
 				document.getElementById("upload_infobar").style.display = 'none';
 				document.getElementById("upload_infobar").innerHTML = '';
@@ -132,7 +147,6 @@ var jbImagesDialog = {
 				this.hasError = this.hasSuccess = false;
 			}
 		}
-		
 	},
 	
 	getWin : function() {

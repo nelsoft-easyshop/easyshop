@@ -5,7 +5,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>JustBoil's Result Page</title>
 <script language="javascript" type="text/javascript">
-	window.parent.window.jbImagesDialog.uploadFinish({
+	//window.parent.window.jbImagesDialog.uploadFinish({
+	window.jbImagesDialog.uploadFinish({
 		filename:'<?php echo $file_name; ?>',
 		result: '<?php echo $result; ?>',
 		resultCode: '<?php echo $resultcode; ?>',
@@ -13,9 +14,6 @@
 		status: '<?php echo $status?>'
 	});
 </script>
-<style type="text/css">
-	body {font-family: Courier, "Courier New", monospace; font-size:11px;}
-</style>
 </head>
 
 <body>
