@@ -425,7 +425,6 @@ $(document).ready(function(){
 /**************************************************************************************************************/
 $(document).ready(function(){
 	//************	PERSONAL PROFILE ADDRESS VALIDATION	***************//
-	$("#personal_profile_address #streetno").numeric({negative : false});
 	$("#personal_profile_address #postalcode").numeric({negative : false});
 	
 	$("#personal_profile_address").validate({
@@ -737,7 +736,6 @@ $(document).ready(function(){
 $(document).ready(function(){
 	$("#c_mobile").numeric({negative : false});
 	$("#c_telephone").numeric({negative : false});
-	$("#c_streetno").numeric({negative : false});
 	$("#c_postalcode").numeric({negative : false});
 	
 	$("#c_deliver_address").validate({
@@ -1199,18 +1197,6 @@ function triggerTab(x){
 	$('.idTabs a[href="#'+x+'"]').trigger('click');
 }
 
-/*
-function setDefaultActivePagination() {
-	$('#pagination_active').jqPagination({
-		paged: function(page) {
-		    $('#active_items .paging').hide();
-			$($('#active_items .paging')[page - 1]).show();
-		}
-	});
-	$('#pagination_active').jqPagination('option','current_page', 1);
-}
-*/
-
 function setDefaultPagination(pagingButton, pagingDiv) {
 	pagingButton.jqPagination({
 		paged: function(page) {
@@ -1220,21 +1206,6 @@ function setDefaultPagination(pagingButton, pagingDiv) {
 	});
 	pagingButton.jqPagination('option','current_page', 1);
 }
-
-/*
-function setFilterResultActivePagination(resultCounter){
-	$('#pagination_active').jqPagination('destroy');
-	$('#pagination_active').jqPagination({
-		max_page: Math.ceil((resultCounter===0 ? 10:resultCounter) / 10),
-		paged: function(page) {
-			$('#active_items div.filter_result').hide();
-			$($('#active_items div.filter_result')[page-1]).show();
-		}
-	});
-	$('#pagination_active').jqPagination('option', 'current_page', 1);
-	$('#active_items div.filter_result:first').show();
-}
-*/
 
 function setFilterResultPagination(pagingButton, filterDiv, resultCounter){
 	pagingButton.jqPagination('destroy');
@@ -1260,7 +1231,7 @@ $(document).ready(function(){
 	 });
 		
 
-/******************	DASHBOARD - ACTIVE TAB Search Box	********************/
+/******************	DASHBOARD Search Box	********************/
 $(function(){
 	var schResult = [];
 	var schValue = '';
@@ -1328,7 +1299,7 @@ $(function(){
 });
 
 
-/*******************	ACTIVE SORT	**************************/
+/*******************	DASHBOARD - SORT	**************************/
 $(function(){
 	
 	function sortNameDesc(a,b){
@@ -1421,50 +1392,48 @@ $(function(){
 	
 });
 
-		
-		
-		
-		
-/*
+/****************	GOOGLE MAPS		***************************/
 $(document).ready(function(){
-	$("#view_map").click(function(){       
-	var streetno = $("#streetno").val();
-	var streetname = $("#streetname").val();
-	var barangay = $("#barangay").val();
-	var citytown = $("#citytown").val();
-	var country = $("#country").val();
-	var address = streetno + " " + streetname + " Street " + ", " + barangay + " " + citytown + ", " + country;
-	$.ajax({
-		async:true,
-		url:config.base_url+"memberpage/toCoordinates",
-		type:"POST",
-		dataType:"JSON",
-		data:{address:address},
-		success:function(data){
-			if(data['lat']==false || data['lng']==false){
-				alert("Cannot retrieve map,Address is invalid");
-			}else{
-				var myLatlng =  new google.maps.LatLng(data['lat'],data['lng']);
-				$("#map").show();
-				google.maps.event.addDomListener(window, 'load', initialize(myLatlng));
+	$("#view_map").click(function(){     
+		var streetno = $("#streetno").val();
+		var streetname = $("#streetname").val();
+		var barangay = $("#barangay").val();
+		var citytown = $("#citytown").val();
+		var country = $("#country").val();
+		var address = streetno + " " + streetname + " Street " + ", " + barangay + " " + citytown + ", " + country;
+		var csrftoken = $('#personal_profile_address').find('input[name^="es_csrf"]').val();
+		console.log(address);
+		$.ajax({
+			async:true,
+			url:config.base_url+"memberpage/toCoordinates",
+			type:"POST",
+			dataType:"JSON",
+			data:{address:address, es_csrf_token:csrftoken},
+			success:function(data){
+				if(data['lat']==false || data['lng']==false){
+					alert("Cannot retrieve map,Address is invalid");
+				}else{
+					var myLatlng =  new google.maps.LatLng(data['lat'],data['lng']);
+					$("#map").show();
+					google.maps.event.addDomListener(window, 'load', initialize(myLatlng));
+				}
 			}
-		}
 
 		});
 	});
 
 	function initialize(myLatlng) {
-	var mapOptions = {
-	  center:myLatlng,
-	  zoom: 15
-	};
-	var map = new google.maps.Map(document.getElementById("map-canvas"),
-		mapOptions);
-		var marker = new google.maps.Marker({
-			position: myLatlng,
-			map: map,
-			title:"You! :)"
-		});
+		var mapOptions = {
+		  center:myLatlng,
+		  zoom: 15
+		};
+		var map = new google.maps.Map(document.getElementById("map-canvas"),
+			mapOptions);
+			var marker = new google.maps.Marker({
+				position: myLatlng,
+				map: map,
+				title:"You! :)"
+			});
 	}
 });
 
@@ -1484,7 +1453,7 @@ $(document).ready(function(){
 
 });
 
-*/
+
 
 
 /******* rotate sort arrow when click *****/

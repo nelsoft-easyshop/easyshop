@@ -25,6 +25,9 @@ class Memberpage extends MY_Controller
         $this->load->view('templates/footer'); 
     } 
     
+	/**
+	 *	Function to obtain location in Google Maps
+	 */
     function toCoordinates() {
         $address1 = $_POST['address'];
         $bad = array(
@@ -35,9 +38,15 @@ class Memberpage extends MY_Controller
             "=" => ""
         );
         $address = str_replace(array_keys($bad), array_values($bad), $address1);
+		print($address);
         $data = new SimpleXMLElement(file_get_contents("http://maps.googleapis.com/maps/api/geocode/xml?address={$address}&sensor=true"));
         $simple = json_decode(json_encode($data), 1);
         $result = array();
+		
+		print('<pre>');
+		print_r($data);
+		print('</pre>');
+		
         if($simple['status']== "ZERO_RESULTS"):
             $result['lat']=false;
             $result['lng']=false;

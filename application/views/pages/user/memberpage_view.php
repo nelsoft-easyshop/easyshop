@@ -38,7 +38,6 @@
 								<li><a href="javascript:void(0)" onclick="triggerTab('transactions');">Transactions</a></li>
 								<!-- <li><a href="javascript:void(0)" onclick="triggerTab('privacy_settings');">Privacy Settings</a></li> -->
 								<li><a href="javascript:void(0)" onclick="triggerTab('security_settings');">Security Setting</a></li>
-
 							</ul>
 						</li>
 						<li><a href="<?=base_url()?>home/under_construction">News</a></li>
@@ -1036,12 +1035,11 @@
 							<span class="red ci_form_validation_error"><?php echo form_error('citytown'); ?></span>
 							<span class="red ci_form_validation_error"><?php echo form_error('country'); ?></span>
 						</div>
-                            <!--
-							 <div class="view_map_btn">
-								 <input type="button" id="view_map" value="View on map">                            
-							</div>
+						<!--
+						<div class="view_map_btn">
+							<input type="button" id="view_map" value="View on map">                            
+						</div>
 						-->
-						
 						<div id="map"  style="display: none">
 							<a id="close" href="javascript:void(0)">Close</a>
 							<div id="GoogleMapContainer" title="Google Map Container"></div>
