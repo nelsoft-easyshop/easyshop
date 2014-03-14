@@ -578,29 +578,36 @@ class productUpload extends MY_Controller
 	*/
 	function step3()
 	{
-		//DEV CODE - temporarily set product id to fetch attribute combinations
-		//$id = 118;
-		//$id = 123;
-		$id = $this->input->post('prod_h_id');
-		
-		$data = array(
-			'shiploc' => $this->product_model->getLocation(),
-			'attr' => $this->product_model->getPrdShippingAttr($id),
-			'product_id' => $id
-			);
-		$data = array_merge($data, $this->fill_view());
-		
-		if( isset($data['attr']['no_attr']) ){
-			$data['product_item_id'] = $this->product_model->getPrdItemId($id)['id_product_item'];
-			$data['has_attr'] = 0;
+		if($this->input->post('prod_h_id')){
+			//DEV CODE - temporarily set product id to fetch attribute combinations
+			//$id = 118;
+			//$id = 123;
+			$id = $this->input->post('prod_h_id');
+			
+			$data = array(
+				'shiploc' => $this->product_model->getLocation(),
+				'attr' => $this->product_model->getPrdShippingAttr($id),
+				'product_id' => $id
+				);
+			$data = array_merge($data, $this->fill_view());
+			
+			if( isset($data['attr']['no_attr']) ){
+				$data['product_item_id'] = $this->product_model->getPrdItemId($id)['id_product_item'];
+				$data['has_attr'] = 0;
+			}
+			else{
+				$data['has_attr'] = 1;
+			}
+			
+			$this->load->view('templates/header', $data); 
+			$this->load->view('pages/product/product_upload_step3_view', $data);
+			$this->load->view('templates/footer'); 
 		}
-		else{
-			$data['has_attr'] = 1;
+		else {
+			redirect(base_url().'sell/step1', 'refresh');
 		}
+	
 		
-		$this->load->view('templates/header', $data); 
-		$this->load->view('pages/product/product_upload_step3_view', $data);
-		$this->load->view('templates/footer'); 
 	}
 	
 	/**
