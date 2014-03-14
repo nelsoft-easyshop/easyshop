@@ -150,9 +150,9 @@
     <!-- Start of Shipping Courier -->
     <div class="shipping_courier_container">
 
-      <a href=""><img src="<?=base_url()?>assets/images/img_logo_air21.jpg"> Air21</a>
-      <a href=""><img src="<?=base_url()?>assets/images/img_logo_lbc.jpg"> LBC</a>
-      <a href=""><img src="<?=base_url()?>assets/images/img_logo_jrs.jpg"> JRS</a>
+      <a href="http://www.air21.com.ph/main/rate_calculator.php"><img src="<?=base_url()?>assets/images/img_logo_air21.jpg"> Air21</a>
+      <a href="http://www.lbcexpress.com/"><img src="<?=base_url()?>assets/images/img_logo_lbc.jpg"> LBC</a>
+      <a href="http://www.jrs-express.com/Ratecalc.aspx"><img src="<?=base_url()?>assets/images/img_logo_jrs.jpg"> JRS</a>
     </div>
     <!-- End of Shipping Courier -->
 
