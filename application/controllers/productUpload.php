@@ -78,7 +78,8 @@ class productUpload extends MY_Controller
 			$response['otherCategory'] = $otherCategory; # id is the selected category
 			$parents = $this->product_model->getParentId($id); # getting all the parent from selected category
 			$attribute = $this->product_model->getAttributesBySelf($id); # getting all attribute from all parent from selected category
-			$str_parents_to_last = "";
+			#$attribute = $this->product_model->getAttributesByParent($parents);
+            $str_parents_to_last = "";
 
 			$lastElement = end($parents);	
 			foreach($parents as $k => $v) { # creating the bread crumbs from parent category to the last selected category
@@ -133,27 +134,27 @@ class productUpload extends MY_Controller
 	 	 
 	 	$key = array_search ($primaryName, $_FILES['files']['name']);
 	 	if(isset($_FILES['files']['name'][0])){
-	 	$temp = $_FILES['files']['name'][0];
-	 	$_FILES['files']['name'][0] = $_FILES['files']['name'][$key];
-	 	$_FILES['files']['name'][$key] = $temp;
+            $temp = $_FILES['files']['name'][0];
+            $_FILES['files']['name'][0] = $_FILES['files']['name'][$key];
+            $_FILES['files']['name'][$key] = $temp;
 
-	 	$temp = $_FILES['files']['type'][0];
-	 	$_FILES['files']['type'][0] = $_FILES['files']['type'][$key];
-	 	$_FILES['files']['type'][$key] = $temp;
+            $temp = $_FILES['files']['type'][0];
+            $_FILES['files']['type'][0] = $_FILES['files']['type'][$key];
+            $_FILES['files']['type'][$key] = $temp;
 
-	 	$temp = $_FILES['files']['tmp_name'][0];
-	 	$_FILES['files']['tmp_name'][0] = $_FILES['files']['tmp_name'][$key];
-	 	$_FILES['files']['tmp_name'][$key] = $temp;
+            $temp = $_FILES['files']['tmp_name'][0];
+            $_FILES['files']['tmp_name'][0] = $_FILES['files']['tmp_name'][$key];
+            $_FILES['files']['tmp_name'][$key] = $temp;
 
-	 	$temp = $_FILES['files']['error'][0];
-	 	$_FILES['files']['error'][0] = $_FILES['files']['error'][$key];
-	 	$_FILES['files']['error'][$key] = $temp;
+            $temp = $_FILES['files']['error'][0];
+            $_FILES['files']['error'][0] = $_FILES['files']['error'][$key];
+            $_FILES['files']['error'][$key] = $temp;
 
-	 	$temp = $_FILES['files']['size'][0];
-	 	$_FILES['files']['size'][0] = $_FILES['files']['size'][$key];
-	 	$_FILES['files']['size'][$key] = $temp;
+            $temp = $_FILES['files']['size'][0];
+            $_FILES['files']['size'][0] = $_FILES['files']['size'][$key];
+            $_FILES['files']['size'][$key] = $temp;
 	 	}
-
+        
 		$combination = json_decode($this->input->post('combination'));
 		$checkIfCombination = $this->input->post('noCombination');
 		$inputs = $this->input->post('inputs'); 
@@ -185,7 +186,8 @@ class productUpload extends MY_Controller
 		$member_id =  $this->session->userdata('member_id');
 		
 		$date = date("Ymd");
-
+        $fulldate = date("YmdGis");
+        
 		foreach ($availableBrand as $brandKey => $brandValue) {
 			if($brand_id === $brandValue['brand_id']){
 				$found = TRUE;
@@ -265,7 +267,7 @@ class productUpload extends MY_Controller
 			# name format: product_id + member_id + date_uploaded
 			foreach($_FILES['files']['name'] as $k => $v) {
 				$file_ext = explode('.', $v);
-				$filenames_ar[$k] = "{$product_id}_{$member_id}_{$date}{$i}.{$file_ext[1]}";
+				$filenames_ar[$k] = "{$product_id}_{$member_id}_{$fulldate}{$i}.{$file_ext[1]}";
 				$file_type[$k] = $_FILES['files']['type'][$i];
 				$i++;
 			}
@@ -390,7 +392,7 @@ class productUpload extends MY_Controller
 
                         		$other_image_type = $_FILES['prod_other_img']['type'][$i];
                         		$file_ext = explode('.', $_FILES['prod_other_img']['name'][$i]);
-                        		$other_image = "{$product_id}_{$member_id}_{$date}{$i}_o.{$file_ext[1]}";
+                        		$other_image = "{$product_id}_{$member_id}_{$fulldate}{$i}_o.{$file_ext[1]}";
                         		$other_tmp = $_FILES["prod_other_img"]["tmp_name"][$i];
                         	}
 
@@ -641,8 +643,7 @@ class productUpload extends MY_Controller
 		$data = array_merge($data,$this->fill_header());
 		$this->load->view('templates/header',$data); 
 		$product = $this->product_model->getProductEdit($product_id, $member_id);
-		
-		#$product['keywords'] = substr($product['keywords'],(strpos($product['keywords'], $product['name']) + strlen($product['name']) + 1));
+
 		$parents = $this->product_model->getParentId($product['cat_id']); # getting all the parent from selected category
 		$lastElement = end($parents);	
 		$str_parents_to_last = "";
@@ -657,10 +658,9 @@ class productUpload extends MY_Controller
 			if(strpos(($image['path']),'other') === FALSE)
 				array_push($main_images, $image);
 		}
-		
-	
 		$attribute = $this->product_model->getAttributesBySelf($product['cat_id']); # getting all attribute from all parent from selected category
-		for ($i=0 ; $i < sizeof($attribute) ; $i++ ) {  # getting all lookuplist from item attribute
+		#$attribute = $this->product_model->getAttributesByParent($parents);
+        for ($i=0 ; $i < sizeof($attribute) ; $i++ ) {  # getting all lookuplist from item attribute
 			$lookuplist = $this->product_model->getLookItemListById($attribute[$i]['attr_lookuplist_id']);
 			array_push($attribute[$i],$lookuplist);
 		}		
@@ -707,13 +707,64 @@ class productUpload extends MY_Controller
 
 	public function editProductSubmit()
 	{
+
+        //SECTION OF CODE FOR ES_PRODUCT_UPLOADER
+        
+        $editRemoveThisPictures = json_decode($_POST['editRemoveThisPictures']); 
+		$editPrimaryId = $_POST['editPrimaryPicture'];
+        
+        $removeThisPictures = json_decode($_POST['removeThisPictures']); 
+		$primaryId = $_POST['primaryPicture'];
+        
+		$primaryName =""; 
+		foreach( $_FILES['files']['name'] as $key => $value ) {
+			if($primaryId == $key){
+				$primaryName =	$_FILES['files']['name'][$key];
+			}
+			if (in_array($key, $removeThisPictures) || $_FILES['files']['name'][$key] == "") {
+				unset($_FILES['files']['name'][$key]);
+				unset($_FILES['files']['type'][$key]);
+				unset($_FILES['files']['tmp_name'][$key]);
+				unset($_FILES['files']['error'][$key]);
+				unset($_FILES['files']['size'][$key]);
+			} 
+		}
+		$_FILES['files']['name'] = array_values($_FILES['files']['name']);
+		$_FILES['files']['type'] = array_values($_FILES['files']['type']);
+		$_FILES['files']['tmp_name'] = array_values($_FILES['files']['tmp_name']);
+		$_FILES['files']['error'] = array_values($_FILES['files']['error']);
+		$_FILES['files']['size'] = array_values($_FILES['files']['size']);
+	 	 
+	 	$key = array_search ($primaryName, $_FILES['files']['name']);
+	 	if(isset($_FILES['files']['name'][0])){
+            $temp = $_FILES['files']['name'][0];
+            $_FILES['files']['name'][0] = $_FILES['files']['name'][$key];
+            $_FILES['files']['name'][$key] = $temp;
+
+            $temp = $_FILES['files']['type'][0];
+            $_FILES['files']['type'][0] = $_FILES['files']['type'][$key];
+            $_FILES['files']['type'][$key] = $temp;
+
+            $temp = $_FILES['files']['tmp_name'][0];
+            $_FILES['files']['tmp_name'][0] = $_FILES['files']['tmp_name'][$key];
+            $_FILES['files']['tmp_name'][$key] = $temp;
+
+            $temp = $_FILES['files']['error'][0];
+            $_FILES['files']['error'][0] = $_FILES['files']['error'][$key];
+            $_FILES['files']['error'][$key] = $temp;
+
+            $temp = $_FILES['files']['size'][0];
+            $_FILES['files']['size'][0] = $_FILES['files']['size'][$key];
+            $_FILES['files']['size'][$key] = $temp;
+	 	}
+        //END PRODUCT_UPLOADER
+    
 		$product_title = trim($this->input->post('prod_title'));
 		$product_brief = trim($this->input->post('prod_brief_desc'));
 		$product_description = trim($this->input->post('desc')) ;
         $product_price = str_replace(',', '', $this->input->post('prod_price')) ;
 		$product_condition = $this->input->post('prod_condition');
 		$sku = trim($this->input->post('prod_sku'));
-		#$keyword = es_url_clean(trim($product_title).' '.trim($this->input->post('prod_keyword')));
         $keyword = es_url_clean(trim($this->input->post('prod_keyword')));
 		$keyword = str_replace('-', ' ',$keyword);
 		$product_id = $this->input->post('p_id');
@@ -729,6 +780,7 @@ class productUpload extends MY_Controller
 		$cat_id = $this->input->post('id');
 		$availableBrand = $this->product_model->getAvailableBrand($cat_id);
 		$date = date("Ymd");
+        $fulldate = date("YmdGis");
 
 		foreach ($availableBrand as $brandKey => $brandValue) {
 			if($brand_id === intval($brandValue['brand_id'],10)){
@@ -755,10 +807,6 @@ class productUpload extends MY_Controller
 		{
 			$data = '{"e":"0","d":"Fill (*) All Required Fields Properly!"}';		
 		}else{
-			$images_removed = array();
-			if($this->input->post('main_image')){
-				$images_removed = $this->input->post('main_image');
-			}
 
 			$images = $this->product_model->getProductImages($product_id, true);
 			$main_images = array();
@@ -772,7 +820,7 @@ class productUpload extends MY_Controller
 			}
 			$main_image_cnt = count($main_images);
 
-			if((empty($_FILES['files']['name'][0])) && ($main_image_cnt  === count($images_removed))){ 
+			if((empty($_FILES['files']['name'][0])) && ($main_image_cnt  === count($editRemoveThisPictures))){ 
 				echo '{"e":"0","d":"Select at least 1 photo for your item."}';
 				exit();
 			}
@@ -800,23 +848,14 @@ class productUpload extends MY_Controller
 					}
 					$x++;
 				}
-
-
+                
 				$i = 0;
-				
-				$last_img_identifier = 0;
-				if(count($main_images) !== 0){
-					$rev = strrev(end($main_images)['file']);
-					$last_img_identifier = (int)substr(strrev(substr($rev, strpos($rev, '.')+1, strpos($rev, '_')-strpos($rev, '.')-1)),8);
-					$last_img_identifier++;
-				}
 
 				#renaming all image
 				# name format: product_id + member_id + date_uploaded
 				foreach($_FILES['files']['name'] as $k => $v) {
 					$file_ext = explode('.', $v);
-					$h = $i+$last_img_identifier;
-					$filenames_ar[$k] = "{$product_id}_{$member_id}_{$date}{$h}.{$file_ext[1]}";
+					$filenames_ar[$k] = "{$product_id}_{$member_id}_{$fulldate}{$i}.{$file_ext[1]}";
 					$file_type[$k] = $_FILES['files']['type'][$i];
 					$i++;
 				}
@@ -872,7 +911,6 @@ class productUpload extends MY_Controller
                 # MOVED BEFORE DELETE PRODUCT ATTRIBUTE FK CONSTRAINT
                 $this->product_model->deleteProductQuantityCombination($product_id);
                 
-                
 				foreach($explode_inputs as $input){
 					$explode_id = explode('/', $input);
 					$explode_value = $explode_id[0];
@@ -914,14 +952,6 @@ class productUpload extends MY_Controller
 				$prod_other_id = $this->input->post('prod_other_id');
 				$prod_other_price = $this->input->post('prod_other_price');
 				
-				#start other
-				$last_img_identifier = 0;
-				if(count($other_images) !== 0){
-					$rev = strrev(end($other_images)['file']);
-					$last_img_identifier = (int)substr(strrev(substr($rev, strpos($rev, '_')+1, strpos($rev, '_', strpos($rev, '_')+1)-strpos($rev, '_')-1)),8);
-					$last_img_identifier++;
-				}
-
 				for ($i=0; $i < sizeof($prod_other_name); $i++) { 
 					if(!array_key_exists($prod_other_name[$i],$newarray)){
 						$newarray[$prod_other_name[$i]] = array();
@@ -943,8 +973,7 @@ class productUpload extends MY_Controller
 					{
 						$other_image_type = $_FILES['prod_other_img']['type'][$i];
 						$file_ext = explode('.', $_FILES['prod_other_img']['name'][$i]);
-						$h = $i + $last_img_identifier;
-						$other_image = "{$product_id}_{$member_id}_{$date}{$h}_o.{$file_ext[1]}";
+						$other_image = "{$product_id}_{$member_id}_{$fulldate}{$i}_o.{$file_ext[1]}";
 						$other_tmp = $_FILES["prod_other_img"]["tmp_name"][$i];
 					}
 
@@ -1025,27 +1054,48 @@ class productUpload extends MY_Controller
 				}
 				#end other
 
-				foreach($images_removed as $key=>$image){
-					$this->product_model->deleteProductImage($product_id, $key);
-					unset($main_images[$key]);
+				foreach($editRemoveThisPictures as $img_id){
+					$this->product_model->deleteProductImage($product_id, $img_id);
+					unset($main_images[$img_id]);
 				}
 				
-				$primary_image_bool = false;
-
+				$currentPrimaryId = 0;
+                $primary_image_bool = false;
 				foreach($main_images as $main_image){
 					if(intval($main_image['is_primary']) === 1){
-						$primary_image_bool = true;
+						$currentPrimaryId = $main_image['id_product_image'];
 						break;
 					}
 				}
-
-				if(!$primary_image_bool){
-					if(count($main_images)>0){
-						$this->product_model->updateImageIsPrimary(reset($main_images)['id_product_image'], 1);
-						$primary_image_bool = true;
-					}
-				}
-
+                
+                #New primary image from previous images, old primary image retained
+                if((intval($editPrimaryId,10) > 0)&&(intval($currentPrimaryId,10)!==0)){
+                    $this->product_model->updateImageIsPrimary($currentPrimaryId, 0);
+                    $this->product_model->updateImageIsPrimary($editPrimaryId, 1);
+                    $primary_image_bool = true;
+                }
+                #New primary image from previous images, old primary image deleted
+                else if((intval($editPrimaryId,10) > 0)&&(intval($currentPrimaryId,10)===0)){
+                    $this->product_model->updateImageIsPrimary($editPrimaryId, 1);
+                    $primary_image_bool = true;
+                }
+                #No new primary image from previous images, old primary image is not deleted and remains the primary
+                #Simple image add/remove without affecting primary
+                else if((intval($editPrimaryId,10) === 0)&&(intval($currentPrimaryId,10)!==0)){
+                    $primary_image_bool = true;
+                }
+                #No new primary image from previous images, old primary image is not deleted
+                #But new primary image is chosen from newly uploaded image
+                else if((intval($editPrimaryId,10) === -1)&&(intval($currentPrimaryId,10)!==0)){
+                    $this->product_model->updateImageIsPrimary($currentPrimaryId, 0);
+                    $primary_image_bool = false;
+                }
+                #No new primary image from previous images, old primary image is deleted
+                #New primary image is chosen from newly uploaded images
+                else if((intval($editPrimaryId,10) === -1)&&(intval($currentPrimaryId,10)===0)){
+                     $primary_image_bool = false;
+                }
+                
                 # start of saving combination qty
                 if($checkIfCombination == 'true'){
                     $quantitySolo = 1;

@@ -203,7 +203,7 @@
 
     <tr>
       <td colspan="3"> 
-        <h3 class="orange"> Image of your item</h3> (You Can Select Multiple)
+        <h3 class="orange"> Image of your item</h3> (You may select multiple images)
       </td>
     </tr>
     <tr>
@@ -211,7 +211,7 @@
       <td colspan="4">
 
         <div class="inputfiles"> 
-          <label for="files" class="labelfiles">Click to browse picture</label>
+          <label for="files" class="labelfiles">Browse pictures</label>
           <input type="file" id="files" class="files" name="files[]" multiple accept="image/*" required = "required"  /><br/><br/>
 
         </div> 
@@ -219,19 +219,37 @@
         <div style="display:inline">
 
           <?php if(isset($main_images)):?> <!-- IF EDIT FUNCTION -->
-          <div class="edit_img_container">
+          <div>
             <?php foreach($main_images as $main_image): ?>
-            <div class="prod_upload_img_container active_img">
-              <a href="" class="edit_img_remove">x</a>
-              <span class="upload_img_con"><img src =<?php echo base_url().$main_image['path'].'thumbnail/'.$main_image['file'];?> ></span>
+            <!--
+            <div class="prod_upload_img_container">
+              <img src =<?php echo base_url().$main_image['path'].'thumbnail/'.$main_image['file'];?> >
               <input type="checkbox" class="prev_img" name="main_image[<?php echo $main_image['id_product_image'];?>]"/> Remove
             </div> 
+            -->
+
+            
           <?php endforeach; ?>
         </div>
       <?php endif; ?>
     </div>
 
-    <output id="list"></output> <!-- this output will show all selected from input file field from above. this is multiple upload. -->
+    <output id="list">
+        <!-- IF EDIT FUNCTION -->
+        <?php $main_img_cnt = 0;?>
+        <?php if(isset($main_images)):?> 
+            <?php foreach($main_images as $main_image): ?>       
+                <div id="editpreviewlist<?php echo $main_img_cnt;?>" class="edit_img upload_img_div <?php echo ($main_img_cnt===0)?'active_img':'';?>">
+                    <a href="javascript:void(0)" class="removepic"  data-imgid="<?php echo $main_image['id_product_image'];?>">x</a>
+                    <span class="upload_img_con"><img src =<?php echo base_url().$main_image['path'].'categoryview/'.$main_image['file'];?> ></span>
+                    <br>
+                    <a class="makeprimary" href="javascript:void(0)" data-imgid="<?php echo $main_image['id_product_image'];?>"><?php echo ($main_img_cnt===0)?'Your Primary':'Make Primary';?></a>
+                </div> 
+                <?php $main_img_cnt++; ?>
+            <?php endforeach; ?>
+      <?php endif; ?>
+    </output>
+    <!-- this output will show all selected from input file field from above. this is multiple upload. -->
 
   </td>
 </tr>
@@ -346,8 +364,7 @@ foreach($opt_attr as $prod_attr): ?>
 <tfoot>
   <tr>
     <td>&nbsp;</td>
-    <td colspan="3">
-      <input type="hidden" value="" name="desc" class="description_hidden"> 
+    <td colspan="3">  
       <a class="add_more_link" href="javascript:void(0)">+ Add More</a>
 
       <?php if(isset($product_details)): ?>
@@ -427,6 +444,10 @@ $(document).ready(function(){
   var combination = []; 
   var arrayCombination = []; 
   var arraySelected = {};  
+  
+       
+  var editRemoveThisPictures = new Array();
+  var editPrimaryPicture = 0;
   
   var cnt_o = <?php echo json_encode($j); ?>;
   //For edit: cnt_o is greater than 1 whenever an optional attribute is already present
@@ -567,59 +588,83 @@ $(document).ready(function(){
 
     $(document).on('change',".files",function (e){
 
-     var fileList = this.files;
-     var anyWindow = window.URL || window.webkitURL;
-     for(var i = 0; i < fileList.length; i++){
-      var objectUrl = anyWindow.createObjectURL(fileList[i]);
-      var primaryText = "Make Primary";
-      var activeText = "";
-      pictureInDiv = $("#list > div").length;
-      if(pictureInDiv == 0){
-        primaryText = "Your Primary";
-        activeText = "active_img";
-        primaryPicture = pictureCount;
-
-      }
-      $('#list').append('<div id="previewList'+pictureCount+'" class="upload_img_div '+activeText+'"><span class="upload_img_con"><img src="'+objectUrl+'"></span><a href="javascript:void(0)" class="removepic" data-number="'+pictureCount+'">x</a><br><a href="javascript:void(0)" class="makeprimary photoprimary'+pictureCount+'" data-number="'+pictureCount+'">'+primaryText+'</a></div>');
-      window.URL.revokeObjectURL(fileList[i]);
-      pictureCount++;
-    }
+        var fileList = this.files;
+        var anyWindow = window.URL || window.webkitURL;
+        for(var i = 0; i < fileList.length; i++){
+            var objectUrl = anyWindow.createObjectURL(fileList[i]);
+            var primaryText = "Make Primary";
+            var activeText = "";
+            pictureInDiv = $("#list > div").length;
+            if(pictureInDiv == 0){
+                primaryText = "Your Primary";
+                activeText = "active_img";
+                primaryPicture = pictureCount;
+            }
+            $('#list').append('<div id="previewList'+pictureCount+'" class="new_img upload_img_div '+activeText+'"><span class="upload_img_con"><img src="'+objectUrl+'"></span><a href="javascript:void(0)" class="removepic" data-number="'+pictureCount+'">x</a><br><a href="javascript:void(0)" class="makeprimary photoprimary'+pictureCount+'" data-number="'+pictureCount+'">'+primaryText+'</a></div>');
+            window.URL.revokeObjectURL(fileList[i]);
+            pictureCount++;
+        }
 
     $(".files").hide(); 
     $('.inputfiles').append('<input type="file" id="files" class="files" name="files[]" multiple accept="image/*" required = "required"  /> ')
 
   });
 
+
     $(document).on('click',".removepic",function (){
-
-      var idNumber = $(this).data('number');
-      var text = $(".photoprimary"+idNumber).text();
-      if(text == "Your Primary"){
-
-        $('#previewList'+idNumber).remove();
-        removeThisPictures.push(idNumber);
-        primaryPicture = $("#list > div:first-child > .makeprimary" ).data('number');
-        $("#list > div:first-child > .makeprimary").text('Your Primary');     
-
-      $("#list > div:first-child").addClass("active_img"); 
-      }else{
-        $('#previewList'+idNumber).remove();
-        removeThisPictures.push(idNumber);
-      }
+        var idNumber;
+        var text = $(this).siblings('.makeprimary').first().text();
+              
+        if($(this).closest('.upload_img_div').hasClass('new_img')){
+            idNumber = $(this).data('number');
+            removeThisPictures.push(idNumber);
+        }
+        else if($(this).closest('.upload_img_div').hasClass('edit_img')){
+            idNumber = $(this).data('imgid');
+            editRemoveThisPictures.push(idNumber);
+        }
+        
+        $(this).closest('.upload_img_div').remove();
+        
+        if(text == "Your Primary"){
+            var first_img_div = $("#list > div:first-child" );
+            var primary_control_anchor = $("#list > div:first-child > .makeprimary");
+            if(first_img_div.hasClass('new_img')){
+                primaryPicture = primary_control_anchor.data('number');
+                editPrimaryPicture = -1;
+            }
+            else if(first_img_div.hasClass('edit_img')){
+                editPrimaryPicture = primary_control_anchor.data('imgid');
+                primaryPicture = 0;
+            }
+            primary_control_anchor.text('Your Primary');     
+            first_img_div.addClass("active_img"); 
+        }
+        
     });
 
     $(document).on('click','.makeprimary',function(){
-
-      var idNumber = $(this).data('number');
-      primaryPicture = idNumber;  
-      $(".makeprimary").text('Make Primary');
-      $(".photoprimary"+idNumber).text('Your Primary');
-
-      $(".upload_img_div").removeClass("active_img");
-      $("#previewList"+idNumber).addClass("active_img");
+        var idNumber;
+        if($(this).closest('.upload_img_div').hasClass('new_img')){
+            primaryPicture = $(this).data('number');
+            editPrimaryPicture = -1;
+        }
+        else if($(this).closest('.upload_img_div').hasClass('edit_img')){
+            editPrimaryPicture = $(this).data('imgid');
+            primaryPicture = 0;
+        }
+        else{
+            return false;
+        }
+        $(".makeprimary").text('Make Primary');
+        $(this).text('Your Primary');
+        $(".upload_img_div").removeClass("active_img");
+        $(this).closest('.upload_img_div').addClass("active_img");
     });
 
     // ES_UPLOAER BETA END
+    
+    
 
     $( ".option_image_input" ).change(function(){
       $(this).siblings(".option_image").css('display','none');
@@ -634,7 +679,8 @@ $(document).ready(function(){
       } 
     });
 
-    $('.quantity_table_row , .quantity_table2').on('click', '.quantity_attr_done', function () {  
+
+      $('.quantity_table_row , .quantity_table2').on('click', '.quantity_attr_done', function () {  
 
       var qtyTextbox = $('.qtyTextClass');
       var qtyTextboxValue = parseInt(qtyTextbox.val());
@@ -979,8 +1025,7 @@ $(document).on('change',"#prod_condition,#prod_brand",function () {
 $(".proceed_form").unbind("click").click(function(){
   tinyMCE.triggerSave();
   var description = tinyMCE.get('prod_description').getContent();
-  var id = "<?php echo $id; ?>"
-  $('.description_hidden').val(description);
+  var id = "<?php echo $id; ?>"; 
   var input_name = "<?php echo (string)$array_name_inputs; ?>";
   var action = "sell/processing"; 
   var title = $("#prod_title");
@@ -996,6 +1041,8 @@ $(".proceed_form").unbind("click").click(function(){
   formData.append("otherCategory",otherCategory);
   formData.append("removeThisPictures",JSON.stringify(removeThisPictures));
   formData.append("primaryPicture",primaryPicture);
+  formData.append("editRemoveThisPictures",JSON.stringify(editRemoveThisPictures));
+  formData.append("editPrimaryPicture",editPrimaryPicture);
 
   var csrftoken = $('#uploadstep2_csrf').val();
   formData.append('es_csrf_token', csrftoken);
@@ -1116,8 +1163,7 @@ $(".proceed_form").unbind("click").click(function(){
           processData:false,
           data: formData, 
           dataType: "json",
-          beforeSend: function(jqxhr, settings) { 
-            $('.description_hidden').val(description);
+          beforeSend: function(jqxhr, settings) {  
             $( ".button_div" ).hide();
             $( ".loader_div" ).show();
           },
@@ -1145,8 +1191,7 @@ $(".proceed_form").unbind("click").click(function(){
           processData:false,
           data: formData , 
           dataType: "json",
-          beforeSend: function(jqxhr, settings) { 
-            $('.description_hidden').val(description);
+          beforeSend: function(jqxhr, settings) {  
             $( ".button_div" ).hide();
             $( ".loader_div" ).show();
           },
@@ -1171,6 +1216,13 @@ $(".proceed_form").unbind("click").click(function(){
      * Product Edit javascript
      * Sam Gavinio
      */
+
+    
+    var itemPrice = parseInt($('#prod_price').data('price'));
+    if((itemPrice>0)&&(!isNaN(itemPrice))){
+        $('#prod_price').val(itemPrice);
+        $('#prod_price').change();
+    }
 
     //Add previously checked attributes to the quantity select elements
     $('.checkbox_itemattr').each(function(){
@@ -1315,9 +1367,8 @@ $(".proceed_form").unbind("click").click(function(){
 tinymce.init({
  mode : "specific_textareas",
  editor_selector : "mceEditor",
-  //selector: "textarea",
+ //selector: "textarea",
   menubar: "table format view insert edit",
-
   statusbar: false,
   //selector: "textarea",
   menubar: "table format view insert edit",
