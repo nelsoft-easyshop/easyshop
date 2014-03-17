@@ -1736,7 +1736,7 @@ div.pass-hint {
 
 .profile_top_nav .member_srch_wrapper {
     border-bottom: 3px solid #CECECE;
-    padding-bottom: 9px;
+    padding-bottom: 11px;
     width: 264px;
 }
 
@@ -1783,10 +1783,26 @@ div.pass-hint {
 	border-top: 1px solid #F08E1C;
 	color: #353535;
 	margin-right: -3px;
-	padding:8px 2px;
-	height: 18px;	
+	padding:0px 2px;
     vertical-align: middle;
     width: 218px;
+	height: 32px;
+}
+
+.profile_top_nav input[type="text"]::-webkit-input-placeholder {
+	color: #353535;
+}
+
+.profile_top_nav input[type="text"]:-moz-placeholder { /* Firefox 18- */
+	color: #353535;
+}
+
+.profile_top_nav input[type="text"]::-moz-placeholder {  /* Firefox 19+ */
+	color: #353535; 
+}
+
+.profile_top_nav input[type="text"]:-ms-input-placeholder {  
+	color: #353535; 
 }
 
 .profile_top_nav input[type="text"]:focus {
@@ -1799,9 +1815,10 @@ div.pass-hint {
 	background-color: #F09D3B;
 	color: #fff;
 	border: 1px solid #F09D3B;
-	padding:8px 5px;
+	padding:0px 5px;
 	vertical-align: middle;
 	width: 40px;
+	height: 34px;
 	display: inline-block;
 }
 
