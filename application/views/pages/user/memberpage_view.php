@@ -43,22 +43,22 @@
 						<li><a href="<?=base_url()?>home/under_construction">News</a></li>
 					</ul>
 				</div>
-				<div>
-					<span class="main_srch_img_con"></span>
-					<input type="text"   class="span_bg">
+				<div class="member_srch_wrapper">
+					<span class="member_srch_img_con"></span>
+					<input type="text" id="member_sch" onblur="this.placeholder = 'Search'" onfocus="this.placeholder = ''" placeholder="Search">
 
 					<script type="text/javascript">
 
 					$(document).ready(function() {
 
-						$( ".span_bg" ).keyup(function() {
+						$( "#member_sch" ).keyup(function() {
 
 							var searchQuery = $(this).val(); 
 							if(searchQuery != ""){
 								$.ajax({
 									type: "GET",
 									url: '<?php echo base_url();?>product/sch_onpress', 
-									onLoading:jQuery(".main_srch_img_con").html('<img src="<?= base_url() ?>assets/images/orange_loader_small.gif" />').show(),
+									onLoading:jQuery(".member_srch_img_con").html('<img src="<?= base_url() ?>assets/images/orange_loader_small.gif" />').show(),
 									cache: false,
 									data: "q="+searchQuery, 
 									beforeSend: function(jqxhr, settings) { 
@@ -66,7 +66,7 @@
 									},
 									success: function(html) {
 										$("#search_content").html(html).show();
-										jQuery(".main_srch_img_con").hide();
+										jQuery(".member_srch_img_con").hide();
 									}
 								});
 							}else{
@@ -75,11 +75,24 @@
 						});
 					});
 
+					$(document).ready(function() { 
+
+			            $('#member_sch').focus(function() {
+			            $('#search_content').show();
+			            $(document).bind('focusin.member_srch_container click.member_srch_container',function(e) {
+			                if ($(e.target).closest('#search_content, #member_sch').length) return;
+			                $('#search_content').hide();
+			                });
+			             });
+			 
+			            $('#search_content').hide();
+			        });
+
 					</script>
 
-					<input type="submit" value="Search">
+					<input type="submit" class="span_bg" value="">
 				</div>    
-				<div id="search_content"></div>     	
+				<div id="search_content" class="member_srch_container"></div>     	
 			</div>
 		</div>
 	</section>
