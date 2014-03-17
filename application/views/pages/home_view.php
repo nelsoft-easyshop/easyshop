@@ -29,8 +29,10 @@
                 <?PHP foreach ($data['productSlide_id'] as $rows): ?>
                   <li>
                     <a href ="<?=base_url()."item/".$rows['id_product']."/".es_url_clean($rows['product']); ?>.html" >
-                        <span>
-                            <img src="<?=  base_url().$rows['path'].'categoryview/'.$rows['file']; ?>" />
+                        <span class="mid_bottom_img_con">
+                            <span class="mid_bottom_img">
+                                <img src="<?=  base_url().$rows['path'].'categoryview/'.$rows['file']; ?>" />
+                            </span>
                         </span>
                         <br />
                            <?=html_escape($rows['product']); ?> 
