@@ -50,12 +50,12 @@
 					<script type="text/javascript">
 
 					$(document).ready(function() {
-
+                        var currentRequest = null;
 						$( "#member_sch" ).keyup(function() {
 
 							var searchQuery = $(this).val(); 
 							if(searchQuery != ""){
-								$.ajax({
+								currentRequest = $.ajax({
 									type: "GET",
 									url: '<?php echo base_url();?>product/sch_onpress', 
 									onLoading:jQuery(".member_srch_img_con").html('<img src="<?= base_url() ?>assets/images/orange_loader_small.gif" />').show(),
@@ -63,6 +63,9 @@
 									data: "q="+searchQuery, 
 									beforeSend: function(jqxhr, settings) { 
 										$("#search_content").empty();
+                                        if(currentRequest != null) {
+                                            currentRequest.abort();
+                                        }
 									},
 									success: function(html) {
 										$("#search_content").html(html).show();
