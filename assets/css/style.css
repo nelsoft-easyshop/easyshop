@@ -1055,7 +1055,8 @@ span.paypal {
 }
 
 #cat1_main_prod {
-    width:240px;height:462px
+    width:240px;
+    height:471px
 }
 
 /*.cat2_slide_prod {
@@ -1143,11 +1144,17 @@ span.paypal {
 #cat_1_main_details {
 	background: none repeat scroll center rgba(255, 255, 255, 0.7);
     float: none;
-    margin: -89px 0px 0;
+    margin: -92px 0px 0;
     padding: 10px 0;
     position: absolute;
     text-align: center;
-    width: 240px;
+    width: 239px;
+}
+
+#cat_1_main_details h2 {
+    height: 47px;
+    overflow: hidden;
+    word-wrap: break-word;
 }
 
 #cat_1_main_details span {
