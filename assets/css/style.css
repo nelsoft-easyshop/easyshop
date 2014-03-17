@@ -549,6 +549,17 @@ header {
     list-style: none;
 }
 
+.adv_srch_lnk {
+	font-size: 11px;
+	margin-left: 5px;
+	border-bottom: 1px dotted #fff;
+}
+
+.adv_srch_lnk:hover {
+	border-bottom: 1px dotted #f18200;
+	text-decoration: none;
+}
+
 
 /*** end of search box ***/
 
@@ -1099,9 +1110,11 @@ span.paypal {
 }
 
 .products h2 {
+	height: 25px;
 	font-size: 12px;
 	font-weight: normal;
 	border:none;
+	overflow: hidden;
 	padding-bottom: 5px;
 }
 
@@ -1639,6 +1652,7 @@ div.pass-hint {
 /*	background-color: #ff4400;*/
 	width: 720px;
 	margin: 20px 0px 0px 20px;
+	position: relative;
 }
 
 .profile_top_nav > div {
@@ -1713,37 +1727,74 @@ div.pass-hint {
 	border-bottom: 1px dotted #f18200;
 }
 
-.profile_top_nav div:last-child {
+.profile_top_nav .member_srch_wrapper {
     border-bottom: 3px solid #CECECE;
     padding-bottom: 9px;
     width: 264px;
 }
 
-/*.profile_top_nav_inner {
-	background: url(../images/img_arrow_down_white.png) 65px center no-repeat;
-    width: 70px;
+.member_srch_img_con {
+    display: inline-block;
+    margin-left: -38px;
+    margin-top: 2px;
+    position: absolute;
 }
 
-.profile_top_nav_inner:hover {
-	background: url(../images/img_arrow_down_white2.png) 65px center no-repeat;
-}*/
+.member_srch_container {
+    background-color: #FFFFFF;
+    border: 1px solid #F18200;
+    display: none;
+    float: right !important;
+    margin-left: 242px;
+    margin-top: 35px;
+    min-height: 15px;
+    min-width: 456px;
+    padding: 10px;
+    position: absolute;
+    top: 0;
+    z-index: 1;
+}
+
+.member_srch_container ul {
+	border:none;
+}
+
+.member_srch_container ul li {
+	border: none;
+	float: none;
+}
+
+.member_srch_container ul li:hover {
+	border: none;
+}
 
 .profile_top_nav input[type="text"] {
-	background-position: -250px -9px; 
-	border: 1px solid #f18200;
-	width: 163px;
-	padding:8px 2px 8px 30px;
+	background-color: #F08E1C; 
+	border-left: 1px solid #F08E1C;
+	border-right: 1px solid #fff;
+	border-bottom: 1px solid #F08E1C;
+	border-top: 1px solid #F08E1C;
+	color: #353535;
+	margin-right: -3px;
+	padding:8px 2px;
 	height: 18px;	
+    vertical-align: middle;
+    width: 218px;
+}
+
+.profile_top_nav input[type="text"]:focus {
+    color: #FFFFFF;	
 }
 
 .profile_top_nav input[type="submit"] {
 	cursor: pointer;
-	background-color: #f18200;
+	background-position: -364px -248px;
+	background-color: #F09D3B;
 	color: #fff;
-	border: 1px solid #f18200;
+	border: 1px solid #F09D3B;
 	padding:8px 5px;
 	vertical-align: middle;
-	width: 64px;
+	width: 40px;
 	display: inline-block;
 }
 
