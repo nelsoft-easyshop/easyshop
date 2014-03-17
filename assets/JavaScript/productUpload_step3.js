@@ -164,10 +164,10 @@ $(function(){
 			arr = rawString.split('- ');
 			jQuery.each(arr, function(k,v){
 				if(v !== ''){
-					row.children('td:first').append('<span>' + v + "</span>");
+					row.children('td:first').append('<p>' + v + "</p>");
 				}
 			});
-			row.children('td:first').append('<br />');
+			row.children('td:first').append('<span>&nbsp;</span>');
         }); 
         $('table#shipping_summary').append('<tr class="tr_shipping_summary" data-group="'+i+'">' + row.html() + '</tr>');
       }
