@@ -24,7 +24,7 @@
 
        <div class="price-cnt">
         <div class="price">
-          <span>&#8369;</span> <?php echo number_format($items[$i]['product_price'],2); ?>
+          Php <?php echo number_format($items[$i]['product_price'],2); ?>
         </div>
       </div>
       <div class="product_info_bottom">
