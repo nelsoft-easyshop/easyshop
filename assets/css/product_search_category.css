@@ -189,10 +189,6 @@ div.product-list .price-cnt {
   float: right;
 }
 
-.product-list p {
-  width: 575px;
-}
-
 .product-list div.product_info_bottom div:first-child {
   width: 420px;
 }
@@ -479,12 +475,16 @@ _filter: progid:DXImageTransform.Microsoft.Chroma(color='#000000');
 }*/
 
 .product h3 a{
-  text-decoration: none;
-  margin: 10px 0;
-  color:#888;
-  font-size: 12px;
-  font-weight: normal;
-  display: inline-block;
+    color: #888888;
+    display: inline-block;
+    font-size: 12px;
+    font-weight: normal;
+    margin: 10px 0;
+    overflow: hidden;
+    text-decoration: none;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 237px;
 }
 
 .product h3 a:hover {
@@ -562,25 +562,28 @@ _filter: progid:DXImageTransform.Microsoft.Chroma(color='#000000');
 }
 
 .product-list h3 a{
-  text-decoration: none;
-  width:320px;
-  float: left;
-  padding:0;
-  margin: 0 10px;
-  color:#3c2e25;
-/*  font: italic normal 22px georgia;*/
-  font: normal 12px;
-
+    color: #888888;
+    float: left;
+    font-weight: normal;
+    margin: 0 10px;
+    overflow: hidden;
+    padding: 0;
+    text-decoration: none;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 355px;
 }
+
 .product-list p{
   color: #888;
-  width:360px;
   float: left;
-
-  margin: 0px 10px 10px 10px;
-  font: normal 12px;
+  height: 60px;
   line-height: 20px;
+  margin: 0px 10px 10px 10px;  
+  overflow: hidden;
+  width:575px;
 }
+
 .product-list .buy-ico{
   border-radius: 5px;
   width: 85px; 
