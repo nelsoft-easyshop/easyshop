@@ -929,22 +929,38 @@ a:hover.tooltips span {
     border: 1px solid #f18200;
 }
 
-.product_combination.active:before {
-    background: url('../images/global_sprite.png') -589px -308px no-repeat;
+.product_combination.active {
+    position: relative;
+}
+
+.product_combination.active div:before {
+    background: url('../images/global_sprite.png') -556px -308px no-repeat;
+    bottom: 0;
     content: "";
     display: inline-block;
     height: 25px;
-    left: 5px;
     position: absolute;
+    right: 0;
     width: 25px;
 }
 
-.prod_att_pad span {
+.prod_att_pad p {
     display: list-item;
     float: left;
     font-size: 10px;
     margin-left: 25px;
     width: 110px;
+}
+
+.prod_att_pad span {
+    border-bottom: 1px dotted #D9D9D9;
+    display: inline-block;
+    height: 7px;
+    width: 395px;
+}
+
+.prod_att_pad span:last-child {
+    border-bottom:none;
 }
 
 .shipping_border {
@@ -1083,11 +1099,11 @@ a:hover.tooltips span {
     margin-top:30px;
 }
 
-tr.tr_shipping_summary:nth-child(even) td {
+tr.tr_shipping_summary:nth-child(odd) td {
     background-color: #fff;
 }
 
-tr.tr_shipping_summary:nth-child(odd) td {
+tr.tr_shipping_summary:nth-child(even) td {
     background-color: #F8F7F7;
 }
 
