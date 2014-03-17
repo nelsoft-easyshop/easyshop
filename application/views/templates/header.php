@@ -48,6 +48,7 @@
               <!-- <li><a href="<?=base_url()?>home/under_construction">Visiting a new Shop</a></li> -->
               <!-- <li><a href="<?=base_url()?>home/under_construction">Discounts</a></li> -->
               <li><a href="<?=base_url()?>category/all">Shopping Categories</a></li>
+			  <li><a href="<?=base_url()?>advsearch">Advance Search</a></li>
 			  <!-- Removed: not part of branch release. Keep edits like this in the trunk -->
               <!-- <li><a href="<?=base_url()?>product_search/advance">Advance Search</a></li> -->
 			  
@@ -140,20 +141,23 @@
 <script type="text/javascript">
 
 $(document).ready(function() {
-
+  var currentRequest = null;
   $( "#main_search" ).keyup(function() {
 
     var searchQuery = $(this).val();
 	var csrftoken = $('#header_search').val();
     if(searchQuery != ""){
-      $.ajax({
+      currentRequest = $.ajax({
         type: "GET",
         url: '<?php echo base_url();?>product/sch_onpress', 
         onLoading:jQuery(".main_srch_img_con").html('<img src="<?= base_url() ?>assets/images/orange_loader_small.gif" />').show(),
         cache: false,
         data: "q="+searchQuery+"&es_csrf_token="+csrftoken , 
         beforeSend: function(jqxhr, settings) { 
-          $("#main_search_drop_content").empty();
+            $("#main_search_drop_content").empty();
+            if(currentRequest != null) {
+                currentRequest.abort();
+            }
         },
         success: function(html) {
          $("#main_search_drop_content").html(html).show();
