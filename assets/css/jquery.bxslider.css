@@ -102,12 +102,12 @@
 
 .bx-wrapper .bx-prev {
 	left: 10px;
-	background: url(../images/controls.png) no-repeat 0 -32px;
+/*	background: url(../images/controls.png) no-repeat 0 -32px;*/
 }
 
 .bx-wrapper .bx-next {
 	right: 10px;
-	background: url(../images/controls.png) no-repeat -43px -32px;
+/*	background: url(../images/controls.png) no-repeat -43px -32px;*/
 }
 
 .bx-wrapper .bx-prev:hover {
@@ -243,9 +243,20 @@
 	display: inline-block;
 }
 
-.mid_bottom_slides a {
+.mid_slide2 li a {
+    display: inline-block;
+    height: 137px;
+    overflow: hidden;
+    padding: 0 8px;
+    width: 140px;
+    word-wrap: break-word;
+}
 
-	width: 140px;
+.mid_bottom_slides a span {
+	border: 1px solid #E5E5E5;
+	display: inline-block;
+	width: 90px;
+	height: 90px;
 }
 
 .mid_bottom_slides a img {
@@ -256,8 +267,8 @@
 }
 
 .inner_mid_bottom_slides {
-    margin-left: 24px;
-    width: 458px;
+    margin-left: 17px;
+    width: 480px;
     height: auto !important
 }
 
