@@ -845,7 +845,12 @@ a:hover.tooltips span {
 }
 
 .active_img .removepic {
-     background-color: #f18200;  
+    background-color: #f18200;  
+}
+
+.removepic:hover {
+    color: #fff;
+    background-color: #f18200; 
 }
 
 .removepic {
@@ -932,6 +937,14 @@ a:hover.tooltips span {
     left: 5px;
     position: absolute;
     width: 25px;
+}
+
+.prod_att_pad span {
+    display: list-item;
+    float: left;
+    font-size: 10px;
+    margin-left: 25px;
+    width: 110px;
 }
 
 .shipping_border {
