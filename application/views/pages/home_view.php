@@ -27,7 +27,16 @@
             <h2><?=$data['productSlide_title'] ?></h2>
             <ul class="mid_slide2">
                 <?PHP foreach ($data['productSlide_id'] as $rows): ?>
-                  <li><a href ="<?=base_url()."item/".$rows['id_product']."/".es_url_clean($rows['product']); ?>.html" ><img src="<?=  base_url().$rows['path'].'categoryview/'.$rows['file']; ?>" /><br /><?=html_escape($rows['product']); ?></a></li> 
+                  <li>
+                    <a href ="<?=base_url()."item/".$rows['id_product']."/".es_url_clean($rows['product']); ?>.html" >
+                        <span>
+                            <img src="<?=  base_url().$rows['path'].'categoryview/'.$rows['file']; ?>" />
+                        </span>
+                        <br />
+                           <!--  <?=html_escape($rows['product']); ?> -->
+                        sample product lang to wlang basagan kahit ano na lang dasfasdfsafasdfjhasdfkladfadsfashdfasdfasdfasdf
+                    </a>
+                </li> 
                 <?PHP endforeach; ?>
             </ul>
 
