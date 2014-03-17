@@ -1254,19 +1254,9 @@ class product_model extends CI_Model
         return $data;
     }
 
-	public function getCourier()
-	{
-		$query = $this->sqlmap->getFilenameID('product', 'getCourier');
-		$sth = $this->db->conn_id->prepare($query);
-		$sth->execute();
-		$row = $sth->fetchAll(PDO::FETCH_ASSOC);
-		
-		return $row;
-	}
-	
     /**
-    *	Fetch Product Attr Combinations based on product ID and from Product Upload Step 2
-    */
+     *	Fetch Product Attr Combinations based on product ID and from Product Upload Step 2
+     */
 	public function getPrdShippingAttr($prd_id)
 	{
 		$query = $this->sqlmap->getFilenameID('product','getPrdShippingAttr');
@@ -1277,12 +1267,14 @@ class product_model extends CI_Model
         $data = array();
 		
 		if(count($row) === 1 && $row[0]['product_id_item'] == ''){
-			$data['no_attr'] = 'true';
+			$data['has_attr'] = 0;
+			$data['product_item_id'] = $row[0]['id_product_item'];
 		}
 		else{
 			foreach($row as $r){
-				$data[$r['product_id_item']][] = $r['attr_value'];
+				$data['attributes'][$r['product_id_item']][] = $r['attr_value'];
 			}
+			$data['has_attr'] = 1;
 		}
 		
         return $data;
@@ -1304,32 +1296,35 @@ class product_model extends CI_Model
     }
 
     /**
-    *	Store Product Shipping Mapping in `es_product_shipping_map`
-    *	Table contains -> Mapping of ShippingID vs ProductItemAttrID
-    */
+     *	Store Product Shipping Mapping in `es_product_shipping_map`
+     *	Table contains -> Mapping of ShippingID vs ProductItemAttrID
+     */
     public function storeProductShippingMap($shippingId, $attrCombinationId)
     {
 		$query = $this->sqlmap->getFilenameID('product','storeProductShippingMap');
     	$sth = $this->db->conn_id->prepare($query);
     	$sth->bindParam(':shipping_id', $shippingId, PDO::PARAM_INT);
     	$sth->bindParam(':product_item_id', $attrCombinationId, PDO::PARAM_INT);
-		//$sth->bindParam(':courier_id', $courierId, PDO::PARAM_INT);
     	$result = $sth->execute();	
 
     	return $result;
     }
-	
-	public function getPrdItemId($prd_id)
+	/*
+	public function getShippingSummary($prod_id)
 	{
-		$query = $this->sqlmap->getFilenameID('product','getPrdItemId');
+		$query = $this->sqlmap->getFilenameID('product', 'getShippingSummary');
     	$sth = $this->db->conn_id->prepare($query);
-    	$sth->bindParam(':id', $prd_id, PDO::PARAM_INT);
-    	$result = $sth->execute();	
-		$row = $sth->fetch(PDO::FETCH_ASSOC);
+    	$sth->bindParam(':prod_id', $prod_id, PDO::PARAM_INT);
+    	$result = $sth->execute();
+		$row = $sth->fetchAll(PDO::FETCH_ASSOC);
 		
-    	return $row;
+		foreach($row as $rk=>$r){
+			$data['location'] = 
+		}
+		
+    	return $data;
 	}
-	
+	*/
     /*
      * Use fulltext search to find strings in es_cat.name 
      * Returns all matched category names.

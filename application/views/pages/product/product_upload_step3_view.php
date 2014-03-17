@@ -81,7 +81,7 @@
     <div class="shipping_wrapper">
     <!-- Start of Shipping Container --> 
     <div class="shipping_container">
-	  <?php if(count($attr) > 0 && $has_attr == 1):?>
+	  <?php if($attr['has_attr'] == 1):?>
 		  <table>
 		  <tr>
 			<td><strong class="f14">Select Product Attribute Combination, Location, and Price</strong></td>
@@ -89,7 +89,7 @@
 		  <tr>
 			<td>
 			  <ul id="product_combination_list">				
-				<?php foreach($attr as $attrkey=>$temp):?>
+				<?php foreach($attr['attributes'] as $attrkey=>$temp):?>
 				  <li class="product_combination" value="<?php echo $attrkey;?>">
 					
 					  <?php foreach($temp as $pattr):?>
@@ -104,9 +104,9 @@
 		  </table>
 	  <?php else:?>
 		<span><strong class="f14">Select Delivery Location and Price</strong></span>
-		<input type="hidden" id="product_item_id" value="<?php echo $product_item_id;?>">
+		<input type="hidden" id="product_item_id" value="<?php echo $attr['product_item_id'];?>">
 	  <?php endif;?>
-	  <input type="hidden" id="has_attr" value="<?php echo $has_attr;?>">
+	  <input type="hidden" id="has_attr" value="<?php echo $attr['has_attr'];?>">
 	  
       <div class="shipping_border"></div>
       <table id="shiploc_selectiontbl" class="shipping_table2" width="526px" cellspacing="0" cellpadding="0">
@@ -157,9 +157,9 @@
     <!-- End of Shipping Courier -->
 
     </div>
-
     <!-- End of top Shipping Content -->
-    <div class="clear"></div>
+    
+	<div class="clear"></div>
 
     <!-- start of shipping summary -->
     <div class="shipping_summary_container">
@@ -173,10 +173,44 @@
           <td width="415px" class="f14">Product Attribute Combinations</td>
           <td><span class="f14">Location</span><span class="f14">Price</span></td>
           <td></td>
-          
         </tr>
       </thead>
 
+	<?php if($attr['has_attr'] === 1):?>
+	  <tr class="cloningfield">
+        <td class="prod_att_pad">
+        </td>
+        <td width="350px">
+          <table class="shiplocprice_summary">
+            <tbody>
+              <tr class="cloningfield" data-idlocation="" data-groupkey="">
+                <td width="100px"></td>
+                <td width="170px" data-value=""></td>
+                <td class="tablehide">
+                  <span class="button delete_priceloc">
+                    <img src="<?php echo base_url();?>assets/images/icon_delete.png"> Delete
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </td>
+        <td width="200px">
+          <span class="edit_summaryrow button edit_del">
+            <img src="<?php echo base_url();?>assets/images/icon_edit.png"> Edit
+          </span>
+          <span class="delete_summaryrow button edit_del">
+            <img src="<?php echo base_url();?>assets/images/icon_delete.png"> Delete
+          </span>
+          <span class="accept_summaryrow buttonhide button accept_cancel">
+            <img src="<?php echo base_url();?>assets/images/check_icon.png"> Accept
+          </span>
+        </td>
+      </tr>
+	<?php endif;?>
+	  
+	  
+	<!-- Original Cloning Field -->
       <tr class="cloningfield">
         <td class="prod_att_pad">
         </td>
@@ -207,7 +241,9 @@
           </span>
         </td>
       </tr>
-    </table>
+	<!-- CLOSE Original Cloning Field -->
+    
+	</table>
     </div>
     <!-- end of shipping summary -->
     <span id="btnShippingDetailsSubmit" class="tablehide orange_btn3">Submit</span>

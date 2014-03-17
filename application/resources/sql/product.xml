@@ -666,13 +666,8 @@
     WHERE e1.type = 1
 </select>
 
-<select id="getCourier">
-	SELECT id_courier, name as courier_name
-	FROM es_courier_lookup
-</select>
-
 <select id="getPrdShippingAttr">
-	SELECT piattr.product_id_item, pattr.attr_value
+	SELECT pitm.id_product_item, piattr.product_id_item, pattr.attr_value
     FROM es_product_item pitm
     LEFT JOIN es_product_item_attr piattr
         ON pitm.id_product_item = piattr.product_id_item
@@ -685,21 +680,26 @@
     INSERT INTO es_product_shipping_head (location_id, price)
     VALUES (:location_id, :price)
 </select>
-<!--
-<select id="storeProductShippingMap">
-    INSERT INTO es_product_shipping_map (shipping_id, product_item_id, courier_id)
-    VALUES (:shipping_id, :product_item_id, :courier_id)
-</select>
--->
+
 <select id="storeProductShippingMap">
     INSERT INTO es_product_shipping_detail (shipping_id, product_item_id)
     VALUES (:shipping_id, :product_item_id)
 </select>
 
-<select id="getPrdItemId">
-	SELECT id_product_item
-	FROM `es_product_item`
-	WHERE product_id = :id
+<select id="getShippingSummary">
+	SELECT pi.id_product_item, loc.location, sh.price, pattr.attr_value, sd.id_shipping_detail
+	FROM es_product_item pi
+	LEFT JOIN es_product_shipping_detail sd
+		ON sd.product_item_id = pi.id_product_item
+	LEFT JOIN es_product_shipping_head sh
+		ON sh.id_shipping = sd.shipping_id
+	LEFT JOIN es_location_lookup loc
+		ON sh.location_id = loc.id_location
+	LEFT JOIN es_product_item_attr piattr
+		ON sd.product_item_id = piattr.product_id_item
+	LEFT JOIN es_product_attr pattr
+		ON piattr.product_attr_id = pattr.id_product_attr
+	WHERE pi.product_id = :prod_id
 </select>
 
 <select id="searchCategory">

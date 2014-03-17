@@ -588,16 +588,14 @@ class productUpload extends MY_Controller
 				'shiploc' => $this->product_model->getLocation(),
 				'attr' => $this->product_model->getPrdShippingAttr($id),
 				'product_id' => $id
+				//'shipping_summary' => $this->product_model->getShippingSummary($id)
 				);
 			$data = array_merge($data, $this->fill_view());
 			
-			if( isset($data['attr']['no_attr']) ){
-				$data['product_item_id'] = $this->product_model->getPrdItemId($id)['id_product_item'];
-				$data['has_attr'] = 0;
-			}
-			else{
-				$data['has_attr'] = 1;
-			}
+			/*print('<pre>');
+			print_r($data['attr']);
+			print('</pre>');
+			die();*/
 			
 			$this->load->view('templates/header', $data); 
 			$this->load->view('pages/product/product_upload_step3_view', $data);
@@ -606,8 +604,6 @@ class productUpload extends MY_Controller
 		else {
 			redirect(base_url().'sell/step1', 'refresh');
 		}
-	
-		
 	}
 	
 	/**
