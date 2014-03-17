@@ -33,8 +33,7 @@
                             <img src="<?=  base_url().$rows['path'].'categoryview/'.$rows['file']; ?>" />
                         </span>
                         <br />
-                           <!--  <?=html_escape($rows['product']); ?> -->
-                        sample product lang to wlang basagan kahit ano na lang dasfasdfsafasdfjhasdfkladfadsfashdfasdfasdfasdf
+                           <?=html_escape($rows['product']); ?> 
                     </a>
                 </li> 
                 <?PHP endforeach; ?>
