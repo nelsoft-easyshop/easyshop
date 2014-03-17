@@ -348,9 +348,9 @@ ul.slides_prod li a:hover {
 }
 
 .slide_arrows .bx-prev:hover {
-	background-position: 0px -62px !important;
+	background-position: 0px -64px !important;
 }
 
 .slide_arrows .bx-next:hover {
-	background-position: -23px -62px !important;
+	background-position: -23px -64px !important;
 }
