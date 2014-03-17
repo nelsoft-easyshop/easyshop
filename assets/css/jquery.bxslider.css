@@ -252,12 +252,17 @@
     word-wrap: break-word;
 }
 
-.mid_bottom_slides a span {
-	border: 1px solid #E5E5E5;
-	background-color: #fff;
-	display: inline-block;
+.mid_bottom_img_con {
+    background-color: #FFFFFF;
+    border: 1px solid #E5E5E5;
+    display: inline-block;	
+}
+
+.mid_bottom_img {
+	display: table-cell;
 	width: 90px;
 	height: 90px;
+	vertical-align: middle;
 }
 
 .mid_bottom_slides a img {
