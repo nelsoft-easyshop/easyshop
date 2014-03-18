@@ -211,8 +211,9 @@
       <td colspan="4">
 
         <div class="inputfiles"> 
-          <label for="files" class="labelfiles">Browse pictures</label>
-          <input type="file" id="files" class="files" name="files[]" multiple accept="image/*" required = "required"  /><br/><br/>
+          <!-- <label for="files" class="labelfiles">Browse pictures</label> -->
+          <span class="labelfiles">Browse pictures</span>
+          <input type="file" class="files active" name="files[]" multiple accept="image/*" required = "required"  /><br/><br/>
 
         </div> 
 
@@ -585,83 +586,69 @@ $(document).ready(function(){
     }
 
     // ES_UPLOADER BETA
-
+    
+    $(".labelfiles").click(function(){
+        $('.files.active').trigger('click'); 
+    });
+ 
     $(document).on('change',".files",function (e){
+     var fileList = this.files;
+     var anyWindow = window.URL || window.webkitURL;
+     for(var i = 0; i < fileList.length; i++){
+      var objectUrl = anyWindow.createObjectURL(fileList[i]);
+      var primaryText = "Make Primary";
+      var activeText = "";
+      pictureInDiv = $("#list > div").length;
+      if(pictureInDiv == 0){
+        primaryText = "Your Primary";
+        activeText = "active_img";
+        primaryPicture = pictureCount;
 
-        var fileList = this.files;
-        var anyWindow = window.URL || window.webkitURL;
-        for(var i = 0; i < fileList.length; i++){
-            var objectUrl = anyWindow.createObjectURL(fileList[i]);
-            var primaryText = "Make Primary";
-            var activeText = "";
-            pictureInDiv = $("#list > div").length;
-            if(pictureInDiv == 0){
-                primaryText = "Your Primary";
-                activeText = "active_img";
-                primaryPicture = pictureCount;
-            }
-            $('#list').append('<div id="previewList'+pictureCount+'" class="new_img upload_img_div '+activeText+'"><span class="upload_img_con"><img src="'+objectUrl+'"></span><a href="javascript:void(0)" class="removepic" data-number="'+pictureCount+'">x</a><br><a href="javascript:void(0)" class="makeprimary photoprimary'+pictureCount+'" data-number="'+pictureCount+'">'+primaryText+'</a></div>');
-            window.URL.revokeObjectURL(fileList[i]);
-            pictureCount++;
-        }
+      }
+      $('#list').append('<div id="previewList'+pictureCount+'" class="upload_img_div '+activeText+'"><span class="upload_img_con"><img src="'+objectUrl+'"></span><a href="javascript:void(0)" class="removepic" data-number="'+pictureCount+'">x</a><br><a href="javascript:void(0)" class="makeprimary photoprimary'+pictureCount+'" data-number="'+pictureCount+'">'+primaryText+'</a></div>');
+      window.URL.revokeObjectURL(fileList[i]);
+      pictureCount++;
+    }
 
     $(".files").hide(); 
-    $('.inputfiles').append('<input type="file" id="files" class="files" name="files[]" multiple accept="image/*" required = "required"  /> ')
+    //Wrapped in EACH just in case there are more than one active .files elements: unlikely but just in case
+    $(".files.active").each(function(){
+        $(this).removeClass('active');
+    });
+    $('.inputfiles').append('<input type="file" class="files active" name="files[]" multiple accept="image/*" required = "required"  /> ')
 
   });
 
-
     $(document).on('click',".removepic",function (){
-        var idNumber;
-        var text = $(this).siblings('.makeprimary').first().text();
-              
-        if($(this).closest('.upload_img_div').hasClass('new_img')){
-            idNumber = $(this).data('number');
-            removeThisPictures.push(idNumber);
-        }
-        else if($(this).closest('.upload_img_div').hasClass('edit_img')){
-            idNumber = $(this).data('imgid');
-            editRemoveThisPictures.push(idNumber);
-        }
-        
-        $(this).closest('.upload_img_div').remove();
-        
-        if(text == "Your Primary"){
-            var first_img_div = $("#list > div:first-child" );
-            var primary_control_anchor = $("#list > div:first-child > .makeprimary");
-            if(first_img_div.hasClass('new_img')){
-                primaryPicture = primary_control_anchor.data('number');
-                editPrimaryPicture = -1;
-            }
-            else if(first_img_div.hasClass('edit_img')){
-                editPrimaryPicture = primary_control_anchor.data('imgid');
-                primaryPicture = 0;
-            }
-            primary_control_anchor.text('Your Primary');     
-            first_img_div.addClass("active_img"); 
-        }
-        
+
+      var idNumber = $(this).data('number');
+      var text = $(".photoprimary"+idNumber).text();
+      if(text == "Your Primary"){
+
+        $('#previewList'+idNumber).remove();
+        removeThisPictures.push(idNumber);
+        primaryPicture = $("#list > div:first-child > .makeprimary" ).data('number');
+        $("#list > div:first-child > .makeprimary").text('Your Primary');     
+
+      $("#list > div:first-child").addClass("active_img"); 
+      }else{
+        $('#previewList'+idNumber).remove();
+        removeThisPictures.push(idNumber);
+      }
     });
 
     $(document).on('click','.makeprimary',function(){
-        var idNumber;
-        if($(this).closest('.upload_img_div').hasClass('new_img')){
-            primaryPicture = $(this).data('number');
-            editPrimaryPicture = -1;
-        }
-        else if($(this).closest('.upload_img_div').hasClass('edit_img')){
-            editPrimaryPicture = $(this).data('imgid');
-            primaryPicture = 0;
-        }
-        else{
-            return false;
-        }
-        $(".makeprimary").text('Make Primary');
-        $(this).text('Your Primary');
-        $(".upload_img_div").removeClass("active_img");
-        $(this).closest('.upload_img_div').addClass("active_img");
-    });
 
+      var idNumber = $(this).data('number');
+      primaryPicture = idNumber;  
+      $(".makeprimary").text('Make Primary');
+      $(".photoprimary"+idNumber).text('Your Primary');
+
+      $(".upload_img_div").removeClass("active_img");
+      $("#previewList"+idNumber).addClass("active_img");
+    });
+   
+    
     // ES_UPLOAER BETA END
     
     

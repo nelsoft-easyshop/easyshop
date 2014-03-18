@@ -1163,9 +1163,11 @@ tr.tr_shipping_summary:nth-child(even) td {
     text-align: center;
 }
 
-#files {
+
+.files {
   position: absolute;
-  left: -9999px;z-index: -1900;
+  left: -9999px;
+  z-index: -1900;
 }
 .labelfiles{
    background-color: #F18200;
@@ -1182,3 +1184,4 @@ tr.tr_shipping_summary:nth-child(even) td {
    background-color: #FF4400;
    border: 1px solid #FF4400;
 }
+
