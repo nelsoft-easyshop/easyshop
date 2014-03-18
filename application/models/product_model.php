@@ -692,6 +692,7 @@ class product_model extends CI_Model
 			LEFT JOIN `es_attr` ea ON epa.`attr_id` = ea.`id_attr`
 			LEFT JOIN `es_product` ep ON epa.`product_id` = ep.`id_product`
 			WHERE ep.`cat_id` IN ('. $cid .')
+			AND ea.`datatype_id` != 2
 			AND epa.`product_id` IN ('. implode(',', $datas) .') ORDER BY ea.`name`';
 		$sth = $this->db->conn_id->prepare($query); 
 		$sth->execute();
@@ -714,6 +715,7 @@ class product_model extends CI_Model
 			LEFT JOIN `es_attr` ea ON epa.`attr_id` = ea.`id_attr`
 			LEFT JOIN `es_product` ep ON epa.`product_id` = ep.`id_product`
 			WHERE ep.cat_id IN ('. $cid .')
+			AND ea.`datatype_id` != 2
 			AND product_id IN ('. implode(', ', $datas) .') 
 			AND ea.`name` = :name ORDER BY ea.`name` ';
 		$sth = $this->db->conn_id->prepare($query);

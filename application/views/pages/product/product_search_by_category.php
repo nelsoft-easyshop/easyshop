@@ -108,7 +108,8 @@ if (isset($arrayofparams)) {
                 $link = site_url(uri_string() . '?' . $_SERVER['QUERY_STRING']) . '&' . $keyparam . '=' . urlencode($itemvalue);
             }
             ?>
-                    <a href="<?php echo $link ?>"><input type="checkbox" <?php echo $check; ?> class='cbx' > <?php echo html_escape($itemvalue); ?><br>
+                    <a href="<?php echo $link ?>"><input type="checkbox" <?php echo $check; ?> class='cbx' > 
+                        <label for="cbx"><?php echo html_escape($itemvalue); ?></label><br>
                     </a>
                     <?php
                 }
