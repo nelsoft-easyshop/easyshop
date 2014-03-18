@@ -1377,7 +1377,7 @@ tinymce.init({
   height: 300,
   plugins: [
   "lists link preview",
-  "table jbimages"
+  "table jbimages fullscreen"
   //"advlist autolink link image lists charmap print preview hr anchor pagebreak",
   //"searchreplace wordcount visualblocks visualchars insertdatetime media nonbreaking",
   //"table contextmenu directionality emoticons paste textcolor responsivefilemanager"
@@ -1401,7 +1401,7 @@ tinymce.init({
  height: 200,
  plugins: [
  "lists link preview ",
- "table jbimages"
+ "table jbimages fullscreen" 
  ],  
  toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | jbimages | image_advtab: true ",  
  relative_urls: false
