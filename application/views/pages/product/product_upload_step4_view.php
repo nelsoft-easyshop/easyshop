@@ -66,10 +66,10 @@
       <h2 class="f24">Sell an Item</h2>
            <div class="sell_steps sell_steps4">
                 <ul>
-                    <li><a href="#">Step 1 : Select Category</a></li>
-                    <li><a href="#">Step 2 : Upload Item</a></li>                   
+                    <li><a href="#">Step 1: Select Category</a></li>
+                    <li><a href="#">Step 2: Upload Item</a></li>                   
                     <li><a href="#">Step 3: Select Shipping Courier</a></li>
-                    <li><a href="#">Step 4: Success</a></li>
+                    <li><a href="#"><span>Step 4: </span> Success</a></li>
                 </ul>
             </div>
 
