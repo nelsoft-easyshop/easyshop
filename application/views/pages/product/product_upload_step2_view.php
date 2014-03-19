@@ -333,13 +333,19 @@ foreach($opt_attr as $prod_attr): ?>
 
 
 <?php if($j===1):?>
-  <tr id="">
-    <td> Others: (Optional) </td> 
+  <tr>
+  <td>
+     Others: (Optional) 
+  </td>
+</tr>
+  <tr class="main1">
+  <td></td>
     <td colspan="3">
       <input type="text" name="prod_other_name[]" data-cnt="<?php echo $j;?>" class="<?php echo 'prod_'.$j;?> other_name_class" autocomplete="off" placeholder="Enter name"> 
+      <a href="javascript:void(0)" class="lnkClearFirst">Clear This Group</a>
     </td>
   </tr>
-  <tr>
+  <tr class="main1 main1_2nd">
     <td>&nbsp;</td>
     <td>
       <input type="text" name="prod_other[]"  class="other_name_value otherNameValue1"  autocomplete="off" data-cnt="<?php echo $j;?>" placeholder="Enter description">
@@ -352,6 +358,7 @@ foreach($opt_attr as $prod_attr): ?>
     <td>
       <div class="<?php echo 'h_if_'.$j;?> hdv">
         <input type="file" name="prod_other_img[]"  >
+        <a href="javascript:void(0)" class="removeOptionValue" data-cnt ="<?php echo $j;?>">Remove</a>
       </div>
     </td>
   </tr> 
@@ -585,6 +592,158 @@ $(document).ready(function(){
       }
     }
 
+    function resetFirstOptional(cnt){ 
+       $('.combinationContainer').empty();
+ noCombination = true;
+ arraySelected = {}; 
+    var link = '<a href="javascript:void(0)" class="lnkClearFirst">Clear This Group</a>';
+
+    if(cnt > 1){ 
+      var link = '<a class="removeOptionGroup" data-cnt='+cnt+' href="javascript:void(0)">Remove This Group</a>';
+    }
+    $('.main'+cnt).empty();
+    $('.main'+cnt).append('<td></td> \
+      <td colspan="3"> \
+      <input type="text" placeholder="Enter name" autocomplete="off" class="prod_'+cnt+' other_name_class" data-cnt="'+cnt+'" name="prod_other_name[]"> \
+      '+link+' \
+      </td>')
+    }
+
+    function resetFirstSecondRowOptional(cnt){
+      $('.combinationContainer').empty();
+ noCombination = true;
+ arraySelected = {}; 
+       $('.main'+cnt+'_2nd_add').remove();
+       $('.main'+cnt+'_2nd').empty();
+       $('.main'+cnt+'_2nd').append('<td>&nbsp;</td> \
+        <td>\
+        <input type="text" placeholder="Enter description" data-cnt="'+cnt+'" autocomplete="off" class="other_name_value otherNameValue'+cnt+'" name="prod_other[]">\
+        </td>\
+        <td>\
+        <div class="h_if_'+cnt+' hdv" style="display: none;">\
+        ₱ <input type="text" placeholder="Enter additional price (0.00)" id="price_field" autocomplete="off" name="prod_other_price[]">\
+        </div>\
+        </td>\
+        <td>\
+        <div class="h_if_'+cnt+' hdv" style="display: none;">\
+        <input type="file" name="prod_other_img[]">\
+        <a data-cnt="'+cnt+'" class="removeOptionValue" href="javascript:void(0)">Remove</a>\
+        </div>\
+        </td>'); 
+    }
+
+    // remove optional
+
+    
+    $(document).on('click',".lnkClearFirst",function (){
+  
+
+      var cnt = 1;
+      var formatHeadValue = $.trim($('.prod_'+cnt).val().replace(/[^a-z0-9\s]/gi, '').replace(/[_\s]/g, ' '));
+      var headValue = formatHeadValue.toLowerCase().replace(/\b[a-z]/g, function(letter) {
+        return letter.toUpperCase();
+      }); 
+
+      $('.main'+cnt+'_2nd').each(function(){
+        var selfValue = $(this).find('td > .otherNameValue'+cnt).val();
+        var value = selfValue+headValue; 
+        var idHtmlId = headValue.replace(/ /g,'')+'Combination';
+        $("#"+idHtmlId+" option[data-temp="+value+"]").remove(); 
+        if($('#'+idHtmlId).has('option').length <= 0){
+          $('#div'+idHtmlId).remove();
+        }
+
+      });
+
+      $('.main'+cnt+'_2nd_add').each(function(){
+        var selfValue = $(this).find('td > .otherNameValue'+cnt).val();
+        var value = selfValue+headValue; 
+        var idHtmlId = headValue.replace(/ /g,'')+'Combination';
+        $("#"+idHtmlId+" option[data-temp="+value+"]").remove(); 
+        if($('#'+idHtmlId).has('option').length <= 0){
+          $('#div'+idHtmlId).remove();
+        }
+      });
+    resetFirstOptional(1);
+      resetFirstSecondRowOptional(1);
+
+    });
+  
+    $(document).on('click',".removeOptionValue",function (){
+
+    
+     $('.combinationContainer').empty();
+     noCombination = true;
+     arraySelected = {}; 
+
+     // REMOVE VALUE TO POSSIBLE COMBINATION
+     var cnt = $(this).data('cnt');
+     var formatHeadValue = $.trim($('.prod_'+cnt).val().replace(/[^a-z0-9\s]/gi, '').replace(/[_\s]/g, ' '));
+     var headValue = formatHeadValue.toLowerCase().replace(/\b[a-z]/g, function(letter) {
+      return letter.toUpperCase();
+    }); 
+ 
+     var selfValue = $.trim($(this).closest('tr').find('.otherNameValue'+cnt).val());
+     var value = selfValue+headValue; 
+     var idHtmlId = headValue.replace(/ /g,'')+'Combination';
+     $("#"+idHtmlId+" option[data-temp="+value+"]").remove(); 
+     if($('#'+idHtmlId).has('option').length <= 0){
+      $('#div'+idHtmlId).remove();
+     }
+
+     if($(this).closest("tr").hasClass('main'+cnt+'_2nd')){
+       if ($(".main"+cnt+"_2nd_add").length > 0){
+         $(this).closest("tr").remove();
+         $('.main'+cnt+'_2nd_add:first').removeClass("main"+cnt+"_2nd_add").addClass("main"+cnt+"_2nd");
+       }else{
+         resetFirstOptional(cnt);
+         resetFirstSecondRowOptional(cnt);
+       }
+     }else{
+      $(this).closest("tr").remove();
+    }
+
+    });
+
+
+    $(document).on('click',".removeOptionGroup",function (){
+
+      var cnt = $(this).data("cnt");
+     var formatHeadValue = $.trim($('.prod_'+cnt).val().replace(/[^a-z0-9\s]/gi, '').replace(/[_\s]/g, ' '));
+     var headValue = formatHeadValue.toLowerCase().replace(/\b[a-z]/g, function(letter) {
+      return letter.toUpperCase();
+    }); 
+
+      $('.main'+cnt+'_2nd').each(function(){
+        var selfValue = $(this).find('td > .otherNameValue'+cnt).val();
+        var value = selfValue+headValue; 
+        var idHtmlId = headValue.replace(/ /g,'')+'Combination';
+        $("#"+idHtmlId+" option[data-temp="+value+"]").remove(); 
+        if($('#'+idHtmlId).has('option').length <= 0){
+          $('#div'+idHtmlId).remove();
+        }
+
+      });
+
+      $('.main'+cnt+'_2nd_add').each(function(){
+        var selfValue = $(this).find('td > .otherNameValue'+cnt).val();
+        var value = selfValue+headValue; 
+        var idHtmlId = headValue.replace(/ /g,'')+'Combination';
+        $("#"+idHtmlId+" option[data-temp="+value+"]").remove(); 
+        if($('#'+idHtmlId).has('option').length <= 0){
+          $('#div'+idHtmlId).remove();
+        }
+        });
+
+
+     $('.combinationContainer').empty();
+     noCombination = true;
+     arraySelected = {}; 
+      $('.main'+cnt).remove();
+      $('.main'+cnt+'_link').remove();
+    });
+
+
     // ES_UPLOADER BETA
     
     $(".labelfiles").click(function(){
@@ -805,8 +964,7 @@ $(document).on('change','.other_name_class',function(){
 
   if(!$.trim( $('#'+idHeadValue+'Combination').html()).length <= 0){
 
-
-        // $('#'+oldValue+'Combination option[data-value=1]').remove().appendTo('#'+headValue+'Combination');  
+ 
 
         $('#'+idOldValue+'Combination option[data-value=1]').each(function(){
           var value = $(this).val();
@@ -830,10 +988,7 @@ $(document).on('change','.other_name_class',function(){
             $('#div'+idOldValue+'Combination').remove();
           }
 
-        }else{
-
-          // console.log(true); 
-          // $('#'+oldValue+'Combination option[data-value=1]').remove().appendTo('#'+headValue+'Combination');  
+        }else{  
 
           $('#'+idOldValue+'Combination option[data-value=1]').each(function(){
             var value = $(this).val();
@@ -951,14 +1106,17 @@ $(".checkbox_itemattr").click(function(){
 
 $(".add_more_link").unbind("click").click(function(){
   cnt_o++;
-  $('.step4_2').append('<tr id="main'+cnt_o+'"><td></td><td colspan="3"><input type="text" data-cnt="'+cnt_o+'" autocomplete="off" name="prod_other_name[]" class="prod_'+cnt_o+' other_name_class" placeholder="Enter name"></td></tr><tr><td></td><td><input type="text" autocomplete="off" data-cnt="'+cnt_o+'" class="other_name_value otherNameValue'+cnt_o+'" name="prod_other[]" placeholder="Enter description"></td><td> <div class="h_if_'+cnt_o+' hdv"  style="display:none">&#8369; <input type="text" name="prod_other_price[]"  class="price_text"   id="price_field"  autocomplete="off" placeholder="Enter additional price (0.00)"></div></td><td> <div class="h_if_'+cnt_o+' hdv" style="display:none"><input type="file" name="prod_other_img[]" ></div></td></tr><tr id="main1"><td></td><td colspan="3"><a class="add_more_link_value" data-value="'+cnt_o+'" href="javascript:void(0)">+Add more value</a></td></tr>');
+  $('.step4_2').append('<tr id="main'+cnt_o+'" class="main'+cnt_o+'"><td></td><td colspan="3"><input type="text" data-cnt="'+cnt_o+'" autocomplete="off" name="prod_other_name[]" class="prod_'+cnt_o+' other_name_class" placeholder="Enter name"><a href="javascript:void(0)" data-cnt="'+cnt_o+'" class="removeOptionGroup">Remove This Group</a></td></tr><tr class="main'+cnt_o+' main'+cnt_o+'_2nd"><td></td><td><input type="text" autocomplete="off" data-cnt="'+cnt_o+'" class="other_name_value otherNameValue'+cnt_o+'" name="prod_other[]" placeholder="Enter description"></td><td> <div class="h_if_'+cnt_o+' hdv"  style="display:none">&#8369; <input type="text" name="prod_other_price[]"  class="price_text"   id="price_field"  autocomplete="off" placeholder="Enter additional price (0.00)"></div></td><td> <div class="h_if_'+cnt_o+' hdv" style="display:none"><input type="file" name="prod_other_img[]" ><a data-cnt="'+cnt_o+'" class="removeOptionValue" href="javascript:void(0)">Remove</a></div></td></tr><tr id="main1" class="main'+cnt_o+'_link"><td></td><td colspan="3"><a class="add_more_link_value" data-value="'+cnt_o+'" href="javascript:void(0)">+Add more value</a></td></tr>');
 });
 
 $('.upload_input_form').on('click', '.add_more_link_value', function() {
   var data =   $(this).data( "value" );   
   $(".h_if_"+data).css("display", "block");
   var attr = $('.prod_'+data).val();
-  var newrow = $('<tr><td></td><td style="display:none"><span ><input type="text" value ="'+attr+'" data-cnt="'+data+'" class="prod_'+data+'" name="prod_other_name[]"></span></td><td><input type="text" autocomplete="off" data-cnt="'+data+'" class="other_name_value otherNameValue'+data+'"  name="prod_other[]" placeholder="Enter description"></td><td>&#8369; <input type="text" name="prod_other_price[]"  id="price_field" class="price_text"  autocomplete="off" placeholder="Enter additional price (0.00)"></td><td><input type="file" name="prod_other_img[]" ></td></tr>');
+
+  var  subClass = "main"+data+"_2nd_add";
+ 
+  var newrow = $('<tr class="main'+data+' '+subClass+'"><td></td><td style="display:none"><span ><input type="text" value ="'+attr+'" data-cnt="'+data+'" class="prod_'+data+'" name="prod_other_name[]"></span></td><td><input type="text" autocomplete="off" data-cnt="'+data+'" class="other_name_value otherNameValue'+data+'"  name="prod_other[]" placeholder="Enter description"></td><td>&#8369; <input type="text" name="prod_other_price[]"  id="price_field" class="price_text"  autocomplete="off" placeholder="Enter additional price (0.00)"></td><td><input type="file" name="prod_other_img[]" ><a data-cnt="'+data+'" class="removeOptionValue" href="javascript:void(0)">Remove</a></td></tr>');
   if (data == 1){
     $('#main'+data).before(newrow);
   }else{
