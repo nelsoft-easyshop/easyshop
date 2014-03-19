@@ -574,32 +574,53 @@ class productUpload extends MY_Controller
 	}
 
 	/**
-	*	View function for Product Upload Step 3
-	*/
+	 *	View function for Product Upload Step 3
+	 */
 	function step3()
 	{
 		if($this->input->post('prod_h_id')){
 			//DEV CODE - temporarily set product id to fetch attribute combinations
 			//$id = 118;
 			//$id = 123;
+			
+			// Actual Product ID Code
 			$id = $this->input->post('prod_h_id');
 			
-			$data = array(
+			$data = array (
 				'shiploc' => $this->product_model->getLocation(),
 				'attr' => $this->product_model->getPrdShippingAttr($id),
-				'product_id' => $id
-				//'shipping_summary' => $this->product_model->getShippingSummary($id)
-				);
+				'product_id' => $id,
+				'shipping_summary' => $this->product_model->getShippingSummary($id)
+			);
+			
 			$data = array_merge($data, $this->fill_view());
 			
-			/*print('<pre>');
-			print_r($data['attr']);
-			print('</pre>');
-			die();*/
+			$jsonDisplayGroup = $jsonFdata = array();
+			if($data['shipping_summary']['has_shippingsummary'] === 1){
+				if($data['attr']['has_attr'] === 1){
+					$i = 0;
+					foreach($data['attr']['attributes'] as $attrk=>$attrarr){
+						$jsonDisplayGroup[$i][$attrk] = $attrk;
+						foreach($data['shipping_summary'][$attrk] as $lockey=>$price){
+							$jsonFdata[$i][$attrk][$lockey] = $price;
+						}
+						$i++;
+					}
+				}else{
+					$jsonDisplayGroup[0][$data['attr']['product_item_id']] = $data['attr']['product_item_id'];
+					foreach($data['shipping_summary'][$data['attr']['product_item_id']] as $lockey=>$price){
+						$jsonFdata[0][$data['attr']['product_item_id']][$lockey] = $price;
+					}
+				}
+			}
+			$data['json_displaygroup'] = json_encode($jsonDisplayGroup, JSON_FORCE_OBJECT);
+			$data['json_fdata'] = json_encode($jsonFdata, JSON_FORCE_OBJECT);
+			$data['json_id_product_item'] = json_encode($data['shipping_summary']['id_product_item']);
 			
-			$this->load->view('templates/header', $data); 
+			$this->load->view('templates/header', $data);
 			$this->load->view('pages/product/product_upload_step3_view', $data);
-			$this->load->view('templates/footer'); 
+			$this->load->view('templates/footer');
+			
 		}
 		else {
 			redirect(base_url().'sell/step1', 'refresh');
@@ -607,15 +628,24 @@ class productUpload extends MY_Controller
 	}
 	
 	/**
-	*	Function used when shipping details are submitted in Product Upload Step 3. 
-	*	Stores shipping data in `es_shipping_price` and `es_product_shipping_map`
-	*/
+	 *	Function used when shipping details are submitted in Product Upload Step 3. 
+	 *	Stores shipping data in `es_shipping_price` and `es_product_shipping_map`
+	 */
 	function step3Submit(){
 		$fdata = $this->input->post('fdata');
+		$arrProductItemId = json_decode($this->input->post('productitemid'));
+		
+		//DELETE EXISTING ENTRIES IN DATABASE
+		$this->product_model->deleteShippingSummaryOnEdit($arrProductItemId);
+		
 		foreach($fdata as $group){
 			foreach($group as $attrCombinationId=>$attrGroup){
-				foreach($attrGroup as $locationKey=>$locgroup){
+				/*foreach($attrGroup as $locationKey=>$locgroup){
 					$shippingId = $this->product_model->storeShippingPrice($locationKey, $locgroup['price']);
+					$this->product_model->storeProductShippingMap($shippingId, $attrCombinationId);
+				}*/
+				foreach($attrGroup as $locationKey=>$price){
+					$shippingId = $this->product_model->storeShippingPrice($locationKey, $price);
 					$this->product_model->storeProductShippingMap($shippingId, $attrCombinationId);
 				}
 			}

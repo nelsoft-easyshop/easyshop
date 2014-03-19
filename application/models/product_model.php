@@ -1271,6 +1271,7 @@ class product_model extends CI_Model
 		if(count($row) === 1 && $row[0]['product_id_item'] == ''){
 			$data['has_attr'] = 0;
 			$data['product_item_id'] = $row[0]['id_product_item'];
+			$data['attributes'][$row[0]['id_product_item']] = array();
 		}
 		else{
 			foreach($row as $r){
@@ -1311,7 +1312,7 @@ class product_model extends CI_Model
 
     	return $result;
     }
-	/*
+	
 	public function getShippingSummary($prod_id)
 	{
 		$query = $this->sqlmap->getFilenameID('product', 'getShippingSummary');
@@ -1319,14 +1320,111 @@ class product_model extends CI_Model
     	$sth->bindParam(':prod_id', $prod_id, PDO::PARAM_INT);
     	$result = $sth->execute();
 		$row = $sth->fetchAll(PDO::FETCH_ASSOC);
+		$data = array();
+		$data['id_product_item'] = array();
+		//$location = $gdata = array();
 		
-		foreach($row as $rk=>$r){
-			$data['location'] = 
+	// Every attribute combination should have shipping location/price
+	// Checking first entry is sufficient to determine if shipping details exist for a product
+		if( $row[0]['id_location'] == '' ) {
+			$data['has_shippingsummary'] = 0;
+			foreach($row as $r){
+				if ( !in_array($r['id_product_item'], $data['id_product_item']) ) {
+					$data['id_product_item'][] = $r['id_product_item'];
+				}
+			}
 		}
+		else {
+			foreach($row as $r){
+				if ( !isset($data[$r['id_product_item']][$r['id_location']]) ) {
+					$data[$r['id_product_item']][$r['id_location']] = $r['price'];
+				}
+				if ( !isset($data['location']['id_location']) ) {
+					$data['location'][$r['id_location']] = $r['location'];
+				}
+				if ( !in_array($r['id_product_item'], $data['id_product_item']) ) {
+					$data['id_product_item'][] = $r['id_product_item'];
+				}
+				
+				/*if(!isset($data['location']['id_product_item']['id_location'])){
+					$data['location'][$r['id_product_item']][$r['id_location']] = $r['price'];
+				}*/
+				/*if(!isset($location[$r['id_location']])){
+					$location[$r['id_location']] = array();
+				}
+				if( !in_array( $r['id_product_item'],$location[$r['id_location']] ) ){
+					$location[$r['id_location']][] = $r['id_product_item'];
+				}*/
+			}
+			$data['has_shippingsummary'] = 1;
+		}
+		
+		/*
+		foreach($location as $lkey=>$locarr){
+			if(count($gdata) === 0){
+				$gdata[] = array();
+				$gdata[count($gdata)-1]['attr'] = $locarr;
+				$gdata[count($gdata)-1]['loc'][] = $lkey;
+			} else {
+				$exist = false;
+				foreach($gdata as $gkey=>$attarr){
+					if($attarr['attr'] == $locarr){
+						$gdata[$gkey]['loc'][] = $lkey;
+						$exist = true;
+					}
+				}
+				if(!$exist){
+					$gdata[] = array(
+						'attr' => $locarr,
+						'loc' => array()
+					);
+					$gdata[count($gdata)-1]['loc'][] = $lkey;
+				}
+			}
+		}*/
 		
     	return $data;
 	}
-	*/
+	
+	public function deleteShippingSummaryOnEdit($arrProductItemId)
+	{
+		// Get shipping_id from es_product_shipping_detail before delete
+		$query = $this->sqlmap->getFilenameID('product', 'getShippingIdFromShippingDetail');
+		for( $i=0; $i<count($arrProductItemId); $i++ ){
+			$query .= '?,';
+		}
+		$query = substr($query, 0, -1);
+		$query .= ' )';	
+		$sth = $this->db->conn_id->prepare($query);
+		$sth->execute($arrProductItemId);
+		$tempShippingId = $sth->fetchAll(PDO::FETCH_ASSOC);
+		$arrShippingId = array();
+		
+		foreach($tempShippingId as $sid){
+			$arrShippingId[] = $sid['shipping_id'];
+		}
+		
+		// Delete Shipping Detail Entries
+		$query = $this->sqlmap->getFilenameID('product', 'deleteShippingDetail');
+		for( $i=0; $i<count($arrProductItemId); $i++ ){
+			$query .= '?,';
+		}
+		$query = substr($query, 0, -1);
+		$query .= ' )';	
+		$sth = $this->db->conn_id->prepare($query);
+    	$sth->execute($arrProductItemId);
+		
+		// Delete Shipping Head Entries
+		$query = $this->sqlmap->getFilenameID('product', 'deleteShippingHead');
+		for( $i=0; $i<count($arrShippingId); $i++ ){
+			$query .= '?,';
+		}
+		$query = substr($query, 0, -1);
+		$query .= ' )';	
+		$sth = $this->db->conn_id->prepare($query);
+    	$sth->execute($arrShippingId);
+	}
+	
     /*
      * Use fulltext search to find strings in es_cat.name 
      * Returns all matched category names.
@@ -1339,5 +1437,5 @@ class product_model extends CI_Model
     	$result = $sth->fetchAll(PDO::FETCH_ASSOC);
         
         return $result;
-    } 
+    }
 }

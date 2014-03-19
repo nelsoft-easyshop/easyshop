@@ -40,8 +40,11 @@ $(function(){
 *
 */
 $(function(){
-  var fdata = {};
-  var displaygroup = {};
+  //var fdata = {};
+  //var displaygroup = {};
+  var fdata = jQuery.parseJSON($('#json_fdata').val());
+  var displaygroup = jQuery.parseJSON($('#json_displaygroup').val());
+  
   var spanerror = '<td class="error red samelocerror">Unable to select same location for same attribute</td>';
   var shiplocselectiontbl = $('#shiploc_selectiontbl');
   var hasAttr = parseInt($('#has_attr').val());
@@ -59,9 +62,9 @@ $(function(){
 	
     var hasActive = hasLoc = hasPrice = hasLPC = false;
     var noDuplicate = true;
-	var shipObj = { 'attr' : {},'loc' : {},'price' : {} };   
+	var shipObj = { 'attr' : {},'loc' : {},'price' : {}, 'disp_attr' : {} };
     var i = parseInt($('#summaryrowcount').val());
-
+	
     //Get Product Attribute Options
 	if(hasAttr === 1){
 		$('.product_combination.active').each(function(){
@@ -70,13 +73,13 @@ $(function(){
 		  attrText = $.trim(attrText.replace(/\r?\n|\r/g, ''));
 		  attrText = attrText.replace(/\s+/g,' ');
 		  shipObj.attr[$(this).val()] = attrText;
-		  //var myarray = attrText.split('- ');
-		  //shipObj.attr[$(this).val()] = myarray;
+		  shipObj.disp_attr[$(this).val()] = $(this).val();
 		  hasActive = true;
 		});
 	}
 	else if(hasAttr === 0){
 		shipObj.attr[prdItemId] = 'All Attribute Combinations';
+		shipObj.disp_attr[prdItemId] = prdItemId.toString();
 		hasActive = true;
 	}
     
@@ -114,17 +117,17 @@ $(function(){
 
     //If all fields are filled up and no duplicate entry
     if(hasActive && hasLPC && noDuplicate){
-      var row = $('table#shipping_summary tr.cloningfield').clone();
-      row.removeClass('cloningfield');
+      var row = $('table#shipping_summary > tbody > tr.cloningfield').clone();
+	  row.removeClass('cloningfield');
       row.find('td:first').html('');
-      
       var summaryExists = addDispGroup = false;
       var groupkey = i;
 
 	  // Determine if new display group / display row will be created
       if(i !== 0 ){
         jQuery.each(displaygroup, function(k,shipObjTemp){
-          if(objectCompare(shipObj.attr, shipObjTemp)){
+          //if(objectCompare(shipObj.attr, shipObjTemp)){
+		  if(objectCompare(shipObj.disp_attr, shipObjTemp)){
               row = $('table#shipping_summary').find('tr[data-group="' + k + '"]');
               groupkey = k;
               summaryExists = true;
@@ -168,7 +171,7 @@ $(function(){
 				}
 			});
 			row.children('td:first').append('<span>&nbsp;</span>');
-        }); 
+        });
         $('table#shipping_summary').append('<tr class="tr_shipping_summary" data-group="'+i+'">' + row.html() + '</tr>');
       }
 
@@ -196,13 +199,14 @@ $(function(){
           if( !( lock in fdata[groupkey][attrk] ) ){
 			fdata[groupkey][attrk][lock] = {};
 		  }
-		  fdata[groupkey][attrk][lock]['price'] = shipObj.price[lock];
+		  //fdata[groupkey][attrk][lock]['price'] = shipObj.price[lock];
+		  fdata[groupkey][attrk][lock] = shipObj.price[lock];
         });
       });
 
       if(addDispGroup)
-        displaygroup[i] = shipObj.attr;
-
+        displaygroup[i] = shipObj.disp_attr;
+		
     }//close hasloc hasactive hasprice
 	else{
 		alert('Select an attribute combination, location, and price');
@@ -219,10 +223,31 @@ $(function(){
 		alert('Please accept changes in Summary Table.');
 		return;
 	}
+	
+	// Check if all attribute combinations have mapped locations
+	var ProductItemId = jQuery.parseJSON($('#json_id_product_item').val());
+	var hasDetail = true;
+	jQuery.each(ProductItemId, function(k,v){
+		if(hasDetail){
+			jQuery.each(displaygroup, function(k2,v2){
+				hasDetail = false;
+				if( displaygroup[k2].hasOwnProperty(v) ){
+					hasDetail = true;
+					return false;
+				}
+			});
+		}		
+	});
+	
+	if(!hasDetail){
+		alert('Please add shipping details for every attribute combination.');
+		return false;
+	}
+	
     if(getObjectSize(fdata) > 0){
 	  var csrftoken = $('#shippingsummary_csrf').val();
-	  console.log(fdata);
-	  $.post(config.base_url+'sell/shippinginfo', {fdata : fdata, es_csrf_token : csrftoken}, function(data){
+	  var productitemid = $('#json_id_product_item').val();
+	  $.post(config.base_url+'sell/shippinginfo', {fdata : fdata, es_csrf_token : csrftoken, productitemid : productitemid}, function(data){
 		$('#step4_form').submit();
       });
     }
@@ -360,7 +385,7 @@ $(function(){
       $(this).siblings('.edit_del').show();
       $(this).siblings('.accept_cancel').hide();
 	  $(this).closest('tr').removeClass('inedit');
-
+	  
       PriceLocRows.each(function(){
         var PriceField = $(this).find('td:nth-child(2)');
         var newPrice = $.trim(PriceField.find('input').val()).replace(new RegExp(",", "g"), '');
@@ -374,10 +399,12 @@ $(function(){
 		$(this).find('td:last').hide();
 		
         jQuery.each(fdata[groupkey], function(attrk, attrObj){
-          attrObj[idlocation]['price'] = newPrice;
+		  //attrObj[idlocation]['price'] = newPrice;
+		  attrObj[idlocation] = newPrice;
         });
 		
       });
+	  
     }
   })
   // Delete button per Location VS Price
@@ -400,6 +427,17 @@ $(function(){
     parentTr.remove();
   });
 
+  /**
+	* Function to hide Summary Table and Submit Button.
+	* Checks if DisplayGroup Object is empty - meaning nothing displayed - before execution
+	*/
+	function hideTable(){
+		if(getObjectSize(displaygroup) === 0){
+		  $('#shipping_summary').addClass('tablehide');
+		  $('#btnShippingDetailsSubmit').addClass('tablehide');
+		}
+	}
+  
 
 });
 /********** CLOSE DOCUMENT READY FUNCTION WITH DATA variables *********/
@@ -448,16 +486,7 @@ function checkIfEdit(){
 	return hasEdit;
 }
 
-/**
-* Function to hide Summary Table and Submit Button.
-* Checks if DisplayGroup Object is empty - meaning nothing displayed - before execution
-*/
-function hideTable(){
-if(getObjectSize(displaygroup) === 0){
-  $('#shipping_summary').addClass('tablehide');
-  $('#btnShippingDetailsSubmit').addClass('tablehide');
-}
-}
+
 
 /**
 * Function to handle display of Price Value

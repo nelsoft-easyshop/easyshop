@@ -109,6 +109,7 @@
 	  <input type="hidden" id="has_attr" value="<?php echo $attr['has_attr'];?>">
 	  
       <div class="shipping_border"></div>
+	  
       <table id="shiploc_selectiontbl" class="shipping_table2" width="526px" cellspacing="0" cellpadding="0">
         <thead>
           <tr>
@@ -165,10 +166,9 @@
     <div class="shipping_summary_container">
     <h2 class="f20">Shipping Summary</h2>
 	  <input type="hidden" id="shippingsummary_csrf" name="<?php echo $my_csrf['csrf_name'];?>" value="<?php echo $my_csrf['csrf_hash'];?>">
-    <table id="shipping_summary" class="tablehide shipping_table3" width="980px" cellspacing="0" cellpadding="0">
-      <input type="hidden" id="summaryrowcount" value="0">
-      
-      <thead>
+    <table id="shipping_summary" class="<?php echo $shipping_summary['has_shippingsummary'] == 1 ? "" : "tablehide"?> shipping_table3" width="980px" cellspacing="0" cellpadding="0">
+		
+	  <thead>
         <tr>
           <td width="415px" class="f14">Product Attribute Combinations</td>
           <td><span class="f14">Location</span><span class="f14">Price</span></td>
@@ -176,39 +176,60 @@
         </tr>
       </thead>
 
-	<?php if($attr['has_attr'] === 1):?>
-	  <tr class="cloningfield">
-        <td class="prod_att_pad">
-        </td>
-        <td width="350px">
-          <table class="shiplocprice_summary">
-            <tbody>
-              <tr class="cloningfield" data-idlocation="" data-groupkey="">
-                <td width="100px"></td>
-                <td width="170px" data-value=""></td>
-                <td class="tablehide">
-                  <span class="button delete_priceloc">
-                    <img src="<?php echo base_url();?>assets/images/icon_delete.png"> Delete
-                  </span>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </td>
-        <td width="200px">
-          <span class="edit_summaryrow button edit_del">
-            <img src="<?php echo base_url();?>assets/images/icon_edit.png"> Edit
-          </span>
-          <span class="delete_summaryrow button edit_del">
-            <img src="<?php echo base_url();?>assets/images/icon_delete.png"> Delete
-          </span>
-          <span class="accept_summaryrow buttonhide button accept_cancel">
-            <img src="<?php echo base_url();?>assets/images/check_icon.png"> Accept
-          </span>
-        </td>
-      </tr>
+	<?php $datagroupcounter = 0; ?>
+	<?php if($shipping_summary['has_shippingsummary'] == 1):?>
+		<?php foreach($attr["attributes"] as $attk=>$temp): ?>
+		  <tr class="tr_shipping_summary" data-group="<?php echo $datagroupcounter;?>">
+			<td class="prod_att_pad">
+				<?php if($attr['has_attr'] == 1):?>
+					<?php foreach($temp as $att):?>
+						<p><?php echo $att;?></p>
+					<?php endforeach;?>
+				<?php else:?>
+						<p>All Attribute Combinations</p>
+				<?php endif;?>
+			</td>
+			<td width="350px">
+			  <table class="shiplocprice_summary">
+				<tbody>
+				  <?php foreach($shipping_summary[$attk] as $lockey=>$price):?>
+				  <tr data-idlocation="<?php echo $lockey?>" data-groupkey="<?php echo $datagroupcounter?>">
+					<td width="100px"><?php echo $shipping_summary['location'][$lockey]?></td>
+					<td width="170px" data-value="<?php echo number_format((float)$price,2,'.',',');?>"><?php echo number_format((float)$price,2,'.',',');?></td>
+					<td class="tablehide">
+					  <span class="button delete_priceloc">
+						<img src="<?php echo base_url();?>assets/images/icon_delete.png"> Delete
+					  </span>
+					</td>
+				  </tr>
+				  <?php endforeach;?>
+				  <tr class="cloningfield" data-idlocation="" data-groupkey="">
+					<td width="100px"></td>
+					<td width="170px" data-value=""></td>
+					<td class="tablehide">
+					  <span class="button delete_priceloc">
+						<img src="<?php echo base_url();?>assets/images/icon_delete.png"> Delete
+					  </span>
+					</td>
+				  </tr>
+				</tbody>
+			  </table>
+			</td>
+			<td width="200px">
+			  <span class="edit_summaryrow button edit_del">
+				<img src="<?php echo base_url();?>assets/images/icon_edit.png"> Edit
+			  </span>
+			  <span class="delete_summaryrow button edit_del">
+				<img src="<?php echo base_url();?>assets/images/icon_delete.png"> Delete
+			  </span>
+			  <span class="accept_summaryrow buttonhide button accept_cancel">
+				<img src="<?php echo base_url();?>assets/images/check_icon.png"> Accept
+			  </span>
+			</td>
+		  </tr>
+		<?php $datagroupcounter++; ?>
+		<?php endforeach;?>
 	<?php endif;?>
-	  
 	  
 	<!-- Original Cloning Field -->
       <tr class="cloningfield">
@@ -242,7 +263,11 @@
         </td>
       </tr>
 	<!-- CLOSE Original Cloning Field -->
-    
+	
+		<input type="hidden" id="json_displaygroup" value='<?php echo $json_displaygroup;?>'>
+		<input type="hidden" id="json_fdata" value='<?php echo $json_fdata;?>'>
+		<input type="hidden" id="json_id_product_item" value='<?php echo $json_id_product_item;?>'>
+		<input type="hidden" id="summaryrowcount" value="<?php echo $datagroupcounter?>">
 	</table>
     </div>
     <!-- end of shipping summary -->
