@@ -1,7 +1,7 @@
 <link type="text/css" href="<?=base_url()?>assets/css/sell_item.css" rel="stylesheet" />
 <div class="wrapper">
 
-  <div class="clear"></div>
+<div class="clear"></div>
 
   <div class="seller_product_content">
 
@@ -10,8 +10,8 @@
       <input type="hidden" id="uploadstep2_csrf" name="<?php echo $my_csrf['csrf_name'];?>" value="<?php echo $my_csrf['csrf_hash'];?>">
       <div class="sell_steps sell_steps2">
         <ul>
-          <li><a href="#">Step 1 : Select Category</a></li>
-          <li><a href="#">Step 2 : Upload Item</a></li>                   
+          <li><a href="#">Step 1: Select Category</a></li>
+          <li><a href="#"><span>Step 2: </span> Upload Item</a></li>                   
           <li><a href="#">Step 3: Select Shipping Courier</a></li>
           <li><a href="#">Step 4: Success</a></li>
         </ul>
@@ -33,44 +33,42 @@
         ?>
 
 
-        <table class="step4">
-
+        <table class="step4" cellspacing="0" cellpadding="0">
           <tr>
             <td colspan="3">
               <?php echo $parent_to_last; ?> <!-- will show the parent category until to the last category selected (bread crumbs) -->
             </td>
           </tr>
+          
           <tr>
-            <td colspan="3">
-              <p class="notification"> <img src="<?= base_url() ?>assets/images/img_notification.png"> (<strong >*</strong>) required fields</p>
-              <h3  class="orange"> Describe your item</h3> 
+            <td colspan="3" class="upload_step2_title">
+              <h3>Describe your item</h3> (<strong class="required">*</strong>) required fields
             </td>
-
           </tr>
           <tr>
-            <td  style="width:130px">Title <font color="red">*</font></td> <!-- Title of the product -->
-            <td colspan="2"><input type="text" maxlength="255" placeholder="Enter title" autocomplete="off" id="prod_title" maxlength="255" name="prod_title" value="<?php echo (isset($product_details['name']))?$product_details['name']:'';?>"></td>
+            <td  class="border-left" style="width:130px">Product Name: <font color="red">*</font></td> <!-- Title of the product -->
+            <td  class="border-right" colspan="2"><input type="text" maxlength="255" placeholder="Enter title" autocomplete="off" id="prod_title" maxlength="255" name="prod_title" value="<?php echo (isset($product_details['name']))?$product_details['name']:'';?>"></td>
           </tr>
           <tr>
-
-
-            <tr>
-              <td  style="width:130px">Brand <font color="red">*</font></td> <!-- Title of the product -->
-              <td colspan="2">
-                <select name="prod_brand" id="prod_brand">
-                  <option value="0">--Select Brand--</option>
+            <td class="border-left" style="width:130px">Brand: <font color="red">*</font></td> <!-- Title of the product -->
+            <td class="border-right" colspan="2">
+              <select name="prod_brand" id="prod_brand">
+                <option value="0">--Select Brand--</option>
                   <?php 
                   foreach ($brand as $key) {
                     ?>
                     <option value="<?php echo $key['brand_id'] ?>" <?php if(isset($product_details['brand_id'])){echo ($product_details['brand_id'])===$key['brand_id']?'selected':'';}?>><?php echo ucfirst(strtolower($key['name'])); ?></option>
                     <?php } ?>
-                  </select>
-                </td>
-              </tr>
+              </select>
+            </td>
+          </tr>
 
-              <td>Condition   
-               <font color="red">*</font></td> <!-- Condition of the product -->
-               <td colspan="2">
+          <!-- Start Condition of the product -->
+          <tr>
+            <td class="border-left border-bottom">
+              Condition: <font color="red">*</font>
+            </td> 
+            <td class="border-right border-bottom" colspan="2">
                 <select name="prod_condition" id="prod_condition">
                   <option value="0">--Select Condition--</option>          
                   <?php foreach($this->lang->line('product_condition') as $x): ?>
@@ -79,368 +77,413 @@
               </select>
             </td>
           </tr>
-
+          <!-- end Condition of the product -->
           <tr>
-            <td colspan="3">
-              <h3 class="orange"> Add item specifics</h3> 
+            <td colspan="3">&nbsp;
             </td>
           </tr>
-          <?php 
-          $array_name_inputs = "";
-          $array_name_of_inputs = array();
-          $input_type = "";
-          $input_cat_name = "";
-          $input_id_attr = "";
-          for ($i=0 ; $i < sizeof($attribute); $i++)
-          {
-
-            $input_type = strtoupper($attribute[$i]['input_type']);
-            $input_cat_name =str_replace(' ', '', ucwords(strtolower($attribute[$i]['cat_name']))); 
-            $input_cat_name_with_space = ucwords(strtolower($attribute[$i]['cat_name'])); 
-            $input_id_attr = $attribute[$i]['id_attr'];
-            $itemattribute = $attribute[$i][0];
-
-            ?>
-            <tr>
-              <td><?php echo  ucwords(strtolower($attribute[$i]['cat_name'])); ?></td>
-              <td colspan="2">
-                <?php 
-                if(isset($product_attributes_spe[$input_id_attr]))
-                 $cat_attr = $product_attributes_spe[$input_id_attr];
-               else
-                 $cat_attr = array();   
-                      #Removed case formatting for input type values
-               switch ($input_type) {
-                case 'SELECT':
-                echo '<span><select name="'.$input_type.'_'.$input_cat_name.'">';
-                echo '<option value="">-</option>';
-                foreach ($itemattribute as $list) {
-                  $selected = '';
-                  if(isset($cat_attr[0])){
-                    if($cat_attr[0]['value'] === $list['name']){
-                      $selected = 'selected';
-                      unset($cat_attr[0]);
-                    }
-                  }
-                  echo '<option value="'.$list['name'].'"'.$selected.'>'.$list['name'].'</option>';
-                }
-                echo '</select></span>';
-                break;
-
-                case 'TEXT':
-                $value = (isset($cat_attr[0]))?$cat_attr[0]['value']:'';
-                echo "<span><input type='text'  autocomplete='off' value='".$value."' name='".$input_type.'_'.$input_cat_name."' /></span>";
-                break;
-
-                case 'TEXTAREA':
-                $value = (isset($cat_attr[0]))?$cat_attr[0]['value']:'';
-                            // echo "<span><textarea style='height:141px' cols=98 rows='98' name='".$input_type.'_'.$input_cat_name."'>".$value."</textarea></span>";
-                echo "<textarea name='".$input_type.'_'.$input_cat_name."' style='width: 100%;height:100%' class='mceEditor_attr' >".$value."</textarea></span>";
-                break;
-
-                case 'RADIO':
-                foreach ($itemattribute as $list) {
-                  $checked = '';
-                  if(isset($cat_attr[0])){
-                   if($cat_attr[0]['value'] === $list['name']){
-                    $checked = 'checked';
-                    unset($cat_attr[0]);
-                  }
-                }
-                echo "<span><input type='radio' value='".$list['name']."' name='".$input_type.'_'.$input_cat_name."' ".$checked.">".$list['name']."</span>";              
-              }
-              break;
-
-              case 'CHECKBOX':
-
-              foreach ($itemattribute as $list) {
-                $checked = '';
-                $id_attribute_value = $list['id_attr_lookuplist_item'];
-                foreach($cat_attr  as $key=>$prod_attr){ 
-                 if($prod_attr['value']===$list['name']){
-                  $checked = 'checked';
-                  unset($cat_attr[$key]);
-                  break;
-                }
-              }
-              echo "<span><input type='checkbox' class='checkbox_itemattr' data-group='".$input_cat_name_with_space."'   data-attrid='". $id_attribute_value."' data-value='".$list['name']."' data-attr='".$input_type.'_'.$input_cat_name.'_'.str_replace(' ', '', $list['name'])."' value='".$list['name']."' name='".$input_type.'_'.$input_cat_name."[]' ".$checked.">".$list['name']."</span>";
-            }
-            break;
-          }
-          ?>
-        </td>
-
-      </tr>
-      <?php
-      $array_name_inputs = $array_name_inputs .'|'. $input_type.'_'.$input_cat_name.'/'.$input_id_attr;
-
-    }
-    ?>
-
-  </table> 
-
-  <table class="step4_2" style="width:100%">
-    <tr>
-      <td colspan="3" >
-        <h3 class="orange"> Add a description</h3> 
-      </td>
-    </tr>
-    <tr>
-      <td  style="width:130px">Brief description <font color="red"> *</font></td><!-- Brief of the product -->
-      <td colspan="2"><input type="text" autocomplete="off" maxlength="255" placeholder="Enter brief description" id="prod_brief_desc" name="prod_brief_desc"  value="<?php echo (isset($product_details['brief']))?$product_details['brief']:'';?>"></td>
-    </tr>
-    <tr>
-      <td valign="top">Description <font color="red">*</font></td><!-- Main Description of the product --> 
-      <td colspan="3"><textarea style="width: 100%;height:100%" name="prod_description" class="mceEditor"  id="prod_description" placeholder="Enter description..."><?php echo (isset($product_details['description']))?$product_details['description']:'';?></textarea></td>
-    </tr> 
-    <tr>
-      <td>SKU Code <font color="red">*</font></td> <!-- SKU of the product -->
-      <td colspan="2">
-        <input type="text" autocomplete="off"  maxlength="45" placeholder="Enter SKU" id="prod_sku" name="prod_sku" value="<?php echo (isset($product_details['sku']))?$product_details['sku']:'';?>">
-        <a class="tooltips" href="javascript:void(0)"><img src="<?= base_url() ?>assets/images/icon_qmark.png" alt=""><span>Stock Keeping Unit: you can assign any code in order to keep track of your items</span></a>
-      </td>
-    </tr>
-
-    <tr>
-      <td colspan="3"> 
-        <h3 class="orange"> Image of your item</h3> (You may select multiple images)
-      </td>
-    </tr>
-    <tr>
-
-      <td colspan="4">
-
-        <div class="inputfiles"> 
-          <!-- <label for="files" class="labelfiles">Browse pictures</label> -->
-          <span class="labelfiles">Browse pictures</span>
-          <input type="file" class="files active" name="files[]" multiple accept="image/*" required = "required"  /><br/><br/>
-
-        </div> 
-
-        <div style="display:inline">
-
-          <?php if(isset($main_images)):?> <!-- IF EDIT FUNCTION -->
-          <div>
-            <?php foreach($main_images as $main_image): ?>
-            <!--
-            <div class="prod_upload_img_container">
-              <img src =<?php echo base_url().$main_image['path'].'thumbnail/'.$main_image['file'];?> >
-              <input type="checkbox" class="prev_img" name="main_image[<?php echo $main_image['id_product_image'];?>]"/> Remove
-            </div> 
-            -->
-
-            
-          <?php endforeach; ?>
-        </div>
-      <?php endif; ?>
-    </div>
-
-    <output id="list">
-        <!-- IF EDIT FUNCTION -->
-        <?php $main_img_cnt = 0;?>
-        <?php if(isset($main_images)):?> 
-            <?php foreach($main_images as $main_image): ?>       
-                <div id="editpreviewlist<?php echo $main_img_cnt;?>" class="edit_img upload_img_div <?php echo ($main_img_cnt===0)?'active_img':'';?>">
-                    <a href="javascript:void(0)" class="removepic"  data-imgid="<?php echo $main_image['id_product_image'];?>">x</a>
-                    <span class="upload_img_con"><img src =<?php echo base_url().$main_image['path'].'categoryview/'.$main_image['file'];?> ></span>
-                    <br>
-                    <a class="makeprimary" href="javascript:void(0)" data-imgid="<?php echo $main_image['id_product_image'];?>"><?php echo ($main_img_cnt===0)?'Your Primary':'Make Primary';?></a>
+          <!-- Upload Image Content -->
+          <tr>
+              <td colspan="3" class="upload_step2_title"> 
+                  <h3>Add Photos</h3> <span class="required">You are required to have a minimum of 1 photo</span>
+              </td>
+          </tr>
+          <tr>
+              <td class="border-left border-right border-bottom" colspan="4">
+                <div class="inputfiles"> 
+                   <label for="files" class="labelfiles"><span class="add_photo span_bg"></span>Browse Photo</label>
+                   <br /><span class="label_bttm_txt">You may select multiple images</span>
+                   <!-- <span class="labelfiles">Browse pictures</span> -->
+                   <input type="file" id="files" class="files" name="files[]" multiple accept="image/*" required = "required"  /><br/><br/>
                 </div> 
-                <?php $main_img_cnt++; ?>
-            <?php endforeach; ?>
-      <?php endif; ?>
-    </output>
-    <!-- this output will show all selected from input file field from above. this is multiple upload. -->
 
-  </td>
-</tr>
-<tr>
-  <td colspan="3">
+                <div style="display:inline">
+                    <?php if(isset($main_images)):?> <!-- IF EDIT FUNCTION -->
+                    <div>
+                        <?php foreach($main_images as $main_image): ?>
+                        <!--
+                        <div class="prod_upload_img_container">
+                          <img src =<?php echo base_url().$main_image['path'].'thumbnail/'.$main_image['file'];?> >
+                          <input type="checkbox" class="prev_img" name="main_image[<?php echo $main_image['id_product_image'];?>]"/> Remove
+                        </div> 
+                        -->                    
+                        <?php endforeach; ?>
+                    </div>
+                    <?php endif; ?>
+                </div>
 
-    <h3 class="orange"> Price</h3> 
-  </td>
-</tr>
-<tr>
-  <td>Base Price <font color="red"> *</font></td>
-  <td colspan="2"><input type="text" autocomplete="off" name="prod_price" id="prod_price" placeholder="Enter price (0.00)" value="<?php echo (isset($product_details['price']))?$product_details['price']:'';?>"></td>
-</tr>
-<tr>
-  <td>Keywords (separated by spaces)</td>
-  <td colspan="2"><input type="text" autocomplete="off" maxlength="1024" name="prod_keyword" id="prod_keyword" placeholder="Enter keyword for you item" value="<?php echo (isset($product_details['keywords']))?$product_details['keywords']:'';?>"></td>
-</tr>
-<tr>
-  <td colspan="3">
-    <h3  class="orange"> Additional Information to your Item</h3> 
-  </td>
-</tr>
+                <!-- this output will show all selected from input file field from above. this is multiple upload. -->
+                <output id="list">
+                    <!-- IF EDIT FUNCTION -->
+                    <?php $main_img_cnt = 0;?>
+                    <?php if(isset($main_images)):?> 
+                        <?php foreach($main_images as $main_image): ?>       
+                            <div id="editpreviewlist<?php echo $main_img_cnt;?>" class="edit_img upload_img_div <?php echo ($main_img_cnt===0)?'active_img':'';?>">
+                                <a href="javascript:void(0)" class="removepic"  data-imgid="<?php echo $main_image['id_product_image'];?>">x</a>
+                                <span class="upload_img_con"><img src =<?php echo base_url().$main_image['path'].'categoryview/'.$main_image['file'];?> ></span>
+                                <br>
+                                <a class="makeprimary" href="javascript:void(0)" data-imgid="<?php echo $main_image['id_product_image'];?>"><?php echo ($main_img_cnt===0)?'Your Primary':'Make Primary';?></a>
+                            </div> 
+                            <?php $main_img_cnt++; ?>
+                        <?php endforeach; ?>
+                  <?php endif; ?>
+                </output>
+                <!-- end of output -->
+              </td>
+          </tr>
+          <!-- end of upload image -->
+
+          <tr>
+            <td colspan="3">&nbsp;
+            </td>
+          </tr>
+          <!--Start of Description -->
+          <tr>
+              <td  class="upload_step2_title" colspan="3">
+                <h3>Add a description</h3> (<strong class="required">*</strong>) required fields
+              </td>
+          </tr>
+          <tr>
+              <td class="border-left" style="width:130px">Brief description: <font color="red"> *</font></td><!-- Brief of the product -->
+              <td class="border-right" colspan="2"><input type="text" autocomplete="off" maxlength="255" placeholder="Enter brief description" id="prod_brief_desc" name="prod_brief_desc"  value="<?php echo (isset($product_details['brief']))?$product_details['brief']:'';?>"></td>
+          </tr>
+          <tr>
+            <td class="border-left" valign="top">Product Details: <font color="red">*</font></td><!-- Main Description of the product --> 
+            <td class="border-right pad-right" colspan="3"><textarea style="width: 98%;height:100%" name="prod_description" class="mceEditor"  id="prod_description" placeholder="Enter description..."><?php echo (isset($product_details['description']))?$product_details['description']:'';?></textarea></td>
+          </tr> 
+          <!-- end of Description -->
+        </table> 
+
+        <table class="step4_2" style="width:100%" cellspacing="0" cellpadding="0">
+          <thead>
+            <tr>
+              <td class="border-left" width="110px;"></td>
+              <td class="border-right" colspan="3">
+                <p class="view_more_product_details blue"><span class="span_bg vmd_img"></span>View more product details</p>
+              </td>
+            </tr>
+          </thead>
+
+          <!-- Start hide of more product details -->
+          <tbody class="more_product_details_container">
+          <!-- Add item specifics -->
+          <tr>
+            <td class="border-left border-right" colspan="4">
+              <h3> Add item specifics</h3> 
+            </td>
+          </tr>
+
+              <?php 
+              $array_name_inputs = "";
+              $array_name_of_inputs = array();
+              $input_type = "";
+              $input_cat_name = "";
+              $input_id_attr = "";
+              for ($i=0 ; $i < sizeof($attribute); $i++)
+              {
+
+                $input_type = strtoupper($attribute[$i]['input_type']);
+                $input_cat_name =str_replace(' ', '', ucwords(strtolower($attribute[$i]['cat_name']))); 
+                $input_cat_name_with_space = ucwords(strtolower($attribute[$i]['cat_name'])); 
+                $input_id_attr = $attribute[$i]['id_attr'];
+                $itemattribute = $attribute[$i][0];
+
+                ?>
+
+          <tr>
+            <td class="border-left"><?php echo  ucwords(strtolower($attribute[$i]['cat_name'])); ?></td>
+            <td class="border-right" colspan="3">
+              
+                        <?php 
+                        if(isset($product_attributes_spe[$input_id_attr]))
+                         $cat_attr = $product_attributes_spe[$input_id_attr];
+                       else
+                         $cat_attr = array();   
+                              #Removed case formatting for input type values
+                       switch ($input_type) {
+                        case 'SELECT':
+                        echo '<span><select name="'.$input_type.'_'.$input_cat_name.'">';
+                        echo '<option value="">-</option>';
+                        foreach ($itemattribute as $list) {
+                          $selected = '';
+                          if(isset($cat_attr[0])){
+                            if($cat_attr[0]['value'] === $list['name']){
+                              $selected = 'selected';
+                              unset($cat_attr[0]);
+                            }
+                          }
+                          echo '<option value="'.$list['name'].'"'.$selected.'>'.$list['name'].'</option>';
+                        }
+                        echo '</select></span>';
+                        break;
+
+                        case 'TEXT':
+                        $value = (isset($cat_attr[0]))?$cat_attr[0]['value']:'';
+                        echo "<span><input type='text'  autocomplete='off' value='".$value."' name='".$input_type.'_'.$input_cat_name."' /></span>";
+                        break;
+
+                        case 'TEXTAREA':
+                        $value = (isset($cat_attr[0]))?$cat_attr[0]['value']:'';
+                                    // echo "<span><textarea style='height:141px' cols=98 rows='98' name='".$input_type.'_'.$input_cat_name."'>".$value."</textarea></span>";
+                        echo "<textarea name='".$input_type.'_'.$input_cat_name."' style='width: 100%;height:100%' class='mceEditor_attr' >".$value."</textarea></span>";
+                        break;
+
+                        case 'RADIO':
+                        foreach ($itemattribute as $list) {
+                          $checked = '';
+                          if(isset($cat_attr[0])){
+                           if($cat_attr[0]['value'] === $list['name']){
+                            $checked = 'checked';
+                            unset($cat_attr[0]);
+                          }
+                        }
+                        echo "<span><input type='radio' value='".$list['name']."' name='".$input_type.'_'.$input_cat_name."' ".$checked.">".$list['name']."</span>";              
+                      }
+                      break;
+
+                      case 'CHECKBOX':
+
+                      foreach ($itemattribute as $list) {
+                        $checked = '';
+                        $id_attribute_value = $list['id_attr_lookuplist_item'];
+                        foreach($cat_attr  as $key=>$prod_attr){ 
+                         if($prod_attr['value']===$list['name']){
+                          $checked = 'checked';
+                          unset($cat_attr[$key]);
+                          break;
+                        }
+                      }
+                      echo "<span><input type='checkbox' class='checkbox_itemattr' data-group='".$input_cat_name_with_space."'   data-attrid='". $id_attribute_value."' data-value='".$list['name']."' data-attr='".$input_type.'_'.$input_cat_name.'_'.str_replace(' ', '', $list['name'])."' value='".$list['name']."' name='".$input_type.'_'.$input_cat_name."[]' ".$checked.">".$list['name']."</span>";
+                    }
+                    break;
+                  }
+                  ?>
+               
+            </td>
+          </tr>
+              <?php
+              $array_name_inputs = $array_name_inputs .'|'. $input_type.'_'.$input_cat_name.'/'.$input_id_attr;
+
+               }
+              ?>
+          <tr>
+            <td class="border-left">Keywords (separated by spaces)</td>
+            <td class="border-right" colspan="3"><input type="text" autocomplete="off" maxlength="1024" name="prod_keyword" id="prod_keyword" placeholder="Enter keyword for you item" value="<?php echo (isset($product_details['keywords']))?$product_details['keywords']:'';?>"></td>
+          </tr>
+          <tr>
+            <td class="border-left border-right" colspan="4">
+              <h3> Additional Information to your Item</h3> 
+            </td>
+          </tr>
+
+          <?php 
+          $j = 1;
+          if(!isset($product_attributes_opt))
+            $product_attributes_opt = array();  
+
+          foreach($product_attributes_opt as $key=>$opt_attr): ?>
+
+          <tr id="<?php echo ($j === 1)?'':'main'.$j; ?>">
+            <td class="border-left"> <?php echo ($j===1)?'Others: (Optional)':''; ?></td>  
+            <td class="border-right" colspan="3">
+              <input type="text" name="prod_other_name[]" data-cnt="<?php echo $j; ?>" class="prod_<?php echo $j;?> other_name_class" autocomplete="off" placeholder="Enter name" value="<?php echo str_replace("'", '', $key);?>"> 
+            </td>
+          </tr>
+
+          <?php $k = 0;
+          foreach($opt_attr as $prod_attr): ?>
+          <tr>
+            <td>&nbsp;</td>
+            <?php if($k > 0):?>
+            <td style="display:none">
+              <span>
+                <input type="text" value ="<?php echo str_replace("'", '',$key);?>" data-cnt="<?php echo $j;?>" class="prod_<?php echo $j;?>" name="prod_other_name[]">
+              </span>
+            </td>
+            <?php endif; ?>
+            <td>
+              <input type="text"  class="other_name_value otherNameValue<?php echo $j?>" data-cnt="<?php echo $j;?>" name="prod_other[]" autocomplete="off" data-otherid="<?php echo $prod_attr['value_id'];?>" placeholder="Enter description" value="<?php echo $prod_attr['value']?>">
+            </td>
+            <td style="display:none">
+              <input type="text" name="prod_other_id[]" value="<?php echo $prod_attr['value_id']; ?>">
+            </td>
+
+            <td>
+              <div class="" style="display:block">
+                &#8369; <input type="text" name="prod_other_price[]" autocomplete="off" id="price_field" placeholder="Enter additional price (0.00)" value="<?php echo $prod_attr['price'];?>">
+              </div>
+            </td>
+
+            <td>
+              <div>
+                <input class="option_image_input" type="file" name="prod_other_img[]">
+                  <?php if((trim($prod_attr['img_path'])!=='')&&(trim($prod_attr['img_file'])!=='')):?>
+                  <img src="<?php echo base_url().$prod_attr['img_path'].'thumbnail/'.$prod_attr['img_file']; ?>" class="option_image">
+                <?php endif;?>
+              </div>
+            </td>
+          </tr>
+        <?php $k++; endforeach; ?>
+
+        <tr id="<?php echo 'main1';?>">
+          <td class="border-left"></td>
+          <td class="border-right" colspan="3">
+            <a class="add_more_link_value" data-value="<?php echo $j;?>" href="javascript:void(0)">+Add more value</a>
+          </td>
+        </tr>     
+        <?php $j++; endforeach;?>
+
+        <?php if($j===1):?>
+        <tr>
+          <td class="border-left"> Others: (Optional) </td> 
+          <td class="border-right" colspan="3">
+            <input type="text" name="prod_other_name[]" data-cnt="<?php echo $j;?>" class="<?php echo 'prod_'.$j;?> other_name_class" autocomplete="off" placeholder="Enter name"> 
+            <a href="javascript:void(0)" class="lnkClearFirst">Clear This Group</a>
+          </td>
+        </tr>
+        <tr>
+          <td class="border-left">&nbsp;</td>
+          <td>
+            <input type="text" name="prod_other[]"  class="other_name_value otherNameValue1"  autocomplete="off" data-cnt="<?php echo $j;?>" placeholder="Enter description">
+          </td>
+          <td>
+            <div class="<?php echo 'h_if_'.$j;?> hdv">
+              &#8369; <input type="text" name="prod_other_price[]" autocomplete="off" id="price_field" placeholder="Enter additional price (0.00)">
+            </div>
+          </td>
+          <td class="border-right">
+            <div class="<?php echo 'h_if_'.$j;?> hdv">
+              <input type="file" name="prod_other_img[]"  >
+              <a href="javascript:void(0)" class="removeOptionValue" data-cnt ="<?php echo $j;?>">Remove</a>
+            </div>
+          </td>
+        </tr> 
+        <tr id="main1">
+          <td class="border-left"></td>
+          <td class="border-right" colspan="3">
+            <a class="add_more_link_value" data-value="<?php echo $j;?>" href="javascript:void(0)">+Add more value</a>
+          </td>
+        </tr>
+        <?php endif; ?>
 
 
+        
+        
+        </tbody>
+        <!-- End hide of more product details -->
+        <tfoot>
+          <tr class="prod-details-add-more-link">
+            <td class="border-left">&nbsp;</td>
+            <td class="border-right" colspan="3">  
+              <a class="add_more_link" href="javascript:void(0)">+ Add More</a>
 
-<?php 
-$j = 1;
-if(!isset($product_attributes_opt))
-  $product_attributes_opt = array();  
+              <?php if(isset($product_details)): ?>
+                <input type="hidden" name="p_id" value="<?php echo $product_details['id_product']; ?>">
+              <?php endif;?>
+            </td>
+          </tr>
+          <tr>
+            <td class="border-left border-bottom">&nbsp;</td>
+            <td class="border-right border-bottom" colspan="3">&nbsp;</td>
+          </tr> 
 
-foreach($product_attributes_opt as $key=>$opt_attr): ?>
+          <tr>
+            <td>&nbsp;</td>
+            <td colspan="3">&nbsp;</td>
+          </tr>  
+          <!-- Start of Price Content -->
+          <tr>
+              <td class="upload_step2_title" colspan="4">
+                <h3>Price and Quantity</h3> (<strong class="required">*</strong>) required fields
+              </td>
+          </tr> 
+          <tr>
+              <td class="border-left">Base Price <font color="red"> *</font></td>
+              <td class="border-right" colspan="3"><input type="text" autocomplete="off" name="prod_price" id="prod_price" placeholder="Enter price (0.00)" value="<?php echo (isset($product_details['price']))?$product_details['price']:'';?>"></td>
+          </tr>
+          <!-- end of Price Content -->
 
-<tr id="<?php echo ($j === 1)?'':'main'.$j; ?>">
-  <td> <?php echo ($j===1)?'Others: (Optional)':''; ?></td>  
-  <td colspan="3">
-    <input type="text" name="prod_other_name[]" data-cnt="<?php echo $j; ?>" class="prod_<?php echo $j;?> other_name_class" autocomplete="off" placeholder="Enter name" value="<?php echo str_replace("'", '', $key);?>"> 
-  </td>
-</tr>
+          <!-- start of sku code -->
+          <tr>
+            <td class="border-left">SKU Code <font color="red">*</font></td> <!-- SKU of the product -->
+            <td class="border-right" colspan="3">
+              <input type="text" autocomplete="off"  maxlength="45" placeholder="Enter SKU" id="prod_sku" name="prod_sku" value="<?php echo (isset($product_details['sku']))?$product_details['sku']:'';?>">
+              <a class="tooltips" href="javascript:void(0)"><img src="<?= base_url() ?>assets/images/icon_qmark.png" alt=""><span>Stock Keeping Unit: you can assign any code in order to keep track of your items</span></a>
+            </td>
+          </tr>
+          <!-- end of sku code -->
 
-<?php $k = 0;
-foreach($opt_attr as $prod_attr): ?>
-<tr>
-  <td>&nbsp;</td>
-  <?php if($k > 0):?>
-  <td style="display:none">
-    <span >
-      <input type="text" value ="<?php echo str_replace("'", '',$key);?>" data-cnt="<?php echo $j;?>" class="prod_<?php echo $j;?>" name="prod_other_name[]">
-    </span>
-  </td>
-<?php endif; ?>
-<td>
-  <input type="text"  class="other_name_value otherNameValue<?php echo $j?>" data-cnt="<?php echo $j;?>" name="prod_other[]" autocomplete="off" data-otherid="<?php echo $prod_attr['value_id'];?>" placeholder="Enter description" value="<?php echo $prod_attr['value']?>">
-</td>
-<td style="display:none">
-  <input type="text" name="prod_other_id[]" value="<?php echo $prod_attr['value_id']; ?>">
-</td>
+          <tr>
+            <td class="border-left border-right" colspan="4"><h3 class="orange">Quantity</h3></td>
+          </tr>
+          <tr>
+            <td class="border-left border-bottom"></td>
+            <td class="border-right border-bottom" colspan="3">
+              <div class="quantity_table">
+                <div class="quantity_table_row">               
+                  <div class="qty_title">
+                    <span>Quantity:</span><br />
+                    <input type="text" class="qtyTextClass" id="qtyTextClass" name="quantity"> 
+                    <a href="javascript:void(0)" data-value="1" class="quantity_attr_done orange_btn3">Add</a>
+                    <a class="tooltips qty_tooltip quantity_attr_done" href="javascript:void(0)" style="display:inline"><img src="<?= base_url() ?>assets/images/icon_qmark.png" alt=""> <span> You can also set the availability of different attribute combinations of your item by clicking the Add button</span></a> 
+                  </div>
+                  <div class="quantity_attrs_content" id="quantity_attrs_content2"></div>
+                </div>
+              </div>
+              <div class="clear"></div>
+              <div class="combinationContainer"></div>
+              <div class="clear"></div>
 
-<td>
-  <div class="" style="display:block">
-    &#8369; <input type="text" name="prod_other_price[]" autocomplete="off" id="price_field" placeholder="Enter additional price (0.00)" value="<?php echo $prod_attr['price'];?>">
-  </div>
-</td>
+            </div>  
+            <div class="clear"></div>
+            <div class="quantity_table2">
+            </div> 
+            <?php echo form_close();?>
 
-<td>
-  <div>
-    <input class="option_image_input" type="file" name="prod_other_img[]">
-    <?php if((trim($prod_attr['img_path'])!=='')&&(trim($prod_attr['img_file'])!=='')):?>
-    <img src="<?php echo base_url().$prod_attr['img_path'].'thumbnail/'.$prod_attr['img_file']; ?>" class="option_image">
-  <?php endif;?>
-</div>
-</td>
-</tr>
-<?php $k++; endforeach; ?>
-<tr id="<?php echo 'main1';?>">
-  <td></td>
-  <td colspan="3"><a class="add_more_link_value" data-value="<?php echo $j;?>" href="javascript:void(0)">+Add more value</a></td>
-</tr>     
-<?php $j++; endforeach;?>
+              <?php 
+              $attributesForm = array('id' => 'hidden_form',
+                'name'=>'hidden_form');
+              echo form_open('sell/step3', $attributesForm);
+              ?>
+              <input type="hidden" name="prod_h_id" id="prod_h_id"> 
+              <?php echo form_close(); ?>
 
-
-
-<?php if($j===1):?>
-  <tr>
-  <td>
-     Others: (Optional) 
-  </td>
-</tr>
-  <tr class="main1">
-  <td></td>
-    <td colspan="3">
-      <input type="text" name="prod_other_name[]" data-cnt="<?php echo $j;?>" class="<?php echo 'prod_'.$j;?> other_name_class" autocomplete="off" placeholder="Enter name"> 
-      <a href="javascript:void(0)" class="lnkClearFirst">Clear This Group</a>
-    </td>
-  </tr>
-  <tr class="main1 main1_2nd">
-    <td>&nbsp;</td>
-    <td>
-      <input type="text" name="prod_other[]"  class="other_name_value otherNameValue1"  autocomplete="off" data-cnt="<?php echo $j;?>" placeholder="Enter description">
-    </td>
-    <td>
-      <div class="<?php echo 'h_if_'.$j;?> hdv">
-        &#8369; <input type="text" name="prod_other_price[]" autocomplete="off" id="price_field" placeholder="Enter additional price (0.00)">
-      </div>
-    </td>
-    <td>
-      <div class="<?php echo 'h_if_'.$j;?> hdv">
-        <input type="file" name="prod_other_img[]"  >
-        <a href="javascript:void(0)" class="removeOptionValue" data-cnt ="<?php echo $j;?>">Remove</a>
-      </div>
-    </td>
-  </tr> 
-
-  <tr id="main1">
-    <td></td>
-    <td colspan="3"><a class="add_more_link_value" data-value="<?php echo $j;?>" href="javascript:void(0)">+Add more value</a></td>
-  </tr>
-<?php endif; ?>
-
-<tfoot>
-  <tr>
-    <td>&nbsp;</td>
-    <td colspan="3">  
-      <a class="add_more_link" href="javascript:void(0)">+ Add More</a>
-
-      <?php if(isset($product_details)): ?>
-      <input type="hidden" name="p_id" value="<?php echo $product_details['id_product']; ?>">
-    <?php endif;?>
-  </td>
-</tr>
-
-<tr>
-  <td colspan="4"><h3 class="orange">Quantity</h3></td>
-
-</tr>
-<tr>
-  <td></td>
-  <td colspan="3">
-    <div class="quantity_table">
-      <div class="quantity_table_row">               
-        <div class="qty_title">
-          <span>Quantity:</span><br />
-          <input type="text" class="qtyTextClass" id="qtyTextClass" name="quantity"> 
-          <a href="javascript:void(0)" data-value="1" class="quantity_attr_done orange_btn3">Add</a>
-          <a class="tooltips qty_tooltip quantity_attr_done" href="javascript:void(0)" style="display:inline"><img src="<?= base_url() ?>assets/images/icon_qmark.png" alt=""> <span> You can also set the availability of different attribute combinations of your item by clicking the Add button</span></a> 
-        </div>
-        <div class="quantity_attrs_content" id="quantity_attrs_content2"></div>
-
-      </div>
-    </div>
-    <div class="clear"></div>
-    <div class="combinationContainer"></div>
-    <div class="clear"></div>
-
-  </div>  
-  <div class="clear"></div>
-  <div class="quantity_table2">
-  </div> 
-  <?php echo form_close();?>
-
-  <?php 
-  $attributesForm = array('id' => 'hidden_form',
-    'name'=>'hidden_form');
-  echo form_open('sell/step3', $attributesForm);
-  ?>
-  <input type="hidden" name="prod_h_id" id="prod_h_id"> 
-  <?php echo form_close(); ?>
-
-</div>
-<div class="clear"></div>
-<div class="add_category_submit">
-
-
-  <div class="button_div"><input class="proceed_form" id="proceed_form" type="button" value="Proceed"></div>
-
-</div>  
-<div class="clear"></div>
-<div class="quantity_table2">
-</div> 
-<input type="hidden" id="qty_details" value='<?php echo (isset($item_quantity))?json_encode($item_quantity):json_encode(array());  ;?>'></input>
-</form>
-
-<div class="loader_div"><br><br><center><img src='<?php echo base_url().'assets/images/orange_loader.gif' ?>'><br><br><br><br><br></center></div>
-</div>
-</div>
-</div>
-</td>
-</tr>
+            </div>
+           
+            <div class="clear"></div>
+            <div class="quantity_table2">
+            </div>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="4">
+                <div class="add_category_submit">
+                    <div class="button_div"><input class="proceed_form" id="proceed_form" type="button" value="Proceed"></div>
+                    <input type="hidden" id="qty_details" value='<?php echo (isset($item_quantity))?json_encode($item_quantity):json_encode(array());  ;?>'></input>
+                    </form>
+                    <div class="loader_div"><img src='<?php echo base_url().'assets/images/orange_loader.gif' ?>'></div>              
+                </div>  
+            </td>
+          </tr>
+          <tr>
+            <td>
+            
+            
+            </td> 
+          </tr>
 </tfoot>
 </table> 
+
 <script type='text/javascript' src='<?=base_url()?>assets/JavaScript/js/jquery.numeric.js'></script>
+<script type="text/javascript">
+  $('.view_more_product_details').on('click', function() {
+    $('.more_product_details_container,.prod-details-add-more-link').slideToggle();
+    $('.view_more_product_details').toggleClass('active-product-details');
+
+  });
+
+</script>
+
 <script type="text/javascript">
 $(document).ready(function(){
   var removeThisPictures = [];
@@ -1106,7 +1149,7 @@ $(".checkbox_itemattr").click(function(){
 
 $(".add_more_link").unbind("click").click(function(){
   cnt_o++;
-  $('.step4_2').append('<tr id="main'+cnt_o+'" class="main'+cnt_o+'"><td></td><td colspan="3"><input type="text" data-cnt="'+cnt_o+'" autocomplete="off" name="prod_other_name[]" class="prod_'+cnt_o+' other_name_class" placeholder="Enter name"><a href="javascript:void(0)" data-cnt="'+cnt_o+'" class="removeOptionGroup">Remove This Group</a></td></tr><tr class="main'+cnt_o+' main'+cnt_o+'_2nd"><td></td><td><input type="text" autocomplete="off" data-cnt="'+cnt_o+'" class="other_name_value otherNameValue'+cnt_o+'" name="prod_other[]" placeholder="Enter description"></td><td> <div class="h_if_'+cnt_o+' hdv"  style="display:none">&#8369; <input type="text" name="prod_other_price[]"  class="price_text"   id="price_field"  autocomplete="off" placeholder="Enter additional price (0.00)"></div></td><td> <div class="h_if_'+cnt_o+' hdv" style="display:none"><input type="file" name="prod_other_img[]" ><a data-cnt="'+cnt_o+'" class="removeOptionValue" href="javascript:void(0)">Remove</a></div></td></tr><tr id="main1" class="main'+cnt_o+'_link"><td></td><td colspan="3"><a class="add_more_link_value" data-value="'+cnt_o+'" href="javascript:void(0)">+Add more value</a></td></tr>');
+  $('.step4_2').append('<tr id="main'+cnt_o+'" class="main'+cnt_o+'"><td class="border-left"></td><td class="border-right" colspan="3"><input type="text" data-cnt="'+cnt_o+'" autocomplete="off" name="prod_other_name[]" class="prod_'+cnt_o+' other_name_class" placeholder="Enter name"><a href="javascript:void(0)" data-cnt="'+cnt_o+'" class="removeOptionGroup">Remove This Group</a></td></tr><tr class="main'+cnt_o+' main'+cnt_o+'_2nd"><td class="border-left"></td><td><input type="text" autocomplete="off" data-cnt="'+cnt_o+'" class="other_name_value otherNameValue'+cnt_o+'" name="prod_other[]" placeholder="Enter description"></td><td> <div class="h_if_'+cnt_o+' hdv"  style="display:none">&#8369; <input type="text" name="prod_other_price[]"  class="price_text"   id="price_field"  autocomplete="off" placeholder="Enter additional price (0.00)"></div></td><td class="border-right"> <div class="h_if_'+cnt_o+' hdv" style="display:none"><input type="file" name="prod_other_img[]" ><a data-cnt="'+cnt_o+'" class="removeOptionValue" href="javascript:void(0)">Remove</a></div></td></tr><tr id="main1" class="main'+cnt_o+'_link"><td class="border-left"></td><td class="border-right" colspan="3"><a class="add_more_link_value" data-value="'+cnt_o+'" href="javascript:void(0)">+Add more value</a></td></tr>');
 });
 
 $('.upload_input_form').on('click', '.add_more_link_value', function() {
@@ -1116,7 +1159,7 @@ $('.upload_input_form').on('click', '.add_more_link_value', function() {
 
   var  subClass = "main"+data+"_2nd_add";
  
-  var newrow = $('<tr class="main'+data+' '+subClass+'"><td></td><td style="display:none"><span ><input type="text" value ="'+attr+'" data-cnt="'+data+'" class="prod_'+data+'" name="prod_other_name[]"></span></td><td><input type="text" autocomplete="off" data-cnt="'+data+'" class="other_name_value otherNameValue'+data+'"  name="prod_other[]" placeholder="Enter description"></td><td>&#8369; <input type="text" name="prod_other_price[]"  id="price_field" class="price_text"  autocomplete="off" placeholder="Enter additional price (0.00)"></td><td><input type="file" name="prod_other_img[]" ><a data-cnt="'+data+'" class="removeOptionValue" href="javascript:void(0)">Remove</a></td></tr>');
+  var newrow = $('<tr class="main'+data+' '+subClass+'"><td class="border-left"></td><td style="display:none"><span ><input type="text" value ="'+attr+'" data-cnt="'+data+'" class="prod_'+data+'" name="prod_other_name[]"></span></td><td><input type="text" autocomplete="off" data-cnt="'+data+'" class="other_name_value otherNameValue'+data+'"  name="prod_other[]" placeholder="Enter description"></td><td>&#8369; <input type="text" name="prod_other_price[]"  id="price_field" class="price_text"  autocomplete="off" placeholder="Enter additional price (0.00)"></td><td class="border-right"><input type="file" name="prod_other_img[]" ><a data-cnt="'+data+'" class="removeOptionValue" href="javascript:void(0)">Remove</a></td></tr>');
   if (data == 1){
     $('#main'+data).before(newrow);
   }else{
@@ -1135,7 +1178,7 @@ $(document).on('change',"#price_field,#prod_price, .price_text",function () {
   }
   
   function ReplaceNumberWithCommas(thisnumber){
-	//Seperates the components of the number
+  //Seperates the components of the number
   var n= thisnumber.toString().split(".");
     //Comma-fies the first part
     n[0] = n[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -1444,7 +1487,7 @@ $(".proceed_form").unbind("click").click(function(){
 
     //Marked for refactoring
     //Duplicate code: see $('.quantity_attr_done') click handler
-	//$(function(){}) removed and $('.quantity_attrs_content option :select') replaced with if statement
+  //$(function(){}) removed and $('.quantity_attrs_content option :select') replaced with if statement
   function addAttrQtyCombination(count){
     var qtyTextbox = $('.qtyTextClass');
     var qtyTextboxValue = parseInt(qtyTextbox.val());
@@ -1491,7 +1534,7 @@ $(".proceed_form").unbind("click").click(function(){
    }
 
    if(haveValue === true){
-     if(alreadyExist === false){			
+     if(alreadyExist === false){      
       $('.combinationContainer').append('<div class="inner_quantity_list innerContainer'+thisValueCount+'"> '+ htmlEach +'</div> <a href="javascript:void(0)" class="removeSelected" data-row="'+thisValueCount+'"   style="color:Red">Remove</a></div>');
       dataCombination['quantity'] = qtyTextbox.val();
       dataCombination['value'] = arrayCombinationString.slice(0, - 1);
@@ -1556,6 +1599,4 @@ tinymce.init({
 
 
 <div class="clear"></div>  
-
-
 
