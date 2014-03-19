@@ -1275,7 +1275,9 @@ class product_model extends CI_Model
 		}
 		else{
 			foreach($row as $r){
-				$data['attributes'][$r['product_id_item']][] = $r['attr_value'];
+				if($r['product_id_item'] != '' && $r['attr_value'] != ''){
+					$data['attributes'][$r['product_id_item']][] = $r['attr_value'];
+				}
 			}
 			$data['has_attr'] = 1;
 		}
@@ -1323,6 +1325,7 @@ class product_model extends CI_Model
 		$data = array();
 		$data['id_product_item'] = array();
 		//$location = $gdata = array();
+		
 		
 	// Every attribute combination should have shipping location/price
 	// Checking first entry is sufficient to determine if shipping details exist for a product

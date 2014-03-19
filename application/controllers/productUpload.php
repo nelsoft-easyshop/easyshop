@@ -582,6 +582,7 @@ class productUpload extends MY_Controller
 			//DEV CODE - temporarily set product id to fetch attribute combinations
 			//$id = 118;
 			//$id = 123;
+			//$id = 129;
 			
 			// Actual Product ID Code
 			$id = $this->input->post('prod_h_id');

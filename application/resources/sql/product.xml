@@ -670,9 +670,19 @@
 	SELECT pitm.id_product_item, piattr.product_id_item, pattr.attr_value
     FROM es_product_item pitm
     LEFT JOIN es_product_item_attr piattr
-        ON pitm.id_product_item = piattr.product_id_item
+        ON pitm.id_product_item = piattr.product_id_item AND piattr.is_other = 0
     LEFT JOIN es_product_attr pattr
         ON piattr.product_attr_id = pattr.id_product_attr
+    WHERE pitm.product_id = :id
+	
+	UNION
+	
+	SELECT pitm.id_product_item, piattr.product_id_item, oattr.value_name
+    FROM es_product_item pitm
+    LEFT JOIN es_product_item_attr piattr
+        ON pitm.id_product_item = piattr.product_id_item AND piattr.is_other = 1
+    LEFT JOIN es_optional_attrdetail oattr
+        ON piattr.product_attr_id = oattr.id_optional_attrdetail
     WHERE pitm.product_id = :id
 </select>
 	
