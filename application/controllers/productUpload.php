@@ -77,8 +77,8 @@ class productUpload extends MY_Controller
 			$response['id'] = $id; # id is the selected category
 			$response['otherCategory'] = $otherCategory; # id is the selected category
 			$parents = $this->product_model->getParentId($id); # getting all the parent from selected category
-			$attribute = $this->product_model->getAttributesBySelf($id); # getting all attribute from all parent from selected category
-			#$attribute = $this->product_model->getAttributesByParent($parents);
+			#$attribute = $this->product_model->getAttributesBySelf($id); # getting all attribute from all parent from selected category
+			$attribute = $this->product_model->getAttributesByParent($parents);
             $str_parents_to_last = "";
 
 			$lastElement = end($parents);	
@@ -113,7 +113,7 @@ class productUpload extends MY_Controller
 		$removeThisPictures = json_decode($_POST['removeThisPictures']); 
 		$primaryId = $_POST['primaryPicture'];
 		$primaryName =""; 
-
+        
 		foreach( $_FILES['files']['name'] as $key => $value ) {
 			if($primaryId == $key){
 				$primaryName =	$_FILES['files']['name'][$key];
@@ -661,8 +661,8 @@ class productUpload extends MY_Controller
 			if(strpos(($image['path']),'other') === FALSE)
 				array_push($main_images, $image);
 		}
-		$attribute = $this->product_model->getAttributesBySelf($product['cat_id']); # getting all attribute from all parent from selected category
-		#$attribute = $this->product_model->getAttributesByParent($parents);
+		#$attribute = $this->product_model->getAttributesBySelf($product['cat_id']); # getting all attribute from all parent from selected category
+		$attribute = $this->product_model->getAttributesByParent($parents);
         for ($i=0 ; $i < sizeof($attribute) ; $i++ ) {  # getting all lookuplist from item attribute
 			$lookuplist = $this->product_model->getLookItemListById($attribute[$i]['attr_lookuplist_id']);
 			array_push($attribute[$i],$lookuplist);
