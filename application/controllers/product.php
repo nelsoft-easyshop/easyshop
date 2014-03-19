@@ -243,8 +243,8 @@ class product extends MY_Controller
 					$string_sort_a = " ORDER BY clickcount desc ,(`cat_id` = ".$category_id.") DESC ";
 					$string_sort_c = " ORDER BY clickcount desc,(`cat_id` = ".$category_id.") DESC ";
 				}else{
-					$string_sort_a = " ORDER BY (`cat_id` = ".$category_id.") DESC";
-					$string_sort_c = " ORDER BY (`cat_id` = ".$category_id.") DESC";
+					$string_sort_a = " ORDER BY (a.`cat_id` = ".$category_id.") DESC";
+					$string_sort_c = " ORDER BY (c.`cat_id` = ".$category_id.") DESC";
 				}
 				unset($_POST['parameters']['sop']);
 			}
@@ -330,7 +330,6 @@ class product extends MY_Controller
 						$response['items'] = $this->product_model->getProductByCategoryIdWithDistinct($category_id,$condition_price_string,$extra_string,$count,$start,$per_page,$catlist_down,$item_brand_string_2);
 
 					}
-
 					if(count($response['items']) <= 0)
 					{
 						$data = json_encode('0');
@@ -340,9 +339,8 @@ class product extends MY_Controller
 				}	
 
 			}else{
-				 
 				$attribute = $this->product_model->getAttributeByCategoryIdWithDistinct($category_id);
-
+                
 				for ($i=0; $i < sizeof($attribute) ; $i++) { 
 					$look_up_list_item = $this->product_model->getAttributeByCategoryIdWithName($category_id,$attribute[$i]['name']);
 					array_push($attribute[$i], $look_up_list_item);
@@ -355,7 +353,7 @@ class product extends MY_Controller
 				array_push($down_cat, $category_id);
 				$catlist_down = implode(",", $down_cat);
 				$response['items'] = $this->product_model->getProductInCategoryAndUnder($category_id,$usable_string,$catlist_down,$start,$per_page,$item_brand_string_1.$string_sort_a);
-				if(count($response['items']) <= 0)
+                if(count($response['items']) <= 0)
 				{
 					$data = json_encode('0');
 				}else{
