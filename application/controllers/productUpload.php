@@ -578,14 +578,14 @@ class productUpload extends MY_Controller
 	 */
 	function step3()
 	{
-		if($this->input->post('prod_h_id')){
+		//if($this->input->post('prod_h_id')){
 			//DEV CODE - temporarily set product id to fetch attribute combinations
 			//$id = 118;
 			//$id = 123;
 			//$id = 129;
 			
 			// Actual Product ID Code
-			$id = $this->input->post('prod_h_id');
+			//$id = $this->input->post('prod_h_id');
 			
 			$data = array (
 				'shiploc' => $this->product_model->getLocation(),
@@ -597,7 +597,7 @@ class productUpload extends MY_Controller
 			$data = array_merge($data, $this->fill_view());
 			
 			$jsonDisplayGroup = $jsonFdata = array();
-			if($data['shipping_summary']['has_shippingsummary'] === 1){
+			if($data['shipping_summary']['has_shippingsummary']){
 				if($data['attr']['has_attr'] === 1){
 					$i = 0;
 					foreach($data['attr']['attributes'] as $attrk=>$attrarr){
@@ -607,7 +607,7 @@ class productUpload extends MY_Controller
 						}
 						$i++;
 					}
-				}else{
+				} else {
 					$jsonDisplayGroup[0][$data['attr']['product_item_id']] = $data['attr']['product_item_id'];
 					foreach($data['shipping_summary'][$data['attr']['product_item_id']] as $lockey=>$price){
 						$jsonFdata[0][$data['attr']['product_item_id']][$lockey] = $price;
@@ -618,14 +618,45 @@ class productUpload extends MY_Controller
 			$data['json_fdata'] = json_encode($jsonFdata, JSON_FORCE_OBJECT);
 			$data['json_id_product_item'] = json_encode($data['shipping_summary']['id_product_item']);
 			
+			$locationGroup = array();
+			$islandLookup = [2,3,4];
+			$data['inc_location'] = false;
+			$data['inc_locationmsg'] = '';
+			if($data['shipping_summary']['has_shippingsummary']){
+				foreach($data['shipping_summary']['location'] as $locKey=>$locV){
+					if(!in_array($locKey,$locationGroup)){
+						$locationGroup[] = $locKey;
+					}
+				}
+				foreach($islandLookup as $locId){
+					if(!in_array($locId, $locationGroup)){
+						$data['inc_location'] = true;
+						switch($locId){
+							case 2:
+								$data['inc_locationmsg'] .= 'Luzon ';
+								break;
+							case 3:
+								$data['inc_locationmsg'] .= 'Visayas ';
+								break;
+							case 4:
+								$data['inc_locationmsg'] .= 'Mindanao ';
+								break;
+						}
+					}
+				}
+			}
+			
+			$data['json_locationgroup'] = json_encode($locationGroup);
+			$data['json_islandlookup'] = json_encode($islandLookup);
+			
 			$this->load->view('templates/header', $data);
 			$this->load->view('pages/product/product_upload_step3_view', $data);
 			$this->load->view('templates/footer');
 			
-		}
+	/*	}
 		else {
 			redirect(base_url().'sell/step1', 'refresh');
-		}
+		}*/
 	}
 	
 	/**

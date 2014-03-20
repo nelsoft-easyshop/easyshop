@@ -166,7 +166,7 @@
     <div class="shipping_summary_container">
     <h2 class="f20">Shipping Summary</h2>
 	  <input type="hidden" id="shippingsummary_csrf" name="<?php echo $my_csrf['csrf_name'];?>" value="<?php echo $my_csrf['csrf_hash'];?>">
-    <table id="shipping_summary" class="<?php echo $shipping_summary['has_shippingsummary'] == 1 ? "" : "tablehide"?> shipping_table3" width="980px" cellspacing="0" cellpadding="0">
+    <table id="shipping_summary" class="<?php echo $shipping_summary['has_shippingsummary'] ? "" : "tablehide"?> shipping_table3" width="980px" cellspacing="0" cellpadding="0">
 		
 	  <thead>
         <tr>
@@ -177,7 +177,7 @@
       </thead>
 
 	<?php $datagroupcounter = 0; ?>
-	<?php if($shipping_summary['has_shippingsummary'] == 1):?>
+	<?php if($shipping_summary['has_shippingsummary']):?>
 		<?php foreach($attr["attributes"] as $attk=>$temp): ?>
 		  <tr class="tr_shipping_summary" data-group="<?php echo $datagroupcounter;?>">
 			<td class="prod_att_pad">
@@ -203,6 +203,7 @@
 					</td>
 				  </tr>
 				  <?php endforeach;?>
+				  <!-- Cloning Field-->
 				  <tr class="cloningfield" data-idlocation="" data-groupkey="">
 					<td width="100px"></td>
 					<td width="170px" data-value=""></td>
@@ -212,6 +213,7 @@
 					  </span>
 					</td>
 				  </tr>
+				  <!-- END OF Cloning Field-->
 				</tbody>
 			  </table>
 			</td>
@@ -265,12 +267,22 @@
 	<!-- CLOSE Original Cloning Field -->
 	
 		<input type="hidden" id="json_displaygroup" value='<?php echo $json_displaygroup;?>'>
+		<input type="hidden" id="json_locationgroup" value='<?php echo $json_locationgroup;?>'>
+		<input type="hidden" id="json_islandlookup" value='<?php echo $json_islandlookup;?>'>
 		<input type="hidden" id="json_fdata" value='<?php echo $json_fdata;?>'>
 		<input type="hidden" id="json_id_product_item" value='<?php echo $json_id_product_item;?>'>
 		<input type="hidden" id="summaryrowcount" value="<?php echo $datagroupcounter?>">
 	</table>
     </div>
-    <!-- end of shipping summary -->
+	
+	<div style="color:red;<?php echo $inc_location ? '' : 'display:none;'?>" id="div_locationwarning">
+		Warning: Your shipping location selection does not cover 
+		<span id="location_warning">
+			<?php echo $inc_location ? $inc_locationmsg : '';?>
+		</span>
+	</div>
+    
+	<!-- end of shipping summary -->
     <span id="btnShippingDetailsSubmit" class="tablehide orange_btn3">Submit</span>
 	 
 	<?php echo form_open('sell/step4', array('id'=>'step4_form'));?>

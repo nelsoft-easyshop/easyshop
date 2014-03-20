@@ -40,10 +40,12 @@ $(function(){
 *
 */
 $(function(){
-  //var fdata = {};
-  //var displaygroup = {};
   var fdata = jQuery.parseJSON($('#json_fdata').val());
   var displaygroup = jQuery.parseJSON($('#json_displaygroup').val());
+  var locationgroup = jQuery.parseJSON($('#json_locationgroup').val());
+  var islandLookup = jQuery.parseJSON($('#json_islandlookup').val());
+  var divLocWarning = $('#div_locationwarning');
+  var spanLocWarning = $('#location_warning');
   
   var spanerror = '<td class="error red samelocerror">Unable to select same location for same attribute</td>';
   var shiplocselectiontbl = $('#shiploc_selectiontbl');
@@ -54,12 +56,10 @@ $(function(){
    * Add Shipping Details to Summary list on-click event
    */
   $('#add_shipping_details').on('click', function(){
-  
 	if(checkIfEdit()){
 		alert('Please accept changes in Summary Table.');
 		return;
 	}
-	
     var hasActive = hasLoc = hasPrice = hasLPC = false;
     var noDuplicate = true;
 	var shipObj = { 'attr' : {},'loc' : {},'price' : {}, 'disp_attr' : {} };
@@ -99,7 +99,6 @@ $(function(){
 		shipObj.loc[selopt.val()] = $.trim(selopt.text());
 		hasLPC = true;
 	  }
-	  
     });
 
     //Check for duplicate entry of attr vs location
@@ -114,8 +113,8 @@ $(function(){
         });  
       });
     });
-
-    //If all fields are filled up and no duplicate entry
+	
+	/*******************	Executed on Complete Data	********************************/
     if(hasActive && hasLPC && noDuplicate){
       var row = $('table#shipping_summary > tbody > tr.cloningfield').clone();
 	  row.removeClass('cloningfield');
@@ -201,11 +200,20 @@ $(function(){
 		  }
 		  //fdata[groupkey][attrk][lock]['price'] = shipObj.price[lock];
 		  fdata[groupkey][attrk][lock] = shipObj.price[lock];
+		  
+		  if(jQuery.inArray(lock, locationgroup) === -1){
+			locationgroup.push(parseInt(lock));
+		  }
         });
       });
 
-      if(addDispGroup)
-        displaygroup[i] = shipObj.disp_attr;
+      if(addDispGroup){
+	    displaygroup[i] = shipObj.disp_attr;
+	  }
+      
+	updateLocationError();
+		
+		
 		
     }//close hasloc hasactive hasprice
 	else{
@@ -214,11 +222,42 @@ $(function(){
 	}
   });//close on click of adding ship details to summary
   
-
+  
+  // Check Shipping Location if 3 major islands are covered
+  function updateLocationError(){
+	spanLocWarning.html("");
+	var incLocation = false;
+	$.each(islandLookup, function(key,value){
+		if( jQuery.inArray(value,locationgroup) == -1){
+			incLocation = true;
+			switch(value){
+				case 2:
+					spanLocWarning.append('Luzon ');
+					break;
+				case 3:
+					spanLocWarning.append('Visayas ');
+					break;
+				case 4:
+					spanLocWarning.append('Mindanao ');
+					break;
+				default:
+					spanLocWarning.html("");
+					break;
+			}
+		}
+	});
+	if(incLocation){
+		divLocWarning.show();
+	}else{
+		divLocWarning.hide();
+	}
+  }
+  
   /**
   * Submit Handler function
   */
   $('#btnShippingDetailsSubmit').on('click', function(){
+	
 	if(checkIfEdit()){
 		alert('Please accept changes in Summary Table.');
 		return;
@@ -254,8 +293,8 @@ $(function(){
   });
 
   /**
-  * On change event for Location select field
-  */
+   * On change event for Location select field
+   */
   $('#shiploc_selectiontbl').on('change', '.shiploc', function(){
     var currval = $(this).find('option:selected').val();
     var thistr = $(this).closest('tr');
@@ -309,8 +348,8 @@ $(function(){
   });
 
   /**
-  * On click event for Attribute Selection
-  */ 
+   * On click event for Attribute Selection
+   */ 
   $('.product_combination').on('click', function(){
 
     $('td.samelocerror').remove();
@@ -345,9 +384,17 @@ $(function(){
   */ 
   $('#shipping_summary').on('click', '.delete_summaryrow', function(){
     var group = $(this).closest('tr').attr('data-group');
+	var locationtr = $(this).closest('td').prev('td').find('tr:not(".cloningfield")');
     $(this).closest('tr').remove();
     delete fdata[group];
     delete displaygroup[group];
+	locationtr.each(function(k,v){
+		var remove = parseInt($(v).attr('data-idlocation'));
+		locationgroup = jQuery.grep(locationgroup, function(value){
+			return value != remove;
+		});
+	});
+	updateLocationError();
     hideTable();
   })
   .on('click', '.edit_summaryrow', function(){
@@ -415,7 +462,10 @@ $(function(){
     jQuery.each(fdata[groupkey], function(attrk, attrObj){
       delete attrObj[idlocation];
     });
-    
+	locationgroup = jQuery.grep(locationgroup, function(value){
+		return value!=idlocation;
+	});
+	updateLocationError();
     if(parentTr.siblings('tr:not(".cloningfield")').length === 0){
       parentTr.parent().closest('tr').remove();
       delete fdata[groupkey];
@@ -435,14 +485,14 @@ $(function(){
 		if(getObjectSize(displaygroup) === 0){
 		  $('#shipping_summary').addClass('tablehide');
 		  $('#btnShippingDetailsSubmit').addClass('tablehide');
+		  divLocWarning.hide();
+		  spanLocWarning.html("");
 		}
 	}
   
 
 });
 /********** CLOSE DOCUMENT READY FUNCTION WITH DATA variables *********/
-
-
 
 /**
  * Compares if two objects are identical
@@ -485,8 +535,6 @@ function checkIfEdit(){
 	});
 	return hasEdit;
 }
-
-
 
 /**
 * Function to handle display of Price Value
