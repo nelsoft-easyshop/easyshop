@@ -45,18 +45,18 @@ class product extends MY_Controller
 				{
 					$sort = $_GET['sop'];
 					if($sort == "hot"){
-						$string_sort_a = " ORDER BY a.is_hot desc,(`cat_id` = ".$categoryId.") DESC ";
-						$string_sort_c = " ORDER BY c.is_hot desc,(`cat_id` = ".$categoryId.") DESC ";
+						$string_sort_a = " ORDER BY a.is_hot desc,(a.`cat_id` = ".$categoryId.") DESC ";
+						$string_sort_c = " ORDER BY c.is_hot desc,(c.`cat_id` = ".$categoryId.") DESC ";
 
 					}elseif ($sort == "new") {
-						$string_sort_a = " ORDER BY a.is_new desc ,(`cat_id` = ".$categoryId.") DESC ";
-						$string_sort_c = " ORDER BY c.is_new desc,(`cat_id` = ".$categoryId.") DESC ";
+						$string_sort_a = " ORDER BY a.is_new desc ,(a.`cat_id` = ".$categoryId.") DESC ";
+						$string_sort_c = " ORDER BY c.is_new desc,(c.`cat_id` = ".$categoryId.") DESC ";
 					}elseif ($sort == "popular"){
-						$string_sort_a = " ORDER BY clickcount desc ,(`cat_id` = ".$categoryId.") DESC ";
-						$string_sort_c = " ORDER BY clickcount desc,(`cat_id` = ".$categoryId.") DESC ";
+						$string_sort_a = " ORDER BY clickcount desc ,(a.`cat_id` = ".$categoryId.") DESC ";
+						$string_sort_c = " ORDER BY clickcount desc,(c.`cat_id` = ".$categoryId.") DESC ";
 					}else{
-						$string_sort_a = " ORDER BY (`cat_id` = ".$categoryId.") DESC";
-						$string_sort_c = " ORDER BY (`cat_id` = ".$categoryId.") DESC";
+						$string_sort_a = " ORDER BY (a.`cat_id` = ".$categoryId.") DESC";
+						$string_sort_c = " ORDER BY (c.`cat_id` = ".$categoryId.") DESC";
 					}
 					unset($_GET['sop']);
 				}
@@ -233,15 +233,15 @@ class product extends MY_Controller
 			{
 				$sort = $_POST['parameters']['sop'];
 				if($sort == "hot"){
-					$string_sort_a = " ORDER BY a.is_hot desc,(`cat_id` = ".$category_id.") DESC ";
-					$string_sort_c = " ORDER BY c.is_hot desc,(`cat_id` = ".$category_id.") DESC ";
+					$string_sort_a = " ORDER BY a.is_hot desc,(a.`cat_id` = ".$category_id.") DESC ";
+					$string_sort_c = " ORDER BY c.is_hot desc,(c.`cat_id` = ".$category_id.") DESC ";
 
 				}elseif ($sort == "new") {
-					$string_sort_a = " ORDER BY a.is_new desc ,(`cat_id` = ".$category_id.") DESC ";
-					$string_sort_c = " ORDER BY c.is_new desc,(`cat_id` = ".$category_id.") DESC ";
+					$string_sort_a = " ORDER BY a.is_new desc ,(a.`cat_id` = ".$category_id.") DESC ";
+					$string_sort_c = " ORDER BY c.is_new desc,(c.`cat_id` = ".$category_id.") DESC ";
 				}elseif ($sort == "popular"){
-					$string_sort_a = " ORDER BY clickcount desc ,(`cat_id` = ".$category_id.") DESC ";
-					$string_sort_c = " ORDER BY clickcount desc,(`cat_id` = ".$category_id.") DESC ";
+					$string_sort_a = " ORDER BY clickcount desc ,(a.`cat_id` = ".$category_id.") DESC ";
+					$string_sort_c = " ORDER BY clickcount desc,(c.`cat_id` = ".$category_id.") DESC ";
 				}else{
 					$string_sort_a = " ORDER BY (a.`cat_id` = ".$category_id.") DESC";
 					$string_sort_c = " ORDER BY (c.`cat_id` = ".$category_id.") DESC";
@@ -359,7 +359,6 @@ class product extends MY_Controller
 				}else{
 					$data = json_encode($this->load->view('pages/product/product_search_by_category2',$response,TRUE));
 				}
-
 			}
 			echo $data;
 		}
