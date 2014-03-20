@@ -52,14 +52,10 @@
           <tr>
             <td class="border-left" style="width:130px">Brand: <font color="red">*</font></td> <!-- Title of the product -->
             <td class="border-right" colspan="2">
-              <select name="prod_brand" id="prod_brand">
-                <option value="0">--Select Brand--</option>
-                  <?php 
-                  foreach ($brand as $key) {
-                    ?>
-                    <option value="<?php echo $key['brand_id'] ?>" <?php if(isset($product_details['brand_id'])){echo ($product_details['brand_id'])===$key['brand_id']?'selected':'';}?>><?php echo ucfirst(strtolower($key['name'])); ?></option>
-                    <?php } ?>
-              </select>
+              <input type = "hidden" id="prod_brand" name="prod_brand" value="0"/>
+              <input type = "text" id="brand_sch" autocomplete="off"/><div class="brand_sch_loading"></div>
+              <span class="add_brand">Add new brand</span>
+              <div id="brand_search_drop_content" class="brand_sch_drop_content"></div>
             </td>
           </tr>
 
@@ -1583,6 +1579,68 @@ tinymce.init({
 
 </script>
 
+<script type="text/javascript">
+
+
+
+$(document).ready(function() {
+   $('#brand_search_drop_content').on('click', 'li.brand_result', function(){
+        $this = $(this);     
+        $('#prod_brand').val($this.data('brandid'));
+        $("#brand_sch").val($this.children('a').text())
+   });
+})
+
+
+$(document).ready(function(){
+    var currentRequest = null;
+    $( "#brand_sch" ).keyup(function() {
+        $('#prod_brand').val(0)
+        var searchQuery = $(this).val();
+        var csrftoken = $('#uploadstep2_csrf').val();
+        if(searchQuery != ""){
+            currentRequest = jQuery.ajax({
+                type: "POST",
+                url: '<?php echo base_url();?>product/searchBrand', 
+                onLoading:jQuery(".brand_sch_loading").html('<img src="<?= base_url() ?>assets/images/orange_loader_small.gif" />').show(),
+                data: "data="+searchQuery+"&es_csrf_token="+csrftoken, 
+                beforeSend : function(){       
+                    $("#brand_search_drop_content").empty();
+                    if(currentRequest != null) {
+                        currentRequest.abort();
+                    }
+                },
+                success: function(response) {
+                    var obj = jQuery.parseJSON(response);
+                    var html = '<ul>';
+                    if((obj.length)>0){
+                        jQuery.each(obj,function(){
+                            html += '<li class="brand_result" data-brandid="'+(this.id_brand) +'"><a href="javascript:void(0)">'+(this.name)+'</a></li>' ;                             
+                        });
+                    }
+                    else{
+                       html = '<li> No results found </li>';
+                    }
+                    html += '</ul>';
+                    jQuery(".brand_sch_loading").hide();
+                    $("#brand_search_drop_content").html(html);
+                }
+            });
+        }
+    });
+    
+     $('.add_brand').click(function(){
+        $('#prod_brand').val('new')
+        if(currentRequest != null) {
+            currentRequest.abort();
+        }
+        jQuery(".brand_sch_loading").hide();
+    });
+});
+
+
+
+</script>
 
 <div class="clear"></div>  
 

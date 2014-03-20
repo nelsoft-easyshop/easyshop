@@ -788,6 +788,12 @@ class product extends MY_Controller
         echo json_encode($rows);
     }
     
+    function searchBrand(){
+        $string = $this->input->post('data');
+        $rows = $this->product_model->searchBrand($string);
+        echo json_encode($rows);
+    }
+    
 }
 
   
