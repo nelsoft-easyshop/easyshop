@@ -90,7 +90,6 @@ class productUpload extends MY_Controller
 					$str_parents_to_last = $str_parents_to_last.' ->';
 				}
 			}
-			$response['brand'] = $this->product_model->getAvailableBrand($id);
 			$response['parent_to_last'] = $str_parents_to_last;
 			for ($i=0 ; $i < sizeof($attribute) ; $i++ ) {  # getting all lookuplist from item attribute
 				$lookuplist = $this->product_model->getLookItemListById($attribute[$i]['attr_lookuplist_id']);
@@ -168,9 +167,9 @@ class productUpload extends MY_Controller
 		$data = $this->input->post('data');
 		$cat_id = $this->input->post('id');
 		$otherCategory = $this->input->post('otherCategory');
-		$availableBrand = $this->product_model->getAvailableBrand($cat_id);
 		$brand_id =  $this->input->post('prod_brand'); 
-		$found = FALSE;
+        $brand_valid = false;
+        $otherBrand = '';
 
 		$product_title = trim($this->input->post('prod_title'));
 		$product_brief = trim($this->input->post('prod_brief_desc'));
@@ -188,17 +187,24 @@ class productUpload extends MY_Controller
 		$date = date("Ymd");
         $fulldate = date("YmdGis");
         
-		foreach ($availableBrand as $brandKey => $brandValue) {
-			if($brand_id === $brandValue['brand_id']){
-				$found = TRUE;
-				break;
-			}
-		}
+        if(is_numeric($brand_id)){
+            if($this->product_model->getBrandName($brand_id)){
+                $brand_valid = true;
+            }
+        }
+        else{ 
+            if($brand_id === 'new'){
+                $brand_valid = true;
+                $otherBrand = $this->input->post('brand_sch');
+                $brand_id = 1;
+            }
+        }
 
-		if($found === FALSE){
-			echo '{"e":"0","d":"Brand selected not available. Please select another."}';	 
+		if($brand_valid === FALSE){
+			echo '{"e":"0","d":"The selected brand is unavailable. Please specify a valid one."}';	 
 			exit();
 		} 
+        
 		if (!in_array($product_condition, $this->lang->line('product_condition')))
 		{
 			echo '{"e":"0","d":"Condition selected not available. Please select another."}';	 
@@ -237,7 +243,7 @@ class productUpload extends MY_Controller
 				$x++;
 			}
 
-			$product_id = $this->product_model->addNewProduct($product_title,$sku,$product_brief,$product_description,$keyword,$brand_id,$cat_id,$style_id,$member_id,$product_price,$product_condition,$otherCategory);
+			$product_id = $this->product_model->addNewProduct($product_title,$sku,$product_brief,$product_description,$keyword,$brand_id,$cat_id,$style_id,$member_id,$product_price,$product_condition,$otherCategory, $otherBrand);
 			
             #ERROR TRACKING: SAM
             if(intval($product_id,10) === 0){
@@ -710,7 +716,6 @@ class productUpload extends MY_Controller
 		$data = array_merge($data,$this->fill_header());
 		$this->load->view('templates/header',$data); 
 		$product = $this->product_model->getProductEdit($product_id, $member_id);
-
 		$parents = $this->product_model->getParentId($product['cat_id']); # getting all the parent from selected category
 		$lastElement = end($parents);	
 		$str_parents_to_last = "";
@@ -738,8 +743,7 @@ class productUpload extends MY_Controller
 		$response['product_details'] = $product;
 
 		$response['is_edit'] = true;
-		$response['brand'] = $this->product_model->getAvailableBrand($product['cat_id']);
-		
+
 		$response['product_attributes_opt'] = array();
 		$response['product_attributes_spe'] = array();
 
@@ -835,31 +839,39 @@ class productUpload extends MY_Controller
         $keyword = es_url_clean(trim($this->input->post('prod_keyword')));
 		$keyword = str_replace('-', ' ',$keyword);
 		$product_id = $this->input->post('p_id');
-		$brand_id =  intval($this->input->post('prod_brand'),10);
+		$brand_id =  $this->input->post('prod_brand');
+        $brand_valid = false;
+        $otherBrand = '';
+        
 		$style_id = 1;
 		$member_id =  $this->session->userdata('member_id');
 		$inputs = $this->input->post('inputs'); 
 		$explode_inputs = explode("|", substr($inputs, 1));
 		$combination = json_decode($this->input->post('combination'));
 		$checkIfCombination = $this->input->post('noCombination');
-
-		$found = FALSE;
+        
 		$cat_id = $this->input->post('id');
-		$availableBrand = $this->product_model->getAvailableBrand($cat_id);
 		$date = date("Ymd");
         $fulldate = date("YmdGis");
 
-		foreach ($availableBrand as $brandKey => $brandValue) {
-			if($brand_id === intval($brandValue['brand_id'],10)){
-				$found = TRUE;
-				break;
-			}
-		}
+        if(is_numeric($brand_id)){
+            if($this->product_model->getBrandName($brand_id)){
+                $brand_valid = true;
+            }
+        }
+        else{ 
+            if($brand_id === 'new'){
+                $brand_valid = true;
+                $otherBrand = $this->input->post('brand_sch');
+                $brand_id = 1;
+            }
+        }
 
-		if($found === FALSE){
-			echo '{"e":"0","d":"Brand selected not available. Please select another."}';	 
+		if($brand_valid === FALSE){
+			echo '{"e":"0","d":"The selected brand is unavailable. Please specify a valid one."}';	 
 			exit();
 		} 
+
 		if (!in_array($product_condition, $this->lang->line('product_condition')))
 		{
 			echo '{"e":"0","d":"Condition selected not available. Please select another."}';	 
@@ -959,6 +971,7 @@ class productUpload extends MY_Controller
 				'style_id' => $style_id,
 				'price' => $product_price,
 				'condition' => $product_condition,
+                'brand_other_name' => $otherBrand,
 				);
 
 			$rowCount = $this->product_model->editProduct($product_details, $member_id);
@@ -1237,6 +1250,7 @@ class productUpload extends MY_Controller
 		echo $data;        
 	}
 
+    
 }
 
 

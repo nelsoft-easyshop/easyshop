@@ -52,9 +52,9 @@
           <tr>
             <td class="border-left" style="width:130px">Brand: <font color="red">*</font></td> <!-- Title of the product -->
             <td class="border-right" colspan="2">
-              <input type = "hidden" id="prod_brand" name="prod_brand" value="0"/>
-              <input type = "text" id="brand_sch" autocomplete="off"/><div class="brand_sch_loading"></div>
-              <span class="add_brand blue">Add new brand</span>
+              <input type = "hidden" id="prod_brand" name="prod_brand" value="<?php echo isset($product_details['brand_id'])?$product_details['brand_id']:0?>"/>
+              <input type = "text" id="brand_sch" name="brand_sch" autocomplete="off" placeholder="Search for your brand" value="<?php echo isset($product_details['brandname'])?$product_details['brandname']:''?>"/>
+              <div class="brand_sch_loading"></div>
               <div id="brand_search_drop_content" class="brand_sch_drop_content"></div>
             </td>
           </tr>
@@ -1171,7 +1171,7 @@ $(document).on('change',"#price_field,#prod_price, .price_text",function () {
   
 });
 
-$( "#prod_brand,#prod_title,#prod_brief_desc,#prod_price,#prod_sku,#prod_condition" ).blur(function() {
+$( "#prod_title,#prod_brief_desc,#prod_price,#prod_sku,#prod_condition" ).blur(function() {
   var value = $(this).val();
   var id = $(this).attr('id');
 
@@ -1182,12 +1182,12 @@ $( "#prod_brand,#prod_title,#prod_brief_desc,#prod_price,#prod_sku,#prod_conditi
   }
 });
 
-$( "#prod_title,#prod_brief_desc,#prod_price,#prod_sku,#qtyTextClass" ).keypress(function() {
+$( "#brand_sch,#prod_title,#prod_brief_desc,#prod_price,#prod_sku,#qtyTextClass" ).keypress(function() {
   var id = $(this).attr('id');
   validateWhiteTextBox("#"+id);
 });
 
-$(document).on('change',"#prod_condition,#prod_brand",function () {
+$(document).on('change',"#prod_condition",function () {
   var id = $(this).attr('id');
   validateWhiteTextBox("#"+id);
 });
@@ -1223,7 +1223,6 @@ $(".proceed_form").unbind("click").click(function(){
   var sku = $("#prod_sku");  
   var brand = $("#prod_brand");
   var condition = $('#prod_condition');
-  var brandAvailable = <?php echo json_encode($brand); ?>;
   var conditionAvailable = <?php echo json_encode($this->lang->line('product_condition')); ?>;
   var found = false;
   var quantity = $('.qtyTextClass');
@@ -1252,9 +1251,9 @@ $(".proceed_form").unbind("click").click(function(){
   }
 
   if(brand.val() == "0"){
-    validateRedTextBox("#prod_brand");
+    validateRedTextBox("#brand_sch");
   }else{
-    validateWhiteTextBox("#prod_brand");
+    validateWhiteTextBox("#brand_sch");
   }
 
   if(condition.val() == "0"){
@@ -1273,28 +1272,12 @@ $(".proceed_form").unbind("click").click(function(){
     return false;
   }else{
    var pricevalue = price.val().replace(new RegExp(",", "g"), '');
-    //if(price.val() <= 0 || !$.isNumeric(price.val())){
      if(pricevalue <= 0 || !$.isNumeric(pricevalue)){
       alert("Invalid Price. Price should be numeric!");
       validateRedTextBox("#prod_price");
       return false;
     }else{
-
-      for (var key in brandAvailable) {
-        if (brandAvailable.hasOwnProperty(key))
-          if(brandAvailable[key]['brand_id'] === brand.val()){
-           found = true;
-           break;
-         }
-       }
-
-       if(found === false){
-         validateRedTextBox("#prod_brand");
-         $( "#prod_brand" ).focus(); 
-         alert('Brand selected not available. Please select other.');
-         return false;
-       } 
-
+    
        found = false;
        for (var key in conditionAvailable) {
         if (conditionAvailable.hasOwnProperty(key))
@@ -1585,10 +1568,16 @@ tinymce.init({
 
 
 $(document).ready(function() {
+   if(($('brand_sch').val() !== '')&&(parseInt($('prod_brand').val(),10) !== 0)){
+      jQuery(".brand_sch_loading").html('<img src="<?= base_url() ?>assets/images/check_icon.png" />').show().css('display','inline-block');
+   }
+   
    $('#brand_search_drop_content').on('click', 'li.brand_result', function(){
         $this = $(this);     
         $('#prod_brand').val($this.data('brandid'));
         $("#brand_sch").val($this.children('a').text())
+        jQuery(".brand_sch_loading").html('<img src="<?= base_url() ?>assets/images/check_icon.png" />').show().css('display','inline-block');
+        $('#brand_search_drop_content').hide();
    });
 })
 
@@ -1623,7 +1612,8 @@ $(document).ready(function(){
                     else{
                        html = '<li> No results found </li>';
                     }
-                    html += '</ul>';
+                    
+                    html += '<li class="add_brand blue">Use your own brand name</li></ul>';
                     jQuery(".brand_sch_loading").hide();
                     $("#brand_search_drop_content").html(html);
                 }
@@ -1631,13 +1621,16 @@ $(document).ready(function(){
         }
     });
     
-     $('.add_brand').click(function(){
+    $(document).on("click",".add_brand", function(){
+        console.log('sam');
         $('#prod_brand').val('new')
         if(currentRequest != null) {
             currentRequest.abort();
         }
-        jQuery(".brand_sch_loading").hide();
+        jQuery(".brand_sch_loading").html('<img src="<?= base_url() ?>assets/images/check_icon.png" />').show().css('display','inline-block');
+        $('#brand_search_drop_content').hide();
     });
+
 });
 
 
@@ -1645,18 +1638,18 @@ $(document).ready(function(){
 </script>
 
 <script>
-         $(document).ready(function() { 
+     $(document).ready(function() { 
 
-            $('#brand_sch').focus(function() {
-            $('#brand_search_drop_content').show();
-            $(document).bind('focusin.brand_sch_drop_content click.brand_sch_drop_content',function(e) {
-                if ($(e.target).closest('#brand_search_drop_content, #brand_sch').length) return;
-                $('#brand_search_drop_content').hide();
-                });
-             });
- 
+        $('#brand_sch').focus(function() {
+        $('#brand_search_drop_content').show();
+        $(document).bind('focusin.brand_sch_drop_content click.brand_sch_drop_content',function(e) {
+            if ($(e.target).closest('#brand_search_drop_content, #brand_sch').length) return;
             $('#brand_search_drop_content').hide();
-        });
+            });
+         });
+
+        $('#brand_search_drop_content').hide();
+    });
 
 </script>
 

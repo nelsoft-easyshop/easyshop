@@ -270,6 +270,20 @@ class product_model extends CI_Model
 		
 		return $rows;
 	}
+    
+    
+    function getBrandName($brand_id)
+	{
+		$query = $this->sqlmap->getFilenameID('product', 'getBrandName');
+		
+		$sth = $this->db->conn_id->prepare($query);
+		$sth->bindParam(':brand_id',$brand_id,PDO::PARAM_INT);
+		$sth->execute();
+        $return = $sth->fetch(PDO::FETCH_ASSOC);
+        
+		return ($sth->rowCount()>0)?$return['name']:false;
+	}
+
 
 	function selectAttributeNameWithNameAndId($name,$id)
 	{
@@ -305,7 +319,7 @@ class product_model extends CI_Model
 	}
 
 
-	function addNewProduct($product_title,$sku,$product_brief,$product_description,$keyword,$brand_id,$cat_id,$style_id,$member_id,$product_price,$product_condition,$other_category_name)
+	function addNewProduct($product_title,$sku,$product_brief,$product_description,$keyword,$brand_id,$cat_id,$style_id,$member_id,$product_price,$product_condition,$other_category_name, $other_brand_name)
 	{
 		# this function for adding new product to es_product table.
 		$query = $this->sqlmap->getFilenameID('product','addNewProduct_es_product');
@@ -323,6 +337,8 @@ class product_model extends CI_Model
 		$sth->bindParam(':price',$product_price);
 		$sth->bindParam(':condition',$product_condition);
 		$sth->bindParam(':cat_other_name',$other_category_name);
+        $sth->bindParam(':brand_other_name',$other_brand_name);
+        
 		$bool = $sth->execute();
 
         if(!$bool){
@@ -1024,6 +1040,7 @@ class product_model extends CI_Model
         $sth->bindParam(':condition',$product_details['condition']);
         $sth->bindParam(':p_id',$product_details['product_id']);
 		$sth->bindParam(':member_id',$member_id);
+        $sth->bindParam(':brand_other_name',$product_details['brand_other_name']);
         
         $bool = $sth->execute();
         
