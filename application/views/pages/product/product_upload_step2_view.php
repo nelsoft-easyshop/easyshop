@@ -54,7 +54,7 @@
             <td class="border-right" colspan="2">
               <input type = "hidden" id="prod_brand" name="prod_brand" value="0"/>
               <input type = "text" id="brand_sch" autocomplete="off"/><div class="brand_sch_loading"></div>
-              <span class="add_brand">Add new brand</span>
+              <span class="add_brand blue">Add new brand</span>
               <div id="brand_search_drop_content" class="brand_sch_drop_content"></div>
             </td>
           </tr>
@@ -135,13 +135,19 @@
             <td class="border-right pad-right" colspan="3"><textarea style="width: 98%;height:100%" name="prod_description" class="mceEditor"  id="prod_description" placeholder="Enter description..."><?php echo (isset($product_details['description']))?$product_details['description']:'';?></textarea></td>
           </tr> 
           <!-- end of Description -->
+
+          <!-- start of keywords -->
+          <tr>
+            <td class="border-left">Keywords (separated by spaces)</td>
+            <td class="border-right" colspan="3"><input type="text" autocomplete="off" maxlength="1024" name="prod_keyword" id="prod_keyword" placeholder="Enter keyword for you item" value="<?php echo (isset($product_details['keywords']))?$product_details['keywords']:'';?>"></td>
+          </tr>
+          <!-- end of keywords -->
         </table> 
 
         <table class="step4_2" style="width:100%" cellspacing="0" cellpadding="0">
           <thead>
             <tr>
-              <td class="border-left" width="110px;"></td>
-              <td class="border-right" colspan="3">
+              <td class="border-left border-right" colspan="4">
                 <p class="view_more_product_details blue"><span class="span_bg vmd_img"></span>View more product details</p>
               </td>
             </tr>
@@ -250,10 +256,6 @@
                }
               ?>
           <tr>
-            <td class="border-left">Keywords (separated by spaces)</td>
-            <td class="border-right" colspan="3"><input type="text" autocomplete="off" maxlength="1024" name="prod_keyword" id="prod_keyword" placeholder="Enter keyword for you item" value="<?php echo (isset($product_details['keywords']))?$product_details['keywords']:'';?>"></td>
-          </tr>
-          <tr>
             <td class="border-left border-right" colspan="4">
               <h3> Additional Information to your Item</h3> 
             </td>
@@ -356,9 +358,8 @@
         <!-- End hide of more product details -->
         <tfoot>
           <tr class="prod-details-add-more-link">
-            <td class="border-left">&nbsp;</td>
-            <td class="border-right" colspan="3">  
-              <a class="add_more_link" href="javascript:void(0)">+ Add More</a>
+            <td class="border-left border-right" colspan="4">  
+              <a class="add_more_link" href="javascript:void(0)">+ Add More Optional</a>
 
               <?php if(isset($product_details)): ?>
                 <input type="hidden" name="p_id" value="<?php echo $product_details['id_product']; ?>">
@@ -381,7 +382,7 @@
               </td>
           </tr> 
           <tr>
-              <td class="border-left">Base Price <font color="red"> *</font></td>
+              <td width="110px" class="border-left">Base Price <font color="red"> *</font></td>
               <td class="border-right" colspan="3"><input type="text" autocomplete="off" name="prod_price" id="prod_price" placeholder="Enter price (0.00)" value="<?php echo (isset($product_details['price']))?$product_details['price']:'';?>"></td>
           </tr>
           <!-- end of Price Content -->
@@ -1602,13 +1603,14 @@ $(document).ready(function(){
             currentRequest = jQuery.ajax({
                 type: "POST",
                 url: '<?php echo base_url();?>product/searchBrand', 
-                onLoading:jQuery(".brand_sch_loading").html('<img src="<?= base_url() ?>assets/images/orange_loader_small.gif" />').show(),
+                onLoading:jQuery(".brand_sch_loading").html('<img src="<?= base_url() ?>assets/images/orange_loader_small.gif" />').show().css('display','inline-block'),
                 data: "data="+searchQuery+"&es_csrf_token="+csrftoken, 
                 beforeSend : function(){       
                     $("#brand_search_drop_content").empty();
                     if(currentRequest != null) {
                         currentRequest.abort();
                     }
+                    $('.brand_sch_drop_content').show();
                 },
                 success: function(response) {
                     var obj = jQuery.parseJSON(response);
@@ -1639,6 +1641,22 @@ $(document).ready(function(){
 });
 
 
+
+</script>
+
+<script>
+         $(document).ready(function() { 
+
+            $('#brand_sch').focus(function() {
+            $('#brand_search_drop_content').show();
+            $(document).bind('focusin.brand_sch_drop_content click.brand_sch_drop_content',function(e) {
+                if ($(e.target).closest('#brand_search_drop_content, #brand_sch').length) return;
+                $('#brand_search_drop_content').hide();
+                });
+             });
+ 
+            $('#brand_search_drop_content').hide();
+        });
 
 </script>
 
