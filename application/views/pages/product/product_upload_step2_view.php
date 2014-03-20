@@ -91,10 +91,11 @@
           <tr>
               <td class="border-left border-right border-bottom" colspan="4">
                 <div class="inputfiles"> 
-                   <label for="files" class="labelfiles"><span class="add_photo span_bg"></span>Browse Photo</label>
+                   <span class="labelfiles">
+                        <span class="add_photo span_bg"></span>Browse Photo
+                   </span>
                    <br /><span class="label_bttm_txt">You may select multiple images</span>
-                   <!-- <span class="labelfiles">Browse pictures</span> -->
-                   <input type="file" id="files" class="files" name="files[]" multiple accept="image/*" required = "required"  /><br/><br/>
+                   <input type="file" id="files" class="files active" name="files[]" multiple accept="image/*" required = "required"  /><br/><br/>
                 </div> 
 
                 <div style="display:inline">
@@ -788,7 +789,6 @@ $(document).ready(function(){
 
 
     // ES_UPLOADER BETA
-    
     $(".labelfiles").click(function(){
         $('.files.active').trigger('click'); 
     });
