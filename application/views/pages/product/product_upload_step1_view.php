@@ -186,7 +186,7 @@
             maxscroll = 0;
             focuslevel = 3; 
             cLevel = 0;
-            $(".jcarousel").animate({scrollLeft: 0}, 400);
+            $(".jcarousel").animate({scrollLeft: 0}, 0);
 
             $(".product_sub_category .product_sub_items0").nextAll().remove();
             $(".product_sub_category .product_sub_items0").remove();
