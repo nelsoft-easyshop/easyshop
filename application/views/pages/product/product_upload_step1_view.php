@@ -120,8 +120,8 @@
                         </div>
 
                         <!-- Controls -->
-                        <a href="#" class="jcarousel-control-prev inactive">&lsaquo;</a>
-                        <a href="#" class="jcarousel-control-next inactive">&rsaquo;</a>
+                        <a href="javascript:void(0)" class="jcarousel-control-prev inactive">&lsaquo;</a>
+                        <a href="javascript:void(0)" class="jcarousel-control-next inactive">&rsaquo;</a>
 
 
 
@@ -137,14 +137,23 @@
         </div>
 
         <div class="clear"></div>  
-
+ 
 
         <script>
         $(document).ready(function() {
+            $('.jcarousel').bind("scroll", ScrollOnLoad);
+            setTimeout(UnbindScroll, 150); 
+            function ScrollOnLoad() {
+                UnbindScroll();
+                $('.jcarousel').scrollLeft(0);
+            }
+
+            function UnbindScroll() {
+                $('.jcarousel').unbind("scroll", ScrollOnLoad);
+            }
 
             var globalParent;
-            var globalLevel;
-
+            var globalLevel; 
             $(document).on('click','.product-list li a',function () { 
                 $(this).addClass('active').parent().siblings().children('a').removeClass('active');
             });
@@ -172,6 +181,13 @@
             var name = D.name;
 			var csrftoken = $('#uploadstep1_csrf').val();
 
+
+            $('.jcarousel-control-prev , .jcarousel-control-next').addClass('inactive'); 
+            maxscroll = 0;
+            focuslevel = 3; 
+            cLevel = 0;
+            $(".jcarousel").animate({scrollLeft: 0}, 400);
+
             $(".product_sub_category .product_sub_items0").nextAll().remove();
             $(".product_sub_category .product_sub_items0").remove();
 
@@ -195,9 +211,13 @@
                var clone = $('#storeValue .parent'+catId).clone();
                $('.product_sub_category').append(clone);
            }
+
+
+   
        });
 
         $(document).on('click','.child',function () { // requesting the child category from selected category
+
             var D = eval('(' + $(this).attr('data') + ')');
             var nlevel = parseInt(D.level) + 1;
             var action = 'productUpload/getChild';
@@ -233,11 +253,55 @@
                     $(".add_category_submit").append('<input type="hidden" name="hidden_attribute" value="'+catId+'" class="hidden_attribute"><input class="proceed_form" id="proceed_form" type="submit" value="Proceed with '+name+'">');
                 }
 
-         }
+         } 
 
-           $('.jcarousel').jcarousel('scroll', '+=1');
-       });
+        
+        if(nlevel > 2){  
+            if(nlevel == focuslevel){
+                $('.jcarousel-control-prev').removeClass('inactive');
+                var leftPos = $('.jcarousel').scrollLeft();
+                // $('.jcarousel').scrollLeft(leftPos + 200);
+            $(".jcarousel").animate({scrollLeft: leftPos + 200}, 400);
+                maxscroll = leftPos;
+                focuslevel = focuslevel + 1;
+            }   
+            cLevel = nlevel;
+        }
+ 
+        });
 
+        var focuslevel = 3;
+        var maxscroll = 0;
+        var cLevel = 0;
+
+        $(document).on('click','.jcarousel-control-prev',function () {
+
+            var leftPos = $('.jcarousel').scrollLeft();
+            // $('.jcarousel').scrollLeft(leftPos - 200);
+            $(".jcarousel").animate({scrollLeft: leftPos - 200}, 400);
+            if(focuslevel > 3){
+                focuslevel = focuslevel - 1;
+                 $('.jcarousel-control-next').removeClass('inactive');
+            }
+
+            if(focuslevel == 3){
+                $('.jcarousel-control-prev').addClass('inactive');
+            }
+        });
+
+        $(document).on('click','.jcarousel-control-next',function () {
+            $('.jcarousel-control-prev').removeClass('inactive');
+            var leftPos = $('.jcarousel').scrollLeft();
+            if(leftPos <= maxscroll){
+                // $('.jcarousel').scrollLeft(leftPos + 200);
+            $(".jcarousel").animate({scrollLeft: leftPos + 200}, 400);
+                focuslevel = focuslevel + 1;
+            }
+            if(leftPos == maxscroll){
+                 $(this).addClass('inactive');
+            }
+
+        });
 
         $(document).on('click','.othercategory a',function () {
             var selfAttrParent = $(this).data('parent');
@@ -282,6 +346,7 @@
 
 });
 </script> 
+ 
 <div id="storeValue" style="display:none">
 
 
