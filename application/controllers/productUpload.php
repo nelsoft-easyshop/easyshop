@@ -71,7 +71,7 @@ class productUpload extends MY_Controller
 	{    
 		$data = $this->fill_view();
 		$this->load->view('templates/header', $data); 
-		if(isset($_POST['hidden_attribute'])||(true)){ # if no item selected cant go to the link. it will redirect to step 1
+		if(isset($_POST['hidden_attribute'])){ # if no item selected cant go to the link. it will redirect to step 1
 			$id = $this->input->post('hidden_attribute'); 
 			$otherCategory = $this->input->post('othernamecategory');
 			$response['id'] = $id; # id is the selected category
