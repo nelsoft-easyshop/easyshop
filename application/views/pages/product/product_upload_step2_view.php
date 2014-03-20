@@ -98,21 +98,7 @@
                    <input type="file" id="files" class="files active" name="files[]" multiple accept="image/*" required = "required"  /><br/><br/>
                 </div> 
 
-                <div style="display:inline">
-                    <?php if(isset($main_images)):?> <!-- IF EDIT FUNCTION -->
-                    <div>
-                        <?php foreach($main_images as $main_image): ?>
-                        <!--
-                        <div class="prod_upload_img_container">
-                          <img src =<?php echo base_url().$main_image['path'].'thumbnail/'.$main_image['file'];?> >
-                          <input type="checkbox" class="prev_img" name="main_image[<?php echo $main_image['id_product_image'];?>]"/> Remove
-                        </div> 
-                        -->                    
-                        <?php endforeach; ?>
-                    </div>
-                    <?php endif; ?>
-                </div>
-
+ 
                 <!-- this output will show all selected from input file field from above. this is multiple upload. -->
                 <output id="list">
                     <!-- IF EDIT FUNCTION -->
@@ -426,7 +412,7 @@
                     <span>Quantity:</span><br />
                     <input type="text" class="qtyTextClass" id="qtyTextClass" name="quantity"> 
                     <a href="javascript:void(0)" data-value="1" class="quantity_attr_done orange_btn3">Add</a>
-                    <a class="tooltips qty_tooltip quantity_attr_done" href="javascript:void(0)" style="display:inline"><img src="<?= base_url() ?>assets/images/icon_qmark.png" alt=""> <span> You can also set the availability of different attribute combinations of your item by clicking the Add button</span></a> 
+                    <a class="tooltips qty_tooltip quantity_attr_done" href="javascript:void(0)" style="display:none"><img src="<?= base_url() ?>assets/images/icon_qmark.png" alt=""> <span> You can also set the availability of different attribute combinations of your item by clicking the Add button</span></a> 
                   </div>
                   <div class="quantity_attrs_content" id="quantity_attrs_content2"></div>
                 </div>

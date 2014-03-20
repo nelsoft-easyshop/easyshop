@@ -733,7 +733,7 @@ div.sell_steps4 ul li:nth-child(4) a {
 }
 
 a.qty_tooltip {
-    display: inline-block !important;
+    display: inline-block;
     margin-top: 9px;
     padding: 0;
     vertical-align: middle;
