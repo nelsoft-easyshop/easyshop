@@ -585,7 +585,7 @@ class productUpload extends MY_Controller
 			//$id = 129;
 			
 			// Actual Product ID Code
-			//$id = $this->input->post('prod_h_id');
+			$id = $this->input->post('prod_h_id');
 			
 			$data = array (
 				'shiploc' => $this->product_model->getLocation(),
@@ -677,8 +677,10 @@ class productUpload extends MY_Controller
 					$this->product_model->storeProductShippingMap($shippingId, $attrCombinationId);
 				}*/
 				foreach($attrGroup as $locationKey=>$price){
-					$shippingId = $this->product_model->storeShippingPrice($locationKey, $price);
-					$this->product_model->storeProductShippingMap($shippingId, $attrCombinationId);
+					if(is_numeric($price)){
+						$shippingId = $this->product_model->storeShippingPrice($locationKey, $price);
+						$this->product_model->storeProductShippingMap($shippingId, $attrCombinationId);
+					}
 				}
 			}
 		}

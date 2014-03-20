@@ -23,7 +23,20 @@ $(function(){
     var shipLocCount = $('#shiploc_count');
     var locCount = parseInt(shipLocCount.val());
     shipLocCount.val(locCount-1);
+  })
+  .on('keypress', '.shipprice', function(e){
+	//console.log(e);
+	var code = e.keyCode || e.which;
+	return ( (code>=48 && code<=57) || code === 46 || code === 44 || code===8 || (code>=37 && code<=40) || ((code === 97 || code === 99 || code === 118) && e.ctrlKey) );
   });
+  
+  $('#shipping_summary').on('keypress', '.shipprice', function(e){
+	//console.log(e);
+	var code = e.keyCode || e.which;
+	return ( (code>=48 && code<=57) || code === 46 || code === 44 || code===8 || (code>=37 && code<=40) || ((code === 97 || code === 99 || code === 118) && e.ctrlKey) );
+  });
+  
+  
 });
 /********** CLOSE DOCUMENT READY FUNCTION *********/
 
