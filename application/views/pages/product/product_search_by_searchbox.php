@@ -48,8 +48,22 @@ echo $category_cnt;
   <div class="right_product">
     <p class="search_result"><!-- Showing 1 - 48 of 13,152 Results --></p>
 
-    <div id="list" class="list "></div>
-    <div id="grid" class="grid grid-active"></div>
+<?php
+$typeOfViewActive = '<div id="list" class="list "></div>
+                     <div id="grid" class="grid grid-active"></div>';
+             if(isset($_COOKIE['view']))
+            {
+                $cookieView = $_COOKIE['view'];
+                if($cookieView == "list"){
+                    $typeOfViewActive = '<div id="list" class="list list-active"></div>
+                     <div id="grid" class="grid"></div>';
+                }else{
+                   $typeOfViewActive = '<div id="list" class="list "></div>
+                     <div id="grid" class="grid grid-active"></div>';
+                }
+            }
+            echo $typeOfViewActive;
+?> 
     <div class="clear"></div>
 	<input type="hidden" id="scroll_csrf" name="<?php echo $my_csrf['csrf_name'];?>" value="<?php echo $my_csrf['csrf_hash'];?>">
     <div id="product_content">     
@@ -58,8 +72,20 @@ echo $category_cnt;
       {
        for ($i=0; $i < sizeof($items); $i++) { 
         $pic = explode('/', $items[$i]['product_image_path']);
-        ?>
-        <div class="product">
+
+
+            $typeOfView = "product";
+             if(isset($_COOKIE['view']))
+            {
+                $cookieView = $_COOKIE['view'];
+                if($cookieView == "list"){
+                    $typeOfView = "product-list";
+                }else{
+                   $typeOfView = "product";
+                }
+            }
+            ?>
+            <div class="<?php echo $typeOfView; ?>">
          <a href="<?=base_url()?>item/<?php echo $items[$i]['product_id']; ?>/<?php echo es_url_clean($items[$i]['product_name']); ?>.html"><span class="prod_img_wrapper"><span class="prod_img_container"><img alt="<?php echo $items[$i]['product_name']; ?>" src="<?php echo base_url().$pic[0].'/'.$pic[1].'/'.$pic[2].'/'.$pic[3].'/'.'categoryview'.'/'.$pic[4];;?>"></span></span></a>
 
          <h3 style="  -o-text-overflow: ellipsis;    
@@ -100,6 +126,34 @@ echo $category_cnt;
 <script type="text/javascript">
 $(document).ready(function(){
 
+    var today = new Date();
+        var expiry = new Date(today.getTime() + 30 * 24 * 3600 * 1000); // plus 30 days
+
+        function createCookie(name, value, expires, path, domain) {
+            var cookie = name + "=" + escape(value) + ";";
+
+            if (expires) { 
+                if(expires instanceof Date) { 
+                    if (isNaN(expires.getTime()))
+                        expires = new Date();
+                }
+                else
+                    expires = new Date(new Date().getTime() + parseInt(expires) * 1000 * 60 * 60 * 24);
+                cookie += "expires=" + expires.toGMTString() + ";";
+            }
+            if (path)
+                cookie += "path=" + path + ";";
+            if (domain)
+                cookie += "domain=" + domain + ";";
+            document.cookie = cookie;
+        }
+
+        function getCookie(name) {
+            var regexp = new RegExp("(?:^" + name + "|;\s*"+ name + ")=(.*?)(?:;|$)", "g");
+            var result = regexp.exec(document.cookie);
+            return (result === null) ? null : result[1];
+        }
+
   // START OF INFINITE SCROLLING FUNCTION
 
   var base_url = '<?php echo base_url(); ?>';
@@ -108,7 +162,18 @@ $(document).ready(function(){
   var ajax_is_on = false; 
   var objHeight=$(window).height()-50;  
   var last_scroll_top = 0;
-  var type = 0;
+  <?php 
+             if(isset($_COOKIE['view']))
+    {
+        $type = 0;
+        if($cookieView == "list"){
+            $type = "1";
+        }else{
+           $type = "0";
+        }
+    }
+ ?>
+ var type = '<?php echo $type ?>';
   var csrftoken = $('#scroll_csrf').val();
   $(window).scroll(function(event) {
     var st = $(this).scrollTop();
@@ -147,7 +212,7 @@ $(document).ready(function(){
 
   $('#list').click(function(){    
     type = 1;
-
+createCookie("view ", "list", 30); 
     $('.product').animate({opacity:0},function(){
       $('.grid').removeClass('grid-active');
       $('.list').addClass('list-active');
@@ -158,7 +223,7 @@ $(document).ready(function(){
 
   $('#grid').click(function(){
     type = 0;
-
+ createCookie("view ", "grid", 30);  
     $('.product-list').animate({opacity:0},function(){
       $('.list').removeClass('list-active');
       $('.grid').addClass('grid-active');
