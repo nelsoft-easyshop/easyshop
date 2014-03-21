@@ -3,6 +3,9 @@
 <link rel="stylesheet" href="<?= base_url() ?>assets/css/jquery.bxslider.css" type="text/css" media="screen"/> 
 
 <?php
+
+session_start();
+$_SESSION['start'] = 0;
 foreach ($arrayofparams as $keyparam_r => $value) {  # this loop to remove the other elements if one attirbute is checked/choosed
     $keyparam = $value['name'];
     
@@ -330,10 +333,9 @@ $(document).ready(function() {
             return (result === null) ? null : result[1];
         }
 
-
-
         $('#price1').val(<?php echo $price1 ?>);
         $('#price2').val(<?php echo $price2 ?>);
+        
         // START OF INFINITE SCROLLING FUNCTION
 
         var base_url = '<?php echo base_url(); ?>';
@@ -353,46 +355,54 @@ $(document).ready(function() {
                 }
             }
          ?>
+
         var type = '<?php echo $type ?>';
         var csrftoken = $('#scroll_csrf').val();
         $(window).scroll(function(event) {
             var st = $(this).scrollTop();
-
-
             if(st > last_scroll_top){
-              if ($(window).scrollTop() + 100 > $(document).height() - $(window).height()) {
-                if (request_ajax === true && ajax_is_on === false) {
-                  ajax_is_on = true;
-                  $.ajax({
-                    url: base_url + 'category/load_other_product',
-                    data:{page_number:offset,id_cat:'<?php echo $id_cat ?>',type:type,parameters:<?php echo json_encode($_GET); ?>, es_csrf_token : csrftoken},
-                    type: 'post',
-                    async: false,
-                    dataType: 'json',
-                    onLoading:jQuery(".loading_products").html('<img src="<?= base_url() ?>assets/images/orange_loader.gif" />').show(),
-                    success: function(d) {
-                     if(d == "0"){
-                       ajax_is_on = true;
-
-                   }else{
-                    $($.parseHTML(d.trim())).appendTo($('#product_content'));
-                    ajax_is_on = false;
-                    offset += 1;
-
-
+                if ($(window).scrollTop() + 100 > $(document).height() - $(window).height()) {
+                    if (request_ajax === true && ajax_is_on === false) {
+                        ajax_is_on = true;
+                        $.ajax({
+                            url: base_url + 'category/load_other_product',
+                            data:{page_number:offset,id_cat:'<?php echo $id_cat ?>',type:type,parameters:<?php echo json_encode($_GET); ?>, es_csrf_token : csrftoken},
+                            type: 'post',
+                            async: false,
+                            dataType: 'JSON',
+                            onLoading:jQuery(".loading_products").html('<img src="<?= base_url() ?>assets/images/orange_loader.gif" />').show(),
+                            success: function(d) {
+                                if(d == "0"){
+                                    ajax_is_on = true;
+                                }else{ 
+                                    if(d.substring(0,5)  == "<dob>"){
+                                        $($.parseHTML(d.trim())).appendTo($('#product_content'));
+                                        ajax_is_on = true;
+                                    }else{
+                                        $($.parseHTML(d.trim())).appendTo($('#product_content'));
+                                        ajax_is_on = false;
+                                        offset += 1;   
+                                    }
+                                }
+                                $(".loading_products").hide();
+                            }
+                        });
+                    }
                 }
             }
+            last_scroll_top = st;
+            jQuery(".loading_products").fadeOut();   
         });
-              }
-          }
-
-      }
-      last_scroll_top = st;
-      jQuery(".loading_products").fadeOut();   
-  });
 
 
         // END OF INFINITE SCROLLING FUNCTION
+
+
+        $(document).on('click','.smr_btn',function () {
+            ajax_is_on = false;
+            $('.phides').show();
+            $(this).hide();
+        });
 
         $(".cbs").click(function() {
             window.location = "<?php echo site_url(uri_string() . '?' . $_SERVER['QUERY_STRING']); ?>" + this.value;

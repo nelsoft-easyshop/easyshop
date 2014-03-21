@@ -1,20 +1,37 @@
- 
- <?php
+<?php
  $class = "";
  if($typeofview == 1){
   $class = '-list';
  }
       if(isset($items))
       {
+        $irclass = "";
+        if($irrelivant){
+          
+          if($count == 0){
+            $irclass = "phides";
+            echo '<dob><div style="clear:both;"></div>
+            <hr>
+            <div>Next item is irrelevant</div>
+            <hr>
+            <input type="button" class="smr_btn" value="Show More Items">
+            <div style="clear:both"></div></dob>
+            <style>
+            .phides{
+              display:none;
+            }
+            </style>';
+          }
+
+        }
        for ($i=0; $i < sizeof($items); $i++) { 
         $pic = explode('/', $items[$i]['product_image_path']);
         ?>
-        <div class="product<?php echo $class; ?>">
+
+        <div class="product<?php echo $class.' '.$irclass; ?>">
          <a href="<?=base_url()?>item/<?php echo $items[$i]['product_id']; ?>/<?php echo es_url_clean($items[$i]['product_name']); ?>.html"><span class="prod_img_wrapper"><span class="prod_img_container"><img alt="<?php echo $items[$i]['product_name']; ?>" src="<?php echo base_url().$pic[0].'/'.$pic[1].'/'.$pic[2].'/'.$pic[3].'/'.'categoryview'.'/'.$pic[4];;?>"></span></span></a>
-         
-		 
-		 
-		 <h3 style="  -o-text-overflow: ellipsis;    
+         		 
+       <h3 style="  -o-text-overflow: ellipsis;    
          text-overflow:    ellipsis;   
          overflow:hidden;             
          white-space:nowrap;  

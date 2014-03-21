@@ -495,7 +495,7 @@ class product_model extends CI_Model
 		return $row;
 	}
 
-	function getProductByCategoryIdWithDistinct($id,$condition_price_string,$string,$cnt,$start,$per_page,$catlist_down,$item_brand_string_2)
+	function getProductByCategoryIdWithDistinct($id,$condition_price_string,$string,$cnt,$start,$per_page,$catlist_down,$item_brand_string_2,$operator)
 	{
 		$start = (int)$start;
 		$per_page = (int)$per_page;
@@ -508,6 +508,7 @@ class product_model extends CI_Model
 				FROM `es_product_image` 
 				LEFT JOIN (SELECT 
 					`product_id`
+          			, cnt
 					, `brand_id` 
 					, `name` AS product_name
 					, `price` AS product_price
@@ -516,6 +517,7 @@ class product_model extends CI_Model
 					FROM `es_product` 
 					INNER JOIN (SELECT 
 						product_id 
+              			, COUNT(*) AS cnt 
 						FROM (SELECT 
 							a.product_id
 							, a.attr_value
@@ -529,16 +531,18 @@ class product_model extends CI_Model
 						) AS sub_main_tbl 
 						WHERE ".$string." GROUP BY product_id 
 						/* HAVING COUNT(*) = :cnt */
+						ORDER BY cnt DESC
 					) AS product_id_table ON es_product.`id_product` = product_id_table.product_id
 				) AS main_tbl ON main_tbl.product_id = es_product_image.`product_id` 
 				WHERE `es_product_image`.`is_primary` = 1 
 				AND main_tbl.product_id = es_product_image.`product_id` 
 			) AS mother_tbl ON mother_tbl.brand_id = `es_brand`.`id_brand` 
-			WHERE mother_tbl.brand_id = `es_brand`.`id_brand` 
+			WHERE mother_tbl.brand_id = `es_brand`.`id_brand` AND cnt ".$operator." :cnt
 			".$item_brand_string_2."
-			ORDER BY product_name 
+			ORDER BY cnt DESC , product_name 
 			LIMIT :start, :per_page
 		";	   
+		
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':cnt',$cnt,PDO::PARAM_INT);  
 		$sth->bindParam(':start',$start,PDO::PARAM_INT);

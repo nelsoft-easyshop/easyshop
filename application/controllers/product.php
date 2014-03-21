@@ -11,18 +11,19 @@ class product extends MY_Controller
 		$this->load->model("product_model");
 		$this->load->vars(
 			array('category_navigation' => $this->load->view('templates/category_navigation',array('cat_items' =>  $this->getcat(),), TRUE ))
-		);
+			);
 	}
 
 	public $per_page = 6;
+	public $start_irrelevant = 0;
 	function searchbycategory($categoryId = 0,$url_string="string") # ROUTING: category/(:num)/(:any)
 	{
         //  Increase user preference for category
-        $this->load->library("MemberCategoryPreferenceUtility");
-        $memberCategoryPreferenceUtility = new MemberCategoryPreferenceUtility();
-        $memberCategoryPreferenceUtility->upPreference($this->session->userdata('member_id'), $categoryId);
-        
-            
+		$this->load->library("MemberCategoryPreferenceUtility");
+		$memberCategoryPreferenceUtility = new MemberCategoryPreferenceUtility();
+		$memberCategoryPreferenceUtility->upPreference($this->session->userdata('member_id'), $categoryId);
+
+
 		$string_sort_a = "";
 		$string_sort_c = "";
 		$item_brand_string_1 ="";
@@ -90,7 +91,7 @@ class product extends MY_Controller
 						$itemparam = $items = $this->product_model->selectAllProductWithCategory($categoryId,$condition_price_string,0,9999999,$catlist_down);
 
 					}elseif(count($_GET) == 1 && isset($_GET['price'])) {
-						 
+
 						if(strpos( $_GET['price'], 'to') !== false)
 						{
 							$price = explode('to', $_GET['price']);
@@ -116,13 +117,17 @@ class product extends MY_Controller
 
 					}elseif(count($_GET) >= 2 && isset($_GET['condition']) && !isset($_GET['price']) ){
 						// echo '4-----------------------------';
+						$withParam = true;
+						$operator = " = ";
 						$condition_price_string = " AND c.condition = '".$_GET['condition']."'" .$string_sort_c;		
 						$extra_string = substr($extra_string, 2);	
-						$response['items'] = $this->product_model->getProductByCategoryIdWithDistinct($categoryId,$condition_price_string,$extra_string,$count,$start,$per_page,$catlist_down,$item_brand_string_2);
-						$itemparam = $this->product_model->getProductByCategoryIdWithDistinct($categoryId,$condition_price_string,$extra_string,$count,0,9999999,$catlist_down,$item_brand_string_2);
+						$response['items'] = $this->product_model->getProductByCategoryIdWithDistinct($categoryId,$condition_price_string,$extra_string,$count,$start,$per_page,$catlist_down,$item_brand_string_2,$operator);
+						$itemparam = $this->product_model->getProductByCategoryIdWithDistinct($categoryId,$condition_price_string,$extra_string,$count,0,9999999,$catlist_down,$item_brand_string_2,$operator);
 
 					}elseif(count($_GET) >= 2 && !isset($_GET['condition']) && isset($_GET['price']) ){
 						// echo '5-------------------------';
+						$withParam = true;
+						$operator = " = ";
 						if(strpos( $_GET['price'], 'to') !== false)
 						{
 							$price = explode('to', $_GET['price']);
@@ -131,15 +136,17 @@ class product extends MY_Controller
 						}
 						$condition_price_string = " AND c.price BETWEEN ".(double)$price[0]." AND ".(double)$price[1] .$string_sort_c;		
 						$extra_string = substr($extra_string, 2);
-						$response['items'] = $this->product_model->getProductByCategoryIdWithDistinct($categoryId,$condition_price_string,$extra_string,$count,$start,$per_page,$catlist_down,$item_brand_string_2);
-						$itemparam = $this->product_model->getProductByCategoryIdWithDistinct($categoryId,$condition_price_string,$extra_string,$count,0,9999999,$catlist_down,$item_brand_string_2);
+						$response['items'] = $this->product_model->getProductByCategoryIdWithDistinct($categoryId,$condition_price_string,$extra_string,$count,$start,$per_page,$catlist_down,$item_brand_string_2,$operator);
+						$itemparam = $this->product_model->getProductByCategoryIdWithDistinct($categoryId,$condition_price_string,$extra_string,$count,0,9999999,$catlist_down,$item_brand_string_2,$operator);
 
 					}else{
 						// echo '6-------------------------';
+						$withParam = true;
+						$operator = " = ";
 						$condition_price_string = "" .$string_sort_c;		
 						$extra_string = substr($extra_string, 2);				  
-						$response['items'] = $this->product_model->getProductByCategoryIdWithDistinct($categoryId,$condition_price_string,$extra_string,$count,$start,$per_page,$catlist_down,$item_brand_string_2);
-						$itemparam = $this->product_model->getProductByCategoryIdWithDistinct($categoryId,$condition_price_string,$extra_string,$count,0,9999999,$catlist_down,$item_brand_string_2);
+						$response['items'] = $this->product_model->getProductByCategoryIdWithDistinct($categoryId,$condition_price_string,$extra_string,$count,$start,$per_page,$catlist_down,$item_brand_string_2,$operator);
+						$itemparam = $this->product_model->getProductByCategoryIdWithDistinct($categoryId,$condition_price_string,$extra_string,$count,0,9999999,$catlist_down,$item_brand_string_2,$operator);
 					}	
 
 				}else{
@@ -212,10 +219,12 @@ class product extends MY_Controller
 
 	function load_product() # ROUTING: category/load_other_product
 	{
+
+		header('Content-type: application/json');
 		$category_id = $_POST['id_cat'];				  
 		$per_page = $this->per_page;
 		$start = $_POST['page_number'] * $per_page;
-		 
+
 		$type = $_POST['type'];
 		$response['typeofview'] = $type;
 		$extra_string = "";
@@ -226,7 +235,8 @@ class product extends MY_Controller
 		$item_brand = "";
 		$item_brand_string_1 ="";
 		$item_brand_string_2 = "";
-        
+		$withParam = false;
+
 		if($category_id != 0)
 		{
 			if(isset($_POST['parameters']['sop']))
@@ -306,12 +316,16 @@ class product extends MY_Controller
 
 					}elseif(count($_POST['parameters']) >= 2 && isset($_POST['parameters']['condition']) && !isset($_POST['parameters']['price']) ){
 
+						$withParam = true;
+						$operator = " = ";
 						$condition_price_string = "AND c.condition = '".$_POST['parameters']['condition']."'".$string_sort_c;		
 						$extra_string = substr($extra_string, 2);	
 						$response['items'] = $this->product_model->getProductByCategoryIdWithDistinct($category_id,$condition_price_string,$extra_string,$count,$start,$per_page,$catlist_down,$item_brand_string_2);
 
 					}elseif(count($_POST['parameters']) >= 2 && !isset($_POST['parameters']['condition']) && isset($_POST['parameters']['price']) ){
- 
+
+						$withParam = true;
+						$operator = " = ";
 						if(strpos( $_POST['parameters']['price'], 'to') !== false)
 						{
 							$price = explode('to', $_POST['parameters']['price']);
@@ -321,14 +335,39 @@ class product extends MY_Controller
 
 						$condition_price_string = " AND c.price BETWEEN ".(double)$price[0]." AND ".(double)$price[1].$string_sort_c;		
 						$extra_string = substr($extra_string, 2);
-						$response['items'] = $this->product_model->getProductByCategoryIdWithDistinct($category_id,$condition_price_string,$extra_string,$count,$start,$per_page,$catlist_down,$item_brand_string_2);
+						$response['items'] = $this->product_model->getProductByCategoryIdWithDistinct($category_id,$condition_price_string,$extra_string,$count,$start,$per_page,$catlist_down,$item_brand_string_2,$operator);
+
 
 					}else{
 
+						$withParam = true;
+						$operator = " = ";
 						$condition_price_string = "".$string_sort_c;		
 						$extra_string = substr($extra_string, 2);				  
-						$response['items'] = $this->product_model->getProductByCategoryIdWithDistinct($category_id,$condition_price_string,$extra_string,$count,$start,$per_page,$catlist_down,$item_brand_string_2);
-
+						$response['items'] = $this->product_model->getProductByCategoryIdWithDistinct($category_id,$condition_price_string,$extra_string,$count,$start,$per_page,$catlist_down,$item_brand_string_2,$operator);
+					}
+					if($withParam == true){
+						if(count($response['items']) <= 0)
+						{	
+							session_start();
+							$start = $_SESSION['start'] * $per_page;
+							$operator = " < ";
+							$response['irrelivant'] = true;
+							$response['count'] = $_SESSION['start'];
+							$response['items'] = $this->product_model->getProductByCategoryIdWithDistinct($category_id,$condition_price_string,$extra_string,$count,$start,$per_page,$catlist_down,$item_brand_string_2,$operator);
+							if(count($response['items']) <= 0)
+							{
+								$data = json_encode('0');
+							}else{
+								if($_SESSION['start'] == 0){
+									$data = json_encode($this->load->view('pages/product/product_search_by_category2',$response,TRUE));
+									echo $data;
+									$_SESSION['start'] += 1;
+									exit();
+								}
+								$_SESSION['start'] += 1;
+							}
+						}
 					}
 					if(count($response['items']) <= 0)
 					{
@@ -340,7 +379,7 @@ class product extends MY_Controller
 
 			}else{
 				$attribute = $this->product_model->getAttributeByCategoryIdWithDistinct($category_id);
-                
+
 				for ($i=0; $i < sizeof($attribute) ; $i++) { 
 					$look_up_list_item = $this->product_model->getAttributeByCategoryIdWithName($category_id,$attribute[$i]['name']);
 					array_push($attribute[$i], $look_up_list_item);
@@ -353,7 +392,7 @@ class product extends MY_Controller
 				array_push($down_cat, $category_id);
 				$catlist_down = implode(",", $down_cat);
 				$response['items'] = $this->product_model->getProductInCategoryAndUnder($category_id,$usable_string,$catlist_down,$start,$per_page,$item_brand_string_1.$string_sort_a);
-                if(count($response['items']) <= 0)
+				if(count($response['items']) <= 0)
 				{
 					$data = json_encode('0');
 				}else{
@@ -361,6 +400,7 @@ class product extends MY_Controller
 				}
 			}
 			echo $data;
+			exit();
 		}
 	}
 
@@ -419,18 +459,18 @@ class product extends MY_Controller
 				$string = ' '.ltrim($_GET['q_str']); 
 				$words = "+".implode("*,+",explode("-",trim($string)))."*"; 
 				$checkifexistcategory = $this->product_model->checkifexistcategory($category);
-					if($checkifexistcategory == 0 || $category == 1)
-					{
-						$usable_string = " AND  MATCH(a.name,keywords) AGAINST('".$words."' IN BOOLEAN MODE)";
-						$response['items'] = $this->product_model->itemSearchNoCategory($usable_string,$start,$per_page);
-					}else{
-						$usable_string = " AND  MATCH(a.name,keywords) AGAINST('".$words."' IN BOOLEAN MODE)";
-						$down_cat = $this->product_model->selectChild($category);
-						array_push($down_cat, $category);
-						$catlist_down = implode(",", $down_cat);
-						$response['items'] = $this->product_model->getProductInCategoryAndUnder($category,$usable_string,$catlist_down,$start,$per_page,$string_sort);
-					}
-				 
+				if($checkifexistcategory == 0 || $category == 1)
+				{
+					$usable_string = " AND  MATCH(a.name,keywords) AGAINST('".$words."' IN BOOLEAN MODE)";
+					$response['items'] = $this->product_model->itemSearchNoCategory($usable_string,$start,$per_page);
+				}else{
+					$usable_string = " AND  MATCH(a.name,keywords) AGAINST('".$words."' IN BOOLEAN MODE)";
+					$down_cat = $this->product_model->selectChild($category);
+					array_push($down_cat, $category);
+					$catlist_down = implode(",", $down_cat);
+					$response['items'] = $this->product_model->getProductInCategoryAndUnder($category,$usable_string,$catlist_down,$start,$per_page,$string_sort);
+				}
+
 
 				// start here
 				$firstdownlevel = $this->product_model->getDownLevelNode($category);
@@ -473,7 +513,7 @@ class product extends MY_Controller
 				$newbuiltarray = array("name"=>$category_name,"children" => $newbuiltarray);
 				// echo '<pre>',print_r($newbuiltarray);exit();
 				$list = $this->toUL($newbuiltarray['children']);
-				 
+
 				if($category_name == "PARENT" || $category == 1){
 					$response['category_cnt'] = '<ul><li>Categories</li>'.$list.'</ul>';
 				}else{	
@@ -535,19 +575,19 @@ class product extends MY_Controller
 		$checkifexistcategory = $this->product_model->checkifexistcategory($category);
 
 		
-			if($checkifexistcategory == 0 || $category == 1)
-			{
-				$usable_string = " AND  MATCH(a.name,keywords) AGAINST('".$words."' IN BOOLEAN MODE)";
-				$response['items'] = $this->product_model->itemSearchNoCategory($usable_string,$start,$per_page);	
-			}else{
-				$usable_string = " AND  MATCH(a.name,keywords) AGAINST('".$words."' IN BOOLEAN MODE)";
-				$down_cat = $this->product_model->selectChild($category);
-				array_push($down_cat, $category);
-				$catlist_down = implode(",", $down_cat);
-				$response['items'] = $this->product_model->getProductInCategoryAndUnder($category,$usable_string,$catlist_down,$start,$per_page,$string_sort);
+		if($checkifexistcategory == 0 || $category == 1)
+		{
+			$usable_string = " AND  MATCH(a.name,keywords) AGAINST('".$words."' IN BOOLEAN MODE)";
+			$response['items'] = $this->product_model->itemSearchNoCategory($usable_string,$start,$per_page);	
+		}else{
+			$usable_string = " AND  MATCH(a.name,keywords) AGAINST('".$words."' IN BOOLEAN MODE)";
+			$down_cat = $this->product_model->selectChild($category);
+			array_push($down_cat, $category);
+			$catlist_down = implode(",", $down_cat);
+			$response['items'] = $this->product_model->getProductInCategoryAndUnder($category,$usable_string,$catlist_down,$start,$per_page,$string_sort);
 
-			}
-	 
+		}
+
 		
 		$response['typeofview'] = $type;
 		$response['id_cat'] = $category; 
@@ -566,9 +606,7 @@ class product extends MY_Controller
 	function view($id=0,$url_string="string") 
 	{ 
 		$product_row = $this->product_model->getProduct($id);
-         
-   
-   
+  
 		$data['title'] = 'Easyshop.ph - Product Page';
 		$uid = $this->session->userdata('member_id');
 		$data = array_merge($data,$this->fill_header());
@@ -591,7 +629,7 @@ class product extends MY_Controller
 				'allowed_reviewers' => $this->product_model->getAllowedReviewers($id),
 				//userdetails --- email/mobile verification info
 				'userdetails' => $this->product_model->getCurrUserDetails($uid),
-                'product_quantity' => $this->product_model->getProductQuantity($id)
+				'product_quantity' => $this->product_model->getProductQuantity($id)
 				));
 			$data['vendorrating'] = $this->product_model->getVendorRating($data['product']['sellerid']);
 			$this->load->view('pages/product/productpage_view', $data); 
@@ -768,35 +806,35 @@ class product extends MY_Controller
 	}
 	
 	function changeDelete(){
-        if($this->input->post('p_id') && $this->input->post('action')){
-            $memberid = $this->session->userdata('member_id');
-            $productid = $this->input->post('p_id');
-            $action = $this->input->post('action');
-            if($action === 'delete')
-                $this->product_model->updateIsDelete($productid, $memberid, 1);
-            else if($action === 'restore')
-                $this->product_model->updateIsDelete($productid, $memberid, 0);
-        }
+		if($this->input->post('p_id') && $this->input->post('action')){
+			$memberid = $this->session->userdata('member_id');
+			$productid = $this->input->post('p_id');
+			$action = $this->input->post('action');
+			if($action === 'delete')
+				$this->product_model->updateIsDelete($productid, $memberid, 1);
+			else if($action === 'restore')
+				$this->product_model->updateIsDelete($productid, $memberid, 0);
+		}
 		redirect('me', 'refresh');
 	}
-    
-    function searchCategory(){
-        $string = $this->input->post('data');
-        $rows = $this->product_model->searchCategory($string);
-        foreach($rows as $idx=>$row){
-            $rows[$idx]['parent'] = $this->product_model->getParentId($row['id_cat']);
-        }
-        echo json_encode($rows);
-    }
-    
-    function searchBrand(){
-        $string = $this->input->post('data');
-        $rows = $this->product_model->searchBrand($string);
-        echo json_encode($rows);
-    }
-    
+
+	function searchCategory(){
+		$string = $this->input->post('data');
+		$rows = $this->product_model->searchCategory($string);
+		foreach($rows as $idx=>$row){
+			$rows[$idx]['parent'] = $this->product_model->getParentId($row['id_cat']);
+		}
+		echo json_encode($rows);
+	}
+
+	function searchBrand(){
+		$string = $this->input->post('data');
+		$rows = $this->product_model->searchBrand($string);
+		echo json_encode($rows);
+	}
+
 }
 
-  
+
 /* End of file product.php */
 /* Location: ./application/controllers/product.php */
