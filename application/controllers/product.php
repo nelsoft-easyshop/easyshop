@@ -382,7 +382,7 @@ class product extends MY_Controller
 				$html .= "<li>No Record Found!</li>";
 			}else{
 				foreach ($keywords as $value) {
-					$html .= "<li><a href='search/search.html?q_str=".es_url_clean($value)."&q_cat=1'>".$value."</a></li>";
+					$html .= "<li><a href='".base_url()."search/search.html?q_str=".es_url_clean($value)."&q_cat=1'>".$value."</a></li>";
 				}
 
 			}
