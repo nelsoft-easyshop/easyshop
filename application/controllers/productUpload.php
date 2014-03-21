@@ -684,7 +684,7 @@ class productUpload extends MY_Controller
 			}
 		}
 		
-		if( count($arrProductItemId) >= $attrCounter ){
+		if( count($arrProductItemId) <= $attrCounter ){
 			//DELETE EXISTING ENTRIES IN DATABASE
 			$this->product_model->deleteShippingSummaryOnEdit($arrProductItemId);
 			
@@ -707,7 +707,6 @@ class productUpload extends MY_Controller
 		else{
 			echo 'fail';
 		}
-		
 	}
 
 	function step4() # uploading of product is successful.
