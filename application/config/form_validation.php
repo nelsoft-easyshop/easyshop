@@ -29,12 +29,22 @@ $config = array(
 						 'rules'   => 'trim|required'
 					  ),
 				   array(
+						'field' => 'email',
+						'label' => 'Email Address',
+						'rules' => 'trim|required|valid_email'
+					  ),
+				   array(
 						 'field'   => 'captcha_word',
 						 'label'   => 'User Captcha',
 						 'rules'   => 'trim|required|callback_external_callbacks[register_model,validate_captcha]'
-					  )
+					  ),
+				   array(
+						 'field'   => 'terms_checkbox',
+						 'label'   => 'Terms and Conditions',
+						 'rules'   => 'required'
+					),
 				),
-			'register_form2_a' => array(
+			/*'register_form2_a' => array(
 				   array(
 						 'field'   => 'register_mobile',
 						 'label'   => 'Mobile number',
@@ -67,7 +77,7 @@ $config = array(
 						 'label'   => 'Verification Code',
 						 'rules'   => 'trim|required'
 					  ),
-				),
+				),*/
 			'personal_profile_main' => array(
 					array(
 						'field' => 'dateofbirth',

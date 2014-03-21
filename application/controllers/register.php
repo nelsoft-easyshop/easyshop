@@ -32,17 +32,30 @@ class Register extends MY_Controller
 				'title' => 'Easyshop.ph - Account Registration',
 			);		
 		$data = array_merge($data, $this->fill_header());
-		$temp['reg_username'] = '';
+		$data['reg_username'] = '';
 		$view = 'register_form1_view';
 		
 		// Registration form page 1
-		if(($this->input->post('register_page1'))&&($this->form_validation->run('register_form1')))
+		/*if(($this->input->post('register_page1'))&&($this->form_validation->run('register_form1')))
 		{
 			$this->session->set_userdata('register_username', $this->input->post('username'));
 			$this->session->set_userdata('register_password', $this->input->post('password'));
 			$this->session->unset_userdata('captcha_word');
 			$temp['reg_username'] = '';
 			$view = 'register_form2_view';
+		}*/
+		if(($this->input->post('register_page1'))&&($this->form_validation->run('register_form1')))
+		{
+			$this->session->unset_userdata('captcha_word');
+			
+			$data['username'] = html_escape($this->input->post('username'));
+			$data['password'] = html_escape($this->input->post('password'));
+			$data['email'] = $this->input->post('email');
+			
+			$this->sendVerificationCode($data);
+			$view = 'register_form3_view';
+			$data['member_username'] = $data['username'];
+			$data['verification_msg'] = $this->lang->line('success_registration');
 		}
 		else
 		{
@@ -50,10 +63,10 @@ class Register extends MY_Controller
 			$image = $cap['image'];
 			$this->session->set_userdata('captcha_word', $cap['word']);
 			$data['image'] = $image;
-			$temp['reg_username'] = $this->input->post('username');
+			$data['reg_username'] = $this->input->post('username');
 		}
 		$this->load->view('templates/header_plain', $data);
-		$this->load->view("pages/user/".$view, $temp);
+		$this->load->view("pages/user/".$view, $data);
 		$this->load->view('templates/footer');
 	}
 	
@@ -100,8 +113,28 @@ class Register extends MY_Controller
 		echo $filename;
 	}
 		
-	//Function upon submit in register form page 2
-	function send_verification_code() {
+	function sendVerificationCode($data)
+	{
+		//GENERATE MOBILE CONFIRMATION CODE
+		$temp['mobilecode'] = $this->register_model->rand_alphanumeric(6);
+		//GENERATE HASH FOR EMAIL VERIFICATION
+		$temp['emailcode'] = sha1($this->session->userdata('session_id'));
+		
+		$temp['member_id'] = $this->register_model->signupMember($data)['id_member'];
+		
+		$status = $this->register_model->send_email_msg($data['email'], $data['username'], $temp['emailcode']);
+		//$status = 'success';
+		
+		if($status === 'success'){
+			$temp['email'] = 1;
+		}else{
+			$temp['email'] = 0;
+		}
+		
+		$this->register_model->store_verifcode($temp);
+	}
+	
+	/*function send_verification_code() {
 		if($this->input->post('register_form2_a_btn')){
 			if($this->form_validation->run('register_form2_a')){
 				$data_val = array(
@@ -244,7 +277,7 @@ class Register extends MY_Controller
 			redirect(base_url().'register');
 		}
 	}
-	
+	*/
 	
 	function email_verification(){
 	
@@ -315,13 +348,28 @@ class Register extends MY_Controller
 	}
 
 
-	function username_check(){
+	function username_check()
+	{
 		if($this->input->post('username')){
-			$username = htmlspecialchars($this->input->post('username'));
+			//$username = htmlspecialchars($this->input->post('username'));
+			$username = $this->input->post('username');
 			if($this->register_model->get_member_by_username($username))
 				echo 0;
 			else
 				echo 1;
+		}
+	}
+	
+	function email_check()
+	{
+		if($this->input->post('email')){
+			$email = $this->input->post('email');
+			if($this->register_model->checkEmailIfExists($email)){
+				echo 0;
+			}
+			else {
+				echo 1;
+			}
 		}
 	}
 	

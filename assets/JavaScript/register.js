@@ -5,28 +5,36 @@ $(document).ready(function(){
 $(document).ready(function(){
 	  
 	  $('#username').on('focus', function() {
-		  $('div.username_info').show();
 		  $(document).bind('focusin.example click.example',function(e) {
 			  if ($(e.target).closest('.username_info, #username').length) return;
 			  $(document).unbind('.example');
-			  $('div.username_info').fadeOut('medium');
 		  });
-		  hidecheckx($('#username'));
-		  $('.username_availability').html('');
 	  }).on('blur', function(){
-		if($.trim($('#username').val()).length >= 5){
-			setTimeout(username_check,1000);
+		var fieldlength = $.trim($('#username').val()).length;
+		if(fieldlength >= 5 && $(this).hasClass('forSearch')){
+			setTimeout(username_check,500);
+		}
+		else if(fieldlength < 5){
+			hidecheckx($('#username'));
+			$('.username_availability').html('');
+		}
+	  }).on('keypress', function(){
+		var fieldlength = $.trim($('#username').val()).length;
+		if(!$(this).hasClass('forSearch') && fieldlength >= 5){
+			$(this).addClass('forSearch');
+		}
+		else if(fieldlength < 5){
+			$(this).removeClass('forSearch');
+			hidecheckx($('#username'));
+			$('.username_availability').html('');
 		}
 	  });
 	  
-	  $('div.username_info').hide();
-	  
+	  $('div.pass-container').show();
 	  $('#password').focus(function() {
-		  $('div.password_info, div.pass-container').show();
 		  $(document).bind('focusin.example click.example',function(e) {
 			  if ($(e.target).closest('.password_info, #password').length) return;
 			  $(document).unbind('.example');
-			  $('div.password_info, div.pass-container').fadeOut('medium');
 			});
 	  }).on('input paste', function(){
 			   if($.trim($(this).val()).length >= 6){
@@ -54,7 +62,26 @@ $(document).ready(function(){
 				showcheck($(this));
 		});
 	  
-	  $('div.password_info').hide();
+	  $('#email').on('blur', function(){
+		var fieldlength = $.trim($('#email').val()).length;
+		if(fieldlength >= 6){
+			setTimeout(email_check,500);
+		}
+		else if(fieldlength < 6){
+			hidecheckx($('#email'));
+			$('.email_availability').html('');
+		}
+	  }).on('keypress', function(){
+		var fieldlength = $.trim($('#email').val()).length;
+		if(!$(this).hasClass('forSearch') && fieldlength >= 6){
+			$(this).addClass('forSearch');
+		}
+		else if(fieldlength < 6){
+			$(this).removeClass('forSearch');
+			hidecheckx($('#email'));
+			$('.email_availability').html('');
+		}
+	  });
 	  
 	  $('#captcha_refresh').click(function(){
 		   $('#captcha_loading').css('display','inline');
@@ -64,7 +91,9 @@ $(document).ready(function(){
 		   });	
 		   $('.red').html('');
 	  });
+
 	  
+/*
 	  $('#verification_code').focus(function() {
 		  $('#verification_code_error').fadeOut();
 		  $('div.verification_info').fadeIn();
@@ -75,7 +104,8 @@ $(document).ready(function(){
 		  });
 	   });
 	 $('div.verification_info').hide();
-	 
+
+*/
 });
 
 
@@ -150,7 +180,7 @@ $(document).ready(function(){
                 minlength: 6,
                 maxlength:25,
 				alphanumeric: true,
-				case_all: true
+				//case_all: true
 				},
 			cpassword: {
 				required: true,
@@ -158,10 +188,19 @@ $(document).ready(function(){
                 maxlength:25,
 				equalTo: '#password'
 				},
+			email: {
+				required: true,
+				email: true,
+				minlength: 6,
+				equalTo: '#emailcheck',
+				},
 			captcha_word: {
 				required: true,
 				minlength: 6
-				}
+				},
+			terms_checkbox:{
+				required: true
+			}
 		 },
 		 messages:{
 		 	username:{
@@ -169,6 +208,15 @@ $(document).ready(function(){
 			},
 			cpassword:{
 				equalTo: ''
+			},
+			email:{
+				required: "Please enter a valid email address",
+				email: 'Please enter a valid email address',
+				minlength: '*Email too short',
+				equalTo: ''
+			},
+			terms_checkbox:{
+				required: "You must agree to Easyshop's terms and conditions before you can proceed."
 			}
 		 },
 		 errorElement: "span",
@@ -301,6 +349,7 @@ $(document).ready(function(){
 /**********************************************************************************************/
 /****************************	FORM 2A VALIDATION	*******************************************/
 /**********************************************************************************************/	
+/*
 $(document).ready(function(){
 	
 	$("#register_mobile").numeric({negative : false});
@@ -366,7 +415,7 @@ $(document).ready(function(){
 					return(($('#register_mobile').val().length)==0 && ($('#register_email').val().length==0));
 				},
 				*/
-				number: true,
+/*				number: true,
 				minlength: 11
 			},
 			cregister_mobile:{
@@ -382,7 +431,7 @@ $(document).ready(function(){
 					return(($('#register_mobile').val().length)==0 && ($('#register_email').val().length==0));
 				},
 				*/
-				required: true,
+/*				required: true,
 				email: true,
 				minlength: 6
 			},
@@ -545,14 +594,13 @@ $(document).ready(function(){
 			return false;
 		}
 	});
-	
-	
-
 }); //CLOSE DOCUMENT READY
+*/
 
 function username_check(){
 	var username = $('#username').val();
 	var csrftoken = $('#register_form1').find('input[name^="es_csrf"]').val();
+	$('#username').siblings('img.check_loader').show();
 	$.post(config.base_url+'register/username_check', {username: username, es_csrf_token : csrftoken}, function(result){
 		if(result === '1'){
 			showcheck($('#username'));
@@ -561,8 +609,29 @@ function username_check(){
 		}
 		else{
 			showx($('#username'));
-			$('.username_availability').html('Username already exists');
+			$('.username_availability').html('Username already exists.');
 		}
+		$('#username').removeClass('forSearch');
+		$('#username').siblings('img.check_loader').hide();
+	});
+}
+
+function email_check(){
+	var email = $('#email').val();
+	var csrftoken = $('#register_form1').find('input[name^="es_csrf"]').val();
+	$('#email').siblings('img.check_loader').show();
+	$.post(config.base_url+'register/email_check', {email: email, es_csrf_token : csrftoken}, function(result){
+		if(result === '1'){
+			showcheck($('#email'));
+			$('.email_availability').html('Email available');
+			$('#emailcheck').attr('value', $('#email').val());
+		}
+		else{
+			showx($('#email'));
+			$('.email_availability').html('Email already used.');
+		}
+		$('#email').removeClass('forSearch');
+		$('#email').siblings('img.check_loader').hide();
 	});
 }
 
@@ -610,9 +679,8 @@ function submitcountdown(){
 /**********************************************************************************************/
 /****************************	FORM 2B VALIDATION	*******************************************/
 /**********************************************************************************************/	
-	
 // FORM VALIDATION FOR MOBILE VERIFICATION
-function form2validation(){		
+/*function form2validation(){		
 		$('#register_form2_b').validate({
 			rules:{
 				verification_code:{
@@ -648,6 +716,6 @@ function form2validation(){
 			}
 		});
 }
-
+*/
 
 		

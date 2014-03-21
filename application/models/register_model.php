@@ -8,6 +8,9 @@ class Register_model extends CI_Model
 		$this->load->library('sqlmap');
 	}	
 	
+	/*
+	 *	Function used to check if username exists in registration page
+	 */
 	function get_member_by_username($member_username)
 	{
 		$query = $this->sqlmap->getFilenameID('users', 'get_member_by_username');
@@ -19,6 +22,20 @@ class Register_model extends CI_Model
 		return $result;
 	}
 
+	/*
+	 *
+	 */
+	function checkEmailIfExists($email)
+	{
+		$query = $this->sqlmap->getFilenameID('users', 'checkEmailIfExists');
+        $sth = $this->db->conn_id->prepare($query);
+        $sth->bindParam(':email', $email);
+        $sth->execute();
+		$result = $sth->fetch(PDO::FETCH_ASSOC);
+		
+		return $result;
+	}
+	
 	function get_memberid($member_username){
 		$query = $this->sqlmap->getFilenameID('users', 'getUserID');
         $sth = $this->db->conn_id->prepare($query);
@@ -32,7 +49,7 @@ class Register_model extends CI_Model
 		return $result;
 	}
 	
-	function signup_member($data=array())
+	/*function signup_member($data=array())
 	{	
 		$query = $this->sqlmap->getFilenameID('users', 'signup_member');
         $sth = $this->db->conn_id->prepare($query);
@@ -46,7 +63,24 @@ class Register_model extends CI_Model
 
         return $row;
 		
+	}*/
+	
+	function signupMember($data) 
+	{
+		$query = $this->sqlmap->getFilenameID('users', 'signup_member');
+        $sth = $this->db->conn_id->prepare($query);
+		$blank = '';
+        $sth->bindParam(':username', $data['username']);
+		$sth->bindParam(':password', $data['password']);
+		$sth->bindParam(':email', $data['email']);
+		$sth->bindParam(':contactno', $blank);
+		$sth->bindParam(':region', $blank);
+        $sth->execute();
+        $row = $sth->fetch(PDO::FETCH_ASSOC);
+
+        return $row;
 	}
+	
 	
 	function changepass($data=array())
 	{	
@@ -95,11 +129,11 @@ class Register_model extends CI_Model
 			$this->form_validation->set_message('external_callbacks', 'Must contain numbers and letters');
 			return FALSE;
 		}
-		else if(!((preg_match('/[a-z]/', $password))&&(preg_match('/[A-Z]/', $password))))
+		/*else if(!((preg_match('/[a-z]/', $password))&&(preg_match('/[A-Z]/', $password))))
 		{
 			$this->form_validation->set_message('external_callbacks', 'Must contain upper-case and lower-case letters');
 			return FALSE;
-		}
+		}*/
 		else
 			return TRUE;
 	}	
@@ -227,7 +261,6 @@ class Register_model extends CI_Model
 		return $result;
 	}
 
-
 	function check_contactinfo($data){
 		$query = $this->sqlmap->getFilenameID('users', 'check_contactinfo');
         $sth = $this->db->conn_id->prepare($query);
@@ -261,7 +294,6 @@ class Register_model extends CI_Model
 	
 
 	function store_verifcode($data){
-		
 		$query = $this->sqlmap->getFilenameID('users', 'store_verifcode');
         $sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':member_id', $data['member_id']);
@@ -271,7 +303,6 @@ class Register_model extends CI_Model
 		$sth->bindParam(':email', $data['email']);
 		
         $sth->execute();
-
 	}
 	
 

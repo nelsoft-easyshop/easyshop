@@ -41,6 +41,7 @@
             <label for="username">Username:</label>
             <input id="username" name="username" type="text" maxlength="25" autocomplete="off" value="<?php echo $reg_username?>"/>
 			<input type="hidden" id="usernamecheck" value="">
+			<img class="check_loader" src="<?=base_url()?>/assets/images/orange_loader_small.gif" style="display:none;">
 			<div id="username_status" style="display:inline;">
 				<img src="<?=base_url()?>/assets/images/check_icon.png" id="username_check" style="position: relative;display:none;vertical-align:middle"/>
 				<img src="<?=base_url()?>/assets/images/x_icon.png" id="username_x" style="position: relative;display:none;vertical-align:middle"/>
@@ -63,6 +64,7 @@
           <div class="password_info">
                Passwords must be within 6-25 characters, and include numbers and upper-case and lower-case letters.
           </div>
+		  
           <div class="field">
             <label>Confirm Password:</label>
             <input id="cpassword" name="cpassword" type="password" maxlength="100" disabled="true">
@@ -70,6 +72,20 @@
 			<img src="<?=base_url()?>/assets/images/x_icon.png" id="cpassword_x" style="position: relative;display:none; "/>
 			<span class="red ci_form_validation_error"><?php echo form_error('cpassword'); ?></span>
           </div>
+		  
+		  <div class="field">			
+				<label for="email">Email Address:</label>
+				<input type="text" name="email" class="contactinfo" id="email" maxlength="40">
+				<input type="hidden" id="emailcheck" value="">
+				<img class="check_loader" src="<?=base_url()?>/assets/images/orange_loader_small.gif" style="display:none;">
+				<div id="email_status" style="display:inline;">
+					<img src="<?=base_url()?>/assets/images/check_icon.png" id="email_check" style="position: relative;display:none;vertical-align:middle"/>
+					<img src="<?=base_url()?>/assets/images/x_icon.png" id="email_x" style="position: relative;display:none;vertical-align:middle"/>
+					<span class="email_availability"></span>
+				</div>
+				<span class="red ci_form_validation_error"><?php echo form_error('email'); ?></span>
+		  </div>
+			
           <div class="field">
             <label><span>Captcha: </span></label>
             <input id="captcha_word" type="text" size="6" maxlength="6" name="captcha_word"/>
@@ -78,6 +94,13 @@
 			<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" id="captcha_loading" style="position: relative; top:10px; left:20px; display:none"/>
 			<span class="red ci_form_validation_error"><?php echo form_error('captcha_word'); ?></span>
           </div>
+		  
+		  <div class="field" id="tc">
+			<input type="checkbox" name="terms_checkbox" id="terms_checkbox">
+			<label for="terms_checkbox" id="terms">I agree to Easyshop.ph's Terms and Conditions.</label>
+			<span class="red ci_form_validation_error"><?php echo form_error('terms_checkbox'); ?></span>
+		</div>
+		  
 		  <div class="field" style="padding-top:25px">
 			<input type="submit" id="register_page1" name="register_page1" value="Agree and Continue"/>
 			<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" id="register_form1_loadingimg" style="position: relative; top:10px; left:20px; display:none"/>

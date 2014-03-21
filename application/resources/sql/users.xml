@@ -29,13 +29,21 @@
 	SELECT id_member, username FROM `es_member` WHERE email = :email LIMIT 1;
 </select>
 
-<!-- Used for vendor details - memberpage -->
+<!-- Used for vendor details and username check- memberpage -->
 <select id="get_member_by_username">
 	SELECT m.id_member, m.username, m.contactno, m.email, a.citytown as city, m.region, DATE_FORMAT(datecreated, "%M %Y") as datecreated
 	FROM es_member m
 	LEFT JOIN es_address a on m.id_member = a.id_member AND a.type=0
 	where m.username=:username
 </select>
+
+<!-- Used for checking email upon registration -->
+<select id="checkEmailIfExists">
+	SELECT email
+	FROM es_member
+	WHERE email = :email
+</select>
+
 
 <select id="getUserDetails">
 	SELECT id_member, is_contactno_verify, is_email_verify

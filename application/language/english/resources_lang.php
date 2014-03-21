@@ -9,6 +9,9 @@ $lang['registration3_invalid_confirmation'] = "Invalid confirmation code.";
 $lang['schoollevel_option'] = array('Please Select', 'Undergraduate degree','Masteral degree','Doctorate degree','High School','Elementary');
 $lang['product_condition'] =  array('New', 'New other (see details)','Manufacturer refurbished','Used','For parts or not working');
 
+#successful registration
+$lang['success_registration'] = 'Thank You for Registering to Easyshop.ph!';
+
 $lang['success_email_verification'] = 'You have successfully verified your email address.';
 $lang['success_mobile_verification'] = 'You have successfully verified your mobile number.';
 $lang['expired_email_verification'] = 'Link expired. This email was already verified.';
