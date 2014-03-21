@@ -319,14 +319,14 @@
         <?php $j++; endforeach;?>
 
         <?php if($j===1):?>
-        <tr>
+        <tr class="main1">
           <td class="border-left"> Others: (Optional) </td> 
           <td class="border-right" colspan="3">
             <input type="text" name="prod_other_name[]" data-cnt="<?php echo $j;?>" class="<?php echo 'prod_'.$j;?> other_name_class" autocomplete="off" placeholder="Enter name"> 
             <a href="javascript:void(0)" class="lnkClearFirst">Clear This Group</a>
           </td>
         </tr>
-        <tr>
+        <tr class="main1 main1_2nd">
           <td class="border-left">&nbsp;</td>
           <td>
             <input type="text" name="prod_other[]"  class="other_name_value otherNameValue1"  autocomplete="off" data-cnt="<?php echo $j;?>" placeholder="Enter description">
@@ -624,13 +624,14 @@ $(document).ready(function(){
  noCombination = true;
  arraySelected = {}; 
     var link = '<a href="javascript:void(0)" class="lnkClearFirst">Clear This Group</a>';
-
+    var title = 'Others: (Optional)';
     if(cnt > 1){ 
-      var link = '<a class="removeOptionGroup" data-cnt='+cnt+' href="javascript:void(0)">Remove This Group</a>';
+       link = '<a class="removeOptionGroup" data-cnt='+cnt+' href="javascript:void(0)">Remove This Group</a>';
+       title = '';
     }
     $('.main'+cnt).empty();
-    $('.main'+cnt).append('<td></td> \
-      <td colspan="3"> \
+    $('.main'+cnt).append('<td class="border-left">'+title+'</td> \
+      <td  colspan="3"> \
       <input type="text" placeholder="Enter name" autocomplete="off" class="prod_'+cnt+' other_name_class" data-cnt="'+cnt+'" name="prod_other_name[]"> \
       '+link+' \
       </td>')
@@ -638,11 +639,11 @@ $(document).ready(function(){
 
     function resetFirstSecondRowOptional(cnt){
       $('.combinationContainer').empty();
- noCombination = true;
- arraySelected = {}; 
+       noCombination = true;
+       arraySelected = {}; 
        $('.main'+cnt+'_2nd_add').remove();
        $('.main'+cnt+'_2nd').empty();
-       $('.main'+cnt+'_2nd').append('<td>&nbsp;</td> \
+       $('.main'+cnt+'_2nd').append('<td class="border-left">&nbsp;</td> \
         <td>\
         <input type="text" placeholder="Enter description" data-cnt="'+cnt+'" autocomplete="off" class="other_name_value otherNameValue'+cnt+'" name="prod_other[]">\
         </td>\
@@ -664,7 +665,8 @@ $(document).ready(function(){
     
     $(document).on('click',".lnkClearFirst",function (){
   
-
+      resetFirstOptional(1);
+      resetFirstSecondRowOptional(1);
       var cnt = 1;
       var formatHeadValue = $.trim($('.prod_'+cnt).val().replace(/[^a-z0-9\s]/gi, '').replace(/[_\s]/g, ' '));
       var headValue = formatHeadValue.toLowerCase().replace(/\b[a-z]/g, function(letter) {
