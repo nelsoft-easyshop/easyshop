@@ -283,11 +283,6 @@ class Register extends MY_Controller
 	
 		$this->load->library('encrypt');
 
-		//UNSET REGISTER SESSION VARIABLES
-		$this->session->unset_userdata('register_username');
-		$this->session->unset_userdata('register_password');
-		$this->session->unset_userdata('temp_memberid');
-
 		//Decrypt and re-assign data
 		$enc = html_escape($this->input->get('h'));
 		$enc = str_replace(" ", "+", $enc);
