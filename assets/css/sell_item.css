@@ -617,6 +617,16 @@ div.sell_steps4 ul li:nth-child(4) a {
     text-decoration: underline;
 }
 
+.lnkClearFirst,
+.removeOptionGroup {
+    border-bottom: 1px dotted #494949;
+}
+
+.lnkClearFirst:hover,
+.removeOptionGroup:hover {
+    border-bottom: 1px dotted #f18200;
+}
+
 .edit_img_container {
     padding-left: 5px;
 }
