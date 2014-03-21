@@ -1567,8 +1567,8 @@ tinymce.init({
 
 
 
-$(document).ready(function() {
-   if(($('brand_sch').val() !== '')&&(parseInt($('prod_brand').val(),10) !== 0)){
+$(document).ready(function() { 
+   if(($('#brand_sch').val() !== '')&&(parseInt($('#prod_brand').val(),10) !== 0)){
       jQuery(".brand_sch_loading").html('<img src="<?= base_url() ?>assets/images/check_icon.png" />').show().css('display','inline-block');
    }
    
