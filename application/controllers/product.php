@@ -384,7 +384,6 @@ class product extends MY_Controller
 				foreach ($keywords as $value) {
 					$html .= "<li><a href='".base_url()."search/search.html?q_str=".es_url_clean($value)."&q_cat=1'>".$value."</a></li>";
 				}
-
 			}
 			$html .= "</ul>";
 			echo $html;
@@ -567,6 +566,8 @@ class product extends MY_Controller
 	function view($id=0,$url_string="string") 
 	{ 
 		$product_row = $this->product_model->getProduct($id);
+         
+   
    
 		$data['title'] = 'Easyshop.ph - Product Page';
 		$uid = $this->session->userdata('member_id');

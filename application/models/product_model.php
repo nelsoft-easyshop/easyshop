@@ -146,7 +146,11 @@ class product_model extends CI_Model
         
         if((intval($row['o_success']) !== 0)&&(strlen(trim($row['userpic']))===0))
             $row['userpic'] = 'assets/user/default';
-		
+	
+        if(intval($row['brand_id'],10) === 1){
+            $row['brand_name'] = ($row['custombrand']!=='')?$row['custombrand']:'Custom brand';
+        }
+    
 		return $row;
 	}
 
