@@ -584,7 +584,7 @@ class productUpload extends MY_Controller
 	 */
 	function step3()
 	{
-		//if($this->input->post('prod_h_id')){
+		if($this->input->post('prod_h_id')){
 			//DEV CODE - temporarily set product id to fetch attribute combinations
 			//$id = 118;
 			//$id = 123;
@@ -659,10 +659,10 @@ class productUpload extends MY_Controller
 			$this->load->view('pages/product/product_upload_step3_view', $data);
 			$this->load->view('templates/footer');
 			
-	/*	}
+		}
 		else {
 			redirect(base_url().'sell/step1', 'refresh');
-		}*/
+		}
 	}
 	
 	/**
@@ -672,24 +672,42 @@ class productUpload extends MY_Controller
 	function step3Submit(){
 		$fdata = $this->input->post('fdata');
 		$arrProductItemId = json_decode($this->input->post('productitemid'));
+		$attrCounter = 0;
 		
-		//DELETE EXISTING ENTRIES IN DATABASE
-		$this->product_model->deleteShippingSummaryOnEdit($arrProductItemId);
-		
-		foreach($fdata as $group){
-			foreach($group as $attrCombinationId=>$attrGroup){
-				/*foreach($attrGroup as $locationKey=>$locgroup){
-					$shippingId = $this->product_model->storeShippingPrice($locationKey, $locgroup['price']);
-					$this->product_model->storeProductShippingMap($shippingId, $attrCombinationId);
-				}*/
-				foreach($attrGroup as $locationKey=>$price){
-					if(is_numeric($price)){
-						$shippingId = $this->product_model->storeShippingPrice($locationKey, $price);
-						$this->product_model->storeProductShippingMap($shippingId, $attrCombinationId);
-					}
+		// Check if all attributes have assigned shipping details
+		foreach($arrProductItemId as $pid){
+			foreach($fdata as $arrAttr){
+				if(array_key_exists($pid,$arrAttr) && count($arrAttr[$pid]) !== 0){
+					$attrCounter++;
+					break;
 				}
 			}
 		}
+		
+		if( count($arrProductItemId) >= $attrCounter ){
+			//DELETE EXISTING ENTRIES IN DATABASE
+			$this->product_model->deleteShippingSummaryOnEdit($arrProductItemId);
+			
+			foreach($fdata as $group){
+				foreach($group as $attrCombinationId=>$attrGroup){
+					/*foreach($attrGroup as $locationKey=>$locgroup){
+						$shippingId = $this->product_model->storeShippingPrice($locationKey, $locgroup['price']);
+						$this->product_model->storeProductShippingMap($shippingId, $attrCombinationId);
+					}*/
+					foreach($attrGroup as $locationKey=>$price){
+						if(is_numeric($price)){
+							$shippingId = $this->product_model->storeShippingPrice($locationKey, $price);
+							$this->product_model->storeProductShippingMap($shippingId, $attrCombinationId);
+						}
+					}
+				}
+			}
+			echo 'success';
+		}
+		else{
+			echo 'fail';
+		}
+		
 	}
 
 	function step4() # uploading of product is successful.

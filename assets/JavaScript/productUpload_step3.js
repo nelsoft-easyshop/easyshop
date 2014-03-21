@@ -226,8 +226,6 @@ $(function(){
       
 	updateLocationError();
 		
-		
-		
     }//close hasloc hasactive hasprice
 	else{
 		alert('Select an attribute combination, location, and price');
@@ -300,7 +298,12 @@ $(function(){
 	  var csrftoken = $('#shippingsummary_csrf').val();
 	  var productitemid = $('#json_id_product_item').val();
 	  $.post(config.base_url+'sell/shippinginfo', {fdata : fdata, es_csrf_token : csrftoken, productitemid : productitemid}, function(data){
-		$('#step4_form').submit();
+		if(data === 'success'){
+			$('#step4_form').submit();
+		}
+		else if(data === 'fail'){
+			alert('An error was encountered. Please add shipping details for all attribute combinations.');
+		}
       });
     }
   });
@@ -464,7 +467,6 @@ $(function(){
         });
 		
       });
-	  
     }
   })
   // Delete button per Location VS Price
