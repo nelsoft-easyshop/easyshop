@@ -1588,6 +1588,7 @@ $(document).ready(function(){
     var currentRequest = null;
     $( "#brand_sch" ).keyup(function() {
         $('#prod_brand').val(0)
+        jQuery(".brand_sch_loading").hide();
         var searchQuery = $(this).val();
         var csrftoken = $('#uploadstep2_csrf').val();
         if(searchQuery != ""){
