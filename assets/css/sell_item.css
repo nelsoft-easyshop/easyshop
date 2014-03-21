@@ -567,8 +567,6 @@ div.sell_steps4 ul li:nth-child(4) a {
 .brand_sch_loading {
     display: inline-block;
     margin-left: -42px;
-    margin-top: 4px;
-    position: absolute;
     vertical-align: middle;
 }
 
@@ -576,8 +574,10 @@ div.sell_steps4 ul li:nth-child(4) a {
     background-color: #FFFFFF;
     border: 1px solid #CECECE;
     display: none;
-    height: 25px;
+    min-height: 25px;
+    max-height: 280px;
     max-width: 600px;
+    overflow-y: scroll;
     padding: 10px 5px 5px 5px;
     position: absolute;
     width: 192px;
@@ -586,11 +586,8 @@ div.sell_steps4 ul li:nth-child(4) a {
 
 .add_brand {
     cursor: pointer;
-}
-
-.add_brand:hover {
-    border-bottom: 1px dotted #0191C8;
-    text-decoration: none;
+    padding:10px 0;
+    text-decoration: underline;
 }
 
 .brand_sch_drop_content li {
