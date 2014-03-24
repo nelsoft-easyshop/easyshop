@@ -22,10 +22,10 @@
 			<input type="hidden" id="uploadstep1_csrf" name="<?php echo $my_csrf['csrf_name'];?>" value="<?php echo $my_csrf['csrf_hash'];?>">
             <div class="sell_steps sell_steps1">
                 <ul>
-                    <li>Step 1 : Select Category</li>
-                    <li>Step 2 : Upload Item</li>                   
-                    <li>Step 3: Select Shipping Courier</li>
-                    <li>Step 4: Success</li>
+                    <li><a href="#"><span>Step 1: </span> Select Category</a></li>
+                    <li><a href="#">Step 2: Upload Item</a></li>                   
+                    <li><a href="#">Step 3: Select Shipping Courier</a></li>
+                    <li><a href="#">Step 4: Success</a></li>
                 </ul>
             </div>
             
@@ -134,18 +134,19 @@
 
             if($('#storeValue .parent'+catId).length == 0) {
                 $.ajax({
+                    onLoading:jQuery(".sub_cat_loading_container").html('<img src="<?= base_url() ?>assets/images/orange_loader.gif" />').show(),
                     async: false,
                     type: "POST",
                     url: '<?php echo base_url(); ?>' + action,
                     data: "cat_id=" + catId + "&level=" + level + "&name=" + name + "&es_csrf_token=" + csrftoken,
                     dataType: "json",
                     cache: false,
-                    onLoading:jQuery(".sub_cat_loading_container").html('<img src="<?= base_url() ?>assets/images/orange_loader.gif" />').show(),
+                    
                     success: function(d) {
                         $(".product_sub_category").append(d);
                         $("#storeValue").append(d);
 
-                        jQuery(".sub_cat_loading_container").hide();
+                        jQuery(".sub_cat_loading_container").fadeOut(600);
                     }
                 });
             }else{
@@ -181,7 +182,7 @@
                     success: function(d) {
                         $(".product_sub_category").append(d);
                         $("#storeValue").append(d);
-                        $(".sub_cat_loading_container").hide();
+                        $(".sub_cat_loading_container").fadeOut(600);
                     }
                 });
             }else{ 
