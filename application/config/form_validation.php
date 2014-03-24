@@ -66,11 +66,6 @@ $config = array(
 						'rules' => 'trim|required|valid_email'
 					  ),
 				   array(
-						 'field'   => 'captcha_word',
-						 'label'   => 'User Captcha',
-						 'rules'   => 'trim|required|callback_external_callbacks[register_model,validate_captcha]'
-					  ),
-				   array(
 						 'field'   => 'terms_checkbox',
 						 'label'   => 'Terms and Conditions',
 						 'rules'   => 'required'
