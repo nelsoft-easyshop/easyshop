@@ -1611,8 +1611,6 @@ $(document).ready(function() {
         $('#prod_sku').val(prev_content.prod_sku);
     }
 
-
-
     var temp_content = new Object();
     temp_content.prod_title = $('#prod_title').val();
     temp_content.brand_sch = $('#brand_sch').val();
@@ -1714,29 +1712,42 @@ $(document).ready(function(){
                         jQuery.each(obj,function(){
                             html += '<li class="brand_result" data-brandid="'+(this.id_brand) +'"><a href="javascript:void(0)">'+(this.name)+'</a></li>' ;                             
                         });
+                        jQuery(".brand_sch_loading").hide();
                     }
                     else{
-                       html = '<li> No results found </li>';
+                       addNewBrand();
                     }
                     
-                    html += '<li class="add_brand blue">Use your own brand name</li></ul>';
-                    jQuery(".brand_sch_loading").hide();
+                    html += '</ul>';
                     $("#brand_search_drop_content").html(html);
+                    
+                    if(!$("#brand_sch").is(":focus")){
+                        $('#brand_search_drop_content li.brand_result a').each(function(){
+                            if($(this).text().toLowerCase() ===  $('#brand_sch').val().toLowerCase()){
+                                $(this).click();
+                            }
+                        });
+                    }
                 }
             });
         }
     });
     
-    $(document).on("click",".add_brand", function(){
+    function addNewBrand(){
         $('#prod_brand').val(1)
         $('#prod_brand').trigger( "change" );
-        if(currentRequest != null) {
-            currentRequest.abort();
-        }
-        jQuery(".brand_sch_loading").html('<img src="<?= base_url() ?>assets/images/check_icon.png" />').show().css('display','inline-block');
+        jQuery(".brand_sch_loading").html('<img src="<?= base_url() ?>assets/images/icon_qmark.png" />').show().css('display','inline-block');
         $('#brand_search_drop_content').hide();
-    });
-
+    }
+  
+    $('#brand_sch').focusout(function(){
+        $('#brand_search_drop_content li.brand_result a').each(function(){
+            if($(this).text().toLowerCase() ===  $('#brand_sch').val().toLowerCase()){
+                $(this).click();
+            }
+        });
+    });    
+  
 });
 
 

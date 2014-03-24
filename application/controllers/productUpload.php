@@ -760,6 +760,7 @@ class productUpload extends MY_Controller
 
 		$member_id = $this->session->userdata('member_id');
 
+        
         if($this->input->post('hidden_attribute')){
             $new_cat_id = $this->input->post('hidden_attribute');
             if($this->product_model->editProductCategory($new_cat_id, $product_id, $member_id)>0){
@@ -767,9 +768,12 @@ class productUpload extends MY_Controller
                 $this->product_model->deleteProductQuantityCombination($product_id);
                 $this->product_model->deleteAttributeByProduct($product_id);
             }
+            /*
             else{
                 redirect('me', 'refresh'); 
             }
+            */
+            
         }
       
 		$data = array('title'=>'Edit Product');

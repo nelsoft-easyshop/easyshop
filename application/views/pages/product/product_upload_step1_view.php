@@ -7,7 +7,7 @@
       
         <?php if(isset($product_id_edit)){
                   echo form_open('sell/edit/step2');
-                  echo '<input type="hidden" name="p_id" value="'.$product_id_edit.'">';
+                  echo '<input type="hidden" id="p_id" name="p_id" value="'.$product_id_edit.'">';
               }
               else{
                   echo form_open('sell/step2');
