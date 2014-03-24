@@ -109,11 +109,9 @@ class productUpload extends MY_Controller
 			$response['sell'] = true;
             
             if($this->input->post('step1_content')){
-               //$response['step1_content']='{prod_title":"jinbei","brand_sch":"","prod_brand":"0","prod_condition":"0","prod_brief_desc":"","prod_description":"","prod_keyword":"","prod_price":"","prod_sku":""}';
                 $response['step1_content'] = $this->input->post('step1_content');
             }
-                
-
+               
 			$this->load->view('pages/product/product_upload_step2_view',$response);
 			$this->load->view('templates/footer'); 
 		}else{
@@ -201,17 +199,15 @@ class productUpload extends MY_Controller
 		
 		$date = date("Ymd");
         $fulldate = date("YmdGis");
-        
-        if(is_numeric($brand_id)){
+                
+        if(intval($brand_id,10) == 1){
+            $brand_valid = true;
+            $otherBrand = $this->input->post('brand_sch');
+            $brand_id = 1;
+        }
+        else{
             if($this->product_model->getBrandName($brand_id)){
                 $brand_valid = true;
-            }
-        }
-        else{ 
-            if($brand_id === 'new'){
-                $brand_valid = true;
-                $otherBrand = $this->input->post('brand_sch');
-                $brand_id = 1;
             }
         }
 
@@ -760,22 +756,15 @@ class productUpload extends MY_Controller
 
 		$member_id = $this->session->userdata('member_id');
 
-        
         if($this->input->post('hidden_attribute')){
             $new_cat_id = $this->input->post('hidden_attribute');
             if($this->product_model->editProductCategory($new_cat_id, $product_id, $member_id)>0){
                 $this->product_model->deleteShippingInfomation($product_id);
                 $this->product_model->deleteProductQuantityCombination($product_id);
                 $this->product_model->deleteAttributeByProduct($product_id);
-            }
-            /*
-            else{
-                redirect('me', 'refresh'); 
-            }
-            */
-            
+            }           
         }
-      
+        
 		$data = array('title'=>'Edit Product');
 		$data = array_merge($data,$this->fill_header());
 		$this->load->view('templates/header',$data); 
