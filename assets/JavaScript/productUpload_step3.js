@@ -297,7 +297,8 @@ $(function(){
     if(getObjectSize(fdata) > 0){
 	  var csrftoken = $('#shippingsummary_csrf').val();
 	  var productitemid = $('#json_id_product_item').val();
-	  $.post(config.base_url+'sell/shippinginfo', {fdata : fdata, es_csrf_token : csrftoken, productitemid : productitemid}, function(data){
+	  var productid = parseInt($('#prod_h_id').val());
+	  $.post(config.base_url+'sell/shippinginfo', {fdata : fdata, es_csrf_token : csrftoken, productitemid : productitemid, productid : productid}, function(data){
 		if(data === 'success'){
 			$('#step4_form').submit();
 		}

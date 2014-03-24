@@ -676,6 +676,7 @@ class productUpload extends MY_Controller
 	function step3Submit(){
 		$fdata = $this->input->post('fdata');
 		$arrProductItemId = json_decode($this->input->post('productitemid'));
+		$productId = $this->input->post('productid');
 		$attrCounter = 0;
 		
 		// Check if all attributes have assigned shipping details
@@ -700,7 +701,7 @@ class productUpload extends MY_Controller
 					}*/
 					foreach($attrGroup as $locationKey=>$price){
 						if(is_numeric($price)){
-							$shippingId = $this->product_model->storeShippingPrice($locationKey, $price);
+							$shippingId = $this->product_model->storeShippingPrice($locationKey, $price, $productId);
 							$this->product_model->storeProductShippingMap($shippingId, $attrCombinationId);
 						}
 					}

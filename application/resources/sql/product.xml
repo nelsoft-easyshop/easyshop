@@ -693,8 +693,8 @@
 </select>
 	
 <select id="storeShippingPrice">
-    INSERT INTO es_product_shipping_head (location_id, price)
-    VALUES (:location_id, :price)
+    INSERT INTO es_product_shipping_head (location_id, price, product_id)
+    VALUES (:location_id, :price, :product_id)
 </select>
 
 <select id="storeProductShippingMap">

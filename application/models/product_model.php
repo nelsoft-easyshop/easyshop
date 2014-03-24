@@ -1399,22 +1399,23 @@ class product_model extends CI_Model
 	}
 
 	/**
-    *	Store Shipping Price in `es_shipping_price`
+    *	Store Shipping Price in `es_product_shipping_head`
     *	Table contains -> Location ID vs Price
     */
-    public function storeShippingPrice ($locationKey, $price)
+    public function storeShippingPrice ($locationKey, $price, $productId)
     {
     	$query = $this->sqlmap->getFilenameID('product','storeShippingPrice');
     	$sth = $this->db->conn_id->prepare($query);
     	$sth->bindParam(':location_id', $locationKey, PDO::PARAM_INT);
     	$sth->bindParam(':price', $price, PDO::PARAM_INT);
+		$sth->bindParam(':product_id', $productId, PDO::PARAM_INT);
     	$sth->execute();
 		
     	return $this->db->conn_id->lastInsertId('id_shipping');
     }
 
     /**
-     *	Store Product Shipping Mapping in `es_product_shipping_map`
+     *	Store Product Shipping Mapping in `es_product_shipping_details`
      *	Table contains -> Mapping of ShippingID vs ProductItemAttrID
      */
     public function storeProductShippingMap($shippingId, $attrCombinationId)
