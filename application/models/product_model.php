@@ -714,7 +714,6 @@ class product_model extends CI_Model
 		   ". $string_sort ."   
 		  LIMIT :start, :per_page
 		";   
-
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':start',$start,PDO::PARAM_INT); 
 		$sth->bindParam(':per_page',$per_page,PDO::PARAM_INT);

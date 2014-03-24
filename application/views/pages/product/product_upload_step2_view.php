@@ -9,11 +9,12 @@
       <h2 class="f24">Sell an Item</h2>
       <input type="hidden" id="uploadstep2_csrf" name="<?php echo $my_csrf['csrf_name'];?>" value="<?php echo $my_csrf['csrf_hash'];?>">
       <div class="sell_steps sell_steps2">
-        <ul>
-          <li><a href="javascript:void(0)" id="step1_link">Step 1 : Select Category</a></li>
-          <li><span>Step 2: </span> Upload Item</li>                   
-          <li>Step 3: Select Shipping Courier</li>
-          <li>Step 4: Success</li>
+        <ul> 
+          <li><a href="javascript:void(0)" id="step1_link">Step 1: Select Category</a></li>
+          <li><a href="javascript:void(0)"><span>Step 2: </span> Upload Item</a></li>                   
+          <li><a href="javascript:void(0)">Step 3: Select Shipping Courier</a></li>
+          <li><a href="javascript:void(0)">Step 4: Success</a></li>
+ 
         </ul>
       </div>
       <input type="hidden" name="step1_content" id="step1_content" value='<?php echo isset($step1_content)?$step1_content:json_encode(array());?>'/>
@@ -41,14 +42,38 @@
         echo form_open('', $attr);
         ?>
 
+        <!--   <a class="tooltips" href="javascript:void(0)">
+            <img src="<?= base_url() ?>assets/images/icon_qmark.png" alt=""> 
+            <span> You can also set the availability of different attribute combinations of your item by clicking the Add button</span>
+          </a>  -->
+
 
         <table class="step4" cellspacing="0" cellpadding="0">
           <tr>
-            <td colspan="3">
-              <?php echo $parent_to_last; ?> <!-- will show the parent category until to the last category selected (bread crumbs) -->
+              <td colspan="3" class="upload_step2_title">
+              <h3>Categories where your listing will appear</h3>  
+              <a class="tooltips" href="javascript:void(0)">
+                <img src="<?= base_url() ?>assets/images/icon_qmark.png" alt="">
+                <span>This is the EasyShop category where your listing will appear.
+                </span>
+              </a> 
             </td>
           </tr>
-          
+
+          <tr>
+            <td  class="border-left border-bottom" colspan="2">
+
+              <?php echo $parent_to_last; ?> <!-- will show the parent category until to the last category selected (bread crumbs) -->
+              <br>
+              <a href="javascript:void(0)" style="color:#0654BA;">Change category</a>
+            </td> 
+            <td  class="border-right border-bottom" colspan="2">
+            </td>
+          </tr>
+          <tr>
+            <td colspan="3">&nbsp;
+            </td>
+          </tr>
           <tr>
             <td colspan="3" class="upload_step2_title">
               <h3>Describe your item</h3> (<strong class="required">*</strong>) required fields
@@ -56,7 +81,13 @@
           </tr>
           <tr>
             <td  class="border-left" style="width:130px">Product Name: <font color="red">*</font></td> <!-- Title of the product -->
-            <td  class="border-right" colspan="2"><input type="text" maxlength="255" placeholder="Enter title" autocomplete="off" id="prod_title" maxlength="255" name="prod_title" value="<?php echo (isset($product_details['name']))?$product_details['name']:'';?>"></td>
+            <td  class="border-right" colspan="2"><input type="text" maxlength="255" placeholder="Enter title" autocomplete="off" id="prod_title" maxlength="255" name="prod_title" value="<?php echo (isset($product_details['name']))?$product_details['name']:'';?>">
+              <a class="tooltips" href="javascript:void(0)">
+                <img src="<?= base_url() ?>assets/images/icon_qmark.png" alt="">
+                <span>This will be the title of your listing. State exactly what you're selling and include words that buyers might use to search, such as the item brand, color, size, and model number.
+                </span>
+              </a> 
+            </td>
           </tr>
           <tr>
             <td class="border-left" style="width:130px">Brand: <font color="red">*</font></td> <!-- Title of the product -->
@@ -65,9 +96,14 @@
               <input type = "text" id="brand_sch" name="brand_sch" autocomplete="off" placeholder="Search for your brand" value="<?php echo isset($product_details['brandname'])?$product_details['brandname']:''?>"/>
               <div class="brand_sch_loading"></div>
               <div id="brand_search_drop_content" class="brand_sch_drop_content"></div>
+                <a class="tooltips" href="javascript:void(0)">
+                <img src="<?= base_url() ?>assets/images/icon_qmark.png" alt="">
+                <span>This will be the brand of your listing.
+                </span>
+              </a> 
             </td>
           </tr>
-
+          
           <!-- Start Condition of the product -->
           <tr>
             <td class="border-left border-bottom">
@@ -80,6 +116,11 @@
                   <option value="<?php echo $x;?>" <?php if(isset($product_details['condition'])){echo ($product_details['condition'])===$x?'selected':'';}?>><?php echo $x; ?></option>
                 <?php endforeach; ?>
               </select>
+              <a class="tooltips" href="javascript:void(0)">
+                <img src="<?= base_url() ?>assets/images/icon_qmark.png" alt="">
+                <span>Tell buyers all about the condition of your item so they know exactly what to expect. Use this field only to describe your item's condition.
+                </span>
+              </a>
             </td>
           </tr>
           <!-- end Condition of the product -->
@@ -91,6 +132,11 @@
           <tr>
               <td colspan="3" class="upload_step2_title"> 
                   <h3>Add Photos</h3> <span class="required">You are required to have a minimum of 1 photo</span>
+                          <a class="tooltips" href="javascript:void(0)">
+                <img src="<?= base_url() ?>assets/images/icon_qmark.png" alt="">
+                <span>Including pictures of your item is vital to your success. You can upload them from your computer.
+                </span>
+              </a>
               </td>
           </tr>
           <tr>
@@ -137,18 +183,49 @@
           </tr>
           <tr>
               <td class="border-left" style="width:130px">Brief description: <font color="red"> *</font></td><!-- Brief of the product -->
-              <td class="border-right" colspan="2"><input type="text" autocomplete="off" maxlength="255" placeholder="Enter brief description" id="prod_brief_desc" name="prod_brief_desc"  value="<?php echo (isset($product_details['brief']))?$product_details['brief']:'';?>"></td>
+              <td class="border-right" colspan="2"><input type="text" autocomplete="off" maxlength="255" placeholder="Enter brief description" id="prod_brief_desc" name="prod_brief_desc"  value="<?php echo (isset($product_details['brief']))?$product_details['brief']:'';?>">
+     <a class="tooltips" href="javascript:void(0)">
+                  <img src="<?= base_url() ?>assets/images/icon_qmark.png" alt="">
+                  <span>Brief description of you item
+                  </span>
+                </a>
+              </td>
           </tr>
           <tr>
             <td class="border-left" valign="top">Product Details: <font color="red">*</font></td><!-- Main Description of the product --> 
-            <td class="border-right pad-right" colspan="3"><textarea style="width: 98%;height:100%" name="prod_description" class="mceEditor"  id="prod_description" placeholder="Enter description..."><?php echo (isset($product_details['description']))?$product_details['description']:'';?></textarea></td>
+            <td class="border-right pad-right" colspan="3"><textarea style="width: 98%;height:100%" name="prod_description" class="mceEditor"  id="prod_description" placeholder="Enter description..."><?php echo (isset($product_details['description']))?$product_details['description']:'';?></textarea>
+              
+            </td>
           </tr> 
           <!-- end of Description -->
 
           <!-- start of keywords -->
+          <script type="text/javascript">
+       $(document).ready(function(){
+          function updateCountdown() {
+    // 140 is the max message length
+    var remaining = 150 - $('#prod_keyword').val().length;
+    $('.countdown').text(remaining + ' characters remaining.');
+}
+    updateCountdown();
+    $('#prod_keyword').change(updateCountdown);
+    $('#prod_keyword').keyup(updateCountdown);
+});</script>
           <tr>
-            <td class="border-left">Keywords (separated by spaces)</td>
-            <td class="border-right" colspan="3"><input type="text" autocomplete="off" maxlength="1024" name="prod_keyword" id="prod_keyword" placeholder="Enter keyword for you item" value="<?php echo (isset($product_details['keywords']))?$product_details['keywords']:'';?>"></td>
+            <td class="border-left">Additional Keywords
+              <br>
+             <span style="color:gray;font-style:italic;font-size:11px">(Seperated by spaces.)</span>
+            </td>
+            <td class="border-right" colspan="3"><input type="text" autocomplete="off" maxlength="150" name="prod_keyword" id="prod_keyword" placeholder="Enter keyword for you item" value="<?php echo (isset($product_details['keywords']))?$product_details['keywords']:'';?>">
+                
+                 <a class="tooltips" href="javascript:void(0)">
+                  <img src="<?= base_url() ?>assets/images/icon_qmark.png" alt="">
+                  <span>Set the keyword of item you are selling.
+                  </span>
+                </a>
+                <br>
+                 <span class="countdown" style="color:gray;font-style:italic;font-size:12px"></span>
+              </td>
           </tr>
           <!-- end of keywords -->
         </table> 
@@ -267,6 +344,13 @@
           <tr>
             <td class="border-left border-right" colspan="4">
               <h3> Additional Information to your Item</h3> 
+              <br>
+              Buyers often refine their search using these item specifics. If you don't provide these details here, your listing may not appear in their search results.
+                             <a class="tooltips" href="javascript:void(0)">
+                <img src="<?= base_url() ?>assets/images/icon_qmark.png" alt="">
+                <span>Add details to help buyers find your item.
+                </span>
+              </a>
             </td>
           </tr>
 
@@ -331,14 +415,18 @@
         <tr class="main1">
           <td class="border-left"> Others: (Optional) </td> 
           <td class="border-right" colspan="3">
-            <input type="text" name="prod_other_name[]" data-cnt="<?php echo $j;?>" class="<?php echo 'prod_'.$j;?> other_name_class" autocomplete="off" placeholder="Enter name"> 
+            <input type="text" name="prod_other_name[]" data-cnt="<?php echo $j;?>" class="<?php echo 'prod_'.$j;?> other_name_class" autocomplete="off" placeholder="Enter item specific name"> 
             <a href="javascript:void(0)" class="lnkClearFirst">Clear This Group</a>
+            <br>
+            <span style="color:gray;font-style:italic;font-size:11px">For Example: Color, Brand and Year</span>
           </td>
         </tr>
         <tr class="main1 main1_2nd">
           <td class="border-left">&nbsp;</td>
           <td>
-            <input type="text" name="prod_other[]"  class="other_name_value otherNameValue1"  autocomplete="off" data-cnt="<?php echo $j;?>" placeholder="Enter description">
+            <input type="text" name="prod_other[]"  class="other_name_value otherNameValue1"  autocomplete="off" data-cnt="<?php echo $j;?>" placeholder="Enter item specific value ">
+            <br>
+            <span style="color:gray;font-style:italic;font-size:11px">For Example: Blue, SKK and 2013</span>
           </td>
           <td>
             <div class="<?php echo 'h_if_'.$j;?> hdv">
@@ -392,7 +480,13 @@
           </tr> 
           <tr>
               <td width="110px" class="border-left">Base Price <font color="red"> *</font></td>
-              <td class="border-right" colspan="3"><input type="text" autocomplete="off" name="prod_price" id="prod_price" placeholder="Enter price (0.00)" value="<?php echo (isset($product_details['price']))?$product_details['price']:'';?>"></td>
+              <td class="border-right" colspan="3"><input type="text" autocomplete="off" name="prod_price" id="prod_price" placeholder="Enter price (0.00)" value="<?php echo (isset($product_details['price']))?$product_details['price']:'';?>">
+                <a class="tooltips" href="javascript:void(0)">
+                  <img src="<?= base_url() ?>assets/images/icon_qmark.png" alt="">
+                  <span>Set the price at which you are selling your item.
+                  </span>
+                </a>
+              </td>
           </tr>
           <!-- end of Price Content -->
 
@@ -1143,7 +1237,7 @@ $(".checkbox_itemattr").click(function(){
 
 $(".add_more_link").unbind("click").click(function(){
   cnt_o++;
-  $('.step4_2').append('<tr id="main'+cnt_o+'" class="main'+cnt_o+'"><td class="border-left"></td><td class="border-right" colspan="3"><input type="text" data-cnt="'+cnt_o+'" autocomplete="off" name="prod_other_name[]" class="prod_'+cnt_o+' other_name_class" placeholder="Enter name"><a href="javascript:void(0)" data-cnt="'+cnt_o+'" class="removeOptionGroup">Remove This Group</a></td></tr><tr class="main'+cnt_o+' main'+cnt_o+'_2nd"><td class="border-left"></td><td><input type="text" autocomplete="off" data-cnt="'+cnt_o+'" class="other_name_value otherNameValue'+cnt_o+'" name="prod_other[]" placeholder="Enter description"></td><td> <div class="h_if_'+cnt_o+' hdv"  style="display:none">&#8369; <input type="text" name="prod_other_price[]"  class="price_text"   id="price_field"  autocomplete="off" placeholder="Enter additional price (0.00)"></div></td><td class="border-right"> <div class="h_if_'+cnt_o+' hdv" style="display:none"><input type="file" name="prod_other_img[]" ><a data-cnt="'+cnt_o+'" class="removeOptionValue" href="javascript:void(0)">Remove</a></div></td></tr><tr id="main1" class="main'+cnt_o+'_link"><td class="border-left"></td><td class="border-right" colspan="3"><a class="add_more_link_value" data-value="'+cnt_o+'" href="javascript:void(0)">+Add more value</a></td></tr>');
+  $('.step4_2').append('<tr id="main'+cnt_o+'" class="main'+cnt_o+'"><td class="border-left"></td><td class="border-right" colspan="3"><input type="text" data-cnt="'+cnt_o+'" autocomplete="off" name="prod_other_name[]" class="prod_'+cnt_o+' other_name_class" placeholder="Enter item specific value"><a href="javascript:void(0)" data-cnt="'+cnt_o+'" class="removeOptionGroup">Remove This Group</a></td></tr><tr class="main'+cnt_o+' main'+cnt_o+'_2nd"><td class="border-left"></td><td><input type="text" autocomplete="off" data-cnt="'+cnt_o+'" class="other_name_value otherNameValue'+cnt_o+'" name="prod_other[]" placeholder="Enter description"></td><td> <div class="h_if_'+cnt_o+' hdv"  style="display:none">&#8369; <input type="text" name="prod_other_price[]"  class="price_text"   id="price_field"  autocomplete="off" placeholder="Enter additional price (0.00)"></div></td><td class="border-right"> <div class="h_if_'+cnt_o+' hdv" style="display:none"><input type="file" name="prod_other_img[]" ><a data-cnt="'+cnt_o+'" class="removeOptionValue" href="javascript:void(0)">Remove</a></div></td></tr><tr id="main1" class="main'+cnt_o+'_link"><td class="border-left"></td><td class="border-right" colspan="3"><a class="add_more_link_value" data-value="'+cnt_o+'" href="javascript:void(0)">+Add more value</a></td></tr>');
 });
 
 $('.upload_input_form').on('click', '.add_more_link_value', function() {
@@ -1153,7 +1247,7 @@ $('.upload_input_form').on('click', '.add_more_link_value', function() {
 
   var  subClass = "main"+data+"_2nd_add";
  
-  var newrow = $('<tr class="main'+data+' '+subClass+'"><td class="border-left"></td><td style="display:none"><span ><input type="text" value ="'+attr+'" data-cnt="'+data+'" class="prod_'+data+'" name="prod_other_name[]"></span></td><td><input type="text" autocomplete="off" data-cnt="'+data+'" class="other_name_value otherNameValue'+data+'"  name="prod_other[]" placeholder="Enter description"></td><td>&#8369; <input type="text" name="prod_other_price[]"  id="price_field" class="price_text"  autocomplete="off" placeholder="Enter additional price (0.00)"></td><td class="border-right"><input type="file" name="prod_other_img[]" ><a data-cnt="'+data+'" class="removeOptionValue" href="javascript:void(0)">Remove</a></td></tr>');
+  var newrow = $('<tr class="main'+data+' '+subClass+'"><td class="border-left"></td><td style="display:none"><span ><input type="text" value ="'+attr+'" data-cnt="'+data+'" class="prod_'+data+'" name="prod_other_name[]"></span></td><td><input type="text" autocomplete="off" data-cnt="'+data+'" class="other_name_value otherNameValue'+data+'"  name="prod_other[]" placeholder="Enter item specific value"></td><td>&#8369; <input type="text" name="prod_other_price[]"  id="price_field" class="price_text"  autocomplete="off" placeholder="Enter additional price (0.00)"></td><td class="border-right"><input type="file" name="prod_other_img[]" ><a data-cnt="'+data+'" class="removeOptionValue" href="javascript:void(0)">Remove</a></td></tr>');
   if (data == 1){
     $('#main'+data).before(newrow);
   }else{

@@ -345,6 +345,7 @@ $(document).ready(function() {
         var objHeight = $(window).height() - 50;
         var last_scroll_top = 0;
         <?php 
+           $type = 0;
                      if(isset($_COOKIE['view']))
             {
                 $type = 0;

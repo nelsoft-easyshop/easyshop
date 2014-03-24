@@ -96,7 +96,7 @@ class productUpload extends MY_Controller
 				if($v == $lastElement) {
 
 				}else{
-					$str_parents_to_last = $str_parents_to_last.' ->';
+					$str_parents_to_last = $str_parents_to_last.' &#10140;';
 				}
 			}
 			$response['parent_to_last'] = $str_parents_to_last;

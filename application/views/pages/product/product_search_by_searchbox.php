@@ -53,6 +53,9 @@ $typeOfViewActive = '<div id="list" class="list "></div>
                      <div id="grid" class="grid grid-active"></div>';
              if(isset($_COOKIE['view']))
             {
+
+            $typeOfViewActive = '<div id="list" class="list "></div>
+                     <div id="grid" class="grid grid-active"></div>';
                 $cookieView = $_COOKIE['view'];
                 if($cookieView == "list"){
                     $typeOfViewActive = '<div id="list" class="list list-active"></div>
@@ -163,7 +166,8 @@ $(document).ready(function(){
   var objHeight=$(window).height()-50;  
   var last_scroll_top = 0;
   <?php 
-             if(isset($_COOKIE['view']))
+   $type = 0;
+   if(isset($_COOKIE['view']))
     {
         $type = 0;
         if($cookieView == "list"){

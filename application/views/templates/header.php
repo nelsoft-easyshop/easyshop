@@ -30,7 +30,7 @@
 	<?php 
         if(isset($_GET['q_str']))
         {
-          echo $_GET['q_str'].' | ';
+          echo urldecode($_GET['q_str']).' | ';
         }
     ?>
     <?php echo $title?>
@@ -142,32 +142,41 @@
 
 $(document).ready(function() {
   var currentRequest = null;
-  $( "#main_search" ).keyup(function() {
 
-    var searchQuery = $(this).val();
-	var csrftoken = $('#header_search').val();
-    if(searchQuery != ""){
-      currentRequest = $.ajax({
-        type: "GET",
-        url: '<?php echo base_url();?>product/sch_onpress', 
-        onLoading:jQuery(".main_srch_img_con").html('<img src="<?= base_url() ?>assets/images/orange_loader_small.gif" />').show(),
-        cache: false,
-        data: "q="+searchQuery+"&es_csrf_token="+csrftoken , 
-        beforeSend: function(jqxhr, settings) { 
-            $("#main_search_drop_content").empty();
-            if(currentRequest != null) {
-                currentRequest.abort();
+ 
+$('#main_search').on('input propertychange', function() {
+        
+          var searchQuery = $.trim( $(this).val());
+          searchQuery = searchQuery.replace(/ +(?= )/g,'');
+          var fulltext = searchQuery; 
+
+          if(searchQuery != ""){
+            if($('#main_search').val().length > 2){
+              currentRequest = $.ajax({
+                type: "GET",
+                url: '<?php echo base_url();?>product/sch_onpress', 
+                onLoading:jQuery(".main_srch_img_con").html('<img src="<?= base_url() ?>assets/images/orange_loader_small.gif" />').show(),
+                cache: false,
+                data: "q="+fulltext, 
+                beforeSend: function(jqxhr, settings) { 
+                  $("#main_search_drop_content").empty();
+                  if(currentRequest != null) {
+                    currentRequest.abort();
+                  }
+                },
+                success: function(html) {
+                  $("#main_search_drop_content").append(html);
+                  $("#main_search_drop_content").show();
+                  $(".main_srch_img_con").hide();
+                }
+              });
+            }else{
+              $("#main_search_drop_content").empty();
             }
-        },
-        success: function(html) {
-         $("#main_search_drop_content").html(html).show();
-          jQuery(".main_srch_img_con").hide();
-       }
-     });
-    }else{
-      $("#main_search_drop_content").hide();
-    }
-  });
+          }else{
+             $("#main_search_drop_content").hide();
+          }
+      });
 });
 
 </script>

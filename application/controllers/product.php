@@ -404,8 +404,22 @@ class product extends MY_Controller
 		}
 	}
 
+function highlight($text, $words)
+{
+	$words = preg_replace('/\s+/', ' ',$words);
+    $split_words = explode(" ", $words);
+    foreach($split_words as $word)
+    {
+        $color = "#e5e5e5";
+        $text = preg_replace("|($word)|Ui","<b>$1</b>" , $text );
+    }
+ 
+    return $text;
+}
+
+
 	function sch_onpress()
-	{ 
+	{  
 
 		header('Content-Type: text/plain'); 	 
 		if($this->input->get('q')){
@@ -422,7 +436,8 @@ class product extends MY_Controller
 				$html .= "<li>No Record Found!</li>";
 			}else{
 				foreach ($keywords as $value) {
-					$html .= "<li><a href='".base_url()."search/search.html?q_str=".es_url_clean($value)."&q_cat=1'>".$value."</a></li>";
+					$showValue = $this->highlight($value,$stringData);
+					$html .= "<li><a href='".base_url()."search/search.html?q_str=".urlencode($value)."&q_cat=1'>".$showValue."</a></li>";
 				}
 			}
 			$html .= "</ul>";
@@ -457,7 +472,7 @@ class product extends MY_Controller
 				}
 
 				$string = ' '.ltrim($_GET['q_str']); 
-				$words = "+".implode("*,+",explode("-",trim($string)))."*"; 
+				$words = "+".implode("*,+",explode(" ",trim($string)))."*"; 
 				$checkifexistcategory = $this->product_model->checkifexistcategory($category);
 				if($checkifexistcategory == 0 || $category == 1)
 				{
