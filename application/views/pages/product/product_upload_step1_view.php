@@ -22,10 +22,10 @@
 			<input type="hidden" id="uploadstep1_csrf" name="<?php echo $my_csrf['csrf_name'];?>" value="<?php echo $my_csrf['csrf_hash'];?>">
             <div class="sell_steps sell_steps1">
                 <ul>
-                    <li><a href="#"><span>Step 1: </span> Select Category</a></li>
-                    <li><a href="#">Step 2: Upload Item</a></li>                   
-                    <li><a href="#">Step 3: Select Shipping Courier</a></li>
-                    <li><a href="#">Step 4: Success</a></li>
+                    <li><span>Step 1: </span> Select Category</li>
+                    <li>Step 2: Upload Item</li>                   
+                    <li>Step 3: Select Shipping Courier</li>
+                    <li>Step 4: Success</li>
                 </ul>
             </div>
             
