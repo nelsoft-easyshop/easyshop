@@ -101,9 +101,9 @@
     <!-- Start of Shipping Courier -->
     <div class="shipping_courier_container">
 
-      <a href="http://www.air21.com.ph/main/rate_calculator.php"><img src="<?=base_url()?>assets/images/img_logo_air21.jpg"> Air21</a>
-      <a href="http://www.lbcexpress.com/"><img src="<?=base_url()?>assets/images/img_logo_lbc.jpg"> LBC</a>
-      <a href="http://www.jrs-express.com/Ratecalc.aspx"><img src="<?=base_url()?>assets/images/img_logo_jrs.jpg"> JRS</a>
+      <a target="_blank" href="http://www.air21.com.ph/main/rate_calculator.php"><img src="<?=base_url()?>assets/images/img_logo_air21.jpg"> Air21</a>
+      <a target="_blank" href="http://www.lbcexpress.com/"><img src="<?=base_url()?>assets/images/img_logo_lbc.jpg"> LBC</a>
+      <a target="_blank" href="http://www.jrs-express.com/Ratecalc.aspx"><img src="<?=base_url()?>assets/images/img_logo_jrs.jpg"> JRS</a>
     </div>
     <!-- End of Shipping Courier -->
 
@@ -226,7 +226,7 @@
     </div>
 	
 	<div style="color:red;<?php echo $inc_location ? '' : 'display:none;'?>" id="div_locationwarning">
-		Warning: Your shipping location selection does not cover 
+		Warning: Your shipping location selection does not cover the whole
 		<span id="location_warning">
 			<?php echo $inc_location ? $inc_locationmsg : '';?>
 		</span>
