@@ -1669,7 +1669,8 @@ $(document).ready(function() {
     });
     
    if(($('#brand_sch').val() !== '')&&(parseInt($('#prod_brand').val(),10) !== 0)){
-      jQuery(".brand_sch_loading").html('<img src="<?= base_url() ?>assets/images/check_icon.png" />').show().css('display','inline-block');
+      var img_temp = (parseInt($('#prod_brand').val(),10) !== 1)?'<img src="<?= base_url() ?>assets/images/check_icon.png" />':'<img src="<?= base_url() ?>assets/images/icon_qmark.png" />';
+      jQuery(".brand_sch_loading").html(img_temp).show().css('display','inline-block');
    }
    
    $('#brand_search_drop_content').on('click', 'li.brand_result', function(){
@@ -1712,6 +1713,7 @@ $(document).ready(function(){
                         jQuery.each(obj,function(){
                             html += '<li class="brand_result" data-brandid="'+(this.id_brand) +'"><a href="javascript:void(0)">'+(this.name)+'</a></li>' ;                             
                         });
+                        html +=  '<li class="add_brand blue">Use your own brand name</li>';
                         jQuery(".brand_sch_loading").hide();
                     }
                     else{
@@ -1731,6 +1733,13 @@ $(document).ready(function(){
                 }
             });
         }
+    });
+    
+    $(document).on("click",".add_brand", function(){
+        if(currentRequest != null) {
+            currentRequest.abort();
+        }
+        addNewBrand();
     });
     
     function addNewBrand(){
