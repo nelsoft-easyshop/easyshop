@@ -9,6 +9,7 @@ class Ios extends MY_Controller {
         parent::__construct();
 
         $this->load->library('home_xml');
+		$this->load->helper('htmlpurifier');
     }
 
 
@@ -70,6 +71,7 @@ class Ios extends MY_Controller {
     public function getProduct(){
     
         $id = $this->input->get('p_id');   
+		$uid = $this->session->userdata('member_id');
         $this->load->model('product_model');
         $product_row = $this->product_model->getProduct($id);  
         $product_options = $this->product_model->getProductAttributes($id, 'NAME');
@@ -81,11 +83,12 @@ class Ios extends MY_Controller {
 				'product' => $product_row,
 				'product_options' => $product_options,
 				'product_images' => $this->product_model->getProductImages($id),
-				//'reviews' => $this->getReviews($id,$product_row['sellerid']),
+				'reviews' => $this->getReviews($id,$product_row['sellerid']),
 				//'recommended_items'=> $this->product_model->getRecommendeditem($product_catid,5,$id),
-				//'allowed_reviewers' => $this->product_model->getAllowedReviewers($id),
+				'allowed_reviewers' => $this->product_model->getAllowedReviewers($id),
 				//userdetails --- email/mobile verification info
-				//'userdetails' => $this->product_model->getCurrUserDetails($uid),
+				'userdetails' => $this->product_model->getCurrUserDetails($uid),
+				'uid' => $uid,
                 'product_quantity' => $this->product_model->getProductQuantity($id)
 				));
 		}
@@ -466,6 +469,148 @@ class Ios extends MY_Controller {
 		}
 	}
 
+	/*************************************************************************/
+	/*********************** Review and Replies Section	**********************/
+	/*************************************************************************/
+	
+	# Accepts product review data from post method and writes to es_product_review table.
+	# Arguments: subject, comment, rating
+	function submit_review()
+	{
+		
+			$subject = html_purify($this->input->get('subject'));
+			$comment =  html_purify($this->input->get('comment'));
+			$rating = $this->input->get('score');
+			
+			if((trim($subject) !== '')||(trim($comment) !== '')){
+				$productid = $this->session->userdata('product_id');
+				$rating = $rating===''?'0':$rating;
+				$memberid =  $this->session->userdata('member_id');
+				$this->product_model->addProductReview($memberid, $productid, $rating, $subject, $comment);
+				echo 1;
+			}
+			else{
+				echo 0;
+			}
+			
+			
+	}
+	#new query for getting reviews (top5 Main reviews) - Janz
+	function getReviews($product_id, $sellerid)
+	{
+		$recent = array();
+		$recent = $this->product_model->getProductReview($product_id);
+		
+		if(count($recent)>0){
+			$retrieve = array();
+			foreach($recent as $data){
+				array_push($retrieve, $data['id_review']);
+			}
+			$replies = $this->product_model->getReviewReplies($retrieve, $product_id);
+			foreach($replies as $key=>$temp){
+				$temp['review'] = html_escape($temp['review']);
+			}
+			$i = 0;
+			$userid = $this->session->userdata('member_id');
+			foreach($recent as $review){
+				$recent[$i]['replies'] = array();
+				$recent[$i]['reply_count'] = 0;
+				if($userid === $review['reviewerid'])
+					$recent[$i]['is_reviewer'] = 1;
+				else
+					$recent[$i]['is_reviewer'] = 0;
+
+				foreach($replies as $reply){
+					if($review['id_review'] == $reply['replyto']){
+						array_push($recent[$i]['replies'], $reply);
+						$recent[$i]['reply_count']++;
+					}
+				}
+				$i++;
+			}
+		}
+		return $recent;
+	}
+
+	# Retrieve more reviews from es_product_review_table
+	# Arguments: $lastreview_id = id of the latest loaded review
+	function get_more_reviews()
+	{	
+		$reviews = $replies = array();
+		//$lastreview_id = $this->input->post('last_id');
+		$lastreview_id = $this->input->get('last_id');
+		$id = $this->session->userdata('product_id');
+		$userid = $this->session->userdata('member_id');
+		$sellerid = '';
+
+		$reviews = $this->product_model->getProductReview($id, $lastreview_id);
+		if(count($reviews) > 0){
+			$retrieve = array();
+			foreach($reviews as $key=>$review)
+			{
+				$review['title']=html_escape($review['title']);
+				$review['review']=html_escape($review['review']);
+				$reviews[$key] = $review;
+
+				array_push($retrieve, $review['id_review']);
+			}
+			$replies = $this->product_model->getReviewReplies($retrieve, $id);
+			foreach($replies as $key=>$temp){
+				$temp['review'] = html_escape($temp['review']);
+				$replies[$key] = $temp;
+			}
+
+			$i = 0;
+			foreach($reviews as $review){
+				$reviews[$i]['replies'] = array();
+				$reviews[$i]['reply_count'] = 0;
+
+				if($userid === $review['reviewerid'])
+					$reviews[$i]['is_reviewer'] = 1;
+				else
+					$reviews[$i]['is_reviewer'] = 0;
+
+				foreach($replies as $reply){
+					if($review['id_review'] == $reply['replyto']){
+						array_push($reviews[$i]['replies'], $reply);
+						$reviews[$i]['reply_count']++;
+					}
+				}
+				$i++;
+			}
+			//$sellerid = $this->product_model->getProduct($id)['sellerid']; eto yung dati
+			$sellerid = $this->product_model->getProduct($id);
+		}
+
+		$data = array(
+			'reviews' => $reviews,
+			'is_seller' => $userid===$sellerid?'yes':'no',
+			'is_loggedin' => $this->session->userdata('usersession') !== '' ?'yes':'no'
+			);
+		
+		echo json_encode($data, JSON_PRETTY_PRINT);
+	}
+	
+	# Submit reply
+	# Arguments: reply, p_reviewid, id_product
+	function submit_reply()
+	{
+		$reply = html_purify($this->input->get('reply'));
+		if($this->input->get('p_reviewid') && trim($reply) !== ''){
+			$data = array(
+				'review' => $reply,
+				'p_reviewid' => $this->input->get('p_reviewid'),
+				'product_id' => $this->input->get('id_product'),
+				'member_id' => $this->session->userdata('member_id')
+				);
+			$this->product_model->addReply($data);
+			echo 1;
+		}
+		else
+			echo 0;
+	}
+	
+	
 }
 
 /* End of file ios.php */
