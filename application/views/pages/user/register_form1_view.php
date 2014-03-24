@@ -85,7 +85,7 @@
 				</div>
 				<span class="red ci_form_validation_error"><?php echo form_error('email'); ?></span>
 		  </div>
-			
+	<!--
           <div class="field">
             <label><span>Captcha: </span></label>
             <input id="captcha_word" type="text" size="6" maxlength="6" name="captcha_word"/>
@@ -94,7 +94,7 @@
 			<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" id="captcha_loading" style="position: relative; top:10px; left:20px; display:none"/>
 			<span class="red ci_form_validation_error"><?php echo form_error('captcha_word'); ?></span>
           </div>
-		  
+	-->  
 		  <div class="field" id="tc">
 			<input type="checkbox" name="terms_checkbox" id="terms_checkbox">
 			<label for="terms_checkbox" id="terms">I agree to Easyshop.ph's Terms and Conditions.</label>

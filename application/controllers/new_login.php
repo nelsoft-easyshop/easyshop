@@ -83,7 +83,7 @@ class New_login extends MY_Controller {
 	/**	SIGNUP in Login Page**/
 	function signup()
 	{
-		if(($this->input->post('register_page1'))&&($this->form_validation->run('register_form1_new'))){
+		if(($this->input->post('register_page1'))&&($this->form_validation->run('register_form1'))){
 			$data['username'] = html_escape($this->input->post('username'));
 			$data['password'] = html_escape($this->input->post('password'));
 			$data['email'] = $this->input->post('email');

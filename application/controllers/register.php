@@ -56,8 +56,10 @@ class Register extends MY_Controller
 			$view = 'register_form3_view';
 			$data['member_username'] = $data['username'];
 			$data['verification_msg'] = $this->lang->line('success_registration');
+			
+			
 		}
-		else
+		/*else
 		{
 			$cap = create_captcha($this->vals);	
 			$image = $cap['image'];
@@ -68,6 +70,10 @@ class Register extends MY_Controller
 		$this->load->view('templates/header_plain', $data);
 		$this->load->view("pages/user/".$view, $data);
 		$this->load->view('templates/footer');
+		*/
+		$this->load->view('templates/header_plain', $data);
+			$this->load->view("pages/user/".$view, $data);
+			$this->load->view('templates/footer');
 	}
 	
 	public function external_callbacks( $postdata, $param )
