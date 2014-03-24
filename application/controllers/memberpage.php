@@ -356,7 +356,7 @@ class Memberpage extends MY_Controller
 			else if($this->input->post('field') === 'email' && $this->input->post('data') == $data['email'])
 			{
 				//GENERATE NEW HASH FOR EMAIL VERIFICATION
-				$hash = sha1($this->session->userdata('session_id'));
+				$hash = sha1($this->session->userdata('session_id').time());
 				$confirmation_code = $data['mobilecode'];
 				$temp = array(
 					'member_id' => $uid,

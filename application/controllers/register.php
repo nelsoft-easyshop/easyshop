@@ -118,7 +118,7 @@ class Register extends MY_Controller
 		//GENERATE MOBILE CONFIRMATION CODE
 		$temp['mobilecode'] = $this->register_model->rand_alphanumeric(6);
 		//GENERATE HASH FOR EMAIL VERIFICATION
-		$temp['emailcode'] = sha1($this->session->userdata('session_id'));
+		$temp['emailcode'] = sha1($this->session->userdata('session_id').time());
 		
 		$temp['member_id'] = $this->register_model->signupMember($data)['id_member'];
 		
