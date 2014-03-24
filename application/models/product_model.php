@@ -54,10 +54,31 @@ class product_model extends CI_Model
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':id',$id);
 		$sth->execute();
+     
 		$row = $sth->fetchAll(PDO::FETCH_ASSOC);
 
 		return $row;
 	}
+    
+    function getParentIdByProduct($product_id, $member_id) #get all parent category from selected product
+	{
+        $query = $this->sqlmap->getFilenameID('product','getProductCategory');
+		$sth = $this->db->conn_id->prepare($query);
+		$sth->bindParam(':id',$product_id);
+        $sth->bindParam(':member_id',$member_id);
+		$sth->execute();
+		$p_row = $sth->fetch(PDO::FETCH_ASSOC);
+        $row = array();
+        if($sth->rowCount() > 0){
+            $query = $this->sqlmap->getFilenameID('product','getParent');
+            $sth = $this->db->conn_id->prepare($query);
+            $sth->bindParam(':id',$p_row['cat_id']);
+            $sth->execute();
+            $row = $sth->fetchAll(PDO::FETCH_ASSOC);
+        }
+		return $row;
+	}
+
 
 	function getAttributesByParent($parents) # get all attributes from all parents from to the last selected category
 	{
@@ -1030,6 +1051,10 @@ class product_model extends CI_Model
 		$sth->execute();
 		
 		$row = $sth->fetch(PDO::FETCH_ASSOC);
+        if(intval($row['brand_id'],10) === 1){
+            $row['brandname'] = ($row['brand_other_name'] !== '')?$row['brand_other_name']:'Custom brand';
+        }
+        
 		return $row;
 	}
     
@@ -1062,16 +1087,35 @@ class product_model extends CI_Model
 		return $sth->rowCount();
     }
     
+    function editProductCategory($cat_id,$product_id,$member_id){
+        $query = $this->sqlmap->getFilenameID('product','editProductCategory');
+        
+        $sth = $this->db->conn_id->prepare($query);
+		$sth->bindParam(':id',$product_id);
+        $sth->bindParam(':member_id',$member_id);
+		$sth->bindParam(':cat_id',$cat_id);
+        $sth->execute();
+
+		return($sth->rowCount());
+        
+    }
+    
+    
     #Deletes product attributes in es_product_attr table, returns number of affected rows
-    function deleteAttributeByProduct($product_id,$attribute_id)
+    function deleteAttributeByProduct($product_id,$attribute_id=0)
 	{
-		$query = $this->sqlmap->getFilenameID('product','deleteAttribute');
-        
-		$sth = $this->db->conn_id->prepare($query);
-		$sth->bindParam(':product_id',$product_id);
-		$sth->bindParam(':attr_id',$attribute_id);
+        if($attribute_id !== 0){
+            $query = $this->sqlmap->getFilenameID('product','deleteProductAttributeByIDs');
+            $sth = $this->db->conn_id->prepare($query);
+            $sth->bindParam(':product_id',$product_id);
+            $sth->bindParam(':attr_id',$attribute_id);
+        }
+        else{
+            $query = $this->sqlmap->getFilenameID('product','deleteProductAttributes');
+            $sth = $this->db->conn_id->prepare($query);
+            $sth->bindParam(':product_id',$product_id);
+        }
 		$sth->execute();
-        
         return $sth->rowCount(); 
 	}
     
@@ -1213,6 +1257,51 @@ class product_model extends CI_Model
         }
         
         return $data;
+    }
+    
+    public function deleteShippingInfomation($product_id){
+        $query = "SELECT id_product_item FROM es_product_item WHERE product_id = :product_id";
+        $sth = $this->db->conn_id->prepare($query);
+		$sth->bindParam(':product_id',$product_id, PDO::PARAM_INT);
+		$sth->execute();
+        $rows = $sth->fetchAll(PDO::FETCH_ASSOC);
+        $shipping_ids = array();
+        if(count($rows) > 0){
+            $query = "SELECT shipping_id FROM es_product_shipping_detail WHERE product_item_id IN ";
+            $qmarks = implode(',', array_fill(0, count($rows), '?'));
+            $query = $query.'('.$qmarks.')';
+            $xth = $this->db->conn_id->prepare($query);
+            foreach ($rows as $k => $id){
+                $xth->bindValue(($k+1), $id['id_product_item'], PDO::PARAM_INT);  
+            }
+            $xth->execute();
+            $shipping_ids = $xth->fetchAll(PDO::FETCH_ASSOC);
+            
+            $query = "DELETE FROM es_product_shipping_detail WHERE product_item_id IN ";
+            $qmarks = implode(',', array_fill(0, count($rows), '?'));
+            $query = $query.'('.$qmarks.')';
+            $xth = $this->db->conn_id->prepare($query);
+            foreach ($rows as $k => $id){
+                $xth->bindValue(($k+1), $id['id_product_item'], PDO::PARAM_INT);  
+            }
+            $xth->execute();
+
+            if(count($shipping_ids) > 0){
+                $query = "DELETE FROM es_product_shipping_head WHERE id_shipping IN ";
+                $qmarks = implode(',', array_fill(0, count($shipping_ids), '?'));
+                $query = $query.'('.$qmarks.')';
+                $xth = $this->db->conn_id->prepare($query);
+                foreach ($shipping_ids as $k => $id){
+                    $xth->bindValue(($k+1), $id['shipping_id'], PDO::PARAM_INT);  
+                }
+                $xth->execute();
+            }
+            
+            
+        }
+        
+     
+
     }
     
     public function deleteProductQuantityCombination($product_id){

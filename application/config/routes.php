@@ -71,7 +71,9 @@ $route['me'] = 'memberpage'; # janz
 $route['vendor/(:any)'] = 'memberpage/vendor/$1'; # janz
 
 #EDIT ITEM
-$route['sell/edit'] = 'productUpload/editProduct'; # sam gavinio
+$route['sell/edit/step1'] = 'productUpload/editStep1'; # sam gavinio
+$route['sell/edit/step2'] = 'productUpload/editStep2'; # sam gavinio
+$route['sell/edit/processing2'] = 'productUpload/editStep2Submit';  # sam gavinio
 
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */

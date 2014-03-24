@@ -562,3 +562,14 @@ n[0] = n[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 //Combines the two sections
 return n.join(".");
 }
+
+$(function(){
+    $('#step2_link').on('click', function(){
+        $('#edit_step2').submit();
+    });
+    
+    $('#step1_link').on('click', function(){
+        $('#edit_step1').submit();
+    });
+});
+

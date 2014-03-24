@@ -2,81 +2,31 @@
 <link type="text/css" href="<?=base_url()?>assets/css/sell_item.css" rel="stylesheet" />
 
 <div class="wrapper">
-
-
   <div class="clear"></div>
 
-  <!--<div class="tab_list">
-     <p><a href="">Iam a Buyer</a></p> 
-    <p class="active"><a href="">Iam a Seller</a></p>
-  </div>
-  <div class="clear"></div>-->
   <div class="seller_product_content">
-   <!-- <div class="top_nav">
-      <ul>
-        <li>
-           
-          <a href="">
-            <img src="<?=base_url()?>assets/images/img_signup.png" alt="signup"><br />
-            <span>Account Sign-in</span>
-          </a>
-         
-        </li>
-        <li>
-            
-          <a href="">
-            <img src="<?=base_url()?>assets/images/img_shop.png" alt="shop"><br />
-            <span>Whant to Shop</span>
-          </a>
-         
-        </li>
-        <li>
-         
-          <a href="">
-            <img src="<?=base_url()?>assets/images/img_setup.png" alt="setup"><br />
-            <span>Shop exam and set up shop</span>
-          </a>
-          
-        </li>
-        <li>
-          
-          <a href="">
-            <img src="<?=base_url()?>assets/images/img_publish.png" alt="publish"><br />
-            <span>Published Baby</span>
-          </a>
-         
-        </li>
-        <li>
-          
-          <a href="">
-            <img src="<?=base_url()?>assets/images/img_delivery.png" alt="delivery"><br />
-            <span>Delivery Operation</span>
-          </a>
-         
-        </li>
-        <li>
-          
-          <a href="">
-            <img src="<?=base_url()?>assets/images/img_ratings.png" alt="ratings"><br />
-            <span>Ratings &amp; Withdrawals</span>
-          </a>
-         
-        </li>
-      </ul>
-    </div> -->
+ 
     <div class="inner_seller_product_content">
       <h2 class="f24">Sell an Item</h2>
       <input type="hidden" id="uploadstep1_csrf" name="<?php echo $my_csrf['csrf_name'];?>" value="<?php echo $my_csrf['csrf_hash'];?>">
             <div class="sell_steps sell_steps3">
                 <ul>
-                    <li><a href="#">Step 1 : Select Category</a></li>
-                    <li><a href="#">Step 2 : Upload Item</a></li>                   
-                    <li><a href="#">Step 3 : Select Shipping Locations</a></li>
-                    <li><a href="#">Step 4 : Success</a></li>
+                    <li><a href="javascript:void(0)" id="step1_link">Step 1 : Select Category</a></li>
+                    <li><a href="javascript:void(0)" id="step2_link">Step 2 : Upload Item</a></li>                   
+                    <li>Step 3 : Select Shipping Locations</li>
+                    <li>Step 4 : Success</li>
                 </ul>
             </div>
     <div class="clear"></div>
+    
+    <?php echo form_open('sell/edit/step2', array('id'=>'edit_step2'));?>
+        <input type="hidden" name="p_id" id="p_id" value="<?php echo $product_id;?>">
+    <?php echo form_close();?>
 
+    <?php echo form_open('sell/edit/step1', array('id'=>'edit_step1'));?>
+        <input type="hidden" name="p_id" id="p_id" value="<?php echo $product_id;?>">
+    <?php echo form_close();?>
+    
     <!-- Start of top Shipping Content -->   
     <div class="shipping_wrapper">
     <!-- Start of Shipping Container --> 

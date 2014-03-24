@@ -1,97 +1,38 @@
 <link type="text/css" href="<?=base_url()?>assets/css/sell_item.css" rel="stylesheet" />
 <div class="wrapper"> 
-
+    <input type="hidden" id="edit_cat_tree" value='<?php echo isset($cat_tree_edit)?$cat_tree_edit:json_encode(array()); ?>'/>
     <div class="clear"></div>
 
-    <!-- <div class="tab_list">
-        <p><a href="">Iam a Buyer</a></p> 
-        <p class="active"><a href="">Iam a Seller</a></p>
-    </div>
-    <div class="clear"></div> -->
     <div class="seller_product_content">
-        <!-- <div class="top_nav">
-            <ul>
-                <li>
-                    
-                    <a href="">
-                        <img src="<?= base_url() ?>assets/images/img_signup.png" alt="signup"><br />
-                        <span>Account Sign-in</span>
-                    </a>
-                   
-                </li>
-                <li>
-                    
-                    <a href="">
-                        <img src="<?= base_url() ?>assets/images/img_shop.png" alt="shop"><br />
-                        <span>Want to Shop</span>
-                    </a>
-                    
-                </li>
-                <li>
-                   
-                    <a href="">
-                        <img src="<?= base_url() ?>assets/images/img_setup.png" alt="setup"><br />
-                        <span>Shop exam and set up shop</span>
-                    </a>
-                   
-                </li>
-                <li>
-                    
-                    <a href="">
-                        <img src="<?= base_url() ?>assets/images/img_publish.png" alt="publish"><br />
-                        <span>Published Baby</span>
-                    </a>
-                   
-                </li>
-                <li>
-                    
-                    <a href="">
-                        <img src="<?= base_url() ?>assets/images/img_delivery.png" alt="delivery"><br />
-                        <span>Delivery Operation</span>
-                    </a>
-                    
-                    
-                </li>
-                <li>
-                    
-                    <a href="">
-                        <img src="<?= base_url() ?>assets/images/img_ratings.png" alt="ratings"><br />
-                        <span>Ratings &amp; Withdrawals</span>
-                    </a>
-                   
-                </li>
-            </ul>
-        </div> -->
+      
+        <?php if(isset($product_id_edit)){
+                  echo form_open('sell/edit/step2');
+                  echo '<input type="hidden" name="p_id" value="'.$product_id_edit.'">';
+              }
+              else{
+                  echo form_open('sell/step2');
+                  $x=(isset($step2_content))?$step2_content:json_encode(array());
+                  echo "<input type='hidden' name='step1_content' id='step1_content' value='".$x."'/>";
+              }
+        ?>
 
-        
-        <!--<form action="<?php //echo base_url() . 'sell/step2'; ?>" method="POST">-->
-        <?php echo form_open('sell/step2'); ?>
 
         <div class="inner_seller_product_content">
             <h2 class="f24">Sell an Item</h2>
 			<input type="hidden" id="uploadstep1_csrf" name="<?php echo $my_csrf['csrf_name'];?>" value="<?php echo $my_csrf['csrf_hash'];?>">
             <div class="sell_steps sell_steps1">
                 <ul>
-                    <li><a href="#">Step 1 : Select Category</a></li>
-                    <li><a href="#">Step 2 : Upload Item</a></li>                   
-                    <li><a href="#">Step 3: Select Shipping Courier</a></li>
-                    <li><a href="#">Step 4: Success</a></li>
+                    <li>Step 1 : Select Category</li>
+                    <li>Step 2 : Upload Item</li>                   
+                    <li>Step 3: Select Shipping Courier</li>
+                    <li>Step 4: Success</li>
                 </ul>
             </div>
-
-            <!-- <div class="search_box seller_search_box">
-              <div>
-                <input type="text">
-                <button class="search_btn">SEARCH</button>
-              </div>         
-
-            </div>  -->
+            
             <div class="clear"></div>
             <div class="cat_sch_container">
                <b>Search for category: &nbsp;</b><input type="text" class="box" id="cat_sch" autocomplete="off"><div class="cat_sch_loading"></div>
              <div id="cat_search_drop_content" class="cat_sch_drop_content"></div>
-
-
        </div>
 
 
@@ -353,8 +294,9 @@
 
 </div>
 
+<script>      
 
-<script>        
+
     $(document).ready(function() {
        $('#cat_search_drop_content').on('click', 'li.cat_result', function(){
             var parent_ids = eval('('+$(this).attr('data-parent')+')');
@@ -379,9 +321,6 @@
                     }
                 });
             });
- 
-
- 
         });
         
         var currentRequest = null;
@@ -427,7 +366,7 @@
                             });
                         }
                         else{
-                            html += '<li"> No results found </li>' 
+                            html += '<li> No results found </li>' 
                         }
                         html += '</ul>';
                         $("#cat_search_drop_content").html(html);
@@ -450,22 +389,52 @@
             scrollTop: offsetTop
         }, xtime);
     }
+    
+    
+    // Edit: Step 1, highlight product category tree
+    $(document).ready(function() {
+        var obj = JSON.parse($('#edit_cat_tree').val());
+        if(obj.length > 0){
+            $('li .select').each(function(){
+                var D = eval('(' + $(this).attr('data') + ')');
+                if( parseInt(D.cat_id,10) === parseInt(obj[0].id_cat,10)){
+                    $(this).click();
+                    scrollToElement(this, '.main_product_category');
+                    return false;
+                }
+            });
+            var cnt = 0;
+            $.each(obj, function(){
+                var new_obj  = obj.shift();
+                $('li.'+ new_obj.id_cat  +' .select2.child').each(function(){
+                    var D = eval('(' + $(this).attr('data') + ')');
+                    if( parseInt(D.cat_id) === parseInt(obj[0].id_cat,10)){
+                        $(this).click(); 
+                        scrollToElement(this, '.product_sub_items' +cnt);
+                        cnt++;
+                        return false;
+                    }
+                });
+            });
+        }
+    });
 
   
 </script>
 
 <script>
-         $(document).ready(function() { 
+$(document).ready(function() { 
 
-            $('#cat_sch').focus(function() {
-            $('#cat_search_drop_content').show();
-            $(document).bind('focusin.cat_sch_drop_content click.cat_sch_drop_content',function(e) {
-                if ($(e.target).closest('#cat_search_drop_content, #cat_sch').length) return;
-                $('#cat_search_drop_content').hide();
-                });
-             });
- 
-            $('#cat_search_drop_content').hide();
+    $('#cat_sch').focus(function() {
+    $('#cat_search_drop_content').show();
+    $(document).bind('focusin.cat_sch_drop_content click.cat_sch_drop_content',function(e) {
+        if ($(e.target).closest('#cat_search_drop_content, #cat_sch').length) return;
+        $('#cat_search_drop_content').hide();
         });
+     });
+
+    $('#cat_search_drop_content').hide();
+    
+});
 
 </script>

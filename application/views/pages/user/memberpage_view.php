@@ -271,7 +271,7 @@
 			<p class="post_item_product_title fm1"><a href="<?=base_url();?>item/<?php echo $active_product['id_product']."/".es_url_clean($active_product['name']);?>"><?php echo html_escape($active_product['name']);?></a></p>
 			
 			<div class="post_item_button">
-				<?php echo form_open('sell/edit'); ?>
+				<?php echo form_open('sell/edit/step2'); ?>
 				<input type="hidden" name="p_id" value ="<?php echo $active_product['id_product'];?>" /> 
 				<input class="manage_lnk" type = "submit" value="Edit Item"> </input>
 				<?php echo form_close(); ?> 

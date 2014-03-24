@@ -26,6 +26,15 @@ class productUpload extends MY_Controller
 
 	function step1() #this function for selecting categories from parent category to the last possible category
 	{ 			
+        if($this->input->post('c_id')){
+            $cat_id = $this->input->post('c_id');    
+            $cat_tree = $this->product_model->getParentId($cat_id);
+            $data_item['cat_tree_edit'] = json_encode($cat_tree);
+        }
+        if($this->input->post('step2_content')){
+            $data_item['step2_content'] = $this->input->post('step2_content');
+        }
+
 		$usersession = $this->session->userdata('usersession');	
 		$uid = $this->session->userdata('member_id');
 		$data_item['firstlevel'] = $this->product_model->getFirstLevelNode(); # getting first category level from database.
@@ -98,7 +107,13 @@ class productUpload extends MY_Controller
 
 			$response['attribute'] = $attribute;
 			$response['sell'] = true;
-			
+            
+            if($this->input->post('step1_content')){
+               //$response['step1_content']='{prod_title":"jinbei","brand_sch":"","prod_brand":"0","prod_condition":"0","prod_brief_desc":"","prod_description":"","prod_keyword":"","prod_price":"","prod_sku":""}';
+                $response['step1_content'] = $this->input->post('step1_content');
+            }
+                
+
 			$this->load->view('pages/product/product_upload_step2_view',$response);
 			$this->load->view('templates/footer'); 
 		}else{
@@ -576,7 +591,6 @@ class productUpload extends MY_Controller
 		
 		$this->image_lib->initialize($config); 
 		$this->image_lib->resize();	
-
 	}
 
 	/**
@@ -585,12 +599,6 @@ class productUpload extends MY_Controller
 	function step3()
 	{
 		if($this->input->post('prod_h_id')){
-			//DEV CODE - temporarily set product id to fetch attribute combinations
-			//$id = 118;
-			//$id = 123;
-			//$id = 129;
-			
-			// Actual Product ID Code
 			$id = $this->input->post('prod_h_id');
 			
 			$data = array (
@@ -722,17 +730,52 @@ class productUpload extends MY_Controller
 		}
 	}
 	
-	public function editProduct(){
+    public function editStep1(){
+        if($this->input->post('p_id'))
+			 $product_id = $this->input->post('p_id');
+		else
+			redirect('me', 'refresh'); 
+        
+        $member_id = $this->session->userdata('member_id');
+        $cat_tree = $this->product_model->getParentIdByProduct($product_id, $member_id);
+        if(count($cat_tree)>0){  
+            $data_item['firstlevel'] = $this->product_model->getFirstLevelNode(); # getting first category level from database.
+            $data = $this->fill_view();
+            $data['cat_tree_edit'] = json_encode($cat_tree);
+            $data['product_id_edit'] = $product_id;
+            $this->load->view('templates/header', $data); 
+            $this->load->view('pages/product/product_upload_step1_view',$data_item);
+            $this->load->view('templates/footer'); 
+        }
+        else{
+            redirect('me', 'refresh'); 
+        }
+    }
+    
+	public function editStep2(){
 		if($this->input->post('p_id'))
 			$product_id = $this->input->post('p_id');
 		else
 			redirect('me', 'refresh'); 
 
 		$member_id = $this->session->userdata('member_id');
+
+        if($this->input->post('hidden_attribute')){
+            $new_cat_id = $this->input->post('hidden_attribute');
+            if($this->product_model->editProductCategory($new_cat_id, $product_id, $member_id)>0){
+                $this->product_model->deleteShippingInfomation($product_id);
+                $this->product_model->deleteProductQuantityCombination($product_id);
+                $this->product_model->deleteAttributeByProduct($product_id);
+            }
+            else{
+                redirect('me', 'refresh'); 
+            }
+        }
+      
 		$data = array('title'=>'Edit Product');
 		$data = array_merge($data,$this->fill_header());
 		$this->load->view('templates/header',$data); 
-		$product = $this->product_model->getProductEdit($product_id, $member_id);
+		$product = $this->product_model->getProductEdit($product_id, $member_id);        
 		$parents = $this->product_model->getParentId($product['cat_id']); # getting all the parent from selected category
 		$lastElement = end($parents);	
 		$str_parents_to_last = "";
@@ -793,9 +836,8 @@ class productUpload extends MY_Controller
 	}
 	
 
-	public function editProductSubmit()
+	public function editStep2Submit()
 	{
-
         //SECTION OF CODE FOR ES_PRODUCT_UPLOADER
         
         $editRemoveThisPictures = json_decode($_POST['editRemoveThisPictures']); 
@@ -871,16 +913,15 @@ class productUpload extends MY_Controller
 		$date = date("Ymd");
         $fulldate = date("YmdGis");
 
-        if(is_numeric($brand_id)){
+
+        if(intval($brand_id,10) == 1){
+            $brand_valid = true;
+            $otherBrand = $this->input->post('brand_sch');
+            $brand_id = 1;
+        }
+        else{
             if($this->product_model->getBrandName($brand_id)){
                 $brand_valid = true;
-            }
-        }
-        else{ 
-            if($brand_id === 'new'){
-                $brand_valid = true;
-                $otherBrand = $this->input->post('brand_sch');
-                $brand_id = 1;
             }
         }
 
@@ -990,6 +1031,7 @@ class productUpload extends MY_Controller
 				'condition' => $product_condition,
                 'brand_other_name' => $otherBrand,
 				);
+            
 
 			$rowCount = $this->product_model->editProduct($product_details, $member_id);
             
@@ -1004,8 +1046,9 @@ class productUpload extends MY_Controller
             
 			if($rowCount>0){
             
-                # DELETE FROM es_product_item_attr AND es_product_item
+                # DELETE FROM es_shipping_detail, es_shipping_head, es_product_item_attr, es_product_item
                 # MOVED BEFORE DELETE PRODUCT ATTRIBUTE FK CONSTRAINT
+                $this->product_model->deleteShippingInfomation($product_id);
                 $this->product_model->deleteProductQuantityCombination($product_id);
                 
 				foreach($explode_inputs as $input){
@@ -1266,8 +1309,40 @@ class productUpload extends MY_Controller
 		}
 		echo $data;        
 	}
-
     
+    
+    public function foo(){
+        $data = $this->fill_view();
+        $response['firstlevel'] = $this->product_model->getFirstLevelNode();
+
+        $parents = $this->product_model->getParentId($id); # getting all the parent from selected category
+        #$attribute = $this->product_model->getAttributesBySelf($id); # getting all attribute from all parent from selected category
+        $attribute = $this->product_model->getAttributesByParent($parents);
+        $str_parents_to_last = "";
+
+        $lastElement = end($parents);	
+        foreach($parents as $k => $v) { # creating the bread crumbs from parent category to the last selected category
+            $str_parents_to_last = $str_parents_to_last  .' '. $v['name'];
+            if($v == $lastElement) {
+
+            }else{
+                $str_parents_to_last = $str_parents_to_last.' ->';
+            }
+        }
+        $response['parent_to_last'] = $str_parents_to_last;
+        for ($i=0 ; $i < sizeof($attribute) ; $i++ ) {  # getting all lookuplist from item attribute
+            $lookuplist = $this->product_model->getLookItemListById($attribute[$i]['attr_lookuplist_id']);
+            array_push($attribute[$i],$lookuplist);
+        }
+
+        $response['attribute'] = $attribute;
+
+
+        # getting first category level from database.
+		$this->load->view('templates/header', $data); 
+		$this->load->view('pages/product/product_upload', $response);
+		$this->load->view('templates/footer'); 
+    }
 }
 
 

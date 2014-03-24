@@ -10,18 +10,27 @@
       <input type="hidden" id="uploadstep2_csrf" name="<?php echo $my_csrf['csrf_name'];?>" value="<?php echo $my_csrf['csrf_hash'];?>">
       <div class="sell_steps sell_steps2">
         <ul>
-          <li><a href="#">Step 1: Select Category</a></li>
-          <li><a href="#"><span>Step 2: </span> Upload Item</a></li>                   
-          <li><a href="#">Step 3: Select Shipping Courier</a></li>
-          <li><a href="#">Step 4: Success</a></li>
+          <li><a href="javascript:void(0)" id="step1_link">Step 1 : Select Category</a></li>
+          <li><span>Step 2: </span> Upload Item</li>                   
+          <li>Step 3: Select Shipping Courier</li>
+          <li>Step 4: Success</li>
         </ul>
       </div>
-
-
+      <input type="hidden" name="step1_content" id="step1_content" value='<?php echo isset($step1_content)?$step1_content:json_encode(array());?>'/>
+    <?php if(isset($product_details)): ?>  
+        <?php echo form_open('sell/edit/step1', array('id'=>'edit_step1'));?>
+            <input type="hidden" name="p_id" id="p_id" value="<?php echo $product_details['id_product'];?>">
+        <?php echo form_close();?>
+    <?php else: ?>
+        <?php echo form_open('sell/step1', array('id'=>'edit_step1'));?>
+            <input type="hidden" name="c_id" id="c_id" value="<?php echo $id;?>">
+            <input type="hidden" name="step2_content" id="step2_content"/>
+        <?php echo form_close();?>
+    <?php endif; ?>
+      
       <div class="clear"></div>
 
       <div class="upload_input_form form_input">
-        <!--<form class="form_product" id="form_product" name="form_product" enctype="multipart/form-data" method="POST" action="upload_step4_2">-->
         <?php 
         $attr = array(
           'class' => 'form_product',
@@ -1312,7 +1321,7 @@ $(".proceed_form").unbind("click").click(function(){
         $.ajax({
           async: false,
           type: "POST",
-          url: '<?php echo base_url();?>' + 'productUpload/editProductSubmit',
+          url: '<?php echo base_url();?>' + 'sell/edit/processing2',
           mimeType:"multipart/form-data",
           contentType: false,
           cache: false,
@@ -1527,7 +1536,6 @@ tinymce.init({
   menubar: "table format view insert edit",
   statusbar: false,
   //selector: "textarea",
-  menubar: "table format view insert edit",
 
   statusbar: false,
   height: 300,
@@ -1545,31 +1553,123 @@ tinymce.init({
   //external_filemanager_path:"/assets/filemanager/",
   //filemanager_title:"Responsive Filemanager" ,
   //external_plugins: { "filemanager" : "/assets/filemanager/plugin.min.js"}
+  
+  
+   setup: function(editor) {
+        editor.on('change', function(e) {
+            $('#prod_description').val(tinyMCE.get('prod_description').getContent());
+            $('#prod_description').trigger( "change" );
+        });
+    }
+
 });
 
 tinymce.init({
- mode : "specific_textareas",
- editor_selector : "mceEditor_attr",
- //selector: "textarea",
- menubar: "table format view insert edit",
+    mode : "specific_textareas",
+    editor_selector : "mceEditor_attr",
+    //selector: "textarea",
+    menubar: "table format view insert edit",
 
- statusbar: false,
- height: 200,
- plugins: [
- "lists link preview ",
- "table jbimages fullscreen" 
- ],  
- toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | jbimages | image_advtab: true ",  
- relative_urls: false
+    statusbar: false,
+    height: 200,
+    plugins: [
+        "lists link preview ",
+        "table jbimages fullscreen" 
+    ],  
+    toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | jbimages | image_advtab: true ",  
+    relative_urls: false
 });
-
-</script>
-
-<script type="text/javascript">
-
 
 
 $(document).ready(function() { 
+    var prev_content = JSON.parse($('#step1_content').val());
+    if(typeof prev_content.prod_title !== "undefined"){
+        $('#prod_title').val(prev_content.prod_title);
+    }
+    if(typeof prev_content.brand_sch !== "undefined"){
+        $('#brand_sch').val(prev_content.brand_sch);
+    }
+    if(typeof prev_content.prod_brand !== "undefined"){
+        $('#prod_brand').val(prev_content.prod_brand);
+    }
+    if(typeof prev_content.prod_brief_desc !== "undefined"){
+        $('#prod_brief_desc').val(prev_content.prod_brief_desc);
+    }
+    if(typeof prev_content.prod_description !== "undefined"){
+        $('#prod_description').val(prev_content.prod_description);
+    }
+    if(typeof prev_content.condition !== "undefined"){
+        $('#prod_condition').val(prev_content.prod_condition); //unsure
+    }
+    if(typeof prev_content.prod_keyword !== "undefined"){
+        $('#prod_keyword').val(prev_content.prod_keyword);
+    }
+    if(typeof prev_content.prod_price !== "undefined"){
+        $('#prod_price').val(prev_content.prod_price);
+    }
+    if(typeof prev_content.prod_sku !== "undefined"){
+        $('#prod_sku').val(prev_content.prod_sku);
+    }
+
+
+
+    var temp_content = new Object();
+    temp_content.prod_title = $('#prod_title').val();
+    temp_content.brand_sch = $('#brand_sch').val();
+    temp_content.prod_brand = $('#prod_brand').val();
+    temp_content.prod_condition = $('#prod_condition').val();
+    temp_content.prod_brief_desc = $('#prod_brief_desc').val();
+    temp_content.prod_description = $('#prod_description').val();
+    temp_content.prod_keyword = $('#prod_keyword').val();
+    temp_content.prod_price = $('#prod_price').val();
+    temp_content.prod_sku = $('#prod_sku').val();
+    $('#step2_content').val(JSON.stringify(temp_content));
+
+    $('#prod_title').change(function(){
+        temp_content.prod_title = $(this).val();
+        $('#step2_content').val(JSON.stringify(temp_content));
+    });
+    
+    $('#brand_sch').change(function(){
+        temp_content.brand_sch = $(this).val();
+        $('#step2_content').val(JSON.stringify(temp_content));
+    });
+    
+    $('#prod_brand').change(function(){
+        temp_content.prod_brand = $(this).val();
+        $('#step2_content').val(JSON.stringify(temp_content));
+    });
+    
+    $('#prod_condition').change(function(){
+        temp_content.prod_condition = $(this).val();
+        $('#step2_content').val(JSON.stringify(temp_content));
+    });
+    
+    $('#prod_brief_desc').change(function(){
+        temp_content.prod_brief_desc = $(this).val();
+        $('#step2_content').val(JSON.stringify(temp_content));
+    });
+    
+    $('#prod_description').change(function(){
+        temp_content.prod_description = $(this).val();
+       $('#step2_content').val(JSON.stringify(temp_content));
+    });
+    
+    $('#prod_keyword').change(function(){
+        temp_content.prod_keyword = $(this).val();
+        $('#step2_content').val(JSON.stringify(temp_content));
+    });
+    
+    $('#prod_price').change(function(){
+        temp_content.prod_price = $(this).val();
+        $('#step2_content').val(JSON.stringify(temp_content));
+    });
+   
+   $('#prod_sku').change(function(){
+        temp_content.prod_sku = $(this).val();
+        $('#step2_content').val(JSON.stringify(temp_content));
+    });
+    
    if(($('#brand_sch').val() !== '')&&(parseInt($('#prod_brand').val(),10) !== 0)){
       jQuery(".brand_sch_loading").html('<img src="<?= base_url() ?>assets/images/check_icon.png" />').show().css('display','inline-block');
    }
@@ -1578,6 +1678,8 @@ $(document).ready(function() {
         $this = $(this);     
         $('#prod_brand').val($this.data('brandid'));
         $("#brand_sch").val($this.children('a').text())
+        $('#prod_brand').trigger( "change" );
+        $("#brand_sch").trigger( "change" );
         jQuery(".brand_sch_loading").html('<img src="<?= base_url() ?>assets/images/check_icon.png" />').show().css('display','inline-block');
         $('#brand_search_drop_content').hide();
    });
@@ -1588,6 +1690,7 @@ $(document).ready(function(){
     var currentRequest = null;
     $( "#brand_sch" ).keyup(function() {
         $('#prod_brand').val(0)
+        $('#prod_brand').trigger( "change" );
         jQuery(".brand_sch_loading").hide();
         var searchQuery = $(this).val();
         var csrftoken = $('#uploadstep2_csrf').val();
@@ -1625,8 +1728,8 @@ $(document).ready(function(){
     });
     
     $(document).on("click",".add_brand", function(){
-        console.log('sam');
-        $('#prod_brand').val('new')
+        $('#prod_brand').val(1)
+        $('#prod_brand').trigger( "change" );
         if(currentRequest != null) {
             currentRequest.abort();
         }
@@ -1653,7 +1756,16 @@ $(document).ready(function(){
 
         $('#brand_search_drop_content').hide();
     });
+</script>
+<script>
 
+    $(function(){
+        $('#step1_link').on('click', function(){
+            $('#edit_step1').submit();
+        });
+
+    });
+    
 </script>
 
 <div class="clear"></div>  
