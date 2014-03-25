@@ -51,8 +51,11 @@
                     </div>
                     <div>
                         <span>
-                            <input id="<?PHP echo $row['rowid']; ?>" type="text" class="inpt_qty" onchange="sum(this.value,this.id);" maxlength="3" value="<?PHP echo $row['qty']; ?>">
+                            <input id="<?PHP echo $row['rowid']; ?>" type="text" class="inpt_qty" mx="<?PHP echo $row['maxqty'];?>" onchange="sum(this);" maxlength="3" value="<?PHP echo $row['qty']; ?>">
                         </span>
+			<span>
+			    <p>Availability : <?PHP echo $row['maxqty']; ?></p>
+			</span>
                     </div>
                     <div>
                         <p>Php <p class="subtotal" id="subtotal<?PHP echo $row['rowid']; ?>"><?PHP echo " ".number_format($row['subtotal'],2,'.',','); ?></p></p>
@@ -86,11 +89,27 @@
 <script>
     $(document).ready(function(){
         $('#checkAll').click(function () {    
-            $('input:checkbox').prop('checked', this.checked);    
+	    if ($(this).prop('checked')) {
+		$("#total").html("<?PHP echo $total; ?>");
+	    }else{		
+		$("#total").html("0.00");
+	    }
+            $('input:checkbox').prop('checked', this.checked);
+        });
+        $('.rad').click(function () {
+	    var value = Number($("#subtotal"+$(this).val()).html().replace(/\$/g,'').replace(/,/g,''));
+	    var total = Number($("#total").html().replace(/\$/g,'').replace(/,/g,''));    
+	    var sum = 0;
+	    if ($(this).prop('checked')) {
+		sum = value + total;
+	    }else {
+		sum = total - value;
+	    }
+	    $("#total").html(Number(sum).toLocaleString('en')+".00");
         });
         $("#proceed_payment").click(function(event){
             event.preventDefault();
-			var csrftoken = $('#mycart').val();
+	    var csrftoken = $('#mycart').val();
             var data1 = $(".wrapper input:checkbox:not(:checked)").map(function(){
                 return $(this).val();
             }).toArray();

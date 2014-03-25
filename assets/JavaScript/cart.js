@@ -7,13 +7,21 @@ $(document).ready(function() {
     }).append('<span class="tooltip"></span>');
 });
 
-function sum(value,id){
+function sum(obj){
+    var csrftoken = $('#mycart').val();
+    var value = $(obj).val();
+    var id = $(obj).attr("id");
+    var mx = $(obj).attr("mx");
+    if (parseInt(value) > parseInt(mx)) {
+        $(obj).val(mx);
+        value = mx;
+    }
     $.ajax({
         async:false,
         url: config.base_url + "cart/change_qty",
         type:"POST",
         dataType:"JSON",
-        data:{id:id,qty:value},
+        data:{id:id,qty:value, es_csrf_token:csrftoken},
         success:function(data){
             if(data==false){
                 alert("Unable to change quantity");
@@ -26,6 +34,7 @@ function sum(value,id){
     });
 }
 function del(id){
+    var csrftoken = $('#mycart').val();
     var r=confirm("Are you sure you would like to remove this item from the shopping cart?");
     if (r==true)
       {
@@ -34,7 +43,7 @@ function del(id){
             url: config.base_url + "cart/remove_item",
             type:"POST",
             dataType:"JSON",
-            data:{id:id},
+            data:{id:id, es_csrf_token:csrftoken},
             success:function(data){
                 if(data['result']==true){
                     $("#row"+id).remove();

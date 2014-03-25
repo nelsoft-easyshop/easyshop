@@ -31,11 +31,9 @@
             
             <div class="clear"></div>
             <div class="cat_sch_container">
-               <b>Search for category: &nbsp;</b><input type="text" class="box" id="cat_sch" autocomplete="off"><div class="cat_sch_loading"></div>
-             <div id="cat_search_drop_content" class="cat_sch_drop_content"></div>
-       </div>
-
-
+				<b>Search for category: &nbsp;</b><input type="text" class="box" id="cat_sch" autocomplete="off"><div class="cat_sch_loading"></div>
+				<div id="cat_search_drop_content" class="cat_sch_drop_content"></div>
+			</div>
        <div class="add_product_category">
         <div class="main_product_category">
             <input type="text" class="box" id="box">

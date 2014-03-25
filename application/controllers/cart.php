@@ -56,7 +56,8 @@ class Cart extends MY_Controller{
             'name'    => $_POST['name'],
             'options' => $opt,
             'img'   => $this->product_model->getProductImages($_POST['id']),
-            'member_id'  => $base['sellerid']
+            'member_id'  => $base['sellerid'],
+	    'maxqty' => $this->input->post('max_qty')
             );
         return $data;
     }
@@ -89,7 +90,7 @@ class Cart extends MY_Controller{
                     if($opt == $opt_user){
                         $data2 = array(
                                'rowid' => $id,
-                               'qty'   => $_POST['qty'] + $row['qty']
+                               'qty'   => ($_POST['qty'] + $row['qty'] > $_POST['max_qty'] ? $_POST['max_qty'] : $_POST['qty'] + $row['qty'] )
                             );
  
                         $this->cart->update($data2);
@@ -132,15 +133,15 @@ class Cart extends MY_Controller{
                'rowid' => $_POST['id'],
                'qty'   => $_POST['qty']
             );
+		
         $result=false;
         if($this->cart->update($data)){
         $carts=$this->cart->contents();
             $result=array(
                 'subtotal'=>  number_format($carts[$_POST['id']]['subtotal'],2,'.',','),
                 'total' =>number_format( $this->cart->total(),2,'.',','));
-        } 
-        
-        echo json_encode($result);
+        }
+	echo json_encode($result);
         
     }
 

@@ -220,7 +220,7 @@ function attrClick(target, $this){
         var qty = JSON.parse($('#p_qty').val());
         var foo = true;
         var sam = false;
-        $.each(qty, function(index, value){        
+        $.each(qty, function(index, value){       
             if(value.product_attribute_ids.sort().join(',') === sel_id.sort().join(',')){
                $('.quantity')[0].innerHTML = value.quantity;
                $('.orange_btn3').removeClass("disabled").addClass("enabled"); //REMOVED TO DISABLE BUY NOW BUTTON ACTIVATION
@@ -363,7 +363,8 @@ $(function(){
             var i_price =  $(".current_price").text().trim();
             var i_opt = {};
             var length = parseInt($('.product_option').length) - 1;
-			var csrftoken = $('#buynow_csrf').val();
+	    var csrftoken = $('#buynow_csrf').val();
+	    var max_qty = $(".quantity").html();
             $(".options").each(function() {
                 var parent = $(this).parent();
                 var id = $(this).attr("name");
@@ -376,7 +377,7 @@ $(function(){
                 url: config.base_url + "cart/add_item",
                 type:"POST",
                 dataType:"JSON",
-                data:{id:i_id,qty:i_qty,price:i_price,opt:i_opt,name:i_name,length:length,es_csrf_token:csrftoken},
+                data:{id:i_id,qty:i_qty,price:i_price,opt:i_opt,name:i_name,length:length,es_csrf_token:csrftoken,max_qty:max_qty},
 
                 success:function(data){
                     if(data == "386f25bdf171542e69262bf316a8981d0ca571b8" ){
