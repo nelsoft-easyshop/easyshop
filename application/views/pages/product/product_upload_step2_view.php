@@ -1765,7 +1765,6 @@ $(document).ready(function() {
         $("#brand_sch").trigger( "change" );
         jQuery(".brand_sch_loading").html('<img src="<?= base_url() ?>assets/images/check_icon.png" />').show().css('display','inline-block');
         $('#brand_search_drop_content').hide();
-        console.log('here');
    });
 })
 
