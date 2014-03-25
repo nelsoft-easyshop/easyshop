@@ -10,7 +10,7 @@
       <input type="hidden" id="uploadstep2_csrf" name="<?php echo $my_csrf['csrf_name'];?>" value="<?php echo $my_csrf['csrf_hash'];?>">
       <div class="sell_steps sell_steps2">
         <ul> 
-          <li><span id="step1_link">Step 1: Select Category</span></li>
+          <li><a href="javascript:void(0)" class="step1_link">Step 1: Select Category</a></li>
           <li><span>Step 2: </span> Upload Item</li>                   
           <li>Step 3: Select Shipping Courier</li>
           <li>Step 4: Success</li>
@@ -59,7 +59,7 @@
 
               <?php echo $parent_to_last; ?> <!-- will show the parent category until to the last category selected (bread crumbs) -->
               <br>
-              <a href="javascript:void(0)" style="color:#0654BA;">Change category</a>
+              <a href="javascript:void(0)" style="color:#0654BA;" class="step1_link">Change category</a>
             </td> 
             <td  class="border-right border-bottom" colspan="2">
             </td>
@@ -1758,7 +1758,6 @@ $(document).ready(function() {
    }
    
    $('#brand_search_drop_content').on('click', 'li.brand_result', function(){
-        console.log($(this));
         $this = $(this);     
         $('#prod_brand').val($this.data('brandid'));
         $("#brand_sch").val($this.children('a').text())
@@ -1766,6 +1765,7 @@ $(document).ready(function() {
         $("#brand_sch").trigger( "change" );
         jQuery(".brand_sch_loading").html('<img src="<?= base_url() ?>assets/images/check_icon.png" />').show().css('display','inline-block');
         $('#brand_search_drop_content').hide();
+        console.log('here');
    });
 })
 
@@ -1809,11 +1809,17 @@ $(document).ready(function(){
                     $("#brand_search_drop_content").html(html);
                     
                     if(!$("#brand_sch").is(":focus")){
+                        var available = false;
                         $('#brand_search_drop_content li.brand_result a').each(function(){
                             if($(this).text().toLowerCase() ===  $('#brand_sch').val().toLowerCase()){
                                 $(this).click();
+                                available = true;
+                                return false;
                             }
                         });
+                        if(!available){
+                            addNewBrand();
+                        }
                     }
                 }
             });
@@ -1825,19 +1831,25 @@ $(document).ready(function(){
             currentRequest.abort();
         }
         addNewBrand();
+        $('#brand_search_drop_content').hide();
     });
     
     function addNewBrand(){
         $('#prod_brand').val(1)
         $('#prod_brand').trigger( "change" );
         jQuery(".brand_sch_loading").html('<img src="<?= base_url() ?>assets/images/img_new_txt.png" />').show().css('display','inline-block');
-        $('#brand_search_drop_content').hide();
     }
   
     $('#brand_sch').focusout(function(){
+         var available = false;
         $('#brand_search_drop_content li.brand_result a').each(function(){
             if($(this).text().toLowerCase() ===  $('#brand_sch').val().toLowerCase()){
                 $(this).click();
+                 available = true;
+                return false;
+            }
+            if(!available){
+                addNewBrand();
             }
         });
     });    
@@ -1865,7 +1877,7 @@ $(document).ready(function(){
 <script>
 
     $(function(){
-        $('#step1_link').on('click', function(){
+        $('.step1_link').on('click', function(){
             $('#edit_step1').submit();
         });
 
