@@ -10,6 +10,7 @@ class Ios extends MY_Controller {
 
         $this->load->library('home_xml');
 		$this->load->helper('htmlpurifier');
+		$this->load->model('product_model');
     }
 
 
@@ -72,7 +73,7 @@ class Ios extends MY_Controller {
     
         $id = $this->input->get('p_id');   
 		$uid = $this->session->userdata('member_id');
-        $this->load->model('product_model');
+        //$this->load->model('product_model');
         $product_row = $this->product_model->getProduct($id);  
         $product_options = $this->product_model->getProductAttributes($id, 'NAME');
         $product_options = $this->product_model->implodeAttributesByName($product_options);
@@ -474,10 +475,9 @@ class Ios extends MY_Controller {
 	/*************************************************************************/
 	
 	# Accepts product review data from post method and writes to es_product_review table.
-	# Arguments: subject, comment, rating
+	# Arguments: subject, comment, score
 	function submit_review()
 	{
-		
 			$subject = html_purify($this->input->get('subject'));
 			$comment =  html_purify($this->input->get('comment'));
 			$rating = $this->input->get('score');
@@ -533,11 +533,10 @@ class Ios extends MY_Controller {
 	}
 
 	# Retrieve more reviews from es_product_review_table
-	# Arguments: $lastreview_id = id of the latest loaded review
+	# Arguments: last_id = id of the latest loaded review
 	function get_more_reviews()
 	{	
 		$reviews = $replies = array();
-		//$lastreview_id = $this->input->post('last_id');
 		$lastreview_id = $this->input->get('last_id');
 		$id = $this->session->userdata('product_id');
 		$userid = $this->session->userdata('member_id');
