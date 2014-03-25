@@ -265,11 +265,8 @@ span.seller-name span:hover {
 }
 
 .pbt {
-	width: 40px;
-	float: left;
-	clear:left;
-	text-align: left;
-	font-size: 11px;
+	width: auto;
+	text-align: center;
 }
 
 /*.pbt1 {
@@ -289,6 +286,7 @@ span.seller-name span:hover {
 	font-family: 'Roboto', sans-serif;
 	font-size: 10px;
 	display: block;
+	margin-top: 5px;
 }
 
 .orange_btn3 {
@@ -353,6 +351,19 @@ span.seller-name span:hover {
     height: 18px;
     vertical-align: middle;
     width: 22px;
+}
+
+.prod_loc_areas {
+	margin:10px 0;
+}
+
+.prod_loc_areas ul {
+	list-style: none;
+	margin-top: 5px;
+}
+
+.prod_loc_areas li {
+    padding-bottom: 5px;
 }
 
 /*** Main Product Content style ***/
