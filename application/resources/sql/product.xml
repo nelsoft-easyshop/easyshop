@@ -138,7 +138,7 @@
     </select>
     
     <select id="editProductCategory">
-        UPDATE es_product SET cat_id = :cat_id WHERE id_product = :id AND member_id = :member_id
+        UPDATE es_product SET cat_id = :cat_id, is_draft = 1 WHERE id_product = :id AND member_id = :member_id
     </select>
 	
     <select id="getProduct">
@@ -336,7 +336,8 @@
         ,`createddate`
         ,`lastmodifieddate`
         ,`cat_other_name`
-        ,`brand_other_name`)
+        ,`brand_other_name`
+        ,`is_draft`)
         VALUES 
         (
         :name
@@ -353,7 +354,8 @@
         ,NOW()
         ,NOW()
         , :cat_other_name
-        , :brand_other_name)
+        , :brand_other_name
+        , '1')
     </select>
 
     <select id="addNewAttribute">
@@ -554,8 +556,12 @@
         CALL `es_sp_FullDelete_product`(:productid, :memberid)
 </select>
 
-    <select id="updateIsDelete">
+<select id="updateIsDelete">
         UPDATE `es_product` SET is_delete = :is_delete where member_id = :memberid AND id_product = :productid
+</select>
+
+<select id="updateIsDraft">
+        UPDATE `es_product` SET is_draft = :is_draft where member_id = :memberid AND id_product = :productid
 </select>
 
 
@@ -597,7 +603,7 @@
 
 <select id="editProduct">
     UPDATE es_product SET 
-    `name` = :name, `sku` = :sku, `brief` = :brief, `description` = :description,
+    `name` = :name, `is_draft` = 1,`sku` = :sku, `brief` = :brief, `description` = :description,
     `keywords` = :keywords, `brand_id` = :brand_id, `style_id` = :style_id, `price` = :price,
     `condition` = :condition, `lastmodifieddate` = NOW(), `brand_other_name` = :brand_other_name
     WHERE `id_product` = :p_id AND `member_id` = :member_id;

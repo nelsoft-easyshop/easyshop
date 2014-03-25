@@ -42,11 +42,13 @@ echo form_open('sell/edit/step2', $attributesForm);
             <div class="clear"></div>
             <div class="cat_sch_container">
  
-               <b>Search for category: &nbsp;</b><input type="text" class="box" id="cat_sch" autocomplete="off"><div class="cat_sch_loading"></div>
-             <div id="cat_search_drop_content" class="cat_sch_drop_content"></div>
-       <div style="float:right">
-           <a href="javascript:void(0);" class="show_draft_link">View your draft items.</a>
-       </div>
+            <b>Search for category: &nbsp;</b><input type="text" class="box" id="cat_sch" autocomplete="off"><div class="cat_sch_loading"></div>
+            <div id="cat_search_drop_content" class="cat_sch_drop_content"></div>
+            <?php if(!isset($product_id_edit)): ?>
+                <div style="float:right">
+                   <a href="javascript:void(0);" class="show_draft_link">View your draft items.</a>
+                </div>
+            <?php endif; ?>
        </div>
 
  <div class="div_draft simplemodal-container">
@@ -413,11 +415,13 @@ echo form_open('sell/edit/step2', $attributesForm);
                 var id  = parent_ids.shift();
                 $('li.'+ id+' .select2.child').each(function(){
                     var D = eval('(' + $(this).attr('data') + ')');
-                    if( parseInt(D.cat_id) === parent_ids[0]){
-                        $(this).click(); 
-                        scrollToElement(this, '.product_sub_items' +cnt);
-                        cnt++;
-                        return false;
+                    if(typeof obj[0] !== 'undefined'){
+                        if( parseInt(D.cat_id) === parent_ids[0]){
+                            $(this).click(); 
+                            scrollToElement(this, '.product_sub_items' +cnt);
+                            cnt++;
+                            return false;
+                        }
                     }
                 });
             });
@@ -508,11 +512,13 @@ echo form_open('sell/edit/step2', $attributesForm);
                 var new_obj  = obj.shift();
                 $('li.'+ new_obj.id_cat  +' .select2.child').each(function(){
                     var D = eval('(' + $(this).attr('data') + ')');
-                    if( parseInt(D.cat_id) === parseInt(obj[0].id_cat,10)){
-                        $(this).click(); 
-                        scrollToElement(this, '.product_sub_items' +cnt);
-                        cnt++;
-                        return false;
+                    if(typeof obj[0] !== 'undefined'){
+                        if( parseInt(D.cat_id) === parseInt(obj[0].id_cat,10)){
+                            $(this).click(); 
+                            scrollToElement(this, '.product_sub_items' +cnt);
+                            cnt++;
+                            return false;
+                        }
                     }
                 });
             });
@@ -536,6 +542,8 @@ $(document).ready(function() {
     $('#cat_search_drop_content').hide();
     
 });
+
+
 
 </script>
 

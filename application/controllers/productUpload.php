@@ -699,6 +699,7 @@ class productUpload extends MY_Controller
 		$fdata = $this->input->post('fdata');
 		$arrProductItemId = json_decode($this->input->post('productitemid'));
 		$productId = $this->input->post('productid');
+        $memberId =  $this->session->userdata('member_id');
 		$attrCounter = 0;
 		
 		// Check if all attributes have assigned shipping details
@@ -729,6 +730,7 @@ class productUpload extends MY_Controller
 					}
 				}
 			}
+            $this->product_model->updateIsDraft($productId, $memberId,0);
 			echo 'success';
 		}
 		else{
@@ -778,21 +780,23 @@ class productUpload extends MY_Controller
 			redirect('me', 'refresh'); 
 
 		$member_id = $this->session->userdata('member_id');
-
-        if($this->input->post('hidden_attribute')){
-            $new_cat_id = $this->input->post('hidden_attribute');
-            if($this->product_model->editProductCategory($new_cat_id, $product_id, $member_id)>0){
-                $this->product_model->deleteShippingInfomation($product_id);
-                $this->product_model->deleteProductQuantityCombination($product_id);
-                $this->product_model->deleteAttributeByProduct($product_id);
-            }           
-        }
-        
 		$data = array('title'=>'Edit Product');
 		$data = array_merge($data,$this->fill_header());
 		$this->load->view('templates/header',$data); 
 		$product = $this->product_model->getProductEdit($product_id, $member_id);        
-		$parents = $this->product_model->getParentId($product['cat_id']); # getting all the parent from selected category
+		
+        if($this->input->post('hidden_attribute')){
+            $new_cat_id = $this->input->post('hidden_attribute');
+            if($this->product_model->editProductCategory($new_cat_id, $product_id, $member_id)>0){
+                if(intval($product['cat_id'],10)!==intval($new_cat_id,10)){
+                    $this->product_model->deleteShippingInfomation($product_id);
+                    $this->product_model->deleteProductQuantityCombination($product_id);
+                    $this->product_model->deleteAttributeByProduct($product_id);
+                }
+            }           
+        }
+        
+        $parents = $this->product_model->getParentId($product['cat_id']); # getting all the parent from selected category
 		$lastElement = end($parents);	
 		$str_parents_to_last = "";
 		foreach($parents as $k => $v) { # creating the bread crumbs from parent category to the last selected category
@@ -1340,39 +1344,6 @@ class productUpload extends MY_Controller
 
 	}
     
-    
-    public function foo(){
-        $data = $this->fill_view();
-        $response['firstlevel'] = $this->product_model->getFirstLevelNode();
-
-        $parents = $this->product_model->getParentId($id); # getting all the parent from selected category
-        #$attribute = $this->product_model->getAttributesBySelf($id); # getting all attribute from all parent from selected category
-        $attribute = $this->product_model->getAttributesByParent($parents);
-        $str_parents_to_last = "";
-
-        $lastElement = end($parents);	
-        foreach($parents as $k => $v) { # creating the bread crumbs from parent category to the last selected category
-            $str_parents_to_last = $str_parents_to_last  .' '. $v['name'];
-            if($v == $lastElement) {
-
-            }else{
-                $str_parents_to_last = $str_parents_to_last.' ->';
-            }
-        }
-        $response['parent_to_last'] = $str_parents_to_last;
-        for ($i=0 ; $i < sizeof($attribute) ; $i++ ) {  # getting all lookuplist from item attribute
-            $lookuplist = $this->product_model->getLookItemListById($attribute[$i]['attr_lookuplist_id']);
-            array_push($attribute[$i],$lookuplist);
-        }
-
-        $response['attribute'] = $attribute;
-
-
-        # getting first category level from database.
-		$this->load->view('templates/header', $data); 
-		$this->load->view('pages/product/product_upload', $response);
-		$this->load->view('templates/footer'); 
-    }
 }
 
 

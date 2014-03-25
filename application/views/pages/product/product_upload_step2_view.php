@@ -1882,6 +1882,17 @@ $(document).ready(function(){
 
     });
     
+    window.onbeforeunload = function (e) {
+        var message = "This page is asking you to confirm that you want to leave - data you have entered may not be saved.",
+        e = e || window.event;
+        // For IE and Firefox
+        if (e) {
+            e.returnValue = message;
+        }
+        // For Safari
+        return message;
+    };
+    
 </script>
 
 <div class="clear"></div>  
