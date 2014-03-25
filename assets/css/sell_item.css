@@ -1381,7 +1381,7 @@ tr.tr_shipping_summary:nth-child(even) td {
     text-align: center;
 }
 
-.div_locationwarning {
+#div_locationwarning {
     padding:8px 0;
 }
 
