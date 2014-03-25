@@ -10,11 +10,10 @@
       <input type="hidden" id="uploadstep2_csrf" name="<?php echo $my_csrf['csrf_name'];?>" value="<?php echo $my_csrf['csrf_hash'];?>">
       <div class="sell_steps sell_steps2">
         <ul> 
-          <li><a href="javascript:void(0)" id="step1_link">Step 1: Select Category</a></li>
-          <li><a href="javascript:void(0)"><span>Step 2: </span> Upload Item</a></li>                   
-          <li><a href="javascript:void(0)">Step 3: Select Shipping Courier</a></li>
-          <li><a href="javascript:void(0)">Step 4: Success</a></li>
- 
+          <li><span id="step1_link">Step 1: Select Category</span></li>
+          <li><span>Step 2: </span> Upload Item</li>                   
+          <li>Step 3: Select Shipping Courier</li>
+          <li>Step 4: Success</li>
         </ul>
       </div>
       <input type="hidden" name="step1_content" id="step1_content" value='<?php echo isset($step1_content)?$step1_content:json_encode(array());?>'/>
@@ -41,11 +40,6 @@
           );
         echo form_open('', $attr);
         ?>
-
-        <!--   <a class="tooltips" href="javascript:void(0)">
-            <img src="<?= base_url() ?>assets/images/icon_qmark.png" alt=""> 
-            <span> You can also set the availability of different attribute combinations of your item by clicking the Add button</span>
-          </a>  -->
 
 
         <table class="step4" cellspacing="0" cellpadding="0">
@@ -96,10 +90,6 @@
               <input type = "text" id="brand_sch" name="brand_sch" autocomplete="off" placeholder="Search for your brand" value="<?php echo isset($product_details['brandname'])?$product_details['brandname']:''?>"/>
               <div class="brand_sch_loading"></div>
               <div id="brand_search_drop_content" class="brand_sch_drop_content"></div>
-                <a class="tooltips" href="javascript:void(0)">
-                <img src="<?= base_url() ?>assets/images/icon_qmark.png" alt="">
-                <span>This will be the brand of your listing.
-                </span>
               </a> 
             </td>
           </tr>
@@ -1763,11 +1753,12 @@ $(document).ready(function() {
     });
     
    if(($('#brand_sch').val() !== '')&&(parseInt($('#prod_brand').val(),10) !== 0)){
-      var img_temp = (parseInt($('#prod_brand').val(),10) !== 1)?'<img src="<?= base_url() ?>assets/images/check_icon.png" />':'<img src="<?= base_url() ?>assets/images/icon_qmark.png" />';
+      var img_temp = (parseInt($('#prod_brand').val(),10) !== 1)?'<img src="<?= base_url() ?>assets/images/check_icon.png" />':'<img src="<?= base_url() ?>assets/images/img_new_txt.png" />';
       jQuery(".brand_sch_loading").html(img_temp).show().css('display','inline-block');
    }
    
    $('#brand_search_drop_content').on('click', 'li.brand_result', function(){
+        console.log($(this));
         $this = $(this);     
         $('#prod_brand').val($this.data('brandid'));
         $("#brand_sch").val($this.children('a').text())
@@ -1829,7 +1820,7 @@ $(document).ready(function(){
         }
     });
     
-    $(document).on("click",".add_brand", function(){
+    $(document).on("click",".add_brand", function(){    
         if(currentRequest != null) {
             currentRequest.abort();
         }
@@ -1839,7 +1830,7 @@ $(document).ready(function(){
     function addNewBrand(){
         $('#prod_brand').val(1)
         $('#prod_brand').trigger( "change" );
-        jQuery(".brand_sch_loading").html('<img src="<?= base_url() ?>assets/images/icon_qmark.png" />').show().css('display','inline-block');
+        jQuery(".brand_sch_loading").html('<img src="<?= base_url() ?>assets/images/img_new_txt.png" />').show().css('display','inline-block');
         $('#brand_search_drop_content').hide();
     }
   
