@@ -547,6 +547,7 @@ class product_model extends CI_Model
 							WHERE a.`attr_id` = b.`id_attr` 
 							AND a.`product_id` = c.`id_product` 
 							AND c.is_delete = 0 
+							 AND c.`is_draft` = 0
 							AND c.`cat_id` IN (".$catlist_down.") 
 							".$condition_price_string." 
 						) AS sub_main_tbl 
@@ -597,6 +598,7 @@ class product_model extends CI_Model
           AND a.`brand_id` = c.`id_brand`
           AND `cat_id` IN (".$catlist_down.")
 		  AND a.`is_delete` = 0 
+		   AND a.`is_draft` = 0
 		  ".$condition_price_string." 
         LIMIT :start, :per_page
 	 	"; 
@@ -633,6 +635,7 @@ class product_model extends CI_Model
           AND a.`brand_id` = c.`id_brand`
           AND `cat_id` IN (". $catlist_down .")
 		  AND a.`is_delete` = 0
+		   AND a.`is_draft` = 0
 		  AND a.`id_product` NOT IN (". implode(',', $product_id) . ")
 		  ".$condition_price_string." 
         LIMIT :start, :per_page
@@ -668,6 +671,7 @@ class product_model extends CI_Model
 		  ,`es_brand` c 
 		WHERE a.`id_product` = b.`product_id` 
 		  AND a.is_delete = 0 
+		   AND a.`is_draft` = 0
 		  AND b.`is_primary` = 1 
 		  AND a.`brand_id` = c.`id_brand`
 		  ".$usable_string." 
@@ -706,6 +710,7 @@ class product_model extends CI_Model
 		  ,`es_brand` c 
 		WHERE a.`id_product` = b.`product_id` 
 		  AND a.is_delete = 0 
+		  AND a.`is_draft` = 0
 		  AND b.`is_primary` = 1 
 		  AND a.`brand_id` = c.`id_brand`
 		  ".$usable_string." 

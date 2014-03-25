@@ -267,7 +267,7 @@
 		SELECT `name` AS `product`,`id_product`,`cat_id`,`clickcount`, `product_image_path` ,`price`
         FROM `es_product` a
         LEFT JOIN `es_product_image` b ON b.`product_id` = a.`id_product` AND b.is_primary = '1'
-        WHERE a.`is_delete` = 0 AND `cat_id` IN 
+        WHERE a.`is_delete` = 0 AND a.`is_draft` = 0 AND `cat_id` IN 
         <!-- Rest of query completed in the model: -->
         <!-- (:cat_id) ORDER BY `clickcount` DESC LIMIT :limit; -->
     </select>
@@ -535,7 +535,7 @@
           , `condition` AS product_condition 
         FROM
           `es_product` 
-        WHERE is_delete = 0 
+        WHERE is_delete = 0 AND `is_draft` = 0
           AND MATCH(NAME, keywords) AGAINST (:words IN BOOLEAN MODE) 
           ) AS main_tbl 
         ON main_tbl.product_id = es_product_image.`product_id` 
@@ -620,7 +620,7 @@
 </select>
 
 <select id="getProductCount">
-    SELECT count(`id_product`) as product_count from es_product WHERE `is_delete` = 0 AND `cat_id` IN <!-- rest of query is completed in the model -->
+    SELECT count(`id_product`) as product_count from es_product WHERE `is_delete` = 0 AND `is_draft` = 0 AND `cat_id` IN <!-- rest of query is completed in the model -->
 </select>
 
 <select id="deleteOtherDetail">
