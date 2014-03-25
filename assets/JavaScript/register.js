@@ -64,7 +64,7 @@ $(document).ready(function(){
 	  
 	  $('#email').on('blur', function(){
 		var fieldlength = $.trim($('#email').val()).length;
-		if(fieldlength >= 6 $(this).hasClass('forSearch')){
+		if(fieldlength >= 6 && $(this).hasClass('forSearch')){
 			setTimeout(email_check,500);
 		}
 		else if(fieldlength < 6){
