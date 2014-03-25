@@ -13,7 +13,7 @@
                 <ul>
                     <li><a href="javascript:void(0)" id="step1_link">Step 1 : Select Category</a></li>
                     <li><a href="javascript:void(0)" id="step2_link">Step 2 : Upload Item</a></li>                   
-                    <li>Step 3 : Select Shipping Locations</li>
+                    <li><span>Step 3</span> : Select Shipping Locations</li>
                     <li>Step 4 : Success</li>
                 </ul>
             </div>
@@ -28,44 +28,53 @@
     <?php echo form_close();?>
     
     <!-- Start of top Shipping Content -->   
-    <div class="shipping_wrapper">
+    <div class="shipping_wrapper wrapper">
+      <div class="shipping_title">
+        <strong class="f14">Select Product Attribute Combination, Location, and Price</strong>
+      </div>
     <!-- Start of Shipping Container --> 
     <div class="shipping_container">
 	  <?php if($attr['has_attr'] == 1):?>
 		  <table>
 		  <tr>
-			<td><strong class="f14">Select Product Attribute Combination, Location, and Price</strong></td>
-		  </tr>
-		  <tr>
 			<td>
-			  <ul id="product_combination_list">				
-				<?php foreach($attr['attributes'] as $attrkey=>$temp):?>
-				  <li class="product_combination" value="<?php echo $attrkey;?>">
-					
-					  <?php foreach($temp as $pattr):?>
-						<p>&bull; <?php echo $pattr;?> </p>
-					  <?php endforeach;?>
-				   
-				  </li>
-				<?php endforeach;?>
-			  </ul>
+        <div class="prod_comb_list_con">
+  			  <ul id="product_combination_list">				
+  				<?php foreach($attr['attributes'] as $attrkey=>$temp):?>
+  				  <li class="product_combination" value="<?php echo $attrkey;?>">
+    					<div>
+    					  <?php foreach($temp as $pattr):?>
+    						<p>&bull; <?php echo $pattr;?> </p>
+    					  <?php endforeach;?>
+    				  </div> 
+  				  </li>
+  				<?php endforeach;?>
+  			  </ul>
+        </div>
 			</td>
 		  </tr>
 		  </table>
-	  <?php else:?>
-		<span><strong class="f14">Select Delivery Location and Price</strong></span>
-		<input type="hidden" id="product_item_id" value="<?php echo $attr['product_item_id'];?>">
-	  <?php endif;?>
-	  <input type="hidden" id="has_attr" value="<?php echo $attr['has_attr'];?>">
 	  
+    </div>   
+    <!-- End of Shipping Container --> 
+
+    <!-- Start of Shipping Courier -->
+    <div class="shipping_courier_container">
+      <div>
+        <?php else:?>
+    <span><strong class="f14">Select Delivery Location and Set Price</strong></span>
+    <input type="hidden" id="product_item_id" value="<?php echo $attr['product_item_id'];?>">
+    <?php endif;?>
+    <input type="hidden" id="has_attr" value="<?php echo $attr['has_attr'];?>">
+    
       <div class="shipping_border"></div>
-	  
-      <table id="shiploc_selectiontbl" class="shipping_table2" width="526px" cellspacing="0" cellpadding="0">
+      <h3>Set Price</h3>
+      <table id="shiploc_selectiontbl" class="shipping_table2" width="425px" cellspacing="0" cellpadding="0">
         <thead>
           <tr>
             <td width="170px">Location</td>
-            <td width="230px">Price</td>
-            <td width="136px">&nbsp;</td>
+            <td width="160px">Price</td>
+            <td width="65px">&nbsp;</td>
           </tr>
         </thead>
         <input type="hidden" value="1" id="shiploc_count">
@@ -78,8 +87,8 @@
                 <?php foreach($loc as $region=>$subloc):?>
                   <option value="<?php echo $shiploc['regionkey'][$region];?>" style="margin-left:15px;">&nbsp;&nbsp;&nbsp;<?php echo $region;?></option>
                   <?php foreach($subloc as $id_cityprov=>$cityprov):?>
-					<option value="<?php echo $id_cityprov;?>" style="margin-left:30px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $cityprov;?></option>
-				  <?php endforeach;?>
+          <option value="<?php echo $id_cityprov;?>" style="margin-left:30px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $cityprov;?></option>
+          <?php endforeach;?>
                 <?php endforeach;?>
               <?php endforeach;?>
             </select>
@@ -89,21 +98,25 @@
           </td>
         </tr>
         <tr>
-          <td>
+          <td class="add_loc_con">
             <a href="javascript:void(0)" id="add_location" class="blue">+ Add Location</a>
           </td>
         </tr>
       </table>
       <input type="button" id="add_shipping_details" value="Add to Shipping List" class="orange_btn3">
-    </div>   
-    <!-- End of Shipping Container --> 
-
-    <!-- Start of Shipping Courier -->
-    <div class="shipping_courier_container">
-
-      <a target="_blank" href="http://www.air21.com.ph/main/rate_calculator.php"><img src="<?=base_url()?>assets/images/img_logo_air21.jpg"> Air21</a>
-      <a target="_blank" href="http://www.lbcexpress.com/"><img src="<?=base_url()?>assets/images/img_logo_lbc.jpg"> LBC</a>
-      <a target="_blank" href="http://www.jrs-express.com/Ratecalc.aspx"><img src="<?=base_url()?>assets/images/img_logo_jrs.jpg"> JRS</a>
+      </div>
+      <div class="rate_calculator_con">
+        <h3>Rate Calculator</h3>
+          <a target="_blank" href="http://www.air21.com.ph/main/rate_calculator.php">
+            <img src="<?=base_url()?>assets/images/img_logo_air21.jpg" alt="Air21">
+          </a>
+          <a target="_blank" href="http://www.lbcexpress.com/">
+            <img src="<?=base_url()?>assets/images/img_logo_lbc.jpg" alt="LBC">
+          </a>
+          <a target="_blank" href="http://www.jrs-express.com/Ratecalc.aspx">
+            <img src="<?=base_url()?>assets/images/img_logo_jrs.jpg" alt="JRS">
+          </a>
+      </div>
     </div>
     <!-- End of Shipping Courier -->
 
