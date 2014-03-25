@@ -1392,8 +1392,10 @@ $(function(){
 	
 });
 
-/****************	GOOGLE MAPS		***************************/
+/***********************	GOOGLE MAPS		***************************/
+/*
 $(document).ready(function(){
+
 	$("#view_map").click(function(){     
 		var streetno = $("#streetno").val();
 		var streetname = $("#streetname").val();
@@ -1402,7 +1404,6 @@ $(document).ready(function(){
 		var country = $("#country").val();
 		var address = streetno + " " + streetname + " Street " + ", " + barangay + " " + citytown + ", " + country;
 		var csrftoken = $('#personal_profile_address').find('input[name^="es_csrf"]').val();
-		console.log(address);
 		$.ajax({
 			async:true,
 			url:config.base_url+"memberpage/toCoordinates",
@@ -1429,12 +1430,101 @@ $(document).ready(function(){
 		};
 		var map = new google.maps.Map(document.getElementById("map-canvas"),
 			mapOptions);
-			var marker = new google.maps.Marker({
-				position: myLatlng,
-				map: map,
-				title:"You! :)"
-			});
+		var marker = new google.maps.Marker({
+			position: myLatlng,
+			map: map,
+			title:"I'm here!",
+			draggable: true
+		});
+		google.maps.event.addListener(marker, 'dragend', function(evt){
+			document.getElementById('map_lat').value = evt.latLng.lat();
+			document.getElementById('map_lng').value = evt.latLng.lng();
+			window.setTimeout(function(){
+				map.panTo(marker.getPosition());
+			}, 500);
+		});
 	}
+	
+});
+*/
+
+
+$(document).ready(function(){
+
+	var map;
+
+	$("#refresh_map").click(function(){     
+		document.getElementById('map_lat').value = 0;
+		document.getElementById('map_lng').value = 0;
+		var streetno = $("#streetno").val();
+		var streetname = $("#streetname").val();
+		var barangay = $("#barangay").val();
+		var citytown = $("#citytown").val();
+		var country = $("#country").val();
+		var address = streetno + " " + streetname + " Street " + ", " + barangay + " " + citytown + ", " + country;
+		var csrftoken = $('#personal_profile_address').find('input[name^="es_csrf"]').val();
+		$.ajax({
+			async:true,
+			url:config.base_url+"memberpage/toCoordinates",
+			type:"POST",
+			dataType:"JSON",
+			data:{address:address, es_csrf_token:csrftoken},
+			success:function(data){
+				if(data['lat']==false || data['lng']==false){
+					alert("Cannot retrieve map,Address is invalid");
+				}else{
+					var myLatlng =  new google.maps.LatLng(data['lat'],data['lng']);
+					google.maps.event.addDomListener(window, 'load', initialize(myLatlng));
+				}
+			}
+
+		});
+	});
+
+	function initialize(myLatlng) {
+		var mapOptions = {
+		  center:myLatlng,
+		  zoom: 15
+		};
+		map = new google.maps.Map(document.getElementById("map-canvas"),
+			mapOptions);
+		var marker = new google.maps.Marker({
+			position: myLatlng,
+			map: map,
+			title:"I'm here!",
+			draggable: true
+		});
+		google.maps.event.addListener(marker, 'dragend', function(evt){
+			document.getElementById('map_lat').value = evt.latLng.lat();
+			document.getElementById('map_lng').value = evt.latLng.lng();
+			window.setTimeout(function(){
+				map.panTo(marker.getPosition());
+			}, 500);
+		});
+	}
+	
+	$('#view_map').click(function () {
+		var maplat = $('#map_lat').val();
+		var maplng = $('#map_lng').val();
+		
+		if (maplat == 0 && maplng == 0){
+			$('#refresh_map').trigger('click');
+		}else{
+			var myLatlng =  new google.maps.LatLng(maplat,maplng);
+			
+			if($('#map-canvas').hasClass('map_canvas')){
+				map.setCenter(myLatlng);
+			}else{
+				google.maps.event.addDomListener(window, 'load', initialize(myLatlng));
+			}
+		}
+		
+		$(this).fadeOut();
+		$(this).parent('div').siblings('#map').show();
+		$(this).parent('div').siblings('#map-canvas').addClass('map_canvas');
+		$(this).parent('div').siblings('#map-canvas').fadeIn();
+	});
+	
 });
 
 $(document).ready(function(){
@@ -1445,11 +1535,14 @@ $(document).ready(function(){
 		$(this).parent('#map').siblings('.view_map_btn').find('#view_map').fadeIn();
 	});
 
+	/*
 	$('#view_map').click(function () {
 		$(this).fadeOut();
+		$(this).parent('div').siblings('#map').show();
 		$(this).parent('div').siblings('#map-canvas').addClass('map_canvas');
 		$(this).parent('div').siblings('#map-canvas').fadeIn();
 	});
+	*/
 
 });
 

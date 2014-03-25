@@ -38,22 +38,25 @@ class Memberpage extends MY_Controller
             "=" => ""
         );
         $address = str_replace(array_keys($bad), array_values($bad), $address1);
-		print($address);
         $data = new SimpleXMLElement(file_get_contents("http://maps.googleapis.com/maps/api/geocode/xml?address={$address}&sensor=true"));
         $simple = json_decode(json_encode($data), 1);
         $result = array();
 		
-		print('<pre>');
-		print_r($data);
-		print('</pre>');
-		
-        if($simple['status']== "ZERO_RESULTS"):
-            $result['lat']=false;
+        if($simple['status']== "ZERO_RESULTS"){
+			$result['lat']=false;
             $result['lng']=false;
-        else:
-            $result['lat'] = $simple['result']['geometry']['location']['lat'];
-            $result['lng'] = $simple['result']['geometry']['location']['lng'];
-        endif;
+		}
+        else{
+		
+			if(array_key_exists(0, $simple)){
+				$result['lat'] = $simple['result'][0]['geometry']['location']['lat'];
+				$result['lng'] = $simple['result'][0]['geometry']['location']['lng'];
+			}
+			else{
+				$result['lat'] = $simple['result']['geometry']['location']['lat'];
+				$result['lng'] = $simple['result']['geometry']['location']['lng'];
+			}
+		}
         
         echo json_encode($result);
     }
@@ -115,7 +118,9 @@ class Memberpage extends MY_Controller
 					'citytown' => $this->input->post('citytown'), 
 					'country' => $this->input->post('country'), 
 					'postalcode' => $this->input->post('postalcode'), 
-					'addresstype' => $this->input->post('addresstype')
+					'addresstype' => $this->input->post('addresstype'),
+					'lat' => $this->input->post('map_lat'),
+					'lng' => $this->input->post('map_lng')
 				); 
 			$uid = $this->session->userdata('member_id');
 			$this->memberpage_model->edit_address_by_id($uid, $postdata);	

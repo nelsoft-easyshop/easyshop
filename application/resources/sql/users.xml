@@ -98,7 +98,8 @@
 	COALESCE(a0.`citytown`, '') as citytown, COALESCE(a0.`country`, '') as country, COALESCE(a0.`postalcode`, '') as postalcode,
 	COALESCE(a1.`streetno`, '') as c_streetno, COALESCE(a1.`streetname`, '') as c_streetname, COALESCE(a1.`barangay`, '') as c_barangay, 
 	COALESCE(a1.`citytown`, '') as c_citytown, COALESCE(a1.`country`, '') as c_country, COALESCE(a1.`postalcode`, '') as c_postalcode,
-	COALESCE(a1.`telephone`, '') as c_telephone, COALESCE(a1.`mobile`, '') as c_mobile, COALESCE(a1.`consignee`, '') as consignee
+	COALESCE(a1.`telephone`, '') as c_telephone, COALESCE(a1.`mobile`, '') as c_mobile, COALESCE(a1.`consignee`, '') as consignee,
+	a0.lat, a0.lng
 	from es_member m 
 	LEFT JOIN es_address a0 ON m.id_member=a0.id_member AND a0.`type`=0
 	LEFT JOIN es_address a1 ON m.id_member=a1.id_member AND a1.`type`=1
@@ -126,9 +127,9 @@
 </select>
 
 <select id="edit_address">
-	INSERT INTO `es_address` (`id_member`, `streetno`, `streetname`, `barangay`, `citytown`, `postalcode`, `country`, `type`, `telephone`, `mobile`, `consignee`) 
-	VALUES (:id_member,:streetno,:streetname,:barangay,:citytown,:postalcode,:country, :type, :telephone, :mobile, :consignee)
-	ON DUPLICATE KEY UPDATE streetno=:streetno,streetname=:streetname,barangay=:barangay,citytown=:citytown,postalcode=:postalcode,country = :country,telephone=:telephone,mobile=:mobile,consignee=:consignee
+	INSERT INTO `es_address` (`id_member`, `streetno`, `streetname`, `barangay`, `citytown`, `postalcode`, `country`, `type`, `telephone`, `mobile`, `consignee`, `lat`, `lng`) 
+	VALUES (:id_member,:streetno,:streetname,:barangay,:citytown,:postalcode,:country, :type, :telephone, :mobile, :consignee, :lat, :lng)
+	ON DUPLICATE KEY UPDATE streetno=:streetno,streetname=:streetname,barangay=:barangay,citytown=:citytown,postalcode=:postalcode,country = :country,telephone=:telephone,mobile=:mobile,consignee=:consignee,lat=:lat,lng=:lng
 </select>
 
 

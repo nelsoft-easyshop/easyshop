@@ -1051,16 +1051,21 @@
 							<span class="red ci_form_validation_error"><?php echo form_error('citytown'); ?></span>
 							<span class="red ci_form_validation_error"><?php echo form_error('country'); ?></span>
 						</div>
-						<!--
+						
 						<div class="view_map_btn">
-							<input type="button" id="view_map" value="View on map">                            
+							<input type="button" id="view_map" value="Mark on map">
+							<input type="hidden" name="map_lat" id="map_lat" value="<?php echo $lat;?>">
+							<input type="hidden" name="map_lng" id="map_lng" value="<?php echo $lng;?>">
 						</div>
-						-->
+						
 						<div id="map"  style="display: none">
+							<span id="refresh_map">Refresh map</span>
 							<a id="close" href="javascript:void(0)">Close</a>
 							<div id="GoogleMapContainer" title="Google Map Container"></div>
 						</div>
+						
 						<div id="map-canvas"></div>
+						
 						<div class="clear"></div>
 						
 						<div class="clear"></div>
@@ -1667,3 +1672,4 @@
 		<!-- MEMBERPAGE JS-->
 		<script type="text/javascript" src="<?=base_url()?>assets/JavaScript/memberpage.js"></script>
 		<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=&sensor=false"></script>
+		

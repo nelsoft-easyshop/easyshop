@@ -84,6 +84,10 @@ class memberpage_model extends CI_Model
 		$sth->bindparam(':consignee', $data['consignee']);
 		$sth->bindparam(':mobile', $data['mobile']);
 		$sth->bindparam(':telephone', $data['telephone']);
+		
+		$sth->bindParam(':lat', $data['lat']);
+		$sth->bindParam(':lng', $data['lng']);
+		
 		$sth->execute();
 	}
 	
