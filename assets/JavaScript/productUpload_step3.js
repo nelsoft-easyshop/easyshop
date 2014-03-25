@@ -13,9 +13,10 @@ $(function(){
     var selecttrnew = $('#shiploc_selectiontbl').find('select[name="shiploc1"]').closest('tr').clone();
     selecttrnew.find('select[name^="shiploc"]')[0].name = "shiploc"+ (+datacount+1);
     selecttrnew.find('input[name^="shipprice"]')[0].name = "shipprice"+ (+datacount+1);
-	selecttrnew.find('td.samelocerror').remove();
+	  selecttrnew.find('td.samelocerror').remove();
     selecttrnew.append('<td><span class="delete_locrow button">Remove</td>');
     $('#shiploc_selectiontbl').find('tr:last').before('<tr class="newlocrow">' + selecttrnew.html() + '</tr>');
+    $('.shipping_table2').animate({scrollTop: $('.shipping_table2').prop("scrollHeight")}, 1000);
   });
 
   $('#shiploc_selectiontbl').on('click', '.delete_locrow', function(){
