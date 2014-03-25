@@ -75,5 +75,9 @@ $route['sell/edit/step1'] = 'productUpload/editStep1'; # sam gavinio
 $route['sell/edit/step2'] = 'productUpload/editStep2'; # sam gavinio
 $route['sell/edit/processing2'] = 'productUpload/editStep2Submit';  # sam gavinio
 
+#REMOVE DRAFT
+$route['sell/draft/remove'] = 'productUpload/deleteDraft';  # sam gavinio
+
+
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */

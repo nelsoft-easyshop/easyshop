@@ -742,5 +742,12 @@
     SELECT name FROM `es_brand` WHERE id_brand = :brand_id
 </select>
 
+<select id="getDraftItems">
+   SELECT id_product,name,cat_id,cat_other_name,lastmodifieddate FROM  `es_product` WHERE member_id = :member_id AND is_draft = 1 AND is_delete = 0
+</select>
+
+<select id="deleteDraft">
+    CALL `es_sp_Remove_draft`(:member_id,:product_id)
+</select>
 
 </map>

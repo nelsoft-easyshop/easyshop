@@ -1570,5 +1570,31 @@ class product_model extends CI_Model
         
         return $result;
     }
+
+    /* 
+     * Return All Draft items by the user.
+     * @member_id
+     */
+    public function getDraftItems($member_id){
+    	$query = $this->sqlmap->getFilenameID('product','getDraftItems');
+    	$sth = $this->db->conn_id->prepare($query);
+    	$sth->bindParam(':member_id', $member_id, PDO::PARAM_INT);
+    	$sth->execute();
+    	$result = $sth->fetchAll(PDO::FETCH_ASSOC);
+
+    	return $result;
+    }
+
+    public function deleteDraft($member_id,$product_id){
+    	$query = $this->sqlmap->getFilenameID('product','deleteDraft');
+    	$sth = $this->db->conn_id->prepare($query);
+    	$sth->bindParam(':member_id', $member_id, PDO::PARAM_INT);
+    	$sth->bindParam(':product_id', $product_id, PDO::PARAM_INT);
+    	$sth->execute();
+    	$result = $sth->fetchAll(PDO::FETCH_ASSOC);
+
+    	return $result[0];
+    }
+        
     
 }

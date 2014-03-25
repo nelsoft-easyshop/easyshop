@@ -37,6 +37,28 @@ class productUpload extends MY_Controller
 
 		$usersession = $this->session->userdata('usersession');	
 		$uid = $this->session->userdata('member_id');
+		$draftItems = $this->product_model->getDraftItems($uid);
+
+		for ($i=0; $i < sizeof($draftItems); $i++) { 
+			$parents = $this->product_model->getParentId($draftItems[$i]['cat_id']); # getting all the parent from selected category	
+			$str_parents_to_last = "";
+
+			$lastElement = end($parents);	
+			foreach($parents as $k => $v) { # creating the bread crumbs from parent category to the last selected category
+				$str_parents_to_last = $str_parents_to_last  .' '. $v['name'];
+				if($v == $lastElement) {
+
+				}else{
+					$str_parents_to_last = $str_parents_to_last.' &#10140;';
+				}
+			}
+			if($draftItems[$i]['cat_other_name'] != ""){
+				$str_parents_to_last = $str_parents_to_last.' &#10140; ' . $draftItems[$i]['cat_other_name'];
+			}
+			$draftItems[$i]['crumbs'] = $str_parents_to_last;
+		} 
+
+		$data_item['draftItems'] = $draftItems;
 		$data_item['firstlevel'] = $this->product_model->getFirstLevelNode(); # getting first category level from database.
 		$userdetails = $this->product_model->getCurrUserDetails($uid);
 		$data = $this->fill_view();
@@ -1302,6 +1324,20 @@ class productUpload extends MY_Controller
 			}
 		}
 		echo $data;        
+	}
+
+	public function deleteDraft(){
+		$productId = $this->input->post('p_id');
+		$memberId =  $this->session->userdata('member_id');
+		$output = $this->product_model->deleteDraft($memberId,$productId);
+
+		if($output['o_success'] == 0){
+			$data = '{"e":"0","d":"'.$output['o_message'].'"}';	
+		}else{
+			$data = '{"e":"1","d":"'.$output['o_message'].'"}';	
+		}
+		echo $data; 
+
 	}
     
     

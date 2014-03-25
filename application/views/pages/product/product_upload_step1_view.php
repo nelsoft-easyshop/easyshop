@@ -1,4 +1,15 @@
 <link type="text/css" href="<?=base_url()?>assets/css/sell_item.css" rel="stylesheet" />
+
+ 
+<?php 
+$attributesForm = array('id' => 'draft_form',
+    'name'=>'draft_form');
+echo form_open('sell/edit/step2', $attributesForm);
+?>
+<?php echo form_close(); ?>
+
+  
+
 <div class="wrapper"> 
     <input type="hidden" id="edit_cat_tree" value='<?php echo isset($cat_tree_edit)?$cat_tree_edit:json_encode(array()); ?>'/>
     <div class="clear"></div>
@@ -16,24 +27,52 @@
               }
         ?>
 
-
         <div class="inner_seller_product_content">
             <h2 class="f24">Sell an Item</h2>
 			<input type="hidden" id="uploadstep1_csrf" name="<?php echo $my_csrf['csrf_name'];?>" value="<?php echo $my_csrf['csrf_hash'];?>">
             <div class="sell_steps sell_steps1">
                 <ul>
-                    <li><span>Step 1: </span> Select Category</li>
-                    <li>Step 2: Upload Item</li>                   
-                    <li>Step 3: Select Shipping Courier</li>
-                    <li>Step 4: Success</li>
+                    <li><a href="javascript:void(0)" id="step1_link"><span>Step 1:</span> Select Category</a></li>
+                  <li><a href="javascript:void(0)">Step 2: Upload Item</a></li>                   
+                  <li><a href="javascript:void(0)">Step 3: Select Shipping Courier</a></li>
+                  <li><a href="javascript:void(0)">Step 4: Success</a></li>
                 </ul>
             </div>
             
             <div class="clear"></div>
             <div class="cat_sch_container">
-				<b>Search for category: &nbsp;</b><input type="text" class="box" id="cat_sch" autocomplete="off"><div class="cat_sch_loading"></div>
-				<div id="cat_search_drop_content" class="cat_sch_drop_content"></div>
-			</div>
+ 
+               <b>Search for category: &nbsp;</b><input type="text" class="box" id="cat_sch" autocomplete="off"><div class="cat_sch_loading"></div>
+             <div id="cat_search_drop_content" class="cat_sch_drop_content"></div>
+       <div style="float:right">
+           <a href="javascript:void(0);" class="show_draft_link">View your draft items.</a>
+       </div>
+       </div>
+
+ <div class="div_draft simplemodal-container">
+      
+        <?php 
+         foreach ($draftItems as $draft) {
+              ?>
+            <div class="div_item draftitem<?php echo $draft['id_product']; ?>" >
+                <div class="draft_title">
+                    <a class="draft_name" href="javascript:void(0)" data-pid="<?php echo $draft['id_product'] ?>">
+                    <?php
+                    if($draft['name'] != ""){
+                        echo  $draft['name'] ;
+                    }else{
+                        echo '(Untitled Draft)';
+                    }
+                    ?> 
+                    </a>
+                </div>
+                <div class="draft_category"><?php echo $draft['crumbs']?></div>
+                <div class="draft_down">[ <a style="color:#0654BA;font-size:10px;font-weight:bold" class="draft_remove" data-pid="<?php echo $draft['id_product'] ?>" href="javascript:{}">Delete</a> ] | <span style="font-style:italic;font-size:10px"><?php echo date("M-d", strtotime($draft['lastmodifieddate']))?></span></div>
+                <hr>
+            </div>
+              <?php } ?>
+    </div>
+ 
        <div class="add_product_category">
         <div class="main_product_category">
             <input type="text" class="box" id="box">
@@ -76,10 +115,71 @@
         </div>
 
         <div class="clear"></div>  
- 
+
+
+        <style type="text/css">
+        /* Overlay */
+        #simplemodal-overlay {
+            background-color:#bcbcbc;
+        }
+
+        /* Container */
+        #simplemodal-container {
+            height: auto !important;
+            width: auto !important; 
+            background-color:#0000;
+            padding: 5px;
+        }
+        </style>
 
         <script>
-        $(document).ready(function() {
+        $(document).ready(function() { 
+            $('.div_draft').hide();
+
+            $(document).on('click','.draft_name',function () {
+                var pid = $(this).data('pid');
+           
+                var input = $("<input>")
+                .attr("type", "hidden")
+                .attr("name", "p_id").val(pid);
+                $('#draft_form').append($(input));
+                $('#draft_form').submit();
+
+            });     
+            $(document).on('click','.draft_remove',function () {
+                var pid = $(this).data('pid');
+                var csrftoken = $('input[name="es_csrf_token"]').val();
+                var action = "sell/draft/remove"; 
+ 
+                if(confirm("Are you sure you want to permanently removed your draft item?")){
+                    var request = $.ajax({
+                        async: false,
+                        type: "POST",
+                        url: '<?php echo base_url(); ?>' + action,
+                        data: "p_id=" + pid + "&es_csrf_token=" + csrftoken,
+                        dataType: "json",
+                        cache: false,
+                        success: function(d) { 
+                            if(d.e == 1){
+                                $('.draftitem'+pid).remove();
+                            }else{
+                                alert(d.m);
+                            }
+                        }
+                    });
+                }
+            });
+            $(document).on('click','.show_draft_link',function () {
+               $('.div_draft').modal({
+                    escClose: false,
+                    containerCss:{
+                        maxWidth: 600,
+                        minWidth: 505,
+                        maxHeight: 600
+                    } 
+                });
+            });
+
             $('.jcarousel').bind("scroll", ScrollOnLoad);
             setTimeout(UnbindScroll, 150); 
             function ScrollOnLoad() {
@@ -100,6 +200,7 @@
             $(document).on('click','.navList li a',function () { 
                 $(this).addClass('active').parent().siblings().children('a').removeClass('active');
             });
+
 
         $("#box").unbind("click").click(function() {  // this function is for searching item on the list box every category
             $('#box').keyup(function() {
@@ -437,3 +538,5 @@ $(document).ready(function() {
 });
 
 </script>
+
+<script type='text/javascript' src='<?=base_url()?>assets/JavaScript/js/jquery.simplemodal.js'></script>
