@@ -43,6 +43,7 @@
               <?php foreach($product_images as $image): ?>
               <li> <a href="javascript:void(0);" rel="{gallery: 'gal1', smallimage: '<?=base_url()?><?php echo $image['path']; ?>small/<?php echo $image['file']; ?>',largeimage: '<?=base_url()?><?php echo $image['path']; ?><?php echo $image['file']; ?>'}"> <img src='<?=base_url()?><?php echo $image['path']; ?>thumbnail/<?php echo $image['file']; ?>'> </a> </li>
               <?php endforeach;?>
+
             </ul>
 
           </div>
@@ -132,8 +133,16 @@
             <?php endif; ?>
             <span>Delivers in 5-8 business days*</span> </div>
         </div>
-        <br />
-        <br />
+        <div class="prod_loc_areas">
+          <p>
+            <strong>Product is available in the following areas:</strong>
+            <ul>
+              <li>Metro Manila</li>
+              <li>Cebu</li>
+              <li>Davao</li>
+            </ul>
+          </p>
+        </div>
         <p class="product_content_payment"> <strong>Payment:</strong><br />
           <span class="mastercard"></span>
           <span class="visa"></span>
@@ -163,7 +172,7 @@
           <?php foreach($product_options as $key=>$product_option):?>
           <?php if(count($product_option)===1): ?>
               <?php if(intval($product_option[0]['datatype'],10) === 2): ?>
-                    <div>
+                    <div class="tab2_html_con">
                         <strong><?php echo html_escape(str_replace("'", '', $key));?> </strong>
                         <?php echo html_purify($product_option[0]['value']);?>
                     </div>
@@ -388,8 +397,8 @@
 
 $(document).on('click','.prod_cat_drop',function() {
      $(".category_nav").toggleClass("category_nav_plus");
-     $(".prod_cat_drop").toggleClass("prod_cat_drop_arrow active_prod_cat_drop_arrow");
-                 $(document).bind('focusin.prod_cat_drop_arrow click.prod_cat_drop_arrow',function(e) {
+     $(".prod_cat_drop").toggleClass("active_prod_cat_drop_arrow");
+                 $(document).bind('focusin.prod_cat_drop click.prod_cat_drop',function(e) {
                 if ($(e.target).closest('.prod_cat_drop, .category_nav').length) return;
                 $('.category_nav').removeClass('category_nav_plus');
                 $('.prod_cat_drop').removeClass('active_prod_cat_drop_arrow');
