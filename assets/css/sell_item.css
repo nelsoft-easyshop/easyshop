@@ -168,8 +168,15 @@ div.sell_steps4 ul li:nth-child(4) a {
     width: 220px;   
 }
 
-.sell_steps ul li a span {
+.sell_steps ul li span {
     font-size: 18px;
+}
+
+.sell_steps1 ul li:first-child,
+.sell_steps2 ul li:nth-child(2),
+.sell_steps3 ul li:nth-child(3),
+.sell_steps4 ul li:last-child {
+    color: #fff;
 }
 
 
@@ -1047,6 +1054,11 @@ a:hover.tooltips span {
 /****************** Upload product step 3 ****************/
 /*********************************************************/
 /*************  Shipping Product Upload Step 3 ****************/
+.prod_comb_list_con {
+    overflow-y: scroll;
+    height: 437px;
+}
+
 #product_combination_list{
     list-style: none;
     position: relative;
@@ -1060,13 +1072,14 @@ a:hover.tooltips span {
     height: auto;
     line-height: 35px;
     margin: 0 0 10px 5px;
+    max-height: 193px;
     min-height: 25px;
+    overflow-y: scroll;
     padding: 0 3px 0 25px;
-    width: 485px;
+    width: 210px;
 }
 
 .product_combination p {
-    float: left;
     width: 161px;
 }
 
@@ -1079,13 +1092,13 @@ a:hover.tooltips span {
 }
 
 .product_combination.active div:before {
-    background: url('../images/global_sprite.png') -556px -308px no-repeat;
-    bottom: 0;
+    background: url('../images/global_sprite.png') -591px -308px no-repeat;
+    left: 0;
     content: "";
     display: inline-block;
     height: 25px;
     position: absolute;
-    right: 0;
+    top:0;
     width: 25px;
 }
 
@@ -1109,8 +1122,7 @@ a:hover.tooltips span {
 }
 
 .shipping_border {
-    border-bottom: 1px dotted #b3b3b3;
-    margin-top: 20px;
+    margin-top: 10px;
 }
 
 .shipping_container input[type="button"] {
@@ -1149,7 +1161,10 @@ a:hover.tooltips span {
 }
 
 .delete_locrow{
-    margin-left: 3px;
+    color: #FF3600;
+    display: block;
+    font-size: 12px;
+    text-align: center;
 }
 .delete_locrow:hover{
     color: #FF4400;
@@ -1179,24 +1194,42 @@ a:hover.tooltips span {
 }
 
 .shipping_wrapper {
+    border:1px solid #cecece;
+    display: inline-block;
     margin-top: 30px;
 }
 
+.shipping_title {
+    background-color: #E5E5E5;
+    padding:10px;
+}
+
 .shipping_container {
-    background-color: #F7F6F6;
     float: left;
     padding: 8px;
     width: 526px;
 }
 
+.rate_calculator_con {
+    border-top: 1px solid #CECECE;
+    margin-top: 40px;
+    margin-right: 10px;
+    padding-top: 10px;
+    text-align: center;
+}
+
+.rate_calculator_con h3 {
+    padding:8px 0;
+}
 .shipping_courier_container {
     display: inline-block;
-    padding-left: 40px;
-    width: 398px;
+    padding-left: 5px;
+    width: 430px;
 }
 
 .shipping_courier_container a {
-    display: block;
+    display: inline-block;
+    margin: 0 5px;
 }
 
 .shipping_courier_container img {
@@ -1207,10 +1240,6 @@ a:hover.tooltips span {
 
 .shipping_container table tr:first-child td {
     height: 30px;
-}
-
-.delete_locrow {
-    color: #FF3600;
 }
 
 .shipping_container input[type="text"],
@@ -1228,7 +1257,12 @@ a:hover.tooltips span {
 }
 
 .shipping_table2 {
-    margin-top: 20px;
+    border: 1px solid #CECECE;
+    display: inline-block;
+    font-size: 12px;
+    height: 195px;
+    margin-top: 5px;
+    overflow-y: scroll;
 }
 
 .shipping_table2 thead tr td,
@@ -1236,8 +1270,20 @@ a:hover.tooltips span {
     font-weight: bold;
 }
 
+.shipping_table2 tr:nth-child(even) td {
+    background-color: #F8F7F7;
+} 
+
 .shipping_table2 tr td {
-    padding-bottom: 10px;
+    padding: 10px 2px;
+}
+
+.newlocrow td {
+    border-bottom: 1px solid #DBD8D7;
+}
+
+.shipping_table2 tr td.add_loc_con {
+    background-color: #fff;
 }
 
 .tablehide {
@@ -1250,6 +1296,17 @@ tr.tr_shipping_summary:nth-child(odd) td {
 
 tr.tr_shipping_summary:nth-child(even) td {
     background-color: #F8F7F7;
+}
+
+.shipping_table3 {
+    border:1px solid #cecece;
+}
+
+.shipping_table3 tr[data-groupkey],
+.edit_summaryrow,
+.delete_summaryrow,
+.accept_summaryrow  {
+    font-size: 12px;
 }
 
 .shipping_table3 tbody tr td {
@@ -1271,13 +1328,29 @@ tr.tr_shipping_summary:nth-child(even) td {
     padding: 0px;
 }
 
+.shiploc {
+    border:1px solid #B3B3B3;
+    padding:8px 2px;
+    width: 150px;
+}
+
+.shipprice {
+    border:1px solid #B3B3B3;
+    padding:8px 2px;
+    width: 120px;
+}
+
+#add_shipping_details {
+    margin-top: 10px;
+}
+
 .tr_shipping_summary img {
     vertical-align: middle;
 }
 
 .shipping_summary_container {
     margin-top: 50px;
-    background-color: #e2e1e1;
+    border-bottom: 1px solid #cecece;
 }
 
 .shipping_summary_container h2 {
@@ -1306,6 +1379,10 @@ tr.tr_shipping_summary:nth-child(even) td {
 
 .tr_shipping_summary td:last-child {
     text-align: center;
+}
+
+.div_locationwarning {
+    padding:8px 0;
 }
 
 
