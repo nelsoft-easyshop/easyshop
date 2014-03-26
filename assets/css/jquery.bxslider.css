@@ -255,7 +255,8 @@
 .mid_bottom_img_con {
     background-color: #FFFFFF;
     border: 1px solid #E5E5E5;
-    display: inline-block;	
+    display: inline-block;
+    margin-bottom: 8px;	
 }
 
 .mid_bottom_img {
