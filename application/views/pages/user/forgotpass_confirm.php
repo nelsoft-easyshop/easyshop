@@ -1,4 +1,3 @@
-
 <div class="clear"></div>
 <section>
 	<div class="wrapper"> <span class="reg_title">Change Password</span></div>
@@ -7,11 +6,7 @@
 <section>
       <div class="wrapper">
         <?php if(!$logged_in):?>
-        <!--<form method="post" id="forgotpass" autocomplete="off">-->
-		<?php 
-			$attr = array('id'=>'forgotpass', 'autocomplete'=>'off');
-			echo form_open('', $attr);
-		?>
+        <form method="post" id="forgotpass" autocomplete="off">
           <div class="fill_out_form">
 				<?php if ($toggle_view == "1"): ?>
                     <div class="field">
@@ -43,17 +38,15 @@
                     Password is successfully updated! <a href='<?=base_url()?>memberpage'>click HERE</a> to return.		        
                 <?php endif; ?>            
           </div>
-        <?php echo form_close();?>
+        </form>
         <?php else: ?>
 			<?php redirect(base_url().'home');?>
         <?php endif; ?>
       </div>
 </section>
-
 <!-- password strength checker -->
 <script type="text/javascript" src="<?=base_url()?>assets/JavaScript/js/mootools-core-1.4.5-full-compat.js"></script> 
 <script type="text/javascript" src="<?=base_url()?>assets/JavaScript/js/password_meter.js"></script>
-
 <script type='text/javascript' src='<?=base_url()?>assets/JavaScript/js/jquery.numeric.js'></script>
 <script type='text/javascript' src='<?=base_url()?>assets/JavaScript/js/jquery.validate.js'></script>
 <script type='text/javascript' src='<?=base_url()?>assets/JavaScript/register.js'></script>
