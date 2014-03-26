@@ -2505,6 +2505,41 @@ padding: 8px 0;
 	vertical-align: middle;
 }
 
+/**** Reset Password ****/
+.reset_pword_btn_con {
+	text-align: center;
+}
+
+.reset_pword_error_con {
+	padding:8px;
+}
+
+.img_error_con {
+    height: 25px;
+    width: 25px;	
+}
+
+.img_error2 {
+	background-position: -439px -255px;
+}
+
+.img_error1 {
+    background-position: -88px -255px;
+}
+
+.error2 {
+	background-color: rgba(255,0,0,.1);
+	border:1px solid #f00;
+	color: #FF3600;
+}
+
+.error1 {
+	background-color: rgba(110,179,29,.1);
+	border:1px solid #6eb31d;	
+	color: #494949;
+}
+
+/**** end of reset password ****/
 
 .address_information, .school_information, .work_information {
 	display: none;
