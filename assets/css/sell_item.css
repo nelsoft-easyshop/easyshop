@@ -1079,6 +1079,10 @@ a:hover.tooltips span {
     width: 210px;
 }
 
+.product_combination:hover {
+    border: 1px solid #f18200; 
+}
+
 .product_combination p {
     width: 161px;
 }
