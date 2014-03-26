@@ -618,7 +618,8 @@ class productUpload extends MY_Controller
 	{
 		//if($this->input->post('prod_h_id')){
 			//$id = $this->input->post('prod_h_id');
-			$id = 118;
+			//$id = 118;
+			$id = 123;
 			
 			$data = array (
 				'shiploc' => $this->product_model->getLocation(),

@@ -62,7 +62,6 @@
     <div class="shipping_courier_container">
       <div>
         <?php else:?>
-    <span><strong class="f14">Select Delivery Location and Set Price</strong></span>
     <input type="hidden" id="product_item_id" value="<?php echo $attr['product_item_id'];?>">
     <?php endif;?>
     <input type="hidden" id="has_attr" value="<?php echo $attr['has_attr'];?>">
