@@ -1451,11 +1451,11 @@ $(document).ready(function(){
 
 $(document).ready(function(){
 
-	var map;
+	var map, marker;
 
 	$("#refresh_map").click(function(){     
-		document.getElementById('map_lat').value = 0;
-		document.getElementById('map_lng').value = 0;
+		//document.getElementById('map_lat').value = 0;
+		//document.getElementById('map_lng').value = 0;
 		var streetno = $("#streetno").val();
 		var streetname = $("#streetname").val();
 		var barangay = $("#barangay").val();
@@ -1477,7 +1477,6 @@ $(document).ready(function(){
 					google.maps.event.addDomListener(window, 'load', initialize(myLatlng));
 				}
 			}
-
 		});
 	});
 
@@ -1488,7 +1487,7 @@ $(document).ready(function(){
 		};
 		map = new google.maps.Map(document.getElementById("map-canvas"),
 			mapOptions);
-		var marker = new google.maps.Marker({
+		marker = new google.maps.Marker({
 			position: myLatlng,
 			map: map,
 			title:"I'm here!",
@@ -1514,6 +1513,7 @@ $(document).ready(function(){
 			
 			if($('#map-canvas').hasClass('map_canvas')){
 				map.setCenter(myLatlng);
+				marker.setPosition(myLatlng);
 			}else{
 				google.maps.event.addDomListener(window, 'load', initialize(myLatlng));
 			}
