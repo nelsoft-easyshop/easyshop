@@ -21,6 +21,7 @@
             <p><img src="<?=base_url()?>assets/images/img_success.png" ><?php echo $member_username?></p>
           </div>
           <div>
+			<br>
             <h2><?php echo $verification_msg?></h2> 
 			<?php if($logged_in == false):?>
 				<a href="<?=base_url()?>login" class="continue">Go to Login Page</a>

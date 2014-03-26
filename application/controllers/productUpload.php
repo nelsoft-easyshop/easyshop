@@ -616,10 +616,10 @@ class productUpload extends MY_Controller
 	 */
 	function step3()
 	{
-		//if($this->input->post('prod_h_id')){
-			//$id = $this->input->post('prod_h_id');
+		if($this->input->post('prod_h_id')){
+			$id = $this->input->post('prod_h_id');
 			//$id = 118;
-			$id = 123;
+			//$id = 123;
 			
 			$data = array (
 				'shiploc' => $this->product_model->getLocation(),
@@ -687,10 +687,10 @@ class productUpload extends MY_Controller
 			$this->load->view('pages/product/product_upload_step3_view', $data);
 			$this->load->view('templates/footer');
 			
-		//}
-		//else {
-		//	redirect(base_url().'sell/step1', 'refresh');
-		//}
+		}
+		else {
+			redirect(base_url().'sell/step1', 'refresh');
+		}
 	}
 	
 	/**

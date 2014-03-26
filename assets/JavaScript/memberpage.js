@@ -484,6 +484,10 @@ $(document).ready(function(){
 						handle_fields($('#personal_profile_address'));
 						progress_update($('#personal_profile_address'));
 						$('#personal_profile_address .edit_fields').fadeOut();
+						
+						$('#map_lat').val($('#temp_lat').val());
+						$('#map_lng').val($('#temp_lng').val());
+						
 					});
 			return false;					
 		}
@@ -1451,7 +1455,7 @@ $(document).ready(function(){
 
 $(document).ready(function(){
 
-	var map, marker;
+	var map, marker, geocoder;
 
 	$("#refresh_map").click(function(){     
 		//document.getElementById('map_lat').value = 0;
@@ -1463,7 +1467,7 @@ $(document).ready(function(){
 		var country = $("#country").val();
 		var address = streetno + " " + streetname + " Street " + ", " + barangay + " " + citytown + ", " + country;
 		var csrftoken = $('#personal_profile_address').find('input[name^="es_csrf"]').val();
-		$.ajax({
+		/*$.ajax({
 			async:true,
 			url:config.base_url+"memberpage/toCoordinates",
 			type:"POST",
@@ -1477,9 +1481,26 @@ $(document).ready(function(){
 					google.maps.event.addDomListener(window, 'load', initialize(myLatlng));
 				}
 			}
-		});
+		});*/
+		codeAddress(address);
 	});
 
+	function codeAddress(address) {
+	  geocoder = new google.maps.Geocoder();
+	  geocoder.geocode( { 'address': address}, function(results, status) {
+		if (status == google.maps.GeocoderStatus.OK) {
+		  /*map.setCenter(results[0].geometry.location);
+		  var marker = new google.maps.Marker({
+			  map: map,
+			  position: results[0].geometry.location
+		  });*/
+		  google.maps.event.addDomListener(window, 'load', initialize(results[0].geometry.location));
+		} else {
+		  alert('Geocode was not successful for the following reason: ' + status);
+		}
+	  });
+	}
+	
 	function initialize(myLatlng) {
 		var mapOptions = {
 		  center:myLatlng,
@@ -1494,8 +1515,8 @@ $(document).ready(function(){
 			draggable: true
 		});
 		google.maps.event.addListener(marker, 'dragend', function(evt){
-			document.getElementById('map_lat').value = evt.latLng.lat();
-			document.getElementById('map_lng').value = evt.latLng.lng();
+			document.getElementById('temp_lat').value = evt.latLng.lat();
+			document.getElementById('temp_lng').value = evt.latLng.lng();
 			window.setTimeout(function(){
 				map.panTo(marker.getPosition());
 			}, 500);
@@ -1523,6 +1544,14 @@ $(document).ready(function(){
 		$(this).parent('div').siblings('#map').show();
 		$(this).parent('div').siblings('#map-canvas').addClass('map_canvas');
 		$(this).parent('div').siblings('#map-canvas').fadeIn();
+	});
+	
+	$('#current_loc').on('click', function(){
+		var maplat = $('#map_lat').val();
+		var maplng = $('#map_lng').val();
+		var myLatlng =  new google.maps.LatLng(maplat,maplng);
+		map.setCenter(myLatlng);
+		marker.setPosition(myLatlng);
 	});
 	
 });

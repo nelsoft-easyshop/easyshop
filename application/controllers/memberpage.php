@@ -28,6 +28,7 @@ class Memberpage extends MY_Controller
 	/**
 	 *	Function to obtain location in Google Maps
 	 */
+	 /*
     function toCoordinates() {
         $address1 = $_POST['address'];
         $bad = array(
@@ -57,9 +58,9 @@ class Memberpage extends MY_Controller
 				$result['lng'] = $simple['result']['geometry']['location']['lng'];
 			}
 		}
-        
         echo json_encode($result);
     }
+	*/
       
     function edit_personal() 
     {	

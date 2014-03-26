@@ -1056,13 +1056,18 @@
 							<input type="button" id="view_map" value="Mark on map">
 							<input type="hidden" name="map_lat" id="map_lat" value="<?php echo $lat;?>">
 							<input type="hidden" name="map_lng" id="map_lng" value="<?php echo $lng;?>">
+							<input type="hidden" name="temp_lat" id="temp_lat" value="<?php echo $lat;?>">
+							<input type="hidden" name="temp_lng" id="temp_lng" value="<?php echo $lng;?>">
 						</div>
 						
 						<div id="map"  style="display: none">
-							<span id="refresh_map">Refresh map</span>
+							<span id="refresh_map">Search address</span>
+							<span id="current_loc">Current location</span>
 							<a id="close" href="javascript:void(0)">Close</a>
 							<div id="GoogleMapContainer" title="Google Map Container"></div>
 						</div>
+						
+						
 						
 						<div id="map-canvas"></div>
 						
