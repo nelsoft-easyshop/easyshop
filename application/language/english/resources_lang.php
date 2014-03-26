@@ -10,7 +10,7 @@ $lang['schoollevel_option'] = array('Please Select', 'Undergraduate degree','Mas
 $lang['product_condition'] =  array('New', 'New other (see details)','Manufacturer refurbished','Used','For parts or not working');
 
 #successful registration
-$lang['success_registration'] = 'Thank You for Registering to Easyshop.ph!';
+$lang['success_registration'] = "Thank You for registering to Easyshop.ph! Verify your email address to experience Easyshop.ph at it's fullest.";
 
 $lang['success_email_verification'] = 'You have successfully verified your email address.';
 $lang['success_mobile_verification'] = 'You have successfully verified your mobile number.';

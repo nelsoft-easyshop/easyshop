@@ -103,6 +103,7 @@
           </td>
         </tr>
       </table>
+	  <p style="display:none; color:red;" id="spanerror">Location already used for selected attribute.</p>
       <input type="button" id="add_shipping_details" value="Add to Shipping List" class="orange_btn3">
       </div>
       <div class="rate_calculator_con">

@@ -13,7 +13,7 @@ $(function(){
     var selecttrnew = $('#shiploc_selectiontbl').find('select[name="shiploc1"]').closest('tr').clone();
     selecttrnew.find('select[name^="shiploc"]')[0].name = "shiploc"+ (+datacount+1);
     selecttrnew.find('input[name^="shipprice"]')[0].name = "shipprice"+ (+datacount+1);
-	  selecttrnew.find('td.samelocerror').remove();
+	//  selecttrnew.find('td.samelocerror').remove();
     selecttrnew.append('<td><span class="delete_locrow button">Remove</td>');
     $('#shiploc_selectiontbl').find('tr:last').before('<tr class="newlocrow">' + selecttrnew.html() + '</tr>');
     $('.shipping_table2').animate({scrollTop: $('.shipping_table2').prop("scrollHeight")}, 1000);
@@ -61,7 +61,8 @@ $(function(){
   var divLocWarning = $('#div_locationwarning');
   var spanLocWarning = $('#location_warning');
   
-  var spanerror = '<td class="error red samelocerror">Unable to select same location for same attribute</td>';
+  //var spanerror = '<td class="error red samelocerror">Unable to select same location for same attribute</td>';
+  var spanerror = $('#spanerror');
   var shiplocselectiontbl = $('#shiploc_selectiontbl');
   var hasAttr = parseInt($('#has_attr').val());
   var prdItemId = parseInt($('#product_item_id').val());
@@ -78,6 +79,7 @@ $(function(){
     var noDuplicate = true;
 	var shipObj = { 'attr' : {},'loc' : {},'price' : {}, 'disp_attr' : {} };
     var i = parseInt($('#summaryrowcount').val());
+	var alerterror = 'Please select: ';
 	
     //Get Product Attribute Options
 	if(hasAttr === 1){
@@ -225,11 +227,34 @@ $(function(){
 	    displaygroup[i] = shipObj.disp_attr;
 	  }
       
-	updateLocationError();
-		
+	  updateLocationError();
     }//close hasloc hasactive hasprice
 	else{
-		alert('Select an attribute combination, location, and price');
+		var counter = 0;
+		if(!hasActive){
+			alerterror += '-Attribute ';
+			counter++;
+		}
+		if(!hasLoc){
+			alerterror += '-Location ';
+			counter++;
+		}
+		if(!hasPrice){
+			alerterror += '-Price ';
+			counter++;
+		}
+		for(var i=0;i<counter;i++){
+			if(counter === 1 || i==0){
+				alerterror = alerterror.replace('-', '');
+			}
+			else if( i==counter-1 ){
+				alerterror = alerterror.replace('-', 'and ');
+			}
+			else{
+				alerterror = alerterror.replace('-', ', ');
+			}
+		}
+		alert(alerterror);
 		return;
 	}
   });//close on click of adding ship details to summary
@@ -317,8 +342,9 @@ $(function(){
     var currval = $(this).find('option:selected').val();
     var thistr = $(this).closest('tr');
     var hasDuplicate = false;
-
-    $(this).parent('td').siblings('td.samelocerror').remove();
+	spanerror.hide();
+	
+    //$(this).parent('td').siblings('td.samelocerror').remove();
 	
 	//Check if same location is selected among its select siblings
     $('.shiploc').not(this).each(function(){
@@ -356,11 +382,13 @@ $(function(){
     if(hasDuplicate){
       thistr.find('input[name^="shipprice"]').val('');
       $(this).val(0);
-	  if(thistr.hasClass('newlocrow')){
+	  spanerror.show();
+	  thistr.effect('pulsate', {times:3}, 800);
+	  /*if(thistr.hasClass('newlocrow')){
 		thistr.children('td:last').before(spanerror);
 	  } else {
 		thistr.append(spanerror);
-	  }
+	  }*/
     }
 
   });
@@ -370,7 +398,8 @@ $(function(){
    */ 
   $('.product_combination').on('click', function(){
 
-    $('td.samelocerror').remove();
+    //$('td.samelocerror').remove();
+	spanerror.hide();
 
     if($(this).hasClass('active')){
       $(this).removeClass('active');
@@ -387,7 +416,9 @@ $(function(){
 
             if(lock in attrObj[attrk]){
               thistr.find('input[name^="shipprice"]').val('');
-              thistr.append(spanerror);
+              //thistr.append(spanerror);
+			  spanerror.show();
+			  thistr.effect('pulsate', {times:3}, 800);
               $(this).val(0);
             }
           });
