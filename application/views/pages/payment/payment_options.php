@@ -11,6 +11,8 @@
         <!--<form id="shipping-form" method="POST">-->
 		<?php 
 			$attr = array('id'=>'shipping-form');
+            
+            
 			echo form_open('',$attr);
 		?>
           <h2><span>Ship to:</span> <!-- <a href=""><img src="images/img_edit2.jpg"> Edit</a> --></h2>
@@ -212,11 +214,12 @@ $(document).ready(function() {
 
    $('.paypal').unbind("click").click(function(e){
     var action = "payment/paypal_setexpresscheckout";
-
+    var csrftoken = $('input[name="es_csrf_token"]').val();
      $.ajax({
           async: false,
           type: "POST",
           url: '<?php echo base_url();?>' + action,
+          data: "es_csrf_token=" + csrftoken,
           dataType: "json",
           beforeSend: function(jqxhr, settings) { 
             $('.paypal_loader').show();
