@@ -42,8 +42,8 @@ $route['default_controller'] = "home/comingSoon";
 $route['404_override'] = 'home/pagenotfound';
 
 # CATEGORY
-$route['category/(:num)/(:any)'] = 'product/searchbycategory/$1/$2'; # ryan vasquez
-$route['category/load_other_product'] = 'product/load_product'; # ryan vasquez
+$route['category/(:num)/(:any)'] = 'product/categorySearch/$1/$2'; # ryan vasquez
+$route['category/loadproduct'] = 'product/loadOtherCategorySearch'; # ryan vasquez
 
 $route['category/all'] = 'product/categories_all'; # ryan vasquez
 
@@ -56,9 +56,10 @@ $route['advance_search/load_other_product'] = 'product_search/load_product'; # r
 
 #ITEMS
 $route['item/(:num)/(:any)'] = 'product/view/$1/$2'; # ryan vasquez
+$route['search/suggest'] = 'product/sch_onpress'; # ryan vasquez
+
 
 #SELL ITEM
- 
 $route['sell/step1'] = 'productUpload/step1'; # ryan vasquez
 $route['sell/step2'] = 'productUpload/step2'; # ryan vasquez
 $route['sell/processing'] = 'productUpload/step2_2'; # ryan vasquez

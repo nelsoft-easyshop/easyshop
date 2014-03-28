@@ -16,178 +16,119 @@ class product extends MY_Controller
 
 	public $per_page = 6;
 	public $start_irrelevant = 0;
-	function searchbycategory($categoryId = 0,$url_string="string") # ROUTING: category/(:num)/(:any)
+
+	function categorySearch($categoryId = 0,$url_string="string")
 	{
-        //  Increase user preference for category
-		$this->load->library("MemberCategoryPreferenceUtility");
-		$memberCategoryPreferenceUtility = new MemberCategoryPreferenceUtility();
-		$memberCategoryPreferenceUtility->upPreference($this->session->userdata('member_id'), $categoryId);
-
-
-		$string_sort_a = "";
-		$string_sort_c = "";
-		$item_brand_string_1 ="";
-		$item_brand_string_2 = "";
-		$sort = "";
-		$item_brand= "";
-		$condition_price_string = '';
-		$extra_string = '';
-		$count = 0;
-		$values = array();
 		$start = 0;
-		$per_page = $this->per_page;
-
+		$count = 0;
+		$perPage = $this->per_page;
+		$condition = "";
+		$operator = " = ";
+		$data =  $this->fill_header();	
 		$checkifexistcategory = $this->product_model->checkifexistcategory($categoryId);
-		$response['subcategories'] = $this->product_model->getDownLevelNode($categoryId);
+		$dontGetBrand = false;
+		if(!count($_GET) <= 0){
+
+			foreach ($_GET as $key => $value) {
+
+				if($key == "Brand"){
+
+					if(strpos($_GET[$key], '-|-') !== false) {
+						$var = explode('-|-',$_GET[$key]);
+						$needString = array();
+						foreach ($var as $varkey => $varvalue) {
+							array_push($needString, "'$varvalue'");
+						}
+						$condition .= "AND  brand IN (".implode(",", $needString).")"; 
+					}else{
+						$condition .= "AND  brand = '$value' ";	 
+					}	
+				}
+				elseif (ucfirst(strtolower($key)) == "Condition") { 
+
+					$dontGetBrand = true;
+					$condition .= "AND  `condition` = '$value' ";	 
+
+				}elseif (ucfirst(strtolower($key)) == "Price") { 
+
+					if(strpos($_GET[$key], 'to') !== false) {	
+
+						$price = explode('to',$_GET[$key]);
+						$price = explode('to', $_GET[$key]);
+					}else{
+
+						$price = explode('to', '0.00to99999999.99');
+					}	
+					$dontGetBrand = true;
+					$condition .= "AND  price BETWEEN ".(double)$price[0]." AND ".(double)$price[1]." " ;
+				}else{
+
+					$dontGetBrand = true;
+					$tempcondition = "";
+					if(strpos($_GET[$key], '-|-') !== false) {
+
+						$var = explode('-|-',$_GET[$key]);
+						foreach ($var as $varkey => $varvalue) {
+
+							$count++; 
+							$tempcondition .= " OR  ( `attr_name` = '".str_replace("_", " ", $key)."' AND attr_value = '$varvalue' )";
+						}	 
+					}else{
+
+						$tempcondition .= " OR  ( `attr_name` = '".str_replace("_", " ", $key)."' AND attr_value = '$value' )";
+						$count++; 
+					}	
+					// $tempcondition = substr_replace($tempcondition,"AND",0,3); 					
+					$condition .= $tempcondition;
+
+				}
+			}
+			$condition = substr_replace($condition,"AND",0,3); 
+		} 
+
 		if($categoryId != 0){
 			if($checkifexistcategory != 0){
+				$downCategory = $this->product_model->selectChild($categoryId);
+				array_push($downCategory, $categoryId);
+				$categories = implode(",", $downCategory);
+				$items = $this->product_model->getProductsByCategory($categories,$condition,$count,$operator,$start,$perPage);
+				$ids = array();
+				foreach ($items as $key) {
+					array_push($ids, $key['product_id']);
+				} 
+				$ids = implode(',',$ids);
+				$attributes = $this->product_model->getProductAttributesByCategory($ids,"",$start,$perPage);
+				$itemCondition = $this->product_model->getProductConditionByCategory($ids,"",$start,$perPage);
+				
 
-				if(isset($_GET['sop']))
-				{
-					$sort = $_GET['sop'];
-					if($sort == "hot"){
-						$string_sort_a = " ORDER BY a.is_hot desc,(a.`cat_id` = ".$categoryId.") DESC ";
-						$string_sort_c = " ORDER BY c.is_hot desc,(c.`cat_id` = ".$categoryId.") DESC ";
-
-					}elseif ($sort == "new") {
-						$string_sort_a = " ORDER BY a.is_new desc ,(a.`cat_id` = ".$categoryId.") DESC ";
-						$string_sort_c = " ORDER BY c.is_new desc,(c.`cat_id` = ".$categoryId.") DESC ";
-					}elseif ($sort == "popular"){
-						$string_sort_a = " ORDER BY clickcount desc ,(a.`cat_id` = ".$categoryId.") DESC ";
-						$string_sort_c = " ORDER BY clickcount desc,(c.`cat_id` = ".$categoryId.") DESC ";
-					}else{
-						$string_sort_a = " ORDER BY (a.`cat_id` = ".$categoryId.") DESC";
-						$string_sort_c = " ORDER BY (c.`cat_id` = ".$categoryId.") DESC";
-					}
-					unset($_GET['sop']);
-				}
-
-				if (isset($_GET['item_brand'])) {
-					$item_brand = $_GET['item_brand'];
-					$item_brand_string_1 =" AND c.name = '".$item_brand."' ";
-					$item_brand_string_2 = " AND `es_brand`.`name` = '".$item_brand."' ";
-					unset($_GET['item_brand']);
+				$brand = $this->product_model->getProductBrandsByCategory($categories,"",$start,$perPage); 
+				if($dontGetBrand){
+					$brand = $this->product_model->getProductBrandsByCategory($categories,$condition,$start,$perPage); 
 				} 
 
-				if(count($_GET) >= 1){
-
-					foreach($_GET as $parameter => $value){
-						if($parameter == "condition") continue; 
-						if($parameter == "price") continue; 
-						if($parameter == "sop") continue; 
-						if($parameter == "item_brand") continue; 
-						$extra_string .= "OR  ( `name` = '".str_replace("_", " ", $parameter)."' AND attr_value = '$value' )  ";
-						$count++;
+				$organizedAttribute = array();
+				$organizedAttribute['Brand'] = $brand;
+				$organizedAttribute['Condition'] = $itemCondition;
+				for ($i=0; $i < sizeof($attributes) ; $i++) { 
+					$head = urlencode($attributes[$i]['attr_name']);
+					if(!array_key_exists($head,$organizedAttribute)){
+						$organizedAttribute[$head] = array();	
 					}
-
-					$down_cat = $this->product_model->selectChild($categoryId);
-					array_push($down_cat, $categoryId);
-					$catlist_down = implode(",", $down_cat);
-
-					if(count($_GET) == 1 && isset($_GET['condition'])){
-						// echo '1--------------------------'; 
-						$condition_price_string = $item_brand_string_1 ." AND a.condition = '".$_GET['condition']."'" .$string_sort_a;
-						$response['items'] = $items = $this->product_model->selectAllProductWithCategory($categoryId,$condition_price_string,$start,$per_page,$catlist_down);
-						$itemparam = $items = $this->product_model->selectAllProductWithCategory($categoryId,$condition_price_string,0,9999999,$catlist_down);
-
-					}elseif(count($_GET) == 1 && isset($_GET['price'])) {
-
-						if(strpos( $_GET['price'], 'to') !== false)
-						{
-							$price = explode('to', $_GET['price']);
-						} else {
-							$price = explode('to', '0.00to99999999.99');
-						}
-						// echo '2----------------------------';
-						$condition_price_string = $item_brand_string_1 . " AND a.price BETWEEN ".(double)$price[0]." AND ".(double)$price[1] .$string_sort_a;
-						$response['items'] = $items = $this->product_model->selectAllProductWithCategory($categoryId,$condition_price_string,$start,$per_page,$catlist_down);
-						$itemparam = $items = $this->product_model->selectAllProductWithCategory($categoryId,$condition_price_string,0,9999999,$catlist_down);
-
-					}elseif (count($_GET) == 2 && isset($_GET['condition']) && isset($_GET['price'])) {
-						// echo '3---------------------';
-						if(strpos( $_GET['price'], 'to') !== false)
-						{
-							$price = explode('to', $_GET['price']);
-						} else {
-							$price = explode('to', '0to99999999');
-						}
-						$condition_price_string = $item_brand_string_1. " AND a.condition = '".$_GET['condition']."' AND a.price BETWEEN ".(double)$price[0]." AND ".(double)$price[1] .$string_sort_a;		
-						$response['items'] = $items = $this->product_model->selectAllProductWithCategory($categoryId,$condition_price_string,$start,$per_page,$catlist_down);
-						$itemparam = $items = $this->product_model->selectAllProductWithCategory($categoryId,$condition_price_string,0,9999999,$catlist_down);
-
-					}elseif(count($_GET) >= 2 && isset($_GET['condition']) && !isset($_GET['price']) ){
-						// echo '4-----------------------------';
-						$withParam = true;
-						$operator = " = ";
-						$condition_price_string = " AND c.condition = '".$_GET['condition']."'" .$string_sort_c;		
-						$extra_string = substr($extra_string, 2);	
-						$response['items'] = $this->product_model->getProductByCategoryIdWithDistinct($categoryId,$condition_price_string,$extra_string,$count,$start,$per_page,$catlist_down,$item_brand_string_2,$operator);
-						$itemparam = $this->product_model->getProductByCategoryIdWithDistinct($categoryId,$condition_price_string,$extra_string,$count,0,9999999,$catlist_down,$item_brand_string_2,$operator);
-
-					}elseif(count($_GET) >= 2 && !isset($_GET['condition']) && isset($_GET['price']) ){
-						// echo '5-------------------------';
-						$withParam = true;
-						$operator = " = ";
-						if(strpos( $_GET['price'], 'to') !== false)
-						{
-							$price = explode('to', $_GET['price']);
-						} else {
-							$price = explode('to', '0to99999999');
-						}
-						$condition_price_string = " AND c.price BETWEEN ".(double)$price[0]." AND ".(double)$price[1] .$string_sort_c;		
-						$extra_string = substr($extra_string, 2);
-						$response['items'] = $this->product_model->getProductByCategoryIdWithDistinct($categoryId,$condition_price_string,$extra_string,$count,$start,$per_page,$catlist_down,$item_brand_string_2,$operator);
-						$itemparam = $this->product_model->getProductByCategoryIdWithDistinct($categoryId,$condition_price_string,$extra_string,$count,0,9999999,$catlist_down,$item_brand_string_2,$operator);
-
-					}else{
-						// echo '6-------------------------';
-						$withParam = true;
-						$operator = " = ";
-						$condition_price_string = "" .$string_sort_c;		
-						$extra_string = substr($extra_string, 2);				  
-						$response['items'] = $this->product_model->getProductByCategoryIdWithDistinct($categoryId,$condition_price_string,$extra_string,$count,$start,$per_page,$catlist_down,$item_brand_string_2,$operator);
-						$itemparam = $this->product_model->getProductByCategoryIdWithDistinct($categoryId,$condition_price_string,$extra_string,$count,0,9999999,$catlist_down,$item_brand_string_2,$operator);
-					}	
-
-				}else{
-					// echo 'Else-------------------------';
-					$usable_string = " ";
-					$down_cat = $this->product_model->selectChild($categoryId);
-					array_push($down_cat, $categoryId);
-					$catlist_down = implode(",", $down_cat); 
-					$response['items'] = $this->product_model->getProductInCategoryAndUnder($categoryId,$usable_string,$catlist_down,$start,$per_page,$item_brand_string_1.$string_sort_a);
-					$itemparam = $this->product_model->getProductInCategoryAndUnder($categoryId,$usable_string,$catlist_down,0,9999999,$item_brand_string_1.$string_sort_a);
-
+					array_push($organizedAttribute[$head],  $attributes[$i]['attr_value']);
 				}
-
-				$array_condition_available = array();
-				$array_brand_available = array();
-				foreach ($itemparam as $row)
-				{
-					$values[] = $row['product_id'];
-					$array_condition_available[] = $row['product_condition'];
-					$array_brand_available[] = $row['product_brand'];
-				} 
-
-				$attribute = $this->product_model->getAttributesWithParam($categoryId,$values);
-
-				for ($i=0; $i < sizeof($attribute) ; $i++) { 
-					$look_up_list_item = $this->product_model->getAttributesWithParamAndName($categoryId,$values,$attribute[$i]['name']);
-					array_push($attribute[$i], $look_up_list_item);
-				}
-
-				$_GET['item_brand'] = $item_brand;
-				$_GET['sop'] = $sort;
-				$arrayofparams = $attribute;
-				$array_condition= array('name'=>'condition',array_unique($array_condition_available));
-				array_unshift($arrayofparams,$array_condition);
-				$array_main_brand= array('name'=>'item brand',array_unique($array_brand_available));
-				array_unshift($arrayofparams,$array_main_brand);
-				$response['category_id '] = $categoryId;
-				$response['arrayofparams'] = $arrayofparams;  
-				$response['id_cat'] = $categoryId;
+				$subcategories = $this->product_model->getDownLevelNode($categoryId);
 				$breadcrumbs = $this->product_model->getParentId($categoryId);
 
+
+				$data = array( 
+					'title' => substr($url_string,0,-5).' | Easyshop.ph',
+					); 
+				$data = array_merge($data, $this->fill_header());
+
+
+				$response['main_categories'] = $this->product_model->getFirstLevelNode(true);
+				$response['breadcrumbs'] = $breadcrumbs;
+				$response['subcategories'] = $subcategories;
 				for($x=0; $x <= sizeof($response['subcategories']) -1 ; $x++){
 					$id = $response['subcategories'][$x][3]; //id_cat
 					$down_cat = $this->product_model->selectChild($id);		
@@ -197,225 +138,160 @@ class product extends MY_Controller
 					$db_cat_item = $this->product_model->getPopularitem($down_cat,1);
 					$response['subcategories'][$x]['popular'] = $db_cat_item;
 				}
+				$response['items'] = $items;
+				$response['attributes'] = $organizedAttribute;
+				$response['id_cat'] = $categoryId;
 
-				$response['breadcrumbs'] = $breadcrumbs;
-				$response['main_categories'] = $this->product_model->getFirstLevelNode(true);
-				$data = array( 
-					'title' => substr($url_string,0,-5).' | Easyshop.ph',
-					); 
-				$data = array_merge($data, $this->fill_header());
-				
 				$this->load->view('templates/header', $data); 
-				$this->load->view('pages/product/product_search_by_category',$response);
+				$this->load->view('pages/product/product_search_by_category_final',$response);
 				$this->load->view('templates/footer_full'); 
-
-			}else{
+			}
+			else{
 				redirect('/category/all', 'refresh');
 			}
 		}else{
 			redirect('/category/all', 'refresh');
 		}
+
 	}
 
-	function load_product() # ROUTING: category/load_other_product
-	{
+	function loadOtherCategorySearch(){
 
-		header('Content-type: application/json');
-		$category_id = $_POST['id_cat'];				  
-		$per_page = $this->per_page;
-		$start = $_POST['page_number'] * $per_page;
-
-		$type = $_POST['type'];
-		$response['typeofview'] = $type;
-		$extra_string = "";
+		$categoryId = $_POST['id_cat'];				  
+		$perPage = $this->per_page;
+		$start = $this->input->post('page_number') * $perPage;
 		$count = 0;
-		$condition_price_string = "";
-		$string_sort_a = "";
-		$string_sort_c ="";
-		$item_brand = "";
-		$item_brand_string_1 ="";
-		$item_brand_string_2 = "";
-		$withParam = false;
+		$parameter = $this->input->post('parameters');
+		$get = json_decode($parameter,true);
+		$operator = ' = ';
+		$type = $this->input->post('type');
+		$condition = "";
+		$notIrrelivant = false;
+		if(!count($get) <= 0){
 
-		if($category_id != 0)
-		{
-			if(isset($_POST['parameters']['sop']))
+			foreach ($get as $key => $value) {
+
+				if($key == "Brand"){
+					if(strpos($get[$key], '-|-') !== false) {
+						$var = explode('-|-',$get[$key]);
+						$needString = array();
+						foreach ($var as $varkey => $varvalue) {
+							array_push($needString, "'$varvalue'");
+						}
+						$condition .= "AND  brand IN (".implode(",", $needString).")"; 
+					}else{
+						$condition .= "AND  brand = '$value' ";	 
+					}	
+				}
+				elseif (ucfirst(strtolower($key)) == "Condition") { 
+
+					$dontGetBrand = true;
+					$condition .= "AND  `condition` = '$value' ";	 
+
+				}elseif (ucfirst(strtolower($key)) == "Price") { 
+
+					if(strpos($get[$key], 'to') !== false) {	
+
+						$price = explode('to',$get[$key]);
+						$price = explode('to', $get[$key]);
+					}else{
+
+						$price = explode('to', '0.00to99999999.99');
+					}	
+					$dontGetBrand = true;
+					$condition .= "AND  price BETWEEN ".(double)$price[0]." AND ".(double)$price[1]." " ;
+				}else{
+
+					$dontGetBrand = true;
+					$tempcondition = "";
+					if(strpos($get[$key], '-|-') !== false) {
+
+						$var = explode('-|-',$get[$key]);
+						foreach ($var as $varkey => $varvalue) {
+
+							$count++; 
+							$tempcondition .= " OR  ( `attr_name` = '".str_replace("_", " ", $key)."' AND attr_value = '$varvalue' )";
+						}	 
+					}else{
+
+						$tempcondition .= " OR  ( `attr_name` = '".str_replace("_", " ", $key)."' AND attr_value = '$value' )";
+						$count++; 
+					}	
+					// $tempcondition = substr_replace($tempcondition,"AND",0,3); 					
+					$condition .= $tempcondition;
+
+				}
+			}
+			$condition = substr_replace($condition,"AND",0,3); 
+		}
+
+		$downCategory = $this->product_model->selectChild($categoryId);
+		array_push($downCategory, $categoryId);
+		$categories = implode(",", $downCategory);
+
+		session_start();
+
+
+		$items = $this->product_model->getProductsByCategory($categories,$condition,$count,$operator,$start,$perPage);
+		$response['items'] = $items; 
+		$response['id_cat'] = $categoryId;
+		$response['typeofview'] = $type;
+
+		if(count($items) <= 0)
+		{	  
+			$notIrrelivant = TRUE;
+		}else{
+			$data = json_encode($this->load->view('pages/product/product_search_by_category2_final',$response,TRUE));
+			echo $data;
+			exit();
+		}
+
+		if($notIrrelivant){
+			$newoperator = ' < ';
+			$start = $_SESSION['start'] * $perPage;
+			$items = $this->product_model->getProductsByCategory($categories,$condition,$count,$newoperator,$start,$perPage);
+			$response['items'] = $items; 
+			$response['id_cat'] = $categoryId;
+			$response['typeofview'] = $type;
+			$response['irrelivant'] = true;
+			$response['count'] = $_SESSION['start'];
+			if(count($items) <= 0)
 			{
-				$sort = $_POST['parameters']['sop'];
-				if($sort == "hot"){
-					$string_sort_a = " ORDER BY a.is_hot desc,(a.`cat_id` = ".$category_id.") DESC ";
-					$string_sort_c = " ORDER BY c.is_hot desc,(c.`cat_id` = ".$category_id.") DESC ";
-
-				}elseif ($sort == "new") {
-					$string_sort_a = " ORDER BY a.is_new desc ,(a.`cat_id` = ".$category_id.") DESC ";
-					$string_sort_c = " ORDER BY c.is_new desc,(c.`cat_id` = ".$category_id.") DESC ";
-				}elseif ($sort == "popular"){
-					$string_sort_a = " ORDER BY clickcount desc ,(a.`cat_id` = ".$category_id.") DESC ";
-					$string_sort_c = " ORDER BY clickcount desc,(c.`cat_id` = ".$category_id.") DESC ";
-				}else{
-					$string_sort_a = " ORDER BY (a.`cat_id` = ".$category_id.") DESC";
-					$string_sort_c = " ORDER BY (c.`cat_id` = ".$category_id.") DESC";
-				}
-				unset($_POST['parameters']['sop']);
-			}
-			if (isset($_POST['parameters']['item_brand'])) {
-				$item_brand = $_POST['parameters']['item_brand'];
-				if($item_brand != ""){
-					$item_brand_string_1 =" AND c.name = '".$item_brand."' ";
-					$item_brand_string_2 = " AND `es_brand`.`name` = '".$item_brand."' ";
-				}
-				unset($_POST['parameters']['item_brand']);
-			}
-
-			if(isset($_POST['parameters']) && !count($_POST['parameters']) <= 0)
-			{	
-				if(!count($_POST['parameters']) <= 0)
-				{
-					foreach($_POST['parameters'] as $parameter => $value){
-						if($parameter == "condition") continue; 
-						if($parameter == "price") continue; 
-						if($parameter == "sop") continue; 
-						if($parameter == "item_brand") continue; 
-						$extra_string .= "OR  ( `name` = '".str_replace("_", " ", $parameter)."' AND attr_value = '$value' )  ";
-						$count++;
-					}
-
-					$down_cat = $this->product_model->selectChild($category_id);
-					array_push($down_cat, $category_id);
-					$catlist_down = implode(",", $down_cat);
-
-					if(count($_POST['parameters']) == 1 && isset($_POST['parameters']['condition'])){
-
-						$condition_price_string =$item_brand_string_1. " AND a.condition = '".$_POST['parameters']['condition']."'".$string_sort_a;
-						$response['items'] = $items = $this->product_model->selectAllProductWithCategory($category_id,$condition_price_string,$start,$per_page,$catlist_down);
-
-					}elseif(count($_POST['parameters']) == 1 && isset($_POST['parameters']['price'])) {
-						
-						if(strpos( $_POST['parameters']['price'], 'to') !== false)
-						{
-							$price = explode('to', $_POST['parameters']['price']);
-						} else {
-							$price = explode('to', '0to99999999');
-						}
-
-						$condition_price_string =$item_brand_string_1. " AND a.price BETWEEN ".(double)$price[0]." AND ".(double)$price[1].$string_sort_a;
-						$response['items'] = $items = $this->product_model->selectAllProductWithCategory($category_id,$condition_price_string,$start,$per_page,$catlist_down);
-
-					}elseif (count($_POST['parameters']) == 2 && isset($_POST['parameters']['condition']) && isset($_POST['parameters']['price'])) {
-
-						
-						if(strpos( $_POST['parameters']['price'], 'to') !== false)
-						{
-							$price = explode('to', $_POST['parameters']['price']);
-						} else {
-							$price = explode('to', '0to99999999');
-						}
-
-						$condition_price_string =$item_brand_string_1. "AND a.condition = '".$_POST['parameters']['condition']."' AND a.price BETWEEN ".(double)$price[0]." AND ".(double)$price[1].$string_sort_a;		
-						$response['items'] = $items = $this->product_model->selectAllProductWithCategory($category_id,$condition_price_string,$start,$per_page,$catlist_down);
-
-					}elseif(count($_POST['parameters']) >= 2 && isset($_POST['parameters']['condition']) && !isset($_POST['parameters']['price']) ){
-
-						$withParam = true;
-						$operator = " = ";
-						$condition_price_string = "AND c.condition = '".$_POST['parameters']['condition']."'".$string_sort_c;		
-						$extra_string = substr($extra_string, 2);	
-						$response['items'] = $this->product_model->getProductByCategoryIdWithDistinct($category_id,$condition_price_string,$extra_string,$count,$start,$per_page,$catlist_down,$item_brand_string_2);
-
-					}elseif(count($_POST['parameters']) >= 2 && !isset($_POST['parameters']['condition']) && isset($_POST['parameters']['price']) ){
-
-						$withParam = true;
-						$operator = " = ";
-						if(strpos( $_POST['parameters']['price'], 'to') !== false)
-						{
-							$price = explode('to', $_POST['parameters']['price']);
-						} else {
-							$price = explode('to', '0to99999999');
-						}
-
-						$condition_price_string = " AND c.price BETWEEN ".(double)$price[0]." AND ".(double)$price[1].$string_sort_c;		
-						$extra_string = substr($extra_string, 2);
-						$response['items'] = $this->product_model->getProductByCategoryIdWithDistinct($category_id,$condition_price_string,$extra_string,$count,$start,$per_page,$catlist_down,$item_brand_string_2,$operator);
-
-
-					}else{
-
-						$withParam = true;
-						$operator = " = ";
-						$condition_price_string = "".$string_sort_c;		
-						$extra_string = substr($extra_string, 2);				  
-						$response['items'] = $this->product_model->getProductByCategoryIdWithDistinct($category_id,$condition_price_string,$extra_string,$count,$start,$per_page,$catlist_down,$item_brand_string_2,$operator);
-					}
-					if($withParam == true){
-						if(count($response['items']) <= 0)
-						{	
-							session_start();
-							$start = $_SESSION['start'] * $per_page;
-							$operator = " < ";
-							$response['irrelivant'] = true;
-							$response['count'] = $_SESSION['start'];
-							$response['items'] = $this->product_model->getProductByCategoryIdWithDistinct($category_id,$condition_price_string,$extra_string,$count,$start,$per_page,$catlist_down,$item_brand_string_2,$operator);
-							if(count($response['items']) <= 0)
-							{
-								$data = json_encode('0');
-							}else{
-								if($_SESSION['start'] == 0){
-									$data = json_encode($this->load->view('pages/product/product_search_by_category2',$response,TRUE));
-									echo $data;
-									$_SESSION['start'] += 1;
-									exit();
-								}
-								$_SESSION['start'] += 1;
-							}
-						}
-					}
-					if(count($response['items']) <= 0)
-					{
-						$data = json_encode('0');
-					}else{
-						$data = json_encode($this->load->view('pages/product/product_search_by_category2',$response,TRUE));
-					}  
-				}	
-
+				$data = json_encode('0');
+				echo $data;
+				exit();
 			}else{
-				$attribute = $this->product_model->getAttributeByCategoryIdWithDistinct($category_id);
-
-				for ($i=0; $i < sizeof($attribute) ; $i++) { 
-					$look_up_list_item = $this->product_model->getAttributeByCategoryIdWithName($category_id,$attribute[$i]['name']);
-					array_push($attribute[$i], $look_up_list_item);
-				}
-
-				$arrayofparams = $attribute;
-				$response['typeofview'] = $type;
-				$usable_string = "";
-				$down_cat = $this->product_model->selectChild($category_id);
-				array_push($down_cat, $category_id);
-				$catlist_down = implode(",", $down_cat);
-				$response['items'] = $this->product_model->getProductInCategoryAndUnder($category_id,$usable_string,$catlist_down,$start,$per_page,$item_brand_string_1.$string_sort_a);
-				if(count($response['items']) <= 0)
-				{
-					$data = json_encode('0');
-				}else{
-					$data = json_encode($this->load->view('pages/product/product_search_by_category2',$response,TRUE));
-				}
+				 
+				$data = json_encode($this->load->view('pages/product/product_search_by_category2_final',$response,TRUE));
+				echo $data;
+				$_SESSION['start'] += 1;
+			   
+				exit();
 			}
 			echo $data;
 			exit();
 		}
-	}
 
-function highlight($text, $words)
-{
-	$words = preg_replace('/\s+/', ' ',$words);
-    $split_words = explode(" ", $words);
-    foreach($split_words as $word)
-    {
-        $color = "#e5e5e5";
-        $text = preg_replace("|($word)|Ui","<b>$1</b>" , $text );
-    }
+
+		echo $data;
+		exit();
+	}
  
-    return $text;
-}
+
+	 
+
+	function highlight($text, $words)
+	{
+		$words = preg_replace('/\s+/', ' ',$words);
+		$split_words = explode(" ", $words);
+		foreach($split_words as $word)
+		{
+			$color = "#e5e5e5";
+			$text = preg_replace("|($word)|Ui","<b>$1</b>" , $text );
+		}
+
+		return $text;
+	}
 
 
 	function sch_onpress()
@@ -621,7 +497,7 @@ function highlight($text, $words)
 	function view($id=0,$url_string="string") 
 	{ 
 		$product_row = $this->product_model->getProduct($id);
-  
+
 		$data['title'] = 'Easyshop.ph - Product Page';
 		$uid = $this->session->userdata('member_id');
 		$data = array_merge($data,$this->fill_header());

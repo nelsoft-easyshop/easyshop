@@ -154,7 +154,7 @@ $('#main_search').on('input propertychange', function() {
             if($('#main_search').val().length > 2){
               currentRequest = $.ajax({
                 type: "GET",
-                url: '<?php echo base_url();?>product/sch_onpress', 
+                url: '<?php echo base_url();?>search/suggest', 
                 onLoading:jQuery(".main_srch_img_con").html('<img src="<?= base_url() ?>assets/images/orange_loader_small.gif" />').show(),
                 cache: false,
                 data: "q="+fulltext, 

@@ -257,19 +257,104 @@ class product_model extends CI_Model
 		}
 		return $rows;
 	}
-        
-	function getProductsByCategory($cat_id)
+       
+	// // start of new 
+	function getProductsByCategory($categories,$condition_string,$count,$operator = "<",$start,$per_page)
 	{
-		$query = $this->sqlmap->getFilenameID('product', 'getProductsByCategory');
+		$start = (int)$start;
+		$per_page = (int)$per_page;
+		$havingString = "";
+
+		if(!$count <= 0){
+			$havingString = " HAVING cnt_all ".$operator. $count;
+		}
+
+		$query = $this->sqlmap->getFilenameID('product', 'getProducts');
+		$query = $query."
+		 WHERE cat_id IN (".$categories.") 
+		 AND is_delete = 0 AND is_draft = 0
+		 ".$condition_string."
+		 GROUP BY product_id 
+		 ".$havingString."
+    	 ORDER BY cnt_all DESC, `name` ASC
+		 LIMIT :start, :per_page
+		 "; 
+	 	// echo $query;exit();
+		$sth = $this->db->conn_id->prepare($query); 
+		$sth->bindParam(':start',$start,PDO::PARAM_INT);
+		$sth->bindParam(':per_page',$per_page,PDO::PARAM_INT);
+		$sth->execute(); 
 		
-		$sth = $this->db->conn_id->prepare($query);
-		$sth->bindParam(':cat_id',$cat_id);
+		$rows = $sth->fetchAll(PDO::FETCH_ASSOC);	
+	 
+		return $rows ;
+	}
+
+	function getProductAttributesByCategory($ids,$condition_string,$start,$per_page)
+	{
+		
+		$start = (int)$start;
+		$per_page = (int)$per_page;
+		$query = $this->sqlmap->getFilenameID('product', 'getProductAndAttributes');
+
+		$query = $query."
+		WHERE product_id IN (".$ids.") 
+		AND is_delete = 0 AND is_draft = 0
+		".$condition_string."
+		GROUP BY attr_value 
+		ORDER BY attr_name
+		";   
+		$sth = $this->db->conn_id->prepare($query);  
 		$sth->execute();
-		$rows = $sth->fetchAll(PDO::FETCH_ASSOC);
 		
-		$this->explodeImagePath($rows);		
+		$rows = $sth->fetchAll(PDO::FETCH_ASSOC);
 		return $rows;
 	}
+ 
+
+	function getProductConditionByCategory($ids,$condition_string,$start,$per_page)
+	{
+		
+		$start = (int)$start;
+		$per_page = (int)$per_page;
+		$query = $this->sqlmap->getFilenameID('product', 'getProductAndCondition');
+
+		$query = $query."
+		WHERE product_id IN (".$ids.") 
+		AND is_delete = 0 AND is_draft = 0
+		".$condition_string."
+		GROUP BY `condition` 
+		ORDER BY attr_name
+		";    
+		$sth = $this->db->conn_id->prepare($query);  
+		$sth->execute();
+		
+		$rows = $sth->fetchAll(PDO::FETCH_COLUMN, 0);
+		return $rows;
+	}
+	
+	function getProductBrandsByCategory($categories,$condition_string,$start,$per_page)
+	{
+		
+		$start = (int)$start;
+		$per_page = (int)$per_page;
+		$query = $this->sqlmap->getFilenameID('product', 'getProductAndBrands');
+
+		$query = $query."
+		WHERE cat_id IN (".$categories.") 
+		AND is_delete = 0 AND is_draft = 0
+		".$condition_string."
+		GROUP BY brand 
+		ORDER BY brand
+		";  
+		$sth = $this->db->conn_id->prepare($query);  
+		$sth->execute();
+		$rows = $sth->fetchAll(PDO::FETCH_COLUMN, 0);
+		 	
+		return $rows;
+	}
+	
+	// // end of new
 	
 	function getBrandsByCategory($cat_id)
 	{
@@ -515,100 +600,8 @@ class product_model extends CI_Model
 		return $row;
 	}
 
-	function getProductByCategoryIdWithDistinct($id,$condition_price_string,$string,$cnt,$start,$per_page,$catlist_down,$item_brand_string_2,$operator)
-	{
-		$start = (int)$start;
-		$per_page = (int)$per_page;
-				 
-		$query = " 
-			SELECT mother_tbl.*,`es_brand`.`name` AS product_brand FROM `es_brand`
-			LEFT JOIN (SELECT 
-				main_tbl.*
-				, es_product_image.product_image_path 
-				FROM `es_product_image` 
-				LEFT JOIN (SELECT 
-					`product_id`
-          			, cnt
-					, `brand_id` 
-					, `name` AS product_name
-					, `price` AS product_price
-					, `brief` AS product_brief
-					, `condition` AS product_condition 
-					FROM `es_product` 
-					INNER JOIN (SELECT 
-						product_id 
-              			, COUNT(*) AS cnt 
-						FROM (SELECT 
-							a.product_id
-							, a.attr_value
-							, b.name 
-							FROM `es_product_attr` a, `es_attr` b , `es_product` c 
-							WHERE a.`attr_id` = b.`id_attr` 
-							AND a.`product_id` = c.`id_product` 
-							AND c.is_delete = 0 
-							 AND c.`is_draft` = 0
-							AND c.`cat_id` IN (".$catlist_down.") 
-							".$condition_price_string." 
-						) AS sub_main_tbl 
-						WHERE ".$string." GROUP BY product_id 
-						/* HAVING COUNT(*) = :cnt */
-						ORDER BY cnt DESC
-					) AS product_id_table ON es_product.`id_product` = product_id_table.product_id
-				) AS main_tbl ON main_tbl.product_id = es_product_image.`product_id` 
-				WHERE `es_product_image`.`is_primary` = 1 
-				AND main_tbl.product_id = es_product_image.`product_id` 
-			) AS mother_tbl ON mother_tbl.brand_id = `es_brand`.`id_brand` 
-			WHERE mother_tbl.brand_id = `es_brand`.`id_brand` AND cnt ".$operator." :cnt
-			".$item_brand_string_2."
-			ORDER BY cnt DESC , product_name 
-			LIMIT :start, :per_page
-		";	   
-		
-		$sth = $this->db->conn_id->prepare($query);
-		$sth->bindParam(':cnt',$cnt,PDO::PARAM_INT);  
-		$sth->bindParam(':start',$start,PDO::PARAM_INT);
-		$sth->bindParam(':per_page',$per_page,PDO::PARAM_INT);
-		$sth->execute();
-		$row = $sth->fetchAll(PDO::FETCH_ASSOC);
-		return $row;
-	}
 
-	function selectAllProductWithCategory($id_cat,$condition_price_string,$start,$per_page,$catlist_down)
-	{
-	
-		$start = (int)$start;
-	 	$per_page = (int)$per_page;		  
-	 	$query ="
-	 	     SELECT 
-          a.`id_product` AS `product_id`
-          , a.`name` AS product_name
-          , a.`price` AS product_price
-          , a.`brief` AS product_brief
-          , a.`condition` AS product_condition
-          , b.`product_image_path`
-          , c.`name` AS product_brand 
-          , a.`brand_id`
-        FROM
-          `es_product` a
-          , `es_product_image` b 
-          ,`es_brand` c
-        WHERE a.`id_product` = b.`product_id` 
-          AND b.`is_primary` = 1 
-          AND a.`brand_id` = c.`id_brand`
-          AND `cat_id` IN (".$catlist_down.")
-		  AND a.`is_delete` = 0 
-		   AND a.`is_draft` = 0
-		  ".$condition_price_string." 
-        LIMIT :start, :per_page
-	 	"; 
 
-		$sth = $this->db->conn_id->prepare($query);  
-		$sth->bindParam(':start',$start,PDO::PARAM_INT);
-		$sth->bindParam(':per_page',$per_page,PDO::PARAM_INT);
-		$sth->execute();
-		$row = $sth->fetchAll(PDO::FETCH_ASSOC);
-		return $row;
-	}
 	
 	function selectAllProductWithCategoryFiltered($id_cat,$condition_price_string,$start,$per_page,$catlist_down,$product_id)
 	{
@@ -688,44 +681,7 @@ class product_model extends CI_Model
 		return $row;
 	}
 
-	function getProductInCategoryAndUnderFiltered($category,$usable_string,$items,$start,$per_page,$product_id,$string_sort)
-	{
-		$start = (int)$start;
-	 	$per_page = (int)$per_page;
-		 
-		$query = "
-		SELECT 
-		  a.`id_product` AS product_id
-		  , a.`name` AS product_name
-		  , a.`price` AS product_price
-		  , a.`brief` AS product_brief
-		  , a.`condition` AS product_condition
-		  , b.product_image_path 
-		  , c.`name` AS product_brand
-		  , a.`brand_id`
-		FROM
-		  `es_product` a
-		  , `es_product_image` b
-		  ,`es_brand` c 
-		WHERE a.`id_product` = b.`product_id` 
-		  AND a.is_delete = 0 
-		  AND a.`is_draft` = 0
-		  AND b.`is_primary` = 1 
-		  AND a.`brand_id` = c.`id_brand`
-		  ".$usable_string." 
-		  AND a.`cat_id` IN (".$items.") 
-		  AND a.`id_product` NOT IN (". implode(',', $product_id) . ")
-		   ". $string_sort ."   
-		  LIMIT :start, :per_page
-		";   
-		$sth = $this->db->conn_id->prepare($query);
-		$sth->bindParam(':start',$start,PDO::PARAM_INT); 
-		$sth->bindParam(':per_page',$per_page,PDO::PARAM_INT);
-		$sth->execute();
-		$row = $sth->fetchAll(PDO::FETCH_ASSOC);
-
-		return $row;
-	}	
+	 
 
 	///// Advance Search: Updated SQL query - Rain 02/25/14 //////
 	function getAttributesWithParam($id,$datas)
