@@ -30,10 +30,10 @@
 						  <p><a href="<?=base_url()?>login/identify">Forgot your password?</a></p>
 						</div>
 						<div>
-						  <input type="checkbox" name="keepmeloggedin">
-						  <p>
-							Keep me signed in
-						  </p>
+						  <input type="checkbox" name="keepmeloggedin" id="keepmeloggedin">
+						  <p><label for="keepmeloggedin">
+							Remember me
+						  </label></p>
 						</div>
 						<div>
 						  <input id="login" type="submit" name="login_form" value="Login"/>
