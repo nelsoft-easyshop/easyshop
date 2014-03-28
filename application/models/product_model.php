@@ -1210,7 +1210,7 @@ class product_model extends CI_Model
 		$sth->bindParam(':product_id',$product_id, PDO::PARAM_INT);
 		$sth->execute();
         $rows = $sth->fetchAll(PDO::FETCH_ASSOC);
-        
+
         $data = array();
         foreach($rows as $row){
             if(!array_key_exists($row['id_product_item'],  $data)){
@@ -1219,7 +1219,7 @@ class product_model extends CI_Model
                 $data[$row['id_product_item']]['product_attribute_ids'] = array();
                 $data[$row['id_product_item']]['attr_lookuplist_item_id'] = array();
             }
-            array_push($data[$row['id_product_item']]['product_attribute_ids'], $row['product_attr_id']);
+            array_push($data[$row['id_product_item']]['product_attribute_ids'], array('id'=>$row['product_attr_id'], 'is_other'=> $row['is_other']));
             if($verbose){
                 array_push($data[$row['id_product_item']]['attr_lookuplist_item_id'], $row['attr_lookuplist_item_id']);
             }
@@ -1385,6 +1385,7 @@ class product_model extends CI_Model
     	$sth->bindParam(':prod_id', $prod_id, PDO::PARAM_INT);
     	$result = $sth->execute();
 		$row = $sth->fetchAll(PDO::FETCH_ASSOC);
+        
 		$data = array();
 		$data['id_product_item'] = array();
 		//$location = $gdata = array();
@@ -1543,6 +1544,25 @@ class product_model extends CI_Model
     	$result = $sth->fetchAll(PDO::FETCH_ASSOC);
 
     	return $result[0];
+    }
+    
+    public function getShipmentInformation($product_id){
+        $query = $this->sqlmap->getFilenameID('product','getShipmentInformation');
+    	$sth = $this->db->conn_id->prepare($query);
+    	$sth->bindParam(':prod_id', $product_id, PDO::PARAM_INT);
+    	$result = $sth->execute();
+		$rows = $sth->fetchAll(PDO::FETCH_ASSOC);
+        $data = array();
+        foreach($rows as $row){
+            if(!array_key_exists($row['id_shipping'], $data)){
+                $data[$row['id_shipping']] = array();
+                $data[$row['id_shipping']]['location'] = $row['location'];
+                $data[$row['id_shipping']]['price'] = $row['price'];
+                $data[$row['id_shipping']]['product_attribute_ids'] = array();
+            }  
+            array_push($data[$row['id_shipping']]['product_attribute_ids'], array('id' => $row['product_attr_id'], 'is_other' => $row['is_other']));                        
+        }
+        return $data;  
     }
         
     

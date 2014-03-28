@@ -1494,22 +1494,30 @@ $(".proceed_form").unbind("click").click(function(){
     var prev_combination_count = 1;
     $.each(qty_obj,function(){
       var $this = this;
+      console.log($this);
       $('.qtyTextClass').val($this.quantity);
       $.each(html_item_selection,function(){
-        $(this).attr("selected",false);
+            $(this).attr("selected",false);
             //Category specific attributes
-            if($.inArray($(this).val(), $this.attr_lookuplist_item_id) !== -1){
-              $(this).attr("selected",true);
+            if($(this).data('value') === 0){
+                if($.inArray($(this).val(), $this.attr_lookuplist_item_id) !== -1){
+                    $(this).attr("selected",true);
+                }
             }
             //Optional product attributes
-            else if($(this).attr('data-otherid')!=='undefined'){
-              var idx = $.inArray($(this).attr('data-otherid'), $this.product_attribute_ids);
-              if(idx !== -1){
-               if(parseInt($this.attr_lookuplist_item_id[idx]) === 0){
-                $(this).attr("selected",true);
-              }
-            }
-          }            
+            //formerly:  if($(this).attr('data-otherid')!==undefined)
+            else if($(this).data('value') === 1){
+                var value_arr = new Array();
+                $.each($this.product_attribute_ids, function(y,x){
+                    value_arr.push([x.id, x.is_other]);
+                });
+                var idx = inArray([$(this).attr('data-otherid'),"1"], value_arr);
+                if(idx){
+                    if(parseInt($this.attr_lookuplist_item_id[idx]) === 0){
+                        $(this).attr("selected",true);
+                    }     
+                }    
+            }                
         });
       addAttrQtyCombination(prev_combination_count++);
     });
@@ -1608,6 +1616,32 @@ $(".proceed_form").unbind("click").click(function(){
     }
   }
 }
+
+
+
+    function inArray(needle, haystack){
+        for(j = 0, len = haystack.length; j<len; j++){
+            if(arraysEqual(needle, haystack[j])){
+                return j;
+            }
+        }
+        return false;
+    }
+
+    function arraysEqual(a, b) {
+        if (a === b) 
+            return true;
+        if (a == null || b == null) 
+            return false;
+        if (a.length != b.length) 
+            return false;
+        for (var i = 0; i < a.length; ++i) {
+            if (a[i] !== b[i]) 
+                return false;
+        }
+        return true;
+    }
+
 
 }); 
 </script>
@@ -1881,18 +1915,9 @@ $(document).ready(function(){
         });
 
     });
-    //
-//    window.onbeforeunload = function (e) {
-//        var message = "This page is asking you to confirm that you want to leave - data you have entered may not be saved.",
-//        e = e || window.event;
-//        // For IE and Firefox
-//        if (e) {
-//            e.returnValue = message;
-//        }
-//        // For Safari
-//        return message;
-//    };
-//    
+
+
+    
 </script>
 
 <div class="clear"></div>  

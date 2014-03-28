@@ -80,7 +80,7 @@
                   <?php if((trim($i['img_path'])!=='')&&(trim($i['img_file'])!=='')): ?>       
                   <a href="#" rel="{gallery: 'gal1', smallimage: '<?=base_url()?><?php echo $i['img_path'].'small/'.$i['img_file']; ?>',largeimage: '<?=base_url()?><?php echo $i['img_path'].$i['img_file']; ?>'}">
                   <?php endif; ?>
-                  <li class="" id="<?php echo html_escape($i['value']);?>" data-price="<?php echo $i['price'];?>" data-attrid="<?php echo $i['value_id'];?>"><?php echo html_escape($i['value']);?></li>
+                  <li class="" id="<?php echo html_escape($i['value']);?>" data-price="<?php echo $i['price'];?>" data-attrid="<?php echo $i['value_id'];?>" data-type="<?php echo ($i['type'] === 'specific')?0:1;?>"><?php echo html_escape($i['value']);?></li>
                   <?php if((trim($i['img_path'])!=='')&&(trim($i['img_file'])!=='')): ?>
                   </a>
                   <?php endif; ?>
@@ -88,13 +88,13 @@
                 </ul>
               </div>
             </div>
-            <!-- Only display hidden attribute if the attribute datatype is a checkbox or an optional attribute -->
+            <!-- Only echo a hidden attribute if the attribute datatype is a checkbox or an optional attribute -->
             <?php elseif((count($product_option) === 1)&&(($product_option[0]['datatype'] === '5'))||($product_option[0]['type'] === 'option')):  ?>
             
                 <div class="product_option" style="display:none"> <span><?php echo html_escape(str_replace("'", '', $key));?></span>
                     <div>
-                        <ul class="options" name="<?php echo $key;?>">
-                            <li data-hidden="true" id="<?php echo html_escape($product_option[0]['value']);?>" data-price="<?php echo $product_option[0]['price'];?>" data-attrid="<?php echo $product_option[0]['value_id'];?>"><?php echo html_escape($product_option[0]['value']);?></li>
+                        <ul class="options" name="<?php echo str_replace("'", '', $key);?>">
+                            <li data-hidden="true" id="<?php echo html_escape($product_option[0]['value']);?>" data-price="<?php echo $product_option[0]['price'];?>" data-attrid="<?php echo $product_option[0]['value_id'];?>" data-type="<?php echo ($i['type'] === 'specific')?0:1;?>"><?php echo html_escape($product_option[0]['value']);?></li>
                         </ul>
                     </div>
                 </div>
@@ -112,10 +112,6 @@
           <div class="price_box">
             <div class="pbt pbt1">Price</div>
             <div>PHP <span class="current_price" data-baseprice="<?php echo $product['price']?>"> <?php echo number_format($product['price'],2,'.',',');?> </span> </div>
-            <!--
-            <div class="pbt">Before</div>
-            <div><span class="recent_price">¥ 370.00</span> <strong>save 22%</strong></div>    
-			--> 
           </div>
           <div class="availability">
             <p> Availability <br />
@@ -136,10 +132,7 @@
         <div class="prod_loc_areas">
           <p>
             <strong>Product is available in the following areas:</strong>
-            <ul>
-              <li>Metro Manila</li>
-              <li>Cebu</li>
-              <li>Davao</li>
+            <ul id="shipment_locations">
             </ul>
           </p>
         </div>
@@ -162,7 +155,6 @@
           <p> <strong>Description: </strong><?php echo html_purify($product['description']);?> </p>
           <ul>
             <li><strong>Brand: </strong><?php echo html_escape(ucfirst(strtolower($product['brand_name'])));?></li>
-            <!-- <li><strong>Style: </strong><?php echo html_escape($product['style_name']);?></li> -->
             <li><strong>Additional description: </strong><?php echo html_escape($product['brief']);?></li>
           </ul>
         </div>
@@ -321,7 +313,7 @@
     <div class="clear"></div>
   </div>
   <input id='p_qty' type='hidden' value=' <?php echo json_encode($product_quantity);?>'>
-  
+  <input id='p_shipment' type='hidden' value='<?php echo json_encode($shipment_information);?>'>
 </section>
 
 <script src="<?=base_url()?>assets/JavaScript/js/jquery.jqzoom-core.js" type="text/javascript"></script>

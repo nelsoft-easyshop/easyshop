@@ -924,19 +924,29 @@
 </select>
 
 <select id="getProductQuantity">
-    SELECT a.id_product_item, a.quantity, COALESCE(b.product_attr_id,0) as product_attr_id  FROM es_product_item a
+    SELECT a.id_product_item, a.quantity, COALESCE(b.product_attr_id,0) as product_attr_id,
+    COALESCE(b.is_other,0) as is_other  FROM es_product_item a
     LEFT JOIN es_product_item_attr b ON b.product_id_item = a.id_product_item 
     WHERE a.product_id = :product_id
 </select>
 
 <select id="getProductQuantityVerbose">
     SELECT a.id_product_item, a.quantity, COALESCE(b.product_attr_id,0) as product_attr_id , 
-    COALESCE(d.id_attr_lookuplist_item,0) as attr_lookuplist_item_id 
+    COALESCE(b.is_other,0) as is_other, COALESCE(d.id_attr_lookuplist_item,0) as attr_lookuplist_item_id
     FROM es_product_item a
-    LEFT JOIN es_product_item_attr b ON b.product_id_item = a.id_product_item 
-    LEFT JOIN es_product_attr c ON c.id_product_attr = b.product_attr_id
-    LEFT JOIN es_attr_lookuplist_item d ON LCASE(d.name) = LCASE(c.attr_value)
+    INNER JOIN es_product_item_attr b ON b.product_id_item = a.id_product_item AND b.is_other = 0
+    INNER JOIN es_product_attr c ON c.id_product_attr = b.product_attr_id
+    INNER JOIN es_attr_lookuplist_item d ON LCASE(d.name) = LCASE(c.attr_value)
     WHERE a.product_id = :product_id
+
+    UNION
+
+    SELECT a.id_product_item, a.quantity, COALESCE(b.product_attr_id,0) as product_attr_id , 
+    COALESCE(b.is_other,0) as is_other, '0' as attr_lookuplist_item_id
+    FROM es_product_item a
+    INNER JOIN es_product_item_attr b ON b.product_id_item = a.id_product_item AND b.is_other = 1
+    WHERE a.product_id = :product_id
+    
 </select>
 
 <select id = 'getCatFast'>
@@ -1041,5 +1051,18 @@
 <select id="deleteDraft">
     CALL `es_sp_Remove_draft`(:member_id,:product_id)
 </select>
+
+
+
+
+<select id="getShipmentInformation">
+    SELECT a.id_shipping, c.location, c.type, a.price, c.parent_id, b.product_item_id, d.product_attr_id, d.is_other FROM es_product_shipping_head a
+    LEFT JOIN es_product_shipping_detail b ON a.id_shipping = b.shipping_id 
+    LEFT JOIN es_location_lookup c ON a.location_id = c.id_location
+    LEFT JOIN es_product_item_attr d ON b.product_item_id = d.product_id_item
+    WHERE a.product_id = :prod_id
+</select>
+
+
 
 </map>

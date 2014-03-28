@@ -90,6 +90,8 @@ $(function(){
   
 });
 
+
+
 $(function(){
     $('.reviews_content').on('click','.reply_btn', function(event){
         $(this).siblings('.reply_area').fadeIn(300);
@@ -140,16 +142,19 @@ $(function(){
 $(function(){
     //Loads the defaults quantity
     var qty = JSON.parse($('#p_qty').val());
-    var first = true;
+    //wrapped in each for the meantime, just in case default quantity is not the
+    //only content of $('#p_qty').val()   
     $.each(qty, function(index, value){
-        if((value.product_attribute_ids.length == 1)&&(parseInt(value.product_attribute_ids[0])==0)){
+        if((value.product_attribute_ids.length == 1)&&(parseInt(value.product_attribute_ids[0].id)==0)&&(parseInt(value.product_attribute_ids[0].is_other)==0)){
             $('.quantity').data('qty',value.quantity);
             $('.quantity')[0].innerHTML = value.quantity;
-            if(first){
-                $('.quantity').data('default','true');
+            $('.quantity').data('default','true');
+            //if there are no attributes to choose from: enable buy button
+            if($('.product_option').find('ul.options')[0] === undefined){
+                 $('.orange_btn3').removeClass("disabled").addClass("enabled");
             }
+            return false;
         }
-        first = false;
     });      
 });
 
@@ -178,6 +183,7 @@ function attrClick(target, $this){
         var isOptionAvailable = false;
         //** calculate price
         var sel_id = new Array();
+        
         var price = parseFloat($('.current_price').attr('data-baseprice'));
         $('.product_option').find('ul.options').each(function(){	
             var actv = $(this).find("li.active");
@@ -185,21 +191,21 @@ function attrClick(target, $this){
                 price += 0;
             }
             else{
-                sel_id.push(actv.attr('data-attrid'))
+                sel_id.push([actv.attr('data-attrid'),actv.attr('data-type')])
                 price += parseFloat(actv.attr('data-price'));
                 //Added this if condition so that hidden active attributes are ignored for attribute display enabling
                 if(actv.attr('data-hidden') !== 'true')
                     isOptionAvailable = true;
             }
         });
-        
-        
+ 
         $('.current_price')[0].innerHTML = price.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-        
+
         /*
          *  If only the default quantity is set, skip attribute checking and quantity recalculation
          *  Enable buy button if an attribute is selected in all the rows.
          */
+         
         if($('.quantity').data('default') === 'true'){
             var defaultBuyEnable = true;
             $('.product_option .options').each(function(){
@@ -218,10 +224,12 @@ function attrClick(target, $this){
         
         //**Calculate quantity          
         var qty = JSON.parse($('#p_qty').val());
-        var foo = true;
-        var sam = false;
-        $.each(qty, function(index, value){       
-            if(value.product_attribute_ids.sort().join(',') === sel_id.sort().join(',')){
+        $.each(qty, function(index, value){
+            var value_arr = new Array();
+            $.each(value.product_attribute_ids, function(y,x){
+                value_arr.push([x.id, x.is_other]);
+            });
+            if(value_arr.sort().join(',') === sel_id.sort().join(',')){
                $('.quantity')[0].innerHTML = value.quantity;
                $('.orange_btn3').removeClass("disabled").addClass("enabled"); //REMOVED TO DISABLE BUY NOW BUTTON ACTIVATION
                return false;
@@ -232,6 +240,23 @@ function attrClick(target, $this){
             }
         });
         
+        //** Determine shipment location
+        var shipment = JSON.parse($('#p_shipment').val());
+        var shipmentList= document.getElementById("shipment_locations");
+        shipmentList.innerHTML = "";
+        $.each(shipment, function(index, value){ 
+            var value_arr = new Array();
+            $.each(value.product_attribute_ids, function(y,x){
+                value_arr.push([x.id, x.is_other]);
+            });
+           if(value_arr.sort().join(',') === sel_id.sort().join(',')){
+               var item = document.createElement("li");
+               item.innerHTML = value.location;
+               shipmentList.appendChild(item);
+            }
+        });
+        
+
         //**trigger keyup event of product_quantity textbox
         $(".product_quantity").trigger( "keyup" );
         
@@ -258,10 +283,14 @@ function attrClick(target, $this){
          *  restricts the user's freedom to change attributes.
          */
         $.each(qty, function(index, value){
-            if(containsAll(sel_id, value.product_attribute_ids)){
-                $.each(value.product_attribute_ids, function(r,s){
+            var value_arr = new Array();
+            $.each(value.product_attribute_ids, function(y,x){
+                value_arr.push([x.id, x.is_other]);
+            });
+            if(containsAll(sel_id, value_arr)){
+                $.each(value_arr, function(r,s){
                     //if attr_id is not yet in show_ids, push it in
-                    if($.inArray(s, show_ids) == -1){
+                    if(!inArray(s, show_ids)){
                         show_ids.push(s);
                     }
                 });
@@ -272,19 +301,23 @@ function attrClick(target, $this){
          * @Step 2: Get ids of PROBABLE attributes based on available combinations, selected attributes, and
          * currently enabled attributes.
          */
-         
+
         $.each(show_ids, function(idx, id){
             $.each(qty, function(index, value){
-                if((containsAll([id], value.product_attribute_ids)) )  {        
-                    $.each(value.product_attribute_ids, function(r,s){
-                        if(($('.product_option li[data-attrid='+s+']').siblings('.active')[0] !== undefined)){
+                var value_arr = new Array();
+                $.each(value.product_attribute_ids, function(y,x){
+                    value_arr.push([x.id, x.is_other]);
+                }); 
+                if((containsAll([id], value_arr)))  {        
+                    $.each(value_arr, function(r,s){
+                        if(($('.product_option li[data-attrid='+s[0]+']').siblings('.active')[0] !== undefined)){
                             //Remove element from the "free-est" row
                             var arr = [].concat(sel_id);
                             arr.shift();  
                             var n_arr = [s].concat(arr);
-                            if((containsAll(n_arr, value.product_attribute_ids))){
+                            if((containsAll(n_arr, value_arr))){
                                 //if attr_id is not yet in show_ids, push it in
-                                if($.inArray(s, show_ids) == -1) 
+                                if(!inArray(s, show_ids))
                                 {
                                     show_ids.push(s);
                                 }
@@ -293,11 +326,13 @@ function attrClick(target, $this){
                     });
                 }
             })
-        });
+        }); 
+       
   
         //Disabled/enable attributes accordingly (if no option is selected, just enable everything)
         $('.product_option li').each(function(){
-            if(($.inArray($(this).attr('data-attrid'), show_ids) === -1)&&(isOptionAvailable))
+            var t_arr = [$(this).attr('data-attrid'), $(this).attr('data-type')];
+            if((!inArray(t_arr, show_ids))&&(isOptionAvailable))
             {
                //@Step 3: added this if condition in order to keep same row attributes from being disabled
                if(($(this).closest('ul')[0]!==target.closest('ul')[0]))
@@ -330,16 +365,15 @@ $(function(){
             var active = new Array();
             $('.product_option li').each(function(){
                 if($(this).hasClass('active')){
-                    active.push($(this).attr('data-attrid'));
+                    active.push([$(this).attr('data-attrid'), $(this).attr('data-type')]);
                 }
                 $(this).removeClass('disable');
                 $(this).removeClass('active');
             });
             $.each(active, function(p, q){
-                var target = $('.product_option li[data-attrid='+q+']');
+                var target = $('.product_option li[data-attrid='+q[0]+'][data-type='+q[1]+']');
                 attrClick(target,$this);
             });
-            
         }
     });
    
@@ -381,9 +415,9 @@ $(function(){
 
                 success:function(data){
                     if(data == "386f25bdf171542e69262bf316a8981d0ca571b8" ){
-                                                alert("Please select an attribute.");
+                        alert("Please select an attribute.");
                     }else if(data == "d3d34a1c4cb94f516ae916e4b8b4be80d50c8f7a"){
-                                                window.location.replace(config.base_url + "cart");
+                        window.location.replace(config.base_url + "cart");
                     }
                 }
 
@@ -474,25 +508,33 @@ $(function(){
  */
 
 function containsAll(needles, haystack){ 
-    for(var i = 0 , len = needles.length; i < len; i++){
-        if($.inArray(needles[i], haystack) == -1){
+    for(var i = 0, len = needles.length; i<len; i++){
+        if(!inArray(needles[i], haystack)){
             return false;
         }
     }
     return true;
 }
 
-/*
- * This function checks if at least one elements in array needles exists in
- * array haystack. This does not compare if two arrays are equal.
- */
- 
-function containsOne(needles, haystack){ 
-  
-    for(var i = 0 , len = needles.length; i < len; i++){
-        if($.inArray(needles[i], haystack) != -1){
+function inArray(needle, haystack){
+    for(j = 0, len = haystack.length; j<len; j++){
+        if(arraysEqual(needle, haystack[j])){
             return true;
         }
     }
     return false;
+}
+
+function arraysEqual(a, b) {
+    if (a === b) 
+        return true;
+    if (a == null || b == null) 
+        return false;
+    if (a.length != b.length) 
+        return false;
+    for (var i = 0; i < a.length; ++i) {
+        if (a[i] !== b[i]) 
+            return false;
+    }
+    return true;
 }

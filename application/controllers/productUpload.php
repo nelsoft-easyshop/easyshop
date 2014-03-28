@@ -627,7 +627,7 @@ class productUpload extends MY_Controller
 				'product_id' => $id,
 				'shipping_summary' => $this->product_model->getShippingSummary($id)
 			);
-			
+            
 			$data = array_merge($data, $this->fill_view());
 			
 			$jsonDisplayGroup = $jsonFdata = array();
@@ -776,10 +776,13 @@ class productUpload extends MY_Controller
     }
     
 	public function editStep2(){
+        /*
 		if($this->input->post('p_id'))
 			$product_id = $this->input->post('p_id');
 		else
 			redirect('me', 'refresh'); 
+        */
+        $product_id = 132;
 
 		$member_id = $this->session->userdata('member_id');
 		$data = array('title'=>'Edit Product');
@@ -1345,6 +1348,7 @@ class productUpload extends MY_Controller
 		echo $data; 
 
 	}
+    
     
 }
 

@@ -504,7 +504,7 @@ class product extends MY_Controller
 		$this->load->view('templates/header', $data); 
 		$product_options = $this->product_model->getProductAttributes($id, 'NAME');
 		$product_options = $this->product_model->implodeAttributesByName($product_options);
-		if($product_row['o_success'] >= 1){
+        if($product_row['o_success'] >= 1){
 			$this->session->set_userdata('product_id', $id);
 			$product_catid = $product_row['cat_id'];
 			$data = array_merge($data,array( 
@@ -520,8 +520,9 @@ class product extends MY_Controller
 				'allowed_reviewers' => $this->product_model->getAllowedReviewers($id),
 				//userdetails --- email/mobile verification info
 				'userdetails' => $this->product_model->getCurrUserDetails($uid),
-				'product_quantity' => $this->product_model->getProductQuantity($id)
-				));
+				'product_quantity' => $this->product_model->getProductQuantity($id),
+				'shipment_information' => $this->product_model->getShipmentInformation($id),
+                ));
 			$data['vendorrating'] = $this->product_model->getVendorRating($data['product']['sellerid']);
 			$this->load->view('pages/product/productpage_view', $data); 
 		}
