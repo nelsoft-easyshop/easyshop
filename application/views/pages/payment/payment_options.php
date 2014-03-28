@@ -181,18 +181,6 @@
 
 <div class="clear"></div>
 
-<footer>
-  <div class="wrapper">
-    <div class="copyright">
-      <p>Copyright © 2013 Easyshop.ph</p>
-    </div>
-  </div>
-</footer>
-
-
-
-</body>
-</html>
 
 <script type="text/javascript">
 $(document).ready(function() {
