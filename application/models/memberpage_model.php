@@ -15,6 +15,7 @@ class memberpage_model extends CI_Model
         $sth->bindParam(':id_member', $member_id);
         $sth->execute();
         $row = $sth->fetch(PDO::FETCH_ASSOC);
+        
 		return $row;
 	}
 	

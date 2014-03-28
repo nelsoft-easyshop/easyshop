@@ -179,7 +179,7 @@ class Memberpage extends MY_Controller
                 ); 
 		$data = array_merge($data, $this->fill_header());
 		$data = array_merge($data,$this->memberpage_model->get_member_by_id($uid));
-		$data = array_merge($data,$this->memberpage_model->get_work_by_id($uid));
+        $data = array_merge($data,$this->memberpage_model->get_work_by_id($uid));
 		$data =  array_merge($data,$this->memberpage_model->get_school_by_id($uid));
 		$data['transaction'] = $this->memberpage_model->getTransactionDetails($uid);
 		$data['allfeedbacks'] = $this->memberpage_model->getFeedback($uid);
