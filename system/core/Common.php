@@ -578,8 +578,9 @@ if ( ! function_exists('es_url_clean'))
 		$string = preg_replace('/[^A-Za-z0-9\-]/', '', $string);  
 
 		$string = str_replace('-', ' ', $string); 
-		$string = str_replace(' ', '-', $string);  
-		return preg_replace('/[^A-Za-z0-9\-]/', '', $string);
+		$string = str_replace(' ', '-', $string); 
+		$string = str_replace('--', '-', $string);  
+		return preg_replace('/\s+/','-', $string);
 	}	
 }
 
