@@ -249,14 +249,26 @@ span.seller-name span:hover {
 }
 
 .availability {
-	border-left: 1px solid #DBD8D7;
-	border-right: 1px solid #DBD8D7;
-	height: 60px;
-    width: 100px !important;
+    border-left: 1px solid #DBD8D7;
+    border-right: 1px solid #DBD8D7;
+    display: inline-block;
+    height: 87px;
+    max-height: 87px;
+    min-height: 40px;
+    width: 100px;
 }
 
 .buy_box {
 	width: 248px;
+}
+
+.buy_btn_sub {
+    background-color: #FFEFEF;
+    border: 1px solid #FF0000;
+    color: #FF0000;
+    font-size: 11px;
+    height: 24px;
+    margin: 5px;
 }
 
 .availability span {
@@ -274,7 +286,6 @@ span.seller-name span:hover {
 }*/
 
 .current_price {
-	font-family: 'Roboto', sans-serif;
 	font-weight: 300;
 	font-size: 26px;
 	padding: 0;
@@ -283,29 +294,12 @@ span.seller-name span:hover {
 }
 
 .buy_box span {
-	font-family: 'Roboto', sans-serif;
+	display: inline-block;
 	font-size: 10px;
-	display: block;
-	margin-top: 5px;
+	padding:5px 0;
 }
 
 .orange_btn3 {
-	font-family: 'Roboto', sans-serif;
-    background-color: #C0C0C0;
-    border-radius: 3px;
-    color: #FFFFFF;
-    display: inline-block;
-    font-size: 16px;
-    height: 40px;
-    line-height: 40px;
-    padding:0;
-    text-align: center;
-    transition: all 0.3s ease-in-out 0s;
-    width: 110px;
-}
-
-.orange_btn3 {
-	font-family: 'Roboto', sans-serif;
     background-color: #C0C0C0;
     border-radius: 3px;
     color: #FFFFFF;
@@ -338,7 +332,6 @@ span.seller-name span:hover {
 	cursor: pointer;
 	margin-left: 5px;
 	padding-left: 5px;
-	border-left: 1px solid #DBD8D7;
 }
 
 .add_to_cart:hover {
@@ -346,7 +339,7 @@ span.seller-name span:hover {
 }
 
 .add_to_cart span {
-	background: url('../images/global_sprite.png') -48px -259px no-repeat;
+	background: url('../images/global_sprite.png') -48px -254px no-repeat;
     display: inline-block;
     height: 18px;
     vertical-align: middle;
