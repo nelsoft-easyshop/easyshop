@@ -116,11 +116,6 @@
     <br> 
     <br>
     <br>
- 
-
-
-
-
 
     <p class="notify">You will be notified regarding your order status via email or sms.</p>
     <p class="subscribe"><input type="checkbox" checked> <img src="<?= base_url() ?>assets/images/icon_email.png" alt="email"> Subscribe to Easyshop Newsletter for great deals and amazing discounts</p>
@@ -203,12 +198,15 @@ $(document).ready(function() {
    $('.paypal').unbind("click").click(function(e){
     var action = "payment/paypal_setexpresscheckout";
     var csrftoken = $('input[name="es_csrf_token"]').val();
+    var csrftoken = "<?php echo $my_csrf['csrf_hash'];?>";
+    
      $.ajax({
           async: false,
           type: "POST",
           url: '<?php echo base_url();?>' + action,
           data: "es_csrf_token=" + csrftoken,
           dataType: "json",
+          data:   "es_csrf_token="+csrftoken, 
           beforeSend: function(jqxhr, settings) { 
             $('.paypal_loader').show();
             $('.paypal_button').hide();
@@ -216,13 +214,11 @@ $(document).ready(function() {
           success: function(d) {
             if (d.e == 1) {
                $('#shipping-form').attr('action', d.d).submit();
-               $('.paypal_loader').hide();
-               $('.paypal_button').show();
             } else {
               alert(d.d);
-              $('.paypal_loader').hide();
-              $('.paypal_button').show();
             }
+            $('.paypal_loader').hide();
+            $('.paypal_button').show();
           }
         });
   });
