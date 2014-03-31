@@ -12,21 +12,6 @@ class Cart extends MY_Controller{
         $this->load->model('user_model');
         $this->load->model('cart_model');
     }
-    
-    function index(){
-        if(!$this->session->userdata('usersession'))
-            redirect(base_url().'home', 'refresh');
-		$id = $this->session->userdata('usersession');
-                $carts=$this->cart->contents();
-		$data['title'] = 'Cart | Easyshop.ph';
-		$data['page_javascript'] = 'assets/JavaScript/cart.js';
-		$data['cart_items'] = $carts;
-		$data['total'] = number_format( $this->cart->total(),2,'.',',');
-		$data = array_merge($data,$this->fill_header());
-		$this->load->view('templates/header', $data);
-		$this->load->view('pages/cart/mycart_view', $data);
-		$this->load->view('templates/footer_full');
-    }
         
     function check_product($id,$opt){
         $base = $this->product_model->getProduct($id);
@@ -105,6 +90,21 @@ class Cart extends MY_Controller{
             endif;
         endif;
         echo json_encode($result);
+    }
+    
+    function index(){
+        if(!$this->session->userdata('usersession'))
+            redirect(base_url().'home', 'refresh');
+		$id = $this->session->userdata('usersession');
+                $carts=$this->cart->contents();
+		$data['title'] = 'Cart | Easyshop.ph';
+		$data['page_javascript'] = 'assets/JavaScript/cart.js';
+		$data['cart_items'] = $carts;
+		$data['total'] = number_format( $this->cart->total(),2,'.',',');
+		$data = array_merge($data,$this->fill_header());
+		$this->load->view('templates/header', $data);
+		$this->load->view('pages/cart/mycart_view', $data);
+		$this->load->view('templates/footer_full');
     }
 	
     function cart_size(){
