@@ -50,6 +50,9 @@ $(document).ready(function(){
 						$('#login').show();
                     }
                     else{
+                        $('#loading_img').hide();
+                        $('#login').val('Redirecting...');
+                        $('#login').show();
                         var url = $('#redirect').val();
                         window.location = config.base_url+'home';
                         /*
