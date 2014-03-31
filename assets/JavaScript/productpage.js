@@ -140,6 +140,7 @@ $(function(){
 $(function(){
     //Loads the defaults quantity
     var qty = JSON.parse($('#p_qty').val());
+    var shipment = JSON.parse($('#p_shipment').val());
     //wrapped in each for the meantime, just in case default quantity is not the
     //only content of $('#p_qty').val()   
     $.each(qty, function(index, value){
@@ -147,6 +148,7 @@ $(function(){
             $('.quantity').data('qty',value.quantity);
             $('.quantity')[0].innerHTML = value.quantity;
             $('.quantity').data('default','true');
+            $('.product_quantity').val(1);
             //if there are no attributes to choose from: enable buy button
             if($('.product_option').find('ul.options')[0] === undefined){
                  $('.orange_btn3').removeClass("disabled").addClass("enabled");
@@ -154,6 +156,16 @@ $(function(){
             return false;
         }
     });      
+    
+    var shipmentList= document.getElementById("shipment_locations");
+    shipmentList.innerHTML = "";
+    $.each(shipment, function(index, value){
+        if((value.product_attribute_ids.length == 1)&&(parseInt(value.product_attribute_ids[0].id)==0)&&(parseInt(value.product_attribute_ids[0].is_other)==0)){
+            var item = document.createElement("li");
+            item.innerHTML = value.location;
+            shipmentList.appendChild(item);
+        }  
+    });
 });
 
 

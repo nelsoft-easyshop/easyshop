@@ -1053,10 +1053,8 @@
 </select>
 
 
-
-
 <select id="getShipmentInformation">
-    SELECT a.id_shipping, c.location, c.type, a.price, c.parent_id, b.product_item_id, d.product_attr_id, d.is_other FROM es_product_shipping_head a
+    SELECT a.id_shipping, c.location, c.type, a.price, c.parent_id, b.product_item_id, COALESCE(d.product_attr_id,0) as product_attr_id, COALESCE(d.is_other,0) as is_other FROM es_product_shipping_head a
     LEFT JOIN es_product_shipping_detail b ON a.id_shipping = b.shipping_id 
     LEFT JOIN es_location_lookup c ON a.location_id = c.id_location
     LEFT JOIN es_product_item_attr d ON b.product_item_id = d.product_id_item
