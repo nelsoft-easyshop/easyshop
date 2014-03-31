@@ -270,7 +270,7 @@ $(document).ready(function(){
                 minlength: 6,
                 maxlength:25,
 				alphanumeric: true,
-				case_all: true
+				//case_all: true
 				},
 			cpassword: {
 				required: true,
@@ -315,7 +315,7 @@ $(document).ready(function(){
                 minlength: 6,
                 maxlength:25,
 				alphanumeric: true,
-				case_all: true
+				//case_all: true
 				},
 			cpassword: {
 				required: true,
