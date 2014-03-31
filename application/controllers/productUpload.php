@@ -1186,7 +1186,7 @@ class productUpload extends MY_Controller
 					$others_id = $this->product_model->addNewAttributeByProduct_others_name($product_id,$key);
 					foreach ($valuex as $keyvalue => $value) {
 						$imageid = 0;
-                        $eval = explode("|", $value);  
+                        $eval = explode("|", $value); 
                         //IF OTHER ATTRIBUTE is empty, skip the rest
 						if(trim($eval[0]) == "--no name"){
 							continue;

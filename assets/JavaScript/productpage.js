@@ -13,8 +13,6 @@ $(document).ready(function() {
             $(".product_quantity").val(1);
         }
     });
-    
-    
 });
 
 $(function(){
@@ -244,6 +242,7 @@ function attrClick(target, $this){
         var shipment = JSON.parse($('#p_shipment').val());
         var shipmentList= document.getElementById("shipment_locations");
         shipmentList.innerHTML = "";
+        
         $.each(shipment, function(index, value){ 
             var value_arr = new Array();
             $.each(value.product_attribute_ids, function(y,x){
@@ -255,7 +254,7 @@ function attrClick(target, $this){
                shipmentList.appendChild(item);
             }
         });
-        
+
 
         //**trigger keyup event of product_quantity textbox
         $(".product_quantity").trigger( "keyup" );
@@ -397,8 +396,8 @@ $(function(){
             var i_price =  $(".current_price").text().trim();
             var i_opt = {};
             var length = parseInt($('.product_option').length) - 1;
-	    var csrftoken = $('#buynow_csrf').val();
-	    var max_qty = $(".quantity").html();
+            var csrftoken = $('#buynow_csrf').val();
+            var max_qty = $(".quantity").html();
             $(".options").each(function() {
                 var parent = $(this).parent();
                 var id = $(this).attr("name");
@@ -476,7 +475,6 @@ $(function(){
                                 rightdiv.children('div.reply_content').append("<p><strong>"+value.reviewer+"</strong> on: "+value.datesubmitted+'<br>"'+value.review+'"</p>');
                             reply_counter++;
                         });
-                        
                     }
                     
                     //APPEND REPLY BUTTON IF ALLOWED

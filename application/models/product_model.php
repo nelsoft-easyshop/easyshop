@@ -505,7 +505,7 @@ class product_model extends CI_Model
 		$sth->bindParam(':value_price',$price);
 		$sth->bindParam(':product_img_id',$imageid);
 		$sth->execute();
-
+        
 		return $this->db->conn_id->lastInsertId('id_optional_attrdetail');
 	}
 

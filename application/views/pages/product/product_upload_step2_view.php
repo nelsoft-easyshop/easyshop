@@ -1887,6 +1887,14 @@ $(document).ready(function(){
         });
     });    
   
+    $('.step1_link').on('click', function(){
+        if(currentRequest != null) {
+            $('#prod_brand').val(1)
+            $('#prod_brand').trigger( "change" );
+        }
+        $('#edit_step1').submit();
+    });
+
 });
 
 
@@ -1907,18 +1915,7 @@ $(document).ready(function(){
         $('#brand_search_drop_content').hide();
     });
 </script>
-<script>
 
-    $(function(){
-        $('.step1_link').on('click', function(){
-            $('#edit_step1').submit();
-        });
-
-    });
-
-
-    
-</script>
 
 <div class="clear"></div>  
 

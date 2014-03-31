@@ -147,7 +147,7 @@
   
 	
     <select id="getProductAttributes">
-        SELECT h.field_name as name, h.id_optional_attrhead as 'name_id', d.value_name as attr_value, d.id_optional_attrdetail as 'attr_value_id' , d.value_price as attr_price, COALESCE(i.product_image_path,'') as product_image_path, 'option' as 'type', i.id_product_image as 'img_id', '0' as 'datatype_id'
+        SELECT h.field_name as name, h.id_optional_attrhead as 'name_id', d.value_name as attr_value, d.id_optional_attrdetail as 'attr_value_id' , d.value_price as attr_price, COALESCE(i.product_image_path,'') as product_image_path, 'option' as 'type', COALESCE(i.id_product_image,0) as 'img_id', '0' as 'datatype_id'
         FROM es_optional_attrhead h 
         LEFT JOIN es_optional_attrdetail d ON h.id_optional_attrhead = d.head_id
         LEFT JOIN es_product_image i ON d.product_img_id = i.id_product_image

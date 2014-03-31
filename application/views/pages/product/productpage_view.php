@@ -43,7 +43,6 @@
               <?php foreach($product_images as $image): ?>
               <li> <a href="javascript:void(0);" rel="{gallery: 'gal1', smallimage: '<?=base_url()?><?php echo $image['path']; ?>small/<?php echo $image['file']; ?>',largeimage: '<?=base_url()?><?php echo $image['path']; ?><?php echo $image['file']; ?>'}"> <img src='<?=base_url()?><?php echo $image['path']; ?>thumbnail/<?php echo $image['file']; ?>'> </a> </li>
               <?php endforeach;?>
-
             </ul>
 
           </div>
@@ -131,7 +130,7 @@
         </div>
         <div class="prod_loc_areas">
           <p>
-            <strong>Product is available in the following areas:</strong>
+            <strong class="location_message">Product is available in the following areas:</strong>
             <ul id="shipment_locations">
             </ul>
           </p>
