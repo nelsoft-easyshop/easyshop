@@ -93,8 +93,7 @@ class Cart extends MY_Controller{
     }
     
     function index(){
-        if(!$this->session->userdata('usersession'))
-            redirect(base_url().'home', 'refresh');
+        if($this->session->userdata('usersession')){
 		$id = $this->session->userdata('usersession');
                 $carts=$this->cart->contents();
 		$data['title'] = 'Cart | Easyshop.ph';
@@ -105,6 +104,9 @@ class Cart extends MY_Controller{
 		$this->load->view('templates/header', $data);
 		$this->load->view('pages/cart/mycart_view', $data);
 		$this->load->view('templates/footer_full');
+	}else{
+            redirect(base_url().'home', 'refresh');
+	}
     }
 	
     function cart_size(){
