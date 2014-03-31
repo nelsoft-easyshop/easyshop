@@ -52,7 +52,8 @@ class Register extends MY_Controller
 			$data['password'] = html_escape($this->input->post('password'));
 			$data['email'] = $this->input->post('email');
 			
-			$this->sendVerificationCode($data);
+			$result = $this->sendVerificationCode($data);
+			
 			$view = 'register_form3_view';
 			$data['member_username'] = $data['username'];
 			$data['verification_msg'] = $this->lang->line('success_registration');
@@ -123,19 +124,22 @@ class Register extends MY_Controller
 		$temp['mobilecode'] = $this->register_model->rand_alphanumeric(6);
 		//GENERATE HASH FOR EMAIL VERIFICATION
 		$temp['emailcode'] = sha1($this->session->userdata('session_id').time());
-		
+		//Register user to database and pull member id
 		$temp['member_id'] = $this->register_model->signupMember($data)['id_member'];
-		
+		//Send confirmation email
 		$status = $this->register_model->send_email_msg($data['email'], $data['username'], $temp['emailcode']);
 		//$status = 'success';
 		
+		//Determine if count limit for verification will be increased
 		if($status === 'success'){
 			$temp['email'] = 1;
 		}else{
 			$temp['email'] = 0;
 		}
+		//Store verification details and increase limit count when necessary
+		$result = $this->register_model->store_verifcode($temp);
 		
-		$this->register_model->store_verifcode($temp);
+		return $result;
 	}
 	
 	/*function send_verification_code() {

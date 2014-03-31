@@ -12,7 +12,7 @@ class Login extends MY_Controller {
     }
 	
 	#Passing the data to login form and loads it.
-    function index() { 
+    function index() {
         $data = array(
             'title' => 'Login | Easyshop.ph',
             'page_javascript' => 'assets/JavaScript/login.js',
@@ -135,7 +135,7 @@ class Login extends MY_Controller {
 			}
 			else{
 				$temp['toggle_view'] = "1";                      // pasok pa sa oras pero hindi pa magsasave ito.
-			}			
+			}
 		}else{
 			$temp['toggle_view'] = "2";                        
 		}

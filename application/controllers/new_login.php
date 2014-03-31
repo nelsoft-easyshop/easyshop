@@ -54,7 +54,6 @@ class New_login extends MY_Controller {
     }
 
     function logout() {/////////////////////////////////////////////////////////when log out button is clicked,session will be set to empty and redirect to home
-        
         $cart_items = serialize($this->session->userdata('cart_contents'));
         $id = $this->session->userdata('member_id');
         $this->cart_model->save_cartitems($cart_items,$id);
@@ -78,8 +77,6 @@ class New_login extends MY_Controller {
 			redirect(base_url().'login');		
     }
 	
-	
-	
 	/**	SIGNUP in Login Page**/
 	function signup()
 	{
@@ -88,7 +85,7 @@ class New_login extends MY_Controller {
 			$data['password'] = html_escape($this->input->post('password'));
 			$data['email'] = $this->input->post('email');
 			
-			
+			$data['member_id'] = $this->register_model->signupMember($data)['id_member'];
 			$this->sendVerificationCode($data);
 
 			$temp['member_username'] = $data['username'];
@@ -105,8 +102,7 @@ class New_login extends MY_Controller {
 		$temp['mobilecode'] = $this->register_model->rand_alphanumeric(6);
 		//GENERATE HASH FOR EMAIL VERIFICATION
 		$temp['emailcode'] = sha1($this->session->userdata('session_id').time());
-		
-		$temp['member_id'] = $this->register_model->signupMember($data)['id_member'];
+		$temp['member_id'] = $data['member_id'];
 		
 		$status = $this->register_model->send_email_msg($data['email'], $data['username'], $temp['emailcode']);
 		//$status = 'success';
@@ -120,7 +116,6 @@ class New_login extends MY_Controller {
 		$this->register_model->store_verifcode($temp);
 	}
 	/** End of Signup in Login Page **/
-	
 	
 	
 	function identify(){

@@ -95,7 +95,7 @@
 			<span class="red ci_form_validation_error"><?php echo form_error('captcha_word'); ?></span>
           </div>
 	-->  
-		  <div class="field" id="tc">
+		<div class="field" id="tc">
 			<input type="checkbox" name="terms_checkbox" id="terms_checkbox">
 			<label for="terms_checkbox" id="terms">I agree to Easyshop.ph's Terms and Conditions.</label>
 			<span class="red ci_form_validation_error"><?php echo form_error('terms_checkbox'); ?></span>

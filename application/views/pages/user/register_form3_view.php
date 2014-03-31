@@ -22,7 +22,8 @@
           </div>
           <div>
 			<br>
-            <h2><?php echo $verification_msg?></h2> 
+            <h2><?php echo $verification_msg?></h2>
+			<br><br>
 			<?php if($logged_in == false):?>
 				<a href="<?=base_url()?>login" class="continue">Go to Login Page</a>
 			<?php elseif($logged_in == true):?>

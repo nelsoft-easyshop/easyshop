@@ -75,7 +75,7 @@ $(document).ready(function(){
 });
 
 /**********************************************************************/
-/**********************	SIGNUP ****************************************/
+/**************************	SIGNUP ************************************/
 /**********************************************************************/
 
 $(document).ready(function(){
@@ -94,7 +94,7 @@ $(document).ready(function(){
 			hidecheckx($('#username'));
 			$('.username_availability').html('');
 		}
-	  }).on('keypress', function(){
+	  }).on('keyup', function(){
 		var fieldlength = $.trim($('#username').val()).length;
 		if(!$(this).hasClass('forSearch') && fieldlength >= 5){
 			$(this).addClass('forSearch');
@@ -112,7 +112,7 @@ $(document).ready(function(){
 			  if ($(e.target).closest('.password_info, #password').length) return;
 			  $(document).unbind('.example');
 			});
-	  }).on('input paste', function(){
+	  }).on('input paste keyup', function(){
 			   if($.trim($(this).val()).length >= 6){
 				   $('#cpassword').attr("disabled", false);
 				   showx($('#cpassword'));
@@ -147,7 +147,7 @@ $(document).ready(function(){
 			hidecheckx($('#email'));
 			$('.email_availability').html('');
 		}
-	  }).on('keypress', function(){
+	  }).on('keyup', function(){
 		var fieldlength = $.trim($('#email').val()).length;
 		if(!$(this).hasClass('forSearch') && fieldlength >= 6){
 			$(this).addClass('forSearch');
@@ -239,6 +239,7 @@ $(document).ready(function(){
 		 },
 		 submitHandler: function(form){
 		 	$('#register_form1_loadingimg').show();
+			$('#register_page1').attr('disabled', true);
 		 	$.post(config.base_url + 'new_login/signup', $(form).serializeArray(), function(data){
 				$('#login_register').html(data);
 			});
@@ -246,8 +247,7 @@ $(document).ready(function(){
 		 }
 	 });
 	 
-	 
-	$('.field input').on('click', function(){
+	 $('.field input').on('click', function(){
 		$('.ci_form_validation_error').text('');
 	 });
 	 

@@ -302,7 +302,9 @@ class Register_model extends CI_Model
 		$sth->bindParam(':mobile', $data['mobile']);
 		$sth->bindParam(':email', $data['email']);
 		
-        $sth->execute();
+        $result = $sth->execute();
+		
+		return $result;
 	}
 	
 

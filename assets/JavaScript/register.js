@@ -5,7 +5,7 @@ $(document).ready(function(){
 $(document).ready(function(){
 	  
 	  $('#username').on('focus', function() {
-		  $(document).bind('focusin.example click.example',function(e) {
+		  $(document).bind('focusin.example click.example',function(e){
 			  if ($(e.target).closest('.username_info, #username').length) return;
 			  $(document).unbind('.example');
 		  });
@@ -18,9 +18,12 @@ $(document).ready(function(){
 			hidecheckx($('#username'));
 			$('.username_availability').html('');
 		}
-	  }).on('keypress', function(){
+	  }).on('keyup', function(){
 		var fieldlength = $.trim($('#username').val()).length;
+		console.log($('#username').val());
+		console.log(fieldlength);
 		if(!$(this).hasClass('forSearch') && fieldlength >= 5){
+			console.log('pasok');
 			$(this).addClass('forSearch');
 		}
 		else if(fieldlength < 5){
@@ -36,7 +39,7 @@ $(document).ready(function(){
 			  if ($(e.target).closest('.password_info, #password').length) return;
 			  $(document).unbind('.example');
 			});
-	  }).on('input paste', function(){
+	  }).on('input paste keyup', function(){
 			   if($.trim($(this).val()).length >= 6){
 				   $('#cpassword').attr("disabled", false);
 				   showx($('#cpassword'));
@@ -46,7 +49,6 @@ $(document).ready(function(){
 			       $('#cpassword').val("");
 				   hidecheckx($('#cpassword'));
 			   }
-			   
 				if($(this).val() !== $('#cpassword').val() && !$('#cpassword')[0].disabled)
 					showx($('#cpassword'));
 				else if($(this).val() == $('#cpassword').val() && !$('#cpassword')[0].disabled)
@@ -71,7 +73,7 @@ $(document).ready(function(){
 			hidecheckx($('#email'));
 			$('.email_availability').html('');
 		}
-	  }).on('keypress', function(){
+	  }).on('keyup', function(){
 		var fieldlength = $.trim($('#email').val()).length;
 		if(!$(this).hasClass('forSearch') && fieldlength >= 6){
 			$(this).addClass('forSearch');
@@ -230,6 +232,7 @@ $(document).ready(function(){
 					error.appendTo(element.parent());
 		 },
 		 submitHandler: function(form){
+			$('#register_page1').attr('disabled', true);
 		 	$('#register_form1_loadingimg').show();
 		 	form.submit();
 		 }
