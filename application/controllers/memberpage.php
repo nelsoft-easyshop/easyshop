@@ -11,6 +11,7 @@ class Memberpage extends MY_Controller
         $this->load->model("memberpage_model"); 
 		$this->load->model('register_model');
 		$this->load->model('product_model');
+		$this->load->model('payment_model');
         $this->form_validation->set_error_delimiters('', ''); 
     } 
       
@@ -24,43 +25,6 @@ class Memberpage extends MY_Controller
         $this->load->view('pages/user/memberpage_view', $data); 
         $this->load->view('templates/footer'); 
     } 
-    
-	/**
-	 *	Function to obtain location in Google Maps
-	 */
-	 /*
-    function toCoordinates() {
-        $address1 = $_POST['address'];
-        $bad = array(
-            " " => "+",
-            "," => "",
-            "?" => "",
-            "&" => "",
-            "=" => ""
-        );
-        $address = str_replace(array_keys($bad), array_values($bad), $address1);
-        $data = new SimpleXMLElement(file_get_contents("http://maps.googleapis.com/maps/api/geocode/xml?address={$address}&sensor=true"));
-        $simple = json_decode(json_encode($data), 1);
-        $result = array();
-		
-        if($simple['status']== "ZERO_RESULTS"){
-			$result['lat']=false;
-            $result['lng']=false;
-		}
-        else{
-		
-			if(array_key_exists(0, $simple)){
-				$result['lat'] = $simple['result'][0]['geometry']['location']['lat'];
-				$result['lng'] = $simple['result'][0]['geometry']['location']['lng'];
-			}
-			else{
-				$result['lat'] = $simple['result']['geometry']['location']['lat'];
-				$result['lng'] = $simple['result']['geometry']['location']['lng'];
-			}
-		}
-        echo json_encode($result);
-    }
-	*/
       
     function edit_personal() 
     {	
@@ -278,7 +242,11 @@ class Memberpage extends MY_Controller
 		}
 	}
 	
-	/***	TRANSACTION CONTROLLER	***/
+	/*****************	TRANSACTION CONTROLLER	*******************/
+	
+	/*
+	 *	Function to add feedback to USER for every transaction made
+	 */
 	function addFeedback(){
 		if($this->input->post('order_id') && $this->input->post('feedback-field') && $this->form_validation->run('add_feedback_transaction')){
 			$data = array(
@@ -298,6 +266,26 @@ class Memberpage extends MY_Controller
 		else
 			echo 0;
 	}
+	
+	/*
+	 *	Function to handle payment transfer.
+	 *	Forward to seller or return to user.
+	 */
+	function transactionResponse(){
+		if($this->input->post('buyer_response')){
+			$data['order_product_id'] = $this->input->post('buyer_response');
+			$data['status'] = 1;
+		}
+		else if($this->input->post('seller_response')){
+			$data['order_product_id'] = $this->input->post('seller_response');
+			$data['status'] = 2;
+		}
+		$data['transaction_num'] = $this->input->post('transaction_num');
+		$result = $this->payment_model->updateTransactionStatus($data);
+		
+		echo $result ? 1:'An error was encountered while submitting your request';
+	}
+	
 	
 	/***	VENDOR DASHBOARD CONTROLLER	***/
 	/*** 	memberpage/vendor/username	***/

@@ -5,6 +5,11 @@ $(window).load(function(){
 	handle_fields('');
 });
 
+/******* rotate sort arrow when click *****/
+$(".arrow_sort").on("click", function () {
+    $(this).toggleClass("rotate_arrow");
+});
+
 /**************************************************************************************************************/	
 /**************************************  PERSONAL INFORMATION MAIN    *****************************************/   
 /**************************************************************************************************************/		
@@ -485,9 +490,9 @@ $(document).ready(function(){
 						progress_update($('#personal_profile_address'));
 						$('#personal_profile_address .edit_fields').fadeOut();
 						
+						// Copy dragged marker coordinates to scanned input for saving - google maps
 						$('#map_lat').val($('#temp_lat').val());
 						$('#map_lng').val($('#temp_lng').val());
-						
 					});
 			return false;					
 		}
@@ -886,6 +891,20 @@ $(document).ready(function(){
 				}
 			});
 		}
+	});
+	
+	$('.transac_response_btn').on('click', function(){
+		var form = $(this).closest('form.transac_response');
+		var thisbtn = $(this);
+		var parentdiv = $(this).closest('div');
+		$.post(config.base_url+"memberpage/transactionResponse", form.serializeArray(), function(data){
+			if(data == 1){
+				parentdiv.html('Request submitted.');
+			}
+			else{
+				alert(data);
+			}
+		});
 	});
 	
 });
@@ -1397,69 +1416,12 @@ $(function(){
 });
 
 /***********************	GOOGLE MAPS		***************************/
-/*
-$(document).ready(function(){
-
-	$("#view_map").click(function(){     
-		var streetno = $("#streetno").val();
-		var streetname = $("#streetname").val();
-		var barangay = $("#barangay").val();
-		var citytown = $("#citytown").val();
-		var country = $("#country").val();
-		var address = streetno + " " + streetname + " Street " + ", " + barangay + " " + citytown + ", " + country;
-		var csrftoken = $('#personal_profile_address').find('input[name^="es_csrf"]').val();
-		$.ajax({
-			async:true,
-			url:config.base_url+"memberpage/toCoordinates",
-			type:"POST",
-			dataType:"JSON",
-			data:{address:address, es_csrf_token:csrftoken},
-			success:function(data){
-				if(data['lat']==false || data['lng']==false){
-					alert("Cannot retrieve map,Address is invalid");
-				}else{
-					var myLatlng =  new google.maps.LatLng(data['lat'],data['lng']);
-					$("#map").show();
-					google.maps.event.addDomListener(window, 'load', initialize(myLatlng));
-				}
-			}
-
-		});
-	});
-
-	function initialize(myLatlng) {
-		var mapOptions = {
-		  center:myLatlng,
-		  zoom: 15
-		};
-		var map = new google.maps.Map(document.getElementById("map-canvas"),
-			mapOptions);
-		var marker = new google.maps.Marker({
-			position: myLatlng,
-			map: map,
-			title:"I'm here!",
-			draggable: true
-		});
-		google.maps.event.addListener(marker, 'dragend', function(evt){
-			document.getElementById('map_lat').value = evt.latLng.lat();
-			document.getElementById('map_lng').value = evt.latLng.lng();
-			window.setTimeout(function(){
-				map.panTo(marker.getPosition());
-			}, 500);
-		});
-	}
-	
-});
-*/
-
 
 $(document).ready(function(){
 
 	var map, marker, geocoder;
 
 	$("#refresh_map").click(function(){     
-		//document.getElementById('map_lat').value = 0;
-		//document.getElementById('map_lng').value = 0;
 		var streetno = $("#streetno").val();
 		var streetname = $("#streetname").val();
 		var barangay = $("#barangay").val();
@@ -1467,21 +1429,7 @@ $(document).ready(function(){
 		var country = $("#country").val();
 		var address = streetno + " " + streetname + " Street " + ", " + barangay + " " + citytown + ", " + country;
 		var csrftoken = $('#personal_profile_address').find('input[name^="es_csrf"]').val();
-		/*$.ajax({
-			async:true,
-			url:config.base_url+"memberpage/toCoordinates",
-			type:"POST",
-			dataType:"JSON",
-			data:{address:address, es_csrf_token:csrftoken},
-			success:function(data){
-				if(data['lat']==false || data['lng']==false){
-					alert("Cannot retrieve map,Address is invalid");
-				}else{
-					var myLatlng =  new google.maps.LatLng(data['lat'],data['lng']);
-					google.maps.event.addDomListener(window, 'load', initialize(myLatlng));
-				}
-			}
-		});*/
+		
 		codeAddress(address);
 	});
 
@@ -1489,14 +1437,9 @@ $(document).ready(function(){
 	  geocoder = new google.maps.Geocoder();
 	  geocoder.geocode( { 'address': address}, function(results, status) {
 		if (status == google.maps.GeocoderStatus.OK) {
-		  /*map.setCenter(results[0].geometry.location);
-		  var marker = new google.maps.Marker({
-			  map: map,
-			  position: results[0].geometry.location
-		  });*/
 		  google.maps.event.addDomListener(window, 'load', initialize(results[0].geometry.location));
 		} else {
-		  alert('Geocode was not successful for the following reason: ' + status);
+		  alert('Location invalid');
 		}
 	  });
 	}
@@ -1521,6 +1464,8 @@ $(document).ready(function(){
 				map.panTo(marker.getPosition());
 			}, 500);
 		});
+		$('#temp_lat').val(myLatlng.lat());
+		$('#temp_lng').val(myLatlng.lng());
 	}
 	
 	$('#view_map').click(function () {
@@ -1549,36 +1494,19 @@ $(document).ready(function(){
 	$('#current_loc').on('click', function(){
 		var maplat = $('#map_lat').val();
 		var maplng = $('#map_lng').val();
-		var myLatlng =  new google.maps.LatLng(maplat,maplng);
-		map.setCenter(myLatlng);
-		marker.setPosition(myLatlng);
+		if(maplat != 0 && maplng != 0){
+			var myLatlng =  new google.maps.LatLng(maplat,maplng);
+			map.setCenter(myLatlng);
+			marker.setPosition(myLatlng);
+		}else{
+			alert('You have not marked your location yet.');
+		}
 	});
 	
-});
-
-$(document).ready(function(){
-    
 	$('#close').click(function () {
 		$(this).parent('#map').fadeOut();
 		$(this).parent('#map').siblings('#map-canvas').fadeOut();
 		$(this).parent('#map').siblings('.view_map_btn').find('#view_map').fadeIn();
 	});
-
-	/*
-	$('#view_map').click(function () {
-		$(this).fadeOut();
-		$(this).parent('div').siblings('#map').show();
-		$(this).parent('div').siblings('#map-canvas').addClass('map_canvas');
-		$(this).parent('div').siblings('#map-canvas').fadeIn();
-	});
-	*/
-
-});
-
-
-
-
-/******* rotate sort arrow when click *****/
-$(".arrow_sort").on("click", function () {
-    $(this).toggleClass("rotate_arrow");
+	
 });

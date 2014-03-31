@@ -359,6 +359,9 @@ class memberpage_model extends CI_Model
 		return $row;
 	}
 	
+	/*
+	 *	Obtain Transaction Details for Transaction Tab
+	 */
 	function getTransactionDetails($member_id){
 		$query = $this->sqlmap->getFilenameID('users','getTransactionDetails');
 		$sth = $this->db->conn_id->prepare($query);
@@ -373,6 +376,7 @@ class memberpage_model extends CI_Model
 			foreach($row as $k=>$temp){
 			
 				$data[$temp['id_order']]['dateadded'] = $temp['dateadded'];
+				$data[$temp['id_order']]['transac_stat'] = $temp['transac_stat'];
 				
 				if(!array_key_exists('users', $data[$temp['id_order']]))
 					$data[$temp['id_order']]['users'] = array();
@@ -383,14 +387,14 @@ class memberpage_model extends CI_Model
 				// you are buyer in transaction
 				if($member_id == $temp['buyer_id']){
 					$product = $temp;
-					$product = array_slice($product, 12, 6);
+					$product = array_slice($product, 12, 7);
 					$userid = $temp['seller_id'];
 					$username = $temp['seller'];
 				}
 				// you are seller in transaction
 				else if($member_id == $temp['seller_id']){
 					$product = $temp;
-					$product = array_slice($product, 12, 6);
+					$product = array_slice($product, 12, 7);
 					unset($product['seller_id']);
 					unset($product['seller']);
 					$userid = $temp['buyer_id'];
@@ -432,7 +436,6 @@ class memberpage_model extends CI_Model
 				if(trim($temp['attr_name']) != '' && trim($temp['attr_value']) != ''){
 					$data[$temp['id_order']]['products'][$temp['id_order_product']]['attr'] .= ucwords(strtolower($temp['attr_name'])) . ':' . ucwords(strtolower($temp['attr_value'])) . ' ';
 				}
-				
 			}
 			
 			foreach($data as $k=>$temp2){
@@ -442,9 +445,9 @@ class memberpage_model extends CI_Model
 					$fdata['buy'][$k] = $temp2;
 			}
 		}
+		
 		return $fdata;
 	}
-	
 	
 	function addFeedback($temp){
 		$query = $this->sqlmap->getFilenameID('users','addFeedback');

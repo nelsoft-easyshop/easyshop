@@ -160,7 +160,6 @@ class Payment extends MY_Controller{
 						);
 						$this->sendNotification($notificationData);
                   }
-
                 }else{
                     $response['message'] = '<div style="color:red"><b>Error 2: (GetTransactionDetails failed):</b>'.urldecode($httpParsedResponseAr["L_LONGMESSAGE0"]).'</div>';
                 }

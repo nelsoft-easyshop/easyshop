@@ -225,7 +225,7 @@
 </select>
 
 <select id="getTransactionDetails">
-	SELECT o.id_order, o.buyer_id, buyer.username as buyer, DATE_FORMAT(o.dateadded, "%D %M %Y") as dateadded, fb.for_memberid, fb.feedb_kind, fb.feedb_msg, DATE_FORMAT(fb.dateadded, "%D %M %Y") as fbdateadded, fb.rating1, fb.rating2, fb.rating3, op.id_order_product, op.product_id, op.seller_id, seller.username as seller, p.name, op.order_quantity, op.total as price, pi.product_image_path, attr.name as attr_name, pattr.attr_value
+	SELECT o.id_order, o.buyer_id, buyer.username as buyer, DATE_FORMAT(o.dateadded, "%D %M %Y") as dateadded, o.order_status as transac_stat, fb.for_memberid, fb.feedb_msg, DATE_FORMAT(fb.dateadded, "%D %M %Y") as fbdateadded, fb.rating1, fb.rating2, fb.rating3, op.id_order_product, op.product_id, op.seller_id, seller.username as seller, p.name, op.order_quantity, op.total as price, opstat.status, pi.product_image_path, attr.name as attr_name, pattr.attr_value
 	FROM es_order o
 	INNER JOIN es_order_product op 
 		ON op.order_id = o.id_order AND (op.seller_id = :id OR o.buyer_id = :id)
@@ -245,7 +245,10 @@
 		ON o.buyer_id = buyer.id_member
 	LEFT JOIN es_member_feedback fb
 		ON fb.order_id = o.id_order AND (fb.for_memberid = op.seller_id OR fb.for_memberid = o.buyer_id) AND fb.member_id = :id
+	LEFT JOIN es_order_product_status	opstat
+		ON opstat.order_product_id = op.id_order_product
 	ORDER BY o.id_order desc, op.product_id asc
 </select>
+
 
 </map>

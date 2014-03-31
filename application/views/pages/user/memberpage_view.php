@@ -1390,7 +1390,7 @@
 				<div class="transac_prod_wrapper">
 					
 					<div class="transac-product-container">
-						<?php foreach($transact['products'] as $product):?>
+						<?php foreach($transact['products'] as $opk=>$product):?>
 						<div class="transac_prod_first">
 							<img src="<?=base_url()?><?php echo $product['product_image_path'];?>">
 							<div>
@@ -1401,6 +1401,22 @@
 								<p>Bought from: <a href="<?php echo base_url();?>vendor/<?php echo $product['seller'];?>"><?php echo $product['seller'];?></a></p>
 								<p>Quantity:<span class="fm1 f16"><?php echo $product['order_quantity']?></span></p>
 								<p>Total:<span class="fm1 f16">Php<?php echo number_format($product['price'],2,'.',',');?></span></p>
+							</div>
+							<div>
+								<?php if($product['status'] == 0):?>
+									<?php
+										$attr = array('class'=>'transac_response');
+										echo form_open('',$attr);
+									?>
+										<span class = "transac_response_btn">Forward payment to seller</span>
+										<input type="hidden" name="buyer_response" value="<?php echo $opk;?>">
+										<input type="hidden" name="transaction_num" value="<?php echo $tk;?>">
+									<?php echo form_close();?>
+								<?php elseif($product['status'] == 1):?>
+									<span>Paid</span>
+								<?php elseif($product['status'] == 2):?>
+									<span>Payment returned by seller</span>
+								<?php endif;?>
 							</div>
 							<div class="clear"></div>
 						</div>
@@ -1506,7 +1522,7 @@
 			</div>
 			<div class="transac_prod_wrapper">
 				
-				<?php foreach($transact['products'] as $product):?>
+				<?php foreach($transact['products'] as $opk=>$product):?>
 				<div class="sold_prod_container transac-product-container">
 					<img src="<?=base_url()?><?php echo $product['product_image_path'];?>">
 					<div>
@@ -1516,7 +1532,23 @@
 						</p>
 						<p>Quantity:<span class="fm1 f18"><?php echo $product['order_quantity']?></span></p>
 						<p>Total:<span class="fm1 f18">Php<?php echo number_format($product['price'],2,'.',',');?></span></p>
-					</div>							
+						<div>
+						<?php if($product['status'] == 0):?>
+							<?php
+								$attr = array('class'=>'transac_response');
+								echo form_open('',$attr);
+							?>
+							<span class="transac_response_btn">Return payment to buyer</span>
+							<input type="hidden" name="seller_response" value="<?php echo $opk;?>">
+							<input type="hidden" name="transaction_num" value="<?php echo $tk;?>">
+							<?php echo form_close();?>
+						<?php elseif($product['status'] == 1):?>
+							<span>Paid</span>
+						<?php elseif($product['status'] == 2):?>
+							<span>Payment returned to buyer</span>
+						<?php endif;?>
+						</div>
+					</div>
 				</div>
 			<?php endforeach;?>
 			

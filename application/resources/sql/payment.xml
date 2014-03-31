@@ -64,4 +64,9 @@
 		ON o.buyer_id = buyer.id_member
 </select>
 
+<select id="updateTransactionStatus">
+	CALL `es_sp_updateTransactionStatus` (:status, :order_product_id, :order_id )
+</select>
+
+
 </map>

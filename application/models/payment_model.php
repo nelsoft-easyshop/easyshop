@@ -87,6 +87,9 @@ class payment_model extends CI_Model
 		return $result;
 	}
 	
+	/*
+	 *	Function to get Transaction Details for summary in notification email
+	 */
 	public function getTransactionDetails($data)
 	{
 		//devcode
@@ -143,6 +146,26 @@ class payment_model extends CI_Model
 		
 		return $data;
 
+	}
+	
+	/*
+	 *	Updates es_order_product_status
+	 *	Checks es_order_product_status if all orders have buyer/seller response and updates
+	 *		es_order as complete
+	 *	USED IN MEMBERPAGE - TRANSACTIONS TAB
+	 */
+	function updateTransactionStatus($data)
+	{
+		$query = $this->sqlmap->getFilenameID('payment','updateTransactionStatus');
+		$sth = $this->db->conn_id->prepare($query);
+
+		$sth->bindParam(':status', $data['status']);
+		$sth->bindParam(':order_product_id', $data['order_product_id']);
+		$sth->bindParam(':order_id', $data['transaction_num']);
+		$result = $sth->execute();
+		
+		//print_r($sth->errorInfo());
+		return $result;
 	}
 }
 
