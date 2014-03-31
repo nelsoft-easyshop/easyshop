@@ -157,8 +157,10 @@ $(function(){
 });
 
 
-
+var sel_id_ordered = new Array();
+        
 function attrClick(target, $this){
+    
         //If clicked attribute is disabled, exit immediately
         if(target.hasClass('disable'))
             return false;
@@ -174,10 +176,31 @@ function attrClick(target, $this){
             $this.find('.active').removeClass("active");
         }
         
+        
+        var data_attr = [target.attr('data-attrid'),target.attr('data-type')];
         if(!isActiveBool){
             target.addClass("active");
+            target.parent().find('li').each(function(){
+                var t_idx = inArray([$(this).attr('data-attrid'),$(this).attr('data-type')], sel_id_ordered);
+                if(t_idx > -1){
+                    sel_id_ordered.splice(t_idx, 1);
+                }
+            });
+            if(inArray(data_attr, sel_id_ordered) === -1){
+                sel_id_ordered.push(data_attr);
+            }
         }
-     
+        else{
+            var idx = inArray(data_attr, sel_id_ordered);
+            if(idx > -1){
+                sel_id_ordered.splice(idx, 1);
+            }
+        }
+        /*  Previously: if(!isActiveBool) target.addClass("active");
+         *  Added rest of code to get selected attributes in the same
+         *  order that they are entered. 
+         */
+             
         var isOptionAvailable = false;
         //** calculate price
         var sel_id = new Array();
@@ -189,14 +212,17 @@ function attrClick(target, $this){
                 price += 0;
             }
             else{
-                sel_id.push([actv.attr('data-attrid'),actv.attr('data-type')])
+                sel_id.push([actv.attr('data-attrid'),actv.attr('data-type')]);
                 price += parseFloat(actv.attr('data-price'));
                 //Added this if condition so that hidden active attributes are ignored for attribute display enabling
                 if(actv.attr('data-hidden') !== 'true')
                     isOptionAvailable = true;
             }
         });
- 
+        
+        var freeRowIndex = inArray(sel_id_ordered[0], sel_id);
+        freeRowIndex = (freeRowIndex<=-1)?0:freeRowIndex;
+        
         $('.current_price')[0].innerHTML = price.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
         /*
@@ -266,11 +292,10 @@ function attrClick(target, $this){
          *  1. If the combination contains all of the selected attributes, enable the other attributes in the combination
          *  2. Get combinations wherein each attribute to be displayed is included:
          *     If an attribute in the combination is in the same row as a currently active attribute    
-         *     AND the selected attributes (minus the first element) PLUS the attribute in question are present together 
+         *     AND the selected attributes (minus the first clicked element) PLUS the attribute in question are present together 
          *     in the combination: enable the attribute. The relevance of the removing the first element of the selected
          *     attributes array is to give the algorithm a row to consider as the "free-est" row (the row wherein the user
-         *     can move about the most without violating the combinations). This can be any row, but it has been arbitrarily 
-         *     decided to consider the row of the top most selected attribute as the "free-est" row.
+         *     can move about the most without violating the combinations).
          *  3. If an attribute is not included in the attributes to be displayed AND is in the same row as the currently 
          *     selected attribute, do not disable it even if it does not pass conditions 1 & 2. Note that this step does 
          *     not enable such attributes but simply prevents them from being disabled. They simply maintain their state.
@@ -289,7 +314,7 @@ function attrClick(target, $this){
             if(containsAll(sel_id, value_arr)){
                 $.each(value_arr, function(r,s){
                     //if attr_id is not yet in show_ids, push it in
-                    if(!inArray(s, show_ids)){
+                    if(inArray(s, show_ids) === -1){
                         show_ids.push(s);
                     }
                 });
@@ -301,22 +326,24 @@ function attrClick(target, $this){
          * currently enabled attributes.
          */
 
-        $.each(show_ids, function(idx, id){
+        $.each(show_ids, function(idx, id){        
             $.each(qty, function(index, value){
                 var value_arr = new Array();
                 $.each(value.product_attribute_ids, function(y,x){
                     value_arr.push([x.id, x.is_other]);
                 }); 
-                if((containsAll([id], value_arr)))  {        
+                if((containsAll([id], value_arr))){        
                     $.each(value_arr, function(r,s){
                         if(($('.product_option li[data-attrid='+s[0]+']').siblings('.active')[0] !== undefined)){
                             //Remove element from the "free-est" row
+                            console.log('before concat');
+                            console.log(sel_id);
                             var arr = [].concat(sel_id);
-                            arr.shift();  
+                            arr.splice(freeRowIndex, 1);
                             var n_arr = [s].concat(arr);
                             if((containsAll(n_arr, value_arr))){
                                 //if attr_id is not yet in show_ids, push it in
-                                if(!inArray(s, show_ids))
+                                if(inArray(s, show_ids)===-1)
                                 {
                                     show_ids.push(s);
                                 }
@@ -327,11 +354,10 @@ function attrClick(target, $this){
             })
         }); 
        
-  
         //Disabled/enable attributes accordingly (if no option is selected, just enable everything)
         $('.product_option li').each(function(){
             var t_arr = [$(this).attr('data-attrid'), $(this).attr('data-type')];
-            if((!inArray(t_arr, show_ids))&&(isOptionAvailable))
+            if((inArray(t_arr, show_ids)===-1)&&(isOptionAvailable))
             {
                //@Step 3: added this if condition in order to keep same row attributes from being disabled
                if(($(this).closest('ul')[0]!==target.closest('ul')[0]))
@@ -368,7 +394,7 @@ $(function(){
                 }
                 $(this).removeClass('disable');
                 $(this).removeClass('active');
-            });
+            });            
             $.each(active, function(p, q){
                 var target = $('.product_option li[data-attrid='+q[0]+'][data-type='+q[1]+']');
                 attrClick(target,$this);
@@ -507,7 +533,7 @@ $(function(){
 
 function containsAll(needles, haystack){ 
     for(var i = 0, len = needles.length; i<len; i++){
-        if(!inArray(needles[i], haystack)){
+        if(inArray(needles[i], haystack) === -1){
             return false;
         }
     }
@@ -517,10 +543,10 @@ function containsAll(needles, haystack){
 function inArray(needle, haystack){
     for(j = 0, len = haystack.length; j<len; j++){
         if(arraysEqual(needle, haystack[j])){
-            return true;
+            return j;
         }
     }
-    return false;
+    return -1;
 }
 
 function arraysEqual(a, b) {
