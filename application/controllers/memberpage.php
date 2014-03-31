@@ -68,8 +68,10 @@ class Memberpage extends MY_Controller
 			
 			echo 1;
         }
-		else
+		else{
 			echo 0;
+		}
+		
     } 
 	
 	function edit_address()
@@ -171,7 +173,7 @@ class Memberpage extends MY_Controller
     { 
          $param_values = explode( ',', $param );  
          $model = $param_values[0]; 
-         $this->load->model( $model ); 
+         $this->load->model( $model );
          $method = $param_values[1]; 
          if( count( $param_values ) > 2 ) { 
               array_shift( $param_values ); 

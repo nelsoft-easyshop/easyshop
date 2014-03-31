@@ -294,6 +294,18 @@ class memberpage_model extends CI_Model
 		}
 	}
 	
+	function is_validmobile($mobile)
+	{
+		if(preg_match('/^9[0-9]{9}/', $mobile)){
+			return true;
+		}
+		else{
+			$this->form_validation->set_message('external_callbacks', 'The mobile number you entered is invalid');
+			return false;
+		}
+		
+	}
+	
 	function getUserItems($member_id) 	#Retrieves user items to be displayed on dashboard
 	{
 		$query = $this->sqlmap->getFilenameID('product','getUserItems');

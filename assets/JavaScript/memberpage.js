@@ -40,6 +40,10 @@ $(document).ready(function(){
 		else 
 			 return this.optional(element) || false;
 	 }, "This date is invalid");
+	 
+	 jQuery.validator.addMethod("is_validmobile", function(value, element) {
+		return this.optional(element) || /^9[0-9]{9}/.test(value);
+	 }, "Invalid mobile number");
  
 	$("#personal_profile_main").validate({
 		rules: {
@@ -48,8 +52,9 @@ $(document).ready(function(){
 			},
 			mobile:{
 				number: true,
-				minlength: 11,
-				maxlength: 11
+				minlength: 10,
+				maxlength: 10,
+				is_validmobile: true
 			},
 			email:{
 				email: true,
@@ -1187,7 +1192,6 @@ $(document).ready(function(){
 			$($('#bought .paging')[page-1]).show();
 		}
 	});
-	
 	
 	$('#pagination-opbuyer').jqPagination({
 		paged: function(page) {

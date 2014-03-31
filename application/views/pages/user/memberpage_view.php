@@ -910,7 +910,7 @@
 
 				<div id="mobilediv">
 					<label for="mobile">Mobile:</label>
-					<input type="text" name="mobile" id="mobile" maxlength="11" value="<?php echo $contactno;?>" <?php echo (trim($contactno)==''?'':'disabled');?>>
+					<input type="text" name="mobile" id="mobile" maxlength="10" value="<?php echo $contactno;?>" <?php echo (trim($contactno)==''?'':'disabled');?> placeholder="e.g. 9051234567">
 					<span class="red ci_form_validation_error"><?php echo form_error('mobile'); ?></span>
 					<input type="hidden" name="mobile_orig" value="<?php echo $contactno;?>">
 					<input type="hidden" name="is_contactno_verify" value="<?php echo $is_contactno_verify;?>">
