@@ -102,6 +102,8 @@
 	</div>
 </div>
 <div class="clear"></div>
+<input type="hidden" id="advancesearch_csrf" name="<?php echo $my_csrf['csrf_name'];?>" value="<?php echo $my_csrf['csrf_hash'];?>">
+
 <style type="text/css">
 .err{
 	-webkit-box-shadow: 0px 0px 2px 2px #FF0000;
@@ -214,6 +216,7 @@ $(document).ready(function() {
             var catId = D.cat_id;
             var level =  D.level;
             var name = D.name;
+			var csrftoken = $('#advancesearch_csrf').val();
 
             $(".product_sub_category .product_sub_items0").nextAll().remove();
             $(".product_sub_category .product_sub_items0").remove();
@@ -225,7 +228,7 @@ $(document).ready(function() {
 				async: false,
 				type: "POST",
 				url: '<?php echo base_url(); ?>' + action,
-				data: "cat_id=" + catId + "&level=" + level + "&name=" + name,
+				data: "cat_id=" + catId + "&level=" + level + "&name=" + name + "&es_csrf_token=" + csrftoken,
 				dataType: "json",
 				cache: false,
 				onLoading:jQuery(".sub_cat_loading_container").html('<img src="<?= base_url() ?>assets/images/orange_loader.gif" />').show(),
@@ -253,6 +256,7 @@ $(document).ready(function() {
 			var D = eval('(' + $(this).attr('data') + ')');
             var nlevel = parseInt(D.level) + 1;
             var action = 'product_search/getChild';
+			var csrftoken = $('#advancesearch_csrf').val();
             var catId = D.cat_id;
             var name = D.name;
 
@@ -265,7 +269,7 @@ $(document).ready(function() {
 				async: false,
 				type: "POST",
 				url: '<?php echo base_url(); ?>' +  action,
-				data: "cat_id=" + catId + "&level=" + nlevel + "&name=" + name,
+				data: "cat_id=" + catId + "&level=" + nlevel + "&name=" + name + "&es_csrf_token=" + csrftoken,
 				dataType: "json",
 				cache: false,
 				onLoading:$(".sub_cat_loading_container").html('<img src="<?= base_url() ?>assets/images/orange_loader.gif" />').show(),
@@ -333,8 +337,9 @@ $(document).ready(function() {
 </script> 
 <div id="storeValue" style="display:none"></div>
 <div id="storeValue2" style="display:none"></div>
-<script>        
-    $(document).ready(function() {
+<script>  
+      
+   $(document).ready(function() {
        $('#cat_search_drop_content').on('click', 'li.cat_result', function(){
             var parent_ids = eval('('+$(this).attr('data-parent')+')');
             $('li .select').each(function(){
@@ -351,10 +356,10 @@ $(document).ready(function() {
                 $('li.'+ id+' .select2.child').each(function(){
                     var D = eval('(' + $(this).attr('data') + ')');
                     if( parseInt(D.cat_id) === parent_ids[0]){
-						$(this).click(); 
-						scrollToElement(this, '.product_sub_items' +cnt);
-						cnt++;
-						return false;
+                        $(this).click(); 
+                        scrollToElement(this, '.product_sub_items' +cnt);
+                        cnt++;
+                        return false;
                     }
                 });
             });
@@ -363,11 +368,12 @@ $(document).ready(function() {
         var currentRequest = null;
         $( "#_cat_sch" ).keyup(function() {
             var searchQuery = $(this).val();
+			var csrftoken = $('#advancesearch_csrf').val();
             if(searchQuery != ""){
                 currentRequest = jQuery.ajax({
                     type: "POST",
                     url: '<?php echo base_url();?>product/searchCategory', 
-                    data: "data="+searchQuery, 
+                    data: "data="+searchQuery+"&es_csrf_token="+csrftoken, 
                     onLoading:jQuery(".cat_sch_loading").html('<img src="<?= base_url() ?>assets/images/orange_loader_small.gif" />').show(),
                     beforeSend : function(){       
                         $("#cat_search_drop_content").empty();
@@ -380,7 +386,7 @@ $(document).ready(function() {
                         var html = '<ul>';
                         var data_content, data_id, cnt;
                         var delim_img = ' <img src = "<?=base_url()?>assets/images/img_bullet2.jpg"/> ';
-                        if((obj.length)>0){
+						if((obj.length)>0){
                             jQuery.each(obj,function(){
                                 data_content = '';
                                 data_id = '[';
@@ -392,7 +398,8 @@ $(document).ready(function() {
                                     if(count !== length){
                                         data_content += $(this)[0].name + delim_img;
                                         data_id += $(this)[0].id_cat+",";
-                                    }else{
+                                    }
+                                    else{
                                         data_content += '<b>' + $(this)[0].name + '</b>';
                                         data_id +=  $(this)[0].id_cat + "]";
                                     }
@@ -401,7 +408,7 @@ $(document).ready(function() {
                             });
                         }
                         else{
-                            html += '<li"> No results found </li>' 
+                            html += '<li> No results found </li>' 
                         }
                         html += '</ul>';
                         $("#cat_search_drop_content").html(html);
@@ -411,7 +418,7 @@ $(document).ready(function() {
             }
         });
  
-    });
+    }); // document.ready end
     
     function scrollToElement(selector, container, time) {
         var xtime = typeof(time) != 'undefined' ? time : 100;
