@@ -436,6 +436,9 @@ class Register_model extends CI_Model
  
 	/*************	LANDING PAGE SUBSCRIPTION	*****************/
 	
+	/*
+	 *	Save email to subscription table
+	 */
 	public function subscribe($email)
 	{
 		$query = $this->sqlmap->getFilenameID('users', 'subscribe');
@@ -443,6 +446,40 @@ class Register_model extends CI_Model
         $sth->bindParam(':email', $email);
         $result = $sth->execute();
 		
+		return $result;
+	}
+	
+	/*
+	 *	Send notification email after registration / subscription
+	 *	$data = 'username', 'email', 'password'
+	 */
+	public function sendNotification($data, $type="")
+	{
+		$this->load->library('email');	
+		$this->load->library('parser');
+		
+		$this->email->set_newline("\r\n");
+		$this->email->to($data['email']);
+		$this->email->from('noreply@easyshop.ph', 'Easyshop.ph');		
+		//$this->email->attach(getcwd() . "\assets\images\img_logo.png", "inline"); //Windows code
+		$this->email->attach(getcwd() . "/assets/images/img_logo.png", "inline"); //CentOS code - working for windows as well
+
+		if($type === 'signup'){
+			$this->email->subject($this->lang->line('registration_subject'));
+			$parseData = array(
+				'user' => $data['username']
+			);
+			$msg = $this->parser->parse('templates/landingpage/registration_email',$parseData,true);
+		}
+		else if ($type === 'subscribe'){
+			$this->email->subject($this->lang->line('subscription_subject'));
+			$parseData = array();
+			$msg = $this->parser->parse('templates/landingpage/subscription_email',$parseData,true);
+		}
+		
+		$this->email->message($msg);
+		$result = $this->email->send();
+
 		return $result;
 	}
 	

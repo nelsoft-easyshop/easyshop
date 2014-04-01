@@ -162,7 +162,7 @@ $(document).ready(function(){
 		 	$.post(config.base_url + 'landingpage/signup', $(form).serializeArray(), function(data){
 				$('#register_form1_loadingimg').hide();
 				$('#register_form1_btn').attr('disabled', false);
-				if(data === '1'){
+				if(data == 1){
 					$('#result_desc').html("Thank you for registering to Easyshop.ph!");
 					var title = "Registration Complete";
 				}
@@ -219,7 +219,7 @@ $(document).ready(function(){
 		 	$.post(config.base_url + 'landingpage/subscribe', $(form).serializeArray(), function(data){
 				$('#subscribe_loadingimg').hide();
 				$('#subscribe_btn').attr('disabled', false);
-				if(data === '1'){
+				if(data == 1){
 					$('#result_desc').html("Thank you for subscribing to Easyshop.ph!");
 					var title = "Subscription Complete";
 				}
@@ -252,8 +252,8 @@ function username_check(){
 	var username = $('#username').val();
 	var csrftoken = $('#register_form1').find('input[name^="es_csrf"]').val();
 	$('#username').siblings('img.check_loader').show();
-	$.post(config.base_url+'register/username_check', {username: username, es_csrf_token : csrftoken}, function(result){
-		if(result === '1'){
+	$.post(config.base_url+'landingpage/username_check', {username: username, es_csrf_token : csrftoken}, function(result){
+		if(result == 1){
 			showcheck($('#username'));
 			$('.username_availability').html('Username available');
 			$('#usernamecheck').attr('value', $('#username').val());
@@ -271,8 +271,8 @@ function email_check(){
 	var email = $('#email').val();
 	var csrftoken = $('#register_form1').find('input[name^="es_csrf"]').val();
 	$('#email').siblings('img.check_loader').show();
-	$.post(config.base_url+'register/email_check', {email: email, es_csrf_token : csrftoken}, function(result){
-		if(result === '1'){
+	$.post(config.base_url+'landingpage/email_check', {email: email, es_csrf_token : csrftoken}, function(result){
+		if(result == 1){
 			showcheck($('#email'));
 			$('.email_availability').html('Email available');
 			$('#emailcheck').attr('value', $('#email').val());
