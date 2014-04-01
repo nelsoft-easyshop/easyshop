@@ -253,8 +253,7 @@ class Register_model extends CI_Model
 		$this->email->message($msg);
 		$result = $this->email->send();
 
-		$errmsg = $this->email->print_debugger();
-		
+		//$errmsg = $this->email->print_debugger();
 		//print_r($errmsg);
 		//die();
 
@@ -435,7 +434,17 @@ class Register_model extends CI_Model
         $sth->execute();	
 	}	
  
-
+	/*************	LANDING PAGE SUBSCRIPTION	*****************/
+	
+	public function subscribe($email)
+	{
+		$query = $this->sqlmap->getFilenameID('users', 'subscribe');
+        $sth = $this->db->conn_id->prepare($query);
+        $sth->bindParam(':email', $email);
+        $result = $sth->execute();
+		
+		return $result;
+	}
 	
 }
 

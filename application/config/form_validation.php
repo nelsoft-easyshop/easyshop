@@ -272,9 +272,39 @@ $config = array(
 						'label' => 'Email Address',
 						'rules' => 'trim|valid_email'
 					  )
-				)			
+				),
+			'landing_form' => array(
+				   array(
+						 'field'   => 'username',
+						 'label'   => 'Username',
+						 'rules'   => 'trim|required||min_length[5]|max_length[25]|callback_external_callbacks[register_model,validate_username]|callback_external_callbacks[register_model,alphanumeric_underscore]'
+					  ),
+				   array(
+						 'field'   => 'password',
+						 'label'   => 'Password',
+						 'rules'   => 'trim|required|matches[cpassword]|min_length[6]|max_length[25]|callback_external_callbacks[register_model,validate_password]'
+					  ),
+				   array(
+						 'field'   => 'cpassword',
+						 'label'   => 'Password Confirmation',
+						 'rules'   => 'trim|required'
+					  ),
+				   array(
+						'field' => 'email',
+						'label' => 'Email Address',
+						'rules' => 'trim|required|valid_email'
+					  ),
+				),
+			'subscription_form' => array(
+					array(
+						'field' => 'subscribe_email',
+						'label' => 'Subscription Email',
+						'rules' => 'trim|required|valid_email'
+					)
+				)
 		);
 
 		
 /* End of file form_validation.php */
 /* Location: ./application/config/form_validation.php */
+

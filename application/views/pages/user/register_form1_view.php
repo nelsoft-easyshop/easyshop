@@ -105,7 +105,7 @@
 			<input type="submit" id="register_page1" name="register_page1" value="Agree and Continue"/>
 			<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" id="register_form1_loadingimg" style="position: relative; top:10px; left:20px; display:none"/>
 		  </div>
-
+		  
 	  </div>
 	<?php echo form_close();?>
    <?php endif; ?>

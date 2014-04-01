@@ -250,5 +250,11 @@
 	ORDER BY o.id_order desc, op.product_id asc
 </select>
 
+<!--	LANDING PAGE SUBSCRIPTION	-->
+<select id="subscribe">
+	INSERT INTO `es_subscribe` (`email`)
+	VALUES (:email)
+	ON DUPLICATE KEY UPDATE email = :email
+</select>
 
 </map>

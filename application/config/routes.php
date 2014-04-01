@@ -39,6 +39,7 @@
 */
 
 $route['default_controller'] = "home/comingSoon";
+//$route['default_controller'] = "landingpage";
 $route['404_override'] = 'home/pagenotfound';
 
 # CATEGORY
