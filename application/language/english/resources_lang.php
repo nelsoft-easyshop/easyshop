@@ -26,15 +26,9 @@ $lang['msg3'] = "Unable to send, please try again later.";
 #Purchase Notification
 $lang['notification_subject'] = "Easyshop.ph - Transaction Details";
 
-
-
 #Landing Page
 $lang['subscription_subject'] = "Easyshop.ph - Thank you for subscribing!";
 $lang['registration_subject'] = "Easyshop.ph - Thank you for registering!";
-
-
-
-
 
 ?>
 
