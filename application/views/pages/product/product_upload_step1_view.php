@@ -415,13 +415,11 @@ echo form_open('sell/edit/step2', $attributesForm);
                 var id  = parent_ids.shift();
                 $('li.'+ id+' .select2.child').each(function(){
                     var D = eval('(' + $(this).attr('data') + ')');
-                    if(typeof obj[0] !== 'undefined'){
-                        if( parseInt(D.cat_id) === parent_ids[0]){
-                            $(this).click(); 
-                            scrollToElement(this, '.product_sub_items' +cnt);
-                            cnt++;
-                            return false;
-                        }
+                    if( parseInt(D.cat_id) === parent_ids[0]){
+                        $(this).click(); 
+                        scrollToElement(this, '.product_sub_items' +cnt);
+                        cnt++;
+                        return false;
                     }
                 });
             });
