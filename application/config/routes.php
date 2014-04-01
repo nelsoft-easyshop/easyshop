@@ -52,6 +52,8 @@ $route['search/(:any)'] = 'product/sch/$1'; # ryan vasquez
 $route['search/load_search_other_product'] = 'product/sch_scroll'; # ryan vasquez
 
 # ADVANCE SEARCH
+$route['advsearch'] = 'product_search/red'; # rain jorque
+$route['advance_search/(:any)'] = 'product_search/red/$1'; # rain jorque
 $route['advance_search/load_other_product'] = 'product_search/load_product'; # rain jorque
 
 #ITEMS
