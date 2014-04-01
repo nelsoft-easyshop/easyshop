@@ -817,14 +817,30 @@ nav ul > li > div ul li {
 	height: 25px;
 }
 
+.cat_slide_img_wrapper {
+	background-color: #FFFFFF;
+    border: 1px solid #E5E5E5;
+    display: inline-block;	
+}
+.cat_slide_img_con {
+	display: table-cell;
+    height: 60px;
+    vertical-align: middle;
+    width: 60px;
+}
+
 nav ul > li > div ul li a {
 	line-height: normal;
 }
 
 nav ul > li > div ul li img {
-	width: 60px;
+/*	width: 60px;
 	height: 60px;
-	max-width: none !important;
+	max-width: none !important;*/
+    height: auto;
+    max-height: 60px;
+    max-width: 60px;
+    width: auto;
 }
 
 nav ul > li:hover > div {
