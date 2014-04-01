@@ -43,7 +43,7 @@ class product_search extends MY_Controller {
 		$parents = $this->search_model->getDownLevelNode($id);
 		$response['cat_id'] = $id;
 		$response['node'] = $parents;
-		$response['level'] = $this->input->post('level');
+		$response['level'] = $this->input->post('level');	
 
 		$attribute = $this->search_model->getAttributesByParent($id);
 		
@@ -88,7 +88,7 @@ class product_search extends MY_Controller {
 			$condition = $this->input->get();
 			$start = 0; # start series
 			$per_page = $this->per_page; # no of display
-			$test = "";			
+			$test = "ok";			
 						
 			$getParentId = $this->search_model->getParentId($category);
 			if(!empty($getParentId)){
@@ -130,11 +130,18 @@ class product_search extends MY_Controller {
 					}// end
 				}
 				
-				if($name == "BRAND" && !empty($val)){
+				if($name == "BRAND"){					
 					if(is_array($val)){
-						$attr_brand = $attr_brand . " AND eb.`name` IN ('". implode("','", $val) . "') ";
-					}else{
-						$attr_brand = $attr_brand . " AND eb.`name` = '". $val . "' ";
+						$arr_brand = "";
+						foreach($val as $row => $brands){
+							$arr_brand = $arr_brand . "'" . $brands . "',";
+						}
+						
+						$fin_arr_brand = substr($arr_brand, 0, strlen($arr_brand) - 1 );
+						
+						if(!empty($fin_arr_brand)){
+							$attr_brand = $attr_brand . " AND eb.`name` IN (". $fin_arr_brand . ") ";
+						}
 					}
 						
 				}
