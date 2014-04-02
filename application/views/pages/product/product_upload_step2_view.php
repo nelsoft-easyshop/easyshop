@@ -1402,7 +1402,7 @@ $(".proceed_form").unbind("click").click(function(){
       if(<?php echo json_encode((isset($is_edit))?$is_edit:false); ?>){
 
         $.ajax({
-          async: false,
+          //async: false, //REMOVED: MAKES BROWSER UNRESPONSIVE
           type: "POST",
           url: '<?php echo base_url();?>' + 'sell/edit/processing2',
           mimeType:"multipart/form-data",
@@ -1430,7 +1430,7 @@ $(".proceed_form").unbind("click").click(function(){
       }else{
 
         $.ajax({
-          async: false,
+          //async: false, //REMOVED: MAKES BROWSER UNRESPONSIVE
           type: "POST",
           url: '<?php echo base_url();?>sell/processing',
           mimeType:"multipart/form-data",
