@@ -25,7 +25,7 @@ class Login extends MY_Controller {
     }
 
 	#when login button is clicked, username pass will check if it exsits in the database
-	function authenticate() {
+	function authenticate() {    
 		if(($this->input->post('login_form'))&&($this->form_validation->run('login_form'))){
 			$uname = $this->input->post('login_username');
 			$pass = $this->input->post('login_password');	
