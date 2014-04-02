@@ -325,10 +325,10 @@ $(function(){
 	  var productitemid = $('#json_id_product_item').val();
 	  var productid = parseInt($('#prod_h_id').val());
 	  $.post(config.base_url+'sell/shippinginfo', {fdata : fdata, es_csrf_token : csrftoken, productitemid : productitemid, productid : productid}, function(data){
-		if(data === 'success'){
+		if(data == 1){
 			$('#step4_form').submit();
 		}
-		else if(data === 'fail'){
+		else if(data == 0){
 			alert('An error was encountered. Please add shipping details for all attribute combinations.');
 		}
       });
