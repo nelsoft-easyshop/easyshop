@@ -617,8 +617,8 @@ class productUpload extends MY_Controller
 	function step3()
 	{
 		//if($this->input->post('prod_h_id')){
-			//$id = $this->input->post('prod_h_id');
-			$id = 118;
+			$id = $this->input->post('prod_h_id');
+			//$id = 118;
 			//$id = 123;
 			
 			$data = array (
