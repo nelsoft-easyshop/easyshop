@@ -934,9 +934,9 @@
     SELECT a.id_product_item, a.quantity, COALESCE(b.product_attr_id,0) as product_attr_id , 
     COALESCE(b.is_other,0) as is_other, COALESCE(d.id_attr_lookuplist_item,0) as attr_lookuplist_item_id
     FROM es_product_item a
-    INNER JOIN es_product_item_attr b ON b.product_id_item = a.id_product_item AND b.is_other = 0
-    INNER JOIN es_product_attr c ON c.id_product_attr = b.product_attr_id
-    INNER JOIN es_attr_lookuplist_item d ON LCASE(d.name) = LCASE(c.attr_value)
+    LEFT JOIN es_product_item_attr b ON b.product_id_item = a.id_product_item AND b.is_other = 0
+    LEFT JOIN es_product_attr c ON c.id_product_attr = b.product_attr_id
+    LEFT JOIN es_attr_lookuplist_item d ON LCASE(d.name) = LCASE(c.attr_value)
     WHERE a.product_id = :product_id
 
     UNION
@@ -944,9 +944,8 @@
     SELECT a.id_product_item, a.quantity, COALESCE(b.product_attr_id,0) as product_attr_id , 
     COALESCE(b.is_other,0) as is_other, '0' as attr_lookuplist_item_id
     FROM es_product_item a
-    INNER JOIN es_product_item_attr b ON b.product_id_item = a.id_product_item AND b.is_other = 1
+    LEFT JOIN es_product_item_attr b ON b.product_id_item = a.id_product_item AND b.is_other = 1
     WHERE a.product_id = :product_id
-    
 </select>
 
 <select id = 'getCatFast'>
