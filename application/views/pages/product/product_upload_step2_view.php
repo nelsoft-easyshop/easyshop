@@ -725,7 +725,7 @@ $(document).ready(function(){
     $('.main'+cnt).empty();
     $('.main'+cnt).append('<td class="border-left">'+title+'</td> \
       <td  colspan="3"> \
-      <input type="text" placeholder="Enter name" autocomplete="off" class="prod_'+cnt+' other_name_class" data-cnt="'+cnt+'" name="prod_other_name[]"> \
+      <input type="text" placeholder="Enter item specific name" autocomplete="off" class="prod_'+cnt+' other_name_class" data-cnt="'+cnt+'" name="prod_other_name[]"> \
       '+link+' \
       </td>')
     }
@@ -738,7 +738,7 @@ $(document).ready(function(){
        $('.main'+cnt+'_2nd').empty();
        $('.main'+cnt+'_2nd').append('<td class="border-left">&nbsp;</td> \
         <td>\
-        <input type="text" placeholder="Enter description" data-cnt="'+cnt+'" autocomplete="off" class="other_name_value otherNameValue'+cnt+'" name="prod_other[]">\
+        <input type="text" placeholder="Enter item specific value" data-cnt="'+cnt+'" autocomplete="off" class="other_name_value otherNameValue'+cnt+'" name="prod_other[]">\
         </td>\
         <td>\
         <div class="h_if_'+cnt+' hdv" style="display: none;">\
@@ -758,8 +758,7 @@ $(document).ready(function(){
     
     $(document).on('click',".lnkClearFirst",function (){
   
-      resetFirstOptional(1);
-      resetFirstSecondRowOptional(1);
+   
       var cnt = 1;
       var formatHeadValue = $.trim($('.prod_'+cnt).val().replace(/[^a-z0-9\s]/gi, '').replace(/[_\s]/g, ' '));
       var headValue = formatHeadValue.toLowerCase().replace(/\b[a-z]/g, function(letter) {
@@ -770,7 +769,7 @@ $(document).ready(function(){
         var selfValue = $(this).find('td > .otherNameValue'+cnt).val();
         var value = selfValue+headValue; 
         var idHtmlId = headValue.replace(/ /g,'')+'Combination';
-        $("#"+idHtmlId+" option[data-temp="+value+"]").remove(); 
+        $("#"+idHtmlId+" option[data-temp='"+value+"']").remove(); 
         if($('#'+idHtmlId).has('option').length <= 0){
           $('#div'+idHtmlId).remove();
         }
@@ -781,7 +780,7 @@ $(document).ready(function(){
         var selfValue = $(this).find('td > .otherNameValue'+cnt).val();
         var value = selfValue+headValue; 
         var idHtmlId = headValue.replace(/ /g,'')+'Combination';
-        $("#"+idHtmlId+" option[data-temp="+value+"]").remove(); 
+        $("#"+idHtmlId+" option[data-temp='"+value+"']").remove(); 
         if($('#'+idHtmlId).has('option').length <= 0){
           $('#div'+idHtmlId).remove();
         }
@@ -808,7 +807,7 @@ $(document).ready(function(){
      var selfValue = $.trim($(this).closest('tr').find('.otherNameValue'+cnt).val());
      var value = selfValue+headValue; 
      var idHtmlId = headValue.replace(/ /g,'')+'Combination';
-     $("#"+idHtmlId+" option[data-temp="+value+"]").remove(); 
+     $("#"+idHtmlId+" option[data-temp='"+value+"']").remove(); 
      if($('#'+idHtmlId).has('option').length <= 0){
       $('#div'+idHtmlId).remove();
      }
@@ -840,7 +839,7 @@ $(document).ready(function(){
         var selfValue = $(this).find('td > .otherNameValue'+cnt).val();
         var value = selfValue+headValue; 
         var idHtmlId = headValue.replace(/ /g,'')+'Combination';
-        $("#"+idHtmlId+" option[data-temp="+value+"]").remove(); 
+        $("#"+idHtmlId+" option[data-temp='"+value+"']").remove(); 
         if($('#'+idHtmlId).has('option').length <= 0){
           $('#div'+idHtmlId).remove();
         }
@@ -851,7 +850,7 @@ $(document).ready(function(){
         var selfValue = $(this).find('td > .otherNameValue'+cnt).val();
         var value = selfValue+headValue; 
         var idHtmlId = headValue.replace(/ /g,'')+'Combination';
-        $("#"+idHtmlId+" option[data-temp="+value+"]").remove(); 
+        $("#"+idHtmlId+" option[data-temp='"+value+"']").remove(); 
         if($('#'+idHtmlId).has('option').length <= 0){
           $('#div'+idHtmlId).remove();
         }
@@ -1195,7 +1194,7 @@ $(document).on('change','.other_name_value',function(){
  
  
  if(formatHeadValue.length >0){
-  $("#"+idHtmlId+" option[data-temp="+temp+"]").remove();
+  $("#"+idHtmlId+" option[data-temp='"+temp+"']").remove();
   if(!$('#'+idHtmlId).length){
     $('.quantity_attrs_content').append('<div id="div'+idHtmlId+'" style="position:relative">'+headValue+':<br> <select id="'+idHtmlId+'" ></select><br></div>');   
   }
