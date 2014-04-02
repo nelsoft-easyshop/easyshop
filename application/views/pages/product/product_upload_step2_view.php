@@ -2,7 +2,7 @@
 <div class="wrapper">
 
 <div class="clear"></div>
-
+    
   <div class="seller_product_content">
 
     <div class="inner_seller_product_content">
@@ -1553,9 +1553,9 @@ $(".proceed_form").unbind("click").click(function(){
       }
     }
 
-    //Marked for refactoring
+    //Marked for refactoring 
     //Duplicate code: see $('.quantity_attr_done') click handler
-  //$(function(){}) removed and $('.quantity_attrs_content option :select') replaced with if statement
+    //$(function(){}) removed and $('.quantity_attrs_content option :select') replaced with if statement
   function addAttrQtyCombination(count){
     var qtyTextbox = $('.qtyTextClass');
     var qtyTextboxValue = parseInt(qtyTextbox.val());
@@ -1869,6 +1869,7 @@ $(document).ready(function(){
     function addNewBrand(){
         $('#prod_brand').val(1)
         $('#prod_brand').trigger( "change" );
+        //validateWhiteTextBox("#brand_sch");
         jQuery(".brand_sch_loading").html('<img src="<?= base_url() ?>assets/images/img_new_txt.png" />').show().css('display','inline-block');
     }
   

@@ -52,7 +52,7 @@ class Home extends MY_Controller {
 	public function comingSoon(){
         $this->load->view('pages/coming_soon');
 	}
-	
+    
 
 }
 
