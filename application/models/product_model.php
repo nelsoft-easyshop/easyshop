@@ -1306,7 +1306,7 @@ class product_model extends CI_Model
         $sth->execute();
         $row = $sth->fetchAll(PDO::FETCH_ASSOC);
         $data = array();
-
+        
         foreach($row as $r){
         	$data['area'][$r['location']][$r['region']][$r['id_cityprov']] = $r['cityprov'];
         	$data['islandkey'][$r['location']] = $r['id_location'];
@@ -1556,6 +1556,8 @@ class product_model extends CI_Model
                 $data[$row['id_shipping']] = array();
                 $data[$row['id_shipping']]['location'] = $row['location'];
                 $data[$row['id_shipping']]['price'] = $row['price'];
+                $data[$row['id_shipping']]['location_type'] = $row['type'];
+                $data[$row['id_shipping']]['location_id'] = $row['id_location'];
                 $data[$row['id_shipping']]['product_attribute_ids'] = array();
             }  
             array_push($data[$row['id_shipping']]['product_attribute_ids'], array('id' => $row['product_attr_id'], 'is_other' => $row['is_other']));                        

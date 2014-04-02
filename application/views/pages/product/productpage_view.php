@@ -123,16 +123,30 @@
 			<a href="JavaScript:void(0)" id="send" class="fm1 orange_btn3 disabled">Buy Now</a> <br/>
             <!-- <img src="<?=base_url()?>assets/images/img_cart2.jpg"> Add to Cart</a> <br /> -->
             <?php else: ?>
-            <a href="<?PHP echo base_url();echo $logged_in?'memberpage':'login';?>" id="unablesend" class="add_to_cart"><span></span> Buy Now</a> <br />
-            <p class="buy_btn_sub">Log In and verify contact info to use this cart</p>
+            <a href="<?PHP echo base_url();echo $logged_in?'me':'login';?>" id="unablesend" class="add_to_cart"><span></span> Buy Now</a> <br />
+            <p class="buy_btn_sub">Log-in and verify your e-mail to purchase </p>
             <?php endif; ?>
             <span>Delivers in 5-8 business days*</span> </div>
         </div>
         <div class="prod_loc_areas">
           <p>
-            <strong class="location_message">Product is available in the following areas:</strong>
-            <ul id="shipment_locations">
-            </ul>
+            <strong class="location_message">Shipping Location:</strong>
+            <select class="shiploc" id="shipment_locations">
+                <option class="default" selected="" value="0">Select Location</option>
+                <?php foreach($shiploc['area'] as $island=>$loc):?>
+                    <option data-price="0" data-type="1" id="<?php echo 'locationID_'.$shiploc['islandkey'][$island];?>" value="<?php echo $shiploc['islandkey'][$island];?>" disabled><?php echo $island;?></option>
+                    <?php foreach($loc as $region=>$subloc):?>
+                        <option data-price="0" data-type="2" id="<?php echo 'locationID_'.$shiploc['regionkey'][$region];?>" value="<?php echo $shiploc['regionkey'][$region];?>" style="margin-left:15px;" disabled>&nbsp;&nbsp;&nbsp;<?php echo $region;?></option>
+                        <?php foreach($subloc as $id_cityprov=>$cityprov):?>
+                            <option data-price="0" data-type="3" id="<?php echo 'locationID_'.$id_cityprov;?>" value="<?php echo $id_cityprov;?>" style="margin-left:30px;" disabled>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $cityprov;?></option>
+                        <?php endforeach;?>
+                    <?php endforeach;?>
+                <?php endforeach;?>
+            </select>
+            <br/>
+            <strong>Shipment fee:</strong>
+            <span class="shipping_fee"> Please select your location </span>
+            
           </p>
         </div>
         <p class="product_content_payment"> <strong>Payment:</strong><br />

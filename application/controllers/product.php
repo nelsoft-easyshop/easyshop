@@ -522,6 +522,7 @@ class product extends MY_Controller
 				'userdetails' => $this->product_model->getCurrUserDetails($uid),
 				'product_quantity' => $this->product_model->getProductQuantity($id),
 				'shipment_information' => $this->product_model->getShipmentInformation($id),
+                'shiploc' => $this->product_model->getLocation(),
                 ));
 			$data['vendorrating'] = $this->product_model->getVendorRating($data['product']['sellerid']);
 			$this->load->view('pages/product/productpage_view', $data); 
