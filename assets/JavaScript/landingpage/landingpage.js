@@ -251,7 +251,7 @@ $(document).ready(function(){
 function username_check(){
 	var username = $('#username').val();
 	var csrftoken = $('#register_form1').find('input[name^="es_csrf"]').val();
-	$('#username').siblings('img.check_loader').show();
+	$('#username').siblings('img.check_loader').show().css('display','inline-block');
 	$.post(config.base_url+'landingpage/username_check', {username: username, es_csrf_token : csrftoken}, function(result){
 		if(result == 1){
 			showcheck($('#username'));
@@ -270,7 +270,7 @@ function username_check(){
 function email_check(){
 	var email = $('#email').val();
 	var csrftoken = $('#register_form1').find('input[name^="es_csrf"]').val();
-	$('#email').siblings('img.check_loader').show();
+	$('#email').siblings('img.check_loader').show().css('display','inline-block');
 	$.post(config.base_url+'landingpage/email_check', {email: email, es_csrf_token : csrftoken}, function(result){
 		if(result == 1){
 			showcheck($('#email'));
@@ -288,14 +288,14 @@ function email_check(){
 
 function showcheck(element){
 	var name = element.attr('name');
-	$('#'+name+'_check').show();
+	$('#'+name+'_check').show().css('display','inline-block');
 	$('#'+name+'_x').hide();
 }
 
 function showx(element){
 	var name = element.attr('name');
 	$('#'+name+'_check').hide();
-	$('#'+name+'_x').show();
+	$('#'+name+'_x').show().css('display','inline-block');
 }
 
 function hidecheckx(element){
