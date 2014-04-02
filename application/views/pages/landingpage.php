@@ -27,11 +27,11 @@
 								<?php echo form_open('', array('id'=>'register_form1'));?>
 									<fieldset>
 											<h4>Username</h4>
-											<input type="text" placeholder="" id="username" name="username">
+											<input type="text" placeholder="" id="username" name="username" class="reqfield">
 											<input type="hidden" id="usernamecheck" value="" name="usernamecheck">
 											<span class="red ci_form_validation_error"><?php echo form_error('username'); ?></span>
-											<img class="check_loader" src="<?=base_url()?>/assets/images/orange_loader_small.gif" style="display:none;">
-											<div id="username_status">
+											<img id="username_loader" src="<?=base_url()?>/assets/images/orange_loader_small.gif" style="display:none;">
+											<div id="username_status" class="fieldstatus">
 												<img src="<?=base_url()?>/assets/images/check_icon.png" id="username_check" style="position: relative;display:none;vertical-align:middle"/>
 												<img src="<?=base_url()?>/assets/images/x_icon.png" id="username_x" style="position: relative;display:none;vertical-align:middle"/>
 												<span class="username_availability"></span>
@@ -41,25 +41,25 @@
 										
 										
 											<h4>Password</h4>
-											<input type="password" placeholder="" id="password" name="password">
+											<input type="password" placeholder="" id="password" name="password" class="reqfield">
 											<span class="red ci_form_validation_error"><?php echo form_error('password'); ?></span>
 											<span class="help-block spnmsg">Password must within 6-25 characters, and include<br>numbers and upper-case and lower-case letters</span>
 										
 										
 										
 											<h4>Confirm Password</h4>
-											<input type="password" placeholder="" id="cpassword" name="cpassword">
-											<img src="<?=base_url()?>/assets/images/check_icon.png" id="cpassword_check" style="position: relative;display:none;"/>
-											<img src="<?=base_url()?>/assets/images/x_icon.png" id="cpassword_x" style="position: relative;display:none; "/>
+											<input type="password" placeholder="" id="cpassword" name="cpassword" class="reqfield">
+											<img class="fieldstatus" src="<?=base_url()?>/assets/images/check_icon.png" id="cpassword_check" style="position: relative;display:none;"/>
+											<img class="fieldstatus" src="<?=base_url()?>/assets/images/x_icon.png" id="cpassword_x" style="position: relative;display:none; "/>
 											<span class="red ci_form_validation_error"><?php echo form_error('cpassword'); ?></span>
 											<span class="help-block spnmsg" style="text-align:left"></span>
 										
 										
 											<h4>Email Address</h4>
-											<input type="text" placeholder="" id="email" name="email">
+											<input type="text" placeholder="" id="email" name="email" class="reqfield">
 											<input type="hidden" id="emailcheck" value="">
-											<img class="check_loader" src="<?=base_url()?>/assets/images/orange_loader_small.gif" style="display:none;">
-											<div id="email_status">
+											<img id="email_loader" src="<?=base_url()?>/assets/images/orange_loader_small.gif" style="display:none;">
+											<div id="email_status" class="fieldstatus">
 												<img src="<?=base_url()?>/assets/images/check_icon.png" id="email_check" style="position: relative;display:none;vertical-align:middle"/>
 												<img src="<?=base_url()?>/assets/images/x_icon.png" id="email_x" style="position: relative;display:none;vertical-align:middle"/>
 												<span class="email_availability"></span>
