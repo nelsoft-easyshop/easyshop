@@ -605,7 +605,7 @@ function username_check(){
 	var csrftoken = $('#register_form1').find('input[name^="es_csrf"]').val();
 	$('#username').siblings('img.check_loader').show();
 	$.post(config.base_url+'register/username_check', {username: username, es_csrf_token : csrftoken}, function(result){
-		if(result === '1'){
+		if(result == 1){
 			showcheck($('#username'));
 			$('.username_availability').html('Username available');
 			$('#usernamecheck').attr('value', $('#username').val());
@@ -624,7 +624,7 @@ function email_check(){
 	var csrftoken = $('#register_form1').find('input[name^="es_csrf"]').val();
 	$('#email').siblings('img.check_loader').show();
 	$.post(config.base_url+'register/email_check', {email: email, es_csrf_token : csrftoken}, function(result){
-		if(result === '1'){
+		if(result == 1){
 			showcheck($('#email'));
 			$('.email_availability').html('Email available');
 			$('#emailcheck').attr('value', $('#email').val());
