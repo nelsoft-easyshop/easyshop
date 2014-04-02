@@ -44,9 +44,12 @@ class Register extends MY_Controller
 			$temp['reg_username'] = '';
 			$view = 'register_form2_view';
 		}*/
+        
+
+
 		if(($this->input->post('register_page1'))&&($this->form_validation->run('register_form1')))
 		{
-			//$this->session->unset_userdata('captcha_word');
+            //$this->session->unset_userdata('captcha_word');
 			
 			$data['username'] = html_escape($this->input->post('username'));
 			$data['password'] = html_escape($this->input->post('password'));
@@ -58,6 +61,8 @@ class Register extends MY_Controller
 			$data['member_username'] = $data['username'];
 			$data['verification_msg'] = $this->lang->line('success_registration');
 		}
+
+
 		/*else
 		{
 			$cap = create_captcha($this->vals);	
@@ -66,9 +71,6 @@ class Register extends MY_Controller
 			$data['image'] = $image;
 			$data['reg_username'] = $this->input->post('username');
 		}
-		$this->load->view('templates/header_plain', $data);
-		$this->load->view("pages/user/".$view, $data);
-		$this->load->view('templates/footer');
 		*/
 		$this->load->view('templates/header_plain', $data);
 		$this->load->view("pages/user/".$view, $data);

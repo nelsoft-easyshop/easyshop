@@ -20,10 +20,7 @@ $(document).ready(function(){
 		}
 	  }).on('keyup', function(){
 		var fieldlength = $.trim($('#username').val()).length;
-		console.log($('#username').val());
-		console.log(fieldlength);
 		if(!$(this).hasClass('forSearch') && fieldlength >= 5){
-			console.log('pasok');
 			$(this).addClass('forSearch');
 		}
 		else if(fieldlength < 5){
@@ -228,12 +225,13 @@ $(document).ready(function(){
 					var added_span = $('<span/>',{'class':"red"});
 					error.insertBefore(element.next());
 					added_span.insertBefore(element.next());}
-				else
+				else{
 					error.appendTo(element.parent());
+                }
 		 },
 		 submitHandler: function(form){
-			$('#register_page1').attr('disabled', true);
 		 	$('#register_form1_loadingimg').show();
+            $('#register_page1_btn').attr('disabled', true);
 		 	form.submit();
 		 }
 	 });
