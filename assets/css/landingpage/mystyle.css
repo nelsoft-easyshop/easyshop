@@ -1,12 +1,20 @@
+body {    
+    font-size: 70px;
+    color: #494949;
+    font-family: century gothic;
+}
+
 .header_bg{
     height: 624px;
-/*    width: 100%;*/
+    line-height: 70px;
+    width: 100%;
     color: #FFFFFF;
     background: #013a87 url('../img/img_header_bg.jpg') no-repeat center center fixed; 
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
     background-size: cover;
+    margin:0;
 }
 .header_bg span{
     color: #ffc600;
@@ -14,8 +22,115 @@
     color: #FFFFFF;
 }
 
+.content1 {
+    margin-top: 50px;
+    text-align: center;
+}
+
+.footer {
+   background: #ececec;    
+}
+
 .content2 {
-   background: #ececec;
+   padding: 50px 0;
+}
+
+.content1_con {
+    margin-bottom: 50px;
+}
+
+#register_form1 p.border1 {
+    border-bottom: 1px dotted #cecece;
+    display: block;
+    float: none;
+    margin-left:auto;
+    margin-right: auto;
+    margin-bottom: 30px;
+    padding:0 !important;
+    width: 95%;
+}
+
+/*#username_status {
+    display: inline-block;
+    padding-bottom: 10px;
+    padding-left: 10px;
+    position: absolute;
+}*/
+
+#username_status {
+    margin: 0 auto;
+    padding-bottom: 10px;
+    text-align: left;
+    width: 275px;
+}
+
+.username_availability {
+    font-size: 12px;
+    vertical-align: middle;
+}
+
+.error.red {
+    background-color: #FFEFEF;
+    border: 1px solid #FF0000;
+    color: #FF0000;
+    display: block;
+    font-size: 12px;
+    margin: 10px auto;
+    padding: 10px 3px;
+    width: 255px;
+
+  -webkit-border-radius: 6px;
+     -moz-border-radius: 6px;
+          border-radius: 6px;
+}
+
+.pass-container {
+    border-bottom: 1px dotted #CECECE;
+    font-size: 12px;
+    margin: 0 auto 10px;
+    padding-bottom: 5px;
+}
+
+.pass-bar {
+    height: 10px;
+    margin-top: 10px;
+}
+
+#cpassword_x,
+#cpassword_check {
+    padding: 12px;
+    position: absolute !important;
+}
+
+/*#email_status {
+    display: inline-block;
+    height: 36px;
+    padding: 0px 0 0 10px;
+    position: absolute;
+}*/
+
+#email_status {
+    margin: 0 auto;
+    padding-bottom: 10px;
+    text-align: left;
+    width: 275px;
+}
+
+#register_form1 fieldset input[name="username"],
+#register_form1 fieldset input[name="email"] {
+    padding-right: 30px;
+    width: 236px !important;
+}
+
+.email_availability {
+    font-size: 12px;
+    vertical-align: middle;
+}
+
+.check_loader {
+    margin-left: -42px;
+    padding: 5px 0 0 10px;
+    position: absolute;
 }
 
 .offset3 label {
@@ -26,26 +141,47 @@
 .header_sub {
     font-size: 0.27em;
 }
-body{    
-    font-size: 70px;
-    color: #494949;
-    line-height: 70px;
-    font-family: century gothic;
-}
+
 .spn18{
     font-size: 18px;
     line-height: 18px;
     
 }
+
+.input-append input[name="subscribe_btn"] {
+  -webkit-border-radius: 0 4px 4px 0;
+     -moz-border-radius: 0 4px 4px 0;
+          border-radius: 0 4px 4px 0;
+
+    padding:10px 19px;
+    width: 120px !important;
+}
+
 .btn-large {
     padding: 9px 19px;
 }
 .spn48{
+    display: inline-block;
     font-size: 48px;
+    line-height: 48px;
+    padding-bottom: 30px;
 }
-.help-block ,spnmsg{
+
+    .content1_con p.border1 {
+        width: 95%;
+    }
+
+.help-block ,.spnmsg{
     font-size: 12px;
     line-height: 12px;
+}
+
+.help-block {
+    line-height: 24px;
+}
+
+.spnmsg {
+    text-align: center;
 }
  @media (min-width:979px) {
  .container .span6:not(:first-child) {
@@ -54,6 +190,10 @@ body{
     -moz-box-sizing: border-box;
     box-sizing: border-box;
   }
+  .span4 img {
+    max-width: 224px;
+    width: 100%;
+}
 
 .row-fluid .span6:first-child {
     border-right: 1px solid #DDDDDD;
@@ -62,7 +202,6 @@ body{
 .footer{
    background: #ececec;
     width: 100%;
-    padding-bottom: 50px;
 }
 .footer .help-block ,.spnmsg{
     line-height: 20px;
@@ -78,5 +217,47 @@ body{
     margin-bottom: 50px;
   }
 
+  .footer {
+    padding-bottom: 50px;
+  }
 
+}
+
+@media (max-width: 767px) {
+    .span4,.row-fluid .span4 {
+        width: auto;
+    }
+    .spn18 {
+        display: inline-block;
+        padding:10px 0;
+    }
+
+    .help-block {
+        margin-bottom: 30px;
+    }
+}
+
+@media (max-width: 480px) {
+    .subscribe_input {
+        width: 200px;
+    }
+
+    .span4 img {
+    max-width: 180px;
+    width: 100%;
+    }
+
+  /*  #username_status {
+    display: block;
+    padding-bottom: 10px;
+    padding-left: 10px;
+    position: relative;
+    }
+
+    #email_status {
+    display: block;
+    height: 36px;
+    padding: 0px 0 0 10px;
+    position: relative;
+    }*/
 }

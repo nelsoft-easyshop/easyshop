@@ -324,9 +324,9 @@ a:focus {
   width: 380px;
 }
 
-/*.span4 {
+.span4 {
   width: 300px;
-}*/
+}
 
 .span3 {
   width: 220px;
@@ -1070,7 +1070,7 @@ textarea {
 
 label {
   display: block;
-  margin-bottom: 5px;
+/*  margin-bottom: 5px;*/
 }
 
 select,
