@@ -34,8 +34,8 @@ $(document).ready(function(){
          submitHandler: function(form) {
 			$('#loading_img').show();
 			$('#login').hide();
+            
             $.ajax({
-                async: false,
                 type : "POST",
                 dataType: "JSON",
                 url : config.base_url + "login/authenticate",
@@ -52,6 +52,7 @@ $(document).ready(function(){
                     else{
                         $('#loading_img').hide();
                         $('#login').val('Redirecting...');
+                        $('#login')[0].disabled = true;
                         $('#login').show();
                         var url = $('#redirect').val();
                         window.location = config.base_url+'home';
