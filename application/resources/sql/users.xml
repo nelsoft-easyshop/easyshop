@@ -31,7 +31,7 @@
 
 <!-- Used for vendor details and username check- memberpage -->
 <select id="get_member_by_username">
-	SELECT m.id_member, m.username, m.contactno, m.email, a.citytown as city, m.region, DATE_FORMAT(datecreated, "%M %Y") as datecreated
+	SELECT m.id_member, m.username, m.contactno, m.email, a.city, DATE_FORMAT(datecreated, "%M %Y") as datecreated
 	FROM es_member m
 	LEFT JOIN es_address a on m.id_member = a.id_member AND a.type=0
 	where m.username=:username
@@ -91,7 +91,7 @@
 	SET is_email_verify = :is_email_verify
 	WHERE id_member = :member_id
 </select>
-
+<!--
 <select id="get_member">
 	SELECT m.`id_member`, m.`nickname`, m.`fullname`, m.`gender`, m.`birthday`, m.contactno, m.is_contactno_verify, m.email, m.is_email_verify,
 	COALESCE(a0.`streetno`, '') as streetno, COALESCE(a0.`streetname`, '') as streetname, COALESCE(a0.`barangay`, '') as barangay, 
@@ -105,6 +105,29 @@
 	LEFT JOIN es_address a1 ON m.id_member=a1.id_member AND a1.`type`=1
 	where m.id_member=:id_member
 </select>	
+-->
+
+<select id="getLocationLookup">
+	SELECT id_location, parent_id, location, type
+	FROM es_location_lookup
+	WHERE type = 0 OR type = 3 OR type = 4
+</select>
+
+<select id="get_member">
+	SELECT m.`id_member`, m.`nickname`, m.`fullname`, m.`gender`, m.`birthday`, m.contactno, m.is_contactno_verify, m.email, m.is_email_verify,
+	a0.city as cityID, a0.province as provinceID, a1.city as c_cityID, a1.province as c_provinceID,
+	COALESCE(loc0.location,'') as city, COALESCE(loc1.location, '') as province, COALESCE(loc2.location, '') as c_city, COALESCE(loc3.location,'') as c_province,
+	COALESCE(a0.address,'') as address, COALESCE(a1.address, '') as c_address,
+	a0.lat, a0.lng
+	FROM es_member m
+	LEFT JOIN es_address a0 ON m.id_member=a0.id_member AND a0.`type`=0
+	LEFT JOIN es_address a1 ON m.id_member=a1.id_member AND a1.`type`=1
+	LEFT JOIN es_location_lookup loc0 ON a0.city = loc0.id_location AND loc0.type = 3
+	LEFT JOIN es_location_lookup loc1 ON a0.province = loc1.id_location AND loc1.type = 4
+	LEFT JOIN es_location_lookup loc2 ON a1.city = loc2.id_location AND loc2.type = 3
+	LEFT JOIN es_location_lookup loc3 ON a1.province = loc3.id_location AND loc3.type = 4
+	where m.id_member=:id_member
+</select>
 
 <select id="get_school">
 	SELECT 
@@ -127,9 +150,9 @@
 </select>
 
 <select id="edit_address">
-	INSERT INTO `es_address` (`id_member`, `streetno`, `streetname`, `barangay`, `citytown`, `postalcode`, `country`, `type`, `telephone`, `mobile`, `consignee`, `lat`, `lng`) 
-	VALUES (:id_member,:streetno,:streetname,:barangay,:citytown,:postalcode,:country, :type, :telephone, :mobile, :consignee, :lat, :lng)
-	ON DUPLICATE KEY UPDATE streetno=:streetno,streetname=:streetname,barangay=:barangay,citytown=:citytown,postalcode=:postalcode,country = :country,telephone=:telephone,mobile=:mobile,consignee=:consignee,lat=:lat,lng=:lng
+	INSERT INTO `es_address` (`id_member`, `city`, `province`, `address`, `country`, `type`, `telephone`, `mobile`, `consignee`, `lat`, `lng`) 
+	VALUES (:id_member,:city,:province,:address,:country, :type, :telephone, :mobile, :consignee, :lat, :lng)
+	ON DUPLICATE KEY UPDATE city=:city,province=:province,address=:address,country = :country,telephone=:telephone,mobile=:mobile,consignee=:consignee,lat=:lat,lng=:lng
 </select>
 
 
