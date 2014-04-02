@@ -11,87 +11,82 @@
         <div class = "container header_bg">
             <div class="row-fluid">
                 <div id="himg" class="text-center"> <img src="<?=base_url()?>assets/images/landingpage/img_logo.png"> </div>
-                <div class="span12" style="text-align:center">
-                </div>
                     <p class="text-center">ONLINE SHOPPING</p>                 
                     <p class="text-center">MADE <span>EASY</span></p>
                
-                   <p class="text-center header_sub">Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut</p>
-               
+                   <p class="text-center header_sub">
+                   		Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut
+                    </p>
             </div>
         </div>
-        <div class = "container">
+        <div class = "container content1">
             <div class="row-fluid">
-                <div class="span12" style="text-align:center">
-                </div>
                 <div class="row-fluid">
-                    <div class="span12" style="text-align:center">
                         <span class="spn48">REGISTER</span>
                         <div class="row-fluid">
 								<?php echo form_open('', array('id'=>'register_form1'));?>
-									<fieldset style="text-align:left">
-										<div>
-											<label><span class="spn18"><b>Username</b></span></label>
+									<fieldset>
+											<h4>Username</h4>
 											<input type="text" placeholder="" id="username" name="username">
 											<input type="hidden" id="usernamecheck" value="" name="usernamecheck">
 											<span class="red ci_form_validation_error"><?php echo form_error('username'); ?></span>
 											<img class="check_loader" src="<?=base_url()?>/assets/images/orange_loader_small.gif" style="display:none;">
-											<div id="username_status" style="display:inline;">
+											<div id="username_status">
 												<img src="<?=base_url()?>/assets/images/check_icon.png" id="username_check" style="position: relative;display:none;vertical-align:middle"/>
 												<img src="<?=base_url()?>/assets/images/x_icon.png" id="username_x" style="position: relative;display:none;vertical-align:middle"/>
 												<span class="username_availability"></span>
 											</div>
-											<span class="help-block spnmsg" style="text-align:left">The username must be 5-25 characters long.</span>
-										</div>
+											<span class="help-block spnmsg">The username must be 5-25 characters long.</span>
 										
-										<div>
-											<label><span class="spn18"><b>Password</b></span></label>
+										
+										
+											<h4>Password</h4>
 											<input type="password" placeholder="" id="password" name="password">
 											<span class="red ci_form_validation_error"><?php echo form_error('password'); ?></span>
-											<span class="help-block spnmsg" style="text-align:left">Password must within 6-25 characters, and include<br>numbers and upper-case and lower-case letters</span>
-										</div>
+											<span class="help-block spnmsg">Password must within 6-25 characters, and include<br>numbers and upper-case and lower-case letters</span>
 										
-										<div>
-											<label><span class="spn18"><b>Confirm Password</b></span></label>
+										
+										
+											<h4>Confirm Password</h4>
 											<input type="password" placeholder="" id="cpassword" name="cpassword">
 											<img src="<?=base_url()?>/assets/images/check_icon.png" id="cpassword_check" style="position: relative;display:none;"/>
 											<img src="<?=base_url()?>/assets/images/x_icon.png" id="cpassword_x" style="position: relative;display:none; "/>
 											<span class="red ci_form_validation_error"><?php echo form_error('cpassword'); ?></span>
 											<span class="help-block spnmsg" style="text-align:left"></span>
-										</div>
 										
-										<div>
-											<label><span class="spn18"><b>Email Address</b></span></label>
+										
+											<h4>Email Address</h4>
 											<input type="text" placeholder="" id="email" name="email">
 											<input type="hidden" id="emailcheck" value="">
 											<img class="check_loader" src="<?=base_url()?>/assets/images/orange_loader_small.gif" style="display:none;">
-											<div id="email_status" style="display:inline;">
+											<div id="email_status">
 												<img src="<?=base_url()?>/assets/images/check_icon.png" id="email_check" style="position: relative;display:none;vertical-align:middle"/>
 												<img src="<?=base_url()?>/assets/images/x_icon.png" id="email_x" style="position: relative;display:none;vertical-align:middle"/>
 												<span class="email_availability"></span>
 											</div>
 											<span class="red ci_form_validation_error"><?php echo form_error('email'); ?></span>
 											<span class="help-block spnmsg"></span>
-										</div>
+										
 										<!--<button type="button" class="btn btn-warning btn-large">SEND</button>-->
 										<input type="submit" class="btn btn-warning btn-large" value="SEND" name="register_form1" id="register_form1_btn">
 										<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" id="register_form1_loadingimg" style="position: relative; top:10px; left:20px; display:none"/>
 									</fieldset>
+
+									<p class="span6 border1"></p>
+
 								<?php echo form_close();?>
 
-								<div class="input-append"  style="text-align: left;">
+								<div class="input-append">
 								<?php echo form_open('', array('id'=>'subscription_form'));?>
-									<label>
-										<span class="spn18"><b>Stay in touch to get the latest updates</b></span>
-									</label>
-									<input class="" id="appendedInputButton" type="text" name="subscribe_email">
+									<h4>Stay in touch to get the latest updates</h4>
+									<input class="subscribe_input" id="appendedInputButton" type="text" name="subscribe_email">
 									<!--<button class="btn btn-warning btn-large" type="button">Subscribe</button>-->
 									<input type="submit" class="btn btn-warning btn-large" value="Subscribe" name="subscribe_btn" id="subscribe_btn">
 									<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" id="subscribe_loadingimg" style="position: relative; top:10px; left:20px; display:none"/>
 								<?php echo form_close();?>
 								</div>
                         </div>                
-                    </div>                
+                                
                 </div>            
             </div>
         </div>
@@ -101,13 +96,11 @@
 		</div>
 		
         <div class = "footer">
-            <div class="container">
+            <div class="container content2">
                 <div class="row-fluid">
-                    <div class="span12" style="text-align:center">
-                    </div>
                     <div class="row-fluid">
                         <div class="span12" style="text-align:center">
-                            <span class="spn48">WE MAKE SHOPPING EASY</span><br><br>
+                            <span class="spn48">WE MAKE SHOPPING EASY</span>
                             <div class="row-fluid">
                                 <div class="span4">
                                     <img src="<?=base_url()?>assets/images/landingpage/img_online_shopping.png"><br>
@@ -136,9 +129,9 @@
                 </div>
             </div>
         </div>
-        <div class="footer2">
+         <div class="footer2">
             <div class="container">
-                <div class="span12" style="text-align:center"><span class="help-block spnmsg"><br><br><br> Copryright &#169; 2014 easyshop.ph. All rights reserved<br><br><br></span></div>
+                <span class="help-block spnmsg"><br>Copryright &#169; 2014 easyshop.ph. All rights reserved<br></span>
             </div>
         </div>
     </body>
