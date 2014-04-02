@@ -151,6 +151,7 @@ function in_array_r($needle, $haystack, $strict = false) {
     </div>
   </div>
   <!-- Products ------------------>
+  <input type="hidden" id="scroll_csrf" name="<?php echo $my_csrf['csrf_name'];?>" value="<?php echo $my_csrf['csrf_hash'];?>">
 </div>
 <script src="<?= base_url() ?>assets/JavaScript/js/jquery.easing.min.js" type="text/javascript"></script> 
 <script src="<?= base_url() ?>assets/JavaScript/js/jquery.scrollUp.min.js" type="text/javascript"></script> 
@@ -308,6 +309,7 @@ $(function () {
         var ajax_is_on = false;
         var objHeight = $(window).height() - 50;
         var last_scroll_top = 0;
+		var csrftoken = $('#scroll_csrf').val();
 		
 		$(window).scroll(function(event) {
 		
@@ -324,7 +326,7 @@ $(function () {
 						
 						$.ajax({
 							url: base_url + 'advance_search/load_other_product',
-							data:{page_number:offset,id_cat:'<?php echo $this->input->get('_cat');?>',parameters:<?php echo json_encode($condition)?>},
+							data:{page_number:offset,id_cat:'<?php echo $this->input->get('_cat');?>',parameters:<?php echo json_encode($condition)?>, es_csrf_token : csrftoken},
 							type: 'post',
 							async: false,
 							dataType: 'json',
