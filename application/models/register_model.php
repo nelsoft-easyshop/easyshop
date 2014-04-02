@@ -6,7 +6,7 @@ class Register_model extends CI_Model
 		parent::__construct();
 		$this->config->load('image_path');
 		$this->load->library('sqlmap');
-	}	
+	}
 	
 	/*
 	 *	Function used to check if username exists in registration page
@@ -18,7 +18,7 @@ class Register_model extends CI_Model
         $sth->bindParam(':username', $member_username);
         $sth->execute();
 		$result = $sth->fetch(PDO::FETCH_ASSOC);
-		
+
 		return $result;
 	}
 
