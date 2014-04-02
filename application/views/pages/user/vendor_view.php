@@ -30,9 +30,9 @@
 						<li><a href="<?=base_url()?>home/under_construction">News</a></li>
 					</ul>
 				</div>
-				<div>
-					<input type="text" class="span_bg">
-					<input type="submit" value="Search">
+				<div class="member_srch_wrapper">
+					<input type="text" onblur="this.placeholder = 'Search'" onfocus="this.placeholder = ''" placeholder="Search">
+					<input type="submit" value="" class="span_bg">
 				</div>         	
 			</div>
 		</div>
