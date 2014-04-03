@@ -50,6 +50,7 @@ $(document).ready(function(){
 						$('#login').show();
                     }
                     else{
+                        $('.error_cont').text('');
                         $('#loading_img').hide();
                         $('#login').val('Redirecting...');
                         $('#login')[0].disabled = true;
