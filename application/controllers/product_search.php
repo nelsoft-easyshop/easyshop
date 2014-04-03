@@ -79,7 +79,7 @@ class product_search extends MY_Controller {
 		}
 	}
 	
-	public $per_page = 3; # number of dispay
+	public $per_page = 10; # number of displayed products
 	function advance($string="advance.html"){
 		
 		if($this->input->get()){
