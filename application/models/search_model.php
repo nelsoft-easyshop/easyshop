@@ -201,7 +201,7 @@ class search_model extends CI_Model
 		FROM `es_product` ep
 		LEFT JOIN `es_product_image` epi ON ep.`id_product` = epi.`product_id` AND epi.`is_primary` = 1
 		LEFT JOIN `es_brand` eb ON ep.`brand_id` = eb.`id_brand`
-		WHERE ep.`cat_id` IN (". $category_id . ") AND ep.`is_draft` = 0 
+		WHERE ep.`cat_id` IN (". $category_id . ") AND ep.`is_draft` = 0 AND ep.`is_delete` = 0 
 		". $QAtt ." ". $is ." ". $con ." ". $gp ." ". $attr_brand ."  
 		ORDER BY ". $colsort ." DESC 
 		LIMIT :start, :per_page ";
