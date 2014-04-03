@@ -27,7 +27,7 @@ class Register_model extends CI_Model
 	 */
 	function checkEmailIfExists($email)
 	{
-		$query = $this->sqlmap->getFilenameID('users', 'checkEmailIfExists');
+		$query = $this->sqlmap->getFilenameID('users', 'getEmail');
         $sth = $this->db->conn_id->prepare($query);
         $sth->bindParam(':email', $email);
         $sth->execute();
@@ -118,6 +118,21 @@ class Register_model extends CI_Model
 		}
 		else{
 			$this->form_validation->set_message('external_callbacks', 'Username already exists');
+			return false;
+		}
+	}
+	
+	function validate_email($email)
+    {	
+		$query = $this->sqlmap->getFilenameID('users', 'getEmail');
+		$sth = $this->db->conn_id->prepare($query);
+		$sth->bindParam(':email', $email);
+		$sth->execute();
+		if($sth->rowcount() == 0){
+			return true;
+		}
+		else{
+			$this->form_validation->set_message('external_callbacks', 'Email already used');
 			return false;
 		}
 	}
@@ -357,7 +372,7 @@ class Register_model extends CI_Model
 			return false;
 	}
 	
-
+	/*
 	function validate_email($email)
     {	
 		$query = $this->sqlmap->getFilenameID('users', 'getEmail');
@@ -366,9 +381,8 @@ class Register_model extends CI_Model
 		$sth->execute();
 		$result = $sth->fetch();
 		return $result;
-					
 	}
-    
+    */
 
     function forgotpass($email, $username, $id_member)
     {

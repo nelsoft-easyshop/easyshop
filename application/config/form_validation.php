@@ -31,7 +31,7 @@ $config = array(
 				   array(
 						'field' => 'email',
 						'label' => 'Email Address',
-						'rules' => 'trim|required|valid_email'
+						'rules' => 'trim|required|valid_email|callback_external_callbacks[register_model,validate_email]'
 					  ),
 				   /*array(
 						 'field'   => 'captcha_word',
@@ -96,7 +96,7 @@ $config = array(
 						'rules' => 'trim|min_length[6]|valid_email'
 					),
 				),
-			'personal_profile_address' => array(
+			/*'personal_profile_address' => array(
 					array(
 						'field' => 'streetno',
 						'label' => 'Street or Building Number',
@@ -117,6 +117,18 @@ $config = array(
 						'label' => 'Country',
 						'rules' => 'required'
 					),
+				),*/
+			'personal_profile_address' => array(
+					array(
+						'field' => 'city',
+						'label' => 'City',
+						'rules' => 'required'
+					),
+					array(
+						'field' => 'province',
+						'label' => 'Province',
+						'rules' => 'required'
+					)
 				),
 			'personal_profile_school' => array(
 					array(

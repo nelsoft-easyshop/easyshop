@@ -11,7 +11,7 @@ $(document).ready(function(){
 		  });
 	  }).on('blur', function(){
 		var fieldlength = $.trim($('#username').val()).length;
-		if(fieldlength >= 5 && $(this).hasClass('forSearch')){
+		if(fieldlength >= 5 && $(this).hasClass('forSearch') && $(this).hasClass('valid')){
 			setTimeout(username_check,500);
 		}
 		else if(fieldlength < 5){
@@ -63,7 +63,7 @@ $(document).ready(function(){
 	  
 	  $('#email').on('blur', function(){
 		var fieldlength = $.trim($('#email').val()).length;
-		if(fieldlength >= 6 && $(this).hasClass('forSearch')){
+		if(fieldlength >= 6 && $(this).hasClass('forSearch') && $(this).hasClass('valid')){
 			setTimeout(email_check,500);
 		}
 		else if(fieldlength < 6){
@@ -156,10 +156,6 @@ $(document).ready(function(){
         return this.optional(element) || (/[a-zA-Z]/.test(value) && /\d/.test(value));
      }, "Must contain numbers and letters"); 
 	 
-	 jQuery.validator.addMethod("case_all", function(value, element) {
-        return this.optional(element) || (/[a-z]/.test(value) && /[A-Z]/.test(value));
-     }, "Must contain upper-case and lower-case letters"); 
-	 
 	 jQuery.validator.addMethod("alphanumeric_underscore", function(value, element) {
         return this.optional(element) || /^\w+$/i.test(value);
 	 }, "Only letters, numbers, and underscores are allowed");
@@ -170,15 +166,13 @@ $(document).ready(function(){
                 required: true,
                 minlength: 5,
                 maxlength:25,
-				alphanumeric_underscore: true,
-				equalTo: '#usernamecheck'
+				alphanumeric_underscore: true
 				},
 			password: {
 				required: true,
                 minlength: 6,
                 maxlength:25,
-				alphanumeric: true,
-				//case_all: true
+				alphanumeric: true
 				},
 			cpassword: {
 				required: true,
@@ -189,8 +183,7 @@ $(document).ready(function(){
 			email: {
 				required: true,
 				email: true,
-				minlength: 6,
-				equalTo: '#emailcheck',
+				minlength: 6
 				},
 			captcha_word: {
 				required: true,
@@ -229,9 +222,11 @@ $(document).ready(function(){
                 }
 		 },
 		 submitHandler: function(form){
-		 	$('#register_form1_loadingimg').show();
-            $('#register_page1_btn').attr('disabled', true);
-		 	form.submit();
+			if( $('#username').hasClass('pass') && $('#email').hasClass('pass') ){
+				$('#register_form1_loadingimg').show();
+				form.submit();
+				$('#register_page1').attr('disabled', true);
+			}			
 		 }
 	 });
 	 
@@ -560,10 +555,12 @@ function username_check(){
 			showcheck($('#username'));
 			$('.username_availability').html('Username available');
 			$('#usernamecheck').attr('value', $('#username').val());
+			$('#username').addClass('pass');
 		}
 		else{
 			showx($('#username'));
 			$('.username_availability').html('Username already exists.');
+			$('#username').removeClass('pass');
 		}
 		$('#username').removeClass('forSearch');
 		$('#username').siblings('img.check_loader').hide();
@@ -579,10 +576,12 @@ function email_check(){
 			showcheck($('#email'));
 			$('.email_availability').html('Email available');
 			$('#emailcheck').attr('value', $('#email').val());
+			$('#email').addClass('pass');
 		}
 		else{
 			showx($('#email'));
 			$('.email_availability').html('Email already used.');
+			$('#email').removeClass('pass');
 		}
 		$('#email').removeClass('forSearch');
 		$('#email').siblings('img.check_loader').hide();
