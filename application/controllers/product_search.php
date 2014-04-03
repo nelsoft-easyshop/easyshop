@@ -354,7 +354,9 @@ class product_search extends MY_Controller {
 						if(is_array($val)){
 							$arr_brand = "";
 							foreach($val as $row => $brands){
-								$arr_brand = $arr_brand . "'" . $brands . "',";
+								if(!empty($brands)){
+									$arr_brand = $arr_brand . "'" . $brands . "',";
+								}
 							}
 							
 							$fin_arr_brand = substr($arr_brand, 0, strlen($arr_brand) - 1 );
