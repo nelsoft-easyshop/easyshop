@@ -415,7 +415,7 @@ class Register_model extends CI_Model
 	
 	function forgotpass_email($hash)
     {   // check ko yung email kung ok pa yung code.
-		$query = "SELECT a.fp_timestamp, a.fp_code, b.username, b.password FROM es_verifcode a
+		$query = "SELECT a.fp_timestamp, a.fp_code, b.username, b.password, a.member_id FROM es_verifcode a
 		LEFT JOIN es_member b ON a.member_id = b.id_member WHERE a.fp_code = :hash
 		AND a.fp_timestamp < DATE_ADD(NOW(), INTERVAL 1 HOUR) LIMIT 1";
 		$sth = $this->db->conn_id->prepare($query);
@@ -426,7 +426,14 @@ class Register_model extends CI_Model
 	}
 	
 	function forgotpass_update($data=array())
-	{	
+	{
+		
+		//update to database
+        $query = "UPDATE es_verifcode SET fp_timestamp = NOW(), fp_code = NULL WHERE member_id = :id_member;";
+        $sth = $this->db->conn_id->prepare($query);
+        $sth->bindParam(':id_member',  $data['member_id']);
+		$sth->execute();
+				
 		$query = $this->sqlmap->getFilenameID('users', 'forgotpass');
         $sth = $this->db->conn_id->prepare($query);
         $sth->bindParam(':username', $data['username']);
