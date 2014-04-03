@@ -88,7 +88,7 @@ class product_search extends MY_Controller {
 			$condition = $this->input->get();
 			$start = 0; # start series
 			$per_page = $this->per_page; # no of display
-			$test = "";			
+			$test = "ok";			
 						
 			$getParentId = $this->search_model->getParentId($category);
 			if(!empty($getParentId)){
@@ -134,7 +134,9 @@ class product_search extends MY_Controller {
 					if(is_array($val)){
 						$arr_brand = "";
 						foreach($val as $row => $brands){
-							$arr_brand = $arr_brand . "'" . $brands . "',";
+							if(!empty($brands)){
+								$arr_brand = $arr_brand . "'" . $brands . "',";
+							}
 						}
 						
 						$fin_arr_brand = substr($arr_brand, 0, strlen($arr_brand) - 1 );
