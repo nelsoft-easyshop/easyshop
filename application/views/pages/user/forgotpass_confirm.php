@@ -112,13 +112,13 @@ $(document).ready(function(){
 	var redurl = '<?php echo base_url();?>login/resetconfirm?&tgv='
     $( "#forgotpass_btn" ).click(function() {
 		if($("#forgotpass").valid()){
-			var pass = $("#password").val();		  
+			var pass = $("#password").val();	  
 			var hash 	 = $('#hash').val();
 			var csrftoken = $('#fc_csrf').val();		
 			currentRequest = jQuery.ajax({
 				type: "POST",
 				url: '<?php echo base_url();?>login/xresetconfirm', 
-				data: "hash="+hash+"&pass="+pass+"&es_csrf_token="+csrftoken, 
+				data: "hash="+hash+"&password="+pass+"&es_csrf_token="+csrftoken, 
 				beforeSend : function(){       
 				},
 				success: function(response){
