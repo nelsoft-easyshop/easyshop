@@ -26,7 +26,7 @@ class Login extends MY_Controller {
     }
 
 	#when login button is clicked, username pass will check if it exsits in the database
-	function authenticate() {    
+	function authenticate() {
 		if(($this->input->post('login_form'))&&($this->form_validation->run('login_form'))){
 			$uname = $this->input->post('login_username');
 			$pass = $this->input->post('login_password');	
@@ -141,50 +141,9 @@ class Login extends MY_Controller {
         );
         $data = array_merge($data, $this->fill_header());
         $this->load->view('templates/header_plain', $data);		
-      	$temp['toggle_view'] = "1";                      // pasok pa sa oras pero hindi pa magsasave ito.
-        $this->load->view('pages/user/forgotpass_confirm', $temp);
+        $this->load->view('pages/user/forgotpass_confirm');
         $this->load->view('templates/footer');
     }	
-	
-//    function resetconfirm()
-//    {
-//        $data = array(
-//                'title' => 'Reset Password | Easyshop.ph'
-//        );
-//        $data = array_merge($data, $this->fill_header());
-//        $this->load->view('templates/header_plain', $data);		
-//
-//
-//		$hash = html_escape($this->input->get('confirm'));
-//        
-//        $result = $this->register_model->forgotpass_email($hash);
-//		
-//		$temp['toggle_view'] = "";
-//        if (isset($result['username'])){
-//							
-//				$user = $result['username'];
-//				$curpass = $result['password'];
-//                if(($this->input->post('forgotpass_btn')) && ($this->form_validation->run('forgotpass'))){
-//						$data = array(
-//                                'username' => $user,
-//                                'cur_password' => $curpass,
-//                                'password' => $this->input->post('password')
-//                        );
-//                        $temp['toggle_view'] = "";
-//                        $this->register_model->forgotpass_update($data); // pasok pa sa oras pero magsasave na.
-//                        $this->session->unset_userdata('user_cur_loc');
-//                }
-//                else{	
-//                        $temp['toggle_view'] = "1";                      // pasok pa sa oras pero hindi pa magsasave ito.
-//                }
-//        }else{
-//                $temp['toggle_view'] = "2";                        
-//        }
-//        $this->load->view('pages/user/forgotpass_confirm', $temp);
-//        $this->load->view('templates/footer');
-//    }
-	
-	
 	
 }
 
