@@ -82,7 +82,6 @@ $(document).ready(function(){
 			$('.email_availability').html('');
 		}
 	  });
-	  
 });
 
 /**********************************************************************************************/
@@ -191,8 +190,60 @@ $(document).ready(function(){
 	 $('.field input').on('click', function(){
 		$('.ci_form_validation_error').text('');
 	 });
-	 
-	 $('#subscription_form').validate({
+	
+});
+
+function username_check(){
+	var username = $('#username').val();
+	var csrftoken = $('#register_form1').find('input[name^="es_csrf"]').val();
+	var field = $('#username');
+	$('#username_loader').show().css('display','inline-block');
+	$.post(config.base_url+'landingpage/username_check', {username: username, es_csrf_token : csrftoken}, function(result){
+		if(result == 1){
+			showcheck($('#username'));
+			$('.username_availability').html('Username available');
+			$('#usernamecheck').attr('value', $('#username').val());
+			field.addClass('pass');
+		}
+		else{
+			showx($('#username'));
+			$('.username_availability').html('Username already exists.');
+			field.removeClass('pass');
+		}
+		field.removeClass('forSearch');
+		$('#username_loader').hide();
+	});
+}
+
+function email_check(){
+	var email = $('#email').val();
+	var csrftoken = $('#register_form1').find('input[name^="es_csrf"]').val();
+	var field = $('#email');
+	$('#email_loader').show().css('display','inline-block');
+	$.post(config.base_url+'landingpage/email_check', {email: email, es_csrf_token : csrftoken}, function(result){
+		if(result == 1){
+			showcheck($('#email'));
+			$('.email_availability').html('Email available');
+			$('#emailcheck').attr('value', $('#email').val());
+			field.addClass('pass');
+		}
+		else{
+			showx($('#email'));
+			$('.email_availability').html('Email already used.');
+			field.removeClass('pass');
+		}
+		field.removeClass('forSearch');
+		$('#email_loader').hide();
+	});
+}
+
+
+/**********************************************************************************************/
+/****************************	SUBSCRIPTION FORM	*******************************************/
+/**********************************************************************************************/
+$(document).ready(function(){
+
+	$('#subscription_form').validate({
 		rules: {           
 			subscribe_email: {
 				required: true,
@@ -246,52 +297,9 @@ $(document).ready(function(){
 			return false;
 		}
 	});
+
 });
 
-
-function username_check(){
-	var username = $('#username').val();
-	var csrftoken = $('#register_form1').find('input[name^="es_csrf"]').val();
-	var field = $('#username');
-	$('#username_loader').show().css('display','inline-block');
-	$.post(config.base_url+'landingpage/username_check', {username: username, es_csrf_token : csrftoken}, function(result){
-		if(result == 1){
-			showcheck($('#username'));
-			$('.username_availability').html('Username available');
-			$('#usernamecheck').attr('value', $('#username').val());
-			field.addClass('pass');
-		}
-		else{
-			showx($('#username'));
-			$('.username_availability').html('Username already exists.');
-			field.removeClass('pass');
-		}
-		field.removeClass('forSearch');
-		$('#username_loader').hide();
-	});
-}
-
-function email_check(){
-	var email = $('#email').val();
-	var csrftoken = $('#register_form1').find('input[name^="es_csrf"]').val();
-	var field = $('#email');
-	$('#email_loader').show().css('display','inline-block');
-	$.post(config.base_url+'landingpage/email_check', {email: email, es_csrf_token : csrftoken}, function(result){
-		if(result == 1){
-			showcheck($('#email'));
-			$('.email_availability').html('Email available');
-			$('#emailcheck').attr('value', $('#email').val());
-			field.addClass('pass');
-		}
-		else{
-			showx($('#email'));
-			$('.email_availability').html('Email already used.');
-			field.removeClass('pass');
-		}
-		field.removeClass('forSearch');
-		$('#email_loader').hide();
-	});
-}
 
 function showcheck(element){
 	var name = element.attr('name');
