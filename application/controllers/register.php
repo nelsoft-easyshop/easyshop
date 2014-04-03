@@ -352,7 +352,6 @@ class Register extends MY_Controller
 		}
 	}
 
-
 	function username_check()
 	{
 		if($this->input->post('username')){
