@@ -88,7 +88,7 @@ class product_search extends MY_Controller {
 			$condition = $this->input->get();
 			$start = 0; # start series
 			$per_page = $this->per_page; # no of display
-			$test = "ok";			
+			$test = "";			
 						
 			$getParentId = $this->search_model->getParentId($category);
 			if(!empty($getParentId)){
