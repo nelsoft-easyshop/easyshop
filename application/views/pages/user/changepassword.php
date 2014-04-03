@@ -79,7 +79,6 @@
 <script type='text/javascript' src='<?=base_url()?>assets/JavaScript/js/jquery.validate.js'></script>
 <script type='text/javascript' src='<?=base_url()?>assets/JavaScript/register.js'></script>
 
-
 <!-- password strength checker -->
 <?php if(($logged_in)&&($toggle_view == "1")):?>
 	<script type="text/javascript" src="<?=base_url()?>assets/JavaScript/js/mootools-core-1.4.5-full-compat.js"></script> 
