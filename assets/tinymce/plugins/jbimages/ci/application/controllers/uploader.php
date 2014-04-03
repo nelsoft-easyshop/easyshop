@@ -142,8 +142,6 @@ class Uploader extends CI_Controller {
 			}
 			// Output to user
 			$this->load->view('ajax_upload_result', $result);
-			
-			sleep(5);
 		}
 	}
 	
