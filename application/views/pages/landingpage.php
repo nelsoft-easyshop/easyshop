@@ -51,7 +51,7 @@
 										
 										
 											<h4>Confirm Password</h4>
-											<input type="password" placeholder="" id="cpassword" name="cpassword" class="reqfield">
+											<input type="password" placeholder="" id="cpassword" name="cpassword" class="reqfield" disabled>
 											<img class="fieldstatus" src="<?=base_url()?>/assets/images/check_icon.png" id="cpassword_check" style="position: relative;display:none;"/>
 											<img class="fieldstatus" src="<?=base_url()?>/assets/images/x_icon.png" id="cpassword_x" style="position: relative;display:none; "/>
 											<span class="red ci_form_validation_error"><?php echo form_error('cpassword'); ?></span>

@@ -44,21 +44,31 @@ $(document).ready(function(){
 			  $(document).unbind('.example');
 			});
 	  }).on('input paste keyup', function(){
-			   if($.trim($(this).val()).length >= 6){
-				   $('#cpassword').attr("disabled", false);
-				   showx($('#cpassword'));
-				   }
-			   else {
-				   $('#cpassword').attr("disabled", true);
-			       $('#cpassword').val("");
-				   hidecheckx($('#cpassword'));
+		   if($.trim($(this).val()).length >= 6){
+			   $('#cpassword').attr("disabled", false);
+			   showx($('#cpassword'));
 			   }
+		   else {
+			   $('#cpassword').attr("disabled", true);
+			   $('#cpassword').val("");
+			   hidecheckx($('#cpassword'));
+		   }
 
-				if($(this).val() !== $('#cpassword').val() && !$('#cpassword')[0].disabled)
-					showx($('#cpassword'));
-				else if($(this).val() == $('#cpassword').val() && !$('#cpassword')[0].disabled)
-					showcheck($('#cpassword'));
-      });
+			if($(this).val() !== $('#cpassword').val() && !$('#cpassword')[0].disabled)
+				showx($('#cpassword'));
+			else if($(this).val() == $('#cpassword').val() && !$('#cpassword')[0].disabled)
+				showcheck($('#cpassword'));
+				
+			if( !$(this).hasClass('error') ){
+				$('div.pass-container').show();
+			}else{
+				$('div.pass-container').hide();
+			}
+      }).on('blur', function(){
+			if( $(this).hasClass('error') ){
+				$('div.pass-container').hide();
+			}
+	  });
 	  
 	  $("#cpassword").on('paste', function(e){
 			e.preventDefault();
