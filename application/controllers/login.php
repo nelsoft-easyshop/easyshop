@@ -9,7 +9,7 @@ class Login extends MY_Controller {
         parent::__construct();
         $this->load->library('cart');
 		$this->load->model('register_model');
-			$this->load->library('encrypt');	
+		$this->load->library('encrypt');	
     }
 	
 	#Passing the data to login form and loads it.
@@ -87,7 +87,7 @@ class Login extends MY_Controller {
         $this->load->view('templates/header_plain', $data);
 		
 		$temp['toggle_view'] = "";
-		if(($this->input->post('identify_btn'))&& ($this->form_validation->run('identify_form'))){
+		if(($this->input->post('identify_btn')) && ($this->form_validation->run('identify_form'))){
 			
             $email = $this->input->post('email');
             $result = $this->register_model->validate_email($email);
@@ -106,13 +106,25 @@ class Login extends MY_Controller {
         $this->load->view('pages/user/forgotpass', $temp);
         $this->load->view('templates/footer');	
 	}
+
+    function resetconfirm()
+    {
+        $data = array(
+                'title' => 'Reset Password | Easyshop.ph'
+        );
+        $data = array_merge($data, $this->fill_header());
+        $this->load->view('templates/header_plain', $data);		
+        $this->load->view('pages/user/forgotpass_confirm');
+        $this->load->view('templates/footer');
+    }	
+	
 	function xresetconfirm()
     {
-		$pass = $this->input->post('pass');
+		$pass = $this->input->post('password');
 		$hash = $this->input->post('hash');
 		$result = $this->register_model->forgotpass_email($hash);
-		
-		if(isset($pass) && !empty($pass)){
+	
+		if(isset($pass) && !empty($pass) && $this->form_validation->run('forgotpass')){
 			if(isset($result['username'])){
 				$user = $result['username'];
 				$curpass = $result['password'];
@@ -132,18 +144,7 @@ class Login extends MY_Controller {
 		}else{
 			echo "1";
 		}
-	}
-	
-    function resetconfirm()
-    {
-        $data = array(
-                'title' => 'Reset Password | Easyshop.ph'
-        );
-        $data = array_merge($data, $this->fill_header());
-        $this->load->view('templates/header_plain', $data);		
-        $this->load->view('pages/user/forgotpass_confirm');
-        $this->load->view('templates/footer');
-    }	
+	}	
 	
 }
 
