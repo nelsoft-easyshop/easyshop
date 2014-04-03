@@ -304,7 +304,7 @@ $config = array(
 				   array(
 						'field' => 'email',
 						'label' => 'Email Address',
-						'rules' => 'trim|required|valid_email'
+						'rules' => 'trim|required|valid_email|callback_external_callbacks[register_model,validate_email]'
 					  ),
 				),
 			'subscription_form' => array(
