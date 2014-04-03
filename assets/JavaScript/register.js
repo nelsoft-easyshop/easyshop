@@ -126,7 +126,6 @@ $(document).ready(function(){
 	  function pass_check(){
 			var username = $("#wsx").val();		  
 			var pass 	 = $('#cur_password').val();
-            
             var csrftoken = $('#changepass').find('input[name^="es_csrf"]').val();
 
 			$.post(config.base_url+'register/pass_check', {username: username, pass: pass, es_csrf_token : csrftoken}, function(result){
@@ -298,52 +297,6 @@ $(document).ready(function(){
 	$('.field input').on('click', function(){
 		$('.ci_form_validation_error').text('');
 	 });
-	 
-});
-
-/**********************************************************************************************/
-/****************************	Forgot Password VALIDATION	************************************/
-/**********************************************************************************************/
-$(document).ready(function(){
-
-	 $("#forgotpass").validate({
-		 rules: {				
-			password: {
-				required: true,
-                minlength: 6,
-                maxlength:25,
-				alphanumeric: true,
-				//case_all: true
-				},
-			cpassword: {
-				required: true,
-				minlength: 6,
-                maxlength:25,
-				equalTo: '#password'
-				}
-		 },
-		 messages:{
-			cpassword:{
-				equalTo: ''
-			}
-		 },
-		 errorElement: "span",
-		 errorPlacement: function(error, element) {
-				error.addClass('red');
-				if(element.attr('name') == 'password'){
-					var added_span = $('<span/>',{'class':"red"});
-					error.insertBefore(element.next());
-					added_span.insertBefore(element.next());}
-				else
-					error.appendTo(element.parent());
-		 }
-	 	
-	 });
-	 
-	 
-	$('.field input').on('click', function(){
-		$('.ci_form_validation_error').text('');
-	 });	 
 	 
 });
 
