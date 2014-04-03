@@ -20,6 +20,12 @@ $(document).ready(function(){
 		}
 	  }).on('keyup', function(){
 		var fieldlength = $.trim($('#username').val()).length;
+		hidecheckx($(this));
+		$('.username_availability').html('');
+		
+		if($(this).hasClass('pass')){
+			$(this).removeClass('pass');
+		}
 		if(!$(this).hasClass('forSearch') && fieldlength >= 5){
 			$(this).addClass('forSearch');
 		}
@@ -72,6 +78,12 @@ $(document).ready(function(){
 		}
 	  }).on('keyup', function(){
 		var fieldlength = $.trim($('#email').val()).length;
+		hidecheckx($(this));
+		$('.email_availability').html('');
+		
+		if($(this).hasClass('pass')){
+			$(this).removeClass('pass');
+		}
 		if(!$(this).hasClass('forSearch') && fieldlength >= 6){
 			$(this).addClass('forSearch');
 		}
