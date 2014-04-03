@@ -11,12 +11,14 @@
         <div class = "container header_bg">
             <div class="row-fluid">
                 <div id="himg" class="text-center"> <img src="<?=base_url()?>assets/images/landingpage/img_logo.png"> </div>
+               
                     <p class="text-center">ONLINE SHOPPING</p>                 
                     <p class="text-center">MADE <span>EASY</span></p>
                
                    <p class="text-center header_sub">
-                   		Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut
+                    Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut
                     </p>
+               
             </div>
         </div>
         <div class = "container content1">
@@ -26,18 +28,19 @@
                         <div class="row-fluid">
 								<?php echo form_open('', array('id'=>'register_form1'));?>
 									<fieldset>
+
 											<h4>Username</h4>
 											<input type="text" placeholder="" id="username" name="username" class="reqfield">
 											<input type="hidden" id="usernamecheck" value="" name="usernamecheck">
 											<span class="red ci_form_validation_error"><?php echo form_error('username'); ?></span>
-											<img id="username_loader" src="<?=base_url()?>/assets/images/orange_loader_small.gif" style="display:none;">
+											<img id="username_loader" class="img_loader_small" src="<?=base_url()?>/assets/images/orange_loader_small.gif" style="display:none;">
 											<div id="username_status" class="fieldstatus">
 												<img src="<?=base_url()?>/assets/images/check_icon.png" id="username_check" style="position: relative;display:none;vertical-align:middle"/>
 												<img src="<?=base_url()?>/assets/images/x_icon.png" id="username_x" style="position: relative;display:none;vertical-align:middle"/>
 												<span class="username_availability"></span>
 											</div>
 											<span class="help-block spnmsg">The username must be 5-25 characters long.</span>
-										
+									
 										
 										
 											<h4>Password</h4>
@@ -58,7 +61,7 @@
 											<h4>Email Address</h4>
 											<input type="text" placeholder="" id="email" name="email" class="reqfield">
 											<input type="hidden" id="emailcheck" value="">
-											<img id="email_loader" src="<?=base_url()?>/assets/images/orange_loader_small.gif" style="display:none;">
+											<img id="email_loader" class="img_loader_small" src="<?=base_url()?>/assets/images/orange_loader_small.gif" style="display:none;">
 											<div id="email_status" class="fieldstatus">
 												<img src="<?=base_url()?>/assets/images/check_icon.png" id="email_check" style="position: relative;display:none;vertical-align:middle"/>
 												<img src="<?=base_url()?>/assets/images/x_icon.png" id="email_x" style="position: relative;display:none;vertical-align:middle"/>
@@ -69,7 +72,7 @@
 										
 										<!--<button type="button" class="btn btn-warning btn-large">SEND</button>-->
 										<input type="submit" class="btn btn-warning btn-large" value="SEND" name="register_form1" id="register_form1_btn">
-										<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" id="register_form1_loadingimg" style="position: relative; top:10px; left:20px; display:none"/>
+										<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" class="img_loader_small2" id="register_form1_loadingimg" style="display:none"/>
 									</fieldset>
 
 									<p class="span6 border1"></p>
