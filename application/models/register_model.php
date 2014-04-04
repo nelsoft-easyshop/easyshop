@@ -504,6 +504,38 @@ class Register_model extends CI_Model
 		return $result;
 	}
 	
+	function is_validmobile($mobile)
+	{
+		if($mobile == '' ){
+			return true;
+		}
+	
+		if(preg_match('/^9[0-9]{9}/', $mobile)){
+			return true;
+		}
+		else{
+			$this->form_validation->set_message('external_callbacks', 'The mobile number you entered is invalid');
+			return false;
+		}
+		
+	}
+	
+	function signupMember_landingpage($data) 
+	{
+		$query = $this->sqlmap->getFilenameID('users', 'signup_member');
+        $sth = $this->db->conn_id->prepare($query);
+		$blank = '';
+        $sth->bindParam(':username', $data['username']);
+		$sth->bindParam(':password', $data['password']);
+		$sth->bindParam(':email', $data['email']);
+		$sth->bindParam(':contactno', $data['mobile']);
+		$sth->bindParam(':region', $blank);
+        $sth->execute();
+        $row = $sth->fetch(PDO::FETCH_ASSOC);
+
+        return $row;
+	}
+	
 }
 
 /* End of file register_model.php */

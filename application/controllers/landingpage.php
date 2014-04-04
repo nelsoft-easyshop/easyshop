@@ -47,9 +47,10 @@ class Landingpage extends MY_Controller
 			$data['username'] = html_escape($this->input->post('username'));
 			$data['password'] = html_escape($this->input->post('password'));
 			$data['email'] = $this->input->post('email');
+			$data['mobile'] = $this->input->post('mobile');
 			
 			// REGISTER MEMBER IN DATABASE
-			$data['member_id'] = $this->register_model->signupMember($data)['id_member'];
+			$data['member_id'] = $this->register_model->signupMember_landingpage($data)['id_member'];
 			
 			//GENERATE MOBILE CONFIRMATION CODE
 			$temp['mobilecode'] = $this->register_model->rand_alphanumeric(6);

@@ -123,6 +123,12 @@ $(document).ready(function(){
         return this.optional(element) || /^\w+$/i.test(value);
 	 }, "Only letters, numbers, and underscores are allowed");
  
+	jQuery.validator.addMethod("is_validmobile", function(value, element) {
+		return this.optional(element) || /^9[0-9]{9}/.test(value);
+	 }, "Invalid mobile number");
+ 
+	$('#mobile').numeric({negative : false});
+ 
 	 $("#register_form1").validate({
 		 rules: {
             username: {
@@ -145,7 +151,13 @@ $(document).ready(function(){
 				required: true,
 				email: true,
 				minlength: 6
-				}
+				},
+			mobile:{
+				number: true,
+				minlength: 10,
+				maxlength: 10,
+				is_validmobile: true
+			},
 		 },
 		 messages:{
 			cpassword:{

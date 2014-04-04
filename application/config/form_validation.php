@@ -306,6 +306,11 @@ $config = array(
 						'label' => 'Email Address',
 						'rules' => 'trim|required|valid_email|callback_external_callbacks[register_model,validate_email]'
 					  ),
+				  array(
+						'field' => 'mobile',
+						'label' => 'Mobile',
+						'rules' => 'trim|numeric|min_length[10]|max_length[10]|callback_external_callbacks[register_model,is_validmobile]'
+					),
 				),
 			'subscription_form' => array(
 					array(

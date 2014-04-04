@@ -34,9 +34,9 @@
 											<input type="hidden" id="usernamecheck" value="" name="usernamecheck">
 											<span class="red ci_form_validation_error"><?php echo form_error('username'); ?></span>
 											<img id="username_loader" class="img_loader_small" src="<?=base_url()?>/assets/images/orange_loader_small.gif" style="display:none;">
-											<div id="username_status" class="fieldstatus">
-												<img src="<?=base_url()?>/assets/images/check_icon.png" id="username_check" style="position: relative;display:none;vertical-align:middle"/>
-												<img src="<?=base_url()?>/assets/images/x_icon.png" id="username_x" style="position: relative;display:none;vertical-align:middle"/>
+											<div id="username_status">
+												<img class="fieldstatus" src="<?=base_url()?>/assets/images/check_icon.png" id="username_check" style="position: relative;display:none;vertical-align:middle"/>
+												<img class="fieldstatus" src="<?=base_url()?>/assets/images/x_icon.png" id="username_x" style="position: relative;display:none;vertical-align:middle"/>
 												<span class="username_availability"></span>
 											</div>
 											<span class="help-block spnmsg">The username must be 5-25 characters long.</span>
@@ -62,14 +62,19 @@
 											<input type="text" placeholder="" id="email" name="email" class="reqfield">
 											<input type="hidden" id="emailcheck" value="">
 											<img id="email_loader" class="img_loader_small" src="<?=base_url()?>/assets/images/orange_loader_small.gif" style="display:none;">
-											<div id="email_status" class="fieldstatus">
-												<img src="<?=base_url()?>/assets/images/check_icon.png" id="email_check" style="position: relative;display:none;vertical-align:middle"/>
-												<img src="<?=base_url()?>/assets/images/x_icon.png" id="email_x" style="position: relative;display:none;vertical-align:middle"/>
+											<div id="email_status">
+												<img class="fieldstatus" src="<?=base_url()?>/assets/images/check_icon.png" id="email_check" style="position: relative;display:none;vertical-align:middle"/>
+												<img class="fieldstatus" src="<?=base_url()?>/assets/images/x_icon.png" id="email_x" style="position: relative;display:none;vertical-align:middle"/>
 												<span class="email_availability"></span>
 											</div>
 											<span class="red ci_form_validation_error"><?php echo form_error('email'); ?></span>
 											<span class="help-block spnmsg"></span>
 										
+											<h4>Mobile Number<h4>
+											<input type="text" placeholder="e.g. 9051234567" name="mobile" class="reqfield" id="mobile" maxlength="10">
+											<span class="red ci_form_validation_error"><?php echo form_error('mobile'); ?></span>
+											<span class="help-block spnmsg"></span>
+											
 										<!--<button type="button" class="btn btn-warning btn-large">SEND</button>-->
 										<input type="submit" class="btn btn-warning btn-large" value="SEND" name="register_form1" id="register_form1_btn">
 										<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" class="img_loader_small2" id="register_form1_loadingimg" style="display:none"/>
