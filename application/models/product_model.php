@@ -1226,6 +1226,7 @@ class product_model extends CI_Model
         return $data;
     }
     
+    
     public function deleteShippingInfomation($product_id){
         $query = "SELECT id_shipping FROM es_product_shipping_head WHERE product_id = :product_id";
         $sth = $this->db->conn_id->prepare($query);

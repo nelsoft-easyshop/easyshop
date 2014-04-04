@@ -49,6 +49,9 @@
 						<p>Joined: <?php echo $vendordetails['datecreated'];?></p>
 						<p><span class="span_bg vendor_map"></span> <?php echo $vendordetails['city'] . " " . $vendordetails['region'];?></p>
 					</div>
+					<div class="vendor-msg-modal">
+					    <p><a id="to_modal" href="javascript:void(0)">Send a message</a></p><button id="modal-launcher">Launch Modal Window</button>
+					</div>
 				</div>
 			</div>
 
@@ -465,10 +468,76 @@
 
 			</div>
 		</div>
+<!--		<div id="msg_modal" style="display:none">
+		    <span class="msg_modal_title">Remove/Transfer Child Categories?</span>
+		    <div class="container">
+			<div>
+			    <label>To : </label><br>
+			    <input type="text" value="<?php echo $vendordetails['username'];?>" id="msg_name" name="msg_name"><br>
+			    <label>Message : </label><br>
+			    <textarea cols="40" rows="5" name="msg-message" id="msg-message"></textarea>			   
+			</div>
+		    </div>
+		</div>-->
+		<div id="modal-background">
+		</div>
+		    <div id="modal-container">
+			<div>
+			    <label>To : </label><br>
+			    <input type="text" value="<?php echo $vendordetails['username'];?>" id="msg_name" name="msg_name"><br>
+			    <label>Message : </label><br>
+			    <textarea cols="40" rows="5" name="msg-message" id="msg-message"></textarea>			   
+			</div>
+			<button id="modal-close">Close</button>
+		    </div>
 		
 <script src="<?=base_url()?>assets/JavaScript/js/jquery.raty.min.js" type="text/javascript"></script>
 <script type='text/javascript' src='<?=base_url()?>assets/JavaScript/js/jquery.jqpagination.min.js'></script>
 <script src="<?=base_url()?>assets/JavaScript/js/jquery.idTabs.min.js" type="text/javascript"></script>
 <script src="<?=base_url()?>assets/JavaScript/js/jquery.knob.js" type="text/javascript"></script>
-
 <script type="text/javascript" src="<?=base_url()?>assets/JavaScript/vendorpage.js"></script>
+
+<script>
+    
+//$(".vendor-msg-modal").on("click","a",function(e){
+//    $("#msg_modal").show();
+//	
+//});
+//$('#msg_modal').click(function(e) {
+//    e.stopPropagation();
+//}).css({outline:0}).focusout(function(){
+//     $(this).fadeOut(300);  
+//}).focus();
+//    
+    $(function(){
+    $("#modal-launcher, #modal-background, #modal-close").click(function() {
+        $("#modal-content, #modal-background").toggleClass("active");
+    });
+});
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

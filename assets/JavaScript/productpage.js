@@ -454,6 +454,7 @@ $(function(){
             var i_id = $(".id-class").attr("id");
             var i_name =  $("#pname").text().trim();
             var i_qty =  $(".product_quantity").val();
+            var i_loc =  $(".shiploc").val();
             var i_price =  $(".current_price").text().trim();
             var i_opt = {};
             var length = parseInt($('.product_option').length) - 1;
@@ -466,16 +467,21 @@ $(function(){
                 i_opt[id] =attr;
                 
             });
+	    if (i_loc == 0) {
+		alert("Select shipping location");
+		return false;
+	    }
+            var i_loc_name =  $("#locationID_"+i_loc).html().replace(/&nbsp;/g,'');
             $.ajax({
                 async:false,
                 url: config.base_url + "cart/add_item",
                 type:"POST",
                 dataType:"JSON",
-                data:{id:i_id,qty:i_qty,price:i_price,opt:i_opt,name:i_name,length:length,es_csrf_token:csrftoken,max_qty:max_qty},
+                data:{id:i_id,qty:i_qty,price:i_price,opt:i_opt,name:i_name,length:length,es_csrf_token:csrftoken,max_qty:max_qty,location_id:i_loc,location:i_loc_name},
 
                 success:function(data){
                     if(data == "386f25bdf171542e69262bf316a8981d0ca571b8" ){
-                        alert("Please select an attribute.");
+                        alert("An error occured,Try refreshing the site.");
                     }else if(data == "d3d34a1c4cb94f516ae916e4b8b4be80d50c8f7a"){
                         window.location.replace(config.base_url + "cart");
                     }
