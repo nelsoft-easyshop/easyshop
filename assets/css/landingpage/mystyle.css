@@ -207,7 +207,7 @@ input.error + span.error {
 
 .ui-widget-header {
     color: #fff;
-    background-color: #82c120 !important;
+ /*   background-color: #82c120 !important;*/
 }
 
 .ui-dialog .ui-dialog-title {
@@ -271,6 +271,24 @@ input.error + span.error {
 .username_container {
     width: 400px;
     margin:0 auto;
+}
+
+.terms_con {
+    font-size: 12px;
+    margin-top: 20px;
+}
+
+.terms_and_conditions {
+    color: #0191C8;
+    cursor:pointer;
+}
+
+.t_and_c {
+    font-size: 12px;
+}
+
+.dialog {
+    display: none;
 }
 
 @media screen and (-webkit-min-device-pixel-ratio:0) { 
