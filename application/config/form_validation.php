@@ -294,7 +294,7 @@ $config = array(
 				   array(
 						 'field'   => 'password',
 						 'label'   => 'Password',
-						 'rules'   => 'trim|required|matches[cpassword]|min_length[6]|max_length[25]|callback_external_callbacks[register_model,validate_password]'
+						 'rules'   => 'trim|required|matches[cpassword]|min_length[6]|callback_external_callbacks[register_model,validate_password]'
 					  ),
 				   array(
 						 'field'   => 'cpassword',

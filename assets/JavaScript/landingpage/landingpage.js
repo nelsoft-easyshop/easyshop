@@ -67,6 +67,8 @@ $(document).ready(function(){
       }).on('blur', function(){
 			if( $(this).hasClass('error') ){
 				$('div.pass-container').hide();
+			}else{
+				$('div.pass-container').show();
 			}
 	  });
 	  
@@ -132,13 +134,11 @@ $(document).ready(function(){
 			password: {
 				required: true,
                 minlength: 6,
-                maxlength:25,
 				alphanumeric: true
 				},
 			cpassword: {
 				required: true,
 				minlength: 6,
-                maxlength:25,
 				equalTo: '#password'
 				},
 			email: {

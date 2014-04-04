@@ -46,7 +46,7 @@
 											<h4>Password</h4>
 											<input type="password" placeholder="" id="password" name="password" class="reqfield">
 											<span class="red ci_form_validation_error"><?php echo form_error('password'); ?></span>
-											<span class="help-block spnmsg">Password must within 6-25 characters, and include<br>numbers and upper-case and lower-case letters</span>
+											<span class="help-block spnmsg">Password must be alphanumeric with a minimum of 6 characters.</span>
 										
 										
 										
