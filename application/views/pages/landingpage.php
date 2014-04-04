@@ -75,6 +75,8 @@
 											<span class="red ci_form_validation_error"><?php echo form_error('mobile'); ?></span>
 											<span class="help-block spnmsg"></span>
 											
+											<span>By registering to Easyshop.ph, you agree to comply with our Terms and Conditions</span>
+											
 										<!--<button type="button" class="btn btn-warning btn-large">SEND</button>-->
 										<input type="submit" class="btn btn-warning btn-large" value="SEND" name="register_form1" id="register_form1_btn">
 										<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" class="img_loader_small2" id="register_form1_loadingimg" style="display:none"/>
