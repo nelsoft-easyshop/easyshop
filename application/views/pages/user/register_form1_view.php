@@ -62,7 +62,7 @@
           </div>
           <div class="clear"></div>
           <div class="password_info">
-               Passwords must be within 6-25 characters, and include numbers and upper-case and lower-case letters.
+               Password must be alphanumeric with a minimum of 6 characters.
           </div>
 		  
           <div class="field">

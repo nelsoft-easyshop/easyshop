@@ -56,7 +56,19 @@ $(document).ready(function(){
 					showx($('#cpassword'));
 				else if($(this).val() == $('#cpassword').val() && !$('#cpassword')[0].disabled)
 					showcheck($('#cpassword'));
-      });
+				
+				if( !$(this).hasClass('error') ){
+					$('div.pass-container').show();
+				}else{
+					$('div.pass-container').hide();
+				}
+      }).on('blur', function(){
+			if( $(this).hasClass('error') ){
+				$('div.pass-container').hide();
+			}else{
+				$('div.pass-container').show();
+			}
+	  });
 	  
 	  $("#cpassword").on('paste', function(e){
 			e.preventDefault();
@@ -183,13 +195,11 @@ $(document).ready(function(){
 			password: {
 				required: true,
                 minlength: 6,
-                maxlength:25,
 				alphanumeric: true
 				},
 			cpassword: {
 				required: true,
 				minlength: 6,
-                maxlength:25,
 				equalTo: '#password'
 				},
 			email: {
@@ -197,18 +207,11 @@ $(document).ready(function(){
 				email: true,
 				minlength: 6
 				},
-			captcha_word: {
-				required: true,
-				minlength: 6
-				},
 			terms_checkbox:{
 				required: true
 			}
 		 },
 		 messages:{
-		 	username:{
-				equalTo: ''
-			},
 			cpassword:{
 				equalTo: ''
 			},
@@ -565,7 +568,7 @@ function username_check(){
 	$.post(config.base_url+'register/username_check', {username: username, es_csrf_token : csrftoken}, function(result){
 		if(result == 1){
 			showcheck($('#username'));
-			$('.username_availability').html('Username available');
+			$('.username_availability').html('');
 			$('#usernamecheck').attr('value', $('#username').val());
 			$('#username').addClass('pass');
 		}
@@ -586,7 +589,7 @@ function email_check(){
 	$.post(config.base_url+'register/email_check', {email: email, es_csrf_token : csrftoken}, function(result){
 		if(result == 1){
 			showcheck($('#email'));
-			$('.email_availability').html('Email available');
+			$('.email_availability').html('');
 			$('#emailcheck').attr('value', $('#email').val());
 			$('#email').addClass('pass');
 		}
