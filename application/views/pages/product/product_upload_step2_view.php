@@ -1,3 +1,5 @@
+ 
+<script src="<?php echo base_url() ?>assets/tinymce/plugins/jbimages/js/jquery.form.js"></script>
 <link type="text/css" href="<?=base_url()?>assets/css/sell_item.css" rel="stylesheet" />
 <div class="wrapper">
 
@@ -38,7 +40,7 @@
           'name' => 'form_product',
           'enctype' => 'multipart/form-data'
           );
-        echo form_open('', $attr);
+        echo form_open('sell/processing', $attr);
         ?>
 
 
@@ -539,6 +541,9 @@
                     <input type="hidden" id="qty_details" value='<?php echo (isset($item_quantity))?json_encode($item_quantity):json_encode(array());  ;?>'></input>
                     </form>
                     <div class="loader_div"><img src='<?php echo base_url().'assets/images/orange_loader.gif' ?>'></div>              
+                    <div class="percentage">
+                                              
+                    </div>
                 </div>  
             </td>
           </tr>
@@ -572,6 +577,20 @@ $(document).ready(function(){
   var combination = []; 
   var arrayCombination = []; 
   var arraySelected = {};  
+  var progress;
+  var formData;
+
+  var g_input_name;
+var g_id;
+var g_combinationSelected;
+var g_description;
+var g_noCombination;
+var g_otherCategory;
+var g_removeThisPictures;
+var g_primaryPicture;
+var g_editRemoveThisPictures;
+var g_editPrimaryPicture; 
+var g_quantitySolo;
   
        
   var editRemoveThisPictures = new Array();
@@ -1286,8 +1305,50 @@ $(document).on('change',"#prod_condition",function () {
   validateWhiteTextBox("#"+id);
 });
 
+$('#form_product').ajaxForm({ 
+       dataType: "json",
+       beforeSubmit : function(arr, $form, options){
+            var percentVal = '0%';
+            $('.percentage').html(percentVal);
+            $( ".button_div" ).hide();
+            $( ".loader_div" ).show();
+            arr.push({name:'inputs', value:g_input_name});
+            arr.push({name:'id', value:g_id});
+            arr.push({name:'combination', value:g_combinationSelected});
+            arr.push({name:'description', value:g_description});
+            arr.push({name:'noCombination', value:g_noCombination});
+            arr.push({name:'otherCategory', value:g_otherCategory});
+            arr.push({name:'removeThisPictures', value:g_removeThisPictures});
+            arr.push({name:'primaryPicture', value:g_primaryPicture});
+            arr.push({name:'editRemoveThisPictures', value:g_editRemoveThisPictures});
+            arr.push({name:'editPrimaryPicture', value:g_editPrimaryPicture});
+            arr.push({name:'quantitySolo', value:g_quantitySolo});
+      },
+      uploadProgress : function(event, position, total, percentComplete) {
+            var percentVal = percentComplete + '%';
+            $('.percentage').empty();
+            $('.percentage').html(percentVal);
+            console.log(percentVal);
+      },
+      success :function(d) { 
+          $('.percentage').html('100%');
+            if (d.e == 1) {
+              $('#prod_h_id').val(d.d); 
+              document.getElementById("hidden_form").submit();
+            } else {
+              $( ".button_div" ).show();
+              $( ".loader_div" ).hide();
+              $('.percentage').empty();
+              alert(d.d);
+            } 
+      }
+}); 
+ 
+
+
 
 $(".proceed_form").unbind("click").click(function(){
+ 
   tinyMCE.triggerSave();
   var description = tinyMCE.get('prod_description').getContent();
   var id = "<?php echo $id; ?>"; 
@@ -1295,19 +1356,29 @@ $(".proceed_form").unbind("click").click(function(){
   var action = "sell/processing"; 
   var title = $("#prod_title");
   var brief = $("#prod_brief_desc"); 
-  var formData = new FormData(document.getElementById("form_product"));
+  formData = new FormData(document.getElementById("form_product"));
   var combinationSelected = JSON.stringify(arraySelected);
   var otherCategory = "<?php echo isset($otherCategory)?$otherCategory:''; ?>";
   formData.append("inputs", input_name);
+  g_input_name = input_name;
   formData.append("id", id);
+  g_id = id;
   formData.append("combination",combinationSelected);
+  g_combinationSelected = combinationSelected;
   formData.append("desc",description);
+  g_description = description;
   formData.append("noCombination",noCombination);
+  g_noCombination = noCombination;
   formData.append("otherCategory",otherCategory);
+  g_otherCategory = otherCategory;
   formData.append("removeThisPictures",JSON.stringify(removeThisPictures));
+  g_removeThisPictures = JSON.stringify(removeThisPictures);
   formData.append("primaryPicture",primaryPicture);
+  g_primaryPicture = primaryPicture;
   formData.append("editRemoveThisPictures",JSON.stringify(editRemoveThisPictures));
+  g_editRemoveThisPictures = JSON.stringify(editRemoveThisPictures);
   formData.append("editPrimaryPicture",editPrimaryPicture);
+  g_editPrimaryPicture = editPrimaryPicture;
 
   var csrftoken = $('#uploadstep2_csrf').val();
   formData.append('es_csrf_token', csrftoken);
@@ -1321,8 +1392,7 @@ $(".proceed_form").unbind("click").click(function(){
   var found = false;
   var quantity = $('.qtyTextClass');
   var combinationQuantity = $('.quantityText');
-
-  
+ 
 
   if(title.val().length == 0){
     $( "#prod_title" ).focus();
@@ -1397,10 +1467,12 @@ $(".proceed_form").unbind("click").click(function(){
           return false;
         }
         formData.append("quantitySolo",quantity.val());
+        g_quantitySolo = quantity.val();
       }
 
       if(<?php echo json_encode((isset($is_edit))?$is_edit:false); ?>){
 
+ 
         $.ajax({
           //async: false, //REMOVED: MAKES BROWSER UNRESPONSIVE
           type: "POST",
@@ -1429,36 +1501,45 @@ $(".proceed_form").unbind("click").click(function(){
 
       }else{
 
-        $.ajax({
-          //async: false, //REMOVED: MAKES BROWSER UNRESPONSIVE
-          type: "POST",
-          url: '<?php echo base_url();?>sell/processing',
-          mimeType:"multipart/form-data",
-          contentType: false,
-          cache: false,
-          processData:false,
-          data: formData , 
-          dataType: "json",
-          beforeSend: function(jqxhr, settings) {  
-            $( ".button_div" ).hide();
-            $( ".loader_div" ).show();
-          },
-          success: function(d) {
-            if (d.e == 1) {
-              $('#prod_h_id').val(d.d);
-              $('#hidden_form').submit();
-            } else {
-              $( ".button_div" ).show();
-              $( ".loader_div" ).hide();
-              alert(d.d);
-            }
-          }
-        });
+ 
+
+        $('#form_product').submit();
+
+ 
+        // $.ajax({
+        //   //async: false, //REMOVED: MAKES BROWSER UNRESPONSIVE
+        //   type: "POST",
+        //   url: '<?php echo base_url();?>sell/processing',
+        //   mimeType:"multipart/form-data",
+        //   contentType: false,
+        //   cache: false,
+        //   processData:false,
+        //   data: formData , 
+        //   dataType: "json",
+        //   beforeSend: function(jqxhr, settings) {  
+        //     $( ".button_div" ).hide();
+        //     $( ".loader_div" ).show();
+        //   },
+        //   success: function(d) {
+        //     if (d.e == 1) {
+        //       $('#prod_h_id').val(d.d);
+        //       $('#hidden_form').submit();
+        //     } else {
+        //       $( ".button_div" ).show();
+        //       $( ".loader_div" ).hide();
+        //       alert(d.d);
+        //     }
+        //   }
+        // });
+ 
       }
 
     }
   }
 });
+
+ 
+ 
 
     /*
      * Product Edit javascript

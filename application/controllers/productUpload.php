@@ -99,7 +99,8 @@ class productUpload extends MY_Controller
 	}
 
 	function step2()
-	{    
+	{ 
+
 		$data = $this->fill_view();
 		$this->load->view('templates/header', $data); 
 		if(isset($_POST['hidden_attribute'])){ # if no item selected cant go to the link. it will redirect to step 1
@@ -141,55 +142,15 @@ class productUpload extends MY_Controller
 		}
 
 	}
+	 
+ 
 
 	function step2_2() # function for processing the adding of new item
 	{	   
-		$removeThisPictures = json_decode($_POST['removeThisPictures']); 
-		$primaryId = $_POST['primaryPicture'];
-		$primaryName =""; 
-        
-		foreach( $_FILES['files']['name'] as $key => $value ) {
-			if($primaryId == $key){
-				$primaryName =	$_FILES['files']['name'][$key];
-			}
-			if (in_array($key, $removeThisPictures) || $_FILES['files']['name'][$key] == "") {
-				unset($_FILES['files']['name'][$key]);
-				unset($_FILES['files']['type'][$key]);
-				unset($_FILES['files']['tmp_name'][$key]);
-				unset($_FILES['files']['error'][$key]);
-				unset($_FILES['files']['size'][$key]);
-			} 
-		}
-		$_FILES['files']['name'] = array_values($_FILES['files']['name']);
-		$_FILES['files']['type'] = array_values($_FILES['files']['type']);
-		$_FILES['files']['tmp_name'] = array_values($_FILES['files']['tmp_name']);
-		$_FILES['files']['error'] = array_values($_FILES['files']['error']);
-		$_FILES['files']['size'] = array_values($_FILES['files']['size']);
-	 	 
-	 	$key = array_search ($primaryName, $_FILES['files']['name']);
-	 	if(isset($_FILES['files']['name'][0])){
-            $temp = $_FILES['files']['name'][0];
-            $_FILES['files']['name'][0] = $_FILES['files']['name'][$key];
-            $_FILES['files']['name'][$key] = $temp;
 
-            $temp = $_FILES['files']['type'][0];
-            $_FILES['files']['type'][0] = $_FILES['files']['type'][$key];
-            $_FILES['files']['type'][$key] = $temp;
-
-            $temp = $_FILES['files']['tmp_name'][0];
-            $_FILES['files']['tmp_name'][0] = $_FILES['files']['tmp_name'][$key];
-            $_FILES['files']['tmp_name'][$key] = $temp;
-
-            $temp = $_FILES['files']['error'][0];
-            $_FILES['files']['error'][0] = $_FILES['files']['error'][$key];
-            $_FILES['files']['error'][$key] = $temp;
-
-            $temp = $_FILES['files']['size'][0];
-            $_FILES['files']['size'][0] = $_FILES['files']['size'][$key];
-            $_FILES['files']['size'][$key] = $temp;
-	 	}
         
 		$combination = json_decode($this->input->post('combination'));
+
 		$checkIfCombination = $this->input->post('noCombination');
 		$inputs = $this->input->post('inputs'); 
 		$inputs_exp = false;
@@ -246,17 +207,67 @@ class productUpload extends MY_Controller
 
 		if(strlen(trim($product_title)) == 0 || $product_title == "" 
 			|| strlen(trim($product_brief)) == 0 || $product_brief == "" 
-			|| strlen(trim($product_description)) <= 4
 			|| strlen(trim($product_price)) == 0 || $product_price <= 0
 			|| strlen(trim($sku)) == 0 || $sku == "")
 		{
-			$data = '{"e":"0","d":"Fill (*) All Required Fields Properly!"}';		
+			echo '{"e":"0","d":"Fill (*) All Required Fields Properly!"}';		
+			exit();
 		}else{
-
+ 
 			if(empty($_FILES['files']['name'][0])){ 
 				echo '{"e":"0","d":"Select at least 1 photo for your item."}';
 				exit();
 			}
+			$removeThisPictures = json_decode($_POST['removeThisPictures']); 
+				$primaryId = $_POST['primaryPicture'];
+				$primaryName =""; 
+
+				foreach($_FILES['files']['name'] as $key => $value ) {
+					if($primaryId == $key){
+						$primaryName =	$_FILES['files']['name'][$key];
+					}
+					if (in_array($key, $removeThisPictures) || $_FILES['files']['name'][$key] == "") {
+						unset($_FILES['files']['name'][$key]);
+						unset($_FILES['files']['type'][$key]);
+						unset($_FILES['files']['tmp_name'][$key]);
+						unset($_FILES['files']['error'][$key]);
+						unset($_FILES['files']['size'][$key]);
+					} 
+				}
+
+				$_FILES['files']['name'] = array_values($_FILES['files']['name']);
+				$_FILES['files']['type'] = array_values($_FILES['files']['type']);
+				$_FILES['files']['tmp_name'] = array_values($_FILES['files']['tmp_name']);
+				$_FILES['files']['error'] = array_values($_FILES['files']['error']);
+				$_FILES['files']['size'] = array_values($_FILES['files']['size']);
+
+				$key = array_search ($primaryName, $_FILES['files']['name']);
+				if(isset($_FILES['files']['name'][0])){
+					$temp = $_FILES['files']['name'][0];
+					$_FILES['files']['name'][0] = $_FILES['files']['name'][$key];
+					$_FILES['files']['name'][$key] = $temp;
+
+					$temp = $_FILES['files']['type'][0];
+					$_FILES['files']['type'][0] = $_FILES['files']['type'][$key];
+					$_FILES['files']['type'][$key] = $temp;
+
+					$temp = $_FILES['files']['tmp_name'][0];
+					$_FILES['files']['tmp_name'][0] = $_FILES['files']['tmp_name'][$key];
+					$_FILES['files']['tmp_name'][$key] = $temp;
+
+					$temp = $_FILES['files']['error'][0];
+					$_FILES['files']['error'][0] = $_FILES['files']['error'][$key];
+					$_FILES['files']['error'][$key] = $temp;
+
+					$temp = $_FILES['files']['size'][0];
+					$_FILES['files']['size'][0] = $_FILES['files']['size'][$key];
+					$_FILES['files']['size'][$key] = $temp;
+				}
+				
+				if(empty($_FILES['files']['name'][0])){ 
+					echo '{"e":"0","d":"Select at least 1 photo for your item."}';
+					exit();
+				}
 
 			$allowed =  array('gif','png' ,'jpg','jpeg'); # available format only for image
 			$x = 0;
@@ -270,14 +281,34 @@ class productUpload extends MY_Controller
 				}
 				if($_FILES["files"]["size"][$x] >= 900000) # size of image must be 900kb only
 				{
-					echo '{"e":"0","d":"File size not valid. Please choose another image with smaller size. \n Expected 600KB."}';
+					echo '{"e":"0","d":"File size not valid. Please choose another image with smaller size. \n Expected 900KB."}';
+					exit();
+				}
+				$x++;
+			} 
+			$x = 0; 
+
+			if(!empty($_FILES['prod_other_img']['name'][0])){
+			foreach($_FILES['prod_other_img']['name'] as $k) { # validating image format.
+				$filename = $_FILES['prod_other_img']['name'][$x];
+				$ext = pathinfo($filename, PATHINFO_EXTENSION);
+				if(!in_array(strtolower($ext),$allowed))
+				{
+					echo '{"e":"0","d":"For Additional Information: File Selected not valid. \n Please choose another image."}';
+					exit();
+				}
+				if($_FILES["prod_other_img"]["size"][$x] >= 900000) # size of image must be 900kb only
+				{
+					echo '{"e":"0","d":"For Additional Information: File size not valid. Please choose another image with smaller size. \n Expected 900KB."}';
 					exit();
 				}
 				$x++;
 			}
+			}
 
 			$product_id = $this->product_model->addNewProduct($product_title,$sku,$product_brief,$product_description,$keyword,$brand_id,$cat_id,$style_id,$member_id,$product_price,$product_condition,$otherCategory, $otherBrand);
-			
+            # product_id = is the id_product for the new item. if 0 no new item added process will stop
+            
             #ERROR TRACKING: SAM
             if(intval($product_id,10) === 0){
                 log_message('error', 'Add new: title=>'. $product_title);
@@ -294,15 +325,12 @@ class productUpload extends MY_Controller
                 log_message('error', 'Add new: other_cat=>'. $otherCategory);
             }
             
-            
-            
-            # product_id = is the id_product for the new item. if 0 no new item added process will stop
 			$this->load->library('upload');
 			$filenames_ar = array();
 			$file_type = array();
 			$i = 0;
 
-			#renaming all image
+			# renaming all image
 			# name format: product_id + member_id + date_uploaded
 			foreach($_FILES['files']['name'] as $k => $v) {
 				$file_ext = explode('.', $v);
@@ -317,9 +345,11 @@ class productUpload extends MY_Controller
 			# creating new directory for each product
 			if(!mkdir($path_directory)) {  
 				echo '{"e":"0","d":"There was a problem. \n Please try again! - Error[0010]"}'; 
+				exit();
 			}   
 			if(!mkdir($other_path_directory)) {  
 				echo '{"e":"0","d":"There was a problem. \n Please try again! - Error[0012]"}'; 
+				exit();
 			}   
  
 			#initializing iamge attributes
@@ -332,38 +362,30 @@ class productUpload extends MY_Controller
 				"allowed_types" => "jpg|jpeg|png|gif",
 				"max_size" => 900,
 				"xss_clean" => FALSE
-				)); 				
+				)); 	
+
 			if($product_id > 0) # id_product is 0 means no item inserted. the process will stop.
 			{
-				if ($this->upload->do_multi_upload("files")) { 
+				if ($this->upload->do_multi_upload("files")) {
 					#starting of uploading
 					for ($i=0; $i < sizeof($filenames_ar); $i++) {
 						$path = $path_directory.$filenames_ar[$i];
 						$this->createThumbnail($filenames_ar[$i],$path_directory);
 						$this->createSmallSize($filenames_ar[$i],$path_directory);
-						$this->createCategorySize($filenames_ar[$i],$path_directory);
-						$is_primary = 0;
-						if($i == 0)
-						{
-							$is_primary = 1;
-						}
+						$this->createCategorySize($filenames_ar[$i],$path_directory);						 
+						$is_primary = ($i == 0 ? 1 : 0);
 						$product_image = $this->product_model->addNewProductImage($path,$file_type[$i],$product_id,$is_primary);	
 					}
 					if($product_id > 0) # id_product is 0 means no item inserted. the process will stop.
 					{
-
 						if($inputs_exp == true){
 							for ($i=0; $i < sizeof($explode_inputs) ; $i++) {
 								$explode_id = explode('/', $explode_inputs[$i]);
 								$explode_value = $explode_id[0];
-
-
 								$attribute_id = $explode_id[1];
 								$extraPrice = '0';
- 
 								$dataType = substr($explode_value,0,strpos($explode_value,'_'));
 
- 
 								switch ($dataType) {
                                     # if the input type is checkbox possible many item will insert to the database.
 									case 'CHECKBOX': 
@@ -412,12 +434,11 @@ class productUpload extends MY_Controller
 
                         $newarray = array();
 
-
                         for ($i=0; $i < sizeof($_POST['prod_other_name']); $i++) { 
                         	$newarray[trim(ucfirst(strtolower($_POST['prod_other_name'][$i])))] = array();
                         }
 
-                        for ($i=0; $i < sizeof($_POST['prod_other_name']); $i++) { 
+                        for ($i=0; $i < sizeof($_POST['prod_other_name']); $i++) {
                         	$other_name = "--no name";
                         	$other_price = "0.00";
                         	$other_image = "--no image";
@@ -427,12 +448,13 @@ class productUpload extends MY_Controller
                         		$other_price = $_POST['prod_other_price'][$i];
                         	}
 
-                        	if($_FILES['prod_other_img']['name'][$i] != ""){
-
-                        		$other_image_type = $_FILES['prod_other_img']['type'][$i];
-                        		$file_ext = explode('.', $_FILES['prod_other_img']['name'][$i]);
-                        		$other_image = "{$product_id}_{$member_id}_{$fulldate}{$i}_o.{$file_ext[1]}";
-                        		$other_tmp = $_FILES["prod_other_img"]["tmp_name"][$i];
+                    		if(isset($_FILES['prod_other_img'])){
+                        		if(!empty($_FILES['prod_other_img']['name'][$i])){
+                        			$other_image_type = $_FILES['prod_other_img']['type'][$i];
+                        			$file_ext = explode('.', $_FILES['prod_other_img']['name'][$i]);
+                        			$other_image = "{$product_id}_{$member_id}_{$fulldate}{$i}_o.{$file_ext[1]}";
+                        			$other_tmp = $_FILES["prod_other_img"]["tmp_name"][$i];
+                        		}
                         	}
 
                         	if(strlen(trim($_POST['prod_other'][$i])) != 0 ||  trim($_POST['prod_other'][$i]) != ""){
@@ -524,15 +546,23 @@ class productUpload extends MY_Controller
 
                         } 
 					# end of combination
-                        $data = '{"e":"1","d":"'.$product_id.'"}';	
+                        $data = '{"e":"1","d":"'.$product_id.'"}';
+                        echo $data;
+                        exit();	
                     }else{
                     	$data = '{"e":"0","d":"Please Double Check your Details!"}';	
+                    	echo $data;
+                        exit();
                     }
                 }else {
                 	$data =  '{"e":"0","d":"'.strip_tags($this->upload->display_errors()).'"}';
+                	echo $data;
+                	exit();
                 }
             }else{
-            	$data = '{"e":"0","d":"There was a problem. \n Please try again later! - Error[0011]"}';	
+            	$data = '{"e":"0","d":"There was a problem. \n Please try again later! - Error[0011]"}';
+            	echo $data;
+            	exit();
             }
         }
         echo $data;
@@ -554,8 +584,9 @@ class productUpload extends MY_Controller
 
     	if(!file_exists($path_to_thumbs_directory)) {  
     		if(!mkdir($path_to_thumbs_directory)) {  
-    			die("There was a problem. Please try again!");  
+    			die('{"e":"0","d":"There was a problem. \n Please try again later! - Error[0013]"}');  
     		}   
+
     	}
 
     	$this->image_lib->initialize($config); 
@@ -578,7 +609,7 @@ class productUpload extends MY_Controller
 		
 		if(!file_exists($path_to_small_directory)) {  
 			if(!mkdir($path_to_small_directory)) {  
-				die("There was a problem. Please try again!");  
+				die('{"e":"0","d":"There was a problem. \n Please try again later! - Error[0014]"}');  
 			}   
 		} 
 		
@@ -603,7 +634,7 @@ class productUpload extends MY_Controller
 
 		if(!file_exists($path_to_categview_directory)) {  
 			if(!mkdir($path_to_categview_directory)) {  
-				die("There was a problem. Please try again!");  
+				die('{"e":"0","d":"There was a problem. \n Please try again later! - Error[0015]"}');  
 			}   
 		}
 		
