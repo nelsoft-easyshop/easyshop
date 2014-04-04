@@ -225,7 +225,7 @@ function username_check(){
 	$.post(config.base_url+'landingpage/username_check', {username: username, es_csrf_token : csrftoken}, function(result){
 		if(result == 1){
 			showcheck($('#username'));
-			$('.username_availability').html('Username available');
+			$('.username_availability').html('');
 			$('#usernamecheck').attr('value', $('#username').val());
 			field.addClass('pass');
 		}
@@ -247,7 +247,7 @@ function email_check(){
 	$.post(config.base_url+'landingpage/email_check', {email: email, es_csrf_token : csrftoken}, function(result){
 		if(result == 1){
 			showcheck($('#email'));
-			$('.email_availability').html('Email available');
+			$('.email_availability').html('');
 			$('#emailcheck').attr('value', $('#email').val());
 			field.addClass('pass');
 		}
