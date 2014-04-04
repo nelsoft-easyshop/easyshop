@@ -80,11 +80,41 @@
 											<span class="red ci_form_validation_error"><?php echo form_error('mobile'); ?></span>
 											<span class="help-block spnmsg"></span>
 											
-											<span>By registering to Easyshop.ph, you agree to comply with our Terms and Conditions</span>
+											
 											
 										<!--<button type="button" class="btn btn-warning btn-large">SEND</button>-->
 										<input type="submit" class="btn btn-warning btn-large" value="SEND" name="register_form1" id="register_form1_btn">
 										<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" class="img_loader_small2" id="register_form1_loadingimg" style="display:none"/>
+									
+										<p class="terms_con">By registering to Easyshop.ph, you agree to comply with our <span class="terms_and_conditions">Terms and Conditions</span></p>
+										<div class="dialog t_and_c">
+											<h3>Terms &amp; Conditions</h3>
+											<p>
+												Welcome to Easyshop.ph, a company under the group of Nelsoft Technologies Inc. Before using the Easyshop.ph website, services or tools, you must agree to the following terms general rules to abide as provided by this Website. Should there be any enquiries or inquisitions upon the said terms conditions- kindly contact us directly or refer to our customer service section. This purpose of this document if to outline the acceptance of the terms and conditions laid out between Easyshop.ph and merchant will to list its products on Easyshop.ph.
+												All the terms and conditions are valid and final.
+											</p>
+											<p><strong>Access &amp; Process</strong></p>
+											<p>
+												Upon utilizing our website you are obligated to read accept the terms conditions set by Easyshop.ph as well as our Privacy Policy.
+												<br /><br/>
+											    <strong>Creating Your Account</strong><br/>
+											    Upon creating your account, you are fully responsible for your account password- should there be any improper activities occurring under your account, it is your direct responsibility Easyshop.ph reserves the right to investigate, remove, or withhold your information.
+											    Our age policy only requires that a minor under the age of 18 should only use the Website under the authorization of a parent or a legal guardian.
+											    <br/><br/>
+											    <strong>Listing Products (Seller Registration)</strong><br/>
+											    The seller is fully responsible for the Listing. By Listing on the website of Easyshop.ph, the seller confirms warrants that:
+											        <ul>
+											        	<li>Seller is the valid owner of Products listed.</li>
+											        	<li>Seller has the right to sell the Products online in Philippines.</li>
+											        	<li>The products conform with all applicable laws regulations in Philippines.</li>
+											        	<li>The product strictly conforms to the specifications, drawings, performance criteria other descriptions referred to/or proved on the website by Seller.</li>
+											        	<li>Products are free from defects in terms of materials, performance, operation &amp; workmanship.</li>
+											        	<li>No misleading information is included on the website.</li>
+											        	<li>The price of the listed Product is competitive.</li>
+											        	<li> No illegal or offensive content is inserted on the Website.</li>											       
+											        </ul>
+											</p>
+										</div>
 									</fieldset>
 
 									<p class="span6 border1"></p>
