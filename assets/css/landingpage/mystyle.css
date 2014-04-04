@@ -396,6 +396,16 @@ input.error + span.error {
 
 
 @media (max-width: 480px) {
+    h4 {
+        font-size: 15.5px;
+    }
+    .header_bg p {
+        font-size: 0.47em;
+    }
+
+    .header_bg p:last-child {
+        font-size: 0.27em;
+    }
     .subscribe_input {
         width: 200px;
     }
@@ -427,6 +437,20 @@ input.error + span.error {
         display: block !important;
         margin: 0 auto;
         position: relative;
+    }
+
+    .subscribe_input {
+           -webkit-border-radius: 6px !important;
+     -moz-border-radius: 6px !important;
+          border-radius: 6px !important;   
+    }
+
+    .subscribe_btn {
+        display: block !important;
+        margin: 10px auto !important;
+      -webkit-border-radius: 6px !important;
+     -moz-border-radius: 6px !important;
+          border-radius: 6px !important;
     }
 
 }
