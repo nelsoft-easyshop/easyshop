@@ -44,7 +44,7 @@
                     <p><b>Sorry, the link is invalid or is already expired.</b></p>
            	        <p><a href='<?=base_url()?>home'>Return to the Home Page.</a></p>
                <?php elseif($toggle_view == "0"): ?>
-                   Password is successfully updated! <a href='<?=base_url()?>memberpage'>click HERE</a> to return.		        
+                   Password is successfully updated! <a href='<?=base_url()?>home'>click HERE</a> to return the Home Page.		        
                <?php else: ?>
                     <p><b>Sorry, the link is invalid or is already expired.</b></p>
            	        <p><a href='<?=base_url()?>home'>Return to the Home Page.</a></p>			   
