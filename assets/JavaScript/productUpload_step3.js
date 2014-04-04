@@ -326,7 +326,40 @@ $(function(){
 	  var productid = parseInt($('#prod_h_id').val());
 	  $.post(config.base_url+'sell/shippinginfo', {fdata : fdata, es_csrf_token : csrftoken, productitemid : productitemid, productid : productid}, function(data){
 		if(data == 1){
-			$('#step4_form').submit();
+            
+            $.post(config.base_url+'productUpload/previewItem', {p_id: productid, es_csrf_token : csrftoken}, function(data){
+                
+                $('#previewProduct').html(data);
+                $('#tabs').tabs();
+                
+                $('#previewProduct').dialog({
+                    width: 1100,
+                    height: 450,
+                    autoOpen: false,
+                    title: "Product Preview",
+                    modal: true,
+                    closeOnEscape: false,
+                    draggable: false,
+                    buttons: [
+                        {
+                            text: "Edit",
+                            "class": 'orange_btn_preview',
+                            click: function() {
+                                $(this).dialog("close");
+                            }
+                        },
+                        {
+                            text: "Finish",
+                            "class": 'orange_btn_preview',
+                            click: function() {
+                                $('#step4_form').submit();
+                            }
+                        },
+                    ],
+                });
+                $('#previewProduct').dialog('open');
+                
+            });
 		}
 		else if(data == 0){
 			alert('An error was encountered. Please add shipping details for all attribute combinations.');
@@ -604,6 +637,10 @@ $(function(){
     $('#step1_link').on('click', function(){
         $('#edit_step1').submit();
     });
+});
+    
+$(function(){
+
 });
 
 

@@ -156,6 +156,8 @@
           <span class="paypal"></span>
         </p>
       </div>
+      
+      
       <div class="clear"></div>
       <div id="tabs">
         <ul>

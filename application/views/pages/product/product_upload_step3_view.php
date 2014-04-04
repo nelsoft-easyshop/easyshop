@@ -255,7 +255,9 @@
   </div>
 </div>
 
-<div class="clear"></div>  
+<div class="clear"></div> 
+
+<div id="previewProduct" style="display:none"></div>
 
 <script type="text/javascript" src="<?=base_url()?>assets/JavaScript/productUpload_step3.js"></script>
 <script type="text/javascript" src="<?=base_url()?>assets/JavaScript/js/jquery.numeric.js"></script>

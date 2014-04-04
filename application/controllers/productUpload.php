@@ -8,6 +8,7 @@ class productUpload extends MY_Controller
 	{ 
 		parent::__construct(); 
 		$this->load->model("product_model");
+        $this->load->helper('htmlpurifier');
 		$this->load->library('cart');
 		if(!$this->session->userdata('usersession') && !$this->check_cookie())
 			redirect(base_url().'login', 'refresh');
@@ -647,11 +648,9 @@ class productUpload extends MY_Controller
 	 */
 	function step3()
 	{
-		//if($this->input->post('prod_h_id')){
+		if($this->input->post('prod_h_id')){
 			$id = $this->input->post('prod_h_id');
-			//$id = 118;
-			//$id = 123;
-			
+
 			$data = array (
 				'shiploc' => $this->product_model->getLocation(),
 				'attr' => $this->product_model->getPrdShippingAttr($id),
@@ -718,10 +717,10 @@ class productUpload extends MY_Controller
 			$this->load->view('pages/product/product_upload_step3_view', $data);
 			$this->load->view('templates/footer');
 			
-		//}
-		//else {
-		//	redirect(base_url().'sell/step1', 'refresh');
-		//}
+		}
+	    else {
+			redirect(base_url().'sell/step1', 'refresh');
+		}
 	}
 	
 	/**
@@ -763,7 +762,6 @@ class productUpload extends MY_Controller
 					}
 				}
 			}
-            $this->product_model->updateIsDraft($productId, $memberId,0);
 			echo 1;
 		}
 		else{
@@ -777,6 +775,7 @@ class productUpload extends MY_Controller
 		$this->load->view('templates/header', $data); 
 		if(isset($_POST['prod_h_id'])){
 			$response['id'] = $_POST['prod_h_id'];
+            $this->product_model->updateIsDraft($productId, $memberId,0);
 			$this->load->view('pages/product/product_upload_step4_view',$response);
 			$this->load->view('templates/footer'); 
 		}else{
@@ -1377,6 +1376,33 @@ class productUpload extends MY_Controller
 
 	}
     
+    public function previewItem(){
+        $id = $this->input->post('p_id');
+        $product_row = $this->product_model->getProductPreview($id);
+        
+        $quantities = $this->product_model->getProductQuantity($id);
+        $availability = "varies";
+        
+        foreach($quantities as $qty){
+            if(count($qty['product_attribute_ids'])===1){
+                if(($qty['product_attribute_ids'][0]['id'] == 0)&&($qty['product_attribute_ids'][0]['is_other'] == 0)){
+                    $availability = $qty['quantity'];
+                }
+            }   
+        }
+
+        $preview_data = array(
+            'breadcrumbs' =>  $this->product_model->getParentId($product_row['cat_id']),
+            'product' => $product_row,
+            'main_categories' => $this->product_model->getFirstLevelNode(TRUE),
+            'product_images' => $this->product_model->getProductImages($id),
+            'product_options' => $this->product_model->getProductAttributes($id, 'NAME'),
+            'availability' => $availability,
+        );
+
+		$this->load->view('pages/product/product_upload_preview',$preview_data);
+
+    }
     
 }
 

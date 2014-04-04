@@ -172,6 +172,15 @@ class product_model extends CI_Model
         }  
 		return $row;
 	}
+    
+    function getProductPreview($id){
+        $query = $this->sqlmap->getFilenameID('product', 'getProductPreview');
+        $sth = $this->db->conn_id->prepare($query);
+        $sth->bindParam(':product_id',$id);
+        $sth->execute();
+		$row = $sth->fetch(PDO::FETCH_ASSOC);
+        return $row;
+    }
 
 
     /*
