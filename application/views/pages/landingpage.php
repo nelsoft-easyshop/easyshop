@@ -1,5 +1,10 @@
 <!DOCTYPE html>
     <head>
+
+<meta property="og:title" content="EasyShop.ph" />
+<meta property="og:description" content="Sample Description" />
+<meta property="og:image" content="https://easyshop.ph/assets/images/img_logo.png" />
+
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link href="<?=base_url()?>assets/css/landingpage/bootstrap.css" rel="stylesheet">
         <link href="<?=base_url()?>assets/css/landingpage/bootstrap-responsive.css" rel="stylesheet">
