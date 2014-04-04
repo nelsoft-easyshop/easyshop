@@ -354,3 +354,47 @@ function hidecheckx(element){
 	$('#'+name+'_check').hide();
 	$('#'+name+'_x').hide();
 }
+
+/*******************************************************************************************************/
+/******************************* Terms and Conditions Dialog box ***************************************/
+/*******************************************************************************************************/
+$(function() {
+	$( ".dialog" ).dialog({
+		width:"50%",
+		autoOpen: false,
+		show: {
+			effect: "blind",
+			duration: 1000,
+		},
+		hide: {
+			effect: "blind",
+			duration: 1000
+		}
+	});
+$( ".terms_and_conditions" ).click(function() {
+	$( ".dialog" ).dialog( "open" );
+	$(".dialog").siblings().parent('.ui-dialog').addClass('terms_container');
+	});
+});
+
+// $(function () {
+// 	$("#dialogify").dialog({
+// 		autoOpen: false,
+// 		modal: true
+// 	});
+// 	$(".terms_and_conditions").on("click", function (e) {
+// 		e.preventDefault();
+
+// 			$('.dialog').dialog("option", {
+// 				title: $(e.target).text(),
+// 				width: $(window).width() - 100,
+// 				height: $(window).height() - 100,
+// 				position: {
+// 					my: "center",
+// 					at: "center",
+// 					of: window
+// 				}
+// 			}).dialog("open");
+		
+// 	});
+// });
