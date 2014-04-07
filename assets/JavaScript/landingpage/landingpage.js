@@ -186,7 +186,7 @@ $(document).ready(function(){
 		 },
 		 submitHandler: function(form){
 			if( $('#username').hasClass('pass') && $('#email').hasClass('pass') ){
-				$('#register_form1_loadingimg').show();
+				$('#register_form1_loadingimg').show().css('display','inline-block');
 				$('#register_form1_btn').attr('disabled', true);
 
 			 	$.post(config.base_url + 'landingpage/signup', $(form).serializeArray(), function(data){
@@ -220,6 +220,7 @@ $(document).ready(function(){
 						title: title,
 						modal: true,
 						closeOnEscape: false,
+						draggable:false,
 						buttons:{
 							OK: function(){
 								$(this).dialog("close");
@@ -332,6 +333,7 @@ $(document).ready(function(){
 					title: title,
 					modal: true,
 					closeOnEscape: false,
+					draggable:false,
 					buttons:{
 						OK: function(){
 							$(this).dialog("close");
@@ -372,39 +374,14 @@ $(function() {
 	$( ".dialog" ).dialog({
 		width:"50%",
 		autoOpen: false,
-		show: {
-			effect: "blind",
-			duration: 1000,
-		},
-		hide: {
-			effect: "blind",
-			duration: 1000
-		}
+		modal: true,
+		closeOnEscape: true,
+		draggable:false,
 	});
-$( ".terms_and_conditions" ).click(function() {
+
+	$( ".terms_and_conditions" ).click(function() {
 	$( ".dialog" ).dialog( "open" );
 	$(".dialog").siblings().parent('.ui-dialog').addClass('terms_container');
 	});
 });
 
-// $(function () {
-// 	$("#dialogify").dialog({
-// 		autoOpen: false,
-// 		modal: true
-// 	});
-// 	$(".terms_and_conditions").on("click", function (e) {
-// 		e.preventDefault();
-
-// 			$('.dialog').dialog("option", {
-// 				title: $(e.target).text(),
-// 				width: $(window).width() - 100,
-// 				height: $(window).height() - 100,
-// 				position: {
-// 					my: "center",
-// 					at: "center",
-// 					of: window
-// 				}
-// 			}).dialog("open");
-		
-// 	});
-// });
