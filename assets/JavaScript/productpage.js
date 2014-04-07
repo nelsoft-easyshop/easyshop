@@ -153,6 +153,7 @@ $(function(){
             $('.quantity')[0].innerHTML = value.quantity;
             $('.quantity').data('default','true');
             $('.product_quantity').val(1);
+            $('#p_itemid').val(index);
             //if there are no attributes to choose from: enable buy button
             if($('.product_option').find('ul.options')[0] === undefined){
                  $('.orange_btn3').removeClass("disabled").addClass("enabled");
@@ -185,7 +186,6 @@ $(function(){
 var sel_id_ordered = new Array();
         
 function attrClick(target, $this){
-    
         //If clicked attribute is disabled, exit immediately
         if(target.hasClass('disable'))
             return false;
@@ -200,7 +200,6 @@ function attrClick(target, $this){
         else{
             $this.find('.active').removeClass("active");
         }
-        
         
         var data_attr = [target.attr('data-attrid'),target.attr('data-type')];
         if(!isActiveBool){
@@ -280,6 +279,7 @@ function attrClick(target, $this){
                 value_arr.push([x.id, x.is_other]);
             });
             if(value_arr.sort().join(',') === sel_id.sort().join(',')){
+               $('#p_itemid').val(index);
                $('.quantity')[0].innerHTML = value.quantity;
                $('.orange_btn3').removeClass("disabled").addClass("enabled"); //REMOVED TO DISABLE BUY NOW BUTTON ACTIVATION
                return false;

@@ -329,6 +329,9 @@
   </div>
   <input id='p_qty' type='hidden' value=' <?php echo json_encode($product_quantity);?>'>
   <input id='p_shipment' type='hidden' value='<?php echo json_encode($shipment_information);?>'>
+  
+  <input id='p_itemid' type='hidden' value='0'/>
+  
 </section>
 
 <script src="<?=base_url()?>assets/JavaScript/js/jquery.jqzoom-core.js" type="text/javascript"></script>
