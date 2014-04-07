@@ -126,11 +126,11 @@
             }else{
                     $.ajax({
                         async:true,
-                        url:"<?=base_url()?>payment/cart_items",
+                        url:"<?=base_url()?>message/send_message",
                         type:"POST",
                         data:{itm:data1, es_csrf_token:csrftoken},
                         success:function(data){
-                            window.location.replace("<?=base_url()?>payment/review");
+			    window.location.replace("<?=base_url()?>payment/review");
                         }
                     });
             }

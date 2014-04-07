@@ -58,16 +58,22 @@ class cart_model extends CI_Model
         }
 	public function getSpecificProductQuantity($product_id,$product_attr_id,$length){ //hnd pa na optimize ung query
 	    $query = "
-		    SELECT a.id_product_item, a.quantity, COALESCE(b.product_attr_id,0) AS product_attr_id,cnt.count,
-		    COALESCE(b.is_other,0) AS is_other  FROM es_product_item a
-		    LEFT JOIN es_product_item_attr b ON b.product_id_item = a.id_product_item 
-		    INNER JOIN (
-		    SELECT a.id_product_item, a.quantity, COALESCE(b.product_attr_id,0) AS product_attr_id,COUNT(*) AS `count`,
-		    COALESCE(b.is_other,0) AS is_other  FROM es_product_item a
-		    LEFT JOIN es_product_item_attr b ON b.product_id_item = a.id_product_item 
-		    WHERE a.product_id = $product_id AND b.product_attr_id IN($product_attr_id) GROUP BY a.`id_product_item`
-		    ) AS `cnt` ON a.`id_product_item` = cnt.id_product_item
-		    WHERE a.product_id = $product_id AND b.product_attr_id IN($product_attr_id) HAVING `count` = $length";
+		SELECT a.id_product_item, a.quantity, COALESCE(b.product_attr_id,0) AS product_attr_id,cnt.count,
+		COALESCE(b.is_other,0) AS is_other  FROM es_product_item a
+		LEFT JOIN es_product_item_attr b ON b.product_id_item = a.id_product_item 
+		INNER JOIN (
+		SELECT a.id_product_item, a.quantity, COALESCE(b.product_attr_id,0) AS product_attr_id,COUNT(*) AS `count`,
+		COALESCE(b.is_other,0) AS is_other  FROM es_product_item a
+		LEFT JOIN es_product_item_attr b ON b.product_id_item = a.id_product_item 
+		WHERE a.product_id = $product_id AND b.product_attr_id IN($product_attr_id) GROUP BY a.`id_product_item`
+		) AS `cnt` ON a.`id_product_item` = cnt.id_product_item
+		WHERE a.product_id = $product_id AND b.product_attr_id IN($product_attr_id) HAVING `count` = $length
+		UNION
+			
+		SELECT b.id_product_item,b.quantity,'','',''
+		FROM es_product AS a
+		LEFT JOIN `es_product_item` AS b ON a.`id_product` = b.`product_id`
+		WHERE b.product_id = $product_id";
 	    $sth = $this->db->conn_id->prepare($query);
 	    $sth->execute();
 	    $rows = $sth->fetchAll(PDO::FETCH_ASSOC);
