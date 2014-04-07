@@ -85,7 +85,7 @@
 	WHERE id_member = :member_id
 </select>
 
-<!--
+
 <select id="get_member">
 	SELECT m.`id_member`, m.`nickname`, m.`fullname`, m.`gender`, m.`birthday`, m.contactno, m.is_contactno_verify, m.email, m.is_email_verify,
 	COALESCE(a0.`streetno`, '') as streetno, COALESCE(a0.`streetname`, '') as streetname, COALESCE(a0.`barangay`, '') as barangay, 
@@ -99,7 +99,7 @@
 	LEFT JOIN es_address a1 ON m.id_member=a1.id_member AND a1.`type`=1
 	where m.id_member=:id_member
 </select>	
--->
+
 
 <select id="getLocationLookup">
 	SELECT id_location, parent_id, location, type
@@ -107,6 +107,7 @@
 	WHERE type = 0 OR type = 3 OR type = 4
 </select>
 
+<!--
 <select id="get_member">
 	SELECT m.`id_member`, m.`nickname`, m.`fullname`, m.`gender`, m.`birthday`, m.contactno, m.is_contactno_verify, m.email, m.is_email_verify,
 	a0.city as cityID, a0.province as provinceID, a1.city as c_cityID, a1.province as c_provinceID,
@@ -122,6 +123,7 @@
 	LEFT JOIN es_location_lookup loc3 ON a1.province = loc3.id_location AND loc3.type = 4
 	where m.id_member=:id_member
 </select>
+-->
 
 <select id="get_school">
 	SELECT 
