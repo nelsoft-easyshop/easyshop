@@ -43,11 +43,18 @@ class Landingpage extends MY_Controller
 	 */
 	public function signup()
 	{
+		$serverResponse = array(
+			'result' => 0,
+			'error' => array()
+		);
+		
 		if(($this->input->post('register_form1'))&&($this->form_validation->run('landing_form'))){
 			$data['username'] = html_escape($this->input->post('username'));
 			$data['password'] = html_escape($this->input->post('password'));
 			$data['email'] = $this->input->post('email');
 			$data['mobile'] = $this->input->post('mobile');
+			
+			$registrationFlag = false;
 			
 			// REGISTER MEMBER IN DATABASE
 			$data['member_id'] = $this->register_model->signupMember_landingpage($data)['id_member'];
@@ -58,19 +65,45 @@ class Landingpage extends MY_Controller
 			$temp['emailcode'] = sha1($this->session->userdata('session_id').time());
 			$temp['member_id'] = $data['member_id'];
 			$temp['email'] = 0;
+			
 			//Store verification details and increase limit count when necessary
 			$result = $this->register_model->store_verifcode($temp);
-		
+			
 			// Send notification email to user
 			$this->register_model->sendNotification($data, 'signup');
 			
-			if( (!is_null($data['member_id']) || $data['member_id'] != 0) && $result ){
-				echo 1;
+			
+			// If verification code failed to enter database
+			if(!$result){
+				array_push($serverResponse['error'], 'Database verifcode error <br>');
+			}
+			if( is_null($data['member_id']) || $data['member_id'] == 0 || $data['member_id'] == ''){
+				array_push($serverResponse['error'], 'Database registration failure <br>');
+				$registrationFlag = false;
+			}else{
+				$registrationFlag = true;
+			}
+			
+			
+			if( $registrationFlag && $result ){
+				$serverResponse['result'] = 1;
+				$serverResponse['error'] = array();
 			}
 			else{
-				echo 0;
+				$serverResponse['result'] = 0;
+			}
+			
+		}
+		else{
+			if( !($this->input->post('register_form1')) ){
+				array_push($serverResponse['error'], 'Failed to submit form. <br>');
+			}
+			if( !($this->form_validation->run('landing_form')) ){
+				array_push($serverResponse['error'], 'Failed to validate form. <br>');
 			}
 		}
+		
+		echo json_encode($serverResponse);
 	}
 	
 	

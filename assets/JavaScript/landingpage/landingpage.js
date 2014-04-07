@@ -192,7 +192,17 @@ $(document).ready(function(){
 			 	$.post(config.base_url + 'landingpage/signup', $(form).serializeArray(), function(data){
 					$('#register_form1_loadingimg').hide();
 					$('#register_form1_btn').attr('disabled', false);
-					if(data == 1){
+					
+					try{
+						var serverResponse = jQuery.parseJSON(data);
+					}
+					catch(e){
+						alert('An error was encountered while processing your data. Please try again later.');
+						window.location.reload(true);
+						return;
+					}
+					
+					if(serverResponse['result'] === 1){
 						$('#result_desc').html("Thank you for registering to Easyshop.ph!");
 						var title = "Registration Complete";
 
@@ -202,7 +212,7 @@ $(document).ready(function(){
 						});
 					}
 					else{
-						$('#result_desc').html("An error was encountered. Try again later.");
+						$('#result_desc').html(serverResponse['error']);
 						var title= "Failed to Register";
 					}
 					$('#register_result').dialog({
