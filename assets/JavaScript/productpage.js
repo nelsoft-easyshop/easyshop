@@ -105,14 +105,17 @@ $(function(){
         var form = $(this).parent('form');
         var replyfield = $(this).siblings('.reply_field');
         var loadingimg = $(this).siblings('#savereply_loadingimg');
+		var replydiv = $(this).closest('div.reply_area');
+		var thisbtn = $(this);
         if($.trim(replyfield.val()).length < 1)
             replyfield.effect('pulsate',{times:5},500);
         else{
-            $(this).hide();
+            thisbtn.hide();
             loadingimg.show();
             $.post(config.base_url+'product/submit_reply',form.serialize(),function(data){
-                $(this).show();
-                loadingimg.hide();
+				replydiv.fadeOut();
+				thisbtn.show();
+				loadingimg.hide();
                 if(data == 1){
                     location.reload(true);
                 }
