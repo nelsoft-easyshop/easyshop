@@ -9,16 +9,15 @@ class Home extends MY_Controller {
         parent::__construct();
 		$this->load->library('cart');
         $this->load->library('home_xml');
-		$this->load->vars(
-            array('category_navigation' => $this->load->view('templates/category_navigation',array('cat_items' =>  $this->getcat(),), TRUE ),)
-		);
+
     }
 
     
     public function index() {
 		$data = array('title' => 'Home | Easyshop.ph',
                 'page_javascript' => 'assets/JavaScript/home.js',
-                'data' => $this->home_xml->getFilenameID('home_files')
+                'data' => $this->home_xml->getFilenameID('home_files'),
+                'category_navigation' => $this->load->view('templates/category_navigation',array('cat_items' =>  $this->getcat(),), TRUE ),
 				);
         $data = array_merge($data, $this->fill_header());
 		$this->load->view('templates/header', $data);

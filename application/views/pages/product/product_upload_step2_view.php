@@ -1893,7 +1893,7 @@ $(document).ready(function(){
         var csrftoken = $('#uploadstep2_csrf').val();
         if(searchQuery != ""){
             currentRequest = jQuery.ajax({
-                type: "POST",
+                type: "GET",
                 url: '<?php echo base_url();?>product/searchBrand', 
                 onLoading:jQuery(".brand_sch_loading").html('<img src="<?= base_url() ?>assets/images/orange_loader_small.gif" />').show().css('display','inline-block'),
                 data: "data="+searchQuery+"&es_csrf_token="+csrftoken, 

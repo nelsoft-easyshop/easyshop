@@ -429,9 +429,9 @@ echo form_open('sell/edit/step2', $attributesForm);
         $( "#cat_sch" ).keyup(function() {
             var searchQuery = $(this).val();
 			var csrftoken = $('#uploadstep1_csrf').val();
-            if(searchQuery != ""){
+            if(searchQuery != ""){  
                 currentRequest = jQuery.ajax({
-                    type: "POST",
+                    type: "GET",
                     url: '<?php echo base_url();?>product/searchCategory', 
                     data: "data="+searchQuery+"&es_csrf_token="+csrftoken, 
                     onLoading:jQuery(".cat_sch_loading").html('<img src="<?= base_url() ?>assets/images/orange_loader_small.gif" />').show(),

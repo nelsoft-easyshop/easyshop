@@ -9,9 +9,6 @@ class product extends MY_Controller
 		parent::__construct(); 
 		$this->load->helper('htmlpurifier');
 		$this->load->model("product_model");
-		$this->load->vars(
-			array('category_navigation' => $this->load->view('templates/category_navigation',array('cat_items' =>  $this->getcat(),), TRUE ))
-			);
 	}
 
 	public $per_page = 6;
@@ -141,7 +138,7 @@ class product extends MY_Controller
 				$response['items'] = $items;
 				$response['attributes'] = $organizedAttribute;
 				$response['id_cat'] = $categoryId;
-
+                $response['category_navigation'] = $this->load->view('templates/category_navigation',array('cat_items' =>  $this->getcat(),), TRUE );
 				$this->load->view('templates/header', $data); 
 				$this->load->view('pages/product/product_search_by_category_final',$response);
 				$this->load->view('templates/footer_full'); 
@@ -418,6 +415,7 @@ class product extends MY_Controller
 					'title' => 'Easyshop.ph',
 					);
 				$data = array_merge($data, $this->fill_header());
+                $response['category_navigation'] = $this->load->view('templates/category_navigation',array('cat_items' =>  $this->getcat(),), TRUE );
 				$this->load->view('templates/header', $data); 
 				$this->load->view('pages/product/product_search_by_searchbox',$response);
 				$this->load->view('templates/footer_full'); 
@@ -523,6 +521,7 @@ class product extends MY_Controller
 				'product_quantity' => $this->product_model->getProductQuantity($id),
 				'shipment_information' => $this->product_model->getShipmentInformation($id),
                 'shiploc' => $this->product_model->getLocation(),
+                'category_navigation' => $this->load->view('templates/category_navigation',array('cat_items' =>  $this->getcat(),), TRUE ),
                 ));
 			$data['vendorrating'] = $this->product_model->getVendorRating($data['product']['sellerid']);
 			$this->load->view('pages/product/productpage_view', $data); 
@@ -711,8 +710,8 @@ class product extends MY_Controller
 		redirect('me', 'refresh');
 	}
 
-	function searchCategory(){
-		$string = $this->input->post('data');
+	function searchCategory(){  
+		$string = $this->input->get('data');
 		$rows = $this->product_model->searchCategory($string);
 		foreach($rows as $idx=>$row){
 			$rows[$idx]['parent'] = $this->product_model->getParentId($row['id_cat']);
@@ -721,7 +720,7 @@ class product extends MY_Controller
 	}
 
 	function searchBrand(){
-		$string = $this->input->post('data');
+		$string = $this->input->get('data');
 		$rows = $this->product_model->searchBrand($string);
 		echo json_encode($rows);
 	}
