@@ -773,9 +773,10 @@ class productUpload extends MY_Controller
 	{	
 		$data = $this->fill_view();
 		$this->load->view('templates/header', $data); 
+        $memberId =  $this->session->userdata('member_id');
 		if(isset($_POST['prod_h_id'])){
 			$response['id'] = $_POST['prod_h_id'];
-            $this->product_model->updateIsDraft($productId, $memberId,0);
+            $this->product_model->updateIsDraft($response['id'] , $memberId,0);
 			$this->load->view('pages/product/product_upload_step4_view',$response);
 			$this->load->view('templates/footer'); 
 		}else{

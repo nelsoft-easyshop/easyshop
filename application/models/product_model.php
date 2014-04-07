@@ -291,7 +291,7 @@ class product_model extends CI_Model
 		$sth->bindParam(':start',$start,PDO::PARAM_INT);
 		$sth->bindParam(':per_page',$per_page,PDO::PARAM_INT);
 		$sth->execute(); 
-		
+	
 		$rows = $sth->fetchAll(PDO::FETCH_ASSOC);	
 	 
 		return $rows ;
