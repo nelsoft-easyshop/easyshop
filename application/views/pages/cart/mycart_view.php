@@ -130,7 +130,7 @@
                         type:"POST",
                         data:{itm:data1, es_csrf_token:csrftoken},
                         success:function(data){
-                            window.location.replace("<?=base_url()?>payment/shipping");
+                            window.location.replace("<?=base_url()?>payment/review");
                         }
                     });
             }

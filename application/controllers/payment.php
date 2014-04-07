@@ -28,6 +28,18 @@ class Payment extends MY_Controller{
     public $PayPalApiSignature     = 'AFcWxV21C7fd0v3bYYYRCpSSRl31Au1bGvwwVcv0garAliLq12YWfivG';  
     public $PayPalCurrencyCode     = 'PHP';
 
+    //function cart_items()
+    //{
+    //    $unchecked = $_POST['itm'];
+    //    $carts = $this->cart->contents();
+    //    for($x=0;$x < sizeof($unchecked);$x++):
+    //        unset($carts[$unchecked[$x]]);
+    //    endfor;
+    //    $this->session->unset_userdata('cart_contents');
+    //    $cart_contentss=array('cart_contents'=>$carts);
+    //    $this->session->set_userdata($cart_contentss);
+    //    return true;
+    //}
     function cart_items()
     {
         $unchecked = $_POST['itm'];
@@ -35,19 +47,20 @@ class Payment extends MY_Controller{
         for($x=0;$x < sizeof($unchecked);$x++):
             unset($carts[$unchecked[$x]]);
         endfor;
-        $this->session->unset_userdata('cart_contents');
-        $cart_contentss=array('cart_contents'=>$carts);
+        //$this->session->unset_userdata('cart_contents');
+        $cart_contentss=array('choosen_items'=>$carts);
         $this->session->set_userdata($cart_contentss);
-        return true;
+	
+	return true;
     }
 
     function review(){
         $carts = $this->session->all_userdata();
-        if(!count($carts['cart_contents']) <=0){
+        if(!count($carts['choosen_items']) <=0){
    
             $member_id =  $this->session->userdata('member_id');
             $data['address'] = $this->payment_model->getUserAddress($member_id);
-            $data['cat_item'] = $carts['cart_contents'];
+            $data['cat_item'] = $carts['choosen_items'];
             $data['title'] = 'Payment | Easyshop.ph';
             $data = array_merge($data,$this->fill_header());
 
@@ -61,7 +74,7 @@ class Payment extends MY_Controller{
 
     function payment_option(){
         $carts = $this->session->all_userdata();
-        print_r($carts['cart_contents']);
+        print_r($carts['choosen_items']);
     }
 
 
@@ -92,7 +105,7 @@ class Payment extends MY_Controller{
 
         $carts = $this->session->all_userdata();
         $dataitem = "";
-        foreach ($carts['cart_contents'] as $key => $value) {
+        foreach ($carts['choosen_items'] as $key => $value) {
             $dataitem .= '&L_PAYMENTREQUEST_0_QTY'.$cnt.'='. urlencode($value['qty']).
             '&L_PAYMENTREQUEST_0_AMT'.$cnt.'='.urlencode($value['price']).
             '&L_PAYMENTREQUEST_0_NAME'.$cnt.'='.urlencode($value['name']).
@@ -162,7 +175,7 @@ class Payment extends MY_Controller{
         if(isset($_GET["token"]) && isset($_GET["PayerID"]))
         {
             $playerid = $_GET["PayerID"];
-            foreach ($carts['cart_contents'] as $key => $value) {
+            foreach ($carts['choosen_items'] as $key => $value) {
                 $ItemTotalPrice += $value['subtotal'];
             }
 
@@ -209,16 +222,16 @@ class Payment extends MY_Controller{
                     $phone = "000-00-00";
                     $cellphone = "0000-000-00-00";
                     $data_response = json_encode($httpParsedResponseAr);
-                    $data_item = json_encode($carts['cart_contents']);
+                    $data_item = json_encode($carts['choosen_items']);
                     $payment_type = 2;
                     $member_id = $this->session->userdata('member_id'); 
-                    $item_count = count($carts['cart_contents']);
+                    $item_count = count($carts['choosen_items']);
                     $option_count = 0;
                     $tax = 0;
                     $productstring = ""; # productid,qty,price,tax,total
                     $optionstring = ""; # productid,name,value
 
-                    foreach ($carts['cart_contents'] as $key => $value) {
+                    foreach ($carts['choosen_items'] as $key => $value) {
                     $productstring .= '<||>'.$value['id']."{+}".$value['qty']."{+}".$value['price']."{+}".$tax."{+}".$value['subtotal']."{+}".$value['rowid'].'{+}'.$value['member_id'];
 
                         if(!count($value['options']) <= 0)
@@ -293,7 +306,7 @@ class Payment extends MY_Controller{
 
        
        $carts = $this->session->all_userdata();
-       $item_count = count($carts['cart_contents']);
+       $item_count = count($carts['choosen_items']);
        $option_count = 0;
        $tax = 0;
 
@@ -302,7 +315,7 @@ class Payment extends MY_Controller{
         // productid,name,value
 
        $optionstring = "";
-       foreach ($carts['cart_contents'] as $key => $value)
+       foreach ($carts['choosen_items'] as $key => $value)
        {
            $productstring .= '<||>'.$value['id']."{+}".$value['qty']."{+}".$value['price']."{+}".$tax."{+}".$value['subtotal']."{+}".$value['rowid'];
 
@@ -315,8 +328,8 @@ class Payment extends MY_Controller{
 
         $productstring = substr($productstring,4);
         $optionstring = substr($optionstring,4);
-        $data_item = json_encode($carts['cart_contents']);
-        echo '<pre>',print_r($carts['cart_contents']),'</pre>';
+        $data_item = json_encode($carts['choosen_items']);
+        echo '<pre>',print_r($carts['choosen_items']),'</pre>';
                    
     }
 	
