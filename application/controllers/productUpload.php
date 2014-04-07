@@ -58,7 +58,7 @@ class productUpload extends MY_Controller
 			}
 			$draftItems[$i]['crumbs'] = $str_parents_to_last;
 		} 
-
+ 
 		$data_item['draftItems'] = $draftItems;
 		$data_item['firstlevel'] = $this->product_model->getFirstLevelNode(); # getting first category level from database.
 		$userdetails = $this->product_model->getCurrUserDetails($uid);
@@ -1393,10 +1393,10 @@ class productUpload extends MY_Controller
 		$memberId =  $this->session->userdata('member_id');
 		$output = $this->product_model->deleteDraft($memberId,$productId);
 
-		if($output['o_success'] == 0){
-			$data = '{"e":"0","d":"'.$output['o_message'].'"}';	
+		if($output == 0){
+			$data = '{"e":"0","m":"Something went wrong."}';	
 		}else{
-			$data = '{"e":"1","d":"'.$output['o_message'].'"}';	
+			$data = '{"e":"1","d":"Great! Success Removing."}';	
 		}
 		echo $data; 
 

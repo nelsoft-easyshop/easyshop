@@ -47,12 +47,18 @@ echo form_open('sell/edit/step2', $attributesForm);
             <?php if(!isset($product_id_edit)): ?>
                 <div style="float:right">
                    <a href="javascript:void(0);" class="show_draft_link">View your draft items.</a>
+                   <br>
+                   <span class='draft-cnt'>(<?php echo count($draftItems) ?>)</span> Item(s)
                 </div>
             <?php endif; ?>
        </div>
 
  <div class="div_draft simplemodal-container">
-      
+      <?php
+      if(count($draftItems) <= 0){
+        echo 'No item in your Draft!';
+      }
+      ?>
         <?php 
          foreach ($draftItems as $draft) {
               ?>
@@ -136,6 +142,8 @@ echo form_open('sell/edit/step2', $attributesForm);
 
         <script>
         $(document).ready(function() { 
+            var draftCount = "<?php echo count($draftItems);?>";
+
             $('.div_draft').hide();
 
             $(document).on('click','.draft_name',function () {
@@ -163,7 +171,14 @@ echo form_open('sell/edit/step2', $attributesForm);
                         cache: false,
                         success: function(d) { 
                             if(d.e == 1){
-                                $('.draftitem'+pid).remove();
+                                $('.simplemodal-container > .draftitem'+pid).remove();
+                                draftCount -= 1;
+                                 $.modal.close();
+                                $('.draft-cnt').html(draftCount);
+                                if(draftCount <= 0){
+
+                                $('.div_draft').html('No item in your Draft!');  
+                                }
                             }else{
                                 alert(d.m);
                             }
@@ -178,7 +193,8 @@ echo form_open('sell/edit/step2', $attributesForm);
                         maxWidth: 600,
                         minWidth: 505,
                         maxHeight: 600
-                    } 
+                    },
+                    persist: true
                 });
             });
 

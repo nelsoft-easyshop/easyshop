@@ -1548,10 +1548,12 @@ class product_model extends CI_Model
     	$sth = $this->db->conn_id->prepare($query);
     	$sth->bindParam(':member_id', $member_id, PDO::PARAM_INT);
     	$sth->bindParam(':product_id', $product_id, PDO::PARAM_INT);
-    	$sth->execute();
-    	$result = $sth->fetchAll(PDO::FETCH_ASSOC);
-
-    	return $result[0];
+    	$return = $sth->execute(); 
+    	$retvalue = 0;
+    	if($return){
+    		$retvalue = 1;
+    	}
+    	return $retvalue;
     }
     
     public function getShipmentInformation($product_id){

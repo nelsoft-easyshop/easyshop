@@ -1075,7 +1075,8 @@ FROM
 </select>
 
 <select id="deleteDraft">
-    CALL `es_sp_Remove_draft`(:member_id,:product_id)
+    
+    UPDATE es_product SET is_delete = 1 WHERE `id_product` = :product_id AND `member_id` = :member_id
 </select>
 
 
