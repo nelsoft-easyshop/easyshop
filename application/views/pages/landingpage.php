@@ -138,6 +138,11 @@
 		
 		<div id="register_result" style="display:none;">
 			<span id="result_desc"></span>
+			 <a id="fb_share" href="https://www.facebook.com/sharer/sharer.php?s=100
+			 &amp;p[url]=https://staging.easyshop.ph
+			 &amp;p[images][0]=https://staging.easyshop.ph/assets/images/img_logo.png
+			 &amp;p[title]=Easyshop.ph
+			 &amp;p[summary]=asds." target="_blank">Share on Facebook</a>
 		</div>
 		
         <div class = "footer">
