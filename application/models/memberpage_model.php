@@ -7,7 +7,35 @@ class memberpage_model extends CI_Model
 		$this->load->library("sqlmap");
 		$this->config->load("image_path");
 	}	
+	
+	function getLocationLookup()
+	{
+		$query = $this->sqlmap->getFilenameID('users', 'getLocationLookup');
+        $sth = $this->db->conn_id->prepare($query);
+        $sth->execute();
+        $row = $sth->fetchAll(PDO::FETCH_ASSOC);
+		$data = array();
 		
+		foreach($row as $r){
+			if($r['type'] == 0){
+				//CODE FOR MULTIPLE COUNTRY OPTIONS
+				//$data['country_lookup'][$r['id_location']] = $r['location'];
+				
+				$data['country_name'] = $r['location'];
+				$data['country_id'] = $r['id_location'];
+			}
+			else if($r['type'] == 3){
+				$data['city_lookup'][$r['id_location']] = $r['location'];
+			}
+			else if($r['type'] == 4){
+				$data['province_lookup'][$r['parent_id']][$r['id_location']] = $r['location'];
+			}
+		}
+		
+		return $data;
+	}
+	
+	
 	function get_member_by_id($member_id)
 	{
 		$query = $this->sqlmap->getFilenameID('users', 'get_member');
@@ -71,11 +99,9 @@ class memberpage_model extends CI_Model
 	{	
 		$query = $this->sqlmap->getFilenameID('users', 'edit_address');
         $sth = $this->db->conn_id->prepare($query);
-        $sth->bindParam(':streetno', $data['streetno']);
-		$sth->bindParam(':barangay', $data['barangay']);
-		$sth->bindParam(':streetname', $data['streetname']);
-		$sth->bindParam(':citytown', $data['citytown']);
-		$sth->bindParam(':postalcode', $data['postalcode']);
+        $sth->bindParam(':city', $data['city']);
+		$sth->bindParam(':province', $data['province']);
+		$sth->bindParam(':address', $data['address']);
 		$sth->bindParam(':country', $data['country']);
 		$sth->bindParam(':type', $data['addresstype']);
 		$sth->bindParam(':id_member', $member_id);
@@ -90,6 +116,7 @@ class memberpage_model extends CI_Model
 		$sth->bindParam(':lng', $data['lng']);
 		
 		$sth->execute();
+		
 	}
 	
 	function edit_school_by_id($member_id, $data=array())
@@ -199,7 +226,8 @@ class memberpage_model extends CI_Model
 	
 	function edit_consignee_address_by_id($member_id, $data=array())
 	{	
-		$i = 0; $type = 1;	
+		$i = 0; $type = 1;
+		$lat = $lng = 0;
 		do
 		{
 			$query = $this->sqlmap->getFilenameID('users', 'edit_address');
@@ -209,12 +237,12 @@ class memberpage_model extends CI_Model
 			$sth->bindparam(':consignee', $data['consignee']);
 			$sth->bindparam(':mobile', $data['mobile']);
 			$sth->bindparam(':telephone', $data['telephone']);
-			$sth->bindparam(':streetno', $data['streetno']);
-			$sth->bindparam(':streetname', $data['streetname']);
-			$sth->bindparam(':barangay', $data['barangay']);
-			$sth->bindparam(':citytown', $data['citytown']);
+			$sth->bindparam(':city', $data['city']);
+			$sth->bindparam(':province', $data['province']);
+			$sth->bindparam(':address', $data['address']);
 			$sth->bindparam(':country', $data['country']);
-			$sth->bindparam(':postalcode', $data['postalcode']);	
+			$sth->bindparam(':lat', $lat);
+			$sth->bindparam(':lng', $lng);
 			$sth->execute();
 			if($data['default_add'] == "on")
 			{
@@ -222,6 +250,8 @@ class memberpage_model extends CI_Model
 				$data['consignee']="";
 				$data['mobile']="";
 				$data['telephone']="";
+				//$lat = $data['lat'];
+				//$lng = $data['lng'];
 			}
 			else
 				break;
@@ -296,6 +326,9 @@ class memberpage_model extends CI_Model
 	
 	function is_validmobile($mobile)
 	{
+		if($mobile == '' ){
+			return true;
+		}
 		if(preg_match('/^9[0-9]{9}/', $mobile)){
 			return true;
 		}

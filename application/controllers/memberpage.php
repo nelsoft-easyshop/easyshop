@@ -79,19 +79,33 @@ class Memberpage extends MY_Controller
 		if(($this->input->post('personal_profile_address_btn'))&&($this->form_validation->run('personal_profile_address')))
 		{
 			$postdata = array( 
-					'streetno' => $this->input->post('streetno'), 
-					'streetname' => $this->input->post('streetname'), 
-					'barangay' => $this->input->post('barangay'), 
-					'citytown' => $this->input->post('citytown'), 
-					'country' => $this->input->post('country'), 
-					'postalcode' => $this->input->post('postalcode'), 
-					'addresstype' => $this->input->post('addresstype'),
-					'lat' => $this->input->post('map_lat'),
-					'lng' => $this->input->post('map_lng')
-				); 
+				'city' => $this->input->post('city'),
+				'province' => $this->input->post('province'),
+				'address' => $this->input->post('address'),
+				'country' => $this->input->post('country'),
+				'addresstype' => $this->input->post('addresstype'),
+				'lat' => $this->input->post('temp_lat'),
+				'lng' => $this->input->post('temp_lng')
+			); 
+			
+			$temp = array(
+				'city_orig' => $this->input->post('city_orig'),
+				'province_orig' => $this->input->post('province_orig'),
+				'address_orig' => $this->input->post('address_orig'),
+				'map_lat' => $this->input->post('map_lat'),
+				'map_lng' => $this->input->post('map_lng')
+			);
+			
+			if( ( ($temp['city_orig'] != $postdata['city']) || ($temp['province_orig'] != $postdata['province']) || ($temp['address_orig'] != $postdata['address']) )  
+				&& ($temp['map_lat'] == $postdata['lat'] && $temp['map_lng'] == $postdata['lng']) ) {
+				$postdata['lat'] = 0;
+				$postdata['lng'] = 0;
+			}
+			
 			$uid = $this->session->userdata('member_id');
 			$this->memberpage_model->edit_address_by_id($uid, $postdata);	
 			$data = $this->memberpage_model->get_member_by_id($uid);
+			
 			$this->output->set_output(json_encode($data));
 		}		
 	}
@@ -117,7 +131,7 @@ class Memberpage extends MY_Controller
 		$data = $this->memberpage_model->get_school_by_id($uid);
 		echo json_encode($data);
 	}
-     	 
+	
 	function deletePersonalInfo()
 	{
 		$field = html_escape($this->input->post('field'));
@@ -144,6 +158,7 @@ class Memberpage extends MY_Controller
 				'deleted_products' => $user_products['deleted'],
                 ); 
 		$data = array_merge($data, $this->fill_header());
+		$data = array_merge($data, $this->memberpage_model->getLocationLookup());
 		$data = array_merge($data,$this->memberpage_model->get_member_by_id($uid));
         $data = array_merge($data,$this->memberpage_model->get_work_by_id($uid));
 		$data =  array_merge($data,$this->memberpage_model->get_school_by_id($uid));
@@ -190,18 +205,17 @@ class Memberpage extends MY_Controller
 	function edit_consignee_address()
 	{
 		if(($this->input->post('c_deliver_address_btn'))&&($this->form_validation->run('c_deliver_address'))){
-			
 			$uid = $this->session->userdata('member_id');
 			$postdata = array(
 				'consignee' => $this->input->post('consignee'),
 				'mobile' => $this->input->post('c_mobile'),
 				'telephone' => $this->input->post('c_telephone'),
-				'streetno' => $this->input->post('c_streetno'),
-				'streetname' => $this->input->post('c_streetname'),
-				'barangay' => $this->input->post('c_barangay'),
-				'citytown' => $this->input->post('c_citytown'),
+				'city' => $this->input->post('c_city'),
+				'province' => $this->input->post('c_province'),
+				'address' => $this->input->post('c_address'),
 				'country' => $this->input->post('c_country'),
-				'postalcode' => $this->input->post('c_postalcode')
+				'lat' => $this->input->post('map_lat'),
+				'lng' => $this->input->post('map_lng')
 			);
 			
 			if($this->input->post('c_def_address'))

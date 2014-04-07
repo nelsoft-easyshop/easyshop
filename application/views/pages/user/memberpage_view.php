@@ -898,7 +898,7 @@
 					<input name="fullname" type="text" value="<?php echo $fullname?>">
 				</div>
 				<div>
-					<label for="gender">Gender:</label>							
+					<label for="gender">Gender:</label>
 					<input type="radio" name="gender" value="M" <?php echo ($gender=='M'?'checked="true"':'') ?>/> Male
 					<input type="radio" name="gender" value="F" <?php echo ($gender=='F'?'checked="true"':'') ?>/> Female
 				</div>
@@ -998,8 +998,9 @@
 				</div>
 				<div class="address_information gen_information">
 					<div class="add_info echoed_info">
-						<?php echo $streetno?> <?php echo $streetname?> <?php echo $barangay?> 
-						<?php echo $citytown?> <?php echo $country?> <?php echo $postalcode?>
+						<?php if(trim($city) != '' && trim($province) != ''):?>
+							<?php echo $city . ', ' . $province . '<br>' . $address?>
+						<?php endif;?>
 					</div>
 					<div class="edit_address edit_info_btn">
 						<span><span class="span_bg edit_btn"></span> Edit</span>
@@ -1014,46 +1015,54 @@
 						<div class="address_fields progress_update update_once">
 							<div class="address_fields_layer1">
 								<div>
-									<input type="text" name="streetno" id="streetno" value="<?php echo $streetno?>">
-									<p>Street No./Bldg. No.</p>
+									<select name="city" id="personal_city" class="address_dropdown cityselect" data-status="<?php echo $cityID?>">
+										<option value="0">--- Select City ---</option>
+										<?php foreach($city_lookup as $ckey=>$city):?>
+											<option class="echo" value="<?php echo $ckey?>" <?php echo $cityID == $ckey ? "selected":"" ?>><?php echo $city?></option>
+										<?php endforeach;?>
+									</select>
+									<p>City</p>
+									<input type="hidden" name="city_orig" value="<?php echo $cityID?>">
 								</div>
 								<div>
-									<input type="text" name="streetname" id="streetname" value="<?php echo $streetname?>">
-									<p>Street Name</p>
+									<select name="province" id="personal_province" class="address_dropdown provinceselect" data-status="<?php echo $provinceID?>">
+										<option value="0">--- Select Province ---</option>
+										<?php foreach($province_lookup as $parentkey=>$arr):?>
+											<?php foreach($arr as $lockey=>$province):?>
+												<option class="echo" value="<?php echo $lockey?>" data-parent="<?php echo $parentkey?>" <?php echo $provinceID == $lockey ? "selected":"" ?> ><?php echo $province?></option>
+											<?php endforeach;?>
+										<?php endforeach;?>
+									</select>
+									<p>Province</p>
+									<input type="hidden" name="province_orig" value="<?php echo $provinceID?>">
 								</div>
 								<div>
-									<input type="text" name="barangay" id="barangay" value="<?php echo $barangay?>">
-									<p>Barangay</p>
+									<select disabled>
+										<option selected=""><?php echo $country_name?></option>
+									</select>
+									<input type="hidden" name="country" value="<?php echo $country_id?>">
+									<p>Country</p>
 								</div>
 							</div>
 							<div class="address_fields_layer2">
 								<div>
-									<input type="text" name="citytown" id="citytown" value="<?php echo $citytown?>">
-									<p>City/Town</p>
-								</div>
-								<div>
-									<input type="text" name="country" id="country" value="<?php echo $country?>">
-									<p>Country</p>
-								</div>
-								<div>
-									<input type="text" name="postalcode" id="postalcode" value="<?php echo $postalcode?>">
-									<p>Postal Code</p>
+									<input type="text" name="address" value="<?php echo $address?>">
+									<p>Full address</p>
+									<input type="hidden" name="address_orig" value="<?php echo $address?>"> 
 								</div>
 							</div>
 							<input type="hidden" name="addresstype" value="0"/>
 							<div class="clear"></div>
 							<input type="hidden" class="progress_update_hidden" value="">
 						</div>
-						<div>
-							<label></label>
-							<span class="red ci_form_validation_error"><?php echo form_error('streetno'); ?></span>
-							<span class="red ci_form_validation_error"><?php echo form_error('streetname'); ?></span>
-							<span class="red ci_form_validation_error"><?php echo form_error('citytown'); ?></span>
-							<span class="red ci_form_validation_error"><?php echo form_error('country'); ?></span>
-						</div>
 						
 						<div class="view_map_btn">
 							<input type="button" id="view_map" value="Mark on map">
+							<?php if($lat == 0 && $lng == 0):?>
+								<span class="maploc_stat">Location not set</span>
+							<?php else:?>
+								<span class="maploc_stat">Location set</span>
+							<?php endif;?>
 							<input type="hidden" name="map_lat" id="map_lat" value="<?php echo $lat;?>">
 							<input type="hidden" name="map_lng" id="map_lng" value="<?php echo $lng;?>">
 							<input type="hidden" name="temp_lat" id="temp_lat" value="<?php echo $lat;?>">
@@ -1066,8 +1075,6 @@
 							<a id="close" href="javascript:void(0)">Close</a>
 							<div id="GoogleMapContainer" title="Google Map Container"></div>
 						</div>
-						
-						
 						
 						<div id="map-canvas"></div>
 						
@@ -1284,6 +1291,7 @@
 
 <div class="profile_main_content" id="delivery_address">
 	<!--<form method="post" id="c_deliver_address" name="c_deliver_address">	-->
+
 	<?php
 	$attr = array('id'=>'c_deliver_address', 'name'=>'c_deliver_address');
 	echo form_open('',$attr);
@@ -1312,30 +1320,37 @@
 			<div class="delivery_address_content">
 				<div class="delivery_address_content_layer1">
 					<div>
-						<input type="text" name="c_streetno" id="c_streetno" value="<?php echo $c_streetno?>">
-						<p>Street No/Bldg. No</p>
+						<select name="c_city" class="address_dropdown cityselect" data-status="<?php echo $c_cityID?>">
+							<option value="0">--- Select City ---</option>
+							<?php foreach($city_lookup as $ckey=>$city):?>
+								<option class="echo" value="<?php echo $ckey?>" <?php echo $c_cityID == $ckey ? "selected":"" ?>><?php echo $city?></option>
+							<?php endforeach;?>
+						</select>
+						<p>City</p>
 					</div>
 					<div>
-						<input type="text" name="c_streetname" value="<?php echo $c_streetname?>">
-						<p>Street Name</p>
+						<select name="c_province" class="address_dropdown provinceselect" data-status="<?php echo $c_provinceID?>">
+							<option value="0">--- Select Province ---</option>
+							<?php foreach($province_lookup as $parentkey=>$arr):?>
+								<?php foreach($arr as $lockey=>$province):?>
+									<option class="echo" value="<?php echo $lockey?>" data-parent="<?php echo $parentkey?>" <?php echo $c_provinceID == $lockey ? "selected":"" ?> ><?php echo $province?></option>
+								<?php endforeach;?>
+							<?php endforeach;?>
+						</select>
+						<p>Province</p>
 					</div>
 					<div>
-						<input type="text" name="c_barangay" value="<?php echo $c_barangay?>">
-						<p>Barangay</p>
+						<select disabled>
+							<option selected=""><?php echo $country_name?></option>
+						</select>
+						<input type="hidden" name="c_country" value="<?php echo $country_id?>">
+						<p>Country</p>
 					</div>
 				</div>
 				<div class="delivery_address_content_layer2">
 					<div>
-						<input type="text" name="c_citytown" value="<?php echo $c_citytown?>">
-						<p>City/Town</p>
-					</div>
-					<div>
-						<input type="text" name="c_country" value="<?php echo $c_country?>">
-						<p>Country</p>
-					</div>
-					<div>
-						<input type="text" name="c_postalcode" id="c_postalcode" value="<?php echo $c_postalcode?>">
-						<p>Postal Code</p>
+						<input type="text" name="c_address" value="<?php echo $c_address?>">
+						<p>Full address</p>
 					</div>
 				</div>
 			</div>
@@ -1343,7 +1358,7 @@
 				<label></label>
 				<input type="checkbox" name="c_def_address" id="c_def_address"> <span>Set as Default Address</span>
 				<a class="tooltips" href="javascript:void(0)"><p class="span_bg"></p><!-- <img src="<?=base_url()?>/assets/images/icon_qmark.png"> --><span>Setting as default updates address in Personal Information</span></a>
-			</div>
+		</div>
 			<br>
 			<div style="padding-left:100px">
 				<label></label>
@@ -1362,6 +1377,7 @@
 		<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" id="load_deliver_address" style="position: relative; top:12px; left:15px;  display:none"/>
 	</div>	
 	<?php echo form_close();?>
+
 </div>	
 
 <div class="profile_main_content" id="transactions">

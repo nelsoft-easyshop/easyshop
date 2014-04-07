@@ -85,7 +85,7 @@
 	WHERE id_member = :member_id
 </select>
 
-
+<!--
 <select id="get_member">
 	SELECT m.`id_member`, m.`nickname`, m.`fullname`, m.`gender`, m.`birthday`, m.contactno, m.is_contactno_verify, m.email, m.is_email_verify,
 	COALESCE(a0.`streetno`, '') as streetno, COALESCE(a0.`streetname`, '') as streetname, COALESCE(a0.`barangay`, '') as barangay, 
@@ -99,7 +99,7 @@
 	LEFT JOIN es_address a1 ON m.id_member=a1.id_member AND a1.`type`=1
 	where m.id_member=:id_member
 </select>	
-
+-->
 
 <select id="getLocationLookup">
 	SELECT id_location, parent_id, location, type
@@ -107,13 +107,14 @@
 	WHERE type = 0 OR type = 3 OR type = 4
 </select>
 
-<!--
+
 <select id="get_member">
 	SELECT m.`id_member`, m.`nickname`, m.`fullname`, m.`gender`, m.`birthday`, m.contactno, m.is_contactno_verify, m.email, m.is_email_verify,
 	a0.city as cityID, a0.province as provinceID, a1.city as c_cityID, a1.province as c_provinceID,
-	COALESCE(loc0.location,'') as city, COALESCE(loc1.location, '') as province, COALESCE(loc2.location, '') as c_city, COALESCE(loc3.location,'') as c_province,
-	COALESCE(a0.address,'') as address, COALESCE(a1.address, '') as c_address,
-	a0.lat, a0.lng
+	COALESCE(loc0.location,'') as city, COALESCE(loc1.location, '') as province, COALESCE(a0.address,'') as address,
+	a1.consignee, a1.mobile as c_mobile, a1.telephone as c_telephone,
+	COALESCE(loc2.location, '') as c_city, COALESCE(loc3.location,'') as c_province, COALESCE(a1.address, '') as c_address,
+	COALESCE(a0.lat, 0) as lat, COALESCE(a0.lng, 0) as lng
 	FROM es_member m
 	LEFT JOIN es_address a0 ON m.id_member=a0.id_member AND a0.`type`=0
 	LEFT JOIN es_address a1 ON m.id_member=a1.id_member AND a1.`type`=1
@@ -123,7 +124,7 @@
 	LEFT JOIN es_location_lookup loc3 ON a1.province = loc3.id_location AND loc3.type = 4
 	where m.id_member=:id_member
 </select>
--->
+
 
 <select id="get_school">
 	SELECT 
