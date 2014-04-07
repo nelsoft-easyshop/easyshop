@@ -1055,7 +1055,7 @@ class productUpload extends MY_Controller
 				}
 			}
             
-
+            $x = 0;
 			if(!empty($_FILES['prod_other_img']['name'][0])){
                 foreach($_FILES['prod_other_img']['name'] as $k) { # validating image format.
                     $filename = $_FILES['prod_other_img']['name'][$x];
