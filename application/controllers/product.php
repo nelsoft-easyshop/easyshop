@@ -24,6 +24,7 @@ class product extends MY_Controller
 		$data =  $this->fill_header();	
 		$checkifexistcategory = $this->product_model->checkifexistcategory($categoryId);
 		$dontGetBrand = false;
+		$filter = false;
 		if(!count($_GET) <= 0){
 
 			foreach ($_GET as $key => $value) {
@@ -228,7 +229,6 @@ class product extends MY_Controller
 
 		session_start();
 
-
 		$items = $this->product_model->getProductsByCategory($categories,$condition,$count,$operator,$start,$perPage);
 		$response['items'] = $items; 
 		$response['id_cat'] = $categoryId;
@@ -236,8 +236,19 @@ class product extends MY_Controller
 
 		if(count($items) <= 0)
 		{	  
-			$notIrrelivant = TRUE;
+			if($count <= 0){
+
+				$data = json_encode('0');
+				echo $data;
+				exit();
+			}else{
+
+				$notIrrelivant = TRUE;
+			}
+
 		}else{
+
+			$response['irrelivant'] = false;
 			$data = json_encode($this->load->view('pages/product/product_search_by_category2_final',$response,TRUE));
 			echo $data;
 			exit();

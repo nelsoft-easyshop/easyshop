@@ -281,7 +281,7 @@ class product_model extends CI_Model
 		 WHERE cat_id IN (".$categories.") 
 		 AND is_delete = 0 AND is_draft = 0
 		 ".$condition_string."
-		 GROUP BY product_id 
+		 GROUP BY product_id , `name`,price,`condition`,brief,product_image_path
 		 ".$havingString."
     	 ORDER BY cnt_all DESC, `name` ASC
 		 LIMIT :start, :per_page

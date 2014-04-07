@@ -178,77 +178,91 @@
     </select>
   
     <select id="getProducts">
-        SELECT 
-
-              COUNT(*) AS cnt_all,
-          item_list_attribute.* 
-        FROM
-          (SELECT 
-            `item_list_attribute_only`.*
-            , item_list.* 
-          FROM
-            (SELECT 
-              COUNT(*) AS cnt
-              , a.product_id
-              , b.name AS attr_name
-              , a.attr_value 
-            FROM
-              `es_product_attr` a
-              , `es_attr` b 
-            WHERE a.`attr_id` = b.`id_attr` 
-            GROUP BY a.product_id
-              , attr_name
-              , attr_value 
-            UNION
-            ALL 
-            SELECT 
-              COUNT(*) AS cnt
-              , a.product_id
-              , a.`field_name` AS attr_name
-              , b.value_name AS attr_value 
-            FROM
-              `es_optional_attrhead` a
-              , `es_optional_attrdetail` b 
-            WHERE a.`id_optional_attrhead` = b.`head_id` 
-            GROUP BY a.product_id
-              , field_name
-              , value_name) AS `item_list_attribute_only`
-            , 
-            (SELECT 
-              a.id_product
-              , a.`name`
-              , a.brief
-              , a.price
-              , a.`condition`
-              , a.brand_id
-              , c.`name` AS brand
-              , a.`cat_id`
-              , d.`name` AS category_name
-              , a.`cat_other_name`
-              , b.`product_image_path`
-              , a.`is_delete`
-              , a.`is_draft`
-              , a.`is_hot`
-              , a.`is_new`
-              , a.`clickcount`
-              , a.`is_real`
-              , a.`is_promote`
-              , a.`keywords`
-              , a.`member_id`
-              , a.`createddate`
-              , a.`lastmodifieddate`
-              , a.`quantity`
-              , a.`sku` 
-            FROM
-              `es_product` a
-              , `es_product_image` b
-              , `es_brand` c
-              , `es_cat` d 
-            WHERE a.id_product = b.product_id 
-              AND a.`brand_id` = c.`id_brand` 
-              AND a.`cat_id` = d.`id_cat` 
-              AND b.is_primary = 1) AS item_list 
-          WHERE `item_list`.`id_product` = `item_list_attribute_only`.`product_id`) AS item_list_attribute 
+     SELECT 
+  COUNT(*) AS cnt_all
+  , item_list_attribute.product_id
+  , item_list_attribute.product_image_path
+  , item_list_attribute.`name`
+  , item_list_attribute.price
+  , item_list_attribute.`condition`
+  , item_list_attribute.brief
+  
+FROM
+  (SELECT 
+    `item_list_attribute_only`.*
+    , item_list.* 
+  FROM
+    (SELECT 
+  COALESCE(es_product_attr_temp.cnt,0) AS cnt
+  , es_product.`id_product` AS product_id
+  , COALESCE(es_product_attr_temp.attr_name,0) AS attr_name
+  , COALESCE(es_product_attr_temp.attr_value,0) AS attr_value 
+FROM
+  `es_product` 
+  LEFT OUTER JOIN 
+    (SELECT 
+      COUNT(*) AS cnt
+      , a.product_id
+      , b.name AS attr_name
+      , a.attr_value 
+    FROM
+      `es_product_attr` a
+      , `es_attr` b 
+    WHERE a.`attr_id` = b.`id_attr` 
+    GROUP BY a.product_id
+      , attr_name
+      , attr_value) AS es_product_attr_temp 
+    ON `es_product`.`id_product` = `es_product_attr_temp`.`product_id` 
+    UNION
+    ALL 
+    SELECT 
+      COUNT(*) AS cnt
+      , a.product_id
+      , a.`field_name` AS attr_name
+      , b.value_name AS attr_value 
+    FROM
+      `es_optional_attrhead` a
+      , `es_optional_attrdetail` b 
+    WHERE a.`id_optional_attrhead` = b.`head_id` 
+    GROUP BY a.product_id
+      , field_name
+      , value_name) AS `item_list_attribute_only`
+    , 
+    (SELECT 
+      a.id_product
+      , a.`name`
+      , a.brief
+      , a.price
+      , a.`condition`
+      , a.brand_id
+      , c.`name` AS brand
+      , a.`cat_id`
+      , d.`name` AS category_name
+      , a.`cat_other_name`
+      , b.`product_image_path`
+      , a.`is_delete`
+      , a.`is_draft`
+      , a.`is_hot`
+      , a.`is_new`
+      , a.`clickcount`
+      , a.`is_real`
+      , a.`is_promote`
+      , a.`keywords`
+      , a.`member_id`
+      , a.`createddate`
+      , a.`lastmodifieddate`
+      , a.`quantity`
+      , a.`sku` 
+    FROM
+      `es_product` a
+      , `es_product_image` b
+      , `es_brand` c
+      , `es_cat` d 
+    WHERE a.id_product = b.product_id 
+      AND a.`brand_id` = c.`id_brand` 
+      AND a.`cat_id` = d.`id_cat` 
+      AND b.is_primary = 1) AS item_list 
+  WHERE `item_list`.`id_product` = `item_list_attribute_only`.`product_id`) AS item_list_attribute 
     </select>
 
     <select id="getProductAndAttributes">
