@@ -128,6 +128,11 @@ $config = array(
 						'field' => 'province',
 						'label' => 'Province',
 						'rules' => 'required'
+					),
+					array(
+						'field' => 'address',
+						'label' => 'Full Address',
+						'rules' => 'required'
 					)
 				),
 			'personal_profile_school' => array(
@@ -181,25 +186,20 @@ $config = array(
 						'rules' => 'required|is_numeric'
 					),
 					array(
-						'field' => 'c_streetno',
-						'label' => 'Street or Building Number',
+						'field' => 'c_city',
+						'label' => 'City',
 						'rules' => 'required'
 					),
 					array(
-						'field' => 'c_streetname',
-						'label' => 'Street',
+						'field' => 'c_province',
+						'label' => 'Province',
 						'rules' => 'required'
 					),
 					array(
-						'field' => 'c_citytown',
-						'label' => 'City or Town',
+						'field' => 'c_address',
+						'label' => 'Full Address',
 						'rules' => 'required'
-					),
-					array(
-						'field' => 'c_country',
-						'label' => 'Country',
-						'rules' => 'required'
-					),
+					)
 				),
 			'add_feedback_transaction' => array(
 					array(
