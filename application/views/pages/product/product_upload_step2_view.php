@@ -40,7 +40,7 @@
           'name' => 'form_product',
           'enctype' => 'multipart/form-data'
           );
-        echo form_open('sell/processing', $attr);
+        echo isset($is_edit)?form_open('sell/edit/processing2', $attr):form_open('sell/processing', $attr);
         ?>
 
 
@@ -1315,7 +1315,7 @@ $('#form_product').ajaxForm({
             arr.push({name:'inputs', value:g_input_name});
             arr.push({name:'id', value:g_id});
             arr.push({name:'combination', value:g_combinationSelected});
-            arr.push({name:'description', value:g_description});
+            arr.push({name:'desc', value:g_description});
             arr.push({name:'noCombination', value:g_noCombination});
             arr.push({name:'otherCategory', value:g_otherCategory});
             arr.push({name:'removeThisPictures', value:g_removeThisPictures});
@@ -1469,70 +1469,8 @@ $(".proceed_form").unbind("click").click(function(){
         formData.append("quantitySolo",quantity.val());
         g_quantitySolo = quantity.val();
       }
-
-      if(<?php echo json_encode((isset($is_edit))?$is_edit:false); ?>){
-
- 
-        $.ajax({
-          //async: false, //REMOVED: MAKES BROWSER UNRESPONSIVE
-          type: "POST",
-          url: '<?php echo base_url();?>' + 'sell/edit/processing2',
-          mimeType:"multipart/form-data",
-          contentType: false,
-          cache: false,
-          processData:false,
-          data: formData, 
-          dataType: "json",
-          beforeSend: function(jqxhr, settings) {  
-            $( ".button_div" ).hide();
-            $( ".loader_div" ).show();
-          },
-          success: function(data) {
-            if (data.e == 1) {
-              $('#prod_h_id').val(data.d);
-              $('#hidden_form').submit();
-            } else {
-             $( ".button_div" ).show();
-             $( ".loader_div" ).hide();
-             alert(data.d);
-           }
-         }
-       });
-
-      }else{
-
- 
-
-        $('#form_product').submit();
-
- 
-        // $.ajax({
-        //   //async: false, //REMOVED: MAKES BROWSER UNRESPONSIVE
-        //   type: "POST",
-        //   url: '<?php echo base_url();?>sell/processing',
-        //   mimeType:"multipart/form-data",
-        //   contentType: false,
-        //   cache: false,
-        //   processData:false,
-        //   data: formData , 
-        //   dataType: "json",
-        //   beforeSend: function(jqxhr, settings) {  
-        //     $( ".button_div" ).hide();
-        //     $( ".loader_div" ).show();
-        //   },
-        //   success: function(d) {
-        //     if (d.e == 1) {
-        //       $('#prod_h_id').val(d.d);
-        //       $('#hidden_form').submit();
-        //     } else {
-        //       $( ".button_div" ).show();
-        //       $( ".loader_div" ).hide();
-        //       alert(d.d);
-        //     }
-        //   }
-        // });
- 
-      }
+      
+      $('#form_product').submit();
 
     }
   }

@@ -891,57 +891,6 @@ class productUpload extends MY_Controller
 
 	public function editStep2Submit()
 	{
-        //SECTION OF CODE FOR ES_PRODUCT_UPLOADER
-        
-        $editRemoveThisPictures = json_decode($_POST['editRemoveThisPictures']); 
-		$editPrimaryId = $_POST['editPrimaryPicture'];
-        
-        $removeThisPictures = json_decode($_POST['removeThisPictures']); 
-		$primaryId = $_POST['primaryPicture'];
-        
-		$primaryName =""; 
-		foreach( $_FILES['files']['name'] as $key => $value ) {
-			if($primaryId == $key){
-				$primaryName =	$_FILES['files']['name'][$key];
-			}
-			if (in_array($key, $removeThisPictures) || $_FILES['files']['name'][$key] == "") {
-				unset($_FILES['files']['name'][$key]);
-				unset($_FILES['files']['type'][$key]);
-				unset($_FILES['files']['tmp_name'][$key]);
-				unset($_FILES['files']['error'][$key]);
-				unset($_FILES['files']['size'][$key]);
-			} 
-		}
-		$_FILES['files']['name'] = array_values($_FILES['files']['name']);
-		$_FILES['files']['type'] = array_values($_FILES['files']['type']);
-		$_FILES['files']['tmp_name'] = array_values($_FILES['files']['tmp_name']);
-		$_FILES['files']['error'] = array_values($_FILES['files']['error']);
-		$_FILES['files']['size'] = array_values($_FILES['files']['size']);
-	 	 
-	 	$key = array_search ($primaryName, $_FILES['files']['name']);
-	 	if(isset($_FILES['files']['name'][0])){
-            $temp = $_FILES['files']['name'][0];
-            $_FILES['files']['name'][0] = $_FILES['files']['name'][$key];
-            $_FILES['files']['name'][$key] = $temp;
-
-            $temp = $_FILES['files']['type'][0];
-            $_FILES['files']['type'][0] = $_FILES['files']['type'][$key];
-            $_FILES['files']['type'][$key] = $temp;
-
-            $temp = $_FILES['files']['tmp_name'][0];
-            $_FILES['files']['tmp_name'][0] = $_FILES['files']['tmp_name'][$key];
-            $_FILES['files']['tmp_name'][$key] = $temp;
-
-            $temp = $_FILES['files']['error'][0];
-            $_FILES['files']['error'][0] = $_FILES['files']['error'][$key];
-            $_FILES['files']['error'][$key] = $temp;
-
-            $temp = $_FILES['files']['size'][0];
-            $_FILES['files']['size'][0] = $_FILES['files']['size'][$key];
-            $_FILES['files']['size'][$key] = $temp;
-	 	}
-        //END PRODUCT_UPLOADER
-    
 		$product_title = trim($this->input->post('prod_title'));
 		$product_brief = trim($this->input->post('prod_brief_desc'));
 		$product_description = trim($this->input->post('desc')) ;
@@ -995,7 +944,8 @@ class productUpload extends MY_Controller
 			|| strlen(trim($product_price)) == 0 || $product_price <= 0
 			|| strlen(trim($sku)) == 0 || $sku == "")
 		{
-			$data = '{"e":"0","d":"Fill (*) All Required Fields Properly!"}';		
+			echo '{"e":"0","d":"Fill (*) All Required Fields Properly!"}';		
+            exit();
 		}else{
 
 			$images = $this->product_model->getProductImages($product_id, true);
@@ -1010,10 +960,65 @@ class productUpload extends MY_Controller
 			}
 			$main_image_cnt = count($main_images);
 
-			if((empty($_FILES['files']['name'][0])) && ($main_image_cnt  === count($editRemoveThisPictures))){ 
-				echo '{"e":"0","d":"Select at least 1 photo for your item."}';
-				exit();
+            $editRemoveThisPictures = json_decode($_POST['editRemoveThisPictures']); 
+            $editPrimaryId = $_POST['editPrimaryPicture'];
+
+            $removeThisPictures = json_decode($_POST['removeThisPictures']); 
+            $primaryId = $_POST['primaryPicture'];
+
+            if((empty($_FILES['files']['name'][0])) && ($main_image_cnt  === count($editRemoveThisPictures))){ 
+                echo '{"e":"0","d":"Select at least 1 photo for your item."}';
+                exit();
 			}
+                  
+            //SECTION OF CODE FOR ES_PRODUCT_UPLOADER
+            if(!empty($_FILES['files']['name'])){
+                $primaryName =""; 
+                foreach( $_FILES['files']['name'] as $key => $value ) {
+                    if($primaryId == $key){
+                        $primaryName =	$_FILES['files']['name'][$key];
+                    }
+                    if (in_array($key, $removeThisPictures) || $_FILES['files']['name'][$key] == "") {
+                        unset($_FILES['files']['name'][$key]);
+                        unset($_FILES['files']['type'][$key]);
+                        unset($_FILES['files']['tmp_name'][$key]);
+                        unset($_FILES['files']['error'][$key]);
+                        unset($_FILES['files']['size'][$key]);
+                    } 
+                }
+                $_FILES['files']['name'] = array_values($_FILES['files']['name']);
+                $_FILES['files']['type'] = array_values($_FILES['files']['type']);
+                $_FILES['files']['tmp_name'] = array_values($_FILES['files']['tmp_name']);
+                $_FILES['files']['error'] = array_values($_FILES['files']['error']);
+                $_FILES['files']['size'] = array_values($_FILES['files']['size']);
+
+                $key = array_search ($primaryName, $_FILES['files']['name']);
+                if(isset($_FILES['files']['name'][0])){
+                    $temp = $_FILES['files']['name'][0];
+                    $_FILES['files']['name'][0] = $_FILES['files']['name'][$key];
+                    $_FILES['files']['name'][$key] = $temp;
+
+                    $temp = $_FILES['files']['type'][0];
+                    $_FILES['files']['type'][0] = $_FILES['files']['type'][$key];
+                    $_FILES['files']['type'][$key] = $temp;
+
+                    $temp = $_FILES['files']['tmp_name'][0];
+                    $_FILES['files']['tmp_name'][0] = $_FILES['files']['tmp_name'][$key];
+                    $_FILES['files']['tmp_name'][$key] = $temp;
+
+                    $temp = $_FILES['files']['error'][0];
+                    $_FILES['files']['error'][0] = $_FILES['files']['error'][$key];
+                    $_FILES['files']['error'][$key] = $temp;
+
+                    $temp = $_FILES['files']['size'][0];
+                    $_FILES['files']['size'][0] = $_FILES['files']['size'][$key];
+                    $_FILES['files']['size'][$key] = $temp;
+                }
+            }
+                  
+           
+            //END PRODUCT_UPLOADER
+            
 			$allowed =  array('gif','png' ,'jpg','jpeg'); # avaialable format only for image
 			$x = 0;
 			
@@ -1021,7 +1026,6 @@ class productUpload extends MY_Controller
 			$filenames_ar = array();
 			$file_type = array();
 
-			
 			if(!empty($_FILES['files']['name'][0])){
 				foreach($_FILES['files']['name'] as $k) { # validating image format.
 					$filename = $_FILES['files']['name'][$x];
@@ -1050,6 +1054,26 @@ class productUpload extends MY_Controller
 					$i++;
 				}
 			}
+            
+
+			if(!empty($_FILES['prod_other_img']['name'][0])){
+                foreach($_FILES['prod_other_img']['name'] as $k) { # validating image format.
+                    $filename = $_FILES['prod_other_img']['name'][$x];
+                    $ext = pathinfo($filename, PATHINFO_EXTENSION);
+                    if(!in_array(strtolower($ext),$allowed))
+                    {
+                        echo '{"e":"0","d":"For Additional Information: File Selected not valid. \n Please choose another image."}';
+                        exit();
+                    }
+                    if($_FILES["prod_other_img"]["size"][$x] >= 900000) # size of image must be 900kb only
+                    {
+                        echo '{"e":"0","d":"For Additional Information: File size not valid. Please choose another image with smaller size. \n Expected 900KB."}';
+                        exit();
+                    }
+                    $x++;
+                }
+			}
+            
 
 			#image directory
 			if($main_image_cnt === 0){
@@ -1161,15 +1185,16 @@ class productUpload extends MY_Controller
 					{
 						$other_price = $prod_other_price[$i];
 					}
-					
-					if($_FILES['prod_other_img']['name'][$i] != "")
-					{
-						$other_image_type = $_FILES['prod_other_img']['type'][$i];
-						$file_ext = explode('.', $_FILES['prod_other_img']['name'][$i]);
-						$other_image = "{$product_id}_{$member_id}_{$fulldate}{$i}_o.{$file_ext[1]}";
-						$other_tmp = $_FILES["prod_other_img"]["tmp_name"][$i];
-					}
-
+                    
+                    if(isset($_FILES['prod_other_img'])){
+                        if(!empty($_FILES['prod_other_img']['name'][$i])){
+                            $other_image_type = $_FILES['prod_other_img']['type'][$i];
+                            $file_ext = explode('.', $_FILES['prod_other_img']['name'][$i]);
+                            $other_image = "{$product_id}_{$member_id}_{$fulldate}{$i}_o.{$file_ext[1]}";
+                            $other_tmp = $_FILES["prod_other_img"]["tmp_name"][$i];
+                        }
+                    }
+                    
 					if(isset($prod_other_id[$i])){
 						$other_id = $prod_other_id[$i];
 					}
