@@ -12,8 +12,10 @@
             $irclass = "phides";
             echo '<dob><div style="clear:both;"></div>
             <hr>
+            <!--          
             <div>Next item is irrelevant</div>
             <hr>
+            -->
             <input type="button" class="smr_btn" value="Show More Items">
             <div style="clear:both"></div></dob>
             <style>

@@ -385,10 +385,10 @@ $(document).ready(function() {
                 if (request_ajax === true && ajax_is_on === false) {
                     ajax_is_on = true; 
                     $.ajax({
-                        url: base_url + 'product/loadproduct',
+                        url: base_url + 'category/loadproduct',
                         data:{page_number:offset,id_cat:'<?php echo $id_cat ?>',type:type,parameters:'<?php echo json_encode($_GET); ?>', es_csrf_token : csrftoken},
                         type: 'post',
-                        async: false,
+                        //async: false,
                         dataType: 'JSON',
                         onLoading:jQuery(".loading_products").html('<img src="<?= base_url() ?>assets/images/orange_loader.gif" />').show(),
                         success: function(d) {
