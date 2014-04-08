@@ -38,6 +38,22 @@ $(function(){
   });
   
   
+  $('#shiploc_selectiontbl, #shipping_summary').on('keyup', '.shipprice', function(e){
+	var price = $.trim($(this).val());
+	if( (e.keyCode == 13 || e.which == 13) && price != ''){
+		var newPrice = price.replace(new RegExp(",", "g"), '');
+		newPrice = parseFloat(newPrice).toFixed(2);
+		$(this).val( ReplaceNumberWithCommas(newPrice) );
+	}
+  }).on('blur', '.shipprice', function(){
+	var price = $.trim($(this).val());
+	if( price != '' ){
+		var newPrice = price.replace(new RegExp(",", "g"), '');
+		newPrice = parseFloat(newPrice).toFixed(2);
+		$(this).val( ReplaceNumberWithCommas(newPrice) );
+	}
+  });
+  
 });
 /********** CLOSE DOCUMENT READY FUNCTION *********/
 
@@ -638,10 +654,5 @@ $(function(){
         $('#edit_step1').submit();
     });
 });
-    
-$(function(){
-
-});
-
-
+ 
 
