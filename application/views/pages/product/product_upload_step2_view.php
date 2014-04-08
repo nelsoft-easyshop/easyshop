@@ -1210,10 +1210,9 @@ $(document).on('change','.other_name_value',function(){
  var attrVal = $(this).val();
  
  var idHtmlId = headValue.replace(/ /g,'')+'Combination';
- 
- 
- if(formatHeadValue.length >0){
-  $("#"+idHtmlId+" option[data-temp='"+temp+"']").remove();
+  
+ if(formatHeadValue.length >0){ 
+  $('#'+idHtmlId+' option[data-temp='+temp+']').remove();
   if(!$('#'+idHtmlId).length){
     $('.quantity_attrs_content').append('<div id="div'+idHtmlId+'" style="position:relative">'+headValue+':<br> <select id="'+idHtmlId+'" ></select><br></div>');   
   }
