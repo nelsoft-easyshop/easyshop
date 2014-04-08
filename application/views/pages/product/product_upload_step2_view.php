@@ -1696,7 +1696,7 @@ tinymce.init({
             $('#prod_description').val(tinyMCE.get('prod_description').getContent());
             $('#prod_description').trigger( "change" );
         });
-    }
+   }
 
 });
 
