@@ -84,6 +84,7 @@ class cart_model extends CI_Model
 		if(!array_key_exists($ctr,  $data)){
 		    $data[$ctr] = array();
 		    $data[$ctr]['quantity'] = $row['quantity'];
+		    $data[$ctr]['id_product_item'] = $row['id_product_item'];
 		    $data[$ctr]['product_attribute_ids'] = array();
 		    $data[$ctr]['attr_lookuplist_item_id'] = array();
 		}

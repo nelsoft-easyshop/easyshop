@@ -48,7 +48,7 @@ class Cart extends MY_Controller{
             'options' => $opt,
             'img'     => $this->product_model->getProductImages($_POST['id']),
             'member_id'  => $base['sellerid'],
-            'product_itemID'  => $this->input->post('pitemid'),
+            'product_itemID'  => $qty[0]['id_product_item'],
 	    'maxqty' => $qty[0]['quantity']
             );
         return $data;
