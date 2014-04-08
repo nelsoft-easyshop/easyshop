@@ -997,24 +997,15 @@ function provinceFilter(cityselect){
 		provinceoption.each(function(){
 			if($(this).attr('data-parent') != selectvalue){
 				$(this).hide();
+				$(this).attr('disabled',true);
 			}
 			else{
 				$(this).show();
+				$(this).attr('disabled',false);
 			}
 		});
 	});
 	
-	/*var provinceoption = provinceselect.find('option.echo');
-	var selectvalue = cityselect.find(':selected').attr('value');
-	
-	provinceoption.each(function(){
-		if($(this).attr('data-parent') != selectvalue){
-			$(this).hide();
-		}
-		else{
-			$(this).show();
-		}
-	});*/
 }
 
 /***************************** PERSONAL PROFILE PROGRESSBAR	************************************/
