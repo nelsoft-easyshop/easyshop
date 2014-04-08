@@ -1,10 +1,7 @@
 <div class="clear"></div>
 <section>
-	<div class="wrapper"> <span class="reg_title">Change Password</span></div>
-</section>
-<div class="clear"></div>
-<section>
-      <div class="wrapper">
+      <div class="wrapper forgot_pword_con">
+      	<span class="reg_title">Change Password</span>
         <?php if(!$logged_in):?>
 		
 		<?php 
