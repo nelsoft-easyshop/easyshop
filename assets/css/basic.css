@@ -54,7 +54,7 @@
 	color:#fff;
 	font-size: 12px;
 	font-weight: normal;
-	background-color: #ff4400;
+	background-color: #f18200;
 	padding:10px;
 }
 
@@ -114,8 +114,8 @@
 	display:inline; 
 	z-index:3200; 
 	position:absolute; 
-	top:5px; 
-	right:7px; 
+	top:8px; 
+	right:10px; 
 	cursor:pointer;
 }
 

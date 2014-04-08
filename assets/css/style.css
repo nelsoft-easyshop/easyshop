@@ -383,7 +383,6 @@ header {
     border-width: 0px 6px 6px 6px;
 }
 .top_nav ul li ul {
-	min-width: 130px;
   padding: 0;
   position: absolute;
   top: 25px;
@@ -425,7 +424,10 @@ header {
 }
 
 .top_nav ul li ul li a {
+	border-bottom: 1px dotted rgba(0, 62, 145, 0.8);
 	color: #fff;
+	display: block;
+	min-width: 130px;
 }
 
 .top_nav ul li ul li a:hover {
