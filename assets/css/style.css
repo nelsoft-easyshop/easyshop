@@ -1500,7 +1500,11 @@ span.pinterest {
 
 /*** Registration style ***/
 .reg_title {
-	font-size: 24px;
+    border-bottom: 1px solid #CECECE;
+    display: block;
+    font-size: 24px;
+    margin: 20px 10px 10px;
+    padding-bottom: 10px;
 }
 .reg_steps {
 	background: url(../images/global_sprite.png) 0 0 no-repeat;
@@ -1562,6 +1566,10 @@ div.reg_step3 ul li:nth-child(3) {
 
 .continue {
 	color: #0191c8;
+}
+
+.forgot_pword_con {
+	border: 1px solid #cecece;
 }
 
 .fill_out_form {
@@ -2533,7 +2541,9 @@ padding: 8px 0;
 
 /**** Reset Password ****/
 .reset_pword_btn_con {
-	text-align: center;
+    display: block;
+    margin-top: 35px;
+    text-align: center;
 }
 
 .reset_pword_error_con {
