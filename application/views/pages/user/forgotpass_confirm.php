@@ -37,7 +37,7 @@
                     </div>
 					<div class="clear"></div>
 			        <div class="reset_pword_btn_con">
-                          <input type="button" name="forgotpass_btn" id="forgotpass_btn" value="Save"/>
+                          <input class="orange_btn3" type="button" name="forgotpass_btn" id="forgotpass_btn" value="Save"/>
                     	
 					</div>
                 <?php elseif($toggle_view == "69"): ?>
