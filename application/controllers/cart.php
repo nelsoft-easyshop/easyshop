@@ -139,18 +139,28 @@ class Cart extends MY_Controller{
     }
     
     function change_qty(){
-        $data = array(
-               'rowid' => $_POST['id'],
-               'qty'   => $_POST['qty']
-            );
 		
-        $result=false;
-        if($this->cart->update($data)){
-        $carts=$this->cart->contents();
-            $result=array(
-                'subtotal'=>  number_format($carts[$_POST['id']]['subtotal'],2,'.',','),
-                'total' =>number_format( $this->cart->total(),2,'.',','));
-        }
+        $result=array();
+	$result['result'] = false;
+	$cart = $this->cart->contents();
+	foreach($cart as $keys => $child){
+	    if($_POST['id']==$keys){
+		$max_qty = $cart[$keys]['maxqty'];
+		$data = array(
+		       'rowid' => $_POST['id'],
+		       'qty'   => ($_POST['qty'] > $max_qty ? $max_qty : $_POST['qty'])
+		    );
+		if($this->cart->update($data)){
+		    $carts=$this->cart->contents();
+			$result=array(
+			    'subtotal'=>  number_format($carts[$_POST['id']]['subtotal'],2,'.',','),
+			    'total' =>number_format( $this->cart->total(),2,'.',','),
+			    'result' => true,
+			    'maxqty' => $max_qty);
+		}
+	    }
+	}
+	
 	echo json_encode($result);
         
     }

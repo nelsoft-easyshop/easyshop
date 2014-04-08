@@ -23,13 +23,14 @@ function sum(obj){
         dataType:"JSON",
         data:{id:id,qty:value, es_csrf_token:csrftoken},
         success:function(data){
-            if(data==false){
+            if(data['result']==false){
                 alert("Unable to change quantity");
             }
             else{
                 $("#subtotal"+id).text(data['subtotal']);
                 $("#total").text(data['total']);
             }
+            $(obj).attr("mx",data['maxqty']);
         }
     });
 }
