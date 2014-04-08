@@ -47,7 +47,10 @@
 					</div>
 					<div class="vendor-profile">
 						<p>Joined: <?php echo $vendordetails['datecreated'];?></p>
-						<p><span class="span_bg vendor_map"></span> <?php echo $vendordetails['city'] . " " . $vendordetails['region'];?></p>
+						<p>
+						<span class="span_bg vendor_map"></span> 
+							<?php echo $vendordetails['cityname'] != '' && $vendordetails['provincename'] != '' ? $vendordetails['cityname'] . ", " . $vendordetails['provincename'] : "Location not set."?>
+						</p>
 					</div>
 					<div class="vendor-msg-modal">
 					    <p><a id="to_modal" href="javascript:void(0)">Send a message</a></p><button id="modal-launcher">Launch Modal Window</button>

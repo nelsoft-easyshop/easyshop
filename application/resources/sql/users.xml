@@ -32,9 +32,11 @@
 
 <!-- Used for vendor details and username check- memberpage -->
 <select id="get_member_by_username">
-	SELECT m.id_member, m.username, m.contactno, m.email, a.city, DATE_FORMAT(datecreated, "%M %Y") as datecreated
+	SELECT m.id_member, m.username, m.contactno, m.email, a.city, a.province, l1.location as cityname, l2.location as provincename, DATE_FORMAT(datecreated, "%M %Y") as datecreated
 	FROM es_member m
 	LEFT JOIN es_address a on m.id_member = a.id_member AND a.type=0
+	LEFT JOIN es_location_lookup l1 ON a.city =  l1.id_location
+	LEFT JOIN es_location_lookup l2 ON a.province = l2.id_location
 	where m.username=:username
 </select>
 
