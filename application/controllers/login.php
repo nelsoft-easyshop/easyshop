@@ -88,10 +88,8 @@ class Login extends MY_Controller {
 		
 		$temp['toggle_view'] = "";
 		if(($this->input->post('identify_btn')) && ($this->form_validation->run('identify_form'))){
-			
             $email = $this->input->post('email');
             $result = $this->register_model->validate_email($email);
-         
 			if (isset($result['username'])){
 				// magsesend na siya ng email dito at magra-write sa db.
 				if ($this->register_model->forgotpass($email, $result['username'], $result['id_member']) == 1){

@@ -541,7 +541,7 @@
                     <div class="button_div"><input class="proceed_form" id="proceed_form" type="button" value="Proceed"></div>
                     <input type="hidden" id="qty_details" value='<?php echo (isset($item_quantity))?json_encode($item_quantity):json_encode(array());  ;?>'></input>
                     </form>
-                    <div class="loader_div"><img src='<?php echo base_url().'assets/images/orange_loader.gif' ?>'></div>              
+                    <div class="loader_div" style="display:none"><img src='<?php echo base_url().'assets/images/orange_loader.gif' ?>'></div>              
                     <div class="percentage">
                                               
                     </div>
