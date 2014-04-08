@@ -372,17 +372,16 @@ class Register_model extends CI_Model
 			return false;
 	}
 	
-	/*
-	function validate_email($email)
+	
+	function check_registered_email($email)
     {	
-		$query = $this->sqlmap->getFilenameID('users', 'getEmail');
+		$query = "SELECT id_member, username FROM `es_member` WHERE email = :email LIMIT 1 ";
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':email', $email);
 		$sth->execute();
 		$result = $sth->fetch();
 		return $result;
 	}
-    */
 
     function forgotpass($email, $username, $id_member)
     {
