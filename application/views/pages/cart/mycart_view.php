@@ -126,7 +126,7 @@
             }else{
                     $.ajax({
                         async:true,
-                        url:"<?=base_url()?>message/send_message",
+                        url:"<?=base_url()?>payment/cart_items",
                         type:"POST",
                         data:{itm:data1, es_csrf_token:csrftoken},
                         success:function(data){

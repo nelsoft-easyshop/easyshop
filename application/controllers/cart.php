@@ -48,6 +48,7 @@ class Cart extends MY_Controller{
             'options' => $opt,
             'img'     => $this->product_model->getProductImages($_POST['id']),
             'member_id'  => $base['sellerid'],
+            'product_itemID'  => $this->input->post('pitemid'),
 	    'maxqty' => $qty[0]['quantity']
             );
         return $data;
@@ -67,6 +68,7 @@ class Cart extends MY_Controller{
         else:
             $data=$this->check_product($_POST['id'],$go);
             $carts=$this->cart->contents();
+	    
 	    if(empty($carts)):
 		$this->cart->insert($data);
 		$result= sha1(md5("tanggap"));
