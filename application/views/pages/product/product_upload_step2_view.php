@@ -1719,6 +1719,7 @@ tinymce.init({
 
 $(document).ready(function() { 
     var prev_content = JSON.parse($('#step1_content').val());
+    console.log(prev_content);
     if(typeof prev_content.prod_title !== "undefined"){
         $('#prod_title').val(prev_content.prod_title);
     }
@@ -1734,8 +1735,8 @@ $(document).ready(function() {
     if(typeof prev_content.prod_description !== "undefined"){
         $('#prod_description').val(prev_content.prod_description);
     }
-    if(typeof prev_content.condition !== "undefined"){
-        $('#prod_condition').val(prev_content.prod_condition); //unsure
+    if(typeof prev_content.prod_condition !== "undefined"){
+        $('#prod_condition').val(prev_content.prod_condition);
     }
     if(typeof prev_content.prod_keyword !== "undefined"){
         $('#prod_keyword').val(prev_content.prod_keyword);
