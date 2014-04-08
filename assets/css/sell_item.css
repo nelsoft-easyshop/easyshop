@@ -228,13 +228,20 @@ div.sell_steps4 ul li:nth-child(4) a {
 
 /***** Draft Content ******/
 .draft_txt {
-    display: inline-block;
+    float: right;
+/*    display: inline-block;
     margin-left: 20px;
-    vertical-align: middle;
+    vertical-align: middle;*/
 }
 
 .draft_container {
     top: 60px !important;
+}
+
+.draft_items_container {
+    overflow-x: scroll;
+    height: 500px; 
+    padding-right: 10px;
 }
 
 .div_item {
@@ -915,41 +922,9 @@ a.qty_tooltip {
 }
 
 a.tooltips span {
-  color: #494949;
-  background: #FFFFFF;
-  border: 1px solid #f4b525;
-  border-radius: 0px;
-  height: auto;
-  line-height: 30px;
-  position: absolute;
-  padding: 8px;
-  text-align: center;
-  width: 440px;
-  visibility: hidden; 
+    text-align: left;
 }
 
-a.tooltips span:before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  right: 100%;
-  margin-top: -12px;
-  width: 0; height: 0;
-  border-right: 12px solid #f4b525;
-  border-top: 12px solid transparent;
-  border-bottom: 12px solid transparent;
-}
-a.tooltips span:after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  right: 100%;
-  margin-top: -10px;
-  width: 0; height: 0;
-  border-right: 10px solid #FFFFFF;
-  border-top: 10px solid transparent;
-  border-bottom: 10px solid transparent;
-}
 a:hover.tooltips span {
   visibility: visible;
   opacity: 1;
@@ -962,6 +937,14 @@ a:hover.tooltips span {
 
 .tooltips > img {
     vertical-align: middle;
+}
+
+.twolines_tooltip {
+    top: -9px !important;
+}
+
+.lines_tooltip {
+    top: -24px !important;
 }
 
 /**** image upload ***/
@@ -1034,6 +1017,10 @@ a:hover.tooltips span {
     width: 15px;
 }
 
+.percentage {
+    font-size: 10px;
+    margin-top: -30px;
+}
 
 /***** Admin upload step 2 ****/
 .border-left {
