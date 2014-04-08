@@ -68,5 +68,4 @@
 	CALL `es_sp_updateTransactionStatus` (:status, :order_product_id, :order_id )
 </select>
 
-
 </map>

@@ -10,6 +10,7 @@ class payment_model extends CI_Model
 		$this->load->library("sqlmap");
 	}	
 
+
 	   function getUserAddress($member_id)
     {
         $query = $this->sqlmap->getFilenameID('payment', 'get_address');
@@ -50,8 +51,8 @@ class payment_model extends CI_Model
 
 
         $sth->execute();
+       
         $row = $sth->fetch(PDO::FETCH_ASSOC);
-
   
         return $row;
         
@@ -167,6 +168,8 @@ class payment_model extends CI_Model
 		//print_r($sth->errorInfo());
 		return $result;
 	}
+    
+   
 }
 
 
