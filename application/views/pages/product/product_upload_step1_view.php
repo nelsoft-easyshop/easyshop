@@ -52,36 +52,36 @@ echo form_open('sell/edit/step2', $attributesForm);
                 </div>
             <?php endif; ?>
        </div>
-
- <div class="div_draft simplemodal-container">
-    <h3>Draft Item(s) </h3>
-      <?php
-      if(count($draftItems) <= 0){
-        echo 'No item in your Draft!';
-      }
-      ?>
-        <?php 
-         foreach ($draftItems as $draft) {
-              ?>
-            <div class="div_item draftitem<?php echo $draft['id_product']; ?>" >
-                <div class="draft_title">
-                    <a class="draft_name" href="javascript:void(0)" data-pid="<?php echo $draft['id_product'] ?>">
-                    <?php
-                    if($draft['name'] != ""){
-                        echo  $draft['name'] ;
-                    }else{
-                        echo '(Untitled Draft)';
-                    }
-                    ?> 
-                    </a>
+     <?php if(!isset($product_id_edit)): ?>
+     <div class="div_draft simplemodal-container">
+        <h3>Draft Item(s) </h3>
+          <?php
+          if(count($draftItems) <= 0){
+            echo 'No item in your Draft!';
+          }
+          ?>
+            <?php 
+             foreach ($draftItems as $draft) {
+                  ?>
+                <div class="div_item draftitem<?php echo $draft['id_product']; ?>" >
+                    <div class="draft_title">
+                        <a class="draft_name" href="javascript:void(0)" data-pid="<?php echo $draft['id_product'] ?>">
+                        <?php
+                        if($draft['name'] != ""){
+                            echo  $draft['name'] ;
+                        }else{
+                            echo '(Untitled Draft)';
+                        }
+                        ?> 
+                        </a>
+                    </div>
+                    <div class="draft_category"><?php echo $draft['crumbs']?></div>
+                    <div class="draft_down"> <span class="span_bg draft_del"></span> <a style="color:#f00;font-size:11px;" class="draft_remove" data-pid="<?php echo $draft['id_product'] ?>" href="javascript:{}">Delete</a>  | <span style="font-style:italic;font-size:10px"><?php echo date("M-d", strtotime($draft['lastmodifieddate']))?></span></div>
+                    <div class="clear"></div>
                 </div>
-                <div class="draft_category"><?php echo $draft['crumbs']?></div>
-                <div class="draft_down"> <span class="span_bg draft_del"></span> <a style="color:#f00;font-size:11px;" class="draft_remove" data-pid="<?php echo $draft['id_product'] ?>" href="javascript:{}">Delete</a>  | <span style="font-style:italic;font-size:10px"><?php echo date("M-d", strtotime($draft['lastmodifieddate']))?></span></div>
-                <div class="clear"></div>
-            </div>
-              <?php } ?>
-    </div>
- 
+                  <?php } ?>
+        </div>
+      <?php endif; ?>
        <div class="add_product_category">
         <div class="main_product_category">
             <input type="text" class="box" id="box">
@@ -143,7 +143,7 @@ echo form_open('sell/edit/step2', $attributesForm);
 
         <script>
         $(document).ready(function() { 
-            var draftCount = "<?php echo count($draftItems);?>";
+            var draftCount = "<?php echo (isset($draftItems))?count($draftItems):'0';?>";
 
             $('.div_draft').hide();
 
