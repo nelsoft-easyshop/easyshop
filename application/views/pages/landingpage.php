@@ -15,7 +15,7 @@
     <body>
         <div class = "container header_bg">
             <div class="row-fluid">
-                <div id="himg" class="text-center"> <img src="<?=base_url()?>assets/images/landingpage/img_logo.png"> </div>
+                <div id="himg" class="text-center logo_con"> <img src="<?=base_url()?>assets/images/landingpage/img_logo.png"> </div>
                
                     <p class="text-center">ONLINE SHOPPING</p>                 
                     <p class="text-center">MADE <span>EASY</span></p>
@@ -127,7 +127,7 @@
 									<input class="subscribe_input" id="appendedInputButton" type="text" name="subscribe_email">
 									<!--<button class="btn btn-warning btn-large" type="button">Subscribe</button>-->
 									<input type="submit" class="btn btn-warning btn-large subscribe_btn" value="Subscribe" name="subscribe_btn" id="subscribe_btn">
-									<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" class="img_loader_small2" id="subscribe_loadingimg" style="display:none"/>
+									<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" class="img_loader_small2 sub_loading_img" id="subscribe_loadingimg" style="display:none"/>
 								<?php echo form_close();?>
 								</div>
                         </div>                
