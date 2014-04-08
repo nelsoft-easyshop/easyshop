@@ -216,6 +216,7 @@ $(document).ready(function(){
 						var title= "Failed to Register";
 					}
 					$('#register_result').dialog({
+						width:'65%',
 						autoOpen: false,
 						title: title,
 						modal: true,
@@ -311,7 +312,7 @@ $(document).ready(function(){
 				error.appendTo(element.parent());
 		 },
 		 submitHandler: function(form){
-			$('#subscribe_loadingimg').show();
+			$('#subscribe_loadingimg').show().css('display','inline-block');
 			$('#subscribe_btn').attr('disabled', true);
 
 			$.post(config.base_url + 'landingpage/subscribe', $(form).serializeArray(), function(data){
@@ -329,6 +330,7 @@ $(document).ready(function(){
 					var title= "Failed to Subscribe";
 				}
 				$('#register_result').dialog({
+					width:'65%',
 					autoOpen: false,
 					title: title,
 					modal: true,
@@ -372,7 +374,7 @@ function hidecheckx(element){
 /*******************************************************************************************************/
 $(function() {
 	$( ".dialog" ).dialog({
-		width:"50%",
+		width:"65%",
 		autoOpen: false,
 		modal: true,
 		closeOnEscape: true,
