@@ -45,15 +45,16 @@ echo form_open('sell/edit/step2', $attributesForm);
             <b>Search for category: &nbsp;</b><input type="text" class="box" id="cat_sch" autocomplete="off"><div class="cat_sch_loading"></div>
             <div id="cat_search_drop_content" class="cat_sch_drop_content"></div>
             <?php if(!isset($product_id_edit)): ?>
-                <div style="float:right">
-                   <a href="javascript:void(0);" class="show_draft_link">View your draft items.</a>
-                   <br>
+                <div class="draft_txt">
+                   <a href="javascript:void(0);" class="show_draft_link blue">View your draft items.</a>
+                  
                    <span class='draft-cnt'>(<?php echo count($draftItems) ?>)</span> Item(s)
                 </div>
             <?php endif; ?>
        </div>
 
  <div class="div_draft simplemodal-container">
+    <h3>Draft Item(s) </h3>
       <?php
       if(count($draftItems) <= 0){
         echo 'No item in your Draft!';
@@ -75,8 +76,8 @@ echo form_open('sell/edit/step2', $attributesForm);
                     </a>
                 </div>
                 <div class="draft_category"><?php echo $draft['crumbs']?></div>
-                <div class="draft_down">[ <a style="color:#0654BA;font-size:10px;font-weight:bold" class="draft_remove" data-pid="<?php echo $draft['id_product'] ?>" href="javascript:{}">Delete</a> ] | <span style="font-style:italic;font-size:10px"><?php echo date("M-d", strtotime($draft['lastmodifieddate']))?></span></div>
-                <hr>
+                <div class="draft_down"> <span class="span_bg draft_del"></span> <a style="color:#f00;font-size:11px;" class="draft_remove" data-pid="<?php echo $draft['id_product'] ?>" href="javascript:{}">Delete</a>  | <span style="font-style:italic;font-size:10px"><?php echo date("M-d", strtotime($draft['lastmodifieddate']))?></span></div>
+                <div class="clear"></div>
             </div>
               <?php } ?>
     </div>
@@ -190,12 +191,13 @@ echo form_open('sell/edit/step2', $attributesForm);
                $('.div_draft').modal({
                     escClose: false,
                     containerCss:{
-                        maxWidth: 600,
-                        minWidth: 505,
-                        maxHeight: 600
+                        maxWidth: 900,
+                        minWidth: 605,
+                        maxHeight: 600,
                     },
                     persist: true
                 });
+               $('#simplemodal-container').addClass('draft_container');
             });
 
             $('.jcarousel').bind("scroll", ScrollOnLoad);
