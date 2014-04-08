@@ -15,6 +15,8 @@ class Payment extends MY_Controller{
         session_start();
     }
 
+ 
+    
     // LIVE
     // public $PayPalMode             = ''; 
     // public $PayPalApiUsername      = 'admin_api1.easyshop.ph'; 
@@ -210,7 +212,7 @@ class Payment extends MY_Controller{
                     // echo 'Query here<pre>';
                     // echo '<pre>',print_r($httpParsedResponseAr),'</pre>';
                     #address details  
-                    $invoice_no = date('YmhDs');
+                    $invoice_no = date('Ymhds');
                     $ip = $this->user_model->getRealIpAddr();
                     $consignee = urldecode($httpParsedResponseAr['SHIPTONAME']);
                     $streetno = '';
