@@ -371,7 +371,7 @@ $(document).ready(function() {
 			var csrftoken = $('#advancesearch_csrf').val();
             if(searchQuery != ""){
                 currentRequest = jQuery.ajax({
-                    type: "POST",
+                    type: "GET",
                     url: '<?php echo base_url();?>product/searchCategory', 
                     data: "data="+searchQuery+"&es_csrf_token="+csrftoken, 
                     onLoading:jQuery(".cat_sch_loading").html('<img src="<?= base_url() ?>assets/images/orange_loader_small.gif" />').show(),
