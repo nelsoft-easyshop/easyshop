@@ -109,8 +109,9 @@
         });
         $("#proceed_payment").click(function(event){
             event.preventDefault();
-	    var csrftoken = $('#mycart').val();
-            var data1 = $(".wrapper input:checkbox:not(:checked)").map(function(){
+            var csrftoken = $('#mycart').val();
+
+           var data1 = $(".wrapper input:checkbox:not(:checked)").map(function(){
                 return $(this).val();
             }).toArray();
                 var a = parseInt(0);
