@@ -36,9 +36,12 @@
       <div class="reset_pword_btn_con">
         <input id="identify_btn" type="submit" name="identify_btn" value="Reset Password"/>
       </div>
-      <div class="reset_pword_error_con <?php echo $class; ?>">
-      <span class="span_bg img_error_con <?php echo $imgclass; ?>"></span><span id="login_error"><?php echo $msg; ?></span>
+	  <?php if(!empty($toggle_view)){ ?>
+		  <div class="reset_pword_error_con <?php echo $class; ?>">
+		  <span class="span_bg img_error_con <?php echo $imgclass; ?>"></span>
+		  <span id="login_error"><?php echo $msg; ?></span>
       </div>
+	  <?php } ?>
     </div>
   <?php echo form_close();?>
 </div>
