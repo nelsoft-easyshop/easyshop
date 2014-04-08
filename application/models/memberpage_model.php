@@ -483,6 +483,7 @@ class memberpage_model extends CI_Model
 				}
 			}
 			
+			// Categorize as buy or sell in final array
 			foreach($data as $k=>$temp2){
 				if(array_key_exists('buyer_id', $temp2) && array_key_exists('buyer', $temp2))
 					$fdata['sell'][$k] = $temp2;
