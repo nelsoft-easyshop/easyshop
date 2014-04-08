@@ -50,21 +50,20 @@
               <h3>Categories where your listing will appear</h3>  
               <a class="tooltips" href="javascript:void(0)">
                 <img src="<?= base_url() ?>assets/images/icon_qmark.png" alt="">
-                <span>This is the EasyShop category where your listing will appear.
+                <span class="1line_tooltip">This is the EasyShop category where your listing will appear.
                 </span>
               </a> 
             </td>
           </tr>
 
           <tr>
-            <td  class="border-left border-bottom" colspan="2">
+            <td  class="border-left border-right border-bottom" colspan="3">
 
               <?php echo $parent_to_last; ?> <!-- will show the parent category until to the last category selected (bread crumbs) -->
               <br>
               <a href="javascript:void(0)" style="color:#0654BA;" class="step1_link">Change category</a>
             </td> 
-            <td  class="border-right border-bottom" colspan="2">
-            </td>
+            
           </tr>
           <tr>
             <td colspan="3">&nbsp;
@@ -80,7 +79,7 @@
             <td  class="border-right" colspan="2"><input type="text" maxlength="255" placeholder="Enter title" autocomplete="off" id="prod_title" maxlength="255" name="prod_title" value="<?php echo (isset($product_details['name']))?$product_details['name']:'';?>">
               <a class="tooltips" href="javascript:void(0)">
                 <img src="<?= base_url() ?>assets/images/icon_qmark.png" alt="">
-                <span>This will be the title of your listing. State exactly what you're selling and include words that buyers might use to search, such as the item brand, color, size, and model number.
+                <span class="lines_tooltip">This will be the title of your listing. State exactly what you're selling and include words that buyers might use to search, such as the item brand, color, size, and model number.
                 </span>
               </a> 
             </td>
@@ -110,7 +109,7 @@
               </select>
               <a class="tooltips" href="javascript:void(0)">
                 <img src="<?= base_url() ?>assets/images/icon_qmark.png" alt="">
-                <span>Tell buyers all about the condition of your item so they know exactly what to expect. Use this field only to describe your item's condition.
+                <span class="lines_tooltip">Tell buyers all about the condition of your item so they know exactly what to expect. Use this field only to describe your item's condition.
                 </span>
               </a>
             </td>
@@ -126,7 +125,7 @@
                   <h3>Add Photos</h3> <span class="required">You are required to have a minimum of 1 photo</span>
                           <a class="tooltips" href="javascript:void(0)">
                 <img src="<?= base_url() ?>assets/images/icon_qmark.png" alt="">
-                <span>Including pictures of your item is vital to your success. You can upload them from your computer.
+                <span class="twolines_tooltip">Including pictures of your item is vital to your success. You can upload them from your computer.
                 </span>
               </a>
               </td>
@@ -337,7 +336,7 @@
             <td class="border-left border-right" colspan="4">
               <h3> Additional Information to your Item</h3> 
               <br>
-              Buyers often refine their search using these item specifics. If you don't provide these details here, your listing may not appear in their search results.
+              Buyers often refine their search using these item specifics.<br />If you don't provide these details here, your listing may not appear in their search results.
                              <a class="tooltips" href="javascript:void(0)">
                 <img src="<?= base_url() ?>assets/images/icon_qmark.png" alt="">
                 <span>Add details to help buyers find your item.
@@ -487,7 +486,9 @@
             <td class="border-left">SKU Code <font color="red">*</font></td> <!-- SKU of the product -->
             <td class="border-right" colspan="3">
               <input type="text" autocomplete="off"  maxlength="45" placeholder="Enter SKU" id="prod_sku" name="prod_sku" value="<?php echo (isset($product_details['sku']))?$product_details['sku']:'';?>">
-              <a class="tooltips" href="javascript:void(0)"><img src="<?= base_url() ?>assets/images/icon_qmark.png" alt=""><span>Stock Keeping Unit: you can assign any code in order to keep track of your items</span></a>
+              <a class="tooltips" href="javascript:void(0)"><img src="<?= base_url() ?>assets/images/icon_qmark.png" alt="">
+                <span class="2lines_tooltip">Stock Keeping Unit: you can assign any code in order to keep track of your items</span>
+              </a>
             </td>
           </tr>
           <!-- end of sku code -->

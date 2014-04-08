@@ -55,6 +55,7 @@ echo form_open('sell/edit/step2', $attributesForm);
      <?php if(!isset($product_id_edit)): ?>
      <div class="div_draft simplemodal-container">
         <h3>Draft Item(s) </h3>
+        <div class="draft_items_container">
           <?php
           if(count($draftItems) <= 0){
             echo 'No item in your Draft!';
@@ -81,6 +82,7 @@ echo form_open('sell/edit/step2', $attributesForm);
                 </div>
                   <?php } ?>
         </div>
+    </div>
       <?php endif; ?>
        <div class="add_product_category">
         <div class="main_product_category">
