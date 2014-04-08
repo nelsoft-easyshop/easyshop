@@ -186,6 +186,9 @@
   , item_list_attribute.price
   , item_list_attribute.`condition`
   , item_list_attribute.brief
+  , item_list_attribute.is_hot
+  , item_list_attribute.is_new
+  , item_list_attribute.clickcount
   
 FROM
   (SELECT 

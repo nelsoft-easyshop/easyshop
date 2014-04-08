@@ -25,6 +25,8 @@ class product extends MY_Controller
 		$checkifexistcategory = $this->product_model->checkifexistcategory($categoryId);
 		$dontGetBrand = false;
 		$filter = false;
+		$haveSort = false;
+		$sortString = "";
 		if(!count($_GET) <= 0){
 
 			foreach ($_GET as $key => $value) {
@@ -46,6 +48,20 @@ class product extends MY_Controller
 
 					$dontGetBrand = true;
 					$condition .= "AND  `condition` = '$value' ";	 
+
+				}elseif (ucfirst(strtolower($key)) == "Sop") { 
+ 	 				$haveSort = true;
+ 	 				$sortValue = ucfirst(strtolower($_GET[$key]));
+ 	 				if($sortValue == ucfirst(strtolower('hot'))){
+ 	 					$sortString = " is_hot DESC , ";
+ 	 				}elseif ($sortValue == ucfirst(strtolower('new'))) {
+ 	 					$sortString = " is_new DESC , ";
+ 	 				}elseif ($sortValue == ucfirst(strtolower('popular'))) {
+ 	 					$sortString = " clickcount DESC , ";
+ 	 				}else{
+ 	 					$sortString = "";
+ 	 				}
+					$dontGetBrand = true;
 
 				}elseif (ucfirst(strtolower($key)) == "Price") { 
 
@@ -81,15 +97,17 @@ class product extends MY_Controller
 
 				}
 			}
-			$condition = substr_replace($condition,"AND",0,3); 
+			if(!count($_GET) == 1 && $haveSort == false){
+				$condition = substr_replace($condition,"AND",0,3); 	
+			} 
 		} 
-
+ 
 		if($categoryId != 0){
 			if($checkifexistcategory != 0){
 				$downCategory = $this->product_model->selectChild($categoryId);
 				array_push($downCategory, $categoryId);
 				$categories = implode(",", $downCategory);
-				$items = $this->product_model->getProductsByCategory($categories,$condition,$count,$operator,$start,$perPage);
+				$items = $this->product_model->getProductsByCategory($categories,$condition,$count,$operator,$start,$perPage,$sortString);
 				$ids = array();
 				foreach ($items as $key) {
 					array_push($ids, $key['product_id']);
@@ -165,6 +183,8 @@ class product extends MY_Controller
 		$type = $this->input->post('type');
 		$condition = "";
 		$notIrrelivant = false;
+		$haveSort = false;
+		$sortString = "";
 		if(!count($get) <= 0){
 
 			foreach ($get as $key => $value) {
@@ -180,8 +200,21 @@ class product extends MY_Controller
 					}else{
 						$condition .= "AND  brand = '$value' ";	 
 					}	
-				}
-				elseif (ucfirst(strtolower($key)) == "Condition") { 
+				}elseif (ucfirst(strtolower($key)) == "Sop") { 
+ 	 				$haveSort = true;
+ 	 				$sortValue = ucfirst(strtolower($get[$key]));
+ 	 				if($sortValue == ucfirst(strtolower('hot'))){
+ 	 					$sortString = " is_hot DESC , ";
+ 	 				}elseif ($sortValue == ucfirst(strtolower('new'))) {
+ 	 					$sortString = " is_new DESC , ";
+ 	 				}elseif ($sortValue == ucfirst(strtolower('popular'))) {
+ 	 					$sortString = " clickcount DESC , ";
+ 	 				}else{
+ 	 					$sortString = "";
+ 	 				}
+					$dontGetBrand = true;
+
+				}elseif (ucfirst(strtolower($key)) == "Condition") { 
 
 					$dontGetBrand = true;
 					$condition .= "AND  `condition` = '$value' ";	 
@@ -220,7 +253,10 @@ class product extends MY_Controller
 
 				}
 			}
-			$condition = substr_replace($condition,"AND",0,3); 
+			
+			if(!count($get) == 1 && $haveSort == false){
+				$condition = substr_replace($condition,"AND",0,3); 	
+			} 
 		}
 
 		$downCategory = $this->product_model->selectChild($categoryId);
@@ -229,7 +265,7 @@ class product extends MY_Controller
 
 		session_start();
 
-		$items = $this->product_model->getProductsByCategory($categories,$condition,$count,$operator,$start,$perPage);
+		$items = $this->product_model->getProductsByCategory($categories,$condition,$count,$operator,$start,$perPage,$sortString);
 		$response['items'] = $items; 
 		$response['id_cat'] = $categoryId;
 		$response['typeofview'] = $type;
@@ -257,7 +293,7 @@ class product extends MY_Controller
 		if($notIrrelivant){
 			$newoperator = ' < ';
 			$start = $_SESSION['start'] * $perPage;
-			$items = $this->product_model->getProductsByCategory($categories,$condition,$count,$newoperator,$start,$perPage);
+			$items = $this->product_model->getProductsByCategory($categories,$condition,$count,$newoperator,$start,$perPage,$sortString);
 			$response['items'] = $items; 
 			$response['id_cat'] = $categoryId;
 			$response['typeofview'] = $type;

@@ -266,7 +266,7 @@ class product_model extends CI_Model
 	}
        
 	// // start of new 
-	function getProductsByCategory($categories,$condition_string,$count,$operator = "<",$start,$per_page)
+	function getProductsByCategory($categories,$condition_string,$count,$operator = "<",$start,$per_page,$sortString)
 	{
 		$start = (int)$start;
 		$per_page = (int)$per_page;
@@ -283,7 +283,7 @@ class product_model extends CI_Model
 		 ".$condition_string."
 		 GROUP BY product_id , `name`,price,`condition`,brief,product_image_path
 		 ".$havingString."
-    	 ORDER BY cnt_all DESC, `name` ASC
+    	 ORDER BY ".$sortString." cnt_all DESC, `name` ASC
 		 LIMIT :start, :per_page
 		 "; 
 	 	// echo $query;exit();
