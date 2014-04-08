@@ -200,6 +200,13 @@ input.error + span.error {
     text-align: center;
 }
 
+#register_result a {
+    font-size: 12px;
+    display: block;
+    margin-top: 50px;
+    color: #0191C8;
+}
+
 #result_desc {
     font-size: 14px;
     line-height: 0;
