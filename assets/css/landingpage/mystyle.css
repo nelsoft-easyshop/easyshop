@@ -122,11 +122,11 @@ input.error + span.error {
     width: 275px;
 }
 */
-#register_form1 fieldset input[name="username"],
+/*#register_form1 fieldset input[name="username"],
 #register_form1 fieldset input[name="email"] {
     padding-right: 30px;
     width: 236px !important;
-}
+}*/
 
 .email_availability {
     font-size: 12px;
@@ -355,7 +355,7 @@ input.error + span.error {
     margin: 0 auto;
     position: relative;
     }
-    #username_status {
+    /*#username_status {
     display: block;
     padding-bottom: 10px;
     padding-left: 10px;
@@ -371,7 +371,7 @@ input.error + span.error {
     position: relative;
     margin-left: auto;
     margin-top: auto;
-    }
+    }*/
 }
 
 @media (min-width: 768px) and (max-width: 979px) {
@@ -402,7 +402,12 @@ input.error + span.error {
 
 
 
-@media (max-width: 480px) {
+@media (max-width: 480px) {   
+    #register_form1 fieldset input,
+    .subscribe_input {
+        width: 65% !important;
+    }
+
     h4 {
         font-size: 15.5px;
     }
@@ -421,7 +426,7 @@ input.error + span.error {
         max-width: 180px;
         width: 100%;
     }
-
+/*
     #username_status {
         display: block;
         padding-bottom: 10px;
@@ -438,7 +443,7 @@ input.error + span.error {
         position: relative;
         margin-left: auto;
         margin-top: auto;
-    }
+    }*/
 
     input.error + span.error {
         display: block !important;
@@ -458,6 +463,13 @@ input.error + span.error {
       -webkit-border-radius: 6px !important;
      -moz-border-radius: 6px !important;
           border-radius: 6px !important;
+    }
+
+    .sub_loading_img {
+        margin-left: 55px;
+        margin-top: -48px;
+        padding: 5px 0 0 10px;
+        position: absolute;
     }
 
 }
