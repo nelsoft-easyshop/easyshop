@@ -1804,6 +1804,7 @@ $(document).ready(function() {
     });
     
    if(($('#brand_sch').val() !== '')&&(parseInt($('#prod_brand').val(),10) !== 0)){
+        console.log($('#prod_brand').val());
       var img_temp = (parseInt($('#prod_brand').val(),10) !== 1)?'<img src="<?= base_url() ?>assets/images/check_icon.png" />':'<img src="<?= base_url() ?>assets/images/img_new_txt.png" />';
       jQuery(".brand_sch_loading").html(img_temp).show().css('display','inline-block');
    }
@@ -1842,6 +1843,7 @@ $(document).ready(function(){
                     $('.brand_sch_drop_content').show();
                 },
                 success: function(response) {
+                    currentRequest = null;
                     var obj = jQuery.parseJSON(response);
                     var html = '<ul>';
                     if((obj.length)>0){
