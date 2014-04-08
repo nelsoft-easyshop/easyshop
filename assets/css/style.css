@@ -1577,7 +1577,6 @@ div.reg_step3 ul li:nth-child(3) {
 }
 
 .fill_out_form input {
-    border: 1px solid #B3B3B3;
     color: #494949;
     height: 25px;
     line-height: 25px;
@@ -1596,6 +1595,15 @@ div.reg_step3 ul li:nth-child(3) {
 	height: 35px;
 	color: #494949;
 	padding:3px;
+}
+
+.fill_out_form input[type="button"] {
+	border: 1px solid #f18200;
+    color: #FFFFFF;
+    cursor: pointer;
+    font-weight: bold;
+    height: 35px;
+    padding: 0;
 }
 
 .countdown_submit{
