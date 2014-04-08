@@ -118,13 +118,21 @@
             </p>
           </div>
           <div class="buy_box"> 
-            <?PHP if($logged_in && ($userdetails['is_contactno_verify'] == 1 || $userdetails['is_email_verify'] == 1) ): ?>
+            <?PHP if($logged_in && $userdetails['is_email_verify'] == 1 ): ?>
             <input type="hidden" id="buynow_csrf" name="<?php echo $my_csrf['csrf_name'];?>" value="<?php echo $my_csrf['csrf_hash'];?>">
 			<a href="JavaScript:void(0)" id="send" class="fm1 orange_btn3 disabled">Buy Now</a> <br/>
             <!-- <img src="<?=base_url()?>assets/images/img_cart2.jpg"> Add to Cart</a> <br /> -->
             <?php else: ?>
             <a href="<?PHP echo base_url();echo $logged_in?'me':'login';?>" id="unablesend" class="add_to_cart"><span></span> Buy Now</a> <br />
-            <p class="buy_btn_sub">Log-in and verify your e-mail to purchase </p>
+			<p class="buy_btn_sub">
+				<?php if( !$logged_in && $userdetails['is_email_verify'] == 1 ){
+					echo "Login to purchase this product.";
+				} else if( $logged_in && !($userdetails['is_email_verify'] == 1) ){
+					echo "Verify your email to purchase this product.";
+				} else if( !$logged_in && !($userdetails['is_email_verify'] == 1) ){
+					echo "Login and verify your email to purchase this product.";
+				}?>
+			</p>
             <?php endif; ?>
             <span>Delivers in 5-8 business days*</span> </div>
         </div>
