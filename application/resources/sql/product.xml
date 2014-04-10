@@ -155,7 +155,7 @@
         LEFT JOIN es_style s ON p.style_id = s.id_style
         LEFT JOIN es_brand b ON p.brand_id = b.id_brand
         LEFT JOIN es_member m on p.member_id = m.id_member 
-        WHERE p.id_product = :product_id AND p.is_draft = 1	
+        WHERE p.id_product = :product_id AND p.is_draft = 1	AND p.member_id = :member_id
     </select>
   
 	
@@ -561,7 +561,7 @@ FROM
          FROM es_product p 
          LEFT JOIN es_product_review r ON p.`id_product` = r.`product_id` AND r.`is_show` = 1 
          LEFT JOIN es_product_image i ON i.`product_id` = p.`id_product` AND i.`is_primary` = 1 
-         WHERE p.member_id = :id
+         WHERE p.member_id = :id AND p.is_draft = 0
          GROUP BY p.`id_product`, p.`name`, p.`brief`, p.`price`, p.`member_id`, i.product_image_path, p.`is_delete`,p.`cat_id`,p.lastmodifieddate 
          ORDER BY p.lastmodifieddate DESC 
     </select>
