@@ -180,8 +180,9 @@ p {
 }
 
 .grey_btn:hover {
-	background-color: #f18200;
-    border:1px solid #f18200;
+	color: #fff;
+	background-color: #626262;
+    border:1px solid #626262;
 }
 
 
@@ -2547,7 +2548,9 @@ padding: 8px 0;
 }
 
 .reset_pword_error_con {
+	margin-top: 30px;
 	padding:8px;
+	width: 300px;
 }
 
 .img_error_con {
@@ -2573,6 +2576,38 @@ padding: 8px 0;
 	background-color: rgba(110,179,29,.1);
 	border:1px solid #6eb31d;	
 	color: #494949;
+}
+
+.forgot_pword_inner_con {
+	padding:10px;
+	min-height: 380px;
+}
+
+.reset_pword {
+    margin: 50px auto 0;
+    width: 400px;
+}
+
+.reset_pword div:first-child {
+	margin-bottom: 30px;
+}
+
+.reset_pword label {
+	display: block;
+	font-weight: bold;
+	padding-bottom:10px;
+	text-align: left;
+}
+
+.reset_pword input[type="text"] {
+	padding:8px 10px;
+	text-align: left;
+	width: 300px;
+}
+
+.reset_pword input[type="submit"] {
+	border:1px solid #f18200;
+	cursor: pointer;
 }
 
 /**** end of reset password ****/
