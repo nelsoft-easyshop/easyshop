@@ -1417,7 +1417,7 @@ tr.tr_shipping_summary:nth-child(even) td {
 
 .shipping_list_items_con {
     background-color: #F8F7F7;
-    height: 275px;
+    height: 430px;
     overflow-y:scroll;
 }
 
@@ -1456,6 +1456,18 @@ tr.tr_shipping_summary:nth-child(even) td {
     margin: 5px auto;
     padding: 8px;
     width: 440px;
+}
+
+.set_price_error1 {
+    display: inline-block;
+    height: 45px !important;
+    width: 463px;
+}
+
+.set_price_error2 {
+    display: inline-block;
+    height: 60px !important;
+    width: 463px;
 }
 
 
