@@ -1104,13 +1104,14 @@ a:hover.tooltips span {
     border: 1px solid #DBD8D7;
     cursor: pointer;
     display: inline-block;
+    float: left;
     font-size: 10px;
-    height: auto;
+    height: 150px;
     line-height: 35px;
     margin: 0 0 10px 5px;
-    max-height: 193px;
-    min-height: 25px;
-    overflow-y: scroll;
+/*    max-height: 193px;
+    min-height: 25px;*/
+/*    overflow-y: scroll;*/
     padding: 0 3px 0 25px;
     width: 180px;
 }
@@ -1131,7 +1132,7 @@ a:hover.tooltips span {
     position: relative;
 }
 
-.product_combination.active div:before {
+.product_combination.active:before {
     background: url('../images/global_sprite.png') -591px -308px no-repeat;
     left: 0;
     content: "";
@@ -1194,7 +1195,7 @@ a:hover.tooltips span {
     border: medium none;
     cursor: pointer;
     display: block;
-    margin: 50px auto 0;
+    margin: 10px auto 0;
     padding: 10px 15px;
     text-transform: uppercase;
     width: 120px;
@@ -1237,6 +1238,7 @@ a:hover.tooltips span {
     border:1px solid #cecece;
     display: inline-block;
     margin-top: 30px;
+    padding-bottom: 30px;
 }
 
 .shipping_title {
@@ -1251,11 +1253,10 @@ a:hover.tooltips span {
 }
 
 .rate_calculator_con {
-    border-top: 1px solid #CECECE;
-    margin-top: 40px;
-    margin-right: 10px;
+/*    border-top: 1px solid #CECECE;
+    margin-top: 40px;*/
     padding-top: 10px;
-    text-align: center;
+    text-align: left;
 }
 
 .rate_calculator_con h3 {
@@ -1264,6 +1265,7 @@ a:hover.tooltips span {
 .shipping_courier_container {
     display: inline-block;
 /*    padding-left: 5px;*/
+    margin-top: 10px;
     width: 465px;
 }
 
@@ -1276,6 +1278,7 @@ a:hover.tooltips span {
     vertical-align: middle;
     border:1px solid #DBD8D7;
     margin-bottom: 10px;
+    width: 75px;
 }
 
 .shipping_container table tr:first-child td {
@@ -1289,7 +1292,7 @@ a:hover.tooltips span {
 
 .shiplocprice_summary input[type="text"] {
     padding:9px 2px;
-    width: 75px;
+    width: 55px;
 }
 
 .shipping_container select,
@@ -1315,10 +1318,10 @@ a:hover.tooltips span {
 
 .shipping_table2 tbody {
     display: table-cell;
-    height: 194px;
+/*    height: 194px;*/
 }
 
-.shipping_table2 tr:nth-child(even) td {
+.shipping_table2 tr:nth-child(odd) td {
     background-color: #F8F7F7;
 } 
 
@@ -1346,9 +1349,9 @@ tr.tr_shipping_summary:nth-child(even) td {
     background-color: #F8F7F7;
 }
 
-.shipping_table3 {
+/*.shipping_table3 {
     border:1px solid #cecece;
-}
+}*/
 
 .shipping_table3 tr[data-groupkey],
 .edit_summaryrow,
@@ -1397,10 +1400,16 @@ tr.tr_shipping_summary:nth-child(even) td {
 }
 
 .shipping_summary_container {
-    border-bottom: 1px solid #CECECE;
+    border: 1px solid #CECECE;
     float: left;
-    margin-top: 20px;
+    margin-top: 8px;
     width: 495px;
+}
+
+.shipping_list_items_con {
+    background-color: #F8F7F7;
+    height: 275px;
+    overflow-y:scroll;
 }
 
 .shipping_summary_container h2 {
@@ -1411,7 +1420,7 @@ tr.tr_shipping_summary:nth-child(even) td {
 
 .shipping_summary_container table thead {
     background-color: #EBE9E9;
-    font-size: 14px;
+/*    font-size: 14px;*/
 }
 
 .shipping_summary_container table thead tr td {
@@ -1419,10 +1428,10 @@ tr.tr_shipping_summary:nth-child(even) td {
     padding:10px 5px;
 }
 
-.shipping_summary_container table tr td.prod_att_pad {
+/*.shipping_summary_container table tr td.prod_att_pad {
     padding-right: 20px;
 }
-
+*/
 .edit_del {
     margin-right: 10px;
 }
@@ -1432,7 +1441,7 @@ tr.tr_shipping_summary:nth-child(even) td {
 }
 
 #div_locationwarning {
-    padding:8px 0;
+    padding:8px;
 }
 
 

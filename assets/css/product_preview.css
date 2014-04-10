@@ -60,15 +60,19 @@
     }
 
     .ui-dialog-titlebar-close:before {
-    font: normal 20px/1 'dashicons';
+    border: 1px solid #6D6D6D;
+    border-radius: 2px;
+    color: #6D6D6D;
+    content: "X";
+    display: inline-block;
+    height: 20px;
+    line-height: 20px;
     vertical-align: top;
+    width: 20px;
+
     speak: none;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    line-height: 36px;
-    width: 36px;
-    height: 36px;
-    content: '\f150';
     }
 
     .ui-button.ui-dialog-titlebar-close:hover {
@@ -96,6 +100,7 @@
 
     .ui-dialog-buttonpane .ui-dialog-buttonset {
     float: right;
+    margin-bottom: 20px;
     }
 
     .ui-draggable .ui-dialog-titlebar {
@@ -418,7 +423,42 @@ span.seller-name span:hover {
 	padding:5px 0;
 }
 
-.orange_btn_preview {
+.ui-dialog-buttonset button {
+	border-radius: 3px;
+	color: #fff;
+	cursor: pointer;
+	display: inline-block;
+	font-size: 14px;
+	padding:8px 40px;
+	text-align: center;
+	-webkit-transition: all 0.3s ease-in-out;
+	-moz-transition: 	all 0.3s ease-in-out;
+	-o-transition:	    all 0.3s ease-in-out;
+	 transition: 		all 0.3s ease-in-out;	
+}
+
+.ui-dialog-buttonset button:first-child {
+	border:1px solid #393939;
+	background-color: #393939;
+}
+
+.ui-dialog-buttonset button:first-child:hover {
+	color: #fff;
+	background-color: #626262;
+    border:1px solid #626262;	
+}
+
+.ui-dialog-buttonset button:nth-child(2) {
+	border:1px solid #f18200;
+	background-color: #f48000;
+}
+
+.ui-dialog-buttonset button:nth-child(2):hover {
+	background-color: #ff4400;
+	color: #fff;
+}
+
+/*.orange_btn_preview {
     background-color: #C0C0C0;
     border-radius: 3px;
     color: #FFFFFF;
@@ -430,7 +470,7 @@ span.seller-name span:hover {
     text-align: center;
     transition: all 0.3s ease-in-out 0s;
     width: 110px;
-}
+}*/
 
 .orange_btn_preview.enabled{
 	background-color: #FF4400;
