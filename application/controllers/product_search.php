@@ -30,8 +30,7 @@ class product_search extends MY_Controller {
 		if(!empty($q)){			
 			$brand_names = $this->search_model->getBrandName($q,'name');
 			echo json_encode($brand_names);			
-		}
-		
+		}		
 	}
 	
 	function getChild() # this function for getting the under category from selected category 
