@@ -1047,7 +1047,7 @@
 							<div class="address_fields_layer2">
 								<div>
 									<input type="text" name="address" value="<?php echo $address?>">
-									<p>Full address</p>
+									<p>Street Address</p>
 									<input type="hidden" name="address_orig" value="<?php echo $address?>"> 
 								</div>
 							</div>
