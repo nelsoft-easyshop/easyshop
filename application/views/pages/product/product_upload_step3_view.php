@@ -315,7 +315,7 @@
 <script type="text/javascript" src="<?=base_url()?>assets/JavaScript/js/jquery.numeric.js"></script>
 <script type="text/javascript">
   if ($('table.shipping_prod_attr_comb').length) {
-    $('.shipping_list_items_con').css('height','737px');
+    $('.shipping_list_items_con').css('height','790px');
    }
 
    $(".product_combination").each(function() {
