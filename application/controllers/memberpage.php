@@ -162,6 +162,8 @@ class Memberpage extends MY_Controller
 		$data = array_merge($data,$this->memberpage_model->get_member_by_id($uid));
         $data = array_merge($data,$this->memberpage_model->get_work_by_id($uid));
 		$data =  array_merge($data,$this->memberpage_model->get_school_by_id($uid));
+		$data['bill'] =  $this->memberpage_model->get_billing_info($uid);
+		$data['bank'] = $this->memberpage_model->get_bank('', 'all');			
 		$data['transaction'] = $this->memberpage_model->getTransactionDetails($uid);
 		$data['allfeedbacks'] = $this->memberpage_model->getFeedback($uid);
 		
@@ -412,6 +414,71 @@ class Memberpage extends MY_Controller
 				echo 0;
 		}
 	}
+	
+	function bank_info(){
+		$q = $this->input->get('q');
+		if(!empty($q)){			
+			$bank_names = $this->memberpage_model->get_bank($q, 'name');
+			echo json_encode($bank_names);			
+		}		
+	}
+	
+	function billing_info(){
+###    di ko mapaandar ulit yung form_validation
+###		if(($this->input->post('bi_acct_no')) && ($this->form_validation->run('billing_info'))){
+		
+		if($this->input->post('bi_acct_no')){
+			
+			$member_id = $this->session->userdata('member_id');
+			$bi_payment_type = $this->input->post('bi_payment_type');
+			$bi_user_account = ""; // pang paypal ito or any online account
+			$bi_bank = $this->input->post('bi_bank');
+			$bi_acct_name = $this->input->post('bi_acct_name');	  
+			$bi_acct_no = $this->input->post('bi_acct_no');
+	
+			$data = array(
+					'member_id' => $member_id,
+					'payment_type' => $bi_payment_type,
+					'user_account' => $bi_user_account,
+					'bank_id' => $bi_bank,
+					'bank_account_name' => $bi_acct_name,
+					'bank_account_number' => $bi_acct_no				
+			);
+			$this->memberpage_model->billing_info($data);
+			$get_info = $this->memberpage_model->get_billing_info($member_id);
+			echo json_encode($get_info);		
+		
+		}
+	}
+	
+	function billing_info_u(){
+					
+		if($this->input->post('bi_id')){
+			$bi_id = $this->input->post('bi_id');
+			$bi_bank = $this->input->post('bi_bank');
+			$bi_acct_name = $this->input->post('bi_acct_name');	  
+			$bi_acct_no = $this->input->post('bi_acct_no');
+	
+			$data = array(
+					'ibi' => $bi_id,
+					'bank_id' => $bi_bank,
+					'bank_account_name' => $bi_acct_name,
+					'bank_account_number' => $bi_acct_no				
+			);
+			$this->memberpage_model->billing_info_update($data);		
+		}
+	}	
+	
+	function billing_info_d(){
+					
+		if($this->input->post('bi_id')){
+			$bi_id = $this->input->post('bi_id');	
+			$data = array(
+					'ibi' => $bi_id			
+			);
+			$this->memberpage_model->billing_info_delete($data);		
+		}
+	}		
 	
 } 
   
