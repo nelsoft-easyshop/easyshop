@@ -128,7 +128,7 @@
 				<?php if( !$logged_in && $userdetails['is_email_verify'] == 1 ){
 					echo "Login to purchase this product.";
 				} else if( $logged_in && !($userdetails['is_email_verify'] == 1) ){
-					echo "Verify your email to purchase this product.";
+					echo "Verify your email to purchase.";
 				} else if( !$logged_in && !($userdetails['is_email_verify'] == 1) ){
 					echo "Login to purchase this product.";
 				}?>
