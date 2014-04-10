@@ -1512,7 +1512,6 @@ $(".proceed_form").unbind("click").click(function(){
     var prev_combination_count = 1;
     $.each(qty_obj,function(){
       var $this = this;
-      console.log($this);
       $('.qtyTextClass').val($this.quantity);
       $.each(html_item_selection,function(){
             $(this).attr("selected",false);
@@ -1719,7 +1718,6 @@ tinymce.init({
 
 $(document).ready(function() { 
     var prev_content = JSON.parse($('#step1_content').val());
-    console.log(prev_content);
     if(typeof prev_content.prod_title !== "undefined"){
         $('#prod_title').val(prev_content.prod_title);
     }
