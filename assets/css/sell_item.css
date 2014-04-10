@@ -1147,8 +1147,9 @@ a:hover.tooltips span {
     display: list-item;
     float: left;
     font-size: 10px;
-    margin-left: 25px;
-    width: 110px;
+    margin-left: 13px;
+    width: 57px;
+    word-wrap: break-word;
 }
 
 .prod_att_pad span {
@@ -1345,6 +1346,10 @@ tr.tr_shipping_summary:nth-child(odd) td {
     background-color: #fff;
 }
 
+.shipping_list_btns {
+    padding-top: 25px !important;
+}
+
 tr.tr_shipping_summary:nth-child(even) td {
     background-color: #F8F7F7;
 }
@@ -1392,7 +1397,11 @@ tr.tr_shipping_summary:nth-child(even) td {
 }
 
 #add_shipping_details {
-    margin-top: 10px;
+    margin: 10px;
+}
+
+.price_table_bottom {
+    border-top: 1px dotted #cecece;
 }
 
 .tr_shipping_summary img {
@@ -1440,8 +1449,13 @@ tr.tr_shipping_summary:nth-child(even) td {
     text-align: center;
 }
 
-#div_locationwarning {
-    padding:8px;
+#div_locationwarning,
+#spanerror {
+    background-color: rgba(255, 0, 0, 0.1);
+    border: 1px solid #FF0000;
+    margin: 5px auto;
+    padding: 8px;
+    width: 440px;
 }
 
 
