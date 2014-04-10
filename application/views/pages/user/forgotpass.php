@@ -22,28 +22,31 @@
 ?> 
 
 <div class="clear"></div>
-<div class="wrapper login_content">
-  <!--<form id="identify_form" method="post">-->
-  <?php
-	$attr = array('id'=>'identify_form');
-	echo form_open('',$attr);
-  ?>
-    <div class="login_box reset_pword">
-      <div>
-        <label for="email">Email Address: </label>
-        <input type="text" id="email" name="email">
-      </div>
-      <div class="reset_pword_btn_con">
-        <input id="identify_btn" type="submit" name="identify_btn" value="Reset Password"/>
-      </div>
-	  <?php if(!empty($toggle_view)){ ?>
-		  <div class="reset_pword_error_con <?php echo $class; ?>">
-		  <span class="span_bg img_error_con <?php echo $imgclass; ?>"></span>
-		  <span id="login_error"><?php echo $msg; ?></span>
-      </div>
-	  <?php } ?>
-    </div>
-  <?php echo form_close();?>
+<div class="wrapper login_content forgot_pword_con">
+	<div class="forgot_pword_inner_con">
+		<span class="reg_title">Forgot Password</span>
+	  <!--<form id="identify_form" method="post">-->
+	  <?php
+		$attr = array('id'=>'identify_form');
+		echo form_open('',$attr);
+	  ?>
+	    <div class="reset_pword">
+	      <div>
+	        <label for="email" class="f14">Email Address: </label>
+	        <input type="text" id="email" name="email">
+	      </div>
+	      <div class="">
+	        <input id="identify_btn" class="orange_btn3" type="submit" name="identify_btn" value="Reset Password"/>
+	      </div>
+		  <?php if(!empty($toggle_view)){ ?>
+			  <div class="reset_pword_error_con <?php echo $class; ?>">
+			  <span class="span_bg img_error_con <?php echo $imgclass; ?>"></span>
+			  <span id="login_error"><?php echo $msg; ?></span>
+	      </div>
+		  <?php } ?>
+	    </div>
+	  <?php echo form_close();?>
+	</div>
 </div>
 </section>
 <div class="clear"></div>
