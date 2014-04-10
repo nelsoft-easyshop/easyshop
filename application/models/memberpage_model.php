@@ -569,7 +569,6 @@ class memberpage_model extends CI_Model
 		return $data;
 	}
 	
-	
 	function get_bank($bank, $toggle){
 		
 		$filter = "";
@@ -646,7 +645,7 @@ class memberpage_model extends CI_Model
 		$rows= $sth->fetchAll(PDO::FETCH_ASSOC);
 	
 		return $rows;	
-	}	
+	}		
 	
 }
 
