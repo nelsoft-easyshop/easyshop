@@ -114,7 +114,7 @@
                     <table cellspacing="0" cellpadding="0" width="463px" class="price_table_bottom">
                       <tbody>
                         <tr>
-                          <td class="border-right">
+                          <td class="border-right set_price_error1" height="45px">
                             <p style="display:none; color:red;" id="spanerror">
                                Location already used for selected attribute.
                             </p>
@@ -127,7 +127,7 @@
                           </td>
                         </tr>
                         <tr>
-                          <td class="border-right border-bottom">
+                          <td class="border-right border-bottom set_price_error2" height="50px">
                             <div style="color:red;<?php echo $inc_location ? '' : 'display:none;'?>" id="div_locationwarning">
                               Warning: Your shipping location selection does not cover the whole
                               <span id="location_warning">
@@ -315,7 +315,7 @@
 <script type="text/javascript" src="<?=base_url()?>assets/JavaScript/js/jquery.numeric.js"></script>
 <script type="text/javascript">
   if ($('table.shipping_prod_attr_comb').length) {
-    $('.shipping_list_items_con').css('height','790px');
+    $('.shipping_list_items_con').css('height','807px');
    }
 
    $(".product_combination").each(function() {
