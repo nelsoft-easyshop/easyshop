@@ -63,7 +63,7 @@
                     <div>
                         <p>
                         <a class="delete"><input type="button" class="del" id="<?PHP echo $row['rowid']; ?>" onclick="del(this.id);" name="delete" value="Remove" > </a>
-                            <a href="">Move to wish list</a>
+                        <!-- <a href="">Move to wish list</a> -->
                         </p>
                     </div>
                 </div>
