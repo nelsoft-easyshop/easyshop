@@ -75,7 +75,7 @@
                     </td>
                   </tr>
                 </thead>
-                <td class="border-left border-right border-bottom">
+                <td class="border-left">
 
                     <table id="shiploc_selectiontbl" class="shipping_table2" width="463px" cellspacing="0" cellpadding="0">
                       <input type="hidden" value="1" id="shiploc_count">
@@ -111,10 +111,35 @@
                         </tr>
                     </tbody>
                     </table>
+                    <table cellspacing="0" cellpadding="0" width="463px" class="price_table_bottom">
+                      <tbody>
+                        <tr>
+                          <td class="border-right">
+                            <p style="display:none; color:red;" id="spanerror">
+                               Location already used for selected attribute.
+                            </p>
+                            
+                          </td>
+                        </tr>
+                        <tr>
+                          <td class="border-right">
+                              <input type="button" id="add_shipping_details" value="Add to Shipping List" class="orange_btn3">
+                          </td>
+                        </tr>
+                        <tr>
+                          <td class="border-right border-bottom">
+                            <div style="color:red;<?php echo $inc_location ? '' : 'display:none;'?>" id="div_locationwarning">
+                              Warning: Your shipping location selection does not cover the whole
+                              <span id="location_warning">
+                                <?php echo $inc_location ? $inc_locationmsg : '';?>
+                              </span>
+                            </div>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
                 </td>
             </table>
-            <p style="display:none; color:red;" id="spanerror">Location already used for selected attribute.</p>
-            <input type="button" id="add_shipping_details" value="Add to Shipping List" class="orange_btn3">
             
             <table cellspacing="0" cellpadding="0" width="465px" style="margin-top:15px;">
                 <thead>
@@ -177,7 +202,7 @@
                                 <p>All Attribute Combinations</p>
                             <?php endif;?>
                           </td>
-                          <td width="230px">
+                          <td width="230px" valign="top">
                               <table class="shiplocprice_summary">
                                   <tbody>
                                     <?php foreach($shipping_summary[$attk] as $lockey=>$price):?>
@@ -205,7 +230,7 @@
                                   </tbody>
                               </table>
                           </td>
-                          <td width="110px">
+                          <td width="110px" valign="top">
                               <span class="edit_summaryrow button edit_del">
                               <img src="<?php echo base_url();?>assets/images/icon_edit.png"> Edit
                               </span>
@@ -224,7 +249,7 @@
                 <!-- Original Cloning Field -->
                 <tr class="cloningfield">
                     <td class="prod_att_pad"></td>
-                    <td width="230px">
+                    <td width="230px" valign="top">
                         <table class="shiplocprice_summary">
                           <tbody>
                             <tr class="cloningfield" data-idlocation="" data-groupkey="">
@@ -240,7 +265,7 @@
                           </tbody>
                         </table>
                     </td>
-                    <td width="110px">
+                    <td width="110px" valign="top" class="shipping_list_btns">
                       <span class="edit_summaryrow button edit_del">
                         <img src="<?php echo base_url();?>assets/images/icon_edit.png"> Edit
                       </span> 
@@ -262,12 +287,7 @@
                 <input type="hidden" id="summaryrowcount" value="<?php echo $datagroupcounter?>">
             </table>
           </div>
-          <div style="color:red;<?php echo $inc_location ? '' : 'display:none;'?>" id="div_locationwarning">
-            Warning: Your shipping location selection does not cover the whole
-            <span id="location_warning">
-              <?php echo $inc_location ? $inc_locationmsg : '';?>
-            </span>
-          </div>
+         
       </div>
       <!-- end of shipping summary -->
 
@@ -295,7 +315,7 @@
 <script type="text/javascript" src="<?=base_url()?>assets/JavaScript/js/jquery.numeric.js"></script>
 <script type="text/javascript">
   if ($('table.shipping_prod_attr_comb').length) {
-    $('.shipping_list_items_con').css('height','645px');
+    $('.shipping_list_items_con').css('height','737px');
    }
 
    $(".product_combination").each(function() {
