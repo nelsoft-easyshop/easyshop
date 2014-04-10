@@ -570,6 +570,84 @@ class memberpage_model extends CI_Model
 	}
 	
 	
+	function get_bank($bank, $toggle){
+		
+		$filter = "";
+		if($toggle == 'name'){
+			$filter =  " WHERE `bank_name` LIKE '%". $bank ."%'";
+		}else{
+			$filter = ""; // wala pa ito
+		}
+		$query = "SELECT `id_bank` AS 'id', `bank_name` AS 'name' FROM `es_bank_info` " . $filter;
+		$sth = $this->db->conn_id->prepare($query);
+		$sth->execute();
+		$row = $sth->fetchAll(PDO::FETCH_ASSOC);
+		return $row;							
+	}
+	
+	function billing_info($data){
+
+		$query = "	INSERT INTO `es_billing_info` (`member_id`,`payment_type`,`user_account`,`bank_id`,`bank_account_name`,`bank_account_number`,`dateadded`)
+			VALUES (:member_id,:payment_type,:user_account,:bank_id,:bank_account_name,:bank_account_number,NOW());";
+		$sth = $this->db->conn_id->prepare($query);
+		$sth->bindParam(':member_id', $data['member_id']);
+		$sth->bindParam(':payment_type', $data['payment_type']);
+		$sth->bindParam(':user_account', $data['user_account']);
+		$sth->bindParam(':bank_id', $data['bank_id']);
+		$sth->bindParam(':bank_account_name', $data['bank_account_name']);
+		$sth->bindParam(':bank_account_number', $data['bank_account_number']);
+		$result = $sth->execute();
+		
+		return $result;
+
+	}
+	
+	function billing_info_update($data){
+
+		$query = "UPDATE `es_billing_info` SET `bank_id`=:bank_id,`bank_account_name`=:bank_account_name,`bank_account_number`=:bank_account_number,`datemodified` = NOW()
+				WHERE `id_billing_info` = :ibi";
+		$sth = $this->db->conn_id->prepare($query);
+		$sth->bindParam(':bank_id', $data['bank_id']);
+		$sth->bindParam(':bank_account_name', $data['bank_account_name']);
+		$sth->bindParam(':bank_account_number', $data['bank_account_number']);
+		$sth->bindParam(':ibi', $data['ibi']);
+		$result = $sth->execute();
+		
+		return $result;
+
+	}
+	
+	function billing_info_delete($data){
+
+		$query = "DELETE FROM `es_billing_info` WHERE `id_billing_info` = :ibi";
+		$sth = $this->db->conn_id->prepare($query);
+		$sth->bindParam(':ibi', $data['ibi']);
+		$result = $sth->execute();
+		
+		return $result;
+
+	}	
+	
+	function get_billing_info($data){
+		$query = "	SELECT
+			ebi.`id_billing_info`, 
+			ebi.`payment_type`,
+			ebi.`user_account`,
+			ebi.`bank_id`, 
+			ebki.`bank_name`,
+			ebi.`bank_account_name`,
+			ebi.`bank_account_number`
+		FROM `es_billing_info` ebi 
+		LEFT JOIN `es_bank_info` ebki ON ebi.`bank_id` = ebki.`id_bank` 
+		WHERE ebi.`member_id` = :member_id;";		
+		$sth = $this->db->conn_id->prepare($query);
+		$sth->bindParam(':member_id',$data);
+		$sth->execute();
+		$rows= $sth->fetchAll(PDO::FETCH_ASSOC);
+	
+		return $rows;	
+	}	
+	
 }
 
 /* End of file memberpage_model.php */
