@@ -130,7 +130,7 @@
 				} else if( $logged_in && !($userdetails['is_email_verify'] == 1) ){
 					echo "Verify your email to purchase this product.";
 				} else if( !$logged_in && !($userdetails['is_email_verify'] == 1) ){
-					echo "Login and verify your email to purchase this product.";
+					echo "Login to purchase this product.";
 				}?>
 			</p>
             <?php endif; ?>
