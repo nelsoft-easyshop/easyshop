@@ -480,8 +480,8 @@ class Ios extends MY_Controller {
 	{
 			$subject = html_purify($this->input->get('subject'));
 			$comment =  html_purify($this->input->get('comment'));
-            $member_id = this->input->get('member_id');
-            $productid =  this->input->get('product_id');
+            $member_id = $this->input->get('member_id');
+            $productid =  $this->input->get('product_id');
 			$rating = $this->input->get('score');
 			
 			if((trim($subject) !== '')||(trim($comment) !== '')){
@@ -492,8 +492,6 @@ class Ios extends MY_Controller {
 			else{
 				echo 0;
 			}
-			
-			
 	}
 	#new query for getting reviews (top5 Main reviews) - Janz
 	function getReviews($product_id, $sellerid)
