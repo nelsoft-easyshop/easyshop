@@ -82,6 +82,11 @@ $route['sell/edit/processing2'] = 'productUpload/editStep2Submit';  # sam gavini
 #REMOVE DRAFT
 $route['sell/draft/remove'] = 'productUpload/deleteDraft';  # sam gavinio
 
+#LANDING PAGE 
+$route['registration/success'] = 'landingpage/success/register';  # sam gavinio
+$route['subscription/success'] = 'landingpage/success/subscribe';  # sam gavinio
+
+
 
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */

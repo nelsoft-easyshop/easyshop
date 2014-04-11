@@ -165,9 +165,19 @@ class Landingpage extends MY_Controller
 		 }
 		 return $callback_result;
 	}
+    
+    public function success($referrer = ''){
+        if($referrer === 'register'){
+            $data['content'] = '';
+        }
+        else if($referrer === 'subscribe'){
+            $data['content'] = '';
+        }
+        else{
+            redirect('', 'refresh');  //redirect to index page
+        }
+        $this->load->view('pages/landingpage_success', $data);
+    } 
 
 }// close class
 
-
-
-?>
