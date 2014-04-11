@@ -21,7 +21,7 @@
                     <p class="text-center">
                     	<img src="<?=base_url()?>assets/images/<?php echo $content; ?>"> 
                     </p>
-                    <p class="text-center txt_success orange">
+                    <p class="text-center txt_success">
                     	Like us on and share
                     </p>
                     <p class="text-center img_social_media">
