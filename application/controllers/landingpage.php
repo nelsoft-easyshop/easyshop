@@ -168,10 +168,10 @@ class Landingpage extends MY_Controller
     
     public function success($referrer = ''){
         if($referrer === 'register'){
-            $data['content'] = '';
+            $data['content'] = 'img_success_register.png';
         }
         else if($referrer === 'subscribe'){
-            $data['content'] = '';
+            $data['content'] = 'img_success_subscribe.png';
         }
         else{
             redirect('', 'refresh');  //redirect to index page
