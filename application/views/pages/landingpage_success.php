@@ -19,7 +19,7 @@
                
                     <!-- <p class="text-center txt_success"><?php echo $content; ?></p>  -->
                     <p class="text-center">
-                    	<img src="<?=base_url()?>assets/images/img_success_register.png" alt="">
+                    	<img src="<?=base_url()?>assets/images/<?php echo $content; ?>"> 
                     </p>
                     <p class="text-center txt_success orange">
                     	Like us on and share
