@@ -111,7 +111,7 @@
 
 
 <select id="get_member">
-	SELECT m.`id_member`, m.`nickname`, m.`fullname`, m.`gender`, m.`birthday`, m.contactno, m.is_contactno_verify, m.email, m.is_email_verify,
+	SELECT m.`id_member`,m.username, m.`nickname`, m.`fullname`, m.`gender`, m.`birthday`, m.contactno, m.is_contactno_verify, m.email, m.is_email_verify,
 	a0.city as cityID, a0.province as provinceID, a1.city as c_cityID, a1.province as c_provinceID,
 	COALESCE(loc0.location,'') as city, COALESCE(loc1.location, '') as province, COALESCE(a0.address,'') as address,
 	a1.consignee, a1.mobile as c_mobile, a1.telephone as c_telephone,

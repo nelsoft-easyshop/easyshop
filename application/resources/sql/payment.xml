@@ -21,27 +21,13 @@
 </select>
 
 <select id="payment_transaction">
-	CALL es_sp_Payment_order(
+	CALL es_sp_Payment_order_temp(
 		:invoice_no,
 		:total_amt,
 		:ip,
-		:product_in_cart,
-		:product_counter,
-		:product_option,
-		:product_option_counter,
 		:member_id,
-		:payment_type,
-		:payment_items,
-		:payment_data,
-		:consignee,
-		:streetno,
-		:street,
-		:city,
-		:brgy,
-		:country,
-		:zipcode,
-		:phone,
-		:cellphone
+		:string,
+		:product_count
 	)
 </select>
 

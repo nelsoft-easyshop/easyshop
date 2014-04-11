@@ -22,33 +22,16 @@ class payment_model extends CI_Model
         
     }
 
-    function payment($invoice_no,$ItemTotalPrice,$ip,$productstring,$item_count,$optionstring,$option_count,$member_id,$payment_type,$data_item,$data_response,$consignee,$streetno,$street,$city,$brgy,$country,$zipcode,$phone,$cellphone)
+    function payment($invoice_no,$ItemTotalPrice,$ip,$member_id,$productstring,$productCount)
     {
         $query = $this->sqlmap->getFilenameID('payment','payment_transaction');
         $sth = $this->db->conn_id->prepare($query);
-        $sth->bindParam(':invoice_no',$invoice_no);
-        $sth->bindParam(':total_amt',$ItemTotalPrice);
-        $sth->bindParam(':ip',$ip);
-        $sth->bindParam(':product_in_cart',$productstring);
-        $sth->bindParam(':product_counter',$item_count);
-        $sth->bindParam(':product_option',$optionstring);
-        $sth->bindParam(':product_option_counter',$option_count);
-        $sth->bindParam(':member_id',$member_id);
-        $sth->bindParam(':payment_type',$payment_type);
-        $sth->bindParam(':payment_items',$data_item);
-        $sth->bindParam(':payment_data',$data_response);
- 
-
-        $sth->bindParam(':consignee',$consignee);
-        $sth->bindParam(':streetno',$streetno);
-        $sth->bindParam(':street',$street);
-        $sth->bindParam(':city',$city);
-        $sth->bindParam(':brgy',$brgy);
-        $sth->bindParam(':country',$country);
-        $sth->bindParam(':zipcode',$zipcode);
-        $sth->bindParam(':phone',$phone);
-        $sth->bindParam(':cellphone',$cellphone); 
-
+        $sth->bindParam(':invoice_no',$invoice_no,PDO::PARAM_STR);
+        $sth->bindParam(':total_amt',$ItemTotalPrice,PDO::PARAM_STR);
+        $sth->bindParam(':ip',$ip,PDO::PARAM_STR);
+        $sth->bindParam(':member_id',$member_id,PDO::PARAM_INT);
+        $sth->bindParam(':string',$productstring,PDO::PARAM_STR);
+        $sth->bindParam(':product_count',$productCount,PDO::PARAM_INT);
 
         $sth->execute();
        
@@ -168,8 +151,66 @@ class payment_model extends CI_Model
 		//print_r($sth->errorInfo());
 		return $result;
 	}
-    
-   
+ 
+
+	function getShippingDetails($product_id,$product_item_id)
+	{
+		$query = "
+			SELECT 
+			  a.`product_item_id`
+			  , b.product_id
+			  , c.location 
+			  , c.`id_location`
+			  , c.`type`
+			FROM
+			  `es_product_shipping_detail` a
+			  , `es_product_shipping_head` b
+			  , `es_location_lookup` c 
+			WHERE b.`id_shipping` = a.`shipping_id` 
+			AND b.`location_id` = c.`id_location`
+			AND b.`product_id` = :product_id
+			AND a.`product_item_id` = :product_item_id
+		";
+		$sth = $this->db->conn_id->prepare($query);
+
+		$sth->bindParam(':product_id', $product_id,PDO::PARAM_INT);
+		$sth->bindParam(':product_item_id', $product_item_id,PDO::PARAM_INT); 
+		$sth->execute();
+		$row = $sth->fetchAll(PDO::FETCH_ASSOC);
+		 
+		return $row[0];
+	}
+
+	function getCityFromRegion($id_location)
+	{
+		$query = "
+		SELECT * FROM `es_location_lookup` WHERE `type` = 3 AND parent_id = :id_location
+		";
+		$sth = $this->db->conn_id->prepare($query);
+ 
+		$sth->bindParam(':id_location', $id_location,PDO::PARAM_INT); 
+     	$sth->execute();
+		$row = $sth->fetchAll(PDO::FETCH_COLUMN, 0);
+	 
+		return $row;
+	}
+	function getRegionOrMajorIsland($id_location,$type)
+	{
+		$query = "
+		SELECT * FROM `es_location_lookup` WHERE `type` = :type AND id_location = :id_location
+		";
+		$sth = $this->db->conn_id->prepare($query);
+ 
+		$sth->bindParam(':id_location', $id_location,PDO::PARAM_INT);
+		$sth->bindParam(':type', $type,PDO::PARAM_INT); 
+     	$sth->execute();
+		$row = $sth->fetchAll(PDO::FETCH_COLUMN, 1);
+	 	  
+		return $row[0];
+	}
+
+ 
+ 
 }
 
 
