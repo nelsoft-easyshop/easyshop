@@ -21,7 +21,7 @@
 </select>
 
 <select id="payment_transaction">
-	CALL es_sp_Payment_order_temp(
+	CALL es_sp_Payment_order(
 		:invoice_no,
 		:total_amt,
 		:ip,
