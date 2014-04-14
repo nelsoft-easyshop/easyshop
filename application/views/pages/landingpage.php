@@ -124,7 +124,7 @@
 								<div class="input-append">
 								<?php echo form_open('', array('id'=>'subscription_form'));?>
 									<h4>Stay in touch to get the latest updates</h4>
-									<input class="subscribe_input" id="appendedInputButton" type="text" name="subscribe_email">
+									<input placeholder="e-mail address" class="subscribe_input" id="appendedInputButton" type="text" name="subscribe_email">
 									<!--<button class="btn btn-warning btn-large" type="button">Subscribe</button>-->
 									<input type="submit" class="btn btn-warning btn-large subscribe_btn" value="Subscribe" name="subscribe_btn" id="subscribe_btn">
 									<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" class="img_loader_small2 sub_loading_img" id="subscribe_loadingimg" style="display:none"/>

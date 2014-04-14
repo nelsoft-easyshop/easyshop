@@ -25,7 +25,11 @@
                     	Like us on and share
                     </p>
                     <p class="text-center img_social_media">
-                    	<a href="" class="img_sc_1">
+                    	<a class="img_sc_1" href="https://www.facebook.com/sharer/sharer.php?s=100
+                             &amp;p[url]=https://staging.easyshop.ph
+                             &amp;p[images][0]=https://staging.easyshop.ph/assets/images/img_logo.png
+                             &amp;p[title]=Easyshop.ph
+                             &amp;p[summary]=asds." target="_blank">
                     		<img src="<?=base_url()?>assets/images/img_social_media_facebook.png" alt="facebook">
                     	</a>
                     	<a href="">

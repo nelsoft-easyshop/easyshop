@@ -197,7 +197,7 @@ $(document).ready(function(){
 						var serverResponse = jQuery.parseJSON(data);
 					}
 					catch(e){
-						alert('An error was encountered while processing your data. Please try again later.');
+						alert('We are currently encountering a problem. Please try again later.');
 						window.location.reload(true);
 						return;
 					}
@@ -210,25 +210,29 @@ $(document).ready(function(){
 						$(form).find('input.reqfield').each(function(){
 							$(this).prop('value', '');
 						});
+                        
+                        window.location.replace(config.base_url + 'registration/success');
 					}
 					else{
 						$('#result_desc').html(serverResponse['error']);
 						var title= "Failed to Register";
+                        
+                        $('#register_result').dialog({
+                        width:'65%',
+                        autoOpen: false,
+                        title: title,
+                        modal: true,
+                        closeOnEscape: false,
+                        draggable:false,
+                        buttons:{
+                                OK: function(){
+                                    $(this).dialog("close");
+                                }
+                            }
+                        });
+                        $('#register_result').dialog('open');
 					}
-					$('#register_result').dialog({
-						width:'65%',
-						autoOpen: false,
-						title: title,
-						modal: true,
-						closeOnEscape: false,
-						draggable:false,
-						buttons:{
-							OK: function(){
-								$(this).dialog("close");
-							}
-						}
-					});
-					$('#register_result').dialog('open');
+					
 				});
 			}
 			return false;
@@ -324,25 +328,30 @@ $(document).ready(function(){
 					$(form).find('input[type="text"]').each(function(){
 						$(this).prop('value', '');
 					});
+                    window.location.replace(config.base_url + 'subscription/success');
 				}
 				else{
-					$('#result_desc').html("An error was encountered. Try again later.");
+					$('#result_desc').html("We are currently encountering a problem. Please try again later.");
 					var title= "Failed to Subscribe";
+                    
+                    $('#register_result').dialog({
+                    width:'65%',
+                    autoOpen: false,
+                    title: title,
+                    modal: true,
+                    closeOnEscape: false,
+                    draggable:false,
+                    buttons:{
+                        OK: function(){
+                            $(this).dialog("close");
+                            }
+                        }
+                    });
+                    $('#register_result').dialog('open');
+                        
+                    
 				}
-				$('#register_result').dialog({
-					width:'65%',
-					autoOpen: false,
-					title: title,
-					modal: true,
-					closeOnEscape: false,
-					draggable:false,
-					buttons:{
-						OK: function(){
-							$(this).dialog("close");
-						}
-					}
-				});
-				$('#register_result').dialog('open');
+				
 			});
 			return false;
 		}

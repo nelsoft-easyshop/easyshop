@@ -167,7 +167,9 @@ class Landingpage extends MY_Controller
 	}
     
     public function success($referrer = ''){
+        $data['title'] = 'Easyshop.ph - Thank You';
         if($referrer === 'register'){
+
             $data['content'] = 'img_success_register.png';
         }
         else if($referrer === 'subscribe'){
@@ -179,5 +181,8 @@ class Landingpage extends MY_Controller
         $this->load->view('pages/landingpage_success', $data);
     } 
 
-}// close class
+}
+
+/* End of file landingpage.php */
+/* Location: ./application/controllers/landingpage.php */
 
