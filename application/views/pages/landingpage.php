@@ -65,7 +65,7 @@
 										
 										
 											<h4>Email Address</h4>
-											<input type="text" placeholder="" id="email" name="email" class="reqfield">
+											<input type="text" placeholder="" id="email" name="email" class="reqfield" autocomplete="off">
 											<input type="hidden" id="emailcheck" value="">
 											<img id="email_loader" class="img_loader_small" src="<?=base_url()?>/assets/images/orange_loader_small.gif" style="display:none;">
 											<div id="email_status">

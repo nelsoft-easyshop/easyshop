@@ -83,8 +83,10 @@ $(document).ready(function(){
 	  
 	  $('#email').on('blur', function(){
 		var fieldlength = $.trim($('#email').val()).length;
+
 		if(fieldlength >= 6 && $(this).hasClass('forSearch') && $(this).hasClass('valid')){
 			setTimeout(email_check,500);
+            console.log('here');
 		}
 		else if(fieldlength < 6){
 			hidecheckx($('#email'));
@@ -281,7 +283,7 @@ function email_check(){
 		}
 		else{
 			showx($('#email'));
-			$('.email_availability').html('Email already used.');
+			$('.email_availability').html('Email is already in use.');
 			field.removeClass('pass');
 		}
 		field.removeClass('forSearch');
