@@ -394,19 +394,19 @@ $(function(){
                                 }
                                 if(parseInt(prod_billing_id,10) === 0){
                                     jQuery.ajax({
-                                    type: "POST",
-                                    url: config.base_url + 'memberpage/billing_info', 
-                                    data: "express=true&bi_payment_type=Bank&bi_bank="+bank_list+"&bi_acct_no="+account_no+"&bi_acct_name="+account_name+"&es_csrf_token="+csrftoken, 
-                                    success: function(response) {
-                                            if(!response){
-                                                alert('We are having a problem right now. Refresh the page to try again.');
+                                        type: "POST",
+                                        url: config.base_url + 'memberpage/billing_info', 
+                                        data: "express=true&bi_payment_type=Bank&bi_bank="+bank_list+"&bi_acct_no="+account_no+"&bi_acct_name="+account_name+"&es_csrf_token="+csrftoken, 
+                                        success: function(response) {
+                                                if(!response){
+                                                    alert('We are having a problem right now. Refresh the page to try again.');
+                                                }
+                                                else{
+                                                    var new_id = parseInt(response,10);
+                                                    $('#prod_billing_id').val(new_id);
+                                                    $('#step4_form').submit();
+                                                }
                                             }
-                                            else{
-                                                var new_id = parseInt(response,10);
-                                                $('#prod_billing_id').val(new_id);
-                                                $('#step4_form').submit();
-                                            }
-                                        }
                                     });
                                 }
                                 else{
