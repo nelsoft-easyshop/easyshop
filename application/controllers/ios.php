@@ -478,6 +478,8 @@ class Ios extends MY_Controller {
 	# Arguments: subject, comment, score
 	function submit_review()
 	{
+            print_r($this->input->get());
+           
 			$subject = html_purify($this->input->get('subject'));
 			$comment =  html_purify($this->input->get('comment'));
             $member_id = $this->input->get('member_id');
@@ -486,7 +488,7 @@ class Ios extends MY_Controller {
 			
 			if((trim($subject) !== '')||(trim($comment) !== '')){
 				$rating = $rating===''?'0':$rating;
-				$this->product_model->addProductReview($memberid, $productid, $rating, $subject, $comment);
+				$this->product_model->addProductReview($member_id, $productid, $rating, $subject, $comment);
 				echo 1;
 			}
 			else{
