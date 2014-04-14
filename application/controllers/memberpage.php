@@ -424,7 +424,7 @@ class Memberpage extends MY_Controller
 	}
 	
 	function billing_info(){
-###    di ko mapaandar ulit yung form_validation
+###     di ko mapaandar ulit yung form_validation
 ###		if(($this->input->post('bi_acct_no')) && ($this->form_validation->run('billing_info'))){
 		
 		if($this->input->post('bi_acct_no')){
@@ -435,38 +435,50 @@ class Memberpage extends MY_Controller
 			$bi_bank = $this->input->post('bi_bank');
 			$bi_acct_name = $this->input->post('bi_acct_name');	  
 			$bi_acct_no = $this->input->post('bi_acct_no');
-	
+            $express = $this->input->post('express');
+            
 			$data = array(
-					'member_id' => $member_id,
-					'payment_type' => $bi_payment_type,
-					'user_account' => $bi_user_account,
-					'bank_id' => $bi_bank,
-					'bank_account_name' => $bi_acct_name,
-					'bank_account_number' => $bi_acct_no				
+                'member_id' => $member_id,
+                'payment_type' => $bi_payment_type,
+                'user_account' => $bi_user_account,
+                'bank_id' => $bi_bank,
+                'bank_account_name' => $bi_acct_name,
+                'bank_account_number' => $bi_acct_no				
 			);
-			$this->memberpage_model->billing_info($data);
-			$get_info = $this->memberpage_model->get_billing_info($member_id);
-			echo json_encode($get_info);		
-		
+            $result = $this->memberpage_model->billing_info($data);
+            if($express == 'true'){
+                echo $result;
+            }
+            else{
+                $get_info = $this->memberpage_model->get_billing_info($member_id);
+                echo json_encode($get_info);
+            }
+           
 		}
+        else{
+            echo json_encode(false);
+        }
 	}
 	
 	function billing_info_u(){
-					
 		if($this->input->post('bi_id')){
 			$bi_id = $this->input->post('bi_id');
 			$bi_bank = $this->input->post('bi_bank');
 			$bi_acct_name = $this->input->post('bi_acct_name');	  
 			$bi_acct_no = $this->input->post('bi_acct_no');
-	
+            $member_id = $this->session->userdata('member_id');
 			$data = array(
-					'ibi' => $bi_id,
-					'bank_id' => $bi_bank,
-					'bank_account_name' => $bi_acct_name,
-					'bank_account_number' => $bi_acct_no				
+                'ibi' => $bi_id,
+                'bank_id' => $bi_bank,
+                'bank_account_name' => $bi_acct_name,
+                'bank_account_number' => $bi_acct_no,
+                'member_id' => $member_id,
 			);
-			$this->memberpage_model->billing_info_update($data);		
+			return json_encode($this->memberpage_model->billing_info_update($data));		
 		}
+        else{
+            return json_encode(false);
+        }
 	}	
 	
 	function billing_info_d(){
@@ -479,7 +491,7 @@ class Memberpage extends MY_Controller
 			$this->memberpage_model->billing_info_delete($data);		
 		}
 	}		
-	
+    
 } 
   
 /* End of file memberpage.php */

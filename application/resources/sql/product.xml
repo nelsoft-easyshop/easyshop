@@ -1091,6 +1091,19 @@ FROM
     WHERE a.product_id = :prod_id ORDER BY c.type
 </select>
 
+<select id="getBillinginfo">
+    SELECT
+        ebi.`id_billing_info`, 
+        ebi.`payment_type`,
+        ebi.`user_account`,
+        ebi.`bank_id`, 
+        ebki.`bank_name`,
+        ebi.`bank_account_name`,
+        ebi.`bank_account_number`
+    FROM `es_billing_info` ebi 
+    LEFT JOIN `es_bank_info` ebki ON ebi.`bank_id` = ebki.`id_bank` 
+    WHERE ebi.`member_id` = :member_id ORDER BY ebi.is_default
+</select>
 
 
 </map>

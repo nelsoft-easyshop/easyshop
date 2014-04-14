@@ -595,21 +595,22 @@ class memberpage_model extends CI_Model
 		$sth->bindParam(':bank_id', $data['bank_id']);
 		$sth->bindParam(':bank_account_name', $data['bank_account_name']);
 		$sth->bindParam(':bank_account_number', $data['bank_account_number']);
-		$result = $sth->execute();
+		$sth->execute();
 		
-		return $result;
-
+		$id =  $this->db->conn_id->lastInsertId('id_billing_info');
+        return $id;
 	}
 	
 	function billing_info_update($data){
 
 		$query = "UPDATE `es_billing_info` SET `bank_id`=:bank_id,`bank_account_name`=:bank_account_name,`bank_account_number`=:bank_account_number,`datemodified` = NOW()
-				WHERE `id_billing_info` = :ibi";
+				WHERE `id_billing_info` = :ibi AND `member_id` = :member_id";
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':bank_id', $data['bank_id']);
 		$sth->bindParam(':bank_account_name', $data['bank_account_name']);
 		$sth->bindParam(':bank_account_number', $data['bank_account_number']);
 		$sth->bindParam(':ibi', $data['ibi']);
+        $sth->bindParam(':member_id', $data['member_id']);
 		$result = $sth->execute();
 		
 		return $result;

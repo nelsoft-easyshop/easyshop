@@ -1403,12 +1403,19 @@ class productUpload extends MY_Controller
 	}
     
     public function previewItem(){
-        $id = $this->input->post('p_id');
-        $product_row = $this->product_model->getProductPreview($id);
-        
+        if($this->input->post('p_id'))
+			$id = $this->input->post('p_id');
+		else
+			redirect('sell/step1', 'refresh'); 
+            
+        $memberId =  $this->session->userdata('member_id');
+        $product_row = $this->product_model->getProductPreview($id, $memberId);
+        if(empty($product_row)){
+            redirect('sell/step1', 'refresh');
+        }
         $quantities = $this->product_model->getProductQuantity($id);
         $availability = "varies";
-        
+ 
         foreach($quantities as $qty){
             if(count($qty['product_attribute_ids'])===1){
                 if(($qty['product_attribute_ids'][0]['id'] == 0)&&($qty['product_attribute_ids'][0]['is_other'] == 0)){
@@ -1420,6 +1427,8 @@ class productUpload extends MY_Controller
         $preview_data = array(
             'breadcrumbs' =>  $this->product_model->getParentId($product_row['cat_id']),
             'product' => $product_row,
+            'billing_info' => $this->product_model->getBillingInfo($memberId),
+            'bank_list' =>  $this->product_model->getAllBanks(),
             'main_categories' => $this->product_model->getFirstLevelNode(TRUE),
             'product_images' => $this->product_model->getProductImages($id),
             'product_options' => $this->product_model->getProductAttributes($id, 'NAME'),

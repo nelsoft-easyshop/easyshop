@@ -106,7 +106,7 @@
                         </tr>
                         <tr>
                             <td colspan="2" class="add_loc_con">
-                                <a href="javascript:void(0)" id="add_location" class="grey_btn">+ Add Location</a>
+                                <a href="javascript:void(0)" id="add_location" class="grey_btn">+ Add another location</a>
                             </td>
                         </tr>
                     </tbody>
@@ -297,11 +297,10 @@
 
     </div>
     <!-- End of Shipping Content -->
-    
-	 
-	 
+    	 
 	 <?php echo form_open('sell/step4', array('id'=>'step4_form'));?>
 		  <input type="hidden" name="prod_h_id" id="prod_h_id" value="<?php echo $product_id;?>">
+          <input type="hidden" name="prod_billing_id" id="prod_billing_id" value="">
 	 <?php echo form_close();?>
    </div> 
   </div>

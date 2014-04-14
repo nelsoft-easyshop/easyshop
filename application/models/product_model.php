@@ -173,10 +173,11 @@ class product_model extends CI_Model
 		return $row;
 	}
     
-    function getProductPreview($id){
+    function getProductPreview($id, $memberid){
         $query = $this->sqlmap->getFilenameID('product', 'getProductPreview');
         $sth = $this->db->conn_id->prepare($query);
         $sth->bindParam(':product_id',$id);
+        $sth->bindParam(':member_id',$memberid);
         $sth->execute();
 		$row = $sth->fetch(PDO::FETCH_ASSOC);
         return $row;
@@ -457,7 +458,7 @@ class product_model extends CI_Model
         $sth->bindParam(':brand_other_name',$other_brand_name);
         
 		$bool = $sth->execute();
-
+        
         if(!$bool){
             $errorInfo = $sth->errorInfo();
             log_message('error', 'PDO::ADD: 0=>'. $errorInfo[0]);
@@ -1577,6 +1578,23 @@ class product_model extends CI_Model
         }
         return $data;  
     }
+    
+    function getBillingInfo($data){
+		$query = $this->sqlmap->getFilenameID('product','getBillinginfo');
+		$sth = $this->db->conn_id->prepare($query);
+		$sth->bindParam(':member_id',$data);
+		$sth->execute();
+		$rows= $sth->fetchAll(PDO::FETCH_ASSOC);
+		return $rows;	
+	}
+        
+    function getAllBanks(){
+		$query = "SELECT * FROM es_bank_info";
+		$sth = $this->db->conn_id->prepare($query);
+		$sth->execute();
+		$rows= $sth->fetchAll(PDO::FETCH_ASSOC);
+		return $rows;	
+	}
         
     
 }
