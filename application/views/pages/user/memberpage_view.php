@@ -1421,7 +1421,7 @@
 			</div>
 			<div>
 				<label for="mobile_num">Mobile No:</label>
-				<input type="text" name="c_mobile" id="c_mobile" value="<?php echo $c_mobile?>">
+				<input maxlength="10" placeholder="eg. 9051235678" type="text" name="c_mobile" id="c_mobile" value="<?php echo $c_mobile?>">
 				<span class="red ci_form_validation_error"><?php echo form_error('c_mobile');?></span>
 			</div>
 			<div>
