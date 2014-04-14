@@ -109,7 +109,7 @@
         }else{ ?> <br /> <br />
       <!-- PAYPAL BUTTON -->
       <div class="paypal_button">
-      <a style="cursor:pointer" data-type="paypal" class="paypal">
+      <a style="cursor:pointer" data-type="1"  class="paypal">
         <img src="https://www.paypal.com/en_US/i/btn/btn_xpressCheckout.gif" alt="Paypap Express Checkout" align="left" style="margin-right:7px;">
         <span></span>
       </a>
@@ -264,15 +264,14 @@ $(document).ready(function(){
  <script type="text/javascript">
  
       $(document).on('click','.paypal',function () {
-        var action = "payment/paypal_setexpresscheckout";
-        var csrftoken = $('input[name="es_csrf_token"]').val();
+        var action = "payment/paypal_setexpresscheckout"; 
         var csrftoken = "<?php echo $my_csrf['csrf_hash'];?>";
-
+        var type = $(this).data('type');
         $.ajax({
             type: "POST",
             url: '<?php echo base_url();?>' + action, 
             dataType: "json",
-            data:   "es_csrf_token="+csrftoken, 
+            data:   "es_csrf_token="+csrftoken+"&paypal="+type, 
             beforeSend: function(jqxhr, settings) { 
               $('.paypal_loader').show();
               $('.paypal_button').hide();

@@ -27,7 +27,8 @@
 		:ip,
 		:member_id,
 		:string,
-		:product_count
+		:product_count,
+		:data_response
 	)
 </select>
 

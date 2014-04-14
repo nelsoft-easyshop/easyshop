@@ -22,7 +22,7 @@ class payment_model extends CI_Model
         
     }
 
-    function payment($invoice_no,$ItemTotalPrice,$ip,$member_id,$productstring,$productCount)
+    function payment($invoice_no,$ItemTotalPrice,$ip,$member_id,$productstring,$productCount,$apiResponse)
     {
         $query = $this->sqlmap->getFilenameID('payment','payment_transaction');
         $sth = $this->db->conn_id->prepare($query);
@@ -32,6 +32,7 @@ class payment_model extends CI_Model
         $sth->bindParam(':member_id',$member_id,PDO::PARAM_INT);
         $sth->bindParam(':string',$productstring,PDO::PARAM_STR);
         $sth->bindParam(':product_count',$productCount,PDO::PARAM_INT);
+        $sth->bindParam(':data_response',$apiResponse,PDO::PARAM_STR);
 
         $sth->execute();
        

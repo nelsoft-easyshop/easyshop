@@ -93,8 +93,7 @@ class Payment extends MY_Controller{
             $itemArray[$value['rowid']]['availability'] = ($availability == "Available" ? true : false);
             $itemArray[$value['rowid']]['seller_username'] = $seller['username'];
             // echo $name.' - '.$availability .'<br>';
-        } 
-        echo $data['shippingDetails'];
+        }  
         // echo '<pre>',print_r($itemArray);exit();
         if(!count($carts['choosen_items']) <=0){  
             $data['cat_item'] = $itemArray;
@@ -121,7 +120,7 @@ class Payment extends MY_Controller{
         $PayPalApiSignature     = $this->PayPalApiSignature;
         $PayPalCurrencyCode     = $this->PayPalCurrencyCode; 
         $PayPalReturnURL        = base_url().'payment/paypal'; 
-        $PayPalCancelURL        = base_url().'payment/shipping'; 
+        $PayPalCancelURL        = base_url().'payment/review'; 
 
         $tax_amt = 0;
         $shipping_amt = 0;    
@@ -130,9 +129,9 @@ class Payment extends MY_Controller{
         $insurance_amt = 0;
         $ItemTotalPrice = 0;
         $cnt = 0;
-        $solutionType = "Sole";
+        $solutionType = "Sole"; 
         $landingPage = "Billing";
-     
+        $paypalType = $this->input->post('paypal');
         $carts = $this->session->all_userdata();
         $dataitem = "";
 
@@ -161,10 +160,11 @@ class Payment extends MY_Controller{
         '&PAYMENTREQUEST_0_HANDLINGAMT='.urlencode($handling_amt).
         '&PAYMENTREQUEST_0_INSURANCEAMT='.urlencode($insurance_amt).
         '&PAYMENTREQUEST_0_SHIPDISCAMT=-'.urlencode($shipping_discount_amt).
-        '&PAYMENTREQUEST_0_AMT='.urlencode($grandTotal).
-        '&SOLUTIONTYPE='.urlencode($solutionType).
-        '&LANDINGPAGE='.urlencode($landingPage);
+        '&PAYMENTREQUEST_0_AMT='.urlencode($grandTotal);
 
+        if($paypalType == 2){
+           $padata .= '&SOLUTIONTYPE='.urlencode($solutionType).'&LANDINGPAGE='.urlencode($landingPage);
+        }
         $httpParsedResponseAr = $this->paypal->PPHttpPost('SetExpressCheckout', $padata, $PayPalApiUsername, $PayPalApiPassword, $PayPalApiSignature, $PayPalMode);
         $pdataarray = json_encode(explode('&',substr($padata, 1)));
 
@@ -192,8 +192,8 @@ function paypal(){
     $response['message_status'] = "";
     $response['message'] = "";
 
-    $firstResponse = "";
-    $secondResponse = "";
+    $apiResponseArray = array(); 
+    $apiResponse  = ""; 
     $tax_amt = 0;
     $shipping_amt = 0;    
     $handling_amt = 0;
@@ -203,8 +203,7 @@ function paypal(){
     $cnt = 0;
     $carts = $this->session->all_userdata();
     $member_id =  $this->session->userdata('member_id');
-    $productCount = count($carts['choosen_items']);
-
+    $productCount = count($carts['choosen_items']); 
     $invoice_no = date('Ymhs'); 
     $ip = $this->user_model->getRealIpAddr();   
     $productstring = ""; 
@@ -242,7 +241,7 @@ function paypal(){
             '&CURRENCYCODE='.urlencode($PayPalCurrencyCode);
 
             $httpParsedResponseAr = $this->paypal->PPHttpPost('DoExpressCheckoutPayment', $padata, $PayPalApiUsername, $PayPalApiPassword, $PayPalApiSignature, $PayPalMode);
-            $firstResponse = json_encode($httpParsedResponseAr);
+            $apiResponseArray['DoExpressCheckoutPayment'] = $httpParsedResponseAr;
 
             if("SUCCESS" == strtoupper($httpParsedResponseAr["ACK"]) || "SUCCESSWITHWARNING" == strtoupper($httpParsedResponseAr["ACK"])) 
             {
@@ -257,13 +256,11 @@ function paypal(){
                 $transactionID = urlencode($httpParsedResponseAr["TRANSACTIONID"]);
                 $nvpStr = "&TRANSACTIONID=".$transactionID;
                 $httpParsedResponseAr =  $this->paypal->PPHttpPost('GetTransactionDetails', $nvpStr, $PayPalApiUsername, $PayPalApiPassword, $PayPalApiSignature, $PayPalMode);
-                $secondResponse = json_encode($httpParsedResponseAr);
+                $apiResponseArray['GetTransactionDetails'] =  $httpParsedResponseAr;
 
                 if("SUCCESS" == strtoupper($httpParsedResponseAr["ACK"]) || "SUCCESSWITHWARNING" == strtoupper($httpParsedResponseAr["ACK"])) {
  
-                            // echo 'Query here<pre>';
-                            // echo '<pre>',print_r($httpParsedResponseAr),'</pre>';
- 
+                    # START SAVING TO DATABASE HERE
 
                     foreach ($carts['choosen_items'] as $key => $value) {
 
@@ -279,8 +276,12 @@ function paypal(){
                     }
 
                     $productstring = substr($productstring,4);
-                    $return = $this->payment_model->payment($invoice_no,$grandTotal,$ip,$member_id,$productstring,$productCount);
-                    
+                    $apiResponseArray['ProductData'] =  $carts['choosen_items'];
+
+                    // apiResponse 
+                    $apiResponse = json_encode($apiResponseArray);
+                    $return = $this->payment_model->payment($invoice_no,$grandTotal,$ip,$member_id,$productstring,$productCount,$apiResponse);
+
                     if($return['o_success'] <= 0){
                         $response['message'] = '<div style="color:red"><b>Error 3: </b>'.$return['o_message'].'</div>'; 
 
