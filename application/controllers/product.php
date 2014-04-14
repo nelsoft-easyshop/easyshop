@@ -27,8 +27,8 @@ class product extends MY_Controller
 		$filter = false;
 		$haveSort = false;
 		$sortString = "";
+		$tempcondition = "";
 		if(!count($_GET) <= 0){
-
 			foreach ($_GET as $key => $value) {
 
 				if($key == "Brand"){
@@ -78,7 +78,6 @@ class product extends MY_Controller
 				}else{
 
 					$dontGetBrand = true;
-					$tempcondition = "";
 					if(strpos($_GET[$key], '-|-') !== false) {
 
 						$var = explode('-|-',$_GET[$key]);
@@ -91,17 +90,19 @@ class product extends MY_Controller
 
 						$tempcondition .= " OR  ( `attr_name` = '".str_replace("_", " ", $key)."' AND attr_value = '$value' )";
 						$count++; 
-					}	
-					// $tempcondition = substr_replace($tempcondition,"AND",0,3); 					
-					$condition .= $tempcondition;
-
+					}			
+				
 				}
 			}
+			if($count > 0){
+				$tempcondition = substr_replace($tempcondition,"AND",0,3); 
+			}
+				$condition  = $tempcondition .' '. $condition;
+ 
 			if(!count($_GET) == 1 && $haveSort == false){
 				$condition = substr_replace($condition,"AND",0,3); 	
 			} 
-		} 
- 
+		}  
 		if($categoryId != 0){
 			if($checkifexistcategory != 0){
 				$downCategory = $this->product_model->selectChild($categoryId);
@@ -185,6 +186,8 @@ class product extends MY_Controller
 		$notIrrelivant = false;
 		$haveSort = false;
 		$sortString = "";
+		$tempcondition = "";
+
 		if(!count($get) <= 0){
 
 			foreach ($get as $key => $value) {
@@ -234,7 +237,6 @@ class product extends MY_Controller
 				}else{
 
 					$dontGetBrand = true;
-					$tempcondition = "";
 					if(strpos($get[$key], '-|-') !== false) {
 
 						$var = explode('-|-',$get[$key]);
@@ -248,11 +250,14 @@ class product extends MY_Controller
 						$tempcondition .= " OR  ( `attr_name` = '".str_replace("_", " ", $key)."' AND attr_value = '$value' )";
 						$count++; 
 					}	
-					// $tempcondition = substr_replace($tempcondition,"AND",0,3); 					
-					$condition .= $tempcondition;
+ 
 
 				}
 			}
+			if($count > 0){
+				$tempcondition = substr_replace($tempcondition,"AND",0,3); 
+			}
+			$condition  = $tempcondition .' '. $condition;
 			
 			if(!count($get) == 1 && $haveSort == false){
 				$condition = substr_replace($condition,"AND",0,3); 	
