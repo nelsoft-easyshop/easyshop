@@ -52,7 +52,8 @@ class Payment extends MY_Controller{
         $member_id =  $this->session->userdata('member_id');
         $address = $this->memberpage_model->get_member_by_id($member_id);
  
-        $city = $address['c_cityID']; #Caloocan 
+        // $city = $address['c_cityID']; #Caloocan 
+        $city = ($address['c_cityID'] == "" ? $address['c_cityID'] :  0);
         $itemCount = count($itemArray);
         $successcount = 0;
 
@@ -68,23 +69,26 @@ class Payment extends MY_Controller{
             $locationType = $details['type'];
             $locationName = $details['location'];
             $locationId = $details['id_location'];
+            $data['shippingDetails'] = false;
+            if($city > 0){
+                if($locationType == '1'){ # if LUZON, VISAYAS OR MINDANAO
+                    $region = $this->payment_model->getRegionOrMajorIsland($city,3);
+                    $majorIsland = $this->payment_model->getRegionOrMajorIsland($region,2);
+                    $availability = ($locationId == $majorIsland ? "Available" : "Not Available");
+                    $successcount = ($availability == "Available" ? $successcount + 1 : $successcount + 0);
 
-            if($locationType == '1'){ # if LUZON, VISAYAS OR MINDANAO
+                }elseif($locationType == '2') { # if REGION
+                    $cityList = $this->payment_model->getCityFromRegion($locationId);
+                    $availability = (in_array($city, $cityList) ? "Available" : "Not Available");
+                    $successcount = ($availability == "Available" ? $successcount + 1 : $successcount + 0);
 
-                $region = $this->payment_model->getRegionOrMajorIsland($city,3);
-                $majorIsland = $this->payment_model->getRegionOrMajorIsland($region,2);
-                $availability = ($locationId == $majorIsland ? "Available" : "Not Available");
-                $successcount = ($availability == "Available" ? $successcount + 1 : $successcount + 0);
+                }else{ # if CITY
+                    $availability = ($locationId == $city ? "Available" : "Not Available");
+                    $successcount = ($availability == "Available" ? $successcount + 1 : $successcount + 0);
+                }
+                $data['shippingDetails'] = true;
+            } 
 
-            }elseif($locationType == '2') { # if REGION
-                $cityList = $this->payment_model->getCityFromRegion($locationId);
-                $availability = (in_array($city, $cityList) ? "Available" : "Not Available");
-                $successcount = ($availability == "Available" ? $successcount + 1 : $successcount + 0);
-
-            }else{ # if CITY
-                $availability = ($locationId == $city ? "Available" : "Not Available");
-                $successcount = ($availability == "Available" ? $successcount + 1 : $successcount + 0);
-            }
             $itemArray[$value['rowid']]['availability'] = ($availability == "Available" ? true : false);
             $itemArray[$value['rowid']]['seller_username'] = $seller['username'];
             // echo $name.' - '.$availability .'<br>';

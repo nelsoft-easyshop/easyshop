@@ -21,15 +21,28 @@
 <section>
   <div class="wrapper">
     <h2 class="checkout_title">Payment</h2>
-
-    <div>
-      <div><b><?php echo ucwords(strtolower($consignee));?></b></div>
-      <div> <?php echo ucwords(strtolower($c_address));?></div>
-      <div><?php echo ucwords(strtolower($c_city));?></div>
-      <div> <?php echo ucwords(strtolower($country_name));?></div>
-      <div> <?php echo ucwords(strtolower($c_mobile));?></div>
-      <div> <?php echo ucwords(strtolower($c_telephone));?></div>
-    </div>
+<?php
+    if($shippingDetails == true){
+?>
+        <div>
+          <div><b><?php echo ucwords(strtolower($consignee));?></b></div>
+          <div> <?php echo ucwords(strtolower($c_address));?></div>
+          <div><?php echo ucwords(strtolower($c_city));?></div>
+          <div> <?php echo ucwords(strtolower($country_name));?></div>
+          <div> <?php echo ucwords(strtolower($c_mobile));?></div>
+          <div> <?php echo ucwords(strtolower($c_telephone));?></div>
+        </div>
+<?php
+    }else{
+?>
+        <div>
+          <div>
+            <span style="color:red">PLEASE CHANGE YOU SHIPPING ADDRESS!</span>
+          </div>
+        </div>
+<?php
+    }
+?>
 [ <a style="color:#0654BA;"  href="javascript:void(0);"  class="link_address">Change Shipping Address</a> ]
 <hr>
     <div class="payment_wrapper">
