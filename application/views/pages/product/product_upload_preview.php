@@ -3,8 +3,8 @@
 
 <div  style="position:relative; height:400px">
 
-    <div>
-        <strong> How am I going to be paid </strong> <br/>
+    <div class="paid_section_container">
+        <h3 class="orange">How am I going to be paid</h3> 
         <label for="deposit_info">Deposit to: </label>
         <select id="deposit_info">
             <?php foreach($billing_info as $x): ?>
@@ -30,7 +30,7 @@
         <input type="hidden" id="billing_info_id" value="<?php echo isset($billing_info[0]['id_billing_info'])?$billing_info[0]['id_billing_info']:'0'; ?>"/>
         
          <?php if(count($billing_info) > 0): ?>
-            <span class="deposit_edit">Edit</span>
+            <span class="deposit_edit"><span class="span_bg"></span>Edit</span>
             <span class="deposit_save" style="display:none">Save</span>
          <?php else: ?>
             <span class="deposit_edit" style="display:none">Edit</span>
@@ -47,7 +47,7 @@
         <input type="hidden" id="temp_bank_name" value=""/>
         <input type="hidden" id="preview_csrf" name="<?php echo $my_csrf['csrf_name'];?>" value="<?php echo $my_csrf['csrf_hash'];?>">
     </div>
-    <strong>Product Preview</strong>
+    <h3 class="orange" style="padding:8px 0px;">Product Preview</h3>
     <div style="max-height:100%;overflow-y:auto;border:1px solid #f48000;">
         <div class="clear"></div>
         <section class="top_margin">
