@@ -350,7 +350,7 @@ $(function(){
                 
                 $('#previewProduct').dialog({
                     width: 1100,
-                    height: 450,
+                    height: 500,
                     autoOpen: false,
                     title: "Review your listing",
                     modal: true,
@@ -368,7 +368,50 @@ $(function(){
                             text: "Finish",
                             "class": 'orange_btn_preview',
                             click: function() {
-                                $('#step4_form').submit();
+                                
+                                var account_name = $('#deposit_acct_name').val();
+                                var bank_name = $('#bank_name').val();
+                                var account_no = $('#deposit_acct_no').val();
+                                var bank_list = $('#bank_list').val();
+                                var prod_billing_id = $('#prod_billing_id').val();
+                                
+                                var valid = true;
+                            
+                                if($.trim(account_name) === ''){
+                                    validateRedTextBox('#deposit_acct_name');
+                                    valid = false;
+                                }
+                                if($.trim(account_no) === ''){
+                                    validateRedTextBox('#deposit_acct_no');
+                                    valid = false;
+                                }
+                                if(parseInt(bank_list,10) === 0){
+                                    validateRedTextBox('#bank_list');
+                                    valid = false;
+                                }
+                                if(!valid){
+                                    return false;
+                                }
+                                if(parseInt(prod_billing_id,10) === 0){
+                                    jQuery.ajax({
+                                    type: "POST",
+                                    url: config.base_url + 'memberpage/billing_info', 
+                                    data: "express=true&bi_payment_type=Bank&bi_bank="+bank_list+"&bi_acct_no="+account_no+"&bi_acct_name="+account_name+"&es_csrf_token="+csrftoken, 
+                                    success: function(response) {
+                                            if(!response){
+                                                alert('We are having a problem right now. Refresh the page to try again.');
+                                            }
+                                            else{
+                                                var new_id = parseInt(response,10);
+                                                $('#prod_billing_id').val(new_id);
+                                                $('#step4_form').submit();
+                                            }
+                                        }
+                                    });
+                                }
+                                else{
+                                    $('#step4_form').submit();
+                                }
                             }
                         },
                     ],
@@ -589,7 +632,10 @@ $(function(){
 		}
 	}
   
-
+    
+    
+    
+    
 });
 /********** CLOSE DOCUMENT READY FUNCTION WITH DATA variables *********/
 
@@ -647,6 +693,21 @@ n[0] = n[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 return n.join(".");
 }
 
+
+function validateRedTextBox(idclass)
+{
+  $(idclass).css({"-webkit-box-shadow": "0px 0px 2px 2px #FF0000",
+    "-moz-box-shadow": "0px 0px 2px 2px #FF0000",
+    "box-shadow": "0px 0px 2px 2px #FF0000"});
+} 
+
+function validateWhiteTextBox(idclass)
+{
+  $(idclass).css({"-webkit-box-shadow": "0px 0px 2px 2px #FFFFFF",
+    "-moz-box-shadow": "0px 0px 2px 2px #FFFFFF",
+    "box-shadow": "0px 0px 2px 2px #FFFFFF"});
+}
+    
 $(function(){
     $('#step2_link').on('click', function(){
         $('#edit_step2').submit();
@@ -658,19 +719,7 @@ $(function(){
 });
 
 $(document).ready(function(){
-    function validateRedTextBox(idclass)
-    {
-      $(idclass).css({"-webkit-box-shadow": "0px 0px 2px 2px #FF0000",
-        "-moz-box-shadow": "0px 0px 2px 2px #FF0000",
-        "box-shadow": "0px 0px 2px 2px #FF0000"});
-    } 
-    
-    function validateWhiteTextBox(idclass)
-    {
-      $(idclass).css({"-webkit-box-shadow": "0px 0px 2px 2px #FFFFFF",
-        "-moz-box-shadow": "0px 0px 2px 2px #FFFFFF",
-        "box-shadow": "0px 0px 2px 2px #FFFFFF"});
-    }
+
     
     $('#previewProduct').on('click', '.deposit_edit', function(){
         $('#temp_deposit_acct_name').val($('#deposit_acct_name').val());
@@ -837,6 +886,7 @@ $(document).ready(function(){
             $('#deposit_acct_no').val('');
             $('#deposit_acct_no').attr('readonly', false);
             $('#billing_info_id').val(0);
+            $('#prod_billing_id').val(0);
             $('#bank_name').val('');
             var default_option = $('#bank_list').find('option[value = "0"]');
             default_option.prop('selected', true);
