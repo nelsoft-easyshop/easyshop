@@ -776,6 +776,8 @@ $(document).ready(function(){
                     new_option.text('Bank: '+bank_name+' - '+ account_name);
                     new_option.val(parseInt(response,10));
                     new_option.insertBefore($('#deposit_info').find(':selected'));
+                    $('#deposit_info').find(':selected').prop('selected', false);
+                    $('#deposit_info').find('option[value = "'+parseInt(response,10)+'"]').prop('selected', true);
                 }
             }
         });
@@ -783,6 +785,7 @@ $(document).ready(function(){
         $('#deposit_acct_no').attr('readonly', true);
         $('#bank_list').attr('disabled', true);
         $('.deposit_edit').show();
+        $('.deposit_save').hide();
         $('.deposit_update').hide();
         $('.deposit_cancel').hide();
     });

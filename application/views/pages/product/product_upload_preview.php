@@ -12,10 +12,10 @@
             <?php endforeach; ?>
             <option value="0">ADD NEW PAYMENT ACCOUNT</option>
         </select><br/><br/>
-        <label>Account name: </label><input name="deposit_acct_name" id="deposit_acct_name" type ="text" value="<?php echo isset($billing_info[0]['bank_account_name'])?$billing_info[0]['bank_account_name']:''; ?>" readonly/>
-        <label>Account number:</label><input name="deposit_acct_no" id="deposit_acct_no" type ="text" value="<?php echo isset($billing_info[0]['bank_account_number'])?$billing_info[0]['bank_account_number']:''; ?>" readonly/>
+        <label>Account name: </label><input name="deposit_acct_name" id="deposit_acct_name" type ="text" value="<?php echo isset($billing_info[0]['bank_account_name'])?$billing_info[0]['bank_account_name']:''; ?>"  <?php echo isset($billing_info[0]['bank_account_name'])?'readonly':''; ?>/>
+        <label>Account number:</label><input name="deposit_acct_no" id="deposit_acct_no" type ="text" value="<?php echo isset($billing_info[0]['bank_account_number'])?$billing_info[0]['bank_account_number']:''; ?>" <?php echo isset($billing_info[0]['bank_account_number'])?'readonly':''; ?>/>
         <label>Bank:</label>
-        <select id="bank_list" disabled>
+        <select id="bank_list" <?php echo (isset($billing_info[0]['bank_id']))?'disabled':'';?>>
             <option value="0">Please select a bank</option>
             <?php foreach($bank_list as $x): ?>
                 <?php if(isset($billing_info[0]['bank_id'])): ?>
@@ -29,10 +29,17 @@
         <input type="hidden" id="bank_name" value="<?php echo isset($billing_info[0]['bank_name'])?$billing_info[0]['bank_name']:''; ?>"/>
         <input type="hidden" id="billing_info_id" value="<?php echo isset($billing_info[0]['id_billing_info'])?$billing_info[0]['id_billing_info']:'0'; ?>"/>
         
-        <span class="deposit_edit">Edit</span>
+         <?php if(count($billing_info) > 0): ?>
+            <span class="deposit_edit">Edit</span>
+            <span class="deposit_save" style="display:none">Save</span>
+         <?php else: ?>
+            <span class="deposit_edit" style="display:none">Edit</span>
+            <span class="deposit_save">Save</span>
+         <?php endif; ?>
+        
         <span class="deposit_update" style="display:none">Update</span>
         <span class="deposit_cancel" style="display:none">Cancel</span>
-        <span class="deposit_save" style="display:none">Save</span>
+       
 
         <input type="hidden" id="temp_deposit_acct_name" value=""/>
         <input type="hidden" id="temp_deposit_acct_no" value=""/>
