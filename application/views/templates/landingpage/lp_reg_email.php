@@ -44,8 +44,8 @@
 			</tr>
 			<tr>
 				<td style="background-color: #ffffff; padding: 30px 20px; width: 600px;">
-					<h2 class="intro" style="margin-bottom: 30px; font-size: 20px~; color: #003E91;">Greetings Mr. Jack Sparrow,</h2>
-					<p style="font-family: Helvetica, sans-serif; font-size: 16px;">Welcome to <a href="#">client.com</a> you have successfully registered</p>
+					<h2 class="intro" style="margin-bottom: 30px; font-size: 20px~; color: #003E91;">Greetings {user},</h2>
+					<p style="font-family: Helvetica, sans-serif; font-size: 16px;">Thank you for registering to <a href="#">Easyshop.ph</a>!</p>
 					<p style="font-family: Helvetica, sans-serif; font-size: 16px;">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatum, repellen obcaecati officia inventore molestias delectus aspernatur incidunt laboriosam dolor quod explicabo provident culpa!</p>
 				</td>
 			</tr>
