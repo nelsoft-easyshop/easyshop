@@ -21,8 +21,8 @@
                     <p class="text-center">MADE <span>EASY</span></p>
                
                    <p class="text-center header_sub">
-                    Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut
-                    </p>
+                        Enjoy the benefits of one-stop shopping at the comforts of your own home.
+                   </p>
                
             </div>
         </div>
@@ -155,23 +155,22 @@
                                 <div class="span4">
                                     <img src="<?=base_url()?>assets/images/landingpage/img_online_shopping.png"><br>
                                     <span class="spn18"><b>Online Shopping</b></span><br>
-                                    <span class="help-block spnmsg">Lorem ipsum dolor sit amet, consectetuer adipiscing elit, <br>
-                                    sed diam nonummy nibh euismod tincidunt ut laoreet dolore<br>
-                                    magna aliquam erat volutpat. Ut wisi enim ad minim veniam</span>
+                                    <span class="help-block spnmsg"> Easyshop is a place where online buyers and sellers engage with each other.
+                                    We provide our users with a fast and easy online shopping experience, letting you enjoy the benefits of one-stop shopping at the comforts of your own home.
+                                    </span>
                                 </div>
                                 <div class="span4">
                                     <img src="<?=base_url()?>assets/images/landingpage/img_paperless_payment.png"><br>
                                     <span class="spn18"><b>Paperless Payment</b></span>
-                                    <span class="help-block spnmsg">Lorem ipsum dolor sit amet, consectetuer adipiscing elit, <br>
-                                    sed diam nonummy nibh euismod tincidunt ut laoreet dolore<br>
-                                    magna aliquam erat volutpat. Ut wisi enim ad minim veniam</span>
+                                    <span class="help-block spnmsg">
+                                        Pay through secure and trusted payment channels and carry out your transactions safely and easily.
+                                        Easyshop aims to provide you with flexible payment options in order to simplify your shopping and selling experience. 
+                                    </span>
                                 </div>
                                 <div class="span4">
                                     <img src="<?=base_url()?>assets/images/landingpage/img_shipping_delivery.png"><br>
                                     <span class="spn18"><b>Item Delivery</b></span>
-                                    <span class="help-block spnmsg">Lorem ipsum dolor sit amet, consectetuer adipiscing elit, <br>
-                                    sed diam nonummy nibh euismod tincidunt ut laoreet dolore<br>
-                                    magna aliquam erat volutpat. Ut wisi enim ad minim veniam</span>
+                                    <span class="help-block spnmsg">Easyshop delivery reaches Metro Manila, Luzon, Visayas, and Mindanao.  The country-wide approach is aimed at providing customers a variety of goods on the Internet. </span>
                                 </div>
                             </div>
                         </div>
