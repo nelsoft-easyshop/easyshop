@@ -12,17 +12,22 @@
             <?php endforeach; ?>
             <option value="0">ADD NEW PAYMENT ACCOUNT</option>
         </select><br/><br/>
-        <label>Account name: </label><input name="deposit_acct_name" id="deposit_acct_name" type ="text" value="<?php echo $billing_info[0]['bank_account_name']; ?>" readonly/>
-        <label>Account number:</label><input name="deposit_acct_no" id="deposit_acct_no" type ="text" value="<?php echo $billing_info[0]['bank_account_number']; ?>" readonly/>
+        <label>Account name: </label><input name="deposit_acct_name" id="deposit_acct_name" type ="text" value="<?php echo isset($billing_info[0]['bank_account_name'])?$billing_info[0]['bank_account_name']:''; ?>" readonly/>
+        <label>Account number:</label><input name="deposit_acct_no" id="deposit_acct_no" type ="text" value="<?php echo isset($billing_info[0]['bank_account_number'])?$billing_info[0]['bank_account_number']:''; ?>" readonly/>
         <label>Bank:</label>
         <select id="bank_list" disabled>
             <option value="0">Please select a bank</option>
             <?php foreach($bank_list as $x): ?>
-                <option value="<?php echo $x['id_bank'];?>" <?php echo (intval($x['id_bank'],10) === intval($billing_info[0]['bank_id'],10))?'selected':'';?>><?php echo $x['bank_name']; ?></option>
+                <?php if(isset($billing_info[0]['bank_id'])): ?>
+                    <option value="<?php echo $x['id_bank'];?>" <?php echo (intval($x['id_bank'],10) === intval($billing_info[0]['bank_id'],10))?'selected':'';?>><?php echo $x['bank_name']; ?></option>
+                <?php else: ?>
+                    <option value="<?php echo $x['id_bank'];?>" ><?php echo $x['bank_name']; ?></option>
+                <?php endif; ?>
+               
             <?php endforeach; ?>
         </select>
-        <input type="hidden" id="bank_name" value="<?php echo $billing_info[0]['bank_name']; ?>"/>
-        <input type="hidden" id="billing_info_id" value="<?php echo $billing_info[0]['id_billing_info']; ?>"/>
+        <input type="hidden" id="bank_name" value="<?php echo isset($billing_info[0]['bank_name'])?$billing_info[0]['bank_name']:''; ?>"/>
+        <input type="hidden" id="billing_info_id" value="<?php echo isset($billing_info[0]['id_billing_info'])?$billing_info[0]['id_billing_info']:'0'; ?>"/>
         
         <span class="deposit_edit">Edit</span>
         <span class="deposit_update" style="display:none">Update</span>
