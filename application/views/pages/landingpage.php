@@ -22,7 +22,7 @@
                
                    <p class="text-center header_sub hs_top">
                        Enjoy the benefits of one-stop shopping at the comforts of your own home
-                        as we help you carry out your transactions hassle-free and risk-free.
+                       as we help you carry out your transactions hassle-free and risk-free.
                    </p>
                
             </div>
@@ -168,11 +168,6 @@
 		
 		<div id="register_result" style="display:none;">
 			<span id="result_desc"></span>
-			 <a id="fb_share" href="https://www.facebook.com/sharer/sharer.php?s=100
-			 &amp;p[url]=https://staging.easyshop.ph
-			 &amp;p[images][0]=https://staging.easyshop.ph/assets/images/img_logo.png
-			 &amp;p[title]=Easyshop.ph
-			 &amp;p[summary]=asds." target="_blank">Share on Facebook</a>
 		</div>
 		
         <div class = "footer">
@@ -188,6 +183,7 @@
                                     <span class="help-block spnmsg content2_sub">   
                                     	We provide our users with a fast and easy online shopping experience, 
                                     	letting them enjoy the benefits of one-stop shopping at the comforts of their own home.
+                                     
                                     </span>
                                 </div>
                                 <div class="span4 text-center">
@@ -205,7 +201,7 @@
                                     <span class="help-block spnmsg content2_sub">
                                     	Easyshop provides a secure platform by which users can carry out their transactions. 
                              			Our business model ensures that deals between merchants and sellers are done with very little risk.
-                         			</span>
+                                    </span>
                                 </div>
                             </div>
                         </div>
@@ -219,6 +215,14 @@
             </div>
         </div>
     </body>
+    
+   	 <?php echo form_open('registration/success', array('id'=>'success_register'));?>
+		  <input type="hidden" name="referrer" class="referrer" value="landingpage"/>
+	 <?php echo form_close();?>
+     
+     <?php echo form_open('subscription/success', array('id'=>'success_subscribe'));?>
+		  <input type="hidden" name="referrer" class="referrer" value="landingpage"/>
+	 <?php echo form_close();?>
 
 	<script>
 		var config = {

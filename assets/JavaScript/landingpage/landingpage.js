@@ -211,7 +211,7 @@ $(document).ready(function(){
 							$(this).prop('value', '');
 						});
                         
-                        window.location.replace(config.base_url + 'registration/success');
+                        $('#success_register').submit();
 					}
 					else{
 						$('#result_desc').html(serverResponse['error']);
@@ -328,7 +328,7 @@ $(document).ready(function(){
 					$(form).find('input[type="text"]').each(function(){
 						$(this).prop('value', '');
 					});
-                    window.location.replace(config.base_url + 'subscription/success');
+                     $('#success_subscribe').submit();
 				}
 				else{
 					$('#result_desc').html("We are currently encountering a problem. Please try again later.");
