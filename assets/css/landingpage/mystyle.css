@@ -166,7 +166,7 @@ input.error + span.error {
     margin-top: 75px;
     margin-left:auto;
     margin-right: auto;
-    width: 90%;
+    width: 70%;
 }
 .spn18{
     display: block;
@@ -205,6 +205,10 @@ input.error + span.error {
 .help-block ,.spnmsg{
     font-size: 12px;
     line-height: 12px;
+}
+
+.content2_sub {
+    font-size: 0.24em;
 }
 
 .cotent2_title {
@@ -402,7 +406,7 @@ input.error + span.error {
     width: 100%;
 }
 .footer .help-block ,.spnmsg{
-    line-height: 20px;
+    line-height: 24px;
     text-align: justify;
 }
 
