@@ -193,7 +193,7 @@
                    <?php if($shipping_summary['has_shippingsummary']):?>
                       <?php foreach($attr["attributes"] as $attk=>$temp): ?>
                       <tr class="tr_shipping_summary" data-group="<?php echo $datagroupcounter;?>">
-                          <td class="prod_att_pad">
+                          <td class="prod_att_pad" valign="top">
                             <?php if($attr['has_attr'] == 1):?>
                               <?php foreach($temp as $att):?>
                                 <p><?php echo $att;?></p>
@@ -315,7 +315,7 @@
 <script type="text/javascript" src="<?=base_url()?>assets/JavaScript/js/jquery.numeric.js"></script>
 <script type="text/javascript">
   if ($('table.shipping_prod_attr_comb').length) {
-    $('.shipping_list_items_con').css('height','807px');
+    $('.shipping_list_items_con').addClass('prod_att_comb_no_select');
    }
 
    $(".product_combination").each(function() {
