@@ -110,7 +110,7 @@ $(function(){
 		});
 	}
 	else if(hasAttr === 0){
-		shipObj.attr[prdItemId] = 'All Attribute Combinations';
+		shipObj.attr[prdItemId] = 'All Combinations';
 		shipObj.disp_attr[prdItemId] = prdItemId.toString();
 		hasActive = true;
 	}

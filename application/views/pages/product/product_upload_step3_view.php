@@ -129,7 +129,7 @@
                         <tr>
                           <td class="border-right border-bottom set_price_error2" height="50px">
                             <div style="color:red;<?php echo $inc_location ? '' : 'display:none;'?>" id="div_locationwarning">
-                              Warning: Your shipping location selection does not cover the whole
+                              Warning: Your shipping location selection does not cover the entire
                               <span id="location_warning">
                                 <?php echo $inc_location ? $inc_locationmsg : '';?>
                               </span>
@@ -180,7 +180,7 @@
           <table class="" cellspacing="0" cellpadding="0">
                <thead>
                     <tr>
-                      <td width="128px" class="f12">Product Attribute Combinations</td>
+                      <td width="128px" class="f12">Attribute Combinations</td>
                       <td width="80px"><span class="f12">Location</span></td>
                       <td width="257px"><span class="f12">Price</span></td>     
                     </tr>
@@ -199,7 +199,7 @@
                                 <p><?php echo $att;?></p>
                               <?php endforeach;?>
                             <?php else:?>
-                                <p>All Attribute Combinations</p>
+                                <p>All Combinations</p>
                             <?php endif;?>
                           </td>
                           <td width="230px" valign="top">
