@@ -22,7 +22,7 @@
                
                    <p class="text-center header_sub hs_top">
                        Enjoy the benefits of one-stop shopping at the comforts of your own home
-                       as we help you carry out your transactions hassle-free and risk-free.
+                       as we help you carry out your transactions conveniently and risk-free
                    </p>
                
             </div>
