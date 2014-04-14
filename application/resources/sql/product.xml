@@ -563,9 +563,7 @@ FROM
          LEFT JOIN es_product_review r ON p.`id_product` = r.`product_id` AND r.`is_show` = 1 
          LEFT JOIN es_product_image i ON i.`product_id` = p.`id_product` AND i.`is_primary` = 1 
          LEFT JOIN es_product_item pi ON pi.`product_id` = p.`id_product`
-         
-         LEFT JOIN es_order_product op on op.`product_id` = p.`id_product` AND status <> 2
-         
+         LEFT JOIN es_order_product op on op.`product_id` = p.`id_product` AND status != 2
          WHERE p.member_id = :id AND p.is_draft = 0
          GROUP BY p.`id_product`, p.`name`, p.`brief`, p.`price`, p.`member_id`, i.product_image_path, p.`is_delete`,p.`cat_id`,p.lastmodifieddate 
          ORDER BY p.lastmodifieddate DESC 
