@@ -876,8 +876,8 @@ FROM
         UPDATE `es_product` SET is_delete = :is_delete where member_id = :memberid AND id_product = :productid
 </select>
 
-<select id="updateIsDraft">
-        UPDATE `es_product` SET is_draft = :is_draft where member_id = :memberid AND id_product = :productid
+<select id="finalizeProduct">
+        UPDATE `es_product` SET is_draft = 0, billing_info_id = :billing_id  where member_id = :memberid AND id_product = :productid
 </select>
 
 

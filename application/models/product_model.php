@@ -938,16 +938,20 @@ class product_model extends CI_Model
 		$sth->execute();
 	}
     
-	function updateIsDraft($productid, $memberid,$is_draft){
-		$query = $this->sqlmap->getFIlenameID('product', 'updateIsDraft');
+     
+	function finalizeProduct($productid, $memberid,$billing_id){
+		$query = $this->sqlmap->getFIlenameID('product', 'finalizeProduct');
 
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':productid',$productid,PDO::PARAM_INT);
 		$sth->bindParam(':memberid',$memberid,PDO::PARAM_INT);
-        $sth->bindParam(':is_draft', $is_draft,PDO::PARAM_INT);
+        $sth->bindParam(':billing_id', $billing_id,PDO::PARAM_INT);
         
         $sth->execute();
 	}
+    
+    
+    
 
 	function checkifexistcategory($cat_id)
 	{

@@ -774,13 +774,17 @@ class productUpload extends MY_Controller
 		$data = $this->fill_view();
 		$this->load->view('templates/header', $data); 
         $memberId =  $this->session->userdata('member_id');
-		if(isset($_POST['prod_h_id'])){
+		if(isset($_POST['prod_h_id'])&&isset($_POST['prod_billing_id'])){
+            $billing_id = $_POST['prod_billing_id']; 
+            if(intval($billing_id,10) === 0){
+                redirect('/sell/step1/', 'refresh');
+            }
 			$response['id'] = $_POST['prod_h_id'];
-            $this->product_model->updateIsDraft($response['id'] , $memberId,0);
+            $this->product_model->finalizeProduct($response['id'] , $memberId, $billing_id);
 			$this->load->view('pages/product/product_upload_step4_view',$response);
 			$this->load->view('templates/footer'); 
 		}else{
-			redirect('/sell/step1/', 'refresh');
+            redirect('/sell/step1/', 'refresh');
 		}
 	}
 	

@@ -300,7 +300,7 @@
     	 
 	 <?php echo form_open('sell/step4', array('id'=>'step4_form'));?>
 		  <input type="hidden" name="prod_h_id" id="prod_h_id" value="<?php echo $product_id;?>">
-          <input type="hidden" name="prod_billing_id" id="prod_billing_id" value="">
+          <input type="hidden" name="prod_billing_id" id="prod_billing_id" value="0">
 	 <?php echo form_close();?>
    </div> 
   </div>
