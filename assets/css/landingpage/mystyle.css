@@ -1,7 +1,14 @@
+/******* font face *********/
+/*@import url(https://fonts.googleapis.com/css?family=Didact+Gothic);*/
+/*@import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300,300italic,600);*/
+@import url(http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300);
+/********************************/
+
 body {    
     font-size: 70px;
     color: #494949;
-    font-family: century gothic;
+    /*font-family: 'Didact Gothic', sans-serif;*/
+    font-family: 'Source Sans Pro', sans-serif;
 }
 
 .header_bg{
@@ -150,13 +157,22 @@ input.error + span.error {
 }
 
 .header_sub {
-    font-size: 0.27em;
+    font-size: 0.34em;
+    line-height: 30px;
 }
 
+.hs_top {
+    margin-bottom: 30px;
+    margin-top: 75px;
+    margin-left:auto;
+    margin-right: auto;
+    width: 90%;
+}
 .spn18{
+    display: block;
     font-size: 18px;
     line-height: 18px;
-    
+    padding: 8px 0;
 }
 
 .input-append input[name="subscribe_btn"] {
@@ -178,21 +194,25 @@ input.error + span.error {
     padding-bottom: 30px;
 }
 
-    .content1_con p.border1 {
+.content1_con p.border1 {
         width: 95%;
-    }
+}
+
+.help-block.spnmsg.text-center {
+    text-align: center;
+}
 
 .help-block ,.spnmsg{
     font-size: 12px;
     line-height: 12px;
 }
 
-.help-block {
-    line-height: 24px;
+.cotent2_title {
+    text-align: center;
 }
 
-.spnmsg {
-    text-align: center;
+.help-block {
+    line-height: 24px;
 }
 
 #register_result {
@@ -290,8 +310,14 @@ input.error + span.error {
     cursor:pointer;
 }
 
+
+
 .t_and_c {
-    font-size: 12px;
+    font-size: 13px !important;
+}
+
+.t_and_c h3 {
+    font-size: 16px;
 }
 
 .dialog {
@@ -326,6 +352,10 @@ input.error + span.error {
 
 .orange {
     color: #f2ec04;
+}
+
+.footer2 span {
+    text-align: center;
 }
 
 @media screen and (-webkit-min-device-pixel-ratio:0) { 
@@ -373,10 +403,14 @@ input.error + span.error {
 }
 .footer .help-block ,.spnmsg{
     line-height: 20px;
+    text-align: justify;
 }
+
 .footer img{
     margin-bottom: 20px;
 }
+
+
 }
 
 @media (max-width: 837px) {
@@ -414,6 +448,10 @@ input.error + span.error {
     padding-bottom: 50px;
   }
 
+  .content2_sub {
+    text-align: justify;
+    }
+
 }
 
 @media (max-width: 767px) {
@@ -431,6 +469,9 @@ input.error + span.error {
     .t_and_c h3 {
         font-size: 16px;
     }
+      .content2_sub {
+        padding:0px 10px;
+    }
 }
 
 
@@ -444,14 +485,14 @@ input.error + span.error {
     h4 {
         font-size: 15.5px;
     }
-    .header_bg p {
-        font-size: 0.47em;
+    .txt_header {
+        font-size: 0.54em;
     }
     p.txt_success {
         font-size: 0.20em;
     }
 
-    .header_bg p:last-child {
+    .hs_top {
         font-size: 0.27em;
     }
     .subscribe_input {
@@ -509,10 +550,18 @@ input.error + span.error {
     }
 
     .t_and_c h3 {
-        font-size: 14px;
+        font-size: 11px;
+    }
+
+    .t_and_c p {
+        font-size: 10px;
     }
 
     .img_social_media img {
         width: 52px;
+    }
+
+    .content_header {
+        font-size: 0.54em;
     }
 }
