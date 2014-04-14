@@ -752,6 +752,7 @@ class product_model extends CI_Model
 		$sth->bindParam(':review',$review); 
 
 		$sth->execute();
+		print_r($sth->errorInfo());
 	}
 
 
