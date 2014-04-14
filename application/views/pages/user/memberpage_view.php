@@ -290,8 +290,8 @@
 		</div>
 		<div class="price_container" data-prodprice="<?php echo $active_product['price'];?>">
 			<p><span class="fm1 f24 orange">Php <?php echo number_format($active_product['price'],2,'.',',');?></span><br />Price</p>
-			<p><span class="fm1 f24 grn">xx</span><br />Sold Items</p>
-			<p><span class="fm1 f24">xx</span><br />Available Stock</p>
+			<p><span class="fm1 f24 grn"><?php echo $active_product['sold'];?></span><br />Sold Items</p>
+			<p><span class="fm1 f24"><?php echo $active_product['availability'];?></span><br />Available Stock</p>
 		</div>
 		<p><strong>Description:</strong><br />
 			<span class="item_prod_desc_content">
@@ -406,8 +406,8 @@
 				<br />Price
 			</p>
 			<p>
-				<span class="fm1 f24">xx</span><br />
-				Available Stock
+                <p><span class="fm1 f24 grn"><?php echo $deleted_product['sold'];?></span><br />Sold Items</p>
+                <p><span class="fm1 f24"><?php echo $deleted_product['availability'];?></span><br />Available Stock</p>
 			</p>
 		</div>
 		<p><strong>Description:</strong><br />
@@ -1633,7 +1633,8 @@
 <?php endif; ?>
 </div>
 
-<div id="sold" class="transactions-sell dashboard_table">
+<div id="
+" class="transactions-sell dashboard_table">
 	<?php if(count($transaction['sell'])===0):?>
 	<br/>
 	<div><strong>You have not sold any items yet.</strong></div>

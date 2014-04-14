@@ -153,7 +153,7 @@
             </select>
             <br/>
             <strong>Shipment fee:</strong>
-            <span class="shipping_fee"> Please select your location </span>
+            <span class="shipping_fee"> Select location to view shipping fee </span>
             
           </p>
         </div>

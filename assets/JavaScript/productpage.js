@@ -319,7 +319,7 @@ function attrClick(target, $this){
         
         if($('#shipment_locations :selected').is(':disabled')){
             $('#shipment_locations :nth-child(1)').prop('selected', true);
-            $('.shipping_fee').html("Please select your location");
+            $('.shipping_fee').html("Select location to view shipping fee");
         }
         
         //**trigger keyup event of product_quantity textbox

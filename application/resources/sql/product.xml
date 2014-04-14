@@ -557,10 +557,15 @@ FROM
         -->
          SELECT p.`id_product`,p.`name`, p.`brief`, p.`price`, p.`member_id`, 
          AVG(COALESCE((r.`rating`),0)) as average_rating, COUNT(r.`rating`) as review_count, 
-         COALESCE(i.product_image_path,'') as product_image_path, p.`cat_id`, p.`is_delete` 
+         COALESCE(i.product_image_path,'') as product_image_path, p.`cat_id`, p.`is_delete`,
+         SUM(pi.`quantity`) as availability, COALESCE(op.order_quantity,0) as sold
          FROM es_product p 
          LEFT JOIN es_product_review r ON p.`id_product` = r.`product_id` AND r.`is_show` = 1 
          LEFT JOIN es_product_image i ON i.`product_id` = p.`id_product` AND i.`is_primary` = 1 
+         LEFT JOIN es_product_item pi ON pi.`product_id` = p.`id_product`
+         
+         LEFT JOIN es_order_product op on op.`product_id` = p.`id_product`
+         
          WHERE p.member_id = :id AND p.is_draft = 0
          GROUP BY p.`id_product`, p.`name`, p.`brief`, p.`price`, p.`member_id`, i.product_image_path, p.`is_delete`,p.`cat_id`,p.lastmodifieddate 
          ORDER BY p.lastmodifieddate DESC 
