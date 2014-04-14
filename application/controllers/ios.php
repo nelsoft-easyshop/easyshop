@@ -478,7 +478,7 @@ class Ios extends MY_Controller {
 	# Arguments: subject, comment, score
 	function submit_review()
 	{
-            print_r($this->input->get());
+
            
 			$subject = html_purify($this->input->get('subject'));
 			$comment =  html_purify($this->input->get('comment'));
