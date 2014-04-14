@@ -1569,3 +1569,296 @@ $(document).ready(function(){
 	});
 	
 });
+
+
+
+/*******************	Billing Info - Bank Selection	********************************/
+
+
+$(document).ready(function(){
+	
+	//// GET BANK DROPDOWN - START
+	(function($){
+	   $.fn.getbank = function(selected) {
+			
+			var appendTarget = "#" + this.attr('id');
+			var csrftoken = $('#personal_profile_address').find('input[name^="es_csrf"]').val();
+			
+			$.getJSON('memberpage/bank_info',{q:'%',name:'',es_csrf_token:csrftoken},function(data){
+				var html = '';
+				var len = data.length;
+				for (var i = 0; i< len; i++) {
+					html += '<option value="' + data[i].id + '">' + data[i].name + '</option>';
+				}
+				$(appendTarget).append(html);
+			
+				var SelectedValue = selected;
+				$(appendTarget + " option").filter(function(){
+					return $(this).text() == SelectedValue;
+				}).first().prop("selected", true);
+			});
+		  	return this;	   
+	   }; 
+	})(jQuery);
+	//// GET BANK DROPDOWN - END	
+		
+	$('#abi_btn').click(function(){
+		$('#abi').toggle("slow");
+	});
+	
+    $('#bi_bank').selectize();
+	
+	////// START /////////////////////////////////////////////////////////////////////
+	
+	// CHECKBOX
+	$(":checkbox[name^='bi_chk_bictr']").click(function(){
+    	$('input:checkbox').not(this).prop("checked", false);
+	});
+	
+	// DELETE BUTTON
+	$(":button[name^='del_bictr']").click(function(){
+	
+		var getbictr = $(this).attr('name');
+		var bictr = getbictr.substring(4,30);
+		var bid = 'bi_id_' + bictr;
+		var del = confirm("Delete bank info?");
+		
+		if(del){
+						
+			var csrftoken = $('#personal_profile_address').find('input[name^="es_csrf"]').val();
+			var bidval = $("#"+bid).val();				
+			var currentRequest = null;
+			var redurl =  config.base_url+'memberpage/billing_info_d';
+			currentRequest = jQuery.ajax({
+				type: "POST",
+				url: redurl, 
+				data: {bi_id:bidval, es_csrf_token:csrftoken},
+				success: function(data){
+					$("#bi_div_" + bictr).remove();
+					alert("Bank info successfully deleted!");
+					return false;
+				}
+			});		
+		}
+	
+	});
+	
+	// EDIT BUTTON
+	$(":button[name^='bictr']").click(function(){
+		
+		$("#billing_info_x").find('div[id*=bi_check_bictr]').hide();
+		
+		var banRule = {
+			required: true,
+			messages: {
+				required: "* Account Name Required"
+			}
+		}
+
+		var barRule = {
+			required: true, minlength: 12, maxlength: 18, number: true,
+			messages: {
+				required: "* Account Number Required",
+				minlength: jQuery.format("At least {0} characters are necessary")
+			}
+		}
+		
+		var bnRule = {
+			required: true,
+			messages: {
+				required: "* Bank Required"
+			}
+		}			
+
+		var bictr = $(this).attr('name');
+		var ban = 'bi_ban_' + bictr;
+		var bar = 'bi_bar_' + bictr;
+		var bn = 'bi_bn_' + bictr;
+		var bns = 'bi_bns_' + bictr;
+		var bid = 'bi_id_' + bictr;
+		var bch = 'bi_chk_' + bictr;
+
+		
+		$("#"+ban).prop("disabled", false);
+		$("#"+bar).prop("disabled", false);
+		$("#"+bn).prop("disabled", false);
+		$("#"+bch).prop("disabled", false);
+		
+		$("#sv_"+bictr+", #cn_"+bictr+", #bi_bns_"+bictr).show("fast");		
+		$("#del_"+bictr+", #"+bictr+", #bi_bn_"+bictr).hide("fast");
+		$(":button[name^='bictr']").prop("disabled", true);
+		$(":button[name^='del_bictr']").prop("disabled", true);
+		
+		var bankname = $('#bi_bn_' + bictr).val();	
+		$('#bi_bns_' + bictr).getbank(bankname).show();
+		
+		$("#cn_"+bictr).click(function(){
+			$("#"+ban).val($("#h"+ban).val());
+			$("#"+bar).val($("#h"+bar).val());
+			$("#"+bn).val($("#h"+bn).val());
+			
+			$("#"+ban).prop("disabled", true);
+			$("#"+bar).prop("disabled", true);
+			$("#"+bn).prop("disabled", true);
+			$("#"+bch).prop("disabled", true);			
+
+			$("#sv_"+bictr+", #cn_"+bictr+", #bi_bns_"+bictr).hide();		
+			$("#del_"+bictr+", #"+bictr+", #bi_bn_"+bictr).show();
+			$(":button[name^='bictr']").prop("disabled", false);
+			$(":button[name^='del_bictr']").prop("disabled", false);
+		});
+		
+		$("#sv_"+bictr).click(function(){
+			
+			var updt = confirm("Update bank info?");
+			
+			if(updt){
+				 $("#ubi_"+bictr).validate({
+					errorElement: "span",
+					errorPlacement: function(error, element){
+							error.addClass('red');
+							error.appendTo(element.parent());
+					}		
+				 });
+				
+				$("[name='bi_ban_"+bictr+"']").rules("add", banRule);
+				$("[name='bi_bar_"+bictr+"']").rules("add", barRule);
+				$("[name='bi_bn_"+bictr+"']").rules("add", bnRule);
+				
+				var csrftoken = $('#personal_profile_address').find('input[name^="es_csrf"]').val();
+				var banval = $("#"+ban).val();
+				var barval = $("#"+bar).val();
+				var bnval = $("#"+bns).val();
+				var bidval = $("#"+bid).val();
+				var bchval = $("#"+bch).val();			
+				var currentRequest = null;
+				
+				var redurl =  config.base_url+'memberpage/billing_info_u';
+				if($("#ubi_"+bictr).valid()){	
+					currentRequest = jQuery.ajax({
+						type: "POST",
+						url: redurl, 
+						data: {bi_acct_name:banval, bi_acct_no:barval, bi_bank:bnval, bi_id:bidval, bi_def:bchval, es_csrf_token:csrftoken},
+						success: function(data){
+							$("#bi_check_"+bictr).show();
+							
+							$("#h"+ban).val($("#"+ban).val());
+							$("#h"+bar).val($("#"+bar).val());
+							$("#h"+bn).val($("#"+bn).val());							
+							
+							$("#"+ban).prop("disabled", true);
+							$("#"+bar).prop("disabled", true);
+							$("#"+bn).prop("disabled", true);
+							$("#"+bch).prop("disabled", true);			
+				
+							$("#sv_"+bictr+", #cn_"+bictr+", #bi_bns_"+bictr).hide();		
+							$("#del_"+bictr+", #"+bictr+", #bi_bn_"+bictr).show();
+							$(":button[name^='bictr']").prop("disabled", false);
+							$(":button[name^='del_bictr']").prop("disabled", false);							
+							return false;
+						}
+					});		
+				}	
+			}else{
+				return false;
+			}
+		});
+	});
+	
+	/////// END /////////////////////////////////////////////////////////////
+
+});
+
+$(document).ready(function(){
+	 $("#billing_info").validate({
+		 ignore: ':hidden:not([class~=selectized]),:hidden > .selectized, .selectize-control .selectize-input input',
+		 rules: {
+			bi_bank: {
+				required: true,				
+			},
+			bi_acct_name: {
+				required: true		
+			},			
+			bi_acct_no: {
+				required: true,
+				minlength: 12,
+				maxlength: 18,
+				number: true				
+			} 
+		 },
+		 messages:{
+			bi_bank: {
+				required: '* Bank Required'
+			},
+			bi_acct_name: {
+				required: '* Account Name Required'
+			},
+			bi_acct_no: {
+				required: '* Account Number Required'
+			}						
+		 },
+		errorElement: "span",
+		errorPlacement: function(error, element) {
+				error.addClass('red');
+				error.appendTo(element.parent());
+		}
+			 	
+	 });
+	 	 
+    var currentRequest = null;
+	var redurl =  config.base_url+'memberpage/billing_info';
+    $("#billing_info_btn").click(function() {
+		if($("#billing_info").valid()){	
+			currentRequest = jQuery.ajax({
+				type: "POST",
+				url: redurl, 
+				data: $("#billing_info").serialize(),
+				success: function(data){
+					$("#bi_bank, #bi_acct_name, #bi_acct_no").val('');
+						
+					var obj = jQuery.parseJSON(data);
+					var string = "";
+
+						string += "<table width='50%'>";
+						string += "<tr><td>Account Name</td><td>Account Number</td><td>Bank Name</td><td> </td></tr>"
+						for(var x=0; x<obj.length; x++){
+							string += "<tr>";
+							string += "<td>" + obj[x].bank_account_name + "</td>"; 
+							string += "<td>" + obj[x].bank_account_number + "</td>";
+							string += "<td>" + obj[x].bank_name + "</td>";
+							string += "<td> [DELETE] </td>";
+							string += "</tr>";
+						};
+						string += "</table>";
+						
+						console.log(string);
+						
+						
+						$('#billing_info .billing_info_grid').empty();
+						$('#billing_info .billing_info_grid').append(string);
+
+					
+					//UPDATE DIV CONTENTS
+//					$('#billing_info .billing_info_grid').html(function(){
+//						
+//						string += "<table width='50%'>";
+//						string += "<tr><td>Account Name</td><td>Account Number</td><td>Bank Name</td><td> </td></tr>"
+//						for(var x=0; x<obj.length; x++){
+//							string += "<tr>";
+//							string += "<td>" + obj[x].bank_account_name + "</td>"; 
+//							string += "<td>" + obj[x].bank_account_number + "</td>";
+//							string += "<td>" + obj[x].bank_name + "</td>";
+//							string += "<td> [DELETE] </td>";
+//							string += "</tr>";
+//						};
+//						string += "</table>";
+//						
+//						return string;
+//						alert(string);
+//					});
+				}
+			});		
+		}		
+    });	
+	
+});
