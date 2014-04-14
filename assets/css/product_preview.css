@@ -1,4 +1,57 @@
-    
+/********** How am I going to be paid CSS style *******************/
+.paid_section_container select,
+
+.paid_section_container input[type="text"] {
+	padding:8px 3px;
+}
+
+.paid_section_container {
+	margin-bottom: 20px;
+}
+
+.paid_section_container h3 {
+	padding:8px 0;
+}
+
+.paid_section_container input[name="deposit_acct_name"],
+.paid_section_container input[name="deposit_acct_no"],
+#bank_list {
+	margin-right: 10px;
+}
+
+.deposit_edit,
+.deposit_update,
+.deposit_cancel {
+	cursor: pointer;
+}
+
+.deposit_edit span {
+	background-position: -124px -263px;
+	height: 12px;
+	width: 12px;
+	margin-right: 3px;
+}
+
+.deposit_update:hover {
+	color: #0191C8;
+}
+
+.deposit_update:after {
+    border-right: 1px solid #CECECE;
+    content: "";
+    display: inline-block;
+    height: 25px;
+    margin: 0 5px;
+    vertical-align: middle;
+    width: 2px;
+}
+
+.deposit_cancel:hover {
+	color: #f00;
+}
+/********** End of How am I going to be paid CSS style ************/ 
+
+
      .category_nav {
         position: relative;
      }
@@ -99,8 +152,9 @@
     }
 
     .ui-dialog-buttonpane .ui-dialog-buttonset {
-    float: right;
+/*    float: right;*/
     margin-bottom: 20px;
+    text-align: right;
     }
 
     .ui-draggable .ui-dialog-titlebar {

@@ -1146,7 +1146,7 @@ a:hover.tooltips span {
 .prod_att_pad p {
     display: list-item;
     font-size: 10px;
-    margin-left: 13px;
+    margin-left: 15px;
     word-wrap: break-word;
 }
 
@@ -1429,7 +1429,7 @@ tr.tr_shipping_summary:nth-child(even) td {
 
 .shipping_list_items_con.prod_att_comb_no_select .shipping_table3 .prod_att_pad p {
     float: left;
-    width: 57px;
+    width: 55px;
 }
 
 .shipping_summary_container h2 {
