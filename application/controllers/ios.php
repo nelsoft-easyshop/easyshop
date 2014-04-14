@@ -599,7 +599,7 @@ class Ios extends MY_Controller {
 			$data = array(
 				'review' => $reply,
 				'p_reviewid' => $this->input->get('p_reviewid'),
-				'product_id' => $this->input->get('id_product'),
+				'product_id' => $this->input->get('product_id'),
 				'member_id' => $this->input->get('member_id'),
 				);
 			$this->product_model->addReply($data);
