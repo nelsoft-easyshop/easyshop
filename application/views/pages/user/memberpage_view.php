@@ -19,7 +19,8 @@
 <link type="text/css" href="<?=base_url()?>assets/css/jquery.Jcrop.min.css" rel="stylesheet" media='screen'/>
 <!--Selectize CSS-->
 <link rel="stylesheet" href="<?=base_url()?>assets/css/jquery.selectize-default.css" type="text/css" media="screen"/>
-
+<!--Chosen CSS-->
+<link rel="stylesheet" href="<?=base_url()?>assets/css/chosen.min.css" type="text/css" media="screen"/>
 
 <div id = "member_page_body">
 	<div class="clear"></div>
@@ -1828,7 +1829,6 @@
 		</div>
 
 
-
 		<script type='text/javascript' src='<?=base_url()?>assets/JavaScript/js/jquery.simplemodal.js'></script>
 		<script type='text/javascript' src='<?=base_url()?>assets/JavaScript/js/jquery.numeric.js'></script>
 		<script type='text/javascript' src='<?=base_url()?>assets/JavaScript/js/jquery.validate.js'></script>
@@ -1838,6 +1838,7 @@
 		<script src="<?=base_url()?>assets/JavaScript/js/jquery.idTabs.min.js" type="text/javascript"></script>
 		<script src="<?=base_url()?>assets/JavaScript/js/jquery.knob.js" type="text/javascript"></script>
 		<script src="<?=base_url()?>assets/JavaScript/js/jquery.selectize.js" type="text/javascript"></script>
+		<script src="<?=base_url()?>assets/JavaScript/js/chosen.jquery.min.js" type="text/javascript"></script>
 		<!-- MEMBERPAGE JS-->
 		<script type="text/javascript" src="<?=base_url()?>assets/JavaScript/memberpage.js"></script>
 		<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=&sensor=false"></script>

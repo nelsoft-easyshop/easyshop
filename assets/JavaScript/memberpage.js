@@ -1,8 +1,8 @@
-
-//Progress update
 $(window).load(function(){
 	progress_update('');
 	handle_fields('');
+	
+	$('.address_dropdown').chosen({width:'200px'});
 	provinceFilter('');
 	
 	jQuery.validator.addMethod("select_is_set", function(value, element, arg) {
@@ -12,8 +12,7 @@ $(window).load(function(){
 	 jQuery.validator.addMethod("is_validmobile", function(value, element) {
 		return this.optional(element) || /^9[0-9]{9}/.test(value);
 	 }, "Invalid mobile number");
-	 
-	 
+	
 });
 
 /******* rotate sort arrow when click *****/
@@ -25,6 +24,7 @@ $(".arrow_sort").on("click", function () {
 /**************************************  PERSONAL INFORMATION MAIN    *****************************************/   
 /**************************************************************************************************************/		
 $(document).ready(function(){
+
 	$(".year").numeric({negative : false});
 	$('#mobile').numeric({negative : false});
 	
@@ -447,7 +447,7 @@ $(document).ready(function(){
 		$(this).parent('div').siblings('div').find('select.provinceselect').val(0);
 		provinceFilter( $(this) );
 	});
-
+	
 	//************	PERSONAL PROFILE ADDRESS VALIDATION	***************//
 	$("#personal_profile_address").validate({
 		rules: {
@@ -994,20 +994,13 @@ function provinceFilter(cityselect){
 	
 	cityselect.each(function(k,v){
 		var selectvalue = $(v).find(':selected').attr('value');
-		var provinceoption = $(v).parent('div').siblings('div').find('select.provinceselect option.echo');
-
-		provinceoption.each(function(){
-			if($(this).attr('data-parent') != selectvalue){
-				$(this).hide();
-				$(this).attr('disabled',true);
-			}
-			else{
-				$(this).show();
-				$(this).attr('disabled',false);
-			}
-		});
+		var provinceselect = $(v).parent('div').siblings('div').find('select.provinceselect');
+		var tohide = provinceselect.find('option.echo[data-parent!="'+selectvalue+'"]');
+		var toshow = provinceselect.find('option.echo[data-parent="'+selectvalue+'"]');
+		tohide.hide().attr('disabled', true);
+		toshow.show().attr('disabled', false);
+		$(provinceselect).trigger('chosen:updated');
 	});
-	
 }
 
 /***************************** PERSONAL PROFILE PROGRESSBAR	************************************/
