@@ -51,9 +51,10 @@ class Payment extends MY_Controller{
         $itemArray = $carts['choosen_items'];
         $member_id =  $this->session->userdata('member_id');
         $address = $this->memberpage_model->get_member_by_id($member_id);
- 
+  
         // $city = $address['c_cityID']; #Caloocan 
-        $city = ($address['c_cityID'] == "" ? $address['c_cityID'] :  0);
+        $city = 0;
+        $city = ($address['c_cityID'] > 0 ? $address['c_cityID'] :  0);
         $itemCount = count($itemArray);
         $successcount = 0;
 
@@ -93,6 +94,7 @@ class Payment extends MY_Controller{
             $itemArray[$value['rowid']]['seller_username'] = $seller['username'];
             // echo $name.' - '.$availability .'<br>';
         } 
+        echo $data['shippingDetails'];
         // echo '<pre>',print_r($itemArray);exit();
         if(!count($carts['choosen_items']) <=0){  
             $data['cat_item'] = $itemArray;
