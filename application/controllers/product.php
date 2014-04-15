@@ -331,6 +331,7 @@ class product extends MY_Controller
 
 	function highlight($text, $words)
 	{
+
 		$words = preg_replace('/\s+/', ' ',$words);
 		$split_words = explode(" ", $words);
 		foreach($split_words as $word)
@@ -351,11 +352,12 @@ class product extends MY_Controller
 
 			$html = "";
 			$stringData =  $this->input->get('q');
+			$stringData = preg_replace('/[^A-Za-z0-9\-]/', '', $stringData);
 			$string = ' '.ltrim($stringData); 
 			$words = "+".implode("*,+",explode(" ",trim($string)))."*"; 
 
 			$keywords = $this->product_model->itemKeySearch($words);
-
+ 
 			$html .= "<ul>";
 			if(count($keywords) <= 0){
 				$html .= "<li>No Record Found!</li>";
