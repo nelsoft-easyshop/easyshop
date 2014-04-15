@@ -534,12 +534,14 @@ class Ios extends MY_Controller {
 
 	# Retrieve more reviews from es_product_review_table
 	# Arguments: last_id = id of the latest loaded review
+	#			 product_id = product id
+	#			 member_id = id of logged in user
 	function get_more_reviews()
 	{	
 		$reviews = $replies = array();
 		$lastreview_id = $this->input->get('last_id');
-		$id = $this->session->userdata('product_id');
-		$userid = $this->session->userdata('member_id');
+		$id = $this->input->get('product_id');
+		$userid = $this->input->get('member_id');
 		$sellerid = '';
 
 		$reviews = $this->product_model->getProductReview($id, $lastreview_id);
