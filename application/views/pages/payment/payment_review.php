@@ -19,38 +19,47 @@
 
 <div class="clear"></div>
 <section>
-  <div class="wrapper">
+  <div class="wrapper payment_content_wrapper">
     <h2 class="checkout_title">Payment</h2>
+
+
+
 <?php
     if($shippingDetails == true){
 ?>
-        <div>
-          <div><b><?php echo ucwords(strtolower($consignee));?></b></div>
-          <div> <?php echo ucwords(strtolower($c_address));?></div>
-          <div><?php echo ucwords(strtolower($c_city));?></div>
-          <div> <?php echo ucwords(strtolower($country_name));?></div>
-          <div> <?php echo ucwords(strtolower($c_mobile));?></div>
-          <div> <?php echo ucwords(strtolower($c_telephone));?></div>
+<div class="payment_wrapper">
+        <div class="member_shipping_info_container">
+          <div><span>Name:</span><strong><?php echo ucwords(strtolower($consignee));?></strong></div>
+          <div><span>Full Address:</span><?php echo ucwords(strtolower($c_address));?></div>
+          <div><span>City:</span><?php echo ucwords(strtolower($c_city));?></div>
+          <div><span>Country:</span><?php echo ucwords(strtolower($country_name));?></div>
+          <div><span>Mobile:</span><?php echo ucwords(strtolower($c_mobile));?></div>
+          <div><span>Telephone:</span><?php echo ucwords(strtolower($c_telephone));?></div>
         </div>
 <?php
     }else{
 ?>
-        <div>
+<div class="payment_wrapper2">
+    <div class="change_shipping_add_con">
+        <div class="txt_change_shipping_address">
           <div>
-            <span style="color:red">PLEASE CHANGE YOU SHIPPING ADDRESS!</span>
+            <span style="color:red">PLEASE CHANGE YOUR SHIPPING ADDRESS!</span>
           </div>
         </div>
-<?php
-    }
-?>
-[ <a style="color:#0654BA;"  href="javascript:void(0);"  class="link_address">Change Shipping Address</a> ]
-<hr>
-    <div class="payment_wrapper">
+        <?php
+            }
+        ?>
+        <div>
+          <a href="javascript:void(0);"  class="link_address orange_btn3">Change Shipping Address</a> 
+        </div>
+
+    
+
 
   <?php
   if($success){
     ?>
-
+  <div class="">
       <p class="fl_pay"><strong>How would you like to pay?</strong></p>
       <ul class="idTabs payment_options_tabs">
         <li><a href="#cod">Cash on Delivery</a></li>
@@ -145,26 +154,38 @@
     <p class="subscribe"><input type="checkbox" checked> <img src="<?php echo base_url(); ?>assets/images/icon_email.png" alt="email"> Subscribe to Easyshop Newsletter for great deals and amazing discounts</p>
     <p class="chck_privacy"><input type="checkbox"> I have read and understand Easyshop <a href="">Privacy Policy</a>.</p>
   </div>
+</div>
 
- 
     <?php
   }else{
     ?>
-      <div>
+    </div>
+      <div class="order_sum_table">
+        <div class="order_sum_header">
+          <div class="fm1">Seller</div>
+          <div class="fm1">Items</div>
+          <div class="fm1">Quantity</div>
+          <div class="fm1">Price</div>
+          <div>&nbsp;</div>
+        </div>
+        <div class="clear"></div>
+
+
+
       <?php 
   $total = 0; 
   foreach ($cat_item as $key => $value) {
     $total += $value['subtotal'];
     ?>
-    <div class="order_sum_content">
+    <div class="order_sum_content order_sum_content2">
       <div><?php echo $value['seller_username'] ?></div>
       <div><?php echo $value['name'] ?></div>
       <div><?php echo $value['qty'] ?></div>
       <div><?php echo number_format($value['price'], 2, '.',',') ?></div>
      
      <?php if(!$value['availability']){ ?>
-     <div style="color:red">
-       Please <a style="color:#0654BA" href="javascript:{}" class="link_address">change your shipping address</a> or go to remove this from your <a style="color:#0654BA">Cart</a>.
+     <div class="error_shipping_address">
+       Please <a style="color:#0654BA" href="javascript:{}" class="link_address">change your shipping address</a> or remove this from your <a style="color:#0654BA">Cart</a>.
      </div>
      <?php } ?>
     </div>
@@ -175,10 +196,12 @@
   }
     ?>
     </div>
+
 <!-- Order Summary Start -->
 <?php
    if($success){
  ?>
+
 <div class="order_summary">
   <h2>Order Summary</h2>
   <p>You have <?php echo count($cat_item);?> item in your cart</p>
@@ -195,9 +218,9 @@
     $total += $value['subtotal'];
     ?>
     <div class="order_sum_content">
-      <div><?php echo $value['name'] ?></div>
-      <div><?php echo $value['qty'] ?></div>
-      <div><?php echo number_format($value['price'], 2, '.',',') ?></div>
+      <div class="sum_con_name"><?php echo $value['name'] ?></div>
+      <div class="sum_con_qty"><?php echo $value['qty'] ?></div>
+      <div class="sum_con_price"><?php echo number_format($value['price'], 2, '.',',') ?></div>
     </div>
     <?php } ?>
 
@@ -209,6 +232,7 @@
     </div>
 
   </div>
+</div> 
   <?php 
 }
    ?>
@@ -345,63 +369,53 @@ $(document).ready(function(){
 
       <div class="del_address">
         <div>
-          <label >Consignee Name:</label>
-          <div >    
-            <input type="text" name="consignee" id="consignee" value="<?php echo $consignee?>">
-          </div>
+          <label >Consignee Name:</label>           
+          <input type="text" name="consignee" id="consignee" value="<?php echo $consignee?>">
         </div>
         <div>
-          <label >Mobile No:</label>
-          <div >
-            <input maxlength="10" placeholder="eg. 9051235678" type="text" name="c_mobile" id="c_mobile" value="<?php echo $c_mobile?>">
-          </div>
+          <label >Mobile No:</label> 
+          <input maxlength="10" placeholder="eg. 9051235678" type="text" name="c_mobile" id="c_mobile" value="<?php echo $c_mobile?>"> 
         </div>
         <div>
           <label  >Telephone No:</label>
-          <div >
-            <input type="text" name="c_telephone" id="c_telephone" value="<?php echo $c_telephone?>">
-          </div>
+          <input type="text" name="c_telephone" id="c_telephone" value="<?php echo $c_telephone?>">
         </div> 
         <div>
             <label>Address:</label>
-            <div >
-                <div>
-                    City:  
-                    <select name="c_city" class="address_dropdown cityselect" data-status="<?php echo $c_cityID?>">
-                        <option value="0">--- Select City ---</option>
-                        <?php foreach($city_lookup as $ckey=>$city):?>
-                        <option class="echo" value="<?php echo $ckey?>" <?php echo $c_cityID == $ckey ? "selected":"" ?>><?php echo $city?></option>
-                        <?php endforeach;?>
-                    </select>
-                </div>  
-                <div>
-                    Province:   
-                    <select name="c_province" class="address_dropdown provinceselect" data-status="<?php echo $c_provinceID?>">
-                        <option value="0">--- Select Province ---</option>
-                        <?php foreach($province_lookup as $parentkey=>$arr):?>
-                        <?php foreach($arr as $lockey=>$province):?>
-                        <option class="echo" value="<?php echo $lockey?>" data-parent="<?php echo $parentkey?>" <?php echo $c_provinceID == $lockey ? "selected":"" ?> ><?php echo $province?></option>
-                        <?php endforeach;?>
-                        <?php endforeach;?>
-                    </select>
-                </div> 
-                <div>
-                    Country:
-                    <select disabled>
-                        <option selected=""><?php echo $country_name?></option>
-                    </select>
-                    <input type="hidden" name="c_country" value="<?php echo $country_id?>">
-                </div> 
-            </div>
+        </div>
+        <div>
+            <label><span>City:</span></label>
+            <select name="c_city" class="address_dropdown cityselect" data-status="<?php echo $c_cityID?>">
+                <option value="0">--- Select City ---</option>
+                <?php foreach($city_lookup as $ckey=>$city):?>
+                <option class="echo" value="<?php echo $ckey?>" <?php echo $c_cityID == $ckey ? "selected":"" ?>><?php echo $city?></option>
+                <?php endforeach;?>
+            </select>
+        </div>
+        <div>
+            <label><span>Province:</span></label>               
+            <select name="c_province" class="address_dropdown provinceselect" data-status="<?php echo $c_provinceID?>">
+                <option value="0">--- Select Province ---</option>
+                <?php foreach($province_lookup as $parentkey=>$arr):?>
+                <?php foreach($arr as $lockey=>$province):?>
+                <option class="echo" value="<?php echo $lockey?>" data-parent="<?php echo $parentkey?>" <?php echo $c_provinceID == $lockey ? "selected":"" ?> ><?php echo $province?></option>
+                <?php endforeach;?>
+                <?php endforeach;?>
+            </select>
+        </div>
+        <div>
+            <label><span>Country:</span></label>            
+            <select disabled>
+                <option selected=""><?php echo $country_name?></option>
+            </select>
+            <input type="hidden" name="c_country" value="<?php echo $country_id?>">
         </div>
         <div>
             <label  >Full Address:</label>
-            <div >
-              <input type="text" name="c_address" value="<?php echo $c_address?>">
-            </div>
+            <input type="text" name="c_address" value="<?php echo $c_address?>">
         </div> 
-        <div>
-             <input type="button" value="Change Shipping Address" class="changeAddressBtn">
+        <div class="change_shipping_add_btn_con">
+             <input type="button" value="Change Shipping Address" class="changeAddressBtn orange_btn3">
         </div> 
       </div>
        <?php echo form_close();?>
