@@ -32,6 +32,8 @@ class memberpage_model extends CI_Model
 			}
 		}
 		
+		$data['json_province'] = json_encode($data['province_lookup'], JSON_FORCE_OBJECT);
+		
 		return $data;
 	}
 	
@@ -478,8 +480,10 @@ class memberpage_model extends CI_Model
 					$data[$temp['id_order']]['products'][$temp['id_order_product']]['attr'] = '';
 				}
 				
-				if(trim($temp['attr_name']) != '' && trim($temp['attr_value']) != ''){
-					$data[$temp['id_order']]['products'][$temp['id_order_product']]['attr'] .= ucwords(strtolower($temp['attr_name'])) . ':' . ucwords(strtolower($temp['attr_value'])) . ' ';
+				if($temp['is_other'] === '0'){
+					$data[$temp['id_order']]['products'][$temp['id_order_product']]['attr'] .= '| ' . ucwords(strtolower($temp['attr_name'])) . ':' . ucwords(strtolower($temp['attr_value'])) . ' |';
+				}else if($temp['is_other'] === '1'){
+					$data[$temp['id_order']]['products'][$temp['id_order_product']]['attr'] .= '| ' . ucwords(strtolower($temp['field_name'])) . ':' . ucwords(strtolower($temp['value_name'])) . ' |';
 				}
 			}
 			
