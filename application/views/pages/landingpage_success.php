@@ -47,10 +47,7 @@
                         Like us on and share
                     </p>
                     <p class="text-center img_social_media">
-                        <a class="img_sc_1" href="https://www.facebook.com/sharer/sharer.php?s=100
-                             &amp;p[url]=http://easyshop.ph
-                             &amp;p[images][0]=http://easyshop.ph/assets/images/img_logo.png
-                             &amp;p[title]=Easyshop.ph" target="_blank">
+                        <a class="img_sc_1" href="https://www.facebook.com/sharer/sharer.php?s=100&amp;p[url]=http://easyshop.ph&amp;p[images][0]=http://easyshop.ph/assets/images/img_logo.png&amp;p[title]=Easyshop.ph" target="_blank">
                             <img src="<?=base_url()?>assets/images/img_social_media_facebook.png" alt="facebook">
                         </a>
                         
