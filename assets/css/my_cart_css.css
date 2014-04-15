@@ -473,15 +473,17 @@ a.delete:hover .del {
 	border-bottom: none;
 }
 
-
-
 .order_summary {
 	background-color: #F4F4F4;
 	display: inline-block;
 	padding:10px;
-	min-height: 300px;
-	margin-top: 10px;
+	min-height: 600px;
+	margin-top: 15px;
 	width: 360px;
+}
+
+.order_summary p {
+	margin:5px 0;
 }
 
 .order_sum_title {
@@ -507,34 +509,41 @@ a.delete:hover .del {
 	vertical-align: middle;
 }
 
-.order_sum_title div,
-.order_sum_content div {
-	width: 170px;
+.order_sum_title div {
+	width: 144px;
 	text-align: left;
 }
 
-.order_sum_title div + div,
-.order_sum_content div + div {
-	width: 70px;
-	text-align: center;
-}
-.order_sum_title div + div + div,
-.order_sum_content div + div + div {
-	width: 109px;
+.order_sum_title div + div {
+	width: 105px;
 	text-align: center;
 }
 
-.order_sum_content div + div + div {
-	text-align: right;
-	padding-right: 5px;
+.order_sum_title div + div + div {
+	width: 105px;
+	text-align: center;
 }
-
 
 .order_sum_content input {
 	width: 30px;
 	text-align: center;
 	padding: 3px;
 	border:1px solid #EBE9E9;
+}
+
+.sum_con_name {
+	width: 144px;
+}
+
+.sum_con_qty {
+	text-align: center;
+	width: 105px;
+}
+
+.sum_con_price {
+	text-align: right;
+	padding-right: 5px;
+	width: 105px;
 }
 
 .order_sum_sub_total {
@@ -736,4 +745,126 @@ input.cc_check {
 }
 
 
+/************ Payment Option New CSS Styles ***************/
+.payment_content_wrapper {
+	min-height: 500px;
+}
 
+.change_shipping_add_con {
+	float: left;
+}
+
+.txt_change_shipping_address {
+	border: 1px solid #f00;
+	background-color: #FFEFEF;
+	margin-top: 5px;
+	padding:8px 3px;
+}
+
+.link_address {
+    margin-top: 15px;
+}
+
+.order_sum_table {
+    float: right;
+    margin-top: 15px;
+    width: 500px;
+}
+
+.order_sum_header {
+	background-color: #EBE9E9;
+	display: inline-block;	
+}
+
+.order_sum_header > div {
+	float: left;
+	font-size: 12px;
+	text-align: left;
+	padding:10px 0;
+}
+
+.order_sum_header div:first-child,
+.order_sum_content2 div:first-child {
+	width: 95px;
+	padding-left: 5px;
+}
+
+.order_sum_header div:nth-child(2),
+.order_sum_content2 div:nth-child(2) {
+	width: 120px;
+}
+
+.order_sum_header div:nth-child(3),
+.order_sum_header div:nth-child(4),
+.order_sum_content2 div:nth-child(3),
+.order_sum_content2 div:nth-child(4) {
+	width: 80px;
+}
+
+.order_sum_header div:last-child,
+.order_sum_content2 div:last-child {
+	width: 111px;
+}
+
+.error_shipping_address {
+    background-color: #FFEFEF;
+    border: 1px solid #FF0000;
+    font-size: 11px;
+    padding:5px;	
+}
+
+.error_shipping_address a:hover {
+	text-decoration: underline;
+}
+
+.div_change_addree {
+	top: 40px !important;
+}
+
+.del_address {
+	padding:10px;
+}
+
+.del_address > div {
+	margin-bottom: 10px;
+}
+
+.del_address label {
+	display: inline-block;
+	width: 120px;
+}
+
+.del_address input,
+.del_address select {
+	padding:8px 3px;
+	width: 200px;
+}
+
+.del_address span {
+	display: block;
+    padding-left: 40px;
+}
+
+.change_shipping_add_btn_con {
+	border-top: 1px dotted #cecece;
+	text-align: center;
+	padding:10px;
+}
+
+.changeAddressBtn {
+	border: none;
+	cursor: pointer;
+}
+
+.member_shipping_info_container {
+	margin:20px 0;
+}
+
+.member_shipping_info_container div {
+	padding:8px 3px;
+}
+
+.member_shipping_info_container span {
+	display: inline-block;
+	width: 95px;
+}
