@@ -51,7 +51,9 @@
 					<input type="text" id="member_sch" onblur="this.placeholder = 'Search'" onfocus="this.placeholder = ''" placeholder="Search">
 
 					<script type="text/javascript">
-
+					
+					var jsonProvince = <?php echo $json_province;?>;
+					
 					$(document).ready(function() {
                         var currentRequest = null;
 						$( "#member_sch" ).keyup(function() {
@@ -1014,6 +1016,9 @@
 					</div>
 					<div class="clear"></div>
 				</div>
+				
+				<input id="json_province" value='<?php echo $json_province;?>' type="hidden">
+				
 				<div class="edit_fields profile_fields">
 					<div class="inner_profile_fields">
 						<div class="address_fields progress_update update_once">
@@ -1031,17 +1036,27 @@
 								<div>
 									<select name="province" id="personal_province" class="address_dropdown provinceselect" data-status="<?php echo $provinceID?>">
 										<option value="0">--- Select Province ---</option>
+										<option class="optionclone" value="" style="display:none;" disabled></option>
+										
+										<?php if($provinceID != '' && $cityID != ''):?>
+											<?php foreach($province_lookup[$cityID] as $lockey=>$province):?>
+												<option class="echo" value="<?php echo $lockey?>" <?php echo $provinceID == $lockey ? "selected":"" ?> ><?php echo $province?></option>
+											<?php endforeach;?>
+										<?php endif;?>
+
+										<!--
 										<?php foreach($province_lookup as $parentkey=>$arr):?>
 											<?php foreach($arr as $lockey=>$province):?>
 												<option class="echo" value="<?php echo $lockey?>" data-parent="<?php echo $parentkey?>" <?php echo $provinceID == $lockey ? "selected":"" ?> ><?php echo $province?></option>
 											<?php endforeach;?>
 										<?php endforeach;?>
+										-->
 									</select>
 									<p>Province</p>
 									<input type="hidden" name="province_orig" value="<?php echo $provinceID?>">
 								</div>
 								<div>
-									<select disabled>
+									<select class="disabled_country" disabled>
 										<option selected=""><?php echo $country_name?></option>
 									</select>
 									<input type="hidden" name="country" value="<?php echo $country_id?>">
@@ -1456,7 +1471,7 @@
 						<p>Province</p>
 					</div>
 					<div>
-						<select disabled>
+						<select class="disabled_country" disabled>
 							<option selected=""><?php echo $country_name?></option>
 						</select>
 						<input type="hidden" name="c_country" value="<?php echo $country_id?>">
@@ -1528,7 +1543,11 @@
 							<div>
 								<p class="transac_prod_name">
 									<a href="<?php echo base_url();?>item/<?php echo $product['product_id'];?>/<?php echo es_url_clean($product['name']);?>"><?php echo $product['name'];?></a><br />
-									<span><?php echo $product['attr'];?></span>
+									<?php if( count($product['attr'] !== 0) ):?>
+										<?php foreach($product['attr'] as $temp):?>
+											<span><?php echo $temp['field'];?>:</span><span><?php echo $temp['value'];?></span>
+										<?php endforeach;?>
+									<?php endif;?>
 								</p>
 								<p>Bought from: <a href="<?php echo base_url();?>vendor/<?php echo $product['seller'];?>"><?php echo $product['seller'];?></a></p>
 								<p>Quantity:<span class="fm1 f16"><?php echo $product['order_quantity']?></span></p>
@@ -1660,7 +1679,11 @@
 					<div>
 						<p class="transac_prod_name">
 							<a href="<?php echo base_url();?>item/<?php echo $product['product_id'];?>/<?php echo es_url_clean($product['name']);?>"><?php echo $product['name'];?></a>
-							<span><?php echo $product['attr'];?></span>
+							<?php if( count($product['attr'] !== 0) ):?>
+								<?php foreach($product['attr'] as $temp):?>
+									<span><?php echo $temp['field'];?>:</span><span><?php echo $temp['value'];?></span>
+								<?php endforeach;?>
+							<?php endif;?>
 						</p>
 						<p>Quantity:<span class="fm1 f18"><?php echo $product['order_quantity']?></span></p>
 						<p>Total:<span class="fm1 f18">Php<?php echo number_format($product['price'],2,'.',',');?></span></p>
@@ -1673,6 +1696,8 @@
 							<span class="transac_response_btn">Return payment to buyer</span>
 							<input type="hidden" name="seller_response" value="<?php echo $opk;?>">
 							<input type="hidden" name="transaction_num" value="<?php echo $tk;?>">
+							<input type="hidden" name="data" value='<?php echo $product['jsondata'];?>'>
+							<input type="hidden" name="userdata" value="<?php echo $transact['buyer'] . '||' . $transact['buyer_email'];?>">
 							<?php echo form_close();?>
 						<?php elseif($product['status'] == 1):?>
 							<span>Paid</span>

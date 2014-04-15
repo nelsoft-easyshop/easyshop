@@ -50,16 +50,19 @@ class payment_model extends CI_Model
 		
 		$this->email->set_newline("\r\n");
 		$this->email->from('noreply@easyshop.ph', 'Easyshop.ph');
-		$this->email->subject($this->lang->line('notification_subject'));
 		
 		if($string === 'buyer'){
+			$this->email->subject($this->lang->line('notification_subject_buyer'));
 			$msg = $this->parser->parse('templates/email_purchase_notification_buyer',$data,true);
 		}
 		else if($string === 'seller'){
+			$this->email->subject($this->lang->line('notification_subject_seller'));
 			$msg = $this->parser->parse('templates/email_purchase_notification_seller',$data,true);
 		}
-		//print($msg);
-		//die();
+		else if($string === 'return_payment'){
+			$this->email->subject($this->lang->line('notification_returntobuyer'));
+			$msg = $this->parser->parse('templates/email_returntobuyer',$data,true);
+		}
 		
 		//$this->email->to($email);
 		$this->email->to('janz.stephen@gmail.com');
@@ -87,12 +90,6 @@ class payment_model extends CI_Model
         $sth->bindParam(':order_id',$data['order_id']);
 		$sth->execute();
         $row = $sth->fetchAll(PDO::FETCH_ASSOC);
-		
-		/*
-		print('<pre>');
-		print_r($row);
-		print('</pre>');
-		*/
 		
 		$data = array(
 			'id_order' => $row[0]['id_order'],
@@ -122,20 +119,13 @@ class payment_model extends CI_Model
 			
 		}
 		
-		/*
-		print('<pre>');
-		print_r($data);
-		print('</pre>');
-		die();
-		*/
-		
 		return $data;
 
 	}
 	
 	/*
-	 *	Updates es_order_product_status
-	 *	Checks es_order_product_status if all orders have buyer/seller response and updates
+	 *	Updates es_order_product status
+	 *	Checks es_order_product status if all orders have buyer/seller response and updates
 	 *		es_order as complete
 	 *	USED IN MEMBERPAGE - TRANSACTIONS TAB
 	 */

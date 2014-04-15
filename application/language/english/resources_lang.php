@@ -24,7 +24,12 @@ $lang['msg2'] = "Sorry, the email you provided is unregistered.";
 $lang['msg3'] = "Unable to send, please try again later.";
 
 #Purchase Notification
-$lang['notification_subject'] = "Easyshop.ph - Transaction Details";
+$lang['notification_subject_buyer'] = "Easyshop.ph - Purchased Item Transaction Details";
+$lang['notification_subject_seller'] = "Easyshop.ph - Sold Item Transaction Details";
+
+#Transaction response by buyer or seller 
+#payment flow direction (forward to seller or return to buyer)
+$lang['notification_returntobuyer'] = "Easyshop.ph - Returned Payment Confirmation";
 
 #Landing Page
 $lang['subscription_subject'] = "Easyshop.ph - Thank you for subscribing!";

@@ -290,18 +290,44 @@ class Memberpage extends MY_Controller
 	 *	Forward to seller or return to user.
 	 */
 	function transactionResponse(){
-		if($this->input->post('buyer_response')){
+	
+		$data['transaction_num'] = $this->input->post('transaction_num');
+		
+		if($this->input->post('buyer_response')){ //Forward payment to seller
 			$data['order_product_id'] = $this->input->post('buyer_response');
 			$data['status'] = 1;
 		}
-		else if($this->input->post('seller_response')){
+		else if($this->input->post('seller_response')){ //Return payment to buyer
 			$data['order_product_id'] = $this->input->post('seller_response');
 			$data['status'] = 2;
+			$userdata = explode('||', $this->input->post('userdata'));
+			
+			$parseData = json_decode($this->input->post('data'), true);
+			$parseData['user'] = $userdata[0];
+			$email = $userdata[1];
+			$parseData['product_link'] = base_url() . 'item/' . $parseData['product_id'] . '/' . $parseData['name'];
+			unset($parseData['product_image_path']);
+			
+			$emailstat = $this->payment_model->sendNotificationEmail($parseData, $email, 'return_payment');
 		}
-		$data['transaction_num'] = $this->input->post('transaction_num');
+		
 		$result = $this->payment_model->updateTransactionStatus($data);
 		
-		echo $result ? 1:'An error was encountered while submitting your request';
+		if($emailstat && $result){
+			$serverResponse['result'] = 'success';
+			$serverResponse['error'] = array();
+		}else{
+			$serverResponse['result'] = 'fail';
+			if(!$emailstat){
+				array_push($serverResponse['error'], 'Failed to send notification email.');
+			}
+			if(!$result){
+				array_push($serverResponse['error'], 'Failed to update database.');
+			}
+		}
+		
+		echo json_encode($serverResponse);
+	
 	}
 	
 	

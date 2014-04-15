@@ -2,8 +2,7 @@ $(window).load(function(){
 	progress_update('');
 	handle_fields('');
 	
-	$('.address_dropdown').chosen({width:'200px'});
-	provinceFilter('');
+	//$('.address_dropdown, .disabled_country').chosen({width:'200px'});
 	
 	jQuery.validator.addMethod("select_is_set", function(value, element, arg) {
 		return this.optional(element) || (arg != value?true:false);
@@ -128,6 +127,7 @@ $(document).ready(function(){
 						catch(e){
 							alert('An error was encountered while processing your data. Please try again later.');
 							window.location.reload(true);
+							return false;
 						}
 						
 						if(obj['mobile'] == 1){
@@ -375,6 +375,10 @@ $(document).ready(function(){
 				}
 				else if(name === 'del_work'){
 					$('#container_work').html('');
+				}else if(name=== 'del_address'){
+					var addselect = editfields.find('select.address_dropdown');
+					addselect.val(0).attr('data-status', "");
+					//addselect.trigger('chosen:updated');
 				}
 				
 				progress_update(form);
@@ -422,17 +426,20 @@ $(document).ready(function(){
 			$(this).prop('value', $(this).attr('value'));
 		});
 		
-		innerfields.find('select').each(function(){
-			$(this).val($(this).attr('data-status'));
-		});
-		
 		if(cancelname === 'cancel_school' || cancelname === 'cancel_work'){			
 			innerfields.find('div.dynamic_dd').find('input[type="text"]').each(function(){
 				if(!($.trim($(this).attr('value')))){
 					$(this).closest('div.dynamic_dd').remove();
 				}
 			});
+		}else if( cancelname === 'cancel_address' ){
+			provinceFilter(innerfields.find('select.cityselect'));
 		}
+		
+		innerfields.find('select').each(function(){
+			$(this).val($(this).attr('data-status'));
+		});
+		
 		
 	});
 	
@@ -477,54 +484,54 @@ $(document).ready(function(){
 		errorElement: 'span',
 		errorPlacement: function(error, element){
 				error.addClass('red');
-				//error.appendTo('#personal_profile_address .error_container').wrap('<p>');
 				error.appendTo(element.parent());
 		},
+		ignore: ":hidden:not(select)",
 		submitHandler: function(form){
 			$('#load_address').css('display', 'inline');
 			$.post(config.base_url+'memberpage/edit_address',$('#personal_profile_address').serializeArray(),
-					function(data){
-						$('#load_address').css('display', 'none');
-						var obj = jQuery.parseJSON(data);
-						
-						//overwrite div to display new address data
-						$('.address_information .add_info').html(function(){
-							var string = obj['city'] + ", " + obj['province'] + "<br>" + obj['address'];
-							return string;
-						});
-						
-						//update input text attribute value to new values
-						$('.address_fields input[type="text"]').each(function(){
-							$(this).attr('value',obj[$(this).attr('name')]);
-						});
-						
-						//update address drop down select fields
-						$('.address_fields select.address_dropdown').each(function(){
-							$(this).attr('data-status', obj[$(this).attr('name') + 'ID']);
-						});
-						
-						//fix display of address depending on contents
-						handle_fields($('#personal_profile_address'));
-						progress_update($('#personal_profile_address'));
-						$('#personal_profile_address .edit_fields').fadeOut();
-						
-						// Copy dragged marker coordinates to scanned input for saving - google maps
-						$('#map_lat').val(obj['lat']);
-						$('#map_lng').val(obj['lng']);
-						
-						// Update original checker fields
-						$('.address_fields input[name="city_orig"]').val(obj['cityID']);
-						$('.address_fields input[name="province_orig"]').val(obj['provinceID']);
-						$('.address_fields input[name="address_orig"]').val(obj['address']);
-						
-						// Map notification status
-						if(obj['lat'] == 0 && obj['lng'] == 0){
-							$('span.maploc_stat').html('Location not set');
-						}else{
-							$('span.maploc_stat').html('Location set');
-						}
-						
+				function(data){
+					$('#load_address').css('display', 'none');
+					var obj = jQuery.parseJSON(data);
+					
+					//overwrite div to display new address data
+					$('.address_information .add_info').html(function(){
+						var string = obj['city'] + ", " + obj['province'] + "<br>" + obj['address'];
+						return string;
 					});
+					
+					//update input text attribute value to new values
+					$('.address_fields input[type="text"]').each(function(){
+						$(this).attr('value',obj[$(this).attr('name')]);
+					});
+					
+					//update address drop down select fields
+					$('.address_fields select.address_dropdown').each(function(){
+						$(this).attr('data-status', obj[$(this).attr('name') + 'ID']);
+					});
+					
+					//fix display of address depending on contents
+					handle_fields($('#personal_profile_address'));
+					progress_update($('#personal_profile_address'));
+					$('#personal_profile_address .edit_fields').fadeOut();
+					
+					// Copy dragged marker coordinates to scanned input for saving - google maps
+					$('#map_lat').val(obj['lat']);
+					$('#map_lng').val(obj['lng']);
+					
+					// Update original checker fields
+					$('.address_fields input[name="city_orig"]').val(obj['cityID']);
+					$('.address_fields input[name="province_orig"]').val(obj['provinceID']);
+					$('.address_fields input[name="address_orig"]').val(obj['address']);
+					
+					// Map notification status
+					if(obj['lat'] == 0 && obj['lng'] == 0){
+						$('span.maploc_stat').html('Location not set');
+					}else{
+						$('span.maploc_stat').html('Location set');
+					}
+					
+				});
 			return false;					
 		}
 	});
@@ -941,11 +948,21 @@ $(document).ready(function(){
 		var thisbtn = $(this);
 		var parentdiv = $(this).closest('div');
 		$.post(config.base_url+"memberpage/transactionResponse", form.serializeArray(), function(data){
-			if(data == 1){
+			
+			try{
+				var serverResponse = jQuery.parseJSON(data);
+			}
+			catch(e){
+				alert('An error was encountered while processing your data. Please try again later.');
+				window.location.reload(true);
+				return false;
+			}
+			
+			if(serverResponse.result === 'success'){
 				parentdiv.html('Request submitted.');
 			}
 			else{
-				alert(data);
+				alert(serverResponse.error);
 			}
 		});
 	});
@@ -984,23 +1001,24 @@ function handle_fields(form)
 
 /**************************	PROVINCE FILTER SELECT	**************************************/
 /*
- *	Function to filter provinces in dropdown.
+ *	Function to generate provinces in dropdown.
  */
 function provinceFilter(cityselect){
+	var cityID = cityselect.find('option:selected').attr('value');
+	var provinceselect = cityselect.parent('div').siblings('div').find('select.provinceselect');
+	var optionclone = provinceselect.find('option.optionclone').clone();
 
-	if ( cityselect == '' ){
-		cityselect = $('select.cityselect');
+	optionclone.removeClass('optionclone').addClass('echo').attr('disabled', false);
+
+	provinceselect.find('option.echo').remove();
+	
+	if(cityID in jsonProvince){
+		jQuery.each(jsonProvince[cityID], function(k,v){
+			optionclone.attr('value', k).html(v).show();
+			provinceselect.append(optionclone.clone());
+		});
 	}
 	
-	cityselect.each(function(k,v){
-		var selectvalue = $(v).find(':selected').attr('value');
-		var provinceselect = $(v).parent('div').siblings('div').find('select.provinceselect');
-		var tohide = provinceselect.find('option.echo[data-parent!="'+selectvalue+'"]');
-		var toshow = provinceselect.find('option.echo[data-parent="'+selectvalue+'"]');
-		tohide.hide().attr('disabled', true);
-		toshow.show().attr('disabled', false);
-		$(provinceselect).trigger('chosen:updated');
-	});
 }
 
 /***************************** PERSONAL PROFILE PROGRESSBAR	************************************/
