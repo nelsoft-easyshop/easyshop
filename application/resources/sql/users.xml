@@ -279,10 +279,8 @@
 		ON op.order_id = o.id_order AND (op.seller_id = :id OR o.buyer_id = :id)
 	INNER JOIN es_product p
 		ON op.product_id = p.id_product
-	LEFT JOIN es_product_item pitem
-		ON op.product_id = pitem.product_id
 	LEFT JOIN es_product_item_attr pitemattr
-		ON pitem.id_product_item = pitemattr.product_id_item
+		ON op.product_item_id = pitemattr.product_id_item
 	LEFT JOIN es_product_attr pattr
 		ON pattr.id_product_attr = pitemattr.product_attr_id 
 	LEFT JOIN es_attr attr
