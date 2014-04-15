@@ -2,15 +2,15 @@
     <head>
 
 <meta property="og:title" content="EasyShop.ph" />
-<meta property="og:description" content="Sample Description" />
-<meta property="og:image" content="https://easyshop.ph/assets/images/img_logo.png" />
+<meta property="og:description" content="Our vision is to be the leading Online Shopping website in South East Asia. The mission that EasyShop has is to provide its customer with a Fast and Easy Online shopping of different products available in the market. The up-to-date information provided by the Online Sellers gives a clear picture of the products and the key features, helping Online Buyers make the right purchasing decision. EasyShops’ goal is to be the first website you think about when buying online." />
+<meta property="og:image" content="http://easyshop.ph/assets/images/img_logo.png" />
 
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link href="<?=base_url()?>assets/css/landingpage/bootstrap.css" rel="stylesheet">
         <link href="<?=base_url()?>assets/css/landingpage/bootstrap-responsive.css" rel="stylesheet">
         <link href="<?=base_url()?>assets/css/landingpage/mystyle.css" rel="stylesheet">
-		<link href="<?=base_url()?>assets/css/jquery-ui.css" rel="stylesheet">
-		<title><?php echo $title;?></title>
+        <link href="<?=base_url()?>assets/css/jquery-ui.css" rel="stylesheet">
+        <title><?php echo $title;?></title>
         
         <!-- Google Analytics -->
         <script>
@@ -41,30 +41,29 @@
                
                     <!-- <p class="text-center txt_success"><?php echo $content; ?></p>  -->
                     <p class="text-center">
-                    	<img src="<?=base_url()?>assets/images/<?php echo $content; ?>"> 
+                        <img src="<?=base_url()?>assets/images/<?php echo $content; ?>"> 
                     </p>
                     <p class="text-center txt_success">
-                    	Like us on and share
+                        Like us on and share
                     </p>
                     <p class="text-center img_social_media">
-                    	<a class="img_sc_1" href="https://www.facebook.com/sharer/sharer.php?s=100
-                             &amp;p[url]=https://staging.easyshop.ph
-                             &amp;p[images][0]=https://staging.easyshop.ph/assets/images/img_logo.png
-                             &amp;p[title]=Easyshop.ph
-                             &amp;p[summary]=asds." target="_blank">
-                    		<img src="<?=base_url()?>assets/images/img_social_media_facebook.png" alt="facebook">
-                    	</a>
-                    	<a href="">
-                    		<img src="<?=base_url()?>assets/images/img_social_media_twitter.png" alt="Twitter">
-                    	</a>
+                        <a class="img_sc_1" href="https://www.facebook.com/sharer/sharer.php?s=100
+                             &amp;p[url]=http://easyshop.ph
+                             &amp;p[images][0]=http://easyshop.ph/assets/images/img_logo.png
+                             &amp;p[title]=Easyshop.ph" target="_blank">
+                            <img src="<?=base_url()?>assets/images/img_social_media_facebook.png" alt="facebook">
+                        </a>
+                        
+                            <img src="<?=base_url()?>assets/images/img_social_media_twitter.png" alt="Twitter">
+                        
                     </p>                
                
             </div>
         </div>
        
-		
-		
-		
+        
+        
+        
        
          <div class="footer2">
             <div class="container">
@@ -73,13 +72,13 @@
         </div>
     </body>
 
-	
-	<script type='text/javascript' src="<?=base_url()?>assets/JavaScript/js/jquery-1.9.1.js" ></script>
-	<script type='text/javascript' src="<?=base_url()?>assets/JavaScript/js/jquery-ui.js"></script>
-	<script type='text/javascript' src='<?=base_url()?>assets/JavaScript/landingpage/bootstrap.min.js'></script>
-	
-	<!-- Form Plugins -->
+    
+    <script type='text/javascript' src="<?=base_url()?>assets/JavaScript/js/jquery-1.9.1.js" ></script>
+    <script type='text/javascript' src="<?=base_url()?>assets/JavaScript/js/jquery-ui.js"></script>
+    <script type='text/javascript' src='<?=base_url()?>assets/JavaScript/landingpage/bootstrap.min.js'></script>
+    
+    <!-- Form Plugins -->
 
-	
-	
-	
+    
+    
+    
