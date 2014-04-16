@@ -586,7 +586,7 @@ class Ios extends MY_Controller {
 		$data = array(
 			'reviews' => $reviews,
 			'is_seller' => $userid===$sellerid?'yes':'no',
-			'is_loggedin' => $this->session->userdata('usersession') !== '' ?'yes':'no'
+			//'is_loggedin' => $this->session->userdata('usersession') !== '' ?'yes':'no'
 			);
 		
 		echo json_encode($data, JSON_PRETTY_PRINT);
