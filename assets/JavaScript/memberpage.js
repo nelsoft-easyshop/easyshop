@@ -2,7 +2,7 @@ $(window).load(function(){
 	progress_update('');
 	handle_fields('');
 	
-	//$('.address_dropdown, .disabled_country').chosen({width:'200px'});
+	$('.address_dropdown, .disabled_country').chosen({width:'200px'});
 	
 	jQuery.validator.addMethod("select_is_set", function(value, element, arg) {
 		return this.optional(element) || (arg != value?true:false);
@@ -441,6 +441,8 @@ $(document).ready(function(){
 			var cityselect = innerfields.find('select.cityselect');
 			provinceFilter(cityselect, provinceselect);
 			provinceselect.val(provinceselect.attr('data-status'));
+			provinceselect.trigger('chosen:updated');
+			cityselect.trigger('chosen:updated');
 		}
 	});
 	
@@ -1018,6 +1020,8 @@ function provinceFilter(cityselect,provinceselect){
 			provinceselect.append(optionclone.clone());
 		});
 	}
+	
+	provinceselect.trigger('chosen:updated');
 	
 }
 
