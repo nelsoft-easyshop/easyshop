@@ -332,7 +332,7 @@ $(function(){
 	});
 	
 	if(!hasDetail){
-		alert('Please add shipping details for every attribute combination.');
+		alert('Please add shipping details for all attribute combinations.');
 		return false;
 	}
 	
@@ -427,7 +427,9 @@ $(function(){
 			alert('An error was encountered. Please add shipping details for all attribute combinations.');
 		}
       });
-    }
+    }else{
+		alert('No shipping details set.');
+	}
   });
 
   /**
