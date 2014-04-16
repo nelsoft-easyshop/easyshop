@@ -12,34 +12,34 @@
 		 			</td>
 		 		</tr>
 		 	</thead>
-		 	<tbody>
+		 	<tbody style="font-size:12px;">
 				<tr>
 					<td colspan="3">
-						{user} has just confirmed to return your payment for the following product:
+						<span style="color:#f18200;font-weight:bold;">{user}</span> has just confirmed to return your payment for the following product:
 					</td>
 				</tr>
 				<tr>
-					<td width="100px">Transaction # : </td>
+					<td width="120px"><strong>Transaction # :</strong> </td>
 					<td colspan="2">{order_id}</td>
 				</tr>
 				<tr>
-					<td>Product Order # : </td>
+					<td><strong>Product Order # :</strong> </td>
 					<td colspan="2">{order_product_id}</td>
 				</tr>
 				<tr>
-					<td>Product Name : </td>
+					<td><strong>Product Name :</strong> </td>
 					<td colspan="2"><a href="{product_link}" target="_blank">{name}</a></td>
 				</tr>
 				<tr>
-					<td>Qty : </td>
+					<td><strong>Quantity :</strong> </td>
 					<td colspan="2">{order_quantity}</td>
 				</tr>
 				<tr>
-					<td>Price : Php</td>
-					<td colspan="2">{price}</td>
+					<td><strong>Price :</strong> </td>
+					<td colspan="2">Php {price}</td>
 				</tr>
 				<tr>
-					<td>Product Attributes</td>
+					<td><strong>Product Attributes</strong></td>
 					{attr}
 						<td>{field} : </td>
 						<td>{value}</td>
