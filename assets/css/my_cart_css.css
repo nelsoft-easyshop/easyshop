@@ -488,14 +488,15 @@ a.delete:hover .del {
 
 .order_sum_title {
 	font-weight: bold;
-	border-bottom: 1px solid #EBE9E9;
-	padding-bottom: 5px;
+	background-color: #EBE9E9;
+	padding: 8px 0;
 }
 
 .order_sum_content {
 	display: table;
 	padding: 10px 0;
 	border-bottom: 1px solid #EBE9E9;
+	word-wrap:break-word;
 }
 
 .order_sum_title > div,
@@ -505,8 +506,9 @@ a.delete:hover .del {
 }
 
 .order_sum_content > div {
-	display: table-cell;
-	vertical-align: middle;
+	float: left;
+/*	display: table-cell;
+	vertical-align: middle;*/
 }
 
 .order_sum_title div {
@@ -750,8 +752,15 @@ input.cc_check {
 	min-height: 500px;
 }
 
+.payment_wrapper3 {
+	float: left;
+	width: 460px;
+}
+
 .change_shipping_add_con {
 	float: left;
+	margin-top: 10px;
+	width: 440px;
 }
 
 .txt_change_shipping_address {
@@ -766,9 +775,16 @@ input.cc_check {
 }
 
 .order_sum_table {
+	background-color: #F4F4F4;
     float: right;
     margin-top: 15px;
+    min-height: 400px;
+    padding:10px;
     width: 500px;
+}
+
+.order_sum_table h2 {
+	margin:8px 3px;
 }
 
 .order_sum_header {
@@ -779,14 +795,16 @@ input.cc_check {
 .order_sum_header > div {
 	float: left;
 	font-size: 12px;
+	font-weight: bold;
 	text-align: left;
 	padding:10px 0;
 }
 
 .order_sum_header div:first-child,
 .order_sum_content2 div:first-child {
-	width: 95px;
+	width: 94px;
 	padding-left: 5px;
+	padding-right: 5px;
 }
 
 .order_sum_header div:nth-child(2),
@@ -798,19 +816,24 @@ input.cc_check {
 .order_sum_header div:nth-child(4),
 .order_sum_content2 div:nth-child(3),
 .order_sum_content2 div:nth-child(4) {
-	width: 80px;
+	width: 77px;
+	text-align: center;
 }
 
 .order_sum_header div:last-child,
 .order_sum_content2 div:last-child {
-	width: 111px;
+	width: 120px;
 }
 
 .error_shipping_address {
     background-color: #FFEFEF;
     border: 1px solid #FF0000;
     font-size: 11px;
-    padding:5px;	
+}
+
+.error_shipping_address span {
+	display: inline-block;
+    padding:5px;
 }
 
 .error_shipping_address a:hover {
@@ -857,7 +880,10 @@ input.cc_check {
 }
 
 .member_shipping_info_container {
-	margin:20px 0;
+	border: 1px solid #EBE9E9;
+	margin: 15px 0 20px;
+	padding: 10px;
+	width: 558px;
 }
 
 .member_shipping_info_container div {
