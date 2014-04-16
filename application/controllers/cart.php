@@ -17,7 +17,7 @@ class Cart extends MY_Controller{
         $base = $this->product_model->getProduct($id);
         $base_price = $base['price'];
         $real_price = $base_price;
-	$product_attr_id = "0";
+        $product_attr_id = "0";
         if(!empty($opt)):
 	    $product_attr_id = "";
 	    $key =  array_keys($opt); //get the key of options,used in checking the product in the database

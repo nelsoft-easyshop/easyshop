@@ -1733,12 +1733,14 @@ $(document).ready(function(){
 			$("#del_"+bictr+", #"+bictr+", #bi_bn_"+bictr).show();
 			$(":button[name^='bictr']").prop("disabled", false);
 			$(":button[name^='del_bictr']").prop("disabled", false);
+           
+            $(this).closest('form').find('span.error').remove();
 		});
 		
 		$("#sv_"+bictr).click(function(){
 			
 			var updt = confirm("Update bank info?");
-			
+            
 			if(updt){
 				 $("#ubi_"+bictr).validate({
 					errorElement: "span",
@@ -1832,11 +1834,10 @@ $(document).ready(function(){
 			 	
 	 });
 	 	 
-    var currentRequest = null;
 	var redurl =  config.base_url+'memberpage/billing_info';
     $("#billing_info_btn").click(function() {
 		if($("#billing_info").valid()){	
-			currentRequest = jQuery.ajax({
+			jQuery.ajax({
 				type: "POST",
 				url: redurl, 
 				data: $("#billing_info").serialize(),

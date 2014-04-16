@@ -80,7 +80,7 @@
 					<p>Rating 1: 
 					<span>
 					<?php if($allfeedbacks['rating1'] === 0 ):?>
-						<?php echo $vendordetails['username'];?> have not received ratings yet.
+						<?php echo $vendordetails['username'];?> has not received any ratings yet.
 					<?php else:?>
 						<?php for($i = 0; $i < $allfeedbacks['rating1']; $i++):?>
 							<span class="span_bg star_on"></span>
@@ -93,7 +93,7 @@
 					</p>
 					<p>Rating 2: 
 					<span><?php if($allfeedbacks['rating2'] === 0 ):?>
-						<?php echo $vendordetails['username'];?> have not received ratings yet.
+						<?php echo $vendordetails['username'];?> has not received any ratings yet.
 					<?php else:?>
 						<?php for($i = 0; $i < $allfeedbacks['rating2']; $i++):?>
 							<span class="span_bg star_on"></span>
@@ -107,7 +107,7 @@
 					<p>Rating 3: 
 					<span>
 					<?php if($allfeedbacks['rating3'] === 0 ):?>
-						<?php echo $vendordetails['username'];?> have not received ratings yet.
+						<?php echo $vendordetails['username'];?> has not received any ratings yet.
 					<?php else:?>
 						<?php for($i = 0; $i < $allfeedbacks['rating3']; $i++):?>
 							<span class="span_bg star_on"></span>

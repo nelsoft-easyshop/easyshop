@@ -508,11 +508,13 @@ class Memberpage extends MY_Controller
 	}	
 	
 	function billing_info_d(){
-					
+	   
 		if($this->input->post('bi_id')){
 			$bi_id = $this->input->post('bi_id');	
+            $member_id = $this->session->userdata('member_id');
 			$data = array(
-					'ibi' => $bi_id			
+					'ibi' => $bi_id,	
+                    'member_id' => $member_id,
 			);
 			$this->memberpage_model->billing_info_delete($data);		
 		}

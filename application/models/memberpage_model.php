@@ -633,9 +633,10 @@ class memberpage_model extends CI_Model
 	
 	function billing_info_delete($data){
 
-		$query = "DELETE FROM `es_billing_info` WHERE `id_billing_info` = :ibi";
+		$query = "DELETE FROM `es_billing_info` WHERE `id_billing_info` = :ibi AND `member_id` = :member_id";
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':ibi', $data['ibi']);
+        $sth->bindParam(':member_id', $data['member_id']);
 		$result = $sth->execute();
 		
 		return $result;
