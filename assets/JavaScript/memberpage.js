@@ -454,9 +454,14 @@ $(document).ready(function(){
 $(document).ready(function(){
 
 	$('.cityselect').on('change', function(){
+		$(this).valid();
 		var provinceselect = $(this).parent('div').siblings('div').find('select.provinceselect');
 		provinceselect.val(0);
 		provinceFilter( $(this), provinceselect );
+	});
+	
+	$('.provinceselect').on('change', function(){
+		$(this).valid();
 	});
 	
 	//************	PERSONAL PROFILE ADDRESS VALIDATION	***************//
