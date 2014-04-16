@@ -296,6 +296,7 @@ class Memberpage extends MY_Controller
 		if($this->input->post('buyer_response')){ //Forward payment to seller
 			$data['order_product_id'] = $this->input->post('buyer_response');
 			$data['status'] = 1;
+			$emailstat = true;
 		}
 		else if($this->input->post('seller_response')){ //Return payment to buyer
 			$data['order_product_id'] = $this->input->post('seller_response');
