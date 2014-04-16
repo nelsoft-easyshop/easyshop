@@ -50,6 +50,16 @@
 	color: #f00;
 }
 /********** End of How am I going to be paid CSS style ************/ 
+    
+    .cod {
+        background-image: url('../images/global_sprite.png');
+        background-repeat: no-repeat;
+        display: inline-block;
+        height: 50px;
+        min-width: 60px;
+        background-position: -339px -176px;		
+        width: 95px;
+    }
 
 
      .category_nav {
