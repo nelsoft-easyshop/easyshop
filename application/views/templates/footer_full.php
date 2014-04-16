@@ -31,8 +31,10 @@
           <h2>Payment</h2>
             <span class="span_bg mastercard"></span>
             <span class="span_bg visa"></span>
-            <span class="span_bg jcb"></span>
+            <!-- <span class="span_bg jcb"></span> -->
             <span class="span_bg paypal"></span>
+            <span class="span_bg dragonpay"></span>
+            <span class="span_bg cod"></span>
         </div>   
       </div>
       <div class="clear"></div>
