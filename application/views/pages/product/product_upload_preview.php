@@ -46,6 +46,9 @@
         <input type="hidden" id="temp_bank_list" value=""/>
         <input type="hidden" id="temp_bank_name" value=""/>
         <input type="hidden" id="preview_csrf" name="<?php echo $my_csrf['csrf_name'];?>" value="<?php echo $my_csrf['csrf_hash'];?>">
+        <br/>
+        <div style="position:relative;"> <input type="checkbox" id="allow_cashondelivery" name="allow_cashondelivery" style="position:absolute; top:29px"> <label for="allow_cashondelivery" > <span class="orange" style="position:absolute; top:26px; left: 20px;"><strong>Allow <strong></span> <span class="cod" style="position:absolute; left: 50px;"></span> </label> </div>
+        <br/> <br/> <br/>
     </div>
     <h3 class="orange" style="padding:8px 0px;">Product Preview</h3>
     <div style="max-height:100%;overflow-y:auto;border:1px solid #f48000;">

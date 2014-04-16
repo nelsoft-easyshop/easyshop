@@ -774,13 +774,15 @@ class productUpload extends MY_Controller
 		$data = $this->fill_view();
 		$this->load->view('templates/header', $data); 
         $memberId =  $this->session->userdata('member_id');
-		if(isset($_POST['prod_h_id'])&&isset($_POST['prod_billing_id'])){
-            $billing_id = $_POST['prod_billing_id']; 
+        
+		if($this->input->post('prod_h_id')&&$this->input->post('prod_billing_id')){
+            $billing_id = $this->input->post('prod_billing_id'); 
             if(intval($billing_id,10) === 0){
                 redirect('/sell/step1/', 'refresh');
             }
-			$response['id'] = $_POST['prod_h_id'];
-            $this->product_model->finalizeProduct($response['id'] , $memberId, $billing_id);
+            $is_cod =($this->input->post('allow_cod'))?1:0;
+			$response['id'] =$this->input->post('prod_h_id');
+            $this->product_model->finalizeProduct($response['id'] , $memberId, $billing_id, $is_cod);
 			$this->load->view('pages/product/product_upload_step4_view',$response);
 			$this->load->view('templates/footer'); 
 		}else{

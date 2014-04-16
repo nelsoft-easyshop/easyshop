@@ -923,7 +923,7 @@ class product_model extends CI_Model
 		$sth->bindParam(':product_id',$data['product_id']);
 		$sth->bindParam('member_id',$data['member_id']);
 		$sth->execute();
-		//print_r($sth->errorInfo());
+		print_r($sth->errorInfo());
 	}
 	
 	function updateIsDelete($productid, $memberid,$is_delete){
@@ -938,12 +938,13 @@ class product_model extends CI_Model
 	}
     
      
-	function finalizeProduct($productid, $memberid,$billing_id){
+	function finalizeProduct($productid, $memberid,$billing_id, $is_cod){
 		$query = $this->sqlmap->getFIlenameID('product', 'finalizeProduct');
 
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':productid',$productid,PDO::PARAM_INT);
 		$sth->bindParam(':memberid',$memberid,PDO::PARAM_INT);
+        $sth->bindParam(':is_cod',$is_cod,PDO::PARAM_INT);
         $sth->bindParam(':billing_id', $billing_id,PDO::PARAM_INT);
         
         $sth->execute();
