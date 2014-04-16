@@ -340,7 +340,15 @@ $(function(){
 	  var csrftoken = $('#shippingsummary_csrf').val();
 	  var productitemid = $('#json_id_product_item').val();
 	  var productid = parseInt($('#prod_h_id').val());
+	  var loadingimg = $(this).siblings('img.loading_img');
+	  var thisbtn = $(this);
+	  
+	  thisbtn.hide();
+	  loadingimg.show();
+
 	  $.post(config.base_url+'sell/shippinginfo', {fdata : fdata, es_csrf_token : csrftoken, productitemid : productitemid, productid : productid}, function(data){
+		loadingimg.hide();
+		thisbtn.show();		
 		if(data == 1){
             
             $.post(config.base_url+'productUpload/previewItem', {p_id: productid, es_csrf_token : csrftoken}, function(data){

@@ -293,7 +293,7 @@
 
       <div class="clear"></div>
       <span id="btnShippingDetailsSubmit" class="tablehide orange_btn3">Submit</span>
-      
+      <img src="<?=base_url()?>/assets/images/orange_loader.gif" class="loading_img" style="display:none;"/>
 
     </div>
     <!-- End of Shipping Content -->
