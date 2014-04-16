@@ -52,7 +52,7 @@
             <label for="allow_cashondelivery" > <span class="orange" style="position:absolute; top:26px; left: 20px;"><strong>Allow </strong></span> <span class="cod" style="position:absolute; left: 50px;"></span> </label> 
             <a class="tooltips" href="javascript:void(0)" style="position:absolute; top:20px; left:150px;">
                 <img src="<?= base_url() ?>assets/images/icon_qmark.png" alt="">
-                <span class="1line_tooltip">Payment for items that are paid with the Cash on Delivery option are not transferred to any account</span>
+                <span class="1line_tooltip">Payment for items that are paid with the Cash on Delivery option are not covered by Easyshop.ph</span>
             </a> 
         </div>
         
