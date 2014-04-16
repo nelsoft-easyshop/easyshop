@@ -426,6 +426,10 @@ $(document).ready(function(){
 			$(this).prop('value', $(this).attr('value'));
 		});
 		
+		innerfields.find('select:not(.provinceselect)').each(function(){
+			$(this).val($(this).attr('data-status'));
+		});
+		
 		if(cancelname === 'cancel_school' || cancelname === 'cancel_work'){			
 			innerfields.find('div.dynamic_dd').find('input[type="text"]').each(function(){
 				if(!($.trim($(this).attr('value')))){
@@ -433,14 +437,11 @@ $(document).ready(function(){
 				}
 			});
 		}else if( cancelname === 'cancel_address' ){
-			provinceFilter(innerfields.find('select.cityselect'));
+			var provinceselect = innerfields.find('select.provinceselect');
+			var cityselect = innerfields.find('select.cityselect');
+			provinceFilter(cityselect, provinceselect);
+			provinceselect.val(provinceselect.attr('data-status'));
 		}
-		
-		innerfields.find('select').each(function(){
-			$(this).val($(this).attr('data-status'));
-		});
-		
-		
 	});
 	
 });
@@ -451,8 +452,9 @@ $(document).ready(function(){
 $(document).ready(function(){
 
 	$('.cityselect').on('change', function(){
-		$(this).parent('div').siblings('div').find('select.provinceselect').val(0);
-		provinceFilter( $(this) );
+		var provinceselect = $(this).parent('div').siblings('div').find('select.provinceselect');
+		provinceselect.val(0);
+		provinceFilter( $(this), provinceselect );
 	});
 	
 	//************	PERSONAL PROFILE ADDRESS VALIDATION	***************//
@@ -1003,11 +1005,9 @@ function handle_fields(form)
 /*
  *	Function to generate provinces in dropdown.
  */
-function provinceFilter(cityselect){
+function provinceFilter(cityselect,provinceselect){
 	var cityID = cityselect.find('option:selected').attr('value');
-	var provinceselect = cityselect.parent('div').siblings('div').find('select.provinceselect');
 	var optionclone = provinceselect.find('option.optionclone').clone();
-
 	optionclone.removeClass('optionclone').addClass('echo').attr('disabled', false);
 
 	provinceselect.find('option.echo').remove();

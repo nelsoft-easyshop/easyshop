@@ -1462,6 +1462,7 @@
 					<div>
 						<select name="c_province" class="address_dropdown provinceselect" data-status="<?php echo $c_provinceID?>">
 							<option value="0">--- Select Province ---</option>
+							<option class="optionclone" value="" style="display:none;" disabled></option>
 							<?php foreach($province_lookup as $parentkey=>$arr):?>
 								<?php foreach($arr as $lockey=>$province):?>
 									<option class="echo" value="<?php echo $lockey?>" data-parent="<?php echo $parentkey?>" <?php echo $c_provinceID == $lockey ? "selected":"" ?> ><?php echo $province?></option>

@@ -476,28 +476,14 @@ class memberpage_model extends CI_Model
 					$data[$temp['id_order']]['products'][$temp['id_order_product']]['product_image_path'] = $imagepath[0]['path'] . 'thumbnail/' . $imagepath[0]['file'];
 					
 				}
-				/*
-				if(!array_key_exists('attr', $data[$temp['id_order']]['products'][$temp['id_order_product']])){
-					$data[$temp['id_order']]['products'][$temp['id_order_product']]['attr'] = '';
-				}
-				
-				
-				if($temp['is_other'] === '0'){
-					$data[$temp['id_order']]['products'][$temp['id_order_product']]['attr'] .= '| ' . ucwords(strtolower($temp['attr_name'])) . ':' . ucwords(strtolower($temp['attr_value'])) . ' |';
-				}else if($temp['is_other'] === '1'){
-					$data[$temp['id_order']]['products'][$temp['id_order_product']]['attr'] .= '| ' . ucwords(strtolower($temp['field_name'])) . ':' . ucwords(strtolower($temp['value_name'])) . ' |';
-				}
-				*/
 				
 				if(!array_key_exists('attr', $data[$temp['id_order']]['products'][$temp['id_order_product']])){
 					$data[$temp['id_order']]['products'][$temp['id_order_product']]['attr'] = array();
 				}
 				
 				if($temp['is_other'] === '0'){
-					//$data[$temp['id_order']]['products'][$temp['id_order_product']]['attr'][ucwords(strtolower($temp['attr_name']))] = ucwords(strtolower($temp['attr_value']));
 					array_push($data[$temp['id_order']]['products'][$temp['id_order_product']]['attr'], array('field' => ucwords(strtolower($temp['attr_name'])), 'value' => ucwords(strtolower($temp['attr_value'])) ));
 				}else if($temp['is_other'] === '1'){
-					//$data[$temp['id_order']]['products'][$temp['id_order_product']]['attr'][ucwords(strtolower($temp['field_name']))] = ucwords(strtolower($temp['value_name']));
 					array_push($data[$temp['id_order']]['products'][$temp['id_order_product']]['attr'], array('field' => ucwords(strtolower($temp['field_name'])), 'value' => ucwords(strtolower($temp['value_name'])) ));
 				}
 				
