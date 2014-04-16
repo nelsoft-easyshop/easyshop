@@ -871,6 +871,10 @@ FROM
         SELECT DISTINCT(`keywords`) FROM `es_keywords` WHERE  MATCH(`keywords`) AGAINST (:words IN BOOLEAN MODE)
 </select>
 
+<select id="itemKeySearch_like">
+    SELECT DISTINCT(`keywords`) FROM `es_keywords` WHERE  `keywords` LIKE CONCAT(CONCAT('%',:words),'%')
+</select>
+
 <select id="fullDeleteItem">
         CALL `es_sp_FullDelete_product`(:productid, :memberid)
 </select>

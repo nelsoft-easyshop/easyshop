@@ -611,6 +611,22 @@ class Ios extends MY_Controller {
 			echo 0;
 	}
 	
+    
+    function sch_onpress()
+	{  
+
+		header('Content-Type: text/plain'); 	 
+		if($this->input->get('q')){
+
+			$html = "";
+			$stringData =  $this->input->get('q');
+			$stringData = preg_replace('/[^A-Za-z0-9\-]/', '', $stringData);
+			$keywords = json_encode($this->product_model->itemKeySearch($stringData, false), JSON_PRETTY_PRINT);
+            
+            echo $keywords;
+		}
+
+	}
 	
 }
 

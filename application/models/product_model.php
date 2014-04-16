@@ -902,12 +902,17 @@ class product_model extends CI_Model
 
 	}
 
-	function itemKeySearch($words)
+	function itemKeySearch($words, $fulltext = true)
 	{
-    
-		$query = $this->sqlmap->getFilenameID('product','itemKeySearch');
+        if($fulltext){
+            $query = $this->sqlmap->getFilenameID('product','itemKeySearch');
+        }else{
+            $query = $this->sqlmap->getFilenameID('product','itemKeySearch_like');
+        }
 		$sth = $this->db->conn_id->prepare($query);
-		$sth->bindParam(':words',$words);
+
+        
+		$sth->bindParam(':words',$words, PDO::PARAM_STR);
 		$sth->execute();
 		$row = $sth->fetchAll(PDO::FETCH_COLUMN, 0);
 		return $row;
