@@ -333,6 +333,7 @@ function paypal(){
         }   
         unset($carts['choosen_items']); 
     }
+	
     function sendNotification($data) 
     {
         //$data = array();

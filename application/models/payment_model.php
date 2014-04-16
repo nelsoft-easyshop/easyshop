@@ -64,8 +64,8 @@ class payment_model extends CI_Model
 			$msg = $this->parser->parse('templates/email_returntobuyer',$data,true);
 		}
 		
-		//$this->email->to($email);
-		$this->email->to('janz.stephen@gmail.com');
+		$this->email->to($email);
+		//$this->email->to('janz.stephen@gmail.com');
 		
 		$this->email->message($msg);
 		$result = $this->email->send();
@@ -81,8 +81,8 @@ class payment_model extends CI_Model
 	public function getTransactionDetails($data)
 	{
 		//devcode
-		//$data['member_id'] = 1;
-		//$data['order_id'] = 4;
+		//$data['member_id'] = 74;
+		//$data['order_id'] = 102;
 		
 		$query = $this->sqlmap->getFilenameID('payment','getTransactionDetails');
         $sth = $this->db->conn_id->prepare($query);
@@ -105,7 +105,7 @@ class payment_model extends CI_Model
 			if(!isset($data['products'][$value['id_order_product']])){
 				$data['products'][$value['id_order_product']] = array_slice($temp,6,8);
 			}
-			$data['products'][$value['id_order_product']]['attr'][] = array_slice($temp,14,2);
+			
 			if(!isset($data['seller'][$value['seller_id']])){
 				$data['seller'][$value['seller_id']]['email'] = $value['seller_email'];
 				$data['seller'][$value['seller_id']]['seller_name'] = $value['seller'];
@@ -115,8 +115,20 @@ class payment_model extends CI_Model
 				$data['seller'][$value['seller_id']]['products'][$value['id_order_product']] = array_slice($temp,9,5);
 				$data['seller'][$value['seller_id']]['totalprice'] += $value['baseprice'];
 			}
-			$data['seller'][$value['seller_id']]['products'][$value['id_order_product']]['attr'][] = array_slice($temp,14,2);
 			
+			if( $value['is_other'] == 0 ){
+				$newattr = array(
+					'attr_name' => $temp['attr_name'],
+					'attr_value' => $temp['attr_value']
+				);
+			}else if( $value['is_other'] == 1 ){
+				$newattr = array(
+					'attr_name' => $temp['field_name'],
+					'attr_value' => $temp['value_name']
+				);
+			}
+			$data['products'][$value['id_order_product']]['attr'][] = $newattr;
+			$data['seller'][$value['seller_id']]['products'][$value['id_order_product']]['attr'][] = $newattr;
 		}
 		
 		return $data;

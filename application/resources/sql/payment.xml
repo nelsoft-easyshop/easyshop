@@ -32,6 +32,7 @@
 	)
 </select>
 
+<!--
 <select id="getTransactionDetails">
 	SELECT o.id_order, buyer.username as buyer, buyer.email as buyer_email, DATE_FORMAT(o.dateadded, "%D %M %Y") as dateadded, o.total as totalprice, op.id_order_product, seller.id_member as seller_id, seller.username as seller, seller.email as seller_email, p.name, op.order_quantity, op.price as baseprice, op.tax, op.total as finalprice, attr.name as attr_name, pattr.attr_value
 	FROM es_order o
@@ -45,6 +46,31 @@
 		ON pattr.id_product_attr = opt.product_attr_id 
 	LEFT JOIN es_attr attr
 		ON opt.attr_id = attr.id_attr
+	LEFT JOIN es_member seller
+		ON op.seller_id = seller.id_member
+	LEFT JOIN es_member buyer
+		ON o.buyer_id = buyer.id_member
+</select>
+-->
+
+
+<select id="getTransactionDetails">
+	SELECT o.id_order, buyer.username as buyer, buyer.email as buyer_email, DATE_FORMAT(o.dateadded, "%D %M %Y") as dateadded, o.total as totalprice, op.id_order_product, seller.id_member as seller_id, seller.username as seller, seller.email as seller_email, p.name, op.order_quantity, op.price as baseprice, op.tax, op.total as finalprice, attr.name as attr_name, pattr.attr_value,  pitemattr.is_other, oah.field_name, oad.value_name, buyer.email as buyer_email
+	FROM es_order o
+	INNER JOIN es_order_product op 
+		ON op.order_id = o.id_order AND o.buyer_id = :buyer_id AND o.id_order = :order_id
+	INNER JOIN es_product p
+		ON op.product_id = p.id_product
+	LEFT JOIN es_product_item_attr pitemattr
+		ON op.product_item_id = pitemattr.product_id_item
+	LEFT JOIN es_product_attr pattr
+		ON pattr.id_product_attr = pitemattr.product_attr_id 
+	LEFT JOIN es_attr attr
+		ON pattr.attr_id = attr.id_attr
+	LEFT JOIN es_optional_attrdetail oad
+		ON	oad.id_optional_attrdetail = pitemattr.product_attr_id
+	LEFT JOIN es_optional_attrhead oah
+		ON oah.id_optional_attrhead = oad.head_id
 	LEFT JOIN es_member seller
 		ON op.seller_id = seller.id_member
 	LEFT JOIN es_member buyer

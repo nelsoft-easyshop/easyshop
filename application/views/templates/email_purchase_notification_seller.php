@@ -48,6 +48,7 @@
 				            <tbody>
 				              <tr>
 				                <td>
+									<span style="display:inline-block;font-weight:bold;width:100px;">Sold to :</span> {buyer_name} <br>
 									<span style="display:inline-block;font-weight:bold;width:100px;">Product :</span> {name} <br>
 									<span style="display:inline-block;font-weight:bold;width:100px;">Qty :</span> {order_quantity} <br>
 									<span style="display:inline-block;font-weight:bold;width:100px;">Base Price :</span> {baseprice} <br>
