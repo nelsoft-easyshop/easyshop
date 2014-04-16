@@ -62,9 +62,9 @@
             <?php if($vendorrating['rate_count'] <=0):?>
               <p>No ratings received.</p>
             <?php else:?>
-              <p> Rating 1: <?php echo $vendorrating['rating1'];?></p>
-              <p> Rating 2: <?php echo $vendorrating['rating2'];?></p>
-              <p> Rating 3: <?php echo $vendorrating['rating3'];?></p>
+              <p> Rating 1: <?php echo round($vendorrating['rating1'], 2);?></p>
+              <p> Rating 2: <?php echo round($vendorrating['rating2'], 2);?></p>
+              <p> Rating 3: <?php echo round($vendorrating['rating3'], 2);?></p>
             <?php endif;?>
           </span> 
         </h1>
