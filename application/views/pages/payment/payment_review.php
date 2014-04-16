@@ -27,8 +27,9 @@
 <?php
     if($shippingDetails == true){
 ?>
-<div class="payment_wrapper">
+<div class="payment_wrapper<?php if(!$success){ ECHO '3';}?>">
         <div class="member_shipping_info_container">
+          <h2>Ship to:</h2>
           <div><span>Name:</span><strong><?php echo ucwords(strtolower($consignee));?></strong></div>
           <div><span>Full Address:</span><?php echo ucwords(strtolower($c_address));?></div>
           <div><span>City:</span><?php echo ucwords(strtolower($c_city));?></div>
@@ -161,11 +162,12 @@
     ?>
     </div>
       <div class="order_sum_table">
+        <h2>Order Summary</h2>
         <div class="order_sum_header">
-          <div class="fm1">Seller</div>
-          <div class="fm1">Items</div>
-          <div class="fm1">Quantity</div>
-          <div class="fm1">Price</div>
+          <div>Seller</div>
+          <div>Items</div>
+          <div>Quantity</div>
+          <div>Price</div>
           <div>&nbsp;</div>
         </div>
         <div class="clear"></div>
@@ -185,7 +187,10 @@
      
      <?php if(!$value['availability']){ ?>
      <div class="error_shipping_address">
-       Please <a style="color:#0654BA" href="javascript:{}" class="link_address">change your shipping address</a> or remove this from your <a style="color:#0654BA">Cart</a>.
+        <span>
+          Please <a style="color:#0654BA" href="javascript:{}" class="link_address">change your shipping address</a>
+          or remove this from your <a style="color:#0654BA">Cart</a>.
+        </span>
      </div>
      <?php } ?>
     </div>
