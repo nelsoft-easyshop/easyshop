@@ -419,6 +419,7 @@ $(function(){
                 $('#previewProduct').dialog('open');
     
                 $('#prod_billing_id').val( $('#billing_info_id').val());
+                $('#allow_cod').prop('checked', false);
                 
             });
 		}
@@ -909,6 +910,16 @@ $(document).ready(function(){
     $(document).on('change',"#bank_list",function () {
         var id = $(this).attr('id');
         validateWhiteTextBox("#"+id);
+    });
+    
+    $(document).on('change',"#allow_cashondelivery",function () {
+        var $this = $(this);
+        if($this.is(':checked')){
+            $('#allow_cod').prop('checked', true);
+        }
+        else{
+            $('#allow_cod').prop('checked', false);
+        }
     });
     
 });
