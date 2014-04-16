@@ -66,7 +66,6 @@
         <li><a href="#cod">Cash on Delivery</a></li>
         <li><a href="#cdb">Credit or Debit Card</a></li>
         <li><a href="#paypal">Paypal</a></li>
-        <li><a href="#megalink">Megalink</a></li>
       </ul>
       <div id="cod" class="payment_inner_content">
         <p class="cod_desc"><strong>You can pay in cash to our courier when you receive the goods at your doorstep.</strong></p> 
@@ -140,21 +139,7 @@
     <p class="chck_privacy"><input type="checkbox"> I have read and understand Easyshop <a href="">Privacy Policy</a>.</p>
   </div>
 
-  <div id="megalink" class="payment_inner_content">
-    <p class="cod_desc"><strong>Pay online using your megalink debit/atm card from the following banks</strong></p> 
-    <ul>
-      <li>Country Rural Bank of Bulacan</li>
-      <li>MASS-SPECC Cooperative Development Center</li>
-      <li>Pacific Ace Savings Bank</li>
-      <li>Unionbank of the Philippines</li>
-      <li>United Coconut Planters Bank</li>
-    </ul>
-    <p class="chck_billing_add"><input type="checkbox"> Billing address is the same as shipping  address</p>       
-    <a href="JavaScript:void(0)" class="payment">Proceed to Payment <span> </span></a> 
-    <p class="notify">You will be notified regarding your order status via email or sms.</p>
-    <p class="subscribe"><input type="checkbox" checked> <img src="<?php echo base_url(); ?>assets/images/icon_email.png" alt="email"> Subscribe to Easyshop Newsletter for great deals and amazing discounts</p>
-    <p class="chck_privacy"><input type="checkbox"> I have read and understand Easyshop <a href="">Privacy Policy</a>.</p>
-  </div>
+
 </div>
 
     <?php
