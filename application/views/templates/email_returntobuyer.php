@@ -1,14 +1,14 @@
 <html>
-	<body>
-		<table cellspacing="0" cellpadding="10" style="width:100%; max-width:780px; margin:0px auto; border-top:5px solid #f18200; 
-		border-left:1px solid #f18200;border-right:1px solid #f18200;border-bottom:1px solid #f18200; font-family:arial; 
-		font-size:12px;">
+	<body style="color:#494949;">
+		<table cellspacing="0" cellpadding="10" style="width:100%; max-width:780px; margin:0 auto; font-family: Arial, sans-serif;">
 			<thead>
 		 		<tr>
 		 			<td colspan="3">
-		 				<a href="" style="padding:10px 0; display:inline-block">
-		 					<img src="img_logo.png" alt="Easyshop.ph">
-		 				</a>
+		 				<div style="border-bottom:3px solid #f18200; padding-bottom:10px;">
+			 				<a href="" style="padding:10px 0; display:inline-block">
+			 					<img src="img_logo.png" alt="Easyshop.ph">
+			 				</a>
+			 			</div>	
 		 			</td>
 		 		</tr>
 		 	</thead>
