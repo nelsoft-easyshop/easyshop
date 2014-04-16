@@ -119,22 +119,26 @@
           </div>
           <div class="buy_box"> 
             <?PHP if($logged_in && $userdetails['is_email_verify'] == 1 ): ?>
-            <input type="hidden" id="buynow_csrf" name="<?php echo $my_csrf['csrf_name'];?>" value="<?php echo $my_csrf['csrf_hash'];?>">
-			<a href="JavaScript:void(0)" id="send" class="fm1 orange_btn3 disabled">Buy Now</a> <br/>
-            <!-- <img src="<?=base_url()?>assets/images/img_cart2.jpg"> Add to Cart</a> <br /> -->
+                <?php if($uid == $product['sellerid']): ?>
+                     <p class="buy_btn_sub"> This is your own listing </p>
+                <?php else: ?>
+                    <input type="hidden" id="buynow_csrf" name="<?php echo $my_csrf['csrf_name'];?>" value="<?php echo $my_csrf['csrf_hash'];?>">
+                    <a href="JavaScript:void(0)" id="send" class="fm1 orange_btn3 disabled">Buy Now</a> <br/>
+                <?php endif;?>
             <?php else: ?>
             <a href="<?PHP echo base_url();echo $logged_in?'me':'login';?>" id="unablesend" class="add_to_cart"><span></span> Buy Now</a> <br />
 			<p class="buy_btn_sub">
 				<?php if( !$logged_in && $userdetails['is_email_verify'] == 1 ){
-					echo "Login to purchase this product.";
+					echo "Sign-in to purchase this product.";
 				} else if( $logged_in && !($userdetails['is_email_verify'] == 1) ){
 					echo "Verify your email to purchase.";
 				} else if( !$logged_in && !($userdetails['is_email_verify'] == 1) ){
-					echo "Login to purchase this product.";
+					echo "Sign-in to purchase this product.";
 				}?>
 			</p>
             <?php endif; ?>
-            <span>Delivers in 5-8 business days*</span> </div>
+            <span>Delivers upon seller confirmation*</span>
+            </div>
         </div>
         <div class="prod_loc_areas">
           <p>
@@ -160,10 +164,13 @@
         <p class="product_content_payment"> <strong>Payment:</strong><br />
           <span class="mastercard"></span>
           <span class="visa"></span>
-          <!-- <span class="jcb"></span> -->
-          <span class="paypal"></span>
           <span class="dragonpay"></span>
-          <span class="cod"></span>
+          <span class="paypal"></span>
+          <?php if(intval($product['is_cod'],10) === 1): ?>
+                <span class="cod"></span>
+          <?php endif; ?>
+         
+         
         </p>
       </div>
       
@@ -208,9 +215,9 @@
             <?php if($logged_in && $uid != $product['sellerid'] && in_array($uid,$allowed_reviewers) ):?>
               <p class="write_review"> <img src="<?=base_url()?>assets/images/img_edit.png">Write a review </p>
             <?php elseif($uid == $product['sellerid']): ?>
-              <p class="">Unable to review own product</p>
+              <p class=""><!-- Unable to review own product --></p>
             <?php else: ?>
-              <p class="">Log-in and purchase item to write a review</p>
+              <p class="" style="color:#f18200;"><strong>Sign-in & purchase item to write a review</strong></p>
             <?php endif; ?>
           </div>
           <div id="write_review_content">
