@@ -1021,7 +1021,8 @@ function provinceFilter(cityselect,provinceselect){
 	
 	if(cityID in jsonProvince){
 		jQuery.each(jsonProvince[cityID], function(k,v){
-			optionclone.attr('value', k).html(v).show();
+			//optionclone.attr('value', k).html(v).show();
+			optionclone.attr('value', k).html(v).css('display', 'block');
 			provinceselect.append(optionclone.clone());
 		});
 	}
