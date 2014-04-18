@@ -51,23 +51,29 @@
             <a href="javascript:void(0)" class="jcarousel-control-next inactive">&rsaquo;</a>
         </div>
       </div>
-      <div class="product_inner_content_info">
+      <div class="product_inner_content_info" >
         <h1 class="id-class" id="<?php echo $product['id_product'];?>"> 
-          <span id="pname"> <?php echo html_escape($product['product_name'])?> </span> 
-          <span class="seller-name"> 
-            <a href="<?php echo base_url() . 'vendor/' . $product['sellerusername'];?>"> 
-              <img src="<?php echo base_url() . $product['userpic']?>/60x60.png"><br />
-              <span><?php echo html_escape($product['sellerusername']);?></span> 
-            </a>
-            <?php if($vendorrating['rate_count'] <=0):?>
-              <p>No ratings received.</p>
-            <?php else:?>
-              <p> Rating 1: <?php echo round($vendorrating['rating1'], 2);?></p>
-              <p> Rating 2: <?php echo round($vendorrating['rating2'], 2);?></p>
-              <p> Rating 3: <?php echo round($vendorrating['rating3'], 2);?></p>
-            <?php endif;?>
-          </span> 
+          <span id="pname"> <?php echo html_escape($product['product_name'])?> </span>
         </h1>
+    
+        <span class="seller-name"> 
+            <a href="<?php echo base_url() . 'vendor/' . $product['sellerusername'];?>"> 
+              <img class=" seller-img" src="<?php echo base_url() . $product['userpic']?>/60x60.png"><br />
+              <span class="name"><?php echo html_escape($product['sellerusername']);?></span> 
+            </a>
+           
+            <span>
+                <br/><br/>
+                <?php if(($vendorrating['rate_count'] <=0)):?>
+                  <p><span class="rating_criteria">No ratings received yet.</span></p>
+                <?php else:?>
+                  <p><span class="rating_criteria"><?php echo $this->lang->line('rating')[0].':';?></span><span class="rating_value"><?php echo number_format($vendorrating['rating1'],2,'.',',');?></span> <img src="<?=base_url()?>assets/images/star-on.png" alt="*" title=""></p>
+                  <p><span class="rating_criteria"><?php echo $this->lang->line('rating')[1].':';?></span><span class="rating_value" > <?php echo number_format($vendorrating['rating2'],2,'.',',');?> </span> <img src="<?=base_url()?>assets/images/star-on.png" alt="*" title=""></p>
+                  <p><span class="rating_criteria"><?php echo $this->lang->line('rating')[2].':';?></span><span class="rating_value"> <?php echo number_format($vendorrating['rating3'],2,'.',',');?></span> <img src="<?=base_url()?>assets/images/star-on.png" alt="*" title=""></p>
+                <?php endif;?>
+            </span>   
+         </span> 
+        
         <div class="clear prod_inner_border"></div>
         
         <?php foreach($product_options as $key=>$product_option):?>

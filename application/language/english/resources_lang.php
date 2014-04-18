@@ -9,6 +9,9 @@ $lang['registration3_invalid_confirmation'] = "Invalid confirmation code.";
 $lang['schoollevel_option'] = array('Please Select', 'Undergraduate degree','Masteral degree','Doctorate degree','High School','Elementary');
 $lang['product_condition'] =  array('New', 'New other (see details)','Manufacturer refurbished','Used','For parts or not working');
 
+#Rating Criteria
+$lang['rating']= array('Item quality', 'Communication', 'Shipment time');
+
 #successful registration
 $lang['success_registration'] = "Thank You for registering to Easyshop.ph! <br> Verify your email address to experience Easyshop.ph at it's fullest!";
 
@@ -34,6 +37,8 @@ $lang['notification_returntobuyer'] = "Easyshop.ph - Returned Payment Confirmati
 #Landing Page
 $lang['subscription_subject'] = "Easyshop.ph - Thank you for subscribing!";
 $lang['registration_subject'] = "Easyshop.ph - Thank you for registering!";
+
+
 
 ?>
 

@@ -166,7 +166,7 @@
 			<div class="posted_feedbacks_top">
 				<h3 class="fm1 f18">Feedback Score:</h3>
 				<span>(<?php echo $allfeedbacks['rcount'];?> Feedback/s received)</span>
-				<p>Rating 1: 
+				<p><?php echo $this->lang->line('rating')[0].':'; ?> 
 					<span>
 						<?php if($allfeedbacks['rating1'] === 0 ):?>
 						You have not received ratings yet.
@@ -180,7 +180,7 @@
 		<?php endif;?>
 	</span>
 </p>
-<p>Rating 2: 
+<p><?php echo $this->lang->line('rating')[1].':'; ?> 
 	<span><?php if($allfeedbacks['rating2'] === 0 ):?>
 		You have not received ratings yet.
 	<?php else:?>
@@ -193,7 +193,7 @@
 <?php endif;?>
 </span>
 </p>
-<p>Rating 3: 
+<p><?php echo $this->lang->line('rating')[2].':'; ?> 
 	<span>
 		<?php if($allfeedbacks['rating3'] === 0 ):?>
 		You have not received ratings yet.
@@ -481,7 +481,7 @@
 				<?php foreach($tempafb as $key=>$afb):?>
 				<p>From: <a href="<?php echo base_url();?>vendor/<?php echo $afb['member_name'];?>"><?php echo $afb['member_name'];?></a> | on: <?php echo $afb['dateadded'];?></p>
 				<p>"<?php echo $afb['feedb_msg']?>"</p>
-				<p>Rating 1: 
+				<p><?php echo $this->lang->line('rating')[0].':'; ?> 
 					<?php for($i = 0; $i < $afb['rating1']; $i++):?>
 					<span class="span_bg star_on"></span>
 				<?php endfor;?>
@@ -489,7 +489,7 @@
 				<span class="span_bg star_off"></span>
 			<?php endfor;?>
 		</p>
-		<p>Rating 2: 
+		<p><?php echo $this->lang->line('rating')[1].':'; ?> 
 			<?php for($i = 0; $i < $afb['rating2']; $i++):?>
 			<span class="span_bg star_on"></span>
 		<?php endfor;?>
@@ -497,7 +497,7 @@
 		<span class="span_bg star_off"></span>
 	<?php endfor;?>
 </p>
-<p>Rating 3: 
+<p><?php echo $this->lang->line('rating')[2].':'; ?>  
 	<?php for($i = 0; $i < $afb['rating3']; $i++):?>
 	<span class="span_bg star_on"></span>
 <?php endfor;?>
@@ -539,7 +539,7 @@
 			<?php foreach($tempafb as $afb):?>
 			<p>From: <a href="<?php echo base_url();?>vendor/<?php echo $afb['member_name'];?>"><?php echo $afb['member_name'];?></a> | on: <?php echo $afb['dateadded'];?></p>
 			<p>"<?php echo $afb['feedb_msg']?>"</p>
-			<p>Rating 1: 
+			<p><?php echo $this->lang->line('rating')[0].':'; ?> 
 				<?php for($i = 0; $i < $afb['rating1']; $i++):?>
 				<span class="span_bg star_on"></span>
 			<?php endfor;?>
@@ -547,7 +547,7 @@
 			<span class="span_bg star_off"></span>
 		<?php endfor;?>
 	</p>
-	<p>Rating 2: 
+	<p><?php echo $this->lang->line('rating')[1].':'; ?> 
 		<?php for($i = 0; $i < $afb['rating2']; $i++):?>
 		<span class="span_bg star_on"></span>
 	<?php endfor;?>
@@ -555,7 +555,7 @@
 	<span class="span_bg star_off"></span>
 <?php endfor;?>
 </p>
-<p>Rating 3: 
+<p><?php echo $this->lang->line('rating')[2].':'; ?> 
 	<?php for($i = 0; $i < $afb['rating3']; $i++):?>
 	<span class="span_bg star_on"></span>
 <?php endfor;?>
@@ -593,7 +593,7 @@
 			<?php foreach($tempafb as $afb):?>
 			<p>For: <a href="<?php echo base_url();?>vendor/<?php echo $afb['for_membername'];?>"><?php echo $afb['for_membername'];?></a> | on: <?php echo $afb['dateadded'];?></p>
 			<p>"<?php echo $afb['feedb_msg']?>"</p>
-			<p>Rating 1: 
+			<p><?php echo $this->lang->line('rating')[0].':'; ?> 
 				<?php for($i = 0; $i < $afb['rating1']; $i++):?>
 				<span class="span_bg star_on"></span>
 			<?php endfor;?>
@@ -601,7 +601,7 @@
 			<span class="span_bg star_off"></span>
 		<?php endfor;?>
 	</p>
-	<p>Rating 2: 
+	<p><?php echo $this->lang->line('rating')[1].':'; ?>  
 		<?php for($i = 0; $i < $afb['rating2']; $i++):?>
 		<span class="span_bg star_on"></span>
 	<?php endfor;?>
@@ -609,7 +609,7 @@
 	<span class="span_bg star_off"></span>
 <?php endfor;?>
 </p>
-<p>Rating 3: 
+<p><?php echo $this->lang->line('rating')[2].':'; ?> 
 	<?php for($i = 0; $i < $afb['rating3']; $i++):?>
 	<span class="span_bg star_on"></span>
 <?php endfor;?>
@@ -647,7 +647,7 @@
 			<?php foreach($tempafb as $afb):?>
 			<p>For: <a href="<?php echo base_url();?>vendor/<?php echo $afb['for_membername'];?>"><?php echo $afb['for_membername'];?></a> | on: <?php echo $afb['dateadded'];?></p>
 			<p>"<?php echo $afb['feedb_msg']?>"</p>
-			<p>Rating 1: 
+			<p><?php echo $this->lang->line('rating')[0].':'; ?> 
 				<?php for($i = 0; $i < $afb['rating1']; $i++):?>
 				<span class="span_bg star_on"></span>
 			<?php endfor;?>
@@ -655,7 +655,7 @@
 			<span class="span_bg star_off"></span>
 		<?php endfor;?>
 	</p>
-	<p>Rating 2: 
+	<p><?php echo $this->lang->line('rating')[1].':'; ?> 
 		<?php for($i = 0; $i < $afb['rating2']; $i++):?>
 		<span class="span_bg star_on"></span>
 	<?php endfor;?>
@@ -663,7 +663,7 @@
 	<span class="span_bg star_off"></span>
 <?php endfor;?>
 </p>
-<p>Rating 3: 
+<p><?php echo $this->lang->line('rating')[2].':'; ?> 
 	<?php for($i = 0; $i < $afb['rating3']; $i++):?>
 	<span class="span_bg star_on"></span>
 <?php endfor;?>
@@ -1578,7 +1578,7 @@
 						<?php if(trim($user['feedb_msg']) !== '' && $user['rating1'] != 0 && $user['rating2'] != 0 && $user['rating3'] != 0):?>												
 						<p>For:<a href="<?php echo base_url();?>vendor/<?php echo $user['name'];?>"><?php echo $user['name'];?></a> | on:<?php echo $user['fbdateadded'];?></p>
 						<p>"<?php echo $user['feedb_msg'];?>"</p>
-						<p> Rating 1: 
+						<p> <?php echo $this->lang->line('rating')[1].':'; ?> : 
 							<?php for($x=0;$x<5;$x++):?>
 							<?php if($x<$user['rating1']):?>
 							<span class="span_bg star_on"></span>
@@ -1587,7 +1587,7 @@
 					<?php endif;?>
 				<?php endfor;?>
 			</p>
-			<p> Rating 2: 
+			<p> <?php echo $this->lang->line('rating')[2].':'; ?> 
 				<?php for($x=0;$x<5;$x++):?>
 				<?php if($x<$user['rating2']):?>
 				<span class="span_bg star_on"></span>
@@ -1596,7 +1596,7 @@
 		<?php endif;?>
 	<?php endfor;?>
 </p>
-<p> Rating 3: 
+<p> <?php echo $this->lang->line('rating')[2].':'; ?> 
 	<?php for($x=0;$x<5;$x++):?>
 	<?php if($x<$user['rating3']):?>
 	<span class="span_bg star_on"></span>
@@ -1618,11 +1618,11 @@
 		<input type="hidden" name="for_memberid" value="<?php echo $uk;?>">
 		<textarea rows="4" cols="50" name="feedback-field"></textarea><br>
 		<span class="red ci_form_validation_error"><?php echo form_error('feedback-field'); ?></span>
-		<span>Rating 1: </span><div class="feedb-star rating1"></div><br>
+		<span><?php echo $this->lang->line('rating')[0].':'; ?>  </span><div class="feedb-star rating1"></div><br>
 		<span class="red ci_form_validation_error"><?php echo form_error('rating1'); ?></span>
-		<span>Rating 2: </span><div class="feedb-star rating2"></div><br>
+		<span><?php echo $this->lang->line('rating')[1].':'; ?> </span><div class="feedb-star rating2"></div><br>
 		<span class="red ci_form_validation_error"><?php echo form_error('rating2'); ?></span>
-		<span>Rating 3: </span><div class="feedb-star rating3"></div><br>
+		<span><?php echo $this->lang->line('rating')[2].':'; ?>  </span><div class="feedb-star rating3"></div><br>
 		<span class="red ci_form_validation_error"><?php echo form_error('rating3'); ?></span>
 		<span class="raty-error error red"></span>
 		<span class="feedback-submit">Submit</span><span class="feedback-cancel">Cancel</span>
@@ -1715,7 +1715,7 @@
 				<?php if(trim($user['feedb_msg']) !== ''):?>												
 				<p>For:<a href="<?php echo base_url();?>vendor/<?php echo $user['name'];?>"><?php echo $user['name'];?></a> | on:<?php echo $user['fbdateadded'];?></p>
 				<p>"<?php echo $user['feedb_msg'];?>"</p>
-				<p> Rating 1: 
+				<p> <?php echo $this->lang->line('rating')[0].':'; ?> 
 					<?php for($x=0;$x<5;$x++):?>
 					<?php if($x<$user['rating1']):?>
 					<span class="span_bg star_on"></span>
@@ -1724,7 +1724,7 @@
 			<?php endif;?>
 		<?php endfor;?>
 	</p>
-	<p> Rating 2: 
+	<p> <?php echo $this->lang->line('rating')[1].':'; ?> 
 		<?php for($x=0;$x<5;$x++):?>
 		<?php if($x<$user['rating2']):?>
 		<span class="span_bg star_on"></span>
@@ -1733,7 +1733,7 @@
 <?php endif;?>
 <?php endfor;?>
 </p>
-<p> Rating 3: 
+<p> <?php echo $this->lang->line('rating')[2].':'; ?> 
 	<?php for($x=0;$x<5;$x++):?>
 	<?php if($x<$user['rating3']):?>
 	<span class="span_bg star_on"></span>
@@ -1755,11 +1755,11 @@
 		<input type="hidden" name="for_memberid" value="<?php echo $uk;?>">
 		<textarea rows="4" cols="50" name="feedback-field"></textarea><br>
 		<span class="red ci_form_validation_error"><?php echo form_error('feedback-field'); ?></span>
-		<span>Rating 1: </span><div class="feedb-star rating1"></div><br>
+		<span><?php echo $this->lang->line('rating')[0].':'; ?>  </span><div class="feedb-star rating1"></div><br>
 		<span class="red ci_form_validation_error"><?php echo form_error('rating1'); ?></span>
-		<span>Rating 2: </span><div class="feedb-star rating2"></div><br>
+		<span><?php echo $this->lang->line('rating')[1].':'; ?>  </span><div class="feedb-star rating2"></div><br>
 		<span class="red ci_form_validation_error"><?php echo form_error('rating2'); ?></span>
-		<span>Rating 3: </span><div class="feedb-star rating3"></div><br>
+		<span><?php echo $this->lang->line('rating')[2].':'; ?>  </span><div class="feedb-star rating3"></div><br>
 		<span class="red ci_form_validation_error"><?php echo form_error('rating3'); ?></span>
 		<span class="raty-error error red"></span>
 		<span class="feedback-submit">Submit</span> <span class="feedback-cancel">Cancel</span>
