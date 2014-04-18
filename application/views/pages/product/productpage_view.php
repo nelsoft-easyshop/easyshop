@@ -142,7 +142,7 @@
         </div>
         <div class="prod_loc_areas">
           <p>
-            <strong class="location_message">Shipping Location:</strong>
+            <strong class="location_message">Shipment Fee:</strong>
             <select class="shiploc" id="shipment_locations">
                 <option class="default" selected="" value="0">Select Location</option>
                 <?php foreach($shiploc['area'] as $island=>$loc):?>
@@ -155,10 +155,9 @@
                     <?php endforeach;?>
                 <?php endforeach;?>
             </select>
-            <br/>
-            <strong>Shipment fee:</strong>
-            <span class="shipping_fee"> Select location to view shipping fee </span>
-            
+     
+            <span class="shipping_fee"> <span class="loc_invalid"> Select location* </span></span>
+         
           </p>
         </div>
         <p class="product_content_payment"> <strong>Payment:</strong><br />

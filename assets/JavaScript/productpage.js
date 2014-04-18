@@ -569,11 +569,11 @@ $(function(){
     $("body").on('change','#shipment_locations', function(){
         var selected = $('#shipment_locations :selected');
         if(selected.val() == 0){
-            $('.shipping_fee').html("Please select your location");
+            $('.shipping_fee').html("<span class='loc_invalid'>Select location*</span>");
         }
         else{
             var fee = parseFloat(selected.data('price'));
-            $('.shipping_fee').html("PHP " + fee.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+            $('.shipping_fee').html("<span class='shipping_fee_php'>PHP <span><span class='shipping_fee_price'>"+fee.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",") +"</span>");
         }
     });
     
