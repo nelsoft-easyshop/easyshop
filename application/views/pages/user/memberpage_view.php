@@ -158,8 +158,8 @@
 					
 				</div>
 				<div>
-					<h3>Sold Items</h3>
-					<input class="items" data-width="150" data-fgColor="#7ad014" data-max="1000" data-thickness=".1" data-angleOffset="180" data-readOnly=true data-displayPrevious=true value="0">
+					<h3>Total Sold Items</h3>
+					<input class="items" data-width="150" data-fgColor="#7ad014" data-max="1000" data-thickness=".1" data-angleOffset="180" data-readOnly=true data-displayPrevious=true value="<?php echo $sold_count;?>">
 				</div>
 			</div>
 
@@ -212,9 +212,6 @@
 <div>
 	<ul class="idTabs post_items">
 		<li><a href="#active_items">Active Items <span><?php echo count($active_products);?></span></a></li>
-		<!-- <li><a href="#latest_post_item">Latest Post Items <span>0</span></a></li> -->
-		<li><a href="#sold_items">Sold Items <span>0</span></a></li>
-		<li><a href="#sold_items">Sold Out Items <span>0</span></a></li>
 		<li><a href="#deleted_items">Deleted Items<span><?php echo count($deleted_products);?></span></a></li>
 		<li><a href="#dashboard-feedbacks">Feedbacks <span><?php echo $allfeedbacks['afbcount'];?></span></a></li>
 		<!-- <li><input type="text" value="search"><input type="submit" value="Submit"></li> -->

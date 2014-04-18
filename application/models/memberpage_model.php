@@ -348,7 +348,7 @@ class memberpage_model extends CI_Model
 		$sth->bindParam(':id',$member_id);
 		$sth->execute();
 		$rows = $sth->fetchAll(PDO::FETCH_ASSOC);
-		$data = array('active'=>array(),'deleted'=>array());
+		$data = array('active'=>array(),'deleted'=>array(), 'sold_count'=>0);
 		
 		foreach($rows as $key=>$row){
 			$query = $this->sqlmap->getFilenameID('product','getParent');
@@ -392,6 +392,8 @@ class memberpage_model extends CI_Model
 				array_push($data['active'],$row);
 			else
 				array_push($data['deleted'],$row);
+            $data['sold_count'] += $row['sold'];
+                
 		}			
 		return $data;
 	}

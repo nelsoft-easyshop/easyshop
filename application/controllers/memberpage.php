@@ -156,6 +156,7 @@ class Memberpage extends MY_Controller
 				'image_profile' => $this->memberpage_model->get_image($uid), 
 				'active_products' => $user_products['active'],
 				'deleted_products' => $user_products['deleted'],
+                'sold_count' => $user_products['sold_count'],
                 ); 
 		$data = array_merge($data, $this->fill_header());
 		$data = array_merge($data, $this->memberpage_model->getLocationLookup());
