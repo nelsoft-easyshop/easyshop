@@ -107,10 +107,12 @@ $(function(){
         var loadingimg = $(this).siblings('#savereply_loadingimg');
 		var replydiv = $(this).closest('div.reply_area');
 		var thisbtn = $(this);
+        var cancelbtn = $('.reply_cancel');
         if($.trim(replyfield.val()).length < 1)
             replyfield.effect('pulsate',{times:5},500);
         else{
             thisbtn.hide();
+            cancelbtn.hide();
             loadingimg.show();
             $.post(config.base_url+'product/submit_reply',form.serialize(),function(data){
 				replydiv.fadeOut();
@@ -559,7 +561,7 @@ $(function(){
                 }
                 else{
                     $('.reviews_content').off('click','#see_more_reviews');
-                    $('#see_more_reviews').html('<strong>End of reviews.</strong>');
+                    $('#see_more_reviews').html('No more reviews to see.');
                 }
             }
         );

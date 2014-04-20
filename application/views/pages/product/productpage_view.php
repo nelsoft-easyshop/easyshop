@@ -236,7 +236,7 @@
               <?php #echo form_open('', array('id' => "review_form")); ?>
                 <div>
                   <label>Subject *</label>
-                  <input type="text" name="subject">
+                  <input type="text" name="subject" maxlength="150">
                 </div>
                 <div>
                   <label>Rating *</label>
@@ -297,7 +297,7 @@
                 <?php endif;?>
               
               <?php if($review['reply_count'] > 3):?>
-              <p class="show_replies">Show replies</p>
+              <p class="show_replies">Show more replies</p>
               <p class="hide_replies">Hide replies</p>
               <?php endif;?>
               <?php if( ($uid == $product['sellerid'] || $review['is_reviewer'] == 1) && $logged_in ) : ?>
@@ -310,7 +310,7 @@
                   <textarea class="reply_field" name="reply_field" cols=50 rows=4></textarea>
                   <br>
                   <span class="reply_save orange_btn3">Save</span> 
-                  <img src="<?=base_url()?>/assets/images/bx_loader.gif" id="savereply_loadingimg" style="position: relative; top:12px; left:15px; display:none"/>
+                  <img src="<?=base_url()?>/assets/images/orange_loader_small.gif" id="savereply_loadingimg" style="position: relative; top:12px; left:15px; display:none"/>
                   <span class="reply_cancel">Cancel</span>
                 <?php echo form_close();?>
               </div>
@@ -319,9 +319,10 @@
             <?php endforeach;?>
             <div class="clear"></div>
             <div class="review_last"> 
-              <span id="see_more_reviews"><strong><a href="">See more reviews.</a></strong></span> 
-              <img src="<?=base_url()?>/assets/images/bx_loader.gif" id="more_review_loading_img" style="position: relative; top:12px; left:15px; display:none"/>
-            </diV>
+              <span id="see_more_reviews" style="font-weight:bold;"><a href="">See more reviews.</a></span> 
+              <img src="<?=base_url()?>/assets/images/orange_loader_small.gif" id="more_review_loading_img" style="position: relative; top:12px; left:15px; display:none; "/>
+              <br/><br/>
+           </diV>
             <?php endif; ?>
           </div>
         </div>

@@ -928,7 +928,7 @@ class product_model extends CI_Model
 		$sth->bindParam(':product_id',$data['product_id']);
 		$sth->bindParam('member_id',$data['member_id']);
 		$sth->execute();
-		print_r($sth->errorInfo());
+
 	}
 	
 	function updateIsDelete($productid, $memberid,$is_delete){
