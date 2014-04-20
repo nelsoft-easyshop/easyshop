@@ -459,17 +459,17 @@
 <div class="dashboard_table" id="dashboard-feedbacks">
 	<h2>Feedbacks</h2>
 	<ul class="idTabs feedbacks_tabs">
-		<li><a href="#op_buyer">Others posted (You are Buyer)</a></li>
-		<li><a href="#op_seller">Others posted (You are Seller)</a></li>
-		<li><a href="#yp_buyer">You posted (You are Buyer)</a></li>
-		<li><a href="#yp_seller">You posted (You are Seller)</a></li>
+		<li><a href="#op_buyer">Feedbacks as a Buyer</a></li>
+		<li><a href="#op_seller">Feedbacks as a Seller</a></li>
+		<li><a href="#yp_buyer">Feedbacks for others - Buyer</a></li>
+		<li><a href="#yp_seller">Feedbacks for others - Seller</a></li>
 	</ul>
 
 	<div class="clear"></div>
 	<div id="others_post">
 
 		<div id="op_buyer">
-			<h4>Feedbacks others posted where you are buyer</h4>
+			<h4>Feedbacks others left for you as a buyer</h4>
 			<?php if(count($allfeedbacks['otherspost_buyer'])==0):?>
 			<p><strong>You have not yet received any feedbacks for this category.</strong></p>
 		<?php else:?>
@@ -526,7 +526,7 @@
 
 
 <div id="op_seller">
-	<h4>Feedbacks others posted where you are seller</h4>
+	<h4>Feedbacks others left for you as a seller</h4>
 	<?php if(count($allfeedbacks['otherspost_seller'])==0):?>
 	<p><strong>You have not yet received any feedbacks for this category.</strong></p>
 <?php else:?>
@@ -581,7 +581,7 @@
 <?php endif;?>
 </div>
 <div id="yp_buyer">
-	<h4>Feedbacks you posted where you are buyer</h4>
+	<h4>Feedbacks you posted as a buyer</h4>
 	<?php if(count($allfeedbacks['youpost_buyer'])==0):?>
 	<p><strong>You have not yet received any feedbacks for this category.</strong></p>
 <?php else:?>
@@ -635,7 +635,7 @@
 <?php endif;?>
 </div>
 <div id="yp_seller">
-	<h4>Feedbacks you posted where you are seller</h4>
+	<h4>Feedbacks you posted as a seller</h4>
 	<?php if(count($allfeedbacks['youpost_seller'])==0):?>
 	<p><strong>You have not yet received any feedbacks for this category.</strong></p>
 <?php else:?>
@@ -695,193 +695,6 @@
 </div>
 
 
-            <!--
-			<div class="profile_main_content" id="wishlist">
-				<h2>Wish List</h2>
-				<p class="wishlist_create">
-					<a href="#create_wishlist" class="">
-						<img src="<?=base_url()?>assets/images/icon_wishlist.png" alt="wishlist">Create Wish List
-					</a>
-				</p>
-				<p class="wishlist_create">
-					<a href="#" class="">
-						<img src="<?=base_url()?>assets/images/icon_print.png" alt="print wishlist">Print All Wish List
-					</a>
-				</p>
-
-
-				<div id="create_wishlist">
-					<h3>Create Wishlist</h3>
-					<span>Wishlist Name:</span> <input type="text"> <br />
-					<span>Comment:</span> <textarea></textarea><br />
-					<input type="submit" class="orange_btn3" value="Submit"> | <a href="" class="simplemodal-close">Cancel</a>
-				</div>
-                    
-					<div class="wishlist_container">
-							<div class="wishlist_title">
-								<h3>My Wish List <span class="f11">3</span></h3>
-								<a href="" class="orange_btn3"><strong>Buy Wishlist</strong></a>
-							</div>
-							<div class="wishlist_content">
-								<div>
-									<a href="">
-										<img src="<?=base_url()?>assets/images/img_electronics_product2.jpg" alt="">
-										<p>
-											Ematic 7" Android 4.2 Capacitive Multi-Touch 4GB Wifi Tablet Kindle Books EGM003
-										</p>
-									</a>
-								</div>
-								<div>
-									<p class="f11">
-										Available Stock<br />
-										<span class="fm1 f18 grn">12</span>
-									</p>
-								</div>
-								<div>
-									<p class="f11">
-										Price<br />
-										<span class="fm1 f18 orange">Php 1,999.00</span>
-									</p>
-								</div>
-								<div>
-									<a href="" class="orange2"><strong>Buy It Now</strong></a>
-								</div>
-							</div>
-							<div class="wishlist_content">
-								<div>
-									<a href="">
-										<img src="<?=base_url()?>assets/images/img_electronics_product2.jpg" alt="">
-										<p>
-											Ematic 7" Android 4.2 Capacitive Multi-Touch 4GB Wifi Tablet Kindle Books EGM003
-										</p>
-									</a>
-								</div>
-								<div>
-									<p class="f11">
-										Available Stock<br />
-										<span class="fm1 f18 grn">12</span>
-									</p>
-								</div>
-								<div>
-									<p class="f11">
-										Price<br />
-										<span class="fm1 f18 orange">Php 1,999.00</span>
-									</p>
-								</div>
-								<div>
-									<a href="" class="orange2"><strong>Buy It Now</strong></a>
-								</div>
-							</div>
-							<div class="wishlist_content">
-								<div>
-									<a href="">
-										<img src="<?=base_url()?>assets/images/img_electronics_product2.jpg" alt="">
-										<p>
-											Ematic 7" Android 4.2 Capacitive Multi-Touch 4GB Wifi Tablet Kindle Books EGM003
-										</p>
-									</a>
-								</div>
-								<div>
-									<p class="f11">
-										Available Stock<br />
-										<span class="fm1 f18 grn">12</span>
-									</p>
-								</div>
-								<div>
-									<p class="f11">
-										Price<br />
-										<span class="fm1 f18 orange">Php 1,999.00</span>
-									</p>
-								</div>
-								<div>
-									<a href="" class="orange2"><strong>Buy It Now</strong></a>
-								</div>
-							</div>
-					</div>
-
-					<div class="wishlist_container">
-							<div class="wishlist_title">
-								<h3>My Special Wish List for January <span class="f11">3</span></h3>
-								<a href="" class="orange_btn3"><strong>Buy Wishlist</strong></a>
-							</div>
-							<div class="wishlist_content">
-								<div>
-									<a href="">
-										<img src="<?=base_url()?>assets/images/img_electronics_product2.jpg" alt="">
-										<p>
-											Ematic 7" Android 4.2 Capacitive Multi-Touch 4GB Wifi Tablet Kindle Books EGM003
-										</p>
-									</a>
-								</div>
-								<div>
-									<p class="f11">
-										Available Stock<br />
-										<span class="fm1 f18 grn">12</span>
-									</p>
-								</div>
-								<div>
-									<p class="f11">
-										Price<br />
-										<span class="fm1 f18 orange">Php 1,999.00</span>
-									</p>
-								</div>
-								<div>
-									<a href="" class="orange2"><strong>Buy It Now</strong></a>
-								</div>
-							</div>
-							<div class="wishlist_content">
-								<div>
-									<a href="">
-										<img src="<?=base_url()?>assets/images/img_electronics_product2.jpg" alt="">
-										<p>
-											Ematic 7" Android 4.2 Capacitive Multi-Touch 4GB Wifi Tablet Kindle Books EGM003
-										</p>
-									</a>
-								</div>
-								<div>
-									<p class="f11">
-										Available Stock<br />
-										<span class="fm1 f18 grn">12</span>
-									</p>
-								</div>
-								<div>
-									<p class="f11">
-										Price<br />
-										<span class="fm1 f18 orange">Php 1,999.00</span>
-									</p>
-								</div>
-								<div>
-									<a href="" class="orange2"><strong>Buy It Now</strong></a>
-								</div>
-							</div>
-							<div class="wishlist_content">
-								<div>
-									<a href="">
-										<img src="<?=base_url()?>assets/images/img_electronics_product2.jpg" alt="">
-										<p>
-											Ematic 7" Android 4.2 Capacitive Multi-Touch 4GB Wifi Tablet Kindle Books EGM003
-										</p>
-									</a>
-								</div>
-								<div>
-									<p class="f11">
-										Available Stock<br />
-										<span class="fm1 f18 grn">12</span>
-									</p>
-								</div>
-								<div>
-									<p class="f11">
-										Price<br />
-										<span class="fm1 f18 orange">Php 1,999.00</span>
-									</p>
-								</div>
-								<div>
-									<a href="" class="orange2"><strong>Buy It Now</strong></a>
-								</div>
-							</div>
-					</div>
-			</div>
-		-->
 		
 		<div class="profile_main_content" id="personal_information">
 			<!--<form method="post" id="personal_profile_main" name="personal_profile_main">-->

@@ -348,6 +348,7 @@ class Memberpage extends MY_Controller
 					'image_profile' => $this->memberpage_model->get_Image($sellerid),
 					'active_products' => $user_products['active'],
 					'deleted_products' => $user_products['deleted'],
+                    'sold_count' => $user_products['sold_count'],
 					)); 
 			$data['transaction'] = $this->memberpage_model->getTransactionDetails($sellerid);
 			$data['allfeedbacks'] = $this->memberpage_model->getFeedback($sellerid);

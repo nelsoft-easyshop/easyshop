@@ -1,13 +1,3 @@
-<!--[if lt IE 10]>
-<script type="text/javascript" src="<?=base_url()?>assets/JavaScript/js/excanvas.js"></script>
-<style>
-.item_attr_content ul li {
-    width: 25%;
-    float: left
-}
-</style>
-<![endif]-->
-
 <!--Pagination CSS-->
 <link  type="text/css"  href='<?=base_url()?>assets/css/jqpagination.css' rel="stylesheet" media='screen'/>
 
@@ -20,7 +10,6 @@
 				<div>
 					<ul>
 						<li><a href="<?=base_url()?>home">Home</a></li>
-						<!-- <li><a href="<?=base_url()?>home">Homepage</a></li> -->
 						<li>
 							<span>Setup</span>
 							<ul>
@@ -71,13 +60,13 @@
 					</div>
 					<div>
 						<h3>Sold Items</h3>
-						<input class="items" data-width="150" data-fgColor="#7ad014" data-max="1000" data-thickness=".1" data-angleOffset="180" data-readOnly=true data-displayPrevious=true value="0">
+						<input class="items" data-width="150" data-fgColor="#7ad014" data-max="1000" data-thickness=".1" data-angleOffset="180" data-readOnly=true data-displayPrevious=true value="<?php echo $sold_count;?>">
 					</div>
 				</div>
 				<div class="posted_feedbacks_top">
 					<h3 class="fm1 f18">Feedback Score:</h3>
 					<span>(<?php echo $allfeedbacks['rcount'];?> Feedback/s received)</span>
-					<p>Rating 1: 
+					<p><?php echo $this->lang->line('rating')[0].':'; ?>
 					<span>
 					<?php if($allfeedbacks['rating1'] === 0 ):?>
 						<?php echo $vendordetails['username'];?> has not received any ratings yet.
@@ -91,7 +80,7 @@
 					<?php endif;?>
 					</span>
 					</p>
-					<p>Rating 2: 
+					<p><?php echo $this->lang->line('rating')[1].':'; ?>
 					<span><?php if($allfeedbacks['rating2'] === 0 ):?>
 						<?php echo $vendordetails['username'];?> has not received any ratings yet.
 					<?php else:?>
@@ -104,7 +93,7 @@
 					<?php endif;?>
 					</span>
 					</p>
-					<p>Rating 3: 
+					<p><?php echo $this->lang->line('rating')[2].':'; ?>
 					<span>
 					<?php if($allfeedbacks['rating3'] === 0 ):?>
 						<?php echo $vendordetails['username'];?> has not received any ratings yet.
@@ -123,11 +112,7 @@
 				<div>
 					<ul class="idTabs post_items">
 						<li><a href="#active_items">Active Items <span><?php echo count($active_products);?></span></a></li>
-						<!-- <li><a href="#latest_post_item">Latest Post Items <span>0</span></a></li> -->
-						<li><a href="#sold_items">Sold Items <span>0</span></a></li>
-						<li><a href="#sold_items">Sold Out Items <span>0</span></a></li>
 						<li><a href="#dashboard-feedbacks">Feedbacks <span><?php echo $allfeedbacks['afbcount'];?></span></a></li>
-						<!-- <li><input type="text" value="search"><input type="submit" value="Submit"></li> -->
 					</ul>
 				</div>
 				<div class="clear"></div>
@@ -183,8 +168,8 @@
 								  	</div>
 									<div class="price_container" data-prodprice="<?php echo $active_product['price'];?>">
 										<p><span class="fm1 f24 orange">Php <?php echo number_format($active_product['price'],2,'.',',');?></span><br />Price</p>
-										<p><span class="fm1 f24 grn">xx</span><br />Sold Items</p>
-										<p><span class="fm1 f24">xx</span><br />Available Stock</p>
+										<p><span class="fm1 f24 grn"><?php echo $active_product['sold']; ?></span><br />Sold Items</p>
+										<p><span class="fm1 f24"><?php echo $active_product['availability']; ?></span><br />Available Stock</p>
 									</div>
 									<p><strong>Description:</strong><br />
 										<span class="item_prod_desc_content">
@@ -236,17 +221,17 @@
 				<div class="dashboard_table" id="dashboard-feedbacks">
 					<h2>Feedbacks</h2>
 						<ul class="idTabs feedbacks_tabs">
-							<li><a href="#op_buyer">Others posted (<?php echo $vendordetails['username'];?> as Buyer)</a></li>
-							<li><a href="#op_seller">Others posted (<?php echo $vendordetails['username'];?> as Seller)</a></li>
-							<li><a href="#yp_buyer"><?php echo $vendordetails['username'];?> as Buyer</a></li>
-							<li><a href="#yp_seller"><?php echo $vendordetails['username'];?> as Seller</a></li>
+							<li><a href="#op_buyer">Feedbacks as a Buyer</a></li>
+							<li><a href="#op_seller">Feedbacks as a Seller</a></li>
+							<li><a href="#yp_buyer">Feedbacks for others - Buyer</a></li>
+							<li><a href="#yp_seller">Feedbacks for others - Seller</a></li>
 						</ul>
 
 						<div class="clear"></div>
 						<div id="others_post">
 
 							<div id="op_buyer">
-								<h4>Feedbacks others posted where <?php echo $vendordetails['username'];?> is buyer</h4>
+								<h4>Feedbacks others posted for <?php echo $vendordetails['username'];?> as a buyer</h4>
 								<?php if(count($allfeedbacks['otherspost_buyer'])==0):?>
 									<p><strong><?php echo $vendordetails['username'];?> have not yet received any feedbacks for this category.</strong></p>
 								<?php else:?>
@@ -258,7 +243,7 @@
 												<?php foreach($tempafb as $key=>$afb):?>
 												<p>From: <a href="<?php echo base_url();?>vendor/<?php echo $afb['member_name'];?>"><?php echo $afb['member_name'];?></a> | on: <?php echo $afb['dateadded'];?></p>
 												<p>"<?php echo $afb['feedb_msg']?>"</p>
-												<p>Rating 1: 
+												<p><?php echo $this->lang->line('rating')[0].':'; ?>
 													<?php for($i = 0; $i < $afb['rating1']; $i++):?>
 														<span class="span_bg star_on"></span>
 													<?php endfor;?>
@@ -266,7 +251,7 @@
 														<span class="span_bg star_off"></span>
 													<?php endfor;?>
 												</p>
-												<p>Rating 2: 
+												<p><?php echo $this->lang->line('rating')[1].':'; ?>
 													<?php for($i = 0; $i < $afb['rating2']; $i++):?>
 														<span class="span_bg star_on"></span>
 													<?php endfor;?>
@@ -274,7 +259,7 @@
 														<span class="span_bg star_off"></span>
 													<?php endfor;?>
 												</p>
-												<p>Rating 3: 
+												<p><?php echo $this->lang->line('rating')[2].':'; ?>
 													<?php for($i = 0; $i < $afb['rating3']; $i++):?>
 														<span class="span_bg star_on"></span>
 													<?php endfor;?>
@@ -303,7 +288,7 @@
 						
 						
 							<div id="op_seller">
-								<h4>Feedbacks others posted where <?php echo $vendordetails['username'];?> is seller</h4>
+								<h4>Feedbacks others posted for <?php echo $vendordetails['username'];?> as a seller</h4>
 								<?php if(count($allfeedbacks['otherspost_seller'])==0):?>
 									<p><strong><?php echo $vendordetails['username'];?> have not yet received any feedbacks for this category.</strong></p>
 								<?php else:?>
@@ -316,7 +301,7 @@
 												<?php foreach($tempafb as $afb):?>
 												<p>From: <a href="<?php echo base_url();?>vendor/<?php echo $afb['member_name'];?>"><?php echo $afb['member_name'];?></a> | on: <?php echo $afb['dateadded'];?></p>
 												<p>"<?php echo $afb['feedb_msg']?>"</p>
-												<p>Rating 1: 
+												<p><?php echo $this->lang->line('rating')[0].':'; ?> 
 													<?php for($i = 0; $i < $afb['rating1']; $i++):?>
 														<span class="span_bg star_on"></span>
 													<?php endfor;?>
@@ -324,7 +309,7 @@
 														<span class="span_bg star_off"></span>
 													<?php endfor;?>
 												</p>
-												<p>Rating 2: 
+												<p><?php echo $this->lang->line('rating')[1].':'; ?>
 													<?php for($i = 0; $i < $afb['rating2']; $i++):?>
 														<span class="span_bg star_on"></span>
 													<?php endfor;?>
@@ -332,7 +317,7 @@
 														<span class="span_bg star_off"></span>
 													<?php endfor;?>
 												</p>
-												<p>Rating 3: 
+												<p><?php echo $this->lang->line('rating')[2].':'; ?> 
 													<?php for($i = 0; $i < $afb['rating3']; $i++):?>
 														<span class="span_bg star_on"></span>
 													<?php endfor;?>
@@ -358,7 +343,7 @@
 								<?php endif;?>
 							</div>
 						<div id="yp_buyer">
-							<h4>Feedbacks <?php echo $vendordetails['username'];?> posted as buyer</h4>
+							<h4>Feedbacks <?php echo $vendordetails['username'];?> posted as a buyer</h4>
 							<?php if(count($allfeedbacks['youpost_buyer'])==0):?>
 								<p><strong><?php echo $vendordetails['username'];?> have not yet posted any feedbacks for this category.</strong></p>
 							<?php else:?>
@@ -370,7 +355,7 @@
 										<?php foreach($tempafb as $afb):?>
 										<p>For: <a href="<?php echo base_url();?>vendor/<?php echo $afb['for_membername'];?>"><?php echo $afb['for_membername'];?></a> | on: <?php echo $afb['dateadded'];?></p>
 										<p>"<?php echo $afb['feedb_msg']?>"</p>
-										<p>Rating 1: 
+										<p><?php echo $this->lang->line('rating')[0].':'; ?>
 											<?php for($i = 0; $i < $afb['rating1']; $i++):?>
 												<span class="span_bg star_on"></span>
 											<?php endfor;?>
@@ -378,7 +363,7 @@
 												<span class="span_bg star_off"></span>
 											<?php endfor;?>
 										</p>
-										<p>Rating 2: 
+										<p><?php echo $this->lang->line('rating')[1].':'; ?>
 											<?php for($i = 0; $i < $afb['rating2']; $i++):?>
 												<span class="span_bg star_on"></span>
 											<?php endfor;?>
@@ -386,7 +371,7 @@
 												<span class="span_bg star_off"></span>
 											<?php endfor;?>
 										</p>
-										<p>Rating 3: 
+										<p><?php echo $this->lang->line('rating')[2].':'; ?>
 											<?php for($i = 0; $i < $afb['rating3']; $i++):?>
 												<span class="span_bg star_on"></span>
 											<?php endfor;?>
@@ -412,7 +397,7 @@
 							<?php endif;?>
 						</div>
 						<div id="yp_seller">
-							<h4>Feedbacks <?php echo $vendordetails['username'];?> posted as seller</h4>
+							<h4>Feedbacks <?php echo $vendordetails['username'];?> posted as a seller</h4>
 							<?php if(count($allfeedbacks['youpost_seller'])==0):?>
 								<p><strong><?php echo $vendordetails['username'];?> have not yet posted any feedbacks for this category.</strong></p>
 							<?php else:?>
@@ -424,7 +409,7 @@
 											<?php foreach($tempafb as $afb):?>
 											<p>For: <a href="<?php echo base_url();?>vendor/<?php echo $afb['for_membername'];?>"><?php echo $afb['for_membername'];?></a> | on: <?php echo $afb['dateadded'];?></p>
 											<p>"<?php echo $afb['feedb_msg']?>"</p>
-											<p>Rating 1: 
+											<p><?php echo $this->lang->line('rating')[0].':'; ?>
 												<?php for($i = 0; $i < $afb['rating1']; $i++):?>
 													<span class="span_bg star_on"></span>
 												<?php endfor;?>
@@ -432,7 +417,7 @@
 													<span class="span_bg star_off"></span>
 												<?php endfor;?>
 											</p>
-											<p>Rating 2: 
+											<p><?php echo $this->lang->line('rating')[1].':'; ?>
 												<?php for($i = 0; $i < $afb['rating2']; $i++):?>
 													<span class="span_bg star_on"></span>
 												<?php endfor;?>
@@ -440,7 +425,7 @@
 													<span class="span_bg star_off"></span>
 												<?php endfor;?>
 											</p>
-											<p>Rating 3: 
+											<p><?php echo $this->lang->line('rating')[2].':'; ?>
 												<?php for($i = 0; $i < $afb['rating3']; $i++):?>
 													<span class="span_bg star_on"></span>
 												<?php endfor;?>

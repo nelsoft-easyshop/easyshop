@@ -3097,15 +3097,15 @@ div.post_item_content_left {
 
 .star_on {
 	background-position: -293px -259px;
-	width: 16px;
-	height: 16px;
+	width: 16px !important;
+	height: 16px !important;
 	display: inline-block;
 }
 
 .star_off {
 	background-position: -316px -259px;	
-	width: 16px;
-	height: 16px;
+	width: 16px !important;
+	height: 16px !important;
 	display: inline-block;
 }
 
