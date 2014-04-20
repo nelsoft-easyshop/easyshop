@@ -1,5 +1,7 @@
 
 <link type="text/css" href="<?=base_url()?>assets/css/sell_item.css" rel="stylesheet" />
+<link rel="stylesheet" href="<?=base_url()?>assets/css/product_preview.css" type="text/css" media="screen"/>
+<link rel="stylesheet" href="<?=base_url()?>assets/css/jquery.bxslider.css" type="text/css" media="screen"/>
 
 <div class="wrapper">
   <div class="seller_product_content">
@@ -293,7 +295,7 @@
 
       <div class="clear"></div>
       <span id="btnShippingDetailsSubmit" class="tablehide orange_btn3">Submit</span>
-      <img src="<?=base_url()?>/assets/images/orange_loader.gif" class="loading_img" style="display:none;"/>
+      <img src="<?=base_url()?>/assets/images/orange_loader.gif" class="loading_img_step3" style="display:none; margin-left:470px;"/>
 
     </div>
     <!-- End of Shipping Content -->
@@ -313,6 +315,8 @@
 
 <script type="text/javascript" src="<?=base_url()?>assets/JavaScript/productUpload_step3.js"></script>
 <script type="text/javascript" src="<?=base_url()?>assets/JavaScript/js/jquery.numeric.js"></script>
+<script type='text/javascript' src="<?=base_url()?>assets/JavaScript/js/jquery-ui.js"></script>
+<script src="<?=base_url()?>assets/JavaScript/js/jquery.idTabs.min.js" type="text/javascript"></script>
 <script type="text/javascript">
   if ($('table.shipping_prod_attr_comb').length) {
     $('.shipping_list_items_con').addClass('prod_att_comb_no_select');
