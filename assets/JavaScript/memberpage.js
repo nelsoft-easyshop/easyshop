@@ -1619,7 +1619,7 @@ $(document).ready(function(){
 				var html = '';
 				var len = data.length;
 				for (var i = 0; i< len; i++) {
-					html += '<option value="' + data[i].id + '">' + data[i].name + '</option>';
+					html += '<option value="' + data[i].id + '" title="' + data[i].name + '">' + data[i].name + '</option>';
 				}
 				$(appendTarget).append(html);
 			
@@ -1687,7 +1687,7 @@ $(document).ready(function(){
 		}
 
 		var barRule = {
-			required: true, minlength: 12, maxlength: 18, number: true,
+			required: true, minlength: 12, maxlength: 18, 
 			messages: {
 				required: "* Account Number Required",
 				minlength: jQuery.format("At least {0} characters are necessary")
@@ -1722,8 +1722,22 @@ $(document).ready(function(){
 		
 		var bankname = $('#bi_bn_' + bictr).val();	
 		$('#bi_bns_' + bictr).getbank(bankname).show();
-		
+			
+		// Cancel
 		$("#cn_"+bictr).click(function(){
+			
+			$(":input[name^='hbi_chk_bictr']").filter(function(){
+				
+				var hid = $(this).attr('id');
+				var fid = hid.substring(1,30);
+				
+				if($(this).val() == "checked"){
+					$("#"+fid).prop("checked", true);
+				}else{
+					$("#"+fid).prop("checked", false);
+				}
+			});
+			
 			$("#"+ban).val($("#h"+ban).val());
 			$("#"+bar).val($("#h"+bar).val());
 			$("#"+bn).val($("#h"+bn).val());
@@ -1741,6 +1755,7 @@ $(document).ready(function(){
             $(this).closest('form').find('span.error').remove();
 		});
 		
+		// Save
 		$("#sv_"+bictr).click(function(){
 			
 			var updt = confirm("Update bank info?");
@@ -1762,6 +1777,7 @@ $(document).ready(function(){
 				var banval = $("#"+ban).val();
 				var barval = $("#"+bar).val();
 				var bnval = $("#"+bns).val();
+				var bntit = $("#"+bns).find("option:selected").attr("title");
 				var bidval = $("#"+bid).val();
 				var bchval = $("#"+bch).val();			
 				var currentRequest = null;
@@ -1773,11 +1789,21 @@ $(document).ready(function(){
 						url: redurl, 
 						data: {bi_acct_name:banval, bi_acct_no:barval, bi_bank:bnval, bi_id:bidval, bi_def:bchval, es_csrf_token:csrftoken},
 						success: function(data){
-							$("#bi_check_"+bictr).show();
 							
+							$(":checkbox[name^='bi_chk_bictr']").filter(function(){
+								var hid = $(this).attr('id');
+								if($(this).prop("checked") == true){
+									$("#h"+hid).val("checked");
+								}else{
+									$("#h"+hid).val("");
+								}
+							});							
+							
+							$("#bi_check_"+bictr).show();
 							$("#h"+ban).val($("#"+ban).val());
 							$("#h"+bar).val($("#"+bar).val());
-							$("#h"+bn).val($("#"+bn).val());							
+							$("#h"+bn).val(bntit);
+							$("#"+bn).val(bntit);							
 							
 							$("#"+ban).prop("disabled", true);
 							$("#"+bar).prop("disabled", true);
@@ -1807,16 +1833,13 @@ $(document).ready(function(){
 		 ignore: ':hidden:not([class~=selectized]),:hidden > .selectized, .selectize-control .selectize-input input',
 		 rules: {
 			bi_bank: {
-				required: true,				
+				required: true			
 			},
 			bi_acct_name: {
 				required: true		
 			},			
 			bi_acct_no: {
-				required: true,
-				minlength: 12,
-				maxlength: 18,
-				number: true				
+				required: true, minlength: 12, maxlength: 18			
 			} 
 		 },
 		 messages:{
@@ -1847,47 +1870,7 @@ $(document).ready(function(){
 				data: $("#billing_info").serialize(),
 				success: function(data){
 					$("#bi_bank, #bi_acct_name, #bi_acct_no").val('');
-						
-					var obj = jQuery.parseJSON(data);
-					var string = "";
-
-						string += "<table width='50%'>";
-						string += "<tr><td>Account Name</td><td>Account Number</td><td>Bank Name</td><td> </td></tr>"
-						for(var x=0; x<obj.length; x++){
-							string += "<tr>";
-							string += "<td>" + obj[x].bank_account_name + "</td>"; 
-							string += "<td>" + obj[x].bank_account_number + "</td>";
-							string += "<td>" + obj[x].bank_name + "</td>";
-							string += "<td> [DELETE] </td>";
-							string += "</tr>";
-						};
-						string += "</table>";
-						
-						console.log(string);
-						
-						
-						$('#billing_info .billing_info_grid').empty();
-						$('#billing_info .billing_info_grid').append(string);
-
-					
-					//UPDATE DIV CONTENTS
-//					$('#billing_info .billing_info_grid').html(function(){
-//						
-//						string += "<table width='50%'>";
-//						string += "<tr><td>Account Name</td><td>Account Number</td><td>Bank Name</td><td> </td></tr>"
-//						for(var x=0; x<obj.length; x++){
-//							string += "<tr>";
-//							string += "<td>" + obj[x].bank_account_name + "</td>"; 
-//							string += "<td>" + obj[x].bank_account_number + "</td>";
-//							string += "<td>" + obj[x].bank_name + "</td>";
-//							string += "<td> [DELETE] </td>";
-//							string += "</tr>";
-//						};
-//						string += "</table>";
-//						
-//						return string;
-//						alert(string);
-//					});
+					window.location.href = config.base_url+'me';
 				}
 			});		
 		}		
