@@ -835,17 +835,17 @@
 							<div class="address_fields_layer1">
 								<div>
 									<select name="city" id="personal_city" class="address_dropdown cityselect" data-status="<?php echo $cityID?>">
-										<option value="0">--- Select City ---</option>
+										<option value="0">--- Select State/Region ---</option>
 										<?php foreach($city_lookup as $ckey=>$city):?>
 											<option class="echo" value="<?php echo $ckey?>" <?php echo $cityID == $ckey ? "selected":"" ?>><?php echo $city?></option>
 										<?php endforeach;?>
 									</select>
-									<p>City</p>
+									<p>State/Region</p>
 									<input type="hidden" name="city_orig" value="<?php echo $cityID?>">
 								</div>
 								<div>
 									<select name="province" id="personal_province" class="address_dropdown provinceselect" data-status="<?php echo $provinceID?>">
-										<option value="0">--- Select Province ---</option>
+										<option value="0">--- Select City ---</option>
 										<option class="optionclone" value="" style="display:none;" disabled></option>
 										
 										<?php if($provinceID != '' && $cityID != ''):?>
@@ -862,7 +862,7 @@
 										<?php endforeach;?>
 										-->
 									</select>
-									<p>Province</p>
+									<p>City</p>
 									<input type="hidden" name="province_orig" value="<?php echo $provinceID?>">
 								</div>
 								<div>
@@ -1262,16 +1262,16 @@
 				<div class="delivery_address_content_layer1">
 					<div>
 						<select name="c_city" class="address_dropdown cityselect" data-status="<?php echo $c_cityID?>">
-							<option value="0">--- Select City ---</option>
+							<option value="0">--- Select State/Region ---</option>
 							<?php foreach($city_lookup as $ckey=>$city):?>
 								<option class="echo" value="<?php echo $ckey?>" <?php echo $c_cityID == $ckey ? "selected":"" ?>><?php echo $city?></option>
 							<?php endforeach;?>
 						</select>
-						<p>City</p>
+						<p>State/Region</p>
 					</div>
 					<div>
 						<select name="c_province" class="address_dropdown provinceselect" data-status="<?php echo $c_provinceID?>">
-							<option value="0">--- Select Province ---</option>
+							<option value="0">--- Select City ---</option>
 							<option class="optionclone" value="" style="display:none;" disabled></option>
 							<?php foreach($province_lookup as $parentkey=>$arr):?>
 								<?php foreach($arr as $lockey=>$province):?>
@@ -1279,7 +1279,7 @@
 								<?php endforeach;?>
 							<?php endforeach;?>
 						</select>
-						<p>Province</p>
+						<p>City</p>
 					</div>
 					<div>
 						<select class="disabled_country" disabled>
