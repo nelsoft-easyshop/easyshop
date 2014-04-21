@@ -318,7 +318,19 @@ $config = array(
 						'label' => 'Subscription Email',
 						'rules' => 'trim|required|valid_email'
 					)
-				)
+				),
+			'billing_info' => array(
+					array(
+						'field' => 'bi_acct_name',
+						'label' => 'Bank Account Name',
+						'rules' => 'required'
+					),					
+					array(
+						'field' => 'bi_acct_no',
+						'label' => 'Bank Account Number',
+						'rules' => 'required|numeric|max_length[18]'
+					)					
+				)				
 		);
 
 		
