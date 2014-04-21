@@ -136,7 +136,7 @@ class Payment extends MY_Controller{
         $email = $address['email']; 
         $telephone = $address['c_telephone'];
 
-        $city = ($address['c_cityID'] > 0 ? $address['c_cityID'] :  0);
+        $city = ($address['c_stateregionID'] > 0 ? $address['c_stateregionID'] :  0);
         $cityDetails = $this->payment_model->getCityOrRegionOrMajorIsland($city);
         $regionDesc = $cityDetails['parent_location'];
         $region = $cityDetails['parent_id'];
@@ -267,7 +267,7 @@ function paypal(){
     
 
     $address = $this->memberpage_model->get_member_by_id($member_id); 
-    $city = ($address['c_cityID'] > 0 ? $address['c_cityID'] :  0);
+    $city = ($address['c_stateregionID'] > 0 ? $address['c_stateregionID'] :  0);
     $cityDetails = $this->payment_model->getCityOrRegionOrMajorIsland($city);
     $regionDesc = $cityDetails['parent_location'];
     $region = $cityDetails['parent_id'];
@@ -388,7 +388,7 @@ function paypal(){
         $ip = $this->user_model->getRealIpAddr();   
         $productstring = "";  
         $address = $this->memberpage_model->get_member_by_id($member_id); 
-        $city = ($address['c_cityID'] > 0 ? $address['c_cityID'] :  0);
+        $city = ($address['c_stateregionID'] > 0 ? $address['c_stateregionID'] :  0);
         $cityDetails = $this->payment_model->getCityOrRegionOrMajorIsland($city);
         $regionDesc = $cityDetails['parent_location'];
         $region = $cityDetails['parent_id'];
