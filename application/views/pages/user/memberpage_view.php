@@ -133,11 +133,18 @@
 				</div>
 			</div>
 			<div>
+				<?php 
+					$param = $this->input->get('me');
+					$sel = "";
+					if($param == "pmnt"){
+						$sel = " class='selected' ";
+					}
+				?>
 				<ul class="idTabs member_side_nav"> 
 					<li><a href="#dashboard">Dashboard</a></li>
 					<!-- <li><a href="#wishlist">Wishlist</a></li> -->
 					<li><a href="#personal_information">Personal Information</a></li>
-					<li><a href="#payment">Payment</a></li>
+					<li><a href="#payment" <?php echo $sel;?>>Payment</a></li>
 					<li><a href="#delivery_address">Delivery Address</a></li>
 					<li><a href="#transactions">Transactions</a></li>
 					<!-- <li><a href="#privacy_settings">Privacy Settings</a></li> -->
