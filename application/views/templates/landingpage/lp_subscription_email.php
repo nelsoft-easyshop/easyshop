@@ -53,7 +53,7 @@
 				<td style="background: #3C475C;	padding: 20px; border-bottom: 5px solid #F18200;">
 					<div class="socialMedia" style="width: 160px; margin: 0 auto;">
 						<a href="#"><img src="facebook.png" style="width: 50px;" alt="Share us on Facebook"></a>
-						<a href="#"><img src="googleplus.png" style="width: 50px;" alt="Connect with Google+"></a>
+						<!--<a href="#"><img src="googleplus.png" style="width: 50px;" alt="Connect with Google+"></a>-->
 						<a href="#"><img src="twitter.png" style="width: 50px;" alt="Tweet us on Twitter"></a>
 					</div>
 					<p style="color: #ffffff; text-align: center;">Copyright &copy; 2014 Easyshop.ph</p>
