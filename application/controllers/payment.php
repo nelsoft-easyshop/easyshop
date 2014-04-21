@@ -12,14 +12,14 @@ class Payment extends MY_Controller{
         $this->load->library('paypal');
         $this->load->model('user_model');
         $this->load->model('payment_model');
-        $this->load->model("memberpage_model"); 
+        $this->load->model('memberpage_model'); 
         session_start();
     }
 
  
     
     public $PayMentPayPal = 1;
-    public $PayMentCashOnDelivery = 2;
+    public $PayMentCashOnDelivery = 3;
 
     // SANDBOX
     public $PayPalMode             = 'sandbox'; 
@@ -60,12 +60,11 @@ class Payment extends MY_Controller{
         if(!$this->session->userdata('member_id')){
             redirect(base_url().'home', 'refresh');
         };
-        
         $carts = $this->session->all_userdata(); 
         $itemArray = $carts['choosen_items'];
         $member_id =  $this->session->userdata('member_id');
         $address = $this->memberpage_model->get_member_by_id($member_id);
-        $city = ($address['c_cityID'] > 0 ? $address['c_cityID'] :  0);
+        $city = ($address['c_stateregionID'] > 0 ? $address['c_stateregionID'] :  0);
         $cityDetails = $this->payment_model->getCityOrRegionOrMajorIsland($city);
         $region = $cityDetails['parent_id'];
         $cityDetails = $this->payment_model->getCityOrRegionOrMajorIsland($region);
@@ -342,8 +341,8 @@ function paypal(){
                     }else{
                         $response['message'] = '<div style="color:green">Your payment is completed through Paypal</div>';            
                         $response = array_merge($response,$return);
-                        // $this->removeItemFromCart();
-                        // $this->session->unset_userdata('choosen_items');
+                        $this->removeItemFromCart();
+                        $this->session->unset_userdata('choosen_items');
                     }
                 }else{
                     $response['message'] = '<div style="color:red"><b>Error 2: (GetTransactionDetails failed):</b>'.urldecode($httpParsedResponseAr["L_LONGMESSAGE0"]).'</div>';
@@ -438,8 +437,8 @@ function paypal(){
             $response['message'] = '<div style="color:red"><b>Error 3: </b>'.$return['o_message'].'</div>'; 
         }else{
             $response['message'] = '<div style="color:green">Your payment is completed through Cash on Delivery.</div>';
-            // $this->removeItemFromCart(); 
-            // $this->session->unset_userdata('choosen_items');
+            $this->removeItemFromCart(); 
+            $this->session->unset_userdata('choosen_items');
         }   
 
         $response = array_merge($response,$return);  
