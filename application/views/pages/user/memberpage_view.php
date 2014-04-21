@@ -37,6 +37,7 @@
 								<li><a href="javascript:void(0)" onclick="triggerTab('dashboard');">Dashboard</a></li>
 								<!-- <li><a href="javascript:void(0)" onclick="triggerTab('wishlist');">Wishlist</a></li> -->
 								<li><a href="javascript:void(0)" onclick="triggerTab('personal_information');">Personal Information</a></li>
+								<li><a href="javascript:void(0)" onclick="triggerTab('payment');">Payment</a></li>
 								<li><a href="javascript:void(0)" onclick="triggerTab('delivery_address');">Delivery Address</a></li>
 								<li><a href="javascript:void(0)" onclick="triggerTab('transactions');">Transactions</a></li>
 								<!-- <li><a href="javascript:void(0)" onclick="triggerTab('privacy_settings');">Privacy Settings</a></li> -->
@@ -136,7 +137,7 @@
 					<li><a href="#dashboard">Dashboard</a></li>
 					<!-- <li><a href="#wishlist">Wishlist</a></li> -->
 					<li><a href="#personal_information">Personal Information</a></li>
-					<li><a href="#billing_info_x">Payment</a></li>
+					<li><a href="#payment">Payment</a></li>
 					<li><a href="#delivery_address">Delivery Address</a></li>
 					<li><a href="#transactions">Transactions</a></li>
 					<!-- <li><a href="#privacy_settings">Privacy Settings</a></li> -->
@@ -1112,7 +1113,7 @@
 </div>
 
 
-<div class="profile_main_content" id="billing_info_x">
+<div class="profile_main_content" id="payment">
 	<h2>Update your payment details</h2>
 	<p>
 		Any changes to banking information after the 15th day of the month will not be in effect until the following month's payment.
@@ -1163,7 +1164,17 @@
 	</div>
 	<hr style="display: block; height: 1px; border: 0; border-top: 1px solid #ccc; margin: 1em 0; padding: 0;" />
 	<div class="billing_info_grid">
+			
 		<?php foreach($bill as $rows => $billing_info){ ?>
+			<?php 
+				$bi_checked = "";
+				$bi_checked_val = "";
+					
+				if($billing_info['is_default'] == "1"){ 
+					$bi_checked = " checked='checked' ";
+					$bi_checked_val = "checked";
+				} 
+			?>
 			<?php
 			if($rows >= 0){
 				$attr = array('id'=>'ubi_bictr'.$rows, 'name'=>'ubi_bictr'.$rows);
@@ -1186,7 +1197,12 @@
 					</div>
 					<div id="bi-left" style="float:left; width:inherit;">
 							<div class="profile_fields" id="bi_div_bictr<?php echo $rows; ?>">
-								<div class="inner_profile_fields progress_update update_once">				
+								<div class="inner_profile_fields progress_update update_once">
+									<div>
+										<label for="bi_chk_bictr<?php echo $rows; ?>">Default Bank: </label>
+										<input type="checkbox" name="bi_chk_bictr<?php echo $rows; ?>" id="bi_chk_bictr<?php echo $rows; ?>" value="1" disabled="disabled" <?php echo $bi_checked; ?>>
+										<input type="hidden" name="hbi_chk_bictr<?php echo $rows; ?>" id="hbi_chk_bictr<?php echo $rows; ?>" value ="<?php echo $bi_checked_val;?>"/>
+									</div>			
 									<div>						
 										<label for="bi_ban_bictr<?php echo $rows; ?>">Account Name: </label>
 										<input type="text" name="bi_ban_bictr<?php echo $rows; ?>" id="bi_ban_bictr<?php echo $rows; ?>" value ="<?php echo $billing_info['bank_account_name'];?>" disabled="disabled" maxlength="60"/>
@@ -1673,4 +1689,3 @@
 		<!-- MEMBERPAGE JS-->
 		<script type="text/javascript" src="<?=base_url()?>assets/JavaScript/memberpage.js"></script>
 		<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=&sensor=false"></script>
-		
