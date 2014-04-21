@@ -619,12 +619,20 @@ class memberpage_model extends CI_Model
 	
 	function billing_info_update($data){
 
-		$query = "UPDATE `es_billing_info` SET `bank_id`=:bank_id,`bank_account_name`=:bank_account_name,`bank_account_number`=:bank_account_number,`datemodified` = NOW()
-				WHERE `id_billing_info` = :ibi AND `member_id` = :member_id";
+		$query = "UPDATE `es_billing_info` SET `is_default`=0, `datemodified` = NOW()
+				WHERE `member_id`=:member_id ";
 		$sth = $this->db->conn_id->prepare($query);
+		$sth->bindParam(':member_id', $data['member_id']);		
+		$result = $sth->execute();
+
+		$query = "UPDATE `es_billing_info` SET `bank_id`=:bank_id,`bank_account_name`=:bank_account_name,`bank_account_number`=:bank_account_number, `is_default`=:is_default, `datemodified` = NOW()
+				WHERE `member_id`=:member_id AND `id_billing_info` = :ibi";
+		$sth = $this->db->conn_id->prepare($query);
+		$sth->bindParam(':member_id', $data['member_id']);		
 		$sth->bindParam(':bank_id', $data['bank_id']);
 		$sth->bindParam(':bank_account_name', $data['bank_account_name']);
 		$sth->bindParam(':bank_account_number', $data['bank_account_number']);
+		$sth->bindParam(':is_default', $data['is_default']);
 		$sth->bindParam(':ibi', $data['ibi']);
         $sth->bindParam(':member_id', $data['member_id']);
 		$result = $sth->execute();
@@ -635,8 +643,9 @@ class memberpage_model extends CI_Model
 	
 	function billing_info_delete($data){
 
-		$query = "DELETE FROM `es_billing_info` WHERE `id_billing_info` = :ibi AND `member_id` = :member_id";
+		$query = "DELETE FROM `es_billing_info` WHERE `member_id`=:member_id AND `id_billing_info`=:ibi";
 		$sth = $this->db->conn_id->prepare($query);
+		$sth->bindParam(':member_id', $data['member_id']);		
 		$sth->bindParam(':ibi', $data['ibi']);
         $sth->bindParam(':member_id', $data['member_id']);
 		$result = $sth->execute();
@@ -646,17 +655,18 @@ class memberpage_model extends CI_Model
 	}	
 	
 	function get_billing_info($data){
-		$query = "	SELECT
+		$query = "SELECT
 			ebi.`id_billing_info`, 
 			ebi.`payment_type`,
 			ebi.`user_account`,
 			ebi.`bank_id`, 
 			ebki.`bank_name`,
 			ebi.`bank_account_name`,
-			ebi.`bank_account_number`
+			ebi.`bank_account_number`,
+			ebi.`is_default`
 		FROM `es_billing_info` ebi 
 		LEFT JOIN `es_bank_info` ebki ON ebi.`bank_id` = ebki.`id_bank` 
-		WHERE ebi.`member_id` = :member_id;";		
+		WHERE ebi.`member_id`=:member_id ORDER BY ebi.`is_default` DESC";		
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':member_id',$data);
 		$sth->execute();
