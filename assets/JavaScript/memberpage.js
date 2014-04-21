@@ -4,6 +4,9 @@ $(window).load(function(){
 	
 	$('.address_dropdown, .disabled_country').chosen({width:'200px'});
 	
+});
+
+$(document).ready(function(){
 	jQuery.validator.addMethod("select_is_set", function(value, element, arg) {
 		return this.optional(element) || (arg != value?true:false);
 	 }, "* This field must be set");
@@ -11,8 +14,8 @@ $(window).load(function(){
 	 jQuery.validator.addMethod("is_validmobile", function(value, element) {
 		return this.optional(element) || /^9[0-9]{9}/.test(value);
 	 }, "Invalid mobile number");
-	
 });
+
 
 /******* rotate sort arrow when click *****/
 $(".arrow_sort").on("click", function () {
@@ -426,7 +429,7 @@ $(document).ready(function(){
 			$(this).prop('value', $(this).attr('value'));
 		});
 		
-		innerfields.find('select:not(.provinceselect)').each(function(){
+		innerfields.find('select:not(.cityselect)').each(function(){
 			$(this).val($(this).attr('data-status'));
 		});
 		
@@ -437,12 +440,12 @@ $(document).ready(function(){
 				}
 			});
 		}else if( cancelname === 'cancel_address' ){
-			var provinceselect = innerfields.find('select.provinceselect');
 			var cityselect = innerfields.find('select.cityselect');
-			provinceFilter(cityselect, provinceselect);
-			provinceselect.val(provinceselect.attr('data-status'));
-			provinceselect.trigger('chosen:updated');
+			var stateregionselect = innerfields.find('select.stateregionselect');
+			cityFilter(stateregionselect, cityselect);
+			cityselect.val(cityselect.attr('data-status'));
 			cityselect.trigger('chosen:updated');
+			stateregionselect.trigger('chosen:updated');
 		}
 	});
 	
@@ -453,25 +456,25 @@ $(document).ready(function(){
 /**************************************************************************************************************/
 $(document).ready(function(){
 
-	$('.cityselect').on('change', function(){
+	$('.stateregionselect').on('change', function(){
 		$(this).valid();
-		var provinceselect = $(this).parent('div').siblings('div').find('select.provinceselect');
-		provinceselect.val(0);
-		provinceFilter( $(this), provinceselect );
+		var cityselect = $(this).parent('div').siblings('div').find('select.cityselect');
+		cityselect.val(0);
+		cityFilter( $(this), cityselect );
 	});
 	
-	$('.provinceselect').on('change', function(){
+	$('.cityselect').on('change', function(){
 		$(this).valid();
 	});
 	
 	//************	PERSONAL PROFILE ADDRESS VALIDATION	***************//
 	$("#personal_profile_address").validate({
 		rules: {
-			city:{
+			stateregion:{
 				required: true,
 				select_is_set: '0'
 			},
-			province:{
+			city:{
 				required: true,
 				select_is_set: '0'
 			},
@@ -480,11 +483,11 @@ $(document).ready(function(){
 			}
 		},
 		messages: {
+			stateregion:{
+				required: '* State/Region is required'
+			},
 			city:{
 				required: '* City is required'
-			},
-			province:{
-				required: '* Province is required'
 			},
 			address:{
 				required: '* Please enter your full address'
@@ -505,7 +508,7 @@ $(document).ready(function(){
 					
 					//overwrite div to display new address data
 					$('.address_information .add_info').html(function(){
-						var string = obj['city'] + ", " + obj['province'] + "<br>" + obj['address'];
+						var string = obj['stateregion'] + ", " + obj['city'] + "<br>" + obj['address'];
 						return string;
 					});
 					
@@ -529,8 +532,8 @@ $(document).ready(function(){
 					$('#map_lng').val(obj['lng']);
 					
 					// Update original checker fields
+					$('.address_fields input[name="stateregion_orig"]').val(obj['stateregionID']);
 					$('.address_fields input[name="city_orig"]').val(obj['cityID']);
-					$('.address_fields input[name="province_orig"]').val(obj['provinceID']);
 					$('.address_fields input[name="address_orig"]').val(obj['address']);
 					
 					// Map notification status
@@ -787,7 +790,6 @@ $(document).ready(function(){
 $(document).ready(function(){
 	$("#c_mobile").numeric({negative : false});
 	$("#c_telephone").numeric({negative : false});
-	$("#c_postalcode").numeric({negative : false});
 	
 	$("#c_deliver_address").validate({
 		rules: {
@@ -801,14 +803,14 @@ $(document).ready(function(){
 				is_validmobile: true
 			},
 			c_telephone: {
-				required: true,
+				//required: true,
 				is_numeric: true
 			},
-			c_city:{
+			c_stateregion:{
 				required: true,
 				select_is_set: '0'
 			},
-			c_province:{
+			c_city:{
 				required: true,
 				select_is_set: '0'
 			},
@@ -823,17 +825,18 @@ $(document).ready(function(){
 			c_mobile: {
 				required: '* Mobile Number required'
 			},
+			c_stateregion:{
+				required: '* State/Region is required'
+			},
 			c_city:{
 				required: '* City is required'
-			},
-			c_province:{
-				required: '* Province is required'
 			},
 			c_address:{
 				required: '* Please enter your full address'
 			}
 			
 		},
+		ignore: ":hidden:not(select)",
 		errorElement: "span",
 		errorPlacement: function(error, element){
 				error.addClass('red');
@@ -876,13 +879,13 @@ $(document).ready(function(){
 						});
 						
 						// Update orig checker fields
+						$('.address_fields input[name="stateregion_orig"]').val(obj['stateregionID']);
 						$('.address_fields input[name="city_orig"]').val(obj['cityID']);
-						$('.address_fields input[name="province_orig"]').val(obj['provinceID']);
 						$('.address_fields input[name="address_orig"]').val(obj['address']);
 						
 						//OVERWRITE DIV in Personal Information Address
 						$('.address_information .add_info').html(function(){
-							var string = obj['c_city'] + ", " + obj['c_province'] + "<br>" + obj['c_address'];
+							var string = obj['c_stateregion'] + ", " + obj['c_city'] + "<br>" + obj['c_address'];
 							return string;
 						});
 						
@@ -1012,22 +1015,22 @@ function handle_fields(form)
 /*
  *	Function to generate provinces in dropdown.
  */
-function provinceFilter(cityselect,provinceselect){
-	var cityID = cityselect.find('option:selected').attr('value');
-	var optionclone = provinceselect.find('option.optionclone').clone();
+function cityFilter(stateregionselect,cityselect){
+	var stateregionID = stateregionselect.find('option:selected').attr('value');
+	var optionclone = cityselect.find('option.optionclone').clone();
 	optionclone.removeClass('optionclone').addClass('echo').attr('disabled', false);
 
-	provinceselect.find('option.echo').remove();
+	cityselect.find('option.echo').remove();
 	
-	if(cityID in jsonProvince){
-		jQuery.each(jsonProvince[cityID], function(k,v){
+	if(stateregionID in jsonCity){
+		jQuery.each(jsonCity[stateregionID], function(k,v){
 			//optionclone.attr('value', k).html(v).show();
 			optionclone.attr('value', k).html(v).css('display', 'block');
-			provinceselect.append(optionclone.clone());
+			cityselect.append(optionclone.clone());
 		});
 	}
 	
-	provinceselect.trigger('chosen:updated');
+	cityselect.trigger('chosen:updated');
 	
 }
 
@@ -1513,9 +1516,9 @@ $(document).ready(function(){
 	var map, marker, geocoder;
 
 	$("#refresh_map").click(function(){     
+		var stateregion = $('#personal_stateregion').find('option:selected').text();
 		var city = $('#personal_city').find('option:selected').text();
-		var province = $('#personal_province').find('option:selected').text();
-		var address = city + " " + province + " PH";
+		var address = stateregion + " " + city + " PH";
 		
 		codeAddress(address);
 	});

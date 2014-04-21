@@ -79,8 +79,8 @@ class Memberpage extends MY_Controller
 		if(($this->input->post('personal_profile_address_btn'))&&($this->form_validation->run('personal_profile_address')))
 		{
 			$postdata = array( 
+				'stateregion' => $this->input->post('stateregion'),
 				'city' => $this->input->post('city'),
-				'province' => $this->input->post('province'),
 				'address' => $this->input->post('address'),
 				'country' => $this->input->post('country'),
 				'addresstype' => $this->input->post('addresstype'),
@@ -89,14 +89,14 @@ class Memberpage extends MY_Controller
 			); 
 			
 			$temp = array(
+				'stateregion_orig' => $this->input->post('stateregion_orig'),
 				'city_orig' => $this->input->post('city_orig'),
-				'province_orig' => $this->input->post('province_orig'),
 				'address_orig' => $this->input->post('address_orig'),
 				'map_lat' => $this->input->post('map_lat'),
 				'map_lng' => $this->input->post('map_lng')
 			);
 			
-			if( ( ($temp['city_orig'] != $postdata['city']) || ($temp['province_orig'] != $postdata['province']) || ($temp['address_orig'] != $postdata['address']) )  
+			if( ( ($temp['stateregion_orig'] != $postdata['stateregion']) || ($temp['city_orig'] != $postdata['city']) || ($temp['address_orig'] != $postdata['address']) )  
 				&& ($temp['map_lat'] == $postdata['lat'] && $temp['map_lng'] == $postdata['lng']) ) {
 				$postdata['lat'] = 0;
 				$postdata['lng'] = 0;
@@ -213,8 +213,8 @@ class Memberpage extends MY_Controller
 				'consignee' => $this->input->post('consignee'),
 				'mobile' => $this->input->post('c_mobile'),
 				'telephone' => $this->input->post('c_telephone'),
+				'stateregion' => $this->input->post('c_stateregion'),
 				'city' => $this->input->post('c_city'),
-				'province' => $this->input->post('c_province'),
 				'address' => $this->input->post('c_address'),
 				'country' => $this->input->post('c_country'),
 				'lat' => $this->input->post('map_lat'),
@@ -233,7 +233,6 @@ class Memberpage extends MY_Controller
 			$this->memberpage_model->edit_consignee_address_by_id($uid, $postdata);
 			$data['default_add'] = $postdata['default_add'];
 			$data = array_merge($data,$this->memberpage_model->get_member_by_id($uid));	
-			//print_r($data);
 			$this->output->set_output(json_encode($data));
 		}
 	}

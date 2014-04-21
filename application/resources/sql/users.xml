@@ -32,11 +32,11 @@
 
 <!-- Used for vendor details and username check- memberpage -->
 <select id="get_member_by_username">
-	SELECT m.id_member, m.username, m.contactno, m.email, a.city, a.province, l1.location as cityname, l2.location as provincename, DATE_FORMAT(datecreated, "%M %Y") as datecreated
+	SELECT m.id_member, m.username, m.contactno, m.email, a.stateregion, a.city, l1.location as stateregionname, l2.location as cityname, DATE_FORMAT(datecreated, "%M %Y") as datecreated
 	FROM es_member m
 	LEFT JOIN es_address a on m.id_member = a.id_member AND a.type=0
-	LEFT JOIN es_location_lookup l1 ON a.city =  l1.id_location
-	LEFT JOIN es_location_lookup l2 ON a.province = l2.id_location
+	LEFT JOIN es_location_lookup l1 ON a.stateregion =  l1.id_location
+	LEFT JOIN es_location_lookup l2 ON a.city = l2.id_location
 	where m.username=:username
 </select>
 
@@ -113,18 +113,18 @@
 
 <select id="get_member">
 	SELECT m.`id_member`,m.username, m.`nickname`, m.`fullname`, m.`gender`, m.`birthday`, m.contactno, m.is_contactno_verify, m.email, m.is_email_verify,
-	a0.city as cityID, a0.province as provinceID, a1.city as c_cityID, a1.province as c_provinceID,
-	COALESCE(loc0.location,'') as city, COALESCE(loc1.location, '') as province, COALESCE(a0.address,'') as address,
+	a0.stateregion as stateregionID, a0.city as cityID, a1.stateregion as c_stateregionID, a1.city as c_cityID,
+	COALESCE(loc0.location,'') as stateregion, COALESCE(loc1.location, '') as city, COALESCE(a0.address,'') as address,
 	a1.consignee, a1.mobile as c_mobile, a1.telephone as c_telephone,
-	COALESCE(loc2.location, '') as c_city, COALESCE(loc3.location,'') as c_province, COALESCE(a1.address, '') as c_address,
+	COALESCE(loc2.location, '') as c_stateregion, COALESCE(loc3.location,'') as c_city, COALESCE(a1.address, '') as c_address,
 	COALESCE(a0.lat, 0) as lat, COALESCE(a0.lng, 0) as lng
 	FROM es_member m
 	LEFT JOIN es_address a0 ON m.id_member=a0.id_member AND a0.`type`=0
 	LEFT JOIN es_address a1 ON m.id_member=a1.id_member AND a1.`type`=1
-	LEFT JOIN es_location_lookup loc0 ON a0.city = loc0.id_location AND loc0.type = 3
-	LEFT JOIN es_location_lookup loc1 ON a0.province = loc1.id_location AND loc1.type = 4
-	LEFT JOIN es_location_lookup loc2 ON a1.city = loc2.id_location AND loc2.type = 3
-	LEFT JOIN es_location_lookup loc3 ON a1.province = loc3.id_location AND loc3.type = 4
+	LEFT JOIN es_location_lookup loc0 ON a0.stateregion = loc0.id_location AND loc0.type = 3
+	LEFT JOIN es_location_lookup loc1 ON a0.city = loc1.id_location AND loc1.type = 4
+	LEFT JOIN es_location_lookup loc2 ON a1.stateregion = loc2.id_location AND loc2.type = 3
+	LEFT JOIN es_location_lookup loc3 ON a1.city = loc3.id_location AND loc3.type = 4
 	where m.id_member=:id_member
 </select>
 
@@ -150,9 +150,9 @@
 </select>
 
 <select id="edit_address">
-	INSERT INTO `es_address` (`id_member`, `city`, `province`, `address`, `country`, `type`, `telephone`, `mobile`, `consignee`, `lat`, `lng`) 
-	VALUES (:id_member,:city,:province,:address,:country, :type, :telephone, :mobile, :consignee, :lat, :lng)
-	ON DUPLICATE KEY UPDATE city=:city,province=:province,address=:address,country = :country,telephone=:telephone,mobile=:mobile,consignee=:consignee,lat=:lat,lng=:lng
+	INSERT INTO `es_address` (`id_member`, `stateregion`, `city`, `address`, `country`, `type`, `telephone`, `mobile`, `consignee`, `lat`, `lng`) 
+	VALUES (:id_member,:stateregion,:city,:address,:country, :type, :telephone, :mobile, :consignee, :lat, :lng)
+	ON DUPLICATE KEY UPDATE stateregion=:stateregion,city=:city,address=:address,country = :country,telephone=:telephone,mobile=:mobile,consignee=:consignee,lat=:lat,lng=:lng
 </select>
 
 
@@ -213,6 +213,7 @@
 	WHERE id_member = :id_member AND last_ip = :ip AND useragent = :useragent AND token = :token
 </select>
 
+<!-- NOT USED - quick inspection
 <select id="get_address">
 	SELECT
 	   `streetno`
@@ -230,6 +231,7 @@
 	AND id_member = :id_member
 	limit 1
 </select>
+-->
 
 <select id="addFeedback">
 	INSERT INTO `es_member_feedback` (`member_id`, `for_memberid`, `feedb_msg`, `feedb_kind`, `order_id`, `dateadded`, `rating1`, `rating2`, `rating3`)

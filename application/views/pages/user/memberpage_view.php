@@ -52,7 +52,7 @@
 
 					<script type="text/javascript">
 					
-					var jsonProvince = <?php echo $json_province;?>;
+					var jsonCity = <?php echo $json_city;?>;
 					
 					$(document).ready(function() {
                         var currentRequest = null;
@@ -814,8 +814,8 @@
 				</div>
 				<div class="address_information gen_information">
 					<div class="add_info echoed_info">
-						<?php if(trim($city) != '' && trim($province) != ''):?>
-							<?php echo $city . ', ' . $province . '<br>' . $address?>
+						<?php if(trim($stateregion) != '' && trim($city) != ''):?>
+							<?php echo $stateregion . ', ' . $city . '<br>' . $address?>
 						<?php endif;?>
 					</div>
 					<div class="edit_address edit_info_btn">
@@ -827,43 +827,36 @@
 					<div class="clear"></div>
 				</div>
 				
-				<input id="json_province" value='<?php echo $json_province;?>' type="hidden">
+				<!--<input id="json_city" value='<?php echo $json_city;?>' type="hidden">-->
 				
 				<div class="edit_fields profile_fields">
 					<div class="inner_profile_fields">
 						<div class="address_fields progress_update update_once">
 							<div class="address_fields_layer1">
 								<div>
-									<select name="city" id="personal_city" class="address_dropdown cityselect" data-status="<?php echo $cityID?>">
+									<select name="stateregion" id="personal_stateregion" class="address_dropdown stateregionselect" data-status="<?php echo $stateregionID?>">
 										<option value="0">--- Select State/Region ---</option>
-										<?php foreach($city_lookup as $ckey=>$city):?>
-											<option class="echo" value="<?php echo $ckey?>" <?php echo $cityID == $ckey ? "selected":"" ?>><?php echo $city?></option>
+										<?php foreach($stateregion_lookup as $srkey=>$stateregion):?>
+											<option class="echo" value="<?php echo $srkey?>" <?php echo $stateregionID == $srkey ? "selected":"" ?>><?php echo $stateregion?></option>
 										<?php endforeach;?>
 									</select>
 									<p>State/Region</p>
-									<input type="hidden" name="city_orig" value="<?php echo $cityID?>">
+									<input type="hidden" name="stateregion_orig" value="<?php echo $stateregionID?>">
 								</div>
 								<div>
-									<select name="province" id="personal_province" class="address_dropdown provinceselect" data-status="<?php echo $provinceID?>">
+									<select name="city" id="personal_city" class="address_dropdown cityselect" data-status="<?php echo $cityID?>">
 										<option value="0">--- Select City ---</option>
 										<option class="optionclone" value="" style="display:none;" disabled></option>
 										
-										<?php if($provinceID != '' && $cityID != ''):?>
-											<?php foreach($province_lookup[$cityID] as $lockey=>$province):?>
-												<option class="echo" value="<?php echo $lockey?>" <?php echo $provinceID == $lockey ? "selected":"" ?> ><?php echo $province?></option>
+										<?php if($cityID != '' && $stateregionID != ''):?>
+											<?php foreach($city_lookup[$stateregionID] as $lockey=>$city):?>
+												<option class="echo" value="<?php echo $lockey?>" <?php echo $cityID == $lockey ? "selected":"" ?> ><?php echo $city?></option>
 											<?php endforeach;?>
 										<?php endif;?>
-
-										<!--
-										<?php foreach($province_lookup as $parentkey=>$arr):?>
-											<?php foreach($arr as $lockey=>$province):?>
-												<option class="echo" value="<?php echo $lockey?>" data-parent="<?php echo $parentkey?>" <?php echo $provinceID == $lockey ? "selected":"" ?> ><?php echo $province?></option>
-											<?php endforeach;?>
-										<?php endforeach;?>
-										-->
+										
 									</select>
 									<p>City</p>
-									<input type="hidden" name="province_orig" value="<?php echo $provinceID?>">
+									<input type="hidden" name="city_orig" value="<?php echo $cityID?>">
 								</div>
 								<div>
 									<select class="disabled_country" disabled>
@@ -1261,21 +1254,21 @@
 			<div class="delivery_address_content">
 				<div class="delivery_address_content_layer1">
 					<div>
-						<select name="c_city" class="address_dropdown cityselect" data-status="<?php echo $c_cityID?>">
+						<select name="c_stateregion" class="address_dropdown stateregionselect" data-status="<?php echo $c_stateregionID?>">
 							<option value="0">--- Select State/Region ---</option>
-							<?php foreach($city_lookup as $ckey=>$city):?>
-								<option class="echo" value="<?php echo $ckey?>" <?php echo $c_cityID == $ckey ? "selected":"" ?>><?php echo $city?></option>
+							<?php foreach($stateregion_lookup as $srkey=>$stateregion):?>
+								<option class="echo" value="<?php echo $srkey?>" <?php echo $c_stateregionID == $srkey ? "selected":"" ?>><?php echo $stateregion?></option>
 							<?php endforeach;?>
 						</select>
 						<p>State/Region</p>
 					</div>
 					<div>
-						<select name="c_province" class="address_dropdown provinceselect" data-status="<?php echo $c_provinceID?>">
+						<select name="c_city" class="address_dropdown cityselect" data-status="<?php echo $c_cityID?>">
 							<option value="0">--- Select City ---</option>
 							<option class="optionclone" value="" style="display:none;" disabled></option>
-							<?php foreach($province_lookup as $parentkey=>$arr):?>
-								<?php foreach($arr as $lockey=>$province):?>
-									<option class="echo" value="<?php echo $lockey?>" data-parent="<?php echo $parentkey?>" <?php echo $c_provinceID == $lockey ? "selected":"" ?> ><?php echo $province?></option>
+							<?php foreach($city_lookup as $parentkey=>$arr):?>
+								<?php foreach($arr as $lockey=>$city):?>
+									<option class="echo" value="<?php echo $lockey?>" data-parent="<?php echo $parentkey?>" <?php echo $c_cityID == $lockey ? "selected":"" ?> ><?php echo $city?></option>
 								<?php endforeach;?>
 							<?php endforeach;?>
 						</select>
@@ -1304,10 +1297,8 @@
 			<br>
 			<div style="padding-left:100px">
 				<label></label>
-				<br><span class="red ci_form_validation_error"><?php echo form_error('c_streeno');?></span>
-				<br><span class="red ci_form_validation_error"><?php echo form_error('c_streetname');?></span>
-				<br><span class="red ci_form_validation_error"><?php echo form_error('c_citytown');?></span>
-				<br><span class="red ci_form_validation_error"><?php echo form_error('c_country');?></span>
+				<br><span class="red ci_form_validation_error"><?php echo form_error('c_stateregion');?></span>
+				<br><span class="red ci_form_validation_error"><?php echo form_error('c_city');?></span>
 			</div>
 			<div id="progressbar" class="profile_progress"></div>
 			<input type="hidden" class="progress_update_hidden" value="">

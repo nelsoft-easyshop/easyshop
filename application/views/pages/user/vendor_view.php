@@ -38,7 +38,7 @@
 						<p>Joined: <?php echo $vendordetails['datecreated'];?></p>
 						<p>
 						<span class="span_bg vendor_map"></span> 
-							<?php echo $vendordetails['cityname'] != '' && $vendordetails['provincename'] != '' ? $vendordetails['cityname'] . ", " . $vendordetails['provincename'] : "Location not set."?>
+							<?php echo $vendordetails['stateregionname'] != '' && $vendordetails['cityname'] != '' ? $vendordetails['stateregionname'] . ", " . $vendordetails['cityname'] : "Location not set."?>
 						</p>
 					</div>
 					<div class="vendor-msg-modal">

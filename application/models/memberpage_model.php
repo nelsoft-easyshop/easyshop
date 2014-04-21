@@ -25,14 +25,14 @@ class memberpage_model extends CI_Model
 				$data['country_id'] = $r['id_location'];
 			}
 			else if($r['type'] == 3){
-				$data['city_lookup'][$r['id_location']] = $r['location'];
+				$data['stateregion_lookup'][$r['id_location']] = $r['location'];
 			}
 			else if($r['type'] == 4){
-				$data['province_lookup'][$r['parent_id']][$r['id_location']] = $r['location'];
+				$data['city_lookup'][$r['parent_id']][$r['id_location']] = $r['location'];
 			}
 		}
 		
-		$data['json_province'] = json_encode($data['province_lookup'], JSON_FORCE_OBJECT);
+		$data['json_city'] = json_encode($data['city_lookup'], JSON_FORCE_OBJECT);
 		
 		return $data;
 	}
@@ -101,8 +101,8 @@ class memberpage_model extends CI_Model
 	{	
 		$query = $this->sqlmap->getFilenameID('users', 'edit_address');
         $sth = $this->db->conn_id->prepare($query);
-        $sth->bindParam(':city', $data['city']);
-		$sth->bindParam(':province', $data['province']);
+        $sth->bindParam(':stateregion', $data['stateregion']);
+		$sth->bindParam(':city', $data['city']);
 		$sth->bindParam(':address', $data['address']);
 		$sth->bindParam(':country', $data['country']);
 		$sth->bindParam(':type', $data['addresstype']);
@@ -239,8 +239,8 @@ class memberpage_model extends CI_Model
 			$sth->bindparam(':consignee', $data['consignee']);
 			$sth->bindparam(':mobile', $data['mobile']);
 			$sth->bindparam(':telephone', $data['telephone']);
+			$sth->bindparam(':stateregion', $data['stateregion']);
 			$sth->bindparam(':city', $data['city']);
-			$sth->bindparam(':province', $data['province']);
 			$sth->bindparam(':address', $data['address']);
 			$sth->bindparam(':country', $data['country']);
 			$sth->bindparam(':lat', $lat);

@@ -119,13 +119,13 @@ $config = array(
 				),*/
 			'personal_profile_address' => array(
 					array(
-						'field' => 'city',
-						'label' => 'City',
+						'field' => 'stateregion',
+						'label' => 'State/Region',
 						'rules' => 'required'
 					),
 					array(
-						'field' => 'province',
-						'label' => 'Province',
+						'field' => 'city',
+						'label' => 'City',
 						'rules' => 'required'
 					),
 					array(
@@ -183,16 +183,16 @@ $config = array(
 					array(
 						'field' => 'c_telephone',
 						'label' => 'Telephone Number',
-						'rules' => 'required|is_numeric'
+						'rules' => 'is_numeric'
+					),
+					array(
+						'field' => 'c_stateregion',
+						'label' => 'State/Region',
+						'rules' => 'required'
 					),
 					array(
 						'field' => 'c_city',
 						'label' => 'City',
-						'rules' => 'required'
-					),
-					array(
-						'field' => 'c_province',
-						'label' => 'Province',
 						'rules' => 'required'
 					),
 					array(
