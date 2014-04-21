@@ -1378,6 +1378,8 @@
 									<span>Paid</span>
 								<?php elseif($product['status'] == 2):?>
 									<span>Payment returned by seller</span>
+								<?php elseif($product['stuats'] == 3):?>
+									<span>Cash on delivery</span>
 								<?php endif;?>
 							</div>
 							<div class="clear"></div>
@@ -1514,6 +1516,8 @@
 							<span>Paid</span>
 						<?php elseif($product['status'] == 2):?>
 							<span>Payment returned to buyer</span>
+						<?php elseif($product['stuats'] == 3):?>
+							<span>Cash on delivery</span>
 						<?php endif;?>
 						</div>
 					</div>
