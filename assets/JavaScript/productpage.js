@@ -471,10 +471,10 @@ $(function(){
                 i_opt[id] =attr;
                 
             });
-	    if (i_loc == 0) {
-		alert("Select shipping location");
-		return false;
-	    }
+	 //    if (i_loc == 0) {
+		// alert("Select shipping location");
+		// return false;
+	 //    }
             var i_loc_name =  $("#locationID_"+i_loc).html().replace(/&nbsp;/g,'');
             $.ajax({
                 async:false,
