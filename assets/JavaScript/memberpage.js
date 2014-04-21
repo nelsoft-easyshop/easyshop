@@ -1871,7 +1871,7 @@ $(document).ready(function(){
 				data: $("#billing_info").serialize(),
 				success: function(data){
 					$("#bi_bank, #bi_acct_name, #bi_acct_no").val('');
-					window.location.href = config.base_url+'me';
+					window.location.href = config.base_url+'me?me=pmnt';
 				}
 			});		
 		}		
