@@ -1,84 +1,84 @@
-<?php 
- 
+<?php
+
 if (!defined('BASEPATH'))
 	exit('No direct script access allowed');
-  
-class Memberpage extends MY_Controller 
-{ 
-    function __construct()  
-    { 
-        parent::__construct(); 
-        $this->load->model("memberpage_model"); 
+
+class Memberpage extends MY_Controller
+{
+	function __construct()
+	{
+		parent::__construct();
+		$this->load->model("memberpage_model");
 		$this->load->model('register_model');
 		$this->load->model('product_model');
 		$this->load->model('payment_model');
-        $this->form_validation->set_error_delimiters('', ''); 
-    } 
-      
-    function index() 
-    { 
+		$this->form_validation->set_error_delimiters('', '');
+	}
+
+	function index()
+	{
 		if(!$this->session->userdata('member_id'))
-		    redirect(base_url().'home', 'refresh');
+			redirect(base_url().'home', 'refresh');
 		$data = $this->fill_view();
-		
-        $this->load->view('templates/header_topnavsolo', $data); 
-        $this->load->view('pages/user/memberpage_view', $data); 
-        $this->load->view('templates/footer'); 
-    } 
-      
-    function edit_personal() 
-    {	
-        if(($this->input->post('personal_profile_main'))&&($this->form_validation->run('personal_profile_main'))) 
-        {
+
+		$this->load->view('templates/header_topnavsolo', $data);
+		$this->load->view('pages/user/memberpage_view', $data);
+		$this->load->view('templates/footer');
+	}
+
+	function edit_personal()
+	{
+		if(($this->input->post('personal_profile_main'))&&($this->form_validation->run('personal_profile_main')))
+		{
 			$uid = $this->session->userdata('member_id');
-			
+
 			$checkdata = array(
 				'member_id' => $uid,
 				'contactno' => html_escape($this->input->post('mobile')),
 				'email' => html_escape($this->input->post('email'))
 			);
-			
+
 			$check = $this->register_model->check_contactinfo($checkdata);
 			if($check['mobile'] !== 0 || $check['email'] !== 0){
 				echo json_encode($check);
 				return;
 			}
-		
-			$uid = $this->session->userdata('member_id'); 
-            $postdata = array( 
-                'fullname' => html_escape($this->input->post('fullname')), 
-                'nickname' => html_escape($this->input->post('nickname')), 
-                'gender' => $this->input->post('gender'),
-                'birthday' => $this->input->post('dateofbirth'),
+
+			$uid = $this->session->userdata('member_id');
+			$postdata = array(
+				'fullname' => html_escape($this->input->post('fullname')),
+				'nickname' => html_escape($this->input->post('nickname')),
+				'gender' => $this->input->post('gender'),
+				'birthday' => $this->input->post('dateofbirth'),
 				'contactno' => html_escape($this->input->post('mobile')),
 				'email' => html_escape($this->input->post('email'))
-            ); 
-			
+			);
+
 			if($postdata['email'] === $this->input->post('email_orig'))
 				$postdata['is_email_verify'] = $this->input->post('is_email_verify');
 			else
 				$postdata['is_email_verify'] = 0;
-				
+
 			if($postdata['contactno'] === $this->input->post('mobile_orig'))
 				$postdata['is_contactno_verify'] = $this->input->post('is_contactno_verify');
 			else
 				$postdata['is_contactno_verify'] = 0;
-			
-            $this->memberpage_model->edit_member_by_id($uid, $postdata); 
-			
+
+			$this->memberpage_model->edit_member_by_id($uid, $postdata);
+
 			echo 1;
-        }
+		}
 		else{
 			echo 0;
 		}
-		
-    } 
-	
+
+	}
+
 	function edit_address()
 	{
 		if(($this->input->post('personal_profile_address_btn'))&&($this->form_validation->run('personal_profile_address')))
 		{
-			$postdata = array( 
+			$postdata = array(
 				'stateregion' => $this->input->post('stateregion'),
 				'city' => $this->input->post('city'),
 				'address' => $this->input->post('address'),
@@ -86,8 +86,8 @@ class Memberpage extends MY_Controller
 				'addresstype' => $this->input->post('addresstype'),
 				'lat' => $this->input->post('temp_lat'),
 				'lng' => $this->input->post('temp_lng')
-			); 
-			
+			);
+
 			$temp = array(
 				'stateregion_orig' => $this->input->post('stateregion_orig'),
 				'city_orig' => $this->input->post('city_orig'),
@@ -95,23 +95,28 @@ class Memberpage extends MY_Controller
 				'map_lat' => $this->input->post('map_lat'),
 				'map_lng' => $this->input->post('map_lng')
 			);
+<<<<<<< .mine
+
+			if( ( ($temp['city_orig'] != $postdata['city']) || ($temp['province_orig'] != $postdata['province']) || ($temp['address_orig'] != $postdata['address']) )
+=======
 			
 			if( ( ($temp['stateregion_orig'] != $postdata['stateregion']) || ($temp['city_orig'] != $postdata['city']) || ($temp['address_orig'] != $postdata['address']) )  
+>>>>>>> .r1099
 				&& ($temp['map_lat'] == $postdata['lat'] && $temp['map_lng'] == $postdata['lng']) ) {
 				$postdata['lat'] = 0;
 				$postdata['lng'] = 0;
 			}
-			
+
 			$uid = $this->session->userdata('member_id');
-			$this->memberpage_model->edit_address_by_id($uid, $postdata);	
+			$this->memberpage_model->edit_address_by_id($uid, $postdata);
 			$data = $this->memberpage_model->get_member_by_id($uid);
-			
+
 			$this->output->set_output(json_encode($data));
-		}		
+		}
 	}
-	
+
 	function edit_school()
-	{	
+	{
 		if(($this->input->post('personal_profile_school'))&&($this->form_validation->run('personal_profile_school')))
 		{
 			$arr = $this->input->post();
@@ -126,12 +131,12 @@ class Memberpage extends MY_Controller
 				$uid = $this->session->userdata('member_id');
 				$this->memberpage_model->edit_school_by_id($uid, $postdata);
 			}
-		} 
-		$uid = $this->session->userdata('member_id'); 
+		}
+		$uid = $this->session->userdata('member_id');
 		$data = $this->memberpage_model->get_school_by_id($uid);
 		echo json_encode($data);
 	}
-	
+
 	function deletePersonalInfo()
 	{
 		$field = html_escape($this->input->post('field'));
@@ -149,11 +154,11 @@ class Memberpage extends MY_Controller
 
 	function fill_view()
 	{
-		$uid = $this->session->userdata('member_id'); 
+		$uid = $this->session->userdata('member_id');
 		$user_products = $this->memberpage_model->getUserItems($uid);
-		$data = array( 
-                'title' => 'Easyshop.ph - Member Profile', 
-				'image_profile' => $this->memberpage_model->get_image($uid), 
+		$data = array(
+				'title' => 'Easyshop.ph - Member Profile',
+				'image_profile' => $this->memberpage_model->get_image($uid),
 				'active_products' => $user_products['active'],
 				'deleted_products' => $user_products['deleted'],
                 'sold_count' => $user_products['sold_count'],
@@ -161,13 +166,13 @@ class Memberpage extends MY_Controller
 		$data = array_merge($data, $this->fill_header());
 		$data = array_merge($data, $this->memberpage_model->getLocationLookup());
 		$data = array_merge($data,$this->memberpage_model->get_member_by_id($uid));
-        $data = array_merge($data,$this->memberpage_model->get_work_by_id($uid));
+		$data = array_merge($data,$this->memberpage_model->get_work_by_id($uid));
 		$data =  array_merge($data,$this->memberpage_model->get_school_by_id($uid));
 		$data['bill'] =  $this->memberpage_model->get_billing_info($uid);
-		$data['bank'] = $this->memberpage_model->get_bank('', 'all');			
+		$data['bank'] = $this->memberpage_model->get_bank('', 'all');
 		$data['transaction'] = $this->memberpage_model->getTransactionDetails($uid);
 		$data['allfeedbacks'] = $this->memberpage_model->getFeedback($uid);
-		
+
 		return $data;
 	}
 
@@ -179,32 +184,32 @@ class Memberpage extends MY_Controller
 			'w' => $this->input->post('w'),
 			'h' => $this->input->post('h')
 		);
-		$uid = $this->session->userdata('member_id');	
+		$uid = $this->session->userdata('member_id');
 		$this->load->library('upload');
-		$this->load->library('image_lib');	
-		$result = $this->memberpage_model->upload_img($uid, $data);	
+		$this->load->library('image_lib');
+		$result = $this->memberpage_model->upload_img($uid, $data);
 		//echo error may be here: $result['error']
-		redirect('memberpage'); 
-	}  
-	  
-    public function external_callbacks( $postdata, $param ) 
-    { 
-         $param_values = explode( ',', $param );  
-         $model = $param_values[0]; 
-         $this->load->model( $model );
-         $method = $param_values[1]; 
-         if( count( $param_values ) > 2 ) { 
-              array_shift( $param_values ); 
-              array_shift( $param_values ); 
-              $argument = $param_values; 
-         }
-         if( isset( $argument )) 
-            $callback_result = $this->$model->$method( $postdata, $argument ); 
-         else
-            $callback_result = $this->$model->$method( $postdata ); 
-         return $callback_result; 
-    } 
-  
+		redirect('memberpage');
+	}
+
+	public function external_callbacks( $postdata, $param )
+	{
+		 $param_values = explode( ',', $param );
+		 $model = $param_values[0];
+		 $this->load->model( $model );
+		 $method = $param_values[1];
+		 if( count( $param_values ) > 2 ) {
+			  array_shift( $param_values );
+			  array_shift( $param_values );
+			  $argument = $param_values;
+		 }
+		 if( isset( $argument ))
+			$callback_result = $this->$model->$method( $postdata, $argument );
+		 else
+			$callback_result = $this->$model->$method( $postdata );
+		 return $callback_result;
+	}
+
 	function edit_consignee_address()
 	{
 		if(($this->input->post('c_deliver_address_btn'))&&($this->form_validation->run('c_deliver_address'))){
@@ -220,7 +225,7 @@ class Memberpage extends MY_Controller
 				'lat' => $this->input->post('map_lat'),
 				'lng' => $this->input->post('map_lng')
 			);
-			
+
 			if($this->input->post('c_def_address'))
 			{
 				$postdata['default_add'] = $this->input->post('c_def_address');
@@ -229,16 +234,16 @@ class Memberpage extends MY_Controller
 			{
 				$postdata['default_add'] = "off";
 			}
-			
+
 			$this->memberpage_model->edit_consignee_address_by_id($uid, $postdata);
 			$data['default_add'] = $postdata['default_add'];
-			$data = array_merge($data,$this->memberpage_model->get_member_by_id($uid));	
+			$data = array_merge($data,$this->memberpage_model->get_member_by_id($uid));
 			$this->output->set_output(json_encode($data));
 		}
 	}
-	
+
 	function edit_work()
-	{	
+	{
 		if(($this->input->post('personal_profile_work_btn'))&&($this->form_validation->run('personal_profile_work')))
 		{
 			$rowcount = count($this->input->post()) - 1;
@@ -259,9 +264,9 @@ class Memberpage extends MY_Controller
 			echo json_encode($data);
 		}
 	}
-	
+
 	/*****************	TRANSACTION CONTROLLER	*******************/
-	
+
 	/*
 	 *	Function to add feedback to USER for every transaction made
 	 */
@@ -278,13 +283,13 @@ class Memberpage extends MY_Controller
 				'rating3' => $this->input->post('rating3')
 			);
 			$result = $this->memberpage_model->addFeedback($data);
-			
+
 			echo $result?1:0;
 		}
 		else
 			echo 0;
 	}
-	
+
 	/*
 	 *	Function to handle payment transfer.
 	 *	Forward to seller or return to user.
@@ -313,7 +318,7 @@ class Memberpage extends MY_Controller
 		}
 		
 		$result = $this->payment_model->updateTransactionStatus($data);
-		
+
 		if($emailstat && $result){
 			$serverResponse['result'] = 'success';
 			$serverResponse['error'] = array();
@@ -330,19 +335,19 @@ class Memberpage extends MY_Controller
 		echo json_encode($serverResponse);
 	
 	}
-	
-	
+
+
 	/***	VENDOR DASHBOARD CONTROLLER	***/
 	/*** 	memberpage/vendor/username	***/
 	function vendor($selleruname){
 		$vendordetails = $this->memberpage_model->getVendorDetails($selleruname);
 		$data['title'] = 'Vendor Profile | Easyshop.ph';
 		$data = array_merge($data, $this->fill_header());
-		$this->load->view('templates/header_topnavsolo', $data); 
+		$this->load->view('templates/header_topnavsolo', $data);
 		if($vendordetails){
 			$sellerid = $vendordetails['id_member'];
 			$user_products = $this->memberpage_model->getUserItems($sellerid);
-			$data = array_merge($data,array( 
+			$data = array_merge($data,array(
 					'vendordetails' => $vendordetails,
 					'image_profile' => $this->memberpage_model->get_Image($sellerid),
 					'active_products' => $user_products['active'],
@@ -351,24 +356,24 @@ class Memberpage extends MY_Controller
 					)); 
 			$data['transaction'] = $this->memberpage_model->getTransactionDetails($sellerid);
 			$data['allfeedbacks'] = $this->memberpage_model->getFeedback($sellerid);
-			$this->load->view('pages/user/vendor_view', $data); 
+			$this->load->view('pages/user/vendor_view', $data);
 		}
 		else{
 			$this->load->view('pages/user/user_error');
 		}
-		$this->load->view('templates/footer'); 
+		$this->load->view('templates/footer');
 	}
-	
-	
+
+
 	/**	VERIFY CONTACT DETAILS SECTION **/
 	function verify(){
 		if($this->input->post('reverify') === 'true'){
 			$uid = $this->session->userdata('member_id');
-			
+
 			$data = $this->register_model->get_verifcode($uid);
-			
+
 			if($this->input->post('field') === 'mobile' && $this->input->post('data') == $data['contactno'])
-			{	
+			{
 				//GENERATE NEW MOBILE CONFIRMATION CODE
 				$confirmation_code = $this->register_model->rand_alphanumeric(6);
 				$hash = $data['emailcode'];
@@ -379,7 +384,7 @@ class Memberpage extends MY_Controller
 					'mobile' => 0,
 					'email' => 0
 				);
-				
+
 				if($data['mobilecount'] < 4 || $data['time'] > 30){
 					$result = $this->register_model->send_mobile_msg($data['username'], $data['contactno'], $confirmation_code);
 					if($result === 'success'){
@@ -389,7 +394,7 @@ class Memberpage extends MY_Controller
 				}
 				else
 					$result = 'exceed';
-				
+
 				$this->register_model->store_verifcode($temp);
 				echo json_encode($result);
 			}
@@ -405,7 +410,7 @@ class Memberpage extends MY_Controller
 					'mobile' => 0,
 					'email' => 0
 				);
-				
+
 				if($data['emailcount'] < 4 || $data['time'] > 30){
 					$result = $this->register_model->send_email_msg($data['email'], $data['username'], $hash);
 					if($result === 'success')
@@ -413,22 +418,22 @@ class Memberpage extends MY_Controller
 				}
 				else
 					$result = 'exceed';
-				
+
 				$this->register_model->store_verifcode($temp);
 				echo json_encode($result);
 			}
 			else
 				echo json_encode('dataerror');
 		}
-		else 
+		else
 			echo 0;
 	}
-	
-	
+
+
 	function verify_mobilecode(){
 		if($this->input->post('mobileverify') === 'true'){
 			$user_mobilecode = html_escape($this->input->post('data'));
-			
+
 			if($user_mobilecode === $this->session->userdata('mobilecode')){
 				$data = array(
 					'is_contactno_verify' => 1,
@@ -442,87 +447,89 @@ class Memberpage extends MY_Controller
 				echo 0;
 		}
 	}
-	
+
 	function bank_info(){
 		$q = $this->input->get('q');
-		if(!empty($q)){			
+		if(!empty($q)){
 			$bank_names = $this->memberpage_model->get_bank($q, 'name');
-			echo json_encode($bank_names);			
-		}		
+			echo json_encode($bank_names);
+		}
 	}
-	
+
 	function billing_info(){
-###     di ko mapaandar ulit yung form_validation
 ###		if(($this->input->post('bi_acct_no')) && ($this->form_validation->run('billing_info'))){
-		
+	
 		if($this->input->post('bi_acct_no')){
-			
+
 			$member_id = $this->session->userdata('member_id');
 			$bi_payment_type = $this->input->post('bi_payment_type');
 			$bi_user_account = ""; // pang paypal ito or any online account
 			$bi_bank = $this->input->post('bi_bank');
-			$bi_acct_name = $this->input->post('bi_acct_name');	  
+			$bi_acct_name = $this->input->post('bi_acct_name');
 			$bi_acct_no = $this->input->post('bi_acct_no');
-            $express = $this->input->post('express');
-            
+			$express = $this->input->post('express');
 			$data = array(
-                'member_id' => $member_id,
-                'payment_type' => $bi_payment_type,
-                'user_account' => $bi_user_account,
-                'bank_id' => $bi_bank,
-                'bank_account_name' => $bi_acct_name,
-                'bank_account_number' => $bi_acct_no				
+				'member_id' => $member_id,
+				'payment_type' => $bi_payment_type,
+				'user_account' => $bi_user_account,
+				'bank_id' => $bi_bank,
+				'bank_account_name' => $bi_acct_name,
+				'bank_account_number' => $bi_acct_no
 			);
-            $result = $this->memberpage_model->billing_info($data);
-            if($express == 'true'){
-                echo $result;
-            }
-            else{
-                $get_info = $this->memberpage_model->get_billing_info($member_id);
-                echo json_encode($get_info);
-            }
-           
+			$result = $this->memberpage_model->billing_info($data);
+			if($express == 'true'){
+				echo $result;
+			}
+			else{
+				$get_info = $this->memberpage_model->get_billing_info($member_id);
+				echo json_encode($get_info);
+			}
+
 		}
-        else{
-            echo json_encode(false);
-        }
+		else{
+			echo json_encode(false);
+		}
 	}
-	
+
 	function billing_info_u(){
 		if($this->input->post('bi_id')){
+			$member_id = $this->session->userdata('member_id');
 			$bi_id = $this->input->post('bi_id');
 			$bi_bank = $this->input->post('bi_bank');
-			$bi_acct_name = $this->input->post('bi_acct_name');	  
+			$bi_acct_name = $this->input->post('bi_acct_name');
 			$bi_acct_no = $this->input->post('bi_acct_no');
-            $member_id = $this->session->userdata('member_id');
+			$bi_def = $this->input->post('bi_def');
 			$data = array(
-                'ibi' => $bi_id,
-                'bank_id' => $bi_bank,
-                'bank_account_name' => $bi_acct_name,
-                'bank_account_number' => $bi_acct_no,
-                'member_id' => $member_id,
+					'member_id' => $member_id,
+					'ibi' => $bi_id,
+					'bank_id' => $bi_bank,
+					'bank_account_name' => $bi_acct_name,
+					'bank_account_number' => $bi_acct_no,
+					'is_default' => $bi_def				
+
 			);
-			return json_encode($this->memberpage_model->billing_info_update($data));		
+			return json_encode($this->memberpage_model->billing_info_update($data));
 		}
-        else{
-            return json_encode(false);
-        }
-	}	
-	
+		else{
+			return json_encode(false);
+		}
+	}
+
 	function billing_info_d(){
 	   
 		if($this->input->post('bi_id')){
-			$bi_id = $this->input->post('bi_id');	
+			$member_id = $this->session->userdata('member_id');
+			$bi_id = $this->input->post('bi_id');
             $member_id = $this->session->userdata('member_id');
 			$data = array(
-					'ibi' => $bi_id,	
-                    'member_id' => $member_id,
+					'member_id' => $member_id,
+					'ibi' => $bi_id
 			);
-			$this->memberpage_model->billing_info_delete($data);		
+			$this->memberpage_model->billing_info_delete($data);
 		}
-	}		
-    
-} 
-  
+	}
+
+}
+
 /* End of file memberpage.php */
 /* Location: ./application/controllers/memberpage.php */
