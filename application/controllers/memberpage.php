@@ -95,13 +95,10 @@ class Memberpage extends MY_Controller
 				'map_lat' => $this->input->post('map_lat'),
 				'map_lng' => $this->input->post('map_lng')
 			);
-<<<<<<< .mine
 
-			if( ( ($temp['city_orig'] != $postdata['city']) || ($temp['province_orig'] != $postdata['province']) || ($temp['address_orig'] != $postdata['address']) )
-=======
+
 			
-			if( ( ($temp['stateregion_orig'] != $postdata['stateregion']) || ($temp['city_orig'] != $postdata['city']) || ($temp['address_orig'] != $postdata['address']) )  
->>>>>>> .r1099
+			if( ( ($temp['stateregion_orig'] != $postdata['stateregion']) || ($temp['city_orig'] != $postdata['city']) || ($temp['address_orig'] != $postdata['address']) ) 
 				&& ($temp['map_lat'] == $postdata['lat'] && $temp['map_lng'] == $postdata['lng']) ) {
 				$postdata['lat'] = 0;
 				$postdata['lng'] = 0;
