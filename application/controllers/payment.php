@@ -336,6 +336,9 @@ function paypal(){
 	
     function sendNotification($data) 
     {
+		//$mobilestat = $this->payment_model->sendNotificationMobile();
+		//die($mobilestat);
+	
         //$data = array();
         $transactionData = $this->payment_model->getTransactionDetails($data);
         

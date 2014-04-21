@@ -76,6 +76,40 @@ class payment_model extends CI_Model
 	}
 	
 	/*
+	 *Code	Description
+	 *200	Successfully Sent
+	 *201	Message Queued
+	 *100	Not Authorized
+	 *101	Not Enough Balance
+	 *102	Feature Not Allowed
+	 *103	Invalid Options
+	 *104	Gateway Down
+	 */
+	//function sendNotificationMobile($mobile,$user)
+	function sendNotificationMobile()
+	{
+		$fields = array();
+		$fields["api"] = "dgsMQ8q77hewW766aqxK";
+		
+		$fields["number"] = 9177050441; //safe use 63
+		//$fields["number"] = $mobile;
+		
+		$fields["message"] = 'Test message';
+		$fields["from"] = 'Easyshop.ph';
+		$fields_string = http_build_query($fields);
+		$outbound_endpoint = "http://api.semaphore.co/api/sms";
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, $outbound_endpoint);
+		curl_setopt($ch,CURLOPT_POST, count($fields));
+		curl_setopt($ch,CURLOPT_POSTFIELDS, $fields_string);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		$output = curl_exec($ch);
+		curl_close($ch);
+		
+		return $output;
+	}
+	
+	/*
 	 *	Function to get Transaction Details for summary in notification email
 	 */
 	public function getTransactionDetails($data)

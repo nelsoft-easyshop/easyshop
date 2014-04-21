@@ -26,9 +26,12 @@ $lang['msg1'] = "Password reset successfully sent!";
 $lang['msg2'] = "Sorry, the email you provided is unregistered.";
 $lang['msg3'] = "Unable to send, please try again later.";
 
-#Purchase Notification
+#Purchase Notification - Email
 $lang['notification_subject_buyer'] = "Easyshop.ph - Purchased Item Transaction Details";
 $lang['notification_subject_seller'] = "Easyshop.ph - Sold Item Transaction Details";
+
+#Purchase Notification - Mobile
+$lang[''] = '';
 
 #Transaction response by buyer or seller 
 #payment flow direction (forward to seller or return to buyer)
