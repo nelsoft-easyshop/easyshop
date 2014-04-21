@@ -1,4 +1,6 @@
+ <?php
  
+ ?>
 <link rel="stylesheet" href="<?=base_url()?>assets/css/my_cart_css.css" type="text/css" media="screen"/>
 <style type="text/css">
 /* Overlay */
@@ -68,41 +70,79 @@
         <li><a href="#paypal">Paypal</a></li>
       </ul>
       <div id="cod" class="payment_inner_content">
-        <p class="cod_desc"><strong>You can pay in cash to our courier when you receive the goods at your doorstep.</strong></p> 
-        <p class="chck_billing_add"><input type="checkbox"> Billing address is the same as shipping  address</p>       
-        <a href="JavaScript:void(0)" class="payment">Proceed to Payment <span> </span></a> 
-        <p class="notify">You will be notified regarding your order status via email or sms.</p>
-        <p class="subscribe"><input type="checkbox" checked> <img src="<?= base_url() ?>assets/images/icon_email.png" alt="email"> Subscribe to Easyshop Newsletter for great deals and amazing discounts</p>
-        <p class="chck_privacy"><input type="checkbox"> I have read and understand Easyshop <a href="">Privacy Policy</a>.</p>
+        <?php
+          if($codsuccess){
+        ?>
+            <p class="cod_desc"><strong>You can pay in cash to our courier when you receive the goods at your doorstep.</strong></p> 
+            <br>
+                    <?php 
+        $attr = array(
+          'class' => 'codFrm',
+          'id' => 'codFrm',
+          'name' => 'codFrm'
+          );
+        echo form_open('pay/cashondelivery/', $attr);
+        ?>
+            <input type="submit" class="payment" value="Proceed to Payment"> 
+            <input type="hidden" value="<?php echo md5(uniqid(mt_rand(), true));?>" name="paymentToken">   
+            <?php echo form_close();?>
+            <p class="notify">You will be notified regarding your order status via email or sms.</p>
+            <p class="subscribe"><input type="checkbox" checked> <img src="<?= base_url() ?>assets/images/icon_email.png" alt="email"> Subscribe to Easyshop Newsletter for great deals and amazing discounts</p>
+            <p class="chck_privacy"><input type="checkbox"> I have read and understand Easyshop <a href="">Privacy Policy</a>.</p>
+    <?php }else{ ?>
+
+      <span style="color:red">NOTE! one of your choosen item is not avaialable for cash on delivery.</span>
+    <?php 
+      $total = 0; 
+      foreach ($cat_item as $key => $value) {
+      $total += $value['subtotal'];
+    ?>
+            <div class="order_sum_content">
+              <div><?php echo $value['seller_username'] ?></div>
+              <div><?php echo $value['name'] ?></div>
+              <div><?php echo $value['qty'] ?></div>
+              <div><?php echo number_format($value['price'], 2, '.',',') ?></div>
+              <div><?php echo ($value['cash_delivery'] ? "<span style='color:red'>Available for Cash on Delivery</span>" : "<span style='color:red'>Not Available for Cash on Delivery</span><br> Go to your <a style='color:#0654BA'>Cart</a> and Remove this Item") ;?></div>
+                 <?php if(!$value['availability']){ ?>
+                 <div style="color:red">
+                   Please <a style="color:#0654BA" href="javascript:{}" class="link_address">change your shipping address</a> or go to remove this from your <a style="color:#0654BA">Cart</a>.
+                 </div>
+                 <?php } ?>
+            </div>
+           <?php } ?>
+        <?php } ?>  
       </div>
 
       <div id="cdb" class="payment_inner_content">
-        <p class="cod_desc"><strong>Pay using  Credit or Debit Card:</strong></p>
-        <p class="img_payment_cards"><img src="<?= base_url() ?>assets/images/img_visa.png"> <img src="<?= base_url() ?>assets/images/img_mastercard.png"> <img src="<?= base_url() ?>assets/images/img_jcb.png"></p>
-        <div class="cdb_info">
-          <label>Cardholder's Name:</label> <input type="text"><br />
-          <label>Card Number:</label> <input type="text"><br />
-          <label>Credit Card Validity:</label>
-          <select>
-            <option>Month</option>
-          </select>
-          <select>
-            <option>Year</option>
-          </select><br />
-          <label>Credit Card check</label><input type="text" class="cc_check">
-
-          <span>?</span>
-          <img src="<?= base_url() ?>assets/images/img_ccc.jpg" class="cc_check_img">
-          
-          <br />
-          <label></label><input type="checkbox" checked>Save my Card information
-        </div>
-        <p class="chck_billing_add"><input type="checkbox"> Billing address is the same as shipping  address</p>    
-        <a href="JavaScript:void(0)" class="payment">Proceed to Payment <span> </span></a> 
-        <p class="notify">You will be notified regarding your order status via email or sms.</p>
-        <p class="subscribe"><input type="checkbox" checked> <img src="<?= base_url() ?>assets/images/icon_email.png" alt="email"> Subscribe to Easyshop Newsletter for great deals and amazing discounts</p>
-        <p class="chck_privacy"><input type="checkbox"> I have read and understand Easyshop <a href="">Privacy Policy</a>.</p>
+ 
+        <p class="cod_desc"><strong>Pay using  Credit or Debit Card. You will be redirected to the PayPal system to complete the payment.</strong></p>  <br />
+        <!-- PayPal Logo -->
+        <a href="https://www.paypal.com/webapps/mpp/paypal-popup" title="How PayPal Works" onclick="javascript:window.open('https://www.paypal.com/webapps/mpp/paypal-popup','WIPaypal','toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width=700, height=350'); return false;"><img src="https://www.paypalobjects.com/webstatic/mktg/logo/pp_cc_mark_37x23.jpg" border="0" alt="PayPal Logo" style="vertical-align:middle;text-decoration: underline;"> What is PayPal?</a>
+        <br />
+        <!-- PayPal Logo --> 
+        <?php
+        if(count($cat_item) <= 0)
+        { ?> <br /> <br />
+       No Items in Cart Can't Proceed.
+       <?php 
+        }else{ ?> <br /> <br />
+      <!-- PAYPAL BUTTON -->
+      <div class="paypal_button">
+      <a style="cursor:pointer" data-type="2"  class="paypal">
+        <img src="<?php echo base_url()?>assets/images/paypal_checkout_button.png" alt="Paypal Credit/Debit Card Checkout" align="left" style="margin-right:7px;">
+        <span></span>
+      </a>
       </div>
+
+
+      <div class="paypal_loader"><img src="/assets/images/paypal_load.gif"></div> 
+      <!-- END OF PAYPAL BUTTON -->
+      <?php
+        } ?>
+    <div style="clear:both"></div>
+    <p class="notify">You will be notified regarding your order status via email or sms.</p>
+    <p class="subscribe"><input type="checkbox" checked> <img src="<?= base_url() ?>assets/images/icon_email.png" alt="email"> Subscribe to Easyshop Newsletter for great deals and amazing discounts</p>
+    <p class="chck_privacy"><input type="checkbox"> I have read and understand Easyshop <a href="">Privacy Policy</a>.</p></div>
 
       <div id="paypal" class="payment_inner_content">
         <p class="cod_desc"><strong>Pay using your PayPal account. You will be redirected to the PayPal system to complete the payment.</strong></p>  <br />
@@ -119,7 +159,7 @@
       <!-- PAYPAL BUTTON -->
       <div class="paypal_button">
       <a style="cursor:pointer" data-type="1"  class="paypal">
-        <img src="https://www.paypal.com/en_US/i/btn/btn_xpressCheckout.gif" alt="Paypap Express Checkout" align="left" style="margin-right:7px;">
+        <img src="https://www.paypal.com/en_US/i/btn/btn_xpressCheckout.gif" alt="Paypal Checkout" align="left" style="margin-right:7px;">
         <span></span>
       </a>
       </div>
@@ -129,11 +169,7 @@
       <!-- END OF PAYPAL BUTTON -->
       <?php
         } ?>
-
-    <br> 
-    <br>
-    <br>
-
+    <div style="clear:both"></div>
     <p class="notify">You will be notified regarding your order status via email or sms.</p>
     <p class="subscribe"><input type="checkbox" checked> <img src="<?= base_url() ?>assets/images/icon_email.png" alt="email"> Subscribe to Easyshop Newsletter for great deals and amazing discounts</p>
     <p class="chck_privacy"><input type="checkbox"> I have read and understand Easyshop <a href="">Privacy Policy</a>.</p>
@@ -199,26 +235,31 @@
     <div>Product</div>
     <div>Quantity</div>
     <div>Price</div>
+    <div>Shipping Fee</div>
   </div>
   
 
   <?php 
   $total = 0;
+  $shipping_fee = 0;
+
   foreach ($cat_item as $key => $value) {
-    $total += $value['subtotal'];
+    $total += $value['subtotal'] ;
+    $shipping_fee += $value['shipping_fee'];
     ?>
     <div class="order_sum_content">
       <div class="sum_con_name"><?php echo $value['name'] ?></div>
       <div class="sum_con_qty"><?php echo $value['qty'] ?></div>
       <div class="sum_con_price"><?php echo number_format($value['price'], 2, '.',',') ?></div>
+      <div><?php echo number_format($value['shipping_fee'], 2, '.',',') ?></div>
     </div>
     <?php } ?>
 
 
     <div class="order_sum_sub_total">
       <p>Subtotal: <span><?php echo number_format($total, 2, '.',','); ?></span></p>
-      <p>Shipping fee: <span>Free</span></p>
-      <p class="order_sum_total">Total: <span>Php <?php echo number_format($total, 2, '.',','); ?></span></p>
+      <p>Shipping fee: <span>Php <?php echo number_format($shipping_fee, 2, '.',','); ?></span></p>
+      <p class="order_sum_total">Total: <span>Php <?php echo number_format($total + $shipping_fee, 2, '.',','); ?></span></p>
     </div>
 
   </div>
@@ -278,7 +319,7 @@ $(document).ready(function(){
  <script type="text/javascript">
  
       $(document).on('click','.paypal',function () {
-        var action = "payment/paypal_setexpresscheckout"; 
+        var action = "pay/setting/paypal"; 
         var csrftoken = "<?php echo $my_csrf['csrf_hash'];?>";
         var type = $(this).data('type');
         $.ajax({

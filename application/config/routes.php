@@ -45,7 +45,6 @@ $route['404_override'] = 'home/pagenotfound';
 # CATEGORY
 $route['category/(:num)/(:any)'] = 'product/categorySearch/$1/$2'; # ryan vasquez
 $route['category/loadproduct'] = 'product/loadOtherCategorySearch'; # ryan vasquez
-
 $route['category/all'] = 'product/categories_all'; # ryan vasquez
 
 #SEARCHING
@@ -60,7 +59,6 @@ $route['advance_search/load_other_product'] = 'product_search/load_product'; # r
 #ITEMS
 $route['item/(:num)/(:any)'] = 'product/view/$1/$2'; # ryan vasquez
 $route['search/suggest'] = 'product/sch_onpress'; # ryan vasquez
-
 
 #SELL ITEM
 $route['sell/step1'] = 'productUpload/step1'; # ryan vasquez
@@ -86,6 +84,11 @@ $route['sell/draft/remove'] = 'productUpload/deleteDraft';  # sam gavinio
 $route['registration/success'] = 'landingpage/success/register';  # sam gavinio
 $route['subscription/success'] = 'landingpage/success/subscribe';  # sam gavinio
 
+#PAYMENT CASH ON DELIVERY
+$route['pay/cashondelivery'] = 'payment/payCashOnDelivery';  # ryan vasquez
+#PAYMENT PAYPAL
+$route['pay/setting/paypal'] = 'payment/paypal_setexpresscheckout';  # ryan vasquez
+$route['pay/paypal'] = 'payment/paypal';  # ryan vasquez
 
 
 /* End of file routes.php */

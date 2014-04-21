@@ -22,10 +22,11 @@ class payment_model extends CI_Model
         
     }
 
-    function payment($invoice_no,$ItemTotalPrice,$ip,$member_id,$productstring,$productCount,$apiResponse)
+    function payment($paymentType,$invoice_no,$ItemTotalPrice,$ip,$member_id,$productstring,$productCount,$apiResponse)
     {
         $query = $this->sqlmap->getFilenameID('payment','payment_transaction');
         $sth = $this->db->conn_id->prepare($query);
+        $sth->bindParam(':payment_type',$paymentType,PDO::PARAM_INT);
         $sth->bindParam(':invoice_no',$invoice_no,PDO::PARAM_STR);
         $sth->bindParam(':total_amt',$ItemTotalPrice,PDO::PARAM_STR);
         $sth->bindParam(':ip',$ip,PDO::PARAM_STR);
@@ -190,32 +191,74 @@ class payment_model extends CI_Model
 	}
  
 
-	function getShippingDetails($product_id,$product_item_id)
+	function getShippingDetails($product_id ,$product_item_id,$city_id,$region_id,$major_island_id)
 	{
 		$query = "
 			SELECT 
-			  a.`product_item_id`
-			  , b.product_id
-			  , c.location 
-			  , c.`id_location`
-			  , c.`type`
+			  es_location_lookup.id_location AS id
+			  , es_location_lookup.location
+			  , es_location_lookup.`type`
+			  , es_location_lookup.`parent_id`
+			  , COALESCE(price, '0') AS price
+			  , shipping.product_id 
+			  , COALESCE(product_item_id, 'Not Available') AS product_item_id
+			  , is_cod 
+			  , CASE es_location_lookup.`type` 
+			  WHEN '1' THEN   
+				  IF(es_location_lookup.id_location = (SELECT COALESCE(:major_island_id,0)), 'Available', 'Not Avialable')
+			  WHEN '2' THEN 
+			      IF(es_location_lookup.id_location = (SELECT COALESCE(:region_id,0)), 'Available', 'Not Avialable')
+			  WHEN '3' THEN 
+				  IF(es_location_lookup.id_location = (SELECT COALESCE(:city_id,0)), 'Available', 'Not Avialable')
+			  END AS availability
 			FROM
-			  `es_product_shipping_detail` a
-			  , `es_product_shipping_head` b
-			  , `es_location_lookup` c 
-			WHERE b.`id_shipping` = a.`shipping_id` 
-			AND b.`location_id` = c.`id_location`
-			AND b.`product_id` = :product_id
-			AND a.`product_item_id` = :product_item_id
+			  `es_location_lookup` 
+			  LEFT OUTER JOIN 
+			    (
+			    	SELECT 
+					  a.`product_item_id`
+					  , b.product_id
+					  , c.location AS shipping_location
+					  , c.`id_location` AS shipping_id_location
+					  , c.`type` AS shipping_type
+					  , b.`price` 
+					  , d.is_cod 
+					FROM
+					  `es_product_shipping_detail` a
+					  , `es_product_shipping_head` b
+					  , `es_location_lookup` c 
+					  , `es_product` d 
+					WHERE b.`id_shipping` = a.`shipping_id` 
+					  AND b.`location_id` = c.`id_location` 
+					  AND d.`id_product` = b.`product_id` 
+   				) AS shipping 
+			    ON shipping.shipping_id_location = es_location_lookup.`id_location` 
+			WHERE es_location_lookup.`type` IN (1, 2, 3) 
+			  AND COALESCE(product_item_id, 'Not Available') != 'Not Available' 
+			  AND
+			  (CASE es_location_lookup.`type` 
+			    WHEN '1' THEN   
+					IF(es_location_lookup.id_location = (SELECT COALESCE(:major_island_id,0)), 'Available', 'Not Avialable')
+			    WHEN '2' THEN 
+					IF(es_location_lookup.id_location = (SELECT COALESCE(:region_id,0)), 'Available', 'Not Avialable')
+			    WHEN '3' THEN 
+					IF(es_location_lookup.id_location = (SELECT COALESCE(:city_id,0)), 'Available', 'Not Avialable')
+			  END ) = 'Available'
+			  AND `product_id` = :product_id  
+			  AND `product_item_id` = :product_item_id
+			  ORDER BY price DESC LIMIT 1
 		";
 		$sth = $this->db->conn_id->prepare($query);
 
 		$sth->bindParam(':product_id', $product_id,PDO::PARAM_INT);
 		$sth->bindParam(':product_item_id', $product_item_id,PDO::PARAM_INT); 
+		$sth->bindParam(':city_id', $city_id,PDO::PARAM_INT); 
+		$sth->bindParam(':region_id', $region_id,PDO::PARAM_INT); 
+		$sth->bindParam(':major_island_id', $major_island_id,PDO::PARAM_INT); 
 		$sth->execute();
 		$row = $sth->fetchAll(PDO::FETCH_ASSOC);
 		 
-		return $row[0];
+		return $row ;
 	}
 
 	function getCityFromRegion($id_location)
@@ -231,18 +274,24 @@ class payment_model extends CI_Model
 	 
 		return $row;
 	}
-	function getRegionOrMajorIsland($id_location,$type)
-	{
+	function getCityOrRegionOrMajorIsland($id_location)
+	{ 
 		$query = "
-		SELECT * FROM `es_location_lookup` WHERE `type` = :type AND id_location = :id_location
+		SELECT 
+		  a.*
+		  , b.location AS parent_location 
+		FROM
+		  `es_location_lookup` a
+		  , es_location_lookup b 
+		WHERE a.`parent_id` = b.`id_location`
+		AND a.`id_location` = :id_location
 		";
 		$sth = $this->db->conn_id->prepare($query);
  
 		$sth->bindParam(':id_location', $id_location,PDO::PARAM_INT);
-		$sth->bindParam(':type', $type,PDO::PARAM_INT); 
      	$sth->execute();
-		$row = $sth->fetchAll(PDO::FETCH_COLUMN, 1);
-	 	  
+		$row = $sth->fetchAll(PDO::FETCH_ASSOC);
+	 	   
 		return $row[0];
 	}
 

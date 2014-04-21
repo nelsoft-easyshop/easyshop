@@ -18,21 +18,31 @@ class Payment extends MY_Controller{
 
  
     
-    // LIVE
-    // public $PayPalMode             = ''; 
-    // public $PayPalApiUsername      = 'admin_api1.easyshop.ph'; 
-    // public $PayPalApiPassword      = 'GDWFS6D9ACFG45E7'; 
-    // public $PayPalApiSignature     = 'AFcWxV21C7fd0v3bYYYRCpSSRl31Adro7yAfl2NInYAAVfFFipJ-QQhT'; 
+    public $PayMentPayPal = 1;
+    public $PayMentCashOnDelivery = 2;
 
     // SANDBOX
     public $PayPalMode             = 'sandbox'; 
     public $PayPalApiUsername      = 'easyseller_api1.yahoo.com'; 
     public $PayPalApiPassword      = '1396000698'; 
     public $PayPalApiSignature     = 'AFcWxV21C7fd0v3bYYYRCpSSRl31Au1bGvwwVcv0garAliLq12YWfivG';  
+
+
+        // LIVE
+    // public $PayPalMode             = ''; 
+    // public $PayPalApiUsername      = 'admin_api1.easyshop.ph'; 
+    // public $PayPalApiPassword      = 'GDWFS6D9ACFG45E7'; 
+    // public $PayPalApiSignature     = 'AFcWxV21C7fd0v3bYYYRCpSSRl31Adro7yAfl2NInYAAVfFFipJ-QQhT'; 
+
+    
     public $PayPalCurrencyCode     = 'PHP';
 
     function cart_items()
-    {
+    {   
+        if(!$this->session->userdata('member_id')){
+            redirect(base_url().'home', 'refresh');
+        };
+        
         $unchecked = $_POST['itm'];
         $carts = $this->cart->contents();
         for($x=0;$x < sizeof($unchecked);$x++):
@@ -46,59 +56,49 @@ class Payment extends MY_Controller{
    
     function review()
     {  
-
+   
+        if(!$this->session->userdata('member_id')){
+            redirect(base_url().'home', 'refresh');
+        };
+        
         $carts = $this->session->all_userdata(); 
         $itemArray = $carts['choosen_items'];
         $member_id =  $this->session->userdata('member_id');
         $address = $this->memberpage_model->get_member_by_id($member_id);
-  
-        // $city = $address['c_cityID']; #Caloocan 
-        $city = 0;
         $city = ($address['c_cityID'] > 0 ? $address['c_cityID'] :  0);
+        $cityDetails = $this->payment_model->getCityOrRegionOrMajorIsland($city);
+        $region = $cityDetails['parent_id'];
+        $cityDetails = $this->payment_model->getCityOrRegionOrMajorIsland($region);
+        $majorIsland = $cityDetails['parent_id'];
         $itemCount = count($itemArray);
         $successcount = 0;
-
+        $codCount = 0;
+        $data['shippingDetails'] = false; 
         foreach ($itemArray as $key => $value) {
 
-            $seller = $this->memberpage_model->get_member_by_id($member_id);
 
-            $productId = $value['id'];
-            $name = $value['name'];
-            $itemId = $value['product_itemID'];
+            $productId = $value['id']; 
+            $itemId = $value['product_itemID']; 
             $availability = "Not Available";
-            $details = $this->payment_model->getShippingDetails($productId,$itemId);
-            $locationType = $details['type'];
-            $locationName = $details['location'];
-            $locationId = $details['id_location'];
-            $data['shippingDetails'] = false;
-            if($city > 0){
-                if($locationType == '1'){ # if LUZON, VISAYAS OR MINDANAO
-                    $region = $this->payment_model->getRegionOrMajorIsland($city,3);
-                    $majorIsland = $this->payment_model->getRegionOrMajorIsland($region,2);
-                    $availability = ($locationId == $majorIsland ? "Available" : "Not Available");
-                    $successcount = ($availability == "Available" ? $successcount + 1 : $successcount + 0);
 
-                }elseif($locationType == '2') { # if REGION
-                    $cityList = $this->payment_model->getCityFromRegion($locationId);
-                    $availability = (in_array($city, $cityList) ? "Available" : "Not Available");
-                    $successcount = ($availability == "Available" ? $successcount + 1 : $successcount + 0);
+            if($city > 0){  
+                $details = $this->payment_model->getShippingDetails($productId,$itemId,$city,$region,$majorIsland);
+                $seller = $value['member_id'];
+                $successcount = (count($details) >= 1 ? $successcount + 1 && $availability = "Available" && $itemArray[$value['rowid']]['shipping_fee'] = $details[0]['price'] : $successcount + 0);
+                $codCount = ($details[0]['is_cod'] >= 1 ? $codCount + 1: $codCount + 0);
+                $sellerDetails = $this->memberpage_model->get_member_by_id($seller);
+                $itemArray[$value['rowid']]['availability'] = ($availability == "Available" ? true : false);
+                $itemArray[$value['rowid']]['seller_username'] = $sellerDetails['username'];
+                $itemArray[$value['rowid']]['cash_delivery'] = $details[0]['is_cod'];
+                $data['shippingDetails'] = true; 
 
-                }else{ # if CITY
-                    $availability = ($locationId == $city ? "Available" : "Not Available");
-                    $successcount = ($availability == "Available" ? $successcount + 1 : $successcount + 0);
-                }
-                $data['shippingDetails'] = true;
             } 
-
-            $itemArray[$value['rowid']]['availability'] = ($availability == "Available" ? true : false);
-            $itemArray[$value['rowid']]['seller_username'] = $seller['username'];
-            // echo $name.' - '.$availability .'<br>';
         }  
-        // echo '<pre>',print_r($itemArray);exit();
-        if(!count($carts['choosen_items']) <=0){  
+        if(!count($carts['choosen_items']) <= 0){  
             $data['cat_item'] = $itemArray;
             $data['title'] = 'Payment | Easyshop.ph';
             $data['success'] = ($successcount == $itemCount ? true : false);
+            $data['codsuccess'] = ($codCount == $itemCount ? true : false);
             $data = array_merge($data,$this->fill_header());
             $data = array_merge($data, $this->memberpage_model->getLocationLookup());
             $data = array_merge($data,$this->memberpage_model->get_member_by_id($member_id));
@@ -113,17 +113,44 @@ class Payment extends MY_Controller{
     #SEE REFERENCE SITE FOR THE PARAMETERS
     # https://developer.paypal.com/webapps/developer/docs/classic/express-checkout/integration-guide/ECCustomizing/
     function paypal_setexpresscheckout() 
-    {
+    {   
+        if(!$this->session->userdata('member_id')){
+            redirect(base_url().'home', 'refresh');
+        };
+        
         $PayPalMode             = $this->PayPalMode; 
         $PayPalApiUsername      = $this->PayPalApiUsername;
         $PayPalApiPassword      = $this->PayPalApiPassword;
         $PayPalApiSignature     = $this->PayPalApiSignature;
         $PayPalCurrencyCode     = $this->PayPalCurrencyCode; 
-        $PayPalReturnURL        = base_url().'payment/paypal'; 
+        $PayPalReturnURL        = base_url().'pay/paypal'; 
         $PayPalCancelURL        = base_url().'payment/review'; 
 
-        $tax_amt = 0;
-        $shipping_amt = 0;    
+        $carts = $this->session->all_userdata(); 
+        $itemArray = $carts['choosen_items'];
+        $member_id =  $this->session->userdata('member_id');
+        $address = $this->memberpage_model->get_member_by_id($member_id); 
+        $name = $address['consignee'];
+        $street = $address['c_address']; 
+        $cityDescription = $address['c_city'];
+        $zipCode = "";
+        $email = $address['email']; 
+        $telephone = $address['c_telephone'];
+
+        $city = ($address['c_cityID'] > 0 ? $address['c_cityID'] :  0);
+        $cityDetails = $this->payment_model->getCityOrRegionOrMajorIsland($city);
+        $regionDesc = $cityDetails['parent_location'];
+        $region = $cityDetails['parent_id'];
+        $cityDetails = $this->payment_model->getCityOrRegionOrMajorIsland($region);
+        $majorIsland = $cityDetails['parent_id'];
+        $shipping_amt = 0;  
+
+        if(count($carts['choosen_items']) <= 0){
+            echo  '{"e":"0","d":"No item in cart."}';
+            exit();
+        }
+
+        $tax_amt = 0;   
         $handling_amt = 0;
         $shipping_discount_amt = 0;
         $insurance_amt = 0;
@@ -133,7 +160,7 @@ class Payment extends MY_Controller{
         $landingPage = "Billing";
         $paypalType = $this->input->post('paypal');
         $carts = $this->session->all_userdata();
-        $dataitem = "";
+        $dataitem = ""; 
 
         foreach ($carts['choosen_items'] as $key => $value) {
             $dataitem .= '&L_PAYMENTREQUEST_0_QTY'.$cnt.'='. urlencode($value['qty']).
@@ -142,31 +169,52 @@ class Payment extends MY_Controller{
             '&L_PAYMENTREQUEST_0_NUMBER'.$cnt.'='.urlencode($value['id']).
             '&L_PAYMENTREQUEST_0_DESC'.$cnt.'=' .urlencode('SAMPLE DESCRIPTION');
             $cnt++;
-            $ItemTotalPrice += $value['subtotal'];
+            $productId = $value['id'];
+            $productItem =  $value['product_itemID'];
+            $tax_amt = $tax_amt;
+            $details = $this->payment_model->getShippingDetails($productId,$productItem,$city,$region,$majorIsland);
+            $shipping_amt += $details[0]['price'];
+            $total =  $value['subtotal'] ;
+            $ItemTotalPrice += $total;  
         } 
-
+ 
         $grandTotal= ($ItemTotalPrice+$tax_amt+$shipping_amt+$handling_amt+$insurance_amt)-$shipping_discount_amt;
+ 
         $padata =   
         '&RETURNURL='.urlencode($PayPalReturnURL ).
         '&CANCELURL='.urlencode($PayPalCancelURL).
-        '&CURRENCYCODE='.urlencode($PayPalCurrencyCode).
-        '&PAYMENTACTION=Sale'.
-        '&ALLOWNOTE=1'.
+        '&PAYMENTACTION=Sale'. 
         '&PAYMENTREQUEST_0_CURRENCYCODE='.urlencode($PayPalCurrencyCode).
-        $dataitem.
+        '&CURRENCYCODE='.urlencode($PayPalCurrencyCode).
+        $dataitem. 
         '&PAYMENTREQUEST_0_ITEMAMT='.urlencode($ItemTotalPrice).  
         '&PAYMENTREQUEST_0_TAXAMT='.urlencode($tax_amt).
         '&PAYMENTREQUEST_0_SHIPPINGAMT='.urlencode($shipping_amt).
         '&PAYMENTREQUEST_0_HANDLINGAMT='.urlencode($handling_amt).
         '&PAYMENTREQUEST_0_INSURANCEAMT='.urlencode($insurance_amt).
         '&PAYMENTREQUEST_0_SHIPDISCAMT=-'.urlencode($shipping_discount_amt).
-        '&PAYMENTREQUEST_0_AMT='.urlencode($grandTotal);
+        '&PAYMENTREQUEST_0_AMT='.urlencode($grandTotal).
+        '&SOLUTIONTYPE='.urlencode($solutionType).
+        '&ALLOWNOTE=0'.
+        '&NOSHIPPING=1'.
+        '&PAYMENTREQUEST_0_SHIPTONAME='.urlencode($name).
+        '&PAYMENTREQUEST_0_SHIPTOSTREET='.urlencode($street).
+        '&PAYMENTREQUEST_0_SHIPTOCITY='.urlencode($cityDescription).
+        '&PAYMENTREQUEST_0_SHIPTOSTATE='.urlencode($regionDesc).
+        '&PAYMENTREQUEST_0_SHIPTOCOUNTRYCODE=PH'.
+        '&PAYMENTREQUEST_0_SHIPTOZIP='.urlencode($zipCode).
+        '&PAYMENTREQUEST_0_EMAIL='.urlencode($email).
+        '&EMAIL='.urlencode($email).
+        '&PAYMENTREQUEST_0_SHIPTOPHONENUM='.urlencode($telephone);
 
         if($paypalType == 2){
-           $padata .= '&SOLUTIONTYPE='.urlencode($solutionType).'&LANDINGPAGE='.urlencode($landingPage);
+           $padata .= '&LANDINGPAGE='.urlencode($landingPage);
+        }else{
+           $padata .= '&LANDINGPAGE='.urlencode('Login'); 
         }
         $httpParsedResponseAr = $this->paypal->PPHttpPost('SetExpressCheckout', $padata, $PayPalApiUsername, $PayPalApiPassword, $PayPalApiSignature, $PayPalMode);
         $pdataarray = json_encode(explode('&',substr($padata, 1)));
+
 
         if("SUCCESS" == strtoupper($httpParsedResponseAr["ACK"]) || "SUCCESSWITHWARNING" == strtoupper($httpParsedResponseAr["ACK"]))
         {       
@@ -179,10 +227,18 @@ class Payment extends MY_Controller{
         echo $data;
         exit();
     }
-
  
-    #PROCESS PAYPAL
+#PROCESS PAYPAL
 function paypal(){
+
+    if(!$this->session->userdata('member_id')){
+        redirect(base_url().'home', 'refresh');
+    };
+
+    $carts = $this->session->all_userdata();
+    if(!isset($carts['choosen_items'])){
+        redirect(base_url().'home', 'refresh');
+    }
 
     $PayPalMode             = $this->PayPalMode; 
     $PayPalApiUsername      = $this->PayPalApiUsername;
@@ -192,8 +248,10 @@ function paypal(){
     $response['message_status'] = "";
     $response['message'] = "";
 
+    $paymentType = $this->PayMentPayPal; ; #paypal
     $apiResponseArray = array(); 
     $apiResponse  = ""; 
+    $otherFee = 0;
     $tax_amt = 0;
     $shipping_amt = 0;    
     $handling_amt = 0;
@@ -201,38 +259,46 @@ function paypal(){
     $insurance_amt = 0;
     $ItemTotalPrice = 0;
     $cnt = 0;
-    $carts = $this->session->all_userdata();
     $member_id =  $this->session->userdata('member_id');
     $productCount = count($carts['choosen_items']); 
+    $itemList =  $carts['choosen_items'];
     $invoice_no = date('Ymhs'); 
     $ip = $this->user_model->getRealIpAddr();   
-    $productstring = ""; 
+    $productstring = "";  
+    
 
-    if(isset($_GET["token"]) && isset($_GET["PayerID"]))
-    {
-        $playerid = $_GET["PayerID"];
-        foreach ($carts['choosen_items'] as $key => $value){
-            $ItemTotalPrice += $value['subtotal'];
-        }
-
-        $tax_amt = 0;
-        $shipping_amt = 0;    
-        $handling_amt = 0;
-        $shipping_discount_amt = 0;
-        $insurance_amt = 0;
-        $ItemTotalPrice = 0;
-        $cnt = 0;
-        $carts = $this->session->all_userdata();
-        $member_id =  $this->session->userdata('member_id');
-
+    $address = $this->memberpage_model->get_member_by_id($member_id); 
+    $city = ($address['c_cityID'] > 0 ? $address['c_cityID'] :  0);
+    $cityDetails = $this->payment_model->getCityOrRegionOrMajorIsland($city);
+    $regionDesc = $cityDetails['parent_location'];
+    $region = $cityDetails['parent_id'];
+    $cityDetails = $this->payment_model->getCityOrRegionOrMajorIsland($region);
+    $majorIsland = $cityDetails['parent_id'];  
+      
         if(isset($_GET["token"]) && isset($_GET["PayerID"]))
         {
-            $playerid = $_GET["PayerID"];
-            foreach ($carts['choosen_items'] as $key => $value) {
-                $ItemTotalPrice += $value['subtotal'];
+       
+            foreach ($itemList as $key => $value) {
+                $sellerId = $value['member_id'];
+                $productId = $value['id'];
+                $orderQuantity = $value['qty'];
+                $price = $value['price'];
+                $productItem =  $value['product_itemID'];
+                $details = $this->payment_model->getShippingDetails($productId,$productItem,$city,$region,$majorIsland);
+                $shipping_amt = $details[0]['price'];
+                $otherFee = $shipping_amt + $tax_amt;
+                $total =  $value['subtotal'] + $otherFee;
+                $productstring .= '<||>'.$sellerId."{+}".$productId."{+}".$orderQuantity."{+}".$price."{+}".$otherFee."{+}".$total."{+}".$productItem;
+                $itemList[$key]['otherFee'] = $otherFee;
+                $sellerDetails = $this->memberpage_model->get_member_by_id($sellerId); 
+                $itemList[$key]['seller_username'] = $sellerDetails['username'];
+                $ItemTotalPrice += $total;  
             }
 
-            $grandTotal= ($ItemTotalPrice+$tax_amt+$shipping_amt+$handling_amt+$insurance_amt)-$shipping_discount_amt;
+            $response['itemList'] = $itemList;
+            $grandTotal= ($ItemTotalPrice+$handling_amt+$insurance_amt)-$shipping_discount_amt;
+
+            $playerid = $_GET["PayerID"];
             $token= $_GET["token"];
             $padata =   '&TOKEN='.urlencode($token).
             '&PAYERID='.urlencode($playerid).
@@ -240,13 +306,15 @@ function paypal(){
             '&AMT='.urlencode($grandTotal).
             '&CURRENCYCODE='.urlencode($PayPalCurrencyCode);
 
+            $httpParsedResponseArGECD =  $this->paypal->PPHttpPost('GetExpressCheckoutDetails', $padata, $PayPalApiUsername, $PayPalApiPassword, $PayPalApiSignature, $PayPalMode);
+            $apiResponseArray['GetExpressCheckoutDetails '] =  $httpParsedResponseArGECD;
+               
             $httpParsedResponseAr = $this->paypal->PPHttpPost('DoExpressCheckoutPayment', $padata, $PayPalApiUsername, $PayPalApiPassword, $PayPalApiSignature, $PayPalMode);
             $apiResponseArray['DoExpressCheckoutPayment'] = $httpParsedResponseAr;
 
-            if("SUCCESS" == strtoupper($httpParsedResponseAr["ACK"]) || "SUCCESSWITHWARNING" == strtoupper($httpParsedResponseAr["ACK"])) 
+            if(("SUCCESS" == strtoupper($httpParsedResponseAr["ACK"]) || "SUCCESSWITHWARNING" == strtoupper($httpParsedResponseAr["ACK"])) && ("SUCCESS" == strtoupper($httpParsedResponseArGECD["ACK"])))
             {
-                $response['message_status'] = 'Your Transaction ID :'.urldecode($httpParsedResponseAr["TRANSACTIONID"]);
-
+                $response['message_status'] = 'Your PayPal Transaction ID :'.urldecode($httpParsedResponseAr["TRANSACTIONID"]); 
                 // if('Completed' == $httpParsedResponseAr["PAYMENTSTATUS"]){
                 //     $response['message_status'] .= '<div style="color:green">Payment Received! Your product will be sent to you very soon!</div>';
                 // }elseif('Pending' == $httpParsedResponseAr["PAYMENTSTATUS"]){
@@ -257,43 +325,25 @@ function paypal(){
                 $nvpStr = "&TRANSACTIONID=".$transactionID;
                 $httpParsedResponseAr =  $this->paypal->PPHttpPost('GetTransactionDetails', $nvpStr, $PayPalApiUsername, $PayPalApiPassword, $PayPalApiSignature, $PayPalMode);
                 $apiResponseArray['GetTransactionDetails'] =  $httpParsedResponseAr;
-
+  
                 if("SUCCESS" == strtoupper($httpParsedResponseAr["ACK"]) || "SUCCESSWITHWARNING" == strtoupper($httpParsedResponseAr["ACK"])) {
  
                     # START SAVING TO DATABASE HERE
-
-                    foreach ($carts['choosen_items'] as $key => $value) {
-
-                        $sellerId = $value['member_id'];
-                        $productId = $value['id'];
-                        $orderQuantity = $value['qty'];
-                        $price = $value['price'];
-                        $tax_amt = $tax_amt;
-                        $total =  $value['subtotal'] + $tax_amt;
-                        $productItem =  $value['product_itemID'];
-                        $productstring .= '<||>'.$sellerId."{+}".$productId."{+}".$orderQuantity."{+}".$price."{+}".$tax_amt."{+}".$total."{+}".$productItem;
-
-                    }
+              
 
                     $productstring = substr($productstring,4);
                     $apiResponseArray['ProductData'] =  $carts['choosen_items'];
 
                     // apiResponse 
                     $apiResponse = json_encode($apiResponseArray);
-                    $return = $this->payment_model->payment($invoice_no,$grandTotal,$ip,$member_id,$productstring,$productCount,$apiResponse);
-
+                    $return = $this->payment_model->payment($paymentType,$invoice_no,$grandTotal,$ip,$member_id,$productstring,$productCount,$apiResponse);
                     if($return['o_success'] <= 0){
                         $response['message'] = '<div style="color:red"><b>Error 3: </b>'.$return['o_message'].'</div>'; 
-
-
                     }else{
-                        $response['message'] = '';
-                        $this->removeItemFromCart();
-                        // $notificationData = array(
-                        //     'order_id' => $return['order_id'],
-                        //     'member_id' => $return['member_id']
-                        //     );
-                        // $this->sendNotification($notificationData);
+                        $response['message'] = '<div style="color:green">Your payment is completed through Paypal</div>';            
+                        $response = array_merge($response,$return);
+                        // $this->removeItemFromCart();
+                        // $this->session->unset_userdata('choosen_items');
                     }
                 }else{
                     $response['message'] = '<div style="color:red"><b>Error 2: (GetTransactionDetails failed):</b>'.urldecode($httpParsedResponseAr["L_LONGMESSAGE0"]).'</div>';
@@ -302,8 +352,97 @@ function paypal(){
                 $response['message'] = '<div style="color:red"><b>Error 1: </b>'.urldecode($httpParsedResponseAr["L_LONGMESSAGE0"]).'</div>';
             }
         }
+  
+
+        $member_id =  $this->session->userdata('member_id'); 
+        $data['cat_item'] = $this->cart->contents();
+        $data['title'] = 'Payment | Easyshop.ph';
+        $data = array_merge($data,$this->fill_header());
+        $this->load->view('templates/header', $data);
+        $this->load->view('pages/payment/payment_response' ,$response);  
+        $this->load->view('templates/footer_full'); 
     }
 
+    function payCashOnDelivery(){
+   
+        if(!$this->session->userdata('member_id')){
+            redirect(base_url().'home', 'refresh');
+        };
+
+        if(!$this->input->post('paymentToken')){
+            redirect(base_url().'home', 'refresh');
+        }; 
+
+        $carts = $this->session->all_userdata();
+        
+        if(!isset($carts['choosen_items'])){
+            redirect(base_url().'home', 'refresh');
+        }
+        
+        $paymentType = $this->PayMentCashOnDelivery; 
+        $apiResponseArray = array(); 
+        
+        $member_id =  $this->session->userdata('member_id');
+        $productCount = count($carts['choosen_items']); 
+        $itemList =  $carts['choosen_items'];
+        $invoice_no = date('Ymhsd'); 
+        $ip = $this->user_model->getRealIpAddr();   
+        $productstring = "";  
+        $address = $this->memberpage_model->get_member_by_id($member_id); 
+        $city = ($address['c_cityID'] > 0 ? $address['c_cityID'] :  0);
+        $cityDetails = $this->payment_model->getCityOrRegionOrMajorIsland($city);
+        $regionDesc = $cityDetails['parent_location'];
+        $region = $cityDetails['parent_id'];
+        $cityDetails = $this->payment_model->getCityOrRegionOrMajorIsland($region);
+        $majorIsland = $cityDetails['parent_id']; 
+
+        $otherFee = 0;
+        $tax_amt = 0;
+        $shipping_amt = 0;    
+        $handling_amt = 0;
+        $shipping_discount_amt = 0;
+        $insurance_amt = 0;
+        $ItemTotalPrice = 0;
+        
+        foreach ($itemList as $key => $value) {
+            $sellerId = $value['member_id'];
+            $productId = $value['id'];
+            $orderQuantity = $value['qty'];
+            $price = $value['price'];
+            $tax_amt = $tax_amt;
+            $productItem =  $value['product_itemID'];
+            $details = $this->payment_model->getShippingDetails($productId,$productItem,$city,$region,$majorIsland);
+            $shipping_amt = $details[0]['price'];
+            $otherFee = $tax_amt + $shipping_amt;
+            $total =  $value['subtotal'] + $otherFee;
+            $productstring .= '<||>'.$sellerId."{+}".$productId."{+}".$orderQuantity."{+}".$price."{+}".$otherFee."{+}".$total."{+}".$productItem;
+            $itemList[$key]['otherFee'] = $otherFee;
+            $sellerDetails = $this->memberpage_model->get_member_by_id($sellerId); 
+            $itemList[$key]['seller_username'] = $sellerDetails['username'];
+            $ItemTotalPrice += $total;  
+
+        }
+    
+        $response['itemList'] = $itemList;
+        $grandTotal= ($ItemTotalPrice+$handling_amt+$insurance_amt)-$shipping_discount_amt;
+
+
+        $productstring = substr($productstring,4);
+        $apiResponseArray['ProductData'] =  $carts['choosen_items'];
+
+        $apiResponse = json_encode($apiResponseArray);
+        $return = $this->payment_model->payment($paymentType,$invoice_no,$grandTotal,$ip,$member_id,$productstring,$productCount,$apiResponse);
+
+
+        if($return['o_success'] <= 0){
+            $response['message'] = '<div style="color:red"><b>Error 3: </b>'.$return['o_message'].'</div>'; 
+        }else{
+            $response['message'] = '<div style="color:green">Your payment is completed through Cash on Delivery.</div>';
+            // $this->removeItemFromCart(); 
+            // $this->session->unset_userdata('choosen_items');
+        }   
+
+        $response = array_merge($response,$return);  
         $member_id =  $this->session->userdata('member_id'); 
         $data['cat_item'] = $this->cart->contents();
         $data['title'] = 'Payment | Easyshop.ph';
@@ -315,27 +454,33 @@ function paypal(){
 
 
     function removeItemFromCart(){
- 
-        $carts = $this->session->all_userdata();
-        foreach ($carts['choosen_items'] as $key => $value) {
-            
-            $carts['cart_contents'][$key]['qty'] = 0 ;
-        $this->cart->update($carts['cart_contents'][$key]);
 
-            unset($carts['cart_contents'][$key]);
-            $carts['cart_contents']['total_items'] =  $carts['cart_contents']['total_items'] - 1;
-            $carts['cart_contents']['cart_total'] =  $carts['cart_contents']['cart_total'] - $value['subtotal'];
-        }
+            $carts = $this->session->all_userdata();
+            if(isset($carts['choosen_items'])){
+                foreach ($carts['choosen_items'] as $key => $value) {
+                    
+                    $carts['cart_contents'][$key]['qty'] = 0 ;
+                    $this->cart->update($carts['cart_contents'][$key]);
+                    unset($carts['cart_contents'][$key]);
+                    $carts['cart_contents']['total_items'] =  $carts['cart_contents']['total_items'] - 1;
+                    $carts['cart_contents']['cart_total'] =  $carts['cart_contents']['cart_total'] - $value['subtotal'];
+                }
+              
+                if(sizeof($carts['cart_contents']) == 2){
+                    unset($carts['cart_contents']['total_items']);
+                    unset($carts['cart_contents']['cart_total']);
+                }   
+                $this->session->unset_userdata('choosen_items');
+            }
       
-        if(sizeof($carts['cart_contents']) == 2){
-            unset($carts['cart_contents']['total_items']);
-            unset($carts['cart_contents']['cart_total']);
-        }   
-        unset($carts['choosen_items']); 
     }
 	
     function sendNotification($data) 
-    {
+    {   
+        if(!$this->session->userdata('member_id')){
+            redirect(base_url().'home', 'refresh');
+        };
+        
 		//$mobilestat = $this->payment_model->sendNotificationMobile();
 		//die($mobilestat);
 	

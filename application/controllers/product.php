@@ -327,8 +327,6 @@ class product extends MY_Controller
 	}
  
 
-	 
-
 	function highlight($text, $words)
 	{
 
@@ -339,7 +337,6 @@ class product extends MY_Controller
 			$color = "#e5e5e5";
 			$text = preg_replace("|($word)|Ui","<b>$1</b>" , $text );
 		}
-
 		return $text;
 	}
 
