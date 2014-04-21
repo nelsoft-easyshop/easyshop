@@ -1292,7 +1292,7 @@
 				<div class="delivery_address_content_layer2">
 					<div>
 						<input type="text" name="c_address" value="<?php echo $c_address?>">
-						<p>Full address</p>
+						<p>Street address</p>
 					</div>
 				</div>
 			</div>
