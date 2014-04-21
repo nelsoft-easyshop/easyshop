@@ -1666,6 +1666,7 @@ $(document).ready(function(){
 				data: {bi_id:bidval, es_csrf_token:csrftoken},
 				success: function(data){
 					$("#bi_div_" + bictr).remove();
+					$("#ubi_" + bictr).remove();
 					alert("Bank info successfully deleted!");
 					return false;
 				}
