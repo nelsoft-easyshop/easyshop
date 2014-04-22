@@ -627,6 +627,14 @@ class Ios extends MY_Controller {
 		}
 
 	}
+	function displaycategory()
+	{
+		 
+	echo json_encode($this->product_model->getFirstLevelNode());exit();
+	}
+	function search()
+	{ 
+	}
 	
 }
 

@@ -866,7 +866,7 @@ class product_model extends CI_Model
 		
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->execute();
-		$row = $sth->fetchAll(); 
+		$row = $sth->fetchAll(PDO::FETCH_ASSOC); 
 
 		return $row;
 	}
