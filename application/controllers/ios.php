@@ -630,7 +630,7 @@ class Ios extends MY_Controller {
 	function displaycategory()
 	{
 		 
-	echo json_encode($this->product_model->getFirstLevelNode());exit();
+	echo json_encode($this->product_model->getFirstLevelNode(), JSON_PRETTY_PRINT);exit();
 	}
 	function search()
 	{ 
