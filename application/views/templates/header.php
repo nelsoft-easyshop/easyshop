@@ -249,6 +249,5 @@ $(document).ready(function(){
 	var getpath = window.location.pathname;
 	var pathname = getpath.substring(1,999);
 	$.cookie('rn', pathname, {path: "/", secure: false});
-	alert($.cookie('rn'));
 });
 </script> 
