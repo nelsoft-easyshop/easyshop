@@ -1,9 +1,7 @@
 <script type='text/javascript' src="<?=base_url()?>assets/JavaScript/js/jquery-1.9.1.js" ></script>
 <script type='text/javascript' src="<?=base_url()?>assets/JavaScript/js/jquery-ui.js"></script>
-<script type="text/javascript" src="<?=base_url()?>assets/JavaScript/js/jquery.jcarousel.min.js"></script>
-
- 
-
+<script type='text/javascript' src="<?=base_url()?>assets/JavaScript/js/jquery.jcarousel.min.js"></script>
+<script type='text/javascript' src="<?=base_url()?>assets/JavaScript/js/jquery.cookie.js"></script>
 <!-- <div id="fb-root"></div>
 <script>(function(d, s, id) {
   var js, fjs = d.getElementsByTagName(s)[0];
