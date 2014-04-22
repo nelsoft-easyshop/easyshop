@@ -632,8 +632,39 @@ class Ios extends MY_Controller {
 		 
 	echo json_encode($this->product_model->getFirstLevelNode(), JSON_PRETTY_PRINT);exit();
 	}
+
 	function search()
-	{ 
+	{   
+		$start = 0;
+		$usable_string;
+		$per_page = $this->per_page;
+		$category = $this->input->get('q_cat');
+
+		if($category == 1){
+			$category_name = "";
+		}else{
+			$category_details = $this->product_model->selectCategoryDetails($category);
+			$category_name = $category_details['name'];
+		}
+
+		$string = ' '.ltrim($_GET['q_str']); 
+		$words = "+".implode("*,+",explode(" ",trim($string)))."*"; 
+		$checkifexistcategory = $this->product_model->checkifexistcategory($category);
+		if($checkifexistcategory == 0 || $category == 1)
+		{
+			$usable_string = " AND  MATCH(a.name,keywords) AGAINST('".$words."' IN BOOLEAN MODE)";
+			$response['items'] = $this->product_model->itemSearchNoCategory($usable_string,$start,'999');
+		}else{
+			$usable_string = " AND  MATCH(a.name,keywords) AGAINST('".$words."' IN BOOLEAN MODE)";
+			$down_cat = $this->product_model->selectChild($category);
+			array_push($down_cat, $category);
+			$catlist_down = implode(",", $down_cat);
+			$response['items'] = $this->product_model->getProductInCategoryAndUnder($category,$usable_string,$catlist_down,$start,'999',$string_sort);
+		}
+
+		echo json_encode($response['items']);
+		exit();
+
 	}
 	
 }
