@@ -476,7 +476,7 @@ a.delete:hover .del {
 .order_summary {
 	background-color: #F4F4F4;
 	display: inline-block;
-	padding:10px;
+	padding:5px;
 	min-height: 600px;
 	margin-top: 15px;
 	width: 360px;
@@ -492,7 +492,8 @@ a.delete:hover .del {
 	padding: 8px 0;
 }
 
-.order_sum_content {
+.order_sum_content,
+.payment_sum_con {
 	display: table;
 	padding: 10px 0;
 	border-bottom: 1px solid #EBE9E9;
@@ -512,18 +513,22 @@ a.delete:hover .del {
 }
 
 .order_sum_title div {
-	width: 144px;
+	width: 125px;
 	text-align: left;
 }
 
 .order_sum_title div + div {
-	width: 105px;
+	width: 60px;
 	text-align: center;
 }
 
 .order_sum_title div + div + div {
-	width: 105px;
+	width: 72px;
 	text-align: center;
+}
+
+.order_sum_title div + div + div + div {
+	width: 94px;	
 }
 
 .order_sum_content input {
@@ -534,18 +539,23 @@ a.delete:hover .del {
 }
 
 .sum_con_name {
-	width: 144px;
+	width: 125px;
 }
 
 .sum_con_qty {
 	text-align: center;
-	width: 105px;
+	width: 60px;
+}
+
+.sum_con_ship_fee {
+	text-align: center;
+	width: 72px;	
 }
 
 .sum_con_price {
 	text-align: right;
 	padding-right: 5px;
-	width: 105px;
+	width: 95px;
 }
 
 .order_sum_sub_total {
@@ -564,6 +574,38 @@ a.delete:hover .del {
 .order_sum_total {
 	padding:5px;
 	background-color: #EBE9E9;
+}
+
+.pay_sum_c1,.pay_sum_c2,.pay_sum_c3,.pay_sum_c4 {
+	display: inline-block;
+	text-align: center;
+	padding:5px 3px;
+}
+
+.pay_sum_head {
+	background-color: #EBE9E9;
+	margin-top: 10px;
+}
+
+.pay_sum_c1 {
+	width: 100px;
+}
+
+.pay_sum_c2 {
+	width: 225px;
+}
+
+.pay_sum_c3 {
+	width: 100px;
+}
+
+.pay_sum_c4 {
+	width: 100px;
+}
+
+.cod_status_con {
+	display: block;
+    padding: 8px 3px;
 }
 
 .payment_inner_content {
@@ -760,14 +802,25 @@ input.cc_check {
 .change_shipping_add_con {
 	float: left;
 	margin-top: 10px;
-	width: 440px;
+	width: 460px;
+}
+
+.txt_change_wrapper {
+    border-left: 1px solid #EBE9E9;
+    border-top: 1px solid #EBE9E9;
+    border-right: 1px solid #EBE9E9;
+    display: inline-block;
+    margin-top: 5px;
+    padding: 8px 3px;
+    width: 432px;
 }
 
 .txt_change_shipping_address {
-	border: 1px solid #f00;
-	background-color: #FFEFEF;
-	margin-top: 5px;
-	padding:8px 3px;
+    background-color: #FFEFEF;
+    border: 1px solid #FF0000;
+    display: inline-block;
+    margin: 5px;
+    padding: 8px 3px;
 }
 
 .link_address {
@@ -884,8 +937,10 @@ input.cc_check {
 }
 
 .member_shipping_info_container {
-	border: 1px solid #EBE9E9;
-	margin: 15px 20px 20px 0;
+	border-left: 1px solid #EBE9E9;
+	border-top: 1px solid #EBE9E9;
+	border-right: 1px solid #EBE9E9;
+	margin: 15px 20px 0px 0;
 	padding: 10px;
 /*	width: 558px;*/
 }
@@ -902,6 +957,14 @@ input.cc_check {
 .member_shipping_info_container span {
 	display: inline-block;
 	width: 95px;
+}
+
+.change_shipping_btn_con {
+	border-left: 1px solid #EBE9E9;
+	border-bottom: 1px solid #EBE9E9;
+	border-right: 1px solid #EBE9E9;
+	margin: 0px 20px 0px 0;	
+	padding:0px 0px 10px 10px;
 }
 
 /****************	Payment Result	*************************/
