@@ -887,7 +887,7 @@
 						</div>
 						
 						<div class="view_map_btn">
-							<input type="button" id="view_map" value="Mark on map">
+							<input type="button" class="view_map" value="View on map" name="personal">
 							<?php if($lat == 0 && $lng == 0):?>
 								<span class="maploc_stat">Location not set</span>
 							<?php else:?>
@@ -899,14 +899,15 @@
 							<input type="hidden" name="temp_lng" id="temp_lng" value="<?php echo $lng;?>">
 						</div>
 						
-						<div id="map"  style="display: none">
-							<span id="refresh_map">Search address</span>
-							<span id="current_loc">Current location</span>
-							<a id="close" href="javascript:void(0)">Close</a>
+						<div class="map_nav" style="display: none">
+							<span class="refresh_map" name="personal_rmap">Search address</span>
+							<span class="current_loc" name="personal_cmap">Current location</span>
+							<a class="close" href="javascript:void(0)">Close</a>
 							<div id="GoogleMapContainer" title="Google Map Container"></div>
 						</div>
 						
-						<div id="map-canvas"></div>					
+						<div id="personal_mapcanvas" class="map-canvas"></div>
+						
 						<div class="clear"></div>
 						<div class="btn_con">
 							<span class="cancel" name="cancel_address">Cancel</span>
@@ -1280,16 +1281,17 @@
 			<div class="delivery_address_content">
 				<div class="delivery_address_content_layer1">
 					<div>
-						<select name="c_stateregion" class="address_dropdown stateregionselect" data-status="<?php echo $c_stateregionID?>">
+						<select name="c_stateregion" id="delivery_stateregion" class="address_dropdown stateregionselect" data-status="<?php echo $c_stateregionID?>">
 							<option value="0">--- Select State/Region ---</option>
 							<?php foreach($stateregion_lookup as $srkey=>$stateregion):?>
 								<option class="echo" value="<?php echo $srkey?>" <?php echo $c_stateregionID == $srkey ? "selected":"" ?>><?php echo $stateregion?></option>
 							<?php endforeach;?>
 						</select>
+						<input type="hidden" name="cstateregion_orig" value="<?php echo $c_stateregionID?>">
 						<p>State/Region</p>
 					</div>
 					<div>
-						<select name="c_city" class="address_dropdown cityselect" data-status="<?php echo $c_cityID?>">
+						<select name="c_city" id="delivery_city" class="address_dropdown cityselect" data-status="<?php echo $c_cityID?>">
 							<option value="0">--- Select City ---</option>
 							<option class="optionclone" value="" style="display:none;" disabled></option>
 							<?php foreach($city_lookup as $parentkey=>$arr):?>
@@ -1298,6 +1300,7 @@
 								<?php endforeach;?>
 							<?php endforeach;?>
 						</select>
+						<input type="hidden" name="ccity_orig" value="<?php echo $c_cityID?>">
 						<p>City</p>
 					</div>
 					<div>
@@ -1312,6 +1315,7 @@
 					<div>
 						<input type="text" name="c_address" value="<?php echo $c_address?>">
 						<p>Street address</p>
+						<input type="hidden" name="caddress_orig" value="<?php echo $c_address?>">
 					</div>
 				</div>
 			</div>
@@ -1319,7 +1323,31 @@
 				<label></label>
 				<input type="checkbox" name="c_def_address" id="c_def_address"> <span>Set as Default Address</span>
 				<a class="tooltips" href="javascript:void(0)"><p class="span_bg"></p><!-- <img src="<?=base_url()?>/assets/images/icon_qmark.png"> --><span>Setting as default updates address in Personal Information</span></a>
-		</div>
+			</div>
+			
+			
+			<div class="view_map_btn">
+				<input type="button" class="view_map" value="View on Map" name="delivery">
+				<?php if($lat == 0 && $lng == 0):?>
+					<span class="maploc_stat">Location not set</span>
+				<?php else:?>
+					<span class="maploc_stat">Location set</span>
+				<?php endif;?>
+				<input type="hidden" name="map_lat" id="map_clat" value="<?php echo $c_lat;?>">
+				<input type="hidden" name="map_lng" id="map_clng" value="<?php echo $c_lng;?>">
+				<input type="hidden" name="temp_lat" id="temp_clat" value="<?php echo $c_lat;?>">
+				<input type="hidden" name="temp_lng" id="temp_clng" value="<?php echo $c_lng;?>">
+			</div>
+			
+			<div class="map_nav" style="display: none">
+				<span class="refresh_map" name="delivery_rmap">Search address</span>
+				<span class="current_loc" name="delivery_cmap">Current location</span>
+				<a class="close" href="javascript:void(0)">Close</a>
+				<div id="GoogleMapContainer" title="Google Map Container"></div>
+			</div>
+			
+			<div id="delivery_mapcanvas" class="map-canvas"></div>
+			
 			<br>
 			<div style="padding-left:100px">
 				<label></label>
@@ -1332,8 +1360,8 @@
 	</div>
 	<div class="clear"></div>
 	<div class="bottom_save">
-		<input type="submit" name="c_deliver_address_btn" value="Save">
-		<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" id="load_deliver_address" style="position: relative; top:12px; left:15px;  display:none"/>
+		<input type="submit" name="c_deliver_address_btn" value="Save" id="c_deliver_address_btn">
+		<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" id="load_cdeliver_address" style="position: relative; top:12px; left:15px;  display:none"/>
 	</div>	
 	<?php echo form_close();?>
 

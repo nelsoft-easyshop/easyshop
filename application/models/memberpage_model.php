@@ -229,7 +229,6 @@ class memberpage_model extends CI_Model
 	function edit_consignee_address_by_id($member_id, $data=array())
 	{	
 		$i = 0; $type = 1;
-		$lat = $lng = 0;
 		do
 		{
 			$query = $this->sqlmap->getFilenameID('users', 'edit_address');
@@ -243,8 +242,8 @@ class memberpage_model extends CI_Model
 			$sth->bindparam(':city', $data['city']);
 			$sth->bindparam(':address', $data['address']);
 			$sth->bindparam(':country', $data['country']);
-			$sth->bindparam(':lat', $lat);
-			$sth->bindparam(':lng', $lng);
+			$sth->bindparam(':lat', $data['lat']);
+			$sth->bindparam(':lng', $data['lng']);
 			$sth->execute();
 			if($data['default_add'] == "on")
 			{
@@ -252,8 +251,6 @@ class memberpage_model extends CI_Model
 				$data['consignee']="";
 				$data['mobile']="";
 				$data['telephone']="";
-				//$lat = $data['lat'];
-				//$lng = $data['lng'];
 			}
 			else
 				break;

@@ -117,7 +117,7 @@
 	COALESCE(loc0.location,'') as stateregion, COALESCE(loc1.location, '') as city, COALESCE(a0.address,'') as address,
 	a1.consignee, a1.mobile as c_mobile, a1.telephone as c_telephone,
 	COALESCE(loc2.location, '') as c_stateregion, COALESCE(loc3.location,'') as c_city, COALESCE(a1.address, '') as c_address,
-	COALESCE(a0.lat, 0) as lat, COALESCE(a0.lng, 0) as lng
+	COALESCE(a0.lat, 0) as lat, COALESCE(a0.lng, 0) as lng, COALESCE(a1.lat, 0) as c_lat, COALESCE(a1.lng, 0) as c_lng
 	FROM es_member m
 	LEFT JOIN es_address a0 ON m.id_member=a0.id_member AND a0.`type`=0
 	LEFT JOIN es_address a1 ON m.id_member=a1.id_member AND a1.`type`=1

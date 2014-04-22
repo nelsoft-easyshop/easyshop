@@ -381,9 +381,10 @@ $(document).ready(function(){
 				}else if(name=== 'del_address'){
 					var addselect = editfields.find('select.address_dropdown');
 					addselect.val(0).attr('data-status', "");
-					//addselect.trigger('chosen:updated');
+					addselect.trigger('chosen:updated');
+					clearPersonalAddress();
 				}
-				
+
 				progress_update(form);
 			}
 			else{
@@ -446,8 +447,30 @@ $(document).ready(function(){
 			cityselect.val(cityselect.attr('data-status'));
 			cityselect.trigger('chosen:updated');
 			stateregionselect.trigger('chosen:updated');
+			
+			var maplat = $('#map_lat').val();
+			var maplng = $('#map_lng').val();
+			
+			if(maplat == 0 && maplng == 0){
+				clearPersonalAddress();
+			}
+			else{
+				$('#personal_mapcanvas').siblings('.map_nav').children('.close').trigger('click');
+			}
 		}
 	});
+	
+	function clearPersonalAddress(){
+		var mapcanvas = $('#personal_mapcanvas');
+		$('#map_lat').val(0);
+		$('#map_lng').val(0);
+		$('#temp_lat').val(0);
+		$('#temp_lng').val(0);
+		mapcanvas.removeAttr('style');
+		mapcanvas.removeClass('map_canvas');
+		mapcanvas.children().remove();
+		mapcanvas.siblings('.map_nav').children('.close').trigger('click');
+	}
 	
 });
 
@@ -843,13 +866,14 @@ $(document).ready(function(){
 				error.appendTo(element.parent());
 		},
 		submitHandler: function(form) {
-		   $('#load_deliver_address').css('display', 'inline');
+		   $('#load_cdeliver_address').css('display', 'inline');
 		   var formdata = $(form).serializeArray();
 		   formdata.push({name:'map_lat', value:$('#map_lat').val()});
 		   formdata.push({name:'map_lng', value:$('#map_lng').val()});
 		   $.post(config.base_url+'memberpage/edit_consignee_address',formdata,
 				function(data){
-					$('#load_deliver_address').css('display', 'none');
+					$('#c_deliver_address_btn').attr('disabled', false);
+					$('#load_cdeliver_address').css('display', 'none');
 					$('#c_def_address').attr('checked', false);
 					var obj = jQuery.parseJSON(data);
 					
@@ -863,6 +887,11 @@ $(document).ready(function(){
 					$('#c_deliver_address .inner_profile_fields select.address_dropdown').each(function(){
 						$(this).attr('data-status', obj[$(this).attr('name') + 'ID']);
 					});
+					
+					// Update map coordinates and status
+					$('#map_clat').val(obj['c_lat']);
+					$('#map_clng').val(obj['c_lng']);
+					$('#c_deliver_address span.maploc_stat').html('Location set');
 					
 					//IF SET AS DEFAULT ADDRESS
 					if(obj['default_add'] == "on"){
@@ -889,14 +918,20 @@ $(document).ready(function(){
 							return string;
 						});
 						
-						// Map notification status
-						$('span.maploc_stat').html('Location not set');
+						//Update Map Coordinates
+						$('.inner_profile_fields').find('div.view_map_btn input[type="hidden"][name$="lat"]').val(obj['c_lat']);
+						$('.inner_profile_fields').find('div.view_map_btn input[type="hidden"][name$="lng"]').val(obj['c_lng']);
+						
+						//Map notification status
+						$('.inner_profile_fields').find('div.view_map_btn span.maploc_stat').html('Location set');
+						
 						
 						$('#personal_profile_address .address_information').show();
 						$('#personal_profile_address .edit_profile').hide();
 					}
 					progress_update($('#c_deliver_address'));
 				});
+		  $('#c_deliver_address_btn').attr('disabled', true);
 		  return false;
 	   }
 	});
@@ -1011,7 +1046,7 @@ function handle_fields(form)
 	});
 }
 
-/**************************	PROVINCE FILTER SELECT	**************************************/
+/**************************	CITY FILTER SELECT	**************************************/
 /*
  *	Function to generate provinces in dropdown.
  */
@@ -1513,90 +1548,148 @@ $(function(){
 
 $(document).ready(function(){
 
-	var map, marker, geocoder;
+	//var map, marker, geocoder;
+	var mapPersonal, markerPersonal, geocoder;
+	var mapDelivery, markerDelivery;
 
-	$("#refresh_map").click(function(){     
-		var stateregion = $('#personal_stateregion').find('option:selected').text();
-		var city = $('#personal_city').find('option:selected').text();
-		var address = stateregion + " " + city + " PH";
+	$(".refresh_map").click(function(){		
+		if($(this).attr('name') === 'personal_rmap'){
+			var stateregion = $('#personal_stateregion').find('option:selected').text();
+			var city = $('#personal_city').find('option:selected').text();
+			var type = "personal";
+		}
+		else if($(this).attr('name') === 'delivery_rmap'){
+			var stateregion = $('#delivery_stateregion').find('option:selected').text();
+			var city = $('#delivery_city').find('option:selected').text();
+			var type = "delivery";
+		}
 		
-		codeAddress(address);
+		var address = stateregion + " " + city + " PH";
+		codeAddress(address, type);
 	});
 
-	function codeAddress(address) {
+	function codeAddress(address, type) {
 	  geocoder = new google.maps.Geocoder();
 	  geocoder.geocode( { 'address': address}, function(results, status) {
 		if (status == google.maps.GeocoderStatus.OK) {
-		  google.maps.event.addDomListener(window, 'load', initialize(results[0].geometry.location));
+			google.maps.event.addDomListener(window, 'load', initialize(results[0].geometry.location, type));
 		} else {
-		  alert('Location invalid');
+			if(type==='personal'){
+				$('#personal_mapcanvas').siblings('.map_nav').children('.close').trigger('click');
+			}else if(type==='delivery'){
+				$('#delivery_mapcanvas').siblings('.map_nav').children('.close').trigger('click');
+			}
+			alert('Location invalid');
 		}
 	  });
 	}
 	
-	function initialize(myLatlng) {
+	//all DOM elements accessed via id
+	function initialize(myLatlng, type) {
 		var mapOptions = {
 		  center:myLatlng,
 		  zoom: 15
 		};
-		map = new google.maps.Map(document.getElementById("map-canvas"),
+		if( type === 'personal' ){
+			var templat = $('#temp_lat');
+			var templng = $('#temp_lng');
+			mapPersonal = new google.maps.Map(document.getElementById("personal_mapcanvas"),
 			mapOptions);
-		marker = new google.maps.Marker({
-			position: myLatlng,
-			map: map,
-			title:"I'm here!",
-			draggable: true
-		});
-		google.maps.event.addListener(marker, 'dragend', function(evt){
-			document.getElementById('temp_lat').value = evt.latLng.lat();
-			document.getElementById('temp_lng').value = evt.latLng.lng();
-			window.setTimeout(function(){
-				map.panTo(marker.getPosition());
-			}, 500);
-		});
-		$('#temp_lat').val(myLatlng.lat());
-		$('#temp_lng').val(myLatlng.lng());
+			markerPersonal = new google.maps.Marker({
+				position: myLatlng,
+				map: mapPersonal,
+				title:"I'm here!",
+				draggable: true
+			});
+			google.maps.event.addListener(markerPersonal, 'dragend', function(evt){
+				templat.val(evt.latLng.lat());
+				templng.val(evt.latLng.lng());
+				
+				window.setTimeout(function(){
+					mapPersonal.panTo(markerPersonal.getPosition());
+				}, 500);
+			});
+		}
+		else if( type === 'delivery' ){
+			var templat = $('#temp_clat');
+			var templng = $('#temp_clng');
+			mapDelivery = new google.maps.Map(document.getElementById("delivery_mapcanvas"),
+			mapOptions);
+			markerDelivery = new google.maps.Marker({
+				position: myLatlng,
+				map: mapDelivery,
+				title:"I'm here!",
+				draggable: true
+			});
+			google.maps.event.addListener(markerDelivery, 'dragend', function(evt){
+				templat.val(evt.latLng.lat());
+				templng.val(evt.latLng.lng());
+				
+				window.setTimeout(function(){
+					mapDelivery.panTo(markerDelivery.getPosition());
+				}, 500);
+			});
+		}
+		templat.val(myLatlng.lat());
+		templng.val(myLatlng.lng());
 	}
 	
-	$('#view_map').click(function () {
-		var maplat = $('#map_lat').val();
-		var maplng = $('#map_lng').val();
+	$('.view_map').click(function () {
+		var maplat = $(this).siblings('input[name="map_lat"]').val();
+		var maplng = $(this).siblings('input[name="map_lng"]').val();
+		var refreshmapbtn = $(this).parent('div').siblings('div.map_nav').children('span.refresh_map');
+		var mapcanvas = $(this).parent('div').siblings('div.map-canvas');
+		var type = this.name;
+		showflag = true;
 		
 		if (maplat == 0 && maplng == 0){
-			$('#refresh_map').trigger('click');
+			refreshmapbtn.trigger('click');
 		}else{
 			var myLatlng =  new google.maps.LatLng(maplat,maplng);
-			
-			if($('#map-canvas').hasClass('map_canvas')){
-				map.setCenter(myLatlng);
-				marker.setPosition(myLatlng);
+			if(mapcanvas.hasClass('map_canvas')){
+				if( type === 'personal' ){
+					mapPersonal.setCenter(myLatlng);
+					markerPersonal.setPosition(myLatlng);
+				}
+				else if( type === 'delivery' ){
+					mapDelivery.setCenter(myLatlng);
+					markerDelivery.setPosition(myLatlng);
+				}
 			}else{
-				google.maps.event.addDomListener(window, 'load', initialize(myLatlng));
+				google.maps.event.addDomListener(window, 'load', initialize(myLatlng, type));
 			}
-		}
+		}	
 		
 		$(this).fadeOut();
-		$(this).parent('div').siblings('#map').show();
-		$(this).parent('div').siblings('#map-canvas').addClass('map_canvas');
-		$(this).parent('div').siblings('#map-canvas').fadeIn();
+		$(this).parent('div').siblings('.map_nav').fadeIn();
+		$(this).parent('div').siblings('.map-canvas').addClass('map_canvas');
+		$(this).parent('div').siblings('.map-canvas').fadeIn();				
 	});
 	
-	$('#current_loc').on('click', function(){
-		var maplat = $('#map_lat').val();
-		var maplng = $('#map_lng').val();
+	$('.current_loc').on('click', function(){
+		var maplat = $(this).parent('div').siblings('div.view_map_btn').children('input[name="map_lat"]').val();
+		var maplng = $(this).parent('div').siblings('div.view_map_btn').children('input[name="map_lng"]').val();
+		var type = $(this).attr('name');
+
 		if(maplat != 0 && maplng != 0){
 			var myLatlng =  new google.maps.LatLng(maplat,maplng);
-			map.setCenter(myLatlng);
-			marker.setPosition(myLatlng);
+			if( type === 'personal_cmap' ){
+				mapPersonal.setCenter(myLatlng);
+				markerPersonal.setPosition(myLatlng);
+			}
+			else if( type === 'delivery_cmap'){
+				mapDelivery.setCenter(myLatlng);
+				markerDelivery.setPosition(myLatlng);
+			}
 		}else{
 			alert('You have not marked your location yet.');
 		}
 	});
 	
-	$('#close').click(function () {
-		$(this).parent('#map').fadeOut();
-		$(this).parent('#map').siblings('#map-canvas').fadeOut();
-		$(this).parent('#map').siblings('.view_map_btn').find('#view_map').fadeIn();
+	$('.close').click(function () {
+		$(this).parent('div').fadeOut();
+		$(this).parent('div').siblings('.map-canvas').fadeOut();
+		$(this).parent('div').siblings('.view_map_btn').find('.view_map').fadeIn();
 	});
 	
 });

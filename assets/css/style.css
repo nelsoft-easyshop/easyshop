@@ -4206,8 +4206,17 @@ span.transac_title_date:after {
 	width: 645px;
 	margin-bottom: 15px;
 } 
+/*
+.map_canvas { height: 305px;width: 620px;margin-bottom: 15px;} 
+*/
 
-#close {
+.map-canvas{
+	height: 305px;
+	width: 500px;
+	display:none;
+}
+
+.close {
 	background: url(../images/img_close.png) left center no-repeat;
 	border-bottom: 1px dotted #F5F5F6;
     display: inline-block;
@@ -4218,9 +4227,9 @@ span.transac_title_date:after {
     padding-left: 25px;
 }
 
-/*#view_map {
+.view_map {
     margin-left: -10px;
-}*/
+}
 
 .view_map_btn input {
 	cursor: pointer;

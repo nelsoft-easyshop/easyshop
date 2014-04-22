@@ -219,10 +219,18 @@ class Memberpage extends MY_Controller
 				'city' => $this->input->post('c_city'),
 				'address' => $this->input->post('c_address'),
 				'country' => $this->input->post('c_country'),
-				'lat' => $this->input->post('map_lat'),
-				'lng' => $this->input->post('map_lng')
+				'lat' => $this->input->post('temp_lat'),
+				'lng' => $this->input->post('temp_lng')
 			);
 
+			$temp = array(
+				'stateregion' => $this->input->post('cstateregion_orig'),
+				'city' => $this->input->post('ccity_orig'),
+				'address' => $this->input->post('caddress_orig'),
+				'map_lat' => $this->input->post('map_lat'),
+				'map_lng' => $this->input->post('map_lng')
+			);
+			
 			if($this->input->post('c_def_address'))
 			{
 				$postdata['default_add'] = $this->input->post('c_def_address');
