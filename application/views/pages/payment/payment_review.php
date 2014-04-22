@@ -278,40 +278,36 @@ $(document).ready(function(){
 
     $('.paypal_loader').hide();
     $('.div_change_addree').hide();
-    $('.paypal_button').show();
-    provinceFilter('');
+    $('.paypal_button').show(); 
 
-    $('.cityselect').on('change', function(){
-        $(this).parent('div').siblings('div').find('select.provinceselect').val(0);
-        provinceFilter( $(this) );
-    });
+    var jsonCity = <?php echo $json_city;?>;
+  
 
 /************************** PROVINCE FILTER SELECT  **************************************/
 /*
  *  Function to filter provinces in dropdown.
  */
-    function provinceFilter(cityselect){
+  function cityFilter(stateregionselect,cityselect){
+  var stateregionID = stateregionselect.find('option:selected').attr('value');
+  var optionclone = cityselect.find('option.optionclone').clone();
+  optionclone.removeClass('optionclone').addClass('echo').attr('disabled', false);
+  cityselect.find('option.echo').remove();
+  if(stateregionID in jsonCity){
+    jQuery.each(jsonCity[stateregionID], function(k,v){
+      //optionclone.attr('value', k).html(v).show();
+      optionclone.attr('value', k).html(v).css('display', 'block');
+      cityselect.append(optionclone.clone());
+    });
+  } 
+  cityselect.trigger('chosen:updated');
+}
 
-        if ( cityselect == '' ){
-          cityselect = $('select.cityselect');
-        }
-
-        cityselect.each(function(k,v){
-            var selectvalue = $(v).find(':selected').attr('value');
-            var provinceoption = $(v).parent('div').siblings('div').find('select.provinceselect option.echo');
-            provinceoption.each(function(){
-                if($(this).attr('data-parent') != selectvalue){
-                    $(this).hide();
-                    $(this).attr('disabled',true);
-                }
-                else{
-                    $(this).show();
-                    $(this).attr('disabled',false);
-                }
-            });
-        });
-    }
-
+ $('.stateregionselect').on('change', function(){
+    var cityselect = $(this).parent('div').siblings('div').find('select.cityselect');
+    cityselect.val(0);
+    cityFilter( $(this), cityselect );
+  });
+  
 });
 </script>
 
@@ -415,23 +411,24 @@ $(document).ready(function(){
             <label>Address:</label>
         </div>
         <div>
-            <label><span>City:</span></label>
-            <select name="c_city" class="address_dropdown cityselect" data-status="<?php echo $c_cityID?>">
-                <option value="0">--- Select City ---</option>
-                <?php foreach($city_lookup as $ckey=>$city):?>
-                <option class="echo" value="<?php echo $ckey?>" <?php echo $c_cityID == $ckey ? "selected":"" ?>><?php echo $city?></option>
-                <?php endforeach;?>
+            <label><span>State/Region:</span></label>
+            <select name="c_stateregion" class="address_dropdown stateregionselect" data-status="<?php echo $c_stateregionID?>">
+              <option value="0">--- Select State/Region ---</option>
+              <?php foreach($stateregion_lookup as $srkey=>$stateregion):?>
+                <option class="echo" value="<?php echo $srkey?>" <?php echo $c_stateregionID == $srkey ? "selected":"" ?>><?php echo $stateregion?></option>
+              <?php endforeach;?>
             </select>
         </div>
         <div>
-            <label><span>Province:</span></label>               
-            <select name="c_province" class="address_dropdown provinceselect" data-status="<?php echo $c_provinceID?>">
-                <option value="0">--- Select Province ---</option>
-                <?php foreach($province_lookup as $parentkey=>$arr):?>
-                <?php foreach($arr as $lockey=>$province):?>
-                <option class="echo" value="<?php echo $lockey?>" data-parent="<?php echo $parentkey?>" <?php echo $c_provinceID == $lockey ? "selected":"" ?> ><?php echo $province?></option>
+            <label><span>City:</span></label>               
+              <select name="c_city" class="address_dropdown cityselect" data-status="<?php echo $c_cityID?>">
+              <option value="0">--- Select City ---</option>
+              <option class="optionclone" value="" style="display:none;" disabled></option>
+              <?php foreach($city_lookup as $parentkey=>$arr):?>
+                <?php foreach($arr as $lockey=>$city):?>
+                  <option class="echo" value="<?php echo $lockey?>" data-parent="<?php echo $parentkey?>" <?php echo $c_cityID == $lockey ? "selected":"" ?> ><?php echo $city?></option>
                 <?php endforeach;?>
-                <?php endforeach;?>
+              <?php endforeach;?>
             </select>
         </div>
         <div>
