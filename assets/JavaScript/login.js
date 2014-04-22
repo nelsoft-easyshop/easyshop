@@ -55,14 +55,7 @@ $(document).ready(function(){
                         $('#login').val('Redirecting...');
                         $('#login')[0].disabled = true;
                         $('#login').show();
-                        var url = $('#redirect').val();
-                        window.location = config.base_url+'home';
-                        /*
-                        if(url.length > 0){
-                            window.location = config.base_url+url;
-                        }else{
-                            window.location = config.base_url+'home';
-                        }*/
+                        window.location = config.base_url+$.cookie('rn');
                     }
                 }
             });
