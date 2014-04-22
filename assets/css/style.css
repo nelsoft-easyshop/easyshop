@@ -2976,8 +2976,9 @@ a:hover.tooltips span {
 }
 
 .dashboard_table {
-	border: 1px solid #cecece;
-	padding:5px;
+    border: 1px solid #CECECE;
+    min-height: 450px;
+    padding: 5px;
 }
 
 .post_item_srch_container {
