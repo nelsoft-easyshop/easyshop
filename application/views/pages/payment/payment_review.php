@@ -44,15 +44,15 @@
 ?>
 <div class="payment_wrapper2">
     <div class="change_shipping_add_con">
-        <div class="txt_change_shipping_address">
-          <div>
+        <div class="txt_change_wrapper">
+          <div class="txt_change_shipping_address">
             <span style="color:red">PLEASE CHANGE YOUR SHIPPING ADDRESS!</span>
           </div>
         </div>
         <?php
             }
         ?>
-        <div>
+        <div class="change_shipping_btn_con">
           <a href="javascript:void(0);"  class="link_address orange_btn3">Change Shipping Address</a> 
         </div>
 
@@ -92,17 +92,24 @@
     <?php }else{ ?>
 
       <span style="color:red">NOTE! one of your choosen item is not avaialable for cash on delivery.</span>
+      <div class="pay_sum_head">
+                <div class="pay_sum_c1">Seller</div>
+                <div class="pay_sum_c2">Product</div>
+                <div class="pay_sum_c3">Quantity</div>
+                <div class="pay_sum_c4">Price</div>
+              </div>
     <?php 
       $total = 0; 
       foreach ($cat_item as $key => $value) {
       $total += $value['subtotal'];
     ?>
-            <div class="order_sum_content">
-              <div><?php echo $value['seller_username'] ?></div>
-              <div><?php echo $value['name'] ?></div>
-              <div><?php echo $value['qty'] ?></div>
-              <div><?php echo number_format($value['price'], 2, '.',',') ?></div>
-              <div><?php echo ($value['cash_delivery'] ? "<span style='color:red'>Available for Cash on Delivery</span>" : "<span style='color:red'>Not Available for Cash on Delivery</span><br> Go to your <a style='color:#0654BA'>Cart</a> and Remove this Item") ;?></div>
+            <div class="payment_sum_con">
+              
+              <div class="pay_sum_c1"><?php echo $value['seller_username'] ?></div>
+              <div class="pay_sum_c2"><?php echo $value['name'] ?></div>
+              <div class="pay_sum_c3"><?php echo $value['qty'] ?></div>
+              <div class="pay_sum_c4"><?php echo number_format($value['price'], 2, '.',',') ?></div>
+              <div class="cod_status_con"><?php echo ($value['cash_delivery'] ? "<span style='color:green'>Available for Cash on Delivery</span>" : "<span style='color:red'>Not Available for Cash on Delivery</span> (Go to your <a style='color:#0654BA'>Cart</a> and Remove this Item)") ;?></div>
                  <?php if(!$value['availability']){ ?>
                  <div style="color:red">
                    Please <a style="color:#0654BA" href="javascript:{}" class="link_address">change your shipping address</a> or go to remove this from your <a style="color:#0654BA">Cart</a>.
@@ -234,8 +241,8 @@
   <div class="order_sum_title">
     <div>Product</div>
     <div>Quantity</div>
-    <div>Price</div>
     <div>Shipping Fee</div>
+    <div>Price</div> 
   </div>
   
 
@@ -250,8 +257,8 @@
     <div class="order_sum_content">
       <div class="sum_con_name"><?php echo $value['name'] ?></div>
       <div class="sum_con_qty"><?php echo $value['qty'] ?></div>
-      <div class="sum_con_price"><?php echo number_format($value['price'], 2, '.',',') ?></div>
-      <div><?php echo number_format($value['shipping_fee'], 2, '.',',') ?></div>
+      <div class="sum_con_ship_fee"><?php echo number_format($value['shipping_fee'], 2, '.',',') ?></div>
+      <div class="sum_con_price"><?php echo number_format($value['price'], 2, '.',',') ?></div> 
     </div>
     <?php } ?>
 

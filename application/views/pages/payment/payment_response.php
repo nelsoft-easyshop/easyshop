@@ -35,6 +35,10 @@
          }
          ?>
       </div> 
+
+      <div>
+        <a href="<?=base_url()?>home">Continue Shopping</a>
+      </div>
       
     </div>
  
