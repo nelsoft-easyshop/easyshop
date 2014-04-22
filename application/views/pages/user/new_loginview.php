@@ -60,8 +60,6 @@
 							*/
 						?>
 					</div>
-                    <input id="redirect" type="hidden" value="<?php echo $user_cur_loc;?>"/> 
-                    
 				<?php echo form_close();?>
 				
 				
