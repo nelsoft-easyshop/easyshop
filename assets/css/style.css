@@ -1903,6 +1903,11 @@ div.pass-hint {
 	background-color: #ededed;
 }
 
+.profile_wrapper input,
+.profile_wrapper select {
+	padding:8px 3px;
+}
+
 .bottom_save {
 	text-align: center;
 }
@@ -2100,8 +2105,8 @@ div.pass-hint {
 
 .profile_fields input[type='text'], .profile_fields input[type='select']{
     color: #494949;
-    height: 25px;
-    line-height: 25px;
+/*    height: 25px;
+    line-height: 25px;*/
     padding-left: 3px;
     width: 165px;
 }
@@ -2121,7 +2126,7 @@ div.pass-hint {
 }
 
 .profile_fields select {
-    height: 28px;
+/*    height: 28px;*/
     position: relative;
 /*    top: -3px;*/
     width: 170px;
@@ -2136,7 +2141,7 @@ div.pass-hint {
 	margin:5px 5px 5px 0px;
 }
 
-.profile_fields input[type="submit"] {
+/*.profile_fields input[type="submit"] {
 	border-radius: 3px;
 	border:none;
 	color: #fff;
@@ -2154,11 +2159,16 @@ div.pass-hint {
 
 .profile_fields input[type="submit"]:hover {
 	background-color: #ff4400;	
+}*/
+
+.btn_con {
+	text-align: right;
 }
 
 .cancel {
-	border-left: 1px solid #cecece;
-	padding-left: 10px;
+	border-right: 1px solid #cecece;
+	padding-right: 10px;
+	margin-right: 10px;
 	cursor: pointer;
 }
 
@@ -2248,6 +2258,10 @@ padding: 8px 0;
 	font-size: 11px;
 }
 
+/*.address_fields_layer1 select {
+	margin-right: 5px;
+}*/
+
 .address_information, .school_information, .work_information {
 	cursor: pointer;
 	display: none;
@@ -2299,6 +2313,45 @@ padding: 8px 0;
 .work_info, .school_info{
 	float: left;
 	display: inline-block;
+}
+
+.address_fields.progress_update.update_once {
+    display: inline-block;
+}
+
+.maploc_stat {
+	color: #f00;
+}
+
+.view_map_btn {
+    display: block;
+    padding:8px 0;
+}
+
+#map {
+	border-left: 1px solid #cecece;
+	border-top: 1px solid #cecece;
+	border-right: 1px solid #cecece;
+    padding-left: 10px;
+    padding-top: 10px;
+}
+
+#map span {
+	cursor: pointer;
+}
+
+#map span:hover {
+	color: #1F4F98;
+	text-decoration: underline;
+}
+
+#refresh_map:after { 
+    border-right: 1px solid #CECECE;
+    content: " ";
+    display: inline-block;
+    height: 20px;
+    margin: 0 10px;
+    vertical-align: middle;
 }
 
 
@@ -2701,6 +2754,14 @@ padding: 8px 0;
 	clear:both;
 }
 
+.delivery_address_content_layer1 select {
+	margin-right: 5px;
+}
+
+.delivery_address_content_layer2 input[name="c_address"] {
+	width: 512px;
+}
+
 a.tooltips {
   position: relative;
   display: inline;
@@ -2788,9 +2849,10 @@ a:hover.tooltips span {
 	border:none;
 	color: #fff;
 	cursor: pointer;
-	background-color: #393939;
+	background-color: #f18200;
 	margin-right: 10px;
 	padding:5px 10px;
+	width: 80px;
 	-webkit-transition: all 0.2s ease-in-out;
 	-moz-transition: 	all 0.2s ease-in-out;
 	-o-transition:	    all 0.2s ease-in-out;
@@ -4135,7 +4197,14 @@ span.transac_title_date:after {
 
 /******* Google Map *******/
 
-.map_canvas { height: 305px;width: 620px;margin-bottom: 15px;} 
+.map_canvas { 
+	border-left: 1px solid #cecece;
+	border-bottom: 1px solid #cecece;
+	border-right: 1px solid #cecece;	
+	height: 305px;
+	width: 645px;
+	margin-bottom: 15px;
+} 
 
 #close {
 	background: url(../images/img_close.png) left center no-repeat;
@@ -4148,15 +4217,24 @@ span.transac_title_date:after {
     padding-left: 25px;
 }
 
-#view_map {
+/*#view_map {
     margin-left: -10px;
-}
+}*/
 
 .view_map_btn input {
 	cursor: pointer;
-	background-color: #4d4d4d;
+	background-color: #838383;
+	border:none;
 	color: #fff;
+    border-radius: 3px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
 }
+
+.view_map_btn input:hover {
+	background-color: #4C4C4C;
+}
+
 #modal-background {
     display: none;
     position: fixed;
