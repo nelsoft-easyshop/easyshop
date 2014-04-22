@@ -863,6 +863,10 @@ input.cc_check {
 	width: 200px;
 }
 
+.del_address input[name="c_address"] {
+    width: 350px;
+}
+
 .del_address span {
 	display: block;
     padding-left: 40px;
@@ -898,4 +902,40 @@ input.cc_check {
 .member_shipping_info_container span {
 	display: inline-block;
 	width: 95px;
+}
+
+/****************	Payment Result	*************************/
+.payment_status_con {
+	font-size: 16px;
+	font-weight: bold;
+	padding:10px 0;
+}
+
+.payment_result_con h2 {
+	display: block;
+	background-color: #E5E5E5;
+	border-left: 1px solid #cecece;
+	border-top: 1px solid #cecece;
+	border-right: 1px solid #cecece;
+	font-size: 14px;
+	padding: 10px;
+}
+
+.payment_items_con {	
+	border-left: 1px solid #cecece;
+	border-bottom: 1px solid #cecece;
+	border-right: 1px solid #cecece;
+	font-size: 14px;
+	padding: 10px;
+	margin-bottom: 20px;
+}
+
+.payment_items_con > div {
+	margin-bottom: 8px;
+}
+
+.payment_items_con span {
+	display: inline-block;
+	font-weight: bold;
+	width: 150px;
 }
