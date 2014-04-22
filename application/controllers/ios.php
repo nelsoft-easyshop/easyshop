@@ -627,6 +627,7 @@ class Ios extends MY_Controller {
 		}
 
 	}
+    
 	function displaycategory()
 	{
 		 
@@ -659,7 +660,7 @@ class Ios extends MY_Controller {
 			$down_cat = $this->product_model->selectChild($category);
 			array_push($down_cat, $category);
 			$catlist_down = implode(",", $down_cat);
-			$response['items'] = $this->product_model->getProductInCategoryAndUnder($category,$usable_string,$catlist_down,$start,'999',$string_sort);
+			$response['items'] = $this->product_model->getProductInCategoryAndUnder($category,$usable_string,$catlist_down,$start,'999','');
 		}
 
 		echo json_encode($response['items']);
