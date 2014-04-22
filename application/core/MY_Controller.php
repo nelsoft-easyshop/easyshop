@@ -21,18 +21,6 @@ class MY_Controller extends CI_Controller
 	
 	function fill_header()
 	{	
-		if(strval(uri_string()) <> "login"){
-			$this->session->set_userdata('user_cur_loc', uri_string());
-		}
-		else{
-            #if user_cur_loc session is empty, set it to home else leave it as is
-            #Fixes a bug that makes the user_cur_loc session variable contain rubbish URIs
-			if(!$this->session->userdata('user_cur_loc')){
-				$this->session->set_userdata('user_cur_loc','home');
-			}
-		}
-
-
 		$usersession = $this->session->userdata('usersession');
 		if(!empty($usersession) || $this->check_cookie()){
 
@@ -52,7 +40,6 @@ class MY_Controller extends CI_Controller
 			'uname' => $uname,
 			'total_items'=> $this->cart_model->cart_size(),
 			'category_search' => $this->product_model->getFirstLevelNode(),
-			'user_cur_loc' => $this->session->userdata('user_cur_loc'),
 			'header_csrf' => array(
 					'csrf_'
 				)
