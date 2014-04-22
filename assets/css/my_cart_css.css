@@ -1002,3 +1002,10 @@ input.cc_check {
 	font-weight: bold;
 	width: 150px;
 }
+
+.con_shop_wrapper {
+	display: block;
+	font-weight: bold;
+	padding:8px;
+	text-align: right;
+}
