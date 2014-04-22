@@ -90,6 +90,8 @@ $route['pay/cashondelivery'] = 'payment/payCashOnDelivery';  # ryan vasquez
 $route['pay/setting/paypal'] = 'payment/paypal_setexpresscheckout';  # ryan vasquez
 $route['pay/paypal'] = 'payment/paypal';  # ryan vasquez
 
+#SITEMAP
+$route['sitemap/(:any)'] = 'sitemap/index/$1'; #sam gavinio
 
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */

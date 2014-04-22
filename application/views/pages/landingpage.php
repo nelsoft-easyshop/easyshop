@@ -2,7 +2,10 @@
     <head>
 
 <meta property="og:title" content="EasyShop.ph" />
-<meta property="og:description" content="Our vision is to be the leading Online Shopping website in South East Asia. The mission that EasyShop has is to provide its customer with a Fast and Easy Online shopping of different products available in the market. The up-to-date information provided by the Online Sellers gives a clear picture of the products and the key features, helping Online Buyers make the right purchasing decision. EasyShops’ goal is to be the first website you think about when buying online." />
+<meta property="og:description" content="Our vision is to be the leading Online Shopping website in South East Asia. 
+           The mission that EasyShop has is to provide its customer with a Fast and Easy 
+           online shopping experience. Our goal is to be the first website you think about
+           when buying online." />
 <meta property="og:image" content="https://easyshop.ph/assets/images/img_logo.png" />
 
         <meta name="viewport" content="width=device-width, initial-scale=1">
