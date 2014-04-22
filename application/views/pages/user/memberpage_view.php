@@ -906,14 +906,13 @@
 							<div id="GoogleMapContainer" title="Google Map Container"></div>
 						</div>
 						
-						<div id="map-canvas"></div>
-						
+						<div id="map-canvas"></div>					
 						<div class="clear"></div>
-						
-						<div class="clear"></div>
-						<input type="submit" name="personal_profile_address_btn" class="save_address" value="save">
-						<span class="cancel" name="cancel_address">Cancel</span>
-						<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" id="load_address" style="position: relative; left:440px; display:none"/>
+						<div class="btn_con">
+							<span class="cancel" name="cancel_address">Cancel</span>
+							<input type="submit" name="personal_profile_address_btn" class="save_address" value="save">
+							<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" id="load_address" style="position: relative; left:440px; display:none"/>
+						</div>
 					</div>
 					<div class="clear"></div>
 					<div class="error_container" style="padding-left:100px"></div>
@@ -1020,10 +1019,12 @@
 					</div>
 					<input type="hidden" class="progress_update_hidden" value="">
 				</div>
-				<div class="clear"></div>							
-				<input type="submit" class="save_school" name="personal_profile_school" value="Save"/>
-				<span class="cancel" name="cancel_school">Cancel</span>
-				<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" id="load_school" style="position: relative; left:440px; display:none"/>
+				<div class="clear"></div>	
+				<div class="btn_con">						
+					<span class="cancel" name="cancel_school">Cancel</span>
+					<input type="submit" class="save_school" name="personal_profile_school" value="Save"/>
+					<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" id="load_school" style="position: relative; left:440px; display:none"/>
+				</div>	
 			</div>
 			<div class="clear"></div>
 			<?php echo form_close();?>
@@ -1109,9 +1110,11 @@
 			<input type="hidden" class="progress_update_hidden" value="">
 		</div>
 		<div class="clear"></div>
-		<input type="submit" name="personal_profile_work_btn" value="Save" class="save_work">
-		<span class="cancel" name="cancel_work">Cancel</span>
-		<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" id="load_work" style="position: relative; left:440px; display:none"/>
+		<div class="btn_con">
+			<span class="cancel" name="cancel_work">Cancel</span>
+			<input type="submit" name="personal_profile_work_btn" value="Save" class="save_work">
+			<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" id="load_work" style="position: relative; left:440px; display:none"/>
+		</div>	
 	</div>
 </div>
 <?php echo form_close();?>
