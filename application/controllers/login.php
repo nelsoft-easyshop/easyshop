@@ -134,7 +134,6 @@ class Login extends MY_Controller {
 						'password' => $pass
 				);
 				$this->register_model->forgotpass_update($data); // pasok pa sa oras pero magsasave na.
-				$this->session->unset_userdata('user_cur_loc');
 				echo "0";	
 			}else{
 				echo "69";

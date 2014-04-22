@@ -397,7 +397,6 @@ class Register extends MY_Controller
 			if($result){
                 $temp['toggle_view'] = "";
             }
-			$this->session->unset_userdata('user_cur_loc');
 		}
         $temp['result'] = $result;
 		$this->load->view('pages/user/changepassword', $temp);

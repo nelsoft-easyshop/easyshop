@@ -173,7 +173,6 @@ class New_login extends MY_Controller {
 				);
 				$temp['toggle_view'] = "";
 				$this->register_model->forgotpass_update($data); // pasok pa sa oras pero magsasave na.
-				$this->session->unset_userdata('user_cur_loc');
 			}
 			else{
 				$temp['toggle_view'] = "1";                      // pasok pa sa oras pero hindi pa magsasave ito.
