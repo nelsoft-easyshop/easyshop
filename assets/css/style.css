@@ -4334,7 +4334,8 @@ span.transac_title_date:after {
 }
 
 #bi-right div:last-child {
-    border: 1px solid #CECECE;
+	background-color: #b1ffb1;
+    border: 1px solid #dbf3db;
     padding: 8px;
     width: 158px;
 }
