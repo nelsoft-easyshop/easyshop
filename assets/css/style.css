@@ -3164,12 +3164,14 @@ div.post_item_content_left {
 .post_item_img_con {
     background-color: #FFFFFF;
     border: 1px solid #EAE8E8;
-    display: inline-block;
+/*    display: inline-block;*/
+	display: table-cell;
     height: 140px;
     margin-bottom: 15px;
     margin-right: 20px;
     text-align: center;
     width: 140px;
+    vertical-align: middle;
 }
 
 .product_img {
