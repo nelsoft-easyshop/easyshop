@@ -4332,3 +4332,9 @@ span.transac_title_date:after {
 	margin:0;
 	width: auto;
 }
+
+#bi-right div:last-child {
+    border: 1px solid #CECECE;
+    padding: 8px;
+    width: 158px;
+}
