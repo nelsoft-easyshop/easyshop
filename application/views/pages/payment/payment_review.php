@@ -91,7 +91,7 @@
             <p class="chck_privacy"><input type="checkbox"> I have read and understand Easyshop <a href="">Privacy Policy</a>.</p>
     <?php }else{ ?>
 
-      <span style="color:red">NOTE! one of your choosen item is not avaialable for cash on delivery.</span>
+      <span style="color:red"><strong>NOTE: one or more of your chosen items are not available for cash on delivery.</strong></span>
       <div class="pay_sum_head">
                 <div class="pay_sum_c1">Seller</div>
                 <div class="pay_sum_c2">Product</div>
@@ -109,7 +109,7 @@
               <div class="pay_sum_c2"><?php echo $value['name'] ?></div>
               <div class="pay_sum_c3"><?php echo $value['qty'] ?></div>
               <div class="pay_sum_c4"><?php echo number_format($value['price'], 2, '.',',') ?></div>
-              <div class="cod_status_con"><?php echo ($value['cash_delivery'] ? "<span style='color:green'>Available for Cash on Delivery</span>" : "<span style='color:red'>Not Available for Cash on Delivery</span> (Go to your <a style='color:#0654BA'>Cart</a> and Remove this Item)") ;?></div>
+              <div class="cod_status_con"><?php echo ($value['cash_delivery'] ? "<span style='color:green'>Available for Cash on Delivery</span>" : "<span style='color:red'>Not available for Cash on Delivery</span> (Go to your <a href='".base_url()."cart' style='color:#0654BA'>Cart</a> and Remove this Item)") ;?></div>
                  <?php if(!$value['availability']){ ?>
                  <div style="color:red">
                    Please <a style="color:#0654BA" href="javascript:{}" class="link_address">change your shipping address</a> or go to remove this from your <a style="color:#0654BA">Cart</a>.
