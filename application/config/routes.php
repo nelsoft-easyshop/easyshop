@@ -38,9 +38,9 @@
 |
 */
 
-$route['(?i)default_controller'] = "home/comingSoon";
+$route['default_controller'] = "home/comingSoon";
 //$route['(?i)default_controller'] = "landingpage";
-$route['(?i)404_override'] = 'home/pagenotfound';
+$route['404_override'] = 'home/pagenotfound';
 
 # CATEGORY
 $route['(?i)category/(:num)/(:any)'] = 'product/categorySearch/$1/$2'; # ryan vasquez
