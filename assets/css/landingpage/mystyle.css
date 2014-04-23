@@ -66,8 +66,12 @@ body {
     background: url("/assets/images/landingpage/img_logo_shadow.png") top center no-repeat;
     height: 160px;
     margin: 0 auto;
-    width: 700px;
-    padding-left: 120px;
+    width: 840px;
+}
+
+.lnk_logo {
+    padding-left: 230px;
+    float: left;    
 }
 
 .header .spn18{
