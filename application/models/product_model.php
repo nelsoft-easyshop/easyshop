@@ -650,6 +650,18 @@ class product_model extends CI_Model
 		$sth->execute();
 		$row = $sth->fetchAll(PDO::FETCH_ASSOC);
 		return $row;
+	}
+
+	function insertSearch($value)
+	{
+		$query = "INSERT INTO es_keywords_temp (keywords) VALUES(:value)"; 
+        $sth = $this->db->conn_id->prepare($query);
+        $sth->bindParam(':value',$value,PDO::PARAM_STR);
+        $sth->execute();
+       
+        $row = $sth->fetch(PDO::FETCH_ASSOC);
+  
+        return $row;
 	}	
 
 	function getProductInCategoryAndUnder($category,$usable_string,$items,$start,$per_page,$string_sort)

@@ -396,6 +396,7 @@ class product extends MY_Controller
 				}
 
 				$string = ' '.ltrim($_GET['q_str']); 
+				$ins = $this->product_model->insertSearch($_GET['q_str']);
 				$words = "+".implode("*,+",explode(" ",trim($string)))."*"; 
 				$checkifexistcategory = $this->product_model->checkifexistcategory($category);
 				if($checkifexistcategory == 0 || $category == 1)
