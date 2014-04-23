@@ -4,7 +4,7 @@
 
 <section>
     <div class="wrapper">
-        <p class="announcement" style="color:green"><strong><!--[<?PHP #echo $data['header']; ?>]--><?PHP echo $data['text']; ?></strong></p>
+        <p class="announcement" style="color:#f28300"><strong><!--[<?PHP #echo $data['header']; ?>]--><?PHP echo $data['text']; ?></strong></p>
     </div>
 
 </section>
@@ -76,12 +76,12 @@
                     </div>
                 </div>
             </div>
+            <br/>
             <div class="global_secure_payment">
-                <p>Global secure payment by:</p>
+                <p><strong>Payment Methods</strong></p>
                 <div>
                     <span class="mastercard"></span>
                     <span class="visa"></span>
-                    <span class="jcb"></span>
                     <span class="paypal"></span>
                 </div>
             </div>

@@ -13,7 +13,7 @@
 			-->
           </div>
         </div>
-
+        
         <div class="about_footer">
           <h2>About</h2>
           <ul>

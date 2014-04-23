@@ -3,23 +3,22 @@
 <div class="wrapper alert_content">
 	            <div>
 	            	<img src="<?=base_url()?>assets/images/img_alert.png">
-	            	<h2>This page may have been moved or is no longer available. Please try one of the following:</h2></div>
+	            	<h2>Sorry, the page you are trying to access cannot be found. You may try any of the following:</h2></div>
 	            <ul>
 	              <li>
-	                Check the Web address you entered to make sure if it's correct. 
+	                Ensure that the web address you are accessing is correct.
 	              </li>
 	              <li>
-	                Try to access the page directly from the easyshop Home page instead of using a bookmark. 
-	                If the page has moved, reset your bookmark. 
+                    Try locating the actual page again if you are accessing it through a bookmark.
+                    It is possible that the page you are looking for may have been moved.
 	              </li>
 	              <li>
-	                Enter keywords in the Search box and click the Search button. Or, 
-	                browse through the many categories available at Easyshop. 
+	                You can always make use of the search box available in most pages to find items you
+                    want to check out.
 	              </li>
-	              <li>
-	                If you are searching for a Help page, click the Back button on your web browser and 
-	                select another Help page link or try entering different keyword combinations to find 
-	                appropriate help topics.
-	              </li>
+                  <li>
+                     Visit our sitemap to find easy navigation link throughout the site.
+                  </li>
+
 	            </ul>
        	 </div>	
