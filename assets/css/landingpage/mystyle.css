@@ -1,18 +1,20 @@
 /******* font face *********/
 /*@import url(https://fonts.googleapis.com/css?family=Didact+Gothic);*/
 /*@import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300,300italic,600);*/
-@import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300);
+/*@import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300);*/
+@import url(https://fonts.googleapis.com/css?family=Muli:400,300);
 /********************************/
 
 body {    
     font-size: 70px;
     color: #494949;
     /*font-family: 'Didact Gothic', sans-serif;*/
-    font-family: 'Source Sans Pro', sans-serif;
+    /*font-family: 'Source Sans Pro', sans-serif;*/
+    font-family: 'Muli', 'sans-serif';
 }
 
 .header_bg{
-    height: 624px;
+    height: 729px;
     line-height: 70px;
     width: 100%;
     color: #FFFFFF;
@@ -23,10 +25,94 @@ body {
     background-size: cover;
     margin:0;
 }
-.header_bg span{
-    color: #ffc600;
-}.header .spn18{
+
+.login_btn {
+    line-height: 16px;
+    font-size: 18px;
+    display: inline-block;
+    
+    float: right;
+    background-color: #002f70;
+    margin-top: 20px;
+      -webkit-border-radius: 3px;
+     -moz-border-radius: 3px;
+          border-radius: 3px;
+      -webkit-transition: all 0.1s linear;
+     -moz-transition: all 0.1s linear;
+       -o-transition: all 0.1s linear;
+          transition: all 0.1s linear;
+}
+
+.login_btn a {
+    color: #fff;
+    display: inline-block;
+    padding:10px;
+    width: 100px;
+}
+
+.login_btn a:hover {
+    text-decoration: none;    
+}
+
+.login_btn:hover {
+    background-color: #00439f;
+  -webkit-box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05);
+     -moz-box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05);
+          box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05);
+
+}
+
+#himg {
+    background: url("/assets/images/landingpage/img_logo_shadow.png") top center no-repeat;
+    height: 160px;
+    margin: 0 auto;
+    width: 700px;
+    padding-left: 120px;
+}
+
+.header .spn18{
     color: #FFFFFF;
+}
+
+.txt_header {
+    font-weight: 300;
+}
+
+.himg2 {
+  background: url("/assets/images/landingpage/img_model.png") bottom right no-repeat;  
+  width: 70%;
+  margin:0 auto;
+  min-height: 400px;
+}
+
+.txt_header2 {
+    font-size: 34px;
+    font-weight: 300;
+    text-transform: uppercase;
+}
+
+.txt_header2 span {
+    font-size: 54px;
+}
+
+.c_ylw {
+    color: #fff600;   
+}
+
+.margin_top1 {
+    margin-top: 60px;
+}
+
+.margin_top2 {
+    margin-top: 30px;
+}
+
+.padding_left1 {
+    padding-left: 100px;
+}
+
+.img_scroll {
+    margin-left: 94px;
 }
 
 .content1 {
@@ -157,16 +243,22 @@ input.error + span.error {
 }
 
 .header_sub {
-    font-size: 0.34em;
-    line-height: 30px;
+    font-size: 0.24em;
+    line-height: 40px;
+}
+
+.header_sub span {
+    display: block;
+    font-size: 1.34em;
 }
 
 .hs_top {
+    font-weight: 300;
     margin-bottom: 30px;
     margin-top: 75px;
-    margin-left:auto;
-    margin-right: auto;
-    width: 70%;
+/*    margin-left:auto;
+    margin-right: auto;*/
+    width: 48%;
 }
 .spn18{
     display: block;
@@ -326,6 +418,23 @@ input.error + span.error {
 
 .dialog {
     display: none;
+}
+
+.p_success {
+    font-size: 18px;
+    font-weight: 300;
+    line-height: 45px;
+    width: 68%;
+    margin:0 auto;
+}
+
+.txt_success2 {
+    margin-top: 100px;
+}
+
+.txt_success3 {
+    font-size: 36px;
+    margin-top: 50px;
 }
 
 .txt_success {
