@@ -13,7 +13,7 @@
 			-->
           </div>
         </div>
-        
+        <!--
         <div class="about_footer">
           <h2>About</h2>
           <ul>
@@ -26,7 +26,7 @@
             <li><a href="<?=base_url()?>home/under_construction">Contact Us</a></li>
           </ul>
         </div>
-
+        -->
         <div class="footer_payment">
           <h2>Payment</h2>
             <span class="span_bg mastercard"></span>
