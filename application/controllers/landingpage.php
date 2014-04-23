@@ -178,10 +178,12 @@ class Landingpage extends MY_Controller
         }
         else{
             if($action === 'register'){
-                $data['content'] = 'img_success_register.png';
+            	$data['content'] = 'You have successfully registered!';
+                // $data['content'] = 'img_success_register.png';
             }
             else if($action === 'subscribe'){
-                $data['content'] = 'img_success_subscribe.png';
+                $data['content'] = 'You have successfully Subscribed!';
+                // $data['content'] = 'img_success_subscribe.png';
             }
             else{
                 redirect('', 'refresh');  //redirect to index page
