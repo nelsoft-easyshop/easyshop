@@ -1131,7 +1131,7 @@
 	</p>
 	<hr style="display: block; height: 1px; border: 0; border-top: 1px solid #ccc; margin: 1em 0; padding: 0;" />
 	<div align="right">
-		<input type="button" id="abi_btn" name="abi_btn" value="Add Bank" />
+		<input type="button" id="abi_btn" class="blue_btn" name="abi_btn" value="+ Add Bank" />
 	</div>
 	<div id="abi" style="display:none">
 		<?php
@@ -1168,7 +1168,7 @@
 		</div>
 		<div class="clear"></div>
 		<div class="bottom_save" style="text-align:left">
-			<input type="button" name="billing_info_btn" id="billing_info_btn" value="Save">
+			<input type="button" name="billing_info_btn" id="billing_info_btn" class="orange_btn3" value="Save">
 			<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" id="load_deliver_address" style="position: relative; top:12px; left:15px;  display:none"/>
 		</div>
 		<?php echo form_close();?>			
