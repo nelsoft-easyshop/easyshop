@@ -131,8 +131,10 @@ class search_model extends CI_Model
 		
 		$query = "SELECT DISTINCT ea.`name` FROM `es_product_attr` epa
 			LEFT JOIN `es_attr` ea ON epa.`attr_id` = ea.`id_attr`
-			LEFT JOIN `es_product` ep ON epa.`product_id` = ep.`id_product`			
+			LEFT JOIN `es_product` ep ON epa.`product_id` = ep.`id_product`
+			LEFT JOIN es_datatype ed ON ea.datatype_id = ed.id_datatype 			
 			WHERE ep.`cat_id` IN (". $cid .")
+			AND ed.name IN ('CHECKBOX', 'RADIO', 'SELECT') 
 			AND epa.`product_id` IN (". implode(',', $datas) .") ORDER BY ea.`name`";
 		$sth = $this->db->conn_id->prepare($query); 
 		$sth->execute();
@@ -153,8 +155,10 @@ class search_model extends CI_Model
 		
 		$query = "SELECT DISTINCT epa.`attr_value` FROM `es_product_attr` epa
 			LEFT JOIN `es_attr` ea ON epa.`attr_id` = ea.`id_attr`
-			LEFT JOIN `es_product` ep ON epa.`product_id` = ep.`id_product`			
+			LEFT JOIN `es_product` ep ON epa.`product_id` = ep.`id_product`	
+			LEFT JOIN es_datatype ed ON ea.datatype_id = ed.id_datatype 		
 			WHERE ep.cat_id IN (". $cid .")
+			AND ed.name IN ('CHECKBOX', 'RADIO', 'SELECT') 
 			AND product_id IN (". implode(', ', $datas) .") 
 			AND ea.`name` = :name ORDER BY ea.`name` ";
 		$sth = $this->db->conn_id->prepare($query);
