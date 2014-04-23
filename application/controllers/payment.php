@@ -516,7 +516,7 @@ function paypal(){
 		//die($mobilestat);
 	
         //$data = array();
-        $transactionData = $this->payment_model->getTransactionDetails($data);
+        $transactionData = $this->payment_model->getPurchaseTransactionDetails($data);
         
         //Send email to buyer
         $buyerEmail = $transactionData['buyer_email'];

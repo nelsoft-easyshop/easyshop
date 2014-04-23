@@ -19,8 +19,8 @@
 					</td>
 				</tr>
 				<tr>
-					<td width="120px"><strong>Transaction # :</strong> </td>
-					<td colspan="2">{order_id}</td>
+					<td width="120px"><strong>Invoice # :</strong> </td>
+					<td colspan="2">{invoice_no}</td>
 				</tr>
 				<tr>
 					<td><strong>Product Order # :</strong> </td>
@@ -28,18 +28,18 @@
 				</tr>
 				<tr>
 					<td><strong>Product Name :</strong> </td>
-					<td colspan="2"><a href="{product_link}" target="_blank">{name}</a></td>
+					<td colspan="2">{product_name}</td>
 				</tr>
 				<tr>
 					<td><strong>Quantity :</strong> </td>
 					<td colspan="2">{order_quantity}</td>
 				</tr>
 				<tr>
-					<td><strong>Price :</strong> </td>
+					<td><strong>Total Price :</strong> </td>
 					<td colspan="2">Php {price}</td>
 				</tr>
 				<tr>
-					<td><strong>Product Attributes</strong></td>
+					<td><strong>Product Attributes : </strong></td>
 					{attr}
 						<td>{field} : </td>
 						<td>{value}</td>

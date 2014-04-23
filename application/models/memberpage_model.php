@@ -420,9 +420,20 @@ class memberpage_model extends CI_Model
 		
 		if(count($row)>0){
 			foreach($row as $k=>$temp){
-			
-				$data[$temp['id_order']]['dateadded'] = $temp['dateadded'];
-				$data[$temp['id_order']]['transac_stat'] = $temp['transac_stat'];
+				
+				if( !array_key_exists($temp['id_order'], $data) ){
+					$data[$temp['id_order']] = array();
+				}
+				
+				if( !array_key_exists('dateadded', $data[$temp['id_order']]) ){
+					$data[$temp['id_order']]['dateadded'] = $temp['dateadded'];
+				}
+				if( !array_key_exists('transac_stat', $data[$temp['id_order']]) ){
+					$data[$temp['id_order']]['transac_stat'] = $temp['transac_stat'];
+				}
+				if( !array_key_exists('invoice_no', $data[$temp['id_order']]) ){
+					$data[$temp['id_order']]['invoice_no'] = $temp['invoice_no'];
+				}
 				
 				if(!array_key_exists('users', $data[$temp['id_order']]))
 					$data[$temp['id_order']]['users'] = array();
@@ -457,7 +468,14 @@ class memberpage_model extends CI_Model
 						'fbdateadded' => '',
 						'rating1' => 0,
 						'rating2' => 0,
-						'rating3' => 0
+						'rating3' => 0,
+						'address' => array(
+							'stateregion' => $temp['stateregion'],
+							'city' => $temp['city'],
+							'fulladd' => $temp['address'],
+							'lat' => $temp['lat'],
+							'lng' => $temp['lng']
+						)
 					);
 				
 				if(trim($temp['feedb_msg']) !== '' && trim($temp['for_memberid']) !== '' && $userid == $temp['for_memberid']){
@@ -487,13 +505,14 @@ class memberpage_model extends CI_Model
 				}
 				
 				//Create json encoded data summary for each product
-				$jsonTemp = array(
+				/*$jsonTemp = array(
 					'order_id' => $temp['id_order'],
 					'order_product_id' => $temp['id_order_product'],
 					'dateadded' => $temp['dateadded'],
 				);
 				unset($data[$temp['id_order']]['products'][$temp['id_order_product']]['jsondata']);
 				$data[$temp['id_order']]['products'][$temp['id_order_product']]['jsondata'] = json_encode(array_merge($jsonTemp, $data[$temp['id_order']]['products'][$temp['id_order_product']]));
+				*/
 			}
 			
 			// Categorize as buy or sell in final array
@@ -504,6 +523,13 @@ class memberpage_model extends CI_Model
 					$fdata['buy'][$k] = $temp2;
 			}
 		}
+		
+		/*
+		print('<pre>');
+		print_r($fdata);
+		print('</pre>');
+		die();
+		*/
 		
 		return $fdata;
 	}

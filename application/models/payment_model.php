@@ -112,14 +112,18 @@ class payment_model extends CI_Model
 	
 	/*
 	 *	Function to get Transaction Details for summary in notification email
+	 *  $data = array(
+	 *		'member_id' => Member ID who made the purchase (buyerID)
+	 *		'order_id'	=> Transaction Number
+	 *	)
 	 */
-	public function getTransactionDetails($data)
+	public function getPurchaseTransactionDetails($data)
 	{
 		//devcode
 		//$data['member_id'] = 74;
 		//$data['order_id'] = 102;
 		
-		$query = $this->sqlmap->getFilenameID('payment','getTransactionDetails');
+		$query = $this->sqlmap->getFilenameID('payment','getPurchaseTransactionDetails');
         $sth = $this->db->conn_id->prepare($query);
         $sth->bindParam(':buyer_id',$data['member_id']);
         $sth->bindParam(':order_id',$data['order_id']);
@@ -167,30 +171,75 @@ class payment_model extends CI_Model
 		}
 		
 		return $data;
-
 	}
+	
+	public function getOrderProductTransactionDetails($data)
+	{
+		$query = $this->sqlmap->getFilenameID('payment','getOrderProductTransactionDetails');
+		$sth = $this->db->conn_id->prepare($query);
+		$sth->bindParam(':order_product_id', $data['order_product_id']);
+		$sth->bindParam(':order_id', $data['transaction_num']);
+		$sth->bindParam(':invoice_num', $data['invoice_num']);
+		$sth->bindParam(':member_id', $data['member_id']);
+		$sth->execute();
+		$row = $sth->fetchAll(PDO::FETCH_ASSOC);
+		
+		$parseData = array(
+			'invoice_no' => $row[0]['invoice_no'],
+			'order_product_id' => $row[0]['id_order_product'],
+			'product_name' => $row[0]['product_name'],
+			'order_quantity' => $row[0]['order_quantity'],
+			'price' => number_format($row[0]['total'], 2, '.', ','),
+			'attr' => array()
+		);
+		
+		if($data['status'] === 1){ // if forward to seller
+			$parseData['user'] = $row[0]['buyer'];
+			$parseData['email'] = $row[0]['seller_email'];
+		} else if($data['status'] === 2){ // if return to buyer
+			$parseData['user'] = $row[0]['seller'];
+			$parseData['email'] = $row[0]['buyer_email'];
+		}
+		
+		foreach( $row as $r){
+			if($r['is_other'] === '0'){
+				array_push($parseData['attr'], array('field' => ucwords(strtolower($r['attr_name'])), 'value' => ucwords(strtolower($r['attr_value'])) ));
+			}else if($r['is_other'] === '1'){
+				array_push($parseData['attr'], array('field' => ucwords(strtolower($r['field_name'])), 'value' => ucwords(strtolower($r['value_name'])) ));
+			}
+		}
+		
+		return $parseData;
+	}
+	
 	
 	/*
 	 *	Updates es_order_product status
 	 *	Checks es_order_product status if all orders have buyer/seller response and updates
 	 *		es_order as complete
 	 *	USED IN MEMBERPAGE - TRANSACTIONS TAB
+	 *
+	 *	Args:
+	 *		transaction_num, order_product_id, status
+	 *		member_id
+	 *
 	 */
 	function updateTransactionStatus($data)
 	{
 		$query = $this->sqlmap->getFilenameID('payment','updateTransactionStatus');
 		$sth = $this->db->conn_id->prepare($query);
-
 		$sth->bindParam(':status', $data['status']);
 		$sth->bindParam(':order_product_id', $data['order_product_id']);
 		$sth->bindParam(':order_id', $data['transaction_num']);
-		$result = $sth->execute();
+		$sth->bindParam(':invoice_num', $data['invoice_num']);
+		$sth->bindParam(':member_id', $data['member_id']);
+		$sth->execute();
 		
-		//print_r($sth->errorInfo());
-		return $result;
+		$row = $sth->fetch(PDO::FETCH_ASSOC);
+		
+		return $row;
 	}
  
-
 	function getShippingDetails($product_id ,$product_item_id,$city_id,$region_id,$major_island_id)
 	{
 		$query = "

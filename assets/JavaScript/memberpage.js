@@ -886,6 +886,7 @@ $(document).ready(function(){
 					// UPDATE SELECT FIELDS
 					$('#c_deliver_address .inner_profile_fields select.address_dropdown').each(function(){
 						$(this).attr('data-status', obj[$(this).attr('name') + 'ID']);
+						$(this).trigger('chosen:updated');
 					});
 					
 					// Update map coordinates and status
@@ -905,6 +906,7 @@ $(document).ready(function(){
 						$('.address_fields select.address_dropdown').each(function(){
 							$(this).attr('data-status', obj[$(this).attr('name') + 'ID']);
 							$(this).val(obj[$(this).attr('name') + 'ID']);
+							$(this).trigger('chosen:updated');
 						});
 						
 						// Update orig checker fields
@@ -925,9 +927,9 @@ $(document).ready(function(){
 						//Map notification status
 						$('.inner_profile_fields').find('div.view_map_btn span.maploc_stat').html('Location set');
 						
-						
 						$('#personal_profile_address .address_information').show();
 						$('#personal_profile_address .edit_profile').hide();
+						progress_update($('#personal_profile_address'));
 					}
 					progress_update($('#c_deliver_address'));
 				});
@@ -995,7 +997,6 @@ $(document).ready(function(){
 		var thisbtn = $(this);
 		var parentdiv = $(this).closest('div');
 		$.post(config.base_url+"memberpage/transactionResponse", form.serializeArray(), function(data){
-			
 			try{
 				var serverResponse = jQuery.parseJSON(data);
 			}
@@ -1008,7 +1009,7 @@ $(document).ready(function(){
 			if(serverResponse.result === 'success'){
 				parentdiv.html('Request submitted.');
 			}
-			else{
+			if(serverResponse.error.length > 0){
 				alert(serverResponse.error);
 			}
 		});
@@ -1547,8 +1548,6 @@ $(function(){
 /***********************	GOOGLE MAPS		***************************/
 
 $(document).ready(function(){
-
-	//var map, marker, geocoder;
 	var mapPersonal, markerPersonal, geocoder;
 	var mapDelivery, markerDelivery;
 
@@ -1691,6 +1690,44 @@ $(document).ready(function(){
 		$(this).parent('div').siblings('.map-canvas').fadeOut();
 		$(this).parent('div').siblings('.view_map_btn').find('.view_map').fadeIn();
 	});
+	
+});
+
+
+/*******************	TRANSACTION MAPS	********************************************/
+$(document).ready(function(){
+	
+	var map, marker;
+	
+	$('.tsold_viewmap').on('click', function(){
+	
+		var maplat = $(this).attr('data-lat');
+		var maplng = $(this).attr('data-lng');
+		var myLatlng =  new google.maps.LatLng(maplat,maplng);
+
+		$('#map_modalcont').modal({
+			onShow: function(){
+				google.maps.event.addDomListener(window, 'load', initialize(myLatlng));
+				this.setPosition();
+			},
+			onClose: function(){
+				$.modal.close();
+			}
+		});
+	});
+	
+	function initialize(myLatlng) {
+		var mapOptions = {
+		  center:myLatlng,
+		  zoom: 15
+		};
+		map = new google.maps.Map(document.getElementById("tsold_mapview"), mapOptions);
+		marker = new google.maps.Marker({
+			position: myLatlng,
+			map: map,
+			title:"I'm here!"
+		});
+	}
 	
 });
 

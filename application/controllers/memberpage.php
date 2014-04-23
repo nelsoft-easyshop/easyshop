@@ -298,9 +298,8 @@ class Memberpage extends MY_Controller
 	/*
 	 *	Function to handle payment transfer.
 	 *	Forward to seller or return to user.
-	 */
+	 *
 	function transactionResponse(){
-	
 		$data['transaction_num'] = $this->input->post('transaction_num');
 		
 		if($this->input->post('buyer_response')){ //Forward payment to seller
@@ -338,9 +337,65 @@ class Memberpage extends MY_Controller
 		}
 		
 		echo json_encode($serverResponse);
-	
 	}
-
+	*/
+	
+	/*
+	 *	Function to handle payment transfer.
+	 *	Forward to seller (status = 1) or return to buyer (status = 2).
+	 */
+	function transactionResponse(){
+		
+		$serverResponse = array(
+			'result' => 'fail',
+			'error' => 'Failed to validate form'
+		);
+		
+		if( $this->input->post('buyer_response') || $this->input->post('seller_response') ){
+			$data['transaction_num'] = $this->input->post('transaction_num');
+			$data['invoice_num'] = $this->input->post('invoice_num');
+			$data['member_id'] = $this->session->userdata('member_id');
+			
+			// Check type of response ( if user or seller response )
+			if( $this->input->post('buyer_response') ){
+				$data['order_product_id'] = $this->input->post('buyer_response');
+				$data['status'] = 1;
+			}
+			else if( $this->input->post('seller_response') ){
+				$data['order_product_id'] = $this->input->post('seller_response');
+				$data['status'] = 2;
+			}
+			
+			// Update database entries and retrieve update stats and buyer info
+			// Also checks for data accuracy
+			// Returns : o_success, o_message
+			//$result['o_success'] = 1; // DEV code
+			$result = $this->payment_model->updateTransactionStatus($data);
+			
+			// If database update is successful and response is 'return to buyer', 
+			// get order_product transaction details and send email
+			if( $result['o_success'] >= 1 && $data['status'] = 2 ){
+				$parseData = $this->payment_model->getOrderProductTransactionDetails($data);
+				$emailstat = $this->payment_model->sendNotificationEmail($parseData, $parseData['email'], 'return_payment');
+			}else if( $result['o_success'] >= 1 && $data['status'] = 1 ){
+				$emailstat = true;
+			}
+		
+			$serverResponse['error'] = array();
+			$serverResponse['result'] = $result['o_success'] >= 1 ? 'success':'fail';
+			
+			if(!$emailstat){
+				array_push($serverResponse['error'], 'Failed to send notification email.');
+			}
+			if($result['o_success'] < 1){
+				array_push($serverResponse['error'], $result['o_message']);
+			}
+			
+		}
+		echo json_encode($serverResponse);
+	}
+	
+	
 
 	/***	VENDOR DASHBOARD CONTROLLER	***/
 	/*** 	memberpage/vendor/username	***/

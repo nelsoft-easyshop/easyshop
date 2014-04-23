@@ -1387,7 +1387,7 @@
 		<?php foreach($transaction['buy'] as $tk=>$transact):?>
 		<div class="transac-container">
 			<div class="transac_title">
-				<h4><span><strong>Transaction #:</strong>  <?php echo $tk;?></span>
+				<h4><span><strong>Invoice #:</strong>  <?php echo $transact['invoice_no'];?></span>
 					<span class="transac_title_date"><?php echo $transact['dateadded']?></span>
 				</div>
 				<div class="transac_prod_wrapper">
@@ -1418,6 +1418,7 @@
 										<span class = "transac_response_btn">Forward payment to seller</span>
 										<input type="hidden" name="buyer_response" value="<?php echo $opk;?>">
 										<input type="hidden" name="transaction_num" value="<?php echo $tk;?>">
+										<input type="hidden" name="invoice_num" value="<?php echo $transact['invoice_no'];?>">
 									<?php echo form_close();?>
 								<?php elseif($product['status'] == 1):?>
 									<span>Paid</span>
@@ -1511,6 +1512,10 @@
 <?php endif; ?>
 </div>
 
+<div id="map_modalcont" style="display:none;">
+	<div id="tsold_mapview" style="height: 300px; width: 500px; "></div>
+</div>
+
 <div id="sold" class="transactions-sell dashboard_table">
 	<?php if(count($transaction['sell'])===0):?>
 	<br/>
@@ -1523,8 +1528,17 @@
 			<div class="transac_title">
 				<h4>
 					<span>
-						<strong>Transaction #: </strong> <?php echo $tk;?><br />
-						<strong>Sold to: </strong> <a href="<?php echo base_url();?>vendor/<?php echo $transact['buyer']?>"><?php echo $transact['buyer']?></a>
+						<strong>Invoice #: </strong> <?php echo $transact['invoice_no'];?><br />
+						<strong>Sold to: </strong> <a href="<?php echo base_url();?>vendor/<?php echo $transact['buyer']?>"><?php echo $transact['buyer']?></a> <br />
+						<?php foreach($transact['users'] as $uk=>$user):?>
+							<span>State/Region: <?php echo $user['address']['stateregion']?></span>
+							<span>City: <?php echo $user['address']['city'];?></span>
+							<span>Address: <?php echo $user['address']['fulladd'];?></span>
+							<?php if( $user['address']['lat']!=0 && $user['address']['lng']!=0 ):?>
+								<span class="tsold_viewmap" data-lat="<?php echo $user['address']['lat'];?>" data-lng="<?php echo $user['address']['lng'];?>">View Map</span>
+								<div class="map_modalcont" style="display:none;"></div>
+							<?php endif;?>
+						<?php endforeach;?>
 					</span>
 					<span class="transac_title_date"><?php echo $transact['dateadded']?></span>
 				</h4>
@@ -1554,8 +1568,11 @@
 							<span class="transac_response_btn">Return payment to buyer</span>
 							<input type="hidden" name="seller_response" value="<?php echo $opk;?>">
 							<input type="hidden" name="transaction_num" value="<?php echo $tk;?>">
-							<input type="hidden" name="data" value='<?php echo $product['jsondata'];?>'>
-							<input type="hidden" name="userdata" value="<?php echo $transact['buyer'] . '||' . $transact['buyer_email'];?>">
+							<input type="hidden" name="invoice_num" value="<?php echo $transact['invoice_no'];?>">
+							<!--
+							<input type="hidden" name="data" value='<?php //echo $product['jsondata'];?>'>
+							<input type="hidden" name="userdata" value="<?php //echo $transact['buyer'] . '||' . $transact['buyer_email'];?>">
+							-->
 							<?php echo form_close();?>
 						<?php elseif($product['status'] == 1):?>
 							<span>Paid</span>
@@ -1565,6 +1582,7 @@
 							<span>Cash on delivery</span>
 						<?php endif;?>
 						</div>
+						
 					</div>
 				</div>
 			<?php endforeach;?>
