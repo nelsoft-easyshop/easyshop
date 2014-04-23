@@ -10,8 +10,10 @@
       </div>
      
       <h2>Stay in touch to get the latest updates</h2>
-      <input type="text"><input type="submit" value="Subscribe">
-      <div class="bottom_content">
+		<?php echo form_open('home/underConstructionSubscribe');?>
+			<input type="text" name="subscribe_email"><input type="submit" value="Subscribe" name="uc_subscribe">
+		<?php echo form_close();?>
+	  <div class="bottom_content">
         <div>
           <h3>About Us</h3>
           <p style="text-align:justify;">
