@@ -51,6 +51,7 @@ class payment_model extends CI_Model
 		
 		$this->email->set_newline("\r\n");
 		$this->email->from('noreply@easyshop.ph', 'Easyshop.ph');
+		$this->email->attach(getcwd() . "/assets/images/img_logo.png", "inline");
 		
 		if($string === 'buyer'){
 			$this->email->subject($this->lang->line('notification_subject_buyer'));
