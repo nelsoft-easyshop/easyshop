@@ -9,7 +9,6 @@ class Home extends MY_Controller {
         parent::__construct();
 		$this->load->library('cart');
         $this->load->library('home_xml');
-
     }
 
     
@@ -33,6 +32,22 @@ class Home extends MY_Controller {
         $this->load->view('templates/footer_full');
 	}
 	
+	public function underConstructionSubscribe()
+	{
+		$this->load->model('register_model');
+		
+		if( $this->input->post('uc_subscribe') && $this->form_validation->run('subscription_form')){
+			$data['email'] = $this->input->post('subscribe_email');
+			$result = $this->register_model->subscribe($data['email']);
+			
+			// Send notification email to user
+			$this->register_model->sendNotification($data, 'subscribe');
+			
+			redirect(base_url().'home/under_construction');
+		}
+	}
+	
+	
 	#(Hnd pa na iimpliment)function to get the Parent in the es_cat, 
 	public function getfirstlevel() {
         $row = $this->home_model->get_firstlevel();
@@ -52,6 +67,7 @@ class Home extends MY_Controller {
         $this->load->view('pages/coming_soon');
 	}
     
+	
 
 }
 
