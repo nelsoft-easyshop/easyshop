@@ -7,6 +7,7 @@ class Home extends MY_Controller {
 
     function __construct() {
         parent::__construct();
+		$this->load->model('register_model');
 		$this->load->library('cart');
         $this->load->library('home_xml');
     }
@@ -34,11 +35,9 @@ class Home extends MY_Controller {
 	
 	public function underConstructionSubscribe()
 	{
-		$this->load->model('register_model');
-		
 		if( $this->input->post('uc_subscribe') && $this->form_validation->run('subscription_form')){
 			$data['email'] = $this->input->post('subscribe_email');
-			$result = $this->register_model->subscribe($data['email']);
+			$this->register_model->subscribe($data['email']);
 			
 			// Send notification email to user
 			$this->register_model->sendNotification($data, 'subscribe');
