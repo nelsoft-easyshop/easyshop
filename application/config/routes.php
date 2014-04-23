@@ -25,73 +25,71 @@
 |
 | There area two reserved routes:
 |
-|	$route['default_controller'] = 'welcome';
+|	$route['(?i)default_controller'] = 'welcome';
 |
 | This route indicates which controller class should be loaded if the
 | URI contains no data. In the above example, the "welcome" class
 | would be loaded.
 |
-|	$route['404_override'] = 'errors/page_missing';
+|	$route['(?i)404_override'] = 'errors/page_missing';
 |
 | This route will tell the Router what URI segments to use if those provided
 | in the URL cannot be matched to a valid route.
 |
 */
 
-$route['default_controller'] = "home/comingSoon";
-//$route['default_controller'] = "landingpage";
-$route['404_override'] = 'home/pagenotfound';
+$route['(?i)default_controller'] = "home/comingSoon";
+//$route['(?i)default_controller'] = "landingpage";
+$route['(?i)404_override'] = 'home/pagenotfound';
 
 # CATEGORY
-$route['category/(:num)/(:any)'] = 'product/categorySearch/$1/$2'; # ryan vasquez
-$route['category/loadproduct'] = 'product/loadOtherCategorySearch'; # ryan vasquez
-$route['category/all'] = 'product/categories_all'; # ryan vasquez
+$route['(?i)category/(:num)/(:any)'] = 'product/categorySearch/$1/$2'; # ryan vasquez
+$route['(?i)category/loadproduct'] = 'product/loadOtherCategorySearch'; # ryan vasquez
+$route['(?i)category/all'] = 'product/categories_all'; # ryan vasquez
 
 #SEARCHING
-$route['search/(:any)'] = 'product/sch/$1'; # ryan vasquez
-$route['search/load_search_other_product'] = 'product/sch_scroll'; # ryan vasquez
+$route['(?i)search/(:any)'] = 'product/sch/$1'; # ryan vasquez
+$route['(?i)search/load_search_other_product'] = 'product/sch_scroll'; # ryan vasquez
 
 # ADVANCE SEARCH
-$route['advsearch'] = 'product_search/red'; # rain jorque
-$route['advance_search/(:any)'] = 'product_search/red/$1'; # rain jorque
-$route['advance_search/load_other_product'] = 'product_search/load_product'; # rain jorque
+$route['(?i)advsearch'] = 'product_search/red'; # rain jorque
+$route['(?i)advance_search/(:any)'] = 'product_search/red/$1'; # rain jorque
+$route['(?i)advance_search/load_other_product'] = 'product_search/load_product'; # rain jorque
 
 #ITEMS
-$route['item/(:num)/(:any)'] = 'product/view/$1/$2'; # ryan vasquez
-$route['search/suggest'] = 'product/sch_onpress'; # ryan vasquez
+$route['(?i)item/(:num)/(:any)'] = 'product/view/$1/$2'; # ryan vasquez
+$route['(?i)search/suggest'] = 'product/sch_onpress'; # ryan vasquez
 
 #SELL ITEM
-$route['sell/step1'] = 'productUpload/step1'; # ryan vasquez
-$route['sell/step2'] = 'productUpload/step2'; # ryan vasquez
-$route['sell/processing'] = 'productUpload/step2_2'; # ryan vasquez
-$route['sell/step3'] = 'productUpload/step3'; # ryan vasquez
-$route['sell/shippinginfo'] = 'productUpload/step3Submit';
-$route['sell/step4'] = 'productUpload/step4'; # ryan vasquez
+$route['(?i)sell/step1'] = 'productUpload/step1'; # ryan vasquez
+$route['(?i)sell/step2'] = 'productUpload/step2'; # ryan vasquez
+$route['(?i)sell/processing'] = 'productUpload/step2_2'; # ryan vasquez
+$route['(?i)sell/step3'] = 'productUpload/step3'; # ryan vasquez
+$route['(?i)sell/shippinginfo'] = 'productUpload/step3Submit';
+$route['(?i)sell/step4'] = 'productUpload/step4'; # ryan vasquez
 
 #User and Vendor
-$route['me'] = 'memberpage'; # janz
-$route['vendor/(:any)'] = 'memberpage/vendor/$1'; # janz
+$route['(?i)me'] = 'memberpage'; # janz
+$route['(?i)vendor/(:any)'] = 'memberpage/vendor/$1'; # janz
 
 #EDIT ITEM
-$route['sell/edit/step1'] = 'productUpload/editStep1'; # sam gavinio
-$route['sell/edit/step2'] = 'productUpload/editStep2'; # sam gavinio
-$route['sell/edit/processing2'] = 'productUpload/editStep2Submit';  # sam gavinio
+$route['(?i)sell/edit/step1'] = 'productUpload/editStep1'; # sam gavinio
+$route['(?i)sell/edit/step2'] = 'productUpload/editStep2'; # sam gavinio
+$route['(?i)sell/edit/processing2'] = 'productUpload/editStep2Submit';  # sam gavinio
 
 #REMOVE DRAFT
-$route['sell/draft/remove'] = 'productUpload/deleteDraft';  # sam gavinio
+$route['(?i)sell/draft/remove'] = 'productUpload/deleteDraft';  # sam gavinio
 
 #LANDING PAGE 
-$route['registration/success'] = 'landingpage/success/register';  # sam gavinio
-$route['subscription/success'] = 'landingpage/success/subscribe';  # sam gavinio
+$route['(?i)registration/success'] = 'landingpage/success/register';  # sam gavinio
+$route['(?i)subscription/success'] = 'landingpage/success/subscribe';  # sam gavinio
 
 #PAYMENT CASH ON DELIVERY
-$route['pay/cashondelivery'] = 'payment/payCashOnDelivery';  # ryan vasquez
+$route['(?i)pay/cashondelivery'] = 'payment/payCashOnDelivery';  # ryan vasquez
 #PAYMENT PAYPAL
-$route['pay/setting/paypal'] = 'payment/paypal_setexpresscheckout';  # ryan vasquez
-$route['pay/paypal'] = 'payment/paypal';  # ryan vasquez
+$route['(?i)pay/setting/paypal'] = 'payment/paypal_setexpresscheckout';  # ryan vasquez
+$route['(?i)pay/paypal'] = 'payment/paypal';  # ryan vasquez
 
-#SITEMAP
-$route['sitemap/(:any)'] = 'sitemap/index/$1'; #sam gavinio
 
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */
