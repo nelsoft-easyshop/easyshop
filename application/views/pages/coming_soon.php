@@ -43,14 +43,14 @@
         <div>
           <h3>About Us</h3>
           <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam sed nulla congue, vestibulum quam sed, ultrices enim. In a neque ut augue dictum viverra vel eget justo. Mauris fringilla felis ac eros dictum, a pulvinar erat lobortis. 
+             EasyShop.ph is a platform where you can facilitate easy and safe online business transactions. We are offering you a free stage for your business, and ensuring that buyers have a scam-free and easy-shopping experience. EasyShop.ph is where shopping is made easy!
           </p>
         </div>
         <div>
             <h3>Follow Us</h3>
             <span>
-              <a href=""><img src="<?php echo base_url() ?>assets/images/icon_facebook.png" alt="facebook"></a>
-              <a href=""><img src="<?php echo base_url() ?>assets/images/icon_twitter.png" alt="facebook"></a>
+              <a href="https://www.facebook.com/pages/EasyShopph/211771799032417?ref=hl"><img src="<?=base_url()?>assets/images/icon_facebook.png" alt="facebook"></a>
+              <a href="https://twitter.com/EasyShopPH"><img src="<?=base_url()?>assets/images/icon_twitter.png" alt="twitter"></a>
               <a href=""><img src="<?php echo base_url() ?>assets/images/icon_youtube.png" alt="facebook"></a>
               <a href=""><img src="<?php echo base_url() ?>assets/images/icon_googleplus.png" alt="facebook"></a>
               <a href=""><img src="<?php echo base_url() ?>assets/images/icon_pinterest.png" alt="facebook"></a>
