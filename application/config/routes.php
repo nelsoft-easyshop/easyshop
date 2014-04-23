@@ -49,7 +49,7 @@ $route['(?i)category/all'] = 'product/categories_all'; # ryan vasquez
 
 #SEARCHING
 $route['(?i)search/(:any)'] = 'product/sch/$1'; # ryan vasquez
-$route['(?i)search/load_search_other_product'] = 'product/sch_scroll'; # ryan vasquez
+$route['search/load_search_other_product'] = 'product/sch_scroll'; # ryan vasquez
 
 # ADVANCE SEARCH
 $route['(?i)advsearch'] = 'product_search/red'; # rain jorque
@@ -58,14 +58,14 @@ $route['(?i)advance_search/load_other_product'] = 'product_search/load_product';
 
 #ITEMS
 $route['(?i)item/(:num)/(:any)'] = 'product/view/$1/$2'; # ryan vasquez
-$route['(?i)search/suggest'] = 'product/sch_onpress'; # ryan vasquez
+$route['search/suggest'] = 'product/sch_onpress'; # ryan vasquez
 
 #SELL ITEM
 $route['(?i)sell/step1'] = 'productUpload/step1'; # ryan vasquez
 $route['(?i)sell/step2'] = 'productUpload/step2'; # ryan vasquez
-$route['(?i)sell/processing'] = 'productUpload/step2_2'; # ryan vasquez
+$route['sell/processing'] = 'productUpload/step2_2'; # ryan vasquez
 $route['(?i)sell/step3'] = 'productUpload/step3'; # ryan vasquez
-$route['(?i)sell/shippinginfo'] = 'productUpload/step3Submit';
+$route['sell/shippinginfo'] = 'productUpload/step3Submit';
 $route['(?i)sell/step4'] = 'productUpload/step4'; # ryan vasquez
 
 #User and Vendor
@@ -75,7 +75,7 @@ $route['(?i)vendor/(:any)'] = 'memberpage/vendor/$1'; # janz
 #EDIT ITEM
 $route['(?i)sell/edit/step1'] = 'productUpload/editStep1'; # sam gavinio
 $route['(?i)sell/edit/step2'] = 'productUpload/editStep2'; # sam gavinio
-$route['(?i)sell/edit/processing2'] = 'productUpload/editStep2Submit';  # sam gavinio
+$route['sell/edit/processing2'] = 'productUpload/editStep2Submit';  # sam gavinio
 
 #REMOVE DRAFT
 $route['(?i)sell/draft/remove'] = 'productUpload/deleteDraft';  # sam gavinio
