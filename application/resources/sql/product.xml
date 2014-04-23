@@ -146,16 +146,17 @@
     </select>
     
     <select id="getProductPreview">
-        SELECT p.id_product as id_product, p.brand_id as brand_id, p.brand_other_name as custombrand, 
-        p.name as product_name, p.description as description, 
-        p.cat_id as cat_id, p.price as price, p.quantity as quantity, p.brief as brief, p.sku as sku,
-        s.name as style_name, b.name as brand_name, p.member_id as sellerid, m.nickname as sellernickname, 
-        m.username as sellerusername, m.imgurl as userpic
+        SELECT p.id_product AS id_product, p.brand_id AS brand_id, p.brand_other_name AS custombrand, 
+        p.name AS product_name, p.description AS description, 
+        p.cat_id AS cat_id, p.price AS price, p.quantity AS quantity, p.brief AS brief, p.sku AS sku,
+        s.name AS style_name, b.name AS brand_name, p.member_id AS sellerid, m.nickname AS sellernickname, 
+        m.username AS sellerusername, m.imgurl AS userpic, c.name AS category
         FROM es_product p 
         LEFT JOIN es_style s ON p.style_id = s.id_style
         LEFT JOIN es_brand b ON p.brand_id = b.id_brand
-        LEFT JOIN es_member m on p.member_id = m.id_member 
-        WHERE p.id_product = :product_id AND p.is_draft = 1	AND p.member_id = :member_id
+        LEFT JOIN es_member m ON p.member_id = m.id_member  
+        LEFT JOIN es_cat c ON p.`cat_id` = c.`id_cat`
+        WHERE p.id_product = :product_id AND p.is_draft = :is_draft	AND p.member_id = :member_id
     </select>
   
 	

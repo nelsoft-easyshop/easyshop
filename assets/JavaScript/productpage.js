@@ -475,13 +475,13 @@ $(function(){
 		// alert("Select shipping location");
 		// return false;
 	 //    }
-            var i_loc_name =  $("#locationID_"+i_loc).html().replace(/&nbsp;/g,'');
+            // var i_loc_name =  $("#locationID_"+i_loc).html().replace(/&nbsp;/g,'');
             $.ajax({
                 async:false,
                 url: config.base_url + "cart/add_item",
                 type:"POST",
                 dataType:"JSON",
-                data:{id:i_id,qty:i_qty,price:i_price,opt:i_opt,name:i_name,length:length,es_csrf_token:csrftoken,max_qty:max_qty,location_id:i_loc,location:i_loc_name},
+                data:{id:i_id,qty:i_qty,price:i_price,opt:i_opt,name:i_name,length:length,es_csrf_token:csrftoken,max_qty:max_qty},
 
                 success:function(data){
                     if(data == "386f25bdf171542e69262bf316a8981d0ca571b8" ){

@@ -31,6 +31,7 @@
             <div><span>Product Subtotal:</span> <?php echo $value['subtotal']; ?></div>
             <div><span>Product Other Price:</span> <?php echo $value['otherFee']; ?></div>
             <div><span>Product Total Fee:</span> <?php echo $value['subtotal'] + $value['otherFee']; ?></div>
+            <hr>
          <?php
          }
          ?>
@@ -46,5 +47,35 @@
 </section>
 
 <div class="clear"></div>
- 
- 
+<script>
+  ga('require', 'ecommerce', 'ecommerce.js');
+
+  <?php
+    foreach ($analytics as $key => $value) {
+  ?>
+
+  ga('ecommerce:addTransaction', {
+      'id': '<?php echo $value["id"]; ?>',
+      'affiliation': '<?php echo $value["affiliation"]; ?>',
+      'revenue': '<?php echo $value["revenue"]; ?>',
+      'shipping': '<?php echo $value["shipping"]; ?>',
+      'tax': '<?php echo $value["tax"]; ?>',
+      'currency': '<?php echo $value["currency"]; ?>'
+  });
+
+  ga('ecommerce:addItem', {
+      id: '<?php echo $value["data"]["id"]; ?>',  
+      sku: '<?php echo $value["data"]["sku"]; ?>',  
+      name: '<?php echo $value["data"]["name"]; ?>',  
+      category: '<?php echo $value["data"]["category"]; ?>',  
+      price: '<?php echo $value["data"]["price"]; ?>',  
+      quantity: '<?php echo $value["data"]["quantity"]; ?>'
+  }); 
+
+  ga('ecommerce:send');
+
+  <?php
+    }
+  ?>
+
+</script>

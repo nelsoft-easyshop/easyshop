@@ -12,6 +12,7 @@ class Payment extends MY_Controller{
         $this->load->library('paypal');
         $this->load->model('user_model');
         $this->load->model('payment_model');
+        $this->load->model('product_model');
         $this->load->model('memberpage_model'); 
         session_start();
     }
@@ -419,7 +420,6 @@ function paypal(){
             $sellerDetails = $this->memberpage_model->get_member_by_id($sellerId); 
             $itemList[$key]['seller_username'] = $sellerDetails['username'];
             $ItemTotalPrice += $total;  
-
         }
     
         $response['itemList'] = $itemList;
@@ -441,6 +441,33 @@ function paypal(){
             $this->session->unset_userdata('choosen_items');
         }   
 
+        #google analytics data
+        # 
+        $analytics = array(); 
+        foreach ($itemList as $key => $value) {
+
+            $product = $this->product_model->getProductPreview($value['id'],$value['member_id'],"0");
+          
+            $tempAnalytics = array(
+                'id' => $return['v_order_id'],
+                'affiliation' => $value['seller_username'],
+                'revenue' => $value['subtotal'],
+                'shipping'=> $value['otherFee'],
+                'tax'=> '0.00',
+                'currency' => 'PHP', 
+                'data' => array(
+                    'id' => $return['v_order_id'],
+                    'name' => $value['name'],
+                    'sku' => $value['id'],
+                    'category' => $product['category'],
+                    'price' => $value['price'],
+                    'quantity' => $value['qty']
+                    )
+                );  
+                array_push($analytics, $tempAnalytics); 
+        }
+
+        $response['analytics'] = $analytics;
         $response = array_merge($response,$return);  
         $member_id =  $this->session->userdata('member_id'); 
         $data['cat_item'] = $this->cart->contents();
@@ -472,6 +499,11 @@ function paypal(){
                 $this->session->unset_userdata('choosen_items');
             }
       
+    }
+
+    function paysuccess()
+    {
+        
     }
 	
     function sendNotification($data) 
