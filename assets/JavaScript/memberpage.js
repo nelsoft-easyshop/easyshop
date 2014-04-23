@@ -1781,10 +1781,11 @@ $(document).ready(function(){
 		}
 
 		var barRule = {
-			required: true, minlength: 12, maxlength: 18, 
+//			required: true, minlength: 12, maxlength: 18, 
+			required: true,  
 			messages: {
 				required: "* Account Number Required",
-				minlength: jQuery.format("At least {0} characters are necessary")
+//				minlength: jQuery.format("At least {0} characters are necessary")
 			}
 		}
 		
@@ -1933,7 +1934,8 @@ $(document).ready(function(){
 				required: true		
 			},			
 			bi_acct_no: {
-				required: true, minlength: 12, maxlength: 18			
+				//required: true, minlength: 12, maxlength: 18
+				required: true					
 			} 
 		 },
 		 messages:{
