@@ -4,7 +4,7 @@
 
 <section>
     <div class="wrapper">
-        <p class="announcement">[<?PHP echo $data['header']; ?>]<?PHP echo $data['text']; ?></p>
+        <p class="announcement" style="color:green"><strong><!--[<?PHP #echo $data['header']; ?>]--><?PHP echo $data['text']; ?></strong></p>
     </div>
 
 </section>
