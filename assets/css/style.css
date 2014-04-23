@@ -213,6 +213,27 @@ p {
     border:1px solid #626262;
 }
 
+.blue_btn {
+	border-radius: 3px;
+	border: 1px solid #0057cf;
+	background-color: #0057cf;
+	color: #fff;
+	cursor: pointer;
+	display: inline-block;
+	padding:8px 10px;
+	text-align: center;
+	-webkit-transition: all 0.3s ease-in-out;
+	-moz-transition: 	all 0.3s ease-in-out;
+	-o-transition:	    all 0.3s ease-in-out;
+	 transition: 		all 0.3s ease-in-out;		
+}
+
+.blue_btn:hover {
+	color: #fff;
+	background-color: #003277;
+    border:1px solid #003277;
+}
+
 
 /****** Font sizes ******/
 .f36 {
@@ -4279,4 +4300,35 @@ span.transac_title_date:after {
 }
 #modal-background.active,#modal-content.active {
 	display:block;
+}
+
+
+/*************** PAYMENT TAB *******************/
+#abi_btn,
+#billing_info_btn {
+	width: 100px;
+}
+
+.control-group {
+    margin-bottom: 10px;
+}
+
+.selectize-control {
+	display: inline-block;
+    vertical-align: middle;
+}
+
+.selectize-input > div  {
+	font-size: 12px !important;
+}
+
+#billing_info_btn {
+	border: 1px solid #f18200;
+	cursor: pointer;
+}
+
+.inner_profile_fields.progress_update.update_once input[type="checkbox"] {
+	padding: 0;
+	margin:0;
+	width: auto;
 }
