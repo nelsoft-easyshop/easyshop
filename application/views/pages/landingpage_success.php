@@ -12,7 +12,7 @@
         <link href="<?=base_url()?>assets/css/jquery-ui.css" rel="stylesheet">
         <title><?php echo $title;?></title>
         
-        <!-- Google Analytics -->
+        <!-- Google Analytics 
         <script>
           (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
           (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -21,27 +21,38 @@
 
           ga('create', 'UA-48811886-1', 'easyshop.ph');
           ga('send', 'pageview');
-        </script>
+        </script>-->
         <!-- End of Google Analytics -->
     </head>
     <body>
-          <!-- Google Tag Manager -->
+          <!-- Google Tag Manager 
          <noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-KP5F8R"
          height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
          <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
          new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
          j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
          '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-         })(window,document,'script','dataLayer','GTM-KP5F8R');</script>
+         })(window,document,'script','dataLayer','GTM-KP5F8R');</script>-->
          <!-- End Google Tag Manager -->
     
         <div class = "container header_bg">
             <div class="row-fluid">
-                <div id="himg" class="text-center"> <img src="<?=base_url()?>assets/images/landingpage/img_logo.png"> </div>
+                <div id="himg" class="text-center"> 
+                  <a href=""><img src="<?=base_url()?>/assets/images/landingpage/img_logo.png"></a>
+                  <div class="login_btn">
+                    <a href="" class="">Log In</a>
+                  </div>
+                </div>
                
-                    <!-- <p class="text-center txt_success"><?php echo $content; ?></p>  -->
-                    <p class="text-center">
-                        <img src="<?=base_url()?>assets/images/<?php echo $content; ?>"> 
+                    <!-- <p class="text-center txt_success"></p>  -->
+                    <p class="text-center p_success txt_success3 c_ylw">
+                       <!--  <img src="<?=base_url()?>assets/images/<?php echo $content; ?>">  -->
+                       <?php echo $content; ?>
+                    </p>
+                    <p class="p_success txt_success2">
+                      Easyshop.ph is inviting you to join its Pre-Launch Event on 17 May 2014
+                       at The Green Lounge Events Place. An RSVP will be sent out to the registered
+                        sellers via email on 9 May 2014. See you there!
                     </p>
                     <p class="text-center txt_success">
                         Like us on and share
