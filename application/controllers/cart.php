@@ -13,15 +13,15 @@ class Cart extends MY_Controller{
         $this->load->model('cart_model');
     }
     
-    function check_product($id,$opt){
+       function check_product($id,$opt){
         $base = $this->product_model->getProduct($id);
         $base_price = $base['price'];
         $real_price = $base_price;
-        $product_attr_id = "0";
+    $product_attr_id = "0";
         if(!empty($opt)):
-	    $product_attr_id = "";
-	    $key =  array_keys($opt); //get the key of options,used in checking the product in the database
-	    $add_price = 0;
+        $product_attr_id = "";
+        $key =  array_keys($opt); //get the key of options,used in checking the product in the database
+        $add_price = 0;
             for($a=0;$a < sizeof($key);$a++){//check attr if exist and sum all the attr's price
                 $attr=$key[$a];
                 $attr_value=$opt[$key[$a]];
@@ -31,15 +31,31 @@ class Cart extends MY_Controller{
                 else:
                     return false;
                 endif;
-		$product_attr_id .= ($a === sizeof($key)-1 ? $sum['attr_id'] : $sum['attr_id'].",");
-		   
+        $product_attr_id .= ($a === sizeof($key)-1 ? $sum['attr_id'] : $sum['attr_id'].",");
+           
             }
 
             $real_price = $base_price +$add_price;
-        endif;	
-	$qty = $this->cart_model->getSpecificProductQuantity($id,$product_attr_id,$_POST['length']);
-	$_POST['max_qty'] = $qty[0]['quantity'];
-	
+        endif;  
+    //$qty = $this->cart_model->getSpecificProductQuantity($id,$product_attr_id,$_POST['length']);
+    $qty = $this->product_model->getProductQuantity($id);
+    $attr = explode(",",$product_attr_id);
+    foreach($attr as $attr_id){
+        foreach($qty as $key => $row){
+            $cnt = 0;
+            foreach($row['product_attribute_ids'] as $key2 => $row2){   
+                if($attr_id == $row2['id']){
+                    $cnt++;
+                }
+            }
+            if($cnt != 1){
+                unset($qty[$key]) ;
+            }
+        }
+    }
+    $max_qty = reset($qty)['quantity'];
+    $_POST['max_qty'] = $max_qty;
+    
         $data = array(
             'id'      => $_POST['id'],
             'qty'     => ($_POST['qty'] > $_POST['max_qty'] ? $_POST['max_qty'] : $_POST['qty'] ), //check if qty is > max qty,if its qty=maxqty else qty
@@ -48,8 +64,8 @@ class Cart extends MY_Controller{
             'options' => $opt,
             'img'     => $this->product_model->getProductImages($_POST['id']),
             'member_id'  => $base['sellerid'],
-            'product_itemID'  => $qty[0]['id_product_item'],
-	    'maxqty' => $qty[0]['quantity']
+            'product_itemID'  => $this->input->post("id"),
+            'maxqty' => $max_qty
             );
         return $data;
     }

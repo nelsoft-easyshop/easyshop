@@ -264,7 +264,8 @@ function paypal(){
     $itemList =  $carts['choosen_items'];
     $invoice_no = date('Ymhs'); 
     $ip = $this->user_model->getRealIpAddr();   
-    $productstring = "";  
+    $productstring = ""; 
+    $analytics = array();  
     
 
     $address = $this->memberpage_model->get_member_by_id($member_id); 
@@ -295,6 +296,7 @@ function paypal(){
                 $ItemTotalPrice += $total;  
             }
 
+            $productstring = substr($productstring,4);
             $response['itemList'] = $itemList;
             $grandTotal= ($ItemTotalPrice+$handling_amt+$insurance_amt)-$shipping_discount_amt;
 
@@ -306,54 +308,89 @@ function paypal(){
             '&AMT='.urlencode($grandTotal).
             '&CURRENCYCODE='.urlencode($PayPalCurrencyCode);
 
-            $httpParsedResponseArGECD =  $this->paypal->PPHttpPost('GetExpressCheckoutDetails', $padata, $PayPalApiUsername, $PayPalApiPassword, $PayPalApiSignature, $PayPalMode);
-            $apiResponseArray['GetExpressCheckoutDetails '] =  $httpParsedResponseArGECD;
-               
-            $httpParsedResponseAr = $this->paypal->PPHttpPost('DoExpressCheckoutPayment', $padata, $PayPalApiUsername, $PayPalApiPassword, $PayPalApiSignature, $PayPalMode);
-            $apiResponseArray['DoExpressCheckoutPayment'] = $httpParsedResponseAr;
+            $return = $this->payment_model->payment($paymentType,$invoice_no,$grandTotal,$ip,$member_id,$productstring,$productCount,"");
+            
+            if($return['o_success'] > 0){
+                
+                $httpParsedResponseArGECD =  $this->paypal->PPHttpPost('GetExpressCheckoutDetails', $padata, $PayPalApiUsername, $PayPalApiPassword, $PayPalApiSignature, $PayPalMode);
+                $apiResponseArray['GetExpressCheckoutDetails '] =  $httpParsedResponseArGECD;
+                   
+                $httpParsedResponseAr = $this->paypal->PPHttpPost('DoExpressCheckoutPayment', $padata, $PayPalApiUsername, $PayPalApiPassword, $PayPalApiSignature, $PayPalMode);
+                $apiResponseArray['DoExpressCheckoutPayment'] = $httpParsedResponseAr;
 
-            if(("SUCCESS" == strtoupper($httpParsedResponseAr["ACK"]) || "SUCCESSWITHWARNING" == strtoupper($httpParsedResponseAr["ACK"])) && ("SUCCESS" == strtoupper($httpParsedResponseArGECD["ACK"])))
-            {
-                $response['message_status'] = 'Your PayPal Transaction ID :'.urldecode($httpParsedResponseAr["TRANSACTIONID"]); 
-                // if('Completed' == $httpParsedResponseAr["PAYMENTSTATUS"]){
-                //     $response['message_status'] .= '<div style="color:green">Payment Received! Your product will be sent to you very soon!</div>';
-                // }elseif('Pending' == $httpParsedResponseAr["PAYMENTSTATUS"]){
-                //     $response['message_status'] .= '<div style="color:red">Transaction Complete, but payment is still pending! You need to manually authorize this payment in your <a target="_new" href="http://www.paypal.com">Paypal Account</a></div>';
-                // }
+                if(("SUCCESS" == strtoupper($httpParsedResponseAr["ACK"]) || "SUCCESSWITHWARNING" == strtoupper($httpParsedResponseAr["ACK"])) && ("SUCCESS" == strtoupper($httpParsedResponseArGECD["ACK"])))
+                {
+                    $response['message_status'] = 'Your PayPal Transaction ID :'.urldecode($httpParsedResponseAr["TRANSACTIONID"]); 
+                    // if('Completed' == $httpParsedResponseAr["PAYMENTSTATUS"]){
+                    //     $response['message_status'] .= '<div style="color:green">Payment Received! Your product will be sent to you very soon!</div>';
+                    // }elseif('Pending' == $httpParsedResponseAr["PAYMENTSTATUS"]){
+                    //     $response['message_status'] .= '<div style="color:red">Transaction Complete, but payment is still pending! You need to manually authorize this payment in your <a target="_new" href="http://www.paypal.com">Paypal Account</a></div>';
+                    // }
 
-                $transactionID = urlencode($httpParsedResponseAr["TRANSACTIONID"]);
-                $nvpStr = "&TRANSACTIONID=".$transactionID;
-                $httpParsedResponseAr =  $this->paypal->PPHttpPost('GetTransactionDetails', $nvpStr, $PayPalApiUsername, $PayPalApiPassword, $PayPalApiSignature, $PayPalMode);
-                $apiResponseArray['GetTransactionDetails'] =  $httpParsedResponseAr;
-  
-                if("SUCCESS" == strtoupper($httpParsedResponseAr["ACK"]) || "SUCCESSWITHWARNING" == strtoupper($httpParsedResponseAr["ACK"])) {
- 
-                    # START SAVING TO DATABASE HERE
-              
+                    $transactionID = urlencode($httpParsedResponseAr["TRANSACTIONID"]);
+                    $nvpStr = "&TRANSACTIONID=".$transactionID;
+                    $httpParsedResponseAr =  $this->paypal->PPHttpPost('GetTransactionDetails', $nvpStr, $PayPalApiUsername, $PayPalApiPassword, $PayPalApiSignature, $PayPalMode);
+                    $apiResponseArray['GetTransactionDetails'] =  $httpParsedResponseAr;
+      
+                    if("SUCCESS" == strtoupper($httpParsedResponseAr["ACK"]) || "SUCCESSWITHWARNING" == strtoupper($httpParsedResponseAr["ACK"])) {
+     
+                        # START SAVING TO DATABASE HERE
+                  
+                        $apiResponseArray['ProductData'] =  $carts['choosen_items'];
 
-                    $productstring = substr($productstring,4);
-                    $apiResponseArray['ProductData'] =  $carts['choosen_items'];
+                        // apiResponse 
+                        $apiResponse = json_encode($apiResponseArray);
+                        $complete = $this->payment_model->updatePaymentIfComplete($return['v_order_id'],$apiResponse);
+                         
+                        if($complete <= 0){
+                            $response['message'] = '
+                            <div style="color:red"><b>Error 4: </b>Someting went wrong. Please contact us immediately. Your INVOICE NUMBER: '.$return['invoice_no'].'</div>
+                            '; 
+                        }else{
+                            $response['completepayment'] = true;
+                            $response['message'] = '<div style="color:green">Your payment is completed through Paypal</div>';            
+                            $response = array_merge($response,$return);
+                            $this->removeItemFromCart();
+                            $this->session->unset_userdata('choosen_items');
 
-                    // apiResponse 
-                    $apiResponse = json_encode($apiResponseArray);
-                    $return = $this->payment_model->payment($paymentType,$invoice_no,$grandTotal,$ip,$member_id,$productstring,$productCount,$apiResponse);
-                    if($return['o_success'] <= 0){
-                        $response['message'] = '<div style="color:red"><b>Error 3: </b>'.$return['o_message'].'</div>'; 
+                            #google analytics data
+                            foreach ($itemList as $key => $value) {
+
+                                $product = $this->product_model->getProductPreview($value['id'],$value['member_id'],"0");
+                              
+                                $tempAnalytics = array(
+                                    'id' => $return['v_order_id'],
+                                    'affiliation' => $value['seller_username'],
+                                    'revenue' => $value['subtotal'],
+                                    'shipping'=> $value['otherFee'],
+                                    'tax'=> '0.00',
+                                    'currency' => 'PHP', 
+                                    'data' => array(
+                                        'id' => $return['v_order_id'],
+                                        'name' => $value['name'],
+                                        'sku' => $value['id'],
+                                        'category' => $product['category'],
+                                        'price' => $value['price'],
+                                        'quantity' => $value['qty']
+                                        )
+                                    );  
+                                    array_push($analytics, $tempAnalytics); 
+                            }
+                            #end of google analytics data
+                        }
                     }else{
-                        $response['message'] = '<div style="color:green">Your payment is completed through Paypal</div>';            
-                        $response = array_merge($response,$return);
-                        $this->removeItemFromCart();
-                        $this->session->unset_userdata('choosen_items');
+                        $response['message'] = '<div style="color:red"><b>Error 3: (GetTransactionDetails failed):</b>'.urldecode($httpParsedResponseAr["L_LONGMESSAGE0"]).'</div>';
                     }
                 }else{
-                    $response['message'] = '<div style="color:red"><b>Error 2: (GetTransactionDetails failed):</b>'.urldecode($httpParsedResponseAr["L_LONGMESSAGE0"]).'</div>';
+                    $response['message'] = '<div style="color:red"><b>Error 2: </b>'.urldecode($httpParsedResponseAr["L_LONGMESSAGE0"]).'</div>';
                 }
             }else{
-                $response['message'] = '<div style="color:red"><b>Error 1: </b>'.urldecode($httpParsedResponseAr["L_LONGMESSAGE0"]).'</div>';
+                $response['message'] = '<div style="color:red"><b>Error 1: </b>'.$return['o_message'].'</div>'; 
             }
         }
   
 
+        $response['analytics'] = $analytics;
         $member_id =  $this->session->userdata('member_id'); 
         $data['cat_item'] = $this->cart->contents();
         $data['title'] = 'Payment | Easyshop.ph';
@@ -395,6 +432,7 @@ function paypal(){
         $region = $cityDetails['parent_id'];
         $cityDetails = $this->payment_model->getCityOrRegionOrMajorIsland($region);
         $majorIsland = $cityDetails['parent_id']; 
+        $analytics = array(); 
 
         $otherFee = 0;
         $tax_amt = 0;
@@ -436,36 +474,37 @@ function paypal(){
         if($return['o_success'] <= 0){
             $response['message'] = '<div style="color:red"><b>Error 3: </b>'.$return['o_message'].'</div>'; 
         }else{
+            $response['completepayment'] = true;
             $response['message'] = '<div style="color:green">Your payment is completed through Cash on Delivery.</div>';
             $this->removeItemFromCart(); 
             $this->session->unset_userdata('choosen_items');
+            
+            #google analytics data
+            foreach ($itemList as $key => $value) {
+
+                $product = $this->product_model->getProductPreview($value['id'],$value['member_id'],"0");
+              
+                $tempAnalytics = array(
+                    'id' => $return['v_order_id'],
+                    'affiliation' => $value['seller_username'],
+                    'revenue' => $value['subtotal'],
+                    'shipping'=> $value['otherFee'],
+                    'tax'=> '0.00',
+                    'currency' => 'PHP', 
+                    'data' => array(
+                        'id' => $return['v_order_id'],
+                        'name' => $value['name'],
+                        'sku' => $value['id'],
+                        'category' => $product['category'],
+                        'price' => $value['price'],
+                        'quantity' => $value['qty']
+                        )
+                    );  
+                    array_push($analytics, $tempAnalytics); 
+            }
         }   
 
-        #google analytics data
-        # 
-        $analytics = array(); 
-        foreach ($itemList as $key => $value) {
-
-            $product = $this->product_model->getProductPreview($value['id'],$value['member_id'],"0");
-          
-            $tempAnalytics = array(
-                'id' => $return['v_order_id'],
-                'affiliation' => $value['seller_username'],
-                'revenue' => $value['subtotal'],
-                'shipping'=> $value['otherFee'],
-                'tax'=> '0.00',
-                'currency' => 'PHP', 
-                'data' => array(
-                    'id' => $return['v_order_id'],
-                    'name' => $value['name'],
-                    'sku' => $value['id'],
-                    'category' => $product['category'],
-                    'price' => $value['price'],
-                    'quantity' => $value['qty']
-                    )
-                );  
-                array_push($analytics, $tempAnalytics); 
-        }
+        
 
         $response['analytics'] = $analytics;
         $response = array_merge($response,$return);  
