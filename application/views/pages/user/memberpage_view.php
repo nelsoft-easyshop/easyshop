@@ -1208,12 +1208,7 @@
 					</div>
 					<div id="bi-left" style="float:left; width:inherit;">
 							<div class="profile_fields" id="bi_div_bictr<?php echo $rows; ?>">
-								<div class="inner_profile_fields progress_update update_once">
-									<div>
-										<label for="bi_chk_bictr<?php echo $rows; ?>">Default Bank: </label>
-										<input type="checkbox" name="bi_chk_bictr<?php echo $rows; ?>" id="bi_chk_bictr<?php echo $rows; ?>" value="1" disabled="disabled" <?php echo $bi_checked; ?>>
-										<input type="hidden" name="hbi_chk_bictr<?php echo $rows; ?>" id="hbi_chk_bictr<?php echo $rows; ?>" value ="<?php echo $bi_checked_val;?>"/>
-									</div>			
+								<div class="inner_profile_fields progress_update update_once">		
 									<div>						
 										<label for="bi_ban_bictr<?php echo $rows; ?>">Account Name: </label>
 										<input type="text" name="bi_ban_bictr<?php echo $rows; ?>" id="bi_ban_bictr<?php echo $rows; ?>" value ="<?php echo $billing_info['bank_account_name'];?>" disabled="disabled" maxlength="60"/>
@@ -1233,6 +1228,11 @@
 										<input type="hidden" name="hbi_bn_bictr<?php echo $rows; ?>" id="hbi_bn_bictr<?php echo $rows; ?>" value ="<?php echo $billing_info['bank_name'];?>"/>
 										<span class="red ci_form_validation_error"><?php #echo form_error('bi_acct_name');?></span>
 									</div>
+									<div>
+										<label for="bi_chk_bictr<?php echo $rows; ?>">Default Bank: </label>
+										<input type="checkbox" name="bi_chk_bictr<?php echo $rows; ?>" id="bi_chk_bictr<?php echo $rows; ?>" value="1" disabled="disabled" <?php echo $bi_checked; ?>>
+										<input type="hidden" name="hbi_chk_bictr<?php echo $rows; ?>" id="hbi_chk_bictr<?php echo $rows; ?>" value ="<?php echo $bi_checked_val;?>"/>
+									</div>										
 								</div>
 							</div>	
 					</div>
