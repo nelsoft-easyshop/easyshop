@@ -86,8 +86,10 @@ class Payment extends MY_Controller{
             if($city > 0){  
                 $details = $this->payment_model->getShippingDetails($productId,$itemId,$city,$region,$majorIsland);
                 $successcount = (count($details) >= 1 ? $successcount + 1 && $availability = "Available" && $itemArray[$value['rowid']]['shipping_fee'] = $details[0]['price'] : $successcount + 0);
+                if(count($details) > 0){
                 $codCount = ($details[0]['is_cod'] >= 1 ? $codCount + 1: $codCount + 0);
                 $itemArray[$value['rowid']]['cash_delivery'] = $details[0]['is_cod'];
+                }
                 $data['shippingDetails'] = true; 
             } 
                 $seller = $value['member_id'];
