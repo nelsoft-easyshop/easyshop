@@ -33,6 +33,15 @@
 	)
 </select>
 
+<select id="updatePaymentIfComplete">
+	UPDATE 
+	  es_order 
+	SET
+	  `order_status` = 0
+	  , `data_response` = :data 
+	WHERE `id_order` = :id_order 
+</select>
+
 <!--
 <select id="getTransactionDetails">
 	SELECT o.id_order, buyer.username as buyer, buyer.email as buyer_email, DATE_FORMAT(o.dateadded, "%D %M %Y") as dateadded, o.total as totalprice, op.id_order_product, seller.id_member as seller_id, seller.username as seller, seller.email as seller_email, p.name, op.order_quantity, op.price as baseprice, op.tax, op.total as finalprice, attr.name as attr_name, pattr.attr_value

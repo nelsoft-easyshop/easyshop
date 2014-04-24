@@ -42,6 +42,23 @@ class payment_model extends CI_Model
         return $row;
         
     }
+
+    function updatePaymentIfComplete($id,$data)
+    {
+        $query = $this->sqlmap->getFilenameID('payment','updatePaymentIfComplete');
+    	$sth = $this->db->conn_id->prepare($query);
+    	$sth->bindParam(':data',$data,PDO::PARAM_STR);
+    	$sth->bindParam(':id_order',$id,PDO::PARAM_INT);
+    	
+    	if ($sth->execute()){
+		  // success
+    		return 1;
+		}
+		else{
+		  	return 0;
+		}
+ 
+    }
 	
 	
 	public function sendNotificationEmail($data, $email, $string)
