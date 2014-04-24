@@ -286,7 +286,7 @@ class productUpload extends MY_Controller
 					exit();
 				}
 				$x++;
-			} 
+			}
 			$x = 0; 
 
 			if(!empty($_FILES['prod_other_img']['name'][0])){
@@ -556,7 +556,7 @@ class productUpload extends MY_Controller
                         exit();
                     }
                 }else {
-                	$data =  '{"e":"0","d":"'.strip_tags($this->upload->display_errors()).'"}';
+                	$data =  '{"e":"0","d":"'.strip_tags($this->upload->display_errors()).'. Only Letters, Numbers, Hypens and Underscore allowed in file name."}';
                 	echo $data;
                 	exit();
                 }
