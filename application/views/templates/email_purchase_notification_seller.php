@@ -18,7 +18,7 @@
 							Dear {seller_name},
 						</p>
 						<p>
-							Thank you for selling through Easyshop.ph! Below are the transaction details for the item you sold.
+							Thank you for selling through Easyshop.ph! Details for the item(s) you've sold are as follows:
 						</p>
 					</td>
 				</tr>
@@ -31,9 +31,10 @@
         	<tbody>
 				<tr>
 					<td>
-						<span style="display:inline-block;font-weight:bold;width:100px;">Transaction # :</span> {id_order} <br>
+						<span style="display:inline-block;font-weight:bold;width:100px;">Invoice # :</span> {invoice_no} <br>
 						<span style="display:inline-block;font-weight:bold;width:100px;">Date :</span> {dateadded} <br>
-						<span style="display:inline-block;font-weight:bold;width:100px;">Total Price :</span> {totalprice}<br><br>
+						<span style="display:inline-block;font-weight:bold;width:100px;">Total Price :</span> Php {totalprice}<br>
+						<span style="display:inline-block;font-weight:bold;width:100px;">Sold to :</span> {buyer_name} <br><br>
 					</td>
 				</tr>
 				<tr>
@@ -48,11 +49,11 @@
 				            <tbody>
 				              <tr>
 				                <td>
-									<span style="display:inline-block;font-weight:bold;width:100px;">Sold to :</span> {buyer_name} <br>
+									<span style="display:inline-block;font-weight:bold;width:100px;">Product Order #: </span>{order_product_id} <br>
 									<span style="display:inline-block;font-weight:bold;width:100px;">Product :</span> {name} <br>
 									<span style="display:inline-block;font-weight:bold;width:100px;">Qty :</span> {order_quantity} <br>
-									<span style="display:inline-block;font-weight:bold;width:100px;">Base Price :</span> {baseprice} <br>
-									<span style="display:inline-block;font-weight:bold;width:100px;">Tax :</span> {tax} <br>
+									<span style="display:inline-block;font-weight:bold;width:100px;">Base Price :</span> Php {baseprice} <br>
+									<span style="display:inline-block;font-weight:bold;width:100px;">Tax :</span> Php {tax} <br>
 									<span style="display:inline-block;font-weight:bold;width:100px;">Final Price :</span> Php {finalprice} <br>
 									<span style="display:inline-block;font-weight:bold;width:100px;">Product Specifications:</span> <br>
 									{attr}
