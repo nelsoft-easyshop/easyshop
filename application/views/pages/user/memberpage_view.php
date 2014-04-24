@@ -1513,7 +1513,7 @@
 </div>
 
 <div id="map_modalcont" style="display:none;">
-	<div id="tsold_mapview" style="height: 300px; width: 500px; "></div>
+	<div id="tsold_mapview" style="height: 400px; width: 650px; "></div>
 </div>
 
 <div id="sold" class="transactions-sell dashboard_table">

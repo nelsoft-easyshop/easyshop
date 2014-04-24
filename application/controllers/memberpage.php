@@ -396,7 +396,7 @@ class Memberpage extends MY_Controller
 			$serverResponse['error'] = array();
 			$serverResponse['result'] = $result['o_success'] >= 1 ? 'success':'fail';
 			
-			if(!$emailstat){
+			if(!$emailstat && $result['o_success'] >= 1){
 				array_push($serverResponse['error'], 'Failed to send notification email.');
 			}
 			if($result['o_success'] < 1){

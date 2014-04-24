@@ -2366,7 +2366,7 @@ padding: 8px 0;
 	text-decoration: underline;
 }
 
-#refresh_map:after { 
+.refresh_map:after { 
     border-right: 1px solid #CECECE;
     content: " ";
     display: inline-block;
