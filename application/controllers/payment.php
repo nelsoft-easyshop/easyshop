@@ -66,10 +66,12 @@ class Payment extends MY_Controller{
         $member_id =  $this->session->userdata('member_id');
         $address = $this->memberpage_model->get_member_by_id($member_id);
         $city = ($address['c_stateregionID'] > 0 ? $address['c_stateregionID'] :  0);
-        $cityDetails = $this->payment_model->getCityOrRegionOrMajorIsland($city);
-        $region = $cityDetails['parent_id'];
-        $cityDetails = $this->payment_model->getCityOrRegionOrMajorIsland($region);
-        $majorIsland = $cityDetails['parent_id'];
+        if($city > 0){  
+            $cityDetails = $this->payment_model->getCityOrRegionOrMajorIsland($city);
+            $region = $cityDetails['parent_id'];
+            $cityDetails = $this->payment_model->getCityOrRegionOrMajorIsland($region);
+            $majorIsland = $cityDetails['parent_id'];
+        }
         $itemCount = count($itemArray);
         $successcount = 0;
         $codCount = 0;
@@ -83,16 +85,15 @@ class Payment extends MY_Controller{
 
             if($city > 0){  
                 $details = $this->payment_model->getShippingDetails($productId,$itemId,$city,$region,$majorIsland);
-                $seller = $value['member_id'];
                 $successcount = (count($details) >= 1 ? $successcount + 1 && $availability = "Available" && $itemArray[$value['rowid']]['shipping_fee'] = $details[0]['price'] : $successcount + 0);
                 $codCount = ($details[0]['is_cod'] >= 1 ? $codCount + 1: $codCount + 0);
+                $itemArray[$value['rowid']]['cash_delivery'] = $details[0]['is_cod'];
+                $data['shippingDetails'] = true; 
+            } 
+                $seller = $value['member_id'];
                 $sellerDetails = $this->memberpage_model->get_member_by_id($seller);
                 $itemArray[$value['rowid']]['availability'] = ($availability == "Available" ? true : false);
                 $itemArray[$value['rowid']]['seller_username'] = $sellerDetails['username'];
-                $itemArray[$value['rowid']]['cash_delivery'] = $details[0]['is_cod'];
-                $data['shippingDetails'] = true; 
-
-            } 
         }  
         if(!count($carts['choosen_items']) <= 0){  
             $data['cat_item'] = $itemArray;

@@ -40,6 +40,7 @@ class Cart extends MY_Controller{
     //$qty = $this->cart_model->getSpecificProductQuantity($id,$product_attr_id,$_POST['length']);
     $qty = $this->product_model->getProductQuantity($id);
     $attr = explode(",",$product_attr_id);
+    $productItemId = 0;
     foreach($attr as $attr_id){
         foreach($qty as $key => $row){
             $cnt = 0;
@@ -50,6 +51,9 @@ class Cart extends MY_Controller{
             }
             if($cnt != 1){
                 unset($qty[$key]) ;
+            }
+            if($cnt == 1){
+                $productItemId = $key;
             }
         }
     }
@@ -64,7 +68,7 @@ class Cart extends MY_Controller{
             'options' => $opt,
             'img'     => $this->product_model->getProductImages($_POST['id']),
             'member_id'  => $base['sellerid'],
-            'product_itemID'  => $this->input->post("id"),
+            'product_itemID'  => $productItemId,
             'maxqty' => $max_qty
             );
         return $data;
