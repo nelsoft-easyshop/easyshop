@@ -1692,7 +1692,7 @@ select:focus:invalid:focus {
 .input-prepend select,
 .input-append .uneditable-input,
 .input-prepend .uneditable-input {
-  position: relative;
+  /*position: relative;                                   edited by kurt*/
   margin-bottom: 0;
   *margin-left: 0;
   vertical-align: top;

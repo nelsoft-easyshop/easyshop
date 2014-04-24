@@ -27,13 +27,13 @@ body {
 }
 
 .login_btn {
+    position: fixed;
+    text-align: center;
     line-height: 16px;
     font-size: 18px;
-    display: inline-block;
-    
-    float: right;
+    display: none;
+    width: 100%;
     background-color: #002f70;
-    margin-top: 20px;
       -webkit-border-radius: 3px;
      -moz-border-radius: 3px;
           border-radius: 3px;
@@ -66,7 +66,7 @@ body {
     background: url("/assets/images/landingpage/img_logo_shadow.png") top center no-repeat;
     height: 160px;
     margin: 0 auto;
-    width: 840px;
+    width: 100%;
 }
 
 .lnk_logo {
@@ -498,6 +498,43 @@ input.error + span.error {
 /**********************************************************************************/
 /********************************* Media Queries **********************************/
 /**********************************************************************************/
+
+ @media (width:980px) {
+    
+    .himg2 {
+        width: 95% ;
+    }
+    
+ }
+ @media (max-width:800px) {
+    
+    .himg2 {
+        background: none;
+        text-align: center;
+    }
+    .txt_header2{
+        padding-left: 0px;
+    }
+    .hs_top{
+        width:100%;
+    }
+    .header_bg{
+        height: 687px;
+    }
+ }
+ 
+ @media (max-width:360px) {    
+    .header_bg{
+        height: 1010px;
+    }
+ }
+ @media (max-width:2000px) {    
+    .himg2 {
+    min-height: 419px;
+    }
+ }
+/* kurtpogi*/
+
  @media (min-width:979px) {
  .container .span6:not(:first-child) {
     padding-left: 10px;
