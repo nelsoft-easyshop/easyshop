@@ -121,20 +121,20 @@ class Cart extends MY_Controller{
     }
     
     function index(){
+        $data = $this->fill_header();
         if($this->session->userdata('usersession')){
-		$id = $this->session->userdata('usersession');
-                $carts=$this->cart->contents();
-		$data['title'] = 'Cart | Easyshop.ph';
-		$data['page_javascript'] = 'assets/JavaScript/cart.js';
-		$data['cart_items'] = $carts;
-		$data['total'] = number_format( $this->cart->total(),2,'.',',');
-		$data = array_merge($data,$this->fill_header());
-		$this->load->view('templates/header', $data);
-		$this->load->view('pages/cart/mycart_view', $data);
-		$this->load->view('templates/footer_full');
-	}else{
+            $id = $this->session->userdata('usersession');
+            $carts=$this->cart->contents();
+            $data['title'] = 'Cart | Easyshop.ph';
+            $data['page_javascript'] = 'assets/JavaScript/cart.js';
+            $data['cart_items'] = $carts;
+            $data['total'] = number_format( $this->cart->total(),2,'.',',');
+            $this->load->view('templates/header', $data);
+            $this->load->view('pages/cart/mycart_view', $data);
+            $this->load->view('templates/footer_full');
+        }else{
             redirect(base_url().'home', 'refresh');
-	}
+        }
     }
 	
     function cart_size(){

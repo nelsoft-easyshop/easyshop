@@ -16,10 +16,12 @@ class Memberpage extends MY_Controller
 	}
 
 	function index()
-	{
-		if(!$this->session->userdata('member_id'))
-			redirect(base_url().'home', 'refresh');
-		$data = $this->fill_view();
+	{        
+        $data = $this->fill_header();
+		if(!$this->session->userdata('member_id')){
+            redirect(base_url().'home', 'refresh');
+        }
+		$data = array_merge($data, $this->fill_view());
 
 		$this->load->view('templates/header_topnavsolo', $data);
 		$this->load->view('pages/user/memberpage_view', $data);
@@ -160,7 +162,6 @@ class Memberpage extends MY_Controller
 				'deleted_products' => $user_products['deleted'],
                 'sold_count' => $user_products['sold_count'],
                 ); 
-		$data = array_merge($data, $this->fill_header());
 		$data = array_merge($data, $this->memberpage_model->getLocationLookup());
 		$data = array_merge($data,$this->memberpage_model->get_member_by_id($uid));
 		$data = array_merge($data,$this->memberpage_model->get_work_by_id($uid));
@@ -186,7 +187,7 @@ class Memberpage extends MY_Controller
 		$this->load->library('image_lib');
 		$result = $this->memberpage_model->upload_img($uid, $data);
 		//echo error may be here: $result['error']
-		redirect('memberpage');
+		redirect('me');
 	}
 
 	public function external_callbacks( $postdata, $param )

@@ -10,7 +10,7 @@ class MY_Controller extends CI_Controller
 		$this->config->set_item('base_url',"https://".$_SERVER["SERVER_NAME"]."/");
         $this->load->model("user_model");
 		$this->load->model("cart_model");
-		$this->load->model("product_model");
+        $this->load->model("product_model");
 		$this->load->vars(
 			array('my_csrf' => array(
 				'csrf_name' => $this->security->get_csrf_token_name(),
@@ -20,6 +20,9 @@ class MY_Controller extends CI_Controller
 		);
 	}
 	
+    #fill_header is not run in the constructor of MY_Controller despite that fact that all pages need it
+    #because it would add unnecessary overhead for all ajax calls. Instead it is called only in the 
+    #controller functions that need it
 	function fill_header()
 	{	
 		$usersession = $this->session->userdata('usersession');
@@ -71,7 +74,6 @@ class MY_Controller extends CI_Controller
 		}
 		else
 			return false;
-
 	}
     
     

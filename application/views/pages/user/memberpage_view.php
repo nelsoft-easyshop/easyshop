@@ -1127,7 +1127,7 @@
 <div class="profile_main_content" id="payment">
 	<h2>Update your payment details</h2>
 	<p>
-		Any changes to banking information after the 15th day of the month will not be in effect until the following month's payment.
+	<!--	Any changes to banking information after the 15th day of the month will not be in effect until the following month's payment. -->
 	</p>
 	<hr style="display: block; height: 1px; border: 0; border-top: 1px solid #ccc; margin: 1em 0; padding: 0;" />
 	<div align="right">
