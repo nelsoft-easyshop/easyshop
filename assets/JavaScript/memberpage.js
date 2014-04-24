@@ -1810,29 +1810,6 @@ $(document).ready(function(){
 		
 		$("#billing_info_x").find('div[id*=bi_check_bictr]').hide();
 		
-		var banRule = {
-			required: true,
-			messages: {
-				required: "* Account Name Required"
-			}
-		}
-
-		var barRule = {
-//			required: true, minlength: 12, maxlength: 18, 
-			required: true,  
-			messages: {
-				required: "* Account Number Required",
-//				minlength: jQuery.format("At least {0} characters are necessary")
-			}
-		}
-		
-		var bnRule = {
-			required: true,
-			messages: {
-				required: "* Bank Required"
-			}
-		}			
-
 		var bictr = $(this).attr('name');
 		var ban = 'bi_ban_' + bictr;
 		var bar = 'bi_bar_' + bictr;
@@ -1855,106 +1832,150 @@ $(document).ready(function(){
 		var bankname = $('#bi_bn_' + bictr).val();	
 		$('#bi_bns_' + bictr).getbank(bankname).show();
 			
-		// Cancel
-		$("#cn_"+bictr).click(function(){
-			
-			$(":input[name^='hbi_chk_bictr']").filter(function(){
-				
-				var hid = $(this).attr('id');
-				var fid = hid.substring(1,30);
-				
-				if($(this).val() == "checked"){
-					$("#"+fid).prop("checked", true);
-				}else{
-					$("#"+fid).prop("checked", false);
-				}
-			});
-			
-			$("#"+ban).val($("#h"+ban).val());
-			$("#"+bar).val($("#h"+bar).val());
-			$("#"+bn).val($("#h"+bn).val());
-			
-			$("#"+ban).prop("disabled", true);
-			$("#"+bar).prop("disabled", true);
-			$("#"+bn).prop("disabled", true);
-			$("#"+bch).prop("disabled", true);			
-
-			$("#sv_"+bictr+", #cn_"+bictr+", #bi_bns_"+bictr).hide();		
-			$("#del_"+bictr+", #"+bictr+", #bi_bn_"+bictr).show();
-			$(":button[name^='bictr']").prop("disabled", false);
-			$(":button[name^='del_bictr']").prop("disabled", false);
-           
-            $(this).closest('form').find('span.error').remove();
-		});
+	});
+	
+	// Cancel Button
+	$(":button[name^='cn_bictr']").click(function(){
 		
-		// Save
-		$("#sv_"+bictr).click(function(){
+		var getbictr = $(this).attr('name');
+		var bictr = getbictr.substring(3,99);
+		
+		var ban = 'bi_ban_' + bictr;
+		var bar = 'bi_bar_' + bictr;
+		var bn = 'bi_bn_' + bictr;
+		var bns = 'bi_bns_' + bictr;
+		var bid = 'bi_id_' + bictr;
+		var bch = 'bi_chk_' + bictr;
+		
+		$(":input[name^='hbi_chk_bictr']").filter(function(){
 			
-			var updt = confirm("Update bank info?");
-            
-			if(updt){
-				 $("#ubi_"+bictr).validate({
-					errorElement: "span",
-					errorPlacement: function(error, element){
-							error.addClass('red');
-							error.appendTo(element.parent());
-					}		
-				 });
-				
-				$("[name='bi_ban_"+bictr+"']").rules("add", banRule);
-				$("[name='bi_bar_"+bictr+"']").rules("add", barRule);
-				$("[name='bi_bn_"+bictr+"']").rules("add", bnRule);
-				
-				var csrftoken = $('#personal_profile_address').find('input[name^="es_csrf"]').val();
-				var banval = $("#"+ban).val();
-				var barval = $("#"+bar).val();
-				var bnval = $("#"+bns).val();
-				var bntit = $("#"+bns).find("option:selected").attr("title");
-				var bidval = $("#"+bid).val();
-				var bchval = $("#"+bch).val();			
-				var currentRequest = null;
-				
-				var redurl =  config.base_url+'memberpage/billing_info_u';
-				if($("#ubi_"+bictr).valid()){	
-					currentRequest = jQuery.ajax({
-						type: "POST",
-						url: redurl, 
-						data: {bi_acct_name:banval, bi_acct_no:barval, bi_bank:bnval, bi_id:bidval, bi_def:bchval, es_csrf_token:csrftoken},
-						success: function(data){
-							
-							$(":checkbox[name^='bi_chk_bictr']").filter(function(){
-								var hid = $(this).attr('id');
-								if($(this).prop("checked") == true){
-									$("#h"+hid).val("checked");
-								}else{
-									$("#h"+hid).val("");
-								}
-							});							
-							
-							$("#bi_check_"+bictr).show();
-							$("#h"+ban).val($("#"+ban).val());
-							$("#h"+bar).val($("#"+bar).val());
-							$("#h"+bn).val(bntit);
-							$("#"+bn).val(bntit);							
-							
-							$("#"+ban).prop("disabled", true);
-							$("#"+bar).prop("disabled", true);
-							$("#"+bn).prop("disabled", true);
-							$("#"+bch).prop("disabled", true);			
-				
-							$("#sv_"+bictr+", #cn_"+bictr+", #bi_bns_"+bictr).hide();		
-							$("#del_"+bictr+", #"+bictr+", #bi_bn_"+bictr).show();
-							$(":button[name^='bictr']").prop("disabled", false);
-							$(":button[name^='del_bictr']").prop("disabled", false);							
-							return false;
-						}
-					});		
-				}	
+			var hid = $(this).attr('id');
+			var fid = hid.substring(1,30);
+			
+			if($(this).val() == "checked"){
+				$("#"+fid).prop("checked", true);
 			}else{
-				return false;
+				$("#"+fid).prop("checked", false);
 			}
 		});
+		
+		$("#"+ban).val($("#h"+ban).val());
+		$("#"+bar).val($("#h"+bar).val());
+		$("#"+bn).val($("#h"+bn).val());
+		
+		$("#"+ban).prop("disabled", true);
+		$("#"+bar).prop("disabled", true);
+		$("#"+bn).prop("disabled", true);
+		$("#"+bch).prop("disabled", true);			
+
+		$("#sv_"+bictr+", #cn_"+bictr+", #bi_bns_"+bictr).hide();		
+		$("#del_"+bictr+", #"+bictr+", #bi_bn_"+bictr).show();
+		$(":button[name^='bictr']").prop("disabled", false);
+		$(":button[name^='del_bictr']").prop("disabled", false);
+	   
+		$(this).closest('form').find('span.error').remove();
 	});
+	
+	// Save Button
+	$(":button[name^='sv_bictr']").click(function(){
+		
+		var banRule = {
+			required: true,
+			messages: {
+				required: "* Account Name Required"
+			}
+		}
+
+		var barRule = {
+//			required: true, minlength: 12, maxlength: 18, 
+			required: true,  
+			messages: {
+				required: "* Account Number Required",
+//				minlength: jQuery.format("At least {0} characters are necessary")
+			}
+		}
+		
+		var bnRule = {
+			required: true,
+			messages: {
+				required: "* Bank Required"
+			}
+		}			
+		
+		var getbictr = $(this).attr('name');
+		var bictr = getbictr.substring(3,99);
+		
+		var ban = 'bi_ban_' + bictr;
+		var bar = 'bi_bar_' + bictr;
+		var bn = 'bi_bn_' + bictr;
+		var bns = 'bi_bns_' + bictr;
+		var bid = 'bi_id_' + bictr;
+		var bch = 'bi_chk_' + bictr;
+		var updt = confirm("Update bank info?");
+		
+		if(updt){
+			 $("#ubi_"+bictr).validate({
+				errorElement: "span",
+				errorPlacement: function(error, element){
+						error.addClass('red');
+						error.appendTo(element.parent());
+				}		
+			 });
+			
+			$("[name='bi_ban_"+bictr+"']").rules("add", banRule);
+			$("[name='bi_bar_"+bictr+"']").rules("add", barRule);
+			$("[name='bi_bn_"+bictr+"']").rules("add", bnRule);
+			
+			var csrftoken = $('#personal_profile_address').find('input[name^="es_csrf"]').val();
+			var banval = $("#"+ban).val();
+			var barval = $("#"+bar).val();
+			var bnval = $("#"+bns).val();
+			var bntit = $("#"+bns).find("option:selected").attr("title");
+			var bidval = $("#"+bid).val();
+			var bchval = $("#"+bch).val();			
+			var currentRequest = null;
+			
+			var redurl = config.base_url+'memberpage/billing_info_u';
+			if($("#ubi_"+bictr).valid()){	
+				currentRequest = jQuery.ajax({
+					type: "POST",
+					url: redurl, 
+					data: {bi_acct_name:banval, bi_acct_no:barval, bi_bank:bnval, bi_id:bidval, bi_def:bchval, es_csrf_token:csrftoken},
+					success: function(data){
+						
+						$(":checkbox[name^='bi_chk_bictr']").filter(function(){
+							var hid = $(this).attr('id');
+							if($(this).prop("checked") == true){
+								$("#h"+hid).val("checked");
+							}else{
+								$("#h"+hid).val("");
+							}
+						});							
+						
+						$("#bi_check_"+bictr).show().delay(1600).fadeOut(600);
+						$("#h"+ban).val($("#"+ban).val());
+						$("#h"+bar).val($("#"+bar).val());
+						$("#h"+bn).val(bntit);
+						$("#"+bn).val(bntit);							
+						
+						$("#"+ban).prop("disabled", true);
+						$("#"+bar).prop("disabled", true);
+						$("#"+bn).prop("disabled", true);
+						$("#"+bch).prop("disabled", true);			
+			
+						$("#sv_"+bictr+", #cn_"+bictr+", #bi_bns_"+bictr).hide();		
+						$("#del_"+bictr+", #"+bictr+", #bi_bn_"+bictr).show();
+						$(":button[name^='bictr']").prop("disabled", false);
+						$(":button[name^='del_bictr']").prop("disabled", false);							
+						return false;
+					}
+				});		
+			}	
+		}else{
+			return false;
+		}
+	});
+	
 	
 	/////// END /////////////////////////////////////////////////////////////
 
