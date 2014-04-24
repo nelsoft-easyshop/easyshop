@@ -2,7 +2,8 @@
 
 class user_model extends CI_Model {
 
-    function __construct() {
+    function __construct() 
+    {
         parent::__construct();
         $this->load->library("sqlmap");
     }

@@ -55,7 +55,14 @@ $(document).ready(function(){
                         $('#login').val('Redirecting...');
                         $('#login')[0].disabled = true;
                         $('#login').show();
-                        window.location = config.base_url+$.cookie('rn');
+                        var url = $('#redirect_url').val();
+                        var first_uri_segment = url.substring(0, url.indexOf('/'));
+                        if((url == 'sell/step1')||(first_uri_segment == 'item')){
+                            window.location = config.base_url+ url;
+                        }
+                        else{
+                            window.location = config.base_url+ 'home';
+                        }                        
                     }
                 }
             });

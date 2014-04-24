@@ -65,6 +65,7 @@
       </div>
 
     </section>
+   <input type='hidden' value='<?php echo $url?>' id='redirect_url'/>
    <div class="clear"></div>
 
    

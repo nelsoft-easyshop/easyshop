@@ -21,7 +21,7 @@ class Login extends MY_Controller {
 		$data = array_merge($data, $this->fill_header());
         $view = 'login_view';
         $this->load->view('templates/header_plain', $data);
-        $this->load->view('pages/user/login_view');
+        $this->load->view('pages/user/login_view', array('url' => $this->session->userdata('uri_string'),));
         $this->load->view('templates/footer');
     }
 

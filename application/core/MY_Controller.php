@@ -18,6 +18,13 @@ class MY_Controller extends CI_Controller
 				)
 			)
 		);
+        
+        $url = uri_string();
+        if($url != 'login'){
+            $this->session->set_userdata('uri_string', $url);
+        }
+        
+        
 	}
 	
     #fill_header is not run in the constructor of MY_Controller despite that fact that all pages need it
