@@ -458,7 +458,7 @@ $(function(){
             var i_id = $(".id-class").attr("id");
             var i_name =  $("#pname").text().trim();
             var i_qty =  $(".product_quantity").val();
-            var i_loc =  $(".shiploc").val();
+            //var i_loc =  $(".shiploc").val();
             var i_price =  $(".current_price").text().trim();
             var i_opt = {};
             var length = parseInt($('.product_option').length) - 1;
