@@ -84,7 +84,7 @@ class payment_model extends CI_Model
 		}
 		
 		$this->email->to($email);
-		//$this->email->to('janz.stephen@gmail.com');
+		//$this->email->to('janz.stephen@gmail.com'); // Test
 		
 		$this->email->message($msg);
 		$result = $this->email->send();
@@ -104,16 +104,15 @@ class payment_model extends CI_Model
 	 *103	Invalid Options
 	 *104	Gateway Down
 	 */
-	//function sendNotificationMobile($mobile,$user)
-	function sendNotificationMobile()
+	function sendNotificationMobile($mobile, $msg)
 	{
 		$fields = array();
 		$fields["api"] = "dgsMQ8q77hewW766aqxK";
 		
-		$fields["number"] = 9177050441; //safe use 63
-		//$fields["number"] = $mobile;
+		//$fields["number"] = 9177050441; //safe use 63
+		$fields["number"] = $mobile;
 		
-		$fields["message"] = 'Test message';
+		$fields["message"] = $msg;
 		$fields["from"] = 'Easyshop.ph';
 		$fields_string = http_build_query($fields);
 		$outbound_endpoint = "http://api.semaphore.co/api/sms";
@@ -133,18 +132,16 @@ class payment_model extends CI_Model
 	 *  $data = array(
 	 *		'member_id' => Member ID who made the purchase (buyerID)
 	 *		'order_id'	=> Transaction Number
+	 *		'invoice_no' => Invoice number
 	 *	)
 	 */
 	public function getPurchaseTransactionDetails($data)
 	{
-		//devcode
-		//$data['member_id'] = 74;
-		//$data['order_id'] = 102;
-		
 		$query = $this->sqlmap->getFilenameID('payment','getPurchaseTransactionDetails');
         $sth = $this->db->conn_id->prepare($query);
         $sth->bindParam(':buyer_id',$data['member_id']);
         $sth->bindParam(':order_id',$data['order_id']);
+		$sth->bindParam(':invoice_no', $data['invoice_no']);
 		$sth->execute();
         $row = $sth->fetchAll(PDO::FETCH_ASSOC);
 		
@@ -153,7 +150,9 @@ class payment_model extends CI_Model
 			'dateadded' => $row[0]['dateadded'],
 			'buyer_name' => $row[0]['buyer'],
 			'buyer_email' => $row[0]['buyer_email'],
+			'buyer_contactno' => $row[0]['buyer_contactno'],
 			'totalprice' => $row[0]['totalprice'],
+			'invoice_no' => $row[0]['invoice_no'],
 			'products' => array()
 		);
 		
@@ -161,31 +160,34 @@ class payment_model extends CI_Model
 			$temp = $value;
 			if(!isset($data['products'][$value['id_order_product']])){
 				$data['products'][$value['id_order_product']] = array_slice($temp,6,8);
+				$data['products'][$value['id_order_product']]['order_product_id'] = $temp['id_order_product'];
 			}
 			
 			if(!isset($data['seller'][$value['seller_id']])){
 				$data['seller'][$value['seller_id']]['email'] = $value['seller_email'];
 				$data['seller'][$value['seller_id']]['seller_name'] = $value['seller'];
+				$data['seller'][$value['seller_id']]['seller_contactno'] = $value['seller_contactno'];
 				$data['seller'][$value['seller_id']]['totalprice'] = 0;
 			}
 			if(!isset($data['seller'][$value['seller_id']]['products'][$value['id_order_product']])){
 				$data['seller'][$value['seller_id']]['products'][$value['id_order_product']] = array_slice($temp,9,5);
-				$data['seller'][$value['seller_id']]['totalprice'] += $value['baseprice'];
+				$data['seller'][$value['seller_id']]['totalprice'] += $value['finalprice'];
+				$data['seller'][$value['seller_id']]['products'][$value['id_order_product']]['order_product_id'] = $value['id_order_product'];
 			}
 			
-			if( $value['is_other'] == 0 ){
-				$newattr = array(
-					'attr_name' => $temp['attr_name'],
-					'attr_value' => $temp['attr_value']
-				);
-			}else if( $value['is_other'] == 1 ){
-				$newattr = array(
-					'attr_name' => $temp['field_name'],
-					'attr_value' => $temp['value_name']
-				);
+			if(!isset($data['products'][$value['id_order_product']]['attr'])){
+				$data['products'][$value['id_order_product']]['attr'] = array();
 			}
-			$data['products'][$value['id_order_product']]['attr'][] = $newattr;
-			$data['seller'][$value['seller_id']]['products'][$value['id_order_product']]['attr'][] = $newattr;
+			if(!isset($data['seller'][$value['seller_id']]['products'][$value['id_order_product']]['attr'])){
+				$data['seller'][$value['seller_id']]['products'][$value['id_order_product']]['attr'] = array();
+			}
+			if( $value['is_other'] == 0 ){
+				array_push($data['products'][$value['id_order_product']]['attr'], array('attr_name' => $temp['attr_name'],'attr_value' => $temp['attr_value']));
+				array_push($data['seller'][$value['seller_id']]['products'][$value['id_order_product']]['attr'], array('attr_name' => $temp['attr_name'],'attr_value' => $temp['attr_value']));
+			}else if( $value['is_other'] == 1 ){
+				array_push($data['products'][$value['id_order_product']]['attr'], array('attr_name' => $temp['field_name'], 'attr_value' => $temp['value_name']));
+				array_push($data['seller'][$value['seller_id']]['products'][$value['id_order_product']]['attr'], array('attr_name' => $temp['field_name'],'attr_value' => $temp['value_name']));
+			}
 		}
 		
 		return $data;
@@ -341,6 +343,7 @@ class payment_model extends CI_Model
 	 
 		return $row;
 	}
+	
 	function getCityOrRegionOrMajorIsland($id_location)
 	{ 
 		$query = "
@@ -362,8 +365,7 @@ class payment_model extends CI_Model
 		return $row[0];
 	}
 
- 
- 
+	
 }
 
 

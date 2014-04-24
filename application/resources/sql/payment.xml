@@ -64,10 +64,11 @@
 -->
 
 <select id="getPurchaseTransactionDetails">
-	SELECT o.id_order, buyer.username as buyer, buyer.email as buyer_email, DATE_FORMAT(o.dateadded, "%D %M %Y") as dateadded, o.total as totalprice, op.id_order_product, seller.id_member as seller_id, seller.username as seller, seller.email as seller_email, p.name, op.order_quantity, op.price as baseprice, op.tax, op.total as finalprice, attr.name as attr_name, pattr.attr_value,  pitemattr.is_other, oah.field_name, oad.value_name, buyer.email as buyer_email
+	SELECT o.id_order, buyer.username as buyer, buyer.email as buyer_email, DATE_FORMAT(o.dateadded, "%D %M %Y") as dateadded, o.total as totalprice, op.id_order_product, seller.id_member as seller_id, seller.username as seller, seller.email as seller_email, p.name, op.order_quantity, op.price as baseprice, op.tax, op.total as finalprice, attr.name as attr_name, pattr.attr_value,  pitemattr.is_other, oah.field_name, oad.value_name, buyer.email as buyer_email, o.invoice_no, 
+		COALESCE(buyer.contactno, '0') as buyer_contactno, COALESCE(seller.contactno, '0') as seller_contactno
 	FROM es_order o
 	INNER JOIN es_order_product op 
-		ON op.order_id = o.id_order AND o.buyer_id = :buyer_id AND o.id_order = :order_id
+		ON op.order_id = o.id_order AND o.buyer_id = :buyer_id AND o.id_order = :order_id AND o.invoice_no = :invoice_no
 	INNER JOIN es_product p
 		ON op.product_id = p.id_product
 	LEFT JOIN es_product_item_attr pitemattr

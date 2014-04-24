@@ -31,7 +31,8 @@ $lang['notification_subject_buyer'] = "Easyshop.ph - Purchased Item Transaction 
 $lang['notification_subject_seller'] = "Easyshop.ph - Sold Item Transaction Details";
 
 #Purchase Notification - Mobile
-$lang[''] = '';
+$lang['notification_txtmsg_buyer'] = ' - This is to notify you that you have made a purchase through Easyshop.ph. Transaction details have been sent to your email.';
+$lang['notification_txtmsg_seller'] = ' - This is to notify you that you have sold an item(s) through Easyshop.ph. Transaction details have been sent to your email. Kindly ship the item(s) as soon as possible.';
 
 #Transaction response by buyer or seller 
 #payment flow direction (forward to seller or return to buyer)

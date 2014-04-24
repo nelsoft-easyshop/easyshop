@@ -381,6 +381,7 @@ function paypal(){
                         }
                     }else{
                         $response['message'] = '<div style="color:red"><b>Error 3: (GetTransactionDetails failed):</b>'.urldecode($httpParsedResponseAr["L_LONGMESSAGE0"]).'</div>';
+						$this->sendNotification(array('member_id'=>$member_id, 'order_id'=>$return['v_order_id'], 'invoice_no'=>$return['invoice_no']));
                     }
                 }else{
                     $response['message'] = '<div style="color:red"><b>Error 2: </b>'.urldecode($httpParsedResponseAr["L_LONGMESSAGE0"]).'</div>';
@@ -479,30 +480,7 @@ function paypal(){
             $response['message'] = '<div style="color:green">Your payment is completed through Cash on Delivery.</div>';
             $this->removeItemFromCart(); 
             $this->session->unset_userdata('choosen_items');
-            
-            #google analytics data
-            foreach ($itemList as $key => $value) {
-
-                $product = $this->product_model->getProductPreview($value['id'],$value['member_id'],"0");
-              
-                $tempAnalytics = array(
-                    'id' => $return['v_order_id'],
-                    'affiliation' => $value['seller_username'],
-                    'revenue' => $value['subtotal'],
-                    'shipping'=> $value['otherFee'],
-                    'tax'=> '0.00',
-                    'currency' => 'PHP', 
-                    'data' => array(
-                        'id' => $return['v_order_id'],
-                        'name' => $value['name'],
-                        'sku' => $value['id'],
-                        'category' => $product['category'],
-                        'price' => $value['price'],
-                        'quantity' => $value['qty']
-                        )
-                    );  
-                    array_push($analytics, $tempAnalytics); 
-            }
+			$this->sendNotification(array('member_id'=>$member_id, 'order_id'=>$return['v_order_id'], 'invoice_no'=>$return['invoice_no']));
         }   
 
         
@@ -520,7 +498,6 @@ function paypal(){
 
 
     function removeItemFromCart(){
-
             $carts = $this->session->all_userdata();
             if(isset($carts['choosen_items'])){
                 foreach ($carts['choosen_items'] as $key => $value) {
@@ -546,16 +523,24 @@ function paypal(){
         
     }
 	
+	/*
+	 *  $data = array(
+	 *		'member_id' => Member ID who made the purchase (buyerID)
+	 *		'order_id'	=> Transaction Number
+	 *		'invoice_no' => Invoice number
+	 *	)
+	 */
     function sendNotification($data) 
     {   
         if(!$this->session->userdata('member_id')){
             redirect(base_url().'home', 'refresh');
         };
         
-		//$mobilestat = $this->payment_model->sendNotificationMobile();
-		//die($mobilestat);
-	
-        //$data = array();
+        //devcode
+		/*$data['member_id'] = 74;
+		$data['order_id'] = 102;
+		$data['invoice_no']= 3;*/
+		
         $transactionData = $this->payment_model->getPurchaseTransactionDetails($data);
         
         //Send email to buyer
@@ -563,21 +548,47 @@ function paypal(){
         $buyerData = $transactionData;
         unset($buyerData['seller']);
         unset($buyerData['buyer_email']);
-        $buyerResult = $this->payment_model->sendNotificationEmail($buyerData, $buyerEmail, 'buyer');
+		// 3 tries to send Email. Quit if success or 3 failed tries met
+		$emailcounter = 0;
+		do{
+			$buyerEmailResult = $this->payment_model->sendNotificationEmail($buyerData, $buyerEmail, 'buyer');
+			$emailcounter++;
+		}while(!$buyerEmailResult && $emailcounter<3);
         
+		//Send text msg to buyer if mobile provided
+		$buyerMobile = trim($buyerData['buyer_contactno']);
+		if($buyerMobile != '' && $buyerMobile != 0 ){
+			$buyerMsg = $buyerData['buyer_name'] . $this->lang->line('notification_txtmsg_buyer');
+			$buyerTxtResult = $this->payment_model->sendNotificationMobile($buyerMobile, $buyerMsg);
+		}
+		
         //Send email to seller of each product - once per seller
         $sellerData = array(
             'id_order' => $transactionData['id_order'],
             'dateadded' => $transactionData['dateadded'],
-            'buyer_name' => $transactionData['buyer_name']
+            'buyer_name' => $transactionData['buyer_name'],
+			'invoice_no' => $transactionData['invoice_no']
             );
+			
         foreach($transactionData['seller'] as $seller){
             $sellerEmail = $seller['email'];
             $sellerData['totalprice'] = $seller['totalprice'];
             $sellerData['seller_name'] = $seller['seller_name'];
             $sellerData['products'] = $seller['products'];
-            $sellerResult = $this->payment_model->sendNotificationEmail($sellerData, $sellerEmail, 'seller');
-        }
+			// 3 tries to send Email. Quit if success or 3 failed tries met
+			$emailcounter = 0;
+			do{
+				$sellerEmailResult = $this->payment_model->sendNotificationEmail($sellerData, $sellerEmail, 'seller');
+				$emailcounter++;
+			}while(!$sellerEmailResult && $emailcounter<3);
+			
+			//Send text msg to buyer if mobile provided
+			$sellerMobile = trim($seller['seller_contactno']);
+			if($sellerMobile != '' && $sellerMobile != 0 ){
+				$sellerMsg = $seller['seller_name'] . $this->lang->line('notification_txtmsg_seller');
+				$sellerTxtResult = $this->payment_model->sendNotificationMobile($sellerMobile, $sellerMsg);
+			}
+        }//close foreach seller loop
     }	 
 }
 
