@@ -666,7 +666,7 @@ class memberpage_model extends CI_Model
 	
 	function billing_info_delete($data){
 
-		$query = "DELETE FROM `es_billing_info` WHERE `member_id`=:member_id AND `id_billing_info`=:ibi";
+		$query = "UPDATE `es_billing_info` SET `is_delete` = 1 WHERE `member_id`=:member_id AND `id_billing_info`=:ibi";
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':member_id', $data['member_id']);		
 		$sth->bindParam(':ibi', $data['ibi']);
@@ -689,7 +689,7 @@ class memberpage_model extends CI_Model
 			ebi.`is_default`
 		FROM `es_billing_info` ebi 
 		LEFT JOIN `es_bank_info` ebki ON ebi.`bank_id` = ebki.`id_bank` 
-		WHERE ebi.`member_id`=:member_id ORDER BY ebi.`is_default` DESC";		
+		WHERE ebi.`member_id`=:member_id AND ebi.`is_delete` = 0 ORDER BY ebi.`is_default` DESC";		
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':member_id',$data);
 		$sth->execute();
