@@ -373,10 +373,22 @@ class Memberpage extends MY_Controller
 			$result = $this->payment_model->updateTransactionStatus($data);
 			
 			// If database update is successful and response is 'return to buyer', 
-			// get order_product transaction details and send email
+			// get order_product transaction details and send notification (email mobile)
 			if( $result['o_success'] >= 1 && $data['status'] = 2 ){
 				$parseData = $this->payment_model->getOrderProductTransactionDetails($data);
-				$emailstat = $this->payment_model->sendNotificationEmail($parseData, $parseData['email'], 'return_payment');
+				
+				// 3 tries to send email. Exit if success or 3 fail limit reached
+				$emailcounter = 0;
+				do{
+					$emailstat = $this->payment_model->sendNotificationEmail($parseData, $parseData['email'], 'return_payment');
+					$emailcounter++;
+				}while(!$emailstat && $emailcounter < 3);
+				
+				if($parseData['mobile'] != '' && $parseData['mobile'] != 0){
+					$msg = $parseData['user'] . ' has just confirmed to return your payment for a product in Invoice # : ' . $parseData['invoice_no'];
+					$mobilestat = $this->payment_model->sendNotificationMobile($parseData['mobile'], $msg);
+				}
+				
 			}else if( $result['o_success'] >= 1 && $data['status'] = 1 ){
 				$emailstat = true;
 			}

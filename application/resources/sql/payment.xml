@@ -91,7 +91,7 @@
 	SELECT	o.id_order, o.invoice_no, op.id_order_product 
 		,p.name as product_name, op.order_quantity, op.total
 		,attr.name as attr_name, pattr.attr_value,  pitemattr.is_other, oah.field_name, oad.value_name
-		,seller.username as seller, seller.email as seller_email, buyer.username as buyer, buyer.email as buyer_email
+		,seller.username as seller, seller.email as seller_email, seller.contactno as seller_contactno, buyer.username as buyer, buyer.email as buyer_email, buyer.contactno as buyer_contactno
 	FROM es_order o
 	INNER JOIN es_order_product op 
 		ON op.order_id = o.id_order AND op.order_id = :order_id AND op.id_order_product = :order_product_id AND o.invoice_no = :invoice_num

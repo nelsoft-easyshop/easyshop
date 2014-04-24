@@ -216,9 +216,11 @@ class payment_model extends CI_Model
 		if($data['status'] === 1){ // if forward to seller
 			$parseData['user'] = $row[0]['buyer'];
 			$parseData['email'] = $row[0]['seller_email'];
+			$parseData['mobile'] = trim($row[0]['seller_contactno']);
 		} else if($data['status'] === 2){ // if return to buyer
 			$parseData['user'] = $row[0]['seller'];
 			$parseData['email'] = $row[0]['buyer_email'];
+			$parseData['mobile'] = trim($row[0]['buyer_contactno']);
 		}
 		
 		foreach( $row as $r){
