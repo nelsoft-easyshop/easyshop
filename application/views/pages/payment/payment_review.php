@@ -385,7 +385,7 @@ $(document).ready(function(){
                 alert('Please Double Check your Details');
               }else{
                 alert('Shipping address changed!');
-                // location.reload();
+                location.reload();
               }
             }
         });
