@@ -43,7 +43,7 @@ class payment_model extends CI_Model
         
     }
 
-    function deductQuantity($productId,itemId,$qty)
+    function deductQuantity($productId,$itemId,$qty)
     {
     	$query = "
 		UPDATE 
