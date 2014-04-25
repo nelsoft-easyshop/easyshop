@@ -948,7 +948,14 @@ $(document).ready(function(){
 					// Update map coordinates and status
 					$('#map_clat').val(obj['c_lat']);
 					$('#map_clng').val(obj['c_lng']);
-					$('#c_deliver_address span.maploc_stat').html('Location set');
+					
+					// Map notification status
+					if(obj['c_lat'] == 0 && obj['c_lng'] == 0){
+						$('#c_deliver_address span.maploc_stat').html('Location not set');
+					}else{
+						$('#c_deliver_address span.maploc_stat').html('Location set');
+					}
+					
 					
 					//IF SET AS DEFAULT ADDRESS
 					if(obj['default_add'] == "on"){
@@ -981,7 +988,13 @@ $(document).ready(function(){
 						$('.inner_profile_fields').find('div.view_map_btn input[type="hidden"][name$="lng"]').val(obj['c_lng']);
 						
 						//Map notification status
-						$('.inner_profile_fields').find('div.view_map_btn span.maploc_stat').html('Location set');
+						if(obj['c_lat'] == 0 && obj['c_lng'] == 0){
+							//$('.inner_profile_fields').find('div.view_map_btn span.maploc_stat').html('Location not set');
+							$('#personal_profile_address span.maploc_stat').html('Location not set');
+						}else{
+							//$('.inner_profile_fields').find('div.view_map_btn span.maploc_stat').html('Location set');
+							$('#personal_profile_address span.maploc_stat').html('Location set');
+						}
 						
 						$('#personal_profile_address .address_information').show();
 						$('#personal_profile_address .edit_profile').hide();
@@ -1665,8 +1678,7 @@ $(document).ready(function(){
 		if( type === 'personal' ){
 			var templat = $('#temp_lat');
 			var templng = $('#temp_lng');
-			mapPersonal = new google.maps.Map(document.getElementById("personal_mapcanvas"),
-			mapOptions);
+			mapPersonal = new google.maps.Map(document.getElementById("personal_mapcanvas"),mapOptions);
 			markerPersonal = new google.maps.Marker({
 				position: myLatlng,
 				map: mapPersonal,
@@ -1681,12 +1693,17 @@ $(document).ready(function(){
 					mapPersonal.panTo(markerPersonal.getPosition());
 				}, 500);
 			});
+			google.maps.event.addListenerOnce(mapPersonal, 'idle', function(){
+				google.maps.event.trigger(mapPersonal, 'resize');
+				window.setTimeout(function(){
+					mapPersonal.panTo(markerPersonal.getPosition());
+				}, 500);
+			});
 		}
 		else if( type === 'delivery' ){
 			var templat = $('#temp_clat');
 			var templng = $('#temp_clng');
-			mapDelivery = new google.maps.Map(document.getElementById("delivery_mapcanvas"),
-			mapOptions);
+			mapDelivery = new google.maps.Map(document.getElementById("delivery_mapcanvas"),mapOptions);
 			markerDelivery = new google.maps.Marker({
 				position: myLatlng,
 				map: mapDelivery,
@@ -1697,6 +1714,12 @@ $(document).ready(function(){
 				templat.val(evt.latLng.lat());
 				templng.val(evt.latLng.lng());
 				
+				window.setTimeout(function(){
+					mapDelivery.panTo(markerDelivery.getPosition());
+				}, 500);
+			});
+			google.maps.event.addListenerOnce(mapDelivery, 'idle', function(){
+				google.maps.event.trigger(mapDelivery, 'resize');
 				window.setTimeout(function(){
 					mapDelivery.panTo(markerDelivery.getPosition());
 				}, 500);
@@ -1712,7 +1735,6 @@ $(document).ready(function(){
 		var refreshmapbtn = $(this).parent('div').siblings('div.map_nav').children('span.refresh_map');
 		var mapcanvas = $(this).parent('div').siblings('div.map-canvas');
 		var type = this.name;
-		showflag = true;
 		
 		if (maplat == 0 && maplng == 0){
 			refreshmapbtn.trigger('click');

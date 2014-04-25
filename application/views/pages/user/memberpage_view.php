@@ -1328,7 +1328,7 @@
 			
 			<div class="view_map_btn">
 				<input type="button" class="view_map" value="View on Map" name="delivery">
-				<?php if($lat == 0 && $lng == 0):?>
+				<?php if($c_lat == 0 && $c_lng == 0):?>
 					<span class="maploc_stat">Location not set</span>
 				<?php else:?>
 					<span class="maploc_stat">Location set</span>
@@ -1346,7 +1346,7 @@
 				<div id="GoogleMapContainer" title="Google Map Container"></div>
 			</div>
 			
-			<div id="delivery_mapcanvas" class="map-canvas"></div>
+			<div id="delivery_mapcanvas" class="map-canvas" ></div>
 			
 			<br>
 			<div style="padding-left:100px">
