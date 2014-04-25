@@ -1,6 +1,5 @@
 $(document).ready(function(){
 
-
     $('.mid_slide1').bxSlider({
       mode: 'horizontal',
       auto:true,

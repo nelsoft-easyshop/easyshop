@@ -2,6 +2,24 @@
 <script type='text/javascript' src="<?=base_url()?>assets/JavaScript/js/jquery-ui.js"></script>
 <script type='text/javascript' src="<?=base_url()?>assets/JavaScript/js/jquery.jcarousel.min.js"></script>
 <script type='text/javascript' src="<?=base_url()?>assets/JavaScript/js/jquery.cookie.js"></script>
+
+<script type='text/javascript'>
+    /*
+   window.alert = function(message){
+        $(document.createElement('div'))
+            .attr({title: 'Alert', class: 'alert'})
+            .html(message)
+            .dialog({
+                buttons: {OK: function(){$(this).dialog('close');}},
+                close: function(){$(this).remove();},
+                draggable: true,
+                modal: true,
+                resizable: false
+            });
+   };
+   */
+</script>
+        
 <!-- <div id="fb-root"></div>
 <script>(function(d, s, id) {
   var js, fjs = d.getElementsByTagName(s)[0];

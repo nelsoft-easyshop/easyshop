@@ -1,5 +1,4 @@
 <link type="text/css" href="<?=base_url()?>assets/css/sell_item.css" rel="stylesheet" />
-
  
 <?php 
 $attributesForm = array('id' => 'draft_form',
