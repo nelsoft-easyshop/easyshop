@@ -42,7 +42,7 @@
 						</p>
 					</div>
 					<div class="vendor-msg-modal">
-					    <p><a id="to_modal" href="javascript:void(0)">Send a message</a></p><button id="modal-launcher">Launch Modal Window</button>
+					    <p><a id="modal-launcher" href="javascript:void(0)">Send a message</a></p>
 					</div>
 				</div>
 			</div>
@@ -456,28 +456,25 @@
 
 			</div>
 		</div>
-<!--		<div id="msg_modal" style="display:none">
-		    <span class="msg_modal_title">Remove/Transfer Child Categories?</span>
-		    <div class="container">
-			<div>
-			    <label>To : </label><br>
-			    <input type="text" value="<?php echo $vendordetails['username'];?>" id="msg_name" name="msg_name"><br>
-			    <label>Message : </label><br>
-			    <textarea cols="40" rows="5" name="msg-message" id="msg-message"></textarea>			   
-			</div>
-		    </div>
-		</div>-->
 		<div id="modal-background">
 		</div>
-		    <div id="modal-container">
-			<div>
-			    <label>To : </label><br>
-			    <input type="text" value="<?php echo $vendordetails['username'];?>" id="msg_name" name="msg_name"><br>
-			    <label>Message : </label><br>
-			    <textarea cols="40" rows="5" name="msg-message" id="msg-message"></textarea>			   
+		<div id="modal-container">
+			<div id="modal-div-header">
+				<button id="modal-close">X</button>        
 			</div>
-			<button id="modal-close">Close</button>
-		    </div>
+			<div id="modal-inside-container">
+				<div>
+					<label>To : </label>
+					<input type="text" value="" id="msg_name" name="msg_name" placeholder="xxxx@yahoo.com">
+				</div>
+				<div>
+					<label>Message : </label>
+					<textarea cols="40" rows="5" name="msg-message" id="msg-message"></textarea>		
+				</div>	   
+			</div>
+			<button id="modal_send_btn">Send</button>
+		</div>
+<input type="hidden" id="csrf" name="<?php echo $my_csrf['csrf_name'];?>" value="<?php echo $my_csrf['csrf_hash'];?>">
 		
 <script src="<?=base_url()?>assets/JavaScript/js/jquery.raty.min.js" type="text/javascript"></script>
 <script type='text/javascript' src='<?=base_url()?>assets/JavaScript/js/jquery.jqpagination.min.js'></script>
@@ -486,22 +483,44 @@
 <script type="text/javascript" src="<?=base_url()?>assets/JavaScript/vendorpage.js"></script>
 
 <script>
-    
-//$(".vendor-msg-modal").on("click","a",function(e){
-//    $("#msg_modal").show();
-//	
-//});
-//$('#msg_modal').click(function(e) {
-//    e.stopPropagation();
-//}).css({outline:0}).focusout(function(){
-//     $(this).fadeOut(300);  
-//}).focus();
-//    
     $(function(){
-    $("#modal-launcher, #modal-background, #modal-close").click(function() {
-        $("#modal-content, #modal-background").toggleClass("active");
+	if (<?=$my_id?> == <?php echo $vendordetails['id_member']; ?>) {
+	    $(".vendor-msg-modal").remove();
+	    $("#modal-background").remove();
+	    $("#modal-container").remove();
+	}
+		
+	$("#modal-background, #modal-close").click(function() {
+	    $("#modal-container, #modal-background").toggleClass("active");
+	    $("#modal-container").hide();
+	    $("#msg-message").val("");
+	});
+	$("#modal-launcher").click(function() {
+	    $("#modal-container, #modal-background").toggleClass("active");
+	    $("#modal-container").show();
+	});
+	
+	$("#modal_send_btn").on("click",function(){
+	    var recipient = <?php echo $vendordetails['id_member']; ?>;
+            var csrftoken = $("#csrf").val().trim();
+	    var msg = $("#msg-message").val();
+            $.ajax({
+                async : true,
+                type : "POST",
+                dataType : "json",
+                url : "<?=base_url()?>messages/send_msg",
+                data : {recipient:recipient,msg:msg,es_csrf_token:csrftoken},
+                success : function(data) {
+		    $("#modal-container, #modal-background").toggleClass("active");
+		    $("#modal-container").hide();
+		    $("#msg-message").val("");
+		    alert("Message Sent");
+                }
+            });
+	});
+	
     });
-});
+    
 </script>
 
 
