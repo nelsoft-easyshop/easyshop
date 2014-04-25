@@ -249,6 +249,12 @@ class Memberpage extends MY_Controller
 				'map_lng' => $this->input->post('map_lng')
 			);
 			
+			if( ( ($temp['stateregion'] != $postdata['stateregion']) || ($temp['city'] != $postdata['city']) || ($temp['address'] != $postdata['address']) ) 
+				&& ($temp['map_lat'] == $postdata['lat'] && $temp['map_lng'] == $postdata['lng']) ) {
+				$postdata['lat'] = 0;
+				$postdata['lng'] = 0;
+			}
+			
 			if($this->input->post('c_def_address'))
 			{
 				$postdata['default_add'] = $this->input->post('c_def_address');

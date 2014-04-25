@@ -916,8 +916,6 @@ $(document).ready(function(){
 		submitHandler: function(form) {
 		   $('#load_cdeliver_address').css('display', 'inline');
 		   var formdata = $(form).serializeArray();
-		   formdata.push({name:'map_lat', value:$('#map_lat').val()});
-		   formdata.push({name:'map_lng', value:$('#map_lng').val()});
 		   $.post(config.base_url+'memberpage/edit_consignee_address',formdata,
 				function(data){
 					$('#c_deliver_address_btn').attr('disabled', false);
@@ -956,6 +954,10 @@ $(document).ready(function(){
 						$('#c_deliver_address span.maploc_stat').html('Location set');
 					}
 					
+					// Update orig checker fields
+					$('.delivery_address_content input[name="stateregion_orig"]').val(obj['stateregionID']);
+					$('.delivery_address_content input[name="city_orig"]').val(obj['cityID']);
+					$('.delivery_address_content input[name="address_orig"]').val(obj['address']);
 					
 					//IF SET AS DEFAULT ADDRESS
 					if(obj['default_add'] == "on"){
