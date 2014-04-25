@@ -547,11 +547,6 @@ class memberpage_model extends CI_Model
 			
 		}
 		
-		print('<pre>');
-		print_r($fdata);
-		print('</pre>');
-		//die();
-		
 		return $fdata;
 	}
 	
