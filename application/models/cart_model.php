@@ -8,11 +8,11 @@ class cart_model extends CI_Model
 	{
 		parent::__construct();
 		$this->load->library("sqlmap");
-		$this->load->library('my_cart');
+		$this->load->library('cart');
 	}	
 
     function cart_size(){
-        #$this->load->library('my_cart');
+        #$this->load->library('cart');
         $carts=$this->cart->contents();
         $cart_size =sizeof($carts);
         return $cart_size;

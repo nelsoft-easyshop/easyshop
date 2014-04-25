@@ -8,7 +8,7 @@ class Home extends MY_Controller {
     function __construct() {
         parent::__construct();
 		$this->load->model('register_model');
-		$this->load->library('my_cart');
+		$this->load->library('cart');
         $this->load->library('home_xml');
     }
     

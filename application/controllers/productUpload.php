@@ -9,7 +9,7 @@ class productUpload extends MY_Controller
 		parent::__construct(); 
 		$this->load->model("product_model");
         $this->load->helper('htmlpurifier');
-		$this->load->library('my_cart');
+		$this->load->library('cart');
 		if(!$this->session->userdata('usersession') && !$this->check_cookie())
 			redirect(base_url().'login', 'refresh');
 	}

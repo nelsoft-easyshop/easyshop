@@ -7,7 +7,7 @@ class New_login extends MY_Controller {
 	#Load the user model that will be used in the functions below
     function __construct() {
         parent::__construct();
-        $this->load->library('my_cart');
+        $this->load->library('cart');
 		$this->load->model('register_model');
 		$this->load->library('encrypt');
     }
