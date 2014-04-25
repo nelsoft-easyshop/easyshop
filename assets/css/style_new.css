@@ -86,16 +86,18 @@ ul.slides_prod li a:hover {
 .product_inner_content_info h1 {
 	font-family: 'Source Sans Pro', sans-serif;
 	color: #393939;
+	display: inline-block;
 	font-size: 20px;
 	font-weight: 400;
 	text-transform: uppercase;
 	padding-bottom: 10px;
 	word-wrap:break-word;
+	width: 400px;
 }
 
 .product_inner_content_info h1 span {
 	float: left;
-	width: 430px;	
+	width: 400px;	
 }
 
 .product_inner_content_info h1 span + span {
@@ -149,15 +151,21 @@ span.seller-name .name:hover {
 
 span.seller-name .rating_value{
     color: #F18200;
+    display: inline-block;
     font-weight: bold;
     margin-left: 2px;
+    width: 30px;
+}
+
+.seller-name p {
+    text-align: left;
 }
 
 span.seller-name .rating_criteria{
+    display: inline-block;
     font-size: 11px;
+    width: 80px;
 }
-
-
 
 .product_option {
     margin-top: 10px;
