@@ -576,6 +576,9 @@ class product extends MY_Controller
                 'category_navigation' => $this->load->view('templates/category_navigation',array('cat_items' =>  $this->getcat(),), TRUE ),
                 ));
 			$data['vendorrating'] = $this->product_model->getVendorRating($data['product']['sellerid']);
+			
+			$data['jsonReviewSchemaData'] = $this->assembleJsonReviewSchemaData($data);
+			
 			$this->load->view('pages/product/productpage_view', $data); 
 		}
 		else
@@ -583,6 +586,49 @@ class product extends MY_Controller
 		$this->load->view('templates/footer_full');
 
 	}
+	
+	// Assemble SEO Review tags
+	function assembleJsonReviewSchemaData($data)
+	{
+		$productQuantity = false;
+		// Check for product availability
+		foreach($data['product_quantity'] as $pq){
+			if($pq['quantity'] > 0){
+				$productQuantity = true;
+				break;
+			}
+		}
+		$jsonReviewSchemaData = array(
+			'@context' => 'http://schema.org',
+			'@type' => 'Product',
+			'description' => html_escape($data['product']['brief']),
+			'name' => html_escape($data['product']['product_name']),
+			'offers' => array(
+				'@type' => 'Offer',
+				'availability' => 'http://schema.org/' . $productQuantity ? 'InStock':'OutOfStock',
+				'price' => 'Php' . $data['product']['price']
+			),
+			'review' => array()
+		);
+		foreach($data['reviews'] as $review){
+			$arrReview = array(
+				'@type' => 'Review',
+				'author' => $review['reviewer'],
+				'datePublished' => $review['ISOdate'],
+				'name' => html_escape($review['title']),
+				'reviewBody' => html_escape($review['review']),
+				'reviewRating' => array(
+					'@type' => 'Rating',
+					'bestRating' => '5',
+					'ratingValue' => $review['rating'],
+					'worstRating' => '0'
+				)
+			);
+			array_push($jsonReviewSchemaData['review'], $arrReview);
+		}
+		return json_encode( $jsonReviewSchemaData, JSON_UNESCAPED_SLASHES );
+	}
+	
 
 	# Accepts product review data from post method and writes to es_product_review table.
 	# Arguments: none
@@ -638,6 +684,7 @@ class product extends MY_Controller
 				$i++;
 			}
 		}
+		
 		return $recent;
 	}
 
@@ -777,6 +824,17 @@ class product extends MY_Controller
 		echo json_encode($rows);
 	}
 
+	function prodjson(){
+		$data = array(
+			'@test' => 'value1',
+			'parameter' => array(
+				array('test1'=>'value1'),
+				array('test2'=>'value2')
+			)
+		);
+		echo ( json_encode($data) );
+	}
+	
 }
 
 

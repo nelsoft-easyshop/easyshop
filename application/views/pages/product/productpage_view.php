@@ -1,3 +1,8 @@
+<!-- REVIEW SEO TAGS -->
+<script type="application/ld+json">
+	<?php echo $jsonReviewSchemaData;?>
+</script>
+
 <link rel="stylesheet" href="<?=base_url()?>assets/css/jquery.jqzoom.css" type="text/css">
 <link rel="stylesheet" href="<?=base_url()?>assets/css/style_new.css" type="text/css" media="screen"/>
 <link rel="stylesheet" href="<?=base_url()?>assets/css/jquery.bxslider.css" type="text/css" media="screen"/>
