@@ -283,7 +283,9 @@ function attrClick(target, $this){
             if(value_arr.sort().join(',') === sel_id.sort().join(',')){
                $('#p_itemid').val(index);
                $('.quantity')[0].innerHTML = value.quantity;
-               $('.orange_btn3').removeClass("disabled").addClass("enabled"); //REMOVED TO DISABLE BUY NOW BUTTON ACTIVATION
+               if(parseInt(value.quantity,10) !== 0){
+                  $('.orange_btn3').removeClass("disabled").addClass("enabled"); //REMOVED TO DISABLE BUY NOW BUTTON ACTIVATION
+               }
                return false;
             }
             else{
@@ -412,7 +414,7 @@ function attrClick(target, $this){
             else{
                 $(this).removeClass('disable');
                 if($(this).parent().prop('tagName').toLowerCase() === 'a'){
-                    //data-enable added in order to disabled jqzoom swapping, see jqzoomer.js
+                    //data-enable added in order to disable jqzoom swapping, see jqzoomer.js
                     $(this).parent().data('enable', 'true');
                 }
             }
