@@ -12,7 +12,6 @@ class cart_model extends CI_Model
 	}	
 
     function cart_size(){
-        #$this->load->library('cart');
         $carts=$this->cart->contents();
         $cart_size =sizeof($carts);
         return $cart_size;
