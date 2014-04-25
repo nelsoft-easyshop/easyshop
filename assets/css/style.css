@@ -4554,6 +4554,11 @@ margin-right: 10px;
 #head_container > div{
 	 display: inline;
 }
+#head_container span{
+		float:right;
+		margin: 8px;
+		display :none;
+}
 #panel_container{
 		float: left;
 		width: 290px;
@@ -4562,6 +4567,9 @@ margin-right: 10px;
 		/*overflow-y: scroll;*/
 		border-top: 1px solid #D9D9D9;
 		border-right: 1px solid #D9D9D9
+}
+#chsn_delete_btn{
+		display:none;
 }
 #table_id_length
 {
