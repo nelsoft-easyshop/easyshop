@@ -1,0 +1,128 @@
+<?php
+if (!defined('BASEPATH'))
+	exit('No direct script access allowed');
+
+class messages_model extends CI_Model
+{
+    function __construct()
+    {
+	parent::__construct();
+        $this->load->library("sqlmap");
+    }
+    public function send_message($sender,$recipient,$msg){
+           
+		$query = $this->sqlmap->getFilenameID('messages', 'send_message');
+			
+		$sth = $this->db->conn_id->prepare($query);
+		$sth->bindParam(':to_id',$recipient, PDO::PARAM_INT);
+		$sth->bindParam(':from_id',$sender, PDO::PARAM_INT);
+		$sth->bindParam(':message',$msg);
+		$sth->execute();
+		
+		return $sth->rowCount();
+    }
+	        
+    public function get_message($user_id){
+        $query = $this->sqlmap->getFilenameID('messages', 'inbox_message');
+	
+        $sth = $this->db->conn_id->prepare($query);
+        $sth->bindParam(':id',$user_id, PDO::PARAM_INT);
+        $sth->execute();
+        $recieveditems = $sth->fetchAll(PDO::FETCH_ASSOC);
+	
+        $query = $this->sqlmap->getFilenameID('messages', 'sentbox_message');
+	
+        $sth = $this->db->conn_id->prepare($query);
+        $sth->bindParam(':id',$user_id, PDO::PARAM_INT);
+        $sth->execute();
+
+        $sentitems = $sth->fetchAll(PDO::FETCH_ASSOC);
+		$result = array();
+		$unread_msgs = 0;
+		foreach($recieveditems as $db_row){
+			if( $db_row['opened'] == 0){$unread_msgs++;}
+		}
+		$result['unread_msgs']=$unread_msgs;
+		$result['inbox']=$recieveditems;
+		$result['sentbox']=$sentitems;
+	
+        return $result;
+	
+    }
+    
+    public function get_recepientID($username){
+
+        $query = $this->sqlmap->getFilenameID('messages', 'get_recepientID');
+		
+        $sth = $this->db->conn_id->prepare($query);
+        $sth->bindParam(':username',$username, PDO::PARAM_INT);
+        $sth->execute();
+
+        $result = $sth->fetchAll(PDO::FETCH_ASSOC);
+        if(!empty($result)){
+	    $result = $result[0]['id_member'];
+	} else {
+	    $result = "false";
+	}
+        return $result;
+    }
+    
+    public function delete_msg($id,$user_id) {
+		$query = "UPDATE `es_messages`
+				SET `is_delete` = CASE
+						WHEN `is_delete` = '0' THEN `is_delete` + (CASE WHEN `to_id` = $user_id THEN 2 ELSE 1 END) 
+						WHEN `is_delete` = '1' THEN `is_delete` + 2
+						WHEN `is_delete` = '2' THEN `is_delete` + 1
+						ELSE 3
+					   END
+				WHERE `id_msg` IN($id);";
+		$sth = $this->db->conn_id->prepare($query);
+		$sth->execute();
+		return $sth->rowCount();
+    }
+	public function get_all_messages ($id) {
+           
+		$query = $this->sqlmap->getFilenameID('messages', 'all_messages');
+			
+		$sth = $this->db->conn_id->prepare($query);
+		$sth->bindParam(':id',$id, PDO::PARAM_INT);
+		$sth->execute();
+		$rows = $sth->fetchAll(PDO::FETCH_ASSOC);
+        $data = array();
+        $result = array();
+		$unread_msg = 0;
+		for($ctr = 0 ; $ctr < sizeof($rows) ; $ctr++){
+		    $inbox=$rows[$ctr]['to_id'].$rows[$ctr]['from_id'];
+		    $sentbox=$rows[$ctr]['from_id'].$rows[$ctr]['to_id'];
+			$status = ($rows[$ctr]['from_id'] == $id ? "sender" : "reciever");
+		    if(array_key_exists($sentbox,$data)){ //sentbox
+				if($rows[$ctr]['is_delete'] == '0' || $rows[$ctr]['is_delete'] == '1' ){
+				    $data[$sentbox][$rows[$ctr]['id_msg']] =$rows[$ctr];
+					$data[$sentbox][$rows[$ctr]['id_msg']]['status'] = $status;
+				}
+		    }elseif( array_key_exists($inbox,$data) ){ //inbox
+				if($rows[$ctr]['is_delete'] == '0' || $rows[$ctr]['is_delete'] == '2' ){
+				    $data[$inbox][$rows[$ctr]['id_msg']] = $rows[$ctr];
+					$data[$inbox][$rows[$ctr]['id_msg']]['status'] =$status;
+				}
+			}else {
+				if($status == "sender" && ($rows[$ctr]['is_delete'] == '0' || $rows[$ctr]['is_delete'] == '2') ) {				        
+				    $data[$sentbox][$rows[$ctr]['id_msg']] = $rows[$ctr];				
+				    $data[$sentbox][$rows[$ctr]['id_msg']]['status'] = $status;		
+				    $data[$sentbox][$rows[$ctr]['id_msg']]['name'] = ($rows[$ctr]['from_id'] == $id ? $rows[$ctr]['recipient'] : $rows[$ctr]['sender']);		
+				    if ($rows[$ctr]['opened'] == 0 )$unread_msg++ ;
+				} else if($status == "reciever" && ($rows[$ctr]['is_delete'] == '0' || $rows[$ctr]['is_delete'] == '1') ){	        
+				    $data[$sentbox][$rows[$ctr]['id_msg']] = $rows[$ctr];				
+				    $data[$sentbox][$rows[$ctr]['id_msg']]['status'] = $status;		
+				    $data[$sentbox][$rows[$ctr]['id_msg']]['name'] = ($rows[$ctr]['from_id'] == $id ? $rows[$ctr]['recipient'] : $rows[$ctr]['sender']);		
+				    if ($rows[$ctr]['opened'] == 0 )$unread_msg++ ;
+				}	
+			}
+		}
+		$result['messages'] = array_values($data);
+		$result['unread_msgs'] = $unread_msg;
+		return $result;
+	}
+}
+
+?>
