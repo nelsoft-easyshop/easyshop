@@ -507,7 +507,7 @@ FROM
     </select>
 	
     <select id="getRecentProductReviews">
-        SELECT a.`id_review`, a.`title`, a.`review`, a.`rating`, DATE_FORMAT(a.`datesubmitted`, "%e-%b-%y %k:%i") as datesubmitted, b.`username` as reviewer, b.`id_member` as reviewerid, DATE_FORMAT(a.`datesubmitted`, "%Y-%m-%d") as ISOdate
+        SELECT a.`id_review`, a.`title`, a.`review`, a.`rating`, DATE_FORMAT(a.`datesubmitted`, "%e-%b-%Y %k:%i") as datesubmitted, b.`username` as reviewer, b.`id_member` as reviewerid, DATE_FORMAT(a.`datesubmitted`, "%Y-%m-%d") as ISOdate
         FROM es_product_review a 
 		INNER JOIN es_member b 
         ON a.`member_id` = b.`id_member`
