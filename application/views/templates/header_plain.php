@@ -66,6 +66,7 @@
               <!-- <li><a href="<?=base_url()?>home/under_construction">Discounts</a></li> -->
               <li><a href="<?=base_url()?>category/all">Shopping Categories</a></li>
               <li><a href="<?=base_url()?>product_search/advance">Advance Search</a></li>
+			  <li><a href="<?=base_url()?>product_search_v2/advsrch2">Advance Search v2</a></li>
             </ul>
           </li>
           <li class="top_nav_main">Seller Center
