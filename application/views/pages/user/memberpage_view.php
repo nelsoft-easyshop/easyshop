@@ -1671,8 +1671,8 @@
 
 <div id="complete" class="dashboard_table">
 
-	<a href="#complete_buy">Bought</span>
-	<a href="#complete_sell">Sold</span>
+	<a href="#complete_buy">Bought</a>
+	<a href="#complete_sell">Sold</a>
 	
 	<div id="complete_buy">
 		<?php if(count($transaction['complete']['buy'])===0):?>
