@@ -2344,24 +2344,34 @@ padding: 8px 0;
 	color: #f00;
 }
 
+#delivery_address .view_map_btn,
+#delivery_address .map_nav,
+#delivery_address .map-canvas {
+	margin-left: 110px;
+}
+
+
 .view_map_btn {
     display: block;
     padding:8px 0;
 }
 
-#map {
-	border-left: 1px solid #cecece;
-	border-top: 1px solid #cecece;
-	border-right: 1px solid #cecece;
+.map_nav {
+    border-left: 1px solid #CECECE;
+    border-right: 1px solid #CECECE;
+    border-top: 1px solid #CECECE;
+    display: inline-block;
+    margin-bottom: 0;
     padding-left: 10px;
     padding-top: 10px;
+    width: 635px;
 }
 
-#map span {
+.map_nav span {
 	cursor: pointer;
 }
 
-#map span:hover {
+.map_nav span:hover {
 	color: #1F4F98;
 	text-decoration: underline;
 }
@@ -3770,7 +3780,7 @@ div.feedback_container {
     border-bottom: 1px dotted #CECECE;
     display: block;
     margin-bottom: 10px;
-    min-height: 140px;
+    min-height: 160px;
     padding-right: 10px;
     text-align: right;
     width: 265px;
@@ -3860,13 +3870,35 @@ div.sold_prod_container {
 
 .transac-product-container > div {
     margin-bottom: 10px;
-    min-height: 140px;
+    min-height: 150px;
     border-bottom: 1px dotted #cecece;
+   	padding-bottom: 10px;
+}
+
+.transac_response_btn {
+	cursor: pointer;
+	margin-left: 20px;
+}
+
+.img_transac_prod {
+    background-color: #FFFFFF;
+    border: 1px solid #EAE8E8;
+    display: table-cell;
+    float: left;
+    height: 60px;
+    margin-bottom: 15px;
+    margin-right: 20px;
+    text-align: center;
+    vertical-align: middle;
+    width: 60px;
+    margin-right: 10px;
 }
 
 .transac-product-container img {
-	margin-right: 10px;
-	float: left;
+	height: auto;
+    max-height: 60px;
+    max-width: 60px;
+    width: auto;
 }
 
 .transac_prod_name {
@@ -3874,6 +3906,10 @@ div.sold_prod_container {
 	display: inline-block;
 	min-height: 70px;
 	width: 420px;
+}
+
+.transac_prod_name a {
+	color: #f18200;
 }
 
 .transac_prod_name span {
@@ -3896,13 +3932,16 @@ div.sold_prod_container {
 .transac_title span {
     display: table-cell;
     line-height: 24px;
-    padding: 5px;
-    width: 590px;
+    width: 607px;
     vertical-align: middle;
 }
 
+.transac_prod_name small {
+	display: block;
+}
+
 .transac_title span strong {
-	width: 110px;
+	width: 75px;
 	display: inline-block;
 }
 
@@ -3916,6 +3955,19 @@ span.transac_title_date {
     position: relative; 
     text-align: center;
     width: 150px;
+}
+
+span.sold_transac_add {
+	font-size: 11px;
+}
+
+span.sold_transac_add strong {
+	width: auto;
+}
+
+#sold .transac_title_date {
+	height: 82px;
+	line-height: 82px;
 }
 
 
@@ -3952,28 +4004,38 @@ span.transac_title_date:after {
 	border-bottom: none;
 }
 
-.transac-product-container img + div p {
+.transac-product-container span + div p {
 	margin-bottom: 10px;
 }
 
-.transac-product-container img + div p span  {
-	display: inline-block;
+.transac-product-container span + div p span  {
+/*	display: inline-block;*/
 	padding: 0 5px;
+	word-wrap:break-word;
 }
 
-.transac-product-container img + div p + p {
+.transac-product-container span + div p + p {
 	float: left;
-	width: 160px;
+	width: 200px;
 	border-right: 1px solid #cecece;
 	text-align: center;
 }
 
-.transac-product-container img + div p + p + p + p {
-	border-right: none;
-	text-align: center;
+.transac-product-container span + div p + p + p {
+	width: 100px;
 }
 
-.transac-product-container img + div p + p + p span {
+.sold_prod_container.transac-product-container span + div p + p + p {
+	width: 200px;
+}
+
+.transac-product-container span + div p + p + p + p {
+	border-right: none;
+	text-align: center;
+	width: 180px;
+}
+
+.transac-product-container span + div p + p + p span {
 		color: #f18200;
 }
 
@@ -4236,7 +4298,7 @@ span.transac_title_date:after {
 /*
 .map-canvas{
 	height: 305px;
-	width: 500px;
+	width: 625px;
 	display:none;
 }
 */
@@ -4577,6 +4639,7 @@ margin-right: 10px;
 #billing_info_btn {
 	border: 1px solid #f18200;
 	cursor: pointer;
+	margin-left: 115px;
 }
 
 .inner_profile_fields.progress_update.update_once input[type="checkbox"] {
