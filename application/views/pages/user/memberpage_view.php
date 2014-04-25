@@ -1396,13 +1396,16 @@
 					<div class="transac-product-container">
 						<?php foreach($transact['products'] as $opk=>$product):?>
 						<div class="transac_prod_first">
-							<img src="<?=base_url()?><?php echo $product['product_image_path'];?>">
+							<span class="img_transac_prod">
+								<img src="<?=base_url()?><?php echo $product['product_image_path'];?>">
+							</span>
 							<div>
 								<p class="transac_prod_name">
 									<a href="<?php echo base_url();?>item/<?php echo $product['product_id'];?>/<?php echo es_url_clean($product['name']);?>"><?php echo $product['name'];?></a><br />
+									<small>Features and Specifications:</small>
 									<?php if( count($product['attr'] !== 0) ):?>
 										<?php foreach($product['attr'] as $temp):?>
-											<span><?php echo $temp['field'];?>:</span><span><?php echo $temp['value'];?></span>
+											<span><strong><?php echo $temp['field'];?>:</strong> <?php echo $temp['value'];?></span>
 										<?php endforeach;?>
 									<?php endif;?>
 								</p>
@@ -1416,7 +1419,7 @@
 										$attr = array('class'=>'transac_response');
 										echo form_open('',$attr);
 									?>
-										<span class = "transac_response_btn">Forward payment to seller</span>
+										<span class = "transac_response_btn orange_btn3">Forward payment to seller</span>
 										<input type="hidden" name="buyer_response" value="<?php echo $opk;?>">
 										<input type="hidden" name="transaction_num" value="<?php echo $tk;?>">
 										<input type="hidden" name="invoice_num" value="<?php echo $transact['invoice_no'];?>">
@@ -1532,9 +1535,9 @@
 						<strong>Invoice #: </strong> <?php echo $transact['invoice_no'];?><br />
 						<strong>Sold to: </strong> <a href="<?php echo base_url();?>vendor/<?php echo $transact['buyer']?>"><?php echo $transact['buyer']?></a> <br />
 						<?php foreach($transact['users'] as $uk=>$user):?>
-							<span>State/Region: <?php echo $user['address']['stateregion']?></span>
-							<span>City: <?php echo $user['address']['city'];?></span>
-							<span>Address: <?php echo $user['address']['fulladd'];?></span>
+							<span class="sold_transac_add"><strong>State/Region:</strong> <?php echo $user['address']['stateregion']?></span>
+							<span class="sold_transac_add"><strong>City:</strong> <?php echo $user['address']['city'];?></span>
+							<span class="sold_transac_add"><strong>Address:</strong> <?php echo $user['address']['fulladd'];?></span>
 							<?php if( $user['address']['lat']!=0 && $user['address']['lng']!=0 ):?>
 								<span class="tsold_viewmap" data-lat="<?php echo $user['address']['lat'];?>" data-lng="<?php echo $user['address']['lng'];?>">View Map</span>
 								<div class="map_modalcont" style="display:none;"></div>
@@ -1548,25 +1551,29 @@
 				
 				<?php foreach($transact['products'] as $opk=>$product):?>
 				<div class="sold_prod_container transac-product-container">
-					<img src="<?=base_url()?><?php echo $product['product_image_path'];?>">
+					<span class="img_transac_prod">
+						<img src="<?=base_url()?><?php echo $product['product_image_path'];?>">
+					</span>
 					<div>
 						<p class="transac_prod_name">
 							<a href="<?php echo base_url();?>item/<?php echo $product['product_id'];?>/<?php echo es_url_clean($product['name']);?>"><?php echo $product['name'];?></a>
+							<small>Features and Specifications:</small>
 							<?php if( count($product['attr'] !== 0) ):?>
 								<?php foreach($product['attr'] as $temp):?>
-									<span><?php echo $temp['field'];?>:</span><span><?php echo $temp['value'];?></span>
+									<span><strong><?php echo $temp['field'];?>:</strong> <?php echo $temp['value'];?></span>
 								<?php endforeach;?>
 							<?php endif;?>
 						</p>
 						<p>Quantity:<span class="fm1 f18"><?php echo $product['order_quantity']?></span></p>
 						<p>Total:<span class="fm1 f18">Php<?php echo number_format($product['price'],2,'.',',');?></span></p>
+						<div class="clear"></div>
 						<div>
 						<?php if($product['status'] == 0):?>
 							<?php
 								$attr = array('class'=>'transac_response');
 								echo form_open('',$attr);
 							?>
-							<span class="transac_response_btn">Return payment to buyer</span>
+							<span class="transac_response_btn orange_btn3">Return payment to buyer</span>
 							<input type="hidden" name="seller_response" value="<?php echo $opk;?>">
 							<input type="hidden" name="transaction_num" value="<?php echo $tk;?>">
 							<input type="hidden" name="invoice_num" value="<?php echo $transact['invoice_no'];?>">
@@ -1670,10 +1677,10 @@
 
 
 <div id="complete" class="dashboard_table">
-
-	<a href="#complete_buy">Bought</a>
-	<a href="#complete_sell">Sold</a>
-	
+	<ul class="idTabs feedbacks_tabs">
+		<li><a href="#complete_buy">Bought</a></li>
+		<li><a href="#complete_sell">Sold</a></li>
+	</ul>
 	<div id="complete_buy">
 		<?php if(count($transaction['complete']['buy'])===0):?>
 			<br/>
@@ -1692,13 +1699,16 @@
 						<div class="transac-product-container">
 							<?php foreach($transact['products'] as $opk=>$product):?>
 							<div class="transac_prod_first">
-								<img src="<?=base_url()?><?php echo $product['product_image_path'];?>">
+								<span class="img_transac_prod">
+									<img src="<?=base_url()?><?php echo $product['product_image_path'];?>">
+								</span>
 								<div>
 									<p class="transac_prod_name">
 										<a href="<?php echo base_url();?>item/<?php echo $product['product_id'];?>/<?php echo es_url_clean($product['name']);?>"><?php echo $product['name'];?></a><br />
+										<small>Features and Specifications:</small>
 										<?php if( count($product['attr'] !== 0) ):?>
 											<?php foreach($product['attr'] as $temp):?>
-												<span><?php echo $temp['field'];?>:</span><span><?php echo $temp['value'];?></span>
+												<span><strong><?php echo $temp['field'];?>:</strong><?php echo $temp['value'];?></span>
 											<?php endforeach;?>
 										<?php endif;?>
 									</p>
@@ -1825,9 +1835,9 @@
 							<strong>Invoice #: </strong> <?php echo $transact['invoice_no'];?><br />
 							<strong>Sold to: </strong> <a href="<?php echo base_url();?>vendor/<?php echo $transact['buyer']?>"><?php echo $transact['buyer']?></a> <br />
 							<?php foreach($transact['users'] as $uk=>$user):?>
-								<span>State/Region: <?php echo $user['address']['stateregion']?></span>
-								<span>City: <?php echo $user['address']['city'];?></span>
-								<span>Address: <?php echo $user['address']['fulladd'];?></span>
+								<span class="sold_transac_add"><strong>State/Region:</strong> <?php echo $user['address']['stateregion']?></span>
+								<span class="sold_transac_add"><strong>City:</strong> <?php echo $user['address']['city'];?></span>
+								<span class="sold_transac_add"><strong>Address:</strong> <?php echo $user['address']['fulladd'];?></span>
 								<?php if( $user['address']['lat']!=0 && $user['address']['lng']!=0 ):?>
 									<span class="tsold_viewmap" data-lat="<?php echo $user['address']['lat'];?>" data-lng="<?php echo $user['address']['lng'];?>">View Map</span>
 									<div class="map_modalcont" style="display:none;"></div>
@@ -1841,13 +1851,16 @@
 					
 					<?php foreach($transact['products'] as $opk=>$product):?>
 					<div class="sold_prod_container transac-product-container">
-						<img src="<?=base_url()?><?php echo $product['product_image_path'];?>">
+						<span class="img_transac_prod">
+							<img src="<?=base_url()?><?php echo $product['product_image_path'];?>">
+						</span>
 						<div>
 							<p class="transac_prod_name">
 								<a href="<?php echo base_url();?>item/<?php echo $product['product_id'];?>/<?php echo es_url_clean($product['name']);?>"><?php echo $product['name'];?></a>
+								<small>Features and Specifications:</small>
 								<?php if( count($product['attr'] !== 0) ):?>
 									<?php foreach($product['attr'] as $temp):?>
-										<span><?php echo $temp['field'];?>:</span><span><?php echo $temp['value'];?></span>
+										<span><strong><?php echo $temp['field'];?>:</strong><?php echo $temp['value'];?></span>
 									<?php endforeach;?>
 								<?php endif;?>
 							</p>
