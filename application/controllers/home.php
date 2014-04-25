@@ -8,12 +8,12 @@ class Home extends MY_Controller {
     function __construct() {
         parent::__construct();
 		$this->load->model('register_model');
-		$this->load->library('cart');
+		$this->load->library('my_cart');
         $this->load->library('home_xml');
     }
-
     
-    public function index() {
+    
+    public function index() {    
 		$data = array('title' => 'Home | Easyshop.ph',
                 'page_javascript' => 'assets/JavaScript/home.js',
                 'data' => $this->home_xml->getFilenameID('home_files'),

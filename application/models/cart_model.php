@@ -8,15 +8,16 @@ class cart_model extends CI_Model
 	{
 		parent::__construct();
 		$this->load->library("sqlmap");
-		$this->load->library("cart");
+		$this->load->library('my_cart');
 	}	
 
-        function cart_size(){
-            $this->load->library('cart');
-            $carts=$this->cart->contents();
-            $cart_size =sizeof($carts);
-            return $cart_size;
-        }
+    function cart_size(){
+        #$this->load->library('my_cart');
+        $carts=$this->cart->contents();
+        $cart_size =sizeof($carts);
+        return $cart_size;
+    }
+    
 	function checkProductAttributes($id,$attr,$attr_value) # getting the product attirbute using product ID,attr,attr value
 	{
             $query = $this->sqlmap->getFilenameID('cart', 'checkProductAttributes');
@@ -43,19 +44,21 @@ class cart_model extends CI_Model
             return $data;
 	}
         
-        function cartdata($id){
-            $query = $this->sqlmap->getFilenameID('cart', 'get_cart_data');
-            
-            $sth = $this->db->conn_id->prepare($query);
-            $sth->bindParam(':id',$id);
-            $sth->execute();
-            $rows =  $sth->fetchAll(PDO::FETCH_ASSOC) ;	
-            $aa = unserialize($rows[0]['userdata']);
-            return $aa;
-        }
-        function save_cartitems($data,$id){
-            $this->db->query("UPDATE `es_member` SET `userdata` = '$data' WHERE `id_member` = $id;");
-        }
+    function cartdata($id){
+        $query = $this->sqlmap->getFilenameID('cart', 'get_cart_data');
+        
+        $sth = $this->db->conn_id->prepare($query);
+        $sth->bindParam(':id',$id);
+        $sth->execute();
+        $rows =  $sth->fetchAll(PDO::FETCH_ASSOC) ;	
+        $aa = unserialize($rows[0]['userdata']);
+        return $aa;
+    }
+    
+    function save_cartitems($data,$id){
+        $this->db->query("UPDATE `es_member` SET `userdata` = '$data' WHERE `id_member` = $id;");
+    }
+    
 	public function getSpecificProductQuantity($product_id,$product_attr_id,$length){ //hnd pa na optimize ung query
 	    $query = "
 		SELECT a.id_product_item, a.quantity, COALESCE(b.product_attr_id,0) AS product_attr_id,cnt.count,

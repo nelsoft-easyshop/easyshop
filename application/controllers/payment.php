@@ -8,7 +8,7 @@ class Payment extends MY_Controller{
     function __construct() {
         parent::__construct();
         $this->load->library('session');
-        $this->load->library('cart');
+        $this->load->library('my_cart');
         $this->load->library('paypal');
         $this->load->model('user_model');
         $this->load->model('payment_model');
@@ -57,7 +57,6 @@ class Payment extends MY_Controller{
    
     function review()
     {  
-   
         if(!$this->session->userdata('member_id')){
             redirect(base_url().'home', 'refresh');
         };
