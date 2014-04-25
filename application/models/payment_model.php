@@ -43,6 +43,31 @@ class payment_model extends CI_Model
         
     }
 
+    function deductQuantity($productId,itemId,$qty)
+    {
+    	$query = "
+		UPDATE 
+		  `es_product_item` 
+		SET
+		  `quantity` = `quantity` - :quantity 
+		WHERE `product_id` = :product_id 
+		  AND `id_product_item` = :item_id ;
+    	";
+        ;
+    	$sth = $this->db->conn_id->prepare($query);
+    	$sth->bindParam(':quantity',$qty,PDO::PARAM_INT);
+    	$sth->bindParam(':product_id',$productId,PDO::PARAM_INT);
+    	$sth->bindParam(':item_id',$itemId,PDO::PARAM_INT);
+    	
+    	if ($sth->execute()){
+		  // success
+    		return 1;
+		}
+		else{
+		  	return 0;
+		}
+    }
+
     function updatePaymentIfComplete($id,$data)
     {
         $query = $this->sqlmap->getFilenameID('payment','updatePaymentIfComplete');

@@ -298,6 +298,8 @@ function paypal(){
                 $ItemTotalPrice += $total;  
             }
 
+
+
             $productstring = substr($productstring,4);
             $response['itemList'] = $itemList;
             $grandTotal= ($ItemTotalPrice+$handling_amt+$insurance_amt)-$shipping_discount_amt;
@@ -342,6 +344,14 @@ function paypal(){
 
                         // apiResponse 
                         $apiResponse = json_encode($apiResponseArray);
+                        foreach ($itemList as $key => $value) {               
+                            $productId = $value['id'];
+                            $productItem =  $value['product_itemID'];
+                            $orderQuantity = $value['qty'];
+                            $itemComplete = $this->payment_model->deductQuantity($productItem,$productId,$orderQuantity);
+                            #   UPDATE `es_product_item` SET `quantity` = `quantity` - v_quantity WHERE `product_id` = v_product_id AND `id_product_item` = v_product_item;
+        
+                        }
                         $complete = $this->payment_model->updatePaymentIfComplete($return['v_order_id'],$apiResponse);
                          
                         if($complete <= 0){
