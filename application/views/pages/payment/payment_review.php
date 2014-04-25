@@ -34,7 +34,7 @@
           <h2>Ship to:</h2>
           <div><span>Name:</span><strong><?php echo ucwords(strtolower($consignee));?></strong></div>
           <div><span>Full Address:</span><?php echo ucwords(strtolower($c_address));?></div>
-          <div><span>City:</span><?php echo ucwords(strtolower($c_city));?></div>
+          <div><span>City:</span><?php echo ucwords(strtolower($c_stateregion));?></div>
           <div><span>Country:</span><?php echo ucwords(strtolower($country_name));?></div>
           <div><span>Mobile:</span><?php echo ucwords(strtolower($c_mobile));?></div>
           <div><span>Telephone:</span><?php echo ucwords(strtolower($c_telephone));?></div>
@@ -367,10 +367,14 @@ $(document).ready(function(){
         var csrftoken = "<?php echo $my_csrf['csrf_hash'];?>";
  
         var formD = $('#delAddressFrm').serializeArray();
+        formD.push({name:'temp_lat', value:0});
+        formD.push({name:'temp_lng', value:0});
         formD.push({name:'map_lat', value:0});
         formD.push({name:'map_lng', value:0});
-        formD.push({name:'c_deliver_address_btn', value:"save"});
+        formD.push({name:'c_deliver_address_btn', value:"Save"});
     
+        
+
         $.ajax({
             type: "POST", 
             url: '<?php echo base_url();?>' + action,
@@ -381,7 +385,7 @@ $(document).ready(function(){
                 alert('Please Double Check your Details');
               }else{
                 alert('Shipping address changed!');
-                location.reload();
+                // location.reload();
               }
             }
         });
