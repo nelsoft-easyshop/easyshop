@@ -93,8 +93,9 @@ class memberpage_model extends CI_Model
 		$sth->bindParam(':id_member', $member_id);     
 		$sth->bindParam(':is_contactno_verify', $data['is_contactno_verify']);
 		$sth->bindParam(':is_email_verify', $data['is_email_verify']);
-		$sth->execute();
+		$result = $sth->execute();
 		
+		return $result;
 	}
 	
 	function edit_address_by_id($member_id, $data=array())
@@ -117,8 +118,9 @@ class memberpage_model extends CI_Model
 		$sth->bindParam(':lat', $data['lat']);
 		$sth->bindParam(':lng', $data['lng']);
 		
-		$sth->execute();
+		$result = $sth->execute();
 		
+		return $result;
 	}
 	
 	function edit_school_by_id($member_id, $data=array())
@@ -137,7 +139,9 @@ class memberpage_model extends CI_Model
 		$sth->bindParam(':level', $data['level']);
 		$sth->bindParam(':school_count', $data['school_count']);
 		$sth->bindParam(':id_member', $member_id);
-		$sth->execute();
+		$result = $sth->execute();
+		
+		return $result;
 	}
 
 	function deletePersonalInformation($member_id, $field)
@@ -276,7 +280,9 @@ class memberpage_model extends CI_Model
 		$sth->bindparam(':designation', $data['designation']);
 		$sth->bindparam(':year', $data['year']);
 		$sth->bindparam(':count', $data['count']);
-		$sth->execute();
+		$result = $sth->execute();
+		
+		return $result;
 	}
 	
 	function get_image($member_id){		
@@ -416,7 +422,7 @@ class memberpage_model extends CI_Model
 		$row = $sth->fetchAll(PDO::FETCH_ASSOC);
 
 		$data = array();
-		$fdata = array('buy' => array(), 'sell' => array());
+		$fdata = array('buy' => array(), 'sell' => array(), 'complete' => array('buy'=>array(), 'sell'=>array()));
 		
 		if(count($row)>0){
 			foreach($row as $k=>$temp){
@@ -504,32 +510,47 @@ class memberpage_model extends CI_Model
 					array_push($data[$temp['id_order']]['products'][$temp['id_order_product']]['attr'], array('field' => ucwords(strtolower($temp['field_name'])), 'value' => ucwords(strtolower($temp['value_name'])) ));
 				}
 				
-				//Create json encoded data summary for each product
-				/*$jsonTemp = array(
-					'order_id' => $temp['id_order'],
-					'order_product_id' => $temp['id_order_product'],
-					'dateadded' => $temp['dateadded'],
-				);
-				unset($data[$temp['id_order']]['products'][$temp['id_order_product']]['jsondata']);
-				$data[$temp['id_order']]['products'][$temp['id_order_product']]['jsondata'] = json_encode(array_merge($jsonTemp, $data[$temp['id_order']]['products'][$temp['id_order_product']]));
-				*/
 			}
 			
 			// Categorize as buy or sell in final array
 			foreach($data as $k=>$temp2){
-				if(array_key_exists('buyer_id', $temp2) && array_key_exists('buyer', $temp2))
-					$fdata['sell'][$k] = $temp2;
-				else
-					$fdata['buy'][$k] = $temp2;
+				// If transaction in progress
+				if($temp2['transac_stat'] == 0){
+					// Check each product entry if user has responded (status != 0)
+					$prodCount = count($temp2['products']);
+					$myCount = 0;
+					foreach($temp2['products'] as $pk=>$product){
+						if($product['status'] != 0){
+							$myCount++;
+						}
+					}
+					// If all product entries have response, move to temporary complete array
+					if($myCount == $prodCount){
+						if(array_key_exists('buyer_id', $temp2) && array_key_exists('buyer', $temp2))
+							$fdata['complete']['sell'][$k] = $temp2;
+						else
+							$fdata['complete']['buy'][$k] = $temp2;
+					}else{	//else move to buy or sell
+						if(array_key_exists('buyer_id', $temp2) && array_key_exists('buyer', $temp2))
+							$fdata['sell'][$k] = $temp2;
+						else
+							$fdata['buy'][$k] = $temp2;
+					}
+				}else if($temp2['transac_stat'] == 1){
+					if(array_key_exists('buyer_id', $temp2) && array_key_exists('buyer', $temp2))
+						$fdata['complete']['sell'][$k] = $temp2;
+					else
+						$fdata['complete']['buy'][$k] = $temp2;
+				}
 			}
+			
+			
 		}
 		
-		/*
 		print('<pre>');
 		print_r($fdata);
 		print('</pre>');
-		die();
-		*/
+		//die();
 		
 		return $fdata;
 	}

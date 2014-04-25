@@ -526,47 +526,62 @@ $(document).ready(function(){
 			$('#load_address').css('display', 'inline');
 			$.post(config.base_url+'memberpage/edit_address',$('#personal_profile_address').serializeArray(),
 				function(data){
+					$(form).find('input[type="submit"]').attr('disabled', false);
 					$('#load_address').css('display', 'none');
-					var obj = jQuery.parseJSON(data);
 					
-					//overwrite div to display new address data
-					$('.address_information .add_info').html(function(){
-						var string = obj['stateregion'] + ", " + obj['city'] + "<br>" + obj['address'];
-						return string;
-					});
-					
-					//update input text attribute value to new values
-					$('.address_fields input[type="text"]').each(function(){
-						$(this).attr('value',obj[$(this).attr('name')]);
-					});
-					
-					//update address drop down select fields
-					$('.address_fields select.address_dropdown').each(function(){
-						$(this).attr('data-status', obj[$(this).attr('name') + 'ID']);
-					});
-					
-					//fix display of address depending on contents
-					handle_fields($('#personal_profile_address'));
-					progress_update($('#personal_profile_address'));
-					$('#personal_profile_address .edit_fields').fadeOut();
-					
-					// Copy dragged marker coordinates to scanned input for saving - google maps
-					$('#map_lat').val(obj['lat']);
-					$('#map_lng').val(obj['lng']);
-					
-					// Update original checker fields
-					$('.address_fields input[name="stateregion_orig"]').val(obj['stateregionID']);
-					$('.address_fields input[name="city_orig"]').val(obj['cityID']);
-					$('.address_fields input[name="address_orig"]').val(obj['address']);
-					
-					// Map notification status
-					if(obj['lat'] == 0 && obj['lng'] == 0){
-						$('span.maploc_stat').html('Location not set');
-					}else{
-						$('span.maploc_stat').html('Location set');
+					try{
+						var obj = jQuery.parseJSON(data);
+					}
+					catch(e){
+						alert('An error was encountered while submitting your form. Please try again later.');
+						window.location.reload(true);
+						return false;
 					}
 					
+					if(obj['result'] === 'fail' || obj['result'] === 'error'){
+						alert(obj['errmsg']);
+						window.location.reload(true);
+						return false;
+					}else if(obj['result'] === 'success'){					
+						//overwrite div to display new address data
+						$('.address_information .add_info').html(function(){
+							var string = obj['stateregion'] + ", " + obj['city'] + "<br>" + obj['address'];
+							return string;
+						});
+						
+						//update input text attribute value to new values
+						$('.address_fields input[type="text"]').each(function(){
+							$(this).attr('value',obj[$(this).attr('name')]);
+						});
+						
+						//update address drop down select fields
+						$('.address_fields select.address_dropdown').each(function(){
+							$(this).attr('data-status', obj[$(this).attr('name') + 'ID']);
+						});
+						
+						//fix display of address depending on contents
+						handle_fields($('#personal_profile_address'));
+						progress_update($('#personal_profile_address'));
+						$('#personal_profile_address .edit_fields').fadeOut();
+						
+						// Copy dragged marker coordinates to scanned input for saving - google maps
+						$('#map_lat').val(obj['lat']);
+						$('#map_lng').val(obj['lng']);
+						
+						// Update original checker fields
+						$('.address_fields input[name="stateregion_orig"]').val(obj['stateregionID']);
+						$('.address_fields input[name="city_orig"]').val(obj['cityID']);
+						$('.address_fields input[name="address_orig"]').val(obj['address']);
+						
+						// Map notification status
+						if(obj['lat'] == 0 && obj['lng'] == 0){
+							$('span.maploc_stat').html('Location not set');
+						}else{
+							$('span.maploc_stat').html('Location set');
+						}
+					}
 				});
+			$(form).find('input[type="submit"]').attr('disabled', true);
 			return false;					
 		}
 	});
@@ -647,47 +662,64 @@ $(document).ready(function(){
 		   $('#load_school').css('display', 'inline');
 		   $.post(config.base_url+'memberpage/edit_school',$('#personal_profile_school').serializeArray(),
 				function(data){
+					$(form).find('input[type="submit"]').attr('disabled', false);
 					$('#load_school').css('display', 'none');
-					var obj = jQuery.parseJSON(data);
-					var string = "";
 					
-					//UPDATE DIV SCHOOL INFORMATION
-					$.each(obj.school, function(index, value){
-						var schoollevel_string;
-						switch(value.schoollevel){
-							case '1': schoollevel_string='Undergraduate degree'; break;
-							case '2': schoollevel_string='Masteral degree'; break;
-							case '3': schoollevel_string='Doctorate degree'; break;
-							case '4': schoollevel_string='High School'; break;
-							case '5': schoollevel_string='Elementary'; break;
-							default:   schoollevel_string='Undergraduate degree';
-						}
-						$('.school_information .school_info').html(function(){
-							string += "<p/>"+value.schoolname+" "+value.schoolyear+" "+schoollevel_string;
-							return string;
-						});
-					});
+					try{
+						var obj = jQuery.parseJSON(data);
+					}
+					catch(e){
+						alert('An error was encountered while submitting your form. Please try again later.');
+						window.location.reload(true);
+						return false;
+					}
 					
-					// UPDATE TEXT BOX AND SELECT PROPERTIES
-					var i = 1;
-					$.each(obj.school, function(){
-						$.each(this, function(k, v){	
-							if(k !='schoollevel'){
-								$(".school_fields input[name='" + k + i +"']").prop('value',v);
-								$(".school_fields input[name='" + k + i +"']").attr('value',v);
+					if(obj['result'] === 'fail' || obj['result'] === 'error'){
+						alert(obj['errmsg']);
+						window.location.reload(true);
+						return false;
+					}else if(obj['result'] === 'success'){
+						var string = "";
+					
+						//UPDATE DIV SCHOOL INFORMATION
+						$.each(obj.school, function(index, value){
+							var schoollevel_string;
+							switch(value.schoollevel){
+								case '1': schoollevel_string='Undergraduate degree'; break;
+								case '2': schoollevel_string='Masteral degree'; break;
+								case '3': schoollevel_string='Doctorate degree'; break;
+								case '4': schoollevel_string='High School'; break;
+								case '5': schoollevel_string='Elementary'; break;
+								default:   schoollevel_string='Undergraduate degree';
 							}
-							else{
-								$(".school_fields select[name='"+k+i+"']").val(v);
-								$(".school_fields select[name='"+k+i+"']").attr('data-status', v);
-							}
+							$('.school_information .school_info').html(function(){
+								string += "<p/>"+value.schoolname+" "+value.schoolyear+" "+schoollevel_string;
+								return string;
+							});
 						});
-						i++;
-					});
-					
-					$('.save_school').parent('.edit_fields').fadeOut();
-					handle_fields($('#personal_profile_school'));
-					progress_update($('#personal_profile_school'));
+						
+						// UPDATE TEXT BOX AND SELECT PROPERTIES
+						var i = 1;
+						$.each(obj.school, function(){
+							$.each(this, function(k, v){	
+								if(k !='schoollevel'){
+									$(".school_fields input[name='" + k + i +"']").prop('value',v);
+									$(".school_fields input[name='" + k + i +"']").attr('value',v);
+								}
+								else{
+									$(".school_fields select[name='"+k+i+"']").val(v);
+									$(".school_fields select[name='"+k+i+"']").attr('data-status', v);
+								}
+							});
+							i++;
+						});
+						
+						$(form).find('.edit_fields').fadeOut();
+						handle_fields($(form));
+						progress_update($(form));
+					}
 				});
+			$(form).find('input[type="submit"]').attr('disabled', true);
 			return false;
 	   }
 	});  
@@ -773,33 +805,49 @@ $(document).ready(function(){
 			$.post(config.base_url+'memberpage/edit_work', $('#personal_profile_work').serializeArray(),
 				function(data){
 					$('#load_work').css('display','none');
+					$(form).find('input[type="submit"]').attr('disabled', false);
 					
-					var obj = jQuery.parseJSON(data);
-					var string = "";
+					try{
+						var obj = jQuery.parseJSON(data);
+					}
+					catch(e){
+						alert('An error was encountered while submitting your form. Please try again later.');
+						window.location.reload(true);
+						return false;
+					}
 					
-					//UPDATE DIV CONTENTS
-					$('#personal_profile_work .work_info').html(function(){
-						for(var x=0; x<obj.work.length; x++){
-							string += "<p>" + obj.work[x].companyname + " " + obj.work[x].designation + " " + obj.work[x].year + "</p>";
-						};
-						return string;
-					});
-					
-					//UPDATE TEXTBOX PROPERTIES
-					var i = 1;
-					$.each(obj.work, function(){
-						$.each(this, function(k, v){	
-							$(".work_fields input[name='" + k + i +"']").prop('value',v);
-							$(".work_fields input[name='" + k + i +"']").attr('value',v);
+					if(obj['result'] === 'fail' || obj['result'] === 'error'){
+						alert(obj['errmsg']);
+						window.location.reload(true);
+						return false;
+					}else if(obj['result'] === 'success'){	
+						var string = "";
+						
+						//UPDATE DIV CONTENTS
+						$('#personal_profile_work .work_info').html(function(){
+							for(var x=0; x<obj.work.length; x++){
+								string += "<p>" + obj.work[x].companyname + " " + obj.work[x].designation + " " + obj.work[x].year + "</p>";
+							};
+							return string;
 						});
-						i++;
-					});
-					
-					$('#personal_profile_work .edit_fields').fadeOut();
-					handle_fields($('#personal_profile_work'));
-					progress_update($('#personal_profile_work'));
-				}
-			);
+						
+						//UPDATE TEXTBOX PROPERTIES
+						var i = 1;
+						$.each(obj.work, function(){
+							$.each(this, function(k, v){	
+								$(".work_fields input[name='" + k + i +"']").prop('value',v);
+								$(".work_fields input[name='" + k + i +"']").attr('value',v);
+							});
+							i++;
+						});
+						
+						$('#personal_profile_work .edit_fields').fadeOut();
+						handle_fields($('#personal_profile_work'));
+						progress_update($('#personal_profile_work'));
+						
+					}
+				});
+			$(form).find('input[type="submit"]').attr('disabled', true);
 			return false;
 		}
 	});
@@ -875,7 +923,15 @@ $(document).ready(function(){
 					$('#c_deliver_address_btn').attr('disabled', false);
 					$('#load_cdeliver_address').css('display', 'none');
 					$('#c_def_address').attr('checked', false);
-					var obj = jQuery.parseJSON(data);
+					
+					try{
+						var obj = jQuery.parseJSON(data);
+					}
+					catch(e){
+						alert('An error was encountered while submitting your form. Please try again later.');
+						window.location.reload(true);
+						return false;
+					}
 					
 					//UPDATE INPUTfield ATTRIBUTE and PROPERTY VALUES in Delivery Address Page
 					$('#c_deliver_address .inner_profile_fields input[type="text"]').each(function(){
@@ -1033,8 +1089,9 @@ function handle_fields(form)
 		var editprof = $(this).find('div.edit_profile');
 		var geninfo = $(this).find('div.gen_information');
 		
-		if ($.trim(echoedfield.html()).length > 0)
+		if ($.trim(echoedfield.html()).length > 0){
 			is_empty = false;
+		}
 		
 		if(is_empty){
 			editprof.show();
@@ -1285,6 +1342,8 @@ $(document).ready(function(){
 	
 	$('#bought .paging:not(:first)').hide();
 	$('#sold .paging:not(:first)').hide();
+	$('#complete_buy .paging:not(:first)').hide();
+	$('#complete_sell .paging:not(:first)').hide();
 	
 	$('#op_buyer .paging:not(:first)').hide();
 	$('#op_seller .paging:not(:first)').hide();
@@ -1314,8 +1373,22 @@ $(document).ready(function(){
 	
 	$('#pagination-sold').jqPagination({
 		paged: function(page) {
-			$('#bought .paging').hide();
-			$($('#bought .paging')[page-1]).show();
+			$('#sold .paging').hide();
+			$($('#sold .paging')[page-1]).show();
+		}
+	});
+	
+	$('#pagination-complete-bought').jqPagination({
+		paged: function(page) {
+			$('#complete_buy .paging').hide();
+			$($('#complete_buy .paging')[page-1]).show();
+		}
+	});
+	
+	$('#pagination-complete-sold').jqPagination({
+		paged: function(page) {
+			$('#complete_sell .paging').hide();
+			$($('#complete_sell .paging')[page-1]).show();
 		}
 	});
 	
