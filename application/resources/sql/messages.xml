@@ -19,7 +19,7 @@
       a.`to_id`,
       c.`username` AS `recipient`,
       a.`from_id`,
-      c.`imgurl` AS `recipient_img`,
+      CASE WHEN c.`imgurl` = '' THEN 'assets/user/default' ELSE c.`imgurl` END AS `recipient_img`,
       b.`username` AS `sender`,
       CASE WHEN b.`imgurl` = '' THEN 'assets/user/default' ELSE b.`imgurl` END AS `sender_img`,
       a.`message`,
