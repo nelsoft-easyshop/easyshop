@@ -114,15 +114,25 @@ class productUpload extends MY_Controller
 			$attribute = $this->product_model->getAttributesByParent($parents);
             $str_parents_to_last = "";
 
-			$lastElement = end($parents);	
-			foreach($parents as $k => $v) { # creating the bread crumbs from parent category to the last selected category
-				$str_parents_to_last = $str_parents_to_last  .' '. $v['name'];
-				if($v == $lastElement) {
+			
+			if($id ==1){
+			 	$str_parents_to_last = $otherCategory;
+			}else{
+				$lastElement = end($parents);	
+				foreach($parents as $k => $v) { # creating the bread crumbs from parent category to the last selected category
+					$str_parents_to_last = $str_parents_to_last  .' '. $v['name'];
+					if($v == $lastElement) {
 
-				}else{
-					$str_parents_to_last = $str_parents_to_last.' &#10140;';
+					}else{
+						$str_parents_to_last = $str_parents_to_last.' &#10140;';
+					}
+				}
+
+				if(!$otherCategory == ""){
+					$str_parents_to_last = $str_parents_to_last.' &#10140; ' . $otherCategory;
 				}
 			}
+			
 			$response['parent_to_last'] = $str_parents_to_last;
 			for ($i=0 ; $i < sizeof($attribute) ; $i++ ) {  # getting all lookuplist from item attribute
 				$lookuplist = $this->product_model->getLookItemListById($attribute[$i]['attr_lookuplist_id']);
