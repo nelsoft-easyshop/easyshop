@@ -487,7 +487,7 @@
 		<div class="paging posted_feedbacks">
 			<?php foreach($allfeedbacks['otherspost_buyer'] as $k=>$tempafb):?>
 			<div>
-				<h3>Feedback from Transaction#: <?php echo $k;?></h3>
+				<!--<h3>Feedback from Transaction#: <?php echo $k;?></h3>-->
 				<?php foreach($tempafb as $key=>$afb):?>
 				<p>From: <a href="<?php echo base_url();?>vendor/<?php echo $afb['member_name'];?>"><?php echo $afb['member_name'];?></a> | on: <?php echo $afb['dateadded'];?></p>
 				<p>"<?php echo $afb['feedb_msg']?>"</p>
@@ -545,7 +545,7 @@
 		<?php foreach($allfeedbacks['otherspost_seller'] as $k=>$tempafb):?>
 		
 		<div>
-			<h3>Feedback from Transaction#: <?php echo $k;?></h3>
+			<!--<h3>Feedback from Transaction#: <?php echo $k;?></h3>-->
 			<?php foreach($tempafb as $afb):?>
 			<p>From: <a href="<?php echo base_url();?>vendor/<?php echo $afb['member_name'];?>"><?php echo $afb['member_name'];?></a> | on: <?php echo $afb['dateadded'];?></p>
 			<p>"<?php echo $afb['feedb_msg']?>"</p>
@@ -599,7 +599,7 @@
 	<div class="paging posted_feedbacks">
 		<?php foreach($allfeedbacks['youpost_buyer'] as $k=>$tempafb):?>
 		<div>
-			<h3>Feedback from Transaction#: <?php echo $k;?></h3>
+			<!--<h3>Feedback from Transaction#: <?php echo $k;?></h3>-->
 			<?php foreach($tempafb as $afb):?>
 			<p>For: <a href="<?php echo base_url();?>vendor/<?php echo $afb['for_membername'];?>"><?php echo $afb['for_membername'];?></a> | on: <?php echo $afb['dateadded'];?></p>
 			<p>"<?php echo $afb['feedb_msg']?>"</p>
@@ -653,7 +653,7 @@
 	<div class="paging posted_feedbacks">
 		<?php foreach($allfeedbacks['youpost_seller'] as $k=>$tempafb):?>
 		<div>
-			<h3>Feedback from Transaction#: <?php echo $k;?></h3>
+			<!--<h3>Feedback from Transaction#: <?php echo $k;?></h3>-->
 			<?php foreach($tempafb as $afb):?>
 			<p>For: <a href="<?php echo base_url();?>vendor/<?php echo $afb['for_membername'];?>"><?php echo $afb['for_membername'];?></a> | on: <?php echo $afb['dateadded'];?></p>
 			<p>"<?php echo $afb['feedb_msg']?>"</p>
