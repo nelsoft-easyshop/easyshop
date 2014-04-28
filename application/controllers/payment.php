@@ -20,6 +20,7 @@ class Payment extends MY_Controller{
  
     
     public $PayMentPayPal = 1;
+    public $PayMentDragonPay = 2;
     public $PayMentCashOnDelivery = 3;
 
     // SANDBOX
@@ -228,6 +229,26 @@ class Payment extends MY_Controller{
         }
         echo $data;
         exit();
+    }
+
+    function changeAddress()
+    {
+            $uid = $this->session->userdata('member_id');
+            $postdata = array(
+                'consignee' => $this->input->post('consignee'),
+                'mobile' => $this->input->post('c_mobile'),
+                'telephone' => $this->input->post('c_telephone'),
+                'stateregion' => $this->input->post('c_stateregion'),
+                'city' => $this->input->post('c_city'),
+                'address' => $this->input->post('c_address'),
+                'country' => $this->input->post('c_country'),
+                'lat' => $this->input->post('temp_lat'),
+                'lng' => $this->input->post('temp_lng')
+            );
+                $postdata['default_add'] = "off";
+            $data = $this->memberpage_model->edit_consignee_address_by_id($uid, $postdata);
+            $this->output->set_output(json_encode($data));
+            echo $data;
     }
  
 #PROCESS PAYPAL

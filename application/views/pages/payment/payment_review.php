@@ -363,7 +363,7 @@ $(document).ready(function(){
     });
 
     $(document).on('click','.changeAddressBtn',function () {
-        var action = "memberpage/edit_consignee_address";
+        var action = "payment/changeAddress";
         var csrftoken = "<?php echo $my_csrf['csrf_hash'];?>";
  
         var formD = $('#delAddressFrm').serializeArray();
