@@ -36,10 +36,10 @@ $(document).ready(function(){
 			$('#login').hide();
             
             $.ajax({
-                type : "POST",
+                type: "POST",
                 dataType: "JSON",
-                url : config.base_url + "login/authenticate",
-                data : $(form).serializeArray(),
+                url: config.base_url + "login/authenticate",
+                data: $(form).serializeArray(),
                 success:function(data){
                     if(data.o_success <= 0){
                         //$("#login_error").empty();
@@ -50,6 +50,7 @@ $(document).ready(function(){
 						$('#login').show();
                     }
                     else{
+						var curl = $.cookie('rn');
                         $('.error_cont').text('');
                         $('#loading_img').hide();
                         $('#login').val('Redirecting...');
@@ -59,7 +60,8 @@ $(document).ready(function(){
 						if($.cookie('rn') == null){
 							window.location = config.base_url+"home";
 						}else{
-							window.location = config.base_url+$.cookie('rn');
+							$.removeCookie('rn');
+							window.location = config.base_url+curl;
 						}
 
 //						  si rain ang nag comment dito.                        
