@@ -314,6 +314,37 @@ textarea:focus {
 }
 
 
+/*** Alert Dialog Box ***/
+.ui-dialog.ui-widget.ui-widget-content.ui-corner-all.ui-front.ui-dialog-buttons.ui-draggable.alert_container {
+    border: 1px solid #CECECE;
+	-webkit-box-shadow: 0px 5px 20px -5px rgba(50, 50, 50, 0.75);
+	-moz-box-shadow:    0px 5px 20px -5px rgba(50, 50, 50, 0.75);
+	box-shadow:         0px 5px 20px -5px rgba(50, 50, 50, 0.75);
+}
+
+.alert_container .ui-dialog-titlebar.ui-widget-header.ui-corner-all.ui-helper-clearfix {
+    background-color: #444444;
+    border: medium none;
+    color: #FFFFFF;
+    margin: 5px;
+    padding: 8px;
+}
+
+.ui-button.ui-widget.ui-state-default.ui-corner-all.ui-button-text-only {
+    background-color: #F18200;
+    border: medium none;
+    color: #FFFFFF;
+    min-width: 70px;
+    padding: 4px;
+	-webkit-transition: all 0.3s ease-in-out;
+	-moz-transition: 	all 0.3s ease-in-out;
+	-o-transition:	    all 0.3s ease-in-out;
+	 transition: 		all 0.3s ease-in-out;	    
+}
+.ui-button.ui-widget.ui-state-default.ui-corner-all.ui-button-text-only:hover {
+    background-color: #ff4400;	
+}
+
 
 /*** header ***/
 
@@ -3881,22 +3912,30 @@ div.sold_prod_container {
 }
 
 .trans_alert {
+    display: inline-block;
+    margin-left: 10px;
+    min-width: 100px;
+    padding: 8px;
+    text-align: center;
     -webkit-border-radius: 3px;
        -moz-border-radius: 3px;
             border-radius: 3px;
 }
 
 .transac_paid {
-	border:1px solid green;
-	color: green;
+	background-color: #eafee9;
+	border:1px solid #18b114;
+	color: #18b114;
 }
 
 .transac_pay_return {
+	background-color: #ffeae4;
 	border: 1px solid #ff3600;;
 	color: #ff3600;
 }
 
 .transac_cod {
+	background-color: #efefef;
 	border:1px solid #313131;
 }
 
@@ -3949,7 +3988,7 @@ div.sold_prod_container {
 	font-weight: normal;
 }
 
-.transac_title span {
+.transac_content {
     display: table-cell;
     line-height: 24px;
     width: 607px;
@@ -3961,14 +4000,14 @@ div.sold_prod_container {
 }
 
 .transac_title span strong {
-	width: 75px;
 	display: inline-block;
 }
 
 span.transac_title_date {
     background-color: #b5b3b3;
     color: #fff;
-    float: right;
+    display: table-cell;
+/*    float: right;*/
     font-weight: bold;
     height: 49px;
     line-height: 52px;
@@ -3977,17 +4016,56 @@ span.transac_title_date {
     width: 150px;
 }
 
-span.sold_transac_add {
-	font-size: 11px;
+.transac_content span {
+	font-size: 12px;
+	display: inline-block;
+	word-wrap: break-word;
+	vertical-align: top;
 }
 
-span.sold_transac_add strong {
-	width: auto;
+.sold_transac_add_state_region {
+	width: 130px;
+}
+
+.sold_transac_add_city {
+	width: 100px;
+}
+
+.sold_transac_add_fulladd {
+	width: 200px;
 }
 
 #sold .transac_title_date {
-	height: 82px;
-	line-height: 82px;
+	display: table-cell;
+    line-height: 85px;
+/*    min-height: 85px;*/	
+	height: auto;
+}
+
+.tsold_viewmap {
+    background-color: #494949;
+    color: #FFFFFF;
+    cursor: pointer;
+    margin: 3px;
+    padding: 3px;
+    width: 100px;
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
+	border-radius: 2px;
+}
+
+.tsold_viewmap:hover {
+	background-color: #868686;
+}
+
+.tsold_viewmap:before {
+	content:' ';
+	background:url(../images/global_sprite.png) -472px -252px no-repeat;
+	display: inline-block;
+	width: 30px;
+	height: 25px;
+	margin-right: 5px;
+	vertical-align: middle;
 }
 
 
