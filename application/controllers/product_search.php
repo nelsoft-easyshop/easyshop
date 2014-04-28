@@ -215,7 +215,9 @@ class product_search extends MY_Controller {
 								
 			# get all items here (right pane)
 			
-			$items = $this->search_model->SearchProduct($catID, $start, $per_page, $colsort, $is, $con, $gp, $attr_brand, $QAtt, $test);
+			$sc = "";
+			$loc = "";
+			$items = $this->search_model->SearchProduct($catID, $start, $per_page, $colsort, $is, $con, $gp, $attr_brand, $QAtt, $sc, $loc, $test);
 
 			if(isset($items) && !empty($items)){ # check if it has items
 					
@@ -430,7 +432,9 @@ class product_search extends MY_Controller {
 			##### Parameters end here ####################################################
 					
 			# get all items here (right pane)
-			$items = $this->search_model->SearchProduct($catID, $start, $per_page, $colsort, $is, $con, $gp, $attr_brand, $QAtt, $test);
+			$sc = "";
+			$loc = "";
+			$items = $this->search_model->SearchProduct($catID, $start, $per_page, $colsort, $is, $con, $gp, $attr_brand, $QAtt, $sc, $loc, $test);
 			
 			if(isset($items) && !empty($items)){ # check if it has items		
 				$response['items'] = $items; ### pass to view	
