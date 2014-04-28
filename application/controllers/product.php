@@ -355,16 +355,18 @@ class product extends MY_Controller
 
 			$keywords = $this->product_model->itemKeySearch($words);
  
-			$html .= "<ul>";
+			
 			if(count($keywords) <= 0){
-				$html .= "<li>No Record Found!</li>";
+				$html = 0;
 			}else{
+                $html .= "<ul>";
 				foreach ($keywords as $value) {
 					$showValue = $this->highlight($value,$stringData);
 					$html .= "<li><a href='".base_url()."search/search.html?q_str=".urlencode($value)."&q_cat=1'>".$showValue."</a></li>";
 				}
+                $html .= "</ul>";
 			}
-			$html .= "</ul>";
+	
 			echo $html;
 		}
 
