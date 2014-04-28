@@ -22,7 +22,7 @@
 <!--Chosen CSS-->
 <link rel="stylesheet" href="<?=base_url()?>assets/css/chosen.min.css" type="text/css" media="screen"/>
 
-
+<script>alert('hello world');</script>
 
 <div id = "member_page_body">
 	<div class="clear"></div>
@@ -1381,6 +1381,7 @@
 	</div>
 	
 	<div id="bought" class="transactions-buy dashboard_table">
+		<h2>Bought Items</h2>
 		<?php if(count($transaction['buy'])===0):?>
 		<br/>
 		<div><strong>You have not bought any items yet.</strong></div>
@@ -1390,7 +1391,7 @@
 		<?php foreach($transaction['buy'] as $tk=>$transact):?>
 		<div class="transac-container">
 			<div class="transac_title">
-				<h4><span><strong>Invoice #:</strong>  <?php echo $transact['invoice_no'];?></span>
+				<h4><span class="transac_content"><strong>Invoice #:</strong>  <?php echo $transact['invoice_no'];?></span>
 					<span class="transac_title_date"><?php echo $transact['dateadded']?></span>
 				</div>
 				<div class="transac_prod_wrapper">
@@ -1427,11 +1428,11 @@
 										<input type="hidden" name="invoice_num" value="<?php echo $transact['invoice_no'];?>">
 									<?php echo form_close();?>
 								<?php elseif($product['status'] == 1):?>
-									<span>Paid</span>
+									<span class="trans_alert transac_paid">Paid</span>
 								<?php elseif($product['status'] == 2):?>
-									<span>Payment returned by seller</span>
+									<span class="trans_alert transac_pay_return">Payment returned by seller</span>
 								<?php elseif($product['stuats'] == 3):?>
-									<span>Cash on delivery</span>
+									<span class="trans_alert transac_cod">Cash on delivery</span>
 								<?php endif;?>
 							</div>
 							<div class="clear"></div>
@@ -1523,6 +1524,7 @@
 </div>
 
 <div id="sold" class="transactions-sell dashboard_table">
+	<h2>Sold Items</h2>
 	<?php if(count($transaction['sell'])===0):?>
 	<br/>
 	<div><strong>You have not sold any items yet.</strong></div>
@@ -1533,13 +1535,13 @@
 		<div class="transac-container">
 			<div class="transac_title">
 				<h4>
-					<span>
+					<span class="transac_content">
 						<strong>Invoice #: </strong> <?php echo $transact['invoice_no'];?><br />
 						<strong>Sold to: </strong> <a href="<?php echo base_url();?>vendor/<?php echo $transact['buyer']?>"><?php echo $transact['buyer']?></a> <br />
 						<?php foreach($transact['users'] as $uk=>$user):?>
-							<span class="sold_transac_add"><strong>State/Region:</strong> <?php echo $user['address']['stateregion']?></span>
-							<span class="sold_transac_add"><strong>City:</strong> <?php echo $user['address']['city'];?></span>
-							<span class="sold_transac_add"><strong>Address:</strong> <?php echo $user['address']['fulladd'];?></span>
+							<span class="sold_transac_add_state_region"><strong>State/Region:</strong> <?php echo $user['address']['stateregion']?></span>
+							<span class="sold_transac_add_city"><strong>City:</strong> <?php echo $user['address']['city'];?></span>
+							<span class="sold_transac_add_fulladd"><strong>Address:</strong> <?php echo $user['address']['fulladd'];?></span>
 							<?php if( $user['address']['lat']!=0 && $user['address']['lng']!=0 ):?>
 								<span class="tsold_viewmap" data-lat="<?php echo $user['address']['lat'];?>" data-lng="<?php echo $user['address']['lng'];?>">View Map</span>
 								<div class="map_modalcont" style="display:none;"></div>
@@ -1679,11 +1681,13 @@
 
 
 <div id="complete" class="dashboard_table">
+	
 	<ul class="idTabs feedbacks_tabs">
 		<li><a href="#complete_buy">Bought</a></li>
 		<li><a href="#complete_sell">Sold</a></li>
 	</ul>
 	<div id="complete_buy">
+		<h2>Bought Items</h2>
 		<?php if(count($transaction['complete']['buy'])===0):?>
 			<br/>
 			<div><strong>No transaction for this category.</strong></div>
@@ -1823,6 +1827,7 @@
 	
 	
 	<div id="complete_sell">
+		<h2>Sell Items</h2>
 		<?php if(count($transaction['complete']['sell'])===0):?>
 		<br/>
 		<div><strong>No transaction for this category.</strong></div>
@@ -1833,13 +1838,13 @@
 			<div class="transac-container">
 				<div class="transac_title">
 					<h4>
-						<span>
+						<span class="transac_content">
 							<strong>Invoice #: </strong> <?php echo $transact['invoice_no'];?><br />
 							<strong>Sold to: </strong> <a href="<?php echo base_url();?>vendor/<?php echo $transact['buyer']?>"><?php echo $transact['buyer']?></a> <br />
 							<?php foreach($transact['users'] as $uk=>$user):?>
-								<span class="sold_transac_add"><strong>State/Region:</strong> <?php echo $user['address']['stateregion']?></span>
-								<span class="sold_transac_add"><strong>City:</strong> <?php echo $user['address']['city'];?></span>
-								<span class="sold_transac_add"><strong>Address:</strong> <?php echo $user['address']['fulladd'];?></span>
+								<span class="sold_transac_add_state_region"><strong>State/Region:</strong> <?php echo $user['address']['stateregion']?></span>
+								<span class="sold_transac_add_city"><strong>City:</strong> <?php echo $user['address']['city'];?></span>
+								<span class="sold_transac_add_fulladd"><strong>Address:</strong> <?php echo $user['address']['fulladd'];?></span>
 								<?php if( $user['address']['lat']!=0 && $user['address']['lng']!=0 ):?>
 									<span class="tsold_viewmap" data-lat="<?php echo $user['address']['lat'];?>" data-lng="<?php echo $user['address']['lng'];?>">View Map</span>
 									<div class="map_modalcont" style="display:none;"></div>
