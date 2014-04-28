@@ -100,6 +100,9 @@
 			var recipient = D.name;
 			var img = D.img;
 			var msg = $("#out_txtarea").val();
+            if (msg == "") {
+                return false;
+            }
 			send_msg(recipient,msg);
 			specific_msgs();
 		});
@@ -108,7 +111,11 @@
 		
 	$("#modal_send_btn").on("click",function(){
 		var recipient = $("#msg_name").val().trim();
-		var msg = $("#msg-message").val();
+		var msg = $("#msg-message").val().trim();
+        if (msg == "") {
+            alert("Say something..");
+            return false;
+        }
 		if(send_msg(recipient,msg)){
 			$("#modal-container, #modal-background").toggleClass("active");
 			$("#modal-container").hide();
