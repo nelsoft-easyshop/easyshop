@@ -29,7 +29,7 @@
                           $row[reset($keys)]['message'] = html_escape(reset($row)['message']);
                     ?>
                     
-					<a class="btn_each_msg" href="javascript:void(0)" data='<?=json_encode($row)?>'>
+					<a class="btn_each_msg" href="javascript:void(0)" data='<?=html_escape(json_encode($row))?>'>
 						<span class="msg_sender"><?PHP echo reset($row)['name']; ?></span>
 						<span class="msg_message"><?PHP echo html_escape(reset($row)['message']); ?></span>
 						<span class="msg_date"><?PHP echo reset($row)['time_sent']; ?></span>
@@ -65,7 +65,7 @@
 		</div>
 		<div>
 			<label>Message : </label><br>
-			<textarea cols="40" rows="5" name="msg-message" id="msg-message"></textarea>		
+			<textarea cols="40" rows="5" name="msg-message" id="msg-message" placeholder="Your message here.."></textarea>		
 		</div>	   
     </div>
     <button id="modal_send_btn">Send</button>
@@ -106,7 +106,7 @@
     });
 		
 	$("#modal_send_btn").on("click",function(){
-		var recipient = $("#msg_name").val().trim();
+		var recipient = htmlspecialchars($("#msg_name").val().trim());
 		var msg = $("#msg-message").val();
 		if(send_msg(recipient,msg)){
 			$("#modal-container, #modal-background").toggleClass("active");
@@ -153,8 +153,13 @@
 			url : "<?=base_url()?>messages/send_msg",
 			data : {recipient:recipient,msg:msg,es_csrf_token:csrftoken},
 			success : function(data) {
-				result = data.messages;
-				tbl_data(result)
+                if (data != "false") {
+                    result = data.messages;
+                    tbl_data(result)
+                }else{
+                    alert("Username does not exist");
+                    return false;
+                }
 			}
 		});
 		
@@ -184,7 +189,22 @@
 		$(this).addClass("Active");
 	});
 	
-	function tbl_data(D){
+	
+    var entityMap = {
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': '&quot;',
+    "'": '&#39;',
+    "/": '&#x2F;'
+  };
+
+  function escapeHtml(string) {
+    return String(string).replace(/[&<>"'\/]/g, function (s) {
+      return entityMap[s];
+    });
+  }
+    function tbl_data(D){
 		html = "";
 		$.each(D,function(key,val){
 			var cnt = parseInt(Object.keys(val).length)- 1;
@@ -198,9 +218,9 @@
 			}
 			html +='</td>';
 			html +='<td class=" ">';
-			html +="<a class='btn_each_msg' data='"+ JSON.stringify(val) +"' href='javascript:void(0)'>";
+			html +="<a class='btn_each_msg' data='"+ escapeHtml(JSON.stringify(val))+"' href='javascript:void(0)'>";
 			html +='<span class="msg_sender">'+Nav_msg.name+'</span>';
-			html +='<span class="msg_message">'+Nav_msg.message+'</span>';
+			html +='<span class="msg_message">'+encodeURI(Nav_msg.message)+'</span>';
 			html +='<span class="msg_date">'+Nav_msg.time_sent+'</span>';
 			html +='</a>';
 			html +='</td>';
@@ -213,7 +233,6 @@
 	function specific_msgs() {
 		var html = "";
 		var all_messages = eval('('+ $(".Active").attr('data')+')');
-		//console.log(all_messages);
 		$.each(all_messages,function(key,val){
 			if (val.status == "reciever") {
 				html += '<span class="float_left">';
@@ -221,7 +240,7 @@
 				html += '<span class="float_right">';
 			}
 			html += '<img src="'+val.sender_img+'/60x60.png">';
-			html += '<p>'+val.message+'</p>';
+			html += '<p>'+encodeURI(val.message)+'</p>';
 			html += '<input type="checkbox" class="d_all" value="'+val.id_msg+'"></span>';
 			$("#msg_field").empty();
 			$("#msg_field").append(html);
@@ -241,9 +260,13 @@
 			url : "<?=base_url()?>messages/get_all_msgs",
 			data : {es_csrf_token:csrftoken},
 			success : function(d) {
-				 tbl_data(d.messages);
-				 specific_msgs();
-				$("#head_container span").show();
+                if (d.messages != 0) {
+                    tbl_data(d.messages);
+                    specific_msgs();
+                    $("#head_container span").show();
+                }else{
+                    location.reload();
+                }
 			}   
 		});
 	});
@@ -264,8 +287,12 @@
 			url : "<?=base_url()?>messages/delete_msg",
 			data : {id_msg:ids,es_csrf_token:csrftoken},
 			success : function(d) {
-				 data = d.messages;
-			}   
+                if (d.messages != 0) {
+                    data = d.messages;
+                }else{
+                    location.reload();
+                }
+			}
 		});
 		
 		return data;
