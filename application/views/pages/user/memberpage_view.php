@@ -1421,7 +1421,7 @@
 										$attr = array('class'=>'transac_response');
 										echo form_open('',$attr);
 									?>
-										<span class = "transac_response_btn orange_btn3">Forward payment to seller</span>
+										<input class = "transac_response_btn orange_btn3" value="Forward payment to seller" type="submit">
 										<input type="hidden" name="buyer_response" value="<?php echo $opk;?>">
 										<input type="hidden" name="transaction_num" value="<?php echo $tk;?>">
 										<input type="hidden" name="invoice_num" value="<?php echo $transact['invoice_no'];?>">
@@ -1575,7 +1575,7 @@
 								$attr = array('class'=>'transac_response');
 								echo form_open('',$attr);
 							?>
-							<span class="transac_response_btn orange_btn3">Return payment to buyer</span>
+							<input class="transac_response_btn orange_btn3" value="Return payment to buyer" type="submit">
 							<input type="hidden" name="seller_response" value="<?php echo $opk;?>">
 							<input type="hidden" name="transaction_num" value="<?php echo $tk;?>">
 							<input type="hidden" name="invoice_num" value="<?php echo $transact['invoice_no'];?>">
@@ -1724,7 +1724,7 @@
 											$attr = array('class'=>'transac_response');
 											echo form_open('',$attr);
 										?>
-											<span class = "transac_response_btn">Forward payment to seller</span>
+											<input class = "transac_response_btn" value="Forward payment to seller" type="submit">
 											<input type="hidden" name="buyer_response" value="<?php echo $opk;?>">
 											<input type="hidden" name="transaction_num" value="<?php echo $tk;?>">
 											<input type="hidden" name="invoice_num" value="<?php echo $transact['invoice_no'];?>">
@@ -1874,7 +1874,7 @@
 									$attr = array('class'=>'transac_response');
 									echo form_open('',$attr);
 								?>
-								<span class="transac_response_btn">Return payment to buyer</span>
+								<input class="transac_response_btn" value="Return payment to buyer" type="submit">
 								<input type="hidden" name="seller_response" value="<?php echo $opk;?>">
 								<input type="hidden" name="transaction_num" value="<?php echo $tk;?>">
 								<input type="hidden" name="invoice_num" value="<?php echo $transact['invoice_no'];?>">

@@ -1092,6 +1092,9 @@ $(document).ready(function(){
 				alert(serverResponse.error);
 			}
 		});
+		$(this).val('Please wait...');
+		$(this).attr('disabled', true);
+		return false;
 	});
 	
 });
