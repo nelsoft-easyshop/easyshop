@@ -1,0 +1,46 @@
+<?xml version='1.0' ?>
+<map>
+    <select id="send_message">
+        INSERT INTO `easyshop`.`es_messages`
+            (`to_id`,
+             `from_id`,
+             `time_sent`,
+             `message`,
+             `opened`)
+        VALUES (:to_id,
+                :from_id,
+                NOW(),
+                :message,
+                '0');
+    </select>
+    <select id="all_messages">
+    SELECT 
+      a.`id_msg`,
+      a.`to_id`,
+      c.`username` AS `recipient`,
+      a.`from_id`,
+      c.`imgurl` AS `recipient_img`,
+      b.`username` AS `sender`,
+      b.`imgurl` AS `sender_img`,
+      a.`message`,
+      a.`time_sent`,
+      a.`opened` ,
+      a.`is_delete`
+    FROM
+      `es_messages` AS a 
+      LEFT JOIN `es_member` AS b 
+        ON a.`from_id` = b.`id_member` 
+      LEFT JOIN `es_member` AS c 
+        ON a.`to_id` = c.`id_member` 
+    WHERE (a.`to_id` = :id 
+        OR a.`from_id` = :id) AND `is_delete` != '3'
+      
+    ORDER BY time_sent DESC 
+    </select>
+    <select id="get_recepientID">
+        SELECT
+        `id_member`
+        FROM `easyshop`.`es_member`
+        WHERE username = :username;
+    </select>
+</map>
