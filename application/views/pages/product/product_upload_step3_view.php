@@ -62,6 +62,9 @@
   	      
         
             <?php else:?>
+				 <ul id="product_combination_list">
+					<li class="product_combination_locked">&bull; All Combinations</li>
+				 </ul>
                  <input type="hidden" id="product_item_id" value="<?php echo $attr['product_item_id'];?>">
             <?php endif;?>
             <input type="hidden" id="has_attr" value="<?php echo $attr['has_attr'];?>">

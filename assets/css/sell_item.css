@@ -1100,6 +1100,20 @@ a:hover.tooltips span {
     position: relative;
 }
 
+.product_combination_locked{
+	background: url('../images/global_sprite.png') -591px -308px no-repeat;
+	border: 1px solid #f18200;
+    cursor: pointer;
+    display: inline-block;
+    float: left;
+    font-size: 10px;
+    height: 150px;
+    line-height: 35px;
+    margin: 0 0 10px 5px;
+    padding: 0 3px 0 25px;
+    width: 180px;
+}
+
 .product_combination {
     border: 1px solid #DBD8D7;
     cursor: pointer;
