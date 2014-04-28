@@ -504,7 +504,11 @@
 	
 	$("#modal_send_btn").on("click",function(){
 	    var recipient = <?php echo $vendordetails['id_member']; ?>;
-            var csrftoken = $("#csrf").val().trim();
+        var csrftoken = $("#csrf").val().trim();
+		if (msg == "") {
+			alert("Say something..");
+			return false;
+		}
 	    var msg = $("#msg-message").val();
             $.ajax({
                 async : true,
