@@ -51,7 +51,7 @@
           					  <?php foreach($temp as $pattr):?>
           						<p>&bull; <?php echo $pattr;?> </p>
           					  <?php endforeach;?>
-          				  </div> 
+          				    </div> 
         				  </li>
         				<?php endforeach;?>
         			  </ul>

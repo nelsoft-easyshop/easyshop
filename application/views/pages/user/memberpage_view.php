@@ -172,7 +172,7 @@
 					<input class="items" data-width="150" data-fgColor="#7ad014" data-max="1000" data-thickness=".1" data-angleOffset="180" data-readOnly=true data-displayPrevious=true value="<?php echo $sold_count;?>">
 				</div>
 			</div>
-
+             
 			<div class="posted_feedbacks_top">
 				<h3 class="fm1 f18">Feedback Score:</h3>
 				<span>(<?php echo $allfeedbacks['rcount'];?> Feedback/s received)</span>
