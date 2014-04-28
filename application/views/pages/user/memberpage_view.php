@@ -22,7 +22,7 @@
 <!--Chosen CSS-->
 <link rel="stylesheet" href="<?=base_url()?>assets/css/chosen.min.css" type="text/css" media="screen"/>
 
-<script>alert('hello world');</script>
+
 
 <div id = "member_page_body">
 	<div class="clear"></div>
