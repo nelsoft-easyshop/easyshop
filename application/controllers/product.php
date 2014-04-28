@@ -400,9 +400,12 @@ class product extends MY_Controller
 				$words = "+".implode("*,+",explode(" ",trim($string)))."*"; 
 				$checkifexistcategory = $this->product_model->checkifexistcategory($category);
 				if($checkifexistcategory == 0 || $category == 1)
-				{
-					$usable_string = " AND  MATCH(a.name,keywords) AGAINST('".$words."' IN BOOLEAN MODE)";
+				{		 
+					$usable_string = " AND  MATCH(`name`,keywords) AGAINST('".$words."' IN BOOLEAN MODE)";
 					$response['items'] = $this->product_model->itemSearchNoCategory($usable_string,$start,$per_page);
+
+	 
+
 				}else{
 					$usable_string = " AND  MATCH(a.name,keywords) AGAINST('".$words."' IN BOOLEAN MODE)";
 					$down_cat = $this->product_model->selectChild($category);
@@ -518,7 +521,7 @@ class product extends MY_Controller
 		
 		if($checkifexistcategory == 0 || $category == 1)
 		{
-			$usable_string = " AND  MATCH(a.name,keywords) AGAINST('".$words."' IN BOOLEAN MODE)";
+			$usable_string = " AND  MATCH(`name`,keywords) AGAINST('".$words."' IN BOOLEAN MODE)";
 			$response['items'] = $this->product_model->itemSearchNoCategory($usable_string,$start,$per_page);	
 		}else{
 			$usable_string = " AND  MATCH(a.name,keywords) AGAINST('".$words."' IN BOOLEAN MODE)";

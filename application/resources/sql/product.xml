@@ -847,30 +847,7 @@ FROM
 
 
 
-<select id="itemSearchNoCategory">
-    SELECT 
-      main_tbl.*
-      , es_product_image.product_image_path 
-    FROM
-      `es_product_image` 
-      LEFT JOIN 
-        (SELECT 
-          `id_product` AS product_id
-          , `name` AS product_name
-          , `price` AS product_price
-          , `brief` AS product_brief
-          , `condition` AS product_condition 
-        FROM
-          `es_product` 
-        WHERE is_delete = 0 AND `is_draft` = 0
-          AND MATCH(NAME, keywords) AGAINST (:words IN BOOLEAN MODE) 
-          ) AS main_tbl 
-        ON main_tbl.product_id = es_product_image.`product_id` 
-    WHERE `es_product_image`.`is_primary` = 1 
-      AND main_tbl.product_id = es_product_image.`product_id` 
-    LIMIT :start, :per_page   
-</select> 
-
+ 
  
 
 <select id="itemKeySearch">

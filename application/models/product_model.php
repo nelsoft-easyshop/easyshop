@@ -888,12 +888,33 @@ class product_model extends CI_Model
 	{
 		$start = (int)$start;
 	 	$per_page = (int)$per_page;
-	
+ 
 
-		$query = $this->sqlmap->getFilenameID('product','itemSearchNoCategory');
-		$sth = $this->db->conn_id->prepare($query);
-		
-		$sth->bindParam(':words',$words,PDO::PARAM_STR);
+		$query = "
+		 SELECT 
+      main_tbl.*
+      , es_product_image.product_image_path 
+    FROM
+      `es_product_image` 
+      LEFT JOIN 
+        (SELECT 
+          `id_product` AS product_id
+          , `name` AS product_name
+          , `price` AS product_price
+          , `brief` AS product_brief
+          , `condition` AS product_condition 
+        FROM
+          `es_product` 
+        WHERE is_delete = 0 AND `is_draft` = 0
+          ".$words."
+          ) AS main_tbl 
+        ON main_tbl.product_id = es_product_image.`product_id` 
+    WHERE `es_product_image`.`is_primary` = 1 
+      AND main_tbl.product_id = es_product_image.`product_id` 
+    LIMIT :start, :per_page 
+    ";  
+    		$sth = $this->db->conn_id->prepare($query);
+		 
 		$sth->bindParam(':start',$start,PDO::PARAM_INT);
 		$sth->bindParam(':per_page',$per_page,PDO::PARAM_INT);
 		$sth->execute();
