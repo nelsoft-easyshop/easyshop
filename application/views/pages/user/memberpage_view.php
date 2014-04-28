@@ -1154,7 +1154,7 @@
 								echo "<option value='" . $banks['id'] ."'>". $banks['name'] ."</option>";
 							}							
 							?>							
-						</select><br />
+						</select>
 				</div>
 				<div>
 					<label for="bi_acct_name">Account Name:</label>
