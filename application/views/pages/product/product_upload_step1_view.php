@@ -175,9 +175,8 @@ echo form_open('sell/edit/step2', $attributesForm);
                         cache: false,
                         success: function(d) { 
                             if(d.e == 1){
-                                $('.simplemodal-container > .draftitem'+pid).remove();
-                                draftCount -= 1;
-                                 $.modal.close();
+                                $('.simplemodal-container  .draftitem'+pid).remove();
+                                draftCount -= 1; 
                                 $('.draft-cnt').html(draftCount);
                                 if(draftCount <= 0){
 
