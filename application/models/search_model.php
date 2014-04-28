@@ -192,7 +192,7 @@ class search_model extends CI_Model
 		return $row;
 	}	
 		
-	public function SearchProduct($category_id, $start, $per_page, $colsort, $is, $con, $gp, $attr_brand, $QAtt, $sc, $test){ 
+	public function SearchProduct($category_id, $start, $per_page, $colsort, $is, $con, $gp, $attr_brand, $QAtt, $sc, $loc, $test){ 
 	
 	$start = (int)$start;
 	$per_page = (int)$per_page;		
@@ -206,7 +206,7 @@ class search_model extends CI_Model
 		LEFT JOIN `es_product_image` epi ON ep.`id_product` = epi.`product_id` AND epi.`is_primary` = 1
 		LEFT JOIN `es_brand` eb ON ep.`brand_id` = eb.`id_brand`
 		WHERE ep.`cat_id` IN (". $category_id . ") AND ep.`is_draft` = 0 AND ep.`is_delete` = 0 
-		". $QAtt . " ". $sc ." ". $is ." ". $con ." ". $gp ." ". $attr_brand ."  
+		". $QAtt . " ". $sc ." ". $loc . " " . $is ." ". $con ." ". $gp ." ". $attr_brand ."  
 		ORDER BY ". $colsort ." DESC 
 		LIMIT :start, :per_page ";
 	
