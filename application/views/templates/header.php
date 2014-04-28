@@ -2,7 +2,7 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <?php require_once("assets/includes/css.php"); ?>
-    <?php require_once("assets/includes/js.php"); ?>
+<?php require_once("assets/includes/js.php"); ?>
 <meta charset="utf-8" />
 <meta name="description" content="" />
 <meta name="keywords" content=""/>
@@ -96,6 +96,7 @@
               <!-- <li><a href="<?=base_url()?>home/under_construction">Discounts</a></li> -->
               <li><a href="<?=base_url()?>category/all">Shopping Categories</a></li>
 			  <li><a href="<?=base_url()?>advsearch">Advance Search</a></li>
+			  <li><a href="<?=base_url()?>product_search_v2/advsrch2">Advance Search v2</a></li>
 			  <!-- Removed: not part of branch release. Keep edits like this in the trunk -->
               <!-- <li><a href="<?=base_url()?>product_search/advance">Advance Search</a></li> -->
 			  
@@ -248,12 +249,12 @@ $('#main_search').on('input propertychange', function() {
 
 <script type='text/javascript'>
 $(document).ready(function(){
-	var getpath = window.location.pathname;
+	var getpath = window.location.pathname + window.location.search;
 	var pathname = getpath.substring(1,999);
 	
 	if($.cookie('rn') == null){
 		$.cookie('rn', "home", {path: "/", secure: false});		
-	}else{
+	}else if(getpath != "/login"){
 		$.cookie('rn', pathname, {path: "/", secure: false});	
 	}
 });

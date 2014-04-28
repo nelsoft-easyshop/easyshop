@@ -2,7 +2,7 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <?php require_once("assets/includes/css.php"); ?>
-    <?php require_once("assets/includes/js.php"); ?>
+<?php require_once("assets/includes/js.php"); ?>
 <meta charset="utf-8" />
 <meta name="description" content="" />
 <meta name="keywords" content=""/>
@@ -42,6 +42,19 @@
   ga('send', 'pageview');
 </script>
 <!-- End of Google Analytics -->
+
+<script type='text/javascript'>
+$(document).ready(function(){
+	var getpath = window.location.pathname + window.location.search;
+	var pathname = getpath.substring(1,999);
+	
+	if($.cookie('rn') == null){
+		$.cookie('rn', "home", {path: "/", secure: false});		
+	}else if(getpath != "/login"){
+		$.cookie('rn', pathname, {path: "/", secure: false});	
+	}
+});
+</script> 
  
 </head>
 <body>
