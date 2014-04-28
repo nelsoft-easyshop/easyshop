@@ -60,7 +60,8 @@ class product_search_v2 extends MY_Controller {
 	public $per_page = 10; # number of displayed products
 	function advsrch2(){
 
-		$data = array( 
+		$data = array(
+			'shiploc' => $this->product_model->getLocation(),
 			'title' => 'Easyshop.com - Advance Search V2.0'
 		);
 		$data = array_merge($data, $this->fill_header());
@@ -185,11 +186,15 @@ class product_search_v2 extends MY_Controller {
 					
 					$sc = "";
 					$gsc = $this->input->get('_subcat');
-					
-					
 					if($gsc){
 						$sc = " AND ep.`cat_id` = " . $gsc . " ";
 					}
+					
+					$loc = "";
+					$gloc = $this->input->get('_loc');
+					if($gloc){
+						$loc = " AND ep.`id_product` IN (SELECT `product_id` FROM `es_product_shipping_head` WHERE `location_id` = " . $gloc . ") ";
+					}					
 					
 					$is = "";
 					$gis = $this->input->get('_is');			
@@ -215,7 +220,7 @@ class product_search_v2 extends MY_Controller {
 										
 					# get all items here (right pane)
 					
-					$items = $this->search_model->SearchProduct($catID, $start, $per_page, $colsort, $is, $con, $gp, $attr_brand, $QAtt, $sc, $test);
+					$items = $this->search_model->SearchProduct($catID, $start, $per_page, $colsort, $is, $con, $gp, $attr_brand, $QAtt, $sc, $loc, $test);
 				
 					if(!empty($items)){ # check if it has items
 							
@@ -255,15 +260,21 @@ class product_search_v2 extends MY_Controller {
 						###########################################
 
 					}
-				
 				$this->load->view('templates/header_plain', $data); 
 				$this->load->view('pages/search/search_display_v2',$response);
 				$this->load->view('templates/footer_full');
 				
 				/////////////////////////////////////////////////////////////////////////////
 				
-			} // end check category
+			}else{
+				// no category found
+				$this->load->view('templates/header_plain', $data); 
+				$this->load->view('pages/search/search_display_v2',$response);
+				$this->load->view('templates/footer_full');
+			}
+			 // end check category
 		}else{
+			// no query string found
 			$this->load->view('templates/header_plain', $data); 
 			$this->load->view('pages/search/search_display_v2',$response);
 			$this->load->view('templates/footer_full');
@@ -309,7 +320,8 @@ class product_search_v2 extends MY_Controller {
 			$attr_values_array = "";
 			$attr_brand = ""; # Brands
 			$sopA = "";	
-			$scA = "";		
+			$scA = "";
+			$locA = "";		
 			$isA = "";
 			$conA = "";
 			$price1A = "";
@@ -354,7 +366,8 @@ class product_search_v2 extends MY_Controller {
 					}
 				
 					if($name == "_sop" && !empty($val)){ $sopA = $val; }
-					if($name == "_subcat" && !empty($val)){ $scA = $val; }	
+					if($name == "_subcat" && !empty($val)){ $scA = $val; }
+					if($name == "_loc" && !empty($val)){ $locA = $val; }	
 					if($name == "_is" && !empty($val)){ $isA = $val; }
 					if($name == "_con" && !empty($val)){ $conA = $val; }
 					if($name == "_price1" && !empty($val)){ $price1A = $val; }
@@ -401,7 +414,12 @@ class product_search_v2 extends MY_Controller {
 			$sc = "";
 			if(!empty($scA)){
 				$sc = " AND ep.`cat_id` = " . $scA . " ";
-			}			
+			}
+			
+			$loc = "";
+			if($locA){
+				$loc = " AND ep.`id_product` IN (SELECT `product_id` FROM `es_product_shipping_head` WHERE `location_id` = " . $locA . ") ";
+			}					
 			
 			$is = "";		
 			if(!empty($isA)){
@@ -423,7 +441,7 @@ class product_search_v2 extends MY_Controller {
 			##### Parameters end here ####################################################
 					
 			# get all items here (right pane)
-			$items = $this->search_model->SearchProduct($catID, $start, $per_page, $colsort, $is, $con, $gp, $attr_brand, $QAtt, $sc, $test);
+			$items = $this->search_model->SearchProduct($catID, $start, $per_page, $colsort, $is, $con, $gp, $attr_brand, $QAtt, $sc, $loc, $test);
 			
 			if(isset($items) && !empty($items)){ # check if it has items		
 				$response['items'] = $items; ### pass to view	
