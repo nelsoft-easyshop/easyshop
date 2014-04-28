@@ -29,13 +29,14 @@ if (!defined('BASEPATH'))
         $session_data = $this->session->all_userdata();
 		$rec = trim($this->input->post("recipient"));
 		if(!is_numeric($rec)){
-			$recipient = $this->messages_model->get_recepientID($rec);
-		} 
-		$msg = trim($this->input->post("msg"));
-		
-		$result = $this->messages_model->send_message($session_data['member_id'],$recipient,$msg);
-		if($result = 1){
-			$result = $this->messages_model->get_all_messages($this->user_ID);			
+			$result = $this->messages_model->get_recepientID($rec);
+		}
+		if($result != "false"){
+			$msg = trim($this->input->post("msg"));			
+			$result = $this->messages_model->send_message($session_data['member_id'],$result,$msg);
+			if($result = 1){
+				$result = $this->messages_model->get_all_messages($this->user_ID);			
+			}
 		}
 		echo json_encode($result);
 	

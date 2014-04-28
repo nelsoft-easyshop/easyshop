@@ -4713,6 +4713,7 @@ margin-right: 10px;
     height: 15px;
     min-width: 159px;
     overflow: hidden;
+	max-width: 172px;
 }
 #table_id img {
     height: 45px;

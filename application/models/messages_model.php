@@ -61,9 +61,9 @@ class messages_model extends CI_Model
         $result = $sth->fetchAll(PDO::FETCH_ASSOC);
         if(!empty($result)){
 	    $result = $result[0]['id_member'];
-	} else {
-	    $result = "false";
-	}
+		} else {
+			$result = "false";
+		}
         return $result;
     }
     
