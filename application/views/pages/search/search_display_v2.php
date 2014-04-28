@@ -321,9 +321,12 @@ $(function () {
 			var srt = $(this).val();
 			url = removeParam("_brnd", url);
 			document.location.href=url+"&_brnd="+srt;
-		});		
+		});
 		
-		// Price - Start //////////////////////////////////////
+		$("#_cat").change(function(){
+			$(this).removeClass("err");
+		});				
+		
 		$("#_price1,#_price2").change(function(){
 			$(this).removeClass("err");
 			var val = parseFloat($(this).val());
@@ -336,43 +339,53 @@ $(function () {
 		
 		$("#btn_srch").click(function() {
 						
-			var price1 = parseInt($("#_price1").val());
-			var price2 = parseInt($("#_price2").val());
-			var url = $("#_price").data("url");
-			var msg = "Invalid price range";
-			var fprice1;
-			var fprice2;
+			if($("#_cat").val() != ""){
 			
-			if (isNaN(price1)){
-				fprice1 = "";
+				// Price - Start //////////////////////////////////////	
+				var price1 = parseInt($("#_price1").val());
+				var price2 = parseInt($("#_price2").val());
+				var url = $("#_price").data("url");
+				var msg = "Invalid price range";
+				var fprice1;
+				var fprice2;
+				
+				if (isNaN(price1)){
+					fprice1 = "";
+				}else{
+					fprice1 = price1.toFixed(2); 
+				}					
+				
+				if (isNaN(price2)){
+					fprice2 = "";
+				}else{
+					fprice2 = price2.toFixed(2); 
+				}			
+													
+				if(price1 > price2){
+					alert(msg);
+					$("#_price2").addClass("err").focus();
+					return false;
+				}else if(isNaN(price1) == true && price2 > 0){
+					alert(msg);
+					$("#_price1").addClass("err").focus();
+					return false;			
+				}else if(isNaN(price2) == true && price1 > 0){
+					alert(msg);
+					$("#_price2").addClass("err").focus();
+					return false;			
+				}else{
+					url = removeParam("_price", url);
+					url = removeParam("_price1", url);
+					url = removeParam("_price2", url);				
+				}
+				// Price - End //////////////////////////////////////					
+				
 			}else{
-				fprice1 = price1.toFixed(2); 
-			}					
-			
-			if (isNaN(price2)){
-				fprice2 = "";
-			}else{
-				fprice2 = price2.toFixed(2); 
-			}			
-												
-			if(price1 > price2){
-				alert(msg);
-				$("#_price2").addClass("err").focus();
+				alert("Please select a category");
+				$("#_cat").addClass("err").focus();
 				return false;
-			}else if(isNaN(price1) == true && price2 > 0){
-				alert(msg);
-				$("#_price1").addClass("err").focus();
-				return false;			
-			}else if(isNaN(price2) == true && price1 > 0){
-				alert(msg);
-				$("#_price2").addClass("err").focus();
-				return false;			
-			}else{
-				url = removeParam("_price", url);
-				url = removeParam("_price1", url);
-				url = removeParam("_price2", url);				
 			}
-			// Price - End //////////////////////////////////////			
+		
 			
 		});
 		
