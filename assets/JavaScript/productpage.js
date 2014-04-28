@@ -165,7 +165,6 @@ $(function(){
     });      
     
     //Loads the default shipment locations
-    console.log(shipment);
     $.each(shipment, function(index, value){
         if((value.product_attribute_ids.length == 1)&&(parseInt(value.product_attribute_ids[0].id)==0)&&(parseInt(value.product_attribute_ids[0].is_other)==0)){
             var option =  $('#locationID_' + value.location_id);

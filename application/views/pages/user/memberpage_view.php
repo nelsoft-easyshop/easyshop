@@ -22,6 +22,8 @@
 <!--Chosen CSS-->
 <link rel="stylesheet" href="<?=base_url()?>assets/css/chosen.min.css" type="text/css" media="screen"/>
 
+
+
 <div id = "member_page_body">
 	<div class="clear"></div>
 	<section>
@@ -889,9 +891,9 @@
 						<div class="view_map_btn">
 							<input type="button" class="view_map" value="View on map" name="personal">
 							<?php if($lat == 0 && $lng == 0):?>
-								<span class="maploc_stat">Location not set</span>
+								<span class="maploc_stat" style='color:#f18200; font-weight:bold;'>Location not yet marked</span>
 							<?php else:?>
-								<span class="maploc_stat">Location set</span>
+								<span class="maploc_stat" style='color:#287520; font-weight:bold;'>Location marked</span>
 							<?php endif;?>
 							<input type="hidden" name="map_lat" id="map_lat" value="<?php echo $lat;?>">
 							<input type="hidden" name="map_lng" id="map_lng" value="<?php echo $lng;?>">
@@ -1329,9 +1331,9 @@
 			<div class="view_map_btn">
 				<input type="button" class="view_map" value="View on Map" name="delivery">
 				<?php if($c_lat == 0 && $c_lng == 0):?>
-					<span class="maploc_stat">Location not set</span>
+					<span class="maploc_stat" style='color:#f18200; font-weight:bold;'>Location not yet marked</span>
 				<?php else:?>
-					<span class="maploc_stat">Location set</span>
+					<span class="maploc_stat" style='color:#287520; font-weight:bold;'>Location marked</span>
 				<?php endif;?>
 				<input type="hidden" name="map_lat" id="map_clat" value="<?php echo $c_lat;?>">
 				<input type="hidden" name="map_lng" id="map_clng" value="<?php echo $c_lng;?>">

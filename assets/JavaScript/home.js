@@ -47,5 +47,4 @@ $(document).ready(function(){
     $('.slides_prod').parent('.bx-viewport').addClass('side_menu_slides');
     $('.side_menu_slides').parent('.bx-wrapper').addClass('side_menu_nav_slides');
     $('.side_menu_nav_slides').children('.bx-controls').addClass('side_menu_nav_arrow');
-
 });
