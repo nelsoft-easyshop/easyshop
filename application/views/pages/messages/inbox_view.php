@@ -24,9 +24,14 @@
 				<?PHP } ?>
 				</td>
 				<td>
+                    <?php 
+                          $keys = array_keys($row);
+                          $row[reset($keys)]['message'] = html_escape(reset($row)['message']);
+                    ?>
+                    
 					<a class="btn_each_msg" href="javascript:void(0)" data='<?=json_encode($row)?>'>
 						<span class="msg_sender"><?PHP echo reset($row)['name']; ?></span>
-						<span class="msg_message"><?PHP echo reset($row)['message']; ?></span>
+						<span class="msg_message"><?PHP echo html_escape(reset($row)['message']); ?></span>
 						<span class="msg_date"><?PHP echo reset($row)['time_sent']; ?></span>
 					</a>
 				</td>
@@ -56,7 +61,7 @@
     <div id="modal-inside-container">
 		<div>
 			<label>To : </label>
-			<input type="text" value="" id="msg_name" name="msg_name" placeholder="xxxx@yahoo.com">
+			<input type="text" value="" id="msg_name" name="msg_name" placeholder="username">
 		</div>
 		<div>
 			<label>Message : </label><br>
@@ -107,7 +112,7 @@
 			$("#modal-container, #modal-background").toggleClass("active");
 			$("#modal-container").hide();
 			$("#msg-message").val("");
-			$("#msg_field").empty().append('<img id="msg_loader" src="https://localhost:81/assets/images/orange_loader.gif">');
+			$("#msg_field").empty().append('<img id="msg_loader" src="'+config.base_url+'assets/images/orange_loader.gif">');
 			$("#msg_textarea").hide();
 			alert("Message sent");
 		}else {
@@ -166,7 +171,7 @@
 				html += '<span class="float_right">';
 			}
 			html += '<img src="'+val.sender_img+'/60x60.png">';
-			html += '<p>'+val.message+'</p>';
+			html += '<p>'+encodeURI(val.message)+'</p>';
 			html += '<input type="checkbox" class="d_all" value="'+val.id_msg+'"></span>';
 			$("#msg_field").empty();
 			$("#msg_field").prepend(html);
