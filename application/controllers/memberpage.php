@@ -405,7 +405,7 @@ class Memberpage extends MY_Controller
 		$session_data = $this->session->all_userdata();
 		$vendordetails = $this->memberpage_model->getVendorDetails($selleruname);
 		$data['title'] = 'Vendor Profile | Easyshop.ph';
-		$data['my_id'] = $session_data['member_id'];
+		$data['my_id'] = (empty($session_data['member_id']) ? 0 : $session_data['member_id']);
 		$data = array_merge($data, $this->fill_header());
 		$this->load->view('templates/header_topnavsolo', $data);
 		if($vendordetails){

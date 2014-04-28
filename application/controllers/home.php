@@ -13,7 +13,7 @@ class Home extends MY_Controller {
     }
     
     
-    public function index() {    
+    public function index() {
 		$data = array('title' => 'Home | Easyshop.ph',
                 'page_javascript' => 'assets/JavaScript/home.js',
                 'data' => $this->home_xml->getFilenameID('home_files'),

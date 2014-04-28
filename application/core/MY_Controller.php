@@ -4,7 +4,6 @@ class MY_Controller extends CI_Controller
 	function __construct()
 	{
 		parent::__construct();
-        $this->load->library('session');
 
 		$this->config->set_item('base_url',"https://".$_SERVER["SERVER_NAME"].":".$_SERVER["SERVER_PORT"]."/");
         #$this->config->set_item('base_url',"http://".$_SERVER["SERVER_NAME"].":".$_SERVER["SERVER_PORT"]."/");
@@ -30,7 +29,7 @@ class MY_Controller extends CI_Controller
     #because it would add unnecessary overhead for all ajax calls. Instead it is called only in the 
     #controller functions that need it
 	function fill_header()
-	{	
+	{
 		$usersession = $this->session->userdata('usersession');
 		if(!empty($usersession) || $this->check_cookie()){
 
@@ -43,12 +42,12 @@ class MY_Controller extends CI_Controller
 		else{
 			$logged_in = false;
 			$uname = '';
-		}
-		
+		}		
+		$Tcart_items = $this->session->userdata('cart_contents');
 		$data = array(
 			'logged_in' => $logged_in,
 			'uname' => $uname,
-			'total_items'=> $this->cart_model->cart_size(),
+			'total_items'=> $Tcart_items['total_items'],
 			'category_search' => $this->product_model->getFirstLevelNode(),
 			'header_csrf' => array(
 					'csrf_'
