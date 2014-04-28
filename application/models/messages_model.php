@@ -70,7 +70,7 @@ class messages_model extends CI_Model
     public function delete_msg($id,$user_id) {
 		$query = "UPDATE `es_messages`
 				SET `is_delete` = CASE
-						WHEN `is_delete` = '0' THEN `is_delete` + (CASE WHEN `to_id` = $user_id THEN 2 ELSE 1 END) 
+						WHEN `is_delete` = '0' THEN `is_delete` + (CASE WHEN `from_id` = $user_id THEN 2 ELSE 1 END) 
 						WHEN `is_delete` = '1' THEN `is_delete` + 2
 						WHEN `is_delete` = '2' THEN `is_delete` + 1
 						ELSE 3
@@ -106,12 +106,12 @@ class messages_model extends CI_Model
 					$data[$inbox][$rows[$ctr]['id_msg']]['status'] =$status;
 				}
 			}else {
-				if($status == "sender" && ($rows[$ctr]['is_delete'] == '0' || $rows[$ctr]['is_delete'] == '2') ) {				        
+				if($status == "sender" && ($rows[$ctr]['is_delete'] == '0' || $rows[$ctr]['is_delete'] == '1') ) {				        
 				    $data[$sentbox][$rows[$ctr]['id_msg']] = $rows[$ctr];				
 				    $data[$sentbox][$rows[$ctr]['id_msg']]['status'] = $status;		
 				    $data[$sentbox][$rows[$ctr]['id_msg']]['name'] = ($rows[$ctr]['from_id'] == $id ? $rows[$ctr]['recipient'] : $rows[$ctr]['sender']);		
 				    if ($rows[$ctr]['opened'] == 0 )$unread_msg++ ;
-				} else if($status == "reciever" && ($rows[$ctr]['is_delete'] == '0' || $rows[$ctr]['is_delete'] == '1') ){	        
+				} else if($status == "reciever" && ($rows[$ctr]['is_delete'] == '0' || $rows[$ctr]['is_delete'] == '2') ){	        
 				    $data[$sentbox][$rows[$ctr]['id_msg']] = $rows[$ctr];				
 				    $data[$sentbox][$rows[$ctr]['id_msg']]['status'] = $status;		
 				    $data[$sentbox][$rows[$ctr]['id_msg']]['name'] = ($rows[$ctr]['from_id'] == $id ? $rows[$ctr]['recipient'] : $rows[$ctr]['sender']);		

@@ -22,14 +22,13 @@ if (!defined('BASEPATH'))
 		$data = array_merge($data,$this->fill_header());
 		$this->load->view('templates/header_topnavsolo', $data);
 		$this->load->view('pages/messages/inbox_view');
-		//$this->load->view('pages/sample');
 		$this->load->view('templates/footer_full');
     }    
-    public function send_msg() { // walaa pang validation
+    public function send_msg() {
         $session_data = $this->session->all_userdata();
-		$rec = trim($this->input->post("recipient"));
-		if(!is_numeric($rec)){
-			$result = $this->messages_model->get_recepientID($rec);
+		$result = trim($this->input->post("recipient"));
+		if(!is_numeric($result)){
+			$result = $this->messages_model->get_recepientID($result);
 		}
 		if($result != "false"){
 			$msg = trim($this->input->post("msg"));			
@@ -43,6 +42,7 @@ if (!defined('BASEPATH'))
     }
     public function delete_msg(){
 		$id = $this->input->post("id_msg");
+		
 		$result = $this->messages_model->delete_msg($id,$this->user_ID);
 		if($result > 0 ){
 			$result = $this->messages_model->get_all_messages($this->user_ID);	

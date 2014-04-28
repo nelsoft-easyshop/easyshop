@@ -106,7 +106,7 @@
     });
 		
 	$("#modal_send_btn").on("click",function(){
-		var recipient = htmlspecialchars($("#msg_name").val().trim());
+		var recipient = $("#msg_name").val().trim();
 		var msg = $("#msg-message").val();
 		if(send_msg(recipient,msg)){
 			$("#modal-container, #modal-background").toggleClass("active");
@@ -117,6 +117,7 @@
 			alert("Message sent");
 		}else {
 			alert("Try again");
+            return false;
 		}
 	});   	
 		
@@ -128,7 +129,7 @@
 			$("#msg_field").empty().append('<img id="msg_loader" src="<?=base_url()?>assets/images/orange_loader.gif">');
 			$("#msg_textarea").hide();
 		}else {
-			alert ("Try again");
+            location.reload();
 		}
 	});
 	$("#delete_all_btn").on("click",function(){
@@ -139,7 +140,7 @@
 			$("#msg_field").empty().append('<img id="msg_loader" src="<?=base_url()?>assets/images/orange_loader.gif">');
 			$("#msg_textarea").hide();
 		}else {
-			alert ("Try again");
+            location.reload();
 		}
 	}); 
 	
@@ -199,11 +200,11 @@
     "/": '&#x2F;'
   };
 
-  function escapeHtml(string) {
-    return String(string).replace(/[&<>"'\/]/g, function (s) {
-      return entityMap[s];
-    });
-  }
+    function escapeHtml(string) {
+        return String(string).replace(/[&<>"'\/]/g, function (s) {
+          return entityMap[s];
+        });
+      }
     function tbl_data(D){
 		html = "";
 		$.each(D,function(key,val){
@@ -287,11 +288,7 @@
 			url : "<?=base_url()?>messages/delete_msg",
 			data : {id_msg:ids,es_csrf_token:csrftoken},
 			success : function(d) {
-                if (d.messages != 0) {
-                    data = d.messages;
-                }else{
-                    location.reload();
-                }
+                data = d.messages;
 			}
 		});
 		
