@@ -384,16 +384,13 @@ class Memberpage extends MY_Controller
 				$emailstat = true;
 			}
 		
-			$serverResponse['error'] = array();
+			$serverResponse['error'] = $result['o_success'] >= 1 ? array() : 'Server unable to update database.';
 			$serverResponse['result'] = $result['o_success'] >= 1 ? 'success':'fail';
 			
 			if($result['o_success'] >= 1){
 				if(!$emailstat){
 					array_push($serverResponse['error'], 'Failed to send notification email.');
 				}
-			}
-			if($result['o_success'] < 1){
-				array_push($serverResponse['error'], $result['o_message']);
 			}
 			
 		}
