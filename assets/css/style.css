@@ -4069,7 +4069,7 @@ span.transac_title_date {
 }
 
 
-span.transac_title_date:after { 
+/*span.transac_title_date:after { 
 	right: 100%; 
 	top: 59%; 
 	border: solid transparent; 
@@ -4081,8 +4081,23 @@ span.transac_title_date:after {
 	border-color: rgba(255, 68, 0, 0); 
 	border-right-color: #b5b3b3; 
 	border-width: 7px; 
-	margin-top: -10px; 
-}
+	margin-top: -10px; */
+/*	pointer-events: none; 
+	border: solid transparent; 
+	border-color: rgba(255, 68, 0, 0); 
+	border-right-color: #b5b3b3; 
+	border-width: 7px;
+	
+    content: " ";
+    display: table;
+    height: 0;
+    left: -14px;
+    margin-top: -32px;
+    pointer-events: none;
+    position: relative;
+    vertical-align: middle;
+    width: 0;
+}*/
 
 .transac_prod_wrapper {
 	float: left;
