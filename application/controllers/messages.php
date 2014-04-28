@@ -24,6 +24,9 @@ if (!defined('BASEPATH'))
 		$this->load->view('pages/messages/inbox_view');
 		//$this->load->view('pages/sample');
 		$this->load->view('templates/footer_full');
+		//print "<pre>";
+		//print_r($result);
+		//print "</pre>";
     }    
     public function send_msg() { // walaa pang validation
         $session_data = $this->session->all_userdata();

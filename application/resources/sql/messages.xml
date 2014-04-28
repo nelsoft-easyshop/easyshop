@@ -21,7 +21,7 @@
       a.`from_id`,
       c.`imgurl` AS `recipient_img`,
       b.`username` AS `sender`,
-      b.`imgurl` AS `sender_img`,
+      CASE WHEN b.`imgurl` = '' THEN 'assets/user/default' ELSE b.`imgurl` END AS `sender_img`,
       a.`message`,
       a.`time_sent`,
       a.`opened` ,

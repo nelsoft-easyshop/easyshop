@@ -5,9 +5,9 @@ class MY_Controller extends CI_Controller
 	{
 		parent::__construct();
 
-		#$this->config->set_item('base_url',"https://".$_SERVER["SERVER_NAME"].":".$_SERVER["SERVER_PORT"]."/");
+		$this->config->set_item('base_url',"https://".$_SERVER["SERVER_NAME"].":".$_SERVER["SERVER_PORT"]."/");
         #$this->config->set_item('base_url',"http://".$_SERVER["SERVER_NAME"].":".$_SERVER["SERVER_PORT"]."/");
-		$this->config->set_item('base_url',"https://".$_SERVER["SERVER_NAME"]."/");
+		//$this->config->set_item('base_url',"https://".$_SERVER["SERVER_NAME"]."/");
         $this->load->model("user_model");
 		$this->load->model("cart_model");
         $this->load->model("product_model");

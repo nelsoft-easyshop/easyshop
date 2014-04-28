@@ -18,7 +18,7 @@
 | - Sam Gavinio
 |
 */
-$config['base_url']	= 'http://localhost/';
+$config['base_url']	= 'https://localhost/';
 /*
 |--------------------------------------------------------------------------
 | Index File
