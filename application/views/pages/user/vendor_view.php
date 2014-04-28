@@ -42,7 +42,7 @@
 						</p>
 					</div>
 					<div class="vendor-msg-modal">
-					    <p><a id="modal-launcher" href="javascript:void(0)">Send a message</a></p>
+					    <p><a id="modal-launcher" href="javascript:void(0)" class="orange_btn3">Send a message</a></p>
 					</div>
 				</div>
 			</div>
@@ -149,7 +149,9 @@
 							<div class="post_items_content" data-order = "<?php echo $mycounter;?>">
 								
 								<div class="post_item_content_left">
-									<img src="<?php echo base_url().$active_product['path'].'categoryview/'.$active_product['file']; ?>" class="product_img">
+									<span class="post_item_img_con">
+										<img src="<?php echo base_url().$active_product['path'].'categoryview/'.$active_product['file']; ?>" class="product_img">
+									</span>
 									<p>
                                         <?php $rounded_score = round($active_product['average_rating']); ?>
 										<?php for($i = 0; $i < $rounded_score;$i++): ?>
