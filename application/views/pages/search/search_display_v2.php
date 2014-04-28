@@ -26,6 +26,10 @@ function in_array_r($needle, $haystack, $strict = false) {
 <div class="wrapper" id="main_search_container">
   <!-- Search ------------------>  
   <div class="left_attribute">
+  	<?php 
+	$category = $this->input->get('_cat');
+	if($category){
+	?>
 	<h3>Categories</h3>
 		<?php
 		
@@ -37,11 +41,13 @@ function in_array_r($needle, $haystack, $strict = false) {
 			foreach ($ctrl_subcat as $row) {
 				//echo "<a href='" . current_url() . "?" . http_build_query($dsplnk) . "&_subcat=" . $row['id_cat'] . "'> - " . $row['name'] . "</a>";
 				
-				$link = current_url() . "?" . http_build_query($dsplnk) . "&_subcat=" . $row['id_cat'];
 				$getsubcat = $this->input->get("_subcat");
 				$check = "";
 				if($getsubcat == $row['id_cat']){
 					$check = ' checked="checked"';
+					$link = current_url() . "?" . http_build_query($dsplnk);
+				}else{
+					$link = current_url() . "?" . http_build_query($dsplnk) . "&_subcat=" . $row['id_cat'];				
 				}
 				echo "<a href='". $link ."' style='display: block;' class='cbx'>";
 				echo "<input type='checkbox' ". $check .">" . $row['name'];
@@ -117,10 +123,11 @@ function in_array_r($needle, $haystack, $strict = false) {
 	} // isset($arrayofparams)
 	
     ?> 
-  	<h3 class="title">&nbsp;</h3>
 	<p class="more_attr">More</p>
 	<p class="less_attr">Less</p>  
-
+  	<?php 
+	}
+	?>
   </div>
   
   <!-- Products ------------------>
@@ -145,19 +152,25 @@ function in_array_r($needle, $haystack, $strict = false) {
 				<option value="<?php echo $row['id_cat']; ?>" <?php if($row['id_cat'] == $getcat){ ?>selected="selected" <?php } ?>><?php echo $row['name']; ?></option>
 			<?php } ?>
 		</select>
-		<!--------------------------------------------------------------->
-		<!--------------------------------------------------------------->
 		<!--------------------------------------------------------------->				
 		<input type="submit" value="Search" name="btn_srch" id="btn_srch"/>
-		<!--------------------------------------------------------------->
-		<!--------------------------------------------------------------->
-		<!--------------------------------------------------------------->						
+		<!--------------------------------------------------------------->					
 	</div>
 	<div style="padding:5px;">
-		Location: 
-		<select title="Sort Item Location" name="_loc" id="_loc">
-			<option value="">- All -</option>          
-		</select>
+		Location:
+		<?php $gloc = $this->input->get('_loc'); ?>
+		<select title="Select Item Location" name="_loc" id="_loc">
+			<option value="">- All -</option>
+				<?php foreach($shiploc['area'] as $island=>$loc):?>
+					<option value="<?php echo $shiploc['islandkey'][$island];?>" <?php if($gloc == $shiploc['islandkey'][$island]){?>selected="selected"<?php } ?>><?php echo $island;?></option>
+						<?php foreach($loc as $region=>$subloc):?>
+							<option value="<?php echo $shiploc['regionkey'][$region];?>" style="margin-left:15px;" <?php if($gloc == $shiploc['regionkey'][$region]){?>selected="selected"<?php } ?>>&nbsp;&nbsp;&nbsp;<?php echo $region;?></option>
+								<?php foreach($subloc as $id_cityprov=>$cityprov):?>
+									<option value="<?php echo $id_cityprov;?>" style="margin-left:30px;" <?php if($gloc == $id_cityprov){?>selected="selected"<?php } ?>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $cityprov;?></option>
+								<?php endforeach;?>
+						<?php endforeach;?>
+				<?php endforeach;?>
+        </select>		
 		Condition:	
 		<?php $con = $this->input->get('_con'); ?>
 		<select title="Sort Item Condition" name="_con" id="_con">
@@ -357,9 +370,7 @@ $(function () {
 			}else{
 				url = removeParam("_price", url);
 				url = removeParam("_price1", url);
-				url = removeParam("_price2", url);
-								
-				//document.location.href=url+"&_price1="+fprice1+"&_price2="+fprice2;
+				url = removeParam("_price2", url);				
 			}
 			// Price - End //////////////////////////////////////			
 			
