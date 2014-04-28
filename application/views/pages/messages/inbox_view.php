@@ -76,6 +76,7 @@
 
 <script>
 	$(document).ready(function() {
+        
 		$('#table_id').dataTable({
 			"bScrollInfinite": true,
 			"bScrollCollapse": false,
@@ -177,7 +178,7 @@
 				html += '<span class="float_right">';
 			}
 			html += '<img src="'+val.sender_img+'/60x60.png">';
-			html += '<p>'+encodeURI(val.message)+'</p>';
+			html += '<p>'+escapeHtml(val.message)+'</p>';
 			html += '<input type="checkbox" class="d_all" value="'+val.id_msg+'"></span>';
 			$("#msg_field").empty();
 			$("#msg_field").prepend(html);
@@ -221,7 +222,7 @@
 			html +='<td class=" ">';
 			html +="<a class='btn_each_msg' data='"+ escapeHtml(JSON.stringify(val))+"' href='javascript:void(0)'>";
 			html +='<span class="msg_sender">'+Nav_msg.name+'</span>';
-			html +='<span class="msg_message">'+encodeURI(Nav_msg.message)+'</span>';
+			html +='<span class="msg_message">'+escapeHtml(Nav_msg.message)+'</span>';
 			html +='<span class="msg_date">'+Nav_msg.time_sent+'</span>';
 			html +='</a>';
 			html +='</td>';
@@ -241,7 +242,7 @@
 				html += '<span class="float_right">';
 			}
 			html += '<img src="'+val.sender_img+'/60x60.png">';
-			html += '<p>'+encodeURI(val.message)+'</p>';
+			html += '<p>'+escapeHtml(val.message)+'</p>';
 			html += '<input type="checkbox" class="d_all" value="'+val.id_msg+'"></span>';
 			$("#msg_field").empty();
 			$("#msg_field").append(html);
