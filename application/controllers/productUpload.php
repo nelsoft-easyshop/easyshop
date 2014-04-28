@@ -566,7 +566,7 @@ class productUpload extends MY_Controller
                         exit();
                     }
                 }else {
-                	$data =  '{"e":"0","d":"'.strip_tags($this->upload->display_errors()).'. Only Letters, Numbers, Hypens and Underscore allowed in file name."}';
+                	$data =  '{"e":"0","d":"'.strip_tags($this->upload->display_errors()).'. Only Letters, Numbers, Hyphens and Underscore allowed in the image file name."}';
                 	echo $data;
                 	exit();
                 }
