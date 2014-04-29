@@ -281,15 +281,23 @@
 		var config = {
 			 base_url: "<?php echo base_url(); ?>",
 		};
-		$(document).ready(function(){
-		  $(document).scroll(function () {
-			  var y = $(this).scrollTop();
-			  if (y > 20) {
-				  $('.login_btn').fadeIn();
-			  } else {
-				  $('.login_btn').fadeOut();
-			  }
-		  });
-		});
+		// $(document).ready(function(){
+		//   $(document).scroll(function () {
+		// 	  var y = $(this).scrollTop();
+		// 	  if (y > 20) {
+		// 		  $('.login_btn').show();
+		// 	  } else {
+		// 		  $('.login_btn').hide();
+		// 	  }
+		//   });
+		// });
+	$(window).load(function () {
+	    	$(window).scroll(function () {
+	        var e; 
+	        return e = $(window).scrollTop(), e < 50 ? $(".login_btn").removeClass("show") : $(".login_btn").addClass("show");
+
+
+	    })
+	})
 		
 	</script>
