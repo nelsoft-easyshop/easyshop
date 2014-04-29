@@ -895,7 +895,7 @@
 						<div class="view_map_btn">
 							<input type="button" class="view_map" value="Mark on map" name="personal">
 							<?php if($lat == 0 && $lng == 0):?>
-								<span class="maploc_stat" style='color:#f18200; font-weight:bold;'>Location not yet marked</span>
+								<span class="maploc_stat" style='color:#f18200; font-weight:bold;'>Location not marked</span>
 							<?php else:?>
 								<span class="maploc_stat" style='color:#287520; font-weight:bold;'>Location marked</span>
 							<?php endif;?>
@@ -1335,7 +1335,7 @@
 			<div class="view_map_btn">
 				<input type="button" class="view_map" value="Mark on Map" name="delivery">
 				<?php if($c_lat == 0 && $c_lng == 0):?>
-					<span class="maploc_stat" style='color:#f18200; font-weight:bold;'>Location not yet marked</span>
+					<span class="maploc_stat" style='color:#f18200; font-weight:bold;'>Location not marked</span>
 				<?php else:?>
 					<span class="maploc_stat" style='color:#287520; font-weight:bold;'>Location marked</span>
 				<?php endif;?>
