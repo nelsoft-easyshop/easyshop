@@ -29,43 +29,46 @@
     <!-- Start of Shipping Content -->   
     <div class="wrapper shipping_wrapper">
       <div class="shipping_title">
-        <strong class="f14">Select Product Attribute Combination and Set Price</strong>
+        <strong class="f14">Shipment Options</strong>
       </div>
       <!-- Start of Shipping Container --> 
       <div class="shipping_container">
-      	  <?php if($attr['has_attr'] == 1):?>
+      	
       		  <table class="shipping_prod_attr_comb" cellspacing="0" cellpadding="0" width="465px">
               <thead>
                 <tr>
-                  <td class="step3_title"><h3>Select Product Attribute Combination</h3></td>
+                  <td class="step3_title"><h4>Select attribute combinations</h4></td>
                 </tr>
               </thead>
       		  <tr>
       			<td class="border-left border-right border-bottom">
               <div class="prod_comb_list_con">
-        			  <ul id="product_combination_list">				
-        				<?php foreach($attr['attributes'] as $attrkey=>$temp):?>
-        				  <li class="product_combination" value="<?php echo $attrkey;?>">
-          					<div>
-          					  <?php foreach($temp as $pattr):?>
-          						<p>&bull; <?php echo $pattr;?> </p>
-          					  <?php endforeach;?>
-          				    </div> 
-        				  </li>
-        				<?php endforeach;?>
-        			  </ul>
+                      <?php if($attr['has_attr'] == 1):?>
+                          <ul id="product_combination_list">				
+                            <?php foreach($attr['attributes'] as $attrkey=>$temp):?>
+                              <li class="product_combination" value="<?php echo $attrkey;?>">
+                                <div>
+                                  <?php foreach($temp as $pattr):?>
+                                    <p>&bull; <?php echo $pattr;?> </p>
+                                  <?php endforeach;?>
+                                </div> 
+                              </li>
+                            <?php endforeach;?>
+                          </ul>
+                      <?php else:?>
+                         <ul id="product_combination_list">
+                            <li class="product_combination_locked">&bull; All Combinations</li>
+                         </ul>
+                         <input type="hidden" id="product_item_id" value="<?php echo $attr['product_item_id'];?>">
+
+                      <?php endif;?>
               </div>
       			</td>
       		  </tr>
       		  </table>
   	      
         
-            <?php else:?>
-				 <ul id="product_combination_list">
-					<li class="product_combination_locked">&bull; All Combinations</li>
-				 </ul>
-                 <input type="hidden" id="product_item_id" value="<?php echo $attr['product_item_id'];?>">
-            <?php endif;?>
+          
             <input type="hidden" id="has_attr" value="<?php echo $attr['has_attr'];?>">
       
             <!-- <div class="shipping_border"></div> -->
@@ -75,7 +78,7 @@
                 <thead>
                   <tr>
                      <td colspan="3" class="step3_title">
-                         <h3>Set Price</h3>
+                         <h4>Set shipment fee</h4>
                     </td>
                   </tr>
                 </thead>
@@ -132,11 +135,12 @@
                         </tr>
                         <tr>
                           <td class="border-right border-bottom set_price_error2" height="50px">
-                            <div style="color:red;<?php echo $inc_location ? '' : 'display:none;'?>" id="div_locationwarning">
-                              Warning: Your shipping location selection does not cover the entire
+                            <div style="font-weight:bold; color:green;<?php echo $inc_location ? '' : 'display:none;'?>" id="div_locationwarning">
+                              Note: Your shipment location does not cover the entire
                               <span id="location_warning">
                                 <?php echo $inc_location ? $inc_locationmsg : '';?>
                               </span>
+                              area
                             </div>
                           </td>
                         </tr>
@@ -179,7 +183,7 @@
 
       <!-- start of shipping summary -->
       <div class="shipping_summary_container">
-          <h2 class="f20">Shipping List</h2>
+          <h2 class='f20'>Shipment list</h2>
           <table class="" cellspacing="0" cellpadding="0">
                <thead>
                     <tr>
@@ -319,9 +323,7 @@
 <script type='text/javascript' src="<?=base_url()?>assets/JavaScript/js/jquery-ui.js"></script>
 <script src="<?=base_url()?>assets/JavaScript/js/jquery.idTabs.min.js" type="text/javascript"></script>
 <script type="text/javascript">
-  if ($('table.shipping_prod_attr_comb').length) {
-    $('.shipping_list_items_con').addClass('prod_att_comb_no_select');
-   }
+
 
    $(".product_combination").each(function() {
     if ($(this).find("p").length > 6) {

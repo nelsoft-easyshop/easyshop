@@ -95,7 +95,7 @@ $(function(){
     var noDuplicate = true;
 	var shipObj = { 'attr' : {},'loc' : {},'price' : {}, 'disp_attr' : {} };
     var i = parseInt($('#summaryrowcount').val());
-	var alerterror = 'Please select: ';
+	var alerterror = 'Please specify the following: ';
 	
     //Get Product Attribute Options
 	if(hasAttr === 1){
@@ -248,15 +248,15 @@ $(function(){
 	else{
 		var counter = 0;
 		if(!hasActive){
-			alerterror += '-Attribute ';
+			alerterror += '-attribute ';
 			counter++;
 		}
 		if(!hasLoc){
-			alerterror += '-Location ';
+			alerterror += '-location ';
 			counter++;
 		}
 		if(!hasPrice){
-			alerterror += '-Price ';
+			alerterror += '-price ';
 			counter++;
 		}
 		for(var i=0;i<counter;i++){

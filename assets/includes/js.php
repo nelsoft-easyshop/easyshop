@@ -4,7 +4,7 @@
 <script type='text/javascript' src="<?=base_url()?>assets/JavaScript/js/jquery.cookie.js"></script>
 
 <script type='text/javascript'>
-   /*
+
    window.alert = function(message){
         $(document.createElement('div'))
             .attr({title: 'Alert', class: 'alert'})
@@ -17,7 +17,7 @@
                 resizable: false
             });
    };
-   */
+ 
 
 </script>
         

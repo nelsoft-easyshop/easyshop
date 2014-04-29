@@ -1811,12 +1811,14 @@ $(document).ready(function() {
    
    $('#brand_search_drop_content').on('click', 'li.brand_result', function(){
         $this = $(this);     
+        console.log($this.data('brandid'));
         $('#prod_brand').val($this.data('brandid'));
-        $("#brand_sch").val($this.children('a').text())
+        $("#brand_sch").val($this.text());
         $('#prod_brand').trigger( "change" );
         $("#brand_sch").trigger( "change" );
         jQuery(".brand_sch_loading").html('<img src="<?= base_url() ?>assets/images/check_icon.png" />').show().css('display','inline-block');
-        $('#brand_search_drop_content').hide();
+
+       $('#brand_search_drop_content').hide();
    });
 })
 
@@ -1837,7 +1839,6 @@ $(document).ready(function(){
                 onLoading:jQuery(".brand_sch_loading").html('<img src="<?= base_url() ?>assets/images/orange_loader_small.gif" />').show().css('display','inline-block'),
                 data: "data="+searchQuery+"&"+csrfname+"="+csrftoken, 
                 beforeSend : function(){       
-                    $("#brand_search_drop_content").empty();
                     if(currentRequest != null) {
                         currentRequest.abort();
                     }
@@ -1849,7 +1850,7 @@ $(document).ready(function(){
                     var html = '<ul>';
                     if((obj.length)>0){
                         jQuery.each(obj,function(){
-                            html += '<li class="brand_result" data-brandid="'+(this.id_brand) +'"><a href="javascript:void(0)">'+(this.name)+'</a></li>' ;                             
+                            html += '<li class="brand_result" data-brandid="'+(this.id_brand) +'">'+(this.name)+'</li>' ;                             
                         });
                         html +=  '<li class="add_brand blue">Use your own brand name</li>';
                         jQuery(".brand_sch_loading").hide();

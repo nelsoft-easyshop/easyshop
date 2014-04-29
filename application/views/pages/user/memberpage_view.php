@@ -1365,9 +1365,9 @@
 		</div>
 	</div>
 	<div class="clear"></div>
-	<div class="bottom_save">
-		<input type="submit" name="c_deliver_address_btn" value="Save" id="c_deliver_address_btn">
-		<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" id="load_cdeliver_address" style="position: relative; top:12px; left:15px;  display:none"/>
+	<div class="bottom_save" style='text-align:left;'>
+		<input type="submit" name="c_deliver_address_btn" value="Save" id="c_deliver_address_btn" style="position: relative; left:40%;">
+		<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" id="load_cdeliver_address" style="position: relative; top:12px; left:42%;  display:none"/>
 	</div>	
 	<?php echo form_close();?>
 

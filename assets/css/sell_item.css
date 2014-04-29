@@ -1486,8 +1486,7 @@ tr.tr_shipping_summary:nth-child(even) td {
 
 #div_locationwarning,
 #spanerror {
-    background-color: rgba(255, 0, 0, 0.1);
-    border: 1px solid #FF0000;
+    border: 1px solid green;
     margin: 5px auto;
     padding: 8px;
     width: 440px;
@@ -1505,4 +1504,7 @@ tr.tr_shipping_summary:nth-child(even) td {
     width: 463px;
 }
 
-
+li.brand_result:hover{
+    color: #F18200;
+    cursor: pointer;
+}

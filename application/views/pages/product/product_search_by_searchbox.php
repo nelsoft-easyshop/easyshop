@@ -18,13 +18,13 @@
     <div class="prob_cat_nav">  
       <div class="category_nav product_content">
         <ul>
-          
+          <!--
           <li class = "active">
             <a href="#">
             Related: Not yet Available
             </a>
           </li>
-        
+          -->
       </ul>
     </div>
   </div>

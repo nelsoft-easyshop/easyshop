@@ -56,7 +56,7 @@ echo form_open('sell/edit/step2', $attributesForm);
         <div class="draft_items_container">
           <?php
           if(count($draftItems) <= 0){
-            echo 'No item in your Draft!';
+           echo '<br/><strong>There are no items in your draft list.</strong><br/>';
           }
           ?>
             <?php 
@@ -179,8 +179,7 @@ echo form_open('sell/edit/step2', $attributesForm);
                                 draftCount -= 1; 
                                 $('.draft-cnt').html(draftCount);
                                 if(draftCount <= 0){
-
-                                $('.div_draft').html('No item in your Draft!');  
+                                    $('.div_draft').html('<h3>Draft Item(s) </h3><div class="draft_items_container"><br/><strong>There are no items in your draft list.</strong><br/></div>');  
                                 }
                             }else{
                                 alert(d.m);

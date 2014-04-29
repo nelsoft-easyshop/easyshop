@@ -585,9 +585,11 @@ $(document).ready(function(){
 						
 						// Map notification status
 						if(obj['lat'] == 0 && obj['lng'] == 0){
-							$('span.maploc_stat').html('Location not set');
+							$('#personal_profile_address span.maploc_stat').html('Location not marked');
+                            $('#personal_profile_address span.maploc_stat').css('color', '#f18200');
 						}else{
-							$('span.maploc_stat').html('Location set');
+							$('#personal_profile_address span.maploc_stat').html('Location marked');
+                            $('#personal_profile_address span.maploc_stat').css('color', '#287520');
 						}
 					}
 				});
@@ -961,8 +963,10 @@ $(document).ready(function(){
 					// Map notification status
 					if(obj['c_lat'] == 0 && obj['c_lng'] == 0){
 						$('#c_deliver_address span.maploc_stat').html('Location not marked');
-					}else{
+                        $('#c_deliver_address span.maploc_stat').css('color', '#f18200');
+                    }else{
 						$('#c_deliver_address span.maploc_stat').html('Location marked');
+                        $('#c_deliver_address span.maploc_stat').css('color', '#287520');
 					}
 					
 					// Update orig checker fields
@@ -1003,9 +1007,11 @@ $(document).ready(function(){
 						//Map notification status
 						if(obj['c_lat'] == 0 && obj['c_lng'] == 0){
 							$('#personal_profile_address span.maploc_stat').html('Location not marked');
-						}else{
+                            $('#personal_profile_address span.maploc_stat').css('color', '#f18200');
+                        }else{
 							$('#personal_profile_address span.maploc_stat').html('Location marked');
-						}
+                            $('#personal_profile_address span.maploc_stat').css('color', '#287520');
+                        }
 						
 						$('#personal_profile_address .address_information').show();
 						$('#personal_profile_address .edit_profile').hide();
