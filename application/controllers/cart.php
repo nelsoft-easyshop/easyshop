@@ -117,6 +117,7 @@ class Cart extends MY_Controller{
 		$result= sha1(md5("tanggap"));
 	    endif;
         endif;
+		$this->session->set_userdata('cart_total_perItem',$this->cart_size());
         echo json_encode($result);
     }
     
@@ -160,7 +161,7 @@ class Cart extends MY_Controller{
     
     function change_qty(){
 		
-        $result=array();
+    $result=array();
 	$result['result'] = false;
 	$cart = $this->cart->contents();
 	foreach($cart as $keys => $child){

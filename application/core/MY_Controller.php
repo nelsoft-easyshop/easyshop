@@ -42,12 +42,13 @@ class MY_Controller extends CI_Controller
 		else{
 			$logged_in = false;
 			$uname = '';
-		}		
-		$Tcart_items = $this->session->userdata('cart_contents');
+		}
+		$carts=$this->session->userdata('cart_contents');
+		$ss = (empty($carts) ? 0 : sizeof($this->session->userdata('cart_contents'))-2);
 		$data = array(
 			'logged_in' => $logged_in,
 			'uname' => $uname,
-			'total_items'=> $Tcart_items['total_items'],
+			'total_items'=> $ss,
 			'category_search' => $this->product_model->getFirstLevelNode(),
 			'header_csrf' => array(
 					'csrf_'
@@ -56,7 +57,12 @@ class MY_Controller extends CI_Controller
 		return $data;
 	}
 
-
+    function cart_size(){
+        $carts=$this->cart->contents();
+        $cart_size =sizeof($carts);
+        return $cart_size;
+    }
+	
 	function check_cookie(){
 		$cookieval = get_cookie('es_usr');
 		if($cookieval != ''){
