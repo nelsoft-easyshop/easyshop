@@ -352,10 +352,8 @@ class product extends MY_Controller
 			// $stringData = preg_replace('/[^A-Za-z0-9\-]/', '', $stringData);
 			$string = ' '.ltrim($stringData); 
 			$words = "+".implode("*,+",explode(" ",trim($string)))."*"; 
-			echo $words;
 			$keywords = $this->product_model->itemKeySearch($words);
- 
-			
+ 	
 			if(count($keywords) <= 0){
 				$html = 0;
 			}else{
