@@ -881,7 +881,8 @@ $(document).ready(function(){
 				number: true,
 				minlength: 10,
 				maxlength: 10,
-				is_validmobile: true
+				is_validmobile: true,
+				required: true
 			},
 			c_telephone: {
 				//required: true,
@@ -1168,6 +1169,7 @@ function progress_update(form){
 		var thisclass = $(this).attr('class');
 		var n = thisclass.indexOf('update_all');
 		var m = thisclass.indexOf('update_once');
+		var c = thisclass.indexOf('update_consignee');
 		
 		if(n!=-1 && m==-1){// if update_all
 			var count = 0;
@@ -1191,6 +1193,23 @@ function progress_update(form){
 			});
 			$(this).find('input[type="hidden"].progress_update_hidden').attr('value', count);
 		}
+		else if(c!=-1){ // for consignee
+			var count = 0;
+			// reads consignee (includes select and address since required), 
+			// mobile, and telephone fields
+			$(this).find('input[type="text"]:not([name="c_telephone"])').each(function(){
+				if($(this).prop('value').length > 1){
+					count++;
+					return false;
+				}
+			});
+			
+			if( $(this).find('input[name="c_telephone"]').prop('value').length > 1 ){
+				count++;
+			}
+			
+			$(this).find('input[type="hidden"].progress_update_hidden').attr('value', count);
+		}
 	});
 	
 	$('input.progress_update_hidden').each(function(){
@@ -1202,8 +1221,8 @@ function progress_update(form){
 	if (n==-1)
 		fcount++;
 	
-	//Total of 9 sections/inputs
-	var percentage = Math.ceil(fcount/11 * 100);
+	// 12 inputs/sets
+	var percentage = Math.ceil(fcount/12 * 100);
 	
 	$('#progressbar').progressbar({
 		value:percentage

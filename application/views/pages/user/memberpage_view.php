@@ -1261,7 +1261,7 @@
 	?>
 	<h2>Delivery Address</h2>
 	<div class="profile_fields">
-		<div class="inner_profile_fields progress_update update_once">
+		<div class="inner_profile_fields progress_update update_consignee">
 			<div>
 				<label for="consignee_name">Consignee name:</label>
 				<input type="text" name="consignee" id="consignee" value="<?php echo $consignee?>">
