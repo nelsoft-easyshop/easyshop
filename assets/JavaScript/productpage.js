@@ -463,7 +463,8 @@ $(function(){
             var i_price =  $(".current_price").text().trim();
             var i_opt = {};
             var length = parseInt($('.product_option').length) - 1;
-            var csrftoken = $('#buynow_csrf').val();
+            var csrftoken = $("meta[name='csrf-token']").attr('content');
+            var csrfname = $("meta[name='csrf-name']").attr('content');
             var max_qty = $(".quantity").html();
             $(".options").each(function() {
                 var parent = $(this).parent();
@@ -482,7 +483,7 @@ $(function(){
                 url: config.base_url + "cart/add_item",
                 type:"POST",
                 dataType:"JSON",
-                data:{id:i_id,qty:i_qty,price:i_price,opt:i_opt,name:i_name,length:length,es_csrf_token:csrftoken,max_qty:max_qty},
+                data:{id:i_id,qty:i_qty,price:i_price,opt:i_opt,name:i_name,length:length,csrfname:csrftoken,max_qty:max_qty},
 
                 success:function(data){
                     if(data == "386f25bdf171542e69262bf316a8981d0ca571b8" ){
@@ -502,8 +503,9 @@ $(function(){
     $('.reviews_content').on('click','#see_more_reviews', function(event){
         $('#more_review_loading_img').show();
         $('#see_more_reviews').hide();
-		var csrftoken = $('#reviews_csrf').val();
-        $.post(config.base_url+'product/get_more_reviews',{last_id:$('#lastreview').prop('value'), es_csrf_token : csrftoken}, 
+		var csrftoken = $("meta[name='csrf-token']").attr('content');
+        var csrfname = $("meta[name='csrf-name']").attr('content');
+        $.post(config.base_url+'product/get_more_reviews',{last_id:$('#lastreview').prop('value'), csrfname : csrftoken}, 
             function(data){
                 $('#more_review_loading_img').hide();
                 $('#see_more_reviews').show();

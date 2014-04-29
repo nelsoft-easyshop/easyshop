@@ -137,9 +137,10 @@ $(document).ready(function(){
 	  function pass_check(){
 			var username = $("#wsx").val();		  
 			var pass 	 = $('#cur_password').val();
-            var csrftoken = $('#changepass').find('input[name^="es_csrf"]').val();
+            var csrftoken = $("meta[name='csrf-token']").attr('content');
+            var csrfname = $("meta[name='csrf-name']").attr('content'); 
 
-			$.post(config.base_url+'register/pass_check', {username: username, pass: pass, es_csrf_token : csrftoken}, function(result){
+			$.post(config.base_url+'register/pass_check', {username: username, pass: pass, csrfname : csrftoken}, function(result){
 				if(result == 1){
 					showcheck($('#username'));
 					$('#username_check').hide();
@@ -300,9 +301,10 @@ $(document).ready(function(){
 
 function username_check(){
 	var username = $('#username').val();
-	var csrftoken = $('#register_form1').find('input[name^="es_csrf"]').val();
+	var csrftoken = $("meta[name='csrf-token']").attr('content');
+    var csrfname = $("meta[name='csrf-name']").attr('content');
 	$('#username').siblings('img.check_loader').show();
-	$.post(config.base_url+'register/username_check', {username: username, es_csrf_token : csrftoken}, function(result){
+	$.post(config.base_url+'register/username_check', {username: username, csrfname : csrftoken}, function(result){
 		if(result == 1){
 			showcheck($('#username'));
 			$('.username_availability').html('');
@@ -321,9 +323,10 @@ function username_check(){
 
 function email_check(){
 	var email = $('#email').val();
-	var csrftoken = $('#register_form1').find('input[name^="es_csrf"]').val();
+	var csrftoken = $("meta[name='csrf-token']").attr('content');
+    var csrfname = $("meta[name='csrf-name']").attr('content');
 	$('#email').siblings('img.check_loader').show();
-	$.post(config.base_url+'register/email_check', {email: email, es_csrf_token : csrftoken}, function(result){
+	$.post(config.base_url+'register/email_check', {email: email, csrfname : csrftoken}, function(result){
 		if(result == 1){
 			showcheck($('#email'));
 			$('.email_availability').html('');

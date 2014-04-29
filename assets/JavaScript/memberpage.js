@@ -227,8 +227,8 @@ $(document).ready(function(){
 	/**
 	 *	CSRF TOKEN
 	 */
-	var csrftoken = $('#personal_information').find('input[name^="es_csrf"]').val();
-	
+	var csrftoken = $("meta[name='csrf-token']").attr('content');
+    var csrfname = $("meta[name='csrf-name']").attr('content');
 	
 	//Mobile verification dialog box
 	$('#verifcode_div').dialog({
@@ -240,7 +240,7 @@ $(document).ready(function(){
 			Submit: function(){
 				var $dialog = $(this);
 				var val = $('#verifcode').val();
-				$.post(config.base_url+'memberpage/verify_mobilecode',{data:val, mobileverify:'true', es_csrf_token : csrftoken}, function(data){
+				$.post(config.base_url+'memberpage/verify_mobilecode',{data:val, mobileverify:'true', csrfname : csrftoken}, function(data){
 					if(data == 1){
 						$('#mobilediv').find('span.doneverify').show();
 						$dialog.dialog( 'close' );
@@ -283,7 +283,7 @@ $(document).ready(function(){
 		verifyspan.siblings('span.personal_contact_cont').hide();
 		$('#ppm_btn').attr('disabled', true);
 		
-		$.post(config.base_url+'memberpage/verify', {field:field, data:data, reverify:'true', es_csrf_token : csrftoken}, function(data){
+		$.post(config.base_url+'memberpage/verify', {field:field, data:data, reverify:'true', csrfname : csrftoken}, function(data){
 			loadingimg.hide();
 			contdiv.show();
 			$('#ppm_btn').attr('disabled', false);
@@ -363,9 +363,11 @@ $(document).ready(function(){
 		var editfields = parentinfocont.siblings('div.edit_fields');
 		var echoedinfo = $(this).siblings('.echoed_info');
 		var form = $(this).closest('form');
-		var csrftoken = form.find('input[name^="es_csrf"]').val();
+        var csrftoken = $("meta[name='csrf-token']").attr('content');
+        var csrfname = $("meta[name='csrf-name']").attr('content');
+        
 		
-		$.post(config.base_url+"memberpage/deletePersonalInfo", {field : name, es_csrf_token : csrftoken}, function(data){
+		$.post(config.base_url+"memberpage/deletePersonalInfo", {field : name, csrfname : csrftoken}, function(data){
 			if(data == 1){
 				editprofilebtn.show();
 				parentinfocont.hide();
@@ -1851,9 +1853,10 @@ $(document).ready(function(){
 	   $.fn.getbank = function(selected) {
 			
 			var appendTarget = "#" + this.attr('id');
-			var csrftoken = $('#personal_profile_address').find('input[name^="es_csrf"]').val();
+			var csrftoken = $("meta[name='csrf-token']").attr('content');
+            var csrfname = $("meta[name='csrf-name']").attr('content');
 			
-			$.getJSON('memberpage/bank_info',{q:'%',name:'',es_csrf_token:csrftoken},function(data){
+			$.getJSON('memberpage/bank_info',{q:'%',name:'',csrfname:csrftoken},function(data){
 				var html = '';
 				var len = data.length;
 				for (var i = 0; i< len; i++) {
@@ -1894,14 +1897,15 @@ $(document).ready(function(){
 		
 		if(del){
 						
-			var csrftoken = $('#personal_profile_address').find('input[name^="es_csrf"]').val();
+			var csrftoken = $("meta[name='csrf-token']").attr('content');
+            var csrfname = $("meta[name='csrf-name']").attr('content');
 			var bidval = $("#"+bid).val();				
 			var currentRequest = null;
 			var redurl =  config.base_url+'memberpage/billing_info_d';
 			currentRequest = jQuery.ajax({
 				type: "POST",
 				url: redurl, 
-				data: {bi_id:bidval, es_csrf_token:csrftoken},
+				data: {bi_id:bidval, csrfname:csrftoken},
 				success: function(data){
 					$("#bi_div_" + bictr).remove();
 					$("#ubi_" + bictr).remove();
@@ -2034,7 +2038,8 @@ $(document).ready(function(){
 			$("[name='bi_bar_"+bictr+"']").rules("add", barRule);
 			$("[name='bi_bn_"+bictr+"']").rules("add", bnRule);
 			
-			var csrftoken = $('#personal_profile_address').find('input[name^="es_csrf"]').val();
+			var csrftoken = $("meta[name='csrf-token']").attr('content');
+            var csrfname = $("meta[name='csrf-name']").attr('content');
 			var banval = $("#"+ban).val();
 			var barval = $("#"+bar).val();
 			var bnval = $("#"+bns).val();
@@ -2048,7 +2053,7 @@ $(document).ready(function(){
 				currentRequest = jQuery.ajax({
 					type: "POST",
 					url: redurl, 
-					data: {bi_acct_name:banval, bi_acct_no:barval, bi_bank:bnval, bi_id:bidval, bi_def:bchval, es_csrf_token:csrftoken},
+					data: {bi_acct_name:banval, bi_acct_no:barval, bi_bank:bnval, bi_id:bidval, bi_def:bchval, csrfname:csrftoken},
 					success: function(data){
 						
 						$(":checkbox[name^='bi_chk_bictr']").filter(function(){

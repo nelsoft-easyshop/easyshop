@@ -249,10 +249,11 @@ $(document).ready(function(){
 
 function username_check(){
 	var username = $('#username').val();
-	var csrftoken = $('#register_form1').find('input[name^="es_csrf"]').val();
+	var csrftoken = $("meta[name='csrf-token']").attr('content');
+    var csrfname = $("meta[name='csrf-name']").attr('content');
 	var field = $('#username');
 	$('#username_loader').show().css('display','inline-block');
-	$.post(config.base_url+'landingpage/username_check', {username: username, es_csrf_token : csrftoken}, function(result){
+	$.post(config.base_url+'landingpage/username_check', {username: username, csrfname : csrftoken}, function(result){
 		if(result == 1){
 			showcheck($('#username'));
 			$('.username_availability').html('');
@@ -271,10 +272,11 @@ function username_check(){
 
 function email_check(){
 	var email = $('#email').val();
-	var csrftoken = $('#register_form1').find('input[name^="es_csrf"]').val();
+	var csrftoken = $("meta[name='csrf-token']").attr('content');
+    var csrfname = $("meta[name='csrf-name']").attr('content');
 	var field = $('#email');
 	$('#email_loader').show().css('display','inline-block');
-	$.post(config.base_url+'landingpage/email_check', {email: email, es_csrf_token : csrftoken}, function(result){
+	$.post(config.base_url+'landingpage/email_check', {email: email, csrfname : csrftoken}, function(result){
 		if(result == 1){
 			showcheck($('#email'));
 			$('.email_availability').html('');

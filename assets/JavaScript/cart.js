@@ -8,7 +8,8 @@ $(document).ready(function() {
 });
 
 function sum(obj){
-    var csrftoken = $('#mycart').val();
+    var csrftoken = $("meta[name='csrf-token']").attr('content');
+    var csrfname = $("meta[name='csrf-name']").attr('content');
     var value = $(obj).val();
     var id = $(obj).attr("id");
     var mx = $(obj).attr("mx");
@@ -21,7 +22,7 @@ function sum(obj){
         url: config.base_url + "cart/change_qty",
         type:"POST",
         dataType:"JSON",
-        data:{id:id,qty:value, es_csrf_token:csrftoken},
+        data:{id:id,qty:value, csrfname:csrftoken},
         success:function(data){
             if(data['result']==false){
                 alert("Unable to change quantity");
@@ -35,7 +36,8 @@ function sum(obj){
     });
 }
 function del(id){
-    var csrftoken = $('#mycart').val();
+    var csrftoken = $("meta[name='csrf-token']").attr('content');
+    var csrfname = $("meta[name='csrf-name']").attr('content');
     var r=confirm("Are you sure you would like to remove this item from the shopping cart?");
     if (r==true)
       {
@@ -44,7 +46,7 @@ function del(id){
             url: config.base_url + "cart/remove_item",
             type:"POST",
             dataType:"JSON",
-            data:{id:id, es_csrf_token:csrftoken},
+            data:{id:id, csrfname:csrftoken},
             success:function(data){
                 if(data['result']==true){
                     $("#row"+id).remove();

@@ -11,14 +11,7 @@ class MY_Controller extends CI_Controller
         $this->load->model("user_model");
 		$this->load->model("cart_model");
         $this->load->model("product_model");
-		$this->load->vars(
-			array('my_csrf' => array(
-				'csrf_name' => $this->security->get_csrf_token_name(),
-				'csrf_hash' => $this->security->get_csrf_hash()
-				)
-			)
-		);
-        
+
         $url = uri_string();
         if($url != 'login'){
             $this->session->set_userdata('uri_string', $url);

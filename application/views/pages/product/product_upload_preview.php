@@ -48,7 +48,6 @@
         <input type="hidden" id="temp_deposit_acct_no" value=""/>
         <input type="hidden" id="temp_bank_list" value=""/>
         <input type="hidden" id="temp_bank_name" value=""/>
-        <input type="hidden" id="preview_csrf" name="<?php echo $my_csrf['csrf_name'];?>" value="<?php echo $my_csrf['csrf_hash'];?>">
         <br/>
         <div style="position:relative;">
             <input type="checkbox" id="allow_cashondelivery" name="allow_cashondelivery" style="position:absolute; top:29px">
@@ -176,7 +175,6 @@
                 </p>
               </div>
               <div class="buy_box"> 
-                <input type="hidden" id="buynow_csrf" name="<?php echo $my_csrf['csrf_name'];?>" value="<?php echo $my_csrf['csrf_hash'];?>">
                 <a href="JavaScript:void(0)" id="send" class="fm1 orange_btn_preview disabled">Buy Now</a> <br/>
                 <span>Delivers in 5-8 business days*</span> </div>
             </div>

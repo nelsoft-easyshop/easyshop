@@ -178,7 +178,6 @@
             ?>
           </select>
           <button onclick="search_form.submit();" class="search_btn">SEARCH</button>
-		  <input type="hidden" id="header_search" name="<?php echo $my_csrf['csrf_name'];?>" value="<?php echo $my_csrf['csrf_hash'];?>">
         </div>
         <div id="main_search_drop_content"></div>
       </div>

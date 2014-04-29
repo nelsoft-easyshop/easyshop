@@ -476,7 +476,6 @@
 			</div>
 			<button id="modal_send_btn">Send</button>
 		</div>
-<input type="hidden" id="csrf" name="<?php echo $my_csrf['csrf_name'];?>" value="<?php echo $my_csrf['csrf_hash'];?>">
 		
 <script src="<?=base_url()?>assets/JavaScript/js/jquery.raty.min.js" type="text/javascript"></script>
 <script type='text/javascript' src='<?=base_url()?>assets/JavaScript/js/jquery.jqpagination.min.js'></script>
@@ -504,7 +503,8 @@
 	
 	$("#modal_send_btn").on("click",function(){
 	    var recipient = <?php echo $vendordetails['id_member']; ?>;
-        var csrftoken = $("#csrf").val().trim();
+        var csrftoken = $("meta[name='csrf-token']").attr('content');
+        var csrfname = $("meta[name='csrf-name']").attr('content');
 		if (msg == "") {
 			alert("Say something..");
 			return false;
@@ -515,7 +515,7 @@
                 type : "POST",
                 dataType : "json",
                 url : "<?=base_url()?>messages/send_msg",
-                data : {recipient:recipient,msg:msg,es_csrf_token:csrftoken},
+                data : {recipient:recipient,msg:msg,csrfname:csrftoken},
                 success : function(data) {
 		    $("#modal-container, #modal-background").toggleClass("active");
 		    $("#modal-container").hide();

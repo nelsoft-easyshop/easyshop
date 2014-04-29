@@ -71,9 +71,6 @@
     <button id="modal_send_btn">Send</button>
 </div>
 
-<input type="hidden" id="csrf" name="<?php echo $my_csrf['csrf_name'];?>" value="<?php echo $my_csrf['csrf_hash'];?>">
-
-
 <script>
 	$(document).ready(function() {
         
@@ -153,14 +150,16 @@
 	}); 
 	
 	function send_msg(recipient,msg){
-		var csrftoken = $("#csrf").val().trim();
+		var csrftoken = $("meta[name='csrf-token']").attr('content');
+        var csrfname = $("meta[name='csrf-name']").attr('content');
+        
 		var result = "";
 		$.ajax({
 			async : false,
 			type : "POST",
 			dataType : "json",
 			url : "<?=base_url()?>messages/send_msg",
-			data : {recipient:recipient,msg:msg,es_csrf_token:csrftoken},
+			data : {recipient:recipient,msg:msg,csrfname:csrftoken},
 			success : function(data) {
                 if (data != "false") {
                     result = data.messages;
@@ -260,14 +259,15 @@
 		objDiv.scrollTop = objDiv.scrollHeight;
 	}
 	$("#btn_refresh").on("click",function(){
-		var csrftoken = $("#csrf").val().trim();
+		var csrftoken = $("meta[name='csrf-token']").attr('content');
+        var csrfname = $("meta[name='csrf-name']").attr('content');
 		var data = "";
 		$.ajax({
 			async:false,
 			type : "POST",
 			dataType : "json",
 			url : "<?=base_url()?>messages/get_all_msgs",
-			data : {es_csrf_token:csrftoken},
+			data : {csrfname:csrftoken},
 			success : function(d) {
                 if (d.messages != 0) {
                     tbl_data(d.messages);
@@ -287,14 +287,15 @@
 		}
 	});
 	function delete_data(ids) {		//loading when sql query
-		var csrftoken = $("#csrf").val().trim();
+		var csrftoken = $("meta[name='csrf-token']").attr('content');
+        var csrfname = $("meta[name='csrf-name']").attr('content');
 		var data = "";
 		$.ajax({
 			async:false,
 			type : "POST",
 			dataType : "json",
 			url : "<?=base_url()?>messages/delete_msg",
-			data : {id_msg:ids,es_csrf_token:csrftoken},
+			data : {id_msg:ids,csrfname:csrftoken},
 			success : function(d) {
                 data = d.messages;
 			}

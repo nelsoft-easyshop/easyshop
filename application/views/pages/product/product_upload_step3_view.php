@@ -8,7 +8,6 @@
  
     <div class="inner_seller_product_content">
       <h2 class="f24">Sell an Item</h2>
-      <input type="hidden" id="uploadstep1_csrf" name="<?php echo $my_csrf['csrf_name'];?>" value="<?php echo $my_csrf['csrf_hash'];?>">
             <div class="sell_steps sell_steps3">
                 <ul>
                     <li><a href="javascript:void(0)" id="step1_link">Step 1 : Select Category</a></li>
@@ -181,7 +180,6 @@
       <!-- start of shipping summary -->
       <div class="shipping_summary_container">
           <h2 class="f20">Shipping List</h2>
-          <input type="hidden" id="shippingsummary_csrf" name="<?php echo $my_csrf['csrf_name'];?>" value="<?php echo $my_csrf['csrf_hash'];?>">
           <table class="" cellspacing="0" cellpadding="0">
                <thead>
                     <tr>

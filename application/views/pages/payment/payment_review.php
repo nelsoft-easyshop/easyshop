@@ -323,13 +323,14 @@ $(document).ready(function(){
  
       $(document).on('click','.paypal',function () {
         var action = "pay/setting/paypal"; 
-        var csrftoken = "<?php echo $my_csrf['csrf_hash'];?>";
+        var csrftoken = $("meta[name='csrf-token']").attr('content');
+        var csrfname = $("meta[name='csrf-name']").attr('content');
         var type = $(this).data('type');
         $.ajax({
             type: "POST",
             url: '<?php echo base_url();?>' + action, 
             dataType: "json",
-            data:   "es_csrf_token="+csrftoken+"&paypal="+type, 
+            data:   csrfname+"="+csrftoken+"&paypal="+type, 
             beforeSend: function(jqxhr, settings) { 
               $('.paypal_loader').show();
               $('.paypal_button').hide();

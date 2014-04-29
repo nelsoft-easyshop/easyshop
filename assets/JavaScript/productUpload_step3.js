@@ -337,29 +337,29 @@ $(function(){
 	}
 	
     if(getObjectSize(fdata) > 0){
-	  var csrftoken = $('#shippingsummary_csrf').val();
+	  var csrftoken = $("meta[name='csrf-token']").attr('content');
+      var csrfname = $("meta[name='csrf-name']").attr('content');
 	  var productitemid = $('#json_id_product_item').val();
 	  var productid = parseInt($('#prod_h_id').val());
-	  var loadingimg = $(this).siblings('img.loading_img_step3');
+	  var loadingimg = $(this).siblings('img.loading_img');
 	  var thisbtn = $(this);
 	  
 	  thisbtn.hide();
 	  loadingimg.show();
 
-	  $.post(config.base_url+'sell/shippinginfo', {fdata : fdata, es_csrf_token : csrftoken, productitemid : productitemid, productid : productid}, function(data){
+	  $.post(config.base_url+'sell/shippinginfo', {fdata : fdata, csrfname : csrftoken, productitemid : productitemid, productid : productid}, function(data){
 		loadingimg.hide();
-        thisbtn.val('Please wait');
 		thisbtn.show();		
 		if(data == 1){
             
-            $.post(config.base_url+'productUpload/previewItem', {p_id: productid, es_csrf_token : csrftoken}, function(data){
+            $.post(config.base_url+'productUpload/previewItem', {p_id: productid, csrfname : csrftoken}, function(data){
                 
                 $('#previewProduct').html(data);
                 $('#tabs').tabs();
                 
                 $('#previewProduct').dialog({
                     width: 1100,
-                    height: 520,
+                    height: 500,
                     autoOpen: false,
                     title: "Review your listing",
                     modal: true,
@@ -382,34 +382,30 @@ $(function(){
                                 var bank_name = $('#bank_name').val();
                                 var account_no = $('#deposit_acct_no').val();
                                 var bank_list = $('#bank_list').val();
-                                var prod_billing_id = parseInt($('#prod_billing_id').val(),10);
-                                var cod_only = ((prod_billing_id === 0)&&($('#allow_cashondelivery').is(':checked')))?true:false;
-                                var valid = true;                                
-
-                                if(!cod_only){
-                                    if($.trim(account_name) === ''){
-                                        validateRedTextBox('#deposit_acct_name');
-                                        valid = false;
-                                    }
-                                    if($.trim(account_no) === ''){
-                                        validateRedTextBox('#deposit_acct_no');
-                                        valid = false;
-                                    }
-                                    if(parseInt(bank_list,10) === 0){
-                                        validateRedTextBox('#bank_list');
-                                        valid = false;
-                                    }
-                                    if(!valid){
-                                        return false;
-                                    }
-                                }
+                                var prod_billing_id = $('#prod_billing_id').val();
                                 
-
-                                if((prod_billing_id === 0)&&(!cod_only)){
+                                var valid = true;
+                            
+                                if($.trim(account_name) === ''){
+                                    validateRedTextBox('#deposit_acct_name');
+                                    valid = false;
+                                }
+                                if($.trim(account_no) === ''){
+                                    validateRedTextBox('#deposit_acct_no');
+                                    valid = false;
+                                }
+                                if(parseInt(bank_list,10) === 0){
+                                    validateRedTextBox('#bank_list');
+                                    valid = false;
+                                }
+                                if(!valid){
+                                    return false;
+                                }
+                                if(parseInt(prod_billing_id,10) === 0){
                                     jQuery.ajax({
                                         type: "POST",
                                         url: config.base_url + 'memberpage/billing_info', 
-                                        data: "express=true&bi_payment_type=Bank&bi_bank="+bank_list+"&bi_acct_no="+account_no+"&bi_acct_name="+account_name+"&es_csrf_token="+csrftoken, 
+                                        data: "express=true&bi_payment_type=Bank&bi_bank="+bank_list+"&bi_acct_no="+account_no+"&bi_acct_name="+account_name+"&"+csrfname+"="+csrftoken, 
                                         success: function(response) {
                                                 if(!response){
                                                     alert('We are having a problem right now. Refresh the page to try again.');
@@ -433,7 +429,6 @@ $(function(){
     
                 $('#prod_billing_id').val( $('#billing_info_id').val());
                 $('#allow_cod').prop('checked', false);
-                $('#btnShippingDetailsSubmit').val('SUBMIT');
                 
             });
 		}
@@ -760,7 +755,8 @@ $(document).ready(function(){
         var billing_id = $('#billing_info_id').val();
         var selected = $('#deposit_info [value="'+billing_id+'"]');
         var valid = true;
-        var csrftoken = $('#preview_csrf').val();
+        var csrftoken = $("meta[name='csrf-token']").attr('content');
+        var csrfname = $("meta[name='csrf-name']").attr('content');
         if($.trim(account_name) === ''){
             validateRedTextBox('#deposit_acct_name');
             valid = false;
@@ -780,7 +776,7 @@ $(document).ready(function(){
         jQuery.ajax({
             type: "POST",
             url: config.base_url + 'memberpage/billing_info_u', 
-            data: "bi_id="+billing_id+"&bi_acct_name="+account_name+"&bi_acct_no="+account_no+"&bi_bank="+bank_list+"&es_csrf_token="+csrftoken, 
+            data: "bi_id="+billing_id+"&bi_acct_name="+account_name+"&bi_acct_no="+account_no+"&bi_bank="+bank_list+"&"+csrfname+"="+csrftoken, 
             success: function(response) {
                 if(!response){
                     alert('We are having a problem right now. Refresh the page to try again.');
@@ -808,7 +804,8 @@ $(document).ready(function(){
         var account_no = $('#deposit_acct_no').val();
         var bank_list = $('#bank_list').val();
         var valid = true;
-        var csrftoken = $('#preview_csrf').val();
+        var csrftoken = $("meta[name='csrf-token']").attr('content');
+        var csrfname = $("meta[name='csrf-name']").attr('content');
         if($.trim(account_name) === ''){
             validateRedTextBox('#deposit_acct_name');
             valid = false;
@@ -828,7 +825,7 @@ $(document).ready(function(){
         jQuery.ajax({
             type: "POST",
             url: config.base_url + 'memberpage/billing_info', 
-            data: "express=true&bi_payment_type=Bank&bi_bank="+bank_list+"&bi_acct_no="+account_no+"&bi_acct_name="+account_name+"&es_csrf_token="+csrftoken, 
+            data: "express=true&bi_payment_type=Bank&bi_bank="+bank_list+"&bi_acct_no="+account_no+"&bi_acct_name="+account_name+"&"+csrfname+"="+csrftoken, 
             success: function(response) {
                 if(!response){
                     alert('We are having a problem right now. Refresh the page to try again.');

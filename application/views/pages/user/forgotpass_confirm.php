@@ -47,7 +47,6 @@
            	        <p><a href='<?=base_url()?>home'>Return to the Home Page.</a></p>			   
                <?php endif; ?>  			           
           </div>
-		  <input type="hidden" id="fc_csrf" name="<?php echo $my_csrf['csrf_name'];?>" value="<?php echo $my_csrf['csrf_hash'];?>">  
 		<?php echo form_close();?>
         <?php else: ?>
 			<?php redirect(base_url().'home');?>

@@ -28,7 +28,6 @@ echo form_open('sell/edit/step2', $attributesForm);
 
         <div class="inner_seller_product_content">
             <h2 class="f24">Sell an Item</h2>
-			<input type="hidden" id="uploadstep1_csrf" name="<?php echo $my_csrf['csrf_name'];?>" value="<?php echo $my_csrf['csrf_hash'];?>">
             <div class="sell_steps sell_steps1">
                 <ul>
                     <li><a href="javascript:void(0)" id="step1_link"><span>Step 1:</span> Select Category</a></li>
@@ -162,7 +161,8 @@ echo form_open('sell/edit/step2', $attributesForm);
             });     
             $(document).on('click','.draft_remove',function () {
                 var pid = $(this).data('pid');
-                var csrftoken = $('input[name="es_csrf_token"]').val();
+                var csrftoken = $("meta[name='csrf-token']").attr('content');
+                var csrfname = $("meta[name='csrf-name']").attr('content');
                 var action = "sell/draft/remove"; 
  
                 if(confirm("Are you sure you want to permanently removed your draft item?")){
@@ -170,7 +170,7 @@ echo form_open('sell/edit/step2', $attributesForm);
                         async: false,
                         type: "POST",
                         url: '<?php echo base_url(); ?>' + action,
-                        data: "p_id=" + pid + "&es_csrf_token=" + csrftoken,
+                        data: "p_id=" + pid + "&"+csrfname+"=" + csrftoken,
                         dataType: "json",
                         cache: false,
                         success: function(d) { 
@@ -241,7 +241,8 @@ echo form_open('sell/edit/step2', $attributesForm);
             var catId = D.cat_id;
             var level =  D.level;
             var name = D.name;
-			var csrftoken = $('#uploadstep1_csrf').val();
+			var csrftoken = $("meta[name='csrf-token']").attr('content');
+            var csrfname = $("meta[name='csrf-name']").attr('content');
 
 
             $('.jcarousel-control-prev , .jcarousel-control-next').addClass('inactive'); 
@@ -259,7 +260,7 @@ echo form_open('sell/edit/step2', $attributesForm);
                     async: false,
                     type: "POST",
                     url: '<?php echo base_url(); ?>' + action,
-                    data: "cat_id=" + catId + "&level=" + level + "&name=" + name + "&es_csrf_token=" + csrftoken,
+                    data: "cat_id=" + catId + "&level=" + level + "&name=" + name + "&"+csrfname+"=" + csrftoken,
                     dataType: "json",
                     cache: false,
                     
@@ -286,7 +287,8 @@ echo form_open('sell/edit/step2', $attributesForm);
             var action = 'productUpload/getChild';
             var catId = D.cat_id;
             var name = D.name;
-			var csrftoken = $('#uploadstep1_csrf').val();
+			var csrftoken = $("meta[name='csrf-token']").attr('content');
+            var csrfname = $("meta[name='csrf-name']").attr('content');
 			
             $(".add_category_submit").empty();
             $(".product_sub_category .product_sub_items" + D.level).nextAll().remove(); 
@@ -296,7 +298,7 @@ echo form_open('sell/edit/step2', $attributesForm);
                     async: false,
                     type: "POST",
                     url: '<?php echo base_url(); ?>' +  action,
-                    data: "cat_id=" + catId + "&level=" + nlevel + "&name=" + name + "&es_csrf_token=" + csrftoken,
+                    data: "cat_id=" + catId + "&level=" + nlevel + "&name=" + name + "&"+csrfname+"=" + csrftoken,
                     dataType: "json",
                     cache: false,
                     onLoading:$(".sub_cat_loading_container").html('<img src="<?= base_url() ?>assets/images/orange_loader.gif" />').show(),
@@ -479,12 +481,13 @@ echo form_open('sell/edit/step2', $attributesForm);
         var currentRequest = null;
         $( "#cat_sch" ).keyup(function() {
             var searchQuery = $(this).val();
-			var csrftoken = $('#uploadstep1_csrf').val();
+			var csrftoken = $("meta[name='csrf-token']").attr('content');
+            var csrfname = $("meta[name='csrf-name']").attr('content');
             if(searchQuery != ""){  
                 currentRequest = jQuery.ajax({
                     type: "GET",
                     url: '<?php echo base_url();?>product/searchCategory', 
-                    data: "data="+searchQuery+"&es_csrf_token="+csrftoken, 
+                    data: "data="+searchQuery+"&"+csrfname+"="+csrftoken, 
                     onLoading:jQuery(".cat_sch_loading").html('<img src="<?= base_url() ?>assets/images/orange_loader_small.gif" />').show(),
                     beforeSend : function(){       
                         $("#cat_search_drop_content").empty();

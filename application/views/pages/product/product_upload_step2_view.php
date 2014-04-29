@@ -9,7 +9,6 @@
 
     <div class="inner_seller_product_content">
       <h2 class="f24">Sell an Item</h2>
-      <input type="hidden" id="uploadstep2_csrf" name="<?php echo $my_csrf['csrf_name'];?>" value="<?php echo $my_csrf['csrf_hash'];?>">
       <div class="sell_steps sell_steps2">
         <ul> 
           <li><a href="javascript:void(0)" class="step1_link">Step 1: Select Category</a></li>
@@ -1380,8 +1379,9 @@ $(".proceed_form").unbind("click").click(function(){
   formData.append("editPrimaryPicture",editPrimaryPicture);
   g_editPrimaryPicture = editPrimaryPicture;
 
-  var csrftoken = $('#uploadstep2_csrf').val();
-  formData.append('es_csrf_token', csrftoken);
+  var csrftoken = $("meta[name='csrf-token']").attr('content');
+  var csrfname = $("meta[name='csrf-name']").attr('content');
+  formData.append(csrfname, csrftoken);
 
   var price = $("#prod_price");
   var other_price = $("#price_field");
@@ -1828,13 +1828,14 @@ $(document).ready(function(){
         $('#prod_brand').trigger( "change" );
         jQuery(".brand_sch_loading").hide();
         var searchQuery = $(this).val();
-        var csrftoken = $('#uploadstep2_csrf').val();
+        var csrftoken = $("meta[name='csrf-token']").attr('content');
+        var csrfname = $("meta[name='csrf-name']").attr('content');
         if(searchQuery != ""){
             currentRequest = jQuery.ajax({
                 type: "GET",
                 url: '<?php echo base_url();?>product/searchBrand', 
                 onLoading:jQuery(".brand_sch_loading").html('<img src="<?= base_url() ?>assets/images/orange_loader_small.gif" />').show().css('display','inline-block'),
-                data: "data="+searchQuery+"&es_csrf_token="+csrftoken, 
+                data: "data="+searchQuery+"&"+csrfname+"="+csrftoken, 
                 beforeSend : function(){       
                     $("#brand_search_drop_content").empty();
                     if(currentRequest != null) {

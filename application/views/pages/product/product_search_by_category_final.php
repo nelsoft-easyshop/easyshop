@@ -254,7 +254,6 @@ echo $typeOfViewActive;
 ?>
 
 </div> 
-<input type="hidden" id="scroll_csrf" name="<?php echo $my_csrf['csrf_name'];?>" value="<?php echo $my_csrf['csrf_hash'];?>">
 <div class="loading_products" style="display: inline-block;text-align: center;width: 100%;"></div>
 </div>
 
@@ -377,7 +376,8 @@ $(document).ready(function() {
     ?>
 
      var type = '<?php echo $type ?>';
-     var csrftoken = $('#scroll_csrf').val();
+     var csrftoken = $("meta[name='csrf-token']").attr('content');
+     var csrfname = $("meta[name='csrf-name']").attr('content');
      $(window).scroll(function(event) {
         var st = $(this).scrollTop();
         if(st > last_scroll_top){
@@ -386,7 +386,7 @@ $(document).ready(function() {
                     ajax_is_on = true; 
                     $.ajax({
                         url: base_url + 'category/loadproduct',
-                        data:{page_number:offset,id_cat:'<?php echo $id_cat ?>',type:type,parameters:'<?php echo json_encode($_GET); ?>', es_csrf_token : csrftoken},
+                        data:{page_number:offset,id_cat:'<?php echo $id_cat ?>',type:type,parameters:'<?php echo json_encode($_GET); ?>', csrfname : csrftoken},
                         type: 'post',
                         //async: false,
                         dataType: 'JSON',

@@ -133,7 +133,6 @@
                 <?php if($uid == $product['sellerid']): ?>
                      <p class="buy_btn_sub"> This is your own listing </p>
                 <?php else: ?>
-                    <input type="hidden" id="buynow_csrf" name="<?php echo $my_csrf['csrf_name'];?>" value="<?php echo $my_csrf['csrf_hash'];?>">
                     <a href="JavaScript:void(0)" id="send" class="fm1 orange_btn3 disabled">Buy Now</a> <br/>
                 <?php endif;?>
             <?php else: ?>
@@ -266,7 +265,6 @@
             </div>
           </div>
           <div class="reviews_content">
-			<input type="hidden" id="reviews_csrf" name="<?php echo $my_csrf['csrf_name'];?>" value="<?php echo $my_csrf['csrf_hash'];?>">
             <?php if(count($reviews) === 0): ?>
             <div> <strong>This product has 0 reviews so far. Be the first to review it.</strong> </div>
             <?php else: ?>

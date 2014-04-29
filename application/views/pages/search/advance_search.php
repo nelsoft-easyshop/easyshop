@@ -102,7 +102,6 @@
 	</div>
 </div>
 <div class="clear"></div>
-<input type="hidden" id="advancesearch_csrf" name="<?php echo $my_csrf['csrf_name'];?>" value="<?php echo $my_csrf['csrf_hash'];?>">
 
 <style type="text/css">
 .err{
@@ -216,7 +215,8 @@ $(document).ready(function() {
             var catId = D.cat_id;
             var level =  D.level;
             var name = D.name;
-			var csrftoken = $('#advancesearch_csrf').val();
+			var csrftoken = $("meta[name='csrf-token']").attr('content');
+            var csrfname = $("meta[name='csrf-name']").attr('content');
 
             $(".product_sub_category .product_sub_items0").nextAll().remove();
             $(".product_sub_category .product_sub_items0").remove();
@@ -228,7 +228,7 @@ $(document).ready(function() {
 				async: false,
 				type: "POST",
 				url: '<?php echo base_url(); ?>' + action,
-				data: "cat_id=" + catId + "&level=" + level + "&name=" + name + "&es_csrf_token=" + csrftoken,
+				data: "cat_id=" + catId + "&level=" + level + "&name=" + name + "&"+csrfname+"=" + csrftoken,
 				dataType: "json",
 				cache: false,
 				onLoading:jQuery(".sub_cat_loading_container").html('<img src="<?= base_url() ?>assets/images/orange_loader.gif" />').show(),
@@ -256,7 +256,8 @@ $(document).ready(function() {
 			var D = eval('(' + $(this).attr('data') + ')');
             var nlevel = parseInt(D.level) + 1;
             var action = 'product_search/getChild';
-			var csrftoken = $('#advancesearch_csrf').val();
+			var csrftoken = $("meta[name='csrf-token']").attr('content');
+            var csrfname = $("meta[name='csrf-name']").attr('content');
             var catId = D.cat_id;
             var name = D.name;
 
@@ -269,7 +270,7 @@ $(document).ready(function() {
 				async: false,
 				type: "POST",
 				url: '<?php echo base_url(); ?>' +  action,
-				data: "cat_id=" + catId + "&level=" + nlevel + "&name=" + name + "&es_csrf_token=" + csrftoken,
+				data: "cat_id=" + catId + "&level=" + nlevel + "&name=" + name + "&"+csrfname+"=" + csrftoken,
 				dataType: "json",
 				cache: false,
 				onLoading:$(".sub_cat_loading_container").html('<img src="<?= base_url() ?>assets/images/orange_loader.gif" />').show(),
@@ -368,12 +369,13 @@ $(document).ready(function() {
         var currentRequest = null;
         $( "#_cat_sch" ).keyup(function() {
             var searchQuery = $(this).val();
-			var csrftoken = $('#advancesearch_csrf').val();
+			var csrftoken = $("meta[name='csrf-token']").attr('content');
+            var csrfname = $("meta[name='csrf-name']").attr('content');
             if(searchQuery != ""){
                 currentRequest = jQuery.ajax({
                     type: "GET",
                     url: '<?php echo base_url();?>product/searchCategory', 
-                    data: "data="+searchQuery+"&es_csrf_token="+csrftoken, 
+                    data: "data="+searchQuery+"&"+csrfname+"="+csrftoken, 
                     onLoading:jQuery(".cat_sch_loading").html('<img src="<?= base_url() ?>assets/images/orange_loader_small.gif" />').show(),
                     beforeSend : function(){       
                         $("#cat_search_drop_content").empty();
