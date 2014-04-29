@@ -490,7 +490,7 @@
 				<!--<h3>Feedback from Transaction#: <?php echo $k;?></h3>-->
 				<?php foreach($tempafb as $key=>$afb):?>
 				<p>From: <a href="<?php echo base_url();?>vendor/<?php echo $afb['member_name'];?>"><?php echo $afb['member_name'];?></a> | on: <?php echo $afb['dateadded'];?></p>
-				<p>"<?php echo $afb['feedb_msg']?>"</p>
+				<p>"<?php echo html_escape($afb['feedb_msg'])?>"</p>
 				<p><?php echo $this->lang->line('rating')[0].':'; ?> 
 					<?php for($i = 0; $i < $afb['rating1']; $i++):?>
 					<span class="span_bg star_on"></span>
@@ -548,7 +548,7 @@
 			<!--<h3>Feedback from Transaction#: <?php echo $k;?></h3>-->
 			<?php foreach($tempafb as $afb):?>
 			<p>From: <a href="<?php echo base_url();?>vendor/<?php echo $afb['member_name'];?>"><?php echo $afb['member_name'];?></a> | on: <?php echo $afb['dateadded'];?></p>
-			<p>"<?php echo $afb['feedb_msg']?>"</p>
+			<p>"<?php echo html_escape($afb['feedb_msg'])?>"</p>
 			<p><?php echo $this->lang->line('rating')[0].':'; ?> 
 				<?php for($i = 0; $i < $afb['rating1']; $i++):?>
 				<span class="span_bg star_on"></span>
@@ -602,7 +602,7 @@
 			<!--<h3>Feedback from Transaction#: <?php echo $k;?></h3>-->
 			<?php foreach($tempafb as $afb):?>
 			<p>For: <a href="<?php echo base_url();?>vendor/<?php echo $afb['for_membername'];?>"><?php echo $afb['for_membername'];?></a> | on: <?php echo $afb['dateadded'];?></p>
-			<p>"<?php echo $afb['feedb_msg']?>"</p>
+			<p>"<?php echo html_escape($afb['feedb_msg'])?>"</p>
 			<p><?php echo $this->lang->line('rating')[0].':'; ?> 
 				<?php for($i = 0; $i < $afb['rating1']; $i++):?>
 				<span class="span_bg star_on"></span>
@@ -656,7 +656,7 @@
 			<!--<h3>Feedback from Transaction#: <?php echo $k;?></h3>-->
 			<?php foreach($tempafb as $afb):?>
 			<p>For: <a href="<?php echo base_url();?>vendor/<?php echo $afb['for_membername'];?>"><?php echo $afb['for_membername'];?></a> | on: <?php echo $afb['dateadded'];?></p>
-			<p>"<?php echo $afb['feedb_msg']?>"</p>
+			<p>"<?php echo html_escape($afb['feedb_msg'])?>"</p>
 			<p><?php echo $this->lang->line('rating')[0].':'; ?> 
 				<?php for($i = 0; $i < $afb['rating1']; $i++):?>
 				<span class="span_bg star_on"></span>
@@ -717,11 +717,11 @@
 			<div class="profile_fields progress_update update_all" >
 				<div>
 					<label for="nickname">Nickname:</label>
-					<input name="nickname" type="text" value="<?php echo $nickname?>">
+					<input name="nickname" type="text" value="<?php echo html_escape($nickname)?>">
 				</div>
 				<div>
 					<label for="fullname">Real name:</label>
-					<input name="fullname" type="text" value="<?php echo $fullname?>">
+					<input name="fullname" type="text" value="<?php echo html_escape($fullname)?>">
 				</div>
 				<div>
 					<label for="gender">Gender:</label>
@@ -730,13 +730,13 @@
 				</div>
 				<div>
 					<label for="dateofbirth">Birthday:</label>
-					<input type="text" name="dateofbirth" id="datepicker" value="<?php echo ($birthday == '0000-00-00' || $birthday == '0001-01-01'?'':$birthday)?>">
+					<input type="text" name="dateofbirth" id="datepicker" value="<?php echo html_escape($birthday == '0000-00-00' || $birthday == '0001-01-01'?'':$birthday)?>">
 					<span class="red ci_form_validation_error"><?php echo form_error('dateofbirth'); ?></span>
 				</div>	
 
 				<div id="mobilediv">
 					<label for="mobile">Mobile:</label>
-					<input type="text" name="mobile" id="mobile" maxlength="10" value="<?php echo $contactno;?>" <?php echo (trim($contactno)==''?'':'disabled');?> placeholder="e.g. 9051234567">
+					<input type="text" name="mobile" id="mobile" maxlength="10" value="<?php echo html_escape($contactno);?>" <?php echo (trim($contactno)==''?'':'disabled');?> placeholder="e.g. 9051234567">
 					<span class="red ci_form_validation_error"><?php echo form_error('mobile'); ?></span>
 					<input type="hidden" name="mobile_orig" value="<?php echo $contactno;?>">
 					<input type="hidden" name="is_contactno_verify" value="<?php echo $is_contactno_verify;?>">
@@ -773,7 +773,7 @@
 				
 				<div id="emaildiv">
 					<label for="email">Email:</label>
-					<input type="text" name="email" id="email" value="<?php echo $email;?>" <?php echo (trim($email)==''?'':'disabled');?>>
+					<input type="text" name="email" id="email" value="<?php echo html_escape($email);?>" <?php echo (trim($email)==''?'':'disabled');?>>
 					<span class="red ci_form_validation_error"><?php echo form_error('email'); ?></span>
 					<input type="hidden" name="email_orig" value="<?php echo $email;?>">
 					<input type="hidden" name="is_email_verify" value="<?php echo $is_email_verify;?>">
@@ -825,7 +825,7 @@
 				<div class="address_information gen_information">
 					<div class="add_info echoed_info">
 						<?php if(trim($stateregion) != '' && trim($city) != ''):?>
-							<?php echo $stateregion . ', ' . $city . '<br>' . $address?>
+							<?php echo $stateregion . ', ' . $city . '<br>' . html_escape($address)?>
 						<?php endif;?>
 					</div>
 					<div class="edit_address edit_info_btn">
@@ -878,9 +878,9 @@
 							</div>
 							<div class="address_fields_layer2">
 								<div>
-									<input type="text" name="address" value="<?php echo $address?>">
+									<input type="text" name="address" value="<?php echo html_escape($address)?>">
 									<p>Street Address</p>
-									<input type="hidden" name="address_orig" value="<?php echo $address?>"> 
+									<input type="hidden" name="address_orig" value="<?php echo html_escape($address)?>"> 
 								</div>
 							</div>
 							<input type="hidden" name="addresstype" value="0"/>
@@ -939,7 +939,7 @@
 						<div class="school_info echoed_info">
 							<?php 	if(count($school)>0){
 								foreach ($school as $i){
-									echo '<p>'.$i['schoolname'].' '.$i['schoolyear'].' ';
+									echo '<p>'. html_escape($i['schoolname']) .' '. html_escape($i['schoolyear']) .' ';
 									switch ($i['schoollevel']){
 										case '1': echo $this->lang->line('schoollevel_option')[1]; break;
 										case '2': echo $this->lang->line('schoollevel_option')[2]; break;
@@ -965,11 +965,11 @@
 						<div class="inner_profile_fields school_fields progress_update update_once">
 							<div id="add_school">
 								<div>
-									<input type="text" name="schoolname1" value="<?php echo isset($school[0]['schoolname'])?$school[0]['schoolname']:"";?> ">
+									<input type="text" name="schoolname1" value="<?php echo isset($school[0]['schoolname'])?html_escape($school[0]['schoolname']):"";?> ">
 									<p>School Name</p>
 								</div>
 								<div>
-									<input type="text" name="schoolyear1" class="year" maxlength="4" value="<?php echo isset($school[0]['schoolyear'])?$school[0]['schoolyear']:"";?>">
+									<input type="text" name="schoolyear1" class="year" maxlength="4" value="<?php echo isset($school[0]['schoolyear'])?html_escape($school[0]['schoolyear']):"";?>">
 									<p>Year</p>
 								</div>
 								<div>
@@ -990,11 +990,11 @@
 								<?php for($schcount = 1; $schcount < count($school); $schcount++ ):?>
 								<div class="add_another_school dynamic_dd" style="display:block;">
 									<div>
-										<input type="text" name="schoolname<?php echo $school[$schcount]['schoolcount']?>" value="<?php echo $school[$schcount]['schoolname']?>">
+										<input type="text" name="schoolname<?php echo $school[$schcount]['schoolcount']?>" value="<?php echo html_escape($school[$schcount]['schoolname'])?>">
 										<p>School Name</p>
 									</div>
 									<div>
-										<input type="text" name="schoolyear<?php echo $school[$schcount]['schoolcount']?>" value="<?php echo $school[$schcount]['schoolyear']?>">
+										<input type="text" name="schoolyear<?php echo $school[$schcount]['schoolcount']?>" value="<?php echo html_escape($school[$schcount]['schoolyear'])?>">
 										<p>Year</p>
 									</div>
 									<div>
@@ -1051,7 +1051,7 @@
 				<div class="work_info echoed_info">
 					<?php 	if(count($work)>0){
 						foreach ($work as $i){
-							echo "<p>" . $i['companyname'] . " " . $i['designation'] . " " . $i['year'] . "</p>";
+							echo "<p>" . html_escape($i['companyname']) . " " . html_escape($i['designation']) . " " . html_escape($i['year']) . "</p>";
 						}
 					}
 					?>
@@ -1068,15 +1068,15 @@
 				<div class="inner_profile_fields work_fields progress_update update_once">
 					<div id="add_work">
 						<div>
-							<input type="text" name="companyname1" value="<?php echo isset($work[0]['companyname'])?$work[0]['companyname']:"";?>">
+							<input type="text" name="companyname1" value="<?php echo isset($work[0]['companyname'])?html_escape($work[0]['companyname']):"";?>">
 							<p>Company Name</p>
 						</div>
 						<div>
-							<input type="text" name="designation1" value="<?php echo isset($work[0]['designation'])?$work[0]['designation']:"";?>">
+							<input type="text" name="designation1" value="<?php echo isset($work[0]['designation'])?html_escape($work[0]['designation']):"";?>">
 							<p>Designation</p>
 						</div>
 						<div>
-							<input type="text" name="year1" value="<?php echo isset($work[0]['year'])?$work[0]['year']:"";?>" maxlength="4">
+							<input type="text" name="year1" value="<?php echo isset($work[0]['year'])?html_escape($work[0]['year']):"";?>" maxlength="4">
 							<p>Year</p>
 						</div>
 						<input type="hidden" name="workcount1" value="1"/>
@@ -1086,15 +1086,15 @@
 						<?php for($workcount = 1; $workcount < count($work); $workcount++):?>
 						<div class="add_another_work dynamic_dd" style="display: block;">
 							<div>
-								<input type="text" name="companyname<?php echo $work[$workcount]['count']?>" value="<?php echo $work[$workcount]['companyname']?>">
+								<input type="text" name="companyname<?php echo $work[$workcount]['count']?>" value="<?php echo html_escape($work[$workcount]['companyname'])?>">
 								<p>Company Name</p>
 							</div>
 							<div>
-								<input type="text" name="designation<?php echo $work[$workcount]['count']?>" value="<?php echo $work[$workcount]['designation']?>">
+								<input type="text" name="designation<?php echo $work[$workcount]['count']?>" value="<?php echo html_escape($work[$workcount]['designation'])?>">
 								<p>Designation</p>
 							</div>
 							<div>
-								<input type="text" name="year<?php echo $work[$workcount]['count']?>" value="<?php echo $work[$workcount]['year']?>">
+								<input type="text" name="year<?php echo $work[$workcount]['count']?>" value="<?php echo html_escape($work[$workcount]['year'])?>">
 								<p>Year</p>
 							</div>
 							<input type="hidden" name="workcount<?php echo $work[$workcount]['count']?>" value="<?php echo $work[$workcount]['count']?>"/>
@@ -1158,12 +1158,12 @@
 				</div>
 				<div>
 					<label for="bi_acct_name">Account Name:</label>
-					<input type="text" name="bi_acct_name" id="bi_acct_name" maxlength="60" value="<?php #echo $bill_info[0][$bank_account_name]?>">
+					<input type="text" name="bi_acct_name" id="bi_acct_name" maxlength="60" value="<?php #echo html_escape($bill_info[0][$bank_account_name])?>">
 					<span class="red ci_form_validation_error"><?php echo form_error('bi_acct_name');?></span>
 				</div>
 				<div>
 					<label for="bi_acct_no">Account Number:</label>
-					<input type="text" name="bi_acct_no" id="bi_acct_no" value="<?php #echo $bank_account_number?>" maxlength="18">
+					<input type="text" name="bi_acct_no" id="bi_acct_no" value="<?php #echo html_escape($bank_account_number)?>" maxlength="18">
 					<span class="red ci_form_validation_error"><?php echo form_error('bi_acct_no');?></span>
 				</div>
 			</div>
@@ -1213,21 +1213,21 @@
 								<div class="inner_profile_fields progress_update update_once">		
 									<div>						
 										<label for="bi_ban_bictr<?php echo $rows; ?>">Account Name: </label>
-										<input type="text" name="bi_ban_bictr<?php echo $rows; ?>" id="bi_ban_bictr<?php echo $rows; ?>" value ="<?php echo $billing_info['bank_account_name'];?>" disabled="disabled" maxlength="60"/>
-										<input type="hidden" name="hbi_ban_bictr<?php echo $rows; ?>" id="hbi_ban_bictr<?php echo $rows; ?>" value ="<?php echo $billing_info['bank_account_name'];?>"/>
+										<input type="text" name="bi_ban_bictr<?php echo $rows; ?>" id="bi_ban_bictr<?php echo $rows; ?>" value ="<?php echo html_escape($billing_info['bank_account_name']);?>" disabled="disabled" maxlength="60"/>
+										<input type="hidden" name="hbi_ban_bictr<?php echo $rows; ?>" id="hbi_ban_bictr<?php echo $rows; ?>" value ="<?php echo html_escape($billing_info['bank_account_name']);?>"/>
 										<span class="red ci_form_validation_error"><?php #echo form_error('bi_acct_name');?></span>
 									</div>
 									<div>
 										<label for="bi_bar_bictr<?php echo $rows; ?>">Account Number: </label>
-										<input type="text" name="bi_bar_bictr<?php echo $rows; ?>" id="bi_bar_bictr<?php echo $rows; ?>" value ="<?php echo $billing_info['bank_account_number'];?>" disabled="disabled" maxlength="18"/>
-										<input type="hidden" name="hbi_bar_bictr<?php echo $rows; ?>" id="hbi_bar_bictr<?php echo $rows; ?>" value ="<?php echo $billing_info['bank_account_number'];?>"/>
+										<input type="text" name="bi_bar_bictr<?php echo $rows; ?>" id="bi_bar_bictr<?php echo $rows; ?>" value ="<?php echo html_escape($billing_info['bank_account_number']);?>" disabled="disabled" maxlength="18"/>
+										<input type="hidden" name="hbi_bar_bictr<?php echo $rows; ?>" id="hbi_bar_bictr<?php echo $rows; ?>" value ="<?php echo html_escape($billing_info['bank_account_number']);?>"/>
 										<span class="red ci_form_validation_error"><?php #echo form_error('bi_acct_name');?></span>
 									</div>
 									<div>
 										<label for="bi_bn_bictr<?php echo $rows; ?>">Bank: </label>
 										<select name="bi_bns_bictr<?php echo $rows; ?>" id="bi_bns_bictr<?php echo $rows; ?>" style="display:none"></select>
-										<input type="text" name="bi_bn_bictr<?php echo $rows; ?>" id="bi_bn_bictr<?php echo $rows; ?>" value ="<?php echo $billing_info['bank_name'];?>" disabled="disabled"/>
-										<input type="hidden" name="hbi_bn_bictr<?php echo $rows; ?>" id="hbi_bn_bictr<?php echo $rows; ?>" value ="<?php echo $billing_info['bank_name'];?>"/>
+										<input type="text" name="bi_bn_bictr<?php echo $rows; ?>" id="bi_bn_bictr<?php echo $rows; ?>" value ="<?php echo html_escape($billing_info['bank_name']);?>" disabled="disabled"/>
+										<input type="hidden" name="hbi_bn_bictr<?php echo $rows; ?>" id="hbi_bn_bictr<?php echo $rows; ?>" value ="<?php echo html_escape($billing_info['bank_name']);?>"/>
 										<span class="red ci_form_validation_error"><?php #echo form_error('bi_acct_name');?></span>
 									</div>
 									<div>
@@ -1264,17 +1264,17 @@
 		<div class="inner_profile_fields progress_update update_consignee">
 			<div>
 				<label for="consignee_name">Consignee name:</label>
-				<input type="text" name="consignee" id="consignee" value="<?php echo $consignee?>">
+				<input type="text" name="consignee" id="consignee" value="<?php echo html_escape($consignee)?>">
 				<span class="red ci_form_validation_error"><?php echo form_error('consignee');?></span>
 			</div>
 			<div>
 				<label for="mobile_num">Mobile No:</label>
-				<input maxlength="10" placeholder="eg. 9051235678" type="text" name="c_mobile" id="c_mobile" value="<?php echo $c_mobile?>">
+				<input maxlength="10" placeholder="eg. 9051235678" type="text" name="c_mobile" id="c_mobile" value="<?php echo html_escape($c_mobile)?>">
 				<span class="red ci_form_validation_error"><?php echo form_error('c_mobile');?></span>
 			</div>
 			<div>
 				<label for="telephone_num">Telephone No:</label>
-				<input type="text" name="c_telephone" id="c_telephone" value="<?php echo $c_telephone?>">
+				<input type="text" name="c_telephone" id="c_telephone" value="<?php echo html_escape($c_telephone)?>">
 				<span class="red ci_form_validation_error"><?php echo form_error('c_telephone');?></span>
 			</div>
 			<div class="address_label">
@@ -1315,9 +1315,9 @@
 				</div>
 				<div class="delivery_address_content_layer2">
 					<div>
-						<input type="text" name="c_address" value="<?php echo $c_address?>">
+						<input type="text" name="c_address" value="<?php echo html_escape($c_address)?>">
 						<p>Street address</p>
-						<input type="hidden" name="caddress_orig" value="<?php echo $c_address?>">
+						<input type="hidden" name="caddress_orig" value="<?php echo html_escape($c_address)?>">
 					</div>
 				</div>
 			</div>
@@ -1404,11 +1404,11 @@
 							</span>
 							<div>
 								<p class="transac_prod_name">
-									<a href="<?php echo base_url();?>item/<?php echo $product['product_id'];?>/<?php echo es_url_clean($product['name']);?>"><?php echo $product['name'];?></a><br />
+									<a href="<?php echo base_url();?>item/<?php echo $product['product_id'];?>/<?php echo es_url_clean($product['name']);?>"><?php echo html_escape($product['name']);?></a><br />
 									<small>Features and Specifications:</small>
 									<?php if( count($product['attr'] !== 0) ):?>
 										<?php foreach($product['attr'] as $temp):?>
-											<span><strong><?php echo $temp['field'];?>:</strong> <?php echo $temp['value'];?></span>
+											<span><strong><?php echo html_escape($temp['field']);?>:</strong> <?php echo html_escape($temp['value']);?></span>
 										<?php endforeach;?>
 									<?php endif;?>
 								</p>
@@ -1445,7 +1445,7 @@
 					<div class="feedback_container">
 						<?php if(trim($user['feedb_msg']) !== '' && $user['rating1'] != 0 && $user['rating2'] != 0 && $user['rating3'] != 0):?>												
 						<p>For:<a href="<?php echo base_url();?>vendor/<?php echo $user['name'];?>"><?php echo $user['name'];?></a> | on:<?php echo $user['fbdateadded'];?></p>
-						<p>"<?php echo $user['feedb_msg'];?>"</p>
+						<p>"<?php echo html_escape($user['feedb_msg']);?>"</p>
 						<p> <?php echo $this->lang->line('rating')[1].':'; ?> : 
 							<?php for($x=0;$x<5;$x++):?>
 							<?php if($x<$user['rating1']):?>
@@ -1541,7 +1541,7 @@
 						<?php foreach($transact['users'] as $uk=>$user):?>
 							<span class="sold_transac_add_state_region"><strong>State/Region:</strong> <?php echo $user['address']['stateregion']?></span>
 							<span class="sold_transac_add_city"><strong>City:</strong> <?php echo $user['address']['city'];?></span>
-							<span class="sold_transac_add_fulladd"><strong>Address:</strong> <?php echo $user['address']['fulladd'];?></span>
+							<span class="sold_transac_add_fulladd"><strong>Address:</strong> <?php echo html_escape($user['address']['fulladd']);?></span>
 							<?php if( $user['address']['lat']!=0 && $user['address']['lng']!=0 ):?>
 								<span class="tsold_viewmap" data-lat="<?php echo $user['address']['lat'];?>" data-lng="<?php echo $user['address']['lng'];?>">View Map</span>
 								<div class="map_modalcont" style="display:none;"></div>
@@ -1564,7 +1564,7 @@
 							<small>Features and Specifications:</small>
 							<?php if( count($product['attr'] !== 0) ):?>
 								<?php foreach($product['attr'] as $temp):?>
-									<span><strong><?php echo $temp['field'];?>:</strong> <?php echo $temp['value'];?></span>
+									<span><strong><?php echo html_escape($temp['field']);?>:</strong> <?php echo html_escape($temp['value']);?></span>
 								<?php endforeach;?>
 							<?php endif;?>
 						</p>
@@ -1606,7 +1606,7 @@
 			<div class="feedback_container">
 				<?php if(trim($user['feedb_msg']) !== ''):?>												
 				<p>For:<a href="<?php echo base_url();?>vendor/<?php echo $user['name'];?>"><?php echo $user['name'];?></a> | on:<?php echo $user['fbdateadded'];?></p>
-				<p>"<?php echo $user['feedb_msg'];?>"</p>
+				<p>"<?php echo html_escape($user['feedb_msg']);?>"</p>
 				<p> <?php echo $this->lang->line('rating')[0].':'; ?> 
 					<?php for($x=0;$x<5;$x++):?>
 					<?php if($x<$user['rating1']):?>
@@ -1714,7 +1714,7 @@
 										<small>Features and Specifications:</small>
 										<?php if( count($product['attr'] !== 0) ):?>
 											<?php foreach($product['attr'] as $temp):?>
-												<span><strong><?php echo $temp['field'];?>:</strong><?php echo $temp['value'];?></span>
+												<span><strong><?php echo html_escape($temp['field']);?>:</strong><?php echo html_escape($temp['value']);?></span>
 											<?php endforeach;?>
 										<?php endif;?>
 									</p>
@@ -1751,7 +1751,7 @@
 						<div class="feedback_container">
 							<?php if(trim($user['feedb_msg']) !== '' && $user['rating1'] != 0 && $user['rating2'] != 0 && $user['rating3'] != 0):?>												
 							<p>For:<a href="<?php echo base_url();?>vendor/<?php echo $user['name'];?>"><?php echo $user['name'];?></a> | on:<?php echo $user['fbdateadded'];?></p>
-							<p>"<?php echo $user['feedb_msg'];?>"</p>
+							<p>"<?php echo html_escape($user['feedb_msg']);?>"</p>
 							<p> <?php echo $this->lang->line('rating')[1].':'; ?> : 
 								<?php for($x=0;$x<5;$x++):?>
 								<?php if($x<$user['rating1']):?>
@@ -1844,7 +1844,7 @@
 							<?php foreach($transact['users'] as $uk=>$user):?>
 								<span class="sold_transac_add_state_region"><strong>State/Region:</strong> <?php echo $user['address']['stateregion']?></span>
 								<span class="sold_transac_add_city"><strong>City:</strong> <?php echo $user['address']['city'];?></span>
-								<span class="sold_transac_add_fulladd"><strong>Address:</strong> <?php echo $user['address']['fulladd'];?></span>
+								<span class="sold_transac_add_fulladd"><strong>Address:</strong> <?php echo html_escape($user['address']['fulladd']);?></span>
 								<?php if( $user['address']['lat']!=0 && $user['address']['lng']!=0 ):?>
 									<span class="tsold_viewmap" data-lat="<?php echo $user['address']['lat'];?>" data-lng="<?php echo $user['address']['lng'];?>">View Map</span>
 									<div class="map_modalcont" style="display:none;"></div>
@@ -1867,7 +1867,7 @@
 								<small>Features and Specifications:</small>
 								<?php if( count($product['attr'] !== 0) ):?>
 									<?php foreach($product['attr'] as $temp):?>
-										<span><strong><?php echo $temp['field'];?>:</strong><?php echo $temp['value'];?></span>
+										<span><strong><?php echo html_escape($temp['field']);?>:</strong><?php echo html_escape($temp['value']);?></span>
 									<?php endforeach;?>
 								<?php endif;?>
 							</p>
@@ -1908,7 +1908,7 @@
 				<div class="feedback_container">
 					<?php if(trim($user['feedb_msg']) !== ''):?>												
 					<p>For:<a href="<?php echo base_url();?>vendor/<?php echo $user['name'];?>"><?php echo $user['name'];?></a> | on:<?php echo $user['fbdateadded'];?></p>
-					<p>"<?php echo $user['feedb_msg'];?>"</p>
+					<p>"<?php echo html_escape($user['feedb_msg']);?>"</p>
 					<p> <?php echo $this->lang->line('rating')[0].':'; ?> 
 						<?php for($x=0;$x<5;$x++):?>
 						<?php if($x<$user['rating1']):?>

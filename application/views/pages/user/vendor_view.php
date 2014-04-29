@@ -244,7 +244,7 @@
 												<!--<h3>Feedback from Transaction#: <?php echo $k;?></h3>-->
 												<?php foreach($tempafb as $key=>$afb):?>
 												<p>From: <a href="<?php echo base_url();?>vendor/<?php echo $afb['member_name'];?>"><?php echo $afb['member_name'];?></a> | on: <?php echo $afb['dateadded'];?></p>
-												<p>"<?php echo $afb['feedb_msg']?>"</p>
+												<p>"<?php echo html_escape($afb['feedb_msg'])?>"</p>
 												<p><?php echo $this->lang->line('rating')[0].':'; ?>
 													<?php for($i = 0; $i < $afb['rating1']; $i++):?>
 														<span class="span_bg star_on"></span>
@@ -302,7 +302,7 @@
 												<!--<h3>Feedback from Transaction#: <?php echo $k;?></h3>-->
 												<?php foreach($tempafb as $afb):?>
 												<p>From: <a href="<?php echo base_url();?>vendor/<?php echo $afb['member_name'];?>"><?php echo $afb['member_name'];?></a> | on: <?php echo $afb['dateadded'];?></p>
-												<p>"<?php echo $afb['feedb_msg']?>"</p>
+												<p>"<?php echo html_escape($afb['feedb_msg'])?>"</p>
 												<p><?php echo $this->lang->line('rating')[0].':'; ?> 
 													<?php for($i = 0; $i < $afb['rating1']; $i++):?>
 														<span class="span_bg star_on"></span>
@@ -356,7 +356,7 @@
 										<!--<h3>Feedback from Transaction#: <?php echo $k;?></h3>-->
 										<?php foreach($tempafb as $afb):?>
 										<p>For: <a href="<?php echo base_url();?>vendor/<?php echo $afb['for_membername'];?>"><?php echo $afb['for_membername'];?></a> | on: <?php echo $afb['dateadded'];?></p>
-										<p>"<?php echo $afb['feedb_msg']?>"</p>
+										<p>"<?php echo html_escape($afb['feedb_msg'])?>"</p>
 										<p><?php echo $this->lang->line('rating')[0].':'; ?>
 											<?php for($i = 0; $i < $afb['rating1']; $i++):?>
 												<span class="span_bg star_on"></span>
@@ -410,7 +410,7 @@
 											<!--<h3>Feedback from Transaction#: <?php echo $k;?></h3>-->
 											<?php foreach($tempafb as $afb):?>
 											<p>For: <a href="<?php echo base_url();?>vendor/<?php echo $afb['for_membername'];?>"><?php echo $afb['for_membername'];?></a> | on: <?php echo $afb['dateadded'];?></p>
-											<p>"<?php echo $afb['feedb_msg']?>"</p>
+											<p>"<?php echo html_escape($afb['feedb_msg'])?>"</p>
 											<p><?php echo $this->lang->line('rating')[0].':'; ?>
 												<?php for($i = 0; $i < $afb['rating1']; $i++):?>
 													<span class="span_bg star_on"></span>
