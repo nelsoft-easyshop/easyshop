@@ -341,7 +341,7 @@ $(function(){
       var csrfname = $("meta[name='csrf-name']").attr('content');
 	  var productitemid = $('#json_id_product_item').val();
 	  var productid = parseInt($('#prod_h_id').val());
-	  var loadingimg = $(this).siblings('img.loading_img');
+	  var loadingimg = $(this).siblings('img.loading_img_step3');
 	  var thisbtn = $(this);
 	  
 	  thisbtn.hide();
@@ -349,6 +349,7 @@ $(function(){
 
 	  $.post(config.base_url+'sell/shippinginfo', {fdata : fdata, csrfname : csrftoken, productitemid : productitemid, productid : productid}, function(data){
 		loadingimg.hide();
+        thisbtn.val('Please wait');
 		thisbtn.show();		
 		if(data == 1){
             
@@ -382,26 +383,29 @@ $(function(){
                                 var bank_name = $('#bank_name').val();
                                 var account_no = $('#deposit_acct_no').val();
                                 var bank_list = $('#bank_list').val();
-                                var prod_billing_id = $('#prod_billing_id').val();
-                                
+                                var prod_billing_id = parseInt($('#prod_billing_id').val(),10);
+                                var cod_only = ((prod_billing_id === 0)&&($('#allow_cashondelivery').is(':checked')))?true:false;
                                 var valid = true;
                             
-                                if($.trim(account_name) === ''){
-                                    validateRedTextBox('#deposit_acct_name');
-                                    valid = false;
+                                if(!cod_only){
+                                    if($.trim(account_name) === ''){
+                                        validateRedTextBox('#deposit_acct_name');
+                                        valid = false;
+                                    }
+                                    if($.trim(account_no) === ''){
+                                        validateRedTextBox('#deposit_acct_no');
+                                        valid = false;
+                                    }
+                                    if(parseInt(bank_list,10) === 0){
+                                        validateRedTextBox('#bank_list');
+                                        valid = false;
+                                    }
+                                    if(!valid){
+                                        return false;
+                                    }
                                 }
-                                if($.trim(account_no) === ''){
-                                    validateRedTextBox('#deposit_acct_no');
-                                    valid = false;
-                                }
-                                if(parseInt(bank_list,10) === 0){
-                                    validateRedTextBox('#bank_list');
-                                    valid = false;
-                                }
-                                if(!valid){
-                                    return false;
-                                }
-                                if(parseInt(prod_billing_id,10) === 0){
+                              
+                                if((prod_billing_id === 0)&&(!cod_only)){
                                     jQuery.ajax({
                                         type: "POST",
                                         url: config.base_url + 'memberpage/billing_info', 
@@ -429,7 +433,7 @@ $(function(){
     
                 $('#prod_billing_id').val( $('#billing_info_id').val());
                 $('#allow_cod').prop('checked', false);
-                
+                $('#btnShippingDetailsSubmit').val('SUBMIT');
             });
 		}
 		else if(data == 0){
