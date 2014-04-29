@@ -95,8 +95,8 @@
               <!-- <li><a href="<?=base_url()?>home/under_construction">Visiting a new Shop</a></li> -->
               <!-- <li><a href="<?=base_url()?>home/under_construction">Discounts</a></li> -->
               <li><a href="<?=base_url()?>category/all">Shopping Categories</a></li>
-			  <li><a href="<?=base_url()?>advsearch">Advance Search</a></li>
-			  <li><a href="<?=base_url()?>product_search_v2/advsrch2">Advance Search v2</a></li>
+			  <!--<li><a href="<?=base_url()?>advsearch">Advance Search</a></li>-->
+			  <li><a href="<?=base_url()?>advsrch">Advance Search</a></li>
 			  <!-- Removed: not part of branch release. Keep edits like this in the trunk -->
               <!-- <li><a href="<?=base_url()?>product_search/advance">Advance Search</a></li> -->
 			  
