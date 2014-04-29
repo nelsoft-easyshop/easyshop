@@ -484,7 +484,7 @@ class Register_model extends CI_Model
 		//$this->email->attach(getcwd() . "\assets\images\img_logo.png", "inline"); //Windows code
 		$this->email->attach(getcwd() . "/assets/images/landingpage/templates/header-img.png", "inline"); //CentOS code - working for windows as well
 		$this->email->attach(getcwd() . "/assets/images/landingpage/templates/facebook.png", "inline");
-		$this->email->attach(getcwd() . "/assets/images/landingpage/templates/googleplus.png", "inline");
+		//$this->email->attach(getcwd() . "/assets/images/landingpage/templates/googleplus.png", "inline");
 		$this->email->attach(getcwd() . "/assets/images/landingpage/templates/twitter.png", "inline");
 		
 		if($type === 'signup'){
