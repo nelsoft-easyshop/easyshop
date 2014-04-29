@@ -68,7 +68,11 @@
         <li><a href="#cod">Cash on Delivery</a></li>
         <li><a href="#cdb">Credit or Debit Card</a></li>
         <li><a href="#paypal">Paypal</a></li>
+        <li><a href="#dragonpay">Dragon Pay</a></li>
       </ul>
+
+<!-- #### CASH ON DELIVERY #### -->
+
       <div id="cod" class="payment_inner_content">
         <?php
           if($codsuccess){
@@ -120,6 +124,8 @@
         <?php } ?>  
       </div>
 
+<!-- #### CREDIT CARD / DEBIT CARD #### -->
+
       <div id="cdb" class="payment_inner_content">
  
         <p class="cod_desc"><strong>Pay using  Credit or Debit Card. You will be redirected to the PayPal system to complete the payment.</strong></p>  <br />
@@ -149,7 +155,10 @@
     <div style="clear:both"></div>
     <p class="notify">You will be notified regarding your order status via email or sms.</p>
     <p class="subscribe"><input type="checkbox" checked> <img src="<?= base_url() ?>assets/images/icon_email.png" alt="email"> Subscribe to Easyshop Newsletter for great deals and amazing discounts</p>
-    <p class="chck_privacy"><input type="checkbox"> I have read and understand Easyshop <a href="">Privacy Policy</a>.</p></div>
+    <p class="chck_privacy"><input type="checkbox"> I have read and understand Easyshop <a href="">Privacy Policy</a>.</p>
+  </div>
+
+<!-- #### PAYPAL #### -->
 
       <div id="paypal" class="payment_inner_content">
         <p class="cod_desc"><strong>Pay using your PayPal account. You will be redirected to the PayPal system to complete the payment.</strong></p>  <br />
@@ -182,6 +191,14 @@
     <p class="chck_privacy"><input type="checkbox"> I have read and understand Easyshop <a href="">Privacy Policy</a>.</p>
   </div>
 
+<!-- #### DRAGON PAY #### -->
+
+    <div id="dragonpay" class="payment_inner_content">
+ <input type="button" class="btnDp" value="Pay via DRAGON PAY">
+    </div>
+
+
+<!-- #### MORE PAYMENT HERE! #### -->
 
 </div>
 
@@ -346,6 +363,30 @@ $(document).ready(function(){
             }
         });
     });
+
+      $(document).on('click','.btnDp',function () {
+        var action = "payment/payDragonPay"; 
+             var csrftoken = $("meta[name='csrf-token']").attr('content');
+        var csrfname = $("meta[name='csrf-name']").attr('content');
+        var type = $(this).data('type');
+        $.ajax({
+          type: "POST",
+          url: '<?php echo base_url();?>' + action, 
+          dataType: "json",
+          data:   csrfname+"="+csrftoken, 
+          beforeSend: function(jqxhr, settings) { 
+           
+          },
+          success: function(d) {
+            if (d.e == 1) { 
+              window.location.replace(d.u);
+            } else {
+              alert(d.m);
+            }
+         
+          }
+        });
+      });
  </script> 
 <!-- END OF PAYPAL FUNCTION -->
 
@@ -365,7 +406,8 @@ $(document).ready(function(){
 
     $(document).on('click','.changeAddressBtn',function () {
         var action = "payment/changeAddress";
-        var csrftoken = "<?php echo $my_csrf['csrf_hash'];?>";
+        var csrftoken = $("meta[name='csrf-token']").attr('content');
+        var csrfname = $("meta[name='csrf-name']").attr('content');
  
         var formD = $('#delAddressFrm').serializeArray();
         formD.push({name:'temp_lat', value:0});

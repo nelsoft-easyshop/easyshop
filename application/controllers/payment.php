@@ -10,6 +10,7 @@ class Payment extends MY_Controller{
         $this->load->library('session');
         $this->load->library('cart');
         $this->load->library('paypal');
+        $this->load->library('dragonpay');
         $this->load->model('user_model');
         $this->load->model('payment_model');
         $this->load->model('product_model');
@@ -65,6 +66,8 @@ class Payment extends MY_Controller{
         $itemArray = $carts['choosen_items'];
         $member_id =  $this->session->userdata('member_id');
         $address = $this->memberpage_model->get_member_by_id($member_id);
+
+
         $city = ($address['c_stateregionID'] > 0 ? $address['c_stateregionID'] :  0);
         if($city > 0){  
             $cityDetails = $this->payment_model->getCityOrRegionOrMajorIsland($city);
@@ -102,9 +105,12 @@ class Payment extends MY_Controller{
             $data['title'] = 'Payment | Easyshop.ph';
             $data['success'] = ($successcount == $itemCount ? true : false);
             $data['codsuccess'] = ($codCount == $itemCount ? true : false);
-            $data = array_merge($data,$this->fill_header());
+ 
+             
+            $data = array_merge($data,$this->fill_header()); 
             $data = array_merge($data, $this->memberpage_model->getLocationLookup());
             $data = array_merge($data,$this->memberpage_model->get_member_by_id($member_id));
+ 
             $this->load->view('templates/header', $data);
             $this->load->view('pages/payment/payment_review' ,$data);  
         }else{
@@ -251,54 +257,56 @@ class Payment extends MY_Controller{
             echo $data;
     }
  
-#PROCESS PAYPAL
-function paypal(){
 
-    if(!$this->session->userdata('member_id')){
-        redirect(base_url().'home', 'refresh');
-    };
 
-    $carts = $this->session->all_userdata();
-    if(!isset($carts['choosen_items'])){
-        redirect(base_url().'home', 'refresh');
-    }
+    #PROCESS PAYPAL
+    function paypal(){
 
-    $PayPalMode             = $this->PayPalMode; 
-    $PayPalApiUsername      = $this->PayPalApiUsername;
-    $PayPalApiPassword      = $this->PayPalApiPassword;
-    $PayPalApiSignature     = $this->PayPalApiSignature; 
-    $PayPalCurrencyCode     = $this->PayPalCurrencyCode; 
-    $response['message_status'] = "";
-    $response['message'] = "";
+        if(!$this->session->userdata('member_id')){
+            redirect(base_url().'home', 'refresh');
+        };
 
-    $paymentType = $this->PayMentPayPal; ; #paypal
-    $apiResponseArray = array(); 
-    $apiResponse  = ""; 
-    $otherFee = 0;
-    $tax_amt = 0;
-    $shipping_amt = 0;    
-    $handling_amt = 0;
-    $shipping_discount_amt = 0;
-    $insurance_amt = 0;
-    $ItemTotalPrice = 0;
-    $cnt = 0;
-    $member_id =  $this->session->userdata('member_id');
-    $productCount = count($carts['choosen_items']); 
-    $itemList =  $carts['choosen_items'];
-    $invoice_no = date('Ymhs'); 
-    $ip = $this->user_model->getRealIpAddr();   
-    $productstring = ""; 
-    $analytics = array();  
-    
+        $carts = $this->session->all_userdata();
+        if(!isset($carts['choosen_items'])){
+            redirect(base_url().'home', 'refresh');
+        }
 
-    $address = $this->memberpage_model->get_member_by_id($member_id); 
-    $city = ($address['c_stateregionID'] > 0 ? $address['c_stateregionID'] :  0);
-    $cityDetails = $this->payment_model->getCityOrRegionOrMajorIsland($city);
-    $regionDesc = $cityDetails['parent_location'];
-    $region = $cityDetails['parent_id'];
-    $cityDetails = $this->payment_model->getCityOrRegionOrMajorIsland($region);
-    $majorIsland = $cityDetails['parent_id'];  
-      
+        $PayPalMode             = $this->PayPalMode; 
+        $PayPalApiUsername      = $this->PayPalApiUsername;
+        $PayPalApiPassword      = $this->PayPalApiPassword;
+        $PayPalApiSignature     = $this->PayPalApiSignature; 
+        $PayPalCurrencyCode     = $this->PayPalCurrencyCode; 
+        $response['message_status'] = "";
+        $response['message'] = "";
+
+        $paymentType = $this->PayMentPayPal; ; #paypal
+        $apiResponseArray = array(); 
+        $apiResponse  = ""; 
+        $otherFee = 0;
+        $tax_amt = 0;
+        $shipping_amt = 0;    
+        $handling_amt = 0;
+        $shipping_discount_amt = 0;
+        $insurance_amt = 0;
+        $ItemTotalPrice = 0;
+        $cnt = 0;
+        $member_id =  $this->session->userdata('member_id');
+        $productCount = count($carts['choosen_items']); 
+        $itemList =  $carts['choosen_items'];
+        $invoice_no = date('Ymhs'); 
+        $ip = $this->user_model->getRealIpAddr();   
+        $productstring = ""; 
+        $analytics = array();  
+        
+
+        $address = $this->memberpage_model->get_member_by_id($member_id); 
+        $city = ($address['c_stateregionID'] > 0 ? $address['c_stateregionID'] :  0);
+        $cityDetails = $this->payment_model->getCityOrRegionOrMajorIsland($city);
+        $regionDesc = $cityDetails['parent_location'];
+        $region = $cityDetails['parent_id'];
+        $cityDetails = $this->payment_model->getCityOrRegionOrMajorIsland($region);
+        $majorIsland = $cityDetails['parent_id'];  
+          
         if(isset($_GET["token"]) && isset($_GET["PayerID"]))
         {
        
@@ -429,9 +437,12 @@ function paypal(){
         $data['cat_item'] = $this->cart->contents();
         $data['title'] = 'Payment | Easyshop.ph';
         $data = array_merge($data,$this->fill_header());
-        $this->load->view('templates/header', $data);
-        $this->load->view('pages/payment/payment_response' ,$response);  
-        $this->load->view('templates/footer_full'); 
+   
+        $this->session->set_userdata('paymentticket', true);
+        $this->session->set_userdata('headerData', $data);
+        $this->session->set_userdata('bodyData', $response);
+
+        redirect(base_url().'payment/success/paypal', 'refresh'); 
     }
 
     function payCashOnDelivery(){
@@ -523,9 +534,212 @@ function paypal(){
         $data['cat_item'] = $this->cart->contents();
         $data['title'] = 'Payment | Easyshop.ph';
         $data = array_merge($data,$this->fill_header());
-        $this->load->view('templates/header', $data);
-        $this->load->view('pages/payment/payment_response' ,$response);  
-        $this->load->view('templates/footer_full'); 
+       
+        $this->session->set_userdata('paymentticket', true);
+        $this->session->set_userdata('headerData', $data);
+        $this->session->set_userdata('bodyData', $response);
+
+        
+        redirect(base_url().'payment/success/cashondelivery', 'refresh');
+    }
+
+    function dp()
+    {
+        $merchantId = 'EASYSHOP';
+        $txnId = '016';
+        $amount = '100.00';
+        $ccy = 'PHP';
+        $description = 'box of ryan';
+        $email = 'sample@yahoo.com';
+        $pwd = 'UT78W5VQ';
+        $digest = sha1($merchantId.':'.$txnId.':'.$amount.':'.$ccy.':' . $description.':'.$email.':'.$pwd);
+        $url = 'http://test.dragonpay.ph/Pay.aspx';
+        $url .= '?merchantid=' . $merchantId .
+        '&txnid=' . $txnId .
+        '&amount=' . $amount . 
+        '&ccy=' . $ccy . 
+        '&description=' . urlencode($description) . 
+        '&email=' . urlencode($email). 
+        '&digest=' . $digest;
+        $fullUrl = $url;
+        // $return = file_get_contents($fullUrl);
+        echo $fullUrl;
+    }
+
+    function payDragonPay(){
+        
+        $carts = $this->session->all_userdata();
+        $member_id =  $this->session->userdata('member_id'); 
+        $itemList =  $carts['choosen_items'];
+
+        $address = $this->memberpage_model->get_member_by_id($member_id); 
+        $email = $address['email'];
+        $city = ($address['c_stateregionID'] > 0 ? $address['c_stateregionID'] :  0);
+        $cityDetails = $this->payment_model->getCityOrRegionOrMajorIsland($city);
+        $regionDesc = $cityDetails['parent_location'];
+        $region = $cityDetails['parent_id'];
+        $cityDetails = $this->payment_model->getCityOrRegionOrMajorIsland($region);
+        $majorIsland = $cityDetails['parent_id']; 
+
+        $otherFee = 0;
+        $tax_amt = 0;
+        $shipping_amt = 0;    
+        $handling_amt = 0;
+        $shipping_discount_amt = 0;
+        $insurance_amt = 0;
+        $ItemTotalPrice = 0;
+        $name = ""; 
+
+        foreach ($itemList as $key => $value) {
+            $sellerId = $value['member_id'];
+            $productId = $value['id'];
+            $orderQuantity = $value['qty'];
+            $price = $value['price'];
+            $tax_amt = $tax_amt;
+            $productItem =  $value['product_itemID'];
+            $details = $this->payment_model->getShippingDetails($productId,$productItem,$city,$region,$majorIsland);
+            $shipping_amt = $details[0]['price'];
+            $otherFee = $tax_amt + $shipping_amt;
+            $total =  $value['subtotal'] + $otherFee; 
+            $sellerDetails = $this->memberpage_model->get_member_by_id($sellerId);  
+            $ItemTotalPrice += $total;  
+            $name .= "<br>".$value['name'];
+        }    
+
+        $grandTotal = ($ItemTotalPrice+$handling_amt+$insurance_amt)-$shipping_discount_amt;
+        $dpReturn = $this->dragonpay->getTxnToken($grandTotal,$name,$email);
+
+        $this->session->set_userdata('dragonpayticket', true);
+        exit($dpReturn);
+
+    }
+
+    function dragonPayPostBack(){
+        echo 'this page is under construction';
+    }
+
+    function paymentSuccess($mode = "easyshop"){
+      
+       
+        $ticket = $this->session->userdata('paymentticket');
+        if($ticket){
+            $data = $this->session->userdata('headerData');
+            $response = $this->session->userdata('bodyData'); 
+
+            $this->session->unset_userdata('paymentticket');
+            $this->session->unset_userdata('headerData');
+            $this->session->unset_userdata('bodyData');
+
+            $this->load->view('templates/header', $data);
+            $this->load->view('pages/payment/payment_response' ,$response);  
+            $this->load->view('templates/footer_full'); 
+        }else{
+            redirect(base_url().'home/', 'refresh');
+        }
+      
+    }
+
+    function dragonPayReturn(){
+     
+        if(!$this->session->userdata('dragonpayticket')){
+             redirect(base_url().'home/', 'refresh'); 
+             exit();
+        } 
+       
+        $paymentType = $this->PayMentDragonPay; 
+        $apiResponseArray = array(); 
+        
+        $carts = $this->session->all_userdata();
+        $member_id =  $this->session->userdata('member_id');
+        $productCount = count($carts['choosen_items']); 
+        $itemList =  $carts['choosen_items'];
+        $invoice_no = date('Ymhsd'); 
+        $ip = $this->user_model->getRealIpAddr();   
+        $productstring = "";  
+        $address = $this->memberpage_model->get_member_by_id($member_id); 
+        $city = ($address['c_stateregionID'] > 0 ? $address['c_stateregionID'] :  0);
+        $cityDetails = $this->payment_model->getCityOrRegionOrMajorIsland($city);
+        $regionDesc = $cityDetails['parent_location'];
+        $region = $cityDetails['parent_id'];
+        $cityDetails = $this->payment_model->getCityOrRegionOrMajorIsland($region);
+        $majorIsland = $cityDetails['parent_id']; 
+        $analytics = array(); 
+
+        $otherFee = 0;
+        $tax_amt = 0;
+        $shipping_amt = 0;    
+        $handling_amt = 0;
+        $shipping_discount_amt = 0;
+        $insurance_amt = 0;
+        $ItemTotalPrice = 0;
+        
+        foreach ($itemList as $key => $value) {
+            $sellerId = $value['member_id'];
+            $productId = $value['id'];
+            $orderQuantity = $value['qty'];
+            $price = $value['price'];
+            $tax_amt = $tax_amt;
+            $productItem =  $value['product_itemID'];
+            $details = $this->payment_model->getShippingDetails($productId,$productItem,$city,$region,$majorIsland);
+            $shipping_amt = $details[0]['price'];
+            $otherFee = $tax_amt + $shipping_amt;
+            $total =  $value['subtotal'] + $otherFee;
+            $productstring .= '<||>'.$sellerId."{+}".$productId."{+}".$orderQuantity."{+}".$price."{+}".$otherFee."{+}".$total."{+}".$productItem;
+            $itemList[$key]['otherFee'] = $otherFee;
+            $sellerDetails = $this->memberpage_model->get_member_by_id($sellerId); 
+            $itemList[$key]['seller_username'] = $sellerDetails['username'];
+            $ItemTotalPrice += $total;  
+        }
+    
+        $response['itemList'] = $itemList;
+        $grandTotal= ($ItemTotalPrice+$handling_amt+$insurance_amt)-$shipping_discount_amt;
+
+        $productstring = substr($productstring,4);
+        $apiResponseArray['ProductData'] =  $carts['choosen_items'];
+        $apiResponseArray['DragonPayReturn'] = array(
+                "txnId" => $this->input->get('txnid'),
+                "refno" => $this->input->get('refno'),
+                "status" => $this->input->get('status'),
+                "message" => $this->input->get('message'),
+                "digest" => $this->input->get('digest')
+            );
+
+        $apiResponse = json_encode($apiResponseArray);
+        
+        if(strtolower($this->input->get('status')) == "p" || strtolower($this->input->get('status')) == "s"){
+
+            $paymentType = (strtolower($this->input->get('status')) == "s" ? 4 : 2);
+            $return = $this->payment_model->payment($paymentType,$invoice_no,$grandTotal,$ip,$member_id,$productstring,$productCount,$apiResponse);
+            if($return['o_success'] <= 0){
+                $response['message'] = '<div style="color:red"><b>Error 3: </b>'.$return['o_message'].'</div>'; 
+            }else{
+                $response['completepayment'] = true;
+                $response['message'] = '<div style="color:green">Your payment is completed through Dragon Pay.</div>
+                <div style="color:red">'.urldecode($this->input->get('message')).'</div>';
+                $response = array_merge($response,$return);  
+                $this->removeItemFromCart(); 
+                $this->session->unset_userdata('choosen_items');
+                $this->sendNotification(array('member_id'=>$member_id, 'order_id'=>$return['v_order_id'], 'invoice_no'=>$return['invoice_no']));
+            }   
+        }else{
+             $response['message'] = '<div style="color:red">Transaction Not Completed.</div>';
+        }
+ 
+
+        $response['analytics'] = $analytics;
+        $data['cat_item'] = $this->cart->contents();
+        $data['title'] = 'Payment | Easyshop.ph';
+        $data = array_merge($data,$this->fill_header());
+
+        $this->session->set_userdata('paymentticket', true);
+        $this->session->set_userdata('headerData', $data);
+        $this->session->set_userdata('bodyData', $response);
+
+        $this->session->unset_userdata('dragonpayticket');
+        
+        redirect(base_url().'payment/success/dragonpay', 'refresh');
+        
+  
     }
 
 

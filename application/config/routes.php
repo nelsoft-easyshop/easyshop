@@ -93,6 +93,7 @@ $route['(?i)pay/cashondelivery'] = 'payment/payCashOnDelivery';  # ryan vasquez
 $route['(?i)pay/setting/paypal'] = 'payment/paypal_setexpresscheckout';  # ryan vasquez
 $route['(?i)pay/paypal'] = 'payment/paypal';  # ryan vasquez
 
+$route['(?i)payment/success/(:any)'] = 'payment/paymentSuccess/$1';
 
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */
