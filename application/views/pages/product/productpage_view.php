@@ -70,7 +70,7 @@
             <span>
                 <br/><br/>
                 <?php if(($vendorrating['rate_count'] <=0)):?>
-                  <p><span class="rating_criteria">No ratings received yet.</span></p>
+                  <p><span style="font-size:11px; margin-left:8px;">No ratings received yet.</span></p>
                 <?php else:?>
                   <p><span class="rating_criteria"><?php echo $this->lang->line('rating')[0].':';?></span><span class="rating_value"><?php echo number_format($vendorrating['rating1'],2,'.',',');?></span> <img src="<?=base_url()?>assets/images/star-on.png" alt="*" title=""></p>
                   <p><span class="rating_criteria"><?php echo $this->lang->line('rating')[1].':';?></span><span class="rating_value" > <?php echo number_format($vendorrating['rating2'],2,'.',',');?> </span> <img src="<?=base_url()?>assets/images/star-on.png" alt="*" title=""></p>
