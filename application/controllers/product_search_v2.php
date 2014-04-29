@@ -25,7 +25,7 @@ class product_search_v2 extends MY_Controller {
 	
 	function getBranch()
 	{
-		$q = $this->input->get('q');
+		$q = html_escape($this->input->get('q'));
 		
 		if(!empty($q)){			
 			$brand_names = $this->search_model->getBrandName($q,'name');
@@ -37,12 +37,12 @@ class product_search_v2 extends MY_Controller {
 	{	
 
 		header('Content-Type: application/json');
-		$id = $this->input->post('cat_id'); 
-		$name = $this->input->post('name');
+		$id = html_escape($this->input->post('cat_id')); 
+		$name = html_escape($this->input->post('name'));
 		$parents = $this->search_model->getDownLevelNode($id);
 		$response['cat_id'] = $id;
 		$response['node'] = $parents;
-		$response['level'] = $this->input->post('level');	
+		$response['level'] = html_escape($this->input->post('level'));	
 
 		$attribute = $this->search_model->getAttributesByParent($id);
 		
@@ -69,15 +69,15 @@ class product_search_v2 extends MY_Controller {
 		$response['ctrl_subcat'] = "";
 		$response['items'] = "";
 		
-		if($this->input->get()){
-			$category = $this->input->get('_cat');
+		if(html_escape($this->input->get())){
+			$category = html_escape($this->input->get('_cat'));
 			if($category){ // kapag may laman ang main category magsesearch
 				
 				$response['ctrl_subcat'] = $this->product_model->getDownLevelNode($category);
 				/////////////////////////////////////////////////////////////////////////////
 				
-					$category = $this->input->get('_cat');	
-					$condition = $this->input->get();
+					$category = html_escape($this->input->get('_cat'));	
+					$condition = html_escape($this->input->get());
 					$start = 0; # start series
 					$per_page = $this->per_page; # no of display
 					$test = "";			
@@ -170,7 +170,7 @@ class product_search_v2 extends MY_Controller {
 					
 					///////////////////////////////////////////
 		
-					$sort = $this->input->get('_sop');
+					$sort = html_escape($this->input->get('_sop'));
 					if($sort){
 						switch($sort){
 							case "hot": $colsort = "ep.is_hot"; break;
@@ -185,31 +185,31 @@ class product_search_v2 extends MY_Controller {
 					}
 					
 					$sc = "";
-					$gsc = $this->input->get('_subcat');
+					$gsc = html_escape($this->input->get('_subcat'));
 					if($gsc){
 						$sc = " AND ep.`cat_id` = " . $gsc . " ";
 					}
 					
 					$loc = "";
-					$gloc = $this->input->get('_loc');
+					$gloc = html_escape($this->input->get('_loc'));
 					if($gloc){
 						$loc = " AND ep.`id_product` IN (SELECT `product_id` FROM `es_product_shipping_head` WHERE `location_id` = " . $gloc . ") ";
 					}					
 					
 					$is = "";
-					$gis = $this->input->get('_is');			
+					$gis = html_escape($this->input->get('_is'));			
 					if(strlen($gis) > 0){
 						$is = " AND MATCH(ep.`name`,keywords) AGAINST('+". $gis ."' IN BOOLEAN MODE) ";
 					}
 					
 					$con = "";
-					$gcon = $this->input->get('_con');
+					$gcon = html_escape($this->input->get('_con'));
 					if(strlen($gcon) > 0){
 						$con = " AND ep.`condition` = '". $gcon ."' ";
 					}
 					
-					$gp1 = $this->input->get('_price1');
-					$gp2 = $this->input->get('_price2');
+					$gp1 = html_escape($this->input->get('_price1'));
+					$gp2 = html_escape($this->input->get('_price2'));
 					
 					$gp = "";
 					if(strlen($gp1) > 0 && strlen($gp2) > 0){
@@ -290,11 +290,11 @@ class product_search_v2 extends MY_Controller {
 	function load_product() # ROUTING
 	{
 
-		if($this->input->post()){
+		if(html_escape($this->input->post())){
 				
-			$category = $this->input->post('id_cat');
-			$condition = $this->input->post('parameters');
-			$start = $this->input->post('page_number') * $this->per_page; # start series
+			$category = html_escape($this->input->post('id_cat'));
+			$condition = html_escape($this->input->post('parameters'));
+			$start = html_escape($this->input->post('page_number')) * $this->per_page; # start series
 			$per_page = $this->per_page ; # no of display
 			$test = "";	
 			
