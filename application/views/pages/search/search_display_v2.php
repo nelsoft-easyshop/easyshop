@@ -199,8 +199,8 @@ function in_array_r($needle, $haystack, $strict = false) {
     </select>
 	<?php echo form_close();?>
     <!-- Buttons start -->
-    <div id="list" class="list list-active"></div>
-    <div id="grid" class="grid"></div>
+    <div id="list" class="list list-active" title="List"></div>
+    <div id="grid" class="grid" title="Grid"></div>
     <!-- Buttons end -->
     <div class="clear"></div>
     <div id="product_content">
