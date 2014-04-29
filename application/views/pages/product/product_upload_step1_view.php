@@ -95,7 +95,7 @@ echo form_open('sell/edit/step2', $attributesForm);
                             <li class="<?php echo $row['parent_id']; ?>"><a href="javascript:void(0)" data="{cat_id:'<?php echo $row['id_cat']; ?>',level:'<?php echo '0' ?>',name:'<?php echo addslashes ($row['name']); ?>'}" class="select"><?php echo $row['name']; ?></a></li>
 
                             <?php } ?>
-                            <li  class="othercategory_main"><a href="javascript:void(0)" class="select2" data-level="0" data-parent="1" data-parentname="" data-final="true" style="color:#0191C8 !important;"><b class="add_cat span_bg"></b><b>Add a Category</b></a></li>
+                            <li  class="othercategory_main otherNameCategory_main_li"><a href="javascript:void(0)" class="select2" data-level="0" data-parent="1" data-parentname="" data-final="true" style="color:#0191C8 !important;"><b class="add_cat span_bg"></b><b>Add a Category</b></a></li>
 
                         </ul>
                     </div>
@@ -384,15 +384,11 @@ echo form_open('sell/edit/step2', $attributesForm);
             globalParent = 1;
             $(".add_category_submit").empty();
             if(otherName.length == 0){ 
-
-                $('.product_sub_items0 .othercategory').empty();
-                if(finalValue == true){ 
-                  $(".add_category_submit").append('<input type="hidden" name="hidden_attribute" value="'+globalParent+'" class="hidden_attribute"><input class="proceed_form" id="proceed_form" type="submit" value="Proceed with '+parentName+'">');    
-                }
-
+                $('.otherNameCategory_main_li').empty();
+              $('.otherNameCategory_main_li').append('<a href="javascript:void(0)" class="select2" data-level="0" data-parent="1" data-parentname="" data-final="true" style="color:#0191C8 !important;"><b class="add_cat span_bg"></b><b>Add a Category</b></a>');
+               
             }else{  
                 $(".add_category_submit").append('<input type="hidden" name="hidden_attribute" value="'+globalParent+'" class="hidden_attribute"><input class="proceed_form" id="proceed_form" type="submit" value="Proceed with '+otherName.replace(/'/g, "\\'")+'">');    
- 
            }
 
         });
