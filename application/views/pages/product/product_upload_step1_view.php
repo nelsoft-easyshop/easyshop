@@ -224,15 +224,25 @@ echo form_open('sell/edit/step2', $attributesForm);
             });
 
 
-        $("#box").unbind("click").click(function() {  // this function is for searching item on the list box every category
-            $('#box').keyup(function() {
+        
+        
+            $(document).on('keyup','#box',function () {
                 var valThis = $(this).val().toLowerCase();
-                $('.navList>li').each(function() {
+
+                $('.navList > li').each(function() {
                     var text = $(this).text().toLowerCase();
-                    (!text.contains(valThis) == 0) ? $(this).show() : $(this).hide();
+                   
+                    if(text.indexOf(valThis) != -1){
+                      $(this).show();
+                    }else{
+                         $(this).hide();
+                    }
+                   
+              
                 });
+
             });
-        });
+     
 
         $(document).on('click','.select',function () { // requesting the child category from selected first level parent category
             $(".add_category_submit").empty();
