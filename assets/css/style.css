@@ -315,27 +315,110 @@ textarea:focus {
 
 
 /*** Alert Dialog Box ***/
+/* Overlays */
+
+.ui-widget-overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 99998;
+}
+
+.ui-widget-overlay {
+	background-color: #000;
+	opacity: .7;
+	filter: Alpha(Opacity=70);
+}
+
+.ui-dialog.ui-widget.ui-widget-content.ui-corner-all.ui-front.ui-dialog-buttons.ui-draggable{
+	z-index: 100102;
+	background-color: #fff;
+	padding:8px;
+}
+
+.ui-dialog-titlebar.ui-widget-header.ui-corner-all.ui-helper-clearfix {
+	border-bottom: 1px solid #cecece;
+}
+
+.ui-dialog-title {
+    display: inline-block;
+    font-size: 18px;
+    font-weight: bold;
+    width: 264px;
+    padding-bottom: 8px;
+}
+
+.ui-button.ui-dialog-titlebar-close {
+    background: none repeat scroll 0 0 rgba(0, 0, 0, 0);
+    border: medium none;
+    box-shadow: none;
+    color: #666666;
+    cursor: pointer;
+    height: 36px;
+    padding: 0;
+    right: 0;
+    text-align: center;
+    top: 0;
+    width: 36px;
+}
+
+.ui-dialog-titlebar-close:before {
+	border: 1px solid #6D6D6D;
+    border-radius: 2px;
+    color: #6D6D6D;
+    content: "X";
+    display: inline-block;
+    height: 20px;
+    line-height: 20px;
+    width: 20px;
+}
+
+.ui-dialog-titlebar-close .ui-button-text {
+	display: none;
+}
+
 .ui-dialog.ui-widget.ui-widget-content.ui-corner-all.ui-front.ui-dialog-buttons.ui-draggable.alert_container {
-    border: 1px solid #CECECE;
+    background-color: #fff;
+    -webkit-border-radius: 0px;
+	-moz-border-radius: 0px;
+	border-radius: 0px;
 	-webkit-box-shadow: 0px 5px 20px -5px rgba(50, 50, 50, 0.75);
 	-moz-box-shadow:    0px 5px 20px -5px rgba(50, 50, 50, 0.75);
 	box-shadow:         0px 5px 20px -5px rgba(50, 50, 50, 0.75);
 }
 
 .alert_container .ui-dialog-titlebar.ui-widget-header.ui-corner-all.ui-helper-clearfix {
-    background-color: #444444;
-    border: medium none;
-    color: #FFFFFF;
-    margin: 5px;
-    padding: 8px;
+    background: none;
+    border-left: none;
+    border-top: none;
+    border-right: none;
+    border-bottom: 1px solid #DFDFDF;
+    color: #494949;
+    font-size: 18px;
+}
+
+.alert.ui-dialog-content.ui-widget-content {
+	padding:15px 8px;
+}
+
+.ui-dialog-buttonpane.ui-widget-content.ui-helper-clearfix {
+    border-top: 1px solid #DFDFDF;
+    padding-top: 15px;
+    text-align: right;
 }
 
 .ui-button.ui-widget.ui-state-default.ui-corner-all.ui-button-text-only {
     background-color: #F18200;
     border: medium none;
     color: #FFFFFF;
+    cursor: pointer;
     min-width: 70px;
-    padding: 4px;
+    padding: 8px;
+        -webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
 	-webkit-transition: all 0.3s ease-in-out;
 	-moz-transition: 	all 0.3s ease-in-out;
 	-o-transition:	    all 0.3s ease-in-out;
@@ -486,6 +569,8 @@ header {
 	background: rgb(0, 62, 145) transparent;
 	/* nice browsers */
 	background: rgba(0, 62, 145, 0.8);
+	/* For IE 8*/
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#99003e91', endColorstr='#99003e91',GradientType=0 );
  	display: block; 
     border-left:1px solid #cecece;
     border-right:1px solid #cecece;
@@ -509,6 +594,9 @@ header {
 	color: #fff;
 	display: block;
 	min-width: 130px;
+}
+.ie8 .top_nav ul li ul li a {
+	border-bottom: 1px dotted #003e91;
 }
 
 .top_nav ul li ul li a:hover {
@@ -1864,6 +1952,10 @@ div.pass-hint {
     width: 264px;
 }
 
+.ie9 .profile_top_nav .member_srch_wrapper {
+	padding-bottom: 10px;
+}
+
 .member_srch_img_con {
     display: inline-block;
     margin-left: -38px;
@@ -1909,7 +2001,8 @@ div.pass-hint {
 	margin-right: -3px;
 	padding:0px 2px;
     vertical-align: middle;
-    width: 218px;
+    width: 217px;
+    line-height: 32px;
 	height: 32px;
 }
 
@@ -2953,7 +3046,7 @@ a:hover.tooltips span {
 /*** Date Picker ***/
 #ui-datepicker-div {
 	background-color: #fff;
-	width: 168px;
+	width: 177px;
 	border:1px solid #DBD8D7;
 }
 
@@ -3200,6 +3293,12 @@ div.post_item_content_left {
 .item_img_thumb {
 	float: left;
 	margin-right: 10px;
+}
+
+.post_item_img_table {
+	display: table;
+	table-layout: fixed;
+	width: 140px;
 }
 
 .post_item_img_con {
