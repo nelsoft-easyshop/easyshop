@@ -1101,7 +1101,6 @@ a:hover.tooltips span {
 }
 
 .product_combination_locked{
-	background: url('../images/global_sprite.png') -591px -308px no-repeat;
 	border: 1px solid #f18200;
     cursor: pointer;
     display: inline-block;
@@ -1112,6 +1111,17 @@ a:hover.tooltips span {
     margin: 0 0 10px 5px;
     padding: 0 3px 0 25px;
     width: 180px;
+}
+
+.product_combination_locked:before {
+    background: url('../images/global_sprite.png') -591px -308px no-repeat;
+    left: 4px;
+    content: "";
+    display: inline-block;
+    height: 25px;
+    position: absolute;
+    top:0;
+    width: 25px;
 }
 
 .product_combination {
