@@ -159,7 +159,6 @@ class productUpload extends MY_Controller
 	function step2_2() # function for processing the adding of new item
 	{	   
 
-        
 		$combination = json_decode($this->input->post('combination'));
 
 		$checkIfCombination = $this->input->post('noCombination');
