@@ -172,12 +172,14 @@ class Cart extends MY_Controller{
 		       'qty'   => ($_POST['qty'] > $max_qty ? $max_qty : $_POST['qty'])
 		    );
 		if($this->cart->update($data)){
-		    $carts=$this->cart->contents();
-			$result=array(
-			    'subtotal'=>  number_format($carts[$_POST['id']]['subtotal'],2,'.',','),
-			    'total' =>number_format( $this->cart->total(),2,'.',','),
-			    'result' => true,
-			    'maxqty' => $max_qty);
+			if($this->input->post('qty') != 0){
+				$carts=$this->cart->contents();
+				$result=array(
+					'subtotal'=>  number_format($carts[$_POST['id']]['subtotal'],2,'.',','),
+					'total' =>number_format( $this->cart->total(),2,'.',','),
+					'result' => true,
+					'maxqty' => $max_qty);
+			}
 		}
 	    }
 	}

@@ -93,7 +93,8 @@
 				
 		
 		$("#msg_textarea").on("click","#send_btn",function(){ // restrict textarea,button if doesnt have value 
-			var D = eval('(' + $(this).attr('data') + ')');
+			
+            var D = eval('(' + $(this).attr('data') + ')');
 			var recipient = D.name;
 			var img = D.img;
 			var msg = $("#out_txtarea").val();
@@ -272,6 +273,7 @@
                 if (d.messages != 0) {
                     tbl_data(d.messages);
                     specific_msgs();
+                    $("#send_btn").attr("data","{'name':'"+$(".Active").children(":first").html()+"','img':'"+$(".Active").parent().parent().children(":first").children().attr("data")+"'}");
                     $("#head_container span").show();
                 }else{
                     location.reload();

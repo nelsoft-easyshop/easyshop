@@ -23,11 +23,11 @@ function sum(obj){
         type:"POST",
         dataType:"JSON",
         data:{id:id,qty:value, csrfname:csrftoken},
-        success:function(data){
+        success:function(data){      
             if(data['result']==false){
-                alert("Unable to change quantity");
+                location.reload();
             }
-            else{
+            else{   
                 $("#subtotal"+id).text(data['subtotal']);
                 $("#total").text(data['total']);
             }
