@@ -1,10 +1,11 @@
 
 <div class="clear"></div>
 <div class="wrapper alert_content">
-	            <div>
+	            <div style="margin-bottom: 25em;">
 	            	<img src="<?=base_url()?>assets/images/img_alert.png">
-	            	<h2>Sorry, the page you are trying to access cannot be found. You may try any of the following:</h2></div>
-	            <ul>
+	            	<h2>Sorry, the user you are trying to view was not found. Please check the username and try again.</h2>
+				</div>
+				<!--<ul>
 	              <li>
 	                Ensure that the web address you are accessing is correct.
 	              </li>
@@ -20,5 +21,5 @@
                      Visit our sitemap to find easy navigation link throughout the site.
                   </li>
 
-	            </ul>
+	            </ul>-->
        	 </div>	
