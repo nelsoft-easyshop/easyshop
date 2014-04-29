@@ -21,12 +21,12 @@
 						<div>
                             <label for="login_username">Username:</label>
                             <input type="text" id="login_username" name="login_username">
-							<span id="username_error" class="red error_cont" style="font-weight:bold;margin-left:8em;"></span>
+							<span id="username_error" class="red error_cont" style="font-weight:bold;display:block;margin:5px 0px 0px 93px;"></span>
 						</div>
 						<div>
 						  <label for="login_password">Password:</label>
 						  <input type="password" id="login_password" name="login_password"> 
-						  <span id="passw_error" class="red error_cont" style="font-weight:bold;margin-left:8em;"></span>
+						  <span id="passw_error" class="red error_cont" style="font-weight:bold;display:block;margin:5px 0px 0px 93px;"></span>
 						  <p><a href="<?=base_url()?>login/identify">Forgot your password?</a></p>
 						</div>
 						<div>
