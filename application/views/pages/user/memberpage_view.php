@@ -8,6 +8,10 @@
 </style>
 <![endif]-->
 
+<!--[if lt IE 9]>
+        <script src="<?=base_url()?>assets/JavaScript/js/excanvas.js"></script>
+<![endif]-->
+
 <!-- ProgressBar / Widget CSS file TEMPORARY-->
 <link type="text/css" href="<?=base_url()?>assets/css/jquery-ui.css" rel="stylesheet" />
 
@@ -21,8 +25,6 @@
 <link rel="stylesheet" href="<?=base_url()?>assets/css/jquery.selectize-default.css" type="text/css" media="screen"/>
 <!--Chosen CSS-->
 <link rel="stylesheet" href="<?=base_url()?>assets/css/chosen.min.css" type="text/css" media="screen"/>
-
-
 
 <div id = "member_page_body">
 	<div class="clear"></div>
@@ -264,9 +266,11 @@
 		<div class="post_items_content" data-order = "<?php echo $mycounter;?>">
 			
 			<div class="post_item_content_left">
+				<div class="post_item_img_table">
 				<span class="post_item_img_con">
 					<img src="<?php echo base_url().$active_product['path'].'categoryview/'.$active_product['file']; ?>" class="product_img">
 				</span>
+				</div>
 				<p class="star_rating_reviews">
 					<?php $rounded_score = round($active_product['average_rating']); ?>
 					<?php for($i = 0; $i < $rounded_score;$i++): ?>
