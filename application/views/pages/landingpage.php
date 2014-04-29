@@ -35,7 +35,7 @@
          new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
          j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
          '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-         })(window,document,'script','dataLayer','GTM-KP5F8R');</script>-->
+         })(window,document,'script','dataLayer','GTM-KP5F8R');</script>
          <!-- End Google Tag Manager -->
     
     
@@ -120,7 +120,7 @@
 											
 											
 										<!--<button type="button" class="btn btn-warning btn-large">SEND</button>-->
-										<input type="submit" class="btn btn-warning btn-large" value="SEND" name="register_form1" id="register_form1_btn">
+										<input type="submit" class="btn btn-warning btn-large" value="SEND" name="register_form1" id="register_form1_btn" onclick="ga(['send','event','Signup','Send' ]);">
 										<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" class="img_loader_small2" id="register_form1_loadingimg" style="display:none"/>
 									
 										<p class="terms_con">By registering to Easyshop.ph, you agree to comply with our <span class="terms_and_conditions">Terms and Conditions</span></p>
@@ -192,7 +192,7 @@
 									<h4>Stay in touch to get the latest updates</h4>
 									<input placeholder="e-mail address" class="subscribe_input" id="appendedInputButton" type="text" name="subscribe_email">
 									<!--<button class="btn btn-warning btn-large" type="button">Subscribe</button>-->
-									<input type="submit" class="btn btn-warning btn-large subscribe_btn" value="Subscribe" name="subscribe_btn" id="subscribe_btn">
+									<input type="submit" class="btn btn-warning btn-large subscribe_btn" value="Subscribe" name="subscribe_btn" id="subscribe_btn" onclick="ga(['send','event','Subcribe','Send' ]);">
 									<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" class="img_loader_small2 sub_loading_img" id="subscribe_loadingimg" style="display:none"/>
 								<?php echo form_close();?>
 								</div>
