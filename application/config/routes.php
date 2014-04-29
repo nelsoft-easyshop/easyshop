@@ -52,9 +52,12 @@ $route['(?i)search/(:any)'] = 'product/sch/$1'; # ryan vasquez
 $route['search/load_search_other_product'] = 'product/sch_scroll'; # ryan vasquez
 
 # ADVANCE SEARCH
-$route['(?i)advsearch'] = 'product_search/red'; # rain jorque
-$route['(?i)advance_search/(:any)'] = 'product_search/red/$1'; # rain jorque
-$route['(?i)advance_search/load_other_product'] = 'product_search/load_product'; # rain jorque
+$route['(?i)advsearch'] = 'product_search/red'; # old search - rain jorque
+$route['(?i)advance_search/(:any)'] = 'product_search/red/$1'; # old search - rain jorque
+$route['(?i)advance_search/load_other_product'] = 'product_search/load_product'; # old search - rain jorque
+
+$route['(?i)advsrch'] = 'product_search_v2/advsrch2'; # new search - rain jorque
+$route['(?i)advsrch/scroll_product'] = 'product_search_v2/load_product'; # new search - rain jorque
 
 #ITEMS
 $route['(?i)item/(:num)/(:any)'] = 'product/view/$1/$2'; # ryan vasquez
