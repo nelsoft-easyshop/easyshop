@@ -1380,7 +1380,7 @@
 		<ul class="idTabs transact_tabs">
 			<li><a href="#bought">Bought <span><?php echo count($transaction['buy']);?></span></a> </li>
 			<li><a href="#sold">Sold 	<span><?php echo count($transaction['sell']);?></span></a> </li>
-			<li><a href="#complete">Complete 	<span><?php echo count($transaction['complete']);?></span></a> </li>
+			<li><a href="#complete">Complete 	<span><?php echo count($transaction['complete']['buy']) + count($transaction['complete']['sell']);?></span></a> </li>
 		</ul>
 	</div>
 	

@@ -392,7 +392,17 @@ class payment_model extends CI_Model
 		return $row[0];
 	}
 
-	
+	function checkTransaction($temp){
+		$query = $this->sqlmap->getFilenameID('payment','checkTransaction');
+		$sth = $this->db->conn_id->prepare($query);
+		$sth->bindParam(':buyer', $temp['buyer']);
+		$sth->bindParam(':seller', $temp['seller']);
+		$sth->bindParam(':order_id', $temp['order_id']);
+		$result = $sth->execute();
+		$row = $sth->fetchAll(PDO::FETCH_ASSOC);
+		
+		return $row;
+	}
 }
 
 

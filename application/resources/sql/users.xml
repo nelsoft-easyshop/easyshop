@@ -238,6 +238,12 @@
 	VALUES (:member_id, :for_memberid, :feedb_msg, :feedb_kind, :order_id, NOW(), :rating1, :rating2, :rating3)
 </select>
 
+<select id="checkFeedback">
+	SELECT id_feedback
+	FROM es_member_feedback
+	WHERE member_id = :member_id AND for_memberid = :for_memberid AND feedb_kind = :feedb_kind AND order_id = :order_id
+</select>
+
 <select id="getFeedback">
 	SELECT fb.member_id, from.username as member_name, fb.for_memberid, for.username as for_membername, fb.feedb_msg, DATE_FORMAT(fb.dateadded, "%D %M %Y") as dateadded, fb.rating1, fb.rating2, fb.rating3, fb.feedb_kind, fb.order_id
 	FROM `es_member_feedback` fb

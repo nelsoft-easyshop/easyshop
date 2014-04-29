@@ -566,6 +566,18 @@ class memberpage_model extends CI_Model
 		return $result;
 	}
 	
+	function checkFeedback( $temp ){
+		$query = $this->sqlmap->getFilenameID('users','checkFeedback');
+		$sth = $this->db->conn_id->prepare($query);
+		$sth->bindParam(':member_id', $temp['uid']);
+		$sth->bindParam(':for_memberid', $temp['for_memberid']);
+		$sth->bindParam(':feedb_kind', $temp['feedb_kind']);
+		$sth->bindParam(':order_id', $temp['order_id']);
+		$result = $sth->execute();
+		$row = $sth->fetchAll(PDO::FETCH_ASSOC);
+		return $row;
+	}
+	
 	function getFeedback($member_id){
 		$query = $this->sqlmap->getFilenameID('users','getFeedback');
 		$sth = $this->db->conn_id->prepare($query);

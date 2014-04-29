@@ -313,6 +313,7 @@ class Memberpage extends MY_Controller
 	 */
 	function addFeedback(){
 		if($this->input->post('order_id') && $this->input->post('feedback-field') && $this->form_validation->run('add_feedback_transaction')){
+			$result = false;
 			$data = array(
 				'uid' => $this->session->userdata('member_id'),
 				'for_memberid' => $this->input->post('for_memberid'),
@@ -323,8 +324,34 @@ class Memberpage extends MY_Controller
 				'rating2' => $this->input->post('rating2'),
 				'rating3' => $this->input->post('rating3')
 			);
-			$result = $this->memberpage_model->addFeedback($data);
+			
+			/******** Check if transaction exists based on post details ***********/
+			// current user is buyer
+			if($data['feedb_kind'] == 0){
+				$transacData = array(					
+					'buyer' => $data['uid'],
+					'seller' => $data['for_memberid'],
+					'order_id' => $data['order_id']
+				);
+			// current user is seller
+			}else if($data['feedb_kind'] == 1){
+				$transacData = array(					
+					'buyer' => $data['for_memberid'],
+					'seller' => $data['uid'],
+					'order_id' => $data['order_id']
+				);
+			}
+			$checkTransaction = $this->payment_model->checkTransaction($transacData);
+			
+			if(count($checkTransaction) > 0){ // if transaction exists
+				/****** Check if feedback entry already exists ******/
+				$checkFeedback = $this->memberpage_model->checkFeedback($data);
 
+				if(count($checkFeedback) == 0){ // if no feedback entry
+					$result = $this->memberpage_model->addFeedback($data);
+				}
+			}
+			
 			echo $result?1:0;
 		}
 		else

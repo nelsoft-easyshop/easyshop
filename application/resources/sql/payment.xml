@@ -118,4 +118,11 @@
 	CALL `es_sp_updateTransactionStatus` (:status, :order_product_id, :order_id, :invoice_num, :member_id )
 </select>
 
+<select id="checkTransaction">
+	SELECT eo.id_order
+	FROM es_order eo
+	INNER JOIN es_order_product ep
+		ON eo.id_order = ep.order_id AND eo.id_order = :order_id AND eo.buyer_id = :buyer AND ep.seller_id = :seller
+</select>
+
 </map>
