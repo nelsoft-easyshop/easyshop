@@ -66,9 +66,9 @@ class product_search_v2 extends MY_Controller {
 		);
 		$data = array_merge($data, $this->fill_header());
 		$response['firstlevel'] = $this->search_model->getFirstLevelNode();
-		$response['ctrl_subcat'] = "";
+		$response['ctrl_subcat'] = $this->product_model->getDownLevelNode(1);
 		$response['items'] = "";
-		
+
 		$condition = $this->input->get();
 		if($condition){
 			$category = $this->input->get('_cat');
@@ -183,8 +183,15 @@ class product_search_v2 extends MY_Controller {
 					
 					$sc = "";
 					$gsc = $this->input->get('_subcat');
+					$child = $this->search_model->selectChild($gsc);				
+					if($child[0] == 0 && $child[1] == 0){
+						$gsubcat = $gsc;
+					}else{
+						$gsubcat = implode(',', $child);
+					} // end - array check					
+					
 					if($gsc){
-						$sc = " AND ep.`cat_id` = " . $gsc . " ";
+						$sc = " AND ep.`cat_id` IN (" . $gsubcat . ") ";
 					}
 					
 					$loc = "";
