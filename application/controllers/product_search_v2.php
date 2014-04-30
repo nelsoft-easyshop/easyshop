@@ -62,7 +62,7 @@ class product_search_v2 extends MY_Controller {
 
 		$data = array(
 			'shiploc' => $this->product_model->getLocation(),
-			'title' => 'Easyshop.com - Advance Search V2.0'
+			'title' => 'Easyshop.com - Advanced Search'
 		);
 		$data = array_merge($data, $this->fill_header());
 		$response['firstlevel'] = $this->search_model->getFirstLevelNode();
