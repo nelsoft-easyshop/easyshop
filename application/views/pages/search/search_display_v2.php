@@ -33,12 +33,16 @@ function in_array_r($needle, $haystack, $strict = false) {
 		<?php
 		
 		$getlnk = $this->input->get();
-		
+		unset($getlnk['_subcat']);
+//		unset($getlnk['_cat']);
+		$dsplnk = "";
+		$xxx = "";		
+		$chk = "";
+
 		if($getlnk){
 			$dsplnk = http_build_query($getlnk);
-			unset($getlnk['_subcat']);	
 		}else{
-			$dsplnk = "all=";
+			$chk = "1";
 		}
 		
 		if($ctrl_subcat){
@@ -51,7 +55,10 @@ function in_array_r($needle, $haystack, $strict = false) {
 					$check = ' checked="checked"';
 					$link = current_url() . "?" . $dsplnk;
 				}else{
-					$link = current_url() . "?" . $dsplnk . "&_subcat=" . $row['id_cat'];				
+					if($chk == "1"){
+						$xxx = "&_cat=" . $row['id_cat'];
+					}
+					$link = current_url() . "?" . $dsplnk . $xxx . "&_subcat=" . $row['id_cat'];				
 				}
 				echo "<a href='". $link ."' style='display: block;' class='cbx'>";
 				echo "<input type='checkbox' ". $check .">" . $row['name'];
