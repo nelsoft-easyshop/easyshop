@@ -372,7 +372,6 @@ class product extends MY_Controller
 
 	function sch($string="search.html") # ROUTING: search/(:any)
 	{
-
 		$values = array();
 		$string_sort = "";
 		$start = 0;
@@ -385,7 +384,7 @@ class product extends MY_Controller
 			{
 				redirect('/category/all/', 'refresh');
 			}elseif($_GET['q_str'] == "" && $_GET['q_cat'] != 1){
-				redirect('/product/searchbycategory/'.$_GET['q_cat'] , 'refresh');
+                redirect('/category/'.$_GET['q_cat'].'/'.es_url_clean($_GET['q_catname']).'.html' , 'refresh');
 			}else{
 
 				if($category == 1){

@@ -18,14 +18,6 @@
 </script>
 <![endif]-->
 
-<!--[if IE]><![endif]-->
-<!--[if lt IE 7 ]> <html lang="en" class="ie6">    <![endif]-->
-<!--[if IE 7 ]>    <html lang="en" class="ie7">    <![endif]-->
-<!--[if IE 8 ]>    <html lang="en" class="ie8">    <![endif]-->
-<!--[if IE 9 ]>    <html lang="en" class="ie9">    <![endif]-->
-<!--[if (gt IE 9)|!(IE)]><!-->
-<html lang="en">
-<!--<![endif]-->
 <title>
 	<?php 
         if(isset($_GET['q_str']))
@@ -163,12 +155,14 @@
           <select name="q_cat" id="q_cat">
             <option value="1">All Categories</option>
             <?php
+                $selected_cat_name = 'All Categories';
                 foreach ($category_search as $keyrow) {
                   $selected = "";
                   if(isset($_GET['q_cat'])){
                       if($_GET['q_cat'] == $keyrow['id_cat'])
                       {
                         $selected = "selected";
+                        $selected_cat_name = $keyrow['name'];
                       }
                   }
              ?>
@@ -177,6 +171,7 @@
                   }
             ?>
           </select>
+          <input type='hidden' name='q_catname' id='q_catname' value='<?php echo $selected_cat_name; ?>'/>
           <button onclick="search_form.submit();" class="search_btn">SEARCH</button><a href="<?=base_url()?>advsrch" class="adv_srch_lnk">Advance Search</a>
         </div>
         <div id="main_search_drop_content"></div> 
@@ -231,6 +226,11 @@ $('#main_search').on('input propertychange', function() {
              $("#main_search_drop_content").hide();
           }
       });
+      
+      $('#q_cat').on('change', function(){
+          $('#q_catname').val($(this).find(':selected').text());
+      });
+      
 });
 
       
@@ -253,19 +253,4 @@ $('#main_search').on('input propertychange', function() {
 
 </script>
 
-<!--
-<script type='text/javascript'>
-
-$(document).ready(function(){
-	var getpath = window.location.pathname + window.location.search;
-	var pathname = getpath.substring(1,999);
-	
-	if($.cookie('rn') == null){
-		$.cookie('rn', "home", {path: "/", secure: false});		
-	}else if(getpath != "/login"){
-		$.cookie('rn', pathname, {path: "/", secure: false});	
-	}
-});
-</script> 
--->
 
