@@ -442,7 +442,7 @@ class Memberpage extends MY_Controller
 					$serverResponse['result'] = $updateResult ? 'success' : 'fail';
 					$serverResponse['error'] = $updateResult ? '' : 'Failed to update Dragonpay order status.';
 				}else if($dragonpayResult == 'P'){
-					$serverResponse['error'] = 'Transaction in Dragonpay is still in pending status.';
+					$serverResponse['error'] = 'Transaction with Dragonpay is still in pending status.';
 				}else if($dragonpayResult == 'U'){
 					$serverResponse['error'] = 'Error with Dragonpay itself. Please check your payment with Dragonpay.';
 				}
