@@ -118,47 +118,6 @@ $(document).ready(function(){
 	  */
 });
 
-
-/**********************************************************************************************/
-/****************************	Change Password	*******************************************/
-/**********************************************************************************************/
-$(document).ready(function(){
-
-	  $('#cur_password').on('focus', function() {
-		  $('#username_check').hide();
-		  $('#username_x').hide();
-		  $('.username_availability').html('');
-	  }).on('blur', function(){
-		if($.trim($('#cur_password').val()).length > 1){
-            pass_check();
-		}
-	  });
-	  
-	  function pass_check(){
-			var username = $("#wsx").val();		  
-			var pass 	 = $('#cur_password').val();
-            var csrftoken = $("meta[name='csrf-token']").attr('content');
-            var csrfname = $("meta[name='csrf-name']").attr('content'); 
-
-			$.post(config.base_url+'register/pass_check', {username: username, pass: pass, csrfname : csrftoken}, function(result){
-				if(result == 1){
-					showcheck($('#username'));
-					$('#username_check').hide();
-                    $('#cur_password_status').val('disapprove');
-					$('#username_x').show();
-					$('.username_availability').html('Incorrect Password');
-				}
-				else{
-					showx($('#username'));
-					$('#username_check').show();
-                    $('#cur_password_status').val('approve');
-					$('#username_x').hide();
-					$('.username_availability').html('Password Correct');
-				}
-			});		
-	  }	  	 	 
-});
-
 /**********************************************************************************************/
 /****************************	FORM 1 VALIDATION	*******************************************/
 /**********************************************************************************************/	
@@ -253,13 +212,9 @@ $(document).ready(function(){
 		 rules: {
 			cur_password: {
 				required: true,
-                minlength: 5,
+                minlength: 6,
                 maxlength:25
-				},		
-            cur_password_status: {
-				required: true,
-                equals: "approve"
-				},	
+				},
 			password: {
 				required: true,
                 minlength: 6,
