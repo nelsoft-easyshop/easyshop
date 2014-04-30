@@ -1807,6 +1807,10 @@ div.reg_step3 ul li:nth-child(3) {
     text-align: left !important;
 }
 
+.check_loader {
+	vertical-align: middle;
+}
+
 .username_info, .password_info {
 	margin-left: 171px;
 	font-size: 11px;
@@ -1816,6 +1820,10 @@ div.reg_step3 ul li:nth-child(3) {
 .field {
     padding: 8px;
     height: 26px;
+}
+
+.field > img {
+    vertical-align: middle;
 }
 
 .filler{
@@ -2983,7 +2991,7 @@ a:hover.tooltips span {
 	cursor: pointer;
 	height: 34px;
 	line-height: 31px;
-    margin: 30px 0px 0px 136px;
+    margin: 0px 0px 0px 136px;
 	width: 200px;
 	text-transform: uppercase;
 	-webkit-border-radius: 3px;
