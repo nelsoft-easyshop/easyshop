@@ -210,9 +210,12 @@ function in_array_r($needle, $haystack, $strict = false) {
             for ($i = 0; $i < sizeof($items); $i++) {
                 $pic = explode('/', $items[$i]['product_image_path']);
       ?>
-				<div class="product-list"> <a href="<?= base_url() ?>item/<?php echo $items[$i]['product_id']; ?>/<?php echo urlencode($items[$i]['product_name']); ?>.html"><img alt="<?php echo $items[$i]['product_name']; ?>" src="<?php echo base_url() . $pic[0] . '/' . $pic[1] . '/' . $pic[2] . '/' . $pic[3] . '/' . 'categoryview' . '/' . $pic[4]; ?>"></a>
+				<div class="product-list"> 
+					<a href="<?= base_url() ?>item/<?php echo $items[$i]['product_id']; ?>/<?php echo es_url_clean(urlencode($items[$i]['product_name'])); ?>.html">
+						<img alt="<?php echo html_escape($items[$i]['product_name']); ?>" src="<?php echo base_url() . $pic[0] . '/' . $pic[1] . '/' . $pic[2] . '/' . $pic[3] . '/' . 'categoryview' . '/' . $pic[4]; ?>">
+					</a>
 					<h3 style="-o-text-overflow: ellipsis; text-overflow:ellipsis; overflow:hidden; white-space:nowrap; width:225px; ">
-						<a href="<?= base_url() ?>item/<?php echo $items[$i]['product_id']; ?>/<?php echo urlencode($items[$i]['product_name']); ?>.php"><?php echo $items[$i]['product_name']; ?></a>
+						<a href="<?= base_url() ?>item/<?php echo $items[$i]['product_id']; ?>/<?php echo es_url_clean(urlencode($items[$i]['product_name'])); ?>.php"><?php echo html_escape($items[$i]['product_name']); ?></a>
 					</h3>
 					<div class="price-cnt">
 					  <div class="price"> <span>&#8369;</span> <?php echo number_format($items[$i]['product_price'], 2); ?> </div>
@@ -232,7 +235,6 @@ function in_array_r($needle, $haystack, $strict = false) {
     </div>
   </div>
   <!-- Products ------------------>
-  <input type="hidden" id="scroll_csrf" name="<?php echo $my_csrf['csrf_name'];?>" value="<?php echo $my_csrf['csrf_hash'];?>">
 </div>
 <script src="<?= base_url() ?>assets/JavaScript/js/jquery.easing.min.js" type="text/javascript"></script> 
 <script src="<?= base_url() ?>assets/JavaScript/js/jquery.scrollUp.min.js" type="text/javascript"></script> 
@@ -401,7 +403,8 @@ $(function () {
         var ajax_is_on = false;
         var objHeight = $(window).height() - 50;
         var last_scroll_top = 0;
-		var csrftoken = $('#scroll_csrf').val();
+		var csrftoken = $("meta[name='csrf-token']").attr('content');
+        var csrfname = $("meta[name='csrf-name']").attr('content'); 
 		
 		$(window).scroll(function(event) {
 		
@@ -418,7 +421,7 @@ $(function () {
 						
 						$.ajax({
 							url: base_url + 'advsrch/scroll_product',
-							data:{page_number:offset,id_cat:'<?php echo $this->input->get('_cat');?>',parameters:<?php echo json_encode($condition)?>, es_csrf_token : csrftoken},
+							data:{page_number:offset,id_cat:'<?php echo $this->input->get('_cat');?>',parameters:<?php echo json_encode($condition)?>, csrfname : csrftoken},
 							type: 'post',
 							async: false,
 							dataType: 'json',
