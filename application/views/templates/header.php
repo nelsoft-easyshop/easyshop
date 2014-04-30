@@ -36,7 +36,7 @@
     <?php echo $title?>
 </title>
 
-<!-- Google Analytics -->
+<!--
 <script>
   /*
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -60,7 +60,7 @@
  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
  '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
- })(window,document,'script','dataLayer','GTM-KP5F8R');</script>
+ })(window,document,'script','dataLayer','GTM-KP5F8R');</script>-->
  <!-- End Google Tag Manager -->
 
  
@@ -95,8 +95,8 @@
               <!-- <li><a href="<?=base_url()?>home/under_construction">Visiting a new Shop</a></li> -->
               <!-- <li><a href="<?=base_url()?>home/under_construction">Discounts</a></li> -->
               <li><a href="<?=base_url()?>category/all">Shopping Categories</a></li>
-			  <!--<li><a href="<?=base_url()?>advsearch">Advance Search</a></li>-->
-			  <li><a href="<?=base_url()?>advsrch">Advance Search</a></li>
+			  <!--<li><a href="<?=base_url()?>advsearch">Advance Search</a></li>
+			  <li><a href="<?=base_url()?>advsrch">Advance Search</a></li>-->
 			  <!-- Removed: not part of branch release. Keep edits like this in the trunk -->
               <!-- <li><a href="<?=base_url()?>product_search/advance">Advance Search</a></li> -->
 			  
@@ -117,28 +117,28 @@
             </ul>
           </li>
           
-          <li class="top_nav_main">Favorites
+          <!-- <li class="top_nav_main">Favorites
             <ul>    
-               <!-- 
+               
               <li><a href="<?=base_url()?>home/under_construction">Favorite</a></li> 
               <li><a href="<?=base_url()?>home/under_construction">Products</a></li> 
               <li><a href="<?=base_url()?>home/under_construction">My Favorite Shops</a></li> 
               <li><a href="<?=base_url()?>home/under_construction">market sellers</a></li> 
               <li><a href="<?=base_url()?>home/under_construction">Training Center</a></li> 
-              -->
+              
             </ul>
-          </li>
-          <li class="top_nav_main">Southeast Asia
+          </li>-->
+          <!--<li class="top_nav_main">Southeast Asia
             <ul>
-                <!--
+                
               <li><a href="<?=base_url()?>home/under_construction">Hong Kong</a></li>
               <li><a href="<?=base_url()?>home/under_construction">Taiwan</a></li>
               <li><a href="<?=base_url()?>home/under_construction">Southeast Asia</a></li>
               <li><a href="<?=base_url()?>home/under_construction">Chinese mainland</a></li>
               <li><a href="<?=base_url()?>home/under_construction">Other regions</a></li>
-               -->
+              
             </ul>
-          </li>
+          </li> -->
          
         </ul>
       </div>
@@ -177,9 +177,9 @@
                   }
             ?>
           </select>
-          <button onclick="search_form.submit();" class="search_btn">SEARCH</button>
+          <button onclick="search_form.submit();" class="search_btn">SEARCH</button><a href="<?=base_url()?>advsrch" class="adv_srch_lnk">Advance Search</a>
         </div>
-        <div id="main_search_drop_content"></div>
+        <div id="main_search_drop_content"></div> 
       </div>
     </div>
   </section>
