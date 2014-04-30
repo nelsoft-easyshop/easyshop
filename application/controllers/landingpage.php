@@ -174,8 +174,31 @@ class Landingpage extends MY_Controller
 		 return $callback_result;
 	}
 
+    public function success($action = ''){
+        $data['title'] = 'Easyshop.ph - Thank You';
+        $referrer = ($this->input->post('referrer'))?$this->input->post('referrer'):'';
+        if($referrer != 'landingpage'){
+		    $data['title'] = 'Page not found';
+            $data = array_merge($data,$this->fill_header());
+            $this->load->view('templates/header', $data); 
+            $this->load->view('pages/product/product_error'); 		
+            $this->load->view('templates/footer_full');
+        }
+        else{
+            if($action === 'register'){
+            	$data['content'] = 'You have successfully registered!';
+                // $data['content'] = 'img_success_register.png';
+            }
+            else if($action === 'subscribe'){
+                $data['content'] = 'You have successfully Subscribed!';
+                // $data['content'] = 'img_success_subscribe.png';
+            }
+            else{
+                redirect('', 'refresh');  //redirect to index page
+            }
+            $this->load->view('pages/landingpage_success', $data);
+        }
+    } 
+    
 }// close class
 
-
-
-?>
