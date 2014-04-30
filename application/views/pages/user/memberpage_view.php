@@ -1593,9 +1593,9 @@
 						<?php elseif($product['status'] == 1):?>
 							<span class="trans_alert transac_paid">Paid</span>
 						<?php elseif($product['status'] == 2):?>
-							<span>Payment returned to buyer</span>
+							<span class="trans_alert transac_pay_return">Payment returned to buyer</span>
 						<?php elseif($product['stuats'] == 3):?>
-							<span>Cash on delivery</span>
+							<span class="trans_alert transac_cod">Cash on delivery</span>
 						<?php endif;?>
 						</div>
 						
@@ -1895,9 +1895,9 @@
 							<?php elseif($product['status'] == 1):?>
 								<span class="trans_alert transac_paid">Paid</span>
 							<?php elseif($product['status'] == 2):?>
-								<span>Payment returned to buyer</span>
+								<span class="trans_alert transac_pay_return">Payment returned to buyer</span>
 							<?php elseif($product['stuats'] == 3):?>
-								<span>Cash on delivery</span>
+								<span class="trans_alert transac_cod">Cash on delivery</span>
 							<?php endif;?>
 							</div>
 							
