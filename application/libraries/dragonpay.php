@@ -36,7 +36,7 @@ class DragonPay {
 	 function getTxnToken($amount,$description,$email)
 	 {
 	 	$errorCodes = $this->errorCodes;
-     	$txnId = '048';
+     	$txnId = '049';
         $ccy = 'PHP';
         $param = array(
         		'merchantId' => $this->merchantId,
@@ -58,6 +58,19 @@ class DragonPay {
     		return '{"e":"1","m":"SUCCESS","c":"'.$token.'","u":"'.$this->ps.'?tokenid='.$token.'"}';
     		exit();
         }
+	}
+
+	function getStatus($txnId) #
+	{ 
+		$param = array(
+        		'merchantId' => $this->merchantId,
+        		'password' => $this->merchantPwd,
+        		'txnId' => $txnId
+        	 
+        	);
+        $client = new nusoap_client($this->url, 'wsdl');
+        $result = $client->call('GetTxnStatus',$param);
+        return $result['GetTxnStatusResult'];
 	}	
 }
 

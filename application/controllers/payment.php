@@ -764,9 +764,10 @@ class Payment extends MY_Controller{
       
     }
 
-    function paysuccess()
+    function xx()
     {
-        
+        $return = $this->dragonpay->getStatus('049');
+       echo $return;
     }
 	
 	/*
