@@ -190,8 +190,10 @@ div.product-list {
 }
 
 .product-list .prod_img_container {
-  display: inline;
-  float: none;
+    display: table-cell;
+    float: none;
+    height: 150px;
+    width: 150px;
 }
 
 .product-list .prod_img_wrapper {
