@@ -28,26 +28,30 @@ function in_array_r($needle, $haystack, $strict = false) {
   <div class="left_attribute">
   	<?php 
 	$category = $this->input->get('_cat');
-	if($category){
 	?>
 	<h3>Categories</h3>
 		<?php
 		
-		$dsplnk = $this->input->get();
-		unset($dsplnk['_subcat']);		
+		$getlnk = $this->input->get();
+		
+		if($getlnk){
+			$dsplnk = http_build_query($getlnk);
+			unset($getlnk['_subcat']);	
+		}else{
+			$dsplnk = "all=";
+		}
 		
 		if($ctrl_subcat){
 			
 			foreach ($ctrl_subcat as $row) {
-				//echo "<a href='" . current_url() . "?" . http_build_query($dsplnk) . "&_subcat=" . $row['id_cat'] . "'> - " . $row['name'] . "</a>";
 				
 				$getsubcat = $this->input->get("_subcat");
 				$check = "";
 				if($getsubcat == $row['id_cat']){
 					$check = ' checked="checked"';
-					$link = current_url() . "?" . http_build_query($dsplnk);
+					$link = current_url() . "?" . $dsplnk;
 				}else{
-					$link = current_url() . "?" . http_build_query($dsplnk) . "&_subcat=" . $row['id_cat'];				
+					$link = current_url() . "?" . $dsplnk . "&_subcat=" . $row['id_cat'];				
 				}
 				echo "<a href='". $link ."' style='display: block;' class='cbx'>";
 				echo "<input type='checkbox' ". $check .">" . $row['name'];
@@ -124,10 +128,7 @@ function in_array_r($needle, $haystack, $strict = false) {
 	
     ?> 
 	<p class="more_attr">More</p>
-	<p class="less_attr">Less</p>  
-  	<?php 
-	}
-	?>
+	<p class="less_attr">Less</p>
   </div>
   
   <!-- Products ------------------>
@@ -144,13 +145,19 @@ function in_array_r($needle, $haystack, $strict = false) {
 		$is = $this->input->get('_is');
 		?>		
 		<input type="text" name="_is" id="_is" value="<?php echo html_escape($is);?>" size="50" maxlength="300" placeholder="Enter keywords or item number" />
-		<select name="_cat" id="_cat">
-			<option value="">- Select Category -</option>
+		<select name="_cat" id="_cat" title="Select item category">
+			<option value="">- All -</option>
 			<?php
 				$getcat = $this->input->get('_cat');
+				$fincat = "";
+				if($getcat){
+					$fincat = $getcat;					
+				}else{
+					$fincat = $this->input->get('_subcat');
+				}
 				foreach ($firstlevel as $row) { # generate all parent category.
 			?>
-				<option value="<?php echo $row['id_cat']; ?>" <?php if($row['id_cat'] == $getcat){ ?>selected="selected" <?php } ?>><?php echo $row['name']; ?></option>
+				<option value="<?php echo $row['id_cat']; ?>" <?php if($row['id_cat'] == $fincat){ ?>selected="selected" <?php } ?>><?php echo $row['name']; ?></option>
 			<?php } ?>
 		</select>
 		<input type="submit" value="SEARCH" name="btn_srch" id="btn_srch"/>
@@ -160,7 +167,7 @@ function in_array_r($needle, $haystack, $strict = false) {
 	<div class="inputRow">
 		Location:
 		<?php $gloc = $this->input->get('_loc'); ?>
-		<select title="Select Item Location" name="_loc" id="_loc" class="advsrchLocation">
+		<select title="Select item location" name="_loc" id="_loc" class="advsrchLocation">
 			<option value="">- All -</option>
 				<?php foreach($shiploc['area'] as $island=>$loc):?>
 					<option value="<?php echo $shiploc['islandkey'][$island];?>" <?php if($gloc == $shiploc['islandkey'][$island]){?>selected="selected"<?php } ?>><?php echo $island;?></option>
@@ -174,7 +181,7 @@ function in_array_r($needle, $haystack, $strict = false) {
         </select>		
 		Condition:	
 		<?php $con = $this->input->get('_con'); ?>
-		<select title="Sort Item Condition" name="_con" id="_con">
+		<select title="Select item condition" name="_con" id="_con">
 			<option value="">- All -</option>          
 			<?php foreach($this->lang->line('product_condition') as $x): ?>
 				<option value="<?php echo $x;?>" <?php if($con == $x){?>selected="selected"<?php } ?>><?php echo $x; ?></option>
@@ -188,16 +195,12 @@ function in_array_r($needle, $haystack, $strict = false) {
 		$price1 = $this->input->get('_price1');
 		$price2 = $this->input->get('_price2');
 		?>
-
-		<input class="advsrchPrice1" type="text" name="_price1" id="_price1" value="<?php echo $price1;?>" maxlength="10" size="6" placeholder="Min"> to <input class="advsrchPrice2" type="text" name="_price2" id="_price2" value="<?php echo $price2;?>" maxlength="10" size="6" placeholder="Max">
-
-		<input type="text" name="_price1" id="_price1" value="<?php echo html_escape($price1);?>" maxlength="10" size="6" placeholder="Min"> to <input type="text" name="_price2" id="_price2" value="<?php echo html_escape($price2);?>" maxlength="10" size="6" placeholder="Max">
-
+		<input class="advsrchPrice1" type="text" name="_price1" id="_price1" value="<?php echo html_escape($price1);?>" maxlength="10" size="6" placeholder="Min" title="Minimum price"> to <input class="advsrchPrice2" type="text" name="_price2" id="_price2" value="<?php echo html_escape($price2);?>" maxlength="10" size="6" placeholder="Max" title="Maximum price">
 		<input type="hidden" name="_price" id="_price"data-url="<?php echo $myurl;?>"/>
 	    <p class="search_result"><!-- Showing 1 - 48 of 13,152 Results --></p>
 	    Sort by:
 		<?php $sop = $this->input->get('_sop'); ?>
-	    <select name="_sop" id="_sop">
+	    <select name="_sop" id="_sop" title="Sort item">
 			<option value="popular" <?php if($sop == "popular"){?>selected="selected"<?php } ?>>Popular</option>
 			<option value="hot" <?php if($sop == "hot"){?>selected="selected"<?php } ?>>Hot</option>		
 			<option value="new" <?php if($sop == "new"){?>selected="selected"<?php } ?>>New</option>
@@ -347,9 +350,7 @@ $(function () {
 		});
 		
 		$("#btn_srch").click(function() {
-						
-			if($("#_cat").val() != ""){
-			
+
 				// Price - Start //////////////////////////////////////	
 				var price1 = parseInt($("#_price1").val());
 				var price2 = parseInt($("#_price2").val());
@@ -388,14 +389,6 @@ $(function () {
 					url = removeParam("_price2", url);				
 				}
 				// Price - End //////////////////////////////////////					
-				
-			}else{
-				alert("Please select a category");
-				$("#_cat").addClass("err").focus();
-				return false;
-			}
-		
-			
 		});
 		
 		$(".cbx").click(function() { // for IE
