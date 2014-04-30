@@ -1450,7 +1450,7 @@
 						<?php if(trim($user['feedb_msg']) !== '' && $user['rating1'] != 0 && $user['rating2'] != 0 && $user['rating3'] != 0):?>												
 						<p>For:<a href="<?php echo base_url();?>vendor/<?php echo $user['name'];?>"><?php echo $user['name'];?></a> | on:<?php echo $user['fbdateadded'];?></p>
 						<p>"<?php echo html_escape($user['feedb_msg']);?>"</p>
-						<p> <?php echo $this->lang->line('rating')[1].':'; ?> : 
+						<p> <?php echo $this->lang->line('rating')[0].':'; ?> : 
 							<?php for($x=0;$x<5;$x++):?>
 							<?php if($x<$user['rating1']):?>
 							<span class="span_bg star_on"></span>
@@ -1459,7 +1459,7 @@
 					<?php endif;?>
 				<?php endfor;?>
 			</p>
-			<p> <?php echo $this->lang->line('rating')[2].':'; ?> 
+			<p> <?php echo $this->lang->line('rating')[1].':'; ?> 
 				<?php for($x=0;$x<5;$x++):?>
 				<?php if($x<$user['rating2']):?>
 				<span class="span_bg star_on"></span>
@@ -1756,7 +1756,7 @@
 							<?php if(trim($user['feedb_msg']) !== '' && $user['rating1'] != 0 && $user['rating2'] != 0 && $user['rating3'] != 0):?>												
 							<p>For:<a href="<?php echo base_url();?>vendor/<?php echo $user['name'];?>"><?php echo $user['name'];?></a> | on:<?php echo $user['fbdateadded'];?></p>
 							<p>"<?php echo html_escape($user['feedb_msg']);?>"</p>
-							<p> <?php echo $this->lang->line('rating')[1].':'; ?> : 
+							<p> <?php echo $this->lang->line('rating')[0].':'; ?> : 
 								<?php for($x=0;$x<5;$x++):?>
 								<?php if($x<$user['rating1']):?>
 								<span class="span_bg star_on"></span>
@@ -1765,7 +1765,7 @@
 						<?php endif;?>
 					<?php endfor;?>
 				</p>
-				<p> <?php echo $this->lang->line('rating')[2].':'; ?> 
+				<p> <?php echo $this->lang->line('rating')[1].':'; ?> 
 					<?php for($x=0;$x<5;$x++):?>
 					<?php if($x<$user['rating2']):?>
 					<span class="span_bg star_on"></span>
