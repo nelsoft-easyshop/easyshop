@@ -130,10 +130,10 @@ $_SESSION['start'] = "0";
                 <?PHP foreach ($subcategories as $rows): ?>
                 <div class="">
                     <a class="cc2_title" href="<?=base_url()?>category/<?php echo $rows['id_cat'];?>/<?php echo es_url_clean($rows['name']);?>.html">
-                        <span><?php echo $rows['name'];?></span></a>
+                        <span><?php echo html_escape($rows['name']);?></span></a>
                         <?PHP if(count($rows['popular'])>0): ?>
                         <span class="cat_carousel_img_con"><span class="cat_carousel_img"><img src="<?= base_url().$rows['popular'][0]['path'].'categoryview/'.$rows['popular'][0]['file']; ?>"></span></span><br />
-                        <div class="cc2_prod_name"><a href="<?PHP echo base_url()."item/".$rows['popular'][0]['id_product']."/".es_url_clean($rows['popular'][0]['product']); ?>.html" title="<?PHP echo $rows['popular'][0]['product']; ?>"><span><?PHP echo $rows['popular'][0]['product']; ?></span></a></div>
+                        <div class="cc2_prod_name"><a href="<?PHP echo base_url()."item/".$rows['popular'][0]['id_product']."/".es_url_clean($rows['popular'][0]['product']); ?>.html" title="<?PHP echo $rows['popular'][0]['product']; ?>"><span><?PHP echo html_escape($rows['popular'][0]['product']); ?></span></a></div>
                         <span class="recommended_product_price">PHP <?php echo number_format($rows['popular'][0]['price'],2,'.',',');?></span>
                         <?PHP endif; ?>
                     </div>
