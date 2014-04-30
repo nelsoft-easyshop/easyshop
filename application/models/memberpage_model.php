@@ -427,6 +427,11 @@ class memberpage_model extends CI_Model
 		if(count($row)>0){
 			foreach($row as $k=>$temp){
 				
+				// Ignore transaction 99 via paypal = error
+				if($temp['transac_stat'] == 99 && $temp['payment_method'] == 1){
+					break;
+				}
+				
 				if( !array_key_exists($temp['id_order'], $data) ){
 					$data[$temp['id_order']] = array();
 				}
@@ -439,6 +444,9 @@ class memberpage_model extends CI_Model
 				}
 				if( !array_key_exists('invoice_no', $data[$temp['id_order']]) ){
 					$data[$temp['id_order']]['invoice_no'] = $temp['invoice_no'];
+				}
+				if( !array_key_exists('payment_method', $data[$temp['id_order']]) ){
+					$data[$temp['id_order']]['payment_method'] = $temp['payment_method'];
 				}
 				
 				if(!array_key_exists('users', $data[$temp['id_order']]))
@@ -509,7 +517,6 @@ class memberpage_model extends CI_Model
 				}else if($temp['is_other'] === '1'){
 					array_push($data[$temp['id_order']]['products'][$temp['id_order_product']]['attr'], array('field' => ucwords(strtolower($temp['field_name'])), 'value' => ucwords(strtolower($temp['value_name'])) ));
 				}
-				
 			}
 			
 			// Categorize as buy or sell in final array
@@ -541,6 +548,11 @@ class memberpage_model extends CI_Model
 						$fdata['complete']['sell'][$k] = $temp2;
 					else
 						$fdata['complete']['buy'][$k] = $temp2;
+				}else if($temp2['transac_stat'] == 99 && $temp2['payment_method'] == 2){ // if pending Dragonpay transaction
+					if(array_key_exists('buyer_id', $temp2) && array_key_exists('buyer', $temp2))
+						continue;
+					else
+						$fdata['buy'][$k] = $temp2;
 				}
 			}
 			

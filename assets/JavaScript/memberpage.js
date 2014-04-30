@@ -1089,15 +1089,18 @@ $(document).ready(function(){
 			}
 			catch(e){
 				alert('An error was encountered while processing your data. Please try again later.');
-				window.location.reload(true);
+				//window.location.reload(true);
 				return false;
+			}
+			
+			if(serverResponse.error.length > 0){
+				alert(serverResponse.error);
 			}
 			
 			if(serverResponse.result === 'success'){
 				parentdiv.html('<span class="trans_alert transac_req_submit">Request submitted.</span>');
-			}
-			if(serverResponse.error.length > 0){
-				alert(serverResponse.error);
+			}else if(serverResponse.result === 'fail'){
+				parentdiv.html('<span class="trans_alert">Failed to update status.</span>');
 			}
 		});
 		$(this).val('Please wait');
@@ -1105,6 +1108,22 @@ $(document).ready(function(){
 		return false;
 	});
 	
+	// DRAGON PAY RESPONSE
+	/*$('.dragonpayupdate').on('click', function(){
+		var form = $(this).closest('form.dragonpay_update');
+		
+		$.post(config.base_url+'memberpage/transactionResponse', form.serializeArray(), function(){
+			try{
+				var serverResponse = jQuery.parseJSON(data);
+			}
+			catch(e){
+				alert('An error was encountered while processing your data. Please try again later.');
+				window.location.reload(true);
+				return false;
+			}
+		});
+	});
+	*/
 });
 
 

@@ -118,11 +118,27 @@
 	CALL `es_sp_updateTransactionStatus` (:status, :order_product_id, :order_id, :invoice_num, :member_id )
 </select>
 
+<!-- Used to verify transaction for adding feedbacks-->
 <select id="checkTransaction">
 	SELECT eo.id_order
 	FROM es_order eo
 	INNER JOIN es_order_product ep
 		ON eo.id_order = ep.order_id AND eo.id_order = :order_id AND eo.buyer_id = :buyer AND ep.seller_id = :seller
 </select>
+
+<!-- Used to check for dragonpay transaction-->
+<select id="checkTransactionBasic">
+	SELECT id_order, data_response
+	FROM es_order
+	WHERE id_order = :transaction_num AND invoice_no = :invoice_num AND buyer_id = :member_id
+</select>
+
+<!-- Used to update es_order - Draongpay transaction -->
+<select id="updateTransactionStatusBasic">
+	UPDATE es_order
+	SET order_status = :order_status
+	WHERE id_order = :transaction_num AND invoice_no = :invoice_num AND buyer_id = :member_id
+</select>
+
 
 </map>

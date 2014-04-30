@@ -392,6 +392,7 @@ class payment_model extends CI_Model
 		return $row[0];
 	}
 
+	// Used by add feedback - memberpage
 	function checkTransaction($temp){
 		$query = $this->sqlmap->getFilenameID('payment','checkTransaction');
 		$sth = $this->db->conn_id->prepare($query);
@@ -402,6 +403,34 @@ class payment_model extends CI_Model
 		$row = $sth->fetchAll(PDO::FETCH_ASSOC);
 		
 		return $row;
+	}
+	
+	// Used by dragonpay - memberpage
+	function checkTransactionBasic($temp)
+	{
+		$query = $this->sqlmap->getFilenameID('payment','checkTransactionBasic');
+		$sth = $this->db->conn_id->prepare($query);
+		$sth->bindParam(':transaction_num', $temp['transaction_num']);
+		$sth->bindParam(':invoice_num', $temp['invoice_num']);
+		$sth->bindParam(':member_id', $temp['member_id']);
+		$result = $sth->execute();
+		$row = $sth->fetchAll(PDO::FETCH_ASSOC);
+
+		return $row;
+	}
+	
+	// Used by dragonpay - memberpage
+	function updateTransactionStatusBasic($temp)
+	{
+		$query = $this->sqlmap->getFilenameID('payment','updateTransactionStatusBasic');
+		$sth = $this->db->conn_id->prepare($query);
+		$sth->bindParam(':transaction_num', $temp['transaction_num']);
+		$sth->bindParam(':invoice_num', $temp['invoice_num']);
+		$sth->bindParam(':member_id', $temp['member_id']);
+		$sth->bindParam(':order_status', $temp['order_status']);
+		$result = $sth->execute();
+		
+		return $result;
 	}
 }
 

@@ -369,10 +369,12 @@ class Memberpage extends MY_Controller
 			'error' => 'Failed to validate form'
 		);
 		
+		$data['transaction_num'] = $this->input->post('transaction_num');
+		$data['invoice_num'] = $this->input->post('invoice_num');
+		$data['member_id'] = $this->session->userdata('member_id');
+		
 		if( $this->input->post('buyer_response') || $this->input->post('seller_response') ){
-			$data['transaction_num'] = $this->input->post('transaction_num');
-			$data['invoice_num'] = $this->input->post('invoice_num');
-			$data['member_id'] = $this->session->userdata('member_id');
+			
 			
 			// Check type of response ( if user or seller response )
 			if( $this->input->post('buyer_response') ){
@@ -421,6 +423,32 @@ class Memberpage extends MY_Controller
 				}
 			}
 			
+		}else if( $this->input->post('dragonpay') ){
+			$this->load->library('dragonpay');
+			
+			// Fetch transaction data
+			$checkTransaction = $this->payment_model->checkTransactionBasic($data);
+			
+			if(count($checkTransaction) == 1){
+				// fetch dragonpay data
+				$dragonpayData = json_decode($checkTransaction[0]['data_response'], true);
+				$txnId = $dragonpayData['DragonPayReturn']['txnId'];
+				
+				$dragonpayResult = $this->dragonpay->getStatus($txnId);
+				
+				if($dragonpayResult == 'S'){ // Transaction Complete
+					$data['order_status'] = 0;
+					$updateResult = $this->payment_model->updateTransactionStatusBasic($data);
+					$serverResponse['result'] = $updateResult ? 'success' : 'fail';
+					$serverResponse['error'] = $updateResult ? '' : 'Failed to update Dragonpay order status.';
+				}else if($dragonpayResult == 'P'){
+					$serverResponse['error'] = 'Transaction in Dragonpay is still in pending status.';
+				}else if($dragonpayResult == 'U'){
+					$serverResponse['error'] = 'Error with Dragonpay itself. Please check your payment with Dragonpay.';
+				}
+			}else{
+				$serverResponse['error'] = 'Dragonpay transaction does not exist.';
+			}
 		}
 		echo json_encode($serverResponse);
 	}
