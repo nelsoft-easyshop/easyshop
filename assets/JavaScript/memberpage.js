@@ -1093,7 +1093,7 @@ $(document).ready(function(){
 			}
 			
 			if(serverResponse.result === 'success'){
-				parentdiv.html('Request submitted.');
+				parentdiv.html('<span class="trans_alert transac_req_submit">Request submitted.</span>');
 			}
 			if(serverResponse.error.length > 0){
 				alert(serverResponse.error);

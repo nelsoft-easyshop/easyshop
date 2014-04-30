@@ -4021,6 +4021,12 @@ div.sold_prod_container {
             border-radius: 3px;
 }
 
+.transac_req_submit{
+	background-color: #eafee9;
+	border:1px solid #18b114;
+	color: #18b114;
+}
+
 .transac_paid {
 	background-color: #eafee9;
 	border:1px solid #18b114;

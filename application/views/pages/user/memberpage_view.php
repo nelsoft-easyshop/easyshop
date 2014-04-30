@@ -1701,7 +1701,7 @@
 			<?php foreach($transaction['complete']['buy'] as $tk=>$transact):?>
 			<div class="transac-container">
 				<div class="transac_title">
-					<h4><span><strong>Invoice #:</strong>  <?php echo $transact['invoice_no'];?></span>
+					<h4><span class="transac_content"><strong>Invoice #:</strong>  <?php echo $transact['invoice_no'];?></span>
 						<span class="transac_title_date"><?php echo $transact['dateadded']?></span>
 					</div>
 					<div class="transac_prod_wrapper">
