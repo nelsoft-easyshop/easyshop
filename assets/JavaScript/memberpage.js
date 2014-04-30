@@ -46,7 +46,8 @@ $(document).ready(function(){
 
 	$( "#datepicker" ).datepicker({
 		changeMonth: true,
-		changeYear: true
+		changeYear: true,
+        yearRange: '1950:2005'
 	});
 
 	 jQuery.validator.addMethod("is_validdate", function(value, element) {
@@ -1099,7 +1100,7 @@ $(document).ready(function(){
 				alert(serverResponse.error);
 			}
 		});
-		$(this).val('Please wait...');
+		$(this).val('Please wait');
 		$(this).attr('disabled', true);
 		return false;
 	});
