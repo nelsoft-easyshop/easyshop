@@ -471,12 +471,13 @@ class Register_model extends CI_Model
 	
 	/*
 	 *	Send notification email after registration / subscription
-	 *	$data = 'username', 'email', 'password'
+	 *	$data = 'username', 'email', 'password', emailcode
 	 */
 	public function sendNotification($data, $type="")
 	{
 		$this->load->library('email');	
 		$this->load->library('parser');
+		$this->load->library('encrypt');
 		
 		$this->email->set_newline("\r\n");
 		$this->email->to($data['email']);
@@ -490,7 +491,9 @@ class Register_model extends CI_Model
 		if($type === 'signup'){
 			$this->email->subject($this->lang->line('registration_subject'));
 			$parseData = array(
-				'user' => $data['username']
+				'user' => $data['username'],
+				'hash' => $this->encrypt->encode($data['email'].'|'.$data['username'].'|'.$data['emailcode']),
+				'site_url' => site_url('register/email_verification')
 			);
 			$msg = $this->parser->parse('templates/landingpage/lp_reg_email',$parseData,true);
 		}

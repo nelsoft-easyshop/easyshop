@@ -50,6 +50,12 @@
 				</td>
 			</tr>
 			<tr>
+				<td style="background-color: #ffffff; padding: 20px 20px;">
+					Please click below to verify your email address:<br />
+					<a href="{site_url}?h={hash}" style="background-color:#0191C8; color:#ffffff; display:inline-block; font-size:14px; padding:10px 20px; margin-top:20px;">Verify email</a>
+				</td>
+			</tr>
+			<tr>
 				<td style="background: #3C475C;	padding: 20px; border-bottom: 5px solid #F18200;">
 					<div class="socialMedia" style="width: 160px; margin: 0 auto;">
 						<a href="https://www.facebook.com/pages/EasyShopph/211771799032417?ref=hl"><img src="facebook.png" style="width: 50px;" alt="Share us on Facebook"></a>

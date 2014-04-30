@@ -49,6 +49,7 @@ class Landingpage extends MY_Controller
 		);
 		
 		if(($this->input->post('register_form1'))&&($this->form_validation->run('landing_form'))){
+			
 			$data['username'] = html_escape($this->input->post('username'));
 			$data['password'] = html_escape($this->input->post('password'));
 			$data['email'] = $this->input->post('email');
@@ -64,30 +65,37 @@ class Landingpage extends MY_Controller
 			//GENERATE HASH FOR EMAIL VERIFICATION
 			$temp['emailcode'] = sha1($this->session->userdata('session_id').time());
 			$temp['member_id'] = $data['member_id'];
-			$temp['email'] = 0;
+			
+			// Send notification email to user, max try = 3
+			$data['emailcode'] = $temp['emailcode'];
+			$emailCount = 0;
+			do{
+				$emailResult = $this->register_model->sendNotification($data, 'signup');
+				$emailCount++;
+			}while(!$emailResult && $emailCount < 3);
+			
+			$temp['email'] = $emailResult ? 1 : 0;
 			
 			//Store verification details and increase limit count when necessary
 			$result = $this->register_model->store_verifcode($temp);
-			
-			// Send notification email to user
-			$this->register_model->sendNotification($data, 'signup');
-			
 			
 			// If verification code failed to enter database
 			if(!$result){
 				array_push($serverResponse['error'], 'Database verifcode error <br>');
 			}
+			// If registration failed
 			if( is_null($data['member_id']) || $data['member_id'] == 0 || $data['member_id'] == ''){
 				array_push($serverResponse['error'], 'Database registration failure <br>');
 				$registrationFlag = false;
 			}else{
 				$registrationFlag = true;
 			}
-			
+			if(!$emailResult){
+				array_push($serverResponse['error'], 'Failed to send verification email. Please verify in user page upon logging in.');
+			}
 			
 			if( $registrationFlag && $result ){
 				$serverResponse['result'] = 1;
-				$serverResponse['error'] = array();
 			}
 			else{
 				$serverResponse['result'] = 0;
