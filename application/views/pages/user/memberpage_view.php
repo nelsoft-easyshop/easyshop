@@ -1207,9 +1207,9 @@
 								<input type="button" name="del_bictr<?php echo $rows; ?>" id="del_bictr<?php echo $rows; ?>"value="Delete">
 								<input type="hidden" name="bi_id_bictr<?php echo $rows; ?>" id="bi_id_bictr<?php echo $rows; ?>" value ="<?php echo $billing_info['id_billing_info'];?>" />
 							</div>
-							<div id="bi_check_bictr<?php echo $rows; ?>"  style="display:none;">
-								<img id="bi_check_img" style="position: relative; vertical-align: middle;" src="<?php echo base_url(); ?>/assets/images/check_icon.png">
-								Saved!
+                            <br/>
+							<div id="bi_check_bictr<?php echo $rows; ?>"  style="display:none; width: 38px;" >
+                                <span>Saved</span>
 							</div>	
 					</div>
 					<div id="bi-left" style="float:left; width:inherit;">
@@ -1435,7 +1435,7 @@
 									<span class="trans_alert transac_paid">Paid</span>
 								<?php elseif($product['status'] == 2):?>
 									<span class="trans_alert transac_pay_return">Payment returned by seller</span>
-								<?php elseif($product['stuats'] == 3):?>
+								<?php elseif($product['status'] == 3):?>
 									<span class="trans_alert transac_cod">Cash on delivery</span>
 								<?php endif;?>
 							</div>
@@ -1594,7 +1594,7 @@
 							<span class="trans_alert transac_paid">Paid</span>
 						<?php elseif($product['status'] == 2):?>
 							<span class="trans_alert transac_pay_return">Payment returned to buyer</span>
-						<?php elseif($product['stuats'] == 3):?>
+						<?php elseif($product['status'] == 3):?>
 							<span class="trans_alert transac_cod">Cash on delivery</span>
 						<?php endif;?>
 						</div>
@@ -1741,7 +1741,7 @@
 										<span class="trans_alert transac_paid">Paid</span>
 									<?php elseif($product['status'] == 2):?>
 										<span class="trans_alert transac_pay_return">Payment returned by seller</span>
-									<?php elseif($product['stuats'] == 3):?>
+									<?php elseif($product['status'] == 3):?>
 										<span class="trans_alert transac_cod">Cash on delivery</span>
 									<?php endif;?>
 								</div>
@@ -1896,7 +1896,7 @@
 								<span class="trans_alert transac_paid">Paid</span>
 							<?php elseif($product['status'] == 2):?>
 								<span class="trans_alert transac_pay_return">Payment returned to buyer</span>
-							<?php elseif($product['stuats'] == 3):?>
+							<?php elseif($product['status'] == 3):?>
 								<span class="trans_alert transac_cod">Cash on delivery</span>
 							<?php endif;?>
 							</div>
@@ -2064,5 +2064,5 @@
 		<script src="<?=base_url()?>assets/JavaScript/js/jquery.selectize.js" type="text/javascript"></script>
 		<script src="<?=base_url()?>assets/JavaScript/js/chosen.jquery.min.js" type="text/javascript"></script>
 		<!-- MEMBERPAGE JS-->
-		<script type="text/javascript" src="<?=base_url()?>assets/JavaScript/memberpage.js"></script>
+		<script type="text/javascript" src="<?=base_url()?>assets/JavaScript/memberpage.js?ver=1.0"></script>
 		<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=&sensor=false"></script>
