@@ -46,7 +46,7 @@
 						</p>
 					</div>
 					<div class="vendor-msg-modal">
-					    <p><a id="modal-launcher" href="javascript:void(0)" class="orange_btn3">Send a message</a></p>
+					    <p><a id="modal-launcher" href="javascript:void(0)" class="orange_btn3">Send a message</a></p> 
 					</div>
 				</div>
 			</div>
@@ -473,11 +473,11 @@
 			<div id="modal-inside-container">
 				<div>
 					<label>To : </label>
-					<input type="text" value="" id="msg_name" name="msg_name" placeholder="xxxx@yahoo.com">
+					<input type="text" value="<?=$vendordetails['username'];?>" disabled id="msg_name" name="msg_name" >
 				</div>
 				<div>
 					<label>Message : </label>
-					<textarea cols="40" rows="5" name="msg-message" id="msg-message"></textarea>		
+					<textarea cols="40" rows="5" name="msg-message" id="msg-message" placeholder="Say something.."></textarea>		
 				</div>	   
 			</div>
 			<button id="modal_send_btn">Send</button>
@@ -491,7 +491,7 @@
 
 <script>
     $(function(){
-	if (<?=$my_id?> == <?php echo $vendordetails['id_member']; ?>) {
+	if (<?=$my_id?> == <?php echo $vendordetails['id_member']; ?> || <?=$my_id?> == 0  ) {
 	    $(".vendor-msg-modal").remove();
 	    $("#modal-background").remove();
 	    $("#modal-container").remove();
@@ -511,6 +511,7 @@
 	    var recipient = <?php echo $vendordetails['id_member']; ?>;
         var csrftoken = $("meta[name='csrf-token']").attr('content');
         var csrfname = $("meta[name='csrf-name']").attr('content');
+        var msg = $("#msg-message").val();
 		if (msg == "") {
 			alert("Say something..");
 			return false;
