@@ -1,7 +1,7 @@
 <?xml version='1.0' ?>
 <map>
     <select id="send_message">
-        INSERT INTO `easyshop`.`es_messages`
+        INSERT INTO `es_messages`
             (`to_id`,
              `from_id`,
              `time_sent`,
@@ -40,7 +40,7 @@
     <select id="get_recepientID">
         SELECT
         `id_member`
-        FROM `easyshop`.`es_member`
+        FROM `es_member`
         WHERE username = :username;
     </select>
 </map>
