@@ -376,7 +376,7 @@ class Register extends MY_Controller
 			}
 		}
 	}
-	
+
 	function changepass(){
 		$data = array(
 			'title' => 'Change Password | Easyshop.com',
@@ -385,42 +385,40 @@ class Register extends MY_Controller
 		
 		$this->load->view('templates/header_plain', $data);
 		$temp['toggle_view'] = "1";
+		$temp['err'] = "";
         $result = true;
 
-		if(($this->input->post('changepass_btn')) && ($this->form_validation->run('changepass'))){  
-			$data = array(
-				'username' => $this->input->post('wsx'),
-				'cur_password' => $this->input->post('cur_password'),
-				'password' => $this->input->post('password')
-			);
-            $result = $this->register_model->changepass($data);       
-			if($result){
-                $temp['toggle_view'] = "";
-            }
+		$username = $this->input->post('wsx');
+		$cur_password = $this->input->post('cur_password');
+		$password = $this->input->post('password');			
+		
+		if(($username) && ($this->form_validation->run('changepass'))){  
+		
+			$dataval = array('login_username' => $username, 'login_password' => $cur_password);
+			$row = $this->user_model->verify_member($dataval);
+
+			if ($row['o_success'] >= 1){
+				$data = array(
+					'username' => $username,
+					'cur_password' => $cur_password,
+					'password' => $password
+				);
+				
+				$result = $this->register_model->changepass($data);       
+				if($result){
+					$temp['toggle_view'] = "";
+				}
+			}else{
+				$temp['toggle_view'] = "1";
+				$temp['err'] = "69";
+			}
 		}
+		
         $temp['result'] = $result;
 		$this->load->view('pages/user/changepassword', $temp);
 		$this->load->view('templates/footer');		
 		
 	}
-	
-	function pass_check(){
-		
-		if(($this->input->post('pass'))){
-		$username = $this->input->post('username');
-		$pass = $this->input->post('pass');	
-		$dataval = array('login_username' => $username, 'login_password' => $pass);
-		
-		$row = $this->user_model->verify_member($dataval);
-
-			if ($row['o_success'] >= 1) {
-				echo 0;
-			}else
-				echo 1;  
-		
-		}
-		
-	}	
 
 	function unload(){
 		if($this->session->userdata('register_username')){
