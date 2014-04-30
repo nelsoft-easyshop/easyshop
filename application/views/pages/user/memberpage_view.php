@@ -1591,7 +1591,7 @@
 							-->
 							<?php echo form_close();?>
 						<?php elseif($product['status'] == 1):?>
-							<span>Paid</span>
+							<span class="trans_alert transac_paid">Paid</span>
 						<?php elseif($product['status'] == 2):?>
 							<span>Payment returned to buyer</span>
 						<?php elseif($product['stuats'] == 3):?>
@@ -1893,7 +1893,7 @@
 								-->
 								<?php echo form_close();?>
 							<?php elseif($product['status'] == 1):?>
-								<span>Paid</span>
+								<span class="trans_alert transac_paid">Paid</span>
 							<?php elseif($product['status'] == 2):?>
 								<span>Payment returned to buyer</span>
 							<?php elseif($product['stuats'] == 3):?>
