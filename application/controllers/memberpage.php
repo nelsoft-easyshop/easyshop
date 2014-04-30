@@ -389,6 +389,7 @@ class Memberpage extends MY_Controller
 			// Returns : o_success, o_message
 			//$result['o_success'] = 1; // DEV code
 			$result = $this->payment_model->updateTransactionStatus($data);
+            
 			
 			// If database update is successful and response is 'return to buyer', 
 			// get order_product transaction details and send notification (email mobile)

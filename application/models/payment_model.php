@@ -281,10 +281,10 @@ class payment_model extends CI_Model
 		$sth->bindParam(':invoice_num', $data['invoice_num']);
 		$sth->bindParam(':member_id', $data['member_id']);
 		$sth->execute();
-		
+        
 		$row = $sth->fetch(PDO::FETCH_ASSOC);
-		
-		return $row;
+        
+	    return $row;
 	}
  
 	function getShippingDetails($product_id ,$product_item_id,$city_id,$region_id,$major_island_id)
