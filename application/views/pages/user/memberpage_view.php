@@ -1395,14 +1395,14 @@
 		<?php foreach($transaction['buy'] as $tk=>$transact):?>
 		<div class="transac-container">
 			<div class="transac_title">
-				<h4><span class="transac_content"><strong>Invoice #:</strong>  <?php echo $transact['invoice_no'];?></span>
+				<h4><span class="transac_content bi_trans_wrapper"><strong>Invoice #:</strong>  <?php echo $transact['invoice_no'];?></span>
 					<!-- If payment method is dragon pay-->
-					<div>
+					<div class="dp_container">
 					<?php if($transact['payment_method'] == 2 && $transact['transac_stat'] == 99):?>
 						<?php $attr = array('class'=>'transac_response');
 							echo form_open('',$attr);
 						?>
-							<input type="submit" class="transac_response_btn" name="dragonpay_update_btn" value="Confirm Dragonpay Payment">
+							<input type="submit" class="transac_response_btn orange_btn3 dp_btn" name="dragonpay_update_btn" value="Confirm Dragonpay Payment">
 							<input type="hidden" name="invoice_num" value="<?php echo $transact['invoice_no'];?>">
 							<input type="hidden" name="transaction_num" value="<?php echo $tk;?>">
 							<input type="hidden" name="dragonpay" value="1">
