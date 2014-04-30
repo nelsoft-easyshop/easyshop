@@ -2030,7 +2030,7 @@
 						
 						<p>Login password</p>
 						<div>
-							<p>****************** <a href="<?=base_url()?>register/changepass" class="change_password">change password</a></p>
+							<p>****************** <a href="<?=base_url()?>chngepaswd" class="change_password">change password</a></p>
 							<p>
 								Having a strong password makes your account more secure. We recommend that you change your password regularly. For the best security, use a combination of numbers, letters and special characters.
 							</p>
