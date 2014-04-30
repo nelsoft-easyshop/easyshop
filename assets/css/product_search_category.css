@@ -662,3 +662,50 @@ _filter: progid:DXImageTransform.Microsoft.Chroma(color='#000000');
 .product-list div.product_info_bottom div + div {
   text-align: right;
 }
+
+
+/*
+==============================
+Advanced Search Filters
+==============================
+*/
+
+#advsrch {
+  border: 1px solid #ECEBEB;
+  padding: 10px;
+  margin-bottom: 10px;
+  background: #F8F7F7;
+}
+
+#btn_srch {
+  background: #F48000;
+  color: #ffffff;
+  font-weight: bold;
+  cursor: pointer
+}
+
+.inputRow {
+  margin: 10px 0;
+  padding: 5px 10px;
+}
+
+.advsrchLocation {
+  margin-right: 20px;
+}
+
+.advsrchPrice1, .advsrchPrice2 {
+  width: 90px;
+}
+
+.advsrchPrice1 {
+  margin-right: 10px;
+}
+
+.advsrchPrice2 {
+  margin-left: 10px;
+  margin-right: 40px;
+}
+
+.left_attribute h3 {
+  color: #F48000;
+}

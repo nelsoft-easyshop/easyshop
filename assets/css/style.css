@@ -25,6 +25,7 @@ body{
 .wrapper {
 	width: 980px;
 	margin: 0 auto;
+	clear: both;
 }
 
 .wrapper2 {

@@ -137,7 +137,8 @@ function in_array_r($needle, $haystack, $strict = false) {
 		$attr = array('id'=>'advsrch', 'autocomplete'=>'off', 'method'=>'get');
 		echo form_open('',$attr);
 	?>
-  	<div style="padding:5px;">	
+
+  	<div class="inputRow">	
 		Keyword:
 		<?php
 		$is = $this->input->get('_is');
@@ -152,14 +153,14 @@ function in_array_r($needle, $haystack, $strict = false) {
 				<option value="<?php echo $row['id_cat']; ?>" <?php if($row['id_cat'] == $getcat){ ?>selected="selected" <?php } ?>><?php echo $row['name']; ?></option>
 			<?php } ?>
 		</select>
-		<!--------------------------------------------------------------->				
-		<input type="submit" value="Search" name="btn_srch" id="btn_srch"/>
-		<!--------------------------------------------------------------->					
+		<input type="submit" value="SEARCH" name="btn_srch" id="btn_srch"/>
+						
 	</div>
-	<div style="padding:5px;">
+
+	<div class="inputRow">
 		Location:
 		<?php $gloc = $this->input->get('_loc'); ?>
-		<select title="Select Item Location" name="_loc" id="_loc">
+		<select title="Select Item Location" name="_loc" id="_loc" class="advsrchLocation">
 			<option value="">- All -</option>
 				<?php foreach($shiploc['area'] as $island=>$loc):?>
 					<option value="<?php echo $shiploc['islandkey'][$island];?>" <?php if($gloc == $shiploc['islandkey'][$island]){?>selected="selected"<?php } ?>><?php echo $island;?></option>
@@ -179,24 +180,30 @@ function in_array_r($needle, $haystack, $strict = false) {
 				<option value="<?php echo $x;?>" <?php if($con == $x){?>selected="selected"<?php } ?>><?php echo $x; ?></option>
 			<?php endforeach; ?>
 		</select>
+	</div>
+
+	<div class="inputRow">
 		Price:
 		<?php
 		$price1 = $this->input->get('_price1');
 		$price2 = $this->input->get('_price2');
 		?>
+
+		<input class="advsrchPrice1" type="text" name="_price1" id="_price1" value="<?php echo $price1;?>" maxlength="10" size="6" placeholder="Min"> to <input class="advsrchPrice2" type="text" name="_price2" id="_price2" value="<?php echo $price2;?>" maxlength="10" size="6" placeholder="Max">
+
 		<input type="text" name="_price1" id="_price1" value="<?php echo html_escape($price1);?>" maxlength="10" size="6" placeholder="Min"> to <input type="text" name="_price2" id="_price2" value="<?php echo html_escape($price2);?>" maxlength="10" size="6" placeholder="Max">
+
 		<input type="hidden" name="_price" id="_price"data-url="<?php echo $myurl;?>"/>
+	    <p class="search_result"><!-- Showing 1 - 48 of 13,152 Results --></p>
+	    Sort by:
+		<?php $sop = $this->input->get('_sop'); ?>
+	    <select name="_sop" id="_sop">
+			<option value="popular" <?php if($sop == "popular"){?>selected="selected"<?php } ?>>Popular</option>
+			<option value="hot" <?php if($sop == "hot"){?>selected="selected"<?php } ?>>Hot</option>		
+			<option value="new" <?php if($sop == "new"){?>selected="selected"<?php } ?>>New</option>
+			<option value="con" <?php if($sop == "con"){?>selected="selected"<?php } ?>>Item Condition</option>
+	    </select>
 	</div>
-	<br />
-    <p class="search_result"><!-- Showing 1 - 48 of 13,152 Results --></p>
-    Sort by:
-	<?php $sop = $this->input->get('_sop'); ?>
-    <select name="_sop" id="_sop">
-		<option value="popular" <?php if($sop == "popular"){?>selected="selected"<?php } ?>>Popular</option>
-		<option value="hot" <?php if($sop == "hot"){?>selected="selected"<?php } ?>>Hot</option>		
-		<option value="new" <?php if($sop == "new"){?>selected="selected"<?php } ?>>New</option>
-		<option value="con" <?php if($sop == "con"){?>selected="selected"<?php } ?>>Item Condition</option>
-    </select>
 	<?php echo form_close();?>
     <!-- Buttons start -->
     <div id="list" class="list list-active" title="List"></div>
