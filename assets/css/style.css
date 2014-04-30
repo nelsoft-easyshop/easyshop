@@ -4019,6 +4019,20 @@ div.sold_prod_container {
 	margin-left: 20px;
 }
 
+.dp_container {
+	width: 210px;
+}
+
+.dp_btn {
+    border: medium none;
+    margin-right: 10px;
+}
+
+.dp_alert {
+	border: 1px solid #ff0000;
+	color: #ff0000;
+}
+
 .trans_alert {
     display: inline-block;
     margin-left: 10px;
@@ -4107,6 +4121,10 @@ div.sold_prod_container {
     line-height: 24px;
     width: 607px;
     vertical-align: middle;
+}
+
+.bi_trans_wrapper {
+    width: 397px !important;
 }
 
 .transac_prod_name small {
