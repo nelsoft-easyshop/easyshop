@@ -249,7 +249,7 @@ $config = array(
 				   array(
 						 'field'   => 'cur_password',
 						 'label'   => 'Current Password',
-						 'rules'   => 'trim|required|min_length[5]|max_length[25]|callback_external_callbacks[register_model,validate_password]'					  
+						 'rules'   => 'trim|required|min_length[6]|max_length[25]'					  
 					  ),
 				   array(
 						 'field'   => 'password',
@@ -261,7 +261,6 @@ $config = array(
 						 'label'   => 'Password Confirmation',
 						 'rules'   => 'trim|required'
 					  )
-
 				),
 				
 			'forgotpass' => array(
