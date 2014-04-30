@@ -142,7 +142,7 @@ function in_array_r($needle, $haystack, $strict = false) {
 		<?php
 		$is = $this->input->get('_is');
 		?>		
-		<input type="text" name="_is" id="_is" value="<?php echo $is;?>" size="50" maxlength="300" placeholder="Enter keywords or item number" />
+		<input type="text" name="_is" id="_is" value="<?php echo html_escape($is);?>" size="50" maxlength="300" placeholder="Enter keywords or item number" />
 		<select name="_cat" id="_cat">
 			<option value="">- Select Category -</option>
 			<?php
@@ -184,7 +184,7 @@ function in_array_r($needle, $haystack, $strict = false) {
 		$price1 = $this->input->get('_price1');
 		$price2 = $this->input->get('_price2');
 		?>
-		<input type="text" name="_price1" id="_price1" value="<?php echo $price1;?>" maxlength="10" size="6" placeholder="Min"> to <input type="text" name="_price2" id="_price2" value="<?php echo $price2;?>" maxlength="10" size="6" placeholder="Max">
+		<input type="text" name="_price1" id="_price1" value="<?php echo html_escape($price1);?>" maxlength="10" size="6" placeholder="Min"> to <input type="text" name="_price2" id="_price2" value="<?php echo html_escape($price2);?>" maxlength="10" size="6" placeholder="Max">
 		<input type="hidden" name="_price" id="_price"data-url="<?php echo $myurl;?>"/>
 	</div>
 	<br />
