@@ -649,15 +649,14 @@ class memberpage_model extends CI_Model
 	}
 	
 	function get_bank($bank, $toggle){
-		
-		$filter = "";
 		if($toggle == 'name'){
-			$filter =  " WHERE `bank_name` LIKE '%". $bank ."%'";
-		}else{
-			$filter = ""; // wala pa ito
-		}
-		$query = "SELECT `id_bank` AS 'id', `bank_name` AS 'name' FROM `es_bank_info` " . $filter;
-		$sth = $this->db->conn_id->prepare($query);
+            $query = "SELECT `id_bank` AS 'id', `bank_name` AS 'name' FROM `es_bank_info` WHERE `bank_name` LIKE CONCAT(CONCAT('%',:bank),'%')";
+            $sth = $this->db->conn_id->prepare($query);
+            $sth->bindParam(':bank', $bank, PDO::PARAM_STR);	
+        }else{
+			$query = "SELECT `id_bank` AS 'id', `bank_name` AS 'name' FROM `es_bank_info`";
+            $sth = $this->db->conn_id->prepare($query);
+        }
 		$sth->execute();
 		$row = $sth->fetchAll(PDO::FETCH_ASSOC);
 		return $row;							
