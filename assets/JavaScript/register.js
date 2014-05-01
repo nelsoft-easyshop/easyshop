@@ -338,3 +338,22 @@ function submitcountdown(){
 		$('span.countdown_submit').html('You can resubmit in: ' + count);
 	}
 }
+
+/*******************************************************************************************************/
+/******************************* Terms and Conditions Dialog box ***************************************/
+/*******************************************************************************************************/
+$(function() {
+    $( ".dialog" ).dialog({
+            width:"70%",
+            height: 500,
+            autoOpen: false,
+            modal: true,
+            title: "Terms and Conditions",
+            closeOnEscape: true,
+            draggable:false,
+    });
+	$( ".terms_and_conditions" ).click(function() {
+        $('.dialog').dialog('open');
+	});
+    
+});

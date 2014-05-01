@@ -4906,12 +4906,6 @@ margin-right: 10px;
 }
 
 #bi-right div:last-child {
-	/*
-    background-color: #b1ffb1;
-    border: 1px solid #dbf3db;
-    padding: 8px;
-    width: 158px;
-    */
     color:white;
     background: #287520;
     -webkit-box-shadow: 0 1px 5px rgba(0,0,0,0.1);
@@ -4925,3 +4919,28 @@ margin-right: 10px;
     font-size: 11px;
     font-weight: bold;
 }
+
+
+.t_and_c {
+    font-size: 10px !important;
+}
+
+.t_and_c h3 {
+    font-size: 16px;
+}
+
+.t_and_c h3 {
+    margin-top: 10px;
+}
+
+
+.dialog {
+    display: none;
+}
+
+
+.terms_and_conditions {
+    color: #0191C8;
+    cursor: pointer;
+}
+
