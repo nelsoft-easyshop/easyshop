@@ -67,7 +67,7 @@ echo form_open('sell/edit/step2', $attributesForm);
                         <a class="draft_name" href="javascript:void(0)" data-pid="<?php echo $draft['id_product'] ?>">
                         <?php
                         if($draft['name'] != ""){
-                            echo  $draft['name'] ;
+                            echo  html_escape($draft['name']) ;
                         }else{
                             echo '(Untitled Draft)';
                         }
