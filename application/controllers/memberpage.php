@@ -462,9 +462,9 @@ class Memberpage extends MY_Controller
 		$vendordetails = $this->memberpage_model->getVendorDetails($selleruname);
 		$data['title'] = 'Vendor Profile | Easyshop.ph';
 		$data['my_id'] = (empty($session_data['member_id']) ? 0 : $session_data['member_id']);
-		$data = array_merge($data, $this->fill_header());
-		$this->load->view('templates/header', $data);
+		$data = array_merge($data, $this->fill_header());	
 		if($vendordetails){
+            $this->load->view('templates/header_topnavsolo', $data);
 			$sellerid = $vendordetails['id_member'];
 			$user_products = $this->memberpage_model->getUserItems($sellerid);
 			$data = array_merge($data,array(
@@ -479,6 +479,7 @@ class Memberpage extends MY_Controller
 			$this->load->view('pages/user/vendor_view', $data);
 		}
 		else{
+            $this->load->view('templates/header', $data);
 			$this->load->view('pages/user/user_error');
 		}
 		$this->load->view('templates/footer');
