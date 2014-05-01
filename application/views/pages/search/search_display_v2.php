@@ -241,7 +241,7 @@ function in_array_r($needle, $haystack, $strict = false) {
 					  <div>Condition: <strong><?php echo $items[$i]['product_condition']; ?></strong></div>
 					  <!-- <div>Sold: <strong>32</strong></div> --> 
 					</div>
-					<p><?php echo $items[$i]['product_brief']; ?></p>
+					<p><?php echo html_escape($items[$i]['product_brief']); ?></p>
 				</div>
       <?php
 			} // end of loop
