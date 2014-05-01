@@ -236,7 +236,7 @@
                                     <span class="spn18 cotent2_title"><b>Secured Transaction</b></span>
                                     <span class="help-block spnmsg content2_sub">
                                     	Easyshop provides a secure platform by which users can carry out their transactions. 
-                             			Our business model ensures that deals between merchants and sellers are done with very little risk.
+                             			Our business model ensures that deals between merchants and sellers are done risk-free.
                                     </span>
                                 </div>
                             </div>
