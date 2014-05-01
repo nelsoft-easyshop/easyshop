@@ -378,6 +378,9 @@ class product extends MY_Controller
 		$usable_string;
 		$per_page = $this->per_page;
 		$category = $this->input->get('q_cat');
+        if(!is_numeric($category)){
+            $category = 1;
+        }
 		
 		if (isset($_GET['q_str'])) {
 			if($_GET['q_str'] == "" && $_GET['q_cat'] == 1)
