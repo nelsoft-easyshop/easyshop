@@ -20,7 +20,7 @@
         <div class="middle_content">
             <ul class="mid_slide1">
                 <?PHP foreach ($data['mainSlide'] as $rows): ?>
-                <li><img style="width:520px;height:270px" src="<?= base_url().$rows ?>" /></li>
+                <li><img style="width:520px;height:270px" src="<?= base_url().$rows.'?ver=1.0' ?>" /></li>
                 <?PHP endforeach; ?>
             </ul>
 
