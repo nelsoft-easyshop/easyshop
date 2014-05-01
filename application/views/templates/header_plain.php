@@ -78,30 +78,28 @@
               <li><a href="<?php echo base_url()."cart/"; ?>">View my Cart</a></li>
             </ul>
           </li>
-          
+           <!-- 
           <li class="top_nav_main">Favorites
             <ul>    
-               <!-- 
+              
               <li><a href="<?=base_url()?>home/under_construction">Favorite</a></li> 
               <li><a href="<?=base_url()?>home/under_construction">Products</a></li> 
               <li><a href="<?=base_url()?>home/under_construction">My Favorite Shops</a></li> 
               <li><a href="<?=base_url()?>home/under_construction">market sellers</a></li> 
               <li><a href="<?=base_url()?>home/under_construction">Training Center</a></li> 
-              -->
+            
             </ul>
           </li>
           <li class="top_nav_main">Southeast Asia
             <ul>
-                <!--
               <li><a href="<?=base_url()?>home/under_construction">Hong Kong</a></li>
               <li><a href="<?=base_url()?>home/under_construction">Taiwan</a></li>
               <li><a href="<?=base_url()?>home/under_construction">Southeast Asia</a></li>
               <li><a href="<?=base_url()?>home/under_construction">Chinese mainland</a></li>
               <li><a href="<?=base_url()?>home/under_construction">Other regions</a></li>
-               -->
             </ul>
           </li>
-         
+           -->
         </ul>
       </div>
     </div>
