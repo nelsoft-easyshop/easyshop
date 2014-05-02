@@ -25,9 +25,9 @@
             <span>
               <a href="https://www.facebook.com/pages/EasyShopph/211771799032417?ref=hl"><img src="<?=base_url()?>assets/images/icon_facebook.png" alt="facebook"></a>
               <a href="https://twitter.com/EasyShopPH"><img src="<?=base_url()?>assets/images/icon_twitter.png" alt="twitter"></a>
-              <a href=""><img src="<?=base_url()?>assets/images/icon_youtube.png" alt="facebook"></a>
-              <a href=""><img src="<?=base_url()?>assets/images/icon_googleplus.png" alt="facebook"></a>
-              <a href=""><img src="<?=base_url()?>assets/images/icon_pinterest.png" alt="facebook"></a>
+              <img src="<?=base_url()?>assets/images/icon_youtube.png" alt="youtube">
+              <img src="<?=base_url()?>assets/images/icon_googleplus.png" alt="googleplus">
+              <img src="<?=base_url()?>assets/images/icon_pinterest.png" alt="pinterest">
             </span>
         </div>
       </div>
