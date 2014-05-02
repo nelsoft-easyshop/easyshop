@@ -388,7 +388,58 @@
                     display: 'none',
                     borderWidth: 1 + 'px'
                 });
+/***************************** *********************************/
+/***************************** *********************************/
+/***************** zoom len customized *************************/
+/***************************** *********************************/
+/***************************** *********************************/
+                $(function(){
+                    
+                    var zoombigview= $('.zoomWindow');
+                    var img= $('.zoomPad img');
+                    var zoomwindowpos= (400 - img.height() )/ 2;
+                    if(img.height() < 400)
+                    {
+                        zoombigview.css('top', -zoomwindowpos + 'px');
+                    }
+                });
 
+                $(function(){
+                    
+                    var zoomlensview= $('.zoomPup');
+                    var img= $('.zoomPad img');
+                    var zoomlenssize= (400 - img.width() )/ 2;
+                    if(img.width() < 400)
+                    {
+                        zoomlensview.css('margin-left', zoomlenssize + 'px');
+                    }
+                    if (img.width() == 400)
+                    {
+                         zoomlensview.css('margin-left', '0px');
+                    }
+                });
+
+                // $(function(){
+                //     var zoompupcon= $('.zoomPup'); 
+                //     var img= $('.zoomPad img');
+                //     if(img.height() < 170)
+                //     {
+                //         zoompupcon.css('min-width','400px');
+                //         $('.zoomWrapper').css('display','table');
+                //         $('.zoomWrapperImage').css({'display':'table-cell','vertical-align':'middle'});
+                //         img.css({'display':'table-cell','position':'inherit'});
+                //     }
+                // });
+
+                // $(function(){
+                //     var zoompad2= $('.zoomPad');
+                //     var zoompadimg= $('.zoomPad img');
+                //     if(zoompadimg.width() < 400)
+                //     {
+                //         zoompad2.css({'top','40px'});
+                //     }
+                // });
+/***************************** *********************************/
 
 
                 if (settings.zoomType == 'reverse') {
