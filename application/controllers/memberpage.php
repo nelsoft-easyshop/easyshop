@@ -410,7 +410,7 @@ class Memberpage extends MY_Controller
 					$mobilestat = $this->payment_model->sendNotificationMobile($parseData['mobile'], $msg);
 				}
 				
-			}else if( $result['o_success'] >= 1 && $data['status'] = 1 ){
+			}else if( $result['o_success'] >= 1 && $data['status'] == 1 ){
 				$emailstat = true;
 			}
 		
