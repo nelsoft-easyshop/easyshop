@@ -1,4 +1,4 @@
-<script type="text/javascript" src="<?=base_url()?>assets/Javascript/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="<?=base_url()?>assets/JavaScript/jquery.dataTables.min.js"></script>
 <div class="container">
     <div id="head_container">       
         <div><input type="button" id="modal-launcher" value="Compose"></div>
@@ -15,7 +15,7 @@
 			</thead>
 			<tbody>
 			<?PHP foreach($result['messages'] as $key => $row) { ?>
-			<tr>
+			<tr class="<?=(reset($row)['opened'] == 0 && reset($row)['status'] == "reciever" ? "NS" : "")?>">
 				<td>
 				<?PHP  if(reset($row)['status'] == "sender"){ ?>
 					<img data="<?=reset($row)['sender_img']?>" src="<?=base_url().reset($row)['recipient_img']?>/60x60.png">
@@ -48,11 +48,12 @@
 		</div>
 		<div id="msg_textarea">
 			<textarea id="out_txtarea" placeholder="Write a message"></textarea>
-			<button id="send_btn" data="">Reply</button>
+			<button id="send_btn" data="">Reply</button><img src="<?=base_url()?>assets/images/horizontal_bar_loader.gif">
 		</div>
     </div>
 </div>
 <div id="modal-background">
+    <img src="<?=base_url()?>assets/images/horizontal_loading.gif">
 </div>
 <div id="modal-container">
     <div id="modal-div-header">
@@ -160,6 +161,10 @@
 			type : "POST",
 			dataType : "json",
 			url : "<?=base_url()?>messages/send_msg",
+            beforeSend :function(){
+                $("#msg_textarea img").show();
+                $("#send_btn").hide();
+            },
 			data : {recipient:recipient,msg:msg,csrfname:csrftoken},
 			success : function(data) {
                 if (data != "false") {
@@ -170,8 +175,9 @@
                     return false;
                 }
 			}
-		});
-		
+		});		
+        $("#msg_textarea img").hide();
+        $("#send_btn").show();
 		return result;
 	}
 	$("#table_id tbody").on("click",".btn_each_msg",function(){	
@@ -196,6 +202,7 @@
 		$("#head_container span").show();
 		$(".btn_each_msg").removeClass($(".btn_each_msg").attr('class').split(' ')[1]);
 		$(this).addClass("Active");
+		seened(this);
 	});
 	
 	
@@ -218,7 +225,7 @@
 		$.each(D,function(key,val){
 			var cnt = parseInt(Object.keys(val).length)- 1;
 			var Nav_msg = D[key][Object.keys(val)[cnt]]; //first element of object
-			html +='<tr class="odd">';
+			html +='<tr class="'+(Nav_msg.opened == "0" && Nav_msg.status == "reciever" ? "NS" : "")+' odd">';
 			html +='<td class=" sorting_1">';
 			if (Nav_msg.status == "sender") {
 				html +='<img src=<?=base_url()?>'+Nav_msg.recipient_img+'/60x60.png data="'+Nav_msg.sender_img+'">';
@@ -267,6 +274,7 @@
 			async:false,
 			type : "POST",
 			dataType : "json",
+            onLoading:$("#btn_refresh").css('background-image','url("<?=base_url()?>/assets/images/ref-icon.gif")'),
 			url : "<?=base_url()?>messages/get_all_msgs",
 			data : {csrfname:csrftoken},
 			success : function(d) {
@@ -278,6 +286,7 @@
                 }else{
                     location.reload();
                 }
+                $("#btn_refresh").css('background-image','url("<?=base_url()?>/assets/images/ref-icon2.png")');
 			}   
 		});
 	});
@@ -288,7 +297,7 @@
 			$("#chsn_delete_btn").show();
 		}
 	});
-	function delete_data(ids) {		//loading when sql query
+	function delete_data(ids) {		
 		var csrftoken = $("meta[name='csrf-token']").attr('content');
         var csrfname = $("meta[name='csrf-name']").attr('content');
 		var data = "";
@@ -296,16 +305,38 @@
 			async:false,
 			type : "POST",
 			dataType : "json",
+			beforeSend: function(){
+                $("#modal-background").show();
+                $("#modal-background img").show();
+                },
 			url : "<?=base_url()?>messages/delete_msg",
 			data : {id_msg:ids,csrfname:csrftoken},
 			success : function(d) {
                 data = d.messages;
 			}
 		});
-		
+		$("#modal-background").hide();
+        $("#modal-background img").hide();
 		return data;
 	}
 
+    function seened(obj) {
+        if ($(obj).parent().parent().attr('class').split(' ')[0] == "NS") {
+            var checked = $(".float_left .d_all").map(function () {return this.value;}).get().join(",");
+            var csrftoken = $("meta[name='csrf-token']").attr('content');
+            var csrfname = $("meta[name='csrf-name']").attr('content');
+            $.ajax({
+                async : false,
+                type : "POST",
+                dataType : "json",
+                url : "<?=base_url()?>messages/is_seened",
+                data : {checked:checked,csrfname:csrftoken},
+                success : function(data) {
+                    $(obj).parent().parent().removeClass($(obj).parent().parent().attr('class').split(' ')[0]);
+                }
+            });
+        }
+    }
 </script>
 
 

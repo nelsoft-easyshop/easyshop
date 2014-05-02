@@ -4671,6 +4671,11 @@ span.transac_title_date {
 #modal-background.active,#modal-content.active {
 	display:block;
 }
+#modal-background img{
+		display: none;
+		margin-left: 466px;
+		 padding: 300px;
+}
 .container{
     height: auto;
     margin: 40px auto 0;
@@ -4757,6 +4762,16 @@ span.transac_title_date {
 		background-color: #EEEEEE;
 		height: 110px;
 		display : none;
+}
+#msg_textarea img{
+		display : none;
+		float: right;
+		margin-right: -5px;
+		padding: 11px;
+}
+.NS{
+    background-color: #E6E0F8;
+    font-weight: bold;
 }
 #msg_loader{
     padding: 132px 305px;

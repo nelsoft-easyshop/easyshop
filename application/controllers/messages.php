@@ -55,6 +55,13 @@ if (!defined('BASEPATH'))
 		$result = $this->messages_model->get_all_messages($this->user_ID);	
 		echo json_encode($result);
 	}
+	public function is_seened(){
+		$id = $this->user_ID;
+		$from_ids = $this->input->post('checked');
+		$result = $this->messages_model->is_seened($id,$from_ids);
+		
+		echo json_encode($result);
+	}
     
 }
 ?>

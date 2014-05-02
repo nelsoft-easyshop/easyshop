@@ -96,32 +96,63 @@ class messages_model extends CI_Model
 		    $sentbox=$rows[$ctr]['from_id'].$rows[$ctr]['to_id'];
 			$status = ($rows[$ctr]['from_id'] == $id ? "sender" : "reciever");
 		    if(array_key_exists($sentbox,$data)){ //sentbox
-				if($rows[$ctr]['is_delete'] == '0' || $rows[$ctr]['is_delete'] == '1' ){
 				    $data[$sentbox][$rows[$ctr]['id_msg']] =$rows[$ctr];
 					$data[$sentbox][$rows[$ctr]['id_msg']]['status'] = $status;
-				}
-		    }elseif( array_key_exists($inbox,$data) ){ //inbox
-				if($rows[$ctr]['is_delete'] == '0' || $rows[$ctr]['is_delete'] == '2' ){
+		    }elseif(array_key_exists($inbox,$data) ){ //inbox
 				    $data[$inbox][$rows[$ctr]['id_msg']] = $rows[$ctr];
 					$data[$inbox][$rows[$ctr]['id_msg']]['status'] =$status;
-				}
 			}else {
 				if($status == "sender" && ($rows[$ctr]['is_delete'] == '0' || $rows[$ctr]['is_delete'] == '1') ) {				        
 				    $data[$sentbox][$rows[$ctr]['id_msg']] = $rows[$ctr];				
-				    $data[$sentbox][$rows[$ctr]['id_msg']]['status'] = $status;		
+				    $data[$sentbox][$rows[$ctr]['id_msg']]['status'] = 'sender';		
 				    $data[$sentbox][$rows[$ctr]['id_msg']]['name'] = ($rows[$ctr]['from_id'] == $id ? $rows[$ctr]['recipient'] : $rows[$ctr]['sender']);		
-				    if ($rows[$ctr]['opened'] == 0 )$unread_msg++ ;
+				    
 				} else if($status == "reciever" && ($rows[$ctr]['is_delete'] == '0' || $rows[$ctr]['is_delete'] == '2') ){	        
 				    $data[$sentbox][$rows[$ctr]['id_msg']] = $rows[$ctr];				
-				    $data[$sentbox][$rows[$ctr]['id_msg']]['status'] = $status;		
+				    $data[$sentbox][$rows[$ctr]['id_msg']]['status'] = 'reciever';		
 				    $data[$sentbox][$rows[$ctr]['id_msg']]['name'] = ($rows[$ctr]['from_id'] == $id ? $rows[$ctr]['recipient'] : $rows[$ctr]['sender']);		
 				    if ($rows[$ctr]['opened'] == 0 )$unread_msg++ ;
 				}	
 			}
 		}
 		$result['messages'] = array_values($data);
+		for($x = 0;$x < sizeof($result['messages']); $x++){
+			$ask = "";
+			foreach($result['messages'][$x] as $key  =>$row){
+				$delete = $result['messages'][$x][$key]['is_delete'];
+				$status = $result['messages'][$x][$key]['status'];
+				if($status == "sender" && ($delete == '0' || $delete == '1')){
+				}else if($status == "reciever" && ($delete == '0' || $delete == '2')){
+				}else{
+					$ask = "true";
+				unset($result['messages'][$x][$key]);
+				}
+			}
+		}
 		$result['unread_msgs'] = $unread_msg;
+		//print "<pre>";
+		//print_r($result);
+		//print "</pre>";
 		return $result;
+	}
+	
+	public function is_seened($id,$from_ids){
+		
+		$query = "UPDATE `es_messages`
+				SET `opened` = '1'
+				WHERE `to_id` = :id AND `id_msg` IN($from_ids);";
+		$sth = $this->db->conn_id->prepare($query);
+		$sth->bindParam(':id',$id, PDO::PARAM_INT);
+		
+		$sth->execute();
+		
+		$row = $sth->rowCount();
+		if($row == 0 ){
+				return false;
+		}
+		else{
+				return true;
+		}
 	}
 }
 
