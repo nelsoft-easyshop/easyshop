@@ -1357,6 +1357,7 @@ $(".proceed_form").unbind("click").click(function(){
   var brief = $("#prod_brief_desc"); 
   formData = new FormData(document.getElementById("form_product"));
   var combinationSelected = JSON.stringify(arraySelected);
+  console.log(combinationSelected);
   var otherCategory = "<?php echo isset($otherCategory)?$otherCategory:''; ?>";
   formData.append("inputs", input_name);
   g_input_name = input_name;
@@ -1897,7 +1898,7 @@ $(document).ready(function(){
   
     $('#brand_sch').focusout(function(){
          var available = false;
-        $('#brand_search_drop_content li.brand_result a').each(function(){
+        $('#brand_search_drop_content li.brand_result').each(function(){
             if($(this).text().toLowerCase() ===  $('#brand_sch').val().toLowerCase()){
                 $(this).click();
                  available = true;
