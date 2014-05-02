@@ -113,7 +113,7 @@ class payment_model extends CI_Model
 		
 		$this->email->message($msg);
 		$result = $this->email->send();
-
+		
 		$errmsg = $this->email->print_debugger();
 		
 		return $result;
@@ -206,12 +206,15 @@ class payment_model extends CI_Model
 			if(!isset($data['seller'][$value['seller_id']]['products'][$value['id_order_product']]['attr'])){
 				$data['seller'][$value['seller_id']]['products'][$value['id_order_product']]['attr'] = array();
 			}
-			if( $value['is_other'] == 0 ){
+			if( $value['is_other'] === '0' ){
 				array_push($data['products'][$value['id_order_product']]['attr'], array('attr_name' => $temp['attr_name'],'attr_value' => $temp['attr_value']));
 				array_push($data['seller'][$value['seller_id']]['products'][$value['id_order_product']]['attr'], array('attr_name' => $temp['attr_name'],'attr_value' => $temp['attr_value']));
-			}else if( $value['is_other'] == 1 ){
+			}else if( $value['is_other'] === '1' ){
 				array_push($data['products'][$value['id_order_product']]['attr'], array('attr_name' => $temp['field_name'], 'attr_value' => $temp['value_name']));
 				array_push($data['seller'][$value['seller_id']]['products'][$value['id_order_product']]['attr'], array('attr_name' => $temp['field_name'],'attr_value' => $temp['value_name']));
+			}else{
+				array_push($data['products'][$value['id_order_product']]['attr'], array('attr_name' => 'N/A', 'attr_value' => 'N/A'));
+				array_push($data['seller'][$value['seller_id']]['products'][$value['id_order_product']]['attr'], array('attr_name' => 'N/A','attr_value' => 'N/A'));
 			}
 		}
 		

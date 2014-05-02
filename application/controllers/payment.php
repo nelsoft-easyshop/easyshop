@@ -786,7 +786,11 @@ class Payment extends MY_Controller{
         //devcode
 		/*$data['member_id'] = 74;
 		$data['order_id'] = 102;
-		$data['invoice_no']= 3;*/
+		$data['invoice_no']= 3;
+		
+		$data['member_id'] = 74;
+		$data['order_id'] = 105;
+		$data['invoice_no']= '22-1231-2';*/
 		
         $transactionData = $this->payment_model->getPurchaseTransactionDetails($data);
         
