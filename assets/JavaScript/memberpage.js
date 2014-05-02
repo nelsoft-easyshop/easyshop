@@ -1066,6 +1066,7 @@ $(document).ready(function(){
 		else if(rating1 === '' || rating2 === '' || rating3 ==='')
 			econt.html('You cannot submit with a 0 rating score!');
 		else{
+			$(this).hide();
 			$.post(config.base_url+'memberpage/addFeedback',form.serialize(),function(data){
 				if(data == 1){
 					form.parent().fadeOut();

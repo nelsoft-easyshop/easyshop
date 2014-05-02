@@ -23,7 +23,7 @@ class DragonPay {
 		);
 
     public function __construct() {
-        require_once('nuSoap/lib/nusoap.php');  
+        require_once('NuSOAP/lib/nusoap.php');  
     }
 
 	 function getProcessors()
