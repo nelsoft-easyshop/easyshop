@@ -7,7 +7,7 @@
  *
  * @author czarpino
  */
-class Bootstrap
+class Kernel
 {
     public function __construct()
     {
