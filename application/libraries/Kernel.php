@@ -22,11 +22,12 @@ class Kernel
      */
     private function _bootstrap()
     {
-        /* 
-         * We register custom class autoloader to autoload classes in our src directory
-         */
+        /* We register the aplication class autoloader */
         require_once 'application/src/EasyShop/Core/ClassAutoloader/PSR0Autoloader.php';
         $psr0Autoloader = new PSR0Autoloader("application/src/");
         $psr0Autoloader->register();
+        
+        /* We register 3rd party autoloader */
+        require_once 'vendor/autoload.php';
     }
 }
