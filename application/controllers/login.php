@@ -110,9 +110,16 @@ class Login extends MY_Controller {
         $data = array(
                 'title' => 'Reset Password | Easyshop.ph'
         );
+        $response['toggle_view'] = '';
+        if($this->input->post()){
+            $response['toggle_view'] = $this->input->post('tgv');
+        }
+        else{
+            $response['hash'] = $this->input->get('confirm');
+        }      
         $data = array_merge($data, $this->fill_header());
         $this->load->view('templates/header_plain', $data);		
-        $this->load->view('pages/user/forgotpass_confirm');
+        $this->load->view('pages/user/forgotpass_confirm', $response);
         $this->load->view('templates/footer');
     }	
 	
@@ -121,7 +128,6 @@ class Login extends MY_Controller {
 		$pass = $this->input->post('password');
 		$hash = $this->input->post('hash');
 		$result = $this->register_model->forgotpass_email($hash);
-	
 		if(isset($pass) && !empty($pass) && $this->form_validation->run('forgotpass')){
 			if(isset($result['username'])){
 				$user = $result['username'];
@@ -133,13 +139,13 @@ class Login extends MY_Controller {
 						'member_id' => $mid,
 						'password' => $pass
 				);
-				$this->register_model->forgotpass_update($data); // pasok pa sa oras pero magsasave na.
-				echo "0";	
+				$this->register_model->forgotpass_update($data); 
+				echo "1";	
 			}else{
-				echo "69";
+				echo "0";
 			}	
 		}else{
-			echo "1";
+			echo "0";
 		}
 	}	
 	

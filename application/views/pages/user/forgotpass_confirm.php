@@ -3,21 +3,18 @@
       <div class="wrapper forgot_pword_con">
       	<span class="reg_title">Change Password</span>
         <?php if(!$logged_in):?>
-		
+            
 		<?php 
 			$attr = array('id'=>'forgotpass','autocomplete'=>'off');
 			echo form_open('',$attr);
 		?>		
-          <div class="fill_out_form">
-		  		<?php 
-					$toggle_view = $this->input->get('tgv');
-				?>				
+          <div class="fill_out_form">			
 				<?php if ($toggle_view == ""): ?>
                     <div class="field">
                           <div class="password_label">
                                 <label for="password">New Password:</label>
                                 <input id="password" name="password" type="password" maxlength="25" />
-								<input id="hash" name="hash" type="hidden" value="<?php echo $this->input->get('confirm'); ?>"/>
+								<input id="hash" name="hash" type="hidden" value="<?php echo $hash ?>"/>
                           </div>
                           <span class="red ci_form_validation_error"><?php echo form_error('password'); ?></span>
                     </div>
@@ -37,28 +34,44 @@
                           <input class="orange_btn3" type="button" name="forgotpass_btn" id="forgotpass_btn" value="Save"/>
                     	
 					</div>
-                <?php elseif($toggle_view == "69"): ?>
-                    <p><b>Sorry, the link is invalid or is already expired.</b></p>
-           	        <p><a href='<?=base_url()?>home'>Return to the Home Page.</a></p>
-               <?php elseif($toggle_view == "0"): ?>
-                   Password is successfully updated! <a href='<?=base_url()?>home'>click HERE</a> to return the Home Page.		        
+               <?php elseif($toggle_view == "1"): ?>
+                    <div style='margin-left: 50px;'>
+                        <p><strong>Your password has been successfully updated. </strong></p>
+                        <p><a href='<?=base_url()?>home'>Return to the Home Page. </a>	</p>
+                    <div>
                <?php else: ?>
-                    <p><b>Sorry, the link is invalid or is already expired.</b></p>
-           	        <p><a href='<?=base_url()?>home'>Return to the Home Page.</a></p>			   
+                    <div style='margin-left: 50px;'>
+                        <p><b>Sorry, the link is invalid or is already expired.</b></p>
+                        <p><a href='<?=base_url()?>home'>Return to the Home Page.</a></p>	
+                    </div>
                <?php endif; ?>  			           
           </div>
 		<?php echo form_close();?>
+        
         <?php else: ?>
-			<?php redirect(base_url().'home');?>
+            <div style="margin-left:50px;">
+                <br/><br/>
+                <p>You are currently signed-in as <b><?php echo $uname; ?></b>. </p>
+                <p>If you wish to continue, sign-out first by <a href='<?=base_url()?>login/logout' class="orange2">clicking here.</a> </p>
+                <br/><br/><br/>
+            </div>
         <?php endif; ?>
       </div>
+      
+      <?php echo form_open('',array('id'=>'fp_complete', 'action' => base_url().'resetconfirm')); ?>
+        <input type='hidden' value='' id='tgv' name='tgv'/>
+      <?php form_close(); ?>
+      
 </section>
 <!-- password strength checker -->
 <script type="text/javascript" src="<?=base_url()?>assets/JavaScript/js/mootools-core-1.4.5-full-compat.js"></script> 
-<script type="text/javascript" src="<?=base_url()?>assets/JavaScript/js/password_meter.js"></script>
 <script type='text/javascript' src='<?=base_url()?>assets/JavaScript/js/jquery.numeric.js'></script>
 <script type='text/javascript' src='<?=base_url()?>assets/JavaScript/js/jquery.validate.js'></script>
 <script type='text/javascript' src='<?=base_url()?>assets/JavaScript/register.js'></script>
+<?php if($toggle_view == ''): ?>
+    <script type="text/javascript" src="<?=base_url()?>assets/JavaScript/js/password_meter.js"></script>
+<?php endif; ?>
+
 <script type="text/javascript">
 $(document).ready(function(){
 
@@ -69,7 +82,6 @@ $(document).ready(function(){
                 minlength: 6,
                 maxlength:25,
 				alphanumeric: true,
-				//case_all: true
 				},
 			cpassword: {
 				required: true,
@@ -104,8 +116,7 @@ $(document).ready(function(){
 });
 
 $(document).ready(function(){ 
-    var currentRequest = null;
-	var redurl = '<?php echo base_url();?>login/resetconfirm?&tgv='
+	var redurl = '<?php echo base_url();?>login/resetconfirm?&tgv=';
     $( "#forgotpass_btn" ).click(function() {
 		if($("#forgotpass").valid()){		
 			currentRequest = jQuery.ajax({
@@ -116,13 +127,8 @@ $(document).ready(function(){
 				},
 				success: function(response){
 					$("#password, #cpassword").val('');
-					if(response == 0){
-						window.location = redurl+response;
-					}else if(response == 1){
-						window.location = redurl+response;
-					}else if(response == 69){
-						window.location = redurl+response;
-					}
+                    $("#tgv").val(response);
+                    $('#fp_complete').submit();
 				}
 			});		
 		}		
