@@ -540,9 +540,16 @@ class product_model extends CI_Model
 	{
 		$query = $this->sqlmap->getFilenameID('product','addNewCombination');
 		$sth = $this->db->conn_id->prepare($query);
-		$sth->bindParam(':product_id',$product_id);
-		$sth->bindParam(':qty',$qty);	
-		$sth->execute();
+		$sth->bindParam(':product_id',$product_id,PDO::PARAM_INT);
+		$sth->bindParam(':qty',$qty,PDO::PARAM_INT);	
+        
+		if(!$sth->execute()){
+            $errorInfo = json_encode($sth->errorInfo());
+			log_message('error', 'Textare PDO::ADDNEWCOMBINATION => '.$errorInfo);
+			log_message('error', 'Textare PDO::QUERY => '.$query);
+			log_message('error', 'Textare PDO::VARIABLE(product_id) => '.$product_id);
+			log_message('error', 'Textare PDO::VARIABLE(qty) => '.$qty);
+        }
 		return $this->db->conn_id->lastInsertId('id_product_item');
 	}
 
