@@ -70,6 +70,8 @@ class product_search_v2 extends MY_Controller {
 		$response['items'] = "";
 
 		$condition = $this->input->get();
+		$response['condition'] = $condition;
+		
 		if($condition){
 			$category = $this->input->get('_cat');
 			if($category){ // kapag may laman ang main category magsesearch
