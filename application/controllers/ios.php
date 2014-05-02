@@ -70,11 +70,19 @@ class Ios extends MY_Controller {
     }
     
     public function getProduct(){
-    
         $id = $this->input->get('p_id');   
+        $width = $this->input->get('width');   
 		$uid = $this->session->userdata('member_id');
-        //$this->load->model('product_model');
         $product_row = $this->product_model->getProduct($id);  
+        
+        $doc = new DOMDocument();
+        //@ = error message suppressor, just to be safe
+        @$doc->loadHTML($product_row['description']);
+        $tags = $doc->getElementsByTagName('img');
+        foreach($tags as $img){
+            $img->setAttribute('style', 'display: block; max-width:'.$width.'px; width: auto; height: auto;');
+        }
+        $product_row['description'] = @$doc->saveHTML($doc);
         $product_options = $this->product_model->getProductAttributes($id, 'NAME');
         $product_options = $this->product_model->implodeAttributesByName($product_options);
         $data = array();
@@ -285,27 +293,11 @@ class Ios extends MY_Controller {
 				$response['main_categories'] = $this->product_model->getFirstLevelNode(true);
 				
 				echo json_encode($response,JSON_PRETTY_PRINT); 
-				
-				/*
-				$data = array( 
-					'title' => substr($url_string,0,-5).' | Easyshop.ph',
-					); 
-				$data = array_merge($data, $this->fill_header());
-				$this->load->view('templates/header', $data); 
-				$this->load->view('pages/product/product_search_by_category',$response);
-				$this->load->view('templates/footer_full'); 
-				*/
 
 			}
-			/*
-			else{
-				redirect('/category/all', 'refresh');
-			}*/
+
 		}
-		/*else{
-			redirect('/category/all', 'refresh');
-		}*/
-		
+
 	}
 	
 	public function load_product() # ROUTING: category/load_product
