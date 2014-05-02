@@ -21,6 +21,7 @@ class Memberpage extends MY_Controller
 		if(!$this->session->userdata('member_id')){
             redirect(base_url().'home', 'refresh');
         }
+        $data['tab'] = $this->input->get('me');        
 		$data = array_merge($data, $this->fill_view());
 
 		$this->load->view('templates/header_topnavsolo', $data);

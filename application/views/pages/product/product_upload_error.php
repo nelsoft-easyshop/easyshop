@@ -10,20 +10,19 @@
             <div class="sell_steps sell_steps1">
                 <ul>
                     <li style="color:#FFFFFF">Step 1 : Select Category</li>
-                    <li>Step 2 : Upload Item</li>
-                    <li>Step 3: Success</li>                    
-                    <!-- <li><a href="#">Step 3: Select Shipping Courier</a></li>
-                    <li><a href="#">Step 4: Success</a></li> -->
+                    <li>Step 2 : Upload Item</li>             
+                    <li>Step 3: Select Shipping Courier<</li>
+                    <li>Step 4: Success</li> 
                 </ul>
             </div>
 
             <div class="clear"></div>
             <div class="add_product_category">
-               <h1>Verify your e-mail to carry out a transaction.</h1>
-                <a href = "<?=base_url()?>me">You may also resend the verification e-mail by going to your member page.</a>
+               <br/><br/>
+               <p><h2>Verify your e-mail address to carry out a transaction.</h2></p>
+               <p><a href = "<?=base_url()?>me?me=myinfo">You may also resend the verification e-mail by going to your member page.</a></p>
+               <br/><br/><br/><br/><br/><br/>
             </div>
-            
-            
 
             <div class="clear"></div>
             <!--<form action="<?php echo base_url() . 'productUpload/step2'; ?>" method="POST">-->
