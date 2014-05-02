@@ -11,7 +11,7 @@
                 <ul>
                     <li style="color:#FFFFFF">Step 1 : Select Category</li>
                     <li>Step 2 : Upload Item</li>             
-                    <li>Step 3: Select Shipping Courier<</li>
+                    <li>Step 3: Select Shipping Courier</li>
                     <li>Step 4: Success</li> 
                 </ul>
             </div>
