@@ -3,13 +3,24 @@
 
 
 /**
- * Workaround for bootstrapping non-CI packages
+ * Workaround for managing non-CI packages
  *
  * @author czarpino
  */
 class Kernel
 {
+    /**
+     * Constructor.
+     */
     public function __construct()
+    {
+        $this->_bootstrap();
+    }
+    
+    /**
+     * Perform boostrap operations.
+     */
+    private function _bootstrap()
     {
         /* 
          * We register custom class autoloader to autoload classes in our src directory
