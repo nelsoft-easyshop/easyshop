@@ -326,69 +326,6 @@ $(function(){
 	
 });
 
-		
-
-/*
-$(document).ready(function(){
-	$("#view_map").click(function(){       
-	var streetno = $("#streetno").val();
-	var streetname = $("#streetname").val();
-	var barangay = $("#barangay").val();
-	var citytown = $("#citytown").val();
-	var country = $("#country").val();
-	var address = streetno + " " + streetname + " Street " + ", " + barangay + " " + citytown + ", " + country;
-	$.ajax({
-		async:true,
-		url:config.base_url+"memberpage/toCoordinates",
-		type:"POST",
-		dataType:"JSON",
-		data:{address:address},
-		success:function(data){
-			if(data['lat']==false || data['lng']==false){
-				alert("Cannot retrieve map,Address is invalid");
-			}else{
-				var myLatlng =  new google.maps.LatLng(data['lat'],data['lng']);
-				$("#map").show();
-				google.maps.event.addDomListener(window, 'load', initialize(myLatlng));
-			}
-		}
-
-		});
-	});
-
-	function initialize(myLatlng) {
-	var mapOptions = {
-	  center:myLatlng,
-	  zoom: 15
-	};
-	var map = new google.maps.Map(document.getElementById("map-canvas"),
-		mapOptions);
-		var marker = new google.maps.Marker({
-			position: myLatlng,
-			map: map,
-			title:"You! :)"
-		});
-	}
-});
-
-$(document).ready(function(){
-    
-	$('#close').click(function () {
-		$(this).parent('#map').fadeOut();
-		$(this).parent('#map').siblings('#map-canvas').fadeOut();
-		$(this).parent('#map').siblings('.view_map_btn').find('#view_map').fadeIn();
-	});
-
-	$('#view_map').click(function () {
-		$(this).fadeOut();
-		$(this).parent('div').siblings('#map-canvas').addClass('map_canvas');
-		$(this).parent('div').siblings('#map-canvas').fadeIn();
-	});
-
-});
-
-*/
-
 /******* rotate sort arrow when click *****/
 $(".arrow_sort").on("click", function () {
     $(this).toggleClass("rotate_arrow");
