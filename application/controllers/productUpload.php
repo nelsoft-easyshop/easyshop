@@ -289,7 +289,7 @@ class productUpload extends MY_Controller
 					echo '{"e":"0","d":"File Selected not valid. \n Please choose another image."}';
 					exit();
 				}
-				if($_FILES["files"]["size"][$x] >= 900000) # size of image must be 900kb only
+				if($_FILES["files"]["size"][$x] >= 5000000) # size of image must be 900kb only
 				{
 					echo '{"e":"0","d":"File size not valid. Please choose another image with smaller size. \n Expected 900KB."}';
 					exit();
@@ -307,7 +307,7 @@ class productUpload extends MY_Controller
 					echo '{"e":"0","d":"For Additional Information: File Selected not valid. \n Please choose another image."}';
 					exit();
 				}
-				if($_FILES["prod_other_img"]["size"][$x] >= 900000) # size of image must be 900kb only
+				if($_FILES["prod_other_img"]["size"][$x] >= 5000000) # size of image must be 900kb only
 				{
 					echo '{"e":"0","d":"For Additional Information: File size not valid. Please choose another image with smaller size. \n Expected 900KB."}';
 					exit();
