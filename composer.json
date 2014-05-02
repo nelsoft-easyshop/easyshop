@@ -1,0 +1,6 @@
+{
+    "require": {
+        "pimple/pimple": "~2.1"
+    },
+    "minimum-stability": "dev"
+}
