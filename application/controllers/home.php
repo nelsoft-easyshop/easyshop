@@ -58,7 +58,7 @@ class Home extends MY_Controller {
 		$data = array('title' => 'Page Not Found | Easyshop.ph',);
 				$data = array_merge($data, $this->fill_header());
 		$this->load->view('templates/header', $data);
-        $this->load->view('pages/product/product_error');
+        $this->load->view('pages/general_error');
         $this->load->view('templates/footer_full');
 	}
 
