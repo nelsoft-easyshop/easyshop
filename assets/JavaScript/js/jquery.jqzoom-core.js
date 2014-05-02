@@ -644,7 +644,7 @@
                 this.node.style.border = '0px';
                 this.node.style.display = 'none';
                 this.node.style.left = '-5000px';
-                this.node.style.top = '0px';
+                this.node.style.top = '10px';
                 document.body.appendChild(this.node);
                 this.node.src = url; // fires off async
             };
