@@ -6,7 +6,15 @@ RewriteRule ^(.*)$ index.php/$1 [L]
 
 <Files "index.php">
 AcceptPathInfo On
-</Files> 
+</Files>
+
+<Files "composer.json">
+Require all denied
+</Files>
+
+<Files "composer.lock">
+Require all denied
+</Files>
 
 <IfModule mod_headers.c>
 Header add Cache-Control:  "no-store, no-cache, must-revalidate"
