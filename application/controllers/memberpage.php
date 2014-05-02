@@ -395,7 +395,7 @@ class Memberpage extends MY_Controller
 			
 			// If database update is successful and response is 'return to buyer', 
 			// get order_product transaction details and send notification (email mobile)
-			if( $result['o_success'] >= 1 && $data['status'] = 2 ){
+			if( $result['o_success'] >= 1 && $data['status'] == 2 ){
 				$parseData = $this->payment_model->getOrderProductTransactionDetails($data);
 				
 				// 3 tries to send email. Exit if success or 3 fail limit reached
