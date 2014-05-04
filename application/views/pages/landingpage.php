@@ -1,6 +1,6 @@
 <!DOCTYPE html>
     <head>
-
+    <link rel="shortcut icon" href="<?php echo base_url()?>assets/images/favicon.ico" type="image/x-icon"/>
 <meta property="og:title" content="EasyShop.ph" />
 <meta property="og:description" content="Our vision is to be the leading Online Shopping website in South East Asia. 
            The mission that EasyShop has is to provide its customer with a Fast and Easy 
@@ -16,7 +16,7 @@
 		<title><?php echo $title;?></title>
         
          <!-- Google Analytics -->
-   <!--     <script>
+      <script>
           (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
           (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
           m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
@@ -24,12 +24,12 @@
 
           ga('create', 'UA-48811886-1', 'easyshop.ph');
           ga('send', 'pageview');
-        </script>-->
+        </script>
         <!-- End of Google Analytics -->
     </head>
     <body>
          <!-- Google Tag Manager -->
-      <!--   <noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-KP5F8R"
+         <noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-KP5F8R"
          height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
          <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
          new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
