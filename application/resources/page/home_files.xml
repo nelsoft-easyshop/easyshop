@@ -10,29 +10,29 @@
     <mainSlide>assets/images/mainslide/3.jpg</mainSlide>
     
     <productSlide_title>Hot and New</productSlide_title>
-    <productSlide_id>104</productSlide_id>
-    <productSlide_id>104</productSlide_id>
-    <productSlide_id>104</productSlide_id>
-    <productSlide_id>104</productSlide_id>
-    <productSlide_id>105</productSlide_id>
-    <productSlide_id>104</productSlide_id>
+    <productSlide_id>141</productSlide_id>
+    <productSlide_id>141</productSlide_id>
+    <productSlide_id>141</productSlide_id>
+    <productSlide_id>141</productSlide_id>
+    <productSlide_id>141</productSlide_id>
+    <productSlide_id>141</productSlide_id>
     
     <category1_title>Fashion</category1_title>
-    <category1_pid_main>104</category1_pid_main>
-    <category1_pid>104</category1_pid>
-    <category1_pid>104</category1_pid>
-    <category1_pid>104</category1_pid>
-    <category1_pid>104</category1_pid>
-    <category1_pid>104</category1_pid>
-    <category1_pid>104</category1_pid>
+    <category1_pid_main>141</category1_pid_main>
+    <category1_pid>141</category1_pid>
+    <category1_pid>141</category1_pid>
+    <category1_pid>141</category1_pid>
+    <category1_pid>141</category1_pid>
+    <category1_pid>141</category1_pid>
+    <category1_pid>141</category1_pid>
     
     <category2_title>DSLR</category2_title>
-    <category2_pid_mainslide>104</category2_pid_mainslide>
-    <category2_pid_mainslide>104</category2_pid_mainslide>
-    <category2_pid_mainslide>104</category2_pid_mainslide>
-    <category2_pid>104</category2_pid>
-    <category2_pid>104</category2_pid>
-    <category2_pid>104</category2_pid>
-    <category2_pid>104</category2_pid>
+    <category2_pid_mainslide>141</category2_pid_mainslide>
+    <category2_pid_mainslide>141</category2_pid_mainslide>
+    <category2_pid_mainslide>141</category2_pid_mainslide>
+    <category2_pid>141</category2_pid>
+    <category2_pid>141</category2_pid>
+    <category2_pid>141</category2_pid>
+    <category2_pid>141</category2_pid>
     
 </map>
