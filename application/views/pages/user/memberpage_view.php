@@ -1,16 +1,3 @@
-<!--[if lt IE 10]>
-<script type="text/javascript" src="<?=base_url()?>assets/JavaScript/js/excanvas.js"></script>
-<style>
-.item_attr_content ul li {
-    width: 25%;
-    float: left
-}
-</style>
-<![endif]-->
-
-<!--[if lt IE 9]>
-        <script src="<?=base_url()?>assets/JavaScript/js/excanvas.js"></script>
-<![endif]-->
 
 <!-- ProgressBar / Widget CSS file TEMPORARY-->
 <link type="text/css" href="<?=base_url()?>assets/css/jquery-ui.css" rel="stylesheet" />
@@ -140,10 +127,10 @@
 				<ul class="idTabs member_side_nav"> 
 					<li><a href="#dashboard">Dashboard</a></li>
 					<li><a href="#personal_information" class="<?php echo ($tab=='myinfo')?'selected':'';?>">Personal Information</a></li>
-					<li><a href="#payment" class="<?php echo ($tab=='pmnt')?'selected':'';?>">Payment</a></li>
 					<li><a href="#delivery_address">Delivery Address</a></li>
+					<li><a href="#payment" class="<?php echo ($tab=='pmnt')?'selected':'';?>">Payment Information</a></li>
 					<li><a href="#transactions">Transactions</a></li>
-					<!-- <li><a href="#privacy_settings">Privacy Settings</a></li> -->
+                    <!-- <li><a href="#privacy_settings">Privacy Settings</a></li> -->
 					<li><a href="#security_settings">Security Settings</a></li>
 				</ul> 
 			</div>	
@@ -1208,26 +1195,26 @@
 					<div id="bi-left" style="float:left; width:inherit;">
 							<div class="profile_fields" id="bi_div_bictr<?php echo $rows; ?>">
 								<div class="inner_profile_fields progress_update update_once">		
-									<div>						
+									<div style='height:40px;'>						
 										<label for="bi_ban_bictr<?php echo $rows; ?>">Account Name: </label>
 										<input type="text" name="bi_ban_bictr<?php echo $rows; ?>" id="bi_ban_bictr<?php echo $rows; ?>" value ="<?php echo html_escape($billing_info['bank_account_name']);?>" disabled="disabled" maxlength="60"/>
 										<input type="hidden" name="hbi_ban_bictr<?php echo $rows; ?>" id="hbi_ban_bictr<?php echo $rows; ?>" value ="<?php echo html_escape($billing_info['bank_account_name']);?>"/>
 										<span class="red ci_form_validation_error"><?php #echo form_error('bi_acct_name');?></span>
 									</div>
-									<div>
+									<div style='height:40px;'>
 										<label for="bi_bar_bictr<?php echo $rows; ?>">Account Number: </label>
 										<input type="text" name="bi_bar_bictr<?php echo $rows; ?>" id="bi_bar_bictr<?php echo $rows; ?>" value ="<?php echo html_escape($billing_info['bank_account_number']);?>" disabled="disabled" maxlength="18"/>
 										<input type="hidden" name="hbi_bar_bictr<?php echo $rows; ?>" id="hbi_bar_bictr<?php echo $rows; ?>" value ="<?php echo html_escape($billing_info['bank_account_number']);?>"/>
 										<span class="red ci_form_validation_error"><?php #echo form_error('bi_acct_name');?></span>
 									</div>
-									<div>
+									<div style='height:40px;'>
 										<label for="bi_bn_bictr<?php echo $rows; ?>">Bank: </label>
 										<select name="bi_bns_bictr<?php echo $rows; ?>" id="bi_bns_bictr<?php echo $rows; ?>" style="display:none"></select>
 										<input type="text" name="bi_bn_bictr<?php echo $rows; ?>" id="bi_bn_bictr<?php echo $rows; ?>" value ="<?php echo html_escape($billing_info['bank_name']);?>" disabled="disabled"/>
 										<input type="hidden" name="hbi_bn_bictr<?php echo $rows; ?>" id="hbi_bn_bictr<?php echo $rows; ?>" value ="<?php echo html_escape($billing_info['bank_name']);?>"/>
 										<span class="red ci_form_validation_error"><?php #echo form_error('bi_acct_name');?></span>
 									</div>
-									<div>
+									<div style='height:40px;'>
 										<label for="bi_chk_bictr<?php echo $rows; ?>">Default Bank: </label>
 										<input type="checkbox" name="bi_chk_bictr<?php echo $rows; ?>" id="bi_chk_bictr<?php echo $rows; ?>" value="1" disabled="disabled" <?php echo $bi_checked; ?>>
 										<input type="hidden" name="hbi_chk_bictr<?php echo $rows; ?>" id="hbi_chk_bictr<?php echo $rows; ?>" value ="<?php echo $bi_checked_val;?>"/>
@@ -1381,7 +1368,7 @@
 		<h2>Bought Items</h2>
 		<?php if(count($transaction['buy'])===0):?>
 		<br/>
-		<div><strong>You have not bought any items yet.</strong></div>
+		<div><span style='margin-left: 10px; font-weight:bold'>You have not bought any items yet.</span></div>
 	<?php else: ?>
 	<?php $transac_counter = 0;?>
 	<div class="paging">
@@ -1540,7 +1527,7 @@
 	<h2>Sold Items</h2>
 	<?php if(count($transaction['sell'])===0):?>
 	<br/>
-	<div><strong>You have not sold any items yet.</strong></div>
+	<div><span style='margin-left: 10px; font-weight:bold'>You have not sold any items yet.</span></div>
 <?php else: ?>
 	<?php $transac_counter = 0;?>
 	<div class="paging">
@@ -1840,7 +1827,7 @@
 	
 	
 	<div id="complete_sell">
-		<h2>Sell Items</h2>
+		<h2>Sold Items</h2>
 		<?php if(count($transaction['complete']['sell'])===0):?>
 		<br/>
 		<div><strong>No transaction for this category.</strong></div>

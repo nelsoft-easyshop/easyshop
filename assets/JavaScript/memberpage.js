@@ -1961,7 +1961,7 @@ $(document).ready(function(){
 				success: function(data){
 					$("#bi_div_" + bictr).remove();
 					$("#ubi_" + bictr).remove();
-					alert("Bank info successfully deleted!");
+					//alert("Bank info successfully deleted!");
 					return false;
 				}
 			});		
