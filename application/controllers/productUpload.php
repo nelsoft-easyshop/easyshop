@@ -4,6 +4,9 @@ if (!defined('BASEPATH'))
 
 class productUpload extends MY_Controller 
 { 
+    public $max_file_size_mb;
+    public $img_dimension = array();
+
 	function __construct()  
 	{ 
 		parent::__construct(); 
@@ -12,7 +15,14 @@ class productUpload extends MY_Controller
 		$this->load->library('cart');
 		if(!$this->session->userdata('usersession') && !$this->check_cookie())
 			redirect(base_url().'login', 'refresh');
+        $this->max_file_size_mb = 5;
+        /* Uploaded images dimensions: (w,h) */
+        $this->img_dimension['categoryview'] = array(220,200);
+        $this->img_dimension['small'] = array(400,535);
+        $this->img_dimension['thumbnail'] = array(60,80);
+        $this->img_dimension['usersize'] = array(1024,768);
 	}
+
 
 	function fill_view()
 	{
@@ -145,6 +155,8 @@ class productUpload extends MY_Controller
             if($this->input->post('step1_content')){
                 $response['step1_content'] = $this->input->post('step1_content');
             }
+               
+            $response['img_max_dimension'] = $this->img_dimension['usersize'];
                
 			$this->load->view('pages/product/product_upload_step2_view',$response);
 			$this->load->view('templates/footer'); 
@@ -289,9 +301,9 @@ class productUpload extends MY_Controller
 					echo '{"e":"0","d":"File Selected not valid. \n Please choose another image."}';
 					exit();
 				}
-				if($_FILES["files"]["size"][$x] >= 5000000) # size of image must be 900kb only
+				if($_FILES["files"]["size"][$x] >= $this->max_file_size_mb * 1024 * 1024) # size of image must be 5mb only
 				{
-					echo '{"e":"0","d":"File size not valid. Please choose another image with smaller size. \n Expected 900KB."}';
+					echo '{"e":"0","d":"File size not valid. Please choose another image with smaller size. \n The maximum allowable file size is '.$this->max_file_size_mb.'mB."}';
 					exit();
 				}
 				$x++;
@@ -299,23 +311,23 @@ class productUpload extends MY_Controller
 			$x = 0; 
 
 			if(!empty($_FILES['prod_other_img']['name'][0])){
-			foreach($_FILES['prod_other_img']['name'] as $k) { # validating image format.
-				$filename = $_FILES['prod_other_img']['name'][$x];
-				$ext = pathinfo($filename, PATHINFO_EXTENSION);
-				if(!in_array(strtolower($ext),$allowed))
-				{
-					echo '{"e":"0","d":"For Additional Information: File Selected not valid. \n Please choose another image."}';
-					exit();
-				}
-				if($_FILES["prod_other_img"]["size"][$x] >= 5000000) # size of image must be 900kb only
-				{
-					echo '{"e":"0","d":"For Additional Information: File size not valid. Please choose another image with smaller size. \n Expected 900KB."}';
-					exit();
-				}
-				$x++;
+                foreach($_FILES['prod_other_img']['name'] as $k) { # validating image format.
+                    $filename = $_FILES['prod_other_img']['name'][$x];
+                    $ext = pathinfo($filename, PATHINFO_EXTENSION);
+                    if(!in_array(strtolower($ext),$allowed))
+                    {
+                        echo '{"e":"0","d":"For Additional Information: File Selected not valid. \n Please choose another image."}';
+                        exit();
+                    }
+                    if($_FILES["prod_other_img"]["size"][$x] >= $this->max_file_size_mb * 1024 * 1024) # size of image must be 5mb only
+                    {
+                        echo '{"e":"0","d":"For Additional Information: File size not valid. Please choose another image with smaller size. \n The maximum allowable file size is '.$this->max_file_size_mb.'mB."}';
+                        exit();
+                    }
+                    $x++;
+                }
 			}
-			}
-
+            
 			$product_id = $this->product_model->addNewProduct($product_title,$sku,$product_brief,$product_description,$keyword,$brand_id,$cat_id,$style_id,$member_id,$product_price,$product_condition,$otherCategory, $otherBrand);
             # product_id = is the id_product for the new item. if 0 no new item added process will stop
             
@@ -370,20 +382,27 @@ class productUpload extends MY_Controller
 				"encrypt_name" => FALSE,
 				"remove_spaces" => TRUE,
 				"allowed_types" => "jpg|jpeg|png|gif",
-				"max_size" => 900,
+				"max_size" => $this->max_file_size_mb * 1024,
 				"xss_clean" => FALSE
 				)); 	
+                
+       
 
 			if($product_id > 0) # id_product is 0 means no item inserted. the process will stop.
 			{
-				if ($this->upload->do_multi_upload("files")) {
+				if ($this->upload->do_multi_upload("files")){
+                    $file_data = $this->upload->get_multi_upload_data();
 					#starting of uploading
 					for ($i=0; $i < sizeof($filenames_ar); $i++) {
 						$path = $path_directory.$filenames_ar[$i];
-						$this->createThumbnail($filenames_ar[$i],$path_directory);
-						$this->createSmallSize($filenames_ar[$i],$path_directory);
-						$this->createCategorySize($filenames_ar[$i],$path_directory);						 
-						$is_primary = ($i == 0 ? 1 : 0);
+                        $this->es_img_resize($filenames_ar[$i],$path_directory, 'categoryview/', $this->img_dimension['categoryview']);
+                        $this->es_img_resize($filenames_ar[$i],$path_directory, 'small/', $this->img_dimension['small']);
+						$this->es_img_resize($filenames_ar[$i],$path_directory, 'thumbnail/', $this->img_dimension['thumbnail']);
+                        //If user uploaded image is too large, resize and overwrite original image
+                        if(($file_data[$i]['image_width'] > $this->img_dimension['usersize'][0]) || ($file_data[$i]['image_height'] > $this->img_dimension['usersize'][1])){
+                            $this->es_img_resize($file_data[$i]['file_name'],$path_directory,'', $this->img_dimension['usersize']);
+                        }
+                        $is_primary = ($i == 0 ? 1 : 0);
 						$product_image = $this->product_model->addNewProductImage($path,$file_type[$i],$product_id,$is_primary);	
 					}
 					if($product_id > 0) # id_product is 0 means no item inserted. the process will stop.
@@ -496,8 +515,13 @@ class productUpload extends MY_Controller
                         		if($eval[2] != "--no image"){
                         			$imageid = $this->product_model->addNewProductImage($path.$eval[2],$eval[3],$product_id,$is_primary);
                         			move_uploaded_file($eval[4], $path.$eval[2]);
-                        			$this->createThumbnail($eval[2],$other_path_directory);
-                        			$this->createSmallSize($eval[2],$other_path_directory);
+                                    list($o_width, $o_height) = getimagesize($path.$eval[2]);
+                                    //If user uploaded image is too large, resize and overwrite original image
+                                    if(($o_width > $this->img_dimension['usersize'][0])||($o_height > $this->img_dimension['usersize'][1])){
+                                        $this->es_img_resize($eval[2],$path,'', $this->img_dimension['usersize']);
+                                    }
+                                    $this->es_img_resize($eval[2],$other_path_directory, 'thumbnail/', $this->img_dimension['thumbnail']);
+                                    $this->es_img_resize($eval[2],$other_path_directory, 'small/', $this->img_dimension['small']);
                         		}
                         		$this->product_model->addNewAttributeByProduct_others_name_value($others_id,$eval[0],$eval[1],$imageid);
 
@@ -578,79 +602,6 @@ class productUpload extends MY_Controller
         echo $data;
     }
 
-    function createThumbnail($filename,$path_directory)
-    {
-    	$filename = strtolower($filename);
-    	$path_to_thumbs_directory = $path_directory.'thumbnail/'; 
-    	$path_to_image_directory = $path_directory;
-
-    	$config['image_library'] = 'gd2';
-    	$config['source_image'] = $path_to_image_directory . $filename;
-    	$config['maintain_ratio'] = true;
-
-    	$config['new_image'] = $path_to_thumbs_directory . $filename;
-    	$config['width'] = 60;
-    	$config['height'] = 80;
-
-    	if(!file_exists($path_to_thumbs_directory)) {  
-    		if(!mkdir($path_to_thumbs_directory)) {  
-    			die('{"e":"0","d":"There was a problem. \n Please try again later! - Error[0013]"}');  
-    		}   
-
-    	}
-
-    	$this->image_lib->initialize($config); 
-    	$this->image_lib->resize();	
-    }
-
-	function createSmallSize($filename,$path_directory) # this function is for creating normal picture from uploaded picture (400x400)
-	{
-		$filename = strtolower($filename);
-		$path_to_small_directory = $path_directory.'small/';  
-		$path_to_image_directory = $path_directory;
-
-		$config['image_library'] = 'gd2';
-		$config['source_image'] = $path_to_image_directory . $filename;
-		$config['maintain_ratio'] = true;
-		
-		$config['new_image'] = $path_to_small_directory . $filename;
-		$config['width'] = 400;
-		$config['height'] = 535;
-		
-		if(!file_exists($path_to_small_directory)) {  
-			if(!mkdir($path_to_small_directory)) {  
-				die('{"e":"0","d":"There was a problem. \n Please try again later! - Error[0014]"}');  
-			}   
-		} 
-		
-		$this->image_lib->initialize($config); 
-		$this->image_lib->resize();	
-	}
-	
-	
-	function createCategorySize($filename,$path_directory)
-	{
-		$filename = strtolower($filename);
-		$path_to_categview_directory = $path_directory.'categoryview/'; 
-		$path_to_image_directory = $path_directory;
-
-		$config['image_library'] = 'gd2';
-		$config['source_image'] = $path_to_image_directory . $filename;
-		$config['maintain_ratio'] = true;
-		
-		$config['new_image'] = $path_to_categview_directory . $filename;
-		$config['width'] = 220;
-		$config['height'] = 220;
-
-		if(!file_exists($path_to_categview_directory)) {  
-			if(!mkdir($path_to_categview_directory)) {  
-				die('{"e":"0","d":"There was a problem. \n Please try again later! - Error[0015]"}');  
-			}   
-		}
-		
-		$this->image_lib->initialize($config); 
-		$this->image_lib->resize();	
-	}
 
 	/**
 	 *	View function for Product Upload Step 3
@@ -894,7 +845,8 @@ class productUpload extends MY_Controller
 
 		$response['main_images'] = $main_images;	
 		$response['item_quantity'] =  $this->product_model->getProductQuantity($product_id, true);
-		$this->load->view('pages/product/product_upload_step2_view', $response);
+		$response['img_max_dimension'] = $this->img_dimension['usersize'];
+        $this->load->view('pages/product/product_upload_step2_view', $response);
 		$this->load->view('templates/footer'); 
 
 	}
@@ -1046,9 +998,9 @@ class productUpload extends MY_Controller
 						echo '{"e":"0","d":"File Selected not valid. \n Please choose another image."}';
 						exit();
 					}
-					if($_FILES["files"]["size"][$x] >= 900000) # size of image must be 900kb only
+					if($_FILES["files"]["size"][$x] >= $this->max_file_size_mb * 1024 * 1024) 
 					{
-						echo '{"e":"0","d":"File size not valid. Please choose another image with smaller size. \n Expected 600KB."}';
+						echo '{"e":"0","d":"File size not valid. Please choose another image with smaller size. \n The maximum file size is '.$this->max_file_size_mb.'mB."}';
 						exit();
 					}
 					$x++;
@@ -1076,9 +1028,9 @@ class productUpload extends MY_Controller
                         echo '{"e":"0","d":"For Additional Information: File Selected not valid. \n Please choose another image."}';
                         exit();
                     }
-                    if($_FILES["prod_other_img"]["size"][$x] >= 900000) # size of image must be 900kb only
+                    if($_FILES["prod_other_img"]["size"][$x] >= $this->max_file_size_mb * 1024 * 1024 ) 
                     {
-                        echo '{"e":"0","d":"For Additional Information: File size not valid. Please choose another image with smaller size. \n Expected 900KB."}';
+                        echo '{"e":"0","d":"For Additional Information: File size not valid. Please choose another image with smaller size. \n The maximum allowable file size is '.$this->max_file_size_mb.'mB."}';
                         exit();
                     }
                     $x++;
@@ -1103,9 +1055,11 @@ class productUpload extends MY_Controller
 				"encrypt_name" => FALSE,
 				"remove_spaces" => TRUE,
 				"allowed_types" => "jpg|jpeg|png|gif",
-				"max_size" => 900,
+				"max_size" => $this->max_file_size_mb * 1024,
 				"xss_clean" => FALSE
 				)); 			
+                
+                
 
 			$product_details = array('product_id' => $product_id,
 				'name' => $product_title,
@@ -1122,7 +1076,6 @@ class productUpload extends MY_Controller
             
 
 			$rowCount = $this->product_model->editProduct($product_details, $member_id);
-            
             
             #ERROR TRACKING: SAM
             if(intval($rowCount,10) === 0){
@@ -1267,8 +1220,13 @@ class productUpload extends MY_Controller
 							}
 							$imageid = $this->product_model->addNewProductImage($other_path_directory.$eval[2],$eval[3],$product_id,$is_primary);
 							move_uploaded_file($eval[4], $other_path_directory.$eval[2]);
-							$this->createThumbnail($eval[2],$other_path_directory);
-							$this->createSmallSize($eval[2],$other_path_directory);
+                            list($o_width, $o_height) = getimagesize($other_path_directory.$eval[2]);
+                            //If user uploaded image is too large, resize and overwrite original image
+                            if(($o_width > $this->img_dimension['usersize'][0])||($o_height > $this->img_dimension['usersize'][1])){
+                                $this->es_img_resize($eval[2],$other_path_directory,'', $this->img_dimension['usersize']);
+                            }
+							$this->es_img_resize($eval[2],$other_path_directory, 'thumbnail/', $this->img_dimension['thumbnail']);
+                            $this->es_img_resize($eval[2],$other_path_directory, 'small/', $this->img_dimension['small']);
 						}
 						else if($eval[2] == "--no image"){
 							if($eval[5] != "--no id"){
@@ -1373,13 +1331,18 @@ class productUpload extends MY_Controller
 				if(!empty($_FILES['files']['name'][0])){
 					#upload new product images
 					if ($this->upload->do_multi_upload("files")) { 
+                        $file_data = $this->upload->get_multi_upload_data();
 						#starting of uploading
 						for ($i=0; $i < sizeof($filenames_ar); $i++) {
 							$path = $path_directory.$filenames_ar[$i];
-							$this->createThumbnail($filenames_ar[$i],$path_directory);
-							$this->createSmallSize($filenames_ar[$i],$path_directory);
-							$this->createCategorySize($filenames_ar[$i],$path_directory);
-							$is_primary = 0;
+							$this->es_img_resize($filenames_ar[$i],$path_directory, 'categoryview/', $this->img_dimension['categoryview']);
+                            $this->es_img_resize($filenames_ar[$i],$path_directory, 'small/', $this->img_dimension['small']);
+                            $this->es_img_resize($filenames_ar[$i],$path_directory, 'thumbnail/', $this->img_dimension['thumbnail']);
+							//If user uploaded image is too large, resize and overwrite original image
+                            if(($file_data[$i]['image_width'] > $this->img_dimension['usersize'][0]) || ($file_data[$i]['image_height'] > $this->img_dimension['usersize'][1])){
+                                $this->es_img_resize($file_data[$i]['file_name'],$path_directory,'', $this->img_dimension['usersize']);
+                            }
+                            $is_primary = 0;
 							if($i == 0)
 							{
 								$is_primary = $primary_image_bool?0:1;
@@ -1403,14 +1366,12 @@ class productUpload extends MY_Controller
 		$productId = $this->input->post('p_id');
 		$memberId =  $this->session->userdata('member_id');
 		$output = $this->product_model->deleteDraft($memberId,$productId);
-
 		if($output == 0){
 			$data = '{"e":"0","m":"Something went wrong."}';	
 		}else{
-			$data = '{"e":"1","d":"Great! Success Removing."}';	
+			$data = '{"e":"1","d":"Draft item successfully removed."}';	
 		}
 		echo $data; 
-
 	}
     
     public function previewItem(){
@@ -1449,6 +1410,31 @@ class productUpload extends MY_Controller
 		$this->load->view('pages/product/product_upload_preview',$preview_data);
 
     }
+
+    private function es_img_resize($filename,$path_directory,$added_path,$dimension){
+        $filename = strtolower($filename);
+		$path_to_result_directory = $path_directory.$added_path; 
+		$path_to_image_directory = $path_directory;
+
+		$config['image_library'] = 'gd2';
+		$config['source_image'] = $path_to_image_directory . $filename;
+		$config['maintain_ratio'] = true;
+		
+		$config['new_image'] = $path_to_result_directory . $filename;
+		$config['width'] = $dimension[0];
+		$config['height'] = $dimension[1];
+
+		if(!file_exists($path_to_result_directory)) {  
+			if(!mkdir($path_to_result_directory)) {  
+				die('{"e":"0","d":"There was a problem. \n Please try again later! - Error[0015]"}');  
+			}   
+		}
+		
+		$this->image_lib->initialize($config); 
+		$this->image_lib->resize();	
+        $this->image_lib->clear();
+    }
+
     
 }
 
