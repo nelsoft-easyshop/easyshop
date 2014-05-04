@@ -140,7 +140,7 @@ class product_search_v2 extends MY_Controller {
 							}	
 						} # brand end
 					} # get all values from querystring - end
-					
+					       
 					$raw_attr_values = $attr_values . $attr_values_array;
 					$fix_attr_values = substr($raw_attr_values, 3, strlen($raw_attr_values));
 					
@@ -185,7 +185,8 @@ class product_search_v2 extends MY_Controller {
 					
 					$sc = "";
 					$gsc = $this->input->get('_subcat');
-					$child = $this->search_model->selectChild($gsc);				
+                                        
+					$child = $this->search_model->selectChild($gsc);	 
 					if($child[0] == 0 && $child[1] == 0){
 						$gsubcat = $gsc;
 					}else{
@@ -227,36 +228,34 @@ class product_search_v2 extends MY_Controller {
 					# get all items here (right pane)
 					
 					$items = $this->search_model->SearchProduct($catID, $start, $per_page, $colsort, $is, $con, $gp, $attr_brand, $QAtt, $sc, $loc, $test);
-				
+
 					if(!empty($items)){ # check if it has items
 							
 						$response['items'] = $items; ### pass to view
-
+                    
 						$product_id = $this->search_model->getProductID($catID);
 						foreach ($product_id as $row){
 							$pid_values[] = $row['product_id'];
 							$bid_values[] = $row['brand_id'];
-						}	
-						
+						}
+                        
 						# get all attributes here (left pane)
 						
 						# brands
 						$get_brand_array = array();
 						$brand_names = $this->search_model->getBrandName($bid_values,'id');
-						foreach ($brand_names as $bn) {
+                        foreach ($brand_names as $bn) {
 							array_push($get_brand_array,$bn['name']);	
 						}
 						$fin_brand_array = array('name'=>'BRAND',$get_brand_array);
 						
 						# attribute group
 						$attribute = $this->search_model->getAttributesWithParam($catID,$pid_values);
-						
 						# attribute values		
 						for ($i=0; $i < sizeof($attribute) ; $i++) { 
 							$attrib_values = $this->search_model->getAttributesWithParamAndName($catID,$pid_values,$attribute[$i]['name']);
 							array_push($attribute[$i], $attrib_values);	
 						}
-						
 						# merging of attributes and brand names
 						array_unshift($attribute,$fin_brand_array);
 								
@@ -369,6 +368,7 @@ class product_search_v2 extends MY_Controller {
 							}
 						}	
 					}
+
 				
 					if($name == "_sop" && !empty($val)){ $sopA = $val; }
 					if($name == "_subcat" && !empty($val)){ $scA = $val; }
@@ -379,7 +379,7 @@ class product_search_v2 extends MY_Controller {
 					if($name == "_price2" && !empty($val)){ $price2A = $val; }
 				}
 			}
-			
+
 			$raw_attr_values = $attr_values . $attr_values_array;
 			$fix_attr_values = substr($raw_attr_values, 3, strlen($raw_attr_values));
 			
@@ -447,7 +447,6 @@ class product_search_v2 extends MY_Controller {
 					
 			# get all items here (right pane)
 			$items = $this->search_model->SearchProduct($catID, $start, $per_page, $colsort, $is, $con, $gp, $attr_brand, $QAtt, $sc, $loc, $test);
-			
 			if(isset($items) && !empty($items)){ # check if it has items		
 				$response['items'] = $items; ### pass to view	
 				$data = json_encode($this->load->view('pages/search/search_display_scroll',$response,TRUE));
