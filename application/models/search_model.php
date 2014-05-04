@@ -38,8 +38,8 @@ class search_model extends CI_Model
 	function getProductID($id)
 	{
 		$query = "SELECT ep.`id_product` AS 'product_id', ep.`brand_id` FROM `es_product` ep 
-			WHERE ep.`cat_id` IN (". $id .")";
-		$sth = $this->db->conn_id->prepare($query);
+			WHERE ep.`cat_id` IN (". $id .") AND ep.`is_draft` = 0 AND ep.`is_delete` = 0";
+        $sth = $this->db->conn_id->prepare($query);
 		$sth->execute();
 		$row = $sth->fetchAll(PDO::FETCH_ASSOC);
 
@@ -109,7 +109,6 @@ class search_model extends CI_Model
 		}else{
 			$condition = "eb.`name` LIKE '%". $var ."%'";		
 		}
-				
 		$query = "SELECT DISTINCT eb.`name` FROM `es_brand` eb WHERE " . $condition;
 			
 		$sth = $this->db->conn_id->prepare($query);
@@ -209,7 +208,7 @@ class search_model extends CI_Model
 		". $QAtt . " ". $sc ." ". $loc . " " . $is ." ". $con ." ". $gp ." ". $attr_brand ."  
 		ORDER BY ". $colsort ." DESC 
 		LIMIT :start, :per_page ";
-	
+
 	$sth = $this->db->conn_id->prepare($query);
 	$sth->bindParam(':start',$start,PDO::PARAM_INT);
 	$sth->bindParam(':per_page',$per_page,PDO::PARAM_INT);
