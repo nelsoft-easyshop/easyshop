@@ -12,10 +12,10 @@ function in_array_r($needle, $haystack, $strict = false) {
 }# checking end	
 
 ?>
-<link rel="stylesheet" href="<?=base_url()?>assets/css/product_search_category.css" type="text/css" media="screen"/>
-<link rel="stylesheet" href="<?=base_url()?>assets/css/grid_list_style.css" type="text/css"  media="screen"/> 
-<link rel="stylesheet" href="<?=base_url()?>assets/css/style_new.css" type="text/css" media="screen"/>
-<link rel="stylesheet" href="<?=base_url()?>assets/css/jquery.bxslider.css" type="text/css" media="screen"/>
+<link rel="stylesheet" href="<?=base_url()?>assets/css/product_search_category.css?ver=1.0" type="text/css" media="screen"/>
+<link rel="stylesheet" href="<?=base_url()?>assets/css/grid_list_style.css?ver=1.0" type="text/css"  media="screen"/> 
+<link rel="stylesheet" href="<?=base_url()?>assets/css/style_new.css?ver=1.0" type="text/css" media="screen"/>
+<link rel="stylesheet" href="<?=base_url()?>assets/css/jquery.bxslider.css?ver=1.0" type="text/css" media="screen"/>
 <style type="text/css">
 .err{
 	-webkit-box-shadow: 0px 0px 2px 2px #FF0000;

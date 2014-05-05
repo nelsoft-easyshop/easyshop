@@ -15,8 +15,8 @@
                 <a href="<?php echo base_url() . "login/resetconfirm?&confirm=". $trigger; ?>"><?php echo base_url() . "login/resetconfirm?confirm=". $trigger; ?></a>
                 <br /><br />
                 If you didn't request a password reset, you can let us know here:<br />
-                <a href="https://Easyshop.ph/contact/">https://Easyshop.ph/contact/</a>. <br />
-                Either way, you can ignore this message and your password will not be changed -- someone probably typed in your username or email address by accident.
+                <a href="https://Easyshop.ph/contact/">info@easyshop.ph</a>. <br />
+                Either way, you can ignore this message and your password will not be changed.
             </div>
             </td>
         </tr>

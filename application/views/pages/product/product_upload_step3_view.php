@@ -1,8 +1,8 @@
 
-<link type="text/css" href="<?=base_url()?>assets/css/sell_item.css" rel="stylesheet" />
-<link rel="stylesheet" href="<?=base_url()?>assets/css/product_preview.css" type="text/css" media="screen"/>
-<link rel="stylesheet" href="<?=base_url()?>assets/css/jquery.bxslider.css" type="text/css" media="screen"/>
-<link  type="text/css"  href='<?=base_url()?>assets/css/jqpagination.css' rel="stylesheet" media='screen'/>
+<link type="text/css" href="<?=base_url()?>assets/css/sell_item.css?ver=1.0" rel="stylesheet" />
+<link rel="stylesheet" href="<?=base_url()?>assets/css/product_preview.css?ver=1.0" type="text/css" media="screen"/>
+<link rel="stylesheet" href="<?=base_url()?>assets/css/jquery.bxslider.css?ver=1.0" type="text/css" media="screen"/>
+<link  type="text/css"  href='<?=base_url()?>assets/css/jqpagination.css?ver=1.0' rel="stylesheet" media='screen'/>
 
 <div class="wrapper">
   <div class="seller_product_content">
@@ -376,7 +376,7 @@
 <script type='text/javascript' src="<?=base_url()?>assets/JavaScript/js/jquery-ui.js"></script>
 <script type='text/javascript' src='<?=base_url()?>assets/JavaScript/js/jquery.jqpagination.min.js'></script>
 <script type='text/javascript' src="<?=base_url()?>assets/JavaScript/js/jquery.simplemodal.js"></script>
-<script type="text/javascript" src="<?=base_url()?>assets/JavaScript/productUpload_step3.js"></script>
+<script type="text/javascript" src="<?=base_url()?>assets/JavaScript/productUpload_step3.js?ver=1.0"></script>
 <script src="<?=base_url()?>assets/JavaScript/js/jquery.idTabs.min.js" type="text/javascript"></script>
 <script type="text/javascript">
 

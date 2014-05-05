@@ -1,7 +1,7 @@
-<link rel="stylesheet" type="text/css" href="<?= base_url() ?>assets/css/product_search_category.css"   media="screen"/> 
-<link rel="stylesheet" type="text/css" href="<?=base_url()?>assets/css/grid_list_style.css" media="screen"/> 
-<link rel="stylesheet" type="text/css" href="<?=base_url()?>assets/css/style_new.css" media="screen"/>
-<link rel="stylesheet" type="text/css" href="<?=base_url()?>assets/css/jquery.bxslider.css" type="text/css" media="screen"/>   
+<link rel="stylesheet" type="text/css" href="<?= base_url() ?>assets/css/product_search_category.css?ver=1.0"   media="screen"/> 
+<link rel="stylesheet" type="text/css" href="<?=base_url()?>assets/css/grid_list_style.css?ver=1.0" media="screen"/> 
+<link rel="stylesheet" type="text/css" href="<?=base_url()?>assets/css/style_new.css?ver=1.0" media="screen"/>
+<link rel="stylesheet" type="text/css" href="<?=base_url()?>assets/css/jquery.bxslider.css?ver=1.0" type="text/css" media="screen"/>   
 
 
 
@@ -123,7 +123,7 @@ $typeOfViewActive = '<div id="list" class="list "></div>
 </div>
 
 <script src="<?=base_url()?>assets/JavaScript/js/jquery.bxslider.min.js" type="text/javascript"></script>
-<script src="<?= base_url() ?>assets/JavaScript/categorynavigation.js" type="text/javascript"></script>
+<script src="<?= base_url() ?>assets/JavaScript/categorynavigation.js?ver=1.0" type="text/javascript"></script>
 
 <script type="text/javascript">
 $(document).ready(function(){

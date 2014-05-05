@@ -5,11 +5,10 @@
   <title>Easyshop.com - Coming Soon</title>
   <meta name="description" content="" />
   <meta name="keywords" content=""/>
-<link rel="shortcut icon" href="<?php echo base_url()?>assets/images/favicon.ico" type="image/x-icon"/>
+  <link rel="shortcut icon" href="<?php echo base_url()?>assets/images/favicon.ico" type="image/x-icon"/>
 
   <!-- CSS Stylesheets -->
-  <link rel="stylesheet" href="<?php echo base_url() ?>assets/css/style.css" type="text/css" media="screen"/>
-  <link rel="stylesheet" href="<?php echo base_url() ?>assets/css/my_cart_css.css" type="text/css" media="screen"/>   
+  <link rel="stylesheet" href="<?php echo base_url() ?>assets/css/style.css?ver=1.0" type="text/css" media="screen"/>
 
 </head>
 

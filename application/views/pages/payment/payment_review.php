@@ -1,7 +1,7 @@
  <?php
  
  ?>
-<link rel="stylesheet" href="<?=base_url()?>assets/css/my_cart_css.css" type="text/css" media="screen"/>
+<link rel="stylesheet" href="<?=base_url()?>assets/css/my_cart_css.css?ver=1.0" type="text/css" media="screen"/>
 <style type="text/css">
 /* Overlay */
 #simplemodal-overlay {

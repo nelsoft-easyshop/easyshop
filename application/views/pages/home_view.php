@@ -256,6 +256,6 @@
 <div class="clear"></div>
 
 <script src="<?= base_url() ?>assets/JavaScript/js/jquery.bxslider.min.js" type="text/javascript"></script>
-<script src="<?= base_url() ?>assets/JavaScript/categorynavigation.js" type="text/javascript"></script>
-<script src="<?= base_url().$page_javascript ?>" type="text/javascript"></script>
+<script src="<?= base_url() ?>assets/JavaScript/categorynavigation.js?ver=1.0" type="text/javascript"></script>
+<script src="<?= base_url().$page_javascript.'?ver=1.0'; ?>" type="text/javascript"></script>
 

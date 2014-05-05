@@ -1,8 +1,3 @@
-<!-- THE FOLLOWING CSS FILES WERE MOVED TO THE STEP3 VIEW -->
-<!--
-<link rel="stylesheet" href="<?=base_url()?>assets/css/product_preview.css" type="text/css" media="screen"/>
-<link rel="stylesheet" href="<?=base_url()?>assets/css/jquery.bxslider.css" type="text/css" media="screen"/>
--->
 
 <div  style="position:relative; height:400px">
 
@@ -243,9 +238,3 @@
 
     </div>
 </div>
-
-<!-- THE FOLLOWING JS FILES WERE MOVED TO THE STEP3 VIEW -->
-<!--
-<script type='text/javascript' src="<?=base_url()?>assets/JavaScript/js/jquery-ui.js"></script>
-<script src="<?=base_url()?>assets/JavaScript/js/jquery.idTabs.min.js" type="text/javascript"></script>
--->

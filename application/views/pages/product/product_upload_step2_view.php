@@ -1,6 +1,6 @@
  
 <script src="<?php echo base_url() ?>assets/tinymce/plugins/jbimages/js/jquery.form.js"></script>
-<link type="text/css" href="<?=base_url()?>assets/css/sell_item.css" rel="stylesheet" />
+<link type="text/css" href="<?=base_url()?>assets/css/sell_item.css?ver=1.0" rel="stylesheet" />
 <div class="wrapper">
 
 <div class="clear"></div>

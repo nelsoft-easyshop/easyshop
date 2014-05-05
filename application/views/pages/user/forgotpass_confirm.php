@@ -67,7 +67,7 @@
 <script type="text/javascript" src="<?=base_url()?>assets/JavaScript/js/mootools-core-1.4.5-full-compat.js"></script> 
 <script type='text/javascript' src='<?=base_url()?>assets/JavaScript/js/jquery.numeric.js'></script>
 <script type='text/javascript' src='<?=base_url()?>assets/JavaScript/js/jquery.validate.js'></script>
-<script type='text/javascript' src='<?=base_url()?>assets/JavaScript/register.js'></script>
+<script type='text/javascript' src='<?=base_url()?>assets/JavaScript/register.js?ver=1.0'></script>
 <?php if($toggle_view == ''): ?>
     <script type="text/javascript" src="<?=base_url()?>assets/JavaScript/js/password_meter.js"></script>
 <?php endif; ?>

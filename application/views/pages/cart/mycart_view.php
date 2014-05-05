@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="<?=base_url()?>assets/css/my_cart_css.css" type="text/css" media="screen"/>
+<link rel="stylesheet" href="<?=base_url()?>assets/css/my_cart_css.css?ver=1.0" type="text/css" media="screen"/>
 
         <div class="clear"></div>
 
@@ -84,7 +84,7 @@
 
         <div class="clear"></div>
 
-<script src="<?=base_url().$page_javascript?>" type="text/javascript"></script>
+<script src="<?=base_url().$page_javascript.'?ver=1.0'?>" type="text/javascript"></script>
 <script>
     $(document).ready(function(){
         $('#checkAll').click(function () {    

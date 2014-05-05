@@ -1,6 +1,6 @@
-<link rel="stylesheet" href="<?=base_url()?>assets/css/sell_item.css" type="text/css" media="screen"/>
-<link rel="stylesheet" href="<?=base_url()?>assets/css/jquery.selectize-default.css" type="text/css" media="screen"/>
-<script src="<?= base_url() ?>assets/JavaScript/js/jquery.selectize.js" type="text/javascript"></script>
+<link rel="stylesheet" href="<?=base_url()?>assets/css/sell_item.css?ver=1.0" type="text/css" media="screen"/>
+<link rel="stylesheet" href="<?=base_url()?>assets/css/jquery.selectize-default.css?ver=1.0" type="text/css" media="screen"/>
+<script src="<?= base_url() ?>assets/JavaScript/js/jquery.selectize.js?ver=1.0" type="text/javascript"></script>
 <!--
 <link rel="stylesheet" href="<?=base_url()?>assets/css/product_search_category.css" type="text/css" media="screen"/>
 -->

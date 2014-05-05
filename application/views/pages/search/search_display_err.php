@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="<?=base_url()?>assets/css/sell_item.css" type="text/css" media="screen"/>
+<link rel="stylesheet" href="<?=base_url()?>assets/css/sell_item.css?ver=1.0" type="text/css" media="screen"/>
 
 <div class="clear"></div>
 <div class="wrapper search_results_wrapper">

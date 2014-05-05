@@ -3,9 +3,9 @@
 	<?php echo $jsonReviewSchemaData;?>
 </script>
 
-<link rel="stylesheet" href="<?=base_url()?>assets/css/jquery.jqzoom.css" type="text/css">
-<link rel="stylesheet" href="<?=base_url()?>assets/css/style_new.css" type="text/css" media="screen"/>
-<link rel="stylesheet" href="<?=base_url()?>assets/css/jquery.bxslider.css" type="text/css" media="screen"/>
+<link rel="stylesheet" href="<?=base_url()?>assets/css/jquery.jqzoom.css?ver=1.0" type="text/css">
+<link rel="stylesheet" href="<?=base_url()?>assets/css/style_new.css?ver=1.0" type="text/css" media="screen"/>
+<link rel="stylesheet" href="<?=base_url()?>assets/css/jquery.bxslider.css?ver=1.0" type="text/css" media="screen"/>
 
 <div class="clear"></div>
 <section class="top_margin">
@@ -363,11 +363,11 @@
 <script src="<?=base_url()?>assets/JavaScript/js/jquery.bxslider.min.js" type="text/javascript"></script>
 <script src="<?=base_url()?>assets/JavaScript/js/jquery.idTabs.min.js" type="text/javascript"></script>
 <script src="<?=base_url()?>assets/JavaScript/js/jquery.raty.min.js" type="text/javascript"></script>
-<script src="<?= base_url() ?>assets/JavaScript/categorynavigation.js" type="text/javascript"></script>
+<script src="<?= base_url() ?>assets/JavaScript/categorynavigation.js?ver=1.0" type="text/javascript"></script>
 <script type='text/javascript' src='<?=base_url()?>assets/JavaScript/js/jquery.numeric.js'></script>
 <script type='text/javascript' src='<?=base_url()?>assets/JavaScript/js/jquery.simplemodal.js'></script>
 <script type='text/javascript' src='<?=base_url()?>assets/JavaScript/js/jquery.validate.js'></script>
-<script src="<?=base_url().$page_javascript?>" type="text/javascript"></script>
+<script src="<?=base_url().$page_javascript.'?ver=1.0'?>" type="text/javascript"></script>
 
 <style type="text/css">
       nav {

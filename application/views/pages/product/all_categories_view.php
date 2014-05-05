@@ -1,4 +1,4 @@
-   <link rel="stylesheet" href="<?=base_url()?>assets/css/style.css" type="text/css" media="screen"/>
+   <link rel="stylesheet" href="<?=base_url()?>assets/css/style.css?ver=1.0" type="text/css" media="screen"/>
    <div class="clear"></div>
 
     <div class="clear"></div>

@@ -269,7 +269,7 @@
 	<script type='text/javascript' src='<?=base_url()?>assets/JavaScript/js/jquery.numeric.js'></script>
 	<script type='text/javascript' src='<?=base_url()?>assets/JavaScript/js/jquery.validate.js'></script>
 	
-	<script type='text/javascript' src='<?=base_url()?>assets/JavaScript/landingpage/landingpage.js'></script>
+	<script type='text/javascript' src='<?=base_url()?>assets/JavaScript/landingpage/landingpage.js?ver=1.0'></script>
 	
 	<!-- Password Strength -->
 	<script type="text/javascript" src="<?=base_url()?>assets/JavaScript/js/mootools-core-1.4.5-full-compat.js"></script>

@@ -3,7 +3,7 @@
 <link type="text/css" href="<?=base_url()?>assets/css/jquery-ui.css" rel="stylesheet" />
 
 <!--Memberpage Modal custom CSS-->
-<link type="text/css" href="<?=base_url()?>assets/css/memberpage.css" rel="stylesheet" media='screen'/>
+<link type="text/css" href="<?=base_url()?>assets/css/memberpage.css?ver=1.0" rel="stylesheet" media='screen'/>
 <!--Pagination CSS-->
 <link  type="text/css"  href='<?=base_url()?>assets/css/jqpagination.css' rel="stylesheet" media='screen'/>
 <!--Jcrop CSS-->
