@@ -240,7 +240,7 @@ class productUpload extends MY_Controller
 				echo '{"e":"0","d":"Select at least 1 photo for your item."}';
 				exit();
 			}
-			$removeThisPictures = json_decode($_POST['removeThisPictures']); 
+				$removeThisPictures = json_decode($_POST['removeThisPictures']); 
 				$primaryId = $_POST['primaryPicture'];
 				$primaryName =""; 
 
@@ -327,7 +327,8 @@ class productUpload extends MY_Controller
                     $x++;
                 }
 			}
-            
+ 
+
 			$product_id = $this->product_model->addNewProduct($product_title,$sku,$product_brief,$product_description,$keyword,$brand_id,$cat_id,$style_id,$member_id,$product_price,$product_condition,$otherCategory, $otherBrand);
             # product_id = is the id_product for the new item. if 0 no new item added process will stop
             
@@ -356,7 +357,8 @@ class productUpload extends MY_Controller
 			# name format: product_id + member_id + date_uploaded
 			foreach($_FILES['files']['name'] as $k => $v) {
 				$file_ext = explode('.', $v);
-				$filenames_ar[$k] = "{$product_id}_{$member_id}_{$fulldate}{$i}.{$file_ext[1]}";
+				$file_ext = end($file_ext);
+				$filenames_ar[$k] = "{$product_id}_{$member_id}_{$fulldate}{$i}.{$file_ext}";
 				$file_type[$k] = $_FILES['files']['type'][$i];
 				$i++;
 			}
@@ -387,6 +389,8 @@ class productUpload extends MY_Controller
 				)); 	
                 
        
+
+		 
 
 			if($product_id > 0) # id_product is 0 means no item inserted. the process will stop.
 			{
@@ -481,7 +485,8 @@ class productUpload extends MY_Controller
                         		if(!empty($_FILES['prod_other_img']['name'][$i])){
                         			$other_image_type = $_FILES['prod_other_img']['type'][$i];
                         			$file_ext = explode('.', $_FILES['prod_other_img']['name'][$i]);
-                        			$other_image = "{$product_id}_{$member_id}_{$fulldate}{$i}_o.{$file_ext[1]}";
+                        			$file_ext = end($file_ext);
+                        			$other_image = "{$product_id}_{$member_id}_{$fulldate}{$i}_o.{$file_ext}";
                         			$other_tmp = $_FILES["prod_other_img"]["tmp_name"][$i];
                         		}
                         	}

@@ -1,6 +1,10 @@
- 
-<script src="<?php echo base_url() ?>assets/tinymce/plugins/jbimages/js/jquery.form.js"></script>
+<style type="text/css">
+  #simplemodal-container{
+    width: 1000px
+  }
+</style>
 <link type="text/css" href="<?=base_url()?>assets/css/sell_item.css?ver=1.0" rel="stylesheet" />
+<link  type="text/css"  href='<?=base_url()?>assets/css/jqpagination.css' rel="stylesheet" media='screen'/>
 <div class="wrapper">
 
 <div class="clear"></div>
@@ -76,7 +80,7 @@
           <tr>
             <td  class="border-left" style="width:130px">Product Name: <font color="red">*</font></td> <!-- Title of the product -->
             <td  class="border-right" colspan="2"><input type="text" maxlength="255" placeholder="Enter title" autocomplete="off" id="prod_title" maxlength="255" name="prod_title" value="<?php echo (isset($product_details['name']))?$product_details['name']:'';?>">
-              <a class="tooltips" href="javascript:void(0)">
+              <a  class="tooltips" href="javascript:void(0)">
                 <img src="<?= base_url() ?>assets/images/icon_qmark.png" alt="">
                 <span class="lines_tooltip">Give your listing a descriptive title. Include necessary information so that other users may easily find your listing.
                 </span>
@@ -232,10 +236,16 @@
           <tbody class="more_product_details_container">
           <!-- Add item specifics -->
           <tr>
+            <!-- id="" -->
             <td class="border-left border-right" colspan="4">
-              <h3> Add item specifics</h3> 
+              <h3> Add item specifics</h3>  
+              <a id="tutSpec" class="" href="javascript:void(0)">
+                <img src="<?= base_url() ?>assets/images/icon_qmark.png" alt="">
+                 
+              </a>
             </td>
           </tr>
+
 
               <?php 
               $array_name_inputs = "";
@@ -333,6 +343,10 @@
           <tr>
             <td class="border-left border-right" colspan="4">
               <h3> Additional Information for your Item</h3> 
+                <a id="tutOptional" class="" href="javascript:void(0)">
+                <img src="<?= base_url() ?>assets/images/icon_qmark.png" alt="">
+                 
+              </a>
               <br>
                 Use this in order to better describe the characteristics of your item.
                 <a class="tooltips" href="javascript:void(0)">
@@ -502,7 +516,7 @@
                     <span>Quantity:</span><br />
                     <input type="text" class="qtyTextClass" id="qtyTextClass" name="quantity"> 
                     <a href="javascript:void(0)" data-value="1" class="quantity_attr_done orange_btn3">Add</a>
-                    <a class="tooltips qty_tooltip quantity_attr_done" href="javascript:void(0)" style="display:none"><img src="<?= base_url() ?>assets/images/icon_qmark.png" alt=""> <span> You can also set the availability of different attribute combinations of your item by clicking the Add button</span></a> 
+                    <a id="tutQty" class="tooltips qty_tooltip" href="javascript:void(0)" style="display:none"><img src="<?= base_url() ?>assets/images/icon_qmark.png" alt=""> <span> You can also set the availability of different attribute combinations of your item by clicking the Add button</span></a> 
                   </div>
                   <div class="quantity_attrs_content" id="quantity_attrs_content2"></div>
                 </div>
@@ -554,6 +568,156 @@
 </tfoot>
 </table> 
 
+
+  
+  <div id="div_tutOptional" style="display:none;">
+  <div class="paging">
+    <h2>Overview (OPTIONALS)</h2>
+    <p>
+      This step allows you to specify shipping location and price for one or more attribute(s).
+      <br/>
+      All attributes should have assigned shipping locations and price.
+    </p>
+  </div>
+
+  <div class="paging">
+    <h2>Step 1:</h2>
+    <p>Select shipping location and set price for the selected attributes:</p>
+    <img src="<?=base_url()?>assets/images/tutorial/prd_upload_step2/optionals/1.png">
+    <p>Click <strong>'Add another location'</strong> to create new location and price entry fields.</p>
+
+  </div>
+
+  <div class="paging">
+    <h2>Step 2:</h2>
+    <p>Select shipping location and set price for the selected attributes:</p>
+    <img src="<?=base_url()?>assets/images/tutorial/prd_upload_step2/optionals/2.png">
+    <p>Click <strong>'Add another location'</strong> to create new location and price entry fields.</p>
+  </div>
+
+  <div class="paging">
+    <h2>Step 3:</h2>
+    <p>Review your shipping summary</p>
+    <img src="<?=base_url()?>assets/images/tutorial/prd_upload_step2/optionals/3.png" alt="With Attribute Combinations.png">
+    <p>Click 'Edit' to change the shipping price, or 'Remove' to delete the entry.</p>
+  </div>
+
+    <div class="paging">
+    <h2>Step 4:</h2>
+    <p>Review your shipping summary</p>
+    <img src="<?=base_url()?>assets/images/tutorial/prd_upload_step2/optionals/4.png" alt="With Attribute Combinations.png">
+    <p>Click 'Edit' to change the shipping price, or 'Remove' to delete the entry.</p>
+  </div>
+
+    <div class="paging">
+    <h2>Step 5:</h2>
+    <p>Review your shipping summary</p>
+    <img src="<?=base_url()?>assets/images/tutorial/prd_upload_step2/optionals/5.png" alt="With Attribute Combinations.png">
+    <p>Click 'Edit' to change the shipping price, or 'Remove' to delete the entry.</p>
+  </div>
+
+    <div class="paging">
+    <h2>Step 6:</h2>
+    <p>Review your shipping summary</p>
+    <img src="<?=base_url()?>assets/images/tutorial/prd_upload_step2/optionals/6.png" alt="With Attribute Combinations.png">
+    <p>Click 'Edit' to change the shipping price, or 'Remove' to delete the entry.</p>
+  </div>
+  
+  <div class="pagination" id="paging_tutOptional">
+    <a href="#" class="first" data-action="first">&laquo;</a>
+    <a href="#" class="previous" data-action="previous">&lsaquo;</a>
+    <input type="text" readonly="readonly" data-max-page="7" />
+    <a href="#" class="next" data-action="next">&rsaquo;</a>
+    <a href="#" class="last" data-action="last">&raquo;</a>
+  </div>
+</div>
+
+  <div id="div_tutQty" style="display:none;">
+  <div class="paging">
+    <h2>Overview (QUANTITY)</h2>
+    <p>
+      This step allows you to specify shipping location and price for one or more attribute(s).
+      <br/>
+      All attributes should have assigned shipping locations and price.
+    </p>
+  </div>
+
+  <div class="paging">
+    <h2>Step 1:</h2>
+    <p>Select shipping location and set price for the selected attributes:</p>
+    <img src="<?=base_url()?>assets/images/tutorial/prd_upload_step2/quantity/1.png">
+    <p>Click <strong>'Add another location'</strong> to create new location and price entry fields.</p>
+
+  </div>
+
+  <div class="paging">
+    <h2>Step 2:</h2>
+    <p>Select shipping location and set price for the selected attributes:</p>
+    <img src="<?=base_url()?>assets/images/tutorial/prd_upload_step2/quantity/2.png">
+    <p>Click <strong>'Add another location'</strong> to create new location and price entry fields.</p>
+  </div>
+
+  <div class="paging">
+    <h2>Step 3:</h2>
+    <p>Review your shipping summary</p>
+    <img src="<?=base_url()?>assets/images/tutorial/prd_upload_step2/quantity/3.png" alt="With Attribute Combinations.png">
+    <p>Click 'Edit' to change the shipping price, or 'Remove' to delete the entry.</p>
+  </div>
+ 
+   
+  
+  <div class="pagination" id="paging_tutQty">
+    <a href="#" class="first" data-action="first">&laquo;</a>
+    <a href="#" class="previous" data-action="previous">&lsaquo;</a>
+    <input type="text" readonly="readonly" data-max-page="4" />
+    <a href="#" class="next" data-action="next">&rsaquo;</a>
+    <a href="#" class="last" data-action="last">&raquo;</a>
+  </div>
+</div>
+
+<div id="div_tutSpec" style="display:none;">
+  <div class="paging">
+    <h2>Overview (SPECIFICATION)</h2>
+    <p>
+      This step allows you to specify shipping location and price for one or more attribute(s).
+      <br/>
+      All attributes should have assigned shipping locations and price.
+    </p>
+  </div>
+
+  <div class="paging">
+    <h2>Step 1:</h2>
+    <p>Select shipping location and set price for the selected attributes:</p>
+    <img src="<?=base_url()?>assets/images/tutorial/prd_upload_step2/specifics/1.png">
+    <p>Click <strong>'Add another location'</strong> to create new location and price entry fields.</p>
+
+  </div>
+
+  <div class="paging">
+    <h2>Step 2:</h2>
+    <p>Select shipping location and set price for the selected attributes:</p>
+    <img src="<?=base_url()?>assets/images/tutorial/prd_upload_step2/specifics/2.png">
+    <p>Click <strong>'Add another location'</strong> to create new location and price entry fields.</p>
+  </div>
+
+  <div class="paging">
+    <h2>Step 3:</h2>
+    <p>Review your shipping summary</p>
+    <img src="<?=base_url()?>assets/images/tutorial/prd_upload_step2/specifics/3.png" alt="With Attribute Combinations.png">
+    <p>Click 'Edit' to change the shipping price, or 'Remove' to delete the entry.</p>
+  </div>
+ 
+   
+  
+  <div class="pagination" id="paging_tutSpec">
+    <a href="#" class="first" data-action="first">&laquo;</a>
+    <a href="#" class="previous" data-action="previous">&lsaquo;</a>
+    <input type="text" readonly="readonly" data-max-page="4" />
+    <a href="#" class="next" data-action="next">&rsaquo;</a>
+    <a href="#" class="last" data-action="last">&raquo;</a>
+  </div>
+</div>
+
 <script type='text/javascript' src='<?=base_url()?>assets/JavaScript/js/jquery.numeric.js'></script>
 <script type="text/javascript">
   $('.view_more_product_details').on('click', function() {
@@ -563,9 +727,31 @@
   });
 
 </script>
-
+ 
+<script type="text/javascript" src="<?=base_url()?>assets/JavaScript/productUpload_step2.js"></script> 
+<script src="<?php echo base_url() ?>assets/tinymce/plugins/jbimages/js/jquery.form.js"></script>
+<script type='text/javascript' src="<?=base_url()?>assets/JavaScript/js/jquery.simplemodal.js"></script>
+<script type='text/javascript' src='<?=base_url()?>assets/JavaScript/js/jquery.jqpagination.min.js'></script>
 <script type="text/javascript">
 $(document).ready(function(){
+ 
+  <?php
+  if(preg_match('/(?i)msie [4-9]/',$_SERVER['HTTP_USER_AGENT']))
+  {
+    // if IE<=9
+    ?>
+    var badIE = true;
+    <?php
+  }
+else
+{
+    // if IE>9
+      ?>
+    var badIE = false;
+    <?php
+}
+  ?>
+
   var removeThisPictures = [];
   var pictureCount = 0;
   var primaryPicture = 0;
@@ -579,17 +765,18 @@ $(document).ready(function(){
   var formData;
 
   var g_input_name;
-var g_id;
-var g_combinationSelected;
-var g_description;
-var g_noCombination;
-var g_otherCategory;
-var g_removeThisPictures;
-var g_primaryPicture;
-var g_editRemoveThisPictures;
-var g_editPrimaryPicture; 
-var g_quantitySolo;
+  var g_id;
+  var g_combinationSelected;
+  var g_description;
+  var g_noCombination;
+  var g_otherCategory;
+  var g_removeThisPictures;
+  var g_primaryPicture;
+  var g_editRemoveThisPictures;
+  var g_editPrimaryPicture; 
+  var g_quantitySolo;
   
+  var imageCustom = new Array();
        
   var editRemoveThisPictures = new Array();
   var editPrimaryPicture = 0;
@@ -603,95 +790,11 @@ var g_quantitySolo;
   $(".hdv").css("display", "none");
   $( ".loader_div" ).hide();
   $('.quantity_attr_done').hide();
+   $('.qty_tooltip').hide();
   var noCombination = true;
 
 
-  function getCombination(array)
-  {
-    var result = [""]; 
-    var resultHtml = "";
-    var counter = 1;
-    arrayCombination = []; 
-    for (var i=0; i<array.length; i++) {
-      var ai = array[i],
-      l = ai.length;
-      result = $.map(result, function(r) { 
-        var ns = [];  
-        for (var j=0; j<l; j++)  
-
-          ns[j] = r + ai[j] +  '|-|';
-
-        return ns;
-      });  
-    }
-
-    for (var i = 0; i < result.length; i++) {
-      var combo = result[i].split('|-|');
-      var tempSpanHtml = "";
-      var tempDivHtml = "";
-      var value = "";
-      for (var x = 0; x < combo.length; x++) {
-        var comboSplit = combo[x].split('=');
-        if(x !== combo.length - 1){
-          tempSpanHtml += '<span class="displayPopUpItem"><b>'+ comboSplit[0] +'</b>: <span style="color:red">'+ comboSplit[1] +'</span></span>';
-          value += comboSplit[2] + "-" ;
-        }
-
-      };
-      dataHtml = '<div class="displaySelected display'+counter+'" >'+tempSpanHtml+'</div><br>';
-      tempDivHtml += "<div class='displayPopUp displayPop"+counter+"' style='border:solid 1px;width:200px;margin:10px;padding:10px'><input type='radio' data-cnt='"+counter+"' data-html='"+dataHtml+"'   name='combinationSet' value='"+value.substring(0, value.length - 1)+"'>" +tempSpanHtml+"</div><br>";
-      arrayCombination.push(tempDivHtml);
-      counter++;
-    }   
-    return arrayCombination;
-  }
-
-  function print_r(arr,level)
-  {
-    var dumpedText = "";
-    if(!level) level = 0;
-    var levelPadding = "";
-    for(var j=0;j<level+1;j++) levelPadding += "    ";
-      if(typeof(arr) == 'object') {  
-        for(var item in arr) {
-          var value = arr[item];
-          if(typeof(value) == 'object') {  
-            dumpedText += levelPadding + "'" + item + "' ...\n";
-            dumpedText += print_r(value,level+1);
-          } else {
-            dumpedText += levelPadding + "'" + item + "' => \"" + value + "\"\n";
-          }
-        }
-      } else {  
-        dumpedText = "===>"+arr+"<===("+typeof(arr)+")";
-      }
-
-      return dumpedText;
-    }
-
-
-    // document.getElementById('files').addEventListener('change', handleFileSelect, false);
-    function handleFileSelect(evt)
-    {
-      var files = evt.target.files;  
-      $('#list').empty();
-      for (var i = 0, f; f = files[i]; i++) {
-
-        if (!f.type.match('image.*')) {
-          continue;
-        }
-        var reader = new FileReader();
-        reader.onload = (function(theFile) {
-          return function(e) { 
-            var span = document.createElement('span');
-            span.innerHTML = ['<img class="thumb" src="', e.target.result,
-            '" title="', escape(theFile.name), '"/>'].join('');
-            document.getElementById('list').insertBefore(span, null);
-          };
-        })(f);
-        reader.readAsDataURL(f);
-      }
-    }
+ 
 
     function validateRedTextBox(idclass)
     {
@@ -730,22 +833,23 @@ var g_quantitySolo;
     }
 
     function resetFirstOptional(cnt){ 
-       $('.combinationContainer').empty();
- noCombination = true;
- arraySelected = {}; 
-    var link = '<a href="javascript:void(0)" class="lnkClearFirst">Clear This Group</a>';
-    var title = 'Others: (Optional)';
-    if(cnt > 1){ 
-       link = '<a class="removeOptionGroup" data-cnt='+cnt+' href="javascript:void(0)">Remove This Group</a>';
-       title = '';
+      $('.combinationContainer').empty();
+      noCombination = true;
+      arraySelected = {}; 
+      var link = '<a href="javascript:void(0)" class="lnkClearFirst">Clear This Group</a>';
+      var title = 'Others: (Optional)';
+      if(cnt > 1){ 
+        link = '<a class="removeOptionGroup" data-cnt='+cnt+' href="javascript:void(0)">Remove This Group</a>';
+        title = '';
+      }
+      $('.main'+cnt).empty();
+      $('.main'+cnt).append('<td class="border-left">'+title+'</td> \
+        <td  colspan="3"> \
+        <input type="text" placeholder="Enter item specific name" autocomplete="off" class="prod_'+cnt+' other_name_class" data-cnt="'+cnt+'" name="prod_other_name[]"> \
+        '+link+' \
+        </td>');
     }
-    $('.main'+cnt).empty();
-    $('.main'+cnt).append('<td class="border-left">'+title+'</td> \
-      <td  colspan="3"> \
-      <input type="text" placeholder="Enter an attribute header" autocomplete="off" class="prod_'+cnt+' other_name_class" data-cnt="'+cnt+'" name="prod_other_name[]"> \
-      '+link+' \
-      </td>')
-    }
+ 
 
     function resetFirstSecondRowOptional(cnt){
       $('.combinationContainer').empty();
@@ -775,7 +879,6 @@ var g_quantitySolo;
     
     $(document).on('click',".lnkClearFirst",function (){
   
-   
       var cnt = 1;
       var formatHeadValue = $.trim($('.prod_'+cnt).val().replace(/[^a-z0-9\s]/gi, '').replace(/[_\s]/g, ' '));
       var headValue = formatHeadValue.toLowerCase().replace(/\b[a-z]/g, function(letter) {
@@ -802,7 +905,7 @@ var g_quantitySolo;
           $('#div'+idHtmlId).remove();
         }
       });
-    resetFirstOptional(1);
+      resetFirstOptional(1);
       resetFirstSecondRowOptional(1);
 
     });
@@ -884,35 +987,61 @@ var g_quantitySolo;
 
     // ES_UPLOADER BETA
     $(".labelfiles").click(function(){
-        $('.files.active').trigger('click'); 
+        $('.files.active').click(); 
     });
  
-    $(document).on('change',".files",function (e){
-     var fileList = this.files;
-     var anyWindow = window.URL || window.webkitURL;
-     for(var i = 0; i < fileList.length; i++){
-      var objectUrl = anyWindow.createObjectURL(fileList[i]);
-      var primaryText = "Make Primary";
-      var activeText = "";
-      pictureInDiv = $("#list > div").length;
-      if(pictureInDiv == 0){
-        primaryText = "Your Primary";
-        activeText = "active_img";
-        primaryPicture = pictureCount;
+    $(document).on('change',".files.active",function (e){
+ 
+      if(badIE == false){
+            var fileList = this.files;
+            var anyWindow = window.URL || window.webkitURL;
+            for(var i = 0; i < fileList.length; i++){
+              var objectUrl = anyWindow.createObjectURL(fileList[i]);
+              var primaryText = "Make Primary";
+              var activeText = "";
+              pictureInDiv = $("#list > div").length;
+              if(pictureInDiv == 0){
+                primaryText = "Your Primary";
+                activeText = "active_img";
+                primaryPicture = pictureCount;
+
+              }
+              $('#list').append('<div id="previewList'+pictureCount+'" class="upload_img_div '+activeText+'"><span class="upload_img_con"><img src="'+objectUrl+'"></span><a href="javascript:void(0)" class="removepic" data-number="'+pictureCount+'">x</a><br><a href="javascript:void(0)" class="makeprimary photoprimary'+pictureCount+'" data-number="'+pictureCount+'">'+primaryText+'</a></div>');
+              window.URL.revokeObjectURL(fileList[i]);
+              pictureCount++;
+            }
+
+            $(".files").hide();  
+            $(".files.active").each(function(){
+              $(this).removeClass('active');
+            });
+            $('.inputfiles').append('<input type="file" class="files active" name="files[]" multiple accept="image/*" required = "required"  /> ')
+
+
+     }else{
+
+            var primaryText = "Make Primary";
+            var activeText = "";
+            pictureInDiv = $("#list > div").length;
+            if(pictureInDiv == 0){
+              primaryText = "Your Primary";
+              activeText = "active_img";   primaryPicture = pictureCount;
+
+            }
+         
+            var id = "imgid" + pictureCount;
+            imageCustom = document.getElementById('files').value;
+            $('#list').append('<div id="previewList'+pictureCount+'" class="upload_img_div '+activeText+'"><span class="upload_img_con"><img src="'+imageCustom+'" alt="'+imageCustom+'" style="height:100px;"></span><a href="javascript:void(0)" class="removepic" data-number="'+pictureCount+'">x</a><br><a href="javascript:void(0)" class="makeprimary photoprimary'+pictureCount+'" data-number="'+pictureCount+'">'+primaryText+'</a></div>');
+            pictureCount++;
+            
+            $(".files").hide();  
+            $(".files.active").each(function(){
+              $(this).removeClass('active');
+            });
+            $('.inputfiles').append('<input type="file" class="files active" name="files[]" multiple accept="image/*" required = "required"  /> ')
+    
 
       }
-      $('#list').append('<div id="previewList'+pictureCount+'" class="upload_img_div '+activeText+'"><span class="upload_img_con"><img src="'+objectUrl+'"></span><a href="javascript:void(0)" class="removepic" data-number="'+pictureCount+'">x</a><br><a href="javascript:void(0)" class="makeprimary photoprimary'+pictureCount+'" data-number="'+pictureCount+'">'+primaryText+'</a></div>');
-      window.URL.revokeObjectURL(fileList[i]);
-      pictureCount++;
-    }
-
-    $(".files").hide(); 
-    //Wrapped in EACH just in case there are more than one active .files elements: unlikely but just in case
-    $(".files.active").each(function(){
-        $(this).removeClass('active');
-    });
-    $('.inputfiles').append('<input type="file" class="files active" name="files[]" multiple accept="image/*" required = "required"  /> ')
-
   });
 
     $(document).on('click',".removepic",function (){
@@ -1179,9 +1308,11 @@ $(document).on('change','.other_name_class',function(){
 
       if( !$.trim( $('.quantity_attrs_content').html() ).length ) {
         $('.quantity_attr_done').hide();
+         $('.qty_tooltip').hide();
         noCombination == true
       }else{
         $('.quantity_attr_done').show();
+         $('.qty_tooltip').show();
       }
 
 
@@ -1226,9 +1357,11 @@ $(document).on('change','.other_name_value',function(){
 
             if( !$.trim( $('.quantity_attrs_content').html() ).length ) {
               $('.quantity_attr_done').hide();
+               $('.qty_tooltip').hide();
               noCombination == true
             }else{
               $('.quantity_attr_done').show();
+              $('.qty_tooltip').show();
             }
           }
 
@@ -1309,16 +1442,93 @@ $('#form_product').ajaxForm({
             $('.percentage').html(percentVal);
             $( ".button_div" ).hide();
             $( ".loader_div" ).show();
+
+            $('<input type="hidden">').attr({
+              id: 'inputs',
+              name: 'inputs',
+              value: g_input_name
+            }).appendTo('form');
             arr.push({name:'inputs', value:g_input_name});
+
+            // -------------------------
+            
+            $('<input type="hidden">').attr({
+              id: 'id',
+              name: 'id',
+              value: g_id
+            }).appendTo('form');
             arr.push({name:'id', value:g_id});
+            // -------------------------
+            
+            $('<input type="hidden">').attr({
+              id: 'combination',
+              name: 'combination',
+              value: g_combinationSelected
+            }).appendTo('form');
             arr.push({name:'combination', value:g_combinationSelected});
+            // -------------------------
+            
+            $('<input type="hidden">').attr({
+              id: 'desc',
+              name: 'desc',
+              value: g_description
+            }).appendTo('form');
             arr.push({name:'desc', value:g_description});
+            // -------------------------
+            
+            $('<input type="hidden">').attr({
+              id: 'noCombination',
+              name: 'noCombination',
+              value: g_noCombination
+            }).appendTo('form');
             arr.push({name:'noCombination', value:g_noCombination});
+            // -------------------------
+            
+            $('<input type="hidden">').attr({
+              id: 'otherCategory',
+              name: 'otherCategory',
+              value: g_otherCategory
+            }).appendTo('form');
             arr.push({name:'otherCategory', value:g_otherCategory});
+            // -------------------------
+            
+            $('<input type="hidden">').attr({
+              id: 'removeThisPictures',
+              name: 'removeThisPictures',
+              value: g_removeThisPictures
+            }).appendTo('form');
             arr.push({name:'removeThisPictures', value:g_removeThisPictures});
+            // -------------------------
+            
+            $('<input type="hidden">').attr({
+              id: 'primaryPicture',
+              name: 'primaryPicture',
+              value: g_primaryPicture
+            }).appendTo('form');
             arr.push({name:'primaryPicture', value:g_primaryPicture});
+            // -------------------------
+            
+            $('<input type="hidden">').attr({
+              id: 'editRemoveThisPictures',
+              name: 'editRemoveThisPictures',
+              value: g_editRemoveThisPictures
+            }).appendTo('form');
             arr.push({name:'editRemoveThisPictures', value:g_editRemoveThisPictures});
+            // -------------------------
+            
+            $('<input type="hidden">').attr({
+              id: 'editPrimaryPicture',
+              name: 'editPrimaryPicture',
+              value: g_editPrimaryPicture
+            }).appendTo('form');
             arr.push({name:'editPrimaryPicture', value:g_editPrimaryPicture});
+            // -------------------------
+            
+            $('<input type="hidden">').attr({
+              id: 'quantitySolo',
+              name: 'quantitySolo',
+              value: g_quantitySolo
+            }).appendTo('form');
             arr.push({name:'quantitySolo', value:g_quantitySolo});
       },
       uploadProgress : function(event, position, total, percentComplete) {
@@ -1353,34 +1563,37 @@ $(".proceed_form").unbind("click").click(function(){
   var action = "sell/processing"; 
   var title = $("#prod_title");
   var brief = $("#prod_brief_desc"); 
-  formData = new FormData(document.getElementById("form_product"));
+
   var combinationSelected = JSON.stringify(arraySelected);
-  console.log(combinationSelected);
+
   var otherCategory = "<?php echo isset($otherCategory)?$otherCategory:''; ?>";
-  formData.append("inputs", input_name);
+
+  // formData = new FormData(document.getElementById("form_product"));
+  // formData.append("inputs", input_name);
+  // formData.append("id", id);
+  // formData.append("combination",combinationSelected);
+  // formData.append("desc",description);
+  // formData.append("noCombination",noCombination);
+  // formData.append("otherCategory",otherCategory);
+  // formData.append("removeThisPictures",JSON.stringify(removeThisPictures));
+  // formData.append("primaryPicture",primaryPicture);
+  // formData.append("editRemoveThisPictures",JSON.stringify(editRemoveThisPictures));
+  // formData.append("editPrimaryPicture",editPrimaryPicture);
+  // formData.append(csrfname, csrftoken);
+
   g_input_name = input_name;
-  formData.append("id", id);
   g_id = id;
-  formData.append("combination",combinationSelected);
   g_combinationSelected = combinationSelected;
-  formData.append("desc",description);
   g_description = description;
-  formData.append("noCombination",noCombination);
   g_noCombination = noCombination;
-  formData.append("otherCategory",otherCategory);
   g_otherCategory = otherCategory;
-  formData.append("removeThisPictures",JSON.stringify(removeThisPictures));
   g_removeThisPictures = JSON.stringify(removeThisPictures);
-  formData.append("primaryPicture",primaryPicture);
   g_primaryPicture = primaryPicture;
-  formData.append("editRemoveThisPictures",JSON.stringify(editRemoveThisPictures));
   g_editRemoveThisPictures = JSON.stringify(editRemoveThisPictures);
-  formData.append("editPrimaryPicture",editPrimaryPicture);
   g_editPrimaryPicture = editPrimaryPicture;
 
   var csrftoken = $("meta[name='csrf-token']").attr('content');
   var csrfname = $("meta[name='csrf-name']").attr('content');
-  formData.append(csrfname, csrftoken);
 
   var price = $("#prod_price");
   var other_price = $("#price_field");
@@ -1465,7 +1678,7 @@ $(".proceed_form").unbind("click").click(function(){
           alert("Invalid Quantity!");
           return false;
         }
-        formData.append("quantitySolo",quantity.val());
+        // formData.append("quantitySolo",quantity.val());
         g_quantitySolo = quantity.val();
       }
       
@@ -1564,9 +1777,11 @@ $(".proceed_form").unbind("click").click(function(){
 
       if( !$.trim( $('.quantity_attrs_content').html() ).length ) {
         $('.quantity_attr_done').hide();
+         $('.qty_tooltip').hide();
         noCombination == true
       }else{
         $('.quantity_attr_done').show();
+         $('.qty_tooltip').show();
       }
     }
 
@@ -1937,6 +2152,6 @@ $(document).ready(function(){
     });
 </script>
 
-
+ 
 <div class="clear"></div>  
 
