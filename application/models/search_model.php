@@ -119,13 +119,18 @@ class search_model extends CI_Model
 		return $row;				
 	}	
 	
-	///// Advance Search: Updated SQL query - Rain 02/25/14 //////
-	function getAttributesWithParam($id,$datas)
+	function getAttributesWithParam($catID,$pid_values)
 	{
-		if(is_array($id)){
-			$cid = implode(',', $id);
+		if(is_array($catID)){
+			$cid = implode(',', $catID);
 		}else{
-			$cid = $id;
+			$cid = $catID;
+		}
+		
+		if(!empty($pid_values)){
+			$cdatas = implode(',', $pid_values);
+		}else{
+			$cdatas = "";
 		}
 		
 		$query = "SELECT DISTINCT ea.`name` FROM `es_product_attr` epa
@@ -134,7 +139,7 @@ class search_model extends CI_Model
 			LEFT JOIN es_datatype ed ON ea.datatype_id = ed.id_datatype 			
 			WHERE ep.`cat_id` IN (". $cid .")
 			AND ed.name IN ('CHECKBOX', 'RADIO', 'SELECT') 
-			AND epa.`product_id` IN (". implode(',', $datas) .") ORDER BY ea.`name`";
+			AND epa.`product_id` IN (". $cdatas .") ORDER BY ea.`name`";
 		$sth = $this->db->conn_id->prepare($query); 
 		$sth->execute();
 
@@ -143,14 +148,19 @@ class search_model extends CI_Model
 		return $row;
 	} /// end
 	
-	///// Advance Search: Updated SQL query - Rain 02/25/14 //////
-	function getAttributesWithParamAndName($id,$datas,$name)
+	function getAttributesWithParamAndName($catID,$pid_values,$name)
 	{
-		if(is_array($id)){
-			$cid = implode(',', $id);
+		if(is_array($catID)){
+			$cid = implode(',', $catID);
 		}else{
-			$cid = $id;
+			$cid = $catID;
 		}
+		
+		if(!empty($pid_values)){
+			$cdatas = implode(',', $pid_values);
+		}else{
+			$cdatas = "";
+		}	
 		
 		$query = "SELECT DISTINCT epa.`attr_value` FROM `es_product_attr` epa
 			LEFT JOIN `es_attr` ea ON epa.`attr_id` = ea.`id_attr`
@@ -158,7 +168,7 @@ class search_model extends CI_Model
 			LEFT JOIN es_datatype ed ON ea.datatype_id = ed.id_datatype 		
 			WHERE ep.cat_id IN (". $cid .")
 			AND ed.name IN ('CHECKBOX', 'RADIO', 'SELECT') 
-			AND product_id IN (". implode(', ', $datas) .") 
+			AND product_id IN (". $cdatas .") 
 			AND ea.`name` = :name ORDER BY ea.`name` ";
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':name',$name);
@@ -208,7 +218,6 @@ class search_model extends CI_Model
 		". $QAtt . " ". $sc ." ". $loc . " " . $is ." ". $con ." ". $gp ." ". $attr_brand ."  
 		ORDER BY ". $colsort ." DESC 
 		LIMIT :start, :per_page ";
-
 	$sth = $this->db->conn_id->prepare($query);
 	$sth->bindParam(':start',$start,PDO::PARAM_INT);
 	$sth->bindParam(':per_page',$per_page,PDO::PARAM_INT);
