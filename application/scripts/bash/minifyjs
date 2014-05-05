@@ -1,0 +1,47 @@
+# Automation script for minifying js files
+
+
+
+if [[ $# -eq 0 ]] ; then
+    echo "Error: Please specify root javascript directory (no trailing slash)"
+    echo "Syntax: minifyjs </path/to/js/dir> </path/to/closure/compiler.jar>"
+    exit 0
+fi
+
+if [[ $# -eq 1 ]] ; then
+    echo "Error: Please specify closure compiler.jar"
+    echo "Syntax: minifyjs </path/to/js/dir> </path/to/closure/compiler.jar>"
+    exit 0
+fi
+
+# get js dir
+JS_DIR=$1
+
+# assume original codes are in `/src` and minified versions must go to `/min`
+JS_SRC_DIR=$JS_DIR/src
+JS_MIN_DIR=$JS_DIR/min
+
+# get closure compiler/minifier
+COMPILER=$2
+
+echo 'Preparing scripts for minification...'
+rm -rf $JS_MIN_DIR
+cp -pvr $JS_SRC_DIR $JS_MIN_DIR
+
+# exclude vendor directory from minification (3rd party scripts are
+# expected to already be minified); we'll link it back later
+echo 'Unlinking vendors...'
+unlink $JS_MIN_DIR/vendor
+rm -rf $JS_MIN_DIR/vendor
+
+# begin minifying
+echo 'Minifying scripts...'
+find $JS_MIN_DIR -name '*.js' -exec java -jar $COMPILER --js {} --js_output_file {}.min --summary_detail_level 3 \; -exec rm {} \; -exec mv {}.min {} \;
+# note that closure will skip minification of js files with javascript errors
+
+# symlink vendor directory
+echo 'Linking vendors...'
+ln -s $JS_SRC_DIR/vendor $JS_MIN_DIR/vendor
+
+# and, we're done!
+echo 'Minification complete!'
