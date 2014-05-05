@@ -46,34 +46,43 @@ var jbImagesDialog = {
 		document.getElementById("upload_additional_info").innerHTML = '';
 		document.getElementById("upload_in_progress").style.display = 'block';
 
-		var origForm = document.getElementById('upl' + this.uploadCounter);
-		if(this.isInProgress){
-			this.myformdata.push(origForm);
-		} else {
-			this.isInProgress = true;
-			var options = {
-				target: '#upload_target',
-				uploadProgress: OnProgress('test')
-			};
-			$(origForm).ajaxSubmit(options);
-			document.getElementById('progressbox').style.display = 'block';
+		var oldIE;
+		if ($('html').is('.ie6, .ie7, .ie8, .ie9')) {
+			oldIE = true;
 		}
-		var newForm = origForm.cloneNode(true);
-		this.uploadCounter++;
-		origForm.style.display = 'none';
-		newForm.id = "upl" + this.uploadCounter;
-		origForm.parentNode.appendChild(newForm);
-		var filenames = origForm.children[0].children[0].files;
-		var uploadlist = document.getElementById("fileupload_list");
-		for (var i = 0; i<filenames.length; i++){
-			var fileExtension = filenames[i].name.split('.').pop()
-			var allowedFileType = ['jpg', 'gif', 'png'];
-			if ( allowedFileType.join('|').indexOf(fileExtension) != -1 ){
-				uploadlist.innerHTML += filenames[i].name + ' ';
+
+		if (oldIE) {
+			document.getElementById('upl1').submit();
+		} else {
+			var origForm = document.getElementById('upl' + this.uploadCounter);
+			if(this.isInProgress){
+				this.myformdata.push(origForm);
+			} else {
+				this.isInProgress = true;
+				var options = {
+					target: '#upload_target',
+					uploadProgress: OnProgress('test')
+				};
+				$(origForm).ajaxSubmit(options);
+				document.getElementById('progressbox').style.display = 'block';
 			}
-			if ( filenames.length-1 == i ) {
-				//uploadlist.innerHTML += '<br>' + $('.progressbox').html();
-				uploadlist.innerHTML += '<br>';
+			var newForm = origForm.cloneNode(true);
+			this.uploadCounter++;
+			origForm.style.display = 'none';
+			newForm.id = "upl" + this.uploadCounter;
+			origForm.parentNode.appendChild(newForm);
+			var filenames = origForm.children[0].children[0].files;
+			var uploadlist = document.getElementById("fileupload_list");
+			for (var i = 0; i<filenames.length; i++){
+				var fileExtension = filenames[i].name.split('.').pop()
+				var allowedFileType = ['jpg', 'gif', 'png'];
+				if ( allowedFileType.join('|').indexOf(fileExtension) != -1 ){
+					uploadlist.innerHTML += filenames[i].name + ' ';
+				}
+				if ( filenames.length-1 == i ) {
+					//uploadlist.innerHTML += '<br>' + $('.progressbox').html();
+					uploadlist.innerHTML += '<br>';
+				}
 			}
 		}
 		
