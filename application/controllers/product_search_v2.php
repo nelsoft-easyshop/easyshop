@@ -68,7 +68,16 @@ class product_search_v2 extends MY_Controller {
 		$response['firstlevel'] = $this->search_model->getFirstLevelNode();
 		$response['ctrl_subcat'] = $this->product_model->getDownLevelNode(1);
 		$response['items'] = "";
-
+		
+		$response['getsubcat'] = $this->input->get("_subcat");
+		$response['getis'] = $this->input->get('_is');
+		$response['getcat'] = $this->input->get('_cat');
+		$response['getloc'] = $this->input->get('_loc');
+		$response['getcon'] = $this->input->get('_con');
+		$response['getprice1'] = $this->input->get('_price1');
+		$response['getprice2'] = $this->input->get('_price2');
+		$response['getsop'] = $this->input->get('_sop');			
+		
 		$condition = $this->input->get();
 		$response['condition'] = $condition;
 		
@@ -126,16 +135,19 @@ class product_search_v2 extends MY_Controller {
 						if($name == "BRAND"){ # brand					
 							if(is_array($val)){
 								$arr_brand = "";
+								
 								foreach($val as $row => $brands){
 									if(!empty($brands)){
 										$arr_brand = $arr_brand . "'" . $brands . "',";
 									}
 								}
 								
-								$fin_arr_brand = substr($arr_brand, 0, strlen($arr_brand) - 1 );
-								
-								if(!empty($fin_arr_brand)){
-									$attr_brand = $attr_brand . " AND eb.`name` IN (". $fin_arr_brand . ") ";
+								if(!empty($arr_brand)){
+									$fin_arr_brand = substr($arr_brand, 0, strlen($arr_brand) - 1 );
+									
+									if(!empty($fin_arr_brand)){
+										$attr_brand = $attr_brand . " AND eb.`name` IN (". $fin_arr_brand . ") ";
+									}
 								}
 							}	
 						} # brand end
@@ -229,15 +241,18 @@ class product_search_v2 extends MY_Controller {
 					
 					$items = $this->search_model->SearchProduct($catID, $start, $per_page, $colsort, $is, $con, $gp, $attr_brand, $QAtt, $sc, $loc, $test);
 
-					if(!empty($items)){ # check if it has items
+					// if(!empty($items)){ # check if it has items
 							
 						$response['items'] = $items; ### pass to view
                     
 						$product_id = $this->search_model->getProductID($catID);
+						
+						$pid_values = "";
+						$bid_values = "";
 						foreach ($product_id as $row){
 							$pid_values[] = $row['product_id'];
 							$bid_values[] = $row['brand_id'];
-						}
+						}						
                         
 						# get all attributes here (left pane)
 						
@@ -264,7 +279,7 @@ class product_search_v2 extends MY_Controller {
 						
 						###########################################
 
-					}
+				//	}
 				/////////////////////////////////////////////////////////////////////////////
 					
 				$this->load->view('templates/header_plain', $data); 
@@ -416,10 +431,21 @@ class product_search_v2 extends MY_Controller {
 				$colsort = "ep.`id_product`";
 			}
 			
+			
+			
 			$sc = "";
-			if(!empty($scA)){
-				$sc = " AND ep.`cat_id` = " . $scA . " ";
-			}
+			$gsc = $scA;
+								
+			$child = $this->search_model->selectChild($gsc);	 
+			if($child[0] == 0 && $child[1] == 0){
+				$gsubcat = $gsc;
+			}else{
+				$gsubcat = implode(',', $child);
+			} // end - array check					
+			
+			if($gsc){
+				$sc = " AND ep.`cat_id` IN (" . $gsubcat . ") ";
+			}			
 			
 			$loc = "";
 			if($locA){
