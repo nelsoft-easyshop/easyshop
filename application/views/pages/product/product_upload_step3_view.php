@@ -2,12 +2,17 @@
 <link type="text/css" href="<?=base_url()?>assets/css/sell_item.css" rel="stylesheet" />
 <link rel="stylesheet" href="<?=base_url()?>assets/css/product_preview.css" type="text/css" media="screen"/>
 <link rel="stylesheet" href="<?=base_url()?>assets/css/jquery.bxslider.css" type="text/css" media="screen"/>
+<link  type="text/css"  href='<?=base_url()?>assets/css/jqpagination.css' rel="stylesheet" media='screen'/>
 
 <div class="wrapper">
   <div class="seller_product_content">
  
     <div class="inner_seller_product_content">
       <h2 class="f24">Sell an Item</h2>
+		<a id="tutShippingLoc" class="tooltips" href="javascript:void(0)">
+			<img src="<?= base_url() ?>assets/images/icon_qmark.png" alt="">
+			<span class="1line_tooltip">Click me for a quick tutorial!</span>
+		</a> 
             <div class="sell_steps sell_steps3">
                 <ul>
                     <li><a href="javascript:void(0)" id="step1_link">Step 1 : Select Category</a></li>
@@ -318,9 +323,60 @@
 
 <div id="previewProduct" style="display:none"></div>
 
-<script type="text/javascript" src="<?=base_url()?>assets/JavaScript/productUpload_step3.js"></script>
+<div id="div_tutShippingLoc" style="display:none;">
+	<div class="paging">
+		<h2>Overview</h2>
+		<p>
+			This step allows you to specify shipping location and price for one or more attribute(s).
+			<br/>
+			All attributes should have assigned shipping locations and price.
+		</p>
+	</div>
+	<div class="paging">
+		<h2>Step 1:</h2>
+		<p>Select product attribute combinations. By default, 'All Combinations' will be displayed.</p>
+		<div>
+			<span>No attributes specified in Step 2:</span>
+			<img src="<?=base_url()?>assets/images/tutorial/prd_upload_step3/attr_combination_def.png" alt="No Attribute Combinations.png">
+		</div>
+		<div>
+			<span>With specified attributes in Step 2:</span>
+			<img src="<?=base_url()?>assets/images/tutorial/prd_upload_step3/attr_combination_opt.png" alt="With Attribute Combinations.png">
+		</div>
+	</div>
+	<div class="paging">
+		<h2>Step 2:</h2>
+		<p>Select shipping location and set price for the selected attributes:</p>
+		<img src="<?=base_url()?>assets/images/tutorial/prd_upload_step3/loc_price.png">
+		<p>Click <strong>'Add another location'</strong> to create new location and price entry fields.</p>
+		<p>Click <strong>'Add to shipping list'</strong> to add the shipping details to the summary section.</p>
+		<p>
+			NOTE: If you select Luzon as a location, the product with the selected attributes are considered available to all locations in Luzon with the indicated price.
+			If you add another location (region or city under Luzon), that indicated price will be prioritized for that location(s).
+		</p>
+	</div>
+	<div class="paging">
+		<h2>Step 3:</h2>
+		<p>Review your shipping summary</p>
+		<img src="<?=base_url()?>assets/images/tutorial/prd_upload_step3/shipping_summary.png" alt="With Attribute Combinations.png">
+		<p>Click 'Edit' to change the shipping price, or 'Remove' to delete the entry.</p>
+	</div>
+	
+	<div class="pagination" id="paging_tutShippingLoc">
+		<a href="#" class="first" data-action="first">&laquo;</a>
+		<a href="#" class="previous" data-action="previous">&lsaquo;</a>
+		<input type="text" readonly="readonly" data-max-page="4" />
+		<a href="#" class="next" data-action="next">&rsaquo;</a>
+		<a href="#" class="last" data-action="last">&raquo;</a>
+	</div>
+</div>
+
+
 <script type="text/javascript" src="<?=base_url()?>assets/JavaScript/js/jquery.numeric.js"></script>
 <script type='text/javascript' src="<?=base_url()?>assets/JavaScript/js/jquery-ui.js"></script>
+<script type='text/javascript' src='<?=base_url()?>assets/JavaScript/js/jquery.jqpagination.min.js'></script>
+<script type='text/javascript' src="<?=base_url()?>assets/JavaScript/js/jquery.simplemodal.js"></script>
+<script type="text/javascript" src="<?=base_url()?>assets/JavaScript/productUpload_step3.js"></script>
 <script src="<?=base_url()?>assets/JavaScript/js/jquery.idTabs.min.js" type="text/javascript"></script>
 <script type="text/javascript">
 

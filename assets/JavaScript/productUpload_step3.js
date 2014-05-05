@@ -53,7 +53,6 @@ $(function(){
 		$(this).val( ReplaceNumberWithCommas(newPrice) );
 	}
   });
-  
 });
 /********** CLOSE DOCUMENT READY FUNCTION *********/
 
@@ -940,5 +939,32 @@ $(document).ready(function(){
     });
     
 });
- 
+
+
+/*
+ *	Step 3 tooltip / tutorial section
+ */
+$(function(){
+
+	$('#div_tutShippingLoc .paging:not(:first)').hide();
+	
+	$('#tutShippingLoc').on('click',function(){
+		$('#div_tutShippingLoc').modal({
+			position: ['5%', '10%'],
+			onShow: function(){
+				$('#paging_tutShippingLoc').jqPagination({
+					paged: function(page) {
+						$('#div_tutShippingLoc .paging').hide();
+						$($('#div_tutShippingLoc .paging')[page - 1]).show();
+					}
+				});
+				$('#paging_tutShippingLoc').jqPagination('option', 'current_page', 1);
+			},
+			onClose: function(){
+				$('#paging_tutShippingLoc').jqPagination('destroy');
+				$.modal.close();
+			}
+		});
+	});
+});
 
