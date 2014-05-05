@@ -1395,6 +1395,9 @@ class productUpload extends MY_Controller
                 }
             }   
         }
+        
+        $product_options = $this->product_model->getProductAttributes($id, 'NAME');
+		$product_options = $this->product_model->implodeAttributesByName($product_options);
 
         $preview_data = array(
             'breadcrumbs' =>  $this->product_model->getParentId($product_row['cat_id']),
@@ -1403,7 +1406,7 @@ class productUpload extends MY_Controller
             'bank_list' =>  $this->product_model->getAllBanks(),
             'main_categories' => $this->product_model->getFirstLevelNode(TRUE),
             'product_images' => $this->product_model->getProductImages($id),
-            'product_options' => $this->product_model->getProductAttributes($id, 'NAME'),
+            'product_options' => $product_options,
             'availability' => $availability,
         );
 
