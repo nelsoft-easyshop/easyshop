@@ -183,7 +183,16 @@ $(document).ready(function(){
 	});
 	
 	$("#imgupload").on("change", function(){
-		imageprev(this);
+		var oldIE;
+		if ($('html').is('.ie6, .ie7, .ie8, .ie9')) {
+			oldIE = true;
+		}
+
+		if (oldIE) {
+			$('#form_image').submit();
+		} else {
+			imageprev(this);
+		}
 	});
 	
 	$('#emaildiv, #mobilediv').on('mouseover', function(){
@@ -1090,7 +1099,7 @@ $(document).ready(function(){
 			}
 			catch(e){
 				alert('An error was encountered while processing your data. Please try again later.');
-				//window.location.reload(true);
+				window.location.reload(true);
 				return false;
 			}
 			
@@ -1109,22 +1118,6 @@ $(document).ready(function(){
 		return false;
 	});
 	
-	// DRAGON PAY RESPONSE
-	/*$('.dragonpayupdate').on('click', function(){
-		var form = $(this).closest('form.dragonpay_update');
-		
-		$.post(config.base_url+'memberpage/transactionResponse', form.serializeArray(), function(){
-			try{
-				var serverResponse = jQuery.parseJSON(data);
-			}
-			catch(e){
-				alert('An error was encountered while processing your data. Please try again later.');
-				window.location.reload(true);
-				return false;
-			}
-		});
-	});
-	*/
 });
 
 
@@ -1292,6 +1285,7 @@ function imageprev(input) {
     }
 	else
 		alert('You can only upload gif|png|jpeg files at a max size of 5MB! ');
+	
 	
 	function deploy_imageprev(){
 		$('#div_user_image_prev').modal({
