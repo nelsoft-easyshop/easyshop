@@ -481,19 +481,19 @@ input.error + span.error {
 }
 
 @media screen and (-webkit-min-device-pixel-ratio:0) { 
-    #username_status {
-        margin-left: 140px;
+    /*#username_status {
+		margin-left: 140px;
         margin-top: -50px;
-    }
+    }*/
     ::i-block-chrome,#username_status {
         margin-left: auto;
         margin-top: auto;
     } 
 
-    #email_status {
+    /*#email_status {
         margin-left: 140px;
         margin-top: -50px;     
-    }
+    }*/
     ::i-block-chrome,#email_status {
         margin-left: auto;
         margin-top: auto;
