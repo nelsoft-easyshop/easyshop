@@ -950,13 +950,18 @@ $(function(){
 	
 	$('#tutShippingLoc').on('click',function(){
 		$('#div_tutShippingLoc').modal({
-			position: ['5%', '10%'],
+			containerCss:{
+				width: '800px'
+			},
 			onShow: function(){
+				var modal = this;
 				$('#paging_tutShippingLoc').jqPagination({
 					paged: function(page) {
 						$('#div_tutShippingLoc .paging').hide();
 						$($('#div_tutShippingLoc .paging')[page - 1]).show();
-					}
+						modal.setPosition();
+					},
+					page_string:'{current_page} of {max_page}'
 				});
 				$('#paging_tutShippingLoc').jqPagination('option', 'current_page', 1);
 			},

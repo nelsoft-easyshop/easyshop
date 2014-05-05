@@ -3,6 +3,7 @@
 <link rel="stylesheet" href="<?=base_url()?>assets/css/product_preview.css?ver=1.0" type="text/css" media="screen"/>
 <link rel="stylesheet" href="<?=base_url()?>assets/css/jquery.bxslider.css?ver=1.0" type="text/css" media="screen"/>
 <link  type="text/css"  href='<?=base_url()?>assets/css/jqpagination.css?ver=1.0' rel="stylesheet" media='screen'/>
+<link  type="text/css"  href='<?=base_url()?>assets/css/product_upload_tutorial.css' rel="stylesheet" media='screen'/>
 
 <div class="wrapper">
   <div class="seller_product_content">
@@ -323,31 +324,23 @@
 
 <div id="previewProduct" style="display:none"></div>
 
-<div id="div_tutShippingLoc" style="display:none;">
-	<div class="paging">
-		<h2>Overview</h2>
-		<p>
-			This step allows you to specify shipping location and price for one or more attribute(s).
-			<br/>
-			All attributes should have assigned shipping locations and price.
-		</p>
-	</div>
+<div id="div_tutShippingLoc" class="tutorial_modal" style="display:none; width: 100%;">
 	<div class="paging">
 		<h2>Step 1:</h2>
 		<p>Select product attribute combinations. By default, 'All Combinations' will be displayed.</p>
-		<div>
-			<span>No attributes specified in Step 2:</span>
-			<img src="<?=base_url()?>assets/images/tutorial/prd_upload_step3/attr_combination_def.png" alt="No Attribute Combinations.png">
+		<div style="display: inline-block; vertical-align:top;">
+			<span style="display:block;">No attributes specified in Step 2:</span>
+			<img height="250px" width="380px" src="<?=base_url()?>assets/images/tutorial/prd_upload_step3/attr_combination_def.png" alt="No Attribute Combinations.png">
 		</div>
-		<div>
-			<span>With specified attributes in Step 2:</span>
-			<img src="<?=base_url()?>assets/images/tutorial/prd_upload_step3/attr_combination_opt.png" alt="With Attribute Combinations.png">
+		<div style="display: inline-block; vertical-align:top;">
+			<span style="display:block;">With specified attributes in Step 2:</span>
+			<img height="300px" width="380px" src="<?=base_url()?>assets/images/tutorial/prd_upload_step3/attr_combination_opt.png" alt="With Attribute Combinations.png">
 		</div>
 	</div>
 	<div class="paging">
 		<h2>Step 2:</h2>
 		<p>Select shipping location and set price for the selected attributes:</p>
-		<img src="<?=base_url()?>assets/images/tutorial/prd_upload_step3/loc_price.png">
+		<img height="250px" width="400px" src="<?=base_url()?>assets/images/tutorial/prd_upload_step3/loc_price.png">
 		<p>Click <strong>'Add another location'</strong> to create new location and price entry fields.</p>
 		<p>Click <strong>'Add to shipping list'</strong> to add the shipping details to the summary section.</p>
 		<p>
@@ -358,14 +351,14 @@
 	<div class="paging">
 		<h2>Step 3:</h2>
 		<p>Review your shipping summary</p>
-		<img src="<?=base_url()?>assets/images/tutorial/prd_upload_step3/shipping_summary.png" alt="With Attribute Combinations.png">
-		<p>Click 'Edit' to change the shipping price, or 'Remove' to delete the entry.</p>
+		<img height="300px" width="400px" src="<?=base_url()?>assets/images/tutorial/prd_upload_step3/shipping_summary.png" alt="With Attribute Combinations.png">
+		<p>Click <strong>'Edit'</strong> to change the shipping price, or <strong>'Delete'</strong> to delete the entry.</p>
 	</div>
 	
 	<div class="pagination" id="paging_tutShippingLoc">
 		<a href="#" class="first" data-action="first">&laquo;</a>
 		<a href="#" class="previous" data-action="previous">&lsaquo;</a>
-		<input type="text" readonly="readonly" data-max-page="4" />
+		<input type="text" readonly="readonly" data-max-page="3" />
 		<a href="#" class="next" data-action="next">&rsaquo;</a>
 		<a href="#" class="last" data-action="last">&raquo;</a>
 	</div>
