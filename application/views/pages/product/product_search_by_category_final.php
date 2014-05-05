@@ -110,7 +110,7 @@ $_SESSION['start'] = "0";
                         $link = $file . '?' . http_build_query($output).'&'. $parameter.'='.$attr_value; 
                     }
 
-                    echo '<a href="'.$link.'"><input type="checkbox" '.$checked.' class="cbx" > 
+                    echo '<a href="'.$link.'"><input type="checkbox" '.$checked.' class="cbx" data-value="'.$link.'" > 
                             <label for="cbx">'.ucfirst(strtolower($attr_value)).'</label><br>
                         </a>';
                 }
@@ -422,8 +422,8 @@ $(document).ready(function() {
         $(this).hide();
     });
 
-    $(".cbs").click(function() {
-        window.location = "<?php echo site_url(uri_string() . '?' . $_SERVER['QUERY_STRING']); ?>" + this.value;
+    $(".cbx").click(function() {
+        window.location = $(this).data('value');
     });
 
     $('#list').click(function() {
