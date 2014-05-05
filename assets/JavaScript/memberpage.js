@@ -1,10 +1,3 @@
-/*$(window).load(function(){
-	progress_update('');
-	handle_fields('');
-	
-	$('.address_dropdown, .disabled_country').chosen({width:'200px'});
-	
-});*/
 
 $(document).ready(function(){
 	progress_update('');
