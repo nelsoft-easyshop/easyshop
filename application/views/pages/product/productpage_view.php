@@ -194,7 +194,7 @@
         </ul>
         <div class="clear"></div>
         <div id="tabs-1">
-          <p> <strong>Description: </strong><?php echo html_purify($product['description']);?> </p>
+          <p> <strong>Description: </strong><div class='html_description'><?php echo html_purify($product['description']);?> </div></p>
           <ul>
             <li><strong>Brand: </strong><?php echo html_escape(ucfirst(strtolower($product['brand_name'])));?></li>
             <li><strong>Additional description: </strong><?php echo html_escape($product['brief']);?></li>

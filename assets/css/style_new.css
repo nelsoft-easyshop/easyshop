@@ -213,9 +213,6 @@ span.seller-name .rating_criteria{
     cursor: default;  
 }
 
-
-
-
 .product_option a {
 	font-size: 11px;
 	border-bottom: 1px dotted #7A7A7A;
@@ -610,10 +607,19 @@ span.seller-name .rating_criteria{
 	width: 552px;
 }
 
-.tabs2_html_con {
+.tab2_html_con {
     display: inline !important;
     width: 745px;
     word-wrap: break-word;
+}
+
+.tab2_html_con  ul li,.html_description  ul li  {
+    margin-left: 30px !important;
+    float: none !important;
+}
+
+div.html_description {
+    text-align:left !important;
 }
 
 /*** Reviews Tab ***/
@@ -892,4 +898,7 @@ div.reply_content_shown > p {
 .jcarousel-control-nex:hover {
 	color: #FF4400;
 }
+
+
+
 
