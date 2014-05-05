@@ -676,22 +676,16 @@
 </div>
 
 <div id="div_tutSpec" style="display:none;">
-  <div class="paging">
-    <h2>Overview (SPECIFICATION)</h2>
-    <p>
-      This step allows you to specify shipping location and price for one or more attribute(s).
-      <br/>
-      All attributes should have assigned shipping locations and price.
-    </p>
-  </div>
 
-  <div class="paging">
-    <h2>Step 1:</h2>
-    <p>Select shipping location and set price for the selected attributes:</p>
-    <img src="<?=base_url()?>assets/images/tutorial/prd_upload_step2/specifics/1.png">
-    <p>Click <strong>'Add another location'</strong> to create new location and price entry fields.</p>
-
-  </div>
+  <div class="paging" style='margin:15px;'>
+    <h2 style='background:#F18200; color:white; height:40px;'>Adding item specifications</h2>
+    <br/>
+    <div>
+    <p>You may add additional information to your listing by selecting from the list of attributes that we have provided.</p>
+    <img style='border:1px solid #F18200; position:center;' src="<?=base_url()?>assets/images/tutorial/prd_upload_step2/specifics/1.png">
+    <p style='font-weight:bold'>Fill up the available text fields or select from the provided checkboxes.</p>
+    </div>
+ </div>
 
   <div class="paging">
     <h2>Step 2:</h2>
@@ -1063,10 +1057,10 @@ else
     });
 
     $(document).on('click','.makeprimary',function(){
-
       var idNumber = $(this).data('number');
       primaryPicture = idNumber;  
       $(".makeprimary").text('Make Primary');
+      console.log(idNumber);
       $(".photoprimary"+idNumber).text('Your Primary');
 
       $(".upload_img_div").removeClass("active_img");
