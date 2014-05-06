@@ -8,8 +8,6 @@
 <link  type="text/css"  href='<?=base_url()?>assets/css/jqpagination.css' rel="stylesheet" media='screen'/>
 <!--Jcrop CSS-->
 <link type="text/css" href="<?=base_url()?>assets/css/jquery.Jcrop.min.css" rel="stylesheet" media='screen'/>
-<!--Selectize CSS-->
-<link rel="stylesheet" href="<?=base_url()?>assets/css/jquery.selectize-default.css" type="text/css" media="screen"/>
 <!--Chosen CSS-->
 <link rel="stylesheet" href="<?=base_url()?>assets/css/chosen.min.css" type="text/css" media="screen"/>
 
@@ -1133,12 +1131,7 @@
 				<div class="control-group">
 						<label for="bi_bank">Bank:</label>
 						<select id="bi_bank" name="bi_bank" style="width:50%" placeholder="Select Bank">
-							<option value="">Select a bank...</option>
-							<?php
-							foreach($bank as $rows => $banks){
-								echo "<option value='" . $banks['id'] ."'>". $banks['name'] ."</option>";
-							}							
-							?>							
+							<option value="">Select a bank...</option>						
 						</select>
 				</div>
 				<div>
@@ -1198,26 +1191,26 @@
 								<div class="inner_profile_fields progress_update update_once">		
 									<div style='height:40px;'>						
 										<label for="bi_ban_bictr<?php echo $rows; ?>">Account Name: </label>
-										<input type="text" name="bi_ban_bictr<?php echo $rows; ?>" id="bi_ban_bictr<?php echo $rows; ?>" value ="<?php echo html_escape($billing_info['bank_account_name']);?>" disabled="disabled" maxlength="60"/>
+										<input type="text" class="bi_input" name="bi_ban_bictr<?php echo $rows; ?>" id="bi_ban_bictr<?php echo $rows; ?>" value ="<?php echo html_escape($billing_info['bank_account_name']);?>" disabled="disabled" maxlength="60" style="width:400px;"/>
 										<input type="hidden" name="hbi_ban_bictr<?php echo $rows; ?>" id="hbi_ban_bictr<?php echo $rows; ?>" value ="<?php echo html_escape($billing_info['bank_account_name']);?>"/>
 										<span class="red ci_form_validation_error"><?php #echo form_error('bi_acct_name');?></span>
 									</div>
 									<div style='height:40px;'>
 										<label for="bi_bar_bictr<?php echo $rows; ?>">Account Number: </label>
-										<input type="text" name="bi_bar_bictr<?php echo $rows; ?>" id="bi_bar_bictr<?php echo $rows; ?>" value ="<?php echo html_escape($billing_info['bank_account_number']);?>" disabled="disabled" maxlength="18"/>
+										<input type="text" class="bi_input" name="bi_bar_bictr<?php echo $rows; ?>" id="bi_bar_bictr<?php echo $rows; ?>" value ="<?php echo html_escape($billing_info['bank_account_number']);?>" disabled="disabled" maxlength="18" style="width:400px;"/>
 										<input type="hidden" name="hbi_bar_bictr<?php echo $rows; ?>" id="hbi_bar_bictr<?php echo $rows; ?>" value ="<?php echo html_escape($billing_info['bank_account_number']);?>"/>
 										<span class="red ci_form_validation_error"><?php #echo form_error('bi_acct_name');?></span>
 									</div>
 									<div style='height:40px;'>
 										<label for="bi_bn_bictr<?php echo $rows; ?>">Bank: </label>
-										<select name="bi_bns_bictr<?php echo $rows; ?>" id="bi_bns_bictr<?php echo $rows; ?>" style="display:none"></select>
-										<input type="text" name="bi_bn_bictr<?php echo $rows; ?>" id="bi_bn_bictr<?php echo $rows; ?>" value ="<?php echo html_escape($billing_info['bank_name']);?>" disabled="disabled"/>
+										<select name="bi_bns_bictr<?php echo $rows; ?>" id="bi_bns_bictr<?php echo $rows; ?>" style="display:none; width:400px;"></select>
+										<input type="text" class="bi_input" name="bi_bn_bictr<?php echo $rows; ?>" id="bi_bn_bictr<?php echo $rows; ?>" value ="<?php echo html_escape($billing_info['bank_name']);?>" disabled="disabled" style="width:400px;"/>
 										<input type="hidden" name="hbi_bn_bictr<?php echo $rows; ?>" id="hbi_bn_bictr<?php echo $rows; ?>" value ="<?php echo html_escape($billing_info['bank_name']);?>"/>
 										<span class="red ci_form_validation_error"><?php #echo form_error('bi_acct_name');?></span>
 									</div>
 									<div style='height:40px;'>
 										<label for="bi_chk_bictr<?php echo $rows; ?>">Default Bank: </label>
-										<input type="checkbox" name="bi_chk_bictr<?php echo $rows; ?>" id="bi_chk_bictr<?php echo $rows; ?>" value="1" disabled="disabled" <?php echo $bi_checked; ?>>
+										<input type="checkbox" class="bi_input" name="bi_chk_bictr<?php echo $rows; ?>" id="bi_chk_bictr<?php echo $rows; ?>" value="1" disabled="disabled" <?php echo $bi_checked; ?>>
 										<input type="hidden" name="hbi_chk_bictr<?php echo $rows; ?>" id="hbi_chk_bictr<?php echo $rows; ?>" value ="<?php echo $bi_checked_val;?>"/>
 									</div>										
 								</div>
@@ -2055,7 +2048,6 @@
 		<script type='text/javascript' src='<?=base_url()?>assets/JavaScript/js/jquery.jqpagination.min.js'></script>
 		<script src="<?=base_url()?>assets/JavaScript/js/jquery.idTabs.min.js" type="text/javascript"></script>
 		<script src="<?=base_url()?>assets/JavaScript/js/jquery.knob.js" type="text/javascript"></script>
-		<script src="<?=base_url()?>assets/JavaScript/js/jquery.selectize.js" type="text/javascript"></script>
 		<script src="<?=base_url()?>assets/JavaScript/js/chosen.jquery.min.js" type="text/javascript"></script>
 		<!-- MEMBERPAGE JS-->
 		<script type="text/javascript" src="<?=base_url()?>assets/JavaScript/memberpage.js?ver=1.0"></script>
