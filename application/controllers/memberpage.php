@@ -185,7 +185,6 @@ class Memberpage extends MY_Controller
 		$data = array_merge($data,$this->memberpage_model->get_work_by_id($uid));
 		$data =  array_merge($data,$this->memberpage_model->get_school_by_id($uid));
 		$data['bill'] =  $this->memberpage_model->get_billing_info($uid);
-		$data['bank'] = $this->memberpage_model->get_bank('', 'all');
 		$data['transaction'] = $this->memberpage_model->getTransactionDetails($uid);
 		$data['allfeedbacks'] = $this->memberpage_model->getFeedback($uid);
 
