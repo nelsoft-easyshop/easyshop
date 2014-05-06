@@ -1181,7 +1181,11 @@
 								<input type="button" name="del_bictr<?php echo $rows; ?>" id="del_bictr<?php echo $rows; ?>"value="Delete">
 								<input type="hidden" name="bi_id_bictr<?php echo $rows; ?>" id="bi_id_bictr<?php echo $rows; ?>" value ="<?php echo $billing_info['id_billing_info'];?>" />
 							</div>
-                            <br/>
+							<?php if($billing_info['is_default'] == 0):?>
+							<div style='height:40px;' id="bi_ctxt_bictr<?php echo $rows; ?>">
+								<span id="bi_txt_bictr<?php echo $rows; ?>" style="cursor:pointer; padding:5px;">set as default</span>
+							</div>
+							<?php endif;?>
 							<div id="bi_check_bictr<?php echo $rows; ?>"  style="display:none; width: 38px;" >
                                 <span>Saved</span>
 							</div>	
@@ -1191,13 +1195,13 @@
 								<div class="inner_profile_fields progress_update update_once">		
 									<div style='height:40px;'>						
 										<label for="bi_ban_bictr<?php echo $rows; ?>">Account Name: </label>
-										<input type="text" class="bi_input" name="bi_ban_bictr<?php echo $rows; ?>" id="bi_ban_bictr<?php echo $rows; ?>" value ="<?php echo html_escape($billing_info['bank_account_name']);?>" disabled="disabled" maxlength="60" style="width:400px;"/>
+										<input type="text" class="bi_input" name="bi_ban_bictr<?php echo $rows; ?>" id="bi_ban_bictr<?php echo $rows; ?>" value ="<?php echo html_escape($billing_info['bank_account_name']);?>" disabled="disabled" maxlength="60" style="width:250px;"/>
 										<input type="hidden" name="hbi_ban_bictr<?php echo $rows; ?>" id="hbi_ban_bictr<?php echo $rows; ?>" value ="<?php echo html_escape($billing_info['bank_account_name']);?>"/>
 										<span class="red ci_form_validation_error"><?php #echo form_error('bi_acct_name');?></span>
 									</div>
 									<div style='height:40px;'>
 										<label for="bi_bar_bictr<?php echo $rows; ?>">Account Number: </label>
-										<input type="text" class="bi_input" name="bi_bar_bictr<?php echo $rows; ?>" id="bi_bar_bictr<?php echo $rows; ?>" value ="<?php echo html_escape($billing_info['bank_account_number']);?>" disabled="disabled" maxlength="18" style="width:400px;"/>
+										<input type="text" class="bi_input" name="bi_bar_bictr<?php echo $rows; ?>" id="bi_bar_bictr<?php echo $rows; ?>" value ="<?php echo html_escape($billing_info['bank_account_number']);?>" disabled="disabled" maxlength="18" style="width:250px;"/>
 										<input type="hidden" name="hbi_bar_bictr<?php echo $rows; ?>" id="hbi_bar_bictr<?php echo $rows; ?>" value ="<?php echo html_escape($billing_info['bank_account_number']);?>"/>
 										<span class="red ci_form_validation_error"><?php #echo form_error('bi_acct_name');?></span>
 									</div>
@@ -1207,12 +1211,7 @@
 										<input type="text" class="bi_input" name="bi_bn_bictr<?php echo $rows; ?>" id="bi_bn_bictr<?php echo $rows; ?>" value ="<?php echo html_escape($billing_info['bank_name']);?>" disabled="disabled" style="width:400px;"/>
 										<input type="hidden" name="hbi_bn_bictr<?php echo $rows; ?>" id="hbi_bn_bictr<?php echo $rows; ?>" value ="<?php echo html_escape($billing_info['bank_name']);?>"/>
 										<span class="red ci_form_validation_error"><?php #echo form_error('bi_acct_name');?></span>
-									</div>
-									<div style='height:40px;'>
-										<label for="bi_chk_bictr<?php echo $rows; ?>">Default Bank: </label>
-										<input type="checkbox" class="bi_input" name="bi_chk_bictr<?php echo $rows; ?>" id="bi_chk_bictr<?php echo $rows; ?>" value="1" disabled="disabled" <?php echo $bi_checked; ?>>
-										<input type="hidden" name="hbi_chk_bictr<?php echo $rows; ?>" id="hbi_chk_bictr<?php echo $rows; ?>" value ="<?php echo $bi_checked_val;?>"/>
-									</div>										
+									</div>									
 								</div>
 							</div>	
 					</div>
