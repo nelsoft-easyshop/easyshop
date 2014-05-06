@@ -22,7 +22,7 @@ class payment_model extends CI_Model
         
     }
 
-    function payment($paymentType,$invoice_no,$ItemTotalPrice,$ip,$member_id,$productstring,$productCount,$apiResponse)
+    function payment($paymentType,$invoice_no,$ItemTotalPrice,$ip,$member_id,$productstring,$productCount,$apiResponse,$tid)
     {
         $query = $this->sqlmap->getFilenameID('payment','payment_transaction');
         $sth = $this->db->conn_id->prepare($query);
@@ -34,6 +34,7 @@ class payment_model extends CI_Model
         $sth->bindParam(':string',$productstring,PDO::PARAM_STR);
         $sth->bindParam(':product_count',$productCount,PDO::PARAM_INT);
         $sth->bindParam(':data_response',$apiResponse,PDO::PARAM_STR);
+        $sth->bindParam(':tid',$tid,PDO::PARAM_STR);
 
         $sth->execute();
        
@@ -68,12 +69,13 @@ class payment_model extends CI_Model
 		}
     }
 
-    function updatePaymentIfComplete($id,$data)
+    function updatePaymentIfComplete($id,$data,$tid)
     {
         $query = $this->sqlmap->getFilenameID('payment','updatePaymentIfComplete');
     	$sth = $this->db->conn_id->prepare($query);
     	$sth->bindParam(':data',$data,PDO::PARAM_STR);
     	$sth->bindParam(':id_order',$id,PDO::PARAM_INT);
+    	$sth->bindParam(':tid',$tid,PDO::PARAM_STR);
     	
     	if ($sth->execute()){
 		  // success

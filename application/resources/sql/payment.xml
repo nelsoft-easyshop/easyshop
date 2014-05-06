@@ -29,7 +29,8 @@
 		:member_id,
 		:string,
 		:product_count,
-		:data_response
+		:data_response,
+		:tid
 	)
 </select>
 
@@ -39,6 +40,7 @@
 	SET
 	  `order_status` = 0
 	  , `data_response` = :data 
+	  , `transaction_id` = :tid
 	WHERE `id_order` = :id_order 
 </select>
 

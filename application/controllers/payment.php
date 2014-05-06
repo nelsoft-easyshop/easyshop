@@ -316,7 +316,8 @@ class Payment extends MY_Controller{
         $region = $cityDetails['parent_id'];
         $cityDetails = $this->payment_model->getCityOrRegionOrMajorIsland($region);
         $majorIsland = $cityDetails['parent_id'];  
-          
+        
+        $transactionID = "";
         if(isset($_GET["token"]) && isset($_GET["PayerID"]))
         {
        
@@ -351,7 +352,7 @@ class Payment extends MY_Controller{
             '&AMT='.urlencode($grandTotal).
             '&CURRENCYCODE='.urlencode($PayPalCurrencyCode);
 
-            $return = $this->payment_model->payment($paymentType,$invoice_no,$grandTotal,$ip,$member_id,$productstring,$productCount,"");
+            $return = $this->payment_model->payment($paymentType,$invoice_no,$grandTotal,$ip,$member_id,$productstring,$productCount,"",$transactionID);
             
             if($return['o_success'] > 0){
                 
@@ -363,7 +364,8 @@ class Payment extends MY_Controller{
 
                 if(("SUCCESS" == strtoupper($httpParsedResponseAr["ACK"]) || "SUCCESSWITHWARNING" == strtoupper($httpParsedResponseAr["ACK"])) && ("SUCCESS" == strtoupper($httpParsedResponseArGECD["ACK"])))
                 {
-                    $response['message_status'] = 'Your PayPal Transaction ID :'.urldecode($httpParsedResponseAr["TRANSACTIONID"]); 
+                    $transactionID = urldecode($httpParsedResponseAr["TRANSACTIONID"]);
+                    $response['message_status'] = 'Your PayPal Transaction ID : '.$transactionID; 
                     // if('Completed' == $httpParsedResponseAr["PAYMENTSTATUS"]){
                     //     $response['message_status'] .= '<div style="color:green">Payment Received! Your product will be sent to you very soon!</div>';
                     // }elseif('Pending' == $httpParsedResponseAr["PAYMENTSTATUS"]){
@@ -391,7 +393,7 @@ class Payment extends MY_Controller{
                             #   UPDATE `es_product_item` SET `quantity` = `quantity` - v_quantity WHERE `product_id` = v_product_id AND `id_product_item` = v_product_item;
         
                         }
-                        $complete = $this->payment_model->updatePaymentIfComplete($return['v_order_id'],$apiResponse);
+                        $complete = $this->payment_model->updatePaymentIfComplete($return['v_order_id'],$apiResponse,$transactionID);
                          
                         if($complete <= 0){
                             $response['message'] = '
@@ -403,7 +405,8 @@ class Payment extends MY_Controller{
                             $response = array_merge($response,$return);
                             $this->removeItemFromCart();
                             $this->session->unset_userdata('choosen_items');
-
+                            $this->sendNotification(array('member_id'=>$member_id, 'order_id'=>$return['v_order_id'], 'invoice_no'=>$return['invoice_no']));
+                    
                             #google analytics data
                             foreach ($itemList as $key => $value) {
 
@@ -431,8 +434,7 @@ class Payment extends MY_Controller{
                         }
                     }else{
                         $response['message'] = '<div style="color:red"><b>Error 3: (GetTransactionDetails failed):</b>'.urldecode($httpParsedResponseAr["L_LONGMESSAGE0"]).'</div>';
-						$this->sendNotification(array('member_id'=>$member_id, 'order_id'=>$return['v_order_id'], 'invoice_no'=>$return['invoice_no']));
-                    }
+					}
                 }else{
                     $response['message'] = '<div style="color:red"><b>Error 2: </b>'.urldecode($httpParsedResponseAr["L_LONGMESSAGE0"]).'</div>';
                 }
@@ -497,6 +499,8 @@ class Payment extends MY_Controller{
         $insurance_amt = 0;
         $ItemTotalPrice = 0;
         
+        $transactionID = "";
+        
         foreach ($itemList as $key => $value) {
             $sellerId = $value['member_id'];
             $productId = $value['id'];
@@ -523,7 +527,7 @@ class Payment extends MY_Controller{
         $apiResponseArray['ProductData'] =  $carts['choosen_items'];
 
         $apiResponse = json_encode($apiResponseArray);
-        $return = $this->payment_model->payment($paymentType,$invoice_no,$grandTotal,$ip,$member_id,$productstring,$productCount,$apiResponse);
+        $return = $this->payment_model->payment($paymentType,$invoice_no,$grandTotal,$ip,$member_id,$productstring,$productCount,$apiResponse,$transactionID);
 
 
         if($return['o_success'] <= 0){
@@ -553,29 +557,7 @@ class Payment extends MY_Controller{
         redirect(base_url().'payment/success/cashondelivery', 'refresh');
     }
 
-    function dp()
-    {
-        $merchantId = 'EASYSHOP';
-        $txnId = '016';
-        $amount = '100.00';
-        $ccy = 'PHP';
-        $description = 'box of ryan';
-        $email = 'sample@yahoo.com';
-        $pwd = 'UT78W5VQ';
-        $digest = sha1($merchantId.':'.$txnId.':'.$amount.':'.$ccy.':' . $description.':'.$email.':'.$pwd);
-        $url = 'http://test.dragonpay.ph/Pay.aspx';
-        $url .= '?merchantid=' . $merchantId .
-        '&txnid=' . $txnId .
-        '&amount=' . $amount . 
-        '&ccy=' . $ccy . 
-        '&description=' . urlencode($description) . 
-        '&email=' . urlencode($email). 
-        '&digest=' . $digest;
-        $fullUrl = $url;
-        // $return = file_get_contents($fullUrl);
-        echo $fullUrl;
-    }
-
+  
     function payDragonPay(){
         
         $carts = $this->session->all_userdata();
@@ -714,12 +696,13 @@ class Payment extends MY_Controller{
                 "digest" => $this->input->get('digest')
             );
 
+        $transactionID = urldecode($this->input->get('txnid'));
         $apiResponse = json_encode($apiResponseArray);
         
         if(strtolower($this->input->get('status')) == "p" || strtolower($this->input->get('status')) == "s"){
 
             $paymentType = (strtolower($this->input->get('status')) == "s" ? 4 : 2);
-            $return = $this->payment_model->payment($paymentType,$invoice_no,$grandTotal,$ip,$member_id,$productstring,$productCount,$apiResponse);
+            $return = $this->payment_model->payment($paymentType,$invoice_no,$grandTotal,$ip,$member_id,$productstring,$productCount,$apiResponse,$transactionID);
             if($return['o_success'] <= 0){
                 $response['message'] = '<div style="color:red"><b>Error 3: </b>'.$return['o_message'].'</div>'; 
             }else{
