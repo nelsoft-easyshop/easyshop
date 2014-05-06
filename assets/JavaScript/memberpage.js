@@ -1917,7 +1917,7 @@ $(document).ready(function(){
 		$('#abi').toggle("slow");
 	});
 	
-    $('#bi_bank').selectize();
+    $('#bi_bank').getbank("");
 	
 	////// START /////////////////////////////////////////////////////////////////////
 	
@@ -1969,11 +1969,10 @@ $(document).ready(function(){
 		var bid = 'bi_id_' + bictr;
 		var bch = 'bi_chk_' + bictr;
 
-		
-		$("#"+ban).prop("disabled", false);
-		$("#"+bar).prop("disabled", false);
-		$("#"+bn).prop("disabled", false);
-		$("#"+bch).prop("disabled", false);
+		$("#"+ban).prop("disabled", false).removeClass("bi_input");
+		$("#"+bar).prop("disabled", false).removeClass("bi_input");
+		$("#"+bn).prop("disabled", false).removeClass("bi_input");
+		$("#"+bch).prop("disabled", false).removeClass("bi_input");
 		
 		$("#sv_"+bictr+", #cn_"+bictr+", #bi_bns_"+bictr).show("fast");		
 		$("#del_"+bictr+", #"+bictr+", #bi_bn_"+bictr).hide("fast");
@@ -2014,10 +2013,10 @@ $(document).ready(function(){
 		$("#"+bar).val($("#h"+bar).val());
 		$("#"+bn).val($("#h"+bn).val());
 		
-		$("#"+ban).prop("disabled", true);
-		$("#"+bar).prop("disabled", true);
-		$("#"+bn).prop("disabled", true);
-		$("#"+bch).prop("disabled", true);			
+		$("#"+ban).prop("disabled", true).addClass("bi_input");
+		$("#"+bar).prop("disabled", true).addClass("bi_input");
+		$("#"+bn).prop("disabled", true).addClass("bi_input");
+		$("#"+bch).prop("disabled", true).addClass("bi_input");			
 
 		$("#sv_"+bictr+", #cn_"+bictr+", #bi_bns_"+bictr).hide();		
 		$("#del_"+bictr+", #"+bictr+", #bi_bn_"+bictr).show();
@@ -2110,10 +2109,10 @@ $(document).ready(function(){
 						$("#h"+bn).val(bntit);
 						$("#"+bn).val(bntit);							
 						
-						$("#"+ban).prop("disabled", true);
-						$("#"+bar).prop("disabled", true);
-						$("#"+bn).prop("disabled", true);
-						$("#"+bch).prop("disabled", true);			
+						$("#"+ban).prop("disabled", true).addClass("bi_input");;
+						$("#"+bar).prop("disabled", true).addClass("bi_input");;
+						$("#"+bn).prop("disabled", true).addClass("bi_input");;
+						$("#"+bch).prop("disabled", true).addClass("bi_input");;			
 			
 						$("#sv_"+bictr+", #cn_"+bictr+", #bi_bns_"+bictr).hide();		
 						$("#del_"+bictr+", #"+bictr+", #bi_bn_"+bictr).show();
