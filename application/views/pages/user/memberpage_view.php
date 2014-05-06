@@ -1683,11 +1683,11 @@
 <div id="complete_transactions" class="profile_main_content">
 	<h2>Completed Transactions</h2>
 	<ul class="idTabs transact_tabs">
-		<li><a href="#complete_buy">Bought</a></li>
-		<li><a href="#complete_sell">Sold</a></li>
+		<li><a href="#complete_buy">Bought<span><?php echo count($transaction['complete']['buy']);?></span></a></li>
+		<li><a href="#complete_sell">Sold<span><?php echo count($transaction['complete']['sell']);?></span></a></li>
 	</ul>
 	<div id="complete_buy">
-		<h2>Bought Items</h2>
+		<!--<h2>Bought Items</h2>-->
 		<?php if(count($transaction['complete']['buy'])===0):?>
 			<br/>
 			<div><strong>No transaction for this category.</strong></div>
@@ -1827,7 +1827,7 @@
 	
 	
 	<div id="complete_sell">
-		<h2>Sold Items</h2>
+		<!--<h2>Sold Items</h2>-->
 		<?php if(count($transaction['complete']['sell'])===0):?>
 		<br/>
 		<div><strong>No transaction for this category.</strong></div>
