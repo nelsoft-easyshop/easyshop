@@ -26,3 +26,8 @@
 .ui-dialog-titlebar-close{
 	display:none;
 }
+
+.bi_input{
+	background-color:transparent; 
+	border-color:transparent;
+}
