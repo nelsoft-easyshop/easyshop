@@ -10,10 +10,13 @@
  
     <div class="inner_seller_product_content">
       <h2 class="f24">Sell an Item</h2>
-		<a id="tutShippingLoc" class="tooltips" href="javascript:void(0)">
-			<img src="<?= base_url() ?>assets/images/icon_qmark.png" alt="">
-			<span class="1line_tooltip">Click me for a quick tutorial!</span>
-		</a> 
+        
+        <a id="tutShippingLoc" class="tooltips" href="javascript:void(0)" style='text-decoration:underline'>
+             <img src="<?= base_url() ?>assets/images/icon_qmark.png" alt="">  
+             What's this?
+             <span>Click here to read more. Your progress will not be lost. </span>
+        </a>
+        
             <div class="sell_steps sell_steps3">
                 <ul>
                     <li><a href="javascript:void(0)" id="step1_link">Step 1 : Select Category</a></li>
@@ -43,7 +46,7 @@
       		  <table class="shipping_prod_attr_comb" cellspacing="0" cellpadding="0" width="465px">
               <thead>
                 <tr>
-                  <td class="step3_title"><h4>Select attribute combinations</h4></td>
+                  <td class="step3_title"><h4>Select from available combinations</h4></td>
                 </tr>
               </thead>
       		  <tr>
@@ -189,11 +192,11 @@
 
       <!-- start of shipping summary -->
       <div class="shipping_summary_container">
-          <h2 class='f20'>Shipment list</h2>
+          <h2 class='f20'>Shipment Summary</h2>
           <table class="" cellspacing="0" cellpadding="0">
                <thead>
                     <tr>
-                      <td width="128px" class="f12">Attribute Combinations</td>
+                      <td width="128px" class="f12">Combination</td>
                       <td width="80px"><span class="f12">Location</span></td>
                       <td width="257px"><span class="f12">Price</span></td>     
                     </tr>
@@ -327,44 +330,46 @@
 <div id="div_tutShippingLoc" class="tutorial_modal" style="display:none; width: 100%;">
 	<div class="paging">
 		<div class="p_title">
-		  <h2>Step 1:</h2>
+		  <h2>Set Shipment Options</h2>
 		</div>
 		<div class="p_content">
-		  <p>Select product attribute combinations. By default, 'All Combinations' will be displayed.</p>
+		  <p class='h_strong'>You can set here the location(s) where you are willing to ship your item and the corresponding shipment fee. You may set the shipment details for each of the combinations you have provided in the previous step.</p>
+            
+        </div>
+        <div class='shipment_container'>
+            <div class='shipment_divider'>
+                <span style="display:block;"><p style='font-weight:bold'>No item detail combinations were provided during the previous step.</p></span>
+                <img src="<?=base_url()?>assets/images/tutorial/prd_upload_step3/attr_combination_def.png" alt="No Attribute Combinations.png">
+            </div>
+            <div class='shipment_divider'>
+                <span style="display:block;"><p style='font-weight:bold'>Item detail combinations were provided during the previous step.</p></span>
+                <img src="<?=base_url()?>assets/images/tutorial/prd_upload_step3/attr_combination_opt.png" alt="With Attribute Combinations.png">
+            </div>
+        </div>
+	</div>
+	<div class="paging">
+		<div class="p_title">
+		  <h2>Set Shipment Options</h2>
 		</div>
-		<div style="display: inline-block; vertical-align:top;padding:15px">
-			<span style="display:block;"><p class="h_strong">No attributes specified in Step 2:</p></span>
-			<img height="250px" width="380px" src="<?=base_url()?>assets/images/tutorial/prd_upload_step3/attr_combination_def.png" alt="No Attribute Combinations.png">
-		</div>
-		<div style="display: inline-block; vertical-align:top;padding:15px">
-			<span style="display:block;"><p class="h_strong">With specified attributes in Step 2:</p></span>
-			<img height="300px" width="380px" src="<?=base_url()?>assets/images/tutorial/prd_upload_step3/attr_combination_opt.png" alt="With Attribute Combinations.png">
+		<div class="p_content">
+		  <p class='h_strong'>
+            You can now assign different locations and shipment fee for the combination(s) that you have selected.
+            You may click on <strong>'Add another location'</strong> to add as many location and shipment fee fields as you need.
+            Once ready, click on <strong>'Add to shipping list'</strong> to add the shipping details to the summary section.
+          </p>
+		  <div class='shipment_container'><img src="<?=base_url()?>assets/images/tutorial/prd_upload_step3/loc_price.png" style='margin: 5px;'></div>
 		</div>
 	</div>
 	<div class="paging">
 		<div class="p_title">
-		  <h2>Step 2:</h2>
+		  <h2>Set Shipment Options</h2>
 		</div>
 		<div class="p_content">
-		  <p>Select shipping location and set price for the selected attributes:</p>
-		  <div><img height="250px" width="400px" src="<?=base_url()?>assets/images/tutorial/prd_upload_step3/loc_price.png"></div>
-		  <p>Click <strong>'Add another location'</strong> to create new location and price entry fields.</p>
-		  <p>Click <strong>'Add to shipping list'</strong> to add the shipping details to the summary section.</p>
-		<p class="h_strong">
-			NOTE: If you select Luzon as a location, the product with the selected attributes are considered available to all locations in Luzon with the indicated price.
-			If you add another location (region or city under Luzon), that indicated price will be prioritized for that location(s).
-		</p>
-		</div>
-	</div>
-	<div class="paging">
-		<div class="p_title">
-		  <h2>Step 3:</h2>
-		</div>
-		<div class="p_content">
-		  <p>Review your shipping summary</p>
-		  <div><img height="300px" width="400px" src="<?=base_url()?>assets/images/tutorial/prd_upload_step3/shipping_summary.png" alt="With Attribute Combinations.png"></div>
-		  <p class="h_strong">Click <strong>'Edit'</strong> to change the shipping price, or <strong>'Delete'</strong> to delete the entry.</p>
-		</div>
+		  <p class='h_strong'>All of your added shipment information is listed in the shipment summary. You may click on <strong>'Edit'</strong> to change the shipping price, or <strong>'Delete'</strong> to delete the entry.  </p>
+		  <div class='shipment_container'><img src="<?=base_url()?>assets/images/tutorial/prd_upload_step3/shipping_summary.png" alt="With Attribute Combinations.png" style='margin: 10px;'></div>
+		  <p style='font-weight:bold'>Shipment option set for a certain region applies to all the locations within that region. However, if a more specific location is included, the shipment fee for the more specific location will be used. A link to the rate calculators of different courier services are provided at the bottom of the page.</p>
+		
+        </div>
 	</div>
 	
 	<div class="pagination" id="paging_tutShippingLoc">

@@ -1,6 +1,5 @@
 <link type="text/css" href="<?=base_url()?>assets/css/sell_item.css?ver=1.0" rel="stylesheet" />
-<link type="text/css" href="<?=base_url()?>assets/css/product_upload_tutorial.css" rel="stylesheet" />
-<link  type="text/css"  href='<?=base_url()?>assets/css/jqpagination.css' rel="stylesheet" media='screen'/>
+<link type="text/css" href="<?=base_url()?>assets/css/product_upload_tutorial.css?ver=1.0" rel="stylesheet" />
 <div class="wrapper">
 
 <div class="clear"></div>
@@ -247,12 +246,12 @@
           <tbody class="more_product_details_container">
           <!-- Add item specifics -->
           <tr>
-            <!-- id="" -->
             <td class="border-left border-right" colspan="4">
-              <h3> Add item specifics</h3>  
-              <a id="tutSpec" class="" href="javascript:void(0)">
-                <img src="<?= base_url() ?>assets/images/icon_qmark.png" alt="">
-                 
+              <h3 style='display:inline'> Add item specifics</h3>  
+              <a id="tutSpec" class="tooltips" href="javascript:void(0)" style='text-decoration:underline'>
+                 <img src="<?= base_url() ?>assets/images/icon_qmark.png" alt="">  
+                 What's this?
+                 <span>Click here to read more. Your progress will not be lost. </span>
               </a>
             </td>
           </tr>
@@ -354,16 +353,13 @@
           <tr>
             <td class="border-left border-right" colspan="4">
               <h3> Additional Information for your Item</h3> 
-                <a id="tutOptional" class="" href="javascript:void(0)">
-                <img src="<?= base_url() ?>assets/images/icon_qmark.png" alt="">
-                 
-              </a>
               <br>
-                Use this in order to better describe the characteristics of your item.
-                <a class="tooltips" href="javascript:void(0)">
-                <img src="<?= base_url() ?>assets/images/icon_qmark.png" alt="">
-                <span>You may add additional fields and even set specific prices and images for each new specification </span>
-              </a>
+                Use this to add your own details to your listing.
+                <a id="tutOptional" class="tooltips" href="javascript:void(0)" style='text-decoration:underline'>
+                      <img src="<?= base_url() ?>assets/images/icon_qmark.png" alt=""> 
+                      What's this?
+                      <span>Click here to read more. Your progress will not be lost. </span>
+                </a>
             </td>
           </tr>
 
@@ -527,7 +523,12 @@
                     <span>Quantity:</span><br />
                     <input type="text" class="qtyTextClass" id="qtyTextClass" name="quantity"> 
                     <a href="javascript:void(0)" data-value="1" class="quantity_attr_done orange_btn3">Add</a>
-                    <a id="tutQty" class="tooltips qty_tooltip" href="javascript:void(0)" style="display:none"><img src="<?= base_url() ?>assets/images/icon_qmark.png" alt=""> <span> You can also set the availability of different attribute combinations of your item by clicking the Add button</span></a> 
+                 
+                       <a id="tutQty" class="tooltips qty_tooltip" href="javascript:void(0)" style='text-decoration:underline'>
+                         <img src="<?= base_url() ?>assets/images/icon_qmark.png" alt="">  
+                         What's this?
+                         <span>Click here to read more about setting the quantity options of your listing. Your progress will not be lost. </span>
+                      </a>                
                   </div>
                   <div class="quantity_attrs_content" id="quantity_attrs_content2"></div>
                 </div>
@@ -584,139 +585,93 @@
   <div id="div_tutOptional" style="display:none;">
       <div class="paging">
         <div class="p_title">
-          <h2>Overview (OPTIONALS)</h2>
+          <h2>Add your own specifications</h2>
         </div>
         <div class="p_content">
-          <p>This step allows you to specify shipping location and price for one or more attribute(s).</p>
-          <p class="h_strong">All attributes should have assigned shipping locations and price.</p>
-        </div>
-      </div>
-      
-      <div class="paging">
-        <div class="p_title">
-          <h2>Step 1:</h2>
-        </div>
-        <div class="p_content">
-          <p>Select shipping location and set price for the selected attributes:</p>
+          <p class="h_strong">You may add your own item specifications to your listing. This is helpful if you have item details that are not present in our provided list.</p>
           <div><img src="<?=base_url()?>assets/images/tutorial/prd_upload_step2/optionals/1.png"></div>
-          <p class="h_strong">Click <strong>'Add another location'</strong> to create new location and price entry fields.</p>
+           <p class="">You can enter as many fields as you need by clicking on <strong>+Add more value</strong></p>
         </div>
       </div>
   
       <div class="paging">
         <div class="p_title">
-          <h2>Step 2:</h2>
+          <h2>Add your own specification</h2>
         </div>
         <div class="p_content">
-          <p>Select shipping location and set price for the selected attributes:</p>
-          <div><img src="<?=base_url()?>assets/images/tutorial/prd_upload_step2/optionals/2.png"></div>
-          <p class="h_strong">Click <strong>'Add another location'</strong> to create new location and price entry fields.</p>
+           <p class="h_strong">You may assign images and additional prices to each of your new details. Take advantage and customize your item listing. </p>
+           <div><img src="<?=base_url()?>assets/images/tutorial/prd_upload_step2/optionals/2.png"></div>
+             <br/>
         </div>
       </div>
   
       <div class="paging">
         <div class="p_title">
-          <h2>Step 3:</h2>
+          <h2>Add your own specification</h2>
         </div>
         <div class="p_content">
-          <p>Review your shipping summary</p>
+          <p class="h_strong">Once successful, other users will be able to see the image and price associated with each detail when they select it. </p>
           <div><img src="<?=base_url()?>assets/images/tutorial/prd_upload_step2/optionals/3.png" alt="With Attribute Combinations.png"></div>
-          <p class="h_strong">Click 'Edit' to change the shipping price, or 'Remove' to delete the entry.</p>
+            <br/>
         </div>
       </div>
   
       <div class="paging">
         <div class="p_title">
-          <h2>Step 4:</h2>
+          <h2>Add your own specification</h2>
         </div>
         <div class="p_content">
-          <p>Review your shipping summary</p>
+            <p class="h_strong">Once successful, other users will be able to see the image and price associated with each detail when they select it. </p>
           <div><img src="<?=base_url()?>assets/images/tutorial/prd_upload_step2/optionals/4.png" alt="With Attribute Combinations.png"></div>
-          <p class="h_strong">Click 'Edit' to change the shipping price, or 'Remove' to delete the entry.</p>
+          <br/>
         </div>
       </div>
-  
-      <div class="paging">
-        <div class="p_title">
-          <h2>Step 5:</h2>
-        </div>
-        <div class="p_content">
-          <p>Review your shipping summary</p>
-          <div><img src="<?=base_url()?>assets/images/tutorial/prd_upload_step2/optionals/5.png" alt="With Attribute Combinations.png"></div>
-          <p class="h_strong">Click 'Edit' to change the shipping price, or 'Remove' to delete the entry.</p>
-        </div>
-      </div>
-  
-      <div class="paging">
-        <div class="p_title">
-          <h2>Step 6:</h2>
-        </div>
-        <div class="p_content">
-          <p>Review your shipping summary</p>
-          <div><img src="<?=base_url()?>assets/images/tutorial/prd_upload_step2/optionals/6.png" alt="With Attribute Combinations.png"></div>
-          <p class="h_strong">Click 'Edit' to change the shipping price, or 'Remove' to delete the entry.</p>
-        </div>
-      </div>
+    
     
       <div class="pagination p_cent" id="paging_tutOptional">
         <a href="#" class="first" data-action="first">&laquo;</a>
         <a href="#" class="previous" data-action="previous">&lsaquo;</a>
-        <input type="text" readonly="readonly" data-max-page="7" />
+        <input type="text" readonly="readonly" data-max-page="4" />
         <a href="#" class="next" data-action="next">&rsaquo;</a>
         <a href="#" class="last" data-action="last">&raquo;</a>
       </div>
   </div>
 
-  <div id="div_tutQty" style="display:none;">
+  <div id="div_tutQty" style="display:none;">    
       <div class="paging">
         <div class="p_title">
-          <h2>Overview (QUANTITY)</h2>
+          <h2>Set Availability Options</h2>
         </div>
         <div class="p_content">
-          <p>This step allows you to specify shipping location and price for one or more attribute(s).</p>
-          <p class="h_strong">All attributes should have assigned shipping locations and price.</p>
-        </div>
-      </div>
-    
-      <div class="paging">
-        <div class="p_title">
-          <h2>Step 1:</h2>
-        </div>
-        <div class="p_content">
-          <p>Select shipping location and set price for the selected attributes:</p>
+          <p class="h_strong">You may set the availability setting for different product detail combinations. To do this, make sure that you have filled-in the <strong>'View more product details' </strong> section with your desired details.</p>
           <div><img src="<?=base_url()?>assets/images/tutorial/prd_upload_step2/quantity/1.png"></div>
-          <p class="h_strong">Click <strong>'Add another location'</strong> to create new location and price entry fields.</p>
         </div>
       </div>
     
       <div class="paging">
         <div class="p_title">
-          <h2>Step 2:</h2>
+          <h2>Set Availability Options</h2>
         </div>
         <div class="p_content">
-          <p>Select shipping location and set price for the selected attributes:</p>
+          <p class="h_strong">All the details you have filled-up should be available in the <strong> 'quantity' </strong> section. From here you may come up with different combinations by playing around with the select boxes.</p>
           <div><img src="<?=base_url()?>assets/images/tutorial/prd_upload_step2/quantity/2.png"></div>
-          <p class="h_strong">Click <strong>'Add another location'</strong> to create new location and price entry fields.</p>
         </div>
       </div>
     
       <div class="paging">
         <div class="p_title">
-          <h2>Step 3:</h2>
+          <h2>Set Availability Options</h2>
         </div>
         <div class="p_content">
-          <p>Review your shipping summary</p>
+          <p class="h_strong">Add an availability value by clicking the <strong>Add</strong> button. You may add as many as you need but do note that you can only set the availability of each combination once. If you need to make changes, you can change the quantity text field for that combination.</p>
           <div><img src="<?=base_url()?>assets/images/tutorial/prd_upload_step2/quantity/3.png" alt="With Attribute Combinations.png"></div>
-          <p class="h_strong">Click 'Edit' to change the shipping price, or 'Remove' to delete the entry.</p>
         </div>
       </div>
      
-       
-      
       <div class="pagination p_cent" id="paging_tutQty">
         <a href="#" class="first" data-action="first">&laquo;</a>
         <a href="#" class="previous" data-action="previous">&lsaquo;</a>
-        <input type="text" readonly="readonly" data-max-page="4" />
+        <input type="text" readonly="readonly" data-max-page="3" />
         <a href="#" class="next" data-action="next">&rsaquo;</a>
         <a href="#" class="last" data-action="last">&raquo;</a>
       </div>
@@ -729,38 +684,27 @@
             <h2>Adding item specifications</h2>
         </div>
         <div class="p_content">
-            <p>You may add additional information to your listing by selecting from the list of attributes that we have provided.</p>
-            <div><img src="<?=base_url()?>assets/images/tutorial/prd_upload_step2/specifics/1.png"></div>
-            <p class="h_strong">Fill up the available text fields or select from the provided checkboxes.</p>
+            <p class="h_strong">Fill up the available text fields or select from the provided checkboxes from the list of attributes that we have provided. </p>
+            <div><img src="<?=base_url()?>assets/images/tutorial/prd_upload_step2/specifics/1.png"></div> 
         </div>
       </div>
 
       <div class="paging">
         <div class="p_title">
-          <h2>Step 2:</h2>
+          <h2>Adding item specifications</h2>
         </div>
         <div class="p_content">
-          <p>Select shipping location and set price for the selected attributes:</p>
-          <div><img src="<?=base_url()?>assets/images/tutorial/prd_upload_step2/specifics/2.png"></div>
-          <p class="h_strong">Click <strong>'Add another location'</strong> to create new location and price entry fields.</p>
+            <p class="h_strong">The fields you filled-up will appear in the listing page of your item. Other users may even select from the available details when they are looking to purchase your item.</p>
+            <div><img src="<?=base_url()?>assets/images/tutorial/prd_upload_step2/specifics/2.png"></div>
+            <p class=""></p>
         </div>
       </div>
 
-      <div class="paging">
-        <div class="p_title">
-          <h2>Step 3:</h2>
-        </div>
-        <div class="p_content">
-          <p>Review your shipping summary</p>
-          <div><img src="<?=base_url()?>assets/images/tutorial/prd_upload_step2/specifics/3.png" alt="With Attribute Combinations.png"></div>
-          <p class="h_strong">Click 'Edit' to change the shipping price, or 'Remove' to delete the entry.</p>
-        </div>
-      </div>
   
       <div class="pagination p_cent" id="paging_tutSpec">
         <a href="#" class="first" data-action="first">&laquo;</a>
         <a href="#" class="previous" data-action="previous">&lsaquo;</a>
-        <input type="text" readonly="readonly" data-max-page="3" />
+        <input type="text" readonly="readonly" data-max-page="2" />
         <a href="#" class="next" data-action="next">&rsaquo;</a>
         <a href="#" class="last" data-action="last">&raquo;</a>
       </div>
@@ -777,7 +721,7 @@
 
 </script>
  
-<script type="text/javascript" src="<?=base_url()?>assets/JavaScript/productUpload_step2.js"></script> 
+<script type="text/javascript" src="<?=base_url()?>assets/JavaScript/productUpload_step2.js?ver=1.0"></script> 
 <script src="<?php echo base_url() ?>assets/tinymce/plugins/jbimages/js/jquery.form.js"></script>
 <script type='text/javascript' src="<?=base_url()?>assets/JavaScript/js/jquery.simplemodal.js"></script>
 <script type='text/javascript' src='<?=base_url()?>assets/JavaScript/js/jquery.jqpagination.min.js'></script>
@@ -1101,6 +1045,7 @@ else
          * Changed ".photoprimary"+idNumber selector to $(this) + sibling/closest selectors
          * SEE REVISION 1529 for original code
          */
+         
         var idNumber;
         var text = $(this).siblings('.makeprimary').first().text();
 
@@ -1231,7 +1176,7 @@ if(haveValue === true){
    thisValueCount++;
    $(this).data('value',thisValueCount);
  }else{
-  alert('Combination Already Selected!');
+  alert('This combination has already been selected. Please select another combination.');
   return false;
 } 
 }

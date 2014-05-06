@@ -331,7 +331,7 @@ $(function(){
 	});
 	
 	if(!hasDetail){
-		alert('Please add shipping details for all attribute combinations.');
+		alert('Please add shipping details for all combinations.');
 		return false;
 	}
 	
@@ -965,9 +965,22 @@ $(function(){
 				});
 				$('#paging_tutShippingLoc').jqPagination('option', 'current_page', 1);
 			},
-			onClose: function(){
+            onOpen: function (dialog) {
+                dialog.overlay.fadeIn(250, function () {
+                    dialog.container.slideDown(250, function () {
+                        dialog.data.fadeIn(250);
+                    });
+                });
+            },
+			onClose: function(dialog){
 				$('#paging_tutShippingLoc').jqPagination('destroy');
-				$.modal.close();
+				dialog.data.fadeOut(200, function () {
+                    dialog.container.slideUp(200, function () {
+                        dialog.overlay.fadeOut(200, function () {
+                            $.modal.close(); 
+                        });
+                    });
+                });
 			}
 		});
 	});
