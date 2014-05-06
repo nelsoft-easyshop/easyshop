@@ -537,7 +537,7 @@ class productUpload extends MY_Controller
 
 
 					# start of saving combination
-                        if($checkIfCombination == 'true'){
+                        if($checkIfCombination == 'true' || $checkIfCombination == 1 || $checkIfCombination == true || $checkIfCombination == TRUE){
 
                         	$quantitySolo = 1;
                         	if($this->input->post('quantitySolo')){
