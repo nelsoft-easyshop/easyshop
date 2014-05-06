@@ -23,6 +23,7 @@ class Payment extends MY_Controller{
     public $PayMentPayPal = 1;
     public $PayMentDragonPay = 2;
     public $PayMentCashOnDelivery = 3;
+    public $PayMentDragonPayOnlineBanking = 4;
 
     // SANDBOX
     public $PayPalMode             = 'sandbox'; 
@@ -88,18 +89,27 @@ class Payment extends MY_Controller{
 
             if($city > 0){  
                 $details = $this->payment_model->getShippingDetails($productId,$itemId,$city,$region,$majorIsland);
-                $successcount = (count($details) >= 1 ? $successcount + 1 && $availability = "Available" && $itemArray[$value['rowid']]['shipping_fee'] = $details[0]['price'] : $successcount + 0);
+  
+
+                if(count($details) >= 1){
+                    $successcount++;
+                    $availability = "Available";
+                    $itemArray[$value['rowid']]['shipping_fee'] = $details[0]['price'];
+                } 
+              
                 if(count($details) > 0){
                 $codCount = ($details[0]['is_cod'] >= 1 ? $codCount + 1: $codCount + 0);
                 $itemArray[$value['rowid']]['cash_delivery'] = $details[0]['is_cod'];
                 }
                 $data['shippingDetails'] = true; 
-            } 
+            }
+          
                 $seller = $value['member_id'];
                 $sellerDetails = $this->memberpage_model->get_member_by_id($seller);
                 $itemArray[$value['rowid']]['availability'] = ($availability == "Available" ? true : false);
                 $itemArray[$value['rowid']]['seller_username'] = $sellerDetails['username'];
         }  
+ 
         if(!count($carts['choosen_items']) <= 0){  
             $data['cat_item'] = $itemArray;
             $data['title'] = 'Payment | Easyshop.ph';
