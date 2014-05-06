@@ -703,6 +703,25 @@ class memberpage_model extends CI_Model
 
 	}
 	
+	function billing_info_default($data){
+		
+		$query = "UPDATE `es_billing_info` SET `is_default`=0, `datemodified` = NOW()
+				WHERE `member_id`=:member_id ";
+		$sth = $this->db->conn_id->prepare($query);
+		$sth->bindParam(':member_id', $data['member_id']);		
+		$result = $sth->execute();		
+
+		$query = "UPDATE `es_billing_info` SET `is_default` = 1, `datemodified` = NOW() WHERE `member_id`=:member_id AND `id_billing_info`=:ibi";
+		$sth = $this->db->conn_id->prepare($query);
+		$sth->bindParam(':member_id', $data['member_id']);		
+		$sth->bindParam(':ibi', $data['ibi']);
+        $sth->bindParam(':member_id', $data['member_id']);
+		$result = $sth->execute();
+		
+		return $result;
+
+	}
+	
 	function billing_info_delete($data){
 
 		$query = "UPDATE `es_billing_info` SET `is_delete` = 1, `datemodified` = NOW() WHERE `member_id`=:member_id AND `id_billing_info`=:ibi";
@@ -714,7 +733,7 @@ class memberpage_model extends CI_Model
 		
 		return $result;
 
-	}	
+	}		
 	
 	function get_billing_info($data){
 		$query = "SELECT
