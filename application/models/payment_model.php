@@ -435,6 +435,18 @@ class payment_model extends CI_Model
 		
 		return $result;
 	}
+	
+	function addOrderHistory($temp)
+	{
+		$query = $this->sqlmap->getFilenameID('payment','addOrderHistory');
+		$sth = $this->db->conn_id->prepare($query);
+		$sth->bindParam(':order_id', $temp['order_id']);
+		$sth->bindParam(':order_status', $temp['order_status']);
+		$sth->bindParam(':comment', $temp['comment']);
+		$result = $sth->execute();
+		
+		return $result;
+	}
 }
 
 
