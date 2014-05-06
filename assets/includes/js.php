@@ -7,7 +7,7 @@
 
    window.alert = function(message){
         $(document.createElement('div'))
-            .attr({title: 'Alert', class: 'alert'})
+            .attr({title: 'Easyshop.ph', class: 'alert'})
             .html(message)
             .dialog({
                 buttons: {OK: function(){$(this).dialog('close');}},
