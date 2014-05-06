@@ -862,7 +862,7 @@ class Payment extends MY_Controller{
 	 */
 	function test($test, $abs)
 	{
-		
+	
 	}
 	
 }

@@ -221,6 +221,9 @@ class payment_model extends CI_Model
 		return $data;
 	}
 	
+	/*
+	 *	Function to get product order transaction details for email notification
+	 */
 	public function getOrderProductTransactionDetails($data)
 	{
 		$query = $this->sqlmap->getFilenameID('payment','getOrderProductTransactionDetails');
@@ -263,7 +266,7 @@ class payment_model extends CI_Model
 	}
 	
 	
-	/*
+	/*	STORED PROCEDURE
 	 *	Updates es_order_product status
 	 *	Checks es_order_product status if all orders have buyer/seller response and updates
 	 *		es_order as complete
@@ -436,6 +439,7 @@ class payment_model extends CI_Model
 		return $result;
 	}
 	
+	// Used by dragonpay - memberpage
 	function addOrderHistory($temp)
 	{
 		$query = $this->sqlmap->getFilenameID('payment','addOrderHistory');

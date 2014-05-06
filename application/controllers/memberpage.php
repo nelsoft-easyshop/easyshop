@@ -423,7 +423,7 @@ class Memberpage extends MY_Controller
 					$serverResponse['error'] = 'Failed to send notification email.';
 				}
 			}
-			
+		/*************	DRAGONPAY HANDLER	************************/
 		}else if( $this->input->post('dragonpay') ){
 			$this->load->library('dragonpay');
 			
