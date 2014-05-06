@@ -116,7 +116,7 @@
               <div class="cod_status_con"><?php echo ($value['cash_delivery'] ? "<span style='color:green'>Available for Cash on Delivery</span>" : "<span style='color:red'>Not available for Cash on Delivery</span> (Go to your <a href='".base_url()."cart' style='color:#0654BA'>Cart</a> and Remove this Item)") ;?></div>
                  <?php if(!$value['availability']){ ?>
                  <div style="color:red">
-                   Please <a style="color:#0654BA" href="javascript:{}" class="link_address">change your shipping address</a> or go to remove this from your <a style="color:#0654BA">Cart</a>.
+                   Please <a style="color:#0654BA" href="javascript:{}" class="link_address">change your shipping address</a> or go to remove this from your <a href="<?=base_url()?>cart" style="color:#0654BA">Cart</a>.
                  </div>
                  <?php } ?>
             </div>
@@ -234,7 +234,7 @@
      <div class="error_shipping_address">
         <span>
           Please <a style="color:#0654BA" href="javascript:{}" class="link_address">change your shipping address</a>
-          or remove this from your <a style="color:#0654BA">Cart</a>.
+          or remove this from your <a href="<?=base_url()?>cart" style="color:#0654BA">Cart</a>.
         </span>
      </div>
      <?php } ?>
