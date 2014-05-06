@@ -140,6 +140,7 @@
 	WHERE id_order = :transaction_num AND invoice_no = :invoice_num AND buyer_id = :member_id
 </select>
 
+<!-- Used by Dragonpay upon updating es_order table (status field) -->
 <select id="addOrderHistory">
 	INSERT INTO es_order_history (`order_id`, `order_status`, `comment`, `date_added`)
 	VALUES (:order_id, :order_status, :comment, NOW());

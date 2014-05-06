@@ -771,6 +771,8 @@ class Payment extends MY_Controller{
     }
 	
 	/*
+	 *	Function called upon purchasing an item. Sends notification to both buyer and seller
+	 *
 	 *  $data = array(
 	 *		'member_id' => Member ID who made the purchase (buyerID)
 	 *		'order_id'	=> Transaction Number
@@ -840,7 +842,19 @@ class Payment extends MY_Controller{
 				$sellerTxtResult = $this->payment_model->sendNotificationMobile($sellerMobile, $sellerMsg);
 			}
         }//close foreach seller loop
-    }	 
+    }
+	
+	
+	/*
+	 *	Function to revert back order quantity when dragon pay transaction expires
+	 *
+	 *
+	 */
+	function test($test, $abs)
+	{
+		
+	}
+	
 }
 
 
