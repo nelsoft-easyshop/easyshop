@@ -89,22 +89,26 @@
     $(document).ready(function(){
         $('#checkAll').click(function () {    
 	    if ($(this).prop('checked')) {
-		$("#total").html("<?PHP echo $total; ?>");
+			var value = 0;
+			$(".subtotal").each(function(){
+				value = Number($(".subtotal").html().replace(/\$/g,'').replace(/,/g,'')) + value;
+			});
+			$("#total").html(Number(value).toLocaleString('en')+".00");
 	    }else{		
-		$("#total").html("0.00");
+			$("#total").html("0.00");
 	    }
             $('input:checkbox').prop('checked', this.checked);
         });
         $('.rad').click(function () {
-	    var value = Number($("#subtotal"+$(this).val()).html().replace(/\$/g,'').replace(/,/g,''));
-	    var total = Number($("#total").html().replace(/\$/g,'').replace(/,/g,''));    
-	    var sum = 0;
-	    if ($(this).prop('checked')) {
-		sum = value + total;
-	    }else {
-		sum = total - value;
-	    }
-	    $("#total").html(Number(sum).toLocaleString('en')+".00");
+			var value = Number($("#subtotal"+$(this).val()).html().replace(/\$/g,'').replace(/,/g,''));
+			var total = Number($("#total").html().replace(/\$/g,'').replace(/,/g,''));    
+			var sum = 0;
+			if ($(this).prop('checked')) {
+			sum = value + total;
+			}else {
+			sum = total - value;
+			}
+			$("#total").html(Number(sum).toLocaleString('en')+".00");
         });
         $("#proceed_payment").click(function(event){
             event.preventDefault();
