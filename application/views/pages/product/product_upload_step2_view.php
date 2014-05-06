@@ -1,9 +1,5 @@
-<style type="text/css">
-  #simplemodal-container{
-    width: 1000px
-  }
-</style>
 <link type="text/css" href="<?=base_url()?>assets/css/sell_item.css?ver=1.0" rel="stylesheet" />
+<link type="text/css" href="<?=base_url()?>assets/css/product_upload_tutorial.css" rel="stylesheet" />
 <link  type="text/css"  href='<?=base_url()?>assets/css/jqpagination.css' rel="stylesheet" media='screen'/>
 <div class="wrapper">
 
@@ -571,146 +567,190 @@
 
   
   <div id="div_tutOptional" style="display:none;">
-  <div class="paging">
-    <h2>Overview (OPTIONALS)</h2>
-    <p>
-      This step allows you to specify shipping location and price for one or more attribute(s).
-      <br/>
-      All attributes should have assigned shipping locations and price.
-    </p>
-  </div>
-
-  <div class="paging">
-    <h2>Step 1:</h2>
-    <p>Select shipping location and set price for the selected attributes:</p>
-    <img src="<?=base_url()?>assets/images/tutorial/prd_upload_step2/optionals/1.png">
-    <p>Click <strong>'Add another location'</strong> to create new location and price entry fields.</p>
-
-  </div>
-
-  <div class="paging">
-    <h2>Step 2:</h2>
-    <p>Select shipping location and set price for the selected attributes:</p>
-    <img src="<?=base_url()?>assets/images/tutorial/prd_upload_step2/optionals/2.png">
-    <p>Click <strong>'Add another location'</strong> to create new location and price entry fields.</p>
-  </div>
-
-  <div class="paging">
-    <h2>Step 3:</h2>
-    <p>Review your shipping summary</p>
-    <img src="<?=base_url()?>assets/images/tutorial/prd_upload_step2/optionals/3.png" alt="With Attribute Combinations.png">
-    <p>Click 'Edit' to change the shipping price, or 'Remove' to delete the entry.</p>
-  </div>
-
-    <div class="paging">
-    <h2>Step 4:</h2>
-    <p>Review your shipping summary</p>
-    <img src="<?=base_url()?>assets/images/tutorial/prd_upload_step2/optionals/4.png" alt="With Attribute Combinations.png">
-    <p>Click 'Edit' to change the shipping price, or 'Remove' to delete the entry.</p>
-  </div>
-
-    <div class="paging">
-    <h2>Step 5:</h2>
-    <p>Review your shipping summary</p>
-    <img src="<?=base_url()?>assets/images/tutorial/prd_upload_step2/optionals/5.png" alt="With Attribute Combinations.png">
-    <p>Click 'Edit' to change the shipping price, or 'Remove' to delete the entry.</p>
-  </div>
-
-    <div class="paging">
-    <h2>Step 6:</h2>
-    <p>Review your shipping summary</p>
-    <img src="<?=base_url()?>assets/images/tutorial/prd_upload_step2/optionals/6.png" alt="With Attribute Combinations.png">
-    <p>Click 'Edit' to change the shipping price, or 'Remove' to delete the entry.</p>
-  </div>
+      <div class="paging">
+        <div class="p_title">
+          <h2>Overview (OPTIONALS)</h2>
+        </div>
+        <div class="p_content">
+          <p>This step allows you to specify shipping location and price for one or more attribute(s).</p>
+          <p class="h_strong">All attributes should have assigned shipping locations and price.</p>
+        </div>
+      </div>
+      
+      <div class="paging">
+        <div class="p_title">
+          <h2>Step 1:</h2>
+        </div>
+        <div class="p_content">
+          <p>Select shipping location and set price for the selected attributes:</p>
+          <div><img src="<?=base_url()?>assets/images/tutorial/prd_upload_step2/optionals/1.png"></div>
+          <p class="h_strong">Click <strong>'Add another location'</strong> to create new location and price entry fields.</p>
+        </div>
+      </div>
   
-  <div class="pagination" id="paging_tutOptional">
-    <a href="#" class="first" data-action="first">&laquo;</a>
-    <a href="#" class="previous" data-action="previous">&lsaquo;</a>
-    <input type="text" readonly="readonly" data-max-page="7" />
-    <a href="#" class="next" data-action="next">&rsaquo;</a>
-    <a href="#" class="last" data-action="last">&raquo;</a>
+      <div class="paging">
+        <div class="p_title">
+          <h2>Step 2:</h2>
+        </div>
+        <div class="p_content">
+          <p>Select shipping location and set price for the selected attributes:</p>
+          <div><img src="<?=base_url()?>assets/images/tutorial/prd_upload_step2/optionals/2.png"></div>
+          <p class="h_strong">Click <strong>'Add another location'</strong> to create new location and price entry fields.</p>
+        </div>
+      </div>
+  
+      <div class="paging">
+        <div class="p_title">
+          <h2>Step 3:</h2>
+        </div>
+        <div class="p_content">
+          <p>Review your shipping summary</p>
+          <div><img src="<?=base_url()?>assets/images/tutorial/prd_upload_step2/optionals/3.png" alt="With Attribute Combinations.png"></div>
+          <p class="h_strong">Click 'Edit' to change the shipping price, or 'Remove' to delete the entry.</p>
+        </div>
+      </div>
+  
+      <div class="paging">
+        <div class="p_title">
+          <h2>Step 4:</h2>
+        </div>
+        <div class="p_content">
+          <p>Review your shipping summary</p>
+          <div><img src="<?=base_url()?>assets/images/tutorial/prd_upload_step2/optionals/4.png" alt="With Attribute Combinations.png"></div>
+          <p class="h_strong">Click 'Edit' to change the shipping price, or 'Remove' to delete the entry.</p>
+        </div>
+      </div>
+  
+      <div class="paging">
+        <div class="p_title">
+          <h2>Step 5:</h2>
+        </div>
+        <div class="p_content">
+          <p>Review your shipping summary</p>
+          <div><img src="<?=base_url()?>assets/images/tutorial/prd_upload_step2/optionals/5.png" alt="With Attribute Combinations.png"></div>
+          <p class="h_strong">Click 'Edit' to change the shipping price, or 'Remove' to delete the entry.</p>
+        </div>
+      </div>
+  
+      <div class="paging">
+        <div class="p_title">
+          <h2>Step 6:</h2>
+        </div>
+        <div class="p_content">
+          <p>Review your shipping summary</p>
+          <div><img src="<?=base_url()?>assets/images/tutorial/prd_upload_step2/optionals/6.png" alt="With Attribute Combinations.png"></div>
+          <p class="h_strong">Click 'Edit' to change the shipping price, or 'Remove' to delete the entry.</p>
+        </div>
+      </div>
+    
+      <div class="pagination p_cent" id="paging_tutOptional">
+        <a href="#" class="first" data-action="first">&laquo;</a>
+        <a href="#" class="previous" data-action="previous">&lsaquo;</a>
+        <input type="text" readonly="readonly" data-max-page="7" />
+        <a href="#" class="next" data-action="next">&rsaquo;</a>
+        <a href="#" class="last" data-action="last">&raquo;</a>
+      </div>
   </div>
-</div>
 
   <div id="div_tutQty" style="display:none;">
-  <div class="paging">
-    <h2>Overview (QUANTITY)</h2>
-    <p>
-      This step allows you to specify shipping location and price for one or more attribute(s).
-      <br/>
-      All attributes should have assigned shipping locations and price.
-    </p>
+      <div class="paging">
+        <div class="p_title">
+          <h2>Overview (QUANTITY)</h2>
+        </div>
+        <div class="p_content">
+          <p>This step allows you to specify shipping location and price for one or more attribute(s).</p>
+          <p class="h_strong">All attributes should have assigned shipping locations and price.</p>
+        </div>
+      </div>
+    
+      <div class="paging">
+        <div class="p_title">
+          <h2>Step 1:</h2>
+        </div>
+        <div class="p_content">
+          <p>Select shipping location and set price for the selected attributes:</p>
+          <div><img src="<?=base_url()?>assets/images/tutorial/prd_upload_step2/quantity/1.png"></div>
+          <p class="h_strong">Click <strong>'Add another location'</strong> to create new location and price entry fields.</p>
+        </div>
+      </div>
+    
+      <div class="paging">
+        <div class="p_title">
+          <h2>Step 2:</h2>
+        </div>
+        <div class="p_content">
+          <p>Select shipping location and set price for the selected attributes:</p>
+          <div><img src="<?=base_url()?>assets/images/tutorial/prd_upload_step2/quantity/2.png"></div>
+          <p class="h_strong">Click <strong>'Add another location'</strong> to create new location and price entry fields.</p>
+        </div>
+      </div>
+    
+      <div class="paging">
+        <div class="p_title">
+          <h2>Step 3:</h2>
+        </div>
+        <div class="p_content">
+          <p>Review your shipping summary</p>
+          <div><img src="<?=base_url()?>assets/images/tutorial/prd_upload_step2/quantity/3.png" alt="With Attribute Combinations.png"></div>
+          <p class="h_strong">Click 'Edit' to change the shipping price, or 'Remove' to delete the entry.</p>
+        </div>
+      </div>
+     
+       
+      
+      <div class="pagination p_cent" id="paging_tutQty">
+        <a href="#" class="first" data-action="first">&laquo;</a>
+        <a href="#" class="previous" data-action="previous">&lsaquo;</a>
+        <input type="text" readonly="readonly" data-max-page="4" />
+        <a href="#" class="next" data-action="next">&rsaquo;</a>
+        <a href="#" class="last" data-action="last">&raquo;</a>
+      </div>
   </div>
 
-  <div class="paging">
-    <h2>Step 1:</h2>
-    <p>Select shipping location and set price for the selected attributes:</p>
-    <img src="<?=base_url()?>assets/images/tutorial/prd_upload_step2/quantity/1.png">
-    <p>Click <strong>'Add another location'</strong> to create new location and price entry fields.</p>
+  <div id="div_tutSpec" style="display:none;">
 
-  </div>
+      <div class="paging">
+        <div class="p_title">
+            <h2>Adding item specifications</h2>
+        </div>
+        <div class="p_content">
+            <p>You may add additional information to your listing by selecting from the list of attributes that we have provided.</p>
+            <div><img src="<?=base_url()?>assets/images/tutorial/prd_upload_step2/specifics/1.png"></div>
+            <p class="h_strong">Fill up the available text fields or select from the provided checkboxes.</p>
+        </div>
+      </div>
 
-  <div class="paging">
-    <h2>Step 2:</h2>
-    <p>Select shipping location and set price for the selected attributes:</p>
-    <img src="<?=base_url()?>assets/images/tutorial/prd_upload_step2/quantity/2.png">
-    <p>Click <strong>'Add another location'</strong> to create new location and price entry fields.</p>
-  </div>
+      <div class="paging">
+        <div class="p_title">
+          <h2>Step 2:</h2>
+        </div>
+        <div class="p_content">
+          <p>Select shipping location and set price for the selected attributes:</p>
+          <div><img src="<?=base_url()?>assets/images/tutorial/prd_upload_step2/specifics/2.png"></div>
+          <p class="h_strong">Click <strong>'Add another location'</strong> to create new location and price entry fields.</p>
+        </div>
+      </div>
 
-  <div class="paging">
-    <h2>Step 3:</h2>
-    <p>Review your shipping summary</p>
-    <img src="<?=base_url()?>assets/images/tutorial/prd_upload_step2/quantity/3.png" alt="With Attribute Combinations.png">
-    <p>Click 'Edit' to change the shipping price, or 'Remove' to delete the entry.</p>
-  </div>
- 
-   
+      <div class="paging">
+        <div class="p_title">
+          <h2>Step 3:</h2>
+        </div>
+        <div class="p_content">
+          <p>Review your shipping summary</p>
+          <div><img src="<?=base_url()?>assets/images/tutorial/prd_upload_step2/specifics/3.png" alt="With Attribute Combinations.png"></div>
+          <p class="h_strong">Click 'Edit' to change the shipping price, or 'Remove' to delete the entry.</p>
+        </div>
+      </div>
   
-  <div class="pagination" id="paging_tutQty">
-    <a href="#" class="first" data-action="first">&laquo;</a>
-    <a href="#" class="previous" data-action="previous">&lsaquo;</a>
-    <input type="text" readonly="readonly" data-max-page="4" />
-    <a href="#" class="next" data-action="next">&rsaquo;</a>
-    <a href="#" class="last" data-action="last">&raquo;</a>
-  </div>
-</div>
-
-<div id="div_tutSpec" style="display:none;">
-
-  <div class="paging" style='margin:15px;'>
-    <h2 style='background:#F18200; color:white; height:40px;'>Adding item specifications</h2>
-    <br/>
-    <div>
-    <p>You may add additional information to your listing by selecting from the list of attributes that we have provided.</p>
-    <img style='border:1px solid #F18200; position:center;' src="<?=base_url()?>assets/images/tutorial/prd_upload_step2/specifics/1.png">
-    <p style='font-weight:bold'>Fill up the available text fields or select from the provided checkboxes.</p>
+      <div class="pagination p_cent" id="paging_tutSpec">
+        <a href="#" class="first" data-action="first">&laquo;</a>
+        <a href="#" class="previous" data-action="previous">&lsaquo;</a>
+        <input type="text" readonly="readonly" data-max-page="3" />
+        <a href="#" class="next" data-action="next">&rsaquo;</a>
+        <a href="#" class="last" data-action="last">&raquo;</a>
+      </div>
+      
     </div>
- </div>
-
-  <div class="paging">
-    <h2>Step 2:</h2>
-    <p>Select shipping location and set price for the selected attributes:</p>
-    <img src="<?=base_url()?>assets/images/tutorial/prd_upload_step2/specifics/2.png">
-    <p>Click <strong>'Add another location'</strong> to create new location and price entry fields.</p>
-  </div>
-
-  <div class="paging">
-    <h2>Step 3:</h2>
-    <p>Review your shipping summary</p>
-    <img src="<?=base_url()?>assets/images/tutorial/prd_upload_step2/specifics/3.png" alt="With Attribute Combinations.png">
-    <p>Click 'Edit' to change the shipping price, or 'Remove' to delete the entry.</p>
-  </div>
- 
-   
-  
-  <div class="pagination" id="paging_tutSpec">
-    <a href="#" class="first" data-action="first">&laquo;</a>
-    <a href="#" class="previous" data-action="previous">&lsaquo;</a>
-    <input type="text" readonly="readonly" data-max-page="4" />
-    <a href="#" class="next" data-action="next">&rsaquo;</a>
-    <a href="#" class="last" data-action="last">&raquo;</a>
-  </div>
-</div>
 
 <script type='text/javascript' src='<?=base_url()?>assets/JavaScript/js/jquery.numeric.js'></script>
 <script type="text/javascript">

@@ -326,33 +326,45 @@
 
 <div id="div_tutShippingLoc" class="tutorial_modal" style="display:none; width: 100%;">
 	<div class="paging">
-		<h2>Step 1:</h2>
-		<p>Select product attribute combinations. By default, 'All Combinations' will be displayed.</p>
-		<div style="display: inline-block; vertical-align:top;">
-			<span style="display:block;">No attributes specified in Step 2:</span>
+		<div class="p_title">
+		  <h2>Step 1:</h2>
+		</div>
+		<div class="p_content">
+		  <p>Select product attribute combinations. By default, 'All Combinations' will be displayed.</p>
+		</div>
+		<div style="display: inline-block; vertical-align:top;padding:15px">
+			<span style="display:block;"><p class="h_strong">No attributes specified in Step 2:</p></span>
 			<img height="250px" width="380px" src="<?=base_url()?>assets/images/tutorial/prd_upload_step3/attr_combination_def.png" alt="No Attribute Combinations.png">
 		</div>
-		<div style="display: inline-block; vertical-align:top;">
-			<span style="display:block;">With specified attributes in Step 2:</span>
+		<div style="display: inline-block; vertical-align:top;padding:15px">
+			<span style="display:block;"><p class="h_strong">With specified attributes in Step 2:</p></span>
 			<img height="300px" width="380px" src="<?=base_url()?>assets/images/tutorial/prd_upload_step3/attr_combination_opt.png" alt="With Attribute Combinations.png">
 		</div>
 	</div>
 	<div class="paging">
-		<h2>Step 2:</h2>
-		<p>Select shipping location and set price for the selected attributes:</p>
-		<img height="250px" width="400px" src="<?=base_url()?>assets/images/tutorial/prd_upload_step3/loc_price.png">
-		<p>Click <strong>'Add another location'</strong> to create new location and price entry fields.</p>
-		<p>Click <strong>'Add to shipping list'</strong> to add the shipping details to the summary section.</p>
-		<p>
+		<div class="p_title">
+		  <h2>Step 2:</h2>
+		</div>
+		<div class="p_content">
+		  <p>Select shipping location and set price for the selected attributes:</p>
+		  <div><img height="250px" width="400px" src="<?=base_url()?>assets/images/tutorial/prd_upload_step3/loc_price.png"></div>
+		  <p>Click <strong>'Add another location'</strong> to create new location and price entry fields.</p>
+		  <p>Click <strong>'Add to shipping list'</strong> to add the shipping details to the summary section.</p>
+		<p class="h_strong">
 			NOTE: If you select Luzon as a location, the product with the selected attributes are considered available to all locations in Luzon with the indicated price.
 			If you add another location (region or city under Luzon), that indicated price will be prioritized for that location(s).
 		</p>
+		</div>
 	</div>
 	<div class="paging">
-		<h2>Step 3:</h2>
-		<p>Review your shipping summary</p>
-		<img height="300px" width="400px" src="<?=base_url()?>assets/images/tutorial/prd_upload_step3/shipping_summary.png" alt="With Attribute Combinations.png">
-		<p>Click <strong>'Edit'</strong> to change the shipping price, or <strong>'Delete'</strong> to delete the entry.</p>
+		<div class="p_title">
+		  <h2>Step 3:</h2>
+		</div>
+		<div class="p_content">
+		  <p>Review your shipping summary</p>
+		  <div><img height="300px" width="400px" src="<?=base_url()?>assets/images/tutorial/prd_upload_step3/shipping_summary.png" alt="With Attribute Combinations.png"></div>
+		  <p class="h_strong">Click <strong>'Edit'</strong> to change the shipping price, or <strong>'Delete'</strong> to delete the entry.</p>
+		</div>
 	</div>
 	
 	<div class="pagination" id="paging_tutShippingLoc">
