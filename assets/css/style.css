@@ -4633,17 +4633,17 @@ span.transac_title_date {
 		height: 11.2%;
 }
 #modal-launcher{
-    background-color: #FF8400;
-	border-radius: 6px;
-	border-style: none;
-	color: #FFFFFF;
-	font-size: 15px;
-	height: 30px;
-	margin-right: 15px;
-	width: 160px;
-    margin-top: 15px;
-    font-size: 15px;
+	
+    background-color: #F48000;
+    border-radius: 3px;
+    border-style: none;
+    color: #FFFFFF;
+    font-size: 18px;
+    height: 35px;
+    margin-right: 15px;
     width: 135px;
+    margin-top: 15px;
+	
 }
 #modal-close {
     background-color: #FFFFFF;
@@ -4656,6 +4656,28 @@ span.transac_title_date {
 }
 #modal-inside-container{
 		margin: 15px;
+}
+#table_id_wrapper{
+    background-color: #F3F3F3;
+    margin-top: -10px;
+    padding: 7px;
+}
+#delete_all_btn , #chsn_delete_btn{
+	
+    background-color: #D20000;
+    border-radius: 3px;
+    border-style: none;
+    color: #FFFFFF;
+    font-size: 12px;
+    height: 35px;
+    margin-right: 15px;
+    margin-top: 15px;
+    width: 170px;
+		
+}
+#tbl_search{
+    height: 25px;
+    width: 263px;
 }
 #modal_send_btn{
     background-color: #FF8400;
@@ -4686,9 +4708,10 @@ span.transac_title_date {
 		border: 1px solid #D9D9D9;
 		border-left: 0px;
 		margin-left: 310px;
-		min-height: 451px;
+		min-height: 470px;
 		text-align: left;
 		width: 678px;
+		border-left: 1px solid #D9D9D9
 }
 .msg_container div:first-child{
     height: 340px;
@@ -4758,8 +4781,6 @@ span.transac_title_date {
 }
 /**/
 #msg_textarea{
-		border-top: 1px solid #D9D9D9;
-		background-color: #EEEEEE;
 		height: 110px;
 		display : none;
 }
@@ -4777,20 +4798,21 @@ span.transac_title_date {
     padding: 132px 305px;
 }
 #msg_textarea textarea{
-    height: 65px;
-    margin-top: 1px;
-    resize: none;
-    width: 98%;
+		height: 65px;
+		margin-left: 14px;
+		margin-top: 5px;
+		resize: none;
+		width: 94%;
 }
 #send_btn{
-    background-color: #5B74A8;
-    border-radius: 6px;
+    background-color: #393939;
+    border-radius: 3px;
     border-style: none;
     color: #FFFFFF;
     float: right;
-    font-size: 15px;
+    font-size: 12px;
     height: 25px;
-    margin: 3px;
+    margin: 12px;
     width: 75px;
 }
 .msg_self{
@@ -4827,9 +4849,6 @@ margin-right: 10px;
 		width: 290px;
 		height: 430px;
 		padding: 10px;
-		/*overflow-y: scroll;*/
-		border-top: 1px solid #D9D9D9;
-		border-right: 1px solid #D9D9D9
 }
 #chsn_delete_btn{
 		display:none;
@@ -4866,8 +4885,9 @@ margin-right: 10px;
   border-bottom: none;
 }
 .msg_sender{
-    font-size: 14px;
-    margin-bottom: 3px;
+		font-weight: bold;
+		font-size: 12px;
+		margin-bottom: 3px;
 }
 .msg_date{
 		margin-top:3px;

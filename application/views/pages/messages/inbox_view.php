@@ -2,7 +2,7 @@
 <div class="container">
     <div id="head_container">       
         <div><input type="button" id="modal-launcher" value="Compose"></div>
-		<div><span>ACTIONS : <button id="chsn_delete_btn"> Delete selected </button> <button id="delete_all_btn"> Delete this conversation </button></span></div>
+		<div><span> <button id="chsn_delete_btn"> Delete selected </button> <button id="delete_all_btn"> Delete this conversation </button></span></div>
         <div id="loader"><input type="button" id="btn_refresh" title="REFRESH"></div> 
     </div>
     <div id="panel_container">
@@ -74,13 +74,13 @@
 
 <script>
 	$(document).ready(function() {
-        
 		$('#table_id').dataTable({
 			"bScrollInfinite": true,
 			"bScrollCollapse": false,
 			"sScrollY": "375px"
 		});
 			
+        $('#table_id_filter label input').prop('placeholder','Search').prop('id','tbl_search');
 		$("#modal-background, #modal-close").click(function() {
 			$("#modal-container, #modal-background").toggleClass("active");
 			$("#modal-container").hide();
