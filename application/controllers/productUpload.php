@@ -932,20 +932,21 @@ class productUpload extends MY_Controller
             $editPrimaryId = $_POST['editPrimaryPicture'];
 
             $removeThisPictures = json_decode($_POST['removeThisPictures']); 
+            
             $primaryId = $_POST['primaryPicture'];
 
             if((empty($_FILES['files']['name'][0])) && ($main_image_cnt  === count($editRemoveThisPictures))){ 
                 echo '{"e":"0","d":"Select at least 1 photo for your item."}';
                 exit();
-			}
-                  
+			}    
             //SECTION OF CODE FOR ES_PRODUCT_UPLOADER
             if(!empty($_FILES['files']['name'])){
                 $primaryName =""; 
-                foreach( $_FILES['files']['name'] as $key => $value ) {
+                foreach( $_FILES['files']['name'] as $key => $value ){
                     if($primaryId == $key){
                         $primaryName =	$_FILES['files']['name'][$key];
                     }
+                    
                     if (in_array($key, $removeThisPictures) || $_FILES['files']['name'][$key] == "") {
                         unset($_FILES['files']['name'][$key]);
                         unset($_FILES['files']['type'][$key]);
@@ -954,6 +955,9 @@ class productUpload extends MY_Controller
                         unset($_FILES['files']['size'][$key]);
                     } 
                 }
+                
+                
+
                 $_FILES['files']['name'] = array_values($_FILES['files']['name']);
                 $_FILES['files']['type'] = array_values($_FILES['files']['type']);
                 $_FILES['files']['tmp_name'] = array_values($_FILES['files']['tmp_name']);
