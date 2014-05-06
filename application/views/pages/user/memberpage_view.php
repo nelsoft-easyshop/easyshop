@@ -130,6 +130,7 @@
 					<li><a href="#delivery_address">Delivery Address</a></li>
 					<li><a href="#payment" class="<?php echo ($tab=='pmnt')?'selected':'';?>">Payment Information</a></li>
 					<li><a href="#transactions">Transactions</a></li>
+					<li><a href="#complete_transactions">Completed Transactions</a></li>
                     <!-- <li><a href="#privacy_settings">Privacy Settings</a></li> -->
 					<li><a href="#security_settings">Security Settings</a></li>
 				</ul> 
@@ -1354,13 +1355,12 @@
 </div>	
 
 <div class="profile_main_content" id="transactions">
-	<h2>Transactions</h2>
+	<h2>On-going Transactions</h2>
 	
 	<div>
 		<ul class="idTabs transact_tabs">
 			<li><a href="#bought">Bought <span><?php echo count($transaction['buy']);?></span></a> </li>
 			<li><a href="#sold">Sold 	<span><?php echo count($transaction['sell']);?></span></a> </li>
-			<li><a href="#complete">Complete 	<span><?php echo count($transaction['complete']['buy']) + count($transaction['complete']['sell']);?></span></a> </li>
 		</ul>
 	</div>
 	
@@ -1523,166 +1523,166 @@
 	<div id="tsold_mapview" style="height: 400px; width: 650px; "></div>
 </div>
 
-<div id="sold" class="transactions-sell dashboard_table">
-	<h2>Sold Items</h2>
-	<?php if(count($transaction['sell'])===0):?>
-	<br/>
-	<div><span style='margin-left: 10px; font-weight:bold'>You have not sold any items yet.</span></div>
-<?php else: ?>
-	<?php $transac_counter = 0;?>
-	<div class="paging">
-		<?php foreach($transaction['sell'] as $tk=>$transact):?>
-		<div class="transac-container">
-			<div class="transac_title">
-				<h4>
-					<span class="transac_content">
-						<strong>Invoice #: </strong> <?php echo $transact['invoice_no'];?><br />
-						<strong>Sold to: </strong> <a href="<?php echo base_url();?>vendor/<?php echo $transact['buyer']?>"><?php echo $transact['buyer']?></a> <br />
-						<?php foreach($transact['users'] as $uk=>$user):?>
-							<span class="sold_transac_add_state_region"><strong>State/Region:</strong> <?php echo $user['address']['stateregion']?></span>
-							<span class="sold_transac_add_city"><strong>City:</strong> <?php echo $user['address']['city'];?></span>
-							<span class="sold_transac_add_fulladd"><strong>Address:</strong> <?php echo html_escape($user['address']['fulladd']);?></span>
-							<?php if( $user['address']['lat']!=0 && $user['address']['lng']!=0 ):?>
-								<span class="tsold_viewmap" data-lat="<?php echo $user['address']['lat'];?>" data-lng="<?php echo $user['address']['lng'];?>">View Map</span>
-								<div class="map_modalcont" style="display:none;"></div>
-							<?php endif;?>
-						<?php endforeach;?>
-					</span>
-					<span class="transac_title_date"><?php echo $transact['dateadded']?></span>
-				</h4>
-			</div>
-			<div class="transac_prod_wrapper">
-				
-				<?php foreach($transact['products'] as $opk=>$product):?>
-				<div class="sold_prod_container transac-product-container">
-					<span class="img_transac_prod">
-						<img src="<?=base_url()?><?php echo $product['product_image_path'];?>">
-					</span>
-					<div>
-						<p class="transac_prod_name">
-							<a href="<?php echo base_url();?>item/<?php echo $product['product_id'];?>/<?php echo es_url_clean($product['name']);?>"><?php echo $product['name'];?></a>
-							<small>Features and Specifications:</small>
-							<?php if( count($product['attr'] !== 0) ):?>
-								<?php foreach($product['attr'] as $temp):?>
-									<span><strong><?php echo html_escape($temp['field']);?>:</strong> <?php echo html_escape($temp['value']);?></span>
-								<?php endforeach;?>
-							<?php endif;?>
-						</p>
-						<p>Quantity:<span class="fm1 f18"><?php echo $product['order_quantity']?></span></p>
-						<p>Total:<span class="fm1 f18">Php<?php echo number_format($product['price'],2,'.',',');?></span></p>
-						<div class="clear"></div>
-						<div>
-						<?php if($product['status'] == 0):?>
-							<?php
-								$attr = array('class'=>'transac_response');
-								echo form_open('',$attr);
-							?>
-							<input class="transac_response_btn orange_btn3" value="Return payment to buyer" type="submit">
-							<input type="hidden" name="seller_response" value="<?php echo $opk;?>">
-							<input type="hidden" name="transaction_num" value="<?php echo $tk;?>">
-							<input type="hidden" name="invoice_num" value="<?php echo $transact['invoice_no'];?>">
-							<!--
-							<input type="hidden" name="data" value='<?php //echo $product['jsondata'];?>'>
-							<input type="hidden" name="userdata" value="<?php //echo $transact['buyer'] . '||' . $transact['buyer_email'];?>">
-							-->
-							<?php echo form_close();?>
-						<?php elseif($product['status'] == 1):?>
-							<span class="trans_alert transac_paid">Paid</span>
-						<?php elseif($product['status'] == 2):?>
-							<span class="trans_alert transac_pay_return">Payment returned to buyer</span>
-						<?php elseif($product['status'] == 3):?>
-							<span class="trans_alert transac_cod">Cash on delivery</span>
-						<?php endif;?>
-						</div>
-						
-					</div>
+	<div id="sold" class="transactions-sell dashboard_table">
+		<h2>Sold Items</h2>
+		<?php if(count($transaction['sell'])===0):?>
+		<br/>
+		<div><span style='margin-left: 10px; font-weight:bold'>You have not sold any items yet.</span></div>
+	<?php else: ?>
+		<?php $transac_counter = 0;?>
+		<div class="paging">
+			<?php foreach($transaction['sell'] as $tk=>$transact):?>
+			<div class="transac-container">
+				<div class="transac_title">
+					<h4>
+						<span class="transac_content">
+							<strong>Invoice #: </strong> <?php echo $transact['invoice_no'];?><br />
+							<strong>Sold to: </strong> <a href="<?php echo base_url();?>vendor/<?php echo $transact['buyer']?>"><?php echo $transact['buyer']?></a> <br />
+							<?php foreach($transact['users'] as $uk=>$user):?>
+								<span class="sold_transac_add_state_region"><strong>State/Region:</strong> <?php echo $user['address']['stateregion']?></span>
+								<span class="sold_transac_add_city"><strong>City:</strong> <?php echo $user['address']['city'];?></span>
+								<span class="sold_transac_add_fulladd"><strong>Address:</strong> <?php echo html_escape($user['address']['fulladd']);?></span>
+								<?php if( $user['address']['lat']!=0 && $user['address']['lng']!=0 ):?>
+									<span class="tsold_viewmap" data-lat="<?php echo $user['address']['lat'];?>" data-lng="<?php echo $user['address']['lng'];?>">View Map</span>
+									<div class="map_modalcont" style="display:none;"></div>
+								<?php endif;?>
+							<?php endforeach;?>
+						</span>
+						<span class="transac_title_date"><?php echo $transact['dateadded']?></span>
+					</h4>
 				</div>
-			<?php endforeach;?>
-			
-		</div>
+				<div class="transac_prod_wrapper">
+					
+					<?php foreach($transact['products'] as $opk=>$product):?>
+					<div class="sold_prod_container transac-product-container">
+						<span class="img_transac_prod">
+							<img src="<?=base_url()?><?php echo $product['product_image_path'];?>">
+						</span>
+						<div>
+							<p class="transac_prod_name">
+								<a href="<?php echo base_url();?>item/<?php echo $product['product_id'];?>/<?php echo es_url_clean($product['name']);?>"><?php echo $product['name'];?></a>
+								<small>Features and Specifications:</small>
+								<?php if( count($product['attr'] !== 0) ):?>
+									<?php foreach($product['attr'] as $temp):?>
+										<span><strong><?php echo html_escape($temp['field']);?>:</strong> <?php echo html_escape($temp['value']);?></span>
+									<?php endforeach;?>
+								<?php endif;?>
+							</p>
+							<p>Quantity:<span class="fm1 f18"><?php echo $product['order_quantity']?></span></p>
+							<p>Total:<span class="fm1 f18">Php<?php echo number_format($product['price'],2,'.',',');?></span></p>
+							<div class="clear"></div>
+							<div>
+							<?php if($product['status'] == 0):?>
+								<?php
+									$attr = array('class'=>'transac_response');
+									echo form_open('',$attr);
+								?>
+								<input class="transac_response_btn orange_btn3" value="Return payment to buyer" type="submit">
+								<input type="hidden" name="seller_response" value="<?php echo $opk;?>">
+								<input type="hidden" name="transaction_num" value="<?php echo $tk;?>">
+								<input type="hidden" name="invoice_num" value="<?php echo $transact['invoice_no'];?>">
+								<!--
+								<input type="hidden" name="data" value='<?php //echo $product['jsondata'];?>'>
+								<input type="hidden" name="userdata" value="<?php //echo $transact['buyer'] . '||' . $transact['buyer_email'];?>">
+								-->
+								<?php echo form_close();?>
+							<?php elseif($product['status'] == 1):?>
+								<span class="trans_alert transac_paid">Paid</span>
+							<?php elseif($product['status'] == 2):?>
+								<span class="trans_alert transac_pay_return">Payment returned to buyer</span>
+							<?php elseif($product['status'] == 3):?>
+								<span class="trans_alert transac_cod">Cash on delivery</span>
+							<?php endif;?>
+							</div>
+							
+						</div>
+					</div>
+				<?php endforeach;?>
+				
+			</div>
 
-		<div class="feedback_wrapper">
-			<?php foreach($transact['users'] as $uk=>$user):?>
-			<div class="feedback_container">
-				<?php if(trim($user['feedb_msg']) !== ''):?>												
-				<p>For:<a href="<?php echo base_url();?>vendor/<?php echo $user['name'];?>"><?php echo $user['name'];?></a> | on:<?php echo $user['fbdateadded'];?></p>
-				<p>"<?php echo html_escape($user['feedb_msg']);?>"</p>
-				<p> <?php echo $this->lang->line('rating')[0].':'; ?> 
-					<?php for($x=0;$x<5;$x++):?>
-					<?php if($x<$user['rating1']):?>
-					<span class="span_bg star_on"></span>
-				<?php else:?>
-				<span class="span_bg star_off"></span>
-			<?php endif;?>
-		<?php endfor;?>
+			<div class="feedback_wrapper">
+				<?php foreach($transact['users'] as $uk=>$user):?>
+				<div class="feedback_container">
+					<?php if(trim($user['feedb_msg']) !== ''):?>												
+					<p>For:<a href="<?php echo base_url();?>vendor/<?php echo $user['name'];?>"><?php echo $user['name'];?></a> | on:<?php echo $user['fbdateadded'];?></p>
+					<p>"<?php echo html_escape($user['feedb_msg']);?>"</p>
+					<p> <?php echo $this->lang->line('rating')[0].':'; ?> 
+						<?php for($x=0;$x<5;$x++):?>
+						<?php if($x<$user['rating1']):?>
+						<span class="span_bg star_on"></span>
+					<?php else:?>
+					<span class="span_bg star_off"></span>
+				<?php endif;?>
+			<?php endfor;?>
+		</p>
+		<p> <?php echo $this->lang->line('rating')[1].':'; ?> 
+			<?php for($x=0;$x<5;$x++):?>
+			<?php if($x<$user['rating2']):?>
+			<span class="span_bg star_on"></span>
+		<?php else:?>
+		<span class="span_bg star_off"></span>
+	<?php endif;?>
+	<?php endfor;?>
 	</p>
-	<p> <?php echo $this->lang->line('rating')[1].':'; ?> 
+	<p> <?php echo $this->lang->line('rating')[2].':'; ?> 
 		<?php for($x=0;$x<5;$x++):?>
-		<?php if($x<$user['rating2']):?>
+		<?php if($x<$user['rating3']):?>
 		<span class="span_bg star_on"></span>
 	<?php else:?>
-	<span class="span_bg star_off"></span>
-<?php endif;?>
-<?php endfor;?>
-</p>
-<p> <?php echo $this->lang->line('rating')[2].':'; ?> 
-	<?php for($x=0;$x<5;$x++):?>
-	<?php if($x<$user['rating3']):?>
-	<span class="span_bg star_on"></span>
-<?php else:?>
-	<span class="span_bg star_off"></span>
-<?php endif;?>
-<?php endfor;?>
-</p>
-<?php else: ?>
-	<p class="transac-feedback-btn"> + Feedback for <?php echo $user['name'];?></p>
-	<div class="transac-feedback-container">
-		<!--<form class="transac-feedback-form">-->
-		<?php
-		$attr = array('class'=>'transac-feedback-form');
-		echo form_open('',$attr);
-		?>
-		<input type="hidden" name="feedb_kind" value="1">
-		<input type="hidden" name="order_id" value="<?php echo $tk;?>">
-		<input type="hidden" name="for_memberid" value="<?php echo $uk;?>">
-		<textarea rows="4" cols="50" name="feedback-field"></textarea><br>
-		<span class="red ci_form_validation_error"><?php echo form_error('feedback-field'); ?></span>
-		<span><?php echo $this->lang->line('rating')[0].':'; ?>  </span><div class="feedb-star rating1"></div><br>
-		<span class="red ci_form_validation_error"><?php echo form_error('rating1'); ?></span>
-		<span><?php echo $this->lang->line('rating')[1].':'; ?>  </span><div class="feedb-star rating2"></div><br>
-		<span class="red ci_form_validation_error"><?php echo form_error('rating2'); ?></span>
-		<span><?php echo $this->lang->line('rating')[2].':'; ?>  </span><div class="feedb-star rating3"></div><br>
-		<span class="red ci_form_validation_error"><?php echo form_error('rating3'); ?></span>
-		<span class="raty-error error red"></span>
-		<span class="feedback-submit">Submit</span> <span class="feedback-cancel">Cancel</span>
-		<?php echo form_close();?>
+		<span class="span_bg star_off"></span>
+	<?php endif;?>
+	<?php endfor;?>
+	</p>
+	<?php else: ?>
+		<p class="transac-feedback-btn"> + Feedback for <?php echo $user['name'];?></p>
+		<div class="transac-feedback-container">
+			<!--<form class="transac-feedback-form">-->
+			<?php
+			$attr = array('class'=>'transac-feedback-form');
+			echo form_open('',$attr);
+			?>
+			<input type="hidden" name="feedb_kind" value="1">
+			<input type="hidden" name="order_id" value="<?php echo $tk;?>">
+			<input type="hidden" name="for_memberid" value="<?php echo $uk;?>">
+			<textarea rows="4" cols="50" name="feedback-field"></textarea><br>
+			<span class="red ci_form_validation_error"><?php echo form_error('feedback-field'); ?></span>
+			<span><?php echo $this->lang->line('rating')[0].':'; ?>  </span><div class="feedb-star rating1"></div><br>
+			<span class="red ci_form_validation_error"><?php echo form_error('rating1'); ?></span>
+			<span><?php echo $this->lang->line('rating')[1].':'; ?>  </span><div class="feedb-star rating2"></div><br>
+			<span class="red ci_form_validation_error"><?php echo form_error('rating2'); ?></span>
+			<span><?php echo $this->lang->line('rating')[2].':'; ?>  </span><div class="feedb-star rating3"></div><br>
+			<span class="red ci_form_validation_error"><?php echo form_error('rating3'); ?></span>
+			<span class="raty-error error red"></span>
+			<span class="feedback-submit">Submit</span> <span class="feedback-cancel">Cancel</span>
+			<?php echo form_close();?>
+		</div>
+	<?php endif;?>
 	</div>
-<?php endif;?>
-</div>
-<?php endforeach;?>
-</div>
-</div>
-<div class="clear"></div>
-<?php $transac_counter++;?>
-<?php if($transac_counter === $items_per_page): $transac_counter = 0;?>
-</div><div class="paging">
-<?php endif;?>
-<?php endforeach;?>
-</div>
-<div class="pagination" id="pagination-sold">
-	<a href="#" class="first" data-action="first">&laquo;</a>
-	<a href="#" class="previous" data-action="previous">&lsaquo;</a>
-	<input type="text" readonly="readonly" data-max-page="<?php echo (count($transaction['sell'])===0)?1:(ceil(count($transaction['sell'])/$items_per_page));?>" />
-	<a href="#" class="next" data-action="next">&rsaquo;</a>
-	<a href="#" class="last" data-action="last">&raquo;</a>
-</div>
-<?php endif; ?>					
+	<?php endforeach;?>
+	</div>
+	</div>
+	<div class="clear"></div>
+	<?php $transac_counter++;?>
+	<?php if($transac_counter === $items_per_page): $transac_counter = 0;?>
+	</div><div class="paging">
+	<?php endif;?>
+	<?php endforeach;?>
+	</div>
+	<div class="pagination" id="pagination-sold">
+		<a href="#" class="first" data-action="first">&laquo;</a>
+		<a href="#" class="previous" data-action="previous">&lsaquo;</a>
+		<input type="text" readonly="readonly" data-max-page="<?php echo (count($transaction['sell'])===0)?1:(ceil(count($transaction['sell'])/$items_per_page));?>" />
+		<a href="#" class="next" data-action="next">&rsaquo;</a>
+		<a href="#" class="last" data-action="last">&raquo;</a>
+	</div>
+	<?php endif; ?>					
+	</div>
 </div>
 
-
-<div id="complete" class="dashboard_table">
-	
-	<ul class="idTabs feedbacks_tabs">
+<div id="complete_transactions" class="profile_main_content">
+	<h2>Completed Transactions</h2>
+	<ul class="idTabs transact_tabs">
 		<li><a href="#complete_buy">Bought</a></li>
 		<li><a href="#complete_sell">Sold</a></li>
 	</ul>
@@ -1983,8 +1983,6 @@
 
 </div>
 
-
-</div>
 		    <!--
 			<div class="profile_main_content" id="privacy_settings">
 				<h2>Privacy Settings</h2>

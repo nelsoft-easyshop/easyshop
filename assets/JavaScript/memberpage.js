@@ -1193,7 +1193,7 @@ function progress_update(form){
 		if(n!=-1 && m==-1){// if update_all
 			var count = 0;
 			$(this).find('input[type="text"]').each(function(){
-				if($(this).prop('value').length > 1)
+				if($(this).prop('value').length > 0)
 					count++;
 			});
 			$(this).find('input[type="radio"]:checked').each(function(){
@@ -1205,7 +1205,7 @@ function progress_update(form){
 		else if(n==-1 && m!=-1){ // if update_once
 			var count = 0;
 			$(this).find('input[type="text"]').each(function(){
-				if($(this).prop('value').length > 1){
+				if($(this).prop('value').length > 0){
 					count++;
 					return false;
 				}
@@ -1217,13 +1217,13 @@ function progress_update(form){
 			// reads consignee (includes select and address since required), 
 			// mobile, and telephone fields
 			$(this).find('input[type="text"]:not([name="c_telephone"])').each(function(){
-				if($(this).prop('value').length > 1){
+				if($(this).prop('value').length > 0){
 					count++;
 					return false;
 				}
 			});
 			
-			if( $(this).find('input[name="c_telephone"]').prop('value').length > 1 ){
+			if( $(this).find('input[name="c_telephone"]').prop('value').length > 0 ){
 				count++;
 			}
 			
