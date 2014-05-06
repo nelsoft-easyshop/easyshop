@@ -126,6 +126,7 @@ class Cart extends MY_Controller{
     }
     
     function index(){
+        
         $data = $this->fill_header();
         if($this->session->userdata('usersession')){
             $id = $this->session->userdata('usersession');

@@ -57,6 +57,10 @@
 </section>
 
 <div class="clear"></div>
+
+<?php 
+  if(ENVIRONMENT == 'production'){
+?>
 <script>
   ga('require', 'ecommerce', 'ecommerce.js');
 
@@ -89,3 +93,5 @@
   ?>
 
 </script>
+
+<?php } ?>
