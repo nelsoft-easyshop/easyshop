@@ -28,8 +28,8 @@
 								<li><a href="javascript:void(0)" onclick="triggerTab('personal_information');">Personal Information</a></li>
 								<li><a href="javascript:void(0)" onclick="triggerTab('payment');">Payment</a></li>
 								<li><a href="javascript:void(0)" onclick="triggerTab('delivery_address');">Delivery Address</a></li>
-								<li><a href="javascript:void(0)" onclick="triggerTab('transactions');">Transactions</a></li>
-								<!-- <li><a href="javascript:void(0)" onclick="triggerTab('privacy_settings');">Privacy Settings</a></li> -->
+								<li><a href="javascript:void(0)" onclick="triggerTab('transactions');">On-going Transactions</a></li>
+								<li><a href="javascript:void(0)" onclick="triggerTab('complete_transactions');">Completed Transactions</a></li> -->
 								<li><a href="javascript:void(0)" onclick="triggerTab('security_settings');">Security Setting</a></li>
 							</ul>
 						</li>
@@ -127,7 +127,7 @@
 					<li><a href="#personal_information" class="<?php echo ($tab=='myinfo')?'selected':'';?>">Personal Information</a></li>
 					<li><a href="#delivery_address">Delivery Address</a></li>
 					<li><a href="#payment" class="<?php echo ($tab=='pmnt')?'selected':'';?>">Payment Information</a></li>
-					<li><a href="#transactions">Transactions</a></li>
+					<li><a href="#transactions">On-going Transactions</a></li>
 					<li><a href="#complete_transactions">Completed Transactions</a></li>
                     <!-- <li><a href="#privacy_settings">Privacy Settings</a></li> -->
 					<li><a href="#security_settings">Security Settings</a></li>
