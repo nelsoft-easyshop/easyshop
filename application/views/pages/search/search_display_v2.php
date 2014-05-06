@@ -89,14 +89,14 @@ function in_array_r($needle, $haystack, $strict = false) {
 		Keyword:	
 		<input type="text" name="_is" id="_is" value="<?php echo html_escape($getis);?>" size="50" maxlength="300" placeholder="Enter keywords or item number" />
 		<select name="_cat" id="_cat" title="Select item category">
-			<option value="">- All -</option>
+			<option value="1">- All -</option>
 			<?php
 				foreach ($firstlevel as $row) : # generate all parent category.
 			?>
 				<option value="<?php echo $row['id_cat']; ?>" <?php if($row['id_cat'] == $getcat){ ?>selected="selected" <?php } ?>><?php echo $row['name']; ?></option>
 			<?php endforeach; ?>
 		</select>
-		<input type="submit" value="SEARCH" name="btn_srch" id="btn_srch"/>
+		<input type="submit" value="SEARCH" id="btn_srch"/>
 						
 	</div>
 
@@ -126,7 +126,6 @@ function in_array_r($needle, $haystack, $strict = false) {
 	<div class="inputRow">
 		Price:
 		<input class="advsrchPrice1" type="text" name="_price1" id="_price1" value="<?php echo html_escape($getprice1);?>" maxlength="10" size="6" placeholder="Min" title="Minimum price"> to <input class="advsrchPrice2" type="text" name="_price2" id="_price2" value="<?php echo html_escape($getprice2);?>" maxlength="10" size="6" placeholder="Max" title="Maximum price">
-		<input type="hidden" name="_price" id="_price"data-url="<?php echo $myurl;?>"/>
 	    <p class="search_result"><!-- Showing 1 - 48 of 13,152 Results --></p>
 	    Sort by:
 	    <select name="_sop" id="_sop" title="Sort item">
@@ -175,7 +174,6 @@ function in_array_r($needle, $haystack, $strict = false) {
   </div>
 </div>
 <input class='condition' type='hidden' value='<?php echo json_encode($condition); ?>'/>
-
 <?php echo form_close();?>
 <script src="<?= base_url() ?>assets/JavaScript/js/jquery.easing.min.js" type="text/javascript"></script> 
 <script src="<?= base_url() ?>assets/JavaScript/js/jquery.scrollUp.min.js" type="text/javascript"></script> 
