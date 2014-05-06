@@ -96,24 +96,28 @@ class Cart extends MY_Controller{
 		$this->cart->insert($data);
 		$result= sha1(md5("tanggap"));
 	    else:
+		$to_transact = '';
 		foreach ($carts as $row ): 
 		    $id=$row['rowid'];
 		    $opt =  serialize($this->cart->product_options($id));
 		    $opt_user =  serialize($go);
-		    if($opt == $opt_user){ //if product exist in cart , check if qty exceeds the maximum qty, if exceed get qty = max qty else qty + cart product qty
-			$data2 = array(
-			       'rowid' => $id,
-			       'qty'   => ($_POST['qty'] + $row['qty'] > $_POST['max_qty'] ? $_POST['max_qty'] : $_POST['qty'] + $row['qty'] )
-			    );
-			
-			$this->cart->update($data2);
-			
-		    }else{   
-			
-			$this->cart->insert($data);         
-			
+		    if($opt == $opt_user && $row['id'] == $data['id']){ //if product exist in cart , check if qty exceeds the maximum qty, if exceed get qty = max qty else qty + cart product qty
+				$data2 = array(
+					   'rowid' => $id,
+					   'qty'   => ($_POST['qty'] + $row['qty'] > $_POST['max_qty'] ? $_POST['max_qty'] : $_POST['qty'] + $row['qty'] )
+					);
+				$to_transact = 'update';
+				break;	
+		    }
+			else{   
+				$to_transact = 'add';		
 		    }
 		endforeach;
+		if($to_transact == 'update'){
+			$this->cart->update($data2);		
+		}else{
+			$this->cart->insert($data);	
+		}
 		$result= sha1(md5("tanggap"));
 	    endif;
         endif;
