@@ -345,7 +345,7 @@ class payment_model extends CI_Model
 			  END ) = 'Available'
 			  AND `product_id` = :product_id  
 			  AND `product_item_id` = :product_item_id
-			  ORDER BY price DESC LIMIT 1
+			  ORDER BY price ASC LIMIT 1
 		";
 		$sth = $this->db->conn_id->prepare($query);
 
