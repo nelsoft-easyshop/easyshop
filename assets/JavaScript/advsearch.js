@@ -1,22 +1,3 @@
-function removeParam(key, sourceURL) {
-	var rtn = sourceURL.split("?")[0],
-	param,
-	params_arr = [],
-	queryString = (sourceURL.indexOf("?") !== -1) ? sourceURL.split("?")[1] : "";
-	if (queryString !== "") {
-		params_arr = queryString.split("&");
-		for (var i = params_arr.length - 1; i >= 0; i -= 1) {
-			param = params_arr[i].split("=")[0];
-			if (param === key) {
-				params_arr.splice(i, 1);
-			}
-		}
-		rtn = rtn + "?" + params_arr.join("&");
-	}
-
-	return rtn;
-}
-
 $(document).ready(function() {
 
 	$(":checkbox[name^='_subcat']").change(function(){
@@ -26,9 +7,9 @@ $(document).ready(function() {
 		$("#advsrch").submit();
 	});
 
-	$(".adv_leftpanel").change(function(){			
+	$(".adv_leftpanel, #_sop, #_con, #_loc").change(function(){			
 		$("#advsrch").submit();
-	});	
+	});
 
 	// Product View Toggle
 	
@@ -73,31 +54,6 @@ $(document).ready(function() {
 	
 	// Product View Toggle end			
 	
-	$("#_sop").change(function(){
-		var url = $(this).data("url");
-		var srt = $(this).val();
-		url = removeParam("_sop", url);
-		document.location.href=url+"&_sop="+srt;
-	});
-	
-	$("#_con").change(function(){
-		var url = $(this).data("url");
-		var srt = $(this).val();
-		url = removeParam("_con", url);
-		document.location.href=url+"&_con="+srt;
-	});
-	
-	$("#_brnd").click(function(){
-		var url = $(this).data("url");
-		var srt = $(this).val();
-		url = removeParam("_brnd", url);
-		document.location.href=url+"&_brnd="+srt;
-	});
-	
-	$("#_cat").change(function(){
-		$(this).removeClass("err");
-	});				
-	
 	$("#_price1,#_price2").change(function(){
 		$(this).removeClass("err");
 		var val = parseFloat($(this).val());
@@ -109,11 +65,14 @@ $(document).ready(function() {
 	});
 	
 	$("#btn_srch").click(function() {
-
+		
+			if($("#_cat").val() == 1){
+				$(":checkbox").not(this).prop("checked", false);	
+			}
+			
 			// Price - Start //////////////////////////////////////	
 			var price1 = parseInt($("#_price1").val());
 			var price2 = parseInt($("#_price2").val());
-			var url = $("#_price").data("url");
 			var msg = "Invalid price range";
 			var fprice1;
 			var fprice2;
@@ -142,18 +101,10 @@ $(document).ready(function() {
 				alert(msg);
 				$("#_price2").addClass("err").focus();
 				return false;			
-			}else{
-				url = removeParam("_price", url);
-				url = removeParam("_price1", url);
-				url = removeParam("_price2", url);				
 			}
 			// Price - End //////////////////////////////////////					
 	});
-	
-	$(".cbx").click(function() { // for IE
-		window.location = "<?php echo site_url(uri_string() . '?' . $_SERVER['QUERY_STRING']); ?>";
-	});
-					   
+
 	// START OF INFINITE SCROLLING FUNCTION
 
 	var base_url = config.base_url;
