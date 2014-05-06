@@ -12,7 +12,6 @@ class product_model extends CI_Model
 
 	# the queries directory -- application/resources/sql/product.xml
 
-
 	function selectCategoryDetails($id) # get all down level category on selected category from database
 	{
 		$query = $this->sqlmap->getFilenameID('product', 'selectCategoryDetails');
@@ -440,6 +439,7 @@ class product_model extends CI_Model
 
 	function addNewProduct($product_title,$sku,$product_brief,$product_description,$keyword,$brand_id,$cat_id,$style_id,$member_id,$product_price,$product_condition,$other_category_name, $other_brand_name)
 	{
+
 		# this function for adding new product to es_product table.
 		$query = $this->sqlmap->getFilenameID('product','addNewProduct_es_product');
 		
@@ -983,15 +983,46 @@ class product_model extends CI_Model
 		$sth->execute();
 	}
     
-     
-	function finalizeProduct($productid, $memberid,$billing_id, $is_cod){
-		$query = $this->sqlmap->getFIlenameID('product', 'finalizeProduct');
+    function createSlug($title)
+    {
+    	$titleLower = strtolower($title);
+    	$slugGenerate = "";
+    	$query = "SELECT COUNT(slug) AS cnt_slug FROM `es_product` WHERE slug LIKE :slug ";
+    	$bindValue = es_url_clean($titleLower).'%';
+    	$sth = $this->db->conn_id->prepare($query);
+		$sth->bindParam(':slug',$bindValue ,PDO::PARAM_STR);
+        $sth->execute();
+        $row = $sth->fetchAll(PDO::FETCH_COLUMN,0);
+        $cnt = $row[0];
 
+        if($cnt > 0){
+        	$slugGenerate = es_url_clean($titleLower.'-'.$cnt++);
+        }else{
+        	$slugGenerate = es_url_clean($titleLower);
+        }
+     
+        return $slugGenerate;
+    } 
+
+	function finalizeProduct($productid, $memberid,$billing_id, $is_cod){
+
+	
+		$product = $this->getProductEdit($productid, $memberid);
+		$title = $product['name'];
+
+ 
+	 
+		$slug = $this->createSlug($title);
+	 
+
+		$query = $this->sqlmap->getFIlenameID('product', 'finalizeProduct');
+	 
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':productid',$productid,PDO::PARAM_INT);
 		$sth->bindParam(':memberid',$memberid,PDO::PARAM_INT);
         $sth->bindParam(':is_cod',$is_cod,PDO::PARAM_INT);
         $sth->bindParam(':billing_id', $billing_id,PDO::PARAM_INT);
+		$sth->bindParam(':slug',$slug ,PDO::PARAM_STR);
         
         $sth->execute();
 	}
