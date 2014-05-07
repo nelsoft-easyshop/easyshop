@@ -172,6 +172,22 @@ class product_model extends CI_Model
 		return $row;
 	}
     
+    function getProductBySlug($slug) 
+	{
+		$query = $this->sqlmap->getFilenameID('product', 'getProductBySlug');
+		$sth = $this->db->conn_id->prepare($query);
+		$sth->bindParam(':slug',$slug);
+		$sth->execute();
+		$row = $sth->fetch(PDO::FETCH_ASSOC);
+        if(intval($row['o_success']) !== 0){
+            if(strlen(trim($row['userpic']))===0)
+                 $row['userpic'] = 'assets/user/default';
+            if(intval($row['brand_id'],10) === 1)
+                $row['brand_name'] = ($row['custombrand']!=='')?$row['custombrand']:'Custom brand';
+        }  
+		return $row;
+	}
+    
     function getProductPreview($id, $memberid, $is_draft = 1){
         $query = $this->sqlmap->getFilenameID('product', 'getProductPreview');
         $sth = $this->db->conn_id->prepare($query);

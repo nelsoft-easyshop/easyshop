@@ -840,6 +840,48 @@ class product extends MY_Controller
 		echo ( json_encode($data) );
 	}
 	
+    
+    function item($slug = ''){
+        $product_row = $this->product_model->getProductBySlug($slug);
+		$data['title'] = 'Easyshop.ph - Product Page';
+		$uid = $this->session->userdata('member_id');
+		$data = array_merge($data,$this->fill_header());
+		$this->load->view('templates/header', $data); 
+        if($product_row['o_success'] >= 1){
+            $id = $product_row['id_product'];
+            $product_options = $this->product_model->getProductAttributes($id, 'NAME');
+		    $product_options = $this->product_model->implodeAttributesByName($product_options);
+			$this->session->set_userdata('product_id', $id);
+			$product_catid = $product_row['cat_id'];
+			$data = array_merge($data,array( 
+				'page_javascript' => 'assets/JavaScript/productpage.js',
+				'breadcrumbs' =>  $this->product_model->getParentId($product_row['cat_id']),
+				'product' => $product_row,
+				'product_options' => $product_options,
+				'product_images' => $this->product_model->getProductImages($id),
+				'main_categories' => $this->product_model->getFirstLevelNode(TRUE),
+				'reviews' => $this->getReviews($id,$product_row['sellerid']),
+				'uid' => $uid,
+				'recommended_items'=> $this->product_model->getRecommendeditem($product_catid,5,$id),
+				'allowed_reviewers' => $this->product_model->getAllowedReviewers($id),
+				//userdetails --- email/mobile verification info
+				'userdetails' => $this->product_model->getCurrUserDetails($uid),
+				'product_quantity' => $this->product_model->getProductQuantity($id),
+				'shipment_information' => $this->product_model->getShipmentInformation($id),
+                'shiploc' => $this->product_model->getLocation(),
+                'category_navigation' => $this->load->view('templates/category_navigation',array('cat_items' =>  $this->getcat(),), TRUE ),
+                ));
+			$data['vendorrating'] = $this->product_model->getVendorRating($data['product']['sellerid']);
+			
+			$data['jsonReviewSchemaData'] = $this->assembleJsonReviewSchemaData($data);
+			
+			$this->load->view('pages/product/productpage_view', $data); 
+		}
+		else
+			$this->load->view('pages/general_error', $data); 		
+		$this->load->view('templates/footer_full');
+    } 
+    
 }
 
 

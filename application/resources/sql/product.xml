@@ -144,6 +144,10 @@
         CALL `es_sp_getProduct` (:id)
     </select>
     
+    <select id="getProductBySlug">
+        CALL `es_sp_getProductBySlug` (:slug)
+    </select>
+    
     <select id="getProductPreview">
         SELECT p.id_product AS id_product, p.brand_id AS brand_id, p.brand_other_name AS custombrand, 
         p.name AS product_name, p.description AS description, 

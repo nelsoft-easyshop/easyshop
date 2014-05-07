@@ -1388,7 +1388,14 @@ class productUpload extends MY_Controller
 			$id = $this->input->post('p_id');
 		else
 			redirect('sell/step1', 'refresh'); 
-            
+
+        #$modal is true unless the string 'false' modal parameter is posted
+        if($this->input->post('modal') == 'false'){
+            $modal = false;
+        }else{
+            $modal = true;
+        }
+       
         $memberId =  $this->session->userdata('member_id');
         $product_row = $this->product_model->getProductPreview($id, $memberId);
         if(empty($product_row)){
@@ -1417,11 +1424,19 @@ class productUpload extends MY_Controller
             'product_images' => $this->product_model->getProductImages($id),
             'product_options' => $product_options,
             'availability' => $availability,
+            'modal' => $modal,
         );
-
-		$this->load->view('pages/product/product_upload_preview',$preview_data);
-
+        if($modal){ 
+            $this->load->view('pages/product/product_upload_preview',$preview_data);
+        }
+		else{
+            $data = $this->fill_view();
+            $this->load->view('templates/header', $data);
+            $this->load->view('pages/product/product_upload_preview',$preview_data);
+            $this->load->view('templates/footer_full');
+        }
     }
+    
 
     private function es_img_resize($filename,$path_directory,$added_path,$dimension){
         $filename = strtolower($filename);
