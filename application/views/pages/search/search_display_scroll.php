@@ -11,7 +11,7 @@
 		for ($i=0; $i < sizeof($items); $i++) { 
 		$pic = explode('/', $items[$i]['product_image_path']);
 ?>
-				<div class="product-list"> 
+				<div class="<?php echo $class;?>"> 
 					<a href="<?= base_url() ?>item/<?php echo $items[$i]['product_id']; ?>/<?php echo es_url_clean(urlencode($items[$i]['product_name'])); ?>.html">
 						<img alt="<?php echo html_escape($items[$i]['product_name']); ?>" src="<?php echo base_url() . $pic[0] . '/' . $pic[1] . '/' . $pic[2] . '/' . $pic[3] . '/' . 'categoryview' . '/' . $pic[4]; ?>">
 					</a>

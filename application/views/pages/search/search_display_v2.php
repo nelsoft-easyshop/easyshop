@@ -51,35 +51,42 @@ function in_array_r($needle, $haystack, $strict = false) {
 
 	if (isset($arrayofparams)) {
 
+		list($file, $parameters) = explode('?', $myurl);
+		parse_str($parameters, $output);
+
     	foreach ($arrayofparams as $row => $value) {
 			
 			if(!empty($value[0])){
-				echo "<h3 class='title'>". $value['name'] ."<br></h3> "; 
-			}
-			$attr_group = $value['name'];
-			foreach ($value[0] as $row => $attr_values) {			
-				
-				$check = "";
+				$genid = "fld_". $row;
+				$i = 0;
+				$geninputs = "";
+				$attr_group = $value['name'];
 				$get_group = $this->input->get($attr_group);
-				if (isset($get_group)) {
-					list($file, $parameters) = explode('?', $myurl);
-					parse_str($parameters, $output);
-
-					if (in_array_r($attr_values, $output)) {
-						$check = ' checked="checked"';
-					}
+				foreach ($value[0] as $row => $attr_values) {
+					$check = "";
+					if (isset($get_group)) {
+						if (in_array_r($attr_values, $output)) {
+							$check = ' checked="checked"';
+							$i = $i + 1;
+						}
+					}			
+					$geninputs = $geninputs . "<input type='checkbox' class='adv_leftpanel' ". $check ." name='". $attr_group ."[". $row ."]' value='". $attr_values ."'>" . $attr_values . "<br>";
+				} // for each attr_values
+				
+				$style = " style='display:none' ";
+				$class = " class='span_bg advsrch' ";
+				if($i > 0){
+					$style = " ";
+					$class = " class='span_bg advsrch_toggle' ";
 				}
 				
-				echo "<input type='checkbox' class='adv_leftpanel' ". $check ." name='". $attr_group ."[". $row ."]' value='". $attr_values ."'>" . $attr_values;
-				echo "<br>";
-				
-			} // for each attr_values
+				echo "<h3 class='title' id='". $genid  ."' style='cursor:pointer;'><span id='ifld_". $row ."' ". $class ."></span> ". $value['name'] ."</h3>";			
+				echo "<div id='c". $genid ."' ". $style .">" . $geninputs . "</div>";
+			} // check value[0]
 		} // for each arrayofparams
 	} // isset($arrayofparams)
 	
     ?> 
-	<p class="more_attr">More</p>
-	<p class="less_attr">Less</p>
   </div>
   <!-- left pane end ------------------>
   <!-- Products ------------------>
@@ -87,7 +94,7 @@ function in_array_r($needle, $haystack, $strict = false) {
   <div class="right_product">
   	<div class="inputRow">	
 		Keyword:	
-		<input type="text" name="_is" id="_is" value="<?php echo html_escape($getis);?>" size="50" maxlength="300" placeholder="Enter keywords or item number" />
+		<input style="" type="text" name="_is" id="_is" value="<?php echo html_escape($getis);?>" size="50" maxlength="300" placeholder="Enter keywords or item number" />
 		<select name="_cat" id="_cat" title="Select item category">
 			<option value="1">- All -</option>
 			<?php
