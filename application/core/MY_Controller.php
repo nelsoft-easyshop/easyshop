@@ -1,22 +1,39 @@
 <?php
+
+
+/**
+ * MY cusotm controller
+ */
 class MY_Controller extends CI_Controller 
 {
-	function __construct()
-	{
-		parent::__construct();
+    /**
+     * Services container
+     * 
+     * @var Pimple\Container
+     */
+    protected $serviceContainer;
+    
+    /**
+     * Constructor.
+     */
+    public function __construct()
+    {
+        parent::__construct();
 
-		#$this->config->set_item('base_url',"https://".$_SERVER["SERVER_NAME"].":".$_SERVER["SERVER_PORT"]."/");
-        #$this->config->set_item('base_url',"http://".$_SERVER["SERVER_NAME"].":".$_SERVER["SERVER_PORT"]."/");
         $this->config->set_item('base_url',"https://".$_SERVER["SERVER_NAME"]."/");
         $this->load->model("user_model");
-		$this->load->model("cart_model");
+        $this->load->model("cart_model");
         $this->load->model("product_model");
 
         $url = uri_string();
-        if($url != 'login'){
+        if($url !== 'login'){
             $this->session->set_userdata('uri_string', $url);
         }
-	}
+        
+        if (isset ($this->kernel)) {
+            $this->serviceContainer = $this->kernel->serviceContainer;
+        }
+    }
 	
     #fill_header is not run in the constructor of MY_Controller despite that fact that all pages need it
     #because it would add unnecessary overhead for all ajax calls. Instead it is called only in the 
