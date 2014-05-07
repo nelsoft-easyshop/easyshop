@@ -1,5 +1,5 @@
 <?php
-    
+    echo 'Loading swiftmailer...';
 	require_once('../../vendor/swiftmailer/swift_required.php');
 	
 	$configDatabase = array(
@@ -30,15 +30,17 @@
 		)
 	);
 	
+	echo 'Initializing database query...'; 
 	
 	/** FETCH DATABASE USER DATA **/
-	//$link = mysqli_connect('localhost:3306', 'root', '121586','easyshop');
 	$link = mysqli_connect($configDatabase['host'], $configDatabase['user'], $configDatabase['pass'], $configDatabase['database']);
 
 	//CONFIRM CONNECTION
 	if (mysqli_connect_errno())
 	{
-		return "Failed to connect to MySQL: " . mysqli_connect_error();
+		echo "ERROR : Failed to connect to MySQL: " . mysqli_connect_error();
+	}else{
+		echo "Successfully connected to database! \n";
 	}
 	
 	$rawResult = mysqli_query($link,
@@ -51,12 +53,17 @@
 	$arrResult = mysqli_fetch_all($rawResult, MYSQLI_ASSOC);
 	mysqli_close($link);
 	
+	echo 'SQL connection closed. Data fetched. \n';
+	echo 'Preparing CSV data... \n';
+	
 	/**	Generate CSV Data	**/
 	$csvData = 'USERNAME,CONTACT NO,EMAIL,NICKNAME,FULLNAME,DATE CREATED' . PHP_EOL;		
 	foreach($arrResult as $userData){
 		$csvData .= $userData['username'] . ',' . $userData['contactno'] . ',' . $userData['email'] . ',' . $userData['nickname'] . 
 					',' . $userData['fullname'] . ',' . $userData['datecreated'] . PHP_EOL;
 	}
+	
+	echo 'Preparing email... \n';
 	
 	/** SEND EMAIL WITH CSV ATTACHED **/
 	$transport = Swift_SmtpTransport::newInstance('smtp.gmail.com', 465, 'ssl')
@@ -69,16 +76,15 @@
 	  ->setBody('Newly registered members from ' . $configQuery['past_date'] . ' to ' . $configQuery['this_date']);
 	
 	$filename = 'registered-'.date("M-j-Y").'.csv';
-	
 	$attachment = Swift_Attachment::newInstance($csvData, $filename, 'application/vnd.ms-excel');  
 	$message->attach($attachment);
 	
 	$numSent = $mailer->send($message);
 	
 	if(!$numSent){
-		return 'Failed to send e-mail to all recipients.';
+		echo 'ERROR : Failed to send all emails!';
 	}else{
-		return 'Successfully sent ' . $numSent . 'emails!';
+		echo 'Successfully sent ' . $numSent . 'emails!';
 	}
 
 ?>
