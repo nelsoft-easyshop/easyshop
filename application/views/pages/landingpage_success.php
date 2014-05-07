@@ -54,6 +54,9 @@
                        at The Green Lounge Events Place. An RSVP will be sent out to the registered
                         sellers via email on 9 May 2014. See you there!
                     </p>
+                     <p class="text-center">
+                      <span class="btn btn-warning btn-large"><a href="" style="color:#fff;">Sell Item</a></span>
+                    </p>   
                     <p class="text-center txt_success">
                         Like us on and share
                     </p>
@@ -64,7 +67,9 @@
                         <a class="img_sc_1" href='https://twitter.com/EasyShopPH' target="_blank">
                             <img src="<?=base_url()?>assets/images/img_social_media_twitter.png" alt="Twitter">
                         </a>
-                    </p>                
+                    </p>
+                    
+
                
             </div>
         </div>
