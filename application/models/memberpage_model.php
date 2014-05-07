@@ -663,9 +663,21 @@ class memberpage_model extends CI_Model
 	}
 	
 	function billing_info($data){
+		
+		$query = "SELECT ebi.`is_default` FROM `es_billing_info` ebi 
+		WHERE ebi.`member_id`=:member_id AND ebi.`is_delete` = 0 ";		
+		$sth = $this->db->conn_id->prepare($query);
+		$sth->bindParam(':member_id',$data['member_id']);
+		$sth->execute();
 
-		$query = "	INSERT INTO `es_billing_info` (`member_id`,`payment_type`,`user_account`,`bank_id`,`bank_account_name`,`bank_account_number`,`dateadded`)
-			VALUES (:member_id,:payment_type,:user_account,:bank_id,:bank_account_name,:bank_account_number,NOW());";
+		if($sth->rowCount() == 0){
+			$query = "	INSERT INTO `es_billing_info` (`is_default`,`member_id`,`payment_type`,`user_account`,`bank_id`,`bank_account_name`,`bank_account_number`,`dateadded`)
+			VALUES ('1',:member_id,:payment_type,:user_account,:bank_id,:bank_account_name,:bank_account_number,NOW());";
+		}else{
+			$query = "	INSERT INTO `es_billing_info` (`member_id`,`payment_type`,`user_account`,`bank_id`,`bank_account_name`,`bank_account_number`,`dateadded`)
+			VALUES (:member_id,:payment_type,:user_account,:bank_id,:bank_account_name,:bank_account_number,NOW());";			
+		}
+
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':member_id', $data['member_id']);
 		$sth->bindParam(':payment_type', $data['payment_type']);
@@ -676,31 +688,20 @@ class memberpage_model extends CI_Model
 		$sth->execute();
 		
 		$id =  $this->db->conn_id->lastInsertId('id_billing_info');
-        return $id;
+		return $id;
+
 	}
 	
 	function billing_info_update($data){
-
-		$query = "UPDATE `es_billing_info` SET `is_default`=0, `datemodified` = NOW()
-				WHERE `member_id`=:member_id ";
-		$sth = $this->db->conn_id->prepare($query);
-		$sth->bindParam(':member_id', $data['member_id']);		
-		$result = $sth->execute();
-
-		$query = "UPDATE `es_billing_info` SET `bank_id`=:bank_id,`bank_account_name`=:bank_account_name,`bank_account_number`=:bank_account_number, `is_default`=:is_default, `datemodified` = NOW()
+		$query = "UPDATE `es_billing_info` SET `bank_id`=:bank_id,`bank_account_name`=:bank_account_name,`bank_account_number`=:bank_account_number, `datemodified` = NOW()
 				WHERE `member_id`=:member_id AND `id_billing_info` = :ibi";
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':member_id', $data['member_id']);		
 		$sth->bindParam(':bank_id', $data['bank_id']);
 		$sth->bindParam(':bank_account_name', $data['bank_account_name']);
 		$sth->bindParam(':bank_account_number', $data['bank_account_number']);
-		$sth->bindParam(':is_default', $data['is_default']);
 		$sth->bindParam(':ibi', $data['ibi']);
-        $sth->bindParam(':member_id', $data['member_id']);
-		$result = $sth->execute();
-		
-		return $result;
-
+		$sth->execute();
 	}
 	
 	function billing_info_default($data){
@@ -709,29 +710,53 @@ class memberpage_model extends CI_Model
 				WHERE `member_id`=:member_id ";
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':member_id', $data['member_id']);		
-		$result = $sth->execute();		
+		$sth->execute();		
 
 		$query = "UPDATE `es_billing_info` SET `is_default` = 1, `datemodified` = NOW() WHERE `member_id`=:member_id AND `id_billing_info`=:ibi";
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':member_id', $data['member_id']);		
 		$sth->bindParam(':ibi', $data['ibi']);
-        $sth->bindParam(':member_id', $data['member_id']);
-		$result = $sth->execute();
-		
-		return $result;
+		$sth->execute();
 
 	}
 	
 	function billing_info_delete($data){
-
+		// eto e dedelete ko na
 		$query = "UPDATE `es_billing_info` SET `is_delete` = 1, `datemodified` = NOW() WHERE `member_id`=:member_id AND `id_billing_info`=:ibi";
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':member_id', $data['member_id']);		
 		$sth->bindParam(':ibi', $data['ibi']);
-        $sth->bindParam(':member_id', $data['member_id']);
-		$result = $sth->execute();
+		$sth->execute();
 		
-		return $result;
+		// dito e chcheck ko kung yung na delete ko ay hindi default
+		$query = "SELECT ebi.`id_billing_info` FROM `es_billing_info` ebi 
+		WHERE ebi.`member_id`=:member_id AND `id_billing_info`=:ibi AND ebi.`is_default` = 1 LIMIT 1 ";		
+		$sth = $this->db->conn_id->prepare($query);
+		$sth->bindParam(':member_id',$data['member_id']);
+		$sth->bindParam(':ibi', $data['ibi']);
+		$sth->execute();
+
+		if($sth->rowCount() > 0){
+			// hanapin ko yung unang data na pwede e default
+			$query = "SELECT ebi.`id_billing_info` FROM `es_billing_info` ebi 
+			WHERE ebi.`member_id`=:member_id AND ebi.`is_delete` = 0 LIMIT 1 ";		
+			$sth = $this->db->conn_id->prepare($query);
+			$sth->bindParam(':member_id',$data['member_id']);
+			$sth->execute();
+			$arr = $sth->fetchAll(PDO::FETCH_ASSOC);
+	
+			if($sth->rowCount() > 0){
+				foreach($arr as $value){
+					$ibi = $value['id_billing_info'];
+				}
+
+				$query = "UPDATE `es_billing_info` SET `is_default` = 1, `datemodified` = NOW() WHERE `member_id`=:member_id AND `id_billing_info`=:ibi";
+				$sth = $this->db->conn_id->prepare($query);
+				$sth->bindParam(':member_id',$data['member_id']);
+				$sth->bindParam(':ibi', $ibi);
+				$sth->execute();		
+			}		
+		}
 
 	}		
 	
