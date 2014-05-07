@@ -351,9 +351,12 @@ $(function(){
         thisbtn.val('Please wait');
 		thisbtn.show();		
 		if(data == 1){
-            //$('#nonmodal_preview').submit();
             
-            $.post(config.base_url+'productUpload/previewItem', {p_id: productid, csrfname : csrftoken}, function(data){
+            if(isMobile()){
+                $('#nonmodal_preview').submit();
+            }
+            else{
+                $.post(config.base_url+'productUpload/previewItem', {p_id: productid, csrfname : csrftoken}, function(data){
                 $('#previewProduct').html(data);
                 $('#tabs').tabs();
                 $('#previewProduct').dialog({
@@ -433,6 +436,9 @@ $(function(){
                 $('#allow_cod').prop('checked', false);
                 $('#btnShippingDetailsSubmit').val('SUBMIT');
             });
+            }
+            
+            
             
 		}
 		else if(data == 0){
@@ -700,12 +706,12 @@ function checkIfEdit(){
 * Function to handle display of Price Value
 **/
 function ReplaceNumberWithCommas(thisnumber){
-//Seperates the components of the number
-var n = thisnumber.toString().split(".");
-//Comma-fies the first part
-n[0] = n[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-//Combines the two sections
-return n.join(".");
+    //Seperates the components of the number
+    var n = thisnumber.toString().split(".");
+    //Comma-fies the first part
+    n[0] = n[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    //Combines the two sections
+    return n.join(".");
 }
 
 
@@ -766,3 +772,16 @@ $(function(){
 	});
 });
 
+
+function isMobile(){
+    if(screen.width < 500 ||
+     navigator.userAgent.match(/Android/i) ||
+     navigator.userAgent.match(/webOS/i) ||
+     navigator.userAgent.match(/iPhone/i) ||
+     navigator.userAgent.match(/iPod/i)) {
+        return true;
+     }
+     else{
+        return false;
+     }
+}

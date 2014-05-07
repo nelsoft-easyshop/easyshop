@@ -21,14 +21,22 @@
                     
                     <div>
                         <input type="checkbox" class="rad" value="<?PHP echo $row['rowid']; ?>" checked="checked">
-             
-                        <a href="<?=base_url().'item/'.$row['id'].'/'.es_url_clean($row['name']);?>" class="has-tooltip" data-image="<?=base_url()?><?php echo $row['img'][0]['path']; ?>categoryview/<?php echo $row['img'][0]['file']; ?>"><img style="height:60px;width: 60px" src="<?=base_url()?><?php echo $row['img'][0]['path']; ?>thumbnail/<?php echo $row['img'][0]['file']; ?>"></a>
-                        <p class="product_title"><?PHP echo html_escape($row['name']); ?></p>
-                        <p class="attr_container">
+
+                        <a href="<?=base_url().'item/'.$row['id'].'/'.es_url_clean($row['name']);?>" class="has-tooltip" data-image="<?=base_url()?><?php echo $row['img'][0]['path']; ?>categoryview/<?php echo $row['img'][0]['file']; ?>"> 
+                            <span style='background-color: #FFFFFF; border: 1px solid #E5E5E5; display: inline-block;'>
+                                <span style=' display: table-cell; width: 60px; height: 60px; vertical-align: middle;'>
+                                    <img style="max-height: 60px; max-width: 60px; height:auto;width: auto; vertical-align: middle;" src="<?=base_url()?><?php echo $row['img'][0]['path']; ?>thumbnail/<?php echo $row['img'][0]['file']; ?>">
+                                </span>
+                            </span>
+                        </a>
+                        <div style='float:right; margin-right: 130px;'>
+                        <span class="product_title" style='width:300px !important'>  <a href="<?=base_url().'item/'.$row['id'].'/'.es_url_clean($row['name']);?>"> <?PHP echo html_escape($row['name']); ?></a></span>
+                        <br/>
+                        <span class="attr_container" style='width:300px !important'>
                             <table>
                                 <?PHP 
                                 if(!array_filter($row['options'])){
-                                    echo  '<tr><td><span class="attr">No attributes</span></td><td></td></tr>';
+                                    echo  '<tr><td><span class="attr">No additional details</span></td><td></td></tr>';
                                 }else{                                    
                                 $key =  array_keys($row['options']); //get the key of options,used in checking the product in the database
                                 for($a=0;$a < sizeof($key);$a++){
@@ -39,13 +47,14 @@
                                 }
                                 ?>
                             </table>
-                        </p>
+                        </span>
+                        </div>
                     </div>
                     <div>
                         <span>
                             <p>&#8369; <?PHP echo number_format($row['price'],2,'.',','); ?></p>
-                            <p>&#8369; <?PHP echo number_format($row['price'],2,'.',','); ?></p>
-                            <p>Discount 0%</p>
+                            <!--<p>&#8369; <?PHP echo number_format($row['price'],2,'.',','); ?></p>
+                            <p>Discount 0%</p> -->
                         </span>
                     </div>
                     <div>
@@ -129,7 +138,7 @@
                 b ++;
             });
             if(a==b){
-                alert("You must select atleast ONE to proceed to payment");
+                alert("You must select at least one item to proceed with your payment");
             }else{
                     $.ajax({
                         async:true,

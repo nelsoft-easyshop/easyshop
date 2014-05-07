@@ -13,11 +13,11 @@ class Cart extends MY_Controller{
         $this->load->model('cart_model');
     }
     
-       function check_product($id,$opt){
+    function check_product($id,$opt){
         $base = $this->product_model->getProduct($id);
         $base_price = $base['price'];
         $real_price = $base_price;
-    $product_attr_id = "0";
+        $product_attr_id = "0";
         if(!empty($opt)):
         $product_attr_id = "";
         $key =  array_keys($opt); //get the key of options,used in checking the product in the database
@@ -73,54 +73,60 @@ class Cart extends MY_Controller{
             );
         return $data;
     }
+    
+    
     /////////////////////////////////////////////////////////////////////////////underconstruction , up and down(QTY DONE,shipment ongoing :P)
     function add_item(){
         $result='';
-        if(intval($_POST['length']) == 0 || empty($_POST['opt'])):
+        if(intval($_POST['length']) == 0 || empty($_POST['opt'])){
             $out_opt = 0;
             $go=array();
-        else:
+        }
+        else{
             $out_opt = sizeof($_POST['opt']);
             $go=$_POST['opt'];
-        endif;
-        if($out_opt !== intval($_POST['length'])):
+        }
+        if($out_opt !== intval($_POST['length'])){
             $result=sha1(md5("hinditanggap"));
-        else:
+        }
+        else{
             $data=$this->check_product($_POST['id'],$go);
             $carts=$this->cart->contents();
 	    
-	    if(empty($carts)):
-		$this->cart->insert($data);
-		$result= sha1(md5("tanggap"));
-		elseif(!is_array($go)):	
-		$this->cart->insert($data);
-		$result= sha1(md5("tanggap"));
-	    else:
-		$to_transact = '';
-		foreach ($carts as $row ): 
-		    $id=$row['rowid'];
-		    $opt =  serialize($this->cart->product_options($id));
-		    $opt_user =  serialize($go);
-		    if($opt == $opt_user && $row['id'] == $data['id']){ //if product exist in cart , check if qty exceeds the maximum qty, if exceed get qty = max qty else qty + cart product qty
-				$data2 = array(
-					   'rowid' => $id,
-					   'qty'   => ($_POST['qty'] + $row['qty'] > $_POST['max_qty'] ? $_POST['max_qty'] : $_POST['qty'] + $row['qty'] )
-					);
-				$to_transact = 'update';
-				break;	
-		    }
-			else{   
-				$to_transact = 'add';		
-		    }
-		endforeach;
-		if($to_transact == 'update'){
-			$this->cart->update($data2);		
-		}else{
-			$this->cart->insert($data);	
-		}
-		$result= sha1(md5("tanggap"));
-	    endif;
-        endif;
+            if(empty($carts)){
+                $this->cart->insert($data);
+                $result= sha1(md5("tanggap"));
+            }
+            else if(!is_array($go)){	
+                $this->cart->insert($data);
+                $result= sha1(md5("tanggap"));
+            }
+            else{
+                $to_transact = '';
+                foreach ($carts as $row ){
+                    $id=$row['rowid'];
+                    $opt =  serialize($this->cart->product_options($id));
+                    $opt_user =  serialize($go);
+                    if($opt == $opt_user && $row['id'] == $data['id']){ //if product exist in cart , check if qty exceeds the maximum qty, if exceed get qty = max qty else qty + cart product qty
+                        $data2 = array(
+                               'rowid' => $id,
+                               'qty'   => ($_POST['qty'] + $row['qty'] > $_POST['max_qty'] ? $_POST['max_qty'] : $_POST['qty'] + $row['qty'] )
+                            );
+                        $to_transact = 'update';
+                        break;	
+                    }
+                    else{   
+                        $to_transact = 'add';		
+                    }
+                }
+                if($to_transact == 'update'){
+                    $this->cart->update($data2);		
+                }else{
+                    $this->cart->insert($data);	
+                }
+                $result= sha1(md5("tanggap"));
+            }
+        }
 		$this->session->set_userdata('cart_total_perItem',$this->cart_size());
         echo json_encode($result);
     }

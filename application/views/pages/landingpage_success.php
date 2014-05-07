@@ -54,8 +54,8 @@
                        at The Green Lounge Events Place. An RSVP will be sent out to the registered
                         sellers via email on 9 May 2014. See you there!
                     </p>
-                     <p class="text-center">
-                      <span class="btn btn-warning btn-large"><a href="" style="color:#fff;">Sell Item</a></span>
+                    <p class="text-center">
+                      <span class="btn btn-warning btn-large"><a href="<?=base_url()?>sell/step1" style="color:#fff;">Sell Now</a></span>
                     </p>   
                     <p class="text-center txt_success">
                         Like us on and share

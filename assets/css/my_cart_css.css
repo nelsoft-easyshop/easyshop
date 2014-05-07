@@ -96,13 +96,15 @@
 	padding:5px;
 }
 
+/*
 .my_cart_content div:first-child img {
 	float: left;
     height : 60px;
 	padding-right: 20px;
 	margin-bottom: 50px;
-        width: 60px;
+    width: 60px;
 }
+*/
 
 .my_cart_content div:first-child input[type="checkbox"] {
     display: block;
@@ -271,14 +273,17 @@
   border:1px solid #e9e7e7;
   position:absolute;
   z-index:999;
+  width: 200px; height: 200px;
+  vertical-align: middle;
+  left: 70px;
 }
 
 .tooltip img {
-	width: 200px !important;
-	height: 200px !important;
-	padding:0 !important;
-	margin:0 !important;
+	 max-height: 200px; max-width: 200px;
+	height:auto;width: auto;
+     vertical-align: middle;
 }
+
 
 /**** Checkout ****/
 
@@ -1009,3 +1014,4 @@ input.cc_check {
 	padding:8px;
 	text-align: right;
 }
+

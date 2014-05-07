@@ -1,8 +1,9 @@
 
 $(document).ready(function() {
     $('.has-tooltip').hover(function() {
-        $(this).find('.tooltip').html('<img src="' + $(this).data('image') + '" >').fadeIn();
-    }, function() {
+        var tooltip =$(this).find('.tooltip');
+        tooltip.html('<img src="' + $(this).data('image') + '" >').fadeIn();
+   }, function() {
         $(this).find('.tooltip').hide();
     }).append('<span class="tooltip"></span>');
 });
@@ -54,7 +55,7 @@ function del(id){
                     $(".cart_no").text(data['total_items']);
                 }
                 else{
-                    alert("Unable to remove!");
+                    alert("Sorry, we are having a problem right now.");
                 }
             }
         });

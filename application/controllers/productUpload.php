@@ -84,7 +84,6 @@ class productUpload extends MY_Controller
 
 	function getChild() # this function for getting the under category from selected category 
 	{	
-
 		header('Content-Type: application/json');
 		$id = $this->input->post('cat_id'); 
 		$name = $this->input->post('name'); 
@@ -1293,7 +1292,7 @@ class productUpload extends MY_Controller
                 }
                 
                 # start of saving combination qty
-                if($checkIfCombination == 'true'){
+                if($checkIfCombination == 'true' || $checkIfCombination == 1){
                     $quantitySolo = 1;
                     if($this->input->post('quantitySolo')){
                         $quantitySolo = $this->input->post('quantitySolo');
