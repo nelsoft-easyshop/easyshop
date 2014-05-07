@@ -754,7 +754,7 @@ else
   var arrayVar = [];
   var combination = []; 
   var arrayCombination = []; 
-  var arraySelected = {};  
+  arraySelected = {};  
   var progress;
   var formData;
 
@@ -787,90 +787,8 @@ else
    $('.qty_tooltip').hide();
   var noCombination = true;
 
-
- 
-
-    function validateRedTextBox(idclass)
-    {
-      $(idclass).css({"-webkit-box-shadow": "0px 0px 2px 2px #FF0000",
-        "-moz-box-shadow": "0px 0px 2px 2px #FF0000",
-        "box-shadow": "0px 0px 2px 2px #FF0000"});
-    } 
-    function validateWhiteTextBox(idclass)
-    {
-      $(idclass).css({"-webkit-box-shadow": "0px 0px 2px 2px #FFFFFF",
-        "-moz-box-shadow": "0px 0px 2px 2px #FFFFFF",
-        "box-shadow": "0px 0px 2px 2px #FFFFFF"});
-    }
-
-    function removeSelected(row)
-    {
-      delete arraySelected[row];
-      $('.innerContainer'+row).remove();
-    }
-
-    function isEmpty(myObject) {
-      for(var key in myObject) {
-        if (myObject.hasOwnProperty(key)) {
-          return false;
-        }
-      }
-      return true;
-    }
-    
-    function escapes(string){
-      if(string != undefined){
-        return string.replace(/([;&,\.\+\*\~':"\!\^#$%@\[\]\(\)=>\|])/g, '\\$1');
-      }else{
-        return "";
-      }
-    }
-
-    function resetFirstOptional(cnt){ 
-      $('.combinationContainer').empty();
-      noCombination = true;
-      arraySelected = {}; 
-      var link = '<a href="javascript:void(0)" class="lnkClearFirst">Clear This Group</a>';
-      var title = 'Others: (Optional)';
-      if(cnt > 1){ 
-        link = '<a class="removeOptionGroup" data-cnt='+cnt+' href="javascript:void(0)">Remove This Group</a>';
-        title = '';
-      }
-      $('.main'+cnt).empty();
-      $('.main'+cnt).append('<td class="border-left">'+title+'</td> \
-        <td  colspan="3"> \
-        <input type="text" placeholder="Enter item specific name" autocomplete="off" class="prod_'+cnt+' other_name_class" data-cnt="'+cnt+'" name="prod_other_name[]"> \
-        '+link+' \
-        </td>');
-    }
- 
-
-    function resetFirstSecondRowOptional(cnt){
-      $('.combinationContainer').empty();
-       noCombination = true;
-       arraySelected = {}; 
-       $('.main'+cnt+'_2nd_add').remove();
-       $('.main'+cnt+'_2nd').empty();
-       $('.main'+cnt+'_2nd').append('<td class="border-left">&nbsp;</td> \
-        <td>\
-        <input type="text" placeholder="Enter an attribute value" data-cnt="'+cnt+'" autocomplete="off" class="other_name_value otherNameValue'+cnt+'" name="prod_other[]">\
-        </td>\
-        <td>\
-        <div class="h_if_'+cnt+' hdv" style="display: none;">\
-        ₱ <input type="text" placeholder="Enter additional price (0.00)" id="price_field" autocomplete="off" name="prod_other_price[]">\
-        </div>\
-        </td>\
-        <td>\
-        <div class="h_if_'+cnt+' hdv" style="display: none;">\
-        <input type="file" name="prod_other_img[]">\
-        <a data-cnt="'+cnt+'" class="removeOptionValue" href="javascript:void(0)">Remove</a>\
-        </div>\
-        </td>'); 
-    }
-
     // remove optional
 
-    
     $(document).on('click',".lnkClearFirst",function (){
   
       var cnt = 1;
@@ -1133,7 +1051,13 @@ else
       var htmlEach  = "";
       var alreadyExist  = false;
       var haveValue = false;
+      if(isNaN(qtyTextboxValue) ||  qtyTextboxValue <= 0){ 
+        qtyTextbox.val('1');
+      }
       htmlEach += '<div class="input_qty"><input type="textbox" class="quantityText" value="'+qtyTextbox.val()+'" data-cnt="'+thisValueCount+'"></div><div class="mid_inner_con_list">';
+
+
+     
 
       $(function() { 
         $('.quantity_attrs_content option:selected').each(function(){
@@ -1147,9 +1071,6 @@ else
           htmlEach += '<div>'+ eachGroup +': ' + eachValueString +'</div>';
         });
 
-        if(isNaN(qtyTextboxValue) ||  qtyTextboxValue <= 0){ 
-          qtyTextbox.val('1');
-        }
 
         sortCombination = combinationVal.sort();
 
@@ -1178,36 +1099,12 @@ if(haveValue === true){
  }else{
   alert('This combination has already been selected. Please select another combination.');
   return false;
+}  
 } 
-}
-
-
+ 
 });
 
-$(document).on('change',".quantityText", function () {
 
-  var txtBox = this;
-  var v = parseInt(txtBox.value);
-  var count = $(this).data('cnt');
-  if (isNaN(v) || v <= 0) {
-    txtBox.value = 1;
-  } else {
-    txtBox.value = v;
-  }
-
-  arraySelected[count]['quantity'] = txtBox.value;
-
-});
-
-$(document).on('change','.qtyTextClass',function(){
-
-  var v = parseInt(this.value);
-  if (isNaN(v) || v <= 0) {
-    this.value = '1';
-  } else {
-    this.value = v;
-  }
-});
 
 $(document).on('change','.other_name_class',function(){
 
@@ -1432,15 +1329,7 @@ $(document).on('change',"#price_field,#prod_price, .price_text",function () {
     this.value = ReplaceNumberWithCommas(v.toFixed(2));
   }
   
-  function ReplaceNumberWithCommas(thisnumber){
-  //Seperates the components of the number
-  var n= thisnumber.toString().split(".");
-    //Comma-fies the first part
-    n[0] = n[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    //Combines the two sections
-    return n.join(".");
-  }
-  
+
 });
 
 $( "#prod_title,#prod_brief_desc,#prod_price,#prod_sku,#prod_condition" ).blur(function() {
@@ -1780,183 +1669,16 @@ $(".proceed_form").unbind("click").click(function(){
       addAttrQtyCombination(prev_combination_count++);
     });
     
-    //Function that adds obj to the quantity select html elements
-    function addAttrQtySelection(obj){
-      var attrIdVal = obj.data( "attrid" );
-      var attrVal = obj.data('value');
-      var attrGroup = obj.data('group'); 
-      var idHtmlId = attrGroup.replace(' ','')+'Combination';
-      var attrValNoSpace = attrVal.replace(' ','');
-
-      $('.combinationContainer').empty();
-      noCombination = true;
-      arraySelected = {};  
-
-      if (obj.is(":checked")) {
-        if(!$('#'+idHtmlId).length){
-          $('.quantity_attrs_content').append('<div id="div'+idHtmlId+'" style="position:relative">'+attrGroup+':<br> <select id="'+idHtmlId+'" ></select><br></div>');   
-        }
-        $('#'+idHtmlId).append('<option value="'+attrIdVal+'" data-value="0" data-group="'+attrGroup+'">'+attrVal+'</option>');
-      }else{
-        $('#'+idHtmlId +' option[value="'+attrIdVal+'"]').remove();
-        if( !$.trim( $('#'+idHtmlId).html() ).length ) {
-          $('#div'+idHtmlId).remove();
-        }
-      } 
-
-      if( !$.trim( $('.quantity_attrs_content').html() ).length ) {
-        $('.quantity_attr_done').hide();
-         $('.qty_tooltip').hide();
-        noCombination == true
-      }else{
-        $('.quantity_attr_done').show();
-         $('.qty_tooltip').show();
-      }
-    }
-
-    //Marked for refactoring 
-    //Duplicate code: see $('.quantity_attr_done') click handler
-    //$(function(){}) removed and $('.quantity_attrs_content option :select') replaced with if statement
-  function addAttrQtyCombination(count){
-    var qtyTextbox = $('.qtyTextClass');
-    var qtyTextboxValue = parseInt(qtyTextbox.val());
-    var dataCombination = {};     
-    var combinationVal = [];
-    var sortCombination = [];
-    var arrayCombinationString = "";
-    var thisValueCount = count;
-    var htmlEach  = "";
-    var alreadyExist  = false;
-    var haveValue = false;
-    htmlEach += '<div class="input_qty"><input type="textbox" class="quantityText" value="'+qtyTextbox.val()+'" data-cnt="'+thisValueCount+'"></div><div class="mid_inner_con_list">';
-
-    $('.quantity_attrs_content option').each(function(){
-
-      if($(this).attr('selected')){
-        haveValue = true;
-        noCombination = false;
-        var eachValue = $(this).val();
-        var eachValueString = $(this).text();
-        var eachGroup = $(this).data('group');  
-        var eachDataValue = $(this).data('value');  
-        combinationVal.push(eachDataValue+':'+eachValue);
-        htmlEach += '<div>'+ eachGroup +': ' + eachValueString +'</div>';
-      }
-    });
-
-    if(isNaN(qtyTextboxValue) ||  qtyTextboxValue <= 0){ 
-     qtyTextbox.val('1');
-   }
-
-   sortCombination = combinationVal.sort();
-
-   for (var i = 0; i < sortCombination.length; i++) {
-     arrayCombinationString += sortCombination[i] + '-';
-   };
-
-   for (var key in arraySelected) { 
-     if (arraySelected.hasOwnProperty(key))
-      if(arraySelected[key]['value'] === arrayCombinationString.slice(0, - 1)){
-       alreadyExist = true;
-       break;
-     }
-   }
-
-   if(haveValue === true){
-     if(alreadyExist === false){      
-      $('.combinationContainer').append('<div class="inner_quantity_list innerContainer'+thisValueCount+'"> '+ htmlEach +'</div> <a href="javascript:void(0)" class="removeSelected" data-row="'+thisValueCount+'"   style="color:Red">Remove</a></div>');
-      dataCombination['quantity'] = qtyTextbox.val();
-      dataCombination['value'] = arrayCombinationString.slice(0, - 1);
-      arraySelected[thisValueCount] = dataCombination;
-      thisValueCount++;
-      $('.quantity_attr_done.orange_btn3').data('value', thisValueCount);
-    }else{
-      alert('Combination Already Selected!');
-      return false;
-    }
-  }
-}
 
 
 
-    function inArray(needle, haystack){
-        for(j = 0, len = haystack.length; j<len; j++){
-            if(arraysEqual(needle, haystack[j])){
-                return j;
-            }
-        }
-        return false;
-    }
-
-    function arraysEqual(a, b) {
-        if (a === b) 
-            return true;
-        if (a == null || b == null) 
-            return false;
-        if (a.length != b.length) 
-            return false;
-        for (var i = 0; i < a.length; ++i) {
-            if (a[i] !== b[i]) 
-                return false;
-        }
-        return true;
-    }
 
 
 }); 
 </script>
 <script src="<?php echo base_url(); ?>assets/tinymce/tinymce.min.js" type="text/javascript"></script>
 <script type="text/javascript">
-tinymce.init({
- mode : "specific_textareas",
- editor_selector : "mceEditor",
- //selector: "textarea",
-  menubar: "table format view insert edit",
-  statusbar: false,
-  //selector: "textarea",
 
-  statusbar: false,
-  height: 300,
-  plugins: [
-  "lists link preview",
-  "table jbimages fullscreen"
-  //"advlist autolink link image lists charmap print preview hr anchor pagebreak",
-  //"searchreplace wordcount visualblocks visualchars insertdatetime media nonbreaking",
-  //"table contextmenu directionality emoticons paste textcolor responsivefilemanager"
-  ],  
-  toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | jbimages | image_advtab: true ",  
-  //toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | image_advtab: true ",  
-  relative_urls: false,
-  
-  //external_filemanager_path:"/assets/filemanager/",
-  //filemanager_title:"Responsive Filemanager" ,
-  //external_plugins: { "filemanager" : "/assets/filemanager/plugin.min.js"}
-  
-  
-   setup: function(editor) {
-        editor.on('change', function(e) {
-            $('#prod_description').val(tinyMCE.get('prod_description').getContent());
-            $('#prod_description').trigger( "change" );
-        });
-   }
-
-});
-
-tinymce.init({
-    mode : "specific_textareas",
-    editor_selector : "mceEditor_attr",
-    //selector: "textarea",
-    menubar: "table format view insert edit",
-
-    statusbar: false,
-    height: 200,
-    plugins: [
-        "lists link preview ",
-        "table jbimages fullscreen" 
-    ],  
-    toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | jbimages | image_advtab: true ",  
-    relative_urls: false
-});
 
 
 $(document).ready(function() { 
@@ -2131,12 +1853,7 @@ $(document).ready(function(){
         $('#brand_search_drop_content').hide();
     });
     
-    function addNewBrand(){
-        $('#prod_brand').val(1)
-        $('#prod_brand').trigger( "change" );
-        //validateWhiteTextBox("#brand_sch");
-        jQuery(".brand_sch_loading").html('<img src="<?= base_url() ?>assets/images/img_new_txt.png" />').show().css('display','inline-block');
-    }
+
   
     $('#brand_sch').focusout(function(){
          var available = false;
@@ -2163,6 +1880,234 @@ $(document).ready(function(){
 });
 
 
+    function removeSelected(row)
+    {
+      delete arraySelected[row];
+      $('.innerContainer'+row).remove();
+    }
+
+    function isEmpty(myObject) {
+      for(var key in myObject) {
+        if (myObject.hasOwnProperty(key)) {
+          return false;
+        }
+      }
+      return true;
+    }
+    
+    function escapes(string){
+      if(string != undefined){
+        return string.replace(/([;&,\.\+\*\~':"\!\^#$%@\[\]\(\)=>\|])/g, '\\$1');
+      }else{
+        return "";
+      }
+    }
+
+    function resetFirstOptional(cnt){ 
+      $('.combinationContainer').empty();
+      noCombination = true;
+      arraySelected = {}; 
+      var link = '<a href="javascript:void(0)" class="lnkClearFirst">Clear This Group</a>';
+      var title = 'Others: (Optional)';
+      if(cnt > 1){ 
+        link = '<a class="removeOptionGroup" data-cnt='+cnt+' href="javascript:void(0)">Remove This Group</a>';
+        title = '';
+      }
+      $('.main'+cnt).empty();
+      $('.main'+cnt).append('<td class="border-left">'+title+'</td> \
+        <td  colspan="3"> \
+        <input type="text" placeholder="Enter item specific name" autocomplete="off" class="prod_'+cnt+' other_name_class" data-cnt="'+cnt+'" name="prod_other_name[]"> \
+        '+link+' \
+        </td>');
+    }
+ 
+
+    function resetFirstSecondRowOptional(cnt){
+      $('.combinationContainer').empty();
+       noCombination = true;
+       arraySelected = {}; 
+       $('.main'+cnt+'_2nd_add').remove();
+       $('.main'+cnt+'_2nd').empty();
+       $('.main'+cnt+'_2nd').append('<td class="border-left">&nbsp;</td> \
+        <td>\
+        <input type="text" placeholder="Enter an attribute value" data-cnt="'+cnt+'" autocomplete="off" class="other_name_value otherNameValue'+cnt+'" name="prod_other[]">\
+        </td>\
+        <td>\
+        <div class="h_if_'+cnt+' hdv" style="display: none;">\
+        ₱ <input type="text" placeholder="Enter additional price (0.00)" id="price_field" autocomplete="off" name="prod_other_price[]">\
+        </div>\
+        </td>\
+        <td>\
+        <div class="h_if_'+cnt+' hdv" style="display: none;">\
+        <input type="file" name="prod_other_img[]">\
+        <a data-cnt="'+cnt+'" class="removeOptionValue" href="javascript:void(0)">Remove</a>\
+        </div>\
+        </td>'); 
+    }
+      function ReplaceNumberWithCommas(thisnumber){
+  //Seperates the components of the number
+  var n= thisnumber.toString().split(".");
+    //Comma-fies the first part
+    n[0] = n[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    //Combines the two sections
+    return n.join(".");
+  }
+  
+      //Function that adds obj to the quantity select html elements
+    function addAttrQtySelection(obj){
+      var attrIdVal = obj.data( "attrid" );
+      var attrVal = obj.data('value');
+      var attrGroup = obj.data('group'); 
+      var idHtmlId = attrGroup.replace(' ','')+'Combination';
+      var attrValNoSpace = attrVal.replace(' ','');
+
+      $('.combinationContainer').empty();
+      noCombination = true;
+      arraySelected = {};  
+
+      if (obj.is(":checked")) {
+        if(!$('#'+idHtmlId).length){
+          $('.quantity_attrs_content').append('<div id="div'+idHtmlId+'" style="position:relative">'+attrGroup+':<br> <select id="'+idHtmlId+'" ></select><br></div>');   
+        }
+        $('#'+idHtmlId).append('<option value="'+attrIdVal+'" data-value="0" data-group="'+attrGroup+'">'+attrVal+'</option>');
+      }else{
+        $('#'+idHtmlId +' option[value="'+attrIdVal+'"]').remove();
+        if( !$.trim( $('#'+idHtmlId).html() ).length ) {
+          $('#div'+idHtmlId).remove();
+        }
+      } 
+
+      if( !$.trim( $('.quantity_attrs_content').html() ).length ) {
+        $('.quantity_attr_done').hide();
+         $('.qty_tooltip').hide();
+        noCombination == true
+      }else{
+        $('.quantity_attr_done').show();
+         $('.qty_tooltip').show();
+      }
+    }
+
+        //Marked for refactoring 
+    //Duplicate code: see $('.quantity_attr_done') click handler
+    //$(function(){}) removed and $('.quantity_attrs_content option :select') replaced with if statement
+  function addAttrQtyCombination(count){
+    var qtyTextbox = $('.qtyTextClass');
+    var qtyTextboxValue = parseInt(qtyTextbox.val());
+    var dataCombination = {};     
+    var combinationVal = [];
+    var sortCombination = [];
+    var arrayCombinationString = "";
+    var thisValueCount = count;
+    var htmlEach  = "";
+    var alreadyExist  = false;
+    var haveValue = false;
+    htmlEach += '<div class="input_qty"><input type="textbox" class="quantityText" value="'+qtyTextbox.val()+'" data-cnt="'+thisValueCount+'"></div><div class="mid_inner_con_list">';
+
+    $('.quantity_attrs_content option').each(function(){
+
+      if($(this).attr('selected')){
+        haveValue = true;
+        noCombination = false;
+        var eachValue = $(this).val();
+        var eachValueString = $(this).text();
+        var eachGroup = $(this).data('group');  
+        var eachDataValue = $(this).data('value');  
+        combinationVal.push(eachDataValue+':'+eachValue);
+        htmlEach += '<div>'+ eachGroup +': ' + eachValueString +'</div>';
+      }
+    });
+
+    if(isNaN(qtyTextboxValue) ||  qtyTextboxValue <= 0){ 
+     qtyTextbox.val('1');
+   }
+
+   sortCombination = combinationVal.sort();
+
+   for (var i = 0; i < sortCombination.length; i++) {
+     arrayCombinationString += sortCombination[i] + '-';
+   };
+
+   for (var key in arraySelected) { 
+     if (arraySelected.hasOwnProperty(key))
+      if(arraySelected[key]['value'] === arrayCombinationString.slice(0, - 1)){
+       alreadyExist = true;
+       break;
+     }
+   }
+
+   if(haveValue === true){
+     if(alreadyExist === false){      
+      $('.combinationContainer').append('<div class="inner_quantity_list innerContainer'+thisValueCount+'"> '+ htmlEach +'</div> <a href="javascript:void(0)" class="removeSelected" data-row="'+thisValueCount+'"   style="color:Red">Remove</a></div>');
+      dataCombination['quantity'] = qtyTextbox.val();
+      dataCombination['value'] = arrayCombinationString.slice(0, - 1);
+      arraySelected[thisValueCount] = dataCombination;
+      thisValueCount++;
+      $('.quantity_attr_done.orange_btn3').data('value', thisValueCount);
+    }else{
+      alert('Combination Already Selected!');
+      return false;
+    }
+  }
+}
+
+
+
+
+
+    function inArray(needle, haystack){
+        for(j = 0, len = haystack.length; j<len; j++){
+            if(arraysEqual(needle, haystack[j])){
+                return j;
+            }
+        }
+        return false;
+    }
+
+    function arraysEqual(a, b) {
+        if (a === b) 
+            return true;
+        if (a == null || b == null) 
+            return false;
+        if (a.length != b.length) 
+            return false;
+        for (var i = 0; i < a.length; ++i) {
+            if (a[i] !== b[i]) 
+                return false;
+        }
+        return true;
+    }
+
+        function addNewBrand(){
+        $('#prod_brand').val(1)
+        $('#prod_brand').trigger( "change" );
+        //validateWhiteTextBox("#brand_sch");
+        jQuery(".brand_sch_loading").html('<img src="<?= base_url() ?>assets/images/img_new_txt.png" />').show().css('display','inline-block');
+    }
+
+$(document).on('change',".quantityText", function () {
+
+  var txtBox = this;
+  var v = parseInt(txtBox.value);
+  var count = $(this).data('cnt');
+  if (isNaN(v) || v <= 0) {
+    txtBox.value = 1;
+  } else {
+    txtBox.value = v;
+  }
+
+  arraySelected[count]['quantity'] = txtBox.value;
+
+});
+
+$(document).on('change','.qtyTextClass',function(){
+
+  var v = parseInt(this.value);
+  if (isNaN(v) || v <= 0) {
+    this.value = '1';
+  } else {
+    this.value = v;
+  }
+});
 
 </script>
 

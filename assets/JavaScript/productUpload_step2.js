@@ -1,4 +1,5 @@
-$(function(){
+$(document).ready(function(){
+ 
 
   $('#div_tutOptional .paging:not(:first)').hide();
   $('#div_tutSpec .paging:not(:first)').hide();
@@ -101,4 +102,84 @@ $(function(){
     });
     
     
+
+
+   
 });
+
+
+// TINYMCE
+$(function(){
+  tinymce.init({
+ mode : "specific_textareas",
+ editor_selector : "mceEditor",
+ //selector: "textarea",
+  menubar: "table format view insert edit",
+  statusbar: false,
+  //selector: "textarea",
+
+  statusbar: false,
+  height: 300,
+  plugins: [
+  "lists link preview",
+  "table jbimages fullscreen"
+  //"advlist autolink link image lists charmap print preview hr anchor pagebreak",
+  //"searchreplace wordcount visualblocks visualchars insertdatetime media nonbreaking",
+  //"table contextmenu directionality emoticons paste textcolor responsivefilemanager"
+  ],  
+  toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | jbimages | image_advtab: true ",  
+  //toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | image_advtab: true ",  
+  relative_urls: false,
+  
+  //external_filemanager_path:"/assets/filemanager/",
+  //filemanager_title:"Responsive Filemanager" ,
+  //external_plugins: { "filemanager" : "/assets/filemanager/plugin.min.js"}
+  
+  
+   setup: function(editor) {
+        editor.on('change', function(e) {
+            $('#prod_description').val(tinyMCE.get('prod_description').getContent());
+            $('#prod_description').trigger( "change" );
+        });
+   }
+
+});
+
+tinymce.init({
+    mode : "specific_textareas",
+    editor_selector : "mceEditor_attr",
+    //selector: "textarea",
+    menubar: "table format view insert edit",
+
+    statusbar: false,
+    height: 200,
+    plugins: [
+        "lists link preview ",
+        "table jbimages fullscreen" 
+    ],  
+    toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | jbimages | image_advtab: true ",  
+    relative_urls: false
+});
+
+});
+
+
+// ERROR HANDLER
+
+      function validateRedTextBox(idclass)
+    {
+      $(idclass).css({"-webkit-box-shadow": "0px 0px 2px 2px #FF0000",
+        "-moz-box-shadow": "0px 0px 2px 2px #FF0000",
+        "box-shadow": "0px 0px 2px 2px #FF0000"});
+    } 
+    function validateWhiteTextBox(idclass)
+    {
+      $(idclass).css({"-webkit-box-shadow": "0px 0px 2px 2px #FFFFFF",
+        "-moz-box-shadow": "0px 0px 2px 2px #FFFFFF",
+        "box-shadow": "0px 0px 2px 2px #FFFFFF"});
+    }
+
+
+
+ 
+
