@@ -69,17 +69,22 @@ class CSRF_Protection
      */
     public function validate_tokens()
     {
-      // Is this a post request?
-      if ($_SERVER['REQUEST_METHOD'] == 'POST')
-      {
-        // Is the token field set and valid?
-        $posted_token = $this->CI->input->post(self::$token_name);
-        if ($posted_token === FALSE || $posted_token != $this->CI->session->userdata(self::$token_name))
+        // Is this a post request?
+        if ($_SERVER['REQUEST_METHOD'] == 'POST')
         {
-          // Invalid request, send error 400.
-          show_error('Request was invalid. Tokens did not match.', 400);
+            if($_SERVER['REQUEST_URI'] === '/payment/dragonPayPostBack'){
+                return true;
+            }
+            else{
+                 // Is the token field set and valid?
+                $posted_token = $this->CI->input->post(self::$token_name);
+                if ($posted_token === FALSE || $posted_token != $this->CI->session->userdata(self::$token_name))
+                {
+                  // Invalid request, send error 400.
+                  show_error('Request was invalid. Tokens did not match.', 400);
+                }
+            }
         }
-      }
     }
     
 
