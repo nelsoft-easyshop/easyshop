@@ -400,6 +400,12 @@ class Payment extends MY_Controller{
                             <div style="color:red"><b>Error 4: </b>Someting went wrong. Please contact us immediately. Your INVOICE NUMBER: '.$return['invoice_no'].'</div>
                             '; 
                         }else{
+							$orderHistory = array(
+								'order_id' => $return['v_order_id'],
+								'order_status' => 0,
+								'comment' => 'Paypal transaction confirmed'
+							);
+							$this->payment_model->addOrderHistory($orderHistory);
                             $response['completepayment'] = true;
                             $response['message'] = '<div style="color:green">Your payment is completed through Paypal</div>';            
                             $response = array_merge($response,$return);
