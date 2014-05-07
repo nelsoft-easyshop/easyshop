@@ -19,7 +19,7 @@ class MY_Controller extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-
+        
         $this->config->set_item('base_url',"https://".$_SERVER["SERVER_NAME"]."/");
         $this->load->model("user_model");
         $this->load->model("cart_model");
@@ -32,6 +32,7 @@ class MY_Controller extends CI_Controller
         
         if (isset ($this->kernel)) {
             $this->serviceContainer = $this->kernel->serviceContainer;
+            $this->load->helper('view_helper');
         }
     }
 	
