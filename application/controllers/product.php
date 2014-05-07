@@ -155,6 +155,7 @@ class product extends MY_Controller
 					$db_cat_item = $this->product_model->getPopularitem($down_cat,1);
 					$response['subcategories'][$x]['popular'] = $db_cat_item;
 				}
+				
 				$response['items'] = $items;
 				$response['attributes'] = $organizedAttribute;
 				$response['id_cat'] = $categoryId;

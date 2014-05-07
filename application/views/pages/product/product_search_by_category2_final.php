@@ -31,13 +31,13 @@
         ?>
 
                 <div class="product<?php echo $class.' '. $irclass; ?>">
-                <a href="<?= base_url() ?>item/<?php echo $items[$i]['product_id']; ?>/<?php echo es_url_clean($items[$i]['name']); ?>.html"><span class="prod_img_wrapper"><span class="prod_img_container"><img alt="<?php echo $items[$i]['name']; ?>" src="<?php echo base_url() . $pic[0] . '/' . $pic[1] . '/' . $pic[2] . '/' . $pic[3] . '/' . 'categoryview' . '/' . $pic[4]; ?>"></span></span></a>
+                <a href="<?= base_url() ?>item/<?php echo $items[$i]['slug']; ?>"><span class="prod_img_wrapper"><span class="prod_img_container"><img alt="<?php echo $items[$i]['name']; ?>" src="<?php echo base_url() . $pic[0] . '/' . $pic[1] . '/' . $pic[2] . '/' . $pic[3] . '/' . 'categoryview' . '/' . $pic[4]; ?>"></span></span></a>
                 <h3 style="  -o-text-overflow: ellipsis;    
                 text-overflow:    ellipsis;   
                 overflow:hidden;             
                 white-space:nowrap;  
                 width: 225px; ">
-                    <a href="<?= base_url() ?>item/<?php echo $items[$i]['product_id']; ?>/<?php echo es_url_clean($items[$i]['name']); ?>.html"><?php echo html_escape($items[$i]['name']); ?></a>
+                    <a href="<?= base_url() ?>item/<?php echo $items[$i]['slug']; ?>"><?php echo html_escape($items[$i]['name']); ?></a>
                 </h3>
 
                 <div class="price-cnt">

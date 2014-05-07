@@ -133,7 +133,7 @@ $_SESSION['start'] = "0";
                         <span><?php echo html_escape($rows['name']);?></span></a>
                         <?PHP if(count($rows['popular'])>0): ?>
                         <span class="cat_carousel_img_con"><span class="cat_carousel_img"><img src="<?= base_url().$rows['popular'][0]['path'].'categoryview/'.$rows['popular'][0]['file']; ?>"></span></span><br />
-                        <div class="cc2_prod_name"><a href="<?PHP echo base_url()."item/".$rows['popular'][0]['id_product']."/".es_url_clean($rows['popular'][0]['product']); ?>.html" title="<?PHP echo $rows['popular'][0]['product']; ?>"><span><?PHP echo html_escape($rows['popular'][0]['product']); ?></span></a></div>
+                        <div class="cc2_prod_name"><a href="<?PHP echo base_url()."item/".$rows['popular'][0]['slug']; ?>" title="<?PHP echo $rows['popular'][0]['product']; ?>"><span><?PHP echo html_escape($rows['popular'][0]['product']); ?></span></a></div>
                         <span class="recommended_product_price">PHP <?php echo number_format($rows['popular'][0]['price'],2,'.',',');?></span>
                         <?PHP endif; ?>
                     </div>
@@ -226,9 +226,9 @@ echo $typeOfViewActive;
          }
          ?>
          <div class="<?php echo $typeOfView; ?>">
-            <a href="<?= base_url() ?>item/<?php echo $items[$i]['product_id']; ?>/<?php echo es_url_clean($items[$i]['name']); ?>.html"><span class="prod_img_wrapper"><span class="prod_img_container"><img alt="<?php echo html_escape($items[$i]['name']); ?>" src="<?php echo base_url() . $pic[0] . '/' . $pic[1] . '/' . $pic[2] . '/' . $pic[3] . '/' . 'categoryview' . '/' . $pic[4]; ?>"></span></span></a>
+            <a href="<?= base_url() ?>item/<?php echo $items[$i]['slug']; ?>"><span class="prod_img_wrapper"><span class="prod_img_container"><img alt="<?php echo html_escape($items[$i]['name']); ?>" src="<?php echo base_url() . $pic[0] . '/' . $pic[1] . '/' . $pic[2] . '/' . $pic[3] . '/' . 'categoryview' . '/' . $pic[4]; ?>"></span></span></a>
             <h3>
-                <a href="<?= base_url() ?>item/<?php echo $items[$i]['product_id']; ?>/<?php echo es_url_clean($items[$i]['name']); ?>.html"><?php echo html_escape($items[$i]['name']); ?></a>
+                <a href="<?= base_url() ?>item/<?php echo $items[$i]['slug']; ?>"><?php echo html_escape($items[$i]['name']); ?></a>
             </h3>
 
             <div class="price-cnt">

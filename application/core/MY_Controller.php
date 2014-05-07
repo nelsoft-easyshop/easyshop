@@ -167,7 +167,7 @@ class MY_Controller extends CI_Controller
 				array_push($down_cat, $row['level2_id']);
 				$pitem = $this->product_model->getPopularitem($down_cat,6);		
                 //end popular items                
-                
+             
                 $data[$idx_lvl1][0][$row['level2_id']] =  array(
                         'id_cat' => $row['level2_id'],
                         'name' => $row['level2_name'],

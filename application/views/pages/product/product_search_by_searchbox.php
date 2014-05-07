@@ -88,14 +88,14 @@ $typeOfViewActive = '<div id="list" class="list "></div>
             }
             ?>
             <div class="<?php echo $typeOfView; ?>">
-         <a href="<?=base_url()?>item/<?php echo $items[$i]['product_id']; ?>/<?php echo es_url_clean($items[$i]['product_name']); ?>.html"><span class="prod_img_wrapper"><span class="prod_img_container"><img alt="<?php echo $items[$i]['product_name']; ?>" src="<?php echo base_url().$pic[0].'/'.$pic[1].'/'.$pic[2].'/'.$pic[3].'/'.'categoryview'.'/'.$pic[4];;?>"></span></span></a>
+         <a href="<?=base_url()?>item/<?php echo $items[$i]['product_slug']; ?>"><span class="prod_img_wrapper"><span class="prod_img_container"><img alt="<?php echo $items[$i]['product_name']; ?>" src="<?php echo base_url().$pic[0].'/'.$pic[1].'/'.$pic[2].'/'.$pic[3].'/'.'categoryview'.'/'.$pic[4];;?>"></span></span></a>
 
          <h3 style="  -o-text-overflow: ellipsis;    
          text-overflow:    ellipsis;   
          overflow:hidden;             
          white-space:nowrap;  
          width: 225px; ">
-         <a href="<?=base_url()?>item/<?php echo $items[$i]['product_id']; ?>/<?php echo es_url_clean($items[$i]['product_name']); ?>.html"><?php echo html_escape($items[$i]['product_name']); ?></a>
+         <a href="<?=base_url()?>item/<?php echo $items[$i]['product_slug']; ?>"><?php echo html_escape($items[$i]['product_name']); ?></a>
        </h3>
 
        <div class="price-cnt">

@@ -19,7 +19,7 @@
 						<p>Recommended</p>
 						<ul class='slides_prod slider_product'>
 							<?PHP for($px=0;$px < sizeof($cat_items[$x][0][$x2]['popular']);$px++): ?>
-								<li><a href='<?= base_url().'item/'.$cat_items[$x][0][$x2]['popular'][$px]['id_product'].'/'.es_url_clean($cat_items[$x][0][$x2]['popular'][$px]['product']); ?>.html'><span class="cat_slide_img_wrapper"><span class="cat_slide_img_con"><img src="<?php echo base_url().$cat_items[$x][0][$x2]['popular'][$px]['path'].'thumbnail/'.$cat_items[$x][0][$x2]['popular'][$px]['file']; ?>" alt="product1" /></span></span><br /><?PHP echo html_escape($cat_items[$x][0][$x2]['popular'][$px]['product']); ?><br /></a></li> 
+								<li><a href='<?= base_url().'item/'.$cat_items[$x][0][$x2]['popular'][$px]['slug']?>'><span class="cat_slide_img_wrapper"><span class="cat_slide_img_con"><img src="<?php echo base_url().$cat_items[$x][0][$x2]['popular'][$px]['path'].'thumbnail/'.$cat_items[$x][0][$x2]['popular'][$px]['file']; ?>" alt="product1" /></span></span><br /><?PHP echo html_escape($cat_items[$x][0][$x2]['popular'][$px]['product']); ?><br /></a></li> 
 							<?PHP endfor; ?>                                        
 						</ul>
                         

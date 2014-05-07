@@ -185,6 +185,7 @@
      SELECT 
   COUNT(*) AS cnt_all
   , item_list_attribute.product_id
+  , item_list_attribute.slug
   , item_list_attribute.product_image_path
   , item_list_attribute.`name`
   , item_list_attribute.price
@@ -237,6 +238,7 @@ FROM
     , 
     (SELECT 
       a.id_product
+      , a.`slug`
       , a.`name`
       , a.brief
       , a.price
@@ -585,14 +587,14 @@ FROM
     </select>
     
     <select id="getProduct_withImage">
-        SELECT `name` AS `product`,`id_product`,`cat_id`, `product_image_path`, `price`
+        SELECT `name` AS `product`, `slug` AS slug, `id_product`,`cat_id`, `product_image_path`, `price`
         FROM `es_product` a
         LEFT JOIN `es_product_image` b ON b.`product_id` = a.`id_product` AND b.is_primary = '1'
         WHERE `id_product` = :id;
     </select>
     
     <select id="getPopularitem">
-		SELECT `name` AS `product`,`id_product`,`cat_id`,`clickcount`, `product_image_path` ,`price`
+		SELECT `name` AS `product`, `slug` AS `slug`, `id_product`,`cat_id`,`clickcount`, `product_image_path` ,`price`
         FROM `es_product` a
         LEFT JOIN `es_product_image` b ON b.`product_id` = a.`id_product` AND b.is_primary = '1'
         WHERE a.`is_delete` = 0 AND a.`is_draft` = 0 AND `cat_id` IN 

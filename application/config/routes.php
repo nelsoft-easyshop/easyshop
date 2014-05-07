@@ -63,7 +63,7 @@ $route['(?i)advsrch/scroll_product'] = 'product_search_v2/load_product'; # new s
 $route['(?i)chngepaswd'] = 'register/changepass'; # rain jorque 
 
 #ITEMS
-$route['(?i)item/(:num)/(:any)'] = 'product/view/$1/$2'; # ryan vasquez
+$route['(?i)item/(:any)'] = 'product/item/$1'; # ryan vasquez
 $route['search/suggest'] = 'product/sch_onpress'; # ryan vasquez
 
 #SELL ITEM

@@ -695,6 +695,7 @@ class product_model extends CI_Model
 		$query = "
 		SELECT 
 		  a.`id_product` AS product_id
+		  , a.`slug` as product_slug
 		  , a.`name` AS product_name
 		  , a.`price` AS product_price
 		  , a.`brief` AS product_brief
@@ -922,6 +923,7 @@ class product_model extends CI_Model
       LEFT JOIN 
         (SELECT 
           `id_product` AS product_id
+          , `slug` as product_slug
           , `name` AS product_name
           , `price` AS product_price
           , `brief` AS product_brief
