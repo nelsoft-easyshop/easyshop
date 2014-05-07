@@ -738,8 +738,8 @@ class product extends MY_Controller
 				}
 				$i++;
 			}
-			//$sellerid = $this->product_model->getProduct($id)['sellerid']; eto yung dati
-			$sellerid = $this->product_model->getProduct($id);
+			$sellerid = $this->product_model->getProduct($id)['sellerid'];
+			//$sellerid = $this->product_model->getProduct($id);
 		}
 
 		$data = array(
