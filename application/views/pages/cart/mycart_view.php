@@ -93,8 +93,9 @@
 			$(".subtotal").each(function(){
 				value = Number($(".subtotal").html().replace(/\$/g,'').replace(/,/g,'')) + value;
 			});
-			$("#total").html(Number(value).toLocaleString('en')+".00");
-	    }else{		
+			//$("#total").html(Number(value).toLocaleString('en')+".00");
+			$("#total").html(parseFloat(value).toFixed(2));
+	    }else{
 			$("#total").html("0.00");
 	    }
             $('input:checkbox').prop('checked', this.checked);
@@ -108,7 +109,8 @@
 			}else {
 			sum = total - value;
 			}
-			$("#total").html(Number(sum).toLocaleString('en')+".00");
+			//$("#total").html(Number(sum).toLocaleString('en')+".00");
+			$("#total").html(parseFloat(sum).toFixed(2));
         });
         $("#proceed_payment").click(function(event){
             event.preventDefault();
