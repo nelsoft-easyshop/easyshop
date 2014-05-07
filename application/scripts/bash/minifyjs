@@ -1,5 +1,7 @@
 # Automation script for minifying js files
 
+# Sample usage: minifyjs /Users/czarpino/dev/src/easyshop/src/assets/js/ /usr/local/bin/compiler.jar
+
 
 
 if [[ $# -eq 0 ]] ; then
@@ -37,7 +39,7 @@ rm -rf $JS_MIN_DIR/vendor
 # begin minifying
 echo 'Minifying scripts...'
 find $JS_MIN_DIR -name '*.js' -exec java -jar $COMPILER --js {} --js_output_file {}.min --summary_detail_level 3 \; -exec rm {} \; -exec mv {}.min {} \;
-# note that closure will skip minification of js files with javascript errors
+# note that closure will skip minification of js files with errors
 
 # symlink vendor directory
 echo 'Linking vendors...'
