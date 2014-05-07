@@ -3,7 +3,7 @@
     ini_set('display_errors', 1);
     error_reporting(E_ALL);
 
-    echo "Loading swiftmailer...";
+    echo "Loading swiftmailer...\n";
     require_once(__DIR__ . '/../../vendor/swiftmailer/swiftmailer/lib/swift_required.php');
     
     /**
@@ -42,7 +42,7 @@
             )
     );
 
-    echo 'Initializing database query...'; 
+    echo "Initializing database query...\n"; 
 
     /** FETCH DATABASE USER DATA **/
     $link = mysqli_connect($configDatabase['host'], $configDatabase['user'], $configDatabase['pass'], $configDatabase['database']);
@@ -65,8 +65,8 @@
     $arrResult = mysqli_fetch_all($rawResult, MYSQLI_ASSOC);
     mysqli_close($link);
 
-    echo 'SQL connection closed. Data fetched. \n';
-    echo 'Preparing CSV data... \n';
+    echo "SQL connection closed. Data fetched. \n";
+    echo "Preparing CSV data... \n";
 
     /**	Generate CSV Data	**/
     $csvData = 'USERNAME,CONTACT NO,EMAIL,NICKNAME,FULLNAME,DATE CREATED' . PHP_EOL;		
@@ -75,7 +75,7 @@
                                     ',' . $userData['fullname'] . ',' . $userData['datecreated'] . PHP_EOL;
     }
 
-    echo 'Preparing email... \n';
+    echo "Preparing email... \n";
 
     /** SEND EMAIL WITH CSV ATTACHED **/
     $transport = Swift_SmtpTransport::newInstance('smtp.gmail.com', 465, 'ssl')
@@ -94,7 +94,7 @@
     $numSent = $mailer->send($message);
 
     if(!$numSent){
-            echo 'ERROR : Failed to send all emails!';
+            echo "ERROR : Failed to send all emails!\n";
     }else{
-            echo 'Successfully sent ' . $numSent . 'emails!';
+            echo "Successfully sent " . $numSent . "emails!\n";
     }
