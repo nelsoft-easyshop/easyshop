@@ -52,10 +52,7 @@ $autoload['packages'] = array();
 |	$autoload['libraries'] = array('database', 'session', 'xmlrpc');
 */
 
-$autoload['libraries'] = array('database', 'session', 'form_validation', 'image_lib','upload');
-
-// Uncomment to enable Kernel
-//$autoload['libraries'] = array('database', 'session', 'form_validation', 'image_lib', 'upload', 'Kernel');
+$autoload['libraries'] = array('database', 'session', 'form_validation', 'image_lib', 'upload', 'Kernel');
 
 /*
 | -------------------------------------------------------------------
