@@ -1083,31 +1083,34 @@ $(document).ready(function(){
 	});
 	
 	$('.transac_response_btn').on('click', function(){
-		var form = $(this).closest('form.transac_response');
-		var thisbtn = $(this);
-		var parentdiv = $(this).closest('div');
-		$.post(config.base_url+"memberpage/transactionResponse", form.serializeArray(), function(data){
-			try{
-				var serverResponse = jQuery.parseJSON(data);
-			}
-			catch(e){
-				alert('An error was encountered while processing your data. Please try again later.');
-				window.location.reload(true);
-				return false;
-			}
-			
-			if(serverResponse.error.length > 0){
-				alert(serverResponse.error);
-			}
-			
-			if(serverResponse.result === 'success'){
-				parentdiv.html('<span class="trans_alert transac_req_submit">Request submitted.</span>');
-			}else if(serverResponse.result === 'fail'){
-				parentdiv.html('<span class="trans_alert">Failed to update status.</span>');
-			}
-		});
-		$(this).val('Please wait');
-		$(this).attr('disabled', true);
+		var r=confirm("Continue submitting request?");
+		if (r==true){
+		    var form = $(this).closest('form.transac_response');
+			var thisbtn = $(this);
+			var parentdiv = $(this).closest('div');
+			$.post(config.base_url+"memberpage/transactionResponse", form.serializeArray(), function(data){
+				try{
+					var serverResponse = jQuery.parseJSON(data);
+				}
+				catch(e){
+					alert('An error was encountered while processing your data. Please try again later.');
+					window.location.reload(true);
+					return false;
+				}
+				
+				if(serverResponse.error.length > 0){
+					alert(serverResponse.error);
+				}
+				
+				if(serverResponse.result === 'success'){
+					parentdiv.html('<span class="trans_alert transac_req_submit">Request submitted.</span>');
+				}else if(serverResponse.result === 'fail'){
+					parentdiv.html('<span class="trans_alert">Failed to update status.</span>');
+				}
+			});
+			$(this).val('Please wait');
+			$(this).attr('disabled', true);
+		}
 		return false;
 	});
 	
