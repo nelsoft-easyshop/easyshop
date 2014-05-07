@@ -260,7 +260,8 @@
 		  <input type="hidden" name="referrer" class="referrer" value="landingpage"/>
 	 <?php echo form_close();?>
 
-	
+        <?php // sample usage of new way to include js?>
+	<?php //include_javascripts('vendor/jquery-1.9.1.js'); ?>
 	<script type='text/javascript' src="<?=base_url()?>assets/JavaScript/js/jquery-1.9.1.js" ></script>
 	<script type='text/javascript' src="<?=base_url()?>assets/JavaScript/js/jquery-ui.js"></script>
 	<script type='text/javascript' src='<?=base_url()?>assets/JavaScript/landingpage/bootstrap.min.js'></script>
