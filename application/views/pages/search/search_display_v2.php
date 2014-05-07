@@ -13,6 +13,7 @@ function in_array_r($needle, $haystack, $strict = false) {
 }# checking end	
 
 ?>
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 <link rel="stylesheet" href="<?=base_url()?>assets/css/product_search_category.css?ver=1.0" type="text/css" media="screen"/>
 <link rel="stylesheet" href="<?=base_url()?>assets/css/grid_list_style.css?ver=1.0" type="text/css"  media="screen"/> 
 <link rel="stylesheet" href="<?=base_url()?>assets/css/style_new.css?ver=1.0" type="text/css" media="screen"/>
