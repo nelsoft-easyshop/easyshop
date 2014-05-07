@@ -319,7 +319,7 @@
           <input type="checkbox" name="allow_cod" id="allow_cod" style="display:none">
 	 <?php echo form_close();?>
      
-     <?php echo form_open('productUpload/previewItem', array('id'=>'nonmodal_preview'));?>
+     <?php echo form_open('sell/preview', array('id'=>'nonmodal_preview'));?>
           <input type="hidden" name="p_id" id="p_id" value="<?php echo $product_id;?>">
           <input type="hidden" name="modal" id="modal" value="false">
      <?php echo form_close();?>

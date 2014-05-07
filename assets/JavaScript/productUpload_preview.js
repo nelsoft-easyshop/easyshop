@@ -212,14 +212,15 @@ $(document).ready(function(){
      */
     
     $(document).on('click', '#previewSubmit', function(){
-           var account_name = $('#deposit_acct_name').val();
+            var csrftoken = $("meta[name='csrf-token']").attr('content');
+            var csrfname = $("meta[name='csrf-name']").attr('content');
+            var account_name = $('#deposit_acct_name').val();
             var bank_name = $('#bank_name').val();
             var account_no = $('#deposit_acct_no').val();
             var bank_list = $('#bank_list').val();
             var prod_billing_id = parseInt($('#prod_billing_id').val(),10);
             var cod_only = ((prod_billing_id === 0)&&($('#allow_cashondelivery').is(':checked')))?true:false;
             var valid = true;
-        
             if(!cod_only){
                 if($.trim(account_name) === ''){
                     $('#deposit_acct_name').focus();
@@ -262,6 +263,24 @@ $(document).ready(function(){
                 $('#step4_form').submit();
             }
     });
+    
+     /*
+      *  Back links for non-modal preview item
+      */
+    
+     $('#previewProduct').on('click', '#step1_link', function(){
+         $('#edit_step1').submit();
+     });
+     
+     $('#previewProduct').on('click', '#step2_link', function(){
+        $('#edit_step2').submit();
+     });
+     
+     $('#previewProduct').on('click', '#step3_link', function(){
+        $('#edit_step3').submit();
+     });
+    
+    
     
 });
 

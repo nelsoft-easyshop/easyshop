@@ -1,7 +1,32 @@
 <?php if(!$modal): ?>
 <link type="text/css" href="<?=base_url()?>assets/css/sell_item.css?ver=1.0" rel="stylesheet" />
 <link rel="stylesheet" href="<?=base_url()?>assets/css/product_preview.css?ver=1.0" type="text/css" media="screen"/>
+
 <div id='previewProduct' style='width:1100px; margin-left: 10%; margin-top: 7%;'>
+
+        <h2 class="f24">Sell an Item</h2>
+        <div class="sell_steps sell_steps4">
+            <ul>
+              <li><a href="javascript:void(0)" id="step1_link">Step 1:Select Category</a></li>
+              <li><a href="javascript:void(0)" id="step2_link">Step 2: Upload Item</a></li>                   
+              <li><a href="javascript:void(0)" id="step3_link">Step 3: Select Shipping Courier</a></li>
+              <li><a href="javascript:void(0)" ><span>Step 4:</span> Preview your listing</a></li>
+            </ul>
+        </div>
+        
+        <?php echo form_open('sell/step3', array('id'=>'edit_step3'));?>
+            <input type="hidden" name="prod_h_id" id="prod_h_id" value="<?php echo $product['id_product'];?>">
+        <?php echo form_close();?>
+        
+        <?php echo form_open('sell/edit/step2', array('id'=>'edit_step2'));?>
+            <input type="hidden" name="p_id" id="p_id" value="<?php echo $product['id_product'];?>">
+        <?php echo form_close();?>
+
+        <?php echo form_open('sell/edit/step1', array('id'=>'edit_step1'));?>
+            <input type="hidden" name="p_id" id="p_id" value="<?php echo $product['id_product'];?>">
+        <?php echo form_close();?>
+        
+    <br/>
 <?php endif; ?>
 
     <div  style="position:relative; height:400px">
