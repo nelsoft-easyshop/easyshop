@@ -7,7 +7,7 @@ $(document).ready(function(){
   
     $('#tutSpec').on('click',function(){
         $('#div_tutSpec').modal({
-            position: ['5%', '10%'],
+            //position: ['5%', '10%'],
             onShow: function(){
                 $('#paging_tutSpec').jqPagination({
                     paged: function(page) {
@@ -39,7 +39,7 @@ $(document).ready(function(){
 
     $('#tutOptional').on('click',function(){
         $('#div_tutOptional').modal({
-            position: ['5%', '10%'],
+            //position: ['5%', '10%'],
             onShow: function(){
                 $('#paging_tutOptional').jqPagination({
                     paged: function(page) {
@@ -71,7 +71,7 @@ $(document).ready(function(){
  
     $('#tutQty').on('click',function(){
         $('#div_tutQty').modal({
-            position: ['5%', '10%'],
+            //position: ['5%', '10%'],
             onShow: function(){
                 $('#paging_tutQty').jqPagination({
                     paged: function(page) {
