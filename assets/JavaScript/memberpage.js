@@ -1917,10 +1917,9 @@ $(document).ready(function(){
 	//// GET BANK DROPDOWN - END	
 		
 	$('#abi_btn').click(function(){
+		$('#bi_bank').getbank("");
 		$('#abi').toggle("slow");
 	});
-	
-    $('#bi_bank').getbank("");
 	
 	////// START /////////////////////////////////////////////////////////////////////
 	
@@ -1981,10 +1980,10 @@ $(document).ready(function(){
 				url: redurl, 
 				data: {bi_id:bidval, csrfname:csrftoken},
 				success: function(data){
-					$("#bi_div_" + bictr).remove();
-					$("#ubi_" + bictr).remove();
-					//alert("Bank info successfully deleted!");
-					return false;
+					//$("#bi_div_" + bictr).remove();
+					//$("#ubi_" + bictr).remove();
+					window.location.href = config.base_url+'me?me=pmnt';
+					//return false;
 				}
 			});		
 		}
