@@ -31,9 +31,9 @@ echo form_open('sell/edit/step2', $attributesForm);
             <div class="sell_steps sell_steps1">
                 <ul>
                     <li><a href="javascript:void(0)" id="step1_link"><span>Step 1:</span> Select Category</a></li>
-                  <li><a href="javascript:void(0)">Step 2: Upload Item</a></li>                   
-                  <li><a href="javascript:void(0)">Step 3: Select Shipping Courier</a></li>
-                  <li><a href="javascript:void(0)">Step 4: Success</a></li>
+                  <li>Step 2: Upload Item</li>                   
+                  <li>Step 3: Select Shipping Courier</li>
+                  <li>Step 4: Success</li>
                 </ul>
             </div>
             
