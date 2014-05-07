@@ -849,9 +849,10 @@ class Payment extends MY_Controller{
 	 *
 	 *
 	 */
-	function test($test, $abs)
+	private function responseDragonpay($txnId)
 	{
-	
+		$result = $this->payment_model->responseDragonpay($txnId);
+		print($result['o_message']);
 	}
 	
 }

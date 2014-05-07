@@ -148,4 +148,8 @@
 	VALUES (:order_id, :order_status, :comment, NOW());
 </select>
 
+<select id="responseDragonpay">
+	CALL `es_sp_expiredDragonpayTransaction` (:transaction_id)
+</select>
+
 </map>
