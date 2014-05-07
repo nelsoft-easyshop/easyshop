@@ -4979,3 +4979,14 @@ margin-right: 10px;
     cursor: pointer;
 }
 
+.advsrch{
+	background-position:-704px -322px;
+	width:13px;
+	height:13px;
+}
+
+.advsrch_toggle{
+	background-position:-717px -325px;
+	width:13px;
+	height:13px;
+}
