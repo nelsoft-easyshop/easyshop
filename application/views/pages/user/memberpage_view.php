@@ -29,7 +29,7 @@
 								<li><a href="javascript:void(0)" onclick="triggerTab('payment');">Payment</a></li>
 								<li><a href="javascript:void(0)" onclick="triggerTab('delivery_address');">Delivery Address</a></li>
 								<li><a href="javascript:void(0)" onclick="triggerTab('transactions');">On-going Transactions</a></li>
-								<li><a href="javascript:void(0)" onclick="triggerTab('complete_transactions');">Completed Transactions</a></li> -->
+								<li><a href="javascript:void(0)" onclick="triggerTab('complete_transactions');">Completed Transactions</a></li>
 								<li><a href="javascript:void(0)" onclick="triggerTab('security_settings');">Security Setting</a></li>
 							</ul>
 						</li>
