@@ -206,7 +206,7 @@ class search_model extends CI_Model
 	$start = (int)$start;
 	$per_page = (int)$per_page;		
 
-	$query = "SELECT ep.`id_product` AS 'product_id', ep.`brand_id` AS 'brand_id', 
+	$query = "SELECT ep.`slug`, ep.`id_product` AS 'product_id', ep.`brand_id` AS 'brand_id', 
 		ep.`cat_id`, ep.`name` AS 'product_name', 
 		ep.`price` AS 'product_price', ep.`brief` AS 'product_brief', ep.`condition` AS 'product_condition',
 		epi.`product_image_path`,
