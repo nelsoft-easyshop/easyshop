@@ -159,27 +159,17 @@ $(document).ready(function() {
 ////////////////////////////////////////////////////
 
 $(function(){
-	$(".more_attr").hide();	
-//	$(".more_attr").click(function() {
-//		$(this).parent().children().show();
-//		$(this).hide();
-//		$(this).siblings('.less_attr').show;
-//	});
-//	
-//	$(".less_attr").click(function() {
-//		$('.adv_leftpanel').children('h3:gt(2)').nextAll().hide();
-//		$('.adv_leftpanel').children('h3:gt(2)').hide();
-//		$(this).siblings('.more_attr').show();
-//		$(this).hide();
-//	});
-//});
-//
-//$(document).ready(function(){
-//	if ($('.adv_leftpanel').length === $('.adv_leftpanel:contains("input")').length) {
-//		$('.adv_leftpanel').children('h3:gt(2)').nextAll().hide();
-//		$('.adv_leftpanel').children('h3:gt(2)').hide();
-//		$('.adv_leftpanel').children('.more_attr').show();
-//	}else{
-//		$('.more_attr').hide();
-//	}
+	$("h3[id^=fld_]").click(function(){
+		var getchild = "#c" + $(this).attr('id');
+		var geticon = "#i" + $(this).attr('id');
+		if($(getchild).is(":visible")){
+			$(getchild).hide();
+			$(geticon).removeClass("span_bg advsrch_toggle");
+			$(geticon).addClass("span_bg advsrch");
+		}else{
+			$(getchild).show();
+			$(geticon).removeClass("span_bg advsrch");
+			$(geticon).addClass("span_bg advsrch_toggle");
+		}
+	});
 });
