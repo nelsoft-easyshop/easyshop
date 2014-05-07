@@ -1086,4 +1086,12 @@ div.reply_content_shown > p {
 	color: #FF4400;
 }
 
-
+#previewSubmit{
+    border: medium none;
+    cursor: pointer;
+    display: block;
+    margin: 10px auto 0;
+    padding: 10px 15px;
+    text-transform: uppercase;
+    width: 120px;
+}

@@ -2,8 +2,7 @@
 <link type="text/css" href="<?=base_url()?>assets/css/sell_item.css?ver=1.0" rel="stylesheet" />
 <link rel="stylesheet" href="<?=base_url()?>assets/css/product_preview.css?ver=1.0" type="text/css" media="screen"/>
 <link rel="stylesheet" href="<?=base_url()?>assets/css/jquery.bxslider.css?ver=1.0" type="text/css" media="screen"/>
-<link  type="text/css"  href='<?=base_url()?>assets/css/jqpagination.css?ver=1.0' rel="stylesheet" media='screen'/>
-<link  type="text/css"  href='<?=base_url()?>assets/css/product_upload_tutorial.css' rel="stylesheet" media='screen'/>
+<link  type="text/css"  href='<?=base_url()?>assets/css/product_upload_tutorial.css?ver=1.0' rel="stylesheet" media='screen'/>
 
 <div class="wrapper">
   <div class="seller_product_content">
@@ -319,6 +318,12 @@
           <input type="hidden" name="prod_billing_id" id="prod_billing_id" value="0">
           <input type="checkbox" name="allow_cod" id="allow_cod" style="display:none">
 	 <?php echo form_close();?>
+     
+     <?php echo form_open('productUpload/previewItem', array('id'=>'nonmodal_preview'));?>
+          <input type="hidden" name="p_id" id="p_id" value="<?php echo $product_id;?>">
+          <input type="hidden" name="modal" id="modal" value="false">
+     <?php echo form_close();?>
+     
    </div> 
   </div>
 </div>
@@ -379,6 +384,8 @@
 		<a href="#" class="next" data-action="next">&rsaquo;</a>
 		<a href="#" class="last" data-action="last">&raquo;</a>
 	</div>
+
+    
 </div>
 
 
@@ -387,6 +394,7 @@
 <script type='text/javascript' src='<?=base_url()?>assets/JavaScript/js/jquery.jqpagination.min.js'></script>
 <script type='text/javascript' src="<?=base_url()?>assets/JavaScript/js/jquery.simplemodal.js"></script>
 <script type="text/javascript" src="<?=base_url()?>assets/JavaScript/productUpload_step3.js?ver=1.0"></script>
+<script type="text/javascript" src="<?=base_url()?>assets/JavaScript/productUpload_preview.js?ver=1.0"></script>
 <script src="<?=base_url()?>assets/JavaScript/js/jquery.idTabs.min.js" type="text/javascript"></script>
 <script type="text/javascript">
 
