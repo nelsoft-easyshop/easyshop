@@ -1323,10 +1323,12 @@ $(document).on('change',"#price_field,#prod_price, .price_text",function () {
   //var priceval = this.value.replace(',','');
   var priceval = this.value.replace(new RegExp(",", "g"), '');
   var v = parseFloat(priceval);
+  var tempval;
   if (isNaN(v)) {
     this.value = '';
   } else {
-    this.value = ReplaceNumberWithCommas(v.toFixed(2));
+    tempval = Math.abs(v);
+    this.value = ReplaceNumberWithCommas(tempval.toFixed(2));
   }
   
 
@@ -1565,12 +1567,20 @@ $(".proceed_form").unbind("click").click(function(){
     alert("Fill (*) All Required Fields Properly!");
     return false;
   }else{
+
+        if($('#price_field, #prod_price, .price_text').val() <= 0){
+        alert('Invalid Price. Price should be numeric or cannot be less than equal 0!');
+        return false;
+      }
+
    var pricevalue = price.val().replace(new RegExp(",", "g"), '');
      if(pricevalue <= 0 || !$.isNumeric(pricevalue)){
-      alert("Invalid Price. Price should be numeric!");
+      alert("Invalid Price. Price should be numeric or cannot be less than equal 0!");
       validateRedTextBox("#prod_price");
       return false;
     }else{
+
+  
     
        found = false;
        for (var key in conditionAvailable) {
