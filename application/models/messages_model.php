@@ -130,9 +130,6 @@ class messages_model extends CI_Model
 			}
 		}
 		$result['unread_msgs'] = $unread_msg;
-		//print "<pre>";
-		//print_r($result);
-		//print "</pre>";
 		return $result;
 	}
 	

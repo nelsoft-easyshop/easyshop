@@ -191,8 +191,9 @@
 				html += '<span class="float_right">';
 			}
 			html += '<img src="'+val.sender_img+'/60x60.png">';
-			html += '<p>'+escapeHtml(val.message)+'</p>';
-			html += '<input type="checkbox" class="d_all" value="'+val.id_msg+'"></span>';
+			html += '<div></div>';
+			html += '<input type="checkbox" class="d_all" value="'+val.id_msg+'">';
+			html += '<p>'+escapeHtml(val.message)+'</p></span>';
 			$("#msg_field").empty();
 			$("#msg_field").prepend(html);
 		});
@@ -256,8 +257,9 @@
 				html += '<span class="float_right">';
 			}
 			html += '<img src="'+val.sender_img+'/60x60.png">';
-			html += '<p>'+escapeHtml(val.message)+'</p>';
-			html += '<input type="checkbox" class="d_all" value="'+val.id_msg+'"></span>';
+			html += '<div></div>';
+			html += '<input type="checkbox" class="d_all" value="'+val.id_msg+'">';
+			html += '<p>'+escapeHtml(val.message)+'</p></span>';
 			$("#msg_field").empty();
 			$("#msg_field").append(html);
 		});

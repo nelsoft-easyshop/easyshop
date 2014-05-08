@@ -4721,34 +4721,53 @@ span.transac_title_date {
 .float_left{
     display: block;
     height: auto;
-    margin: 20px 20px 20px;
+    margin-left: 20px;
+    margin-bottom: -25px;
+    margin-top: 15px;
 }
 .float_left img{
+    border: 1px solid #D9D9D9;
+    float: left;
     height: 40px;
     width: 40px;
+    margin-left: 3px;
 }
 .float_left p{
-    background-color: #F8E6E0;
-    border-bottom-left-radius: 2em;
-    border-top-right-radius: 2em;
+    background-color: #D8D8D8;
+    border-radius: 3px;
+    bottom: 37px;
     height: auto;
+    left: 62px;
     max-width: 60%;
-    min-height: 70px;
+    min-height: 45px;
     padding: 5px;
+    position: relative;
     text-indent: 10px;
     width: auto;
 }
+.float_left div{
+		width: 0px;
+		height: 0px;
+		border-style: solid;
+		border-width: 12.5px 12px 12.5px 0;
+		border-color: transparent #D8D8D8 transparent transparent;
+		left: 50px;
+		position: relative;
+		top: 15px;
+		width: 0;
+}
 .float_left input{
+    bottom: 24px;
+    left: -59px;
     position: relative;
-    right: 15px;
-    top: -55px;
 }
 /**/
 
 .float_right{
+    margin-top: 5px;
     display: block;
     height: auto;
-    margin: 20px;
+    margin-bottom: -75px;
     max-width: 620px;
     min-height: 120px;
     min-width: 620px;
@@ -4756,13 +4775,14 @@ span.transac_title_date {
     width: 620px;
 }
 .float_right img{
+    border: 1px solid #D9D9D9;
     height: 40px;
     left: 580px;
     position: relative;
     width: 40px;
 }
 .float_right p{
-    background-color: #E6E6E6;
+/*    background-color: #E6E6E6;
     border-bottom-right-radius: 2em;
     border-top-left-radius: 2em;
     height: auto;
@@ -4772,12 +4792,35 @@ span.transac_title_date {
     padding: 5px;
     position: relative;
     text-indent: 10px;
+    width: 50%;*/
+
+    background-color: #C6C6C6;
+    border-radius: 3px;
+    bottom: 91px;
+    height: auto;
+    left: 240px;
+    max-width: 60%;
+    margin-top: 15px;
+    min-height: 45px;
+    padding: 5px;
+    position: relative;
+    text-indent: 10px;
     width: 50%;
 }
-.float_right input{
-    left: 622px;
+.float_right div {
+    border-color: rgba(0, 0, 0, 0) rgba(0, 0, 0, 0) rgba(0, 0, 0, 0) #C6C6C6;
+    border-style: solid;
+    border-width: 12.5px 0 12.5px 12px;
+    bottom: 25px;
+    height: 0;
+    left: 560px;
     position: relative;
-    top: -55px;
+    width: 0;
+}
+.float_right input{
+    bottom: 64px;
+    left: 626px;
+    position: relative;
 }
 /**/
 #msg_textarea{
@@ -4900,7 +4943,8 @@ margin-right: 10px;
     overflow: hidden;
 	max-width: 172px;
 }
-#table_id img {
+#table_id img {		
+    border: 1px solid #D9D9D9;
     height: 45px;
     width: 45px;
 }

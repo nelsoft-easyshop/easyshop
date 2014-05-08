@@ -43,4 +43,9 @@
         FROM `es_member`
         WHERE username = :username;
     </select>
+    <select id="is_seened">
+        UPDATE `es_messages`
+        SET `opened` = 1
+        where `to_id` = :id
+    </select>
 </map>
