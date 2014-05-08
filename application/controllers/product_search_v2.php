@@ -236,8 +236,10 @@ class product_search_v2 extends MY_Controller {
 			# get all items here (right pane)
 			
 			$items = $this->search_model->SearchProduct($cat, $start, $per_page, $colsort, $is, $us, $con, $gp, $attr_brand, $QAtt, $sc, $loc, $test);
+			$cntr = $this->search_model->ProductCount($cat, $is, $us, $con, $gp, $attr_brand, $QAtt, $sc, $loc);
 	
 			$response['items'] = $items; ### pass to view
+			$response['cntr'] = $cntr; ### pass to view
 		
 			$product_id = $this->search_model->getProductID($catID);
 			
