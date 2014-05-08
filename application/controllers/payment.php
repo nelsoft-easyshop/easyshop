@@ -741,10 +741,7 @@ class Payment extends MY_Controller{
 
     function dragonPayReturn(){
      
-        if(!$this->session->userdata('dragonpayticket')){
-             redirect(base_url().'home/', 'refresh'); 
-             exit();
-        } 
+    
         
         
 
