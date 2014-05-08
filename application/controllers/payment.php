@@ -566,7 +566,6 @@ class Payment extends MY_Controller{
   
     function payDragonPay(){
         
-        $this->session->set_userdata('dragonpayticket', true);
         $carts = $this->session->all_userdata();
         $member_id =  $this->session->userdata('member_id'); 
         $itemList =  $carts['choosen_items'];
@@ -608,6 +607,7 @@ class Payment extends MY_Controller{
         $grandTotal = ($ItemTotalPrice+$handling_amt+$insurance_amt)-$shipping_discount_amt;
         $dpReturn = $this->dragonpay->getTxnToken($grandTotal,$name,$email);
 
+        $this->session->set_userdata('dragonpayticket', true);
         exit($dpReturn);
 
     }
@@ -618,7 +618,7 @@ class Payment extends MY_Controller{
       
        
         $ticket = $this->session->userdata('paymentticket');
-        if($ticket){
+        // if($ticket){
             $data = $this->session->userdata('headerData');
             $response = $this->session->userdata('bodyData'); 
 
@@ -629,12 +629,11 @@ class Payment extends MY_Controller{
             $this->load->view('templates/header', $data);
             $this->load->view('pages/payment/payment_response' ,$response);  
             $this->load->view('templates/footer_full'); 
-        }else{
-            redirect(base_url().'home/', 'refresh');
-        }
+        // }else{
+        //     redirect(base_url().'home/', 'refresh');
+        // }
       
     }
-
 
 
     function dragonPayPostBack(){
@@ -741,7 +740,10 @@ class Payment extends MY_Controller{
 
     function dragonPayReturn(){
      
-    
+        if(!$this->session->userdata('dragonpayticket')){
+             redirect(base_url().'home/', 'refresh'); 
+             exit();
+        } 
         
         
 
