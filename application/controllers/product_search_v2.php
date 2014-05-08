@@ -213,7 +213,7 @@ class product_search_v2 extends MY_Controller {
 			
 			$is = "";
 			if(strlen($gis) > 0){
-				$is = " AND MATCH(ep.`name`,keywords) AGAINST(CONCAT('".$gis."','*') IN BOOLEAN MODE) ";
+				$is = " AND MATCH(ep.`name`) AGAINST(CONCAT('".$gis."','*') IN BOOLEAN MODE) ";
 			}
 			
 			$us = "";
@@ -429,7 +429,7 @@ class product_search_v2 extends MY_Controller {
 			
 			$is = "";		
 			if(!empty($isA)){
-				$is = " AND MATCH(ep.`name`,keywords) AGAINST('+". $isA ."' IN BOOLEAN MODE) ";
+				$is = " AND MATCH(ep.`name`) AGAINST('+". $isA ."' IN BOOLEAN MODE) ";
 			}
 			
 			$us = "";
