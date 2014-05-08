@@ -636,7 +636,8 @@ class Payment extends MY_Controller{
 
     function dragonPayPostBack(){
 
-
+    $this->session->set_userdata('post', $_POST);
+        $this->session->set_userdata('get', $_GET);
 
 
     }
@@ -709,8 +710,8 @@ class Payment extends MY_Controller{
         $productstring = substr($productstring,4);
         $apiResponseArray['ProductData'] =  $carts['choosen_items'];
         $apiResponseArray['DragonPayReturn'] = array(
-                "POST" => $_POST,
-                "GET" => $_GET
+                "POST" => $this->session->userdata('post'),
+                "GET" => $$this->session->userdata('get')
             );
 
         $transactionID = urldecode($txnId).'-'.urldecode($refNo);
