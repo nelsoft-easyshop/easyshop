@@ -38,7 +38,7 @@ class DragonPay {
 	 	$errorCodes = $this->errorCodes;
 	 	$txnId = substr( "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" ,mt_rand( 0 ,50 ) ,1 ) .substr( md5( time() ), 1);
      	
-     	$txnId = '050';
+     	$txnId = '061';
         $ccy = 'PHP';
         $param = array(
         		'merchantId' => $this->merchantId,

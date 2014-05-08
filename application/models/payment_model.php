@@ -453,17 +453,6 @@ class payment_model extends CI_Model
 		
 		return $result;
 	}
-	
-	function responseDragonpay($txnId)
-	{
-		$query = $this->sqlmap->getFilenameID('payment','responseDragonpay');
-		$sth = $this->db->conn_id->prepare($query);
-		$sth->bindParam(':transaction_id', $txnId);
-		$result = $sth->execute();
-		$row = $sth->fetch(PDO::FETCH_ASSOC);
-		
-		return $row;
-	}
 }
 
 
