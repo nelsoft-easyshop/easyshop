@@ -152,8 +152,13 @@ function in_array_r($needle, $haystack, $strict = false) {
 				</select>
 			</span>
 		</div>
-		<p class="search_result"><!-- Showing 1 - 48 of 13,152 Results --></p>
 	</div>
+	<?php 
+		  $cntr = $cntr[0]['ctr'];
+		  if($cntr > 0):
+	?>
+			<div class="adv_ctr"><strong style="font-size:14px"><?php echo number_format($cntr);?></strong> results</div>
+	<?php endif; ?>
     <!-- Buttons start -->
     <div id="list" class="list list-active" title="List"></div>
     <div id="grid" class="grid" title="Grid"></div>
