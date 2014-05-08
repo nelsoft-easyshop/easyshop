@@ -3,7 +3,7 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
-class product_search_v2 extends MY_Controller {
+class product_search extends MY_Controller {
 	
 	function __construct()  
 	{ 
@@ -58,7 +58,7 @@ class product_search_v2 extends MY_Controller {
 	
 	
 	public $per_page = 10; # number of displayed products
-	function advsrch2(){
+	function advsrch(){
 
 		$data = array(
 			'shiploc' => $this->product_model->getLocation(),
@@ -467,4 +467,4 @@ class product_search_v2 extends MY_Controller {
 }
 
 /* End of file search.php */
-/* Location: ./application/controllers/product_search_v2.php */
+/* Location: ./application/controllers/product_search.php */
