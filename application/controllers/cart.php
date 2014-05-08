@@ -82,10 +82,6 @@ class Cart extends MY_Controller{
             'product_itemID'  => $productItemId,
             'maxqty' => $max_qty
             );
-	//print "<pre>";
-	//print_r($data);
-	//print "</pre>";
-	//return false;
         return $data;
     }
     
