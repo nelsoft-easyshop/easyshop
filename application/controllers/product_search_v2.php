@@ -98,7 +98,7 @@ class product_search_v2 extends MY_Controller {
 			$per_page = $this->per_page; # no of display
 			$catID = $category;
 			$cat = "";
-			$test = "";			
+			$test = "";
 
 			$child = $this->search_model->selectChild($category);
 			if($child[0] != 0 && $child[1] != 0){
