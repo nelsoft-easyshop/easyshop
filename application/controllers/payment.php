@@ -710,6 +710,7 @@ class Payment extends MY_Controller{
 
             // $paymentType = (strtolower($status) == "s" ? 4 : 2);
             $paymentType = 2;
+            $message = "sdsdxx";
             $return = $this->payment_model->payment($paymentType,$invoice_no,$grandTotal,$ip,$member_id,$productstring,$productCount,$apiResponse,$transactionID);
             if($return['o_success'] <= 0){
                 $response['message'] = '<div style="color:red"><b>Error 3: </b>'.$return['o_message'].'</div>'; 
