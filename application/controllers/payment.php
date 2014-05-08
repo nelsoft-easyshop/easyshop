@@ -686,6 +686,9 @@ class Payment extends MY_Controller{
         $response['itemList'] = $itemList;
         $grandTotal= ($ItemTotalPrice+$handling_amt+$insurance_amt)-$shipping_discount_amt;
 
+           echo  $_GET['txnid'].'='.$_POST['txnid'];
+        exit();
+
         $txnId = $_GET['txnid'];
         $refNo = $_GET['refno'];
         $status = $_GET['status'];
