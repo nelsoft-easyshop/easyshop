@@ -695,6 +695,10 @@ Advanced Search Filters
 .adv_us{
 	margin-right: 10px;
 }
+.adv_ctr{
+	float:left;
+	padding-top:13px;
+}
 
 .left_attribute h3 {
   color: #F48000;
