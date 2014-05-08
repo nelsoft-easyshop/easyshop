@@ -616,7 +616,7 @@ class Payment extends MY_Controller{
 
 
         $ticket = $this->session->userdata('paymentticket');
-        if($ticket){
+        // if($ticket){
         $data = $this->session->userdata('headerData');
         $response = $this->session->userdata('bodyData'); 
 
@@ -627,9 +627,9 @@ class Payment extends MY_Controller{
         $this->load->view('templates/header', $data);
         $this->load->view('pages/payment/payment_response' ,$response);  
         $this->load->view('templates/footer_full'); 
-        }else{
-            redirect(base_url().'home/', 'refresh');
-        }
+        // }else{
+        //     redirect(base_url().'home/', 'refresh');
+        // }
 
     }
 
