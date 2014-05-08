@@ -686,14 +686,11 @@ class Payment extends MY_Controller{
         $response['itemList'] = $itemList;
         $grandTotal= ($ItemTotalPrice+$handling_amt+$insurance_amt)-$shipping_discount_amt;
 
-           echo  $_GET['txnid'].'='.$_POST['txnid'];
-        exit();
-
-        $txnId = $_GET['txnid'];
-        $refNo = $_GET['refno'];
-        $status = $_GET['status'];
-        $message = $_GET['message'];
-        $digest = $_GET['digest'];
+        $txnId = $_POST['txnid'];
+        $refNo = $_POST['refno'];
+        $status = $_POST['status'];
+        $message = $_POST['message'];
+        $digest = $_POST['digest'];
 
         $productstring = substr($productstring,4);
         $apiResponseArray['ProductData'] =  $carts['choosen_items'];
