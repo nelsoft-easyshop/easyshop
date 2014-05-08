@@ -139,7 +139,8 @@ $(document).ready(function() {
 						data:{page_number:offset,id_cat:cat,parameters:condition,csrfname:csrftoken},
 						type: 'post',
 						async: false,
-						dataType: 'json',
+						dataType: 'JSON',
+                        onLoading:jQuery(".loading_products").html("<img src='"+ base_url +"assets/images/orange_loader.gif' />").show(),						
 						success: function(d){
 							if(d == "0"){
 								ajax_is_on = true;
@@ -148,6 +149,7 @@ $(document).ready(function() {
 								ajax_is_on = false;
 								offset += 1;
 							}
+							$(".loading_products").hide();
 						} // end of function(d)
 					}); // end of .ajax
 				} // end of request ajax
@@ -155,6 +157,7 @@ $(document).ready(function() {
 		} // end of st > last_scroll_top
 		
 		last_scroll_top = st;
+		jQuery(".loading_products").fadeOut(); 
 	});  // end of window .scroll
 
 	// END OF INFINITE SCROLLING FUNCTION
