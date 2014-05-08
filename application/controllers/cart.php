@@ -39,27 +39,38 @@ class Cart extends MY_Controller{
         endif;  
     //$qty = $this->cart_model->getSpecificProductQuantity($id,$product_attr_id,$_POST['length']);
     $qty = $this->product_model->getProductQuantity($id);
-    $attr = explode(",",$product_attr_id);
-    $productItemId = 0;
-    foreach($attr as $attr_id){
-        foreach($qty as $key => $row){
-            $cnt = 0;
-            foreach($row['product_attribute_ids'] as $key2 => $row2){   
-                if($attr_id == $row2['id']){
-                    $cnt++;
-                }
-            }
-            if($cnt != 1){
-                unset($qty[$key]) ;
-            }
-            if($cnt == 1){
-                $productItemId = $key;
-            }
-        }
-    }
-    $max_qty = reset($qty)['quantity'];
-    $_POST['max_qty'] = $max_qty;
-    
+	$ss = array_keys($qty);
+	$ff = $qty[$ss[0]];
+	$attr = explode(",",$product_attr_id);
+	$productItemId = 0;
+	if(sizeof($qty) == 1 && $ff['product_attribute_ids'][0]['id'] == 0 && $ff['product_attribute_ids'][0]['is_other'] == 0){
+		
+		$max_qty = $ff['quantity'];
+		$productItemId = $ss[0];
+		
+	}else{
+		
+		foreach($attr as $attr_id){
+			foreach($qty as $key => $row){
+				$cnt = 0;
+				foreach($row['product_attribute_ids'] as $key2 => $row2){   
+					if($attr_id == $row2['id']){
+						$cnt++;
+					}
+				}
+				if($cnt != 1){
+					unset($qty[$key]) ;
+				}
+				if($cnt == 1){
+					$productItemId = $key;
+				}
+			}
+		}
+		$max_qty = reset($qty)['quantity'];
+		$_POST['max_qty'] = $max_qty;
+		
+	}
+
         $data = array(
             'id'      => $_POST['id'],
             'qty'     => ($_POST['qty'] > $_POST['max_qty'] ? $_POST['max_qty'] : $_POST['qty'] ), //check if qty is > max qty,if its qty=maxqty else qty
@@ -71,6 +82,10 @@ class Cart extends MY_Controller{
             'product_itemID'  => $productItemId,
             'maxqty' => $max_qty
             );
+	//print "<pre>";
+	//print_r($data);
+	//print "</pre>";
+	//return false;
         return $data;
     }
     
@@ -92,7 +107,6 @@ class Cart extends MY_Controller{
         else{
             $data=$this->check_product($_POST['id'],$go);
             $carts=$this->cart->contents();
-	    
             if(empty($carts)){
                 $this->cart->insert($data);
                 $result= sha1(md5("tanggap"));
