@@ -2,9 +2,7 @@
 <script type='text/javascript' src="<?=base_url()?>assets/JavaScript/js/jquery-ui.js"></script>
 <script type='text/javascript' src="<?=base_url()?>assets/JavaScript/js/jquery.jcarousel.min.js"></script>
 <script type='text/javascript' src="<?=base_url()?>assets/JavaScript/js/jquery.cookie.js"></script>
-
 <script type='text/javascript'>
-
    window.alert = function(message){
         $(document.createElement('div'))
             .attr({title: 'Easyshop.ph', class: 'alert'})
@@ -17,8 +15,6 @@
                 resizable: false
             });
    };
-
-
 </script>
         
 <!-- <div id="fb-root"></div>
