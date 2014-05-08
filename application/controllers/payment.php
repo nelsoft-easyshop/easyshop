@@ -686,28 +686,30 @@ class Payment extends MY_Controller{
         $response['itemList'] = $itemList;
         $grandTotal= ($ItemTotalPrice+$handling_amt+$insurance_amt)-$shipping_discount_amt;
 
-        $txnId = $_POST['txnid'];
-        $refNo = $_POST['refno'];
-        $status = $_POST['status'];
-        $message = $_POST['message'];
-        $digest = $_POST['digest'];
+        // $txnId = $_POST['txnid'];
+        // $refNo = $_POST['refno'];
+        // $status = $_POST['status'];
+        // $message = $_POST['message'];
+        // $digest = $_POST['digest'];
 
         $productstring = substr($productstring,4);
         $apiResponseArray['ProductData'] =  $carts['choosen_items'];
-        $apiResponseArray['DragonPayReturn'] = array(
-                "txnId" => $txnId,
-                "refno" => $refNo,
-                "status" => $status,
-                "message" => $message,
-                "digest" => $digest
-            );
+        // $apiResponseArray['DragonPayReturn'] = array(
+        //         "txnId" => $txnId,
+        //         "refno" => $refNo,
+        //         "status" => $status,
+        //         "message" => $message,
+        //         "digest" => $digest
+        //     );
 
-        $transactionID = urldecode($txnId).'-'.urldecode($refNo);
+        // $transactionID = urldecode($txnId).'-'.urldecode($refNo);
+        $transactionID = 123456;
         $apiResponse = json_encode($apiResponseArray);
         
-        if(strtolower($status) == "p" || strtolower($status) == "s"){
+        // if(strtolower($status) == "p" || strtolower($status) == "s"){
 
-            $paymentType = (strtolower($status) == "s" ? 4 : 2);
+            // $paymentType = (strtolower($status) == "s" ? 4 : 2);
+            $paymentType = 2;
             $return = $this->payment_model->payment($paymentType,$invoice_no,$grandTotal,$ip,$member_id,$productstring,$productCount,$apiResponse,$transactionID);
             if($return['o_success'] <= 0){
                 $response['message'] = '<div style="color:red"><b>Error 3: </b>'.$return['o_message'].'</div>'; 
@@ -721,9 +723,9 @@ class Payment extends MY_Controller{
                 $this->sendNotification(array('member_id'=>$member_id, 'order_id'=>$return['v_order_id'], 'invoice_no'=>$return['invoice_no']));
             } 
 
-        }else{
-             $response['message'] = '<div style="color:red">Transaction Not Completed.</div>';
-        }
+        // }else{
+        //      $response['message'] = '<div style="color:red">Transaction Not Completed.</div>';
+        // }
  
 
         $response['analytics'] = $analytics;
