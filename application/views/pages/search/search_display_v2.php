@@ -13,11 +13,8 @@ function in_array_r($needle, $haystack, $strict = false) {
 }# checking end	
 
 ?>
-<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 <link rel="stylesheet" href="<?=base_url()?>assets/css/product_search_category.css?ver=1.0" type="text/css" media="screen"/>
-<link rel="stylesheet" href="<?=base_url()?>assets/css/grid_list_style.css?ver=1.0" type="text/css"  media="screen"/> 
 <link rel="stylesheet" href="<?=base_url()?>assets/css/style_new.css?ver=1.0" type="text/css" media="screen"/>
-<link rel="stylesheet" href="<?=base_url()?>assets/css/jquery.bxslider.css?ver=1.0" type="text/css" media="screen"/>
 <style type="text/css">
 .err{
 	-webkit-box-shadow: 0px 0px 2px 2px #FF0000;
@@ -170,18 +167,25 @@ function in_array_r($needle, $haystack, $strict = false) {
                 $pic = explode('/', $items[$i]['product_image_path']);
       ?>
 				<div class="product-list"> 
-					<a href="<?= base_url() ?>item/<?php echo $items[$i]['product_id']; ?>/<?php echo es_url_clean(urlencode($items[$i]['product_name'])); ?>.html">
-						<img alt="<?php echo html_escape($items[$i]['product_name']); ?>" src="<?php echo base_url() . $pic[0] . '/' . $pic[1] . '/' . $pic[2] . '/' . $pic[3] . '/' . 'categoryview' . '/' . $pic[4]; ?>">
+					<a href="<?php echo base_url() . "item/" . $items[$i]['slug']; ?>">
+						<span class="prod_img_wrapper">
+							<span class="prod_img_container">
+								<img alt="<?php echo html_escape($items[$i]['product_name']); ?>" src="<?php echo base_url() . $pic[0] . "/" . $pic[1] . "/" . $pic[2] . "/" . $pic[3] . "/" . "categoryview" . "/" . $pic[4]; ?>">
+							</span>
+						</span>	
 					</a>
-					<h3 style="-o-text-overflow: ellipsis; text-overflow:ellipsis; overflow:hidden; white-space:nowrap; width:225px; ">
-						<a href="<?= base_url() ?>item/<?php echo $items[$i]['product_id']; ?>/<?php echo es_url_clean(urlencode($items[$i]['product_name'])); ?>.php"><?php echo html_escape($items[$i]['product_name']); ?></a>
+					<h3>
+						<a href="<?php echo base_url() . "item/" . $items[$i]['slug']; ?>">
+							<?php echo html_escape($items[$i]['product_name']); ?>
+						</a>
 					</h3>
 					<div class="price-cnt">
-					  <div class="price"> <span>&#8369;</span> <?php echo number_format($items[$i]['product_price'], 2); ?> </div>
+					  	<div class="price"> 
+					  		<span>&#8369;</span> <?php echo number_format($items[$i]['product_price'], 2);?>
+						</div>
 					</div>
 					<div class="product_info_bottom">
-					  <div>Condition: <strong><?php echo $items[$i]['product_condition']; ?></strong></div>
-					  <!-- <div>Sold: <strong>32</strong></div> --> 
+					  	<div>Condition: <strong><?php echo $items[$i]['product_condition']; ?></strong></div>
 					</div>
 					<p><?php echo html_escape($items[$i]['product_brief']); ?></p>
 				</div>
@@ -197,8 +201,7 @@ function in_array_r($needle, $haystack, $strict = false) {
 <input class='condition' type='hidden' value='<?php echo json_encode($condition); ?>'/>
 <?php echo form_close();?>
 <script src="<?= base_url() ?>assets/JavaScript/js/jquery.easing.min.js" type="text/javascript"></script> 
-<script src="<?= base_url() ?>assets/JavaScript/js/jquery.scrollUp.min.js" type="text/javascript"></script> 
-<script src="<?= base_url() ?>assets/JavaScript/js/jquery.bxslider.min.js" type="text/javascript"></script>
+<script src="<?= base_url() ?>assets/JavaScript/js/jquery.scrollUp.min.js" type="text/javascript"></script>
 <script src="<?= base_url() ?>assets/JavaScript/advsearch.js?ver=1.0" type="text/javascript"></script>
 <script type="text/javascript">
 $(function () {
