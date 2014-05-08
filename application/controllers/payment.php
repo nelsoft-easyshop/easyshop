@@ -687,26 +687,26 @@ class Payment extends MY_Controller{
         $productstring = substr($productstring,4);
         $apiResponseArray['ProductData'] =  $carts['choosen_items'];
         $apiResponseArray['DragonPayReturn'] = array(
-                "txnId" => $this->input->get('txnid'),
-                "refno" => $this->input->get('refno'),
-                "status" => $this->input->get('status'),
-                "message" => $this->input->get('message'),
-                "digest" => $this->input->get('digest')
+                "txnId" => $this->input->post('txnid'),
+                "refno" => $this->input->post('refno'),
+                "status" => $this->input->post('status'),
+                "message" => $this->input->post('message'),
+                "digest" => $this->input->post('digest')
             );
 
-        $transactionID = urldecode($this->input->get('txnid')).'-'.urldecode($this->input->get('refno'));
+        $transactionID = urldecode($this->input->post('txnid')).'-'.urldecode($this->input->post('refno'));
         $apiResponse = json_encode($apiResponseArray);
         
-        if(strtolower($this->input->get('status')) == "p" || strtolower($this->input->get('status')) == "s"){
+        if(strtolower($this->input->post('status')) == "p" || strtolower($this->input->post('status')) == "s"){
 
-            $paymentType = (strtolower($this->input->get('status')) == "s" ? 4 : 2);
+            $paymentType = (strtolower($this->input->post('status')) == "s" ? 4 : 2);
             $return = $this->payment_model->payment($paymentType,$invoice_no,$grandTotal,$ip,$member_id,$productstring,$productCount,$apiResponse,$transactionID);
             if($return['o_success'] <= 0){
                 $response['message'] = '<div style="color:red"><b>Error 3: </b>'.$return['o_message'].'</div>'; 
             }else{
                 $response['completepayment'] = true;
                 $response['message'] = '<div style="color:green">Your payment is completed through Dragon Pay.</div>
-                <div style="color:red">'.urldecode($this->input->get('message')).'</div>';
+                <div style="color:red">'.urldecode($this->input->post('message')).'</div>';
                 $response = array_merge($response,$return);  
                 $this->removeItemFromCart(); 
                 $this->session->unset_userdata('choosen_items');
@@ -729,7 +729,7 @@ class Payment extends MY_Controller{
     }
 
     function xxtry(){
-        echo '<form action="http://nelsoft.dyndns.org:81/payment/dragonPayPostBack" method="POST">
+        echo '<form action="" method="POST">
         <input type="submit">
         </form>';
     }
@@ -740,8 +740,8 @@ class Payment extends MY_Controller{
              redirect(base_url().'home/', 'refresh'); 
              exit();
         } 
-       
-       
+        
+        #this is long cut.
 
         $this->session->unset_userdata('dragonpayticket');
         
