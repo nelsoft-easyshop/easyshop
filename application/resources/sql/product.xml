@@ -551,18 +551,7 @@ FROM
 	</select>
 	
     <select id="getUserItems">
-        <!-- Didn't work in mysql 5.6 
-        SELECT p.`id_product`,p.`name`, p.`brief`, p.`price`, p.`member_id`, p.`price`,
-        AVG(COALESCE((r.`rating`),0)) as average_rating, COUNT(r.`rating`) as review_count,
-        COALESCE(i.product_image_path,'') as product_image_path, p.`cat_id`, p.`is_delete`
-        FROM es_product p
-        LEFT JOIN es_product_review r ON p.`id_product` = r.`product_id` AND r.`is_show` = 1
-        LEFT JOIN es_product_image i ON i.`product_id` = p.`id_product` AND i.`is_primary` = 1
-        WHERE p.member_id = :id
-        GROUP BY p.`id_product` ORDER BY p.lastmodifieddate DESC
-        -->
-
-         SELECT p.`id_product`,p.`name`, p.`brief`, p.`price`, p.`member_id`, 
+         SELECT p.`slug`, p.`id_product`,p.`name`, p.`brief`, p.`price`, p.`member_id`, 
          AVG(COALESCE((r.`rating`),0)) as average_rating, COUNT(r.`rating`) as review_count, 
          COALESCE(i.product_image_path,'') as product_image_path, p.`cat_id`, p.`is_delete` ,
          SUM(pi.quantity) as availability, COALESCE(order_product_temp.sum_quantity, 0) as sold
@@ -577,7 +566,6 @@ FROM
          WHERE p.member_id = :id AND p.is_draft = 0
          GROUP BY p.`id_product`, p.`name`, p.`brief`, p.`price`, p.`member_id`, i.product_image_path, p.`is_delete`,p.`cat_id`,p.lastmodifieddate,order_product_temp.sum_quantity
          ORDER BY p.lastmodifieddate DESC 
-  
     </select>
 	
     <select id="getCatItemsWithImage">

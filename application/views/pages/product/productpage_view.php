@@ -336,7 +336,7 @@
           <ul>
             <?PHP foreach ($recommended_items as $row): ?>                
             <li>
-              <a href="<?=base_url()."item/".$row['id_product'].'/'.es_url_clean($row['product']); ?>.html">
+              <a href="<?=base_url()."item/".$row['slug'];?>">
                 <span class="rec_item_container">
                   <img class="rec_item_img" src="<?=base_url().$row['path'].'categoryview/'.$row['file']?>">
                 </span>

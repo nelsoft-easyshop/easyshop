@@ -263,7 +263,7 @@
 	</div>
 	<div class="post_item_content_right">
 		<div class="product_title_container">
-			<p class="post_item_product_title fm1"><a href="<?=base_url();?>item/<?php echo $active_product['id_product']."/".es_url_clean($active_product['name']);?>"><?php echo html_escape($active_product['name']);?></a></p>
+			<p class="post_item_product_title fm1"><a href="<?=base_url();?>item/<?php echo $active_product['slug'];?>"><?php echo html_escape($active_product['name']);?></a></p>
 			
 			<div class="post_item_button">
 				<?php echo form_open('sell/edit/step2'); ?>
@@ -382,7 +382,7 @@
 	<div class="post_item_content_right">
 		<div class="product_title_container">
 			<p class="post_item_product_title">
-				<a href="<?=base_url();?>item/<?php echo $deleted_product['id_product']."/".es_url_clean($deleted_product['name']);?>"><?php echo html_escape($deleted_product['name']);?></a>
+				<a href="<?=base_url();?>item/<?php echo $deleted_product['slug'];?>"><?php echo html_escape($deleted_product['name']);?></a>
 			</p>
 			<div class="post_item_button">
 				<?php echo form_open('product/changeDelete'); ?>
@@ -1394,7 +1394,7 @@
 							</span>
 							<div>
 								<p class="transac_prod_name">
-									<a href="<?php echo base_url();?>item/<?php echo $product['product_id'];?>/<?php echo es_url_clean($product['name']);?>"><?php echo html_escape($product['name']);?></a><br />
+									<a href="<?php echo base_url();?>item/<?php echo $product['slug'];?>"><?php echo html_escape($product['name']);?></a><br />
 									<small>Features and Specifications:</small>
 									<?php if( count($product['attr'] !== 0) ):?>
 										<?php foreach($product['attr'] as $temp):?>
@@ -1552,7 +1552,7 @@
 						</span>
 						<div>
 							<p class="transac_prod_name">
-								<a href="<?php echo base_url();?>item/<?php echo $product['product_id'];?>/<?php echo es_url_clean($product['name']);?>"><?php echo $product['name'];?></a>
+								<a href="<?php echo base_url();?>item/<?php echo $product['slug'];?>"><?php echo $product['name'];?></a>
 								<small>Features and Specifications:</small>
 								<?php if( count($product['attr'] !== 0) ):?>
 									<?php foreach($product['attr'] as $temp):?>
@@ -1702,7 +1702,7 @@
 								</span>
 								<div>
 									<p class="transac_prod_name">
-										<a href="<?php echo base_url();?>item/<?php echo $product['product_id'];?>/<?php echo es_url_clean($product['name']);?>"><?php echo $product['name'];?></a><br />
+										<a href="<?php echo base_url();?>item/<?php echo $product['slug'];?>"><?php echo $product['name'];?></a><br />
 										<small>Features and Specifications:</small>
 										<?php if( count($product['attr'] !== 0) ):?>
 											<?php foreach($product['attr'] as $temp):?>
@@ -1855,7 +1855,7 @@
 						</span>
 						<div>
 							<p class="transac_prod_name">
-								<a href="<?php echo base_url();?>item/<?php echo $product['product_id'];?>/<?php echo es_url_clean($product['name']);?>"><?php echo $product['name'];?></a>
+								<a href="<?php echo base_url();?>item/<?php echo $product['slug'];?>"><?php echo $product['name'];?></a>
 								<small>Features and Specifications:</small>
 								<?php if( count($product['attr'] !== 0) ):?>
 									<?php foreach($product['attr'] as $temp):?>

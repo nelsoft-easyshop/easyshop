@@ -331,7 +331,7 @@ class productUpload extends MY_Controller
 			$product_id = $this->product_model->addNewProduct($product_title,$sku,$product_brief,$product_description,$keyword,$brand_id,$cat_id,$style_id,$member_id,$product_price,$product_condition,$otherCategory, $otherBrand);
             # product_id = is the id_product for the new item. if 0 no new item added process will stop
             
-            #ERROR TRACKING: SAM
+            #ERROR TRACKING: 
             if(intval($product_id,10) === 0){
                 log_message('error', 'Add new: title=>'. $product_title);
                 log_message('error', 'Add new: sku=>'. $sku); 
@@ -386,10 +386,6 @@ class productUpload extends MY_Controller
 				"max_size" => $this->max_file_size_mb * 1024,
 				"xss_clean" => FALSE
 				)); 	
-                
-       
-
-		 
 
 			if($product_id > 0) # id_product is 0 means no item inserted. the process will stop.
 			{
@@ -407,204 +403,198 @@ class productUpload extends MY_Controller
                         }
                         $is_primary = ($i == 0 ? 1 : 0);
 						$product_image = $this->product_model->addNewProductImage($path,$file_type[$i],$product_id,$is_primary);	
-					}
-					if($product_id > 0) # id_product is 0 means no item inserted. the process will stop.
-					{
-						if($inputs_exp == true){
-							for ($i=0; $i < sizeof($explode_inputs) ; $i++) {
-								$explode_id = explode('/', $explode_inputs[$i]);
-								$explode_value = $explode_id[0];
-								$attribute_id = $explode_id[1];
-								$extraPrice = '0';
-								$dataType = substr($explode_value,0,strpos($explode_value,'_'));
+                    }
 
-								switch ($dataType) {
-                                    # if the input type is checkbox possible many item will insert to the database.
-									case 'CHECKBOX': 
-									if(isset($_POST[$explode_value])){
-										for ($x=0; $x < sizeof($_POST[$explode_value]) ; $x++) {
-											$attributeCount = count($this->product_model->selectAttributeNameWithNameAndId($_POST[$explode_value][$x],$attribute_id));
-											if($attributeCount > 0){
-												$prod_attr_id = $this->product_model->addNewAttributeByProduct($product_id,$attribute_id,$_POST[$explode_value][$x],$extraPrice);
-											}
-										}
-									}
-									break;
-                                    #input type is textarea
-									case 'TEXTAREA':
-									if(isset($_POST[$explode_value]) && (strlen(trim($_POST[$explode_value])) != 0 )){
-										$attributeCount = count($this->product_model->selectAttributeNameWithTypeAndId($attribute_id,2));
-										if($attributeCount > 0){
-											$prod_attr_id = $this->product_model->addNewAttributeByProduct($product_id,$attribute_id,$_POST[$explode_value],$extraPrice);
-										}
-									}
-									break;
-                                    #input type is simple textbox
-									case 'TEXT':
-									if(isset($_POST[$explode_value]) && (strlen(trim($_POST[$explode_value])) != 0 )){
-										$attributeCount = count($this->product_model->selectAttributeNameWithTypeAndId($attribute_id,1));
-										if($attributeCount > 0){
-											$prod_attr_id = $this->product_model->addNewAttributeByProduct($product_id,$attribute_id,$_POST[$explode_value],$extraPrice);
-										}
-									}
-									break;
+                    if($inputs_exp == true){
+                        for ($i=0; $i < sizeof($explode_inputs) ; $i++) {
+                            $explode_id = explode('/', $explode_inputs[$i]);
+                            $explode_value = $explode_id[0];
+                            $attribute_id = $explode_id[1];
+                            $extraPrice = '0';
+                            $dataType = substr($explode_value,0,strpos($explode_value,'_'));
 
-                                    default: # default input type (SELECT& RADIO)
-                                    if(isset($_POST[$explode_value]) && strlen(trim($_POST[$explode_value])) != 0 ){
-                                    	$attributeCount = count($this->product_model->selectAttributeNameWithNameAndId($_POST[$explode_value],$attribute_id));
-                                    	if($attributeCount > 0){
-                                    		$prod_attr_id = $this->product_model->addNewAttributeByProduct($product_id,$attribute_id,$_POST[$explode_value],$extraPrice);
-                                    	}	
+                            switch ($dataType) {
+                                # if the input type is checkbox possible many item will insert to the database.
+                                case 'CHECKBOX': 
+                                if(isset($_POST[$explode_value])){
+                                    for ($x=0; $x < sizeof($_POST[$explode_value]) ; $x++) {
+                                        $attributeCount = count($this->product_model->selectAttributeNameWithNameAndId($_POST[$explode_value][$x],$attribute_id));
+                                        if($attributeCount > 0){
+                                            $prod_attr_id = $this->product_model->addNewAttributeByProduct($product_id,$attribute_id,$_POST[$explode_value][$x],$extraPrice);
+                                        }
                                     }
-                                    break;	
-                                }			
+                                }
+                                break;
+                                #input type is textarea
+                                case 'TEXTAREA':
+                                if(isset($_POST[$explode_value]) && (strlen(trim($_POST[$explode_value])) != 0 )){
+                                    $attributeCount = count($this->product_model->selectAttributeNameWithTypeAndId($attribute_id,2));
+                                    if($attributeCount > 0){
+                                        $prod_attr_id = $this->product_model->addNewAttributeByProduct($product_id,$attribute_id,$_POST[$explode_value],$extraPrice);
+                                    }
+                                }
+                                break;
+                                #input type is simple textbox
+                                case 'TEXT':
+                                if(isset($_POST[$explode_value]) && (strlen(trim($_POST[$explode_value])) != 0 )){
+                                    $attributeCount = count($this->product_model->selectAttributeNameWithTypeAndId($attribute_id,1));
+                                    if($attributeCount > 0){
+                                        $prod_attr_id = $this->product_model->addNewAttributeByProduct($product_id,$attribute_id,$_POST[$explode_value],$extraPrice);
+                                    }
+                                }
+                                break;
+
+                                default: # default input type (SELECT& RADIO)
+                                if(isset($_POST[$explode_value]) && strlen(trim($_POST[$explode_value])) != 0 ){
+                                    $attributeCount = count($this->product_model->selectAttributeNameWithNameAndId($_POST[$explode_value],$attribute_id));
+                                    if($attributeCount > 0){
+                                        $prod_attr_id = $this->product_model->addNewAttributeByProduct($product_id,$attribute_id,$_POST[$explode_value],$extraPrice);
+                                    }	
+                                }
+                                break;	
+                            }			
+                        }
+                    }
+
+
+                    # start of saving other/custom attribute
+
+                    $newarray = array();
+
+                    for ($i=0; $i < sizeof($_POST['prod_other_name']); $i++) { 
+                        $newarray[trim(ucfirst(strtolower($_POST['prod_other_name'][$i])))] = array();
+                    }
+
+                    for ($i=0; $i < sizeof($_POST['prod_other_name']); $i++) {
+                        $other_name = "--no name";
+                        $other_price = "0.00";
+                        $other_image = "--no image";
+                        $other_image_type = "--no type";
+                        $other_tmp = "--no temp";
+                        if(strlen(trim($_POST['prod_other_price'][$i])) != 0 || $_POST['prod_other_price'][$i] != ""){
+                            $other_price = $_POST['prod_other_price'][$i];
+                        }
+
+                        if(isset($_FILES['prod_other_img'])){
+                            if(!empty($_FILES['prod_other_img']['name'][$i])){
+                                $other_image_type = $_FILES['prod_other_img']['type'][$i];
+                                $file_ext = explode('.', $_FILES['prod_other_img']['name'][$i]);
+                                $file_ext = end($file_ext);
+                                $other_image = "{$product_id}_{$member_id}_{$fulldate}{$i}_o.{$file_ext}";
+                                $other_tmp = $_FILES["prod_other_img"]["tmp_name"][$i];
                             }
                         }
- 
 
-					# start of saving other/custom attribute
-
-                        $newarray = array();
-
-                        for ($i=0; $i < sizeof($_POST['prod_other_name']); $i++) { 
-                        	$newarray[trim(ucfirst(strtolower($_POST['prod_other_name'][$i])))] = array();
+                        if(strlen(trim($_POST['prod_other'][$i])) != 0 ||  trim($_POST['prod_other'][$i]) != ""){
+                            $other_name = $_POST['prod_other'][$i];
                         }
-
-                        for ($i=0; $i < sizeof($_POST['prod_other_name']); $i++) {
-                        	$other_name = "--no name";
-                        	$other_price = "0.00";
-                        	$other_image = "--no image";
-                        	$other_image_type = "--no type";
-                        	$other_tmp = "--no temp";
-                        	if(strlen(trim($_POST['prod_other_price'][$i])) != 0 || $_POST['prod_other_price'][$i] != ""){
-                        		$other_price = $_POST['prod_other_price'][$i];
-                        	}
-
-                    		if(isset($_FILES['prod_other_img'])){
-                        		if(!empty($_FILES['prod_other_img']['name'][$i])){
-                        			$other_image_type = $_FILES['prod_other_img']['type'][$i];
-                        			$file_ext = explode('.', $_FILES['prod_other_img']['name'][$i]);
-                        			$file_ext = end($file_ext);
-                        			$other_image = "{$product_id}_{$member_id}_{$fulldate}{$i}_o.{$file_ext}";
-                        			$other_tmp = $_FILES["prod_other_img"]["tmp_name"][$i];
-                        		}
-                        	}
-
-                        	if(strlen(trim($_POST['prod_other'][$i])) != 0 ||  trim($_POST['prod_other'][$i]) != ""){
-                        		$other_name = $_POST['prod_other'][$i];
-                        	}
-                        	array_push($newarray[trim(ucfirst(strtolower($_POST['prod_other_name'][$i])))], ucfirst(strtolower($other_name)) .'|'.$other_price.'|'.$other_image.'|'.$other_image_type.'|'.$other_tmp);
-                        }
-                        $filenames_ar = array();					
-                        $path = $other_path_directory;
-                        $is_primary = 0;
-
-                        foreach ($newarray as $key => $valuex) {
-
-                        	if(trim($key) == "" || strlen(trim($key)) <= 0 ){
-                        		continue;
-                        	}
-                        	if(count($valuex) <= 1 && $valuex[0] == '--no name|0.00|--no image|--no type|--no temp'){
-                        		continue;
-                        	}
-                        	$others_id = $this->product_model->addNewAttributeByProduct_others_name($product_id,$key);
-                        	foreach ($valuex as $keyvalue => $value) {
-                        		$eval = explode("|", $value);
-
-                        		if(trim($eval[0]) == "--no name"){
-                        			continue;
-                        		}
-
-                        		$imageid = 0;
-                        		if($eval[2] != "--no image"){
-                        			$imageid = $this->product_model->addNewProductImage($path.$eval[2],$eval[3],$product_id,$is_primary);
-                        			move_uploaded_file($eval[4], $path.$eval[2]);
-                                    list($o_width, $o_height) = getimagesize($path.$eval[2]);
-                                    //If user uploaded image is too large, resize and overwrite original image
-                                    if(($o_width > $this->img_dimension['usersize'][0])||($o_height > $this->img_dimension['usersize'][1])){
-                                        $this->es_img_resize($eval[2],$path,'', $this->img_dimension['usersize']);
-                                    }
-                                    $this->es_img_resize($eval[2],$other_path_directory, 'thumbnail/', $this->img_dimension['thumbnail']);
-                                    $this->es_img_resize($eval[2],$other_path_directory, 'small/', $this->img_dimension['small']);
-                        		}
-                        		$this->product_model->addNewAttributeByProduct_others_name_value($others_id,$eval[0],$eval[1],$imageid);
-
-                        	}
-                        }
-
-					# end of other
-
-
-					# start of saving combination
-                        if($checkIfCombination == 'true' || $checkIfCombination == 1){
-
-                        	$quantitySolo = 1;
-                        	if($this->input->post('quantitySolo')){
-                        		$quantitySolo = $this->input->post('quantitySolo');
-                        	}
-                        	$idProductItem = $this->product_model->addNewCombination($product_id,$quantitySolo);
-
-                        }else{
-                        	 
-                        	foreach ($combination as $keyCombination) {
-                        		$quantitycombination = 1;
-                        		if(!$quantitycombination <= 0){
-                        			$quantitycombination = $keyCombination->quantity;
-                        		}
-                        		$idProductItem = $this->product_model->addNewCombination($product_id,$quantitycombination);
-                        		if(strpos($keyCombination->value, '-') !== false) {
-
-                        			$explodeCombination = explode("-",  $keyCombination->value);
-                        			foreach ($explodeCombination as $value) {
-
-                        				$explodeOther = explode(":",  $value);
-                        				$otherAttrIdentifier = $explodeOther[0];
-                        				$otherAttrValue = $explodeOther[1];
-                        				if($otherAttrIdentifier == 1){
-                        					$productAttributeId = $this->product_model->selectProductAttributeOther($otherAttrValue,$product_id);
-                        				}else{
-                        					$productAttributeId = $this->product_model->selectProductAttribute($otherAttrValue,$product_id);
-                        				}
-
-                        				$this->product_model->addNewCombinationAttribute($idProductItem,$productAttributeId,$otherAttrIdentifier);
-                        			}
-                        		}else{
-                        			$explodeOther = explode(":",  $keyCombination->value);
-                        			$otherAttrIdentifier = $explodeOther[0];
-                        			$otherAttrValue = $explodeOther[1];
-                        			if($otherAttrIdentifier == 1){
-                        				$productAttributeId = $this->product_model->selectProductAttributeOther($otherAttrValue,$product_id);
-                        			}else{
-                        				$productAttributeId = $this->product_model->selectProductAttribute($otherAttrValue,$product_id);
-                        			}
-
-                        			$this->product_model->addNewCombinationAttribute($idProductItem,$productAttributeId,$otherAttrIdentifier);
-                        		}	
-                        	}
-
-                        } 
-					# end of combination
-                        $data = '{"e":"1","d":"'.$product_id.'"}';
-                        echo $data;
-                        exit();	
-                    }else{
-                    	$data = '{"e":"0","d":"Please Double Check your Details!"}';	
-                    	echo $data;
-                        exit();
+                        array_push($newarray[trim(ucfirst(strtolower($_POST['prod_other_name'][$i])))], ucfirst(strtolower($other_name)) .'|'.$other_price.'|'.$other_image.'|'.$other_image_type.'|'.$other_tmp);
                     }
+                    $filenames_ar = array();					
+                    $path = $other_path_directory;
+                    $is_primary = 0;
+
+                    foreach ($newarray as $key => $valuex) {
+
+                        if(trim($key) == "" || strlen(trim($key)) <= 0 ){
+                            continue;
+                        }
+                        if(count($valuex) <= 1 && $valuex[0] == '--no name|0.00|--no image|--no type|--no temp'){
+                            continue;
+                        }
+                        $others_id = $this->product_model->addNewAttributeByProduct_others_name($product_id,$key);
+                        foreach ($valuex as $keyvalue => $value) {
+                            $eval = explode("|", $value);
+
+                            if(trim($eval[0]) == "--no name"){
+                                continue;
+                            }
+
+                            $imageid = 0;
+                            if($eval[2] != "--no image"){
+                                $imageid = $this->product_model->addNewProductImage($path.$eval[2],$eval[3],$product_id,$is_primary);
+                                move_uploaded_file($eval[4], $path.$eval[2]);
+                                list($o_width, $o_height) = getimagesize($path.$eval[2]);
+                                //If user uploaded image is too large, resize and overwrite original image
+                                if(($o_width > $this->img_dimension['usersize'][0])||($o_height > $this->img_dimension['usersize'][1])){
+                                    $this->es_img_resize($eval[2],$path,'', $this->img_dimension['usersize']);
+                                }
+                                $this->es_img_resize($eval[2],$other_path_directory, 'thumbnail/', $this->img_dimension['thumbnail']);
+                                $this->es_img_resize($eval[2],$other_path_directory, 'small/', $this->img_dimension['small']);
+                            }
+                            $this->product_model->addNewAttributeByProduct_others_name_value($others_id,$eval[0],$eval[1],$imageid);
+
+                        }
+                    }
+
+                    # end of other
+
+
+                     # start of saving combination
+                    if($checkIfCombination == 'true' || $checkIfCombination == 1){
+
+                        $quantitySolo = 1;
+                        if($this->input->post('quantitySolo')){
+                            $quantitySolo = $this->input->post('quantitySolo');
+                        }
+                        $idProductItem = $this->product_model->addNewCombination($product_id,$quantitySolo);
+
+                    }else{
+                         
+                        foreach ($combination as $keyCombination) {
+                            $quantitycombination = 1;
+                            if(!$quantitycombination <= 0){
+                                $quantitycombination = $keyCombination->quantity;
+                            }
+                            $idProductItem = $this->product_model->addNewCombination($product_id,$quantitycombination);
+                            if(strpos($keyCombination->value, '-') !== false) {
+
+                                $explodeCombination = explode("-",  $keyCombination->value);
+                                foreach ($explodeCombination as $value) {
+
+                                    $explodeOther = explode(":",  $value);
+                                    $otherAttrIdentifier = $explodeOther[0];
+                                    $otherAttrValue = $explodeOther[1];
+                                    if($otherAttrIdentifier == 1){
+                                        $productAttributeId = $this->product_model->selectProductAttributeOther($otherAttrValue,$product_id);
+                                    }else{
+                                        $productAttributeId = $this->product_model->selectProductAttribute($otherAttrValue,$product_id);
+                                    }
+
+                                    $this->product_model->addNewCombinationAttribute($idProductItem,$productAttributeId,$otherAttrIdentifier);
+                                }
+                            }else{
+                                $explodeOther = explode(":",  $keyCombination->value);
+                                $otherAttrIdentifier = $explodeOther[0];
+                                $otherAttrValue = $explodeOther[1];
+                                if($otherAttrIdentifier == 1){
+                                    $productAttributeId = $this->product_model->selectProductAttributeOther($otherAttrValue,$product_id);
+                                }else{
+                                    $productAttributeId = $this->product_model->selectProductAttribute($otherAttrValue,$product_id);
+                                }
+
+                                $this->product_model->addNewCombinationAttribute($idProductItem,$productAttributeId,$otherAttrIdentifier);
+                            }	
+                        }
+
+                    } 
+                    # end of combination
+                    $data = '{"e":"1","d":"'.$product_id.'"}';
+                    echo $data;
+                    exit();	
                 }else {
-                	$data =  '{"e":"0","d":"'.strip_tags($this->upload->display_errors()).'. Only Letters, Numbers, Hyphens and Underscore allowed in the image file name."}';
-                	echo $data;
-                	exit();
+                    $data =  '{"e":"0","d":"'.strip_tags($this->upload->display_errors()).' We only accept letters, numbers, hyphens and underscores in the image file name."}';
+                    echo $data;
+                    exit();
                 }
             }else{
-            	$data = '{"e":"0","d":"There was a problem. \n Please try again later! - Error[0011]"}';
-            	echo $data;
-            	exit();
+                $data = '{"e":"0","d":"There was a problem. \n Please try again later! - Error[0011]"}';
+                echo $data;
+                exit();
             }
-        }
-        echo $data;
     }
+    echo $data;
+}
 
 
 	/**
@@ -742,7 +732,7 @@ class productUpload extends MY_Controller
             $billing_id = $this->input->post('prod_billing_id'); 
             $is_cod =($this->input->post('allow_cod'))?1:0;
 			$response['id'] =$this->input->post('prod_h_id');
-            $this->product_model->finalizeProduct($response['id'] , $memberId, $billing_id, $is_cod);
+            $response['slug'] = $this->product_model->finalizeProduct($response['id'] , $memberId, $billing_id, $is_cod);
 			$this->load->view('pages/product/product_upload_step4_view',$response);
 			$this->load->view('templates/footer'); 
 		}else{
@@ -1045,7 +1035,6 @@ class productUpload extends MY_Controller
                 }
 			}
             
-
 			#image directory
 			if($main_image_cnt === 0){
 				$path_directory = './assets/product/'.$product_id.'_'.$member_id.'_'.$date.'/';
@@ -1067,8 +1056,6 @@ class productUpload extends MY_Controller
 				"xss_clean" => FALSE
 				)); 			
                 
-                
-
 			$product_details = array('product_id' => $product_id,
 				'name' => $product_title,
 				'sku' => $sku,
@@ -1359,7 +1346,7 @@ class productUpload extends MY_Controller
 						}
 					}
 					else{
-						$data =  '{"e":"0","d":"'.strip_tags($this->upload->display_errors()).'"}';
+						$data =  '{"e":"0","d":"'.strip_tags($this->upload->display_errors()).' We only accept letters, numbers, hyphens and underscores in the image file name."}';
 					}
 				}
 			}
@@ -1394,7 +1381,7 @@ class productUpload extends MY_Controller
         }else{
             $modal = true;
         }
-       
+        
         $memberId =  $this->session->userdata('member_id');
         $product_row = $this->product_model->getProductPreview($id, $memberId);
         if(empty($product_row)){

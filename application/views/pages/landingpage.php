@@ -45,8 +45,8 @@
                 	<a href="<?=base_url();?>login" class="">Log In</a>
                 </div>
                 <div id="himg" class="text-center"> 
-                	<a href="<?=base_url()?>home"><img src="<?=base_url()?>/assets/images/landingpage/img_logo.png"></a>
-                	
+                	<a href="<?=base_url()?>home"><img title='Click here to checkout our site' src="<?=base_url()?>/assets/images/landingpage/img_logo.png"></a>
+
                 </div>
                 
                     <h2 class="text-center txt_header">SHOPPING MADE <span class="c_ylw">EASY</span></h2>

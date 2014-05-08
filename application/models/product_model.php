@@ -1028,11 +1028,7 @@ class product_model extends CI_Model
 		$product = $this->getProductEdit($productid, $memberid);
 		$title = $product['name'];
 
- 
-	 
 		$slug = $this->createSlug($title);
-	 
-
 		$query = $this->sqlmap->getFIlenameID('product', 'finalizeProduct');
 	 
 		$sth = $this->db->conn_id->prepare($query);
@@ -1043,6 +1039,7 @@ class product_model extends CI_Model
 		$sth->bindParam(':slug',$slug ,PDO::PARAM_STR);
         
         $sth->execute();
+        return $slug;
 	}
     
     
