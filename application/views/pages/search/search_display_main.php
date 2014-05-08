@@ -157,8 +157,12 @@ function in_array_r($needle, $haystack, $strict = false) {
 		if(!empty($cntr)):
 		  $cntr = $cntr[0]['ctr'];
 		  	if($cntr > 0):
+				$s = "";
+				if($cntr > 1){
+					$s = "s";
+				}
 	?>
-			<div class="adv_ctr"><strong style="font-size:14px"><?php echo number_format($cntr);?></strong> results</div>
+				<div class="adv_ctr"><strong style="font-size:14px"><?php echo number_format($cntr);?></strong> result<?php echo $s;?></div>
 	<?php 	endif; 
 		endif;
 	?>
