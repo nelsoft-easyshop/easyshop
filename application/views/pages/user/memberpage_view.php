@@ -37,58 +37,13 @@
 					</ul>
 				</div>
 				<div class="member_srch_wrapper">
+					<form method="get" action="<?=base_url()?>search/search.html">
 					<span class="member_srch_img_con"></span>
-					<input type="text" id="member_sch" onblur="this.placeholder = 'Search'" onfocus="this.placeholder = ''" placeholder="Search">
-
-					<script type="text/javascript">
+					<input type="text" name="q_str" id="member_sch" onblur="this.placeholder = 'Search'" onfocus="this.placeholder = ''" placeholder="Search">
 					
-					var jsonCity = <?php echo $json_city;?>;
 					
-					$(document).ready(function() {
-                        var currentRequest = null;
-						$( "#member_sch" ).keyup(function() {
-
-							var searchQuery = $(this).val(); 
-							if(searchQuery != ""){
-								currentRequest = $.ajax({
-									type: "GET",
-									url: '<?php echo base_url();?>product/sch_onpress', 
-									onLoading:jQuery(".member_srch_img_con").html('<img src="<?= base_url() ?>assets/images/orange_loader_small.gif" />').show(),
-									cache: false,
-									data: "q="+searchQuery, 
-									beforeSend: function(jqxhr, settings) { 
-										$("#search_content").empty();
-                                        if(currentRequest != null) {
-                                            currentRequest.abort();
-                                        }
-									},
-									success: function(html) {
-										$("#search_content").html(html).show();
-										jQuery(".member_srch_img_con").hide();
-									}
-								});
-							}else{
-								$("#search_content").hide();
-							}
-						});
-					});
-
-					$(document).ready(function() { 
-
-			            $('#member_sch').focus(function() {
-			            $('#search_content').show();
-			            $(document).bind('focusin.member_srch_container click.member_srch_container',function(e) {
-			                if ($(e.target).closest('#search_content, #member_sch').length) return;
-			                $('#search_content').hide();
-			                });
-			             });
-			 
-			            $('#search_content').hide();
-			        });
-
-					</script>
-
 					<input type="submit" class="span_bg" value="">
+					 </form>
 				</div>    
 				<div id="search_content" class="member_srch_container"></div>     	
 			</div>
@@ -2051,3 +2006,64 @@
 		<!-- MEMBERPAGE JS-->
 		<script type="text/javascript" src="<?=base_url()?>assets/JavaScript/memberpage.js?ver=1.0"></script>
 		<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=&sensor=false"></script>
+
+		<script type="text/javascript">
+					
+					var jsonCity = <?php echo $json_city;?>;
+					
+	 
+
+					$(document).ready(function() {
+                        var currentRequest = null;
+					 
+					$('#member_sch').on('input propertychange', function() {
+						var searchQuery = $.trim( $(this).val());
+						searchQuery = searchQuery.replace(/ +(?= )/g,'');
+						var fulltext = searchQuery; 
+							if(searchQuery != ""){
+								currentRequest = $.ajax({
+									type: "GET",
+									 url: '<?php echo base_url();?>search/suggest', 
+									onLoading:jQuery(".member_srch_img_con").html('<img src="<?= base_url() ?>assets/images/orange_loader_small.gif" />').show(),
+									cache: false,
+									data: "q="+fulltext, 
+									beforeSend: function(jqxhr, settings) { 
+										$("#search_content").empty();
+                                        if(currentRequest != null) {
+                                            currentRequest.abort();
+                                        }
+									},
+									success: function(html) {
+										$("#search_content").empty();
+
+
+										if(html==0){
+											$("#search_content").append('No result found');
+										}
+										else{
+											$("#search_content").append(html);
+											$("#search_content").show();
+										}
+										$(".member_srch_img_con").hide();
+									}
+								});
+							}else{
+								$("#search_content").hide();
+							}
+						});
+					});
+
+					$(document).ready(function() { 
+
+			            $('#member_sch').focus(function() {
+			            $('#search_content').show();
+			            $(document).bind('focusin.member_srch_container click.member_srch_container',function(e) {
+			                if ($(e.target).closest('#search_content, #member_sch').length) return;
+			                $('#search_content').hide();
+			                });
+			             });
+			 
+			            $('#search_content').hide();
+			        });
+
+					</script>
