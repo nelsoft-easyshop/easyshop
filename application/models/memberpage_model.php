@@ -459,6 +459,7 @@ class memberpage_model extends CI_Model
 				if($member_id == $temp['buyer_id']){
 					$product = $temp;
 					$product = array_slice($product, 12, 7);
+					$product['slug'] = $temp['slug'];
 					$userid = $temp['seller_id'];
 					$username = $temp['seller'];
 				}
@@ -466,6 +467,7 @@ class memberpage_model extends CI_Model
 				else if($member_id == $temp['seller_id']){
 					$product = $temp;
 					$product = array_slice($product, 12, 7);
+					$product['slug'] = $temp['slug'];
 					unset($product['seller_id']);
 					unset($product['seller']);
 					$userid = $temp['buyer_id'];
