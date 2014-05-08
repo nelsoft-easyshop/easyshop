@@ -198,7 +198,9 @@
           <ul>
             <li><strong>Brand: </strong><?php echo html_escape(ucfirst(strtolower($product['brand_name'])));?></li>
             <li><strong>Additional description: </strong><?php echo html_escape($product['brief']);?></li>
-          </ul>
+            <li><strong>Condition: </strong><?php echo html_escape($product['condition']);?></li>
+
+         </ul>
         </div>
         <div id="tabs-2">
           <h3>Specifications of <?php echo html_escape($product['product_name']);?></h3>
