@@ -276,11 +276,11 @@ class product_search_v2 extends MY_Controller {
 			###########################################
 
 			$this->load->view('templates/header_plain', $data); 
-			$this->load->view('pages/search/search_display_v2',$response);
+			$this->load->view('pages/search/search_display_main',$response);
 			$this->load->view('templates/footer_full');
 		}else{
 			$this->load->view('templates/header_plain', $data); 
-			$this->load->view('pages/search/search_display_v2',$response);
+			$this->load->view('pages/search/search_display_main',$response);
 			$this->load->view('templates/footer_full');		
 		}// end check get
 	}
