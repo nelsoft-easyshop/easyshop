@@ -711,7 +711,7 @@ class Payment extends MY_Controller{
         $apiResponseArray['ProductData'] =  $carts['choosen_items'];
         $apiResponseArray['DragonPayReturn'] = array(
                 "POST" => $this->session->userdata('post'),
-                "GET" => $$this->session->userdata('get')
+                "GET" => $this->session->userdata('get')
             );
 
         $transactionID = urldecode($txnId).'-'.urldecode($refNo);
