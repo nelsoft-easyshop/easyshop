@@ -684,29 +684,35 @@ class Payment extends MY_Controller{
         $response['itemList'] = $itemList;
         $grandTotal= ($ItemTotalPrice+$handling_amt+$insurance_amt)-$shipping_discount_amt;
 
+        $txnId = $_REQUEST['txnid'];
+        $refNo = $_REQUEST['refno'];
+        $status = $_REQUEST['status'];
+        $message = $_REQUEST['message'];
+        $digest = $_REQUEST['digest'];
+
         $productstring = substr($productstring,4);
         $apiResponseArray['ProductData'] =  $carts['choosen_items'];
         $apiResponseArray['DragonPayReturn'] = array(
-                "txnId" => $this->input->post('txnid'),
-                "refno" => $this->input->post('refno'),
-                "status" => $this->input->post('status'),
-                "message" => $this->input->post('message'),
-                "digest" => $this->input->post('digest')
+                "txnId" => $txnId,
+                "refno" => $refNo,
+                "status" => $status,
+                "message" => $message,
+                "digest" => $digest
             );
 
-        $transactionID = urldecode($this->input->post('txnid')).'-'.urldecode($this->input->post('refno'));
+        $transactionID = urldecode($txnId).'-'.urldecode($refNo);
         $apiResponse = json_encode($apiResponseArray);
         
-        if(strtolower($this->input->post('status')) == "p" || strtolower($this->input->post('status')) == "s"){
+        if(strtolower($status) == "p" || strtolower($status) == "s"){
 
-            $paymentType = (strtolower($this->input->post('status')) == "s" ? 4 : 2);
+            $paymentType = (strtolower($status) == "s" ? 4 : 2);
             $return = $this->payment_model->payment($paymentType,$invoice_no,$grandTotal,$ip,$member_id,$productstring,$productCount,$apiResponse,$transactionID);
             if($return['o_success'] <= 0){
                 $response['message'] = '<div style="color:red"><b>Error 3: </b>'.$return['o_message'].'</div>'; 
             }else{
                 $response['completepayment'] = true;
                 $response['message'] = '<div style="color:green">Your payment is completed through Dragon Pay.</div>
-                <div style="color:red">'.urldecode($this->input->post('message')).'</div>';
+                <div style="color:red">'.urldecode($message).'</div>';
                 $response = array_merge($response,$return);  
                 $this->removeItemFromCart(); 
                 $this->session->unset_userdata('choosen_items');
