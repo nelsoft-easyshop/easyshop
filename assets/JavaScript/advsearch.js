@@ -106,54 +106,56 @@ $(document).ready(function() {
 	});
 
 	// START OF INFINITE SCROLLING FUNCTION
-
-	var base_url = config.base_url;
-	var offset = 1;
-	var request_ajax = true;
-	var ajax_is_on = false;
-	var objHeight = $(window).height() - 50;
-	var last_scroll_top = 0;
-	var csrftoken = $("meta[name='csrf-token']").attr('content');
-	var csrfname = $("meta[name='csrf-name']").attr('content'); 
+	var rec = $(".rec").val();
 	
-	$(window).scroll(function(event) {
-	
-		var st = $(this).scrollTop();
+	if(rec > 0){
+		var base_url = config.base_url;
+		var offset = 1;
+		var request_ajax = true;
+		var ajax_is_on = false;
+		var objHeight = $(window).height() - 50;
+		var last_scroll_top = 0;
+		var csrftoken = $("meta[name='csrf-token']").attr('content');
+		var csrfname = $("meta[name='csrf-name']").attr('content'); 
 		
-		if(st > last_scroll_top){
-			if ($(window).scrollTop() + 100 > $(document).height() - $(window).height()) {					
-				if (request_ajax === true && ajax_is_on === false) {
-					ajax_is_on = true;
-					
-					var cat = $("#_cat").val();
-					var condition = JSON.parse($('.condition').val());
-					
-					$.ajax({
-						url: base_url + 'advsrch/scroll_product',
-						data:{page_number:offset,id_cat:cat,parameters:condition,csrfname:csrftoken},
-						type: 'post',
-						async: false,
-						dataType: 'JSON',
-                        onLoading:jQuery(".loading_products").html("<img src='"+ base_url +"assets/images/orange_loader.gif' />").show(),						
-						success: function(d){
-							if(d == "0"){
-								ajax_is_on = true;
-							}else{
-								$($.parseHTML(d.trim())).appendTo($('#product_content'));
-								ajax_is_on = false;
-								offset += 1;
-							}
-							$(".loading_products").hide();
-						} // end of function(d)
-					}); // end of .ajax
-				} // end of request ajax
-			} // end of $(window).scrollTop
-		} // end of st > last_scroll_top
+		$(window).scroll(function(event) {
 		
-		last_scroll_top = st;
-		jQuery(".loading_products").fadeOut(); 
-	});  // end of window .scroll
-
+			var st = $(this).scrollTop();
+			
+			if(st > last_scroll_top){
+				if ($(window).scrollTop() + 100 > $(document).height() - $(window).height()) {					
+					if (request_ajax === true && ajax_is_on === false) {
+						ajax_is_on = true;
+						
+						var cat = $("#_cat").val();
+						var condition = JSON.parse($('.condition').val());
+						
+						$.ajax({
+							url: base_url + 'advsrch/scroll_product',
+							data:{page_number:offset,id_cat:cat,parameters:condition,csrfname:csrftoken},
+							type: 'post',
+							async: false,
+							dataType: 'JSON',
+							onLoading:jQuery(".loading_products").html("<img src='"+ base_url +"assets/images/orange_loader.gif' />").show(),						
+							success: function(d){
+								if(d == "0"){
+									ajax_is_on = true;
+								}else{
+									$($.parseHTML(d.trim())).appendTo($('#product_content'));
+									ajax_is_on = false;
+									offset += 1;
+								}
+								$(".loading_products").hide();
+							} // end of function(d)
+						}); // end of .ajax
+					} // end of request ajax
+				} // end of $(window).scrollTop
+			} // end of st > last_scroll_top
+			
+			last_scroll_top = st;
+			jQuery(".loading_products").fadeOut(); 
+		});  // end of window .scroll
+	} // end check
 	// END OF INFINITE SCROLLING FUNCTION
 
 }); // end of document ready
