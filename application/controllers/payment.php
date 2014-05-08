@@ -636,8 +636,21 @@ class Payment extends MY_Controller{
 
     function dragonPayPostBack(){
 
-    $this->session->set_userdata('post', $_POST);
-        $this->session->set_userdata('get', $_GET);
+    $post = array();
+foreach ( $_POST as $key => $value )
+{
+    $post[$key] = $this->input->post($key);
+}
+
+    $this->session->set_userdata('post', $post);
+
+        $get = array();
+foreach ( $_GET as $key => $value )
+{
+    $get[$key] = $this->input->get($key);
+}
+
+        $this->session->set_userdata('get', $get);
 
 
     }
