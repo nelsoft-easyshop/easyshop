@@ -81,7 +81,7 @@ function in_array_r($needle, $haystack, $strict = false) {
 					$class = " class='span_bg advsrch_toggle' ";
 				}
 				
-				echo "<h3 class='title' id='". $genid  ."' style='cursor:pointer;'><span id='ifld_". $row ."' ". $class ."></span> ". $value['name'] ."</h3>";			
+				echo "<h3 class='title' id='". $genid  ."' style='cursor:pointer;'><span id='i". $genid ."' ". $class ."></span> ". $value['name'] ."</h3>";			
 				echo "<div id='c". $genid ."' ". $style .">" . $geninputs . "</div>";
 			} // check value[0]
 		} // for each arrayofparams
@@ -90,58 +90,72 @@ function in_array_r($needle, $haystack, $strict = false) {
     ?> 
   </div>
   <!-- left pane end ------------------>
-  <!-- Products ------------------>
-  
-  <div class="right_product">
-  	<div class="inputRow">	
-		Keyword:	
-		<input style="" type="text" name="_is" id="_is" value="<?php echo html_escape($getis);?>" size="50" maxlength="300" placeholder="Enter keywords or item number" />
-		<select name="_cat" id="_cat" title="Select item category">
-			<option value="1">- All -</option>
-			<?php
-				foreach ($firstlevel as $row) : # generate all parent category.
-			?>
-				<option value="<?php echo $row['id_cat']; ?>" <?php if($row['id_cat'] == $getcat){ ?>selected="selected" <?php } ?>><?php echo $row['name']; ?></option>
-			<?php endforeach; ?>
-		</select>
-		<input type="submit" value="SEARCH" id="btn_srch"/>
-						
-	</div>
 
-	<div class="inputRow">
-		Location:
-		<select title="Select item location" name="_loc" id="_loc" class="advsrchLocation">
-			<option value="">- All -</option>
-				<?php foreach($shiploc['area'] as $island=>$loc):?>
-					<option value="<?php echo $shiploc['islandkey'][$island];?>" <?php if($getloc == $shiploc['islandkey'][$island]){?>selected="selected"<?php } ?>><?php echo $island;?></option>
-						<?php foreach($loc as $region=>$subloc):?>
-							<option value="<?php echo $shiploc['regionkey'][$region];?>" style="margin-left:15px;" <?php if($getloc == $shiploc['regionkey'][$region]){?>selected="selected"<?php } ?>>&nbsp;&nbsp;&nbsp;<?php echo $region;?></option>
-								<?php foreach($subloc as $id_cityprov=>$cityprov):?>
-									<option value="<?php echo $id_cityprov;?>" style="margin-left:30px;" <?php if($getloc == $id_cityprov){?>selected="selected"<?php } ?>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $cityprov;?></option>
+  <div class="right_product">
+  	<div class="advsearch">
+		<div class="inputRow">
+			<span class="adv_is">	
+				Keyword:	
+				<input style="" type="text" name="_is" id="_is" value="<?php echo html_escape($getis);?>" size="50" maxlength="300" placeholder="Enter keywords or item number" />
+			</span>
+			<span class="adv_is">
+				<select name="_cat" id="_cat" title="Select item category">
+					<option value="1">- All -</option>
+					<?php
+						foreach ($firstlevel as $row) : # generate all parent category.
+					?>
+						<option value="<?php echo $row['id_cat']; ?>" <?php if($row['id_cat'] == $getcat){ ?>selected="selected" <?php } ?>><?php echo $row['name']; ?></option>
+					<?php endforeach; ?>
+				</select>
+			</span>
+			<input type="submit" value="SEARCH" id="btn_srch"/>			
+		</div>
+		<div class="inputRow">
+			<span class="adv_us">
+				Seller:	
+				<input type="text" name="_us" id="_us" value="<?php echo html_escape($getus);?>" size="40" maxlength="30" placeholder="Find items offered by a particular seller" />
+			</span>
+			<span class="adv_us">
+			Location:
+				<select title="Select item location" name="_loc" id="_loc" class="advsrchLocation">
+					<option value="">- All -</option>
+						<?php foreach($shiploc['area'] as $island=>$loc):?>
+							<option value="<?php echo $shiploc['islandkey'][$island];?>" <?php if($getloc == $shiploc['islandkey'][$island]){?>selected="selected"<?php } ?>><?php echo $island;?></option>
+								<?php foreach($loc as $region=>$subloc):?>
+									<option value="<?php echo $shiploc['regionkey'][$region];?>" style="margin-left:15px;" <?php if($getloc == $shiploc['regionkey'][$region]){?>selected="selected"<?php } ?>>&nbsp;&nbsp;&nbsp;<?php echo $region;?></option>
+										<?php foreach($subloc as $id_cityprov=>$cityprov):?>
+											<option value="<?php echo $id_cityprov;?>" style="margin-left:30px;" <?php if($getloc == $id_cityprov){?>selected="selected"<?php } ?>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $cityprov;?></option>
+										<?php endforeach;?>
 								<?php endforeach;?>
 						<?php endforeach;?>
-				<?php endforeach;?>
-        </select>		
-		Condition:	
-		<select title="Select item condition" name="_con" id="_con">
-			<option value="">- All -</option>          
-			<?php foreach($this->lang->line('product_condition') as $con): ?>
-				<option value="<?php echo $con;?>" <?php if($getcon == $con){?>selected="selected"<?php } ?>><?php echo $con; ?></option>
-			<?php endforeach; ?>
-		</select>
-	</div>
-
-	<div class="inputRow">
-		Price:
-		<input class="advsrchPrice1" type="text" name="_price1" id="_price1" value="<?php echo html_escape($getprice1);?>" maxlength="10" size="6" placeholder="Min" title="Minimum price"> to <input class="advsrchPrice2" type="text" name="_price2" id="_price2" value="<?php echo html_escape($getprice2);?>" maxlength="10" size="6" placeholder="Max" title="Maximum price">
-	    <p class="search_result"><!-- Showing 1 - 48 of 13,152 Results --></p>
-	    Sort by:
-	    <select name="_sop" id="_sop" title="Sort item">
-			<option value="popular" <?php if($getsop == "popular"){?>selected="selected"<?php } ?>>Popular</option>
-			<option value="hot" <?php if($getsop == "hot"){?>selected="selected"<?php } ?>>Hot</option>		
-			<option value="new" <?php if($getsop == "new"){?>selected="selected"<?php } ?>>New</option>
-			<option value="con" <?php if($getsop == "con"){?>selected="selected"<?php } ?>>Item Condition</option>
-	    </select>
+				</select>
+			</span>
+		</div>
+		<div class="inputRow">
+			<span class="adv_us">
+				Condition:	
+				<select title="Select item condition" name="_con" id="_con">
+					<option value="">- All -</option>          
+					<?php foreach($this->lang->line('product_condition') as $con): ?>
+						<option value="<?php echo $con;?>" <?php if($getcon == $con){?>selected="selected"<?php } ?>><?php echo $con; ?></option>
+					<?php endforeach; ?>
+				</select>
+			</span>
+			<span class="adv_us">
+				Price:
+				<input type="text" name="_price1" id="_price1" value="<?php echo html_escape($getprice1);?>" maxlength="10" size="6" placeholder="Min" title="Minimum price"> to <input type="text" name="_price2" id="_price2" value="<?php echo html_escape($getprice2);?>" maxlength="10" size="6" placeholder="Max" title="Maximum price">
+			</span>
+			<span class="adv_us">
+				Sort by:
+				<select name="_sop" id="_sop" title="Sort item">
+					<option value="popular" <?php if($getsop == "popular"){?>selected="selected"<?php } ?>>Popular</option>
+					<option value="hot" <?php if($getsop == "hot"){?>selected="selected"<?php } ?>>Hot</option>		
+					<option value="new" <?php if($getsop == "new"){?>selected="selected"<?php } ?>>New</option>
+					<option value="con" <?php if($getsop == "con"){?>selected="selected"<?php } ?>>Item Condition</option>
+				</select>
+			</span>
+		</div>
+		<p class="search_result"><!-- Showing 1 - 48 of 13,152 Results --></p>
 	</div>
     <!-- Buttons start -->
     <div id="list" class="list list-active" title="List"></div>
@@ -178,7 +192,6 @@ function in_array_r($needle, $haystack, $strict = false) {
 		} // end of isset
       ?>
     </div>
-	<!-- Products end ------------------>
   </div>
 </div>
 <input class='condition' type='hidden' value='<?php echo json_encode($condition); ?>'/>
