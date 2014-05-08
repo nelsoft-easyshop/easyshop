@@ -461,9 +461,9 @@ class product extends MY_Controller
 				$list = $this->toUL($newbuiltarray['children']);
 
 				if($category_name == "PARENT" || $category == 1){
-					$response['category_cnt'] = '<h3>Categories1</h3>'.$list;
+					$response['category_cnt'] = '<h3>Categories</h3>'.$list;
 				}else{	
-					$response['category_cnt'] = '<h3>Categories2</h3><ul><li>'.$category_name.'</li><li>'.$list.'</li></ul>';
+					$response['category_cnt'] = '<h3>Categories</h3><ul><li>'.$category_name.'</li><li>'.$list.'</li></ul>';
 				}
 
 				// end here
