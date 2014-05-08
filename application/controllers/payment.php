@@ -686,11 +686,11 @@ class Payment extends MY_Controller{
         $response['itemList'] = $itemList;
         $grandTotal= ($ItemTotalPrice+$handling_amt+$insurance_amt)-$shipping_discount_amt;
 
-        $txnId = $_REQUEST['txnid'];
-        $refNo = $_REQUEST['refno'];
-        $status = $_REQUEST['status'];
-        $message = $_REQUEST['message'];
-        $digest = $_REQUEST['digest'];
+        $txnId = $_GET['txnid'];
+        $refNo = $_GET['refno'];
+        $status = $_GET['status'];
+        $message = $_GET['message'];
+        $digest = $_GET['digest'];
 
         $productstring = substr($productstring,4);
         $apiResponseArray['ProductData'] =  $carts['choosen_items'];
