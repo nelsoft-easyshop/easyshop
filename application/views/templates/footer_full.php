@@ -2,10 +2,12 @@
       <div class="wrapper footer_panel">
         <div class="social_media">
           <h2>Stay in Touch</h2>
-          <a href="https://www.facebook.com/pages/EasyShopph/211771799032417?ref=hl"> <span class="span_bg facebook"></span></a>
+          <a href="https://www.facebook.com/EasyShopPhilippines"> <span class="span_bg facebook"></span></a>
           <a href="https://twitter.com/EasyShopPH"><span class="span_bg twitter"></span></a>
-          <span class="span_bg youtube"></span>
+          <!--
+		  <span class="span_bg youtube"></span>
           <span class="span_bg pinterest"></span>
+		  -->
           <div class="signup">
             <!--
 			<h2>Signup for Newsletter</h2>
