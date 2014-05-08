@@ -5,7 +5,7 @@
 
 <script>
     var config = {
-         base_url: "<?php echo base_url(); ?>",
+         base_url: "<?php echo base_url(); ?>"
     };
 </script>
 
