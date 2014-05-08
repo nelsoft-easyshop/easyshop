@@ -159,8 +159,6 @@ $(document).ready(function() {
 }); // end of document ready
 
 
-////////////////////////////////////////////////////
-
 $(function(){
 	$("h3[id^=fld_]").click(function(){
 		var getchild = "#c" + $(this).attr('id');
