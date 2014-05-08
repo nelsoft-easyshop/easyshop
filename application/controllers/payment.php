@@ -636,23 +636,8 @@ class Payment extends MY_Controller{
     }
 
     function dragonPayPostBack(){
-       
-    }
-
-    function xxtry(){
-        echo '<form action="" method="POST">
-        <input type="submit">
-        </form>';
-    }
-
-    function dragonPayReturn(){
-     
-        if(!$this->session->userdata('dragonpayticket')){
-             redirect(base_url().'home/', 'refresh'); 
-             exit();
-        } 
         
-        $paymentType = $this->PayMentDragonPay; 
+       $paymentType = $this->PayMentDragonPay; 
         $apiResponseArray = array(); 
         
         $carts = $this->session->all_userdata();
@@ -748,6 +733,18 @@ class Payment extends MY_Controller{
         $this->session->set_userdata('paymentticket', true);
         $this->session->set_userdata('headerData', $data);
         $this->session->set_userdata('bodyData', $response);
+
+    }
+ 
+
+    function dragonPayReturn(){
+     
+        if(!$this->session->userdata('dragonpayticket')){
+             redirect(base_url().'home/', 'refresh'); 
+             exit();
+        } 
+        
+        
 
         $this->session->unset_userdata('dragonpayticket');
         
