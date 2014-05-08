@@ -89,7 +89,7 @@ class Payment extends MY_Controller{
 
             if($city > 0){  
                 $details = $this->payment_model->getShippingDetails($productId,$itemId,$city,$region,$majorIsland);
-  
+    
 
                 if(count($details) >= 1){
                     $successcount++;
@@ -612,11 +612,9 @@ class Payment extends MY_Controller{
 
     }
 
-    function dragonPayPostBack(){
-        echo 'this page is under construction';
-    }
 
-    function paymentSuccess($mode = "easyshop"){
+
+        function paymentSuccess($mode = "easyshop"){
       
        
         $ticket = $this->session->userdata('paymentticket');
@@ -637,13 +635,7 @@ class Payment extends MY_Controller{
       
     }
 
-    function dragonPayReturn(){
-     
-        if(!$this->session->userdata('dragonpayticket')){
-             redirect(base_url().'home/', 'refresh'); 
-             exit();
-        } 
-       
+    function dragonPayPostBack(){
         $paymentType = $this->PayMentDragonPay; 
         $apiResponseArray = array(); 
         
@@ -702,7 +694,7 @@ class Payment extends MY_Controller{
                 "digest" => $this->input->get('digest')
             );
 
-        $transactionID = urldecode($this->input->get('txnid'));
+        $transactionID = urldecode($this->input->get('txnid')).'-'.urldecode($this->input->get('refno'));
         $apiResponse = json_encode($apiResponseArray);
         
         if(strtolower($this->input->get('status')) == "p" || strtolower($this->input->get('status')) == "s"){
@@ -719,7 +711,8 @@ class Payment extends MY_Controller{
                 $this->removeItemFromCart(); 
                 $this->session->unset_userdata('choosen_items');
                 $this->sendNotification(array('member_id'=>$member_id, 'order_id'=>$return['v_order_id'], 'invoice_no'=>$return['invoice_no']));
-            }   
+            } 
+
         }else{
              $response['message'] = '<div style="color:red">Transaction Not Completed.</div>';
         }
@@ -733,6 +726,22 @@ class Payment extends MY_Controller{
         $this->session->set_userdata('paymentticket', true);
         $this->session->set_userdata('headerData', $data);
         $this->session->set_userdata('bodyData', $response);
+    }
+
+    function xxtry(){
+        echo '<form action="http://nelsoft.dyndns.org:81/payment/dragonPayPostBack" method="POST">
+        <input type="submit">
+        </form>';
+    }
+
+    function dragonPayReturn(){
+     
+        if(!$this->session->userdata('dragonpayticket')){
+             redirect(base_url().'home/', 'refresh'); 
+             exit();
+        } 
+       
+       
 
         $this->session->unset_userdata('dragonpayticket');
         
@@ -849,10 +858,9 @@ class Payment extends MY_Controller{
 	 *
 	 *
 	 */
-	private function responseDragonpay($txnId)
+	function test($test, $abs)
 	{
-		$result = $this->payment_model->responseDragonpay($txnId);
-		print($result['o_message']);
+	
 	}
 	
 }
