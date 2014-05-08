@@ -154,11 +154,14 @@ function in_array_r($needle, $haystack, $strict = false) {
 		</div>
 	</div>
 	<?php 
+		if(!empty($cntr)):
 		  $cntr = $cntr[0]['ctr'];
-		  if($cntr > 0):
+		  	if($cntr > 0):
 	?>
 			<div class="adv_ctr"><strong style="font-size:14px"><?php echo number_format($cntr);?></strong> results</div>
-	<?php endif; ?>
+	<?php 	endif; 
+		endif;
+	?>
     <!-- Buttons start -->
     <div id="list" class="list list-active" title="List"></div>
     <div id="grid" class="grid" title="Grid"></div>
@@ -201,6 +204,8 @@ function in_array_r($needle, $haystack, $strict = false) {
 		} // end of isset
       ?>
     </div>
+	<!-- Products end ------------------>
+	<div class="loading_products" style="display: inline-block;text-align: center;width: 100%;"></div>
   </div>
 </div>
 <input class='condition' type='hidden' value='<?php echo json_encode($condition); ?>'/>
