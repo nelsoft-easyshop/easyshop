@@ -612,33 +612,31 @@ class Payment extends MY_Controller{
 
     }
 
+    function paymentSuccess($mode = "easyshop"){
 
 
-        function paymentSuccess($mode = "easyshop"){
-      
-       
         $ticket = $this->session->userdata('paymentticket');
-        // if($ticket){
-            $data = $this->session->userdata('headerData');
-            $response = $this->session->userdata('bodyData'); 
+        if($ticket){
+        $data = $this->session->userdata('headerData');
+        $response = $this->session->userdata('bodyData'); 
 
-            $this->session->unset_userdata('paymentticket');
-            $this->session->unset_userdata('headerData');
-            $this->session->unset_userdata('bodyData');
+        $this->session->unset_userdata('paymentticket');
+        $this->session->unset_userdata('headerData');
+        $this->session->unset_userdata('bodyData');
 
-            $this->load->view('templates/header', $data);
-            $this->load->view('pages/payment/payment_response' ,$response);  
-            $this->load->view('templates/footer_full'); 
-        // }else{
-        //     redirect(base_url().'home/', 'refresh');
-        // }
-      
+        $this->load->view('templates/header', $data);
+        $this->load->view('pages/payment/payment_response' ,$response);  
+        $this->load->view('templates/footer_full'); 
+        }else{
+            redirect(base_url().'home/', 'refresh');
+        }
+
     }
 
 
     function dragonPayPostBack(){
 
-       $paymentType = $this->PayMentDragonPay; 
+        $paymentType = $this->PayMentDragonPay; 
         $apiResponseArray = array(); 
         
         $carts = $this->session->all_userdata();
@@ -686,11 +684,11 @@ class Payment extends MY_Controller{
         $response['itemList'] = $itemList;
         $grandTotal= ($ItemTotalPrice+$handling_amt+$insurance_amt)-$shipping_discount_amt;
 
-        $txnId = $_POST['txnid'];
-        $refNo = $_POST['refno'];
-        $status = $_POST['status'];
-        $message = $_POST['message'];
-        $digest = $_POST['digest'];
+        $txnId = 121;
+        $refNo = 1212;
+        $status = 'P';
+        $message = 'asda';
+        $digest = 'add';
 
         $productstring = substr($productstring,4);
         $apiResponseArray['ProductData'] =  $carts['choosen_items'];
@@ -744,8 +742,9 @@ class Payment extends MY_Controller{
              redirect(base_url().'home/', 'refresh'); 
              exit();
         } 
-        
-        
+
+
+    
 
         $this->session->unset_userdata('dragonpayticket');
         
