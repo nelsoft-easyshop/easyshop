@@ -404,14 +404,16 @@ $(document).ready(function() {
                                     offset += 1;   
                                 }
                             }
-                            $(".loading_products").hide();
+                           // $(".loading_products").hide();
+                           jQuery(".loading_products").fadeOut();   
+                          
                         }
                     });
                 }
             }
         }
         last_scroll_top = st;
-        jQuery(".loading_products").fadeOut();   
+
     });
     // END OF INFINITE SCROLLING FUNCTION
 
