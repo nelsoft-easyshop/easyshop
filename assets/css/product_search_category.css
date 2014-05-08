@@ -670,7 +670,7 @@ Advanced Search Filters
 ==============================
 */
 
-#advsrch {
+.advsearch {
   border: 1px solid #ECEBEB;
   padding: 10px;
   margin-bottom: 10px;
@@ -685,25 +685,15 @@ Advanced Search Filters
 }
 
 .inputRow {
-  margin: 10px 0;
-  padding: 5px 10px;
+  margin: 2px 0;
+  padding: 5px 5px;
 }
 
-.advsrchLocation {
-  margin-right: 20px;
+.adv_is{
+	margin-right: 5px;
 }
-
-.advsrchPrice1, .advsrchPrice2 {
-  width: 90px;
-}
-
-.advsrchPrice1 {
-  margin-right: 10px;
-}
-
-.advsrchPrice2 {
-  margin-left: 10px;
-  margin-right: 40px;
+.adv_us{
+	margin-right: 10px;
 }
 
 .left_attribute h3 {
