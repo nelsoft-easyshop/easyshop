@@ -154,15 +154,16 @@ function in_array_r($needle, $haystack, $strict = false) {
 		</div>
 	</div>
 	<?php 
+		$rec = 0;
 		if(!empty($cntr)):
-		  $cntr = $cntr[0]['ctr'];
-		  	if($cntr > 0):
+		  $rec = $cntr[0]['ctr'];
+		  	if($rec > 0):
 				$s = "";
-				if($cntr > 1){
+				if($rec > 1){
 					$s = "s";
 				}
 	?>
-				<div class="adv_ctr"><strong style="font-size:14px"><?php echo number_format($cntr);?></strong> result<?php echo $s;?></div>
+				<div class="adv_ctr"><strong style="font-size:14px"><?php echo number_format($rec);?></strong> result<?php echo $s;?></div>
 	<?php 	endif; 
 		endif;
 	?>
@@ -212,6 +213,7 @@ function in_array_r($needle, $haystack, $strict = false) {
 	<div class="loading_products" style="display: inline-block;text-align: center;width: 100%;"></div>
   </div>
 </div>
+<input class='rec' type='hidden' value='<?php echo $rec; ?>'/>
 <input class='condition' type='hidden' value='<?php echo json_encode($condition); ?>'/>
 <?php echo form_close();?>
 <script src="<?= base_url() ?>assets/JavaScript/js/jquery.easing.min.js" type="text/javascript"></script> 
