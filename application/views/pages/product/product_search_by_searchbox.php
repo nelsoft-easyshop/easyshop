@@ -1,130 +1,95 @@
-<link rel="stylesheet" type="text/css" href="<?= base_url() ?>assets/css/product_search_category.css?ver=1.0"   media="screen"/> 
-<link rel="stylesheet" type="text/css" href="<?=base_url()?>assets/css/grid_list_style.css?ver=1.0" media="screen"/> 
+<link rel="stylesheet" type="text/css" href="<?=base_url()?>assets/css/product_search_category.css?ver=1.0"   media="screen"/>
 <link rel="stylesheet" type="text/css" href="<?=base_url()?>assets/css/style_new.css?ver=1.0" media="screen"/>
-<link rel="stylesheet" type="text/css" href="<?=base_url()?>assets/css/jquery.bxslider.css?ver=1.0" type="text/css" media="screen"/>   
-
-
-
-
 <div class="clear"></div>
-
 <section class="top_margin">
-  <div class="wrapper">
-    <div class="prod_categories">
-      <div class="nav_title">Categories <img src="<?=base_url()?>assets/images/img_arrow_down.png"></div>
-      <?php echo $category_navigation; ?>
-    </div>
-    
-    <div class="prob_cat_nav">  
-      <div class="category_nav product_content">
-        <ul>
-          <!--
-          <li class = "active">
-            <a href="#">
-            Related: Not yet Available
-            </a>
-          </li>
-          -->
-      </ul>
-    </div>
-  </div>
-  <div class="clear"></div>
-  <div class="bread_crumbs">
-  
-</div>
-
-</div>
-</section>    
-
+	<div class="wrapper">
+		<div class="prod_categories">
+			<div class="nav_title">Categories <img src="<?=base_url()?>assets/images/img_arrow_down.png"></div>
+			<?php echo $category_navigation; ?> 
+		</div>
+		<div class="prob_cat_nav">
+			<div class="category_nav product_content">
+				<ul>
+					<!--
+				  	<li class = "active">
+						<a href="#">Related: Not yet Available</a>
+				  	</li>
+				  	-->
+				</ul>
+			</div>
+		</div>
+		<div class="clear"></div>
+		<div class="bread_crumbs"></div>
+	</div>
+</section>
 <div class="wrapper" id="main_search_container">
+	<div class="left_attribute">
+		<div class="src_ul_li">
+			<?php echo $category_cnt; ?>
+		</div>
+	</div>
+	<div class="right_product">
+		<p class="search_result"><!-- Showing 1 - 48 of 13,152 Results --></p>
+		<?php
+			$typeOfViewActive = '<div id="list" class="list "></div><div id="grid" class="grid grid-active"></div>';
+            if(isset($_COOKIE['view'])){
 
-  <div class="left_attribute">
-
-    <?php
-echo $category_cnt;
-     ?>
-  </div>
-
-  <div class="right_product">
-    <p class="search_result"><!-- Showing 1 - 48 of 13,152 Results --></p>
-
-<?php
-$typeOfViewActive = '<div id="list" class="list "></div>
-                     <div id="grid" class="grid grid-active"></div>';
-             if(isset($_COOKIE['view']))
-            {
-
-            $typeOfViewActive = '<div id="list" class="list "></div>
-                     <div id="grid" class="grid grid-active"></div>';
+            	$typeOfViewActive = '<div id="list" class="list "></div><div id="grid" class="grid grid-active"></div>';
                 $cookieView = $_COOKIE['view'];
                 if($cookieView == "list"){
-                    $typeOfViewActive = '<div id="list" class="list list-active"></div>
-                     <div id="grid" class="grid"></div>';
+                    $typeOfViewActive = '<div id="list" class="list list-active"></div><div id="grid" class="grid"></div>';
                 }else{
-                   $typeOfViewActive = '<div id="list" class="list "></div>
-                     <div id="grid" class="grid grid-active"></div>';
+                   $typeOfViewActive = '<div id="list" class="list "></div><div id="grid" class="grid grid-active"></div>';
                 }
             }
             echo $typeOfViewActive;
-?> 
-    <div class="clear"></div>
-    <div id="product_content">     
-      <?php
-      if(isset($items))
-      {
-       for ($i=0; $i < sizeof($items); $i++) { 
-        $pic = explode('/', $items[$i]['product_image_path']);
-
-
-            $typeOfView = "product";
-             if(isset($_COOKIE['view']))
-            {
-                $cookieView = $_COOKIE['view'];
-                if($cookieView == "list"){
-                    $typeOfView = "product-list";
-                }else{
-                   $typeOfView = "product";
-                }
-            }
-            ?>
-            <div class="<?php echo $typeOfView; ?>">
-         <a href="<?=base_url()?>item/<?php echo $items[$i]['product_slug']; ?>"><span class="prod_img_wrapper"><span class="prod_img_container"><img alt="<?php echo $items[$i]['product_name']; ?>" src="<?php echo base_url().$pic[0].'/'.$pic[1].'/'.$pic[2].'/'.$pic[3].'/'.'categoryview'.'/'.$pic[4];;?>"></span></span></a>
-
-         <h3 style="  -o-text-overflow: ellipsis;    
-         text-overflow:    ellipsis;   
-         overflow:hidden;             
-         white-space:nowrap;  
-         width: 225px; ">
-         <a href="<?=base_url()?>item/<?php echo $items[$i]['product_slug']; ?>"><?php echo html_escape($items[$i]['product_name']); ?></a>
-       </h3>
-
-       <div class="price-cnt">
-        <div class="price">
-          <span>&#8369;</span> <?php echo number_format($items[$i]['product_price'],2); ?>
-        </div>
-      </div>
-      <div class="product_info_bottom">
-        <div>Condition: <strong><?php echo html_escape($items[$i]['product_condition']); ?></strong></div>
-        <!-- <div>Sold: <strong>32</strong></div> -->
-      </div>
-      <p>
-        <?php echo html_escape($items[$i]['product_brief']); ?>
-      </p>
-    </div>
-
-  
-
-<?php
-}
-}
-?>
+		?>
+		<div class="clear"></div>
+		<div id="product_content">
+		<?php
+      		if(isset($items)):
+       			for ($i=0; $i < sizeof($items); $i++): 
+        			$pic = explode('/', $items[$i]['product_image_path']);
+            		$typeOfView = "product";
+             		if(isset($_COOKIE['view'])){
+                		$cookieView = $_COOKIE['view'];
+						if($cookieView == "list"){
+							$typeOfView = "product-list";
+						}else{
+						   $typeOfView = "product";
+						}
+            		}
+         ?>
+					<div class="<?php echo $typeOfView; ?>"> 
+						<a href="<?php echo base_url() . "item/" . $items[$i]['product_slug']; ?>">
+							<span class="prod_img_wrapper">
+								<span class="prod_img_container">
+									<img alt="<?php echo html_escape($items[$i]['product_name']); ?>" src="<?php echo base_url() . $pic[0] . "/" . $pic[1] . "/" . $pic[2] . "/" . $pic[3] . "/" . "categoryview" . "/" . $pic[4]; ?>">
+								</span>
+							</span>	
+						</a>
+						<h3>
+							<a href="<?php echo base_url() . "item/" . $items[$i]['product_slug']; ?>">
+								<?php echo html_escape($items[$i]['product_name']); ?>
+							</a>
+						</h3>
+						<div class="price-cnt">
+							<div class="price"> 
+								<span>&#8369;</span> <?php echo number_format($items[$i]['product_price'], 2);?>
+							</div>
+						</div>
+						<div class="product_info_bottom">
+							<div>Condition: <strong><?php echo $items[$i]['product_condition']; ?></strong></div>
+						</div>
+						<p><?php echo html_escape($items[$i]['product_brief']); ?></p>
+					</div>
+		<?php
+				endfor;
+			endif;
+		?>
+		</div>
+	</div>
 </div>
-</div>
-</div>
-
-<script src="<?=base_url()?>assets/JavaScript/js/jquery.bxslider.min.js" type="text/javascript"></script>
-<script src="<?= base_url() ?>assets/JavaScript/categorynavigation.js?ver=1.0" type="text/javascript"></script>
-
 <script type="text/javascript">
 $(document).ready(function(){
 
@@ -216,7 +181,7 @@ $(document).ready(function(){
 
   $('#list').click(function(){    
     type = 1;
-createCookie("view ", "list", 30); 
+	createCookie("view ", "list", 30); 
     $('.product').animate({opacity:0},function(){
       $('.grid').removeClass('grid-active');
       $('.list').addClass('list-active');
@@ -227,7 +192,7 @@ createCookie("view ", "list", 30);
 
   $('#grid').click(function(){
     type = 0;
- createCookie("view ", "grid", 30);  
+ 	createCookie("view ", "grid", 30);  
     $('.product-list').animate({opacity:0},function(){
       $('.list').removeClass('list-active');
       $('.grid').addClass('grid-active');
@@ -248,6 +213,4 @@ createCookie("view ", "list", 30);
     $(this).hide();
   });
 });
-
-
-</script>
+</script> 
