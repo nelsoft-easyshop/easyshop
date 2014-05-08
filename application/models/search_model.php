@@ -200,35 +200,49 @@ class search_model extends CI_Model
 
 		return $row;
 	}	
-		
-	public function SearchProduct($cat, $start, $per_page, $colsort, $is, $us, $con, $gp, $attr_brand, $QAtt, $sc, $loc, $test){ 
+			
+	function SearchProduct($cat, $start, $per_page, $colsort, $is, $us, $con, $gp, $attr_brand, $QAtt, $sc, $loc, $test){ 
 	
-	$start = (int)$start;
-	$per_page = (int)$per_page;		
-
-	$query = "SELECT em.`username`, ep.`slug`, ep.`id_product` AS 'product_id', ep.`brand_id` AS 'brand_id', 
-		ep.`cat_id`, ep.`name` AS 'product_name', 
-		ep.`price` AS 'product_price', ep.`brief` AS 'product_brief', ep.`condition` AS 'product_condition',
-		epi.`product_image_path`,
-		eb.`name` AS 'product_brand'
-		FROM `es_product` ep
-		LEFT JOIN `es_product_image` epi ON ep.`id_product` = epi.`product_id` AND epi.`is_primary` = 1
-		LEFT JOIN `es_brand` eb ON ep.`brand_id` = eb.`id_brand` 
-		LEFT JOIN `es_member` em ON ep.`member_id` = em.`id_member` 
-		WHERE ep.`is_draft` = 0 AND ep.`is_delete` = 0 ". $cat ."   
-		". $QAtt . " ". $sc ." ". $loc . " " . $is ." " . $us . " ". $con ." ". $gp ." ". $attr_brand ."  
-		ORDER BY ". $colsort ." DESC 
-		LIMIT :start, :per_page ";
-	$sth = $this->db->conn_id->prepare($query);
-	$sth->bindParam(':start',$start,PDO::PARAM_INT);
-	$sth->bindParam(':per_page',$per_page,PDO::PARAM_INT);
-	$sth->execute();
-	$row = $sth->fetchAll(PDO::FETCH_ASSOC);
-
-	if($test == "okok"){print_r($query); exit;}
-	if($test == "ok"){print_r($query);}	
-
-	return $row;			
-	}					
+		$start = (int)$start;
+		$per_page = (int)$per_page;		
 	
+		$query = "SELECT em.`username`, ep.`slug`, ep.`id_product` AS 'product_id', ep.`brand_id` AS 'brand_id', 
+			ep.`cat_id`, ep.`name` AS 'product_name', 
+			ep.`price` AS 'product_price', ep.`brief` AS 'product_brief', ep.`condition` AS 'product_condition',
+			epi.`product_image_path`,
+			eb.`name` AS 'product_brand'
+			FROM `es_product` ep
+			LEFT JOIN `es_product_image` epi ON ep.`id_product` = epi.`product_id` AND epi.`is_primary` = 1
+			LEFT JOIN `es_brand` eb ON ep.`brand_id` = eb.`id_brand` 
+			LEFT JOIN `es_member` em ON ep.`member_id` = em.`id_member` 
+			WHERE ep.`is_draft` = 0 AND ep.`is_delete` = 0 ". $cat ."   
+			". $QAtt . " ". $sc ." ". $loc . " " . $is ." " . $us . " ". $con ." ". $gp ." ". $attr_brand ."  
+			ORDER BY ". $colsort ." DESC 
+			LIMIT :start, :per_page ";
+		$sth = $this->db->conn_id->prepare($query);
+		$sth->bindParam(':start',$start,PDO::PARAM_INT);
+		$sth->bindParam(':per_page',$per_page,PDO::PARAM_INT);
+		$sth->execute();
+		$row = $sth->fetchAll(PDO::FETCH_ASSOC);
+	
+		if($test == "okok"){print_r($query); exit;}
+		if($test == "ok"){print_r($query);}	
+	
+		return $row;			
+	}
+	
+	function ProductCount($cat, $is, $us, $con, $gp, $attr_brand, $QAtt, $sc, $loc){ 
+		$query = "SELECT count(ep.`id_product`) AS ctr
+			FROM `es_product` ep
+			LEFT JOIN `es_product_image` epi ON ep.`id_product` = epi.`product_id` AND epi.`is_primary` = 1
+			LEFT JOIN `es_brand` eb ON ep.`brand_id` = eb.`id_brand` 
+			LEFT JOIN `es_member` em ON ep.`member_id` = em.`id_member` 
+			WHERE ep.`is_draft` = 0 AND ep.`is_delete` = 0 ". $cat ."   
+			". $QAtt . " ". $sc ." ". $loc . " " . $is ." " . $us . " ". $con ." ". $gp ." ". $attr_brand;
+		$sth = $this->db->conn_id->prepare($query);
+		$sth->execute();
+		$row = $sth->fetchAll(PDO::FETCH_ASSOC);
+
+		return $row;			
+	}
 }
