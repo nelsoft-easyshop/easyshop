@@ -69,7 +69,8 @@ class product_search_v2 extends MY_Controller {
 		$condition = $this->input->get();		
 		$category = $this->input->get('_cat');
 		$gsc = $this->input->get('_subcat');
-		$gis = $this->input->get('_is');	
+		$gis = $this->input->get('_is');
+		$gus = $this->input->get('_us');	
 		$gloc = $this->input->get('_loc');
 		$gcon = $this->input->get('_con');		
 		$gp1 = $this->input->get('_price1');
@@ -80,6 +81,7 @@ class product_search_v2 extends MY_Controller {
 		$response['getcat'] = $category;
 		$response['getsubcat'] = $gsc;
 		$response['getis'] = $gis;
+		$response['getus'] = $gus;
 		$response['getloc'] = $gloc;
 		$response['getcon'] = $gcon;
 		$response['getprice1'] = $gp1;
@@ -214,6 +216,11 @@ class product_search_v2 extends MY_Controller {
 				$is = " AND MATCH(ep.`name`,keywords) AGAINST(CONCAT('".$gis."','*') IN BOOLEAN MODE) ";
 			}
 			
+			$us = "";
+			if(strlen($gus) > 0){
+				$us = " AND MATCH(em.`username`) AGAINST(CONCAT('".$gus."','*') IN BOOLEAN MODE) ";
+			}			
+			
 			$con = "";
 			if(strlen($gcon) > 0){
 				$con = " AND ep.`condition` = '". $gcon ."' ";
@@ -228,7 +235,7 @@ class product_search_v2 extends MY_Controller {
 								
 			# get all items here (right pane)
 			
-			$items = $this->search_model->SearchProduct($cat, $start, $per_page, $colsort, $is, $con, $gp, $attr_brand, $QAtt, $sc, $loc, $test);
+			$items = $this->search_model->SearchProduct($cat, $start, $per_page, $colsort, $is, $us, $con, $gp, $attr_brand, $QAtt, $sc, $loc, $test);
 	
 			$response['items'] = $items; ### pass to view
 		
@@ -308,6 +315,7 @@ class product_search_v2 extends MY_Controller {
 			$scA = "";
 			$locA = "";		
 			$isA = "";
+			$usA = "";
 			$conA = "";
 			$price1A = "";
 			$price2A = "";
@@ -355,6 +363,7 @@ class product_search_v2 extends MY_Controller {
 					if($name == "_subcat" && !empty($val)){ $scA = $val; }
 					if($name == "_loc" && !empty($val)){ $locA = $val; }	
 					if($name == "_is" && !empty($val)){ $isA = $val; }
+					if($name == "_us" && !empty($val)){ $usA = $val; }
 					if($name == "_con" && !empty($val)){ $conA = $val; }
 					if($name == "_price1" && !empty($val)){ $price1A = $val; }
 					if($name == "_price2" && !empty($val)){ $price2A = $val; }
@@ -423,6 +432,11 @@ class product_search_v2 extends MY_Controller {
 				$is = " AND MATCH(ep.`name`,keywords) AGAINST('+". $isA ."' IN BOOLEAN MODE) ";
 			}
 			
+			$us = "";
+			if(strlen($usA) > 0){
+				$us = " AND MATCH(em.`username`) AGAINST(CONCAT('".$usA."','*') IN BOOLEAN MODE) ";
+			}				
+			
 			$con = "";
 			if(!empty($conA)){
 				$con = " AND ep.`condition` = '". $conA ."' ";
@@ -438,7 +452,7 @@ class product_search_v2 extends MY_Controller {
 			##### Parameters end here ####################################################
 					
 			# get all items here (right pane)
-			$items = $this->search_model->SearchProduct($cat, $start, $per_page, $colsort, $is, $con, $gp, $attr_brand, $QAtt, $sc, $loc, $test);
+			$items = $this->search_model->SearchProduct($cat, $start, $per_page, $colsort, $is, $us, $con, $gp, $attr_brand, $QAtt, $sc, $loc, $test);
 			if(isset($items) && !empty($items)){ # check if it has items		
 				$response['items'] = $items; ### pass to view	
 				$data = json_encode($this->load->view('pages/search/search_display_scroll',$response,TRUE));
