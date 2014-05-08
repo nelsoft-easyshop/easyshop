@@ -236,7 +236,7 @@
 			</div>
 		</div>
 		<div class="price_container" data-prodprice="<?php echo $active_product['price'];?>">
-			<p><span class="fm1 f24 orange">Php <?php echo number_format($active_product['price'],2,'.',',');?></span><br />Price</p>
+			<p><span class="fm1 f24 orange">PHP <?php echo number_format($active_product['price'],2,'.',',');?></span><br />Price</p>
 			<p><span class="fm1 f24 grn"><?php echo $active_product['sold'];?></span><br />Sold Items</p>
 			<p><span class="fm1 f24"><?php echo $active_product['availability'];?></span><br />Available Stock</p>
 		</div>
@@ -349,7 +349,7 @@
 		</div>
 		<div class="price_container"> 
 			<p>
-				<span class="fm1 f24 orange"><?php echo number_format($deleted_product['price'],2,'.',',');?></span>
+				<span class="fm1 f24 orange">PHP <?php echo number_format($deleted_product['price'],2,'.',',');?></span>
 				<br />Price
 			</p>
 			<p>
