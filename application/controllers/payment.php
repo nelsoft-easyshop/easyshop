@@ -566,6 +566,7 @@ class Payment extends MY_Controller{
   
     function payDragonPay(){
         
+        $this->session->set_userdata('dragonpayticket', true);
         $carts = $this->session->all_userdata();
         $member_id =  $this->session->userdata('member_id'); 
         $itemList =  $carts['choosen_items'];
@@ -607,7 +608,6 @@ class Payment extends MY_Controller{
         $grandTotal = ($ItemTotalPrice+$handling_amt+$insurance_amt)-$shipping_discount_amt;
         $dpReturn = $this->dragonpay->getTxnToken($grandTotal,$name,$email);
 
-        $this->session->set_userdata('dragonpayticket', true);
         exit($dpReturn);
 
     }
