@@ -112,7 +112,7 @@
     <?php if(!$logged_in): ?>
     <div  class="top_links_right"> <a href="<?=base_url()?>login" class="top_border">Login</a> <a href="<?=base_url()?>register">Register</a> </div>
     <?php else: ?>
-    <div  class="top_links_right"> <a href="<?=base_url()?>me" class="top_border"><?php echo $uname; ?></a> <a href="<?=base_url()?>login/logout">Logout</a> </div>
+    <div  class="top_links_right"><a href="<?=base_url()?>messages">[ <?PHP echo $unread_msgs;?> ]</a><a href="<?=base_url()?>me" class="top_border"><?php echo $uname; ?></a> <a href="<?=base_url()?>login/logout">Logout</a> </div>
     <?php endif; ?>
   </div>
 </header>

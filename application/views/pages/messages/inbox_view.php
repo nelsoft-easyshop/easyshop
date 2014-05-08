@@ -106,8 +106,51 @@
 			specific_msgs();
 		});
 		
+    
+    
+        var myInterval;
+        var interval_delay = 5000;
+        var is_interval_running = false;
+        
+        $(document).ready(function () {
+            $(window).focus(function () {
+                clearInterval(myInterval); 
+                if  (!is_interval_running)
+                    myInterval = setInterval(Reload, interval_delay);
+            }).blur(function () {
+                clearInterval(myInterval);
+                is_interval_running = false;
+            });
+        });
+        
+        interval_function = function () {
+             is_interval_running = true;
+        }
+       
     });
-		
+     
+    function Reload() {
+        var csrftoken = $("meta[name='csrf-token']").attr('content');
+        var csrfname = $("meta[name='csrf-name']").attr('content');
+        var result = "";
+        $.ajax({
+            asycn :true,
+            type:"POST",
+            dataType : "json",
+            url :  "<?=base_url()?>messages/get_all_msgs",
+            data : {csrfname:csrftoken},
+            success :function(data){
+                if (data != "false") {
+                    result = data.messages;
+                    tbl_data(result);
+                    specific_msgs();
+                }else{
+                    alert("Connection Error");
+                    return "false";
+                }
+            }            
+        });
+    }
 	$("#modal_send_btn").on("click",function(){
 		var recipient = $("#msg_name").val().trim();
 		var msg = $("#msg-message").val().trim();
