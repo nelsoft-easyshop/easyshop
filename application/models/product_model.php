@@ -158,7 +158,6 @@ class product_model extends CI_Model
 	function getProduct($id) 
 	{
 		$query = $this->sqlmap->getFilenameID('product', 'getProduct');
-
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':id',$id);
 		$sth->execute();
