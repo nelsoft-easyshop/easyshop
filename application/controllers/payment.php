@@ -638,6 +638,34 @@ class Payment extends MY_Controller{
 
 
         header("Content-Type:text/plain");
+        $this->product_model->checkMyDp(json_encode($_POST));
+
+    }
+
+    function dpt(){
+        echo "
+                <form method='post' action='http://nelsoft.dyndns.org:81/payment/dragonPayPostBack'>
+                
+                <input type='text' name='txnid' placeholder='txn'><br>
+                <input type='text' name='refno' placeholder='ref'><br>
+                <input type='text' name='status' placeholder='status'><br>
+                <input type='text' name='message' placeholder='message'><br>
+                <input type='text' name='digest' placeholder='digest'><br>
+                <input type='submit' > 
+                </form>
+            ";
+    }
+ 
+
+    function dragonPayReturn(){
+     
+        if(!$this->session->userdata('dragonpayticket')){
+             redirect(base_url().'home/', 'refresh'); 
+             exit();
+        } 
+
+
+        $this->session->set_userdata('paymentticket', true);
         
         $paymentType = $this->PayMentDragonPay; 
         $apiResponseArray = array(); 
@@ -693,11 +721,11 @@ class Payment extends MY_Controller{
         $message = 'asda';
         $digest = 'add';
 
-        // $txnId = $this->input->get('txnid');
-        // $refNo = $this->input->get('refno');
-        // $status =  $this->input->get('status');
-        // $message = $this->input->get('message');
-        // $digest = $this->input->get('digest');
+        $txnId = $this->input->get('txnid');
+        $refNo = $this->input->get('refno');
+        $status =  $this->input->get('status');
+        $message = $this->input->get('message');
+        $digest = $this->input->get('digest');
 
         $productstring = substr($productstring,4);
         $apiResponseArray['ProductData'] =  $carts['choosen_items'];
@@ -742,34 +770,6 @@ class Payment extends MY_Controller{
 
         $this->session->set_userdata('headerData', $data);
         $this->session->set_userdata('bodyData', $response);
-
-    }
-
-    function dpt(){
-        echo "
-                <form method='post' action='http://nelsoft.dyndns.org:81/payment/dragonPayPostBack'>
-                
-                <input type='text' name='txnid' placeholder='txn'><br>
-                <input type='text' name='refno' placeholder='ref'><br>
-                <input type='text' name='status' placeholder='status'><br>
-                <input type='text' name='message' placeholder='message'><br>
-                <input type='text' name='digest' placeholder='digest'><br>
-                <input type='submit' > 
-                </form>
-            ";
-    }
- 
-
-    function dragonPayReturn(){
-     
-        if(!$this->session->userdata('dragonpayticket')){
-             redirect(base_url().'home/', 'refresh'); 
-             exit();
-        } 
-
-
-        $this->session->set_userdata('paymentticket', true);
-      
 
         $this->session->unset_userdata('dragonpayticket');
         

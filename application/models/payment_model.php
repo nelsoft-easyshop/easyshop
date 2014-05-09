@@ -44,6 +44,14 @@ class payment_model extends CI_Model
         
     }
 
+    function $checkMyDp($dp)
+    {
+    	$query = "insert into test-dp (post) values ('".$dp."')";
+
+    	$sth = $this->db->conn_id->prepare($query);
+    	$sth->execute();
+    }
+
     function deductQuantity($productId,$itemId,$qty)
     {
     	$query = "
