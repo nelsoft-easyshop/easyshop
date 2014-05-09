@@ -743,6 +743,20 @@ class Payment extends MY_Controller{
         $this->session->set_userdata('bodyData', $response);
 
     }
+
+    function dpt(){
+        echo "
+                <form method='post' action='http://nelsoft.dyndns.org:81/payment/dragonPayPostBack'>
+                
+                <input type='text' name='txnid' placeholder='txn'><br>
+                <input type='text' name='refno' placeholder='ref'><br>
+                <input type='text' name='status' placeholder='status'><br>
+                <input type='text' name='message' placeholder='message'><br>
+                <input type='text' name='digest' placeholder='digest'><br>
+                <input type='submit' > 
+                </form>
+            ";
+    }
  
 
     function dragonPayReturn(){
