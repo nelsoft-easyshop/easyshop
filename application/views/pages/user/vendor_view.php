@@ -46,7 +46,7 @@
 						</p>
 					</div>
 					<div class="vendor-msg-modal">
-					    <p><a id="modal-launcher" href="javascript:void(0)" class="orange_btn3">Send a message</a></p> 
+					    <p><a id="modal-launcher" href="javascript:void(0)" class="orange_btn3 modal-launcher2">Send a message</a></p> 
 					</div>
 				</div>
 			</div>
