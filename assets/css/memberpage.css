@@ -32,3 +32,23 @@
 	border-color:transparent;
 	color:#494949;
 }
+
+.set_default_lnk{
+    text-decoration: underline;
+    cursor:pointer; 
+    padding:5px;
+}
+
+.set_default_lnk:hover{
+    color:#ffae00;
+}
+
+.acct_container{
+    height: 40px; 
+}
+
+.acct_container label{
+    font-weight: bold;
+}
+
+

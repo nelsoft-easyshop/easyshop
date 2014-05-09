@@ -1928,21 +1928,12 @@ $(document).ready(function(){
     	$('input:checkbox').not(this).prop("checked", false);
 	});
 	
-	$("span[id^='bi_txt_bictr']").hover(
-		function(){
-    	$(this).css("background-color","#63E46C");
-		},
-		function(){
-    	$(this).css("background-color","");
-		}
-	);
-	
 	$("span[id^='bi_txt_bictr']").click(function(){
 
 		var getbictr = $(this).attr('id');
 		var bictr = getbictr.substring(7,30);
 		var bid = 'bi_id_' + bictr;
-		var def = confirm("Set as default?");
+		var def = confirm("Set as default account?");
 		if(def){			
 			var csrftoken = $("meta[name='csrf-token']").attr('content');
             var csrfname = $("meta[name='csrf-name']").attr('content');
