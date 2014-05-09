@@ -19,11 +19,14 @@ class MY_Controller extends CI_Controller
     public function __construct()
     {
         parent::__construct();
+		$this->config->set_item('base_url',"https://".$_SERVER["SERVER_NAME"].":".$_SERVER["SERVER_PORT"]."/");
         
-        $this->config->set_item('base_url',"https://".$_SERVER["SERVER_NAME"]."/");
+        
+        #$this->config->set_item('base_url',"https://".$_SERVER["SERVER_NAME"]."/");
         $this->load->model("user_model");
         $this->load->model("cart_model");
         $this->load->model("product_model");
+        $this->load->model("messages_model");
 
         $url = uri_string();
         if($url !== 'login'){
@@ -58,18 +61,25 @@ class MY_Controller extends CI_Controller
 		}
 		$carts=$this->session->userdata('cart_contents');
 		$ss = (empty($carts) ? 0 : sizeof($this->session->userdata('cart_contents'))-2);
+		$unread = $this->messages_model->get_all_messages($this->session->userdata('member_id'))['unread_msgs'];	
 		$data = array(
 			'logged_in' => $logged_in,
 			'uname' => $uname,
 			'total_items'=> $ss,
+			'unread_msgs'=> $unread,
 			'category_search' => $this->product_model->getFirstLevelNode(),
 			'header_csrf' => array(
 					'csrf_'
 				)
 			);
+				
 		return $data;
 	}
-
+	//
+	//public function get_all_msgs(){
+	//	$result = $this->messages_model->get_all_messages($this->user_ID);	
+	//	return  $result;
+	//}
     function cart_size(){
         $carts=$this->cart->contents();
         $cart_size =sizeof($carts);
