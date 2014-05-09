@@ -688,7 +688,7 @@ class Payment extends MY_Controller{
 
         $txnId = 121;
         $refNo = 1212;
-        $status = 'P';
+        $status = 'p';
         $message = 'asda';
         $digest = 'add';
 
@@ -706,8 +706,8 @@ class Payment extends MY_Controller{
                 "status" => $status,
                 "message" => $message,
                 "digest" => $digest,
-                "POST" => $this->input->post(),
-                "GET" => $this->input->get()
+                // "POST" => $this->input->post(),
+                // "GET" => $this->input->get()
             );
 
         $transactionID = urldecode($txnId).'-'.urldecode($refNo);
