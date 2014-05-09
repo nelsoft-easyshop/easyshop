@@ -706,8 +706,8 @@ class Payment extends MY_Controller{
                 "status" => $status,
                 "message" => $message,
                 "digest" => $digest,
-                // "POST" => $this->input->post(),
-                // "GET" => $this->input->get()
+                "POST" => $this->input->post(),
+                "GET" => $this->input->get()
             );
 
         $transactionID = urldecode($txnId).'-'.urldecode($refNo);
