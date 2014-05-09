@@ -67,7 +67,7 @@
               <img class=" seller-img" src="<?php echo base_url() . $product['userpic']?>/60x60.png"><br />
               <span class="name"><?php echo html_escape($product['sellerusername']);?></span> 
             </a><br/>
-           <span><a href="<?=base_url()?>messages" title="Send a message"><img src="<?=base_url()?>assets/images/msg_icon.ico"></a></span>
+           <span><a id="modal-launcher2" href="javascript:void(0)" title="Send a message"><img src="<?=base_url()?>assets/images/msg_icon.ico"></a></span>
             <span>
                 <br/>
                 <?php if(($vendorrating['rate_count'] <=0)):?>
@@ -355,7 +355,28 @@
       </div>
     </div>
     <div class="clear"></div>
+    
+    <div id="modal-background">
+    </div>
+    <div id="modal-container">
+        <div id="modal-div-header">
+            <button id="modal-close">X</button>        
+        </div>
+        <div id="modal-inside-container">
+            <div>
+                <label>To : </label>
+                <input type="text" value="<?=$product['sellerusername'];?>" disabled id="msg_name" name="msg_name" >
+            </div>
+            <div>
+                <label>Message : </label>
+                <textarea cols="40" rows="5" name="msg-message" id="msg-message" placeholder="Say something.."></textarea>		
+            </div>	   
+        </div>
+        <button id="modal_send_btn">Send</button>
+    </div>
   </div>
+  
+        
   <input id='p_qty' type='hidden' value=' <?php echo json_encode($product_quantity);?>'>
   <input id='p_shipment' type='hidden' value='<?php echo json_encode($shipment_information);?>'>
   <input id='p_itemid' type='hidden' value='0'/>
@@ -432,6 +453,48 @@
 </script>
 <script type="text/javascript">
 
+    $(function(){
+	if (<?=$uid?> == <?php echo $product['sellerid']; ?> || <?=$uid?> == 0  ) {
+	    $(".vendor-msg-modal").remove();
+	    $("#modal-background").remove();
+	    $("#modal-container").remove();
+	}
+	$("#modal-background, #modal-close").click(function() {
+	    $("#modal-container, #modal-background").toggleClass("active");
+	    $("#modal-container").hide();
+	    $("#msg-message").val("");
+	});
+	$("#modal-launcher2").click(function() {
+	    $("#modal-container, #modal-background").toggleClass("active");
+	    $("#modal-container").show();
+	});
+	
+	$("#modal_send_btn").on("click",function(){
+	    var recipient =<?php echo $product['sellerid']; ?>;
+        var csrftoken = $("meta[name='csrf-token']").attr('content');
+        var csrfname = $("meta[name='csrf-name']").attr('content');
+        var msg = $("#msg-message").val();
+		if (msg == "") {
+			alert("Say something..");
+			return false;
+		}
+	    var msg = $("#msg-message").val();
+            $.ajax({
+                async : true,
+                type : "POST",
+                dataType : "json",
+                url : "<?=base_url()?>messages/send_msg",
+                data : {recipient:recipient,msg:msg,csrfname:csrftoken},
+                success : function(data) {
+		    $("#modal-container, #modal-background").toggleClass("active");
+		    $("#modal-container").hide();
+		    $("#msg-message").val("");
+		    alert("Message Sent");
+                }
+            });
+	});
+	
+    });
 $(document).on('click','.prod_cat_drop',function() {
      $(".category_nav").toggleClass("category_nav_plus");
      $(".prod_cat_drop").toggleClass("active_prod_cat_drop_arrow");

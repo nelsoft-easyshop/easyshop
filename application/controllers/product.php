@@ -597,12 +597,12 @@ class product extends MY_Controller
 			
 			$data['jsonReviewSchemaData'] = $this->assembleJsonReviewSchemaData($data);
 			
+
 			$this->load->view('pages/product/productpage_view', $data); 
 		}
 		else
 			$this->load->view('pages/general_error', $data); 		
 		$this->load->view('templates/footer_full');
-
 	}
 	
 	// Assemble SEO Review tags

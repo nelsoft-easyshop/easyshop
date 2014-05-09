@@ -110,7 +110,7 @@
 		});
 		
     
-    
+        ////this is for page reload every time the user is focused on the web page/tab
         //var myInterval;
         //var interval_delay = 5000;
         //var is_interval_running = false;

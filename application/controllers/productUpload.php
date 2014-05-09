@@ -1036,6 +1036,7 @@ class productUpload extends MY_Controller
 			}
             
 			#image directory
+			
 			if($main_image_cnt === 0){
 				$path_directory = './assets/product/'.$product_id.'_'.$member_id.'_'.$date.'/';
 			}
