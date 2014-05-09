@@ -49,8 +49,7 @@ class payment_model extends CI_Model
     	$query = "CALL es_sp_checkDP(:tid)";
 
     	$sth = $this->db->conn_id->prepare($query);
-    	$sth->bindParam(':tid',$transactionId,PDO::PARAM_STR);
-    	$sth = $this->db->conn_id->prepare($query);
+    	$sth->bindParam(':tid',$transactionId,PDO::PARAM_STR); 
     	$sth->execute();
     }
 
