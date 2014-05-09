@@ -41,6 +41,12 @@ foreach ($node as $row) { # generating all child category base on selected paren
 <li  class="othercategory othercategory<?php echo $level; ?> "><a href="javascript:void(0)" class="select2" data-level="<?php echo $level; ?>" data-parent="<?php echo $row['parent_id']; ?>" data-parentname="<?php echo addslashes($name)?>" data-final="false"><b class="add_cat span_bg"></b><b>Add a Category</b></a></li>
 </ul>
 </div>
+<script type="text/javascript">
+$(document).ready(function() {
+$(".add_category_submit").empty();
+$(".add_category_submit").append('<input type="hidden" name="hidden_attribute" value="'+<?php echo $cat_id ?>+'" class="hidden_attribute"><input class="proceed_form" id="proceed_form" type="submit" value="Proceed with <?php echo html_escape($name) ?>">');
+});     
+</script>
 <?php
 }
 ?>

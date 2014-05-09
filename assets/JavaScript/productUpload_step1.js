@@ -137,6 +137,10 @@
                 }
             });
         }else{
+             
+                $(".add_category_submit").empty();
+                $(".add_category_submit").append('<input type="hidden" name="hidden_attribute" value="'+catId+'" class="hidden_attribute"><input class="proceed_form" id="proceed_form" type="submit" value="Proceed with '+name+'">');
+           
            var clone = $('#storeValue .parent'+catId).clone();
            $('.product_sub_category').append(clone);
        }
@@ -174,6 +178,7 @@
             });
         }else{ 
             var finalValue = $('#storeValue .parent'+catId).data('final');
+            var finalValue = true;
             var clone = $('#storeValue .parent'+catId).clone();
             $('.product_sub_category').append(clone);
             if(finalValue == true){
