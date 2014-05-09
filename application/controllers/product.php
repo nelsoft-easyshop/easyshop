@@ -11,7 +11,7 @@ class product extends MY_Controller
 		$this->load->model("product_model");
 	}
 
-	public $per_page = 1;
+	public $per_page = 6;
 	public $start_irrelevant = 0;
 
 	function categorySearch($categoryId = 0,$url_string="string")
