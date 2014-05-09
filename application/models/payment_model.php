@@ -44,10 +44,11 @@ class payment_model extends CI_Model
         
     }
 
-    function checkMyDp($dp)
+    function checkMyDp($transactionId)
     {
-    	$query = "insert into testdp (post) values ('".$dp."')";
+    	$query = "CALL es_sp_checkDP(:tid)";
 
+    	$sth->bindParam(':tid',$transactionId,PDO::PARAM_STR);
     	$sth = $this->db->conn_id->prepare($query);
     	$sth->execute();
     }

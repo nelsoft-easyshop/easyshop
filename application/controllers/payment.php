@@ -638,23 +638,14 @@ class Payment extends MY_Controller{
 
 
         header("Content-Type:text/plain");
-        $this->payment_model->checkMyDp(json_encode($_POST));
-
+        $status = $this->input->post('status');
+        if(strtolower($status) == "p" || strtolower($status) == "s"){
+            $transactionID = $this->input->post('txnid').'-'.$this->input->post('refno');
+            $this->payment_model->checkMyDp($transactionID);
+        }
+        
     }
 
-    function dpt(){
-        echo "
-                <form method='post' action='http://nelsoft.dyndns.org:81/payment/dragonPayPostBack'>
-                
-                <input type='text' name='txnid' placeholder='txn'><br>
-                <input type='text' name='refno' placeholder='ref'><br>
-                <input type='text' name='status' placeholder='status'><br>
-                <input type='text' name='message' placeholder='message'><br>
-                <input type='text' name='digest' placeholder='digest'><br>
-                <input type='submit' > 
-                </form>
-            ";
-    }
  
 
     function dragonPayReturn(){
@@ -715,11 +706,6 @@ class Payment extends MY_Controller{
         $response['itemList'] = $itemList;
         $grandTotal= ($ItemTotalPrice+$handling_amt+$insurance_amt)-$shipping_discount_amt;
 
-        $txnId = 121;
-        $refNo = 1212;
-        $status = 'p';
-        $message = 'asda';
-        $digest = 'add';
 
         $txnId = $this->input->get('txnid');
         $refNo = $this->input->get('refno');
@@ -753,7 +739,7 @@ class Payment extends MY_Controller{
                 $response['message'] = '<div style="color:green">Your payment is completed through Dragon Pay.</div>
                 <div style="color:red">'.urldecode($message).'</div>';
                 $response = array_merge($response,$return);  
-                // $this->removeItemFromCart(); 
+                $this->removeItemFromCart(); 
                 $this->session->unset_userdata('choosen_items');
                 // $this->sendNotification(array('member_id'=>$member_id, 'order_id'=>$return['v_order_id'], 'invoice_no'=>$return['invoice_no']));
             } 
