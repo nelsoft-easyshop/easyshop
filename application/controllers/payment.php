@@ -737,9 +737,9 @@ class Payment extends MY_Controller{
                 $response['message'] = '<div style="color:green">Your payment is completed through Dragon Pay.</div>
                 <div style="color:red">'.urldecode($message).'</div>';
                 $response = array_merge($response,$return);  
-                // $this->removeItemFromCart(); 
+                $this->removeItemFromCart(); 
                 $this->session->unset_userdata('choosen_items');
-                // $this->sendNotification(array('member_id'=>$member_id, 'order_id'=>$return['v_order_id'], 'invoice_no'=>$return['invoice_no']));
+                $this->sendNotification(array('member_id'=>$member_id, 'order_id'=>$return['v_order_id'], 'invoice_no'=>$return['invoice_no']));
             } 
 
         }else{
