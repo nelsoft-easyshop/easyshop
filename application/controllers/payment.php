@@ -637,7 +637,8 @@ class Payment extends MY_Controller{
     function dragonPayPostBack(){
 
 
-  header("Content-Type:text/plain");
+        header("Content-Type:text/plain");
+        
         $paymentType = $this->PayMentDragonPay; 
         $apiResponseArray = array(); 
         
