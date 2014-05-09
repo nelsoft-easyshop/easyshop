@@ -474,7 +474,9 @@ header {
 .top_links_right {
 	float: right;
 }
-
+.top_links_right img{
+    margin: 0 4px -4px 0;
+}
 .top_links_right a {
 	color: #fff;
 }

@@ -66,10 +66,10 @@
             <a href="<?php echo base_url() . 'vendor/' . $product['sellerusername'];?>"> 
               <img class=" seller-img" src="<?php echo base_url() . $product['userpic']?>/60x60.png"><br />
               <span class="name"><?php echo html_escape($product['sellerusername']);?></span> 
-            </a>
-           
+            </a><br/>
+           <span><a href="<?=base_url()?>messages" title="Send a message"><img src="<?=base_url()?>assets/images/msg_icon.ico"></a></span>
             <span>
-                <br/><br/>
+                <br/>
                 <?php if(($vendorrating['rate_count'] <=0)):?>
                   <p><span style="font-size:11px; margin-left:8px;">No ratings received yet.</span></p>
                 <?php else:?>
