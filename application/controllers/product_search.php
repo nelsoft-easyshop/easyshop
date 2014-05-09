@@ -76,7 +76,22 @@ class product_search extends MY_Controller {
 		$gp1 = $this->input->get('_price1');
 		$gp2 = $this->input->get('_price2');		
 		$sort = $this->input->get('_sop');
-
+		
+		if(!is_numeric($category)){
+			$category = 1;
+		}
+		
+		if(!is_numeric($gloc)){
+			$gloc = "";
+		}
+		
+		if(strlen($gp1) > 0 && strlen($gp2) > 0){
+			if(!is_numeric($gp1) && !is_numeric($gp2)){
+				$gp1 = "";
+				$gp2 = "";
+			}
+		}		
+		
 		$response['condition'] = $condition;
 		$response['getcat'] = $category;
 		$response['getsubcat'] = $gsc;
@@ -295,10 +310,14 @@ class product_search extends MY_Controller {
 			$start = $this->input->post('page_number') * $this->per_page; # start series
 			$per_page = $this->per_page ; # no of display
 			$condition = $this->input->post('parameters');
-			$category = $this->input->post('id_cat');
-			$catID = $category;
 			$cat = "";
-			$test = "";			
+			$test = "";
+			
+			$category = $this->input->post('id_cat');
+			if(!is_numeric($category)){
+				$category = 1;
+			}
+			$catID = $category;
 
 			$child = $this->search_model->selectChild($category);
 			if($child[0] != 0 && $child[1] != 0){
@@ -359,16 +378,30 @@ class product_search extends MY_Controller {
 							}
 						}	
 					}
-
 				
 					if($name == "_sop" && !empty($val)){ $sopA = $val; }
 					if($name == "_subcat" && !empty($val)){ $scA = $val; }
-					if($name == "_loc" && !empty($val)){ $locA = $val; }	
+					if($name == "_loc" && !empty($val)){ 
+						if(!is_numeric($val)){
+							$val = "";
+						}
+						$locA = $val;
+					}	
 					if($name == "_is" && !empty($val)){ $isA = $val; }
 					if($name == "_us" && !empty($val)){ $usA = $val; }
 					if($name == "_con" && !empty($val)){ $conA = $val; }
-					if($name == "_price1" && !empty($val)){ $price1A = $val; }
-					if($name == "_price2" && !empty($val)){ $price2A = $val; }
+					if($name == "_price1" && !empty($val)){
+						if(!is_numeric($val)){
+							$val = "";
+						}
+						$price1A = $val;
+					}
+					if($name == "_price2" && !empty($val)){
+						if(!is_numeric($val)){
+							$val = "";
+						}						
+						$price2A = $val;
+					}
 				}
 			}
 
