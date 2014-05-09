@@ -22,7 +22,7 @@
                     <div>
                         <input type="checkbox" class="rad" value="<?PHP echo $row['rowid']; ?>" checked="checked">
 
-                        <a href="<?=base_url().'item/'.$row['id'].'/'.es_url_clean($row['name']);?>" class="has-tooltip" data-image="<?=base_url()?><?php echo $row['img'][0]['path']; ?>categoryview/<?php echo $row['img'][0]['file']; ?>"> 
+                        <a href="<?=base_url().'item/'.$row['slug'];?>" class="has-tooltip" data-image="<?=base_url()?><?php echo $row['img'][0]['path']; ?>categoryview/<?php echo $row['img'][0]['file']; ?>"> 
                             <span style='background-color: #FFFFFF; border: 1px solid #E5E5E5; display: inline-block;'>
                                 <span style=' display: table-cell; width: 60px; height: 60px; vertical-align: middle;'>
                                     <img style="max-height: 60px; max-width: 60px; height:auto;width: auto; vertical-align: middle;" src="<?=base_url()?><?php echo $row['img'][0]['path']; ?>thumbnail/<?php echo $row['img'][0]['file']; ?>">
@@ -30,7 +30,7 @@
                             </span>
                         </a>
                         <div style='float:right; margin-right: 130px;'>
-                        <span class="product_title" style='width:300px !important'>  <a href="<?=base_url().'item/'.$row['id'].'/'.es_url_clean($row['name']);?>"> <?PHP echo html_escape($row['name']); ?></a></span>
+                        <span class="product_title" style='width:300px !important'>  <a href="<?=base_url().'item/'.$row['slug'];?>"> <?PHP echo html_escape($row['name']); ?></a></span>
                         <br/>
                         <span class="attr_container" style='width:300px !important'>
                             <table>
