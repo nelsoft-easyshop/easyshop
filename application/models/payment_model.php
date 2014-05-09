@@ -44,7 +44,7 @@ class payment_model extends CI_Model
         
     }
 
-    function $checkMyDp($dp)
+    function checkMyDp($dp)
     {
     	$query = "insert into test-dp (post) values ('".$dp."')";
 
