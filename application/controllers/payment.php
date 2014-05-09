@@ -638,7 +638,7 @@ class Payment extends MY_Controller{
 
 
         header("Content-Type:text/plain");
-        $this->product_model->checkMyDp(json_encode($_POST));
+        $this->payment_model->checkMyDp(json_encode($_POST));
 
     }
 
