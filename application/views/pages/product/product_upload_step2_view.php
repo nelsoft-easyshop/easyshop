@@ -439,7 +439,7 @@
           </td>
           <td>
             <div class="<?php echo 'h_if_'.$j;?> hdv">
-              &#8369; <input type="text" name="prod_other_price[]" autocomplete="off" id="price_field" placeholder="Enter additional price (0.00)">
+              &#8369; <input type="text" name="prod_other_price[]" class="price_text" autocomplete="off" id="price_field" placeholder="Enter additional price (0.00)">
             </div>
           </td>
           <td class="border-right">
@@ -1524,7 +1524,7 @@ $(".proceed_form").unbind("click").click(function(){
   var found = false;
   var quantity = $('.qtyTextClass');
   var combinationQuantity = $('.quantityText');
- 
+
 
   if(title.val().length == 0){
     $( "#prod_title" ).focus();
@@ -1568,10 +1568,20 @@ $(".proceed_form").unbind("click").click(function(){
     return false;
   }else{
 
-        if($('#price_field, #prod_price, .price_text').val() <= 0){
-        alert('Invalid Price. Price should be numeric or cannot be less than equal 0!');
-        return false;
-      }
+//         if ($(".price_text").length > 0){ 
+//    $('.price_text').each(function() {
+//   if($( this ).val().length != 0){
+//         if($( this ).val() <= 1){
+//           alert('Invalid Price. Price should be numeric or cannot be less than equal 0!');
+//            validateRedTextBox(this);
+//           return false;
+//         }
+//     }
+// });
+  
+//     }
+
+ 
 
    var pricevalue = price.val().replace(new RegExp(",", "g"), '');
      if(pricevalue <= 0 || !$.isNumeric(pricevalue)){
