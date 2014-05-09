@@ -637,21 +637,7 @@ class Payment extends MY_Controller{
     function dragonPayPostBack(){
 
 
-
-
-    }
- 
-
-    function dragonPayReturn(){
-     
-        if(!$this->session->userdata('dragonpayticket')){
-             redirect(base_url().'home/', 'refresh'); 
-             exit();
-        } 
-
-
-        $this->session->set_userdata('paymentticket', true);
-        
+  
         $paymentType = $this->PayMentDragonPay; 
         $apiResponseArray = array(); 
         
@@ -700,17 +686,17 @@ class Payment extends MY_Controller{
         $response['itemList'] = $itemList;
         $grandTotal= ($ItemTotalPrice+$handling_amt+$insurance_amt)-$shipping_discount_amt;
 
-        // $txnId = 121;
-        // $refNo = 1212;
-        // $status = 'P';
-        // $message = 'asda';
-        // $digest = 'add';
+        $txnId = 121;
+        $refNo = 1212;
+        $status = 'P';
+        $message = 'asda';
+        $digest = 'add';
 
-        $txnId = $this->input->get('txnid');
-        $refNo = $this->input->get('refno');
-        $status =  $this->input->get('status');
-        $message = $this->input->get('message');
-        $digest = $this->input->get('digest');
+        // $txnId = $this->input->get('txnid');
+        // $refNo = $this->input->get('refno');
+        // $status =  $this->input->get('status');
+        // $message = $this->input->get('message');
+        // $digest = $this->input->get('digest');
 
         $productstring = substr($productstring,4);
         $apiResponseArray['ProductData'] =  $carts['choosen_items'];
@@ -719,7 +705,9 @@ class Payment extends MY_Controller{
                 "refno" => $refNo,
                 "status" => $status,
                 "message" => $message,
-                "digest" => $digest
+                "digest" => $digest,
+                "POST" => $this->input->post(),
+                "GET" => $this->input->get()
             );
 
         $transactionID = urldecode($txnId).'-'.urldecode($refNo);
@@ -736,9 +724,9 @@ class Payment extends MY_Controller{
                 $response['message'] = '<div style="color:green">Your payment is completed through Dragon Pay.</div>
                 <div style="color:red">'.urldecode($message).'</div>';
                 $response = array_merge($response,$return);  
-                $this->removeItemFromCart(); 
+                // $this->removeItemFromCart(); 
                 $this->session->unset_userdata('choosen_items');
-                $this->sendNotification(array('member_id'=>$member_id, 'order_id'=>$return['v_order_id'], 'invoice_no'=>$return['invoice_no']));
+                // $this->sendNotification(array('member_id'=>$member_id, 'order_id'=>$return['v_order_id'], 'invoice_no'=>$return['invoice_no']));
             } 
 
         }else{
@@ -753,6 +741,20 @@ class Payment extends MY_Controller{
 
         $this->session->set_userdata('headerData', $data);
         $this->session->set_userdata('bodyData', $response);
+
+    }
+ 
+
+    function dragonPayReturn(){
+     
+        if(!$this->session->userdata('dragonpayticket')){
+             redirect(base_url().'home/', 'refresh'); 
+             exit();
+        } 
+
+
+        $this->session->set_userdata('paymentticket', true);
+      
 
         $this->session->unset_userdata('dragonpayticket');
         
