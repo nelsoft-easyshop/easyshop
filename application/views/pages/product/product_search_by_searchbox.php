@@ -29,7 +29,20 @@
 		</div>
 	</div>
 	<div class="right_product">
-		<p class="search_result"><!-- Showing 1 - 48 of 13,152 Results --></p>
+		<?php 
+			$rec = 0;
+			if(!empty($cntr)):
+			  $rec = $cntr;
+				if($rec > 0):
+					$s = "";
+					if($rec > 1){
+						$s = "s";
+					}
+		?>
+					<div class="adv_ctr"><strong style="font-size:14px"><?php echo number_format($rec);?></strong> result<?php echo $s;?></div>
+		<?php 	endif; 
+			endif;
+		?>
 		<?php
 			$typeOfViewActive = '<div id="list" class="list "></div><div id="grid" class="grid grid-active"></div>';
             if(isset($_COOKIE['view'])){
