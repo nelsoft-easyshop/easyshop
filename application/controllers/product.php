@@ -11,7 +11,7 @@ class product extends MY_Controller
 		$this->load->model("product_model");
 	}
 
-	public $per_page = 6;
+	public $per_page = 1;
 	public $start_irrelevant = 0;
 
 	function categorySearch($categoryId = 0,$url_string="string")
@@ -351,8 +351,9 @@ class product extends MY_Controller
 			$html = "";
 			$stringData =  $this->input->get('q');
 			// $stringData = preg_replace('/[^A-Za-z0-9\-]/', '', $stringData);
-			$string = ' '.ltrim($stringData); 
-			$words = "+".implode("*,+",explode(" ",trim($string)))."*"; 
+			$string = ltrim($stringData); 
+			// $words = "+".implode("*,+",explode(" ",trim($string)))."*"; 
+			$words = explode(" ",trim($string)); 
 			$keywords = $this->product_model->itemKeySearch($words);
  	
 			if(count($keywords) <= 0){
@@ -398,28 +399,31 @@ class product extends MY_Controller
 					$category_name = $category_details['name'];
 				}
 
-				$string = ' '.ltrim($_GET['q_str']); 
-				$ins = $this->product_model->insertSearch($_GET['q_str']);
-				$words = "+".implode("*,+",explode(" ",trim($string)))."*"; 
+				$string = ltrim($this->input->get('q_str')); 
+				$ins = $this->product_model->insertSearch($string);
+				// $words = "+".implode("*,+",explode(" ",trim($string)))."*";
+				$words = explode(" ",trim($string)); 
+
 				$checkifexistcategory = $this->product_model->checkifexistcategory($category);
 				if($checkifexistcategory == 0 || $category == 1)
 				{		 
-					$usable_string = " AND  MATCH(`name`,keywords) AGAINST('".$words."' IN BOOLEAN MODE)";
-					$response['items'] = $this->product_model->itemSearchNoCategory($usable_string,$start,$per_page);
+					// $usable_string = " AND  MATCH(`name`,keywords) AGAINST('".$words."' IN BOOLEAN MODE)";
+					$response['items'] = $this->product_model->itemSearchNoCategory($words,$start,$per_page);
 
 	 
 
 				}else{
-					$usable_string = " AND  MATCH(a.name,keywords) AGAINST('".$words."' IN BOOLEAN MODE)";
+					// $usable_string = " AND  MATCH(a.name,keywords) AGAINST('".$words."' IN BOOLEAN MODE)";
 					$down_cat = $this->product_model->selectChild($category);
 					array_push($down_cat, $category);
 					$catlist_down = implode(",", $down_cat);
-					$response['items'] = $this->product_model->getProductInCategoryAndUnder($category,$usable_string,$catlist_down,$start,$per_page,$string_sort);
+					$response['items'] = $this->product_model->getProductInCategoryAndUnder($words,$catlist_down,$start,$per_page);
 				}
 
 
 				// start here
 				$firstdownlevel = $this->product_model->getDownLevelNode($category);
+
 				$newbuiltarray = array();
 				$cnt = 0;
 				$item_total_cnt = 0;
@@ -428,11 +432,12 @@ class product extends MY_Controller
 					$count_main = 0;
 					$noitem = false; 
 					$newcat = $value['id_cat']; 
-					$usable_string = " AND  MATCH(a.name,keywords) AGAINST('".$words."' IN BOOLEAN MODE)";
+					// $usable_string = " AND  MATCH(a.name,keywords) AGAINST('".$words."' IN BOOLEAN MODE)";
 					$down_cat = $this->product_model->selectChild($newcat);
 					array_push($down_cat,$value['id_cat']);
 					$catlist_down = implode(",", $down_cat);
-					$count_main_new = count($this->product_model->getProductInCategoryAndUnder($category,$usable_string,$catlist_down,0,9999999999,$string_sort));
+					$count_main_new = count($this->product_model->getProductInCategoryAndUnder($words,$catlist_down,0,9999999999));
+			 
 					$count_main += $count_main_new;
 					$item_total_cnt += $count_main;
 					$cnt = $keyfirstlevel;
@@ -442,11 +447,11 @@ class product extends MY_Controller
 					foreach ($secondlevel as $key){
 						$count = 0;
 						$newcat = $key['id_cat']; 
-						$usable_string = " AND  MATCH(a.name,keywords) AGAINST('".$words."' IN BOOLEAN MODE)";
+						// $usable_string = " AND  MATCH(a.name,keywords) AGAINST('".$words."' IN BOOLEAN MODE)";
 						$down_cat = $this->product_model->selectChild($newcat);
 						array_push($down_cat,$newcat);
 						$catlist_down = implode(",", $down_cat); 
-						$count_new = count($this->product_model->getProductInCategoryAndUnder($newcat,$usable_string,$catlist_down,0,9999999999,$string_sort));	
+						$count_new = count($this->product_model->getProductInCategoryAndUnder($words,$catlist_down,0,9999999999));	
 						$count += $count_new;
 						if(!$count <= 0)
 						{
@@ -457,7 +462,7 @@ class product extends MY_Controller
 				}
 
 				$newbuiltarray = array("name"=>$category_name,"children" => $newbuiltarray);
-				// echo '<pre>',print_r($newbuiltarray);exit();
+			 
 				$list = $this->toUL($newbuiltarray['children']);
 
 				if($category_name == "PARENT" || $category == 1){
@@ -465,6 +470,7 @@ class product extends MY_Controller
 				}else{	
 					$response['category_cnt'] = '<h3>Categories</h3><ul><li>'.$category_name.'</li><li>'.$list.'</li></ul>';
 				}
+
 
 				// end here
 
@@ -518,20 +524,21 @@ class product extends MY_Controller
 
 		$string = ' '.ltrim($_POST['parameters']['q_str']);
 		$category = $_POST['parameters']['q_cat'];
-		$words = "+".implode("*,+",explode(" ",trim($string)))."*"; 
+		// $words = "+".implode("*,+",explode(" ",trim($string)))."*";
+		$words = explode(" ",trim($string));  
 		$checkifexistcategory = $this->product_model->checkifexistcategory($category);
 
 		
 		if($checkifexistcategory == 0 || $category == 1)
 		{
-			$usable_string = " AND  MATCH(`name`,keywords) AGAINST('".$words."' IN BOOLEAN MODE)";
-			$response['items'] = $this->product_model->itemSearchNoCategory($usable_string,$start,$per_page);	
+			// $usable_string = " AND  MATCH(`name`,keywords) AGAINST('".$words."' IN BOOLEAN MODE)";
+			$response['items'] = $this->product_model->itemSearchNoCategory($words,$start,$per_page);	
 		}else{
-			$usable_string = " AND  MATCH(a.name,keywords) AGAINST('".$words."' IN BOOLEAN MODE)";
+			// $usable_string = " AND  MATCH(a.name,keywords) AGAINST('".$words."' IN BOOLEAN MODE)";
 			$down_cat = $this->product_model->selectChild($category);
 			array_push($down_cat, $category);
 			$catlist_down = implode(",", $down_cat);
-			$response['items'] = $this->product_model->getProductInCategoryAndUnder($category,$usable_string,$catlist_down,$start,$per_page,$string_sort);
+			$response['items'] = $this->product_model->getProductInCategoryAndUnder($words,$catlist_down,$start,$per_page);
 
 		}
 

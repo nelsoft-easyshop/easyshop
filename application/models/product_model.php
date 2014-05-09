@@ -687,15 +687,21 @@ class product_model extends CI_Model
         return $row;
 	}	
 
-	function getProductInCategoryAndUnder($category,$usable_string,$items,$start,$per_page,$string_sort)
+	function getProductInCategoryAndUnder($words,$items,$start,$per_page)
 	{
 		$start = (int)$start;
 	 	$per_page = (int)$per_page;
 		 
+	 		$concatQuery = "";
+ 		foreach ($words as $key => $value) {
+ 			$concatQuery .= " AND  ( a.`name` LIKE :like".$key." OR `keywords` LIKE :like".$key." )";
+ 		}
+  
+
 		$query = "
 		SELECT 
 		  a.`id_product` AS product_id
-		  , a.`slug` as product_slug
+		  , a.`slug` AS product_slug
 		  , a.`name` AS product_name
 		  , a.`price` AS product_price
 		  , a.`brief` AS product_brief
@@ -712,18 +718,25 @@ class product_model extends CI_Model
 		   AND a.`is_draft` = 0
 		  AND b.`is_primary` = 1 
 		  AND a.`brand_id` = c.`id_brand`
-		  ".$usable_string." 
+		  ".$concatQuery." 
 		  AND a.`cat_id` IN (".$items.") 
-		   ". $string_sort ."   
+		  
 		  LIMIT :start, :per_page
 		";   
 
 		$sth = $this->db->conn_id->prepare($query);
+
+
+		foreach ($words as $key => $value) {
+			$newValue = '%'.$value.'%';
+ 			$sth->bindParam(':like'.$key,$newValue,PDO::PARAM_STR);
+ 		}
+
 		$sth->bindParam(':start',$start,PDO::PARAM_INT); 
 		$sth->bindParam(':per_page',$per_page,PDO::PARAM_INT);
 		$sth->execute();
 		$row = $sth->fetchAll(PDO::FETCH_ASSOC);
-
+	 
 		return $row;
 	}
 
@@ -912,8 +925,11 @@ class product_model extends CI_Model
 	{
 		$start = (int)$start;
 	 	$per_page = (int)$per_page;
- 
-
+ 		$concatQuery = "";
+ 		foreach ($words as $key => $value) {
+ 			$concatQuery .= " AND  ( `name` LIKE :like".$key." OR `keywords` LIKE :like".$key." )";
+ 		}
+  
 		$query = "
 		 SELECT 
       main_tbl.*
@@ -931,20 +947,26 @@ class product_model extends CI_Model
         FROM
           `es_product` 
         WHERE is_delete = 0 AND `is_draft` = 0
-          ".$words."
+          ".$concatQuery."
           ) AS main_tbl 
         ON main_tbl.product_id = es_product_image.`product_id` 
     WHERE `es_product_image`.`is_primary` = 1 
       AND main_tbl.product_id = es_product_image.`product_id` 
     LIMIT :start, :per_page 
     ";  
-    		$sth = $this->db->conn_id->prepare($query);
-		 
+ 	 
+		$sth = $this->db->conn_id->prepare($query);
+		
+		foreach ($words as $key => $value) {
+			$newValue = '%'.$value.'%';
+ 			$sth->bindParam(':like'.$key,$newValue,PDO::PARAM_STR);
+ 		}
+   
 		$sth->bindParam(':start',$start,PDO::PARAM_INT);
 		$sth->bindParam(':per_page',$per_page,PDO::PARAM_INT);
 		$sth->execute();
 		$row = $sth->fetchAll(PDO::FETCH_ASSOC);
-
+		 
 		return $row;
 	}
 
@@ -963,15 +985,33 @@ class product_model extends CI_Model
 
 	function itemKeySearch($words, $fulltext = true)
 	{
-        if($fulltext){
-            $query = $this->sqlmap->getFilenameID('product','itemKeySearch');
-        }else{
-            $query = $this->sqlmap->getFilenameID('product','itemKeySearch_like');
+        // if($fulltext){
+        //     $query = $this->sqlmap->getFilenameID('product','itemKeySearch');
+        // }else{
+        //     $query = $this->sqlmap->getFilenameID('product','itemKeySearch_like');
+        // }
+ 
+		 
+		$totalKeywords = count($words);
+
+        $query = "
+           SELECT DISTINCT(`keywords`) FROM `es_keywords` WHERE  `keywords` LIKE ?
+           ";
+       
+       for($i=1 ; $i < $totalKeywords; $i++){
+        	$query .= " AND  keywords LIKE ?";
         }
+
+     
 		$sth = $this->db->conn_id->prepare($query);
 
+		foreach($words as $key => $keyword){
+			$keyword = '%'.$keyword.'%';
+			$key = $key+1;
+			$sth->bindParam($key, $keyword , PDO::PARAM_STR);
+		}
         
-		$sth->bindParam(':words',$words, PDO::PARAM_STR);
+		// $sth->bindParam(':words',$words);
 		$sth->execute();
 		$row = $sth->fetchAll(PDO::FETCH_COLUMN, 0);
 		return $row;
