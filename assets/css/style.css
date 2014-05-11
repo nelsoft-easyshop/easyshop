@@ -2475,9 +2475,6 @@ padding: 8px 0;
     display: inline-block;
 }
 
-.maploc_stat {
-	color: #f00;
-}
 
 #delivery_address .view_map_btn,
 #delivery_address .map_nav,
@@ -4565,6 +4562,7 @@ span.transac_title_date {
 }
 
 .view_map_btn input {
+    /*
 	cursor: pointer;
 	background-color: #838383;
 	border:none;
@@ -4572,6 +4570,20 @@ span.transac_title_date {
     border-radius: 3px;
     -webkit-border-radius: 3px;
     -moz-border-radius: 3px;
+    */
+    
+    color:white;
+    background: #838383;
+    -webkit-box-shadow: 0 1px 5px rgba(0,0,0,0.1);
+    -moz-box-shadow: 0 1px 5px rgba(0,0,0,0.1);
+    box-shadow: 0 1px 5px rgba(0,0,0,0.1);
+    padding: 7px 7px 7px 7px;
+    color: white;
+    text-transform: uppercase;
+    border-radius: 3px;
+    -webkit-border-radius: 3px;
+    font-size: 11px;
+    font-weight: bold;
 }
 
 .view_map_btn input:hover {

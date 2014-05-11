@@ -291,13 +291,34 @@
 	ORDER BY o.id_order desc, op.product_id asc
 </select>
 
-
-
 <!--	LANDING PAGE SUBSCRIPTION	-->
 <select id="subscribe">
 	INSERT INTO `es_subscribe` (`email`)
 	VALUES (:email)
 	ON DUPLICATE KEY UPDATE email = :email
+</select>
+
+<select id='getDefaultBillingAccnt'>
+    SELECT ebi.`is_default` FROM `es_billing_info` ebi 
+    WHERE ebi.`member_id`=:member_id AND ebi.`is_delete` = 0 
+</select>
+
+<select id='addBillingAccnt'>
+    INSERT INTO `es_billing_info` (`is_default`,`member_id`,`payment_type`,`user_account`,`bank_id`,`bank_account_name`,`bank_account_number`,`dateadded`)
+	VALUES (:is_default,:member_id,:payment_type,:user_account,:bank_id,:bank_account_name,:bank_account_number,NOW());
+</select>
+
+<select id='updateBillingAccnt'>
+    UPDATE `es_billing_info` SET `bank_id`=:bank_id,`bank_account_name`=:bank_account_name,`bank_account_number`=:bank_account_number, `datemodified` = NOW()
+	WHERE `member_id`=:member_id AND `id_billing_info` = :ibi
+</select>
+
+<select id='clearDefaultBillingAccnt'>
+    UPDATE `es_billing_info` SET `is_default`=0, `datemodified` = NOW() WHERE `member_id`=:member_id 
+</select>
+
+<select id='setDefaultBillingAccnt'>
+    UPDATE `es_billing_info` SET `is_default` = 1, `datemodified` = NOW() WHERE `member_id`=:member_id AND `id_billing_info`=:ibi
 </select>
 
 </map>

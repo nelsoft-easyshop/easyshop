@@ -8,14 +8,8 @@ class cart_model extends CI_Model
 	{
 		parent::__construct();
 		$this->load->library("sqlmap");
-		$this->load->library('cart');
 	}	
 
-    function cart_size(){
-        $carts=$this->cart->contents();
-        $cart_size =sizeof($carts);
-        return $cart_size;
-    }
     
 	function checkProductAttributes($id,$attr,$attr_value) # getting the product attirbute using product ID,attr,attr value
 	{
@@ -28,9 +22,10 @@ class cart_model extends CI_Model
             $sth->execute();
             $rows = $sth->fetchAll(PDO::FETCH_ASSOC);	
             $data = array();
-            if(empty($rows)):
+            if(empty($rows)){
                 $data['result'] = false;
-            else:
+            }
+            else{
                 foreach($rows as $row){
 					$index = $row['name'];
 					if(!array_key_exists($index, $data))
@@ -39,7 +34,7 @@ class cart_model extends CI_Model
 					$data['result'] = true;
 					$data['attr_id'] = $row['id_optional_attrdetail'];
                 }
-            endif;
+            }
             return $data;
 	}
         
@@ -55,10 +50,18 @@ class cart_model extends CI_Model
     }
     
     function save_cartitems($data,$id){
-        $this->db->query("UPDATE `es_member` SET `userdata` = '$data' WHERE `id_member` = $id;");
+        $query = $this->sqlmap->getFilenameID('cart', 'save_cart_data');
+        $sth = $this->db->conn_id->prepare($query);
+        $sth->bindParam(':id',$id); 
+        $sth->bindParam(':data',$data);
+        $sth->execute();
     }
     
-	public function getSpecificProductQuantity($product_id,$product_attr_id,$length){ //hnd pa na optimize ung query
+    
+    /*  This function is no longer used.
+     *  Marked for removal. 5/10/2014
+     */
+	public function getSpecificProductQuantity($product_id,$product_attr_id,$length){ 
 	    $query = "
 		SELECT a.id_product_item, a.quantity, COALESCE(b.product_attr_id,0) AS product_attr_id,cnt.count,
 		COALESCE(b.is_other,0) AS is_other  FROM es_product_item a
@@ -83,14 +86,14 @@ class cart_model extends CI_Model
 	    $data = array();
 	    $ctr = 0;
 	    foreach($rows as $row){
-		if(!array_key_exists($ctr,  $data)){
-		    $data[$ctr] = array();
-		    $data[$ctr]['quantity'] = $row['quantity'];
-		    $data[$ctr]['id_product_item'] = $row['id_product_item'];
-		    $data[$ctr]['product_attribute_ids'] = array();
-		    $data[$ctr]['attr_lookuplist_item_id'] = array();
-		}
-		array_push($data[$ctr]['product_attribute_ids'], array('id'=>$row['product_attr_id'], 'is_other'=> $row['is_other']));
+            if(!array_key_exists($ctr,  $data)){
+                $data[$ctr] = array();
+                $data[$ctr]['quantity'] = $row['quantity'];
+                $data[$ctr]['id_product_item'] = $row['id_product_item'];
+                $data[$ctr]['product_attribute_ids'] = array();
+                $data[$ctr]['attr_lookuplist_item_id'] = array();
+            }
+            array_push($data[$ctr]['product_attribute_ids'], array('id'=>$row['product_attr_id'], 'is_other'=> $row['is_other']));
 	    }
 	    
 	    return $data;

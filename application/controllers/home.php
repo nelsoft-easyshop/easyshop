@@ -7,16 +7,12 @@ class Home extends MY_Controller {
 
     function __construct() {
         parent::__construct();
-		$this->load->model('register_model');
-		$this->load->library('cart');
-        $this->load->library('home_xml');
     }
-    
     
     public function index() {
 		$data = array('title' => 'Home | Easyshop.ph',
                 'page_javascript' => 'assets/JavaScript/home.js',
-                'data' => $this->home_xml->getFilenameID('home_files'),
+                'data' => $this->getHomeXML('page/home_files'),
                 'category_navigation' => $this->load->view('templates/category_navigation',array('cat_items' =>  $this->getcat(),), TRUE ),
 				);
         $data = array_merge($data, $this->fill_header());
@@ -35,6 +31,7 @@ class Home extends MY_Controller {
 	
 	public function underConstructionSubscribe()
 	{
+        $this->load->model('register_model');
 		if( $this->input->post('uc_subscribe') && $this->form_validation->run('subscription_form')){
 			$data['email'] = $this->input->post('subscribe_email');
 			$this->register_model->subscribe($data['email']);
@@ -46,14 +43,6 @@ class Home extends MY_Controller {
 		}
 	}
 	
-	
-	#(Hnd pa na iimpliment)function to get the Parent in the es_cat, 
-	public function getfirstlevel() {
-        $row = $this->home_model->get_firstlevel();
-        echo json_encode($row);
-    }
-
-
 	public function pagenotfound(){
 		$data = array('title' => 'Page Not Found | Easyshop.ph',);
 				$data = array_merge($data, $this->fill_header());
@@ -65,6 +54,32 @@ class Home extends MY_Controller {
 	public function comingSoon(){
         $this->load->view('pages/coming_soon');
 	}
+    
+    private function getHomeXML($file){
+        $this->load->model('product_model');
+        $xml = simplexml_load_file(APPPATH . "resources/" . $file . ".xml");
+       
+        $simple = json_decode(json_encode($xml), 1);
+        $data = array();
+        foreach ($simple as $key => $product){
+            if (is_array($product) && $key != "mainSlide"){
+                foreach ($product as $id => $key2){
+                    $result = $this->product_model->getProductById($key2);
+                    if (!empty($result)){
+                        $data[$key][$id] = $result;
+                    }
+                    else{
+                        $data[$key][$id] = "empty";
+                    }
+                }
+            }
+            else{
+                $data[$key] = $product;
+            }
+       }
+       $data['category1_pid_main'] = array($this->product_model->getProductById($data['category1_pid_main']));
+       return $data;
+    }
     
 	
 

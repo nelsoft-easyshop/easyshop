@@ -5,36 +5,17 @@ if (!defined('BASEPATH'))
 
 class Ios extends MY_Controller {
 
+    public $per_page;
+
     function __construct() {
         parent::__construct();
-
-        $this->load->library('home_xml');
 		$this->load->helper('htmlpurifier');
 		$this->load->model('product_model');
-    }
-
-
-
-    public function url(){
-
-        $ipAddress = base_url();
-        echo 'LIST OF URL';
-        echo '<br><br>';
-        echo 'LOGIN: <a  style="font-weight:bold;color:maroon" href="http://'. $ipAddress.'/ios/authenticate?uname=&upwd=">http://'. $ipAddress.'/ios/authenticate?uname=&upwd=</a>';
-        echo '<br><br>'; 
-        echo 'HOME: <a  style="font-weight:bold;color:maroon" href="http://'. $ipAddress.'/ios/home">http://'. $ipAddress.'/ios/home</a>';
-        echo '<br><br>'; 
-        echo 'PRODUCT PAGE: <a  style="font-weight:bold;color:maroon" href="http://'. $ipAddress.'/ios/getProduct?p_id=">http://'. $ipAddress.'/ios/getProduct?p_id=</a>';
-        echo '<br><br>';
-        echo 'PRODUCT PAGE: <a  style="font-weight:bold;color:maroon" href="http://'. $ipAddress.'/ios/getMainCategories">http://'. $ipAddress.'/ios/getMainCategories</a>';
-        echo '<br><br>';
-        echo 'http://www.google.fr/url?sa=t&rct=j&q=&esrc=s&source=web&cd=1&cad=rja&ved=0CB4QFjAA&url=http%3A%2F%2Fallseeing-i.com%2FASIHTTPRequest%2F&ei=-dFZULfKO7SU0QW-1YGoAw&usg=AFQjCNFpUZprrMAY9mTk0aGzEzwSG8L9sg';
-      
-
+        $this->per_page = 20;
     }
 
     public function home(){
-        $items =  $this->home_xml->getFilenameID('home_files');
+        $items =  $this->getHomeXML('page/home_files');
         echo json_encode($items,JSON_PRETTY_PRINT);
     }
 
@@ -73,7 +54,8 @@ class Ios extends MY_Controller {
         $id = $this->input->get('p_id');   
         $width = $this->input->get('width');   
 		$uid = $this->session->userdata('member_id');
-        $product_row = $this->product_model->getProduct($id);  
+        $slug = $this->product_model->getSlug($id);
+        $product_row = $this->product_model->getProductBySlug($slug);  
         
         $doc = new DOMDocument();
         //@ = error message suppressor, just to be safe
@@ -103,18 +85,12 @@ class Ios extends MY_Controller {
 		}
         echo json_encode($data,JSON_PRETTY_PRINT); 
     }
-	
-	//function searchbycategory($categoryId = 0,$url_string="string") # ROUTING: category/(:num)/(:any)
-	public $per_page = 20;
+    
+
 	public function searchbycategory()
 	{
 		$categoryId = $this->input->get('id_cat');
 	
-        //  Increase user preference for category
-        $this->load->library("MemberCategoryPreferenceUtility");
-        $memberCategoryPreferenceUtility = new MemberCategoryPreferenceUtility();
-        $memberCategoryPreferenceUtility->upPreference($this->session->userdata('member_id'), $categoryId);
-        
 		$string_sort_a = "";
 		$string_sort_c = "";
 		$item_brand_string_1 ="";
@@ -571,8 +547,7 @@ class Ios extends MY_Controller {
 				}
 				$i++;
 			}
-			//$sellerid = $this->product_model->getProduct($id)['sellerid']; eto yung dati
-			$sellerid = $this->product_model->getProduct($id);
+			$sellerid = $this->product_model->getProductById($id)['sellerid']; 
 		}
 
 		$data = array(
@@ -606,25 +581,24 @@ class Ios extends MY_Controller {
     
     function sch_onpress()
 	{  
-
-		header('Content-Type: text/plain'); 	 
+        header('Content-Type: text/plain'); 	 
 		if($this->input->get('q')){
-
 			$html = "";
 			$stringData =  $this->input->get('q');
-			$stringData = preg_replace('/[^A-Za-z0-9\-]/', '', $stringData);
-			$keywords = json_encode($this->product_model->itemKeySearch($stringData, false), JSON_PRETTY_PRINT);
-            
-            echo $keywords;
+			$string = ltrim($stringData); 
+			$words = explode(" ",trim($string)); 
+			$keywords = $this->product_model->itemKeySearch($words);
+            echo json_encode($keywords, JSON_PRETTY_PRINT);
+
 		}
 
 	}
     
 	function displaycategory()
 	{
-		 
-	echo json_encode($this->product_model->getFirstLevelNode(), JSON_PRETTY_PRINT);exit();
+        echo json_encode($this->product_model->getFirstLevelNode(), JSON_PRETTY_PRINT);exit();
 	}
+    
 
 	function search()
 	{   
@@ -658,9 +632,43 @@ class Ios extends MY_Controller {
 		}
 
 		echo json_encode($response['items']);
-		exit();
-
 	}
+
+        
+    function version(){
+        $xml = simplexml_load_file(APPPATH . "resources/page/ios_files.xml");
+        $simple = json_decode(json_encode($xml), 1);
+        echo $simple['version'];
+    }
+    
+    private function getHomeXML($file){
+         $this->load->model('product_model');
+        $xml = simplexml_load_file(APPPATH . "resources/" . $file . ".xml");
+       
+        $simple = json_decode(json_encode($xml), 1);
+        $data = array();
+        foreach ($simple as $key => $product){
+            if (is_array($product) && $key != "mainSlide"){
+                foreach ($product as $id => $key2){
+                    $result = $this->product_model->getProductById($key2);
+                    if (!empty($result)){
+                        $data[$key][$id] = $result;
+                    }
+                    else{
+                        $data[$key][$id] = "empty";
+                    }
+                }
+            }
+            else{
+                $data[$key] = $product;
+            }
+       }
+       $data['category1_pid_main'] = array($this->product_model->getProductById($data['category1_pid_main']));
+       return $data;
+    }
+    
+
+
 	
 }
 

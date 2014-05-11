@@ -538,9 +538,24 @@ div.sell_steps4 ul li:nth-child(4) a {
     width:200px;
 }
 
-.removeOptionValue {
+.remove_option_long {
     color:#f00;
+    float:left;
+    margin-top:15px;
 }
+
+.remove_option_short {
+    font-weight:bold; 
+    font-size:16px; 
+    color:#F18200; 
+    margin-left:1px;
+    cursor: pointer;
+    display:inline !important;
+    float: right;
+    margin-right: 10px;
+    margin-top: -35px;
+}
+
 
 .step4_2 input[name="prod_other_img[]"],
 .step4_2 input[type="file"] {
@@ -738,14 +753,42 @@ div.sell_steps4 ul li:nth-child(4) a {
 }
 
 .option_image_input {
-    width: 180px;
-    vertical-align: middle;
+    float:left;
+    margin-top: 7px;
 }
 
+.option_image_container {
+    display: inline !important; 
+
+}
+
+.option_image_td{
+    width: 302px;
+}
+
+.add_more_link_value{
+    color: #0191C8;
+}
+
+.option_image_span {
+    display: table-cell; 
+    vertical-align: middle; 
+    height: 50px; 
+    width: 50px; 
+    background-color:white; 
+    border:1px solid #B3B3B3;
+}
+
+
 .option_image {
-    height: 60px;
-    width: 60px;
-    vertical-align: middle;
+    display:block;
+    margin: 0 auto;
+
+    height: auto;
+    width: auto;
+    max-height: 50px;
+    max-width: 50px; 
+
 }
 
 .inputfiles {
@@ -1484,17 +1527,23 @@ tr.tr_shipping_summary:nth-child(even) td {
     text-align: center;
 }
 
-#div_locationwarning,
-#spanerror {
+#div_locationwarning {
     border: 1px solid green;
     margin: 5px auto;
     padding: 8px;
     width: 440px;
+    border-radius: 3px;
+    -webkit-border-radius: 3px;
+}
+
+#spanerror{
+    font-weight: bold;
+    margin-left: 10px;
 }
 
 .set_price_error1 {
     display: inline-block;
-    height: 45px !important;
+    height: 30px !important;
     width: 463px;
 }
 
@@ -1508,3 +1557,4 @@ li.brand_result:hover{
     color: #F18200;
     cursor: pointer;
 }
+

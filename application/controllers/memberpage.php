@@ -588,7 +588,7 @@ class Memberpage extends MY_Controller
 	}
 
 	function billing_info(){
-###		if(($this->input->post('bi_acct_no')) && ($this->form_validation->run('billing_info'))){
+        # if(($this->input->post('bi_acct_no')) && ($this->form_validation->run('billing_info'))){
 	
 		if($this->input->post('bi_acct_no')){
 

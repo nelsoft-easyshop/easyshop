@@ -6,8 +6,8 @@ class product_model extends CI_Model
 {
 	function __construct() 
 	{
-		parent::__construct();
-		$this->load->library("sqlmap");
+		parent::__construct();  
+        $this->load->library("sqlmap");
 	}	
 
 	# the queries directory -- application/resources/sql/product.xml
@@ -155,21 +155,19 @@ class product_model extends CI_Model
 		return $row;
 	}
 
-	function getProduct($id) 
+	function getSlug($id) 
 	{
-		$query = $this->sqlmap->getFilenameID('product', 'getProduct');
+		$query = $this->sqlmap->getFilenameID('product', 'getSlugByID');
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':id',$id);
 		$sth->execute();
 		$row = $sth->fetch(PDO::FETCH_ASSOC);
-        if(intval($row['o_success']) !== 0){
-            if(strlen(trim($row['userpic']))===0)
-                 $row['userpic'] = 'assets/user/default';
-            if(intval($row['brand_id'],10) === 1)
-                $row['brand_name'] = ($row['custombrand']!=='')?$row['custombrand']:'Custom brand';
-        }  
-		return $row;
+		return $row['slug'];
 	}
+    
+    /*  DO NOT USE THIS FUNCTION FOR ANYTHING OTHER THAN DISPLAYING THE PRODUCT PAGE.
+     *  THIS INCREMENTS THE PRODUCT CLICK COUNT. USE getProductByID FOR ANYTHING ELSE.
+     */
     
     function getProductBySlug($slug) 
 	{
@@ -557,17 +555,19 @@ class product_model extends CI_Model
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':product_id',$product_id,PDO::PARAM_INT);
 		$sth->bindParam(':qty',$qty,PDO::PARAM_INT);	
-        
-		if(!$sth->execute()){
-            $errorInfo = json_encode($sth->errorInfo());
-			log_message('error', 'Textare PDO::ADDNEWCOMBINATION => '.$errorInfo);
-			log_message('error', 'Textare PDO::QUERY => '.$query);
-			log_message('error', 'Textare PDO::VARIABLE(product_id) => '.$product_id);
-			log_message('error', 'Textare PDO::VARIABLE(qty) => '.$qty);
-        }
+		$sth->execute();
 		return $this->db->conn_id->lastInsertId('id_product_item');
 	}
-
+    
+    function updateCombination($product_id,$qty)
+	{
+		$query = $this->sqlmap->getFilenameID('product','updateCombination');
+		$sth = $this->db->conn_id->prepare($query);
+		$sth->bindParam(':product_id',$product_id,PDO::PARAM_INT);
+		$sth->bindParam(':qty',$qty,PDO::PARAM_INT);	
+        $sth->execute();
+	}
+    
 	function selectProductAttribute($attribute_id,$product_id)
 	{
 		$query = $this->sqlmap->getFilenameID('product','selectProductAttribute');
@@ -691,7 +691,8 @@ class product_model extends CI_Model
 		$start = (int)$start;
 	 	$per_page = (int)$per_page;
 		 
-	 		$concatQuery = "";
+	 	$concatQuery = "";
+        
  		foreach ($words as $key => $value) {
  			$concatQuery .= " AND  ( a.`name` LIKE :like".$key." OR `keywords` LIKE :like".$key." )";
  		}
@@ -900,19 +901,20 @@ class product_model extends CI_Model
 
 	function getFirstLevelNode($is_main = false, $is_alpha = false) # get all main/parent/first level category from database
 	{
+        $query = $this->sqlmap->getFilenameID('product', 'selectFirstLevel');
         if(($is_main)&&(!$is_alpha)){
-            $query = $this->sqlmap->getFilenameID('product', 'selectFirstLevelIsMain');
+            $query = $query.' AND c.is_main = 1 ORDER BY c.sort_order ASC, c.id_cat ASC';
         }
         else if((!$is_main)&&(!$is_alpha)){
-            $query = $this->sqlmap->getFilenameID('product', 'selectFirstLevel');
+            $query = $query.' ORDER BY c.sort_order ASC,c.id_cat ASC';
         }
         else if(($is_main)&&($is_alpha)){
-            $query = $this->sqlmap->getFilenameID('product', 'selectFirstLevelIsMainAlpha');
+            $query = $query.' AND c.is_main = 1 ORDER BY c.name ASC,c.id_cat ASC';
         }
         else if((!$is_main)&&($is_alpha)){
-            $query = $this->sqlmap->getFilenameID('product', 'selectFirstLevelAlpha');
+            $query = $query.' ORDER BY c.name ASC,c.id_cat ASC';
         }
-		
+
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->execute();
 		$row = $sth->fetchAll(PDO::FETCH_ASSOC); 
@@ -969,39 +971,18 @@ class product_model extends CI_Model
 		return $row;
 	}
 
-	function getCatItemsWithImage($cat_id)
-	{	
-
-		$query = $this->sqlmap->getFilenameID('product','getCatItemsWithImage');
-
-		$sth = $this->db->conn_id->prepare($query);
-		$sth->bindParam(':cat_id',$cat_id);
-		$sth->execute();
-		$row = $sth->fetchAll(PDO::FETCH_ASSOC);
-		return $row;
-
-	}
-
-	function itemKeySearch($words, $fulltext = true)
-	{
-        // if($fulltext){
-        //     $query = $this->sqlmap->getFilenameID('product','itemKeySearch');
-        // }else{
-        //     $query = $this->sqlmap->getFilenameID('product','itemKeySearch_like');
-        // }
- 
-		 
+	function itemKeySearch($words)
+	{		 
 		$totalKeywords = count($words);
 
         $query = "
            SELECT DISTINCT(`keywords`) FROM `es_keywords` WHERE  `keywords` LIKE ?
            ";
        
-       for($i=1 ; $i < $totalKeywords; $i++){
+        for($i=1 ; $i < $totalKeywords; $i++){
         	$query .= " AND  keywords LIKE ?";
         }
 
-     
 		$sth = $this->db->conn_id->prepare($query);
 
 		foreach($words as $key => $keyword){
@@ -1133,15 +1114,18 @@ class product_model extends CI_Model
 		return array_values($rows);
 	}
 	
-    function getProduct_withImage($id){
-		$query = $this->sqlmap->getFilenameID('product','getProduct_withImage');
+    function getProductById($id){
+		$query = $this->sqlmap->getFilenameID('product','getProductById');
 
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':id',$id);
 		$sth->execute();
-		$rows = $sth->fetchAll(PDO::FETCH_ASSOC);
+		$rows = $sth->fetch(PDO::FETCH_ASSOC);
    
-        $this->explodeImagePath($rows);
+        $temp = array($rows);
+        $this->explodeImagePath($temp);
+        $rows = $temp[0];
+        
 		return $rows;
 	}
 		
@@ -1422,8 +1406,8 @@ class product_model extends CI_Model
 
     }
     
-    public function getCatFast(){
-        $query = $this->sqlmap->getFilenameID('product','getCatFast');
+    public function getCategoriesNavigation(){
+        $query = $this->sqlmap->getFilenameID('product','getCategoriesNavigation');
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->execute();
         $rows = $sth->fetchAll(PDO::FETCH_ASSOC);

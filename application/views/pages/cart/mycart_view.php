@@ -146,7 +146,7 @@
                         type:"POST",
                         data:{itm:data1, csrfname:csrftoken},
                         success:function(data){
-			    window.location.replace("<?=base_url()?>payment/review");
+                            window.location.replace("<?=base_url()?>payment/review");
                         }
                     });
             }

@@ -16,70 +16,12 @@
     </select>
 	
     <select id="selectFirstLevel">
-        SELECT
-        name,
-        description,
-        keywords,
-        id_cat,
-        sort_order,
-        parent_id,
-        is_main
-
-        FROM es_cat
-        WHERE parent_id = 1
-        AND id_cat != 1
-        ORDER BY sort_order ASC
+        SELECT c.name,c.description,c.keywords,c.id_cat, c.sort_order,c.parent_id,c.is_main, i.path
+        FROM es_cat c
+        LEFT JOIN es_cat_img i ON c.id_cat = i.id_cat
+        WHERE c.parent_id = 1 AND c.id_cat != 1
     </select>
-    
-    <select id="selectFirstLevelIsMain">
-        SELECT
-        name,
-        description,
-        keywords,
-        id_cat,
-        sort_order,
-        parent_id,
-        is_main
-
-        FROM es_cat
-        WHERE parent_id = 1
-        AND id_cat != 1
-        AND is_main = 1
-        ORDER BY sort_order ASC
-    </select>
-
-    <select id="selectFirstLevelAlpha">
-        SELECT
-        name,
-        description,
-        keywords,
-        id_cat,
-        sort_order,
-        parent_id,
-        is_main
-
-        FROM es_cat
-        WHERE parent_id = 1
-        AND id_cat != 1
-        ORDER BY name ASC
-    </select>
-    
-    <select id="selectFirstLevelIsMainAlpha">
-        SELECT
-        name,
-        description,
-        keywords,
-        id_cat,
-        sort_order,
-        parent_id,
-        is_main
-
-        FROM es_cat
-        WHERE parent_id = 1
-        AND id_cat != 1
-        AND is_main = 1
-        ORDER BY name ASC
-    </select>
+ 
 
     <select id="selectDownLevel">
         SELECT
@@ -568,19 +510,14 @@ FROM
          ORDER BY p.lastmodifieddate DESC 
     </select>
 	
-    <select id="getCatItemsWithImage">
-        SELECT A.id_cat,A.NAME,A.parent_id,B.path 
-        FROM es_cat AS A,es_cat_img AS B
-        WHERE A.id_cat = B.id_cat AND A.parent_id = :cat_id AND A.id_cat != 1 AND is_main = 1;
-    </select>
-    
-    <select id="getProduct_withImage">
-        SELECT `name` AS `product`, `slug` AS slug, `id_product`,`cat_id`, `product_image_path`, `price`
+    <select id="getProductById">
+        SELECT a.`name` AS `product`, a.`slug` AS slug, a.`id_product`,`cat_id`, b.`product_image_path`, a.`price`, a.`member_id` as sellerid
         FROM `es_product` a
         LEFT JOIN `es_product_image` b ON b.`product_id` = a.`id_product` AND b.is_primary = '1'
-        WHERE `id_product` = :id;
+        WHERE `id_product` = :id
     </select>
-    
+
+
     <select id="getPopularitem">
 		SELECT `name` AS `product`, `slug` AS `slug`, `id_product`,`cat_id`,`clickcount`, `product_image_path` ,`price`
         FROM `es_product` a
@@ -766,6 +703,10 @@ FROM
         , :qty);
     </select>
 
+    <select id="updateCombination">
+        UPDATE es_product_item SET quantity = :qty WHERE product_id = :product_id;
+    </select>
+    
     <select id="selectProductAttribute">
 
         SELECT 
@@ -838,17 +779,8 @@ FROM
         ) AS new_table WHERE NAME = :name
 </select>
 
-
-
- 
- 
-
 <select id="itemKeySearch">
         SELECT DISTINCT(`keywords`) FROM `es_keywords` WHERE  MATCH(`keywords`) AGAINST (:words IN BOOLEAN MODE)
-</select>
-
-<select id="itemKeySearch_like">
-    SELECT DISTINCT(`keywords`) FROM `es_keywords` WHERE  `keywords` LIKE CONCAT(CONCAT('%',:words),'%')
 </select>
 
 <select id="fullDeleteItem">
@@ -961,7 +893,7 @@ FROM
     WHERE a.product_id = :product_id
 </select>
 
-<select id = 'getCatFast'>
+<select id = 'getCategoriesNavigation'>
     SELECT COALESCE(a.name,'') as level1_name,COALESCE(a.id_cat,'') as level1_id,
     COALESCE(b.name,'') as level2_name,COALESCE(b.id_cat,'') as level2_id,
     COALESCE(c.name,'') as level3_name,COALESCE(c.id_cat,'') as level3_id,
@@ -1088,5 +1020,8 @@ FROM
     WHERE ebi.`member_id` = :member_id ORDER BY ebi.is_default
 </select>
 
+<select id='getSlugByID'>
+    SELECT slug FROM es_product WHERE id_product = :id;
+</select>
 
 </map>

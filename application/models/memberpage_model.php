@@ -650,36 +650,14 @@ class memberpage_model extends CI_Model
 		return $data;
 	}
 	
-	function get_bank($bank, $toggle){
-		if($toggle == 'name'){
-            $query = "SELECT `id_bank` AS 'id', `bank_name` AS 'name' FROM `es_bank_info` WHERE `bank_name` LIKE CONCAT(CONCAT('%',:bank),'%')";
-            $sth = $this->db->conn_id->prepare($query);
-            $sth->bindParam(':bank', $bank, PDO::PARAM_STR);	
-        }else{
-			$query = "SELECT `id_bank` AS 'id', `bank_name` AS 'name' FROM `es_bank_info`";
-            $sth = $this->db->conn_id->prepare($query);
-        }
-		$sth->execute();
-		$row = $sth->fetchAll(PDO::FETCH_ASSOC);
-		return $row;							
-	}
-	
-	function billing_info($data){
-		
-		$query = "SELECT ebi.`is_default` FROM `es_billing_info` ebi 
-		WHERE ebi.`member_id`=:member_id AND ebi.`is_delete` = 0 ";		
+	function billing_info($data){	
+        $query = $this->sqlmap->getFilenameID('users','getDefaultBillingAccnt');
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':member_id',$data['member_id']);
 		$sth->execute();
+        $is_default = ($sth->rowCount() == 0)?'1':'0';
 
-		if($sth->rowCount() == 0){
-			$query = "	INSERT INTO `es_billing_info` (`is_default`,`member_id`,`payment_type`,`user_account`,`bank_id`,`bank_account_name`,`bank_account_number`,`dateadded`)
-			VALUES ('1',:member_id,:payment_type,:user_account,:bank_id,:bank_account_name,:bank_account_number,NOW());";
-		}else{
-			$query = "	INSERT INTO `es_billing_info` (`member_id`,`payment_type`,`user_account`,`bank_id`,`bank_account_name`,`bank_account_number`,`dateadded`)
-			VALUES (:member_id,:payment_type,:user_account,:bank_id,:bank_account_name,:bank_account_number,NOW());";			
-		}
-
+        $query = $this->sqlmap->getFilenameID('users','addBillingAccnt');
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':member_id', $data['member_id']);
 		$sth->bindParam(':payment_type', $data['payment_type']);
@@ -687,6 +665,8 @@ class memberpage_model extends CI_Model
 		$sth->bindParam(':bank_id', $data['bank_id']);
 		$sth->bindParam(':bank_account_name', $data['bank_account_name']);
 		$sth->bindParam(':bank_account_number', $data['bank_account_number']);
+        $sth->bindParam(':is_default', $is_default);
+
 		$sth->execute();
 		
 		$id =  $this->db->conn_id->lastInsertId('id_billing_info');
@@ -695,8 +675,7 @@ class memberpage_model extends CI_Model
 	}
 	
 	function billing_info_update($data){
-		$query = "UPDATE `es_billing_info` SET `bank_id`=:bank_id,`bank_account_name`=:bank_account_name,`bank_account_number`=:bank_account_number, `datemodified` = NOW()
-				WHERE `member_id`=:member_id AND `id_billing_info` = :ibi";
+		$query = $this->sqlmap->getFilenameID('users','updateBillingAccnt');
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':member_id', $data['member_id']);		
 		$sth->bindParam(':bank_id', $data['bank_id']);
@@ -708,13 +687,12 @@ class memberpage_model extends CI_Model
 	
 	function billing_info_default($data){
 		
-		$query = "UPDATE `es_billing_info` SET `is_default`=0, `datemodified` = NOW()
-				WHERE `member_id`=:member_id ";
+		$query = $this->sqlmap->getFilenameID('users','clearDefaultBillingAccnt');
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':member_id', $data['member_id']);		
 		$sth->execute();		
 
-		$query = "UPDATE `es_billing_info` SET `is_default` = 1, `datemodified` = NOW() WHERE `member_id`=:member_id AND `id_billing_info`=:ibi";
+		$query = $this->sqlmap->getFilenameID('users','setDefaultBillingAccnt');
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':member_id', $data['member_id']);		
 		$sth->bindParam(':ibi', $data['ibi']);
@@ -782,7 +760,39 @@ class memberpage_model extends CI_Model
 	
 		return $rows;	
 	}		
-	
+    
+       
+    function getBillingInfo($data){
+		$query = $this->sqlmap->getFilenameID('product','getBillinginfo');
+		$sth = $this->db->conn_id->prepare($query);
+		$sth->bindParam(':member_id',$data);
+		$sth->execute();
+		$rows= $sth->fetchAll(PDO::FETCH_ASSOC);
+		return $rows;	
+	}
+        
+    function getAllBanks(){
+		$query = "SELECT * FROM es_bank_info";
+		$sth = $this->db->conn_id->prepare($query);
+		$sth->execute();
+		$rows= $sth->fetchAll(PDO::FETCH_ASSOC);
+		return $rows;	
+	}
+
+    function get_bank($bank, $toggle){
+		if($toggle == 'name'){
+            $query = "SELECT `id_bank` AS 'id', `bank_name` AS 'name' FROM `es_bank_info` WHERE `bank_name` LIKE CONCAT(CONCAT('%',:bank),'%')";
+            $sth = $this->db->conn_id->prepare($query);
+            $sth->bindParam(':bank', $bank, PDO::PARAM_STR);	
+        }else{
+			$query = "SELECT `id_bank` AS 'id', `bank_name` AS 'name' FROM `es_bank_info`";
+            $sth = $this->db->conn_id->prepare($query);
+        }
+		$sth->execute();
+		$row = $sth->fetchAll(PDO::FETCH_ASSOC);
+		return $row;							
+	}
+    
 }
 
 /* End of file memberpage_model.php */

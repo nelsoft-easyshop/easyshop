@@ -4,16 +4,17 @@ if (!defined('BASEPATH'))
 	exit('No direct script access allowed');
 
     class messages extends MY_Controller {
+    
 	public $user_ID = null;
-	function __construct(){
+	
+    function __construct(){
 	    parent::__construct();
 		$this->load->helper('htmlpurifier');
 	    $this->load->library('session');
-	    $this->load->library('cart');
 	    $this->load->model('messages_model');
-	    $this->load->model('user_model');
 		$this->user_ID = $this->session->userdata('member_id');
 	}
+    
     public function index() {
 		$result = $this->messages_model->get_all_messages($this->user_ID);
 		$title = ($result['unread_msgs'] == 0 ? 'Message | Easyshop.ph' :'Message ('.$result['unread_msgs'].') | Easyshop.ph' );

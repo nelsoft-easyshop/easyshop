@@ -14,7 +14,7 @@ class Cart extends MY_Controller{
     }
     
     function check_product($id,$opt){
-        $base = $this->product_model->getProduct($id);
+        $base = $this->product_model->getProductById($id);
         $base_price = $base['price'];
         $real_price = $base_price;
         $product_attr_id = "0";

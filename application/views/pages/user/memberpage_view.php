@@ -26,7 +26,7 @@
 								<li><a href="javascript:void(0)" onclick="triggerTab('dashboard');">Dashboard</a></li>
 								<!-- <li><a href="javascript:void(0)" onclick="triggerTab('wishlist');">Wishlist</a></li> -->
 								<li><a href="javascript:void(0)" onclick="triggerTab('personal_information');">Personal Information</a></li>
-								<li><a href="javascript:void(0)" onclick="triggerTab('payment');">Payment</a></li>
+								<li><a href="javascript:void(0)" onclick="triggerTab('payment');">Payment Accounts</a></li>
 								<li><a href="javascript:void(0)" onclick="triggerTab('delivery_address');">Delivery Address</a></li>
 								<li><a href="javascript:void(0)" onclick="triggerTab('transactions');">On-going Transactions</a></li>
 								<li><a href="javascript:void(0)" onclick="triggerTab('complete_transactions');">Completed Transactions</a></li>
@@ -81,7 +81,7 @@
 					<li><a href="#dashboard">Dashboard</a></li>
 					<li><a href="#personal_information" class="<?php echo ($tab=='myinfo')?'selected':'';?>">Personal Information</a></li>
 					<li><a href="#delivery_address">Delivery Address</a></li>
-					<li><a href="#payment" class="<?php echo ($tab=='pmnt')?'selected':'';?>">Payment Information</a></li>
+					<li><a href="#payment" class="<?php echo ($tab=='pmnt')?'selected':'';?>">Payment Accounts</a></li>
 					<li><a href="#transactions">On-going Transactions</a></li>
 					<li><a href="#complete_transactions">Completed Transactions</a></li>
                     <!-- <li><a href="#privacy_settings">Privacy Settings</a></li> -->
@@ -739,16 +739,17 @@
 				<div id="cont_emaildiv" class="errordiv" style="display:none;">
 					<span></span>
 				</div>
-				
+                
 				<div class="save_con">
 					<input type="submit" name="personal_profile_main" value="Save" id="ppm_btn"/>
 					<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" id="load_personalinfo" style="display:none"/>
 				</div>
+
 				<input type="hidden" class="progress_update_hidden" value="">
 			</div>
 			<?php echo form_close();?>
-			
-			<div>
+
+            <div>
 				<!--<form method="post" id="personal_profile_address" name="personal_profile_address" class="dropdownform">-->
 				<?php
 				$attr = array('id'=>'personal_profile_address','name'=>'personal_profile_address', 'class'=>'dropdownform');
@@ -827,11 +828,11 @@
 						</div>
 						
 						<div class="view_map_btn">
-							<input type="button" class="view_map" value="Mark on map" name="personal">
+							<input type="button" class="view_map" value="Mark on map" name="personal">&nbsp;| 
 							<?php if($lat == 0 && $lng == 0):?>
-								<span class="maploc_stat" style='color:#f18200; font-weight:bold;'>Location not marked</span>
+								<span class="maploc_stat">Location not marked</span>
 							<?php else:?>
-								<span class="maploc_stat" style='color:#287520; font-weight:bold;'>Location marked</span>
+								<span class="maploc_stat">Location marked</span>
 							<?php endif;?>
 							<input type="hidden" name="map_lat" id="map_lat" value="<?php echo $lat;?>">
 							<input type="hidden" name="map_lng" id="map_lng" value="<?php echo $lng;?>">
@@ -1261,11 +1262,11 @@
 			
 			
 			<div class="view_map_btn">
-				<input type="button" class="view_map" value="Mark on Map" name="delivery">
+				<input type="button" class="view_map" value="Mark on Map" name="delivery">&nbsp;|
 				<?php if($c_lat == 0 && $c_lng == 0):?>
-					<span class="maploc_stat" style='color:#f18200; font-weight:bold;'>Location not marked</span>
+					<span class="maploc_stat">Location not marked</span>
 				<?php else:?>
-					<span class="maploc_stat" style='color:#287520; font-weight:bold;'>Location marked</span>
+					<span class="maploc_stat">Location marked</span>
 				<?php endif;?>
 				<input type="hidden" name="map_lat" id="map_clat" value="<?php echo $c_lat;?>">
 				<input type="hidden" name="map_lng" id="map_clng" value="<?php echo $c_lng;?>">
@@ -1282,6 +1283,10 @@
 			
 			<div id="delivery_mapcanvas" class="map-canvas" ></div>
 			
+            <div style='margin-left: 113px;'>
+                <span class='uptd'>Information Updated</span>
+            </div>
+            
 			<br>
 			<div style="padding-left:100px">
 				<label></label>

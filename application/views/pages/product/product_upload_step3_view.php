@@ -116,7 +116,7 @@
                               </select>
                             </td>
                             <td>
-                              Php <input type="text" name="shipprice1" class="shipprice">
+                              PHP <input type="text" name="shipprice1" class="shipprice">
                             </td>
                         </tr>
                         <tr>
@@ -131,7 +131,7 @@
                         <tr>
                           <td class="border-right set_price_error1" height="45px">
                             <p style="display:none; color:red;" id="spanerror">
-                               Location already used for selected attribute.
+                               This location is already in use for the combination that you have selected.
                             </p>
                             
                           </td>
@@ -208,7 +208,7 @@
                    <?php if($shipping_summary['has_shippingsummary']):?>
                       <?php foreach($attr["attributes"] as $attk=>$temp): ?>
                       <tr class="tr_shipping_summary" data-group="<?php echo $datagroupcounter;?>">
-                          <td class="prod_att_pad" valign="top">
+                          <td class="prod_att_pad">
                             <?php if($attr['has_attr'] == 1):?>
                               <?php foreach($temp as $att):?>
                                 <p><?php echo $att;?></p>
@@ -222,9 +222,9 @@
                                   <tbody>
                                     <?php foreach($shipping_summary[$attk] as $lockey=>$price):?>
                                         <tr data-idlocation="<?php echo $lockey?>" data-groupkey="<?php echo $datagroupcounter?>">
-                                            <td width="85px"><?php echo $shipping_summary['location'][$lockey]?></td>
-                                            <td width="55px" data-value="<?php echo number_format((float)$price,2,'.',',');?>"><?php echo number_format((float)$price,2,'.',',');?></td>
-                                            <td width="100px" class="tablehide">
+                                            <td width="90px"><?php echo $shipping_summary['location'][$lockey]?></td>
+                                            <td width="75px" data-value="<?php echo number_format((float)$price,2,'.',',');?>"><?php echo number_format((float)$price,2,'.',',');?></td>
+                                            <td class="tablehide">
                                               <span class="button delete_priceloc">
                                               <img src="<?php echo base_url();?>assets/images/icon_delete.png"> Delete
                                               </span>

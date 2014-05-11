@@ -12,7 +12,6 @@ class productUpload extends MY_Controller
 		parent::__construct(); 
 		$this->load->model("product_model");
         $this->load->helper('htmlpurifier');
-		$this->load->library('cart');
 		if(!$this->session->userdata('usersession') && !$this->check_cookie())
 			redirect(base_url().'login', 'refresh');
         $this->max_file_size_mb = 5;
@@ -308,7 +307,7 @@ class productUpload extends MY_Controller
 				$x++;
 			}
 			$x = 0; 
-
+            
 			if(!empty($_FILES['prod_other_img']['name'][0])){
                 foreach($_FILES['prod_other_img']['name'] as $k) { # validating image format.
                     $filename = $_FILES['prod_other_img']['name'][$x];
@@ -356,12 +355,12 @@ class productUpload extends MY_Controller
 			# name format: product_id + member_id + date_uploaded
 			foreach($_FILES['files']['name'] as $k => $v) {
 				$file_ext = explode('.', $v);
-				$file_ext = end($file_ext);
+				$file_ext = strtolower(end($file_ext));
 				$filenames_ar[$k] = "{$product_id}_{$member_id}_{$fulldate}{$i}.{$file_ext}";
 				$file_type[$k] = $_FILES['files']['type'][$i];
 				$i++;
 			}
-
+            
 			#image directory
 			$path_directory = './assets/product/'.$product_id.'_'.$member_id.'_'.$date.'/';
 			$other_path_directory = $path_directory.'other/';
@@ -386,7 +385,7 @@ class productUpload extends MY_Controller
 				"max_size" => $this->max_file_size_mb * 1024,
 				"xss_clean" => FALSE
 				)); 	
-
+                
 			if($product_id > 0) # id_product is 0 means no item inserted. the process will stop.
 			{
 				if ($this->upload->do_multi_upload("files")){
@@ -459,8 +458,10 @@ class productUpload extends MY_Controller
 
                     # start of saving other/custom attribute
 
-                    $newarray = array();
 
+                    $newarray = array();
+                    $option_image_idx = 0;
+                    
                     for ($i=0; $i < sizeof($_POST['prod_other_name']); $i++) { 
                         $newarray[trim(ucfirst(strtolower($_POST['prod_other_name'][$i])))] = array();
                     }
@@ -476,12 +477,15 @@ class productUpload extends MY_Controller
                         }
 
                         if(isset($_FILES['prod_other_img'])){
-                            if(!empty($_FILES['prod_other_img']['name'][$i])){
-                                $other_image_type = $_FILES['prod_other_img']['type'][$i];
-                                $file_ext = explode('.', $_FILES['prod_other_img']['name'][$i]);
-                                $file_ext = end($file_ext);
-                                $other_image = "{$product_id}_{$member_id}_{$fulldate}{$i}_o.{$file_ext}";
-                                $other_tmp = $_FILES["prod_other_img"]["tmp_name"][$i];
+                            if(intval($_POST['prod_other_img_idx'][$i],10) === 1){
+                                if(!empty($_FILES['prod_other_img']['name'][$option_image_idx])){
+                                    $other_image_type = $_FILES['prod_other_img']['type'][$option_image_idx];
+                                    $file_ext = explode('.', $_FILES['prod_other_img']['name'][$option_image_idx]);
+                                    $file_ext = strtolower(end($file_ext));
+                                    $other_image = "{$product_id}_{$member_id}_{$fulldate}{$i}_o.{$file_ext}";
+                                    $other_tmp = $_FILES["prod_other_img"]["tmp_name"][$option_image_idx];
+                                }
+                                $option_image_idx++;
                             }
                         }
 
@@ -493,7 +497,7 @@ class productUpload extends MY_Controller
                     $filenames_ar = array();					
                     $path = $other_path_directory;
                     $is_primary = 0;
-
+                    
                     foreach ($newarray as $key => $valuex) {
 
                         if(trim($key) == "" || strlen(trim($key)) <= 0 ){
@@ -526,7 +530,8 @@ class productUpload extends MY_Controller
 
                         }
                     }
-
+                    
+            
                     # end of other
 
 
@@ -1010,7 +1015,7 @@ class productUpload extends MY_Controller
 				# name format: product_id + member_id + date_uploaded
 				foreach($_FILES['files']['name'] as $k => $v) {
 					$file_ext = explode('.', $v);
-					$filenames_ar[$k] = "{$product_id}_{$member_id}_{$fulldate}{$i}.{$file_ext[1]}";
+					$filenames_ar[$k] = $product_id.'_'.$member_id.'_'.$fulldate.$i.'.'.strtolower($file_ext[1]);
 					$file_type[$k] = $_FILES['files']['type'][$i];
 					$i++;
 				}
@@ -1038,6 +1043,10 @@ class productUpload extends MY_Controller
 			#image directory
 			
 			if($main_image_cnt === 0){
+                /* 
+                 *  THIS SHOULD NEVER HAPPEN. IF IT DID, AN ERROR SAYING THE UPLOAD PATH IS INVALID WILL PROMPT THE USER
+                 *  REASON FOR THIS HAPPENING: no image exists in es_product_image at the time of the edit
+                 */
 				$path_directory = './assets/product/'.$product_id.'_'.$member_id.'_'.$date.'/';
 			}
 			else{
@@ -1083,11 +1092,26 @@ class productUpload extends MY_Controller
             
 			if($rowCount>0){
             
-                # DELETE FROM es_shipping_detail, es_shipping_head, es_product_item_attr, es_product_item
-                # MOVED BEFORE DELETE PRODUCT ATTRIBUTE FK CONSTRAINT
-                $this->product_model->deleteShippingInfomation($product_id);
-                $this->product_model->deleteProductQuantityCombination($product_id);
+                # CHECK IF CURRENT COMBINATION AND PREVIOUS COMBINATION ARE FOR DEFAULT QUANTITY
+                # ADDED TO SUPPORT RETAINING SHIPMENT DETAILS FOR NON-COMPLEX COMBINATIONS DURING EDITS
+                $retain_shipment = false;
+                if($checkIfCombination == 'true' || $checkIfCombination == 1){
+                    $itemcombinations = $this->product_model->getProductQuantity($product_id);
+                    if(count($itemcombinations) === 1){
+                        $combination = reset($itemcombinations);
+                        if((count($combination['product_attribute_ids']) === 1)&& (intval($combination['product_attribute_ids'][0]['id'],10) === 0) &&(intval($combination['product_attribute_ids'][0]['is_other'],10) === 0)){
+                            $retain_shipment = true;
+                        }           
+                    }
+                }
                 
+                if(!$retain_shipment){
+                    # DELETE FROM es_shipping_detail, es_shipping_head, es_product_item_attr, es_product_item
+                    # MOVED BEFORE DELETE PRODUCT ATTRIBUTE DUE TO FK CONSTRAINT
+                    $this->product_model->deleteShippingInfomation($product_id);
+                    $this->product_model->deleteProductQuantityCombination($product_id); 
+                }
+
 				foreach($explode_inputs as $input){
 					$explode_id = explode('/', $input);
 					$explode_value = $explode_id[0];
@@ -1124,11 +1148,15 @@ class productUpload extends MY_Controller
 				}
 				
 				$newarray = array();
+                $option_image_idx = 0;
+
 				$prod_other = $this->input->post('prod_other');
 				$prod_other_name = $this->input->post('prod_other_name');
 				$prod_other_id = $this->input->post('prod_other_id');
 				$prod_other_price = $this->input->post('prod_other_price');
-				
+                $prod_other_img_idx = $this->input->post('prod_other_img_idx');
+
+             
 				for ($i=0; $i < sizeof($prod_other_name); $i++) { 
 					if(!array_key_exists($prod_other_name[$i],$newarray)){
 						$newarray[$prod_other_name[$i]] = array();
@@ -1147,13 +1175,17 @@ class productUpload extends MY_Controller
 					}
                     
                     if(isset($_FILES['prod_other_img'])){
-                        if(!empty($_FILES['prod_other_img']['name'][$i])){
-                            $other_image_type = $_FILES['prod_other_img']['type'][$i];
-                            $file_ext = explode('.', $_FILES['prod_other_img']['name'][$i]);
-                            $other_image = "{$product_id}_{$member_id}_{$fulldate}{$i}_o.{$file_ext[1]}";
-                            $other_tmp = $_FILES["prod_other_img"]["tmp_name"][$i];
+                        if(intval($prod_other_img_idx[$i],10) === 1){
+                            if(!empty($_FILES['prod_other_img']['name'][$option_image_idx])){
+                                $other_image_type = $_FILES['prod_other_img']['type'][$option_image_idx];
+                                $file_ext = explode('.', $_FILES['prod_other_img']['name'][$option_image_idx]);
+                                $other_image = $product_id.'_'.$member_id.'_'.$fulldate.$i.'_o.'.strtolower($file_ext[1]);
+                                $other_tmp = $_FILES["prod_other_img"]["tmp_name"][$option_image_idx];
+                            }
+                            $option_image_idx++;
                         }
                     }
+
                     
 					if(isset($prod_other_id[$i])){
 						$other_id = $prod_other_id[$i];
@@ -1166,7 +1198,7 @@ class productUpload extends MY_Controller
 					array_push($newarray[$prod_other_name[$i]], $other_name .'|'.$other_price.'|'.$other_image.'|'.$other_image_type.'|'.$other_tmp.'|'.$other_id);
 				}
 
-
+                
 				$attr_opt_head = array();
 				$attr_opt_det_idx = array();
 				
@@ -1181,7 +1213,6 @@ class productUpload extends MY_Controller
 						}
 					}	
 				}
-
 
 				foreach($attr_opt_head as $head_id){
 					$this->product_model->deleteAttrOthers($head_id);
@@ -1280,47 +1311,59 @@ class productUpload extends MY_Controller
                 }
                 
                 # start of saving combination qty
-                if($checkIfCombination == 'true' || $checkIfCombination == 1){
+                
+                if($retain_shipment){
+                    #Special combination update for retaining shipment detail
                     $quantitySolo = 1;
                     if($this->input->post('quantitySolo')){
                         $quantitySolo = $this->input->post('quantitySolo');
                     }
-                    $idProductItem = $this->product_model->addNewCombination($product_id,$quantitySolo);
-                }else{
-                    foreach ($combination as $keyCombination) {
-                        $quantitycombination = 1;
-                        if(!$quantitycombination <= 0){
-                            $quantitycombination = $keyCombination->quantity;
+                    $this->product_model->updateCombination($product_id,$quantitySolo);
+                }
+                else{
+                    #Regular combination insert
+                    if($checkIfCombination == 'true' || $checkIfCombination == 1){
+                        $quantitySolo = 1;
+                        if($this->input->post('quantitySolo')){
+                            $quantitySolo = $this->input->post('quantitySolo');
                         }
-                        $idProductItem = $this->product_model->addNewCombination($product_id,$quantitycombination);
-                        if(strpos($keyCombination->value, '-') !== false) {
-							$explodeCombination = explode("-",  $keyCombination->value);
-							foreach ($explodeCombination as $value) {
+                        $idProductItem = $this->product_model->addNewCombination($product_id,$quantitySolo);
+                    }else{
+                        foreach ($combination as $keyCombination) {
+                            $quantitycombination = 1;
+                            if(!$quantitycombination <= 0){
+                                $quantitycombination = $keyCombination->quantity;
+                            }
+                            $idProductItem = $this->product_model->addNewCombination($product_id,$quantitycombination);
+                            if(strpos($keyCombination->value, '-') !== false) {
+                                $explodeCombination = explode("-",  $keyCombination->value);
+                                foreach ($explodeCombination as $value) {
 
-								$explodeOther = explode(":",  $value);
-								$otherAttrIdentifier = $explodeOther[0];
-								$otherAttrValue = $explodeOther[1];
-								if($otherAttrIdentifier == 1){
-									$productAttributeId = $this->product_model->selectProductAttributeOther($otherAttrValue,$product_id);
-								}else{
-									$productAttributeId = $this->product_model->selectProductAttribute($otherAttrValue,$product_id);
-								}
+                                    $explodeOther = explode(":",  $value);
+                                    $otherAttrIdentifier = $explodeOther[0];
+                                    $otherAttrValue = $explodeOther[1];
+                                    if($otherAttrIdentifier == 1){
+                                        $productAttributeId = $this->product_model->selectProductAttributeOther($otherAttrValue,$product_id);
+                                    }else{
+                                        $productAttributeId = $this->product_model->selectProductAttribute($otherAttrValue,$product_id);
+                                    }
 
-								$this->product_model->addNewCombinationAttribute($idProductItem,$productAttributeId,$otherAttrIdentifier);
-							}
-						}else{
-							$explodeOther = explode(":",  $keyCombination->value);
-							$otherAttrIdentifier = $explodeOther[0];
-							$otherAttrValue = $explodeOther[1];
-							if($otherAttrIdentifier == 1){
-								$productAttributeId = $this->product_model->selectProductAttributeOther($otherAttrValue,$product_id);
-							}else{
-								$productAttributeId = $this->product_model->selectProductAttribute($otherAttrValue,$product_id);
-							}
-							$this->product_model->addNewCombinationAttribute($idProductItem,$productAttributeId,$otherAttrIdentifier);
-						}
-                    }
-                } 
+                                    $this->product_model->addNewCombinationAttribute($idProductItem,$productAttributeId,$otherAttrIdentifier);
+                                }
+                            }else{
+                                $explodeOther = explode(":",  $keyCombination->value);
+                                $otherAttrIdentifier = $explodeOther[0];
+                                $otherAttrValue = $explodeOther[1];
+                                if($otherAttrIdentifier == 1){
+                                    $productAttributeId = $this->product_model->selectProductAttributeOther($otherAttrValue,$product_id);
+                                }else{
+                                    $productAttributeId = $this->product_model->selectProductAttribute($otherAttrValue,$product_id);
+                                }
+                                $this->product_model->addNewCombinationAttribute($idProductItem,$productAttributeId,$otherAttrIdentifier);
+                            }
+                        }
+                    } 
+                }
                 #end combination qty
 
 				$data = '{"e":"1","d":"'.$product_id.'"}';
@@ -1445,11 +1488,15 @@ class productUpload extends MY_Controller
 		}
 		
 		$this->image_lib->initialize($config); 
-		$this->image_lib->resize();	
+		$this->image_lib->resize();
         $this->image_lib->clear();
     }
 
-    
+    function sam(){
+       
+        echo ($old_solo_combination)?'true':'false';
+        
+    }
 }
 
 

@@ -1,7 +1,7 @@
 <?xml version='1.0' ?>
 <map>  
     <select id="checkProductAttributes">
-           SELECT h.field_name AS `name`, d.value_name AS attr_value, d.value_price AS attr_price,d.id_optional_attrdetail, COALESCE(i.product_image_path,'') AS image_path 
+       SELECT h.field_name AS `name`, d.value_name AS attr_value, d.value_price AS attr_price,d.id_optional_attrdetail, COALESCE(i.product_image_path,'') AS image_path 
         FROM es_optional_attrhead h 
         LEFT JOIN es_optional_attrdetail d ON h.id_optional_attrhead = d.head_id
         LEFT JOIN es_product_image i ON d.product_img_id = i.id_product_image
@@ -14,9 +14,12 @@
     </select>
     
     <select id="get_cart_data">
-        SELECT userdata
-        FROM `es_member` 
-        WHERE `id_member` = :id
+        SELECT userdata FROM `es_member`  WHERE `id_member` = :id
     </select>
+    
+    <select id='save_cart_data'>
+        UPDATE `es_member` SET `userdata` = :data WHERE `id_member` = :id;
+    </select>
+
     
 </map>

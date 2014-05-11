@@ -363,98 +363,121 @@
             </td>
           </tr>
 
-          <?php 
-          $j = 1;
-          if(!isset($product_attributes_opt))
-            $product_attributes_opt = array();  
+          
+            <!-- BEGIN ADDING PREVIOUS OPTIONAL ATTRIBUTES (EDIT FEATURE) -->
+            <?php 
+            $j = 1;
+            if(!isset($product_attributes_opt)){
+                $product_attributes_opt = array();
+            }            
 
-          foreach($product_attributes_opt as $key=>$opt_attr): ?>
+            foreach($product_attributes_opt as $key=>$opt_attr): ?>
 
-          <tr id="<?php echo ($j === 1)?'':'main'.$j; ?>">
-            <td class="border-left"> <?php echo ($j===1)?'Others: (Optional)':''; ?></td>  
-            <td class="border-right" colspan="3">
-              <input type="text" name="prod_other_name[]" data-cnt="<?php echo $j; ?>" class="prod_<?php echo $j;?> other_name_class" autocomplete="off" placeholder="Enter name" value="<?php echo str_replace("'", '', $key);?>"> 
-            </td>
-          </tr>
+            <tr class='main<?php echo $j; ?>' >
+                <td class="border-left"> <?php echo ($j===1)?'Others: (Optional)':''; ?></td>  
+                <td class="border-right option_image_td" colspan="3">
+                    <input type="text" name="prod_other_name[]" data-cnt="<?php echo $j; ?>" class="prod_<?php echo $j;?> other_name_class" autocomplete="off" placeholder="Enter name" value="<?php echo str_replace("'", '', $key);?>"> 
+                    <?php if($j === 1): ?>
+                    <a href="javascript:void(0)" class="lnkClearFirst">Clear This Group</a>
+                    <?php else: ?>
+                    <a class="removeOptionGroup" data-cnt="<?php echo $j?>" href="javascript:void(0)">Remove This Group</a>
+                    <?php endif; ?>
+                </td>
+            </tr>
 
-          <?php $k = 0;
-          foreach($opt_attr as $prod_attr): ?>
-          <tr>
-            <td>&nbsp;</td>
-            <?php if($k > 0):?>
-            <td style="display:none">
-              <span>
-                <input type="text" value ="<?php echo str_replace("'", '',$key);?>" data-cnt="<?php echo $j;?>" class="prod_<?php echo $j;?>" name="prod_other_name[]">
-              </span>
-            </td>
-            <?php endif; ?>
-            <td>
-              <input type="text"  class="other_name_value otherNameValue<?php echo $j?>" data-cnt="<?php echo $j;?>" name="prod_other[]" autocomplete="off" data-otherid="<?php echo $prod_attr['value_id'];?>" placeholder="Enter description" value="<?php echo $prod_attr['value']?>">
-            </td>
-            <td style="display:none">
-              <input type="text" name="prod_other_id[]" value="<?php echo $prod_attr['value_id']; ?>">
-            </td>
+            <?php $k = 0;
+            foreach($opt_attr as $prod_attr): ?>
+            <tr class='main<?php echo $j; ?> main<?php echo $j; ?>_2nd<?php echo ($k===0)?'':'_add';?>'>
+                <td class='border-left'>&nbsp;</td>
+                <?php if($k > 0):?>
+                <td style="display:none">
+                    <span>
+                        <input type="text" value ="<?php echo str_replace("'", '',$key);?>" data-cnt="<?php echo $j;?>" class="prod_<?php echo $j;?>" name="prod_other_name[]">
+                    </span>
+                </td>
+                <?php endif; ?>
+                
+                <td>
+                    <input type="text"  class="other_name_value otherNameValue<?php echo $j?>" data-cnt="<?php echo $j;?>" name="prod_other[]" autocomplete="off" data-otherid="<?php echo $prod_attr['value_id'];?>" placeholder="Enter description" value="<?php echo $prod_attr['value']?>">
+                </td>
+                
+                <td style="display:none">
+                    <input type="text" name="prod_other_id[]" value="<?php echo $prod_attr['value_id']; ?>">
+                </td>
+                
+                <td>
+                    <div class="" style="display:block">
+                        &#8369; <input type="text" name="prod_other_price[]" autocomplete="off" id="price_field" placeholder="Enter additional price (0.00)" value="<?php echo $prod_attr['price'];?>">
+                    </div>
+                </td>
 
-            <td>
-              <div class="" style="display:block">
-                &#8369; <input type="text" name="prod_other_price[]" autocomplete="off" id="price_field" placeholder="Enter additional price (0.00)" value="<?php echo $prod_attr['price'];?>">
-              </div>
-            </td>
+                <td class="border-right option_image_td">
+                    <div>
+                        <input class="option_image_input" type="file" name="prod_other_img[]" accept="image/*">
+                        <input type="hidden" name="prod_other_img_idx[]">                       
+                       <?php if((trim($prod_attr['img_path'])!=='')&&(trim($prod_attr['img_file'])!=='')):?>
+                        <span class='option_image_container'> 
+                            <span class='option_image_span'>
+                                <img src="<?php echo base_url().$prod_attr['img_path'].'thumbnail/'.$prod_attr['img_file']; ?>" class="option_image">
+                            </span>
+                        </span>
+                        <div class='clear'></div>
+                        <span class='removeOptionValue remove_option_short' data-cnt="<?php echo $j;?>">x</span>
+                        <?php else: ?>
+                        <a href="javascript:void(0)" class="removeOptionValue remove_option_long " data-cnt="<?php echo $j;?>">Remove</a>
+                        <?php endif;?>
+                    </div>
+                </td>
+            </tr>
+            <?php $k++; endforeach; ?>
 
-            <td>
-              <div>
-                <input class="option_image_input" type="file" name="prod_other_img[]">
-                  <?php if((trim($prod_attr['img_path'])!=='')&&(trim($prod_attr['img_file'])!=='')):?>
-                  <img src="<?php echo base_url().$prod_attr['img_path'].'thumbnail/'.$prod_attr['img_file']; ?>" class="option_image">
-                <?php endif;?>
-              </div>
-            </td>
-          </tr>
-        <?php $k++; endforeach; ?>
-
-        <tr id="<?php echo 'main1';?>">
-          <td class="border-left"></td>
-          <td class="border-right" colspan="3">
-            <a class="add_more_link_value" data-value="<?php echo $j;?>" href="javascript:void(0)">+Add more value</a>
-          </td>
-        </tr>     
-        <?php $j++; endforeach;?>
-
+            <tr id="main<?php echo $j;?>" class='<?php echo ($j===0)?'':'main'.$j.'_link'?>'  >
+                <td class="border-left"></td>
+                <td class="border-right" colspan="3">
+                    <a class="add_more_link_value" data-value="<?php echo $j;?>" href="javascript:void(0)">+Add more value</a>
+                </td>
+            </tr>     
+            <?php $j++; endforeach;?>
+        
+            <!-- END PREVIOUS OPTIONAL ATTRIBUTES (EDIT FEATURE) -->
+        
+        
         <?php if($j===1):?>
-        <tr class="main1">
-          <td class="border-left"> Others: (Optional) </td> 
-          <td class="border-right" colspan="3">
-            <input type="text" name="prod_other_name[]" data-cnt="<?php echo $j;?>" class="<?php echo 'prod_'.$j;?> other_name_class" autocomplete="off" placeholder="Enter an attribute header"> 
-            <a href="javascript:void(0)" class="lnkClearFirst">Clear This Group</a>
-            <br>
-            <span style="color:gray;font-style:italic;font-size:11px">For Example: Color, Brand and Year</span>
-          </td>
-        </tr>
-        <tr class="main1 main1_2nd">
-          <td class="border-left">&nbsp;</td>
-          <td>
-            <input type="text" name="prod_other[]"  class="other_name_value otherNameValue1"  autocomplete="off" data-cnt="<?php echo $j;?>" placeholder="Enter an attribute value ">
-            <br>
-            <span style="color:gray;font-style:italic;font-size:11px">For Example: Blue, SKK and 2013</span>
-          </td>
-          <td>
-            <div class="<?php echo 'h_if_'.$j;?> hdv">
-              &#8369; <input type="text" name="prod_other_price[]" class="price_text" autocomplete="off" id="price_field" placeholder="Enter additional price (0.00)">
-            </div>
-          </td>
-          <td class="border-right">
-            <div class="<?php echo 'h_if_'.$j;?> hdv">
-              <input type="file" name="prod_other_img[]"  >
-              <a href="javascript:void(0)" class="removeOptionValue" data-cnt ="<?php echo $j;?>">Remove</a>
-            </div>
-          </td>
-        </tr> 
-        <tr id="main1">
-          <td class="border-left"></td>
-          <td class="border-right" colspan="3">
-            <a class="add_more_link_value" data-value="<?php echo $j;?>" href="javascript:void(0)">+Add more value</a>
-          </td>
-        </tr>
+            <tr class="main1">
+                <td class="border-left"> Others: (Optional) </td> 
+                <td class="border-right" colspan="3">
+                    <input type="text" name="prod_other_name[]" data-cnt="<?php echo $j;?>" class="<?php echo 'prod_'.$j;?> other_name_class" autocomplete="off" placeholder="Enter an attribute header"> 
+                    <a href="javascript:void(0)" class="lnkClearFirst">Clear This Group</a>
+                    <br>
+                    <span style="color:gray;font-style:italic;font-size:11px">For Example: Color, Brand and Year</span>
+                </td>
+            </tr>
+            <tr class="main1 main1_2nd">
+                <td class="border-left">&nbsp;</td>
+                <td>
+                    <input type="text" name="prod_other[]"  class="other_name_value otherNameValue1"  autocomplete="off" data-cnt="<?php echo $j;?>" placeholder="Enter an attribute value ">
+                    <br>
+                    <span style="color:gray;font-style:italic;font-size:11px">For Example: Blue, SKK and 2013</span>
+                </td>
+                <td>
+                    <div class="<?php echo 'h_if_'.$j;?> hdv">
+                        &#8369; <input type="text" name="prod_other_price[]" class="price_text" autocomplete="off" id="price_field" placeholder="Enter additional price (0.00)">
+                    </div>
+                </td>
+                <td class="border-right option_image_td">
+                    <div class="<?php echo 'h_if_'.$j;?> hdv">
+                        <input type="file" class='option_image_input' name="prod_other_img[]"  accept="image/*">
+                        <input type="hidden" name="prod_other_img_idx[]">
+                        <a href="javascript:void(0)" class="removeOptionValue remove_option_long " data-cnt ="<?php echo $j;?>">Remove</a>
+                    </div>
+                </td>
+            </tr> 
+            <tr id="main1">
+                <td class="border-left"></td>
+                <td class="border-right" colspan="3">
+                    <a class="add_more_link_value" data-value="<?php echo $j;?>" href="javascript:void(0)">+Add more value</a>
+                </td>
+            </tr>
         <?php endif; ?>
 
 
@@ -462,6 +485,8 @@
         
         </tbody>
         <!-- End hide of more product details -->
+        
+        
         <tfoot>
           <tr class="prod-details-add-more-link">
             <td class="border-left border-right" colspan="4">  
@@ -791,112 +816,123 @@ else
 
     $(document).on('click',".lnkClearFirst",function (){
   
-      var cnt = 1;
-      var formatHeadValue = $.trim($('.prod_'+cnt).val().replace(/[^a-z0-9\s]/gi, '').replace(/[_\s]/g, ' '));
-      var headValue = formatHeadValue.toLowerCase().replace(/\b[a-z]/g, function(letter) {
-        return letter.toUpperCase();
-      }); 
+        var cnt = 1;
+        var formatHeadValue = $.trim($('.prod_'+cnt).val().replace(/[^a-z0-9\s]/gi, '').replace(/[_\s]/g, ' '));
+        var headValue = formatHeadValue.toLowerCase().replace(/\b[a-z]/g, function(letter) { return letter.toUpperCase();}); 
 
-      $('.main'+cnt+'_2nd').each(function(){
-        var selfValue = $(this).find('td > .otherNameValue'+cnt).val();
-        var value = selfValue+headValue; 
-        var idHtmlId = headValue.replace(/ /g,'')+'Combination';
-        $("#"+idHtmlId+" option[data-temp='"+value+"']").remove(); 
-        if($('#'+idHtmlId).has('option').length <= 0){
-          $('#div'+idHtmlId).remove();
-        }
+        $('.main'+cnt+'_2nd').each(function(){
+            var selfValue = $(this).find('td > .otherNameValue'+cnt).val();
+            var value = selfValue+headValue; 
+            var idHtmlId = headValue.replace(/ /g,'')+'Combination';
+            $("#"+idHtmlId+" option[data-temp='"+value+"']").remove(); 
+            if($('#'+idHtmlId).has('option').length <= 0){
+                $('#div'+idHtmlId).remove();
+            }
+        });
 
-      });
-
-      $('.main'+cnt+'_2nd_add').each(function(){
-        var selfValue = $(this).find('td > .otherNameValue'+cnt).val();
-        var value = selfValue+headValue; 
-        var idHtmlId = headValue.replace(/ /g,'')+'Combination';
-        $("#"+idHtmlId+" option[data-temp='"+value+"']").remove(); 
-        if($('#'+idHtmlId).has('option').length <= 0){
-          $('#div'+idHtmlId).remove();
-        }
-      });
-      resetFirstOptional(1);
-      resetFirstSecondRowOptional(1);
+        $('.main'+cnt+'_2nd_add').each(function(){
+            var selfValue = $(this).find('td > .otherNameValue'+cnt).val();
+            var value = selfValue+headValue; 
+            var idHtmlId = headValue.replace(/ /g,'')+'Combination';
+            $("#"+idHtmlId+" option[data-temp='"+value+"']").remove(); 
+            if($('#'+idHtmlId).has('option').length <= 0){
+                $('#div'+idHtmlId).remove();
+            }
+        });
+        
+        resetFirstOptional(1);
+        resetFirstSecondRowOptional(1);
 
     });
   
     $(document).on('click',".removeOptionValue",function (){
 
-    
-     $('.combinationContainer').empty();
-     noCombination = true;
-     arraySelected = {}; 
+        $('.combinationContainer').empty();
+        noCombination = true;
+        arraySelected = {}; 
 
-     // REMOVE VALUE TO POSSIBLE COMBINATION
-     var cnt = $(this).data('cnt');
-     var formatHeadValue = $.trim($('.prod_'+cnt).val().replace(/[^a-z0-9\s]/gi, '').replace(/[_\s]/g, ' '));
-     var headValue = formatHeadValue.toLowerCase().replace(/\b[a-z]/g, function(letter) {
-      return letter.toUpperCase();
-    }); 
- 
-     var selfValue = $.trim($(this).closest('tr').find('.otherNameValue'+cnt).val());
-     var value = selfValue+headValue; 
-     var idHtmlId = headValue.replace(/ /g,'')+'Combination';
-     $("#"+idHtmlId+" option[data-temp='"+value+"']").remove(); 
-     if($('#'+idHtmlId).has('option').length <= 0){
-      $('#div'+idHtmlId).remove();
-     }
+        // REMOVE VALUE TO POSSIBLE COMBINATION
+        var cnt = $(this).data('cnt');
+        var formatHeadValue = $.trim($('.prod_'+cnt).val().replace(/[^a-z0-9\s]/gi, '').replace(/[_\s]/g, ' '));
+        var headValue = formatHeadValue.toLowerCase().replace(/\b[a-z]/g, function(letter) {
+        return letter.toUpperCase();
+        }); 
 
-     if($(this).closest("tr").hasClass('main'+cnt+'_2nd')){
-       if ($(".main"+cnt+"_2nd_add").length > 0){
-         $(this).closest("tr").remove();
-         $('.main'+cnt+'_2nd_add:first').removeClass("main"+cnt+"_2nd_add").addClass("main"+cnt+"_2nd");
-       }else{
-         resetFirstOptional(cnt);
-         resetFirstSecondRowOptional(cnt);
-       }
-     }else{
-      $(this).closest("tr").remove();
-    }
+        var selfValue = $.trim($(this).closest('tr').find('.otherNameValue'+cnt).val());
+        var value = selfValue+headValue; 
+        var idHtmlId = headValue.replace(/ /g,'')+'Combination';
+        $("#"+idHtmlId+" option[data-temp='"+value+"']").remove(); 
+        if($('#'+idHtmlId).has('option').length <= 0){
+            $('#div'+idHtmlId).remove();
+        }
+
+        if($(this).closest("tr").hasClass('main'+cnt+'_2nd')){
+            if ($(".main"+cnt+"_2nd_add").length > 0){
+                $(this).closest("tr").remove();
+                $('.main'+cnt+'_2nd_add:first').find('td:hidden').remove();
+                $('.main'+cnt+'_2nd_add:first').removeClass("main"+cnt+"_2nd_add").addClass("main"+cnt+"_2nd");
+                
+            }else{
+                resetFirstOptional(cnt);
+                resetFirstSecondRowOptional(cnt);
+            }
+        }else{
+            $(this).closest("tr").remove();
+        }
 
     });
 
 
     $(document).on('click',".removeOptionGroup",function (){
 
-      var cnt = $(this).data("cnt");
-     var formatHeadValue = $.trim($('.prod_'+cnt).val().replace(/[^a-z0-9\s]/gi, '').replace(/[_\s]/g, ' '));
-     var headValue = formatHeadValue.toLowerCase().replace(/\b[a-z]/g, function(letter) {
-      return letter.toUpperCase();
-    }); 
+        var cnt = $(this).data("cnt");
+        var formatHeadValue = $.trim($('.prod_'+cnt).val().replace(/[^a-z0-9\s]/gi, '').replace(/[_\s]/g, ' '));
+        var headValue = formatHeadValue.toLowerCase().replace(/\b[a-z]/g, function(letter) { return letter.toUpperCase();}); 
 
-      $('.main'+cnt+'_2nd').each(function(){
-        var selfValue = $(this).find('td > .otherNameValue'+cnt).val();
-        var value = selfValue+headValue; 
-        var idHtmlId = headValue.replace(/ /g,'')+'Combination';
-        $("#"+idHtmlId+" option[data-temp='"+value+"']").remove(); 
-        if($('#'+idHtmlId).has('option').length <= 0){
-          $('#div'+idHtmlId).remove();
-        }
-
-      });
-
-      $('.main'+cnt+'_2nd_add').each(function(){
-        var selfValue = $(this).find('td > .otherNameValue'+cnt).val();
-        var value = selfValue+headValue; 
-        var idHtmlId = headValue.replace(/ /g,'')+'Combination';
-        $("#"+idHtmlId+" option[data-temp='"+value+"']").remove(); 
-        if($('#'+idHtmlId).has('option').length <= 0){
-          $('#div'+idHtmlId).remove();
-        }
+        $('.main'+cnt+'_2nd').each(function(){
+            var selfValue = $(this).find('td > .otherNameValue'+cnt).val();
+            var value = selfValue+headValue; 
+            var idHtmlId = headValue.replace(/ /g,'')+'Combination';
+            $("#"+idHtmlId+" option[data-temp='"+value+"']").remove(); 
+            if($('#'+idHtmlId).has('option').length <= 0){
+                $('#div'+idHtmlId).remove();
+            }
         });
 
+        $('.main'+cnt+'_2nd_add').each(function(){
+            var selfValue = $(this).find('td > .otherNameValue'+cnt).val();
+            var value = selfValue+headValue; 
+            var idHtmlId = headValue.replace(/ /g,'')+'Combination';
+            $("#"+idHtmlId+" option[data-temp='"+value+"']").remove(); 
+            if($('#'+idHtmlId).has('option').length <= 0){
+                $('#div'+idHtmlId).remove();
+            }
+        });
 
-     $('.combinationContainer').empty();
-     noCombination = true;
-     arraySelected = {}; 
-      $('.main'+cnt).remove();
-      $('.main'+cnt+'_link').remove();
+        $('.combinationContainer').empty();
+        noCombination = true;
+        arraySelected = {}; 
+        $('.main'+cnt).remove();
+        $('.main'+cnt+'_link').remove();
     });
 
+    
+    $(document).on('change',".option_image_input",function (){
+        var $parent = $(this).parent();
+        var cnt = $parent.find('.removeOptionValue').data('cnt');
+        $parent.find('.removeOptionValue').remove();
+        $parent.find('.clear').remove();
+        if(badIE == false){
+            var anyWindow = window.URL || window.webkitURL; 
+            $parent.find('.option_image_container').remove();
+            $parent.append("<span class='option_image_container'><span class='option_image_span'><img src='"+anyWindow.createObjectURL(this.files[0])+"' class='option_image'></span></span><div class='clear'></div>");
+        }
+       $parent.append("<a class='removeOptionValue remove_option_short' data-cnt="+cnt+">x</a>");
 
+       $parent.find('[name^=prod_other_img_idx]').val(1);
+       
+    });
+    
     // ES_UPLOADER BETA
     $(".labelfiles").click(function(){
         $('.files.active').click(); 
@@ -1020,232 +1056,191 @@ else
         
     });
    
-    
     // ES_UPLOAER BETA END
     
-    
-
-    $( ".option_image_input" ).change(function(){
-      $(this).siblings(".option_image").css('display','none');
-    });
-
     $(document).on('click',".removeSelected",function (){
-      var row = $(this).data('row');
-      removeSelected (row);
-      var trueFalse = isEmpty(arraySelected);        
-      if(trueFalse) {
-        noCombination = true;
-      } 
+        var row = $(this).data('row');
+        removeSelected (row);
+        var trueFalse = isEmpty(arraySelected);        
+        if(trueFalse) {
+            noCombination = true;
+        } 
     });
 
 
-      $('.quantity_table_row , .quantity_table2').on('click', '.quantity_attr_done', function () {  
+    $('.quantity_table_row , .quantity_table2').on('click', '.quantity_attr_done', function () {  
 
-      var qtyTextbox = $('.qtyTextClass');
-      var qtyTextboxValue = parseInt(qtyTextbox.val());
-      var dataCombination = {};     
-      var combinationVal = [];
-      var sortCombination = [];
-      var arrayCombinationString = "";
-      var thisValueCount = $(this).data('value');
-      var htmlEach  = "";
-      var alreadyExist  = false;
-      var haveValue = false;
-      if(isNaN(qtyTextboxValue) ||  qtyTextboxValue <= 0){ 
-        qtyTextbox.val('1');
-      }
-      htmlEach += '<div class="input_qty"><input type="textbox" class="quantityText" value="'+qtyTextbox.val()+'" data-cnt="'+thisValueCount+'"></div><div class="mid_inner_con_list">';
-
-
-     
-
-      $(function() { 
-        $('.quantity_attrs_content option:selected').each(function(){
-          haveValue = true;
-          noCombination = false;
-          var eachValue = $(this).val();
-          var eachValueString = $(this).text();
-          var eachGroup = $(this).data('group');  
-          var eachDataValue = $(this).data('value');  
-          combinationVal.push(eachDataValue+':'+eachValue);
-          htmlEach += '<div>'+ eachGroup +': ' + eachValueString +'</div>';
-        });
-
-
-        sortCombination = combinationVal.sort();
-
-        for (var i = 0; i < sortCombination.length; i++) {
-          arrayCombinationString += sortCombination[i] + '-';
-        };
-
-        for (var key in arraySelected) { 
-          if (arraySelected.hasOwnProperty(key))
-            if(arraySelected[key]['value'] === arrayCombinationString.slice(0, - 1)){
-             alreadyExist = true;
-             break;
-           }
-         }
-       });
-
-if(haveValue === true){
-  if(alreadyExist === false){
-
-   $('.combinationContainer').append('<div class="inner_quantity_list innerContainer'+thisValueCount+'"> '+ htmlEach +'</div> <a href="javascript:void(0)" class="removeSelected" data-row="'+thisValueCount+'"   style="color:Red">Remove</a></div>');
-   dataCombination['quantity'] = qtyTextbox.val();
-   dataCombination['value'] = arrayCombinationString.slice(0, - 1);
-   arraySelected[thisValueCount] = dataCombination;
-   thisValueCount++;
-   $(this).data('value',thisValueCount);
- }else{
-  alert('This combination has already been selected. Please select another combination.');
-  return false;
-}  
-} 
- 
-});
-
-
-
-$(document).on('change','.other_name_class',function(){
-
-  $('.combinationContainer').empty();
-  noCombination = true;
-  arraySelected = {};  
-
-  var formatHeadValue = $.trim($(this).val().replace(/[^a-z0-9\s]/gi, '').replace(/[_\s]/g, ' '));
-
-  var headValue = formatHeadValue.toLowerCase().replace(/\b[a-z]/g, function(letter) {
-    return letter.toUpperCase();
-  }); 
-  
-  var formatOldValue = $(this).data('oldValue');
-  if (formatOldValue == undefined){
-    formatOldValue ="";
-
-  }
-  var oldValue = formatOldValue;
-
-  var cnt = $(this).data('cnt');
-  var headCount = 0;
-
-  var idHeadValue = escapes(headValue.replace(/ /g,''));
-  var idOldValue = escapes(oldValue.replace(/ /g,''));
-
-
-  if(!headValue <= 0){
-
-    $('.other_name_class').each(function(){
-      var thisValue = $.trim($(this).val());
-      var thisValue = thisValue.toLowerCase().replace(/\b[a-z]/g, function(letter) {
-        return letter.toUpperCase();
-      });  
-      if(headValue == thisValue){
-        headCount++;
-      }
-    });
-  }  
-  if(headCount > 1){
-    alert('Value '+headValue+' already exist!');
-    $('.prod_'+cnt).val(oldValue);
-    return false;
-  }
-
-  
-
-  $(this).data('oldValue', headValue);
-
-  if(!$.trim( $('#'+idHeadValue+'Combination').html()).length <= 0){
-
- 
-
-        $('#'+idOldValue+'Combination option[data-value=1]').each(function(){
-          var value = $(this).val();
-          var dataValue = 1;
-          var dataGroup = headValue;
-          var dataTemp = value+headValue;
-          var html = '<option value="'+value+'" data-temp="'+dataTemp+'" data-value="1" data-group="'+dataGroup+'">'+value+'</option>'
-          $('#'+idHeadValue+'Combination').append(html);
-          $(this).remove();
-        });
-
-        if($('#'+idOldValue+'Combination').has('option').length <= 0 ){
-          $('#div'+idOldValue+'Combination').remove();
+        var qtyTextbox = $('.qtyTextClass');
+        var qtyTextboxValue = parseInt(qtyTextbox.val());
+        var dataCombination = {};     
+        var combinationVal = [];
+        var sortCombination = [];
+        var arrayCombinationString = "";
+        var thisValueCount = $(this).data('value');
+        var htmlEach  = "";
+        var alreadyExist  = false;
+        var haveValue = false;
+        if(isNaN(qtyTextboxValue) ||  qtyTextboxValue <= 0){ 
+            qtyTextbox.val('1');
         }
+        htmlEach += '<div class="input_qty"><input type="textbox" class="quantityText" value="'+qtyTextbox.val()+'" data-cnt="'+thisValueCount+'"></div><div class="mid_inner_con_list">';
 
-      }else{
-
-        if(headValue.length <= 0){
-          $('#'+idOldValue+'Combination option[data-value=1]').remove();  
-          if($('#'+idOldValue+'Combination').has('option').length <= 0){
-            $('#div'+idOldValue+'Combination').remove();
-          }
-
-        }else{  
-
-          $('#'+idOldValue+'Combination option[data-value=1]').each(function(){
-            var value = $(this).val();
-            var dataValue = 1;
-            var dataGroup = headValue;
-            var dataTemp = value+headValue;
-            var html = '<option value="'+value+'" data-temp="'+dataTemp+'" data-value="1" data-group="'+dataGroup+'">'+value+'</option>'
-            $('#'+idHeadValue+'Combination').append(html);
-            $(this).remove();
-          });
-
-          if($('#'+idOldValue+'Combination').has('option').length <= 0){
-            $('#div'+idOldValue+'Combination').remove();
-          }
-
-          if(!headValue.length <= 0){
-            var haveValue = 0;
-            $(".otherNameValue"+cnt).each(function(){
-              var attrVal = $(this).val();
-              if(attrVal.length > 0){
-                haveValue++;
-              }
+        $(function() { 
+            $('.quantity_attrs_content option:selected').each(function(){
+                haveValue = true;
+                noCombination = false;
+                var eachValue = $(this).val();
+                var eachValueString = $(this).text();
+                var eachGroup = $(this).data('group');  
+                var eachDataValue = $(this).data('value');  
+                combinationVal.push(eachDataValue+':'+eachValue);
+                htmlEach += '<div>'+ eachGroup +': ' + eachValueString +'</div>';
             });
-            if(haveValue > 0){
-              $('.quantity_attrs_content').append('<div id="div'+idHeadValue+'Combination" style="position:relative">'+headValue+':<br> <select id="'+idHeadValue+'Combination" ></select><br></div>');   
 
-              $(".otherNameValue"+cnt).each(function(){  
+            sortCombination = combinationVal.sort();
 
-                var attrVal = $(this).val();
-                var attrID = $(this).data('otherid');
-                if(attrVal.length > 0){
+            for (var i = 0; i < sortCombination.length; i++) {
+                arrayCombinationString += sortCombination[i] + '-';
+            };
 
-
-                 $('[id='+idHeadValue+'Combination]').append('<option value="'+attrVal+'" data-temp="'+attrVal+headValue+'" data-value="1" data-group="'+headValue+'" data-otherid="'+attrID+'">'+attrVal+'</option>');
-
-               }
-             });
-
-              
+            for (var key in arraySelected) { 
+                if (arraySelected.hasOwnProperty(key))
+                if(arraySelected[key]['value'] === arrayCombinationString.slice(0, - 1)){
+                    alreadyExist = true;
+                    break;
+                }
             }
-          }
+        });
 
-        }
-      }
+        if(haveValue === true){
+            if(alreadyExist === false){
 
-      $('.prod_'+cnt).val(headValue);
-      $(".otherNameValue"+cnt).each(function(){
-        var value = $(this).val()+headValue;
-        $(this).data('temp','"'+value+'"');
-      });
-
-      if( !$.trim( $('.quantity_attrs_content').html() ).length ) {
-        $('.quantity_attr_done').hide();
-         $('.qty_tooltip').hide();
-        noCombination == true
-      }else{
-        $('.quantity_attr_done').show();
-         $('.qty_tooltip').show();
-      }
-
+                $('.combinationContainer').append('<div class="inner_quantity_list innerContainer'+thisValueCount+'"> '+ htmlEach +'</div> <a href="javascript:void(0)" class="removeSelected" data-row="'+thisValueCount+'"   style="color:Red">Remove</a></div>');
+                dataCombination['quantity'] = qtyTextbox.val();
+                dataCombination['value'] = arrayCombinationString.slice(0, - 1);
+                arraySelected[thisValueCount] = dataCombination;
+                thisValueCount++;
+                $(this).data('value',thisValueCount);
+            }else{
+                alert('This combination has already been selected. Please select another combination.');
+            return false;
+            }  
+        } 
 
     });
 
 
 
+    $(document).on('change','.other_name_class',function(){
+        $('.combinationContainer').empty();
+        noCombination = true;
+        arraySelected = {};  
+        var formatHeadValue = $.trim($(this).val().replace(/[^a-z0-9\s]/gi, '').replace(/[_\s]/g, ' '));
+        var headValue = formatHeadValue.toLowerCase().replace(/\b[a-z]/g, function(letter) {
+            return letter.toUpperCase();
+        }); 
+        var formatOldValue = $(this).data('oldValue');
+        if (formatOldValue == undefined){
+            formatOldValue ="";
+        }
+        var oldValue = formatOldValue;
+        var cnt = $(this).data('cnt');
+        var headCount = 0;
+        var idHeadValue = escapes(headValue.replace(/ /g,''));
+        var idOldValue = escapes(oldValue.replace(/ /g,''));
+        if(!headValue <= 0){
+            $('.other_name_class').each(function(){
+                var thisValue = $.trim($(this).val());
+                var thisValue = thisValue.toLowerCase().replace(/\b[a-z]/g, function(letter) {
+                    return letter.toUpperCase();
+                });  
+                if(headValue == thisValue){
+                    headCount++;
+                }
+            });
+        }  
+        if(headCount > 1){
+            alert('Value '+headValue+' already exist!');
+            $('.prod_'+cnt).val(oldValue);
+            return false;
+        }
+        $(this).data('oldValue', headValue);
+        if(!$.trim( $('#'+idHeadValue+'Combination').html()).length <= 0){
+            $('#'+idOldValue+'Combination option[data-value=1]').each(function(){
+                var value = $(this).val();
+                var dataValue = 1;
+                var dataGroup = headValue;
+                var dataTemp = value+headValue;
+                var html = '<option value="'+value+'" data-temp="'+dataTemp+'" data-value="1" data-group="'+dataGroup+'">'+value+'</option>'
+                $('#'+idHeadValue+'Combination').append(html);
+                $(this).remove();
+            });
+
+            if($('#'+idOldValue+'Combination').has('option').length <= 0 ){
+                $('#div'+idOldValue+'Combination').remove();
+            }
+        }else{
+            if(headValue.length <= 0){
+                $('#'+idOldValue+'Combination option[data-value=1]').remove();  
+                if($('#'+idOldValue+'Combination').has('option').length <= 0){
+                    $('#div'+idOldValue+'Combination').remove();
+                }
+            }else{  
+                $('#'+idOldValue+'Combination option[data-value=1]').each(function(){
+                    var value = $(this).val();
+                    var dataValue = 1;
+                    var dataGroup = headValue;
+                    var dataTemp = value+headValue;
+                    var html = '<option value="'+value+'" data-temp="'+dataTemp+'" data-value="1" data-group="'+dataGroup+'">'+value+'</option>'
+                    $('#'+idHeadValue+'Combination').append(html);
+                    $(this).remove();
+                });
+
+                if($('#'+idOldValue+'Combination').has('option').length <= 0){
+                    $('#div'+idOldValue+'Combination').remove();
+                }
+
+                if(!headValue.length <= 0){
+                    var haveValue = 0;
+                    $(".otherNameValue"+cnt).each(function(){
+                        var attrVal = $(this).val();
+                        if(attrVal.length > 0){
+                            haveValue++;
+                        }
+                    });
+                    if(haveValue > 0){
+                        $('.quantity_attrs_content').append('<div id="div'+idHeadValue+'Combination" style="position:relative">'+headValue+':<br> <select id="'+idHeadValue+'Combination" ></select><br></div>');   
+                        $(".otherNameValue"+cnt).each(function(){  
+                            var attrVal = $(this).val();
+                            var attrID = $(this).data('otherid');
+                            if(attrVal.length > 0){
+                                $('[id='+idHeadValue+'Combination]').append('<option value="'+attrVal+'" data-temp="'+attrVal+headValue+'" data-value="1" data-group="'+headValue+'" data-otherid="'+attrID+'">'+attrVal+'</option>');
+                            }
+                        });
+                    }
+                }
+
+            }
+        }
+
+        $('.prod_'+cnt).val(headValue);
+        $(".otherNameValue"+cnt).each(function(){
+            var value = $(this).val()+headValue;
+            $(this).data('temp','"'+value+'"');
+        });
+
+        if( !$.trim( $('.quantity_attrs_content').html() ).length ) {
+            $('.quantity_attr_done').hide();
+            $('.qty_tooltip').hide();
+            noCombination == true
+        }else{
+            $('.quantity_attr_done').show();
+            $('.qty_tooltip').show();
+        }
+    });
+
+    
+    
 $(document).on('change','.other_name_value',function(){
 
 
@@ -1301,7 +1296,7 @@ $(".checkbox_itemattr").click(function(){
 
 $(".add_more_link").unbind("click").click(function(){
   cnt_o++;
-  $('.step4_2').append('<tr id="main'+cnt_o+'" class="main'+cnt_o+'"><td class="border-left"></td><td class="border-right" colspan="3"><input type="text" data-cnt="'+cnt_o+'" autocomplete="off" name="prod_other_name[]" class="prod_'+cnt_o+' other_name_class" placeholder="Enter an attribute value"><a href="javascript:void(0)" data-cnt="'+cnt_o+'" class="removeOptionGroup">Remove This Group</a></td></tr><tr class="main'+cnt_o+' main'+cnt_o+'_2nd"><td class="border-left"></td><td><input type="text" autocomplete="off" data-cnt="'+cnt_o+'" class="other_name_value otherNameValue'+cnt_o+'" name="prod_other[]" placeholder="Enter description"></td><td> <div class="h_if_'+cnt_o+' hdv"  style="display:none"> &#8369; <input type="text" name="prod_other_price[]"  class="price_text"   id="price_field"  autocomplete="off" placeholder="Enter additional price (0.00)"></div></td><td class="border-right"> <div class="h_if_'+cnt_o+' hdv" style="display:none"><input type="file" name="prod_other_img[]" ><a data-cnt="'+cnt_o+'" class="removeOptionValue" href="javascript:void(0)">Remove</a></div></td></tr><tr id="main1" class="main'+cnt_o+'_link"><td class="border-left"></td><td class="border-right" colspan="3"><a class="add_more_link_value" data-value="'+cnt_o+'" href="javascript:void(0)">+Add more value</a></td></tr>');
+  $('.step4_2').append('<tr class="main'+cnt_o+'"><td class="border-left"></td><td class="border-right" colspan="3"><input type="text" data-cnt="'+cnt_o+'" autocomplete="off" name="prod_other_name[]" class="prod_'+cnt_o+' other_name_class" placeholder="Enter an attribute value"><a href="javascript:void(0)" data-cnt="'+cnt_o+'" class="removeOptionGroup">Remove This Group</a></td></tr><tr class="main'+cnt_o+' main'+cnt_o+'_2nd"><td class="border-left"></td><td><input type="text" autocomplete="off" data-cnt="'+cnt_o+'" class="other_name_value otherNameValue'+cnt_o+'" name="prod_other[]" placeholder="Enter description"></td><td> <div class="h_if_'+cnt_o+' hdv"  style="display:none"> &#8369; <input type="text" name="prod_other_price[]"  class="price_text"   id="price_field"  autocomplete="off" placeholder="Enter additional price (0.00)"></div></td><td class="border-right option_image_td"> <div class="h_if_'+cnt_o+' hdv" style="display:none"><input type="file" class="option_image_input" name="prod_other_img[]" accept="image/*" ><input type="hidden" name="prod_other_img_idx[]"><a data-cnt="'+cnt_o+'" class="removeOptionValue remove_option_long" href="javascript:void(0)">Remove</a></div></td></tr><tr id="main'+cnt_o+'" class="main'+cnt_o+'_link"><td class="border-left"></td><td class="border-right" colspan="3"><a class="add_more_link_value" data-value="'+cnt_o+'" href="javascript:void(0)">+Add more value</a></td></tr>');
 });
 
 $('.upload_input_form').on('click', '.add_more_link_value', function() {
@@ -1311,12 +1306,8 @@ $('.upload_input_form').on('click', '.add_more_link_value', function() {
 
   var  subClass = "main"+data+"_2nd_add";
  
-  var newrow = $('<tr class="main'+data+' '+subClass+'"><td class="border-left"></td><td style="display:none"><span ><input type="text" value ="'+attr+'" data-cnt="'+data+'" class="prod_'+data+'" name="prod_other_name[]"></span></td><td><input type="text" autocomplete="off" data-cnt="'+data+'" class="other_name_value otherNameValue'+data+'"  name="prod_other[]" placeholder="Enter an attribute value"></td><td> &#8369; <input type="text" name="prod_other_price[]"  id="price_field" class="price_text"  autocomplete="off" placeholder="Enter additional price (0.00)"></td><td class="border-right"><input type="file" name="prod_other_img[]" ><a data-cnt="'+data+'" class="removeOptionValue" href="javascript:void(0)">Remove</a></td></tr>');
-  if (data == 1){
-    $('#main'+data).before(newrow);
-  }else{
-    $('#main'+data).after(newrow);
-  }
+  var newrow = $('<tr class="main'+data+' '+subClass+'"><td class="border-left"></td><td style="display:none"><span ><input type="text" value ="'+attr+'" data-cnt="'+data+'" class="prod_'+data+'" name="prod_other_name[]"></span></td><td><input type="text" autocomplete="off" data-cnt="'+data+'" class="other_name_value otherNameValue'+data+'"  name="prod_other[]" placeholder="Enter an attribute value"></td><td> &#8369; <input type="text" name="prod_other_price[]"  id="price_field" class="price_text"  autocomplete="off" placeholder="Enter additional price (0.00)"></td><td class="border-right option_image_td"><input type="file" class="option_image_input" name="prod_other_img[]"  accept="image/*"><input type="hidden" name="prod_other_img_idx[]"><a data-cnt="'+data+'" class="removeOptionValue remove_option_long " href="javascript:void(0)">Remove</a></td></tr>');
+  $('#main'+data).before(newrow);
 });
 
 $(document).on('change',"#price_field,#prod_price, .price_text",function () {
@@ -1643,17 +1634,17 @@ $(".proceed_form").unbind("click").click(function(){
 
     //Add previously checked attributes to the quantity select elements
     $('.checkbox_itemattr').each(function(){
-      if($(this).is(":checked")){
-        addAttrQtySelection($(this));
-      }
+        if($(this).is(":checked")){
+            addAttrQtySelection($(this));
+        }
     });
 
     //Add previously entered optional attributes to the quantity select elements
     $('.other_name_class').each(function(){
-      $(this).change();
+        $(this).change();
     });
     $('.other_name_value').each(function(){
-      $(this).change();
+        $(this).change();
     });
 
     //Submits previously configured quantity attribute combinations 
@@ -1661,9 +1652,9 @@ $(".proceed_form").unbind("click").click(function(){
     var html_item_selection = $('#quantity_attrs_content2').find('option');
     var prev_combination_count = 1;
     $.each(qty_obj,function(){
-      var $this = this;
-      $('.qtyTextClass').val($this.quantity);
-      $.each(html_item_selection,function(){
+        var $this = this;
+        $('.qtyTextClass').val($this.quantity);
+        $.each(html_item_selection,function(){
             $(this).attr("selected",false);
             //Category specific attributes
             if($(this).data('value') === 0){
@@ -1686,7 +1677,7 @@ $(".proceed_form").unbind("click").click(function(){
                 }    
             }                
         });
-      addAttrQtyCombination(prev_combination_count++);
+        addAttrQtyCombination(prev_combination_count++);
     });
     
 
@@ -1900,78 +1891,82 @@ $(document).ready(function(){
 });
 
 
-    function removeSelected(row)
-    {
-      delete arraySelected[row];
-      $('.innerContainer'+row).remove();
+    function removeSelected(row){
+        delete arraySelected[row];
+        $('.innerContainer'+row).remove();
     }
 
     function isEmpty(myObject) {
-      for(var key in myObject) {
-        if (myObject.hasOwnProperty(key)) {
-          return false;
+        for(var key in myObject) {
+            if (myObject.hasOwnProperty(key)) {
+              return false;
+            }
         }
-      }
-      return true;
+        return true;
     }
     
     function escapes(string){
-      if(string != undefined){
-        return string.replace(/([;&,\.\+\*\~':"\!\^#$%@\[\]\(\)=>\|])/g, '\\$1');
-      }else{
-        return "";
-      }
+        if(string != undefined){
+            return string.replace(/([;&,\.\+\*\~':"\!\^#$%@\[\]\(\)=>\|])/g, '\\$1');
+        }else{
+            return "";
+        }
     }
 
     function resetFirstOptional(cnt){ 
-      $('.combinationContainer').empty();
-      noCombination = true;
-      arraySelected = {}; 
-      var link = '<a href="javascript:void(0)" class="lnkClearFirst">Clear This Group</a>';
-      var title = 'Others: (Optional)';
-      if(cnt > 1){ 
-        link = '<a class="removeOptionGroup" data-cnt='+cnt+' href="javascript:void(0)">Remove This Group</a>';
-        title = '';
-      }
-      $('.main'+cnt).empty();
-      $('.main'+cnt).append('<td class="border-left">'+title+'</td> \
-        <td  colspan="3"> \
-        <input type="text" placeholder="Enter item specific name" autocomplete="off" class="prod_'+cnt+' other_name_class" data-cnt="'+cnt+'" name="prod_other_name[]"> \
-        '+link+' \
-        </td>');
+        $('.combinationContainer').empty();
+        noCombination = true;
+        arraySelected = {}; 
+        var link = '<a href="javascript:void(0)" class="lnkClearFirst">Clear This Group</a>';
+        var title = 'Others: (Optional)';
+        if(cnt > 1){ 
+            link = '<a class="removeOptionGroup" data-cnt='+cnt+' href="javascript:void(0)">Remove This Group</a>';
+            title = '';
+        }
+        $('.main'+cnt).empty();
+        console.log( $('.main'+cnt));
+        
+        $('.main'+cnt).append('<td class="border-left">'+title+'</td> \
+            <td class="border-right" colspan="3"> \
+            <input type="text" placeholder="Enter item specific name" autocomplete="off" class="prod_'+cnt+' other_name_class" data-cnt="'+cnt+'" name="prod_other_name[]"> \
+            '+link+' \
+            </td>');
     }
  
 
     function resetFirstSecondRowOptional(cnt){
-      $('.combinationContainer').empty();
-       noCombination = true;
-       arraySelected = {}; 
-       $('.main'+cnt+'_2nd_add').remove();
-       $('.main'+cnt+'_2nd').empty();
-       $('.main'+cnt+'_2nd').append('<td class="border-left">&nbsp;</td> \
-        <td>\
-        <input type="text" placeholder="Enter an attribute value" data-cnt="'+cnt+'" autocomplete="off" class="other_name_value otherNameValue'+cnt+'" name="prod_other[]">\
-        </td>\
-        <td>\
-        <div class="h_if_'+cnt+' hdv" style="display: none;">\
-        &#8369; <input type="text" placeholder="Enter additional price (0.00)" id="price_field" autocomplete="off" name="prod_other_price[]">\
-        </div>\
-        </td>\
-        <td>\
-        <div class="h_if_'+cnt+' hdv" style="display: none;">\
-        <input type="file" name="prod_other_img[]">\
-        <a data-cnt="'+cnt+'" class="removeOptionValue" href="javascript:void(0)">Remove</a>\
-        </div>\
-        </td>'); 
+        $('.combinationContainer').empty();
+        noCombination = true;
+        arraySelected = {}; 
+        $('.main'+cnt+'_2nd_add').remove();
+        $('.main'+cnt+'_2nd').empty();
+        $('.main'+cnt+'_2nd').append('<td class="border-left">&nbsp;</td> \
+            <td>\
+            <input type="text" placeholder="Enter an attribute value" data-cnt="'+cnt+'" autocomplete="off" class="other_name_value otherNameValue'+cnt+'" name="prod_other[]">\
+            </td>\
+            <td>\
+            <div class="h_if_'+cnt+' hdv" style="display: none;">\
+            &#8369; <input type="text" placeholder="Enter additional price (0.00)" id="price_field" autocomplete="off" name="prod_other_price[]">\
+            </div>\
+            </td>\
+            <td class="border-right option_image_td">\
+            <div class="h_if_'+cnt+' hdv" style="display: none;">\
+            <input type="file" class="option_image_input" name="prod_other_img[]" accept="image/*">\
+            <input type="hidden" name="prod_other_img_idx[]">\
+            <a data-cnt="'+cnt+'" class="removeOptionValue remove_option_long " href="javascript:void(0)">Remove</a>\
+            </div>\
+            </td>'); 
     }
-      function ReplaceNumberWithCommas(thisnumber){
-  //Seperates the components of the number
-  var n= thisnumber.toString().split(".");
-    //Comma-fies the first part
-    n[0] = n[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    //Combines the two sections
-    return n.join(".");
-  }
+    
+    
+    function ReplaceNumberWithCommas(thisnumber){
+        //Seperates the components of the number
+        var n= thisnumber.toString().split(".");
+        //Comma-fies the first part
+        n[0] = n[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        //Combines the two sections
+        return n.join(".");
+    }
   
       //Function that adds obj to the quantity select html elements
     function addAttrQtySelection(obj){
@@ -2007,10 +2002,8 @@ $(document).ready(function(){
       }
     }
 
-        //Marked for refactoring 
-    //Duplicate code: see $('.quantity_attr_done') click handler
-    //$(function(){}) removed and $('.quantity_attrs_content option :select') replaced with if statement
-  function addAttrQtyCombination(count){
+
+ function addAttrQtyCombination(count){
     var qtyTextbox = $('.qtyTextClass');
     var qtyTextboxValue = parseInt(qtyTextbox.val());
     var dataCombination = {};     

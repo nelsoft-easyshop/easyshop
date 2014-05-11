@@ -2,7 +2,7 @@
 
 
 /**
- * MY cusotm controller
+ * MY custom controller
  */
 class MY_Controller extends CI_Controller 
 {
@@ -19,15 +19,9 @@ class MY_Controller extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-		$this->config->set_item('base_url',"https://".$_SERVER["SERVER_NAME"].":".$_SERVER["SERVER_PORT"]."/");
-        
-        
-        #$this->config->set_item('base_url',"https://".$_SERVER["SERVER_NAME"]."/");
-        $this->load->model("user_model");
-        $this->load->model("cart_model");
-        $this->load->model("product_model");
-        $this->load->model("messages_model");
-
+		#$this->config->set_item('base_url',"https://".$_SERVER["SERVER_NAME"].":".$_SERVER["SERVER_PORT"]."/");
+        $this->config->set_item('base_url',"https://".$_SERVER["SERVER_NAME"]."/");
+ 
         $url = uri_string();
         if($url !== 'login'){
             $this->session->set_userdata('uri_string', $url);
@@ -45,7 +39,10 @@ class MY_Controller extends CI_Controller
     #because it would add unnecessary overhead for all ajax calls. Instead it is called only in the 
     #controller functions that need it
 	function fill_header()
-	{
+	{   
+        $this->load->model("user_model");
+        $this->load->model("product_model");
+        $this->load->model("messages_model");
 		$usersession = $this->session->userdata('usersession');
 		if(!empty($usersession) || $this->check_cookie()){
 
@@ -68,25 +65,15 @@ class MY_Controller extends CI_Controller
 			'total_items'=> $ss,
 			'unread_msgs'=> $unread,
 			'category_search' => $this->product_model->getFirstLevelNode(),
-			'header_csrf' => array(
-					'csrf_'
-				)
-			);
-				
+			);		
 		return $data;
 	}
-	//
-	//public function get_all_msgs(){
-	//	$result = $this->messages_model->get_all_messages($this->user_ID);	
-	//	return  $result;
-	//}
-    function cart_size(){
-        $carts=$this->cart->contents();
-        $cart_size =sizeof($carts);
-        return $cart_size;
-    }
+    
+
 	
 	function check_cookie(){
+        $this->load->model("cart_model");
+        $this->load->model("user_model");
 		$cookieval = get_cookie('es_usr');
 		if($cookieval != ''){
 			$data = array(
@@ -110,51 +97,13 @@ class MY_Controller extends CI_Controller
 			return false;
 	}
     
-    
-    function getcat_old() {
-        
-		$row = $this->getdatafromcat(1);
-		$arr_data = array();
-		for($i=0;$i < count($row);$i++)
-		{
-			array_push($row[$i], $arr_data);
-			$id= $row[$i]['id_cat'];
-			$row2 = $this->product_model->getDownLevelNode($id);
-			$arr_data2 = array();
-			for($j=0;$j < count($row2);$j++)
-			{
-				array_push($row2[$j], $arr_data2);
-				$row[$i][0][$j] = $row2[$j]; 
 
-				$id2= $row2[$j]['id_cat'];
-				$row3 = $this->product_model->getDownLevelNode($id2);
-				$arr_data3 = array();
-				$down_cat = $this->product_model->selectChild($id2);			
-				if((count($down_cat) === 1)&&(trim($down_cat[0]) === ''))
-					$down_cat = array();
-				array_push($down_cat, $id2);
-				$pitem = $this->product_model->getPopularitem($down_cat,6);		
-				$row[$i][0][$j]['popular'] = $pitem;			
-				for($k=0;$k < count($row3);$k++)
-				{
-					array_push($row3[$k], $arr_data3);
-					$row[$i][0][$j][6][$k] = $row3[$k]; 
-				}
-			}
-		}
-        
-		return $row;
-
-	}
-	
-	function getdatafromcat($id){
-		$row = $this->product_model-> getCatItemsWithImage($id);
-		return $row;
-	}
-
-    //THIS METHOD IS 0.3 seconds faster than the original one
+    /*
+     *  Displays navigation categories
+     */
     function getcat(){
-        $rows = $this->product_model->getCatFast();
+        $this->load->model("product_model");
+        $rows = $this->product_model->getCategoriesNavigation();
         $data = array();
         $idx_lvl1 = 0;
         $idx_lvl2 = 0;
@@ -171,7 +120,6 @@ class MY_Controller extends CI_Controller
             if((strlen(trim($row['level2_id']) > 0))&&(!array_key_exists($row['level2_id'], $data[$idx_lvl1][0]))){
                 //start popular items : this is the slowest part of this function
                 $down_cat = $this->product_model->selectChild($row['level2_id']);	
-                //$down_cat = Array ( 0 => 18, 1 => 19, 2 => 20, 3 => 21, 4 => 22, 5 => 23);
 				if((count($down_cat) === 1)&&(trim($down_cat[0]) === ''))
 					$down_cat = array();
 				array_push($down_cat, $row['level2_id']);

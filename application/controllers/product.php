@@ -14,6 +14,10 @@ class product extends MY_Controller
 	public $per_page = 6;
 	public $start_irrelevant = 0;
 
+    /*     
+     *   Displays products in each category
+     */
+    
 	function categorySearch($categoryId = 0,$url_string="string")
 	{
 		$start = 0;
@@ -173,6 +177,10 @@ class product extends MY_Controller
 
 	}
 
+    /*     
+     *    Returns more products as user scroll down the page  
+     */
+     
 	function loadOtherCategorySearch(){
 
 		$categoryId = $_POST['id_cat'];				  
@@ -328,23 +336,12 @@ class product extends MY_Controller
 	}
  
 
-	function highlight($text, $words)
-	{
-
-		$words = preg_replace('/\s+/', ' ',$words);
-		$split_words = explode(" ", $words);
-		foreach($split_words as $word)
-		{
-			$color = "#e5e5e5";
-			$text = preg_replace("|($word)|Ui","<b>$1</b>" , $text );
-		}
-		return $text;
-	}
-
-
+    /*   
+     *   Returns recommended keywords for search bar
+     */
+    
 	function sch_onpress()
 	{  
-
 		header('Content-Type: text/plain'); 	 
 		if($this->input->get('q')){
 
@@ -372,6 +369,10 @@ class product extends MY_Controller
 
 	}
 
+    /*   
+     *   Returns results of searching products through the search bar
+     */
+    
 	function sch($string="search.html") # ROUTING: search/(:any)
 	{
 		$values = array();
@@ -494,31 +495,11 @@ class product extends MY_Controller
 		}
 	}	
 
-	
-
-	function toUL(array $array)
-	{
-		$html = '<ul>' . PHP_EOL;
-
-		foreach ($array as $value)
-		{
-			if($value['count'] <= 0){
-				continue;
-			}
-			$html .= '<li><a href="search.html?q_str=' . $_GET['q_str'] .'&q_cat='.$value['item_id'].'">' . $value['name'].'('.$value['count'].')</a>';
-			if (!empty($value['children']))
-			{
-				$html .= $this->toUL($value['children']);
-			}
-			$html .= '</li>' . PHP_EOL;
-		}
-
-		$html .= '</ul>' . PHP_EOL;
-
-		return $html;
-	}
-
-
+    /*   
+     *   Load more products as user scroll through the search results through
+     *   the search bar
+     */
+    
 	function sch_scroll() ##ROUTING : search/load_search_other_product
 	{
 		$string_sort = "";
@@ -560,50 +541,44 @@ class product extends MY_Controller
 		echo $data; 
 	}
 
-	# Generate the product view page
-	# Arguments: $id -> product id of product to be displayed
-	function view($id=0,$url_string="string") 
-	{ 
-		$product_row = $this->product_model->getProduct($id);
+	
+    	
+	function highlight($text, $words)
+	{
 
-		$data['title'] = 'Easyshop.ph - Product Page';
-		$uid = $this->session->userdata('member_id');
-		$data = array_merge($data,$this->fill_header());
-		$this->load->view('templates/header', $data); 
-		$product_options = $this->product_model->getProductAttributes($id, 'NAME');
-		$product_options = $this->product_model->implodeAttributesByName($product_options);
-        if($product_row['o_success'] >= 1){
-			$this->session->set_userdata('product_id', $id);
-			$product_catid = $product_row['cat_id'];
-			$data = array_merge($data,array( 
-				'page_javascript' => 'assets/JavaScript/productpage.js',
-				'breadcrumbs' =>  $this->product_model->getParentId($product_row['cat_id']),
-				'product' => $product_row,
-				'product_options' => $product_options,
-				'product_images' => $this->product_model->getProductImages($id),
-				'main_categories' => $this->product_model->getFirstLevelNode(TRUE),
-				'reviews' => $this->getReviews($id,$product_row['sellerid']),
-				'uid' => $uid,
-				'recommended_items'=> $this->product_model->getRecommendeditem($product_catid,5,$id),
-				'allowed_reviewers' => $this->product_model->getAllowedReviewers($id),
-				//userdetails --- email/mobile verification info
-				'userdetails' => $this->product_model->getCurrUserDetails($uid),
-				'product_quantity' => $this->product_model->getProductQuantity($id),
-				'shipment_information' => $this->product_model->getShipmentInformation($id),
-                'shiploc' => $this->product_model->getLocation(),
-                'category_navigation' => $this->load->view('templates/category_navigation',array('cat_items' =>  $this->getcat(),), TRUE ),
-                ));
-			$data['vendorrating'] = $this->product_model->getVendorRating($data['product']['sellerid']);
-			
-			$data['jsonReviewSchemaData'] = $this->assembleJsonReviewSchemaData($data);
-			
-
-			$this->load->view('pages/product/productpage_view', $data); 
+		$words = preg_replace('/\s+/', ' ',$words);
+		$split_words = explode(" ", $words);
+		foreach($split_words as $word)
+		{
+			$color = "#e5e5e5";
+			$text = preg_replace("|($word)|Ui","<b>$1</b>" , $text );
 		}
-		else
-			$this->load->view('pages/general_error', $data); 		
-		$this->load->view('templates/footer_full');
+		return $text;
 	}
+    
+
+	function toUL(array $array)
+	{
+		$html = '<ul>' . PHP_EOL;
+
+		foreach ($array as $value)
+		{
+			if($value['count'] <= 0){
+				continue;
+			}
+			$html .= '<li><a href="search.html?q_str=' . $_GET['q_str'] .'&q_cat='.$value['item_id'].'">' . $value['name'].'('.$value['count'].')</a>';
+			if (!empty($value['children']))
+			{
+				$html .= $this->toUL($value['children']);
+			}
+			$html .= '</li>' . PHP_EOL;
+		}
+
+		$html .= '</ul>' . PHP_EOL;
+
+		return $html;
+	}
+
 	
 	// Assemble SEO Review tags
 	function assembleJsonReviewSchemaData($data)
@@ -751,8 +726,7 @@ class product extends MY_Controller
 				}
 				$i++;
 			}
-			$sellerid = $this->product_model->getProduct($id)['sellerid'];
-			//$sellerid = $this->product_model->getProduct($id);
+			$sellerid = $this->product_model->getProductById($id)['sellerid'];
 		}
 
 		$data = array(
@@ -793,7 +767,6 @@ class product extends MY_Controller
 				if((count($down_cat) === 1)&&(trim($down_cat[0]) === ''))
 					$down_cat = array();
 				array_push($down_cat, $subcategory['id_cat']);
-				#$catlist_down = implode(",", $down_cat);
 				$categories[$index]['subcategories'][$inner_index]['product_count'] = $this->product_model->getProductCount($down_cat)['product_count'];
 			}
 		}		
@@ -806,12 +779,6 @@ class product extends MY_Controller
 		$this->load->view('templates/header', $data); 
 		$this->load->view('pages/product/all_categories_view', $data); 
 		$this->load->view('templates/footer_full'); 	
-	}
-
-	#Function that will receive id from category ajax, and id will be passed to model and retrieves the data
-	function getdatafromcat($id){
-		$row = $this->product_model-> getCatItemsWithImage($id);
-		return $row;
 	}
 	
 	function changeDelete(){
@@ -853,6 +820,9 @@ class product extends MY_Controller
 		echo ( json_encode($data) );
 	}
 	
+    /*
+     *   Displays the product page
+     */
     
     function item($slug = ''){
         $product_row = $this->product_model->getProductBySlug($slug);

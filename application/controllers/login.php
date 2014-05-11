@@ -4,15 +4,14 @@ if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
 class Login extends MY_Controller {
-	#Load the user model that will be used in the functions below
     function __construct() {
         parent::__construct();
-        $this->load->library('cart');
-		$this->load->model('register_model');
+        $this->load->model('register_model');
+        $this->load->model('user_model');
+        $this->load->model('cart_model');
 		$this->load->library('encrypt');	
     }
 	
-	#Passing the data to login form and loads it.
     function index() {
         $data = array(
             'title' => 'Login | Easyshop.ph',
@@ -25,16 +24,14 @@ class Login extends MY_Controller {
         $this->load->view('templates/footer');
     }
 
-	#when login button is clicked, username pass will check if it exsits in the database
 	function authenticate() {
 		if(($this->input->post('login_form'))&&($this->form_validation->run('login_form'))){
 			$uname = $this->input->post('login_username');
 			$pass = $this->input->post('login_password');	
 			$dataval = array('login_username' => $uname, 'login_password' => $pass);
 			$row = $this->user_model->verify_member($dataval);               
-
-                        
-			if ($row['o_success'] >= 1) {///////////////////////////////////////////if exsist,member id and usersession(defined in the sql query) will be set in the session
+            #if user is valid: member i, usersession and cart_contents will be set in the session
+			if ($row['o_success'] >= 1) {
 				$this->session->set_userdata('member_id', $row['o_memberid']);
 				$this->session->set_userdata('usersession', $row['o_session']);
                 $this->session->set_userdata('cart_contents', $this->cart_model->cartdata($row['o_memberid']));
@@ -49,16 +46,15 @@ class Login extends MY_Controller {
 					$this->user_model->create_cookie($cookieval);
 				}
 			}  
-			echo json_encode($row);//////////////////////////////////////////////////else return o_message(set in the query) to ajax and post it
+			echo json_encode($row);
         }
     }
 
-    function logout() {/////////////////////////////////////////////////////////when log out button is clicked,session will be set to empty and redirect to home
+    function logout() {
         
         $cart_items = serialize($this->session->userdata('cart_contents'));
-        $id = $this->session->userdata('member_id');
+        $id = $this->session->userdata('member_id');        
         $this->cart_model->save_cartitems($cart_items,$id);
-        
         $this->user_model->logout();
         $temp = array(
                 'member_id' => $this->session->userdata('member_id'),
@@ -91,7 +87,7 @@ class Login extends MY_Controller {
             $email = $this->input->post('email');
             $result = $this->register_model->check_registered_email($email);
 			if (isset($result['username'])){
-				// magsesend na siya ng email dito at magra-write sa db.
+				// Send email and update database 
 				if ($this->register_model->forgotpass($email, $result['username'], $result['id_member']) == 1){
 					$temp['toggle_view'] = "1";
 				}else{
