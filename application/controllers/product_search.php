@@ -9,7 +9,8 @@ class product_search extends MY_Controller {
 	{ 
 		parent::__construct(); 
 		$this->load->helper('htmlpurifier');
-		$this->load->model("search_model");				
+		$this->load->model("search_model");		
+        $this->load->model("product_model");				
 	}
 	
 	function arrvwr($target){
