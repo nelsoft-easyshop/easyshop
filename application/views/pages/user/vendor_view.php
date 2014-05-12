@@ -145,7 +145,7 @@
 							<option value="price">Price</option>
 						</select>
 						<span id="active_sortorder" class="span_bg arrow_sort"></span>
-                        <a href='https://easyshop.ph.trunk/advsrch?_is=&_cat=1&_us=<?php echo $vendordetails['username'];?>&_loc=&_con=&_price1=&_price2=&_sop=popular' style='margin-left: 7px; border-bottom: 1px dotted #000000;'>Advanced</a>
+                        <a href='<?=base_url()?>advsrch?_is=&_cat=1&_us=<?php echo $vendordetails['username'];?>&_loc=&_con=&_price1=&_price2=&_sop=popular' style='margin-left: 7px; border-bottom: 1px dotted #000000;'>Advanced</a>
 					</div>
 					
                     
