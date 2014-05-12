@@ -2116,7 +2116,12 @@ $(document).on('change','.qtyTextClass',function(){
 
   var v = parseInt(this.value);
   if (isNaN(v) || v <= 0) {
+    if(isNaN(v)){
+
     this.value = '1';
+  } else if(v <= 0){
+    this.value = Math.abs(v);
+}
   } else {
     this.value = v;
   }
