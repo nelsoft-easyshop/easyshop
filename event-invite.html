@@ -8,7 +8,7 @@
 $(document).ready(function(){
 	$("#ss-submit").click(function(){
 		var name = $("#entry_381773971").val();
-		if(name.length < 5 || name == ""){
+		if(name == ""){
 			alert("Please enter your name");
 			return false;		
 		}
@@ -22,7 +22,7 @@ $(document).ready(function(){
 		});
 
 		if (ctr == 3) {
-			alert('Please please fill up all required field');
+			alert('Please please fill up all required fields');
 			return false;
 		}			
 
