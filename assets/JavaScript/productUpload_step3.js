@@ -491,12 +491,12 @@ $(function(){
                 $('#btnShippingDetailsSubmit').val('SUBMIT');
             });
             }
-            
-            
-            
 		}
 		else if(data == 0){
 			alert('An error was encountered. Please add shipping details for all attribute combinations.');
+		}
+		else if(data == 2){
+			alert('An error was encountered. Database data mismatch!');
 		}
       });
     }else{

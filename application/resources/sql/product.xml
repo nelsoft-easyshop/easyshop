@@ -908,6 +908,14 @@ FROM
 
 <!-- Product_upload step 3 -->
 
+<select id="getProductItem">
+	SELECT p.id_product, pi.id_product_item
+	FROM es_product p
+	INNER JOIN es_product_item pi
+		ON p.id_product = pi.product_id AND p.id_product = :product_id AND p.member_id = :member_id
+	ORDER BY p.id_product
+</select>
+
 <select id="getLocation">
     SELECT e1.id_location, e1.location, e2.id_location as id_region, e2.location as region, e3.id_location as id_cityprov, e3.location as cityprov
     FROM es_location_lookup e1

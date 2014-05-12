@@ -701,38 +701,47 @@ class productUpload extends MY_Controller
         $memberId =  $this->session->userdata('member_id');
 		$attrCounter = 0;
 		
-		// Check if all attributes have assigned shipping details
-		foreach($arrProductItemId as $pid){
-			foreach($fdata as $arrAttr){
-				if(array_key_exists($pid,$arrAttr) && count($arrAttr[$pid]) !== 0){
-					$attrCounter++;
-					break;
-				}
-			}
+		//Fetch db data
+		$dbProductItem = $this->product_model->getProductItem($productId, $memberId);
+		//Assemble product item id from db similar to arrProductItemId structure
+		$dbtemp = array();
+		foreach($dbProductItem as $db){
+			$dbtemp[] = $db['id_product_item'];
 		}
-		
-		if( count($arrProductItemId) <= $attrCounter ){
-			//DELETE EXISTING ENTRIES IN DATABASE
-			$this->product_model->deleteShippingSummaryOnEdit($arrProductItemId);
-			
-			foreach($fdata as $group){
-				foreach($group as $attrCombinationId=>$attrGroup){
-					/*foreach($attrGroup as $locationKey=>$locgroup){
-						$shippingId = $this->product_model->storeShippingPrice($locationKey, $locgroup['price']);
-						$this->product_model->storeProductShippingMap($shippingId, $attrCombinationId);
-					}*/
-					foreach($attrGroup as $locationKey=>$price){
-						if(is_numeric($price)){
-							$shippingId = $this->product_model->storeShippingPrice($locationKey, $price, $productId);
-							$this->product_model->storeProductShippingMap($shippingId, $attrCombinationId);
-						}
+		//Compare 'posted' product item id array with 'server' product item id array
+		if($dbtemp == $arrProductItemId){
+			// Check if all attributes have assigned shipping details
+			foreach($arrProductItemId as $pid){
+				foreach($fdata as $arrAttr){
+					if(array_key_exists($pid,$arrAttr) && count($arrAttr[$pid]) !== 0){
+						$attrCounter++;
+						break;
 					}
 				}
 			}
-			echo 1;
+			
+			if( count($arrProductItemId) <= $attrCounter ){
+				//DELETE EXISTING ENTRIES IN DATABASE
+				$this->product_model->deleteShippingSummaryOnEdit($arrProductItemId);
+				
+				foreach($fdata as $group){
+					foreach($group as $attrCombinationId=>$attrGroup){
+						foreach($attrGroup as $locationKey=>$price){
+							if(is_numeric($price)){
+								$shippingId = $this->product_model->storeShippingPrice($locationKey, $price, $productId);
+								$this->product_model->storeProductShippingMap($shippingId, $attrCombinationId);
+							}
+						}
+					}
+				}
+				echo 1;
+			}
+			else{
+				echo 0;
+			}
 		}
 		else{
-			echo 0;
+			echo 2;
 		}
 	}
 

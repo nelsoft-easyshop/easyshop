@@ -1507,6 +1507,18 @@ class product_model extends CI_Model
     	return $result;
     }
 	
+	public function getProductItem($productId, $memberId)
+	{
+		$query = $this->sqlmap->getFilenameID('product','getProductItem');
+    	$sth = $this->db->conn_id->prepare($query);
+    	$sth->bindParam(':product_id', $productId, PDO::PARAM_INT);
+    	$sth->bindParam(':member_id', $memberId, PDO::PARAM_INT);
+    	$result = $sth->execute();
+		$row = $sth->fetchAll(PDO::FETCH_ASSOC);
+
+    	return $row;
+	}
+	
 	public function getShippingSummary($prod_id)
 	{
 		$query = $this->sqlmap->getFilenameID('product', 'getShippingSummary');
