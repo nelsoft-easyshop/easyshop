@@ -563,7 +563,6 @@ class Payment extends MY_Controller{
         $this->session->set_userdata('headerData', $data);
         $this->session->set_userdata('bodyData', $response);
 
-        
         redirect(base_url().'payment/success/cashondelivery', 'refresh');
     }
 
