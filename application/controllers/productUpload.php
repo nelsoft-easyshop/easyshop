@@ -475,6 +475,7 @@ class productUpload extends MY_Controller
                         if(strlen(trim($_POST['prod_other_price'][$i])) != 0 || $_POST['prod_other_price'][$i] != ""){
                             $other_price = $_POST['prod_other_price'][$i];
                         }
+                        $other_price = abs($other_price);
 
                         if(isset($_FILES['prod_other_img'])){
                             if(intval($_POST['prod_other_img_idx'][$i],10) === 1){
@@ -541,6 +542,7 @@ class productUpload extends MY_Controller
                         $quantitySolo = 1;
                         if($this->input->post('quantitySolo')){
                             $quantitySolo = $this->input->post('quantitySolo');
+                            $quantitySolo = abs($quantitySolo);
                         }
                         $idProductItem = $this->product_model->addNewCombination($product_id,$quantitySolo);
 
@@ -549,7 +551,7 @@ class productUpload extends MY_Controller
                         foreach ($combination as $keyCombination) {
                             $quantitycombination = 1;
                             if(!$quantitycombination <= 0){
-                                $quantitycombination = $keyCombination->quantity;
+                                $quantitycombination = abs($keyCombination->quantity);
                             }
                             $idProductItem = $this->product_model->addNewCombination($product_id,$quantitycombination);
                             if(strpos($keyCombination->value, '-') !== false) {
