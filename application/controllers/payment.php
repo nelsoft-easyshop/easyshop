@@ -281,6 +281,7 @@ class Payment extends MY_Controller{
             redirect(base_url().'home', 'refresh');
         }
 
+        $this->session->set_userdata('paymentticket', true);
         $PayPalMode             = $this->PayPalMode; 
         $PayPalApiUsername      = $this->PayPalApiUsername;
         $PayPalApiPassword      = $this->PayPalApiPassword;
@@ -455,6 +456,7 @@ class Payment extends MY_Controller{
         $data['cat_item'] = $this->cart->contents();
         $data['title'] = 'Payment | Easyshop.ph';
         $data = array_merge($data,$this->fill_header());
+   
    
         $this->session->set_userdata('paymentticket', true);
         $this->session->set_userdata('headerData', $data);
@@ -882,9 +884,3 @@ class Payment extends MY_Controller{
 
 /* End of file payment.php */
 /* Location: ./application/controllers/payment.php */
-
-// ROLLBACK;
-//             GET DIAGNOSTICS CONDITION 1 @sqlstate = RETURNED_SQLSTATE,
-//             @errno = MYSQL_ERRNO, @text = MESSAGE_TEXT;
-//             SET @full_error = CONCAT("ERROR ", @errno, " (", @sqlstate, "): ", @text);
-//             SELECT o_success AS o_success, @full_error AS o_message;
