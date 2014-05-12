@@ -1111,3 +1111,7 @@ div.reply_content_shown > p {
     width: 70px;
 }
 
+#thumblist li {
+    margin-left: 5px;
+}
+

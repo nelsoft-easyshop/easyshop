@@ -93,8 +93,8 @@
 			<div class="radio_container">
 				<?php foreach($shipping_preference['name'] as $productId => $name):?>				
 					<p>
-						<input type="radio" name="shipping_preference" value="<?php echo $productId?>">
-						<label for="shipping_preference"><span style='font-weight:bold'><?php echo $shipping_preference['date'][$productId]?></span><span style='font-weight:bold; margin-left: 5px;'>|</span><span style='margin-left: 5px;'><?php echo html_escape($name);?></span><span style='font-weight:bold; margin-left: 5px;'> |</span><span style='margin-left: 5px;'><?php echo html_escape($shipping_preference['brief'][$productId]);?></span></label>
+						<input style='float:left; margin-top: 6px;' type="radio" name="shipping_preference" value="<?php echo $productId?>">
+						<label for="shipping_preference" style='margin-left: 5px;'><span style='font-weight:bold'><?php echo $shipping_preference['date'][$productId]?></span><span style='font-weight:bold; margin-left: 5px;'>|</span><span style='margin-left: 5px;'><?php echo html_escape($name);?></span><span style='font-weight:bold; margin-left: 5px;'> |</span><span style='margin-left: 5px;'><?php echo html_escape($shipping_preference['brief'][$productId]);?></span></label>
 					</p>
 				<?php endforeach;?>
 			</div>

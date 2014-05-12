@@ -485,7 +485,7 @@ $(function(){
                     ],
                     show: {
                         effect: "fade",
-                        duration: 1000
+                        duration: 600
                     },
                       hide: {
                         effect: "fade",
