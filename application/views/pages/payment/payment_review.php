@@ -91,8 +91,8 @@
             <input type="hidden" value="<?php echo md5(uniqid(mt_rand(), true));?>" name="paymentToken">   
             <?php echo form_close();?>
             <p class="notify">You will be notified regarding your order status via email or sms.</p>
-            <p class="subscribe"><input type="checkbox" checked> <img src="<?= base_url() ?>assets/images/icon_email.png" alt="email"> Subscribe to Easyshop Newsletter for great deals and amazing discounts</p>
-            <p class="chck_privacy"><input type="checkbox"> I have read and understand Easyshop <a href="">Privacy Policy</a>.</p>
+            <!-- <p class="subscribe"><input type="checkbox" checked> <img src="<?= base_url() ?>assets/images/icon_email.png" alt="email"> Subscribe to Easyshop Newsletter for great deals and amazing discounts</p> -->
+    <p class="chck_privacy"><input type="checkbox"> I acknowledge I have read and understood Easyshop.ph's <a href="">Privacy Policy</a>.</p>
     <?php }else{ ?>
 
       <span style="color:red"><strong>NOTE: one or more of your chosen items are not available for cash on delivery.</strong></span>
@@ -154,8 +154,8 @@
         } ?>
     <div style="clear:both"></div>
     <p class="notify">You will be notified regarding your order status via email or sms.</p>
-    <p class="subscribe"><input type="checkbox" checked> <img src="<?= base_url() ?>assets/images/icon_email.png" alt="email"> Subscribe to Easyshop Newsletter for great deals and amazing discounts</p>
-    <p class="chck_privacy"><input type="checkbox"> I have read and understand Easyshop <a href="">Privacy Policy</a>.</p>
+    <!-- <p class="subscribe"><input type="checkbox" checked> <img src="<?= base_url() ?>assets/images/icon_email.png" alt="email"> Subscribe to Easyshop Newsletter for great deals and amazing discounts</p> -->
+    <p class="chck_privacy"><input type="checkbox"> I acknowledge I have read and understood Easyshop.ph's <a href="">Privacy Policy</a>.</p>
   </div>
 
 <!-- #### PAYPAL #### -->
@@ -169,7 +169,7 @@
         <?php
         if(count($cat_item) <= 0)
         { ?> <br /> <br />
-       No Items in Cart Can't Proceed.
+       There are no items in the cart.
        <?php 
         }else{ ?> <br /> <br />
       <!-- PAYPAL BUTTON -->
@@ -187,8 +187,8 @@
         } ?>
     <div style="clear:both"></div>
     <p class="notify">You will be notified regarding your order status via email or sms.</p>
-    <p class="subscribe"><input type="checkbox" checked> <img src="<?= base_url() ?>assets/images/icon_email.png" alt="email"> Subscribe to Easyshop Newsletter for great deals and amazing discounts</p>
-    <p class="chck_privacy"><input type="checkbox"> I have read and understand Easyshop <a href="">Privacy Policy</a>.</p>
+    <!-- <p class="subscribe"><input type="checkbox" checked> <img src="<?= base_url() ?>assets/images/icon_email.png" alt="email"> Subscribe to Easyshop Newsletter for great deals and amazing discounts</p> -->
+    <p class="chck_privacy"><input type="checkbox"> I acknowledge I have read and understood Easyshop.ph's <a href="">Privacy Policy</a>.</p>
   </div>
 
 <!-- #### DRAGON PAY #### -->
@@ -205,7 +205,10 @@
     <?php
   }else{
     ?>
+        <br/>
+        <span style='padding:8px; background-color: #FFEFEF; border: 1px solid #FF0000; font-size: 12px; font-weight:bold;'>One or more of your item(s) is unavailable in your location. </span>
     </div>
+    
       <div class="order_sum_table">
         <h2>Order Summary</h2>
         <div class="order_sum_header">
@@ -425,9 +428,9 @@ $(document).ready(function(){
             dataType: "json", 
             success: function(d) {
               if(d == ""){
-                alert('Please Double Check your Details');
+                alert('Please double check your details');
               }else{
-                alert('Shipping address changed!');
+                //alert('Shipping address changed!');
                 location.reload();
               }
             }

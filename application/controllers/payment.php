@@ -123,6 +123,7 @@ class Payment extends MY_Controller{
  
             $this->load->view('templates/header', $data);
             $this->load->view('pages/payment/payment_review' ,$data);  
+            $this->load->view('templates/footer' ,$data);  
         }else{
            redirect('/cart/', 'refresh'); 
        }
