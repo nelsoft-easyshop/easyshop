@@ -95,28 +95,6 @@ $config = array(
 						'rules' => 'trim|min_length[6]|valid_email'
 					),
 				),
-			/*'personal_profile_address' => array(
-					array(
-						'field' => 'streetno',
-						'label' => 'Street or Building Number',
-						'rules' => 'required'
-					),
-					array(
-						'field' => 'streetname',
-						'label' => 'Streetname',
-						'rules' => 'required'
-					),
-					array(
-						'field' => 'citytown',
-						'label' => 'City or Town',
-						'rules' => 'required'
-					),
-					array(
-						'field' => 'country',
-						'label' => 'Country',
-						'rules' => 'required'
-					),
-				),*/
 			'personal_profile_address' => array(
 					array(
 						'field' => 'stateregion',
@@ -177,7 +155,6 @@ $config = array(
 					array(
 						'field' => 'c_mobile',
 						'label' => 'Mobile Number',
-						//'rules' => 'required|is_numeric'
 						'rules' => 'required|trim|numeric|min_length[10]|max_length[10]|callback_external_callbacks[memberpage_model,is_validmobile]'
 					),
 					array(
@@ -308,7 +285,7 @@ $config = array(
 				  array(
 						'field' => 'mobile',
 						'label' => 'Mobile',
-						'rules' => 'trim|numeric|min_length[10]|max_length[10]|callback_external_callbacks[register_model,is_validmobile]'
+						'rules' => 'trim|numeric|min_length[10]|max_length[10]|callback_external_callbacks[register_model,is_validmobile]|callback_external_callbacks[register_model,validate_mobile]'
 					),
 				),
 			'subscription_form' => array(

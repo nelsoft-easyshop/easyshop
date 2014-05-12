@@ -22,9 +22,7 @@ class Register_model extends CI_Model
 		return $result;
 	}
 
-	/*
-	 *
-	 */
+	// USED BY AJAX CHECK
 	function checkEmailIfExists($email)
 	{
 		$query = $this->sqlmap->getFilenameID('users', 'getEmail');
@@ -33,6 +31,17 @@ class Register_model extends CI_Model
         $sth->execute();
 		$result = $sth->fetch(PDO::FETCH_ASSOC);
 		
+		return $result;
+	}
+	// USED BY AJAX CHECK
+	function checkMobileIfExists($mobile)
+	{
+		$query = $this->sqlmap->getFilenameID('users', 'getMobile');
+        $sth = $this->db->conn_id->prepare($query);
+        $sth->bindParam(':contactno', $mobile);
+        $sth->execute();
+		$result = $sth->fetch(PDO::FETCH_ASSOC);
+
 		return $result;
 	}
 	
@@ -122,6 +131,7 @@ class Register_model extends CI_Model
 		}
 	}
 	
+	// FOR FIRST TIME REGISTRATION ONLY
 	function validate_email($email)
     {	
 		$query = $this->sqlmap->getFilenameID('users', 'getEmail');
@@ -133,6 +143,21 @@ class Register_model extends CI_Model
 		}
 		else{
 			$this->form_validation->set_message('external_callbacks', 'Email already used');
+			return false;
+		}
+	}
+	// FOR FIRST TIME REGISTRATION ONLY
+	function validate_mobile($mobile)
+	{
+		$query = $this->sqlmap->getFilenameID('users', 'getMobile');
+		$sth = $this->db->conn_id->prepare($query);
+		$sth->bindParam(':contactno', $mobile);
+		$sth->execute();
+		if($sth->rowcount() == 0){
+			return true;
+		}
+		else{
+			$this->form_validation->set_message('external_callbacks', 'Mobile already used');
 			return false;
 		}
 	}

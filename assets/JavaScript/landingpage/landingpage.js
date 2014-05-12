@@ -110,6 +110,36 @@ $(document).ready(function(){
 			$('.email_availability').html('');
 		}
 	  });
+	  
+	  $('#mobile').on('blur', function(){
+		var fieldlength = $.trim($('#mobile').val()).length;
+
+		if(fieldlength >= 6 && $(this).hasClass('forSearch') && $(this).hasClass('valid')){
+			setTimeout(mobile_check,500);
+            console.log('here');
+		}
+		else if(fieldlength < 6){
+			hidecheckx($('#mobile'));
+			$('.mobile_availability').html('');
+		}
+	  }).on('keyup', function(){
+		var fieldlength = $.trim($('#mobile').val()).length;
+		hidecheckx($(this));
+		$('.mobile_availability').html('');
+		
+		if($(this).hasClass('pass')){
+			$(this).removeClass('pass');
+		}
+		
+		if(!$(this).hasClass('forSearch') && fieldlength >= 6){
+			$(this).addClass('forSearch');
+		}
+		else if(fieldlength < 6){
+			$(this).removeClass('forSearch');
+			hidecheckx($('#mobile'));
+			$('.mobile_availability').html('');
+		}
+	  });
 });
 
 /**********************************************************************************************/
@@ -293,6 +323,28 @@ function email_check(){
 	});
 }
 
+function mobile_check(){
+	var mobile = $('#mobile').val();
+	var csrftoken = $("meta[name='csrf-token']").attr('content');
+    var csrfname = $("meta[name='csrf-name']").attr('content');
+	var field = $('#mobile');
+	$('#mobile_loader').show().css('display','inline-block');
+	$.post(config.base_url+'landingpage/mobile_check', {mobile: mobile, csrfname : csrftoken}, function(result){
+		if(result == 1){
+			showcheck($('#mobile'));
+			$('.mobile_availability').html('');
+			$('#mobilecheck').attr('value', $('#mobile').val());
+			field.addClass('pass');
+		}
+		else{
+			showx($('#mobile'));
+			$('.mobile_availability').html('Mobile is already in use.');
+			field.removeClass('pass');
+		}
+		field.removeClass('forSearch');
+		$('#mobile_loader').hide();
+	});
+}
 
 /**********************************************************************************************/
 /****************************	SUBSCRIPTION FORM	*******************************************/

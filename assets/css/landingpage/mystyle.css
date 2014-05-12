@@ -165,7 +165,7 @@ body {
     width: 275px;
 }*/
 
-.username_availability {
+.username_availability, .email_availability, .mobile_availability {
     font-size: 12px;
     vertical-align: middle;
 }
@@ -229,10 +229,14 @@ input.error + span.error {
     width: 236px !important;
 }*/
 
-.email_availability {
-    font-size: 12px;
-    vertical-align: middle;
+#mobile_status {
+    display: inline-block;
+    padding-bottom: 10px;
+    padding-left: 10px;
+    position: absolute;
 }
+
+
 
 .img_loader_small2 {
     padding: 5px 0 0 10px;
@@ -495,6 +499,11 @@ input.error + span.error {
         margin-top: -50px;     
     }*/
     ::i-block-chrome,#email_status {
+        margin-left: auto;
+        margin-top: auto;
+    } 
+	
+	::i-block-chrome,#mobile_status {
         margin-left: auto;
         margin-top: auto;
     } 

@@ -112,7 +112,7 @@
 											<span class="red ci_form_validation_error"><?php echo form_error('email'); ?></span>
 											<span class="help-block spnmsg"></span>
 										
-											<h4>Mobile Number<h4>
+											<h4>Mobile Number</h4>
 											<input type="text" placeholder="e.g. 9051234567" name="mobile" class="reqfield" id="mobile" maxlength="10">
 											<input type="hidden" id="mobilecheck" value="">
 											<img id="mobile_loader" class="img_loader_small" src="<?=base_url()?>/assets/images/orange_loader_small.gif" style="display:none;">

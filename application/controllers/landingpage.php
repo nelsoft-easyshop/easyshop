@@ -139,6 +139,19 @@ class Landingpage extends MY_Controller
 			}
 		}
 	}
+	
+	public function mobile_check()
+	{
+		if($this->input->post('mobile')){
+			$mobile = $this->input->post('mobile');
+			if($this->register_model->checkMobileIfExists($mobile)){
+				echo 0;
+			}
+			else {
+				echo 1;
+			}
+		}
+	}
 
 	public function external_callbacks( $postdata, $param )
 	{

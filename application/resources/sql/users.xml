@@ -30,6 +30,11 @@
 	SELECT id_member, username FROM `es_member` WHERE email = :email LIMIT 1;
 </select>
 
+<!-- CHECK if mobile is already used -->
+<select id="getMobile">
+	SELECT id_member, username FROM `es_member` WHERE contactno = :contactno LIMIT 1;
+</select>
+
 <!-- Used for vendor details and username check- memberpage -->
 <select id="get_member_by_username">
 	SELECT m.id_member, m.username, m.contactno, m.email, a.stateregion, a.city, l1.location as stateregionname, l2.location as cityname, DATE_FORMAT(datecreated, "%M %Y") as datecreated
