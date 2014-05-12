@@ -176,6 +176,7 @@
 			tbl_data(result);
 			$("#msg_field").empty().append('<img id="msg_loader" src="<?=base_url()?>assets/images/orange_loader.gif">');
 			$("#msg_textarea").hide();
+			$("#chsn_delete_btn").hide();            
 		}else {
             location.reload();
 		}
