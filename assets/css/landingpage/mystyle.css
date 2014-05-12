@@ -14,7 +14,7 @@ body {
 }
 
 .header_bg{
-    height: 729px;
+    height: 100%;
     line-height: 70px;
     width: 100%;
     color: #FFFFFF;
@@ -87,7 +87,7 @@ body {
 }
 
 .himg2 {
-  background: url("/assets/images/landingpage/img_model.png") bottom right no-repeat;  
+  background: url("/assets/images/landingpage/img_model.png") no-repeat scroll right bottom / 42% auto rgba(0, 0, 0, 0);  
   width: 70%;
   margin:0 auto;
   min-height: 400px;
@@ -532,15 +532,10 @@ input.error + span.error {
     .hs_top{
         width:100%;
     }
-    .header_bg{
-        height: 687px;
-    }
  }
  
  @media (max-width:360px) {    
-    .header_bg{
-        height: 1010px;
-    }
+
  }
  @media (max-width:2000px) {    
     .himg2 {
