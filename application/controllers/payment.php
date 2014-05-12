@@ -480,6 +480,7 @@ class Payment extends MY_Controller{
         }
         
         $this->session->set_userdata('paymentticket', true);
+        
         $paymentType = $this->PayMentCashOnDelivery; 
         $apiResponseArray = array(); 
         
