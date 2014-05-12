@@ -55,7 +55,19 @@ if (!defined('BASEPATH'))
 	public function get_all_msgs(){
 		$result = $this->messages_model->get_all_messages($this->user_ID);	
 		echo json_encode($result);
-	}
+	}	
+	public function get_all_msgs2(){
+		$result = $this->messages_model->get_all_messages($this->user_ID);
+		$size  = sizeof($result['messages']);
+		for($x = 0;$size > $x;$x++){
+			foreach($result['messages'][$x] as $key => $data){		
+				if(isset($data['name']) && $data['opened'] == '1'){
+					unset($result['messages'][$x]);					
+				}
+			}
+		}	
+		echo json_encode($result);
+	}	
 	public function is_seened(){
 		$id = $this->user_ID;
 		$from_ids = $this->input->post('checked');

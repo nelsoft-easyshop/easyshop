@@ -125,7 +125,7 @@ class messages_model extends CI_Model
 				}else if($status == "reciever" && ($delete == '0' || $delete == '2')){
 				}else{
 					$ask = "true";
-				unset($result['messages'][$x][$key]);
+				    unset($result['messages'][$x][$key]);
 				}
 			}
 		}

@@ -29,7 +29,7 @@
                           $row[reset($keys)]['message'] = html_escape(reset($row)['message']);
                     ?>
                     
-					<a class="btn_each_msg" href="javascript:void(0)" data='<?=html_escape(json_encode($row))?>'>
+					<a class="btn_each_msg" id="ID_<?PHP echo reset($row)['name']; ?>" href="javascript:void(0)" data='<?=html_escape(json_encode($row))?>'>
 						<span class="msg_sender"><?PHP echo reset($row)['name']; ?></span>
 						<span class="msg_message"><?PHP echo html_escape(reset($row)['message']); ?></span>
 						<span class="msg_date"><?PHP echo reset($row)['time_sent']; ?></span>
@@ -95,40 +95,40 @@
 		
 		$("#msg_textarea").on("click","#send_btn",function(){ // restrict textarea,button if doesnt have value 
 			
-            var D = eval('(' + $(this).attr('data') + ')');
-			var recipient = D.name;
-			var img = D.img;
-			var msg = $("#out_txtarea").val();
-            if (msg == "") {
-                return false;
-            }
-			send_msg(recipient,msg);
-			specific_msgs();
-            
-            var objDiv = document.getElementById("msg_field");	
-            objDiv.scrollTop = objDiv.scrollHeight;
+        var D = eval('(' + $(this).attr('data') + ')');
+        var recipient = D.name;
+        var img = D.img;
+        var msg = $("#out_txtarea").val();
+        if (msg == "") {
+            return false;
+        }
+        send_msg(recipient,msg);
+        specific_msgs();
+        
+        var objDiv = document.getElementById("msg_field");	
+        objDiv.scrollTop = objDiv.scrollHeight;
 		});
 		
     
         ////this is for page reload every time the user is focused on the web page/tab
-        //var myInterval;
-        //var interval_delay = 5000;
-        //var is_interval_running = false;
-        //
-        //$(document).ready(function () {
-        //    $(window).focus(function () {
-        //        clearInterval(myInterval); 
-        //        if  (!is_interval_running)
-        //            myInterval = setInterval(Reload, interval_delay);
-        //    }).blur(function () {
-        //        clearInterval(myInterval);
-        //        is_interval_running = false;
-        //    });
-        //});
-        //
-        //interval_function = function () {
-        //     is_interval_running = true;
-        //}
+        var myInterval;
+        var interval_delay = 5000;
+        var is_interval_running = false;
+        
+        $(document).ready(function () {
+            $(window).focus(function () {
+                clearInterval(myInterval); 
+                if  (!is_interval_running)
+                    myInterval = setInterval(Reload, interval_delay);
+            }).blur(function () {
+                clearInterval(myInterval);
+                is_interval_running = false;
+            });
+        });
+        
+        interval_function = function () {
+             is_interval_running = true;
+        }
        
     });
      
@@ -140,16 +140,11 @@
             asycn :true,
             type:"POST",
             dataType : "json",
-            url :  "<?=base_url()?>messages/get_all_msgs",
-            data : {csrfname:csrftoken},
-            success :function(data){
-                if (data != "false") {
-                    result = data.messages;
-                    tbl_data(result);
-                    //specific_msgs();
-                }else{
-                    alert("Connection Error");
-                    return "false";
+            url : "<?=base_url()?>messages/get_all_msgs2",
+			data : {csrfname:csrftoken},
+			success : function(d) {
+                if (d.unread_msgs != 0) {
+                    onFocus_Reload(d.messages);
                 }
             }            
         });
@@ -247,7 +242,7 @@
 		var objDiv = document.getElementById("msg_field");	
 		objDiv.scrollTop = objDiv.scrollHeight;
 		$("#head_container span").show();
-		$(".btn_each_msg").removeClass($(".btn_each_msg").attr('class').split(' ')[1]);
+		$(".btn_each_msg").removeClass("Active");
 		$(this).addClass("Active");
 		seened(this);
 	});
@@ -267,35 +262,10 @@
           return entityMap[s];
         });
       }
-    function tbl_data(D){
-		html = "";
-		$.each(D,function(key,val){
-			var cnt = parseInt(Object.keys(val).length)- 1;
-			var Nav_msg = D[key][Object.keys(val)[cnt]]; //first element of object
-			html +='<tr class="'+(Nav_msg.opened == "0" && Nav_msg.status == "reciever" ? "NS" : "")+' odd">';
-			html +='<td class=" sorting_1">';
-			if (Nav_msg.status == "sender") {
-				html +='<img src=<?=base_url()?>'+Nav_msg.recipient_img+'/60x60.png data="'+Nav_msg.sender_img+'">';
-			}else {
-				html +='<img src=<?=base_url()?>'+Nav_msg.sender_img+'/60x60.png data="'+Nav_msg.recipient_img+'">';
-			}
-			html +='</td>';
-			html +='<td class=" ">';
-			html +="<a class='btn_each_msg' data='"+ escapeHtml(JSON.stringify(val))+"' href='javascript:void(0)'>";
-			html +='<span class="msg_sender">'+Nav_msg.name+'</span>';
-			html +='<span class="msg_message">'+escapeHtml(Nav_msg.message)+'</span>';
-			html +='<span class="msg_date">'+Nav_msg.time_sent+'</span>';
-			html +='</a>';
-			html +='</td>';
-			html +='</tr>';
-			$("#table_id tbody").empty();
-			$("#table_id tbody").append(html);
-		});
-		$("#table_id a").first().addClass("Active");
-	}
 	function specific_msgs() {
 		var html = "";
 		var all_messages = eval('('+ $(".Active").attr('data')+')');
+        var objDiv = document.getElementById("msg_field");
 		$.each(all_messages,function(key,val){
 			if (val.status == "reciever") {
 				html += '<span class="float_left">';
@@ -311,8 +281,7 @@
 		});
 		$("#out_txtarea").val("");
 		$("#msg_textarea").show();
-		//var objDiv = document.getElementById("msg_field");	
-		//objDiv.scrollTop = objDiv.scrollHeight;
+        objDiv.scrollTop = objDiv.scrollTop + 100;
 	}
 	$("#btn_refresh").on("click",function(){
 		var csrftoken = $("meta[name='csrf-token']").attr('content');
@@ -340,7 +309,68 @@
 			}   
 		});
 	});
-	$("#msg_field").on("click",".d_all",function(){
+    function tbl_data(D){
+        html = "";
+        $.each(D,function(key,val){
+            var cnt = parseInt(Object.keys(val).length)- 1;
+            var Nav_msg = D[key][Object.keys(val)[cnt]]; //first element of object
+            html +='<tr class="'+(Nav_msg.opened == "0" && Nav_msg.status == "reciever" ? "NS" : "")+' odd">';
+            html +='<td class=" sorting_1">';
+            if (Nav_msg.status == "sender") {
+                html +='<img src=<?=base_url()?>'+Nav_msg.recipient_img+'/60x60.png data="'+Nav_msg.sender_img+'">';
+            }else {
+                html +='<img src=<?=base_url()?>'+Nav_msg.sender_img+'/60x60.png data="'+Nav_msg.recipient_img+'">';
+            }
+            html +='</td>';
+            html +='<td class=" ">';
+            html +="<a class='btn_each_msg' id='ID_"+Nav_msg.name+"' data='"+ escapeHtml(JSON.stringify(val))+"' href='javascript:void(0)'>";
+            html +='<span class="msg_sender">'+Nav_msg.name+'</span>';
+            html +='<span class="msg_message">'+escapeHtml(Nav_msg.message)+'</span>';
+            html +='<span class="msg_date">'+Nav_msg.time_sent+'</span>';
+            html +='</a>';
+            html +='</td>';
+            html +='</tr>';
+            $("#table_id tbody").empty();
+            $("#table_id tbody").append(html);
+        });
+        $("#table_id a").first().addClass("Active");
+	}
+    function onFocus_Reload(D) {
+		html = "";
+		$.each(D,function(key,val){
+			var cnt = parseInt(Object.keys(val).length)- 1;
+			var Nav_msg = D[key][Object.keys(val)[cnt]]; //first element of object
+            if ($('#ID_'+Nav_msg.name).length) {
+                $('#ID_'+Nav_msg.name).children('.msg_message').text(escapeHtml(Nav_msg.message));
+                $('#ID_'+Nav_msg.name).attr('data',JSON.stringify(val));
+                $('#ID_'+Nav_msg.name).parent().parent().addClass('NS');
+                if ($('#ID_'+Nav_msg.name).hasClass("Active")) {
+                    specific_msgs();
+                    seened($('#ID_'+Nav_msg.name));
+                }
+            }else{
+                //append another div on tbl_data
+                html +='<tr class="'+(Nav_msg.opened == "0" && Nav_msg.status == "reciever" ? "NS" : "")+' odd">';
+                html +='<td class=" sorting_1">';
+                if (Nav_msg.status == "sender") {
+                    html +='<img src=<?=base_url()?>'+Nav_msg.recipient_img+'/60x60.png data="'+Nav_msg.sender_img+'">';
+                }else {
+                    html +='<img src=<?=base_url()?>'+Nav_msg.sender_img+'/60x60.png data="'+Nav_msg.recipient_img+'">';
+                }
+                html +='</td>';
+                html +='<td class=" ">';
+                html +="<a class='btn_each_msg' id='ID_"+Nav_msg.name+"' data='"+ escapeHtml(JSON.stringify(val))+"' href='javascript:void(0)'>";
+                html +='<span class="msg_sender">'+Nav_msg.name+'</span>';
+                html +='<span class="msg_message">'+escapeHtml(Nav_msg.message)+'</span>';
+                html +='<span class="msg_date">'+Nav_msg.time_sent+'</span>';
+                html +='</a>';
+                html +='</td>';
+                html +='</tr>';
+                $("#table_id tbody").prepend(html);
+            }
+		});
+    }
+    $("#msg_field").on("click",".d_all",function(){
 		if ($('.d_all').not(':checked').length == $('.d_all').length) {
 			$("#chsn_delete_btn").hide();
 		}else{
@@ -371,7 +401,8 @@
 	}
 
     function seened(obj) {
-        if ($(obj).parent().parent().attr('class').split(' ')[0] == "NS") {
+        //if ($(obj).parent().parent().attr('class').split(' ')[0] == "NS") {
+        if ($(obj).parent().parent().hasClass("NS")) {
             var checked = $(".float_left .d_all").map(function () {return this.value;}).get().join(",");
             var csrftoken = $("meta[name='csrf-token']").attr('content');
             var csrfname = $("meta[name='csrf-name']").attr('content');
@@ -382,7 +413,7 @@
                 url : "<?=base_url()?>messages/is_seened",
                 data : {checked:checked,csrfname:csrftoken},
                 success : function(data) {
-                    $(obj).parent().parent().removeClass($(obj).parent().parent().attr('class').split(' ')[0]);
+                    $(obj).parent().parent().removeClass('NS');
                 }
             });
         }
