@@ -44,7 +44,7 @@
     </div>
     <div id="msg_inbox_container" class = "msg_container">
 		<div id="msg_field">
-			<img id="msg_loader" src="<?=base_url()?>assets/images/orange_loader.gif">
+			<!-- <img id="msg_loader" src="<?=base_url()?>assets/images/orange_loader.gif"> -->
 		</div>
 		<div id="msg_textarea">
 			<textarea id="out_txtarea" placeholder="Write a message"></textarea>
