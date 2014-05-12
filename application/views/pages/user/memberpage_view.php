@@ -1491,6 +1491,13 @@
 							<strong>Invoice #: </strong> <?php echo $transact['invoice_no'];?><br />
 							<strong>Sold to: </strong> <a href="<?php echo base_url();?>vendor/<?php echo $transact['buyer']?>"><?php echo $transact['buyer']?></a> <br />
 							<?php foreach($transact['users'] as $uk=>$user):?>
+								<span class="transac_additional_details"><strong>Consignee: </strong> <?php echo html_escape($user['address']['consignee']);?></span>
+								<?php if(trim($user['address']['mobile']) != ''):?>
+									<span class="transac_additional_details"><strong>Mobile: </strong> <?php echo html_escape($user['address']['mobile']);?></span>
+								<?php endif;?>
+								<?php if(trim($user['address']['telephone']) != ''):?>
+									<span class="transac_additional_details"><strong>Telephone: </strong> <?php echo html_escape($user['address']['telephone']);?></span>
+								<?php endif;?>
 								<span class="sold_transac_add_state_region"><strong>State/Region:</strong> <?php echo $user['address']['stateregion']?></span>
 								<span class="sold_transac_add_city"><strong>City:</strong> <?php echo $user['address']['city'];?></span>
 								<span class="sold_transac_add_fulladd"><strong>Address:</strong> <?php echo html_escape($user['address']['fulladd']);?></span>
@@ -1794,6 +1801,13 @@
 							<strong>Invoice #: </strong> <?php echo $transact['invoice_no'];?><br />
 							<strong>Sold to: </strong> <a href="<?php echo base_url();?>vendor/<?php echo $transact['buyer']?>"><?php echo $transact['buyer']?></a> <br />
 							<?php foreach($transact['users'] as $uk=>$user):?>
+								<span class="transac_additional_details"><strong>Consignee: </strong> <?php echo html_escape($user['address']['consignee']);?></span>
+								<?php if(trim($user['address']['mobile']) != ''):?>
+									<span class="transac_additional_details"><strong>Mobile: </strong> <?php echo html_escape($user['address']['mobile']);?></span>
+								<?php endif;?>
+								<?php if(trim($user['address']['telephone']) != ''):?>
+									<span class="transac_additional_details"><strong>Telephone: </strong> <?php echo html_escape($user['address']['telephone']);?></span>
+								<?php endif;?>
 								<span class="sold_transac_add_state_region"><strong>State/Region:</strong> <?php echo $user['address']['stateregion']?></span>
 								<span class="sold_transac_add_city"><strong>City:</strong> <?php echo $user['address']['city'];?></span>
 								<span class="sold_transac_add_fulladd"><strong>Address:</strong> <?php echo html_escape($user['address']['fulladd']);?></span>

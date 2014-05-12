@@ -486,6 +486,9 @@ class memberpage_model extends CI_Model
 						'rating2' => 0,
 						'rating3' => 0,
 						'address' => array(
+							'consignee' => $temp['consignee'],
+							'mobile' => $temp['mobile'],
+							'telephone' => $temp['telephone'],
 							'stateregion' => $temp['stateregion'],
 							'city' => $temp['city'],
 							'fulladd' => $temp['address'],
