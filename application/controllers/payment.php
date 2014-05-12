@@ -756,12 +756,9 @@ class Payment extends MY_Controller{
         $data['cat_item'] = $this->cart->contents();
         $data['title'] = 'Payment | Easyshop.ph';
         $data = array_merge($data,$this->fill_header());
-
         $this->session->set_userdata('headerData', $data);
         $this->session->set_userdata('bodyData', $response);
-
         $this->session->unset_userdata('dragonpayticket');
-        
         redirect(base_url().'payment/success/dragonpay', 'refresh');
         
   
