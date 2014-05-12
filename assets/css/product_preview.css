@@ -522,7 +522,7 @@ span.seller-name span:hover {
 	color: #fff;
 }
 
-/*.orange_btn_preview {
+.preview_buy_btn {
     background-color: #C0C0C0;
     border-radius: 3px;
     color: #FFFFFF;
@@ -530,11 +530,11 @@ span.seller-name span:hover {
     font-size: 16px;
     height: 40px;
     line-height: 40px;
-    padding:0;
+    padding: 0;
     text-align: center;
     transition: all 0.3s ease-in-out 0s;
     width: 110px;
-}*/
+}
 
 .orange_btn_preview.enabled{
 	background-color: #FF4400;
@@ -1095,3 +1095,19 @@ div.reply_content_shown > p {
     text-transform: uppercase;
     width: 120px;
 }
+
+#thumblist li a img {
+    height: auto;
+    max-height: 70px;
+    max-width: 70px;
+    width: auto;
+}
+
+#thumblist li a {
+    border: 1px solid #E5E5E5;
+    display: table-cell;
+    height: 70px;
+    vertical-align: middle;
+    width: 70px;
+}
+

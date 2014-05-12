@@ -193,6 +193,12 @@ class product_model extends CI_Model
         $sth->bindParam(':is_draft',$is_draft);
         $sth->execute();
 		$row = $sth->fetch(PDO::FETCH_ASSOC);
+        if(count($row) > 0){
+            if(strlen(trim($row['userpic']))===0){
+                 $row['userpic'] = 'assets/user/default';
+            }
+        }
+        
         return $row;
     }
 

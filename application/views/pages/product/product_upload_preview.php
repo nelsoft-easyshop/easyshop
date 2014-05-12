@@ -146,7 +146,7 @@
                   <span class="seller-name"> 
                       <img src="<?php echo base_url() . $product['userpic']?>/60x60.png"><br />
                       <span><?php echo html_escape($product['sellerusername']);?></span> 
-                      <p>No ratings received.</p>
+                      <p style='font-size:8px;'>No ratings received.</p>
                   </span> 
                 </h1>
                 <div class="clear prod_inner_border"></div>
@@ -199,7 +199,7 @@
                     </p>
                   </div>
                   <div class="buy_box"> 
-                    <a href="JavaScript:void(0)" id="send" class="fm1 orange_btn_preview disabled">Buy Now</a> <br/>
+                    <a href="JavaScript:void(0)" id="send" class="fm1 preview_buy_btn disabled">Buy Now</a> <br/>
                     <span>Delivers in 5-8 business days*</span> </div>
                 </div>
                 <p class="product_content_payment"> <strong>Payment:</strong><br />
@@ -225,6 +225,7 @@
                     <p> <strong>Description: </strong><?php echo html_purify($product['description']);?> </p>
                     <li><strong>Brand: </strong><?php echo html_escape(ucfirst(strtolower($product['brand_name'])));?></li>
                     <li><strong>Additional description: </strong><?php echo html_escape($product['brief']);?></li>
+                    <li><strong>Condition: </strong><?php echo html_escape($product['condition']);?></li
                   </ul>
                 </div>
                 <div id="tabs-2">

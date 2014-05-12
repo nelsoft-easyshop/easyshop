@@ -160,7 +160,8 @@
 			$("#modal-container, #modal-background").toggleClass("active");
 			$("#modal-container").hide();
 			$("#msg-message").val("");
-			$("#msg_field").empty().append('<img id="msg_loader" src="'+config.base_url+'assets/images/orange_loader.gif">');
+            $("#msg_field").empty();
+			//$("#msg_field").empty().append('<img id="msg_loader" src="'+config.base_url+'assets/images/orange_loader.gif">');
 			$("#msg_textarea").hide();
 			alert("Message sent");
 		}else {

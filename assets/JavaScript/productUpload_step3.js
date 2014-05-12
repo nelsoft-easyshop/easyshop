@@ -483,9 +483,17 @@ $(function(){
                             }
                         },
                     ],
+                    show: {
+                        effect: "fade",
+                        duration: 1000
+                    },
+                      hide: {
+                        effect: "fade",
+                        duration: 400
+                    }
                 });
                 $('#previewProduct').dialog('open');
-    
+                
                 $('#prod_billing_id').val( $('#billing_info_id').val());
                 $('#allow_cod').prop('checked', false);
                 $('#btnShippingDetailsSubmit').val('SUBMIT');
