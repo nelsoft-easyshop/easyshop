@@ -134,11 +134,10 @@ $(function(){
 		alert('Please accept changes in Summary Table.');
 		return;
 	}
-    var hasActive = hasLoc = hasPrice = hasLPC = false;
+    var hasActive = hasLoc = hasPrice = hasLP = false;
     var noDuplicate = true;
 	var shipObj = { 'attr' : {},'loc' : {},'price' : {}, 'disp_attr' : {} };
     var i = parseInt($('#summaryrowcount').val());
-	var alerterror = 'Please specify the following: ';
 	
     //Get Product Attribute Options
 	if(hasAttr === 1){
@@ -164,7 +163,7 @@ $(function(){
       var price = $(this).parent('td').next('td').children('input[name^="shipprice"]');
       
 	  hasPrice = $.trim(price.val()) !== '' ? true : false;
-	  hasLoc = selopt.val() != 0 ? true : false;	  
+	  hasLoc = selopt.val() != 0 ? true : false;
 	  
 	  //if(hasLoc && hasPrice && hasCourier){
 	  if(hasLoc && hasPrice){
@@ -172,7 +171,7 @@ $(function(){
 		priceVal = parseFloat(priceVal).toFixed(2);
 		shipObj.price[selopt.val()] = priceVal;
 		shipObj.loc[selopt.val()] = $.trim(selopt.text());
-		hasLPC = true;
+		hasLP = true;
 	  }
     });
 
@@ -189,8 +188,8 @@ $(function(){
       });
     });
 	
-	/*******************	Executed on Complete Data	********************************/
-    if(hasActive && hasLPC && noDuplicate){
+	/*******************	Executed on Complete and non-Duplicate Data	********************************/
+    if(hasActive && hasLP && noDuplicate){
       var row = $('table#shipping_summary > tbody > tr.cloningfield').clone();
 	  row.removeClass('cloningfield');
       row.find('td:first').html('');
@@ -289,31 +288,42 @@ $(function(){
 	  updateLocationError();
     }//close hasloc hasactive hasprice
 	else{
-		var counter = 0;
-		if(!hasActive){
-			alerterror += '-attribute ';
-			counter++;
-		}
-		if(!hasLoc){
-			alerterror += '-location ';
-			counter++;
-		}
-		if(!hasPrice){
-			alerterror += '-price ';
-			counter++;
-		}
-		for(var i=0;i<counter;i++){
-			if(counter === 1 || i==0){
-				alerterror = alerterror.replace('-', '');
+		var duperror = '';
+		var alerterror = '';
+		if(!hasActive || !hasLP){
+			alerterror = 'Please specify the following: ';
+			var counter = 0;
+			if(!hasActive){
+				alerterror += '-attribute ';
+				counter++;
 			}
-			else if( i==counter-1 ){
-				alerterror = alerterror.replace('-', 'and ');
+			if(!hasLoc){
+				alerterror += '-location ';
+				counter++;
 			}
-			else{
-				alerterror = alerterror.replace('-', ', ');
+			if(!hasPrice){
+				alerterror += '-price ';
+				counter++;
 			}
+			for(var i=0;i<counter;i++){
+				if(counter === 1 || i==0){
+					alerterror = alerterror.replace('-', '');
+				}
+				else if( i==counter-1 ){
+					alerterror = alerterror.replace('-', 'and ');
+				}
+				else{
+					alerterror = alerterror.replace('-', ', ');
+				}
+			}
+			alerterror += '<br>';
 		}
-		alert(alerterror);
+		
+		if(!noDuplicate){
+			duperror = 'Location already used for selected attribute.'
+		}
+		
+		alert(alerterror + duperror);
 		return;
 	}
   });//close on click of adding ship details to summary
