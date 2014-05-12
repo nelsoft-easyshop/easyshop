@@ -479,6 +479,7 @@ class Payment extends MY_Controller{
             redirect(base_url().'home', 'refresh');
         }
         
+        $this->session->set_userdata('paymentticket', true);
         $paymentType = $this->PayMentCashOnDelivery; 
         $apiResponseArray = array(); 
         
@@ -555,7 +556,6 @@ class Payment extends MY_Controller{
         $data['title'] = 'Payment | Easyshop.ph';
         $data = array_merge($data,$this->fill_header());
        
-        $this->session->set_userdata('paymentticket', true);
         $this->session->set_userdata('headerData', $data);
         $this->session->set_userdata('bodyData', $response);
 
