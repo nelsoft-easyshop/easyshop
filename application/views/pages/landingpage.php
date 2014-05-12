@@ -114,6 +114,13 @@
 										
 											<h4>Mobile Number<h4>
 											<input type="text" placeholder="e.g. 9051234567" name="mobile" class="reqfield" id="mobile" maxlength="10">
+											<input type="hidden" id="mobilecheck" value="">
+											<img id="mobile_loader" class="img_loader_small" src="<?=base_url()?>/assets/images/orange_loader_small.gif" style="display:none;">
+											<div id="mobile_status">
+												<img class="fieldstatus" src="<?=base_url()?>/assets/images/check_icon.png" id="mobile_check" style="position: relative;display:none;vertical-align:middle"/>
+												<img class="fieldstatus" src="<?=base_url()?>/assets/images/x_icon.png" id="mobile_x" style="position: relative;display:none;vertical-align:middle"/>
+												<span class="mobile_availability"></span>
+											</div>
 											<span class="red ci_form_validation_error"><?php echo form_error('mobile'); ?></span>
 											<span class="help-block spnmsg"></span>
 											

@@ -611,12 +611,15 @@ class productUpload extends MY_Controller
 	{
 		if($this->input->post('prod_h_id')){
 			$id = $this->input->post('prod_h_id');
+			$member_id = $this->session->userdata('member_id');
 
 			$data = array (
 				'shiploc' => $this->product_model->getLocation(),
 				'attr' => $this->product_model->getPrdShippingAttr($id),
 				'product_id' => $id,
-				'shipping_summary' => $this->product_model->getShippingSummary($id)
+				'shipping_summary' => $this->product_model->getShippingSummary($id),
+				// get shipping location for all products uploaded by user
+				'shipping_preference' => $this->product_model->getShippingPreference($member_id)
 			);
             
 			$data = array_merge($data, $this->fill_view());
@@ -673,6 +676,9 @@ class productUpload extends MY_Controller
 			
 			$data['json_locationgroup'] = json_encode($locationGroup);
 			$data['json_islandlookup'] = json_encode($islandLookup);
+			
+			$data['json_shippingpreference'] = json_encode($data['shipping_preference'], JSON_FORCE_OBJECT);
+			
 			
 			$this->load->view('templates/header', $data);
 			$this->load->view('pages/product/product_upload_step3_view', $data);

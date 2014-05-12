@@ -4,6 +4,10 @@
 <link rel="stylesheet" href="<?=base_url()?>assets/css/jquery.bxslider.css?ver=1.0" type="text/css" media="screen"/>
 <link  type="text/css"  href='<?=base_url()?>assets/css/product_upload_tutorial.css?ver=1.0' rel="stylesheet" media='screen'/>
 
+<script>
+	var shippingPreference = <?php echo $json_shippingpreference;?>;
+</script>
+
 <div class="wrapper">
   <div class="seller_product_content">
  
@@ -11,7 +15,7 @@
       <h2 class="f24">Sell an Item</h2>
         
         <a id="tutShippingLoc" class="tooltips" href="javascript:void(0)" style='text-decoration:underline'>
-             <img src="<?= base_url() ?>assets/images/icon_qmark.png" alt="">  
+             <img src="<?= base_url() ?>assets/images/icon_qmark.png" alt="">
              What's this?
              <span>Click here to read more. Your progress will not be lost. </span>
         </a>
@@ -19,7 +23,7 @@
             <div class="sell_steps sell_steps3">
                 <ul>
                     <li><a href="javascript:void(0)" id="step1_link">Step 1 : Select Category</a></li>
-                    <li><a href="javascript:void(0)" id="step2_link">Step 2 : Upload Item</a></li>                   
+                    <li><a href="javascript:void(0)" id="step2_link">Step 2 : Upload Item</a></li>
                     <li><span>Step 3</span> : Select Shipping Locations</li>
                     <li>Step 4 : Success</li>
                 </ul>
@@ -78,7 +82,28 @@
         
           
             <input type="hidden" id="has_attr" value="<?php echo $attr['has_attr'];?>">
-      
+    
+	<!-- Modal div for Shipping Preference -->
+	<div id="div_shipping_preference" style="display:none; width: 500px;">
+		<div class="p_title">
+			<h2>Select product</h2>
+		</div>
+		<div class="p_content">
+			<?php if(count($shipping_preference) > 0):?>
+			<div class="radio_container">
+				<?php foreach($shipping_preference['name'] as $productId => $name):?>				
+					<p>
+						<input type="radio" name="shipping_preference" value="<?php echo $productId?>">
+						<label for="shipping_preference"><?php echo $name;?></label>
+					</p>
+				<?php endforeach;?>
+			</div>
+			<?php endif;?>
+		</div>
+		<span id="import_shipping_preference" class="orange_btn3" style="cursor: pointer;">Import</span>
+	</div>
+	
+	
             <!-- <div class="shipping_border"></div> -->
           <!-- Start of Shipping Courier -->
           <div class="shipping_courier_container">
@@ -86,7 +111,12 @@
                 <thead>
                   <tr>
                      <td colspan="3" class="step3_title">
-                         <h4>Set shipment fee</h4>
+                        <h4 style="width: 70%;display:inline-block;">Set shipment fee</h4>
+						<?php if(count($shipping_preference) > 0):?>
+							<a id="shipping_preference" class="tooltips" style="cursor:pointer;">Shipping Preferences
+							<span>Use locations from previous products</span>
+							</a>
+						<?php endif;?>
                     </td>
                   </tr>
                 </thead>
@@ -204,63 +234,6 @@
             <div class="shipping_list_items_con">
             
             <table id="shipping_summary" class="<?php echo $shipping_summary['has_shippingsummary'] ? "" : "tablehide"?> shipping_table3" width="auto" cellspacing="0" cellpadding="0"> 
-                <?php $datagroupcounter = 0; ?>
-                   <?php if($shipping_summary['has_shippingsummary']):?>
-                      <?php foreach($attr["attributes"] as $attk=>$temp): ?>
-                      <tr class="tr_shipping_summary" data-group="<?php echo $datagroupcounter;?>">
-                          <td class="prod_att_pad">
-                            <?php if($attr['has_attr'] == 1):?>
-                              <?php foreach($temp as $att):?>
-                                <p><?php echo $att;?></p>
-                              <?php endforeach;?>
-                            <?php else:?>
-                                <p>All Combinations</p>
-                            <?php endif;?>
-                          </td>
-                          <td width="230px" valign="top">
-                              <table class="shiplocprice_summary">
-                                  <tbody>
-                                    <?php foreach($shipping_summary[$attk] as $lockey=>$price):?>
-                                        <tr data-idlocation="<?php echo $lockey?>" data-groupkey="<?php echo $datagroupcounter?>">
-                                            <td width="90px"><?php echo $shipping_summary['location'][$lockey]?></td>
-                                            <td width="75px" data-value="<?php echo number_format((float)$price,2,'.',',');?>"><?php echo number_format((float)$price,2,'.',',');?></td>
-                                            <td class="tablehide">
-                                              <span class="button delete_priceloc">
-                                              <img src="<?php echo base_url();?>assets/images/icon_delete.png"> Delete
-                                              </span>
-                                            </td>
-                                        </tr>
-                                    <?php endforeach;?>
-                                    <!-- Cloning Field-->
-                                        <tr class="cloningfield" data-idlocation="" data-groupkey="">
-                                            <td width="85px"></td>
-                                            <td width="55px" data-value=""></td>
-                                            <td width="100px" class="tablehide">
-                                                <span class="button delete_priceloc">
-                                                <img src="<?php echo base_url();?>assets/images/icon_delete.png"> Delete
-                                                </span>
-                                            </td>
-                                        </tr>
-                                    <!-- END OF Cloning Field-->
-                                  </tbody>
-                              </table>
-                          </td>
-                          <td width="110px" valign="top">
-                              <span class="edit_summaryrow button edit_del">
-                              <img src="<?php echo base_url();?>assets/images/icon_edit.png"> Edit
-                              </span>
-                              <span class="delete_summaryrow button edit_del">
-                              <img src="<?php echo base_url();?>assets/images/icon_delete.png"> Delete
-                              </span>
-                              <span class="accept_summaryrow buttonhide button accept_cancel">
-                              <img src="<?php echo base_url();?>assets/images/check_icon.png"> Accept
-                              </span>
-                            </td>
-                      </tr>
-                      <?php $datagroupcounter++; ?>
-                  <?php endforeach;?>
-                <?php endif;?>
-        
                 <!-- Original Cloning Field -->
                 <tr class="cloningfield">
                     <td class="prod_att_pad"></td>
@@ -293,6 +266,65 @@
                     </td>
                 </tr>
                 <!-- CLOSE Original Cloning Field -->
+				
+				<?php $datagroupcounter = 0; ?>
+                   <?php if($shipping_summary['has_shippingsummary']):?>
+                      <?php foreach($attr["attributes"] as $attk=>$temp): ?>
+                      <tr class="tr_shipping_summary" data-group="<?php echo $datagroupcounter;?>">
+                          <td class="prod_att_pad">
+                            <?php if($attr['has_attr'] == 1):?>
+                              <?php foreach($temp as $att):?>
+                                <p><?php echo $att;?></p>
+								<span></span>
+                              <?php endforeach;?>
+                            <?php else:?>
+                                <p>All Combinations</p>
+								<span></span>
+                            <?php endif;?>
+                          </td>
+                          <td width="230px" valign="top">
+                              <table class="shiplocprice_summary">
+                                  <tbody>
+                                    <?php foreach($shipping_summary[$attk] as $lockey=>$price):?>
+                                        <tr data-idlocation="<?php echo $lockey?>" data-groupkey="<?php echo $datagroupcounter?>">
+                                            <td width="90px"><?php echo $shipping_summary['location'][$lockey]?></td>
+                                            <td width="75px" data-value="<?php echo number_format((float)$price,2,'.',',');?>"><?php echo number_format((float)$price,2,'.',',');?></td>
+                                            <td class="tablehide">
+                                              <span class="button delete_priceloc">
+                                              <img src="<?php echo base_url();?>assets/images/icon_delete.png"> Delete
+                                              </span>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach;?>
+                                    <!-- Cloning Field-->
+                                        <tr class="cloningfield" data-idlocation="" data-groupkey="">
+                                            <td width="85px"></td>
+                                            <td width="55px" data-value=""></td>
+                                            <td width="100px" class="tablehide">
+                                                <span class="button delete_priceloc">
+                                                <img src="<?php echo base_url();?>assets/images/icon_delete.png"> Delete
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    <!-- END OF Cloning Field-->
+                                  </tbody>
+                              </table>
+                          </td>
+                          <td class="shipping_list_btns" width="110px" valign="top">
+                              <span class="edit_summaryrow button edit_del">
+                              <img src="<?php echo base_url();?>assets/images/icon_edit.png"> Edit
+                              </span>
+                              <span class="delete_summaryrow button edit_del">
+                              <img src="<?php echo base_url();?>assets/images/icon_delete.png"> Delete
+                              </span>
+                              <span class="accept_summaryrow buttonhide button accept_cancel">
+                              <img src="<?php echo base_url();?>assets/images/check_icon.png"> Accept
+                              </span>
+                            </td>
+                      </tr>
+                      <?php $datagroupcounter++; ?>
+                  <?php endforeach;?>
+                <?php endif;?>
       
                 <input type="hidden" id="json_displaygroup" value='<?php echo $json_displaygroup;?>'>
                 <input type="hidden" id="json_locationgroup" value='<?php echo $json_locationgroup;?>'>
@@ -332,7 +364,7 @@
 
 <div id="previewProduct" style="display:none"></div>
 
-<div id="div_tutShippingLoc" class="tutorial_modal" style="display:none; width: 100%;">
+<div id="div_tutShippingLoc" class="tutorial_modal" style="display:none; width: 990px; height: 530px;">
 	<div class="paging">
 		<div class="p_title">
 		  <h2>Set Shipment Options</h2>

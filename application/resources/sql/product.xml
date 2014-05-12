@@ -960,6 +960,13 @@ FROM
 	WHERE pi.product_id = :prod_id
 </select>
 
+<select id="getShippingPreference">
+	SELECT p.id_product, p.name, sh.location_id, sh.price
+	FROM es_product_shipping_head sh
+	INNER JOIN es_product p
+		ON p.id_product = sh.product_id AND p.member_id = :member_id AND is_draft = 0
+</select>
+
 <select id="deleteShippingDetail">
 	DELETE FROM es_product_shipping_detail
 	WHERE product_item_id IN (

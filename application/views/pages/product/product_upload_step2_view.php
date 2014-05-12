@@ -607,7 +607,7 @@
 
 
   
-  <div id="div_tutOptional" style="display:none;">
+  <div id="div_tutOptional" style="display:none;width:990px; height: 530px;">
       <div class="paging">
         <div class="p_title">
           <h2>Add your own specifications</h2>
@@ -662,7 +662,7 @@
       </div>
   </div>
 
-  <div id="div_tutQty" style="display:none;">    
+  <div id="div_tutQty" style="display:none;width:990px; height: 530px;">    
       <div class="paging">
         <div class="p_title">
           <h2>Set Availability Options</h2>
@@ -702,7 +702,7 @@
       </div>
   </div>
 
-  <div id="div_tutSpec" style="display:none;">
+  <div id="div_tutSpec" style="display:none; width:990px; height:530px;">
 
       <div class="paging">
         <div class="p_title">

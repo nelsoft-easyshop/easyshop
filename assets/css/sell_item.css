@@ -1558,3 +1558,14 @@ li.brand_result:hover{
     cursor: pointer;
 }
 
+/****	Shipping Preference	****/
+
+.radio_container {
+	padding: 5px;
+}
+
+.radio_container p{
+	margin: 3px;
+	
+}
+

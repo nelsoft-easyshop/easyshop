@@ -8,7 +8,7 @@ class product_model extends CI_Model
 	{
 		parent::__construct();  
         $this->load->library("sqlmap");
-	}	
+	}
 
 	# the queries directory -- application/resources/sql/product.xml
 
@@ -1580,6 +1580,29 @@ class product_model extends CI_Model
 		}*/
 		
     	return $data;
+	}
+	
+	
+	public function getShippingPreference($member_id)
+	{
+		// Get shipping_id from es_product_shipping_detail before delete
+		$query = $this->sqlmap->getFilenameID('product', 'getShippingPreference');
+		$sth = $this->db->conn_id->prepare($query);
+		$sth->bindParam(':member_id', $member_id);
+		$sth->execute();
+		$row = $sth->fetchAll(PDO::FETCH_ASSOC);
+		$data = array();
+		
+		foreach($row as $r){
+			if(!isset($data[$r['id_product']][$r['location_id']])){
+				$data[$r['id_product']][$r['location_id']] = $r['price'];
+			}
+			if(!isset($data['name'][$r['id_product']])){
+				$data['name'][$r['id_product']] = $r['name'];
+			}
+		}
+		
+		return $data;
 	}
 	
 	public function deleteShippingSummaryOnEdit($arrProductItemId)

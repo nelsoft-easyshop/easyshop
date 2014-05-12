@@ -53,6 +53,50 @@ $(function(){
 		$(this).val( ReplaceNumberWithCommas(newPrice) );
 	}
   });
+  
+  /************ Shipping Preferences *********************/
+  $('#shipping_preference').on('click', function(){
+	$('#div_shipping_preference').modal({
+		containerCss:{
+			maxHeight: '500px',
+			maxWidth: '990px'
+		},
+		onShow: function(dialog){
+			$('#import_shipping_preference').on('click', function(){
+				var productId = $('input[name="shipping_preference"]:checked').val();
+				$('tr.newlocrow').remove();
+				$('#shiploc_count').val(1);
+				var i = 1;
+				$.each(shippingPreference[productId], function(locationId,price){
+					$('select[name="shiploc'+i+'"]').val(locationId);
+					$('input[name="shipprice'+i+'"]').val(parseFloat(price).toFixed(2));
+					i++;
+					$('#add_location').trigger('click');
+				});
+				$.modal.close();
+			});
+		},
+		onOpen: function (dialog) {
+			dialog.overlay.fadeIn(250, function () {
+				dialog.container.slideDown(250, function () {
+					dialog.data.fadeIn(250);
+				});
+			});
+		},
+		onClose: function(dialog){
+			dialog.data.fadeOut(200, function () {
+				dialog.container.slideUp(200, function () {
+					dialog.overlay.fadeOut(200, function () {
+						$.modal.close(); 
+					});
+				});
+			});
+		}
+	});
+  });
+  
+  
+  
 });
 /********** CLOSE DOCUMENT READY FUNCTION *********/
 
@@ -736,9 +780,6 @@ $(function(){
 	
 	$('#tutShippingLoc').on('click',function(){
 		$('#div_tutShippingLoc').modal({
-			containerCss:{
-				width: '800px'
-			},
 			onShow: function(){
 				var modal = this;
 				$('#paging_tutShippingLoc').jqPagination({
@@ -771,6 +812,9 @@ $(function(){
 		});
 	});
 });
+
+
+
 
 
 function isMobile(){
