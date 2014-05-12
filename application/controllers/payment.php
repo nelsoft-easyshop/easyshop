@@ -480,7 +480,7 @@ class Payment extends MY_Controller{
         }
         
         $this->session->set_userdata('paymentticket', true);
-        
+
         $paymentType = $this->PayMentCashOnDelivery; 
         $apiResponseArray = array(); 
         
@@ -624,6 +624,7 @@ class Payment extends MY_Controller{
         $this->session->unset_userdata('paymentticket');
         $this->session->unset_userdata('headerData');
         $this->session->unset_userdata('bodyData');
+
 
         $this->load->view('templates/header', $data);
         $this->load->view('pages/payment/payment_response' ,$response);  
@@ -881,3 +882,9 @@ class Payment extends MY_Controller{
 
 /* End of file payment.php */
 /* Location: ./application/controllers/payment.php */
+
+// ROLLBACK;
+//             GET DIAGNOSTICS CONDITION 1 @sqlstate = RETURNED_SQLSTATE,
+//             @errno = MYSQL_ERRNO, @text = MESSAGE_TEXT;
+//             SET @full_error = CONCAT("ERROR ", @errno, " (", @sqlstate, "): ", @text);
+//             SELECT o_success AS o_success, @full_error AS o_message;
