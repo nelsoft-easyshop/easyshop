@@ -704,7 +704,15 @@ FROM
     </select>
 
     <select id="updateCombination">
-        UPDATE es_product_item SET quantity = :qty WHERE product_id = :product_id;
+        UPDATE es_product_item SET quantity = :qty WHERE product_id = :product_id AND id_product_item = :product_item_id
+    </select>
+    
+    <select id="updateCombinationAtrribute">
+        UPDATE es_product_item_attr SET product_attr_id = :product_attr_id, is_other = :is_other WHERE product_id_item = :product_id_item AND id_product_item_attr = :product_item_attr_id
+    </select>
+    
+    <select id='selectProductItemAttr'>
+        SELECT id_product_item_attr FROM es_product_item_attr WHERE product_id_item = :product_item_id AND product_attr_id = :product_attr_id AND is_other = :is_other
     </select>
     
     <select id="selectProductAttribute">
@@ -877,19 +885,22 @@ FROM
 
 <select id="getProductQuantityVerbose">
     SELECT a.id_product_item, a.quantity, COALESCE(b.product_attr_id,0) as product_attr_id , 
-    COALESCE(b.is_other,0) as is_other, COALESCE(d.id_attr_lookuplist_item,0) as attr_lookuplist_item_id
+    COALESCE(b.is_other,0) as is_other, COALESCE(d.id_attr_lookuplist_item,0) as attr_lookuplist_item_id,
+    d.name as attr_value
     FROM es_product_item a
     LEFT JOIN es_product_item_attr b ON b.product_id_item = a.id_product_item AND b.is_other = 0
     LEFT JOIN es_product_attr c ON c.id_product_attr = b.product_attr_id
-    LEFT JOIN es_attr_lookuplist_item d ON LCASE(d.name) = LCASE(c.attr_value)
+	LEFT JOIN es_attr e ON e.id_attr =  c.attr_id
+    LEFT JOIN es_attr_lookuplist_item d ON LCASE(d.name) = LCASE(c.attr_value) AND e.attr_lookuplist_id = d.attr_lookuplist_id
     WHERE a.product_id = :product_id
-
+    
     UNION
 
     SELECT a.id_product_item, a.quantity, COALESCE(b.product_attr_id,0) as product_attr_id , 
-    COALESCE(b.is_other,0) as is_other, '0' as attr_lookuplist_item_id
+    COALESCE(b.is_other,0) as is_other, '0' as attr_lookuplist_item_id, d.value_name
     FROM es_product_item a
-    LEFT JOIN es_product_item_attr b ON b.product_id_item = a.id_product_item AND b.is_other = 1
+    INNER JOIN es_product_item_attr b ON b.product_id_item = a.id_product_item AND b.is_other = 1
+	LEFT JOIN es_optional_attrdetail d ON d.id_optional_attrdetail = b.product_attr_id
     WHERE a.product_id = :product_id
 </select>
 
@@ -969,10 +980,11 @@ FROM
 </select>
 
 <select id="getShippingPreference">
-	SELECT p.id_product, p.name, sh.location_id, sh.price
+	SELECT p.id_product, p.name,p.lastmodifieddate, p.brief, sh.location_id, sh.price
 	FROM es_product_shipping_head sh
 	INNER JOIN es_product p
-		ON p.id_product = sh.product_id AND p.member_id = :member_id AND is_draft = 0
+    ON p.id_product = sh.product_id AND p.member_id = :member_id AND is_draft = 0
+    ORDER BY p.lastmodifieddate DESC
 </select>
 
 <select id="deleteShippingDetail">
@@ -1004,7 +1016,7 @@ FROM
 </select>
 
 <select id="getDraftItems">
-   SELECT id_product,name,cat_id,cat_other_name,lastmodifieddate FROM  `es_product` WHERE member_id = :member_id AND is_draft = 1 AND is_delete = 0
+   SELECT id_product,name,cat_id,cat_other_name,lastmodifieddate FROM  `es_product` WHERE member_id = :member_id AND is_draft = 1 AND is_delete = 0 ORDER BY lastmodifieddate DESC
 </select>
 
 <select id="deleteDraft">

@@ -1497,12 +1497,14 @@ $(".proceed_form").unbind("click").click(function(){
   g_combinationSelected = combinationSelected;
   g_description = description;
   g_noCombination = noCombination;
+  
   g_otherCategory = otherCategory;
   g_removeThisPictures = JSON.stringify(removeThisPictures);
   g_primaryPicture = primaryPicture;
   g_editRemoveThisPictures = JSON.stringify(editRemoveThisPictures);
   g_editPrimaryPicture = editPrimaryPicture;  
   
+
   var csrftoken = $("meta[name='csrf-token']").attr('content');
   var csrfname = $("meta[name='csrf-name']").attr('content');
 
@@ -1678,9 +1680,101 @@ $(".proceed_form").unbind("click").click(function(){
             }                
         });
         addAttrQtyCombination(prev_combination_count++);
+        console.log(noCombination);
     });
     
 
+    //Function that adds obj to the quantity select html elements
+    function addAttrQtySelection(obj){
+        var attrIdVal = obj.data( "attrid" );
+        var attrVal = obj.data('value');
+        var attrGroup = obj.data('group'); 
+        var idHtmlId = attrGroup.replace(' ','')+'Combination';
+        var attrValNoSpace = attrVal.replace(' ','');
+
+        $('.combinationContainer').empty();
+        noCombination = true;
+        arraySelected = {};  
+
+        if (obj.is(":checked")) {
+            if(!$('#'+idHtmlId).length){
+                $('.quantity_attrs_content').append('<div id="div'+idHtmlId+'" style="position:relative">'+attrGroup+':<br> <select id="'+idHtmlId+'" ></select><br></div>');   
+            }
+            $('#'+idHtmlId).append('<option value="'+attrIdVal+'" data-value="0" data-group="'+attrGroup+'">'+attrVal+'</option>');
+        }else{
+            $('#'+idHtmlId +' option[value="'+attrIdVal+'"]').remove();
+            if( !$.trim( $('#'+idHtmlId).html() ).length ) {
+              $('#div'+idHtmlId).remove();
+            }
+        } 
+
+        if( !$.trim( $('.quantity_attrs_content').html() ).length ) {
+        $('.quantity_attr_done').hide();
+            $('.qty_tooltip').hide();
+        noCombination == true
+        }else{
+        $('.quantity_attr_done').show();
+            $('.qty_tooltip').show();
+        }
+    }
+
+
+    function addAttrQtyCombination(count){
+        var qtyTextbox = $('.qtyTextClass');
+        var qtyTextboxValue = parseInt(qtyTextbox.val());
+        var dataCombination = {};     
+        var combinationVal = [];
+        var sortCombination = [];
+        var arrayCombinationString = "";
+        var thisValueCount = count;
+        var htmlEach  = "";
+        var alreadyExist  = false;
+        var haveValue = false;
+        htmlEach += '<div class="input_qty"><input type="textbox" class="quantityText" value="'+qtyTextbox.val()+'" data-cnt="'+thisValueCount+'"></div><div class="mid_inner_con_list">';
+
+        $('.quantity_attrs_content option').each(function(){
+            if($(this).attr('selected')){
+                haveValue = true;
+                noCombination = false;
+                var eachValue = $(this).val();
+                var eachValueString = $(this).text();
+                var eachGroup = $(this).data('group');  
+                var eachDataValue = $(this).data('value');  
+                combinationVal.push(eachDataValue+':'+eachValue);
+                htmlEach += '<div>'+ eachGroup +': ' + eachValueString +'</div>';
+            }
+        });
+        if(isNaN(qtyTextboxValue) ||  qtyTextboxValue <= 0){ 
+            qtyTextbox.val('1');
+        }
+        sortCombination = combinationVal.sort();
+
+        for (var i = 0; i < sortCombination.length; i++) {
+            arrayCombinationString += sortCombination[i] + '-';
+        };
+
+        for (var key in arraySelected) { 
+            if (arraySelected.hasOwnProperty(key))
+            if(arraySelected[key]['value'] === arrayCombinationString.slice(0, - 1)){
+                alreadyExist = true;
+                break;
+            }
+        }
+
+        if(haveValue === true){
+            if(alreadyExist === false){      
+                $('.combinationContainer').append('<div class="inner_quantity_list innerContainer'+thisValueCount+'"> '+ htmlEach +'</div> <a href="javascript:void(0)" class="removeSelected" data-row="'+thisValueCount+'"   style="color:Red">Remove</a></div>');
+                dataCombination['quantity'] = qtyTextbox.val();
+                dataCombination['value'] = arrayCombinationString.slice(0, - 1);
+                arraySelected[thisValueCount] = dataCombination;
+                thisValueCount++;
+                $('.quantity_attr_done.orange_btn3').data('value', thisValueCount);
+            }else{
+                alert('Combination Already Selected!');
+                return false;
+            }
+        }
+    }
 
 
 
@@ -1780,7 +1874,6 @@ $(document).ready(function() {
     });
     
    if(($('#brand_sch').val() !== '')&&(parseInt($('#prod_brand').val(),10) !== 0)){
-        console.log($('#prod_brand').val());
       var img_temp = (parseInt($('#prod_brand').val(),10) !== 1)?'<img src="<?= base_url() ?>assets/images/check_icon.png" />':'<img src="<?= base_url() ?>assets/images/img_new_txt.png" />';
       jQuery(".brand_sch_loading").html(img_temp).show().css('display','inline-block');
    }
@@ -1968,104 +2061,6 @@ $(document).ready(function(){
         return n.join(".");
     }
   
-      //Function that adds obj to the quantity select html elements
-    function addAttrQtySelection(obj){
-      var attrIdVal = obj.data( "attrid" );
-      var attrVal = obj.data('value');
-      var attrGroup = obj.data('group'); 
-      var idHtmlId = attrGroup.replace(' ','')+'Combination';
-      var attrValNoSpace = attrVal.replace(' ','');
-
-      $('.combinationContainer').empty();
-      noCombination = true;
-      arraySelected = {};  
-
-      if (obj.is(":checked")) {
-        if(!$('#'+idHtmlId).length){
-          $('.quantity_attrs_content').append('<div id="div'+idHtmlId+'" style="position:relative">'+attrGroup+':<br> <select id="'+idHtmlId+'" ></select><br></div>');   
-        }
-        $('#'+idHtmlId).append('<option value="'+attrIdVal+'" data-value="0" data-group="'+attrGroup+'">'+attrVal+'</option>');
-      }else{
-        $('#'+idHtmlId +' option[value="'+attrIdVal+'"]').remove();
-        if( !$.trim( $('#'+idHtmlId).html() ).length ) {
-          $('#div'+idHtmlId).remove();
-        }
-      } 
-
-      if( !$.trim( $('.quantity_attrs_content').html() ).length ) {
-        $('.quantity_attr_done').hide();
-         $('.qty_tooltip').hide();
-        noCombination == true
-      }else{
-        $('.quantity_attr_done').show();
-         $('.qty_tooltip').show();
-      }
-    }
-
-
- function addAttrQtyCombination(count){
-    var qtyTextbox = $('.qtyTextClass');
-    var qtyTextboxValue = parseInt(qtyTextbox.val());
-    var dataCombination = {};     
-    var combinationVal = [];
-    var sortCombination = [];
-    var arrayCombinationString = "";
-    var thisValueCount = count;
-    var htmlEach  = "";
-    var alreadyExist  = false;
-    var haveValue = false;
-    htmlEach += '<div class="input_qty"><input type="textbox" class="quantityText" value="'+qtyTextbox.val()+'" data-cnt="'+thisValueCount+'"></div><div class="mid_inner_con_list">';
-
-    $('.quantity_attrs_content option').each(function(){
-
-      if($(this).attr('selected')){
-        haveValue = true;
-        noCombination = false;
-        var eachValue = $(this).val();
-        var eachValueString = $(this).text();
-        var eachGroup = $(this).data('group');  
-        var eachDataValue = $(this).data('value');  
-        combinationVal.push(eachDataValue+':'+eachValue);
-        htmlEach += '<div>'+ eachGroup +': ' + eachValueString +'</div>';
-      }
-    });
-
-    if(isNaN(qtyTextboxValue) ||  qtyTextboxValue <= 0){ 
-     qtyTextbox.val('1');
-   }
-
-   sortCombination = combinationVal.sort();
-
-   for (var i = 0; i < sortCombination.length; i++) {
-     arrayCombinationString += sortCombination[i] + '-';
-   };
-
-   for (var key in arraySelected) { 
-     if (arraySelected.hasOwnProperty(key))
-      if(arraySelected[key]['value'] === arrayCombinationString.slice(0, - 1)){
-       alreadyExist = true;
-       break;
-     }
-   }
-
-   if(haveValue === true){
-     if(alreadyExist === false){      
-      $('.combinationContainer').append('<div class="inner_quantity_list innerContainer'+thisValueCount+'"> '+ htmlEach +'</div> <a href="javascript:void(0)" class="removeSelected" data-row="'+thisValueCount+'"   style="color:Red">Remove</a></div>');
-      dataCombination['quantity'] = qtyTextbox.val();
-      dataCombination['value'] = arrayCombinationString.slice(0, - 1);
-      arraySelected[thisValueCount] = dataCombination;
-      thisValueCount++;
-      $('.quantity_attr_done.orange_btn3').data('value', thisValueCount);
-    }else{
-      alert('Combination Already Selected!');
-      return false;
-    }
-  }
-}
-
-
-
-
 
     function inArray(needle, haystack){
         for(j = 0, len = haystack.length; j<len; j++){
@@ -2090,7 +2085,7 @@ $(document).ready(function(){
         return true;
     }
 
-        function addNewBrand(){
+    function addNewBrand(){
         $('#prod_brand').val(1)
         $('#prod_brand').trigger( "change" );
         //validateWhiteTextBox("#brand_sch");

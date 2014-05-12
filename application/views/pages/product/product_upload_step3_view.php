@@ -86,7 +86,7 @@
 	<!-- Modal div for Shipping Preference -->
 	<div id="div_shipping_preference" style="display:none; width: 500px;">
 		<div class="p_title">
-			<h2>Select product</h2>
+			<h2>Select from your previous uploads</h2>
 		</div>
 		<div class="p_content">
 			<?php if(count($shipping_preference) > 0):?>
@@ -94,7 +94,7 @@
 				<?php foreach($shipping_preference['name'] as $productId => $name):?>				
 					<p>
 						<input type="radio" name="shipping_preference" value="<?php echo $productId?>">
-						<label for="shipping_preference"><?php echo $name;?></label>
+						<label for="shipping_preference"><span style='font-weight:bold'><?php echo $shipping_preference['date'][$productId]?></span><span style='font-weight:bold; margin-left: 5px;'>|</span><span style='margin-left: 5px;'><?php echo html_escape($name);?></span><span style='font-weight:bold; margin-left: 5px;'> |</span><span style='margin-left: 5px;'><?php echo html_escape($shipping_preference['brief'][$productId]);?></span></label>
 					</p>
 				<?php endforeach;?>
 			</div>
@@ -113,8 +113,8 @@
                      <td colspan="3" class="step3_title">
                         <h4 style="width: 70%;display:inline-block;">Set shipment fee</h4>
 						<?php if(count($shipping_preference) > 0):?>
-							<a id="shipping_preference" class="tooltips" style="cursor:pointer;">Shipping Preferences
-							<span>Use locations from previous products</span>
+							<a id="shipping_preference" class="tooltips" style="cursor:pointer; text-decoration:underline; font-size:11px; margin-left:12px;">Shipping Preferences
+							<span style='font-size:12px;'>You may use the shipment details you have used from previous products</span>
 							</a>
 						<?php endif;?>
                     </td>

@@ -559,14 +559,38 @@ class product_model extends CI_Model
 		return $this->db->conn_id->lastInsertId('id_product_item');
 	}
     
-    function updateCombination($product_id,$qty)
+    function updateCombination($product_id,$product_item_id,$qty)
 	{
 		$query = $this->sqlmap->getFilenameID('product','updateCombination');
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':product_id',$product_id,PDO::PARAM_INT);
+        $sth->bindParam(':product_item_id',$product_item_id,PDO::PARAM_INT);	
 		$sth->bindParam(':qty',$qty,PDO::PARAM_INT);	
         $sth->execute();
 	}
+    
+    function updateCombinationAttribute($product_id_item,$product_attr_id,$other_identifier, $product_item_attr_id)
+	{
+		$query = $this->sqlmap->getFilenameID('product','updateCombinationAtrribute');
+		$sth = $this->db->conn_id->prepare($query);
+
+		$sth->bindParam(':product_id_item',$product_id_item,PDO::PARAM_INT);
+		$sth->bindParam(':product_attr_id',$product_attr_id,PDO::PARAM_INT);
+		$sth->bindParam(':is_other',$other_identifier,PDO::PARAM_INT);	
+        $sth->bindParam(':product_item_attr_id',$product_item_attr_id,PDO::PARAM_INT);	
+		$sth->execute();
+	}
+
+    function selectProductItemAttr($product_item_id,$product_attr_id, $is_other){
+        $query = $this->sqlmap->getFilenameID('product','selectProductItemAttr');
+		$sth = $this->db->conn_id->prepare($query);
+		$sth->bindParam(':product_item_id',$product_item_id,PDO::PARAM_INT);
+		$sth->bindParam(':product_attr_id',$product_attr_id,PDO::PARAM_INT);
+        $sth->bindParam(':is_other',$is_other,PDO::PARAM_INT);        
+		$sth->execute();
+        $rows = $sth->fetch(PDO::FETCH_ASSOC);
+		return $rows['id_product_item_attr'];	
+    }
     
 	function selectProductAttribute($attribute_id,$product_id)
 	{
@@ -1346,10 +1370,12 @@ class product_model extends CI_Model
                 $data[$row['id_product_item']]['quantity'] = $row['quantity'];
                 $data[$row['id_product_item']]['product_attribute_ids'] = array();
                 $data[$row['id_product_item']]['attr_lookuplist_item_id'] = array();
+                $data[$row['id_product_item']]['attr_name'] = array();
             }
             array_push($data[$row['id_product_item']]['product_attribute_ids'], array('id'=>$row['product_attr_id'], 'is_other'=> $row['is_other']));
             if($verbose){
                 array_push($data[$row['id_product_item']]['attr_lookuplist_item_id'], $row['attr_lookuplist_item_id']);
+                array_push($data[$row['id_product_item']]['attr_name'], $row['attr_value']);
             }
         }
         
@@ -1357,7 +1383,7 @@ class product_model extends CI_Model
     }
     
     
-    public function deleteShippingInfomation($product_id){
+    public function deleteShippingInfomation($product_id, $keep_product_item_id){
         $query = "SELECT id_shipping FROM es_product_shipping_head WHERE product_id = :product_id";
         $sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':product_id',$product_id, PDO::PARAM_INT);
@@ -1367,24 +1393,78 @@ class product_model extends CI_Model
             $query = "DELETE FROM es_product_shipping_detail WHERE shipping_id IN ";
             $qmarks = implode(',', array_fill(0, count($rows), '?'));
             $query = $query.'('.$qmarks.')';
+            
+            if(count($keep_product_item_id) != 0){
+                $query = $query." AND product_item_id NOT IN ";
+                $qmarks = implode(',', array_fill(0, count($keep_product_item_id), '?'));
+                $query = $query.'('.$qmarks.')';
+            }
+
+            $xth = $this->db->conn_id->prepare($query);
+            $cnt = 0;
+            foreach ($rows as $k => $id){
+                $xth->bindValue(($k+1), $id['id_shipping'], PDO::PARAM_INT);   
+                $cnt++;                
+            }
+            foreach ($keep_product_item_id as $k => $id){
+                $xth->bindValue(($cnt+$k+1), $id, PDO::PARAM_INT);   
+            }
+            $xth->execute();
+            
+            $query = "SELECT shipping_id FROM es_product_shipping_detail WHERE shipping_id IN ";
+            $qmarks = implode(',', array_fill(0, count($rows), '?'));
+            $query = $query.'('.$qmarks.')';
             $xth = $this->db->conn_id->prepare($query);
             foreach ($rows as $k => $id){
                 $xth->bindValue(($k+1), $id['id_shipping'], PDO::PARAM_INT);  
             }
             $xth->execute();
+            $retain_shipping_id = $xth->fetchAll(PDO::FETCH_ASSOC);
             
-            $query = "DELETE FROM es_product_shipping_head WHERE product_id = :product_id";
-            $sth = $this->db->conn_id->prepare($query);
-            $sth->bindParam(':product_id',$product_id, PDO::PARAM_INT);
-            $sth->execute();
+            if(count($retain_shipping_id) > 0){
+                $query = "DELETE FROM es_product_shipping_head WHERE id_shipping NOT IN ";
+                $qmarks = implode(',', array_fill(0, count($retain_shipping_id), '?'));
+                $query = $query.'('.$qmarks.')';
+                $query = $query.' AND product_id = ?';
+                $xth = $this->db->conn_id->prepare($query);
+                $cnt = 0;
+                foreach ($retain_shipping_id as $k => $id){
+                    $xth->bindValue(($k+1), $id['shipping_id'], PDO::PARAM_INT); 
+                    $cnt++;
+                }
+                $xth->bindValue(($cnt+1), $product_id, PDO::PARAM_INT);   
+                $xth->execute();
+            } 
+            else{
+                $query = "DELETE FROM es_product_shipping_head WHERE product_id = :product_id";
+                $xth = $this->db->conn_id->prepare($query);
+                $xth->bindParam(':product_id',$product_id, PDO::PARAM_INT);
+                $xth->execute();
+            }
+            
         }
     }
 
     
-    public function deleteProductQuantityCombination($product_id){
-        $query = "SELECT id_product_item FROM es_product_item WHERE product_id = :product_id";
+    public function deleteProductQuantityCombination($product_id, $keep_product_item_id){
+    
+        if(count($keep_product_item_id) == 0){
+            $query = "SELECT id_product_item FROM es_product_item WHERE product_id = ?";
+        }
+        else{
+            $query = "SELECT id_product_item FROM es_product_item WHERE id_product_item NOT IN ";
+            $qmarks = implode(',', array_fill(0, count($keep_product_item_id), '?'));
+            $query = $query.'('.$qmarks.')';
+            $query = $query.' AND product_id = ?';
+        }
+
         $sth = $this->db->conn_id->prepare($query);
-		$sth->bindParam(':product_id',$product_id, PDO::PARAM_INT);
+        $cnt = 0;
+        foreach ($keep_product_item_id as $k => $id){
+            $sth->bindValue(($k+1), $id, PDO::PARAM_INT);  
+            $cnt++;
+        }
+        $sth->bindValue(($cnt+1), $product_id, PDO::PARAM_INT);  
 		$sth->execute();
         $rows = $sth->fetchAll(PDO::FETCH_ASSOC);
         
@@ -1397,13 +1477,20 @@ class product_model extends CI_Model
                 $xth->bindValue(($k+1), $id['id_product_item'], PDO::PARAM_INT);  
             }
             $xth->execute();
+            
+            $query = "DELETE FROM es_product_item WHERE id_product_item IN ";
+            $qmarks = implode(',', array_fill(0, count($rows), '?'));
+            $query = $query.'('.$qmarks.')';
+            $query = $query.' AND product_id = ?';
+            $xth = $this->db->conn_id->prepare($query);
+            $cnt = 0;
+            foreach ($rows as $k => $id){
+                $xth->bindValue(($k+1), $id['id_product_item'], PDO::PARAM_INT);  
+                $cnt++;
+            }
+            $xth->bindValue(($cnt+1), $product_id, PDO::PARAM_INT);  
+            $xth->execute();
         }
-        
-        $query = "DELETE FROM es_product_item WHERE product_id = :product_id";
-        $sth = $this->db->conn_id->prepare($query);
-		$sth->bindParam(':product_id',$product_id, PDO::PARAM_INT);
-		$sth->execute();
-
     }
     
     public function getCategoriesNavigation(){
@@ -1611,6 +1698,8 @@ class product_model extends CI_Model
 			}
 			if(!isset($data['name'][$r['id_product']])){
 				$data['name'][$r['id_product']] = $r['name'];
+                $data['brief'][$r['id_product']] = $r['brief'];
+                $data['date'][$r['id_product']] = date('M-d-Y',strtotime($r['lastmodifieddate']));
 			}
 		}
 		

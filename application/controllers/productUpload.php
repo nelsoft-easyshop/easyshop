@@ -538,7 +538,6 @@ class productUpload extends MY_Controller
 
                      # start of saving combination
                     if($checkIfCombination == 'true' || $checkIfCombination == 1){
-
                         $quantitySolo = 1;
                         if($this->input->post('quantitySolo')){
                             $quantitySolo = $this->input->post('quantitySolo');
@@ -547,7 +546,6 @@ class productUpload extends MY_Controller
                         $idProductItem = $this->product_model->addNewCombination($product_id,$quantitySolo);
 
                     }else{
-                         
                         foreach ($combination as $keyCombination) {
                             $quantitycombination = 1;
                             if(!$quantitycombination <= 0){
@@ -621,7 +619,7 @@ class productUpload extends MY_Controller
 				// get shipping location for all products uploaded by user
 				'shipping_preference' => $this->product_model->getShippingPreference($member_id)
 			);
-            
+       
 			$data = array_merge($data, $this->fill_view());
 			
 			$jsonDisplayGroup = $jsonFdata = array();
@@ -1106,28 +1104,75 @@ class productUpload extends MY_Controller
                 }
                 log_message('error', 'edit: member_id=>'.$member_id);
             }
-            
+     
 			if($rowCount>0){
-            
-                # CHECK IF CURRENT COMBINATION AND PREVIOUS COMBINATION ARE FOR DEFAULT QUANTITY
-                # ADDED TO SUPPORT RETAINING SHIPMENT DETAILS FOR NON-COMPLEX COMBINATIONS DURING EDITS
-                $retain_shipment = false;
+                $itemcombinations = $this->product_model->getProductQuantity($product_id, true);
+                $update_product_item_obj = array();
+                $default_retain_shipment = false;
+               
                 if($checkIfCombination == 'true' || $checkIfCombination == 1){
-                    $itemcombinations = $this->product_model->getProductQuantity($product_id);
                     if(count($itemcombinations) === 1){
-                        $combination = reset($itemcombinations);
-                        if((count($combination['product_attribute_ids']) === 1)&& (intval($combination['product_attribute_ids'][0]['id'],10) === 0) &&(intval($combination['product_attribute_ids'][0]['is_other'],10) === 0)){
-                            $retain_shipment = true;
+                        $combo_element = reset($itemcombinations);
+                        $idx = key($itemcombinations);
+                        if((count($combo_element['product_attribute_ids']) === 1)&& (intval($combo_element['product_attribute_ids'][0]['id'],10) === 0) &&(intval($combo_element['product_attribute_ids'][0]['is_other'],10) === 0)){
+                            $quantitySolo = 1;
+                            if($this->input->post('quantitySolo')){
+                                $quantitySolo = $this->input->post('quantitySolo');
+                                $quantitySolo = abs($quantitySolo);
+                            }
+                            $default_retain_shipment = true;
+                            array_push($update_product_item_obj, array('id' => $idx, 'qty' =>$quantitySolo));
                         }           
                     }
-                }
+                }else{
+                    foreach($combination as $index=>$new_elem){
+                        $value_arr = explode('-',$new_elem->value);
+                        $search_arr = array();
+                        foreach($value_arr as $x){
+                            $temp_arr = array();
+                            $temp_arr = explode(':',$x);
+                            if($temp_arr[0] == 0){
+                                $temp_arr[2] = 'attr_lookuplist_item_id';
+                            }
+                            else if($temp_arr[0] == 1){
+                                $temp_arr[2] = 'attr_name';
+                            }        
+                            array_push($search_arr, $temp_arr);
+                        }
+                        foreach($itemcombinations as $idx=>$old_elem){
+                            $bool = true;
+
+                            foreach($search_arr as $x){
+                                if((!in_array($x[1],$old_elem[$x[2]])) || (count($search_arr) != count($old_elem[$x[2]]))){
+                                    $bool = false;
+                                    break;
+                                }
+                            }
+                            if($bool){
+                                //Form old product attribute/optional detail info string
+                                $old_prod_attr_detail = '';
+                                foreach($old_elem['product_attribute_ids'] as $y){
+                                    $old_prod_attr_detail = $old_prod_attr_detail.(($old_prod_attr_detail=='')?'':'-').$y['is_other'].':'.$y['id'];
+                                }
+                                $combination->$index->item_id = $idx;
+                                $combination->$index->old_prod_attr_id = $old_prod_attr_detail;
+                                array_push($update_product_item_obj, array('id' => $idx, 'qty' =>$new_elem->quantity));
+                                break;
+                            }
+                        }
+                    }
                 
-                if(!$retain_shipment){
-                    # DELETE FROM es_shipping_detail, es_shipping_head, es_product_item_attr, es_product_item
-                    # MOVED BEFORE DELETE PRODUCT ATTRIBUTE DUE TO FK CONSTRAINT
-                    $this->product_model->deleteShippingInfomation($product_id);
-                    $this->product_model->deleteProductQuantityCombination($product_id); 
                 }
+                $keep_ids = array();
+                foreach($update_product_item_obj as $x){
+                    array_push($keep_ids, $x['id']);
+                }
+           
+
+                #DELETE PRODUCT ITEM, PRODUCT ITEM ATTR, SHIPPING HEAD AND SHIPPING DETAIL
+                #THAT ARE NOT IN THE object
+                $this->product_model->deleteShippingInfomation($product_id, $keep_ids);
+                $this->product_model->deleteProductQuantityCombination($product_id, $keep_ids);
 
 				foreach($explode_inputs as $input){
 					$explode_id = explode('/', $input);
@@ -1170,7 +1215,7 @@ class productUpload extends MY_Controller
 				$prod_other = $this->input->post('prod_other');
 				$prod_other_name = $this->input->post('prod_other_name');
 				$prod_other_id = $this->input->post('prod_other_id');
-				$prod_other_price = $this->input->post('prod_other_price');
+				$prod_other_price = abs($this->input->post('prod_other_price'));
                 $prod_other_img_idx = $this->input->post('prod_other_img_idx');
 
              
@@ -1328,25 +1373,46 @@ class productUpload extends MY_Controller
                 }
                 
                 # start of saving combination qty
-                
-                if($retain_shipment){
-                    #Special combination update for retaining shipment detail
-                    $quantitySolo = 1;
-                    if($this->input->post('quantitySolo')){
-                        $quantitySolo = $this->input->post('quantitySolo');
+
+                if($checkIfCombination == 'true' || $checkIfCombination == 1){
+                    #SHIPMENT RETAIN: UPDATE
+                    if(($default_retain_shipment)&&(count($update_product_item_obj) == 1)){
+                        $x = reset($update_product_item_obj);
+                        $this->product_model->updateCombination($product_id, $x['id'], $x['qty']);
                     }
-                    $this->product_model->updateCombination($product_id,$quantitySolo);
-                }
-                else{
-                    #Regular combination insert
-                    if($checkIfCombination == 'true' || $checkIfCombination == 1){
+                    #NEW ATTRIBUTE: INSERT
+                    else{
                         $quantitySolo = 1;
                         if($this->input->post('quantitySolo')){
                             $quantitySolo = $this->input->post('quantitySolo');
+                            $quantitySolo = abs($quantitySolo);
                         }
                         $idProductItem = $this->product_model->addNewCombination($product_id,$quantitySolo);
-                    }else{
-                        foreach ($combination as $keyCombination) {
+                    }
+                }else{
+                    foreach ($combination as $keyCombination) {
+                        if(isset($keyCombination->item_id)){
+                            $this->product_model->updateCombination($product_id, $keyCombination->item_id, $keyCombination->quantity);
+                            $explodeOldProdAttr = explode("-",  $keyCombination->old_prod_attr_id);
+                            $explodeCombination = explode("-",  $keyCombination->value);
+                            
+                            for($i = 0;$i < count($explodeCombination);$i++){
+                                $explodeOld = explode(":",  $explodeOldProdAttr[$i]);
+                                $is_other = $explodeOld[0];
+                                $old_product_attr_id = $explodeOld[1];
+                                $product_item_attr_id = $this->product_model->selectProductItemAttr($keyCombination->item_id,$old_product_attr_id, $is_other);
+                                $explodeOther = explode(":",  $explodeCombination[$i]);
+                                $otherAttrIdentifier = $explodeOther[0];
+                                $otherAttrValue = $explodeOther[1];
+                                if($otherAttrIdentifier == 1){
+                                    $productAttributeId = $this->product_model->selectProductAttributeOther($otherAttrValue,$product_id);
+                                }else{
+                                    $productAttributeId = $this->product_model->selectProductAttribute($otherAttrValue,$product_id);
+                                }
+                                $this->product_model->updateCombinationAttribute($keyCombination->item_id, $productAttributeId  ,$otherAttrIdentifier, $product_item_attr_id);
+                            }
+                        }
+                        else{
                             $quantitycombination = 1;
                             if(!$quantitycombination <= 0){
                                 $quantitycombination = $keyCombination->quantity;
@@ -1379,8 +1445,11 @@ class productUpload extends MY_Controller
                                 $this->product_model->addNewCombinationAttribute($idProductItem,$productAttributeId,$otherAttrIdentifier);
                             }
                         }
-                    } 
-                }
+                        
+                        
+                        
+                    }
+                } 
                 #end combination qty
 
 				$data = '{"e":"1","d":"'.$product_id.'"}';
@@ -1510,9 +1579,17 @@ class productUpload extends MY_Controller
     }
 
     function sam(){
-       
-        echo ($old_solo_combination)?'true':'false';
-        
+        $id =311;
+        $response['item_quantity'] =  $this->product_model->getShippingSummary($id);
+        print('<pre>');
+        print_r($response['item_quantity']);
+    }
+    
+    function sammy(){
+        $id = 299;
+        $response['item_quantity'] =  $this->product_model->getProductQuantity($id, true);
+        print('<pre>');
+        print_r($response['item_quantity']);
     }
 }
 
