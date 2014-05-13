@@ -135,7 +135,7 @@ class messages_model extends CI_Model
 			$size  = sizeof($result['messages']);
 			for($x = 0;$size > $x;$x++){
 				foreach($result['messages'][$x] as $key => $data){
-					if(((isset($data['name']) && $data['to_id'] == $this->user_ID) && $data['opened'] == '1' ) || ($data['status'] == "sender" && isset($data['name']) )){
+					if(((isset($data['name']) && $data['to_id'] == $id) && $data['opened'] == '1' ) || ($data['status'] == "sender" && isset($data['name']) )){
 						unset($result['messages'][$x]);
 					}
 				}
