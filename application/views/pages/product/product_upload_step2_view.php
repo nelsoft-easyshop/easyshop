@@ -1672,7 +1672,7 @@ $(".proceed_form").unbind("click").click(function(){
                     value_arr.push([x.id, x.is_other]);
                 });
                 var idx = inArray([$(this).attr('data-otherid'),"1"], value_arr);
-                if(idx){
+                if(idx>-1){
                     if(parseInt($this.attr_lookuplist_item_id[idx]) === 0){
                         $(this).attr("selected",true);
                     }     
@@ -1680,7 +1680,6 @@ $(".proceed_form").unbind("click").click(function(){
             }                
         });
         addAttrQtyCombination(prev_combination_count++);
-        console.log(noCombination);
     });
     
 
@@ -1709,11 +1708,11 @@ $(".proceed_form").unbind("click").click(function(){
         } 
 
         if( !$.trim( $('.quantity_attrs_content').html() ).length ) {
-        $('.quantity_attr_done').hide();
+            $('.quantity_attr_done').hide();
             $('.qty_tooltip').hide();
-        noCombination == true
+            noCombination == true
         }else{
-        $('.quantity_attr_done').show();
+            $('.quantity_attr_done').show();
             $('.qty_tooltip').show();
         }
     }
@@ -2068,7 +2067,7 @@ $(document).ready(function(){
                 return j;
             }
         }
-        return false;
+        return -1;
     }
 
     function arraysEqual(a, b) {

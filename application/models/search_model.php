@@ -110,7 +110,7 @@ class search_model extends CI_Model
 			$condition = "eb.`name` LIKE '%". $var ."%'";		
 		}
 		$query = "SELECT DISTINCT eb.`name` FROM `es_brand` eb WHERE " . $condition;
-			
+            
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->execute();
 		
@@ -225,6 +225,9 @@ class search_model extends CI_Model
 		$sth->execute();
 		$row = $sth->fetchAll(PDO::FETCH_ASSOC);
 	
+        print($query);
+        print_r($sth->errorInfo());
+    
 		if($test == "okok"){print_r($query); exit;}
 		if($test == "ok"){print_r($query);}	
 	

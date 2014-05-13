@@ -1599,14 +1599,14 @@ class productUpload extends MY_Controller
     }
 
     function sam(){
-        $id =311;
+        $id =315;
         $response['item_quantity'] =  $this->product_model->getShippingSummary($id);
         print('<pre>');
         print_r($response['item_quantity']);
     }
     
     function sammy(){
-        $id = 299;
+        $id = 327;
         $response['item_quantity'] =  $this->product_model->getProductQuantity($id, true);
         print('<pre>');
         print_r($response['item_quantity']);
