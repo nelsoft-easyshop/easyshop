@@ -5,6 +5,15 @@ $(document).ready(function(){
 	
 	$('.address_dropdown, .disabled_country').chosen({width:'200px'});
 	
+	$('.transac_address_details_show').on('click', function(){
+		$(this).siblings('div.transac_address_cont').slideToggle();
+		$(this).hide();
+	});
+	
+	$('.transac_address_details_hide').on('click', function(){
+		$(this).parent('div').slideToggle();
+		$(this).parent('div').siblings('span.transac_address_details_show').fadeIn();
+	});
 });
 
 $(document).ready(function(){
@@ -1068,7 +1077,7 @@ $(document).ready(function(){
 		if($.trim(feedbackfield.val()).length < 1)
 			feedbackfield.effect('pulsate',{times:3},800);
 		else if(rating1 === '' || rating2 === '' || rating3 ==='')
-			econt.html('You cannot submit with a 0 rating score!');
+			econt.html('Please rate this user!');
 		else{
 			$(this).hide();
 			$.post(config.base_url+'memberpage/addFeedback',form.serialize(),function(data){
