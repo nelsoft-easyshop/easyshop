@@ -621,9 +621,9 @@ class productUpload extends MY_Controller
 			);
        
 			$data = array_merge($data, $this->fill_view());
-			
 			$jsonDisplayGroup = $jsonFdata = array();
-			if($data['shipping_summary']['has_shippingsummary']){
+			
+			/*if($data['shipping_summary']['has_shippingsummary']){
 				if($data['attr']['has_attr'] === 1){
 					$i = 0;
 					foreach($data['attr']['attributes'] as $attrk=>$attrarr){
@@ -632,6 +632,26 @@ class productUpload extends MY_Controller
 							$jsonFdata[$i][$attrk][$lockey] = $price;
 						}
 						$i++;
+					}
+				} else {
+					$jsonDisplayGroup[0][$data['attr']['product_item_id']] = $data['attr']['product_item_id'];
+					foreach($data['shipping_summary'][$data['attr']['product_item_id']] as $lockey=>$price){
+						$jsonFdata[0][$data['attr']['product_item_id']][$lockey] = $price;
+					}
+				}
+			}*/
+			
+			if($data['shipping_summary']['has_shippingsummary']){
+				if($data['attr']['has_attr'] === 1){
+					$i = 0;
+					foreach($data['attr']['attributes'] as $attrk=>$attrarr){
+						if( isset($data['shipping_summary'][$attrk]) ){
+							$jsonDisplayGroup[$i][$attrk] = $attrk;
+							foreach($data['shipping_summary'][$attrk] as $lockey=>$price){
+								$jsonFdata[$i][$attrk][$lockey] = $price;
+							}
+							$i++;
+						}
 					}
 				} else {
 					$jsonDisplayGroup[0][$data['attr']['product_item_id']] = $data['attr']['product_item_id'];

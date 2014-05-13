@@ -270,59 +270,61 @@
 				<?php $datagroupcounter = 0; ?>
                    <?php if($shipping_summary['has_shippingsummary']):?>
                       <?php foreach($attr["attributes"] as $attk=>$temp): ?>
-                      <tr class="tr_shipping_summary" data-group="<?php echo $datagroupcounter;?>">
-                          <td class="prod_att_pad">
-                            <?php if($attr['has_attr'] == 1):?>
-                              <?php foreach($temp as $att):?>
-                                <p><?php echo $att;?></p>
-								<span></span>
-                              <?php endforeach;?>
-                            <?php else:?>
-                                <p>All Combinations</p>
-								<span></span>
-                            <?php endif;?>
-                          </td>
-                          <td width="230px" valign="top">
-                              <table class="shiplocprice_summary">
-                                  <tbody>
-                                    <?php foreach($shipping_summary[$attk] as $lockey=>$price):?>
-                                        <tr data-idlocation="<?php echo $lockey?>" data-groupkey="<?php echo $datagroupcounter?>">
-                                            <td width="90px"><?php echo $shipping_summary['location'][$lockey]?></td>
-                                            <td width="75px" data-value="<?php echo number_format((float)$price,2,'.',',');?>"><?php echo number_format((float)$price,2,'.',',');?></td>
-                                            <td class="tablehide">
-                                              <span class="button delete_priceloc">
-                                              <img src="<?php echo base_url();?>assets/images/icon_delete.png"> Delete
-                                              </span>
-                                            </td>
-                                        </tr>
-                                    <?php endforeach;?>
-                                    <!-- Cloning Field-->
-                                        <tr class="cloningfield" data-idlocation="" data-groupkey="">
-                                            <td width="85px"></td>
-                                            <td width="55px" data-value=""></td>
-                                            <td width="100px" class="tablehide">
-                                                <span class="button delete_priceloc">
-                                                <img src="<?php echo base_url();?>assets/images/icon_delete.png"> Delete
-                                                </span>
-                                            </td>
-                                        </tr>
-                                    <!-- END OF Cloning Field-->
-                                  </tbody>
-                              </table>
-                          </td>
-                          <td class="shipping_list_btns" width="110px" valign="top">
-                              <span class="edit_summaryrow button edit_del">
-                              <img src="<?php echo base_url();?>assets/images/icon_edit.png"> Edit
-                              </span>
-                              <span class="delete_summaryrow button edit_del">
-                              <img src="<?php echo base_url();?>assets/images/icon_delete.png"> Delete
-                              </span>
-                              <span class="accept_summaryrow buttonhide button accept_cancel">
-                              <img src="<?php echo base_url();?>assets/images/check_icon.png"> Accept
-                              </span>
-                            </td>
-                      </tr>
-                      <?php $datagroupcounter++; ?>
+						<?php if( isset($shipping_summary[$attk]) ):?>
+						  <tr class="tr_shipping_summary" data-group="<?php echo $datagroupcounter;?>">
+							  <td class="prod_att_pad">
+								<?php if($attr['has_attr'] == 1):?>
+								  <?php foreach($temp as $att):?>
+									<p><?php echo $att;?></p>
+									<span></span>
+								  <?php endforeach;?>
+								<?php else:?>
+									<p>All Combinations</p>
+									<span></span>
+								<?php endif;?>
+							  </td>
+							  <td width="230px" valign="top">
+								  <table class="shiplocprice_summary">
+									  <tbody>
+										<?php foreach($shipping_summary[$attk] as $lockey=>$price):?>
+											<tr data-idlocation="<?php echo $lockey?>" data-groupkey="<?php echo $datagroupcounter?>">
+												<td width="90px"><?php echo $shipping_summary['location'][$lockey]?></td>
+												<td width="75px" data-value="<?php echo number_format((float)$price,2,'.',',');?>"><?php echo number_format((float)$price,2,'.',',');?></td>
+												<td class="tablehide">
+												  <span class="button delete_priceloc">
+												  <img src="<?php echo base_url();?>assets/images/icon_delete.png"> Delete
+												  </span>
+												</td>
+											</tr>
+										<?php endforeach;?>
+										<!-- Cloning Field-->
+											<tr class="cloningfield" data-idlocation="" data-groupkey="">
+												<td width="85px"></td>
+												<td width="55px" data-value=""></td>
+												<td width="100px" class="tablehide">
+													<span class="button delete_priceloc">
+													<img src="<?php echo base_url();?>assets/images/icon_delete.png"> Delete
+													</span>
+												</td>
+											</tr>
+										<!-- END OF Cloning Field-->
+									  </tbody>
+								  </table>
+							  </td>
+							  <td class="shipping_list_btns" width="110px" valign="top">
+								  <span class="edit_summaryrow button edit_del">
+								  <img src="<?php echo base_url();?>assets/images/icon_edit.png"> Edit
+								  </span>
+								  <span class="delete_summaryrow button edit_del">
+								  <img src="<?php echo base_url();?>assets/images/icon_delete.png"> Delete
+								  </span>
+								  <span class="accept_summaryrow buttonhide button accept_cancel">
+								  <img src="<?php echo base_url();?>assets/images/check_icon.png"> Accept
+								  </span>
+							  </td>
+						  </tr>
+						  <?php $datagroupcounter++; ?>
+						<?php endif;?>
                   <?php endforeach;?>
                 <?php endif;?>
       
