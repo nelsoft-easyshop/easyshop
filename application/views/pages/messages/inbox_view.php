@@ -143,6 +143,7 @@
             url : "<?=base_url()?>messages/get_all_msgs2",
 			data : {csrfname:csrftoken},
 			success : function(d) {
+                    //$(".top_links_right:first-child").html("<img src='<?=base_url()?>assets/images/msg_icon.ico'>"+ " [ " +d.unread_msgs+ " ] ");
                 if (d.unread_msgs != 0) {
                     onFocus_Reload(d.messages);
                 }
