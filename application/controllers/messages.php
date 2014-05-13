@@ -56,16 +56,23 @@ if (!defined('BASEPATH'))
 		$result = $this->messages_model->get_all_messages($this->user_ID);	
 		echo json_encode($result);
 	}	
-	public function get_all_msgs2(){
+	public function retrieve_msgs(){
 		$result = $this->messages_model->get_all_messages($this->user_ID);
-		$size  = sizeof($result['messages']);
-		for($x = 0;$size > $x;$x++){
-			foreach($result['messages'][$x] as $key => $data){
-				if((isset($data['name']) && $data['opened'] == '1') || $data['to_id'] != $this->user_ID){
-					unset($result['messages'][$x]);	
+		$todo = $this->input->post("todo");
+		if($todo == "Get_UnreadMsgs"){
+			$size  = sizeof($result['messages']);
+			for($x = 0;$size > $x;$x++){
+				foreach($result['messages'][$x] as $key => $data){
+					if(((isset($data['name']) && $data['to_id'] == $this->user_ID) && $data['opened'] == '1' ) || ($data['status'] == "sender" && isset($data['name']) )){
+						unset($result['messages'][$x]);
+					}
 				}
 			}
+			$result['Case'] = "UnreadMsgs";
 		}
+		//print "<pre>";
+		//print_r($result);
+		//print "</pre>";
 		echo json_encode($result);
 	}	
 	public function is_seened(){

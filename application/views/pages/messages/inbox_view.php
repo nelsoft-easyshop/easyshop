@@ -3,7 +3,6 @@
     <div id="head_container">       
         <div><input type="button" id="modal-launcher" value="Compose"></div>
 		<div><span> <button id="chsn_delete_btn"> Delete selected </button> <button id="delete_all_btn"> Delete this conversation </button></span></div>
-        <div id="loader"><input type="button" id="btn_refresh" title="REFRESH"></div> 
     </div>
     <div id="panel_container">
 		<table id="table_id">
@@ -132,21 +131,23 @@
        
     });
      
-    function Reload() {
+    function Reload() {//header update unread msgs
         var csrftoken = $("meta[name='csrf-token']").attr('content');
         var csrfname = $("meta[name='csrf-name']").attr('content');
         var result = "";
+        var todo = "Get_UnreadMsgs";
         $.ajax({
             asycn :true,
             type:"POST",
             dataType : "json",
-            url : "<?=base_url()?>messages/get_all_msgs2",
-			data : {csrfname:csrftoken},
+            url : "<?=base_url()?>messages/retrieve_msgs",
+			data : {csrfname:csrftoken,todo:todo},
 			success : function(d) {
-                    //$(".top_links_right:first-child").html("<img src='<?=base_url()?>assets/images/msg_icon.ico'>"+ " [ " +d.unread_msgs+ " ] ");
-                if (d.unread_msgs != 0) {
-                    onFocus_Reload(d.messages);
-                }
+                $(".top_links_right a:first-child").html("<img src='<?=base_url()?>assets/images/msg_icon.ico'>"+ " [ " +d.unread_msgs+ " ] ");
+                
+                //if (d.unread_msgs != 0) {
+                //    onFocus_Reload(d);
+                //}
             }            
         });
     }
@@ -175,7 +176,8 @@
 		var checked = $(".d_all:checked").map(function () {return this.value;}).get().join(",");
 		var result = delete_data(checked);
 		if(result != ""){
-			tbl_data(result);
+            $("#table_id tbody").empty();
+			onFocus_Reload(result);
 			$("#msg_field").empty().append('<img id="msg_loader" src="<?=base_url()?>assets/images/orange_loader.gif">');
 			$("#msg_textarea").hide();
 			$("#chsn_delete_btn").hide();            
@@ -187,7 +189,8 @@
 		var checked = $(".d_all").map(function () {return this.value;}).get().join(",");	
 		var result = delete_data(checked);	
 		if(result != ""){
-			tbl_data(result);
+            $("#table_id tbody").empty();
+			onFocus_Reload(result);
 			$("#msg_field").empty().append('<img id="msg_loader" src="<?=base_url()?>assets/images/orange_loader.gif">');
 			$("#msg_textarea").hide();
 		}else {
@@ -212,8 +215,8 @@
 			data : {recipient:recipient,msg:msg,csrfname:csrftoken},
 			success : function(data) {
                 if (data != "false") {
-                    result = data.messages;
-                    tbl_data(result)
+                    $("#table_id tbody").empty();
+                    onFocus_Reload(data)
                 }else{
                     alert("Username does not exist");
                     return false;
@@ -286,60 +289,9 @@
 		$("#msg_textarea").show();
         objDiv.scrollTop = objDiv.scrollTop + 100;
 	}
-	$("#btn_refresh").on("click",function(){
-		var csrftoken = $("meta[name='csrf-token']").attr('content');
-        var csrfname = $("meta[name='csrf-name']").attr('content');
-		var data = "";
-		$.ajax({
-			async:false,
-			type : "POST",
-			dataType : "json",
-            onLoading:$("#btn_refresh").css('background-image','url("<?=base_url()?>/assets/images/ref-icon.gif")'),
-			url : "<?=base_url()?>messages/get_all_msgs",
-			data : {csrfname:csrftoken},
-			success : function(d) {
-                if (d.messages != 0) {
-                    tbl_data(d.messages);
-                    specific_msgs();                    
-                    var objDiv = document.getElementById("msg_field");	
-                    objDiv.scrollTop = objDiv.scrollHeight;
-                    $("#send_btn").attr("data","{'name':'"+$(".Active").children(":first").html()+"','img':'"+$(".Active").parent().parent().children(":first").children().attr("data")+"'}");
-                    $("#head_container span").show();
-                }else{
-                    location.reload();
-                }
-                $("#btn_refresh").css('background-image','url("<?=base_url()?>/assets/images/ref-icon2.png")');
-			}   
-		});
-	});
-    function tbl_data(D){
-        html = "";
-        $.each(D,function(key,val){
-            var cnt = parseInt(Object.keys(val).length)- 1;
-            var Nav_msg = D[key][Object.keys(val)[cnt]]; //first element of object
-            html +='<tr class="'+(Nav_msg.opened == "0" && Nav_msg.status == "reciever" ? "NS" : "")+' odd">';
-            html +='<td class=" sorting_1">';
-            if (Nav_msg.status == "sender") {
-                html +='<img src=<?=base_url()?>'+Nav_msg.recipient_img+'/60x60.png data="'+Nav_msg.sender_img+'">';
-            }else {
-                html +='<img src=<?=base_url()?>'+Nav_msg.sender_img+'/60x60.png data="'+Nav_msg.recipient_img+'">';
-            }
-            html +='</td>';
-            html +='<td class=" ">';
-            html +="<a class='btn_each_msg' id='ID_"+Nav_msg.name+"' data='"+ escapeHtml(JSON.stringify(val))+"' href='javascript:void(0)'>";
-            html +='<span class="msg_sender">'+Nav_msg.name+'</span>';
-            html +='<span class="msg_message">'+escapeHtml(Nav_msg.message)+'</span>';
-            html +='<span class="msg_date">'+Nav_msg.time_sent+'</span>';
-            html +='</a>';
-            html +='</td>';
-            html +='</tr>';
-            $("#table_id tbody").empty();
-            $("#table_id tbody").append(html);
-        });
-        $("#table_id a").first().addClass("Active");
-	}
-    function onFocus_Reload(D) {
+    function onFocus_Reload(msgs) {
 		html = "";
+        D = msgs.messages;
 		$.each(D,function(key,val){
 			var cnt = parseInt(Object.keys(val).length)- 1;
 			var Nav_msg = D[key][Object.keys(val)[cnt]]; //first element of object
@@ -352,7 +304,6 @@
                     seened($('#ID_'+Nav_msg.name));
                 }
             }else{
-                //append another div on tbl_data
                 html +='<tr class="'+(Nav_msg.opened == "0" && Nav_msg.status == "reciever" ? "NS" : "")+' odd">';
                 html +='<td class=" sorting_1">';
                 if (Nav_msg.status == "sender") {
@@ -369,9 +320,14 @@
                 html +='</a>';
                 html +='</td>';
                 html +='</tr>';
-                $("#table_id tbody").prepend(html);
             }
 		});
+        if(msgs.Case == "UnreadMsgs"){
+            $("#table_id tbody").prepend(html);
+        }else{
+            $("#table_id tbody").append(html);
+            $("#table_id a").first().addClass("Active");
+        }
     }
     $("#msg_field").on("click",".d_all",function(){
 		if ($('.d_all').not(':checked').length == $('.d_all').length) {
@@ -395,7 +351,7 @@
 			url : "<?=base_url()?>messages/delete_msg",
 			data : {id_msg:ids,csrfname:csrftoken},
 			success : function(d) {
-                data = d.messages;
+                data = d;
 			}
 		});
 		$("#modal-background").hide();
@@ -404,7 +360,6 @@
 	}
 
     function seened(obj) {
-        //if ($(obj).parent().parent().attr('class').split(' ')[0] == "NS") {
         if ($(obj).parent().parent().hasClass("NS")) {
             var checked = $(".float_left .d_all").map(function () {return this.value;}).get().join(",");
             var csrftoken = $("meta[name='csrf-token']").attr('content');
@@ -416,7 +371,11 @@
                 url : "<?=base_url()?>messages/is_seened",
                 data : {checked:checked,csrfname:csrftoken},
                 success : function(data) {
-                    $(obj).parent().parent().removeClass('NS');
+                    if (data === true) {                        
+                        $(obj).parent().parent().removeClass('NS');
+                    }else{
+                        alert("Error loading the message.");
+                    }
                 }
             });
         }
