@@ -23,14 +23,14 @@
 				<?PHP } ?>
 				</td>
 				<td>
+                    
+					<a class="btn_each_msg" id="ID_<?PHP echo reset($row)['name']; ?>" href="javascript:void(0)" data='<?=html_escape(json_encode($row))?>'>
+						<span class="msg_sender"><?PHP echo reset($row)['name']; ?></span>
                     <?php 
                           $keys = array_keys($row);
                           $row[reset($keys)]['message'] = html_escape(reset($row)['message']);
                     ?>
-                    
-					<a class="btn_each_msg" id="ID_<?PHP echo reset($row)['name']; ?>" href="javascript:void(0)" data='<?=html_escape(json_encode($row))?>'>
-						<span class="msg_sender"><?PHP echo reset($row)['name']; ?></span>
-						<span class="msg_message"><?PHP echo html_escape(reset($row)['message']); ?></span>
+						<span class="msg_message"><?PHP echo reset($row)['message']; ?></span>
 						<span class="msg_date"><?PHP echo reset($row)['time_sent']; ?></span>
 					</a>
 				</td>
@@ -92,7 +92,7 @@
 		});
 				
 		
-		$("#msg_textarea").on("click","#send_btn",function(){ // restrict textarea,button if doesnt have value 
+		$("#msg_textarea").on("click","#send_btn",function(){ 
 			
         var D = eval('(' + $(this).attr('data') + ')');
         var recipient = D.name;
@@ -131,7 +131,7 @@
        
     });
      
-    function Reload() {//header update unread msgs
+    function Reload() {
         var csrftoken = $("meta[name='csrf-token']").attr('content');
         var csrfname = $("meta[name='csrf-name']").attr('content');
         var result = "";
@@ -143,7 +143,9 @@
             url : "<?=base_url()?>messages/retrieve_msgs",
 			data : {csrfname:csrftoken,todo:todo},
 			success : function(d) {
-                $(".top_links_right a:first-child").html("<img src='<?=base_url()?>assets/images/msg_icon.ico'>"+ " [ " +d.unread_msgs+ " ] ");
+                $(".top_links_right a:first-child").html("<img src='<?=base_url()?>assets/images/msg_icon.ico'>"+ "[ " +d.unread_msgs+ " ] ");
+                document.title = (d.unread_msgs == 0 ? "Message | Easyshop.ph" : "Message (" + d.unread_msgs + ") | Easyshop.ph");
+                //Message | Easyshop.ph
                 if (d.unread_msgs != 0) {
                     onFocus_Reload(d);
                 }
@@ -295,7 +297,7 @@
 			var cnt = parseInt(Object.keys(val).length)- 1;
 			var Nav_msg = D[key][Object.keys(val)[cnt]]; //first element of object
             if ($('#ID_'+Nav_msg.name).length) {
-                $('#ID_'+Nav_msg.name).children('.msg_message').text(escapeHtml(Nav_msg.message));
+                $('#ID_'+Nav_msg.name).children('.msg_message').text(Nav_msg.message);
                 $('#ID_'+Nav_msg.name).attr('data',JSON.stringify(val));
                 $('#ID_'+Nav_msg.name).parent().parent().addClass('NS');
                 if ($('#ID_'+Nav_msg.name).hasClass("Active")) {
