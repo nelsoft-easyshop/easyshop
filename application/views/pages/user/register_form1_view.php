@@ -98,7 +98,7 @@
     
 		  
 		  <div class="field" style="padding-top:25px">
-			<input type="submit" id="register_page1_btn" value="Agree and Continue"/>
+			<input type="submit" id="register_page1_btn" value="Register"/>
             <input type="hidden"  name="register_page1" value="register_page1"/>
             <img src="<?=base_url()?>/assets/images/orange_loader_small.gif" id="register_form1_loadingimg" style="position: relative; left:20px; display:none"/>
 		  </div>
