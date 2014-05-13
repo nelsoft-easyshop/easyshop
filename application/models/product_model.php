@@ -1622,12 +1622,11 @@ class product_model extends CI_Model
         
 		$data = array();
 		$data['id_product_item'] = array();
-		//$location = $gdata = array();
-		
+		$data['has_shippingsummary'] = false;
 		
 	// Every attribute combination should have shipping location/price
 	// Checking first entry is sufficient to determine if shipping details exist for a product
-		if( $row[0]['id_location'] == '' ) {
+		/*if( $row[0]['id_location'] == '' ) {
 			$data['has_shippingsummary'] = false;
 			foreach($row as $r){
 				if ( !in_array($r['id_product_item'], $data['id_product_item']) ) {
@@ -1646,43 +1645,31 @@ class product_model extends CI_Model
 				if ( !in_array($r['id_product_item'], $data['id_product_item']) ) {
 					$data['id_product_item'][] = $r['id_product_item'];
 				}
-				
-				/*if(!isset($data['location']['id_product_item']['id_location'])){
-					$data['location'][$r['id_product_item']][$r['id_location']] = $r['price'];
-				}*/
-				/*if(!isset($location[$r['id_location']])){
-					$location[$r['id_location']] = array();
-				}
-				if( !in_array( $r['id_product_item'],$location[$r['id_location']] ) ){
-					$location[$r['id_location']][] = $r['id_product_item'];
-				}*/
 			}
 			$data['has_shippingsummary'] = true;
-		}
+		}*/
 		
-		/*
-		foreach($location as $lkey=>$locarr){
-			if(count($gdata) === 0){
-				$gdata[] = array();
-				$gdata[count($gdata)-1]['attr'] = $locarr;
-				$gdata[count($gdata)-1]['loc'][] = $lkey;
-			} else {
-				$exist = false;
-				foreach($gdata as $gkey=>$attarr){
-					if($attarr['attr'] == $locarr){
-						$gdata[$gkey]['loc'][] = $lkey;
-						$exist = true;
-					}
+		foreach($row as $r){
+			// Create array for list of product items
+			if ( !in_array($r['id_product_item'], $data['id_product_item']) ) {
+				$data['id_product_item'][] = $r['id_product_item'];
+			}
+			// Set has_shippingsummary to true (once only) if fetched product item has location
+			if( !$data['has_shippingsummary'] && $r['id_location'] != '' ){
+				$data['has_shippingsummary'] = true;
+			}
+			// If product item has assigned location
+			if( $r['id_location'] != '' ){
+				// Set location id VS price
+				if ( !isset($data[$r['id_product_item']][$r['id_location']]) ) {
+					$data[$r['id_product_item']][$r['id_location']] = $r['price'];
 				}
-				if(!$exist){
-					$gdata[] = array(
-						'attr' => $locarr,
-						'loc' => array()
-					);
-					$gdata[count($gdata)-1]['loc'][] = $lkey;
+				// Set location name
+				if ( !isset($data['location']['id_location']) ) {
+					$data['location'][$r['id_location']] = $r['location'];
 				}
 			}
-		}*/
+		}
 		
     	return $data;
 	}
