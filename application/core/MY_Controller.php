@@ -19,8 +19,8 @@ class MY_Controller extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-		#$this->config->set_item('base_url',"https://".$_SERVER["SERVER_NAME"].":".$_SERVER["SERVER_PORT"]."/");
-        $this->config->set_item('base_url',"https://".$_SERVER["SERVER_NAME"]."/");
+		$this->config->set_item('base_url',"https://".$_SERVER["SERVER_NAME"].":".$_SERVER["SERVER_PORT"]."/");
+        //$this->config->set_item('base_url',"https://".$_SERVER["SERVER_NAME"]."/");
  
         $url = uri_string();
         if($url !== 'login'){
@@ -58,12 +58,14 @@ class MY_Controller extends CI_Controller
 		}
 		$carts=$this->session->userdata('cart_contents');
 		$ss = (empty($carts) ? 0 : sizeof($this->session->userdata('cart_contents'))-2);
-		$unread = $this->messages_model->get_all_messages($this->session->userdata('member_id'))['unread_msgs'];	
+		$unread = $this->messages_model->get_all_messages($this->session->userdata('member_id'),"Get_UnreadMsgs");	
+		$msgs['unread_msgs'] = $unread['unread_msgs'];
+		$msgs['msgs'] = ($unread['unread_msgs'] != 0 ? reset($unread['messages'][0]) : "");		
 		$data = array(
 			'logged_in' => $logged_in,
 			'uname' => $uname,
 			'total_items'=> $ss,
-			'unread_msgs'=> $unread,
+			'msgs'=> $msgs,
 			'category_search' => $this->product_model->getFirstLevelNode(),
 			);		
 		return $data;

@@ -129,6 +129,7 @@
              is_interval_running = true;
         }
        
+        
     });
      
     function Reload() {
@@ -143,9 +144,9 @@
             url : "<?=base_url()?>messages/retrieve_msgs",
 			data : {csrfname:csrftoken,todo:todo},
 			success : function(d) {
-                $(".top_links_right a:first-child").html("<img src='<?=base_url()?>assets/images/msg_icon.ico'>"+ "[ " +d.unread_msgs+ " ] ");
+                $(".top_links_right a:first-child").html("<img src='<?=base_url()?>assets/images/msg_icon.ico'>"+ "[ <span>" +d.unread_msgs+ "</span> ] ");
                 document.title = (d.unread_msgs == 0 ? "Message | Easyshop.ph" : "Message (" + d.unread_msgs + ") | Easyshop.ph");
-                //Message | Easyshop.ph
+                
                 if (d.unread_msgs != 0) {
                     onFocus_Reload(d);
                 }
@@ -381,6 +382,8 @@
             });
         }
     }
+    
+    
 </script>
 
 

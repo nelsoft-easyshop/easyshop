@@ -16,7 +16,7 @@ if (!defined('BASEPATH'))
 	}
     
     public function index() {
-		$result = $this->messages_model->get_all_messages($this->user_ID);
+		$result = $this->messages_model->get_all_messages($this->user_ID,"kurt");
 		$title = ($result['unread_msgs'] == 0 ? 'Message | Easyshop.ph' :'Message ('.$result['unread_msgs'].') | Easyshop.ph' );
 		$data['title'] = $title;
 		$data['result'] = $result;
@@ -35,7 +35,7 @@ if (!defined('BASEPATH'))
 			$msg = trim($this->input->post("msg"));			
 			$result = $this->messages_model->send_message($session_data['member_id'],$result,$msg);
 			if($result = 1){
-				$result = $this->messages_model->get_all_messages($this->user_ID);			
+				$result = $this->messages_model->get_all_messages($this->user_ID,"kurt");			
 			}
 		}
 		echo json_encode($result);
@@ -46,33 +46,15 @@ if (!defined('BASEPATH'))
 		
 		$result = $this->messages_model->delete_msg($id,$this->user_ID);
 		if($result > 0 ){
-			$result = $this->messages_model->get_all_messages($this->user_ID);	
+			$result = $this->messages_model->get_all_messages($this->user_ID,"kurt");	
 		} else {
 			$result = "";
 		}
 		echo json_encode($result);
     }
-	public function get_all_msgs(){
-		$result = $this->messages_model->get_all_messages($this->user_ID);	
-		echo json_encode($result);
-	}	
 	public function retrieve_msgs(){
-		$result = $this->messages_model->get_all_messages($this->user_ID);
 		$todo = $this->input->post("todo");
-		if($todo == "Get_UnreadMsgs"){
-			$size  = sizeof($result['messages']);
-			for($x = 0;$size > $x;$x++){
-				foreach($result['messages'][$x] as $key => $data){
-					if(((isset($data['name']) && $data['to_id'] == $this->user_ID) && $data['opened'] == '1' ) || ($data['status'] == "sender" && isset($data['name']) )){
-						unset($result['messages'][$x]);
-					}
-				}
-			}
-			$result['Case'] = "UnreadMsgs";
-		}
-		//print "<pre>";
-		//print_r($result);
-		//print "</pre>";
+		$result = $this->messages_model->get_all_messages($this->user_ID,$todo);
 		echo json_encode($result);
 	}	
 	public function is_seened(){

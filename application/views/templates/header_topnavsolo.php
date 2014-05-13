@@ -109,8 +109,26 @@
     <?php if(!$logged_in): ?>
     <div  class="top_links_right"> <a href="<?=base_url()?>login" class="top_border">Login</a> <a href="<?=base_url()?>register">Register</a> </div>
     <?php else: ?>
-    <div  class="top_links_right"><a href="<?=base_url()?>messages"><img src="<?=base_url()?>assets/images/msg_icon.ico">[ <?PHP echo $unread_msgs;?> ]</a> <a href="<?=base_url()?>me" class="top_border"><?php echo $uname; ?></a> <a href="<?=base_url()?>login/logout">Logout</a> </div>
+    <div  class="top_links_right"><a href="<?=base_url()?>messages"><img src="<?=base_url()?>assets/images/msg_icon.ico">[ <span><?PHP echo $msgs['unread_msgs'];?></span> ]</a> <a href="<?=base_url()?>me" class="top_border"><?php echo $uname; ?></a> <a href="<?=base_url()?>login/logout">Logout</a> </div>
     <?php endif; ?>
+	<div class="alertUser">
+	    <p>You have a message!</p>
+		<span><?PHP echo $msgs['msgs']['name'];?> :</span>
+		<span><?PHP echo html_escape($msgs['msgs']['message']);?> </span>
+	</div>
   </div>
 </header>
-
+<!--added by kurt-->
+<!--<script>-->
+<!--  -->
+<!--$(document).ready(function() {-->
+<!--    alertUser();-->
+<!--});-->
+<!--function alertUser() {-->
+<!--	var unreadMsgs = $(".top_links_right a:first-child span").html();-->
+<!--	if (unreadMsgs != 0) {-->
+<!--		$(".alertUser").effect( "bounce",{times:3}, 300 );-->
+<!--		$(".alertUser").fadeOut(10000);-->
+<!--	}-->
+<!--}-->
+<!--</script>-->

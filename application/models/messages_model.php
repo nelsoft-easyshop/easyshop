@@ -80,8 +80,8 @@ class messages_model extends CI_Model
 		$sth->execute();
 		return $sth->rowCount();
     }
-	public function get_all_messages ($id) {
-           
+	public function get_all_messages ($id,$todo) {
+		
 		$query = $this->sqlmap->getFilenameID('messages', 'all_messages');
 			
 		$sth = $this->db->conn_id->prepare($query);
@@ -130,6 +130,19 @@ class messages_model extends CI_Model
 			}
 		}
 		$result['unread_msgs'] = $unread_msg;
+		
+		if($todo == "Get_UnreadMsgs"){
+			$size  = sizeof($result['messages']);
+			for($x = 0;$size > $x;$x++){
+				foreach($result['messages'][$x] as $key => $data){
+					if(((isset($data['name']) && $data['to_id'] == $this->user_ID) && $data['opened'] == '1' ) || ($data['status'] == "sender" && isset($data['name']) )){
+						unset($result['messages'][$x]);
+					}
+				}
+			}
+			$result['Case'] = "UnreadMsgs";
+		}
+		
 		return $result;
 	}
 	

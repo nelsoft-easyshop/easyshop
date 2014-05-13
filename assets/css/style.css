@@ -4757,7 +4757,8 @@ span.transac_title_date {
     border-radius: 3px;
     bottom: 37px;
     height: auto;
-    left: 62px;
+	overflow: hidden;
+    left: 15px;
     max-width: 60%;
     min-height: 45px;
     padding: 5px;
@@ -4819,6 +4820,7 @@ span.transac_title_date {
     bottom: 91px;
     height: auto;
     left: 240px;
+	overflow: hidden;
     max-width: 60%;
     margin-top: 15px;
     min-height: 45px;
@@ -5063,3 +5065,39 @@ margin-right: 10px;
 	display:block;
 }
 
+.alertUser{
+		display:none;
+		background-color: #FFFFFF;
+		border: 1px solid #D9D9D9;
+		border-radius: 5px;
+		float: right;
+		height: 75px;
+		/*margin: 35px -90px 0 0;*/
+		margin-top: 30px;
+		padding: 2px;
+		width: 145px;
+		z-index: 1000;
+		color:#494949;
+		position: absolute;
+		right: 19%;
+}
+.alertUser p{
+    background-color: #DF0101;
+    border-radius: 3px;
+    color: #FFFFFF;
+    font-size: 12px;
+    height: 25px;
+    text-indent: 14px;
+    width: 100%;
+}
+.alertUser span:nth-of-type(1){
+		font-weight: bold;
+}
+.alertUser span{
+    display: block;
+    height: 19px;
+    margin-left: 5px;
+    max-width: 126px;
+    min-width: 90px;
+    overflow: hidden;
+}
