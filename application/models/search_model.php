@@ -85,7 +85,7 @@ class search_model extends CI_Model
 	
 	function selectChild($id) # get all down level category on selected category from database
 	{
-        print_r($id);
+
 		$query = $this->sqlmap->getFilenameID('product', 'selectChild');
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':cat_id', $id);
@@ -191,17 +191,18 @@ class search_model extends CI_Model
 	
 	function getFirstLevelNode($is_main = false, $is_alpha = false) # get all main/parent/first level category from database
 	{
+        $query = $this->sqlmap->getFilenameID('product', 'selectFirstLevel');
         if(($is_main)&&(!$is_alpha)){
-            $query = $this->sqlmap->getFilenameID('product', 'selectFirstLevelIsMain');
+            $query = $query.' AND c.is_main = 1 ORDER BY c.sort_order ASC, c.id_cat ASC';
         }
         else if((!$is_main)&&(!$is_alpha)){
-            $query = $this->sqlmap->getFilenameID('product', 'selectFirstLevel');
+            $query = $query.' ORDER BY c.sort_order ASC,c.id_cat ASC';
         }
         else if(($is_main)&&($is_alpha)){
-            $query = $this->sqlmap->getFilenameID('product', 'selectFirstLevelIsMainAlpha');
+            $query = $query.' AND c.is_main = 1 ORDER BY c.name ASC,c.id_cat ASC';
         }
         else if((!$is_main)&&($is_alpha)){
-            $query = $this->sqlmap->getFilenameID('product', 'selectFirstLevelAlpha');
+            $query = $query.' ORDER BY c.name ASC,c.id_cat ASC';
         }
 		
 		$sth = $this->db->conn_id->prepare($query);

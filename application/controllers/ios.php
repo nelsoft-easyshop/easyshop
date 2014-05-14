@@ -89,9 +89,7 @@ class Ios extends MY_Controller {
 
 	public function searchbycategory()
 	{
-		$categoryId = $this->input->get('id_cat');
-	
-		 
+		$categoryId = $this->input->get('id_cat');		 
 		$start = 0;
 		$count = 0;
 		$perPage = $this->per_page;
@@ -104,7 +102,6 @@ class Ios extends MY_Controller {
 		$haveSort = false;
 		$sortString = "";
 		$tempcondition = "";
-		   
 		if($categoryId != 0){
 			if($checkifexistcategory != 0){
 				$downCategory = $this->product_model->selectChild($categoryId);
@@ -114,7 +111,7 @@ class Ios extends MY_Controller {
                     $categories = implode(",", $downCategory);
                 }
 				$items = $this->product_model->getProductsByCategory($categories,$condition,$count,$operator,$start,$perPage,$sortString);
-				$ids = array();
+                $ids = array();
 				foreach ($items as $key) {
 					array_push($ids, $key['product_id']);
 				} 
@@ -141,8 +138,6 @@ class Ios extends MY_Controller {
 				$subcategories = $this->product_model->getDownLevelNode($categoryId);
 				$breadcrumbs = $this->product_model->getParentId($categoryId);
 
- 
-
 				$response['main_categories'] = $this->product_model->getFirstLevelNode(true);
 				$response['breadcrumbs'] = $breadcrumbs;
 				$response['subcategories'] = $subcategories;
@@ -155,11 +150,10 @@ class Ios extends MY_Controller {
 					$db_cat_item = $this->product_model->getPopularitem($down_cat,1);
 					$response['subcategories'][$x]['popular'] = $db_cat_item;
 				}
-				
+				$response['items'] = $items;
 				echo json_encode($response,JSON_PRETTY_PRINT);
 				exit();
 			}
-			 
 		} 
 
 	}
