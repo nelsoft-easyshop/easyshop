@@ -134,7 +134,7 @@ $(document).ready(function() {
 							url: base_url + 'advsrch/scroll_product',
 							data:{page_number:offset,id_cat:cat,parameters:condition,csrfname:csrftoken},
 							type: 'post',
-							async: false,
+							async: true,
 							dataType: 'JSON',
 							onLoading:jQuery(".loading_products").html("<img src='"+ base_url +"assets/images/orange_loader.gif' />").show(),						
 							success: function(d){
