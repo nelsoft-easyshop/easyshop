@@ -50,8 +50,8 @@ class Landingpage extends MY_Controller
 		
 		if(($this->input->post('register_form1'))&&($this->form_validation->run('landing_form'))){
 			
-			$data['username'] = html_escape($this->input->post('username'));
-			$data['password'] = html_escape($this->input->post('password'));
+			$data['username'] = $this->input->post('username');
+			$data['password'] = $this->input->post('password');
 			$data['email'] = $this->input->post('email');
 			$data['mobile'] = $this->input->post('mobile');
 			
