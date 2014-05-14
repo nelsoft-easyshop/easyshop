@@ -98,22 +98,29 @@ class search_model extends CI_Model
 	
 	function getBrandName($var, $toggle)
 	{
+        $bind_param = array();
 		if($toggle == 'id'){
-			if(is_array($var)){
-				$value = implode(',',$var);
-			}else{
-				$value = $var;
-			}
-			
-			$condition = "eb.`id_brand` IN (". $value .")";
+            if(is_array($var)){
+                $condition = "eb.`id_brand` IN ";
+                $qmarks = implode(',', array_fill(0, count($var), '?'));
+                $condition = $condition.'('.$qmarks.')';
+                foreach ($var as $x){
+                    array_push($bind_param, $x);
+                }
+            }
+            else{
+                $condition = '1';
+            }         
 		}else{
-			$condition = "eb.`name` LIKE '%". $var ."%'";		
+			$condition = "eb.`name` LIKE '%?%'";	
+            array_push($bind_param, $var);
 		}
-		$query = "SELECT DISTINCT eb.`name` FROM `es_brand` eb WHERE " . $condition;
-            
+		$query = "SELECT DISTINCT eb.`name` FROM `es_brand` eb WHERE " . $condition;  
 		$sth = $this->db->conn_id->prepare($query);
-		$sth->execute();
-		
+        foreach($bind_param as $k=>$x){
+             $sth->bindValue(($k+1), $x); 
+        }
+		$sth->execute();		
 		$row = $sth->fetchAll(PDO::FETCH_ASSOC);
 
 		return $row;				
@@ -225,8 +232,6 @@ class search_model extends CI_Model
 		$sth->execute();
 		$row = $sth->fetchAll(PDO::FETCH_ASSOC);
 	
-        print($query);
-        print_r($sth->errorInfo());
     
 		if($test == "okok"){print_r($query); exit;}
 		if($test == "ok"){print_r($query);}	
