@@ -514,7 +514,7 @@
           </tr> 
           <tr>
               <td width="110px" class="border-left">Base Price <font color="red"> *</font></td>
-              <td class="border-right" colspan="3"><input type="text" autocomplete="off" name="prod_price" id="prod_price" placeholder="Enter price (0.00)" value="<?php echo (isset($product_details['price']))?$product_details['price']:'';?>">
+              <td class="border-right" colspan="3"> &#8369; <input type="text" autocomplete="off" name="prod_price" id="prod_price" placeholder="Enter price (0.00)" value="<?php echo (isset($product_details['price']))?$product_details['price']:'';?>">
                 <a class="tooltips" href="javascript:void(0)">
                   <img src="<?= base_url() ?>assets/images/icon_qmark.png" alt="">
                   <span>Set the base price for your listing. You may set the shipment fee separately in the following step.
@@ -528,7 +528,7 @@
           <tr>
             <td class="border-left">SKU Code <font color="red">*</font></td> <!-- SKU of the product -->
             <td class="border-right" colspan="3">
-              <input type="text" autocomplete="off"  maxlength="45" placeholder="Enter SKU" id="prod_sku" name="prod_sku" value="<?php echo (isset($product_details['sku']))?$product_details['sku']:'';?>">
+             &nbsp;  &nbsp; <input type="text" autocomplete="off"  maxlength="45" placeholder="Enter SKU" id="prod_sku" name="prod_sku" value="<?php echo (isset($product_details['sku']))?$product_details['sku']:'';?>">
               <a class="tooltips" href="javascript:void(0)"><img src="<?= base_url() ?>assets/images/icon_qmark.png" alt="">
                 <span class="2lines_tooltip">Stock Keeping Unit: you can assign any code in order to keep track of your items</span>
               </a>

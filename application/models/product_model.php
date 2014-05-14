@@ -286,14 +286,67 @@ class product_model extends CI_Model
 	}
        
 	// // start of new 
-	function getProductsByCategory($categories,$condition_string,$count,$operator = "<",$start,$per_page,$sortString)
-	{
+	function getProductsByCategory($categories,$conditionArray,$countMatch,$operator = "<",$start,$per_page,$sortString)
+	{	
+		$arrayCount = count($conditionArray);
+		if ($arrayCount > 0) {
+			krsort($conditionArray);
+			if(!empty($conditionArray['attributes'])) {  
+				arsort($conditionArray['attributes']);
+			}
+		}
+	
+		$condition_string = "";
+		$attributeString = "";
+		$brand_string = "";  		
 		$start = (int)$start;
 		$per_page = (int)$per_page;
-		$havingString = "";
+		$havingString = ""; 
 
-		if(!$count <= 0){
-			$havingString = " HAVING cnt_all ".$operator. $count;
+		if ($arrayCount > 0) {
+			foreach ($conditionArray as $key => $value) {
+				if($key == 'attributes'){
+					$attrCount = count($conditionArray['attributes']);
+				 	$counterAttrName = 0;
+				 	$counterAttrValue = 0;
+					foreach ($conditionArray[$key] as $keyatt => $valueatt) {
+						$count = count($conditionArray[$key][$keyatt]); 
+
+						if($count == 1){
+							$attributeString .= " OR    ( `attr_name` = :attrname$counterAttrName AND attr_value = :attrvalue$counterAttrValue )  ";
+							$counterAttrValue++;
+						}else{
+							foreach ($conditionArray[$key][$keyatt] as $key2 => $value2) {
+								$attributeString .= " OR    ( `attr_name` = :attrname$counterAttrName AND attr_value = :attrvalue$counterAttrValue )  ";
+								$counterAttrValue++;
+							}
+						}
+						$counterAttrName++;
+					}
+
+				}elseif($key == 'brand'){
+					if($conditionArray[$key]['count'] == 1){
+						$condition_string .= " AND brand = :brand";
+					}else{
+						$condition_string .= " AND brand IN (";
+						foreach ($conditionArray[$key]['value'] as $keybrand => $valuebrand) {
+							$brand_string .= ",:brand".$keybrand;
+						}
+						$brand_string = ltrim ($brand_string,',');
+						$condition_string .= $brand_string. ")";
+					}
+				}elseif($key == 'condition'){
+					$condition_string .= " AND `condition` = :condition";
+				}elseif($key == 'price'){
+					$condition_string .= " AND price BETWEEN :startprice AND :endprice";
+				}
+			}
+		}  
+		
+		if($countMatch > 0){
+			// $havingString = " HAVING cnt_all ".$operator. $countMatch." ";
+			$attributeString = substr_replace($attributeString," AND",1,3); 
+			$condition_string .= $attributeString;	
 		}
 
 		$query = $this->sqlmap->getFilenameID('product', 'getProducts');
@@ -302,36 +355,92 @@ class product_model extends CI_Model
 		 AND is_delete = 0 AND is_draft = 0
 		 ".$condition_string."
 		 GROUP BY product_id , `name`,price,`condition`,brief,product_image_path,
-         item_list_attribute.is_new, item_list_attribute.is_hot, item_list_attribute.clickcount,item_list_attribute.slug
-		 ".$havingString."
-    	 ORDER BY ".$sortString." cnt_all DESC, `name` ASC
-		 LIMIT :start, :per_page
-		 "; 
-	 	// echo $query;exit();
+         item_list_attribute.is_new, item_list_attribute.is_hot, item_list_attribute.clickcount,item_list_attribute.slug 
+         ".$havingString."
+  	   	 ORDER BY ".$sortString." cnt_all DESC, `name` ASC
+		 LIMIT :start, :per_page 
+		 ";
+
+
 		$sth = $this->db->conn_id->prepare($query); 
-		$sth->bindParam(':start',$start,PDO::PARAM_INT);
+			if ($arrayCount > 0) {
+			foreach ($conditionArray as $key => $value) {
+				if($key == 'attributes'){
+
+					$attrCount = count($conditionArray['attributes']);
+				 	$counterAttrName = 0;
+				 	$counterAttrValue = 0;
+					foreach ($conditionArray[$key] as $keyatt => $valueatt) {
+
+						$count = count($conditionArray[$key][$keyatt]); 
+						$attrNameBind = ':attrname'.$counterAttrName;
+					 	$sth->bindParam($attrNameBind,$keyatt,PDO::PARAM_STR);
+
+						if($count == 1){
+							$attrValueBind = ':attrvalue'.$counterAttrValue;
+							$sth->bindParam($attrValueBind,$valueatt,PDO::PARAM_STR);
+						 
+							$counterAttrValue++;		 
+						}else{
+						 	 
+							foreach ($conditionArray[$key][$keyatt] as $key2 => $value2) {
+								$attrValueBind = ':attrvalue'.$counterAttrValue;
+								$sth->bindParam($attrValueBind,$value2,PDO::PARAM_STR);
+							 
+								$counterAttrValue++;
+
+							}
+						}
+						$counterAttrName++;
+					}
+
+				}elseif($key == 'brand'){
+
+					if($conditionArray[$key]['count'] == 1){
+						$brandValue = $conditionArray[$key]['value'];
+						$sth->bindParam(':brand',$brandValue,PDO::PARAM_STR);				 
+					}else{
+						foreach ($conditionArray[$key]['value'] as $keybrand => $valuebrand) {	  
+							$sth->bindParam(":brand".$keybrand,$valuebrand,PDO::PARAM_STR);
+						}
+					}
+				}elseif($key == 'condition'){
+
+					$conditionValue = $conditionArray[$key]['value']; 
+					$sth->bindParam(':condition',$conditionValue,PDO::PARAM_STR);
+							 
+				}elseif($key == 'price'){
+
+					$priceStartValue = $conditionArray[$key]['start']; 
+					$priceEndValue = $conditionArray[$key]['end'];  
+					$sth->bindParam(':startprice',$priceStartValue,PDO::PARAM_STR);		 
+					$sth->bindParam(':endprice',$priceEndValue,PDO::PARAM_STR);
+				
+				}
+			}  
+		}
+ 
+		$sth->bindParam(':start',$start,PDO::PARAM_INT);			 
 		$sth->bindParam(':per_page',$per_page,PDO::PARAM_INT);
 		$sth->execute(); 
-	
 		$rows = $sth->fetchAll(PDO::FETCH_ASSOC);	
 	 
-		return $rows ;
+		return $rows;
+		// print_r($rows);exit();
 	}
 
-	function getProductAttributesByCategory($ids,$condition_string,$start,$per_page)
+	function getProductAttributesByCategory($ids)
 	{
 		
-		$start = (int)$start;
-		$per_page = (int)$per_page;
 		$query = $this->sqlmap->getFilenameID('product', 'getProductAndAttributes');
 
 		$query = $query."
 		WHERE product_id IN (".$ids.") 
 		AND is_delete = 0 AND is_draft = 0
-		".$condition_string."
 		GROUP BY attr_value 
 		ORDER BY attr_name
 		";   
+		 
 		$sth = $this->db->conn_id->prepare($query);  
 		$sth->execute();
 		
@@ -340,45 +449,42 @@ class product_model extends CI_Model
 	}
  
 
-	function getProductConditionByCategory($ids,$condition_string,$start,$per_page)
+	function getProductConditionByCategory($ids)
 	{
 		
-		$start = (int)$start;
-		$per_page = (int)$per_page;
-		$query = $this->sqlmap->getFilenameID('product', 'getProductAndCondition');
-
-		$query = $query."
-		WHERE product_id IN (".$ids.") 
+		$query = "
+		SELECT `condition` from es_product
+		WHERE id_product IN (".$ids.") 
 		AND is_delete = 0 AND is_draft = 0
-		".$condition_string."
 		GROUP BY `condition` 
-		ORDER BY attr_name
+		 
 		";    
 		$sth = $this->db->conn_id->prepare($query);  
 		$sth->execute();
-		
+		 
 		$rows = $sth->fetchAll(PDO::FETCH_COLUMN, 0);
 		return $rows;
 	}
 	
-	function getProductBrandsByCategory($categories,$condition_string,$start,$per_page)
+	function getProductBrandsByCategory($ids)
 	{
 		
-		$start = (int)$start;
-		$per_page = (int)$per_page;
-		$query = $this->sqlmap->getFilenameID('product', 'getProductAndBrands');
-
-		$query = $query."
-		WHERE cat_id IN (".$categories.") 
-		AND is_delete = 0 AND is_draft = 0
-		".$condition_string."
-		GROUP BY brand 
-		ORDER BY brand
+	 
+		$query = "
+		SELECT 
+		  a.`name` 
+		FROM
+		  `es_brand` a
+		  , `es_product` b 
+		WHERE a.`id_brand` = b.`brand_id` 
+		AND b.`id_product` IN (".$ids.") 
+		GROUP BY `name` 
 		";  
+		 
 		$sth = $this->db->conn_id->prepare($query);  
 		$sth->execute();
 		$rows = $sth->fetchAll(PDO::FETCH_COLUMN, 0);
-		 	
+		 
 		return $rows;
 	}
 	
@@ -663,47 +769,6 @@ class product_model extends CI_Model
 	}
 
 
-
-	
-	function selectAllProductWithCategoryFiltered($id_cat,$condition_price_string,$start,$per_page,$catlist_down,$product_id)
-	{
-	
-		$start = (int)$start;
-	 	$per_page = (int)$per_page;		  
-	 	$query ="
-	 	     SELECT 
-          a.`id_product` AS `product_id`
-          , a.`name` AS product_name
-          , a.`price` AS product_price
-          , a.`brief` AS product_brief
-          , a.`condition` AS product_condition
-          , b.`product_image_path`
-          , c.`name` AS product_brand 
-          , a.`brand_id`
-        FROM
-          `es_product` a
-          , `es_product_image` b 
-          ,`es_brand` c
-        WHERE a.`id_product` = b.`product_id` 
-          AND b.`is_primary` = 1 
-          AND a.`brand_id` = c.`id_brand`
-          AND `cat_id` IN (". $catlist_down .")
-		  AND a.`is_delete` = 0
-		   AND a.`is_draft` = 0
-		  AND a.`id_product` NOT IN (". implode(',', $product_id) . ")
-		  ".$condition_price_string." 
-        LIMIT :start, :per_page
-	 	"; 
-
-
-		$sth = $this->db->conn_id->prepare($query);  
-		$sth->bindParam(':start',$start,PDO::PARAM_INT);
-		$sth->bindParam(':per_page',$per_page,PDO::PARAM_INT);
-		$sth->execute();
-		$row = $sth->fetchAll(PDO::FETCH_ASSOC);
-		return $row;
-	}
-
 	function insertSearch($value)
 	{
 		$query = "INSERT INTO es_keywords_temp (keywords) VALUES(:value)"; 
@@ -962,28 +1027,28 @@ class product_model extends CI_Model
  		}
   
 		$query = "
-		 SELECT 
-      main_tbl.*
-      , es_product_image.product_image_path 
-    FROM
-      `es_product_image` 
-      LEFT JOIN 
-        (SELECT 
-          `id_product` AS product_id
-          , `slug` as product_slug
-          , `name` AS product_name
-          , `price` AS product_price
-          , `brief` AS product_brief
-          , `condition` AS product_condition 
-        FROM
-          `es_product` 
-        WHERE is_delete = 0 AND `is_draft` = 0
-          ".$concatQuery."
-          ) AS main_tbl 
-        ON main_tbl.product_id = es_product_image.`product_id` 
-    WHERE `es_product_image`.`is_primary` = 1 
-      AND main_tbl.product_id = es_product_image.`product_id` 
-    LIMIT :start, :per_page 
+	 	SELECT 
+	      main_tbl.*
+	      , es_product_image.product_image_path 
+	    FROM
+	      `es_product_image` 
+	      LEFT JOIN 
+	        (SELECT 
+	          `id_product` AS product_id
+	          , `slug` as product_slug
+	          , `name` AS product_name
+	          , `price` AS product_price
+	          , `brief` AS product_brief
+	          , `condition` AS product_condition 
+	        FROM
+	          `es_product` 
+	        WHERE is_delete = 0 AND `is_draft` = 0
+	          ".$concatQuery."
+	          ) AS main_tbl 
+	        ON main_tbl.product_id = es_product_image.`product_id` 
+	    WHERE `es_product_image`.`is_primary` = 1 
+	      AND main_tbl.product_id = es_product_image.`product_id` 
+	    LIMIT :start, :per_page 
     ";  
  	 
 		$sth = $this->db->conn_id->prepare($query);
@@ -1020,8 +1085,7 @@ class product_model extends CI_Model
 			$key = $key+1;
 			$sth->bindParam($key, $keyword , PDO::PARAM_STR);
 		}
-        
-		// $sth->bindParam(':words',$words);
+   
 		$sth->execute();
 		$row = $sth->fetchAll(PDO::FETCH_COLUMN, 0);
 		return $row;
