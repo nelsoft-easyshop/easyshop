@@ -92,7 +92,7 @@ $config = array(
 					array(
 						'field' => 'email',
 						'label' => 'Email',
-						'rules' => 'trim|min_length[6]|valid_email'
+						'rules' => 'trim|min_length[6]|valid_email|required'
 					),
 				),
 			'personal_profile_address' => array(

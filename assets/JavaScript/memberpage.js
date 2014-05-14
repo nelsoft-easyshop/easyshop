@@ -79,6 +79,7 @@ $(document).ready(function(){
 			},
 			email:{
 				email: true,
+				required: true,
 				minlength: 6
 			}
 		},
