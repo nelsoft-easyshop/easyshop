@@ -1733,7 +1733,7 @@ $(document).ready(function(){
 			}else if(type==='delivery'){
 				$('#delivery_mapcanvas').siblings('.map_nav').children('.close').trigger('click');
 			}
-			alert('Location invalid');
+			alert('Please specify a valid address.');
 		}
 	  });
 	}
