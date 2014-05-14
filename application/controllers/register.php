@@ -51,8 +51,8 @@ class Register extends MY_Controller
 		{
             //$this->session->unset_userdata('captcha_word');
 			
-			$data['username'] = html_escape($this->input->post('username'));
-			$data['password'] = html_escape($this->input->post('password'));
+			$data['username'] = $this->input->post('username');
+			$data['password'] = $this->input->post('password');
 			$data['email'] = $this->input->post('email');
 			
 			$result = $this->sendVerificationCode($data);

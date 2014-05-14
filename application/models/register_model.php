@@ -58,22 +58,6 @@ class Register_model extends CI_Model
 		return $result;
 	}
 	
-	/*function signup_member($data=array())
-	{	
-		$query = $this->sqlmap->getFilenameID('users', 'signup_member');
-        $sth = $this->db->conn_id->prepare($query);
-        $sth->bindParam(':username', $data['register_username']);
-		$sth->bindParam(':password', $data['register_password']);
-		$sth->bindParam(':contactno', $data['register_mobile']);
-		$sth->bindParam(':email', $data['register_email']);
-		$sth->bindParam(':region', $data['register_region']);
-        $sth->execute();
-        $row = $sth->fetch(PDO::FETCH_ASSOC);
-
-        return $row;
-		
-	}*/
-	
 	function signupMember($data) 
 	{
 		$query = $this->sqlmap->getFilenameID('users', 'signup_member');
