@@ -108,7 +108,7 @@ $(document).ready(function() {
 	// START OF INFINITE SCROLLING FUNCTION
 	var rec = $(".rec").val();
 	
-	if(rec > 0){
+	if(rec > 9){
 		var base_url = config.base_url;
 		var offset = 1;
 		var request_ajax = true;
