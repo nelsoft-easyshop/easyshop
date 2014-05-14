@@ -147,14 +147,6 @@
                     <?php $main_img_cnt = 0;?>
                     <?php if(isset($main_images)):?> 
                         <?php foreach($main_images as $main_image): ?>      
-                            <!--
-                            <div id="editpreviewlist<?php echo $main_img_cnt;?>" class="edit_img upload_img_div <?php echo ($main_img_cnt===0)?'active_img':'';?>">
-                                <a href="javascript:void(0)" class="removepic"  data-imgid="<?php echo $main_image['id_product_image'];?>">x</a>
-                                <span class="upload_img_con"><img src =<?php echo base_url().$main_image['path'].'categoryview/'.$main_image['file'];?> ></span>
-                                <br>
-                                <a class="makeprimary" href="javascript:void(0)" data-imgid="<?php echo $main_image['id_product_image'];?>"><?php echo ($main_img_cnt===0)?'Your Primary':'Make Primary';?></a>
-                            </div>
-                            -->
                          
                             <div id="previewList<?php echo $main_img_cnt; ?>" class="edit_img upload_img_div <?php echo ($main_img_cnt===0)?'active_img':'';?>">
                                 <span class="upload_img_con">
@@ -446,7 +438,7 @@
             <tr class="main1">
                 <td class="border-left"> Others: (Optional) </td> 
                 <td class="border-right" colspan="3">
-                    <input type="text" name="prod_other_name[]" data-cnt="<?php echo $j;?>" class="<?php echo 'prod_'.$j;?> other_name_class" autocomplete="off" placeholder="Enter an attribute header"> 
+                    <input type="text" name="prod_other_name[]" data-cnt="<?php echo $j;?>" class="<?php echo 'prod_'.$j;?> other_name_class" autocomplete="off" placeholder="Item property title"> 
                     <a href="javascript:void(0)" class="lnkClearFirst">Clear This Group</a>
                     <br>
                     <span style="color:gray;font-style:italic;font-size:11px">For Example: Color, Brand and Year</span>
@@ -455,7 +447,7 @@
             <tr class="main1 main1_2nd">
                 <td class="border-left">&nbsp;</td>
                 <td>
-                    <input type="text" name="prod_other[]"  class="other_name_value otherNameValue1"  autocomplete="off" data-cnt="<?php echo $j;?>" placeholder="Enter an attribute value ">
+                    <input type="text" name="prod_other[]"  class="other_name_value otherNameValue1"  autocomplete="off" data-cnt="<?php echo $j;?>" placeholder="Item property value ">
                     <br>
                     <span style="color:gray;font-style:italic;font-size:11px">For Example: Blue, SKK and 2013</span>
                 </td>
@@ -1296,7 +1288,7 @@ $(".checkbox_itemattr").click(function(){
 
 $(".add_more_link").unbind("click").click(function(){
   cnt_o++;
-  $('.step4_2').append('<tr class="main'+cnt_o+'"><td class="border-left"></td><td class="border-right" colspan="3"><input type="text" data-cnt="'+cnt_o+'" autocomplete="off" name="prod_other_name[]" class="prod_'+cnt_o+' other_name_class" placeholder="Enter an attribute value"><a href="javascript:void(0)" data-cnt="'+cnt_o+'" class="removeOptionGroup">Remove This Group</a></td></tr><tr class="main'+cnt_o+' main'+cnt_o+'_2nd"><td class="border-left"></td><td><input type="text" autocomplete="off" data-cnt="'+cnt_o+'" class="other_name_value otherNameValue'+cnt_o+'" name="prod_other[]" placeholder="Enter description"></td><td> <div class="h_if_'+cnt_o+' hdv"  style="display:none"> &#8369; <input type="text" name="prod_other_price[]"  class="price_text"   id="price_field"  autocomplete="off" placeholder="Enter additional price (0.00)"></div></td><td class="border-right option_image_td"> <div class="h_if_'+cnt_o+' hdv" style="display:none"><input type="file" class="option_image_input" name="prod_other_img[]" accept="image/*" ><input type="hidden" name="prod_other_img_idx[]"><a data-cnt="'+cnt_o+'" class="removeOptionValue remove_option_long" href="javascript:void(0)">Remove</a></div></td></tr><tr id="main'+cnt_o+'" class="main'+cnt_o+'_link"><td class="border-left"></td><td class="border-right" colspan="3"><a class="add_more_link_value" data-value="'+cnt_o+'" href="javascript:void(0)">+Add more value</a></td></tr>');
+  $('.step4_2').append('<tr class="main'+cnt_o+'"><td class="border-left"></td><td class="border-right" colspan="3"><input type="text" data-cnt="'+cnt_o+'" autocomplete="off" name="prod_other_name[]" class="prod_'+cnt_o+' other_name_class" placeholder="Item property title"><a href="javascript:void(0)" data-cnt="'+cnt_o+'" class="removeOptionGroup">Remove This Group</a></td></tr><tr class="main'+cnt_o+' main'+cnt_o+'_2nd"><td class="border-left"></td><td><input type="text" autocomplete="off" data-cnt="'+cnt_o+'" class="other_name_value otherNameValue'+cnt_o+'" name="prod_other[]" placeholder="Item property value"></td><td> <div class="h_if_'+cnt_o+' hdv"  style="display:none"> &#8369; <input type="text" name="prod_other_price[]"  class="price_text"   id="price_field"  autocomplete="off" placeholder="Enter additional price (0.00)"></div></td><td class="border-right option_image_td"> <div class="h_if_'+cnt_o+' hdv" style="display:none"><input type="file" class="option_image_input" name="prod_other_img[]" accept="image/*" ><input type="hidden" name="prod_other_img_idx[]"><a data-cnt="'+cnt_o+'" class="removeOptionValue remove_option_long" href="javascript:void(0)">Remove</a></div></td></tr><tr id="main'+cnt_o+'" class="main'+cnt_o+'_link"><td class="border-left"></td><td class="border-right" colspan="3"><a class="add_more_link_value" data-value="'+cnt_o+'" href="javascript:void(0)">+Add more value</a></td></tr>');
 });
 
 $('.upload_input_form').on('click', '.add_more_link_value', function() {
@@ -1306,7 +1298,7 @@ $('.upload_input_form').on('click', '.add_more_link_value', function() {
 
   var  subClass = "main"+data+"_2nd_add";
  
-  var newrow = $('<tr class="main'+data+' '+subClass+'"><td class="border-left"></td><td style="display:none"><span ><input type="text" value ="'+attr+'" data-cnt="'+data+'" class="prod_'+data+'" name="prod_other_name[]"></span></td><td><input type="text" autocomplete="off" data-cnt="'+data+'" class="other_name_value otherNameValue'+data+'"  name="prod_other[]" placeholder="Enter an attribute value"></td><td> &#8369; <input type="text" name="prod_other_price[]"  id="price_field" class="price_text"  autocomplete="off" placeholder="Enter additional price (0.00)"></td><td class="border-right option_image_td"><input type="file" class="option_image_input" name="prod_other_img[]"  accept="image/*"><input type="hidden" name="prod_other_img_idx[]"><a data-cnt="'+data+'" class="removeOptionValue remove_option_long " href="javascript:void(0)">Remove</a></td></tr>');
+  var newrow = $('<tr class="main'+data+' '+subClass+'"><td class="border-left"></td><td style="display:none"><span ><input type="text" value ="'+attr+'" data-cnt="'+data+'" class="prod_'+data+'" name="prod_other_name[]"></span></td><td><input type="text" autocomplete="off" data-cnt="'+data+'" class="other_name_value otherNameValue'+data+'"  name="prod_other[]" placeholder="Item property value"></td><td> &#8369; <input type="text" name="prod_other_price[]"  id="price_field" class="price_text"  autocomplete="off" placeholder="Enter additional price (0.00)"></td><td class="border-right option_image_td"><input type="file" class="option_image_input" name="prod_other_img[]"  accept="image/*"><input type="hidden" name="prod_other_img_idx[]"><a data-cnt="'+data+'" class="removeOptionValue remove_option_long " href="javascript:void(0)">Remove</a></td></tr>');
   $('#main'+data).before(newrow);
 });
 
@@ -2020,7 +2012,7 @@ $(document).ready(function(){
         
         $('.main'+cnt).append('<td class="border-left">'+title+'</td> \
             <td class="border-right" colspan="3"> \
-            <input type="text" placeholder="Enter item specific name" autocomplete="off" class="prod_'+cnt+' other_name_class" data-cnt="'+cnt+'" name="prod_other_name[]"> \
+            <input type="text" placeholder="Item property title" autocomplete="off" class="prod_'+cnt+' other_name_class" data-cnt="'+cnt+'" name="prod_other_name[]"> \
             '+link+' \
             </td>');
     }
@@ -2034,7 +2026,7 @@ $(document).ready(function(){
         $('.main'+cnt+'_2nd').empty();
         $('.main'+cnt+'_2nd').append('<td class="border-left">&nbsp;</td> \
             <td>\
-            <input type="text" placeholder="Enter an attribute value" data-cnt="'+cnt+'" autocomplete="off" class="other_name_value otherNameValue'+cnt+'" name="prod_other[]">\
+            <input type="text" placeholder="Item property value" data-cnt="'+cnt+'" autocomplete="off" class="other_name_value otherNameValue'+cnt+'" name="prod_other[]">\
             </td>\
             <td>\
             <div class="h_if_'+cnt+' hdv" style="display: none;">\
