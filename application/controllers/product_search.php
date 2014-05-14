@@ -327,6 +327,8 @@ class product_search extends MY_Controller {
 				$response['items'] = $items; ### pass to view	
 				$data = json_encode($this->load->view('pages/search/search_display_scroll',$response,TRUE));
 				echo $data;
+			}else{
+				echo "0";
 			}						
 		} // end
 	} # load_product end	
