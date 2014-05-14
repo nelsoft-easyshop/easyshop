@@ -155,7 +155,7 @@ class Ios extends MY_Controller {
 					$response['subcategories'][$x]['popular'] = $db_cat_item;
 				}
 				
-				echo json_encode($items,JSON_PRETTY_PRINT);
+				echo json_encode($response,JSON_PRETTY_PRINT);
 				exit();
 			}
 			 
@@ -404,6 +404,9 @@ class Ios extends MY_Controller {
 	{
         echo json_encode($this->product_model->getFirstLevelNode(), JSON_PRETTY_PRINT);exit();
 	}
+        
+
+    
     
 
 	function search()
