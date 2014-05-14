@@ -33,29 +33,7 @@ class product_search extends MY_Controller {
 			echo json_encode($brand_names);			
 		}		
 	}
-	
-	function getChild() # this function for getting the under category from selected category 
-	{	
 
-		header('Content-Type: application/json');
-		$id = $this->input->post('cat_id'); 
-		$name = $this->input->post('name');
-		$parents = $this->search_model->getDownLevelNode($id);
-		$response['cat_id'] = $id;
-		$response['node'] = $parents;
-		$response['level'] = html_escape($this->input->post('level'));	
-
-		$attribute = $this->search_model->getAttributesByParent($id);
-		
-		for ($i=0 ; $i < sizeof($attribute) ; $i++ ) {  # getting all lookuplist from item attribute
-				$lookuplist = $this->search_model->getLookItemListById($attribute[$i]['attr_lookuplist_id']);
-				array_push($attribute[$i],$lookuplist);
-		}
-		$response['attribute'] = $attribute;		
-
-		$data = json_encode($this->load->view('pages/search/advance_search_carousel',$response,TRUE));
-		echo $data;
-	}
 	
 	
 	public $per_page = 10; # number of displayed products
@@ -108,7 +86,7 @@ class product_search extends MY_Controller {
 		$response['getprice2'] = $gp2;
 		$response['getsop'] = $sort;			
 		$response['items'] = "";
-		$response['firstlevel'] = $this->search_model->getFirstLevelNode();
+		$response['firstlevel'] = $this->product_model->getFirstLevelNode();
 		$response['ctrl_subcat'] = $this->product_model->getDownLevelNode(1);
 
 		
