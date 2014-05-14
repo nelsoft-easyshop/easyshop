@@ -63,7 +63,7 @@
                 </div>
             </div>
         </div>
-        <div class = "container content1">
+        <div class = "container content1" id='register'>
             <div class="row-fluid">
                 <div class="row-fluid">
                         <span class="spn48">REGISTER</span>
