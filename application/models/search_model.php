@@ -85,16 +85,26 @@ class search_model extends CI_Model
 	
 	function selectChild($id) # get all down level category on selected category from database
 	{
+        print_r($id);
 		$query = $this->sqlmap->getFilenameID('product', 'selectChild');
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':cat_id', $id);
 		$sth->execute();
 		$row = $sth->fetchAll(PDO::FETCH_COLUMN, 0);
-	
+
 		if (isset($row[0])){ // Added - Rain 02/25/14
 			return explode(',', $row[0]);
 		}	
 	}
+    
+    function getAllKeywords(){
+        $query = $this->sqlmap->getFilenameID('product','getAllKeyword');
+        $sth = $this->db->conn_id->prepare($query);
+		$sth->execute();       
+        $row = $sth->fetchAll(PDO::FETCH_ASSOC);
+        return $row;
+    }
+
 	
 	function getBrandName($var, $toggle)
 	{

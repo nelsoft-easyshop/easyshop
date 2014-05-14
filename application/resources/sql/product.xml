@@ -646,6 +646,11 @@ FROM
         SELECT DISTINCT(`keywords`) FROM `es_keywords` WHERE  MATCH(`keywords`) AGAINST (:words IN BOOLEAN MODE)
 </select>
 
+<select id="getAllKeyword">
+        SELECT `id_keywords`,`keywords` FROM es_keywords WHERE 1
+</select>
+
+
 <select id="fullDeleteItem">
         CALL `es_sp_FullDelete_product`(:productid, :memberid)
 </select>
