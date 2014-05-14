@@ -95,7 +95,7 @@ class Ios extends MY_Controller {
 		$start = 0;
 		$count = 0;
 		$perPage = $this->per_page;
-		$condition = "";
+		$condition = array();
 		$operator = " = ";
 		$data =  $this->fill_header();	
 		$checkifexistcategory = $this->product_model->checkifexistcategory($categoryId);
@@ -108,11 +108,12 @@ class Ios extends MY_Controller {
 		if($categoryId != 0){
 			if($checkifexistcategory != 0){
 				$downCategory = $this->product_model->selectChild($categoryId);
-				array_push($downCategory, $categoryId);
-				$categories = implode(",", $downCategory);
+                $categories = '';
+                if(is_array($downCategory)){
+                    array_push($downCategory, $categoryId);
+                    $categories = implode(",", $downCategory);
+                }
 				$items = $this->product_model->getProductsByCategory($categories,$condition,$count,$operator,$start,$perPage,$sortString);
-			
-			 
 				$ids = array();
 				foreach ($items as $key) {
 					array_push($ids, $key['product_id']);
@@ -463,15 +464,21 @@ class Ios extends MY_Controller {
 		} 
 	}
 
-        
-    function version(){
+    public function version(){
         $xml = simplexml_load_file(APPPATH . "resources/page/ios_files.xml");
         $simple = json_decode(json_encode($xml), 1);
         echo $simple['version'];
+        exit();
+    }
+    
+    public function getKeywords(){
+        $this->load->model('search_model');
+        echo json_encode($this->search_model->getAllKeywords(), JSON_PRETTY_PRINT);
+        exit();
     }
     
     private function getHomeXML($file){
-         $this->load->model('product_model');
+        $this->load->model('product_model');
         $xml = simplexml_load_file(APPPATH . "resources/" . $file . ".xml");
        
         $simple = json_decode(json_encode($xml), 1);
