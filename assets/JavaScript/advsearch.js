@@ -145,7 +145,8 @@ $(document).ready(function() {
 									ajax_is_on = false;
 									offset += 1;
 								}
-								$(".loading_products").hide();
+                                jQuery(".loading_products").fadeOut(); 
+								//$(".loading_products").hide();
 							} // end of function(d)
 						}); // end of .ajax
 					} // end of request ajax
@@ -153,7 +154,6 @@ $(document).ready(function() {
 			} // end of st > last_scroll_top
 			
 			last_scroll_top = st;
-			jQuery(".loading_products").fadeOut(); 
 		});  // end of window .scroll
 	} // end check
 	// END OF INFINITE SCROLLING FUNCTION
