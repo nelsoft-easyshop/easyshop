@@ -1649,7 +1649,7 @@
 		<li><a href="#complete_buy">Bought<span><?php echo count($transaction['complete']['buy']);?></span></a></li>
 		<li><a href="#complete_sell">Sold<span><?php echo count($transaction['complete']['sell']);?></span></a></li>
 	</ul>
-	<div id="complete_buy">
+	<div id="complete_buy" class="dashboard_table">
 		<!--<h2>Bought Items</h2>-->
 		<?php if(count($transaction['complete']['buy'])===0):?>
 			<br/>
@@ -1789,7 +1789,7 @@
 	</div>
 	
 	
-	<div id="complete_sell">
+	<div id="complete_sell" class="dashboard_table">
 		<!--<h2>Sold Items</h2>-->
 		<?php if(count($transaction['complete']['sell'])===0):?>
 		<br/>
