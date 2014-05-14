@@ -219,9 +219,10 @@
                 if (data != "false") {
                     $("#table_id tbody").empty();
                     onFocus_Reload(data)
+                    result = true;
                 }else{
                     alert("Username does not exist");
-                    return false;
+                    result = false;
                 }
 			}
 		});		
