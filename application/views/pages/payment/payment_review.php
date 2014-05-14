@@ -411,7 +411,14 @@ $(document).ready(function(){
         var action = "payment/changeAddress";
         var csrftoken = $("meta[name='csrf-token']").attr('content');
         var csrfname = $("meta[name='csrf-name']").attr('content');
- 
+        
+
+        if($('.stateregionselect').val() == '0' || $('.cityselect').val() == '0' || $('.c_address').val().length == 0){
+          alert('Fill up Required Fields!');
+          return false;
+        }
+
+    
         var formD = $('#delAddressFrm').serializeArray();
         formD.push({name:'temp_lat', value:0});
         formD.push({name:'temp_lng', value:0});
@@ -427,11 +434,13 @@ $(document).ready(function(){
             data:formD,
             dataType: "json", 
             success: function(d) {
-              if(d == ""){
-                alert('Please double check your details');
+              
+              if(d == "success"){
+                   location.reload();
               }else{
                 //alert('Shipping address changed!');
-                location.reload();
+             
+                alert('Please double check your details!');
               }
             }
         });
@@ -453,7 +462,7 @@ $(document).ready(function(){
 
       <div class="del_address">
         <div>
-          <label >Consignee Name:</label>           
+          <label >Consignee Name:<font color="red">*</font></label>           
           <input type="text" name="consignee" id="consignee" value="<?php echo $consignee?>">
         </div>
         <div>
@@ -468,7 +477,7 @@ $(document).ready(function(){
             <label>Address:</label>
         </div>
         <div>
-            <label><span>State/Region:</span></label>
+            <label><span>State/Region:<font color="red">*</font></span></label>
             <select name="c_stateregion" class="address_dropdown stateregionselect" data-status="<?php echo $c_stateregionID?>">
               <option value="0">--- Select State/Region ---</option>
               <?php foreach($stateregion_lookup as $srkey=>$stateregion):?>
@@ -477,7 +486,7 @@ $(document).ready(function(){
             </select>
         </div>
         <div>
-            <label><span>City:</span></label>               
+            <label><span>City:<font color="red">*</font></span></label>               
               <select name="c_city" class="address_dropdown cityselect" data-status="<?php echo $c_cityID?>">
               <option value="0">--- Select City ---</option>
               <option class="optionclone" value="" style="display:none;" disabled></option>
@@ -489,15 +498,15 @@ $(document).ready(function(){
             </select>
         </div>
         <div>
-            <label><span>Country:</span></label>            
+            <label><span>Country:<font color="red">*</font></span></label>            
             <select disabled>
                 <option selected=""><?php echo $country_name?></option>
             </select>
             <input type="hidden" name="c_country" value="<?php echo $country_id?>">
         </div>
         <div>
-            <label  >Full Address:</label>
-            <input type="text" name="c_address" value="<?php echo $c_address?>">
+            <label  >Full Address:<font color="red">*</font></label>
+            <input type="text" name="c_address" class="c_address" value="<?php echo $c_address?>">
         </div> 
         <div class="change_shipping_add_btn_con">
              <input type="button" value="Change Shipping Address" class="changeAddressBtn orange_btn3">

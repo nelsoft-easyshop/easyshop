@@ -262,10 +262,18 @@ class Payment extends MY_Controller{
                 'lat' => $this->input->post('temp_lat'),
                 'lng' => $this->input->post('temp_lng')
             );
-                $postdata['default_add'] = "off";
+            if(trim($this->input->post('consignee')) == "" || $this->input->post('c_city') == 0 || $this->input->post('c_stateregion') == 0 || trim($this->input->post('c_address')) == "")
+            {
+            echo json_encode("null");
+            exit();
+            }else{
+                  $postdata['default_add'] = "off";
             $data = $this->memberpage_model->edit_consignee_address_by_id($uid, $postdata);
             $this->output->set_output(json_encode($data));
-            echo $data;
+            echo json_encode("success");
+            exit(); 
+            }
+        
     }
  
 

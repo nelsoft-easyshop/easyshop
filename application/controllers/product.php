@@ -354,7 +354,7 @@ class product extends MY_Controller
     		$string = ltrim($stringData);  
     		$words = explode(" ",trim($string)); 
     		$keywords = $this->product_model->itemKeySearch($words);
-
+           
     		if(count($keywords) <= 0){
     			$html = 0;
     		}else{
@@ -546,7 +546,7 @@ class product extends MY_Controller
 		foreach($split_words as $word)
 		{
 			$color = "#e5e5e5";
-			$text = preg_replace("|($word)|Ui","<b>$1</b>" , $text );
+			$text = preg_replace("|($word)|Ui","$1" , $text );
 		}
 		return $text;
 	}

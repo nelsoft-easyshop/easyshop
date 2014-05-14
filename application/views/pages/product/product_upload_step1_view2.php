@@ -15,7 +15,7 @@ var text = $(this).text().toLowerCase();
 if (empty($node)) { # if no more available item on selected category the button procedd will show 
 ?>
 <div class='product_sub_items<?php echo $level; ?> parent<?php echo $cat_id ?>' data-final="true">
-<input type="text" class="box<?php echo $level; ?>" id="box<?php echo $level; ?>">
+<!-- <input type="text" class="box<?php echo $level; ?>" id="box<?php echo $level; ?>"> -->
 <ul class="product-list navList<?php echo $level; ?>" style="list-style-type:none">
 <li  class="othercategory othercategory<?php echo $level; ?>"><a href="javascript:void(0)" class="select2" data-level="<?php echo $level; ?>" data-parent="<?php echo $cat_id; ?>" data-parentname="<?php echo addslashes($name)?>" data-final="true"><b class="add_cat span_bg"></b><b>Add a Category</b></a></li>
 </ul>

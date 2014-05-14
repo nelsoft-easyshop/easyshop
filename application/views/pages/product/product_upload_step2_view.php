@@ -1437,8 +1437,12 @@ $('#form_product').ajaxForm({
       uploadProgress : function(event, position, total, percentComplete) {
             var percentVal = percentComplete + '%';
             $('.percentage').empty();
-            $('.percentage').html(percentVal);
-            console.log(percentVal);
+            if(percentComplete >= 100){
+                percentVal = '100%'
+                $('.percentage').html(percentVal);
+            }else{
+                $('.percentage').html(percentVal);
+            }
       },
       success :function(d) { 
           $('.percentage').html('100%');
