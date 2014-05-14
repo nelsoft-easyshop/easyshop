@@ -37,9 +37,16 @@ class search_model extends CI_Model
 	
 	function getProductID($id)
 	{
-		$query = "SELECT ep.`id_product` AS 'product_id', ep.`brand_id` FROM `es_product` ep 
-			WHERE ep.`cat_id` IN (". $id .") AND ep.`is_draft` = 0 AND ep.`is_delete` = 0";
+
+        $id_arr = explode(',', $id);
+        $query = "SELECT ep.`id_product` AS 'product_id', ep.`brand_id` FROM `es_product` ep 
+        WHERE ep.`cat_id` IN ";
+        $qmarks = implode(',', array_fill(0, count($id_arr), '?'));
+        $query =  $query.'('.$qmarks.') AND ep.`is_draft` = 0 AND ep.`is_delete` = 0';
         $sth = $this->db->conn_id->prepare($query);
+        foreach($id_arr as $k=>$x){
+            $sth->bindValue(($k+1), $x); 
+        }
 		$sth->execute();
 		$row = $sth->fetchAll(PDO::FETCH_ASSOC);
 
@@ -108,25 +115,32 @@ class search_model extends CI_Model
 	
 	function getBrandName($var, $toggle)
 	{
+		$bind_param = array();
 		if($toggle == 'id'){
-			if(is_array($var)){
-				$value = implode(',',$var);
-			}else{
-				$value = $var;
-			}
-			
-			$condition = "eb.`id_brand` IN (". $value .")";
+            if(is_array($var)){
+                $condition = "eb.`id_brand` IN ";
+                $qmarks = implode(',', array_fill(0, count($var), '?'));
+                $condition = $condition.'('.$qmarks.')';
+                foreach ($var as $x){
+                    array_push($bind_param, $x);
+                }
+            }
+            else{
+                $condition = '1';
+            }         
 		}else{
-			$condition = "eb.`name` LIKE '%". $var ."%'";		
+			$condition = "eb.`name` LIKE '%?%'";	
+            array_push($bind_param, $var);
 		}
-		$query = "SELECT DISTINCT eb.`name` FROM `es_brand` eb WHERE " . $condition;
-			
+		$query = "SELECT DISTINCT eb.`name` FROM `es_brand` eb WHERE " . $condition;  
 		$sth = $this->db->conn_id->prepare($query);
-		$sth->execute();
-		
+        foreach($bind_param as $k=>$x){
+             $sth->bindValue(($k+1), $x); 
+        }
+		$sth->execute();		
 		$row = $sth->fetchAll(PDO::FETCH_ASSOC);
 
-		return $row;				
+		return $row;							
 	}	
 	
 	function getAttributesWithParam($catID,$pid_values)
