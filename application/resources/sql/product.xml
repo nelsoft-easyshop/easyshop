@@ -822,6 +822,30 @@ FROM
     VALUES (:shipping_id, :product_item_id)
 </select>
 
+<select id="storeShippingPreferenceHead">
+	INSERT INTO es_product_shipping_preference_head (title, member_id)
+	VALUES (:title, :member_id)
+</select>
+
+<select id="storeShippingPreferenceDetail">
+	INSERT INTO es_product_shipping_preference_detail (location_id, price, shipping_pref_head_id)
+	VALUES (:loc, :price, :head_id)
+</select>
+
+<select id="getShippingPreferenceHead">
+	SELECT id_shipping_pref_head
+	FROM es_product_shipping_preference_head
+	WHERE member_id = :member_id AND id_shipping_pref_head = :head_id
+</select>
+
+<select id="deleteShippingPreference">
+	DELETE FROM es_product_shipping_preference_detail
+	WHERE shipping_pref_head_id = :head_id;
+	
+	DELETE FROM es_product_shipping_preference_head
+	WHERE id_shipping_pref_head = :head_id AND member_id = :member_id;
+</select>
+
 <select id="getShippingSummary">
 	SELECT pi.id_product_item, loc.id_location, loc.location, sh.price, sd.id_shipping_detail
 	FROM es_product_item pi
@@ -835,11 +859,10 @@ FROM
 </select>
 
 <select id="getShippingPreference">
-	SELECT p.id_product, p.name,p.lastmodifieddate, p.brief, sh.location_id, sh.price
-	FROM es_product_shipping_head sh
-	INNER JOIN es_product p
-    ON p.id_product = sh.product_id AND p.member_id = :member_id AND is_draft = 0
-    ORDER BY p.lastmodifieddate DESC
+	SELECT sh.id_shipping_pref_head as head_id, sh.title, sd.location_id, sd.price
+	FROM es_product_shipping_preference_head sh
+	INNER JOIN es_product_shipping_preference_detail sd
+		ON sh.id_shipping_pref_head = sd.shipping_pref_head_id AND sh.member_id = :member_id
 </select>
 
 <select id="deleteShippingDetail">

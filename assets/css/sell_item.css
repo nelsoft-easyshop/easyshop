@@ -1569,3 +1569,11 @@ li.brand_result:hover{
 	
 }
 
+.add_ship_preference{
+	display:block;
+	font-size:10px;
+	margin-top:8px;
+	cursor:pointer;
+	color:#0191C8;
+}
+

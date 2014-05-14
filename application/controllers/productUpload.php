@@ -616,30 +616,11 @@ class productUpload extends MY_Controller
 				'attr' => $this->product_model->getPrdShippingAttr($id),
 				'product_id' => $id,
 				'shipping_summary' => $this->product_model->getShippingSummary($id),
-				// get shipping location for all products uploaded by user
 				'shipping_preference' => $this->product_model->getShippingPreference($member_id)
 			);
        
 			$data = array_merge($data, $this->fill_view());
 			$jsonDisplayGroup = $jsonFdata = array();
-			
-			/*if($data['shipping_summary']['has_shippingsummary']){
-				if($data['attr']['has_attr'] === 1){
-					$i = 0;
-					foreach($data['attr']['attributes'] as $attrk=>$attrarr){
-						$jsonDisplayGroup[$i][$attrk] = $attrk;
-						foreach($data['shipping_summary'][$attrk] as $lockey=>$price){
-							$jsonFdata[$i][$attrk][$lockey] = $price;
-						}
-						$i++;
-					}
-				} else {
-					$jsonDisplayGroup[0][$data['attr']['product_item_id']] = $data['attr']['product_item_id'];
-					foreach($data['shipping_summary'][$data['attr']['product_item_id']] as $lockey=>$price){
-						$jsonFdata[0][$data['attr']['product_item_id']][$lockey] = $price;
-					}
-				}
-			}*/
 			
 			if($data['shipping_summary']['has_shippingsummary']){
 				if($data['attr']['has_attr'] === 1){
@@ -762,7 +743,74 @@ class productUpload extends MY_Controller
 			echo 2;
 		}
 	}
-
+	
+	
+	function step3_addPreference()
+	{
+		$serverResponse['result'] = 'fail';
+		$serverResponse['error'] = 'Failed to validate form';
+		
+		if( $this->input->post('data') && $this->input->post('name') ){
+			$preferenceData = $this->input->post('data');
+			$preferenceName = $this->input->post('name');
+			
+			$member_id = $this->session->userdata('member_id');
+			
+			// Insert name vs memid in shipping pref head
+			// Returns last id inserted on success, false on failure
+			$resultHead = $this->product_model->storeShippingPreferenceHead($member_id, $preferenceName);
+			
+			$serverResponse['result'] = $resultHead ? 'success' : 'fail';
+			$serverResponse['error'] = $resultHead ? '' : 'Failed to store preference head.';
+			
+			// if success, enter shipping details
+			if($resultHead){
+				foreach($preferenceData as $loc=>$price){
+					$resultDetail = $this->product_model->storeShippingPreferenceDetail($resultHead, $loc, $price);
+					
+					if(!$resultDetail){
+						$serverResponse['result'] = 'fail';
+						$serverResponse['error'] = 'Failed to insert preference. Data stored may be incomplete.';
+						break;
+					}
+				}
+				if($resultDetail){
+					$serverResponse['shipping_preference'] = $this->product_model->getShippingPreference($member_id);
+				}
+			}
+		}
+		echo json_encode($serverResponse, JSON_FORCE_OBJECT);
+	}
+	
+	function step3_deletePreference()
+	{
+		$serverResponse['result'] = 'fail';
+		$serverResponse['error'] = 'Failed to validate form.';
+		
+		if($this->input->post('head')){
+			$member_id = $this->session->userdata('member_id');
+			$headId = $this->input->post('head');
+			
+			// Check if shipping preference ID is owned by current user
+			$result = $this->product_model->getShippingPreferenceHead($headId, $member_id);
+		
+			// if shipping preference is owned by current user
+			if( count($result) > 0 ){
+				$deleteResult = $this->product_model->deleteShippingPreference($headId, $member_id);
+				
+				$serverResponse['result'] = $deleteResult ? 'success' : 'fail';
+				$serverResponse['error'] = $deleteResult ? '' : 'Failed to delete database entry.' ;
+				
+			} else {
+				$serverResponse['result'] = 'fail';
+				$serverResponse['error'] = 'Server data mismatch. Try again later.';
+			}
+		}
+		
+		echo json_encode($serverResponse, JSON_FORCE_OBJECT);
+	}
+	
+	
 	function step4() # uploading of product is successful.
 	{	
 		$data = $this->fill_view();

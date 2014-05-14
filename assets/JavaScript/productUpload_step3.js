@@ -7,13 +7,15 @@
  *
  */
 $(function(){
+
+  $.modal.defaults.persist = true;
+
   $('#add_location').on('click',function(){
     var datacount = $('#shiploc_count').val();
     $('#shiploc_count').val(+datacount+1);
     var selecttrnew = $('#shiploc_selectiontbl').find('select[name="shiploc1"]').closest('tr').clone();
     selecttrnew.find('select[name^="shiploc"]')[0].name = "shiploc"+ (+datacount+1);
     selecttrnew.find('input[name^="shipprice"]')[0].name = "shipprice"+ (+datacount+1);
-	//  selecttrnew.find('td.samelocerror').remove();
     selecttrnew.append('<td><span class="delete_locrow button">Remove</td>');
     $('#shiploc_selectiontbl').find('tr:last').before('<tr class="newlocrow">' + selecttrnew.html() + '</tr>');
     $('.shipping_table2').animate({scrollTop: $('.shipping_table2').prop("scrollHeight")}, 1000);
@@ -63,11 +65,11 @@ $(function(){
 		},
 		onShow: function(dialog){
 			$('#import_shipping_preference').on('click', function(){
-				var productId = $('input[name="shipping_preference"]:checked').val();
+				var headId = $('input[name="shipping_preference"]:checked').val();
 				$('tr.newlocrow').remove();
 				$('#shiploc_count').val(1);
 				var i = 1;
-				$.each(shippingPreference[productId], function(locationId,price){
+				$.each(shippingPreference[headId], function(locationId,price){
 					$('select[name="shiploc'+i+'"]').val(locationId);
 					$('input[name="shipprice'+i+'"]').val(parseFloat(price).toFixed(2));
 					i++;
@@ -95,7 +97,7 @@ $(function(){
 	});
   });
   
-  
+	
   
 });
 /********** CLOSE DOCUMENT READY FUNCTION *********/
@@ -120,7 +122,6 @@ $(function(){
   var divLocWarning = $('#div_locationwarning');
   var spanLocWarning = $('#location_warning');
   
-  //var spanerror = '<td class="error red samelocerror">Unable to select same location for same attribute</td>';
   var spanerror = $('#spanerror');
   var shiplocselectiontbl = $('#shiploc_selectiontbl');
   var hasAttr = parseInt($('#has_attr').val());
@@ -165,7 +166,6 @@ $(function(){
 	  hasPrice = $.trim(price.val()) !== '' ? true : false;
 	  hasLoc = selopt.val() != 0 ? true : false;
 	  
-	  //if(hasLoc && hasPrice && hasCourier){
 	  if(hasLoc && hasPrice){
 		var priceVal = price.val().replace(new RegExp(",", "g"), '');
 		priceVal = parseFloat(priceVal).toFixed(2);
@@ -199,7 +199,6 @@ $(function(){
 	  // Determine if new display group / display row will be created
       if(i !== 0 ){
         jQuery.each(displaygroup, function(k,shipObjTemp){
-          //if(objectCompare(shipObj.attr, shipObjTemp)){
 		  if(objectCompare(shipObj.disp_attr, shipObjTemp)){
               row = $('table#shipping_summary').find('tr[data-group="' + k + '"]');
               groupkey = k;
@@ -272,7 +271,6 @@ $(function(){
           if( !( lock in fdata[groupkey][attrk] ) ){
 			fdata[groupkey][attrk][lock] = {};
 		  }
-		  //fdata[groupkey][attrk][lock]['price'] = shipObj.price[lock];
 		  fdata[groupkey][attrk][lock] = shipObj.price[lock];
 		  
 		  if(jQuery.inArray(lock, locationgroup) === -1){
@@ -521,8 +519,6 @@ $(function(){
     var hasDuplicate = false;
 	spanerror.hide();
 	
-    //$(this).parent('td').siblings('td.samelocerror').remove();
-	
 	//Check if same location is selected among its select siblings
     $('.shiploc').not(this).each(function(){
       var otherval = $(this).find('option:selected').val();
@@ -561,11 +557,6 @@ $(function(){
       $(this).val(0);
 	  spanerror.show();
 	  thistr.effect('pulsate', {times:3}, 800);
-	  /*if(thistr.hasClass('newlocrow')){
-		thistr.children('td:last').before(spanerror);
-	  } else {
-		thistr.append(spanerror);
-	  }*/
     }
 
   });
@@ -575,7 +566,6 @@ $(function(){
    */ 
   $('.product_combination').on('click', function(){
 
-    //$('td.samelocerror').remove();
 	spanerror.hide();
 
     if($(this).hasClass('active')){
@@ -715,7 +705,134 @@ $(function(){
 		}
 	}
   
-    
+  
+	/*
+	 *	Add shipping preferences
+	 */
+    $('#shipping_summary').on('click','.add_ship_preference', function(){
+		var groupkey = $(this).closest('tr.tr_shipping_summary').attr('data-group');
+		var preferenceData = {};
+		var preferenceName = "";
+		var csrftoken = $("meta[name='csrf-token']").attr('content');
+		var csrfname = $("meta[name='csrf-name']").attr('content');
+		
+		// Get location vs price details for first attr array, since data is same for all attr arrays
+		$.each(fdata[groupkey], function(attrk,attrarr){
+			preferenceData = attrarr;
+			return false;
+		});
+		
+		$('#dialog_preference_name').dialog({
+			height: 180,
+			autoOpen: false,
+			title: "Enter Preference name",
+			modal: true,
+			closeOnEscape: false,
+			draggable: false,
+			buttons:[
+				{
+					text: "Ok",
+					click: function(){
+						var namefield = $('#preference_name');
+						var thisdialog = $(this);
+						var cloningfield = $('#div_shipping_preference p.cloningfield');
+						preferenceName = namefield.val();
+						
+						if( ($.trim(preferenceName)).length > 0){
+							$('button.ui-button').attr('disabled',true);
+							namefield.attr('disabled',true);
+							namefield.siblings('img.loading').show();
+							
+							$.post(config.base_url+'productUpload/step3_addPreference',{data:preferenceData, name:preferenceName, csrfname:csrftoken},function(data){
+								namefield.siblings('img.loading').hide();
+								namefield.attr('disabled',false);
+								$('button.ui-button').attr('disabled',false);
+								
+								try{
+									var obj = jQuery.parseJSON(data);	
+								}
+								catch(e){
+									alert('An error was encountered while processing your data. Please try again later.');
+									window.location.reload(true);
+									return false;
+								}
+								
+								if( obj['result'] === 'success' ){
+									// Recreate shippingpreference variable data
+									shippingPreference = obj['shipping_preference'];
+									// Clear preference DIV display									
+									$('#div_shipping_preference div.radio_container').children().not('p.cloningfield').remove();
+									
+									// Create new preference display contents
+									$.each(shippingPreference['name'], function(headId,name){
+										var thisfield = cloningfield.clone();
+										
+										thisfield.removeClass('cloningfield');
+										thisfield.find('input').attr('value', headId);
+										thisfield.find('label').html(name);
+										$('#div_shipping_preference div.radio_container').append(thisfield);
+									});
+								}else{
+									alert(obj['error']);
+								}
+								
+								thisdialog.dialog("close");
+							});
+						} else {
+							namefield.effect('pulsate', {times:3}, 800);
+						}
+					}
+				},
+				{
+					text: "Cancel",
+					click: function(){
+						$(this).dialog("close");
+					}
+				},
+			],
+			close: function(){
+				$('#dialog_preference_name input[name="preference_name"]').val('');
+			}
+		});
+		
+		$('#dialog_preference_name').dialog("open");
+		
+	});
+	
+	/*
+	 *	Delete Shipping Preference
+	 */
+	$('#div_shipping_preference').on('click','.delete_ship_preference',function(){
+		var headId = parseInt($(this).siblings('input[name="shipping_preference"]').val());
+		var csrftoken = $("meta[name='csrf-token']").attr('content');
+		var csrfname = $("meta[name='csrf-name']").attr('content');
+		
+		var thisspan = $(this);
+		
+		var r=confirm("Confirm delete?");
+		if (r==true){
+			$.post(config.base_url+'productUpload/step3_deletePreference', {head:headId, csrfname:csrftoken}, function(data){
+				try{
+					var obj = jQuery.parseJSON(data);	
+				}
+				catch(e){
+					alert('An error was encountered while processing your data. Please try again later.');
+					window.location.reload(true);
+					return false;
+				}
+				
+				if( obj['result'] === 'success' ){
+					if( thisspan.closest('p').siblings('p:not(".cloningfield")').length === 0 ){
+						$('#div_shipping_preference div.radio_container').append('<span><strong>No shipping preferences created.</strong></span>')
+					}
+					thisspan.closest('p').remove();
+				}else{
+					alert( obj['error'] );
+				}
+			});
+		}
+		
+	});
     
     
     

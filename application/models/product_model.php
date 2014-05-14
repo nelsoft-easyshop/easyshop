@@ -1664,6 +1664,64 @@ class product_model extends CI_Model
     	return $result;
     }
 	
+	/**
+	 *	Store shipping preference head
+	 */
+	public function storeShippingPreferenceHead($member_id, $title)
+	{
+		$query = $this->sqlmap->getFilenameID('product','storeShippingPreferenceHead');
+    	$sth = $this->db->conn_id->prepare($query);
+    	$sth->bindParam(':title', $title, PDO::PARAM_STR);
+    	$sth->bindParam(':member_id', $member_id, PDO::PARAM_INT);
+    	$result = $sth->execute();	
+
+    	return $result ? $this->db->conn_id->lastInsertId('id_shipping_pref_head') : $result;
+	}
+	
+	/**
+	 *	Store shipping preference detail
+	 */
+	public function storeShippingPreferenceDetail($headId, $locId, $price)
+	{
+		$query = $this->sqlmap->getFilenameID('product','storeShippingPreferenceDetail');
+    	$sth = $this->db->conn_id->prepare($query);
+    	$sth->bindParam(':loc', $locId, PDO::PARAM_INT);
+    	$sth->bindParam(':price', $price, PDO::PARAM_STR);
+		$sth->bindParam(':head_id', $headId, PDO::PARAM_INT);
+    	$result = $sth->execute();	
+
+    	return $result;
+	}
+	
+	/*
+	 *	Check if shipping preference ID sent matches current user
+	 */
+	public function getShippingPreferenceHead($headId, $member_id)
+	{
+		$query = $this->sqlmap->getFilenameID('product','getShippingPreferenceHead');
+    	$sth = $this->db->conn_id->prepare($query);
+    	$sth->bindParam(':member_id', $member_id, PDO::PARAM_INT);
+		$sth->bindParam(':head_id', $headId, PDO::PARAM_INT);
+    	$result = $sth->execute();	
+		$row = $sth->fetch(PDO::FETCH_ASSOC);
+
+    	return $row;
+	}
+	
+	/*
+	 * Delete BOTH shipping preference head and detail in one query
+	 */
+	public function deleteShippingPreference($headId, $member_id)
+	{
+		$query = $this->sqlmap->getFilenameID('product','deleteShippingPreference');
+    	$sth = $this->db->conn_id->prepare($query);
+    	$sth->bindParam(':member_id', $member_id, PDO::PARAM_INT);
+		$sth->bindParam(':head_id', $headId, PDO::PARAM_INT);
+    	$result = $sth->execute();	
+		
+		return $result;
+	}
+	
 	public function getProductItem($productId, $memberId)
 	{
 		$query = $this->sqlmap->getFilenameID('product','getProductItem');
@@ -1690,29 +1748,6 @@ class product_model extends CI_Model
 		
 	// Every attribute combination should have shipping location/price
 	// Checking first entry is sufficient to determine if shipping details exist for a product
-		/*if( $row[0]['id_location'] == '' ) {
-			$data['has_shippingsummary'] = false;
-			foreach($row as $r){
-				if ( !in_array($r['id_product_item'], $data['id_product_item']) ) {
-					$data['id_product_item'][] = $r['id_product_item'];
-				}
-			}
-		}
-		else {
-			foreach($row as $r){
-				if ( !isset($data[$r['id_product_item']][$r['id_location']]) ) {
-					$data[$r['id_product_item']][$r['id_location']] = $r['price'];
-				}
-				if ( !isset($data['location']['id_location']) ) {
-					$data['location'][$r['id_location']] = $r['location'];
-				}
-				if ( !in_array($r['id_product_item'], $data['id_product_item']) ) {
-					$data['id_product_item'][] = $r['id_product_item'];
-				}
-			}
-			$data['has_shippingsummary'] = true;
-		}*/
-		
 		foreach($row as $r){
 			// Create array for list of product items
 			if ( !in_array($r['id_product_item'], $data['id_product_item']) ) {
@@ -1738,7 +1773,7 @@ class product_model extends CI_Model
     	return $data;
 	}
 	
-	
+	/*
 	public function getShippingPreference($member_id)
 	{
 		// Get shipping_id from es_product_shipping_detail before delete
@@ -1758,6 +1793,26 @@ class product_model extends CI_Model
                 $data['brief'][$r['id_product']] = $r['brief'];
                 $data['date'][$r['id_product']] = date('M-d-Y',strtotime($r['lastmodifieddate']));
 			}
+		}
+		
+		return $data;
+	}*/
+	
+	public function getShippingPreference($member_id)
+	{
+		// Get shipping_id from es_product_shipping_detail before delete
+		$query = $this->sqlmap->getFilenameID('product', 'getShippingPreference');
+		$sth = $this->db->conn_id->prepare($query);
+		$sth->bindParam(':member_id', $member_id);
+		$sth->execute();
+		$row = $sth->fetchAll(PDO::FETCH_ASSOC);
+		$data = array();
+		
+		foreach($row as $r){
+			if( !isset($data[$r['head_id']]['title']) ){
+				$data['name'][$r['head_id']] = $r['title'];
+			}
+			$data[$r['head_id']][$r['location_id']] = $r['price'];
 		}
 		
 		return $data;

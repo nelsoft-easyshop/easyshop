@@ -89,16 +89,26 @@
 			<h2>Select from your previous uploads</h2>
 		</div>
 		<div class="p_content">
-			<?php if(count($shipping_preference) > 0):?>
 			<div class="radio_container">
-				<?php foreach($shipping_preference['name'] as $productId => $name):?>				
-					<p>
-						<input style='float:left; margin-top: 6px;' type="radio" name="shipping_preference" value="<?php echo $productId?>">
-						<label for="shipping_preference" style='margin-left: 5px;'><span style='font-weight:bold'><?php echo $shipping_preference['date'][$productId]?></span><span style='font-weight:bold; margin-left: 5px;'>|</span><span style='margin-left: 5px;'><?php echo html_escape($name);?></span><span style='font-weight:bold; margin-left: 5px;'> |</span><span style='margin-left: 5px;'><?php echo html_escape($shipping_preference['brief'][$productId]);?></span></label>
-					</p>
-				<?php endforeach;?>
+				<p class="cloningfield">
+					<input style='float:left; margin-top: 6px;' type="radio" name="shipping_preference" value="">
+					<label for="shipping_preference" style='margin-left: 5px;'></label>
+					<span class="delete_ship_preference" style="margin-left:3em;color:red;cursor:pointer;">Delete</span>
+				</p>
+				<?php if(count($shipping_preference) > 0):?>
+					<?php foreach($shipping_preference['name'] as $headId => $name):?>				
+						<p>
+							<input style='float:left; margin-top: 6px;' type="radio" name="shipping_preference" value="<?php echo $headId?>">
+							<label for="shipping_preference" style='margin-left: 5px;'>
+								<?php echo $name;?>
+							</label>
+							<span class="delete_ship_preference" style="margin-left:3em;color:red;cursor:pointer;">Delete</span>
+						</p>
+					<?php endforeach;?>
+				<?php else:?>
+					<span><strong>No shipping preferences created.</strong></span>
+				<?php endif;?>
 			</div>
-			<?php endif;?>
 		</div>
 		<span id="import_shipping_preference" class="orange_btn3" style="cursor: pointer;">Import</span>
 	</div>
@@ -112,11 +122,11 @@
                   <tr>
                      <td colspan="3" class="step3_title">
                         <h4 style="width: 70%;display:inline-block;">Set shipment fee</h4>
-						<?php if(count($shipping_preference) > 0):?>
+						
 							<a id="shipping_preference" class="tooltips" style="cursor:pointer; text-decoration:underline; font-size:11px; margin-left:12px;">Shipping Preferences
 							<span style='font-size:12px;'>You may use the shipment details you have used from previous products</span>
 							</a>
-						<?php endif;?>
+						
                     </td>
                   </tr>
                 </thead>
@@ -219,6 +229,12 @@
       </div>   
       <!-- End of Shipping Container --> 
 
+	<div id="dialog_preference_name" style="display:none;">
+		<label for="preference_name">Name: </label>
+		<input type="text" id="preference_name" name="preference_name" maxlength="30">
+		<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" class="loading" style="display:none;vertical-align:middle;padding-left:20px;"/>
+	</div>
+	 
       <!-- start of shipping summary -->
       <div class="shipping_summary_container">
           <h2 class='f20'>Shipment Summary</h2>
@@ -249,7 +265,6 @@
                                 </span>
                               </td>
                             </tr>
-
                           </tbody>
                         </table>
                     </td>
@@ -263,6 +278,7 @@
                       <span class="accept_summaryrow buttonhide button accept_cancel">
                         <img src="<?php echo base_url();?>assets/images/check_icon.png"> Accept
                       </span>
+					  <span class="add_ship_preference">Add to Preference</span>
                     </td>
                 </tr>
                 <!-- CLOSE Original Cloning Field -->
@@ -321,6 +337,7 @@
 								  <span class="accept_summaryrow buttonhide button accept_cancel">
 								  <img src="<?php echo base_url();?>assets/images/check_icon.png"> Accept
 								  </span>
+								  <span class="add_ship_preference">Add to Preference</span>
 							  </td>
 						  </tr>
 						  <?php $datagroupcounter++; ?>
