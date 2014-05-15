@@ -102,7 +102,8 @@ class product_search extends MY_Controller {
 
 			$main_cat = $this->search_model->selectChild($catID);
 			if($main_cat[0] != 0 && $main_cat[1] != 0){
-				$catID = implode(',', $main_cat);
+				$cat = implode(',', $main_cat);
+				$catID = $category . ", " . $cat;
 			}
 			
 			$sub_cat = $this->search_model->selectChild($gsc);	 
