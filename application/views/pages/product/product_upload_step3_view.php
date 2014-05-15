@@ -49,7 +49,15 @@
       		  <table class="shipping_prod_attr_comb" cellspacing="0" cellpadding="0" width="465px">
               <thead>
                 <tr>
-                  <td class="step3_title"><h4>Select from available combinations</h4></td>
+                  <td class="step3_title">
+					<h4 style="width:68%;display:inline-block;">Select from available combinations</h4>
+					<?php if($attr['has_attr'] == 1):?>
+						<div style="width:30%;display:inline-block;">
+							<input style="vertical-align:middle;" type="checkbox" name="select_all_attr" id="select_all_attr">
+							<label style="vertical-align:middle;" for="select_all_attr">Select all attributes</label>
+						</div>
+					<?php endif;?>
+				  </td>
                 </tr>
               </thead>
       		  <tr>
@@ -90,19 +98,19 @@
 		</div>
 		<div class="p_content">
 			<div class="radio_container">
-				<p class="cloningfield">
-					<input style='float:left; margin-top: 6px;' type="radio" name="shipping_preference" value="">
-					<label for="shipping_preference" style='margin-left: 5px;'></label>
-					<span class="delete_ship_preference" style="margin-left:3em;color:red;cursor:pointer;">Delete</span>
+				<p class="cloningfield ship_pref_option">
+					<input type="radio" name="shipping_preference" value="">
+					<label for="shipping_preference"></label>
+					<span class="delete_ship_preference">Delete</span>
 				</p>
 				<?php if(count($shipping_preference) > 0):?>
 					<?php foreach($shipping_preference['name'] as $headId => $name):?>				
-						<p>
-							<input style='float:left; margin-top: 6px;' type="radio" name="shipping_preference" value="<?php echo $headId?>">
-							<label for="shipping_preference" style='margin-left: 5px;'>
+						<p class="ship_pref_option">
+							<input type="radio" name="shipping_preference" value="<?php echo $headId?>">
+							<label for="shipping_preference">
 								<?php echo $name;?>
 							</label>
-							<span class="delete_ship_preference" style="margin-left:3em;color:red;cursor:pointer;">Delete</span>
+							<span class="delete_ship_preference">Delete</span>
 						</p>
 					<?php endforeach;?>
 				<?php else:?>

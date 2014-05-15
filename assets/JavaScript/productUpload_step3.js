@@ -56,6 +56,18 @@ $(function(){
 	}
   });
   
+  
+  /***************		Select all attributes	*************/
+  $('#select_all_attr').on('click', function(){
+	if(this.checked){
+		$('.product_combination').addClass('active');
+	} else {
+		$('.product_combination').removeClass('active');
+	}
+	
+  });
+  
+  
   /************ Shipping Preferences *********************/
   $('#shipping_preference').on('click', function(){
 	$('#div_shipping_preference').modal({

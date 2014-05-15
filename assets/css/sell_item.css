@@ -1577,3 +1577,23 @@ li.brand_result:hover{
 	color:#0191C8;
 }
 
+.delete_ship_preference{
+	color:red;
+	cursor:pointer;
+	position:absolute;
+	right:60px;
+}
+
+.ship_pref_option:hover{
+	background-color: #F8F7F7;
+}
+
+.ship_pref_option input[type="radio"]{
+	float:left;
+	margin-top:6px;
+	margin-left:5px;
+}
+
+.ship_pref_option label{
+	margin-left: 5px;
+}
