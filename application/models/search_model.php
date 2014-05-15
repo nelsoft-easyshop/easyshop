@@ -37,22 +37,51 @@ class search_model extends CI_Model
 	
 	function getProductID($id)
 	{
-	
-        $id_arr = explode(',', $id);
-        $query = "SELECT ep.`id_product` AS 'product_id', ep.`brand_id` FROM `es_product` ep 
-        WHERE ep.`cat_id` IN ";
-        $qmarks = implode(',', array_fill(0, count($id_arr), '?'));
-        $query =  $query.'('.$qmarks.') AND ep.`is_draft` = 0 AND ep.`is_delete` = 0';
+		$query = "SELECT ep.`id_product` AS 'product_id', ep.`brand_id` FROM `es_product` ep 
+			WHERE ep.`cat_id` IN (". $id .") AND ep.`is_draft` = 0 AND ep.`is_delete` = 0";
         $sth = $this->db->conn_id->prepare($query);
-        foreach($id_arr as $k=>$x){
-            $sth->bindValue(($k+1), $x); 
-        }
 		$sth->execute();
 		$row = $sth->fetchAll(PDO::FETCH_ASSOC);
 
 		return $row;			
 	}
 	
+	
+	# get all attributes from all parents from to the last selected category
+	function getAttributesByParent($parents) 
+	{
+		if(is_array($parents)){
+			$value = implode(',',$parents);
+		}else{
+			$value = $parents;
+		}
+		
+		$query = "SELECT DISTINCT
+  			ea.name AS cat_name, ea.id_attr, ea.attr_lookuplist_id, ed.name AS input_type, eal.name AS input_name 
+			FROM es_attr ea
+			LEFT JOIN es_datatype ed ON ea.datatype_id = ed.id_datatype 
+			LEFT JOIN es_attr_lookuplist eal ON ea.attr_lookuplist_id = eal.id_attr_lookuplist 
+			WHERE ea.cat_id IN (" .$value .")
+  				AND ed.name IN ('CHECKBOX', 'RADIO', 'SELECT')
+  				GROUP BY ea.name
+				ORDER BY ea.name ASC ";
+
+		$sth = $this->db->conn_id->prepare($query);
+		$sth->execute();
+		$row = $sth->fetchAll(PDO::FETCH_ASSOC);
+		return $row;
+	}
+	
+	function getLookItemListById($id) # getting item list from database. EG: Color -- (White,Blue,Yellow)
+	{
+		$query = $this->sqlmap->getFilenameID('product','getLookupListItem');
+		$sth = $this->db->conn_id->prepare($query);
+		$sth->bindParam(':id',$id);
+		$sth->execute();
+		$row = $sth->fetchAll();
+
+		return $row;
+	}
 	
 	function selectChild($id) # get all down level category on selected category from database
 	{
@@ -79,32 +108,25 @@ class search_model extends CI_Model
 	
 	function getBrandName($var, $toggle)
 	{
-		$bind_param = array();
 		if($toggle == 'id'){
-            if(is_array($var)){
-                $condition = "eb.`id_brand` IN ";
-                $qmarks = implode(',', array_fill(0, count($var), '?'));
-                $condition = $condition.'('.$qmarks.')';
-                foreach ($var as $x){
-                    array_push($bind_param, $x);
-                }
-            }
-            else{
-                $condition = '0';
-            }  	
+			if(is_array($var)){
+				$value = implode(',',$var);
+			}else{
+				$value = $var;
+			}
+			
+			$condition = "eb.`id_brand` IN (". $value .")";
 		}else{
-			$condition = "eb.`name` LIKE '%?%'";	
-            array_push($bind_param, $var);
+			$condition = "eb.`name` LIKE '%". $var ."%'";		
 		}
-		$query = "SELECT DISTINCT eb.`name` FROM `es_brand` eb WHERE " . $condition;  
+		$query = "SELECT DISTINCT eb.`name` FROM `es_brand` eb WHERE " . $condition;
+			
 		$sth = $this->db->conn_id->prepare($query);
-        foreach($bind_param as $k=>$x){
-             $sth->bindValue(($k+1), $x); 
-        }
-		$sth->execute();		
+		$sth->execute();
+		
 		$row = $sth->fetchAll(PDO::FETCH_ASSOC);
 
-		return $row;							
+		return $row;				
 	}	
 	
 	function getAttributesWithParam($catID,$pid_values)
@@ -167,49 +189,31 @@ class search_model extends CI_Model
 		return $row;
 	} /// end
 	
-	/*
-	$query = "SELECT DISTINCT ea.`name` FROM `es_product_attr` epa
-		LEFT JOIN `es_attr` ea ON epa.`attr_id` = ea.`id_attr`
-		LEFT JOIN `es_product` ep ON epa.`product_id` = ep.`id_product`
-		LEFT JOIN es_datatype ed ON ea.datatype_id = ed.id_datatype WHERE ";
-	    $cid = $catID;
-		if(!is_array($cid)){
-			$cid = explode(',', $cid );
-		}
-		$cdatas = $pid_values;
-		if(!is_array($cdatas )){
-			$cdatas = explode(',', $cdatas);
-		}
-		$bind_param = array();
-		$condition = '';
-		if(count($cid) > 0){
-			$qmarks = implode(',', array_fill(0, count($cid), '?'));
-			$condition = ' ep.`cat_id` IN ('.$qmarks.') AND';
-			$bind_param = array_merge($bind_param, $cid);
-		}	
-		if(count($cdatas) > 0){
-			$qmarks = implode(',', array_fill(0, count($cdatas), '?'));
-			$condition = $condition." epa.`product_id` IN (". $qmarks .") ORDER BY ea.`name` AND";
-			$bind_param = array_merge($bind_param, $cdatas);
-		}	
+	function getFirstLevelNode($is_main = false, $is_alpha = false) # get all main/parent/first level category from database
+	{
+        if(($is_main)&&(!$is_alpha)){
+            $query = $this->sqlmap->getFilenameID('product', 'selectFirstLevelIsMain');
+        }
+        else if((!$is_main)&&(!$is_alpha)){
+            $query = $this->sqlmap->getFilenameID('product', 'selectFirstLevel');
+        }
+        else if(($is_main)&&($is_alpha)){
+            $query = $this->sqlmap->getFilenameID('product', 'selectFirstLevelIsMainAlpha');
+        }
+        else if((!$is_main)&&($is_alpha)){
+            $query = $this->sqlmap->getFilenameID('product', 'selectFirstLevelAlpha');
+        }
 		
-		$condition	= $condition." ed.name IN ('CHECKBOX', 'RADIO', 'SELECT')";
-		$query = $query.$condition;
-		$sth = $this->db->conn_id->prepare($query); 
-
-		foreach($bind_param as $k=>$x){
-			$sth->bindValue(($k+1), $x); 
-		}
+		$sth = $this->db->conn_id->prepare($query);
 		$sth->execute();
+		$row = $sth->fetchAll(); 
 
-		$row = $sth->fetchAll(PDO::FETCH_ASSOC);
-		print_r($row);
 		return $row;
-		*/
-	
-	
+	}	
 			
 	function SearchProduct($catID, $start, $per_page, $sort, $gis, $gus, $gcon, $gloc, $gp1, $gp2, $gsubcat, $othr_att, $brnd_att, $test){ 
+		
+
 		//// MAIN CATEGORY /////////////////////////////////////////////////
 		$mc = "";
 		if($catID != 1){
@@ -300,7 +304,10 @@ class search_model extends CI_Model
 		}	
 	
 		################################################################
-
+		
+//		echo "<br><br>";
+//		echo $ba;
+//		echo "<br><br>";		
 						
 		$start = (int)$start;
 		$per_page = (int)$per_page;
