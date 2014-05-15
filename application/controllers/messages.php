@@ -16,15 +16,19 @@ if (!defined('BASEPATH'))
 	}
     
     public function index() {
-		$result = $this->messages_model->get_all_messages($this->user_ID,"kurt");
-		$title = ($result['unread_msgs'] == 0 ? 'Message | Easyshop.ph' :'Message ('.$result['unread_msgs'].') | Easyshop.ph' );
-		$data['title'] = $title;
-		$data['result'] = $result;
-		$data = array_merge($data,$this->fill_header());
-		$this->load->view('templates/header_plain', $data);
-		//$this->load->view('templates/header_topnavsolo', $data);
-		$this->load->view('pages/messages/inbox_view');
-		$this->load->view('templates/footer_full');
+        if($this->session->userdata('usersession')){
+			$result = $this->messages_model->get_all_messages($this->user_ID,"kurt");
+			$title = ($result['unread_msgs'] == 0 ? 'Message | Easyshop.ph' :'Message ('.$result['unread_msgs'].') | Easyshop.ph' );
+			$data['title'] = $title;
+			$data['result'] = $result;
+			$data = array_merge($data,$this->fill_header());
+			$this->load->view('templates/header_plain', $data);
+			//$this->load->view('templates/header_topnavsolo', $data);
+			$this->load->view('pages/messages/inbox_view');
+			$this->load->view('templates/footer_full');
+        }else{
+            redirect(base_url().'home', 'refresh');
+        }   
     }    
     public function send_msg() {
         $session_data = $this->session->all_userdata();
