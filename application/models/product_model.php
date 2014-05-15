@@ -1077,13 +1077,14 @@ class product_model extends CI_Model
         for($i=1 ; $i < $totalKeywords; $i++){
         	$query .= " AND  keywords LIKE ?";
         }
-
+ 
 		$sth = $this->db->conn_id->prepare($query);
 
 		foreach($words as $key => $keyword){
 			$keyword = '%'.$keyword.'%';
 			$key = $key+1;
-			$sth->bindParam($key, $keyword , PDO::PARAM_STR);
+			$sth->bindValue($key, $keyword , PDO::PARAM_STR);
+
 		}
    
 		$sth->execute();

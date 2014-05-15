@@ -159,7 +159,7 @@
       <div class="search_box prob_search_box">
         <div>
           <span class="main_srch_img_con"></span>
-          <input name="q_str" type="text" id="main_search" value="<?php if(isset($_GET['q_str'])) echo str_replace('-', ' ', html_escape($_GET['q_str'])); ?>" autocomplete="off">
+          <input name="q_str" type="text" id="main_search" placeholder="Search..." value="<?php if(isset($_GET['q_str'])) echo str_replace('-', ' ', html_escape($_GET['q_str'])); ?>" autocomplete="off">
           
           <select name="q_cat" id="q_cat">
             <option value="1">All Categories</option>
@@ -202,11 +202,11 @@ $('#main_search').on('input propertychange', function() {
           var fulltext = searchQuery; 
 
           if(searchQuery != ""){
-            if($('#main_search').val().length > 2){
+            if($('#main_search').val().length > 0){
               currentRequest = $.ajax({
                 type: "GET",
                 url: '<?php echo base_url();?>search/suggest', 
-                onLoading:jQuery(".main_srch_img_con").html('<img src="<?= base_url() ?>assets/images/orange_loader_small.gif" />').show(),
+                
                 cache: false,
                 data: "q="+fulltext, 
                 processData: false,
@@ -218,21 +218,23 @@ $('#main_search').on('input propertychange', function() {
                 success: function(html) {
                     $("#main_search_drop_content").empty();
                     if(html==0){
-                        $("#main_search_drop_content").hide();
+                        $("#main_search_drop_content").fadeOut(150);
+                        // $("#main_search_drop_content").append('No Results Found');
+                        // $("#main_search_drop_content").show();
                     }
                     else{
                         $("#main_search_drop_content").append(html);
-                        $("#main_search_drop_content").show();
+                        $("#main_search_drop_content").fadeIn(150);
                     }
                     $(".main_srch_img_con").hide();
                 }
               });
             }else{
                $("#main_search_drop_content").empty();
-               $("#main_search_drop_content").hide();
+               $("#main_search_drop_content").fadeOut(150);
             }
           }else{
-             $("#main_search_drop_content").hide();
+             $("#main_search_drop_content").fadeOut(150);
           }
       });
       
@@ -249,14 +251,18 @@ $('#main_search').on('input propertychange', function() {
          $(document).ready(function() { 
 
             $('#main_search').focus(function() {
-            $('#main_search_drop_content').show();
+            if($('#main_search').val().length != 0){
+             
+            $('#main_search_drop_content').fadeIn(150);
+            }
             $(document).bind('focusin.main_search_drop_content click.main_search_drop_content',function(e) {
                 if ($(e.target).closest('#main_search_drop_content, #main_search').length) return;
-                $('#main_search_drop_content').hide();
+                $('#main_search_drop_content').fadeOut('fast');
                 });
              });
  
             $('#main_search_drop_content').hide();
+           
         });
 
 </script>
