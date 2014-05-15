@@ -1273,10 +1273,10 @@ $(document).on('change','.other_name_value',function(){
   return letter.toUpperCase();
 }); 
  var temp = $(this).data('temp'); 
- var selfValue = $.trim($(this).val());
+ var selfValue = escapeHtml($.trim($(this).val()));
  var value = selfValue+headValue;
  $(this).data('temp','"'+value+'"');
- var attrVal = $(this).val();
+ var attrVal = selfValue;
  
  var idHtmlId = headValue.replace(/ /g,'')+'Combination';
   
