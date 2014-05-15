@@ -1645,19 +1645,7 @@ class productUpload extends MY_Controller
         $this->image_lib->clear();
     }
 
-    function sam(){
-        $id =315;
-        $response['item_quantity'] =  $this->product_model->getShippingSummary($id);
-        print('<pre>');
-        print_r($response['item_quantity']);
-    }
-    
-    function sammy(){
-        $id = 327;
-        $response['item_quantity'] =  $this->product_model->getProductQuantity($id, true);
-        print('<pre>');
-        print_r($response['item_quantity']);
-    }
+
 }
 
 
