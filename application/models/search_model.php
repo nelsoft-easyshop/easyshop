@@ -363,7 +363,7 @@ class search_model extends CI_Model
 		}
 		$sth->execute();
 		$row = $sth->fetchAll(PDO::FETCH_ASSOC);
-	
+
 		if($test == "ok"){print_r($query);}	
 	
 		return $row;			
