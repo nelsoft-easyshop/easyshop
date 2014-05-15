@@ -100,6 +100,22 @@
             }
         });
     });
+
+        $(document).on('keyup','.sub-box',function () {
+        var valThis = $(this).val().toLowerCase();
+        var cnt = $(this).data('cnt');
+        $('.navList'+cnt+' > li').each(function() {
+            var text = $(this).text().toLowerCase();
+            if(text.indexOf(valThis) != -1){
+              $(this).show();
+            }else{
+                 $(this).hide();
+            }
+        });
+    });
+
+
+    
      
     /*
      * requesting the child category from selected first level parent category

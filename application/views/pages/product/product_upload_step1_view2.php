@@ -30,7 +30,7 @@ $(".add_category_submit").append('<input type="hidden" name="hidden_attribute" v
 } else {  # if there is more available item on selected category the list will generate
 ?>
 <div class='product_sub_items<?php echo $level; ?> parent<?php echo $cat_id; ?>' data-final="false">
-<input type="text" class="box<?php echo $level; ?>" id="box<?php echo $level; ?>">
+<input type="text" class="sub-box box<?php echo $level; ?>" id="box<?php echo $level; ?>" data-cnt="<?php echo $level; ?>">
 <ul class="product-list navList<?php echo $level; ?>" style="list-style-type:none">
 <?php
 foreach ($node as $row) { # generating all child category base on selected parent category from product_upload_step3_view
