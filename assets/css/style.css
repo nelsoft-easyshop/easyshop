@@ -2191,7 +2191,7 @@ div.pass-hint {
     padding: 3px;
     position: relative;
     width: 161px;
-    z-index: 999;
+    z-index: 100;
 }
 
 .member_side_nav li a.selected  {
