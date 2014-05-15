@@ -4765,6 +4765,7 @@ span.transac_title_date {
     position: relative;
     text-indent: 10px;
     width: auto;
+    word-wrap: break-word;
 }
 .float_left div{
 		width: 0px;
@@ -4828,6 +4829,7 @@ span.transac_title_date {
     position: relative;
     text-indent: 10px;
     width: 50%;
+    word-wrap: break-word;
 }
 .float_right div {
     border-color: rgba(0, 0, 0, 0) rgba(0, 0, 0, 0) rgba(0, 0, 0, 0) #C6C6C6;
@@ -4964,6 +4966,7 @@ margin-right: 10px;
     min-width: 159px;
     overflow: hidden;
 	max-width: 172px;
+    word-wrap: break-word;
 }
 #table_id img {		
     border: 1px solid #D9D9D9;
