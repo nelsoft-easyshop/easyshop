@@ -33,7 +33,7 @@
         <div class="member_shipping_info_container">
           <h2>Ship to:</h2>
           <div><span>Name:</span><strong><?php echo ucwords(strtolower($consignee));?></strong></div>
-          <div><span>Full Address:</span><?php echo ucwords(strtolower($c_address));?></div>
+          <div><span>Full Address:</span><?php echo ucwords(strtolower(html_escape($c_address)));?></div>
           <div><span>City:</span><?php echo ucwords(strtolower($c_stateregion));?></div>
           <div><span>Country:</span><?php echo ucwords(strtolower($country_name));?></div>
           <div><span>Mobile:</span><?php echo ucwords(strtolower($c_mobile));?></div>
@@ -505,7 +505,7 @@ $(document).ready(function(){
         </div>
         <div>
             <label  >Full Address:<font color="red">*</font></label>
-            <input type="text" name="c_address" class="c_address" value="<?php echo $c_address?>">
+            <input type="text" name="c_address" class="c_address" value="<?php echo html_escape($c_address);?>">
         </div> 
         <div class="change_shipping_add_btn_con">
              <input type="button" value="Change Shipping Address" class="changeAddressBtn orange_btn3">
