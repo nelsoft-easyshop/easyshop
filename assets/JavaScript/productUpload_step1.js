@@ -251,7 +251,7 @@
           $('.otherNameCategory_main_li').append('<a href="javascript:void(0)" class="select2" data-level="0" data-parent="1" data-parentname="" data-final="true" style="color:#0191C8 !important;"><b class="add_cat span_bg"></b><b>Add a Category</b></a>');
            
         }else{  
-            $(".add_category_submit").append('<input type="hidden" name="hidden_attribute" value="'+globalParent+'" class="hidden_attribute"><input class="proceed_form" id="proceed_form" type="submit" value="Proceed with '+otherName.replace(/'/g, "\\'")+'">');    
+            $(".add_category_submit").append('<input type="hidden" name="hidden_attribute" value="'+globalParent+'" class="hidden_attribute"><input class="proceed_form" id="proceed_form" type="submit" value="Proceed with '+escapeHtml(otherName.replace(/'/g, "\\'"))+'">');    
         }
     });
 
@@ -282,7 +282,7 @@
               $(".add_category_submit").append('<input type="hidden" name="hidden_attribute" value="'+globalParent+'" class="hidden_attribute"><input class="proceed_form" id="proceed_form" type="submit" value="Proceed with '+parentName+'">');    
             }
         }else{  
-            $(".add_category_submit").append('<input type="hidden" name="hidden_attribute" value="'+globalParent+'" class="hidden_attribute"><input class="proceed_form" id="proceed_form" type="submit" value="Proceed with '+otherName.replace(/'/g, "\\'")+'">');    
+            $(".add_category_submit").append('<input type="hidden" name="hidden_attribute" value="'+globalParent+'" class="hidden_attribute"><input class="proceed_form" id="proceed_form" type="submit" value="Proceed with '+escapeHtml(otherName.replace(/'/g, "\\'"))+'">');    
         }
     });
 

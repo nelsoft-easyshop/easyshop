@@ -159,7 +159,7 @@
       <div class="search_box prob_search_box">
         <div>
           <span class="main_srch_img_con"></span>
-          <input name="q_str" type="text" id="main_search" value="<?php if(isset($_GET['q_str'])) echo str_replace('-', ' ', $_GET['q_str']); ?>" autocomplete="off">
+          <input name="q_str" type="text" id="main_search" value="<?php if(isset($_GET['q_str'])) echo str_replace('-', ' ', html_escape($_GET['q_str'])); ?>" autocomplete="off">
           
           <select name="q_cat" id="q_cat">
             <option value="1">All Categories</option>

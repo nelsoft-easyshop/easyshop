@@ -402,7 +402,8 @@ class product extends MY_Controller
 					$category_name = $category_details['name'];
 				}
 
-				$string = ltrim($this->input->get('q_str')); 
+				$string = html_escape(ltrim($this->input->get('q_str')));
+
 				$ins = $this->product_model->insertSearch($string);
 				// $words = "+".implode("*,+",explode(" ",trim($string)))."*";
 				$words = explode(" ",trim($string)); 
