@@ -45,14 +45,14 @@ $(document).ready(function(){
 	  }).on('input paste keyup', function(){
 			   if($.trim($(this).val()).length >= 6){
 				   $('#cpassword').attr("disabled", false);
-				   showx($('#cpassword'));
+				   //showx($('#cpassword'));
 				   }
 			   else {
 				   $('#cpassword').attr("disabled", true);
 			       $('#cpassword').val("");
 				   hidecheckx($('#cpassword'));
 			   }
-				if($(this).val() !== $('#cpassword').val() && !$('#cpassword')[0].disabled)
+				if($(this).val() !== $('#cpassword').val() && !$('#cpassword')[0].disabled && $('#cpassword').val().length > 0)
 					showx($('#cpassword'));
 				else if($(this).val() == $('#cpassword').val() && !$('#cpassword')[0].disabled)
 					showcheck($('#cpassword'));
