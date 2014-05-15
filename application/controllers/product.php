@@ -362,6 +362,7 @@ class product extends MY_Controller
     			foreach ($keywords as $value) {
     				$showValue = $this->highlight($value,$stringData);
     				$html .= "<li><a href='".base_url()."search/search.html?q_str=".urlencode($value)."&q_cat=1'>".$showValue."</a></li>";
+
     			}
     			$html .= "</ul>";
     		}
@@ -537,9 +538,26 @@ class product extends MY_Controller
 		echo $data; 
 	}
 
-	
+	function highlight($str, $search) {
+    // $highlightcolor = "#daa732";
+    $highlightcolor = "#808080";
+    $occurrences = substr_count(strtolower($str), strtolower($search));
+    $newstring = $str;
+    $match = array();
+ 
+    for ($i=0;$i<$occurrences;$i++) {
+        $match[$i] = stripos($str, $search, $i);
+        $match[$i] = substr($str, $match[$i], strlen($search));
+        $newstring = str_replace($match[$i], '[#]'.$match[$i].'[@]', strip_tags($newstring));
+    }
+ 
+    $newstring = str_replace('[#]', '<mark><span style="color: '.$highlightcolor.';font-weight:bold">', $newstring);
+    $newstring = str_replace('[@]', '</span></mark>', $newstring);
+    return $newstring;
+ 
+}
 
-	function highlight($text, $words)
+	function highlights($text, $words)
 	{
 
 		$words = preg_replace('/\s+/', ' ',$words);
@@ -547,9 +565,11 @@ class product extends MY_Controller
 		foreach($split_words as $word)
 		{
 			$color = "#e5e5e5";
-			$text = preg_replace("|($word)|Ui","$1" , $text );
-		}
+			$text = preg_replace("|($word)|Ui","<mark>$1</mark>" , $text );
+		} 
 		return $text;
+
+ 
 	}
 
 

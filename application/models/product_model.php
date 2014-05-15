@@ -1077,7 +1077,8 @@ class product_model extends CI_Model
         for($i=1 ; $i < $totalKeywords; $i++){
         	$query .= " AND  keywords LIKE ?";
         }
- 
+ 	
+ 		$query .= "LIMIT 12";
 		$sth = $this->db->conn_id->prepare($query);
 
 		foreach($words as $key => $keyword){

@@ -465,7 +465,7 @@ $(document).ready(function(){
           <input type="text" name="consignee" id="consignee" value="<?php echo $consignee?>">
         </div>
         <div>
-          <label >Mobile No:</label> 
+          <label >Mobile No:<font color="red">*</font></label> 
           <input maxlength="10" placeholder="eg. 9051235678" type="text" name="c_mobile" id="c_mobile" value="<?php echo $c_mobile?>"> 
         </div>
         <div>

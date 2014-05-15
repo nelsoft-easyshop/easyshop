@@ -722,7 +722,11 @@ header {
 #main_search_drop_content ul {
     list-style: none;
 }
-
+#main_search_drop_content ul li {
+    line-height: 25px;
+    font-size: 14px;
+}
+ 
 .adv_srch_lnk {
 	font-size: 11px;
 	margin-left: 5px;
