@@ -413,11 +413,10 @@ $(document).ready(function(){
         var csrfname = $("meta[name='csrf-name']").attr('content');
         
 
-        if($('.stateregionselect').val() == '0' || $('.cityselect').val() == '0' || $('.c_address').val().length == 0){
+        if($('.stateregionselect').val() == '0' || $('.cityselect').val() == '0' || $('.c_address').val().length == 0 || $('#c_mobile').val().length < 10){
           alert('Fill up Required Fields!');
           return false;
         }
-
     
         var formD = $('#delAddressFrm').serializeArray();
         formD.push({name:'temp_lat', value:0});
@@ -440,7 +439,7 @@ $(document).ready(function(){
               }else{
                 //alert('Shipping address changed!');
              
-                alert('Please double check your details!');
+                alert(d);
               }
             }
         });
