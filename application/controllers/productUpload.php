@@ -1283,7 +1283,7 @@ class productUpload extends MY_Controller
 				$prod_other = $this->input->post('prod_other');
 				$prod_other_name = $this->input->post('prod_other_name');
 				$prod_other_id = $this->input->post('prod_other_id');
-				$prod_other_price = abs($this->input->post('prod_other_price'));
+				$prod_other_price = $this->input->post('prod_other_price');
                 $prod_other_img_idx = $this->input->post('prod_other_img_idx');
 
              
@@ -1298,10 +1298,9 @@ class productUpload extends MY_Controller
 					$other_image_type = "--no type";
 					$other_tmp = "--no temp";
 					$other_id = "--no id";
-
 					if(strlen(trim($prod_other_price[$i])) != 0 || $prod_other_price[$i] != "") 
 					{
-						$other_price = $prod_other_price[$i];
+						$other_price = abs($prod_other_price[$i]);
 					}
                     
                     if(isset($_FILES['prod_other_img'])){
@@ -1328,7 +1327,7 @@ class productUpload extends MY_Controller
 					array_push($newarray[$prod_other_name[$i]], $other_name .'|'.$other_price.'|'.$other_image.'|'.$other_image_type.'|'.$other_tmp.'|'.$other_id);
 				}
 
-                
+        
 				$attr_opt_head = array();
 				$attr_opt_det_idx = array();
 				
