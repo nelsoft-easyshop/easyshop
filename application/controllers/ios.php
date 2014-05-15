@@ -132,7 +132,7 @@ class Ios extends MY_Controller {
 				}
 				
 				$response['items'] = $items;  
-			echo '<pre>',print_r($response);exit();
+			echo json_encode($response);exit();
 			}
 		} 
 
@@ -185,7 +185,7 @@ class Ios extends MY_Controller {
 				}
 				
 				$response['items'] = $items;  
-				echo '<pre>',print_r($response);exit();
+				echo json_encode($response);exit();
 			}
 		} 
 
