@@ -21,7 +21,8 @@ if (!defined('BASEPATH'))
 		$data['title'] = $title;
 		$data['result'] = $result;
 		$data = array_merge($data,$this->fill_header());
-		$this->load->view('templates/header_topnavsolo', $data);
+		$this->load->view('templates/header_plain', $data);
+		//$this->load->view('templates/header_topnavsolo', $data);
 		$this->load->view('pages/messages/inbox_view');
 		$this->load->view('templates/footer_full');
     }    
