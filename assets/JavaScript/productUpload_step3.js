@@ -109,6 +109,12 @@ $(function(){
 	});
   });
   
+  $('#div_shipping_preference').on('mouseover', 'p.ship_pref_option', function(){
+	$(this).children('span.delete_ship_preference').show();
+  })
+  .on('mouseleave', 'p.ship_pref_option', function(){
+	$(this).children('span.delete_ship_preference').hide();
+  });
 	
   
 });

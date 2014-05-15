@@ -1582,6 +1582,7 @@ li.brand_result:hover{
 	cursor:pointer;
 	position:absolute;
 	right:60px;
+	display:none;
 }
 
 .ship_pref_option:hover{
