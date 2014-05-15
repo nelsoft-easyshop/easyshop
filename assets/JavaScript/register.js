@@ -68,6 +68,10 @@ $(document).ready(function(){
 			}else{
 				$('div.pass-container').show();
 			}
+	  })
+	  .on('keypress', function(e){
+		var code = e.keyCode || e.which
+		return code!=32;
 	  });
 	  
 	  $("#cpassword").on('paste', function(e){
@@ -77,6 +81,10 @@ $(document).ready(function(){
 				showx($(this));
 			else
 				showcheck($(this));
+		})
+		.on('keypress', function(e){
+			var code = e.keyCode || e.which
+			return code!=32;
 		});
 	  
 	  $('#email').on('blur', function(){

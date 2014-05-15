@@ -43,7 +43,8 @@ $(document).ready(function(){
 			  if ($(e.target).closest('.password_info, #password').length) return;
 			  $(document).unbind('.example');
 			});
-	  }).on('input paste keyup', function(){
+	  }).on('input paste keyup', function(e){
+			
 		   if($.trim($(this).val()).length >= 6){
 			   $('#cpassword').attr("disabled", false);
 			   //showx($('#cpassword'));
@@ -70,6 +71,10 @@ $(document).ready(function(){
 			}else{
 				$('div.pass-container').show();
 			}
+	  })
+	  .on('keypress', function(e){
+		var code = e.keyCode || e.which
+		return code!=32;
 	  });
 	  
 	  $("#cpassword").on('paste', function(e){
@@ -79,6 +84,10 @@ $(document).ready(function(){
 				showx($(this));
 			else
 				showcheck($(this));
+		})
+		.on('keypress', function(e){
+			var code = e.keyCode || e.which
+			return code!=32;
 		});
 	  
 	  $('#email').on('blur', function(){
@@ -86,7 +95,6 @@ $(document).ready(function(){
 
 		if(fieldlength >= 6 && $(this).hasClass('forSearch') && $(this).hasClass('valid')){
 			setTimeout(email_check,500);
-            console.log('here');
 		}
 		else if(fieldlength < 6){
 			hidecheckx($('#email'));
@@ -116,7 +124,6 @@ $(document).ready(function(){
 
 		if(fieldlength >= 6 && $(this).hasClass('forSearch') && $(this).hasClass('valid')){
 			setTimeout(mobile_check,500);
-            console.log('here');
 		}
 		else if(fieldlength < 6){
 			hidecheckx($('#mobile'));
@@ -158,6 +165,10 @@ $(document).ready(function(){
 	jQuery.validator.addMethod("is_validmobile", function(value, element) {
 		return this.optional(element) || /^9[0-9]{9}/.test(value);
 	 }, "Invalid mobile number");
+	 
+	 jQuery.validator.addMethod("no_space", function(value, element) {
+		return this.optional(element) || /[^\s]/g.test(value);
+	 }, "Spaces are not allowed.");
  
 	$('#mobile').numeric({negative : false});
  
@@ -172,12 +183,14 @@ $(document).ready(function(){
 			password: {
 				required: true,
                 minlength: 6,
-				alphanumeric: true
+				alphanumeric: true,
+				no_space: true
 				},
 			cpassword: {
 				required: true,
 				minlength: 6,
-				equalTo: '#password'
+				equalTo: '#password',
+				no_space: true
 				},
 			email: {
 				required: true,
@@ -204,14 +217,6 @@ $(document).ready(function(){
 		 errorElement: "span",
 		 errorPlacement: function(error, element) {
 				error.addClass('red');
-				/*
-				if(element.attr('name') == 'password'){
-					var added_span = $('<span/>',{'class':"red"});
-					error.insertBefore(element.next());
-					added_span.insertBefore(element.next());}
-				else
-					error.appendTo(element.parent());
-				*/
 				if(element.attr('name') !== 'cpassword'){
 					error.insertAfter(element);
 				}

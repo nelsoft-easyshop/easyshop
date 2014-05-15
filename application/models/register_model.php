@@ -148,9 +148,9 @@ class Register_model extends CI_Model
 	
 	function validate_password($password)
 	{
-		if(!((preg_match('/[a-zA-Z]/', $password))&&(preg_match('/\d/',$password))))
+		if( !( (preg_match('/[a-zA-Z]/', $password)) && (preg_match('/\d/',$password)) && !(preg_match('/\s/',$password)) ) )
 		{
-			$this->form_validation->set_message('external_callbacks', 'Must contain numbers and letters');
+			$this->form_validation->set_message('external_callbacks', 'Must contain numbers and letters with no spaces.');
 			return FALSE;
 		}
 		/*else if(!((preg_match('/[a-z]/', $password))&&(preg_match('/[A-Z]/', $password))))
