@@ -1673,7 +1673,7 @@
 								</span>
 								<div>
 									<p class="transac_prod_name">
-										<a href="<?php echo base_url();?>item/<?php echo $product['slug'];?>"><?php echo $product['name'];?></a><br />
+										<a href="<?php echo base_url();?>item/<?php echo $product['slug'];?>"><?php echo html_escape($product['name']);?></a><br />
 										<small>Features and Specifications:</small>
 										<?php if( count($product['attr'] !== 0) ):?>
 											<?php foreach($product['attr'] as $temp):?>
@@ -1837,7 +1837,7 @@
 						</span>
 						<div>
 							<p class="transac_prod_name">
-								<a href="<?php echo base_url();?>item/<?php echo $product['slug'];?>"><?php echo $product['name'];?></a>
+								<a href="<?php echo base_url();?>item/<?php echo $product['slug'];?>"><?php echo html_escape($product['name']);?></a>
 								<small>Features and Specifications:</small>
 								<?php if( count($product['attr'] !== 0) ):?>
 									<?php foreach($product['attr'] as $temp):?>
@@ -1857,10 +1857,6 @@
 								<input type="hidden" name="seller_response" value="<?php echo $opk;?>">
 								<input type="hidden" name="transaction_num" value="<?php echo $tk;?>">
 								<input type="hidden" name="invoice_num" value="<?php echo $transact['invoice_no'];?>">
-								<!--
-								<input type="hidden" name="data" value='<?php //echo $product['jsondata'];?>'>
-								<input type="hidden" name="userdata" value="<?php //echo $transact['buyer'] . '||' . $transact['buyer_email'];?>">
-								-->
 								<?php echo form_close();?>
 							<?php elseif($product['status'] == 1):?>
 								<span class="trans_alert transac_paid">Paid</span>

@@ -37,8 +37,8 @@ class Memberpage extends MY_Controller
 
 			$checkdata = array(
 				'member_id' => $uid,
-				'contactno' => html_escape($this->input->post('mobile')),
-				'email' => html_escape($this->input->post('email'))
+				'contactno' => $this->input->post('mobile'),
+				'email' => $this->input->post('email')
 			);
 
 			$check = $this->register_model->check_contactinfo($checkdata);
@@ -49,12 +49,12 @@ class Memberpage extends MY_Controller
 
 			$uid = $this->session->userdata('member_id');
 			$postdata = array(
-				'fullname' => html_escape($this->input->post('fullname')),
-				'nickname' => html_escape($this->input->post('nickname')),
+				'fullname' => $this->input->post('fullname'),
+				'nickname' => $this->input->post('nickname'),
 				'gender' => $this->input->post('gender'),
 				'birthday' => $this->input->post('dateofbirth'),
-				'contactno' => html_escape($this->input->post('mobile')),
-				'email' => html_escape($this->input->post('email'))
+				'contactno' => $this->input->post('mobile'),
+				'email' => $this->input->post('email')
 			);
 
 			if($postdata['email'] === $this->input->post('email_orig'))
@@ -317,7 +317,7 @@ class Memberpage extends MY_Controller
 			$data = array(
 				'uid' => $this->session->userdata('member_id'),
 				'for_memberid' => $this->input->post('for_memberid'),
-				'feedb_msg' => html_escape($this->input->post('feedback-field')),
+				'feedb_msg' => $this->input->post('feedback-field'),
 				'feedb_kind' => $this->input->post('feedb_kind'),
 				'order_id' => $this->input->post('order_id'),
 				'rating1' => $this->input->post('rating1'),

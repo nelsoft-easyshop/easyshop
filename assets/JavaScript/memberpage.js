@@ -104,7 +104,7 @@ $(document).ready(function(){
 							if($(this).attr('value') !== $.trim($(this).prop('value')))
 								$(this).siblings('input[name^="is_"]').val(0);
 							
-							$(this).attr('value', $.trim($(this).prop('value')));
+							$(this).attr('value', htmlDecode($.trim($(this).prop('value'))));
 							$(this).closest('div').removeClass('fired');
 							$(this).closest('div').next('div[id^="cont"] span:first').html('');
 							$(this).closest('div').next('div[id^="cont"]').hide();
@@ -718,7 +718,7 @@ $(document).ready(function(){
 								default:   schoollevel_string='Undergraduate degree';
 							}
 							$('.school_information .school_info').html(function(){
-								string += "<p/>"+value.schoolname+" "+value.schoolyear+" "+schoollevel_string;
+								string += "<p/>"+htmlDecode(value.schoolname)+" "+htmlDecode(value.schoolyear)+" "+htmlDecode(schoollevel_string);
 								return string;
 							});
 						});
@@ -728,12 +728,12 @@ $(document).ready(function(){
 						$.each(obj.school, function(){
 							$.each(this, function(k, v){	
 								if(k !='schoollevel'){
-									$(".school_fields input[name='" + k + i +"']").prop('value',v);
-									$(".school_fields input[name='" + k + i +"']").attr('value',v);
+									$(".school_fields input[name='" + k + i +"']").prop('value',htmlDecode(v));
+									$(".school_fields input[name='" + k + i +"']").attr('value',htmlDecode(v));
 								}
 								else{
 									$(".school_fields select[name='"+k+i+"']").val(v);
-									$(".school_fields select[name='"+k+i+"']").attr('data-status', v);
+									$(".school_fields select[name='"+k+i+"']").attr('data-status', htmlDecode(v));
 								}
 							});
 							i++;
@@ -860,8 +860,8 @@ $(document).ready(function(){
 						var i = 1;
 						$.each(obj.work, function(){
 							$.each(this, function(k, v){	
-								$(".work_fields input[name='" + k + i +"']").prop('value',v);
-								$(".work_fields input[name='" + k + i +"']").attr('value',v);
+								$(".work_fields input[name='" + k + i +"']").prop('value',htmlDecode(v));
+								$(".work_fields input[name='" + k + i +"']").attr('value',htmlDecode(v));
 							});
 							i++;
 						});
@@ -1131,7 +1131,10 @@ $(document).ready(function(){
 
 /*******************	HTML Decoder	********************************/
 function htmlDecode(value) {
-    if (value) {
+    
+	//value = value.replace(/script>/g, '');
+	
+	if (value) {
         return $('<div />').html(value).text();
     } else {
         return '';
