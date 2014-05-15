@@ -932,25 +932,38 @@ else
  
     $(document).on('change',".files.active",function (e){
  
+
+
       if(badIE == false){
             var fileList = this.files;
             var anyWindow = window.URL || window.webkitURL;
             for(var i = 0; i < fileList.length; i++){
-              var objectUrl = anyWindow.createObjectURL(fileList[i]);
-              var primaryText = "Make Primary";
-              var activeText = "";
-              pictureInDiv = $("#list > div").length;
-              if(pictureInDiv == 0){
-                primaryText = "Your Primary";
-                activeText = "active_img";
-                primaryPicture = pictureCount;
 
-              }
-              $('#list').append('<div id="previewList'+pictureCount+'" class="new_img upload_img_div '+activeText+'"><span class="upload_img_con"><img src="'+objectUrl+'"></span><a href="javascript:void(0)" class="removepic" data-number="'+pictureCount+'">x</a><br><a href="javascript:void(0)" class="makeprimary photoprimary'+pictureCount+'" data-number="'+pictureCount+'">'+primaryText+'</a></div>');
-              window.URL.revokeObjectURL(fileList[i]);
-              pictureCount++;
+                var val = fileList[i].name;
+                var extension = val.substring(val.lastIndexOf('.') + 1).toLowerCase();
+                var objectUrl = anyWindow.createObjectURL(fileList[i]);
+                var primaryText = "Make Primary";
+                var activeText = "";
+                pictureInDiv = $("#list > div").length;
+                if(pictureInDiv == 0){
+                  primaryText = "Your Primary";
+                  activeText = "active_img";
+                  primaryPicture = pictureCount;
+                }
+
+                switch(extension){
+                  case 'gif': case 'jpg': case 'png':
+                      $('#list').append('<div id="previewList'+pictureCount+'" class="new_img upload_img_div '+activeText+'"><span class="upload_img_con"><img src="'+objectUrl+'"></span><a href="javascript:void(0)" class="removepic" data-number="'+pictureCount+'">x</a><br><a href="javascript:void(0)" class="makeprimary photoprimary'+pictureCount+'" data-number="'+pictureCount+'">'+primaryText+'</a></div>');
+                  break;
+                  default:
+                      removeThisPictures.push(pictureCount);
+                  break;
+                }
+
+                window.URL.revokeObjectURL(fileList[i]);
+                pictureCount++; 
             }
-
+            
             $(".files").hide();  
             $(".files.active").each(function(){
               $(this).removeClass('active');
@@ -960,19 +973,32 @@ else
 
      }else{
 
+       var val = $(this).val();
+
+  
             var primaryText = "Make Primary";
             var activeText = "";
             pictureInDiv = $("#list > div").length;
             if(pictureInDiv == 0){
               primaryText = "Your Primary";
-              activeText = "active_img";   primaryPicture = pictureCount;
-
+              activeText = "active_img";   
+              primaryPicture = pictureCount;
             }
          
             var id = "imgid" + pictureCount;
             imageCustom = document.getElementById('files').value;
-            $('#list').append('<div id="previewList'+pictureCount+'" class="new_img upload_img_div '+activeText+'"><span class="upload_img_con"><img src="'+imageCustom+'" alt="'+imageCustom+'" style="height:100px;"></span><a href="javascript:void(0)" class="removepic" data-number="'+pictureCount+'">x</a><br><a href="javascript:void(0)" class="makeprimary photoprimary'+pictureCount+'" data-number="'+pictureCount+'">'+primaryText+'</a></div>');
-            pictureCount++;
+
+            switch(val.substring(val.lastIndexOf('.') + 1).toLowerCase()){
+              case 'gif': case 'jpg': case 'png':
+              $('#list').append('<div id="previewList'+pictureCount+'" class="new_img upload_img_div '+activeText+'"><span class="upload_img_con"><img src="'+imageCustom+'" alt="'+imageCustom+'" style="height:100px;"></span><a href="javascript:void(0)" class="removepic" data-number="'+pictureCount+'">x</a><br><a href="javascript:void(0)" class="makeprimary photoprimary'+pictureCount+'" data-number="'+pictureCount+'">'+primaryText+'</a></div>');
+              break;
+              default:
+              removeThisPictures.push(pictureCount); 
+              break;
+            }
+
+
+           pictureCount++;
             
             $(".files").hide();  
             $(".files.active").each(function(){
@@ -1003,6 +1029,7 @@ else
             idNumber = $(this).data('imgid');
             editRemoveThisPictures.push(idNumber);
         } 
+         
         $(this).closest('.upload_img_div').remove();
         if(text == "Your Primary"){
             var first_img_div = $("#list > div:first-child" );
@@ -1473,7 +1500,7 @@ $(".proceed_form").unbind("click").click(function(){
 
   var combinationSelected = JSON.stringify(arraySelected);
 
-  var otherCategory = "<?php echo isset($otherCategory)?$otherCategory:''; ?>";
+  var otherCategory = escapeHtml("<?php echo isset( $otherCategory)? html_escape($otherCategory) :''; ?>");
 
   // formData = new FormData(document.getElementById("form_product"));
   // formData.append("inputs", input_name);
