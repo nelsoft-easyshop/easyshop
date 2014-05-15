@@ -39,7 +39,7 @@ function in_array_r($needle, $haystack, $strict = false) {
 					$check = ' checked="checked"';
 				}			
 				
-				echo "<input type='checkbox' class='adv_catpanel' ". $check ." name='_subcat' value='". $value['id_cat'] ."'>" . $value['name'];
+				echo "<input type='checkbox' class='adv_catpanel' ". $check ." name='_subcat' value='". $value['id_cat'] ."'>" . html_escape($value['name']);
 				echo "<br>";
 			}		
 		}
@@ -68,7 +68,7 @@ function in_array_r($needle, $haystack, $strict = false) {
 							$i = $i + 1;
 						}
 					}			
-					$geninputs = $geninputs . "<input type='checkbox' class='adv_leftpanel' ". $check ." name='". $attr_group ."[". $row ."]' value='". $attr_values ."'>" . $attr_values . "<br>";
+					$geninputs = $geninputs . "<input type='checkbox' class='adv_leftpanel' ". $check ." name='". $attr_group ."[". $row ."]' value='". html_escape($attr_values) ."'>" . html_escape($attr_values) . "<br>";
 				} // for each attr_values
 				
 				$style = " style='display:none' ";
@@ -78,7 +78,7 @@ function in_array_r($needle, $haystack, $strict = false) {
 					$class = " class='span_bg advsrch_toggle' ";
 				}
 				
-				echo "<h3 class='title' id='". $genid  ."' style='cursor:pointer;'><span id='i". $genid ."' ". $class ."></span> ". $value['name'] ."</h3>";			
+				echo "<h3 class='title' id='". $genid  ."' style='cursor:pointer;'><span id='i". $genid ."' ". $class ."></span> ". html_escape($value['name']) ."</h3>";			
 				echo "<div id='c". $genid ."' ". $style .">" . $geninputs . "</div>";
 			} // check value[0]
 		} // for each arrayofparams
