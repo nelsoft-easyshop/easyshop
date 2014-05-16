@@ -29,7 +29,7 @@ $(document).ready(function(){
 // -- PAYPAL PROCESS PAYMENT SECTION -- // 
 
     $(document).on('click','.paypal',function () {
-        var action = "pay/setting/paypal"; 
+        var action = config.base_url + "pay/setting/paypal"; 
         var csrftoken = $("meta[name='csrf-token']").attr('content');
         var csrfname = $("meta[name='csrf-name']").attr('content');
         var type = $(this).data('type');
@@ -48,7 +48,7 @@ $(document).ready(function(){
 
         $.ajax({
             type: "POST",
-            url:config.base_url + action, 
+            url: action, 
             dataType: "json",
             data:   csrfname+"="+csrftoken+"&paypal="+type, 
             beforeSend: function(jqxhr, settings) { 
@@ -72,7 +72,7 @@ $(document).ready(function(){
 // -- DRAGON PAY PROCESS PAYMENT SECTION -- // 
 
     $(document).on('click','.btnDp',function () {
-        var action = "payment/payDragonPay"; 
+        var action = config.base_url + "payment/payDragonPay"; 
         var csrftoken = $("meta[name='csrf-token']").attr('content');
         var csrfname = $("meta[name='csrf-name']").attr('content');
         var type = $(this).data('type');
@@ -80,7 +80,7 @@ $(document).ready(function(){
         if($('#chk_dp').is(':checked')){
             $.ajax({
                 type: "POST",
-                url: config.base_url + action, 
+                url:  action, 
                 dataType: "json",
                 data: csrfname+"="+csrftoken, 
                 success: function(d) {
@@ -126,7 +126,7 @@ $(document).ready(function(){
     });
 
     $(document).on('click','.changeAddressBtn',function () {
-        var action = "payment/changeAddress";
+        var action = config.base_url + "payment/changeAddress";
         var csrftoken = $("meta[name='csrf-token']").attr('content');
         var csrfname = $("meta[name='csrf-name']").attr('content');
 
@@ -144,7 +144,7 @@ $(document).ready(function(){
 
         $.ajax({
             type: "POST", 
-            url: config.base_url + action,
+            url:  action,
             data:formD,
             dataType: "json", 
             success: function(d) {
