@@ -96,18 +96,18 @@
 <script src="<?=base_url().$page_javascript.'?ver=1.0'?>" type="text/javascript"></script>
 <script>
     $(document).ready(function(){
-        $('#checkAll').click(function () {    
-	    if ($(this).prop('checked')) {
-			var value = 0;
-			$(".subtotal").each(function(){
-				value = Number($(".subtotal").html().replace(/\$/g,'').replace(/,/g,'')) + value;
-			});
-			//$("#total").html(Number(value).toLocaleString('en')+".00");
-			$("#total").html(parseFloat(value).toFixed(2));
-	    }else{
-			$("#total").html("0.00");
-	    }
+        $('#checkAll').click(function () {
             $('input:checkbox').prop('checked', this.checked);
+			value = 0;
+			if ($(this).prop('checked')) {
+				for (var i=0;i<$(".subtotal").length;i++) {
+					value = Number($(".subtotal").eq(i).html().replace(/\$/g,'').replace(/,/g,'')) + value;
+				}
+				$("#total").html(Number(value).toLocaleString('en')+".00");
+				$("#total").html(parseFloat(value).toFixed(2));
+			}else{
+				$("#total").html("0.00");
+			}
         });
         $('.rad').click(function () {
 			var value = Number($("#subtotal"+$(this).val()).html().replace(/\$/g,'').replace(/,/g,''));
