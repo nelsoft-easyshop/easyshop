@@ -5,6 +5,7 @@
 <!--[if IE 8 ]>    <html class="ie8"> <![endif]-->
 <!--[if IE 9 ]>    <html class="ie9"> <![endif]-->
 <!--[if (gt IE 9)|!(IE)]><!-->  <!--<![endif]-->
+
 <head>
 <?php require_once("assets/includes/css.php"); ?>
 <?php require_once("assets/includes/js.php"); ?>
@@ -28,8 +29,7 @@
 	<?php echo $title?>
 </title>
 
-
-<!-- Google Analytics -->
+<!-- Google Analytics
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -39,12 +39,13 @@
   ga('create', 'UA-48811886-1', 'easyshop.ph');
   ga('send', 'pageview');
 </script>
-<!-- End of Google Analytics -->
+ End of Google Analytics -->
  
 </head>
 <body>
 
-<!-- Google Tag Manager -->
+<!-- Google Tag Manager
+
  <noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-KP5F8R"
  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -52,8 +53,7 @@
  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
  '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
  })(window,document,'script','dataLayer','GTM-KP5F8R');</script>
- <!-- End Google Tag Manager -->
-
+ End Google Tag Manager -->
 
 <header>
   <div class="wrapper">
@@ -113,7 +113,7 @@
         <a href="<?=base_url()?>#register">Register</a> 
     </div> 
     <?php else: ?>
-    <div  class="top_links_right"><a href="<?=base_url()?>messages"><img src="<?=base_url()?>assets/images/msg_icon.ico">[ <span><?PHP echo $msgs['unread_msgs'];?></span> ]</a> <a href="<?=base_url()?>me" class="top_border"><?php echo $uname; ?></a> <a href="<?=base_url()?>login/logout">Logout</a> </div>
+    <div  class="top_links_right"><a href="<?=base_url()?>messages" class="msgs_link"><span class="span_bg img_msgs_cntr"></span> <span class="msg_countr"><?PHP echo $msgs['unread_msgs'];?></span></a> <a href="<?=base_url()?>me" class="top_border"><?php echo $uname; ?></a> <a href="<?=base_url()?>login/logout">Logout</a> </div>
     <?php endif; ?>
 	<div class="alertUser">
 	    <p>You have a message!</p>
