@@ -235,6 +235,27 @@ p {
     border:1px solid #003277;
 }
 
+.red_btn {
+	border-radius: 3px;
+	border: 1px solid #ff0030;
+	background-color: #ff0030;
+	color: #fff;
+	cursor: pointer;
+	display: inline-block;
+	padding:8px 10px;
+	text-align: center;
+	-webkit-transition: all 0.3s ease-in-out;
+	-moz-transition: 	all 0.3s ease-in-out;
+	-o-transition:	    all 0.3s ease-in-out;
+	 transition: 		all 0.3s ease-in-out;		
+}
+
+.red_btn:hover {
+	color: #fff;
+	background-color: #a90020;
+    border:1px solid #a90020;
+}
+
 
 /****** Font sizes ******/
 .f36 {
@@ -486,6 +507,27 @@ header {
 	text-decoration: underline;
 }
 
+.msgs_link {
+	margin-right: 10px;
+}
+
+a.msgs_link:hover {
+	text-decoration: none;	
+}
+
+.msg_countr {
+    background-color: #F18200;
+    display: inline-block;
+    height: 20px;
+    line-height: 21px;
+    margin-left: -6px;
+    text-align: center;
+    vertical-align: middle;
+    width: 20px;
+	-webkit-border-radius: 90px;
+	-moz-border-radius: 90px;
+	border-radius: 90px;
+}
 
 .top_border {
 	padding-right: 10px;
@@ -619,6 +661,14 @@ header {
 	padding-right: 5px;
 	height: 18px;
 	width: 22px;
+}
+
+
+.img_msgs_cntr {
+	background-position: -511px -258px;
+    height: 16px;
+    margin-bottom: -7px;
+    width: 16px;
 }
 
 /*** end of header ***/
@@ -819,8 +869,8 @@ section {
 
 
 .nav_title > img {
-    vertical-align: middle;
-    padding-left: 50px;
+    float: right;
+    margin-top: 8px;
 }
 
 nav a { text-decoration: none; }
@@ -1755,6 +1805,7 @@ div.reg_step3 ul li:nth-child(3) {
 
 .forgot_pword_con {
 	border: 1px solid #cecece;
+	min-height: 400px;
 }
 
 .fill_out_form {
@@ -1897,7 +1948,7 @@ div.pass-hint {
     border-bottom: 3px solid #CECECE;
     display: inline-block;
     list-style: none;
-    width: 456px;
+    width: 435px;
 }
 
 .profile_top_nav ul li {
@@ -1964,7 +2015,8 @@ div.pass-hint {
 .profile_top_nav .member_srch_wrapper {
     border-bottom: 3px solid #CECECE;
     padding-bottom: 11px;
-    width: 264px;
+    text-align: right;
+    width: 285px;
 }
 
 .ie9 .profile_top_nav .member_srch_wrapper {
@@ -1995,6 +2047,7 @@ div.pass-hint {
 
 .member_srch_container ul {
 	border:none;
+	width: 100%;
 }
 
 .member_srch_container ul li {
@@ -2004,6 +2057,19 @@ div.pass-hint {
 
 .member_srch_container ul li:hover {
 	border: none;
+}
+
+.member_srch_container ul li a {
+	display: block;
+	padding:3px;
+}
+
+.member_srch_container ul li a:hover {
+	background-color: #ebeaea;
+}
+
+.member_srch_container ul li a span {
+	padding:0;
 }
 
 .profile_top_nav input[type="text"] {
@@ -3439,11 +3505,11 @@ div.post_item_content_left {
 	float: left;
     font-size: 16px;
     padding-right:10px; 
-    width: 410px;	
+    width: 400px;	
     word-wrap:break-word;
 }
 
-.post_item_button {
+/*.post_item_button {
 	background-color: #ffae00;
 	margin-bottom: 10px;
 	padding:8px 10px;
@@ -3452,6 +3518,39 @@ div.post_item_content_left {
 	-webkit-border-radius: 2px;
 	-moz-border-radius: 2px;
 	border-radius: 2px;
+}*/
+
+.delete_lnk {
+/*	padding:8px 10px;	
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
+	border-radius: 2px;*/
+}
+
+.post_item_button input {
+	border: none;
+	cursor: pointer;
+	font-size: 12px;
+}
+
+.manage_lnk, .delete_lnk {
+    opacity: 0.8;
+         -webkit-transition: opacity 0.3s linear;
+     -moz-transition: opacity 0.3s linear;
+       -o-transition: opacity 0.3s linear;
+          transition: opacity 0.3s linear;
+}
+
+.manage_lnk.span_bg {
+    background-color: #F8F7F7;
+    background-position: -255px -48px;
+    padding-left: 20px;
+}
+
+.manage_lnk.span_bg:hover {
+	color: #0057CF;
+	background-position: -255px -78px;
+	opacity: 1;
 }
 
 .product_title_container form,
@@ -3460,28 +3559,32 @@ div.post_item_content_left {
 	display: inline-block;
 }
 
-.delete_lnk {
-	color: #fff;
-	margin-left: 5px;
+.delete_lnk.span_bg {
+    background-color: #F8F7F7;
+    background-position: -352px -48px;
+    padding-left: 20px;
 }
 
-.post_item_button input {
+.delete_lnk.span_bg:hover {
+	color: #ff0030;
+	background-position: -352px -79px;
+}
+
+/*.post_item_button input {
 	border:none;
-	background-color: #ffae00;
 	color: #fff;
 	cursor: pointer;
-	padding:0;
-}
+}*/
 
 .border_white {
 	color: #fff;	
 }
 
-.post_item_button a:hover,
+/*.post_item_button a:hover,
 .post_item_button input:hover {
 	color: #fff;
 	text-decoration: underline;
-}
+}*/
 
 .price_container {
     border-bottom: 1px solid #eae8e8;
