@@ -73,7 +73,20 @@ class DragonPay {
         $client = new nusoap_client($this->url, 'wsdl');
         $result = $client->call('GetTxnStatus',$param);
         return $result['GetTxnStatusResult'];
-	}	
+	}
+
+	function voidTransaction($txnId)	
+	{
+		$param = array(
+        		'merchantId' => $this->merchantId,
+        		'password' => $this->merchantPwd,
+        		'merchantTxnId' => $txnId
+        	 
+        	);
+        $client = new nusoap_client($this->url, 'wsdl');
+        $result = $client->call('CancelTransaction',$param);
+        return $result['CancelTransactionResult'];
+	}
 }
 
 /* End of file paypal.php */
