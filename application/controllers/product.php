@@ -872,16 +872,17 @@ class product extends MY_Controller
     			'shiploc' => $this->product_model->getLocation(),
     			'category_navigation' => $this->load->view('templates/category_navigation',array('cat_items' =>  $this->getcat(),), TRUE ),
     			));
-$data['vendorrating'] = $this->product_model->getVendorRating($data['product']['sellerid']);
+                $data['vendorrating'] = $this->product_model->getVendorRating($data['product']['sellerid']);
 
-$data['jsonReviewSchemaData'] = $this->assembleJsonReviewSchemaData($data);
-
-$this->load->view('pages/product/productpage_view', $data); 
-}
-else
-	$this->load->view('pages/general_error', $data); 		
-$this->load->view('templates/footer_full');
-} 
+                $data['jsonReviewSchemaData'] = $this->assembleJsonReviewSchemaData($data);
+                $this->load->view('pages/product/productpage_view', $data); 
+            }
+            else{
+                $this->load->view('pages/general_error', $data); 
+            }
+            $this->load->view('templates/footer_full');
+        } 
+        
 
 }
 
