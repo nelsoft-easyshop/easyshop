@@ -530,6 +530,10 @@ span.seller-name .rating_criteria{
     text-align: center;
 }
 
+.html_description div {
+    height: auto !important;
+}
+
 .recommendation_list {
     background-color: #F8F7F7;
     float: right;
