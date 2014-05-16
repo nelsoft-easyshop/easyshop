@@ -47,42 +47,6 @@ class search_model extends CI_Model
 	}
 	
 	
-	# get all attributes from all parents from to the last selected category
-	function getAttributesByParent($parents) 
-	{
-		if(is_array($parents)){
-			$value = implode(',',$parents);
-		}else{
-			$value = $parents;
-		}
-		
-		$query = "SELECT DISTINCT
-  			ea.name AS cat_name, ea.id_attr, ea.attr_lookuplist_id, ed.name AS input_type, eal.name AS input_name 
-			FROM es_attr ea
-			LEFT JOIN es_datatype ed ON ea.datatype_id = ed.id_datatype 
-			LEFT JOIN es_attr_lookuplist eal ON ea.attr_lookuplist_id = eal.id_attr_lookuplist 
-			WHERE ea.cat_id IN (" .$value .")
-  				AND ed.name IN ('CHECKBOX', 'RADIO', 'SELECT')
-  				GROUP BY ea.name
-				ORDER BY ea.name ASC ";
-
-		$sth = $this->db->conn_id->prepare($query);
-		$sth->execute();
-		$row = $sth->fetchAll(PDO::FETCH_ASSOC);
-		return $row;
-	}
-	
-	function getLookItemListById($id) # getting item list from database. EG: Color -- (White,Blue,Yellow)
-	{
-		$query = $this->sqlmap->getFilenameID('product','getLookupListItem');
-		$sth = $this->db->conn_id->prepare($query);
-		$sth->bindParam(':id',$id);
-		$sth->execute();
-		$row = $sth->fetchAll();
-
-		return $row;
-	}
-	
 	function selectChild($id) # get all down level category on selected category from database
 	{
 
@@ -189,28 +153,7 @@ class search_model extends CI_Model
 		return $row;
 	} /// end
 	
-	function getFirstLevelNode($is_main = false, $is_alpha = false) # get all main/parent/first level category from database
-	{
-        if(($is_main)&&(!$is_alpha)){
-            $query = $this->sqlmap->getFilenameID('product', 'selectFirstLevelIsMain');
-        }
-        else if((!$is_main)&&(!$is_alpha)){
-            $query = $this->sqlmap->getFilenameID('product', 'selectFirstLevel');
-        }
-        else if(($is_main)&&($is_alpha)){
-            $query = $this->sqlmap->getFilenameID('product', 'selectFirstLevelIsMainAlpha');
-        }
-        else if((!$is_main)&&($is_alpha)){
-            $query = $this->sqlmap->getFilenameID('product', 'selectFirstLevelAlpha');
-        }
-		
-		$sth = $this->db->conn_id->prepare($query);
-		$sth->execute();
-		$row = $sth->fetchAll(); 
 
-		return $row;
-	}	
-			
 	function SearchProduct($catID, $start, $per_page, $sort, $gis, $gus, $gcon, $gloc, $gp1, $gp2, $gsubcat, $othr_att, $brnd_att, $test){ 
 		
 
@@ -325,7 +268,7 @@ class search_model extends CI_Model
 			". $oa . " ". $sc ." ". $loc . " " . $is ." " . $us . " ". $con ." ". $gp ." " . $ba . "   
 			ORDER BY :colsort DESC 
 			LIMIT :start, :per_page ";
-			
+	
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':start',$start,PDO::PARAM_INT);
 		$sth->bindParam(':per_page',$per_page,PDO::PARAM_INT);
