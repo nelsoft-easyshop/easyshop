@@ -52,9 +52,9 @@
                   <td class="step3_title">
 					<h4 style="width:68%;display:inline-block;">Select from available combinations</h4>
 					<?php if($attr['has_attr'] == 1):?>
-						<div style="width:30%;display:inline-block;">
+						<div style="width:30%;display:inline-block;text-align:right; font-size:10px;">
 							<input style="vertical-align:middle;" type="checkbox" name="select_all_attr" id="select_all_attr">
-							<label style="vertical-align:middle;" for="select_all_attr">Select all attributes</label>
+							<label style="vertical-align:middle;" for="select_all_attr">Select all</label>
 						</div>
 					<?php endif;?>
 				  </td>
@@ -114,7 +114,7 @@
 						</p>
 					<?php endforeach;?>
 				<?php else:?>
-					<span><strong>No shipping preferences created.</strong></span>
+					<span><strong>You have no shipping preference entry to display.</strong></span>
 				<?php endif;?>
 			</div>
 		</div>

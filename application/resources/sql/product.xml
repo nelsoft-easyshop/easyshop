@@ -597,6 +597,7 @@ FROM
         WHERE a.`id_optional_attrhead` = b.`head_id` 
           AND a.`product_id` = :productID
           AND b.`value_name` = :valueName
+          AND a.`field_name` = :valueGroup
     </select>
 
     <select id="addNewCombinationAtrribute">
@@ -663,6 +664,9 @@ FROM
         UPDATE `es_product` SET slug = :slug, is_cod = :is_cod, is_draft = 0, billing_info_id = :billing_id  where member_id = :memberid AND id_product = :productid
 </select>
 
+<select id="finalizeProductKeepSlug">
+        UPDATE `es_product` SET is_cod = :is_cod, is_draft = 0, billing_info_id = :billing_id  where member_id = :memberid AND id_product = :productid
+</select>
 
 <select id="checkifexistcategory">
         SELECT COUNT(id_cat) AS cnt FROM `es_cat` WHERE id_cat = :cat_id
@@ -931,7 +935,7 @@ FROM
 </select>
 
 <select id='getSlugByID'>
-    SELECT slug FROM es_product WHERE id_product = :id;
+    SELECT slug, name FROM es_product WHERE id_product = :id;
 </select>
 
 </map>

@@ -716,10 +716,11 @@ class product_model extends CI_Model
 		return $rows['id_product_attr'];	
 	}
 
-	function selectProductAttributeOther($other_value,$product_id)
+	function selectProductAttributeOther($other_group,$other_value,$product_id)
 	{
 		$query = $this->sqlmap->getFilenameID('product','selectProductAttributeOther');
 		$sth = $this->db->conn_id->prepare($query);
+        $sth->bindParam(':valueGroup',$other_group,PDO::PARAM_STR);	
 		$sth->bindParam(':valueName',$other_value,PDO::PARAM_STR);
 		$sth->bindParam(':productID',$product_id,PDO::PARAM_INT);	
 		$sth->execute();
@@ -1134,27 +1135,40 @@ class product_model extends CI_Model
         }else{
         	$slugGenerate = es_url_clean($titleLower);
         }
-     
+        
+        #IDEALLY, THIS BLOCK OF CODE IS NOT NEEDED, HOWEVER THERE ARE RARE INSTANCES WHEN
+        #THE SAME SLUG IS GENERATED FOR TWO PRODUCTS      
+        $query = "SELECT count(`slug`) as cnt FROM es_product WHERE slug = :slug";
+     	$sth = $this->db->conn_id->prepare($query);
+        $sth->bindParam(':slug',$slugGenerate ,PDO::PARAM_STR);
+        $sth->execute();
+        $row = $sth->fetch(PDO::FETCH_ASSOC);
+        if($row['cnt']>0){
+            $slugGenerate = $slugGenerate.'-'.date("YmdHis");
+        }
+
         return $slugGenerate;
     } 
 
 	function finalizeProduct($productid, $memberid,$billing_id, $is_cod){
-
-	
-		$product = $this->getProductEdit($productid, $memberid);
+        $product = $this->getProductEdit($productid, $memberid);
 		$title = $product['name'];
-
-		$slug = $this->createSlug($title);
-		$query = $this->sqlmap->getFIlenameID('product', 'finalizeProduct');
-	 
-		$sth = $this->db->conn_id->prepare($query);
+        $slug = $this->getSlug($productid);
+        if(strlen(trim($slug)) == 0 ){
+            $slug = $this->createSlug($title);
+            $query = $this->sqlmap->getFIlenameID('product', 'finalizeProduct');
+            $sth = $this->db->conn_id->prepare($query);
+            $sth->bindParam(':slug',$slug ,PDO::PARAM_STR);
+        }else{
+            $query = $this->sqlmap->getFIlenameID('product', 'finalizeProductKeepSlug');
+            $sth = $this->db->conn_id->prepare($query);
+        }
 		$sth->bindParam(':productid',$productid,PDO::PARAM_INT);
 		$sth->bindParam(':memberid',$memberid,PDO::PARAM_INT);
         $sth->bindParam(':is_cod',$is_cod,PDO::PARAM_INT);
         $sth->bindParam(':billing_id', $billing_id,PDO::PARAM_INT);
-		$sth->bindParam(':slug',$slug ,PDO::PARAM_STR);
-        
         $sth->execute();
+
         return $slug;
 	}
     
@@ -1448,6 +1462,23 @@ class product_model extends CI_Model
             if($verbose){
                 array_push($data[$row['id_product_item']]['attr_lookuplist_item_id'], $row['attr_lookuplist_item_id']);
                 array_push($data[$row['id_product_item']]['attr_name'], $row['attr_value']);
+            }
+        }
+
+        if(($verbose)&&(count($data) === 0)){
+            $query = $this->sqlmap->getFilenameID('product','getProductQuantity');
+            $sth = $this->db->conn_id->prepare($query);
+            $sth->bindParam(':product_id',$product_id, PDO::PARAM_INT);
+            $sth->execute();
+            $rows = $sth->fetchAll(PDO::FETCH_ASSOC);
+            if(count($rows) === 1){
+                if((intval($rows[0]['product_attr_id'],10) === 0) && (intval($rows[0]['is_other'],10) === 0)){
+                    $data[$rows[0]['id_product_item']] = array();
+                    $data[$rows[0]['id_product_item']]['quantity'] = $rows[0]['quantity'];
+                    $data[$rows[0]['id_product_item']]['product_attribute_ids'] =  array(0=>array('id'=>$rows[0]['product_attr_id'], 'is_other'=> $rows[0]['is_other']));
+                    $data[$rows[0]['id_product_item']]['attr_lookuplist_item_id'] = array();
+                    $data[$rows[0]['id_product_item']]['attr_name'] = array();
+                }
             }
         }
         

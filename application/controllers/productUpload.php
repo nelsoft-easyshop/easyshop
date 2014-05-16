@@ -227,8 +227,7 @@ class productUpload extends MY_Controller
 
 		if(strlen(trim($product_title)) == 0 || $product_title == "" 
 			|| strlen(trim($product_brief)) == 0 || $product_brief == "" 
-			|| strlen(trim($product_price)) == 0 || $product_price <= 0
-			|| strlen(trim($sku)) == 0 || $sku == "")
+			|| strlen(trim($product_price)) == 0 || $product_price <= 0)
 		{
 			echo '{"e":"0","d":"Fill (*) All Required Fields Properly!"}';		
 			exit();
@@ -475,8 +474,7 @@ class productUpload extends MY_Controller
                         if(strlen(trim($_POST['prod_other_price'][$i])) != 0 || $_POST['prod_other_price'][$i] != ""){
                             $other_price = $_POST['prod_other_price'][$i];
                         }
-                        $other_price = abs($other_price);
-
+                        $other_price = abs(str_replace(',','',$other_price));
                         if(isset($_FILES['prod_other_img'])){
                             if(intval($_POST['prod_other_img_idx'][$i],10) === 1){
                                 if(!empty($_FILES['prod_other_img']['name'][$option_image_idx])){
@@ -541,7 +539,8 @@ class productUpload extends MY_Controller
                         $quantitySolo = 1;
                         if($this->input->post('quantitySolo')){
                             $quantitySolo = $this->input->post('quantitySolo');
-                            $quantitySolo = abs($quantitySolo);
+                             $quantitySolo = abs(str_replace(',','',$quantitySolo));
+
                         }
                         $idProductItem = $this->product_model->addNewCombination($product_id,$quantitySolo);
 
@@ -549,7 +548,7 @@ class productUpload extends MY_Controller
                         foreach ($combination as $keyCombination) {
                             $quantitycombination = 1;
                             if(!$quantitycombination <= 0){
-                                $quantitycombination = abs($keyCombination->quantity);
+                                $quantitycombination = abs(str_replace(',','',$keyCombination->quantity)); 
                             }
                             $idProductItem = $this->product_model->addNewCombination($product_id,$quantitycombination);
                             if(strpos($keyCombination->value, '-') !== false) {
@@ -560,8 +559,9 @@ class productUpload extends MY_Controller
                                     $explodeOther = explode(":",  $value);
                                     $otherAttrIdentifier = $explodeOther[0];
                                     $otherAttrValue = $explodeOther[1];
+                                    $otherAttrGroup = $explodeOther[2];
                                     if($otherAttrIdentifier == 1){
-                                        $productAttributeId = $this->product_model->selectProductAttributeOther($otherAttrValue,$product_id);
+                                        $productAttributeId = $this->product_model->selectProductAttributeOther($otherAttrGroup,$otherAttrValue,$product_id);
                                     }else{
                                         $productAttributeId = $this->product_model->selectProductAttribute($otherAttrValue,$product_id);
                                     }
@@ -572,8 +572,9 @@ class productUpload extends MY_Controller
                                 $explodeOther = explode(":",  $keyCombination->value);
                                 $otherAttrIdentifier = $explodeOther[0];
                                 $otherAttrValue = $explodeOther[1];
+                                $otherAttrGroup = $explodeOther[2];
                                 if($otherAttrIdentifier == 1){
-                                    $productAttributeId = $this->product_model->selectProductAttributeOther($otherAttrValue,$product_id);
+                                    $productAttributeId = $this->product_model->selectProductAttributeOther($otherAttrGroup,$otherAttrValue,$product_id);
                                 }else{
                                     $productAttributeId = $this->product_model->selectProductAttribute($otherAttrValue,$product_id);
                                 }
@@ -616,9 +617,9 @@ class productUpload extends MY_Controller
 				'attr' => $this->product_model->getPrdShippingAttr($id),
 				'product_id' => $id,
 				'shipping_summary' => $this->product_model->getShippingSummary($id),
-				'shipping_preference' => $this->product_model->getShippingPreference($member_id)
-			);
-       
+				'shipping_preference' => $this->product_model->getShippingPreference($member_id), 
+            );
+            
 			$data = array_merge($data, $this->fill_view());
 			$jsonDisplayGroup = $jsonFdata = array();
 			
@@ -816,12 +817,15 @@ class productUpload extends MY_Controller
 		$data = $this->fill_view();
 		$this->load->view('templates/header', $data); 
         $memberId =  $this->session->userdata('member_id');
+        
+        
 		if($this->input->post('prod_h_id')){
             $billing_id = $this->input->post('prod_billing_id'); 
             $is_cod =($this->input->post('allow_cod'))?1:0;
 			$response['id'] =$this->input->post('prod_h_id');
-            $response['slug'] = $this->product_model->finalizeProduct($response['id'] , $memberId, $billing_id, $is_cod);
-			$this->load->view('pages/product/product_upload_step4_view',$response);
+            $response['slug'] = $this->product_model->finalizeProduct($response['id'] , $memberId, $billing_id, $is_cod, true);
+
+            $this->load->view('pages/product/product_upload_step4_view',$response);
 			$this->load->view('templates/footer'); 
 		}else{
             redirect('/sell/step1/', 'refresh');
@@ -936,6 +940,7 @@ class productUpload extends MY_Controller
 
 	public function editStep2Submit()
 	{
+     
 		$product_title = trim($this->input->post('prod_title'));
 		$product_brief = trim($this->input->post('prod_brief_desc'));
 		$product_description = trim($this->input->post('desc')) ;
@@ -986,8 +991,7 @@ class productUpload extends MY_Controller
 		if(strlen(trim($product_title)) == 0 || $product_title == "" 
 			|| strlen(trim($product_brief)) == 0 || $product_brief == "" 
 			|| strlen(trim($product_description)) <= 4
-			|| strlen(trim($product_price)) == 0 || $product_price <= 0
-			|| strlen(trim($sku)) == 0 || $sku == "")
+			|| strlen(trim($product_price)) == 0 || $product_price <= 0)
 		{
 			echo '{"e":"0","d":"Fill (*) All Required Fields Properly!"}';		
             exit();
@@ -1186,7 +1190,7 @@ class productUpload extends MY_Controller
                             $quantitySolo = 1;
                             if($this->input->post('quantitySolo')){
                                 $quantitySolo = $this->input->post('quantitySolo');
-                                $quantitySolo = abs($quantitySolo);
+                                $quantitySolo = abs(str_replace(',','',$quantitySolo));
                             }
                             $default_retain_shipment = true;
                             array_push($update_product_item_obj, array('id' => $idx, 'qty' =>$quantitySolo));
@@ -1209,7 +1213,6 @@ class productUpload extends MY_Controller
                         }
                         foreach($itemcombinations as $idx=>$old_elem){
                             $bool = true;
-
                             foreach($search_arr as $x){
                                 if((!in_array($x[1],$old_elem[$x[2]])) || (count($search_arr) != count($old_elem[$x[2]]))){
                                     $bool = false;
@@ -1231,10 +1234,12 @@ class productUpload extends MY_Controller
                     }
                 
                 }
+
                 $keep_ids = array();
                 foreach($update_product_item_obj as $x){
                     array_push($keep_ids, $x['id']);
                 }
+                
            
 
                 #DELETE PRODUCT ITEM, PRODUCT ITEM ATTR, SHIPPING HEAD AND SHIPPING DETAIL
@@ -1286,8 +1291,7 @@ class productUpload extends MY_Controller
 				$prod_other_price = $this->input->post('prod_other_price');
                 $prod_other_img_idx = $this->input->post('prod_other_img_idx');
 
-             
-				for ($i=0; $i < sizeof($prod_other_name); $i++) { 
+			 	for ($i=0; $i < sizeof($prod_other_name); $i++) { 
 					if(!array_key_exists($prod_other_name[$i],$newarray)){
 						$newarray[$prod_other_name[$i]] = array();
 					}
@@ -1300,7 +1304,7 @@ class productUpload extends MY_Controller
 					$other_id = "--no id";
 					if(strlen(trim($prod_other_price[$i])) != 0 || $prod_other_price[$i] != "") 
 					{
-						$other_price = abs($prod_other_price[$i]);
+                       $other_price = abs(str_replace(',','',$prod_other_price[$i]));
 					}
                     
                     if(isset($_FILES['prod_other_img'])){
@@ -1315,8 +1319,7 @@ class productUpload extends MY_Controller
                         }
                     }
 
-                    
-					if(isset($prod_other_id[$i])){
+					if(isset($prod_other_id[$i]) && strlen(trim($prod_other_id[$i]) != 0) ){
 						$other_id = $prod_other_id[$i];
 					}
 
@@ -1326,8 +1329,7 @@ class productUpload extends MY_Controller
 
 					array_push($newarray[$prod_other_name[$i]], $other_name .'|'.$other_price.'|'.$other_image.'|'.$other_image_type.'|'.$other_tmp.'|'.$other_id);
 				}
-
-        
+                
 				$attr_opt_head = array();
 				$attr_opt_det_idx = array();
 				
@@ -1342,13 +1344,12 @@ class productUpload extends MY_Controller
 						}
 					}	
 				}
-
+                
 				foreach($attr_opt_head as $head_id){
 					$this->product_model->deleteAttrOthers($head_id);
 				}
 
 				$is_primary = 0;
-
 				foreach ($newarray as $key => $valuex) {
                     //If OTHER GROUP NAME is empty: skip 
 					if(trim($key) == "" || strlen(trim($key)) <= 0 ){
@@ -1360,6 +1361,7 @@ class productUpload extends MY_Controller
 						continue;
 					}
 					$others_id = $this->product_model->addNewAttributeByProduct_others_name($product_id,$key);
+                    
 					foreach ($valuex as $keyvalue => $value) {
 						$imageid = 0;
                         $eval = explode("|", $value); 
@@ -1393,7 +1395,7 @@ class productUpload extends MY_Controller
 							}
 						}  
 						$this->product_model->addNewAttributeByProduct_others_name_value($others_id,$eval[0],$eval[1],$imageid);
-					}
+                    }
 				}
 				#end other
 
@@ -1452,7 +1454,7 @@ class productUpload extends MY_Controller
                         $quantitySolo = 1;
                         if($this->input->post('quantitySolo')){
                             $quantitySolo = $this->input->post('quantitySolo');
-                            $quantitySolo = abs($quantitySolo);
+                            $quantitySolo = abs(str_replace(',','',$quantitySolo));
                         }
                         $idProductItem = $this->product_model->addNewCombination($product_id,$quantitySolo);
                     }
@@ -1462,7 +1464,6 @@ class productUpload extends MY_Controller
                             $this->product_model->updateCombination($product_id, $keyCombination->item_id, $keyCombination->quantity);
                             $explodeOldProdAttr = explode("-",  $keyCombination->old_prod_attr_id);
                             $explodeCombination = explode("-",  $keyCombination->value);
-                            
                             for($i = 0;$i < count($explodeCombination);$i++){
                                 $explodeOld = explode(":",  $explodeOldProdAttr[$i]);
                                 $is_other = $explodeOld[0];
@@ -1471,8 +1472,9 @@ class productUpload extends MY_Controller
                                 $explodeOther = explode(":",  $explodeCombination[$i]);
                                 $otherAttrIdentifier = $explodeOther[0];
                                 $otherAttrValue = $explodeOther[1];
+                                $otherAttrGroup = $explodeOther[2];
                                 if($otherAttrIdentifier == 1){
-                                    $productAttributeId = $this->product_model->selectProductAttributeOther($otherAttrValue,$product_id);
+                                    $productAttributeId = $this->product_model->selectProductAttributeOther($otherAttrGroup, $otherAttrValue,$product_id);
                                 }else{
                                     $productAttributeId = $this->product_model->selectProductAttribute($otherAttrValue,$product_id);
                                 }
@@ -1488,12 +1490,12 @@ class productUpload extends MY_Controller
                             if(strpos($keyCombination->value, '-') !== false) {
                                 $explodeCombination = explode("-",  $keyCombination->value);
                                 foreach ($explodeCombination as $value) {
-
                                     $explodeOther = explode(":",  $value);
                                     $otherAttrIdentifier = $explodeOther[0];
                                     $otherAttrValue = $explodeOther[1];
+                                    $otherAttrGroup = $explodeOther[2];
                                     if($otherAttrIdentifier == 1){
-                                        $productAttributeId = $this->product_model->selectProductAttributeOther($otherAttrValue,$product_id);
+                                        $productAttributeId = $this->product_model->selectProductAttributeOther($otherAttrGroup,$otherAttrValue,$product_id);
                                     }else{
                                         $productAttributeId = $this->product_model->selectProductAttribute($otherAttrValue,$product_id);
                                     }
@@ -1504,8 +1506,9 @@ class productUpload extends MY_Controller
                                 $explodeOther = explode(":",  $keyCombination->value);
                                 $otherAttrIdentifier = $explodeOther[0];
                                 $otherAttrValue = $explodeOther[1];
+                                $otherAttrGroup = $explodeOther[2];
                                 if($otherAttrIdentifier == 1){
-                                    $productAttributeId = $this->product_model->selectProductAttributeOther($otherAttrValue,$product_id);
+                                    $productAttributeId = $this->product_model->selectProductAttributeOther($otherAttrGroup,$otherAttrValue,$product_id);
                                 }else{
                                     $productAttributeId = $this->product_model->selectProductAttribute($otherAttrValue,$product_id);
                                 }

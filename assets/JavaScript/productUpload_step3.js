@@ -524,7 +524,7 @@ $(function(){
 		}
       });
     }else{
-		alert('No shipping details set.');
+		alert('You have no entries in the shipping summary list.');
 	}
   });
 
@@ -841,7 +841,7 @@ $(function(){
 				
 				if( obj['result'] === 'success' ){
 					if( thisspan.closest('p').siblings('p:not(".cloningfield")').length === 0 ){
-						$('#div_shipping_preference div.radio_container').append('<span><strong>No shipping preferences created.</strong></span>')
+						$('#div_shipping_preference div.radio_container').append('<span><strong>You have no shipping preference entry to display.</strong></span>')
 					}
 					thisspan.closest('p').remove();
 				}else{
