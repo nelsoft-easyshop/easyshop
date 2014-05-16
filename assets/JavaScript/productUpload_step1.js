@@ -252,7 +252,7 @@
         $('.othercategory_main').empty();
         $(".product_sub_category .product_sub_items0").nextAll().remove();
         $(".product_sub_category .product_sub_items0").remove();
-        $('.othercategory_main').append('<input type="text" id="otherNameCategory_main" class="otherNameCategory_main" data-parentname="" data-level="" data-final="" autocomplete="off" name="othernamecategory" />');
+        $('.othercategory_main').append('<input type="text" id="otherNameCategory_main" style="background:none;padding:5px" placeholder="Add a category"  class="otherNameCategory_main" data-parentname="" data-level="" data-final="" autocomplete="off" name="othernamecategory" />');
         $('.othercategory_main .otherNameCategory_main').focus();
         $(".add_category_submit").empty();
     });
@@ -281,7 +281,7 @@
         $(".product_sub_items"+selfLevel+" .select2 ").removeClass('active');
         $('.othercategory'+selfLevel).empty();
         $(".product_sub_category .product_sub_items" + selfLevel).nextAll().remove(); 
-        $('.product_sub_items'+selfLevel+' .othercategory'+selfLevel).append('<input type="text" id="otherNameCategory" class="otherNameCategoryClass'+selfLevel+'" data-parentname="'+parentName+'" data-level="'+selfLevel+'" data-final="'+finalValue+'" autocomplete="off" name="othernamecategory" />');
+        $('.product_sub_items'+selfLevel+' .othercategory'+selfLevel).append('<input type="text" style="background:none;padding:5px" placeholder="Add a category" id="otherNameCategory" class="otherNameCategoryClass'+selfLevel+'" data-parentname="'+parentName+'" data-level="'+selfLevel+'" data-final="'+finalValue+'" autocomplete="off" name="othernamecategory" />');
         $('.product_sub_items'+selfLevel+' .otherNameCategoryClass'+selfLevel).focus();
         $(".add_category_submit").empty();
     });
