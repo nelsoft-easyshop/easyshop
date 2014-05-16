@@ -159,7 +159,7 @@
 		var recipient = $("#msg_name").val().trim();
 		var msg = $("#msg-message").val().trim();
         if (msg == "") {
-            alert("Say something..");
+            alert("Say something.");
             return false;
         }
 		if(send_msg(recipient,msg)){
@@ -169,9 +169,9 @@
             $("#msg_field").empty();
 			//$("#msg_field").empty().append('<img id="msg_loader" src="'+config.base_url+'assets/images/orange_loader.gif">');
 			$("#msg_textarea").hide();
-			alert("Message sent");
+			alert("Your message has been sent");
 		}else {
-			alert("Try again");
+			alert("Sorry, we failed to send your message.");
             return false;
 		}
 	});   	
@@ -223,7 +223,7 @@
                     onFocus_Reload(data)
                     result = true;
                 }else{
-                    alert("Username does not exist");
+                    alert("The user you are trying to message does not exist");
                     result = false;
                 }
 			}
