@@ -73,7 +73,7 @@
 .left_attribute input[type="text"] {
   border:1px solid #cecece;
   margin-left: 3px;
-  width: 51px;
+  width: 45px;
 }
 
 .left_attribute input[type="text"]:focus {
@@ -172,6 +172,7 @@ div.product-list {
 }
 
 .prod_img_container {
+  border:1px solid #e5e5e5;
   display: table-cell;
   height: 220px;
   line-height: 220px;
@@ -190,10 +191,12 @@ div.product-list {
 }
 
 .product-list .prod_img_container {
+    border:1px solid #e5e5e5;
     display: table-cell;
     float: none;
     height: 150px;
     width: 150px;
+    vertical-align: middle;
 }
 
 .product-list .prod_img_wrapper {
@@ -676,12 +679,46 @@ Advanced Search Filters
   margin-bottom: 10px;
   background: #F8F7F7;
 }
+.advsearch input,.advsearch select {
+  padding:8px 3px;
+}
+
+.advsearch select {
+  border:1px solid #cecece;
+}
+
+.advsearch label {
+  display: inline-block;
+  width: 53px;
+}
+
+.advsrchLocation {
+    width: 206px;
+}
+
+.prod_condition {
+    width: 264px;
+}
 
 #btn_srch {
-  background: #F48000;
+  background-color: #F48000;
+  border: none;
   color: #ffffff;
   font-weight: bold;
-  cursor: pointer
+  cursor: pointer;
+  padding: 8px 20px;
+    -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+
+    -webkit-transition: all 0.3s ease-in-out;
+  -moz-transition:  all 0.3s ease-in-out;
+  -o-transition:      all 0.3s ease-in-out;
+   transition:    all 0.3s ease-in-out;
+}
+
+#btn_srch:hover {
+  background-color: #ff4400;
 }
 
 .inputRow {
