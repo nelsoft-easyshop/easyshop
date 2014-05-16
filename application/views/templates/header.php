@@ -4,7 +4,9 @@
 <!--[if IE 7 ]>    <html class="ie7"> <![endif]-->
 <!--[if IE 8 ]>    <html class="ie8"> <![endif]-->
 <!--[if IE 9 ]>    <html class="ie9"> <![endif]-->
+
 <!--[if (gt IE 9)|!(IE)]><!--><!--<![endif]-->
+
 <head>
 <?php require_once("assets/includes/css.php"); ?>
 <?php require_once("assets/includes/js.php"); ?>
@@ -249,12 +251,13 @@ $('#main_search').on('input propertychange', function() {
 
 <script>
          $(document).ready(function() { 
-
+            var srchdropcontent= $('#main_search_drop_content');
             $('#main_search').focus(function() {
-            if($('#main_search').val().length != 0){
+            if(srchdropcontent.find("ul").length > 0){
              
-            $('#main_search_drop_content').fadeIn(150);
+              $('#main_search_drop_content').fadeIn(150);
             }
+
             $(document).bind('focusin.main_search_drop_content click.main_search_drop_content',function(e) {
                 if ($(e.target).closest('#main_search_drop_content, #main_search').length) return;
                 $('#main_search_drop_content').fadeOut('fast');
@@ -265,5 +268,5 @@ $('#main_search').on('input propertychange', function() {
            
         });
 
-</script>
 
+</script>
