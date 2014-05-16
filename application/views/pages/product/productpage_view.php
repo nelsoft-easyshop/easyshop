@@ -204,7 +204,7 @@
         </div>
         <div id="tabs-2">
           <h3>Specifications of <?php echo html_escape($product['product_name']);?></h3>
-          <div> <span>SKU</span> <span><?php echo html_escape($product['sku']);?></span> </div>
+          <div> <span>SKU</span> <span><?php echo (strlen(trim($product['sku'])) > 0)?html_escape($product['sku']):'not specified';?></span></div>
           <?php foreach($product_options as $key=>$product_option):?>
           <?php if(count($product_option)===1): ?>
               <?php if(intval($product_option[0]['datatype'],10) === 2): ?>
@@ -380,6 +380,7 @@
   <input id='p_qty' type='hidden' value=' <?php echo json_encode($product_quantity);?>'>
   <input id='p_shipment' type='hidden' value='<?php echo json_encode($shipment_information);?>'>
   <input id='p_itemid' type='hidden' value='0'/>
+  
 </section>
 
 <script src="<?=base_url()?>assets/JavaScript/js/jquery.jqzoom-core.js" type="text/javascript"></script>
@@ -454,46 +455,48 @@
 <script type="text/javascript">
 
     $(function(){
-	if (<?=$uid?> == <?php echo $product['sellerid']; ?> || <?=$uid?> == 0  ) {
-	    $(".vendor-msg-modal").remove();
-	    $("#modal-background").remove();
-	    $("#modal-container").remove();
-	}
-	$("#modal-background, #modal-close").click(function() {
-	    $("#modal-container, #modal-background").toggleClass("active");
-	    $("#modal-container").hide();
-	    $("#msg-message").val("");
-	});
-	$("#modal-launcher2").click(function() {
-	    $("#modal-container, #modal-background").toggleClass("active");
-	    $("#modal-container").show();
-	});
-	
-	$("#modal_send_btn").on("click",function(){
-	    var recipient =<?php echo $product['sellerid']; ?>;
-        var csrftoken = $("meta[name='csrf-token']").attr('content');
-        var csrfname = $("meta[name='csrf-name']").attr('content');
-        var msg = $("#msg-message").val();
-		if (msg == "") {
-			alert("Say something..");
-			return false;
-		}
-	    var msg = $("#msg-message").val();
-            $.ajax({
-                async : true,
-                type : "POST",
-                dataType : "json",
-                url : "<?=base_url()?>messages/send_msg",
-                data : {recipient:recipient,msg:msg,csrfname:csrftoken},
-                success : function(data) {
-		    $("#modal-container, #modal-background").toggleClass("active");
-		    $("#modal-container").hide();
-		    $("#msg-message").val("");
-		    alert("Message Sent");
-                }
-            });
-	});
-	
+        var uid = <?php echo json_encode(!empty($uid)?$uid:0);?>;
+        var seller_id = <?php echo $product['sellerid']; ?>;
+        if (uid ==  seller_id || uid == 0  ) {
+            $(".vendor-msg-modal").remove();
+            $("#modal-background").remove();
+            $("#modal-container").remove();
+        }
+        $("#modal-background, #modal-close").click(function() {
+            $("#modal-container, #modal-background").toggleClass("active");
+            $("#modal-container").hide();
+            $("#msg-message").val("");
+        });
+        $("#modal-launcher2").click(function() {
+            $("#modal-container, #modal-background").toggleClass("active");
+            $("#modal-container").show();
+        });
+        
+        $("#modal_send_btn").on("click",function(){
+            var recipient =<?php echo $product['sellerid']; ?>;
+            var csrftoken = $("meta[name='csrf-token']").attr('content');
+            var csrfname = $("meta[name='csrf-name']").attr('content');
+            var msg = $("#msg-message").val();
+            if (msg == "") {
+                alert("Say something..");
+                return false;
+            }
+            var msg = $("#msg-message").val();
+                $.ajax({
+                    async : true,
+                    type : "POST",
+                    dataType : "json",
+                    url : "<?=base_url()?>messages/send_msg",
+                    data : {recipient:recipient,msg:msg,csrfname:csrftoken},
+                    success : function(data) {
+                $("#modal-container, #modal-background").toggleClass("active");
+                $("#modal-container").hide();
+                $("#msg-message").val("");
+                alert("Your message has been sent.");
+                    }
+                });
+        });
+        
     });
 $(document).on('click','.prod_cat_drop',function() {
      $(".category_nav").toggleClass("category_nav_plus");
