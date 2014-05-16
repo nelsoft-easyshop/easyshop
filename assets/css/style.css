@@ -4943,7 +4943,6 @@ margin-right: 10px;
 }
 #table_id td{
 		padding:10px;
-		/*background-color: #f5f2f0;*/
 }
 #table_id tr{
 		border: solid #D9D9D9;
@@ -4955,10 +4954,14 @@ margin-right: 10px;
 #table_id tr:last-child {
   border-bottom: none;
 }
+.unreadConve{
+		display:inline !important;
+}
 .msg_sender{
 		font-weight: bold;
 		font-size: 12px;
 		margin-bottom: 3px;
+		display: inline !important;
 }
 .msg_date{
 		margin-top:3px;

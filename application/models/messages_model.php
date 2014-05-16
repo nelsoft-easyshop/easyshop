@@ -91,6 +91,7 @@ class messages_model extends CI_Model
         $data = array();
         $result = array();
 		$unread_msg = 0;
+		$unread_conve = 0;
 		for($ctr = 0 ; $ctr < sizeof($rows) ; $ctr++){
 		    $inbox=$rows[$ctr]['to_id'].$rows[$ctr]['from_id'];
 		    $sentbox=$rows[$ctr]['from_id'].$rows[$ctr]['to_id'];
@@ -110,27 +111,34 @@ class messages_model extends CI_Model
 				} else if($status == "reciever" && ($rows[$ctr]['is_delete'] == '0' || $rows[$ctr]['is_delete'] == '2') ){	        
 				    $data[$sentbox][$rows[$ctr]['id_msg']] = $rows[$ctr];				
 				    $data[$sentbox][$rows[$ctr]['id_msg']]['status'] = 'reciever';		
+				    $data[$sentbox][$rows[$ctr]['id_msg']]['unreadConve'] = 0;		
 				    $data[$sentbox][$rows[$ctr]['id_msg']]['name'] = ($rows[$ctr]['from_id'] == $id ? $rows[$ctr]['recipient'] : $rows[$ctr]['sender']);		
 				    if ($rows[$ctr]['opened'] == 0 )$unread_msg++ ;
 				}	
 			}
 		}
 		$result['messages'] = array_values($data);
-		for($x = 0;$x < sizeof($result['messages']); $x++){
-			$ask = "";
+		$size = sizeof($result['messages']);
+		for($x = 0;$x < $size; $x++){ //get all msgs that is not deleted by receiver & count each msgs in conversation
+			$ask = 0;
 			foreach($result['messages'][$x] as $key  =>$row){
 				$delete = $result['messages'][$x][$key]['is_delete'];
 				$status = $result['messages'][$x][$key]['status'];
+				$is_opened = $result['messages'][$x][$key]['opened'];
 				if($status == "sender" && ($delete == '0' || $delete == '1')){
 				}else if($status == "reciever" && ($delete == '0' || $delete == '2')){
+				    if($is_opened == '0'){
+						$ask = ++$ask;
+				    }
 				}else{
-					$ask = "true";
 				    unset($result['messages'][$x][$key]);
 				}
+				$first_key = reset($result['messages'][$x])['id_msg'];
 			}
+			$result['messages'][$x][$first_key]['unreadConve'] = $ask;
+		    $result['unread_msgs'] = $unread_msg;
 		}
-		$result['unread_msgs'] = $unread_msg;
-		
+				
 		if($todo == "Get_UnreadMsgs"){
 			$size  = sizeof($result['messages']);
 			for($x = 0;$size > $x;$x++){

@@ -20,12 +20,14 @@
 					<img data="<?=reset($row)['sender_img']?>" src="<?=base_url().reset($row)['recipient_img']?>/60x60.png">
 				<?PHP }else{ ?>
 					<img data="<?=reset($row)['recipient_img']?>" src="<?=base_url().reset($row)['sender_img']?>/60x60.png">
-				<?PHP } ?>
+				<?PHP }
+                $span = (reset($row)['unreadConve'] != 0 ? '<span class="unreadConve">('.reset($row)['unreadConve'].')</span>' : "");
+                ?>
 				</td>
 				<td>
                     
 					<a class="btn_each_msg" id="ID_<?PHP echo reset($row)['name']; ?>" href="javascript:void(0)" data='<?=html_escape(json_encode($row))?>'>
-						<span class="msg_sender"><?PHP echo reset($row)['name']; ?></span>
+						<span class="msg_sender"><?PHP echo reset($row)['name']."</span>".$span; ?>
                     <?php 
                           $keys = array_keys($row);
                           $row[reset($keys)]['message'] = html_escape(reset($row)['message']);
@@ -253,6 +255,7 @@
 		$("#head_container span").show();
 		$(".btn_each_msg").removeClass("Active");
 		$(this).addClass("Active");
+		$("#"+this.id+" .msg_sender span").remove();
 		seened(this);
 	});
 	
@@ -294,6 +297,7 @@
 	}
     function onFocus_Reload(msgs) {
 		html = "";
+        var span = "";
         D = msgs.messages;
 		$.each(D,function(key,val){
 			var cnt = parseInt(Object.keys(val).length)- 1;
@@ -314,10 +318,11 @@
                 }else {
                     html +='<img src=<?=base_url()?>'+Nav_msg.sender_img+'/60x60.png data="'+Nav_msg.recipient_img+'">';
                 }
+                span = (Nav_msg.unreadConve != 0 ? '<span class="unreadConve">('+Nav_msg.unreadConve+')</span>' : "");
                 html +='</td>';
                 html +='<td class=" ">';
                 html +="<a class='btn_each_msg' id='ID_"+Nav_msg.name+"' data='"+ escapeHtml(JSON.stringify(val))+"' href='javascript:void(0)'>";
-                html +='<span class="msg_sender">'+Nav_msg.name+'</span>';
+                html +='<span class="msg_sender">'+Nav_msg.name+ '</span>'+span;
                 html +='<span class="msg_message">'+escapeHtml(Nav_msg.message)+'</span>';
                 html +='<span class="msg_date">'+Nav_msg.time_sent+'</span>';
                 html +='</a>';

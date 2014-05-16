@@ -59,15 +59,15 @@ class MY_Controller extends CI_Controller
 		$carts=$this->session->userdata('cart_contents');
 		$ss = (empty($carts) ? 0 : sizeof($this->session->userdata('cart_contents'))-2);
 		$unread = $this->messages_model->get_all_messages($this->session->userdata('member_id'),"Get_UnreadMsgs");
-		$msgs['unread_msgs'] = $unread['unread_msgs'];
-		$msgs['msgs'] = ($unread['unread_msgs'] != 0 ? reset($unread['messages'][0]) : "");		
+		$msgs['unread_msgs'] = (isset($unread['unread_msgs']) ?$unread['unread_msgs'] : 0);
+		$msgs['msgs'] = (isset($unread['unread_msgs']) ? ($unread['unread_msgs'] != 0 ? reset($unread['messages']) : ""):0);		
 		$data = array(
 			'logged_in' => $logged_in,
 			'uname' => $uname,
 			'total_items'=> $ss,
 			'msgs'=> $msgs,
 			'category_search' => $this->product_model->getFirstLevelNode(),
-			);		
+			);
 		return $data;
 	}
     
