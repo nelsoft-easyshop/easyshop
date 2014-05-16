@@ -205,7 +205,7 @@ function in_array_r($needle, $haystack, $strict = false) {
       <?php
 			} // end of loop
 		}else{
-			echo "<br><br><h3 align='center'>No results found.</h3>";
+			echo "<br><br><h3 align='center'>".($default?'Begin searching by applying search filters.':'No results found.')."</h3>";
 		} // end of isset
       ?>
     </div>
