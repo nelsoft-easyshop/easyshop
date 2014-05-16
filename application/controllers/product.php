@@ -387,7 +387,9 @@ class product extends MY_Controller
 		if(!is_numeric($category)){
 			$category = 1;
 		}
-		
+        if(!isset($_GET['q_cat'])){
+            $_GET['q_cat'] = 1;
+        }
 		if (isset($_GET['q_str'])) {
 			if($_GET['q_str'] == "" && $_GET['q_cat'] == 1)
 			{
