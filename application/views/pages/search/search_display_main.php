@@ -92,7 +92,7 @@ function in_array_r($needle, $haystack, $strict = false) {
   	<div class="advsearch">
 		<div class="inputRow">
 			<span class="adv_is">	
-				Keyword:	
+				<label>Keyword:	</label>
 				<input style="" type="text" name="_is" id="_is" value="<?php echo html_escape($getis);?>" size="50" maxlength="300" placeholder="Enter keywords or item number" />
 			</span>
 			<span class="adv_is">
@@ -109,11 +109,11 @@ function in_array_r($needle, $haystack, $strict = false) {
 		</div>
 		<div class="inputRow">
 			<span class="adv_us">
-				Seller:	
+				<label>Seller:</label>	
 				<input type="text" name="_us" id="_us" value="<?php echo html_escape($getus);?>" size="40" maxlength="30" placeholder="Find items offered by a particular seller" />
 			</span>
 			<span class="adv_us">
-			Location:
+			<label>Location:</label>
 				<select title="Select item location" name="_loc" id="_loc" class="advsrchLocation">
 					<option value="">- All -</option>
 						<?php foreach($shiploc['area'] as $island=>$loc):?>
@@ -130,8 +130,8 @@ function in_array_r($needle, $haystack, $strict = false) {
 		</div>
 		<div class="inputRow">
 			<span class="adv_us">
-				Condition:	
-				<select title="Select item condition" name="_con" id="_con">
+				<label>Condition:</label>	
+				<select title="Select item condition" name="_con" id="_con" class="prod_condition">
 					<option value="">- All -</option>          
 					<?php foreach($this->lang->line('product_condition') as $con): ?>
 						<option value="<?php echo $con;?>" <?php if($getcon == $con){?>selected="selected"<?php } ?>><?php echo $con; ?></option>
@@ -139,11 +139,11 @@ function in_array_r($needle, $haystack, $strict = false) {
 				</select>
 			</span>
 			<span class="adv_us">
-				Price:
+				<label>Price:</label>
 				<input type="text" name="_price1" id="_price1" value="<?php echo html_escape($getprice1);?>" maxlength="10" size="6" placeholder="Min" title="Minimum price"> to <input type="text" name="_price2" id="_price2" value="<?php echo html_escape($getprice2);?>" maxlength="10" size="6" placeholder="Max" title="Maximum price">
 			</span>
 			<span class="adv_us">
-				Sort by:
+				<label>Sort by:</label>
 				<select name="_sop" id="_sop" title="Sort item">
 					<option value="popular" <?php if($getsop == "popular"){?>selected="selected"<?php } ?>>Popular</option>
 					<option value="hot" <?php if($getsop == "hot"){?>selected="selected"<?php } ?>>Hot</option>		
