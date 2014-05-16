@@ -149,8 +149,8 @@
     <?php endif; ?>
 	<div class="alertUser">
 	    <p>You have a message!</p>
-		<span><?PHP echo $msgs['msgs']['name'];?> :</span>
-		<span><?PHP echo html_escape($msgs['msgs']['message']);?> </span>
+		<span><?PHP echo isset($msgs['msgs']['name'])?$msgs['msgs']['name']:'';?> :</span>
+		<span><?PHP echo isset($msgs['msgs']['message'])?html_escape($msgs['msgs']['message']):'';?> </span>
 	</div>
   </div>
 </header>
