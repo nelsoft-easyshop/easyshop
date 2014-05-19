@@ -802,7 +802,7 @@ FROM
 </select>
 
 <select id="getPrdShippingAttr">
-	SELECT pitm.id_product_item, piattr.product_id_item, pattr.attr_value
+	SELECT pitm.id_product_item, piattr.product_id_item, pattr.attr_value, piattr.id_product_item_attr
     FROM es_product_item pitm
     LEFT JOIN es_product_item_attr piattr
         ON pitm.id_product_item = piattr.product_id_item AND piattr.is_other = 0
@@ -812,7 +812,7 @@ FROM
 	
 	UNION
 	
-	SELECT pitm.id_product_item, piattr.product_id_item, oattr.value_name
+	SELECT pitm.id_product_item, piattr.product_id_item, oattr.value_name, piattr.id_product_item_attr
     FROM es_product_item pitm
     LEFT JOIN es_product_item_attr piattr
         ON pitm.id_product_item = piattr.product_id_item AND piattr.is_other = 1
