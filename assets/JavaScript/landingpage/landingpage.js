@@ -212,6 +212,10 @@ $(document).ready(function(){
 				required: "Please enter a valid email address",
 				email: 'Please enter a valid email address',
 				minlength: '*Email too short'
+			},
+			mobile:{
+				minlength: 'Mobile should consist of 10 digits',
+				maxlength: 'Mobile should consist of 10 digits'
 			}
 		 },
 		 errorElement: "span",
