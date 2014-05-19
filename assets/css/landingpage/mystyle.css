@@ -120,9 +120,12 @@ body {
 }
 
 .img_scroll {
-    margin-left: 94px;
+    /*margin-left: 94px;*/
 }
-
+#gotoHome{
+    border-radius: 15px;
+    min-width: 15%;
+}
 .content1 {
     margin-top: 50px;
     text-align: center;
