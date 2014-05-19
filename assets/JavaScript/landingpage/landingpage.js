@@ -164,7 +164,7 @@ $(document).ready(function(){
  
 	jQuery.validator.addMethod("is_validmobile", function(value, element) {
 		return this.optional(element) || /^9[0-9]{9}/.test(value);
-	 }, "Invalid mobile number");
+	 }, "Mobile no. format : 9XXXXXXXXX");
 	 
 	 jQuery.validator.addMethod("no_space", function(value, element) {
 		return this.optional(element) || /[^\s]/g.test(value);
