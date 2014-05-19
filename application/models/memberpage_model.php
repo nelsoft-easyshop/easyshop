@@ -181,7 +181,7 @@ class memberpage_model extends CI_Model
 		$config['overwrite'] = TRUE;
 		$config['file_name'] = 'usersize.png';
 		$config['upload_path'] = $path; 
-		$config['allowed_types'] = 'gif|jpg|png';
+		$config['allowed_types'] = 'gif|jpg|png|jpeg';
 		$config['max_size']	= '5000';
 		$config['max_width']  = '1024';
 		$config['max_height']  = '768';

@@ -1295,7 +1295,7 @@ function imageprev(input) {
 		reader.readAsDataURL(input.files[0]);
     }
 	else
-		alert('You can only upload gif|png|jpeg files at a max size of 5MB! ');
+		alert('You can only upload gif|png|jpeg|jpg files at a max size of 5MB! ');
 	
 	
 	function deploy_imageprev(){

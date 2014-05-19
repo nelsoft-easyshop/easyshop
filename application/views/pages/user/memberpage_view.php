@@ -58,7 +58,7 @@
 						<div class="avatar_edit" style="width:45px; position: relative; float:right"><span class="span_bg" name='avatar_edit_icon'></span>Edit</div>
 						<?php echo $image_profile?>	
 						<?php echo form_open_multipart('memberpage/upload_img', 'id="form_image"');?>
-						<input type="file" style="display:none" id="imgupload" name="userfile"/>
+						<input type="file" style="display:none" id="imgupload" accept="image/*" name="userfile"/>
 						<input type='hidden' name='x' value='0' id='image_x'>
 						<input type='hidden' name='y' value='0' id='image_y'>
 						<input type='hidden' name='w' value='0' id='image_w'>
