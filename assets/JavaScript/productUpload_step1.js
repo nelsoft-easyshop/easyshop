@@ -35,7 +35,7 @@
 
         if(confirm("Are you sure you want to permanently removed this draft entry?")){
             var request = $.ajax({
-                async: false,
+                // async: false,
                 type: "POST",
                 url: config.base_url + action,
                 data: "p_id=" + pid + "&"+csrfname+"=" + csrftoken,
@@ -140,7 +140,7 @@
         if($('#storeValue .parent'+catId).length == 0) {
             $.ajax({
                 onLoading:jQuery(".sub_cat_loading_container").html('<img src="'+config.base_url+'assets/images/orange_loader.gif" />').show(),
-                async: false,
+                // async: false,
                 type: "POST",
                 url: config.base_url + action,
                 data: "cat_id=" + catId + "&level=" + level + "&name=" + name + "&"+csrfname+"=" + csrftoken,
@@ -179,7 +179,7 @@
         $(".product_sub_category .product_sub_items" + nlevel).nextAll().remove(); 
         if($('#storeValue .parent'+catId).length == 0){
             $.ajax({
-                async: false,
+                // async: false,
                 type: "POST",
                 url: config.base_url +  action,
                 data: "cat_id=" + catId + "&level=" + nlevel + "&name=" + name + "&"+csrfname+"=" + csrftoken,
