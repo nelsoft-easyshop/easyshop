@@ -4261,17 +4261,6 @@ span.transac_title_date {
 	vertical-align: top;
 }
 
-.sold_transac_add_state_region {
-	width: 130px;
-}
-
-.sold_transac_add_city {
-	width: 100px;
-}
-
-.sold_transac_add_fulladd {
-	width: 200px;
-}
 
 #sold .transac_title_date {
 	display: table-cell;
@@ -5170,9 +5159,31 @@ margin-right: 10px;
 	height:13px;
 }
 
-.transac_additional_details{
+.tad_1{
 	width: 30%;
 }
+
+.tad_2{
+	width: 45%;
+}
+
+.tad_3{
+	display: block !important;
+}
+
+/*
+.sold_transac_add_state_region {
+	width: 130px;
+}
+
+.sold_transac_add_city {
+	width: 100px;
+}
+
+.sold_transac_add_fulladd {
+	width: 200px;
+}
+*/
 
 .raty-error{
 	display:block;

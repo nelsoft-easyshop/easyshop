@@ -1493,16 +1493,17 @@
 							<span class="transac_address_details_show" style="color:#0191C8;cursor:pointer;font-size:10px;text-decoration:underline;">View Delivery details</span>
 							<div style="display:none;" class="transac_address_cont">
 								<?php foreach($transact['users'] as $uk=>$user):?>
-									<span class="transac_additional_details"><strong>Consignee: </strong> <?php echo html_escape($user['address']['consignee']);?></span>
+									<span class="tad_1"><strong>Consignee: </strong> <?php echo html_escape($user['address']['consignee']);?></span>
 									<?php if(trim($user['address']['mobile']) != ''):?>
-										<span class="transac_additional_details"><strong>Mobile: </strong> <?php echo html_escape($user['address']['mobile']);?></span>
+										<span class="tad_1"><strong>Mobile: </strong> <?php echo html_escape($user['address']['mobile']);?></span>
 									<?php endif;?>
 									<?php if(trim($user['address']['telephone']) != ''):?>
-										<span class="transac_additional_details"><strong>Telephone: </strong> <?php echo html_escape($user['address']['telephone']);?></span>
+										<span class="tad_1"><strong>Telephone: </strong> <?php echo html_escape($user['address']['telephone']);?></span>
 									<?php endif;?>
-									<span class="sold_transac_add_state_region"><strong>State/Region:</strong> <?php echo $user['address']['stateregion']?></span>
-									<span class="sold_transac_add_city"><strong>City:</strong> <?php echo $user['address']['city'];?></span>
-									<span class="sold_transac_add_fulladd"><strong>Address:</strong> <?php echo html_escape($user['address']['fulladd']);?></span>
+									<span style="display:block;"></span>
+									<span class="tad_2"><strong>State/Region:</strong> <?php echo $user['address']['stateregion']?></span>
+									<span class="tad_2"><strong>City:</strong> <?php echo $user['address']['city'];?></span>
+									<span class="tad_3"><strong>Address:</strong> <?php echo html_escape($user['address']['fulladd']);?></span>
 									<?php if( $user['address']['lat']!=0 && $user['address']['lng']!=0 ):?>
 										<span class="tsold_viewmap" data-lat="<?php echo $user['address']['lat'];?>" data-lng="<?php echo $user['address']['lng'];?>">View Map</span>
 										<div class="map_modalcont" style="display:none;"></div>
@@ -1807,16 +1808,17 @@
 							<span class="transac_address_details_show" style="color:#0191C8;cursor:pointer;font-size:10px;text-decoration:underline;">View Delivery details</span>
 							<div style="display:none;" class="transac_address_cont">
 								<?php foreach($transact['users'] as $uk=>$user):?>
-									<span class="transac_additional_details"><strong>Consignee: </strong> <?php echo html_escape($user['address']['consignee']);?></span>
+									<span class="tad_1"><strong>Consignee: </strong> <?php echo html_escape($user['address']['consignee']);?></span>
 									<?php if(trim($user['address']['mobile']) != ''):?>
-										<span class="transac_additional_details"><strong>Mobile: </strong> <?php echo html_escape($user['address']['mobile']);?></span>
+										<span class="tad_1"><strong>Mobile: </strong> <?php echo html_escape($user['address']['mobile']);?></span>
 									<?php endif;?>
 									<?php if(trim($user['address']['telephone']) != ''):?>
-										<span class="transac_additional_details"><strong>Telephone: </strong> <?php echo html_escape($user['address']['telephone']);?></span>
+										<span class="tad_1"><strong>Telephone: </strong> <?php echo html_escape($user['address']['telephone']);?></span>
 									<?php endif;?>
-									<span class="sold_transac_add_state_region"><strong>State/Region:</strong> <?php echo $user['address']['stateregion']?></span>
-									<span class="sold_transac_add_city"><strong>City:</strong> <?php echo $user['address']['city'];?></span>
-									<span class="sold_transac_add_fulladd"><strong>Address:</strong> <?php echo html_escape($user['address']['fulladd']);?></span>
+									<span style="display:block;"></span>
+									<span class="tad_2"><strong>State/Region:</strong> <?php echo $user['address']['stateregion']?></span>
+									<span class="tad_2"><strong>City:</strong> <?php echo $user['address']['city'];?></span>
+									<span class="tad_3"><strong>Address:</strong> <?php echo html_escape($user['address']['fulladd']);?></span>
 									<?php if( $user['address']['lat']!=0 && $user['address']['lng']!=0 ):?>
 										<span class="tsold_viewmap" data-lat="<?php echo $user['address']['lat'];?>" data-lng="<?php echo $user['address']['lng'];?>">View Map</span>
 										<div class="map_modalcont" style="display:none;"></div>
