@@ -51,6 +51,10 @@
      AND id_cat = :cat_id ;
     </select>
 
+    <select id="getCategoryDetails">
+        SELECT id_cat,name, description, keywords, parent_id, is_main, sort_order from es_cat WHERE id_cat = :id
+    </select>
+    
     <select id="getParent">
         SELECT T2.id_cat, T2.name
         FROM (

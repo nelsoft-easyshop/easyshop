@@ -40,7 +40,8 @@ echo form_open('sell/edit/step2', $attributesForm);
             <div class="clear"></div>
             <div class="cat_sch_container">
  
-            <b>Search for category: &nbsp;</b><input type="text" class="box" id="cat_sch" autocomplete="off"><div class="cat_sch_loading"></div>
+            <b>Search for category: &nbsp;</b>
+            <input type="text" class="box" id="cat_sch" autocomplete="off"><div class="cat_sch_loading"></div>
             <div id="cat_search_drop_content" class="cat_sch_drop_content"></div>
             <?php if(!isset($product_id_edit)): ?>
                 <div class="draft_txt">

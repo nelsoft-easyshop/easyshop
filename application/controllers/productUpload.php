@@ -328,7 +328,7 @@ class productUpload extends MY_Controller
 
 			$product_id = $this->product_model->addNewProduct($product_title,$sku,$product_brief,$product_description,$keyword,$brand_id,$cat_id,$style_id,$member_id,$product_price,$product_condition,$otherCategory, $otherBrand);
             # product_id = is the id_product for the new item. if 0 no new item added process will stop
-            
+
             #ERROR TRACKING: 
             if(intval($product_id,10) === 0){
                 log_message('error', 'Add new: title=>'. $product_title);
@@ -1623,6 +1623,22 @@ class productUpload extends MY_Controller
         }
     }
     
+
+    
+    public function getAllChildren(){
+        $cat_arr = json_decode($this->input->get('cat_array'));
+        $level = 0;
+        $prev_cat_name ='';
+        foreach($cat_arr as $idx=>$id){
+            $response['cat_id'] = $id;
+            $response['name'] = $this->product_model->getCategoryDetails($id)['name'];
+            $response['node'] = $this->product_model->getDownLevelNode($id); # get all down level category based on selected parent category            
+            $response['level'] = $level;
+            $data[$idx] = $this->load->view('pages/product/product_upload_step1_view2',$response,TRUE);
+            $level++;
+        }
+        echo json_encode($data);
+    }
 
     private function es_img_resize($filename,$path_directory,$added_path,$dimension){
         $filename = strtolower($filename);

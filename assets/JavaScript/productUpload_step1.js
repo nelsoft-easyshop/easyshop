@@ -2,15 +2,7 @@
 
     var globalParent;
     var globalLevel; 
-    var scrollEvent = {
-        bool: false,
-        scrollLeft: 0,
-        reset : function (){
-            this.bool = 0;
-            this.scrollLeft = 0;
-        }
-    };
-    
+
     var focuslevel = 3;
     var maxscroll = 0;
     var cLevel = 0;
@@ -205,15 +197,8 @@
         if(nlevel > 2){
             if(nlevel == focuslevel){
                 $('.jcarousel-control-prev').removeClass('inactive');
-                var leftPos;
-                if(scrollEvent.bool){
-                    leftPos = scrollEvent.scrollLeft;
-                    scrollEvent.scrollLeft += 200;
-                }
-                else{
-                    leftPos = $('.jcarousel').scrollLeft();
-                    scrollEvent.scrollLeft = 0;
-                }
+                leftPos = $('.jcarousel').scrollLeft();
+
                 $(".jcarousel").animate({scrollLeft: leftPos + 200}, 400);
                 maxscroll = leftPos;
                 focuslevel = focuslevel + 1;
@@ -309,35 +294,49 @@
     
     /*
      *   Event action when any of the category search results is clicked.
-     *   Each ancestor of the selected category of is sequentially clicked.
-     *   Also enables scrollEvent.bool before running and disables it afterwards.
+     *   Re-factored on May 20, 2014: no longer required asynchronous = false     
      */
     
     $('#cat_search_drop_content').on('click', 'li.cat_result', function(){
         var parent_ids = eval('('+$(this).attr('data-parent')+')');
+        $('.cat_sch_drop_content').fadeOut('fast');
+        $(".product_sub_category .product_sub_items0").nextAll().remove();
+        $(".product_sub_category .product_sub_items0").remove();
+        $('li .select').removeClass('active');
         $('li .select').each(function(){
             var D = eval('(' + $(this).attr('data') + ')');
             if( parseInt(D.cat_id) === parent_ids[0]){
-                $(this).click();
+                $(this).addClass('active');
                 scrollToElement(this, '.main_product_category');
                 return false;
             }
         });
-        scrollEvent.bool = true;
-        var cnt = 0;
-        $.each(parent_ids, function(){
-            var id  = parent_ids.shift();
-            $('li.'+ id+' .select2.child').each(function(){
-                var D = eval('(' + $(this).attr('data') + ')');
-                if( parseInt(D.cat_id) === parent_ids[0]){
-                    $(this).click(); 
-                    scrollToElement(this, '.product_sub_items' +cnt);
-                    cnt++;
-                    return false;
-                }
-            });
+        var csrftoken = $("meta[name='csrf-token']").attr('content');
+        var csrfname = $("meta[name='csrf-name']").attr('content');
+        
+        $.ajax({
+            type: "GET",
+            url: config.base_url +  'productUpload/getAllChildren',
+            data: "cat_array="+ JSON.stringify(parent_ids) + "&"+csrfname+"=" + csrftoken,
+            dataType: "json",
+            cache: false,
+            success: function(d) {
+                $.each(d, function(index, value){
+                    parent_ids.shift();
+                    $(".product_sub_category").append(value);                  
+                    $("#storeValue").append(value);
+                    $(".product_sub_category .product_sub_items"+index+" li").not('.othercategory').each(function(){
+                        $this = $(this).find('a');
+                        var D = eval('(' + $this.attr('data') + ')');
+                        if(D.cat_id == parent_ids[0]){
+                            $this.addClass('active');
+                             scrollToElement(this, '.product_sub_items' + index);
+                            return false;
+                        }
+                    });
+                });
+            }
         });
-        scrollEvent.reset();
     });
         
     var currentRequest = null;
@@ -352,12 +351,12 @@
                 data: "data="+searchQuery+"&"+csrfname+"="+csrftoken, 
                 onLoading:jQuery(".cat_sch_loading").html('<img src="'+config.base_url+'assets/images/orange_loader_small.gif" />').show(),
                 beforeSend : function(){       
-                    $("#cat_search_drop_content").empty();
                     if(currentRequest != null) {
                         currentRequest.abort();
                     }
                 },
                 success: function(response) {
+                    $("#cat_search_drop_content").empty();
                     var obj = jQuery.parseJSON(response);
                     var html = '<ul>';
                     var data_content, data_id, cnt;
@@ -388,11 +387,18 @@
                     }
                     html += '</ul>';
                     $("#cat_search_drop_content").html(html);
-                    jQuery(".cat_sch_loading").hide();
+                    $("#cat_search_drop_content").fadeIn(150);
+                    jQuery(".cat_sch_loading").fadeOut('fast');
                 }
             });
         }
+        else{
+            $("#cat_search_drop_content").fadeOut('fast');
+            $("#cat_search_drop_content").empty();
+        }
     });
+
+
     
 });
     
@@ -415,42 +421,69 @@ $(document).ready(function() {
      */
     var obj = JSON.parse($('#edit_cat_tree').val());
     if(obj.length > 0){
+    
+    
+        var parent_ids = eval('('+$(this).attr('data-parent')+')');
+        $('li .select').removeClass('active');
         $('li .select').each(function(){
             var D = eval('(' + $(this).attr('data') + ')');
             if( parseInt(D.cat_id,10) === parseInt(obj[0].id_cat,10)){
-                $(this).click();
+                $(this).addClass('active');
                 scrollToElement(this, '.main_product_category');
                 return false;
             }
         });
-        var cnt = 0;
-        $.each(obj, function(){
-            var new_obj  = obj.shift();
-            $('li.'+ new_obj.id_cat  +' .select2.child').each(function(){
-                var D = eval('(' + $(this).attr('data') + ')');
-                if(typeof obj[0] !== 'undefined'){
-                    if( parseInt(D.cat_id) === parseInt(obj[0].id_cat,10)){
-                        $(this).click(); 
-                        scrollToElement(this, '.product_sub_items' +cnt);
-                        cnt++;
-                        return false;
-                    }
-                }
-            });
+        var csrftoken = $("meta[name='csrf-token']").attr('content');
+        var csrfname = $("meta[name='csrf-name']").attr('content');
+        var parent_ids = new Array();
+        $.each(obj, function(index, val){ 
+            parent_ids.push(val.id_cat)
+        });
+
+        $.ajax({
+            type: "GET",
+            url: config.base_url +  'productUpload/getAllChildren',
+            data: "cat_array="+ JSON.stringify(parent_ids) + "&"+csrfname+"=" + csrftoken,
+            dataType: "json",
+            cache: false,
+            success: function(d) {
+                $.each(d, function(index, value){
+                    parent_ids.shift();
+                    $(".product_sub_category").append(value);                  
+                    $("#storeValue").append(value);
+                    $(".product_sub_category .product_sub_items"+index+" li").not('.othercategory').each(function(){
+                        $this = $(this).find('a');
+                        var D = eval('(' + $this.attr('data') + ')');
+                        if(D.cat_id == parent_ids[0]){
+                            $this.addClass('active');
+                             scrollToElement(this, '.product_sub_items' + index);
+                            return false;
+                        }
+                    });
+                });
+            }
         });
     }
+    
 });
 
 
-$(document).ready(function() { 
 
-    $('#cat_sch').focus(function() {
-    $('#cat_search_drop_content').show();
-    $(document).bind('focusin.cat_sch_drop_content click.cat_sch_drop_content',function(e) {
-        if ($(e.target).closest('#cat_search_drop_content, #cat_sch').length) return;
-        $('#cat_search_drop_content').hide();
-        });
-     });
-    $('#cat_search_drop_content').hide();
+
+
+
+$(document).ready(function() { 
+    var srchdropcontent= $('#cat_search_drop_content');
+    
+    $('#cat_sch').focusin(function() {
+        if($('#cat_sch').val().length > 0){
+            srchdropcontent.fadeIn(150);
+        }
+    });
+
+    $('#cat_sch').focusout(function() {
+        srchdropcontent.fadeOut('fast');  
+    });
+
     
 });

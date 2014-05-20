@@ -78,6 +78,14 @@ class product_model extends CI_Model
 		return $row;
 	}
 
+    function getCategoryDetails($id){
+        $query = $this->sqlmap->getFilenameID('product','getCategoryDetails');
+		$sth = $this->db->conn_id->prepare($query);
+		$sth->bindParam(':id',$id);
+		$sth->execute();
+		$row = $sth->fetch(PDO::FETCH_ASSOC);
+		return $row;
+    }
 
 	function getAttributesByParent($parents) # get all attributes from all parents from to the last selected category
 	{
@@ -1391,52 +1399,6 @@ class product_model extends CI_Model
 		}
 	}
 
-        function addCategory($id,$name,$desc,$keyword,$sort_order,$is_main){
-            
-            $this->check_sort_order($id,$sort_order);
-            $query = $this->sqlmap->getFilenameID('product','addCategory');
-            
-            $sth = $this->db->conn_id->prepare($query);
-            
-            $sth->bindParam(':parent_id',$id, PDO::PARAM_INT);
-            $sth->bindParam(':name',$name);
-            $sth->bindParam(':description',$desc);
-            $sth->bindParam(':keywords',$keyword);
-            $sth->bindParam(':sort_order',$sort_order, PDO::PARAM_INT);
-            $sth->bindParam(':is_main',$is_main, PDO::PARAM_INT);
-            $sth->execute();
-            $data = $this->lastInsertData("es_cat",$id." AND id_cat > 1 ORDER BY sort_order ASC","parent_id");
-            
-            return $data;
-            
-        }
-        
-        function lastInsertData($tbl_name, $id, $field) {
-            $query = "SELECT * FROM $tbl_name WHERE $field = $id ";
-            $sth = $this->db->conn_id->prepare($query);
-            $sth->execute();
-
-            $row = $sth->fetchAll(PDO::FETCH_ASSOC);
-
-            return $row;
-        }
-        
-        function check_sort_order($id,$sort_order){
-            $query = "SELECT * FROM es_cat WHERE parent_id = $id AND id_cat > 1 AND `sort_order` >= $sort_order ORDER BY sort_order ASC;";
-            $sth = $this->db->conn_id->prepare($query);
-            $sth->execute();
-            $row = $sth->fetchAll(PDO::FETCH_ASSOC);
-            if(!empty($row)) : //sort_order exists
-                for($x=0;$x < sizeof($row);$x++) :
-                    $new_sort = $row[$x]['sort_order'] + 1;
-                    $query = "UPDATE `es_cat` SET `sort_order` = {$new_sort} WHERE `id_cat` = {$row[$x]['id_cat']};";
-                    $sth = $this->db->conn_id->prepare($query);
-                    $sth->execute();
-                endfor;
-            endif;
-        }
-	
-        
     public function getProductQuantity($product_id, $verbose = false){
         if($verbose){
             $query = $this->sqlmap->getFilenameID('product','getProductQuantityVerbose');
@@ -1544,7 +1506,6 @@ class product_model extends CI_Model
                 $xth->bindParam(':product_id',$product_id, PDO::PARAM_INT);
                 $xth->execute();
             }
-            
         }
     }
 
@@ -1945,7 +1906,7 @@ class product_model extends CI_Model
     	}
     	return $retvalue;
     }
-    
+     
     public function getShipmentInformation($product_id){
         $query = $this->sqlmap->getFilenameID('product','getShipmentInformation');
     	$sth = $this->db->conn_id->prepare($query);
