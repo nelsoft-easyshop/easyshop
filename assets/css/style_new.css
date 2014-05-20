@@ -593,7 +593,7 @@ span.seller-name .rating_criteria{
 .lnk_rec_item {
     background-color: #FFFFFF;
     border: 1px solid #E5E5E5;
-    display: inline-block;
+    display: table-cell;
 /*    float: left;*/
     height: 85px;
     max-height: 85px;
