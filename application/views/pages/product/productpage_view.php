@@ -338,16 +338,20 @@
           <ul>
             <?PHP foreach ($recommended_items as $row): ?>                
             <li>
-              <a href="<?=base_url()."item/".$row['slug'];?>">
+              
                 <span class="rec_item_container">
-                  <img class="rec_item_img" src="<?=base_url().$row['path'].'categoryview/'.$row['file']?>">
+                  <a href="<?=base_url()."item/".$row['slug'];?>" class="lnk_rec_item">
+                    <img class="rec_item_img" src="<?=base_url().$row['path'].'categoryview/'.$row['file']?>">
+                  </a>
                 </span>
                 <p>
-                  <?php echo html_escape($row['product']);?><br />
+                  <a href="<?=base_url()."item/".$row['slug'];?>">
+                    <span class="prod_rec_item"><?php echo html_escape($row['product']);?></span>
+                  </a><br />
                   <span class="price"> PHP <?=number_format($row['price'],2,'.',',');?></span>
 
                 </p>
-              </a>
+              
             </li>
             <?PHP endforeach; ?>
           </ul>
