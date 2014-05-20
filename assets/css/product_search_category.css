@@ -172,7 +172,7 @@ div.product-list {
 }
 
 .prod_img_container {
-  border:1px solid #e5e5e5;
+  /*border:1px solid #e5e5e5;*/
   display: table-cell;
   height: 220px;
   line-height: 220px;
