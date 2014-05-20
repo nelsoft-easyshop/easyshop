@@ -127,25 +127,26 @@
         focuslevel = 3; 
         cLevel = 0;
         $(".jcarousel").animate({scrollLeft: 0}, 0);
-        $(".product_sub_category .product_sub_items0").nextAll().remove();
-        $(".product_sub_category .product_sub_items0").remove();
+
         if($('#storeValue .parent'+catId).length == 0) {
             $.ajax({
                 onLoading:jQuery(".sub_cat_loading_container").html('<img src="'+config.base_url+'assets/images/orange_loader.gif" />').show(),
-                // async: false,
                 type: "POST",
                 url: config.base_url + action,
                 data: "cat_id=" + catId + "&level=" + level + "&name=" + name + "&"+csrfname+"=" + csrftoken,
                 dataType: "json",
                 cache: false,
                 success: function(d) {
+                    $(".product_sub_category .product_sub_items0").nextAll().remove();
+                    $(".product_sub_category .product_sub_items0").remove();
                     $(".product_sub_category").append(d);
                     $("#storeValue").append(d);
                     jQuery(".sub_cat_loading_container").fadeOut(600);
                 }
             });
         }else{
-             
+                $(".product_sub_category .product_sub_items0").nextAll().remove();
+                $(".product_sub_category .product_sub_items0").remove();
                 $(".add_category_submit").empty();
                 $(".add_category_submit").append('<input type="hidden" name="hidden_attribute" value="'+catId+'" class="hidden_attribute"><input class="proceed_form" id="proceed_form" type="submit" value="Proceed with '+name+'">');
            
@@ -167,11 +168,8 @@
         var csrftoken = $("meta[name='csrf-token']").attr('content');
         var csrfname = $("meta[name='csrf-name']").attr('content');
         $(".add_category_submit").empty();
-        $(".product_sub_category .product_sub_items" + D.level).nextAll().remove(); 
-        $(".product_sub_category .product_sub_items" + nlevel).nextAll().remove(); 
         if($('#storeValue .parent'+catId).length == 0){
             $.ajax({
-                // async: false,
                 type: "POST",
                 url: config.base_url +  action,
                 data: "cat_id=" + catId + "&level=" + nlevel + "&name=" + name + "&"+csrfname+"=" + csrftoken,
@@ -179,6 +177,8 @@
                 cache: false,
                 onLoading:$(".sub_cat_loading_container").html('<img src="'+config.base_url+'assets/images/orange_loader.gif" />').show(),
                 success: function(d) {
+                    $(".product_sub_category .product_sub_items" + D.level).nextAll().remove(); 
+                    $(".product_sub_category .product_sub_items" + nlevel).nextAll().remove(); 
                     $(".product_sub_category").append(d);
                     $("#storeValue").append(d);
                     $(".sub_cat_loading_container").fadeOut(600);
@@ -188,6 +188,10 @@
             var finalValue = $('#storeValue .parent'+catId).data('final');
             var finalValue = true;
             var clone = $('#storeValue .parent'+catId).clone();
+            
+            $(".product_sub_category .product_sub_items" + D.level).nextAll().remove(); 
+            $(".product_sub_category .product_sub_items" + nlevel).nextAll().remove(); 
+            
             $('.product_sub_category').append(clone);
             if(finalValue == true){
                 $(".add_category_submit").empty();
