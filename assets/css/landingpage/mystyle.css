@@ -103,6 +103,66 @@ body {
     font-size: 54px;
 }
 
+.lnk_homepage {
+    color: #494949;
+    display: inline-block;
+    font-size: 14px;
+    height: 30px;
+    line-height: 30px;
+    margin-bottom: 20px;
+    text-align: center;
+    width: 180px;
+
+    color: #ffffff;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+    background-color: #faa732;
+    *background-color: #f89406;
+    background-image: -moz-linear-gradient(top, #fbb450, #f89406);
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#fbb450), to(#f89406));
+    background-image: -webkit-linear-gradient(top, #fbb450, #f89406);
+    background-image: -o-linear-gradient(top, #fbb450, #f89406);
+    background-image: linear-gradient(to bottom, #fbb450, #f89406);
+    background-repeat: repeat-x;
+    border-color: #f89406 #f89406 #ad6704;
+    border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fffbb450', endColorstr='#fff89406', GradientType=0);
+   filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+}
+
+.lnk_homepage img {
+    margin-right: 10px;
+}
+
+.lnk_homepage:hover {
+    text-decoration: none;
+}
+
+.lnk_homepage:hover,
+.lnk_homepage:focus,
+.lnk_homepage:active,
+.lnk_homepage.active,
+.lnk_homepage.disabled,
+.lnk_homepage[disabled] {
+    color: #fff;
+    background-color: #ff7200;
+    *background-color: #ff7200;
+    background-image: -moz-linear-gradient(top, #ff7200, #ff7200);
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ff7200), to(#ff7200));
+    background-image: -webkit-linear-gradient(top, #ff7200, #ff7200);
+    background-image: -o-linear-gradient(top, #ff7200, #ff7200);
+    background-image: linear-gradient(to bottom, #ff7200, #ff7200);
+    background-repeat: repeat-x;
+    border-color: #ff7200 #ff7200 #ff7200;
+    border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff7200', endColorstr='#ff7200', GradientType=0);
+   filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+}
+
+.lnk_homepage:active,
+.lnk_homepage.active {
+  background-color: #ff7200 \9;
+}
+
 .c_ylw {
     color: #fff600;   
 }
