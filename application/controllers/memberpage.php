@@ -179,6 +179,7 @@ class Memberpage extends MY_Controller
 				'active_products' => $user_products['active'],
 				'deleted_products' => $user_products['deleted'],
                 'sold_count' => $user_products['sold_count'],
+				'last_dashboard_item_id' => $user_products['last_id']
                 ); 
 		$data = array_merge($data, $this->memberpage_model->getLocationLookup());
 		$data = array_merge($data,$this->memberpage_model->get_member_by_id($uid));
@@ -472,7 +473,7 @@ class Memberpage extends MY_Controller
 		$vendordetails = $this->memberpage_model->getVendorDetails($selleruname);
 		$data['title'] = 'Vendor Profile | Easyshop.ph';
 		$data['my_id'] = (empty($session_data['member_id']) ? 0 : $session_data['member_id']);
-		$data = array_merge($data, $this->fill_header());	
+		$data = array_merge($data, $this->fill_header());
 		if($vendordetails){
             $this->load->view('templates/header_topnavsolo', $data);
 			$sellerid = $vendordetails['id_member'];
@@ -483,7 +484,8 @@ class Memberpage extends MY_Controller
 					'active_products' => $user_products['active'],
 					'deleted_products' => $user_products['deleted'],
                     'sold_count' => $user_products['sold_count'],
-					)); 
+					'last_dashboard_item_id' => $user_products['last_id']
+					));
 			$data['transaction'] = $this->memberpage_model->getTransactionDetails($sellerid);
 			$data['allfeedbacks'] = $this->memberpage_model->getFeedback($sellerid);
 			$this->load->view('pages/user/vendor_view', $data);
@@ -674,6 +676,39 @@ class Memberpage extends MY_Controller
 		}
 	}	
 
+	function getMoreUserItems($string = "")
+	{
+		$lastid = $this->input->post('lastid');
+		
+		if($string == "vendor"){
+			$activeView = 'vendor_activeproduct_view';
+			$deletedView = 'memberpage_deletedproduct_view';
+			$member_id = $this->input->post('mid');
+		}else{
+			$activeView = 'memberpage_activeproduct_view';
+			$deletedView = 'memberpage_deletedproduct_view';
+			$member_id = $this->session->userdata('member_id');
+		}
+		
+		$data = $this->memberpage_model->getUserItems($member_id, $lastid);
+		
+		$parseData = array(
+			'active_products' => $data['active'],
+			'deleted_products' => $data['deleted']
+		);
+		
+		$jsonData = array(
+			'active' => $this->load->view('pages/user/'.$activeView, $parseData, true),
+			'deleted' => $this->load->view('pages/user/'.$deletedView, $parseData, true),
+			'active_count' => $data['active_count'],
+			'deleted_count' => $data['deleted_count'],
+			'sold_count' => $data['sold_count']
+		);
+		
+		echo json_encode($jsonData);
+		
+	}
+	
 }
 
 /* End of file memberpage.php */

@@ -1,5 +1,80 @@
 
 $(document).ready(function(){
+	var csrftoken = $("meta[name='csrf-token']").attr('content');
+    var csrfname = $("meta[name='csrf-name']").attr('content');
+	var lastid = parseInt($('#last_dashboard_item_id').val());
+
+	$.post(config.base_url+'memberpage/getMoreUserItems',{csrfname:csrftoken, lastid:lastid}, function(data){
+		try{
+			var obj = jQuery.parseJSON(data);
+		}
+		catch(e){
+			alert('Failed to retrieve user product list.');
+			window.location.reload(true);
+			return false;
+		}
+		// Updated Item count display
+		var TotalItems = parseInt($('.db_total_items:first').val()) + obj['active_count'] + obj['deleted_count'];
+		var ActiveItems = parseInt($('.db_active_items:first').val()) + obj['active_count'];
+		var SoldItems = parseInt($('.db_sold_items:first').val()) + obj['sold_count'];
+		var DeletedItems = parseInt($('.db_deleted_items:first').text()) + obj['deleted_count'];
+		$('.db_total_items').val(TotalItems);
+		$('.db_active_items').val(ActiveItems);
+		$('.db_sold_items').val(SoldItems);
+		$('.db_deleted_items').text(DeletedItems);
+		$('.db_active_items').text(ActiveItems);
+		
+		
+		// Update display of active products
+		var activeItems = $('#active_items');
+		var activeCount = parseInt(activeItems.find('div.post_items_content').length);
+		var activeRaw = $.parseHTML(obj.active); // contains TextNodes
+		var deletedItems = $('#deleted_items');
+		var deletedCount = parseInt(deletedItems.find('div.post_items_content').length);
+		var deletedRaw = $.parseHTML(obj.deleted);
+		var newdiv = "<div class='paging' style='display:none;'></div>";
+		
+		var activeContent = $.map(activeRaw, function(val,key){if(val.nodeType == 1){return val;}});
+		var deletedContent = $.map(deletedRaw, function(val,key){if(val.nodeType == 1){return val;}});
+		
+		if(activeContent.length > 0){
+			if(activeCount == 0){
+				activeItems.find('p:first').remove();
+				activeItems.append($(newdiv).css('display','block'));
+			}
+			$.each(activeContent, function(k,v){
+				$(v).attr('data-order', activeCount);
+				$(v).find('form').append('<input type="hidden" name="'+csrfname+'" value="'+csrftoken+'">');
+				activeItems.find('div.paging:last').append(v);
+				activeCount++;
+				if(activeCount%10 == 0){
+					activeItems.append(newdiv);
+				}
+			});
+			$('#pagination_active').jqPagination('option', 'max_page', Math.ceil( (activeCount===0 ? 10:activeCount) /10) );
+		}
+		
+		if(deletedContent.length > 0){
+			if(deletedCount == 0){
+				deletedItems.find('p:first').remove();
+				deletedItems.append($(newdiv).css('display','block'));
+			}
+			$.each(deletedContent, function(k,v){
+				$(v).attr('data-order', deletedCount);
+				$(v).find('form').append('<input type="hidden" name="'+csrfname+'" value="'+csrftoken+'">');
+				deletedItems.find('div.paging:last').append(v);
+				deletedCount++;
+				if(deletedCount%10 == 0){
+					deletedItems.append(newdiv);
+				}
+			});
+			$('#pagination_deleted').jqPagination('option', 'max_page', Math.ceil( (deletedCount===0 ? 10:deletedCount) /10));
+		}
+		
+	});
+});
+
+$(document).ready(function(){
 	progress_update('');
 	handle_fields('');
 	

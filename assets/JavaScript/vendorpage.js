@@ -1,3 +1,54 @@
+$(document).ready(function(){
+	var csrftoken = $("meta[name='csrf-token']").attr('content');
+    var csrfname = $("meta[name='csrf-name']").attr('content');
+	var lastid = parseInt($('#last_dashboard_item_id').val());
+	var mid = parseInt($('#mid').val());
+
+	$.post(config.base_url+'memberpage/getMoreUserItems/vendor',{csrfname:csrftoken, lastid:lastid, mid:mid}, function(data){
+		try{
+			var obj = jQuery.parseJSON(data);
+		}
+		catch(e){
+			alert('Failed to retrieve user product list.');
+			window.location.reload(true);
+			return false;
+		}
+		// Updated Item count display
+		var TotalItems = parseInt($('.db_total_items:first').val()) + obj['active_count'];
+		var ActiveItems = parseInt($('.db_active_items:first').val()) + obj['active_count'];
+		var SoldItems = parseInt($('.db_sold_items:first').val()) + obj['sold_count'];
+		$('.db_total_items').val(TotalItems);
+		$('.db_active_items').val(ActiveItems);
+		$('.db_sold_items').val(SoldItems);
+		$('.db_active_items').text(ActiveItems);
+		
+		// Update display of active products
+		var activeItems = $('#active_items');
+		var activeCount = parseInt(activeItems.find('div.post_items_content').length);
+		var activeRaw = $.parseHTML(obj.active); // contains TextNodes
+		var newdiv = "<div class='paging' style='display:none;'></div>";
+		
+		var activeContent = $.map(activeRaw, function(val,key){if(val.nodeType == 1){return val;}});
+		
+		if(activeContent.length > 0){
+			if(activeCount == 0){
+				activeItems.find('p:first').remove();
+				activeItems.append($(newdiv).css('display','block'));
+			}
+			$.each(activeContent, function(k,v){
+				$(v).attr('data-order', activeCount);
+				activeItems.find('div.paging:last').append(v);
+				activeCount++;
+				if(activeCount%10 == 0){
+					activeItems.append(newdiv);
+				}
+			});
+			$('#pagination_active').jqPagination('option', 'max_page', Math.ceil( (activeCount===0 ? 10:activeCount) /10) );
+		}
+		
+	});
+});
+
 
 /*************** Personal Profile Dashboard circular progress bar **************/
 $(function($) {

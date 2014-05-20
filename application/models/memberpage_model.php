@@ -344,14 +344,26 @@ class memberpage_model extends CI_Model
 		
 	}
 	
-	function getUserItems($member_id) 	#Retrieves user items to be displayed on dashboard
+	function getUserItems($member_id, $lastid = 0) 	#Retrieves user items to be displayed on dashboard
 	{
-		$query = $this->sqlmap->getFilenameID('product','getUserItems');
-		$sth = $this->db->conn_id->prepare($query);
-		$sth->bindParam(':id',$member_id);
-		$sth->execute();
-		$rows = $sth->fetchAll(PDO::FETCH_ASSOC);
-		$data = array('active'=>array(),'deleted'=>array(), 'sold_count'=>0);
+		if($lastid === 0){
+			$query = $this->sqlmap->getFilenameID('product','getUserItems');
+			$sth = $this->db->conn_id->prepare($query);
+			$sth->bindParam(':id',$member_id);
+			$sth->execute();
+			$rows = $sth->fetchAll(PDO::FETCH_ASSOC);
+			$data = array('active'=>array(),'deleted'=>array(), 'sold_count'=>0);
+		}else{
+			$query = $this->sqlmap->getFilenameID('product','getMoreUserItems');
+			$sth = $this->db->conn_id->prepare($query);
+			$sth->bindParam(':id',$member_id);
+			$sth->bindParam(':last_id',$lastid);
+			$sth->execute();
+			$rows = $sth->fetchAll(PDO::FETCH_ASSOC);
+			$data = array('active'=>array(),'deleted'=>array(), 'sold_count'=>0);
+		}
+		
+		$data['last_id'] = end($rows)['id_product'];
 		
 		foreach($rows as $key=>$row){
 			$query = $this->sqlmap->getFilenameID('product','getParent');
@@ -398,6 +410,10 @@ class memberpage_model extends CI_Model
             $data['sold_count'] += $row['sold'];
                 
 		}			
+		
+		$data['active_count'] = count($data['active']);
+		$data['deleted_count'] = count($data['deleted']);
+		
 		return $data;
 	}
 	

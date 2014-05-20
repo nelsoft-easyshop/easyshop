@@ -95,16 +95,16 @@
 			<div class="progress_bar_panel">
 				<div>
 					<h3>Total Posted Items</h3>
-					<input class="items" data-width="150" data-fgColor="#FF8400" data-max="1000" data-thickness=".1" data-angleOffset="180" data-readOnly=true data-displayPrevious=true value="<?php echo count($active_products)+count($deleted_products);?>">
+					<input class="items db_total_items" data-width="150" data-fgColor="#FF8400" data-max="1000" data-thickness=".1" data-angleOffset="180" data-readOnly=true data-displayPrevious=true value="<?php echo count($active_products)+count($deleted_products);?>">
 				</div>
 				<div>
 					<h3>Active Items</h3>
-					<input class="items" data-width="150" data-fgColor="#ff4400" data-max="1000" data-thickness=".1" data-angleOffset="180" data-readOnly=true data-displayPrevious=true value="<?php echo count($active_products);?>">
+					<input class="items db_active_items" data-width="150" data-fgColor="#ff4400" data-max="1000" data-thickness=".1" data-angleOffset="180" data-readOnly=true data-displayPrevious=true value="<?php echo count($active_products);?>">
 					
 				</div>
 				<div>
 					<h3>Total Sold Items</h3>
-					<input class="items" data-width="150" data-fgColor="#7ad014" data-max="1000" data-thickness=".1" data-angleOffset="180" data-readOnly=true data-displayPrevious=true value="<?php echo $sold_count;?>">
+					<input class="items db_sold_items" data-width="150" data-fgColor="#7ad014" data-max="1000" data-thickness=".1" data-angleOffset="180" data-readOnly=true data-displayPrevious=true value="<?php echo $sold_count;?>">
 				</div>
 			</div>
              
@@ -156,8 +156,8 @@
 <div class="clear"></div>
 <div>
 	<ul class="idTabs post_items">
-		<li><a href="#active_items">Active Items <span><?php echo count($active_products);?></span></a></li>
-		<li><a href="#deleted_items">Deleted Items<span><?php echo count($deleted_products);?></span></a></li>
+		<li><a href="#active_items">Active Items <span class="db_active_items"><?php echo count($active_products);?></span></a></li>
+		<li><a href="#deleted_items">Deleted Items<span class="db_deleted_items"><?php echo count($deleted_products);?></span></a></li>
 		<li><a href="#dashboard-feedbacks">Feedbacks <span><?php echo $allfeedbacks['afbcount'];?></span></a></li>
 		<!-- <li><input type="text" value="search"><input type="submit" value="Submit"></li> -->
 	</ul>
@@ -166,11 +166,11 @@
 
 <?php $items_per_page = 10; ?>
 
+<!-- Echoes last fetched product ID for dashboard item list -->
+<input id="last_dashboard_item_id" type="hidden" value="<?php echo $last_dashboard_item_id;?>">
+
 <div class="dashboard_table" id="active_items">
 	<h2>Active Items</h2>
-	<?php if(count($active_products) == 0):?>
-	<p><strong>No items on sale.</strong></p>
-<?php else:?>
 	
 	<div class="pagination" id="pagination_active">
 		<a href="#" class="first" data-action="first">&laquo;</a>
@@ -179,7 +179,10 @@
 		<a href="#" class="next" data-action="next">&rsaquo;</a>
 		<a href="#" class="last" data-action="last">&raquo;</a>
 	</div>
-
+	
+	<?php if(count($active_products) == 0):?>
+		<p><strong>No items on sale.</strong></p>
+	<?php else:?>
 	<div class="post_item_srch_container">
 		<input type="text" class="box sch_box" placeholder="Search" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Search'" />
 		<span class="span_bg sch_btn"></span>
@@ -291,10 +294,7 @@
 
 <div class="dashboard_table" id="deleted_items">
 	<h2>Deleted Items</h2>
-	<?php if(count($deleted_products) == 0):?>
-	<p><strong>No deleted items.</strong></p>
-<?php else:?>
-
+	
 	<div class="pagination" id="pagination_deleted">
 		<a href="#" class="first" data-action="first">&laquo;</a>
 		<a href="#" class="previous" data-action="previous">&lsaquo;</a>
@@ -303,6 +303,10 @@
 		<a href="#" class="last" data-action="last">&raquo;</a>
 	</div>
 	
+	<?php if(count($deleted_products) == 0):?>
+		<p><strong>No deleted items.</strong></p>
+	<?php else:?>
+
 	<div class="post_item_srch_container">
 		<input type="text" class="box sch_box" placeholder="Search" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Search'" />
 		<span class="span_bg sch_btn"></span>
