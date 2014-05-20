@@ -556,32 +556,55 @@ span.seller-name .rating_criteria{
 .recommendation_list ul li {
     border-bottom: 1px dotted #CECECE;
     clear: both;
+    min-height: 87px;
     padding: 8px 0;
 }
 
 .recommendation_list ul li p {
-	display: inline-block;
-	width: 77px;
-	word-wrap: break-word;
+    display: table-cell;
+    line-height: 16px;
+    padding-left: 5px;
+    vertical-align: middle;
+    width: 95px;
+    word-wrap: break-word;
+}
+
+.prod_rec_item {
+    display: inline-block;
+    font-size: 11px;
+    width: 95px;
 }
 
 .recommendation_list img {
-    max-width:105px;
-    max-height:105px;
+    max-width:85px;
+    max-height:85px;
     width: auto;
     height: auto;
 }
 
 .rec_item_container {
-	background-color: #fff;
-	text-align: center;
-	width: 105px;
-	height: 105px;
-	display: inline-block;
-	vertical-align: top;
-	margin-right: 5px;
+    display: table-cell;
+/*    float: left;*/
+    text-align: center;
+    vertical-align: top;
+/*	margin-right: 5px;*/
 }
 
+.lnk_rec_item {
+    background-color: #FFFFFF;
+    border: 1px solid #E5E5E5;
+    display: inline-block;
+/*    float: left;*/
+    height: 85px;
+    max-height: 85px;
+    text-align: center;
+    vertical-align: top;
+    width: 85px;	
+}
+
+.price {
+	color: #f18200;
+}
 
 
 #tabs-2  h3 {
