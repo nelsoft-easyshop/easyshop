@@ -64,8 +64,8 @@
                
                    <p class="header_sub hs_top">
                       <span>Sign up and enjoy selling online for free! </span>
-                      Registered sellers will be invited to the EasyShop.ph Pre-Launch 
-                      Event on 17 May 2014, wherein freebies and prizes await you.
+                      Let us help you bring your products to the right customers. 
+                      Manage your business anytime, anywhere!
                    </p>
                    <span class="img_scroll">
 					<a href="<?=base_url()?>home" class="lnk_homepage well-small" ><img src="<?=base_url()?>/assets/images/landingpage/img_home.png">Visit Homepage</a>

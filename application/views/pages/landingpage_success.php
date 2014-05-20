@@ -50,9 +50,7 @@
                        <?php echo $content; ?>
                     </p>
                     <p class="p_success txt_success2">
-                      Easyshop.ph is inviting you to join its Pre-Launch Event on 17 May 2014
-                       at The Green Lounge Events Place. An RSVP will be sent out to the registered
-                        sellers via email on 9 May 2014. See you there!
+                       You have successfully registered with Easyshop.ph. Verify your e-mail to begin selling your products online.
                     </p>
                     <p class="text-center">
                       <span class="btn btn-warning btn-large"><a href="<?=base_url()?>sell/step1" style="color:#fff;">Sell Now</a></span>
