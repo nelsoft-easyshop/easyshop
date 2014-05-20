@@ -1,4 +1,12 @@
 <!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<!--[if lt IE 7 ]> <html lang="en" class="ie6">    <![endif]-->
+<!--[if IE 7 ]>    <html lang="en" class="ie7">    <![endif]-->
+<!--[if IE 8 ]>    <html lang="en" class="ie8">    <![endif]-->
+<!--[if IE 9 ]>    <html lang="en" class="ie9">    <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!-->
+<html lang="en">
+<!--<![endif]-->
     <head>
     <link rel="shortcut icon" href="<?php echo base_url()?>assets/images/favicon.ico" type="image/x-icon"/>
 <meta property="og:title" content="EasyShop.ph" />
@@ -60,7 +68,7 @@
                       Event on 17 May 2014, wherein freebies and prizes await you.
                    </p>
                    <span class="img_scroll">
-					<a href="<?=base_url()?>home" ><img src="<?=base_url()?>/assets/images/landingpage/sample.png"></a>
+					<a href="<?=base_url()?>home" class="lnk_homepage well-small" ><img src="<?=base_url()?>/assets/images/landingpage/img_home.png">Visit Homepage</a>
 					<!--<a id="gotoHome" class="btn btn-warning btn-large" href="<?=base_url()?>home" >Visit home page</a>-->
 				   </span>
                 </div>
