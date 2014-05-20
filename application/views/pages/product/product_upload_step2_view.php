@@ -1,7 +1,7 @@
 <link type="text/css" href="<?=base_url()?>assets/css/sell_item.css?ver=1.0" rel="stylesheet" />
 <link type="text/css" href="<?=base_url()?>assets/css/product_upload_tutorial.css?ver=1.0" rel="stylesheet" />
 <!-- Start of simple slider-->
-<link rel="stylesheet" href="<?=base_url()?>assets/css/normalize.min.css" />
+<!--<link rel="stylesheet" href="--><?//=base_url()?><!--assets/css/normalize.min.css" />-->
 <link rel="stylesheet" href="<?=base_url()?>assets/css/ion.rangeSlider.css" />
 <link rel="stylesheet" href="<?=base_url()?>assets/css/ion.rangeSlider.skinFlat.css" />
 <script src="<?=base_url()?>assets/js/src/vendor/ion.rangeSlider.min.js"></script>
