@@ -59,7 +59,10 @@
                       Registered sellers will be invited to the EasyShop.ph Pre-Launch 
                       Event on 17 May 2014, wherein freebies and prizes await you.
                    </p>
-                   <span class="img_scroll"><img src="<?=base_url()?>/assets/images/landingpage/img_scroll.png"></span>
+                   <span class="img_scroll">
+					<a href="<?=base_url()?>home" ><img src="<?=base_url()?>/assets/images/landingpage/sample.png"></a>
+					<!--<a id="gotoHome" class="btn btn-warning btn-large" href="<?=base_url()?>home" >Visit home page</a>-->
+				   </span>
                 </div>
             </div>
         </div>
