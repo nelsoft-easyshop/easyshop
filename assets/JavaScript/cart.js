@@ -18,6 +18,7 @@ function sum(obj){
         $(obj).val(mx);
         value = mx;
     }
+    
     $.ajax({
         async:false,
         url: config.base_url + "cart/change_qty",
@@ -35,6 +36,15 @@ function sum(obj){
             $(obj).attr("mx",data['maxqty']);
         }
     });
+}
+
+function isNumberKey(evt)
+{
+   var charCode = (evt.which) ? evt.which : event.keyCode
+   if (charCode > 31 && (charCode < 48 || charCode > 57))
+      return false;
+
+   return true;
 }
 function del(id){
     var csrftoken = $("meta[name='csrf-token']").attr('content');

@@ -59,7 +59,7 @@
                     </div>
                     <div>
                         <span>
-                            <input id="<?PHP echo $row['rowid']; ?>" type="text" class="inpt_qty" mx="<?PHP echo $row['maxqty'];?>" onchange="sum(this);" maxlength="3" value="<?PHP echo $row['qty']; ?>">
+                            <input id="<?PHP echo $row['rowid']; ?>" onkeypress="return isNumberKey(event);" type="text" class="inpt_qty" mx="<?PHP echo $row['maxqty'];?>" onchange="sum(this);" maxlength="3" value="<?PHP echo $row['qty']; ?>">
                         </span>
 			<span>
 			    <p>Availability : <?PHP echo $row['maxqty']; ?></p>

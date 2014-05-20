@@ -1,5 +1,11 @@
 <link type="text/css" href="<?=base_url()?>assets/css/sell_item.css?ver=1.0" rel="stylesheet" />
 <link type="text/css" href="<?=base_url()?>assets/css/product_upload_tutorial.css?ver=1.0" rel="stylesheet" />
+<!-- Start of simple slider-->
+<link rel="stylesheet" href="<?=base_url()?>assets/css/normalize.min.css" />
+<link rel="stylesheet" href="<?=base_url()?>assets/css/ion.rangeSlider.css" />
+<link rel="stylesheet" href="<?=base_url()?>assets/css/ion.rangeSlider.skinFlat.css" />
+<script src="<?=base_url()?>assets/js/src/vendor/ion.rangeSlider.min.js"></script>
+<!--  END OF simple slider-->
 <div class="wrapper">
 
 <div class="clear"></div>
@@ -512,12 +518,28 @@
           <tr>
               <td width="110px" class="border-left">Base Price <font color="red"> *</font></td>
               <td class="border-right" colspan="3"> &#8369; <input type="text" autocomplete="off" name="prod_price" id="prod_price" placeholder="Enter price (0.00)" value="<?php echo (isset($product_details['price']))?number_format($product_details['price'],2,'.',','):'';?>">
+                
                 <a class="tooltips" href="javascript:void(0)">
                   <img src="<?= base_url() ?>assets/images/icon_qmark.png" alt="">
                   <span>Set the base price for your listing. You may set the shipment fee separately in the following step.
                   </span>
                 </a>
+                <br><a id="discnt_btn">Add discount price</a>
               </td>
+          </tr>
+          <tr>
+            <td width="110px" class="border-left"></td>
+            <td>
+              <div id="dsc_frm">
+                <nobr>
+                  <label id="lbl_discount">Discount Percentage</label><input type="text" id="slider_val" placeholder="0%" maxlength="3">
+                </nobr>     
+                <input type="text" id="range_1" name="range_1" value=""/>           
+                <nobr>
+                <label id="lbl_realPrc">Discounted Price : &#8369;</label><input type="text" id="discountedP" name="discountedP" value="" disabled="disable"/>
+                </nobr> 
+              </div>
+            </td>
           </tr>
           <!-- end of Price Content -->
 
@@ -749,7 +771,7 @@
 <script type='text/javascript' src='<?=base_url()?>assets/JavaScript/js/jquery.jqpagination.min.js'></script>
 <script type="text/javascript">
 $(document).ready(function(){
- 
+
   <?php
   if(preg_match('/(?i)msie [4-9]/',$_SERVER['HTTP_USER_AGENT']))
   {
@@ -2005,8 +2027,52 @@ $(document).ready(function(){
         $('#edit_step1').submit();
     });
 
+    $("#range_1").ionRangeSlider({
+        min: 0,
+        max: 100,
+        type: 'single',
+        step: 1,
+        postfix: "%",
+        prettify: true,
+        hasGrid: true,
+        onChange: function (obj) {        // callback is called after slider load and update
+          var value = $(".irs-single").html();
+          $("#slider_val").val(value);
+          get_discPrice();
+      }
+    });
+    $("#slider_val").on('change',function(){
+      get_discPrice();
+    });
+    $("#discnt_btn").on("click",function(){
+      $("#dsc_frm").toggle();      
+    });
+    $("#dsc_frm").hide();
 });
-
+//  START discount compt
+  function get_discPrice() {
+    var prcnt = $("#slider_val").val().replace("%",'');
+    var act_price =$("#prod_price").val().replace(/,/g,'');
+    
+    if (prcnt > 100) {
+      prcnt = 100;
+    }
+    if (act_price == 0 || act_price == null ) {      
+      validateRedTextBox("#prod_price");
+      return false;
+    }
+    $("#range_1").ionRangeSlider("update", {
+        from: prcnt
+    });
+    $("#slider_val").val("");
+    $("#slider_val").val(prcnt+"%");
+    discounted = act_price * (prcnt/100);
+    var v = parseFloat(act_price - discounted);
+    tempval = Math.abs(v);
+    disc_price = ReplaceNumberWithCommas(tempval.toFixed(2));
+    $("#discountedP").val(disc_price);
+  }
+//  END Discount compt
 
     function removeSelected(row){
         delete arraySelected[row];
