@@ -240,7 +240,7 @@
 	<div id="dialog_preference_name" style="display:none;">
 		<label for="preference_name">Name: </label>
 		<input type="text" id="preference_name" name="preference_name" maxlength="30">
-		<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" class="loading" style="display:none;vertical-align:middle;padding-left:20px;"/>
+		<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" class="loading" style="display:none;vertical-align:middle; float: right;"/>
 	</div>
 	 
       <!-- start of shipping summary -->
