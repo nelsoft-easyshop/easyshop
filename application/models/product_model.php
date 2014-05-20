@@ -1448,7 +1448,7 @@ class product_model extends CI_Model
     }
     
     
-    public function deleteShippingInfomation($product_id, $keep_product_item_id){
+    public function deleteShippingInfomation($product_id, $keep_product_item_id = array()){
         $query = "SELECT id_shipping FROM es_product_shipping_head WHERE product_id = :product_id";
         $sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':product_id',$product_id, PDO::PARAM_INT);
@@ -1510,7 +1510,7 @@ class product_model extends CI_Model
     }
 
     
-    public function deleteProductQuantityCombination($product_id, $keep_product_item_id){
+    public function deleteProductQuantityCombination($product_id, $keep_product_item_id=array()){
     
         if(count($keep_product_item_id) == 0){
             $query = "SELECT id_product_item FROM es_product_item WHERE product_id = ?";
