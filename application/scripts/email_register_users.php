@@ -38,7 +38,7 @@
             'from_email' => 'noreply@easyshop.ph',
             'from_name' => 'Easyshop.ph',
             'recipients' => array(
-                    'janz.stephen@gmail.com'
+                    'jerry.pereda@easyshop.ph'
             )
     );
 
