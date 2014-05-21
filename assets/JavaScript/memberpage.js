@@ -1216,13 +1216,6 @@ $(document).ready(function(){
 		var cancelbtn = $(this).parent('div').siblings('div.shipping_comment_cont').find('span.shipping_comment_cancel');
 		var textarea = $(this).parent('div').siblings('div.shipping_comment_cont').find('textarea');
 		
-		if( $(this).hasClass('sc_bought') ){
-			if( $.trim(textarea.val()).length <= 0 ){
-				alert('No shipping comments provided by seller');
-				return false;
-			}
-		}
-		
 		$(this).parent('div').siblings('div.shipping_comment_cont').modal({
 			escClose: false,
 			onShow: function(){

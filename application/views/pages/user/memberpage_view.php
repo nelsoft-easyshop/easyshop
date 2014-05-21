@@ -1400,22 +1400,25 @@
 										<span class="trans_alert transac_cod">Cash on delivery</span>
 									<?php endif;?>
 								<?php endif;?>
-								<span class="shipping_comment sc_bought">View Shipping Comment</span>
+								<?php if( strlen(trim($product['shipping_comment'])) > 0 ):?>
+									<span class="shipping_comment">View Shipping Comment</span>
+								<?php endif;?>
 							</div>
 							
 							<div class="clear"></div>
-							
-							<div class="shipping_comment_cont" style="display:none;">
-								<h2>Shipping Details</h2>
-								<div>
-									<label for="courier">Courier: </label>
-									<input type="text" name="courier" value="<?php echo html_escape($product['courier']);?>" disabled ><br/>
-									<label for="tracking_num">Tracking Number: </label>
-									<input type="text" name="tracking_num" value="<?php echo html_escape($product['tracking_num']);?>" disabled ><br/>
-									<label for="comment">* Comments: </label>
-									<textarea name="comment" cols="55" rows="5" disabled ><?php echo html_escape($product['shipping_comment']); ?></textarea>								
+							<?php if( strlen(trim($product['shipping_comment'])) > 0 ):?>
+								<div class="shipping_comment_cont" style="display:none;">
+									<h2>Shipping Details</h2>
+									<div>
+										<label for="courier">Courier: </label>
+										<input type="text" name="courier" value="<?php echo html_escape($product['courier']);?>" disabled ><br/>
+										<label for="tracking_num">Tracking Number: </label>
+										<input type="text" name="tracking_num" value="<?php echo html_escape($product['tracking_num']);?>" disabled ><br/>
+										<label for="comment">* Comments: </label>
+										<textarea name="comment" cols="55" rows="5" disabled ><?php echo html_escape($product['shipping_comment']); ?></textarea>								
+									</div>
 								</div>
-							</div>
+							<?php endif?>
 						</div>
 						<?php endforeach;?>
 					</div>
