@@ -194,8 +194,22 @@
         </ul>
         <div class="clear"></div>
         <div id="tabs-1">
-          <p> <strong>Description: </strong><div class='html_description'><?php echo html_purify($product['description']);?> </div></p>
-          <ul>
+          <p> <strong>Description: </strong>
+                <div class='html_description'>
+                    <?php  
+                        $clean_desc = html_purify($product['description']);
+                        $doc = new DOMDocument();
+                        //@ = error message suppressor, just to be safe
+                        @$doc->loadHTML(clean_desc);
+                        $tags = $doc->getElementsByTagName('a');
+                        foreach($tags as $a){
+                            $a->setAttribute('rel', 'nofollow');
+                        }
+                        echo @$doc->saveHTML($doc);
+                    ?>
+                </div></p>
+
+            <ul>
             <li><strong>Brand: </strong><?php echo html_escape(ucfirst(strtolower($product['brand_name'])));?></li>
             <li><strong>Additional description: </strong><?php echo html_escape($product['brief']);?></li>
             <li><strong>Condition: </strong><?php echo html_escape($product['condition']);?></li>
