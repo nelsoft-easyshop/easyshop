@@ -1354,25 +1354,7 @@
 							<?php echo form_close();?>
 						<?php endif;?>
 
-						<?php if($transact['transac_stat'] == 0):?>
-							<?php if($product['status'] == 0):?>
-								<?php
-									$attr = array('class'=>'transac_response');
-									echo form_open('',$attr);
-								?>
-								<input class = "transac_response_btn orange_btn3" value="Forward payment to seller" type="submit">
-									<input type="hidden" name="buyer_response" value="<?php echo $opk;?>">
-									<input type="hidden" name="transaction_num" value="<?php echo $tk;?>">
-									<input type="hidden" name="invoice_num" value="<?php echo $transact['invoice_no'];?>">
-									<?php echo form_close();?>
-										<?php elseif($product['status'] == 1):?>
-											<span class="trans_alert transac_paid">Paid</span>
-										<?php elseif($product['status'] == 2):?>
-											<span class="trans_alert transac_pay_return">Payment returned by seller</span>
-										<?php elseif($product['status'] == 3):?>
-											<span class="trans_alert transac_cod">Cash on delivery</span>
-							<?php endif;?>
-						<?php endif;?>
+						
 					</div>
 					<!-- End of dragonpay button-->
 				</div>
@@ -1399,7 +1381,27 @@
 								<p>Quantity:<span class="fm1 f16"><?php echo $product['order_quantity']?></span></p>
 								<p>Total:<span class="fm1 f16">Php<?php echo number_format($product['price'],2,'.',',');?></span></p>
 							</div>
-							
+							<div>
+								<?php if($transact['transac_stat'] == 0):?>
+							<?php if($product['status'] == 0):?>
+								<?php
+									$attr = array('class'=>'transac_response');
+									echo form_open('',$attr);
+								?>
+								<input class = "transac_response_btn orange_btn3" value="Forward payment to seller" type="submit">
+									<input type="hidden" name="buyer_response" value="<?php echo $opk;?>">
+									<input type="hidden" name="transaction_num" value="<?php echo $tk;?>">
+									<input type="hidden" name="invoice_num" value="<?php echo $transact['invoice_no'];?>">
+									<?php echo form_close();?>
+										<?php elseif($product['status'] == 1):?>
+											<span class="trans_alert transac_paid">Paid</span>
+										<?php elseif($product['status'] == 2):?>
+											<span class="trans_alert transac_pay_return">Payment returned by seller</span>
+										<?php elseif($product['status'] == 3):?>
+											<span class="trans_alert transac_cod">Cash on delivery</span>
+							<?php endif;?>
+						<?php endif;?>
+							</div>
 							<div class="clear"></div>
 						</div>
 					<?php endforeach;?>
