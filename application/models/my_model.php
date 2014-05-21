@@ -20,7 +20,7 @@ class my_model extends CI_Model
 		return $row;
 	}
 	
-	function updateSlug($id, $slug)
+	function updateProductSlug($id, $slug)
 	{
 		$query = "UPDATE `es_product` SET slug = :slug WHERE id_product = :product_id";
     	$sth = $this->db->conn_id->prepare($query);
@@ -31,6 +31,26 @@ class my_model extends CI_Model
 		return $result;
 	}
 	
+	function getNoSlugCategory()
+	{
+		$query = "SELECT id_cat, TRIM(LOWER(`name`)) as `name` FROM `es_cat` WHERE slug = '' ";
+    	$sth = $this->db->conn_id->prepare($query);
+        $sth->execute();
+        $row = $sth->fetchAll(PDO::FETCH_ASSOC);
+        
+		return $row;
+	}
+	
+	function updateCategorySlug($id, $slug)
+	{
+		$query = "UPDATE `es_cat` SET slug = :slug WHERE id_cat = :cat_id";
+    	$sth = $this->db->conn_id->prepare($query);
+		$sth->bindParam(':slug',$slug ,PDO::PARAM_STR);
+		$sth->bindParam(':cat_id',$id ,PDO::PARAM_STR);
+        $result = $sth->execute();
+        
+		return $result;
+	}
 	
 }
 

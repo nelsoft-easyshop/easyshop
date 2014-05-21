@@ -19,13 +19,15 @@ class product extends MY_Controller
      */
     
     function categorySearch($categoryId = 0,$url_string="string")
+	//function categorySearch($url_string="")
     {
-
+		
     	$start = 0;
     	$count = 0;
     	$perPage = $this->per_page;
     	$operator = " = ";
     	$data =  $this->fill_header();	
+		//$categoryId = $this->product_model->getCategoryIdBySlug($url_string);
     	$checkifexistcategory = $this->product_model->checkifexistcategory($categoryId);
     	$sortString = ""; 
     	$conditionArray = array();

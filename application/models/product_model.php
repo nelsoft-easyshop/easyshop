@@ -1928,7 +1928,22 @@ class product_model extends CI_Model
         return $data;  
     }
     
-
+	public function getCategoryIdBySlug($slug)
+	{
+		$query = "SELECT id_cat FROM es_cat WHERE slug = :slug";
+    	$sth = $this->db->conn_id->prepare($query);
+    	$sth->bindParam(':slug', $slug, PDO::PARAM_STR);
+    	$result = $sth->execute();
+		$rows = $sth->fetchAll(PDO::FETCH_ASSOC);
+        
+		if( count($rows) == 1 ){
+			$id = $rows[0]['id_cat'];
+		} else {
+			$id = 0;
+		}
+		
+        return $id;  
+	}
         
     
 }

@@ -44,6 +44,7 @@ $route['404_override'] = 'home/pagenotfound';
 
 # CATEGORY
 $route['(?i)category/(:num)/(:any)'] = 'product/categorySearch/$1/$2'; # ryan vasquez
+#$route['(?i)cat/(:any)'] = 'product/categorySearch/$1'; # janz serafico
 $route['(?i)category/loadproduct'] = 'product/loadOtherCategorySearch'; # ryan vasquez
 $route['(?i)category/all'] = 'product/categories_all'; # ryan vasquez
 
