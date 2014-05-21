@@ -1240,6 +1240,7 @@ span.secure_payment {
 	display: inline-block;
 /*	padding:3px;*/
 	height: 50px;
+	margin-bottom: 3px;
 	width: 60px;
 	vertical-align: middle;
 }
