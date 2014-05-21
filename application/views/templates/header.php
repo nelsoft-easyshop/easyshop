@@ -104,7 +104,7 @@
               <!-- <li><a href="<?=base_url()?>home/under_construction">Training Center</a></li> -->
             </ul>
           </li>
-          <li class="top_nav_main"><span class="span_bg cart"></span>Shopping Cart <span class="cart_no"><?PHP echo isset($total_items)?$total_items:0; ?></span> items
+          <li class="top_nav_main"><span class="span_bg cart"></span><span class="cart_no"><?PHP echo isset($total_items)?$total_items:0; ?></span>Shopping Cart
             <ul>
               <li><a href="<?php echo base_url()."cart/"; ?>">View my Cart</a></li>
             </ul>
