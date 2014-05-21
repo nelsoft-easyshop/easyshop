@@ -226,7 +226,7 @@
 			<div class="post_item_button">
 				<?php echo form_open('sell/edit/step2'); ?>
 				<input type="hidden" name="p_id" value ="<?php echo $active_product['id_product'];?>" /> 
-				<input class="manage_lnk span_bg" type = "submit" value="Edit Item"> </input>
+				<input class="manage_lnk edit_lnk span_bg" type = "submit" value="Edit Item"> </input>
 				<?php echo form_close(); ?> 
 				<span class="border_white">|</span>
 				
@@ -347,7 +347,7 @@
 				<?php echo form_open('product/changeDelete'); ?>
 				<input type="hidden" name="p_id" value ="<?php echo $deleted_product['id_product'];?>" /> 
 				<input type="hidden" name="action" value ="restore" /> 
-				<input class="manage_lnk" type = "submit" value="Restore Item"> </input>
+				<input class="manage_lnk restore_lnk span_bg" type = "submit" value="Restore Item"> </input>
 				<?php echo form_close(); ?>
 			</div>
 		</div>
@@ -1074,7 +1074,7 @@
 	<p>
 	<!--	Any changes to banking information after the 15th day of the month will not be in effect until the following month's payment. -->
 	</p>
-	<hr style="display: block; height: 1px; border: 0; border-top: 1px solid #ccc; margin: 1em 0; padding: 0;" />
+	
 	<div align="right">
 		<input type="button" id="abi_btn" class="blue_btn" name="abi_btn" value="+ Add Bank" />
 	</div>
@@ -1132,13 +1132,12 @@
 				echo form_open('',$attr);
 			?>
 				<div style="width:inherit;">
-					<div id="bi-right" style="float:right; width:200px;">
-							<div class="post_item_button">
-								<input type="button" name="bictr<?php echo $rows; ?>" id="bictr<?php echo $rows; ?>" value="Edit">
+					<div id="bi-right" style="float:right; width:200px; text-align:right;">
+							<div class="post_item_button payment_btns">
+								<input type="button" name="bictr<?php echo $rows; ?>" id="bictr<?php echo $rows; ?>" class="edit_lnk span_bg" value="Edit">
 								<input type="button" name="sv_bictr<?php echo $rows; ?>" id="sv_bictr<?php echo $rows; ?>" value="Save" style="display:none">				 	
-								<span class="border_white">|</span>
 								<input type="button" name="cn_bictr<?php echo $rows; ?>" id="cn_bictr<?php echo $rows; ?>" value="Cancel" style="display:none">
-								<input type="button" name="del_bictr<?php echo $rows; ?>" id="del_bictr<?php echo $rows; ?>"value="Delete">
+								<input type="button" name="del_bictr<?php echo $rows; ?>" id="del_bictr<?php echo $rows; ?>" class="delete_lnk span_bg"  value="Delete">
 								<input type="hidden" name="bi_id_bictr<?php echo $rows; ?>" id="bi_id_bictr<?php echo $rows; ?>" value ="<?php echo $billing_info['id_billing_info'];?>" />
 							</div>
 							<?php if($billing_info['is_default'] == 0):?>
@@ -1331,23 +1330,51 @@
 		<?php foreach($transaction['buy'] as $tk=>$transact):?>
 		<div class="transac-container">
 			<div class="transac_title">
-				<h4><span class="transac_content bi_trans_wrapper"><strong>Invoice #:</strong>  <?php echo $transact['invoice_no'];?></span>
+				<div class="transac_title_table">
+					<div class="transac_title_col1">
+						<span><strong>Invoice No.:</strong></span>
+						<span><?php echo $transact['invoice_no'];?></span>
+					</div>
+					<div class="transac_title_col2">
+						<span><strong>Date:</strong></span>
+						<span class="transac_title_date"><?php echo $transact['dateadded']?></span>
+					</div>
 					<!-- If payment method is dragon pay-->
-					<div class="dp_container">
-					<?php if($transact['payment_method'] == 2 && $transact['transac_stat'] == 99):?>
-						<?php $attr = array('class'=>'transac_response');
-							echo form_open('',$attr);
-						?>
-							<input type="submit" class="transac_response_btn orange_btn3 dp_btn" name="dragonpay_update_btn" value="Confirm Dragonpay Payment">
-							<input type="hidden" name="invoice_num" value="<?php echo $transact['invoice_no'];?>">
-							<input type="hidden" name="transaction_num" value="<?php echo $tk;?>">
-							<input type="hidden" name="dragonpay" value="1">
-						<?php echo form_close();?>
-					<?php endif;?>
+					<div class="transac_title_col3">
+						<?php if($transact['payment_method'] == 2 && $transact['transac_stat'] == 99):?>
+							<?php $attr = array('class'=>'transac_response');
+								echo form_open('',$attr);
+							?>
+								<input type="submit" class="transac_response_btn orange_btn3" name="dragonpay_update_btn" value="Confirm Dragonpay Payment">
+								<input type="hidden" name="invoice_num" value="<?php echo $transact['invoice_no'];?>">
+								<input type="hidden" name="transaction_num" value="<?php echo $tk;?>">
+								<input type="hidden" name="dragonpay" value="1">
+							<?php echo form_close();?>
+						<?php endif;?>
+
+						<?php if($transact['transac_stat'] == 0):?>
+							<?php if($product['status'] == 0):?>
+								<?php
+									$attr = array('class'=>'transac_response');
+									echo form_open('',$attr);
+								?>
+								<input class = "transac_response_btn orange_btn3" value="Forward payment to seller" type="submit">
+									<input type="hidden" name="buyer_response" value="<?php echo $opk;?>">
+									<input type="hidden" name="transaction_num" value="<?php echo $tk;?>">
+									<input type="hidden" name="invoice_num" value="<?php echo $transact['invoice_no'];?>">
+									<?php echo form_close();?>
+										<?php elseif($product['status'] == 1):?>
+											<span class="trans_alert transac_paid">Paid</span>
+										<?php elseif($product['status'] == 2):?>
+											<span class="trans_alert transac_pay_return">Payment returned by seller</span>
+										<?php elseif($product['status'] == 3):?>
+											<span class="trans_alert transac_cod">Cash on delivery</span>
+							<?php endif;?>
+						<?php endif;?>
 					</div>
 					<!-- End of dragonpay button-->
-					<span class="transac_title_date"><?php echo $transact['dateadded']?></span>
 				</div>
+			</div>
 				<div class="transac_prod_wrapper">
 					
 					<div class="transac-product-container">
@@ -1359,7 +1386,7 @@
 							<div>
 								<p class="transac_prod_name">
 									<a href="<?php echo base_url();?>item/<?php echo $product['slug'];?>"><?php echo html_escape($product['name']);?></a><br />
-									<small>Features and Specifications:</small>
+									Features and Specifications:<br />
 									<?php if( count($product['attr'] !== 0) ):?>
 										<?php foreach($product['attr'] as $temp):?>
 											<span><strong><?php echo html_escape($temp['field']);?>:</strong> <?php echo html_escape($temp['value']);?></span>
@@ -1370,27 +1397,7 @@
 								<p>Quantity:<span class="fm1 f16"><?php echo $product['order_quantity']?></span></p>
 								<p>Total:<span class="fm1 f16">Php<?php echo number_format($product['price'],2,'.',',');?></span></p>
 							</div>
-							<div>
-								<?php if($transact['transac_stat'] == 0):?>
-									<?php if($product['status'] == 0):?>
-										<?php
-											$attr = array('class'=>'transac_response');
-											echo form_open('',$attr);
-										?>
-											<input class = "transac_response_btn orange_btn3" value="Forward payment to seller" type="submit">
-											<input type="hidden" name="buyer_response" value="<?php echo $opk;?>">
-											<input type="hidden" name="transaction_num" value="<?php echo $tk;?>">
-											<input type="hidden" name="invoice_num" value="<?php echo $transact['invoice_no'];?>">
-										<?php echo form_close();?>
-									<?php elseif($product['status'] == 1):?>
-										<span class="trans_alert transac_paid">Paid</span>
-									<?php elseif($product['status'] == 2):?>
-										<span class="trans_alert transac_pay_return">Payment returned by seller</span>
-									<?php elseif($product['status'] == 3):?>
-										<span class="trans_alert transac_cod">Cash on delivery</span>
-									<?php endif;?>
-								<?php endif;?>
-							</div>
+							
 							<div class="clear"></div>
 						</div>
 					<?php endforeach;?>
@@ -1524,7 +1531,9 @@
 					<?php foreach($transact['products'] as $opk=>$product):?>
 					<div class="sold_prod_container transac-product-container">
 						<span class="img_transac_prod">
-							<img src="<?=base_url()?><?php echo $product['product_image_path'];?>">
+							<span class="img_transac_prod_con">
+								<img src="<?=base_url()?><?php echo $product['product_image_path'];?>">
+							</span>
 						</span>
 						<div>
 							<p class="transac_prod_name">
