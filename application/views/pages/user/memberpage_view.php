@@ -341,7 +341,7 @@
 	<div class="post_item_content_right">
 		<div class="product_title_container">
 			<p class="post_item_product_title">
-				<a href="<?=base_url();?>item/<?php echo $deleted_product['slug'];?>"><?php echo html_escape($deleted_product['name']);?></a>
+				<?php echo html_escape($deleted_product['name']);?>
 			</p>
 			<div class="post_item_button">
 				<?php echo form_open('product/changeDelete'); ?>
