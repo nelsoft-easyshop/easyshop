@@ -20,9 +20,19 @@
       <div class="clear"></div>
      
       <div class="product_upload_success">
-        <p><img src="<?=base_url()?>assets/images/img_success.png">You have <strong>successully</strong> uploaded <span>1 new item</span> <br />
-		 <a href="<?php echo base_url().'item/'.$slug; ?>">Click here to view</a> </p> 
-         <!-- You can now view the new item added by clicking the link (Click here to view) -->
+        
+        <p>
+            <img src="<?=base_url()?>assets/images/img_success.png">
+                <?php if(!isset($is_edit)): ?>
+                    You have <strong>successfully</strong> uploaded <span>1 new item</span>
+                <?php else: ?>   
+                    You have <strong>successfully</strong> edited your listing for <span><?php echo html_escape($productname);?></span>. 
+                <?php endif; ?>  
+            <br />
+            <a href="<?php echo base_url().'item/'.$slug; ?>">Click here to view</a>
+        </p> 
+         
+         
       </div>
     </div>
   </div>

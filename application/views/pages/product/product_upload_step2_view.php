@@ -587,13 +587,18 @@
             </div> 
             <?php echo form_close();?>
 
-              <?php 
-              $attributesForm = array('id' => 'hidden_form',
-                'name'=>'hidden_form');
-              echo form_open('sell/step3', $attributesForm);
-              ?>
-              <input type="hidden" name="prod_h_id" id="prod_h_id"> 
-              <?php echo form_close(); ?>
+            <?php 
+            $attributesForm = array('id' => 'hidden_form',
+            'name'=>'hidden_form');
+            echo form_open('sell/step3', $attributesForm);
+            ?>
+                <input type="hidden" name="prod_h_id" id="prod_h_id"> 
+
+                <?php if(isset($is_edit)): ?>
+                    <input type="hidden" name="is_edit" value="true">
+                <?php endif; ?>
+
+            <?php echo form_close(); ?>
 
             </div>
            

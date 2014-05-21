@@ -376,6 +376,9 @@
 		  <input type="hidden" name="prod_h_id" id="prod_h_id" value="<?php echo $product_id;?>">
           <input type="hidden" name="prod_billing_id" id="prod_billing_id" value="0">
           <input type="checkbox" name="allow_cod" id="allow_cod" style="display:none">
+          <?php if(isset($is_edit)): ?>
+                <input type="hidden" name="is_edit" value="true">
+          <?php endif; ?>
 	 <?php echo form_close();?>
      
      <?php echo form_open('sell/preview', array('id'=>'nonmodal_preview'));?>
