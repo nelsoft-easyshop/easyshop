@@ -1,4 +1,4 @@
-
+/**	Populate product item display **/
 $(document).ready(function(){
 	var csrftoken = $("meta[name='csrf-token']").attr('content');
     var csrfname = $("meta[name='csrf-name']").attr('content');
@@ -10,7 +10,7 @@ $(document).ready(function(){
 		}
 		catch(e){
 			alert('Failed to retrieve user product list.');
-			window.location.reload(true);
+			//window.location.reload(true);
 			return false;
 		}
 		// Updated Item count display
@@ -34,49 +34,53 @@ $(document).ready(function(){
 		var deletedRaw = $.parseHTML(obj.deleted);
 		var newdiv = "<div class='paging' style='display:none;'></div>";
 		
-		var activeContent = $.map(activeRaw, function(val,key){if(val.nodeType == 1){return val;}});
-		var deletedContent = $.map(deletedRaw, function(val,key){if(val.nodeType == 1){return val;}});
-		
-		if(activeContent.length > 0){
-			if(activeCount == 0){
-				activeItems.find('p:first').remove();
-				activeItems.append($(newdiv).css('display','block'));
-			}
-			$.each(activeContent, function(k,v){
-				$(v).attr('data-order', activeCount);
-				$(v).find('form').append('<input type="hidden" name="'+csrfname+'" value="'+csrftoken+'">');
-				activeItems.find('div.paging:last').append(v);
-				activeCount++;
-				if(activeCount%10 == 0){
-					activeItems.append(newdiv);
+		if(activeRaw){
+			var activeContent = $.map(activeRaw, function(val,key){if(val.nodeType == 1){return val;}});
+			if(activeContent.length > 0){
+				if(activeCount == 0){
+					activeItems.find('p:first').remove();
+					activeItems.append($(newdiv).css('display','block'));
 				}
-			});
-			$('#pagination_active').jqPagination('option', 'max_page', Math.ceil( (activeCount===0 ? 10:activeCount) /10) );
+				$.each(activeContent, function(k,v){
+					$(v).attr('data-order', activeCount);
+					$(v).find('form').append('<input type="hidden" name="'+csrfname+'" value="'+csrftoken+'">');
+					activeItems.find('div.paging:last').append(v);
+					activeCount++;
+					if(activeCount%10 == 0){
+						activeItems.append(newdiv);
+					}
+				});
+				$('#pagination_active').jqPagination('option', 'max_page', Math.ceil( (activeCount===0 ? 10:activeCount) /10) );
+			}
 		}
 		
-		if(deletedContent.length > 0){
-			if(deletedCount == 0){
-				deletedItems.find('p:first').remove();
-				deletedItems.append($(newdiv).css('display','block'));
-			}
-			$.each(deletedContent, function(k,v){
-				$(v).attr('data-order', deletedCount);
-				$(v).find('form').append('<input type="hidden" name="'+csrfname+'" value="'+csrftoken+'">');
-				deletedItems.find('div.paging:last').append(v);
-				deletedCount++;
-				if(deletedCount%10 == 0){
-					deletedItems.append(newdiv);
+		if(deletedRaw){
+			var deletedContent = $.map(deletedRaw, function(val,key){if(val.nodeType == 1){return val;}});
+			if(deletedContent.length > 0){
+				if(deletedCount == 0){
+					deletedItems.find('p:first').remove();
+					deletedItems.append($(newdiv).css('display','block'));
 				}
-			});
-			$('#pagination_deleted').jqPagination('option', 'max_page', Math.ceil( (deletedCount===0 ? 10:deletedCount) /10));
+				$.each(deletedContent, function(k,v){
+					$(v).attr('data-order', deletedCount);
+					$(v).find('form').append('<input type="hidden" name="'+csrfname+'" value="'+csrftoken+'">');
+					deletedItems.find('div.paging:last').append(v);
+					deletedCount++;
+					if(deletedCount%10 == 0){
+						deletedItems.append(newdiv);
+					}
+				});
+				$('#pagination_deleted').jqPagination('option', 'max_page', Math.ceil( (deletedCount===0 ? 10:deletedCount) /10));
+			}
 		}
-		
 	});
 });
 
 $(document).ready(function(){
 	progress_update('');
 	handle_fields('');
+	
+	$.modal.defaults.persist = true;
 	
 	$('.address_dropdown, .disabled_country').chosen({width:'200px'});
 	
@@ -1201,6 +1205,81 @@ $(document).ready(function(){
 		return false;
 	});
 	
+	$('span.shipping_comment').on('click', function(){
+		var textarea = $(this).parent('div').siblings('div.shipping_comment_cont').children('textarea');
+		var input = $(this).parent('div').siblings('div.shipping_comment_cont').children('input[type="text"]');
+		
+		$(this).parent('div').siblings('div.shipping_comment_cont').modal({
+			escClose: false,
+			onShow: function(){
+				textarea.val( htmlDecode(textarea.attr('data-value')) );
+				input.prop('value', input.attr('value'));
+				this.setPosition();
+			},
+			onClose: function(){
+				$.modal.close();
+			}
+		});
+	});
+	
+	$('.shipping_comment_submit').on('click', function(){
+		var form = $(this).closest('form.shipping_details');
+		var textarea = $(this).siblings('textarea');
+		var editbtn = $(this).siblings('.shipping_comment_edit');
+		var cancelbtn = $(this).siblings('.shipping_comment_cancel');
+		var input = $(this).siblings('input[type="text"]');
+		
+		if( $.trim(textarea.val()).length > 0 ){
+			$(this).attr('disabled', true);
+			$(this).val('Saving...');
+			$.post(config.base_url+'memberpage/addShippingComment', form.serializeArray(), function(data){
+				$(this).attr('disabled', false);
+				$(this).val('Save');
+				
+				try{
+					var obj = jQuery.parseJSON(data);
+				}
+				catch(e){
+					alert('An error was encountered while processing your data. Please try again later.');
+					window.location.reload(true);
+					return false;
+				}
+				
+				if(obj.result === 'success'){
+					input.attr('value', input.prop('value'));
+					textarea.attr('data-value', htmlDecode(textarea.val()));
+					
+					editbtn.show();
+					cancelbtn.hide();
+					$.modal.close();
+				}else{
+					alert(obj.error);
+				}
+			});
+		} else {
+			textarea.effect('pulsate',{times:3},800);
+		}
+		return false;
+	});
+	
+	$('.shipping_comment_edit').on('click', function(){
+		$(this).siblings('input[type="text"],textarea').attr('disabled', false);
+		$(this).hide();
+		$(this).siblings('.shipping_comment_cancel').show();
+	});
+	
+	$('.shipping_comment_cancel').on('click', function(){
+		$(this).siblings('input[type="text"],textarea').attr('disabled', true);
+		var input = $(this).siblings('input[type="text"]');
+		var textarea = $(this).siblings('textarea');
+		
+		
+		input.prop('value', input.attr('value'));
+		textarea.attr('data-value', htmlDecode(textarea.val()));
+		
+		$(this).hide();
+		$(this).siblings('.shipping_comment_edit').show();
+	});
 });
 
 

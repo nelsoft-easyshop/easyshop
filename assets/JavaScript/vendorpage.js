@@ -28,24 +28,24 @@ $(document).ready(function(){
 		var activeRaw = $.parseHTML(obj.active); // contains TextNodes
 		var newdiv = "<div class='paging' style='display:none;'></div>";
 		
-		var activeContent = $.map(activeRaw, function(val,key){if(val.nodeType == 1){return val;}});
-		
-		if(activeContent.length > 0){
-			if(activeCount == 0){
-				activeItems.find('p:first').remove();
-				activeItems.append($(newdiv).css('display','block'));
-			}
-			$.each(activeContent, function(k,v){
-				$(v).attr('data-order', activeCount);
-				activeItems.find('div.paging:last').append(v);
-				activeCount++;
-				if(activeCount%10 == 0){
-					activeItems.append(newdiv);
+		if(activeRaw){
+			var activeContent = $.map(activeRaw, function(val,key){if(val.nodeType == 1){return val;}});
+			if(activeContent.length > 0){
+				if(activeCount == 0){
+					activeItems.find('p:first').remove();
+					activeItems.append($(newdiv).css('display','block'));
 				}
-			});
-			$('#pagination_active').jqPagination('option', 'max_page', Math.ceil( (activeCount===0 ? 10:activeCount) /10) );
-		}
-		
+				$.each(activeContent, function(k,v){
+					$(v).attr('data-order', activeCount);
+					activeItems.find('div.paging:last').append(v);
+					activeCount++;
+					if(activeCount%10 == 0){
+						activeItems.append(newdiv);
+					}
+				});
+				$('#pagination_active').jqPagination('option', 'max_page', Math.ceil( (activeCount===0 ? 10:activeCount) /10) );
+			}
+		}		
 	});
 });
 
