@@ -360,19 +360,9 @@ class productUpload extends MY_Controller
 				$i++;
 			}
             
-			#image directory
-			$path_directory = './assets/product/'.$product_id.'_'.$member_id.'_'.$date.'/';
-			$other_path_directory = $path_directory.'other/';
-			# creating new directory for each product
-			if(!mkdir($path_directory)) {  
-				echo '{"e":"0","d":"There was a problem. \n Please try again! - Error[0010]"}'; 
-				exit();
-			}   
-			if(!mkdir($other_path_directory)) {  
-				echo '{"e":"0","d":"There was a problem. \n Please try again! - Error[0012]"}'; 
-				exit();
-			}   
- 
+            $path_directory = './assets/product/'.$product_id.'_'.$member_id.'_'.$date.'/';
+            $other_path_directory = $path_directory.'other/';
+        
 			#initializing iamge attributes
 			$this->upload->initialize(array( 
 				"upload_path" => $path_directory,
@@ -387,6 +377,17 @@ class productUpload extends MY_Controller
                 
 			if($product_id > 0) # id_product is 0 means no item inserted. the process will stop.
 			{
+                #image directory
+                # creating new directory for each product
+                if(!mkdir($path_directory)) {  
+                    echo '{"e":"0","d":"There was a problem. \n Please try again! - Error[0010]"}'; 
+                    exit();
+                }   
+                if(!mkdir($other_path_directory)) {  
+                    echo '{"e":"0","d":"There was a problem. \n Please try again! - Error[0012]"}'; 
+                    exit();
+                }   
+            
 				if ($this->upload->do_multi_upload("files")){
                     $file_data = $this->upload->get_multi_upload_data();
 					#starting of uploading
