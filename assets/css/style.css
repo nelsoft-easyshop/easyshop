@@ -4047,11 +4047,12 @@ div.feedback_container {
     min-height: 110px;
 /*    padding-right: 10px;*/
     text-align: right;
-    width: 265px;
+    width: 220px;
 }
 
 .feedback_container p {
 	font-style: italic;
+	word-wrap:break-word;
 }
 
 .transac-feedback-container {
@@ -4063,7 +4064,7 @@ div.feedback_container {
     padding: 5px;
     position: absolute;
     text-align: left;
-    width: 252px;
+    width: 211px;
     z-index: 4;
 }
 
@@ -4074,7 +4075,11 @@ div.feedback_container {
     font-family: arial;
     font-size: 12px;
     padding: 5px;
-    width: 240px;
+    width: 200px;
+}
+
+.transac-feedback-container span {
+
 }
 
 .transac-feedback-btn {
@@ -4134,9 +4139,11 @@ div.sold_prod_container {
 
 .transac-product-container > div {
 /*    margin-bottom: 10px;*/
-    min-height: 110px;
 /*    border-bottom: 1px dotted #cecece;*/
-   	padding-bottom: 10px;
+    border-bottom: 1px dotted #CECECE;
+    margin-bottom: 10px;
+    min-height: 110px;
+    padding-bottom: 10px;
 }
 
 .transac_response_btn {
@@ -4162,9 +4169,9 @@ box-shadow:         inset 0px -10px 12px -8px rgba(255, 255, 255, 0.75);
 
 .trans_alert {
     display: inline-block;
+    line-height: 35px;
     margin-left: 10px;
     min-width: 100px;
-    padding: 8px;
     text-align: center;
     -webkit-border-radius: 3px;
        -moz-border-radius: 3px;
@@ -4194,14 +4201,16 @@ box-shadow:         inset 0px -10px 12px -8px rgba(255, 255, 255, 0.75);
 	border:1px solid #313131;
 }
 
+.img_transac_prod_con {
+	float: left;
+	margin-right: 10px;
+}
+
 .img_transac_prod {
     background-color: #FFFFFF;
     border: 1px solid #EAE8E8;
     display: table-cell;
-    float: left;
     height: 60px;
-    margin-bottom: 15px;
-    margin-right: 20px;
     text-align: center;
     vertical-align: middle;
     width: 60px;
@@ -4218,7 +4227,7 @@ box-shadow:         inset 0px -10px 12px -8px rgba(255, 255, 255, 0.75);
 .transac_prod_name {
 	font-weight: bold;
 	display: inline-block;
-	min-height: 70px;
+/*	min-height: 70px;*/
 	width: 420px;
 }
 
@@ -4227,7 +4236,12 @@ box-shadow:         inset 0px -10px 12px -8px rgba(255, 255, 255, 0.75);
 }
 
 .transac_prod_name span {
+	display: block;
 	font-weight: normal;
+}
+
+.feat_and_specs_items {
+	word-wrap: break-word;
 }
 
 .transac_title {
@@ -4266,10 +4280,6 @@ box-shadow:         inset 0px -10px 12px -8px rgba(255, 255, 255, 0.75);
 
 .transac_title_col3 {
 	text-align: right;
-}
-
-.transac_prod_name small {
-	display: block;
 }
 
 .transac_content span {
@@ -4351,7 +4361,7 @@ box-shadow:         inset 0px -10px 12px -8px rgba(255, 255, 255, 0.75);
 
 .transac-product-container {
 	float: left;
-    width: 493px;
+    width: 530px;
 /*    margin-bottom: 10px;*/
 }
 
@@ -4359,16 +4369,95 @@ box-shadow:         inset 0px -10px 12px -8px rgba(255, 255, 255, 0.75);
     float: right;
 }
 
-.transac-product-container:last-child {
+.info_transac_prod_con {
+	display: inline-block;
+}
+
+.title_top_transac_table span {
+	display: table-cell;
+	vertical-align: middle;
+}
+
+.title_top_transac_col1 {
+	width: 200px;
+	padding-right: 17px;
+}
+
+.title_top_transac_col1 a {
+	color: #f18200;
+	font-size: 14px;
+	font-weight: bold;
+}
+
+.title_top_transac_col2 {
+	width: 85px;
+}
+
+.title_top_transac_col3 {
+	width: 155px;
+}
+
+.title_top_transac_col2 span,
+.title_top_transac_col3 span {
+	display: block;
+	font-size: 14px;
+    font-weight: bold;
+}
+
+.title_top_transac_col2 span {
+	margin-left: 40px;
+}
+
+.title_top_transac_col3 span {
+	margin-left: 30px;
+}
+
+.transac_bought_con {
+    background-color: #EFEEEE;
+    border: 1px solid #FFFFFF;
+    border-radius: 3px;
+    margin: 5px 0;
+    padding: 10px 5px;
+    width: 420px;
+
+    -webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+}
+
+.transac_bought_con > span {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.transac_bought_con span:first-child {
+	padding-right: 5px;
+}
+
+.transac_bought_con a {
+    display: inline-block;
+    width:155px;
+    word-wrap: break-word;
+}
+
+.transac_response {
+    display: inline-block;
+    float: right;
+}
+
+.transac_response input {
+	line-height: 35px;
+}
+
+/*.transac-product-container:last-child {
 	border-bottom: none;
 }
 
 .transac-product-container span + div p {
 	margin-bottom: 10px;
-}
+}*/
 
-.transac-product-container span + div p span  {
-/*	display: inline-block;*/
+/*.transac-product-container span + div p span  {
+	display: inline-block;////
 	padding: 0 5px;
 	word-wrap:break-word;
 }
@@ -4397,7 +4486,7 @@ box-shadow:         inset 0px -10px 12px -8px rgba(255, 255, 255, 0.75);
 .transac-product-container span + div p + p + p span {
 		color: #f18200;
 }
-
+*/
 .feedb-star{
 	display:inline;
 }
@@ -5252,8 +5341,11 @@ margin-right: 10px;
 }
 
 .shipping_comment{
-	cursor:pointer;
-	color: #0191C8;
+    color: #0191C8;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 11px;
+    padding-top: 10px;
 }
 
 .shipping_comment_cont{
