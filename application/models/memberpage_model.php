@@ -780,16 +780,7 @@ class memberpage_model extends CI_Model
 		return $rows;	
 	}		
     
-       
-    function getBillingInfo($data){
-		$query = $this->sqlmap->getFilenameID('product','getBillinginfo');
-		$sth = $this->db->conn_id->prepare($query);
-		$sth->bindParam(':member_id',$data);
-		$sth->execute();
-		$rows= $sth->fetchAll(PDO::FETCH_ASSOC);
-		return $rows;	
-	}
-        
+
     function getAllBanks(){
 		$query = "SELECT * FROM es_bank_info";
 		$sth = $this->db->conn_id->prepare($query);
