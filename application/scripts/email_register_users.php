@@ -10,9 +10,9 @@
      * Database params
      */
     $configDatabase = array(
-            'host' => 'localhost:3306',
-            'user' => 'root',
-            'pass' => 'pass',
+            'host' => '127.0.0.1',
+            'user' => 'easyshop',
+            'pass' => 'MYSQL345y5h0p',
             'database' => 'easyshop'
     );
 
