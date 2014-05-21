@@ -1137,8 +1137,8 @@
 					<div id="bi-right" style="float:right; width:200px; text-align:right;">
 							<div class="post_item_button payment_btns">
 								<input type="button" name="bictr<?php echo $rows; ?>" id="bictr<?php echo $rows; ?>" class="edit_lnk span_bg" value="Edit">
-								<input type="button" name="sv_bictr<?php echo $rows; ?>" id="sv_bictr<?php echo $rows; ?>" value="Save" style="display:none">				 	
-								<input type="button" name="cn_bictr<?php echo $rows; ?>" id="cn_bictr<?php echo $rows; ?>" value="Cancel" style="display:none">
+								<input type="button" name="sv_bictr<?php echo $rows; ?>" id="sv_bictr<?php echo $rows; ?>" class="save_lnk span_bg" value="Save" style="display:none">				 	
+								<input type="button" name="cn_bictr<?php echo $rows; ?>" id="cn_bictr<?php echo $rows; ?>" class="cancel_lnk span_bg" value="Cancel" style="display:none">
 								<input type="button" name="del_bictr<?php echo $rows; ?>" id="del_bictr<?php echo $rows; ?>" class="delete_lnk span_bg"  value="Delete">
 								<input type="hidden" name="bi_id_bictr<?php echo $rows; ?>" id="bi_id_bictr<?php echo $rows; ?>" value ="<?php echo $billing_info['id_billing_info'];?>" />
 							</div>
@@ -1413,34 +1413,34 @@
 						<p>"<?php echo html_escape($user['feedb_msg']);?>"</p>
 						<p> <?php echo $this->lang->line('rating')[0].':'; ?> : 
 							<?php for($x=0;$x<5;$x++):?>
-							<?php if($x<$user['rating1']):?>
-							<span class="span_bg star_on"></span>
-						<?php else:?>
-						<span class="span_bg star_off"></span>
-					<?php endif;?>
-				<?php endfor;?>
-			</p>
-			<p> <?php echo $this->lang->line('rating')[1].':'; ?> 
-				<?php for($x=0;$x<5;$x++):?>
-				<?php if($x<$user['rating2']):?>
-				<span class="span_bg star_on"></span>
-			<?php else:?>
-			<span class="span_bg star_off"></span>
-		<?php endif;?>
-	<?php endfor;?>
-</p>
-<p> <?php echo $this->lang->line('rating')[2].':'; ?> 
-	<?php for($x=0;$x<5;$x++):?>
-	<?php if($x<$user['rating3']):?>
-	<span class="span_bg star_on"></span>
-<?php else:?>
-	<span class="span_bg star_off"></span>
-<?php endif;?>
-<?php endfor;?>
-</p>
-<?php else: ?>
-	<p class="transac-feedback-btn"> + Feedback for <?php echo $user['name'];?></p>
-	<div class="transac-feedback-container">
+								<?php if($x<$user['rating1']):?>
+									<span class="span_bg star_on"></span>
+									<?php else:?>
+									<span class="span_bg star_off"></span>
+								<?php endif;?>
+							<?php endfor;?>
+						</p>
+						<p> <?php echo $this->lang->line('rating')[1].':'; ?> 
+							<?php for($x=0;$x<5;$x++):?>
+								<?php if($x<$user['rating2']):?>
+									<span class="span_bg star_on"></span>
+									<?php else:?>
+									<span class="span_bg star_off"></span>
+								<?php endif;?>
+							<?php endfor;?>
+						</p>
+						<p> <?php echo $this->lang->line('rating')[2].':'; ?> 
+							<?php for($x=0;$x<5;$x++):?>
+								<?php if($x<$user['rating3']):?>
+									<span class="span_bg star_on"></span>
+								<?php else:?>
+									<span class="span_bg star_off"></span>
+								<?php endif;?>
+							<?php endfor;?>
+						</p>
+						<?php else: ?>
+						<p class="transac-feedback-btn"> + Feedback for <?php echo $user['name'];?></p>
+						<div class="transac-feedback-container">
 		<!--<form class="transac-feedback-form">-->
 		<?php
 		$attr = array('class'=>'transac-feedback-form');
