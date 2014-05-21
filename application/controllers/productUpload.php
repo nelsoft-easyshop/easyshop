@@ -392,9 +392,9 @@ class productUpload extends MY_Controller
 					#starting of uploading
 					for ($i=0; $i < sizeof($filenames_ar); $i++) {
 						$path = $path_directory.$filenames_ar[$i];
-                        $this->es_img_resize($filenames_ar[$i],$path_directory, 'categoryview/', $this->img_dimension['categoryview']);
                         $this->es_img_resize($filenames_ar[$i],$path_directory, 'small/', $this->img_dimension['small']);
-						$this->es_img_resize($filenames_ar[$i],$path_directory, 'thumbnail/', $this->img_dimension['thumbnail']);
+                        $this->es_img_resize($filenames_ar[$i],$path_directory.'small/', '../categoryview/', $this->img_dimension['categoryview']);
+						$this->es_img_resize($filenames_ar[$i],$path_directory.'categoryview/', '../thumbnail/', $this->img_dimension['thumbnail']);
                         //If user uploaded image is too large, resize and overwrite original image
                         if(($file_data[$i]['image_width'] > $this->img_dimension['usersize'][0]) || ($file_data[$i]['image_height'] > $this->img_dimension['usersize'][1])){
                             $this->es_img_resize($file_data[$i]['file_name'],$path_directory,'', $this->img_dimension['usersize']);
@@ -522,8 +522,8 @@ class productUpload extends MY_Controller
                                 if(($o_width > $this->img_dimension['usersize'][0])||($o_height > $this->img_dimension['usersize'][1])){
                                     $this->es_img_resize($eval[2],$path,'', $this->img_dimension['usersize']);
                                 }
-                                $this->es_img_resize($eval[2],$other_path_directory, 'thumbnail/', $this->img_dimension['thumbnail']);
                                 $this->es_img_resize($eval[2],$other_path_directory, 'small/', $this->img_dimension['small']);
+                                $this->es_img_resize($eval[2],$other_path_directory.'small/', '../thumbnail/', $this->img_dimension['thumbnail']);  
                             }
                             $this->product_model->addNewAttributeByProduct_others_name_value($others_id,$eval[0],$eval[1],$imageid);
 
@@ -679,7 +679,9 @@ class productUpload extends MY_Controller
 			
 			$data['json_shippingpreference'] = json_encode($data['shipping_preference'], JSON_FORCE_OBJECT);
 			
-			
+			if($this->input->post('is_edit')){
+                $data['is_edit'] = true;
+            }
 			$this->load->view('templates/header', $data);
 			$this->load->view('pages/product/product_upload_step3_view', $data);
 			$this->load->view('templates/footer');
@@ -818,13 +820,17 @@ class productUpload extends MY_Controller
 		$this->load->view('templates/header', $data); 
         $memberId =  $this->session->userdata('member_id');
         
-        
 		if($this->input->post('prod_h_id')){
             $billing_id = $this->input->post('prod_billing_id'); 
             $is_cod =($this->input->post('allow_cod'))?1:0;
-			$response['id'] =$this->input->post('prod_h_id');
-            $response['slug'] = $this->product_model->finalizeProduct($response['id'] , $memberId, $billing_id, $is_cod, true);
-
+			$response['id'] = $this->input->post('prod_h_id');
+            $this->product_model->finalizeProduct($response['id'] , $memberId, $billing_id, $is_cod, true);
+            $product = $this->product_model->getProductById($response['id']);
+            $response['slug'] = $product['slug'];
+            $response['productname'] = $product['product'];
+            if($this->input->post('is_edit')){
+                $response['is_edit'] = true;
+            }
             $this->load->view('pages/product/product_upload_step4_view',$response);
 			$this->load->view('templates/footer'); 
 		}else{
@@ -1384,8 +1390,8 @@ class productUpload extends MY_Controller
                             if(($o_width > $this->img_dimension['usersize'][0])||($o_height > $this->img_dimension['usersize'][1])){
                                 $this->es_img_resize($eval[2],$other_path_directory,'', $this->img_dimension['usersize']);
                             }
-							$this->es_img_resize($eval[2],$other_path_directory, 'thumbnail/', $this->img_dimension['thumbnail']);
                             $this->es_img_resize($eval[2],$other_path_directory, 'small/', $this->img_dimension['small']);
+                            $this->es_img_resize($eval[2],$other_path_directory.'small/', '../thumbnail/', $this->img_dimension['thumbnail']);  
 						}
 						else if($eval[2] == "--no image"){
 							if($eval[5] != "--no id"){
@@ -1531,9 +1537,9 @@ class productUpload extends MY_Controller
 						#starting of uploading
 						for ($i=0; $i < sizeof($filenames_ar); $i++) {
 							$path = $path_directory.$filenames_ar[$i];
-							$this->es_img_resize($filenames_ar[$i],$path_directory, 'categoryview/', $this->img_dimension['categoryview']);
                             $this->es_img_resize($filenames_ar[$i],$path_directory, 'small/', $this->img_dimension['small']);
-                            $this->es_img_resize($filenames_ar[$i],$path_directory, 'thumbnail/', $this->img_dimension['thumbnail']);
+                            $this->es_img_resize($filenames_ar[$i],$path_directory.'small/', '../categoryview/', $this->img_dimension['categoryview']);
+                            $this->es_img_resize($filenames_ar[$i],$path_directory.'categoryview/', '../thumbnail/', $this->img_dimension['thumbnail']);
 							//If user uploaded image is too large, resize and overwrite original image
                             if(($file_data[$i]['image_width'] > $this->img_dimension['usersize'][0]) || ($file_data[$i]['image_height'] > $this->img_dimension['usersize'][1])){
                                 $this->es_img_resize($file_data[$i]['file_name'],$path_directory,'', $this->img_dimension['usersize']);
@@ -1575,14 +1581,13 @@ class productUpload extends MY_Controller
 			$id = $this->input->post('p_id');
 		else
 			redirect('sell/step1', 'refresh'); 
-
         #$modal is true unless the string 'false' modal parameter is posted
         if($this->input->post('modal') == 'false'){
             $modal = false;
         }else{
             $modal = true;
         }
-        
+        $this->load->model("memberpage_model");
         $memberId =  $this->session->userdata('member_id');
         $product_row = $this->product_model->getProductPreview($id, $memberId);
         if(empty($product_row)){
@@ -1605,8 +1610,8 @@ class productUpload extends MY_Controller
         $preview_data = array(
             'breadcrumbs' =>  $this->product_model->getParentId($product_row['cat_id']),
             'product' => $product_row,
-            'billing_info' => $this->product_model->getBillingInfo($memberId),
-            'bank_list' =>  $this->product_model->getAllBanks(),
+            'billing_info' => $this->memberpage_model->get_billing_info($memberId),
+            'bank_list' =>  $this->memberpage_model->getAllBanks(),
             'main_categories' => $this->product_model->getFirstLevelNode(TRUE),
             'product_images' => $this->product_model->getProductImages($id),
             'product_options' => $product_options,
@@ -1649,7 +1654,7 @@ class productUpload extends MY_Controller
 		$config['image_library'] = 'gd2';
 		$config['source_image'] = $path_to_image_directory . $filename;
 		$config['maintain_ratio'] = true;
-		
+
 		$config['new_image'] = $path_to_result_directory . $filename;
 		$config['width'] = $dimension[0];
 		$config['height'] = $dimension[1];
