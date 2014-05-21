@@ -109,7 +109,7 @@ $(document).ready(function(){
 	 
 	 jQuery.validator.addMethod("is_validmobile", function(value, element) {
 		return this.optional(element) || /^9[0-9]{9}/.test(value);
-	 }, "We only accept mobile numbers of this format: 9xxxxxxxxx");
+	 }, "Valid mobile format: 9xxxxxxxxx");
 });
 
 
