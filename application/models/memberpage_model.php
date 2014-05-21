@@ -476,6 +476,9 @@ class memberpage_model extends CI_Model
 					$product = $temp;
 					$product = array_slice($product, 12, 7);
 					$product['slug'] = $temp['slug'];
+					$product['shipping_comment'] = $temp['comment'];
+					$product['courier'] = $temp['courier'];
+					$product['tracking_num'] = $temp['tracking_num'];
 					$userid = $temp['seller_id'];
 					$username = $temp['seller'];
 				}
@@ -484,6 +487,9 @@ class memberpage_model extends CI_Model
 					$product = $temp;
 					$product = array_slice($product, 12, 7);
 					$product['slug'] = $temp['slug'];
+					$product['shipping_comment'] = $temp['comment'];
+					$product['courier'] = $temp['courier'];
+					$product['tracking_num'] = $temp['tracking_num'];
 					unset($product['seller_id']);
 					unset($product['seller']);
 					$userid = $temp['buyer_id'];
@@ -552,7 +558,7 @@ class memberpage_model extends CI_Model
 							$myCount++;
 						}
 					}
-					// If all product entries have response, move to temporary complete array
+					// If all product entries have response, move to complete array
 					if($myCount == $prodCount){
 						if(array_key_exists('buyer_id', $temp2) && array_key_exists('buyer', $temp2))
 							$fdata['complete']['sell'][$k] = $temp2;
@@ -576,10 +582,7 @@ class memberpage_model extends CI_Model
 						$fdata['buy'][$k] = $temp2;
 				}
 			}
-			
-			
-		}
-		
+		}		
 		return $fdata;
 	}
 	

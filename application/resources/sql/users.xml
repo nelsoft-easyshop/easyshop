@@ -263,7 +263,7 @@
 <select id="getTransactionDetails">
 	SELECT o.id_order, o.buyer_id, buyer.username as buyer, DATE_FORMAT(o.dateadded, "%D %M %Y") as dateadded, o.order_status as transac_stat, fb.for_memberid, fb.feedb_msg, DATE_FORMAT(fb.dateadded, "%D %M %Y") as fbdateadded, fb.rating1, fb.rating2, fb.rating3, op.id_order_product, op.product_id, op.seller_id, seller.username as seller, p.name, op.order_quantity, op.total as price, op.status, pi.product_image_path, attr.name as attr_name, pattr.attr_value, pitemattr.is_other, oah.field_name, oad.value_name, buyer.email as buyer_email, 
 		l0.location as stateregion, l1.location as city, badd.address, COALESCE(badd.lat, '0') as lat, COALESCE(badd.lng, '0') as lng,
-		o.invoice_no, o.payment_method_id as payment_method, p.slug, badd.consignee, badd.mobile, badd.telephone
+		o.invoice_no, o.payment_method_id as payment_method, p.slug, badd.consignee, badd.mobile, badd.telephone, sc.comment, sc.courier, sc.tracking_num
 	FROM es_order o
 	INNER JOIN es_order_product op 
 		ON op.order_id = o.id_order AND (op.seller_id = :id OR o.buyer_id = :id)
@@ -293,7 +293,10 @@
 		ON badd.stateregion = l0.id_location
 	LEFT JOIN es_location_lookup l1
 		ON badd.city = l1.id_location
+	LEFT JOIN es_product_shipping_comment sc
+		ON sc.order_product_id = op.id_order_product
 	ORDER BY o.id_order desc, op.product_id asc
+	LIMIT 500;
 </select>
 
 <!--	LANDING PAGE SUBSCRIPTION	-->

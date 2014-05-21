@@ -18,7 +18,6 @@ $(document).ready(function(){
 		}
 		catch(e){
 			alert('Failed to retrieve user product list.');
-			//window.location.reload(true);
 			return false;
 		}
 		// Updated Item count display
@@ -1214,14 +1213,22 @@ $(document).ready(function(){
 	});
 	
 	$('span.shipping_comment').on('click', function(){
-		var textarea = $(this).parent('div').siblings('div.shipping_comment_cont').children('textarea');
-		var input = $(this).parent('div').siblings('div.shipping_comment_cont').children('input[type="text"]');
+		var cancelbtn = $(this).parent('div').siblings('div.shipping_comment_cont').find('span.shipping_comment_cancel');
+		var textarea = $(this).parent('div').siblings('div.shipping_comment_cont').find('textarea');
+		
+		if( $(this).hasClass('sc_bought') ){
+			if( $.trim(textarea.val()).length <= 0 ){
+				alert('No shipping comments provided by seller');
+				return false;
+			}
+		}
 		
 		$(this).parent('div').siblings('div.shipping_comment_cont').modal({
 			escClose: false,
 			onShow: function(){
-				textarea.val( htmlDecode(textarea.attr('data-value')) );
-				input.prop('value', input.attr('value'));
+				if( $.trim(textarea.val()).length > 0 ){
+					cancelbtn.trigger('click');
+				}
 				this.setPosition();
 			},
 			onClose: function(){
@@ -1236,26 +1243,35 @@ $(document).ready(function(){
 		var editbtn = $(this).siblings('.shipping_comment_edit');
 		var cancelbtn = $(this).siblings('.shipping_comment_cancel');
 		var input = $(this).siblings('input[type="text"]');
+		var submitbtn = $(this);
 		
 		if( $.trim(textarea.val()).length > 0 ){
-			$(this).attr('disabled', true);
-			$(this).val('Saving...');
+			submitbtn.attr('disabled', true);
+			submitbtn.val('Saving...');
+			input.attr('disabled', false);
+			textarea.attr('disabled', false);
+			
 			$.post(config.base_url+'memberpage/addShippingComment', form.serializeArray(), function(data){
-				$(this).attr('disabled', false);
-				$(this).val('Save');
+				submitbtn.attr('disabled', false);
+				submitbtn.val('Save');
 				
 				try{
 					var obj = jQuery.parseJSON(data);
 				}
 				catch(e){
 					alert('An error was encountered while processing your data. Please try again later.');
-					window.location.reload(true);
+					//window.location.reload(true);
 					return false;
 				}
 				
 				if(obj.result === 'success'){
-					input.attr('value', input.prop('value'));
+					
+					$.each(input, function(k,v){
+						$(v).attr('value', $(v).prop('value'));
+						$(v).attr('disabled', true);
+					});
 					textarea.attr('data-value', htmlDecode(textarea.val()));
+					textarea.attr('disabled', true);
 					
 					editbtn.show();
 					cancelbtn.hide();
@@ -1281,9 +1297,10 @@ $(document).ready(function(){
 		var input = $(this).siblings('input[type="text"]');
 		var textarea = $(this).siblings('textarea');
 		
-		
-		input.prop('value', input.attr('value'));
-		textarea.attr('data-value', htmlDecode(textarea.val()));
+		$.each(input, function(k,v){
+			$(v).prop('value', $(v).attr('value'));
+		});
+		textarea.val(htmlDecode(textarea.attr('data-value')));
 		
 		$(this).hide();
 		$(this).siblings('.shipping_comment_edit').show();

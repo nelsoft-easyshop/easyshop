@@ -188,7 +188,7 @@ class Memberpage extends MY_Controller
 		$data['bill'] =  $this->memberpage_model->get_billing_info($uid);
 		$data['transaction'] = $this->memberpage_model->getTransactionDetails($uid);
 		$data['allfeedbacks'] = $this->memberpage_model->getFeedback($uid);
-
+		
 		return $data;
 	}
 
@@ -709,6 +709,35 @@ class Memberpage extends MY_Controller
 		
 	}
 	
+	function addShippingComment()
+	{
+		$serverResponse['result'] = 'fail';
+		$serverResponse['error'] = 'Failed to validate form.';
+		
+		if( strlen(trim($this->input->post('comment'))) > 0 ){
+			$postData = array(
+				'comment' => $this->input->post('comment'),
+				'order_product' => $this->input->post('order_product'),
+				'member_id' => $this->session->userdata('member_id'),
+				'transact_num' => $this->input->post('transact_num'),
+				'courier' => $this->input->post('courier'),
+				'tracking_num' => $this->input->post('tracking_num')
+			);
+			
+			$result = $this->payment_model->checkOrderProductBasic($postData);
+			
+			if( count($result) == 1 ){ // insert comment
+				$r = $this->payment_model->addShippingComment($postData);
+				$serverResponse['result'] = $r ? 'success' : 'fail';
+				$serverResponse['error'] = $r ? '' : 'Failed to insert in database.';
+			} else {
+				$serverResponse['result'] = 'success';
+				$serverResponse['error'] = 'Server data mismatch. Possible hacking attempt';
+			}
+		}
+		
+		echo json_encode($serverResponse);
+	}
 }
 
 /* End of file memberpage.php */

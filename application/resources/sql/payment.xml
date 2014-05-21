@@ -135,6 +135,20 @@
 	WHERE id_order = :transaction_num AND invoice_no = :invoice_num AND buyer_id = :member_id
 </select>
 
+<!-- Check order product - used to check before adding comments -->
+<select id="checkOrderProductComment">
+	SELECT id_order_product
+	FROM es_order_product
+	WHERE id_order_product = :id_order_product AND order_id = :order_id AND seller_id = :member_id
+	LIMIT 1
+</select>
+
+<select id="addShippingComment">
+	INSERT INTO es_product_shipping_comment (`order_product_id`, `comment`, `member_id`)
+	VALUES (:order_product, :comment, :member_id)
+	ON DUPLICATE KEY UPDATE comment = :comment, courier = :courier, tracking_num = :tracking_num
+</select>
+
 <!-- Used to update es_order - Dragonpay transaction -->
 <select id="updateTransactionStatusBasic">
 	UPDATE es_order
@@ -147,6 +161,8 @@
 	INSERT INTO es_order_history (`order_id`, `order_status`, `comment`, `date_added`)
 	VALUES (:order_id, :order_status, :comment, NOW());
 </select>
+
+
 
 <select id="responseDragonpay">
 	CALL `es_sp_expiredDragonpayTransaction` (:transaction_id)

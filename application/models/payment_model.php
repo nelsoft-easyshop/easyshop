@@ -436,6 +436,35 @@ class payment_model extends CI_Model
 		return $row;
 	}
 	
+	// Check order product before saving comment
+	function checkOrderProductBasic($temp)
+	{
+		$query = $this->sqlmap->getFilenameID('payment','checkOrderProductComment');
+		$sth = $this->db->conn_id->prepare($query);
+		$sth->bindParam(':id_order_product', $temp['order_product']);
+		$sth->bindParam(':order_id', $temp['transact_num']);
+		$sth->bindParam(':member_id', $temp['member_id']);
+		$result = $sth->execute();
+		$row = $sth->fetchAll(PDO::FETCH_ASSOC);
+		
+		return $row;
+	}
+	
+	// Add shipping comment, binded to order_product
+	function addShippingComment($temp)
+	{
+		$query = $this->sqlmap->getFilenameID('payment','addShippingComment');
+		$sth = $this->db->conn_id->prepare($query);
+		$sth->bindParam(':order_product', $temp['order_product']);
+		$sth->bindParam(':comment', $temp['comment']);
+		$sth->bindParam(':member_id', $temp['member_id']);
+		$sth->bindParam(':courier', $temp['courier']);
+		$sth->bindParam(':tracking_num', $temp['tracking_num']);
+		$result = $sth->execute();
+		
+		return $result;
+	}
+	
 	// Used by dragonpay - memberpage
 	function updateTransactionStatusBasic($temp)
 	{

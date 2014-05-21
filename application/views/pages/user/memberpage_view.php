@@ -1360,7 +1360,6 @@
 				</div>
 			</div>
 				<div class="transac_prod_wrapper">
-					
 					<div class="transac-product-container">
 						<?php foreach($transact['products'] as $opk=>$product):?>
 						<div class="transac_prod_first">
@@ -1381,30 +1380,45 @@
 								<p>Quantity:<span class="fm1 f16"><?php echo $product['order_quantity']?></span></p>
 								<p>Total:<span class="fm1 f16">Php<?php echo number_format($product['price'],2,'.',',');?></span></p>
 							</div>
-							<?php if($transact['transac_stat'] == 0):?>
-								<?php if($product['status'] == 0):?>
-									<?php
-										$attr = array('class'=>'transac_response');
-										echo form_open('',$attr);
-									?>
-									<input class = "transac_response_btn orange_btn3" value="Forward payment to seller" type="submit">
-										<input type="hidden" name="buyer_response" value="<?php echo $opk;?>">
-										<input type="hidden" name="transaction_num" value="<?php echo $tk;?>">
-										<input type="hidden" name="invoice_num" value="<?php echo $transact['invoice_no'];?>">
-									<?php echo form_close();?>
-								<?php elseif($product['status'] == 1):?>
-									<span class="trans_alert transac_paid">Paid</span>
-								<?php elseif($product['status'] == 2):?>
-									<span class="trans_alert transac_pay_return">Payment returned by seller</span>
-								<?php elseif($product['status'] == 3):?>
-									<span class="trans_alert transac_cod">Cash on delivery</span>
+							<div>
+								<?php if($transact['transac_stat'] == 0):?>
+									<?php if($product['status'] == 0):?>
+										<?php
+											$attr = array('class'=>'transac_response');
+											echo form_open('',$attr);
+										?>
+										<input class = "transac_response_btn orange_btn3" value="Forward payment to seller" type="submit">
+											<input type="hidden" name="buyer_response" value="<?php echo $opk;?>">
+											<input type="hidden" name="transaction_num" value="<?php echo $tk;?>">
+											<input type="hidden" name="invoice_num" value="<?php echo $transact['invoice_no'];?>">
+										<?php echo form_close();?>
+									<?php elseif($product['status'] == 1):?>
+										<span class="trans_alert transac_paid">Paid</span>
+									<?php elseif($product['status'] == 2):?>
+										<span class="trans_alert transac_pay_return">Payment returned by seller</span>
+									<?php elseif($product['status'] == 3):?>
+										<span class="trans_alert transac_cod">Cash on delivery</span>
+									<?php endif;?>
 								<?php endif;?>
-							<?php endif;?>
+								<span class="shipping_comment sc_bought">View Shipping Comment</span>
+							</div>
+							
 							<div class="clear"></div>
+							
+							<div class="shipping_comment_cont" style="display:none;">
+								<h2>Shipping Details</h2>
+								<div>
+									<label for="courier">Courier: </label>
+									<input type="text" name="courier" value="<?php echo html_escape($product['courier']);?>" disabled ><br/>
+									<label for="tracking_num">Tracking Number: </label>
+									<input type="text" name="tracking_num" value="<?php echo html_escape($product['tracking_num']);?>" disabled ><br/>
+									<label for="comment">* Comments: </label>
+									<textarea name="comment" cols="55" rows="5" disabled ><?php echo html_escape($product['shipping_comment']); ?></textarea>								
+								</div>
+							</div>
 						</div>
 						<?php endforeach;?>
-					
-				</div>
+					</div>
 				<div class="feedback_wrapper">
 					<?php foreach($transact['users'] as $uk=>$user):?>
 					<div class="feedback_container">
@@ -1576,23 +1590,25 @@
 						
 						<div class="shipping_comment_cont" style="display:none;">
 							<h2>Shipping Details</h2>
-							<?php
-								$disable = trim($product['shipping_comment']) == '' ? false : true;
-								$attr = array('class'=>'shipping_details');
-								echo form_open('',$attr);
-							?>
-								<label for="courier">Courier: </label>
-								<input type="text" name="courier" value="<?php echo html_escape($product['courier']);?>" <?php echo $disable ? 'disabled':''; ?> ><br/>
-								<label for="tracking_num">Tracking Number: </label>
-								<input type="text" name="tracking_num" value="<?php echo html_escape($product['tracking_num']);?>" <?php echo $disable ? 'disabled':''; ?> ><br/>
-								<label for="comment">Comments:</label>
-								<textarea name="comment" data-value="<?php echo html_escape($product['shipping_comment']); ?>" <?php echo $disable ? 'disabled':''; ?>><?php echo html_escape($product['shipping_comment']); ?></textarea>
-								<input name="order_product" type="hidden" value="<?php echo $opk;?>">
-								<input name="transact_num" type="hidden" value="<?php echo $tk;?>">
-								<input class="shipping_comment_submit" type="submit" value="Save">
-								<span class="shipping_comment_edit" style="display: <?php echo $disable ? '':'none'?>;">Edit</span>
-								<span class="shipping_comment_cancel" style="display:none;">Cancel</span>
-							<?php echo form_close();?>
+							<div>
+								<?php
+									$disable = trim($product['shipping_comment']) == '' ? false : true;
+									$attr = array('class'=>'shipping_details');
+									echo form_open('',$attr);
+								?>
+									<label for="courier">Courier: </label>
+									<input type="text" name="courier" value="<?php echo html_escape($product['courier']);?>" <?php echo $disable ? 'disabled':''; ?> ><br/>
+									<label for="tracking_num">Tracking Number: </label>
+									<input type="text" name="tracking_num" value="<?php echo html_escape($product['tracking_num']);?>" <?php echo $disable ? 'disabled':''; ?> ><br/>
+									<label for="comment">* Comments: </label>
+									<textarea name="comment" cols="55" rows="5" data-value="<?php echo html_escape($product['shipping_comment']); ?>" <?php echo $disable ? 'disabled':''; ?>><?php echo html_escape($product['shipping_comment']); ?></textarea>
+									<input name="order_product" type="hidden" value="<?php echo $opk;?>">
+									<input name="transact_num" type="hidden" value="<?php echo $tk;?>">
+									<input class="shipping_comment_submit" type="submit" value="Save">
+									<span class="shipping_comment_edit" style="display: <?php echo $disable ? '':'none'?>;">Edit</span>
+									<span class="shipping_comment_cancel" style="display:none;">Cancel</span>
+								<?php echo form_close();?>
+							</div>
 						</div>
 						
 					</div>
