@@ -721,7 +721,8 @@ class Memberpage extends MY_Controller
 				'member_id' => $this->session->userdata('member_id'),
 				'transact_num' => $this->input->post('transact_num'),
 				'courier' => $this->input->post('courier'),
-				'tracking_num' => $this->input->post('tracking_num')
+				'tracking_num' => $this->input->post('tracking_num'),
+				'expected_date' => $this->input->post('expected_date')
 			);
 			
 			$result = $this->payment_model->checkOrderProductBasic($postData);

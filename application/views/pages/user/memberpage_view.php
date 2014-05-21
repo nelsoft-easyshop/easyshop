@@ -1444,7 +1444,22 @@
 
 							
 							<div class="clear"></div>
-						</div>	
+							<?php if( strlen(trim($product['shipping_comment'])) > 0 ):?>
+								<div class="shipping_comment_cont" style="display:none;">
+									<h2>Shipping Details</h2>
+									<div>
+										<label for="courier">Courier: </label>
+										<input type="text" name="courier" value="<?php echo html_escape($product['courier']);?>" disabled ><br/>
+										<label for="tracking_num">Tracking Number: </label>
+										<input type="text" name="tracking_num" value="<?php echo html_escape($product['tracking_num']);?>" disabled ><br/>
+										<label for="expected_date">Expected Date of Arrival: </label>
+										<input type="text" name="expected_date" value="<?php echo html_escape($product['expected_date'])?>" disabled><br/>
+										<label for="comment">* Comments: </label>
+										<textarea name="comment" cols="55" rows="5" disabled ><?php echo html_escape($product['shipping_comment']); ?></textarea>								
+									</div>
+								</div>
+							<?php endif?>
+						</div>
 						<?php endforeach;?>
 					</div>
 				<div class="feedback_wrapper">
@@ -1573,7 +1588,6 @@
 					</h4>
 				</div>
 				<div class="transac_prod_wrapper">
-					
 					<?php foreach($transact['products'] as $opk=>$product):?>
 					<div class="sold_prod_container transac-product-container">
 						<span class="img_transac_prod">
@@ -1628,8 +1642,11 @@
 									<input type="text" name="courier" value="<?php echo html_escape($product['courier']);?>" <?php echo $disable ? 'disabled':''; ?> ><br/>
 									<label for="tracking_num">Tracking Number: </label>
 									<input type="text" name="tracking_num" value="<?php echo html_escape($product['tracking_num']);?>" <?php echo $disable ? 'disabled':''; ?> ><br/>
+									<label for="expected_date">Expected Date of Arrival: </label>
+									<input type="text" name="expected_date" value="<?php echo html_escape($product['expected_date'])?>" <?php echo $disable ? 'disabled':''; ?>><br/>
 									<label for="comment">* Comments: </label>
 									<textarea name="comment" cols="55" rows="5" data-value="<?php echo html_escape($product['shipping_comment']); ?>" <?php echo $disable ? 'disabled':''; ?>><?php echo html_escape($product['shipping_comment']); ?></textarea>
+									
 									<input name="order_product" type="hidden" value="<?php echo $opk;?>">
 									<input name="transact_num" type="hidden" value="<?php echo $tk;?>">
 									<input class="shipping_comment_submit" type="submit" value="Save">

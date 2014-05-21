@@ -479,6 +479,7 @@ class memberpage_model extends CI_Model
 					$product['shipping_comment'] = $temp['comment'];
 					$product['courier'] = $temp['courier'];
 					$product['tracking_num'] = $temp['tracking_num'];
+					$product['expected_date'] = $temp['expected_date'];
 					$userid = $temp['seller_id'];
 					$username = $temp['seller'];
 				}
@@ -490,6 +491,7 @@ class memberpage_model extends CI_Model
 					$product['shipping_comment'] = $temp['comment'];
 					$product['courier'] = $temp['courier'];
 					$product['tracking_num'] = $temp['tracking_num'];
+					$product['expected_date'] = $temp['expected_date'];
 					unset($product['seller_id']);
 					unset($product['seller']);
 					$userid = $temp['buyer_id'];

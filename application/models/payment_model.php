@@ -460,6 +460,7 @@ class payment_model extends CI_Model
 		$sth->bindParam(':member_id', $temp['member_id']);
 		$sth->bindParam(':courier', $temp['courier']);
 		$sth->bindParam(':tracking_num', $temp['tracking_num']);
+		$sth->bindParam(':expected_date', $temp['expected_date']);
 		$result = $sth->execute();
 		
 		return $result;
