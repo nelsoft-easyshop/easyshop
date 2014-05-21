@@ -1,5 +1,4 @@
 <link href="<?= base_url() ?>assets/css/jquery.bxslider.css" rel="stylesheet" />
-
 <div class="clear"></div>
 
 <section>
@@ -81,7 +80,9 @@
                 <div>
                     <span class="mastercard"></span>
                     <span class="visa"></span>
-                    <span class="paypal"></span>
+                    <span class="paypal"></span><br />
+                    <span class="dragonpay"></span>
+                    <span class="cod"></span>
                 </div>
             </div>
         </div>
