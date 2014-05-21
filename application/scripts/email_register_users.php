@@ -38,7 +38,8 @@
             'from_email' => 'noreply@easyshop.ph',
             'from_name' => 'Easyshop.ph',
             'recipients' => array(
-                    'jerry.pereda@easyshop.ph'
+                    'jerry.pereda@easyshop.ph',
+                    'samgavinio@easyshop.ph',
             )
     );
 
