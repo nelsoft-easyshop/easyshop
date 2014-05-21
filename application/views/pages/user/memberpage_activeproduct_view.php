@@ -24,7 +24,7 @@
 				<div class="post_item_button">
 					<?php echo form_open('sell/edit/step2'); ?>
 					<input type="hidden" name="p_id" value ="<?php echo $active_product['id_product'];?>" /> 
-					<input class="manage_lnk span_bg" type = "submit" value="Edit Item"> </input>
+					<input class="manage_lnk edit_lnk span_bg" type = "submit" value="Edit Item"> </input>
 					<?php echo form_close(); ?> 
 					<span class="border_white">|</span>
 					
