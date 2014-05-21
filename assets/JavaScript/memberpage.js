@@ -109,7 +109,7 @@ $(document).ready(function(){
 	 
 	 jQuery.validator.addMethod("is_validmobile", function(value, element) {
 		return this.optional(element) || /^9[0-9]{9}/.test(value);
-	 }, "Invalid mobile number");
+	 }, "We only accept mobile numbers of this format: 9xxxxxxxxx");
 });
 
 
@@ -1740,9 +1740,8 @@ $(function(){
 			
 			//cycle through each Product Title
 			divPaging.children('div.post_items_content').each(function(){
-				var prodTitle = $(this).find('div.post_item_content_right').find('.post_item_product_title a').text();
+				var prodTitle = $(this).find('div.post_item_content_right').find('.post_item_product_title').text();
 				prodTitle = prodTitle.toLowerCase().replace(/\s/g,'');
-				
 				// Search for search string in product title
 				if(prodTitle.indexOf(schValue) != -1){
 					if(resultCounter % 10 === 0 && resultCounter !== 0){
