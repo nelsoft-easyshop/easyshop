@@ -23,7 +23,7 @@
 					<?php echo form_open('product/changeDelete'); ?>
 						<input type="hidden" name="p_id" value ="<?php echo $deleted_product['id_product'];?>" /> 
 						<input type="hidden" name="action" value ="restore" /> 
-						<input class="manage_lnk" type = "submit" value="Restore Item"> </input>
+						<input class="manage_lnk restore_lnk span_bg" type = "submit" value="Restore Item"> </input>
 					<?php echo form_close(); ?>
 				</div>
 			</div>
