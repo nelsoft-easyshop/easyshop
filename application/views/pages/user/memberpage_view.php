@@ -95,18 +95,20 @@
 			<div class="progress_bar_panel">
 				<div>
 					<h3>Total Posted Items</h3>
-					<input class="items db_total_items" data-width="150" data-fgColor="#FF8400" data-max="1000" data-thickness=".1" data-angleOffset="180" data-readOnly=true data-displayPrevious=true value="<?php echo count($active_products)+count($deleted_products);?>">
+					<input class="items db_total_items" data-width="150" data-fgColor="#FF8400" data-max="1000" data-thickness=".1" data-angleOffset="180" data-readOnly=true data-displayPrevious=true data-value="<?php echo count($active_products)+count($deleted_products);?>"   value="<?php echo count($active_products)+count($deleted_products);?>">
 				</div>
 				<div>
 					<h3>Active Items</h3>
-					<input class="items db_active_items" data-width="150" data-fgColor="#ff4400" data-max="1000" data-thickness=".1" data-angleOffset="180" data-readOnly=true data-displayPrevious=true value="<?php echo count($active_products);?>">
+					<input class="items db_active_items" data-width="150" data-fgColor="#ff4400" data-max="1000" data-thickness=".1" data-angleOffset="180" data-readOnly=true data-displayPrevious=true data-value="<?php echo count($active_products);?>"   value="<?php echo count($active_products);?>">
 					
 				</div>
 				<div>
 					<h3>Total Sold Items</h3>
-					<input class="items db_sold_items" data-width="150" data-fgColor="#7ad014" data-max="1000" data-thickness=".1" data-angleOffset="180" data-readOnly=true data-displayPrevious=true value="<?php echo $sold_count;?>">
+					<input class="items db_sold_items" data-width="150" data-fgColor="#7ad014" data-max="1000" data-thickness=".1" data-angleOffset="180" data-readOnly=true data-displayPrevious=true data-value="<?php echo $sold_count;?>" value="<?php echo $sold_count;?>">
 				</div>
 			</div>
+             
+             
              
 			<div class="posted_feedbacks_top">
 				<h3 class="fm1 f18">Feedback Score:</h3>
@@ -1968,34 +1970,6 @@
 
 </div>
 
-		    <!--
-			<div class="profile_main_content" id="privacy_settings">
-				<h2>Privacy Settings</h2>
-					<div class="profile_fields">
-							<p>Who can access my dynamic</p>
-								<div>
-									<input type="radio" name="access">Everyone
-									<input type="radio" name="access">Friends
-									<input type="radio" name="access">Only Me
-								</div>
-							<p>Allow the search to find me</p>
-								<div>
-									<input type="radio" name="search">Yes
-									<input type="radio" name="search">No
-								</div>
-							<p>Who can focus on my</p>
-								<div>
-									<input type="radio" name="focus">Everyone<br />
-									<input type="radio" name="focus">My only concern people<br />
-									<input type="radio" name="focus">The answers to questions in order to focus on my
-								</div>
-					</div>
-					<div class="bottom_save">
-						<input type="submit" name="privacy_settings_btn" value="Save"/>
-					</div>	
-			</div>	
-		-->
-		
 		
 		<div class="profile_main_content" id="security_settings">
 			<h2>Security Settings</h2>
@@ -2046,10 +2020,9 @@
 		<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=&sensor=false"></script>
 
 		<script type="text/javascript">
-					
+
+                                       
 					var jsonCity = <?php echo $json_city;?>;
-					
-	 
 
 					$(document).ready(function() {
                         var currentRequest = null;

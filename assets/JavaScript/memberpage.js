@@ -1,5 +1,13 @@
 /**	Populate product item display **/
 $(document).ready(function(){
+		
+    /* 
+     *   Fix for the stupid behaviour of jpagination with chrome when pressing the back button.
+     *   See next two lines of code.
+     */
+    $('.sch_box').val('');
+    $('input.items').val($('input.items').data('value'));
+
 	var csrftoken = $("meta[name='csrf-token']").attr('content');
     var csrfname = $("meta[name='csrf-name']").attr('content');
 	var lastid = parseInt($('#last_dashboard_item_id').val());
