@@ -351,6 +351,10 @@ FROM
 		WHERE op.product_id = :id
 	</select>
 	
+	<select id="getUserItemCount">
+		
+	</select>
+	
     <select id="getUserItems">
          SELECT p.`slug`, p.`id_product`,p.`name`, p.`brief`, p.`price`, p.`member_id`, 
          AVG(COALESCE((r.`rating`),0)) as average_rating, COUNT(r.`rating`) as review_count, 

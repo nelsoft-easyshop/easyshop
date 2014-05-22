@@ -445,7 +445,7 @@ class memberpage_model extends CI_Model
 				
 				// Ignore transaction 99 via paypal = error
 				if($temp['transac_stat'] == 99 && $temp['payment_method'] == 1){
-					break;
+					continue;
 				}
 				
 				if( !array_key_exists($temp['id_order'], $data) ){
@@ -480,6 +480,7 @@ class memberpage_model extends CI_Model
 					$product['courier'] = $temp['courier'];
 					$product['tracking_num'] = $temp['tracking_num'];
 					$product['expected_date'] = $temp['expected_date'];
+					$product['datemodified'] = $temp['datemodified'];
 					$userid = $temp['seller_id'];
 					$username = $temp['seller'];
 				}
@@ -492,6 +493,7 @@ class memberpage_model extends CI_Model
 					$product['courier'] = $temp['courier'];
 					$product['tracking_num'] = $temp['tracking_num'];
 					$product['expected_date'] = $temp['expected_date'];
+					$product['datemodified'] = $temp['datemodified'];
 					unset($product['seller_id']);
 					unset($product['seller']);
 					$userid = $temp['buyer_id'];

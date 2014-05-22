@@ -144,9 +144,9 @@
 </select>
 
 <select id="addShippingComment">
-	INSERT INTO es_product_shipping_comment (`order_product_id`, `comment`, `member_id`, `courier`, `tracking_num`, `expected_date`)
-	VALUES (:order_product, :comment, :member_id, :courier, :tracking_num, :expected_date)
-	ON DUPLICATE KEY UPDATE comment = :comment, courier = :courier, tracking_num = :tracking_num, expected_date = :expected_date
+	INSERT INTO es_product_shipping_comment (`order_product_id`, `comment`, `member_id`, `courier`, `tracking_num`, `expected_date`, `datemodified`)
+	VALUES (:order_product, :comment, :member_id, :courier, :tracking_num, :expected_date, NOW())
+	ON DUPLICATE KEY UPDATE comment = :comment, courier = :courier, tracking_num = :tracking_num, expected_date = :expected_date, datemodified = NOW()
 </select>
 
 <!-- Used to update es_order - Dragonpay transaction -->

@@ -1413,20 +1413,26 @@
 											<span class="trans_alert transac_cod">Cash on delivery</span>
 										<?php endif;?>
 									<?php endif;?>
-									</span>									
+									</span>		
+											
 									<?php if( strlen(trim($product['shipping_comment'])) > 0 ):?>
-										<div><span class="shipping_comment">View Shipping Comment</span></div>
-											<div class="shipping_comment_cont" style="display:none;">
-												<h2>Shipping Details</h2>
-												<div>
-													<label for="courier">Courier: </label>
-													<input type="text" name="courier" value="<?php echo html_escape($product['courier']);?>" disabled ><br/>
-													<label for="tracking_num">Tracking Number: </label>
-													<input type="text" name="tracking_num" value="<?php echo html_escape($product['tracking_num']);?>" disabled ><br/>
-													<label for="comment">* Comments: </label>
-													<textarea name="comment" cols="55" rows="5" disabled ><?php echo html_escape($product['shipping_comment']); ?></textarea>								
-												</div>
+										<div>
+											<span class="shipping_comment">View Shipping Comment</span>
+										</div>
+										<div class="shipping_comment_cont" style="display:none;">
+											<h2>Shipping Details</h2>
+											<div>
+												<label for="courier">Courier: </label>
+												<input type="text" name="courier" value="<?php echo html_escape($product['courier']);?>" disabled ><br/>
+												<label for="tracking_num">Tracking Number: </label>
+												<input type="text" name="tracking_num" value="<?php echo html_escape($product['tracking_num']);?>" disabled ><br/>
+												<label for="expected_date">Expected Date of Arrival: </label>
+												<input type="text" name="expected_date" value="<?php echo html_escape($product['expected_date'])?>" disabled><br/>
+												<label for="comment">* Comments: </label>
+												<textarea name="comment" cols="55" rows="5" disabled ><?php echo html_escape($product['shipping_comment']); ?></textarea>								
+												<span style="margin-left:35em;"><?php echo $product['datemodified'];?></span>
 											</div>
+										</div>
 									<?php endif;?>
 								</div>
 								<div>
@@ -1440,24 +1446,7 @@
 									</p>
 								</div>
 							</div>
-
-							
 							<div class="clear"></div>
-							<?php if( strlen(trim($product['shipping_comment'])) > 0 ):?>
-								<div class="shipping_comment_cont" style="display:none;">
-									<h2>Shipping Details</h2>
-									<div>
-										<label for="courier">Courier: </label>
-										<input type="text" name="courier" value="<?php echo html_escape($product['courier']);?>" disabled ><br/>
-										<label for="tracking_num">Tracking Number: </label>
-										<input type="text" name="tracking_num" value="<?php echo html_escape($product['tracking_num']);?>" disabled ><br/>
-										<label for="expected_date">Expected Date of Arrival: </label>
-										<input type="text" name="expected_date" value="<?php echo html_escape($product['expected_date'])?>" disabled><br/>
-										<label for="comment">* Comments: </label>
-										<textarea name="comment" cols="55" rows="5" disabled ><?php echo html_escape($product['shipping_comment']); ?></textarea>								
-									</div>
-								</div>
-							<?php endif?>
 						</div>
 						<?php endforeach;?>
 					</div>
@@ -1677,6 +1666,7 @@
 												<input class="shipping_comment_submit" type="submit" value="Save">
 												<span class="shipping_comment_edit" style="display: <?php echo $disable ? '':'none'?>;">Edit</span>
 												<span class="shipping_comment_cancel" style="display:none;">Cancel</span>
+												<span style="margin-left:28em;"><?php echo $product['datemodified'];?></span>
 											<?php echo form_close();?>
 										</div>
 									</div>
