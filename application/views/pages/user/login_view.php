@@ -19,7 +19,7 @@
 				?>
 					<div class="login_box">
 						<div>
-                            <label for="login_username">Username / E-mail:</label>
+                            <label for="login_username">Username:</label>
                             <input type="text" id="login_username" name="login_username">
 							<span id="username_error" class="red error_cont" style="font-weight:bold;display:block;margin:5px 0px 0px 93px;"></span>
 						</div>
