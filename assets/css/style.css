@@ -2755,6 +2755,7 @@ padding: 8px 0;
 	padding-right: 10px;
 	display: inline-block;
 	text-align: right;
+	vertical-align: middle;
 }
 
 .login_box input {
@@ -2764,6 +2765,7 @@ padding: 8px 0;
     line-height: 25px;
     width: 200px;
     padding-left:3px;
+	vertical-align: middle;
 }
 
 .login_box input:focus {
@@ -5437,7 +5439,7 @@ margin-right: 10px;
 	color: white;
 }
 
-.shipping_comment_cont input,label{
+.shipping_comment_cont input, .shipping_comment_cont label{
 	display:inline-block;
 	margin-top: 5px;
 }
