@@ -1557,104 +1557,141 @@
 			<?php foreach($transaction['sell'] as $tk=>$transact):?>
 			<div class="transac-container">
 				<div class="transac_title">
-					<h4>
-						<span class="transac_content">
-							<strong>Invoice #: </strong> <?php echo $transact['invoice_no'];?><br />
+					<div class="transac_title_table">
+						<div class="transac_title_col1">
+							<span><strong>Invoice No.: </strong></span>		
+							<span><?php echo $transact['invoice_no'];?></span>  
+						</div>
+						<div class="transac_title_col2">
+							<span><strong>Date:</strong></span>
+							<span class="transac_title_date"><?php echo $transact['dateadded']?></span>
+						</div>
+						<div class="transac_title_col3">
 							<strong>Sold to: </strong> <a href="<?php echo base_url();?>vendor/<?php echo $transact['buyer']?>"><?php echo $transact['buyer']?></a> <br />
 							<span class="transac_address_details_show" style="color:#0191C8;cursor:pointer;font-size:10px;text-decoration:underline;">View Delivery details</span>
 							<div style="display:none;" class="transac_address_cont">
 								<?php foreach($transact['users'] as $uk=>$user):?>
-									<span class="tad_1"><strong>Consignee: </strong> <?php echo html_escape($user['address']['consignee']);?></span>
+									<span class="tad_1 consignee">
+										<strong>Consignee: </strong>
+										<span><?php echo html_escape($user['address']['consignee']);?></span>
+									</span>
 									<?php if(trim($user['address']['mobile']) != ''):?>
-										<span class="tad_1"><strong>Mobile: </strong> <?php echo html_escape($user['address']['mobile']);?></span>
+										<span class="tad_1 mobile">
+											<strong>Mobile: </strong> 
+											<span><?php echo html_escape($user['address']['mobile']);?></span>
+										</span>
 									<?php endif;?>
 									<?php if(trim($user['address']['telephone']) != ''):?>
-										<span class="tad_1"><strong>Telephone: </strong> <?php echo html_escape($user['address']['telephone']);?></span>
+										<span class="tad_1 telephone">
+											<strong>Telephone: </strong>
+											<span><?php echo html_escape($user['address']['telephone']);?></span> 
+										</span>
 									<?php endif;?>
 									<span style="display:block;"></span>
-									<span class="tad_2"><strong>State/Region:</strong> <?php echo $user['address']['stateregion']?></span>
-									<span class="tad_2"><strong>City:</strong> <?php echo $user['address']['city'];?></span>
-									<span class="tad_3"><strong>Address:</strong> <?php echo html_escape($user['address']['fulladd']);?></span>
+									<span class="tad_2 stateregion">
+										<strong>State/Region:</strong>
+										<span><?php echo $user['address']['stateregion']?></span> 
+									</span>
+									<span class="tad_2 city">
+										<strong>City:</strong>
+										<span><?php echo $user['address']['city'];?></span> 
+									</span>
+									<span class="tad_3 fulladdress">
+										<strong>Address:</strong>
+										<span><?php echo html_escape($user['address']['fulladd']);?></span> 
+									</span>
+									<span class="tsold_viewmap" data-lat="<?php echo $user['address']['lat'];?>" data-lng="<?php echo $user['address']['lng'];?>">View Map</span>
 									<?php if( $user['address']['lat']!=0 && $user['address']['lng']!=0 ):?>
-										<span class="tsold_viewmap" data-lat="<?php echo $user['address']['lat'];?>" data-lng="<?php echo $user['address']['lng'];?>">View Map</span>
+										
 										<div class="map_modalcont" style="display:none;"></div>
 									<?php endif;?>
 								<?php endforeach;?>
-								<span class="transac_address_details_hide" style="color:#0191C8;cursor:pointer;font-size:10px;text-decoration:underline;width:100%;">Hide</span>
+								
+								<span class="transac_address_details_hide">Close</span>
 							</div>
-						</span>
-						<span class="transac_title_date"><?php echo $transact['dateadded']?></span>
-					</h4>
+							</span>
+						</div>
+					</div>
 				</div>
 				<div class="transac_prod_wrapper">
 					<?php foreach($transact['products'] as $opk=>$product):?>
 					<div class="sold_prod_container transac-product-container">
-						<span class="img_transac_prod">
-							<span class="img_transac_prod_con">
-								<img src="<?=base_url()?><?php echo $product['product_image_path'];?>">
-							</span>
-						</span>
-						<div>
-							<p class="transac_prod_name">
-								<a href="<?php echo base_url();?>item/<?php echo $product['slug'];?>"><?php echo $product['name'];?></a>
-								<?php if( count($product['attr']) !== 0 ):?>
-									<small>Features and Specifications:</small>
-									<?php foreach($product['attr'] as $temp):?>
-										<span><strong><?php echo html_escape($temp['field']);?>:</strong> <?php echo html_escape($temp['value']);?></span>
-									<?php endforeach;?>
-								<?php endif;?>
-							</p>
-							<p>Quantity:<span class="fm1 f18"><?php echo $product['order_quantity']?></span></p>
-							<p>Total:<span class="fm1 f18">Php<?php echo number_format($product['price'],2,'.',',');?></span></p>
-							<div class="clear"></div>
-							<div>
-								<?php if($product['status'] == 0):?>
-									<?php
-										$attr = array('class'=>'transac_response');
-										echo form_open('',$attr);
-									?>
-									<input class="transac_response_btn orange_btn3" value="Return payment to buyer" type="submit">
-									<input type="hidden" name="seller_response" value="<?php echo $opk;?>">
-									<input type="hidden" name="transaction_num" value="<?php echo $tk;?>">
-									<input type="hidden" name="invoice_num" value="<?php echo $transact['invoice_no'];?>">
-									<?php echo form_close();?>
-								<?php elseif($product['status'] == 1):?>
-									<span class="trans_alert transac_paid">Paid</span>
-								<?php elseif($product['status'] == 2):?>
-									<span class="trans_alert transac_pay_return">Payment returned to buyer</span>
-								<?php elseif($product['status'] == 3):?>
-									<span class="trans_alert transac_cod">Cash on delivery</span>
-								<?php endif;?>
+						<div class="transac_prod_first">
+							<div class="img_transac_prod_con">
+								<span class="img_transac_prod">
+									<img src="<?=base_url()?><?php echo $product['product_image_path'];?>">
+								</span>
 							</div>
-							<span class="shipping_comment">+ Shipping Comment</span>
+							<div class="info_transac_prod_con">
+								<div class="title_top_transac_table">
+									<span class="title_top_transac_col1">
+										<a href="<?php echo base_url();?>item/<?php echo $product['slug'];?>"><?php echo $product['name'];?></a>
+									</span>
+									<span class="title_top_transac_col2">
+										Quantity:<span><?php echo $product['order_quantity']?></span>
+									</span>
+									<span class="title_top_transac_col3">
+										Total:<span>Php<?php echo number_format($product['price'],2,'.',',');?></span>
+									</span>
+								</div>
+								<div class="transac_bought_con">
+									<span></span>
+									<span>
+									<?php if($product['status'] == 0):?>
+										<?php
+											$attr = array('class'=>'transac_response');
+											echo form_open('',$attr);
+										?>
+										<input class="transac_response_btn orange_btn3" value="Return payment to buyer" type="submit">
+										<input type="hidden" name="seller_response" value="<?php echo $opk;?>">
+										<input type="hidden" name="transaction_num" value="<?php echo $tk;?>">
+										<input type="hidden" name="invoice_num" value="<?php echo $transact['invoice_no'];?>">
+										<?php echo form_close();?>
+									<?php elseif($product['status'] == 1):?>
+										<span class="trans_alert transac_paid">Paid</span>
+									<?php elseif($product['status'] == 2):?>
+										<span class="trans_alert transac_pay_return">Payment returned to buyer</span>
+									<?php elseif($product['status'] == 3):?>
+										<span class="trans_alert transac_cod">Cash on delivery</span>
+									<?php endif;?>
+									</span>
+									<div><span class="shipping_comment">+ Shipping Comment</span></div>
+									<div class="shipping_comment_cont" style="display:none;">
+										<h2>Shipping Details</h2>
+										<div>
+											<?php
+												$disable = trim($product['shipping_comment']) == '' ? false : true;
+												$attr = array('class'=>'shipping_details');
+												echo form_open('',$attr);
+											?>
+												<label for="courier">Courier: </label>
+												<input type="text" name="courier" value="<?php echo html_escape($product['courier']);?>" <?php echo $disable ? 'disabled':''; ?> ><br/>
+												<label for="tracking_num">Tracking Number: </label>
+												<input type="text" name="tracking_num" value="<?php echo html_escape($product['tracking_num']);?>" <?php echo $disable ? 'disabled':''; ?> ><br/>
+												<label for="comment">* Comments: </label>
+												<textarea name="comment" cols="55" rows="5" data-value="<?php echo html_escape($product['shipping_comment']); ?>" <?php echo $disable ? 'disabled':''; ?>><?php echo html_escape($product['shipping_comment']); ?></textarea>
+												<input name="order_product" type="hidden" value="<?php echo $opk;?>">
+												<input name="transact_num" type="hidden" value="<?php echo $tk;?>">
+												<input class="shipping_comment_submit" type="submit" value="Save">
+												<span class="shipping_comment_edit" style="display: <?php echo $disable ? '':'none'?>;">Edit</span>
+												<span class="shipping_comment_cancel" style="display:none;">Cancel</span>
+											<?php echo form_close();?>
+										</div>
+									</div>
+								</div>
+								<div>
+									<p class="transac_prod_name">
+										
+										<?php if( count($product['attr']) !== 0 ):?>
+											<span><strong>Features and Specifications:</strong></span>
+											<?php foreach($product['attr'] as $temp):?>
+												<span class="feat_and_specs_items"><strong><?php echo html_escape($temp['field']);?>:</strong> <?php echo html_escape($temp['value']);?></span>
+											<?php endforeach;?>
+										<?php endif;?>
+									</p>
+								</div>								
+								<div class="clear"></div>
 						</div>
-						
-						<div class="shipping_comment_cont" style="display:none;">
-							<h2>Shipping Details</h2>
-							<div>
-								<?php
-									$disable = trim($product['shipping_comment']) == '' ? false : true;
-									$attr = array('class'=>'shipping_details');
-									echo form_open('',$attr);
-								?>
-									<label for="courier">Courier: </label>
-									<input type="text" name="courier" value="<?php echo html_escape($product['courier']);?>" <?php echo $disable ? 'disabled':''; ?> ><br/>
-									<label for="tracking_num">Tracking Number: </label>
-									<input type="text" name="tracking_num" value="<?php echo html_escape($product['tracking_num']);?>" <?php echo $disable ? 'disabled':''; ?> ><br/>
-									<label for="expected_date">Expected Date of Arrival: </label>
-									<input type="text" name="expected_date" value="<?php echo html_escape($product['expected_date'])?>" <?php echo $disable ? 'disabled':''; ?>><br/>
-									<label for="comment">* Comments: </label>
-									<textarea name="comment" cols="55" rows="5" data-value="<?php echo html_escape($product['shipping_comment']); ?>" <?php echo $disable ? 'disabled':''; ?>><?php echo html_escape($product['shipping_comment']); ?></textarea>
-									
-									<input name="order_product" type="hidden" value="<?php echo $opk;?>">
-									<input name="transact_num" type="hidden" value="<?php echo $tk;?>">
-									<input class="shipping_comment_submit" type="submit" value="Save">
-									<span class="shipping_comment_edit" style="display: <?php echo $disable ? '':'none'?>;">Edit</span>
-									<span class="shipping_comment_cancel" style="display:none;">Cancel</span>
-								<?php echo form_close();?>
-							</div>
-						</div>
-						
 					</div>
 				<?php endforeach;?>
 				
@@ -1756,33 +1793,46 @@
 			<?php foreach($transaction['complete']['buy'] as $tk=>$transact):?>
 			<div class="transac-container">
 				<div class="transac_title">
-					<h4><span class="transac_content"><strong>Invoice #:</strong>  <?php echo $transact['invoice_no'];?></span>
-						<span class="transac_title_date"><?php echo $transact['dateadded']?></span>
+					<div class="transac_title_table">
+						<div class="transac_title_col1">
+							<span><strong>Invoice No.:</strong></span>
+							<span><?php echo $transact['invoice_no'];?></span>
+						</div>
+						<div class="transac_title_col2">
+							<span><strong>Date:</strong></span>
+							<span class="transac_title_date"><?php echo $transact['dateadded']?></span>
+						</div>
+						<div class="transac_title_col3">
+
+						</div>
 					</div>
-					<div class="transac_prod_wrapper">
-						
-						<div class="transac-product-container">
-							<?php foreach($transact['products'] as $opk=>$product):?>
-							<div class="transac_prod_first">
+				</div>
+				<div class="transac_prod_wrapper">
+					<div class="transac-product-container">
+						<?php foreach($transact['products'] as $opk=>$product):?>
+						<div class="transac_prod_first">
+							<div class="img_transac_prod_con">
 								<span class="img_transac_prod">
 									<img src="<?=base_url()?><?php echo $product['product_image_path'];?>">
 								</span>
-								<div>
-									<p class="transac_prod_name">
-										<a href="<?php echo base_url();?>item/<?php echo $product['slug'];?>"><?php echo html_escape($product['name']);?></a><br />
-										<?php if( count($product['attr']) !== 0 ):?>
-											<small>Features and Specifications:</small>
-											<?php foreach($product['attr'] as $temp):?>
-												<span><strong><?php echo html_escape($temp['field']);?>:</strong><?php echo html_escape($temp['value']);?></span>
-											<?php endforeach;?>
-										<?php endif;?>
-									</p>
-									<p>Bought from: <a href="<?php echo base_url();?>vendor/<?php echo $product['seller'];?>"><?php echo $product['seller'];?></a></p>
-									<p>Quantity:<span class="fm1 f16"><?php echo $product['order_quantity']?></span></p>
-									<p>Total:<span class="fm1 f16">Php<?php echo number_format($product['price'],2,'.',',');?></span></p>
+							</div>
+							<div class="info_transac_prod_con">
+								<div class="title_top_transac_table">
+									<span class="title_top_transac_col1">
+										<a href="<?php echo base_url();?>item/<?php echo $product['slug'];?>"><?php echo html_escape($product['name']);?></a>
+									</span>
+									<span class="title_top_transac_col2">
+										Quantity:<span><?php echo $product['order_quantity']?></span>
+									</span>
+									<span class="title_top_transac_col3">
+										Total:<span>Php<?php echo number_format($product['price'],2,'.',',');?></span>
+									</span>
 								</div>
-								<div>
-									<?php if($product['status'] == 0):?>
+								<div class="transac_bought_con">
+									<span>Bought from: </span>
+									<span><a href="<?php echo base_url();?>vendor/<?php echo $product['seller'];?>"><?php echo $product['seller'];?></a></span>
+									<span>
+										<?php if($product['status'] == 0):?>
 										<?php
 											$attr = array('class'=>'transac_response');
 											echo form_open('',$attr);
@@ -1792,18 +1842,29 @@
 											<input type="hidden" name="transaction_num" value="<?php echo $tk;?>">
 											<input type="hidden" name="invoice_num" value="<?php echo $transact['invoice_no'];?>">
 										<?php echo form_close();?>
-									<?php elseif($product['status'] == 1):?>
-										<span class="trans_alert transac_paid">Paid</span>
-									<?php elseif($product['status'] == 2):?>
-										<span class="trans_alert transac_pay_return">Payment returned by seller</span>
-									<?php elseif($product['status'] == 3):?>
-										<span class="trans_alert transac_cod">Cash on delivery</span>
-									<?php endif;?>
+										<?php elseif($product['status'] == 1):?>
+											<span class="trans_alert transac_paid">Paid</span>
+										<?php elseif($product['status'] == 2):?>
+											<span class="trans_alert transac_pay_return">Payment returned by seller</span>
+										<?php elseif($product['status'] == 3):?>
+											<span class="trans_alert transac_cod">Cash on delivery</span>
+										<?php endif;?>
+									</span>
+								</div>
+								<div>
+									<p class="transac_prod_name">
+										<?php if( count($product['attr']) !== 0 ):?>
+											<span>Features and Specifications:</span>
+											<?php foreach($product['attr'] as $temp):?>
+												<span class="feat_and_specs_items"><strong><?php echo html_escape($temp['field']);?>:</strong><?php echo html_escape($temp['value']);?></span>
+											<?php endforeach;?>
+										<?php endif;?>
+									</p>
 								</div>
 								<div class="clear"></div>
 							</div>
-						<?php endforeach;?>
-						
+						</div>
+						<?php endforeach;?>	
 					</div>
 					<div class="feedback_wrapper">
 						<?php foreach($transact['users'] as $uk=>$user):?>
@@ -1896,24 +1957,50 @@
 			<?php foreach($transaction['complete']['sell'] as $tk=>$transact):?>
 			<div class="transac-container">
 				<div class="transac_title">
-					<h4>
-						<span class="transac_content">
-							<strong>Invoice #: </strong> <?php echo $transact['invoice_no'];?><br />
-							<strong>Sold to: </strong> <a href="<?php echo base_url();?>vendor/<?php echo $transact['buyer']?>"><?php echo $transact['buyer']?></a> <br />
+					<div class="transac_title_table">
+						<div class="transac_title_col1">
+							<span><strong>Invoice No.:</strong></span>
+							<span><?php echo $transact['invoice_no'];?></span> 
+						</div>
+						<div class="transac_title_col2">
+							<span><strong>Date:</strong></span>
+							<span class="transac_title_date"><?php echo $transact['dateadded']?></span>
+						</div>
+						<div class="transac_title_col3">
+							<strong>Sold to: </strong>
+							<a href="<?php echo base_url();?>vendor/<?php echo $transact['buyer']?>"><?php echo $transact['buyer']?></a> <br />
 							<span class="transac_address_details_show" style="color:#0191C8;cursor:pointer;font-size:10px;text-decoration:underline;">View Delivery details</span>
 							<div style="display:none;" class="transac_address_cont">
 								<?php foreach($transact['users'] as $uk=>$user):?>
-									<span class="tad_1"><strong>Consignee: </strong> <?php echo html_escape($user['address']['consignee']);?></span>
+									<span class="tad_1 consignee">
+										<strong>Consignee: </strong>
+										<span><?php echo html_escape($user['address']['consignee']);?></span> 
+									</span>
 									<?php if(trim($user['address']['mobile']) != ''):?>
-										<span class="tad_1"><strong>Mobile: </strong> <?php echo html_escape($user['address']['mobile']);?></span>
+										<span class="tad_1 mobile">
+											<strong>Mobile: </strong>
+											<span><?php echo html_escape($user['address']['mobile']);?></span> 
+										</span>
 									<?php endif;?>
 									<?php if(trim($user['address']['telephone']) != ''):?>
-										<span class="tad_1"><strong>Telephone: </strong> <?php echo html_escape($user['address']['telephone']);?></span>
+										<span class="tad_1 telephone">
+											<strong>Telephone: </strong>
+											<span><?php echo html_escape($user['address']['telephone']);?></span> 
+										</span>
 									<?php endif;?>
 									<span style="display:block;"></span>
-									<span class="tad_2"><strong>State/Region:</strong> <?php echo $user['address']['stateregion']?></span>
-									<span class="tad_2"><strong>City:</strong> <?php echo $user['address']['city'];?></span>
-									<span class="tad_3"><strong>Address:</strong> <?php echo html_escape($user['address']['fulladd']);?></span>
+									<span class="tad_2 stateregion">
+										<strong>State/Region:</strong>
+										<span><?php echo $user['address']['stateregion']?></span> 
+									</span>
+									<span class="tad_2 city">
+										<strong>City:</strong>
+										<span><?php echo $user['address']['city'];?></span> 
+									</span>
+									<span class="tad_3 fulladdress">
+										<strong>Address:</strong>
+										<span><?php echo html_escape($user['address']['fulladd']);?></span> 
+									</span>
 									<?php if( $user['address']['lat']!=0 && $user['address']['lng']!=0 ):?>
 										<span class="tsold_viewmap" data-lat="<?php echo $user['address']['lat'];?>" data-lng="<?php echo $user['address']['lng'];?>">View Map</span>
 										<div class="map_modalcont" style="display:none;"></div>
@@ -1921,49 +2008,65 @@
 								<?php endforeach;?>
 								<span class="transac_address_details_hide" style="color:#0191C8;cursor:pointer;font-size:10px;text-decoration:underline;width:100%;">Hide</span>
 							</div>
-						</span>
-						<span class="transac_title_date"><?php echo $transact['dateadded']?></span>
-					</h4>
+						</div>			
+					</div>
 				</div>
 				<div class="transac_prod_wrapper">
 					
 					<?php foreach($transact['products'] as $opk=>$product):?>
 					<div class="sold_prod_container transac-product-container">
-						<span class="img_transac_prod">
-							<img src="<?=base_url()?><?php echo $product['product_image_path'];?>">
-						</span>
+						<div class="transac_prod_first">
+							<div class="img_transac_prod_con">
+								<span class="img_transac_prod">
+									<img src="<?=base_url()?><?php echo $product['product_image_path'];?>">
+								</span>
+							</div>
+							<div class="info_transac_prod_con">
+								<div class="title_top_transac_table">
+									<span class="title_top_transac_col1">
+										<a href="<?php echo base_url();?>item/<?php echo $product['slug'];?>"><?php echo html_escape($product['name']);?></a>
+									</span>
+									<span class="title_top_transac_col2">
+										Quantity:<span><?php echo $product['order_quantity']?></span>
+									</span>
+									<span class="title_top_transac_col3">
+										Total:<span>Php<?php echo number_format($product['price'],2,'.',',');?></span>
+									</span>
+								</div>
+								<div class="transac_bought_con">
+									<span></span>
+									<span>
+										<?php if($product['status'] == 0):?>
+											<?php
+												$attr = array('class'=>'transac_response');
+												echo form_open('',$attr);
+											?>
+											<input class="transac_response_btn" value="Return payment to buyer" type="submit">
+											<input type="hidden" name="seller_response" value="<?php echo $opk;?>">
+											<input type="hidden" name="transaction_num" value="<?php echo $tk;?>">
+											<input type="hidden" name="invoice_num" value="<?php echo $transact['invoice_no'];?>">
+											<?php echo form_close();?>
+										<?php elseif($product['status'] == 1):?>
+											<span class="trans_alert transac_paid">Paid</span>
+										<?php elseif($product['status'] == 2):?>
+											<span class="trans_alert transac_pay_return">Payment returned to buyer</span>
+										<?php elseif($product['status'] == 3):?>
+											<span class="trans_alert transac_cod">Cash on delivery</span>
+										<?php endif;?>							
+									</span>
+								</div>
+							</div>
+						</div>
 						<div>
 							<p class="transac_prod_name">
-								<a href="<?php echo base_url();?>item/<?php echo $product['slug'];?>"><?php echo html_escape($product['name']);?></a>
+								
 								<?php if( count($product['attr']) !== 0 ):?>
 									<small>Features and Specifications:</small>
 									<?php foreach($product['attr'] as $temp):?>
 										<span><strong><?php echo html_escape($temp['field']);?>:</strong><?php echo html_escape($temp['value']);?></span>
 									<?php endforeach;?>
 								<?php endif;?>
-							</p>
-							<p>Quantity:<span class="fm1 f18"><?php echo $product['order_quantity']?></span></p>
-							<p>Total:<span class="fm1 f18">Php<?php echo number_format($product['price'],2,'.',',');?></span></p>
-							<div>
-							<?php if($product['status'] == 0):?>
-								<?php
-									$attr = array('class'=>'transac_response');
-									echo form_open('',$attr);
-								?>
-								<input class="transac_response_btn" value="Return payment to buyer" type="submit">
-								<input type="hidden" name="seller_response" value="<?php echo $opk;?>">
-								<input type="hidden" name="transaction_num" value="<?php echo $tk;?>">
-								<input type="hidden" name="invoice_num" value="<?php echo $transact['invoice_no'];?>">
-								<?php echo form_close();?>
-							<?php elseif($product['status'] == 1):?>
-								<span class="trans_alert transac_paid">Paid</span>
-							<?php elseif($product['status'] == 2):?>
-								<span class="trans_alert transac_pay_return">Payment returned to buyer</span>
-							<?php elseif($product['status'] == 3):?>
-								<span class="trans_alert transac_cod">Cash on delivery</span>
-							<?php endif;?>
-							</div>
-							
+							</p>						
 						</div>
 					</div>
 				<?php endforeach;?>
