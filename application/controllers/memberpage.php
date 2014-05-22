@@ -180,7 +180,7 @@ class Memberpage extends MY_Controller
 				'deleted_products' => $user_products['deleted'],
                 'sold_count' => $user_products['sold_count'],
 				'last_dashboard_item_id' => $user_products['last_id']
-                ); 
+                );
 		$data = array_merge($data, $this->memberpage_model->getLocationLookup());
 		$data = array_merge($data,$this->memberpage_model->get_member_by_id($uid));
 		$data = array_merge($data,$this->memberpage_model->get_work_by_id($uid));
