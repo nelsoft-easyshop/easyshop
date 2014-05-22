@@ -89,10 +89,10 @@
                   <?php echo form_close();?>
                   <p class="notify">You will be notified regarding your order status via email or sms.</p>
                   <!-- <p class="subscribe"><input type="checkbox" checked> <img src="<?= base_url() ?>assets/images/icon_email.png" alt="email"> Subscribe to Easyshop Newsletter for great deals and amazing discounts</p> -->
-                  <p class="chck_privacy"><input type="checkbox"  id="chk_cod"> I acknowledge I have read and understood Easyshop.ph's <a href="">Privacy Policy</a>.</p>
+                  <p class="chck_privacy"><input type="checkbox"  id="chk_cod" name='chk_cod'><label for='chk_cod'> I acknowledge I have read and understood Easyshop.ph's</label> <a href="">Privacy Policy</a>.</p>
                   <?php }else{ ?>
 
-                  <span style="color:red"><strong>NOTE: one or more of your chosen items are not available for cash on delivery.</strong></span>
+                  <span><strong>NOTE: one or more of your chosen items are not available for cash on delivery.</strong></span>
                   <div class="pay_sum_head">
                     <div class="pay_sum_c1">Seller</div>
                     <div class="pay_sum_c2">Product</div>
@@ -152,7 +152,7 @@
               <div style="clear:both"></div>
               <p class="notify">You will be notified regarding your order status via email or sms.</p>
               <!-- <p class="subscribe"><input type="checkbox" checked> <img src="<?= base_url() ?>assets/images/icon_email.png" alt="email"> Subscribe to Easyshop Newsletter for great deals and amazing discounts</p> -->
-              <p class="chck_privacy"><input type="checkbox" id="chk_paypal2"> I acknowledge I have read and understood Easyshop.ph's <a href="">Privacy Policy</a>.</p>
+              <p class="chck_privacy"><input type="checkbox" id="chk_paypal2" name='chk_paypal2'><label for='chk_paypal2'> I acknowledge I have read and understood Easyshop.ph's</label> <a href="">Privacy Policy</a>.</p>
             </div>
 
             <!-- #### PAYPAL #### -->
@@ -185,14 +185,14 @@
           <div style="clear:both"></div>
           <p class="notify">You will be notified regarding your order status via email or sms.</p>
           <!-- <p class="subscribe"><input type="checkbox" checked> <img src="<?= base_url() ?>assets/images/icon_email.png" alt="email"> Subscribe to Easyshop Newsletter for great deals and amazing discounts</p> -->
-          <p class="chck_privacy"><input type="checkbox"  id="chk_paypal1"> I acknowledge I have read and understood Easyshop.ph's <a href="">Privacy Policy</a>.</p>
+          <p class="chck_privacy"><input type="checkbox"  id="chk_paypal1" name='chk_paypal1'><label for='chk_paypal1'> I acknowledge I have read and understood Easyshop.ph's </label><a href="">Privacy Policy</a>.</p>
         </div>
 
         <!-- #### DRAGON PAY #### -->
 
         <div id="dragonpay" class="payment_inner_content">
          <input type="button" class="btnDp" value="Pay via DRAGON PAY">
-         <p class="chck_privacy"><input type="checkbox" id="chk_dp"> I acknowledge I have read and understood Easyshop.ph's <a href="">Privacy Policy</a>.</p>
+         <p class="chck_privacy"><input type="checkbox" id="chk_dp" name='chk_dp'> <label for='chk_dp'>I acknowledge I have read and understood Easyshop.ph's  </label><a href="">Privacy Policy</a>.</p>
        </div>
 
 
@@ -204,7 +204,7 @@
    }else{
     ?>
     <br/>
-    <span style='padding:8px; background-color: #FFEFEF; border: 1px solid #FF0000; font-size: 12px; font-weight:bold;'>One or more of your item(s) is unavailable in your location. </span>
+    <span style='padding:8px; font-size: 12px; font-weight:bold;'>One or more of your item(s) is unavailable in your location. </span>
   </div>
 
   <div class="order_sum_table">
@@ -367,8 +367,8 @@ if($success){
 <?php echo form_close();?>
 </div>
 
- 
- 
-<script type='text/javascript' src='<?=base_url()?>assets/JavaScript/payment.js'>
-  var jsonCity = <?php echo $json_city;?>;
+<script type='text/javascript'>
+      var jsonCity = <?php echo $json_city;?>;
 </script>
+ 
+<script type='text/javascript' src='<?=base_url()?>assets/JavaScript/payment.js'></script>

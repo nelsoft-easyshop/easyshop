@@ -36,12 +36,12 @@ $(document).ready(function(){
 
         if(type == 1){
             if(!$('#chk_paypal1').is(':checked')){
-                alert('accept our terms!');
+                alert('Please acknowledge that you have read and understood our privacy policy.');
                 return false;
             }
         }else{
             if(!$('#chk_paypal2').is(':checked')){
-                alert('accept our terms!');
+                  alert('Please acknowledge that you have read and understood our privacy policy.');
                 return false;
             }
         } 
@@ -92,7 +92,7 @@ $(document).ready(function(){
                 }
             });
         }else{
-            alert('accept our terms!');
+              alert('Please acknowledge that you have read and understood our privacy policy.');
         }
     });
 
@@ -104,7 +104,7 @@ $(document).ready(function(){
         if($('#chk_cod').is(':checked')){
             $('#codFrm').submit();
         }else{
-            alert('accept our terms!');
+            alert('Please acknowledge that you have read and understood our privacy policy.');
         }
     });
 
