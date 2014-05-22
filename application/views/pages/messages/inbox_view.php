@@ -146,7 +146,7 @@
             url : "<?=base_url()?>messages/retrieve_msgs",
 			data : {csrfname:csrftoken,todo:todo},
 			success : function(d) {
-                $(".top_links_right a:first-child").html("<img src='<?=base_url()?>assets/images/msg_icon.ico'>"+ "[ <span>" +d.unread_msgs+ "</span> ] ");
+                $(".msg_countr").html(d.unread_msgs);
                 document.title = (d.unread_msgs == 0 ? "Message | Easyshop.ph" : "Message (" + d.unread_msgs + ") | Easyshop.ph");
                 
                 if (d.unread_msgs != 0) {
@@ -167,11 +167,10 @@
 			$("#modal-container").hide();
 			$("#msg-message").val("");
             $("#msg_field").empty();
-			//$("#msg_field").empty().append('<img id="msg_loader" src="'+config.base_url+'assets/images/orange_loader.gif">');
 			$("#msg_textarea").hide();
 			alert("Your message has been sent");
 		}else {
-			alert("Sorry, we failed to send your message.");
+			alert("failed to send your message,Try again.");
             return false;
 		}
 	});   	
@@ -182,7 +181,7 @@
 		if(result != ""){
             $("#table_id tbody").empty();
 			onFocus_Reload(result);
-			$("#msg_field").empty().append('<img id="msg_loader" src="<?=base_url()?>assets/images/orange_loader.gif">');
+			$("#msg_field").empty();
 			$("#msg_textarea").hide();
 			$("#chsn_delete_btn").hide();            
 		}else {
@@ -195,7 +194,7 @@
 		if(result != ""){
             $("#table_id tbody").empty();
 			onFocus_Reload(result);
-			$("#msg_field").empty().append('<img id="msg_loader" src="<?=base_url()?>assets/images/orange_loader.gif">');
+			$("#msg_field").empty();
 			$("#msg_textarea").hide();
 		}else {
             location.reload();
@@ -223,7 +222,6 @@
                     onFocus_Reload(data)
                     result = true;
                 }else{
-                    alert("The user you are trying to message does not exist");
                     result = false;
                 }
 			}
