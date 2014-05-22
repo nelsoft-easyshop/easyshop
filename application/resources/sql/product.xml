@@ -366,7 +366,7 @@ FROM
                     ON order_product_temp.product_id = p.id_product
          WHERE p.member_id = :id AND p.is_draft = 0
          GROUP BY p.`id_product`, p.`slug`, p.`name`, p.`brief`, p.`price`, p.`member_id`, i.product_image_path, p.`is_delete`,p.`cat_id`,p.lastmodifieddate,order_product_temp.sum_quantity
-         ORDER BY p.lastmodifieddate DESC 
+         ORDER BY p.`id_product` DESC 
 		 LIMIT 10
     </select>
 	
@@ -385,7 +385,7 @@ FROM
                     ON order_product_temp.product_id = p.id_product
          WHERE p.member_id = :id AND p.is_draft = 0 AND :last_id > p.id_product 
          GROUP BY p.`id_product`, p.`slug`, p.`name`, p.`brief`, p.`price`, p.`member_id`, i.product_image_path, p.`is_delete`,p.`cat_id`,p.lastmodifieddate,order_product_temp.sum_quantity
-         ORDER BY p.lastmodifieddate DESC 
+         ORDER BY p.`id_product` DESC 
 	</select>
 	
     <select id="getProductById">
