@@ -226,7 +226,7 @@ $(document).ready(function(){
 				}
 		 },
 		 submitHandler: function(form){
-			if( $('#username').hasClass('pass') && $('#email').hasClass('pass') ){
+			if( $('#username').hasClass('pass') && $('#email').hasClass('pass') && !($('#mobile').hasClass('fail')) ){
 				$('#register_form1_loadingimg').show().css('display','inline-block');
 				$('#register_form1_btn').attr('disabled', true);
 
@@ -344,11 +344,13 @@ function mobile_check(){
 			$('.mobile_availability').html('');
 			$('#mobilecheck').attr('value', $('#mobile').val());
 			field.addClass('pass');
+			field.removeClass('fail');
 		}
 		else{
 			showx($('#mobile'));
 			$('.mobile_availability').html('Mobile is already in use.');
 			field.removeClass('pass');
+			field.addClass('fail');
 		}
 		field.removeClass('forSearch');
 		$('#mobile_loader').hide();
