@@ -315,9 +315,14 @@ div.sell_steps4 ul li:nth-child(4) a {
 }
 
 .main_product_category a.active,
-.main_product_category a:hover {
+.main_product_category a.active:hover {
     color: #fff;
     background-color: #f18200;
+}
+
+.main_product_category a:hover {
+    color: #fff;
+    background-color: #ffb400;
 }
 
 .main_product_category li.active:after {
@@ -369,13 +374,14 @@ div.sell_steps4 ul li:nth-child(4) a {
 }
 
 .product_sub_category > div a.active,
+.product_sub_category > div a.active:hover,
 .product_sub_category > div a:hover {
     background-color: #f18200;
     color: #fff;
 }
 
 .product_sub_category > div a:hover {
-    background-color: #f18200;
+    background-color: #ffb400;
     color: #fff;
 }
 
@@ -824,7 +830,7 @@ div.sell_steps4 ul li:nth-child(4) a {
    text-align: center;
    text-transform: uppercase;
    transition: all 0.3s ease-in-out 0s;
-   width: 166px;
+/*   width: 170px;*/
    padding: 5px 8px;
 }
 
@@ -1156,7 +1162,7 @@ a:hover.tooltips span {
 }
 
 .product_combination_locked:before {
-    background: url('../images/global_sprite.png') -591px -308px no-repeat;
+    background: url('../images/global_sprite.png') -588px -308px no-repeat;
     left: 4px;
     content: "";
     display: inline-block;
@@ -1320,7 +1326,7 @@ a:hover.tooltips span {
 .rate_calculator_con {
 /*    border-top: 1px solid #CECECE;
     margin-top: 40px;*/
-    padding-top: 10px;
+    padding: 10px;
     text-align: left;
 }
 
@@ -1336,14 +1342,47 @@ a:hover.tooltips span {
 
 .shipping_courier_container a {
     display: inline-block;
-    margin: 0 5px;
+    margin-right: 10px;
 }
 
-.shipping_courier_container img {
+.rate_calculator_con a {
+    display: inline-block;   
+}
+
+.rate_calculator_con a span {
+    border:1px solid #d6d6d6;
+    display: table-cell;
+    background-color: #f0efef;
+    font-size: 11px;
+    height: 70px;
+    padding:8px;
+    text-align: center;
     vertical-align: middle;
-    border:1px solid #DBD8D7;
-    margin-bottom: 10px;
-    width: 75px;
+    width: 70px;
+
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+
+    -webkit-transition: all 0.3s ease-in-out;
+    -moz-transition:    all 0.3s ease-in-out;
+    -o-transition:      all 0.3s ease-in-out;
+     transition:        all 0.3s ease-in-out;
+}
+
+.rate_calculator_con a span:hover {
+    border:1px solid #f18200;
+    background-color: #f18200;
+    color: #fff;
+}
+
+.rate_calculator_con img {
+    border: 1px solid #DBD8D7;
+    display: block;
+    margin: 8px auto;
+/*    
+    vertical-align: middle;*/
+    width: 45px;
 }
 
 .shipping_container table tr:first-child td {
@@ -1475,6 +1514,7 @@ tr.tr_shipping_summary:nth-child(even) td {
 .shipping_summary_container {
     border: 1px solid #CECECE;
     float: left;
+    margin-bottom: 10px;
     margin-top: 8px;
     width: 495px;
 }
@@ -1485,7 +1525,7 @@ tr.tr_shipping_summary:nth-child(even) td {
 
 .shipping_list_items_con {
     background-color: #F8F7F7;
-    height: 420px;
+    height: 528px;
     overflow-y:scroll;
 }
 
@@ -1527,7 +1567,7 @@ tr.tr_shipping_summary:nth-child(even) td {
 }
 
 #div_locationwarning {
-    border: 1px solid green;
+    border: 1px solid #ff0000;
     margin: 5px auto;
     padding: 8px;
     width: 440px;
