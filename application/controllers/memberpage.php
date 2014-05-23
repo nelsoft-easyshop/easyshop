@@ -173,12 +173,15 @@ class Memberpage extends MY_Controller
 	{
 		$uid = $this->session->userdata('member_id');
 		$user_products = $this->memberpage_model->getUserItems($uid);
+		$user_product_count = $this->memberpage_model->getUserItemCount($uid);
 		$data = array(
 				'title' => 'Easyshop.ph - Member Profile',
 				'image_profile' => $this->memberpage_model->get_image($uid),
 				'active_products' => $user_products['active'],
 				'deleted_products' => $user_products['deleted'],
-                'sold_count' => $user_products['sold_count'],
+				'active_count' => $user_product_count['active'],
+				'deleted_count' => $user_product_count['deleted'],
+                'sold_count' => $user_product_count['sold'],
 				'last_dashboard_item_id' => $user_products['last_id']
                 );
 		$data = array_merge($data, $this->memberpage_model->getLocationLookup());
@@ -478,12 +481,15 @@ class Memberpage extends MY_Controller
             $this->load->view('templates/header_topnavsolo', $data);
 			$sellerid = $vendordetails['id_member'];
 			$user_products = $this->memberpage_model->getUserItems($sellerid);
+			$user_product_count = $this->memberpage_model->getUserItemCount($sellerid);
 			$data = array_merge($data,array(
 					'vendordetails' => $vendordetails,
 					'image_profile' => $this->memberpage_model->get_Image($sellerid),
 					'active_products' => $user_products['active'],
 					'deleted_products' => $user_products['deleted'],
-                    'sold_count' => $user_products['sold_count'],
+					'active_count' => $user_product_count['active'],
+					'deleted_count' => $user_product_count['deleted'],
+                    'sold_count' => $user_product_count['sold'],
 					'last_dashboard_item_id' => $user_products['last_id']
 					));
 			$data['transaction'] = $this->memberpage_model->getTransactionDetails($sellerid);
@@ -700,9 +706,6 @@ class Memberpage extends MY_Controller
 		$jsonData = array(
 			'active' => $this->load->view('pages/user/'.$activeView, $parseData, true),
 			'deleted' => $this->load->view('pages/user/'.$deletedView, $parseData, true),
-			'active_count' => $data['active_count'],
-			'deleted_count' => $data['deleted_count'],
-			'sold_count' => $data['sold_count']
 		);
 		
 		echo json_encode($jsonData);

@@ -23,14 +23,6 @@ $(document).ready(function(){
 			window.location.reload(true);
 			return false;
 		}
-		// Updated Item count display
-		var TotalItems = parseInt($('.db_total_items:first').val()) + obj['active_count'];
-		var ActiveItems = parseInt($('.db_active_items:first').val()) + obj['active_count'];
-		var SoldItems = parseInt($('.db_sold_items:first').val()) + obj['sold_count'];
-		$('.db_total_items').val(TotalItems);
-		$('.db_active_items').val(ActiveItems);
-		$('.db_sold_items').val(SoldItems);
-		$('.db_active_items').text(ActiveItems);
 		
 		// Update display of active products
 		var activeItems = $('#active_items');

@@ -95,11 +95,11 @@
 			<div class="progress_bar_panel">
 				<div>
 					<h3>Total Posted Items</h3>
-					<input class="items db_total_items" data-width="150" data-fgColor="#FF8400" data-max="1000" data-thickness=".1" data-angleOffset="180" data-readOnly=true data-displayPrevious=true data-value="<?php echo count($active_products)+count($deleted_products);?>"   value="<?php echo count($active_products)+count($deleted_products);?>">
+					<input class="items db_total_items" data-width="150" data-fgColor="#FF8400" data-max="1000" data-thickness=".1" data-angleOffset="180" data-readOnly=true data-displayPrevious=true data-value="<?php echo $active_count + $deleted_count;?>"   value="<?php echo $active_count + $deleted_count;?>">
 				</div>
 				<div>
 					<h3>Active Items</h3>
-					<input class="items db_active_items" data-width="150" data-fgColor="#ff4400" data-max="1000" data-thickness=".1" data-angleOffset="180" data-readOnly=true data-displayPrevious=true data-value="<?php echo count($active_products);?>"   value="<?php echo count($active_products);?>">
+					<input class="items db_active_items" data-width="150" data-fgColor="#ff4400" data-max="1000" data-thickness=".1" data-angleOffset="180" data-readOnly=true data-displayPrevious=true data-value="<?php echo $active_count;?>"   value="<?php echo $active_count;?>">
 					
 				</div>
 				<div>
@@ -158,8 +158,8 @@
 <div class="clear"></div>
 <div>
 	<ul class="idTabs post_items">
-		<li><a href="#active_items">Active Items <span class="db_active_items"><?php echo count($active_products);?></span></a></li>
-		<li><a href="#deleted_items">Deleted Items<span class="db_deleted_items"><?php echo count($deleted_products);?></span></a></li>
+		<li><a href="#active_items">Active Items <span class="db_active_items"><?php echo $active_count;?></span></a></li>
+		<li><a href="#deleted_items">Deleted Items<span class="db_deleted_items"><?php echo $deleted_count;?></span></a></li>
 		<li><a href="#dashboard-feedbacks">Feedbacks <span><?php echo $allfeedbacks['afbcount'];?></span></a></li>
 		<!-- <li><input type="text" value="search"><input type="submit" value="Submit"></li> -->
 	</ul>
@@ -1413,7 +1413,15 @@
 
 										<?php if( strlen(trim($product['shipping_comment'])) > 0 ):?>
 											<div>
-												<span class="shipping_comment">View Shipping Comment</span>
+												<label for="courier">Courier: </label>
+												<input type="text" name="courier" value="<?php echo html_escape($product['courier']);?>" disabled ><br/>
+												<label for="tracking_num">Tracking Number: </label>
+												<input type="text" name="tracking_num" value="<?php echo html_escape($product['tracking_num']);?>" disabled ><br/>
+												<label for="expected_date">Expected Date of Arrival: </label>
+												<input type="text" name="expected_date" value="<?php echo html_escape($product['expected_date'])?>" disabled><br/>
+												<label for="comment">* Comments: </label>
+												<textarea name="comment" cols="55" rows="5" disabled ><?php echo html_escape($product['shipping_comment']); ?></textarea>								
+												<span style="margin-left:32em;"><?php echo $product['datemodified'];?></span>
 											</div>
 											<div class="shipping_comment_cont" style="display:none;">
 												<h2>Shipping Details</h2>

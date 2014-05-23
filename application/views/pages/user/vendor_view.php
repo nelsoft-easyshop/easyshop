@@ -56,11 +56,11 @@
 				<div class="progress_bar_panel">
 					<div>
 						<h3>Total Posted Items</h3>
-						<input class="items db_total_items" data-width="150" data-fgColor="#FF8400" data-max="1000" data-thickness=".1" data-angleOffset="180" data-readOnly=true data-displayPrevious=true data-value="<?php echo count($active_products)+count($deleted_products);?>" value="<?php echo count($active_products)+count($deleted_products);?>">
+						<input class="items db_total_items" data-width="150" data-fgColor="#FF8400" data-max="1000" data-thickness=".1" data-angleOffset="180" data-readOnly=true data-displayPrevious=true data-value="<?php echo $active_count + $deleted_count;?>" value="<?php echo $active_count + $deleted_count;?>">
 					</div>
 					<div>
 						<h3>Active Items</h3>
-						<input class="items db_active_items" data-width="150" data-fgColor="#ff4400" data-max="1000" data-thickness=".1" data-angleOffset="180" data-readOnly=true data-displayPrevious=true data-value="<?php echo count($active_products);?>" value="<?php echo count($active_products);?>">
+						<input class="items db_active_items" data-width="150" data-fgColor="#ff4400" data-max="1000" data-thickness=".1" data-angleOffset="180" data-readOnly=true data-displayPrevious=true data-value="<?php echo $active_count;?>" value="<?php echo $active_count;?>">
 					</div>
 					<div>
 						<h3>Sold Items</h3>
@@ -115,7 +115,7 @@
 				<div class="clear"></div>
 				<div>
 					<ul class="idTabs post_items">
-						<li><a href="#active_items">Active Items <span class="db_active_items"><?php echo count($active_products);?></span></a></li>
+						<li><a href="#active_items">Active Items <span class="db_active_items"><?php echo $active_count;?></span></a></li>
 						<li><a href="#dashboard-feedbacks">Feedbacks <span><?php echo $allfeedbacks['afbcount'];?></span></a></li>
 					</ul>
 				</div>

@@ -22,16 +22,6 @@ $(document).ready(function(){
 			alert('Failed to retrieve user product list.');
 			return false;
 		}
-		// Updated Item count display
-		var TotalItems = parseInt($('.db_total_items:first').val()) + obj['active_count'] + obj['deleted_count'];
-		var ActiveItems = parseInt($('.db_active_items:first').val()) + obj['active_count'];
-		var SoldItems = parseInt($('.db_sold_items:first').val()) + obj['sold_count'];
-		var DeletedItems = parseInt($('.db_deleted_items:first').text()) + obj['deleted_count'];
-		$('.db_total_items').val(TotalItems);
-		$('.db_active_items').val(ActiveItems);
-		$('.db_sold_items').val(SoldItems);
-		$('.db_deleted_items').text(DeletedItems);
-		$('.db_active_items').text(ActiveItems);
 		
 		// Update display of active products
 		var activeItems = $('#active_items');

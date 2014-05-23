@@ -352,7 +352,9 @@ FROM
 	</select>
 	
 	<select id="getUserItemCount">
-		
+		SELECT COUNT(CASE WHEN p.is_delete = 0 THEN 1 END) as active, COUNT(CASE WHEN p.is_delete = 1 THEN 1 END) as deleted, (SELECT SUM(order_quantity) FROM es_order_product WHERE seller_id = :member_id AND status NOT IN (2,6) ) as sold
+		FROM es_product p
+		WHERE p.is_draft = 0 and p.member_id = :member_id;
 	</select>
 	
     <select id="getUserItems">

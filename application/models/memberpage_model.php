@@ -344,6 +344,21 @@ class memberpage_model extends CI_Model
 		
 	}
 	
+	# Check query and adjust filter for order_product_status
+	# Current filter : 2 = returned , 6 = dragonpay expired
+	# Returns 'active', 'deleted' and 'sold'
+	function getUserItemCount($member_id)
+	{
+		$query = $this->sqlmap->getFilenameID('product','getUserItemCount');
+		$sth = $this->db->conn_id->prepare($query);
+		$sth->bindParam(':member_id',$member_id);
+		$sth->execute();
+		$row = $sth->fetch(PDO::FETCH_ASSOC);
+		
+		return $row;
+	}
+	
+	
 	function getUserItems($member_id, $lastid = 0) 	#Retrieves user items to be displayed on dashboard
 	{
 		if($lastid === 0){
@@ -407,13 +422,7 @@ class memberpage_model extends CI_Model
 				array_push($data['active'],$row);
 			else
 				array_push($data['deleted'],$row);
-            $data['sold_count'] += $row['sold'];
-                
 		}			
-		
-		$data['active_count'] = count($data['active']);
-		$data['deleted_count'] = count($data['deleted']);
-		
 		return $data;
 	}
 	
