@@ -395,7 +395,7 @@ FROM
 	</select>
 	
     <select id="getProductById">
-        SELECT a.`name` AS `product`, a.`slug` AS slug, a.`id_product`,`cat_id`, b.`product_image_path`, a.`price`, a.`member_id` as sellerid
+        SELECT a.`name` AS `product`, a.`slug` AS slug,a.`brief`,a.`id_product`,`cat_id`, b.`product_image_path`, a.`price`, a.`member_id` as sellerid
         FROM `es_product` a
         LEFT JOIN `es_product_image` b ON b.`product_id` = a.`id_product` AND b.is_primary = '1'
         WHERE `id_product` = :id

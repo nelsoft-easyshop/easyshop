@@ -74,10 +74,14 @@ class Cart extends MY_Controller{
             'options' => $opt,
             'img'     => $this->product_model->getProductImages($_POST['id']),
             'member_id'  => $base['sellerid'],
+            'brief'  => $base['brief'],
             'product_itemID'  => $productItemId,
             'maxqty' => $max_qty,
             'slug' => $base['slug'],
             );
+        print "<pre>";
+        print_r($base);
+        print "</pre>";
         return $data;
     }
     
