@@ -181,8 +181,11 @@
 		<a href="#" class="next" data-action="next">&rsaquo;</a>
 		<a href="#" class="last" data-action="last">&raquo;</a>
 	</div>
-    
-    <div class="post_item_srch_container">
+	
+	<?php if(count($active_products) == 0):?>
+		<p><strong>No items on sale.</strong></p>
+	<?php else:?>
+	<div class="post_item_srch_container">
 		<input type="text" class="box sch_box" placeholder="Search" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Search'" />
 		<span class="span_bg sch_btn"></span>
 		<label for="active_sort">Sort By</label>
@@ -194,11 +197,6 @@
 		<span class="span_bg arrow_sort"></span>
 		<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" class="loading_img" style="display:none;"/>
 	</div>
-	
-	<?php if(count($active_products) == 0):?>
-		<p><strong>No items on sale.</strong></p>
-	<?php else:?>
-	
 	
 	<div class="paging">					
 		<?php $product_counter = $mycounter = 0; 
@@ -307,7 +305,11 @@
 		<a href="#" class="last" data-action="last">&raquo;</a>
 	</div>
 	
-    	<div class="post_item_srch_container">
+	<?php if(count($deleted_products) == 0):?>
+		<p><strong>No deleted items.</strong></p>
+	<?php else:?>
+
+	<div class="post_item_srch_container">
 		<input type="text" class="box sch_box" placeholder="Search" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Search'" />
 		<span class="span_bg sch_btn"></span>
 		<label for="active_sort">Sort By</label>
@@ -320,12 +322,6 @@
 		<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" class="loading_img" style="display:none;"/>
 	</div>
 	
-    
-	<?php if(count($deleted_products) == 0):?>
-
-		<p><strong>There are no deleted items.</strong></p>
-	<?php else:?>
-
 	<div class="paging">
 		<?php $product_counter =0; $mycounter = 0;?>
 		<?php foreach($deleted_products as $deleted_product):?>
@@ -1385,55 +1381,57 @@
 									</span>
 								</div>	
 								<div class="transac_bought_con">
-									<span>Bought from: </span>
-									<span>
+									<span class="transac_bought_con_col1">Bought from: </span>
+									<span class="transac_bought_con_col2">
 										<a href="<?php echo base_url();?>vendor/<?php echo $product['seller'];?>">
 											<?php echo $product['seller'];?>
 										</a>
 									</span>
 
-									<span>
-									<?php if($transact['transac_stat'] == 0):?>
-										<?php if($product['status'] == 0):?>
-											<?php
-												$attr = array('class'=>'transac_response');
-												echo form_open('',$attr);
-											?>
-											
-											<input class = "transac_response_btn orange_btn3" value="Forward payment to seller" type="submit">
-												<input type="hidden" name="buyer_response" value="<?php echo $opk;?>">
-												<input type="hidden" name="transaction_num" value="<?php echo $tk;?>">
-												<input type="hidden" name="invoice_num" value="<?php echo $transact['invoice_no'];?>">
-											<?php echo form_close();?>
-										<?php elseif($product['status'] == 1):?>
-											<span class="trans_alert transac_paid">Paid</span>
-										<?php elseif($product['status'] == 2):?>
-											<span class="trans_alert transac_pay_return">Payment returned by seller</span>
-										<?php elseif($product['status'] == 3):?>
-											<span class="trans_alert transac_cod">Cash on delivery</span>
+									<span class="transac_bought_con_col3">
+										Status:
+										<?php if($transact['transac_stat'] == 0):?>
+											<?php if($product['status'] == 0):?>
+												<?php
+													$attr = array('class'=>'transac_response');
+													echo form_open('',$attr);
+												?>		
+																					
+												<input class = "transac_response_btn transac_forward orange_btn3" value="Forward payment to seller" type="submit">
+													<input type="hidden" name="buyer_response" value="<?php echo $opk;?>">
+													<input type="hidden" name="transaction_num" value="<?php echo $tk;?>">
+													<input type="hidden" name="invoice_num" value="<?php echo $transact['invoice_no'];?>">
+												<?php echo form_close();?>
+											<?php elseif($product['status'] == 1):?>
+												<span class="trans_alert transac_paid">Paid</span>
+											<?php elseif($product['status'] == 2):?>
+												<span class="trans_alert transac_pay_return">Payment returned by seller</span>
+											<?php elseif($product['status'] == 3):?>
+												<span class="trans_alert transac_cod">Cash on delivery</span>
+											<?php endif;?>
 										<?php endif;?>
-									<?php endif;?>
-									</span>		
-											
-									<?php if( strlen(trim($product['shipping_comment'])) > 0 ):?>
-										<div>
-											<span class="shipping_comment">View Shipping Comment</span>
-										</div>
-										<div class="shipping_comment_cont" style="display:none;">
-											<h2>Shipping Details</h2>
+
+										<?php if( strlen(trim($product['shipping_comment'])) > 0 ):?>
 											<div>
-												<label for="courier">Courier: </label>
-												<input type="text" name="courier" value="<?php echo html_escape($product['courier']);?>" disabled ><br/>
-												<label for="tracking_num">Tracking Number: </label>
-												<input type="text" name="tracking_num" value="<?php echo html_escape($product['tracking_num']);?>" disabled ><br/>
-												<label for="expected_date">Expected Date of Arrival: </label>
-												<input type="text" name="expected_date" value="<?php echo html_escape($product['expected_date'])?>" disabled><br/>
-												<label for="comment">* Comments: </label>
-												<textarea name="comment" cols="55" rows="5" disabled ><?php echo html_escape($product['shipping_comment']); ?></textarea>								
-												<span style="margin-left:35em;"><?php echo $product['datemodified'];?></span>
+												<span class="shipping_comment">View Shipping Comment</span>
 											</div>
-										</div>
-									<?php endif;?>
+											<div class="shipping_comment_cont" style="display:none;">
+												<h2>Shipping Details</h2>
+												<div>
+													<label for="courier">Courier: </label>
+													<input type="text" name="courier" value="<?php echo html_escape($product['courier']);?>" disabled ><br/>
+													<label for="tracking_num">Tracking Number: </label>
+													<input type="text" name="tracking_num" value="<?php echo html_escape($product['tracking_num']);?>" disabled ><br/>
+													<label for="expected_date">Expected Date of Arrival: </label>
+													<input type="text" name="expected_date" value="<?php echo html_escape($product['expected_date'])?>" disabled><br/>
+													<label for="comment">* Comments: </label>
+													<textarea name="comment" cols="55" rows="5" disabled ><?php echo html_escape($product['shipping_comment']); ?></textarea>								
+													<span style="margin-left:35em;"><?php echo $product['datemodified'];?></span>
+												</div>
+
+											</div>
+										<?php endif;?>
+									</span>		
 								</div>
 								<div>
 									<p class="transac_prod_name">
@@ -1603,6 +1601,7 @@
 					</div>
 				</div>
 				<div class="transac_prod_wrapper">
+					
 					<?php foreach($transact['products'] as $opk=>$product):?>
 					<div class="sold_prod_container transac-product-container">
 						<div class="transac_prod_first">
@@ -1624,14 +1623,16 @@
 									</span>
 								</div>
 								<div class="transac_bought_con">
-									<span></span>
-									<span>
+									<span class="transac_bought_con_col1"></span>
+									<span class="transac_bought_con_col2"></span>
+									<span class="transac_bought_con_col3">
+										Status:
 									<?php if($product['status'] == 0):?>
 										<?php
 											$attr = array('class'=>'transac_response');
 											echo form_open('',$attr);
 										?>
-										<input class="transac_response_btn orange_btn3" value="Return payment to buyer" type="submit">
+										<input class="transac_response_btn transac_forward orange_btn3" value="Return payment to buyer" type="submit">
 										<input type="hidden" name="seller_response" value="<?php echo $opk;?>">
 										<input type="hidden" name="transaction_num" value="<?php echo $tk;?>">
 										<input type="hidden" name="invoice_num" value="<?php echo $transact['invoice_no'];?>">
@@ -1659,18 +1660,21 @@
 												<input type="text" name="tracking_num" value="<?php echo html_escape($product['tracking_num']);?>" <?php echo $disable ? 'disabled':''; ?> ><br/>
 												<label for="expected_date">Expected Date of Arrival: </label>
 												<input type="text" name="expected_date" value="<?php echo html_escape($product['expected_date'])?>" <?php echo $disable ? 'disabled':''; ?> ><br/>
-												<label for="comment">* Comments: </label>
+												<label for="comment"><span style="color:red;">*</span> Comments: </label>
 												<textarea name="comment" cols="55" rows="5" data-value="<?php echo html_escape($product['shipping_comment']); ?>" <?php echo $disable ? 'disabled':''; ?>><?php echo html_escape($product['shipping_comment']); ?></textarea>
 												<input name="order_product" type="hidden" value="<?php echo $opk;?>">
 												<input name="transact_num" type="hidden" value="<?php echo $tk;?>">
-												<input class="shipping_comment_submit" type="submit" value="Save">
+												<input class="shipping_comment_submit orange_btn3" type="submit" value="Save">
 												<span class="shipping_comment_edit" style="display: <?php echo $disable ? '':'none'?>;">Edit</span>
 												<span class="shipping_comment_cancel" style="display:none;">Cancel</span>
-												<span style="margin-left:28em;"><?php echo $product['datemodified'];?></span>
+												<span style="margin-left:25em;"><?php echo $product['datemodified'];?></span>
 											<?php echo form_close();?>
 										</div>
 									</div>
+
+
 								</div>
+
 								<div>
 									<p class="transac_prod_name">
 										
@@ -1683,6 +1687,7 @@
 									</p>
 								</div>								
 								<div class="clear"></div>
+							</div>
 						</div>
 					</div>
 				<?php endforeach;?>
@@ -1821,9 +1826,10 @@
 									</span>
 								</div>
 								<div class="transac_bought_con">
-									<span>Bought from: </span>
-									<span><a href="<?php echo base_url();?>vendor/<?php echo $product['seller'];?>"><?php echo $product['seller'];?></a></span>
-									<span>
+									<span class="transac_bought_con_col1">Bought from: </span>
+									<span class="transac_bought_con_col2"><a href="<?php echo base_url();?>vendor/<?php echo $product['seller'];?>"><?php echo $product['seller'];?></a></span>
+									<span class="transac_bought_con_col3">
+										Status:
 										<?php if($product['status'] == 0):?>
 										<?php
 											$attr = array('class'=>'transac_response');
@@ -1998,7 +2004,7 @@
 										<div class="map_modalcont" style="display:none;"></div>
 									<?php endif;?>
 								<?php endforeach;?>
-								<span class="transac_address_details_hide" style="color:#0191C8;cursor:pointer;font-size:10px;text-decoration:underline;width:100%;">Hide</span>
+								<span class="transac_address_details_hide">Close</span>
 							</div>
 						</div>			
 					</div>
@@ -2026,8 +2032,10 @@
 									</span>
 								</div>
 								<div class="transac_bought_con">
-									<span></span>
-									<span>
+									<span class="transac_bought_con_col1"></span>
+									<span class="transac_bought_con_col2"></span>
+									<span class="transac_bought_con_col3">
+										Status:
 										<?php if($product['status'] == 0):?>
 											<?php
 												$attr = array('class'=>'transac_response');
@@ -2047,22 +2055,21 @@
 										<?php endif;?>							
 									</span>
 								</div>
-							</div>
-						</div>
-						<div>
-							<p class="transac_prod_name">
-								
-								<?php if( count($product['attr']) !== 0 ):?>
-									<small>Features and Specifications:</small>
-									<?php foreach($product['attr'] as $temp):?>
-										<span><strong><?php echo html_escape($temp['field']);?>:</strong><?php echo html_escape($temp['value']);?></span>
-									<?php endforeach;?>
-								<?php endif;?>
-							</p>						
-						</div>
+								<div>
+									<p class="transac_prod_name">
+										
+										<?php if( count($product['attr']) !== 0 ):?>
+											<strong>Features and Specifications:</strong>
+											<?php foreach($product['attr'] as $temp):?>
+												<span class="feat_and_specs_items"><strong><?php echo html_escape($temp['field']);?>:</strong><?php echo html_escape($temp['value']);?></span>
+											<?php endforeach;?>
+										<?php endif;?>
+									</p>						
+								</div>
+							</div>	
+						</div>		
 					</div>
-				<?php endforeach;?>
-				
+				<?php endforeach;?>				
 			</div>
 
 			<div class="feedback_wrapper">
