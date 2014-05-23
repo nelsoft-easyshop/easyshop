@@ -471,6 +471,7 @@ FROM
         , `style_id`
         , `member_id`
         , `price`
+        , `discount`
         , `condition`
         ,`createddate`
         ,`lastmodifieddate`
@@ -489,6 +490,7 @@ FROM
         , :style_id
         , :member_id
         , :price
+        , :discount
         , :condition
         ,NOW()
         ,NOW()

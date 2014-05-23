@@ -72,7 +72,14 @@ class CSRF_Protection
         // Is this a post request?
         if ($_SERVER['REQUEST_METHOD'] == 'POST')
         {
-            if($_SERVER['REQUEST_URI'] === '/payment/dragonPayPostBack'){
+
+
+            if(empty($_POST) && empty($_FILES) && $_SERVER['CONTENT_LENGTH'] > 0){
+
+                show_error('Request was invalid. Selected file was too large. 1001', 400);
+
+            }
+            elseif($_SERVER['REQUEST_URI'] === '/payment/dragonPayPostBack'){
                 return true;
             }
             else{
@@ -85,6 +92,7 @@ class CSRF_Protection
                 }
             }
         }
+
     }
     
 

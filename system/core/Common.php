@@ -584,5 +584,52 @@ if ( ! function_exists('es_url_clean'))
 	}	
 }
 
+/**
+ * Copy a whole Directory
+ *
+ * Copy a directory recrusively ( all file and directories inside it )
+ *
+ * @access    public
+ * @param    string    path to source dir
+ * @param    string    path to destination dir
+ * @return    array
+ */    
+if(!function_exists('directory_copy'))
+{
+    function directory_copy($srcdir, $dstdir,$pid,$arrayNameOnly)
+    {
+        //preparing the paths
+        $srcdir=rtrim($srcdir,'/');
+        $dstdir=rtrim($dstdir,'/');
+
+        //creating the destination directory
+        if(!is_dir($dstdir))mkdir($dstdir, 0777, true);
+
+        //Mapping the directory
+        $dir_map=directory_map($srcdir);
+
+        foreach($dir_map as $object_key=>$object_value)
+        {
+        	
+        	if(is_numeric($object_key)){
+        		if(in_array($object_value,$arrayNameOnly)){   	 
+	                copy($srcdir.'/'.$object_value,$dstdir.'/'.$object_value);//This is a File not a directory
+	                $filename = explode('_', $object_value);
+	                $newFileName = $pid.'_'.$filename[1].'_'.$filename[2];
+	                rename($dstdir.'/'.$object_value, $dstdir.'/'.$newFileName);
+	            }
+	        }else{
+                directory_copy($srcdir.'/'.$object_key,$dstdir.'/'.$object_key,$pid,$arrayNameOnly);//this is a directory
+            }
+        	 
+        }
+
+        //Deleting the directory contents
+        delete_files($srcdir, TRUE);
+        rmdir($srcdir);
+    }
+}
+
+
 /* End of file Common.php */
 /* Location: ./system/core/Common.php */

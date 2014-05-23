@@ -182,5 +182,17 @@ tinymce.init({
 
 
 
+ // ES_UPLOADER BETA
  
 
+$(document).ready(function() {
+
+    $(".labelfiles").click(function(){
+        $('.files.active').click(); 
+    });
+
+});
+
+
+ // ES_UPLOADER BETA END
+ 

@@ -47,6 +47,9 @@
         echo isset($is_edit)?form_open('sell/edit/processing2', $attr):form_open('sell/processing', $attr);
         ?>
 
+        <input type="hidden" name="tempid" value="<?php echo $tempId; ?>">
+        <input type="hidden" class="arrayNameOfFiles" name="arraynameoffiles">
+        <input type="hidden" id="tempdirectory" name="tempdirectory">
 
         <table class="step4" cellspacing="0" cellpadding="0">
           <tr>
@@ -140,8 +143,7 @@
                         <span class="add_photo span_bg"></span>Browse Photo
                    </span>
                    <br /><span class="label_bttm_txt">You may select multiple images</span>
-                   <input type="file" id="files" class="files active" name="files[]" multiple accept="image/*" required = "required"  /><br/><br/>
-                </div> 
+                 </div> 
 
  
                 <!-- this output will show all selected from input file field from above. this is multiple upload. -->
@@ -185,7 +187,7 @@
           <tr>
               <td class="border-left" style="width:130px">Brief description: <font color="red"> *</font></td><!-- Brief of the product -->
               <td class="border-right" colspan="2"><input type="text" autocomplete="off" maxlength="255" placeholder="Enter brief description" id="prod_brief_desc" name="prod_brief_desc"  value="<?php echo (isset($product_details['brief']))?$product_details['brief']:'';?>">
-     <a class="tooltips" href="javascript:void(0)">
+               <a class="tooltips" href="javascript:void(0)">
                   <img src="<?= base_url() ?>assets/images/icon_qmark.png" alt="">
                   <span>Describe your item in a brief but precise way.
                   </span>
@@ -534,7 +536,7 @@
                 <nobr>
                   <label id="lbl_discount">Discount Percentage</label><input type="text" id="slider_val" placeholder="0%" maxlength="3">
                 </nobr>     
-                <input type="text" id="range_1" name="range_1" value=""/>           
+                <input type="text" id="range_1" name="discount" value=""/>           
                 <nobr>
                 <label id="lbl_realPrc">Discounted Price : &#8369;</label><input type="text" id="discountedP" name="discountedP" value="" disabled="disable"/>
                 </nobr> 
@@ -759,6 +761,23 @@
       </div>
       
     </div>
+         <?php 
+        $attr = array(
+          'class' => 'form_files',
+          'id' => 'form_files',
+          'name' => 'form_files',
+          'enctype' => 'multipart/form-data'
+          );
+        echo form_open('productUpload/uploadimage', $attr);
+        ?>
+        <input type="hidden" name="tempid" value="<?php echo $tempId; ?>"> 
+        <input type="hidden" class="counter" name="counter" >
+        <input type="hidden" class="arrayNameOfFiles" name="arraynameoffiles">
+        <input type="hidden" class="filescnttxt" name="filescnttxt">
+        <div class="inputList">
+         <input type="file" id="files" class="files active" name="files[]" multiple accept="image/*" required = "required"  /><br/><br/>
+       </div>
+            </form> 
 
 <script type='text/javascript' src='<?=base_url()?>assets/JavaScript/js/jquery.numeric.js'></script>
 <script type="text/javascript">
@@ -777,23 +796,12 @@
 <script type="text/javascript">
 $(document).ready(function(){
 
-  <?php
-  if(preg_match('/(?i)msie [4-9]/',$_SERVER['HTTP_USER_AGENT']))
-  {
-    // if IE<=9
-    ?>
-    var badIE = true;
-    <?php
-  }
-else
-{
-    // if IE>9
-      ?>
-    var badIE = false;
-    <?php
-}
-  ?>
+ 
+  var badIE = config.badIE;
+  
+  var canProceed = false;
 
+  var arrayNameOfFiles;
   var removeThisPictures = [];
   var pictureCount = 0;
   var primaryPicture = 0;
@@ -804,9 +812,7 @@ else
   var combination = []; 
   var arrayCombination = []; 
   arraySelected = {};  
-  var progress;
-  var formData;
-
+ 
   var g_input_name;
   var g_id;
   var g_combinationSelected;
@@ -958,19 +964,59 @@ else
     });
     
     // ES_UPLOADER BETA
-    $(".labelfiles").click(function(){
-        $('.files.active').click(); 
-    });
- 
-    $(document).on('change',".files.active",function (e){
- 
 
+    var filescntret;
+    function startUpload(cnt,filescnt,arrayUpload){
+      $('.counter').val(cnt); 
+      $('.filescnttxt').val(filescnt); 
+      var response;   
+      $('#form_files').ajaxForm({
+          url: config.base_url+'productUpload/uploadimage',
+          type: 'post', 
+          dataType: "json",         
+          uploadProgress : function(event, position, total, percentComplete) {
+              canProceed = false;
+          },
+          success :function(d) { 
+              arrayNameOfFiles = d.n;
+              $('.arrayNameOfFiles').val(arrayNameOfFiles);
+              $('#tempdirectory').val(d.dr);
+              filescntret = d.fcnt;
+              $('.filescnt'+filescntret+' > .loadingfiles').remove();
+              $('.filescnt'+filescntret+' > span').removeClass('loading_opacity');
+              canProceed = true;
+          },
+          error: function (request, status, error) {
+          
+          response = request.responseText;
+              if (response.toLowerCase().indexOf("1001") >= 0){
+                alert('Something Went Wrong. The images you are uploading is too large.');
+              }else{
+                alert('Something Went Wrong. Please try again.');
+              }
+              // alert('Something Went Wrong. Please try again.');
+              $.each( arrayUpload, function( key, value ) {
+                 removeThisPictures.push(value); 
+                 $('#previewList'+value).remove();
+              });
+              canProceed = true;
+              // console.log(removeThisPictures)
+          }
+      }); 
+      $('#form_files').submit();
+    }
+
+    var filescnt = 1;
+    $(document).on('change',".files.active",function (e){
+      var arrayUpload = new Array();
 
       if(badIE == false){
             var fileList = this.files;
             var anyWindow = window.URL || window.webkitURL;
-            for(var i = 0; i < fileList.length; i++){
+            var errorValues = "";
 
+            for(var i = 0; i < fileList.length; i++){
+                var size = fileList[i].size
                 var val = fileList[i].name;
                 var extension = val.substring(val.lastIndexOf('.') + 1).toLowerCase();
                 var objectUrl = anyWindow.createObjectURL(fileList[i]);
@@ -983,31 +1029,36 @@ else
                   primaryPicture = pictureCount;
                 }
 
-                switch(extension){
-                  case 'gif': case 'jpg': case 'png':
-                      $('#list').append('<div id="previewList'+pictureCount+'" class="new_img upload_img_div '+activeText+'"><span class="upload_img_con"><img src="'+objectUrl+'"></span><a href="javascript:void(0)" class="removepic" data-number="'+pictureCount+'">x</a><br><a href="javascript:void(0)" class="makeprimary photoprimary'+pictureCount+'" data-number="'+pictureCount+'">'+primaryText+'</a></div>');
-                  break;
-                  default:
-                      removeThisPictures.push(pictureCount);
-                  break;
+                if((extension == 'gif' || extension == 'jpg' || extension == 'png' || extension == 'jpeg') && size < 5242880){
+                    $('#list').append('<div id="previewList'+pictureCount+'" class="new_img upload_img_div '+activeText+' filescnt filescntactive filescnt'+filescnt+'"><span class="upload_img_con loading_opacity"><img src="'+objectUrl+'"></span><a href="javascript:void(0)" class="removepic" data-number="'+pictureCount+'">x</a><br><a href="javascript:void(0)" class="makeprimary photoprimary'+pictureCount+'" data-number="'+pictureCount+'">'+primaryText+'</a><div class="loadingfiles"></div></div>');
+                   
+                }else{
+                    if(size < 1242880){
+                        errorValues += val + "\n(Not Valid File Type).\n<br>";
+                    }else{
+                         errorValues += val + "\n(File Size Exceed in 5mb).\n<br>";
+                    }
+                    removeThisPictures.push(pictureCount);
                 }
-
+             
                 window.URL.revokeObjectURL(fileList[i]);
+                arrayUpload.push(pictureCount);
                 pictureCount++; 
+
             }
-            
+
+            if(errorValues != ""){
+              alert("<b>FOLLIWING FILES CAN'T UPLOAD</b> <br><br>\n"+errorValues)
+            }
+
             $(".files").hide();  
             $(".files.active").each(function(){
               $(this).removeClass('active');
             });
-            $('.inputfiles').append('<input type="file" class="files active" name="files[]" multiple accept="image/*" required = "required"  /> ')
-
-
+             
      }else{
 
-       var val = $(this).val();
-
-  
+            var val = $(this).val();
             var primaryText = "Make Primary";
             var activeText = "";
             pictureInDiv = $("#list > div").length;
@@ -1021,28 +1072,32 @@ else
             imageCustom = document.getElementById('files').value;
 
             switch(val.substring(val.lastIndexOf('.') + 1).toLowerCase()){
-              case 'gif': case 'jpg': case 'png':
-              $('#list').append('<div id="previewList'+pictureCount+'" class="new_img upload_img_div '+activeText+'"><span class="upload_img_con"><img src="'+imageCustom+'" alt="'+imageCustom+'" style="height:100px;"></span><a href="javascript:void(0)" class="removepic" data-number="'+pictureCount+'">x</a><br><a href="javascript:void(0)" class="makeprimary photoprimary'+pictureCount+'" data-number="'+pictureCount+'">'+primaryText+'</a></div>');
+              case 'gif': case 'jpg': case 'png': case 'jpeg':
+              $('#list').append('<div id="previewList'+pictureCount+'" class="new_img upload_img_div '+activeText+' filescnt filescntactive filescnt'+filescnt+'"><span class="upload_img_con"><img src="'+imageCustom+'" alt="'+imageCustom+'" style="height:100px;"></span><a href="javascript:void(0)" class="removepic" data-number="'+pictureCount+'">x</a><br><a href="javascript:void(0)" class="makeprimary photoprimary'+pictureCount+'" data-number="'+pictureCount+'">'+primaryText+'</a><div class="loadingfiles"></div></div>');
+               
               break;
               default:
               removeThisPictures.push(pictureCount); 
               break;
             }
+            arrayUpload.push(pictureCount);  
+            pictureCount++;
 
-
-           pictureCount++;
-            
             $(".files").hide();  
             $(".files.active").each(function(){
               $(this).removeClass('active');
             });
-            $('.inputfiles').append('<input type="file" class="files active" name="files[]" multiple accept="image/*" required = "required"  /> ')
-    
-
+               
       }
+     
+      startUpload(pictureCount,filescnt,arrayUpload);
+      filescnt++;
+      $('.inputList').append('<input type="file" class="files active" name="files[]" multiple accept="image/*" required = "required"  /> ');
+      $(this).remove();
   });
 
     $(document).on('click',".removepic",function (){
+
         /* 
          * Altered ON: 5/6/2014
          * Altered BY: SAM (for edit functionlity)
@@ -1397,127 +1452,139 @@ $(document).on('change',"#prod_condition",function () {
   validateWhiteTextBox("#"+id);
 });
 
-$('#form_product').ajaxForm({ 
-       dataType: "json",
-       beforeSubmit : function(arr, $form, options){
-            var percentVal = '0%';
-            $('.percentage').html(percentVal);
-            $( ".button_div" ).hide();
-            $( ".loader_div" ).show();
+function proceedStep3(url){
+    $('#form_product').ajaxForm({ 
+           url: config.base_url+url,
+           dataType: "json",
+           beforeSubmit : function(arr, $form, options){
+                var percentVal = '0%';
+                $('.percentage').html(percentVal);
+                $( ".button_div" ).hide();
+                $( ".loader_div" ).show();
 
-            $('<input type="hidden">').attr({
-              id: 'inputs',
-              name: 'inputs',
-              value: g_input_name
-            }).appendTo('form');
-            arr.push({name:'inputs', value:g_input_name});
-
-            // -------------------------
-            
-            $('<input type="hidden">').attr({
-              id: 'id',
-              name: 'id',
-              value: g_id
-            }).appendTo('form');
-            arr.push({name:'id', value:g_id});
-            // -------------------------
-            
-            $('<input type="hidden">').attr({
-              id: 'combination',
-              name: 'combination',
-              value: g_combinationSelected
-            }).appendTo('form');
-            arr.push({name:'combination', value:g_combinationSelected});
-            // -------------------------
-            
-            $('<input type="hidden">').attr({
-              id: 'desc',
-              name: 'desc',
-              value: g_description
-            }).appendTo('form');
-            arr.push({name:'desc', value:g_description});
-            // -------------------------
-            
-            $('<input type="hidden">').attr({
-              id: 'noCombination',
-              name: 'noCombination',
-              value: g_noCombination
-            }).appendTo('form');
-            arr.push({name:'noCombination', value:g_noCombination});
-            // -------------------------
-            
-            $('<input type="hidden">').attr({
-              id: 'otherCategory',
-              name: 'otherCategory',
-              value: g_otherCategory
-            }).appendTo('form');
-            arr.push({name:'otherCategory', value:g_otherCategory});
-            // -------------------------
-            
-            $('<input type="hidden">').attr({
-              id: 'removeThisPictures',
-              name: 'removeThisPictures',
-              value: g_removeThisPictures
-            }).appendTo('form');
-            arr.push({name:'removeThisPictures', value:g_removeThisPictures});
-            // -------------------------
-            
-            $('<input type="hidden">').attr({
-              id: 'primaryPicture',
-              name: 'primaryPicture',
-              value: g_primaryPicture
-            }).appendTo('form');
-            arr.push({name:'primaryPicture', value:g_primaryPicture});
-            // -------------------------
-            
-            $('<input type="hidden">').attr({
-              id: 'editRemoveThisPictures',
-              name: 'editRemoveThisPictures',
-              value: g_editRemoveThisPictures
-            }).appendTo('form');
-            arr.push({name:'editRemoveThisPictures', value:g_editRemoveThisPictures});
-            // -------------------------
-            
-            $('<input type="hidden">').attr({
-              id: 'editPrimaryPicture',
-              name: 'editPrimaryPicture',
-              value: g_editPrimaryPicture
-            }).appendTo('form');
-            arr.push({name:'editPrimaryPicture', value:g_editPrimaryPicture});
-            // -------------------------
-            
-            $('<input type="hidden">').attr({
-              id: 'quantitySolo',
-              name: 'quantitySolo',
-              value: g_quantitySolo
-            }).appendTo('form');
-            arr.push({name:'quantitySolo', value:g_quantitySolo});
-      },
-      uploadProgress : function(event, position, total, percentComplete) {
-            var percentVal = percentComplete + '%';
+                $('<input type="hidden">').attr({
+                  id: 'inputs',
+                  name: 'inputs',
+                  value: g_input_name
+                }).appendTo('form');
+                arr.push({name:'inputs', value:g_input_name});
+                // -------------------------
+                
+                $('<input type="hidden">').attr({
+                  id: 'id',
+                  name: 'id',
+                  value: g_id
+                }).appendTo('form');
+                arr.push({name:'id', value:g_id});
+                // -------------------------
+                
+                $('<input type="hidden">').attr({
+                  id: 'combination',
+                  name: 'combination',
+                  value: g_combinationSelected
+                }).appendTo('form');
+                arr.push({name:'combination', value:g_combinationSelected});
+                // -------------------------
+                
+                $('<input type="hidden">').attr({
+                  id: 'desc',
+                  name: 'desc',
+                  value: g_description
+                }).appendTo('form');
+                arr.push({name:'desc', value:g_description});
+                // -------------------------
+                
+                $('<input type="hidden">').attr({
+                  id: 'noCombination',
+                  name: 'noCombination',
+                  value: g_noCombination
+                }).appendTo('form');
+                arr.push({name:'noCombination', value:g_noCombination});
+                // -------------------------
+                
+                $('<input type="hidden">').attr({
+                  id: 'otherCategory',
+                  name: 'otherCategory',
+                  value: g_otherCategory
+                }).appendTo('form');
+                arr.push({name:'otherCategory', value:g_otherCategory});
+                // -------------------------
+                
+                $('<input type="hidden">').attr({
+                  id: 'removeThisPictures',
+                  name: 'removeThisPictures',
+                  value: g_removeThisPictures
+                }).appendTo('form');
+                arr.push({name:'removeThisPictures', value:g_removeThisPictures});
+                // -------------------------
+                
+                $('<input type="hidden">').attr({
+                  id: 'primaryPicture',
+                  name: 'primaryPicture',
+                  value: g_primaryPicture
+                }).appendTo('form');
+                arr.push({name:'primaryPicture', value:g_primaryPicture});
+                // -------------------------
+                
+                $('<input type="hidden">').attr({
+                  id: 'editRemoveThisPictures',
+                  name: 'editRemoveThisPictures',
+                  value: g_editRemoveThisPictures
+                }).appendTo('form');
+                arr.push({name:'editRemoveThisPictures', value:g_editRemoveThisPictures});
+                // -------------------------
+                
+                $('<input type="hidden">').attr({
+                  id: 'editPrimaryPicture',
+                  name: 'editPrimaryPicture',
+                  value: g_editPrimaryPicture
+                }).appendTo('form');
+                arr.push({name:'editPrimaryPicture', value:g_editPrimaryPicture});
+                // -------------------------
+                
+                $('<input type="hidden">').attr({
+                  id: 'quantitySolo',
+                  name: 'quantitySolo',
+                  value: g_quantitySolo
+                }).appendTo('form');
+                arr.push({name:'quantitySolo', value:g_quantitySolo});
+          },
+          uploadProgress : function(event, position, total, percentComplete) {
+                var percentVal = percentComplete + '%';
+                $('.percentage').empty();
+                if(percentComplete >= 100){
+                    percentVal = '100%'
+                    $('.percentage').html(percentVal);
+                }else{
+                    $('.percentage').html(percentVal);
+                }
+          },
+          success :function(d) { 
+              $('.percentage').html('100%');
+                if (d.e == 1) {
+                  $('#prod_h_id').val(d.d); 
+                  document.getElementById("hidden_form").submit();
+                } else {
+                  $( ".button_div" ).show();
+                  $( ".loader_div" ).hide();
+                  $('.percentage').empty();
+                  alert(d.d);
+                } 
+          },
+          error: function (request, status, error) {
+            $( ".button_div" ).show();
+            $( ".loader_div" ).hide();
             $('.percentage').empty();
-            if(percentComplete >= 100){
-                percentVal = '100%'
-                $('.percentage').html(percentVal);
-            }else{
-                $('.percentage').html(percentVal);
-            }
-      },
-      success :function(d) { 
-          $('.percentage').html('100%');
-            if (d.e == 1) {
-              $('#prod_h_id').val(d.d); 
-              document.getElementById("hidden_form").submit();
-            } else {
-              $( ".button_div" ).show();
-              $( ".loader_div" ).hide();
-              $('.percentage').empty();
-              alert(d.d);
-            } 
-      }
-}); 
- 
-
+               response = request.responseText;
+              if (response.toLowerCase().indexOf("1001") >= 0){
+                alert('Something Went Wrong. The images you are uploading in [OTHER ATTRIBUTES] is too large.');
+              }else{
+                alert('Something Went Wrong. Please try again.');
+              }
+          }
+    }); 
+     
+}
 
 
 $(".proceed_form").unbind("click").click(function(){
@@ -1529,40 +1596,22 @@ $(".proceed_form").unbind("click").click(function(){
   var action = "sell/processing"; 
   var title = $("#prod_title");
   var brief = $("#prod_brief_desc"); 
-
   var combinationSelected = JSON.stringify(arraySelected);
-
   var otherCategory = escapeHtml("<?php echo isset( $otherCategory)? html_escape($otherCategory) :''; ?>");
-
-  // formData = new FormData(document.getElementById("form_product"));
-  // formData.append("inputs", input_name);
-  // formData.append("id", id);
-  // formData.append("combination",combinationSelected);
-  // formData.append("desc",description);
-  // formData.append("noCombination",noCombination);
-  // formData.append("otherCategory",otherCategory);
-  // formData.append("removeThisPictures",JSON.stringify(removeThisPictures));
-  // formData.append("primaryPicture",primaryPicture);
-  // formData.append("editRemoveThisPictures",JSON.stringify(editRemoveThisPictures));
-  // formData.append("editPrimaryPicture",editPrimaryPicture);
-  // formData.append(csrfname, csrftoken);
 
   g_input_name = input_name;
   g_id = id;
   g_combinationSelected = combinationSelected;
   g_description = description;
   g_noCombination = noCombination;
-  
   g_otherCategory = otherCategory;
   g_removeThisPictures = JSON.stringify(removeThisPictures);
   g_primaryPicture = primaryPicture;
   g_editRemoveThisPictures = JSON.stringify(editRemoveThisPictures);
   g_editPrimaryPicture = editPrimaryPicture;  
-  
 
   var csrftoken = $("meta[name='csrf-token']").attr('content');
   var csrfname = $("meta[name='csrf-name']").attr('content');
-
   var price = $("#prod_price");
   var other_price = $("#price_field");
   var sku = $("#prod_sku");  
@@ -1659,11 +1708,17 @@ $(".proceed_form").unbind("click").click(function(){
           alert("Invalid Quantity!");
           return false;
         }
-        // formData.append("quantitySolo",quantity.val());
+     
         g_quantitySolo = quantity.val();
       }
-      
-      $('#form_product').submit();
+      if(canProceed == false){
+        alert('Please wait while your pictures is uploading.');
+        return false;
+      }else{
+        proceedStep3('sell/processing');
+        $('#form_product').submit();
+      }
+
 
     }
   }
@@ -2240,3 +2295,4 @@ $(document).on('change','.qtyTextClass',function(){
  
 <div class="clear"></div>  
 
+ 
