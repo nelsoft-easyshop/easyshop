@@ -79,9 +79,6 @@ class Cart extends MY_Controller{
             'maxqty' => $max_qty,
             'slug' => $base['slug'],
             );
-        print "<pre>";
-        print_r($base);
-        print "</pre>";
         return $data;
     }
     
