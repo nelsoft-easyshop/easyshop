@@ -461,17 +461,28 @@ $(document).ready(function() {
     }).mouseleave(function() {
         $(this).hide();
     });
-
+    function ReplaceNumberWithCommas(thisnumber){
+        //Seperates the components of the number
+        var n= thisnumber.toString().split(".");
+        //Comma-fies the first part
+        n[0] = n[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        //Combines the two sections
+        return n.join(".");
+    }
+  
 
     $('#price1').val(<?php echo $price1 ?>);
     $('#price2').val(<?php echo $price2 ?>);
 
     $(document).on('change',"#price2,#price1",function () {
-        var v = parseFloat(this.value);
+        var priceval = this.value.replace(new RegExp(",", "g"), '');
+        var v = parseFloat(priceval);
+        var tempval;
         if (isNaN(v)) {
             this.value = '';
         } else {
-            this.value = v.toFixed(2)
+            tempval = Math.abs(v);
+            this.value = ReplaceNumberWithCommas(tempval.toFixed(2));
         }
     });
 

@@ -187,7 +187,7 @@ class Payment extends MY_Controller{
             '&L_PAYMENTREQUEST_0_AMT'.$cnt.'='.urlencode($value['price']).
             '&L_PAYMENTREQUEST_0_NAME'.$cnt.'='.urlencode($value['name']).
             '&L_PAYMENTREQUEST_0_NUMBER'.$cnt.'='.urlencode($value['id']).
-            '&L_PAYMENTREQUEST_0_DESC'.$cnt.'=' .urlencode('SAMPLE DESCRIPTION');
+            '&L_PAYMENTREQUEST_0_DESC'.$cnt.'=' .urlencode($value['brief']);
             $cnt++;
             $productId = $value['id'];
             $productItem =  $value['product_itemID'];

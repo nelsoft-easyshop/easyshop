@@ -260,6 +260,30 @@
         }
     });
 
+    $(document).ready(function() {
+        $(window).keydown(function(event){
+            if(event.keyCode == 13) {
+                event.preventDefault();
+                return false;
+            }
+        });
+    });
+
+   
+    $(document).on('keydown','.otherNameCategory_main',function (event) {
+        if(event.keyCode == 13){ 
+            $(".otherNameCategory_main").focusout();
+            return false;
+        }
+    });
+
+        $(document).on('keydown','#otherNameCategory',function (event) {
+        if(event.keyCode == 13){ 
+            $("#otherNameCategory").focusout();
+            return false;
+        }
+    });
+
     $(document).on('click','.othercategory a',function () {
         var selfAttrParent = $(this).data('parent');
         var selfLevel = $(this).data('level'); 
@@ -295,6 +319,9 @@
         var level = $(this).data('level');
         $(".product_sub_category .product_sub_items" + level).nextAll().remove();    
     });
+
+
+
     
     /*
      *   Event action when any of the category search results is clicked.
