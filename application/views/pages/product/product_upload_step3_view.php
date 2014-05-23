@@ -138,7 +138,7 @@
                     </td>
                   </tr>
                 </thead>
-                <td class="border-left">
+                <td class="border-left border-right">
 
                     <table id="shiploc_selectiontbl" class="shipping_table2" width="463px" cellspacing="0" cellpadding="0">
                       <input type="hidden" value="1" id="shiploc_count">
@@ -177,7 +177,7 @@
                     <table cellspacing="0" cellpadding="0" width="463px" class="price_table_bottom">
                       <tbody>
                         <tr>
-                          <td class="border-right set_price_error1" height="45px">
+                          <td class="set_price_error1" height="45px">
                             <p style="display:none; color:red;" id="spanerror">
                                This location is already in use for the combination that you have selected.
                             </p>
@@ -185,13 +185,13 @@
                           </td>
                         </tr>
                         <tr>
-                          <td class="border-right">
+                          <td>
                               <input type="button" id="add_shipping_details" value="Add to Shipping List" class="orange_btn3">
                           </td>
                         </tr>
                         <tr>
-                          <td class="border-right border-bottom set_price_error2" height="50px">
-                            <div style="font-weight:bold; color:green;<?php echo $inc_location ? '' : 'display:none;'?>" id="div_locationwarning">
+                          <td class="border-bottom set_price_error2" height="50px">
+                            <div style="font-weight:bold; color:#ff0000;<?php echo $inc_location ? '' : 'display:none;'?>" id="div_locationwarning">
                               Note: Your shipment location does not cover the entire
                               <span id="location_warning">
                                 <?php echo $inc_location ? $inc_locationmsg : '';?>
@@ -205,32 +205,7 @@
                 </td>
             </table>
             
-            <table cellspacing="0" cellpadding="0" width="465px" style="margin-top:15px;">
-                <thead>
-                  <tr>
-                     <td colspan="3" class="step3_title">
-                         <h3>Rate Calculator</h3>
-                    </td>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td class="border-left border-right border-bottom">
-                      <div class="rate_calculator_con">
-                          <a target="_blank" href="http://www.air21.com.ph/main/rate_calculator.php">
-                            <img src="<?=base_url()?>assets/images/img_logo_air21.jpg" alt="Air21">
-                          </a>
-                          <a target="_blank" href="http://www.lbcexpress.com/">
-                            <img src="<?=base_url()?>assets/images/img_logo_lbc.jpg" alt="LBC">
-                          </a>
-                          <a target="_blank" href="http://www.jrs-express.com/Ratecalc.aspx">
-                            <img src="<?=base_url()?>assets/images/img_logo_jrs.jpg" alt="JRS">
-                          </a>
-                      </div> 
-                    </td>
-                  </tr>
-                </tbody>        
-            </table>  
+            
           </div>
           <!-- End of Shipping Courier -->
 
@@ -361,8 +336,39 @@
                 <input type="hidden" id="summaryrowcount" value="<?php echo $datagroupcounter?>">
             </table>
           </div>
-         
       </div>
+       <table cellspacing="0" cellpadding="0" width="497px" style="margin-top:15px;">
+                <thead>
+                  <tr>
+                     <td colspan="3" class="step3_title" height="30px">
+                         <h3>Rate Calculator</h3>
+                    </td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="border-left border-right border-bottom">
+                      <div class="rate_calculator_con">
+                          <a target="_blank" href="http://www.air21.com.ph/main/rate_calculator.php">
+                            <span>
+                              <img src="<?=base_url()?>assets/images/img_logo_air21.jpg" alt="Air21"> Air21 Rate Calculator
+                            </span>
+                          </a>
+                          <a target="_blank" href="http://www.lbcexpress.com/">
+                            <span>
+                              <img src="<?=base_url()?>assets/images/img_logo_lbc.jpg" alt="LBC">LBC Rate Calculator
+                            </span>
+                          </a>
+                          <a target="_blank" href="http://www.jrs-express.com/Ratecalc.aspx">
+                            <span>
+                              <img src="<?=base_url()?>assets/images/img_logo_jrs.jpg" alt="JRS">JRS Rate Calculator
+                            </span>
+                          </a>
+                      </div> 
+                    </td>
+                  </tr>
+                </tbody>        
+            </table>     
       <!-- end of shipping summary -->
 
       <div class="clear"></div>
