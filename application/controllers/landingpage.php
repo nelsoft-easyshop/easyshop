@@ -200,11 +200,11 @@ class Landingpage extends MY_Controller
         else{
             if($action === 'register'){
             	$data['content'] = 'You have successfully registered!';
-                // $data['content'] = 'img_success_register.png';
+                $data['sub_content'] =  'You have successfully registered with Easyshop.ph. Verify your e-mail to begin selling your products online.';
             }
             else if($action === 'subscribe'){
                 $data['content'] = 'You have successfully Subscribed!';
-                // $data['content'] = 'img_success_subscribe.png';
+                $data['sub_content'] =  'Thank you for choosing to keep in touch with Easyshop.ph. Expect to hear many things from us soon.';
             }
             else{
                 redirect('', 'refresh');  //redirect to index page

@@ -50,7 +50,7 @@
                        <?php echo $content; ?>
                     </p>
                     <p class="p_success txt_success2">
-                       You have successfully registered with Easyshop.ph. Verify your e-mail to begin selling your products online.
+                        <?php echo $sub_content;?>
                     </p>
                     <p class="text-center">
                       <span class="btn btn-warning btn-large"><a href="<?=base_url()?>sell/step1" style="color:#fff;">Sell Now</a></span>
