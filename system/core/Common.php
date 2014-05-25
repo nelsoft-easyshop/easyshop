@@ -604,9 +604,10 @@ if(!function_exists('directory_copy'))
 
         //creating the destination directory
         if(!is_dir($dstdir))mkdir($dstdir, 0777, true);
-
+        
         //Mapping the directory
-        $dir_map=directory_map($srcdir);
+        
+        $dir_map = directory_map($srcdir);
 
         foreach($dir_map as $object_key=>$object_value)
         {
@@ -629,6 +630,37 @@ if(!function_exists('directory_copy'))
         rmdir($srcdir);
     }
 }
+
+
+/**
+* Ruthlessly strips emoji characters. 
+* The need for this can be removed by converting the db collation to utf8mb4
+* 
+* @access	public
+* @param	mixed
+* @return	mixed
+*/
+if ( ! function_exists('es_strip_emoji'))
+{
+    function es_strip_emoji($text)
+    {       
+    $clean_text = "";
+    // Match Emoticons
+    $regexEmoticons = '/[\x{1F600}-\x{1F64F}]/u';
+    $clean_text = preg_replace($regexEmoticons, '', $text);
+    // Match Miscellaneous Symbols and Pictographs
+    $regexSymbols = '/[\x{1F300}-\x{1F5FF}]/u';
+    $clean_text = preg_replace($regexSymbols, '', $clean_text);
+    // Match Transport And Map Symbols
+    $regexTransport = '/[\x{1F680}-\x{1F6FF}]/u';
+    $clean_text = preg_replace($regexTransport, '', $clean_text);
+    // Match flags (iOS)
+    $regexTransport = '/[\x{1F1E0}-\x{1F1FF}]/u';
+    $clean_text = preg_replace($regexTransport, '', $clean_text);
+    return $clean_text;
+    }
+}
+
 
 
 /* End of file Common.php */
