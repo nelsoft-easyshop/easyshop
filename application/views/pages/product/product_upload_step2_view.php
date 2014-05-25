@@ -777,16 +777,14 @@
         <div class="inputList">
          <input type="file" id="files" class="files active" name="files[]" multiple accept="image/*" required = "required"  /><br/><br/>
        </div>
-            </form> 
+       </form> 
 
 <script type='text/javascript' src='<?=base_url()?>assets/JavaScript/js/jquery.numeric.js'></script>
 <script type="text/javascript">
-  $('.view_more_product_details').on('click', function() {
-    $('.more_product_details_container,.prod-details-add-more-link').slideToggle();
-    $('.view_more_product_details').toggleClass('active-product-details');
-
-  });
-
+    $('.view_more_product_details').on('click', function() {
+        $('.more_product_details_container,.prod-details-add-more-link').slideToggle();
+        $('.view_more_product_details').toggleClass('active-product-details');
+    });
 </script>
  
 <script type="text/javascript" src="<?=base_url()?>assets/JavaScript/productUpload_step2.js?ver=1.0"></script> 
@@ -795,12 +793,8 @@
 <script type='text/javascript' src='<?=base_url()?>assets/JavaScript/js/jquery.jqpagination.min.js'></script>
 <script type="text/javascript">
 $(document).ready(function(){
-
- 
   var badIE = config.badIE;
-  
   var canProceed = false;
-
   var arrayNameOfFiles;
   var removeThisPictures = [];
   var pictureCount = 0;
@@ -990,11 +984,10 @@ $(document).ready(function(){
           
           response = request.responseText;
               if (response.toLowerCase().indexOf("1001") >= 0){
-                alert('Something Went Wrong. The images you are uploading is too large.');
+                alert('Sorry, the images you are uploading are too large.');
               }else{
-                alert('Something Went Wrong. Please try again.');
+                alert('<b>Sorry, we have encountered a problem.</b><br/>Please try again.');
               }
-              // alert('Something Went Wrong. Please try again.');
               $.each( arrayUpload, function( key, value ) {
                  removeThisPictures.push(value); 
                  $('#previewList'+value).remove();
@@ -1034,9 +1027,9 @@ $(document).ready(function(){
                    
                 }else{
                     if(size < 1242880){
-                        errorValues += val + "\n(Not Valid File Type).\n<br>";
+                        errorValues += val + "\n(Invalid file type).\n<br>";
                     }else{
-                         errorValues += val + "\n(File Size Exceed in 5mb).\n<br>";
+                         errorValues += val + "\n(The file size exceeds 5 MB).\n<br>";
                     }
                     removeThisPictures.push(pictureCount);
                 }
@@ -1048,7 +1041,7 @@ $(document).ready(function(){
             }
 
             if(errorValues != ""){
-              alert("<b>FOLLIWING FILES CAN'T UPLOAD</b> <br><br>\n"+errorValues)
+              alert("<b>Sorry, the following files cannot be uploaded:</b> <br><br>\n"+errorValues)
             }
 
             $(".files").hide();  
@@ -1454,7 +1447,7 @@ $(document).on('change',"#prod_condition",function () {
 
 function proceedStep3(url){
     $('#form_product').ajaxForm({ 
-           url: config.base_url+url,
+           url: url,
            dataType: "json",
            beforeSubmit : function(arr, $form, options){
                 var percentVal = '0%';
@@ -1593,7 +1586,6 @@ $(".proceed_form").unbind("click").click(function(){
   var description = tinyMCE.get('prod_description').getContent();
   var id = "<?php echo $id; ?>"; 
   var input_name = "<?php echo (string)$array_name_inputs; ?>";
-  var action = "sell/processing"; 
   var title = $("#prod_title");
   var brief = $("#prod_brief_desc"); 
   var combinationSelected = JSON.stringify(arraySelected);
@@ -1712,10 +1704,11 @@ $(".proceed_form").unbind("click").click(function(){
         g_quantitySolo = quantity.val();
       }
       if(canProceed == false){
-        alert('Please wait while your pictures is uploading.');
+        alert('Please wait while your pictures are being uploaded.');
         return false;
       }else{
-        proceedStep3('sell/processing');
+        var action = $('#form_product').attr('action');
+        proceedStep3(action);
         $('#form_product').submit();
       }
 
