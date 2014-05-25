@@ -532,8 +532,12 @@ span.seller-name span:hover {
     line-height: 40px;
     padding: 0;
     text-align: center;
-    transition: all 0.3s ease-in-out 0s;
     width: 110px;
+    cursor: default;
+}
+
+.preview_buy_btn:hover{
+    color: #FFFFFF !important;
 }
 
 .orange_btn_preview.enabled{
@@ -1113,5 +1117,28 @@ div.reply_content_shown > p {
 
 #thumblist li {
     margin-left: 5px;
+}
+
+.category_nav ul li:not(.active) a:hover{
+    background-color: #B0B0B0 !important;
+}
+
+.category_nav ul li a{
+    cursor: default !important;
+}
+
+.bread_crumbs a{
+    cursor: default !important;
+}
+
+.prod_cat_drop{
+    cursor: default !important;
+}
+
+span.seller-name span:hover{
+    color: #000000 !important;
+}
+span.seller-name {
+    cursor: default !important;
 }
 
