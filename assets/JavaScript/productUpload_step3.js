@@ -26,33 +26,29 @@ $(function(){
     var shipLocCount = $('#shiploc_count');
     var locCount = parseInt(shipLocCount.val());
     shipLocCount.val(locCount-1);
-  })
-  .on('keypress', '.shipprice', function(e){
-	//console.log(e);
-	var code = e.keyCode || e.which;
-	return ( (code>=48 && code<=57) || code === 46 || code === 44 || code===8 || (code>=37 && code<=40) || ((code === 97 || code === 99 || code === 118) && e.ctrlKey) );
   });
-  
-  $('#shipping_summary').on('keypress', '.shipprice', function(e){
-	//console.log(e);
-	var code = e.keyCode || e.which;
-	return ( (code>=48 && code<=57) || code === 46 || code === 44 || code===8 || (code>=37 && code<=40) || ((code === 97 || code === 99 || code === 118) && e.ctrlKey) );
-  });
-  
-  
+
   $('#shiploc_selectiontbl, #shipping_summary').on('keyup', '.shipprice', function(e){
 	var price = $.trim($(this).val());
-	if( (e.keyCode == 13 || e.which == 13) && price != ''){
-		var newPrice = price.replace(new RegExp(",", "g"), '');
-		newPrice = parseFloat(newPrice).toFixed(2);
+	var newPrice = price.replace(new RegExp(",", "g"), '');
+	newPrice = parseFloat(newPrice).toFixed(2);
+	
+	if( (e.keyCode == 13 || e.which == 13) && $.isNumeric(newPrice)){
 		$(this).val( ReplaceNumberWithCommas(newPrice) );
+	}else if ( (e.keyCode == 13 || e.which == 13) && !$.isNumeric(newPrice) ) {
+		$(this).val('');
 	}
+  }).on('keypress', '.shipprice', function(e){
+	var code = e.keyCode || e.which;
+	return ( (code>=48 && code<=57) || code === 46 || code === 44 || code===8 || (code>=37 && code<=40) || ((code === 97 || code === 99 || code === 118) && e.ctrlKey) );
   }).on('blur', '.shipprice', function(){
 	var price = $.trim($(this).val());
-	if( price != '' ){
-		var newPrice = price.replace(new RegExp(",", "g"), '');
-		newPrice = parseFloat(newPrice).toFixed(2);
+	var newPrice = price.replace(new RegExp(",", "g"), '');
+	newPrice = parseFloat(newPrice).toFixed(2);
+	if( $.isNumeric(newPrice) ){
 		$(this).val( ReplaceNumberWithCommas(newPrice) );
+	}else{
+		$(this).val('');
 	}
   });
   
@@ -302,6 +298,8 @@ $(function(){
 	  }
       
 	  updateLocationError();
+	  
+	  $('#select_all_attr').attr('checked', false);
     }//close hasloc hasactive hasprice
 	else{
 		var duperror = '';

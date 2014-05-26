@@ -952,7 +952,7 @@
 										<p>School Name</p>
 									</div>
 									<div>
-										<input type="text" name="schoolyear<?php echo $school[$schcount]['schoolcount']?>" value="<?php echo html_escape($school[$schcount]['schoolyear'])?>">
+										<input type="text" class="year" name="schoolyear<?php echo $school[$schcount]['schoolcount']?>" value="<?php echo html_escape($school[$schcount]['schoolyear'])?>">
 										<p>Year</p>
 									</div>
 									<div>
@@ -1034,7 +1034,7 @@
 							<p>Designation</p>
 						</div>
 						<div>
-							<input type="text" name="year1" value="<?php echo isset($work[0]['year'])?html_escape($work[0]['year']):"";?>" maxlength="4">
+							<input type="text" class="year" name="year1" value="<?php echo isset($work[0]['year'])?html_escape($work[0]['year']):"";?>" maxlength="4">
 							<p>Year</p>
 						</div>
 						<input type="hidden" name="workcount1" value="1"/>
@@ -1052,7 +1052,7 @@
 								<p>Designation</p>
 							</div>
 							<div>
-								<input type="text" name="year<?php echo $work[$workcount]['count']?>" value="<?php echo html_escape($work[$workcount]['year'])?>">
+								<input type="text" class="year" name="year<?php echo $work[$workcount]['count']?>" value="<?php echo html_escape($work[$workcount]['year'])?>">
 								<p>Year</p>
 							</div>
 							<input type="hidden" name="workcount<?php echo $work[$workcount]['count']?>" value="<?php echo $work[$workcount]['count']?>"/>

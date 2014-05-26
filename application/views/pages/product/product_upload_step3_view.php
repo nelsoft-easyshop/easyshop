@@ -69,7 +69,7 @@
                               <li class="product_combination" value="<?php echo $attrkey;?>">
                                 <div>
                                   <?php foreach($temp as $pattr):?>
-                                    <p>&bull; <?php echo $pattr;?> </p>
+                                    <p>&bull; <?php echo $pattr['name']?> : <?php echo $pattr['value'];?> </p>
                                   <?php endforeach;?>
                                 </div> 
                               </li>

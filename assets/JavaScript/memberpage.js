@@ -91,6 +91,16 @@ $(document).ready(function(){
 		$(this).parent('div').slideToggle();
 		$(this).parent('div').siblings('span.transac_address_details_show').fadeIn();
 	});
+	
+	//disable decimal point
+	$('#mobile').on('keypress',function(e){
+		var code = e.keyCode || e.which;
+		return (code != 46);
+	});
+	$('#personal_information').on('keypress', 'input.year', function(e){
+		var code = e.keyCode || e.which;
+		return (code != 46);
+	});
 });
 
 $(document).ready(function(){

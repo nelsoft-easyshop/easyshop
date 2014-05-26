@@ -1611,6 +1611,7 @@ class product_model extends CI_Model
         $row = $sth->fetchAll(PDO::FETCH_ASSOC);
         $data = array();
 		
+		
 		if(count($row) === 1 && $row[0]['product_id_item'] == ''){
 			$data['has_attr'] = 0;
 			$data['product_item_id'] = $row[0]['id_product_item'];
@@ -1619,7 +1620,10 @@ class product_model extends CI_Model
 		else{
 			foreach($row as $r){
 				if($r['product_id_item'] != '' && $r['attr_value'] != ''){
-					$data['attributes'][$r['product_id_item']][] = $r['attr_value'];
+					$data['attributes'][$r['product_id_item']][] = array(
+						'name' => $r['name'],
+						'value' => $r['attr_value']
+					);
 				}
 			}
 			$data['has_attr'] = 1;
