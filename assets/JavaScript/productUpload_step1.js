@@ -243,19 +243,20 @@
         $(".product_sub_category .product_sub_items0").remove();
         $('.othercategory_main').append('<input type="text" id="otherNameCategory_main" style="background:none;padding:5px" placeholder="Add a category"  class="otherNameCategory_main" data-parentname="" data-level="" data-final="" autocomplete="off" name="othernamecategory" />');
         $('.othercategory_main .otherNameCategory_main').focus();
-        $(".add_category_submit").empty();
+        // $(".add_category_submit").empty();
     });
     
     $(document).on('blur change','#otherNameCategory_main',function () {
         var otherName = $(this).val();
         var finalValue = true;
         globalParent = 1;
-        $(".add_category_submit").empty();
+        
         if(otherName.length == 0){ 
             $('.otherNameCategory_main_li').empty();
-          $('.otherNameCategory_main_li').append('<a href="javascript:void(0)" class="select2" data-level="0" data-parent="1" data-parentname="" data-final="true" style="color:#0191C8 !important;"><b class="add_cat span_bg"></b><b>Add a Category</b></a>');
+            $('.otherNameCategory_main_li').append('<a href="javascript:void(0)" class="select2" data-level="0" data-parent="1" data-parentname="" data-final="true" style="color:#0191C8 !important;"><b class="add_cat span_bg"></b><b>Add a Category</b></a>');
            
-        }else{  
+        }else{ 
+            $(".add_category_submit").empty(); 
             $(".add_category_submit").append('<input type="hidden" name="hidden_attribute" value="'+globalParent+'" class="hidden_attribute"><input class="proceed_form" id="proceed_form" type="submit" value="Proceed with '+escapeHtml(otherName.replace(/'/g, "\\'"))+'">');    
         }
     });
@@ -294,24 +295,26 @@
         $(".product_sub_items"+selfLevel+" .select2 ").removeClass('active');
         $('.othercategory'+selfLevel).empty();
         $(".product_sub_category .product_sub_items" + selfLevel).nextAll().remove(); 
-        $('.product_sub_items'+selfLevel+' .othercategory'+selfLevel).append('<input type="text" style="background:none;padding:5px" placeholder="Add a category" id="otherNameCategory" class="otherNameCategoryClass'+selfLevel+'" data-parentname="'+parentName+'" data-level="'+selfLevel+'" data-final="'+finalValue+'" autocomplete="off" name="othernamecategory" />');
+        $('.product_sub_items'+selfLevel+' .othercategory'+selfLevel).append('<input type="text" style="background:none;padding:5px" placeholder="Add a category" id="otherNameCategory" class="otherNameCategoryClass'+selfLevel+'" data-parentname="'+parentName+'" data-level="'+selfLevel+'" data-final="'+finalValue+'" data-rp="'+selfAttrParent+'" autocomplete="off" name="othernamecategory" />');
         $('.product_sub_items'+selfLevel+' .otherNameCategoryClass'+selfLevel).focus();
-        $(".add_category_submit").empty();
+        // $(".add_category_submit").empty();
     });
 
     $(document).on('blur change','#otherNameCategory',function () {
         var otherName = $(this).val();
         var finalValue = $(this).data('final');
         var parentName = $(this).data('parentname');
-        $(".add_category_submit").empty();
+        var realparent = $(this).data('rp');
+        
         if(otherName.length == 0){ 
             $('.product_sub_items'+globalLevel+' .othercategory').empty();
             $('.product_sub_items'+globalLevel+' .othercategory').append('<a href="javascript:void(0)" class="select2" data-level="'+globalLevel+'" data-parent="'+globalParent+'"><b class="add_cat span_bg"></b><b>Add a Category</b></a>');
             if(finalValue == true){ 
-              $(".add_category_submit").append('<input type="hidden" name="hidden_attribute" value="'+globalParent+'" class="hidden_attribute"><input class="proceed_form" id="proceed_form" type="submit" value="Proceed with '+parentName+'">');    
+                $(".add_category_submit").append('<input type="hidden" name="hidden_attribute" value="'+globalParent+'" class="hidden_attribute"><input class="proceed_form" id="proceed_form" type="submit" value="Proceed with '+parentName+'">');    
             }
         }else{  
-            $(".add_category_submit").append('<input type="hidden" name="hidden_attribute" value="'+globalParent+'" class="hidden_attribute"><input class="proceed_form" id="proceed_form" type="submit" value="Proceed with '+escapeHtml(otherName.replace(/'/g, "\\'"))+'">');    
+            $(".add_category_submit").empty();
+            $(".add_category_submit").append('<input type="hidden" name="hidden_attribute" value="'+realparent+'" class="hidden_attribute"><input class="proceed_form" id="proceed_form" type="submit" value="Proceed with '+escapeHtml(otherName.replace(/'/g, "\\'"))+'">');    
         }
     });
 
