@@ -381,7 +381,7 @@ class productUpload extends MY_Controller
 				$arrayNameOnly[$key] = strtolower($nameOfFile); 
 
 				if($primaryId == $key){
-					$primaryName =	$nameOfFile;
+					$primaryName =	strtolower($nameOfFile);
 				}
 
 				if (in_array($key, $removeThisPictures) || $arraynameoffiles[$key] == "") {
@@ -389,7 +389,8 @@ class productUpload extends MY_Controller
 					unset($arrayNameOnly[$key]);
 				} 
 			}
-				
+
+			 
 			$arraynameoffiles = array_values($arraynameoffiles);
 			$arrayNameOnly = array_values($arrayNameOnly); 
 			$key = array_search ($primaryName, $arrayNameOnly);
