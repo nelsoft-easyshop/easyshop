@@ -1530,8 +1530,6 @@ function imageprev(input) {
 
 	var jcrop_api, width, height;
 	
-	console.log(input.files[0].type);
-	
     if (input.files && input.files[0] && input.files[0].type.match(/(gif|png|jpeg|jpg)/g) && input.files[0].size < 5000001) {
 		var reader = new FileReader();
 
