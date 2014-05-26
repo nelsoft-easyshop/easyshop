@@ -420,7 +420,7 @@ class memberpage_model extends CI_Model
 			unset($row['product_image_path']);
 			if($row['is_delete'] === '0')
 				array_push($data['active'],$row);
-			else
+			else if($row['is_delete'] === '1')
 				array_push($data['deleted'],$row);
 		}			
 		return $data;

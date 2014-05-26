@@ -351,6 +351,14 @@
 				<input type="hidden" name="action" value ="restore" /> 
 				<input class="manage_lnk restore_lnk span_bg" type = "submit" value="Restore Item"> </input>
 				<?php echo form_close(); ?>
+                
+                <span class="border_white">|</span>
+                <?php $attributes = array('class'=>'fulldelete'); ?>
+                <?php echo form_open('product/changeDelete', $attributes); ?>
+                    <input type="hidden" name="p_id" value ="<?php echo $deleted_product['id_product'];?>" /> 
+                    <input type="hidden" name="action" value ="fulldelete" /> 
+                    <input class="delete_lnk span_bg" type = "submit" value="Remove"> </input>
+                <?php echo form_close(); ?>
 			</div>
 		</div>
 		<div class="price_container"> 

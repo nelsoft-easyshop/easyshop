@@ -2382,5 +2382,11 @@ $(document).ready(function(){
 			});		
 		}		
     });	
+    
+    
+    $(document).on('click','.fulldelete',function(event){ 
+        var bool = confirm('This item will be deleted from Easyshop.ph for good. Are you sure?');
+        return bool;
+    });
 	
 });
