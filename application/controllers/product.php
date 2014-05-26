@@ -10,8 +10,10 @@ class product extends MY_Controller
 		$this->load->helper('htmlpurifier');
 		$this->load->model("product_model");
 	}
+    
 
-	public $per_page = 6;
+    
+	public $per_page = 9;
 	public $start_irrelevant = 0;
 
     /*     
@@ -810,6 +812,8 @@ class product extends MY_Controller
 				$this->product_model->updateIsDelete($productid, $memberid, 1);
 			else if($action === 'restore')
 				$this->product_model->updateIsDelete($productid, $memberid, 0);
+            else if($action === 'fulldelete')
+				$this->product_model->updateIsDelete($productid, $memberid, 2);
 		}
 		redirect('me', 'refresh');
 	}
