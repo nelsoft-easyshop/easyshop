@@ -33,18 +33,32 @@ while($r = mysqli_fetch_array($sthHoliday)) {
 }
 asort($holiday_arr); 
 array_values($holiday_arr);
- 
-
 $sth = mysqli_query($con,$sql);
 $counter = 0;
 echo PHP_EOL .'Scanning of data started ('.date('M-d-Y h:i:s A').')'.PHP_EOL;
 echo PHP_EOL;
+
 while($r = mysqli_fetch_array($sth)) {
     $counter++;
     $txnid = $r['txnid'];
     $tid = mysqli_real_escape_string($con,$r['tid']);
     $addDate = date('Y-m-d',strtotime($r['dateadded']));
-    $expiredDate = date('Y-m-d',strtotime($r['dateadded'].' + 5 days'));
+
+    $additionalExpiration = 0;
+    for ($i=1; $i <= 5; $i++) { 
+
+        $inDate = date('Y-m-d',strtotime($r['dateadded'].' + '.$i.' days'));
+        $weekend = date('w',strtotime($inDate));
+        
+        if($weekend == '0' || $weekend == '6')
+        {
+            $additionalExpiration += 1; 
+        }elseif(in_array($inDate, $holiday_arr)){
+            $additionalExpiration += 1; 
+        }
+    }
+    $additionalExpiration += 5;
+    $expiredDate = date('Y-m-d',strtotime($r['dateadded'].' + '.$additionalExpiration.' days'));
     
     $pass = "0";     
     while($pass == "0"){
@@ -86,28 +100,29 @@ while($r = mysqli_fetch_array($sth)) {
 }
 echo PHP_EOL .'Scanning of data ended ('.date('M-d-Y h:i:s A').')'.PHP_EOL;
 echo PHP_EOL.$counter.' ROWS AFFECTED!'.PHP_EOL;
- function moveExpiredDate($expDate,$holiday_arr){
-      $weekend = date('w',strtotime($expDate));
-      $pass = '0';
-      if($weekend == '0')
-      {
-          
-          $expDate = date('Y-m-d',strtotime($expDate.' + 1 day'));
-      }elseif($weekend == '6'){
-        
-          $expDate = date('Y-m-d',strtotime($expDate.' + 2 days'));
-      }
- 
-      if (in_array($expDate, $holiday_arr)){
-          $expDate = date('Y-m-d',strtotime($expDate.' + 1 day'));
-       
-      }else{
-          $pass = '1';
-      }
 
-      return array('expdate' => $expDate, 'pass' => $pass);
+function moveExpiredDate($expDate,$holiday_arr){
+    $weekend = date('w',strtotime($expDate));
+    $pass = '0';
+    if($weekend == '0')
+    {
+        
+        $expDate = date('Y-m-d',strtotime($expDate.' + 1 day'));
+    }elseif($weekend == '6'){
       
- }
+        $expDate = date('Y-m-d',strtotime($expDate.' + 2 days'));
+    }
+
+    if (in_array($expDate, $holiday_arr)){
+        $expDate = date('Y-m-d',strtotime($expDate.' + 1 day'));
+     
+    }else{
+        $pass = '1';
+    }
+
+    return array('expdate' => $expDate, 'pass' => $pass);
+      
+}
 
 mysqli_close($con);
 ?>
