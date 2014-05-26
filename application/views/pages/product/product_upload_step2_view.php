@@ -791,6 +791,7 @@
 <script src="<?php echo base_url() ?>assets/tinymce/plugins/jbimages/js/jquery.form.js"></script>
 <script type='text/javascript' src="<?=base_url()?>assets/JavaScript/js/jquery.simplemodal.js"></script>
 <script type='text/javascript' src='<?=base_url()?>assets/JavaScript/js/jquery.jqpagination.min.js'></script>
+<script src="<?php echo base_url(); ?>assets/tinymce/tinymce.min.js" type="text/javascript"></script>
 <script type="text/javascript">
 $(document).ready(function(){
   var badIE = config.badIE;
@@ -1351,31 +1352,29 @@ $(document).ready(function(){
     
     
 $(document).on('change','.other_name_value',function(){
+        $('.combinationContainer').empty();
+        noCombination = true;
+        arraySelected = {};  
 
+        var cnt = $(this).data('cnt');
+        var formatHeadValue = $.trim($('.prod_'+cnt).val().replace(/[^a-z0-9\s]/gi, '').replace(/[_\s]/g, ' '));
+        var headValue = formatHeadValue.toLowerCase().replace(/\b[a-z]/g, function(letter) {
+            return letter.toUpperCase();
+        }); 
+        var temp = $(this).data('temp'); 
+        var selfValue = escapeHtml($.trim($(this).val()));
+        var value = selfValue+headValue;
+        $(this).data('temp','"'+value+'"');
+        var attrVal = selfValue;
 
- $('.combinationContainer').empty();
- noCombination = true;
- arraySelected = {};  
+        var idHtmlId = headValue.replace(/ /g,'')+'Combination';
 
- var cnt = $(this).data('cnt');
- var formatHeadValue = $.trim($('.prod_'+cnt).val().replace(/[^a-z0-9\s]/gi, '').replace(/[_\s]/g, ' '));
- var headValue = formatHeadValue.toLowerCase().replace(/\b[a-z]/g, function(letter) {
-  return letter.toUpperCase();
-}); 
- var temp = $(this).data('temp'); 
- var selfValue = escapeHtml($.trim($(this).val()));
- var value = selfValue+headValue;
- $(this).data('temp','"'+value+'"');
- var attrVal = selfValue;
- 
- var idHtmlId = headValue.replace(/ /g,'')+'Combination';
-  
- if(formatHeadValue.length >0){ 
-  $('#'+idHtmlId+' option[data-temp='+temp+']').remove();
-  if(!$('#'+idHtmlId).length){
-    $('.quantity_attrs_content').append('<div id="div'+idHtmlId+'" style="position:relative">'+headValue+':<br> <select id="'+idHtmlId+'" ></select><br></div>');   
-  }
-  if(!attrVal.length <= 0){
+        if(formatHeadValue.length >0){ 
+            $('#'+idHtmlId+' option[data-temp='+temp+']').remove();
+            if(!$('#'+idHtmlId).length){
+                $('.quantity_attrs_content').append('<div id="div'+idHtmlId+'" style="position:relative">'+headValue+':<br> <select id="'+idHtmlId+'" ></select><br></div>');   
+            }
+            if(!attrVal.length <= 0){
               //added additional data attribute to option for edit option
               var attrID = $(this).data('otherid');
               $('#'+idHtmlId).append('<option value="'+attrVal+'" data-temp="'+value+'" data-value="1" data-group="'+headValue+'" data-otherid="'+attrID+'">'+attrVal+'</option>');
@@ -1386,349 +1385,342 @@ $(document).on('change','.other_name_value',function(){
             }
 
             if( !$.trim( $('.quantity_attrs_content').html() ).length ) {
-              $('.quantity_attr_done').hide();
-               $('.qty_tooltip').hide();
-              noCombination == true
+                $('.quantity_attr_done').hide();
+                $('.qty_tooltip').hide();
+                noCombination == true
             }else{
-              $('.quantity_attr_done').show();
-              $('.qty_tooltip').show();
+                $('.quantity_attr_done').show();
+                $('.qty_tooltip').show();
             }
-          }
-
-
-        }); 
-
-
-$(".checkbox_itemattr").click(function(){
-  addAttrQtySelection($(this));
-});
-
-$(".add_more_link").unbind("click").click(function(){
-  cnt_o++;
-  $('.step4_2').append('<tr class="main'+cnt_o+'"><td class="border-left"></td><td class="border-right" colspan="3"><input type="text" data-cnt="'+cnt_o+'" autocomplete="off" name="prod_other_name[]" class="prod_'+cnt_o+' other_name_class" placeholder="Item property title"><a href="javascript:void(0)" data-cnt="'+cnt_o+'" class="removeOptionGroup">Remove This Group</a></td></tr><tr class="main'+cnt_o+' main'+cnt_o+'_2nd"><td class="border-left"></td><td><input type="text" autocomplete="off" data-cnt="'+cnt_o+'" class="other_name_value otherNameValue'+cnt_o+'" name="prod_other[]" placeholder="Item property value"></td>   <td style="display:none"><input type="text" name="prod_other_id[]" value=""> </td>  <td> <div class="h_if_'+cnt_o+' hdv"  style="display:none"> &#8369; <input type="text" name="prod_other_price[]"  class="price_text"   id="price_field"  autocomplete="off" placeholder="Enter additional price (0.00)"></div></td><td class="border-right option_image_td"> <div class="h_if_'+cnt_o+' hdv" style="display:none"><input type="file" class="option_image_input" name="prod_other_img[]" accept="image/*" ><input type="hidden" name="prod_other_img_idx[]"><a data-cnt="'+cnt_o+'" class="removeOptionValue remove_option_long" href="javascript:void(0)">Remove</a></div></td></tr><tr id="main'+cnt_o+'" class="main'+cnt_o+'_link"><td class="border-left"></td><td class="border-right" colspan="3"><a class="add_more_link_value" data-value="'+cnt_o+'" href="javascript:void(0)">+Add more value</a></td></tr>');
-});
-
-$('.upload_input_form').on('click', '.add_more_link_value', function() {
-  var data =   $(this).data( "value" );   
-  $(".h_if_"+data).css("display", "block");
-  var attr = $('.prod_'+data).val();
-
-  var  subClass = "main"+data+"_2nd_add";
- 
-  var newrow = $('<tr class="main'+data+' '+subClass+'"><td class="border-left"></td><td style="display:none"><span ><input type="text" value ="'+attr+'" data-cnt="'+data+'" class="prod_'+data+'" name="prod_other_name[]"></span></td><td><input type="text" autocomplete="off" data-cnt="'+data+'" class="other_name_value otherNameValue'+data+'"  name="prod_other[]" placeholder="Item property value"></td>  <td style="display:none"><input type="text" name="prod_other_id[]" value=""> </td> <td> &#8369; <input type="text" name="prod_other_price[]"  id="price_field" class="price_text"  autocomplete="off" placeholder="Enter additional price (0.00)"></td><td class="border-right option_image_td"><input type="file" class="option_image_input" name="prod_other_img[]"  accept="image/*"><input type="hidden" name="prod_other_img_idx[]"><a data-cnt="'+data+'" class="removeOptionValue remove_option_long " href="javascript:void(0)">Remove</a></td></tr>');
-  $('#main'+data).before(newrow);
-});
-
-$(document).on('change',"#price_field,#prod_price, .price_text",function () {
-  //var priceval = this.value.replace(',','');
-  var priceval = this.value.replace(new RegExp(",", "g"), '');
-  var v = parseFloat(priceval);
-  var tempval;
-  if (isNaN(v)) {
-    this.value = '';
-  } else {
-    tempval = Math.abs(v);
-    this.value = ReplaceNumberWithCommas(tempval.toFixed(2));
-  }
-  
-
-});
-
-$( "#prod_title,#prod_brief_desc,#prod_price,#prod_condition" ).blur(function() {
-  var value = $(this).val();
-  var id = $(this).attr('id');
-
-  if(value == "0" || value == ""){
-    validateRedTextBox("#"+id);
-  }else{
-    validateWhiteTextBox("#"+id);
-  }
-});
-
-$( "#brand_sch,#prod_title,#prod_brief_desc,#prod_price,#qtyTextClass" ).keypress(function() {
-  var id = $(this).attr('id');
-  validateWhiteTextBox("#"+id);
-});
-
-$(document).on('change',"#prod_condition",function () {
-  var id = $(this).attr('id');
-  validateWhiteTextBox("#"+id);
-});
-
-function proceedStep3(url){
-    $('#form_product').ajaxForm({ 
-           url: url,
-           dataType: "json",
-           beforeSubmit : function(arr, $form, options){
-                var percentVal = '0%';
-                $('.percentage').html(percentVal);
-                $( ".button_div" ).hide();
-                $( ".loader_div" ).show();
-
-                $('<input type="hidden">').attr({
-                  id: 'inputs',
-                  name: 'inputs',
-                  value: g_input_name
-                }).appendTo('form');
-                arr.push({name:'inputs', value:g_input_name});
-                // -------------------------
-                
-                $('<input type="hidden">').attr({
-                  id: 'id',
-                  name: 'id',
-                  value: g_id
-                }).appendTo('form');
-                arr.push({name:'id', value:g_id});
-                // -------------------------
-                
-                $('<input type="hidden">').attr({
-                  id: 'combination',
-                  name: 'combination',
-                  value: g_combinationSelected
-                }).appendTo('form');
-                arr.push({name:'combination', value:g_combinationSelected});
-                // -------------------------
-                
-                $('<input type="hidden">').attr({
-                  id: 'desc',
-                  name: 'desc',
-                  value: g_description
-                }).appendTo('form');
-                arr.push({name:'desc', value:g_description});
-                // -------------------------
-                
-                $('<input type="hidden">').attr({
-                  id: 'noCombination',
-                  name: 'noCombination',
-                  value: g_noCombination
-                }).appendTo('form');
-                arr.push({name:'noCombination', value:g_noCombination});
-                // -------------------------
-                
-                $('<input type="hidden">').attr({
-                  id: 'otherCategory',
-                  name: 'otherCategory',
-                  value: g_otherCategory
-                }).appendTo('form');
-                arr.push({name:'otherCategory', value:g_otherCategory});
-                // -------------------------
-                
-                $('<input type="hidden">').attr({
-                  id: 'removeThisPictures',
-                  name: 'removeThisPictures',
-                  value: g_removeThisPictures
-                }).appendTo('form');
-                arr.push({name:'removeThisPictures', value:g_removeThisPictures});
-                // -------------------------
-                
-                $('<input type="hidden">').attr({
-                  id: 'primaryPicture',
-                  name: 'primaryPicture',
-                  value: g_primaryPicture
-                }).appendTo('form');
-                arr.push({name:'primaryPicture', value:g_primaryPicture});
-                // -------------------------
-                
-                $('<input type="hidden">').attr({
-                  id: 'editRemoveThisPictures',
-                  name: 'editRemoveThisPictures',
-                  value: g_editRemoveThisPictures
-                }).appendTo('form');
-                arr.push({name:'editRemoveThisPictures', value:g_editRemoveThisPictures});
-                // -------------------------
-                
-                $('<input type="hidden">').attr({
-                  id: 'editPrimaryPicture',
-                  name: 'editPrimaryPicture',
-                  value: g_editPrimaryPicture
-                }).appendTo('form');
-                arr.push({name:'editPrimaryPicture', value:g_editPrimaryPicture});
-                // -------------------------
-                
-                $('<input type="hidden">').attr({
-                  id: 'quantitySolo',
-                  name: 'quantitySolo',
-                  value: g_quantitySolo
-                }).appendTo('form');
-                arr.push({name:'quantitySolo', value:g_quantitySolo});
-          },
-          uploadProgress : function(event, position, total, percentComplete) {
-                var percentVal = percentComplete + '%';
-                $('.percentage').empty();
-                if(percentComplete >= 100){
-                    percentVal = '100%'
-                    $('.percentage').html(percentVal);
-                }else{
-                    $('.percentage').html(percentVal);
-                }
-          },
-          success :function(d) { 
-              $('.percentage').html('100%');
-                if (d.e == 1) {
-                  $('#prod_h_id').val(d.d); 
-                  document.getElementById("hidden_form").submit();
-                } else {
-                  $( ".button_div" ).show();
-                  $( ".loader_div" ).hide();
-                  $('.percentage').empty();
-                  alert(d.d);
-                } 
-          },
-          error: function (request, status, error) {
-            $( ".button_div" ).show();
-            $( ".loader_div" ).hide();
-            $('.percentage').empty();
-               response = request.responseText;
-              if (response.toLowerCase().indexOf("1001") >= 0){
-                alert('Something Went Wrong. The images you are uploading in [OTHER ATTRIBUTES] is too large.');
-              }else{
-                alert('Something Went Wrong. Please try again.');
-              }
-          }
-    }); 
-     
-}
-
-
-$(".proceed_form").unbind("click").click(function(){
- 
-  tinyMCE.triggerSave();
-  var description = tinyMCE.get('prod_description').getContent();
-  var id = "<?php echo $id; ?>"; 
-  var input_name = "<?php echo (string)$array_name_inputs; ?>";
-  var title = $("#prod_title");
-  var brief = $("#prod_brief_desc"); 
-  var combinationSelected = JSON.stringify(arraySelected);
-  var otherCategory = escapeHtml("<?php echo isset( $otherCategory)? html_escape($otherCategory) :''; ?>");
-
-  g_input_name = input_name;
-  g_id = id;
-  g_combinationSelected = combinationSelected;
-  g_description = description;
-  g_noCombination = noCombination;
-  g_otherCategory = otherCategory;
-  g_removeThisPictures = JSON.stringify(removeThisPictures);
-  g_primaryPicture = primaryPicture;
-  g_editRemoveThisPictures = JSON.stringify(editRemoveThisPictures);
-  g_editPrimaryPicture = editPrimaryPicture;  
-
-  var csrftoken = $("meta[name='csrf-token']").attr('content');
-  var csrfname = $("meta[name='csrf-name']").attr('content');
-  var price = $("#prod_price");
-  var other_price = $("#price_field");
-  var sku = $("#prod_sku");  
-  var brand = $("#prod_brand");
-  var condition = $('#prod_condition');
-  var conditionAvailable = <?php echo json_encode($this->lang->line('product_condition')); ?>;
-  var found = false;
-  var quantity = $('.qtyTextClass');
-  var combinationQuantity = $('.quantityText');
-
-
-  if(title.val().length == 0){
-    $( "#prod_title" ).focus();
-    validateRedTextBox("#prod_title");
-  }
-
-  if(brief.val().length == 0){
-    $( "#prod_brief_desc" ).focus();
-    validateRedTextBox("#prod_brief_desc");
-  }
-
-  if(price.val().length == 0){
-    $( "#prod_price" ).focus();
-    validateRedTextBox("#prod_price");
-  }
-
-  if(brand.val() == "0"){
-    validateRedTextBox("#brand_sch");
-  }else{
-    validateWhiteTextBox("#brand_sch");
-  }
-
-  if(condition.val() == "0"){
-    validateRedTextBox("#prod_condition");
-  }else{
-    validateWhiteTextBox("#prod_condition");
-  }
-
-  if(combinationQuantity.val() <= 0){
-    alert('0 Quantity is Invalid!');
-    return false;
-  }
-
-  if(title.val().length == 0 || brief.val().length == 0 || description.length == 0 || price.val().length == 0 || brand.val() == "0"){
-    alert("Fill (*) All Required Fields Properly!");
-    return false;
-  }else{
-
-//         if ($(".price_text").length > 0){ 
-//    $('.price_text').each(function() {
-//   if($( this ).val().length != 0){
-//         if($( this ).val() <= 1){
-//           alert('Invalid Price. Price should be numeric or cannot be less than equal 0!');
-//            validateRedTextBox(this);
-//           return false;
-//         }
-//     }
-// });
-  
-//     }
-
- 
-
-   var pricevalue = price.val().replace(new RegExp(",", "g"), '');
-     if(pricevalue <= 0 || !$.isNumeric(pricevalue)){
-      alert("Invalid Price. Price should be numeric or cannot be less than equal 0!");
-      validateRedTextBox("#prod_price");
-      return false;
-    }else{
-
-  
-    
-       found = false;
-       for (var key in conditionAvailable) {
-        if (conditionAvailable.hasOwnProperty(key))
-          if(conditionAvailable[key]=== condition.val()){
-           found = true;
-           break;
-         }
-       }
-
-       if(found === false){
-         validateRedTextBox("#prod_condition");
-         $( "#prod_condition" ).focus(); 
-         alert('Condition selected not available. Please select other.');
-         return false;
-       } 
-
-       if(noCombination == true){
-
-        if(quantity.val().length == 0 || quantity.val() <= 0){
-          $( ".qtyTextClass" ).focus();
-          validateRedTextBox(".qtyTextClass"); 
-          alert("Invalid Quantity!");
-          return false;
         }
+    }); 
+
+
+    $(".checkbox_itemattr").click(function(){
+      addAttrQtySelection($(this));
+    });
+
+    $(".add_more_link").unbind("click").click(function(){
+      cnt_o++;
+      $('.step4_2').append('<tr class="main'+cnt_o+'"><td class="border-left"></td><td class="border-right" colspan="3"><input type="text" data-cnt="'+cnt_o+'" autocomplete="off" name="prod_other_name[]" class="prod_'+cnt_o+' other_name_class" placeholder="Item property title"><a href="javascript:void(0)" data-cnt="'+cnt_o+'" class="removeOptionGroup">Remove This Group</a></td></tr><tr class="main'+cnt_o+' main'+cnt_o+'_2nd"><td class="border-left"></td><td><input type="text" autocomplete="off" data-cnt="'+cnt_o+'" class="other_name_value otherNameValue'+cnt_o+'" name="prod_other[]" placeholder="Item property value"></td>   <td style="display:none"><input type="text" name="prod_other_id[]" value=""> </td>  <td> <div class="h_if_'+cnt_o+' hdv"  style="display:none"> &#8369; <input type="text" name="prod_other_price[]"  class="price_text"   id="price_field"  autocomplete="off" placeholder="Enter additional price (0.00)"></div></td><td class="border-right option_image_td"> <div class="h_if_'+cnt_o+' hdv" style="display:none"><input type="file" class="option_image_input" name="prod_other_img[]" accept="image/*" ><input type="hidden" name="prod_other_img_idx[]"><a data-cnt="'+cnt_o+'" class="removeOptionValue remove_option_long" href="javascript:void(0)">Remove</a></div></td></tr><tr id="main'+cnt_o+'" class="main'+cnt_o+'_link"><td class="border-left"></td><td class="border-right" colspan="3"><a class="add_more_link_value" data-value="'+cnt_o+'" href="javascript:void(0)">+Add more value</a></td></tr>');
+    });
+
+    $('.upload_input_form').on('click', '.add_more_link_value', function() {
+      var data =   $(this).data( "value" );   
+      $(".h_if_"+data).css("display", "block");
+      var attr = $('.prod_'+data).val();
+
+      var  subClass = "main"+data+"_2nd_add";
      
-        g_quantitySolo = quantity.val();
+      var newrow = $('<tr class="main'+data+' '+subClass+'"><td class="border-left"></td><td style="display:none"><span ><input type="text" value ="'+attr+'" data-cnt="'+data+'" class="prod_'+data+'" name="prod_other_name[]"></span></td><td><input type="text" autocomplete="off" data-cnt="'+data+'" class="other_name_value otherNameValue'+data+'"  name="prod_other[]" placeholder="Item property value"></td>  <td style="display:none"><input type="text" name="prod_other_id[]" value=""> </td> <td> &#8369; <input type="text" name="prod_other_price[]"  id="price_field" class="price_text"  autocomplete="off" placeholder="Enter additional price (0.00)"></td><td class="border-right option_image_td"><input type="file" class="option_image_input" name="prod_other_img[]"  accept="image/*"><input type="hidden" name="prod_other_img_idx[]"><a data-cnt="'+data+'" class="removeOptionValue remove_option_long " href="javascript:void(0)">Remove</a></td></tr>');
+      $('#main'+data).before(newrow);
+    });
+
+    $(document).on('change',"#price_field,#prod_price, .price_text",function () {
+      //var priceval = this.value.replace(',','');
+      var priceval = this.value.replace(new RegExp(",", "g"), '');
+      var v = parseFloat(priceval);
+      var tempval;
+      if (isNaN(v)) {
+        this.value = '';
+      } else {
+        tempval = Math.abs(v);
+        this.value = ReplaceNumberWithCommas(tempval.toFixed(2));
       }
-      if(canProceed == false){
-        alert('Please wait while your pictures are being uploaded.');
-        return false;
+      
+
+    });
+
+    $( "#prod_title,#prod_brief_desc,#prod_price,#prod_condition" ).blur(function() {
+      var value = $(this).val();
+      var id = $(this).attr('id');
+
+      if(value == "0" || value == ""){
+        validateRedTextBox("#"+id);
       }else{
-        var action = $('#form_product').attr('action');
-        proceedStep3(action);
-        $('#form_product').submit();
+        validateWhiteTextBox("#"+id);
       }
+    });
 
+    $( "#brand_sch,#prod_title,#prod_brief_desc,#prod_price,#qtyTextClass" ).keypress(function() {
+      var id = $(this).attr('id');
+      validateWhiteTextBox("#"+id);
+    });
 
+    $(document).on('change',"#prod_condition",function () {
+      var id = $(this).attr('id');
+      validateWhiteTextBox("#"+id);
+    });
+
+    function proceedStep3(url){
+        $('#form_product').ajaxForm({ 
+               url: url,
+               dataType: "json",
+               beforeSubmit : function(arr, $form, options){
+                    var percentVal = '0%';
+                    $('.percentage').html(percentVal);
+                    $( ".button_div" ).hide();
+                    $( ".loader_div" ).show();
+
+                    $('<input type="hidden">').attr({
+                      id: 'inputs',
+                      name: 'inputs',
+                      value: g_input_name
+                    }).appendTo('form');
+                    arr.push({name:'inputs', value:g_input_name});
+                    // -------------------------
+                    
+                    $('<input type="hidden">').attr({
+                      id: 'id',
+                      name: 'id',
+                      value: g_id
+                    }).appendTo('form');
+                    arr.push({name:'id', value:g_id});
+                    // -------------------------
+                    
+                    $('<input type="hidden">').attr({
+                      id: 'combination',
+                      name: 'combination',
+                      value: g_combinationSelected
+                    }).appendTo('form');
+                    arr.push({name:'combination', value:g_combinationSelected});
+                    // -------------------------
+                    
+                    $('<input type="hidden">').attr({
+                      id: 'desc',
+                      name: 'desc',
+                      value: g_description
+                    }).appendTo('form');
+                    arr.push({name:'desc', value:g_description});
+                    // -------------------------
+                    
+                    $('<input type="hidden">').attr({
+                      id: 'noCombination',
+                      name: 'noCombination',
+                      value: g_noCombination
+                    }).appendTo('form');
+                    arr.push({name:'noCombination', value:g_noCombination});
+                    // -------------------------
+                    
+                    $('<input type="hidden">').attr({
+                      id: 'otherCategory',
+                      name: 'otherCategory',
+                      value: g_otherCategory
+                    }).appendTo('form');
+                    arr.push({name:'otherCategory', value:g_otherCategory});
+                    // -------------------------
+                    
+                    $('<input type="hidden">').attr({
+                      id: 'removeThisPictures',
+                      name: 'removeThisPictures',
+                      value: g_removeThisPictures
+                    }).appendTo('form');
+                    arr.push({name:'removeThisPictures', value:g_removeThisPictures});
+                    // -------------------------
+                    
+                    $('<input type="hidden">').attr({
+                      id: 'primaryPicture',
+                      name: 'primaryPicture',
+                      value: g_primaryPicture
+                    }).appendTo('form');
+                    arr.push({name:'primaryPicture', value:g_primaryPicture});
+                    // -------------------------
+                    
+                    $('<input type="hidden">').attr({
+                      id: 'editRemoveThisPictures',
+                      name: 'editRemoveThisPictures',
+                      value: g_editRemoveThisPictures
+                    }).appendTo('form');
+                    arr.push({name:'editRemoveThisPictures', value:g_editRemoveThisPictures});
+                    // -------------------------
+                    
+                    $('<input type="hidden">').attr({
+                      id: 'editPrimaryPicture',
+                      name: 'editPrimaryPicture',
+                      value: g_editPrimaryPicture
+                    }).appendTo('form');
+                    arr.push({name:'editPrimaryPicture', value:g_editPrimaryPicture});
+                    // -------------------------
+                    
+                    $('<input type="hidden">').attr({
+                      id: 'quantitySolo',
+                      name: 'quantitySolo',
+                      value: g_quantitySolo
+                    }).appendTo('form');
+                    arr.push({name:'quantitySolo', value:g_quantitySolo});
+              },
+              uploadProgress : function(event, position, total, percentComplete) {
+                    var percentVal = percentComplete + '%';
+                    $('.percentage').empty();
+                    if(percentComplete >= 100){
+                        percentVal = '100%'
+                        $('.percentage').html(percentVal);
+                    }else{
+                        $('.percentage').html(percentVal);
+                    }
+              },
+              success :function(d) { 
+                  $('.percentage').html('100%');
+                    if (d.e == 1) {
+                      $('#prod_h_id').val(d.d); 
+                      document.getElementById("hidden_form").submit();
+                    } else {
+                      $( ".button_div" ).show();
+                      $( ".loader_div" ).hide();
+                      $('.percentage').empty();
+                      alert(d.d);
+                    } 
+              },
+              error: function (request, status, error) {
+                $( ".button_div" ).show();
+                $( ".loader_div" ).hide();
+                $('.percentage').empty();
+                   response = request.responseText;
+                  if (response.toLowerCase().indexOf("1001") >= 0){
+                    alert('Something Went Wrong. The images you are uploading in [OTHER ATTRIBUTES] is too large.');
+                  }else{
+                    alert('Something Went Wrong. Please try again.');
+                  }
+              }
+        }); 
+         
     }
-  }
-});
 
- 
- 
+    $(".proceed_form").unbind("click").click(function(){
+     
+        tinyMCE.triggerSave();
+        var description = tinyMCE.get('prod_description').getContent();
+        var id = "<?php echo $id; ?>"; 
+        var input_name = "<?php echo (string)$array_name_inputs; ?>";
+        var title = $("#prod_title");
+        var brief = $("#prod_brief_desc"); 
+        var combinationSelected = JSON.stringify(arraySelected);
+        var otherCategory = escapeHtml("<?php echo isset( $otherCategory)? html_escape($otherCategory) :''; ?>");
+
+        g_input_name = input_name;
+        g_id = id;
+        g_combinationSelected = combinationSelected;
+        g_description = description;
+        g_noCombination = noCombination;
+        g_otherCategory = otherCategory;
+        g_removeThisPictures = JSON.stringify(removeThisPictures);
+        g_primaryPicture = primaryPicture;
+        g_editRemoveThisPictures = JSON.stringify(editRemoveThisPictures);
+        g_editPrimaryPicture = editPrimaryPicture;  
+
+        var csrftoken = $("meta[name='csrf-token']").attr('content');
+        var csrfname = $("meta[name='csrf-name']").attr('content');
+        var price = $("#prod_price");
+        var other_price = $("#price_field");
+        var sku = $("#prod_sku");  
+        var brand = $("#prod_brand");
+        var condition = $('#prod_condition');
+        var conditionAvailable = <?php echo json_encode($this->lang->line('product_condition')); ?>;
+        var found = false;
+        var quantity = $('.qtyTextClass');
+        var combinationQuantity = $('.quantityText');
+
+
+        if(title.val().length == 0){
+        $( "#prod_title" ).focus();
+        validateRedTextBox("#prod_title");
+        }
+
+        if(brief.val().length == 0){
+        $( "#prod_brief_desc" ).focus();
+        validateRedTextBox("#prod_brief_desc");
+        }
+
+        if(price.val().length == 0){
+        $( "#prod_price" ).focus();
+        validateRedTextBox("#prod_price");
+        }
+
+        if(brand.val() == "0"){
+        validateRedTextBox("#brand_sch");
+        }else{
+        validateWhiteTextBox("#brand_sch");
+        }
+
+        if(condition.val() == "0"){
+        validateRedTextBox("#prod_condition");
+        }else{
+        validateWhiteTextBox("#prod_condition");
+        }
+
+        if(combinationQuantity.val() <= 0){
+        alert('0 Quantity is Invalid!');
+        return false;
+        }
+
+        if(title.val().length == 0 || brief.val().length == 0 || description.length == 0 || price.val().length == 0 || brand.val() == "0"){
+            alert("Fill (*) All Required Fields Properly!");
+            return false;
+        }
+        else{
+            //         if ($(".price_text").length > 0){ 
+            //    $('.price_text').each(function() {
+            //   if($( this ).val().length != 0){
+            //         if($( this ).val() <= 1){
+            //           alert('Invalid Price. Price should be numeric or cannot be less than equal 0!');
+            //            validateRedTextBox(this);
+            //           return false;
+            //         }
+            //     }
+            // });
+
+            //     }
+
+
+
+            var pricevalue = price.val().replace(new RegExp(",", "g"), '');
+            if(pricevalue <= 0 || !$.isNumeric(pricevalue)){
+                alert("Invalid Price. Price should be numeric or cannot be less than equal 0!");
+                validateRedTextBox("#prod_price");
+                return false;
+            }else{
+               found = false;
+               for (var key in conditionAvailable) {
+                if (conditionAvailable.hasOwnProperty(key))
+                  if(conditionAvailable[key]=== condition.val()){
+                   found = true;
+                   break;
+                 }
+               }
+
+               if(found === false){
+                 validateRedTextBox("#prod_condition");
+                 $( "#prod_condition" ).focus(); 
+                 alert('Condition selected not available. Please select other.');
+                 return false;
+               } 
+
+               if(noCombination == true){
+
+                if(quantity.val().length == 0 || quantity.val() <= 0){
+                  $( ".qtyTextClass" ).focus();
+                  validateRedTextBox(".qtyTextClass"); 
+                  alert("Invalid Quantity!");
+                  return false;
+                }
+             
+                g_quantitySolo = quantity.val();
+              }
+              if(canProceed == false){
+                alert('Please wait while your pictures are being uploaded.');
+                return false;
+              }else{
+                var action = $('#form_product').attr('action');
+                proceedStep3(action);
+                confirm_unload = false;
+                $('#form_product').submit();
+
+              }
+
+
+            }
+        }
+    });
 
     /*
      * Product Edit javascript
@@ -1759,7 +1751,6 @@ $(".proceed_form").unbind("click").click(function(){
 
     //Submits previously configured quantity attribute combinations 
     var qty_obj =  JSON.parse($('#qty_details').val());
-    console.log(qty_obj);
     
     var html_item_selection = $('#quantity_attrs_content2').find('option');
     var prev_combination_count = 1;
@@ -1885,17 +1876,33 @@ $(".proceed_form").unbind("click").click(function(){
         }
     }
 
+    
+    var confirm_unload = true;
+    window.onbeforeunload = function (e) {
+        if(confirm_unload){
+          e = e || window.event;
+          var str = 'Some of your data may be lost.'
+          // For IE and Firefox prior to version 4
+          if (e) {
+            e.returnValue = str;
+          }
+          // For others
+          return str;
+        }
+  
+    };
+
+    
+    $('.step1_link').on('click', function(){
+        if(currentRequest != null) {
+            $('#prod_brand').val(1)
+            $('#prod_brand').trigger( "change" );
+        }
+        confirm_unload = false;
+        $('#edit_step1').submit();
+    });
 
 
-
-}); 
-</script>
-<script src="<?php echo base_url(); ?>assets/tinymce/tinymce.min.js" type="text/javascript"></script>
-<script type="text/javascript">
-
-
-
-$(document).ready(function() { 
     var prev_content = JSON.parse($('#step1_content').val());
     if(typeof prev_content.prod_title !== "undefined"){
         $('#prod_title').val(prev_content.prod_title);
@@ -1998,10 +2005,7 @@ $(document).ready(function() {
 
        $('#brand_search_drop_content').hide();
    });
-})
 
-
-$(document).ready(function(){
     var currentRequest = null;
     $( "#brand_sch" ).keyup(function() {
         $('#prod_brand').val(0)
@@ -2082,13 +2086,6 @@ $(document).ready(function(){
         });
     });    
   
-    $('.step1_link').on('click', function(){
-        if(currentRequest != null) {
-            $('#prod_brand').val(1)
-            $('#prod_brand').trigger( "change" );
-        }
-        $('#edit_step1').submit();
-    });
 
     $("#range_1").ionRangeSlider({
         min: 0,
