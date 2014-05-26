@@ -131,10 +131,14 @@ $(document).ready(function(){
 
 	 jQuery.validator.addMethod("is_validdate", function(value, element) {
 		var comp = value.split( /[-\/]+/);
+        if(comp.length > 3){
+            return this.optional(element) || false;
+        }
 		var y = parseInt(comp[0], 10);
 		var m = parseInt(comp[1], 10);
 		var d = parseInt(comp[2], 10);
 		var date = new Date(y,m-1,d);
+
 		if ((date.getFullYear() == y) && ((date.getMonth() + 1) == m) && (date.getDate() == d)) 
 			 return this.optional(element) || true;
 		else 
