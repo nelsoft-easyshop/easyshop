@@ -194,9 +194,9 @@ class memberpage_model extends CI_Model
 		{
 			$config['image_library'] = 'gd2';
 			$config['source_image'] = $path.'/usersize.png';
-			$config['maintain_ratio'] = false;
+			$config['maintain_ratio'] = true;
 			
-			if($data['w'] >= 60 && $data['h'] >= 60){			
+			if($data['w'] > 0 && $data['h'] > 0){			
 				$config['new_image'] = $path.'/usersize.png';
 				$config['width'] = $data['w'];
 				$config['height'] = $data['h'];

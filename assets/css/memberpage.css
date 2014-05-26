@@ -156,3 +156,20 @@
 	margin: 3px;
 	margin-left: 5px;
 }
+
+/** AVATAR CSS FIX **/
+#avatar_cont{
+	text-align: center;
+}
+
+#avatar_cont span{
+	height: 150px;
+	width: 157px;	
+}
+
+#avatar_cont img{
+	height: auto;
+	width: auto;
+	max-height: 150px;
+	max-width: 157px;
+}

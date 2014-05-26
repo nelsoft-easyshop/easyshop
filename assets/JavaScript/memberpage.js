@@ -1530,7 +1530,9 @@ function imageprev(input) {
 
 	var jcrop_api, width, height;
 	
-    if (input.files && input.files[0] && input.files[0].type.match('image.*') && input.files[0].size < 5000001) {
+	console.log(input.files[0].type);
+	
+    if (input.files && input.files[0] && input.files[0].type.match(/(gif|png|jpeg|jpg)/g) && input.files[0].size < 5000001) {
 		var reader = new FileReader();
 
 		reader.onload = function(e){
@@ -1540,7 +1542,7 @@ function imageprev(input) {
 				width = this.width;
 				height = this.height;
 				$('#user_image_prev').attr('src', this.src);
-				if(width >60 && height > 60 && width <= 1024 && height <= 768)
+				if(width >10 && height > 10 && width <= 1024 && height <= 768)
 					deploy_imageprev();
 				else if(width > 1024 || height > 768)
 					alert('Failed to upload image. Max image dimensions: 1024 x 768');
@@ -1570,6 +1572,7 @@ function imageprev(input) {
 					jcrop_api = $.Jcrop($('#user_image_prev'),{
 						aspectRatio: width/height,
 						boxWidth: 500,
+						boxHeight: 500,
 						minSize: [width*0.1,height*0.1],
 						trueSize: [width,height],
 						onChange: showCoords,

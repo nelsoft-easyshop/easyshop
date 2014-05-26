@@ -62,7 +62,7 @@ var jbImagesDialog = {
 			//check if all file extensions are allowed, break if one is not allowed
 			for(var i = 0; i<filenames.length; i++){
 				var fileExtension = filenames[i].name.split('.').pop();
-				if ( this.allowedFileType.join('|').indexOf(fileExtension) == -1 ){
+				if ( this.allowedFileType.join('|').indexOf(fileExtension.toLowerCase()) == -1 ){
 					filesAllowed = false;
 					notAllowedFiles += filenames[i].name + '\n';
 				}
