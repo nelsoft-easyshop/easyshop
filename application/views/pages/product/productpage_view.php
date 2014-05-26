@@ -198,14 +198,15 @@
                 <div class='html_description'>
                     <?php  
                         $clean_desc = html_purify($product['description']);
+                        $us_ascii = mb_convert_encoding($clean_desc, 'HTML-ENTITIES', 'UTF-8');
                         $doc = new DOMDocument();
                         //@ = error message suppressor, just to be safe
-                        @$doc->loadHTML(clean_desc);
+                        @$doc->loadHTML($us_ascii);
                         $tags = $doc->getElementsByTagName('a');
                         foreach($tags as $a){
                             $a->setAttribute('rel', 'nofollow');
                         }
-                        echo @$doc->saveHTML($doc);
+                        echo @$doc->saveHTML($doc); 
                     ?>
                 </div></p>
 
