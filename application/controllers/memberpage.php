@@ -379,7 +379,6 @@ class Memberpage extends MY_Controller
 		
 		if( $this->input->post('buyer_response') || $this->input->post('seller_response') ){
 			
-			
 			// Check type of response ( if user or seller response )
 			if( $this->input->post('buyer_response') ){
 				$data['order_product_id'] = $this->input->post('buyer_response');
@@ -461,7 +460,28 @@ class Memberpage extends MY_Controller
 					$serverResponse['error'] = 'Error with Dragonpay itself. Please check your payment with Dragonpay.';
 				}
 			}else{
-				$serverResponse['error'] = 'Dragonpay transaction does not exist.';
+				$serverResponse['error'] = 'Transaction does not exist.';
+			}
+		/*************	BANK DEPOSIT HANDLER	************************/
+		}else if( $this->input->post('bank_deposit') ) {
+			// Fetch transaction data
+			$checkTransaction = $this->payment_model->checkTransactionBasic($data);
+			
+			if( count($checkTransaction) == 1 ){
+				$postData = array(
+					'order_id' => $data['transaction_num'],
+					'bank' => $this->input->post('bank'),
+					'ref_num' => $this->input->post('ref_num'),
+					'amount' => $this->input->post('amount'),
+					'date_deposit' => $this->input->post('date'),
+					'comment' => $this->input->post('comment')
+				);
+				$result = $this->payment_model->addBankDepositDetails($postData);
+				
+				$serverResponse['result'] = $result ? 'success' : 'fail';
+				$serverResponse['error'] = $result ? '' : 'Failed to insert details into database.';
+			}else{
+				$serverRespone['error'] = 'Transaction does not exist.';
 			}
 		}
 		echo json_encode($serverResponse);

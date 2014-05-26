@@ -5438,56 +5438,5 @@ margin-right: 10px;
     overflow: hidden;
 }
 
-.shipping_comment{
-    color: #0191C8;
-    cursor: pointer;
-    display: inline-block;
-    font-size: 11px;
-    padding-top: 10px;
-    width: auto !important;
-}
 
-.shipping_comment_cont{
-	width: 500px;
-}
 
-.shipping_comment_cont h2{
-	padding: 5px;
-	background-color: #F48000;
-	color: white;
-}
-
-.shipping_comment_cont input, .shipping_comment_cont label{
-	display:inline-block;
-	margin-top: 5px;
-}
-
-.shipping_comment_cont label{
-	width: 30%;
-	margin-left: 5px;
-}
-
-.shipping_comment_cont textarea{
-	display:block;
-	margin: 3px;
-	margin-left: 5px;
-}
-
-.shipping_comment_submit{
-	border: none;
-	cursor: pointer;
-	margin-left: 5px;
-}
-
-.shipping_comment_edit, .shipping_comment_cancel{
-	cursor:pointer;
-	margin-left: 5px;
-}
-
-.shipping_comment_edit{
-	color: #0191C8;
-}
-
-.shipping_comment_cancel{
-	color: red;
-}

@@ -135,8 +135,8 @@
 	WHERE id_order = :transaction_num AND invoice_no = :invoice_num AND buyer_id = :member_id
 </select>
 
-<!-- Check order product - used to check before adding comments -->
-<select id="checkOrderProductComment">
+<!-- Check order product - used to check before adding comments and bankdeposit details-->
+<select id="checkOrderProductBasic">
 	SELECT id_order_product
 	FROM es_order_product
 	WHERE id_order_product = :id_order_product AND order_id = :order_id AND seller_id = :member_id
@@ -147,6 +147,12 @@
 	INSERT INTO es_product_shipping_comment (`order_product_id`, `comment`, `member_id`, `courier`, `tracking_num`, `expected_date`, `datemodified`)
 	VALUES (:order_product, :comment, :member_id, :courier, :tracking_num, :expected_date, NOW())
 	ON DUPLICATE KEY UPDATE comment = :comment, courier = :courier, tracking_num = :tracking_num, expected_date = :expected_date, datemodified = NOW()
+</select>
+
+<select id="addBankDepositDetails">
+	INSERT INTO es_payment_bankdeposit (`order_id`, `bank`,`ref_num`, `amount`, `date_deposit`, `comment`, `datemodified`)
+	VALUES(:order_id, :bank, :ref_num, :amount, :date_deposit, :comment, NOW())
+	ON DUPLICATE KEY UPDATE bank = :bank, ref_num = :ref_num, amount = :amount, date_deposit = :date_deposit, comment = :comment, datemodified = NOW()
 </select>
 
 <!-- Used to update es_order - Dragonpay transaction -->

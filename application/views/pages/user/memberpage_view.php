@@ -1360,9 +1360,34 @@
 								<input type="hidden" name="transaction_num" value="<?php echo $tk;?>">
 								<input type="hidden" name="dragonpay" value="1">
 							<?php echo form_close();?>
+						<?php elseif($transact['payment_method'] == 4 && $transact['transac_stat'] == 99):?>
+								<input type="submit" class="orange_btn3 payment_details_btn" value="Payment Details">
+								<div class="payment_details_cont" style="display:none;">
+								<?php $attr = array('class'=>'payment_bankdeposit');
+									$disable = $transact['bd_details']['bd_datemodified'] != '' ? true : false;
+									echo form_open('',$attr);
+								?>
+									<h2>Payment Details</h2>
+									<label for="bank">Bank: </label> 
+									<input type="text" name="bank" value="<?php echo html_escape($transact['bd_details']['bank'])?>" <?php echo $disable ? 'disabled':''?>><br/>
+									<label for="ref_num">Reference #: </label>
+									<input type="text" name="ref_num" value="<?php echo html_escape($transact['bd_details']['ref_num'])?>" <?php echo $disable ? 'disabled':''?>><br/>
+									<label for="amount">Amount Deposited: </label>
+									<input type="text" name="amount" class="bankdeposit_amount" value="<?php echo html_escape($transact['bd_details']['amount'])?>" <?php echo $disable ? 'disabled':''?>><br/>
+									<label for="date">Date of Deposit: </label>
+									<input type="text" name="date" value="<?php echo html_escape($transact['bd_details']['date_deposit'])?>" <?php echo $disable ? 'disabled':''?>><br/>
+									<label for="comment">Comments: </label>
+									<textarea name="comment" cols="55" rows="5" data-value="<?php echo html_escape($transact['bd_details']['comment'])?>" <?php echo $disable ? 'disabled':''?>><?php echo html_escape($transact['bd_details']['comment'])?></textarea>
+									<input type="hidden" name="invoice_num" value="<?php echo $transact['invoice_no'];?>">
+									<input type="hidden" name="transaction_num" value="<?php echo $tk;?>">
+									<input type="hidden" name="bank_deposit" value="1">
+									<input type="submit" class="bank_deposit_submit" name="bank_deposit_submit" value="Submit">
+									<span class="tx_modal_edit css_modal_edit" style="display:<?php echo $disable ? '':'none;'?>">Edit</span>
+									<span class="tx_modal_cancel css_modal_cancel" style="display:none;">Cancel</span>
+									<span style="margin-left: 25em;"><?php echo $transact['bd_details']['bd_datemodified']?></span>
+								<?php echo form_close();?>
+								</div>
 						<?php endif;?>
-
-						
 					</div>
 					<!-- End of dragonpay button-->
 				</div>
@@ -1403,8 +1428,7 @@
 												<?php
 													$attr = array('class'=>'transac_response');
 													echo form_open('',$attr);
-												?>		
-																					
+												?>							
 												<input class = "transac_response_btn transac_forward orange_btn3" value="Forward payment to seller" type="submit">
 													<input type="hidden" name="buyer_response" value="<?php echo $opk;?>">
 													<input type="hidden" name="transaction_num" value="<?php echo $tk;?>">
@@ -1417,20 +1441,12 @@
 											<?php elseif($product['status'] == 3):?>
 												<span class="trans_alert transac_cod">Cash on delivery</span>
 											<?php endif;?>
+										<?php else:?>
+											<span class="trans_alert">PENDING</span>
 										<?php endif;?>
 
 										<?php if( strlen(trim($product['shipping_comment'])) > 0 ):?>
-											<div>
-												<label for="courier">Courier: </label>
-												<input type="text" name="courier" value="<?php echo html_escape($product['courier']);?>" disabled ><br/>
-												<label for="tracking_num">Tracking Number: </label>
-												<input type="text" name="tracking_num" value="<?php echo html_escape($product['tracking_num']);?>" disabled ><br/>
-												<label for="expected_date">Expected Date of Arrival: </label>
-												<input type="text" name="expected_date" value="<?php echo html_escape($product['expected_date'])?>" disabled><br/>
-												<label for="comment">* Comments: </label>
-												<textarea name="comment" cols="55" rows="5" disabled ><?php echo html_escape($product['shipping_comment']); ?></textarea>								
-												<span style="margin-left:32em;"><?php echo $product['datemodified'];?></span>
-											</div>
+											<div><span class="shipping_comment">View Shipping Comment</span></div>
 											<div class="shipping_comment_cont" style="display:none;">
 												<h2>Shipping Details</h2>
 												<div>
@@ -1444,7 +1460,6 @@
 													<textarea name="comment" cols="55" rows="5" disabled ><?php echo html_escape($product['shipping_comment']); ?></textarea>								
 													<span style="margin-left:35em;"><?php echo $product['datemodified'];?></span>
 												</div>
-
 											</div>
 										<?php endif;?>
 									</span>		
@@ -1681,8 +1696,8 @@
 												<input name="order_product" type="hidden" value="<?php echo $opk;?>">
 												<input name="transact_num" type="hidden" value="<?php echo $tk;?>">
 												<input class="shipping_comment_submit orange_btn3" type="submit" value="Save">
-												<span class="shipping_comment_edit" style="display: <?php echo $disable ? '':'none'?>;">Edit</span>
-												<span class="shipping_comment_cancel" style="display:none;">Cancel</span>
+												<span class="tx_modal_edit css_modal_edit" style="display: <?php echo $disable ? '':'none'?>;">Edit</span>
+												<span class="tx_modal_cancel css_modal_cancel" style="display:none;">Cancel</span>
 												<span style="margin-left:25em;"><?php echo $product['datemodified'];?></span>
 											<?php echo form_close();?>
 										</div>

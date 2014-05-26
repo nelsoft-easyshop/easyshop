@@ -445,7 +445,7 @@ class memberpage_model extends CI_Model
 		$sth->bindParam(':id', $member_id);
 		$sth->execute();
 		$row = $sth->fetchAll(PDO::FETCH_ASSOC);
-
+		
 		$data = array();
 		$fdata = array('buy' => array(), 'sell' => array(), 'complete' => array('buy'=>array(), 'sell'=>array()));
 		
@@ -460,7 +460,6 @@ class memberpage_model extends CI_Model
 				if( !array_key_exists($temp['id_order'], $data) ){
 					$data[$temp['id_order']] = array();
 				}
-				
 				if( !array_key_exists('dateadded', $data[$temp['id_order']]) ){
 					$data[$temp['id_order']]['dateadded'] = $temp['dateadded'];
 				}
@@ -474,6 +473,11 @@ class memberpage_model extends CI_Model
 					$data[$temp['id_order']]['payment_method'] = $temp['payment_method'];
 				}
 				
+				if($temp['transac_stat'] == 99 && $temp['payment_method'] == 4){
+					if( !isset( $data[$temp['id_order']]['bd_details'] ) )
+						$data[$temp['id_order']]['bd_details'] = array_splice($temp, 42, 6);
+				}
+				
 				if(!array_key_exists('users', $data[$temp['id_order']]))
 					$data[$temp['id_order']]['users'] = array();
 				
@@ -483,26 +487,14 @@ class memberpage_model extends CI_Model
 				// you are buyer in transaction
 				if($member_id == $temp['buyer_id']){
 					$product = $temp;
-					$product = array_slice($product, 12, 7);
-					$product['slug'] = $temp['slug'];
-					$product['shipping_comment'] = $temp['comment'];
-					$product['courier'] = $temp['courier'];
-					$product['tracking_num'] = $temp['tracking_num'];
-					$product['expected_date'] = $temp['expected_date'];
-					$product['datemodified'] = $temp['datemodified'];
+					$product = array_slice($product, 12, 13);
 					$userid = $temp['seller_id'];
 					$username = $temp['seller'];
 				}
 				// you are seller in transaction
 				else if($member_id == $temp['seller_id']){
 					$product = $temp;
-					$product = array_slice($product, 12, 7);
-					$product['slug'] = $temp['slug'];
-					$product['shipping_comment'] = $temp['comment'];
-					$product['courier'] = $temp['courier'];
-					$product['tracking_num'] = $temp['tracking_num'];
-					$product['expected_date'] = $temp['expected_date'];
-					$product['datemodified'] = $temp['datemodified'];
+					$product = array_slice($product, 12, 13);
 					unset($product['seller_id']);
 					unset($product['seller']);
 					$userid = $temp['buyer_id'];
@@ -520,16 +512,7 @@ class memberpage_model extends CI_Model
 						'rating1' => 0,
 						'rating2' => 0,
 						'rating3' => 0,
-						'address' => array(
-							'consignee' => $temp['consignee'],
-							'mobile' => $temp['mobile'],
-							'telephone' => $temp['telephone'],
-							'stateregion' => $temp['stateregion'],
-							'city' => $temp['city'],
-							'fulladd' => $temp['address'],
-							'lat' => $temp['lat'],
-							'lng' => $temp['lng']
-						)
+						'address' => array_slice($temp, 32, 8)
 					);
 				
 				if(trim($temp['feedb_msg']) !== '' && trim($temp['for_memberid']) !== '' && $userid == $temp['for_memberid']){
@@ -588,7 +571,7 @@ class memberpage_model extends CI_Model
 						$fdata['complete']['sell'][$k] = $temp2;
 					else
 						$fdata['complete']['buy'][$k] = $temp2;
-				}else if($temp2['transac_stat'] == 99 && $temp2['payment_method'] == 2){ // if pending Dragonpay transaction
+				}else if($temp2['transac_stat'] == 99 && ( $temp2['payment_method'] == 2 || $temp2['payment_method'] == 4 ) ){ // if pending Dragonpay transaction
 					if(array_key_exists('buyer_id', $temp2) && array_key_exists('buyer', $temp2))
 						continue;
 					else
@@ -596,6 +579,7 @@ class memberpage_model extends CI_Model
 				}
 			}
 		}		
+		
 		return $fdata;
 	}
 	

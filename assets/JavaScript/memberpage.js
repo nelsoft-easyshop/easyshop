@@ -160,6 +160,11 @@ $(document).ready(function(){
 				minlength: 6
 			}
 		},
+		messages:{
+			mobile: {
+				minlength: 'Please enter at least 10 characters'
+			}
+		},
 		errorElement: "span",
 		errorPlacement: function(error, element) {
 				error.addClass('red');
@@ -1224,8 +1229,8 @@ $(document).ready(function(){
 	$('.shipping_comment_submit').on('click', function(){
 		var form = $(this).closest('form.shipping_details');
 		var textarea = $(this).siblings('textarea');
-		var editbtn = $(this).siblings('.shipping_comment_edit');
-		var cancelbtn = $(this).siblings('.shipping_comment_cancel');
+		var editbtn = $(this).siblings('.tx_modal_edit');
+		var cancelbtn = $(this).siblings('.tx_modal_cancel');
 		var input = $(this).siblings('input[type="text"]');
 		var submitbtn = $(this);
 		
@@ -1270,25 +1275,109 @@ $(document).ready(function(){
 		return false;
 	});
 	
-	$('.shipping_comment_edit').on('click', function(){
-		$(this).siblings('input[type="text"],textarea').attr('disabled', false);
-		$(this).hide();
-		$(this).siblings('.shipping_comment_cancel').show();
+	/***************	BANK DEPOSIT HANDLERS	*********************/
+	$('.payment_details_btn').on('click', function(){
+		var thisdiv = $(this).siblings('div.payment_details_cont');
+		var thisform = thisdiv.children('form.payment_bankdeposit'); 
+		var submitbtn = thisform.children('input[type="submit"]');
+		
+		var input = thisform.children('input[type="text"]');
+		var textarea = thisform.children('textarea');
+		var cancelbtn = thisform.children('.tx_modal_cancel');
+		var editbtn = thisform.children('.tx_modal_edit');
+		
+		$('input.bankdeposit_amount').numeric({negative:false});
+		
+		thisdiv.modal({
+			escClose: false,
+			onShow: function(){
+				this.setPosition();
+				thisform.validate({
+					rules: {
+						bank:{
+							required: true
+						},
+						ref_num:{
+							required: true
+						},
+						amount:{
+							required: true
+						},
+						date:{
+							required: true
+						}
+					},
+					errorElement: "span",
+					errorPlacement: function(error, element) {
+						error.addClass('red');
+						error.insertAfter(element);
+					},	
+					submitHandler: function(form) {
+						submitbtn.val('Sending...');
+						$.post(config.base_url+'memberpage/transactionResponse', $(form).serializeArray(), function(data){
+							submitbtn.val('Submit');
+							try{
+								var obj = jQuery.parseJSON(data);
+							}
+							catch(e){
+								alert('An error was encountered while processing your data. Please try again later.');
+								return false;
+							}
+							if(obj.result === 'success'){
+								$.each(input, function(k,v){
+									$(v).attr('value', $(v).prop('value'));
+									$(v).attr('disabled', true);
+								});
+								textarea.attr('data-value', htmlDecode(textarea.val()));
+								textarea.attr('disabled', true);
+								
+								editbtn.show();
+								cancelbtn.hide();
+								$.modal.close();
+							}else{
+								alert(obj.error);
+							}
+						});
+						return false;
+					}
+				});
+				thisform.validate().resetForm();
+				input.each(function(){
+					if( $.trim($(this).attr('value'))>0 ){
+						cancelbtn.trigger('click');
+						return false;
+					}
+				});
+			},
+			onClose: function(){
+				$.modal.close();
+			}
+		});
 	});
 	
-	$('.shipping_comment_cancel').on('click', function(){
-		$(this).siblings('input[type="text"],textarea').attr('disabled', true);
+	$('.tx_modal_edit').on('click', function(){
+		$(this).siblings('input[type="text"],textarea').attr('disabled', false);
+		$(this).hide();
+		$(this).siblings('.tx_modal_cancel').show();
+	});
+	
+	$('.tx_modal_cancel').on('click', function(){
 		var input = $(this).siblings('input[type="text"]');
 		var textarea = $(this).siblings('textarea');
 		
+		input.attr('disabled', true);
+		textarea.attr('disabled', true);
+		
 		$.each(input, function(k,v){
-			$(v).prop('value', $(v).attr('value'));
+			$(v).prop('value', htmlDecode($(v).attr('value')));
 		});
 		textarea.val(htmlDecode(textarea.attr('data-value')));
 		
 		$(this).hide();
-		$(this).siblings('.shipping_comment_edit').show();
+		$(this).siblings('.tx_modal_edit').show();
+		$(this).closest('form').validate().resetForm();
 	});
+	
 });
 
 

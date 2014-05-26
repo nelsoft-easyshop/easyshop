@@ -439,7 +439,7 @@ class payment_model extends CI_Model
 	// Check order product before saving comment
 	function checkOrderProductBasic($temp)
 	{
-		$query = $this->sqlmap->getFilenameID('payment','checkOrderProductComment');
+		$query = $this->sqlmap->getFilenameID('payment','checkOrderProductBasic');
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':id_order_product', $temp['order_product']);
 		$sth->bindParam(':order_id', $temp['transact_num']);
@@ -461,6 +461,21 @@ class payment_model extends CI_Model
 		$sth->bindParam(':courier', $temp['courier']);
 		$sth->bindParam(':tracking_num', $temp['tracking_num']);
 		$sth->bindParam(':expected_date', $temp['expected_date']);
+		$result = $sth->execute();
+		
+		return $result;
+	}
+	
+	function addBankDepositDetails($temp)
+	{
+		$query = $this->sqlmap->getFilenameID('payment','addBankDepositDetails');
+		$sth = $this->db->conn_id->prepare($query);
+		$sth->bindParam(':order_id', $temp['order_id']);
+		$sth->bindParam(':bank', $temp['bank']);
+		$sth->bindParam(':ref_num', $temp['ref_num']);
+		$sth->bindParam(':amount', $temp['amount']);
+		$sth->bindParam(':date_deposit', $temp['date_deposit']);
+		$sth->bindParam(':comment', $temp['comment']);
 		$result = $sth->execute();
 		
 		return $result;
