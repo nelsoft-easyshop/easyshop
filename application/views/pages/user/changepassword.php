@@ -56,7 +56,7 @@
 					<input type="hidden" value="<?php echo strtolower($uname);?>" id="changepass_username">
                 <?php elseif($toggle_view == ""): ?>
                     <strong>
-						Password successfully updated. <br/><a href='<?=base_url()?>me' style="color: #0191C8">Click here </a> to return the your page.
+						Password successfully updated. <br/><a href='<?=base_url()?>me' style="color: #0191C8">Click here </a> to return to your page.
 					</strong>
 				<?php endif; ?>            
           </div>
