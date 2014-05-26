@@ -97,7 +97,7 @@
     <select id="getProductPreview">
         SELECT p.id_product AS id_product, p.condition, p.brand_id AS brand_id, p.brand_other_name AS custombrand, 
         p.name AS product_name, p.description AS description, 
-        p.cat_id AS cat_id, p.price AS price, p.quantity AS quantity, p.brief AS brief, p.sku AS sku,
+        p.cat_id AS cat_id, p.price AS price, p.brief AS brief, p.sku AS sku,
         s.name AS style_name, b.name AS brand_name, p.member_id AS sellerid, m.nickname AS sellernickname, 
         m.username AS sellerusername, m.imgurl AS userpic, c.name AS category
         FROM es_product p 
