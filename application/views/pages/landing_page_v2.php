@@ -40,7 +40,7 @@
 	<header>
 		<div class="container-16">
 				<div class="grid-4">
-					<span class="span_bg logo"></span>
+					<a href="<?=base_url()?>home"><span class="span_bg logo"></span></a>
 				</div>
 				<div class="nav_container">
 					<nav class="nav-collapse">
@@ -205,9 +205,9 @@
 						<div class="mgrn_top2">
 							<div class="vid_container"><span class="fs1">watch this video </span> 
 							<span>
-								<img src="<?=base_url()?>assets/images/img_video.jpg" class="vidplay" alt="Easyshop.ph Video">
+								<img src="<?=base_url()?>assets/images/landingpage/img_video.jpg" class="vidplay" alt="Easyshop.ph Video">
 								<span id="videoplayer">									
-									<embed width="420" height="345" src="https://www.youtube.com/v/bA4vWKZSE00" type="application/x-shockwave-flash"></embed>
+									<embed src="https://www.youtube.com/v/bA4vWKZSE00" type="application/x-shockwave-flash"></embed>
 								</span>
 							</span>
 							</div>	
@@ -220,35 +220,39 @@
 	<div class="clear"></div>
 	<footer>
 		<div class="container-16">
-			<div>
+			<div class="footer">
 				<ul>
 					<li>
 						<a href="">Shop</a>
 					</li>
 					<li>
-						<a href="">Buy</a>
+						<a href="">Sell</a>
 					</li>
 					<li>
-						<p>
+						<div class="footer_payment">
 							Payment Methods:
-							<span></span>
-							<span></span>
-							<span></span>
-							<span></span>
-						</p>
+							<span class="span_bg mastercard"></span>
+							<span class="span_bg visa"></span>
+							<span class="span_bg paypal"></span>
+							<span class="span_bg dragonpay"></span>
+							<span class="span_bg cod"></span>
+						</div>
 					</li>
 					<li>
-						<p>
+						<div class="social_media">
 							Social Media:
-						</p>
+							<a href="https://www.facebook.com/EasyShopPhilippines"><span class="span_bg facebook"></span></a>
+							<a href="https://twitter.com/EasyShopPH"><span class="span_bg twitter"></span></a>
+						</div>
 					</li>
 				</ul>
 				
 			</div>
-			<div class="copyright_content">
+			<div class="clear"></div>
+		</div>
+		<div class="copyright_content">
 				<p>Copyright © 2014 easyshop.ph. All rights reserved </p>
 			</div>
-		</div>
 	</footer>
 </body>
 <?php echo form_open('registration/success', array('id'=>'success_register'));?>
@@ -260,24 +264,7 @@
 
 <!-- script for responsive navigation -->
 <script src="<?=base_url()?>assets/JavaScript/js/landingpage/responsive-nav.js"></script>
-<script>
-      var navigation = responsiveNav(".nav-collapse", {
-        animate: true,                    // Boolean: Use CSS3 transitions, true or false
-        transition: 284,                  // Integer: Speed of the transition, in milliseconds
-        label: "Menu",                    // String: Label for the navigation toggle
-        insert: "after",                  // String: Insert the toggle before or after the navigation
-        customToggle: "",                 // Selector: Specify the ID of a custom toggle
-        closeOnNavClick: false,           // Boolean: Close the navigation when one of the links are clicked
-        openPos: "relative",              // String: Position of the opened nav, relative or static
-        navClass: "nav-collapse",         // String: Default CSS class. If changed, you need to edit the CSS too!
-        navActiveClass: "js-nav-active",  // String: Class that is added to <html> element when nav is active
-        jsClass: "js",                    // String: 'JS enabled' class which is added to <html> element
-        init: function(){},               // Function: Init callback
-        open: function(){},               // Function: Open callback
-        close: function(){}               // Function: Close callback
-      });
-    </script>
-<!-- script for jquery ui -->
+
 <script type='text/javascript' src="<?=base_url()?>assets/JavaScript/js/jquery-1.9.1.js" ></script>
 <script type='text/javascript' src="<?=base_url()?>assets/JavaScript/js/jquery-ui.js"></script>
 
