@@ -99,8 +99,8 @@ $(document).ready(function(){
 	 }, "* This field must be set");
 	 
 	 jQuery.validator.addMethod("is_validmobile", function(value, element) {
-		return this.optional(element) || /^9[0-9]{9}/.test(value);
-	 }, "Valid mobile format: 9xxxxxxxxx");
+		return this.optional(element) || /^(8|9)[0-9]{9}/.test(value);
+	 }, "Must begin with 8 or 9");
 });
 
 

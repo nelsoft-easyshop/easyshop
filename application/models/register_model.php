@@ -524,11 +524,11 @@ class Register_model extends CI_Model
 			return true;
 		}
 	
-		if(preg_match('/^9[0-9]{9}/', $mobile)){
+		if(preg_match('/^(8|9)[0-9]{9}/', $mobile)){
 			return true;
 		}
 		else{
-			$this->form_validation->set_message('external_callbacks', 'The mobile number you entered is invalid');
+			$this->form_validation->set_message('external_callbacks', 'Mobile number must begin with 8 or 9');
 			return false;
 		}
 		

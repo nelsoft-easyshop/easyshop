@@ -163,8 +163,8 @@ $(document).ready(function(){
 	 }, "Only letters, numbers, and underscores are allowed");
  
 	jQuery.validator.addMethod("is_validmobile", function(value, element) {
-		return this.optional(element) || /^9[0-9]{9}/.test(value);
-	 }, "Mobile no. format : 9XXXXXXXXX");
+		return this.optional(element) || /^(8|9)[0-9]{9}/.test(value);
+	 }, "Must begin with 8 or 9");
 	 
 	 jQuery.validator.addMethod("no_space", function(value, element) {
 		return this.optional(element) || /[^\s]/g.test(value);
@@ -226,7 +226,7 @@ $(document).ready(function(){
 				}
 		 },
 		 submitHandler: function(form){
-			if( $('#username').hasClass('pass') && $('#email').hasClass('pass') && !($('#mobile').hasClass('fail')) ){
+			if( $('#username').hasClass('pass') && $('#email').hasClass('pass') && !($('#mobile').hasClass('fail')) && !($('#mobile').hasClass('forSearch')) ){
 				$('#register_form1_loadingimg').show().css('display','inline-block');
 				$('#register_form1_btn').attr('disabled', true);
 
