@@ -51,6 +51,26 @@ class Mycontroller extends MY_Controller
 			echo 'Successfully updated slug for all categories.';
 		}
 	}
+	
+	function mobileTest($mobile, $msg, $from)
+	{
+		$fields = array();
+		$fields["api"] = "dgsMQ8q77hewW766aqxK";
+		$fields["number"] = $mobile; //safe use 63
+		$fields["message"] = $msg;
+		$fields["from"] = $from;
+		$fields_string = http_build_query($fields);
+		$outbound_endpoint = "http://api.semaphore.co/api/sms";
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, $outbound_endpoint);
+		curl_setopt($ch,CURLOPT_POST, count($fields));
+		curl_setopt($ch,CURLOPT_POSTFIELDS, $fields_string);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		$output = curl_exec($ch);
+		curl_close($ch);
+		
+		return $output;
+	}
 }
 
 ?>
