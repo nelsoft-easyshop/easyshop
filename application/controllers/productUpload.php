@@ -260,26 +260,33 @@ class productUpload extends MY_Controller
 			)); 	
 
 		$this->upload->do_multi_upload("files");
-		 
+	 	$error = 0;
 	   	$file_data = $this->upload->get_multi_upload_data();
-		for ($i=0; $i < sizeof($filenames_ar); $i++) { 
-	 		
-	 
-			$this->es_img_resize($filenames_ar[$i],$path_directory, 'small/', $this->img_dimension['small']); 
-			$this->es_img_resize($filenames_ar[$i],$path_directory.'small/', '../categoryview/', $this->img_dimension['categoryview']);
-			$this->es_img_resize($filenames_ar[$i],$path_directory.'categoryview/','../thumbnail/', $this->img_dimension['thumbnail']);
-            
+	   	if(count($file_data) > 0){
+	   		for ($i=0; $i < sizeof($filenames_ar); $i++) { 
+
+
+	   			$this->es_img_resize($filenames_ar[$i],$path_directory, 'small/', $this->img_dimension['small']); 
+	   			$this->es_img_resize($filenames_ar[$i],$path_directory.'small/', '../categoryview/', $this->img_dimension['categoryview']);
+	   			$this->es_img_resize($filenames_ar[$i],$path_directory.'categoryview/','../thumbnail/', $this->img_dimension['thumbnail']);
+
             //If user uploaded image is too large, resize and overwrite original image
-			if(($file_data[$i]['image_width'] > $this->img_dimension['usersize'][0]) || ($file_data[$i]['image_height'] > $this->img_dimension['usersize'][1])){
-				$this->es_img_resize($file_data[$i]['file_name'],$path_directory,'', $this->img_dimension['usersize']);
-			}	
-		}
+
+	   			if(($file_data[$i]['image_width'] > $this->img_dimension['usersize'][0]) || ($file_data[$i]['image_height'] > $this->img_dimension['usersize'][1])){
+	   				$this->es_img_resize($file_data[$i]['file_name'],$path_directory,'', $this->img_dimension['usersize']);
+	   			}	
+	   		}
+	   	}else{
+	   		$text = $this->upload->display_errors();
+	   		$error = 1;
+	   	}
 		  
 		$return = array(
 			'n' => $arraynameoffiles,
-			'td' => $text,
+			'msg' => $text,
 			'dr' => $path_directory,
-			'fcnt' => $filescnttxt
+			'fcnt' => $filescnttxt,
+			'err' => $error
 			);
 
 		echo json_encode($return);
@@ -357,7 +364,7 @@ class productUpload extends MY_Controller
  			
  			$arraynameoffiles = $this->input->post('arraynameoffiles');
 			if($arraynameoffiles == ""){ 
-				echo '{"e":"0","d":"Select at least 1 photo for your item."}';
+				echo '{"e":"0","d":"Please select at least one photo for your listing."}';
 				exit();
 			}
 
@@ -397,7 +404,7 @@ class productUpload extends MY_Controller
 			}
 
 			if(count($arraynameoffiles) <= 0){
-				echo '{"e":"0","d":"Select at least 1 photo for your item."}';
+				echo '{"e":"0","d":"Please select at least one photo for your listing."}';
 				exit();
 			}
 
@@ -1099,7 +1106,7 @@ class productUpload extends MY_Controller
             $primaryId = $_POST['primaryPicture'];
 
             if((empty($_FILES['files']['name'][0])) && ($main_image_cnt  === count($editRemoveThisPictures))){ 
-                echo '{"e":"0","d":"Select at least 1 photo for your item."}';
+                echo '{"e":"0","d":"Please select at least one photo for your listing."}';
                 exit();
 			}    
             //SECTION OF CODE FOR ES_PRODUCT_UPLOADER

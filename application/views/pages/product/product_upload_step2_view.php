@@ -794,7 +794,7 @@
 <script type="text/javascript">
 $(document).ready(function(){
   var badIE = config.badIE;
-  var canProceed = false;
+  var canProceed = true;
   var arrayNameOfFiles;
   var removeThisPictures = [];
   var pictureCount = 0;
@@ -979,6 +979,16 @@ $(document).ready(function(){
               $('.filescnt'+filescntret+' > .loadingfiles').remove();
               $('.filescnt'+filescntret+' > span').removeClass('loading_opacity');
               canProceed = true;
+
+              if(d.err == '1'){
+                alert(d.msg);
+                 $.each( arrayUpload, function( key, value ) {
+                   removeThisPictures.push(value); 
+                   $('#previewList'+value).remove();
+                 });
+              }
+               console.log(removeThisPictures)
+
           },
           error: function (request, status, error) {
           
