@@ -613,7 +613,7 @@ if(!function_exists('directory_copy'))
         {
         	
         	if(is_numeric($object_key)){
-        		if(in_array($object_value,$arrayNameOnly)){   	 
+        		if(in_array(strtolower($object_value),$arrayNameOnly)){   	 
 	                copy($srcdir.'/'.$object_value,$dstdir.'/'.$object_value);//This is a File not a directory
 	                $filename = explode('_', $object_value);
 	                $newFileName = $pid.'_'.$filename[1].'_'.$filename[2];

@@ -245,7 +245,7 @@ class productUpload extends MY_Controller
  		$path_directory = './assets/temp_product/'.$temp_product_id.'_'.$member_id.'_'.$date.'/';
 
 		if (!file_exists ($path_directory)){
-			mkdir($path_directory);
+			mkdir($path_directory, 0777, true);;
 		}
 		 
 		$this->upload->initialize(array( 
@@ -378,7 +378,7 @@ class productUpload extends MY_Controller
 
 				$explodearraynameoffiles = explode('||', $value);
 				$nameOfFile = $explodearraynameoffiles[0];
-				$arrayNameOnly[$key] = $nameOfFile; 
+				$arrayNameOnly[$key] = strtolower($nameOfFile); 
 
 				if($primaryId == $key){
 					$primaryName =	$nameOfFile;
@@ -465,12 +465,8 @@ class productUpload extends MY_Controller
 
 
 			$tempdirectory = $this->input->post('tempdirectory');
- 			
-
 			directory_copy($tempdirectory, $path_directory,$product_id,$arrayNameOnly); 
 
-
- 
 			if($product_id > 0) # id_product is 0 means no item inserted. the process will stop.
 			{
  
@@ -672,7 +668,9 @@ class productUpload extends MY_Controller
 
                     } 
                     # end of combination
+                  
                     $data = '{"e":"1","d":"'.$product_id.'"}';
+
                     echo $data;
                     exit();	
             }else{
