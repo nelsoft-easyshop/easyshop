@@ -635,14 +635,20 @@ class Memberpage extends MY_Controller
 				'bank_account_name' => $bi_acct_name,
 				'bank_account_number' => $bi_acct_no
 			);
-			$result = $this->memberpage_model->billing_info($data);
-			if($express == 'true'){
-				echo $result;
-			}
-			else{
-				$get_info = $this->memberpage_model->get_billing_info($member_id);
-				echo json_encode($get_info);
-			}
+			
+			$check = $this->memberpage_model->checkBankAccount($data);
+			if($check == 0){
+				$result = $this->memberpage_model->billing_info($data);
+				if($express == 'true'){
+					echo $result;
+				}
+				else{
+					$get_info = $this->memberpage_model->get_billing_info($member_id);
+					echo json_encode($get_info);
+				}
+			}else{
+				echo 1;
+			}			
 
 		}
 		else{
@@ -652,6 +658,8 @@ class Memberpage extends MY_Controller
 
 	function billing_info_u(){
 		if($this->input->post('bi_id')){
+			
+			
 			$member_id = $this->session->userdata('member_id');
 			$bi_id = $this->input->post('bi_id');
 			$bi_bank = $this->input->post('bi_bank');
@@ -667,7 +675,15 @@ class Memberpage extends MY_Controller
 					'is_default' => $bi_def				
 
 			);
-			return json_encode($this->memberpage_model->billing_info_update($data));
+			
+			
+			$check = $this->memberpage_model->checkBankAccount($data);
+			if($check == 0){
+				return json_encode($this->memberpage_model->billing_info_update($data));
+				echo 0;
+			}else{
+				echo 1;
+			}
 		}
 		else{
 			return json_encode(false);
