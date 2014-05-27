@@ -1108,8 +1108,8 @@
 						<select id="bi_bank" name="bi_bank" style="width:50%" placeholder="Select Bank">
 							<option value="">Select a bank...</option>						
 						</select>
-						<div id="bi_err_add" style="float: right; display:none; color:#FFF; width:150px; padding:10px; background:#F30;" >
-							<span>Duplicate Account Number</span>
+						<div id="bi_err_add" style="float: right; display:none; margin-top: 10px;" >
+							<span style='color:red; font-weight:bold;'>* Duplicate Account Number</span>
 						</div>					
 				</div>				
 				<div>
@@ -1166,9 +1166,9 @@
 							<div id="bi_check_bictr<?php echo $rows; ?>"  style="display:none; width: 38px;" >
                                 <span>Saved</span>
 							</div>
-							<div id="bi_err_bictr<?php echo $rows; ?>" style="display:none; width:auto; margin-top:0px; padding-right:10px; background:#F30;" >
-                                <span>Duplicate Account Number</span>
-							</div>								
+							<span id="bi_err_bictr<?php echo $rows; ?>" style="display:none; width:auto; margin-top:0px;" >
+                                <span style='color:red; font-weight:bold;'>* Duplicate Account Number</span>
+							</span>								
 					</div>
 					<div id="bi-left" style="float:left; width:inherit;">
 							<div class="profile_fields" id="bi_div_bictr<?php echo $rows; ?>">
