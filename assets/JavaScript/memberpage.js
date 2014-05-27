@@ -2275,8 +2275,8 @@ $(document).ready(function(){
 		$("#"+bn).prop("disabled", false).removeClass("bi_input");
 		$("#"+bch).prop("disabled", false).removeClass("bi_input");
 		
-		$("#sv_"+bictr+", #cn_"+bictr+", #bi_bns_"+bictr).show("fast");		
-		$("#del_"+bictr+", #"+bictr+", #bi_bn_"+bictr).hide("fast");
+		$("#sv_"+bictr+", #cn_"+bictr+", #bi_bns_"+bictr).show();		
+		$("#del_"+bictr+", #"+bictr+", #bi_bn_"+bictr).hide();
 		$(":button[name^='bictr']").prop("disabled", true);
 		$(":button[name^='del_bictr']").prop("disabled", true);
 		
@@ -2395,31 +2395,35 @@ $(document).ready(function(){
 					data: {bi_acct_name:banval, bi_acct_no:barval, bi_bank:bnval, bi_id:bidval, bi_def:bchval, csrfname:csrftoken},
 					success: function(data){
 						
-						$(":checkbox[name^='bi_chk_bictr']").filter(function(){
-							var hid = $(this).attr('id');
-							if($(this).prop("checked") == true){
-								$("#h"+hid).val("checked");
-							}else{
-								$("#h"+hid).val("");
-							}
-						});							
-						
-						$("#bi_check_"+bictr).show().delay(1600).fadeOut(600);
-						$("#h"+ban).val($("#"+ban).val());
-						$("#h"+bar).val($("#"+bar).val());
-						$("#h"+bn).val(bntit);
-						$("#"+bn).val(bntit);							
-						
-						$("#"+ban).prop("disabled", true).addClass("bi_input");;
-						$("#"+bar).prop("disabled", true).addClass("bi_input");;
-						$("#"+bn).prop("disabled", true).addClass("bi_input");;
-						$("#"+bch).prop("disabled", true).addClass("bi_input");;			
-			
-						$("#sv_"+bictr+", #cn_"+bictr+", #bi_bns_"+bictr).hide();		
-						$("#del_"+bictr+", #"+bictr+", #bi_bn_"+bictr).show();
-						$(":button[name^='bictr']").prop("disabled", false);
-						$(":button[name^='del_bictr']").prop("disabled", false);							
-						return false;
+						if(data == 0){
+							$(":checkbox[name^='bi_chk_bictr']").filter(function(){
+								var hid = $(this).attr('id');
+								if($(this).prop("checked") == true){
+									$("#h"+hid).val("checked");
+								}else{
+									$("#h"+hid).val("");
+								}
+							});							
+							
+							$("#bi_check_"+bictr).show().delay(1600).fadeOut(600);
+							$("#h"+ban).val($("#"+ban).val());
+							$("#h"+bar).val($("#"+bar).val());
+							$("#h"+bn).val(bntit);
+							$("#"+bn).val(bntit);							
+							
+							$("#"+ban).prop("disabled", true).addClass("bi_input");;
+							$("#"+bar).prop("disabled", true).addClass("bi_input");;
+							$("#"+bn).prop("disabled", true).addClass("bi_input");;
+							$("#"+bch).prop("disabled", true).addClass("bi_input");;			
+				
+							$("#sv_"+bictr+", #cn_"+bictr+", #bi_bns_"+bictr).hide();		
+							$("#del_"+bictr+", #"+bictr+", #bi_bn_"+bictr).show();
+							$(":button[name^='bictr']").prop("disabled", false);
+							$(":button[name^='del_bictr']").prop("disabled", false);							
+							return false;
+						}else{
+							$("#bi_err_"+bictr).show().delay(2000).fadeOut(800);
+						}
 					}
 				});		
 			}	
@@ -2475,8 +2479,12 @@ $(document).ready(function(){
 				url: redurl, 
 				data: $("#billing_info").serialize(),
 				success: function(data){
-					$("#bi_bank, #bi_acct_name, #bi_acct_no").val('');
-					window.location.href = config.base_url+'me?me=pmnt';
+					if(data == 1){
+						$("#bi_err_add").show().delay(2000).fadeOut(800);						
+					}else{
+						$("#bi_bank, #bi_acct_name, #bi_acct_no").val('');
+						window.location.href = config.base_url+'me?me=pmnt';
+					}
 				}
 			});		
 		}		
