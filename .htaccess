@@ -8,11 +8,7 @@ RewriteRule ^(.*)$ index.php/$1 [L]
 AcceptPathInfo On
 </Files>
 
-<Files "composer.json">
-Require all denied
-</Files>
-
-<Files "composer.lock">
+<Files "composer.*">
 Require all denied
 </Files>
 
