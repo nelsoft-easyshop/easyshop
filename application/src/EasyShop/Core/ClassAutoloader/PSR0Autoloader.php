@@ -81,14 +81,9 @@ class PSR0Autoloader
          * Hack to avoid handling annoying CI & friends classes. Ideally, this
          * should be placed in MY_Controller.
          *
-         * Also added ugly fix for require error when loading home/pagenotfound (404 page).
-         * If the function for the 404 page is moved out of the home controller, take care 
-         * to change the comparison condition. This also prevents autoloading legitimate classes
-         * with the name 'home'.
-         *
          */
 
-        if ((FALSE !== stripos($className, '_')) ||  ($className === 'home')){
+        if (FALSE !== stripos($className, '_')){
             return;
         }
 
