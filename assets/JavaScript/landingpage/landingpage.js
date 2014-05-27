@@ -291,7 +291,6 @@ function username_check(){
 	var csrftoken = $("meta[name='csrf-token']").attr('content');
     var csrfname = $("meta[name='csrf-name']").attr('content');
 	var field = $('#username');
-	$('#username_loader').show().css('display','inline-block');
 	$.post(config.base_url+'landingpage/username_check', {username: username, csrfname : csrftoken}, function(result){
 		if(result == 1){
 			showcheck($('#username'));
@@ -314,7 +313,6 @@ function email_check(){
 	var csrftoken = $("meta[name='csrf-token']").attr('content');
     var csrfname = $("meta[name='csrf-name']").attr('content');
 	var field = $('#email');
-	$('#email_loader').show().css('display','inline-block');
 	$.post(config.base_url+'landingpage/email_check', {email: email, csrfname : csrftoken}, function(result){
 		if(result == 1){
 			showcheck($('#email'));
@@ -337,7 +335,6 @@ function mobile_check(){
 	var csrftoken = $("meta[name='csrf-token']").attr('content');
     var csrfname = $("meta[name='csrf-name']").attr('content');
 	var field = $('#mobile');
-	$('#mobile_loader').show().css('display','inline-block');
 	$.post(config.base_url+'landingpage/mobile_check', {mobile: mobile, csrfname : csrftoken}, function(result){
 		if(result == 1){
 			showcheck($('#mobile'));
@@ -383,7 +380,6 @@ $(document).ready(function(){
 				error.appendTo(element.parent());
 		 },
 		 submitHandler: function(form){
-			$('#subscribe_loadingimg').show().css('display','inline-block');
 			$('#subscribe_btn').attr('disabled', true);
 
 			$.post(config.base_url + 'landingpage/subscribe', $(form).serializeArray(), function(data){

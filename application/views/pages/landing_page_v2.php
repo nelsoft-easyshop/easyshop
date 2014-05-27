@@ -48,19 +48,31 @@
 					<nav class="nav-collapse">
 					  <ul>
                         <!--
-					    <li class="grid-1"><a href="<?=base_url()?>home">Shop</a></li>
-					    <li class="grid-1"><a href="<?=base_url()?>sell/step1">Sell</a></li>
+					  
                         -->
-					    <li class="btn_login">
-                            <?php echo form_open('login');?>
-                                <input type="text" name='login_username'>
-                                <input type="password" name='login_password'>
-                                <input type="submit" class='btn' value='Login' name='login_form'/>
-                            <?php echo form_close();?>
-					    </li>
-					    <li class="btn_register">
-					    	<span class="btn reg_btn" id="reg_btn">Register</span>
-					    </li>
+                        <?php if(!$logged_in): ?>
+                            <li class="btn_login">
+                                <?php echo form_open('login');?>
+                                    <input type="text" name='login_username'>
+                                    <input type="password" name='login_password'>
+                                    <input type="submit" class='btn' value='Login' name='login_form'/>
+                                <?php echo form_close();?>
+                            </li>
+                            <li class="btn_register">
+                                <span class="btn reg_btn" id="reg_btn">Register</span>
+                            </li>
+                        <?php else: ?>
+                              <li class="grid-1"><a href="<?=base_url()?>home">Shop</a></li>
+					    <li class="grid-1"><a href="<?=base_url()?>sell/step1">Sell</a></li>
+                            <li class='btn_login' style='margin-left:37em !important;'>   
+                                <a href='<?=base_url()?>me'><input type="submit" class='btn' id='userpage' value = "<?php echo html_escape($uname);?>"/></a>
+                            </li>
+                            <li class='btn_register'>   
+                                <a href='<?=base_url()?>login/logout'><span class="btn" id="sign_out">Sign-out</span></a>
+                            </li>
+                        <?php endif; ?>    
+                        
+                        
 					  </ul>
 					</nav>
 				</div>		
@@ -72,10 +84,9 @@
 									<fieldset>
 
 											<h4>Username</h4>
-											<input type="text" placeholder="" id="username" name="username" class="reqfield" autocomplete="off"/>
-											<input type="hidden" id="usernamecheck" value="" name="usernamecheck">
+											<input maxlength='25' type="text" placeholder="" id="username" name="username" class="reqfield" autocomplete="off"/>
+											<input  type="hidden" id="usernamecheck" value="" name="usernamecheck">
 											<span class="red ci_form_validation_error"><?php echo form_error('username'); ?></span>
-											<img id="username_loader" class="img_loader_small" src="<?=base_url()?>/assets/images/orange_loader_small.gif" style="display:none;">
 											<div id="username_status">
 												<img class="fieldstatus" src="<?=base_url()?>/assets/images/check_icon.png" id="username_check" style="position: relative;display:none;vertical-align:middle"/>
 												<img class="fieldstatus" src="<?=base_url()?>/assets/images/x_icon.png" id="username_x" style="position: relative;display:none;vertical-align:middle"/>
@@ -99,19 +110,18 @@
 											<h4>Email Address</h4>
 											<input type="text" placeholder="" id="email" name="email" class="reqfield" autocomplete="off">
 											<input type="hidden" id="emailcheck" value="">
-											<img id="email_loader" class="img_loader_small" src="<?=base_url()?>/assets/images/orange_loader_small.gif" style="display:none;">
 											<div id="email_status">
 												<img class="fieldstatus" src="<?=base_url()?>/assets/images/check_icon.png" id="email_check" style="position: relative;display:none;vertical-align:middle"/>
 												<img class="fieldstatus" src="<?=base_url()?>/assets/images/x_icon.png" id="email_x" style="position: relative;display:none;vertical-align:middle"/>
-												<span class="email_availability"></span>
 											</div>
+                                            <br/>
+                                            <span class="red email_availability"></span>
 											<span class="red ci_form_validation_error"><?php echo form_error('email'); ?></span>
 											<span class="help-block spnmsg padding1"></span>
 										
 											<h4>Mobile Number</h4>
 											<input type="text" placeholder="e.g. 9051234567" name="mobile" class="reqfield" id="mobile" maxlength="10">
 											<input type="hidden" id="mobilecheck" value="">
-											<img id="mobile_loader" class="img_loader_small" src="<?=base_url()?>/assets/images/orange_loader_small.gif" style="display:none;">
 											<div id="mobile_status">
 												<img class="fieldstatus" src="<?=base_url()?>/assets/images/check_icon.png" id="mobile_check" style="position: relative;display:none;vertical-align:middle"/>
 												<img class="fieldstatus" src="<?=base_url()?>/assets/images/x_icon.png" id="mobile_x" style="position: relative;display:none;vertical-align:middle"/>
@@ -214,7 +224,6 @@
 							</span>
 							</div>	
 						</div>	
-	
 			</div>
 		</div>
 	</section>
@@ -260,9 +269,7 @@
 </body>
 <?php echo form_open('registration/success', array('id'=>'success_register'));?>
 		  <input type="hidden" name="referrer" class="referrer" value="landingpage"/>
-	 <?php echo form_close();?>
-
-
+<?php echo form_close();?>
 
 
 <script type='text/javascript' src="<?=base_url()?>assets/JavaScript/js/jquery-1.9.1.js" ></script>
@@ -274,11 +281,25 @@ var config = {
      base_url: "<?php echo base_url(); ?>",
 };
 
+$(document).ready(function() {  
+    $("#reg_btn").click(function() {
+           $('#register_container').fadeIn(300);
+    });    
+
+    var pathname = $(location).attr('href');
+    var idx = pathname.indexOf('#');
+    if(idx > -1){
+        if(pathname.substring(idx+1) == 'register'){
+             $("#reg_btn").click();
+        }
+    }
+});
+
 $(window).load(function () {
-$(window).scroll(function () {
-var e;
-return e = $(window).scrollTop(), e < 50 ? $("#header").removeClass("fixed_header") : $("#header").addClass("fixed_header").fadeIn(300);
-})
+    $(window).scroll(function () {
+        var e;
+        return e = $(window).scrollTop(), e < 50 ? $("#header").removeClass("fixed_header") : $("#header").addClass("fixed_header").fadeIn(300);
+    })
 }) 
 
 /**** video player dialog box ****/
@@ -303,6 +324,7 @@ $(function() {
 	$( "#videoplayer" ).dialog( "open" );
 	});
 });
+
 /****** Terms and Conditions Dialog box ********/
 $(function() {
 	$( ".dialog" ).dialog({
@@ -329,11 +351,7 @@ $(function() {
 
 </script> 
 <script type="text/javascript">
-$(document).ready(function() {
-    $("#reg_btn").click(function() {
-           $('#register_container').fadeIn(300);
-    });
-});
+
 
 $(document).click(function (e)
 {
