@@ -46,7 +46,7 @@
 				<td style="background-color: #ffffff; padding: 30px 20px;">
 					<h2 class="intro" style="margin-bottom: 30px; font-size: 20px~; color: #003E91;">Greetings,</h2>
 					<p style="font-family: Helvetica, sans-serif; font-size: 16px;">Thank you for subscribing!</p>
-					<p style="font-family: Helvetica, sans-serif; font-size: 16px;"><a href="https://easyshop.ph/">EasyShop.ph</a> targets to cater a platform, where you can facilitate easy and safe online business transactions. We are offering you a free stage for your business, and ensuring the buyers scam-free and easy-shopping experience. <a href="https://easyshop.ph/">EasyShop.ph</a> is where shopping made easy!</p>
+					<p style="font-family: Helvetica, sans-serif; font-size: 16px;">EasyShop.ph targets to cater a platform, where you can facilitate easy and safe online business transactions. We are offering you a free stage for your business, and ensuring the buyers scam-free and easy-shopping experience. EasyShop.ph is where shopping made easy!</p>
 				</td>
 			</tr>
 			<tr>
