@@ -787,6 +787,16 @@ class memberpage_model extends CI_Model
 		$row = $sth->fetchAll(PDO::FETCH_ASSOC);
 		return $row;							
 	}
+	
+    function checkBankAccount($data){
+		$query = "SELECT * FROM `es_billing_info` WHERE `member_id` = :member_id AND `bank_account_number` = :bank_account_number ";
+		$sth = $this->db->conn_id->prepare($query);
+		$sth->bindParam(':member_id',$data['member_id']);
+		$sth->bindParam(':bank_account_number',$data['bank_account_number']);		
+		$sth->execute();
+		$rows = $sth->rowCount();
+		return $rows;	
+	}	
     
 }
 
