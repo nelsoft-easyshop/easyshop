@@ -45,8 +45,8 @@
 				<div class="nav_container">
 					<nav class="nav-collapse">
 					  <ul>
-					    <li class="grid-1"><a href="#">Shop</a></li>
-					    <li class="grid-1"><a href="#">Sell</a></li>
+					    <li class="grid-1"><a href="<?=base_url()?>home">Shop</a></li>
+					    <li class="grid-1"><a href="<?=base_url()?>sell/step1">Sell</a></li>
 					    <li class="btn_login">
 					    	<input type="text">
 					    	<input type="text">
@@ -223,10 +223,10 @@
 			<div class="footer">
 				<ul>
 					<li>
-						<a href="">Shop</a>
+						<a href="<?=base_url()?>home">Shop</a>
 					</li>
 					<li>
-						<a href="">Sell</a>
+						<a href="<?=base_url()?>sell/step1">Sell</a>
 					</li>
 					<li>
 						<div class="footer_payment">
@@ -271,6 +271,10 @@
 
 <script type="text/javascript">
 
+var config = {
+     base_url: "<?php echo base_url(); ?>",
+};
+
 $(function() {
 	$( "#videoplayer" ).dialog({
 		width:"68%",
@@ -278,6 +282,14 @@ $(function() {
 		modal: true,
 		closeOnEscape: true,
 		draggable:false,
+        show: {
+            effect: "fade",
+            duration: 600
+        },
+        hide: {
+            effect: "fade",
+            duration: 400
+        }
 	});
 
 	$( ".vidplay" ).click(function() {
@@ -292,6 +304,14 @@ $(function() {
 		modal: true,
 		closeOnEscape: true,
 		draggable:false,
+        show: {
+            effect: "fade",
+            duration: 600
+        },
+        hide: {
+            effect: "fade",
+            duration: 400
+        }
 	});
 
 	$( ".terms_and_conditions" ).click(function() {
@@ -320,8 +340,7 @@ $(document).mouseup(function (e)
 });
 </script>
 
-
-<!-- Form Plugins -->
+    <!-- Form Plugins -->
 	<script type='text/javascript' src='<?=base_url()?>assets/JavaScript/js/jquery.numeric.js'></script>
 	<script type='text/javascript' src='<?=base_url()?>assets/JavaScript/js/jquery.validate.js'></script>
 	
