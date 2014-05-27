@@ -41,7 +41,7 @@
 		<link href='https://fonts.googleapis.com/css?family=Roboto:400,300' rel='stylesheet' type='text/css'>
 </head>
 <body>
-	<header>
+	<header id="header" class="">
 		<div class="container-16">
 				<div class="grid-4">
 					<a href="<?=base_url()?>home"><span class="span_bg logo"></span></a>
