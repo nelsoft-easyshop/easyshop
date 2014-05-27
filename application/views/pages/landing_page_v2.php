@@ -48,9 +48,11 @@
 					    <li class="grid-1"><a href="<?=base_url()?>home">Shop</a></li>
 					    <li class="grid-1"><a href="<?=base_url()?>sell/step1">Sell</a></li>
 					    <li class="btn_login">
-					    	<input type="text">
-					    	<input type="text">
-					    	<a href="#" class="btn">Login</a>
+                            <?php form_open();?>
+                                <input type="text">
+                                <input type="text">
+                                <input type="submit" class='btn' value='Login'/>
+                            <?php form_close();?>
 					    </li>
 					    <li class="btn_register">
 					    	<span class="btn reg_btn" id="reg_btn">Register</span>
@@ -324,7 +326,7 @@ $(function() {
 <script type="text/javascript">
 $(document).ready(function() {
     $("#reg_btn").click(function() {
-            $('#register_container').toggle();
+           $('#register_container').toggle();
     });
 });
 
