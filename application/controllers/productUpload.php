@@ -416,7 +416,8 @@ class productUpload extends MY_Controller
                 foreach($_FILES['prod_other_img']['name'] as $k) { # validating image format.
                 	$filename = $_FILES['prod_other_img']['name'][$x];
                 	$ext = pathinfo($filename, PATHINFO_EXTENSION);
-                	if(!in_array(strtolower($ext),$allowed))
+                	$file_temp =  $_FILES['prod_other_img']['tmp_name'][$x];
+                    if(!in_array(strtolower($ext),$allowed) || (getimagesize($file_temp) === FALSE)) 
                 	{
                 		echo '{"e":"0","d":"For Additional Information: File Selected not valid. \n Please choose another image."}';
                 		exit();
@@ -1201,7 +1202,8 @@ class productUpload extends MY_Controller
                 foreach($_FILES['prod_other_img']['name'] as $k) { # validating image format.
                     $filename = $_FILES['prod_other_img']['name'][$x];
                     $ext = pathinfo($filename, PATHINFO_EXTENSION);
-                    if(!in_array(strtolower($ext),$allowed))
+                    $file_temp =  $_FILES['prod_other_img']['tmp_name'][$x];
+                    if(!in_array(strtolower($ext),$allowed) || (getimagesize($file_temp) === FALSE)) 
                     {
                         echo '{"e":"0","d":"For Additional Information: File Selected not valid. \n Please choose another image."}';
                         exit();
