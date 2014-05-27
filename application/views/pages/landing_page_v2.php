@@ -7,10 +7,14 @@
 		<meta charset="utf-8" />
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <title>Easyshop.com - Homepage</title>
-        <meta name="description" content="" />
-        <meta name="keywords" content=""/>
-        <meta name="viewport" content="width=device-width">
-		<link rel="shortcut icon" href="../favicon.ico" type="image/x-icon"/>
+        <link rel="shortcut icon" href="<?php echo base_url()?>assets/images/favicon.ico" type="image/x-icon"/>
+        <meta property="og:title" content="EasyShop.ph" />
+		<meta property="og:description" content="Our vision is to be the leading Online Shopping website in South East Asia. 
+           The mission that EasyShop has is to provide its customer with a Fast and Easy 
+           online shopping experience. Our goal is to be the first website you think about
+           when buying online." />
+		<meta property="og:image" content="https://easyshop.ph/assets/images/img_logo.png" />
+        <meta name="viewport" content="width=device-width, initial-scale=1">
 
 		<!-- CSS -->
         <link rel="stylesheet" href="<?=base_url()?>assets/css/landingpage/style_v2.css" type="text/css" media="screen"/>
@@ -264,8 +268,8 @@
 
 
 
-<!-- script for responsive navigation
-<script src="<?=base_url()?>assets/JavaScript/js/landingpage/responsive-nav.js"></script> -->
+<!-- script for responsive navigation-->
+<script src="<?=base_url()?>assets/JavaScript/js/landingpage/responsive-nav.js"></script> 
 
 <script type='text/javascript' src="<?=base_url()?>assets/JavaScript/js/jquery-1.9.1.js" ></script>
 <script type='text/javascript' src="<?=base_url()?>assets/JavaScript/js/jquery-ui.js"></script>
@@ -277,6 +281,7 @@ var config = {
      base_url: "<?php echo base_url(); ?>",
 };
 
+/**** video player dialog box ****/
 $(function() {
 	$( "#videoplayer" ).dialog({
 		width:"68%",
@@ -326,7 +331,7 @@ $(function() {
 <script type="text/javascript">
 $(document).ready(function() {
     $("#reg_btn").click(function() {
-           $('#register_container').toggle();
+           $('#register_container').fadeIn(300);
     });
 });
 
@@ -337,9 +342,10 @@ $(document).mouseup(function (e)
     if (!container.is(e.target) // if the target of the click isn't the container...
         && container.has(e.target).length === 0) // ... nor a descendant of the container
     {
-        container.hide();
+        container.fadeOut(300);
     }
 });
+
 </script>
 
     <!-- Form Plugins -->
