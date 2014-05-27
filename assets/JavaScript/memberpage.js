@@ -93,7 +93,7 @@ $(document).ready(function(){
 	});
 	
 	//disable decimal point
-	$('#mobile').on('keypress',function(e){
+	$('#mobile,#c_mobile').on('keypress',function(e){
 		var code = e.keyCode || e.which;
 		return (code != 46);
 	});
@@ -154,16 +154,14 @@ $(document).ready(function(){
 		else 
 			 return this.optional(element) || false;
 	 }, "This date is invalid");
-	 
-	 
- 
+
 	$("#personal_profile_main").validate({
 		rules: {
 			dateofbirth:{
 				is_validdate: true
 			},
 			mobile:{
-				number: true,
+				digits: true,
 				minlength: 10,
 				maxlength: 10,
 				is_validmobile: true
@@ -229,7 +227,7 @@ $(document).ready(function(){
 					}
 					else if(data == 0){
 						alert('An error was encountered in submitting your form. Please try again later.');
-						window.location.reload(true);
+						//window.location.reload(true);
 					}
 					else{
 						try{
@@ -237,7 +235,7 @@ $(document).ready(function(){
 						}
 						catch(e){
 							alert('An error was encountered while processing your data. Please try again later.');
-							window.location.reload(true);
+							//window.location.reload(true);
 							return false;
 						}
 						
@@ -735,7 +733,7 @@ $(document).ready(function(){
 			'class': 'add_another_school dynamic_dd',
 			html: GetHtml2()
 		}).hide().appendTo('#container_school').fadeIn('slow');
-		cont.find('*[name^="schoolyear"]').rules('add', {required: true, is_numeric: true,
+		cont.find('*[name^="schoolyear"]').rules('add', {required: true, digits: true,
 										   messages: {required: '* The year field is required'}});
 		cont.find('*[name^="schoolname"]').rules('add', {required: true, 
 										   messages: {required: '* The school field is required'}});
@@ -749,10 +747,6 @@ $(document).ready(function(){
 	
 
 	//*****************	PERSONAL PROFILE SCHOOL SUBMIT	****************************//
-	 jQuery.validator.addMethod("is_numeric", function(value, element) {
-		return this.optional(element) || /[0-9]/.test(value);
-	 }, "* This field should be numeric");
-	
 	$("#personal_profile_school").validate({
 		rules: {
 			schoolname1:{
@@ -760,7 +754,7 @@ $(document).ready(function(){
 			},
 			schoolyear1:{
 				required: true,
-				is_numeric: true
+				digits: true
 			},
 			schoollevel1:{
 				select_is_set: '0'
@@ -878,7 +872,7 @@ $(document).ready(function(){
 			
 			cont.find("*[name^='companyname']").rules('add',{required: true, messages:{required: '* Company name is required'}});
 			cont.find("*[name^='designation']").rules('add',{required: true, messages:{required: '* Designation is required'}});
-			cont.find("*[name^='year']").rules('add',{required: true, is_numeric: true, messages:{required: '* Year of service is required'}});
+			cont.find("*[name^='year']").rules('add',{required: true, digits: true, messages:{required: '* Year of service is required'}});
 			cont.find("*[name^='year']").numeric({negative : false});	
 			
 			var len = $("#container_work").find(".add_another_work").length;
@@ -901,7 +895,7 @@ $(document).ready(function(){
 			},
 			year1:{
 				required:true,
-				is_numeric: true
+				digits: true
 			}
 		},
 		messages:{
@@ -989,15 +983,14 @@ $(document).ready(function(){
 				required: true
 			},
 			c_mobile: {
-				number: true,
+				digits: true,
 				minlength: 10,
 				maxlength: 10,
 				is_validmobile: true,
 				required: true
 			},
 			c_telephone: {
-				//required: true,
-				is_numeric: true
+				digits: true
 			},
 			c_stateregion:{
 				required: true,

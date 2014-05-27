@@ -87,7 +87,7 @@ $config = array(
 					array(
 						'field' => 'mobile',
 						'label' => 'Mobile',
-						'rules' => 'trim|numeric|min_length[10]|max_length[10]|callback_external_callbacks[memberpage_model,is_validmobile]'
+						'rules' => 'trim|numeric|min_length[10]|max_length[10]|callback_external_callbacks[register_model,is_validmobile]'
 					),
 					array(
 						'field' => 'email',
@@ -155,7 +155,7 @@ $config = array(
 					array(
 						'field' => 'c_mobile',
 						'label' => 'Mobile Number',
-						'rules' => 'required|trim|numeric|min_length[10]|max_length[10]|callback_external_callbacks[memberpage_model,is_validmobile]'
+						'rules' => 'required|trim|numeric|min_length[10]|max_length[10]|callback_external_callbacks[register_model,is_validmobile]'
 					),
 					array(
 						'field' => 'c_telephone',

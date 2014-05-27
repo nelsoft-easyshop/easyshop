@@ -523,7 +523,6 @@ class Register_model extends CI_Model
 		if($mobile == '' ){
 			return true;
 		}
-	
 		if(preg_match('/^(8|9)[0-9]{9}/', $mobile)){
 			return true;
 		}

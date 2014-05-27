@@ -329,21 +329,6 @@ class memberpage_model extends CI_Model
 		}
 	}
 	
-	function is_validmobile($mobile)
-	{
-		if($mobile == '' ){
-			return true;
-		}
-		if(preg_match('/^9[0-9]{9}/', $mobile)){
-			return true;
-		}
-		else{
-			$this->form_validation->set_message('external_callbacks', 'The mobile number you entered is invalid');
-			return false;
-		}
-		
-	}
-	
 	# Check query and adjust filter for order_product_status
 	# Current filter : 2 = returned , 6 = dragonpay expired
 	# Returns 'active', 'deleted' and 'sold'
