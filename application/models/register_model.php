@@ -270,8 +270,13 @@ class Register_model extends CI_Model
 			'hash' => $enc,
 			'user' => $username
 		);
-		
-		$msg = $this->parser->parse('templates/email_template',$data,true);		
+		#$msg = $this->parser->parse('templates/email_template',$data,true);	
+        	
+		$this->email->attach(getcwd() . "/assets/images/landingpage/templates/facebook.png", "inline");
+		$this->email->attach(getcwd() . "/assets/images/landingpage/templates/twitter.png", "inline");
+        $this->email->attach(getcwd() . "/assets/images/landingpage/templates/header-img.png", "inline");
+        
+		$msg = $this->parser->parse('templates/landingpage/lp_reg_email',$data,true);		
 		
 		$this->email->message($msg);
 		$result = $this->email->send();

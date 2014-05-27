@@ -4,6 +4,7 @@ if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
 class Login extends MY_Controller {
+
     function __construct() {
         parent::__construct();
         $this->load->model('register_model');
@@ -11,16 +12,33 @@ class Login extends MY_Controller {
         $this->load->model('cart_model');
 		$this->load->library('encrypt');	
     }
-	
+    	
     function index() {
         $data = array(
             'title' => 'Login | Easyshop.ph',
             'page_javascript' => 'assets/JavaScript/login.js',
 			);
 		$data = array_merge($data, $this->fill_header());
-        $view = 'login_view';
+        $response['url'] = $this->session->userdata('uri_string');  
+        
+        if($this->input->post('login_form')){
+            $row = array();
+            if($this->form_validation->run('login_form')){
+                $uname = $this->input->post('login_username');
+                $pass = $this->input->post('login_password');	
+                $row = $this->login($uname, $pass);
+            }
+            if(isset($row['o_success']) && $row['o_success'] >= 1){
+                redirect('home'); exit();
+            }
+            else{
+                $response['form_error'] = 'Invalid username or password';
+            }  
+        }
+     
+    
         $this->load->view('templates/header_plain', $data);
-        $this->load->view('pages/user/login_view', array('url' => $this->session->userdata('uri_string'),));
+        $this->load->view('pages/user/login_view',$response);
         $this->load->view('templates/footer');
     }
 
@@ -28,27 +46,39 @@ class Login extends MY_Controller {
 		if(($this->input->post('login_form'))&&($this->form_validation->run('login_form'))){
 			$uname = $this->input->post('login_username');
 			$pass = $this->input->post('login_password');	
-			$dataval = array('login_username' => $uname, 'login_password' => $pass);
-			$row = $this->user_model->verify_member($dataval);               
-            #if user is valid: member i, usersession and cart_contents will be set in the session
-			if ($row['o_success'] >= 1) {
-				$this->session->set_userdata('member_id', $row['o_memberid']);
-				$this->session->set_userdata('usersession', $row['o_session']);
-                $this->session->set_userdata('cart_contents', $this->cart_model->cartdata($row['o_memberid']));
-				if($this->input->post('keepmeloggedin') == 'on'){ //create cookie bound to memberid||ip||browser 
-					$temp = array(
-						'member_id' => $this->session->userdata('member_id'),
-						'ip' => $this->session->userdata('ip_address'),
-						'useragent' => $this->session->userdata('user_agent'),
-						'session' => $this->session->userdata('session_id'),
-					);
-					$cookieval = $this->user_model->dbsave_cookie_keeplogin($temp)['o_token'];
-					$this->user_model->create_cookie($cookieval);
-				}
-			}  
-			echo json_encode($row);
+			$row =  $this->login($uname, $pass);
+            echo json_encode($row);
         }
     }
+    
+    
+    /*   
+     *   Function for creating sessions and making database changes upon login
+     */
+
+    private function login($uname, $pass){
+        $dataval = array('login_username' => $uname, 'login_password' => $pass);
+        $row = $this->user_model->verify_member($dataval);               
+        #if user is valid: member i, usersession and cart_contents will be set in the session
+        if ($row['o_success'] >= 1) {
+            $this->session->set_userdata('member_id', $row['o_memberid']);
+            $this->session->set_userdata('usersession', $row['o_session']);
+            $this->session->set_userdata('cart_contents', $this->cart_model->cartdata($row['o_memberid']));
+            if($this->input->post('keepmeloggedin') == 'on'){ //create cookie bound to memberid||ip||browser 
+                $temp = array(
+                    'member_id' => $this->session->userdata('member_id'),
+                    'ip' => $this->session->userdata('ip_address'),
+                    'useragent' => $this->session->userdata('user_agent'),
+                    'session' => $this->session->userdata('session_id'),
+                );
+                $cookieval = $this->user_model->dbsave_cookie_keeplogin($temp)['o_token'];
+                $this->user_model->create_cookie($cookieval);
+            }
+        }
+        return $row;
+    }
+    
+    
 
     function logout() {
         
@@ -144,6 +174,19 @@ class Login extends MY_Controller {
 			echo "0";
 		}
 	}	
+    
+    function user_test(){
+        $u = new EasyShop\Entities\User();
+        $entityManager = $this->serviceContainer['entity_manager'];
+
+        $u->setusername('sam');
+
+        $entityManager->persist($u);
+        $entityManager->flush();
+        
+        print('<pre>');
+        print_r($u);
+    }
 	
 }
 

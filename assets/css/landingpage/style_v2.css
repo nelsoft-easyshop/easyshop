@@ -189,7 +189,7 @@ header {
 }
 
 .btn_login {
-	margin-left: 10em;
+	margin-left: 19em;
 }
 
 .btn_register {
@@ -295,7 +295,6 @@ body{
 
 #register_container input {
 	padding:8px 3px;
-    background-color: #ffffff;
     border: 1px solid #cccccc;
     width: 20em;
     -webkit-border-radius: 3px;

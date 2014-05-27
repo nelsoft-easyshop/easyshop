@@ -71,7 +71,7 @@ $(document).ready(function(){
          }
     });
      
-    $('.login_box input').on('click', function(){
+    $('.login_box input').on('focus', function(){
 		$('#login_error').text('');
     });
 

@@ -47,14 +47,16 @@
 				<div class="nav_container">
 					<nav class="nav-collapse">
 					  <ul>
+                        <!--
 					    <li class="grid-1"><a href="<?=base_url()?>home">Shop</a></li>
 					    <li class="grid-1"><a href="<?=base_url()?>sell/step1">Sell</a></li>
+                        -->
 					    <li class="btn_login">
-                            <?php form_open();?>
-                                <input type="text">
-                                <input type="text">
-                                <input type="submit" class='btn' value='Login'/>
-                            <?php form_close();?>
+                            <?php echo form_open('login');?>
+                                <input type="text" name='login_username'>
+                                <input type="password" name='login_password'>
+                                <input type="submit" class='btn' value='Login' name='login_form'/>
+                            <?php echo form_close();?>
 					    </li>
 					    <li class="btn_register">
 					    	<span class="btn reg_btn" id="reg_btn">Register</span>
@@ -311,7 +313,7 @@ $(function() {
 		draggable:false,
         show: {
             effect: "fade",
-            duration: 600
+            duration: 1000
         },
         hide: {
             effect: "fade",

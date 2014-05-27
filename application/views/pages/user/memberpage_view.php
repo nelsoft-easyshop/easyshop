@@ -30,7 +30,7 @@
 								<li><a href="javascript:void(0)" onclick="triggerTab('delivery_address');">Delivery Address</a></li>
 								<li><a href="javascript:void(0)" onclick="triggerTab('transactions');">On-going Transactions</a></li>
 								<li><a href="javascript:void(0)" onclick="triggerTab('complete_transactions');">Completed Transactions</a></li>
-								<li><a href="javascript:void(0)" onclick="triggerTab('security_settings');">Security Setting</a></li>
+								<li><a href="javascript:void(0)" onclick="triggerTab('security_settings');">Security Settings</a></li>
 							</ul>
 						</li>
 						<li><a href="<?=base_url()?>home/under_construction">News</a></li>

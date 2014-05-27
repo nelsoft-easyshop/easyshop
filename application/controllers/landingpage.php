@@ -19,7 +19,7 @@ class Landingpage extends MY_Controller
 		$data = array(
 			'title' => 'Easyshop.ph - Welcome to Easyshop.ph'
 		);
-		$this->load->view('pages/landingpage', $data);
+		$this->load->view('pages/landing_page_v2', $data);
 	}
 	
 	/*
