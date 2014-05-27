@@ -125,7 +125,7 @@
 											<div id="mobile_status">
 												<img class="fieldstatus" src="<?=base_url()?>/assets/images/check_icon.png" id="mobile_check" style="position: relative;display:none;vertical-align:middle"/>
 												<img class="fieldstatus" src="<?=base_url()?>/assets/images/x_icon.png" id="mobile_x" style="position: relative;display:none;vertical-align:middle"/>
-												<span class="mobile_availability"></span>
+												<span class="red mobile_availability"></span>
 											</div>
 											<span class="red ci_form_validation_error"><?php echo form_error('mobile'); ?></span>
 											<span class="help-block spnmsg padding1"></span>
