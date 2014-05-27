@@ -78,6 +78,18 @@ input[type="submit"] {
 	padding-top: 1em;	
 }
 
+.ui-dialog-titlebar-close:before {
+	background-color: #FFFFFF;
+	border: 1px solid #6D6D6D;
+    border-radius: 2px;
+    color: #6D6D6D;
+    content: "X";
+    display: inline-block;
+    height: 20px;
+    line-height: 20px;
+    width: 20px;
+}
+
 
 /****** Header ********/
 header {
@@ -286,17 +298,17 @@ box-shadow:         inset 0px 0px 5px 5px rgba(129, 129, 131, 0.25);
 #videoplayer {
 	display: none;
 }
-        #simplemodal-overlay {
-            background-color:#bcbcbc;
-        }
+#simplemodal-overlay {
+    background-color:#bcbcbc;
+}
 
-        /* Container */
-        #simplemodal-container {
-            height: auto !important;
-            width: auto !important; 
-            background-color:#0000;
-            padding: 5px;
-        }
+/* Container */
+#simplemodal-container {
+    height: auto !important;
+    width: auto !important; 
+    background-color:#000;
+    padding: 5px;
+}
 
 #videoplayer embed {
 	width: 50em;
