@@ -174,20 +174,7 @@ class Login extends MY_Controller {
 			echo "0";
 		}
 	}	
-    
-    function user_test(){
-        $u = new EasyShop\Entities\User();
-        $entityManager = $this->serviceContainer['entity_manager'];
-
-        $u->setusername('sam');
-
-        $entityManager->persist($u);
-        $entityManager->flush();
-        
-        print('<pre>');
-        print_r($u);
-    }
-	
+    	
 }
 
 
