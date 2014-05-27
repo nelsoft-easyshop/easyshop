@@ -23,7 +23,7 @@
 
 		<!-- Contact Form CSS files -->
 		<link type='text/css' href='<?=base_url()?>assets/css/basic.css' rel='stylesheet' media='screen' />
-		<link href="<?=base_url()?>assets/css/jquery-ui.css?ver=1.0" rel="stylesheet">
+		<link href="<?=base_url()?>assets/css/jquery-ui.css?ver=4.10" rel="stylesheet">
         <!-- JS -->
 		<!-- html5.js for IE less than 9 -->
 		<!--[if lt IE 9]>
@@ -65,7 +65,7 @@
                               <li class="grid-1"><a href="<?=base_url()?>home">Shop</a></li>
 					    <li class="grid-1"><a href="<?=base_url()?>sell/step1">Sell</a></li>
                             <li class='btn_login' style='margin-left:37em !important;'>   
-                                <a href='<?=base_url()?>me'><input type="submit" class='btn' id='userpage' value = "<?php echo html_escape($uname);?>"/></a>
+                                <a href='<?=base_url()?>me'><input style='overflow: hidden; text-overflow: ellipsis; max-width: 120px;' type="submit" class='btn' id='userpage' value = "<?php echo html_escape($uname);?>"/></a>
                             </li>
                             <li class='btn_register'>   
                                 <a href='<?=base_url()?>login/logout'><span class="btn" id="sign_out">Sign-out</span></a>
@@ -125,7 +125,7 @@
 											<div id="mobile_status">
 												<img class="fieldstatus" src="<?=base_url()?>/assets/images/check_icon.png" id="mobile_check" style="position: relative;display:none;vertical-align:middle"/>
 												<img class="fieldstatus" src="<?=base_url()?>/assets/images/x_icon.png" id="mobile_x" style="position: relative;display:none;vertical-align:middle"/>
-												<span class="red mobile_availability"></span>
+												<span class=" red  mobile_availability"></span>
 											</div>
 											<span class="red ci_form_validation_error"><?php echo form_error('mobile'); ?></span>
 											<span class="help-block spnmsg padding1"></span>
@@ -371,7 +371,7 @@ $(document).click(function (e)
 	<script type='text/javascript' src='<?=base_url()?>assets/JavaScript/js/jquery.numeric.js'></script>
 	<script type='text/javascript' src='<?=base_url()?>assets/JavaScript/js/jquery.validate.js'></script>
 	
-	<script type='text/javascript' src='<?=base_url()?>assets/JavaScript/landingpage/landingpage.js?ver=1.0'></script>
+	<script type='text/javascript' src='<?=base_url()?>assets/JavaScript/landingpage/landingpage.js?ver=4.10'></script>
 	
 	<!-- Password Strength -->
 	<script type="text/javascript" src="<?=base_url()?>assets/JavaScript/js/mootools-core-1.4.5-full-compat.js"></script>
