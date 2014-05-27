@@ -4,7 +4,7 @@
       <thead>
         <tr>
           <td style="height:60px;">
-            <a href=""><img src="img_logo.png" alt="Easyshop.ph"></a>
+            <a href=""><img src="easyshoplogo-transp.png" alt="Easyshop.ph"></a>
           </td>
         </tr>
       </thead>

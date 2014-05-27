@@ -262,18 +262,17 @@ class Register_model extends CI_Model
 		$this->email->to($email);
 		$this->email->from('noreply@easyshop.ph', 'Easyshop.ph');
 		$this->email->subject($this->lang->line('email_subject'));
-		//Windows code
-		//$this->email->attach(getcwd() . "\assets\images\img_logo.png", "inline");
-		//CentOS code - working for windows as well
-		$this->email->attach(getcwd() . "/assets/images/img_logo.png", "inline");
-
+		
+		$this->email->attach(getcwd() . "/assets/images/landingpage/templates/easyshoplogo-transp.png", "inline"); 
+		
 		$data = array(
 			'site_url' => site_url('register/email_verification'),
 			'hash' => $enc,
 			'user' => $username
 		);
 		
-		$msg = $this->parser->parse('templates/email_template',$data,true);
+		$msg = $this->parser->parse('templates/email_template',$data,true);		
+		
 		$this->email->message($msg);
 		$result = $this->email->send();
 
@@ -491,13 +490,14 @@ class Register_model extends CI_Model
 		$this->email->set_newline("\r\n");
 		$this->email->to($data['email']);
 		$this->email->from('noreply@easyshop.ph', 'Easyshop.ph');		
-		//$this->email->attach(getcwd() . "\assets\images\img_logo.png", "inline"); //Windows code
-		$this->email->attach(getcwd() . "/assets/images/landingpage/templates/header-img.png", "inline"); //CentOS code - working for windows as well
+		
 		$this->email->attach(getcwd() . "/assets/images/landingpage/templates/facebook.png", "inline");
 		//$this->email->attach(getcwd() . "/assets/images/landingpage/templates/googleplus.png", "inline");
 		$this->email->attach(getcwd() . "/assets/images/landingpage/templates/twitter.png", "inline");
 		
 		if($type === 'signup'){
+			//$this->email->attach(getcwd() . "/assets/images/landingpage/templates/easyshoplogo-transp.png", "inline"); 
+			$this->email->attach(getcwd() . "/assets/images/landingpage/templates/header-img.png", "inline");
 			$this->email->subject($this->lang->line('registration_subject'));
 			$parseData = array(
 				'user' => $data['username'],
@@ -505,8 +505,10 @@ class Register_model extends CI_Model
 				'site_url' => site_url('register/email_verification')
 			);
 			$msg = $this->parser->parse('templates/landingpage/lp_reg_email',$parseData,true);
+			//$msg = $this->parser->parse('templates/temp_emailreg',$parseData,true);
 		}
 		else if ($type === 'subscribe'){
+			$this->email->attach(getcwd() . "/assets/images/landingpage/templates/header-img.png", "inline");
 			$this->email->subject($this->lang->line('subscription_subject'));
 			$parseData = array();
 			$msg = $this->parser->parse('templates/landingpage/lp_subscription_email',$parseData,true);
