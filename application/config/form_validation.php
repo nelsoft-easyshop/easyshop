@@ -258,7 +258,7 @@ $config = array(
 					array(
 						'field' => 'email',
 						'label' => 'Email Address',
-						'rules' => 'trim|valid_email'
+						'rules' => 'trim|required|valid_email|callback_external_callbacks[register_model,validate_email]'						
 					  )
 				),
 			'landing_form' => array(
