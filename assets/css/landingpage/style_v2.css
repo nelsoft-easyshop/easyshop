@@ -501,7 +501,11 @@ span.twitter {
 *********************************************************************************************/ 
 
 @media only screen and (min-width: 720px) and (max-width: 959px) {
- 
+
+.btn_login {
+	margin-left: 5em;
+}
+
 }
  
  
