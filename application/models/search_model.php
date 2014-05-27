@@ -225,7 +225,7 @@ class search_model extends CI_Model
 		//// USERNAME /////////////////////////////////////////////////////
 		$us = "";
 		if(strlen($gus) > 0){
-			$us = " AND MATCH(em.`username`) AGAINST(CONCAT(:gus,'*') IN BOOLEAN MODE) ";
+			$us = " AND em.username = :gus";
 		}			
 
 		//// CONDITION ////////////////////////////////////////////////////
@@ -368,7 +368,7 @@ class search_model extends CI_Model
 		//// USERNAME /////////////////////////////////////////////////////
 		$us = "";
 		if(strlen($gus) > 0){
-			$us = " AND MATCH(em.`username`) AGAINST(CONCAT(:gus,'*') IN BOOLEAN MODE) ";
+			$us = " AND em.`username` = :gus ";
 		}			
 
 		//// CONDITION ////////////////////////////////////////////////////
