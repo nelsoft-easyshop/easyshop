@@ -17,6 +17,15 @@ class sqlmap {
         }
     }
 
+    function getFilenameIDPage($file, $id) {
+    	$query = simplexml_load_file(APPPATH . "resources/page/" . $file . ".xml");
+    	$query = $query->xpath(' /map/select[@id="' . $id . '"] ');
+
+    	foreach ($query as $string) {
+    		return $string;
+    	}
+    }
+
 }
 
 /* End of file sqlmap.php */

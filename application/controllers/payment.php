@@ -11,6 +11,7 @@ class Payment extends MY_Controller{
         $this->load->library('cart');
         $this->load->library('paypal');
         $this->load->library('dragonpay');
+        $this->load->library("sqlmap");
         $this->load->model('user_model');
         $this->load->model('payment_model');
         $this->load->model('product_model');
@@ -33,7 +34,7 @@ class Payment extends MY_Controller{
     public $PayPalApiSignature     = 'AFcWxV21C7fd0v3bYYYRCpSSRl31Au1bGvwwVcv0garAliLq12YWfivG';  
 
 
-        // LIVE
+    // LIVE
     // public $PayPalMode             = ''; 
     // public $PayPalApiUsername      = 'admin_api1.easyshop.ph'; 
     // public $PayPalApiPassword      = 'GDWFS6D9ACFG45E7'; 
@@ -48,7 +49,7 @@ class Payment extends MY_Controller{
             redirect(base_url().'home', 'refresh');
         };
         
-        $unchecked = $_POST['itm'];
+        $unchecked = $this->input->post('itm');
         $carts = $this->cart->contents();
         for($x=0;$x < sizeof($unchecked);$x++):
             unset($carts[$unchecked[$x]]);
@@ -63,7 +64,7 @@ class Payment extends MY_Controller{
     {  
         if(!$this->session->userdata('member_id')){
             redirect(base_url().'home', 'refresh');
-        };
+        }
         $carts = $this->session->all_userdata(); 
         $itemArray = $carts['choosen_items'];
         $member_id =  $this->session->userdata('member_id');
@@ -90,7 +91,6 @@ class Payment extends MY_Controller{
 
             if($city > 0){  
                 $details = $this->payment_model->getShippingDetails($productId,$itemId,$city,$region,$majorIsland);
-    
 
                 if(count($details) >= 1){
                     $successcount++;
@@ -134,7 +134,8 @@ class Payment extends MY_Controller{
     #SEE REFERENCE SITE FOR THE PARAMETERS
     # https://developer.paypal.com/webapps/developer/docs/classic/express-checkout/integration-guide/ECCustomizing/
     function paypal_setexpresscheckout() 
-    {   
+    {      
+        header('Content-type: application/json');
         if(!$this->session->userdata('member_id')){
             redirect(base_url().'home', 'refresh');
         };
@@ -250,7 +251,8 @@ class Payment extends MY_Controller{
     }
 
     function changeAddress()
-    {
+    {   
+            header('Content-type: application/json');
             $uid = $this->session->userdata('member_id');
             $postdata = array(
                 'consignee' => $this->input->post('consignee'),
@@ -315,7 +317,7 @@ class Payment extends MY_Controller{
         $shipping_discount_amt = 0;
         $insurance_amt = 0;
         $ItemTotalPrice = 0;
-        $cnt = 0;
+        
         $member_id =  $this->session->userdata('member_id');
         $productCount = count($carts['choosen_items']); 
         $itemList =  $carts['choosen_items'];
@@ -323,8 +325,6 @@ class Payment extends MY_Controller{
         $ip = $this->user_model->getRealIpAddr();   
         $productstring = ""; 
         $analytics = array();  
-        
-
         $address = $this->memberpage_model->get_member_by_id($member_id); 
         $city = ($address['c_stateregionID'] > 0 ? $address['c_stateregionID'] :  0);
         $cityDetails = $this->payment_model->getCityOrRegionOrMajorIsland($city);
@@ -332,31 +332,15 @@ class Payment extends MY_Controller{
         $region = $cityDetails['parent_id'];
         $cityDetails = $this->payment_model->getCityOrRegionOrMajorIsland($region);
         $majorIsland = $cityDetails['parent_id'];  
-        
         $transactionID = "";
         if(isset($_GET["token"]) && isset($_GET["PayerID"]))
         {
        
-            foreach ($itemList as $key => $value) {
-                $sellerId = $value['member_id'];
-                $productId = $value['id'];
-                $orderQuantity = $value['qty'];
-                $price = $value['price'];
-                $productItem =  $value['product_itemID'];
-                $details = $this->payment_model->getShippingDetails($productId,$productItem,$city,$region,$majorIsland);
-                $shipping_amt = $details[0]['price'];
-                $otherFee = $shipping_amt + $tax_amt;
-                $total =  $value['subtotal'] + $otherFee;
-                $productstring .= '<||>'.$sellerId."{+}".$productId."{+}".$orderQuantity."{+}".$price."{+}".$otherFee."{+}".$total."{+}".$productItem;
-                $itemList[$key]['otherFee'] = $otherFee;
-                $sellerDetails = $this->memberpage_model->get_member_by_id($sellerId); 
-                $itemList[$key]['seller_username'] = $sellerDetails['username'];
-                $ItemTotalPrice += $total;  
-            }
+            $prepareData = $this->processData($itemList,$city,$region,$majorIsland);
+            $ItemTotalPrice = $prepareData['totalPrice'];
+            $productstring = $prepareData['productstring'];
+            $itemList = $prepareData['newItemList'];
 
-
-
-            $productstring = substr($productstring,4);
             $response['itemList'] = $itemList;
             $grandTotal= ($ItemTotalPrice+$handling_amt+$insurance_amt)-$shipping_discount_amt;
 
@@ -409,6 +393,7 @@ class Payment extends MY_Controller{
                             #   UPDATE `es_product_item` SET `quantity` = `quantity` - v_quantity WHERE `product_id` = v_product_id AND `id_product_item` = v_product_item;
         
                         }
+
                         $complete = $this->payment_model->updatePaymentIfComplete($return['v_order_id'],$apiResponse,$transactionID);
                          
                         if($complete <= 0){
@@ -428,30 +413,9 @@ class Payment extends MY_Controller{
                             $this->removeItemFromCart();
                             $this->session->unset_userdata('choosen_items');
                             $this->sendNotification(array('member_id'=>$member_id, 'order_id'=>$return['v_order_id'], 'invoice_no'=>$return['invoice_no']));
-                    
+                            
                             #google analytics data
-                            foreach ($itemList as $key => $value) {
-
-                                $product = $this->product_model->getProductPreview($value['id'],$value['member_id'],"0");
-                              
-                                $tempAnalytics = array(
-                                    'id' => $return['v_order_id'],
-                                    'affiliation' => $value['seller_username'],
-                                    'revenue' => $value['subtotal'],
-                                    'shipping'=> $value['otherFee'],
-                                    'tax'=> '0.00',
-                                    'currency' => 'PHP', 
-                                    'data' => array(
-                                        'id' => $return['v_order_id'],
-                                        'name' => $value['name'],
-                                        'sku' => $value['id'],
-                                        'category' => $product['category'],
-                                        'price' => $value['price'],
-                                        'quantity' => $value['qty']
-                                        )
-                                    );  
-                                    array_push($analytics, $tempAnalytics); 
-                            }
+                            $analytics = $this->ganalytics($itemList,$return['v_order_id']);
                             #end of google analytics data
                         }
                     }else{
@@ -471,14 +435,15 @@ class Payment extends MY_Controller{
         $data['cat_item'] = $this->cart->contents();
         $data['title'] = 'Payment | Easyshop.ph';
         $data = array_merge($data,$this->fill_header());
-   
-   
+
         $this->session->set_userdata('paymentticket', true);
         $this->session->set_userdata('headerData', $data);
         $this->session->set_userdata('bodyData', $response);
 
         redirect(base_url().'payment/success/paypal', 'refresh'); 
     }
+
+
 
     function payCashOnDelivery(){
    
@@ -504,9 +469,20 @@ class Payment extends MY_Controller{
             $response['message'] = '<div style="color:green">Your payment is completed through Cash on Delivery.</div>';
               
         }elseif ($lastDigit == 2) {
-            $paymentType = $this->PayMentDirectBankDeposit; 
+            $paymentType = $this->PayMentDirectBankDeposit;
+
+
+            $esAccountNumber = $this->sqlmap->getFilenameIDPage('content_files','bank-account-number');
             $textType = 'directbankdeposit';
-            $response['message'] = '<div style="color:green">Your payment is completed through Direct Bank Deposit.</div>';
+            $response['message'] = '
+            <div style="color:green">Your payment is completed through Direct Bank Deposit.</div>
+            <div>Step to complete to your transactions:
+                <ul>
+                    <li>Go to your bank.</li>
+                    <li>Deposit to this account number: '.$esAccountNumber .'</li>
+                </ul>
+            </div>
+            ';
              
         }else{
             $paymentType = $this->PayMentCashOnDelivery;  
@@ -540,37 +516,21 @@ class Payment extends MY_Controller{
         $shipping_discount_amt = 0;
         $insurance_amt = 0;
         $ItemTotalPrice = 0;
-        
         $transactionID = "";
-        
-        foreach ($itemList as $key => $value) {
-            $sellerId = $value['member_id'];
-            $productId = $value['id'];
-            $orderQuantity = $value['qty'];
-            $price = $value['price'];
-            $tax_amt = $tax_amt;
-            $productItem =  $value['product_itemID'];
-            $details = $this->payment_model->getShippingDetails($productId,$productItem,$city,$region,$majorIsland);
-            $shipping_amt = $details[0]['price'];
-            $otherFee = $tax_amt + $shipping_amt;
-            $total =  $value['subtotal'] + $otherFee;
-            $productstring .= '<||>'.$sellerId."{+}".$productId."{+}".$orderQuantity."{+}".$price."{+}".$otherFee."{+}".$total."{+}".$productItem;
-            $itemList[$key]['otherFee'] = $otherFee;
-            $sellerDetails = $this->memberpage_model->get_member_by_id($sellerId); 
-            $itemList[$key]['seller_username'] = $sellerDetails['username'];
-            $ItemTotalPrice += $total;  
-        }
-    
+
+        $prepareData = $this->processData($itemList,$city,$region,$majorIsland);
+        $ItemTotalPrice = $prepareData['totalPrice'];
+        $productstring = $prepareData['productstring'];
+        $itemList = $prepareData['newItemList'];
+
         $response['itemList'] = $itemList;
         $grandTotal= ($ItemTotalPrice+$handling_amt+$insurance_amt)-$shipping_discount_amt;
 
-
-        $productstring = substr($productstring,4);
         $apiResponseArray['ProductData'] =  $carts['choosen_items'];
 
         $apiResponse = json_encode($apiResponseArray);
         $return = $this->payment_model->payment($paymentType,$invoice_no,$grandTotal,$ip,$member_id,$productstring,$productCount,$apiResponse,$transactionID);
-
+        $v_order_id = $return['v_order_id'];
 
         if($return['o_success'] <= 0){
             $response['message'] = '<div style="color:red"><b>Error 3: </b>'.$return['o_message'].'</div>'; 
@@ -579,9 +539,11 @@ class Payment extends MY_Controller{
             $this->removeItemFromCart(); 
             $this->session->unset_userdata('choosen_items');
 			$this->sendNotification(array('member_id'=>$member_id, 'order_id'=>$return['v_order_id'], 'invoice_no'=>$return['invoice_no']));
-        }   
 
-        
+            #google analytics data
+            $analytics = $this->ganalytics($itemList,$v_order_id);
+            #end of google analytics data
+        }   
 
         $response['analytics'] = $analytics;
         $response = array_merge($response,$return);  
@@ -598,11 +560,10 @@ class Payment extends MY_Controller{
 
   
     function payDragonPay(){
-        
+        header('Content-type: application/json');
         $carts = $this->session->all_userdata();
         $member_id =  $this->session->userdata('member_id'); 
         $itemList =  $carts['choosen_items'];
-
         $address = $this->memberpage_model->get_member_by_id($member_id); 
         $email = $address['email'];
         $city = ($address['c_stateregionID'] > 0 ? $address['c_stateregionID'] :  0);
@@ -620,23 +581,9 @@ class Payment extends MY_Controller{
         $insurance_amt = 0;
         $ItemTotalPrice = 0;
         $name = ""; 
-
-        foreach ($itemList as $key => $value) {
-            $sellerId = $value['member_id'];
-            $productId = $value['id'];
-            $orderQuantity = $value['qty'];
-            $price = $value['price'];
-            $tax_amt = $tax_amt;
-            $productItem =  $value['product_itemID'];
-            $details = $this->payment_model->getShippingDetails($productId,$productItem,$city,$region,$majorIsland);
-            $shipping_amt = $details[0]['price'];
-            $otherFee = $tax_amt + $shipping_amt;
-            $total =  $value['subtotal'] + $otherFee; 
-            $sellerDetails = $this->memberpage_model->get_member_by_id($sellerId);  
-            $ItemTotalPrice += $total;  
-            $name .= "<br>".$value['name'];
-        }    
-
+        $prepareData = $this->processData($itemList,$city,$region,$majorIsland);
+        $ItemTotalPrice = $prepareData['totalPrice'];
+        $name = $prepareData['productName'];
         $grandTotal = ($ItemTotalPrice+$handling_amt+$insurance_amt)-$shipping_discount_amt;
         $dpReturn = $this->dragonpay->getTxnToken($grandTotal,$name,$email);
 
@@ -646,7 +593,6 @@ class Payment extends MY_Controller{
     }
 
     function paymentSuccess($mode = "easyshop"){
-
 
         $ticket = $this->session->userdata('paymentticket');
         // if($ticket){
@@ -670,7 +616,6 @@ class Payment extends MY_Controller{
 
     function dragonPayPostBack(){
 
-
         header("Content-Type:text/plain");
         $status = $this->input->post('status');
         if(strtolower($status) == "p" || strtolower($status) == "s"){
@@ -688,7 +633,6 @@ class Payment extends MY_Controller{
              redirect(base_url().'home/', 'refresh'); 
              exit();
         } 
-
 
         $this->session->set_userdata('paymentticket', true);
         
@@ -719,26 +663,13 @@ class Payment extends MY_Controller{
         $insurance_amt = 0;
         $ItemTotalPrice = 0;
         
-        foreach ($itemList as $key => $value) {
-            $sellerId = $value['member_id'];
-            $productId = $value['id'];
-            $orderQuantity = $value['qty'];
-            $price = $value['price'];
-            $tax_amt = $tax_amt;
-            $productItem =  $value['product_itemID'];
-            $details = $this->payment_model->getShippingDetails($productId,$productItem,$city,$region,$majorIsland);
-            $shipping_amt = $details[0]['price'];
-            $otherFee = $tax_amt + $shipping_amt;
-            $total =  $value['subtotal'] + $otherFee;
-            $productstring .= '<||>'.$sellerId."{+}".$productId."{+}".$orderQuantity."{+}".$price."{+}".$otherFee."{+}".$total."{+}".$productItem;
-            $itemList[$key]['otherFee'] = $otherFee;
-            $sellerDetails = $this->memberpage_model->get_member_by_id($sellerId); 
-            $itemList[$key]['seller_username'] = $sellerDetails['username'];
-            $ItemTotalPrice += $total;  
-        }
-    
+        $prepareData = $this->processData($itemList,$city,$region,$majorIsland);
+        $ItemTotalPrice = $prepareData['totalPrice'];
+        $productstring = $prepareData['productstring'];
+        $itemList = $prepareData['newItemList'];
+
         $response['itemList'] = $itemList;
-        $grandTotal= ($ItemTotalPrice+$handling_amt+$insurance_amt)-$shipping_discount_amt;
+        $grandTotal = ($ItemTotalPrice+$handling_amt+$insurance_amt)-$shipping_discount_amt;
 
 
         $txnId = $this->input->get('txnid');
@@ -746,8 +677,7 @@ class Payment extends MY_Controller{
         $status =  $this->input->get('status');
         $message = $this->input->get('message');
         $digest = $this->input->get('digest');
-
-        $productstring = substr($productstring,4);
+ 
         $apiResponseArray['ProductData'] =  $carts['choosen_items'];
         $apiResponseArray['DragonPayReturn'] = array(
                 "txnid" => $txnId,
@@ -755,7 +685,7 @@ class Payment extends MY_Controller{
                 "status" => $status,
                 "message" => $message,
                 "digest" => $digest
-            );
+        );
 
         $transactionID = urldecode($txnId).'-'.urldecode($refNo);
         $apiResponse = json_encode($apiResponseArray);
@@ -774,6 +704,10 @@ class Payment extends MY_Controller{
                 $this->removeItemFromCart(); 
                 $this->session->unset_userdata('choosen_items');
                 $this->sendNotification(array('member_id'=>$member_id, 'order_id'=>$return['v_order_id'], 'invoice_no'=>$return['invoice_no']));
+               
+                #google analytics data
+                $analytics = $this->ganalytics($itemList,$return['v_order_id']);
+                #end of google analytics data
             } 
 
         }else{
@@ -814,12 +748,7 @@ class Payment extends MY_Controller{
             }
       
     }
-
-    function xx()
-    {
-        $return = $this->dragonpay->getStatus('049');
-       echo $return;
-    }
+ 
 	
 	/*
 	 *	Function called upon purchasing an item. Sends notification to both buyer and seller
@@ -901,10 +830,67 @@ class Payment extends MY_Controller{
 	 *
 	 *
 	 */
-	function test($test, $abs)
-	{
-	
+	function ganalytics($itemList,$v_order_id)
+	{  
+        $analytics = array(); 
+        foreach ($itemList as $key => $value) {
+
+            $product = $this->product_model->getProductPreview($value['id'],$value['member_id'],"0");
+
+            $tempAnalytics = array(
+                'id' => $v_order_id,
+                'affiliation' => $value['seller_username'],
+                'revenue' => $value['subtotal'],
+                'shipping'=> $value['otherFee'],
+                'tax'=> '0.00',
+                'currency' => 'PHP', 
+                'data' => array(
+                    'id' => $v_order_id,
+                    'name' => $value['name'],
+                    'sku' => $value['id'],
+                    'category' => $product['category'],
+                    'price' => $value['price'],
+                    'quantity' => $value['qty']
+                    )
+                );  
+            array_push($analytics, $tempAnalytics); 
+        }
+
+        return $analytics;
 	}
+    function processData($itemList,$city,$region,$majorIsland)
+    {
+        $ItemTotalPrice = 0;
+        $productstring = "";
+        $name = "";
+        foreach ($itemList as $key => $value) {
+            $sellerId = $value['member_id'];
+            $productId = $value['id'];
+            $orderQuantity = $value['qty'];
+            $price = $value['price'];
+            $tax_amt = 0;
+            $productItem =  $value['product_itemID'];
+            $details = $this->payment_model->getShippingDetails($productId,$productItem,$city,$region,$majorIsland);
+            $shipping_amt = $details[0]['price'];
+            $otherFee = $tax_amt + $shipping_amt;
+            $total =  $value['subtotal'] + $otherFee;
+            $productstring .= '<||>'.$sellerId."{+}".$productId."{+}".$orderQuantity."{+}".$price."{+}".$otherFee."{+}".$total."{+}".$productItem;
+            $itemList[$key]['otherFee'] = $otherFee;
+            $sellerDetails = $this->memberpage_model->get_member_by_id($sellerId); 
+            $itemList[$key]['seller_username'] = $sellerDetails['username'];
+            $ItemTotalPrice += $total;  
+            $name .= "<br>".$value['name'];
+        }
+        $productstring = substr($productstring,4);
+        return array(
+            'totalPrice' => $ItemTotalPrice,
+            'newItemList' => $itemList,
+            'productstring' => $productstring,
+            'productName' => $name
+            );
+    }
+
+
 	
 }
 
