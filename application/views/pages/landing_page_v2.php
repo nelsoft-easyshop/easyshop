@@ -336,12 +336,13 @@ $(document).ready(function() {
     });
 });
 
-$(document).mouseup(function (e)
+$(document).click(function (e)
 {
     var container = $("#register_container");
-
     if (!container.is(e.target) // if the target of the click isn't the container...
-        && container.has(e.target).length === 0) // ... nor a descendant of the container
+        && container.has(e.target).length === 0  // ... nor a descendant of the container
+        && !e.target.hasClass('reg_btn')
+        )
     {
         container.fadeOut(300);
     }
