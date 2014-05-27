@@ -1321,6 +1321,8 @@ $(document).ready(function(){
 					},	
 					submitHandler: function(form) {
 						submitbtn.val('Sending...');
+						input.attr('disabled',false);
+						textarea.attr('disabled',false);
 						$.post(config.base_url+'memberpage/transactionResponse', $(form).serializeArray(), function(data){
 							submitbtn.val('Submit');
 							try{
