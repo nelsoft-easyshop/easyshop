@@ -14,14 +14,12 @@
            online shopping experience. Our goal is to be the first website you think about
            when buying online." />
 		<meta property="og:image" content="https://easyshop.ph/assets/images/img_logo.png" />
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- <meta name="viewport" content="width=device-width, initial-scale=1"> -->
 
 		<!-- CSS -->
         <link rel="stylesheet" href="<?=base_url()?>assets/css/landingpage/style_v2.css" type="text/css" media="screen"/>
-        <link rel="stylesheet" href="<?=base_url()?>assets/css/landingpage/rwdgrid.css" type="text/css" media="screen"/>
+<!--         <link rel="stylesheet" href="<?=base_url()?>assets/css/landingpage/rwdgrid.css" type="text/css" media="screen"/> -->
 
-        <!-- start responsive menu -->
-        <link rel="stylesheet" href="<?=base_url()?>assets/css/landingpage/responsive-nav.css">
 
 		<!-- Contact Form CSS files -->
 		<link type='text/css' href='<?=base_url()?>assets/css/basic.css' rel='stylesheet' media='screen' />
@@ -86,10 +84,12 @@
 											<input type="password" placeholder="" id="password" name="password" class="reqfield">
 											<span class="red ci_form_validation_error"><?php echo form_error('password'); ?></span>
 
-											<h4>Confirm Password</h4>
+											<h4 class="txt_cp">Confirm Password</h4>
 											<input type="password" placeholder="" id="cpassword" name="cpassword" class="reqfield" disabled>
+											<span class="field_pword_status">
 											<img class="fieldstatus" src="<?=base_url()?>/assets/images/check_icon.png" id="cpassword_check" style="position: relative;display:none;"/>
 											<img class="fieldstatus" src="<?=base_url()?>/assets/images/x_icon.png" id="cpassword_x" style="position: relative;display:none; "/>
+											</span>
 											<span class="red ci_form_validation_error"><?php echo form_error('cpassword'); ?></span>
 											<span class="help-block spnmsg padding1" style="text-align:left"></span>
 										
@@ -198,7 +198,7 @@
 						<h1><span>YOUR</span> BUSINESS</h1>
 						<h1><span>HAS A</span>  NEW HOME</h1>
 						<p class="fs1 mgrn_top1">
-						EasyShop.ph provides fast and easy online shopping experience.
+						EasyShop.ph provides fast and easy online<br />shopping experience.
 						</p>
 						<p class="fs2 mgrn_top2">Start buying on June 15, 2014 </p>
 						
@@ -207,7 +207,7 @@
 							<span>
 								<img src="<?=base_url()?>assets/images/landingpage/img_video.jpg" class="vidplay" alt="Easyshop.ph Video">
 								<span id="videoplayer">									
-									<embed src="https://www.youtube.com/v/bA4vWKZSE00" type="application/x-shockwave-flash"></embed>
+									<embed src="https://www.youtube.com/v/-iLuVgicBjE" type="application/x-shockwave-flash"></embed>
 								</span>
 							</span>
 							</div>	
@@ -254,6 +254,7 @@
 				<p>Copyright © 2014 easyshop.ph. All rights reserved </p>
 			</div>
 	</footer>
+
 </body>
 <?php echo form_open('registration/success', array('id'=>'success_register'));?>
 		  <input type="hidden" name="referrer" class="referrer" value="landingpage"/>
@@ -262,12 +263,8 @@
 
 
 
-<!-- script for responsive navigation-->
-<script src="<?=base_url()?>assets/JavaScript/js/landingpage/responsive-nav.js"></script> 
-
 <script type='text/javascript' src="<?=base_url()?>assets/JavaScript/js/jquery-1.9.1.js" ></script>
 <script type='text/javascript' src="<?=base_url()?>assets/JavaScript/js/jquery-ui.js"></script>
-
 
 <script type="text/javascript">
 
