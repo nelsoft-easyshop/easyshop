@@ -281,6 +281,13 @@ var config = {
      base_url: "<?php echo base_url(); ?>",
 };
 
+$(window).load(function () {
+$(window).scroll(function () {
+var e;
+return e = $(window).scrollTop(), e < 50 ? $("#header").removeClass("fixed_header") : $("#header").addClass("fixed_header").fadeIn(300);
+})
+}) 
+
 /**** video player dialog box ****/
 $(function() {
 	$( "#videoplayer" ).dialog({
