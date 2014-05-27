@@ -91,6 +91,8 @@ $route['(?i)subscription/success'] = 'landingpage/success/subscribe';  # sam gav
 
 #PAYMENT CASH ON DELIVERY
 $route['(?i)pay/cashondelivery'] = 'payment/payCashOnDelivery';  # ryan vasquez
+#PAYMENT DIRECT BANK DEPOSIT
+$route['(?i)pay/directbank'] = 'payment/payCashOnDelivery';  # ryan vasquez
 #PAYMENT PAYPAL
 $route['(?i)pay/setting/paypal'] = 'payment/paypal_setexpresscheckout';  # ryan vasquez
 $route['(?i)pay/paypal'] = 'payment/paypal';  # ryan vasquez

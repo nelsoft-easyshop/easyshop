@@ -110,6 +110,18 @@ $(document).ready(function(){
 
 // -- END OF CASH ON DELIVERY PROCESS PAYMENT SECTION -- // 
 
+// -- DIRECT BANK DEPOSIT PROCESS PAYMENT SECTION -- // 
+
+    $(document).on('click','.payment_dbd',function () {
+        if($('#chk_dbd').is(':checked')){
+            $('#dbdFrm').submit();
+        }else{
+            alert('Please acknowledge that you have read and understood our privacy policy.');
+        }
+    });
+
+// -- END OF DIRECT BANK DEPOSIT PROCESS PAYMENT SECTION -- // 
+
 // -- CHANGE ADDRESS SECTION -- // 
 
     $(document).on('click','.link_address',function () {

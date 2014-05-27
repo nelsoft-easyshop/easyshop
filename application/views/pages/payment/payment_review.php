@@ -66,6 +66,7 @@
                 <li><a href="#cdb">Credit or Debit Card</a></li>
                 <li><a href="#paypal">Paypal</a></li>
                 <li><a href="#dragonpay">Dragon Pay</a></li>
+                <li><a href="#dbd">Direct Bank Deposit</a></li>
               </ul>
 
               <!-- #### CASH ON DELIVERY #### -->
@@ -85,7 +86,7 @@
                   echo form_open('pay/cashondelivery/', $attr);
                   ?>
                   <input type="button" class="payment_cod" value="Proceed to Payment"> 
-                  <input type="hidden" value="<?php echo md5(uniqid(mt_rand(), true));?>" name="paymentToken">   
+                  <input type="hidden" value="<?php echo md5(uniqid(mt_rand(), true)).'1';?>" name="paymentToken">   
                   <?php echo form_close();?>
                   <p class="notify">You will be notified regarding your order status via email or sms.</p>
                   <!-- <p class="subscribe"><input type="checkbox" checked> <img src="<?= base_url() ?>assets/images/icon_email.png" alt="email"> Subscribe to Easyshop Newsletter for great deals and amazing discounts</p> -->
@@ -191,10 +192,30 @@
         <!-- #### DRAGON PAY #### -->
 
         <div id="dragonpay" class="payment_inner_content">
-         <input type="button" class="btnDp" value="Pay via DRAGON PAY">
-         <p class="chck_privacy"><input type="checkbox" id="chk_dp" name='chk_dp'> <label for='chk_dp'>I acknowledge I have read and understood Easyshop.ph's  </label><a href="">Privacy Policy</a>.</p>
-       </div>
+          <input type="button" class="btnDp" value="Pay via DRAGON PAY">
+          <p class="chck_privacy"><input type="checkbox" id="chk_dp" name='chk_dp'> <label for='chk_dp'>I acknowledge I have read and understood Easyshop.ph's  </label><a href="">Privacy Policy</a>.</p>
+        </div>
 
+      <!-- #### DRAGON PAY #### -->
+
+      <div id="dbd" class="payment_inner_content">
+      <p class="cod_desc"><strong>You can pay in cash to our courier when you receive the goods at your doorstep.</strong></p> 
+                  <br>
+                  <?php 
+                  $attr = array(
+                    'class' => 'dbdFrm',
+                    'id' => 'dbdFrm',
+                    'name' => 'dbdFrm'
+                    );
+                  echo form_open('pay/directbank/', $attr);
+                  ?>
+                  <input type="button" class="payment_dbd" value="Proceed to Payment"> 
+                  <input type="hidden" value="<?php echo md5(uniqid(mt_rand(), true)).'2';?>" name="paymentToken">   
+                  <?php echo form_close();?>
+                  <p class="notify">You will be notified regarding your order status via email or sms.</p>
+                  <!-- <p class="subscribe"><input type="checkbox" checked> <img src="<?= base_url() ?>assets/images/icon_email.png" alt="email"> Subscribe to Easyshop Newsletter for great deals and amazing discounts</p> -->
+                  <p class="chck_privacy"><input type="checkbox"  id="chk_dbd" name='chk_dbd'><label for='chk_dbd'> I acknowledge I have read and understood Easyshop.ph's</label> <a href="">Privacy Policy</a>.</p>
+                   </div>
 
        <!-- #### MORE PAYMENT HERE! #### -->
 

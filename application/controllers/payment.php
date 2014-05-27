@@ -24,6 +24,7 @@ class Payment extends MY_Controller{
     public $PayMentDragonPay = 2;
     public $PayMentCashOnDelivery = 3;
     public $PayMentDragonPayOnlineBanking = 4;
+    public $PayMentDirectBankDeposit = 5;
 
     // SANDBOX
     public $PayPalMode             = 'sandbox'; 
@@ -488,7 +489,8 @@ class Payment extends MY_Controller{
         if(!$this->input->post('paymentToken')){
             redirect(base_url().'home', 'refresh');
         }; 
-
+        $token = $this->input->post('paymentToken');
+        $lastDigit = substr($token, -1);
         $carts = $this->session->all_userdata();
         
         if(!isset($carts['choosen_items'])){
@@ -496,10 +498,26 @@ class Payment extends MY_Controller{
         }
         
         $this->session->set_userdata('paymentticket', true);
+        if($lastDigit == 1){
+            $paymentType = $this->PayMentCashOnDelivery;
+            $textType = 'cashondelivery';
+            $response['message'] = '<div style="color:green">Your payment is completed through Cash on Delivery.</div>';
+              
+        }elseif ($lastDigit == 2) {
+            $paymentType = $this->PayMentDirectBankDeposit; 
+            $textType = 'directbankdeposit';
+            $response['message'] = '<div style="color:green">Your payment is completed through Direct Bank Deposit.</div>';
+             
+        }else{
+            $paymentType = $this->PayMentCashOnDelivery;  
+            $textType = 'cashondelivery';
+            $response['message'] = '<div style="color:green">Your payment is completed through Cash on Delivery.</div>';
 
-        $paymentType = $this->PayMentCashOnDelivery; 
+        }
+
+        // $paymentType = $this->PayMentCashOnDelivery; 
         $apiResponseArray = array(); 
-        
+     
         $member_id =  $this->session->userdata('member_id');
         $productCount = count($carts['choosen_items']); 
         $itemList =  $carts['choosen_items'];
@@ -558,7 +576,6 @@ class Payment extends MY_Controller{
             $response['message'] = '<div style="color:red"><b>Error 3: </b>'.$return['o_message'].'</div>'; 
         }else{
             $response['completepayment'] = true;
-            $response['message'] = '<div style="color:green">Your payment is completed through Cash on Delivery.</div>';
             $this->removeItemFromCart(); 
             $this->session->unset_userdata('choosen_items');
 			$this->sendNotification(array('member_id'=>$member_id, 'order_id'=>$return['v_order_id'], 'invoice_no'=>$return['invoice_no']));
@@ -576,7 +593,7 @@ class Payment extends MY_Controller{
         $this->session->set_userdata('headerData', $data);
         $this->session->set_userdata('bodyData', $response);
 
-        redirect(base_url().'payment/success/cashondelivery', 'refresh');
+        redirect(base_url().'payment/success/'.$textType, 'refresh');
     }
 
   
@@ -632,7 +649,7 @@ class Payment extends MY_Controller{
 
 
         $ticket = $this->session->userdata('paymentticket');
-        if($ticket){
+        // if($ticket){
         $data = $this->session->userdata('headerData');
         $response = $this->session->userdata('bodyData'); 
 
@@ -644,9 +661,9 @@ class Payment extends MY_Controller{
         $this->load->view('templates/header', $data);
         $this->load->view('pages/payment/payment_response' ,$response);  
         $this->load->view('templates/footer_full'); 
-        }else{
-            redirect(base_url().'home/', 'refresh');
-        }
+        // }else{
+        //     redirect(base_url().'home/', 'refresh');
+        // }
 
     }
 
