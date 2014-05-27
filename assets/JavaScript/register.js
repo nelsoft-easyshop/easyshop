@@ -252,6 +252,7 @@ $(document).ready(function(){
 				else
 					error.appendTo(element.parent());
 		 }	
+		 
 	 });
 	 
 	 
@@ -364,4 +365,48 @@ $(function() {
         $('.dialog').dialog('open');
 	});
     
+});
+
+/**********************************************************************************************/
+/****************************	Change Password VALIDATION	************************************/
+/**********************************************************************************************/
+$(document).ready(function(){
+	
+	$("#notify").delay(3000).fadeOut(2000);
+
+    jQuery.validator.addMethod("equals", function(value, element, param) {
+      return this.optional(element) || value === param; 
+    }, jQuery.format(""));
+ 
+	 $("#identify_form").validate({
+         ignore: "",
+		 rules: {
+			email: {
+				required: true,
+				email: true,
+				minlength: 6
+				}
+		 },
+		 messages:{
+			email:{
+				required: "<br>Please enter a valid email address",
+				email: "<br>Please enter a valid email address",
+				minlength: "*Email too short",
+				equalTo: ""
+			}
+		 },
+		 
+		 errorElement: "span",
+		 errorPlacement: function(error, element) {     
+			error.addClass('red');
+			error.appendTo(element.parent());
+		 }	
+		 
+	 });
+	 
+	 
+	$('.field input').on('click', function(){
+		$('.ci_form_validation_error').text('');
+	 });
+	 
 });
