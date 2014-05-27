@@ -76,14 +76,22 @@ class PSR0Autoloader
      */
     public function loadClass($className)
     {
+
         /* 
          * Hack to avoid handling annoying CI & friends classes. Ideally, this
          * should be placed in MY_Controller.
+         *
+         * Also added ugly fix for require error when loading home/pagenotfound (404 page).
+         * If the function for the 404 page is moved out of the home controller, take care 
+         * to change the comparison condition. This also prevents autoloading legitimate classes
+         * with the name 'home'.
+         *
          */
-        if (FALSE !== stripos($className, '_')) {
+
+        if ((FALSE !== stripos($className, '_')) ||  ($className === 'home')){
             return;
         }
-        
+
         $className = ltrim($className, '\\');
         $namespacePath = '';
         
@@ -91,7 +99,7 @@ class PSR0Autoloader
             $namespacePath = str_replace('\\', DIRECTORY_SEPARATOR, substr($className, 0, $lastNsPos)) . DIRECTORY_SEPARATOR;
             $className = substr($className, $lastNsPos + 1);
         }
-        
+  
         require $this->_includePath . $namespacePath . str_replace('_', DIRECTORY_SEPARATOR, $className) . '.php';
     }
 }
