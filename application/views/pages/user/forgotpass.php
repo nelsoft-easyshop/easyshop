@@ -38,12 +38,12 @@
 	      <div class="">
 	        <input id="identify_btn" class="orange_btn3" type="submit" name="identify_btn" value="Reset Password"/>
 	      </div>
-		  <?php if(!empty($toggle_view)){ ?>
-			  <div class="reset_pword_error_con <?php echo $class; ?>">
-			  <span class="span_bg img_error_con <?php echo $imgclass; ?>"></span>
-			  <span id="login_error"><?php echo $msg; ?></span>
-	      </div>
-		  <?php } ?>
+		  <?php if(!empty($toggle_view)):?>
+			<div id="notify" class="reset_pword_error_con <?php echo $class; ?>">
+				<span class="span_bg img_error_con <?php echo $imgclass; ?>"></span>
+				<span id="login_error"><?php echo $msg; ?></span>
+			</div>
+		  <?php endif; ?>
 	    </div>
 	  <?php echo form_close();?>
 	</div>
