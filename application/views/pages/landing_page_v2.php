@@ -18,10 +18,10 @@
 
         <!-- start responsive menu -->
         <link rel="stylesheet" href="<?=base_url()?>assets/css/landingpage/responsive-nav.css">
-		<!-- end responsive menu -->
+
 		<!-- Contact Form CSS files -->
-	<link type='text/css' href='<?=base_url()?>assets/css/basic.css' rel='stylesheet' media='screen' />
-	<link href="<?=base_url()?>assets/css/jquery-ui.css?ver=1.0" rel="stylesheet">
+		<link type='text/css' href='<?=base_url()?>assets/css/basic.css' rel='stylesheet' media='screen' />
+		<link href="<?=base_url()?>assets/css/jquery-ui.css?ver=1.0" rel="stylesheet">
         <!-- JS -->
 		<!-- html5.js for IE less than 9 -->
 		<!--[if lt IE 9]>
@@ -262,40 +262,29 @@
 
 
 
-<!-- script for responsive navigation -->
-<script src="<?=base_url()?>assets/JavaScript/js/landingpage/responsive-nav.js"></script>
+<!-- script for responsive navigation
+<script src="<?=base_url()?>assets/JavaScript/js/landingpage/responsive-nav.js"></script> -->
 
 <script type='text/javascript' src="<?=base_url()?>assets/JavaScript/js/jquery-1.9.1.js" ></script>
 <script type='text/javascript' src="<?=base_url()?>assets/JavaScript/js/jquery-ui.js"></script>
 
-<!-- script for modal -->
-<script src="<?=base_url()?>assets/JavaScript/js/jquery.simplemodal.js"></script>
-	
 
 <script type="text/javascript">
-$(function ($) {
-  // Load dialog on page load
-  //$('#basic-modal-content').modal();
 
-  // Load dialog on click
-  $('.vidplay').click(function (e) {
-    $('#videoplayer').modal({
+$(function() {
+	$( "#videoplayer" ).dialog({
+		width:"68%",
+		autoOpen: false,
+		modal: true,
+		closeOnEscape: true,
+		draggable:false,
+	});
 
-    	escClose: false,
-            containerCss:{
-                maxWidth: 900,
-                minWidth: 605,
-                maxHeight: 600,
-            },
-    });
-
-    return false;
-  });
+	$( ".vidplay" ).click(function() {
+	$( "#videoplayer" ).dialog( "open" );
+	});
 });
-
-/*******************************************************************************************************/
-/******************************* Terms and Conditions Dialog box ***************************************/
-/*******************************************************************************************************/
+/****** Terms and Conditions Dialog box ********/
 $(function() {
 	$( ".dialog" ).dialog({
 		width:"65%",
@@ -319,6 +308,16 @@ $(document).ready(function() {
     });
 });
 
+$(document).mouseup(function (e)
+{
+    var container = $("#register_container");
+
+    if (!container.is(e.target) // if the target of the click isn't the container...
+        && container.has(e.target).length === 0) // ... nor a descendant of the container
+    {
+        container.hide();
+    }
+});
 </script>
 
 
