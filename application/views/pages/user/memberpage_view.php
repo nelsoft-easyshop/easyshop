@@ -1092,7 +1092,7 @@
 	
 	<div align="right">
 		<input type="button" id="abi_btn" class="blue_btn" name="abi_btn" value="+ Add Bank" />
-	</div>
+	</div>	
 	<div id="abi" style="display:none">
 		<?php
 			$attr = array('id'=>'billing_info', 'name'=>'billing_info');
@@ -1108,7 +1108,10 @@
 						<select id="bi_bank" name="bi_bank" style="width:50%" placeholder="Select Bank">
 							<option value="">Select a bank...</option>						
 						</select>
-				</div>
+						<div id="bi_err_add" style="float: right; display:none; color:#FFF; width:150px; padding:10px; background:#F30;" >
+							<span>Duplicate Account Number</span>
+						</div>					
+				</div>				
 				<div>
 					<label for="bi_acct_name">Account Name:</label>
 					<input type="text" name="bi_acct_name" id="bi_acct_name" maxlength="60" value="<?php #echo html_escape($bill_info[0][$bank_account_name])?>">
@@ -1118,7 +1121,7 @@
 					<label for="bi_acct_no">Account Number:</label>
 					<input type="text" name="bi_acct_no" id="bi_acct_no" value="<?php #echo html_escape($bank_account_number)?>" maxlength="18">
 					<span class="red ci_form_validation_error"><?php echo form_error('bi_acct_no');?></span>
-				</div>
+				</div>				
 			</div>
 		</div>
 		<div class="clear"></div>
@@ -1162,7 +1165,10 @@
 							<?php endif;?>
 							<div id="bi_check_bictr<?php echo $rows; ?>"  style="display:none; width: 38px;" >
                                 <span>Saved</span>
-							</div>	
+							</div>
+							<div id="bi_err_bictr<?php echo $rows; ?>" style="display:none; width:auto; margin-top:0px; padding-right:10px; background:#F30;" >
+                                <span>Duplicate Account Number</span>
+							</div>								
 					</div>
 					<div id="bi-left" style="float:left; width:inherit;">
 							<div class="profile_fields" id="bi_div_bictr<?php echo $rows; ?>">
