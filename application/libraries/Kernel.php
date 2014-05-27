@@ -30,7 +30,7 @@ class Kernel
      */
     private function _bootstrap()
     {
-        /* We register the aplication class autoloader */
+        /* We register the application class autoloader */
         require_once 'application/src/EasyShop/Core/ClassAutoloader/PSR0Autoloader.php';
         $psr0Autoloader = new PSR0Autoloader("application/src/");
         $psr0Autoloader->register();
