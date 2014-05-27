@@ -42,16 +42,15 @@ $(document).ready(function(){
                 data: $(form).serializeArray(),
                 success:function(data){
                     if(data.o_success <= 0){
-                        //$("#login_error").empty();
-                        //$("#login_error").html(data[3]);
-						$("#passw_error").empty();
-                        $("#passw_error").html(data[3]);
+						$("#login_error").empty();
+                        $("#login_error").html(data[3]);
 						$('#loading_img').hide();
 						$('#login').show();
                     }
                     else{
 						var curl = $.cookie('rn');
                         $('.error_cont').text('');
+						$('#login_error').text('');
                         $('#loading_img').hide();
                         $('#login').val('Redirecting...');
                         $('#login')[0].disabled = true;
@@ -73,8 +72,7 @@ $(document).ready(function(){
     });
      
     $('.login_box input').on('click', function(){
-        //$('.error_cont').text('');
-		$(this).siblings('.error_cont').text('');
+		$('#login_error').text('');
     });
 
 });

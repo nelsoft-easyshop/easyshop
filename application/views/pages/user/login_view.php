@@ -27,8 +27,10 @@
 						  <label for="login_password">Password:</label>
 						  <input type="password" id="login_password" name="login_password"> 
 						  <span id="passw_error" class="red error_cont" style="font-weight:bold;display:block;margin:5px 0px 0px 93px;"></span>
+						  <span id="login_error" class="red" style="font-weight:bold;display:block;margin:5px 0px 0px 93px;"></span>
 						  <p><a href="<?=base_url()?>login/identify">Forgot your password?</a></p>
 						</div>
+						
 						<div>
 						  <input type="checkbox" name="keepmeloggedin" id="keepmeloggedin">
 						  <p><label for="keepmeloggedin">
