@@ -81,17 +81,11 @@
 												<img class="fieldstatus" src="<?=base_url()?>/assets/images/x_icon.png" id="username_x" style="position: relative;display:none;vertical-align:middle"/>
 												<span class="username_availability"></span>
 											</div>
-											<span class="help-block spnmsg text-center padding1">The username must be 5-25 characters long.</span>
-									
-										
-										
+											
 											<h4>Password</h4>
 											<input type="password" placeholder="" id="password" name="password" class="reqfield">
 											<span class="red ci_form_validation_error"><?php echo form_error('password'); ?></span>
-											<span class="help-block spnmsg text-center padding1">Password must be alphanumeric with a minimum of 6 characters.</span>
-										
-										
-										
+
 											<h4>Confirm Password</h4>
 											<input type="password" placeholder="" id="cpassword" name="cpassword" class="reqfield" disabled>
 											<img class="fieldstatus" src="<?=base_url()?>/assets/images/check_icon.png" id="cpassword_check" style="position: relative;display:none;"/>
