@@ -458,7 +458,8 @@ class memberpage_model extends CI_Model
 					$data[$temp['id_order']]['payment_method'] = $temp['payment_method'];
 				}
 				
-				if($temp['transac_stat'] == 99 && $temp['payment_method'] == 4){
+				//IF DIRECT BANK DEPOSIT
+				if($temp['transac_stat'] == 99 && $temp['payment_method'] == 5){
 					if( !isset( $data[$temp['id_order']]['bd_details'] ) )
 						$data[$temp['id_order']]['bd_details'] = array_splice($temp, 42, 6);
 				}
@@ -556,9 +557,10 @@ class memberpage_model extends CI_Model
 						$fdata['complete']['sell'][$k] = $temp2;
 					else
 						$fdata['complete']['buy'][$k] = $temp2;
-				}else if($temp2['transac_stat'] == 99 && ( $temp2['payment_method'] == 2 || $temp2['payment_method'] == 4 ) ){ // if pending Dragonpay transaction
+				}else if($temp2['transac_stat'] == 99 && ( $temp2['payment_method'] == 2 || $temp2['payment_method'] == 5 ) ){ // if pending Dragonpay/Direct BankDeposit transaction
 					if(array_key_exists('buyer_id', $temp2) && array_key_exists('buyer', $temp2))
-						continue;
+						//continue;
+						$fdata['sell'][$k] = $temp2;
 					else
 						$fdata['buy'][$k] = $temp2;
 				}

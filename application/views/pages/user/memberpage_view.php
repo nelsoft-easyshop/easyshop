@@ -1330,6 +1330,11 @@
 
 </div>	
 
+<div id="tx_dialog" style="display:none;" title="Request Confirmation">
+	<p>Continue submitting your request?</p>
+	<p>Once submitted, there is no turning back!</p>
+</div>
+
 <div class="profile_main_content" id="transactions">
 	<h2>On-going Transactions</h2>
 	
@@ -1360,7 +1365,7 @@
 						<span><strong>Date:</strong></span>
 						<span class="transac_title_date"><?php echo $transact['dateadded']?></span>
 					</div>
-					<!-- If payment method is dragon pay-->
+					<!-- If payment method is dragon pay / direct bank deposit-->
 					<div class="transac_title_col3">
 						<?php if($transact['payment_method'] == 2 && $transact['transac_stat'] == 99):?>
 							<?php $attr = array('class'=>'transac_response');
@@ -1371,7 +1376,7 @@
 								<input type="hidden" name="transaction_num" value="<?php echo $tk;?>">
 								<input type="hidden" name="dragonpay" value="1">
 							<?php echo form_close();?>
-						<?php elseif($transact['payment_method'] == 4 && $transact['transac_stat'] == 99):?>
+						<?php elseif($transact['payment_method'] == 5 && $transact['transac_stat'] == 99):?>
 								<input type="submit" class="orange_btn3 payment_details_btn" value="Payment Details">
 								<div class="payment_details_cont" style="display:none;">
 								<?php $attr = array('class'=>'payment_bankdeposit');
@@ -1400,7 +1405,7 @@
 								</div>
 						<?php endif;?>
 					</div>
-					<!-- End of dragonpay button-->
+					<!-- End of dragonpay / direct bank deposit button-->
 				</div>
 			</div>
 				<div class="transac_prod_wrapper">
@@ -1440,7 +1445,7 @@
 													$attr = array('class'=>'transac_response');
 													echo form_open('',$attr);
 												?>							
-												<input class = "transac_response_btn transac_forward orange_btn3" value="Forward payment to seller" type="submit">
+												<input class = "transac_response_btn transac_forward orange_btn3" value="Item received" type="submit">
 													<input type="hidden" name="buyer_response" value="<?php echo $opk;?>">
 													<input type="hidden" name="transaction_num" value="<?php echo $tk;?>">
 													<input type="hidden" name="invoice_num" value="<?php echo $transact['invoice_no'];?>">
@@ -1586,6 +1591,7 @@
 			<?php foreach($transaction['sell'] as $tk=>$transact):?>
 			<div class="transac-container">
 				<div class="transac_title">
+					<?php if($transact['transac_stat'] != 99): ?>
 					<div class="transac_title_table">
 						<div class="transac_title_col1">
 							<span><strong>Invoice No.: </strong></span>		
@@ -1641,6 +1647,9 @@
 							</span>
 						</div>
 					</div>
+					<?php else:?>
+					<span><strong>ON HOLD</strong></span>
+					<?php endif;?>
 				</div>
 				<div class="transac_prod_wrapper">
 					
@@ -1669,22 +1678,26 @@
 									<span class="transac_bought_con_col2"></span>
 									<span class="transac_bought_con_col3">
 										Status:
-									<?php if($product['status'] == 0):?>
-										<?php
-											$attr = array('class'=>'transac_response');
-											echo form_open('',$attr);
-										?>
-										<input class="transac_response_btn transac_forward orange_btn3" value="Return payment to buyer" type="submit">
-										<input type="hidden" name="seller_response" value="<?php echo $opk;?>">
-										<input type="hidden" name="transaction_num" value="<?php echo $tk;?>">
-										<input type="hidden" name="invoice_num" value="<?php echo $transact['invoice_no'];?>">
-										<?php echo form_close();?>
-									<?php elseif($product['status'] == 1):?>
-										<span class="trans_alert transac_paid">Paid</span>
-									<?php elseif($product['status'] == 2):?>
-										<span class="trans_alert transac_pay_return">Payment returned to buyer</span>
-									<?php elseif($product['status'] == 3):?>
-										<span class="trans_alert transac_cod">Cash on delivery</span>
+									<?php if($transact['transac_stat'] == 0):?>
+										<?php if($product['status'] == 0):?>
+											<?php
+												$attr = array('class'=>'transac_response');
+												echo form_open('',$attr);
+											?>
+											<input class="transac_response_btn transac_forward orange_btn3" value="Return payment to buyer" type="submit">
+											<input type="hidden" name="seller_response" value="<?php echo $opk;?>">
+											<input type="hidden" name="transaction_num" value="<?php echo $tk;?>">
+											<input type="hidden" name="invoice_num" value="<?php echo $transact['invoice_no'];?>">
+											<?php echo form_close();?>
+										<?php elseif($product['status'] == 1):?>
+											<span class="trans_alert transac_paid">Paid</span>
+										<?php elseif($product['status'] == 2):?>
+											<span class="trans_alert transac_pay_return">Payment returned to buyer</span>
+										<?php elseif($product['status'] == 3):?>
+											<span class="trans_alert transac_cod">Cash on delivery</span>
+										<?php endif;?>
+									<?php else:?>
+										<span>ON HOLD</span>
 									<?php endif;?>
 									</span>
 									<div><span class="shipping_comment">+ Shipping Comment</span></div>
@@ -1738,6 +1751,7 @@
 
 			<div class="feedback_wrapper">
 				<?php foreach($transact['users'] as $uk=>$user):?>
+				<?php if($transact['transac_stat'] != 99):?>
 				<div class="feedback_container">
 					<?php if(trim($user['feedb_msg']) !== ''):?>												
 					<p>For:<a href="<?php echo base_url();?>vendor/<?php echo $user['name'];?>"><?php echo $user['name'];?></a> | on:<?php echo $user['fbdateadded'];?></p>
@@ -1794,6 +1808,7 @@
 		</div>
 	<?php endif;?>
 	</div>
+	<?php endif;?>
 	<?php endforeach;?>
 	</div>
 	</div>
