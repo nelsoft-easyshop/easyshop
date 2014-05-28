@@ -202,9 +202,9 @@ $('#main_search').on('input propertychange', function() {
           var searchQuery = $.trim( $(this).val());
           searchQuery = searchQuery.replace(/ +(?= )/g,'');
           var fulltext = searchQuery; 
-
+          console.log(searchQuery);
           if(searchQuery != ""){
-            if($('#main_search').val().length > 0){
+            if(searchQuery.length > 0){
               currentRequest = $.ajax({
                 type: "GET",
                 url: '<?php echo base_url();?>search/suggest', 
@@ -232,11 +232,18 @@ $('#main_search').on('input propertychange', function() {
                 }
               });
             }else{
-               $("#main_search_drop_content").empty();
-               $("#main_search_drop_content").fadeOut(150);
+              if(currentRequest != null) {
+                currentRequest.abort();
+              }
+              $("#main_search_drop_content").empty();
+              $("#main_search_drop_content").fadeOut(150);
             }
           }else{
-             $("#main_search_drop_content").fadeOut(150);
+            if(currentRequest != null) {
+              currentRequest.abort();
+            }  
+            $("#main_search_drop_content").empty();
+            $("#main_search_drop_content").fadeOut(150);
           }
       });
       
