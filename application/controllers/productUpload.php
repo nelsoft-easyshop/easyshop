@@ -215,8 +215,6 @@ class productUpload extends MY_Controller
 					unset($filenames_ar[$key]); 
 				}
 			}
-
- 
  		}
 
  		$_FILES['files']['name'] = array_values($_FILES['files']['name']);
@@ -243,24 +241,33 @@ class productUpload extends MY_Controller
 			"xss_clean" => FALSE
 			)); 	
 
-		$this->upload->do_multi_upload("files");
+		// $this->upload->do_multi_upload("files");
+
+
 	 	$error = 0;
 	   	$file_data = $this->upload->get_multi_upload_data();
-	   	if(count($file_data) > 0){
-	   		for ($i=0; $i < sizeof($filenames_ar); $i++) { 
 
+	   	if ($this->upload->do_multi_upload('files')){
+	   		for ($i=0; $i < sizeof($filenames_ar); $i++) { 
 
 	   			$this->es_img_resize($filenames_ar[$i],$path_directory, 'small/', $this->img_dimension['small']); 
 	   			$this->es_img_resize($filenames_ar[$i],$path_directory.'small/', '../categoryview/', $this->img_dimension['categoryview']);
 	   			$this->es_img_resize($filenames_ar[$i],$path_directory.'categoryview/','../thumbnail/', $this->img_dimension['thumbnail']);
 
             //If user uploaded image is too large, resize and overwrite original image
-
-	   			if(($file_data[$i]['image_width'] > $this->img_dimension['usersize'][0]) || ($file_data[$i]['image_height'] > $this->img_dimension['usersize'][1])){
-	   				$this->es_img_resize($file_data[$i]['file_name'],$path_directory,'', $this->img_dimension['usersize']);
-	   			}	
+	   			if(isset($file_data[$i])){
+		   			if(($file_data[$i]['image_width'] > $this->img_dimension['usersize'][0]) || ($file_data[$i]['image_height'] > $this->img_dimension['usersize'][1])){
+		   				$this->es_img_resize($file_data[$i]['file_name'],$path_directory,'', $this->img_dimension['usersize']);
+		   			}	
+	   			}
 	   		}
+
 	   	}else{
+	   		for ($i=0; $i < sizeof($filenames_ar); $i++) { 
+				if (file_exists($path_directory.$filenames_ar[$i])) {
+					unlink($path_directory.$filenames_ar[$i]) or die('failed deleting: ' . $path);
+				}
+			}
 	   		$text = $this->upload->display_errors();
 	   		$error = 1;
 	   	}
