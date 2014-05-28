@@ -6,6 +6,12 @@
 
 <script>
 	var shippingPreference = <?php echo $json_shippingpreference;?>;
+	var displaygroup = <?php echo $json_displaygroup;?>;
+	var locationgroup = <?php echo $json_locationgroup;?>;
+	var islandLookup = <?php echo $json_islandlookup;?>;
+	var fdata = <?php echo $json_fdata;?>;
+	var ProductItemId = <?php echo $json_id_product_item;?>;
+	
 </script>
 
 <div class="wrapper">
@@ -273,8 +279,8 @@
 						  <tr class="tr_shipping_summary" data-group="<?php echo $datagroupcounter;?>">
 							  <td class="prod_att_pad">
 								<?php if($attr['has_attr'] == 1):?>
-								  <?php foreach($temp as $att):?>
-									<p><?php echo $att;?></p>
+								  <?php foreach($temp as $pattr):?>
+									<p><?php echo $pattr['name']?> : <?php echo $pattr['value'];?></p>
 									<span></span>
 								  <?php endforeach;?>
 								<?php else:?>
@@ -328,11 +334,6 @@
                   <?php endforeach;?>
                 <?php endif;?>
       
-                <input type="hidden" id="json_displaygroup" value='<?php echo $json_displaygroup;?>'>
-                <input type="hidden" id="json_locationgroup" value='<?php echo $json_locationgroup;?>'>
-                <input type="hidden" id="json_islandlookup" value='<?php echo $json_islandlookup;?>'>
-                <input type="hidden" id="json_fdata" value='<?php echo $json_fdata;?>'>
-                <input type="hidden" id="json_id_product_item" value='<?php echo $json_id_product_item;?>'>
                 <input type="hidden" id="summaryrowcount" value="<?php echo $datagroupcounter?>">
             </table>
           </div>

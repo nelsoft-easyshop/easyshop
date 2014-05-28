@@ -764,7 +764,8 @@ class productUpload extends MY_Controller
 	 */
 	function step3Submit(){
 		$fdata = $this->input->post('fdata');
-		$arrProductItemId = json_decode($this->input->post('productitemid'));
+		//$arrProductItemId = json_decode($this->input->post('productitemid'));
+		$arrProductItemId = $this->input->post('productitemid');
 		$productId = $this->input->post('productid');
         $memberId =  $this->session->userdata('member_id');
 		$attrCounter = 0;

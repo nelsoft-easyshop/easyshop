@@ -129,10 +129,7 @@ $(function(){
 *
 */
 $(function(){
-  var fdata = jQuery.parseJSON($('#json_fdata').val());
-  var displaygroup = jQuery.parseJSON($('#json_displaygroup').val());
-  var locationgroup = jQuery.parseJSON($('#json_locationgroup').val());
-  var islandLookup = jQuery.parseJSON($('#json_islandlookup').val());
+	// located in view fdata, displaygroup, locationgroup, islandLookup
   var divLocWarning = $('#div_locationwarning');
   var spanLocWarning = $('#location_warning');
   
@@ -158,7 +155,7 @@ $(function(){
 	if(hasAttr === 1){
 		$('.product_combination.active').each(function(){
 		  var attrText = $(this).text();
-		  attrText = attrText.replace(/[^\w\s]/gi, '-');
+		  attrText = attrText.replace(/[^\w\s:]/gi, '-');
 		  attrText = $.trim(attrText.replace(/\r?\n|\r/g, ''));
 		  attrText = attrText.replace(/\s+/g,' ');
 		  shipObj.attr[$(this).val()] = attrText;
@@ -384,7 +381,7 @@ $(function(){
 	}
 	
 	// Check if all attribute combinations have mapped locations
-	var ProductItemId = jQuery.parseJSON($('#json_id_product_item').val());
+	// ProductItemId located in view
 	var hasDetail = true;
 	jQuery.each(ProductItemId, function(k,v){
 		if(hasDetail){
@@ -406,7 +403,8 @@ $(function(){
     if(getObjectSize(fdata) > 0){
 	  var csrftoken = $("meta[name='csrf-token']").attr('content');
       var csrfname = $("meta[name='csrf-name']").attr('content');
-	  var productitemid = $('#json_id_product_item').val();
+	  //var productitemid = $('#json_id_product_item').val();
+	  var productitemidlist = ProductItemId;
 	  var productid = parseInt($('#prod_h_id').val());
 	  var loadingimg = $(this).siblings('img.loading_img_step3');
 	  var thisbtn = $(this);
@@ -414,7 +412,7 @@ $(function(){
 	  thisbtn.hide();
 	  loadingimg.show();
 
-	  $.post(config.base_url+'sell/shippinginfo', {fdata : fdata, csrfname : csrftoken, productitemid : productitemid, productid : productid}, function(data){
+	  $.post(config.base_url+'sell/shippinginfo', {fdata : fdata, csrfname : csrftoken, productitemid : productitemidlist, productid : productid}, function(data){
 		loadingimg.hide();
         thisbtn.val('Please wait');
 		thisbtn.show();		

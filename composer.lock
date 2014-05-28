@@ -1,9 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
+        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "This file is @generated automatically"
     ],
-    "hash": "dc6c29e09f4da90aa998ab43279ee624",
+    "hash": "036683347036899ee574bcee75d509c4",
     "packages": [
         {
             "name": "cboden/ratchet",
@@ -1070,51 +1071,6 @@
             "time": "2014-03-30 17:19:02"
         },
         {
-            "name": "react/zmq",
-            "version": "v0.3.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/reactphp/zmq.git",
-                "reference": "2865e3b23000751ed443d3f108da2735abf80716"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/reactphp/zmq/zipball/2865e3b23000751ed443d3f108da2735abf80716",
-                "reference": "2865e3b23000751ed443d3f108da2735abf80716",
-                "shasum": ""
-            },
-            "require": {
-                "evenement/evenement": "~2.0",
-                "ext-zmq": "*",
-                "php": ">=5.4.0",
-                "react/event-loop": "0.4.*"
-            },
-            "require-dev": {
-                "ext-pcntl": "*"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "0.4-dev"
-                }
-            },
-            "autoload": {
-                "psr-0": {
-                    "React\\ZMQ": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "description": "ZeroMQ bindings for React.",
-            "keywords": [
-                "zeromq",
-                "zmq"
-            ],
-            "time": "2014-05-25 17:54:51"
-        },
-        {
             "name": "swiftmailer/swiftmailer",
             "version": "v5.2.0",
             "source": {
@@ -1414,7 +1370,6 @@
         "pimple/pimple": 20,
         "swiftmailer/swiftmailer": 0,
         "cboden/ratchet": 0,
-        "react/zmq": 0,
         "ezyang/htmlpurifier": 20
     },
     "platform": [
