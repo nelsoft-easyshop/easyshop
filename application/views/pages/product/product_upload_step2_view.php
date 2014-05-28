@@ -2112,8 +2112,6 @@ $(document).on('change','.other_name_value',function(){
         addNewBrand();
         $('#brand_search_drop_content').hide();
     });
-    
-
   
     $('#brand_sch').focusout(function(){
          var available = false;
@@ -2128,8 +2126,10 @@ $(document).on('change','.other_name_value',function(){
             }
         });
     });    
-  
+});
 
+
+$(document).ready(function(){
     $("#range_1").ionRangeSlider({
         min: 0,
         max: 100,
@@ -2139,19 +2139,48 @@ $(document).on('change','.other_name_value',function(){
         prettify: true,
         hasGrid: true,
         onChange: function (obj) {        // callback is called after slider load and update
-          var value = $(".irs-single").html();
+		  var value = obj.fromNumber;
           $("#slider_val").val(value);
           get_discPrice();
       }
     });
+	
     $("#slider_val").on('change',function(){
-      get_discPrice();
-    });
+	  var thisslider = $(this);
+      var newval = parseInt($(this).val());
+	  get_discPrice();
+	  $('#range_1').ionRangeSlider('remove');
+	  $('#range_1').ionRangeSlider({
+        min: 0,
+        max: 100,
+        type: 'single',
+        step: 1,
+        postfix: "%",
+        prettify: true,
+        hasGrid: true,
+		from: newval,
+        onChange: function (obj) {        // callback is called after slider load and update
+		  var value = obj.fromNumber;
+          thisslider.val(value);
+          get_discPrice();
+		}
+	  });
+	});
+	
+	$('#prod_price').on('change', function(){
+		var prcnt = parseFloat($("#slider_val").val().replace("%",''));
+		if( !isNaN(prcnt) ){
+			get_discPrice();
+		}
+	});
+	
     $("#discnt_btn").on("click",function(){
       $("#dsc_frm").toggle();      
     });
     $("#dsc_frm").hide();
 });
+
+
 //  START discount compt
   function get_discPrice() {
     var prcnt = $("#slider_val").val().replace("%",'');
@@ -2164,9 +2193,7 @@ $(document).on('change','.other_name_value',function(){
       validateRedTextBox("#prod_price");
       return false;
     }
-    $("#range_1").ionRangeSlider("update", {
-        from: prcnt
-    });
+   
     $("#slider_val").val("");
     $("#slider_val").val(prcnt+"%");
     discounted = act_price * (prcnt/100);
