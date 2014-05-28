@@ -3936,7 +3936,23 @@ div.post_item_content_left {
 
 /**	VENDOR VIEW CSS	**/
 .vendor-avatar{
-	margin-bottom: 5px;
+	text-align: center;
+	height: 150px;
+	width: 157px;
+}
+
+.vendor-avatar span{
+	vertical-align: middle;
+	display: table-cell;
+	height: 150px;
+	width: 157px;
+}
+
+.vendor-avatar img{
+	height: auto;
+	width: auto;
+	max-height: 150px;
+	max-width: 157px;
 }
 
 .vendor-profile{

@@ -36,7 +36,9 @@
 			<div class="profile_left_nav">
 				<div>
 					<div class="vendor-avatar">
-						<?php echo $image_profile?>	
+						<span>
+							<?php echo $image_profile?>	
+						</span>
 					</div>
 					<div class="vendor-profile">
 						<p>Joined: <?php echo $vendordetails['datecreated'];?></p>
