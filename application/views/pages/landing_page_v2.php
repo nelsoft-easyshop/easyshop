@@ -39,6 +39,17 @@
 		<link href='https://fonts.googleapis.com/css?family=Roboto:400,300' rel='stylesheet' type='text/css'>
 </head>
 <body>
+
+	<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&appId=154815247949100&version=v2.0";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
 	<header id="header" class="">
 		<div class="container-16">
 				<div class="grid-4">
@@ -214,7 +225,7 @@
 						<div class="mgrn_top2">
 							<div class="vid_container"><span class="fs1">watch this video </span> 
 							<span>
-								<img src="<?=base_url()?>assets/images/landingpage/img_video.jpg" class="vidplay" alt="Easyshop.ph Video">
+								<img src="<?=base_url()?>assets/images/landingpage/btn_play.png" class="vidplay" alt="Easyshop.ph Video">
 								<span id="videoplayer">									
 									<embed src="https://www.youtube.com/v/-iLuVgicBjE" type="application/x-shockwave-flash"></embed>
 								</span>
@@ -246,11 +257,19 @@
 							<span class="span_bg cod"></span>
 						</div>
 					</li>
-					<li>
+					<li class="social_media_container">
 						<div class="social_media">
-							Social Media:
-							<a href="https://www.facebook.com/EasyShopPhilippines"><span class="span_bg facebook"></span></a>
-							<a href="https://twitter.com/EasyShopPH"><span class="span_bg twitter"></span></a>
+							<span class="txt_sm">Social Media:</span>
+							<ul>
+								<li>
+									<div class="fb-like" data-href="https://www.facebook.com/EasyShopPhilippines" data-width="200" data-layout="button" data-action="like" data-show-faces="false" data-share="false"></div>
+								</li>
+								<li>
+									<a href="https://twitter.com/EasyShopPH" class="twitter-follow-button" data-show-count="false" data-size="large" data-show-screen-name="false">Follow @EasyShopPH</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+								</li>
+							</ul>
+							
 						</div>
 					</li>
 				</ul>
