@@ -1168,18 +1168,26 @@ $(document).ready(function(){
         if(text == "Your Primary"){
             var first_img_div = $("#list > div:first-child" );
             var primary_control_anchor = $("#list > div:first-child > .makeprimary");
-            if(first_img_div.hasClass('new_img')){
-                primaryPicture = primary_control_anchor.data('number');
-                editPrimaryPicture = -1;
+            console.log(primary_control_anchor[0]);
+            if(typeof primary_control_anchor[0] !== 'undefined'){
+                if(first_img_div.hasClass('new_img')){
+                    primaryPicture = primary_control_anchor.data('number');
+                    editPrimaryPicture = -1;
+                }
+                else if(first_img_div.hasClass('edit_img')){
+                    editPrimaryPicture = primary_control_anchor.data('imgid');
+                    primaryPicture = 0;
+                }
+            
             }
-            else if(first_img_div.hasClass('edit_img')){
-                editPrimaryPicture = primary_control_anchor.data('imgid');
+            else{
+                editPrimaryPicture = -1;
                 primaryPicture = 0;
             }
             primary_control_anchor.text('Your Primary');     
             first_img_div.addClass("active_img"); 
         }
-        
+        console.log(editPrimaryPicture);
 
     });
 
