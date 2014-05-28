@@ -47,14 +47,13 @@
 				<div class="nav_container">
 					<nav class="nav-collapse">
 					  <ul>
-                        <!--
-					  
-                        -->
+                        <li class="grid-1"><a href="<?=base_url()?>home">Shop</a></li>
+					    <li class="grid-1"><a href="<?=base_url()?>sell/step1">Sell</a></li>
                         <?php if(!$logged_in): ?>
                             <li class="btn_login">
                                 <?php echo form_open('login');?>
-                                    <input type="text" name='login_username'>
-                                    <input type="password" name='login_password'>
+                                    <input type="text" placeholder='Username' name='login_username'>
+                                    <input type="password" placeholder='Password' name='login_password'>
                                     <input type="submit" class='btn' value='Login' name='login_form'/>
                                 <?php echo form_close();?>
                             </li>
@@ -62,9 +61,7 @@
                                 <span class="btn reg_btn" id="reg_btn">Register</span>
                             </li>
                         <?php else: ?>
-                              <li class="grid-1"><a href="<?=base_url()?>home">Shop</a></li>
-					    <li class="grid-1"><a href="<?=base_url()?>sell/step1">Sell</a></li>
-                            <li class='btn_login' style='margin-left:37em !important;'>   
+                            <li class='btn_login' style=''>   
                                 <a href='<?=base_url()?>me'><input style='overflow: hidden; text-overflow: ellipsis; max-width: 120px;' type="submit" class='btn' id='userpage' value = "<?php echo html_escape($uname);?>"/></a>
                             </li>
                             <li class='btn_register'>   
