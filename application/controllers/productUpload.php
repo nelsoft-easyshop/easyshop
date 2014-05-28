@@ -165,26 +165,10 @@ class productUpload extends MY_Controller
 
 	}
 
-	public function uploadimageother()
-	{
-		header('Content-type: application/json');
-
-		$counter = $this->input->post('counter');
- 		$temp_product_id = $this->input->post('tempid');
- 		$member_id =  $this->session->userdata('member_id');
- 		$filescnttxt = $this->input->post('filescnttxt');
-
- 		$date = date("Ymd");
- 		$fulldate = date("YmdGis");
- 		$filenames_ar = array();
- 		$fileNameOutput_ar = array();
- 		$text = "";
-
-	}
-	 
+ 
  	public function uploadimage()
  	{
-		header('Content-type: application/json');
+		 
 
  		$counter = $this->input->post('counter');
  		$temp_product_id = $this->input->post('tempid');

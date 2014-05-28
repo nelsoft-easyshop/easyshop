@@ -774,8 +774,9 @@
         <input type="hidden" class="counter" name="counter" >
         <input type="hidden" class="arrayNameOfFiles" name="arraynameoffiles">
         <input type="hidden" class="filescnttxt" name="filescnttxt">
-        <div class="inputList">
-         <input type="file" id="files" class="files active" name="files[]" multiple accept="image/*" required = "required"  /><br/><br/>
+        <div id="inputList" class="inputList">
+
+  
        </div>
        </form> 
 
@@ -794,6 +795,15 @@
 <script src="<?php echo base_url(); ?>assets/tinymce/tinymce.min.js" type="text/javascript"></script>
 <script type="text/javascript">
 $(document).ready(function(){
+
+  if(window.FileReader) {   
+    badIE = false;
+      $('#inputList').append('<input type="file" id="files" class="files active" name="files[]" multiple accept="image/*" required = "required"  /><br/><br/>');
+  } else { 
+    badIE = true;
+    $('#inputList').append('<input type="file" id="files" class="files active" name="files[]" accept="image/*" required = "required"  /><br/><br/>');
+  }
+
   var badIE = config.badIE;
   var canProceed = true;
   var arrayNameOfFiles;
@@ -962,6 +972,11 @@ $(document).ready(function(){
 
     var filescntret;
     function startUpload(cnt,filescnt,arrayUpload){
+      if(window.FileReader) {   
+        badIE = false;
+      } else { 
+        badIE = true;
+      }
       $('.counter').val(cnt); 
       $('.filescnttxt').val(filescnt); 
       var response;   
@@ -988,8 +1003,12 @@ $(document).ready(function(){
                    $('#previewList'+value).remove();
                  });
               }
-               console.log(removeThisPictures)
-
+               // console.log(removeThisPictures);
+              if(badIE == true){
+                $(".files").remove();
+                $('#inputList').append('<input type="file"  id="files" class="files active" name="files[]" accept="image/*" required = "required"  /> ');
+              }
+   
           },
           error: function (request, status, error) {
           
@@ -1004,21 +1023,36 @@ $(document).ready(function(){
                  $('#previewList'+value).remove();
               });
               canProceed = true;
-              // console.log(removeThisPictures)
+              if(badIE == true){
+                $(".files").remove();
+                $('#inputList').append('<input type="file"  id="files" class="files active" name="files[]"  accept="image/*" required = "required"  /> ');
+              }
+
+
           }
       }); 
       $('#form_files').submit();
+
     }
 
     var filescnt = 1;
     $(document).on('change',".files.active",function (e){
       var arrayUpload = new Array();
 
+      if(window.FileReader) {   
+       badIE = false;
+     } else { 
+       badIE = true;
+     }
+ 
+
       if(badIE == false){
             var fileList = this.files;
             var anyWindow = window.URL || window.webkitURL;
             var errorValues = "";
 
+
+             
             for(var i = 0; i < fileList.length; i++){
                 var size = fileList[i].size
                 var val = fileList[i].name;
@@ -1059,6 +1093,12 @@ $(document).ready(function(){
             $(".files.active").each(function(){
               $(this).removeClass('active');
             });
+
+
+            startUpload(pictureCount,filescnt,arrayUpload);
+            filescnt++;
+            $('#inputList').append('<input type="file"  id="files" class="files active" name="files[]" multiple accept="image/*" required = "required"  /> ');
+            $(this).remove();
              
      }else{
 
@@ -1077,8 +1117,9 @@ $(document).ready(function(){
 
             switch(val.substring(val.lastIndexOf('.') + 1).toLowerCase()){
               case 'gif': case 'jpg': case 'png': case 'jpeg':
-              $('#list').append('<div id="previewList'+pictureCount+'" class="new_img upload_img_div '+activeText+' filescnt filescntactive filescnt'+filescnt+'"><span class="upload_img_con"><img src="'+imageCustom+'" alt="'+imageCustom+'" style="height:100px;"></span><a href="javascript:void(0)" class="removepic" data-number="'+pictureCount+'">x</a><br><a href="javascript:void(0)" class="makeprimary photoprimary'+pictureCount+'" data-number="'+pictureCount+'">'+primaryText+'</a><div class="loadingfiles"></div></div>');
-               
+
+              $('#list').append('<div id="previewList'+pictureCount+'" class="new_img upload_img_div '+activeText+' filescnt filescntactive filescnt'+filescnt+'"><span class="upload_img_con"><img src="'+imageCustom+'" alt="'+imageCustom+'" style="height:100px;"></span><a href="javascript:void(0)" class="removepic" data-number="'+pictureCount+'">x</a><br><a href="javascript:void(0)" class="makeprimary photoprimary'+pictureCount+'" data-number="'+pictureCount+'">'+primaryText+'</a><div class="loadingfiles"></div></div>');   
+              
               break;
               default:
               removeThisPictures.push(pictureCount); 
@@ -1091,13 +1132,15 @@ $(document).ready(function(){
             $(".files.active").each(function(){
               $(this).removeClass('active');
             });
+
+            startUpload(pictureCount,filescnt,arrayUpload);
+            filescnt++;
+            // $('#inputList').append('<input type="file"  id="files" class="files active" name="files[]" multiple accept="image/*" required = "required"  /> ');
+            // $(this).remove();
                
       }
      
-      startUpload(pictureCount,filescnt,arrayUpload);
-      filescnt++;
-      $('.inputList').append('<input type="file" class="files active" name="files[]" multiple accept="image/*" required = "required"  /> ');
-      $(this).remove();
+  
   });
 
     $(document).on('click',".removepic",function (){
