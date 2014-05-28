@@ -59,7 +59,7 @@
 						<div class="clear"></div>
 						<div id="avatar_cont">
 							<span>
-								<?php echo $image_profile?>	
+								<?php echo $image_profile?>
 							</span>
 						</div>
 						<?php echo form_open_multipart('memberpage/upload_img', 'id="form_image"');?>

@@ -160,11 +160,15 @@
 /** AVATAR CSS FIX **/
 #avatar_cont{
 	text-align: center;
+	height: 150px;
+	width: 157px;
 }
 
 #avatar_cont span{
+	vertical-align: middle;
+	display: table-cell;
 	height: 150px;
-	width: 157px;	
+	width: 157px;
 }
 
 #avatar_cont img{

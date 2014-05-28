@@ -1182,38 +1182,6 @@ $(document).ready(function(){
 			});
 		}
 	});
-	/*
-	$('.transac_response_btn').on('click', function(){
-		var r=confirm("Continue submitting request?");
-		if (r==true){
-		    var form = $(this).closest('form.transac_response');
-			var thisbtn = $(this);
-			var parentdiv = $(this).closest('div');
-			$.post(config.base_url+"memberpage/transactionResponse", form.serializeArray(), function(data){
-				try{
-					var serverResponse = jQuery.parseJSON(data);
-				}
-				catch(e){
-					alert('An error was encountered while processing your data. Please try again later.');
-					window.location.reload(true);
-					return false;
-				}
-				
-				if(serverResponse.error.length > 0){
-					alert(serverResponse.error);
-				}
-				
-				if(serverResponse.result === 'success'){
-					parentdiv.html('<span class="trans_alert transac_req_submit">Request submitted.</span>');
-				}else if(serverResponse.result === 'fail'){
-					parentdiv.html('<span class="trans_alert">Failed to update status.</span>');
-				}
-			});
-			$(this).val('Please wait');
-			$(this).attr('disabled', true);
-		}
-		return false;
-	});*/
 	
 	$('.transac_response_btn').on('click', function(){
 		var txResponseBtn = $(this);
@@ -1578,7 +1546,7 @@ function imageprev(input) {
 
 	var jcrop_api, width, height;
 	
-    if (input.files && input.files[0] && input.files[0].type.match(/(gif|png|jpeg|jpg)/g) && input.files[0].size < 5000001) {
+    if (input.files && input.files[0] && input.files[0].type.match(/(gif|png|jpeg|jpg)/g) && input.files[0].size <= 5000000) {
 		var reader = new FileReader();
 
 		reader.onload = function(e){
@@ -1588,10 +1556,10 @@ function imageprev(input) {
 				width = this.width;
 				height = this.height;
 				$('#user_image_prev').attr('src', this.src);
-				if(width >10 && height > 10 && width <= 1024 && height <= 768)
+				if(width >10 && height > 10 && width <= 5000 && height <= 5000)
 					deploy_imageprev();
-				else if(width > 1024 || height > 768)
-					alert('Failed to upload image. Max image dimensions: 1024 x 768');
+				else if(width > 5000 || height > 5000)
+					alert('Failed to upload image. Max image dimensions: 5000px x 5000px');
 				else
 					$('#div_user_image_prev span:first').html('Preview');
 			}
@@ -1631,6 +1599,7 @@ function imageprev(input) {
 					$('#user_image_prev').attr('src', '');
 					resetCoords();
 					jcrop_api.destroy();
+					$('#div_user_image_prev span').after('<img src="" id="user_image_prev">');
 					$.modal.close();
 				}
 			});
@@ -1712,12 +1681,12 @@ $(function($) {
 
 $(document).ready(function(){
 
-	$(".show_prod_desc").click(function(){
+	$('div.dashboard_table').on('click', '.show_prod_desc', function(){
 		$(this).siblings('.item_prod_desc_content').addClass('show_desc');
 		$(this).fadeOut();
 	});
 
-	$(".show_more_options").click(function(){
+	$('div.dashboard_table').on('click', '.show_more_options', function(){
 		$(this).siblings('.attr_hide').slideToggle();
 		$(this).toggleClass("active");
 	});

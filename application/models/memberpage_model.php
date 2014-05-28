@@ -171,6 +171,7 @@ class memberpage_model extends CI_Model
         $sth->execute();
         $row = $sth->fetch(PDO::FETCH_ASSOC);
 		$path = $row['imgurl'];	
+		
 		if(trim($path) === ''){
 			$path = $this->config->item('user_img_directory').$path.$row['id_member'].'_'.$row['username'];
 		}		
@@ -183,9 +184,10 @@ class memberpage_model extends CI_Model
 		$config['upload_path'] = $path; 
 		$config['allowed_types'] = 'gif|jpg|png|jpeg';
 		$config['max_size']	= '5000';
-		$config['max_width']  = '1024';
-		$config['max_height']  = '768';
+		$config['max_width']  = '5000';
+		$config['max_height']  = '5000';
 		$this->upload->initialize($config);  
+		
 		if ( ! $this->upload->do_upload())
 		{
 			return array('error' => $this->upload->display_errors());
@@ -196,6 +198,9 @@ class memberpage_model extends CI_Model
 			$config['source_image'] = $path.'/usersize.png';
 			$config['maintain_ratio'] = true;
 			
+			$imageData = $this->upload->data();
+			
+			// If cropped
 			if($data['w'] > 0 && $data['h'] > 0){			
 				$config['new_image'] = $path.'/usersize.png';
 				$config['width'] = $data['w'];
@@ -205,6 +210,12 @@ class memberpage_model extends CI_Model
 				$this->image_lib->initialize($config);  
 				$this->image_lib->image_process_gd('crop');
 				$config['x_axis'] = $config['y_axis'] = '';
+			}else if( $imageData['image_width'] > 768 || $imageData['image_height'] > 1024 ){				
+				$config['new_image'] = $path.'/usersize.png';
+				$config['width'] = 768;
+				$config['height'] = 1024;
+				$this->image_lib->initialize($config);  
+				$this->image_lib->resize();	
 			}
 
 			//$this->upload->data(); 
