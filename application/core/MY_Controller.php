@@ -33,6 +33,8 @@ class MY_Controller extends CI_Controller
             $this->serviceContainer = $this->kernel->serviceContainer;
             $this->load->helper('view_helper');
         }
+        /*  Load custom common functions */
+        $this->load->helper('mycommon_helper');
     }
 	
     #fill_header is not ran in the constructor of MY_Controller despite that fact that all pages need it
