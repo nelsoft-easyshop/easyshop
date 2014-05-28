@@ -34,13 +34,15 @@
          <?php 
          foreach ($itemList as $key => $value) {
             ?>
-            <div><span>Product Name:</span> <?php echo $value['name']; ?></div>
+            <div><span>Product:</span> <?php echo $value['name']; ?></div>
             <div><span>Name of Seller:</span> <?php echo $value['seller_username']; ?></div>
-            <div><span>Product Price:</span> <?php echo $value['price']; ?></div>
-            <div><span>Product Quantity:</span> <?php echo $value['qty']; ?></div>
-            <div><span>Product Subtotal:</span> <?php echo $value['subtotal']; ?></div>
-            <div><span>Product Other Price:</span> <?php echo $value['otherFee']; ?></div>
-            <div><span>Product Total Fee:</span> <?php echo $value['subtotal'] + $value['otherFee']; ?></div>
+            <div><span>Price:</span> <?php echo $value['price']; ?></div>
+            <div><span>Quantity:</span> <?php echo $value['qty']; ?></div>
+            <div><span>Subtotal:</span> <?php echo $value['subtotal']; ?></div>
+            <div><span>Other Fee:</span> <?php echo $value['otherFee']; ?></div>
+            <div><span>Total Fee:</span> <?php echo $value['subtotal'] + $value['otherFee']; ?></div>
+
+
             <hr>
          <?php
          }

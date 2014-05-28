@@ -53,7 +53,7 @@
 									<span style="display:inline-block;font-weight:bold;width:100px;">Product :</span> {name} <br>
 									<span style="display:inline-block;font-weight:bold;width:100px;">Qty :</span> {order_quantity} <br>
 									<span style="display:inline-block;font-weight:bold;width:100px;">Base Price :</span> Php {baseprice} <br>
-									<span style="display:inline-block;font-weight:bold;width:100px;">Tax :</span> Php {tax} <br>
+									<span style="display:inline-block;font-weight:bold;width:100px;">Other Fee :</span> Php {tax} <br>
 									<span style="display:inline-block;font-weight:bold;width:100px;">Final Price :</span> Php {finalprice} <br>
 									<span style="display:inline-block;font-weight:bold;width:100px;">Product Specifications:</span> <br>
 									{attr}
