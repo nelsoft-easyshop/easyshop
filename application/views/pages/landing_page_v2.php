@@ -227,7 +227,7 @@
 							<span>
 								<img src="<?=base_url()?>assets/images/landingpage/btn_play.png" class="vidplay" alt="Easyshop.ph Video">
 								<span id="videoplayer">									
-									<embed src="https://www.youtube.com/v/-iLuVgicBjE" type="application/x-shockwave-flash"></embed>
+									<embed src="https://www.youtube.com/v/-iLuVgicBjE&rel=0" type="application/x-shockwave-flash"></embed>
 								</span>
 							</span>
 							</div>	
