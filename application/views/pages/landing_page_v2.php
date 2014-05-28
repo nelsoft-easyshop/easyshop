@@ -72,7 +72,7 @@
                                 <span class="btn reg_btn" id="reg_btn">Register</span>
                             </li>
                         <?php else: ?>
-                            <li class='btn_login' style=''>   
+                            <li class='btn_login' style='margin-left: 23em !important;'>   
                                 <a href='<?=base_url()?>me'><input style='overflow: hidden; text-overflow: ellipsis; max-width: 120px;' type="submit" class='btn' id='userpage' value = "<?php echo html_escape($uname);?>"/></a>
                             </li>
                             <li class='btn_register'>   
