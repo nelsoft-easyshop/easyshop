@@ -407,7 +407,7 @@
                 
                 <td>
                     <div class="" style="display:block">
-                        &#8369; <input type="text" name="prod_other_price[]" autocomplete="off" id="price_field" placeholder="Enter additional price (0.00)" value="<?php echo number_format($prod_attr['price'],2,'.',',');?>">
+                        &#8369; <input type="text" name="prod_other_price[]" autocomplete="off" id="price_field"   onkeypress="return isNumberKey(event)"  placeholder="Enter additional price (0.00)" value="<?php echo number_format($prod_attr['price'],2,'.',',');?>">
                     </div>
                 </td>
 
@@ -466,7 +466,7 @@
                 
                 <td>
                     <div class="<?php echo 'h_if_'.$j;?> hdv">
-                        &#8369; <input type="text" name="prod_other_price[]" class="price_text" autocomplete="off" id="price_field" placeholder="Enter additional price (0.00)">
+                        &#8369; <input type="text" name="prod_other_price[]"   onkeypress="return isNumberKey(event)"  class="price_text" autocomplete="off" id="price_field" placeholder="Enter additional price (0.00)">
                     </div>
                 </td>
                 <td class="border-right option_image_td">
@@ -519,7 +519,7 @@
           </tr> 
           <tr>
               <td width="110px" class="border-left">Base Price <font color="red"> *</font></td>
-              <td class="border-right" colspan="3"> &#8369; <input type="text" autocomplete="off" name="prod_price" id="prod_price" placeholder="Enter price (0.00)" value="<?php echo (isset($product_details['price']))?number_format($product_details['price'],2,'.',','):'';?>">
+              <td class="border-right" colspan="3"> &#8369; <input type="text" autocomplete="off" onkeypress="return isNumberKey(event)"  name="prod_price" id="prod_price" placeholder="Enter price (0.00)" value="<?php echo (isset($product_details['price']))?number_format($product_details['price'],2,'.',','):'';?>">
                 
                 <a class="tooltips" href="javascript:void(0)">
                   <img src="<?= base_url() ?>assets/images/icon_qmark.png" alt="">
@@ -567,7 +567,7 @@
                 <div class="quantity_table_row">               
                   <div class="qty_title">
                     <span>Quantity:</span><br />
-                    <input type="text" class="qtyTextClass" id="qtyTextClass" name="quantity"> 
+                    <input type="text" class="qtyTextClass"  onkeypress="return isNumberKey(event)"  id="qtyTextClass" name="quantity"> 
                     <a href="javascript:void(0)" data-value="1" class="quantity_attr_done orange_btn3">Add</a>
                  
                        <a id="tutQty" class="tooltips qty_tooltip" href="javascript:void(0)" style='text-decoration:underline'>
@@ -1445,7 +1445,7 @@ $(document).on('change','.other_name_value',function(){
 
     $(".add_more_link").unbind("click").click(function(){
       cnt_o++;
-      $('.step4_2').append('<tr class="main'+cnt_o+'"><td class="border-left"></td><td class="border-right" colspan="3"><input type="text" data-cnt="'+cnt_o+'" autocomplete="off" name="prod_other_name[]" class="prod_'+cnt_o+' other_name_class" placeholder="Item property title"><a href="javascript:void(0)" data-cnt="'+cnt_o+'" class="removeOptionGroup">Remove This Group</a></td></tr><tr class="main'+cnt_o+' main'+cnt_o+'_2nd"><td class="border-left"></td><td><input type="text" autocomplete="off" data-cnt="'+cnt_o+'" class="other_name_value otherNameValue'+cnt_o+'" name="prod_other[]" placeholder="Item property value"></td>   <td style="display:none"><input type="text" name="prod_other_id[]" value=""> </td>  <td> <div class="h_if_'+cnt_o+' hdv"  style="display:none"> &#8369; <input type="text" name="prod_other_price[]"  class="price_text"   id="price_field"  autocomplete="off" placeholder="Enter additional price (0.00)"></div></td><td class="border-right option_image_td"> <div class="h_if_'+cnt_o+' hdv" style="display:none"><input type="file" class="option_image_input" name="prod_other_img[]" accept="image/*" ><input type="hidden" name="prod_other_img_idx[]"><a data-cnt="'+cnt_o+'" class="removeOptionValue remove_option_long" href="javascript:void(0)">Remove</a></div></td></tr><tr id="main'+cnt_o+'" class="main'+cnt_o+'_link"><td class="border-left"></td><td class="border-right" colspan="3"><a class="add_more_link_value" data-value="'+cnt_o+'" href="javascript:void(0)">+Add more value</a></td></tr>');
+      $('.step4_2').append('<tr class="main'+cnt_o+'"><td class="border-left"></td><td class="border-right" colspan="3"><input type="text" data-cnt="'+cnt_o+'" autocomplete="off" name="prod_other_name[]" class="prod_'+cnt_o+' other_name_class" placeholder="Item property title"><a href="javascript:void(0)" data-cnt="'+cnt_o+'" class="removeOptionGroup">Remove This Group</a></td></tr><tr class="main'+cnt_o+' main'+cnt_o+'_2nd"><td class="border-left"></td><td><input type="text" autocomplete="off" data-cnt="'+cnt_o+'" class="other_name_value otherNameValue'+cnt_o+'" name="prod_other[]" placeholder="Item property value"></td>   <td style="display:none"><input type="text" name="prod_other_id[]" value=""> </td>  <td> <div class="h_if_'+cnt_o+' hdv"  style="display:none"> &#8369; <input type="text" name="prod_other_price[]"  class="price_text"   id="price_field"   onkeypress="return isNumberKey(event)"   autocomplete="off" placeholder="Enter additional price (0.00)"></div></td><td class="border-right option_image_td"> <div class="h_if_'+cnt_o+' hdv" style="display:none"><input type="file" class="option_image_input" name="prod_other_img[]" accept="image/*" ><input type="hidden" name="prod_other_img_idx[]"><a data-cnt="'+cnt_o+'" class="removeOptionValue remove_option_long" href="javascript:void(0)">Remove</a></div></td></tr><tr id="main'+cnt_o+'" class="main'+cnt_o+'_link"><td class="border-left"></td><td class="border-right" colspan="3"><a class="add_more_link_value" data-value="'+cnt_o+'" href="javascript:void(0)">+Add more value</a></td></tr>');
     });
 
     $('.upload_input_form').on('click', '.add_more_link_value', function() {
@@ -1455,7 +1455,7 @@ $(document).on('change','.other_name_value',function(){
 
       var  subClass = "main"+data+"_2nd_add";
      
-      var newrow = $('<tr class="main'+data+' '+subClass+'"><td class="border-left"></td><td style="display:none"><span ><input type="text" value ="'+attr+'" data-cnt="'+data+'" class="prod_'+data+'" name="prod_other_name[]"></span></td><td><input type="text" autocomplete="off" data-cnt="'+data+'" class="other_name_value otherNameValue'+data+'"  name="prod_other[]" placeholder="Item property value"></td>  <td style="display:none"><input type="text" name="prod_other_id[]" value=""> </td> <td> &#8369; <input type="text" name="prod_other_price[]"  id="price_field" class="price_text"  autocomplete="off" placeholder="Enter additional price (0.00)"></td><td class="border-right option_image_td"><input type="file" class="option_image_input" name="prod_other_img[]"  accept="image/*"><input type="hidden" name="prod_other_img_idx[]"><a data-cnt="'+data+'" class="removeOptionValue remove_option_long " href="javascript:void(0)">Remove</a></td></tr>');
+      var newrow = $('<tr class="main'+data+' '+subClass+'"><td class="border-left"></td><td style="display:none"><span ><input type="text" value ="'+attr+'" data-cnt="'+data+'" class="prod_'+data+'" name="prod_other_name[]"></span></td><td><input type="text" autocomplete="off" data-cnt="'+data+'" class="other_name_value otherNameValue'+data+'"  name="prod_other[]" placeholder="Item property value"></td>  <td style="display:none"><input type="text" name="prod_other_id[]" value=""> </td> <td> &#8369; <input type="text" name="prod_other_price[]"  id="price_field" class="price_text"   onkeypress="return isNumberKey(event)"   autocomplete="off" placeholder="Enter additional price (0.00)"></td><td class="border-right option_image_td"><input type="file" class="option_image_input" name="prod_other_img[]"  accept="image/*"><input type="hidden" name="prod_other_img_idx[]"><a data-cnt="'+data+'" class="removeOptionValue remove_option_long " href="javascript:void(0)">Remove</a></td></tr>');
       $('#main'+data).before(newrow);
     });
 
@@ -2235,7 +2235,7 @@ $(document).on('change','.other_name_value',function(){
             </td>\
             <td>\
             <div class="h_if_'+cnt+' hdv" style="display: none;">\
-            &#8369; <input type="text" placeholder="Enter additional price (0.00)" id="price_field" autocomplete="off" name="prod_other_price[]">\
+            &#8369; <input type="text"   onkeypress="return isNumberKey(event)"  placeholder="Enter additional price (0.00)" id="price_field" autocomplete="off" name="prod_other_price[]">\
             </div>\
             </td>\
             <td class="border-right option_image_td">\

@@ -296,9 +296,10 @@ $price2 = "";
 if(isset($_GET['price'])){
     if(strpos($_GET['price'], 'to') !== false)
     {
-        $price = explode('to',  $_GET['price']);          
-        $price1= (double)$price[0];
-        $price2 = (double)$price[1];
+        $price = explode('to',  $_GET['price']);
+        $price1 = str_replace( ',', '', $price[0]);
+        $price2 = str_replace( ',', '', $price[1]);          
+       
     } else {
        $price1= "";
        $price2 = "";
@@ -461,16 +462,7 @@ $(document).ready(function() {
     }).mouseleave(function() {
         $(this).hide();
     });
-    function ReplaceNumberWithCommas(thisnumber){
-        //Seperates the components of the number
-        var n= thisnumber.toString().split(".");
-        //Comma-fies the first part
-        n[0] = n[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-        //Combines the two sections
-        return n.join(".");
-    }
-  
-
+ 
     $('#price1').val(<?php echo $price1 ?>);
     $('#price2').val(<?php echo $price2 ?>);
 
@@ -482,7 +474,7 @@ $(document).ready(function() {
             this.value = '';
         } else {
             tempval = Math.abs(v);
-            this.value = ReplaceNumberWithCommas(tempval.toFixed(2));
+            this.value = tempval.toFixed(2);
         }
     });
 
@@ -513,10 +505,20 @@ $(document).ready(function() {
         }     
     });
  
-    $( "#price1 , #price2" ).keypress(function() {
-        $(this).css({"-webkit-box-shadow": "0px 0px 0px 0px #FFFFFF",
+    $( "#price1 , #price2" ).keypress(function(evt) {
+ 
+        var charCode = (evt.which) ? evt.which : event.keyCode;
+        if (charCode != 46 && charCode > 31 
+            && (charCode < 48 || charCode > 57))
+            return false;
+
+        return true;
+               $(this).css({"-webkit-box-shadow": "0px 0px 0px 0px #FFFFFF",
             "-moz-box-shadow": "0px 0px 0px 0px #FFFFFF",
             "box-shadow": "0px 0px 0px 0px #FFFFFF"});
+         
+   
+   
     });
 
     $(".more_attr").click(function() {

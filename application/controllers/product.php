@@ -84,12 +84,17 @@ class product extends MY_Controller
 
     					$price = explode('to', '0.00to99999999.99');
     				}	 
-    				if(is_numeric($price[0]) && is_numeric($price[1])){
+                    $a = str_replace( ',', '', $price[0]);
+                    $b = str_replace( ',', '', $price[1]);
+    				if(is_numeric($a) && is_numeric($b)){
+
     					$conditionArray['price'] = array(
-    						'start' => $price[0],
-    						'end'=> $price[1]
+    						'start' => $a,
+    						'end'=> $b
     						);
     				}
+                  
+                    
     			}else{
 
     				$count++; 
