@@ -215,12 +215,19 @@
 	<section class="bg_mid">
 		<div class="container-16">
 			<div class="grid-11 mgrn_top3">
-						<h1><span>YOUR</span> BUSINESS</h1>
-						<h1><span>HAS A</span>  NEW HOME</h1>
-						<p class="fs1 mgrn_top1">
-						EasyShop.ph provides fast and easy online<br />shopping experience.
+						<h1><span>Buy an</span> iPhone 5s</h1>
+						<h1><span>for as low as</span></h1>
+						<h1><span>Php 48,990</span></h1>
+						<h1><span>Php 489.90*</span></h1>
+						<p class="mgrn_top4">
+							The offer starts on June 15 at 12 noon<br />and expires on June 17, 2014.
 						</p>
-						<p class="fs2 mgrn_top2">Start buying on June 15, 2014 </p>
+						<p class="mgrn_top4">To qualify, like us on Facebook and  </p>
+						<p class="fs2 txt_reg">register now!</p>
+						<p>
+							*The price will drop by 2% every hour until it<br />reaches 99% off for 48 hours. <br />
+							One stock is available per item.
+						</p>
 						
 						<div class="mgrn_top2">
 							<div class="vid_container"><span class="fs1">watch this video </span> 
