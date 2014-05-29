@@ -10,7 +10,16 @@ use Doctrine\ORM\Tools\Console\ConsoleRunner;
 include_once __DIR__ . '/../../vendor/autoload.php';
 
 // add commands here
-$commands = array();
+$commands = [
+    
+    /* Migration commands */
+    new \Doctrine\DBAL\Migrations\Tools\Console\Command\DiffCommand(),
+    new \Doctrine\DBAL\Migrations\Tools\Console\Command\ExecuteCommand(),
+    new \Doctrine\DBAL\Migrations\Tools\Console\Command\GenerateCommand(),
+    new \Doctrine\DBAL\Migrations\Tools\Console\Command\MigrateCommand(),
+    new \Doctrine\DBAL\Migrations\Tools\Console\Command\StatusCommand(),
+    new \Doctrine\DBAL\Migrations\Tools\Console\Command\VersionCommand()
+];
 
 $entityManager = Doctrine\ORM\EntityManager::create(
     [
