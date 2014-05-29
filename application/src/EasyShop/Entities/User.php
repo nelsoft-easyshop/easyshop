@@ -7,116 +7,117 @@ namespace Easyshop\Entities;
 
 
 /**
- * @Entity @Table(name="es_member")
+ * @Entity
+ * @Table(name="es_member", indexes={@Index(name="username_idx", columns={"username"})})
  */
 class User
 {
     /** 
      * @Id
-     * @Column(name="id_member", type="integer")
+     * @Column(name="id_member", type="integer", length=10, options={"unsigned"=true})
      * @GeneratedValue(strategy="AUTO")
      *  @var int 
      */
     protected $id;
     
     /**
-     * @Column(name="username", type="string", length=255)
+     * @Column(name="username", type="string", length=255, options={"default"=""})
      * @var string 
      */
     protected $username;
     
     /**
-     * @Column(name="usersession", type="string", length=255)
+     * @Column(name="usersession", type="string", length=255, nullable=true)
      * @var string 
      */
     protected $session;
     
     /**
-     * @Column(name="password", type="string", length=255)
+     * @Column(name="password", type="string", length=255, nullable=false, options={"default"=""})
      * @var string
      */
     protected $password;
     
     /**
-     * @Column(name="contactno", type="string", length=45)
+     * @Column(name="contactno", type="string", length=45, options={"default"=""})
      * @var string
      */
     protected $contactNumber;
     
     /**
-     * @Column(name="is_contactno_verify", type="boolean")
+     * @Column(name="is_contactno_verify", type="boolean", options={"default"=false})
      * @var boolean
      */
     protected $isContactNumberVerified;
     
     /**
-     * @Column(name="email", type="string", length=255)
+     * @Column(name="email", type="string", length=255, options={"default"=""})
      * @var string
      */
     protected $email;
     
     /**
-     * @Column(name="is_email_verify", type="boolean")
+     * @Column(name="is_email_verify", type="boolean", options={"default"=false})
      * @var boolean
      */
     protected $isEmailVerified;
     
     /**
-     * @Column(name="gender", type="string", length=1)
+     * @Column(name="gender", type="string", length=1, options={"default"="0"})
      * @var string
      */
     protected $gender;
     
     /**
-     * @Column(name="birthday", type="date")
+     * @Column(name="birthday", type="date", options={"default"="0001-01-01"})
      * @var DateTime
      */
     protected $birthday;
     
     /**
-     * @Column(name="datecreated", type="datetime")
+     * @Column(name="datecreated", type="datetime", options={"default"="0001-01-01 01:01:01"})
      * @var DateTime
      */
     protected $creationDate;
     
     /**
-     * @Column(name="lastmodifieddate", type="datetime")
+     * @Column(name="lastmodifieddate", type="datetime", options={"default"="0001-01-01 01:01:01"})
      * @var DateTime
      */
     protected $lastModifiedDate;
     
     /**
-     * @Column(name="last_login_datetime", type="datetime")
+     * @Column(name="last_login_datetime", type="datetime", options={"default"="0001-01-01 01:01:01"})
      * @var DateTime
      */
     protected $lastLoginDate;
     
     /**
-     * @Column(name="last_login_ip", type="string", length=45)
+     * @Column(name="last_login_ip", type="string", length=45, options={"default"=""})
      * @var string
      */
     protected $loginIp;
     
     /**
-     * @Column(name="login_count", type="integer", length=10)
+     * @Column(name="login_count", type="integer", length=10, options={"unsigned"=true, "default"=0})
      * @var int 
      */
     protected $loginCount;
     
     /**
-     * @Column(name="fullname", type="string", length=255, nullable=true)    
+     * @Column(name="fullname", type="string", length=255, nullable=true, options={"default"=""})    
      * @var string
      */
     protected $fullname;
     
     /**
-     * @Column(name="nickname", type="string", length=255, nullable=true)    
+     * @Column(name="nickname", type="string", length=255, nullable=true, options={"default"=""})    
      * @var string
      */
     protected $nickname;
     
     /**
-     * @Column(name="imgurl", type="string", length=255, nullable=true)    
+     * @Column(name="imgurl", type="string", length=255, nullable=true, options={"default"=""})    
      * @var string
      */
     protected $imageUrl;
@@ -128,6 +129,7 @@ class User
     protected $data;
     
     
+    /* Getters / setters */
     
     public function getId()
     {
