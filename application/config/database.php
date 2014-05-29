@@ -51,7 +51,7 @@ $active_record = TRUE;
 $db['default']['hostname'] = 'mysql:host=127.0.0.1;dbname=easyshop';
 #$db['default']['hostname'] = 'mysql:host=192.168.1.50;dbname=easyshop';
 $db['default']['username'] = 'root';
-$db['default']['password'] = 'pass';
+$db['default']['password'] = '121586';
 $db['default']['database'] = '';
 $db['default']['dbdriver'] = 'pdo';
 $db['default']['dbprefix'] = '';

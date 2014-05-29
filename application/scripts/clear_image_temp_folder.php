@@ -1,7 +1,8 @@
 <?php 
 
-$path = '../../assets/temp_product/*';
+$path = '../../web/assets/temp_product/*';
 $files = glob($path);
+
 foreach($files as $file){ 
     $datecreated = date ("F d Y H:i:s.", filectime($file));
     $now = date("Y-m-d H:i:s");
