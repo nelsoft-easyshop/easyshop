@@ -289,8 +289,12 @@
 		ON o.buyer_id = buyer.id_member
 	LEFT JOIN es_member_feedback fb
 		ON fb.order_id = o.id_order AND (fb.for_memberid = op.seller_id OR fb.for_memberid = o.buyer_id) AND fb.member_id = :id
+	<!--
 	LEFT JOIN es_address badd
 		ON o.buyer_id = badd.id_member AND badd.type = 1
+	-->
+	LEFT JOIN es_order_shipping_address badd
+		ON o.shipping_address_id = badd.id_order_shipping_address
 	LEFT JOIN es_location_lookup l0
 		ON badd.stateregion = l0.id_location
 	LEFT JOIN es_location_lookup l1
