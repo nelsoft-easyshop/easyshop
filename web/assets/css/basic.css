@@ -1,0 +1,162 @@
+/*
+ * SimpleModal Basic Modal Dialog
+ * http://simplemodal.com
+ *
+ * Copyright (c) 2013 Eric Martin - http://ericmmartin.com
+ *
+ * Licensed under the MIT license:
+ *   http://www.opensource.org/licenses/mit-license.php
+ */
+
+#verification-content,
+#write_review_content {
+	display:none;
+}
+
+/* Overlay */
+#simplemodal-overlay {
+	background-color:#bcbcbc;
+}
+
+/* Container */
+#simplemodal-container {
+	/*height:290px !important;*/
+	height: auto !important;
+	width:600px; 
+	background-color:#fff;
+}
+
+#simplemodal-container code {
+	background:#141414; 
+	border-left:3px solid #65B43D; 
+	color:#bbb; 
+	display:block; 
+	font-size:12px; 
+	margin-bottom:12px; 
+	padding:4px 6px 6px;
+}
+
+/*#simplemodal-container a {
+	color:#ddd;
+}*/
+
+#simplemodal-container a.modalCloseImg {
+	background:url(../img/basic/x.png) no-repeat; 
+	width:25px; height:
+	29px; display:inline; 
+	z-index:3200; 
+	position:absolute; 
+	top:-15px; right:-16px; 
+	cursor:pointer;
+}
+
+#simplemodal-container h3 {
+	color:#fff;
+	font-size: 12px;
+	font-weight: normal;
+	background-color: #f18200;
+	padding:10px;
+}
+
+.verification-inner-content {
+	padding:12px;
+}
+
+.verification-inner-content p {
+	margin-top: 12px;
+	text-align:center;
+}
+
+.verification-inner-content input {
+    border: 1px solid #B3B3B3;
+    color: #494949;
+    height: 25px;
+    line-height: 25px;
+    width: 165px;
+    padding-left:3px;
+}
+
+.verification-inner-content label {
+	width: 150px;
+	display: inline-block;
+	text-align: right;
+	padding-right: 10px;
+}
+
+.verification_info {
+	margin-left: 90px;
+	padding-top: 10px;
+}
+
+.verification_field_mobile_set{
+	padding-left: 50px;
+}
+
+#verification_code_error{
+	display: none;
+	color: red;
+	margin-top: 10px;
+	padding-left: 130px;
+}
+
+.verification_field_email{
+	display:none;
+}
+
+.verification-msg{
+	margin-top: 10px;
+}
+
+#simplemodal-container a.modalCloseImg {
+	background:url(../images/x.png) no-repeat; 
+	width:25px; 
+	height:29px; 
+	display:inline; 
+	z-index:3200; 
+	position:absolute; 
+	top:8px; 
+	right:10px; 
+	cursor:pointer;
+}
+
+/* sam css*/
+
+
+.verification-inner-content button, .verification-inner-content input[type="submit"],
+#write_review_content input[type="submit"] {
+	border: 1px solid #ff3000;
+	background-color: #ff4400;
+	color: #fff;
+	cursor: pointer;
+	line-height: 31px;
+	margin-top: 20px;
+    margin-left: 128px;
+	text-transform: uppercase;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	-webkit-transition: all 0.3s ease-in-out;
+	-moz-transition: 	all 0.3s ease-in-out;
+	-o-transition:	    all 0.3s ease-in-out;
+	 transition: 		all 0.3s ease-in-out;
+} /*paul edit*/
+
+.verification-inner-content input[type="submit"]:hover,
+.verification-inner-content button:hover,
+#write_review_content input[type="submit"]:hover {
+	border: 1px solid #ff4400;
+	background-color: #ff6600;
+} /*paul edit*/
+
+
+#review_success_container p:first-child {
+	float: left;
+}
+
+#review_success_container > div {
+	display: inline-block;
+}
+
+#review_success_container a {
+	text-decoration: underline;
+}

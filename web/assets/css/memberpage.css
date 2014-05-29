@@ -1,0 +1,186 @@
+<!--Member page CSS Janz-->
+
+
+
+/* Overlay */
+#simplemodal-overlay {
+	background-color:#bcbcbc;
+}
+
+/* Container */
+#simplemodal-container {
+	height: auto !important;
+	width: auto !important; 
+	background-color:#0000;
+	padding: 5px;
+}
+
+.jcrop-holder{
+	margin: auto !important;
+}
+
+
+#user_image_prev{
+	display: block;
+	margin: auto !important;
+}
+
+.ui-dialog-titlebar-close{
+	display:none;
+}
+
+.bi_input{
+	background-color:transparent; 
+	border-color:transparent;
+	color:#494949;
+}
+
+.set_default_lnk{
+    text-decoration: underline;
+    cursor:pointer; 
+    padding:5px;
+}
+
+.set_default_lnk:hover{
+    color:#ffae00;
+}
+
+.acct_container{
+    height: 40px; 
+}
+
+.acct_container label{
+    font-weight: bold;
+}
+
+.maploc_stat{
+    font-weight: bold;
+}
+
+.uptd{
+    float:left;
+    display:none;
+    color:white;
+    background: #838383;
+    -webkit-box-shadow: 0 1px 5px rgba(0,0,0,0.1);
+    -moz-box-shadow: 0 1px 5px rgba(0,0,0,0.1);
+    box-shadow: 0 1px 5px rgba(0,0,0,0.1);
+    padding: 3px 7px 3px 7px;
+    color: white;
+    text-transform: uppercase;
+    border-radius: 3px;
+    -webkit-border-radius: 3px;
+    font-size: 11px;
+    font-weight: bold;
+}
+
+.shipping_comment{
+    color: #0191C8;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 11px;
+    padding-top: 10px;
+    width: auto !important;
+}
+
+.shipping_comment_cont{
+	width: 500px;
+}
+
+.shipping_comment_cont h2{
+	padding: 5px;
+	background-color: #F48000;
+	color: white;
+}
+
+.shipping_comment_cont input, .shipping_comment_cont label{
+	display:inline-block;
+	margin-top: 5px;
+}
+
+.shipping_comment_cont label{
+	width: 30%;
+	margin-left: 5px;
+}
+
+.shipping_comment_cont textarea{
+	display:block;
+	margin: 3px;
+	margin-left: 5px;
+}
+
+.shipping_comment_submit{
+	border: none;
+	cursor: pointer;
+	margin-left: 5px;
+}
+
+.css_modal_edit, .css_modal_cancel{
+	cursor:pointer;
+	margin-left: 5px;
+}
+
+.css_modal_edit{
+	color: #0191C8;
+}
+
+.css_modal_cancel{
+	color: red;
+}
+
+/** Payment Details div modal **/
+.payment_details_cont{
+	width: 500px;
+}
+
+.payment_details_cont input, .payment_details_cont label{
+	display:inline-block;
+	margin-top: 5px;
+}
+
+.payment_details_cont label{
+	width: 30%;
+}
+
+.payment_details_cont h2{
+	padding: 5px;
+	background-color: #F48000;
+	color: white;
+}
+
+.peyment_details_cont label{
+	width: 30%;
+	margin-left: 5px;
+}
+
+.payment_details_cont textarea{
+	display:block;
+	margin: 3px;
+	margin-left: 5px;
+}
+
+/** AVATAR CSS FIX **/
+#avatar_cont{
+	text-align: center;
+	height: 150px;
+	width: 157px;
+}
+
+#avatar_cont span{
+	vertical-align: middle;
+	display: table-cell;
+	height: 150px;
+	width: 157px;
+}
+
+#avatar_cont img{
+	height: auto;
+	width: auto;
+	max-height: 150px;
+	max-width: 157px;
+}
+
+
+.trans_alert{
+    font-weight:bold;
+}

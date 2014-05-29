@@ -1,0 +1,59 @@
+﻿/*** error product ****/
+
+
+
+/*** start of product category ***/
+
+
+
+
+
+
+
+
+/**** Step 4 ****/
+
+
+
+
+
+
+
+
+
+
+/********** Product Upload Step 1 (main category hover edit & delete) **************/
+.main_product_category a:hover .op_ed,
+.product-list a:hover .op_ed {
+	display: block;
+}
+
+.op_ed {
+     /* Fallback for web browsers that doesn't support RGBa */
+    background: rgb(255, 68, 0) transparent;
+    /* RGBa with 0.6 opacity */
+    background: rgba(255, 68, 0, 0.6);
+    /* For IE 5.5 - 7*/
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#ff4400, endColorstr=#ff4400);
+    /* For IE 8*/
+    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#ff4400, endColorstr=#ff4400)";
+
+    color: #fff;
+    cursor: pointer;
+    display: none;
+    font-size: 10px;
+    line-height: 24px;
+    margin-left: 112px;
+    margin-top: -19px;
+    position: absolute;
+    padding:0 5px;
+}
+
+.op_ed img {
+	vertical-align: middle;
+}
+
+.op_edit_lnk:hover,
+.op_delete_lnk:hover {
+	border-bottom: 1px solid #fff;
+}

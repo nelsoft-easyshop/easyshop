@@ -31,12 +31,12 @@ class Kernel
     private function _bootstrap()
     {
         /* We register the application class autoloader */
-        require_once 'application/src/EasyShop/Core/ClassAutoloader/PSR0Autoloader.php';
-        $psr0Autoloader = new PSR0Autoloader("application/src/");
+        require_once APPPATH . '/src/EasyShop/Core/ClassAutoloader/PSR0Autoloader.php';
+        $psr0Autoloader = new PSR0Autoloader(APPPATH . "/src/");
         $psr0Autoloader->register();
 
         /* We register 3rd party autoloader */
-        require_once 'vendor/autoload.php';
+        require_once '../vendor/autoload.php';
     }
     
     /**
