@@ -5,6 +5,7 @@
         "cboden/Ratchet": "@stable",
         "react/zmq": "0.2.*",
         "doctrine/orm": "2.4.*",
+        "doctrine/migrations": "dev-master",
         "ezyang/htmlpurifier": "dev-master"
     }
 }
