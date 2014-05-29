@@ -4,10 +4,10 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
+include_once __DIR__ . '/../../vendor/autoload.php';
+
 use Symfony\Component\Console\Helper\HelperSet;
 use Doctrine\ORM\Tools\Console\ConsoleRunner;
-
-include_once __DIR__ . '/../../vendor/autoload.php';
 
 // add commands here
 $commands = [
