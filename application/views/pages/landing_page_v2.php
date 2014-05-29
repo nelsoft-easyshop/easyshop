@@ -213,23 +213,28 @@
 
 	<div class="clear"></div>
 	<section class="bg_mid">
+		<div class="bg_mid2">
 		<div class="container-16">
 			<div class="grid-11 mgrn_top3">
-						<h1><span>Buy an</span> iPhone 5s</h1>
+						<h1><span>Buy a</span>CANON DSLR 60D</h1>
 						<h1><span>for as low as</span></h1>
-						<h1><span>Php 48,990</span></h1>
-						<h1><span>Php 489.90*</span></h1>
-						<p class="mgrn_top4">
-							The offer starts on June 15 at 12 noon<br />and expires on June 17, 2014.
+						<h1><span>Php 32,900</span></h1>
+						<h1><span>Php 329.00*</span></h1>
+						
+						<p class="mgrn_top4">The COUNTDOWN SALE offer starts on<br />
+							June 15 at 12 noon and expires on <br />June 17,2014.
 						</p>
-						<p class="mgrn_top4">To qualify, like us on Facebook and  </p>
+						<p>To qualify, like us on Facebook and</p>
 						<p class="fs2 txt_reg">register now!</p>
 						<p>
-							*The price will drop by 2% every hour until it<br />reaches 99% off for 48 hours. <br />
+							*The price will drop by 2% every hour until sold<br />One stock is available per item. <br />
 							One stock is available per item.
 						</p>
+						<p>
+							For more details on how to avail this promo <a href="">click here</a>.
+						</p>
 						
-						<div class="mgrn_top2">
+						<!-- <div class="mgrn_top2">
 							<div class="vid_container"><span class="fs1">watch this video </span> 
 							<span>
 								<img src="<?=base_url()?>assets/images/landingpage/btn_play.png" class="vidplay" alt="Easyshop.ph Video">
@@ -238,7 +243,8 @@
 								</span>
 							</span>
 							</div>	
-						</div>	
+						</div> -->	
+			</div>
 			</div>
 		</div>
 	</section>
