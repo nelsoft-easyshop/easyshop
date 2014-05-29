@@ -11,6 +11,7 @@
 <!--Chosen CSS-->
 <link rel="stylesheet" href="<?=base_url()?>assets/css/chosen.min.css" type="text/css" media="screen"/>
 
+
 <div id = "member_page_body">
 	<div class="clear"></div>
 	<section>
@@ -1377,8 +1378,11 @@
 								<input type="hidden" name="dragonpay" value="1">
 							<?php echo form_close();?>
 						<?php elseif($transact['payment_method'] == 5 && $transact['transac_stat'] == 99):?>
-								<input type="submit" class="orange_btn3 payment_details_btn" value="Payment Details">
-								<div class="payment_details_cont" style="display:none;">
+								
+								<a class='payment_details_btn' href='javascript:void(0)' style='float:right; text-decoration:underline; font-weight:bold;'>+ Add Deposit Details</a>
+                                
+                     
+                                <div class="payment_details_cont" style="display:none;">
 								<?php $attr = array('class'=>'payment_bankdeposit');
 									$disable = $transact['bd_details']['bd_datemodified'] != '' ? true : false;
 									echo form_open('',$attr);
@@ -1445,8 +1449,8 @@
 													$attr = array('class'=>'transac_response');
 													echo form_open('',$attr);
 												?>							
-												<input class = "transac_response_btn transac_forward orange_btn3" value="Item received" type="submit">
-													<input type="hidden" name="buyer_response" value="<?php echo $opk;?>">
+                                                    <input class = "transac_response_btn transac_forward orange_btn3" value="Item received" type="submit">
+                                                    <input type="hidden" name="buyer_response" value="<?php echo $opk;?>">
 													<input type="hidden" name="transaction_num" value="<?php echo $tk;?>">
 													<input type="hidden" name="invoice_num" value="<?php echo $transact['invoice_no'];?>">
 												<?php echo form_close();?>
@@ -1458,11 +1462,13 @@
 												<span class="trans_alert transac_cod">Cash on delivery</span>
 											<?php endif;?>
 										<?php else:?>
-											<span class="trans_alert">PENDING</span>
+											<span class="trans_alert">Pending</span>
 										<?php endif;?>
-
+                                        
+                               
+                                        
 										<?php if( strlen(trim($product['shipping_comment'])) > 0 ):?>
-											<div><span class="shipping_comment">View Shipping Comment</span></div>
+											<div><span class="shipping_comment">+ View shipment detail</span></div>
 											<div class="shipping_comment_cont" style="display:none;">
 												<h2>Shipping Details</h2>
 												<div>
@@ -1684,7 +1690,7 @@
 												$attr = array('class'=>'transac_response');
 												echo form_open('',$attr);
 											?>
-											<input class="transac_response_btn transac_forward orange_btn3" value="Return payment to buyer" type="submit">
+											<input class="transac_response_btn transac_forward orange_btn3" value="Cancel Order" type="submit">
 											<input type="hidden" name="seller_response" value="<?php echo $opk;?>">
 											<input type="hidden" name="transaction_num" value="<?php echo $tk;?>">
 											<input type="hidden" name="invoice_num" value="<?php echo $transact['invoice_no'];?>">
@@ -1700,7 +1706,7 @@
 										<span>ON HOLD</span>
 									<?php endif;?>
 									</span>
-									<div><span class="shipping_comment">+ Shipping Comment</span></div>
+									<div><span class="shipping_comment">+ Update Shipment Detail</span></div>
 									<div class="shipping_comment_cont" style="display:none;">
 										<h2>Shipping Details</h2>
 										<div>
@@ -1837,10 +1843,10 @@
 		<li><a href="#complete_sell">Sold<span><?php echo count($transaction['complete']['sell']);?></span></a></li>
 	</ul>
 	<div id="complete_buy" class="dashboard_table">
-		<!--<h2>Bought Items</h2>-->
+		<h2>Bought Items</h2>
 		<?php if(count($transaction['complete']['buy'])===0):?>
 			<br/>
-			<div><strong>No transaction for this category.</strong></div>
+			<div><span style='margin-left:10px; font-weight:bold;'>No transaction for this category.</span></div>
 		<?php else: ?>
 		<?php $transac_counter = 0;?>
 		<div class="paging">
@@ -2002,10 +2008,10 @@
 	
 	
 	<div id="complete_sell" class="dashboard_table">
-		<!--<h2>Sold Items</h2>-->
+		<h2>Sold Items</h2>
 		<?php if(count($transaction['complete']['sell'])===0):?>
 		<br/>
-		<div><strong>No transaction for this category.</strong></div>
+		<div><span style='margin-left:10px; font-weight:bold;'>No transaction for this category.</span></div>
 		<?php else: ?>
 		<?php $transac_counter = 0;?>
 		<div class="paging">
@@ -2098,7 +2104,7 @@
 												$attr = array('class'=>'transac_response');
 												echo form_open('',$attr);
 											?>
-											<input class="transac_response_btn" value="Return payment to buyer" type="submit">
+											<input class="transac_response_btn" value="Cancel Order" type="submit">
 											<input type="hidden" name="seller_response" value="<?php echo $opk;?>">
 											<input type="hidden" name="transaction_num" value="<?php echo $tk;?>">
 											<input type="hidden" name="invoice_num" value="<?php echo $transact['invoice_no'];?>">

@@ -1,5 +1,7 @@
 <!--Member page CSS Janz-->
 
+
+
 /* Overlay */
 #simplemodal-overlay {
 	background-color:#bcbcbc;
@@ -176,4 +178,9 @@
 	width: auto;
 	max-height: 150px;
 	max-width: 157px;
+}
+
+
+.trans_alert{
+    font-weight:bold;
 }
