@@ -13,17 +13,17 @@
            The mission that EasyShop has is to provide its customer with a Fast and Easy 
            online shopping experience. Our goal is to be the first website you think about
            when buying online." />
-		<meta property="og:image" content="https://easyshop.ph/assets/images/img_logo.png" />
+		<meta property="og:image" content="https://easyshop.ph/assets/images/img_logo.png?ver=1.0" />
         <!-- <meta name="viewport" content="width=device-width, initial-scale=1"> -->
 
 		<!-- CSS -->
-        <link rel="stylesheet" href="<?=base_url()?>assets/css/landingpage/style_v2.css" type="text/css" media="screen"/>
+        <link rel="stylesheet" href="<?=base_url()?>assets/css/landingpage/style_v2.css?ver=1.0" type="text/css" media="screen"/>
 <!--         <link rel="stylesheet" href="<?=base_url()?>assets/css/landingpage/rwdgrid.css" type="text/css" media="screen"/> -->
 
 
 		<!-- Contact Form CSS files -->
 		<link type='text/css' href='<?=base_url()?>assets/css/basic.css' rel='stylesheet' media='screen' />
-		<link href="<?=base_url()?>assets/css/jquery-ui.css?ver=4.10" rel="stylesheet">
+		<link href="<?=base_url()?>assets/css/jquery-ui.css?ver=1.0" rel="stylesheet">
         <!-- JS -->
 		<!-- html5.js for IE less than 9 -->
 		<!--[if lt IE 9]>
