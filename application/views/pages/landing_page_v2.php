@@ -22,7 +22,7 @@
 
 
 		<!-- Contact Form CSS files -->
-		<link type='text/css' href='<?=base_url()?>assets/css/basic.css' rel='stylesheet' media='screen' />
+		<link type='text/css' href='<?=base_url()?>assets/css/basic.css?ver=1.0' rel='stylesheet' media='screen' />
 		<link href="<?=base_url()?>assets/css/jquery-ui.css?ver=1.0" rel="stylesheet">
         <!-- JS -->
 		<!-- html5.js for IE less than 9 -->
