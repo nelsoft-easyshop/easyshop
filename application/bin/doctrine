@@ -1,0 +1,40 @@
+#!/usr/bin/env php
+<?php
+
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
+use Symfony\Component\Console\Helper\HelperSet;
+use Doctrine\ORM\Tools\Console\ConsoleRunner;
+
+include_once __DIR__ . '/../../vendor/autoload.php';
+
+// add commands here
+$commands = array();
+
+$entityManager = Doctrine\ORM\EntityManager::create(
+    [
+        'driver'   => 'pdo_mysql',
+        'user'     => 'root',
+        'password' => 'pass',
+        'dbname'   => 'easyshop',
+    ],
+    Doctrine\ORM\Tools\Setup::createAnnotationMetadataConfiguration([__DIR__ . '/../src/EasyShop/Entities'], true)
+);
+
+$entityManager->getConnection()
+              ->getDatabasePlatform()
+              ->registerDoctrineTypeMapping('enum', 'string');
+
+$helperSet = ConsoleRunner::createHelperSet($entityManager);
+
+if ( ! ($helperSet instanceof HelperSet)) {
+    foreach ($GLOBALS as $helperSetCandidate) {
+        if ($helperSetCandidate instanceof HelperSet) {
+            $helperSet = $helperSetCandidate;
+            break;
+        }
+    }
+}
+
+\Doctrine\ORM\Tools\Console\ConsoleRunner::run($helperSet, $commands);
