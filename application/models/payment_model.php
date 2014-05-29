@@ -93,7 +93,6 @@ class payment_model extends CI_Model
 		else{
 		  	return 0;
 		}
- 
     }
 	
 	
@@ -165,6 +164,7 @@ class payment_model extends CI_Model
 	
 	/*
 	 *	Function to get Transaction Details for summary in notification email
+	 *	Sent right after transaction is made
 	 *  $data = array(
 	 *		'member_id' => Member ID who made the purchase (buyerID)
 	 *		'order_id'	=> Transaction Number
@@ -207,7 +207,7 @@ class payment_model extends CI_Model
 			}
 			if(!isset($data['seller'][$value['seller_id']]['products'][$value['id_order_product']])){
 				$data['seller'][$value['seller_id']]['products'][$value['id_order_product']] = array_slice($temp,9,5);
-				$data['seller'][$value['seller_id']]['totalprice'] += $value['finalprice'];
+				$data['seller'][$value['seller_id']]['totalprice'] += preg_replace('/\,/', '' , $value['finalprice']);
 				$data['seller'][$value['seller_id']]['products'][$value['id_order_product']]['order_product_id'] = $value['id_order_product'];
 			}
 			
@@ -233,7 +233,8 @@ class payment_model extends CI_Model
 	}
 	
 	/*
-	 *	Function to get product order transaction details for email notification
+	 *	Function to get product order transaction details for email notification upon transaction response
+	 *	Used by memberpage->transactionResponse function 
 	 */
 	public function getOrderProductTransactionDetails($data)
 	{

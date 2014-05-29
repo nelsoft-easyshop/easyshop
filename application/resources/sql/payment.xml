@@ -44,29 +44,9 @@
 	WHERE `id_order` = :id_order 
 </select>
 
-<!--
-<select id="getTransactionDetails">
-	SELECT o.id_order, buyer.username as buyer, buyer.email as buyer_email, DATE_FORMAT(o.dateadded, "%D %M %Y") as dateadded, o.total as totalprice, op.id_order_product, seller.id_member as seller_id, seller.username as seller, seller.email as seller_email, p.name, op.order_quantity, op.price as baseprice, op.tax, op.total as finalprice, attr.name as attr_name, pattr.attr_value
-	FROM es_order o
-	INNER JOIN es_order_product op 
-		ON op.order_id = o.id_order AND o.buyer_id = :buyer_id AND o.id_order = :order_id
-	INNER JOIN es_product p
-		ON op.product_id = p.id_product
-	LEFT JOIN es_order_option opt
-		ON opt.order_product_id = op.id_order_product
-	LEFT JOIN es_product_attr pattr
-		ON pattr.id_product_attr = opt.product_attr_id 
-	LEFT JOIN es_attr attr
-		ON opt.attr_id = attr.id_attr
-	LEFT JOIN es_member seller
-		ON op.seller_id = seller.id_member
-	LEFT JOIN es_member buyer
-		ON o.buyer_id = buyer.id_member
-</select>
--->
 
 <select id="getPurchaseTransactionDetails">
-	SELECT o.id_order, buyer.username as buyer, buyer.email as buyer_email, DATE_FORMAT(o.dateadded, "%D %M %Y") as dateadded, o.total as totalprice, op.id_order_product, seller.id_member as seller_id, seller.username as seller, seller.email as seller_email, p.name, op.order_quantity, op.price as baseprice, op.tax, op.total as finalprice, attr.name as attr_name, pattr.attr_value,  pitemattr.is_other, oah.field_name, oad.value_name, buyer.email as buyer_email, o.invoice_no, 
+	SELECT o.id_order, buyer.username as buyer, buyer.email as buyer_email, DATE_FORMAT(o.dateadded, "%D %M %Y") as dateadded, FORMAT(o.total,2) as totalprice, op.id_order_product, seller.id_member as seller_id, seller.username as seller, seller.email as seller_email, p.name, op.order_quantity, FORMAT(op.price,2) as baseprice, FORMAT(op.tax,2) as tax, FORMAT(op.total,2) as finalprice, attr.name as attr_name, pattr.attr_value,  pitemattr.is_other, oah.field_name, oad.value_name, buyer.email as buyer_email, o.invoice_no, 
 		COALESCE(buyer.contactno, '0') as buyer_contactno, COALESCE(seller.contactno, '0') as seller_contactno
 	FROM es_order o
 	INNER JOIN es_order_product op 
@@ -88,6 +68,7 @@
 	LEFT JOIN es_member buyer
 		ON o.buyer_id = buyer.id_member
 </select>
+
 
 <select id="getOrderProductTransactionDetails">
 	SELECT	o.id_order, o.invoice_no, op.id_order_product 
