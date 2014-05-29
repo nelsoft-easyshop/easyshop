@@ -6,7 +6,7 @@
 <head>
 		<meta charset="utf-8" />
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <title>Easyshop.com - Homepage</title>
+        <title>Easyshop.ph - Welcome</title>
         <link rel="shortcut icon" href="<?php echo base_url()?>assets/images/favicon.ico" type="image/x-icon"/>
         <meta property="og:title" content="EasyShop.ph" />
 		<meta property="og:description" content="Our vision is to be the leading Online Shopping website in South East Asia. 
@@ -229,9 +229,11 @@
 						<p>
 							*The price will drop by 2% every hour until sold<br />One stock is available per item. 
 						</p>
+                        <!--
 						<p>
 							For more details on how to avail this promo <a href="">click here</a>.
 						</p>
+                        -->
 						
 						<!-- <div class="mgrn_top2">
 							<div class="vid_container"><span class="fs1">watch this video </span> 
