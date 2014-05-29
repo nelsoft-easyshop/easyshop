@@ -50,13 +50,21 @@
             
             <div class="right_panel_box">
                 <div class="sign_in_register">
-                    <div>
-                        <a href="<?=base_url()?>login" class="orange_btn"> Sign In</a>
-                    </div>
-                    <div>
-                       <!-- <a href="<?=base_url()?>register" class="orange_btn"> Register</a> -->
-                       <a href="<?=base_url()?>#register" class="orange_btn"> Register</a>
-                    </div>
+                    
+                    <?php if(!$logged_in): ?>
+                        <div>
+                            <a href="<?=base_url()?>login" class="orange_btn"> Sign In</a>
+                        </div>                    
+                        <div>
+                           <a href="<?=base_url()?>#register" class="orange_btn"> Register</a>
+                        </div>
+                    <?php else: ?>
+                        <div>
+                            <a href="<?=base_url()?>sell/step1" class="orange_btn" style='width:240px;'>Sell Now</a>
+                        </div>     
+                    <?php endif; ?>
+                    
+                    
                 </div>
                 <div class="clear"></div>
                 <div class="guides_panel">

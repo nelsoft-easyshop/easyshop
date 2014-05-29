@@ -611,6 +611,7 @@ a.delete:hover .del {
 .cod_status_con {
 	display: block;
     padding: 8px 3px;
+    margin-left: 20px;
 }
 
 .payment_inner_content {

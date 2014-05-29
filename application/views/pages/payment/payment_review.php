@@ -45,9 +45,10 @@
         <div class="payment_wrapper2">
           <div class="change_shipping_add_con">
             <div class="txt_change_wrapper">
-              <div class="txt_change_shipping_address">
-                <span style="color:red">PLEASE CHANGE YOUR SHIPPING ADDRESS!</span>
-              </div>
+                <div style='margin-left:10px; font-weight:bold;'>
+                    <br>
+                    You have not set your shipping address yet. Do this by clicking on the button below.
+                </div>
             </div>
             <?php
           }
@@ -111,7 +112,7 @@
                       <div class="pay_sum_c2"><?php echo $value['name'] ?></div>
                       <div class="pay_sum_c3"><?php echo $value['qty'] ?></div>
                       <div class="pay_sum_c4"><?php echo number_format($value['price'], 2, '.',',') ?></div>
-                      <div class="cod_status_con"><?php echo ($value['cash_delivery'] ? "<span style='color:green'>Available for Cash on Delivery</span>" : "<span style='color:red'>Not available for Cash on Delivery</span> (Go to your <a href='".base_url()."cart' style='color:#0654BA'>Cart</a> and Remove this Item)") ;?></div>
+                      <div class="cod_status_con"><?php echo ($value['cash_delivery'] ? "<span style='color:green'>Available for Cash on Delivery</span>" : "<span style='color:red; font-weight:bold;'>Not available for Cash on Delivery</span> (Go to your <a href='".base_url()."cart' style='color:#0654BA'>Cart</a> and Remove this Item)") ;?></div>
                       <?php if(!$value['availability']){ ?>
                       <div style="color:red">
                        Please <a style="color:#0654BA" href="javascript:{}" class="link_address">change your shipping address</a> or go to remove this from your <a href="<?=base_url()?>cart" style="color:#0654BA">Cart</a>.

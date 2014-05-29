@@ -227,8 +227,7 @@
 						<p>To qualify, like us on Facebook and</p>
 						<p class="fs2 txt_reg">register now!</p>
 						<p>
-							*The price will drop by 2% every hour until sold<br />One stock is available per item. <br />
-							One stock is available per item.
+							*The price will drop by 2% every hour until sold<br />One stock is available per item. 
 						</p>
 						<p>
 							For more details on how to avail this promo <a href="">click here</a>.
