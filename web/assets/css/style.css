@@ -4312,6 +4312,10 @@ box-shadow:         inset 0px -10px 12px -8px rgba(255, 255, 255, 0.75);
 	width: 252px;
 }
 
+.transac_title_col3 {
+	text-align: right;
+}
+
 .transac_title_col1 span,
 .transac_title_col2 span {
     font-size: 14px;
@@ -4478,14 +4482,18 @@ box-shadow:         inset 0px -10px 12px -8px rgba(255, 255, 255, 0.75);
 }
 
 .transac_prod_wrapper {
-	float: left;
+/*	float: left;*/
 	padding:5px;
 }
 
-.transac-product-container {
+/*.transac-product-container {
 	float: left;
     width: 530px;
-/*    margin-bottom: 10px;*/
+/*    margin-bottom: 10px;
+}*/
+
+.transac-product-container {
+/*    width: 530px;*/
 }
 
 .feedback_wrapper {
@@ -4531,9 +4539,11 @@ box-shadow:         inset 0px -10px 12px -8px rgba(255, 255, 255, 0.75);
     background-color: #EFEEEE;
     border: 1px solid #FFFFFF;
     border-radius: 3px;
+    display: inline-block;
     margin: 5px 0;
     padding: 10px 5px;
-    width: 420px;
+    vertical-align: middle;
+    width: 455px;
 
     -webkit-border-radius: 3px;
 	-moz-border-radius: 3px;
@@ -4571,6 +4581,23 @@ box-shadow:         inset 0px -10px 12px -8px rgba(255, 255, 255, 0.75);
 
 .transac_forward {
 	font-size: 11px;
+}
+
+.transac_prod_btns {
+    display: inline-block;
+    text-align: center;
+    width: 210px;
+}
+
+.transac_prod_btns input:first-child {
+	margin-right: 10px;
+}
+
+.transac_prod_btns input {
+	border: none;
+	cursor: pointer;
+	padding: 8px 12px;
+
 }
 
 /*.transac_response input {
@@ -4619,7 +4646,6 @@ box-shadow:         inset 0px -10px 12px -8px rgba(255, 255, 255, 0.75);
 .feedb-star{
 	display:inline;
 }
-
 
 #others_post,
 #you_post {
