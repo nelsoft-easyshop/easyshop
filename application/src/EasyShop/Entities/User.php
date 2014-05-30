@@ -2,8 +2,6 @@
 
 namespace Easyshop\Entities;
 
-//use Doctrine\ORM\Mapping as ORM;
-
 
 
 /**
