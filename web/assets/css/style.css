@@ -4084,8 +4084,8 @@ div.feedback_container {
 /*    border-bottom: 1px dotted #CECECE;*/
     display: block;
     margin-bottom: 10px;
-    min-height: 110px;
-/*    padding-right: 10px;*/
+/*     min-height: 110px;
+   padding-right: 10px;*/
     text-align: right;
     width: 220px;
 }
