@@ -216,10 +216,10 @@
 		<div class="bg_mid2">
 		<div class="container-16">
 			<div class="grid-11 mgrn_top3">
-						<h1><span>Buy a</span>CANON DSLR 60D</h1>
+						<h1><span>Buy a</span><br />Samsung Smart LED TV 40"</h1>
 						<h1><span>for as low as</span></h1>
-						<h1><span>Php 32,900</span></h1>
-						<h1><span>Php 329.00*</span></h1>
+						<h1><span>Php 43,890</span></h1>
+						<h1><span>Php 438.90*</span></h1>
 						
 						<p class="mgrn_top4">The COUNTDOWN SALE offer starts on<br />
 							June 15 at 12 noon and expires on <br />June 17,2014.
