@@ -60,9 +60,10 @@ $(document).ready(function(){
                     window.location.replace(d.d);
                 }else{
                     alert(d.d);
+                    $('.paypal_loader').hide();
+                    $('.paypal_button').show();
                 }
-                $('.paypal_loader').hide();
-                $('.paypal_button').show();
+             
             }
         });
     });
