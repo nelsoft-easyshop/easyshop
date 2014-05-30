@@ -264,6 +264,12 @@ body{
 	line-height: 0.75em;
 }
 
+.container-16 .grid-11 h1:first-child {
+	font-size: 4.5em;
+	font-weight: 300;
+	line-height: 0.75em;
+}
+
 .container-16 .grid-11 h1:nth-child(3) {
 	font-size: 4.5em;
 }
@@ -304,16 +310,16 @@ body{
 }
  
 .bg_mid {
-	background-image: url('/assets/images/landingpage/img_main2_bg.png'), url('/assets/images/landingpage/img_main_bg2.jpg');
-	background-repeat: no-repeat, repeat;
-	background-position: top center, top center;
+	background-image: url('/assets/images/landingpage/img_main_bg3.jpg');
+	background-repeat: repeat;
+	background-position:top center;
 	min-height: 49.063em;
 }
 
 .bg_mid .container-16 {
-	background-image: url('/assets/images/landingpage/img_main2.png');
+	background-image: url('/assets/images/landingpage/img_main3.png');
 	background-repeat: no-repeat;
-	background-position: bottom right;
+	background-position: right 73px;
 	min-height: 45.063em;
 }
 
@@ -627,7 +633,7 @@ span.twitter {
 	}
 
 	.container-16 .grid-11 h1 {
-		font-size: 5.5em;
+		font-size: 4.5em;
 		font-weight: 300;
 	}
 }	
