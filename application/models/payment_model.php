@@ -61,7 +61,7 @@ class payment_model extends CI_Model
 		SET
 		  `quantity` = `quantity` - :quantity 
 		WHERE `product_id` = :product_id 
-		  AND `id_product_item` = :item_id ;
+		  AND `id_product_item` = :item_id;
     	";
         ;
     	$sth = $this->db->conn_id->prepare($query);

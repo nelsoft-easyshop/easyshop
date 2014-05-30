@@ -395,7 +395,7 @@ class Payment extends MY_Controller{
                             $productId = $value['id'];
                             $productItem =  $value['product_itemID'];
                             $orderQuantity = $value['qty'];
-                            $itemComplete = $this->payment_model->deductQuantity($productItem,$productId,$orderQuantity);
+                            $itemComplete = $this->payment_model->deductQuantity($productId,$productItem,$orderQuantity);
                             #   UPDATE `es_product_item` SET `quantity` = `quantity` - v_quantity WHERE `product_id` = v_product_id AND `id_product_item` = v_product_item;
         
                         }
