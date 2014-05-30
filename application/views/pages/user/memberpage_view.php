@@ -1369,11 +1369,11 @@
 					<!-- If payment method is dragon pay / direct bank deposit-->
 					<div class="transac_title_col3">
 						<?php if($transact['payment_method'] == 2 && $transact['transac_stat'] == 99):?>
-							<?php $attr = array('class'=>'transac_response');
+							<?php $attr = array('class'=>'');
 								echo form_open('',$attr);
 							?>
-								<input type="submit" class="transac_response_btn orange_btn3" name="dragonpay_update_btn" value="Confirm Dragonpay Payment">
-								<input type="hidden" name="invoice_num" value="<?php echo $transact['invoice_no'];?>">
+								<input type="submit" class="dragonpay_update_btn transac_response_btn" name="dragonpay_update_btn" value="Confirm Dragonpay Payment">
+                                <input type="hidden" name="invoice_num" value="<?php echo $transact['invoice_no'];?>">
 								<input type="hidden" name="transaction_num" value="<?php echo $tk;?>">
 								<input type="hidden" name="dragonpay" value="1">
 							<?php echo form_close();?>
