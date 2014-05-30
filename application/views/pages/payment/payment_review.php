@@ -345,7 +345,7 @@ if($success){
     </div>
     <div>
       <label  >Telephone No:</label>
-      <input type="text" name="c_telephone" id="c_telephone" value="<?php echo $c_telephone?>">
+      <input type="text" name="c_telephone" id="c_telephone" onkeypress="return isNumberKeyAndDash(event);" placeholder="eg. 123-45-67" maxlength="15" value="<?php echo $c_telephone?>">
     </div> 
     <div>
       <label>Address:</label>
@@ -391,6 +391,13 @@ if($success){
 
 <script type='text/javascript'>
       var jsonCity = <?php echo $json_city;?>;
+          function isNumberKeyAndDash(evt)
+    {
+        var charCode = (evt.which) ? evt.which : event.keyCode
+        if (charCode != 45  && charCode > 31 && (charCode < 48 || charCode > 57))
+            return false;
+        return true;
+    }
 </script>
  
 <script type='text/javascript' src='<?=base_url()?>assets/JavaScript/payment.js'></script>

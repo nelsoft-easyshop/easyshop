@@ -132,18 +132,72 @@ $(document).ready(function(){
                 minWidth: 605,
                 maxHeight: 600,
             },
-            persist: true
+            
         });
         $('#simplemodal-container').addClass('div_change_addree');
     });
+
+    function validateRedTextBox(idclass)
+    {
+      $(idclass).css({"-webkit-box-shadow": "0px 0px 2px 2px #FF0000",
+        "-moz-box-shadow": "0px 0px 2px 2px #FF0000",
+        "box-shadow": "0px 0px 2px 2px #FF0000"});
+    } 
+    
+    function validateWhiteTextBox(idclass)
+    {
+      $(idclass).css({"-webkit-box-shadow": "0px 0px 2px 2px #FFFFFF",
+        "-moz-box-shadow": "0px 0px 2px 2px #FFFFFF",
+        "box-shadow": "0px 0px 2px 2px #FFFFFF"});
+    }
+
 
     $(document).on('click','.changeAddressBtn',function () {
         var action = config.base_url + "payment/changeAddress";
         var csrftoken = $("meta[name='csrf-token']").attr('content');
         var csrfname = $("meta[name='csrf-name']").attr('content');
 
-        if($('.stateregionselect').val() == '0' || $('.cityselect').val() == '0' || $('.c_address').val().length == 0 || $('#c_mobile').val().length < 10){
+        var consignee = $('#consignee');
+        var stateregion = $('.stateregionselect');
+        var cityselect = $('.cityselect');
+        var address =  $('.c_address');
+        var mobile = $('#c_mobile');
+        var telephone = $('#c_telephone');
+
+
+        validateWhiteTextBox('#consignee');
+        validateWhiteTextBox('.stateregionselect');
+        validateWhiteTextBox('.cityselect');
+        validateWhiteTextBox('.c_address');
+        validateWhiteTextBox('#c_mobile');
+
+        if(consignee.val().length == 0){
+            validateRedTextBox('#consignee');
+        }
+
+        if(stateregion.val() == '0'){
+            validateRedTextBox('.stateregionselect');
+        }
+
+        if(cityselect.val() == '0'){
+            validateRedTextBox('.cityselect');
+        }
+
+        if(address.val().length == 0){
+            validateRedTextBox('.c_address');
+        }
+        if(mobile.val().length == 0){  
+            validateRedTextBox('#c_mobile');
+        }
+
+
+
+        if(consignee.val().length == 0 || stateregion.val() == '0' || cityselect.val() == '0' || address.val().length == 0 || mobile.val().length == 0){
             alert('Fill up Required Fields!');
+            return false;
+        }else if(mobile.val().length != 10){
+            alert('Mobile number should be numeric and 10 digits. eg: 9051235678');
+            validateRedTextBox('#c_mobile');
             return false;
         }
 

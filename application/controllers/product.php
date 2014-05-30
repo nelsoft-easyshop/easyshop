@@ -19,11 +19,9 @@ class product extends MY_Controller
     /*     
      *   Displays products in each category
      */
-    
     function categorySearch($categoryId = 0,$url_string="string")
 	//function categorySearch($url_string="")
     {
-		
     	$start = 0;
     	$count = 0;
     	$perPage = $this->per_page;
@@ -32,7 +30,7 @@ class product extends MY_Controller
 		//$categoryId = $this->product_model->getCategoryIdBySlug($url_string);
     	$checkifexistcategory = $this->product_model->checkifexistcategory($categoryId);
     	$sortString = ""; 
-    	$conditionArray = array();
+    	$conditionArray = array(); 
 
     	if(!count($_GET) <= 0){
     		foreach ($_GET as $key => $value) {
@@ -114,20 +112,22 @@ class product extends MY_Controller
     				}			
     			}
     		}
-    	}   
+    	}    
+ 
+        
 
     	if($categoryId != 0){
     		if($checkifexistcategory != 0){
-    			$downCategory = $this->product_model->selectChild($categoryId);
+
+
+       			$downCategory = $this->product_model->selectChild($categoryId);
     			array_push($downCategory, $categoryId);
     			$categories = implode(",", $downCategory);
     			$items = $this->product_model->getProductsByCategory($categories,$conditionArray,$count,$operator,$start,$perPage,$sortString);
-
     			$ids = array();
     			foreach ($items as $key) {
     				array_push($ids, $key['product_id']);
-    			} 
-
+    			}
     			$ids = implode(',',$ids);
     			$attributes = $this->product_model->getProductAttributesByCategory($ids);
     			$itemCondition = $this->product_model->getProductConditionByCategory($ids);
@@ -170,6 +170,7 @@ class product extends MY_Controller
 				$response['attributes'] = $organizedAttribute;
 				$response['id_cat'] = $categoryId;
 				$response['category_navigation'] = $this->load->view('templates/category_navigation',array('cat_items' =>  $this->getcat(),), TRUE );
+
 				$this->load->view('templates/header', $data); 
 				$this->load->view('pages/product/product_search_by_category_final',$response);
 				$this->load->view('templates/footer_full'); 
@@ -291,7 +292,7 @@ class product extends MY_Controller
     	$categories = implode(",", $downCategory);
 
     	session_start();
-
+        
     	$items = $this->product_model->getProductsByCategory($categories,$conditionArray,$count,$operator,$start,$perPage,$sortString);
     	$response['items'] = $items; 
     	$response['id_cat'] = $categoryId;
@@ -299,15 +300,15 @@ class product extends MY_Controller
 
     	if(count($items) <= 0)
     	{	  
-    		if($count <= 0){
+    		// if($count <= 0){
 
     			$data = json_encode('0');
     			echo $data;
     			exit();
-    		}else{
+    		// }else{
 
-    			$notIrrelivant = TRUE;
-    		}
+    		// 	$notIrrelivant = TRUE;
+    		// }
 
     	}else{
 
@@ -317,31 +318,31 @@ class product extends MY_Controller
     		exit();
     	}
 
-    	if($notIrrelivant){
-    		$newoperator = ' < ';
-    		$start = $_SESSION['start'] * $perPage;
-    		$items = $this->product_model->getProductsByCategory($categories,$conditionArray,$count,$newoperator,$start,$perPage,$sortString);
-    		$response['items'] = $items; 
-    		$response['id_cat'] = $categoryId;
-    		$response['typeofview'] = $type;
-    		$response['irrelivant'] = true;
-    		$response['count'] = $_SESSION['start'];
-    		if(count($items) <= 0)
-    		{
-    			$data = json_encode('0');
-    			echo $data;
-    			exit();
-    		}else{
+    	// if($notIrrelivant){
+    	// 	$newoperator = ' < ';
+    	// 	$start = $_SESSION['start'] * $perPage;
+    	// 	$items = $this->product_model->getProductsByCategory($categories,$conditionArray,$count,$newoperator,$start,$perPage,$sortString);
+    	// 	$response['items'] = $items; 
+    	// 	$response['id_cat'] = $categoryId;
+    	// 	$response['typeofview'] = $type;
+    	// 	$response['irrelivant'] = true;
+    	// 	$response['count'] = $_SESSION['start'];
+    	// 	if(count($items) <= 0)
+    	// 	{
+    	// 		$data = json_encode('0');
+    	// 		echo $data;
+    	// 		exit();
+    	// 	}else{
 
-    			$data = json_encode($this->load->view('pages/product/product_search_by_category2_final',$response,TRUE));
-    			echo $data;
-    			$_SESSION['start'] += 1;
+    	// 		$data = json_encode($this->load->view('pages/product/product_search_by_category2_final',$response,TRUE));
+    	// 		echo $data;
+    	// 		$_SESSION['start'] += 1;
 
-    			exit();
-    		}
-    		echo $data;
-    		exit();
-    	}
+    	// 		exit();
+    	// 	}
+    	// 	echo $data;
+    	// 	exit();
+    	// }
 
 
     	echo $data;

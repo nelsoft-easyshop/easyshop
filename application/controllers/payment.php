@@ -269,11 +269,17 @@ class Payment extends MY_Controller{
             {
             echo json_encode("Fill the required fields!");
             exit();
-            }else if(!is_numeric($this->input->post('c_mobile'))){
-            echo json_encode("Mobile number should be numeric and 10 digits. eg: 9051235678");
+            }else if(!is_numeric($this->input->post('c_mobile')) || strlen($this->input->post('c_mobile')) != 10){
+            echo json_encode("<b>MOBILE NUMBER</b> should be numeric and 10 digits. eg: 9051235678");
             exit();
-            }else if(trim($this->input->post('c_telephone')) != "" && !is_numeric($this->input->post('c_telephone'))){
-                echo json_encode("Telephone number should be numeric and 10 digits. eg: 9051235678");
+            }else if(trim($this->input->post('c_telephone')) != "" && (preg_match("/^([0-9]{4}-){3}[0-9]{4}$/", $this->input->post('c_telephone')) || !is_numeric(str_replace('-', '', $this->input->post('c_telephone'))))){
+
+          
+                
+                        echo json_encode("<b>MOBILE NUMBER</b> should be numeric and hypen only. eg: 123-45-67");
+                
+               
+                
             }else{
             $postdata['default_add'] = "off";
             $data = $this->memberpage_model->edit_consignee_address_by_id($uid, $postdata);

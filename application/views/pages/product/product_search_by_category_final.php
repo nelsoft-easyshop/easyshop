@@ -63,7 +63,8 @@ $_SESSION['start'] = "0";
             foreach ($attributes as $keyparam => $value) {
                     
                     $decodeparam = urldecode($keyparam);
-                    $parameter = str_replace(' ', '_', $decodeparam);
+                    $parameter = strtolower(str_replace(' ', '_', $decodeparam));
+
                     echo '<h3 class="title">'.html_escape($decodeparam).' <br></h3>';
                     
                 foreach ($value as $key2 => $attr_value) {
@@ -117,8 +118,8 @@ $_SESSION['start'] = "0";
             }
         }
         ?> 
-        <p class="more_attr">More</p>
-        <p class="less_attr">Less</p>
+        <p class="more_attr">More Filters</p>
+        <p class="less_attr">Less Filters</p>
     </div>
 
     <div class="right_product">
