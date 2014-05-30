@@ -47,11 +47,13 @@
 
 $active_group = 'default';
 $active_record = TRUE;
- 
-$db['default']['hostname'] = 'mysql:host=127.0.0.1;dbname=easyshop';
+
+$dbConfig = require APPPATH . '/config/param/database.php';
+
+$db['default']['hostname'] = 'mysql:host=' . $dbConfig['host'] . ';dbname=' . $dbConfig['dbname'];
 #$db['default']['hostname'] = 'mysql:host=192.168.1.50;dbname=easyshop';
-$db['default']['username'] = 'root';
-$db['default']['password'] = '121586';
+$db['default']['username'] = $dbConfig['user'];
+$db['default']['password'] = $dbConfig['password'];
 $db['default']['database'] = '';
 $db['default']['dbdriver'] = 'pdo';
 $db['default']['dbprefix'] = '';
