@@ -12,7 +12,7 @@ class AuthenticatedSession
 {
     /**
      * @Id
-     * @ManyToOne(targetEntity="User", inversedBy="authenticatedSessions")
+     * @ManyToOne(targetEntity="User")
      * @JoinColumn(name="member_id", referencedColumnName="id_member", onDelete="CASCADE")
      * 
      * @var int
@@ -21,7 +21,7 @@ class AuthenticatedSession
     
     /**
      * @Id
-     * @OneToOne(targetEntity="Session", cascade={"remove"})
+     * @OneToOne(targetEntity="Session")
      * @JoinColumn(name="session_id", referencedColumnName="session_id", onDelete="CASCADE")
      * 
      * @var string
