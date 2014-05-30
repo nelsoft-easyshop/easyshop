@@ -57,15 +57,11 @@ class Kernel
         //Doctrine ORM
         $paths = array('src/EasyShop/Entities');
         $isDevMode = (ENVIRONMENT === 'development');
-        $dbParams = array(
-            'driver'   => 'pdo_mysql',
-            'user'     => 'root',
-            'password' => '121586',
-            'dbname'   => 'easyshop',
-        );
+        
+        $dbConfig = require APPPATH . '/config/param/database.php';
         $config = Doctrine\ORM\Tools\Setup::createAnnotationMetadataConfiguration($paths, $isDevMode);
-        $container['entity_manager'] = function ($c) use ($dbParams, $config){
-            return Doctrine\ORM\EntityManager::create($dbParams, $config);
+        $container['entity_manager'] = function ($c) use ($dbConfig, $config){
+            return Doctrine\ORM\EntityManager::create($dbConfig, $config);
         };
 
         /* Register services END */
