@@ -1479,9 +1479,9 @@
 													<input type="text" name="tracking_num" value="<?php echo html_escape($product['tracking_num']);?>" disabled ><br/>
 													<label for="expected_date">Expected Date of Arrival: </label>
 													<input type="text" name="expected_date" value="<?php echo html_escape($product['expected_date'])?>" disabled><br/>
-													<label for="comment">* Comments: </label>
+													<label for="comment"><span style="color:red">*</span> Comments: </label>
 													<textarea name="comment" cols="55" rows="5" disabled ><?php echo html_escape($product['shipping_comment']); ?></textarea>								
-													<span style="margin-left:35em;"><?php echo $product['datemodified'];?></span>
+													<span style="display: block;margin-left: 33em;padding: 10px 0;"><?php echo $product['datemodified'];?></span>
 												</div>
 											</div>
 										<?php endif;?>
