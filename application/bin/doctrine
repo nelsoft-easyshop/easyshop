@@ -21,13 +21,10 @@ $commands = [
     new \Doctrine\DBAL\Migrations\Tools\Console\Command\VersionCommand()
 ];
 
+$dbConfig = require __DIR__ . '/../config/param/database.php';
+
 $entityManager = Doctrine\ORM\EntityManager::create(
-    [
-        'driver'   => 'pdo_mysql',
-        'user'     => 'root',
-        'password' => 'pass',
-        'dbname'   => 'easyshop',
-    ],
+    $dbConfig,
     Doctrine\ORM\Tools\Setup::createAnnotationMetadataConfiguration([__DIR__ . '/../src/EasyShop/Entities'], true)
 );
 
