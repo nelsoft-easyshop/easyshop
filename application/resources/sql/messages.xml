@@ -41,7 +41,13 @@
         SELECT
         `id_member`
         FROM `es_member`
-        WHERE username = :username;
+        WHERE username = :val;
+    </select>
+    <select id="check_recepientID">
+        SELECT
+        `id_member`
+        FROM `es_member`
+        WHERE id_member = :val;
     </select>
     <select id="is_seened">
         UPDATE `es_messages`

@@ -51,11 +51,14 @@ class messages_model extends CI_Model
     }
     
     public function get_recepientID($username){
-
-        $query = $this->sqlmap->getFilenameID('messages', 'get_recepientID');
+        if(is_numeric($username)){
+            $query = $this->sqlmap->getFilenameID('messages', 'check_recepientID');
+        }else {
+            $query = $this->sqlmap->getFilenameID('messages', 'get_recepientID');
+        }
 		
         $sth = $this->db->conn_id->prepare($query);
-        $sth->bindParam(':username',$username, PDO::PARAM_INT);
+        $sth->bindParam(':val',$username, PDO::PARAM_INT);
         $sth->execute();
 
         $result = $sth->fetchAll(PDO::FETCH_ASSOC);
@@ -64,6 +67,7 @@ class messages_model extends CI_Model
 		} else {
 			$result = "false";
 		}
+
         return $result;
     }
     

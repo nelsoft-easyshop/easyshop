@@ -121,7 +121,7 @@ class Payment extends MY_Controller{
             $data = array_merge($data,$this->fill_header()); 
             $data = array_merge($data, $this->memberpage_model->getLocationLookup());
             $data = array_merge($data,$this->memberpage_model->get_member_by_id($member_id));
- 
+
             $this->load->view('templates/header', $data);
             $this->load->view('pages/payment/payment_review' ,$data);  
             $this->load->view('templates/footer' ,$data);  

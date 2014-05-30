@@ -1,5 +1,5 @@
 <link rel="stylesheet" href="<?=base_url()?>assets/css/my_cart_css.css?ver=1.0" type="text/css" media="screen"/>
-
+<script src="<?=base_url()?>assets/js/src/vendor/numeral.min.js"></script>
         <div class="clear"></div>
 
         <section>
@@ -78,7 +78,7 @@
                 <?PHP endforeach; ?>
                 
                 <div class="my_cart_total">
-                    <p>Total: <span id="total"><?PHP echo $total; ?></span></p>
+                    <p>Total: &#8369;<span id="total"><?PHP echo $total; ?></span></p>
                     <p><span>VAT included</span></p>
                 </div>
                 <div class="may_cart_payment">
@@ -119,7 +119,8 @@
 			sum = total - value;
 			}
 			//$("#total").html(Number(sum).toLocaleString('en')+".00");
-			$("#total").html(parseFloat(sum).toFixed(2));
+            var ttl = numeral(parseFloat(sum).toFixed(2)).format('0.00');
+			$("#total").html(ttl);
         });
         $("#proceed_payment").click(function(event){
             event.preventDefault();

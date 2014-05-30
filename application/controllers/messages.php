@@ -37,20 +37,23 @@ class messages extends MY_Controller
 
     public function send_msg() {
         $session_data = $this->session->all_userdata();
-        $result = trim($this->input->post("recipient"));
-        if (!is_numeric($result)) {
-            $result = $this->messages_model->get_recepientID($result);
-        }
-        if ($session_data['member_id'] == $result) {
-            $result = "false";
-        } else if ($result != "false") {
+		$val = trim($this->input->post("recipient"));
+//		if(!is_numeric($result)){
+//			$result = $this->messages_model->get_recepientID($result);
+//		}
+        $q_result = $this->messages_model->get_recepientID($val);
+        if($session_data['member_id'] == $val || $q_result == "false"){
+            $result['success'] = 0;
+            $result['msg'] = "Username doesnt exist";
+        }else{
             $msg = trim($this->input->post("msg"));
-            $result = $this->messages_model->send_message($session_data['member_id'], $result, $msg);
-            if ($result = 1) {
-                $result = $this->messages_model->get_all_messages($this->user_ID, "kurt");
+            $result = $this->messages_model->send_message($session_data['member_id'],$result,$msg);
+            if($result = 1){
+                $result = $this->messages_model->get_all_messages($this->user_ID,"kurt");
+
             }
         }
-        echo json_encode($result);
+		echo json_encode($result);
     }
 
     public function delete_msg() {

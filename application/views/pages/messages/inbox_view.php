@@ -170,7 +170,6 @@
 			$("#msg_textarea").hide();
 			alert("Your message has been sent");
 		}else {
-			alert("failed to send your message,Try again.");
             return false;
 		}
 	});   	
@@ -217,11 +216,12 @@
             },
 			data : {recipient:recipient,msg:msg,csrfname:csrftoken},
 			success : function(data) {
-                if (data != "false") {
+                if (data.success != 0) {
                     $("#table_id tbody").empty();
                     onFocus_Reload(data)
                     result = true;
                 }else{
+                    alert(data.msg);
                     result = false;
                 }
 			}
