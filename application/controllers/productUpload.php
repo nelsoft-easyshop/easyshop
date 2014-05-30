@@ -311,7 +311,7 @@ class productUpload extends MY_Controller
 		$product_description =  $this->input->post('desc');
 
 		$product_price = str_replace(',', '', $this->input->post('prod_price')) ;
-		$product_discount = $this->input->post('discount');
+		$product_discount = ($this->input->post('discount'))?$this->input->post('discount'):0;
 		$product_condition = $this->input->post('prod_condition');
 		$sku = trim($this->input->post('prod_sku'));
 		
