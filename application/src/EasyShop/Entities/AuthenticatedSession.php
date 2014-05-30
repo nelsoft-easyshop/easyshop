@@ -6,7 +6,7 @@ namespace Easyshop\Entities;
 
 /**
  * @Entity
- * @Table(name="es_authenticated_session")
+ * @Table(name="es_authenticated_session", options={"collate"="utf8_general_ci"})
  */
 class AuthenticatedSession
 {
