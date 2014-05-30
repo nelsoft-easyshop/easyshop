@@ -4595,9 +4595,23 @@ box-shadow:         inset 0px -10px 12px -8px rgba(255, 255, 255, 0.75);
 
 .transac_prod_btns input {
 	border: none;
+	background-color: #646464;
+	color: #fff;
 	cursor: pointer;
 	padding: 8px 12px;
 
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+
+    -webkit-transition: all linear 0.2s;
+       -moz-transition: all linear 0.2s;
+         -o-transition: all linear 0.2s;
+            transition: all linear 0.2s;
+}
+
+.transac_prod_btns input:hover {
+	background-color: #2d2d2d;	
 }
 
 /*.transac_response input {
