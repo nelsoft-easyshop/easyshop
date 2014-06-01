@@ -3939,6 +3939,8 @@ div.post_item_content_left {
 	text-align: center;
 	height: 150px;
 	width: 157px;
+    border: #DDDCDC 1px solid;
+    background-color: white;
 }
 
 .vendor-avatar span{
@@ -3957,8 +3959,7 @@ div.post_item_content_left {
 
 .vendor-profile{
 	background:white;
-/*	border-radius:3px;*/
-/*	border:1px solid #FF4400;*/
+    border: #DDDCDC 1px solid;
 }
 
 .vendor-profile > p:nth-child(2) > img{

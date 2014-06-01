@@ -9,7 +9,7 @@
 <?php require_once("assets/includes/css.php"); ?>
 <?php require_once("assets/includes/js.php"); ?>
 <meta charset="utf-8" />
-<meta name="description" content="" />
+<meta name="description" content="<?php echo isset($metadescription)?$metadescription:''?>"  />
 <meta name="keywords" content=""/>
 <link rel="shortcut icon" href="<?php echo base_url()?>assets/images/favicon.ico" type="image/x-icon"/>
 <!--[if lt IE 9]>
@@ -66,7 +66,7 @@
             <ul>
               <!-- <li><a href="<?=base_url()?>home/under_construction">Visiting a new Shop</a></li> -->
               <!-- <li><a href="<?=base_url()?>home/under_construction">Discounts</a></li> -->
-              <li><a href="<?=base_url()?>category/all">Shopping Categories</a></li>
+              <li><a href="<?=base_url()?>cat/all">Shopping Categories</a></li>
 			  <li><a href="<?=base_url()?>advsrch">Advance Search</a></li>
             </ul>
           </li>

@@ -111,3 +111,21 @@ if ( ! function_exists('es_strip_emoji'))
         return $clean_text;
     }
 }
+
+
+
+if ( ! function_exists('es_string_limit'))
+{
+    function es_string_limit($string, $length, $trailer = '...', $postfix='')
+    {       
+        $final_string = '';
+        $lentgh = intval($length,10);
+        if((strlen($string) + strlen($postfix)) > $length){
+            $final_string = substr($string, 0, $length-strlen($postfix)-strlen($trailer)); 
+            $final_string = $final_string.$trailer.$postfix;
+        }else{
+            $final_string = $string.$postfix;
+        }
+        return $final_string;
+    }
+}
