@@ -138,9 +138,8 @@ class Ios extends MY_Controller {
 
 	}
 	
-	public function load_product() # ROUTING: category/load_product
+	public function load_product() 
 	{
- 
 		$categoryId = $this->input->get('id_cat');		 
 		$count = 0;
 		$perPage = $this->per_page;
@@ -151,26 +150,15 @@ class Ios extends MY_Controller {
 		$checkifexistcategory = $this->product_model->checkifexistcategory($categoryId);
 		$sortString = "";
 		$conditionArray = array();
-
-		   
-		 if($categoryId != 0){
+        $response = array();
+		if($categoryId != 0){
     		if($checkifexistcategory != 0){
     			$downCategory = $this->product_model->selectChild($categoryId);
     			array_push($downCategory, $categoryId);
     			$categories = implode(",", $downCategory);
     			$items = $this->product_model->getProductsByCategory($categories,$conditionArray,$count,$operator,$start,$perPage,$sortString);
-
-    			 
     			$subcategories = $this->product_model->getDownLevelNode($categoryId);
     			$breadcrumbs = $this->product_model->getParentId($categoryId);
-
-
-    			$data = array( 
-    				'title' => 'Category | Easyshop.ph',
-    				); 
-    			$data = array_merge($data, $this->fill_header());
-
-
     			$response['main_categories'] = $this->product_model->getFirstLevelNode(true);
     			$response['breadcrumbs'] = $breadcrumbs;
     			$response['subcategories'] = $subcategories;
@@ -183,14 +171,11 @@ class Ios extends MY_Controller {
 					$db_cat_item = $this->product_model->getPopularitem($down_cat,1);
 					$response['subcategories'][$x]['popular'] = $db_cat_item;
 				}
-				
 				$response['items'] = $items;  
-				echo json_encode($response);exit();
 			}
 		} 
+        echo json_encode($response);
 
-		 
-		
 	}
 
 	/*************************************************************************/
@@ -371,47 +356,34 @@ class Ios extends MY_Controller {
         if(!is_numeric($category)){
             $category = 1;
         }
-		
-		if (isset($_GET['q_str'])) {
-			if($_GET['q_str'] == "" && $_GET['q_cat'] == 1)
-			{
-				redirect('/category/all/', 'refresh');
-			}elseif($_GET['q_str'] == "" && $_GET['q_cat'] != 1){
-                redirect('/category/'.$_GET['q_cat'].'/'.es_url_clean($_GET['q_catname']).'.html' , 'refresh');
-			}else{
-
+        $response['items'] = array();
+		if (isset($_GET['q_str'])) {            
+            if($_GET['q_str'] != ""){
 				if($category == 1){
 					$category_name = "";
 				}else{
 					$category_details = $this->product_model->selectCategoryDetails($category);
 					$category_name = $category_details['name'];
 				}
-
 				$string = ltrim($this->input->get('q_str')); 
 				$ins = $this->product_model->insertSearch($string);
 				// $words = "+".implode("*,+",explode(" ",trim($string)))."*";
 				$words = explode(" ",trim($string)); 
-
 				$checkifexistcategory = $this->product_model->checkifexistcategory($category);
 				if($checkifexistcategory == 0 || $category == 1)
 				{		 
 					// $usable_string = " AND  MATCH(`name`,keywords) AGAINST('".$words."' IN BOOLEAN MODE)";
 					$response['items'] = $this->product_model->itemSearchNoCategory($words,$start,$per_page);
-
-	 
-
 				}else{
 					// $usable_string = " AND  MATCH(a.name,keywords) AGAINST('".$words."' IN BOOLEAN MODE)";
 					$down_cat = $this->product_model->selectChild($category);
 					array_push($down_cat, $category);
 					$catlist_down = implode(",", $down_cat);
 					$response['items'] = $this->product_model->getProductInCategoryAndUnder($words,$catlist_down,$start,$per_page);
-				}
-
-				echo json_encode($response['items']);exit();
-				 
+				}   
 			}
-		} 
+		}
+        echo json_encode($response['items']);    
 	}
 
     public function version(){
