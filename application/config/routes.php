@@ -42,10 +42,9 @@ $route['default_controller'] = "landingpage";
 $route['404_override'] = 'home/pagenotfound';
 
 # CATEGORY
-$route['(?i)category/(:num)/(:any)'] = 'product/categorySearch/$1/$2'; # ryan vasquez
-#$route['(?i)cat/(:any)'] = 'product/categorySearch/$1'; # janz serafico
-$route['(?i)category/loadproduct'] = 'product/loadOtherCategorySearch'; # ryan vasquez
-$route['(?i)category/all'] = 'product/categories_all'; # ryan vasquez
+$route['(?i)category/(:any)'] = 'product/categorySearch/$1'; # janz serafico
+$route['(?i)cat/loadproduct'] = 'product/loadOtherCategorySearch'; # ryan vasquez
+$route['(?i)cat/all'] = 'product/categories_all'; # ryan vasquez
 
 #SEARCHING
 $route['(?i)search/(:any)'] = 'product/sch/$1'; # ryan vasquez
@@ -59,8 +58,7 @@ $route['(?i)advsrch/scroll_product'] = 'product_search/load_product'; # new sear
 $route['(?i)chngepaswd'] = 'register/changepass'; # rain jorque 
 
 #ITEMS
-$route['(?i)item/(:any)'] = 'product/item/$1'; # ryan vasquez
-#$route['(?i)item/(:any)'] = 'product/item/$1'; # ryan vasquez
+$route['(?i)item/(:any)'] = 'product/item/$1'; # sam gavinio
 $route['search/suggest'] = 'product/sch_onpress'; # ryan vasquez
 
 #SELL ITEM

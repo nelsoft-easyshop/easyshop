@@ -34,7 +34,7 @@ class MY_Controller extends CI_Controller
             $this->load->helper('view_helper');
         }
         /*  Load custom common functions */
-        $this->load->helper('mycommon_helper');
+        $this->load->helper('common_helper');
     }
 	
     #fill_header is not ran in the constructor of MY_Controller despite that fact that all pages need it
@@ -117,6 +117,7 @@ class MY_Controller extends CI_Controller
                         'id_cat' => $row['level1_id'],
                         'NAME' => $row['level1_name'],
                         'path' => $row['img_level1'],
+                        'slug' => $row['level1_slug'],
                         0 => array(),
                     );
                 $idx_lvl1 = $row['level1_id'];
@@ -133,6 +134,7 @@ class MY_Controller extends CI_Controller
                 $data[$idx_lvl1][0][$row['level2_id']] =  array(
                         'id_cat' => $row['level2_id'],
                         'name' => $row['level2_name'],
+                        'slug' => $row['level2_slug'],
                         6 => array(),
                         'popular' => $pitem,
                     );
@@ -141,7 +143,8 @@ class MY_Controller extends CI_Controller
             if(strlen(trim($row['level3_id']) > 0)){
                 array_push($data[$idx_lvl1][0][$idx_lvl2][6], array(
                         'id_cat' => $row['level3_id'],
-                        'name' => $row['level3_name'],));
+                        'name' => $row['level3_name'],
+                        'slug' => $row['level3_slug'],));
             }
         }
         foreach($data as $key=>$x){

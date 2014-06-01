@@ -10,13 +10,14 @@
         , `parent_id`
         , `sort_order`
         , `is_main` 
+        , `slug`
         FROM `es_cat`
         WHERE id_cat = :id_cat
         LIMIT 1
     </select>
 	
     <select id="selectFirstLevel">
-        SELECT c.name,c.description,c.keywords,c.id_cat, c.sort_order,c.parent_id,c.is_main, i.path
+        SELECT c.name,c.description,c.keywords,c.id_cat, c.slug, c.sort_order,c.parent_id,c.is_main, i.path
         FROM es_cat c
         LEFT JOIN es_cat_img i ON c.id_cat = i.id_cat
         WHERE c.parent_id = 1 AND c.id_cat != 1
@@ -30,8 +31,8 @@
         keywords,
         id_cat,
         parent_id,
-        is_main
-
+        is_main,
+        slug
         FROM es_cat
         WHERE parent_id = :parent_id
         and id_cat != 1
@@ -56,7 +57,7 @@
     </select>
     
     <select id="getParent">
-        SELECT T2.id_cat, T2.name
+        SELECT T2.id_cat, T2.name, T2.slug
         FROM (
         SELECT
         @r AS _id,
@@ -206,7 +207,6 @@ FROM
       , a.`member_id`
       , a.`createddate`
       , a.`lastmodifieddate`
-      , a.`quantity`
       , a.`sku` 
     FROM
       `es_product` a
@@ -800,9 +800,9 @@ FROM
 </select>
 
 <select id = 'getCategoriesNavigation'>
-    SELECT COALESCE(a.name,'') as level1_name,COALESCE(a.id_cat,'') as level1_id,
-    COALESCE(b.name,'') as level2_name,COALESCE(b.id_cat,'') as level2_id,
-    COALESCE(c.name,'') as level3_name,COALESCE(c.id_cat,'') as level3_id,
+    SELECT COALESCE(a.name,'') as level1_name,COALESCE(a.id_cat,'') as level1_id, COALESCE(a.slug,'') as level1_slug,
+    COALESCE(b.name,'') as level2_name,COALESCE(b.id_cat,'') as level2_id, COALESCE(b.slug,'') as level2_slug,
+    COALESCE(c.name,'') as level3_name,COALESCE(c.id_cat,'') as level3_id, COALESCE(c.slug,'') as level3_slug,
     d.path as img_level1
     FROM es_cat a
     LEFT JOIN es_cat b ON b.parent_id = a.id_cat AND b.is_main = 1

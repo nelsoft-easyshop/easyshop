@@ -39,7 +39,7 @@ class Mycontroller extends MY_Controller
 		$flagger = TRUE;
 		
 		foreach($category as $p){
-			$slugVal = $this->product_model->createSlug($p['name']);
+			$slugVal = $this->product_model->createSlug($p['name'],1);
 			$result = $this->my_model->updateCategorySlug($p['id_cat'], $slugVal);
 			if(!$result){
 				echo 'Error updating slug field of current category.' ;

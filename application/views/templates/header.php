@@ -11,7 +11,7 @@
 <?php require_once("assets/includes/css.php"); ?>
 <?php require_once("assets/includes/js.php"); ?>
 <meta charset="utf-8" />
-<meta name="description" content="" />
+<meta name="description" content="<?php echo isset($metadescription)?$metadescription:''?>"  />
 <meta name="keywords" content=""/>
 <link rel="shortcut icon" href="<?php echo base_url()?>assets/images/favicon.ico" type="image/x-icon"/>
 <!--[if lt IE 9]>
@@ -26,12 +26,6 @@
 <![endif]-->
 
 <title>
-	<?php 
-        if(isset($_GET['q_str']))
-        {
-          echo urldecode($_GET['q_str']).' | ';
-        }
-    ?>
     <?php echo $title?>
 </title>
 
@@ -91,7 +85,7 @@
             <ul>
               <!-- <li><a href="<?=base_url()?>home/under_construction">Visiting a new Shop</a></li> -->
               <!-- <li><a href="<?=base_url()?>home/under_construction">Discounts</a></li> -->
-              <li><a href="<?=base_url()?>category/all">Shopping Categories</a></li>
+              <li><a href="<?=base_url()?>cat/all">Shopping Categories</a></li>
 			  <li><a href="<?=base_url()?>advsrch">Advance Search</a></li>
             </ul>
           </li>
@@ -166,14 +160,12 @@
           <select name="q_cat" id="q_cat">
             <option value="1">All Categories</option>
             <?php
-                $selected_cat_name = 'All Categories';
                 foreach ($category_search as $keyrow) {
                   $selected = "";
                   if(isset($_GET['q_cat'])){
                       if($_GET['q_cat'] == $keyrow['id_cat'])
                       {
                         $selected = "selected";
-                        $selected_cat_name = $keyrow['name'];
                       }
                   }
              ?>
@@ -182,7 +174,6 @@
                   }
             ?>
           </select>
-          <input type='hidden' name='q_catname' id='q_catname' value='<?php echo $selected_cat_name; ?>'/>
           <button onclick="search_form.submit();" class="search_btn">SEARCH</button><a href="<?=base_url()?>advsrch" class="adv_srch_lnk">Advance Search</a>
         </div>
         <div id="main_search_drop_content"></div> 
@@ -246,11 +237,6 @@ $('#main_search').on('input propertychange', function() {
             $("#main_search_drop_content").fadeOut(150);
           }
       });
-      
-      $('#q_cat').on('change', function(){
-          $('#q_catname').val($(this).find(':selected').text());
-      });
-      
 });
 
       

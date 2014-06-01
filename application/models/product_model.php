@@ -431,10 +431,10 @@ class product_model extends CI_Model
 		$sth->bindParam(':start',$start,PDO::PARAM_INT);			 
 		$sth->bindParam(':per_page',$per_page,PDO::PARAM_INT);
 		$sth->execute(); 
+        
 		$rows = $sth->fetchAll(PDO::FETCH_ASSOC);	
-	 
+
 		return $rows;
-		// print_r($rows);exit();
 	}
 
 	function getProductAttributesByCategory($ids)
@@ -1127,18 +1127,22 @@ class product_model extends CI_Model
 		$sth->execute();
 	}
     
-    function createSlug($title)
+    function createSlug($title, $table = 0)
     {
     	$titleLower = strtolower($title);
     	$slugGenerate = "";
-    	$query = "SELECT COUNT(slug) AS cnt_slug FROM `es_product` WHERE slug LIKE :slug ";
+        if($table == 0){
+            $query = "SELECT COUNT(slug) AS cnt_slug FROM `es_product` WHERE slug LIKE :slug ";
+        }else if($table == 1){
+            $query = "SELECT COUNT(slug) AS cnt_slug FROM `es_cat` WHERE slug LIKE :slug ";
+        }
     	$bindValue = es_url_clean($titleLower).'%';
     	$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':slug',$bindValue ,PDO::PARAM_STR);
         $sth->execute();
         $row = $sth->fetchAll(PDO::FETCH_COLUMN,0);
         $cnt = $row[0];
-
+        
         if($cnt > 0){
         	$slugGenerate = es_url_clean($titleLower.'-'.$cnt++);
         }else{
@@ -1146,16 +1150,20 @@ class product_model extends CI_Model
         }
         
         #IDEALLY, THIS BLOCK OF CODE IS NOT NEEDED, HOWEVER THERE ARE RARE INSTANCES WHEN
-        #THE SAME SLUG IS GENERATED FOR TWO PRODUCTS      
-        $query = "SELECT count(`slug`) as cnt FROM es_product WHERE slug = :slug";
+        #THE SAME SLUG IS GENERATED FOR TWO ENTRIES    
+        if($table == 0){        
+            $query = "SELECT id_product as id FROM es_product WHERE slug = :slug";
+        }
+        else if($table == 1){
+            $query = "SELECT id_cat as id FROM es_cat WHERE slug = :slug";
+        }
      	$sth = $this->db->conn_id->prepare($query);
         $sth->bindParam(':slug',$slugGenerate ,PDO::PARAM_STR);
         $sth->execute();
         $row = $sth->fetch(PDO::FETCH_ASSOC);
-        if($row['cnt']>0){
-            $slugGenerate = $slugGenerate.'-'.date("YmdHis");
+        if($row['id']>0){
+            $slugGenerate = $slugGenerate.'-'.$row['id'];
         }
-
         return $slugGenerate;
     } 
 
@@ -1933,21 +1941,23 @@ class product_model extends CI_Model
         return $data;  
     }
     
-	public function getCategoryIdBySlug($slug)
+	public function getCategoryBySlug($slug)
 	{
-		$query = "SELECT id_cat FROM es_cat WHERE slug = :slug";
+		$query = "SELECT id_cat, name, description FROM es_cat WHERE slug = :slug";
     	$sth = $this->db->conn_id->prepare($query);
     	$sth->bindParam(':slug', $slug, PDO::PARAM_STR);
     	$result = $sth->execute();
 		$rows = $sth->fetchAll(PDO::FETCH_ASSOC);
-        
-		if( count($rows) == 1 ){
-			$id = $rows[0]['id_cat'];
-		} else {
-			$id = 0;
-		}
+        $return  = array();
+		if( count($rows) != 1 ){
+			$return['id_cat'] = 0;
+            $return['name'] = '';
+            $return['description'] = '';
+		}else{
+            $return = $rows[0];
+        }
 		
-        return $id;  
+        return $return;  
 	}
         
     

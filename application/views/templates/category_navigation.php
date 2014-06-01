@@ -5,8 +5,8 @@
 	<?PHP for($x=0;$x < sizeof($cat_items);$x++): ?>                
 		<li  class="category_item">
 			<p style="background:url('<?php echo base_url()?>assets/<?PHP echo $cat_items[$x]['path']; ?>') no-repeat scroll left center #fff">
-				<a href="<?=base_url()?>category/<?PHP echo $cat_items[$x]['id_cat']; ?>/<?PHP echo es_url_clean($cat_items[$x]['NAME']); ?>.html">
-					<span><?PHP echo $cat_items[$x]['NAME']; ?></span>
+				<a href="<?=base_url()?>category/<?PHP echo $cat_items[$x]['slug']; ?>">
+					<span><?PHP echo html_escape($cat_items[$x]['NAME']); ?></span>
 				</a>
 			</p>
 			<?PHP if(sizeof($cat_items[$x][0]) >= 1): ?>
@@ -14,7 +14,7 @@
 				<?PHP for($x2=0;$x2 < sizeof($cat_items[$x][0]);$x2++): ?>     
 					<div class='inner_category'>
 						<h3>
-							<a href='<?=base_url()?>category/<?PHP echo $cat_items[$x][0][$x2]['id_cat']; ?>/<?PHP echo es_url_clean($cat_items[$x][0][$x2]['name']); ?>.html'><?PHP echo $cat_items[$x][0][$x2]['name']; ?></a>
+							<a href='<?=base_url()?>category/<?PHP echo $cat_items[$x][0][$x2]['slug']?>'><?PHP echo html_escape($cat_items[$x][0][$x2]['name']); ?></a>
 						</h3> 
 						<p>Recommended</p>
 						<ul class='slides_prod slider_product'>
@@ -25,7 +25,7 @@
                         
 						<ul class='category_product_types'>         
 							<?PHP for($x3=0;$x3 < sizeof($cat_items[$x][0][$x2][6]);$x3++): ?>     
-							<li><a href='<?=base_url()?>category/<?PHP echo $cat_items[$x][0][$x2][6][$x3]['id_cat']; ?>/<?PHP echo es_url_clean($cat_items[$x][0][$x2][6][$x3]['name']); ?>.html'><?PHP echo $cat_items[$x][0][$x2][6][$x3]['name']; ?></a></li>
+							<li><a href='<?=base_url()?>category/<?PHP echo $cat_items[$x][0][$x2][6][$x3]['slug'];?>'><?PHP echo html_escape($cat_items[$x][0][$x2][6][$x3]['name']); ?></a></li>
 							<?PHP endfor; ?>     
 						</ul>  
 					</div>

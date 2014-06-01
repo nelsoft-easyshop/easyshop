@@ -241,20 +241,16 @@ class productUpload extends MY_Controller
 			"xss_clean" => FALSE
 			)); 	
 
-		// $this->upload->do_multi_upload("files");
-
-
 	 	$error = 0;
-	   	$file_data = $this->upload->get_multi_upload_data();
 
 	   	if ($this->upload->do_multi_upload('files')){
+            $file_data = $this->upload->get_multi_upload_data();
 	   		for ($i=0; $i < sizeof($filenames_ar); $i++) { 
 
 	   			$this->es_img_resize($filenames_ar[$i],$path_directory, 'small/', $this->img_dimension['small']); 
 	   			$this->es_img_resize($filenames_ar[$i],$path_directory.'small/', '../categoryview/', $this->img_dimension['categoryview']);
 	   			$this->es_img_resize($filenames_ar[$i],$path_directory.'categoryview/','../thumbnail/', $this->img_dimension['thumbnail']);
-
-            //If user uploaded image is too large, resize and overwrite original image
+                //If user uploaded image is too large, resize and overwrite original image
 	   			if(isset($file_data[$i])){
 		   			if(($file_data[$i]['image_width'] > $this->img_dimension['usersize'][0]) || ($file_data[$i]['image_height'] > $this->img_dimension['usersize'][1])){
 		   				$this->es_img_resize($file_data[$i]['file_name'],$path_directory,'', $this->img_dimension['usersize']);
@@ -877,19 +873,32 @@ class productUpload extends MY_Controller
 				$serverResponse['error'] = 'Server data mismatch. Try again later.';
 			}
 		}
-		
+	
 		echo json_encode($serverResponse, JSON_FORCE_OBJECT);
 	}
 	
 	
 	function step4() # uploading of product is successful.
 	{	
+        $this->load->model('memberpage_model');
 		$data = $this->fill_view();
 		$this->load->view('templates/header', $data); 
         $memberId =  $this->session->userdata('member_id');
-        
 		if($this->input->post('prod_h_id')){
             $billing_id = $this->input->post('prod_billing_id'); 
+            
+            $deposit_details = array('bank_id'=>'0','acct_no'=>'','acct_name'=>'');
+            
+            $user_accounts = $this->memberpage_model->get_billing_info($memberId);
+            foreach($user_accounts as $account){
+                if(intval($account['id_billing_info']) === intval($billing_id)){
+                    $deposit_details['bank_id'] = $account['bank_id'];
+                    $deposit_details['acct_name'] = $account['bank_account_name'];
+                    $deposit_details['acct_no'] = $account['bank_account_number'];
+                }
+            }
+            
+
             $is_cod =($this->input->post('allow_cod'))?1:0;
 			$response['id'] = $this->input->post('prod_h_id');
             $this->product_model->finalizeProduct($response['id'] , $memberId, $billing_id, $is_cod, true);

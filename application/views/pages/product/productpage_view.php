@@ -18,7 +18,7 @@
       <div class="category_nav product_content">
         <ul>
           <?php foreach($main_categories as $category): ?>
-          <li class = <?php echo (($category['id_cat'] === $breadcrumbs[0]['id_cat'])?"active":"");?>> <a href="<?=base_url()?>category/<?php echo $category['id_cat'];?>/<?php echo es_url_clean($category['name']); ?>.html"> <?php echo $category['name'];?> </a> </li>
+          <li class = <?php echo (($category['id_cat'] === $breadcrumbs[0]['id_cat'])?"active":"");?>> <a href="<?=base_url()?>category/<?php echo $category['slug']?>"> <?php echo html_escape($category['name']);?> </a> </li>
           <?php endforeach;?>
         </ul>
         <span class="span_bg prod_cat_drop"></span>
@@ -29,7 +29,7 @@
       <ul>
         <li class=""><a href="<?=base_url()?>home">Home</a></li>
         <?php foreach($breadcrumbs as $crumbs): ?>
-        <li> <a href="<?=base_url()?>category/<?php echo $crumbs['id_cat']?>/<?php echo es_url_clean($crumbs['name']);?>.html"> <?php echo $crumbs['name']?> </a> </li>
+        <li> <a href="<?=base_url()?>category/<?php echo $crumbs['slug']?>"> <?php echo html_escape($crumbs['name']);?> </a> </li>
         <?php endforeach;?>
         <li class="bread_crumbs_last_child"><?php echo html_escape($product['product_name']);?></li>
       </ul>

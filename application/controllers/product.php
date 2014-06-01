@@ -19,20 +19,23 @@ class product extends MY_Controller
     /*     
      *   Displays products in each category
      */
-    function categorySearch($categoryId = 0,$url_string="string")
-	//function categorySearch($url_string="")
+	function categorySearch($url_string="")
     {
     	$start = 0;
     	$count = 0;
     	$perPage = $this->per_page;
     	$operator = " = ";
     	$data =  $this->fill_header();	
-		//$categoryId = $this->product_model->getCategoryIdBySlug($url_string);
-    	$checkifexistcategory = $this->product_model->checkifexistcategory($categoryId);
+		$category_array = $this->product_model->getCategoryBySlug($url_string);
+
+        $categoryId = $category_array['id_cat'];
+        $categoryName = $category_array['name'];
+        $categoryDescription = $category_array['description'];
+
     	$sortString = ""; 
     	$conditionArray = array(); 
 
-    	if(!count($_GET) <= 0){
+    	if(count($_GET) > 0){
     		foreach ($_GET as $key => $value) {
 
     			if($key == "Brand"){
@@ -113,18 +116,14 @@ class product extends MY_Controller
     			}
     		}
     	}    
- 
-        
 
     	if($categoryId != 0){
-    		if($checkifexistcategory != 0){
-
-
        			$downCategory = $this->product_model->selectChild($categoryId);
     			array_push($downCategory, $categoryId);
     			$categories = implode(",", $downCategory);
     			$items = $this->product_model->getProductsByCategory($categories,$conditionArray,$count,$operator,$start,$perPage,$sortString);
-    			$ids = array();
+    			
+                $ids = array();
     			foreach ($items as $key) {
     				array_push($ids, $key['product_id']);
     			}
@@ -145,13 +144,12 @@ class product extends MY_Controller
     			}
     			$subcategories = $this->product_model->getDownLevelNode($categoryId);
     			$breadcrumbs = $this->product_model->getParentId($categoryId);
-
-
+                
     			$data = array( 
-    				'title' => substr($url_string,0,-5).' | Easyshop.ph',
+    				'title' => es_string_limit(html_escape($categoryName), 60, '...', ' | Easyshop.ph'),
+                    'metadescription' => es_string_limit(html_escape($categoryDescription), 60),
     				); 
     			$data = array_merge($data, $this->fill_header());
-
 
     			$response['main_categories'] = $this->product_model->getFirstLevelNode(true);
     			$response['breadcrumbs'] = $breadcrumbs;
@@ -174,12 +172,8 @@ class product extends MY_Controller
 				$this->load->view('templates/header', $data); 
 				$this->load->view('pages/product/product_search_by_category_final',$response);
 				$this->load->view('templates/footer_full'); 
-			}
-			else{
-				redirect('/category/all', 'refresh');
-			}
 		}else{
-			redirect('/category/all', 'refresh');
+			redirect('/cat/all', 'refresh');
 		}
 
 	}
@@ -190,7 +184,7 @@ class product extends MY_Controller
 
     function loadOtherCategorySearch(){
 
-    	$categoryId = $_POST['id_cat'];				  
+    	$categoryId = $this->input->post('id_cat');				  
     	$perPage = $this->per_page;
     	$start = $this->input->post('page_number') * $perPage;
     	$count = 0;
@@ -393,118 +387,99 @@ class product extends MY_Controller
 		$start = 0;
 		$usable_string;
 		$per_page = $this->per_page;
-		$category = $this->input->get('q_cat');
-		if(!is_numeric($category)){
-			$category = 1;
-		}
-        if(!isset($_GET['q_cat'])){
-            $_GET['q_cat'] = 1;
+
+		$category = $this->input->get('q_cat')?$this->input->get('q_cat'):1;
+        $search_string =  $this->input->get('q_str')?$this->input->get('q_str'):'';
+
+        $category_details = $this->product_model->selectCategoryDetails($category);
+        $category_name = $category_details['name'];
+        
+        if($search_string == "" && $category == 1){
+            redirect('/cat/all/', 'refresh');
+        }elseif($search_string == "" && $category != 1){
+            redirect('/category/'. $category_details['slug'], 'refresh');
+        }else{
+            $string = html_escape(ltrim($this->input->get('q_str')));
+            $ins = $this->product_model->insertSearch($string);
+            // $words = "+".implode("*,+",explode(" ",trim($string)))."*";
+            $words = explode(" ",trim($string)); 
+
+            $checkifexistcategory = $this->product_model->checkifexistcategory($category);
+            if($checkifexistcategory == 0 || $category == 1)
+            {		  
+                $response['items'] = $this->product_model->itemSearchNoCategory($words,$start,$per_page);
+            }else{ 
+                $down_cat = $this->product_model->selectChild($category);
+                array_push($down_cat, $category);
+                $catlist_down = implode(",", $down_cat);
+                $response['items'] = $this->product_model->getProductInCategoryAndUnder($words,$catlist_down,$start,$per_page);
+            }
+            // start here
+            $firstdownlevel = $this->product_model->getDownLevelNode($category);
+
+            $newbuiltarray = array();
+            $cnt = 0;
+            $item_total_cnt = 0;
+
+            foreach ($firstdownlevel as $keyfirstlevel => $value) {
+                $count_main = 0;
+                $noitem = false; 
+                $newcat = $value['id_cat'];  
+                $down_cat = $this->product_model->selectChild($newcat);
+                array_push($down_cat,$value['id_cat']);
+                $catlist_down = implode(",", $down_cat);
+                $count_main_new = count($this->product_model->getProductInCategoryAndUnder($words,$catlist_down,0,9999999999));
+
+                $count_main += $count_main_new;
+                $item_total_cnt += $count_main;
+                $cnt = $keyfirstlevel;
+                array_push($newbuiltarray, array("name"=>$value['name'],"item_id"=> $value['id_cat'],"parent_id"=> $value['parent_id'],"count"=>0,"children"=>array()));
+                $secondlevel = $this->product_model->getDownLevelNode($value['id_cat']);
+                
+                foreach ($secondlevel as $key){
+                    $count = 0;
+                    $newcat = $key['id_cat'];  
+                    $down_cat = $this->product_model->selectChild($newcat);
+                    array_push($down_cat,$newcat);
+                    $catlist_down = implode(",", $down_cat); 
+                    $count_new = count($this->product_model->getProductInCategoryAndUnder($words,$catlist_down,0,9999999999));	
+                    $count += $count_new;
+                    if(!$count <= 0)
+                    {
+                        array_push($newbuiltarray[$cnt]['children'], array("name"=>$key['name'],"item_id"=> $key['id_cat'],"parent_id"=> $key['parent_id'],"count"=>$count));
+                    }
+                }
+                $newbuiltarray[$cnt]['count'] = $count_main;
+            }
+
+            $newbuiltarray = array("name"=>$category_name,"children" => $newbuiltarray);
+
+            $list = $this->toUL($newbuiltarray['children']);
+
+            if($category_name == "PARENT" || $category == 1){
+                $response['category_cnt'] = '<h3>Categories</h3>' . $list;
+            }else{
+                $vcnt = "";
+                if($item_total_cnt > 0){
+                    $vcnt = "(" . $item_total_cnt . ")";
+                }
+                $response['category_cnt'] = '<h3>Categories</h3><ul><li>'.$category_name. $vcnt .'</li><li>'.$list.'</li></ul>';
+            }
+            
+            $response['cntr'] = $item_total_cnt;
+            $response['string'] = $search_string;
+            // end here
+
+            $response['id_cat'] = $category;
+            $data = array(
+                'title' => html_escape($search_string).' | Easyshop.ph',
+                );
+            $data = array_merge($data, $this->fill_header());
+            $response['category_navigation'] = $this->load->view('templates/category_navigation',array('cat_items' =>  $this->getcat(),), TRUE );
+            $this->load->view('templates/header', $data); 
+            $this->load->view('pages/product/product_search_by_searchbox',$response);
+            $this->load->view('templates/footer_full'); 
         }
-		if (isset($_GET['q_str'])) {
-			if($_GET['q_str'] == "" && $_GET['q_cat'] == 1)
-			{
-				redirect('/category/all/', 'refresh');
-			}elseif($_GET['q_str'] == "" && $_GET['q_cat'] != 1){
-				redirect('/category/'.$_GET['q_cat'].'/'.es_url_clean($_GET['q_catname']).'.html' , 'refresh');
-			}else{
-
-				if($category == 1){
-					$category_name = "";
-				}else{
-					$category_details = $this->product_model->selectCategoryDetails($category);
-					$category_name = $category_details['name'];
-				}
-
-				$string = html_escape(ltrim($this->input->get('q_str')));
-
-				$ins = $this->product_model->insertSearch($string);
-				// $words = "+".implode("*,+",explode(" ",trim($string)))."*";
-				$words = explode(" ",trim($string)); 
-
-				$checkifexistcategory = $this->product_model->checkifexistcategory($category);
-				if($checkifexistcategory == 0 || $category == 1)
-				{		  
-					$response['items'] = $this->product_model->itemSearchNoCategory($words,$start,$per_page);
-
-
-
-				}else{ 
-					$down_cat = $this->product_model->selectChild($category);
-					array_push($down_cat, $category);
-					$catlist_down = implode(",", $down_cat);
-					$response['items'] = $this->product_model->getProductInCategoryAndUnder($words,$catlist_down,$start,$per_page);
-				}
-
-
-				// start here
-				$firstdownlevel = $this->product_model->getDownLevelNode($category);
-
-				$newbuiltarray = array();
-				$cnt = 0;
-				$item_total_cnt = 0;
-
-				foreach ($firstdownlevel as $keyfirstlevel => $value) {
-					$count_main = 0;
-					$noitem = false; 
-					$newcat = $value['id_cat'];  
-					$down_cat = $this->product_model->selectChild($newcat);
-					array_push($down_cat,$value['id_cat']);
-					$catlist_down = implode(",", $down_cat);
-					$count_main_new = count($this->product_model->getProductInCategoryAndUnder($words,$catlist_down,0,9999999999));
-
-					$count_main += $count_main_new;
-					$item_total_cnt += $count_main;
-					$cnt = $keyfirstlevel;
-					array_push($newbuiltarray, array("name"=>$value['name'],"item_id"=> $value['id_cat'],"parent_id"=> $value['parent_id'],"count"=>0,"children"=>array()));
-					$secondlevel = $this->product_model->getDownLevelNode($value['id_cat']);
-					
-					foreach ($secondlevel as $key){
-						$count = 0;
-						$newcat = $key['id_cat'];  
-						$down_cat = $this->product_model->selectChild($newcat);
-						array_push($down_cat,$newcat);
-						$catlist_down = implode(",", $down_cat); 
-						$count_new = count($this->product_model->getProductInCategoryAndUnder($words,$catlist_down,0,9999999999));	
-						$count += $count_new;
-						if(!$count <= 0)
-						{
-							array_push($newbuiltarray[$cnt]['children'], array("name"=>$key['name'],"item_id"=> $key['id_cat'],"parent_id"=> $key['parent_id'],"count"=>$count));
-						}
-					}
-					$newbuiltarray[$cnt]['count'] = $count_main;
-				}
-
-				$newbuiltarray = array("name"=>$category_name,"children" => $newbuiltarray);
-
-				$list = $this->toUL($newbuiltarray['children']);
-
-				if($category_name == "PARENT" || $category == 1){
-					$response['category_cnt'] = '<h3>Categories</h3>-' . $list;
-				}else{
-					$vcnt = "";
-					if($item_total_cnt > 0){
-						$vcnt = "(" . $item_total_cnt . ")";
-					}
-					$response['category_cnt'] = '<h3>Categories</h3><ul><li>'.$category_name. $vcnt .'</li><li>'.$list.'</li></ul>';
-				}
-				
-				$response['cntr'] = $item_total_cnt;
-
-				// end here
-
-				$response['id_cat'] = $category;
-				$data = array(
-					'title' => 'Easyshop.ph',
-					);
-				$data = array_merge($data, $this->fill_header());
-				$response['category_navigation'] = $this->load->view('templates/category_navigation',array('cat_items' =>  $this->getcat(),), TRUE );
-				$this->load->view('templates/header', $data); 
-				$this->load->view('pages/product/product_search_by_searchbox',$response);
-				$this->load->view('templates/footer_full'); 
-			}
-		}else{
-			redirect('/category/all', 'refresh');
-		}
 	}	
 
     /*   
@@ -784,7 +759,7 @@ class product extends MY_Controller
 			echo 2;
 	}
 	
-	function categories_all() # ROUTING: category/all
+	function categories_all() # ROUTING: cat/all
 	{
 		$categories = $this->product_model->getFirstLevelNode(false, true);
 		foreach($categories as $index=>$category){
@@ -856,10 +831,8 @@ class product extends MY_Controller
     
     function item($slug = ''){
     	$product_row = $this->product_model->getProductBySlug($slug);
-    	$data['title'] = 'Easyshop.ph - Product Page';
     	$uid = $this->session->userdata('member_id');
-    	$data = array_merge($data,$this->fill_header());
-    	$this->load->view('templates/header', $data); 
+    	$data = $this->fill_header();
     	if($product_row['o_success'] >= 1){
     		$id = $product_row['id_product'];
     		$product_options = $this->product_model->getProductAttributes($id, 'NAME');
@@ -884,17 +857,20 @@ class product extends MY_Controller
     			'shiploc' => $this->product_model->getLocation(),
     			'category_navigation' => $this->load->view('templates/category_navigation',array('cat_items' =>  $this->getcat(),), TRUE ),
     			));
-                $data['vendorrating'] = $this->product_model->getVendorRating($data['product']['sellerid']);
-
-                $data['jsonReviewSchemaData'] = $this->assembleJsonReviewSchemaData($data);
-                $this->load->view('pages/product/productpage_view', $data); 
-            }
-            else{
-                $this->load->view('pages/general_error', $data); 
-            }
-            $this->load->view('templates/footer_full');
-        } 
-        
+            $data['vendorrating'] = $this->product_model->getVendorRating($data['product']['sellerid']);
+            $data['jsonReviewSchemaData'] = $this->assembleJsonReviewSchemaData($data);
+            $data['title'] = es_string_limit(html_escape($product_row['product_name']), 60, '...', ' | Easyshop.ph');
+            $data['metadescription'] = es_string_limit(html_escape($product_row['brief']), 155);
+            $this->load->view('templates/header', $data); 
+            $this->load->view('pages/product/productpage_view', $data); 
+        }
+        else{
+            $data['title'] =  'Easyshop.ph | Page Not Found';
+            $this->load->view('templates/header', $data); 
+            $this->load->view('pages/general_error', $data); 
+        }
+        $this->load->view('templates/footer_full');
+    } 
 
 }
 

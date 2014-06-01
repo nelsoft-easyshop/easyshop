@@ -10,11 +10,6 @@
 		<div class="prob_cat_nav">
 			<div class="category_nav product_content">
 				<ul>
-					<!--
-				  	<li class = "active">
-						<a href="#">Related: Not yet Available</a>
-				  	</li>
-				  	-->
 				</ul>
 			</div>
 		</div>
@@ -23,23 +18,21 @@
 	</div>
 </section>
 <div class="wrapper" id="main_search_container">
-	<div class="left_attribute">
-		<div class="src_ul_li">
 
-			<?php
-        if(!count($items) <= 0){
-       echo $category_cnt; 
-     }
-     ?>
-		</div>
-	</div>
+    <?php if(count($items) > 0): ?>
+        <div class="left_attribute">
+            <div class="src_ul_li">
+                <?php echo $category_cnt; ?>
+            </div>
+        </div>
+    <?php endif; ?>
+
 	<div class="right_product">
 	   <?php 
       if(count($items) <= 0){
         ?>
-        <div>
-         <h2> No Results Found.
-          </h2>
+        <div style='margin-left:200px; margin-bottom: 100px;'>
+         <span style='font-size:15px;'> Your search for <span style='font-weight:bold'><?php echo html_escape($string); ?></span> did not return any results. </span>
         </div>
         <?php
       }else{
@@ -54,7 +47,7 @@
             $s = "s";
           }
     ?>
-          <div class="adv_ctr"><strong style="font-size:14px"><?php echo number_format($rec);?></strong> result<?php echo $s;?></div>
+          <div class="adv_ctr"><strong style="font-size:14px"><?php echo number_format($rec);?></strong> result<?php echo $s;?> found for <strong><?php echo html_escape($string);?></strong></div>
     <?php   endif; 
       endif;
     ?>

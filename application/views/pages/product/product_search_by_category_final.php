@@ -21,8 +21,8 @@ $_SESSION['start'] = "0";
                 <ul>
                     <?php foreach ($main_categories as $category): ?>
                     <li class = <?php echo (($category['id_cat'] === $breadcrumbs[0]['id_cat']) ? "active" : ""); ?>>
-                        <a href="<?= base_url() ?>category/<?php echo $category['id_cat']; ?>/<?php echo es_url_clean($category['name']); ?>.html">
-                            <?php echo $category['name']; ?>
+                        <a href="<?= base_url() ?>category/<?php echo $category['slug']?>">
+                            <?php echo html_escape($category['name']); ?>
                         </a>
                     </li>
                 <?php endforeach; ?>
@@ -36,8 +36,8 @@ $_SESSION['start'] = "0";
             <li class=""><a href="<?= base_url() ?>home">Home</a></li>
             <?php foreach ($breadcrumbs as $crumbs): ?>
             <li>
-                <a href="<?= base_url() ?>category/<?php echo $crumbs['id_cat'] ?>/<?php echo es_url_clean($crumbs['name']) ?>.html">
-                    <?php echo $crumbs['name'] ?>
+                <a href="<?= base_url() ?>category/<?php echo $crumbs['slug'] ?>">
+                    <?php echo html_escape($crumbs['name']); ?>
                 </a>
             </li> 
         <?php endforeach; ?>
@@ -130,7 +130,7 @@ $_SESSION['start'] = "0";
             <div class="cc2">
                 <?PHP foreach ($subcategories as $rows): ?>
                 <div class="">
-                    <a class="cc2_title" href="<?=base_url()?>category/<?php echo $rows['id_cat'];?>/<?php echo es_url_clean($rows['name']);?>.html">
+                    <a class="cc2_title" href="<?=base_url()?>category/<?php echo $rows['slug'];?>">
                         <span><?php echo html_escape($rows['name']);?></span></a>
                         <?PHP if(count($rows['popular'])>0): ?>
                         <span class="cat_carousel_img_con"><span class="cat_carousel_img"><img src="<?= base_url().$rows['popular'][0]['path'].'categoryview/'.$rows['popular'][0]['file']; ?>"></span></span><br />
@@ -387,7 +387,7 @@ $(document).ready(function() {
                 if (request_ajax === true && ajax_is_on === false) {
                     ajax_is_on = true; 
                     $.ajax({
-                        url: base_url + 'category/loadproduct',
+                        url: base_url + 'cat/loadproduct',
                         data:{page_number:offset,id_cat:'<?php echo $id_cat ?>',type:type,parameters:'<?php echo json_encode($_GET); ?>', csrfname : csrftoken},
                         type: 'post',
                         //async: false,
