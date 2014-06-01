@@ -333,7 +333,15 @@
 		<?php foreach($deleted_products as $deleted_product):?>
 		<div class="post_items_content" data-order = "<?php echo $mycounter;?>">
 			<div class="post_item_content_left">
-				<img src="<?php echo base_url().$deleted_product['path'].'categoryview/'.$deleted_product['file']; ?>" class="product_img">
+            
+                <div class="post_item_img_table">
+                    <span class="post_item_img_con">
+                        <img src="<?php echo base_url().$deleted_product['path'].'categoryview/'.$deleted_product['file']; ?>" class="product_img">
+                    </span>
+				</div>
+            
+            
+		
 				<p>
 					<?php $rounded_score = round($deleted_product['average_rating']); ?>
 					<?php for($i = 0; $i < $rounded_score ;$i++): ?>

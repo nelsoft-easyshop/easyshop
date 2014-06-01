@@ -40,6 +40,7 @@
 							<?php echo $image_profile?>	
 						</span>
 					</div>
+                    <br/>
 					<div class="vendor-profile">
 						<p>Joined: <?php echo $vendordetails['datecreated'];?></p>
 						<p>
