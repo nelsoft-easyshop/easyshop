@@ -2,31 +2,41 @@
  * Web socket client
  */
 var esClient = (function () {
+    
+    // Load Autobahn.js, if not already loaded
+    window.ab || document.write('<script src="https://autobahn.s3.amazonaws.com/js/autobahn.min.js">\x3C/script>');
+    
     var client = {};
-    var webSocket;
+    var abConnection;
     
     /**
      * Connect to websocket server using specified identification
      * 
      * @param string id
+     * @param fn onPushAction Receives 2 params topic and data respectively
      * 
      * @returns {_L4.client} Self
      */
-    client.connect = function (id) {
-        webSocket = new WebSocket('wss://' + window.location.hostname + '/ws/?id=' + id);
-        return client;
-    };
-    
-    /**
-     * Set the push event handler function. This function will
-     * recieve a MessageEvent object.
-     * 
-     * @param fn fn Event handler
-     * 
-     * @returns {_L4.client} Self
-     */
-    client.setPushEventListener = function (fn) {
-        webSocket.onmessage = fn;
+    client.listen = function (id, onPushAction) {
+
+        /*
+         * Warning: ab is a legacy verison of AutobahnJS. We'll settle on it for now.
+         */
+        abConnection = new ab.Session(
+            'wss://' + window.location.hostname + '/ws/?id=' + id,
+            function() {
+                
+                // Once the connection has been established
+                abConnection.subscribe(id, onPushAction);
+            },
+            function() {
+                console.warn('WebSocket connection closed');
+            },
+            {
+                'skipSubprotocolCheck': true
+            }
+        );
+
         return client;
     };
     
