@@ -21,13 +21,13 @@
 				<?PHP }else{ ?>
 					<img data="<?=reset($row)['recipient_img']?>" src="<?=base_url().reset($row)['sender_img']?>/60x60.png">
 				<?PHP }
-                $span = (reset($row)['unreadConve'] != 0 ? '<span class="unreadConve">('.reset($row)['unreadConve'].')</span>' : "");
+                $span = (reset($row)['unreadConve'] != 0 ? '('.reset($row)['unreadConve'].')' : "");
                 ?>
 				</td>
 				<td>
                     
 					<a class="btn_each_msg" id="ID_<?PHP echo reset($row)['name']; ?>" href="javascript:void(0)" data='<?=html_escape(json_encode($row))?>'>
-						<span class="msg_sender"><?PHP echo reset($row)['name']."</span>".$span; ?>
+						<span class="msg_sender"><?PHP echo reset($row)['name']."</span><span class=\"unreadConve\">".$span."</span>"; ?>
                     <?php 
                           $keys = array_keys($row);
                           $row[reset($keys)]['message'] = html_escape(reset($row)['message']);
@@ -92,8 +92,7 @@
 			$("#modal-container, #modal-background").toggleClass("active");
 			$("#modal-container").show();
 		});
-				
-		
+
 		$("#msg_textarea").on("click","#send_btn",function(){ 
 			
         var D = eval('(' + $(this).attr('data') + ')');
@@ -307,13 +306,15 @@
 		$.each(D,function(key,val){
 			var cnt = parseInt(Object.keys(val).length)- 1;
 			var Nav_msg = D[key][Object.keys(val)[cnt]]; //first element of object
-            if ($('#ID_'+Nav_msg.name).length) {
+            if ($('#ID_'+Nav_msg.name).length) { //if existing on the conve
                 $('#ID_'+Nav_msg.name).children('.msg_message').text(Nav_msg.message);
                 $('#ID_'+Nav_msg.name).attr('data',JSON.stringify(val));
                 $('#ID_'+Nav_msg.name).parent().parent().addClass('NS');
-                if ($('#ID_'+Nav_msg.name).hasClass("Active")) {
+                $('#ID_'+Nav_msg.name+" .unreadConve").html("("+Nav_msg.unreadConve+")");
+                if ($('#ID_'+Nav_msg.name).hasClass("Active")) {//if focus on the conve
                     specific_msgs();
                     seened($('#ID_'+Nav_msg.name));
+                    $('#ID_'+Nav_msg.name+" .unreadConve").html("");
                 }
             }else{
                 html +='<tr class="'+(Nav_msg.opened == "0" && Nav_msg.status == "reciever" ? "NS" : "")+' odd">';
@@ -374,6 +375,7 @@
 
     function seened(obj) {
         if ($(obj).parent().parent().hasClass("NS")) {
+            $(obj).children(".unreadConve").html("");
             var checked = $(".float_left .d_all").map(function () {return this.value;}).get().join(",");
             var csrftoken = $("meta[name='csrf-token']").attr('content');
             var csrfname = $("meta[name='csrf-name']").attr('content');
