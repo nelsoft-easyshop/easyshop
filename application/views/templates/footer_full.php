@@ -48,6 +48,13 @@
           <p>Copyright &copy; <?php echo date("Y"); ?> Easyshop.ph</p>
       </div>
     </div>
+    
+    <?php if ('development' === ENVIRONMENT): ?>
+        <?php // NOTE: asynchronous loading may cause random fails ?>
+        <input id="user-session" type="hidden" value="<?php echo $this->session->userdata('session_id');?>">
+        <script src="/assets/js/src/ws/wsclient.js"></script>
+        <script src="/assets/js/src/main.js"></script>
+    <?php endif; ?>
     </footer>
 	</body>
 
