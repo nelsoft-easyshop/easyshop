@@ -41,7 +41,7 @@ class Zada implements WampServerInterface
      * 
      * @param \EasyShop\Utility\StringUtility $stringUtility
      */
-    public function __construct(StringUtility $stringUtility, EntityManager $em = null)
+    public function __construct(StringUtility $stringUtility, EntityManager $em)
     {
         $this->stringUtility = $stringUtility;
         $this->em = $em;
