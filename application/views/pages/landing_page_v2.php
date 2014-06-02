@@ -493,7 +493,7 @@
 	
 	<div class="clear"></div>
 	<footer>
-		<div class="container-16">
+		<div class="wrapper">
 			<div class="footer">
 				<ul>
 					<li>
