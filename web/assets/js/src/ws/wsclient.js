@@ -13,7 +13,7 @@ var esClient = (function () {
      * Connect to websocket server using specified identification
      * 
      * @param string sid Session id
-     * @param fn onPushAction Receives 2 params topic and data respectively
+     * @param fn onPushAction Receives 2 params `topic` and `data` respectively
      * 
      * @returns {_L4.client} Self
      */
