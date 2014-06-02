@@ -688,7 +688,6 @@ class memberpage_model extends CI_Model
 		
 		$id =  $this->db->conn_id->lastInsertId('id_billing_info');
 		return $id;
-
 	}
 	
 	function billing_info_update($data){
@@ -802,13 +801,19 @@ class memberpage_model extends CI_Model
 	}
 	
     function checkBankAccount($data){
-		$query = "SELECT * FROM `es_billing_info` WHERE `member_id` = :member_id AND `bank_account_number` = :bank_account_number ";
+		$query = "SELECT * FROM `es_billing_info` WHERE `member_id` = :member_id AND `bank_account_number` = :bank_account_number AND `is_delete` = 0";
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':member_id',$data['member_id']);
-		$sth->bindParam(':bank_account_number',$data['bank_account_number']);		
+		$sth->bindParam(':bank_account_number',$data['bank_account_number']);	
 		$sth->execute();
-		$rows = $sth->rowCount();
-		return $rows;	
+        $row = $sth->fetch(PDO::FETCH_ASSOC);
+        $data['ibi'] = isset($data['ibi'])?$data['ibi']:0;
+        $response = false;
+        if((!$row)||(intval($row['id_billing_info'],10) == intval($data['ibi'],10))){
+            $response = true;
+        } 
+        return $response;
+
 	}	
     
 }

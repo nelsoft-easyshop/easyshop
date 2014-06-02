@@ -626,7 +626,6 @@ class Memberpage extends MY_Controller
 			$bi_bank = $this->input->post('bi_bank');
 			$bi_acct_name = $this->input->post('bi_acct_name');
 			$bi_acct_no = $this->input->post('bi_acct_no');
-			$express = $this->input->post('express');
 			$data = array(
 				'member_id' => $member_id,
 				'payment_type' => $bi_payment_type,
@@ -636,30 +635,20 @@ class Memberpage extends MY_Controller
 				'bank_account_number' => $bi_acct_no
 			);
 			
-			$check = $this->memberpage_model->checkBankAccount($data);
-			if($check == 0){
+			if($this->memberpage_model->checkBankAccount($data)){
 				$result = $this->memberpage_model->billing_info($data);
-				if($express == 'true'){
-					echo $result;
-				}
-				else{
-					$get_info = $this->memberpage_model->get_billing_info($member_id);
-					echo json_encode($get_info);
-				}
+                echo '{"e":"1","d":"success","id":'.$result.'}';
 			}else{
-				echo 1;
+				echo '{"e":"0","d":"duplicate"}';
 			}			
-
 		}
 		else{
-			echo json_encode(false);
+			echo '{"e":"0","d":"fail"}';
 		}
 	}
 
 	function billing_info_u(){
 		if($this->input->post('bi_id')){
-			
-			
 			$member_id = $this->session->userdata('member_id');
 			$bi_id = $this->input->post('bi_id');
 			$bi_bank = $this->input->post('bi_bank');
@@ -673,21 +662,19 @@ class Memberpage extends MY_Controller
 					'bank_account_name' => $bi_acct_name,
 					'bank_account_number' => $bi_acct_no,
 					'is_default' => $bi_def				
-
 			);
-			
-			
-			$check = $this->memberpage_model->checkBankAccount($data);
-			if($check == 0){
-				return json_encode($this->memberpage_model->billing_info_update($data));
-				echo 0;
-			}else{
-				echo 1;
-			}
+			if($this->memberpage_model->checkBankAccount($data)){
+                $this->memberpage_model->billing_info_update($data);
+                $return = '{"e":"1","d":"success"}';
+            }
+            else{
+                $return = '{"e":"0","d":"duplicate"}';
+            }
 		}
 		else{
-			return json_encode(false);
+            $return = '{"e":"0","d":"fail"}';
 		}
+        echo $return;
 	}
 
 	function billing_info_d(){
@@ -778,6 +765,8 @@ class Memberpage extends MY_Controller
 		
 		echo json_encode($serverResponse);
 	}
+
+
 }
 
 /* End of file memberpage.php */

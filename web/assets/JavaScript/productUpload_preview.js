@@ -50,24 +50,29 @@ $(document).ready(function(){
             url: config.base_url + 'memberpage/billing_info_u', 
             data: "bi_id="+billing_id+"&bi_acct_name="+account_name+"&bi_acct_no="+account_no+"&bi_bank="+bank_list+"&"+csrfname+"="+csrftoken, 
             success: function(response) {
-                if(!response){
-                    alert('We are having a problem right now. Refresh the page to try again.');
-                }
-                else{
+                var obj = JSON.parse(response);
+                if((parseInt(obj.e,10) == 1) && (obj.d=='success')){
                     selected.data('bankid',bank_list);
                     selected.data('acctname',account_name);
                     selected.data('acctno',account_no);
                     selected.data('bankname',bank_name);
                     selected.text('Bank: '+bank_name+' - '+ account_name);
+                    
+                    $('#deposit_acct_name').attr('readonly', true);
+                    $('#deposit_acct_no').attr('readonly', true);
+                    $('#bank_list').attr('disabled', true);
+                    $('.deposit_edit').show();
+                    $('.deposit_update').hide();
+                    $('.deposit_cancel').hide();
+                    
+                    
+                }else if((parseInt(obj.e,10) == 0) && (obj.d=='duplicate')){
+                    alert('You are already using this account number.');
+                }else{
+                    alert('We are having a problem right now. Refresh the page to try again.');
                 }
             }
         });
-        $('#deposit_acct_name').attr('readonly', true);
-        $('#deposit_acct_no').attr('readonly', true);
-        $('#bank_list').attr('disabled', true);
-        $('.deposit_edit').show();
-        $('.deposit_update').hide();
-        $('.deposit_cancel').hide();
     });
     
     $('#previewProduct').on('click', '.deposit_save', function(){
@@ -99,32 +104,37 @@ $(document).ready(function(){
             url: config.base_url + 'memberpage/billing_info', 
             data: "express=true&bi_payment_type=Bank&bi_bank="+bank_list+"&bi_acct_no="+account_no+"&bi_acct_name="+account_name+"&"+csrfname+"="+csrftoken, 
             success: function(response) {
-                if(!response){
-                    alert('We are having a problem right now. Refresh the page to try again.');
-                }
-                else{
+                var obj = JSON.parse(response);
+                if((parseInt(obj.e,10) == 0)&&(obj.d=='duplicate')){
+                    alert('You are already using this account number');					
+                }else if((parseInt(obj.e,10) == 1)&&(obj.d=='success')){
                     var new_option = $(document.createElement( "option" ));
                     new_option.data('bankname',bank_name);
                     new_option.data('bankid',bank_list);
                     new_option.data('acctname',account_name);
                     new_option.data('acctno',account_no);
                     new_option.text('Bank: '+bank_name+' - '+ account_name);
-                    var new_id = parseInt(response,10);
+                    var new_id = parseInt(d.id,10);
                     new_option.val(new_id);
                     new_option.insertBefore($('#deposit_info').find(':selected'));
                     $('#deposit_info').find(':selected').prop('selected', false);
-                    $('#deposit_info').find('option[value = "'+parseInt(response,10)+'"]').prop('selected', true);
+                    $('#deposit_info').find('option[value = "'+new_id+'"]').prop('selected', true);
                     $('#prod_billing_id').val(new_id);
+                    
+                    $('#deposit_acct_name').attr('readonly', true);
+                    $('#deposit_acct_no').attr('readonly', true);
+                    $('#bank_list').attr('disabled', true);
+                    $('.deposit_edit').show();
+                    $('.deposit_save').hide();
+                    $('.deposit_update').hide();
+                    $('.deposit_cancel').hide();
+                    
+                }else{
+                    alert('Something went wrong. Pleasy try again later.');
                 }
             }
         });
-        $('#deposit_acct_name').attr('readonly', true);
-        $('#deposit_acct_no').attr('readonly', true);
-        $('#bank_list').attr('disabled', true);
-        $('.deposit_edit').show();
-        $('.deposit_save').hide();
-        $('.deposit_update').hide();
-        $('.deposit_cancel').hide();
+
     });
     
     $('#previewProduct').on('click', '.deposit_cancel', function(){
@@ -246,15 +256,17 @@ $(document).ready(function(){
                 jQuery.ajax({
                     type: "POST",
                     url: config.base_url + 'memberpage/billing_info', 
-                    data: "express=true&bi_payment_type=Bank&bi_bank="+bank_list+"&bi_acct_no="+account_no+"&bi_acct_name="+account_name+"&"+csrfname+"="+csrftoken, 
+                    data: "bi_payment_type=Bank&bi_bank="+bank_list+"&bi_acct_no="+account_no+"&bi_acct_name="+account_name+"&"+csrfname+"="+csrftoken, 
                     success: function(response) {
-                            if(!response){
-                                alert('We are having a problem right now. Refresh the page to try again.');
-                            }
-                            else{
-                                var new_id = parseInt(response,10);
+                            var obj = JSON.parse(response);
+                            if((parseInt(obj.e,10) == 1) && (parseInt(obj.d == 'success'))){
+                                var new_id = parseInt(obj.id,10);
                                 $('#prod_billing_id').val(new_id);
                                 $('#step4_form').submit();
+                            }else if((parseInt(obj.e,10) == 0) && (parseInt(obj.d == 'duplicate'))){
+                                alert('You are already using this account number.');
+                            }else{
+                                alert('Something went wrong please try again later.');
                             }
                         }
                 });

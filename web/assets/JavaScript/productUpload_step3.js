@@ -476,15 +476,18 @@ $(function(){
                                     jQuery.ajax({
                                         type: "POST",
                                         url: config.base_url + 'memberpage/billing_info', 
-                                        data: "express=true&bi_payment_type=Bank&bi_bank="+bank_list+"&bi_acct_no="+account_no+"&bi_acct_name="+account_name+"&"+csrfname+"="+csrftoken, 
+                                        data: "bi_payment_type=Bank&bi_bank="+bank_list+"&bi_acct_no="+account_no+"&bi_acct_name="+account_name+"&"+csrfname+"="+csrftoken, 
                                         success: function(response) {
-                                                if(!response){
-                                                    alert('We are having a problem right now. Refresh the page to try again.');
-                                                }
-                                                else{
+                                                var obj = JSON.parse(response);
+                                                console.log(obj.e);
+                                                if((parseInt(obj.e,10) == 1) && (obj.d == 'success')){
                                                     var new_id = parseInt(response,10);
                                                     $('#prod_billing_id').val(new_id);
                                                     $('#step4_form').submit();
+                                                }else if((parseInt(obj.e,10) == 0) && (obj.d == 'duplicate')){
+                                                    alert('You are already using this account number.');
+                                                }else{
+                                                    alert('Something went wrong please try again later.');
                                                 }
                                             }
                                     });

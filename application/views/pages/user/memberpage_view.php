@@ -1176,7 +1176,7 @@
                                 <span>Saved</span>
 							</div>
 							<span id="bi_err_bictr<?php echo $rows; ?>" style="display:none; width:auto; margin-top:0px;" >
-                                <span style='color:red; font-weight:bold;'>* Duplicate Account Number</span>
+                                <br/><span style='color:red; font-weight:bold;'>* Duplicate Account Number</span>
 							</span>								
 					</div>
 					<div id="bi-left" style="float:left; width:inherit;">

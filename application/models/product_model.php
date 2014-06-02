@@ -1169,24 +1169,38 @@ class product_model extends CI_Model
 
 	function finalizeProduct($productid, $memberid,$billing_id, $is_cod){
         $product = $this->getProductEdit($productid, $memberid);
-		$title = $product['name'];
-        $slug = $this->getSlug($productid);
-        if(strlen(trim($slug)) == 0 ){
-            $slug = $this->createSlug($title);
-            $query = $this->sqlmap->getFIlenameID('product', 'finalizeProduct');
-            $sth = $this->db->conn_id->prepare($query);
-            $sth->bindParam(':slug',$slug ,PDO::PARAM_STR);
-        }else{
-            $query = $this->sqlmap->getFIlenameID('product', 'finalizeProductKeepSlug');
-            $sth = $this->db->conn_id->prepare($query);
-        }
-		$sth->bindParam(':productid',$productid,PDO::PARAM_INT);
-		$sth->bindParam(':memberid',$memberid,PDO::PARAM_INT);
-        $sth->bindParam(':is_cod',$is_cod,PDO::PARAM_INT);
-        $sth->bindParam(':billing_id', $billing_id,PDO::PARAM_INT);
-        $sth->execute();
+        if($product){
+            $title = $product['name'];
+            $slug = $product['slug'];
+            
+            $deposit_details = array('bank_id'=>'0','acct_no'=>'','acct_name'=>'');
+            $user_accounts = $this->memberpage_model->get_billing_info($memberId);
+            foreach($user_accounts as $account){
+                if(intval($account['id_billing_info']) === intval($billing_id)){
+                    $deposit_details['bank_id'] = $account['bank_id'];
+                    $deposit_details['acct_name'] = $account['bank_account_name'];
+                    $deposit_details['acct_no'] = $account['bank_account_number'];
+                }
+            }
 
-        return $slug;
+            if(strlen(trim($slug)) == 0 ){
+                $slug = $this->createSlug($title);
+                $query = $this->sqlmap->getFIlenameID('product', 'finalizeProduct');
+                $sth = $this->db->conn_id->prepare($query);
+                $sth->bindParam(':slug',$slug ,PDO::PARAM_STR);
+            }else{
+                $query = $this->sqlmap->getFIlenameID('product', 'finalizeProductKeepSlug');
+                $sth = $this->db->conn_id->prepare($query);
+            }
+            $sth->bindParam(':productid',$productid,PDO::PARAM_INT);
+            $sth->bindParam(':memberid',$memberid,PDO::PARAM_INT);
+            $sth->bindParam(':is_cod',$is_cod,PDO::PARAM_INT);
+            $sth->bindParam(':billing_id', $billing_id,PDO::PARAM_INT);
+            $sth->execute();
+            return true;
+        }else{
+            return false;
+        }
 	}
     
     

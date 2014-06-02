@@ -2406,8 +2406,8 @@ $(document).ready(function(){
 					url: redurl, 
 					data: {bi_acct_name:banval, bi_acct_no:barval, bi_bank:bnval, bi_id:bidval, bi_def:bchval, csrfname:csrftoken},
 					success: function(data){
-						
-						if(data == 0){
+						var obj = JSON.parse(data);
+						if((parseInt(obj.e,10) == 1) && (obj.d=='success')){
 							$(":checkbox[name^='bi_chk_bictr']").filter(function(){
 								var hid = $(this).attr('id');
 								if($(this).prop("checked") == true){
@@ -2416,7 +2416,6 @@ $(document).ready(function(){
 									$("#h"+hid).val("");
 								}
 							});							
-							
 							$("#bi_check_"+bictr).show().delay(1600).fadeOut(600);
 							$("#h"+ban).val($("#"+ban).val());
 							$("#h"+bar).val($("#"+bar).val());
@@ -2433,9 +2432,11 @@ $(document).ready(function(){
 							$(":button[name^='bictr']").prop("disabled", false);
 							$(":button[name^='del_bictr']").prop("disabled", false);							
 							return false;
-						}else{
+						}else if((parseInt(obj.e,10) == 0) && (obj.d=='duplicate')){
 							$("#bi_err_"+bictr).show().delay(2000).fadeOut(800);
-						}
+						}else{
+                            alert('Something went wrong. Please try again later.');
+                        }
 					}
 				});		
 			}	
@@ -2491,12 +2492,15 @@ $(document).ready(function(){
 				url: redurl, 
 				data: $("#billing_info").serialize(),
 				success: function(data){
-					if(data == 1){
+                    var obj = JSON.parse(data);
+					if((parseInt(obj.e,10) == 0)&&(obj.d=='duplicate')){
 						$("#bi_err_add").show().delay(2000).fadeOut(800);						
-					}else{
+					}else if((parseInt(obj.e,10) == 1)&&(obj.d=='success')){
 						$("#bi_bank, #bi_acct_name, #bi_acct_no").val('');
 						window.location.href = config.base_url+'me?me=pmnt';
-					}
+					}else{
+                        alert('Something went wrong. Pleasy try again later.');
+                    }
 				}
 			});		
 		}		

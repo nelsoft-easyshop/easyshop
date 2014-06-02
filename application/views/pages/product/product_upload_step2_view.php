@@ -1628,7 +1628,7 @@ $(document).on('change','.other_name_value',function(){
                 $('.percentage').empty();
                    response = request.responseText;
                   if (response.toLowerCase().indexOf("1001") >= 0){
-                    alert('Something Went Wrong. The images you are uploading in [OTHER ATTRIBUTES] is too large.');
+                    alert('Something Went Wrong. The images you are uploading in [OTHER ATTRIBUTES] are too large.');
                   }else{
                     alert('Something Went Wrong. Please try again.');
                   }

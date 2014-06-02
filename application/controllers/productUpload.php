@@ -886,22 +886,9 @@ class productUpload extends MY_Controller
         $memberId =  $this->session->userdata('member_id');
 		if($this->input->post('prod_h_id')){
             $billing_id = $this->input->post('prod_billing_id'); 
-            
-            $deposit_details = array('bank_id'=>'0','acct_no'=>'','acct_name'=>'');
-            
-            $user_accounts = $this->memberpage_model->get_billing_info($memberId);
-            foreach($user_accounts as $account){
-                if(intval($account['id_billing_info']) === intval($billing_id)){
-                    $deposit_details['bank_id'] = $account['bank_id'];
-                    $deposit_details['acct_name'] = $account['bank_account_name'];
-                    $deposit_details['acct_no'] = $account['bank_account_number'];
-                }
-            }
-            
-
             $is_cod =($this->input->post('allow_cod'))?1:0;
 			$response['id'] = $this->input->post('prod_h_id');
-            $this->product_model->finalizeProduct($response['id'] , $memberId, $billing_id, $is_cod, true);
+            $this->product_model->finalizeProduct($response['id'] , $memberId, $billing_id, $is_cod);
             $product = $this->product_model->getProductById($response['id']);
             $response['slug'] = $product['slug'];
             $response['productname'] = $product['product'];
