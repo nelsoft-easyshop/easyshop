@@ -12,22 +12,22 @@ var esClient = (function () {
     /**
      * Connect to websocket server using specified identification
      * 
-     * @param string id
+     * @param string sid Session id
      * @param fn onPushAction Receives 2 params topic and data respectively
      * 
      * @returns {_L4.client} Self
      */
-    client.listen = function (id, onPushAction) {
+    client.listen = function (sid, onPushAction) {
 
         /*
          * Warning: ab is a legacy verison of AutobahnJS. We'll settle on it for now.
          */
         abConnection = new ab.Session(
-            'wss://' + window.location.hostname + '/ws/?id=' + id,
+            'wss://' + window.location.hostname + '/ws/?id=' + sid,
             function() {
                 
                 // Once the connection has been established
-                abConnection.subscribe(id, onPushAction);
+                abConnection.subscribe(sid, onPushAction);
             },
             function() {
                 console.warn('WebSocket connection closed');
