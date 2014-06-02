@@ -27,4 +27,28 @@ class AuthenticatedSession
      * @var string
      */
     protected $session;
+    
+    
+    
+    public function getUser()
+    {
+        return $this->user;
+    }
+    
+    public function setUser(User $user)
+    {
+        $this->user = $user;
+        return $this;
+    }
+    
+    public function getSession()
+    {
+        return $this->session;
+    }
+    
+    public function setSession(Session $session)
+    {
+        $this->session = $session;
+        return $this;
+    }
 }
