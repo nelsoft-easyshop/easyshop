@@ -92,25 +92,31 @@ class Zada implements WampServerInterface
      */
     public function onOpen(ConnectionInterface $conn)
     {
-        $params = $this->stringUtility->paramsToArray($conn->WebSocket
-                                                           ->request
-                                                           ->getQuery());
-        
-        $hasSingleParam             = 1 === count($params);     // keep attack vectors low -- limit to a single param
-        $hasIdParam                 = isset ($params['id']);    // look for session id in param `id`
-        $isSessionAuthenticated     = true;                     // pretend we queried db
-        
-        
-        if ($hasSingleParam && $hasIdParam && $isSessionAuthenticated) {
+        try {
+            $isSessionAuthenticated = false;
+            $params = $this->stringUtility->paramsToArray($conn->WebSocket
+                                                               ->request
+                                                               ->getQuery());
             
-            // Allow connection
-            echo "Client connected\n";
-        }
-        else {
-            
-            // Terminate illegal connection -- ideally log failed connections; some other time perhaps
-            echo "Unauthorized connection!\n";
-            $conn->close();
+            if (isset ($params['id'])) {
+                $as = $this->em->getRepository('\Easyshop\Entities\AuthenticatedSession')
+                               ->findOneBy(['session' => $params['id']]);
+                $isSessionAuthenticated = NULL !== $as;
+            }
+
+            if (!$isSessionAuthenticated) {
+                
+                // Terminate illegal connection
+                echo "Unauthorized connection!\n";
+                $conn->close();
+            }
+            else {
+                
+                // Allow connection
+                echo "Client connected\n";
+            }
+        } catch (\Exception $e) {
+            // TODO log exception
         }
     }
 
