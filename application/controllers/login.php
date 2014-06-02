@@ -74,6 +74,19 @@ class Login extends MY_Controller {
                 $cookieval = $this->user_model->dbsave_cookie_keeplogin($temp)['o_token'];
                 $this->user_model->create_cookie($cookieval);
             }
+            
+            /*
+             * Register authenticated session
+             */
+            
+            $em = $this->serviceContainer['entity_manager'];
+            $user = $em->find('\Easyshop\Entities\User', ['id' => $row['o_memberid']]);
+            $session = $em->find('\Easyshop\Entities\Session', ['id' => $this->session->userdata('session_id')]);
+            $authenticatedSession = new \Easyshop\Entities\AuthenticatedSession();
+            $authenticatedSession->setUser($user)
+                                 ->setSession($session);
+            $em->persist($authenticatedSession);
+            $em->flush();
         }
         return $row;
     }
