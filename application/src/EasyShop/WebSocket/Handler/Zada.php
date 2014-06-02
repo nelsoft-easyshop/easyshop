@@ -4,6 +4,7 @@ namespace EasyShop\WebSocket\Handler;
 
 use Ratchet\Wamp\WampServerInterface;
 use Ratchet\ConnectionInterface;
+use Ratchet\Wamp\Topic;
 use EasyShop\Utility\StringUtility;
 
 
@@ -23,9 +24,11 @@ class Zada implements WampServerInterface
     private $stringUtility;
     
     /**
-     * @var \React\Socket\ConnectionInterface
+     * Topic array
+     * 
+     * @var array
      */
-    private $clients;
+    private $topics;
     
     /**
      * Constructor
@@ -35,7 +38,7 @@ class Zada implements WampServerInterface
     public function __construct(StringUtility $stringUtility)
     {
         $this->stringUtility = $stringUtility;
-        $this->clients = [];
+        $this->topics = [];
     }
     
     /**
@@ -91,12 +94,14 @@ class Zada implements WampServerInterface
         $isSessionAuthenticated     = true;                     // pretend we queried db
         
         if ($hasSingleParam && $hasIdParam && $isSessionAuthenticated) {
-            $this->clients[$params['id']] = $conn;
+            
+            // Allow connection
             echo "Client connected\n";
         }
         else {
+            
+            // Terminate illegal connection -- ideally log failed connections; some other time perhaps
             echo "Unauthorized connection!\n";
-            // Ideally log failed connections; some other time perhaps
             $conn->close();
         }
     }
@@ -120,11 +125,13 @@ class Zada implements WampServerInterface
      * No subscriptions here
      * 
      * @param \Ratchet\ConnectionInterface $conn
-     * @param type $topic
+     * @param Topic $topic
      */
     public function onSubscribe(ConnectionInterface $conn, $topic)
     {
-        // Do nothing
+        if (!array_key_exists($topic->getId(), $this->topics)) {
+            $this->topics[$topic->getId()] = $topic;
+        }
     }
 
     /**
@@ -143,13 +150,32 @@ class Zada implements WampServerInterface
      * 
      * @param string $serialData
      */
-    public function onUpdate($serialData)
+    public function onPush($serialData)
     {
         $data = json_decode($serialData, true);
-        $sessionId = isset($data['session_id']) ? $data['session_id'] : false;
         
-        if ($sessionId && $this->clients[$sessionId]) {
-            $this->clients[$sessionId]->send($serialData);
+        if (isset ($data['session_id'])) {
+            $this->topics[$data['session_id']]->broadcast($data);
         }
+    }
+    
+    /**
+     * Retrieve push handler method name
+     * 
+     * @return string
+     */
+    public function getHandlerMethod()
+    {
+        return 'onPush';
+    }
+    
+    /**
+     * Retrieve URL to listen to
+     * 
+     * @return string
+     */
+    public function getPushURL()
+    {
+        return 'tcp://127.0.0.1:5555';
     }
 }

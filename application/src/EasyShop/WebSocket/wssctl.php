@@ -6,7 +6,7 @@
 
 /* show errors */
 error_reporting(E_ALL);
-ini_set('display_error', 1);
+ini_set('display_errors', 1);
 
 $rootDir = dirname(__DIR__) . DIRECTORY_SEPARATOR . '..' .DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR;
 
@@ -23,6 +23,6 @@ require_once $rootDir . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
 $eventLoop = \React\EventLoop\Factory::create();
 $socketHandler = new \EasyShop\WebSocket\Handler\Zada(new EasyShop\Utility\StringUtility());
 $webSocketServer = new \EasyShop\WebSocket\WebSocketServer($eventLoop, $socketHandler);
-$webSocketServer->listenToPusher('onUpdate', 'tcp://127.0.0.1:5555');
+$webSocketServer->listenToPusher($socketHandler->getHandlerMethod(), $socketHandler->getPushURL());
 $webSocketServer->listenToClient(8080, '0.0.0.0');
 $webSocketServer->start();
