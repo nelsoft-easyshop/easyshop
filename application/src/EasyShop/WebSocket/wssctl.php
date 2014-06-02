@@ -18,10 +18,13 @@ $psr0Autoloader->register();
 // register 3rd party autoloader
 require_once $rootDir . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
 
-
+$paths = array('src/EasyShop/Entities');
+$isDevMode = true;
+$dbConfig = require $rootDir . 'application/config/param/database.php';
+$config = Doctrine\ORM\Tools\Setup::createAnnotationMetadataConfiguration([$rootDir . 'application/src/EasyShop/Entities'], $isDevMode);
 
 $eventLoop = \React\EventLoop\Factory::create();
-$socketHandler = new \EasyShop\WebSocket\Handler\Zada(new EasyShop\Utility\StringUtility());
+$socketHandler = new \EasyShop\WebSocket\Handler\Zada(new EasyShop\Utility\StringUtility(), \Doctrine\ORM\EntityManager::create($dbConfig, $config));
 $webSocketServer = new \EasyShop\WebSocket\WebSocketServer($eventLoop, $socketHandler);
 $webSocketServer->listenToPusher($socketHandler->getHandlerMethod(), $socketHandler->getPushURL());
 $webSocketServer->listenToClient(8080, '0.0.0.0');
