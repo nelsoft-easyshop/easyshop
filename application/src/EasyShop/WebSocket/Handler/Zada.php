@@ -143,9 +143,18 @@ class Zada implements WampServerInterface
      */
     public function onSubscribe(ConnectionInterface $conn, $topic)
     {
-        if (!array_key_exists($topic->getId(), $this->topics)) {
-            $this->topics[$topic->getId()] = $topic;
+        $authenticatedSession = $this->em->getRepository('\Easyshop\Entities\AuthenticatedSession')
+                       ->findOneBy(['session' => $topic->getId()]);
+        
+        /*
+         * We use session id as the topic id and (re) check whether authenticated
+         */
+        if (NULL !== $authenticatedSession) {
+            if (!array_key_exists($topic->getId(), $this->topics)) {
+                $this->topics[$topic->getId()] = $topic;
+            }
         }
+        
     }
 
     /**
