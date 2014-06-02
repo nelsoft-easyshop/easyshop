@@ -6,6 +6,7 @@ use Ratchet\Wamp\WampServerInterface;
 use Ratchet\ConnectionInterface;
 use Ratchet\Wamp\Topic;
 use EasyShop\Utility\StringUtility;
+use Doctrine\ORM\EntityManager;
 
 
 
@@ -31,13 +32,19 @@ class Zada implements WampServerInterface
     private $topics;
     
     /**
+     * @var EntityManager
+     */
+    private $em;
+    
+    /**
      * Constructor
      * 
      * @param \EasyShop\Utility\StringUtility $stringUtility
      */
-    public function __construct(StringUtility $stringUtility)
+    public function __construct(StringUtility $stringUtility, EntityManager $em = null)
     {
         $this->stringUtility = $stringUtility;
+        $this->em = $em;
         $this->topics = [];
     }
     
@@ -92,6 +99,7 @@ class Zada implements WampServerInterface
         $hasSingleParam             = 1 === count($params);     // keep attack vectors low -- limit to a single param
         $hasIdParam                 = isset ($params['id']);    // look for session id in param `id`
         $isSessionAuthenticated     = true;                     // pretend we queried db
+        
         
         if ($hasSingleParam && $hasIdParam && $isSessionAuthenticated) {
             
