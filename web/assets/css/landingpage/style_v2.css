@@ -386,7 +386,7 @@ div.pass-bar {
 /*  min-height: 49.063em;*/
   padding-bottom: 1px;
     color: #fff;
-    text-shadow: 0px 2px 0px rgba(17, 17, 17, 1);
+    text-shadow: 0px 1px 0px rgba(17, 17, 17, 1);
 }
 
 /*.prod_slides {
@@ -403,7 +403,7 @@ float: left;
 }
 
 .product_content div:first-child {
-    max-width: 46%;
+    max-width: 50%;
     padding-right: 45px;
     width: auto;
 }
@@ -417,7 +417,19 @@ float: left;
 .product_content div:first-child h1 {
     font-size: 5em;
     font-weight: 300;
-    line-height: 0.75em;
+    line-height: 0.85em;
+}
+
+.product_content div:first-child h1:first-child {
+    line-height: 1em;
+}
+
+.slide-5 .product_content div:first-child h1:first-child {
+    font-size: 4.5em;
+}
+
+.slide-6 .product_content div:first-child h1:first-child {
+    font-size: 3.5em;
 }
 
 .product_content div:first-child h1 span {
@@ -439,9 +451,7 @@ float: left;
         content: "";
         width: 206px;
         height: 31px;
-    }
-
-
+}
 
 .footer {
   padding-top: 30px;

@@ -98,6 +98,9 @@ img.img_main_product {
         width: 206px;
         height: 31px;
     }
+      .slide-6 .product_content div:first-child h1:first-child {
+    font-size: 2.5em;
+  }
 }
 
 @media screen and (max-width: 59.99em) {
@@ -230,6 +233,10 @@ img.img_main_product {
     width: 165px;
   }
 
+  .slide-4 .product_content div:first-child h1 {
+    font-size: 3em;
+  }
+
   .product_content1_sub {
     font-size: 1em;
   }
@@ -345,6 +352,12 @@ img.img_main_product {
     max-width: 190px;
   }
 
+  .slide-5 .product_content div:first-child h1:first-child {
+    font-size: 2.5em;
+  }
+  .slide-6 .product_content div:first-child h1:first-child {
+    font-size: 1.8em;
+  }
 }
 
 @media only screen and (max-width : 320px) {
