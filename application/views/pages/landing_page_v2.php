@@ -260,13 +260,104 @@
 							</p>
 						</div>
 					</li>
-					<li class="slide-1">
+
+					<li class="slide-1 slide-2">
 						<div class="product_content">
 							<div>
-								<h1><span>Buy an</span> iPhone 5s</h1>
+								<h1><span>Buy a</span> Canon DSLR 60D</h1>
 								<h1><span>for as low as</span></h1>
-								<h1><span>Php 48,990</span></h1>
-								<h1><span>Php 489.90*</span></h1>
+								<h1><span>Php 32,900</span></h1>
+								<h1><span>Php 329.00*</span></h1>
+								<div class="product_content1_sub">
+									<p class="mgrn_top4">
+									The offer starts on June 15 at 12 noon<br />and expires on June 17, 2014.
+									</p>
+									<p class="mgrn_top4">To qualify, like us on Facebook and  </p>
+									<p class="fs2 txt_reg">register now!</p>
+									<p>
+										*The price will drop by 2% every hour until it<br />reaches 99% off for 48 hours. <br />
+										One stock is available per item.
+									</p>
+								</div>
+							</div>
+							<div class="img_product_content">
+								<div class="discount_tag">
+									<p><span>2% OFF</span> every hour until sold</p>
+									<p>Starting June 15,2014</p>
+									<p>12:00 noon</p>
+								</div>
+								<div class="img_container">
+								<img src="assets/images/landingpage/img_ribbon.png" class="ribbon_tag">
+								<img src="assets/images/landingpage/img_canon60d.png" class="img_main_product">
+								</div>
+							</div>
+						</div>
+						<div class="clear"></div>
+						<div class="product_content2">
+							<p class="mgrn_top4">
+							The offer starts on June 15 at 12 noon and expires on June 17, 2014.
+							</p>
+							<p class="mgrn_top4">To qualify, like us on Facebook and  </p>
+							<p class="fs2 txt_reg">register now!</p>
+							<p class="mgrn_top4">
+								*The price will drop by 2% every hour until it reaches 99% off for 48 hours. 
+								One stock is available per item.
+							</p>
+						</div>
+					</li>
+
+					<li class="slide-1 slide-3">
+						<div class="product_content">
+							<div>
+								<h1><span>Buy a</span> Samsung Smart LED TV 40"</h1>
+								<h1><span>for as low as</span></h1>
+								<h1><span>Php 43,890</span></h1>
+								<h1><span>Php 438.90*</span></h1>
+								<div class="product_content1_sub">
+									<p class="mgrn_top4">
+									The offer starts on June 15 at 12 noon<br />and expires on June 17, 2014.
+									</p>
+									<p class="mgrn_top4">To qualify, like us on Facebook and  </p>
+									<p class="fs2 txt_reg">register now!</p>
+									<p>
+										*The price will drop by 2% every hour until it<br />reaches 99% off for 48 hours. <br />
+										One stock is available per item.
+									</p>
+								</div>
+							</div>
+							<div class="img_product_content">
+								<div class="discount_tag">
+									<p><span>2% OFF</span> every hour until sold</p>
+									<p>Starting June 15,2014</p>
+									<p>12:00 noon</p>
+								</div>
+								<div class="img_container">
+								<img src="assets/images/landingpage/img_ribbon.png" class="ribbon_tag">
+								<img src="assets/images/landingpage/img_samsung_ledtv.png" class="img_main_product">
+								</div>
+							</div>
+						</div>
+						<div class="clear"></div>
+						<div class="product_content2">
+							<p class="mgrn_top4">
+							The offer starts on June 15 at 12 noon and expires on June 17, 2014.
+							</p>
+							<p class="mgrn_top4">To qualify, like us on Facebook and  </p>
+							<p class="fs2 txt_reg">register now!</p>
+							<p class="mgrn_top4">
+								*The price will drop by 2% every hour until it reaches 99% off for 48 hours. 
+								One stock is available per item.
+							</p>
+						</div>
+					</li>
+
+					<li class="slide-1 slide-4">
+						<div class="product_content">
+							<div>
+								<h1><span>Buy an</span> LG G2 D802 32Gb</h1>
+								<h1><span>for as low as</span></h1>
+								<h1><span>Php 25,400</span></h1>
+								<h1><span>Php 254.00*</span></h1>
 								<div class="product_content1_sub">
 									<p class="mgrn_top4">
 									The offer starts on June 15 at 12 noon<br />and expires on June 17, 2014.
@@ -304,21 +395,95 @@
 							</p>
 						</div>
 					</li>
-					<li>
-						<h1><span>YOUR</span> BUSINESS</h1>
-						<h1><span>HAS A</span>  NEW HOME</h1>
-						<p class="fs1 mgrn_top1">
-						EasyShop.ph provides fast and easy online shopping experience.
-						</p>
-						<p class="fs2 mgrn_top2">Start buying on June 15, 2014 </p>
+					
+					<li class="slide-1 slide-5">
+						<div class="product_content">
+							<div>
+								<h1><span>Buy a</span> Samsung Galaxy Note 3</h1>
+								<h1><span>for as low as</span></h1>
+								<h1><span>Php 29,990</span></h1>
+								<h1><span>Php 299.90*</span></h1>
+								<div class="product_content1_sub">
+									<p class="mgrn_top4">
+									The offer starts on June 15 at 12 noon<br />and expires on June 17, 2014.
+									</p>
+									<p class="mgrn_top4">To qualify, like us on Facebook and  </p>
+									<p class="fs2 txt_reg">register now!</p>
+									<p>
+										*The price will drop by 2% every hour until it<br />reaches 99% off for 48 hours. <br />
+										One stock is available per item.
+									</p>
+								</div>
+							</div>
+							<div class="img_product_content">
+								<div class="discount_tag">
+									<p><span>2% OFF</span> every hour until sold</p>
+									<p>Starting June 15,2014</p>
+									<p>12:00 noon</p>
+								</div>
+								<div class="img_container">
+								<img src="assets/images/landingpage/img_ribbon.png" class="ribbon_tag">
+								<img src="assets/images/landingpage/img_samsung_galaxynote.png" class="img_main_product">
+								</div>
+							</div>
+						</div>
+						<div class="clear"></div>
+						<div class="product_content2">
+							<p class="mgrn_top4">
+							The offer starts on June 15 at 12 noon and expires on June 17, 2014.
+							</p>
+							<p class="mgrn_top4">To qualify, like us on Facebook and  </p>
+							<p class="fs2 txt_reg">register now!</p>
+							<p class="mgrn_top4">
+								*The price will drop by 2% every hour until it reaches 99% off for 48 hours. 
+								One stock is available per item.
+							</p>
+						</div>
 					</li>
-					<li>
-						<h1><span>YOUR</span> BUSINESS</h1>
-						<h1><span>HAS A</span>  NEW HOME</h1>
-						<p class="fs1 mgrn_top1">
-						EasyShop.ph provides fast and easy online shopping experience.
-						</p>
-						<p class="fs2 mgrn_top2">Start buying on June 15, 2014 </p>
+
+					<li class="slide-1 slide-6">
+						<div class="product_content">
+							<div>
+								<h1><span>Buy a</span> Samsung 7 cu. ft. REFRIGERATOR</h1>
+								<h1><span>for as low as</span></h1>
+								<h1><span>Php 17,995</span></h1>
+								<h1><span>Php 179.95*</span></h1>
+								<div class="product_content1_sub">
+									<p class="mgrn_top4">
+									The offer starts on June 15 at 12 noon<br />and expires on June 17, 2014.
+									</p>
+									<p class="mgrn_top4">To qualify, like us on Facebook and  </p>
+									<p class="fs2 txt_reg">register now!</p>
+									<p>
+										*The price will drop by 2% every hour until it<br />reaches 99% off for 48 hours. <br />
+										One stock is available per item.
+									</p>
+								</div>
+							</div>
+							<div class="img_product_content">
+								<div class="discount_tag">
+									<p><span>2% OFF</span> every hour until sold</p>
+									<p>Starting June 15,2014</p>
+									<p>12:00 noon</p>
+								</div>
+								<div class="img_container">
+								<img src="assets/images/landingpage/img_ribbon.png" class="ribbon_tag">
+								<img src="assets/images/landingpage/img_samsung_ref.png" class="img_main_product">
+								</div>
+							</div>
+						</div>
+						<div class="clear"></div>
+						<div class="product_content2">
+							<p class="mgrn_top4">
+							The offer starts on June 15 at 12 noon and expires on June 17, 2014.
+							</p>
+							<p class="mgrn_top4">To qualify, like us on Facebook and  </p>
+							<p class="fs2 txt_reg">register now!</p>
+							<p class="mgrn_top4">
+								*The price will drop by 2% every hour until it reaches 99% off for 48 hours. 
+								One stock is available per item.
+							</p>
+						</div>
 					</li>
 				</ul>					
 	
