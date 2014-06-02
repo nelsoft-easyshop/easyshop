@@ -357,7 +357,7 @@ $(document).ready(function() {
 
         
     // START OF INFINITE SCROLLING FUNCTION
-    var base_url = '<?php echo base_url(); ?>';
+    var base_url = config.base_url;
     var offset = 1;
     var request_ajax = true;
     var ajax_is_on = false;
@@ -501,6 +501,11 @@ $(document).ready(function() {
                 "-moz-box-shadow": "0px 0px 2px 2px #FF0000",
                 "box-shadow": "0px 0px 2px 2px #FF0000"});
             $( "#price2" ).focus();
+        }else if(price1 > price2){
+           $("#price1,#price2").css({"-webkit-box-shadow": "0px 0px 2px 2px #FF0000",
+                "-moz-box-shadow": "0px 0px 2px 2px #FF0000",
+                "box-shadow": "0px 0px 2px 2px #FF0000"});
+            $( "#price1" ).focus();
         }else{
             document.location.href=url;
         }     
@@ -518,8 +523,6 @@ $(document).ready(function() {
             "-moz-box-shadow": "0px 0px 0px 0px #FFFFFF",
             "box-shadow": "0px 0px 0px 0px #FFFFFF"});
          
-   
-   
     });
 
     $(".more_attr").click(function() {

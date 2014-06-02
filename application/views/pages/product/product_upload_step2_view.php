@@ -986,6 +986,7 @@ $(document).ready(function(){
           dataType: "json",         
           uploadProgress : function(event, position, total, percentComplete) {
               canProceed = false;
+              console.log(percentComplete);
           },
           success :function(d) { 
               arrayNameOfFiles = d.n;

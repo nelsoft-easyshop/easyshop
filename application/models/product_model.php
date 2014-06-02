@@ -294,8 +294,9 @@ class product_model extends CI_Model
 	}
        
 	// // start of new 
-	function getProductsByCategory($categories,$conditionArray,$countMatch,$operator = "<",$start,$per_page,$sortString)
+	function getProductsByCategory($categories,$conditionArray,$countMatch,$operator = "<",$start,$per_page,$sortString,$words = array())
 	{	
+		$concatQuery = "";
 		$arrayCount = count($conditionArray);
 		if ($arrayCount > 0) {
 			krsort($conditionArray);
@@ -303,7 +304,14 @@ class product_model extends CI_Model
 				arsort($conditionArray['attributes']);
 			}
 		}
-	
+
+		if(count($words) > 0){
+			
+			foreach ($words as $key => $value) {
+				$concatQuery .= " AND  ( `name` LIKE :like".$key." OR `keywords` LIKE :like".$key." )";
+			}
+		}
+
 		$condition_string = "";
 		$attributeString = "";
 		$brand_string = "";  		
@@ -357,9 +365,11 @@ class product_model extends CI_Model
 			$condition_string .= $attributeString;	
 		}
 
+	
+
 		$query = $this->sqlmap->getFilenameID('product', 'getProducts');
 		$query = $query."
-		 WHERE cat_id IN (".$categories.") 
+		 WHERE cat_id IN (".$categories.")  ".$concatQuery." 
 		 AND is_delete = 0 AND is_draft = 0
 		 ".$condition_string."
 		 GROUP BY product_id , `name`,price,`condition`,brief,product_image_path,
@@ -368,9 +378,19 @@ class product_model extends CI_Model
   	   	 ORDER BY ".$sortString." cnt_all DESC, `name` ASC
 		 LIMIT :start, :per_page 
 		 ";
+	
 
 
 		$sth = $this->db->conn_id->prepare($query); 
+	 
+			if(count($words) > 0){
+
+				foreach ($words as $key => $value) {
+					$newValue = '%'.$value.'%';
+					$sth->bindParam(':like'.$key,$newValue,PDO::PARAM_STR);
+				}
+			}
+
 			if ($arrayCount > 0) {
 			foreach ($conditionArray as $key => $value) {
 				if($key == 'attributes'){

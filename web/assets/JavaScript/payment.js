@@ -36,12 +36,20 @@ $(document).ready(function(){
 
         if(type == 1){
             if(!$('#chk_paypal1').is(':checked')){
-                alert('Please acknowledge that you have read and understood our privacy policy.');
+                $("#chk_paypal1").css({"-webkit-box-shadow": "0px 0px 2px 2px #FF0000",
+                    "-moz-box-shadow": "0px 0px 2px 2px #FF0000",
+                    "box-shadow": "0px 0px 2px 2px #FF0000"}); 
+                $('#paypal > .chck_privacy').append('<br><span style="color:red"> * Please acknowledge that you have read and understood our privacy policy.</span> ')
+
                 return false;
             }
         }else{
             if(!$('#chk_paypal2').is(':checked')){
-                  alert('Please acknowledge that you have read and understood our privacy policy.');
+                $("#chk_paypal2").css({"-webkit-box-shadow": "0px 0px 2px 2px #FF0000",
+                    "-moz-box-shadow": "0px 0px 2px 2px #FF0000",
+                    "box-shadow": "0px 0px 2px 2px #FF0000"}); 
+                $('#cdb > .chck_privacy').append('<br><span style="color:red"> * Please acknowledge that you have read and understood our privacy policy.</span> ')
+
                 return false;
             }
         } 
@@ -93,7 +101,10 @@ $(document).ready(function(){
                 }
             });
         }else{
-              alert('Please acknowledge that you have read and understood our privacy policy.');
+            $("#chk_dp").css({"-webkit-box-shadow": "0px 0px 2px 2px #FF0000",
+                "-moz-box-shadow": "0px 0px 2px 2px #FF0000",
+                "box-shadow": "0px 0px 2px 2px #FF0000"}); 
+            $('#dragonpay > .chck_privacy').append('<br><span style="color:red"> * Please acknowledge that you have read and understood our privacy policy.</span> ');
         }
     });
 
@@ -105,7 +116,10 @@ $(document).ready(function(){
         if($('#chk_cod').is(':checked')){
             $('#codFrm').submit();
         }else{
-            alert('Please acknowledge that you have read and understood our privacy policy.');
+           $("#chk_cod").css({"-webkit-box-shadow": "0px 0px 2px 2px #FF0000",
+            "-moz-box-shadow": "0px 0px 2px 2px #FF0000",
+            "box-shadow": "0px 0px 2px 2px #FF0000"}); 
+           $('#cod > .chck_privacy').append('<br><span style="color:red"> * Please acknowledge that you have read and understood our privacy policy.</span> ')
         }
     });
 
@@ -117,7 +131,10 @@ $(document).ready(function(){
         if($('#chk_dbd').is(':checked')){
             $('#dbdFrm').submit();
         }else{
-            alert('Please acknowledge that you have read and understood our privacy policy.');
+         $("#chk_dbd").css({"-webkit-box-shadow": "0px 0px 2px 2px #FF0000",
+            "-moz-box-shadow": "0px 0px 2px 2px #FF0000",
+            "box-shadow": "0px 0px 2px 2px #FF0000"}); 
+           $('#dbd > .chck_privacy').append('<br><span style="color:red"> * Please acknowledge that you have read and understood our privacy policy.</span> ')
         }
     });
 

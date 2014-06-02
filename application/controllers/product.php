@@ -34,11 +34,11 @@ class product extends MY_Controller
 
     	$sortString = ""; 
     	$conditionArray = array(); 
-
+       
     	if(count($_GET) > 0){
     		foreach ($_GET as $key => $value) {
 
-    			if($key == "Brand"){
+    			if(ucfirst(strtolower($key)) == "Brand"){
 
     				if(strpos($_GET[$key], '-|-') !== false) {
     					$var = explode('-|-',$_GET[$key]);
@@ -118,6 +118,7 @@ class product extends MY_Controller
     	}    
 
     	if($categoryId != 0){
+ 
        			$downCategory = $this->product_model->selectChild($categoryId);
     			array_push($downCategory, $categoryId);
     			$categories = implode(",", $downCategory);
@@ -281,9 +282,15 @@ class product extends MY_Controller
     		}
     	}
 
-    	$downCategory = $this->product_model->selectChild($categoryId);
-    	array_push($downCategory, $categoryId);
-    	$categories = implode(",", $downCategory);
+        if($categoryId == 1 || $categoryId == 0){
+
+            $categories = "SELECT cat_id FROM es_product WHERE is_delete = 0 AND is_draft = 0";
+        }else{
+            $downCategory = $this->product_model->selectChild($categoryId);
+            array_push($downCategory, $categoryId);
+            $categories = implode(",", $downCategory);
+        }
+
 
     	session_start();
         
@@ -386,11 +393,11 @@ class product extends MY_Controller
 		$string_sort = "";
 		$start = 0;
 		$usable_string;
-		$per_page = $this->per_page;
+		$perPage = $this->per_page;
 
 		$category = $this->input->get('q_cat')?$this->input->get('q_cat'):1;
         $search_string =  $this->input->get('q_str')?$this->input->get('q_str'):'';
-
+        $response['string'] = $search_string;
         $category_details = $this->product_model->selectCategoryDetails($category);
         $category_name = $category_details['name'];
         
@@ -401,85 +408,208 @@ class product extends MY_Controller
         }else{
             $string = html_escape(ltrim($this->input->get('q_str')));
             $ins = $this->product_model->insertSearch($string);
-            // $words = "+".implode("*,+",explode(" ",trim($string)))."*";
             $words = explode(" ",trim($string)); 
 
             $checkifexistcategory = $this->product_model->checkifexistcategory($category);
+
+            unset($_GET['q_str']);
+            unset($_GET['q_cat']);
+            unset($_GET['q_catname']);
+
             if($checkifexistcategory == 0 || $category == 1)
             {		  
-                $response['items'] = $this->product_model->itemSearchNoCategory($words,$start,$per_page);
+                $categories = "SELECT cat_id FROM es_product WHERE is_delete = 0 AND is_draft = 0";
             }else{ 
+
                 $down_cat = $this->product_model->selectChild($category);
                 array_push($down_cat, $category);
-                $catlist_down = implode(",", $down_cat);
-                $response['items'] = $this->product_model->getProductInCategoryAndUnder($words,$catlist_down,$start,$per_page);
+                $categories = implode(",", $down_cat);
             }
-            // start here
-            $firstdownlevel = $this->product_model->getDownLevelNode($category);
 
-            $newbuiltarray = array();
-            $cnt = 0;
-            $item_total_cnt = 0;
+ 
+                    $count = 0; 
+                    $operator = " = ";    
+                    $sortString = ""; 
+                    $conditionArray = array(); 
+ 
 
-            foreach ($firstdownlevel as $keyfirstlevel => $value) {
-                $count_main = 0;
-                $noitem = false; 
-                $newcat = $value['id_cat'];  
-                $down_cat = $this->product_model->selectChild($newcat);
-                array_push($down_cat,$value['id_cat']);
-                $catlist_down = implode(",", $down_cat);
-                $count_main_new = count($this->product_model->getProductInCategoryAndUnder($words,$catlist_down,0,9999999999));
+                    if(!count($_GET) <= 0){
+                        foreach ($_GET as $key => $value) {
 
-                $count_main += $count_main_new;
-                $item_total_cnt += $count_main;
-                $cnt = $keyfirstlevel;
-                array_push($newbuiltarray, array("name"=>$value['name'],"item_id"=> $value['id_cat'],"parent_id"=> $value['parent_id'],"count"=>0,"children"=>array()));
-                $secondlevel = $this->product_model->getDownLevelNode($value['id_cat']);
-                
-                foreach ($secondlevel as $key){
-                    $count = 0;
-                    $newcat = $key['id_cat'];  
-                    $down_cat = $this->product_model->selectChild($newcat);
-                    array_push($down_cat,$newcat);
-                    $catlist_down = implode(",", $down_cat); 
-                    $count_new = count($this->product_model->getProductInCategoryAndUnder($words,$catlist_down,0,9999999999));	
-                    $count += $count_new;
-                    if(!$count <= 0)
-                    {
-                        array_push($newbuiltarray[$cnt]['children'], array("name"=>$key['name'],"item_id"=> $key['id_cat'],"parent_id"=> $key['parent_id'],"count"=>$count));
+                            if(ucfirst(strtolower($key)) == "Brand"){
+
+                                if(strpos($_GET[$key], '-|-') !== false) {
+                                    $var = explode('-|-',$_GET[$key]);
+                                    $needString = array();
+                                    foreach ($var as $varkey => $varvalue) {
+                                        array_push($needString, "'$varvalue'");
+                                    } 
+                                    $conditionArray['brand'] = array(
+                                        'value' => $var,
+                                        'count' => count($var)
+                                        );
+                                }else{ 
+                                    $conditionArray['brand'] = array(
+                                        'value' => $value,
+                                        'count' => 1
+                                        );
+                                }   
+                            }
+                            elseif (ucfirst(strtolower($key)) == "Condition") { 
+
+                                $conditionArray['condition'] = array(
+                                    'value' => $value,
+                                    );   
+
+                            }elseif (ucfirst(strtolower($key)) == "Sop") { 
+
+                                $sortValue = ucfirst(strtolower($_GET[$key]));
+                                if($sortValue == ucfirst(strtolower('hot'))){
+                                    $sortString = " is_hot DESC , ";
+                                }elseif ($sortValue == ucfirst(strtolower('new'))) {
+                                    $sortString = " is_new DESC , ";
+                                }elseif ($sortValue == ucfirst(strtolower('popular'))) {
+                                    $sortString = " clickcount DESC , ";
+                                }else{
+                                    $sortString = "";
+                                } 
+
+                            }elseif (ucfirst(strtolower($key)) == "Price") { 
+
+                                if(strpos($_GET[$key], 'to') !== false) {   
+
+                                    $price = explode('to', $_GET[$key]);
+                                }else{
+
+                                    $price = explode('to', '0.00to99999999.99');
+                                }    
+                                $a = str_replace( ',', '', $price[0]);
+                                $b = str_replace( ',', '', $price[1]);
+                                if(is_numeric($a) && is_numeric($b)){
+
+                                    $conditionArray['price'] = array(
+                                        'start' => $a,
+                                        'end'=> $b
+                                        );
+                                }
+
+
+                            }else{
+
+                                $count++; 
+                                if(!isset($conditionArray['attributes'])){
+                                    $conditionArray['attributes'] = array();
+                                }
+
+                                if(strpos($_GET[$key], '-|-') !== false) {
+                                    $var = explode('-|-',$_GET[$key]);      
+                                    $key = strtolower(str_replace("_", " ", $key));
+                                    foreach ($var as $varkey => $varvalue) {
+                                        $conditionArray['attributes'][$key] = $var;
+                                    }    
+                                }else{
+                                    $key = strtolower(str_replace("_", " ", $key)); 
+                                    $conditionArray['attributes'][$key] = $value; 
+                                }           
+                            }
+                        }
+                    }    
+
+                    $response['items'] = $this->product_model->getProductsByCategory($categories,$conditionArray,$count,$operator,$start,$perPage,$sortString,$words);
+
+
+                // GETTING ALL ATTRIBUTES
+
+                    $ids = array();
+                    foreach ($response['items'] as $key) {
+                        array_push($ids, $key['product_id']);
                     }
+                    $ids = implode(',',$ids);
+                    $attributes = $this->product_model->getProductAttributesByCategory($ids);
+                    $itemCondition = $this->product_model->getProductConditionByCategory($ids);
+                    $brand = $this->product_model->getProductBrandsByCategory($ids); 
+
+                    $organizedAttribute = array();
+                    $organizedAttribute['Brand'] = $brand;
+                    $organizedAttribute['Condition'] = $itemCondition;
+                    for ($i=0; $i < sizeof($attributes) ; $i++) { 
+                        $head = urlencode($attributes[$i]['attr_name']);
+                        if(!array_key_exists($head,$organizedAttribute)){
+                            $organizedAttribute[$head] = array();   
+                        }
+                        array_push($organizedAttribute[$head],  $attributes[$i]['attr_value']);
+                    }
+
+                    $response['attributes'] = $organizedAttribute;
+
+				// start here GET DOWN CATEGORIES
+                $firstdownlevel = $this->product_model->getDownLevelNode($category); 
+				$newbuiltarray = array();
+				$cnt = 0;
+				$item_total_cnt = 0;
+
+                foreach ($firstdownlevel as $keyfirstlevel => $value) {
+                    $count_main = 0;
+                    $noitem = false; 
+                    $newcat = $value['id_cat'];  
+                    $down_cat = $this->product_model->selectChild($newcat);
+                    array_push($down_cat,$value['id_cat']);
+                    $catlist_down = implode(",", $down_cat);
+                    $count_main_new = count($this->product_model->getProductInCategoryAndUnder($words,$catlist_down,0,9999999999));
+
+                    $count_main += $count_main_new;
+                    $item_total_cnt += $count_main;
+                    $cnt = $keyfirstlevel;
+                    array_push($newbuiltarray, array("name"=>$value['name'],"item_id"=> $value['id_cat'],"parent_id"=> $value['parent_id'],"count"=>0,"children"=>array()));
+                    $secondlevel = $this->product_model->getDownLevelNode($value['id_cat']);
+
+                    foreach ($secondlevel as $key){
+                        $count = 0;
+                        $newcat = $key['id_cat'];  
+                        $down_cat = $this->product_model->selectChild($newcat);
+                        array_push($down_cat,$newcat);
+                        $catlist_down = implode(",", $down_cat); 
+                        $count_new = count($this->product_model->getProductInCategoryAndUnder($words,$catlist_down,0,9999999999));	
+                        $count += $count_new;
+                        if(!$count <= 0)
+                        {
+                            array_push($newbuiltarray[$cnt]['children'], array("name"=>$key['name'],"item_id"=> $key['id_cat'],"parent_id"=> $key['parent_id'],"count"=>$count));
+                        }
+                    }
+                    $newbuiltarray[$cnt]['count'] = $count_main;
                 }
-                $newbuiltarray[$cnt]['count'] = $count_main;
-            }
 
-            $newbuiltarray = array("name"=>$category_name,"children" => $newbuiltarray);
+				$newbuiltarray = array("name"=>$category_name,"children" => $newbuiltarray);
 
-            $list = $this->toUL($newbuiltarray['children']);
+				$list = $this->toUL($newbuiltarray['children'],$string);
 
-            if($category_name == "PARENT" || $category == 1){
-                $response['category_cnt'] = '<h3>Categories</h3>' . $list;
-            }else{
-                $vcnt = "";
-                if($item_total_cnt > 0){
-                    $vcnt = "(" . $item_total_cnt . ")";
-                }
-                $response['category_cnt'] = '<h3>Categories</h3><ul><li>'.$category_name. $vcnt .'</li><li>'.$list.'</li></ul>';
-            }
-            
-            $response['cntr'] = $item_total_cnt;
-            $response['string'] = $search_string;
-            // end here
+				if($category_name == "PARENT" || $category == 1){
+					$response['category_cnt'] = '<h3>Categories</h3>' . $list;
+				}else{
+					$vcnt = "";
+					if($item_total_cnt > 0){
+						$vcnt = "(" . $item_total_cnt . ")";
+					}
+					$response['category_cnt'] = '<h3>Categories</h3><ul><li>'.$category_name. $vcnt .'</li><li>'.$list.'</li></ul>';
+				}
+				
+				$response['cntr'] = $item_total_cnt;
 
-            $response['id_cat'] = $category;
-            $data = array(
-                'title' => html_escape($search_string).' | Easyshop.ph',
-                );
-            $data = array_merge($data, $this->fill_header());
-            $response['category_navigation'] = $this->load->view('templates/category_navigation',array('cat_items' =>  $this->getcat(),), TRUE );
-            $this->load->view('templates/header', $data); 
-            $this->load->view('pages/product/product_search_by_searchbox',$response);
-            $this->load->view('templates/footer_full'); 
-        }
+				// end here
+
+				$response['id_cat'] = $category;
+				$data = array(
+					'title' => 'Easyshop.ph',
+					);
+
+				$data = array_merge($data, $this->fill_header());
+				$response['category_navigation'] = $this->load->view('templates/category_navigation',array('cat_items' =>  $this->getcat(),), TRUE );
+				$this->load->view('templates/header', $data); 
+				$this->load->view('pages/product/product_search_by_searchbox',$response);
+				$this->load->view('templates/footer_full'); 
+			}
+		 
+ 
 	}	
 
     /*   
@@ -560,7 +690,7 @@ class product extends MY_Controller
 	}
 
 
-	function toUL(array $array)
+	function toUL(array $array,$string)
 	{
 		$html = '<ul>' . PHP_EOL;
 
@@ -569,10 +699,10 @@ class product extends MY_Controller
 			if($value['count'] <= 0){
 				continue;
 			}
-			$html .= '<li><a href="search.html?q_str=' . $_GET['q_str'] .'&q_cat='.$value['item_id'].'">' . $value['name'].'('.$value['count'].')</a>';
+			$html .= '<li><a href="search.html?q_str=' . $string .'&q_cat='.$value['item_id'].'">' . $value['name'].'('.$value['count'].')</a>';
 			if (!empty($value['children']))
 			{
-				$html .= $this->toUL($value['children']);
+				$html .= $this->toUL($value['children'],$string);
 			}
 			$html .= '</li>' . PHP_EOL;
 		}
