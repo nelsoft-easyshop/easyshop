@@ -14,16 +14,17 @@
            online shopping experience. Our goal is to be the first website you think about
            when buying online." />
 		<meta property="og:image" content="https://easyshop.ph/assets/images/img_logo.png?ver=1.0" />
-        <!-- <meta name="viewport" content="width=device-width, initial-scale=1"> -->
+        <meta name="viewport" content="width=device-width">
 
 		<!-- CSS -->
         <link rel="stylesheet" href="<?=base_url()?>assets/css/landingpage/style_v2.css?ver=1.0" type="text/css" media="screen"/>
-<!--         <link rel="stylesheet" href="<?=base_url()?>assets/css/landingpage/rwdgrid.css" type="text/css" media="screen"/> -->
-
-
+        <link rel="stylesheet" href="<?=base_url()?>assets/css/landingpage/jquery.bxslider.css" type="text/css" media="screen"/> <!-- Slider CSS -->
+        <link rel="stylesheet" href="<?=base_url()?>assets/css/landingpage/responsive-nav.css"><!-- responsive menu -->
+		
 		<!-- Contact Form CSS files -->
 		<link type='text/css' href='<?=base_url()?>assets/css/basic.css?ver=1.0' rel='stylesheet' media='screen' />
 		<link href="<?=base_url()?>assets/css/jquery-ui.css?ver=1.0" rel="stylesheet">
+
         <!-- JS -->
 		<!-- html5.js for IE less than 9 -->
 		<!--[if lt IE 9]>
@@ -39,53 +40,53 @@
 		<link href='https://fonts.googleapis.com/css?family=Roboto:400,300' rel='stylesheet' type='text/css'>
 </head>
 <body>
-
-	<div id="fb-root"></div>
-<script>(function(d, s, id) {
-  var js, fjs = d.getElementsByTagName(s)[0];
-  if (d.getElementById(id)) return;
-  js = d.createElement(s); js.id = id;
-  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&appId=154815247949100&version=v2.0";
-  fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));</script>
-
-
+		<!--<div id="fb-root"></div>
+		<script>(function(d, s, id) {
+		  var js, fjs = d.getElementsByTagName(s)[0];
+		  if (d.getElementById(id)) return;
+		  js = d.createElement(s); js.id = id;
+		  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&appId=154815247949100&version=v2.0";
+		  fjs.parentNode.insertBefore(js, fjs);
+		  }(document, 'script', 'facebook-jssdk'));</script>-->
 	<header id="header" class="">
-		<div class="container-16">
-				<div class="grid-4">
-					<a href="<?=base_url()?>home"><span class="span_bg logo"></span></a>
+		<div class="header">
+				<div class="logo_con">
+					<span class="span_bg logo"></span>
 				</div>
 				<div class="nav_container">
 					<nav class="nav-collapse">
 					  <ul>
-                        <li class="grid-1"><a href="<?=base_url()?>home">Shop</a></li>
+					    <li class="grid-1"><a href="<?=base_url()?>home">Shop</a></li>
 					    <li class="grid-1"><a href="<?=base_url()?>sell/step1">Sell</a></li>
-                        <?php if(!$logged_in): ?>
-                            <li class="btn_login">
-                                <?php echo form_open('login');?>
-                                    <input type="text" placeholder='Username' name='login_username'>
-                                    <input type="password" placeholder='Password' name='login_password'>
-                                    <input type="submit" class='btn' value='Login' name='login_form'/>
-                                <?php echo form_close();?>
-                            </li>
-                            <li class="btn_register">
-                                <span class="btn reg_btn" id="reg_btn">Register</span>
-                            </li>
-                        <?php else: ?>
+					    <?php if(!$logged_in): ?>
+					    <li class="btn_login">
+					    	<?php echo form_open('login');?>
+                                <input type="text" placeholder='Username' name='login_username'>
+                                <input type="password" placeholder='Password' name='login_password'>
+                                <input type="submit" class='btn' value='Login' name='login_form'/>
+                            <?php echo form_close();?>
+					    </li>
+					    <li class="btn_register">
+					    	<span class="btn reg_btn" id="reg_btn">Register</span>					    	
+					    </li>
+					    <?php else: ?>
                             <li class='btn_login' style='margin-left: 23em !important;'>   
                                 <a href='<?=base_url()?>me'><input style='overflow: hidden; text-overflow: ellipsis; max-width: 120px;' type="submit" class='btn' id='userpage' value = "<?php echo html_escape($uname);?>"/></a>
                             </li>
                             <li class='btn_register'>   
                                 <a href='<?=base_url()?>login/logout'><span class="btn" id="sign_out">Sign-out</span></a>
                             </li>
-                        <?php endif; ?>    
-                        
-                        
+                        <?php endif; ?>  
+					    <li class="shop_con">
+					    	<a href="<?=base_url()?>home">Shop</a>
+					    	<a href="<?=base_url()?>sell/step1">Sell</a>
+					    </li>
 					  </ul>
 					</nav>
 				</div>		
 				
 		</div>
+
 		<div class="register_container container-16" id="register_container">
 			<div class="grid-6">
 					    		<?php echo form_open('', array('id'=>'register_form1'));?>
@@ -210,42 +211,117 @@
 			</div>					
 		</div>
 	</header>
-
 	<div class="clear"></div>
 	<section class="bg_mid">
-		<div class="bg_mid2">
-		<div class="container-16">
-			<div class="grid-11 mgrn_top3">
-						<h1><span>Buy a</span><br />Samsung Smart LED TV 40"</h1>
-						<h1><span>for as low as</span></h1>
-						<h1><span>Php 43,890</span></h1>
-						<h1><span>Php 438.90*</span></h1>
-						
-						<p class="mgrn_top4">The COUNTDOWN SALE offer starts on<br />
-							June 15 at 12 noon and expires on <br />June 17,2014.
+		<div class="wrapper prod_slides">
+			<div class="grid-11">
+				<ul class="bxslider">
+					<li class="slide-1">
+						<div class="product_content">
+							<div>
+								<h1><span>Buy an</span> iPhone 5s</h1>
+								<h1><span>for as low as</span></h1>
+								<h1><span>Php 48,990</span></h1>
+								<h1><span>Php 489.90*</span></h1>
+								<div class="product_content1_sub">
+									<p class="mgrn_top4">
+									The offer starts on June 15 at 12 noon<br />and expires on June 17, 2014.
+									</p>
+									<p class="mgrn_top4">To qualify, like us on Facebook and  </p>
+									<p class="fs2 txt_reg">register now!</p>
+									<p>
+										*The price will drop by 2% every hour until it<br />reaches 99% off for 48 hours. <br />
+										One stock is available per item.
+									</p>
+								</div>
+							</div>
+							<div class="img_product_content">
+								<div class="discount_tag">
+									<p><span>2% OFF</span> every hour until sold</p>
+									<p>Starting June 15,2014</p>
+									<p>12:00 noon</p>
+								</div>
+								<div class="img_container">
+								<img src="assets/images/landingpage/img_ribbon.png" class="ribbon_tag">
+								<img src="assets/images/landingpage/img_iphone.png" class="img_main_product">
+								</div>
+							</div>
+						</div>
+						<div class="clear"></div>
+						<div class="product_content2">
+							<p class="mgrn_top4">
+							The offer starts on June 15 at 12 noon and expires on June 17, 2014.
+							</p>
+							<p class="mgrn_top4">To qualify, like us on Facebook and  </p>
+							<p class="fs2 txt_reg">register now!</p>
+							<p class="mgrn_top4">
+								*The price will drop by 2% every hour until it reaches 99% off for 48 hours. 
+								One stock is available per item.
+							</p>
+						</div>
+					</li>
+					<li class="slide-1">
+						<div class="product_content">
+							<div>
+								<h1><span>Buy an</span> iPhone 5s</h1>
+								<h1><span>for as low as</span></h1>
+								<h1><span>Php 48,990</span></h1>
+								<h1><span>Php 489.90*</span></h1>
+								<div class="product_content1_sub">
+									<p class="mgrn_top4">
+									The offer starts on June 15 at 12 noon<br />and expires on June 17, 2014.
+									</p>
+									<p class="mgrn_top4">To qualify, like us on Facebook and  </p>
+									<p class="fs2 txt_reg">register now!</p>
+									<p>
+										*The price will drop by 2% every hour until it<br />reaches 99% off for 48 hours. <br />
+										One stock is available per item.
+									</p>
+								</div>
+							</div>
+							<div class="img_product_content">
+								<div class="discount_tag">
+									<p><span>2% OFF</span> every hour until sold</p>
+									<p>Starting June 15,2014</p>
+									<p>12:00 noon</p>
+								</div>
+								<div class="img_container">
+								<img src="assets/images/landingpage/img_ribbon.png" class="ribbon_tag">
+								<img src="assets/images/landingpage/img_lg_phone.png" class="img_main_product">
+								</div>
+							</div>
+						</div>
+						<div class="clear"></div>
+						<div class="product_content2">
+							<p class="mgrn_top4">
+							The offer starts on June 15 at 12 noon and expires on June 17, 2014.
+							</p>
+							<p class="mgrn_top4">To qualify, like us on Facebook and  </p>
+							<p class="fs2 txt_reg">register now!</p>
+							<p class="mgrn_top4">
+								*The price will drop by 2% every hour until it reaches 99% off for 48 hours. 
+								One stock is available per item.
+							</p>
+						</div>
+					</li>
+					<li>
+						<h1><span>YOUR</span> BUSINESS</h1>
+						<h1><span>HAS A</span>  NEW HOME</h1>
+						<p class="fs1 mgrn_top1">
+						EasyShop.ph provides fast and easy online shopping experience.
 						</p>
-						<p>To qualify, like us on Facebook and</p>
-						<p class="fs2 txt_reg">register now!</p>
-						<p>
-							*The price will drop by 2% every hour until sold<br />One stock is available per item. 
+						<p class="fs2 mgrn_top2">Start buying on June 15, 2014 </p>
+					</li>
+					<li>
+						<h1><span>YOUR</span> BUSINESS</h1>
+						<h1><span>HAS A</span>  NEW HOME</h1>
+						<p class="fs1 mgrn_top1">
+						EasyShop.ph provides fast and easy online shopping experience.
 						</p>
-                        <!--
-						<p>
-							For more details on how to avail this promo <a href="">click here</a>.
-						</p>
-                        -->
-						
-						<!-- <div class="mgrn_top2">
-							<div class="vid_container"><span class="fs1">watch this video </span> 
-							<span>
-								<img src="<?=base_url()?>assets/images/landingpage/btn_play.png" class="vidplay" alt="Easyshop.ph Video">
-								<span id="videoplayer">									
-									<embed src="https://www.youtube.com/v/-iLuVgicBjE&rel=0" type="application/x-shockwave-flash"></embed>
-								</span>
-							</span>
-							</div>	
-						</div> -->	
-			</div>
+						<p class="fs2 mgrn_top2">Start buying on June 15, 2014 </p>
+					</li>
+				</ul>					
+	
 			</div>
 		</div>
 	</section>
@@ -275,13 +351,13 @@
 						<div class="social_media">
 							<span class="txt_sm">Social Media:</span>
 							<ul>
-								<li>
+								<!-- <li>
 									<div class="fb-like" data-href="https://www.facebook.com/EasyShopPhilippines" data-width="200" data-layout="button" data-action="like" data-show-faces="false" data-share="false"></div>
 								</li>
 								<li>
 									<a href="https://twitter.com/EasyShopPH" class="twitter-follow-button" data-show-count="false" data-size="large" data-show-screen-name="false">Follow @EasyShopPH</a>
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-								</li>
+								</li> -->
 							</ul>
 							
 						</div>
@@ -296,14 +372,26 @@
 			</div>
 	</footer>
 
+
+
+
 </body>
 <?php echo form_open('registration/success', array('id'=>'success_register'));?>
 		  <input type="hidden" name="referrer" class="referrer" value="landingpage"/>
 <?php echo form_close();?>
 
 
-<script type='text/javascript' src="<?=base_url()?>assets/JavaScript/js/jquery-1.9.1.js" ></script>
+
+<script src="<?=base_url()?>assets/JavaScript/js/jquery-1.9.1.js"></script>
+<script src="<?=base_url()?>assets/JavaScript/landingpage/responsive-nav.js"></script>
 <script type='text/javascript' src="<?=base_url()?>assets/JavaScript/js/jquery-ui.js"></script>
+<script>
+      var navigation = responsiveNav(".nav-collapse");
+</script>
+
+
+
+
 
 <script type="text/javascript">
 
@@ -382,7 +470,6 @@ $(function() {
 </script> 
 <script type="text/javascript">
 
-
 $(document).click(function (e)
 {
     var container = $("#register_container");
@@ -396,13 +483,28 @@ $(document).click(function (e)
 });
 
 </script>
-
+   
     <!-- Form Plugins -->
 	<script type='text/javascript' src='<?=base_url()?>assets/JavaScript/js/jquery.numeric.js'></script>
 	<script type='text/javascript' src='<?=base_url()?>assets/JavaScript/js/jquery.validate.js'></script>
 	
 	<script type='text/javascript' src='<?=base_url()?>assets/JavaScript/landingpage/landingpage.js?ver=4.10'></script>
 	
-	<!-- Password Strength -->
+	<!-- Password Strength 
 	<script type="text/javascript" src="<?=base_url()?>assets/JavaScript/js/mootools-core-1.4.5-full-compat.js"></script>
-	<script type="text/javascript" src="<?=base_url()?>assets/JavaScript/js/password_meter.js"></script>
+	<script type="text/javascript" src="<?=base_url()?>assets/JavaScript/js/password_meter.js"></script>-->
+
+	<script src="<?=base_url()?>assets/JavaScript/landingpage/jquery.bxslider.min.js"></script>
+	<script type="text/javascript">
+
+
+	  $(document).ready(function(){
+	    
+	$('.bxslider').bxSlider({
+	  infiniteLoop: false,
+	  hideControlOnEnd: true
+	});
+	  });
+
+
+	</script>
