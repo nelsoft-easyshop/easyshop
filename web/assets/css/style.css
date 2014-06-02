@@ -5283,7 +5283,6 @@ margin-right: 10px;
 #head_container span{
 		float:right;
 		margin: 8px;
-		display :none;
 }
 #panel_container{
 		float: left;
@@ -5291,7 +5290,7 @@ margin-right: 10px;
 		height: 430px;
 		padding: 10px;
 }
-#chsn_delete_btn{
+#chsn_delete_btn ,#delete_all_btn{
 		display:none;
 }
 #table_id_length

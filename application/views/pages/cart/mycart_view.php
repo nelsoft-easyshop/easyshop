@@ -119,7 +119,7 @@
 			sum = total - value;
 			}
 			//$("#total").html(Number(sum).toLocaleString('en')+".00");
-            var ttl = numeral(parseFloat(sum).toFixed(2)).format('0.00');
+            var ttl = numeral(parseFloat(sum).toFixed(2)).format('0,0.00');
 			$("#total").html(ttl);
         });
         $("#proceed_payment").click(function(event){
