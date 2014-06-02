@@ -48,8 +48,8 @@ class WebSocketServer
     public function listenToPusher($handlerFunction, $netUrl = 'tcp://127.0.0.1:5555')
     {
         $zmqServer = new \React\ZMQ\Context($this->eventLoop);
-        $zmqServer->bind($netUrl);
-        $zmqServer->on('message', [$this->socketHandler, $handlerFunction]);
+        @$zmqServer->bind($netUrl);
+        @$zmqServer->on('message', [$this->socketHandler, $handlerFunction]);
     }
     
     /**
