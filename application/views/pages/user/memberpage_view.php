@@ -1141,8 +1141,7 @@
 		<?php echo form_close();?>			
 	</div>
 	<hr style="display: block; height: 1px; border: 0; border-top: 1px solid #ccc; margin: 1em 0; padding: 0;" />
-	<div class="billing_info_grid">
-			
+	<div class="billing_info_grid">            
 		<?php foreach($bill as $rows => $billing_info){ ?>
 			<?php 
 				$bi_checked = "";
@@ -1200,7 +1199,24 @@
 										<input type="text" class="bi_input" name="bi_bn_bictr<?php echo $rows; ?>" id="bi_bn_bictr<?php echo $rows; ?>" value ="<?php echo html_escape($billing_info['bank_name']);?>" disabled="disabled" style="width:400px;"/>
 										<input type="hidden" name="hbi_bn_bictr<?php echo $rows; ?>" id="hbi_bn_bictr<?php echo $rows; ?>" value ="<?php echo html_escape($billing_info['bank_name']);?>"/>
 										<span class="red ci_form_validation_error"><?php #echo form_error('bi_acct_name');?></span>
-									</div>									
+									</div>	
+                                    
+                                    <?php if(count($billing_info['products'])): ?>
+                                        <div style='display:none; height: 600px; overflow-y:scroll;' id='acct_prod_bictr<?php echo $rows; ?>'>
+                                            This account is currently in use for <strong><?php echo count($billing_info['products']) ?></strong> products. Are you sure about this action?
+                                            <br/><br/>
+                                            <span style='font-size:10px;'>
+                                            * All purchases made for the items listed below will still be linked to the original account. We will call you to confirm if you have made any changes within the
+                                            current pay-out period before making a deposit. Should you wish to change the deposit account for any of your items, you can do it by editing your item listing.
+                                            </span>
+                                            
+                                            <br/><br/>
+                                            <?php foreach($billing_info['products'] as $x): ?>
+                                                <div style='width:auto; height:20px;'><a href='<?=base_url()?>item/<?=$x['p_slug']?>'><span style='font-weight:bold'><?php echo html_escape($x['p_name']);?> - <?php echo date('m/d/Y', strtotime($x['p_date'])); ?></span> | <?php echo es_string_limit(html_escape($x['p_briefdesc']), 60);?></a></div>
+                                            <?php endforeach; ?>
+                                        </div>
+                                   <?php endif; ?>
+
 								</div>
 							</div>	
 					</div>
