@@ -1142,3 +1142,10 @@ span.seller-name {
     cursor: default !important;
 }
 
+.deposit_save{
+    cursor:pointer;
+}
+
+.deposit_save:hover{
+    color:#f18200;
+}
