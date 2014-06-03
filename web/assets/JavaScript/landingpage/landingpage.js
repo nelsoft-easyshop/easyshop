@@ -332,6 +332,12 @@ function email_check(){
 
 function mobile_check(){
 	var mobile = jQuery('#mobile').val();
+	//If mobile is 11 digit long, get the digit value
+	if(parseInt($.trim(mobile).length,10) === 11){
+		if(mobile.substr(0,1) === '0'){
+			mobile = mobile.substr(1,11);
+		}
+	}		
 	var csrftoken = jQuery("meta[name='csrf-token']").attr('content');
     var csrfname = jQuery("meta[name='csrf-name']").attr('content');
 	var field = jQuery('#mobile');
