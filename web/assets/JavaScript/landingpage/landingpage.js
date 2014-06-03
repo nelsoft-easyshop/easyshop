@@ -159,7 +159,7 @@ jQuery(document).ready(function(){
      }, "Must contain numbers and letters");
 	 
 	 jQuery.validator.addMethod("alphanumeric_underscore", function(value, element) {
-        return this.optional(element) || /^\w+jQuery/i.test(value);
+        return this.optional(element) || /^\w+$/i.test(value);
 	 }, "Only letters, numbers, and underscores are allowed");
  
 	jQuery.validator.addMethod("is_validmobile", function(value, element) {
@@ -411,8 +411,6 @@ jQuery(document).ready(function(){
                         }
                     });
                     jQuery('#register_result').dialog('open');
-                        
-                    
 				}
 				
 			});
@@ -459,29 +457,6 @@ jQuery(function() {
 	});
 });
 
-
-
-jQuery(document).ready(function() {  
-    jQuery("#reg_btn").click(function() {
-           jQuery('#register_container').fadeIn(300);
-    });    
-
-    var pathname = jQuery(location).attr('href');
-    var idx = pathname.indexOf('#');
-    if(idx > -1){
-        if(pathname.substring(idx+1) == 'register'){
-            jQuery("#reg_btn").click();
-        }
-    }
-});
-
-jQuery(window).load(function () {
-    jQuery(window).scroll(function () {
-        var e;
-        return e = jQuery(window).scrollTop(), e < 50 ? jQuery("#header").removeClass("fixed_header") : jQuery("#header").addClass("fixed_header").fadeIn(300);
-    })
-}) 
-
 /**** video player dialog box ****/
 jQuery(function() {
     jQuery( "#videoplayer" ).dialog({
@@ -524,29 +499,9 @@ jQuery(function() {
     });
 
     jQuery( ".terms_and_conditions" ).click(function() {
-    jQuery(".dialog" ).dialog( "open" );
-    jQuery(".dialog").siblings().parent('.ui-dialog').addClass('terms_container');
+        jQuery(".dialog" ).dialog( "open" );
+        jQuery(".dialog").siblings().parent('.ui-dialog').addClass('terms_container');
     });
 });
 
-
-$(document).click(function (e)
-{
-    var container = jQuery("#register_container");
-    if (!container.is(e.target) // if the target of the click isn't the container...
-        && container.has(e.target).length === 0  // ... nor a descendant of the container
-        && ! jQuery(e.target).hasClass('reg_btn')
-        && ! jQuery(e.target).hasClass('txt_reg')
-        )
-    {
-        container.fadeOut(300);
-    }
-});
-
-$(document).keyup(function(e) {
-  var container = jQuery("#register_container");
-  if (e.keyCode == 27) {
-    container.fadeOut(300);
-  } 
-});
 

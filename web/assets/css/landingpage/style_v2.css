@@ -328,8 +328,8 @@ box-shadow:         inset 0px 0px 5px 5px rgba(129, 129, 131, 0.25);
 
 div.pass-bar {
   height: 11px;
-    margin-top: 5px;
-    width: auto !important
+  margin-top: 5px;
+  /* width: auto !important */
 }
 
 .pass-hint {

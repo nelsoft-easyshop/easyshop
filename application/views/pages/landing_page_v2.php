@@ -20,10 +20,7 @@
         <link rel="stylesheet" href="<?=base_url()?>assets/css/landingpage/style_v2.css?ver=1.0" type="text/css" media="screen"/>
         <link rel="stylesheet" href="<?=base_url()?>assets/css/landingpage/jquery.bxslider.css" type="text/css" media="screen"/> <!-- Slider CSS -->
         <link rel="stylesheet" href="<?=base_url()?>assets/css/landingpage/responsive-nav.css"><!-- responsive menu -->
-		
-        
-        <link rel="stylesheet" href="<?=base_url()?>assets/css/strength.css"/>
-        
+
 		<!-- Contact Form CSS files -->
 		<link type='text/css' href='<?=base_url()?>assets/css/basic.css?ver=1.0' rel='stylesheet' media='screen' />
 		<link href="<?=base_url()?>assets/css/jquery-ui.css?ver=1.0" rel="stylesheet">
@@ -94,64 +91,6 @@
 
 		<div class="register_container container-16" id="register_container">
 			<div class="grid-6">
-					    		<?php echo form_open('', array('id'=>'register_form1_2'));?>
-									<fieldset>
-									<!--
-											<h4>Username</h4>
-											<input maxlength='25' type="text" placeholder="" id="username" name="username" class="reqfield" autocomplete="off"/>
-											<input  type="hidden" id="usernamecheck" value="" name="usernamecheck">
-											<span class="red ci_form_validation_error"><?php echo form_error('username'); ?></span>
-											<div id="username_status">
-												<img class="fieldstatus" src="<?=base_url()?>/assets/images/check_icon.png" id="username_check" style="position: relative;display:none;vertical-align:middle"/>
-												<img class="fieldstatus" src="<?=base_url()?>/assets/images/x_icon.png" id="username_x" style="position: relative;display:none;vertical-align:middle"/>
-												<span class="username_availability"></span>
-											</div>
-											
-											<h4>Password</h4>
-											<input type="password" placeholder="" id="password" name="password" class="reqfield">
-											<span class="red ci_form_validation_error"><?php echo form_error('password'); ?></span>
-
-											<h4 class="txt_cp">Confirm Password</h4>
-											<input type="password" placeholder="" id="cpassword" name="cpassword" class="reqfield" disabled>
-											<span class="field_pword_status">
-											<img class="fieldstatus" src="<?=base_url()?>/assets/images/check_icon.png" id="cpassword_check" style="position: relative;display:none;"/>
-											<img class="fieldstatus" src="<?=base_url()?>/assets/images/x_icon.png" id="cpassword_x" style="position: relative;display:none; "/>
-											</span>
-											<span class="red ci_form_validation_error"><?php echo form_error('cpassword'); ?></span>
-											<span class="help-block spnmsg padding1" style="text-align:left"></span>
-										
-										
-											<h4>Email Address</h4>
-											<input type="text" placeholder="" id="email" name="email" class="reqfield" autocomplete="off">
-											<input type="hidden" id="emailcheck" value="">
-											<div id="email_status">
-												<img class="fieldstatus" src="<?=base_url()?>/assets/images/check_icon.png" id="email_check" style="position: relative;display:none;vertical-align:middle"/>
-												<img class="fieldstatus" src="<?=base_url()?>/assets/images/x_icon.png" id="email_x" style="position: relative;display:none;vertical-align:middle"/>
-											</div>
-                                            <br/>
-                                            <span class="red email_availability"></span>
-											<span class="red ci_form_validation_error"><?php echo form_error('email'); ?></span>
-											<span class="help-block spnmsg padding1"></span>
-										
-											<h4>Mobile Number</h4>
-											<input type="text" placeholder="e.g. 09051234567" name="mobile" class="reqfield" id="mobile" maxlength="11">
-											<input type="hidden" id="mobilecheck" value="">
-											<div id="mobile_status">
-												<img class="fieldstatus" src="<?=base_url()?>/assets/images/check_icon.png" id="mobile_check" style="position: relative;display:none;vertical-align:middle"/>
-												<img class="fieldstatus" src="<?=base_url()?>/assets/images/x_icon.png" id="mobile_x" style="position: relative;display:none;vertical-align:middle"/>
-												<span class=" red  mobile_availability"></span>
-											</div>
-											<span class="red ci_form_validation_error"><?php echo form_error('mobile'); ?></span>
-											<span class="help-block spnmsg padding1"></span>
-											<h4></h4>
-											
-											
-										<!--<button type="button" class="btn btn-warning btn-large">SEND</button>
-										<input type="submit" class="btn btn_send" value="SEND" name="register_form1" id="register_form1_btn" >
-										<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" class="img_loader_small2" id="register_form1_loadingimg" style="display:none"/>
-									
-										<p class="terms_con padding1 padding-t1">By registering to Easyshop.ph, you agree to comply with our <span class="terms_and_conditions">Terms and Conditions</span></p>
-									-->
 
 								<?php echo form_close();?> 
 										<div class="dialog t_and_c">
@@ -211,10 +150,7 @@
 												the parties arising before the date of termination. 
 											</p>	
 										</div>
-									</fieldset>
-
 									<p class="span6 border1"></p>
-
 			</div>					
 		</div>
 	</header>
@@ -501,7 +437,7 @@
 	
 	<div class="clear"></div>
 	<section class="mid_reg2">
-		<div class="wrapper register_wrapper" id="register_panel">
+		<div class="wrapper register_wrapper" id="register">
 			<h1>REGISTER</h1>
 			<div class="register_container2" id="register_container2">
 				<?php echo form_open('', array('id'=>'register_form1'));?>
@@ -661,7 +597,7 @@
 	jQuery('#reg_btn,#reg_txt').click(function(event) {
 	    event.preventDefault();
 	    var n = jQuery(document).height();
-	    jQuery('html, body').animate({ scrollTop: 900 }, 300);
+	    jQuery('html, body').animate({ scrollTop: 1000 }, 300);
 	});
 
 </script> 
