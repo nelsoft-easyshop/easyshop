@@ -2363,12 +2363,12 @@ $(document).ready(function(){
 	
 	// DELETE BUTTON
 	$(":button[name^='del_bictr']").click(function(){
-	
 		var getbictr = $(this).attr('name');
 		var bictr = getbictr.substring(4);
 		var bid = 'bi_id_' + bictr;
+        var bi = $('#'+bid).val();
         
-        var $prod_div = $('#acct_prod_'+bictr);
+        var $prod_div = $('#acct_prod_'+bi);
         if(typeof $prod_div[0] !== 'undefined'){
             $prod_div.dialog({
                 modal:true,
@@ -2380,7 +2380,7 @@ $(document).ready(function(){
                 buttons:{
                     OK:function(){
                         $(this).dialog('close');
-                        delete_bank_account(bictr, false);
+                        delete_bank_account(bi, false);
                     },
                     Cancel:function(){
                         $(this).dialog('close');
@@ -2389,7 +2389,7 @@ $(document).ready(function(){
             });
         }
         else{
-            delete_bank_account(bictr);
+            delete_bank_account(bi);
         }
     });
 
@@ -2494,24 +2494,22 @@ $(document).ready(function(){
     
     
     
-    function delete_bank_account(bictr,xconfirm){
+    function delete_bank_account(bid,xconfirm){
         var xconfirm = (typeof xconfirm !== 'undefined') ? xconfirm : true;
         if(xconfirm){
             var del = confirm("Delete bank info?");
         }else{
             var del = true;
         }
-    
 		if(del){
 			var csrftoken = $("meta[name='csrf-token']").attr('content');
-            var csrfname = $("meta[name='csrf-name']").attr('content');
-			var bidval = $("#"+bid).val();				
+            var csrfname = $("meta[name='csrf-name']").attr('content');		
 			var currentRequest = null;
 			var redurl =  config.base_url+'memberpage/billing_info_d';
 			currentRequest = jQuery.ajax({
 				type: "POST",
 				url: redurl, 
-				data: {bi_id:bidval, csrfname:csrftoken},
+				data: {bi_id:bid, csrfname:csrftoken},
 				success: function(data){
 					window.location.href = config.base_url+'me?me=pmnt';
 				}
@@ -2549,13 +2547,13 @@ $(document).ready(function(){
 		var bns = 'bi_bns_' + bictr;
 		var bid = 'bi_id_' + bictr;
 		var bch = 'bi_chk_' + bictr;
- 
+
         if(xconfirm){
             var updt = confirm("Update bank info?");
         }else{
             var updt = true;
         }
-		
+
 		if(updt){
             $("#ubi_"+bictr).validate({
                 errorElement: "span",
@@ -2583,7 +2581,7 @@ $(document).ready(function(){
                 currentRequest = jQuery.ajax({
                     type: "POST",
                     url: redurl, 
-                    data: {bi_acct_name:banval, bi_acct_no:barval, bi_bank:bnval, bi_id:bidval, bi_def:bchval, csrfname:csrftoken},
+                    data: {bi_acct_name:banval, bi_acct_no:barval, bi_bank:bnval, bi_id:bidval, bi_def:bchval, csrfname:csrftoken, bi_payment_type:'Bank'},
                     success: function(data){
                         var obj = JSON.parse(data);
                         if((parseInt(obj.e,10) == 1) && (obj.d=='success')){
@@ -2609,7 +2607,32 @@ $(document).ready(function(){
                             $("#sv_"+bictr+", #cn_"+bictr+", #bi_bns_"+bictr).hide();		
                             $("#del_"+bictr+", #"+bictr+", #bi_bn_"+bictr).show();
                             $(":button[name^='bictr']").prop("disabled", false);
-                            $(":button[name^='del_bictr']").prop("disabled", false);							
+                            $(":button[name^='del_bictr']").prop("disabled", false);	
+                            
+                            //UPDATE ID OF EDITED ELEMENTS
+                            $("#"+bid).val(obj.id);
+                            var $form = $('#ubi_bictr'+bidval);
+                            $form.find('[id$="'+ bidval+'"]').each(function(){
+                                var $this = $(this);
+                                var id =  $this.attr('id')
+                                var x =id.substr(0, id.indexOf(bidval))
+                                 $this.attr('id', x+obj.id);
+                            });
+                            $form.find('label[for$="'+bidval+'"]').each(function(){
+                                var $this = $(this);
+                                var for_string =  $this.attr('for');
+                                var x =for_string.substr(0, for_string.indexOf(bidval))
+                                 $this.attr('for', x+obj.id);
+                            });
+                            $form.find('[name$="'+ bidval+'"]').each(function(){
+                                var $this = $(this);
+                                var name =  $this.attr('name')
+                                var x =name.substr(0, name.indexOf(bidval))
+                                 $this.attr('name', x+obj.id);
+                            });
+                            $form.attr('id','ubi_bictr'+obj.id);
+                            $form.attr('name','ubi_bictr'+obj.id);
+                            
                             return false;
                         }else if((parseInt(obj.e,10) == 0) && (obj.d=='duplicate')){
                             $("#bi_err_"+bictr).show().delay(2000).fadeOut(800);

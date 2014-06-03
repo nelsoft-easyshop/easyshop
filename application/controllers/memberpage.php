@@ -718,20 +718,24 @@ class Memberpage extends MY_Controller
 			$member_id = $this->session->userdata('member_id');
 			$bi_id = $this->input->post('bi_id');
 			$bi_bank = $this->input->post('bi_bank');
+            $bi_payment_type = $this->input->post('bi_payment_type');
 			$bi_acct_name = $this->input->post('bi_acct_name');
 			$bi_acct_no = $this->input->post('bi_acct_no');
 			$bi_def = $this->input->post('bi_def');
+            $bi_user_account = "";
 			$data = array(
 					'member_id' => $member_id,
+                    'payment_type' => $bi_payment_type,
 					'ibi' => $bi_id,
 					'bank_id' => $bi_bank,
 					'bank_account_name' => $bi_acct_name,
 					'bank_account_number' => $bi_acct_no,
-					'is_default' => $bi_def				
+					'is_default' => $bi_def,
+                    'user_account' => $bi_user_account,
 			);
 			if($this->memberpage_model->isBankAccountUnique($data)){
-                $this->memberpage_model->billing_info_update($data);
-                $return = '{"e":"1","d":"success"}';
+                $new_id = $this->memberpage_model->billing_info_update($data);
+                $return = '{"e":"1","d":"success", "id":'.$new_id.'}';
             }
             else{
                 $return = '{"e":"0","d":"duplicate"}';
@@ -744,7 +748,6 @@ class Memberpage extends MY_Controller
 	}
 
 	function billing_info_d(){
-	   
 		if($this->input->post('bi_id')){
 			$member_id = $this->session->userdata('member_id');
 			$bi_id = $this->input->post('bi_id');
