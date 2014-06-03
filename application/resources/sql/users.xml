@@ -324,7 +324,7 @@
 
 <select id='getDefaultBillingAccnt'>
     SELECT ebi.`is_default` FROM `es_billing_info` ebi 
-    WHERE ebi.`member_id`=:member_id AND ebi.`is_delete` = 0 
+    WHERE ebi.`member_id`=:member_id AND ebi.`is_delete` = 0  AND ebi.`is_default` = 1 
 </select>
 
 <select id='addBillingAccnt'>
