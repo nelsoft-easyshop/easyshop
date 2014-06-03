@@ -86,6 +86,8 @@
                                       <div class="pay_sum_c3">Quantity</div>
                                       <div class="pay_sum_c4">Price</div>
                                 </div>
+               
+                                <?php foreach ($cat_item as $key => $value): ?>
                                 <div class="payment_sum_con">
                                       <div class="pay_sum_c1"><?php echo $value['seller_username'] ?></div>
                                       <div class="pay_sum_c2"><?php echo $value['name'] ?></div>
@@ -98,6 +100,7 @@
                                           </div>
                                       <?php endif; ?>  
                                 </div>
+                                <?php endforeach; ?>
 
                             <?php endif; ?>  
                         </div>
