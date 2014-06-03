@@ -71,6 +71,7 @@ class Zada implements WampServerInterface
     public function onClose(ConnectionInterface $conn)
     {
         // Do nothing
+        echo "Client disconnected\n";
     }
 
     /**
