@@ -94,7 +94,7 @@
 
 		<div class="register_container container-16" id="register_container">
 			<div class="grid-6">
-					    		<?php echo form_open('', array('id'=>'register_form1'));?>
+					    		<?php echo form_open('', array('id'=>'register_form1_2'));?>
 									<fieldset>
 									<!--
 											<h4>Username</h4>
@@ -152,6 +152,8 @@
 									
 										<p class="terms_con padding1 padding-t1">By registering to Easyshop.ph, you agree to comply with our <span class="terms_and_conditions">Terms and Conditions</span></p>
 									-->
+
+								<?php echo form_close();?> 
 										<div class="dialog t_and_c">
 											<h3>TERMS &amp; CONDITIONS</h3>
 											<p> 
@@ -213,7 +215,6 @@
 
 									<p class="span6 border1"></p>
 
-								<?php echo form_close();?> 
 			</div>					
 		</div>
 	</header>
@@ -235,7 +236,7 @@
 									The offer starts on June 15 at 12 noon<br />and expires on June 17, 2014.
 									</p>
 									<p class="mgrn_top4">To qualify, like us on Facebook and  </p>
-									<p class="fs2 txt_reg">register now!</p>
+									<p class="fs2 txt_reg" id="reg_txt">register now!</p>
 									<p>
 										*The price will drop by 2% every hour until it<br />reaches 99% off for 48 hours. <br />
 										One stock is available per item.
@@ -260,7 +261,7 @@
 							The offer starts on June 15 at 12 noon and expires on June 17, 2014.
 							</p>
 							<p class="mgrn_top4">To qualify, like us on Facebook and  </p>
-							<p class="fs2 txt_reg">register now!</p>
+							<p class="fs2 txt_reg" id="reg_txt">register now!</p>
 							<p class="mgrn_top4">
 								*The price will drop by 2% every hour until it reaches 99% off for 48 hours. 
 								One stock is available per item.
@@ -280,7 +281,7 @@
 									The offer starts on June 15 at 12 noon<br />and expires on June 17, 2014.
 									</p>
 									<p class="mgrn_top4">To qualify, like us on Facebook and  </p>
-									<p class="fs2 txt_reg">register now!</p>
+									<p class="fs2 txt_reg" id="reg_txt">register now!</p>
 									<p>
 										*The price will drop by 2% every hour until it<br />reaches 99% off for 48 hours. <br />
 										One stock is available per item.
@@ -305,7 +306,7 @@
 							The offer starts on June 15 at 12 noon and expires on June 17, 2014.
 							</p>
 							<p class="mgrn_top4">To qualify, like us on Facebook and  </p>
-							<p class="fs2 txt_reg">register now!</p>
+							<p class="fs2 txt_reg" id="reg_txt">register now!</p>
 							<p class="mgrn_top4">
 								*The price will drop by 2% every hour until it reaches 99% off for 48 hours. 
 								One stock is available per item.
@@ -325,7 +326,7 @@
 									The offer starts on June 15 at 12 noon<br />and expires on June 17, 2014.
 									</p>
 									<p class="mgrn_top4">To qualify, like us on Facebook and  </p>
-									<p class="fs2 txt_reg">register now!</p>
+									<p class="fs2 txt_reg" id="reg_txt">register now!</p>
 									<p>
 										*The price will drop by 2% every hour until it<br />reaches 99% off for 48 hours. <br />
 										One stock is available per item.
@@ -350,7 +351,7 @@
 							The offer starts on June 15 at 12 noon and expires on June 17, 2014.
 							</p>
 							<p class="mgrn_top4">To qualify, like us on Facebook and  </p>
-							<p class="fs2 txt_reg">register now!</p>
+							<p class="fs2 txt_reg" id="reg_txt">register now!</p>
 							<p class="mgrn_top4">
 								*The price will drop by 2% every hour until it reaches 99% off for 48 hours. 
 								One stock is available per item.
@@ -370,7 +371,7 @@
 									The offer starts on June 15 at 12 noon<br />and expires on June 17, 2014.
 									</p>
 									<p class="mgrn_top4">To qualify, like us on Facebook and  </p>
-									<p class="fs2 txt_reg">register now!</p>
+									<p class="fs2 txt_reg" id="reg_txt">register now!</p>
 									<p>
 										*The price will drop by 2% every hour until it<br />reaches 99% off for 48 hours. <br />
 										One stock is available per item.
@@ -395,7 +396,7 @@
 							The offer starts on June 15 at 12 noon and expires on June 17, 2014.
 							</p>
 							<p class="mgrn_top4">To qualify, like us on Facebook and  </p>
-							<p class="fs2 txt_reg">register now!</p>
+							<p class="fs2 txt_reg" id="reg_txt">register now!</p>
 							<p class="mgrn_top4">
 								*The price will drop by 2% every hour until it reaches 99% off for 48 hours. 
 								One stock is available per item.
@@ -415,7 +416,7 @@
 									The offer starts on June 15 at 12 noon<br />and expires on June 17, 2014.
 									</p>
 									<p class="mgrn_top4">To qualify, like us on Facebook and  </p>
-									<p class="fs2 txt_reg">register now!</p>
+									<p class="fs2 txt_reg" id="reg_txt">register now!</p>
 									<p>
 										*The price will drop by 2% every hour until it<br />reaches 99% off for 48 hours. <br />
 										One stock is available per item.
@@ -440,7 +441,7 @@
 							The offer starts on June 15 at 12 noon and expires on June 17, 2014.
 							</p>
 							<p class="mgrn_top4">To qualify, like us on Facebook and  </p>
-							<p class="fs2 txt_reg">register now!</p>
+							<p class="fs2 txt_reg" id="reg_txt">register now!</p>
 							<p class="mgrn_top4">
 								*The price will drop by 2% every hour until it reaches 99% off for 48 hours. 
 								One stock is available per item.
@@ -460,7 +461,7 @@
 									The offer starts on June 15 at 12 noon<br />and expires on June 17, 2014.
 									</p>
 									<p class="mgrn_top4">To qualify, like us on Facebook and  </p>
-									<p class="fs2 txt_reg">register now!</p>
+									<p class="fs2 txt_reg" id="reg_txt">register now!</p>
 									<p>
 										*The price will drop by 2% every hour until it<br />reaches 99% off for 48 hours. <br />
 										One stock is available per item.
@@ -485,7 +486,7 @@
 							The offer starts on June 15 at 12 noon and expires on June 17, 2014.
 							</p>
 							<p class="mgrn_top4">To qualify, like us on Facebook and  </p>
-							<p class="fs2 txt_reg">register now!</p>
+							<p class="fs2 txt_reg" id="reg_txt">register now!</p>
 							<p class="mgrn_top4">
 								*The price will drop by 2% every hour until it reaches 99% off for 48 hours. 
 								One stock is available per item.
@@ -500,7 +501,7 @@
 	
 	<div class="clear"></div>
 	<section class="mid_reg2">
-		<div class="wrapper register_wrapper">
+		<div class="wrapper register_wrapper" id="register_panel">
 			<h1>REGISTER</h1>
 			<div class="register_container2" id="register_container2">
 				<?php echo form_open('', array('id'=>'register_form1'));?>
@@ -518,7 +519,7 @@
 						</div>
 						<div class="reg2_password">
 							<h4 class="txt_cp">Password</h4>
-							<input type="password" placeholder="" id="password2" name="password" class="reqfield">
+							<input type="password" placeholder="" id="password" name="password" class="reqfield">
 							<span class="red ci_form_validation_error"><?php echo form_error('password'); ?></span>
 						</div>
 						<div class="reg2_confirmpassword">
@@ -642,92 +643,26 @@
          base_url: "<?php echo base_url(); ?>",
     };
     
+
     var navigation = responsiveNav(".nav-collapse");
 
+
     (function( $ ) {
+
+
         jQuery('.bxslider_slides').bxSlider({
             infiniteLoop: true,
             auto: true
         });
-    })(jQuery);
+    })(jQuery);  
 
-$(document).ready(function() {  
-    $("#reg_btn").click(function() {
-           $('#register_container').fadeIn(300);
-    });    
+	
 
-    var pathname = $(location).attr('href');
-    var idx = pathname.indexOf('#');
-    if(idx > -1){
-        if(pathname.substring(idx+1) == 'register'){
-             $("#reg_btn").click();
-        }
-    }
-});
-
-// $(window).load(function () {
-//     $(window).scroll(function () {
-//         var e;
-//         return e = $(window).scrollTop(), e < 50 ? $("#header").removeClass("fixed_header") : $("#header").addClass("fixed_header").fadeIn(300);
-//     })
-// }) 
-
-/**** video player dialog box ****/
-$(function() {
-	$( "#videoplayer" ).dialog({
-		width:"68%",
-		autoOpen: false,
-		modal: true,
-		closeOnEscape: true,
-		draggable:false,
-        show: {
-            effect: "fade",
-            duration: 600
-        },
-        hide: {
-            effect: "fade",
-            duration: 400
-        }
+	jQuery('#reg_btn,#reg_txt').click(function(event) {
+	    event.preventDefault();
+	    var n = jQuery(document).height();
+	    jQuery('html, body').animate({ scrollTop: 900 }, 300);
 	});
-
-	$( ".vidplay" ).click(function() {
-	$( "#videoplayer" ).dialog( "open" );
-	});
-});
-
-/****** Terms and Conditions Dialog box ********/
-$(function() {
-	$( ".dialog" ).dialog({
-		width:"65%",
-		autoOpen: false,
-		modal: true,
-		closeOnEscape: true,
-		draggable:false,
-        show: {
-            effect: "fade",
-            duration: 1000
-        },
-        hide: {
-            effect: "fade",
-            duration: 400
-        }
-	});
-
-	$( ".terms_and_conditions" ).click(function() {
-	$( ".dialog" ).dialog( "open" );
-	$(".dialog").siblings().parent('.ui-dialog').addClass('terms_container');
-	});
-});
-
-
-    (function( $ ) {
-        var container = jQuery("#register_container");
-        $('.txt_reg').click(function(e){
-            container.fadeIn();
-        });
-    })(jQuery);
-   
-    
 
 </script> 
 
