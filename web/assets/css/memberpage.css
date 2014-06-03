@@ -166,7 +166,7 @@ box-shadow:         0px 0px 10px 0px rgba(50, 50, 50, 0.75);
 #avatar_cont{
 	text-align: center;
 	height: 150px;
-	width: 157px;
+	width: 150px;
     border: #DDDCDC 1px solid;
     background-color: white;
 }
@@ -175,14 +175,14 @@ box-shadow:         0px 0px 10px 0px rgba(50, 50, 50, 0.75);
 	vertical-align: middle;
 	display: table-cell;
 	height: 150px;
-	width: 157px;
+	width: 150px;
 }
 
 #avatar_cont img{
 	height: auto;
 	width: auto;
 	max-height: 150px;
-	max-width: 157px;
+	max-width: 150px;
 }
 
 
