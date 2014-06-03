@@ -273,9 +273,9 @@ img.img_main_product {
     width: 80%;
   }
 
-  .header .btn_register span {
+  /*.header .btn_register span {
     width: 12.5em;
-  }
+  }*/
   .container-16 .grid-6 {
     width: 93%;
   }
@@ -381,7 +381,7 @@ img.img_main_product {
   }
 
   .reg2_username input {
-   max-width: 90%;
+   max-width: 85%;
    width: 100%;
   }
 
@@ -436,6 +436,10 @@ img.img_main_product {
   .div.pass-bar {
     width: 90%;
   }
+
+  #userpage {
+    width: 76% !important;
+  }
 }
 
 
@@ -464,7 +468,7 @@ img.img_main_product {
   
   @media only screen and (max-width : 960px) {
   #userpage{
-    max-width:none;
+    width: 91%;
   }
   
   
