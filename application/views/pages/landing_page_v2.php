@@ -43,14 +43,14 @@
 		<link href='https://fonts.googleapis.com/css?family=Roboto:400,300' rel='stylesheet' type='text/css'>
 </head>
 <body>
-		<!--<div id="fb-root"></div>
+		<div id="fb-root"></div>
 		<script>(function(d, s, id) {
 		  var js, fjs = d.getElementsByTagName(s)[0];
 		  if (d.getElementById(id)) return;
 		  js = d.createElement(s); js.id = id;
 		  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&appId=154815247949100&version=v2.0";
 		  fjs.parentNode.insertBefore(js, fjs);
-		  }(document, 'script', 'facebook-jssdk'));</script>-->
+		  }(document, 'script', 'facebook-jssdk'));</script>
 	<header id="header" class="">
 		<div class="header">
 				<div class="logo_con">
@@ -93,7 +93,7 @@
 		</div>
 
 		<div class="register_container container-16" id="register_container">
-			<div class="grid-6">
+			<!--<div class="grid-6">
 					    		<?php echo form_open('', array('id'=>'register_form1'));?>
 									<fieldset>
 
@@ -146,7 +146,7 @@
 											<h4></h4>
 											
 											
-										<!--<button type="button" class="btn btn-warning btn-large">SEND</button>-->
+										<!--<button type="button" class="btn btn-warning btn-large">SEND</button>
 										<input type="submit" class="btn btn_send" value="SEND" name="register_form1" id="register_form1_btn" >
 										<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" class="img_loader_small2" id="register_form1_loadingimg" style="display:none"/>
 									
@@ -212,8 +212,8 @@
 
 									<p class="span6 border1"></p>
 
-								<?php echo form_close();?>
-			</div>					
+								<?php echo form_close();?> 
+			</div>					-->
 		</div>
 	</header>
 	<div class="clear"></div>
@@ -498,6 +498,80 @@
 	</section>
 	
 	<div class="clear"></div>
+	<section class="mid_reg2">
+		<div class="wrapper register_wrapper">
+			<h1>REGISTER</h1>
+			<div class="register_container2" id="register_container2">
+				<?php echo form_open('', array('id'=>'register_form1'));?>
+					<fieldset>
+						<div class="reg2_username">
+							<h4>Username</h4>
+							<input maxlength='25' type="text" placeholder="" id="username" name="username" class="reqfield" autocomplete="off"/>
+							<input  type="hidden" id="usernamecheck" value="" name="usernamecheck">
+							<span class="red ci_form_validation_error"><?php echo form_error('username'); ?></span>
+							<div id="username_status">
+								<img class="fieldstatus" src="<?=base_url()?>/assets/images/check_icon.png" id="username_check" style="position: relative;display:none;vertical-align:middle"/>
+								<img class="fieldstatus" src="<?=base_url()?>/assets/images/x_icon.png" id="username_x" style="position: relative;display:none;vertical-align:middle"/>
+								<span class="username_availability"></span>
+							</div>
+						</div>
+						<div class="reg2_password">
+							<h4 class="txt_cp">Password</h4>
+							<input type="password" placeholder="" id="password2" name="password" class="reqfield">
+							<span class="red ci_form_validation_error"><?php echo form_error('password'); ?></span>
+						</div>
+						<div class="reg2_confirmpassword">
+							<h4 class="txt_cp">Confirm Password</h4>
+							<input type="password" placeholder="" id="cpassword" name="cpassword" class="reqfield" disabled>
+							<span class="field_pword_status">
+								<img class="fieldstatus" src="<?=base_url()?>/assets/images/check_icon.png" id="cpassword_check" style="position: relative;display:none;"/>
+								<img class="fieldstatus" src="<?=base_url()?>/assets/images/x_icon.png" id="cpassword_x" style="position: relative;display:none; "/>
+							</span>
+							<span class="red ci_form_validation_error"><?php echo form_error('cpassword'); ?></span>
+							<span class="help-block spnmsg padding1" style="text-align:left"></span>
+						</div>
+						<div class="reg2_email">
+							<h4>Email Address</h4>
+							<input type="text" placeholder="" id="email" name="email" class="reqfield" autocomplete="off">
+							<input type="hidden" id="emailcheck" value="">
+							<div id="email_status">
+								<img class="fieldstatus" src="<?=base_url()?>/assets/images/check_icon.png" id="email_check" style="position: relative;display:none;vertical-align:middle"/>
+								<img class="fieldstatus" src="<?=base_url()?>/assets/images/x_icon.png" id="email_x" style="position: relative;display:none;vertical-align:middle"/>
+							</div>
+							<br/>
+							<span class="red email_availability"></span>
+							<span class="red ci_form_validation_error"><?php echo form_error('email'); ?></span>
+							<span class="help-block spnmsg padding1"></span>
+						</div>					
+						<div class="mobile">
+							<h4>Mobile Number</h4>
+							<input type="text" placeholder="e.g. 09051234567" name="mobile" class="reqfield" id="mobile" maxlength="11">
+							<input type="hidden" id="mobilecheck" value="">
+							<div id="mobile_status">
+								<img class="fieldstatus" src="<?=base_url()?>/assets/images/check_icon.png" id="mobile_check" style="position: relative;display:none;vertical-align:middle"/>
+								<img class="fieldstatus" src="<?=base_url()?>/assets/images/x_icon.png" id="mobile_x" style="position: relative;display:none;vertical-align:middle"/>
+								<span class=" red  mobile_availability"></span>
+							</div>
+							<span class="red ci_form_validation_error"><?php echo form_error('mobile'); ?></span>
+							<span class="help-block spnmsg padding1"></span>
+						</div>
+						<div class="reg2_tc">
+							<p class="terms_con padding1 padding-t1">
+								By registering to Easyshop.ph, you agree to comply with our 
+								<span class="terms_and_conditions">Terms and Conditions</span>
+							</p>
+						</div>
+						<div class="reg2_btn_submit">
+							<!--<button type="button" class="btn btn-warning btn-large">SEND</button>-->
+							<input type="submit" class="btn btn_send" value="SEND" name="register_form1" id="register_form1_btn" >
+							<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" class="img_loader_small2" id="register_form1_loadingimg" style="display:none"/>
+						</div>				
+					</fieldset>
+				<?php echo form_close();?>
+			</div>	
+		</div>
+	</section>
+	<div class="clear"></div>
 	<footer>
 		<div class="wrapper">
 			<div class="footer">
@@ -510,7 +584,7 @@
 					</li>
 					<li>
 						<div class="footer_payment">
-							Payment Methods:
+							<p><strong>Payment Methods:</strong></p>
 							<span class="span_bg mastercard"></span>
 							<span class="span_bg visa"></span>
 							<span class="span_bg paypal"></span>
@@ -520,7 +594,7 @@
 					</li>
 					<li class="social_media_container">
 						<div class="social_media">
-							<span class="txt_sm">Social Media:</span>
+							<p><strong>Social Media:</strong></p>
 							<ul>
 								<li>
 									<div class="fb-like" data-href="https://www.facebook.com/EasyShopPhilippines" data-width="200" data-layout="button" data-action="like" data-show-faces="false" data-share="false"></div>
@@ -538,6 +612,7 @@
 			</div>
 			<div class="clear"></div>
 		</div>
+		<div class="clear"></div>
 		<div class="copyright_content">
 				<p>Copyright © 2014 easyshop.ph. All rights reserved </p>
 			</div>
@@ -575,6 +650,75 @@
         });
     })(jQuery);
 
+$(document).ready(function() {  
+    $("#reg_btn").click(function() {
+           $('#register_container').fadeIn(300);
+    });    
+
+    var pathname = $(location).attr('href');
+    var idx = pathname.indexOf('#');
+    if(idx > -1){
+        if(pathname.substring(idx+1) == 'register'){
+             $("#reg_btn").click();
+        }
+    }
+});
+
+// $(window).load(function () {
+//     $(window).scroll(function () {
+//         var e;
+//         return e = $(window).scrollTop(), e < 50 ? $("#header").removeClass("fixed_header") : $("#header").addClass("fixed_header").fadeIn(300);
+//     })
+// }) 
+
+/**** video player dialog box ****/
+$(function() {
+	$( "#videoplayer" ).dialog({
+		width:"68%",
+		autoOpen: false,
+		modal: true,
+		closeOnEscape: true,
+		draggable:false,
+        show: {
+            effect: "fade",
+            duration: 600
+        },
+        hide: {
+            effect: "fade",
+            duration: 400
+        }
+	});
+
+	$( ".vidplay" ).click(function() {
+	$( "#videoplayer" ).dialog( "open" );
+	});
+});
+
+/****** Terms and Conditions Dialog box ********/
+$(function() {
+	$( ".dialog" ).dialog({
+		width:"65%",
+		autoOpen: false,
+		modal: true,
+		closeOnEscape: true,
+		draggable:false,
+        show: {
+            effect: "fade",
+            duration: 1000
+        },
+        hide: {
+            effect: "fade",
+            duration: 400
+        }
+	});
+
+	$( ".terms_and_conditions" ).click(function() {
+	$( ".dialog" ).dialog( "open" );
+	$(".dialog").siblings().parent('.ui-dialog').addClass('terms_container');
+	});
+});
+
+
     (function( $ ) {
         var container = jQuery("#register_container");
         $('.txt_reg').click(function(e){
@@ -583,6 +727,7 @@
     })(jQuery);
    
     
+
 </script> 
 
 
