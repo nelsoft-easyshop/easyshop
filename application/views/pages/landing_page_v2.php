@@ -93,10 +93,10 @@
 		</div>
 
 		<div class="register_container container-16" id="register_container">
-			<!--<div class="grid-6">
+			<div class="grid-6">
 					    		<?php echo form_open('', array('id'=>'register_form1'));?>
 									<fieldset>
-
+									<!--
 											<h4>Username</h4>
 											<input maxlength='25' type="text" placeholder="" id="username" name="username" class="reqfield" autocomplete="off"/>
 											<input  type="hidden" id="usernamecheck" value="" name="usernamecheck">
@@ -151,6 +151,7 @@
 										<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" class="img_loader_small2" id="register_form1_loadingimg" style="display:none"/>
 									
 										<p class="terms_con padding1 padding-t1">By registering to Easyshop.ph, you agree to comply with our <span class="terms_and_conditions">Terms and Conditions</span></p>
+									-->
 										<div class="dialog t_and_c">
 											<h3>TERMS &amp; CONDITIONS</h3>
 											<p> 
@@ -213,7 +214,7 @@
 									<p class="span6 border1"></p>
 
 								<?php echo form_close();?> 
-			</div>					-->
+			</div>					
 		</div>
 	</header>
 	<div class="clear"></div>
