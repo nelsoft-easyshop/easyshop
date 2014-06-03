@@ -25,7 +25,7 @@ class Login extends MY_Controller {
             $row = array();
             if($this->form_validation->run('login_form')){
                 $uname = $this->input->post('login_username');
-                $pass = $this->input->post('login_password');	
+                $pass = $this->input->post('login_password');
                 $row = $this->login($uname, $pass);
             }
             if(isset($row['o_success']) && $row['o_success'] >= 1){

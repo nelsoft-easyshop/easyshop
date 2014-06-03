@@ -125,9 +125,9 @@
 </select>
 
 <select id="addShippingComment">
-	INSERT INTO es_product_shipping_comment (`order_product_id`, `comment`, `member_id`, `courier`, `tracking_num`, `expected_date`, `datemodified`)
-	VALUES (:order_product, :comment, :member_id, :courier, :tracking_num, :expected_date, NOW())
-	ON DUPLICATE KEY UPDATE comment = :comment, courier = :courier, tracking_num = :tracking_num, expected_date = :expected_date, datemodified = NOW()
+	INSERT INTO es_product_shipping_comment (`order_product_id`, `comment`, `member_id`, `courier`, `tracking_num`, `delivery_date`, `expected_date`, `datemodified`)
+	VALUES (:order_product, :comment, :member_id, :courier, :tracking_num, :delivery_date, :expected_date, NOW())
+	ON DUPLICATE KEY UPDATE comment = :comment, courier = :courier, tracking_num = :tracking_num, delivery_date = :delivery_date, expected_date = :expected_date, datemodified = NOW()
 </select>
 
 <select id="addBankDepositDetails">
@@ -149,10 +149,15 @@
 	VALUES (:order_id, :order_status, :comment, NOW());
 </select>
 
-
-
 <select id="responseDragonpay">
 	CALL `es_sp_expiredDragonpayTransaction` (:transaction_id)
+</select>
+
+<!-- Used by produc reject and unreject buttons in memberpage transactions-->
+<select id="responseReject">
+	UPDATE `es_order_product`
+	SET is_reject = :stat
+	WHERE id_order_product = :id_order_product AND order_id = :order_id AND seller_id = :member_id
 </select>
 
 </map>

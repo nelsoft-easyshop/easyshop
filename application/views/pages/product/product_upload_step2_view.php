@@ -891,7 +891,7 @@ $(document).ready(function(){
         var formatHeadValue = $.trim($('.prod_'+cnt).val().replace(/[^a-z0-9\s]/gi, '').replace(/[_\s]/g, ' '));
         var headValue = formatHeadValue.toLowerCase().replace(/\b[a-z]/g, function(letter) {
         return letter.toUpperCase();
-        }); 
+        });
 
         var selfValue = $.trim($(this).closest('tr').find('.otherNameValue'+cnt).val());
         var value = selfValue+headValue; 

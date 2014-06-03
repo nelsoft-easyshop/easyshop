@@ -31,7 +31,7 @@
         	<tbody>
 				<tr>
 					<td>
-						<span style="display:inline-block;font-weight:bold;width:100px;">Invoice # :</span> {invoice_no} <br>
+						<span style="display:inline-block;font-weight:bold;width:100px;">Transaction # :</span> {invoice_no} <br>
 						<span style="display:inline-block;font-weight:bold;width:100px;">Date :</span> {dateadded} <br>
 						<span style="display:inline-block;font-weight:bold;width:100px;">Total Price :</span> Php {totalprice}<br>
 						<span style="display:inline-block;font-weight:bold;width:100px;">Sold to :</span> {buyer_name} <br><br>

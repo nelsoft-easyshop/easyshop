@@ -462,6 +462,7 @@ class payment_model extends CI_Model
 		$sth->bindParam(':courier', $temp['courier']);
 		$sth->bindParam(':tracking_num', $temp['tracking_num']);
 		$sth->bindParam(':expected_date', $temp['expected_date']);
+		$sth->bindParam(':delivery_date', $temp['delivery_date']);
 		$result = $sth->execute();
 		
 		return $result;
@@ -491,6 +492,27 @@ class payment_model extends CI_Model
 		$sth->bindParam(':invoice_num', $temp['invoice_num']);
 		$sth->bindParam(':member_id', $temp['member_id']);
 		$sth->bindParam(':order_status', $temp['order_status']);
+		$result = $sth->execute();
+		
+		return $result;
+	}
+	
+	// Function for product rejection. Handles both reject and unreject buttons
+	function responseReject($temp)
+	{
+		$query = $this->sqlmap->getFilenameID('payment','responseReject');
+		$sth = $this->db->conn_id->prepare($query);
+		
+		if($temp['method'] === 'reject'){
+			$temp['stat'] = 1;
+		}else if($temp['method'] === 'unreject'){
+			$temp['stat'] = 0;
+		}
+		
+		$sth->bindParam(':stat', $temp['stat']);
+		$sth->bindParam(':id_order_product', $temp['order_product']);
+		$sth->bindParam(':order_id', $temp['transact_num']);
+		$sth->bindParam(':member_id', $temp['member_id']);
 		$result = $sth->execute();
 		
 		return $result;

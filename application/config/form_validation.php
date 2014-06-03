@@ -306,7 +306,46 @@ $config = array(
 						'label' => 'Bank Account Number',
 						'rules' => 'required|numeric|max_length[18]'
 					)					
-				)				
+				),
+			'addShippingComment' => array(
+					array(
+						'field' => 'courier',
+						'label' => 'Courier',
+						'rules' => 'trim|required'
+					),
+					array(
+						'field' => 'tracking_num',
+						'label' => 'Tracking Number',
+						'rules' => 'trim|required'
+					),
+					array(
+						'field' => 'delivery_date',
+						'label' => 'Delivery Date',
+						'rules' => 'trim|required'
+					),
+				),
+			'bankdeposit' => array(
+					array(
+						'field' => 'bank',
+						'label' => 'Bank',
+						'rules' => 'trim|required'
+					),
+					array(
+						'field' => 'ref_num',
+						'label' => 'Reference Number',
+						'rules' => 'trim|required'
+					),
+					array(
+						'field' => 'amount',
+						'label' => 'Amount',
+						'rules' => 'trim|required|numeric'
+					),
+					array(
+						'field' => 'date',
+						'label' => 'Date',
+						'rules' => 'trim|required'
+					),
+			)
 		);
 
 		

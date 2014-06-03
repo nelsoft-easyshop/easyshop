@@ -472,7 +472,7 @@ class memberpage_model extends CI_Model
 				//IF DIRECT BANK DEPOSIT
 				if($temp['transac_stat'] == 99 && $temp['payment_method'] == 5){
 					if( !isset( $data[$temp['id_order']]['bd_details'] ) )
-						$data[$temp['id_order']]['bd_details'] = array_splice($temp, 42, 6);
+						$data[$temp['id_order']]['bd_details'] = array_splice($temp, 39, 6);
 				}
 				
 				if(!array_key_exists('users', $data[$temp['id_order']]))
@@ -481,17 +481,23 @@ class memberpage_model extends CI_Model
 				if(!array_key_exists('products', $data[$temp['id_order']]))
 					$data[$temp['id_order']]['products'] = array();
 				
+				// Generate product array
+				$product = $temp;
+				$product = array_slice($product, 8, 14);
+				$product['has_shipping_summary'] = 0;
+				$product['is_reject'] = $temp['is_reject'];
+				//Check if shipping comments exist
+				if( trim(strlen($product['courier'])) > 0 && trim(strlen($product['tracking_num'])) > 0 && trim(strlen($product['delivery_date'])) > 0){
+					$product['has_shipping_summary'] = 1;
+				}
+				
 				// you are buyer in transaction
 				if($member_id == $temp['buyer_id']){
-					$product = $temp;
-					$product = array_slice($product, 12, 13);
 					$userid = $temp['seller_id'];
 					$username = $temp['seller'];
 				}
 				// you are seller in transaction
 				else if($member_id == $temp['seller_id']){
-					$product = $temp;
-					$product = array_slice($product, 12, 13);
 					unset($product['seller_id']);
 					unset($product['seller']);
 					$userid = $temp['buyer_id'];
@@ -505,17 +511,12 @@ class memberpage_model extends CI_Model
 					$data[$temp['id_order']]['users'][$userid] = array(
 						'name' => $username,
 						'feedb_msg' => '',
-						'fbdateadded' => '',
-						'rating1' => 0,
-						'rating2' => 0,
-						'rating3' => 0,
-						'address' => array_slice($temp, 32, 8)
+						'has_feedb' => 0,
+						'address' => array_slice($temp, 29, 8)
 					);
 				
 				if(trim($temp['feedb_msg']) !== '' && trim($temp['for_memberid']) !== '' && $userid == $temp['for_memberid']){
-					$feedb = array_slice($temp, 6, 5, true);
-					$usrtemp = $data[$temp['id_order']]['users'][$userid];
-					$data[$temp['id_order']]['users'][$userid] = array_merge($usrtemp, $feedb);
+					$data[$temp['id_order']]['users'][$userid]['has_feedb'] = 1;
 				}
 				
 				if(!array_key_exists($temp['id_order_product'], $data[$temp['id_order']]['products'])){
@@ -525,7 +526,6 @@ class memberpage_model extends CI_Model
 					);
 					$this->product_model->explodeImagePath($imagepath);
 					$data[$temp['id_order']]['products'][$temp['id_order_product']]['product_image_path'] = $imagepath[0]['path'] . 'thumbnail/' . $imagepath[0]['file'];
-					
 				}
 				
 				if(!array_key_exists('attr', $data[$temp['id_order']]['products'][$temp['id_order_product']])){
@@ -570,7 +570,6 @@ class memberpage_model extends CI_Model
 						$fdata['complete']['buy'][$k] = $temp2;
 				}else if($temp2['transac_stat'] == 99 && ( $temp2['payment_method'] == 2 || $temp2['payment_method'] == 5 ) ){ // if pending Dragonpay/Direct BankDeposit transaction
 					if(array_key_exists('buyer_id', $temp2) && array_key_exists('buyer', $temp2))
-						//continue;
 						$fdata['sell'][$k] = $temp2;
 					else
 						$fdata['buy'][$k] = $temp2;
@@ -579,6 +578,19 @@ class memberpage_model extends CI_Model
 		}		
 		
 		return $fdata;
+	}
+	
+	function authenticateUser($data)
+	{
+		$query = $this->sqlmap->getFilenameID('users', 'authenticateUser');
+		$sth = $this->db->conn_id->prepare($query);
+		$sth->bindParam(':username', $data['username']);
+		$sth->bindParam(':password', $data['password']);
+		$sth->bindParam(':member_id', $data['member_id']);
+		$sth->execute();
+		$row = $sth->fetch(PDO::FETCH_ASSOC);
+		
+		return $row['id_member'] ? true : false ;
 	}
 	
 	function addFeedback($temp){

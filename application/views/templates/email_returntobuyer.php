@@ -19,7 +19,7 @@
 					</td>
 				</tr>
 				<tr>
-					<td width="120px"><strong>Invoice # :</strong> </td>
+					<td width="120px"><strong>Transaction # :</strong> </td>
 					<td colspan="2">{invoice_no}</td>
 				</tr>
 				<tr>

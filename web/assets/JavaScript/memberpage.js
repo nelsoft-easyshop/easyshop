@@ -1183,58 +1183,191 @@ $(document).ready(function(){
 		}
 	});
 	
+	$('#tx_dialog_pass input[type="password"]').on('keypress', function(){
+		$(this).siblings('span.error').text('');
+	});
+	
 	$('.transac_response_btn').on('click', function(){
 		var txResponseBtn = $(this);
-		$('#tx_dialog').dialog({
+		var txStatus = $(this).closest('div.tx_btns').siblings('div.tx_cont').find('.tx_cont_col3 span.trans_alert');
+		// tx object located in view. contains username and password( requires once every memberpage load )
+		var txDialog = $.trim(tx.p).length > 0 ? $('#tx_dialog') : $('#tx_dialog_pass');
+		var loadingimg = txDialog.find('img.loading_img');
+		
+		txDialog.dialog({
 			modal:true,
 			resizable:false,
 			draggable:false,
-			width:400,
+			width:500,
+			height:220,
 			buttons:{
 				OK:function(){
+					var thisdialog = $(this);
 					var form = txResponseBtn.closest('form.transac_response');
+					var data = form.serializeArray();
+					if( txDialog.attr('id')=='tx_dialog_pass' ){
+						var password = $('#tx_password').val();
+					}else{
+						var password = tx.p;
+					}
+					data.push({name:'password', value: password},{name:'username', value:tx.u});
 					var parentdiv = txResponseBtn.closest('div');
-					$.post(config.base_url+"memberpage/transactionResponse", form.serializeArray(), function(data){
+					txResponseBtn.attr('disabled', true);
+					$('button.ui-button').attr('disabled', true);
+					loadingimg.show();
+					
+					$.post(config.base_url+"memberpage/transactionResponse", data, function(data){
+						loadingimg.hide();
 						try{
 							var serverResponse = jQuery.parseJSON(data);
 						}
 						catch(e){
 							alert('An error was encountered while processing your data. Please try again later.');
-							window.location.reload(true);
+							//window.location.reload(true);
 							return false;
 						}
 						
-						if(serverResponse.error.length > 0){
-							alert(serverResponse.error);
+						//if invalid password
+						if(serverResponse.result === 'invalid' && txDialog.attr('id')=='tx_dialog_pass'){
+							var errspan = txDialog.children('span');
+							errspan.text(serverResponse.error);
+							txResponseBtn.attr('disabled', false);
+						}else{
+							if(serverResponse.result === 'success'){
+								if(txDialog.attr('id') == 'tx_dialog_pass'){
+									tx.p = password;
+								}
+								if(txResponseBtn.hasClass('tx_forward')){
+									txStatus.replaceWith('<span class="trans_alert transac_paid">Item Received</span>');
+								}else if(txResponseBtn.hasClass('tx_return')){
+									txStatus.replaceWith('<span class="trans_alert transac_pay_return">Payment returned to buyer</span>');
+								}
+								
+								txResponseBtn.closest('div.tx_btns').find('input[type="button"]').hide();
+								
+							}else if(serverResponse.result === 'fail'){
+								txResponseBtn.replaceWith('<span class="trans_alert">Failed to update status.</span>');
+							}
+							if(serverResponse.error.length > 0){
+								alert(serverResponse.error);
+							}
+							thisdialog.dialog('close');
 						}
-						
-						if(serverResponse.result === 'success'){
-							parentdiv.html('<span class="trans_alert transac_req_submit">Request submitted.</span>');
-						}else if(serverResponse.result === 'fail'){
-							parentdiv.html('<span class="trans_alert">Failed to update status.</span>');
-						}
+						$('button.ui-button').attr('disabled', false);
 					});
-					txResponseBtn.val('Please wait');
-					txResponseBtn.attr('disabled', true);
-					$(this).dialog('close');
 				},
 				Cancel:function(){
 					$(this).dialog('close');
+				}
+			},
+			open: function(event,ui){
+				if( txDialog.attr('id') == 'tx_dialog_pass' ){
+					txDialog.children('input[type="password"]').val('');
+					txDialog.children('span').text('');
 				}
 			}
 		});
 		return false;
 	});
 	
-	$('span.shipping_comment').on('click', function(){
-		var cancelbtn = $(this).parent('div').siblings('div.shipping_comment_cont').find('span.shipping_comment_cancel');
-		var textarea = $(this).parent('div').siblings('div.shipping_comment_cont').find('textarea');
+	
+	/********** DRAGONPAY HANDLER *****************/
+	$('.dragonpay_update_btn').on('click', function(){
+		var form = $(this).closest('form');
+		var thisbtn = $(this);
 		
-		$(this).parent('div').siblings('div.shipping_comment_cont').modal({
+		$.post(config.base_url+'memberpage/transactionResponse', $(form).serializeArray(), function(data){
+			try{
+				var obj = jQuery.parseJSON(data);
+			}
+			catch(e){
+				alert('An error was encountered while processing your data. Please try again later.');
+				return false;
+			}
+			
+			if(obj.result === 'success'){
+				alert('Payment confirmed.');
+				window.location.reload(true);
+			}else if(obj.result === 'fail'){
+				alert(obj.error);
+				thisbtn.attr('disabled',false);
+			}
+		});
+		thisbtn.attr('disabled',true);
+		return false;
+	});
+	
+	/******	Submit / View shipping Comments	******/
+	$('span.shipping_comment').on('click', function(){
+		var divcont = $(this).parent('div').siblings('div.shipping_comment_cont');
+		var thisbtn = $(this);
+		var txStatus = $(this).parent('div').siblings('span.trans_alert');
+		
+		divcont.modal({
 			escClose: false,
 			onShow: function(){
-				if( $.trim(textarea.val()).length > 0 ){
-					cancelbtn.trigger('click');
+				if( thisbtn.hasClass('isform') ){
+					var form = divcont.find('form.shipping_details');
+					form.validate({
+						rules:{
+							courier:{
+								required: true
+							},
+							tracking_num:{
+								required: true
+							},
+							delivery_date:{
+								required: true
+							}
+						},
+						errorElement: "span",
+						errorPlacement: function(error, element) {
+							error.addClass('red');
+							error.insertAfter(element);
+						},
+						submitHandler: function(form){
+							var submitbtn = $(form).children('input.shipping_comment_submit');
+							var input = $(form).children('input[type="text"]');
+							var textarea = $(form).children('textarea');
+							var editbtn = $(form).children('span.tx_modal_edit');
+							var cancelbtn = $(form).children('span.tx_modal_cancel');
+							
+							$.post(config.base_url+'memberpage/addShippingComment', $(form).serializeArray(), function(data){
+								submitbtn.attr('disabled', false);
+								submitbtn.val('Save');
+								
+								try{
+									var obj = jQuery.parseJSON(data);
+								}
+								catch(e){
+									alert('An error was encountered while processing your data. Please try again later.');
+									//window.location.reload(true);
+									return false;
+								}
+								
+								if(obj.result === 'success'){
+									
+									$.each(input, function(k,v){
+										$(v).attr('value', $(v).prop('value'));
+										$(v).attr('disabled', true);
+									});
+									textarea.attr('data-value', htmlDecode(textarea.val()));
+									textarea.attr('disabled', true);
+									
+									editbtn.show();
+									cancelbtn.hide();
+									
+									if(thisbtn.hasClass('is_form')){
+										txStatus.text('Item on route');
+									}
+									
+									$.modal.close();
+								}else{
+									alert(obj.error);
+								}
+							});
+						}
+					});
 				}
 				this.setPosition();
 			},
@@ -1244,65 +1377,18 @@ $(document).ready(function(){
 		});
 	});
 	
-	$('.shipping_comment_submit').on('click', function(){
-		var form = $(this).closest('form.shipping_details');
-		var textarea = $(this).siblings('textarea');
-		var editbtn = $(this).siblings('.tx_modal_edit');
-		var cancelbtn = $(this).siblings('.tx_modal_cancel');
-		var input = $(this).siblings('input[type="text"]');
-		var submitbtn = $(this);
-		
-		if( $.trim(textarea.val()).length > 0 ){
-			submitbtn.attr('disabled', true);
-			submitbtn.val('Saving...');
-			input.attr('disabled', false);
-			textarea.attr('disabled', false);
-			
-			$.post(config.base_url+'memberpage/addShippingComment', form.serializeArray(), function(data){
-				submitbtn.attr('disabled', false);
-				submitbtn.val('Save');
-				
-				try{
-					var obj = jQuery.parseJSON(data);
-				}
-				catch(e){
-					alert('An error was encountered while processing your data. Please try again later.');
-					//window.location.reload(true);
-					return false;
-				}
-				
-				if(obj.result === 'success'){
-					
-					$.each(input, function(k,v){
-						$(v).attr('value', $(v).prop('value'));
-						$(v).attr('disabled', true);
-					});
-					textarea.attr('data-value', htmlDecode(textarea.val()));
-					textarea.attr('disabled', true);
-					
-					editbtn.show();
-					cancelbtn.hide();
-					$.modal.close();
-				}else{
-					alert(obj.error);
-				}
-			});
-		} else {
-			textarea.effect('pulsate',{times:3},800);
-		}
-		return false;
-	});
-	
 	/***************	BANK DEPOSIT HANDLERS	*********************/
 	$('.payment_details_btn').on('click', function(){
 		var thisdiv = $(this).siblings('div.payment_details_cont');
-		var thisform = thisdiv.children('form.payment_bankdeposit'); 
+		var thisform = thisdiv.children('form.payment_bankdeposit');
 		var submitbtn = thisform.children('input[type="submit"]');
 		
 		var input = thisform.children('input[type="text"]');
 		var textarea = thisform.children('textarea');
 		var cancelbtn = thisform.children('.tx_modal_cancel');
 		var editbtn = thisform.children('.tx_modal_edit');
+		
+		var txStatus = $(this).closest('div.transac_title').siblings('div.transac_prod_wrapper').find('.tx_cont .tx_cont_col3 span.trans_alert');
 		
 		$('input.bankdeposit_amount').numeric({negative:false});
 		
@@ -1353,6 +1439,10 @@ $(document).ready(function(){
 								
 								editbtn.show();
 								cancelbtn.hide();
+								
+								console.log(txStatus);
+								txStatus.text('CONFIRMING BANK DEPOSIT DETAILS');
+								
 								$.modal.close();
 							}else{
 								alert(obj.error);
@@ -1373,6 +1463,39 @@ $(document).ready(function(){
 				$.modal.close();
 			}
 		});
+	});
+	
+	
+	$('.transac_prod_btns').on('click', '.reject_item', function(){
+		var form = $(this).closest('form');
+		var thisbtn = $(this);
+		var thismethod = $(this).siblings('input[name="method"]');
+		$.post(config.base_url+'memberpage/rejectItem', $(form).serializeArray(), function(data){
+			try{
+				var obj = jQuery.parseJSON(data);
+			}
+			catch(e){
+				alert('An error was encountered while processing your data. Please try again later.');
+				return false;
+			}
+			thisbtn.attr('disabled', false);
+			
+			if(obj.result === 'success'){
+				if ( thisbtn.hasClass('reject') ){
+					thisbtn.removeClass('reject').addClass('unreject').val('Unreject Item');
+					thismethod.val('unreject');
+				}else if ( thisbtn.hasClass('unreject') ){
+					thisbtn.removeClass('unreject').addClass('reject').val('Reject Item');
+					thismethod.val('reject');
+				}
+			}
+			else{
+				alert(obj.error);
+			}
+		});
+		thisbtn.attr('disabled', true);
+		thisbtn.val('Sending...');
+		return false;
 	});
 	
 	$('.tx_modal_edit').on('click', function(){
@@ -1690,7 +1813,6 @@ $(document).ready(function(){
 		$(this).siblings('.attr_hide').slideToggle();
 		$(this).toggleClass("active");
 	});
- 
 });
 
 /********************	PAGING FUNCTIONS	************************************************/

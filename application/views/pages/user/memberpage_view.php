@@ -1355,9 +1355,24 @@
 
 </div>	
 
+<!-- Used by transaction response when password is set-->
 <div id="tx_dialog" style="display:none;" title="Request Confirmation">
-	<p>Continue submitting your request?</p>
-	<p>Once submitted, there is no turning back!</p>
+	<p>Continue submitting request?</p>
+	<p>Make sure you've received your order and is in good quality!</p>
+	<div style="text-align:center;">
+		<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" class="loading_img" style="display:none;"/>
+	</div>
+	<br/>
+</div>
+<!-- Used by transaction response when password is not yet set-->
+<div id="tx_dialog_pass" style="display:none;" title="Password Authentication">
+	<p>Continue submitting request?</p>
+	<p>Make sure you've received your order and is in good quality!</p>
+	<label for="tx_password">Enter your password:</label>
+	<input type="password" id="tx_password" name="tx_password">
+	<span class="error red"></span>
+	<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" class="loading_img" style="display:none;vertical-align:middle;margin-left:3px;"/>
+	<br/>
 </div>
 
 <div class="profile_main_content" id="transactions">
@@ -1383,7 +1398,7 @@
 			<div class="transac_title">
 				<div class="transac_title_table">
 					<div class="transac_title_col1">
-						<span><strong>Invoice No.:</strong></span>
+						<span><strong>Transaction No.:</strong></span>
 						<span><?php echo $transact['invoice_no'];?></span>
 					</div>
 					<div class="transac_title_col2">
@@ -1396,7 +1411,7 @@
 							<?php $attr = array('class'=>'');
 								echo form_open('',$attr);
 							?>
-								<input type="submit" class="dragonpay_update_btn transac_response_btn" name="dragonpay_update_btn" value="Confirm Dragonpay Payment">
+								<input type="submit" class="dragonpay_update_btn" name="dragonpay_update_btn" value="Confirm Dragonpay Payment">
                                 <input type="hidden" name="invoice_num" value="<?php echo $transact['invoice_no'];?>">
 								<input type="hidden" name="transaction_num" value="<?php echo $tk;?>">
 								<input type="hidden" name="dragonpay" value="1">
@@ -1404,8 +1419,7 @@
 						<?php elseif($transact['payment_method'] == 5 && $transact['transac_stat'] == 99):?>
 								
 								<a class='payment_details_btn' href='javascript:void(0)' style='float:right; text-decoration:underline; font-weight:bold;'>+ Add Deposit Details</a>
-                                
-                     
+								
                                 <div class="payment_details_cont" style="display:none;">
 								<?php $attr = array('class'=>'payment_bankdeposit');
 									$disable = $transact['bd_details']['bd_datemodified'] != '' ? true : false;
@@ -1457,42 +1471,51 @@
 										Total: <span>Php <?php echo number_format($product['price'],2,'.',',');?></span>
 									</span>
 								</div>	
-								<div class="transac_bought_con">
+								<div class="transac_bought_con tx_cont">
 									<span class="transac_bought_con_col1">Bought from: </span>
 									<span class="transac_bought_con_col2">
 										<a href="<?php echo base_url();?>vendor/<?php echo $product['seller'];?>">
 											<?php echo $product['seller'];?>
 										</a>
 									</span>
-
-									<span class="transac_bought_con_col3">
+									<span class="transac_bought_con_col3 tx_cont_col3">
 										Status:
 										<?php if($transact['transac_stat'] == 0):?>
-											<?php if($product['status'] == 0):?>
-												<?php
-													$attr = array('class'=>'transac_response');
-													echo form_open('',$attr);
-												?>							
-                                                    <input class = "transac_response_btn transac_forward orange_btn3" value="Item received" type="submit">
-                                                    <input type="hidden" name="buyer_response" value="<?php echo $opk;?>">
-													<input type="hidden" name="transaction_num" value="<?php echo $tk;?>">
-													<input type="hidden" name="invoice_num" value="<?php echo $transact['invoice_no'];?>">
-												<?php echo form_close();?>
-											<?php elseif($product['status'] == 1):?>
-												<span class="trans_alert transac_paid">Paid</span>
-											<?php elseif($product['status'] == 2):?>
-												<span class="trans_alert transac_pay_return">Payment returned by seller</span>
-											<?php elseif($product['status'] == 3):?>
-												<span class="trans_alert transac_cod">Cash on delivery</span>
+											<?php if($product['is_reject'] == 1):?>
+												<span class="trans_alert">Item Rejected</span>
+											<?php else:?>
+												<?php if($product['status'] == 0):?>
+													<?php if( $product['has_shipping_summary'] == 0 ):?>
+														<span class="trans_alert">Pending Shipping Info</span>
+													<?php elseif( $product['has_shipping_summary'] == 1 ):?>
+														<span class="trans_alert">Item on route</span>
+													<?php endif;?>
+												<?php elseif($product['status'] == 1):?>
+													<span class="trans_alert transac_paid">Item Received</span>
+												<?php elseif($product['status'] == 2):?>
+													<span class="trans_alert transac_pay_return">Item returned</span>
+												<?php elseif($product['status'] == 3):?>
+													<span class="trans_alert transac_cod">Cash on delivery</span>
+												<?php elseif($product['status'] == 4):?>
+													<span class="trans_alert transac_cod">Paid</span>
+												<?php elseif($product['status'] == 5):?>
+													<span class="trans_alert transac_cod">Payment Returned</span>
+												<?php endif;?>
 											<?php endif;?>
 										<?php else:?>
-											<span class="trans_alert transac_pending">PENDING</span>
-
+											<?php if($transact['payment_method'] == 2):?>
+												<span class="trans_alert transac_pending">CONFIRM DRAGONPAY PAYMENT</span>
+											<?php elseif($transact['payment_method'] == 5):?>
+												<?php if( $transact['bd_details']['bd_datemodified'] != '' ):?>
+													<span class="trans_alert transac_pending">CONFIRMING BANK DEPOSIT DETAILS</span>
+												<?php else:?>
+													<span class="trans_alert transac_pending">PENDING BANK DEPOSIT DETAILS</span>
+												<?php endif;?>
+												
+											<?php endif;?>
 										<?php endif;?>
                                         
-                               
-                                        
-										<?php if( strlen(trim($product['shipping_comment'])) > 0 ):?>
+										<?php if( $product['has_shipping_summary'] == 1 ):?>
 											<div><span class="shipping_comment">+ View shipment detail</span></div>
 											<div class="shipping_comment_cont" style="display:none;">
 												<h2>Shipping Details</h2>
@@ -1501,30 +1524,56 @@
 													<input type="text" name="courier" value="<?php echo html_escape($product['courier']);?>" disabled ><br/>
 													<label for="tracking_num">Tracking Number: </label>
 													<input type="text" name="tracking_num" value="<?php echo html_escape($product['tracking_num']);?>" disabled ><br/>
+													<label for="delivery_date">Delivery Date: </label>
+													<input type="text" name="delivery_date" value="<?php echo html_escape($product['delivery_date'])?>" disabled> <br/>
 													<label for="expected_date">Expected Date of Arrival: </label>
 													<input type="text" name="expected_date" value="<?php echo html_escape($product['expected_date'])?>" disabled><br/>
-													<label for="comment"><span style="color:red">*</span> Comments: </label>
+													<label for="comment">Comments: </label>
 													<textarea name="comment" cols="55" rows="5" disabled ><?php echo html_escape($product['shipping_comment']); ?></textarea>								
 													<span style="display: block;margin-left: 33em;padding: 10px 0;"><?php echo $product['datemodified'];?></span>
 												</div>
 											</div>
 										<?php endif;?>
-									</span>		
+									</span>
 								</div>
-								<div class="transac_prod_btns">
-									<input type="button" value="Button1" class="">
-									<input type="button" value="Button2" class="">
+								<div class="transac_prod_btns tx_btns">
+									<?php if( $product['has_shipping_summary'] == 1 && $transact['transac_stat'] == 0 && $product['status'] == 0 ):?>
+										<?php
+											$attr = array('class'=>'transac_response');
+											echo form_open('',$attr);
+										?>							
+											<input type="button" value="Item received" class="transac_response_btn tx_forward">
+											<input type="hidden" name="buyer_response" value="<?php echo $opk;?>">
+											<input type="hidden" name="transaction_num" value="<?php echo $tk;?>">
+											<input type="hidden" name="invoice_num" value="<?php echo $transact['invoice_no'];?>">
+										<?php echo form_close();?>
+										
+										<?php echo form_open('');?>
+											<?php if($product['is_reject'] == 0):?>
+												<input type="button" value="Reject Item" class="reject_item	reject">
+												<input type="hidden" name="method" value="reject">
+											<?php else:?>
+												<input type="button" value="Unreject Item" class="reject_item unreject">
+												<input type="hidden" name="method" value="unreject">
+											<?php endif;?>
+											
+											<input type="hidden" name="order_product" value="<?php echo $opk;?>">
+											<input type="hidden" name="transact_num" value="<?php echo $tk;?>">
+											<input type="hidden" name="seller_id" value="<?php echo $product['seller_id']?>">
+										<?php echo form_close();?>
+									<?php endif; ?>
 								</div>
-								<div>
-									<p class="transac_prod_name">
-										<?php if( count($product['attr']) !== 0 ):?>
-											<span><strong>Features and Specifications:</strong></span>
-											<?php foreach($product['attr'] as $temp):?>
-												<span class="feat_and_specs_items"><strong><?php echo html_escape($temp['field']);?>:</strong> <?php echo html_escape($temp['value']);?></span>
-											<?php endforeach;?>
-										<?php endif;?>
-									</p>
-								</div>
+								<?php if( count($product['attr']) !== 0 ):?>
+									<div class="show_more_options blue">										
+										<span class="span_bg"></span>
+										<p>View Features and Specifications</p>
+									</div>
+									<div class="attr_hide">
+										<?php foreach($product['attr'] as $temp):?>
+											<p class="feat_and_specs_items"><strong><?php echo html_escape($temp['field']);?>:</strong> <?php echo html_escape($temp['value']);?></p>
+										<?php endforeach;?>
+									</div>
+								<?php endif;?>
 							</div>
 							<div class="clear"></div>
 						</div>
@@ -1533,59 +1582,29 @@
 				 <div class="feedback_wrapper">
 					<?php foreach($transact['users'] as $uk=>$user):?>
 					<div class="feedback_container">
-						<?php if(trim($user['feedb_msg']) !== '' && $user['rating1'] != 0 && $user['rating2'] != 0 && $user['rating3'] != 0):?>												
-						<p>For:<a href="<?php echo base_url();?>vendor/<?php echo $user['name'];?>"><?php echo $user['name'];?></a> | on:<?php echo $user['fbdateadded'];?></p>
-						<p>"<?php echo html_escape($user['feedb_msg']);?>"</p>
-						<p> <?php echo $this->lang->line('rating')[0].':'; ?> : 
-							<?php for($x=0;$x<5;$x++):?>
-								<?php if($x<$user['rating1']):?>
-									<span class="span_bg star_on"></span>
-									<?php else:?>
-									<span class="span_bg star_off"></span>
-								<?php endif;?>
-							<?php endfor;?>
-						</p>
-						<p> <?php echo $this->lang->line('rating')[1].':'; ?> 
-							<?php for($x=0;$x<5;$x++):?>
-								<?php if($x<$user['rating2']):?>
-									<span class="span_bg star_on"></span>
-									<?php else:?>
-									<span class="span_bg star_off"></span>
-								<?php endif;?>
-							<?php endfor;?>
-						</p>
-						<p> <?php echo $this->lang->line('rating')[2].':'; ?> 
-							<?php for($x=0;$x<5;$x++):?>
-								<?php if($x<$user['rating3']):?>
-									<span class="span_bg star_on"></span>
-								<?php else:?>
-									<span class="span_bg star_off"></span>
-								<?php endif;?>
-							<?php endfor;?>
-						</p>
-						<?php else: ?>
-						<p class="transac-feedback-btn"> + Feedback for <?php echo $user['name'];?></p>
-						<div class="transac-feedback-container">
-							 <!--<form class="transac-feedback-form"> -->
-							<?php
-							$attr = array('class'=>'transac-feedback-form');
-							echo form_open('',$attr);
-							?>
-							<input type="hidden" name="feedb_kind" value="0">
-							<input type="hidden" name="order_id" value="<?php echo $tk;?>">
-							<input type="hidden" name="for_memberid" value="<?php echo $uk;?>">
-							<textarea rows="4" cols="50" name="feedback-field"></textarea><br>
-							<span class="red ci_form_validation_error"><?php echo form_error('feedback-field'); ?></span>
-							<span><?php echo $this->lang->line('rating')[0].':'; ?>  </span><div class="feedb-star rating1"></div><br>
-							<span class="red ci_form_validation_error"><?php echo form_error('rating1'); ?></span>
-							<span><?php echo $this->lang->line('rating')[1].':'; ?> </span><div class="feedb-star rating2"></div><br>
-							<span class="red ci_form_validation_error"><?php echo form_error('rating2'); ?></span>
-							<span><?php echo $this->lang->line('rating')[2].':'; ?>  </span><div class="feedb-star rating3"></div><br>
-							<span class="red ci_form_validation_error"><?php echo form_error('rating3'); ?></span>
-							<span class="raty-error error red"></span>
-							<span class="feedback-submit">Submit</span><span class="feedback-cancel">Cancel</span>
-							<?php echo form_close();?>
-						</div>
+						<?php if( $user['has_feedb'] == 0 ): ?>
+							<p class="transac-feedback-btn"> + Feedback for <?php echo $user['name'];?></p>
+							<div class="transac-feedback-container">
+								 <!--<form class="transac-feedback-form"> -->
+								<?php
+								$attr = array('class'=>'transac-feedback-form');
+								echo form_open('',$attr);
+								?>
+								<input type="hidden" name="feedb_kind" value="0">
+								<input type="hidden" name="order_id" value="<?php echo $tk;?>">
+								<input type="hidden" name="for_memberid" value="<?php echo $uk;?>">
+								<textarea rows="4" cols="50" name="feedback-field"></textarea><br>
+								<span class="red ci_form_validation_error"><?php echo form_error('feedback-field'); ?></span>
+								<span><?php echo $this->lang->line('rating')[0].':'; ?>  </span><div class="feedb-star rating1"></div><br>
+								<span class="red ci_form_validation_error"><?php echo form_error('rating1'); ?></span>
+								<span><?php echo $this->lang->line('rating')[1].':'; ?> </span><div class="feedb-star rating2"></div><br>
+								<span class="red ci_form_validation_error"><?php echo form_error('rating2'); ?></span>
+								<span><?php echo $this->lang->line('rating')[2].':'; ?>  </span><div class="feedb-star rating3"></div><br>
+								<span class="red ci_form_validation_error"><?php echo form_error('rating3'); ?></span>
+								<span class="raty-error error red"></span>
+								<span class="feedback-submit">Submit</span><span class="feedback-cancel">Cancel</span>
+								<?php echo form_close();?>
+							</div>
 						<?php endif;?>
 					</div>
 					<?php endforeach;?>
@@ -1613,8 +1632,6 @@
 	<div id="tsold_mapview" style="height: 400px; width: 650px; "></div>
 </div>
 
-
-
 	<div id="sold" class="transactions-sell dashboard_table">
 		<h2>Sold Items</h2>
 		<?php if(count($transaction['sell'])===0):?>
@@ -1629,7 +1646,7 @@
 					<?php if($transact['transac_stat'] != 99): ?>
 					<div class="transac_title_table">
 						<div class="transac_title_col1">
-							<span><strong>Invoice No.: </strong></span>		
+							<span><strong>Transaction No.: </strong></span>		
 							<span><?php echo $transact['invoice_no'];?></span>  
 						</div>
 						<div class="transac_title_col2">
@@ -1672,18 +1689,20 @@
 									</span>
 									<span class="tsold_viewmap" data-lat="<?php echo $user['address']['lat'];?>" data-lng="<?php echo $user['address']['lng'];?>">View Map</span>
 									<?php if( $user['address']['lat']!=0 && $user['address']['lng']!=0 ):?>
-										
 										<div class="map_modalcont" style="display:none;"></div>
 									<?php endif;?>
 								<?php endforeach;?>
-								
 								<span class="transac_address_details_hide">Close</span>
 							</div>
 							</span>
 						</div>
 					</div>
 					<?php else:?>
-					<span><strong>ON HOLD</strong></span>
+						<?php if($transact['payment_method'] == 2):?>
+							<span><strong>ON HOLD - PENDING DRAGONPAY PAYMENT FROM <?php echo $transact['buyer']?></strong></span>
+						<?php elseif($transact['payment_method'] == 5):?>
+							<span><strong>ON HOLD - PENDING BANK DEPOSIT DETAILS FROM <?php echo $transact['buyer']?></strong></span>
+						<?php endif;?>
 					<?php endif;?>
 				</div>
 				<div class="transac_prod_wrapper">
@@ -1708,77 +1727,104 @@
 										Total:<span>Php<?php echo number_format($product['price'],2,'.',',');?></span>
 									</span>
 								</div>
-								<div class="transac_bought_con">
+								<div class="transac_bought_con tx_cont">
 									
-									<span class="transac_bought_con_col3">
+									<span class="transac_bought_con_col3 tx_cont_col3">
 										Status:
 									<?php if($transact['transac_stat'] == 0):?>
-										<?php if($product['status'] == 0):?>
-											<?php
-												$attr = array('class'=>'transac_response');
-												echo form_open('',$attr);
-											?>
-											<input class="transac_response_btn transac_forward orange_btn3" value="Cancel Order" type="submit">
-											<input type="hidden" name="seller_response" value="<?php echo $opk;?>">
-											<input type="hidden" name="transaction_num" value="<?php echo $tk;?>">
-											<input type="hidden" name="invoice_num" value="<?php echo $transact['invoice_no'];?>">
-											<?php echo form_close();?>
-										<?php elseif($product['status'] == 1):?>
-											<span class="trans_alert transac_paid">Paid</span>
-										<?php elseif($product['status'] == 2):?>
-											<span class="trans_alert transac_pay_return">Payment returned to buyer</span>
-										<?php elseif($product['status'] == 3):?>
-											<span class="trans_alert transac_cod">Cash on delivery</span>
+										<?php if($product['is_reject'] == 1):?>
+											<span class="trans_alert">Item Rejected</span>
+										<?php else:?>
+											<?php if($product['status'] == 0):?>
+												<?php if( $product['has_shipping_summary'] == 0 ):?>
+													<span class="trans_alert">Pending Shipping Info</span>
+												<?php elseif( $product['has_shipping_summary'] == 1 ):?>
+													<span class="trans_alert">Item on route</span>
+												<?php endif;?>
+											<?php elseif($product['status'] == 1):?>
+												<span class="trans_alert transac_paid">Item Received</span>
+											<?php elseif($product['status'] == 2):?>
+												<span class="trans_alert transac_pay_return">Item returned</span>
+											<?php elseif($product['status'] == 3):?>
+												<span class="trans_alert transac_cod">Cash on delivery</span>
+											<?php elseif($product['status'] == 4):?>
+												<span class="trans_alert transac_cod">Paid</span>
+											<?php elseif($product['status'] == 5):?>
+												<span class="trans_alert transac_cod">Payment Returned</span>
+											<?php endif;?>
 										<?php endif;?>
 									<?php else:?>
-										<span>ON HOLD</span>
+										<?php if($transact['payment_method'] == 2):?>
+											<span class="trans_alert transac_pending">PENDING DRAGONPAY PAYMENT</span>
+										<?php elseif($transact['payment_method'] == 5):?>
+											<span class="trans_alert transac_pending">PENDING BANK DEPOSIT DETAILS</span>
+										<?php endif;?>
 									<?php endif;?>
 									</span>
-
-									<div style="display:table-cell"><span class="shipping_comment">+ Update Shipping Comment</span></div>
-
-									<div class="shipping_comment_cont" style="display:none;">
-										<h2>Shipping Details</h2>
-										<div>
-											<?php
-												$disable = trim($product['shipping_comment']) == '' ? false : true;
-												$attr = array('class'=>'shipping_details');
-												echo form_open('',$attr);
-											?>
-												<label for="courier">Courier: </label>
-												<input type="text" name="courier" value="<?php echo html_escape($product['courier']);?>" <?php echo $disable ? 'disabled':''; ?> ><br/>
-												<label for="tracking_num">Tracking Number: </label>
-												<input type="text" name="tracking_num" value="<?php echo html_escape($product['tracking_num']);?>" <?php echo $disable ? 'disabled':''; ?> ><br/>
-												<label for="expected_date">Expected Date of Arrival: </label>
-												<input type="text" name="expected_date" value="<?php echo html_escape($product['expected_date'])?>" <?php echo $disable ? 'disabled':''; ?> ><br/>
-												<label for="comment"><span style="color:red;">*</span> Comments: </label>
-												<textarea name="comment" cols="55" rows="5" data-value="<?php echo html_escape($product['shipping_comment']); ?>" <?php echo $disable ? 'disabled':''; ?>><?php echo html_escape($product['shipping_comment']); ?></textarea>
-												<input name="order_product" type="hidden" value="<?php echo $opk;?>">
-												<input name="transact_num" type="hidden" value="<?php echo $tk;?>">
-												<input class="shipping_comment_submit orange_btn3" type="submit" value="Save">
-												<span class="tx_modal_edit css_modal_edit" style="display: <?php echo $disable ? '':'none'?>;">Edit</span>
-												<span class="tx_modal_cancel css_modal_cancel" style="display:none;">Cancel</span>
-												<span class="css_modal_date"><?php echo $product['datemodified'];?></span>
-											<?php echo form_close();?>
+				
+									<?php if($transact['transac_stat'] == 0):?>
+										<div style="display:table-cell"><span class="shipping_comment isform">+ Update Shipping Comment</span></div>
+										<div class="shipping_comment_cont" style="display:none;">
+											<h2>Shipping Details</h2>
+											<div>
+												<?php
+													$disable = trim($product['shipping_comment']) == '' ? false : true;
+													$attr = array('class'=>'shipping_details');
+													echo form_open('',$attr);
+												?>
+													<label for="courier">Courier: </label>
+													<input type="text" name="courier" value="<?php echo html_escape($product['courier']);?>" <?php echo $disable ? 'disabled':''; ?> ><br/>
+													<label for="tracking_num">Tracking Number: </label>
+													<input type="text" name="tracking_num" value="<?php echo html_escape($product['tracking_num']);?>" <?php echo $disable ? 'disabled':''; ?> ><br/>
+													<label for="delivery_date">Delivery Date: </label>
+													<input type="text" name="delivery_date" value="<?php echo html_escape($product['delivery_date'])?>" <?php echo $disable ? 'disabled':''; ?> > <br/>
+													<label for="expected_date">Expected Date of Arrival: </label>
+													<input type="text" name="expected_date" value="<?php echo html_escape($product['expected_date'])?>" <?php echo $disable ? 'disabled':''; ?> ><br/>
+													<label for="comment">Comments: </label>
+													<textarea name="comment" cols="55" rows="5" data-value="<?php echo html_escape($product['shipping_comment']); ?>" <?php echo $disable ? 'disabled':''; ?>><?php echo html_escape($product['shipping_comment']); ?></textarea>
+													<input name="order_product" type="hidden" value="<?php echo $opk;?>">
+													<input name="transact_num" type="hidden" value="<?php echo $tk;?>">
+													<input class="shipping_comment_submit orange_btn3" type="submit" value="Save">
+													<span class="tx_modal_edit css_modal_edit" style="display: <?php echo $disable ? '':'none'?>;">Edit</span>
+													<span class="tx_modal_cancel css_modal_cancel" style="display:none;">Cancel</span>
+													<span class="css_modal_date"><?php echo $product['datemodified'];?></span>
+												<?php echo form_close();?>
+											</div>
 										</div>
-									</div>
-
-
+									<?php endif;?>
+									
 								</div>
-								<div class="transac_prod_btns">
-									<input type="button" value="Button1" class="">
-								</div>
-								<div>
-									<p class="transac_prod_name">
+								
+								<div class="transac_prod_btns tx_btns">
+									<?php if($transact['transac_stat'] == 0 && $product['status'] == 0):?>										
+										<?php
+											$attr = array('class'=>'transac_response');
+											echo form_open('',$attr);
+										?>
+										<input type="button" value="Cancel Order" class="transac_response_btn tx_return">
+										<input type="hidden" name="seller_response" value="<?php echo $opk;?>">
+										<input type="hidden" name="transaction_num" value="<?php echo $tk;?>">
+										<input type="hidden" name="invoice_num" value="<?php echo $transact['invoice_no'];?>">
+										<?php echo form_close();?>
 										
-										<?php if( count($product['attr']) !== 0 ):?>
-											<span><strong>Features and Specifications:</strong></span>
-											<?php foreach($product['attr'] as $temp):?>
-												<span class="feat_and_specs_items"><strong><?php echo html_escape($temp['field']);?>:</strong> <?php echo html_escape($temp['value']);?></span>
-											<?php endforeach;?>
+										<?php if($product['is_reject'] == 1):?>
+											<span class="trans_alert">Item Rejected!</span>
 										<?php endif;?>
-									</p>
-								</div>								
+									<?php endif;?>
+								</div>
+								
+								<?php if( count($product['attr']) !== 0 ):?>
+									<div class="show_more_options blue">										
+										<span class="span_bg"></span>
+										<p>View Features and Specifications</p>
+									</div>
+									<div class="attr_hide">
+										<?php foreach($product['attr'] as $temp):?>
+											<p class="feat_and_specs_items"><strong><?php echo html_escape($temp['field']);?>:</strong> <?php echo html_escape($temp['value']);?></p>
+										<?php endforeach;?>
+									</div>
+								<?php endif;?>
+								
 								<div class="clear"></div>
 							</div>
 						</div>
@@ -1791,60 +1837,30 @@
 				<?php foreach($transact['users'] as $uk=>$user):?>
 				<?php if($transact['transac_stat'] != 99):?>
 				<div class="feedback_container">
-					<?php if(trim($user['feedb_msg']) !== ''):?>												
-					<p>For:<a href="<?php echo base_url();?>vendor/<?php echo $user['name'];?>"><?php echo $user['name'];?></a> | on:<?php echo $user['fbdateadded'];?></p>
-					<p>"<?php echo html_escape($user['feedb_msg']);?>"</p>
-					<p> <?php echo $this->lang->line('rating')[0].':'; ?> 
-						<?php for($x=0;$x<5;$x++):?>
-						<?php if($x<$user['rating1']):?>
-						<span class="span_bg star_on"></span>
-						<?php else:?>
-						<span class="span_bg star_off"></span>
-							<?php endif;?>
-						<?php endfor;?>
-					</p>
-					<p> <?php echo $this->lang->line('rating')[1].':'; ?> 
-						<?php for($x=0;$x<5;$x++):?>
-						<?php if($x<$user['rating2']):?>
-						<span class="span_bg star_on"></span>
-						<?php else:?>
-						<span class="span_bg star_off"></span>
-						<?php endif;?>
-						<?php endfor;?>
-					</p>
-					<p> <?php echo $this->lang->line('rating')[2].':'; ?> 
-						<?php for($x=0;$x<5;$x++):?>
-						<?php if($x<$user['rating3']):?>
-						<span class="span_bg star_on"></span>
-						<?php else:?>
-							<span class="span_bg star_off"></span>
-						<?php endif;?>
-						<?php endfor;?>
-					</p>
-					<?php else: ?>
-					<p class="transac-feedback-btn"> + Feedback for <?php echo $user['name'];?></p>
-					<div class="transac-feedback-container">
-						<!-- <form class="transac-feedback-form"> -->
-						<?php
-						$attr = array('class'=>'transac-feedback-form');
-						echo form_open('',$attr);
-						?>
-						<input type="hidden" name="feedb_kind" value="1">
-						<input type="hidden" name="order_id" value="<?php echo $tk;?>">
-						<input type="hidden" name="for_memberid" value="<?php echo $uk;?>">
-						<textarea rows="4" cols="50" name="feedback-field"></textarea><br>
-						<span class="red ci_form_validation_error"><?php echo form_error('feedback-field'); ?></span>
-						<span><?php echo $this->lang->line('rating')[0].':'; ?>  </span><div class="feedb-star rating1"></div><br>
-						<span class="red ci_form_validation_error"><?php echo form_error('rating1'); ?></span>
-						<span><?php echo $this->lang->line('rating')[1].':'; ?>  </span><div class="feedb-star rating2"></div><br>
-						<span class="red ci_form_validation_error"><?php echo form_error('rating2'); ?></span>
-						<span><?php echo $this->lang->line('rating')[2].':'; ?>  </span><div class="feedb-star rating3"></div><br>
-						<span class="red ci_form_validation_error"><?php echo form_error('rating3'); ?></span>
-						<span class="raty-error error red"></span>
-						<span class="feedback-submit">Submit</span> <span class="feedback-cancel">Cancel</span>
-						<?php echo form_close();?>
-					</div>
-				<?php endif;?>
+					<?php if( $user['has_feedb'] == 0 ): ?>
+						<p class="transac-feedback-btn"> + Feedback for <?php echo $user['name'];?></p>
+						<div class="transac-feedback-container">
+							<!-- <form class="transac-feedback-form"> -->
+							<?php
+							$attr = array('class'=>'transac-feedback-form');
+							echo form_open('',$attr);
+							?>
+							<input type="hidden" name="feedb_kind" value="1">
+							<input type="hidden" name="order_id" value="<?php echo $tk;?>">
+							<input type="hidden" name="for_memberid" value="<?php echo $uk;?>">
+							<textarea rows="4" cols="50" name="feedback-field"></textarea><br>
+							<span class="red ci_form_validation_error"><?php echo form_error('feedback-field'); ?></span>
+							<span><?php echo $this->lang->line('rating')[0].':'; ?>  </span><div class="feedb-star rating1"></div><br>
+							<span class="red ci_form_validation_error"><?php echo form_error('rating1'); ?></span>
+							<span><?php echo $this->lang->line('rating')[1].':'; ?>  </span><div class="feedb-star rating2"></div><br>
+							<span class="red ci_form_validation_error"><?php echo form_error('rating2'); ?></span>
+							<span><?php echo $this->lang->line('rating')[2].':'; ?>  </span><div class="feedb-star rating3"></div><br>
+							<span class="red ci_form_validation_error"><?php echo form_error('rating3'); ?></span>
+							<span class="raty-error error red"></span>
+							<span class="feedback-submit">Submit</span> <span class="feedback-cancel">Cancel</span>
+							<?php echo form_close();?>
+						</div>
+					<?php endif;?>
 				</div>
 			<?php endif;?>
 			<?php endforeach;?>
@@ -1887,7 +1903,7 @@
 				<div class="transac_title">
 					<div class="transac_title_table">
 						<div class="transac_title_col1">
-							<span><strong>Invoice No.:</strong></span>
+							<span><strong>Transaction No.:</strong></span>
 							<span><?php echo $transact['invoice_no'];?></span>
 						</div>
 						<div class="transac_title_col2">
@@ -1925,35 +1941,32 @@
 									<span class="transac_bought_con_col2"><a href="<?php echo base_url();?>vendor/<?php echo $product['seller'];?>"><?php echo $product['seller'];?></a></span>
 									<span class="transac_bought_con_col3">
 										Status:
-										<?php if($product['status'] == 0):?>
-										<?php
-											$attr = array('class'=>'transac_response');
-											echo form_open('',$attr);
-										?>
-											<input class = "transac_response_btn" value="Forward payment to seller" type="submit">
-											<input type="hidden" name="buyer_response" value="<?php echo $opk;?>">
-											<input type="hidden" name="transaction_num" value="<?php echo $tk;?>">
-											<input type="hidden" name="invoice_num" value="<?php echo $transact['invoice_no'];?>">
-										<?php echo form_close();?>
-										<?php elseif($product['status'] == 1):?>
-											<span class="trans_alert transac_paid">Paid</span>
+										<?php if($product['status'] == 1):?>
+											<span class="trans_alert transac_paid">Item Received</span>
 										<?php elseif($product['status'] == 2):?>
-											<span class="trans_alert transac_pay_return">Payment returned by seller</span>
+											<span class="trans_alert transac_pay_return">Item returned</span>
 										<?php elseif($product['status'] == 3):?>
 											<span class="trans_alert transac_cod">Cash on delivery</span>
+										<?php elseif($product['status'] == 4):?>
+											<span class="trans_alert transac_cod">Paid</span>
+										<?php elseif($product['status'] == 5):?>
+											<span class="trans_alert transac_cod">Payment Returned</span>
+										<?php elseif($product['is_reject'] == 1):?>
+											<span class="trans_alert">Item Rejected</span>
 										<?php endif;?>
 									</span>
 								</div>
-								<div>
-									<p class="transac_prod_name">
-										<?php if( count($product['attr']) !== 0 ):?>
-											<span>Features and Specifications:</span>
-											<?php foreach($product['attr'] as $temp):?>
-												<span class="feat_and_specs_items"><strong><?php echo html_escape($temp['field']);?>:</strong><?php echo html_escape($temp['value']);?></span>
-											<?php endforeach;?>
-										<?php endif;?>
-									</p>
-								</div>
+								<?php if( count($product['attr']) !== 0 ):?>
+									<div class="show_more_options blue">										
+										<span class="span_bg"></span>
+										<p>View Features and Specifications</p>
+									</div>
+									<div class="attr_hide">
+										<?php foreach($product['attr'] as $temp):?>
+											<p class="feat_and_specs_items"><strong><?php echo html_escape($temp['field']);?>:</strong> <?php echo html_escape($temp['value']);?></p>
+										<?php endforeach;?>
+									</div>
+								<?php endif;?>
 								<div class="clear"></div>
 							</div>
 						</div>
@@ -1962,59 +1975,29 @@
 					<div class="feedback_wrapper">
 						<?php foreach($transact['users'] as $uk=>$user):?>
 						<div class="feedback_container">
-							<?php if(trim($user['feedb_msg']) !== '' && $user['rating1'] != 0 && $user['rating2'] != 0 && $user['rating3'] != 0):?>												
-							<p>For:<a href="<?php echo base_url();?>vendor/<?php echo $user['name'];?>"><?php echo $user['name'];?></a> | on:<?php echo $user['fbdateadded'];?></p>
-							<p>"<?php echo html_escape($user['feedb_msg']);?>"</p>
-							<p> <?php echo $this->lang->line('rating')[0].':'; ?> : 
-								<?php for($x=0;$x<5;$x++):?>
-								<?php if($x<$user['rating1']):?>
-								<span class="span_bg star_on"></span>
-									<?php else:?>
-									<span class="span_bg star_off"></span>
-								<?php endif;?>
-								<?php endfor;?>
-							</p>
-							<p> <?php echo $this->lang->line('rating')[1].':'; ?> 
-								<?php for($x=0;$x<5;$x++):?>
-								<?php if($x<$user['rating2']):?>
-								<span class="span_bg star_on"></span>
-								<?php else:?>
-								<span class="span_bg star_off"></span>
-								<?php endif;?>
-								<?php endfor;?>
-							</p>
-							<p> <?php echo $this->lang->line('rating')[2].':'; ?> 
-								<?php for($x=0;$x<5;$x++):?>
-								<?php if($x<$user['rating3']):?>
-								<span class="span_bg star_on"></span>
-								<?php else:?>
-								<span class="span_bg star_off"></span>
-								<?php endif;?>
-								<?php endfor;?>
-							</p>
-							<?php else: ?>
-							<p class="transac-feedback-btn"> + Feedback for <?php echo $user['name'];?></p>
-							<div class="transac-feedback-container">
-								<!--<form class="transac-feedback-form">-->
-								<?php
-								$attr = array('class'=>'transac-feedback-form');
-								echo form_open('',$attr);
-								?>
-								<input type="hidden" name="feedb_kind" value="0">
-								<input type="hidden" name="order_id" value="<?php echo $tk;?>">
-								<input type="hidden" name="for_memberid" value="<?php echo $uk;?>">
-								<textarea rows="4" cols="50" name="feedback-field"></textarea><br>
-								<span class="red ci_form_validation_error"><?php echo form_error('feedback-field'); ?></span>
-								<span><?php echo $this->lang->line('rating')[0].':'; ?>  </span><div class="feedb-star rating1"></div><br>
-								<span class="red ci_form_validation_error"><?php echo form_error('rating1'); ?></span>
-								<span><?php echo $this->lang->line('rating')[1].':'; ?> </span><div class="feedb-star rating2"></div><br>
-								<span class="red ci_form_validation_error"><?php echo form_error('rating2'); ?></span>
-								<span><?php echo $this->lang->line('rating')[2].':'; ?>  </span><div class="feedb-star rating3"></div><br>
-								<span class="red ci_form_validation_error"><?php echo form_error('rating3'); ?></span>
-								<span class="raty-error error red"></span>
-								<span class="feedback-submit">Submit</span><span class="feedback-cancel">Cancel</span>
-								<?php echo form_close();?>
-							</div>
+							<?php if( $user['has_feedb'] == 0 ): ?>
+								<p class="transac-feedback-btn"> + Feedback for <?php echo $user['name'];?></p>
+								<div class="transac-feedback-container">
+									<!--<form class="transac-feedback-form">-->
+									<?php
+									$attr = array('class'=>'transac-feedback-form');
+									echo form_open('',$attr);
+									?>
+									<input type="hidden" name="feedb_kind" value="0">
+									<input type="hidden" name="order_id" value="<?php echo $tk;?>">
+									<input type="hidden" name="for_memberid" value="<?php echo $uk;?>">
+									<textarea rows="4" cols="50" name="feedback-field"></textarea><br>
+									<span class="red ci_form_validation_error"><?php echo form_error('feedback-field'); ?></span>
+									<span><?php echo $this->lang->line('rating')[0].':'; ?>  </span><div class="feedb-star rating1"></div><br>
+									<span class="red ci_form_validation_error"><?php echo form_error('rating1'); ?></span>
+									<span><?php echo $this->lang->line('rating')[1].':'; ?> </span><div class="feedb-star rating2"></div><br>
+									<span class="red ci_form_validation_error"><?php echo form_error('rating2'); ?></span>
+									<span><?php echo $this->lang->line('rating')[2].':'; ?>  </span><div class="feedb-star rating3"></div><br>
+									<span class="red ci_form_validation_error"><?php echo form_error('rating3'); ?></span>
+									<span class="raty-error error red"></span>
+									<span class="feedback-submit">Submit</span><span class="feedback-cancel">Cancel</span>
+									<?php echo form_close();?>
+								</div>
 							<?php endif;?>
 						</div>
 					<?php endforeach;?>
@@ -2052,7 +2035,7 @@
 				<div class="transac_title">
 					<div class="transac_title_table">
 						<div class="transac_title_col1">
-							<span><strong>Invoice No.:</strong></span>
+							<span><strong>Transaction No.:</strong></span>
 							<span><?php echo $transact['invoice_no'];?></span> 
 						</div>
 						<div class="transac_title_col2">
@@ -2131,36 +2114,33 @@
 									<span class="transac_bought_con_col2"></span>
 									<span class="transac_bought_con_col3">
 										Status:
-										<?php if($product['status'] == 0):?>
-											<?php
-												$attr = array('class'=>'transac_response');
-												echo form_open('',$attr);
-											?>
-											<input class="transac_response_btn" value="Cancel Order" type="submit">
-											<input type="hidden" name="seller_response" value="<?php echo $opk;?>">
-											<input type="hidden" name="transaction_num" value="<?php echo $tk;?>">
-											<input type="hidden" name="invoice_num" value="<?php echo $transact['invoice_no'];?>">
-											<?php echo form_close();?>
-										<?php elseif($product['status'] == 1):?>
-											<span class="trans_alert transac_paid">Paid</span>
+										<?php if($product['status'] == 1):?>
+											<span class="trans_alert transac_paid">Item Received</span>
 										<?php elseif($product['status'] == 2):?>
-											<span class="trans_alert transac_pay_return">Payment returned to buyer</span>
+											<span class="trans_alert transac_pay_return">Item returned</span>
 										<?php elseif($product['status'] == 3):?>
 											<span class="trans_alert transac_cod">Cash on delivery</span>
-										<?php endif;?>							
+										<?php elseif($product['status'] == 4):?>
+											<span class="trans_alert transac_cod">Paid</span>
+										<?php elseif($product['status'] == 5):?>
+											<span class="trans_alert transac_cod">Payment Returned</span>
+										<?php elseif($product['is_reject'] == 1):?>
+											<span class="trans_alert">Item Rejected</span>
+										<?php endif;?>						
 									</span>
 								</div>
-								<div>
-									<p class="transac_prod_name">
-										
-										<?php if( count($product['attr']) !== 0 ):?>
-											<strong>Features and Specifications:</strong>
-											<?php foreach($product['attr'] as $temp):?>
-												<span class="feat_and_specs_items"><strong><?php echo html_escape($temp['field']);?>:</strong><?php echo html_escape($temp['value']);?></span>
-											<?php endforeach;?>
-										<?php endif;?>
-									</p>						
-								</div>
+								<?php if( count($product['attr']) !== 0 ):?>
+									<div class="show_more_options blue">										
+										<span class="span_bg"></span>
+										<p>View Features and Specifications</p>
+									</div>
+									<div class="attr_hide">
+										<?php foreach($product['attr'] as $temp):?>
+											<p class="feat_and_specs_items"><strong><?php echo html_escape($temp['field']);?>:</strong> <?php echo html_escape($temp['value']);?></p>
+										<?php endforeach;?>
+									</div>
+								<?php endif;?>
+								
 							</div>	
 						</div>		
 					</div>
@@ -2169,64 +2149,34 @@
 
 			<div class="feedback_wrapper">
 				<?php foreach($transact['users'] as $uk=>$user):?>
-				<div class="feedback_container">
-					<?php if(trim($user['feedb_msg']) !== ''):?>												
-					<p>For:<a href="<?php echo base_url();?>vendor/<?php echo $user['name'];?>"><?php echo $user['name'];?></a> | on:<?php echo $user['fbdateadded'];?></p>
-					<p>"<?php echo html_escape($user['feedb_msg']);?>"</p>
-					<p> <?php echo $this->lang->line('rating')[0].':'; ?> 
-						<?php for($x=0;$x<5;$x++):?>
-						<?php if($x<$user['rating1']):?>
-						<span class="span_bg star_on"></span>
-					<?php else:?>
-					<span class="span_bg star_off"></span>
-				<?php endif;?>
-			<?php endfor;?>
-		</p>
-		<p> <?php echo $this->lang->line('rating')[1].':'; ?> 
-			<?php for($x=0;$x<5;$x++):?>
-			<?php if($x<$user['rating2']):?>
-			<span class="span_bg star_on"></span>
-		<?php else:?>
-		<span class="span_bg star_off"></span>
-	<?php endif;?>
-	<?php endfor;?>
-	</p>
-	<p> <?php echo $this->lang->line('rating')[2].':'; ?> 
-		<?php for($x=0;$x<5;$x++):?>
-		<?php if($x<$user['rating3']):?>
-		<span class="span_bg star_on"></span>
-	<?php else:?>
-		<span class="span_bg star_off"></span>
-	<?php endif;?>
-	<?php endfor;?>
-	</p>
-	<?php else: ?>
-		<p class="transac-feedback-btn"> + Feedback for <?php echo $user['name'];?></p>
-		<div class="transac-feedback-container">
-			<!--<form class="transac-feedback-form">-->
-			<?php
-			$attr = array('class'=>'transac-feedback-form');
-			echo form_open('',$attr);
-			?>
-			<input type="hidden" name="feedb_kind" value="1">
-			<input type="hidden" name="order_id" value="<?php echo $tk;?>">
-			<input type="hidden" name="for_memberid" value="<?php echo $uk;?>">
-			<textarea rows="4" cols="50" name="feedback-field"></textarea><br>
-			<span class="red ci_form_validation_error"><?php echo form_error('feedback-field'); ?></span>
-			<span><?php echo $this->lang->line('rating')[0].':'; ?>  </span><div class="feedb-star rating1"></div><br>
-			<span class="red ci_form_validation_error"><?php echo form_error('rating1'); ?></span>
-			<span><?php echo $this->lang->line('rating')[1].':'; ?>  </span><div class="feedb-star rating2"></div><br>
-			<span class="red ci_form_validation_error"><?php echo form_error('rating2'); ?></span>
-			<span><?php echo $this->lang->line('rating')[2].':'; ?>  </span><div class="feedb-star rating3"></div><br>
-			<span class="red ci_form_validation_error"><?php echo form_error('rating3'); ?></span>
-			<span class="raty-error error red"></span>
-			<span class="feedback-submit">Submit</span> <span class="feedback-cancel">Cancel</span>
-			<?php echo form_close();?>
-		</div>
-	<?php endif;?>
-	</div>
-	<?php endforeach;?>
-	</div>
+					<div class="feedback_container">
+						<?php if( $user['has_feedb'] == 0 ): ?>
+							<p class="transac-feedback-btn"> + Feedback for <?php echo $user['name'];?></p>
+							<div class="transac-feedback-container">
+								<!--<form class="transac-feedback-form">-->
+								<?php
+								$attr = array('class'=>'transac-feedback-form');
+								echo form_open('',$attr);
+								?>
+								<input type="hidden" name="feedb_kind" value="1">
+								<input type="hidden" name="order_id" value="<?php echo $tk;?>">
+								<input type="hidden" name="for_memberid" value="<?php echo $uk;?>">
+								<textarea rows="4" cols="50" name="feedback-field"></textarea><br>
+								<span class="red ci_form_validation_error"><?php echo form_error('feedback-field'); ?></span>
+								<span><?php echo $this->lang->line('rating')[0].':'; ?>  </span><div class="feedb-star rating1"></div><br>
+								<span class="red ci_form_validation_error"><?php echo form_error('rating1'); ?></span>
+								<span><?php echo $this->lang->line('rating')[1].':'; ?>  </span><div class="feedb-star rating2"></div><br>
+								<span class="red ci_form_validation_error"><?php echo form_error('rating2'); ?></span>
+								<span><?php echo $this->lang->line('rating')[2].':'; ?>  </span><div class="feedb-star rating3"></div><br>
+								<span class="red ci_form_validation_error"><?php echo form_error('rating3'); ?></span>
+								<span class="raty-error error red"></span>
+								<span class="feedback-submit">Submit</span> <span class="feedback-cancel">Cancel</span>
+								<?php echo form_close();?>
+							</div>
+						<?php endif;?>
+					</div>
+				<?php endforeach;?>
+			</div>
 	</div>
 	<div class="clear"></div>
 	<?php $transac_counter++;?>
@@ -2300,6 +2250,10 @@
 
                                        
 					var jsonCity = <?php echo $json_city;?>;
+					var tx = {
+						u:'<?php echo $uname;?>',
+						p:''
+					};
 
 					$(document).ready(function() {
                         var currentRequest = null;
