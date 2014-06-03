@@ -124,7 +124,7 @@
 											<span class="help-block spnmsg"></span>
 										
 											<h4>Mobile Number</h4>
-											<input type="text" placeholder="e.g. 9051234567" name="mobile" class="reqfield" id="mobile" maxlength="10">
+											<input type="text" placeholder="e.g. 09051234567" name="mobile" class="reqfield" id="mobile" maxlength="11">
 											<input type="hidden" id="mobilecheck" value="">
 											<img id="mobile_loader" class="img_loader_small" src="<?=base_url()?>/assets/images/orange_loader_small.gif" style="display:none;">
 											<div id="mobile_status">

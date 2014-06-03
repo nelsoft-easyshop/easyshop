@@ -21,6 +21,9 @@
         <link rel="stylesheet" href="<?=base_url()?>assets/css/landingpage/jquery.bxslider.css" type="text/css" media="screen"/> <!-- Slider CSS -->
         <link rel="stylesheet" href="<?=base_url()?>assets/css/landingpage/responsive-nav.css"><!-- responsive menu -->
 		
+        
+        <link rel="stylesheet" href="<?=base_url()?>assets/css/strength.css"/>
+        
 		<!-- Contact Form CSS files -->
 		<link type='text/css' href='<?=base_url()?>assets/css/basic.css?ver=1.0' rel='stylesheet' media='screen' />
 		<link href="<?=base_url()?>assets/css/jquery-ui.css?ver=1.0" rel="stylesheet">
@@ -70,11 +73,13 @@
 					    	<span class="btn reg_btn" id="reg_btn">Register</span>					    	
 					    </li>
 					    <?php else: ?>
-                            <li class='btn_login' style='margin-left: 23em !important;'>   
-                                <a href='<?=base_url()?>me'><input style='overflow: hidden; text-overflow: ellipsis; max-width: 120px;' type="submit" class='btn' id='userpage' value = "<?php echo html_escape($uname);?>"/></a>
+                            <li class='btn_login'>   
+                                <a href='<?=base_url()?>me'><input type="submit" class='btn' id='userpage' value='<?php echo html_escape($uname);?>'/></a>
                             </li>
-                            <li class='btn_register'>   
-                                <a href='<?=base_url()?>login/logout'><span class="btn" id="sign_out">Sign-out</span></a>
+                            
+                        
+                             <li class="btn_register"> 
+                                <a href='<?=base_url()?>login/logout'><span class='btn' id='signout'>Sign-out</span></a>
                             </li>
                         <?php endif; ?>  
 					    <li class="shop_con">
@@ -129,7 +134,7 @@
 											<span class="help-block spnmsg padding1"></span>
 										
 											<h4>Mobile Number</h4>
-											<input type="text" placeholder="e.g. 9051234567" name="mobile" class="reqfield" id="mobile" maxlength="10">
+											<input type="text" placeholder="e.g. 09051234567" name="mobile" class="reqfield" id="mobile" maxlength="11">
 											<input type="hidden" id="mobilecheck" value="">
 											<div id="mobile_status">
 												<img class="fieldstatus" src="<?=base_url()?>/assets/images/check_icon.png" id="mobile_check" style="position: relative;display:none;vertical-align:middle"/>
@@ -215,7 +220,8 @@
 	<section class="bg_mid">
 		<div class="wrapper prod_slides">
 			<div class="grid-11">
-				<ul class="bxslider">
+        
+				<ul class="bxslider_slides">
 					<li class="slide-1">
 						<div class="product_content">
 							<div>
@@ -242,8 +248,8 @@
 									<p>12:00 noon</p>
 								</div>
 								<div class="img_container">
-								<img src="assets/images/landingpage/img_ribbon.png" class="ribbon_tag">
-								<img src="assets/images/landingpage/img_iphone.png" class="img_main_product">
+								<img src="<?=base_url()?>assets/images/landingpage/img_ribbon.png" class="ribbon_tag">
+								<img src="<?=base_url()?>assets/images/landingpage/img_iphone.png" class="img_main_product">
 								</div>
 							</div>
 						</div>
@@ -516,13 +522,13 @@
 						<div class="social_media">
 							<span class="txt_sm">Social Media:</span>
 							<ul>
-								<!-- <li>
+								<li>
 									<div class="fb-like" data-href="https://www.facebook.com/EasyShopPhilippines" data-width="200" data-layout="button" data-action="like" data-show-faces="false" data-share="false"></div>
 								</li>
 								<li>
 									<a href="https://twitter.com/EasyShopPH" class="twitter-follow-button" data-show-count="false" data-size="large" data-show-screen-name="false">Follow @EasyShopPH</a>
-<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-								</li> -->
+                                <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+								</li> 
 							</ul>
 							
 						</div>
@@ -546,130 +552,44 @@
 <?php echo form_close();?>
 
 
-
 <script src="<?=base_url()?>assets/JavaScript/js/jquery-1.9.1.js"></script>
 <script src="<?=base_url()?>assets/JavaScript/landingpage/responsive-nav.js"></script>
 <script type='text/javascript' src="<?=base_url()?>assets/JavaScript/js/jquery-ui.js"></script>
-<script>
-      var navigation = responsiveNav(".nav-collapse");
-</script>
 
-
-
-
+<script type='text/javascript' src='<?=base_url()?>assets/JavaScript/js/jquery.numeric.js'></script>
+<script type='text/javascript' src='<?=base_url()?>assets/JavaScript/js/jquery.validate.js'></script>
+<script type='text/javascript' src='<?=base_url()?>assets/JavaScript/landingpage/landingpage.js?ver=1.0'></script>
+<script src="<?=base_url()?>assets/JavaScript/js/jquery.bxslider.min.js"></script>
 
 <script type="text/javascript">
+    var config = {
+         base_url: "<?php echo base_url(); ?>",
+    };
+    
+    var navigation = responsiveNav(".nav-collapse");
 
-var config = {
-     base_url: "<?php echo base_url(); ?>",
-};
+    (function( $ ) {
+        jQuery('.bxslider_slides').bxSlider({
+            infiniteLoop: true,
+            auto: true
+        });
+    })(jQuery);
 
-$(document).ready(function() {  
-    $("#reg_btn").click(function() {
-           $('#register_container').fadeIn(300);
-    });    
-
-    var pathname = $(location).attr('href');
-    var idx = pathname.indexOf('#');
-    if(idx > -1){
-        if(pathname.substring(idx+1) == 'register'){
-             $("#reg_btn").click();
-        }
-    }
-});
-
-$(window).load(function () {
-    $(window).scroll(function () {
-        var e;
-        return e = $(window).scrollTop(), e < 50 ? $("#header").removeClass("fixed_header") : $("#header").addClass("fixed_header").fadeIn(300);
-    })
-}) 
-
-/**** video player dialog box ****/
-$(function() {
-	$( "#videoplayer" ).dialog({
-		width:"68%",
-		autoOpen: false,
-		modal: true,
-		closeOnEscape: true,
-		draggable:false,
-        show: {
-            effect: "fade",
-            duration: 600
-        },
-        hide: {
-            effect: "fade",
-            duration: 400
-        }
-	});
-
-	$( ".vidplay" ).click(function() {
-	$( "#videoplayer" ).dialog( "open" );
-	});
-});
-
-/****** Terms and Conditions Dialog box ********/
-$(function() {
-	$( ".dialog" ).dialog({
-		width:"65%",
-		autoOpen: false,
-		modal: true,
-		closeOnEscape: true,
-		draggable:false,
-        show: {
-            effect: "fade",
-            duration: 1000
-        },
-        hide: {
-            effect: "fade",
-            duration: 400
-        }
-	});
-
-	$( ".terms_and_conditions" ).click(function() {
-	$( ".dialog" ).dialog( "open" );
-	$(".dialog").siblings().parent('.ui-dialog').addClass('terms_container');
-	});
-});
-
-</script> 
-<script type="text/javascript">
-
-$(document).click(function (e)
-{
-    var container = $("#register_container");
-    if (!container.is(e.target) // if the target of the click isn't the container...
-        && container.has(e.target).length === 0  // ... nor a descendant of the container
-        && !e.target.hasClass('reg_btn')
-        )
-    {
-        container.fadeOut(300);
-    }
-});
-
-</script>
+    (function( $ ) {
+        var container = jQuery("#register_container");
+        $('.txt_reg').click(function(e){
+            container.fadeIn();
+        });
+    })(jQuery);
    
-    <!-- Form Plugins -->
-	<script type='text/javascript' src='<?=base_url()?>assets/JavaScript/js/jquery.numeric.js'></script>
-	<script type='text/javascript' src='<?=base_url()?>assets/JavaScript/js/jquery.validate.js'></script>
-	
-	<script type='text/javascript' src='<?=base_url()?>assets/JavaScript/landingpage/landingpage.js?ver=4.10'></script>
-	
-	<!-- Password Strength 
-	<script type="text/javascript" src="<?=base_url()?>assets/JavaScript/js/mootools-core-1.4.5-full-compat.js"></script>
-	<script type="text/javascript" src="<?=base_url()?>assets/JavaScript/js/password_meter.js"></script>-->
-
-	<script src="<?=base_url()?>assets/JavaScript/js/jquery.bxslider.min.js"></script>
-	<script type="text/javascript">
+    
+</script> 
 
 
-	  $(document).ready(function(){
-	    
-	$('.bxslider').bxSlider({
-	  infiniteLoop: false,
-	  hideControlOnEnd: true
-	});
-	  });
+<!-- password meter: uses mootool, consider replacing -->
+<script type="text/javascript" src="<?=base_url()?>assets/JavaScript/js/mootools-core-1.4.5-full-compat.js"></script>
+<script type="text/javascript" src="<?=base_url()?>assets/JavaScript/js/password_meter.js"></script>
+<!-- end mootool -->
 
 
-	</script>
+  

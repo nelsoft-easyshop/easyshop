@@ -2,74 +2,74 @@
 /**************************	SIGNUP/REGISTER ***************************/
 /**********************************************************************/
 
-$(document).ready(function(){
+jQuery(document).ready(function(){
 	  
-	  $('#username').on('focus', function() {
-		  $(document).bind('focusin.example click.example',function(e) {
-			  if ($(e.target).closest('.username_info, #username').length) return;
-			  $(document).unbind('.example');
+	  jQuery('#username').on('focus', function() {
+		  jQuery(document).bind('focusin.example click.example',function(e) {
+			  if (jQuery(e.target).closest('.username_info, #username').length) return;
+			  jQuery(document).unbind('.example');
 		  });
 	  }).on('blur', function(){
-		var fieldlength = $.trim($('#username').val()).length;
-		if(fieldlength >= 5 && $(this).hasClass('forSearch') && $(this).hasClass('valid')){
+		var fieldlength = jQuery.trim(jQuery('#username').val()).length;
+		if(fieldlength >= 5 && jQuery(this).hasClass('forSearch') && jQuery(this).hasClass('valid')){
 			setTimeout(username_check,500);
 		}
 		else if(fieldlength < 5){
-			hidecheckx($('#username'));
-			$('.username_availability').html('');
+			hidecheckx(jQuery('#username'));
+			jQuery('.username_availability').html('');
 		}
 	  }).on('keyup', function(){
-		var fieldlength = $.trim($('#username').val()).length;
-		hidecheckx($(this));
-		$('.username_availability').html('');
+		var fieldlength = jQuery.trim(jQuery('#username').val()).length;
+		hidecheckx(jQuery(this));
+		jQuery('.username_availability').html('');
 		
-		if($(this).hasClass('pass')){
-			$(this).removeClass('pass');
+		if(jQuery(this).hasClass('pass')){
+			jQuery(this).removeClass('pass');
 		}
 		
-		if(!$(this).hasClass('forSearch') && fieldlength >= 5){
-			$(this).addClass('forSearch');
+		if(!jQuery(this).hasClass('forSearch') && fieldlength >= 5){
+			jQuery(this).addClass('forSearch');
 		}
 		else if(fieldlength < 5){
-			$(this).removeClass('forSearch');
-			hidecheckx($('#username'));
-			$('.username_availability').html('');
+			jQuery(this).removeClass('forSearch');
+			hidecheckx(jQuery('#username'));
+			jQuery('.username_availability').html('');
 		}
 	  });
 	  
-	  $('div.pass-container').show();
-	  $('#password').focus(function() {
-		  $(document).bind('focusin.example click.example',function(e) {
-			  if ($(e.target).closest('.password_info, #password').length) return;
-			  $(document).unbind('.example');
+	  jQuery('div.pass-container').show();
+	  jQuery('#password').focus(function() {
+		  jQuery(document).bind('focusin.example click.example',function(e) {
+			  if (jQuery(e.target).closest('.password_info, #password').length) return;
+			  jQuery(document).unbind('.example');
 			});
 	  }).on('input paste keyup', function(e){
 			
-		   if($.trim($(this).val()).length >= 6){
-			   $('#cpassword').attr("disabled", false);
-			   //showx($('#cpassword'));
+		   if(jQuery.trim(jQuery(this).val()).length >= 6){
+			   jQuery('#cpassword').attr("disabled", false);
+			   //showx(jQuery('#cpassword'));
 			   }
 		   else {
-			   $('#cpassword').attr("disabled", true);
-			   $('#cpassword').val("");
-			   hidecheckx($('#cpassword'));
+			   jQuery('#cpassword').attr("disabled", true);
+			   jQuery('#cpassword').val("");
+			   hidecheckx(jQuery('#cpassword'));
 		   }
 
-			if($(this).val() !== $('#cpassword').val() && !$('#cpassword')[0].disabled && $('#cpassword').val().length > 0)
-				showx($('#cpassword'));
-			else if($(this).val() == $('#cpassword').val() && !$('#cpassword')[0].disabled)
-				showcheck($('#cpassword'));
+			if(jQuery(this).val() !== jQuery('#cpassword').val() && !jQuery('#cpassword')[0].disabled && jQuery('#cpassword').val().length > 0)
+				showx(jQuery('#cpassword'));
+			else if(jQuery(this).val() == jQuery('#cpassword').val() && !jQuery('#cpassword')[0].disabled)
+				showcheck(jQuery('#cpassword'));
 				
-			if( !$(this).hasClass('error') ){
-				$('div.pass-container').show();
+			if( !jQuery(this).hasClass('error') ){
+				jQuery('div.pass-container').show();
 			}else{
-				$('div.pass-container').hide();
+				jQuery('div.pass-container').hide();
 			}
       }).on('blur', function(){
-			if( $(this).hasClass('error') ){
-				$('div.pass-container').hide();
+			if( jQuery(this).hasClass('error') ){
+				jQuery('div.pass-container').hide();
 			}else{
-				$('div.pass-container').show();
+				jQuery('div.pass-container').show();
 			}
 	  })
 	  .on('keypress', function(e){
@@ -77,74 +77,74 @@ $(document).ready(function(){
 		return code!=32;
 	  });
 	  
-	  $("#cpassword").on('paste', function(e){
+	  jQuery("#cpassword").on('paste', function(e){
 			e.preventDefault();
 		}).on('focusin input focusout',function(){
-			if($(this).val() !== $('#password').val())
-				showx($(this));
+			if(jQuery(this).val() !== jQuery('#password').val())
+				showx(jQuery(this));
 			else
-				showcheck($(this));
+				showcheck(jQuery(this));
 		})
 		.on('keypress', function(e){
 			var code = e.keyCode || e.which
 			return code!=32;
 		});
 	  
-	  $('#email').on('blur', function(){
-		var fieldlength = $.trim($('#email').val()).length;
+	  jQuery('#email').on('blur', function(){
+		var fieldlength = jQuery.trim(jQuery('#email').val()).length;
 
-		if(fieldlength >= 6 && $(this).hasClass('forSearch') && $(this).hasClass('valid')){
+		if(fieldlength >= 6 && jQuery(this).hasClass('forSearch') && jQuery(this).hasClass('valid')){
 			setTimeout(email_check,500);
 		}
 		else if(fieldlength < 6){
-			hidecheckx($('#email'));
-			$('.email_availability').html('');
+			hidecheckx(jQuery('#email'));
+			jQuery('.email_availability').html('');
 		}
 	  }).on('keyup', function(){
-		var fieldlength = $.trim($('#email').val()).length;
-		hidecheckx($(this));
-		$('.email_availability').html('');
+		var fieldlength = jQuery.trim(jQuery('#email').val()).length;
+		hidecheckx(jQuery(this));
+		jQuery('.email_availability').html('');
 		
-		if($(this).hasClass('pass')){
-			$(this).removeClass('pass');
+		if(jQuery(this).hasClass('pass')){
+			jQuery(this).removeClass('pass');
 		}
 		
-		if(!$(this).hasClass('forSearch') && fieldlength >= 6){
-			$(this).addClass('forSearch');
+		if(!jQuery(this).hasClass('forSearch') && fieldlength >= 6){
+			jQuery(this).addClass('forSearch');
 		}
 		else if(fieldlength < 6){
-			$(this).removeClass('forSearch');
-			hidecheckx($('#email'));
-			$('.email_availability').html('');
+			jQuery(this).removeClass('forSearch');
+			hidecheckx(jQuery('#email'));
+			jQuery('.email_availability').html('');
 		}
 	  });
 	  
-	  $('#mobile').on('blur', function(){
-		var fieldlength = $.trim($('#mobile').val()).length;
+	  jQuery('#mobile').on('blur', function(){
+		var fieldlength = jQuery.trim(jQuery('#mobile').val()).length;
 
-		if(fieldlength >= 6 && $(this).hasClass('forSearch') && $(this).hasClass('valid')){
+		if(fieldlength >= 6 && jQuery(this).hasClass('forSearch') && jQuery(this).hasClass('valid')){
 			setTimeout(mobile_check,500);
 		}
 		else if(fieldlength < 6){
-			hidecheckx($('#mobile'));
-			$('.mobile_availability').html('');
+			hidecheckx(jQuery('#mobile'));
+			jQuery('.mobile_availability').html('');
 		}
 	  }).on('keyup', function(){
-		var fieldlength = $.trim($('#mobile').val()).length;
-		hidecheckx($(this));
-		$('.mobile_availability').html('');
+		var fieldlength = jQuery.trim(jQuery('#mobile').val()).length;
+		hidecheckx(jQuery(this));
+		jQuery('.mobile_availability').html('');
 		
-		if($(this).hasClass('pass')){
-			$(this).removeClass('pass');
+		if(jQuery(this).hasClass('pass')){
+			jQuery(this).removeClass('pass');
 		}
 		
-		if(!$(this).hasClass('forSearch') && fieldlength >= 6){
-			$(this).addClass('forSearch');
+		if(!jQuery(this).hasClass('forSearch') && fieldlength >= 6){
+			jQuery(this).addClass('forSearch');
 		}
 		else if(fieldlength < 6){
-			$(this).removeClass('forSearch');
-			hidecheckx($('#mobile'));
-			$('.mobile_availability').html('');
+			jQuery(this).removeClass('forSearch');
+			hidecheckx(jQuery('#mobile'));
+			jQuery('.mobile_availability').html('');
 		}
 	  });
 });
@@ -152,27 +152,27 @@ $(document).ready(function(){
 /**********************************************************************************************/
 /****************************	FORM 1 VALIDATION	*******************************************/
 /**********************************************************************************************/	
-$(document).ready(function(){
+jQuery(document).ready(function(){
 
 	 jQuery.validator.addMethod("alphanumeric", function(value, element) {
         return this.optional(element) || (/[a-zA-Z]/.test(value) && /\d/.test(value));
      }, "Must contain numbers and letters");
 	 
 	 jQuery.validator.addMethod("alphanumeric_underscore", function(value, element) {
-        return this.optional(element) || /^\w+$/i.test(value);
+        return this.optional(element) || /^\w+jQuery/i.test(value);
 	 }, "Only letters, numbers, and underscores are allowed");
  
 	jQuery.validator.addMethod("is_validmobile", function(value, element) {
-		return this.optional(element) || /^(8|9)[0-9]{9}/.test(value);
-	 }, "Must begin with 8 or 9");
+		return this.optional(element) || /^(09|08)[0-9]{9}/.test(value);
+	 }, "Mobile numbers must begin with 09 or 08");
 	 
 	 jQuery.validator.addMethod("no_space", function(value, element) {
 		return this.optional(element) || /[^\s]/g.test(value);
 	 }, "Spaces are not allowed.");
  
-	$('#mobile').numeric({negative : false});
+	jQuery('#mobile').numeric({negative : false});
  
-	 $("#register_form1").validate({
+	 jQuery("#register_form1").validate({
 		 rules: {
             username: {
                 required: true,
@@ -199,8 +199,8 @@ $(document).ready(function(){
 				},
 			mobile:{
 				number: true,
-				minlength: 10,
-				maxlength: 10,
+				minlength: 11,
+				maxlength: 11,
 				is_validmobile: true
 			},
 		 },
@@ -211,11 +211,11 @@ $(document).ready(function(){
 			email:{
 				required: "Please enter a valid email address",
 				email: 'Please enter a valid email address',
-				minlength: '*Email too short'
+				minlength: '*E-mail is too short'
 			},
 			mobile:{
-				minlength: 'Mobile should consist of 10 digits',
-				maxlength: 'Mobile should consist of 10 digits'
+				minlength: 'Mobile should be at least 11 digits long',
+				maxlength: 'Mobile should be no longer than 11 digits'
 			}
 		 },
 		 errorElement: "span",
@@ -226,13 +226,13 @@ $(document).ready(function(){
 				}
 		 },
 		 submitHandler: function(form){
-			if( $('#username').hasClass('pass') && $('#email').hasClass('pass') && !($('#mobile').hasClass('fail')) && !($('#mobile').hasClass('forSearch')) ){
-				$('#register_form1_loadingimg').show().css('display','inline-block');
-				$('#register_form1_btn').attr('disabled', true);
+			if( jQuery('#username').hasClass('pass') && jQuery('#email').hasClass('pass') && !(jQuery('#mobile').hasClass('fail')) && !(jQuery('#mobile').hasClass('forSearch')) ){
+				jQuery('#register_form1_loadingimg').show().css('display','inline-block');
+				jQuery('#register_form1_btn').attr('disabled', true);
 
-			 	$.post(config.base_url + 'landingpage/signup', $(form).serializeArray(), function(data){
-					$('#register_form1_loadingimg').hide();
-					$('#register_form1_btn').attr('disabled', false);
+			 	jQuery.post(config.base_url + 'landingpage/signup', jQuery(form).serializeArray(), function(data){
+					jQuery('#register_form1_loadingimg').hide();
+					jQuery('#register_form1_btn').attr('disabled', false);
 					
 					try{
 						var serverResponse = jQuery.parseJSON(data);
@@ -244,21 +244,21 @@ $(document).ready(function(){
 					}
 					
 					if(serverResponse['result'] === 1){
-						$('#result_desc').html("Thank you for registering to Easyshop.ph!");
+						jQuery('#result_desc').html("Thank you for registering to Easyshop.ph!");
 						var title = "Registration Complete";
 
-						$('div.pass-container, .fieldstatus').hide();
-						$(form).find('input.reqfield').each(function(){
-							$(this).prop('value', '');
+						jQuery('div.pass-container, .fieldstatus').hide();
+						jQuery(form).find('input.reqfield').each(function(){
+							jQuery(this).prop('value', '');
 						});
                         
-                        $('#success_register').submit();
+                        jQuery('#success_register').submit();
 					}
 					else{
-						$('#result_desc').html(serverResponse['error']);
+						jQuery('#result_desc').html(serverResponse['error']);
 						var title= "Failed to Register";
                         
-                        $('#register_result').dialog({
+                        jQuery('#register_result').dialog({
                         width:'65%',
                         autoOpen: false,
                         title: title,
@@ -267,11 +267,11 @@ $(document).ready(function(){
                         draggable:false,
                         buttons:{
                                 OK: function(){
-                                    $(this).dialog("close");
+                                    jQuery(this).dialog("close");
                                 }
                             }
                         });
-                        $('#register_result').dialog('open');
+                        jQuery('#register_result').dialog('open');
 					}
 					
 				});
@@ -280,86 +280,86 @@ $(document).ready(function(){
 		 }
 	 });
 	 
-	 $('.field input').on('click', function(){
-		$('.ci_form_validation_error').text('');
+	 jQuery('.field input').on('click', function(){
+		jQuery('.ci_form_validation_error').text('');
 	 });
 	
 });
 
 function username_check(){
-	var username = $('#username').val();
-	var csrftoken = $("meta[name='csrf-token']").attr('content');
-    var csrfname = $("meta[name='csrf-name']").attr('content');
-	var field = $('#username');
-	$.post(config.base_url+'landingpage/username_check', {username: username, csrfname : csrftoken}, function(result){
+	var username = jQuery('#username').val();
+	var csrftoken = jQuery("meta[name='csrf-token']").attr('content');
+    var csrfname = jQuery("meta[name='csrf-name']").attr('content');
+	var field = jQuery('#username');
+	jQuery.post(config.base_url+'landingpage/username_check', {username: username, csrfname : csrftoken}, function(result){
 		if(result == 1){
-			showcheck($('#username'));
-			$('.username_availability').html('');
-			$('#usernamecheck').attr('value', $('#username').val());
+			showcheck(jQuery('#username'));
+			jQuery('.username_availability').html('');
+			jQuery('#usernamecheck').attr('value', jQuery('#username').val());
 			field.addClass('pass');
 		}
 		else{
-			showx($('#username'));
-			$('.username_availability').html('Username already exists.');
+			showx(jQuery('#username'));
+			jQuery('.username_availability').html('Username already exists.');
 			field.removeClass('pass');
 		}
 		field.removeClass('forSearch');
-		$('#username_loader').hide();
+		jQuery('#username_loader').hide();
 	});
 }
 
 function email_check(){
-	var email = $('#email').val();
-	var csrftoken = $("meta[name='csrf-token']").attr('content');
-    var csrfname = $("meta[name='csrf-name']").attr('content');
-	var field = $('#email');
-	$.post(config.base_url+'landingpage/email_check', {email: email, csrfname : csrftoken}, function(result){
+	var email = jQuery('#email').val();
+	var csrftoken = jQuery("meta[name='csrf-token']").attr('content');
+    var csrfname = jQuery("meta[name='csrf-name']").attr('content');
+	var field = jQuery('#email');
+	jQuery.post(config.base_url+'landingpage/email_check', {email: email, csrfname : csrftoken}, function(result){
 		if(result == 1){
-			showcheck($('#email'));
-			$('.email_availability').html('');
-			$('#emailcheck').attr('value', $('#email').val());
+			showcheck(jQuery('#email'));
+			jQuery('.email_availability').html('');
+			jQuery('#emailcheck').attr('value', jQuery('#email').val());
 			field.addClass('pass');
 		}
 		else{
-			showx($('#email'));
-			$('.email_availability').html('Email is already in use.');
+			showx(jQuery('#email'));
+			jQuery('.email_availability').html('Email is already in use.');
 			field.removeClass('pass');
 		}
 		field.removeClass('forSearch');
-		$('#email_loader').hide();
+		jQuery('#email_loader').hide();
 	});
 }
 
 function mobile_check(){
-	var mobile = $('#mobile').val();
-	var csrftoken = $("meta[name='csrf-token']").attr('content');
-    var csrfname = $("meta[name='csrf-name']").attr('content');
-	var field = $('#mobile');
-	$.post(config.base_url+'landingpage/mobile_check', {mobile: mobile, csrfname : csrftoken}, function(result){
+	var mobile = jQuery('#mobile').val();
+	var csrftoken = jQuery("meta[name='csrf-token']").attr('content');
+    var csrfname = jQuery("meta[name='csrf-name']").attr('content');
+	var field = jQuery('#mobile');
+	jQuery.post(config.base_url+'landingpage/mobile_check', {mobile: mobile, csrfname : csrftoken}, function(result){
 		if(result == 1){
-			showcheck($('#mobile'));
-			$('.mobile_availability').html('');
-			$('#mobilecheck').attr('value', $('#mobile').val());
+			showcheck(jQuery('#mobile'));
+			jQuery('.mobile_availability').html('');
+			jQuery('#mobilecheck').attr('value', jQuery('#mobile').val());
 			field.addClass('pass');
 			field.removeClass('fail');
 		}
 		else{
-			showx($('#mobile'));
-			$('.mobile_availability').html('Mobile is already in use.');
+			showx(jQuery('#mobile'));
+			jQuery('.mobile_availability').html('Mobile is already in use.');
 			field.removeClass('pass');
 			field.addClass('fail');
 		}
 		field.removeClass('forSearch');
-		$('#mobile_loader').hide();
+		jQuery('#mobile_loader').hide();
 	});
 }
 
 /**********************************************************************************************/
 /****************************	SUBSCRIPTION FORM	*******************************************/
 /**********************************************************************************************/
-$(document).ready(function(){
+jQuery(document).ready(function(){
 
-	$('#subscription_form').validate({
+	jQuery('#subscription_form').validate({
 		rules: {           
 			subscribe_email: {
 				required: true,
@@ -380,24 +380,24 @@ $(document).ready(function(){
 				error.appendTo(element.parent());
 		 },
 		 submitHandler: function(form){
-			$('#subscribe_btn').attr('disabled', true);
+			jQuery('#subscribe_btn').attr('disabled', true);
 
-			$.post(config.base_url + 'landingpage/subscribe', $(form).serializeArray(), function(data){
-				$('#subscribe_loadingimg').hide();
-				$('#subscribe_btn').attr('disabled', false);
+			jQuery.post(config.base_url + 'landingpage/subscribe', jQuery(form).serializeArray(), function(data){
+				jQuery('#subscribe_loadingimg').hide();
+				jQuery('#subscribe_btn').attr('disabled', false);
 				if(data == 1){
-					$('#result_desc').html("Thank you for subscribing to Easyshop.ph!");
+					jQuery('#result_desc').html("Thank you for subscribing to Easyshop.ph!");
 					var title = "Subscription Complete";
-					$(form).find('input[type="text"]').each(function(){
-						$(this).prop('value', '');
+					jQuery(form).find('input[type="text"]').each(function(){
+						jQuery(this).prop('value', '');
 					});
-                     $('#success_subscribe').submit();
+                     jQuery('#success_subscribe').submit();
 				}
 				else{
-					$('#result_desc').html("We are currently encountering a problem. Please try again later.");
+					jQuery('#result_desc').html("We are currently encountering a problem. Please try again later.");
 					var title= "Failed to Subscribe";
                     
-                    $('#register_result').dialog({
+                    jQuery('#register_result').dialog({
                     width:'65%',
                     autoOpen: false,
                     title: title,
@@ -406,11 +406,11 @@ $(document).ready(function(){
                     draggable:false,
                     buttons:{
                         OK: function(){
-                            $(this).dialog("close");
+                            jQuery(this).dialog("close");
                             }
                         }
                     });
-                    $('#register_result').dialog('open');
+                    jQuery('#register_result').dialog('open');
                         
                     
 				}
@@ -425,27 +425,27 @@ $(document).ready(function(){
 
 function showcheck(element){
 	var name = element.attr('name');
-	$('#'+name+'_check').show().css('display','inline-block');
-	$('#'+name+'_x').hide();
+	jQuery('#'+name+'_check').show().css('display','inline-block');
+	jQuery('#'+name+'_x').hide();
 }
 
 function showx(element){
 	var name = element.attr('name');
-	$('#'+name+'_check').hide();
-	$('#'+name+'_x').show().css('display','inline-block');
+	jQuery('#'+name+'_check').hide();
+	jQuery('#'+name+'_x').show().css('display','inline-block');
 }
 
 function hidecheckx(element){
 	var name = element.attr('name');
-	$('#'+name+'_check').hide();
-	$('#'+name+'_x').hide();
+	jQuery('#'+name+'_check').hide();
+	jQuery('#'+name+'_x').hide();
 }
 
 /*******************************************************************************************************/
 /******************************* Terms and Conditions Dialog box ***************************************/
 /*******************************************************************************************************/
-$(function() {
-	$( ".dialog" ).dialog({
+jQuery(function() {
+	jQuery( ".dialog" ).dialog({
 		width:"65%",
 		autoOpen: false,
 		modal: true,
@@ -453,9 +453,100 @@ $(function() {
 		draggable:false,
 	});
 
-	$( ".terms_and_conditions" ).click(function() {
-	$( ".dialog" ).dialog( "open" );
-	$(".dialog").siblings().parent('.ui-dialog').addClass('terms_container');
+	jQuery( ".terms_and_conditions" ).click(function() {
+	jQuery( ".dialog" ).dialog( "open" );
+	jQuery(".dialog").siblings().parent('.ui-dialog').addClass('terms_container');
 	});
+});
+
+
+
+jQuery(document).ready(function() {  
+    jQuery("#reg_btn").click(function() {
+           jQuery('#register_container').fadeIn(300);
+    });    
+
+    var pathname = jQuery(location).attr('href');
+    var idx = pathname.indexOf('#');
+    if(idx > -1){
+        if(pathname.substring(idx+1) == 'register'){
+            jQuery("#reg_btn").click();
+        }
+    }
+});
+
+jQuery(window).load(function () {
+    jQuery(window).scroll(function () {
+        var e;
+        return e = jQuery(window).scrollTop(), e < 50 ? jQuery("#header").removeClass("fixed_header") : jQuery("#header").addClass("fixed_header").fadeIn(300);
+    })
+}) 
+
+/**** video player dialog box ****/
+jQuery(function() {
+    jQuery( "#videoplayer" ).dialog({
+        width:"68%",
+        autoOpen: false,
+        modal: true,
+        closeOnEscape: true,
+        draggable:false,
+        show: {
+            effect: "fade",
+            duration: 600
+        },
+        hide: {
+            effect: "fade",
+            duration: 400
+        }
+    });
+
+    jQuery( ".vidplay" ).click(function() {
+    jQuery( "#videoplayer" ).dialog( "open" );
+    });
+});
+
+/****** Terms and Conditions Dialog box ********/
+jQuery(function() {
+    jQuery( ".dialog" ).dialog({
+        width:"65%",
+        autoOpen: false,
+        modal: true,
+        closeOnEscape: true,
+        draggable:false,
+        show: {
+            effect: "fade",
+            duration: 1000
+        },
+        hide: {
+            effect: "fade",
+            duration: 400
+        }
+    });
+
+    jQuery( ".terms_and_conditions" ).click(function() {
+    jQuery(".dialog" ).dialog( "open" );
+    jQuery(".dialog").siblings().parent('.ui-dialog').addClass('terms_container');
+    });
+});
+
+
+$(document).click(function (e)
+{
+    var container = jQuery("#register_container");
+    if (!container.is(e.target) // if the target of the click isn't the container...
+        && container.has(e.target).length === 0  // ... nor a descendant of the container
+        && ! jQuery(e.target).hasClass('reg_btn')
+        && ! jQuery(e.target).hasClass('txt_reg')
+        )
+    {
+        container.fadeOut(300);
+    }
+});
+
+$(document).keyup(function(e) {
+  var container = jQuery("#register_container");
+  if (e.keyCode == 27) {
+    container.fadeOut(300);
+  } 
 });
 

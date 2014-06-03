@@ -196,15 +196,16 @@ header {
   }
 
   .header .btn_register span {
-    background-color: #e6e5e5;
-    color: #494949;
+    background-color: #f18200;
+    color: #FFFFFF;
+    font-weight: bold;
     cursor: pointer;
     padding: 11px 10px;
     width: 6em;
   }
 
   .header .btn_register span:hover {
-    background-color: #cecccc;  
+    background-color: #ff4400;  
   }
 
   .nav-collapse li.shop_con {
@@ -699,3 +700,29 @@ span.twitter {
   }
 }
 
+
+.bxslider_slides{
+    font-family: 'Roboto',sans-serif;
+}
+
+
+
+.btn_login a, .btn_register a {
+    margin: 0;
+    margin: 0;
+    float: none;
+    text-align: center;
+    border-bottom: 0;
+}
+
+.txt_reg{
+    cursor: pointer;
+}
+
+  
+  #userpage{
+    overflow: hidden; 
+    text-overflow: ellipsis; 
+    max-width: 120px;
+    margin-bottom: 0px !important;
+  }
