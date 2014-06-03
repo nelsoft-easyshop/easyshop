@@ -103,7 +103,7 @@
 	   <?php 
       if(count($items) <= 0){
         ?>
-        <div style='margin-left:200px; margin-bottom: 100px;'>
+        <div style='margin-bottom: 100px;'>
          <span style='font-size:15px;'> Your search for <span style='font-weight:bold'><?php echo html_escape($string); ?></span> did not return any results. </span>
         </div>
         <?php
