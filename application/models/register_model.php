@@ -130,6 +130,7 @@ class Register_model extends CI_Model
 			return false;
 		}
 	}
+    
 	// FOR FIRST TIME REGISTRATION ONLY
 	function validate_mobile($mobile)
 	{
@@ -525,7 +526,21 @@ class Register_model extends CI_Model
 		return $result;
 	}
 	
-	function is_validmobile($mobile)
+	function is_validmobile_register($mobile)
+	{
+		if($mobile == '' ){
+			return true;
+		}
+		if(preg_match('/^(09|08)[0-9]{9}/', $mobile)){
+			return true;
+		}
+		else{
+			$this->form_validation->set_message('external_callbacks', 'Mobile number must begin with 09 or 08');
+			return false;
+		}
+	}
+    
+    function is_validmobile($mobile)
 	{
 		if($mobile == '' ){
 			return true;
@@ -534,10 +549,9 @@ class Register_model extends CI_Model
 			return true;
 		}
 		else{
-			$this->form_validation->set_message('external_callbacks', 'Mobile number must begin with 8 or 9');
+			$this->form_validation->set_message('external_callbacks', 'Mobile number must begin with 9 or 8');
 			return false;
 		}
-		
 	}
 	
 	function signupMember_landingpage($data) 
