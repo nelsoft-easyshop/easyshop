@@ -20,43 +20,75 @@ $(document).ready(function(){
     });
     
     $('#previewProduct').on('click', '.deposit_update', function(){
-        var account_name = $('#deposit_acct_name').val();
-        var bank_name = $('#bank_name').val();
-        var account_no = $('#deposit_acct_no').val();
-        var bank_list = $('#bank_list').val();
-        var billing_id = $('#billing_info_id').val();
-        var selected = $('#deposit_info [value="'+billing_id+'"]');
+    
+        var account = {
+            account_name: $('#deposit_acct_name').val(),
+            bank_name: $('#bank_name').val(),
+            account_no: $('#deposit_acct_no').val(),
+            bank_list:  $('#bank_list').val(),
+            billing_id: $('#billing_info_id').val()
+        };
+        
         var valid = true;
-        var csrftoken = $("meta[name='csrf-token']").attr('content');
-        var csrfname = $("meta[name='csrf-name']").attr('content');
-        if($.trim(account_name) === ''){
+
+        if($.trim(account.account_name) === ''){
             validateRedTextBox('#deposit_acct_name');
             valid = false;
         }
-        if($.trim(account_no) === ''){
+        if($.trim(account.account_no) === ''){
             validateRedTextBox('#deposit_acct_no');
             valid = false;
         }
-        if(parseInt(bank_list,10) === 0){
+        if(parseInt(account.bank_list,10) === 0){
             validateRedTextBox('#bank_list');
             valid = false;
         }
         if(!valid){
             return false;
         }
-
+        
+        var $prod_div = $('.acct_prod[data-bid='+account.billing_id+']');
+        if(typeof $prod_div[0] !== 'undefined'){
+            $prod_div.dialog({
+                modal:true,
+                resizable:false,
+                draggable:false,
+                width:650,
+                height: 400,
+                title: 'Confirm Changes',
+                buttons:{
+                    OK:function(){
+                        $(this).dialog('close');
+                        update_bank_account(account);
+                    },
+                    Cancel:function(){
+                        $(this).dialog('close');
+                    },
+                }
+            });
+        }
+        else{
+            update_bank_account(account);
+        }
+    });
+    
+    function update_bank_account(account){
+            
+        var selected = $('#deposit_info [value="'+account.billing_id+'"]');
+        var csrftoken = $("meta[name='csrf-token']").attr('content');
+        var csrfname = $("meta[name='csrf-name']").attr('content');
         jQuery.ajax({
             type: "POST",
             url: config.base_url + 'memberpage/billing_info_u', 
-            data: "bi_id="+billing_id+"&bi_acct_name="+account_name+"&bi_acct_no="+account_no+"&bi_bank="+bank_list+"&"+csrfname+"="+csrftoken, 
+            data: "bi_id="+account.billing_id+bi_payment_type+"=Bank&bi_acct_name="+account.account_name+"&bi_acct_no="+account.account_no+"&bi_bank="+account.bank_list+"&"+csrfname+"="+csrftoken, 
             success: function(response) {
                 var obj = JSON.parse(response);
                 if((parseInt(obj.e,10) == 1) && (obj.d=='success')){
-                    selected.data('bankid',bank_list);
-                    selected.data('acctname',account_name);
-                    selected.data('acctno',account_no);
-                    selected.data('bankname',bank_name);
-                    selected.text('Bank: '+bank_name+' - '+ account_name);
+                    selected.data('bankid',account.bank_list);
+                    selected.data('acctname',account.account_name);
+                    selected.data('acctno',account.account_no);
+                    selected.data('bankname',account.bank_name);
+                    selected.text('Bank: '+account.bank_name+' - '+ account.account_name);
                     
                     $('#deposit_acct_name').attr('readonly', true);
                     $('#deposit_acct_no').attr('readonly', true);
@@ -73,7 +105,7 @@ $(document).ready(function(){
                 }
             }
         });
-    });
+    }
     
     $('#previewProduct').on('click', '.deposit_save', function(){
         var account_name = $('#deposit_acct_name').val();

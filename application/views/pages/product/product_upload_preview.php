@@ -28,7 +28,26 @@
         
     <br/>
 <?php endif; ?>
-
+    
+    <?php foreach($billing_info as $idx=>$x): ?>
+        <?php if(count($x['products'])): ?>
+            <div style='display:none; height: 600px; overflow-y:scroll;' class='acct_prod' data-bid='<?php echo $idx; ?>'>
+                This account is currently in use for <strong><?php echo count($x['products']) ?></strong> products. Are you sure about this action?
+                <br/><br/>
+                <span style='font-size:10px;'>
+                * All purchases made for the items listed below will still be linked to the original account. We will call you to confirm if you have made any changes within the
+                current pay-out period before making a deposit. Should you wish to change the deposit account for any of your items, you can do it by editing your item listing.
+                </span>
+                
+                <br/><br/>
+                <?php foreach($x['products'] as $y): ?>
+                    <div style='width:auto; height:20px;'><a href='<?=base_url()?>item/<?=$y['p_slug']?>'><span style='font-weight:bold'><?php echo html_escape($y['p_name']);?> - <?php echo date('m/d/Y', strtotime($y['p_date'])); ?></span> | <?php echo es_string_limit(html_escape($y['p_briefdesc']), 60);?></a></div>
+                <?php endforeach; ?>
+            </div>
+        <?php endif; ?>       
+     <?php endforeach; ?>
+    
+    
     <div  style="position:relative; height:400px">
         <div class="paid_section_container">
             <h3 class="orange">How am I going to be paid</h3> 
@@ -51,7 +70,6 @@
                     <?php else: ?>
                         <option value="<?php echo $x['id_bank'];?>" ><?php echo  html_escape($x['bank_name']); ?></option>
                     <?php endif; ?>
-                   
                 <?php endforeach; ?>
             </select>
             <input type="hidden" id="bank_name" value="<?php echo  html_escape(isset($first_accnt['bank_name'])?$first_accnt['bank_name']:''); ?>"/>
