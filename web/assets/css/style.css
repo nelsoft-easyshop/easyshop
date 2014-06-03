@@ -3938,7 +3938,7 @@ div.post_item_content_left {
 .vendor-avatar{
 	text-align: center;
 	height: 150px;
-	width: 157px;
+	width: 150px;
     border: #DDDCDC 1px solid;
     background-color: white;
 }
@@ -3947,14 +3947,14 @@ div.post_item_content_left {
 	vertical-align: middle;
 	display: table-cell;
 	height: 150px;
-	width: 157px;
+	width: 150px;
 }
 
 .vendor-avatar img{
 	height: auto;
 	width: auto;
 	max-height: 150px;
-	max-width: 157px;
+	max-width: 150px;
 }
 
 .vendor-profile{
