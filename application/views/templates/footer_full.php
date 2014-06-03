@@ -48,7 +48,7 @@
       </div>
     </div>
     
-    <?php if ('development' === ENVIRONMENT && false): ?>
+    <?php if ('development' === ENVIRONMENT): ?>
     
         <script src="https://autobahn.s3.amazonaws.com/js/autobahn.min.js"></script>
         <script>
@@ -56,6 +56,7 @@
         </script>
         
         <script src="/assets/js/src/lib/websocket/client.js"></script>
+        <script src="/assets/js/src/lib/eventdispatcher.js"></script>
         <script src="/assets/js/src/main.js"></script>
         
         <input id="user-session" type="hidden" value="<?php echo $this->session->userdata('session_id');?>">
