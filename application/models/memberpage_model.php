@@ -765,16 +765,33 @@ class memberpage_model extends CI_Model
 			ebki.`bank_name`,
 			ebi.`bank_account_name`,
 			ebi.`bank_account_number`,
-			ebi.`is_default`
+			ebi.`is_default`,
+			ep.`slug`, ep.`name`, ep.`brief`, ep.`createddate`
 		FROM `es_billing_info` ebi 
 		LEFT JOIN `es_bank_info` ebki ON ebi.`bank_id` = ebki.`id_bank` 
-		WHERE ebi.`member_id`=:member_id AND ebi.`is_delete` = 0 ORDER BY ebi.`is_default` DESC";		
+		LEFT JOIN `es_product` ep ON ep.billing_info_id = ebi.`id_billing_info` 
+		WHERE ebi.`member_id`=:member_id AND ebi.`is_delete` = 0 ORDER BY ebi.`is_default` DESC, ep.createddate DESC";
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':member_id',$data);
 		$sth->execute();
 		$rows= $sth->fetchAll(PDO::FETCH_ASSOC);
-	
-		return $rows;	
+        $response = array();
+        foreach($rows as $row){
+            if(!isset($response[$row['id_billing_info']])){
+                $response[$row['id_billing_info']]['id_billing_info'] = $row['id_billing_info'];
+                $response[$row['id_billing_info']]['payment_type'] = $row['payment_type'];
+                $response[$row['id_billing_info']]['user_account'] = $row['user_account'];
+                $response[$row['id_billing_info']]['bank_id'] = $row['bank_id'];
+                $response[$row['id_billing_info']]['bank_name'] = $row['bank_name'];
+                $response[$row['id_billing_info']]['bank_account_name'] = $row['bank_account_name'];
+                $response[$row['id_billing_info']]['bank_account_number'] = $row['bank_account_number'];
+                $response[$row['id_billing_info']]['is_default'] = $row['is_default'];
+                $response[$row['id_billing_info']]['products'] = array();
+            }else{
+                array_push($response[$row['id_billing_info']]['products'], array('p_slug' => $row['slug'], 'p_name' => $row['name'], 'p_briefdesc' => $row['brief'], 'p_date' => $row['createddate']));
+            }
+        }
+		return $response;	
 	}		
     
 
@@ -800,7 +817,7 @@ class memberpage_model extends CI_Model
 		return $row;							
 	}
 	
-    function checkBankAccount($data){
+    function isBankAccountUnique($data){
 		$query = "SELECT * FROM `es_billing_info` WHERE `member_id` = :member_id AND `bank_account_number` = :bank_account_number AND `is_delete` = 0";
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':member_id',$data['member_id']);
@@ -813,8 +830,16 @@ class memberpage_model extends CI_Model
             $response = true;
         } 
         return $response;
-
 	}	
+    
+    function getProductsByBillingInfo($billing_id){
+        $query = "SELECT id_product, name, brief FROM `es_product` WHERE `billing_info_id` = :billing_id AND `is_delete` = 0 AND `is_draft` = 0";
+        $sth = $this->db->conn_id->prepare($query);
+		$sth->bindParam(':billing_id',$billing_id);
+		$sth->execute();
+        $row = $sth->fetchAll(PDO::FETCH_ASSOC);
+        return $row;
+    }
     
 }
 
