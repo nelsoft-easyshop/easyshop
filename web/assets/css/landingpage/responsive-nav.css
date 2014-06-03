@@ -114,7 +114,7 @@ img.img_main_product {
 
     nav {
       background-color: #FFFFFF;
-      margin-top: 62px;
+      margin-top: 64px;
     }
 
     .nav-collapse ul {
@@ -226,6 +226,9 @@ img.img_main_product {
   .product_content div:first-child h1 {
     font-size: 3.8em;
   }
+    .slide-5 .product_content div:first-child h1:first-child {
+    font-size: 3.6em;
+}
 
   .product_content h1:nth-child(3):before {
     border-bottom: 2px solid #FF0000;
@@ -283,6 +286,10 @@ img.img_main_product {
     width: 21em;
   }
   /**** product content *****/
+  .product_content {
+    padding: 0 5px; 
+  }
+
   .product_content div:first-child h1 {
     font-size: 2.5em;
   }
@@ -360,6 +367,27 @@ img.img_main_product {
   .slide-6 .product_content div:first-child h1:first-child {
     font-size: 1.8em;
   }
+
+  /**** register section ***/
+  .reg2_username,
+  .reg2_password,
+  .reg2_confirmpassword,
+  .reg2_email,
+  .mobile,
+  .reg2_tc,
+  .reg2_btn_submit {
+  display: block;
+  width: 97%;
+  }
+
+  .reg2_username input {
+   max-width: 90%;
+   width: 100%;
+  }
+
+  .reg2_tc .terms_con {
+    width: auto;
+  }
 }
 
 @media only screen and (max-width : 320px) {
@@ -414,8 +442,8 @@ img.img_main_product {
 }
 
 @media only screen and (max-width : 644px) {
-  .footer_payment{
-    display:none;
+/*  .footer_payment{
+    display:none;*/
   }
 
   
