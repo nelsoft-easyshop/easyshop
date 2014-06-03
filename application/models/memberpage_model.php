@@ -684,6 +684,7 @@ class memberpage_model extends CI_Model
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':member_id',$data['member_id']);
 		$sth->execute();
+
         $is_default = ($sth->rowCount() == 0)?'1':'0';
 
         $query = $this->sqlmap->getFilenameID('users','addBillingAccnt');
@@ -703,14 +704,14 @@ class memberpage_model extends CI_Model
 	}
 	
 	function billing_info_update($data){
-		$query = $this->sqlmap->getFilenameID('users','updateBillingAccnt');
+    
+        $query = "UPDATE `es_billing_info` SET `is_delete` = 1, `is_default` = 0, `datemodified` = NOW() WHERE `member_id`=:member_id AND `id_billing_info`=:ibi";
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':member_id', $data['member_id']);		
-		$sth->bindParam(':bank_id', $data['bank_id']);
-		$sth->bindParam(':bank_account_name', $data['bank_account_name']);
-		$sth->bindParam(':bank_account_number', $data['bank_account_number']);
 		$sth->bindParam(':ibi', $data['ibi']);
 		$sth->execute();
+
+        return $this->billing_info($data);
 	}
 	
 	function billing_info_default($data){
@@ -735,7 +736,7 @@ class memberpage_model extends CI_Model
 		$sth->bindParam(':member_id', $data['member_id']);		
 		$sth->bindParam(':ibi', $data['ibi']);
 		$sth->execute();
-		
+        
 		// dito e chcheck ko kung yung na delete ko ay hindi default
 		$query = "SELECT ebi.`id_billing_info` FROM `es_billing_info` ebi 
 		WHERE ebi.`member_id`=:member_id AND `id_billing_info`=:ibi AND ebi.`is_default` = 1 LIMIT 1 ";		
@@ -757,7 +758,6 @@ class memberpage_model extends CI_Model
 				foreach($arr as $value){
 					$ibi = $value['id_billing_info'];
 				}
-
 				$query = "UPDATE `es_billing_info` SET `is_default` = 1, `datemodified` = NOW() WHERE `member_id`=:member_id AND `id_billing_info`=:ibi";
 				$sth = $this->db->conn_id->prepare($query);
 				$sth->bindParam(':member_id',$data['member_id']);
