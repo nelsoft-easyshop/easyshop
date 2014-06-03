@@ -50,10 +50,8 @@
     
     <?php if ('development' === ENVIRONMENT && false): ?>
     
-        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.0-beta.10/angular.min.js"></script>
         <script src="https://autobahn.s3.amazonaws.com/js/autobahn.min.js"></script>
         <script>
-            window.angular || document.write('<script src="/assests/js/src/vendor/angular.min.js">\x3C/script>');
             window.ab || document.write('<script src="/assests/js/src/vendor/autobahn.min.js">\x3C/script>');
         </script>
         
