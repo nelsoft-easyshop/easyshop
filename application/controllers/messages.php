@@ -48,7 +48,7 @@ class messages extends MY_Controller
         }else{
             $msg = trim($this->input->post("msg"));
             $result = $this->messages_model->send_message($session_data['member_id'],$q_result,$msg);
-            if($result = 1){
+            if($result === 1){
                 $result = $this->messages_model->get_all_messages($this->user_ID,"kurt");
 
             }
