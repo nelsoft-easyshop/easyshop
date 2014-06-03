@@ -34,7 +34,6 @@ class Memberpage extends MY_Controller
 		if(($this->input->post('personal_profile_main'))&&($this->form_validation->run('personal_profile_main')))
 		{
 			$uid = $this->session->userdata('member_id');
-
 			$checkdata = array(
 				'member_id' => $uid,
 				'contactno' => $this->input->post('mobile'),
@@ -74,7 +73,6 @@ class Memberpage extends MY_Controller
 		else{
 			echo 0;
 		}
-
 	}
 
 	function edit_address()
@@ -99,8 +97,6 @@ class Memberpage extends MY_Controller
 				'map_lng' => $this->input->post('map_lng')
 			);
 
-
-			
 			if( ( ($temp['stateregion_orig'] != $postdata['stateregion']) || ($temp['city_orig'] != $postdata['city']) || ($temp['address_orig'] != $postdata['address']) ) 
 				&& ($temp['map_lat'] == $postdata['lat'] && $temp['map_lng'] == $postdata['lng']) ) {
 				$postdata['lat'] = 0;
@@ -635,7 +631,7 @@ class Memberpage extends MY_Controller
 				'bank_account_number' => $bi_acct_no
 			);
 			
-			if($this->memberpage_model->checkBankAccount($data)){
+			if($this->memberpage_model->isBankAccountUnique($data)){
 				$result = $this->memberpage_model->billing_info($data);
                 echo '{"e":"1","d":"success","id":'.$result.'}';
 			}else{
@@ -663,7 +659,7 @@ class Memberpage extends MY_Controller
 					'bank_account_number' => $bi_acct_no,
 					'is_default' => $bi_def				
 			);
-			if($this->memberpage_model->checkBankAccount($data)){
+			if($this->memberpage_model->isBankAccountUnique($data)){
                 $this->memberpage_model->billing_info_update($data);
                 $return = '{"e":"1","d":"success"}';
             }

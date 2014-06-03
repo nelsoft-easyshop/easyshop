@@ -285,7 +285,7 @@ $config = array(
 				  array(
 						'field' => 'mobile',
 						'label' => 'Mobile',
-						'rules' => 'trim|numeric|min_length[10]|max_length[10]|callback_external_callbacks[register_model,is_validmobile]|callback_external_callbacks[register_model,validate_mobile]'
+						'rules' => 'trim|numeric|min_length[11]|max_length[11]|callback_external_callbacks[register_model,is_validmobile_register]|callback_external_callbacks[register_model,validate_mobile]'
 					),
 				),
 			'subscription_form' => array(

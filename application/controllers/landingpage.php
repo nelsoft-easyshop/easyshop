@@ -54,7 +54,7 @@ class Landingpage extends MY_Controller
 			$data['username'] = $this->input->post('username');
 			$data['password'] = $this->input->post('password');
 			$data['email'] = $this->input->post('email');
-			$data['mobile'] = $this->input->post('mobile');
+            $data['mobile'] = substr($this->input->post('mobile'),1);
 			
 			$registrationFlag = false;
 			
