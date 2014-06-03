@@ -225,7 +225,7 @@ $(document).ready(function(){
 							}
 						});
 					}
-					else if(data == 0){
+					else if(data == 0){ 
 						alert('An error was encountered in submitting your form. Please try again later.');
 						//window.location.reload(true);
 					}
@@ -2243,32 +2243,34 @@ $(document).ready(function(){
 	$(":button[name^='del_bictr']").click(function(){
 	
 		var getbictr = $(this).attr('name');
-		var bictr = getbictr.substring(4,30);
+		var bictr = getbictr.substring(4);
 		var bid = 'bi_id_' + bictr;
-		var del = confirm("Delete bank info?");
-		
-		if(del){
-						
-			var csrftoken = $("meta[name='csrf-token']").attr('content');
-            var csrfname = $("meta[name='csrf-name']").attr('content');
-			var bidval = $("#"+bid).val();				
-			var currentRequest = null;
-			var redurl =  config.base_url+'memberpage/billing_info_d';
-			currentRequest = jQuery.ajax({
-				type: "POST",
-				url: redurl, 
-				data: {bi_id:bidval, csrfname:csrftoken},
-				success: function(data){
-					//$("#bi_div_" + bictr).remove();
-					//$("#ubi_" + bictr).remove();
-					window.location.href = config.base_url+'me?me=pmnt';
-					//return false;
-				}
-			});		
-		}
-	
-	});
-	
+        
+        var $prod_div = $('#acct_prod_'+bictr);
+        if(typeof $prod_div[0] !== 'undefined'){
+            $prod_div.dialog({
+                modal:true,
+                resizable:false,
+                draggable:false,
+                width:650,
+                height: 400,
+                title: 'Confirm Delete | Easyshop.ph',
+                buttons:{
+                    OK:function(){
+                        $(this).dialog('close');
+                        delete_bank_account(bictr, false);
+                    },
+                    Cancel:function(){
+                        $(this).dialog('close');
+                    },
+                }
+            });
+        }
+        else{
+            delete_bank_account(bictr);
+        }
+    });
+
 	// EDIT BUTTON
 	$(":button[name^='bictr']").click(function(){
 		
@@ -2341,8 +2343,65 @@ $(document).ready(function(){
 	
 	// Save Button
 	$(":button[name^='sv_bictr']").click(function(){
-		
-		var banRule = {
+        var getbictr = $(this).attr('name');
+		var bictr = getbictr.substring(3);
+        var $prod_div = $('#acct_prod_'+bictr);
+        if(typeof $prod_div[0] !== 'undefined'){
+            $prod_div.dialog({
+                modal:true,
+                resizable:false,
+                draggable:false,
+                width:650,
+                height: 400,
+                title: 'Confirm Changes | Easyshop.ph',
+                buttons:{
+                    OK:function(){
+                        $(this).dialog('close');
+                        update_bank_account(bictr, false);
+                    },
+                    Cancel:function(){
+                        $(this).dialog('close');
+                    },
+                }
+            });
+        }
+        else{
+            update_bank_account(bictr);
+        }
+    });
+    
+    
+    
+    function delete_bank_account(bictr,xconfirm){
+        var xconfirm = (typeof xconfirm !== 'undefined') ? xconfirm : true;
+        if(xconfirm){
+            var del = confirm("Delete bank info?");
+        }else{
+            var del = true;
+        }
+    
+		if(del){
+			var csrftoken = $("meta[name='csrf-token']").attr('content');
+            var csrfname = $("meta[name='csrf-name']").attr('content');
+			var bidval = $("#"+bid).val();				
+			var currentRequest = null;
+			var redurl =  config.base_url+'memberpage/billing_info_d';
+			currentRequest = jQuery.ajax({
+				type: "POST",
+				url: redurl, 
+				data: {bi_id:bidval, csrfname:csrftoken},
+				success: function(data){
+					window.location.href = config.base_url+'me?me=pmnt';
+				}
+			});		
+		}
+    }
+
+    
+    
+    function update_bank_account(bictr, xconfirm){
+        var xconfirm = (typeof xconfirm !== 'undefined') ? xconfirm : true;
+        var banRule = {
 			required: true,
 			messages: {
 				required: "* Account Name Required"
@@ -2350,11 +2409,9 @@ $(document).ready(function(){
 		}
 
 		var barRule = {
-//			required: true, minlength: 12, maxlength: 18, 
 			required: true,  
 			messages: {
 				required: "* Account Number Required",
-//				minlength: jQuery.format("At least {0} characters are necessary")
 			}
 		}
 		
@@ -2362,91 +2419,90 @@ $(document).ready(function(){
 			required: true,
 			messages: {
 				required: "* Bank Required"
-			}
-		}			
-		
-		var getbictr = $(this).attr('name');
-		var bictr = getbictr.substring(3,99);
-		
-		var ban = 'bi_ban_' + bictr;
+            }
+        }
+        var ban = 'bi_ban_' + bictr;
 		var bar = 'bi_bar_' + bictr;
 		var bn = 'bi_bn_' + bictr;
 		var bns = 'bi_bns_' + bictr;
 		var bid = 'bi_id_' + bictr;
 		var bch = 'bi_chk_' + bictr;
-		var updt = confirm("Update bank info?");
+ 
+        if(xconfirm){
+            var updt = confirm("Update bank info?");
+        }else{
+            var updt = true;
+        }
 		
 		if(updt){
-			 $("#ubi_"+bictr).validate({
-				errorElement: "span",
-				errorPlacement: function(error, element){
-						error.addClass('red');
-						error.appendTo(element.parent());
-				}		
-			 });
-			
-			$("[name='bi_ban_"+bictr+"']").rules("add", banRule);
-			$("[name='bi_bar_"+bictr+"']").rules("add", barRule);
-			$("[name='bi_bn_"+bictr+"']").rules("add", bnRule);
-			
-			var csrftoken = $("meta[name='csrf-token']").attr('content');
+            $("#ubi_"+bictr).validate({
+                errorElement: "span",
+                errorPlacement: function(error, element){
+                        error.addClass('red');
+                        error.appendTo(element.parent());
+                }		
+            });
+
+            $("[name='bi_ban_"+bictr+"']").rules("add", banRule);
+            $("[name='bi_bar_"+bictr+"']").rules("add", barRule);
+            $("[name='bi_bn_"+bictr+"']").rules("add", bnRule);
+
+            var csrftoken = $("meta[name='csrf-token']").attr('content');
             var csrfname = $("meta[name='csrf-name']").attr('content');
-			var banval = $("#"+ban).val();
-			var barval = $("#"+bar).val();
-			var bnval = $("#"+bns).val();
-			var bntit = $("#"+bns).find("option:selected").attr("title");
-			var bidval = $("#"+bid).val();
-			var bchval = $("#"+bch).val();			
-			var currentRequest = null;
-			
-			var redurl = config.base_url+'memberpage/billing_info_u';
-			if($("#ubi_"+bictr).valid()){	
-				currentRequest = jQuery.ajax({
-					type: "POST",
-					url: redurl, 
-					data: {bi_acct_name:banval, bi_acct_no:barval, bi_bank:bnval, bi_id:bidval, bi_def:bchval, csrfname:csrftoken},
-					success: function(data){
-						var obj = JSON.parse(data);
-						if((parseInt(obj.e,10) == 1) && (obj.d=='success')){
-							$(":checkbox[name^='bi_chk_bictr']").filter(function(){
-								var hid = $(this).attr('id');
-								if($(this).prop("checked") == true){
-									$("#h"+hid).val("checked");
-								}else{
-									$("#h"+hid).val("");
-								}
-							});							
-							$("#bi_check_"+bictr).show().delay(1600).fadeOut(600);
-							$("#h"+ban).val($("#"+ban).val());
-							$("#h"+bar).val($("#"+bar).val());
-							$("#h"+bn).val(bntit);
-							$("#"+bn).val(bntit);							
-							
-							$("#"+ban).prop("disabled", true).addClass("bi_input");;
-							$("#"+bar).prop("disabled", true).addClass("bi_input");;
-							$("#"+bn).prop("disabled", true).addClass("bi_input");;
-							$("#"+bch).prop("disabled", true).addClass("bi_input");;			
-				
-							$("#sv_"+bictr+", #cn_"+bictr+", #bi_bns_"+bictr).hide();		
-							$("#del_"+bictr+", #"+bictr+", #bi_bn_"+bictr).show();
-							$(":button[name^='bictr']").prop("disabled", false);
-							$(":button[name^='del_bictr']").prop("disabled", false);							
-							return false;
-						}else if((parseInt(obj.e,10) == 0) && (obj.d=='duplicate')){
-							$("#bi_err_"+bictr).show().delay(2000).fadeOut(800);
-						}else{
+            var banval = $("#"+ban).val();
+            var barval = $("#"+bar).val();
+            var bnval = $("#"+bns).val();
+            var bntit = $("#"+bns).find("option:selected").attr("title");
+            var bidval = $("#"+bid).val();
+            var bchval = $("#"+bch).val();		
+            
+            var redurl = config.base_url+'memberpage/billing_info_u';
+            if($("#ubi_"+bictr).valid()){	
+                currentRequest = jQuery.ajax({
+                    type: "POST",
+                    url: redurl, 
+                    data: {bi_acct_name:banval, bi_acct_no:barval, bi_bank:bnval, bi_id:bidval, bi_def:bchval, csrfname:csrftoken},
+                    success: function(data){
+                        var obj = JSON.parse(data);
+                        if((parseInt(obj.e,10) == 1) && (obj.d=='success')){
+                            $(":checkbox[name^='bi_chk_bictr']").filter(function(){
+                                var hid = $(this).attr('id');
+                                if($(this).prop("checked") == true){
+                                    $("#h"+hid).val("checked");
+                                }else{
+                                    $("#h"+hid).val("");
+                                }
+                            });							
+                            $("#bi_check_"+bictr).show().delay(1600).fadeOut(600);
+                            $("#h"+ban).val($("#"+ban).val());
+                            $("#h"+bar).val($("#"+bar).val());
+                            $("#h"+bn).val(bntit);
+                            $("#"+bn).val(bntit);							
+                            
+                            $("#"+ban).prop("disabled", true).addClass("bi_input");;
+                            $("#"+bar).prop("disabled", true).addClass("bi_input");;
+                            $("#"+bn).prop("disabled", true).addClass("bi_input");;
+                            $("#"+bch).prop("disabled", true).addClass("bi_input");;			
+                
+                            $("#sv_"+bictr+", #cn_"+bictr+", #bi_bns_"+bictr).hide();		
+                            $("#del_"+bictr+", #"+bictr+", #bi_bn_"+bictr).show();
+                            $(":button[name^='bictr']").prop("disabled", false);
+                            $(":button[name^='del_bictr']").prop("disabled", false);							
+                            return false;
+                        }else if((parseInt(obj.e,10) == 0) && (obj.d=='duplicate')){
+                            $("#bi_err_"+bictr).show().delay(2000).fadeOut(800);
+                        }else{
                             alert('Something went wrong. Please try again later.');
                         }
-					}
-				});		
-			}	
+                    }
+                });		
+            }
 		}else{
 			return false;
 		}
-	});
+	}
 	
-	
-	/////// END /////////////////////////////////////////////////////////////
+
 
 });
 
