@@ -289,6 +289,21 @@ class Payment extends MY_Controller{
             }
         
     }
+
+    function getLocation()
+    {
+        $id = $this->input->post('sid');
+        $itemId = $this->input->post('iid');
+        $itemName = $this->input->post('name');
+        $data = array( 
+            'shipment_information' => $this->product_model->getShipmentInformation($id),
+            'shiploc' => $this->product_model->getLocation(),
+            'item_id' => $itemId,
+            'item_name' => $itemName
+        );
+        $data = json_encode($this->load->view('pages/payment/payment_review_popout',$data,TRUE));  
+        echo $data;
+    }
  
 
 
@@ -631,8 +646,6 @@ class Payment extends MY_Controller{
         
     }
 
- 
-
     function dragonPayReturn(){
      
         if(!$this->session->userdata('dragonpayticket')){
@@ -733,7 +746,6 @@ class Payment extends MY_Controller{
   
     }
 
-
     function removeItemFromCart(){
             $carts = $this->session->all_userdata();
             if(isset($carts['choosen_items'])){
@@ -755,7 +767,6 @@ class Payment extends MY_Controller{
       
     }
  
-	
 	/*
 	 *	Function called upon purchasing an item. Sends notification to both buyer and seller
 	 *
@@ -864,6 +875,7 @@ class Payment extends MY_Controller{
 
         return $analytics;
 	}
+
     function processData($itemList,$city,$region,$majorIsland)
     {
         $ItemTotalPrice = 0;

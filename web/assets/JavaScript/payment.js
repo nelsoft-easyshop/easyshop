@@ -3,6 +3,7 @@ $(document).ready(function(){
     $('.paypal_loader').hide();
     $('.div_change_addree').hide();
     $('.paypal_button').show(); 
+    $('.div_view_avail_location').hide();
     
 
     function cityFilter(stateregionselect,cityselect){
@@ -242,6 +243,40 @@ $(document).ready(function(){
     });
 
 // -- END OF CHANGE ADDRESS SECTION -- // 
-    
+
+// -- START OF VIEW ITEM AVAILABILITY LOCATION -- //
+
+
+ 
+    $(document).on('click','.view_location_item',function () {
+
+        $('.div_view_avail_location').modal({
+            escClose: false,
+            containerCss:{
+                maxWidth: 900,
+                minWidth: 605,
+                maxHeight: 600,
+            }
+        }); 
+        var csrftoken = $("meta[name='csrf-token']").attr('content');
+        var csrfname = $("meta[name='csrf-name']").attr('content');
+        var slug = $(this).data('slug');
+        var iid = $(this).data('iid');
+        var pname = $(this).data('name');
+        var action = config.base_url + "payment/getLocation"; 
+            $.ajax({
+                type: "POST",
+                url:  action, 
+                dataType: "json",
+                data: csrfname+"="+csrftoken+"&sid="+slug+"&iid="+iid+"&name="+pname, 
+                success: function(d) {
+                    $('.div_view_avail_location').empty();
+                    $('.div_view_avail_location').html(d);
+                }
+            });
+    });
+
+
+// -- END OF VIEW ITEM AVAILABILITY LOCATION -- //
 
 });

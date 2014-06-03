@@ -7,9 +7,7 @@ session_start();
 $_SESSION['start'] = "0";
 ?>
 
-
 <div class="clear"></div>
-
 <section class="top_margin">
     <div class="wrapper">
         <div class="prod_categories">
@@ -22,29 +20,28 @@ $_SESSION['start'] = "0";
                     <?php foreach ($main_categories as $category): ?>
                     <li class = <?php echo (($category['id_cat'] === $breadcrumbs[0]['id_cat']) ? "active" : ""); ?>>
                         <a href="<?= base_url() ?>category/<?php echo $category['slug']?>">
-                            <?php echo html_escape($category['name']); ?>
+                        <?php echo html_escape($category['name']); ?>
                         </a>
                     </li>
+                    <?php endforeach; ?>
+                </ul>
+                <span class="span_bg prod_cat_drop"></span>
+            </div>
+        </div>
+        <div class="clear"></div>
+        <div class="bread_crumbs">
+            <ul>
+                <li class=""><a href="<?= base_url() ?>home">Home</a></li>
+                <?php foreach ($breadcrumbs as $crumbs): ?>
+                <li>
+                    <a href="<?= base_url() ?>category/<?php echo $crumbs['slug'] ?>">
+                        <?php echo html_escape($crumbs['name']); ?>
+                    </a>
+                </li> 
                 <?php endforeach; ?>
-            </ul>
-            <span class="span_bg prod_cat_drop"></span>
+            </ul> 
         </div>
     </div>
-    <div class="clear"></div>
-    <div class="bread_crumbs">
-        <ul>
-            <li class=""><a href="<?= base_url() ?>home">Home</a></li>
-            <?php foreach ($breadcrumbs as $crumbs): ?>
-            <li>
-                <a href="<?= base_url() ?>category/<?php echo $crumbs['slug'] ?>">
-                    <?php echo html_escape($crumbs['name']); ?>
-                </a>
-            </li> 
-        <?php endforeach; ?>
-    </ul> 
-</div>
-
-</div>
 </section>    
 
 <div class="wrapper" id="main_search_container">
@@ -123,147 +120,103 @@ $_SESSION['start'] = "0";
     </div>
 
     <div class="right_product">
-        <?php if(count($subcategories) !== 0):?>
-        <div class="filters">           
-          <h2>Categories:</h2>    
-          <div class="jcarousel category_carousel cc2_wrapper">
-            <div class="cc2">
-                <?PHP foreach ($subcategories as $rows): ?>
-                <div class="">
-                    <a class="cc2_title" href="<?=base_url()?>category/<?php echo $rows['slug'];?>">
-                        <span><?php echo html_escape($rows['name']);?></span></a>
-                        <?PHP if(count($rows['popular'])>0): ?>
-                        <span class="cat_carousel_img_con"><span class="cat_carousel_img"><img src="<?= base_url().$rows['popular'][0]['path'].'categoryview/'.$rows['popular'][0]['file']; ?>"></span></span><br />
-                        <div class="cc2_prod_name"><a href="<?PHP echo base_url()."item/".$rows['popular'][0]['slug']; ?>" title="<?PHP echo $rows['popular'][0]['product']; ?>"><span><?PHP echo html_escape($rows['popular'][0]['product']); ?></span></a></div>
-                        <span class="recommended_product_price">PHP <?php echo number_format($rows['popular'][0]['price'],2,'.',',');?></span>
-                        <?PHP endif; ?>
-                    </div>
-                    <?PHP endforeach;?>
-                </div>  
-            </div>
-            <!-- Controls -->
-            <a href="#" class="jcarousel-control-prev inactive category_carousel2_prev">&lsaquo;</a>
-            <a href="#" class="jcarousel-control-next inactive category_carousel2_next">&rsaquo;</a>            
-        </div>
-    <?php endif; ?>        
-    <div class="clear"></div>
-    <p class="search_result"><!-- Showing 1 - 48 of 13,152 Results --></p>
-
-    Sort by: 
-    <select data-url="<?php echo site_url(uri_string() . '?' . $_SERVER['QUERY_STRING']).'&sop=';  ?>" id="sort_order"> 
-        <?php 
-        if(isset($_GET['sop'])){
-            if($_GET['sop'] == "hot"){
-                ?>    
-                <option value="hot">Hot</option>
-                <option value="bestmatch">Best Match</option>
-                <option value="new">New</option>
-                <option value="popular">Popular</option>
-                <?php
-            }
-            elseif($_GET['sop'] == "new"){
-                ?>
-                <option value="new">New</option>   
-                <option value="bestmatch">Best Match</option>
-                <option value="hot">Hot</option>
-                <option value="popular">Popular</option>
-                <?php
-            }
-            elseif ($_GET['sop'] == "popular") { ?>    
-            <option value="popular">Popular</option>
-            <option value="bestmatch">Best Match</option>
-            <option value="hot">Hot</option>
-            <option value="new">New</option>
-            <?php
-        }
-        else{ ?>
-        <option value="bestmatch">Best Match</option>
-        <option value="hot">Hot</option>
-        <option value="new">New</option>
-        <option value="popular">Popular</option>
-        <?php
-    }
-}else{
-    ?>
-    <option value="bestmatch">Best Match</option>
-    <option value="hot">Hot</option>
-    <option value="new">New</option>
-    <option value="popular">Popular</option>
-    <?php   } ?>
-</select>
-
-<?php
-$typeOfViewActive = '<div id="list" class="list "></div>
-<div id="grid" class="grid grid-active"></div>';
-if(isset($_COOKIE['view']))
-{
-    $cookieView = $_COOKIE['view'];
-    if($cookieView == "list"){
-        $typeOfViewActive = '<div id="list" class="list list-active"></div>
-        <div id="grid" class="grid"></div>';
-    }else{
-     $typeOfViewActive = '<div id="list" class="list "></div>
-     <div id="grid" class="grid grid-active"></div>';
- }
-}
-echo $typeOfViewActive;
-?> 
-<div class="clear"></div>
-<div id="product_content">     
-    <?php
-    if (isset($items)) {
-        for ($i = 0; $i < sizeof($items); $i++) {
-            $pic = explode('/', $items[$i]['product_image_path']);
-
-            $typeOfView = "product";
-            if(isset($_COOKIE['view']))
-            {
-                $cookieView = $_COOKIE['view'];
-                if($cookieView == "list"){
-                    $typeOfView = "product-list";
-                }else{
-                 $typeOfView = "product";
-             }
-         }
-         ?>
-         <div class="<?php echo $typeOfView; ?>">
-            <a href="<?= base_url() ?>item/<?php echo $items[$i]['slug']; ?>"><span class="prod_img_wrapper"><span class="prod_img_container"><img alt="<?php echo html_escape($items[$i]['name']); ?>" src="<?php echo base_url() . $pic[0] . '/' . $pic[1] . '/' . $pic[2] . '/' . $pic[3] . '/' . 'categoryview' . '/' . $pic[4]; ?>"></span></span></a>
-            <h3>
-                <a href="<?= base_url() ?>item/<?php echo $items[$i]['slug']; ?>"><?php echo html_escape($items[$i]['name']); ?></a>
-            </h3>
-
-            <div class="price-cnt">
-                <div class="price">
-                    Php <?php echo number_format($items[$i]['price'], 2); ?>
+            <?php if(count($subcategories) !== 0):?>
+            <div class="filters">           
+              <h2>Categories:</h2>    
+              <div class="jcarousel category_carousel cc2_wrapper">
+                <div class="cc2">
+                    <?PHP foreach ($subcategories as $rows): ?>
+                    <div class="">
+                        <a class="cc2_title" href="<?=base_url()?>category/<?php echo $rows['slug'];?>">
+                            <span><?php echo html_escape($rows['name']);?></span></a>
+                            <?PHP if(count($rows['popular'])>0): ?>
+                            <span class="cat_carousel_img_con"><span class="cat_carousel_img"><img src="<?= base_url().$rows['popular'][0]['path'].'categoryview/'.$rows['popular'][0]['file']; ?>"></span></span><br />
+                            <div class="cc2_prod_name"><a href="<?PHP echo base_url()."item/".$rows['popular'][0]['slug']; ?>" title="<?PHP echo $rows['popular'][0]['product']; ?>"><span><?PHP echo html_escape($rows['popular'][0]['product']); ?></span></a></div>
+                            <span class="recommended_product_price">PHP <?php echo number_format($rows['popular'][0]['price'],2,'.',',');?></span>
+                            <?PHP endif; ?>
+                        </div>
+                        <?PHP endforeach;?>
+                    </div>  
                 </div>
+                <!-- Controls -->
+                <a href="#" class="jcarousel-control-prev inactive category_carousel2_prev">&lsaquo;</a>
+                <a href="#" class="jcarousel-control-next inactive category_carousel2_next">&rsaquo;</a>            
             </div>
-            <div class="product_info_bottom">
-                <div>Condition: <strong><?php echo html_escape($items[$i]['condition']); ?></strong></div>
-                <!-- <div>Sold: <strong>32</strong></div> -->
-            </div>
-            <p>
-                <?php echo html_escape($items[$i]['brief']); ?>
-            </p>
-        </div>
+        <?php endif; ?>        
+        <div class="clear"></div>
+        <p class="search_result"><!-- Showing 1 - 48 of 13,152 Results --></p>
 
-
-
+        Sort by: 
+        <select data-url="<?php echo site_url(uri_string() . '?' . $_SERVER['QUERY_STRING']).'&sop='; ?>" id="sort_order"> 
+            <?php
+            $sortarray = array('bestmatch' => 'best match', 'hot' => 'hot','new' => 'new','popular' => 'popular');
+            $sop = isset($_GET['sop']) ? $this->input->get('sop') : 'best match';
+            foreach ($sortarray as $key => $value) {
+                $selected = ($sop == $value) ? 'selected' : '';
+                echo '<option value="'.$key.'" '.$selected.'>'.ucfirst($value).'</option>';
+            } ?>
+        </select>
 
         <?php
-    }
-}
-?>
+        $typeOfViewActive = '<div id="list" class="list "></div><div id="grid" class="grid grid-active"></div>';
+        if(isset($_COOKIE['view']))
+        {
+            $cookieView = $_COOKIE['view'];
+            $typeOfViewActive = ($cookieView == "list") ? '<div id="list" class="list list-active"></div><div id="grid" class="grid"></div>' : '<div id="list" class="list "></div><div id="grid" class="grid grid-active"></div>';
+        }
+        echo $typeOfViewActive;
+        ?> 
+        <div class="clear"></div>
+        <div id="product_content">     
+            <?php
+            if (isset($items)) {
+                for ($i = 0; $i < sizeof($items); $i++) {
+                    $pic = explode('/', $items[$i]['product_image_path']);
 
-</div> 
-<div class="loading_products" style="display: inline-block;text-align: center;width: 100%;"></div>
-</div>
+                    $typeOfView = "product";
+                    if(isset($_COOKIE['view']))
+                    {
+                        $cookieView = $_COOKIE['view'];
+                        $typeOfView = ($cookieView == "list") ? "product-list" : "product";
+                    }
+                 ?>
+                <div class="<?php echo $typeOfView; ?>">
+                    <a href="<?= base_url() ?>item/<?php echo $items[$i]['slug']; ?>">
+                        <span class="prod_img_wrapper">
+                            <span class="prod_img_container">
+                                <img alt="<?php echo html_escape($items[$i]['name']); ?>" src="<?php echo base_url() . $pic[0] . '/' . $pic[1] . '/' . $pic[2] . '/' . $pic[3] . '/' . 'categoryview' . '/' . $pic[4]; ?>">
+                            </span>
+                        </span>
+                    </a>
+                    <h3>
+                        <a href="<?= base_url() ?>item/<?php echo $items[$i]['slug']; ?>">
+                            <?php echo html_escape($items[$i]['name']); ?>
+                        </a>
+                    </h3>
+                    <div class="price-cnt">
+                        <div class="price">
+                            Php <?php echo number_format($items[$i]['price'], 2); ?>
+                        </div>
+                    </div>
+                    <div class="product_info_bottom">
+                        <div>Condition: <strong><?php echo html_escape($items[$i]['condition']); ?></strong></div>
+                    </div>
+                    <p>
+                        <?php echo html_escape($items[$i]['brief']); ?>
+                    </p>
+                </div>
+                <?php
+            }
+        }
+        ?>
+
+        </div> 
+        <div class="loading_products" style="display: inline-block;text-align: center;width: 100%;"></div>
+    </div>
 
 </div>
 </div>   
 </div>
-
-
-
 
 <script src="<?= base_url() ?>assets/JavaScript/js/jquery.easing.min.js" type="text/javascript"></script>
 <script src="<?= base_url() ?>assets/JavaScript/js/jquery.scrollUp.min.js" type="text/javascript"></script>
@@ -287,13 +240,12 @@ $(function () {
 });
 
 </script>
-
 <script src="<?= base_url() ?>assets/JavaScript/js/jquery.bxslider.min.js" type="text/javascript"></script>
 <script src="<?= base_url() ?>assets/JavaScript/categorynavigation.js?ver=1.0" type="text/javascript"></script>
+
 <?php
 $price1= "";
 $price2 = "";
-
 if(isset($_GET['price'])){
     if(strpos($_GET['price'], 'to') !== false)
     {
@@ -307,6 +259,7 @@ if(isset($_GET['price'])){
    }
 }
 ?>
+
 <script type="text/javascript">
 $(document).ready(function() {
 
@@ -354,8 +307,7 @@ $(document).ready(function() {
         }
         return rtn;
     }
-
-        
+ 
     // START OF INFINITE SCROLLING FUNCTION
     var base_url = config.base_url;
     var offset = 1;
@@ -366,21 +318,15 @@ $(document).ready(function() {
     
     <?php 
     $type = 0;
-    if(isset($_COOKIE['view']))
-    {
-        $type = 0;
-        if($cookieView == "list"){
-            $type = "1";
-        }else{
-         $type = "0";
-        }
+    if(isset($_COOKIE['view']){
+        $type = ($cookieView == "list") ? '1' : '0';
     }
     ?>
 
-     var type = '<?php echo $type ?>';
-     var csrftoken = $("meta[name='csrf-token']").attr('content');
-     var csrfname = $("meta[name='csrf-name']").attr('content');
-     $(window).scroll(function(event) {
+    var type = '<?php echo $type ?>';
+    var csrftoken = $("meta[name='csrf-token']").attr('content');
+    var csrfname = $("meta[name='csrf-name']").attr('content');
+    $(window).scroll(function(event) {
         var st = $(this).scrollTop();
         if(st > last_scroll_top){
             if ($(window).scrollTop() + 100 > $(document).height() - $(window).height()) {
@@ -406,9 +352,7 @@ $(document).ready(function() {
                                     offset += 1;   
                                 }
                             }
-                           // $(".loading_products").hide();
-                           jQuery(".loading_products").fadeOut();   
-                          
+                           jQuery(".loading_products").fadeOut();    
                         }
                     });
                 }
@@ -564,68 +508,63 @@ $(document).ready(function() {
 </script>
  
 <script type="text/javascript">
- 
-$(document).ready(function () {
-     if ($('.left_attribute').length === $('.left_attribute:contains("a")').length) {
-        $('.left_attribute').children('h3:gt(2)').nextAll().hide();
-        $('.left_attribute').children('h3:gt(2)').hide();
-        $('.left_attribute').children('.more_attr').show();
-    }
-    else {
-       $('.more_attr').hide();
-    }
-});
-
+    $(document).ready(function () {
+        if ($('.left_attribute').length === $('.left_attribute:contains("a")').length) {
+            $('.left_attribute').children('h3:gt(2)').nextAll().hide();
+            $('.left_attribute').children('h3:gt(2)').hide();
+            $('.left_attribute').children('.more_attr').show();
+        }
+        else {
+            $('.more_attr').hide();
+        }
+    });
 </script>
  
 <script type="text/javascript">
-(function($) {
-    $(function() {
-        $('.jcarousel').jcarousel();
+    (function($) {
+        $(function() {
+            $('.jcarousel').jcarousel();
 
-        $('.jcarousel-control-prev')
-        .on('jcarouselcontrol:active', function() {
-            $(this).removeClass('inactive');
-        })
-        .on('jcarouselcontrol:inactive', function() {
-            $(this).addClass('inactive');
-        })
-        .jcarouselControl({
-            target: '-=1'
+            $('.jcarousel-control-prev')
+            .on('jcarouselcontrol:active', function() {
+                $(this).removeClass('inactive');
+            })
+            .on('jcarouselcontrol:inactive', function() {
+                $(this).addClass('inactive');
+            })
+            .jcarouselControl({
+                target: '-=1'
+            });
+
+            $('.jcarousel-control-next')
+            .on('jcarouselcontrol:active', function() {
+                $(this).removeClass('inactive');
+            })
+            .on('jcarouselcontrol:inactive', function() {
+                $(this).addClass('inactive');
+            })
+            .jcarouselControl({
+                target: '+=1'
+            });
+
+            $('.jcarousel-pagination')
+            .on('jcarouselpagination:active', 'a', function() {
+                $(this).addClass('active');
+            })
+            .on('jcarouselpagination:inactive', 'a', function() {
+                $(this).removeClass('active');
+            })
+            .jcarouselPagination();
         });
-
-        $('.jcarousel-control-next')
-        .on('jcarouselcontrol:active', function() {
-            $(this).removeClass('inactive');
-        })
-        .on('jcarouselcontrol:inactive', function() {
-            $(this).addClass('inactive');
-        })
-        .jcarouselControl({
-            target: '+=1'
-        });
-
-        $('.jcarousel-pagination')
-        .on('jcarouselpagination:active', 'a', function() {
-            $(this).addClass('active');
-        })
-        .on('jcarouselpagination:inactive', 'a', function() {
-            $(this).removeClass('active');
-        })
-        .jcarouselPagination();
-    });
-})(jQuery);
-
+    })(jQuery);
 </script>
 
 <script type="text/javascript">
-
-var p = $('.cc2_prod_name span');
-var divh = $('.cc2_prod_name').height();
-while ($(p).outerHeight()>divh) {
-    $(p).text(function (index, text) {
-        return text.replace(/\W*\s(\S)*$/, '...');
-    });
-}
-
+    var p = $('.cc2_prod_name span');
+    var divh = $('.cc2_prod_name').height();
+    while ($(p).outerHeight()>divh) {
+        $(p).text(function (index, text) {
+            return text.replace(/\W*\s(\S)*$/, '...');
+        });
+    }
 </script>
