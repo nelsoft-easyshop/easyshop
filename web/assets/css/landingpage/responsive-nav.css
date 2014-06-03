@@ -421,6 +421,21 @@ img.img_main_product {
     left: 27%;
   }
 
+  .reg2_username, .reg2_password, .reg2_confirmpassword, .reg2_email, .mobile, .reg2_tc, .reg2_btn_submit {
+  width: 77%;
+  }
+
+  .reg2_username input {
+    width: 85%;
+  }
+
+  .pass-container {
+    width: 88% !important;
+  }
+
+  .div.pass-bar {
+    width: 90%;
+  }
 }
 
 

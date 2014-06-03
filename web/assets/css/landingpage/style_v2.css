@@ -295,10 +295,17 @@ box-shadow:         inset 0px 0px 5px 5px rgba(129, 129, 131, 0.25);
  #username_status,
  #mobile_status,
  .field_pword_status {
-    display: inline-block;
+/*    display: inline-block;
     height: 36px;
     line-height: 36px;
     margin-left: 2px;
+    position: absolute;*/
+    display: inline;
+/*    margin-left: 2px;*/
+}
+
+.fieldstatus {
+    line-height: 36px;
     position: absolute;
 }
 
@@ -316,7 +323,7 @@ box-shadow:         inset 0px 0px 5px 5px rgba(129, 129, 131, 0.25);
 
 .pass-container {
   display: none;
-    width: 20em !important;
+  /*  width: 20em !important;*/
 }
 
 div.pass-bar {
@@ -328,7 +335,7 @@ div.pass-bar {
     display: inline-block;
     font-size: 0.75em;
     margin-top: 5px;
-    width: 28em;
+/*    width: 28em;*/
 }
 
 .txt_cp {
@@ -493,7 +500,6 @@ float: left;
 /** Register Section *****/
 .bg_mid {
   position: relative;
-    z-index: 999999;
   -webkit-box-shadow: 0 14px 10px -10px #424242;
      -moz-box-shadow: 0 14px 10px -10px #424242;
           box-shadow: 0 14px 10px -10px #424242;
@@ -550,7 +556,7 @@ float: left;
 }
 
 .reg2_username input {
-  max-width: 44%;
+  max-width: 41.5%;
   width: 100%;
 }
 
@@ -558,7 +564,7 @@ float: left;
 .reg2_confirmpassword input,
 .reg2_email input,
 .mobile input {
-  max-width: 90%;
+  max-width: 85%;
   width: 100%;
 }
 
@@ -853,6 +859,6 @@ span.twitter {
   #userpage{
     overflow: hidden; 
     text-overflow: ellipsis; 
-    max-width: 120px;
+    /*max-width: 120px;*/
     margin-bottom: 0px !important;
   }
