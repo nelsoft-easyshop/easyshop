@@ -10,6 +10,7 @@
             unreadMessagesLabel.html(data.unreadMessageCount);
         });
         
+        /* Begin listening for events */
         easyshop.websocket.client.listen($('#user-session').val(), function (topic, data) {
             easyshop.eventDispatcher.dispatch(data);
         });
