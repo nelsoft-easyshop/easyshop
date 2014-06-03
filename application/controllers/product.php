@@ -599,7 +599,7 @@ class product extends MY_Controller
 
 				$response['id_cat'] = $category;
 				$data = array(
-					'title' => 'Easyshop.ph',
+					'title' => (trim($search_string)==='')?'Search | Easyshop.ph':html_escape($search_string).' | Easyshop.ph',
 					);
 
 				$data = array_merge($data, $this->fill_header());
