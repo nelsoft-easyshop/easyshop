@@ -1194,7 +1194,7 @@ class product_model extends CI_Model
             $slug = $product['slug'];
             
             $deposit_details = array('bank_id'=>'0','acct_no'=>'','acct_name'=>'');
-            $user_accounts = $this->memberpage_model->get_billing_info($memberId);
+            $user_accounts = $this->memberpage_model->get_billing_info($memberid);
             foreach($user_accounts as $account){
                 if(intval($account['id_billing_info']) === intval($billing_id)){
                     $deposit_details['bank_id'] = $account['bank_id'];
