@@ -48,11 +48,19 @@
       </div>
     </div>
     
-    <?php if ('development' === ENVIRONMENT): ?>
-        <?php // NOTE: asynchronous loading may cause random fails ?>
-        <input id="user-session" type="hidden" value="<?php echo $this->session->userdata('session_id');?>">
-        <script src="/assets/js/src/ws/wsclient.js"></script>
+    <?php if ('development' === ENVIRONMENT && false): ?>
+    
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.0-beta.10/angular.min.js"></script>
+        <script src="https://autobahn.s3.amazonaws.com/js/autobahn.min.js"></script>
+        <script>
+            window.angular || document.write('<script src="/assests/js/src/vendor/angular.min.js">\x3C/script>');
+            window.ab || document.write('<script src="/assests/js/src/vendor/autobahn.min.js">\x3C/script>');
+        </script>
+        
+        <script src="/assets/js/src/lib/websocket/client.js"></script>
         <script src="/assets/js/src/main.js"></script>
+        
+        <input id="user-session" type="hidden" value="<?php echo $this->session->userdata('session_id');?>">
     <?php endif; ?>
     </footer>
 	</body>
