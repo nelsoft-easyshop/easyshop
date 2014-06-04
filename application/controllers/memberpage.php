@@ -14,7 +14,7 @@ class Memberpage extends MY_Controller
 		$this->load->model('payment_model');
 		$this->form_validation->set_error_delimiters('', '');
 	}
-
+    
 	function index()
 	{        
         $data = $this->fill_header();
@@ -734,8 +734,8 @@ class Memberpage extends MY_Controller
                     'user_account' => $bi_user_account,
 			);
 			if($this->memberpage_model->isBankAccountUnique($data)){
-                $new_id = $this->memberpage_model->billing_info_update($data);
-                $return = '{"e":"1","d":"success", "id":'.$new_id.'}';
+                $this->memberpage_model->billing_info_update($data);
+                $return = '{"e":"1","d":"success"}';
             }
             else{
                 $return = '{"e":"0","d":"duplicate"}';

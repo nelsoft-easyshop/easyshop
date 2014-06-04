@@ -703,15 +703,48 @@ class memberpage_model extends CI_Model
 		return $id;
 	}
 	
-	function billing_info_update($data){
+    /*   The update here is implemented by updating the current entry and inserting a copy
+     *   of the previous entry for history purposes.
+     */
     
-        $query = "UPDATE `es_billing_info` SET `is_delete` = 1, `is_default` = 0, `datemodified` = NOW() WHERE `member_id`=:member_id AND `id_billing_info`=:ibi";
+	function billing_info_update($data){
+
+        //GET PAYMENT ACCOUNT DETAIL
+        $query =  $this->sqlmap->getFilenameID('users','getBillingAccountById');
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':member_id', $data['member_id']);		
 		$sth->bindParam(':ibi', $data['ibi']);
 		$sth->execute();
-
-        return $this->billing_info($data);
+        $billing_detail = $sth->fetch(PDO::FETCH_ASSOC);
+        //UPDATE CURRENT BILLING DETAIL WITH NEW INFO
+        $query = $this->sqlmap->getFilenameID('users','updateBillingAccnt');
+		$sth = $this->db->conn_id->prepare($query);	
+		$sth->bindParam(':bank_id',  $data['bank_id']);
+		$sth->bindParam(':bank_account_name', $data['bank_account_name']);
+		$sth->bindParam(':bank_account_number', $data['bank_account_number']);
+        $sth->bindParam(':payment_type', $data['payment_type']);
+		$sth->bindParam(':user_account', $billing_detail['user_account']);
+		$sth->bindParam(':is_default', $billing_detail['is_default']);
+        $sth->bindParam(':is_delete', $billing_detail['is_delete']);
+        $sth->bindParam(':member_id', $data['member_id']);	
+		$sth->bindParam(':ibi', $data['ibi']);
+		$sth->execute();
+        
+        //SAVE A COPY OF THE PREVIOUS ENTRY WITH IS_DELETE = 1
+        $query = $this->sqlmap->getFilenameID('users','InsertHistoryBillingAccnt');
+		$sth = $this->db->conn_id->prepare($query);
+        $billing_detail['is_default'] = 0;
+        $billing_detail['is_delete'] = 1;
+		$sth->bindParam(':member_id', $data['member_id']);
+		$sth->bindParam(':payment_type', $billing_detail['payment_type']);
+		$sth->bindParam(':user_account', $billing_detail['user_account']);
+		$sth->bindParam(':bank_id', $billing_detail['bank_id']);
+		$sth->bindParam(':bank_account_name', $billing_detail['bank_account_name']);
+		$sth->bindParam(':bank_account_number', $billing_detail['bank_account_number']);
+        $sth->bindParam(':is_default', $billing_detail['is_default']);
+        $sth->bindParam(':is_delete', $billing_detail['is_delete'] );
+        $sth->bindParam(':date_added', $billing_detail['dateadded']);
+        $sth->execute();
 	}
 	
 	function billing_info_default($data){

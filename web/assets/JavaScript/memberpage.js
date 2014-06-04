@@ -2608,31 +2608,7 @@ $(document).ready(function(){
                             $("#del_"+bictr+", #"+bictr+", #bi_bn_"+bictr).show();
                             $(":button[name^='bictr']").prop("disabled", false);
                             $(":button[name^='del_bictr']").prop("disabled", false);	
-                            
-                            //UPDATE ID OF EDITED ELEMENTS
-                            $("#"+bid).val(obj.id);
-                            var $form = $('#ubi_bictr'+bidval);
-                            $form.find('[id$="'+ bidval+'"]').each(function(){
-                                var $this = $(this);
-                                var id =  $this.attr('id')
-                                var x =id.substr(0, id.indexOf(bidval))
-                                 $this.attr('id', x+obj.id);
-                            });
-                            $form.find('label[for$="'+bidval+'"]').each(function(){
-                                var $this = $(this);
-                                var for_string =  $this.attr('for');
-                                var x =for_string.substr(0, for_string.indexOf(bidval))
-                                 $this.attr('for', x+obj.id);
-                            });
-                            $form.find('[name$="'+ bidval+'"]').each(function(){
-                                var $this = $(this);
-                                var name =  $this.attr('name')
-                                var x =name.substr(0, name.indexOf(bidval))
-                                 $this.attr('name', x+obj.id);
-                            });
-                            $form.attr('id','ubi_bictr'+obj.id);
-                            $form.attr('name','ubi_bictr'+obj.id);
-                            
+
                             return false;
                         }else if((parseInt(obj.e,10) == 0) && (obj.d=='duplicate')){
                             $("#bi_err_"+bictr).show().delay(2000).fadeOut(800);

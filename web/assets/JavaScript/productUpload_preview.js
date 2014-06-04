@@ -80,7 +80,7 @@ $(document).ready(function(){
         jQuery.ajax({
             type: "POST",
             url: config.base_url + 'memberpage/billing_info_u', 
-            data: "bi_id="+account.billing_id+bi_payment_type+"=Bank&bi_acct_name="+account.account_name+"&bi_acct_no="+account.account_no+"&bi_bank="+account.bank_list+"&"+csrfname+"="+csrftoken, 
+            data: "bi_id="+account.billing_id+"&bi_payment_type"+"=Bank&bi_acct_name="+account.account_name+"&bi_acct_no="+account.account_no+"&bi_bank="+account.bank_list+"&"+csrfname+"="+csrftoken, 
             success: function(response) {
                 var obj = JSON.parse(response);
                 if((parseInt(obj.e,10) == 1) && (obj.d=='success')){

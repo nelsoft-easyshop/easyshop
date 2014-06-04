@@ -322,18 +322,31 @@
 	ON DUPLICATE KEY UPDATE email = :email
 </select>
 
+<!-- Payment Account Queries -->
+
+<select id='getBillingAccountById'>
+    SELECT * FROM `es_billing_info` ebi 
+    WHERE ebi.`member_id`=:member_id AND ebi.`id_billing_info` =:ibi
+</select>
+
 <select id='getDefaultBillingAccnt'>
     SELECT ebi.`is_default` FROM `es_billing_info` ebi 
     WHERE ebi.`member_id`=:member_id AND ebi.`is_delete` = 0  AND ebi.`is_default` = 1 
 </select>
 
 <select id='addBillingAccnt'>
-    INSERT INTO `es_billing_info` (`is_default`,`member_id`,`payment_type`,`user_account`,`bank_id`,`bank_account_name`,`bank_account_number`,`dateadded`)
-	VALUES (:is_default,:member_id,:payment_type,:user_account,:bank_id,:bank_account_name,:bank_account_number,NOW());
+    INSERT INTO `es_billing_info` (`is_default`,`member_id`,`payment_type`,`user_account`,`bank_id`,`bank_account_name`,`bank_account_number`,`dateadded`, `date_modified`)
+	VALUES (:is_default,:member_id,:payment_type,:user_account,:bank_id,:bank_account_name,:bank_account_number, NOW(), NOW());
+</select>
+
+<select id='InsertHistoryBillingAccnt'>
+    INSERT INTO `es_billing_info` (`is_default`,`is_delete`,`member_id`,`payment_type`,`user_account`,`bank_id`,`bank_account_name`,`bank_account_number`,`dateadded`, `datemodified`)
+	VALUES (:is_default,:is_delete, :member_id,:payment_type,:user_account,:bank_id,:bank_account_name,:bank_account_number, :date_added, NOW());
 </select>
 
 <select id='updateBillingAccnt'>
-    UPDATE `es_billing_info` SET `bank_id`=:bank_id,`bank_account_name`=:bank_account_name,`bank_account_number`=:bank_account_number, `datemodified` = NOW()
+    UPDATE `es_billing_info` SET `bank_id`=:bank_id,`bank_account_name`=:bank_account_name,`bank_account_number`=:bank_account_number, `datemodified` = NOW(),
+    `payment_type` = :payment_type, `user_account` = :user_account, `is_delete` = :is_delete, `is_default` = :is_default
 	WHERE `member_id`=:member_id AND `id_billing_info` = :ibi
 </select>
 
