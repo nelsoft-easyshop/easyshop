@@ -29,11 +29,15 @@ class Pusher
         return $this;
     }
     
-    public function push($sessionId)
+    public function pushToUserSession($sessionId)
     {
         $this->data['session_id'] = $sessionId;
         $this->socket->send(json_encode($this->data));
-        
         return $this;
+    }
+    
+    public function pushToAllUserSessions($userId)
+    {
+        
     }
 }
