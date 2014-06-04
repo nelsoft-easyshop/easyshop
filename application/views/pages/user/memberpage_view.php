@@ -2054,11 +2054,9 @@
 										<?php elseif($product['status'] == 3):?>
 											<span class="trans_alert transac_cod">Cash on delivery</span>
 										<?php elseif($product['status'] == 4):?>
-											<span class="trans_alert transac_cod">Paid</span>
+											<span class="trans_alert transac_paid">Paid</span>
 										<?php elseif($product['status'] == 5):?>
-											<span class="trans_alert transac_cod">Payment Returned</span>
-										<?php elseif($product['is_reject'] == 1):?>
-											<span class="trans_alert">Item Rejected</span>
+											<span class="trans_alert transac_pay_return">Payment Returned</span>
 										<?php endif;?>
 									</span>
 								</div>
@@ -2227,11 +2225,9 @@
 										<?php elseif($product['status'] == 3):?>
 											<span class="trans_alert transac_cod">Cash on delivery</span>
 										<?php elseif($product['status'] == 4):?>
-											<span class="trans_alert transac_cod">Paid</span>
+											<span class="trans_alert transac_paid">Paid</span>
 										<?php elseif($product['status'] == 5):?>
-											<span class="trans_alert transac_cod">Payment Returned</span>
-										<?php elseif($product['is_reject'] == 1):?>
-											<span class="trans_alert">Item Rejected</span>
+											<span class="trans_alert transac_pay_return">Payment Returned</span>
 										<?php endif;?>						
 									</span>
 								</div>

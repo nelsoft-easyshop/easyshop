@@ -553,6 +553,16 @@ class Memberpage extends MY_Controller
 		
 		if( count($result) == 1 ){
 			$dbresult = $this->payment_model->responseReject($data);
+			if($dbresult){
+				$historyData['order_product_id'] = $data['order_product'];
+				$historyData['order_product_status'] = 99;
+				if($data['method'] === 'reject'){
+					$historyData['comment'] = 'REJECTED';
+				}else if($data['method'] === 'unreject'){
+					$historyData['comment'] = 'UNREJECTED';
+				}
+				$this->payment_model->addOrderProductHistory($historyData);
+			}
 			$serverResponse['result'] = $dbresult ? 'success':'fail';
 			$serverResponse['error'] = $dbresult ? '':'Failed to update database.';
 		}

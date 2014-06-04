@@ -579,6 +579,18 @@ class payment_model extends CI_Model
 		
 		return $result;
 	}
+	
+	function addOrderProductHistory($temp)
+	{
+		$query = $this->sqlmap->getFilenameID('payment','addOrderProductHistory');
+		$sth = $this->db->conn_id->prepare($query);
+		$sth->bindParam(':order_product_id', $temp['order_product_id']);
+		$sth->bindParam(':order_product_status', $temp['order_product_status']);
+		$sth->bindParam(':comment', $temp['comment']);
+		$result = $sth->execute();
+		
+		return $result;
+	}
 }
 
 

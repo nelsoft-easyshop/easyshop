@@ -151,6 +151,11 @@
 	VALUES (:order_id, :order_status, :comment, NOW());
 </select>
 
+<select id="addOrderProductHistory">
+	INSERT INTO es_order_product_history (`order_product_id`, `comment`, `date_added`, `order_product_status`)
+	VALUES (:order_product_id, :comment, NOW(), :order_product_status)
+</select>
+
 <select id="responseDragonpay">
 	CALL `es_sp_expiredDragonpayTransaction` (:transaction_id)
 </select>
