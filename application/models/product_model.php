@@ -1453,7 +1453,7 @@ class product_model extends CI_Model
 		$sth->bindParam(':product_id',$product_id, PDO::PARAM_INT);
 		$sth->execute();
         $rows = $sth->fetchAll(PDO::FETCH_ASSOC);
-
+        
         $data = array();
         foreach($rows as $row){
             if(!array_key_exists($row['id_product_item'],  $data)){
@@ -1470,6 +1470,9 @@ class product_model extends CI_Model
             }
         }
 
+        // In cases where the previous query (specifically 'getProductQuantityVerbose') does not return any
+        // result due to the INNER JOIN with es_product_item_attr (which happens with the default qty), we
+        // query using the non-verbose version to get the default quantity result set.
         if(($verbose)&&(count($data) === 0)){
             $query = $this->sqlmap->getFilenameID('product','getProductQuantity');
             $sth = $this->db->conn_id->prepare($query);
@@ -1487,9 +1490,32 @@ class product_model extends CI_Model
             }
         }
         
+        $query = 'SELECT lck.id_item_lock, pi.id_product_item, lck.qty as lock_qty, lck.timestamp, NOW() as timenow,
+        pi.quantity FROM es_product_item_lock lck INNER JOIN es_product_item pi ON pi.product_id = :product_id AND lck.product_item_id = pi.id_product_item';
+        $sth = $this->db->conn_id->prepare($query);
+		$sth->bindParam(':product_id',$product_id, PDO::PARAM_INT);
+		$sth->execute();
+        $lockdata = $sth->fetchAll(PDO::FETCH_ASSOC);
+        foreach($lockdata as $lock){
+            //DELETE LOCK ITEMS THAT ARE 10 MINUTES IN LIFE TIME
+            if(round((strtotime($lock['timenow']) - strtotime($lock['timestamp']))/60) > 10){
+                $this->deleteProductItemLock($lock['id_item_lock']);
+            }else{
+                if(isset($data[$lock['id_product_item']])){
+                    $data[$lock['id_product_item']]['quantity'] -=  $lock['lock_qty'];
+                }
+            }
+        }
         return $data;
     }
     
+    
+    public function deleteProductItemLock($item_lock_id){
+        $query = 'DELETE FROM es_product_item_lock WHERE id_item_lock = :id';
+        $sth = $this->db->conn_id->prepare($query);
+        $sth->bindParam(':id',$item_lock_id, PDO::PARAM_INT);
+        $sth->execute();
+    }
     
     public function deleteShippingInfomation($product_id, $keep_product_item_id = array()){
         $query = "SELECT id_shipping FROM es_product_shipping_head WHERE product_id = :product_id";
