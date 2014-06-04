@@ -269,7 +269,7 @@ class Payment extends MY_Controller{
 
         $this->session->set_userdata('paymentticket', true);
         $PayPalMode         = $this->PayPalMode; 
-        $PayPalApiUsernam   = $this->PayPalApiUsername;
+        $PayPalApiUsername  = $this->PayPalApiUsername;
         $PayPalApiPassword  = $this->PayPalApiPassword;
         $PayPalApiSignature = $this->PayPalApiSignature; 
         $PayPalCurrencyCode = $this->PayPalCurrencyCode; 
@@ -326,7 +326,7 @@ class Payment extends MY_Controller{
                
             $httpParsedResponseAr = $this->paypal->PPHttpPost('DoExpressCheckoutPayment', $padata, $PayPalApiUsername, $PayPalApiPassword, $PayPalApiSignature, $PayPalMode);
             $apiResponseArray['DoExpressCheckoutPayment'] = $httpParsedResponseAr;
-
+            echo '<pre>',print_r($httpParsedResponseAr);
             if(("SUCCESS" == strtoupper($httpParsedResponseAr["ACK"]) || "SUCCESSWITHWARNING" == strtoupper($httpParsedResponseAr["ACK"])) && ("SUCCESS" == strtoupper($httpParsedResponseArGECD["ACK"])))
             {
                 $transactionID = urldecode($httpParsedResponseAr["TRANSACTIONID"]);
