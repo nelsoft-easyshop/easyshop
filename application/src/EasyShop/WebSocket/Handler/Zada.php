@@ -153,9 +153,13 @@ class Zada implements WampServerInterface
         if (NULL !== $authenticatedSession) {
             if (!array_key_exists($topic->getId(), $this->topics)) {
                 $this->topics[$topic->getId()] = $topic;
+                echo $topic->getId() . " has been registered\n";
             }
+            echo "Client has subscribed!\n";
         }
-        
+        else {
+            $conn->close();
+        }
     }
 
     /**
@@ -177,8 +181,8 @@ class Zada implements WampServerInterface
     public function onPush($serialData)
     {
         $data = json_decode($serialData, true);
-        
         if (isset ($data['session_id'])) {
+            echo "gotcha!" . $data['session_id'];
             $this->topics[$data['session_id']]->broadcast($data);
         }
     }
