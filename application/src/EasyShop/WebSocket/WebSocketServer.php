@@ -45,11 +45,12 @@ class WebSocketServer
      * @param string $handlerFunction
      * @param string $netUrl
      */
-    public function listenToPusher($handlerFunction, $netUrl = 'tcp://127.0.0.1:5555')
+    public function listenToPusher($handlerFunction, $netUrl = 'tcp://localhost:5555')
     {
         $zmqServer = new \React\ZMQ\Context($this->eventLoop);
-        @$zmqServer->bind($netUrl);
-        @$zmqServer->on('message', [$this->socketHandler, $handlerFunction]);
+        $pull = $zmqServer->getSocket(\ZMQ::SOCKET_PULL);
+        $pull->bind($netUrl);
+        $pull->on('message', [$this->socketHandler, $handlerFunction]);
     }
     
     /**
