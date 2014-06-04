@@ -48,7 +48,7 @@
       </div>
     </div>
     
-    <?php if ('development' === ENVIRONMENT): ?>
+    <?php if ('development' === ENVIRONMENT && false): ?>
     
         <script src="https://autobahn.s3.amazonaws.com/js/autobahn.min.js"></script>
         <script>
