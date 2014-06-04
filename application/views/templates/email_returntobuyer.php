@@ -24,27 +24,49 @@
 				</tr>
 				<tr>
 					<td><strong>Product Order # :</strong> </td>
-					<td colspan="2">{order_product_id}</td>
+					<td colspan="2">{id_order_product}</td>
 				</tr>
 				<tr>
 					<td><strong>Product Name :</strong> </td>
 					<td colspan="2">{product_name}</td>
 				</tr>
 				<tr>
-					<td><strong>Quantity :</strong> </td>
+					<td><strong>Base Price :</strong> </td>
+					<td colspan="2">{price}</td>
+				</tr>
+				<tr>
+					<td><strong>Qty :</strong> </td>
 					<td colspan="2">{order_quantity}</td>
 				</tr>
 				<tr>
-					<td><strong>Total Price :</strong> </td>
-					<td colspan="2">Php {price}</td>
+					<td><strong>Handling Fee :</strong> </td>
+					<td colspan="2">Php {handling_fee}</td>
+				</tr>
+				<tr>
+					<td><strong>Product Total Price :</strong> </td>
+					<td colspan="2">Php {total}</td>
+				</tr>
+				<tr>
+					<td><strong>Easyshop Charge :</strong> </td>
+					<td colspan="2">Php {easyshop_charge}</td>
+				</tr>
+				<tr>
+					<td><strong>Payment Method Charge :</strong> </td>
+					<td colspan="2">Php {payment_method_charge}</td>
+				</tr>
+				<tr>
+					<td><strong>Net amount to be received :</strong> </td>
+					<td colspan="2">Php {net}</td>
 				</tr>
 				<tr>
 					<td><strong>Product Attributes : </strong></td>
-					{attr}
-						<td>{field} : </td>
-						<td>{value}</td>
-					{/attr}
 				</tr>
+				{attr}
+				<tr>
+					<td>{field} : </td>
+					<td>{value}</td>
+				</tr>
+				{/attr}
 			</tbody>
 	</body>
 </html>

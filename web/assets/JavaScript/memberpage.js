@@ -422,17 +422,13 @@ $(document).ready(function(){
 							$thisspan.show();
 							parentdiv.removeClass('fired');
 							verifyspan.siblings('span.personal_contact_cont').show();
-							//$('#cont_mobilediv span:first').html('An error was encountered. Please try again later');
 							errorspan.html('An error was encountered. Please try again later');
 						}
 						else if(obj === 'exceed')
-							//$('#cont_mobilediv span:first').html('You have exceeded the number of times to verify your mobile. Try again after 30 mins.');
 							errorspan.html('You have exceeded the number of times to verify your mobile. Try again after 30 mins.');
 					}
 					else if(field==='email'){
 						if(obj === 'success'){
-							//$('#emaildiv').find('span.doneverify').show();
-							//$('#emaildiv').find('span.doneverify span:first').html('<strong>Email sent.</strong>');
 							parentdiv.find('span.doneverify').show();
 							parentdiv.find('span.doneverify span:nth-child(2)').html('<strong>Email sent.</strong>');
 							errorspan.html('');
@@ -1301,7 +1297,7 @@ $(document).ready(function(){
 	$('span.shipping_comment').on('click', function(){
 		var divcont = $(this).parent('div').siblings('div.shipping_comment_cont');
 		var thisbtn = $(this);
-		var txStatus = $(this).parent('div').siblings('span.trans_alert');
+		var txStatus = $(this).parent('div').siblings('span.tx_cont_col3').children('span.trans_alert');
 		
 		divcont.modal({
 			escClose: false,
@@ -1357,7 +1353,7 @@ $(document).ready(function(){
 									editbtn.show();
 									cancelbtn.hide();
 									
-									if(thisbtn.hasClass('is_form')){
+									if(thisbtn.hasClass('isform')){
 										txStatus.text('Item on route');
 									}
 									
@@ -1802,6 +1798,7 @@ $(function($) {
 	});
 });
 
+/*********	DASHBOARD BUTTONS - ETC	***************/
 $(document).ready(function(){
 
 	$('div.dashboard_table').on('click', '.show_prod_desc', function(){
@@ -1812,6 +1809,20 @@ $(document).ready(function(){
 	$('div.dashboard_table').on('click', '.show_more_options', function(){
 		$(this).siblings('.attr_hide').slideToggle();
 		$(this).toggleClass("active");
+	});
+	
+	$('.sales_info').on('click', function(){
+		var modaldiv = $(this).siblings('div.sales_details');
+		
+		modaldiv.modal({
+			escClose: false,
+			onShow: function(){
+				this.setPosition();
+			},
+			onClose: function(){
+				$.modal.close();
+			}
+		});
 	});
 });
 

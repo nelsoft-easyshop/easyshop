@@ -187,6 +187,10 @@ class Memberpage extends MY_Controller
 		$data['bill'] =  $this->memberpage_model->get_billing_info($uid);
 		$data['transaction'] = $this->memberpage_model->getTransactionDetails($uid);
 		$data['allfeedbacks'] = $this->memberpage_model->getFeedback($uid);
+		$data['sales'] = array(
+			'release' => $this->memberpage_model->getNextPayout($uid),
+			'balance' => $this->memberpage_model->getUserBalance($uid)
+		);
 		
 		return $data;
 	}
@@ -406,7 +410,6 @@ class Memberpage extends MY_Controller
 			//$result['o_success'] = 1; // DEV code
 			$result = $this->payment_model->updateTransactionStatus($data);
             
-			
 			// If database update is successful and response is 'return to buyer', 
 			// get order_product transaction details and send notification (email mobile)
 			if( $result['o_success'] >= 1 && $data['status'] == 2 ){
@@ -801,12 +804,8 @@ class Memberpage extends MY_Controller
 		);
 		
 		echo json_encode($jsonData);
-		
 	}
 	
-	
-
-
 }
 
 /* End of file memberpage.php */

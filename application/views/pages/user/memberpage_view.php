@@ -167,7 +167,7 @@
 		<li><a href="#active_items">Active Items <span class="db_active_items"><?php echo $active_count;?></span></a></li>
 		<li><a href="#deleted_items">Deleted Items<span class="db_deleted_items"><?php echo $deleted_count;?></span></a></li>
 		<li><a href="#dashboard-feedbacks">Feedbacks <span><?php echo $allfeedbacks['afbcount'];?></span></a></li>
-		<!-- <li><input type="text" value="search"><input type="submit" value="Submit"></li> -->
+		<li><a href="#dashboard-sales">Sales</a></li>
 	</ul>
 </div>
 <div class="clear"></div>
@@ -340,8 +340,6 @@
                     </span>
 				</div>
             
-            
-		
 				<p>
 					<?php $rounded_score = round($deleted_product['average_rating']); ?>
 					<?php for($i = 0; $i < $rounded_score ;$i++): ?>
@@ -667,10 +665,96 @@
 
 </div>
 
+	<div id="dashboard-sales" class="dashboard_table">
+		<h2>Sales</h2>
+		<div>
+			<div>
+				<span class="label">Total:</span>
+				<span class="amount"><?php echo number_format(round($sales['balance']['balance'],2), 2)?></span>
+				<br/>
+				<span class="sales_info">View more info</span>
+				
+				<div style="display:none;" class="sales_details">
+					<div>
+						<span></span>
+						<span>Base Price</span>
+						<span>Quantity</span>
+						<span>Handling Fee</span>
+						<span>Total</span>
+						<span>Easyshop Charge</span>
+						<span>Payment Method Charge</span>
+						<span>Net Amount</span>
+					</div>
+					<?php foreach($sales['balance']['list'] as $balance):?>
+						<div>
+							<p>Transaction # : <?php echo $balance['invoice']?></p>
+						<?php foreach($balance['product'] as $product):?>
+							<div>
+								<span><?php echo $product['name']?></span>
+								<span><?php echo $product['base_price']?></span>
+								<span><?php echo $product['qty']?></span>
+								<span><?php echo $product['handling_fee']?></span>
+								<span><?php echo $product['prd_total_price']?></span>
+								<span><?php echo $product['easyshop_charge']?></span>
+								<span><?php echo $product['payment_method_charge']?></span>
+								<span><?php echo $product['prd_net']?></span>
+							</div>
+						<?php endforeach;?>
+							<div>
+								<span>Transaction net amount : </span>
+								<span><?php echo $balance['tx_net']?></span>
+							</div>
+						</div>
+					<?php endforeach;?>
+				</div>
+			</div>
+			
+			<div>
+				<span class="label">Payout <small>(to be credited on <?php echo $sales['release']['payout_date'];?>)</small>:</span><span></span>
+				<span class="amount"><?php echo number_format(round($sales['release']['payout'],2), 2)?></span>
+				<br/>
+				<span class="sales_info">View more info</span>
+				
+				<div style="display:none;" class="sales_details">
+					<p>From: <?php echo $sales['release']['start_date']?> to: <?php echo $sales['release']['end_date']?></p>
+					<div>
+						<span></span>
+						<span>Base Price:</span>
+						<span>Quantity:</span>
+						<span>Handling Fee:</span>
+						<span>Total:</span>
+						<span>Easyshop Charge:</span>
+						<span>Payment Method Charge:</span>
+						<span>Net Amount:</span>
+					</div>
+					<?php foreach($sales['release']['list'] as $release):?>
+						<div>
+							<p>Transaction # : <?php echo $release['invoice']?></p>
+						<?php foreach($release['product'] as $product):?>
+							<div>
+								<span><?php echo $product['name']?></span>
+								<span><?php echo $product['base_price']?></span>
+								<span><?php echo $product['qty']?></span>
+								<span><?php echo $product['handling_fee']?></span>
+								<span><?php echo $product['prd_total_price']?></span>
+								<span><?php echo $product['easyshop_charge']?></span>
+								<span><?php echo $product['payment_method_charge']?></span>
+								<span><?php echo $product['prd_net']?></span>
+							</div>
+						<?php endforeach;?>
+							<div>
+								<span>Transaction net amount : </span>
+								<span><?php echo $release['tx_net']?></span>
+							</div>
+						</div>
+					<?php endforeach;?>
+				</div>
+			</div>
+		</div>
+	</div>
+
 </div>
 
-
-		
 		<div class="profile_main_content" id="personal_information">
 			<!--<form method="post" id="personal_profile_main" name="personal_profile_main">-->
 			<?php 

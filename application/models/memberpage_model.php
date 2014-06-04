@@ -886,6 +886,108 @@ class memberpage_model extends CI_Model
         return $row;
     }
     
+	function getNextPayout($member_id)
+	{
+		$dateToday = getdate();
+		$month = $dateToday['mon'];
+		$day = $dateToday['mday'];
+		$year = $dateToday['year'];
+		
+		//lastmonth 16 to 30/31
+		if( $day <= 5 ){ 
+			$startDate = date( "Y-m-d H:i:s", mktime(0,0,0,$month-1,16,$year) );
+			$endDate = date( "Y-m-d H:i:s", mktime(23,59,59,$month-1,date('d', strtotime('last day of previous month')),$year) );
+			$payoutDate = date("Y-m-d", mktime(0,0,0,$month,5,$year));
+		}else if( $day > 20 ){
+			$startDate = date( "Y-m-d H:i:s", mktime(0,0,0,$month,16,$year) );
+			$endDate = date( "Y-m-d H:i:s", mktime(23,59,59,$month,date('t'),$year) );
+			$payoutDate = date("Y-m-d", mktime(0,0,0,$month+1,5,$year));
+		// thismonth 1st to 15th
+		}else if( $day > 5 && $day <= 20 ){
+			$startDate = date( "Y-m-d H:i:s", mktime(0,0,0,$month,1,$year) );
+			$endDate = date( "Y-m-d H:i:s", mktime(23,59,59,$month,15,$year) );
+			$payoutDate = date("Y-m-d", mktime(0,0,0,$month,20,$year));
+		}
+		
+		$query = $this->sqlmap->getFilenameID('users','getNextPayout');
+		$sth = $this->db->conn_id->prepare($query);
+		$sth->bindParam(':member_id',$member_id);
+		$sth->bindParam(':start_date',$startDate);
+		$sth->bindParam(':end_date',$endDate);
+		$sth->execute();
+		$row = $sth->fetchAll(PDO::FETCH_ASSOC);
+		
+		$data = array(
+			'list' => array(),
+			'payout' => 0,
+			'start_date' => $startDate,
+			'end_date' => $endDate,
+			'payout_date' => $payoutDate
+		);
+		
+		foreach($row as $r){
+			if( !isset($data['list'][$r['order_id']]) ){
+				$data['list'][$r['order_id']]['invoice'] = $r['invoice_no'];
+				$data['list'][$r['order_id']]['tx_net'] = 0;
+				$data['list'][$r['order_id']]['product'] = array();
+			}
+			
+			$data['list'][$r['order_id']]['product'][] = array(
+				'name' => $r['name'],
+				'qty' => $r['order_quantity'],
+				'base_price' => $r['price'],
+				'handling_fee' => $r['handling_fee'],
+				'prd_total_price' => $r['total'],
+				'payment_method_charge' => $r['payment_method_charge'],
+				'easyshop_charge' => $r['easyshop_charge'],
+				'prd_net' => $r['net']
+			);
+			
+			$data['payout'] += $r['net'];
+			$data['list'][$r['order_id']]['tx_net'] += $r['net'];
+		}
+		
+		return $data;
+	}
+	
+	function getUserBalance($member_id)
+	{
+		$query = $this->sqlmap->getFilenameID('users','getUserBalance');
+		$sth = $this->db->conn_id->prepare($query);
+		$sth->bindParam(':member_id',$member_id);
+		$sth->execute();
+		$row = $sth->fetchAll(PDO::FETCH_ASSOC);
+		
+		$data = array(
+			'list' => array(),
+			'balance' => 0
+		);
+		
+		foreach($row as $r){
+			if( !isset($data['list'][$r['order_id']]) ){
+				$data['list'][$r['order_id']]['invoice'] = $r['invoice_no'];
+				$data['list'][$r['order_id']]['tx_net'] = 0;
+				$data['list'][$r['order_id']]['product'] = array();
+			}
+			
+			$data['list'][$r['order_id']]['product'][] = array(
+				'name' => $r['name'],
+				'qty' => $r['order_quantity'],
+				'base_price' => $r['price'],
+				'handling_fee' => $r['handling_fee'],
+				'prd_total_price' => $r['total'],
+				'payment_method_charge' => $r['payment_method_charge'],
+				'easyshop_charge' => $r['easyshop_charge'],
+				'prd_net' => $r['net']
+			);
+			
+			$data['balance'] += $r['net'];
+			$data['list'][$r['order_id']]['tx_net'] += $r['net'];
+		}
+		
+		return $data;
+	}
+	
 }
 
 /* End of file memberpage_model.php */

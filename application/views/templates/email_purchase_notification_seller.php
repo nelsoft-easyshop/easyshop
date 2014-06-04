@@ -33,7 +33,7 @@
 					<td>
 						<span style="display:inline-block;font-weight:bold;width:100px;">Transaction # :</span> {invoice_no} <br>
 						<span style="display:inline-block;font-weight:bold;width:100px;">Date :</span> {dateadded} <br>
-						<span style="display:inline-block;font-weight:bold;width:100px;">Total Price :</span> Php {totalprice}<br>
+						<span style="display:inline-block;font-weight:bold;width:100px;">Net Amount :</span> Php {totalprice}<br>
 						<span style="display:inline-block;font-weight:bold;width:100px;">Sold to :</span> {buyer_name} <br><br>
 					</td>
 				</tr>
@@ -49,15 +49,19 @@
 				            <tbody>
 				              <tr>
 				                <td>
-									<span style="display:inline-block;font-weight:bold;width:100px;">Product Order #: </span>{order_product_id} <br>
-									<span style="display:inline-block;font-weight:bold;width:100px;">Product :</span> {name} <br>
-									<span style="display:inline-block;font-weight:bold;width:100px;">Qty :</span> {order_quantity} <br>
-									<span style="display:inline-block;font-weight:bold;width:100px;">Base Price :</span> Php {baseprice} <br>
-									<span style="display:inline-block;font-weight:bold;width:100px;">Other Fees :</span> Php {tax} <br>
-									<span style="display:inline-block;font-weight:bold;width:100px;">Final Price :</span> Php {finalprice} <br>
-									<span style="display:inline-block;font-weight:bold;width:100px;">Product Specifications:</span> <br>
+									<span style="display:inline-block;font-weight:bold;width:150px;">Product Order #: </span>{order_product_id} <br>
+									<span style="display:inline-block;font-weight:bold;width:150px;">Product :</span> {name} <br>
+									<span style="display:inline-block;font-weight:bold;width:150px;">Base Price :</span> Php {baseprice} <br>
+									<span style="display:inline-block;font-weight:bold;width:150px;">Qty :</span> {order_quantity} <br>
+									<span style="display:inline-block;font-weight:bold;width:150px;">Handling Fee :</span> Php {handling_fee} <br>
+									<span style="display:inline-block;font-weight:bold;width:150px;">Product Final Price :</span> Php {finalprice} <br>
+									<span style="display:inline-block;font-weight:bold;width:150px;">Deductions :</span><br>
+									<span style="display:inline-block;font-weight:bold;width:150px;">Easyshop charge :</span> Php {easyshop_charge} <br>
+									<span style="display:inline-block;font-weight:bold;width:150px;">Payment Method charge :</span> Php {payment_method_charge} <br>
+									<span style="display:inline-block;font-weight:bold;width:150px;">Net Amount to be received:</span> Php {net} <br>
+									<span style="display:inline-block;font-weight:bold;width:150px;">Product Specifications:</span> <br>
 									{attr}
-										<span style="display:inline-block;font-weight:bold;width:100px;">{attr_name} :</span> {attr_value} <br>
+										<span style="display:inline-block;font-weight:bold;width:150px;">{attr_name} :</span> {attr_value} <br>
 									{/attr} 
 									<br>
 								</td>

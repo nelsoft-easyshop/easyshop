@@ -171,7 +171,6 @@ class payment_model extends CI_Model
 		}
 		
 		$this->email->to($email);
-		//$this->email->to('janz.stephen@gmail.com'); // Test
 		
 		$this->email->message($msg);
 		$result = $this->email->send();
@@ -246,11 +245,14 @@ class payment_model extends CI_Model
 		
 		foreach($row as $value){
 			$temp = $value;
+			
+			// Assemble data for buyer
 			if(!isset($data['products'][$value['id_order_product']])){
-				$data['products'][$value['id_order_product']] = array_slice($temp,6,8);
+				$data['products'][$value['id_order_product']] = array_slice($temp,6,11);
 				$data['products'][$value['id_order_product']]['order_product_id'] = $temp['id_order_product'];
 			}
 			
+			// Assemble data for seller
 			if(!isset($data['seller'][$value['seller_id']])){
 				$data['seller'][$value['seller_id']]['email'] = $value['seller_email'];
 				$data['seller'][$value['seller_id']]['seller_name'] = $value['seller'];
@@ -258,11 +260,12 @@ class payment_model extends CI_Model
 				$data['seller'][$value['seller_id']]['totalprice'] = 0;
 			}
 			if(!isset($data['seller'][$value['seller_id']]['products'][$value['id_order_product']])){
-				$data['seller'][$value['seller_id']]['products'][$value['id_order_product']] = array_slice($temp,9,5);
-				$data['seller'][$value['seller_id']]['totalprice'] += preg_replace('/\,/', '' , $value['finalprice']);
+				$data['seller'][$value['seller_id']]['products'][$value['id_order_product']] = array_slice($temp,9,8);
+				$data['seller'][$value['seller_id']]['totalprice'] += preg_replace('/\,/', '' , $value['net']);
 				$data['seller'][$value['seller_id']]['products'][$value['id_order_product']]['order_product_id'] = $value['id_order_product'];
 			}
 			
+			// Assemble attr array for buyer and seller
 			if(!isset($data['products'][$value['id_order_product']]['attr'])){
 				$data['products'][$value['id_order_product']]['attr'] = array();
 			}
@@ -299,14 +302,8 @@ class payment_model extends CI_Model
 		$sth->execute();
 		$row = $sth->fetchAll(PDO::FETCH_ASSOC);
 		
-		$parseData = array(
-			'invoice_no' => $row[0]['invoice_no'],
-			'order_product_id' => $row[0]['id_order_product'],
-			'product_name' => $row[0]['product_name'],
-			'order_quantity' => $row[0]['order_quantity'],
-			'price' => number_format($row[0]['total'], 2, '.', ','),
-			'attr' => array()
-		);
+		$parseData = array_splice($row[0], 1, 10);
+		$parseData['attr'] = array();
 		
 		if($data['status'] === 1){ // if forward to seller
 			$parseData['user'] = $row[0]['buyer'];

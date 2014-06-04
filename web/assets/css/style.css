@@ -3204,7 +3204,7 @@ a:hover.tooltips span {
 
 /**** Member page Dashboard panel *****/
 #active_items h2, #latest_post_item h2, #deleted_items h2, 
-#dashboard-feedbacks h2 {
+#dashboard-feedbacks h2, #dashboard-sales h2 {
     margin-top: 20px;
     margin-bottom: 10px;
 }
