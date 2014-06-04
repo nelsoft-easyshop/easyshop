@@ -1237,6 +1237,8 @@ $(document).ready(function(){
 									txStatus.replaceWith('<span class="trans_alert transac_paid">Item Received</span>');
 								}else if(txResponseBtn.hasClass('tx_return')){
 									txStatus.replaceWith('<span class="trans_alert transac_pay_return">Payment returned to buyer</span>');
+								}else if(txResponseBtn.hasClass('tx_cod')){
+									txStatus.replaceWith('<span class="trans_alert transac_paid">Completed</span>');
 								}
 								
 								txResponseBtn.closest('div.tx_btns').find('input[type="button"]').hide();

@@ -266,7 +266,7 @@
 		badd.consignee, badd.mobile, badd.telephone, l0.location as stateregion, l1.location as city, badd.address as fulladd, COALESCE(badd.lat, '0') as lat, COALESCE(badd.lng, '0') as lng,
 		o.invoice_no, o.payment_method_id as payment_method,
 		pbd.bank, pbd.ref_num, pbd.amount, pbd.date_deposit, pbd.comment, DATE_FORMAT(pbd.datemodified, "%D %M %Y") as bd_datemodified,
-		op.is_reject
+		op.is_reject, pbd.is_invalid
 	FROM es_order o
 	INNER JOIN es_order_product op 
 		ON op.order_id = o.id_order AND (op.seller_id = :id OR o.buyer_id = :id)

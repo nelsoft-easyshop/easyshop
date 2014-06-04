@@ -1569,10 +1569,14 @@
 												<span class="trans_alert">Item Rejected</span>
 											<?php else:?>
 												<?php if($product['status'] == 0):?>
-													<?php if( $product['has_shipping_summary'] == 0 ):?>
-														<span class="trans_alert">Pending Shipping Info</span>
-													<?php elseif( $product['has_shipping_summary'] == 1 ):?>
-														<span class="trans_alert">Item on route</span>
+													<?php if( $transact['payment_method'] == 3 ):?>
+														<span class="trans_alert">Cash on delivery</span>
+													<?php else:?>
+														<?php if( $product['has_shipping_summary'] == 0 ):?>
+															<span class="trans_alert">Pending Shipping Info</span>
+														<?php elseif( $product['has_shipping_summary'] == 1 ):?>
+															<span class="trans_alert">Item on route</span>
+														<?php endif;?>
 													<?php endif;?>
 												<?php elseif($product['status'] == 1):?>
 													<span class="trans_alert transac_paid">Item Received</span>
@@ -1591,7 +1595,11 @@
 												<span class="trans_alert transac_pending">CONFIRM DRAGONPAY PAYMENT</span>
 											<?php elseif($transact['payment_method'] == 5):?>
 												<?php if( $transact['bd_details']['bd_datemodified'] != '' ):?>
-													<span class="trans_alert transac_pending">CONFIRMING BANK DEPOSIT DETAILS</span>
+													<?php if($transact['bd_details']['is_invalid'] == 1):?>
+														<span class="trans_alert transac_pending">INCORRECT BANK DEPOSIT DETAILS</span>
+													<?php else:?>
+														<span class="trans_alert transac_pending">CONFIRMING BANK DEPOSIT DETAILS</span>
+													<?php endif;?>
 												<?php else:?>
 													<span class="trans_alert transac_pending">PENDING BANK DEPOSIT DETAILS</span>
 												<?php endif;?>
@@ -1621,7 +1629,7 @@
 									</span>
 								</div>
 								<div class="transac_prod_btns tx_btns">
-									<?php if( $product['has_shipping_summary'] == 1 && $transact['transac_stat'] == 0 && $product['status'] == 0 ):?>
+									<?php if( $product['has_shipping_summary'] == 1 && $transact['transac_stat'] == 0 && $product['status'] == 0 && $transact['payment_method'] != 3):?>
 										<?php
 											$attr = array('class'=>'transac_response');
 											echo form_open('',$attr);
@@ -1820,10 +1828,14 @@
 											<span class="trans_alert">Item Rejected</span>
 										<?php else:?>
 											<?php if($product['status'] == 0):?>
-												<?php if( $product['has_shipping_summary'] == 0 ):?>
-													<span class="trans_alert">Pending Shipping Info</span>
-												<?php elseif( $product['has_shipping_summary'] == 1 ):?>
-													<span class="trans_alert">Item on route</span>
+												<?php if( $transact['payment_method'] == 3 ):?>
+													<span class="trans_alert">Cash on delivery</span>
+												<?php else:?>
+													<?php if( $product['has_shipping_summary'] == 0 ):?>
+														<span class="trans_alert">Pending Shipping Info</span>
+													<?php elseif( $product['has_shipping_summary'] == 1 ):?>
+														<span class="trans_alert">Item on route</span>
+													<?php endif;?>
 												<?php endif;?>
 											<?php elseif($product['status'] == 1):?>
 												<span class="trans_alert transac_paid">Item Received</span>
@@ -1846,7 +1858,7 @@
 									<?php endif;?>
 									</span>
 				
-									<?php if($transact['transac_stat'] == 0):?>
+									<?php if($transact['transac_stat'] == 0 && $transact['payment_method'] != 3):?>
 										<div style="display:table-cell"><span class="shipping_comment isform">+ Update Shipping Comment</span></div>
 										<div class="shipping_comment_cont" style="display:none;">
 											<h2>Shipping Details</h2>
@@ -1880,7 +1892,7 @@
 								</div>
 								
 								<div class="transac_prod_btns tx_btns">
-									<?php if($transact['transac_stat'] == 0 && $product['status'] == 0):?>										
+									<?php if($transact['transac_stat'] == 0 && $product['status'] == 0 && $transact['payment_method'] != 3):?>										
 										<?php
 											$attr = array('class'=>'transac_response');
 											echo form_open('',$attr);
@@ -1894,6 +1906,16 @@
 										<?php if($product['is_reject'] == 1):?>
 											<span class="trans_alert">Item Rejected!</span>
 										<?php endif;?>
+									<?php elseif( $transact['transac_stat'] == 0 && $product['status'] == 0 && $transact['payment_method'] == 3 ):?>
+										<?php
+											$attr = array('class'=>'transac_response');
+											echo form_open('',$attr);
+										?>
+										<input type="button" value="Delivered" class="transac_response_btn tx_cod">
+										<input type="hidden" name="cash_on_delivery" value="<?php echo $opk;?>">
+										<input type="hidden" name="transaction_num" value="<?php echo $tk;?>">
+										<input type="hidden" name="invoice_num" value="<?php echo $transact['invoice_no'];?>">
+										<?php echo form_close();?>
 									<?php endif;?>
 								</div>
 								

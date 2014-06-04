@@ -377,7 +377,7 @@ class Memberpage extends MY_Controller
 		$data['invoice_num'] = $this->input->post('invoice_num');
 		$data['member_id'] = $this->session->userdata('member_id');
 		
-		if( $this->input->post('buyer_response') || $this->input->post('seller_response') ){
+		if( $this->input->post('buyer_response') || $this->input->post('seller_response') || $this->input->post('cash_on_delivery') ){
 			
 			$authenticateData = array(
 				'username' => $this->input->post('username'),
@@ -398,10 +398,12 @@ class Memberpage extends MY_Controller
 			if( $this->input->post('buyer_response') ){
 				$data['order_product_id'] = $this->input->post('buyer_response');
 				$data['status'] = 1;
-			}
-			else if( $this->input->post('seller_response') ){
+			}else if( $this->input->post('seller_response') ){
 				$data['order_product_id'] = $this->input->post('seller_response');
 				$data['status'] = 2;
+			}else if( $this->input->post('cash_on_delivery') ){
+				$data['order_product_id'] = $this->input->post('cash_on_delivery');
+				$data['status'] = 3;
 			}
 			
 			// Update database entries and retrieve update stats and buyer info
@@ -427,7 +429,7 @@ class Memberpage extends MY_Controller
 					$mobilestat = $this->payment_model->sendNotificationMobile($parseData['mobile'], $msg);
 				}
 				
-			}else if( $result['o_success'] >= 1 && $data['status'] == 1 ){
+			}else if( $result['o_success'] >= 1 && ( $data['status'] === 1 || $data['status'] === 3) ){
 				$emailstat = true;
 			}
 		

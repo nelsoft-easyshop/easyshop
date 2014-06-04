@@ -473,6 +473,7 @@ class memberpage_model extends CI_Model
 				if($temp['transac_stat'] == 99 && $temp['payment_method'] == 5){
 					if( !isset( $data[$temp['id_order']]['bd_details'] ) )
 						$data[$temp['id_order']]['bd_details'] = array_splice($temp, 39, 6);
+						$data[$temp['id_order']]['bd_details']['is_invalid'] = $temp['is_invalid'];
 				}
 				
 				if(!array_key_exists('users', $data[$temp['id_order']]))
