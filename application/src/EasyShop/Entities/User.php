@@ -6,7 +6,7 @@ namespace Easyshop\Entities;
 
 /**
  * @Entity
- * @Table(name="es_member", indexes={@Index(name="username_idx", columns={"username"})})
+ * @Table(name="es_member", uniqueConstraints={@UniqueConstraint(name="username", columns={"username"})})
  */
 class User
 {
