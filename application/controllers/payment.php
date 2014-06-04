@@ -86,6 +86,8 @@ class Payment extends MY_Controller{
 
             $productId = $value['id']; 
             $itemId = $value['product_itemID']; 
+            $newQty = $this->product_model->getProductQuantity($productId);
+            $itemArray[$value['rowid']]['newmaxqtty'] = $newQty[$itemId]['quantity'];
             $availability = "Not Available";
 
             if($city > 0){  
@@ -108,8 +110,9 @@ class Payment extends MY_Controller{
                 $sellerDetails = $this->memberpage_model->get_member_by_id($seller);
                 $itemArray[$value['rowid']]['availability'] = ($availability == "Available" ? true : false);
                 $itemArray[$value['rowid']]['seller_username'] = $sellerDetails['username'];
-        }  
+        }
  
+        
         if(!count($carts['choosen_items']) <= 0){  
             $data['cat_item'] = $itemArray;
             $data['title'] = 'Payment | Easyshop.ph';
