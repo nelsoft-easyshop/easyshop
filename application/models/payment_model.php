@@ -53,6 +53,40 @@ class payment_model extends CI_Model
     	$sth->execute();
     }
 
+    public function lockItem($itemId,$qty,$orderId,$action)
+    {
+    	$query = "
+    	INSERT INTO `es_product_item_lock` (order_id,product_item_id, qty) 
+		VALUES
+		 	(:order_id,:item_id, :quantity)
+    	";
+
+    	if($action == 'delete'){
+    		$query = "
+			DELETE 
+			FROM
+			  	es_product_item_lock 
+			WHERE product_item_id = :item_id 
+			  	AND qty = :quantity
+			  	AND order_id = :order_id
+    		";
+    	}
+    	;
+    	$sth = $this->db->conn_id->prepare($query);
+    	$sth->bindParam(':item_id',$itemId,PDO::PARAM_INT);
+    	$sth->bindParam(':quantity',$qty,PDO::PARAM_INT); 
+    	$sth->bindParam(':order_id',$orderId,PDO::PARAM_INT); 
+
+    	if ($sth->execute()){
+	  	// success
+    		return 1;
+    	}
+    	else{
+    		return 0;
+    	}
+    }
+
+
     function deductQuantity($productId,$itemId,$qty)
     {
     	$query = "
@@ -78,13 +112,31 @@ class payment_model extends CI_Model
 		}
     }
 
-    function updatePaymentIfComplete($id,$data,$tid)
+    function selectFromEsOrder($token,$paymentType)
+    {
+    	$query = "SELECT invoice_no,id_order,dateadded FROM es_order WHERE transaction_id = :token AND payment_method_id = :payment_id";
+        $sth = $this->db->conn_id->prepare($query);
+        $sth->bindParam(':token',$token,PDO::PARAM_STR);
+        $sth->bindParam(':payment_id',$paymentType,PDO::PARAM_STR);
+        $sth->execute();
+       
+        $row = $sth->fetch(PDO::FETCH_ASSOC);
+
+       return $row;
+
+    }
+
+    function updatePaymentIfComplete($id,$data,$tid,$paymentType)
     {
         $query = $this->sqlmap->getFilenameID('payment','updatePaymentIfComplete');
     	$sth = $this->db->conn_id->prepare($query);
+
+    	$orderStatus = ($paymentType == 2) ? 99 : 0;
+    	$sth->bindParam(':order_status',$orderStatus,PDO::PARAM_STR);
     	$sth->bindParam(':data',$data,PDO::PARAM_STR);
     	$sth->bindParam(':id_order',$id,PDO::PARAM_INT);
     	$sth->bindParam(':tid',$tid,PDO::PARAM_STR);
+    	$sth->bindParam(':payment_id',$paymentType,PDO::PARAM_STR);
     	
     	if ($sth->execute()){
 		  // success

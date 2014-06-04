@@ -38,9 +38,10 @@
 	UPDATE 
 	  es_order 
 	SET
-	  `order_status` = 0
+	  `order_status` = :order_status
 	  , `data_response` = :data 
 	  , `transaction_id` = :tid
+	  , `payment_method_id` = :payment_id
 	WHERE `id_order` = :id_order 
 </select>
 

@@ -39,8 +39,9 @@ $(document).ready(function(){
             if(!$('#chk_paypal1').is(':checked')){
                 $("#chk_paypal1").css({"-webkit-box-shadow": "0px 0px 2px 2px #FF0000",
                     "-moz-box-shadow": "0px 0px 2px 2px #FF0000",
-                    "box-shadow": "0px 0px 2px 2px #FF0000"}); 
-                $('#paypal > .chck_privacy').append('<br><span style="color:red"> * Please acknowledge that you have read and understood our privacy policy.</span> ')
+                    "box-shadow": "0px 0px 2px 2px #FF0000"});
+                $('#paypal > .chck_privacy > p').empty();
+                $('#paypal > .chck_privacy').append('<p><span style="color:red"> * Please acknowledge that you have read and understood our privacy policy.</span></p>');
 
                 return false;
             }
@@ -49,11 +50,12 @@ $(document).ready(function(){
                 $("#chk_paypal2").css({"-webkit-box-shadow": "0px 0px 2px 2px #FF0000",
                     "-moz-box-shadow": "0px 0px 2px 2px #FF0000",
                     "box-shadow": "0px 0px 2px 2px #FF0000"}); 
-                $('#cdb > .chck_privacy').append('<br><span style="color:red"> * Please acknowledge that you have read and understood our privacy policy.</span> ')
+                $('#cdb > .chck_privacy > p').empty();
+                $('#cdb > .chck_privacy').append('<p><span style="color:red"> * Please acknowledge that you have read and understood our privacy policy.</span></p>');
 
                 return false;
             }
-        } 
+        }
 
         $.ajax({
             type: "POST",
@@ -73,6 +75,11 @@ $(document).ready(function(){
                     $('.paypal_button').show();
                 }
              
+            }, 
+            error: function (request, status, error) {
+                    alert('Something Went Wrong. Please try again.');
+                    $('.paypal_loader').hide();
+                    $('.paypal_button').show();      
             }
         });
     });
@@ -105,7 +112,8 @@ $(document).ready(function(){
             $("#chk_dp").css({"-webkit-box-shadow": "0px 0px 2px 2px #FF0000",
                 "-moz-box-shadow": "0px 0px 2px 2px #FF0000",
                 "box-shadow": "0px 0px 2px 2px #FF0000"}); 
-            $('#dragonpay > .chck_privacy').append('<br><span style="color:red"> * Please acknowledge that you have read and understood our privacy policy.</span> ');
+            $('#dragonpay > .chck_privacy > p').empty();
+            $('#dragonpay > .chck_privacy').append('<p><span style="color:red"> * Please acknowledge that you have read and understood our privacy policy.</span></p>');
         }
     });
 
@@ -119,8 +127,9 @@ $(document).ready(function(){
         }else{
            $("#chk_cod").css({"-webkit-box-shadow": "0px 0px 2px 2px #FF0000",
             "-moz-box-shadow": "0px 0px 2px 2px #FF0000",
-            "box-shadow": "0px 0px 2px 2px #FF0000"}); 
-           $('#cod > .chck_privacy').append('<br><span style="color:red"> * Please acknowledge that you have read and understood our privacy policy.</span> ')
+            "box-shadow": "0px 0px 2px 2px #FF0000"});
+            $('#cod > .chck_privacy > p').empty();
+            $('#cod > .chck_privacy').append('<p><span style="color:red"> * Please acknowledge that you have read and understood our privacy policy.</span></p>')
         }
     });
 
@@ -132,10 +141,11 @@ $(document).ready(function(){
         if($('#chk_dbd').is(':checked')){
             $('#dbdFrm').submit();
         }else{
-         $("#chk_dbd").css({"-webkit-box-shadow": "0px 0px 2px 2px #FF0000",
+            $("#chk_dbd").css({"-webkit-box-shadow": "0px 0px 2px 2px #FF0000",
             "-moz-box-shadow": "0px 0px 2px 2px #FF0000",
             "box-shadow": "0px 0px 2px 2px #FF0000"}); 
-           $('#dbd > .chck_privacy').append('<br><span style="color:red"> * Please acknowledge that you have read and understood our privacy policy.</span> ')
+            $('#dbd > .chck_privacy > p').empty();
+            $('#dbd > .chck_privacy').append('<p><span style="color:red"> * Please acknowledge that you have read and understood our privacy policy.</span></p>')
         }
     });
 
@@ -238,6 +248,9 @@ $(document).ready(function(){
                 }else{
                     alert(d);
                 }
+            }, 
+            error: function (request, status, error) {
+                    alert(error);
             }
         });
     });
