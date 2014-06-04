@@ -163,9 +163,27 @@ class MY_Controller extends CI_Controller
             array_push($temp, $x);
         }
         $array = $temp; 
-    }    
-		
+    }
 
+
+    public function GetPromoPrice($price,$start,$end,$is_promo,$case){
+        $today = strtotime( date("Y-m-d H:i:s"));
+        $startdate = strtotime($start);
+        $enddate = strtotime($end);
+        switch ($case) {
+            case "FirstPromo" :
+                $diffHours = floor(($today - $startdate) / 3600);
+                if($today >= $enddate){
+                    $diffHours = 0.99;
+                }
+                $PromoPrice = $price - (($diffHours * 0.02) * $price);
+
+                break;
+        }
+
+        return (intval($is_promo) === 1)?$PromoPrice:$price;
+
+    }
 
 }
 

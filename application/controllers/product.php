@@ -958,7 +958,7 @@ class product extends MY_Controller
     /*
      *   Displays the product page
      */
-    
+
     function item($slug = ''){
     	$product_row = $this->product_model->getProductBySlug($slug);
     	$uid = $this->session->userdata('member_id');
@@ -969,10 +969,14 @@ class product extends MY_Controller
     		$product_options = $this->product_model->implodeAttributesByName($product_options);
     		$this->session->set_userdata('product_id', $id);
     		$product_catid = $product_row['cat_id'];
+
+            $promo_price =$this->GetPromoPrice($product_row['price'],$product_row['startdate'],$product_row['enddate'],$product_row['is_promote'],"FirstPromo");
+
     		$data = array_merge($data,array( 
     			'page_javascript' => 'assets/JavaScript/productpage.js',
     			'breadcrumbs' =>  $this->product_model->getParentId($product_row['cat_id']),
     			'product' => $product_row,
+    			'promo_price' => $promo_price,
     			'product_options' => $product_options,
     			'product_images' => $this->product_model->getProductImages($id),
     			'main_categories' => $this->product_model->getFirstLevelNode(TRUE),
@@ -992,7 +996,7 @@ class product extends MY_Controller
             $data['title'] = es_string_limit(html_escape($product_row['product_name']), 60, '...', ' | Easyshop.ph');
             $data['metadescription'] = es_string_limit(html_escape($product_row['brief']), 155);
             $this->load->view('templates/header', $data); 
-            $this->load->view('pages/product/productpage_view', $data); 
+            $this->load->view('pages/product/productpage_view', $data);
         }
         else{
             $data['title'] =  'Easyshop.ph | Page Not Found';
