@@ -329,7 +329,7 @@ class Payment extends MY_Controller{
                
             $httpParsedResponseAr = $this->paypal->PPHttpPost('DoExpressCheckoutPayment', $padata, $PayPalApiUsername, $PayPalApiPassword, $PayPalApiSignature, $PayPalMode);
             $apiResponseArray['DoExpressCheckoutPayment'] = $httpParsedResponseAr;
-            echo '<pre>',print_r($httpParsedResponseAr);
+            
             if(("SUCCESS" == strtoupper($httpParsedResponseAr["ACK"]) || "SUCCESSWITHWARNING" == strtoupper($httpParsedResponseAr["ACK"])) && ("SUCCESS" == strtoupper($httpParsedResponseArGECD["ACK"])))
             {
                 $transactionID = urldecode($httpParsedResponseAr["TRANSACTIONID"]);
