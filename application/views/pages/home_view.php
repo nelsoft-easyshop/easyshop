@@ -3,6 +3,7 @@
 
 <section>
     <div class="wrapper">
+
         <p class="announcement" style="color:#f28300"><strong><!--[<?PHP #echo $data['header']; ?>]--><?PHP echo $data['text']; ?></strong></p>
     </div>
 
@@ -23,16 +24,20 @@
                     <div class="countdown_top_left_content">
                        <div class="cd_timer_container">
                         <div class="cd_timer_days">
-                            <span>00</span>
+                            <span id='countdown_days'>00</span>
                             <span>DAYS</span>
                         </div>
                         <div class="cd_timer_hours">
-                            <span>00</span>
+                            <span id='countdown_hours'>00</span>
                             <span>HOURS</span>
                         </div>
                         <div class="cd_timer_minutes">
-                            <span>00</span>
+                            <span id='countdown_minutes'>00</span>
                             <span>MINUTES</span>
+                        </div>
+                        <div class="cd_timer_seconds">
+                            <span id="countdown_second">00</span>
+                            <span>SECONDS</span> 
                         </div>
                        </div>
                     </div>
@@ -294,10 +299,17 @@
         </div>
     </div>
 </section>
+<input type = 'hidden' id='cd_enddate' value='<?php echo $data['countdown_enddate']; ?>'/>
 
 <div class="clear"></div>
 
 <script src="<?= base_url() ?>assets/JavaScript/js/jquery.bxslider.min.js" type="text/javascript"></script>
 <script src="<?= base_url() ?>assets/JavaScript/categorynavigation.js?ver=1.0" type="text/javascript"></script>
 <script src="<?= base_url().$page_javascript.'?ver=1.0'; ?>" type="text/javascript"></script>
+<script src="<?=base_url()?>/assets/js/src/vendor/jquery.plugin.min.js" type="text/javascript"></script>
+<script src="<?=base_url()?>/assets/js/src/vendor/jquery.countdown.min.js" type="text/javascript"></script>
+
+
+	
+    
 

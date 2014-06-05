@@ -80,6 +80,7 @@ class Home extends MY_Controller {
             }
        }
        $data['category1_pid_main'] = array($this->product_model->getProductById($data['category1_pid_main']));
+
        return $data;
     }
     
