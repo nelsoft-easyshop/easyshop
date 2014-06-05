@@ -1352,6 +1352,9 @@ $(document).ready(function(){
 							var editbtn = $(form).children('span.tx_modal_edit');
 							var cancelbtn = $(form).children('span.tx_modal_cancel');
 							
+							input.attr('disabled',false);
+							textarea.attr('disabled', false);
+							
 							$.post(config.base_url+'memberpage/addShippingComment', $(form).serializeArray(), function(data){
 								submitbtn.attr('disabled', false);
 								submitbtn.val('Save');
