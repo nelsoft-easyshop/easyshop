@@ -318,7 +318,7 @@ $(document).ready(function() {
     
     <?php 
     $type = 0;
-    if(isset($_COOKIE['view']){
+    if(isset($_COOKIE['view'])){
         $type = ($cookieView == "list") ? '1' : '0';
     }
     ?>
