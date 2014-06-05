@@ -41,6 +41,8 @@
 $route['default_controller'] = "landingpage";
 $route['404_override'] = 'home/pagenotfound';
 
+#route maintenance: home/splash
+
 # CATEGORY
 $route['(?i)category/(:any)'] = 'product/categorySearch/$1'; # janz serafico
 $route['(?i)cat/loadproduct'] = 'product/loadOtherCategorySearch'; # ryan vasquez
@@ -95,6 +97,9 @@ $route['(?i)pay/setting/paypal'] = 'payment/paypal_setexpresscheckout';  # ryan 
 $route['(?i)pay/paypal'] = 'payment/paypal';  # ryan vasquez
 
 $route['(?i)payment/success/(:any)'] = 'payment/paymentSuccess/$1';
+
+
+
 
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */

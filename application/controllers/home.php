@@ -50,11 +50,13 @@ class Home extends MY_Controller {
         $this->load->view('pages/general_error');
         $this->load->view('templates/footer_full');
 	}
-
-	public function comingSoon(){
-        $this->load->view('pages/coming_soon');
-	}
     
+    public function splash(){
+
+        $this->load->view('pages/undermaintenance.php');
+
+    }
+
     private function getHomeXML($file){
         $this->load->model('product_model');
         $xml = simplexml_load_file(APPPATH . "resources/" . $file . ".xml");
