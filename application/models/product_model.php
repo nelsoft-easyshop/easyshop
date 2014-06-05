@@ -2074,7 +2074,7 @@ class product_model extends CI_Model
         $type = intval($type);
         switch ($type) {
             case 1 :
-                if($today < $startdate){
+                if(($today < $startdate) || ($enddate > $startdate)){
                     $diffHours = 0;
                 }else if($today >= $enddate){
                     $diffHours = 0.99;
