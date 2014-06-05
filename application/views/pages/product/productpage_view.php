@@ -136,8 +136,8 @@
                         <?php echo number_format($product['price'],2,'.',',');?> 
                     </span> 
                 </div>
-            
             <?PHP endif;?>
+            
           </div>
           <div class="availability">
             <p> Availability <br />

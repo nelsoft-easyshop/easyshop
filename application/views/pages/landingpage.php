@@ -1,42 +1,56 @@
 <!DOCTYPE html>
-<!--[if IE]><![endif]-->
-<!--[if lt IE 7 ]> <html lang="en" class="ie6">    <![endif]-->
-<!--[if IE 7 ]>    <html lang="en" class="ie7">    <![endif]-->
-<!--[if IE 8 ]>    <html lang="en" class="ie8">    <![endif]-->
-<!--[if IE 9 ]>    <html lang="en" class="ie9">    <![endif]-->
-<!--[if (gt IE 9)|!(IE)]><!-->
-<html lang="en">
-<!--<![endif]-->
-    <head>
-    <link rel="shortcut icon" href="<?php echo base_url()?>assets/images/favicon.ico" type="image/x-icon"/>
-<meta property="og:title" content="EasyShop.ph" />
-<meta property="og:description" content="Our vision is to be the leading Online Shopping website in South East Asia. 
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+<head>
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>Easyshop.ph - Welcome</title>
+        <link rel="shortcut icon" href="<?php echo base_url()?>assets/images/favicon.ico" type="image/x-icon"/>
+        <meta property="og:title" content="EasyShop.ph" />
+		<meta property="og:description" content="Our vision is to be the leading Online Shopping website in South East Asia. 
            The mission that EasyShop has is to provide its customer with a Fast and Easy 
            online shopping experience. Our goal is to be the first website you think about
            when buying online." />
-<meta property="og:image" content="https://easyshop.ph/assets/images/img_logo.png" />
+		<meta property="og:image" content="https://easyshop.ph/assets/images/img_logo.png?ver=1.0" />
+        <meta name="viewport" content="width=device-width">
 
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link href="<?=base_url()?>assets/css/landingpage/bootstrap.css?ver=1.0" rel="stylesheet">
-        <link href="<?=base_url()?>assets/css/landingpage/bootstrap-responsive.css?ver=1.0" rel="stylesheet">
-        <link href="<?=base_url()?>assets/css/landingpage/mystyle.css?ver=1.0" rel="stylesheet">
+		<!-- CSS -->
+        <link rel="stylesheet" href="<?=base_url()?>assets/css/landingpage/style_v2.css?ver=1.0" type="text/css" media="screen"/>
+        <link rel="stylesheet" href="<?=base_url()?>assets/css/landingpage/jquery.bxslider.css" type="text/css" media="screen"/> <!-- Slider CSS -->
+        <link rel="stylesheet" href="<?=base_url()?>assets/css/landingpage/responsive-nav.css"><!-- responsive menu -->
+
+		<!-- Contact Form CSS files -->
+		<link type='text/css' href='<?=base_url()?>assets/css/basic.css?ver=1.0' rel='stylesheet' media='screen' />
 		<link href="<?=base_url()?>assets/css/jquery-ui.css?ver=1.0" rel="stylesheet">
-		<title><?php echo $title;?></title>
-        
-         <!-- Google Analytics -->
-      <script>
-          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-          })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-          ga('create', 'UA-48811886-1', 'easyshop.ph');
-          ga('send', 'pageview');
+        <!-- JS -->
+		<!-- html5.js for IE less than 9 -->
+		<!--[if lt IE 9]>
+			<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+		<![endif]-->
+
+		<!-- css3-mediaqueries.js for IE less than 9 -->
+		<!--[if lt IE 9]>
+			<script src="http://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js"></script>
+		<![endif]-->
+
+		<!-- fonts -->
+		<link href='https://fonts.googleapis.com/css?family=Roboto:400,300' rel='stylesheet' type='text/css'>
+        <script>
+              (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+              (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+              m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+              })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+              ga('create', 'UA-48811886-1', 'easyshop.ph');
+              ga('send', 'pageview');
         </script>
         <!-- End of Google Analytics -->
-    </head>
-    <body>
-         <!-- Google Tag Manager -->
+</head>
+<body>
+        <!-- Google Tag Manager -->
          <noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-KP5F8R"
          height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
          <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -45,103 +59,60 @@
          '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
          })(window,document,'script','dataLayer','GTM-KP5F8R');</script>
          <!-- End Google Tag Manager -->
-    
-    
-        <div class = "container header_bg">
-            <div class="row-fluid">
-				<div class="login_btn">
-                	<a href="<?=base_url();?>login" class="">Log In</a>
-                </div>
-                <div id="himg" class="text-center"> 
-                	<a href="<?=base_url()?>home"><img title='Click here to checkout our site' src="<?=base_url()?>/assets/images/landingpage/img_logo.png"></a>
 
-                </div>
-                
-                    <h2 class="text-center txt_header">SHOPPING MADE <span class="c_ylw">EASY</span></h2>
-                 <div class="himg2">                     
-                    <h1 class="txt_header2 margin_top1">Your <span class="c_ylw">business</span></h1>
-                    <h1 class="txt_header2 margin_top2 padding_left1">has a <span>new home!</span></h1>
-               
-                   <p class="header_sub hs_top">
-                      <span>Sign up and enjoy selling online for free! </span>
-                      Let us help you bring your products to the right customers. 
-                      Manage your business anytime, anywhere!
-                   </p>
-                   <span class="img_scroll">
-					<a href="<?=base_url()?>home" class="lnk_homepage well-small" ><img src="<?=base_url()?>/assets/images/landingpage/img_home.png">Visit Homepage</a>
-					<!--<a id="gotoHome" class="btn btn-warning btn-large" href="<?=base_url()?>home" >Visit home page</a>-->
-				   </span>
-                </div>
-            </div>
-        </div>
-        <div class = "container content1" id='register'>
-            <div class="row-fluid">
-                <div class="row-fluid">
-                        <span class="spn48">REGISTER</span>
-                        <div class="row-fluid">
-								<?php echo form_open('', array('id'=>'register_form1'));?>
-									<fieldset>
+		<div id="fb-root"></div>
+		<script>(function(d, s, id) {
+		  var js, fjs = d.getElementsByTagName(s)[0];
+		  if (d.getElementById(id)) return;
+		  js = d.createElement(s); js.id = id;
+		  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&appId=154815247949100&version=v2.0";
+		  fjs.parentNode.insertBefore(js, fjs);
+		  }(document, 'script', 'facebook-jssdk'));</script>
+	<header id="header" class="">
+		<div class="header">
+				<div class="logo_con">
+					<a href='<?=base_url()?>home'><span class="span_bg logo"></span></a>
+				</div>
+				<div class="nav_container">
+					<nav class="nav-collapse">
+					  <ul>
+					    <li class="grid-1"><a href="<?=base_url()?>home">Shop</a></li>
+					    <li class="grid-1"><a href="<?=base_url()?>sell/step1">Sell</a></li>
+					    <?php if(!$logged_in): ?>
+					    <li class="btn_login">
+					    	<?php echo form_open('login');?>
+                                <input type="text" placeholder='Username' name='login_username'>
+                                <input type="password" placeholder='Password' name='login_password'>
+                                <input type="submit" class='btn' value='Login' name='login_form'/>
+                            <?php echo form_close();?>
+					    </li>
+					    <li class="btn_register">
+					    	<span class="btn reg_btn" id="reg_btn">Register</span>					    	
+					    </li>
+					    <?php else: ?>
+                            <li class='btn_login'>   
+                                <a href='<?=base_url()?>me'><input type="submit" class='btn' id='userpage' value='<?php echo html_escape($uname);?>'/></a>
+                            </li>
+                            
+                        
+                             <li class="btn_register"> 
+                                <a href='<?=base_url()?>login/logout'><span class='btn' id='signout'>Sign-out</span></a>
+                            </li>
+                        <?php endif; ?>  
+					    <li class="shop_con">
+					    	<a href="<?=base_url()?>home">Shop</a>
+					    	<a href="<?=base_url()?>sell/step1">Sell</a>
+					    </li>
+					  </ul>
+					</nav>
+				</div>		
+				
+		</div>
 
-											<h4>Username</h4>
-											<input type="text" placeholder="" id="username" name="username" class="reqfield" autocomplete="off"/>
-											<input type="hidden" id="usernamecheck" value="" name="usernamecheck">
-											<span class="red ci_form_validation_error"><?php echo form_error('username'); ?></span>
-											<img id="username_loader" class="img_loader_small" src="<?=base_url()?>/assets/images/orange_loader_small.gif" style="display:none;">
-											<div id="username_status">
-												<img class="fieldstatus" src="<?=base_url()?>/assets/images/check_icon.png" id="username_check" style="position: relative;display:none;vertical-align:middle"/>
-												<img class="fieldstatus" src="<?=base_url()?>/assets/images/x_icon.png" id="username_x" style="position: relative;display:none;vertical-align:middle"/>
-												<span class="username_availability"></span>
-											</div>
-											<span class="help-block spnmsg text-center">The username must be 5-25 characters long.</span>
-									
-										
-										
-											<h4>Password</h4>
-											<input type="password" placeholder="" id="password" name="password" class="reqfield">
-											<span class="red ci_form_validation_error"><?php echo form_error('password'); ?></span>
-											<span class="help-block spnmsg text-center">Password must be alphanumeric with a minimum of 6 characters.</span>
-										
-										
-										
-											<h4>Confirm Password</h4>
-											<input type="password" placeholder="" id="cpassword" name="cpassword" class="reqfield" disabled>
-											<img class="fieldstatus" src="<?=base_url()?>/assets/images/check_icon.png" id="cpassword_check" style="position: relative;display:none;"/>
-											<img class="fieldstatus" src="<?=base_url()?>/assets/images/x_icon.png" id="cpassword_x" style="position: relative;display:none; "/>
-											<span class="red ci_form_validation_error"><?php echo form_error('cpassword'); ?></span>
-											<span class="help-block spnmsg" style="text-align:left"></span>
-										
-										
-											<h4>Email Address</h4>
-											<input type="text" placeholder="" id="email" name="email" class="reqfield" autocomplete="off">
-											<input type="hidden" id="emailcheck" value="">
-											<img id="email_loader" class="img_loader_small" src="<?=base_url()?>/assets/images/orange_loader_small.gif" style="display:none;">
-											<div id="email_status">
-												<img class="fieldstatus" src="<?=base_url()?>/assets/images/check_icon.png" id="email_check" style="position: relative;display:none;vertical-align:middle"/>
-												<img class="fieldstatus" src="<?=base_url()?>/assets/images/x_icon.png" id="email_x" style="position: relative;display:none;vertical-align:middle"/>
-												<span class="email_availability"></span>
-											</div>
-											<span class="red ci_form_validation_error"><?php echo form_error('email'); ?></span>
-											<span class="help-block spnmsg"></span>
-										
-											<h4>Mobile Number</h4>
-											<input type="text" placeholder="e.g. 09051234567" name="mobile" class="reqfield" id="mobile" maxlength="11">
-											<input type="hidden" id="mobilecheck" value="">
-											<img id="mobile_loader" class="img_loader_small" src="<?=base_url()?>/assets/images/orange_loader_small.gif" style="display:none;">
-											<div id="mobile_status">
-												<img class="fieldstatus" src="<?=base_url()?>/assets/images/check_icon.png" id="mobile_check" style="position: relative;display:none;vertical-align:middle"/>
-												<img class="fieldstatus" src="<?=base_url()?>/assets/images/x_icon.png" id="mobile_x" style="position: relative;display:none;vertical-align:middle"/>
-												<span class="mobile_availability"></span>
-											</div>
-											<span class="red ci_form_validation_error"><?php echo form_error('mobile'); ?></span>
-											<span class="help-block spnmsg"></span>
-											
-											
-											
-										<!--<button type="button" class="btn btn-warning btn-large">SEND</button>-->
-										<input type="submit" class="btn btn-warning btn-large" value="SEND" name="register_form1" id="register_form1_btn" >
-										<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" class="img_loader_small2" id="register_form1_loadingimg" style="display:none"/>
-									
-										<p class="terms_con">By registering to Easyshop.ph, you agree to comply with our <span class="terms_and_conditions">Terms and Conditions</span></p>
+		<div class="register_container container-16" id="register_container">
+			<div class="grid-6">
+
+								<?php echo form_close();?> 
 										<div class="dialog t_and_c">
 											<h3>TERMS &amp; CONDITIONS</h3>
 											<p> 
@@ -199,124 +170,465 @@
 												the parties arising before the date of termination. 
 											</p>	
 										</div>
-									</fieldset>
-
 									<p class="span6 border1"></p>
-
-								<?php echo form_close();?>
-
-								<div class="input-append">
-								<?php echo form_open('', array('id'=>'subscription_form'));?>
-									<h4>Stay in touch to get the latest updates</h4>
-									<input placeholder="e-mail address" class="subscribe_input" id="appendedInputButton" type="text" name="subscribe_email">
-									<!--<button class="btn btn-warning btn-large" type="button">Subscribe</button>-->
-									<input type="submit" class="btn btn-warning btn-large subscribe_btn" value="Subscribe" name="subscribe_btn" id="subscribe_btn" >
-									<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" class="img_loader_small2 sub_loading_img" id="subscribe_loadingimg" style="display:none"/>
-								<?php echo form_close();?>
-								</div>
-                        </div>                
-                                
-                </div>            
-            </div>
-        </div>
-		
-		<div id="register_result" style="display:none;">
-			<span id="result_desc"></span>
+			</div>					
 		</div>
-		
-        <div class = "footer">
-            <div class="container content2">
-                <div class="row-fluid">
-                    <div class="row-fluid">
-                        <div class="span12 text-center">
-                            <span class="spn48 content_header">WE MAKE SHOPPING EASY</span>
-                            <div class="row-fluid">
-                                <div class="span4 text-center">
-                                    <img src="<?=base_url()?>assets/images/landingpage/img_online_shopping.png"><br>
-                                    <span class="spn18 cotent2_title"><b>Online Shopping</b></span>
-                                    <span class="help-block spnmsg content2_sub">   
-                                    	We provide our users with a fast and easy online shopping experience, 
-                                    	letting them enjoy the benefits of one-stop shopping at the comforts of their own home.
-                                     
-                                    </span>
-                                </div>
-                                <div class="span4 text-center">
-                                    <img src="<?=base_url()?>assets/images/landingpage/img_paperless_payment.png"><br>
-                                    <span class="spn18 cotent2_title"><b>Paperless Payment</b></span>
-                                    <span class="help-block spnmsg content2_sub">
-                                         Pay through trusted payment channels and carry out your transactions easily.
-                             			 Easyshop aims to provide you with flexible payment options in order to simplify 
-                             			 your shopping and selling experience. 
-                                    </span>
-                                </div>
-                                <div class="span4 text-center">
-                                    <img src="<?=base_url()?>assets/images/landingpage/img_secured.png"><br>
-                                    <span class="spn18 cotent2_title"><b>Secured Transaction</b></span>
-                                    <span class="help-block spnmsg content2_sub">
-                                    	Easyshop provides a secure platform by which users can carry out their transactions. 
-                             			Our business model ensures that deals between buyers and sellers are done risk-free.
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-         <div class="footer2">
-            <div class="container">
-                <span class="help-block spnmsg"><br>Copryright &#169; 2014 easyshop.ph. All rights reserved<br></span>
-            </div>
-        </div>
-    </body>
+	</header>
+	<div class="clear"></div>
+	<section class="bg_mid">
+		<div class="wrapper prod_slides">
+			<div class="grid-11">
+        
+				<ul class="bxslider_slides">
+					<li class="slide-1">
+						<div class="product_content">
+							<div>
+								<h1><span>Buy an</span> iPhone 5s</h1>
+								<h1><span>for as low as</span></h1>
+								<h1><span>Php 48,990</span></h1>
+								<h1><span>Php 489.90*</span></h1>
+								<div class="product_content1_sub">
+									<p class="mgrn_top4">
+									The offer starts on June 15 at 12 noon<br />and expires on June 17, 2014.
+									</p>
+									<p class="mgrn_top4">To qualify, like us on Facebook and  </p>
+									<p class="fs2 txt_reg" id="reg_txt">register now!</p>
+									<p>
+										*The price will drop by 2% every hour until it<br />reaches 99% off for 48 hours. <br />
+										One stock is available per item.
+									</p>
+								</div>
+							</div>
+							<div class="img_product_content">
+								<div class="discount_tag">
+									<p><span>2% OFF</span> every hour until sold</p>
+									<p>Starting June 15,2014</p>
+									<p>12:00 noon</p>
+								</div>
+								<div class="img_container">
+								<img src="<?=base_url()?>assets/images/landingpage/img_ribbon.png" class="ribbon_tag">
+								<img src="<?=base_url()?>assets/images/landingpage/img_iphone.png" class="img_main_product">
+								</div>
+							</div>
+						</div>
+						<div class="clear"></div>
+						<div class="product_content2">
+							<p class="mgrn_top4">
+							The offer starts on June 15 at 12 noon and expires on June 17, 2014.
+							</p>
+							<p class="mgrn_top4">To qualify, like us on Facebook and  </p>
+							<p class="fs2 txt_reg" id="reg_txt">register now!</p>
+							<p class="mgrn_top4">
+								*The price will drop by 2% every hour until it reaches 99% off for 48 hours. 
+								One stock is available per item.
+							</p>
+						</div>
+					</li>
+
+					<li class="slide-1 slide-2">
+						<div class="product_content">
+							<div>
+								<h1><span>Buy a</span> Canon DSLR 60D</h1>
+								<h1><span>for as low as</span></h1>
+								<h1><span>Php 32,900</span></h1>
+								<h1><span>Php 329.00*</span></h1>
+								<div class="product_content1_sub">
+									<p class="mgrn_top4">
+									The offer starts on June 15 at 12 noon<br />and expires on June 17, 2014.
+									</p>
+									<p class="mgrn_top4">To qualify, like us on Facebook and  </p>
+									<p class="fs2 txt_reg" id="reg_txt">register now!</p>
+									<p>
+										*The price will drop by 2% every hour until it<br />reaches 99% off for 48 hours. <br />
+										One stock is available per item.
+									</p>
+								</div>
+							</div>
+							<div class="img_product_content">
+								<div class="discount_tag">
+									<p><span>2% OFF</span> every hour until sold</p>
+									<p>Starting June 15,2014</p>
+									<p>12:00 noon</p>
+								</div>
+								<div class="img_container">
+								<img src="assets/images/landingpage/img_ribbon.png" class="ribbon_tag">
+								<img src="assets/images/landingpage/img_canon60d.png" class="img_main_product">
+								</div>
+							</div>
+						</div>
+						<div class="clear"></div>
+						<div class="product_content2">
+							<p class="mgrn_top4">
+							The offer starts on June 15 at 12 noon and expires on June 17, 2014.
+							</p>
+							<p class="mgrn_top4">To qualify, like us on Facebook and  </p>
+							<p class="fs2 txt_reg" id="reg_txt">register now!</p>
+							<p class="mgrn_top4">
+								*The price will drop by 2% every hour until it reaches 99% off for 48 hours. 
+								One stock is available per item.
+							</p>
+						</div>
+					</li>
+
+					<li class="slide-1 slide-3">
+						<div class="product_content">
+							<div>
+								<h1><span>Buy a</span> Samsung Smart LED TV 40"</h1>
+								<h1><span>for as low as</span></h1>
+								<h1><span>Php 43,890</span></h1>
+								<h1><span>Php 438.90*</span></h1>
+								<div class="product_content1_sub">
+									<p class="mgrn_top4">
+									The offer starts on June 15 at 12 noon<br />and expires on June 17, 2014.
+									</p>
+									<p class="mgrn_top4">To qualify, like us on Facebook and  </p>
+									<p class="fs2 txt_reg" id="reg_txt">register now!</p>
+									<p>
+										*The price will drop by 2% every hour until it<br />reaches 99% off for 48 hours. <br />
+										One stock is available per item.
+									</p>
+								</div>
+							</div>
+							<div class="img_product_content">
+								<div class="discount_tag">
+									<p><span>2% OFF</span> every hour until sold</p>
+									<p>Starting June 15,2014</p>
+									<p>12:00 noon</p>
+								</div>
+								<div class="img_container">
+								<img src="assets/images/landingpage/img_ribbon.png" class="ribbon_tag">
+								<img src="assets/images/landingpage/img_samsung_ledtv.png" class="img_main_product">
+								</div>
+							</div>
+						</div>
+						<div class="clear"></div>
+						<div class="product_content2">
+							<p class="mgrn_top4">
+							The offer starts on June 15 at 12 noon and expires on June 17, 2014.
+							</p>
+							<p class="mgrn_top4">To qualify, like us on Facebook and  </p>
+							<p class="fs2 txt_reg" id="reg_txt">register now!</p>
+							<p class="mgrn_top4">
+								*The price will drop by 2% every hour until it reaches 99% off for 48 hours. 
+								One stock is available per item.
+							</p>
+						</div>
+					</li>
+
+					<li class="slide-1 slide-4">
+						<div class="product_content">
+							<div>
+								<h1><span>Buy an</span> LG G2 D802 32Gb</h1>
+								<h1><span>for as low as</span></h1>
+								<h1><span>Php 25,400</span></h1>
+								<h1><span>Php 254.00*</span></h1>
+								<div class="product_content1_sub">
+									<p class="mgrn_top4">
+									The offer starts on June 15 at 12 noon<br />and expires on June 17, 2014.
+									</p>
+									<p class="mgrn_top4">To qualify, like us on Facebook and  </p>
+									<p class="fs2 txt_reg" id="reg_txt">register now!</p>
+									<p>
+										*The price will drop by 2% every hour until it<br />reaches 99% off for 48 hours. <br />
+										One stock is available per item.
+									</p>
+								</div>
+							</div>
+							<div class="img_product_content">
+								<div class="discount_tag">
+									<p><span>2% OFF</span> every hour until sold</p>
+									<p>Starting June 15,2014</p>
+									<p>12:00 noon</p>
+								</div>
+								<div class="img_container">
+								<img src="assets/images/landingpage/img_ribbon.png" class="ribbon_tag">
+								<img src="assets/images/landingpage/img_lg_phone.png" class="img_main_product">
+								</div>
+							</div>
+						</div>
+						<div class="clear"></div>
+						<div class="product_content2">
+							<p class="mgrn_top4">
+							The offer starts on June 15 at 12 noon and expires on June 17, 2014.
+							</p>
+							<p class="mgrn_top4">To qualify, like us on Facebook and  </p>
+							<p class="fs2 txt_reg" id="reg_txt">register now!</p>
+							<p class="mgrn_top4">
+								*The price will drop by 2% every hour until it reaches 99% off for 48 hours. 
+								One stock is available per item.
+							</p>
+						</div>
+					</li>
+					
+					<li class="slide-1 slide-5">
+						<div class="product_content">
+							<div>
+								<h1><span>Buy a</span> Samsung Galaxy Note 3</h1>
+								<h1><span>for as low as</span></h1>
+								<h1><span>Php 29,990</span></h1>
+								<h1><span>Php 299.90*</span></h1>
+								<div class="product_content1_sub">
+									<p class="mgrn_top4">
+									The offer starts on June 15 at 12 noon<br />and expires on June 17, 2014.
+									</p>
+									<p class="mgrn_top4">To qualify, like us on Facebook and  </p>
+									<p class="fs2 txt_reg" id="reg_txt">register now!</p>
+									<p>
+										*The price will drop by 2% every hour until it<br />reaches 99% off for 48 hours. <br />
+										One stock is available per item.
+									</p>
+								</div>
+							</div>
+							<div class="img_product_content">
+								<div class="discount_tag">
+									<p><span>2% OFF</span> every hour until sold</p>
+									<p>Starting June 15,2014</p>
+									<p>12:00 noon</p>
+								</div>
+								<div class="img_container">
+								<img src="assets/images/landingpage/img_ribbon.png" class="ribbon_tag">
+								<img src="assets/images/landingpage/img_samsung_galaxynote.png" class="img_main_product">
+								</div>
+							</div>
+						</div>
+						<div class="clear"></div>
+						<div class="product_content2">
+							<p class="mgrn_top4">
+							The offer starts on June 15 at 12 noon and expires on June 17, 2014.
+							</p>
+							<p class="mgrn_top4">To qualify, like us on Facebook and  </p>
+							<p class="fs2 txt_reg" id="reg_txt">register now!</p>
+							<p class="mgrn_top4">
+								*The price will drop by 2% every hour until it reaches 99% off for 48 hours. 
+								One stock is available per item.
+							</p>
+						</div>
+					</li>
+
+					<li class="slide-1 slide-6">
+						<div class="product_content">
+							<div>
+								<h1><span>Buy a</span> Samsung 7 cu. ft. REFRIGERATOR</h1>
+								<h1><span>for as low as</span></h1>
+								<h1><span>Php 17,995</span></h1>
+								<h1><span>Php 179.95*</span></h1>
+								<div class="product_content1_sub">
+									<p class="mgrn_top4">
+									The offer starts on June 15 at 12 noon<br />and expires on June 17, 2014.
+									</p>
+									<p class="mgrn_top4">To qualify, like us on Facebook and  </p>
+									<p class="fs2 txt_reg" id="reg_txt">register now!</p>
+									<p>
+										*The price will drop by 2% every hour until it<br />reaches 99% off for 48 hours. <br />
+										One stock is available per item.
+									</p>
+								</div>
+							</div>
+							<div class="img_product_content">
+								<div class="discount_tag">
+									<p><span>2% OFF</span> every hour until sold</p>
+									<p>Starting June 15,2014</p>
+									<p>12:00 noon</p>
+								</div>
+								<div class="img_container">
+								<img src="assets/images/landingpage/img_ribbon.png" class="ribbon_tag">
+								<img src="assets/images/landingpage/img_samsung_ref.png" class="img_main_product">
+								</div>
+							</div>
+						</div>
+						<div class="clear"></div>
+						<div class="product_content2">
+							<p class="mgrn_top4">
+							The offer starts on June 15 at 12 noon and expires on June 17, 2014.
+							</p>
+							<p class="mgrn_top4">To qualify, like us on Facebook and  </p>
+							<p class="fs2 txt_reg" id="reg_txt">register now!</p>
+							<p class="mgrn_top4">
+								*The price will drop by 2% every hour until it reaches 99% off for 48 hours. 
+								One stock is available per item.
+							</p>
+						</div>
+					</li>
+				</ul>					
+	
+			</div>
+		</div>
+	</section>
+	
+	<div class="clear"></div>
+	<section class="mid_reg2">
+		<div class="wrapper register_wrapper" id="register">
+			<h1>REGISTER</h1>
+			<div class="register_container2" id="register_container2">
+				<?php echo form_open('', array('id'=>'register_form1'));?>
+					<fieldset>
+						<div class="reg2_username">
+							<h4>Username</h4>
+							<input maxlength='25' type="text" placeholder="" id="username" name="username" class="reqfield" autocomplete="off"/>
+							<input  type="hidden" id="usernamecheck" value="" name="usernamecheck">
+							<span class="red ci_form_validation_error"><?php echo form_error('username'); ?></span>
+							<div id="username_status">
+								<img class="fieldstatus" src="<?=base_url()?>/assets/images/check_icon.png" id="username_check" style="position: relative;display:none;vertical-align:middle"/>
+								<img class="fieldstatus" src="<?=base_url()?>/assets/images/x_icon.png" id="username_x" style="position: relative;display:none;vertical-align:middle"/>
+								<span class="username_availability"></span>
+							</div>
+						</div>
+						<div class="reg2_password">
+							<h4 class="txt_cp">Password</h4>
+							<input type="password" placeholder="" id="password" name="password" class="reqfield">
+							<span class="red ci_form_validation_error"><?php echo form_error('password'); ?></span>
+						</div>
+						<div class="reg2_confirmpassword">
+							<h4 class="txt_cp">Confirm Password</h4>
+							<input type="password" placeholder="" id="cpassword" name="cpassword" class="reqfield" disabled>
+							<span class="field_pword_status">
+								<img class="fieldstatus" src="<?=base_url()?>/assets/images/check_icon.png" id="cpassword_check" style="position: relative;display:none;"/>
+								<img class="fieldstatus" src="<?=base_url()?>/assets/images/x_icon.png" id="cpassword_x" style="position: relative;display:none; "/>
+							</span>
+							<span class="red ci_form_validation_error"><?php echo form_error('cpassword'); ?></span>
+							<span class="help-block spnmsg padding1" style="text-align:left"></span>
+						</div>
+						<div class="reg2_email">
+							<h4>Email Address</h4>
+							<input type="text" placeholder="" id="email" name="email" class="reqfield" autocomplete="off">
+							<input type="hidden" id="emailcheck" value="">
+							<div id="email_status">
+								<img class="fieldstatus" src="<?=base_url()?>/assets/images/check_icon.png" id="email_check" style="position: relative;display:none;vertical-align:middle"/>
+								<img class="fieldstatus" src="<?=base_url()?>/assets/images/x_icon.png" id="email_x" style="position: relative;display:none;vertical-align:middle"/>
+							</div>
+							<br/>
+							<span class="red email_availability"></span>
+							<span class="red ci_form_validation_error"><?php echo form_error('email'); ?></span>
+							<span class="help-block spnmsg padding1"></span>
+						</div>					
+						<div class="mobile">
+							<h4>Mobile Number</h4>
+							<input type="text" placeholder="e.g. 09051234567" name="mobile" class="reqfield" id="mobile" maxlength="11">
+							<input type="hidden" id="mobilecheck" value="">
+							<div id="mobile_status">
+								<img class="fieldstatus" src="<?=base_url()?>/assets/images/check_icon.png" id="mobile_check" style="position: relative;display:none;vertical-align:middle"/>
+								<img class="fieldstatus" src="<?=base_url()?>/assets/images/x_icon.png" id="mobile_x" style="position: relative;display:none;vertical-align:middle"/>
+								<span class=" red  mobile_availability"></span>
+							</div>
+							<span class="red ci_form_validation_error"><?php echo form_error('mobile'); ?></span>
+							<span class="help-block spnmsg padding1"></span>
+						</div>
+						<div class="reg2_tc">
+							<p class="terms_con padding1 padding-t1">
+								By registering to Easyshop.ph, you agree to comply with our 
+								<span class="terms_and_conditions">Terms and Conditions</span>
+							</p>
+						</div>
+						<div class="reg2_btn_submit">
+							<!--<button type="button" class="btn btn-warning btn-large">SEND</button>-->
+							<input type="submit" class="btn btn_send" value="SEND" name="register_form1" id="register_form1_btn" >
+							<div style='display:inline-block; position:absolute;'>
+							<img style='display:none;margin-top:5px;margin-left:5px;' src="<?=base_url()?>/assets/images/orange_loader_small.gif" class="img_loader_small2" id="register_form1_loadingimg"/>
+							</div>
+						</div>				
+					</fieldset>
+				<?php echo form_close();?>
+			</div>	
+		</div>
+	</section>
+	<div class="clear"></div>
+	<footer>
+		<div class="wrapper">
+			<div class="footer">
+				<ul>
+					<li>
+						<a href="<?=base_url()?>home">Shop</a>
+					</li>
+					<li>
+						<a href="<?=base_url()?>sell/step1">Sell</a>
+					</li>
+					<li>
+						<div class="footer_payment">
+							<p><strong>Payment Methods:</strong></p>
+							<span class="span_bg mastercard"></span>
+							<span class="span_bg visa"></span>
+							<span class="span_bg paypal"></span>
+							<span class="span_bg dragonpay"></span>
+							<span class="span_bg cod"></span>
+						</div>
+					</li>
+					<li class="social_media_container">
+						<div class="social_media">
+							<p><strong>Social Media:</strong></p>
+							<ul>
+								<li>
+									<div class="fb-like" data-href="https://www.facebook.com/EasyShopPhilippines" data-width="200" data-layout="button" data-action="like" data-show-faces="false" data-share="false"></div>
+								</li>
+								<li>
+									<a href="https://twitter.com/EasyShopPH" class="twitter-follow-button" data-show-count="false" data-size="large" data-show-screen-name="false">Follow @EasyShopPH</a>
+                                <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+								</li> 
+							</ul>
+							
+						</div>
+					</li>
+				</ul>
+				
+			</div>
+			<div class="clear"></div>
+		</div>
+		<div class="clear"></div>
+		<div class="copyright_content">
+				<p>Copyright © 2014 easyshop.ph. All rights reserved </p>
+			</div>
+	</footer>
+
+
+
+
+</body>
+<?php echo form_open('registration/success', array('id'=>'success_register'));?>
+		  <input type="hidden" name="referrer" class="referrer" value="landingpage"/>
+<?php echo form_close();?>
+
+
+<script src="<?=base_url()?>assets/JavaScript/js/jquery-1.9.1.js"></script>
+<script src="<?=base_url()?>assets/JavaScript/landingpage/responsive-nav.js"></script>
+<script type='text/javascript' src="<?=base_url()?>assets/JavaScript/js/jquery-ui.js"></script>
+
+<script type='text/javascript' src='<?=base_url()?>assets/JavaScript/js/jquery.numeric.js'></script>
+<script type='text/javascript' src='<?=base_url()?>assets/JavaScript/js/jquery.validate.js'></script>
+<script type='text/javascript' src='<?=base_url()?>assets/JavaScript/landingpage/landingpage.js?ver=1.0'></script>
+<script src="<?=base_url()?>assets/JavaScript/js/jquery.bxslider.min.js"></script>
+
+<script type="text/javascript">
+    var config = {
+         base_url: "<?php echo base_url(); ?>",
+    };
     
-   	 <?php echo form_open('registration/success', array('id'=>'success_register'));?>
-		  <input type="hidden" name="referrer" class="referrer" value="landingpage"/>
-	 <?php echo form_close();?>
-     
-     <?php echo form_open('subscription/success', array('id'=>'success_subscribe'));?>
-		  <input type="hidden" name="referrer" class="referrer" value="landingpage"/>
-	 <?php echo form_close();?>
 
-        <?php // sample usage of new way to include js?>
-	<?php //include_javascripts('vendor/jquery-1.9.1.js'); ?>
-	<script type='text/javascript' src="<?=base_url()?>assets/JavaScript/js/jquery-1.9.1.js" ></script>
-	<script type='text/javascript' src="<?=base_url()?>assets/JavaScript/js/jquery-ui.js"></script>
-	<script type='text/javascript' src='<?=base_url()?>assets/JavaScript/landingpage/bootstrap.min.js'></script>
-	
-	<!-- Form Plugins -->
-	<script type='text/javascript' src='<?=base_url()?>assets/JavaScript/js/jquery.numeric.js'></script>
-	<script type='text/javascript' src='<?=base_url()?>assets/JavaScript/js/jquery.validate.js'></script>
-	
-	<script type='text/javascript' src='<?=base_url()?>assets/JavaScript/landingpage/landingpage.js?ver=1.0'></script>
-	
-	<!-- Password Strength -->
-	<script type="text/javascript" src="<?=base_url()?>assets/JavaScript/js/mootools-core-1.4.5-full-compat.js"></script>
-	<script type="text/javascript" src="<?=base_url()?>assets/JavaScript/js/password_meter.js"></script>
-	
-	
-	
-	<script>
-		var config = {
-			 base_url: "<?php echo base_url(); ?>",
-		};
-		// $(document).ready(function(){
-		//   $(document).scroll(function () {
-		// 	  var y = $(this).scrollTop();
-		// 	  if (y > 20) {
-		// 		  $('.login_btn').show();
-		// 	  } else {
-		// 		  $('.login_btn').hide();
-		// 	  }
-		//   });
-		// });
-	$(window).load(function () {
-	    	$(window).scroll(function () {
-	        var e; 
-	        return e = $(window).scrollTop(), e < 50 ? $(".login_btn").removeClass("show") : $(".login_btn").addClass("show");
+    var navigation = responsiveNav(".nav-collapse");
 
 
-	    })
-	})
-		
-	</script>
+    (function( $ ) {
+
+
+        jQuery('.bxslider_slides').bxSlider({
+            infiniteLoop: true,
+            auto: true
+        });
+    })(jQuery);  
+
+	
+
+	jQuery('#reg_btn,#reg_txt').click(function(event) {
+	    event.preventDefault();
+	    var n = jQuery(document).height();
+	    jQuery('html, body').animate({ scrollTop: 1000 }, 300);
+	});
+
+</script> 
+
+
+<!-- password meter: uses mootool, consider replacing -->
+<script type="text/javascript" src="<?=base_url()?>assets/JavaScript/js/mootools-core-1.4.5-full-compat.js"></script>
+<script type="text/javascript" src="<?=base_url()?>assets/JavaScript/js/password_meter.js"></script>
+<!-- end mootool -->
+
+
+  
