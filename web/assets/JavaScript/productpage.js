@@ -157,7 +157,7 @@ $(function(){
             $('.product_quantity').val(1);
             $('#p_itemid').val(index);
             //if there are no attributes to choose from: enable buy button
-            if($('.product_option').find('ul.options')[0] === undefined){
+            if(($('.product_option').find('ul.options')[0] === undefined) && (parseInt(value.quantity,10) > 0))  {
                  $('.orange_btn3').removeClass("disabled").addClass("enabled");
             }
             return false;
@@ -262,7 +262,8 @@ function attrClick(target, $this){
                     defaultBuyEnable = false;
                 }
             });
-            if(defaultBuyEnable){
+            var availability = parseInt($('.quantity').data('qty'),10);
+            if((defaultBuyEnable) && (availability > 0)){
                 $('.orange_btn3').removeClass("disabled").addClass("enabled");
             }
             else{
@@ -282,7 +283,7 @@ function attrClick(target, $this){
             if(value_arr.sort().join(',') === sel_id.sort().join(',')){
                $('#p_itemid').val(index);
                $('.quantity')[0].innerHTML = value.quantity;
-               if(parseInt(value.quantity,10) !== 0){
+               if(parseInt(value.quantity,10) > 0){
                   $('.orange_btn3').removeClass("disabled").addClass("enabled"); //REMOVED TO DISABLE BUY NOW BUTTON ACTIVATION
                }
                return false;
@@ -292,6 +293,7 @@ function attrClick(target, $this){
                $('.quantity')[0].innerHTML = $('.quantity').data('qty');
             }
         });
+        
         
         //** Determine shipment location
         
