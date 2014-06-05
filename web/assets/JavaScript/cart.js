@@ -36,6 +36,7 @@ function sum(obj){
             $(obj).attr("mx",data['maxqty']);
         }
     });
+
 }
 
 function isNumberKey(evt)

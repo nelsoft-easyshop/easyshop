@@ -138,7 +138,6 @@ class Cart extends MY_Controller{
     }
 
     function index(){
-
         $data = $this->fill_header();
         if($this->session->userdata('usersession')){
             $cart = $this->cart_items($this->cart->contents());
@@ -146,10 +145,11 @@ class Cart extends MY_Controller{
             $data['title'] = 'Cart | Easyshop.ph';
             $data['page_javascript'] = 'assets/JavaScript/cart.js';
             $data['cart_items'] =$cart;
-            $data['total'] = number_format( $this->cart->total(),2,'.',',');
+            $data['total'] = $this->get_total_price();
             $this->load->view('templates/header', $data);
             $this->load->view('pages/cart/mycart_view', $data);
             $this->load->view('templates/footer_full');
+            $this->get_total_price();
         }else{
             redirect(base_url().'home', 'refresh');
         }
@@ -230,7 +230,6 @@ class Cart extends MY_Controller{
                 }
             }
             $max_qty = reset($qty)['quantity'];
-//            $_POST['max_qty'] = $max_qty;
         }
         #done checking if the attribute's are existing on DB and max_quantity
         $data = array(
@@ -287,9 +286,10 @@ class Cart extends MY_Controller{
                     if($this->cart->update($data)){
                         if($this->input->post('qty') != 0){
                             $carts=$this->cart->contents();
+                            $totalprice = ($carts[$_POST['id']]['is_promote'] === "1" ? $carts[$_POST['id']]['promo_price'] : $carts[$_POST['id']]['price']) * $_POST['qty'];
                             $result=array(
-                                'subtotal'=>  number_format($carts[$_POST['id']]['subtotal'],2,'.',','),
-                                'total' =>number_format( $this->cart->total(),2,'.',','),
+                                'subtotal'=>  number_format($totalprice,2,'.',','),
+                                'total' =>  $this->get_total_price(),
                                 'result' => true,
                                 'maxqty' => $max_qty);
                         }
@@ -298,7 +298,19 @@ class Cart extends MY_Controller{
             }
         echo json_encode($result);
     }
+    function get_total_price(){
+        $cart = $this->cart->contents();
+        $total = 0;
+        foreach($cart as $key => $row){
+            if($row['is_promote'] === "1"){
+                $total += $row['promo_price'] * $row['qty'];
+            } else {
+                $total += $row['price'] * $row['qty'];
+            }
+        }
 
+        return number_format($total,2,'.',',');
+    }
 }
 
 /* End of file cart.php */

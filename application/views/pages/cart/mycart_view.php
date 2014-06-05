@@ -52,9 +52,13 @@
                     </div>
                     <div>
                         <span>
+                            <?PHP if($row['is_promote'] === "1"){?>
+                            <p>&#8369; <?PHP echo number_format($row['promo_price'],2,'.',','); ?></p>
                             <p>&#8369; <?PHP echo number_format($row['price'],2,'.',','); ?></p>
-                            <!--<p>&#8369; <?PHP echo number_format($row['price'],2,'.',','); ?></p>
-                            <p>Discount 0%</p> -->
+                           <?PHP }else{ ?>
+                            <p>&#8369; <?PHP echo number_format($row['price'],2,'.',','); ?></p>
+                           <?PHP } ?>
+<!--                            <p>Discount 0%</p>-->
                         </span>
                     </div>
                     <div>
@@ -66,7 +70,10 @@
 			</span>
                     </div>
                     <div>
-                        <p>Php <p class="subtotal" id="subtotal<?PHP echo $row['rowid']; ?>"><?PHP echo " ".number_format($row['subtotal'],2,'.',','); ?></p></p>
+                        <?PHP
+                            $totalprice = ($row['is_promote'] === "1" ? $row['promo_price'] : $row['price']) * $row['qty'];
+                        ?>
+                        <p>Php <p class="subtotal" id="subtotal<?PHP echo $row['rowid']; ?>"><?PHP echo " ".number_format($totalprice,2,'.',','); ?></p></p>
                     </div>
                     <div>
                         <p>
@@ -152,5 +159,6 @@
                     });
             }
         });
+
     });
 </script>

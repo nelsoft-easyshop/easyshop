@@ -166,7 +166,7 @@ class MY_Controller extends CI_Controller
     }
 
 
-    public function GetPromoPrice($price,$start,$end,$is_promo,$case){
+    public function GetPromoPrice($baseprice,$start,$end,$is_promo,$case){
         $today = strtotime( date("Y-m-d H:i:s"));
         $startdate = strtotime($start);
         $enddate = strtotime($end);
@@ -176,12 +176,12 @@ class MY_Controller extends CI_Controller
                 if($today >= $enddate){
                     $diffHours = 0.99;
                 }
-                $PromoPrice = $price - (($diffHours * 0.02) * $price);
+                $PromoPrice = $baseprice - (($diffHours * 0.02) * $baseprice);
 
                 break;
         }
 
-        return (intval($is_promo) === 1)?$PromoPrice:$price;
+        return (intval($is_promo) === 1)?$PromoPrice:$baseprice;
 
     }
 
