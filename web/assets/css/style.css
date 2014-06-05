@@ -591,7 +591,7 @@ a.msgs_link:hover {
 .top_nav ul li ul {
   padding: 0;
   position: absolute;
-  top: 25px;
+  top: 32px;
   -webkit-box-shadow: none;
   -moz-box-shadow: none;
   box-shadow: none;
@@ -1165,15 +1165,16 @@ nav ul > li:hover > div {
 .cd_timer_container {
 	background: url(../../assets/images/img_bg_countdown_timer.png) no-repeat center top;
 	color: #fff;
-	height: 61px;
+	height: 76px;
 	margin: 175px auto 0;
-	width: 241px;	
+	width: 346px;	
 }
 
 .cd_timer_container div {
-	float: left;
-	text-align: center;
-	width: 70px;
+    float: left;
+    margin-top: 12px;
+    text-align: center;
+    width: 70px;
 }
 
 .cd_timer_container div > span {
@@ -1181,7 +1182,7 @@ nav ul > li:hover > div {
 }
 
 .cd_timer_days {
-    margin-left: 15px;
+    margin-left: 50px;
 }
 
 .cd_timer_container div > span:first-child {
