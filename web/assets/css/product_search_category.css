@@ -48,8 +48,12 @@
 
 .left_attribute a {
   display: block;
-  /*smargin-bottom: 8px;*/
+  margin-bottom: 8px;
   margin-right: 5px;
+}
+
+.left_attribute ul li a {
+  margin-bottom: 0px;
 }
 
 .left_attribute h3 {
