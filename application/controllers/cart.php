@@ -183,10 +183,11 @@ class Cart extends MY_Controller{
         $base_price = $base['price'];
         $real_price = $base_price;
         $product_attr_id = "0";
+        $add_price = 0;
         if(!empty($opt)){
             $product_attr_id = "";
             $key =  array_keys($opt); //get the key of options,used in checking the product in the database
-            $add_price = 0;
+            
             for($a=0;$a < sizeof($key);$a++){//check attr if exist and sum all the attr's price
                 $attr=$key[$a];
                 $attr_value=$opt[$key[$a]];
@@ -244,7 +245,8 @@ class Cart extends MY_Controller{
             'product_itemID'  => $productItemId,
             'maxqty' => $max_qty,
             'slug' => $base['slug'],
-            'is_promote' => $base['is_promote']
+            'is_promote' => $base['is_promote'],
+            'additional_fee' => $add_price
         );
         return $data;
     }
