@@ -452,8 +452,8 @@ header {
 	width: 100%;
 	display: block;
 	background-color: #003e91;
-	height: 25px;
-	line-height: 25px;
+	height: 32px;
+	line-height: 32px;
 /*	-webkit-box-shadow: 0px 0px 10px 0px #494949;
 	box-shadow: 		0px 0px 10px 0px #494949;*/
 /*	position: fixed;
@@ -1143,7 +1143,261 @@ nav ul > li:hover > div {
 }
 
 
+/********* COUNTDOWN CONTENT STYLES **********/
+.middle_content2 {
+	border: 1px solid #E7E7E7;
+	float: left;
+	width: 782px;
+}
 
+.countdown_top_left_content,
+.countdown_top_right_content {
+	float: left;
+	vertical-align: middle;
+}
+
+.cd_left_con,
+.cd_right_con {
+	display: table-cell;
+	height: 266px;
+}
+
+.cd_left_con {
+	vertical-align: top;
+}
+
+.cd_right_con {
+	vertical-align: bottom;
+}
+
+.countdown_top_right_content {
+	border-bottom: 1px solid #CECECE;
+	padding: 5px 0;
+	min-height: 266px;
+	margin-left: 5px;
+}
+
+.cd_left_con {	
+    width: 235px;
+}
+
+.cd_left_con span {
+	display: inline-block;
+}
+
+.cd_left_con p {
+	line-height: 30px;
+}
+
+.cd_top_content {
+	text-align: right;
+}
+
+/*.txt_title_new {
+    background-color: #494949;
+    color: #FFFFFF;
+    font-size: 18px;
+    margin-right: 20px;
+    padding: 5px 3px;
+    text-align: center;
+    width: 120px;
+}*/
+
+.cd_discount_tag {
+	border:2px solid #ba0000;
+	color: #ba0000;
+	font-size: 20px;
+	height: 65px;
+	text-align: center;
+	vertical-align: middle;
+	width: 65px;
+	-webkit-border-radius: 90px;
+	-moz-border-radius: 90px;
+	border-radius: 90px;
+}
+
+.cd_discount_tag > span {
+    padding-top: 6px;
+}
+
+.cd_prod_name {
+	color: #f18200;
+	font-size: 30px;
+	width: 230px;
+    word-wrap: break-word;
+}
+
+.cd_prod_base_price,
+.txt_buy {
+	font-size: 20px;
+}
+
+.cd_prod_base_price:before {
+    border-bottom: 2px solid #FF0000;
+    content: "";
+    height: 14px;
+    position: absolute;
+    width: 110px;
+}
+
+.cd_prod_discount_price {
+	font-size: 24px;
+}
+
+.cd_buy_btn {
+	font-weight: bold;
+	margin-top: 20px;
+	text-align: center;
+}
+
+/***** countdown slides ******/
+
+.bx-wrapper .bx-viewport {
+    margin-left: 40px;
+    width: 684px;
+}
+
+.countdown_slides_wrapper {
+    margin-bottom: 5px !important;
+    margin-top: 5px !important;
+    max-width: 770px !important;
+}
+
+.countdown_slides_wrapper .bx-controls-direction {
+	top: -107px;
+}
+
+.bx-wrapper.countdown_slides_wrapper .bx-next {
+	right: 5px;
+}
+
+.cd_slide_title {
+    display: inline-block;
+    width: 150px;
+}
+
+.cd_slide_title a {
+	color: #f18200;
+	font-size: 16px;
+	text-transform: uppercase;
+}
+
+.cd_slide_discount {
+	border:2px solid #ba0000;
+	color: #ba0000;
+	display: inline-block;
+	font-size: 20px;
+	height: 58px;
+	text-align: center;
+	vertical-align: middle;
+	width: 58px;
+	-webkit-border-radius: 90px;
+	-moz-border-radius: 90px;
+	border-radius: 90px;
+}
+
+.cd_slide_discount > span {
+	display: inline-block;
+	font-size: 16px;
+    padding-top: 10px;
+}
+
+.cd_slide_base_price {
+	font-size: 14px;
+}
+
+.cd_slide_base_price:before {
+    border-bottom: 1px solid #FF0000;
+    content: "";
+    height: 12px;
+    position: absolute;
+    width: 77px;
+}
+
+.cd_slide_discount_price {
+	font-size: 20px;
+}
+
+.cd_slide_buy_btn a {
+	font-size: 11px;
+	height: auto;
+	line-height: normal;
+	width: auto;
+	padding:6px 3px;
+}
+
+.cd_slide_bleft,
+.cd_slide_rleft {
+	display: table-cell;
+	vertical-align: top;
+}
+
+.cd_slide_bleft {
+    width: 100px;
+}
+
+.cd_slide_rleft span {
+	display: table-cell;
+    height: 135px;
+    vertical-align: middle;
+    width: 120px;
+}
+
+.cd_slide_rleft span img {
+	height: auto;
+    max-height: 135px;
+    max-width: 120px;
+    width: auto;
+}
+
+.cd_slide_buy_btn {
+    margin-left: 15px;
+    margin-top: 30px;
+}
+
+.cd_border {
+	border-right: 1px solid #CECECE;
+    display: inline-block;
+    height: 200px;
+    width: 6px !important;
+    margin-right: 5px;
+}
+
+.cd_slide_soldout:before {
+    background-color: rgba(172,5,5,0.8);
+    color: #FFFFFF;
+    content: "SOLD OUT";
+    font-weight: bold;
+    height: 65px;
+    line-height: 65px;
+    position: absolute;
+    right: 0;
+    text-align: center;
+    vertical-align: middle;
+    width: 70px;
+}
+
+.disable_btn {
+	background-color: #cccccc;
+    border: 2px solid #cccccc;
+    color: #FFFFFF;
+    display: block;
+    float: left;
+    text-align: center;
+
+    -webkit-border-radius: 2px;
+  	-moz-border-radius: 2px;
+  	border-radius: 2px;
+
+    -webkit-transition: all 0.3s ease-in-out;
+	-moz-transition: 	all 0.3s ease-in-out;
+	-o-transition:	    all 0.3s ease-in-out;
+	 transition: 		all 0.3s ease-in-out;	
+}
+
+.disable_btn:hover {
+	color: #fff;
+}
 
 /*** Category Page ***/
 .right_panel_sub_page {
@@ -3607,6 +3861,29 @@ div.post_item_content_left {
 .cancel_lnk:hover {
 	color: #ff0030;
 	background-position: -708px -78px;
+}
+
+#ubi_bictr1 {
+	border: 1px solid #F18200;
+}
+
+#ubi_bictr1:before {
+	content: "Default Account";
+	background-color: #f18200;
+	color: #fff;
+	position: relative;
+}
+
+#bi_check_bictr1 {
+    background-color: #ff9000;
+    border-radius: 3px;
+    color: #FFFFFF;
+    height: 24px;
+    line-height: 24px;
+    margin-left: 75px;
+    padding: 0 10px;
+    text-align: center;
+    width: 105px !important;
 }
 
 /*.post_item_button input {
