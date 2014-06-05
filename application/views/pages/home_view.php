@@ -21,7 +21,20 @@
             <div class="countdown_container">
                 <div class="countdown_top_content">
                     <div class="countdown_top_left_content">
-                        <img src="<?= base_url() ?>assets/images/img_countdown_banner.png">
+                       <div class="cd_timer_container">
+                        <div class="cd_timer_days">
+                            <span>00</span>
+                            <span>DAYS</span>
+                        </div>
+                        <div class="cd_timer_hours">
+                            <span>00</span>
+                            <span>HOURS</span>
+                        </div>
+                        <div class="cd_timer_minutes">
+                            <span>00</span>
+                            <span>MINUTES</span>
+                        </div>
+                       </div>
                     </div>
                     <div class="countdown_top_right_content">
                         <div class="cd_left_con">
