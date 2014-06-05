@@ -48,7 +48,7 @@
 
 .left_attribute a {
   display: block;
-  margin-bottom: 8px;
+  /*smargin-bottom: 8px;*/
   margin-right: 5px;
 }
 
@@ -102,12 +102,19 @@
     padding-top: 10px;
 }
 .left_attribute ul li {
-    border-bottom: 1px solid #CECECE;
-    font-weight: bold;
-    margin-bottom: 10px;
-    padding-bottom: 10px;
+    font-size: 11px;
+    margin-bottom: 3px;
+    padding-bottom: 3px; 
     text-transform: uppercase;
 }
+
+.left_attribute>ul>li {
+    border-bottom: 1px solid #CECECE;
+}
+.left_attribute>ul>li>a{
+    font-weight: bold; 
+}
+
 
 .left_attribute ul li + ul {
   margin-left: 10px;
