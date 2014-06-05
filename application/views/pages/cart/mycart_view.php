@@ -55,10 +55,10 @@
                             <?PHP if($row['is_promote'] === "1"){?>
                             <p>&#8369; <?PHP echo number_format($row['promo_price'],2,'.',','); ?></p>
                             <p>&#8369; <?PHP echo number_format($row['price'],2,'.',','); ?></p>
+                            <p>Discount <?php echo round(($row['price'] - $row['promo_price'])/$row['price'] * 100);?>%</p>
                            <?PHP }else{ ?>
                             <p>&#8369; <?PHP echo number_format($row['price'],2,'.',','); ?></p>
                            <?PHP } ?>
-<!--                            <p>Discount 0%</p>-->
                         </span>
                     </div>
                     <div>
