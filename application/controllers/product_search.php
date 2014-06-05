@@ -188,12 +188,14 @@ class product_search extends MY_Controller {
 			
 			###########################################
             $response['default'] = false;
-			$this->load->view('templates/header_plain', $data); 
+            $data['render_searchbar'] = false;
+			$this->load->view('templates/header', $data); 
 			$this->load->view('pages/search/search_display_main',$response);
 			$this->load->view('templates/footer_full');
 		}else{
             $response['default'] = true;
-			$this->load->view('templates/header_plain', $data); 
+            $data['render_searchbar'] = false;
+			$this->load->view('templates/header', $data); 
 			$this->load->view('pages/search/search_display_main',$response);
 			$this->load->view('templates/footer_full');		
 		}// end check get

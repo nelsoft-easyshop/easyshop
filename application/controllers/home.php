@@ -10,9 +10,9 @@ class Home extends MY_Controller {
     }
     
     public function index() {
+        $this->load->model('product_model');
 		$data = array('title' => 'Home | Easyshop.ph',
-                'page_javascript' => 'assets/JavaScript/home.js',
-                'data' => $this->getHomeXML('page/home_files'),
+                'data' => $this->product_model->getHomeXML('page/home_files'),
                 'category_navigation' => $this->load->view('templates/category_navigation',array('cat_items' =>  $this->getcat(),), TRUE ),
 				);
         $data = array_merge($data, $this->fill_header());
@@ -52,38 +52,23 @@ class Home extends MY_Controller {
 	}
     
     public function splash(){
-
         $this->load->view('pages/undermaintenance.php');
-
     }
 
-    private function getHomeXML($file){
-        $this->load->model('product_model');
-        $xml = simplexml_load_file(APPPATH . "resources/" . $file . ".xml");
-       
-        $simple = json_decode(json_encode($xml), 1);
-        $data = array();
-        foreach ($simple as $key => $product){
-            if (is_array($product) && $key != "mainSlide"){
-                foreach ($product as $id => $key2){
-                    $result = $this->product_model->getProductById($key2);
-                    if (!empty($result)){
-                        $data[$key][$id] = $result;
-                    }
-                    else{
-                        $data[$key][$id] = "empty";
-                    }
-                }
-            }
-            else{
-                $data[$key] = $product;
-            }
-       }
-       $data['category1_pid_main'] = array($this->product_model->getProductById($data['category1_pid_main']));
-
-       return $data;
+    /*  Returns server time in Month Day, Year 24Hour:Min:Sec format
+     *  Timezone is set to Asia/Manila
+     */
+    
+    public function getServerTime(){
+        date_default_timezone_set('Asia/Manila');
+        echo date('M d,Y H:i:s');
     }
     
+    public function sam(){
+                $this->load->model('product_model');
+        $this->product_model->getHomeXML('page/home_files');
+    }
+
 	
 
 }

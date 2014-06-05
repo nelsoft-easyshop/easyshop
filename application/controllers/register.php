@@ -34,18 +34,6 @@ class Register extends MY_Controller
 		$data = array_merge($data, $this->fill_header());
 		$data['reg_username'] = '';
 		$view = 'register_form1_view';
-		
-		// Registration form page 1
-		/*if(($this->input->post('register_page1'))&&($this->form_validation->run('register_form1')))
-		{
-			$this->session->set_userdata('register_username', $this->input->post('username'));
-			$this->session->set_userdata('register_password', $this->input->post('password'));
-			$this->session->unset_userdata('captcha_word');
-			$temp['reg_username'] = '';
-			$view = 'register_form2_view';
-		}*/
-        
-
 
 		if(($this->input->post('register_page1'))&&($this->form_validation->run('register_form1')))
 		{
@@ -61,18 +49,8 @@ class Register extends MY_Controller
 			$data['member_username'] = $data['username'];
 			$data['verification_msg'] = $this->lang->line('success_registration');
 		}
-
-
-		/*else
-		{
-			$cap = create_captcha($this->vals);	
-			$image = $cap['image'];
-			$this->session->set_userdata('captcha_word', $cap['word']);
-			$data['image'] = $image;
-			$data['reg_username'] = $this->input->post('username');
-		}
-		*/
-		$this->load->view('templates/header_plain', $data);
+        $data['render_searchbar'] = false;
+		$this->load->view('templates/header', $data);
 		$this->load->view("pages/user/".$view, $data);
 		$this->load->view('templates/footer');
 	}
@@ -306,14 +284,16 @@ class Register extends MY_Controller
 		$data = array(
 			'title' => 'Easyshop.ph - Email Verification',
 			'member_username' => $username,
-			'email' => $email
+			'email' => $email,
+            'render_logo' => false,
+            'render_searchbar' => false,
 		);
 		$data = array_merge($data, $this->fill_header());
 
 		$member_id = $this->register_model->get_memberid($username)['id_member'];
 
 		if($member_id === 0){
-			$this->load->view('templates/header_topnavsolo', $data);
+			$this->load->view('templates/header', $data);
 			$this->load->view('pages/user/err_email_verif', $data);
 			$this->load->view('templates/footer');
 			return;
@@ -327,7 +307,7 @@ class Register extends MY_Controller
 		
 			if($data_val['is_email_verify'] == 1){
 				$data['verification_msg'] = $this->lang->line('expired_email_verification');
-				$this->load->view('templates/header_topnavsolo', $data);
+				$this->load->view('templates/header', $data);
 				$this->load->view('pages/user/register_form3_view', $data);
 				$this->load->view('templates/footer');
 				return;
@@ -346,7 +326,7 @@ class Register extends MY_Controller
 			$this->load->view('templates/footer');
 		}
 		else{
-			$this->load->view('templates/header_topnavsolo', $data);
+			$this->load->view('templates/header', $data);
 			$this->load->view('pages/user/err_email_verif', $data);
 			$this->load->view('templates/footer');
 		}
@@ -380,10 +360,11 @@ class Register extends MY_Controller
 	function changepass(){
 		$data = array(
 			'title' => 'Change Password | Easyshop.com',
+            'render_searchbar' => false,
 		);
 		$data = array_merge($data, $this->fill_header());
 		
-		$this->load->view('templates/header_plain', $data);
+		$this->load->view('templates/header', $data);
 		$temp['toggle_view'] = "1";
 		$temp['err'] = "";
         $result = true;

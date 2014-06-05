@@ -71,14 +71,7 @@ class Mycontroller extends MY_Controller
 		
 		return $output;
 	}
-	
-	function countdown($id)
-	{
-		$data = $this->my_model->getCountdownProduct($id);
-		$data = array_merge($data, $this->fill_header());
-		
-		$this->load->view('pages/user/test', $data);
-	}
+
 }
 
 ?>

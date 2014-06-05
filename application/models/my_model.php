@@ -51,17 +51,7 @@ class my_model extends CI_Model
         
 		return $result;
 	}
-	
-	function getCountdownProduct($id)
-	{
-		$query = 'SELECT `date_start`, DATE_FORMAT(`date_end`, "%Y,%m-1,%e,%H,%i,%s") as `date_end` FROM es_product WHERE id_product = :id';
-		$sth = $this->db->conn_id->prepare($query);
-		$sth->bindParam(':id', $id);
-		$result = $sth->execute();
-		$row = $sth->fetch(PDO::FETCH_ASSOC);
-		
-		return $row;
-	}
+
 }
 
 ?>

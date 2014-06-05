@@ -35,9 +35,8 @@ class Login extends MY_Controller {
                 $response['form_error'] = 'Invalid username or password';
             }  
         }
-     
-    
-        $this->load->view('templates/header_plain', $data);
+        $data['render_searchbar'] = false;
+        $this->load->view('templates/header', $data);
         $this->load->view('pages/user/login_view',$response);
         $this->load->view('templates/footer');
     }
@@ -120,10 +119,11 @@ class Login extends MY_Controller {
 	function identify(){
 		
         $data = array(
-            'title' => 'Forgot Password | Easyshop.ph'
+            'title' => 'Forgot Password | Easyshop.ph',
+            'render_searchbar' => false,
 		);
 		$data = array_merge($data, $this->fill_header());
-        $this->load->view('templates/header_plain', $data);
+        $this->load->view('templates/header', $data);
 		
 		$temp['toggle_view'] = "";
 		if(($this->input->post('identify_btn')) && ($this->form_validation->run('identify_form'))){
@@ -147,7 +147,8 @@ class Login extends MY_Controller {
     function resetconfirm()
     {
         $data = array(
-                'title' => 'Reset Password | Easyshop.ph'
+                'title' => 'Reset Password | Easyshop.ph',
+                'render_searchbar' => false,
         );
         $response['toggle_view'] = '';
         if($this->input->post()){
@@ -157,7 +158,7 @@ class Login extends MY_Controller {
             $response['hash'] = $this->input->get('confirm');
         }      
         $data = array_merge($data, $this->fill_header());
-        $this->load->view('templates/header_plain', $data);		
+        $this->load->view('templates/header', $data);		
         $this->load->view('pages/user/forgotpass_confirm', $response);
         $this->load->view('templates/footer');
     }	

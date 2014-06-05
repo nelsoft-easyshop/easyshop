@@ -49,14 +49,16 @@
                             </div>
                             <div>
                                 <p class="txt_buy">Buy an</p>
-                                <p class="cd_prod_name">iPhone 5s</p>
-                                <p class="cd_prod_base_price">Php 48,990</p>
+                                <p class="cd_prod_name"><?php echo html_escape($data['cd_product'][0]['product']);?></p>
+                                <p class="cd_prod_base_price">Php <?php echo number_format($data['cd_product'][0]['original_price'],2,'.',',');?></p>
                                 <p class="cd_prod_discount_price">Php 489.90*</p>
+                                <p class='cd_prod_disclaimer'>* Lowest possible price</p>
+                                
                                 <p class="cd_buy_btn"><a href="" class="orange_btn3">BUY NOW</a></p>
                             </div>
                         </div>                        
                         <div class="cd_right_con">
-                             <img src="<?= base_url() ?>assets/images/img_cd_prod1.jpg" alt="iPhone 5s">
+                        <img src="<?= base_url().$data['cd_product'][0]['path'].'categoryview/'.$data['cd_product'][0]['file']?>" alt="<?php echo html_escape($data['cd_product'][0]['product']);?>">
                         </div>     
                     </div>
                 </div>
@@ -147,13 +149,13 @@
         <div class="clear"></div>
         <div class="border fashion_products">
             <div>
-                <img id="cat1_main_prod" src="<?=base_url().$data['category1_pid_main'][0]['path'].'small/'.$data['category1_pid_main'][0]['file']; ?>">
+                <img id="cat1_main_prod" src="<?=base_url().$data['category1_pid_main']['path'].'small/'.$data['category1_pid_main']['file']; ?>">
                 <div id="cat_1_main_details">
-                    <a href="<?= base_url()."item/".$data['category1_pid_main'][0]['slug']; ?>">
-                        <h2><?=html_escape($data['category1_pid_main'][0]['product']);?></h2>
+                    <a href="<?= base_url()."item/".$data['category1_pid_main']['slug']; ?>">
+                        <h2><?=html_escape($data['category1_pid_main']['product']);?></h2>
                     </a>
               
-                    <p>Price: <span>&#8369;<?php echo number_format($data['category1_pid_main'][0]['price'],2,'.',',');?></span> onwards</p>
+                    <p>Price: <span>&#8369;<?php echo number_format($data['category1_pid_main']['price'],2,'.',',');?></span> onwards</p>
                 </div>
             </div>
                 <div class="products border2">
@@ -299,13 +301,14 @@
         </div>
     </div>
 </section>
-<input type = 'hidden' id='cd_enddate' value='<?php echo $data['countdown_enddate']; ?>'/>
+<input type = 'hidden' id='cd_enddate' value='<?php echo $data['cd_enddate']; ?>'/>
+
 
 <div class="clear"></div>
 
-<script src="<?= base_url() ?>assets/JavaScript/js/jquery.bxslider.min.js" type="text/javascript"></script>
-<script src="<?= base_url() ?>assets/JavaScript/categorynavigation.js?ver=1.0" type="text/javascript"></script>
-<script src="<?= base_url().$page_javascript.'?ver=1.0'; ?>" type="text/javascript"></script>
+<script src="<?=base_url()?>assets/JavaScript/js/jquery.bxslider.min.js" type="text/javascript"></script>
+<script src="<?=base_url()?>assets/JavaScript/categorynavigation.js?ver=1.0" type="text/javascript"></script>
+<script src="<?=base_url()?>assets/JavaScript/home.js?ver=1.0" type="text/javascript"></script>
 <script src="<?=base_url()?>/assets/js/src/vendor/jquery.plugin.min.js" type="text/javascript"></script>
 <script src="<?=base_url()?>/assets/js/src/vendor/jquery.countdown.min.js" type="text/javascript"></script>
 

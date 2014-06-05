@@ -23,8 +23,9 @@ class Memberpage extends MY_Controller
         }
         $data['tab'] = $this->input->get('me');        
 		$data = array_merge($data, $this->fill_view());
-
-		$this->load->view('templates/header_topnavsolo', $data);
+        $data['render_logo'] = false;
+        $data['render_searchbar'] = false;
+		$this->load->view('templates/header', $data);
 		$this->load->view('pages/user/memberpage_view', $data);
 		$this->load->view('templates/footer');
 	}
@@ -579,7 +580,9 @@ class Memberpage extends MY_Controller
 		$data['my_id'] = (empty($session_data['member_id']) ? 0 : $session_data['member_id']);
 		$data = array_merge($data, $this->fill_header());
 		if($vendordetails){
-            $this->load->view('templates/header_topnavsolo', $data);
+            $data['render_logo'] = false;
+            $data['render_searchbar'] = false;
+            $this->load->view('templates/header', $data);
 			$sellerid = $vendordetails['id_member'];
 			$user_products = $this->memberpage_model->getUserItems($sellerid);
 			$user_product_count = $this->memberpage_model->getUserItemCount($sellerid);

@@ -155,39 +155,49 @@
 	</div>
   </div>
 </header>
-<form action="<?php echo base_url(); ?>search/search.html" name="search_form" method="get">
-  <section>
-    <div class="wrapper search_wrapper">
-      <div class="logo"> <a href="<?=base_url()?>home"><span class="span_bg"></span></a> </div>
-      <div class="search_box prob_search_box">
-        <div>
-          <span class="main_srch_img_con"></span>
-          <input name="q_str" type="text" id="main_search" placeholder="Search..." value="<?php if(isset($_GET['q_str'])) echo str_replace('-', ' ', html_escape($_GET['q_str'])); ?>" autocomplete="off">
+
+
+
+    <form action="<?php echo base_url(); ?>search/search.html" name="search_form" method="get">
+      <section>
+        <div class="wrapper search_wrapper">
+        
+          <?php if(!(isset($render_logo) && ($render_logo === false))): ?>
+            <div class="logo"> <a href="<?=base_url()?>home"><span class="span_bg"></span></a> </div>
+          <?php endif; ?>
           
-          <select name="q_cat" id="q_cat">
-            <option value="1">All Categories</option>
-            <?php
-                foreach ($category_search as $keyrow) {
-                  $selected = "";
-                  if(isset($_GET['q_cat'])){
-                      if($_GET['q_cat'] == $keyrow['id_cat'])
-                      {
-                        $selected = "selected";
-                      }
-                  }
-             ?>
-            <option <?php  echo $selected ?> value="<?php  echo $keyrow['id_cat'] ?>"><?php echo $keyrow['name']; ?></option>
-            <?php
-                  }
-            ?>
-          </select>
-          <button onclick="search_form.submit();" class="search_btn">SEARCH</button><a href="<?=base_url()?>advsrch" class="adv_srch_lnk">Advance Search</a>
+          <?php if(!(isset($render_searchbar) && ($render_searchbar === false))): ?>
+              <div class="search_box prob_search_box">
+                <div>
+                  <span class="main_srch_img_con"></span>
+                  <input name="q_str" type="text" id="main_search" placeholder="Search..." value="<?php if(isset($_GET['q_str'])) echo str_replace('-', ' ', html_escape($_GET['q_str'])); ?>" autocomplete="off">
+                  
+                  <select name="q_cat" id="q_cat">
+                    <option value="1">All Categories</option>
+                    <?php
+                        foreach ($category_search as $keyrow) {
+                          $selected = "";
+                          if(isset($_GET['q_cat'])){
+                              if($_GET['q_cat'] == $keyrow['id_cat'])
+                              {
+                                $selected = "selected";
+                              }
+                          }
+                     ?>
+                    <option <?php  echo $selected ?> value="<?php  echo $keyrow['id_cat'] ?>"><?php echo $keyrow['name']; ?></option>
+                    <?php
+                          }
+                    ?>
+                  </select>
+                  <button onclick="search_form.submit();" class="search_btn">SEARCH</button><a href="<?=base_url()?>advsrch" class="adv_srch_lnk">Advance Search</a>
+                </div>
+                <div id="main_search_drop_content"></div> 
+              </div>
+          <?php endif; ?>
         </div>
-        <div id="main_search_drop_content"></div> 
-      </div>
-    </div>
-  </section>
-</form>
+      </section>
+    </form>
+
 
 <script type="text/javascript">
 
@@ -200,7 +210,6 @@ $('#main_search').on('input propertychange', function() {
           var searchQuery = $.trim( $(this).val());
           searchQuery = searchQuery.replace(/ +(?= )/g,'');
           var fulltext = searchQuery; 
-          console.log(searchQuery);
           if(searchQuery != ""){
             if(searchQuery.length > 0){
               currentRequest = $.ajax({
