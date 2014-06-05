@@ -335,7 +335,7 @@
 </select>
 
 <select id='addBillingAccnt'>
-    INSERT INTO `es_billing_info` (`is_default`,`member_id`,`payment_type`,`user_account`,`bank_id`,`bank_account_name`,`bank_account_number`,`dateadded`, `date_modified`)
+    INSERT INTO `es_billing_info` (`is_default`,`member_id`,`payment_type`,`user_account`,`bank_id`,`bank_account_name`,`bank_account_number`,`dateadded`, `datemodified`)
 	VALUES (:is_default,:member_id,:payment_type,:user_account,:bank_id,:bank_account_name,:bank_account_number, NOW(), NOW());
 </select>
 
