@@ -65,7 +65,12 @@ class Payment extends MY_Controller{
         if(!$this->session->userdata('member_id')){
             redirect(base_url().'home', 'refresh');
         }
+
+
+        $qtysuccess = $this->resetPriceAndQty();
+
         $carts = $this->session->all_userdata(); 
+
         $itemArray = $carts['choosen_items'];
         $member_id =  $this->session->userdata('member_id');
         $address = $this->memberpage_model->get_member_by_id($member_id);
@@ -80,14 +85,15 @@ class Payment extends MY_Controller{
         }
         $itemCount = count($itemArray);
         $successcount = 0;
-        $codCount = 0;
+        $codCount = 0; 
         $data['shippingDetails'] = false; 
+
+
         foreach ($itemArray as $key => $value) {
 
             $productId = $value['id']; 
             $itemId = $value['product_itemID']; 
-            $newQty = $this->product_model->getProductQuantity($productId);
-            $itemArray[$value['rowid']]['newmaxqtty'] = $newQty[$itemId]['quantity'];
+
             $availability = "Not Available";
 
             if($city > 0){  
@@ -103,6 +109,7 @@ class Payment extends MY_Controller{
                 $codCount = ($details[0]['is_cod'] >= 1 ? $codCount + 1: $codCount + 0);
                 $itemArray[$value['rowid']]['cash_delivery'] = $details[0]['is_cod'];
                 }
+
                 $data['shippingDetails'] = true; 
             }
           
@@ -111,15 +118,16 @@ class Payment extends MY_Controller{
                 $itemArray[$value['rowid']]['availability'] = ($availability == "Available" ? true : false);
                 $itemArray[$value['rowid']]['seller_username'] = $sellerDetails['username'];
         }
- 
+
         
-        if(!count($carts['choosen_items']) <= 0){  
+        if(!count($itemArray) <= 0){ 
+  
             $data['cat_item'] = $itemArray;
             $data['title'] = 'Payment | Easyshop.ph';
+            $data['qtysuccess'] = ($qtysuccess == $itemCount ? true : false);
             $data['success'] = ($successcount == $itemCount ? true : false);
             $data['codsuccess'] = ($codCount == $itemCount ? true : false);
- 
-             
+
             $data = array_merge($data,$this->fill_header()); 
             $data = array_merge($data, $this->memberpage_model->getLocationLookup());
             $data = array_merge($data,$this->memberpage_model->get_member_by_id($member_id));
@@ -150,6 +158,8 @@ class Payment extends MY_Controller{
         $PayPalReturnURL    = base_url().'pay/paypal'; 
         $PayPalCancelURL    = base_url().'payment/review'; 
 
+
+        $qtysuccess = $this->resetPriceAndQty();
         $carts = $this->session->all_userdata();
 
         if(count($carts['choosen_items']) <= 0){
@@ -158,6 +168,14 @@ class Payment extends MY_Controller{
         } 
 
         $itemList = $carts['choosen_items'];
+        $productCount = count($itemList);  
+
+        if($qtysuccess != $productCount){
+            echo  '{"e":"0","d":"Item quantity not available."}';
+            exit();
+        } 
+
+
         $member_id =  $this->session->userdata('member_id');
         $address = $this->memberpage_model->get_member_by_id($member_id); 
         $name = $address['consignee'];
@@ -177,26 +195,13 @@ class Payment extends MY_Controller{
         $cnt = 0;
         $solutionType = "Sole"; 
         $landingPage = "Billing";
-        $paypalType = $this->input->post('paypal');
-        $carts = $this->session->all_userdata();
+        $paypalType = $this->input->post('paypal'); 
         $dataitem = ""; 
         $toBeLocked = array(); 
-
-        foreach ($itemList as $key => $value) {
-            $dataitem .= '&L_PAYMENTREQUEST_0_QTY'.$cnt.'='. urlencode($value['qty']).
-            '&L_PAYMENTREQUEST_0_AMT'.$cnt.'='.urlencode($value['price']).
-            '&L_PAYMENTREQUEST_0_NAME'.$cnt.'='.urlencode($value['name']).
-            '&L_PAYMENTREQUEST_0_NUMBER'.$cnt.'='.urlencode($value['id']).
-            '&L_PAYMENTREQUEST_0_DESC'.$cnt.'=' .urlencode($value['brief']);
-            $cnt++;
-             
-
-        } 
  
         $paymentType = $this->PayMentPayPal; #paypal
         $invoice_no = date('Ymhs'); 
         $ip = $this->user_model->getRealIpAddr();   
-        $productCount = count($carts['choosen_items']); 
         $transactionID = "";
         $prepareData = $this->processData($itemList,$city,$region,$majorIsland);
 
@@ -206,7 +211,16 @@ class Payment extends MY_Controller{
         $itemList = $prepareData['newItemList'];
         $toBeLocked = $prepareData['toBeLocked'];
         $grandTotal= $ItemTotalPrice+$shipping_amt;
-         
+        
+        foreach ($itemList as $key => $value) {
+            $dataitem .= '&L_PAYMENTREQUEST_0_QTY'.$cnt.'='. urlencode($value['qty']).
+            '&L_PAYMENTREQUEST_0_AMT'.$cnt.'='.urlencode($value['price']).
+            '&L_PAYMENTREQUEST_0_NAME'.$cnt.'='.urlencode($value['name']).
+            '&L_PAYMENTREQUEST_0_NUMBER'.$cnt.'='.urlencode($value['id']).
+            '&L_PAYMENTREQUEST_0_DESC'.$cnt.'=' .urlencode($value['brief']);
+            $cnt++;
+        } 
+
         $padata =   
                 '&RETURNURL='.urlencode($PayPalReturnURL).
                 '&CANCELURL='.urlencode($PayPalCancelURL).
@@ -343,7 +357,7 @@ class Payment extends MY_Controller{
  
                     # START SAVING TO DATABASE HERE
               
-                    $apiResponseArray['ProductData'] =  $carts['choosen_items'];
+                    $apiResponseArray['ProductData'] =   $itemList;
                     $apiResponse = json_encode($apiResponseArray);
                     foreach ($itemList as $key => $value) {               
                         $productId = $value['id'];
@@ -448,8 +462,8 @@ class Payment extends MY_Controller{
         $analytics = array(); 
 
         $member_id =  $this->session->userdata('member_id');
-        $productCount = count($carts['choosen_items']); 
         $itemList =  $carts['choosen_items'];
+        $productCount = count($itemList); 
         $invoice_no = date('Ymhsd'); 
         $ip = $this->user_model->getRealIpAddr();     
         $address = $this->memberpage_model->get_member_by_id($member_id); 
@@ -469,7 +483,7 @@ class Payment extends MY_Controller{
         $itemList = $prepareData['newItemList'];
         $grandTotal = $ItemTotalPrice;
 
-        $apiResponseArray['ProductData'] =  $carts['choosen_items'];
+        $apiResponseArray['ProductData'] = $itemList;
         $apiResponse = json_encode($apiResponseArray);
        
         $return = $this->payment_model->payment($paymentType,$invoice_no,$grandTotal,$ip,$member_id,$productstring,$productCount,$apiResponse,$transactionID);
@@ -508,9 +522,17 @@ class Payment extends MY_Controller{
 
     function payDragonPay(){
         header('Content-type: application/json');
+
+        $qtysuccess = $this->resetPriceAndQty();
+
         $carts = $this->session->all_userdata();
         $member_id =  $this->session->userdata('member_id'); 
         $itemList =  $carts['choosen_items'];
+        $productCount = count($itemList);
+        if($qtysuccess != $productCount){
+            echo  '{"e":"0","m":"Item quantity not available."}';
+            exit();
+        }  
         $address = $this->memberpage_model->get_member_by_id($member_id); 
         $email = $address['email'];
 
@@ -535,8 +557,7 @@ class Payment extends MY_Controller{
         $transactionID =  $dpReturnArray->tid;
         $paymentType = $this->PayMentDragonPay; 
         $invoice_no = date('Ymhsd'); 
-        $ip = $this->user_model->getRealIpAddr();
-        $productCount = count($carts['choosen_items']);    
+        $ip = $this->user_model->getRealIpAddr();  
         
         $return = $this->payment_model->payment($paymentType,$invoice_no,$grandTotal,$ip,$member_id,$productstring,$productCount,"",$transactionID);
         $orderId = $return['v_order_id'];
@@ -735,6 +756,14 @@ class Payment extends MY_Controller{
             redirect(base_url().'home', 'refresh');
         };
         
+        //devcode
+		/*$data['member_id'] = 74;
+		$data['order_id'] = 102;
+		$data['invoice_no']= 3;
+		$data['member_id'] = 74;
+		$data['order_id'] = 105;
+		$data['invoice_no']= '22-1231-2';*/
+		
         $transactionData = $this->payment_model->getPurchaseTransactionDetails($data);
         
         //Send email to buyer
@@ -767,6 +796,7 @@ class Payment extends MY_Controller{
         foreach($transactionData['seller'] as $seller){
             $sellerEmail = $seller['email'];
             $sellerData['totalprice'] = number_format($seller['totalprice'], 2, '.' , ',');
+			print($sellerData['totalprice']);
             $sellerData['seller_name'] = $seller['seller_name'];
             $sellerData['products'] = $seller['products'];
 			// 3 tries to send Email. Quit if success or 3 failed tries met
@@ -918,6 +948,42 @@ class Payment extends MY_Controller{
         foreach ($ids as $key => $value) {
             $lock = $this->payment_model->lockItem($key,$value,$orderId,$action);   
         }
+    }
+
+    function resetPriceAndQty()
+    {
+ 
+        $carts = $this->session->all_userdata(); 
+        $itemArray = $carts['choosen_items'];
+        $qtysuccess = 0;
+
+        foreach ($itemArray as $key => $value) {
+
+            $productId = $value['id']; 
+            $itemId = $value['product_itemID']; 
+
+        /** NEW QUANTITY **/
+            $newQty = $this->product_model->getProductQuantity($productId);
+            $maxqty = $newQty[$itemId]['quantity'];
+            $qty = $value['qty']; 
+            $itemArray[$value['rowid']]['maxqty'] = $maxqty;
+             
+        $qtysuccess = ($maxqty >= $qty ? $qtysuccess + 1: $qtysuccess + 0);
+
+        /** NEW PRICE **/
+            $base = $this->product_model->getProductById($productId); 
+            $promoPrice = $this->GetPromoPrice($base['price'],$base['startdate'],$base['enddate'],$base['is_promote'],"FirstPromo");
+            $additionalPrice = $value['additional_fee'];
+            $finalPromoPrice = $promoPrice + $additionalPrice;
+            $itemArray[$value['rowid']]['price'] = $finalPromoPrice;
+            $subtotal = $finalPromoPrice * $qty;
+            $itemArray[$value['rowid']]['subtotal'] = $subtotal;
+
+        }
+
+        $this->session->set_userdata('choosen_items', $itemArray);
+        // echo '<pre>',print_r($itemArray);exit();
+        return $qtysuccess;
     }
 
 

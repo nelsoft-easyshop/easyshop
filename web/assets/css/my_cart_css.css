@@ -484,7 +484,7 @@ a.delete:hover .del {
 	padding:5px;
 	min-height: 600px;
 	margin-top: 15px;
-	width: 360px;
+	width: 390px;
 }
 
 .order_summary p {
@@ -518,7 +518,7 @@ a.delete:hover .del {
 }
 
 .order_sum_title div {
-	width: 125px;
+	width: 155px;
 	text-align: left;
 }
 
@@ -528,12 +528,12 @@ a.delete:hover .del {
 }
 
 .order_sum_title div + div + div {
-	width: 72px;
+	width: 85px;
 	text-align: center;
 }
 
 .order_sum_title div + div + div + div {
-	width: 94px;	
+	width: 81px;	
 }
 
 .order_sum_content input {
@@ -544,7 +544,7 @@ a.delete:hover .del {
 }
 
 .sum_con_name {
-	width: 125px;
+	width: 150px;
 }
 
 .sum_con_qty {
@@ -554,13 +554,13 @@ a.delete:hover .del {
 
 .sum_con_ship_fee {
 	text-align: center;
-	width: 72px;	
+	width: 105px;	
 }
 
 .sum_con_price {
 	text-align: right;
 	padding-right: 5px;
-	width: 95px;
+	width: 70px;
 }
 
 .order_sum_sub_total {
@@ -619,7 +619,7 @@ a.delete:hover .del {
 /*	border-top: none;*/
 /*	margin-top: -1px;*/
 	padding:20px 10px 10px;
-	width: 558px;
+	width: 546px;
 }
 
 
@@ -807,19 +807,10 @@ input.cc_check {
 
 .change_shipping_add_con {
 	float: left;
-	margin-top: 10px;
-	width: 460px;
+	width: 580px
 }
 
-.txt_change_wrapper {
-    border-left: 1px solid #EBE9E9;
-    border-top: 1px solid #EBE9E9;
-    border-right: 1px solid #EBE9E9;
-    display: inline-block;
-    margin-top: 5px;
-    padding: 8px 3px;
-    width: 432px;
-}
+ 
 
 .txt_change_shipping_address {
     background-color: #FFEFEF;
@@ -948,7 +939,7 @@ input.cc_check {
 	border-right: 1px solid #EBE9E9;
 	margin: 15px 20px 0px 0;
 	padding: 10px;
-/*	width: 558px;*/
+	width: 546px;
 }
 
 .member_shipping_info_container h2 {
@@ -971,6 +962,7 @@ input.cc_check {
 	border-right: 1px solid #EBE9E9;
 	margin: 0px 20px 0px 0;	
 	padding:0px 0px 10px 10px;
+	width: 556px;
 }
 
 /****************	Payment Result	*************************/

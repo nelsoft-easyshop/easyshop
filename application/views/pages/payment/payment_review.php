@@ -20,37 +20,31 @@
     <div class="wrapper payment_content_wrapper">
         <h2 class="checkout_title">Payment</h2>
 
-        <?php if($shippingDetails == true): ?>
-
-        <div class="payment_wrapper<?php if(!$success){ ECHO '3';}?>">
-            <div class="member_shipping_info_container">
-                <h2>Ship to:</h2>
-                <div><span>Name:</span><strong><?php echo ucwords(strtolower($consignee));?></strong></div>
-                <div><span>Full Address:</span><?php echo ucwords(strtolower(html_escape($c_address)));?></div>
-                <div><span>City:</span><?php echo ucwords(strtolower($c_stateregion));?></div>
-                <div><span>Country:</span><?php echo ucwords(strtolower($country_name));?></div>
-                <div><span>Mobile:</span><?php echo ucwords(strtolower($c_mobile));?></div>
-                <div><span>Telephone:</span><?php echo ucwords(strtolower($c_telephone));?></div>
-            </div>
-
-        <?php else: ?>
-
             <div class="payment_wrapper2">
                 <div class="change_shipping_add_con">
-                    <div class="txt_change_wrapper">
-                        <div style='margin-left:10px; font-weight:bold;'>
-                          <br>
-                          You have not set your shipping address yet. Do this by clicking on the button below.
-                        </div>
-                    </div>
 
-            <?php endif; ?> 
+                    <div class="member_shipping_info_container">
+                        <?php if($shippingDetails == true): ?>
+                            <h2>Ship to:</h2>
+                            <div><span>Name:</span><strong><?php echo ucwords(strtolower($consignee));?></strong></div>
+                            <div><span>Full Address:</span><?php echo ucwords(strtolower(html_escape($c_address)));?></div>
+                            <div><span>City:</span><?php echo ucwords(strtolower($c_stateregion));?></div>
+                            <div><span>Country:</span><?php echo ucwords(strtolower($country_name));?></div>
+                            <div><span>Mobile:</span><?php echo ucwords(strtolower($c_mobile));?></div>
+                            <div><span>Telephone:</span><?php echo ucwords(strtolower($c_telephone));?></div> 
+                            <?php else: ?> 
+                            <div style='margin-left:10px; font-weight:bold;'>
+                                <br>
+                                You have not set your shipping address yet. Do this by clicking on the button below.
+                            </div> 
+                        <?php endif; ?>
+                    </div>
 
                     <div class="change_shipping_btn_con">
                         <a href="javascript:void(0);"  class="link_address orange_btn3">Change Shipping Address</a> 
                     </div>
 
-                    <?php if($success): ?>
+                    <?php if($success && $qtysuccess): ?>
                     <div>
                         <p class="fl_pay"><strong>How would you like to pay?</strong></p>
                         <ul class="idTabs payment_options_tabs">
@@ -184,77 +178,74 @@
 <!-- #### MORE PAYMENT HERE! #### -->
 
                     </div>
+
+                    
                     <?php else: ?>
-                    <br/>
-                    <span style='padding:8px; font-size: 12px; font-weight:bold;'>One or more of your item(s) is unavailable in your location. </span>
-                </div>
 
-                <div class="order_sum_table">
-                    <h2>Order Summary</h2>
-                    <div class="order_sum_header">
-                        <div>Seller</div>
-                        <div>Items</div>
-                        <div>Quantity</div>
-                        <div>Price</div>
-                        <div>&nbsp;</div>
-                    </div>
-                    <div class="clear"></div> 
-
-                    <?php foreach ($cat_item as $key => $value): ?>
-                    <div class="order_sum_content order_sum_content2">
-                    <div><?= $value['seller_username'] ?></div>
-                    <div><?= $value['name'] ?></div>
-                    <div><?= $value['qty'] ?></div>
-                    <div><?= number_format($value['price'], 2, '.',',') ?></div>
-
-                    <?php if(!$value['availability']): ?>
-                    <div class="error_shipping_address">
-                        <span>
-                            This item is not available in your location. 
-                            <a style="color:#0654BA" href="javascript:{}" data-slug="<?= $value['id'] ?>" data-name="<?= $value['name'] ?>" data-iid="<?= $value['product_itemID']; ?>" class="view_location_item">Click here for location availability.</a>
-                        </span>
-                    </div>
+                        <?php if(!$success && $qtysuccess):?>
+                            <br/>
+                            <span style='padding:8px; font-size: 12px; font-weight:bold;color:red'>NOTE!: One or more of your item(s) is unavailable in your location. </span>
+                      
+                        <?php elseif($success && !$qtysuccess):?>
+                            <br/>
+                            <span style='padding:8px; font-size: 12px; font-weight:bold;color:red'>NOTE!: One or more of your item(s) is not available for desired quantity you want. </span>
+                        <?php else:?>
+                            <br/>
+                            <span style='padding:8px; font-size: 12px; font-weight:bold;color:red'>NOTE!: One or more of your item(s) is unavailable in your location. </span>
+                            <br/> <br/>
+                            <span style='padding:8px; font-size: 12px; font-weight:bold;color:red'>NOTE!: One or more of your item(s) is not available for desired quantity you want. </span>
+                        <?php endif;?>
                     <?php endif; ?>
+                </div>
+                <div class="order_summary">
+                    <h2>Order Summary</h2>
+                    <p>You have <?php echo count($cat_item);?> item in your cart</p>
+                    <div class="order_sum_title">
+                        <div>Product</div>
+                        <div>Quantity</div>
+                        <div>Shipping Fee</div>
+                        <div>Price</div> 
+                    </div>
+                
+                    <?php 
+                    $total = 0;
+                    $shipping_fee = 0;
+                    foreach ($cat_item as $key => $value):
+                        $total += $value['subtotal'] ;
+                        $shipping_fee = (isset($value['shipping_fee'])) ? $shipping_fee += $value['shipping_fee'] : $shipping_fee;
+                    ?>
+                    <div class="order_sum_content">
+                        <div class="sum_con_name"><?php echo $value['name'] ?></div>
+                        <div class="sum_con_qty"><?php echo $value['qty'] ?></div>
+                        <div class="sum_con_ship_fee"><?php echo (isset($value['shipping_fee'])) ? number_format($value['shipping_fee'], 2, '.',',') : '<span style="color:red">Not available.</span>' ?></div>
+                        <div class="sum_con_price"><?php echo number_format($value['price'], 2, '.',',') ?></div> 
+                            <?php if(!$value['availability']): ?>
+                     
+                                <div class="error_shipping_address">
+                                    <span>
+                                        This item is not available in your location. 
+                                        <a style="color:#0654BA" href="javascript:{}" data-slug="<?= $value['id'] ?>" data-name="<?= $value['name'] ?>" data-iid="<?= $value['product_itemID']; ?>" class="view_location_item">Click here for location availability.</a>
+                                    </span>
+                                </div>
+                            <?php endif; ?>
+
+                            <?php if($value['qty'] > $value['maxqty']): ?>
+                                <div class="error_shipping_address">
+                                    <span>
+                                        This item is  not available for desired quantity you want
+                                    </span>
+                                </div>
+                            <?php endif; ?>
                     </div>
                     <?php endforeach; ?>
-                </div>
-            <?php endif; ?>
-            </div>
 
-    <!-- Order Summary Start -->
-            <?php if($success): ?>
-            <div class="order_summary">
-                <h2>Order Summary</h2>
-                <p>You have <?php echo count($cat_item);?> item in your cart</p>
-                <div class="order_sum_title">
-                    <div>Product</div>
-                    <div>Quantity</div>
-                    <div>Shipping Fee</div>
-                    <div>Price</div> 
-                </div>
-            
-                <?php 
-                $total = 0;
-                $shipping_fee = 0;
-                foreach ($cat_item as $key => $value):
-                $total += $value['subtotal'] ;
-                $shipping_fee += $value['shipping_fee'];
-                ?>
-                <div class="order_sum_content">
-                    <div class="sum_con_name"><?php echo $value['name'] ?></div>
-                    <div class="sum_con_qty"><?php echo $value['qty'] ?></div>
-                    <div class="sum_con_ship_fee"><?php echo number_format($value['shipping_fee'], 2, '.',',') ?></div>
-                    <div class="sum_con_price"><?php echo number_format($value['price'], 2, '.',',') ?></div> 
-                </div>
-                <?php endforeach; ?>
-
-                <div class="order_sum_sub_total">
-                    <p>Subtotal: <span><?php echo number_format($total, 2, '.',','); ?></span></p>
-                    <p>Shipping fee: <span>Php <?php echo number_format($shipping_fee, 2, '.',','); ?></span></p>
-                    <p class="order_sum_total">Total: <span>Php <?php echo number_format($total + $shipping_fee, 2, '.',','); ?></span></p>
+                    <div class="order_sum_sub_total">
+                        <p>Subtotal: <span><?php echo number_format($total, 2, '.',','); ?></span></p>
+                        <p>Shipping fee: <span>Php <?php echo number_format($shipping_fee, 2, '.',','); ?></span></p>
+                        <p class="order_sum_total">Total: <span>Php <?php echo number_format($total + $shipping_fee, 2, '.',','); ?></span></p>
+                    </div>
                 </div>
             </div>
-            <?php endif; ?>
         </div> 
     </div>
 </section>

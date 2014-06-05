@@ -71,6 +71,9 @@ $(document).ready(function(){
                     window.location.replace(d.d);
                 }else{
                     alert(d.d);
+                    if(d.d == 'Item quantity not available.'){
+                        location.reload();
+                    }
                     $('.paypal_loader').hide();
                     $('.paypal_button').show();
                 }
@@ -103,7 +106,10 @@ $(document).ready(function(){
                 success: function(d) {
                     if(d.e == 1){ 
                         window.location.replace(d.u);
-                    }else{
+                    }else{       
+                        if(d.m == 'Item quantity not available.'){
+                            location.reload();
+                        }
                         alert(d.m);
                     }
                 }
