@@ -969,12 +969,10 @@ class product extends MY_Controller
     		$product_options = $this->product_model->implodeAttributesByName($product_options);
     		$this->session->set_userdata('product_id', $id);
     		$product_catid = $product_row['cat_id'];
-            $promo_price = $this->GetPromoPrice($product_row['price'],$product_row['startdate'],$product_row['enddate'],$product_row['is_promote'],"FirstPromo");
             $data = array_merge($data,array( 
     			'page_javascript' => 'assets/JavaScript/productpage.js',
     			'breadcrumbs' =>  $this->product_model->getParentId($product_row['cat_id']),
     			'product' => $product_row,
-    			'promo_price' => $promo_price,
     			'product_options' => $product_options,
     			'product_images' => $this->product_model->getProductImages($id),
     			'main_categories' => $this->product_model->getFirstLevelNode(TRUE),

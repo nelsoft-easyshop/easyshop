@@ -52,13 +52,11 @@
                     </div>
                     <div>
                         <span>
-                            <?PHP if($row['is_promote'] === "1"){?>
-                            <p>&#8369; <?PHP echo number_format($row['promo_price'],2,'.',','); ?></p>
                             <p>&#8369; <?PHP echo number_format($row['price'],2,'.',','); ?></p>
-                            <p>Discount <?php echo round(($row['price'] - $row['promo_price'])/$row['price'] * 100);?>%</p>
-                           <?PHP }else{ ?>
-                            <p>&#8369; <?PHP echo number_format($row['price'],2,'.',','); ?></p>
-                           <?PHP } ?>
+                            <?PHP if($row['is_promote'] === "1"): ?>
+                                <p>&#8369; <?PHP echo number_format($row['original_price'],2,'.',','); ?></p>
+                                <p>Discount <?php echo round(($row['original_price'] - $row['price'])/$row['original_price'] * 100);?>%</p>
+                            <?PHP endif; ?>
                         </span>
                     </div>
                     <div>

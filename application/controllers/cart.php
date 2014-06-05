@@ -4,6 +4,7 @@ if (!defined('BASEPATH'))
 	exit('No direct script access allowed');
 
 class Cart extends MY_Controller{
+
     function __construct() {
         parent::__construct();
         $this->load->library('session');
@@ -11,6 +12,24 @@ class Cart extends MY_Controller{
         $this->load->model('product_model');
         $this->load->model('user_model');
         $this->load->model('cart_model');
+    }
+    
+    function index(){
+        $data = $this->fill_header();
+        if($this->session->userdata('usersession')){
+            $cart = $this->cart_items($this->cart->contents());
+            $id = $this->session->userdata('usersession');
+            $data['title'] = 'Cart | Easyshop.ph';
+            $data['page_javascript'] = 'assets/JavaScript/cart.js';
+            $data['cart_items'] =$cart;
+            $data['total'] = $this->get_total_price();
+            $this->load->view('templates/header', $data);
+            $this->load->view('pages/cart/mycart_view', $data);
+            $this->load->view('templates/footer_full');
+            $this->get_total_price();
+        }else{
+            redirect(base_url().'home', 'refresh');
+        }
     }
     
     function check_product($id,$opt){ //OLD checking
@@ -137,24 +156,6 @@ class Cart extends MY_Controller{
         echo json_encode($result);
     }
 
-    function index(){
-        $data = $this->fill_header();
-        if($this->session->userdata('usersession')){
-            $cart = $this->cart_items($this->cart->contents());
-            $id = $this->session->userdata('usersession');
-            $data['title'] = 'Cart | Easyshop.ph';
-            $data['page_javascript'] = 'assets/JavaScript/cart.js';
-            $data['cart_items'] =$cart;
-            $data['total'] = $this->get_total_price();
-            $this->load->view('templates/header', $data);
-            $this->load->view('pages/cart/mycart_view', $data);
-            $this->load->view('templates/footer_full');
-            $this->get_total_price();
-        }else{
-            redirect(base_url().'home', 'refresh');
-        }
-    }
-
     public function cart_items($carts){
         foreach($carts as $key => $row1){
             $data = $this->check_prod($row1['id'],$row1['options'],$row1['qty']);
@@ -175,14 +176,12 @@ class Cart extends MY_Controller{
                 }
             }
         }
-
         return $this->cart->contents();
     }
 
 	private function check_prod($id,$opt,$userQTY){
-        $base = $this->product_model->getProductById($id);
-        $base_price = $base['price'];
-        $real_price = $base_price;
+        $product = $this->product_model->getProductById($id);
+        $final_price = $product['price']; //product['price'] already has the promo calculations applied to it
         $product_attr_id = "0";
         $add_price = 0;
         if(!empty($opt)){
@@ -201,7 +200,7 @@ class Cart extends MY_Controller{
                 $product_attr_id .= ($a === sizeof($key)-1 ? $sum['attr_id'] : $sum['attr_id'].",");
 
             }
-            $real_price = $base_price + $add_price;
+            $final_price = $product['price'] + $add_price;
         }
         #from this part, u already have (Price,prod_attr_id,prodID)
         $qty = $this->product_model->getProductQuantity($id);
@@ -235,17 +234,17 @@ class Cart extends MY_Controller{
         $data = array(
             'id'      => $id,
             'qty'     => ($userQTY > $max_qty ? $max_qty : $userQTY ), //check if qty is > max qty,if its qty=maxqty else qty
-            'price'   => $real_price,
-            'promo_price' => $this->GetPromoPrice($base['price'],$base['startdate'],$base['enddate'],$base['is_promote'],"FirstPromo"),
-            'name'    => $base['product'],
+            'price'   => $final_price,
+            'original_price' => $product['original_price'],
+            'name'    => $product['product'],
             'options' => $opt,
-            'img'     => $this->product_model->getProductImages($base['id_product']),
-            'member_id'  => $base['sellerid'],
-            'brief'  => $base['brief'],
+            'img'     => $this->product_model->getProductImages($product['id_product']),
+            'member_id'  => $product['sellerid'],
+            'brief'  => $product['brief'],
             'product_itemID'  => $productItemId,
             'maxqty' => $max_qty,
-            'slug' => $base['slug'],
-            'is_promote' => $base['is_promote'],
+            'slug' => $product['slug'],
+            'is_promote' => $product['is_promote'],
             'additional_fee' => $add_price
         );
         return $data;
@@ -286,7 +285,7 @@ class Cart extends MY_Controller{
                     if($this->cart->update($data)){
                         if($this->input->post('qty') != 0){
                             $carts=$this->cart->contents();
-                            $totalprice = ($carts[$_POST['id']]['is_promote'] === "1" ? $carts[$_POST['id']]['promo_price'] : $carts[$_POST['id']]['price']) * $_POST['qty'];
+                            $totalprice = ($carts[$_POST['id']]['price']) * $_POST['qty'];
                             $result=array(
                                 'subtotal'=>  number_format($totalprice,2,'.',','),
                                 'total' =>  $this->get_total_price(),
@@ -298,17 +297,13 @@ class Cart extends MY_Controller{
             }
         echo json_encode($result);
     }
+    
     function get_total_price(){
         $cart = $this->cart->contents();
         $total = 0;
         foreach($cart as $key => $row){
-            if($row['is_promote'] === "1"){
-                $total += $row['promo_price'] * $row['qty'];
-            } else {
-                $total += $row['price'] * $row['qty'];
-            }
+            $total += $row['price'] * $row['qty'];
         }
-
         return number_format($total,2,'.',',');
     }
 }

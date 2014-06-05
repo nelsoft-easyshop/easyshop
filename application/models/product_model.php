@@ -190,6 +190,9 @@ class product_model extends CI_Model
             if(intval($row['brand_id'],10) === 1)
                 $row['brand_name'] = ($row['custombrand']!=='')?$row['custombrand']:'Custom brand';
         }  
+        $row['original_price'] = $row['price'];
+        $row['price'] = $this->GetPromoPrice($row['price'],$row['startdate'],$row['enddate'],$row['is_promote'],$row['promo_type']);
+
 		return $row;
 	}
     
@@ -1277,17 +1280,18 @@ class product_model extends CI_Model
 	
     function getProductById($id){
 		$query = $this->sqlmap->getFilenameID('product','getProductById');
-
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':id',$id);
 		$sth->execute();
 		$rows = $sth->fetch(PDO::FETCH_ASSOC);
-   
+        /* Get actual price, apply any promo calculation */
+        $rows['original_price'] = $rows['price'];
+        $rows['price'] = $this->GetPromoPrice($rows['price'],$rows['startdate'],$rows['enddate'],$rows['is_promote'],$rows['promo_type']);
+        /* Separate image file path and file name */
         $temp = array($rows);
         $this->explodeImagePath($temp);
         $rows = $temp[0];
-        
-		return $rows;
+        return $rows;
 	}
 		
 	function getProductCount($down_cat){
@@ -2019,6 +2023,73 @@ class product_model extends CI_Model
 		
         return $return;  
 	}
-        
+    
+    
+    public function getHomeXML($file){
+        $xml = simplexml_load_file(APPPATH . "resources/" . $file . ".xml");
+        $simple = json_decode(json_encode($xml), 1);
+        $home_view_data = array();
+        foreach ($simple as $key => $element){
+            if(isset($element['value']) &&  isset($element['type'])){   
+                if($element['type'] === 'product'){
+                    $productdata = $this->getProductById($element['value']);
+                    if (!empty($productdata)){
+                        $home_view_data[$key] = $productdata;                
+                    }
+                    else{
+                        $home_view_data[$key] = array();
+                    }
+                }else if($element['type'] === 'date'){
+                        $home_view_data[$key] = date('M d,Y H:i:s',strtotime($element['value']));
+                }else{
+                    $home_view_data[$key] = $element['value'];
+                }
+            }else{
+                foreach ($element as $key2 => $inner_el){
+                    if($inner_el['type'] === 'product'){
+                        $productdata = $this->getProductById($inner_el['value']);
+                        if (!empty($productdata)){
+                            $home_view_data[$key][$key2] = $productdata;
+                        }
+                        else{
+                            $home_view_data[$key][$key2] = array();
+                        }
+                    }else if($inner_el['type'] === 'date'){
+                        $home_view_data[$key][$key2] = date('M d,Y H:i:s',strtotime($inner_el['value']));
+                    }
+                    else{
+                        $home_view_data[$key][$key2] = $inner_el['value'];
+                    }
+                }
+            }    
+       }
+       return $home_view_data;
+    }
+
+    
+    public function GetPromoPrice($baseprice,$start,$end,$is_promo,$type){
+        $today = strtotime( date("Y-m-d H:i:s"));
+        $startdate = strtotime($start);
+        $enddate = strtotime($end);
+        $type = intval($type);
+        switch ($type) {
+            case 1 :
+                if($today < $startdate){
+                    $diffHours = 0;
+                }else if($today >= $enddate){
+                    $diffHours = 0.99;
+                }else{
+                    $diffHours = floor(($today - $startdate) / 3600);
+                }
+                $PromoPrice = $baseprice - (($diffHours * 0.02) * $baseprice);
+                break;
+            default :
+                $PromoPrice = $baseprice;
+                break;
+        }
+        return (intval($is_promo) === 1)?$PromoPrice:$baseprice;
+    }
+    
+    
     
 }

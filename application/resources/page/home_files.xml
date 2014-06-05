@@ -1,40 +1,167 @@
 <?xml version='1.0' ?>
 <map>
-    <header>Announcement</header>
+
+    <header>
+        <value>Announcement</value>
+        <type>text</type>
+    </header>
+    
     <text>
-         Welcome to Easyshop.ph! We are making the website available to the public for the first time. Feel free to report any bugs you find.
+        <value>Welcome to Easyshop.ph! We are making the website available to the public for the first time. Feel free to report any bugs you find.</value>
+        <type>text</type>
     </text>
     
-    <mainSlide>assets/images/mainslide/1.jpg</mainSlide>
-    <mainSlide>assets/images/mainslide/2.jpg</mainSlide>
-    <mainSlide>assets/images/mainslide/3.jpg</mainSlide>
+    <mainSlide>
+        <value>assets/images/mainslide/1.jpg</value>
+        <type>image</type>
+    </mainSlide>
     
-    <productSlide_title>Hot and New</productSlide_title>
-    <productSlide_id>141</productSlide_id>
-    <productSlide_id>141</productSlide_id>
-    <productSlide_id>141</productSlide_id>
-    <productSlide_id>141</productSlide_id>
-    <productSlide_id>141</productSlide_id>
-    <productSlide_id>141</productSlide_id>
+    <mainSlide> 
+        <value>assets/images/mainslide/2.jpg</value>
+        <type>image</type> 
+    </mainSlide>
     
-    <category1_title>Fashion</category1_title>
-    <category1_pid_main>141</category1_pid_main>
-    <category1_pid>141</category1_pid>
-    <category1_pid>141</category1_pid>
-    <category1_pid>141</category1_pid>
-    <category1_pid>141</category1_pid>
-    <category1_pid>141</category1_pid>
-    <category1_pid>141</category1_pid>
+    <mainSlide> 
+        <value>assets/images/mainslide/3.jpg</value> 
+        <type>image</type>
+    </mainSlide>
     
-    <category2_title>DSLR</category2_title>
-    <category2_pid_mainslide>141</category2_pid_mainslide>
-    <category2_pid_mainslide>141</category2_pid_mainslide>
-    <category2_pid_mainslide>141</category2_pid_mainslide>
-    <category2_pid>141</category2_pid>
-    <category2_pid>141</category2_pid>
-    <category2_pid>141</category2_pid>
-    <category2_pid>141</category2_pid>
+    <productSlide_title>
+        <value>Hot and New</value>
+        <type>text</type>
+    </productSlide_title>
     
-    <countdown_enddate>2014-06-15 12:00:00</countdown_enddate>
+    
+    <productSlide_id>
+        <value>141</value>
+        <type>product</type>
+    </productSlide_id>
+    
+     <productSlide_id>
+        <value>141</value>
+        <type>product</type>
+    </productSlide_id>
+    
+    <productSlide_id>
+        <value>141</value>
+        <type>product</type>
+    </productSlide_id>
+    
+     <productSlide_id>
+        <value>141</value>
+        <type>product</type>
+    </productSlide_id>
+    
+     <productSlide_id>
+        <value>141</value>
+        <type>product</type>
+    </productSlide_id>
+
+    <category1_title>
+        <value>Fashion</value>
+        <type>text</type>
+    </category1_title>
+    
+    <category1_pid_main>
+        <value>141</value>
+        <type>product</type>
+    </category1_pid_main>
+
+    <category1_pid>
+        <value>141</value>
+        <type>product</type>
+    </category1_pid>
+    
+    <category1_pid>
+        <value>141</value>
+        <type>product</type>
+    </category1_pid>
+
+    <category1_pid>
+        <value>141</value>
+        <type>product</type>
+    </category1_pid>
+
+    <category1_pid>
+        <value>141</value>
+        <type>product</type>
+    </category1_pid>
+
+    <category1_pid>
+        <value>141</value>
+        <type>product</type>
+    </category1_pid>
+    
+    <category1_pid>
+        <value>141</value>
+        <type>product</type>
+    </category1_pid>
+
+    <category2_title>
+        <value>DSLR</value>
+        <type>text</type>
+    </category2_title>
+    
+    <category2_pid_mainslide>
+        <value>141</value>
+        <type>product</type>
+    </category2_pid_mainslide>
+    
+    <category2_pid_mainslide>
+        <value>141</value>
+        <type>product</type>
+    </category2_pid_mainslide>
+    
+    <category2_pid_mainslide>
+        <value>141</value>
+        <type>product</type>
+    </category2_pid_mainslide>
+    
+   
+    <category2_pid>
+        <value>141</value>
+        <type>product</type>
+    </category2_pid>
+    
+    <category2_pid>
+        <value>141</value>
+        <type>product</type>
+    </category2_pid>
+    
+   <category2_pid>
+        <value>141</value>
+        <type>product</type>
+    </category2_pid>
+    
+    <category2_pid>
+        <value>141</value>
+        <type>product</type>
+    </category2_pid>
+
+    <cd_enddate>
+        <value>June 15, 2014 12:00:00</value>
+        <type>date</type>
+        <remark>Web launch sale start date</remark>
+    </cd_enddate>
+    
+    <cd_product>
+        <value>141</value>
+        <type>product</type>
+    </cd_product>
+    
+    <cd_product>
+        <value>141</value>
+        <type>product</type>
+    </cd_product>
+    
+    <cd_product>
+        <value>141</value>
+        <type>product</type>
+    </cd_product>
+    
+    <cd_product>
+        <value>141</value>
+        <type>product</type>
+    </cd_product>
     
 </map>

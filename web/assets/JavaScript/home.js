@@ -1,8 +1,21 @@
-$(document).ready(function(){
+function serverTime() { 
+    var time = null; 
+    $.ajax({url: config.base_url + 'home/getServerTime', 
+        async: false, dataType: 'text', 
+        success: function(text) { 
+            time = new Date(text); 
+        }, error: function(http, message, exc) { 
+            time = new Date(); 
+    }}); 
+    return time; 
+}
 
+
+$(document).ready(function(){
     var endDate = new Date($('#cd_enddate').val());
     $('.cd_timer_container').countdown({
         until : endDate,
+        serverSync: serverTime,
         layout: ' <div class="cd_timer_days"><span id="countdown_days">{dnn}</span> <span>DAYS</span> </div>'+
                 ' <div class="cd_timer_hours"><span id="countdown_hours">{hnn}</span> <span>HOURS</span> </div>'+
                 ' <div class="cd_timer_minutes"><span id="countdown_minutes">{mnn}</span> <span>MINUTES</span> </div>' +

@@ -122,22 +122,14 @@
         <div class="price_details">
           <div class="price_box">
             <div class="pbt pbt1">Price</div>
-          
-            <?PHP if(intval($product['is_promote']) === 1): ?>
-                <div>PHP 
-                    <span class="current_price fm1" data-baseprice="<?php echo $promo_price?>"> 
-                        <?php echo number_format($promo_price,2,'.',',');?> 
-                    </span> 
-                </div>
-                <div><span class="recent_price"> PHP <?php echo number_format($product['price'],2,'.',','); ?></span> | <strong> <?php echo round(($product['price'] - $promo_price)/$product['price'] * 100);?> % OFF  </strong></div>          
-            <?PHP else: ?>
                 <div>PHP 
                     <span class="current_price fm1" data-baseprice="<?php echo $product['price']?>"> 
                         <?php echo number_format($product['price'],2,'.',',');?> 
                     </span> 
                 </div>
-            <?PHP endif;?>
-            
+                <?PHP if(intval($product['is_promote']) === 1): ?>   
+                    <div><span class="recent_price"> PHP <?php echo number_format($product['original_price'],2,'.',','); ?></span> | <strong> <?php echo round(($product['original_price'] - $product['price'])/$product['original_price'] * 100);?> % OFF  </strong></div>          
+                <?PHP endif;?>
           </div>
           <div class="availability">
             <p> Availability <br />

@@ -971,8 +971,7 @@ class Payment extends MY_Controller{
         $qtysuccess = ($maxqty >= $qty ? $qtysuccess + 1: $qtysuccess + 0);
 
         /** NEW PRICE **/
-            $base = $this->product_model->getProductById($productId); 
-            $promoPrice = $this->GetPromoPrice($base['price'],$base['startdate'],$base['enddate'],$base['is_promote'],"FirstPromo");
+            $promoPrice = $this->product_model->getProductById($productId)['price']; 
             $additionalPrice = $value['additional_fee'];
             $finalPromoPrice = $promoPrice + $additionalPrice;
             $itemArray[$value['rowid']]['price'] = $finalPromoPrice;
