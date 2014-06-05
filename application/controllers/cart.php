@@ -136,28 +136,26 @@ class Cart extends MY_Controller{
 		$this->session->set_userdata('cart_total_perItem',$this->cart_size());
         echo json_encode($result);
     }
-    
+
     function index(){
-        
+
         $data = $this->fill_header();
         if($this->session->userdata('usersession')){
-            $this->cart_items();
+            $cart = $this->cart_items($this->cart->contents());
             $id = $this->session->userdata('usersession');
-            $carts=$this->cart->contents();
             $data['title'] = 'Cart | Easyshop.ph';
             $data['page_javascript'] = 'assets/JavaScript/cart.js';
-            $data['cart_items'] = $carts;
+            $data['cart_items'] =$cart;
             $data['total'] = number_format( $this->cart->total(),2,'.',',');
             $this->load->view('templates/header', $data);
             $this->load->view('pages/cart/mycart_view', $data);
             $this->load->view('templates/footer_full');
         }else{
             redirect(base_url().'home', 'refresh');
-        }   
+        }
     }
 
-    public function cart_items(){
-        $carts=$this->cart->contents();
+    public function cart_items($carts){
         foreach($carts as $key => $row1){
             $data = $this->check_prod($row1['id'],$row1['options'],$row1['qty']);
             foreach ($carts as $row ){
@@ -165,19 +163,22 @@ class Cart extends MY_Controller{
                 $opt =  serialize($this->cart->product_options($row['rowid']));
                 $opt_user =  serialize($data['options']);
                 if($opt == $opt_user && $id == $data['id']){ //if product exist in cart , check if qty exceeds the maximum qty, if exceed get qty = max qty else qty + cart product qty
-                    $data2 = array(
-                        'rowid' => $row['rowid'],
-                        'qty'   => $data['qty'],
-                        'promo_price'   => $data['promo_price']
-                    );
-                    $this->cart->update($data2);
+                    $data['rowid']= $row['rowid'];
+
+                    $this->cart->insert($data);
+
+                    if($data['qty'] == "0" ){
+                        $data_remove = array('rowid'=>$data['rowid'],'qty'=> 0);
+                        $this->cart->update($data_remove);
+                    }
                     break;
                 }
-
             }
         }
-        $carts2=$this->cart->contents();
+
+        return $this->cart->contents();
     }
+
 	private function check_prod($id,$opt,$userQTY){
         $base = $this->product_model->getProductById($id);
         $base_price = $base['price'];
