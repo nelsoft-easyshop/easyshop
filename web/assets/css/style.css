@@ -1156,6 +1156,39 @@ nav ul > li:hover > div {
 	vertical-align: middle;
 }
 
+.countdown_top_left_content {
+	background:#fff url(../../assets/images/img_countdown_banner.png) no-repeat center top;
+	width: 348px;
+	height: 277px;
+}
+
+.cd_timer_container {
+	background: url(../../assets/images/img_bg_countdown_timer.png) no-repeat center top;
+	color: #fff;
+	height: 61px;
+	margin: 175px auto 0;
+	width: 241px;	
+}
+
+.cd_timer_container div {
+	float: left;
+	text-align: center;
+	width: 70px;
+}
+
+.cd_timer_container div > span {
+	display: block;
+}
+
+.cd_timer_days {
+    margin-left: 15px;
+}
+
+.cd_timer_container div > span:first-child {
+	font-size: 30px;
+	margin-bottom: -4px;
+}
+
 .cd_left_con,
 .cd_right_con {
 	display: table-cell;
