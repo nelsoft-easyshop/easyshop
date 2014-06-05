@@ -2079,7 +2079,7 @@ class product_model extends CI_Model
                 }else if($today >= $enddate){
                     $diffHours = 0.99;
                 }else{
-                    $diffHours = floor(($today - $startdate) / 3600);
+                    $diffHours = floor(($today - $startdate) / 3600.0);
                 }
                 $PromoPrice = $baseprice - (($diffHours * 0.02) * $baseprice);
                 break;
