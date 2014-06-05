@@ -1179,7 +1179,7 @@ $(document).ready(function(){
 		}
 	});
 	
-	$('#tx_dialog_pass input[type="password"]').on('keypress', function(){
+	$('#tx_dialog input[type="password"]').on('keypress', function(){
 		$(this).siblings('span.error').text('');
 	});
 	
@@ -1187,8 +1187,26 @@ $(document).ready(function(){
 		var txResponseBtn = $(this);
 		var txStatus = $(this).closest('div.tx_btns').siblings('div.tx_cont').find('.tx_cont_col3 span.trans_alert');
 		// tx object located in view. contains username and password( requires once every memberpage load )
-		var txDialog = $.trim(tx.p).length > 0 ? $('#tx_dialog') : $('#tx_dialog_pass');
-		var loadingimg = txDialog.find('img.loading_img');
+		var txDialog = $('#tx_dialog');
+		var passCont = $('#tx_dialog_pass_cont');
+		
+		if( $.trim(tx.p).length > 0 ){
+			passCont.hide();
+			var loadingimg = $('#tx_dialog_loadingimg img');
+			var hasPass = true;
+		}else{
+			var loadingimg = passCont.find('img.loading_img');
+			var hasPass = false;
+		}
+		
+		txDialog.children('p.msg').hide();
+		if(txResponseBtn.hasClass('tx_forward')){
+			txDialog.children('p.forward').show();
+		}else if(txResponseBtn.hasClass('tx_return')){
+			txDialog.children('p.return').show();
+		}else if(txResponseBtn.hasClass('tx_cod')){
+			txDialog.children('p.cod').show();
+		}
 		
 		txDialog.dialog({
 			modal:true,
@@ -1201,8 +1219,12 @@ $(document).ready(function(){
 					var thisdialog = $(this);
 					var form = txResponseBtn.closest('form.transac_response');
 					var data = form.serializeArray();
-					if( txDialog.attr('id')=='tx_dialog_pass' ){
+					if( !hasPass ){
 						var password = $('#tx_password').val();
+						if(password === ''){
+							$('#tx_password').effect('pulsate',{times:3},800);
+							return false;
+						}
 					}else{
 						var password = tx.p;
 					}
@@ -1224,19 +1246,19 @@ $(document).ready(function(){
 						}
 						
 						//if invalid password
-						if(serverResponse.result === 'invalid' && txDialog.attr('id')=='tx_dialog_pass'){
-							var errspan = txDialog.children('span');
+						if(serverResponse.result === 'invalid' && !hasPass){
+							var errspan = passCont.children('span');
 							errspan.text(serverResponse.error);
 							txResponseBtn.attr('disabled', false);
 						}else{
 							if(serverResponse.result === 'success'){
-								if(txDialog.attr('id') == 'tx_dialog_pass'){
+								if(!hasPass){
 									tx.p = password;
 								}
 								if(txResponseBtn.hasClass('tx_forward')){
 									txStatus.replaceWith('<span class="trans_alert transac_paid">Item Received</span>');
 								}else if(txResponseBtn.hasClass('tx_return')){
-									txStatus.replaceWith('<span class="trans_alert transac_pay_return">Payment returned to buyer</span>');
+									txStatus.replaceWith('<span class="trans_alert transac_pay_return">Item Returned</span>');
 								}else if(txResponseBtn.hasClass('tx_cod')){
 									txStatus.replaceWith('<span class="trans_alert transac_paid">Completed</span>');
 								}
@@ -1259,9 +1281,9 @@ $(document).ready(function(){
 				}
 			},
 			open: function(event,ui){
-				if( txDialog.attr('id') == 'tx_dialog_pass' ){
-					txDialog.children('input[type="password"]').val('');
-					txDialog.children('span').text('');
+				if( !hasPass ){
+					passCont.children('input[type="password"]').val('');
+					passCont.children('span').text('');
 				}
 			}
 		});
@@ -1468,6 +1490,7 @@ $(document).ready(function(){
 		var form = $(this).closest('form');
 		var thisbtn = $(this);
 		var thismethod = $(this).siblings('input[name="method"]');
+		var status = $(this).closest('div.tx_btns').siblings('div.tx_cont').find('.tx_cont_col3 .trans_alert');
 		$.post(config.base_url+'memberpage/rejectItem', $(form).serializeArray(), function(data){
 			try{
 				var obj = jQuery.parseJSON(data);
@@ -1482,9 +1505,11 @@ $(document).ready(function(){
 				if ( thisbtn.hasClass('reject') ){
 					thisbtn.removeClass('reject').addClass('unreject').val('Unreject Item');
 					thismethod.val('unreject');
+					status.text('Item Rejected');
 				}else if ( thisbtn.hasClass('unreject') ){
 					thisbtn.removeClass('unreject').addClass('reject').val('Reject Item');
 					thismethod.val('reject');
+					status.text('Item Unrejected');
 				}
 			}
 			else{

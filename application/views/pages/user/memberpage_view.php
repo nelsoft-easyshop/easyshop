@@ -1439,23 +1439,22 @@
 
 </div>	
 
-<!-- Used by transaction response when password is set-->
-<div id="tx_dialog" style="display:none;" title="Request Confirmation">
+<!-- Used by transaction response when password is not yet set-->
+<div id="tx_dialog" style="display:none;" title="Password Authentication">
 	<p>Continue submitting request?</p>
-	<p>Make sure you've received your order and is in good quality!</p>
-	<div style="text-align:center;">
+	<p class="forward msg">Make sure you've received your order and is in good quality!</p>
+	<p class="return msg">When canceled you won't receive any payment for this product!</p>
+	<p class="cod msg">This transaction will be marked as completed!</p>
+	
+	<div id="tx_dialog_pass_cont">
+		<label for="tx_password">Enter your password:</label>
+		<input type="password" id="tx_password" name="tx_password">
+		<span class="error red"></span>
+		<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" class="loading_img" style="display:none;vertical-align:middle;margin-left:3px;"/>
+	</div>
+	<div id="tx_dialog_loadingimg" style="text-align:center;">
 		<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" class="loading_img" style="display:none;"/>
 	</div>
-	<br/>
-</div>
-<!-- Used by transaction response when password is not yet set-->
-<div id="tx_dialog_pass" style="display:none;" title="Password Authentication">
-	<p>Continue submitting request?</p>
-	<p>Make sure you've received your order and is in good quality!</p>
-	<label for="tx_password">Enter your password:</label>
-	<input type="password" id="tx_password" name="tx_password">
-	<span class="error red"></span>
-	<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" class="loading_img" style="display:none;vertical-align:middle;margin-left:3px;"/>
 	<br/>
 </div>
 
@@ -1581,7 +1580,7 @@
 												<?php elseif($product['status'] == 1):?>
 													<span class="trans_alert transac_paid">Item Received</span>
 												<?php elseif($product['status'] == 2):?>
-													<span class="trans_alert transac_pay_return">Item returned</span>
+													<span class="trans_alert transac_pay_return">Order canceled</span>
 												<?php elseif($product['status'] == 3):?>
 													<span class="trans_alert transac_cod">Cash on delivery</span>
 												<?php elseif($product['status'] == 4):?>
@@ -1598,12 +1597,11 @@
 													<?php if($transact['bd_details']['is_invalid'] == 1):?>
 														<span class="trans_alert transac_pending">INCORRECT BANK DEPOSIT DETAILS</span>
 													<?php else:?>
-														<span class="trans_alert transac_pending">CONFIRMING BANK DEPOSIT DETAILS</span>
+														<span class="trans_alert transac_pending">PROCESSING BANK DEPOSIT DETAILS</span>
 													<?php endif;?>
 												<?php else:?>
-													<span class="trans_alert transac_pending">PENDING BANK DEPOSIT DETAILS</span>
+													<span class="trans_alert transac_pending">BANK DEPOSIT DETAILS REQUIRED</span>
 												<?php endif;?>
-												
 											<?php endif;?>
 										<?php endif;?>
                                         
@@ -1838,23 +1836,19 @@
 													<?php endif;?>
 												<?php endif;?>
 											<?php elseif($product['status'] == 1):?>
-												<span class="trans_alert transac_paid">Item Received</span>
+												<span class="trans_alert transac_paid">Item Delivered</span>
 											<?php elseif($product['status'] == 2):?>
-												<span class="trans_alert transac_pay_return">Item returned</span>
+												<span class="trans_alert transac_pay_return">Order Canceled</span>
 											<?php elseif($product['status'] == 3):?>
 												<span class="trans_alert transac_cod">Cash on delivery</span>
 											<?php elseif($product['status'] == 4):?>
-												<span class="trans_alert transac_cod">Paid</span>
+												<span class="trans_alert transac_cod">Payment Received</span>
 											<?php elseif($product['status'] == 5):?>
 												<span class="trans_alert transac_cod">Payment Returned</span>
 											<?php endif;?>
 										<?php endif;?>
 									<?php else:?>
-										<?php if($transact['payment_method'] == 2):?>
-											<span class="trans_alert transac_pending">PENDING DRAGONPAY PAYMENT</span>
-										<?php elseif($transact['payment_method'] == 5):?>
-											<span class="trans_alert transac_pending">PENDING BANK DEPOSIT DETAILS</span>
-										<?php endif;?>
+										<span class="trans_alert transac_pending">On Hold</span>
 									<?php endif;?>
 									</span>
 				
@@ -2050,7 +2044,7 @@
 										<?php if($product['status'] == 1):?>
 											<span class="trans_alert transac_paid">Item Received</span>
 										<?php elseif($product['status'] == 2):?>
-											<span class="trans_alert transac_pay_return">Item returned</span>
+											<span class="trans_alert transac_pay_return">Order Canceled</span>
 										<?php elseif($product['status'] == 3):?>
 											<span class="trans_alert transac_cod">Cash on delivery</span>
 										<?php elseif($product['status'] == 4):?>
@@ -2219,13 +2213,13 @@
 									<span class="transac_bought_con_col3">
 										Status:
 										<?php if($product['status'] == 1):?>
-											<span class="trans_alert transac_paid">Item Received</span>
+											<span class="trans_alert transac_paid">Item Delivered</span>
 										<?php elseif($product['status'] == 2):?>
-											<span class="trans_alert transac_pay_return">Item returned</span>
+											<span class="trans_alert transac_pay_return">Order Canceled</span>
 										<?php elseif($product['status'] == 3):?>
 											<span class="trans_alert transac_cod">Cash on delivery</span>
 										<?php elseif($product['status'] == 4):?>
-											<span class="trans_alert transac_paid">Paid</span>
+											<span class="trans_alert transac_paid">Payment Received</span>
 										<?php elseif($product['status'] == 5):?>
 											<span class="trans_alert transac_pay_return">Payment Returned</span>
 										<?php endif;?>						
