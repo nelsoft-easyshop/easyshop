@@ -1842,14 +1842,17 @@ $(document).ready(function(){
 	});
 	
 	$('.sales_info').on('click', function(){
-		var modaldiv = $(this).siblings('div.sales_details');
+		var sub = $(this).attr('data-div');
+		var modaldiv = $('#sales_'+sub);
 		
 		modaldiv.modal({
-			escClose: false,
+			containerCss:{
+				maxHeight: '350px'
+			},
 			onShow: function(){
 				this.setPosition();
 			},
-			onClose: function(){
+			onClose: function(dialog){
 				$.modal.close();
 			}
 		});

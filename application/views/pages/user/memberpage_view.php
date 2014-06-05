@@ -668,89 +668,108 @@
 	<div id="dashboard-sales" class="dashboard_table">
 		<h2>Sales</h2>
 		<div>
-			<div>
-				<span class="label">Total:</span>
-				<span class="amount"><?php echo number_format(round($sales['balance']['balance'],2), 2)?></span>
-				<br/>
-				<span class="sales_info">View more info</span>
-				
-				<div style="display:none;" class="sales_details">
-					<div>
-						<span></span>
-						<span>Base Price</span>
-						<span>Quantity</span>
-						<span>Handling Fee</span>
-						<span>Total</span>
-						<span>Easyshop Charge</span>
-						<span>Payment Method Charge</span>
-						<span>Net Amount</span>
-					</div>
-					<?php foreach($sales['balance']['list'] as $balance):?>
-						<div>
-							<p>Transaction # : <?php echo $balance['invoice']?></p>
-						<?php foreach($balance['product'] as $product):?>
-							<div>
-								<span><?php echo $product['name']?></span>
-								<span><?php echo $product['base_price']?></span>
-								<span><?php echo $product['qty']?></span>
-								<span><?php echo $product['handling_fee']?></span>
-								<span><?php echo $product['prd_total_price']?></span>
-								<span><?php echo $product['easyshop_charge']?></span>
-								<span><?php echo $product['payment_method_charge']?></span>
-								<span><?php echo $product['prd_net']?></span>
-							</div>
-						<?php endforeach;?>
-							<div>
-								<span>Transaction net amount : </span>
-								<span><?php echo $balance['tx_net']?></span>
-							</div>
-						</div>
-					<?php endforeach;?>
-				</div>
-			</div>
-			
-			<div>
-				<span class="label">Payout <small>(to be credited on <?php echo $sales['release']['payout_date'];?>)</small>:</span><span></span>
-				<span class="amount"><?php echo number_format(round($sales['release']['payout'],2), 2)?></span>
-				<br/>
-				<span class="sales_info">View more info</span>
-				
-				<div style="display:none;" class="sales_details">
-					<p>From: <?php echo $sales['release']['start_date']?> to: <?php echo $sales['release']['end_date']?></p>
-					<div>
-						<span></span>
-						<span>Base Price:</span>
-						<span>Quantity:</span>
-						<span>Handling Fee:</span>
-						<span>Total:</span>
-						<span>Easyshop Charge:</span>
-						<span>Payment Method Charge:</span>
-						<span>Net Amount:</span>
-					</div>
-					<?php foreach($sales['release']['list'] as $release):?>
-						<div>
-							<p>Transaction # : <?php echo $release['invoice']?></p>
-						<?php foreach($release['product'] as $product):?>
-							<div>
-								<span><?php echo $product['name']?></span>
-								<span><?php echo $product['base_price']?></span>
-								<span><?php echo $product['qty']?></span>
-								<span><?php echo $product['handling_fee']?></span>
-								<span><?php echo $product['prd_total_price']?></span>
-								<span><?php echo $product['easyshop_charge']?></span>
-								<span><?php echo $product['payment_method_charge']?></span>
-								<span><?php echo $product['prd_net']?></span>
-							</div>
-						<?php endforeach;?>
-							<div>
-								<span>Transaction net amount : </span>
-								<span><?php echo $release['tx_net']?></span>
-							</div>
-						</div>
-					<?php endforeach;?>
-				</div>
-			</div>
+			<table class="sales_summary">
+				<tr>
+					<td class="label">TOTAL:</td>
+					<td class="amount">Php <?php echo number_format(round($sales['balance']['balance'],2), 2)?></td>
+					<td class="sales_info" data-div="balance">View more info</td>
+				</tr>
+				<tr>
+					<td class="label">Next PAYOUT:</td>
+					<td class="amount">Php <?php echo number_format(round($sales['release']['payout'],2), 2)?></td>
+					<td class="sales_info" data-div="payout">View more info</td>
+				</tr>
+			</table>
 		</div>
+		
+		<div id="sales_balance" style="display:none;" class="sales_details">
+			<?php if( count($sales['balance']['list']) <= 0 ):?>
+				<h1>Wala kaming utang sayo!</h1>
+			<?php else:?>
+				<h2>Total Amount : Php <?php echo number_format(round($sales['balance']['balance'],2), 2)?></h2>
+				<table class="sales_details_content" cellpadding="0" cellspacing="0">
+					<tr class="header">
+						<th>Product Name</th>
+						<th>Base Price</th>
+						<th>Quantity</th>
+						<th>Handling Fee</th>
+						<th>Total</th>
+						<th>Easyshop Charge</th>
+						<th>Payment Method Charge</th>
+						<th>Net Amount</th>
+					</tr>
+				<?php foreach($sales['balance']['list'] as $balance):?>
+					<tr class="tx_header">
+						<th>Transaction #: <?php echo $balance['invoice'];?></th>
+						<th colspan="7"></th>
+					</tr>
+					<?php foreach($balance['product'] as $product):?>
+					<tr class="tx_details">
+						<td><?php echo html_escape($product['name'])?></td>
+						<td><?php echo number_format(round($product['base_price'],2),2)?></td>
+						<td><?php echo $product['qty']?></td>
+						<td><?php echo number_format(round($product['handling_fee'],2),2)?></td>
+						<td><?php echo number_format(round($product['prd_total_price'],2),2)?></td>
+						<td><?php echo number_format(round($product['easyshop_charge'],2),2)?></td>
+						<td><?php echo number_format(round($product['payment_method_charge'],2),2)?></td>
+						<td><?php echo number_format(round($product['prd_net'],2),2)?></td>
+					</tr>
+					<?php endforeach;?>
+					<tr class="tx_total">
+						<td colspan="6"></td>
+						<td><strong>Transaction Net Amount : </strong></td>
+						<td><strong><?php echo number_format(round($balance['tx_net'],2),2)?></strong></td>
+					</tr>
+				<?php endforeach;?>
+				</table>
+			<?php endif;?>
+		</div>
+	
+		<div id="sales_payout" style="display:none;" class="sales_details">
+			<?php if( count($sales['release']['list']) <= 0 ):?>
+				<h1>Wala kaming utang sayo!</h1>
+			<?php else:?>
+				<h2>Payout Amount: Php <?php echo number_format(round($sales['release']['payout'],2), 2)?></h2> 
+				<span id="payout_date">To be credited on: <strong><?php echo $sales['release']['payout_date'];?></strong></span> 
+				<span>From: <strong><?php echo $sales['release']['start_date']?></strong> To: <strong><?php echo $sales['release']['end_date']?></strong></span>
+				<table class="sales_details_content" cellpadding="0" cellspacing="0">
+					<tr class="header">
+						<th>Product Name</th>
+						<th>Base Price</th>
+						<th>Quantity</th>
+						<th>Handling Fee</th>
+						<th>Total</th>
+						<th>Easyshop Charge</th>
+						<th>Payment Method Charge</th>
+						<th>Net Amount</th>
+					</tr>
+				<?php foreach($sales['release']['list'] as $release):?>
+					<tr class="tx_header">
+						<th>Transaction # : <?php echo $release['invoice']?></th>
+						<th colspan="7"></th>
+					</tr>
+					<?php foreach($release['product'] as $product):?>
+					<tr class="tx_details">
+						<td><?php echo html_escape($product['name'])?></td>
+						<td><?php echo number_format(round($product['base_price'],2),2)?></td>
+						<td><?php echo $product['qty']?></td>
+						<td><?php echo number_format(round($product['handling_fee'],2),2)?></td>
+						<td><?php echo number_format(round($product['prd_total_price'],2),2)?></td>
+						<td><?php echo number_format(round($product['easyshop_charge'],2),2)?></td>
+						<td><?php echo number_format(round($product['payment_method_charge'],2),2)?></td>
+						<td><?php echo number_format(round($product['prd_net'],2),2)?></td>
+					</tr>
+					<?php endforeach;?>
+					<tr class="tx_total">
+						<td colspan="6"></td>
+						<td><strong>Transaction Net Amount : </strong></td>
+						<td><strong><?php echo number_format(round($release['tx_net'],2),2)?></strong></td>
+					</tr>
+				<?php endforeach;?>
+				</table>
+			<?php endif;?>
+		</div>
+			
 	</div>
 
 </div>
