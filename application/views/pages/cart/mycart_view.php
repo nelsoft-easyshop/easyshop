@@ -69,7 +69,7 @@
                     </div>
                     <div>
                         <?PHP
-                            $totalprice = ($row['is_promote'] === "1" ? $row['promo_price'] : $row['price']) * $row['qty'];
+                            $totalprice = $row['price'] * $row['qty'];
                         ?>
                         <p>Php <p class="subtotal" id="subtotal<?PHP echo $row['rowid']; ?>"><?PHP echo " ".number_format($totalprice,2,'.',','); ?></p></p>
                     </div>
