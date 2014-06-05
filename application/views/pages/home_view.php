@@ -16,84 +16,105 @@
             <?php echo $category_navigation; ?> 
 		</div>
 
-        <div class="middle_content">
-            <ul class="mid_slide1">
-                <?PHP foreach ($data['mainSlide'] as $rows): ?>
-                <li><img style="width:520px;height:270px" src="<?= base_url().$rows.'?ver=1.0' ?>" /></li>
-                <?PHP endforeach; ?>
-            </ul>
-
-            <h2><?=$data['productSlide_title'] ?></h2>
-            <ul class="mid_slide2">
-                <?PHP foreach ($data['productSlide_id'] as $rows): ?>
-                  <li>
-                    <a href ="<?=base_url()."item/".$rows['slug']; ?>" >
-                        <span class="mid_bottom_img_con">
-                            <span class="mid_bottom_img">
-                                <img src="<?=  base_url().$rows['path'].'categoryview/'.$rows['file']; ?>" />
-                            </span>
-                        </span>
-                        <br />
-                           <?=html_escape($rows['product']); ?> 
-                    </a>
-                </li> 
-                <?PHP endforeach; ?>
-            </ul>
-
-
-            <div class="clear"></div>
-        </div>
-
-        <!-- Start Right -->
-
-        <div class="right_panel">
+        <div class="middle_content2">
             
-            <div class="right_panel_box">
-                <div class="sign_in_register">
-                    
-                    <?php if(!$logged_in): ?>
-                        <div>
-                            <a href="<?=base_url()?>login" class="orange_btn"> Sign In</a>
-                        </div>                    
-                        <div>
-                           <a href="<?=base_url()?>#register" class="orange_btn"> Register</a>
-                        </div>
-                    <?php else: ?>
-                        <div>
-                            <a href="<?=base_url()?>sell/step1" class="orange_btn" style='width:240px;'>Sell Now</a>
+            <div class="countdown_container">
+                <div class="countdown_top_content">
+                    <div class="countdown_top_left_content">
+                        <img src="<?= base_url() ?>assets/images/img_countdown_banner.png">
+                    </div>
+                    <div class="countdown_top_right_content">
+                        <div class="cd_left_con">
+                            <div class="cd_top_content">
+                                
+                                <span class="cd_discount_tag"><span>2%<br />OFF</span></span>
+                            </div>
+                            <div>
+                                <p class="txt_buy">Buy an</p>
+                                <p class="cd_prod_name">iPhone 5s</p>
+                                <p class="cd_prod_base_price">Php 48,990</p>
+                                <p class="cd_prod_discount_price">Php 489.90*</p>
+                                <p class="cd_buy_btn"><a href="" class="orange_btn3">BUY NOW</a></p>
+                            </div>
+                        </div>                        
+                        <div class="cd_right_con">
+                             <img src="<?= base_url() ?>assets/images/img_cd_prod1.jpg" alt="iPhone 5s">
                         </div>     
-                    <?php endif; ?>
-                    
-                    
+                    </div>
                 </div>
                 <div class="clear"></div>
-                <div class="guides_panel">
-                    <div>
-                        <a href="<?= base_url() ?>home/under_construction"><span class="span_bg shopping_guide"></span>Shopping Guide</a>
-                    </div>
-                    <div>
-                        <a href="<?= base_url() ?>home/under_construction"><span class="q_and_a"></span>Q &amp; A</a>
-                    </div>
-                    <div>
-                        <a href="<?= base_url() ?>home/under_construction"><span class="shipping"></span>Shipping</a>
-                    </div>
-                    <div>
-                        <a href="<?= base_url() ?>home/under_construction"><span class="secure_payment"></span>Secure Payment</a>
-                    </div>
-                </div>
-            </div>
-            <br/>
-            <div class="global_secure_payment">
-                <p><strong>Payment Methods</strong></p>
-                <div>
-                    <span class="mastercard"></span>
-                    <span class="visa"></span>
-                    <span class="paypal"></span><br />
-                    <span class="dragonpay"></span>
-                    <span class="cod"></span>
-                </div>
+                <ul class="countdown_slides">
+                    <li>
+                        <div>
+                            <div>
+                                <span class="cd_slide_title"><a href="">Canon DSLR 60D</a></span>
+                                <span class="cd_slide_discount"><span>77% <br />OFF</span></span>
+                            </div>
+                            <div>
+                                <div class="cd_slide_bleft">
+                                    <p class="cd_slide_base_price">Php 32,900</p>
+                                    <p class="cd_slide_discount_price">Php 7,567</p>
+                                    <p class="cd_slide_buy_btn"><a href="" class="orange_btn">BUY NOW</a></p>
+                                </div>
+                                <div class="cd_slide_rleft">
+                                    <span>
+                                        <img src="<?= base_url() ?>assets/images/img_cd_slide_prod1.jpg">
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <div class="cd_border"></div>
+                    <li>
+                        <div>
+                            <div>
+                                <span class="cd_slide_title"><a href="">Samsung Smart LED TV 40"</a></span>
+                                <span class="cd_slide_discount"><span>77% <br />OFF</span></span>
+                            </div>
+                            <div>
+                                <div class="cd_slide_bleft">
+                                    <p class="cd_slide_base_price">Php 32,900</p>
+                                    <p class="cd_slide_discount_price">Php 7,567</p>
+                                    <p class="cd_slide_buy_btn"><a href="" class="orange_btn">BUY NOW</a></p>
+                                </div>
+                                <div class="cd_slide_rleft">
+                                    <span>
+                                        <img src="<?= base_url() ?>assets/images/img_cd_slide_prod2.jpg">
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <div class="cd_border"></div>
+                    <li class="cd_slide_soldout">
+                        <div>
+                            <div>
+                                <span class="cd_slide_title"><a href="">Samsung Smart LED TV 40"</a></span>
+                                <span class="cd_slide_discount"><span>77% <br />OFF</span></span>
+                            </div>
+                            <div>
+                                <div class="cd_slide_bleft">
+                                    <p class="cd_slide_base_price">Php 32,900</p>
+                                    <p class="cd_slide_discount_price">Php 7,567</p>
+                                    <p class="cd_slide_buy_btn"><a href="" class="disable_btn">BUY NOW</a></p>
+                                </div>
+                                <div class="cd_slide_rleft">
+                                    <span>
+                                        <img src="<?= base_url() ?>assets/images/img_cd_slide_prod2.jpg">
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <div class="cd_border"></div>
+
+                </ul>
+
+
+                <div class="clear"></div>
             </div>
         </div>
+
     </div>
 </section>
 
