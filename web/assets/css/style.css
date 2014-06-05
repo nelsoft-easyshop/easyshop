@@ -1285,7 +1285,7 @@ nav ul > li:hover > div {
 
 /***** countdown slides ******/
 
-.bx-wrapper .bx-viewport {
+.bx-wrapper.countdown_slides_wrapper .bx-viewport {
     margin-left: 40px;
     width: 684px;
 }
