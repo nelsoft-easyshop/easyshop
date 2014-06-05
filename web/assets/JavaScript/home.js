@@ -20,6 +20,17 @@ $(document).ready(function(){
       pager:false
     });
 
+    $('.countdown_slides').bxSlider({
+      slideWidth: 220,
+       minSlides: 3,
+        maxSlides: 4,
+        moveSlides: 2,
+        slideMargin: 0,
+      infiniteLoop:true,
+      autoControls: false,
+      pager:false
+    });
+
     $('.slider3').bxSlider({
       slideWidth: 452,
        minSlides: 1,
@@ -35,6 +46,9 @@ $(document).ready(function(){
 
     //middle content top slides
     $('.mid_slide1').parent('.bx-viewport').addClass('mid_top_slides');
+
+     //middle content countdown slides
+    $('.countdown_slides').parent('.bx-viewport').parent('.bx-wrapper').addClass('countdown_slides_wrapper');
 
     //middle content bottom slides
     $('.mid_slide2').parent('.bx-viewport').parent('.bx-wrapper').addClass('mid_bottom_slides');
