@@ -67,7 +67,7 @@
               <img class=" seller-img" src="<?php echo base_url() . $product['userpic']?>/60x60.png"><br />
               <span class="name"><?php echo html_escape($product['sellerusername']);?></span> 
             </a><br/>
-           <span><a id="modal-launcher2" href="javascript:void(0)" title="Send a message"><img src="<?=base_url()?>assets/images/msg_icon.ico"></a></span>
+           <span><a id="modal-launcher2" href="javascript:void(0)" title="Send a message"><span class="span_bg prod_message"></span></a></span>
             <span>
                 <br/>
                 <?php if(($vendorrating['rate_count'] <=0)):?>
