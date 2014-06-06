@@ -1,5 +1,6 @@
 <link rel="stylesheet" href="<?=base_url()?>assets/css/my_cart_css.css?ver=1.0" type="text/css" media="screen"/>
 
+<script src="<?=base_url() ?>assets/JavaScript/js/jquery.idTabs.min.js"></script>
 <style type="text/css">
  /* Overlay */
  #simplemodal-overlay {
@@ -224,7 +225,8 @@
                                 <div class="error_shipping_address">
                                     <span>
                                         This item is not available in your location. 
-                                        <a style="color:#0654BA" href="javascript:{}" data-slug="<?= $value['id'] ?>" data-name="<?= $value['name'] ?>" data-iid="<?= $value['product_itemID']; ?>" class="view_location_item">Click here for location availability.</a>
+                                        <a style="color:#0654BA" href="javascript:{}" data-slug="<?= $value['id'] ?>" data-name="<?= $value['name'] ?>" data-iid="<?= $value['product_itemID']; ?>" class="view_location_item">Click here for location availability</a>
+                                        or <a href="javascript:void(0);" class="removeitem" data-slug="<?= $value['slug'] ?>" style="color:red">Remove</a> this item from your selected item to checkout.
                                     </span>
                                 </div>
                             <?php endif; ?>
@@ -232,7 +234,8 @@
                             <?php if($value['qty'] > $value['maxqty']): ?>
                                 <div class="error_shipping_address">
                                     <span>
-                                        This item is  not available for desired quantity you want
+                                        This item is  not available for desired quantity you want.
+                                        <br><a href="javascript:void(0);" class="removeitem" data-slug="<?= $value['slug'] ?>" style="color:red">Remove</a> this item from your selected item to checkout.
                                     </span>
                                 </div>
                             <?php endif; ?>
@@ -341,6 +344,6 @@
     }
 </script>
 
-<script type='text/javascript' src='<?=base_url()?>assets/JavaScript/js/jquery.simplemodal.js'></script>
 <script type='text/javascript' src='<?=base_url()?>assets/JavaScript/payment.js'></script>
-<script src="<?=base_url() ?>assets/JavaScript/js/jquery.idTabs.min.js"></script>
+
+<script type='text/javascript' src='<?=base_url()?>assets/JavaScript/js/jquery.simplemodal.js'></script>

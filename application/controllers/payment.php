@@ -815,7 +815,6 @@ class Payment extends MY_Controller{
         }//close foreach seller loop
     }
 	
-	
 	/*
 	 *	Function to revert back order quantity when dragon pay transaction expires
 	 *
@@ -905,25 +904,19 @@ class Payment extends MY_Controller{
             );
             if(trim($this->input->post('consignee')) == "" || $this->input->post('c_city') == 0 || $this->input->post('c_stateregion') == 0 || trim($this->input->post('c_address')) == "" || trim($this->input->post('c_mobile')) == "")
             {
-            echo json_encode("Fill the required fields!");
-            exit();
+                echo json_encode("Fill the required fields!");
+                exit();
             }else if(!is_numeric($this->input->post('c_mobile')) || strlen($this->input->post('c_mobile')) != 10){
-            echo json_encode("<b>MOBILE NUMBER</b> should be numeric and 10 digits. eg: 9051235678");
-            exit();
+                echo json_encode("<b>MOBILE NUMBER</b> should be numeric and 10 digits. eg: 9051235678");
+                exit();
             }else if(trim($this->input->post('c_telephone')) != "" && (preg_match("/^([0-9]{4}-){3}[0-9]{4}$/", $this->input->post('c_telephone')) || !is_numeric(str_replace('-', '', $this->input->post('c_telephone'))))){
-
-          
-                
-                        echo json_encode("<b>MOBILE NUMBER</b> should be numeric and hypen only. eg: 123-45-67");
-                
-               
-                
+                echo json_encode("<b>MOBILE NUMBER</b> should be numeric and hypen only. eg: 123-45-67");
             }else{
-            $postdata['default_add'] = "off";
-            $data = $this->memberpage_model->edit_consignee_address_by_id($uid, $postdata);
-            $this->output->set_output(json_encode($data));
-            echo json_encode("success");
-            exit(); 
+                $postdata['default_add'] = "off";
+                $data = $this->memberpage_model->edit_consignee_address_by_id($uid, $postdata);
+                $this->output->set_output(json_encode($data));
+                echo json_encode("success");
+                exit(); 
             }
         
     }

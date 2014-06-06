@@ -306,6 +306,23 @@ class Cart extends MY_Controller{
         }
         return number_format($total,2,'.',',');
     }
+
+    function removeselected()
+    {   
+        $userdata = $this->session->all_userdata();
+        $itemList = $userdata['choosen_items'];
+        $slug = $this->input->post('slug');
+
+        $key = "";
+        foreach ($itemList as $key => $value) {
+            if($value['slug'] == $slug){
+                unset($itemList[$key]);
+            }
+        }
+        $this->session->set_userdata('choosen_items', $itemList);
+        echo '{"e":"0"}';
+        
+    }
 }
 
 /* End of file cart.php */
