@@ -1,7 +1,19 @@
+<?php
+/*
+ * This file is only for scripts that have dependent scripts
+ */
+?>
 <script type='text/javascript' src="<?=base_url()?>assets/JavaScript/js/jquery-1.9.1.js" ></script>
 <script type='text/javascript' src="<?=base_url()?>assets/JavaScript/js/jquery-ui.js"></script>
 <script type='text/javascript' src="<?=base_url()?>assets/JavaScript/js/jquery.jcarousel.min.js"></script>
 <script type='text/javascript' src="<?=base_url()?>assets/JavaScript/js/jquery.cookie.js"></script>
+<script src="https://autobahn.s3.amazonaws.com/js/autobahn.min.js"></script>
+<script>
+    window.ab || document.write('<script src="/assests/js/src/vendor/autobahn.min.js">\x3C/script>');
+</script>
+<script src="/assets/js/src/lib/websocket/client.js"></script>
+<script src="/assets/js/src/lib/eventdispatcher.js"></script>
+
 <script type='text/javascript'>
    window.alert = function(message){
         $(document.createElement('div'))
