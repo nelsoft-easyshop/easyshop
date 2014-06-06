@@ -192,7 +192,9 @@ class product_model extends CI_Model
         }  
         $row['original_price'] = $row['price'];
         $row['price'] = $this->GetPromoPrice($row['price'],$row['startdate'],$row['enddate'],$row['is_promote'],$row['promo_type']);
-
+        $rows['start_promo'] = ((intval($rows['is_promote']) === 1)&&(strtotime($rows['startdate']) < strtotime(date('Y-m-d H:i:s'))));
+        $rows['percentage'] = ($rows['start_promo'])?($rows['original_price'] - $rows['price'])/$rows['original_price'] * 100.00:0.00;
+        
 		return $row;
 	}
     
@@ -1285,8 +1287,12 @@ class product_model extends CI_Model
 		$sth->execute();
 		$rows = $sth->fetch(PDO::FETCH_ASSOC);
         /* Get actual price, apply any promo calculation */
+
         $rows['original_price'] = $rows['price'];
         $rows['price'] = $this->GetPromoPrice($rows['price'],$rows['startdate'],$rows['enddate'],$rows['is_promote'],$rows['promo_type']);
+        $rows['start_promo'] = ((intval($rows['is_promote']) === 1)&&(strtotime($rows['startdate']) < strtotime(date('Y-m-d H:i:s'))));
+        $rows['percentage'] = ($rows['start_promo'])?($rows['original_price'] - $rows['price'])/$rows['original_price'] * 100.00:0.00;
+
         /* Separate image file path and file name */
         $temp = array($rows);
         $this->explodeImagePath($temp);
@@ -2074,7 +2080,7 @@ class product_model extends CI_Model
         $type = intval($type);
         switch ($type) {
             case 1 :
-                if(($today < $startdate) || ($enddate > $startdate)){
+                if(($today < $startdate) || ($enddate < $startdate)){
                     $diffHours = 0;
                 }else if($today >= $enddate){
                     $diffHours = 0.99;
