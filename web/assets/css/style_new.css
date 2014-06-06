@@ -145,6 +145,12 @@ span.seller-name .name {
 	word-wrap: break-word;
 }
 
+.prod_message {
+	background-position: -542px -261px;
+	height: 10px;
+	width: 15px;
+}
+
 span.seller-name .name:hover {
 	color: #ff4400;
 }
