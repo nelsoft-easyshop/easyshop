@@ -268,22 +268,7 @@
 		$("#"+this.id+" .msg_sender span").remove();
 		seened(this);
 	});
-	
-	
-    var entityMap = {
-        "&": "&amp;",
-        "<": "&lt;",
-        ">": "&gt;",
-        '"': '&quot;',
-        "'": '&#39;',
-        "/": '&#x2F;'
-      };
-
-    function escapeHtml(string) {
-        return String(string).replace(/[&<>"'\/]/g, function (s) {
-          return entityMap[s];
-        });
-    }
+        
 	function specific_msgs() {
 		var html = "";
 		var all_messages = eval('('+ $(".Active").attr('data')+')');
