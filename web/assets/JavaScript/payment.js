@@ -291,11 +291,43 @@ $(document).ready(function(){
                 success: function(d) {
                     $('.div_view_avail_location').empty();
                     $('.div_view_avail_location').html(d);
+                },       
+                error: function (request, status, error) {
+                    alert(error);
                 }
             });
     });
 
 
 // -- END OF VIEW ITEM AVAILABILITY LOCATION -- //
+
+// -- START REMOVE ITEM FROM SELECTED CART --//
+
+    $(document).on('click','.removeitem',function () {
+
+
+    var csrftoken = $("meta[name='csrf-token']").attr('content');
+    var csrfname = $("meta[name='csrf-name']").attr('content'); 
+    var slug = $(this).data('slug'); 
+
+    var action = config.base_url + "cart/removeselected"; 
+        $.ajax({
+            type: "POST",
+            url:  action, 
+            dataType: "json",
+            data: csrfname+"="+csrftoken+"&slug="+slug, 
+            success: function(d) {
+                if(d.e == 0)
+                {
+                    location.reload();
+                }else{
+                    alert('Something went wrong. Please refresh this page.');
+                }
+            } 
+        });
+    });
+
+
+// -- END OF REMOVE ITEM FROM SELECTED CART --//
 
 });
