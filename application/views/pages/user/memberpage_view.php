@@ -1533,10 +1533,10 @@
 									<input type="hidden" name="invoice_num" value="<?php echo $transact['invoice_no'];?>">
 									<input type="hidden" name="transaction_num" value="<?php echo $tk;?>">
 									<input type="hidden" name="bank_deposit" value="1">
-									<input type="submit" class="bank_deposit_submit" name="bank_deposit_submit" value="Submit">
-									<span class="tx_modal_edit css_modal_edit" style="display:<?php echo $disable ? '':'none;'?>">Edit</span>
-									<span class="tx_modal_cancel css_modal_cancel" style="display:none;">Cancel</span>
-									<span class="css_modal_date"><?php echo $transact['bd_details']['bd_datemodified']?></span>
+									<input type="submit" class="bank_deposit_submit orange_btn3" name="bank_deposit_submit" value="Submit">
+									<div class="tx_modal_edit css_modal_edit footer" style="display:<?php echo $disable ? '':'none;'?>">Edit</div>
+									<div class="tx_modal_cancel css_modal_cancel footer" style="display:none;">Cancel</div>
+									<div class="css_modal_date footer"><?php echo $transact['bd_details']['bd_datemodified']?></div>
 								<?php echo form_close();?>
 								</div>
 						<?php endif;?>
@@ -1886,9 +1886,9 @@
 													<input name="order_product" type="hidden" value="<?php echo $opk;?>">
 													<input name="transact_num" type="hidden" value="<?php echo $tk;?>">
 													<input class="shipping_comment_submit orange_btn3" type="submit" value="Save">
-													<span class="tx_modal_edit css_modal_edit" style="display: <?php echo $disable ? '':'none'?>;">Edit</span>
-													<span class="tx_modal_cancel css_modal_cancel" style="display:none;">Cancel</span>
-													<span class="css_modal_date"><?php echo $product['datemodified'];?></span>
+													<div class="tx_modal_edit css_modal_edit footer" style="display: <?php echo $disable ? '':'none'?>;">Edit</div>
+													<div class="tx_modal_cancel css_modal_cancel footer" style="display:none;">Cancel</div>
+													<div class="css_modal_date footer"><?php echo $product['datemodified'];?></div>
 												<?php echo form_close();?>
 											</div>
 										</div>

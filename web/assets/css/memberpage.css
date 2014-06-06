@@ -86,6 +86,11 @@ box-shadow:         0px 0px 10px 0px rgba(50, 50, 50, 0.75);
     width: auto !important;
 }
 
+.shipping_comment.isform{
+    padding-top: 0px !important;
+    
+}
+
 .shipping_comment_cont{
 	width: 500px;
 }
@@ -96,12 +101,21 @@ box-shadow:         0px 0px 10px 0px rgba(50, 50, 50, 0.75);
 	color: white;
 }
 
-.shipping_comment_cont input, .shipping_comment_cont label{
+.shipping_comment_cont input, .shipping_comment_cont label,
+.payment_details_cont input, .payment_details_cont label{
 	display:inline-block;
 	margin-top: 5px;
 }
 
-.shipping_comment_cont label{
+.shipping_comment_cont input[type="submit"],
+.payment_details_cont input[type="submit"]{
+	border: none;
+	cursor: pointer;
+	margin-left: 5px;
+	width: 90px;
+}
+
+.shipping_comment_cont label, .payment_details_cont label{
 	width: 30%;
 	margin-left: 5px;
 }
@@ -109,12 +123,6 @@ box-shadow:         0px 0px 10px 0px rgba(50, 50, 50, 0.75);
 .shipping_comment_cont textarea{
 	display:block;
 	margin: 3px;
-	margin-left: 5px;
-}
-
-.shipping_comment_submit{
-	border: none;
-	cursor: pointer;
 	margin-left: 5px;
 }
 
@@ -160,6 +168,19 @@ box-shadow:         0px 0px 10px 0px rgba(50, 50, 50, 0.75);
 	display:block;
 	margin: 3px;
 	margin-left: 5px;
+}
+
+div.footer{
+	display: inline-block;
+}
+
+div.css_modal_edit, div.css_modal_cancel{
+	width: 50px;
+}
+
+div.css_modal_date{
+	width: 65%;
+	text-align: right;
 }
 
 /** AVATAR CSS FIX **/

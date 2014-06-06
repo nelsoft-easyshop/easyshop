@@ -1389,6 +1389,8 @@ $(document).ready(function(){
 									alert(obj.error);
 								}
 							});
+							submitbtn.attr('disabled', true);
+							submitbtn.val('Saving...');
 						}
 					});
 				}
@@ -1445,6 +1447,7 @@ $(document).ready(function(){
 						textarea.attr('disabled',false);
 						$.post(config.base_url+'memberpage/transactionResponse', $(form).serializeArray(), function(data){
 							submitbtn.val('Submit');
+							submitbtn.attr('disabled',false);
 							try{
 								var obj = jQuery.parseJSON(data);
 							}
@@ -1471,6 +1474,7 @@ $(document).ready(function(){
 								alert(obj.error);
 							}
 						});
+						submitbtn.attr('disabled', true);
 						return false;
 					}
 				});
