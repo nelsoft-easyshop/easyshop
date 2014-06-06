@@ -72,7 +72,7 @@
     </div>
     <button id="modal_send_btn">Send</button>
 </div>
-
+<script src="/assets/js/src/messaging.js"></script>
 <script>
 	$(document).ready(function() {
 		$('#table_id').dataTable({
