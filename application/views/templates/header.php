@@ -53,28 +53,6 @@
  '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
  })(window,document,'script','dataLayer','GTM-KP5F8R');</script>
  <!-- End Google Tag Manager -->
-
- 
-<!--  <div class="fb-share-button" data-href="https://developers.facebook.com/docs/plugins/" data-type="box_count">
-  <img src = "share_button.png" id="es_fb_share"
-   data-name="EasyShop"
-   data-link="https://easyshop.ph/"
-   data-pic="https://easyshop.ph/assets/images/img_logo.png" 
-   data-caption="Best and Easy" 
-   data-desc="Easyshop Coming Soon!"  />
-  </div>  -->
-
- <!-- <div class="fb-share-button" data-href="https://staging.easyshop.ph" data-type="box_count"></div> -->
-
- 
-<!-- 
- <a id="fb_share" href="https://www.facebook.com/sharer/sharer.php?s=100
- &amp;p[url]=https://staging.easyshop.ph
- &amp;p[images][0]=https://staging.easyshop.ph/assets/images/img_logo.png
- &amp;p[title]=Easyshop.ph
- &amp;p[summary]=asds." target="_blank">Share on Facebook</a> -->
-
-
  
 <header>
   <div class="wrapper">
