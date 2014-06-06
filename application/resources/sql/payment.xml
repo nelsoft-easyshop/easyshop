@@ -133,9 +133,9 @@
 </select>
 
 <select id="addBankDepositDetails">
-	INSERT INTO es_payment_bankdeposit (`order_id`, `bank`,`ref_num`, `amount`, `date_deposit`, `comment`, `datemodified`)
-	VALUES(:order_id, :bank, :ref_num, :amount, :date_deposit, :comment, NOW())
-	ON DUPLICATE KEY UPDATE bank = :bank, ref_num = :ref_num, amount = :amount, date_deposit = :date_deposit, comment = :comment, datemodified = NOW()
+	INSERT INTO es_payment_bankdeposit (`order_id`, `bank`,`ref_num`, `amount`, `date_deposit`, `comment`, `datemodified`, `is_invalid`)
+	VALUES(:order_id, :bank, :ref_num, :amount, :date_deposit, :comment, NOW(), 0)
+	ON DUPLICATE KEY UPDATE bank = :bank, ref_num = :ref_num, amount = :amount, date_deposit = :date_deposit, comment = :comment, datemodified = NOW(), is_invalid = 0
 </select>
 
 <!-- Used to update es_order - Dragonpay transaction -->

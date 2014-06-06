@@ -111,6 +111,25 @@ $(document).ready(function(){
 	 jQuery.validator.addMethod("is_validmobile", function(value, element) {
 		return this.optional(element) || /^(8|9)[0-9]{9}/.test(value);
 	 }, "Must begin with 8 or 9");
+	 
+	 $.datepicker.setDefaults({dateFormat: 'yy-mm-dd'}, $.extend($.datepicker.regional['']));
+
+	 jQuery.validator.addMethod("is_validdate", function(value, element) {
+		var comp = value.split( /[-\/]+/);
+        if(comp.length > 3){
+            return this.optional(element) || false;
+        }
+		var y = parseInt(comp[0], 10);
+		var m = parseInt(comp[1], 10);
+		var d = parseInt(comp[2], 10);
+		var date = new Date(y,m-1,d);
+
+		if ((date.getFullYear() == y) && ((date.getMonth() + 1) == m) && (date.getDate() == d)) 
+			 return this.optional(element) || true;
+		else 
+			 return this.optional(element) || false;
+	 }, "This date is invalid");
+	 
 });
 
 
@@ -131,29 +150,11 @@ $(document).ready(function(){
 		return e.which !== 32;
 	});
 	
-	$.datepicker.setDefaults({dateFormat: 'yy-mm-dd'}, $.extend($.datepicker.regional['']));
-
 	$( "#datepicker" ).datepicker({
 		changeMonth: true,
 		changeYear: true,
         yearRange: '1950:2005'
 	});
-
-	 jQuery.validator.addMethod("is_validdate", function(value, element) {
-		var comp = value.split( /[-\/]+/);
-        if(comp.length > 3){
-            return this.optional(element) || false;
-        }
-		var y = parseInt(comp[0], 10);
-		var m = parseInt(comp[1], 10);
-		var d = parseInt(comp[2], 10);
-		var date = new Date(y,m-1,d);
-
-		if ((date.getFullYear() == y) && ((date.getMonth() + 1) == m) && (date.getDate() == d)) 
-			 return this.optional(element) || true;
-		else 
-			 return this.optional(element) || false;
-	 }, "This date is invalid");
 
 	$("#personal_profile_main").validate({
 		rules: {
@@ -1185,7 +1186,7 @@ $(document).ready(function(){
 	
 	$('.transac_response_btn').on('click', function(){
 		var txResponseBtn = $(this);
-		var txStatus = $(this).closest('div.tx_btns').siblings('div.tx_cont').find('.tx_cont_col3 span.trans_alert');
+		var txStatus = $(this).closest('div.tx_btns').siblings('div.tx_cont').find('.tx_cont_col3 .trans_alert');
 		// tx object located in view. contains username and password( requires once every memberpage load )
 		var txDialog = $('#tx_dialog');
 		var passCont = $('#tx_dialog_pass_cont');
@@ -1317,6 +1318,12 @@ $(document).ready(function(){
 		return false;
 	});
 	
+	$('input.modal_date').datepicker({
+		changeMonth: true,
+		changeYear: true,
+        yearRange: '2013:2050'
+	});
+	
 	/******	Submit / View shipping Comments	******/
 	$('span.shipping_comment').on('click', function(){
 		var divcont = $(this).parent('div').siblings('div.shipping_comment_cont');
@@ -1337,7 +1344,11 @@ $(document).ready(function(){
 								required: true
 							},
 							delivery_date:{
-								required: true
+								required: true,
+								is_validdate:true
+							},
+							expected_date:{
+								is_validdate:true
 							}
 						},
 						errorElement: "span",
@@ -1349,8 +1360,8 @@ $(document).ready(function(){
 							var submitbtn = $(form).children('input.shipping_comment_submit');
 							var input = $(form).children('input[type="text"]');
 							var textarea = $(form).children('textarea');
-							var editbtn = $(form).children('span.tx_modal_edit');
-							var cancelbtn = $(form).children('span.tx_modal_cancel');
+							var editbtn = $(form).children('.tx_modal_edit');
+							var cancelbtn = $(form).children('.tx_modal_cancel');
 							
 							input.attr('disabled',false);
 							textarea.attr('disabled', false);
@@ -1381,7 +1392,7 @@ $(document).ready(function(){
 									cancelbtn.hide();
 									
 									if(thisbtn.hasClass('isform')){
-										txStatus.replace('<span class="trans_alert trans_orange">Item on route</span>');
+										txStatus.replaceWith('<span class="trans_alert trans_orange">Item on route</span>');
 									}
 									
 									$.modal.close();
@@ -1433,7 +1444,8 @@ $(document).ready(function(){
 							required: true
 						},
 						date:{
-							required: true
+							required: true,
+							is_validdate: true
 						}
 					},
 					errorElement: "span",
@@ -1466,7 +1478,7 @@ $(document).ready(function(){
 								editbtn.show();
 								cancelbtn.hide();
 								
-								txStatus.replace('<span class="trans_alert trans_red">CONFIRMING BANK DEPOSIT DETAILS</span>');
+								txStatus.replaceWith('<span class="trans_alert trans_red">PROCESSING DEPOSIT DETAILS</span>');
 								
 								$.modal.close();
 							}else{
@@ -1511,11 +1523,11 @@ $(document).ready(function(){
 				if ( thisbtn.hasClass('reject') ){
 					thisbtn.removeClass('reject').addClass('unreject').val('Unreject Item');
 					thismethod.val('unreject');
-					status.text('Item Rejected');
+					status.replaceWith('<span class="trans_alert trans_red">Item Rejected</span>');
 				}else if ( thisbtn.hasClass('unreject') ){
 					thisbtn.removeClass('unreject').addClass('reject').val('Reject Item');
 					thismethod.val('reject');
-					status.text('Item Unrejected');
+					status.replaceWith('<span class="trans_alert trans_red">Item Unrejected</span>');
 				}
 			}
 			else{

@@ -1527,7 +1527,7 @@
 									<label for="amount">Amount Deposited: </label>
 									<input type="text" name="amount" class="bankdeposit_amount" value="<?php echo html_escape($transact['bd_details']['amount'])?>" <?php echo $disable ? 'disabled':''?>><br/>
 									<label for="date">Date of Deposit: </label>
-									<input type="text" name="date" value="<?php echo html_escape($transact['bd_details']['date_deposit'])?>" <?php echo $disable ? 'disabled':''?>><br/>
+									<input type="text" name="date" class="modal_date" value="<?php echo html_escape($transact['bd_details']['date_deposit'])?>" <?php echo $disable ? 'disabled':''?>><br/>
 									<label for="comment">Comments: </label>
 									<textarea name="comment" cols="55" rows="5" data-value="<?php echo html_escape($transact['bd_details']['comment'])?>" <?php echo $disable ? 'disabled':''?>><?php echo html_escape($transact['bd_details']['comment'])?></textarea>
 									<input type="hidden" name="invoice_num" value="<?php echo $transact['invoice_no'];?>">
@@ -1878,9 +1878,9 @@
 													<label for="tracking_num">Tracking Number: </label>
 													<input type="text" name="tracking_num" value="<?php echo html_escape($product['tracking_num']);?>" <?php echo $disable ? 'disabled':''; ?> ><br/>
 													<label for="delivery_date">Delivery Date: </label>
-													<input type="text" name="delivery_date" value="<?php echo html_escape($product['delivery_date'])?>" <?php echo $disable ? 'disabled':''; ?> > <br/>
+													<input type="text" class="modal_date" name="delivery_date" value="<?php echo html_escape($product['delivery_date'])?>" <?php echo $disable ? 'disabled':''; ?> > <br/>
 													<label for="expected_date">Expected Date of Arrival: </label>
-													<input type="text" name="expected_date" value="<?php echo html_escape($product['expected_date'])?>" <?php echo $disable ? 'disabled':''; ?> ><br/>
+													<input type="text" class="modal_date" name="expected_date" value="<?php echo html_escape($product['expected_date'])?>" <?php echo $disable ? 'disabled':''; ?> ><br/>
 													<label for="comment">Comments: </label>
 													<textarea name="comment" cols="55" rows="5" data-value="<?php echo html_escape($product['shipping_comment']); ?>" <?php echo $disable ? 'disabled':''; ?>><?php echo html_escape($product['shipping_comment']); ?></textarea>
 													<input name="order_product" type="hidden" value="<?php echo $opk;?>">
