@@ -273,10 +273,3 @@ table.sales_summary tr.sales_info:hover td.label{
 table.sales_summary tr.sales_info:hover td.amount{
 	color: rgb(0,255,0);
 }
-
-/*
-table.sales_summary td.sales_info{
-	cursor: pointer;
-	color: #0191C8;
-	font-size: 10px;
-}*/

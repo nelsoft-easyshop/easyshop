@@ -4504,7 +4504,7 @@ div.sold_prod_container {
 /*	min-width: 185px;*/
 /*	margin-left: 20px;*/
 }
-.transac_response_btn:hover {
+.transac_response_btn:hover, .reject_btn:hover {
 -webkit-box-shadow: inset 0px -10px 12px -8px rgba(255, 255, 255, 0.75);
 -moz-box-shadow:    inset 0px -10px 12px -8px rgba(255, 255, 255, 0.75);
 box-shadow:         inset 0px -10px 12px -8px rgba(255, 255, 255, 0.75);
@@ -4886,9 +4886,8 @@ box-shadow:         inset 0px -10px 12px -8px rgba(255, 255, 255, 0.75);
     word-wrap: break-word;
 }
 
-.transac_response {
+.transac_prod_btns form{
     display: inline-block;
-/*    float: right;*/
 }
 
 .transac_forward {

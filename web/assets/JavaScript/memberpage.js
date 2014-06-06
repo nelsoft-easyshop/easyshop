@@ -1213,7 +1213,7 @@ $(document).ready(function(){
 			resizable:false,
 			draggable:false,
 			width:500,
-			height:220,
+			height:230,
 			buttons:{
 				OK:function(){
 					var thisdialog = $(this);

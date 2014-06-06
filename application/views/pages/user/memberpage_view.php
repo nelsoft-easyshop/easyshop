@@ -1651,10 +1651,10 @@
 										
 										<?php echo form_open('');?>
 											<?php if($product['is_reject'] == 0):?>
-												<input type="button" value="Reject Item" class="reject_item	reject">
+												<input type="button" value="Reject Item" class="reject_btn reject_item	reject">
 												<input type="hidden" name="method" value="reject">
 											<?php else:?>
-												<input type="button" value="Unreject Item" class="reject_item unreject">
+												<input type="button" value="Unreject Item" class=" reject_btn reject_item unreject">
 												<input type="hidden" name="method" value="unreject">
 											<?php endif;?>
 											
@@ -1916,7 +1916,7 @@
 											$attr = array('class'=>'transac_response');
 											echo form_open('',$attr);
 										?>
-										<input type="button" value="Delivered" class="transac_response_btn tx_cod">
+										<input type="button" value="Completed" class="transac_response_btn tx_cod">
 										<input type="hidden" name="cash_on_delivery" value="<?php echo $opk;?>">
 										<input type="hidden" name="transaction_num" value="<?php echo $tk;?>">
 										<input type="hidden" name="invoice_num" value="<?php echo $transact['invoice_no'];?>">

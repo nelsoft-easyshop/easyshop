@@ -418,7 +418,8 @@ class memberpage_model extends CI_Model
 				array_push($data['active'],$row);
 			else if($row['is_delete'] === '1')
 				array_push($data['deleted'],$row);
-		}			
+		}
+		
 		return $data;
 	}
 	
