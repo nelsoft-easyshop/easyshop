@@ -9,6 +9,6 @@ return [
     'host'      => '127.0.0.1',
     'driver'    => 'pdo_mysql',
     'user'      => 'root',
-    'password'  => '121586',
+    'password'  => 'pass',
     'dbname'    => 'easyshop',
 ];

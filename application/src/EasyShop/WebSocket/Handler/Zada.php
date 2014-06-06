@@ -137,7 +137,7 @@ class Zada implements WampServerInterface
     }
 
     /**
-     * No subscriptions here
+     * Handle subscribers
      * 
      * @param \Ratchet\ConnectionInterface $conn
      * @param Topic $topic
@@ -150,15 +150,12 @@ class Zada implements WampServerInterface
         /*
          * We use session id as the topic id and (re) check whether authenticated
          */
-        if (NULL !== $authenticatedSession) {
-            if (!array_key_exists($topic->getId(), $this->topics)) {
-                $this->topics[$topic->getId()] = $topic;
-                echo $topic->getId() . " has been registered\n";
-            }
-            echo "Client has subscribed!\n";
+        if (NULL === $authenticatedSession) {
+            $conn->close();
         }
         else {
-            $conn->close();
+            $this->topics[$topic->getId()] = $topic;
+            echo "Client has subscribed to " . $topic->getId() . " !\n";
         }
     }
 
@@ -171,6 +168,7 @@ class Zada implements WampServerInterface
     public function onUnSubscribe(ConnectionInterface $conn, $topic)
     {
         // Do nothing
+        echo "unsubscribed\n";
     }
     
     /**
@@ -180,10 +178,14 @@ class Zada implements WampServerInterface
      */
     public function onPush($serialData)
     {
-        $data = json_decode($serialData, true);
-        if (isset ($data['session_id'])) {
-            echo "gotcha!" . $data['session_id'];
-            $this->topics[$data['session_id']]->broadcast($data);
+        try {
+            $data = json_decode($serialData, true);
+            if (isset ($data['session_id']) && isset ($this->topics[$data['session_id']])) {
+                echo "Pushing to topic" . $data['session_id'] . "\n";
+                $this->topics[$data['session_id']]->broadcast($data);
+            }
+        } catch (\Exception $e) {
+            echo "ex thrown\n";
         }
     }
     

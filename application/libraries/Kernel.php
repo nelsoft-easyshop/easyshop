@@ -54,7 +54,7 @@ class Kernel
                     ENVIRONMENT === 'production', 'assets/js/src', 'assets/js/min');
         };
         
-        //Doctrine ORM
+        // Doctrine ORM
         $paths = array('src/EasyShop/Entities');
         $isDevMode = (ENVIRONMENT === 'development');
         
@@ -63,7 +63,20 @@ class Kernel
         $container['entity_manager'] = function ($c) use ($dbConfig, $config){
             return Doctrine\ORM\EntityManager::create($dbConfig, $config);
         };
-
+        
+        // ZeroMQ pusher
+        $container['user_pusher'] = function ($c) {
+            $wsConfig = require APPPATH . '/config/param/websocket.php';
+            $context = new \ZMQContext();
+            $socket = $context->getSocket(\ZMQ::SOCKET_PUSH, 'my pusher');
+            $socket->connect($wsConfig['pushUrl']);
+            
+            // keeps from blocking when unable to send
+            $socket->setSockOpt(ZMQ::SOCKOPT_LINGER, 50);
+            
+            return new EasyShop\WebSocket\Pusher\UserPusher($socket, $c['entity_manager']);
+        };
+        
         /* Register services END */
         $this->serviceContainer = $container;
     }

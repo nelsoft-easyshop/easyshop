@@ -8,8 +8,10 @@ var easyshop = (function (es) {
         };
         
         eventDispatcher.dispatch = function (data) {
-            for (var key in data) {
-                eventHandlers[key](data[key]);
+            for (var eventKey in eventHandlers) {
+                if (eventKey in data) {
+                    eventHandlers[eventKey](data[eventKey]);
+                }
             }
         };
         

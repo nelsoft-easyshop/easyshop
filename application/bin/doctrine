@@ -33,6 +33,7 @@ $entityManager->getConnection()
               ->registerDoctrineTypeMapping('enum', 'string');
 
 $helperSet = ConsoleRunner::createHelperSet($entityManager);
+$helperSet->set(new Symfony\Component\Console\Helper\DialogHelper());
 
 if ( ! ($helperSet instanceof HelperSet)) {
     foreach ($GLOBALS as $helperSetCandidate) {

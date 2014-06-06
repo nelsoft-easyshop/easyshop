@@ -51,7 +51,16 @@ class messages extends MY_Controller
             $result = $this->messages_model->send_message($session_data['member_id'],$q_result,$msg);
             if($result === 1){
                 $result = $this->messages_model->get_all_messages($this->user_ID,"kurt");
-
+                
+                // TODO: query count only
+                $recipientMessages = $this->messages_model->get_all_messages($q_result, "Get_UnreadMsgs");
+                
+                $dc = new \EasyShop\WebSocket\Pusher\DataContainer();
+                $dc->set('messageCount', $recipientMessages['unread_msgs']);
+                $dc->set('unreadMessages', $recipientMessages);
+                
+                $userPusher = $this->serviceContainer['user_pusher'];
+                $userPusher->push($q_result, $dc);
             }
         }
 		echo json_encode($result);
