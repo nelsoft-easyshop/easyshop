@@ -1576,42 +1576,42 @@
 										Status:
 										<?php if($transact['transac_stat'] == 0):?>
 											<?php if($product['is_reject'] == 1):?>
-												<span class="trans_alert">Item Rejected</span>
+												<span class="trans_alert trans_red">Item Rejected</span>
 											<?php else:?>
 												<?php if($product['status'] == 0):?>
 													<?php if( $transact['payment_method'] == 3 ):?>
-														<span class="trans_alert">Cash on delivery</span>
+														<span class="trans_alert trans_green">Cash on delivery</span>
 													<?php else:?>
 														<?php if( $product['has_shipping_summary'] == 0 ):?>
-															<span class="trans_alert">Pending Shipping Info</span>
+															<span class="trans_alert trans_red">Pending Shipping Info</span>
 														<?php elseif( $product['has_shipping_summary'] == 1 ):?>
-															<span class="trans_alert">Item on route</span>
+															<span class="trans_alert trans_orange">Item on route</span>
 														<?php endif;?>
 													<?php endif;?>
 												<?php elseif($product['status'] == 1):?>
-													<span class="trans_alert transac_paid">Item Received</span>
+													<span class="trans_alert trans_green">Item Received</span>
 												<?php elseif($product['status'] == 2):?>
-													<span class="trans_alert transac_pay_return">Order canceled</span>
+													<span class="trans_alert trans_red">Order canceled</span>
 												<?php elseif($product['status'] == 3):?>
-													<span class="trans_alert transac_cod">Cash on delivery</span>
+													<span class="trans_alert trans_green">Cash on delivery</span>
 												<?php elseif($product['status'] == 4):?>
-													<span class="trans_alert transac_cod">Paid</span>
+													<span class="trans_alert trans_green">Paid</span>
 												<?php elseif($product['status'] == 5):?>
-													<span class="trans_alert transac_cod">Payment Returned</span>
+													<span class="trans_alert trans_red">Payment Returned</span>
 												<?php endif;?>
 											<?php endif;?>
 										<?php else:?>
 											<?php if($transact['payment_method'] == 2):?>
-												<span class="trans_alert transac_pending">CONFIRM DRAGONPAY PAYMENT</span>
+												<span class="trans_alert trans_red">CONFIRM DRAGONPAY PAYMENT</span>
 											<?php elseif($transact['payment_method'] == 5):?>
 												<?php if( $transact['bd_details']['bd_datemodified'] != '' ):?>
 													<?php if($transact['bd_details']['is_invalid'] == 1):?>
-														<span class="trans_alert transac_pending">INCORRECT BANK DEPOSIT DETAILS</span>
+														<span class="trans_alert trans_red">WRONG DEPOSIT DETAILS</span>
 													<?php else:?>
-														<span class="trans_alert transac_pending">PROCESSING BANK DEPOSIT DETAILS</span>
+														<span class="trans_alert trans_orange">PROCESSING DEPOSIT DETAILS</span>
 													<?php endif;?>
 												<?php else:?>
-													<span class="trans_alert transac_pending">BANK DEPOSIT DETAILS REQUIRED</span>
+													<span class="trans_alert trans_red">DEPOSIT DETAILS REQUIRED</span>
 												<?php endif;?>
 											<?php endif;?>
 										<?php endif;?>
@@ -1834,32 +1834,32 @@
 										Status:
 									<?php if($transact['transac_stat'] == 0):?>
 										<?php if($product['is_reject'] == 1):?>
-											<span class="trans_alert">Item Rejected</span>
+											<span class="trans_alert trans_red">Item Rejected</span>
 										<?php else:?>
 											<?php if($product['status'] == 0):?>
 												<?php if( $transact['payment_method'] == 3 ):?>
-													<span class="trans_alert">Cash on delivery</span>
+													<span class="trans_alert trans_green">Cash on delivery</span>
 												<?php else:?>
 													<?php if( $product['has_shipping_summary'] == 0 ):?>
-														<span class="trans_alert">Pending Shipping Info</span>
+														<span class="trans_alert trans_red">Pending Shipping Info</span>
 													<?php elseif( $product['has_shipping_summary'] == 1 ):?>
-														<span class="trans_alert">Item on route</span>
+														<span class="trans_alert trans_orange">Item on route</span>
 													<?php endif;?>
 												<?php endif;?>
 											<?php elseif($product['status'] == 1):?>
-												<span class="trans_alert transac_paid">Item Delivered</span>
+												<span class="trans_alert trans_green">Item Delivered</span>
 											<?php elseif($product['status'] == 2):?>
-												<span class="trans_alert transac_pay_return">Order Canceled</span>
+												<span class="trans_alert trans_red">Order Canceled</span>
 											<?php elseif($product['status'] == 3):?>
-												<span class="trans_alert transac_cod">Cash on delivery</span>
+												<span class="trans_alert trans_green">Cash on delivery</span>
 											<?php elseif($product['status'] == 4):?>
-												<span class="trans_alert transac_cod">Payment Received</span>
+												<span class="trans_alert trans_green">Payment Received</span>
 											<?php elseif($product['status'] == 5):?>
-												<span class="trans_alert transac_cod">Payment Returned</span>
+												<span class="trans_alert trans_red">Payment Returned</span>
 											<?php endif;?>
 										<?php endif;?>
 									<?php else:?>
-										<span class="trans_alert transac_pending">On Hold</span>
+										<span class="trans_alert trans_red">On Hold</span>
 									<?php endif;?>
 									</span>
 				
@@ -2053,15 +2053,15 @@
 									<span class="transac_bought_con_col3">
 										Status:
 										<?php if($product['status'] == 1):?>
-											<span class="trans_alert transac_paid">Item Received</span>
+											<span class="trans_alert trans_green">Item Received</span>
 										<?php elseif($product['status'] == 2):?>
-											<span class="trans_alert transac_pay_return">Order Canceled</span>
+											<span class="trans_alert trans_red">Order Canceled</span>
 										<?php elseif($product['status'] == 3):?>
-											<span class="trans_alert transac_cod">Cash on delivery</span>
+											<span class="trans_alert trans_green">Cash on delivery</span>
 										<?php elseif($product['status'] == 4):?>
-											<span class="trans_alert transac_paid">Paid</span>
+											<span class="trans_alert trans_green">Paid</span>
 										<?php elseif($product['status'] == 5):?>
-											<span class="trans_alert transac_pay_return">Payment Returned</span>
+											<span class="trans_alert trans_red">Payment Returned</span>
 										<?php endif;?>
 									</span>
 								</div>
@@ -2224,15 +2224,15 @@
 									<span class="transac_bought_con_col3">
 										Status:
 										<?php if($product['status'] == 1):?>
-											<span class="trans_alert transac_paid">Item Delivered</span>
+											<span class="trans_alert trans_green">Item Delivered</span>
 										<?php elseif($product['status'] == 2):?>
-											<span class="trans_alert transac_pay_return">Order Canceled</span>
+											<span class="trans_alert trans_red">Order Canceled</span>
 										<?php elseif($product['status'] == 3):?>
-											<span class="trans_alert transac_cod">Cash on delivery</span>
+											<span class="trans_alert trans_green">Cash on delivery</span>
 										<?php elseif($product['status'] == 4):?>
-											<span class="trans_alert transac_paid">Payment Received</span>
+											<span class="trans_alert trans_green">Payment Received</span>
 										<?php elseif($product['status'] == 5):?>
-											<span class="trans_alert transac_pay_return">Payment Returned</span>
+											<span class="trans_alert trans_red">Payment Returned</span>
 										<?php endif;?>						
 									</span>
 								</div>

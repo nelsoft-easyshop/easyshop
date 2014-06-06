@@ -1256,17 +1256,17 @@ $(document).ready(function(){
 									tx.p = password;
 								}
 								if(txResponseBtn.hasClass('tx_forward')){
-									txStatus.replaceWith('<span class="trans_alert transac_paid">Item Received</span>');
+									txStatus.replaceWith('<span class="trans_alert trans_green">Item Received</span>');
 								}else if(txResponseBtn.hasClass('tx_return')){
-									txStatus.replaceWith('<span class="trans_alert transac_pay_return">Item Returned</span>');
+									txStatus.replaceWith('<span class="trans_alert trans_red">Item Returned</span>');
 								}else if(txResponseBtn.hasClass('tx_cod')){
-									txStatus.replaceWith('<span class="trans_alert transac_paid">Completed</span>');
+									txStatus.replaceWith('<span class="trans_alert trans_green">Completed</span>');
 								}
 								
 								txResponseBtn.closest('div.tx_btns').find('input[type="button"]').hide();
 								
 							}else if(serverResponse.result === 'fail'){
-								txResponseBtn.replaceWith('<span class="trans_alert">Failed to update status.</span>');
+								txResponseBtn.replaceWith('<span class="trans_alert trans_red">Failed to update status.</span>');
 							}
 							if(serverResponse.error.length > 0){
 								alert(serverResponse.error);
@@ -1381,7 +1381,7 @@ $(document).ready(function(){
 									cancelbtn.hide();
 									
 									if(thisbtn.hasClass('isform')){
-										txStatus.text('Item on route');
+										txStatus.replace('<span class="trans_alert trans_orange">Item on route</span>');
 									}
 									
 									$.modal.close();
@@ -1466,8 +1466,7 @@ $(document).ready(function(){
 								editbtn.show();
 								cancelbtn.hide();
 								
-								console.log(txStatus);
-								txStatus.text('CONFIRMING BANK DEPOSIT DETAILS');
+								txStatus.replace('<span class="trans_alert trans_red">CONFIRMING BANK DEPOSIT DETAILS</span>');
 								
 								$.modal.close();
 							}else{

@@ -449,8 +449,8 @@ class memberpage_model extends CI_Model
 		if(count($row)>0){
 			foreach($row as $k=>$temp){
 				
-				// Ignore transaction 99 via paypal = error
-				if($temp['transac_stat'] == 99 && $temp['payment_method'] == 1){
+				// Ignore transaction 99 via paypal = error || dragonpay expired
+				if( ($temp['transac_stat'] == 99 && $temp['payment_method'] == 1) || $temp['transac_stat'] == 2 ){
 					continue;
 				}
 				

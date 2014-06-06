@@ -364,7 +364,7 @@
 	INNER JOIN es_order_product_history oph
 		ON op.id_order_product = oph.order_product_id AND op.seller_id = :member_id AND op.status = oph.order_product_status AND op.is_reject = 0 AND op.status = 1
 	INNER JOIN es_order o
-		ON o.id_order = op.order_id AND o.order_status IN (0,1)
+		ON o.id_order = op.order_id AND o.order_status IN (0,1) AND o.payment_method_id != 3
 	INNER JOIN es_product p
 		ON op.product_id = p.id_product
 	WHERE oph.date_added BETWEEN :start_date AND :end_date
@@ -376,7 +376,7 @@
 	INNER JOIN es_order_product_history oph
 		ON op.id_order_product = oph.order_product_id AND op.seller_id = :member_id AND op.status = oph.order_product_status AND op.is_reject = 0 AND op.status IN (0,1)
 	INNER JOIN es_order o
-		ON o.id_order = op.order_id AND o.order_status IN (0,1)
+		ON o.id_order = op.order_id AND o.order_status IN (0,1) AND o.payment_method_id != 3
 	INNER JOIN es_product p
 		ON op.product_id = p.id_product
 </select>
