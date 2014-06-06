@@ -741,3 +741,141 @@ Advanced Search Filters
     padding-bottom: 0px !important;
     text-transform:none !important;		
 }
+
+/****** Countdown sale css style *******/
+.countdown_category_banner {
+    background:#FFFFFF url("../../assets/images/img_countdown_category_banner.png") no-repeat center top ;
+    height: 205px;
+    padding-top: 25px;
+    position: relative;
+    width: 980px;
+}
+
+.countdown_category_banner .cd_timer_container {
+  margin: 0 auto;
+  position: absolute;
+  right: 80px;
+}
+.cd_product_container {
+  margin-top: 20px;
+}
+.cd_product {
+    background-color: #FFFFFF;
+    border: 1px solid #ECEBEB;
+    float: left;
+    margin: 8px;
+    padding: 3px;
+    position: relative;
+    text-align: center;
+    width: 220px;
+}
+
+.cd_soldout {
+    background-color: rgba(172, 5, 5, 0.8);
+    color: #FFFFFF;
+    font-size: 18px;
+    height: 50px;
+    left: 0;
+    line-height: 50px;
+    position: absolute;
+    top: 110px;
+    width: 100%;
+    z-index: 3;
+}
+
+.cd_soldout p {
+  line-height: 50px;
+}
+
+.cd_product .cd_slide_discount {
+    background-color: #FFFFFF;
+    position: absolute;
+    right: 5px;
+    z-index: 2;
+}
+
+.cd_product:hover .product_buy_con {
+  display: block;
+}
+.product_buy_con {
+    /* Fallback for web browsers that doesn't support RGBa */
+    background: rgb(0, 0, 0) transparent;
+    /* RGBa with 0.6 opacity */
+    background: rgba(0, 0, 0, 0.1);
+    /* For IE 5.5 - 7*/
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#20000000, endColorstr=#20000000);
+    /* For IE 8*/
+    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#20000000, endColorstr=#20000000)";
+    display: none;
+    height: 315px;
+    margin-top: 3px;
+    position: absolute;
+    text-align: center;
+    top: 0;
+    width: 220px;
+    z-index: 999999;
+}
+
+.product_buy_con > span {
+    display: table-cell;
+    height: 315px;
+    text-align: center;
+    vertical-align: middle;
+    width: 220px;
+}
+.product_buy_con > span a {
+  background-color: #f18200;
+}
+
+.cd_product .cd_prod_img_con {
+    display: table;
+    width: 220px;
+}
+
+.cd_prod_img_con {
+    display: table-cell;
+    height: 210px;
+    line-height: 210px;
+    overflow: hidden;
+    position: relative;
+    vertical-align: middle;
+    width: 210px;
+}
+
+.cd_prod_img_con img {
+    height: auto;
+    max-height: 210px;
+    max-width: 210px;
+    vertical-align: middle;
+    width: auto;
+}
+
+.cd_product h3 a {
+    color: #888888;
+    display: inline-block;
+    font-size: 12px;
+    font-weight: normal;
+    margin: 10px 0;
+    overflow: hidden;
+    text-decoration: none;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 210px;
+}
+
+.cd_product h3 a:hover {
+  color: #f18200;
+}
+
+.cd_product .price {
+  font-size: 16px;
+}
+
+.discount_price {
+  text-decoration: line-through;
+}
+
+.cd_condition {
+  margin-top: 20px;
+  text-align: left;
+}
