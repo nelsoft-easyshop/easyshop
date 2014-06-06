@@ -774,6 +774,7 @@
         <input type="hidden" class="counter" name="counter" >
         <input type="hidden" class="arrayNameOfFiles" name="arraynameoffiles">
         <input type="hidden" class="filescnttxt" name="filescnttxt">
+        <input type="hidden" class="afstart" id="afstart" name="afstart">
         <div id="inputList" class="inputList">
 
   
@@ -804,9 +805,12 @@ $(document).ready(function(){
     $('#inputList').append('<input type="file" id="files" class="files active" name="files[]" accept="image/*" required = "required"  /><br/><br/>');
   }
 
+  var tempId = '<?= $tempId; ?>';
+  var memberId = '<?= $memid; ?>';
+  var fulldate = '<?=date("YmdGis");?>';
+  var af = new Array(); 
   var badIE = config.badIE;
-  var canProceed = true;
-  var arrayNameOfFiles;
+  var canProceed = true; 
   var removeThisPictures = [];
   var pictureCount = 0;
   var primaryPicture = 0;
@@ -971,7 +975,7 @@ $(document).ready(function(){
     // ES_UPLOADER BETA
 
     var filescntret;
-    function startUpload(cnt,filescnt,arrayUpload){
+    function startUpload(cnt,filescnt,arrayUpload,afstart){
       if(window.FileReader) {   
         badIE = false;
       } else { 
@@ -979,6 +983,7 @@ $(document).ready(function(){
       }
       $('.counter').val(cnt); 
       $('.filescnttxt').val(filescnt); 
+      $('#afstart').val(JSON.stringify(afstart));
       var response;   
       $('#form_files').ajaxForm({
           url: config.base_url+'productUpload/uploadimage',
@@ -988,9 +993,7 @@ $(document).ready(function(){
               canProceed = false;
               console.log(percentComplete);
           },
-          success :function(d) { 
-              arrayNameOfFiles = d.n;
-              $('.arrayNameOfFiles').val(arrayNameOfFiles);
+          success :function(d) {  
               $('#tempdirectory').val(d.dr);
               filescntret = d.fcnt;
               $('.filescnt'+filescntret+' > .loadingfiles').remove();
@@ -1003,12 +1006,12 @@ $(document).ready(function(){
                    removeThisPictures.push(value); 
                    $('#previewList'+value).remove();
                  });
-              }
-               // console.log(removeThisPictures);
+              } 
               if(badIE == true){
                 $(".files").remove();
                 $('#inputList').append('<input type="file"  id="files" class="files active" name="files[]" accept="image/*" required = "required"  /> ');
               }
+ 
    
           },
           error: function (request, status, error) {
@@ -1023,6 +1026,7 @@ $(document).ready(function(){
                  removeThisPictures.push(value); 
                  $('#previewList'+value).remove();
               });
+ 
               canProceed = true;
               if(badIE == true){
                 $(".files").remove();
@@ -1032,14 +1036,17 @@ $(document).ready(function(){
 
           }
       }); 
+
       $('#form_files').submit();
+
 
     }
 
     var filescnt = 1;
     $(document).on('change',".files.active",function (e){
       var arrayUpload = new Array();
-
+      var afstart = new Array();
+  
       if(window.FileReader) {   
        badIE = false;
      } else { 
@@ -1051,8 +1058,6 @@ $(document).ready(function(){
             var fileList = this.files;
             var anyWindow = window.URL || window.webkitURL;
             var errorValues = "";
-
-
              
             for(var i = 0; i < fileList.length; i++){
                 var size = fileList[i].size
@@ -1079,7 +1084,12 @@ $(document).ready(function(){
                     }
                     removeThisPictures.push(pictureCount);
                 }
-             
+                
+                fname = tempId+'_'+memberId+'_'+fulldate+pictureCount+'.'+extension+'||'+extension;
+                fnamestart = tempId+'_'+memberId+'_'+fulldate+pictureCount+'.'+extension;
+                af.push(fname); 
+                afstart.push(fnamestart); 
+
                 window.URL.revokeObjectURL(fileList[i]);
                 arrayUpload.push(pictureCount);
                 pictureCount++; 
@@ -1096,12 +1106,12 @@ $(document).ready(function(){
             });
 
 
-            startUpload(pictureCount,filescnt,arrayUpload);
+            startUpload(pictureCount,filescnt,arrayUpload,afstart);
             filescnt++;
             $('#inputList').append('<input type="file"  id="files" class="files active" name="files[]" multiple accept="image/*" required = "required"  /> ');
             $(this).remove();
              
-     }else{
+      }else{
 
             var val = $(this).val();
             var primaryText = "Make Primary";
@@ -1115,8 +1125,8 @@ $(document).ready(function(){
          
             var id = "imgid" + pictureCount;
             imageCustom = document.getElementById('files').value;
-
-            switch(val.substring(val.lastIndexOf('.') + 1).toLowerCase()){
+            extension = val.substring(val.lastIndexOf('.') + 1).toLowerCase();
+            switch(extension){
               case 'gif': case 'jpg': case 'png': case 'jpeg':
 
               $('#list').append('<div id="previewList'+pictureCount+'" class="new_img upload_img_div '+activeText+' filescnt filescntactive filescnt'+filescnt+'"><span class="upload_img_con"><img src="'+imageCustom+'" alt="'+imageCustom+'" style="height:100px;"></span><a href="javascript:void(0)" class="removepic" data-number="'+pictureCount+'">x</a><br><a href="javascript:void(0)" class="makeprimary photoprimary'+pictureCount+'" data-number="'+pictureCount+'">'+primaryText+'</a><div class="loadingfiles"></div></div>');   
@@ -1126,6 +1136,12 @@ $(document).ready(function(){
               removeThisPictures.push(pictureCount); 
               break;
             }
+
+            fname = tempId+'_'+memberId+'_'+fulldate+pictureCount+'.'+extension+'||'+extension;
+            fnamestart = tempId+'_'+memberId+'_'+fulldate+pictureCount+'.'+extension;
+            af.push(fname); 
+            afstart.push(fnamestart);
+
             arrayUpload.push(pictureCount);  
             pictureCount++;
 
@@ -1600,6 +1616,8 @@ $(document).on('change','.other_name_value',function(){
                       value: g_quantitySolo
                     }).appendTo('form');
                     arr.push({name:'quantitySolo', value:g_quantitySolo});
+
+              
               },
               uploadProgress : function(event, position, total, percentComplete) {
                     var percentVal = percentComplete + '%';
@@ -1633,7 +1651,7 @@ $(document).on('change','.other_name_value',function(){
                   }else{
                     alert('Something Went Wrong. Please try again.');
                   }
-              }
+              } 
         }); 
          
     }
@@ -1763,6 +1781,7 @@ $(document).on('change','.other_name_value',function(){
                 return false;
               }else{
                 var action = $('#form_product').attr('action');
+                $('.arrayNameOfFiles').val(JSON.stringify(af)); 
                 proceedStep3(action);
                 confirm_unload = false;
                 $('#form_product').submit();

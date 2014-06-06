@@ -147,6 +147,7 @@ class productUpload extends MY_Controller
 				$lookuplist = $this->product_model->getLookItemListById($attribute[$i]['attr_lookuplist_id']);
 				array_push($attribute[$i],$lookuplist);
 			}
+			$response['memid'] = $this->session->userdata('member_id');
 		 	$response['tempId'] = strtolower(substr( "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" ,mt_rand( 0 ,50 ) ,1 ) .substr( md5( time() ), 1));
 			$response['attribute'] = $attribute;
 			$response['sell'] = true;
@@ -174,25 +175,21 @@ class productUpload extends MY_Controller
  		$temp_product_id = $this->input->post('tempid');
  		$member_id =  $this->session->userdata('member_id');
  		$filescnttxt = $this->input->post('filescnttxt');
+ 		$afstart = $this->input->post('afstart');
+ 		$afstartArray = json_decode($afstart);
+ 		 
  		$date = date("Ymd");
 	 	$fulldate = date("YmdGis");
- 		$filenames_ar = array();
- 		$fileNameOutput_ar = array();
+ 		$filenames_ar = array(); 
  		$text = "";
-
-		$arraynameoffiles =  $this->input->post('arraynameoffiles');
-		$allowed =  array('gif','png' ,'jpg','jpeg'); # available format only for image
  
+		$allowed =  array('gif','png' ,'jpg','jpeg'); # available format only for image
+
  		foreach($_FILES['files']['name'] as $key => $value ) {
 
- 			$counter += 1;
-
  			$file_ext = explode('.', $value);
- 			$file_ext = strtolower(end($file_ext));
- 			$file_type = $_FILES['files']['type'][$key];
- 			$filenames_ar[$key] = "{$temp_product_id}_{$member_id}_{$fulldate}{$counter}.{$file_ext}";
- 			$fileNameOutput_ar[$key] = "{$temp_product_id}_{$member_id}_{$fulldate}{$counter}.{$file_ext}||{$file_type}";
- 			$arraynameoffiles .= "{$temp_product_id}_{$member_id}_{$fulldate}{$counter}.{$file_ext}||{$file_type}==";
+ 			$file_ext = strtolower(end($file_ext)); 
+ 			$filenames_ar[$key] = $afstartArray[$key];  
 
  			if(!in_array(strtolower($file_ext),$allowed))
  			{
@@ -268,8 +265,7 @@ class productUpload extends MY_Controller
 	   		$error = 1;
 	   	}
 		  
-		$return = array(
-			'n' => $arraynameoffiles,
+		$return = array( 
 			'msg' => $text,
 			'dr' => $path_directory,
 			'fcnt' => $filescnttxt,
@@ -350,12 +346,13 @@ class productUpload extends MY_Controller
 		}else{
  			
  			$arraynameoffiles = $this->input->post('arraynameoffiles');
-			if($arraynameoffiles == ""){ 
+			$arraynameoffiles = json_decode($arraynameoffiles);
+ 	 
+			if(count($arraynameoffiles) <= 0){ 
 				echo '{"e":"0","d":"Please select at least one photo for your listing."}';
 				exit();
 			}
 
-			$arraynameoffiles = explode('==', substr($arraynameoffiles, 0, -2));
 			$removeThisPictures = json_decode($this->input->post('removeThisPictures')); 
 			$primaryId = $this->input->post('primaryPicture');
 			$primaryName =""; 
@@ -376,6 +373,8 @@ class productUpload extends MY_Controller
 					unset($arrayNameOnly[$key]);
 				} 
 			}
+
+
 
 			 
 			$arraynameoffiles = array_values($arraynameoffiles);
