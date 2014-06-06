@@ -49,7 +49,7 @@
     </div>
     
     <script src="/assets/js/src/messaging.js"></script>
-    <script src="/assets/js/src/main.js"></script>
+    <script src="/assets/js/src/ws.js"></script>
     <input id="user-session" type="hidden" value="<?php echo $this->session->userdata('session_id');?>">
     </footer>
 	</body>
