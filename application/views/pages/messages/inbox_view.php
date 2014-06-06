@@ -110,24 +110,30 @@
 		});
 		
     
-        ////this is for page reload every time the user is focused on the web page/tab
-        var myInterval;
-        var interval_delay = 5000;
-        var is_interval_running = false;
-        
-        $(document).ready(function () {
-            $(window).focus(function () {
-                clearInterval(myInterval); 
-                if  (!is_interval_running)
-                    myInterval = setInterval(Reload, interval_delay);
-            }).blur(function () {
-                clearInterval(myInterval);
-                is_interval_running = false;
+        /*
+         * We only enable this when web socket fails
+         */
+        if (!("WebSocket" in window)) {
+            
+            ////this is for page reload every time the user is focused on the web page/tab
+            var myInterval;
+            var interval_delay = 5000;
+            var is_interval_running = false;
+
+            $(document).ready(function () {
+                $(window).focus(function () {
+                    clearInterval(myInterval); 
+                    if  (!is_interval_running)
+                        myInterval = setInterval(Reload, interval_delay);
+                }).blur(function () {
+                    clearInterval(myInterval);
+                    is_interval_running = false;
+                });
             });
-        });
-        
-        interval_function = function () {
-             is_interval_running = true;
+
+            interval_function = function () {
+                 is_interval_running = true;
+            }
         }
        
         
