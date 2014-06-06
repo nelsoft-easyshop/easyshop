@@ -48,21 +48,9 @@
       </div>
     </div>
     
-    <?php if ('development' === ENVIRONMENT && true): ?>
-    
-        <script src="https://autobahn.s3.amazonaws.com/js/autobahn.min.js"></script>
-        <script>
-            window.ab || document.write('<script src="/assests/js/src/vendor/autobahn.min.js">\x3C/script>');
-        </script>
-        
-        <script src="/assets/js/src/lib/websocket/client.js"></script>
-        <script src="/assets/js/src/lib/eventdispatcher.js"></script>
-        
-        
-        
-        <script src="/assets/js/src/main.js"></script>
-        <input id="user-session" type="hidden" value="<?php echo $this->session->userdata('session_id');?>">
-    <?php endif; ?>
+    <script src="/assets/js/src/messaging.js"></script>
+    <script src="/assets/js/src/main.js"></script>
+    <input id="user-session" type="hidden" value="<?php echo $this->session->userdata('session_id');?>">
     </footer>
 	</body>
 
