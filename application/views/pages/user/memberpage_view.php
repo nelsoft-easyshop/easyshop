@@ -668,24 +668,21 @@
 	<div id="dashboard-sales" class="dashboard_table">
 		<h2>Sales</h2>
 		<div>
-			<table class="sales_summary">
-				<tr>
+			<table class="sales_summary" cellspacing="0" cellpadding="0">
+				<tr class="sales_info" data-div="balance">
 					<td class="label">TOTAL:</td>
 					<td class="amount">Php <?php echo number_format(round($sales['balance']['balance'],2), 2)?></td>
-					<td class="sales_info" data-div="balance">View more info</td>
+					<!--<td class="sales_info" data-div="balance">View more info</td>-->
 				</tr>
-				<tr>
+				<tr class="sales_info" data-div="payout">
 					<td class="label">Next PAYOUT:</td>
 					<td class="amount">Php <?php echo number_format(round($sales['release']['payout'],2), 2)?></td>
-					<td class="sales_info" data-div="payout">View more info</td>
+					<!--<td class="sales_info" data-div="payout">View more info</td>-->
 				</tr>
 			</table>
 		</div>
 		
 		<div id="sales_balance" style="display:none;" class="sales_details">
-			<?php if( count($sales['balance']['list']) <= 0 ):?>
-				<h1>Wala kaming utang sayo!</h1>
-			<?php else:?>
 				<h2>Total Amount : Php <?php echo number_format(round($sales['balance']['balance'],2), 2)?></h2>
 				<table class="sales_details_content" cellpadding="0" cellspacing="0">
 					<tr class="header">
@@ -722,13 +719,9 @@
 					</tr>
 				<?php endforeach;?>
 				</table>
-			<?php endif;?>
 		</div>
 	
 		<div id="sales_payout" style="display:none;" class="sales_details">
-			<?php if( count($sales['release']['list']) <= 0 ):?>
-				<h1>Wala kaming utang sayo!</h1>
-			<?php else:?>
 				<h2>Payout Amount: Php <?php echo number_format(round($sales['release']['payout'],2), 2)?></h2> 
 				<span id="payout_date">To be credited on: <strong><?php echo $sales['release']['payout_date'];?></strong></span> 
 				<span>From: <strong><?php echo $sales['release']['start_date']?></strong> To: <strong><?php echo $sales['release']['end_date']?></strong></span>
@@ -767,7 +760,6 @@
 					</tr>
 				<?php endforeach;?>
 				</table>
-			<?php endif;?>
 		</div>
 			
 	</div>
