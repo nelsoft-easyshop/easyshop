@@ -192,8 +192,8 @@ class product_model extends CI_Model
         }  
         $row['original_price'] = $row['price'];
         $row['price'] = $this->GetPromoPrice($row['price'],$row['startdate'],$row['enddate'],$row['is_promote'],$row['promo_type']);
-        $rows['start_promo'] = ((intval($rows['is_promote']) === 1)&&(strtotime($rows['startdate']) < strtotime(date('Y-m-d H:i:s'))));
-        $rows['percentage'] = ($rows['start_promo'])?($rows['original_price'] - $rows['price'])/$rows['original_price'] * 100.00:0.00;
+        $row['start_promo'] = ((intval($row['is_promote']) === 1)&&(strtotime($row['startdate']) < strtotime(date('Y-m-d H:i:s'))));
+        $row['percentage'] = ($row['start_promo'])?($row['original_price'] - $row['price'])/$row['original_price'] * 100.00:0.00;
         
 		return $row;
 	}
@@ -2083,7 +2083,7 @@ class product_model extends CI_Model
                 if(($today < $startdate) || ($enddate < $startdate)){
                     $diffHours = 0;
                 }else if($today >= $enddate){
-                    $diffHours = 0.99;
+                    $diffHours = 49.5;
                 }else{
                     $diffHours = floor(($today - $startdate) / 3600.0);
                 }
