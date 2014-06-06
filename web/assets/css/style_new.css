@@ -655,6 +655,10 @@ div.html_description {
     text-align:left !important;
 }
 
+.html_description table{
+	max-width: 100% !important;
+}
+
 /*** Reviews Tab ***/
 .reviews_title {
 	display: block;
