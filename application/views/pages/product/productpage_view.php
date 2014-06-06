@@ -6,6 +6,7 @@
 <link rel="stylesheet" href="<?=base_url()?>assets/css/jquery.jqzoom.css?ver=1.0" type="text/css">
 <link rel="stylesheet" href="<?=base_url()?>assets/css/style_new.css?ver=1.0" type="text/css" media="screen"/>
 <link rel="stylesheet" href="<?=base_url()?>assets/css/jquery.bxslider.css?ver=1.0" type="text/css" media="screen"/>
+<link rel="stylesheet" href="<?=base_url()?>assets/css/productview.css" type="text/css" media="screen"/>
 
 <div class="clear"></div>
 <section class="top_margin">
@@ -56,6 +57,43 @@
             <a href="javascript:void(0)" class="jcarousel-control-prev inactive">&lsaquo;</a>
             <a href="javascript:void(0)" class="jcarousel-control-next inactive">&rsaquo;</a>
         </div>
+      </div>
+      <div class="right_header_discount">
+          <div id="dsc_cont">
+
+              <span class="dsc_header_txt">
+                COUNTDOWN SALE
+              </span>
+              <span class="dsc_prp_txt">
+                2% OFF
+              </span>
+              <span class="dsc_prp_txt2">EVERY HOUR UNTIL SOLD</span>
+
+              <span class="dsc_prp_txt3">STARTS ON</span>
+          </div>
+          <div class="dsc_tmr">
+              <div class="cd_timer_container product_view">
+                  <div class="cd_timer_days">
+                      <span id='countdown_days'>00</span>
+                      <span class="cnt_lgnd">DAYS</span>
+                  </div>
+                  <div class="cd_timer_hours">
+                      <span id='countdown_hours'>00</span>
+                      <span class="cnt_lgnd">HOURS</span>
+                  </div>
+                  <div class="cd_timer_minutes">
+                      <span id='countdown_minutes'>00</span>
+                      <span class="cnt_lgnd">MINUTES</span>
+                  </div>
+                  <div class="cd_timer_seconds">
+                      <span id="countdown_second">00</span>
+                      <span class="cnt_lgnd">SECONDS</span>
+                  </div>
+              </div>
+          </div>
+          <div class="discount_perc">
+              <p id="percentage"></p>
+          </div>
       </div>
       <div class="product_inner_content_info" >
         <h1 class="id-class" id="<?php echo $product['id_product'];?>"> 
@@ -401,8 +439,9 @@
         <button id="modal_send_btn">Send</button>
     </div>
   </div>
-  
-        
+
+
+  <input type = 'hidden' id='cd_enddate' value='<?php echo date('M d,Y H:i:s',strtotime(($product['start_promo'] == "1" ? $product['enddate'] : $product['startdate']))); ?>'/>
   <input id='p_qty' type='hidden' value=' <?php echo json_encode($product_quantity);?>'>
   <input id='p_shipment' type='hidden' value='<?php echo json_encode($shipment_information);?>'>
   <input id='p_itemid' type='hidden' value='0'/>
@@ -536,4 +575,115 @@ $(document).on('click','.prod_cat_drop',function() {
  
               $('.category_nav').removeClass('category_nav_plus');
               $('.prod_cat_drop').removeClass('active_prod_cat_drop_arrow');
+</script>
+
+<script src="<?=base_url()?>/assets/js/src/vendor/jquery.plugin.min.js" type="text/javascript"></script>
+<script src="<?=base_url()?>/assets/js/src/vendor/jquery.countdown.min.js" type="text/javascript"></script>
+<script>
+    function serverTime() {
+        var time = null;
+        $.ajax({url: config.base_url + 'home/getServerTime',
+            async: false, dataType: 'text',
+            success: function(text) {
+                time = new Date(text);
+            }, error: function(http, message, exc) {
+                time = new Date();
+            }});
+        return time;
+    }
+
+    function to_disp(){
+        var start_promote = <?=($product['start_promo']=="" ? 0 : $product['start_promo'])?> ;
+        var percentage = <?=$product['percentage']?> ;
+        var is_promote = <?=$product['is_promote']?> ;
+
+        if(is_promote === 1){
+            $(".right_header_discount").show();
+            if(start_promote == 1){
+                $(".dsc_prp_txt").css("display", "block");
+                $(".dsc_prp_txt2").show();
+                $(".discount_perc").show();
+                $(".dsc_prp_txt3").hide();
+                $("#percentage").show().html(percentage + "% <br> OFF")
+            }
+        }
+    }
+    $(document).ready(function(){
+        var endDate = new Date($('#cd_enddate').val());
+        $('.cd_timer_container').countdown({
+            until : endDate,
+            serverSync: serverTime,
+            layout: ' <div class="cd_timer_days"><span id="countdown_days">{dnn}</span> <span class="cnt_lgnd">DAYS</span> </div>'+
+                ' <div class="cd_timer_hours"><span id="countdown_hours">{hnn}</span> <span class="cnt_lgnd">HOURS</span> </div>'+
+                ' <div class="cd_timer_minutes"><span id="countdown_minutes">{mnn}</span> <span class="cnt_lgnd">MINUTES</span> </div>' +
+                ' <div class="cd_timer_seconds"><span id="countdown_second">{snn}</span> <span class="cnt_lgnd">SECONDS</span> </div>'
+        });
+
+        $('.mid_slide1').bxSlider({
+            mode: 'horizontal',
+            auto:true,
+            autoControls: true,
+            pause: 3500,
+            controls:false,
+            slideWidth: 510
+        });
+
+        $('.mid_slide2').bxSlider({
+            slideWidth: 160,
+            minSlides: 2,
+            maxSlides: 3,
+            moveSlides: 1,
+            slideMargin: 0,
+            infiniteLoop:true,
+            autoControls: false,
+            pager:false
+        });
+
+        $('.countdown_slides').bxSlider({
+            slideWidth: 220,
+            minSlides: 3,
+            maxSlides: 4,
+            moveSlides: 2,
+            slideMargin: 0,
+            infiniteLoop:true,
+            autoControls: false,
+            pager:false
+        });
+
+        $('.slider3').bxSlider({
+            slideWidth: 452,
+            minSlides: 1,
+            maxSlides: 1,
+            moveSlides: 1,
+            slideMargin: 0,
+            infiniteLoop:true,
+            autoControls: false,
+            pager:false
+        });
+
+        $('.bx-wrapper').addClass('slide_arrows');
+
+        //middle content top slides
+        $('.mid_slide1').parent('.bx-viewport').addClass('mid_top_slides');
+
+        //middle content countdown slides
+        $('.countdown_slides').parent('.bx-viewport').parent('.bx-wrapper').addClass('countdown_slides_wrapper');
+
+        //middle content bottom slides
+        $('.mid_slide2').parent('.bx-viewport').parent('.bx-wrapper').addClass('mid_bottom_slides');
+        $('.mid_slide2').parent('.bx-viewport').addClass('inner_mid_bottom_slides');
+
+        //electronics slides
+        $('.slider3').parent('.bx-viewport').addClass('electronic_slides');
+
+        //side navigation menu slides
+        $('.slides_prod').parent('.bx-viewport').addClass('side_menu_slides');
+        $('.side_menu_slides').parent('.bx-wrapper').addClass('side_menu_nav_slides');
+        $('.side_menu_nav_slides').children('.bx-controls').addClass('side_menu_nav_arrow');
+
+        to_disp();
+
+    });
+
+
 </script>

@@ -1,0 +1,79 @@
+.cd_timer_container{;
+    margin: 1px !important;
+}
+.dsc_tmr{
+    bottom: 74px;
+    left: 211px;
+    position: relative;
+    width: 287px;
+}
+.right_header_discount{
+    display: none;
+    border : 1px #dd0000 solid;
+    float: left;
+    height: 53px;
+    margin-bottom: 10px;
+    margin-left: 10px;
+    min-height: 53px;
+    padding: 10px;
+    width: 548px;
+}
+.dsc_header_txt{
+    color: #f70000;
+    font-weight: 600 !important;
+    font-size: 22px;
+}
+.dsc_prp_txt{
+    display: none;
+    font-size: 23px;
+}
+.dsc_prp_txt2{
+    bottom: 20px;
+    display: none;
+    font-size: 11px;
+    left: 89px;
+    position: relative;
+}
+
+.cd_timer_container div > span:first-child {
+    font-size: 19px !important;
+    margin-bottom: -4px;
+}
+.cd_timer_container {
+    background: url("../../assets/images/img_bg_countdown_timer2.png") no-repeat scroll center top rgba(0, 0, 0, 0);
+    color: #FFFFFF;
+    height: 76px;
+    margin: 175px auto 0;
+    width: 302px;
+}
+.cd_timer_container div {
+    float: left;
+    margin-top: 12px;
+    text-align: center;
+    width: 55px;
+}
+.cnt_lgnd{
+    font-size: 8px;
+}
+.discount_perc{
+    display: none;
+    background-color: #dd0000;
+    bottom: 155px;
+    color: #FFFFFF;
+    float: right;
+    font-size: 25px;
+    height: 73px;
+    left: 10px;
+    position: relative;
+    width: 63px;
+}
+
+.discount_perc p{
+    line-height: 29px !important;
+    padding: 7px;
+}
+.dsc_prp_txt3{
+    display: block;
+    font-size: 34px;
+    text-indent: 23px;
+}
