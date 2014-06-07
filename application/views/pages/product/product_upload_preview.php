@@ -1,6 +1,6 @@
 <?php if(!$modal): ?>
-<link type="text/css" href="<?=base_url()?>assets/css/sell_item.css?ver=1.0" rel="stylesheet" />
-<link rel="stylesheet" href="<?=base_url()?>assets/css/product_preview.css?ver=1.0" type="text/css" media="screen"/>
+<link type="text/css" href="<?=base_url()?>assets/css/sell_item.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet" />
+<link rel="stylesheet" href="<?=base_url()?>assets/css/product_preview.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
 
 <div id='previewProduct' style='width:1100px; margin-left: 10%; margin-top: 7%;'>
 
@@ -302,6 +302,6 @@
     
 </div>
 <script src="<?=base_url()?>assets/js/src/vendor/jquery.idTabs.min.js" type="text/javascript"></script>
-<script type="text/javascript" src="<?=base_url()?>assets/js/src/productUpload_preview.js?ver=1.0"></script>
+<script type="text/javascript" src="<?=base_url()?>assets/js/src/productUpload_preview.js?ver=<?=ES_FILE_VERSION?>"></script>
 
 <?php endif;?>

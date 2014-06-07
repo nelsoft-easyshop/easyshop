@@ -1,5 +1,5 @@
-<link rel="stylesheet" type="text/css" href="<?=base_url()?>assets/css/product_search_category.css?ver=1.0"   media="screen"/>
-<link rel="stylesheet" type="text/css" href="<?=base_url()?>assets/css/style_new.css?ver=1.0" media="screen"/>
+<link rel="stylesheet" type="text/css" href="<?=base_url()?>assets/css/product_search_category.css?ver=<?=ES_FILE_VERSION?>"   media="screen"/>
+<link rel="stylesheet" type="text/css" href="<?=base_url()?>assets/css/style_new.css?ver=<?=ES_FILE_VERSION?>" media="screen"/>
 <div class="clear"></div>
 <section class="top_margin">
 	<div class="wrapper">

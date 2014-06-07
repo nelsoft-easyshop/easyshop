@@ -497,7 +497,7 @@
 <script type='text/javascript' src='<?=base_url()?>assets/js/src/vendor/jquery.jqpagination.min.js'></script>
 <script src="<?=base_url()?>assets/js/src/vendor/jquery.idTabs.min.js" type="text/javascript"></script>
 <script src="<?=base_url()?>assets/js/src/vendor/jquery.knob.js" type="text/javascript"></script>
-<script type="text/javascript" src="<?=base_url()?>assets/js/src/vendorpage.js?ver=1.0"></script>
+<script type="text/javascript" src="<?=base_url()?>assets/js/src/vendorpage.js?ver=<?=ES_FILE_VERSION?>"></script>
 
 <script>
     $(function(){

@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="<?=base_url()?>assets/css/my_cart_css.css?ver=1.0" type="text/css" media="screen"/> 
+<link rel="stylesheet" href="<?=base_url()?>assets/css/my_cart_css.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/> 
 
 <script src="<?= base_url() ?>assets/js/src/vendor/jquery.idTabs.min.js"></script>
     <div class="clear"></div>

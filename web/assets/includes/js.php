@@ -15,6 +15,17 @@
 <script src="/assets/js/src/lib/eventdispatcher.js"></script>
 
 <script type='text/javascript'>
+    <?php if(preg_match('/(?i)msie [4-9]/',$_SERVER['HTTP_USER_AGENT'])): ?>
+        var badIE = true;
+    <?php else: ?>
+        var badIE = false;
+    <?php endif; ?>
+
+    var config = {
+         base_url: "<?php echo base_url(); ?>",
+         badIE : badIE
+    };
+
    window.alert = function(message){
         $(document.createElement('div'))
             .attr({title: 'Easyshop.ph', class: 'alert'})
@@ -28,6 +39,7 @@
             });
    };
    
+
    var entityMap = {
 	"&": "&amp;",
 	"<": "&lt;",

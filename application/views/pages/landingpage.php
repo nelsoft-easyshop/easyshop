@@ -14,17 +14,17 @@
            The mission that EasyShop has is to provide its customer with a Fast and Easy 
            online shopping experience. Our goal is to be the first website you think about
            when buying online." />
-		<meta property="og:image" content="https://easyshop.ph/assets/images/img_logo.png?ver=1.0" />
+		<meta property="og:image" content="https://easyshop.ph/assets/images/img_logo.png?ver=<?=ES_FILE_VERSION?>" />
         <meta name="viewport" content="width=device-width">
 
 		<!-- CSS -->
-        <link rel="stylesheet" href="<?=base_url()?>assets/css/landingpage/style_v2.css?ver=1.0" type="text/css" media="screen"/>
+        <link rel="stylesheet" href="<?=base_url()?>assets/css/landingpage/style_v2.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
         <link rel="stylesheet" href="<?=base_url()?>assets/css/landingpage/jquery.bxslider.css" type="text/css" media="screen"/> <!-- Slider CSS -->
         <link rel="stylesheet" href="<?=base_url()?>assets/css/landingpage/responsive-nav.css"><!-- responsive menu -->
 
 		<!-- Contact Form CSS files -->
-		<link type='text/css' href='<?=base_url()?>assets/css/basic.css?ver=1.0' rel='stylesheet' media='screen' />
-		<link href="<?=base_url()?>assets/css/jquery-ui.css?ver=1.0" rel="stylesheet">
+		<link type='text/css' href='<?=base_url()?>assets/css/basic.css?ver=<?=ES_FILE_VERSION?>' rel='stylesheet' media='screen' />
+		<link href="<?=base_url()?>assets/css/jquery-ui.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet">
 
         <!-- JS -->
 		<!-- html5.js for IE less than 9 -->
@@ -594,7 +594,7 @@
 
 <script type='text/javascript' src='<?=base_url()?>assets/js/src/vendor/jquery.numeric.js'></script>
 <script type='text/javascript' src='<?=base_url()?>assets/js/src/vendor/jquery.validate.js'></script>
-<script type='text/javascript' src='<?=base_url()?>assets/js/src/landingpage.js?ver=1.0'></script>
+<script type='text/javascript' src='<?=base_url()?>assets/js/src/landingpage.js?ver=<?=ES_FILE_VERSION?>'></script>
 <script src="<?=base_url()?>assets/js/src/vendor/jquery.bxslider.min.js"></script>
 
 <script type="text/javascript">

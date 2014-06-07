@@ -36,6 +36,11 @@ define('FOPEN_READ_WRITE_CREATE',				'a+b');
 define('FOPEN_WRITE_CREATE_STRICT',				'xb');
 define('FOPEN_READ_WRITE_CREATE_STRICT',		'x+b');
 
+/*   
+ *  EASYSHOP CUSTOM CONSTANTS
+ */
+define('ES_FILE_VERSION','1.0');
+
 
 /* End of file constants.php */
 /* Location: ./application/config/constants.php */

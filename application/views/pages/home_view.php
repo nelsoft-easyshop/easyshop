@@ -286,7 +286,7 @@
 <div class="clear"></div>
 
 <script src="<?=base_url()?>assets/js/src/vendor/jquery.bxslider.min.js" type="text/javascript"></script>
-<script src="<?=base_url()?>assets/js/src/categorynavigation.js?ver=1.0" type="text/javascript"></script>
-<script src="<?=base_url()?>assets/js/src/home.js?ver=1.0" type="text/javascript"></script>
+<script src="<?=base_url()?>assets/js/src/categorynavigation.js?ver=<?=ES_FILE_VERSION?>" type="text/javascript"></script>
+<script src="<?=base_url()?>assets/js/src/home.js?ver=<?=ES_FILE_VERSION?>" type="text/javascript"></script>
 <script src="<?=base_url()?>/assets/js/src/vendor/jquery.plugin.min.js" type="text/javascript"></script>
 <script src="<?=base_url()?>/assets/js/src/vendor/jquery.countdown.min.js" type="text/javascript"></script>

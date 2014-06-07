@@ -1,6 +1,6 @@
-<link rel="stylesheet" href="<?= base_url() ?>assets/css/product_search_category.css?ver=1.0" type="text/css"  media="screen"/> 
-<link rel="stylesheet" href="<?= base_url() ?>assets/css/style_new.css?ver=1.0" type="text/css" media="screen"/>
-<link rel="stylesheet" href="<?= base_url() ?>assets/css/jquery.bxslider.css?ver=1.0" type="text/css" media="screen"/> 
+<link rel="stylesheet" href="<?= base_url() ?>assets/css/product_search_category.css?ver=<?=ES_FILE_VERSION?>" type="text/css"  media="screen"/> 
+<link rel="stylesheet" href="<?= base_url() ?>assets/css/style_new.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
+<link rel="stylesheet" href="<?= base_url() ?>assets/css/jquery.bxslider.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/> 
 
 
 <div class="clear"></div>

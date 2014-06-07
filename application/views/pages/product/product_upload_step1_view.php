@@ -1,4 +1,4 @@
-<link type="text/css" href="<?=base_url()?>assets/css/sell_item.css?ver=1.0" rel="stylesheet" />
+<link type="text/css" href="<?=base_url()?>assets/css/sell_item.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet" />
  
 <?php 
 $attributesForm = array('id' => 'draft_form',
@@ -149,5 +149,5 @@ echo form_open('sell/edit/step2', $attributesForm);
 
 </div>
 
-<script type='text/javascript' src='<?=base_url()?>assets/js/src/productUpload_step1.js?ver=1.0'></script>
+<script type='text/javascript' src='<?=base_url()?>assets/js/src/productUpload_step1.js?ver=<?=ES_FILE_VERSION?>'></script>
 <script type='text/javascript' src='<?=base_url()?>assets/js/src/vendor/jquery.simplemodal.js'></script>

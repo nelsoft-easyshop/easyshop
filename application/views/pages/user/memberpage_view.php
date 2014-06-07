@@ -3,7 +3,7 @@
 <link type="text/css" href="<?=base_url()?>assets/css/jquery-ui.css" rel="stylesheet" />
 
 <!--Memberpage Modal custom CSS-->
-<link type="text/css" href="<?=base_url()?>assets/css/memberpage.css?ver=1.0" rel="stylesheet" media='screen'/>
+<link type="text/css" href="<?=base_url()?>assets/css/memberpage.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet" media='screen'/>
 <!--Pagination CSS-->
 <link  type="text/css"  href='<?=base_url()?>assets/css/jqpagination.css' rel="stylesheet" media='screen'/>
 <!--Jcrop CSS-->
@@ -2350,7 +2350,7 @@
 		<script src="<?=base_url()?>assets/js/src/vendor/jquery.knob.js" type="text/javascript"></script>
 		<script src="<?=base_url()?>assets/js/src/vendor/chosen.jquery.min.js" type="text/javascript"></script>
 		<!-- MEMBERPAGE JS-->
-		<script type="text/javascript" src="<?=base_url()?>assets/js/src/memberpage.js?ver=1.0"></script>
+		<script type="text/javascript" src="<?=base_url()?>assets/js/src/memberpage.js?ver=<?=ES_FILE_VERSION?>"></script>
 		<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=&sensor=false"></script>
 
 		<script type="text/javascript">

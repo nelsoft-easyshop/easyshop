@@ -1,6 +1,6 @@
-<link rel="stylesheet" href="<?= base_url() ?>assets/css/product_search_category.css?ver=1.0" type="text/css"  media="screen"/> 
-<link rel="stylesheet" href="<?= base_url() ?>assets/css/style_new.css?ver=1.0" type="text/css" media="screen"/>
-<link rel="stylesheet" href="<?= base_url() ?>assets/css/jquery.bxslider.css?ver=1.0" type="text/css" media="screen"/> 
+<link rel="stylesheet" href="<?= base_url() ?>assets/css/product_search_category.css?ver=<?=ES_FILE_VERSION?>" type="text/css"  media="screen"/> 
+<link rel="stylesheet" href="<?= base_url() ?>assets/css/style_new.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
+<link rel="stylesheet" href="<?= base_url() ?>assets/css/jquery.bxslider.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/> 
 
 <?php
 session_start();
@@ -241,7 +241,7 @@ $(function () {
 
 </script>
 <script src="<?= base_url() ?>assets/js/src/vendor/jquery.bxslider.min.js" type="text/javascript"></script>
-<script src="<?= base_url() ?>assets/js/src/categorynavigation.js?ver=1.0" type="text/javascript"></script>
+<script src="<?= base_url() ?>assets/js/src/categorynavigation.js?ver=<?=ES_FILE_VERSION?>" type="text/javascript"></script>
 
 <?php
 $price1= "";

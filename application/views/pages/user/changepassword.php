@@ -77,7 +77,7 @@
 
 <script type='text/javascript' src='<?=base_url()?>assets/js/src/vendor/jquery.numeric.js'></script>
 <script type='text/javascript' src='<?=base_url()?>assets/js/src/vendor/jquery.validate.js'></script>
-<script type='text/javascript' src='<?=base_url()?>assets/js/src/register.js?ver=1.0'></script>
+<script type='text/javascript' src='<?=base_url()?>assets/js/src/register.js?ver=<?=ES_FILE_VERSION?>'></script>
 
 <!-- password strength checker -->
 <?php if(($logged_in)&&($toggle_view == "1")):?>

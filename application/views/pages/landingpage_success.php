@@ -6,10 +6,10 @@
 <meta property="og:image" content="http://easyshop.ph/assets/images/img_logo.png" />
 
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link href="<?=base_url()?>assets/css/landingpage/bootstrap.css?ver=1.0" rel="stylesheet">
-        <link href="<?=base_url()?>assets/css/landingpage/bootstrap-responsive.css?ver=1.0" rel="stylesheet">
-        <link href="<?=base_url()?>assets/css/landingpage/mystyle.css?ver=1.0" rel="stylesheet">
-        <link href="<?=base_url()?>assets/css/jquery-ui.css?ver=1.0" rel="stylesheet">
+        <link href="<?=base_url()?>assets/css/landingpage/bootstrap.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet">
+        <link href="<?=base_url()?>assets/css/landingpage/bootstrap-responsive.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet">
+        <link href="<?=base_url()?>assets/css/landingpage/mystyle.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet">
+        <link href="<?=base_url()?>assets/css/jquery-ui.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet">
         <title><?php echo $title;?></title>
         
         <!-- Google Analytics -->

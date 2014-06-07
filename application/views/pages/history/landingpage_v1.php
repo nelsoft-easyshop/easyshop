@@ -17,10 +17,10 @@
 <meta property="og:image" content="https://easyshop.ph/assets/images/img_logo.png" />
 
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link href="<?=base_url()?>assets/css/landingpage/bootstrap.css?ver=1.0" rel="stylesheet">
-        <link href="<?=base_url()?>assets/css/landingpage/bootstrap-responsive.css?ver=1.0" rel="stylesheet">
-        <link href="<?=base_url()?>assets/css/landingpage/mystyle.css?ver=1.0" rel="stylesheet">
-		<link href="<?=base_url()?>assets/css/jquery-ui.css?ver=1.0" rel="stylesheet">
+        <link href="<?=base_url()?>assets/css/landingpage/bootstrap.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet">
+        <link href="<?=base_url()?>assets/css/landingpage/bootstrap-responsive.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet">
+        <link href="<?=base_url()?>assets/css/landingpage/mystyle.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet">
+		<link href="<?=base_url()?>assets/css/jquery-ui.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet">
 		<title><?php echo $title;?></title>
         
          <!-- Google Analytics -->
@@ -288,7 +288,7 @@
 	<script type='text/javascript' src='<?=base_url()?>assets/js/src/vendor/jquery.numeric.js'></script>
 	<script type='text/javascript' src='<?=base_url()?>assets/js/src/vendor/jquery.validate.js'></script>
 	
-	<script type='text/javascript' src='<?=base_url()?>assets/js/src/landingpage.js?ver=1.0'></script>
+	<script type='text/javascript' src='<?=base_url()?>assets/js/src/landingpage.js?ver=<?=ES_FILE_VERSION?>'></script>
 	
 	<!-- Password Strength -->
 	<script type="text/javascript" src="<?=base_url()?>assets/js/src/vendor/mootools-core-1.4.5-full-compat.js"></script>

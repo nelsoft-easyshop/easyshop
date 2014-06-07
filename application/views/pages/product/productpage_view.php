@@ -3,9 +3,9 @@
 	<?php echo $jsonReviewSchemaData;?>
 </script>
 
-<link rel="stylesheet" href="<?=base_url()?>assets/css/jquery.jqzoom.css?ver=1.0" type="text/css">
-<link rel="stylesheet" href="<?=base_url()?>assets/css/style_new.css?ver=1.0" type="text/css" media="screen"/>
-<link rel="stylesheet" href="<?=base_url()?>assets/css/jquery.bxslider.css?ver=1.0" type="text/css" media="screen"/>
+<link rel="stylesheet" href="<?=base_url()?>assets/css/jquery.jqzoom.css?ver=<?=ES_FILE_VERSION?>" type="text/css">
+<link rel="stylesheet" href="<?=base_url()?>assets/css/style_new.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
+<link rel="stylesheet" href="<?=base_url()?>assets/css/jquery.bxslider.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
 <link rel="stylesheet" href="<?=base_url()?>assets/css/productview.css" type="text/css" media="screen"/>
 
 <div class="clear"></div>
@@ -452,11 +452,11 @@
 <script src="<?=base_url()?>assets/js/src/vendor/jquery.bxslider.min.js" type="text/javascript"></script>
 <script src="<?=base_url()?>assets/js/src/vendor/jquery.idTabs.min.js" type="text/javascript"></script>
 <script src="<?=base_url()?>assets/js/src/vendor/jquery.raty.min.js" type="text/javascript"></script>
-<script src="<?= base_url() ?>assets/js/src/categorynavigation.js?ver=1.0" type="text/javascript"></script>
+<script src="<?= base_url() ?>assets/js/src/categorynavigation.js?ver=<?=ES_FILE_VERSION?>" type="text/javascript"></script>
 <script type='text/javascript' src='<?=base_url()?>assets/js/src/vendor/jquery.numeric.js'></script>
 <script type='text/javascript' src='<?=base_url()?>assets/js/src/vendor/jquery.simplemodal.js'></script>
 <script type='text/javascript' src='<?=base_url()?>assets/js/src/vendor/jquery.validate.js'></script>
-<script src="<?=base_url()?>assets/js/src/productpage.js?ver=1.0" type="text/javascript"></script>
+<script src="<?=base_url()?>assets/js/src/productpage.js?ver=<?=ES_FILE_VERSION?>" type="text/javascript"></script>
 
 <style type="text/css">
       nav {

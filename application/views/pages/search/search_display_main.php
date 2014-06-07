@@ -13,8 +13,8 @@ function in_array_r($needle, $haystack, $strict = false) {
 }# checking end	
 
 ?>
-<link rel="stylesheet" href="<?=base_url()?>assets/css/product_search_category.css?ver=1.0" type="text/css" media="screen"/>
-<link rel="stylesheet" href="<?=base_url()?>assets/css/style_new.css?ver=1.0" type="text/css" media="screen"/>
+<link rel="stylesheet" href="<?=base_url()?>assets/css/product_search_category.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
+<link rel="stylesheet" href="<?=base_url()?>assets/css/style_new.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
 <style type="text/css">
 .err{
 	-webkit-box-shadow: 0px 0px 2px 2px #FF0000;
@@ -218,7 +218,7 @@ function in_array_r($needle, $haystack, $strict = false) {
 <?php echo form_close();?>
 <script src="<?= base_url() ?>assets/js/src/vendor/jquery.easing.min.js" type="text/javascript"></script> 
 <script src="<?= base_url() ?>assets/js/src/vendor/jquery.scrollUp.min.js" type="text/javascript"></script>
-<script src="<?= base_url() ?>assets/js/src/advsearch.js?ver=1.0" type="text/javascript"></script>
+<script src="<?= base_url() ?>assets/js/src/advsearch.js?ver=<?=ES_FILE_VERSION?>" type="text/javascript"></script>
 <script type="text/javascript">
 $(function () {
 	$.scrollUp({
