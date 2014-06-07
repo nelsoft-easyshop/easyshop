@@ -1010,8 +1010,8 @@ class product extends MY_Controller
         
         $startdate_xml_obj = $this->xmlmap->getFilenameNode('page/home_files', 'cd_startdate');
         $enddate_xml_obj = $this->xmlmap->getFilenameNode('page/home_files', 'cd_startdate');
-        $view_data['startdate'] = date('M d,Y H:i:s',strtotime($startdate_xml_obj['value']));
-        $view_data['enddate'] = date('M d,Y H:i:s',strtotime($enddate_xml_obj['value'])); 
+        $view_data['startdate'] = date('M d,Y H:i:s',strtotime((string)$startdate_xml_obj->value));
+        $view_data['enddate'] = date('M d,Y H:i:s',strtotime((string)$enddate_xml_obj->value));
         
         $this->load->view('templates/header', $data); 
         $this->load->view('pages/product/product_promo_category', $view_data); 
