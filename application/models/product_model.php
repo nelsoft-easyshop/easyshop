@@ -299,7 +299,7 @@ class product_model extends CI_Model
 	}
        
 	// // start of new 
-	function getProductsByCategory($categories,$conditionArray,$countMatch,$operator = "<",$start,$per_page,$sortString,$words = array())
+	function getProductsByCategory($categories,$conditionArray=array(),$countMatch=0,$operator = "<",$start=0,$per_page=9,$sortString = '',$words = array())
 	{	
 		$concatQuery = "";
 		$arrayCount = count($conditionArray);
@@ -2095,7 +2095,6 @@ class product_model extends CI_Model
         }
         return (intval($is_promo) === 1)?$PromoPrice:$baseprice;
     }
-    
-    
+
     
 }
