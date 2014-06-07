@@ -43,18 +43,28 @@
                     </div>
                     <div class="countdown_top_right_content">
                         <div class="cd_left_con">
-                            <div class="cd_top_content">
-                                
-                                <span class="cd_discount_tag"><span>2%<br />OFF</span></span>
+                            <div class="cd_top_content <?php echo ($data['cd_product'][0]['is_soldout'])?'cd_main_slide_soldout':''?>">
+                                <span class="cd_discount_tag ">
+                                    <span>
+                                        <?php echo ($data['cd_product'][0]['start_promo'])?($data['cd_product'][0]['percentage']):($data['cd_product'][0]['percentage']);  ?>%
+                                        <br />OFF
+                                    </span>
+                                </span>
+
                             </div>
                             <div>
                                 <p class="txt_buy">Buy an</p>
-                                <p class="cd_prod_name"><?php echo html_escape($data['cd_product'][0]['product']);?></p>
+                                <p class="cd_prod_name"><a href="<?=base_url()?>item/<?=$data['cd_product'][0]['slug']?>"><?php echo html_escape($data['cd_product'][0]['product']);?></a></p>
                                 <p class="cd_prod_base_price">Php <?php echo number_format($data['cd_product'][0]['original_price'],2,'.',',');?></p>
-                                <p class="cd_prod_discount_price">Php 489.90*</p>
-                                <p class='cd_prod_disclaimer'>* Lowest possible price</p>
-                                
-                                <p class="cd_buy_btn"><a href="" class="orange_btn3">BUY NOW</a></p>
+                                <?php if($data['cd_product'][0]['start_promo']):  ?>
+                                    <p class="cd_prod_discount_price">Php <?php echo number_format($data['cd_product'][0]['price'],2,'.',',');?></p>
+                                    <p class="cd_buy_btn"><a href="<?=base_url()?>item/<?=$data['cd_product'][0]['slug']?>  " class="orange_btn3">BUY NOW</a></p>
+                                <?php else: ?>
+                                    <p class="cd_prod_discount_price">Php <?php echo number_format($data['cd_product'][0]['original_price']*(1-0.99),2,'.',',');?>*</p>
+                                    <p class='cd_prod_disclaimer'>* Lowest possible price</p>
+                                    <p class="cd_buy_btn"><a href="" class="disable_btn">BUY NOW</a></p>
+                                <?php endif;  ?>
+                               
                             </div>
                         </div>                        
                         <div class="cd_right_con">
@@ -64,70 +74,39 @@
                 </div>
                 <div class="clear"></div>
                 <ul class="countdown_slides">
-                    <li>
-                        <div>
+                        <?php $cnt = 0;
+                        foreach($data['cd_product'] as $countdown_slide): 
+                        $cnt++; ?>
+                        <?php if($cnt === 1 ) continue; ?>
+                        <li class='<?php echo ($countdown_slide['is_soldout'])?'cd_slide_soldout':''?>'>
                             <div>
-                                <span class="cd_slide_title"><a href="">Canon DSLR 60D</a></span>
-                                <span class="cd_slide_discount"><span>77% <br />OFF</span></span>
-                            </div>
-                            <div>
-                                <div class="cd_slide_bleft">
-                                    <p class="cd_slide_base_price">Php 32,900</p>
-                                    <p class="cd_slide_discount_price">Php 7,567</p>
-                                    <p class="cd_slide_buy_btn"><a href="" class="orange_btn">BUY NOW</a></p>
+                                <div>
+                                    <span class="cd_slide_title"><a href="<?=base_url()?>item/<?=$countdown_slide['slug']?>"><?=html_escape($countdown_slide['product']);?></a></span>
+                                    <span class="cd_slide_discount"><span> <?php echo ($countdown_slide['start_promo'])?($countdown_slide['percentage']):($countdown_slide['percentage']);  ?>%<br />OFF</span></span>
                                 </div>
-                                <div class="cd_slide_rleft">
-                                    <span>
-                                        <img src="<?= base_url() ?>assets/images/img_cd_slide_prod1.jpg">
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                    <div class="cd_border"></div>
-                    <li>
-                        <div>
-                            <div>
-                                <span class="cd_slide_title"><a href="">Samsung Smart LED TV 40"</a></span>
-                                <span class="cd_slide_discount"><span>77% <br />OFF</span></span>
-                            </div>
-                            <div>
-                                <div class="cd_slide_bleft">
-                                    <p class="cd_slide_base_price">Php 32,900</p>
-                                    <p class="cd_slide_discount_price">Php 7,567</p>
-                                    <p class="cd_slide_buy_btn"><a href="" class="orange_btn">BUY NOW</a></p>
-                                </div>
-                                <div class="cd_slide_rleft">
-                                    <span>
-                                        <img src="<?= base_url() ?>assets/images/img_cd_slide_prod2.jpg">
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                    <div class="cd_border"></div>
-                    <li class="cd_slide_soldout">
-                        <div>
-                            <div>
-                                <span class="cd_slide_title"><a href="">Samsung Smart LED TV 40"</a></span>
-                                <span class="cd_slide_discount"><span>77% <br />OFF</span></span>
-                            </div>
-                            <div>
-                                <div class="cd_slide_bleft">
-                                    <p class="cd_slide_base_price">Php 32,900</p>
-                                    <p class="cd_slide_discount_price">Php 7,567</p>
-                                    <p class="cd_slide_buy_btn"><a href="" class="disable_btn">BUY NOW</a></p>
-                                </div>
-                                <div class="cd_slide_rleft">
-                                    <span>
-                                        <img src="<?= base_url() ?>assets/images/img_cd_slide_prod2.jpg">
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                    <div class="cd_border"></div>
+                                <div>
+                                    <div class="cd_slide_bleft">
+                                        <p class="cd_slide_base_price">Php <?php echo number_format($countdown_slide['original_price'],2,'.',','); ?></p>
+                                        
+                                        <?php if($data['cd_product'][1]['start_promo']):  ?>
+                                            <p class="cd_slide_discount_price">Php <?php echo number_format($countdown_slide['price'],2,'.',','); ?></p>
+                                            <p class="cd_slide_buy_btn"><a href="" class="orange_btn">BUY NOW</a></p>
+                                        <?php else: ?>
+                                            <p class="cd_slide_discount_price">Php <?php echo number_format($countdown_slide['original_price']*(1-0.99),2,'.',',');?>*</p>
+                                            <p class='cd_prod_disclaimer'>* for as low as</p>
+                                            <p class="cd_slide_buy_btn"><a href="<?=base_url()?>item/<?=$countdown_slide['slug']?>" class="disable_btn">BUY NOW</a></p>
+                                        <?php endif;  ?>
 
+                                    </div>
+                                    <div class="cd_slide_rleft">
+                                        <span>
+                                            <img src="<?= base_url().$countdown_slide['path'].'categoryview/'.$countdown_slide['file']?>" alt="<?php echo html_escape($countdown_slide['product']);?>">
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    <?php endforeach; ?>
                 </ul>
 
 
@@ -301,8 +280,8 @@
         </div>
     </div>
 </section>
-<input type = 'hidden' id='cd_enddate' value='<?php echo $data['cd_enddate']; ?>'/>
 
+<input type = 'hidden' id='timer_date' value='<?php echo (strtotime(date('M d,Y H:i:s')) < strtotime($data['cd_startdate']))?$data['cd_startdate']:$data['cd_enddate']; ?>'/>
 
 <div class="clear"></div>
 
@@ -311,8 +290,3 @@
 <script src="<?=base_url()?>assets/JavaScript/home.js?ver=1.0" type="text/javascript"></script>
 <script src="<?=base_url()?>/assets/js/src/vendor/jquery.plugin.min.js" type="text/javascript"></script>
 <script src="<?=base_url()?>/assets/js/src/vendor/jquery.countdown.min.js" type="text/javascript"></script>
-
-
-	
-    
-

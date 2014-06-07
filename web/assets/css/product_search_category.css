@@ -879,3 +879,16 @@ Advanced Search Filters
   margin-top: 20px;
   text-align: left;
 }
+
+span.cd_timerlabel{
+    color: white; 
+    font-size: 20px; 
+    text-shadow: black 0.1em 0.1em 0.2em;
+    font-family: calibri;
+}
+
+div.cd_timerlabel_container{
+    position: absolute;
+    right: 200px;
+    top: 85px;
+}

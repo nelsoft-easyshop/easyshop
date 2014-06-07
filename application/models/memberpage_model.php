@@ -4,13 +4,13 @@ class memberpage_model extends CI_Model
 	function __construct() 
 	{
 		parent::__construct();
-		$this->load->library("sqlmap");
+		$this->load->library("xmlmap");
 		$this->config->load("image_path");
 	}	
 	
 	function getLocationLookup()
 	{
-		$query = $this->sqlmap->getFilenameID('users', 'getLocationLookup');
+		$query = $this->xmlmap->getFilenameID('sql/users', 'getLocationLookup');
         $sth = $this->db->conn_id->prepare($query);
         $sth->execute();
         $row = $sth->fetchAll(PDO::FETCH_ASSOC);
@@ -40,7 +40,7 @@ class memberpage_model extends CI_Model
 	
 	function get_member_by_id($member_id)
 	{
-		$query = $this->sqlmap->getFilenameID('users', 'get_member');
+		$query = $this->xmlmap->getFilenameID('sql/users', 'get_member');
         $sth = $this->db->conn_id->prepare($query);
         $sth->bindParam(':id_member', $member_id);
         $sth->execute();
@@ -51,7 +51,7 @@ class memberpage_model extends CI_Model
 	
 	function get_school_by_id($member_id)
 	{
-		$query = $this->sqlmap->getFilenameID('users', 'get_school');
+		$query = $this->xmlmap->getFilenameID('sql/users', 'get_school');
         $sth = $this->db->conn_id->prepare($query);
         $sth->bindParam(':id_member', $member_id);
         $sth->execute();
@@ -65,7 +65,7 @@ class memberpage_model extends CI_Model
 	
 	function get_work_by_id($member_id)
 	{
-		$query = $this->sqlmap->getFilenameID('users', 'get_work');
+		$query = $this->xmlmap->getFilenameID('sql/users', 'get_work');
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':id_member',$member_id);
 		$sth->execute();
@@ -82,7 +82,7 @@ class memberpage_model extends CI_Model
 		if(strlen($data['birthday']) == 0)
 			//$data['birthday']='0000-00-00';
 			$data['birthday']='0001-01-01';
-		$query = $this->sqlmap->getFilenameID('users', 'edit_member');
+		$query = $this->xmlmap->getFilenameID('sql/users', 'edit_member');
         $sth = $this->db->conn_id->prepare($query);	
         $sth->bindParam(':fullname', $data['fullname']);
 		$sth->bindParam(':nickname', $data['nickname']);
@@ -100,7 +100,7 @@ class memberpage_model extends CI_Model
 	
 	function edit_address_by_id($member_id, $data=array())
 	{	
-		$query = $this->sqlmap->getFilenameID('users', 'edit_address');
+		$query = $this->xmlmap->getFilenameID('sql/users', 'edit_address');
         $sth = $this->db->conn_id->prepare($query);
         $sth->bindParam(':stateregion', $data['stateregion']);
 		$sth->bindParam(':city', $data['city']);
@@ -132,7 +132,7 @@ class memberpage_model extends CI_Model
 			$data['year'] = ($data['year'] < 1901)?1901:$data['year'];
 			$data['year']= ($data['year'] > 2155)?2155:$data['year'];
 		}
-		$query = $this->sqlmap->getFilenameID('users', 'edit_school');
+		$query = $this->xmlmap->getFilenameID('sql/users', 'edit_school');
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':schoolname', $data['school']);
 		$sth->bindParam(':year', $data['year']);
@@ -147,13 +147,13 @@ class memberpage_model extends CI_Model
 	function deletePersonalInformation($member_id, $field)
 	{
 		if($field === 'del_address' ){
-			$query = $this->sqlmap->getFilenameID('users', 'delete_address');
+			$query = $this->xmlmap->getFilenameID('sql/users', 'delete_address');
 		}
 		if($field === 'del_school' ){
-			$query = $this->sqlmap->getFilenameID('users', 'delete_school');
+			$query = $this->xmlmap->getFilenameID('sql/users', 'delete_school');
 		}
 		if($field === 'del_work' ){
-			$query = $this->sqlmap->getFilenameID('users', 'delete_work');
+			$query = $this->xmlmap->getFilenameID('sql/users', 'delete_work');
 		}
 		
 		$sth = $this->db->conn_id->prepare($query);
@@ -165,7 +165,7 @@ class memberpage_model extends CI_Model
 	
 	function upload_img($uid, $data=array())
 	{
-		$query = $this->sqlmap->getFilenameID('users', 'get_image');
+		$query = $this->xmlmap->getFilenameID('sql/users', 'get_image');
         $sth = $this->db->conn_id->prepare($query);
         $sth->bindParam(':id', $uid);
         $sth->execute();
@@ -231,7 +231,7 @@ class memberpage_model extends CI_Model
 			$this->image_lib->initialize($config);  
 			$this->image_lib->resize();
 
-			$query = $this->sqlmap->getFilenameID('users', 'update_imgurl');
+			$query = $this->xmlmap->getFilenameID('sql/users', 'update_imgurl');
 			$sth = $this->db->conn_id->prepare($query);
 			$sth->bindParam(':path', $path);
 			$sth->bindParam(':id_member', $uid);
@@ -246,7 +246,7 @@ class memberpage_model extends CI_Model
 		$i = 0; $type = 1;
 		do
 		{
-			$query = $this->sqlmap->getFilenameID('users', 'edit_address');
+			$query = $this->xmlmap->getFilenameID('sql/users', 'edit_address');
 			$sth = $this->db->conn_id->prepare($query);
 			$sth->bindparam(':id_member', $member_id);
 			$sth->bindparam(':type', $type);
@@ -284,7 +284,7 @@ class memberpage_model extends CI_Model
 			$data['year']= ($data['year'] > 2155)?2155:$data['year'];
 		}
 		
-		$query = $this->sqlmap->getFilenameID('users', 'edit_work');
+		$query = $this->xmlmap->getFilenameID('sql/users', 'edit_work');
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindparam(':id_member', $member_id);
 		$sth->bindparam(':companyname', $data['companyname']);
@@ -298,7 +298,7 @@ class memberpage_model extends CI_Model
 	
 	function get_image($member_id){		
 		$path = $this->config->item('user_img_directory');
-		$query = $this->sqlmap->getFilenameID('users', 'get_image');
+		$query = $this->xmlmap->getFilenameID('sql/users', 'get_image');
         $sth = $this->db->conn_id->prepare($query);
         $sth->bindParam(':id', $member_id);
         $sth->execute();
@@ -345,7 +345,7 @@ class memberpage_model extends CI_Model
 	# Returns 'active', 'deleted' and 'sold'
 	function getUserItemCount($member_id)
 	{
-		$query = $this->sqlmap->getFilenameID('product','getUserItemCount');
+		$query = $this->xmlmap->getFilenameID('sql/product','getUserItemCount');
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':member_id',$member_id);
 		$sth->execute();
@@ -358,14 +358,14 @@ class memberpage_model extends CI_Model
 	function getUserItems($member_id, $lastid = 0) 	#Retrieves user items to be displayed on dashboard
 	{
 		if($lastid === 0){
-			$query = $this->sqlmap->getFilenameID('product','getUserItems');
+			$query = $this->xmlmap->getFilenameID('sql/product','getUserItems');
 			$sth = $this->db->conn_id->prepare($query);
 			$sth->bindParam(':id',$member_id);
 			$sth->execute();
 			$rows = $sth->fetchAll(PDO::FETCH_ASSOC);
 			$data = array('active'=>array(),'deleted'=>array(), 'sold_count'=>0);
 		}else{
-			$query = $this->sqlmap->getFilenameID('product','getMoreUserItems');
+			$query = $this->xmlmap->getFilenameID('sql/product','getMoreUserItems');
 			$sth = $this->db->conn_id->prepare($query);
 			$sth->bindParam(':id',$member_id);
 			$sth->bindParam(':last_id',$lastid);
@@ -377,7 +377,7 @@ class memberpage_model extends CI_Model
 		$data['last_id'] = end($rows)['id_product'];
 		
 		foreach($rows as $key=>$row){
-			$query = $this->sqlmap->getFilenameID('product','getParent');
+			$query = $this->xmlmap->getFilenameID('sql/product','getParent');
 			$sth = $this->db->conn_id->prepare($query);
 			$sth->bindParam(':id',$row['cat_id']);
 			$sth->execute();
@@ -387,7 +387,7 @@ class memberpage_model extends CI_Model
 				array_push($row['parents'], $parent['name']);
 			}
 			
-			$query = $this->sqlmap->getFilenameID('product','getProductAttributes');
+			$query = $this->xmlmap->getFilenameID('sql/product','getProductAttributes');
 			$sth = $this->db->conn_id->prepare($query);
 			$sth->bindParam(':id',$row['id_product']);
 			$sth->execute();
@@ -424,7 +424,7 @@ class memberpage_model extends CI_Model
 	}
 	
 	function getVendorDetails($selleruname){
-		$query = $this->sqlmap->getFilenameID('users','get_member_by_username');
+		$query = $this->xmlmap->getFilenameID('sql/users','get_member_by_username');
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':username',$selleruname);
 		$sth->execute();
@@ -437,7 +437,7 @@ class memberpage_model extends CI_Model
 	 *	Obtain Transaction Details for Transaction Tab
 	 */
 	function getTransactionDetails($member_id){
-		$query = $this->sqlmap->getFilenameID('users','getTransactionDetails');
+		$query = $this->xmlmap->getFilenameID('sql/users','getTransactionDetails');
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':id', $member_id);
 		$sth->execute();
@@ -584,7 +584,7 @@ class memberpage_model extends CI_Model
 	
 	function authenticateUser($data)
 	{
-		$query = $this->sqlmap->getFilenameID('users', 'authenticateUser');
+		$query = $this->xmlmap->getFilenameID('sql/users', 'authenticateUser');
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':username', $data['username']);
 		$sth->bindParam(':password', $data['password']);
@@ -596,7 +596,7 @@ class memberpage_model extends CI_Model
 	}
 	
 	function addFeedback($temp){
-		$query = $this->sqlmap->getFilenameID('users','addFeedback');
+		$query = $this->xmlmap->getFilenameID('sql/users','addFeedback');
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':member_id', $temp['uid']);
 		$sth->bindParam(':for_memberid', $temp['for_memberid']);
@@ -612,7 +612,7 @@ class memberpage_model extends CI_Model
 	}
 	
 	function checkFeedback( $temp ){
-		$query = $this->sqlmap->getFilenameID('users','checkFeedback');
+		$query = $this->xmlmap->getFilenameID('sql/users','checkFeedback');
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':member_id', $temp['uid']);
 		$sth->bindParam(':for_memberid', $temp['for_memberid']);
@@ -624,7 +624,7 @@ class memberpage_model extends CI_Model
 	}
 	
 	function getFeedback($member_id){
-		$query = $this->sqlmap->getFilenameID('users','getFeedback');
+		$query = $this->xmlmap->getFilenameID('sql/users','getFeedback');
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':id',$member_id);
 		$sth->execute();
@@ -682,14 +682,14 @@ class memberpage_model extends CI_Model
 	}
 	
 	function billing_info($data){	
-        $query = $this->sqlmap->getFilenameID('users','getDefaultBillingAccnt');
+        $query = $this->xmlmap->getFilenameID('sql/users','getDefaultBillingAccnt');
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':member_id',$data['member_id']);
 		$sth->execute();
 
         $is_default = ($sth->rowCount() == 0)?'1':'0';
 
-        $query = $this->sqlmap->getFilenameID('users','addBillingAccnt');
+        $query = $this->xmlmap->getFilenameID('sql/users','addBillingAccnt');
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':member_id', $data['member_id']);
 		$sth->bindParam(':payment_type', $data['payment_type']);
@@ -712,14 +712,14 @@ class memberpage_model extends CI_Model
 	function billing_info_update($data){
 
         //GET PAYMENT ACCOUNT DETAIL
-        $query =  $this->sqlmap->getFilenameID('users','getBillingAccountById');
+        $query =  $this->xmlmap->getFilenameID('sql/users','getBillingAccountById');
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':member_id', $data['member_id']);		
 		$sth->bindParam(':ibi', $data['ibi']);
 		$sth->execute();
         $billing_detail = $sth->fetch(PDO::FETCH_ASSOC);
         //UPDATE CURRENT BILLING DETAIL WITH NEW INFO
-        $query = $this->sqlmap->getFilenameID('users','updateBillingAccnt');
+        $query = $this->xmlmap->getFilenameID('sql/users','updateBillingAccnt');
 		$sth = $this->db->conn_id->prepare($query);	
 		$sth->bindParam(':bank_id',  $data['bank_id']);
 		$sth->bindParam(':bank_account_name', $data['bank_account_name']);
@@ -733,7 +733,7 @@ class memberpage_model extends CI_Model
 		$sth->execute();
         
         //SAVE A COPY OF THE PREVIOUS ENTRY WITH IS_DELETE = 1
-        $query = $this->sqlmap->getFilenameID('users','InsertHistoryBillingAccnt');
+        $query = $this->xmlmap->getFilenameID('sql/users','InsertHistoryBillingAccnt');
 		$sth = $this->db->conn_id->prepare($query);
         $billing_detail['is_default'] = 0;
         $billing_detail['is_delete'] = 1;
@@ -751,12 +751,12 @@ class memberpage_model extends CI_Model
 	
 	function billing_info_default($data){
 		
-		$query = $this->sqlmap->getFilenameID('users','clearDefaultBillingAccnt');
+		$query = $this->xmlmap->getFilenameID('sql/users','clearDefaultBillingAccnt');
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':member_id', $data['member_id']);		
 		$sth->execute();		
 
-		$query = $this->sqlmap->getFilenameID('users','setDefaultBillingAccnt');
+		$query = $this->xmlmap->getFilenameID('sql/users','setDefaultBillingAccnt');
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':member_id', $data['member_id']);		
 		$sth->bindParam(':ibi', $data['ibi']);
@@ -911,7 +911,7 @@ class memberpage_model extends CI_Model
 			$payoutDate = date("Y-m-d", mktime(0,0,0,$month,20,$year));
 		}
 		
-		$query = $this->sqlmap->getFilenameID('users','getNextPayout');
+		$query = $this->xmlmap->getFilenameID('sql/users','getNextPayout');
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':member_id',$member_id);
 		$sth->bindParam(':start_date',$startDate);
@@ -954,7 +954,7 @@ class memberpage_model extends CI_Model
 	
 	function getUserBalance($member_id)
 	{
-		$query = $this->sqlmap->getFilenameID('users','getUserBalance');
+		$query = $this->xmlmap->getFilenameID('sql/users','getUserBalance');
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':member_id',$member_id);
 		$sth->execute();

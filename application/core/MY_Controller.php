@@ -37,7 +37,7 @@ class MY_Controller extends CI_Controller
         $this->load->helper('common_helper');
     }
 	
-    #fill_header is not ran in the constructor of MY_Controller despite that fact that all pages need it
+    #fill_header is not run in the constructor of MY_Controller despite that fact that all pages need it
     #because it would add unnecessary overhead for all ajax calls. Instead it is called only in the 
     #controller functions that need it
 	function fill_header()

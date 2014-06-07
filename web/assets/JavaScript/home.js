@@ -12,9 +12,9 @@ function serverTime() {
 
 
 $(document).ready(function(){
-    var endDate = new Date($('#cd_enddate').val());
+    var timer_date = new Date($('#timer_date').val());
     $('.cd_timer_container').countdown({
-        until : endDate,
+        until : timer_date,
         serverSync: serverTime,
         layout: ' <div class="cd_timer_days"><span id="countdown_days">{dnn}</span> <span>DAYS</span> </div>'+
                 ' <div class="cd_timer_hours"><span id="countdown_hours">{hnn}</span> <span>HOURS</span> </div>'+

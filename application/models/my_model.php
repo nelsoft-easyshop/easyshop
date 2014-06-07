@@ -7,7 +7,7 @@ class my_model extends CI_Model
 	function __construct() 
 	{
 		parent::__construct();
-		$this->load->library("sqlmap");
+		$this->load->library("xmlmap");
 	}	
 	
 	function getNoSlugProduct()

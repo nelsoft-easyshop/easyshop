@@ -7,13 +7,13 @@ class cart_model extends CI_Model
 	function __construct() 
 	{
 		parent::__construct();
-		$this->load->library("sqlmap");
+		$this->load->library("xmlmap");
 	}	
 
     
 	function checkProductAttributes($id,$attr,$attr_value) # getting the product attirbute using product ID,attr,attr value
 	{
-            $query = $this->sqlmap->getFilenameID('cart', 'checkProductAttributes');
+            $query = $this->xmlmap->getFilenameID('sql/cart', 'checkProductAttributes');
 
             $sth = $this->db->conn_id->prepare($query);
             $sth->bindParam(':id',$id);
@@ -39,7 +39,7 @@ class cart_model extends CI_Model
 	}
         
     function cartdata($id){
-        $query = $this->sqlmap->getFilenameID('cart', 'get_cart_data');
+        $query = $this->xmlmap->getFilenameID('sql/cart', 'get_cart_data');
         
         $sth = $this->db->conn_id->prepare($query);
         $sth->bindParam(':id',$id);
@@ -50,7 +50,7 @@ class cart_model extends CI_Model
     }
     
     function save_cartitems($data,$id){
-        $query = $this->sqlmap->getFilenameID('cart', 'save_cart_data');
+        $query = $this->xmlmap->getFilenameID('sql/cart', 'save_cart_data');
         $sth = $this->db->conn_id->prepare($query);
         $sth->bindParam(':id',$id); 
         $sth->bindParam(':data',$data);

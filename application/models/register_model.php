@@ -5,7 +5,7 @@ class Register_model extends CI_Model
 	{
 		parent::__construct();
 		$this->config->load('image_path');
-		$this->load->library('sqlmap');
+		$this->load->library('xmlmap');
 	}
 	
 	/*
@@ -13,7 +13,7 @@ class Register_model extends CI_Model
 	 */
 	function get_member_by_username($member_username)
 	{
-		$query = $this->sqlmap->getFilenameID('users', 'get_member_by_username');
+		$query = $this->xmlmap->getFilenameID('sql/users', 'get_member_by_username');
         $sth = $this->db->conn_id->prepare($query);
         $sth->bindParam(':username', $member_username);
         $sth->execute();
@@ -25,7 +25,7 @@ class Register_model extends CI_Model
 	// USED BY AJAX CHECK
 	function checkEmailIfExists($email)
 	{
-		$query = $this->sqlmap->getFilenameID('users', 'getEmail');
+		$query = $this->xmlmap->getFilenameID('sql/users', 'getEmail');
         $sth = $this->db->conn_id->prepare($query);
         $sth->bindParam(':email', $email);
         $sth->execute();
@@ -36,7 +36,7 @@ class Register_model extends CI_Model
 	// USED BY AJAX CHECK
 	function checkMobileIfExists($mobile)
 	{
-		$query = $this->sqlmap->getFilenameID('users', 'getMobile');
+		$query = $this->xmlmap->getFilenameID('sql/users', 'getMobile');
         $sth = $this->db->conn_id->prepare($query);
         $sth->bindParam(':contactno', $mobile);
         $sth->execute();
@@ -46,7 +46,7 @@ class Register_model extends CI_Model
 	}
 	
 	function get_memberid($member_username){
-		$query = $this->sqlmap->getFilenameID('users', 'getUserID');
+		$query = $this->xmlmap->getFilenameID('sql/users', 'getUserID');
         $sth = $this->db->conn_id->prepare($query);
         $sth->bindParam(':username', $member_username);
         $sth->execute();
@@ -60,7 +60,7 @@ class Register_model extends CI_Model
 	
 	function signupMember($data) 
 	{
-		$query = $this->sqlmap->getFilenameID('users', 'signup_member');
+		$query = $this->xmlmap->getFilenameID('sql/users', 'signup_member');
         $sth = $this->db->conn_id->prepare($query);
 		$blank = '';
         $sth->bindParam(':username', $data['username']);
@@ -77,7 +77,7 @@ class Register_model extends CI_Model
 	
 	function changepass($data=array())
 	{	
-		$query = $this->sqlmap->getFilenameID('users', 'changepass');
+		$query = $this->xmlmap->getFilenameID('sql/users', 'changepass');
         $sth = $this->db->conn_id->prepare($query);
         $sth->bindParam(':username', $data['username']);
 		$sth->bindParam(':cur_password', $data['cur_password']);
@@ -102,7 +102,7 @@ class Register_model extends CI_Model
 	
 	function validate_username($username)
 	{
-		$query = $this->sqlmap->getFilenameID('users', 'get_member_by_username');
+		$query = $this->xmlmap->getFilenameID('sql/users', 'get_member_by_username');
         $sth = $this->db->conn_id->prepare($query);
         $sth->bindParam(':username', $username);
         $sth->execute();	
@@ -118,7 +118,7 @@ class Register_model extends CI_Model
 	// FOR FIRST TIME REGISTRATION ONLY
 	function validate_email($email)
     {	
-		$query = $this->sqlmap->getFilenameID('users', 'getEmail');
+		$query = $this->xmlmap->getFilenameID('sql/users', 'getEmail');
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':email', $email);
 		$sth->execute();
@@ -134,7 +134,7 @@ class Register_model extends CI_Model
 	// FOR FIRST TIME REGISTRATION ONLY
 	function validate_mobile($mobile)
 	{
-		$query = $this->sqlmap->getFilenameID('users', 'getMobile');
+		$query = $this->xmlmap->getFilenameID('sql/users', 'getMobile');
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':contactno', $mobile);
 		$sth->execute();
@@ -290,7 +290,7 @@ class Register_model extends CI_Model
 	}
 
 	function check_contactinfo($data){
-		$query = $this->sqlmap->getFilenameID('users', 'check_contactinfo');
+		$query = $this->xmlmap->getFilenameID('sql/users', 'check_contactinfo');
         $sth = $this->db->conn_id->prepare($query);
 
         $data['contactno'] = $data['contactno'] === '' ? 0:$data['contactno'];
@@ -322,7 +322,7 @@ class Register_model extends CI_Model
 	
 
 	function store_verifcode($data){
-		$query = $this->sqlmap->getFilenameID('users', 'store_verifcode');
+		$query = $this->xmlmap->getFilenameID('sql/users', 'store_verifcode');
         $sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':member_id', $data['member_id']);
 		$sth->bindParam(':mobilecode', $data['mobilecode']);
@@ -338,7 +338,7 @@ class Register_model extends CI_Model
 
 	function get_verifcode($member_id)
 	{
-		$query = $this->sqlmap->getFilenameID('users', 'get_verifcode');
+		$query = $this->xmlmap->getFilenameID('sql/users', 'get_verifcode');
         $sth = $this->db->conn_id->prepare($query);
         $sth->bindParam(':member_id', $member_id);
         $sth->execute();
@@ -360,7 +360,7 @@ class Register_model extends CI_Model
 	function update_verification_status($data = array())
 	{
 		if(isset($data['is_contactno_verify'])){
-			$query = $this->sqlmap->getFilenameID('users', 'update_mobileverif_status');
+			$query = $this->xmlmap->getFilenameID('sql/users', 'update_mobileverif_status');
 			$sth = $this->db->conn_id->prepare($query);
 			$sth->bindParam(':member_id', $data['member_id']);
 			$sth->bindParam(':is_contactno_verify', $data['is_contactno_verify']);	
@@ -369,7 +369,7 @@ class Register_model extends CI_Model
 		}
 
 		if(isset($data['is_email_verify'])){
-			$query = $this->sqlmap->getFilenameID('users', 'update_emailverif_status');
+			$query = $this->xmlmap->getFilenameID('sql/users', 'update_emailverif_status');
 			$sth = $this->db->conn_id->prepare($query);
 			$sth->bindParam(':member_id', $data['member_id']);
 			$sth->bindParam(':is_email_verify', $data['is_email_verify']);				
@@ -461,7 +461,7 @@ class Register_model extends CI_Model
         $sth->bindParam(':id_member',  $data['member_id']);
 		$sth->execute();
 				
-		$query = $this->sqlmap->getFilenameID('users', 'forgotpass');
+		$query = $this->xmlmap->getFilenameID('sql/users', 'forgotpass');
         $sth = $this->db->conn_id->prepare($query);
         $sth->bindParam(':username', $data['username']);
 		$sth->bindParam(':password', $data['password']);
@@ -475,7 +475,7 @@ class Register_model extends CI_Model
 	 */
 	public function subscribe($email)
 	{
-		$query = $this->sqlmap->getFilenameID('users', 'subscribe');
+		$query = $this->xmlmap->getFilenameID('sql/users', 'subscribe');
         $sth = $this->db->conn_id->prepare($query);
         $sth->bindParam(':email', $email);
         $result = $sth->execute();
@@ -556,7 +556,7 @@ class Register_model extends CI_Model
 	
 	function signupMember_landingpage($data) 
 	{
-		$query = $this->sqlmap->getFilenameID('users', 'signup_member');
+		$query = $this->xmlmap->getFilenameID('sql/users', 'signup_member');
         $sth = $this->db->conn_id->prepare($query);
 		$blank = '';
         $sth->bindParam(':username', $data['username']);

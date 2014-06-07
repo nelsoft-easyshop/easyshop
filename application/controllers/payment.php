@@ -11,7 +11,7 @@ class Payment extends MY_Controller{
         $this->load->library('cart');
         $this->load->library('paypal');
         $this->load->library('dragonpay');
-        $this->load->library("sqlmap");
+        $this->load->library("xmlmap");
         $this->load->model('user_model');
         $this->load->model('payment_model');
         $this->load->model('product_model');
@@ -440,7 +440,7 @@ class Payment extends MY_Controller{
               
         }elseif ($lastDigit == 2) {
             $paymentType = $this->PayMentDirectBankDeposit;
-            $esAccountNumber = $this->sqlmap->getFilenameIDPage('content_files','bank-account-number');
+            $esAccountNumber = $this->xmlmap->getFilenameID('page/content_files','bank-account-number');
             $textType = 'directbankdeposit';
             $response['message'] = '
             <div style="color:green">Your payment is completed through Direct Bank Deposit.</div>

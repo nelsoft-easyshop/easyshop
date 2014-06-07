@@ -117,7 +117,6 @@
         <type>product</type>
     </category2_pid_mainslide>
     
-   
     <category2_pid>
         <value>141</value>
         <type>product</type>
@@ -137,11 +136,17 @@
         <value>141</value>
         <type>product</type>
     </category2_pid>
-
-    <cd_enddate>
+    
+    <cd_startdate>
         <value>June 15, 2014 12:00:00</value>
         <type>date</type>
         <remark>Web launch sale start date</remark>
+    </cd_startdate>
+
+    <cd_enddate>
+        <value>June 17, 2014 12:00:00</value>
+        <type>date</type>
+        <remark>Web launch sale end date</remark>
     </cd_enddate>
     
     <cd_product>
@@ -163,5 +168,6 @@
         <value>141</value>
         <type>product</type>
     </cd_product>
+            
     
 </map>

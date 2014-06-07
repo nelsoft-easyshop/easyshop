@@ -7,14 +7,14 @@ class product_model extends CI_Model
 	function __construct() 
 	{
 		parent::__construct();  
-        $this->load->library("sqlmap");
+        $this->load->library("xmlmap");
 	}
 
 	# the queries directory -- application/resources/sql/product.xml
 
 	function selectCategoryDetails($id) # get all down level category on selected category from database
 	{
-		$query = $this->sqlmap->getFilenameID('product', 'selectCategoryDetails');
+		$query = $this->xmlmap->getFilenameID('sql/product', 'selectCategoryDetails');
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':id_cat', $id);
 		$sth->execute();
@@ -25,7 +25,7 @@ class product_model extends CI_Model
 
 	function getDownLevelNode($id) # get all down level category on selected category from database
 	{
-		$query = $this->sqlmap->getFilenameID('product', 'selectDownLevel');
+		$query = $this->xmlmap->getFilenameID('sql/product', 'selectDownLevel');
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':parent_id', $id);
 		$sth->execute();
@@ -35,7 +35,7 @@ class product_model extends CI_Model
 
 	function selectChild($id) # get all down level category on selected category from database
 	{
-		$query = $this->sqlmap->getFilenameID('product', 'selectChild');
+		$query = $this->xmlmap->getFilenameID('sql/product', 'selectChild');
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':cat_id', $id);
 		$sth->execute();
@@ -49,7 +49,7 @@ class product_model extends CI_Model
 	function getParentId($id) #get all parent category from selected id.
 	{
 
-		$query = $this->sqlmap->getFilenameID('product','getParent');
+		$query = $this->xmlmap->getFilenameID('sql/product','getParent');
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':id',$id);
 		$sth->execute();
@@ -61,7 +61,7 @@ class product_model extends CI_Model
     
     function getParentIdByProduct($product_id, $member_id) #get all parent category from selected product
 	{
-        $query = $this->sqlmap->getFilenameID('product','getProductCategory');
+        $query = $this->xmlmap->getFilenameID('sql/product','getProductCategory');
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':id',$product_id);
         $sth->bindParam(':member_id',$member_id);
@@ -69,7 +69,7 @@ class product_model extends CI_Model
 		$p_row = $sth->fetch(PDO::FETCH_ASSOC);
         $row = array();
         if($sth->rowCount() > 0){
-            $query = $this->sqlmap->getFilenameID('product','getParent');
+            $query = $this->xmlmap->getFilenameID('sql/product','getParent');
             $sth = $this->db->conn_id->prepare($query);
             $sth->bindParam(':id',$p_row['cat_id']);
             $sth->execute();
@@ -79,7 +79,7 @@ class product_model extends CI_Model
 	}
 
     function getCategoryDetails($id){
-        $query = $this->sqlmap->getFilenameID('product','getCategoryDetails');
+        $query = $this->xmlmap->getFilenameID('sql/product','getCategoryDetails');
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':id',$id);
 		$sth->execute();
@@ -154,7 +154,7 @@ class product_model extends CI_Model
 
 	function getLookItemListById($id) # getting item list from database. EG: Color -- (White,Blue,Yellow)
 	{
-		$query = $this->sqlmap->getFilenameID('product','getLookupListItem');
+		$query = $this->xmlmap->getFilenameID('sql/product','getLookupListItem');
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':id',$id);
 		$sth->execute();
@@ -165,7 +165,7 @@ class product_model extends CI_Model
 
 	function getSlug($id) 
 	{
-		$query = $this->sqlmap->getFilenameID('product', 'getSlugByID');
+		$query = $this->xmlmap->getFilenameID('sql/product', 'getSlugByID');
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':id',$id);
 		$sth->execute();
@@ -179,7 +179,7 @@ class product_model extends CI_Model
     
     function getProductBySlug($slug) 
 	{
-		$query = $this->sqlmap->getFilenameID('product', 'getProductBySlug');
+		$query = $this->xmlmap->getFilenameID('sql/product', 'getProductBySlug');
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':slug',$slug);
 		$sth->execute();
@@ -199,7 +199,7 @@ class product_model extends CI_Model
 	}
     
     function getProductPreview($id, $memberid, $is_draft = 1){
-        $query = $this->sqlmap->getFilenameID('product', 'getProductPreview');
+        $query = $this->xmlmap->getFilenameID('sql/product', 'getProductPreview');
         $sth = $this->db->conn_id->prepare($query);
         $sth->bindParam(':product_id',$id);
         $sth->bindParam(':member_id',$memberid);
@@ -222,7 +222,7 @@ class product_model extends CI_Model
      */
 	function getProductAttributes($id, $key = 'ALL') # getting the product attribute using product ID
 	{	
-		$query = $this->sqlmap->getFilenameID('product', 'getProductAttributes');
+		$query = $this->xmlmap->getFilenameID('sql/product', 'getProductAttributes');
 
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':id',$id);
@@ -279,7 +279,7 @@ class product_model extends CI_Model
 	
 	function getProductImages($id, $getById = false) # getting the product image using product ID
 	{
-		$query = $this->sqlmap->getFilenameID('product', 'getProductImages');
+		$query = $this->xmlmap->getFilenameID('sql/product', 'getProductImages');
 
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':id',$id);
@@ -372,7 +372,7 @@ class product_model extends CI_Model
 
 	
 
-		$query = $this->sqlmap->getFilenameID('product', 'getProducts');
+		$query = $this->xmlmap->getFilenameID('sql/product', 'getProducts');
 		$query = $query."
 		 WHERE cat_id IN (".$categories.")  ".$concatQuery." 
 		 AND is_delete = 0 AND is_draft = 0
@@ -465,7 +465,7 @@ class product_model extends CI_Model
 	function getProductAttributesByCategory($ids)
 	{
 		
-		$query = $this->sqlmap->getFilenameID('product', 'getProductAndAttributes');
+		$query = $this->xmlmap->getFilenameID('sql/product', 'getProductAndAttributes');
 
 		$query = $query."
 		WHERE product_id IN (".$ids.") 
@@ -525,7 +525,7 @@ class product_model extends CI_Model
 	
 	function getBrandsByCategory($cat_id)
 	{
-		$query = $this->sqlmap->getFilenameID('product', 'getBrandsByCategory');
+		$query = $this->xmlmap->getFilenameID('sql/product', 'getBrandsByCategory');
 		
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':cat_id',$cat_id);
@@ -537,7 +537,7 @@ class product_model extends CI_Model
 	
 	function getAvailableBrand($cat_id)
 	{
-		$query = $this->sqlmap->getFilenameID('product', 'getAvailableBrand');
+		$query = $this->xmlmap->getFilenameID('sql/product', 'getAvailableBrand');
 		
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':cat_id',$cat_id);
@@ -550,7 +550,7 @@ class product_model extends CI_Model
     
     function getBrandName($brand_id)
 	{
-		$query = $this->sqlmap->getFilenameID('product', 'getBrandName');
+		$query = $this->xmlmap->getFilenameID('sql/product', 'getBrandName');
 		
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':brand_id',$brand_id,PDO::PARAM_INT);
@@ -563,7 +563,7 @@ class product_model extends CI_Model
 
 	function selectAttributeNameWithNameAndId($name,$id)
 	{
-		$query = $this->sqlmap->getFilenameID('product', 'selectAttributeNameWithNameAndId');
+		$query = $this->xmlmap->getFilenameID('sql/product', 'selectAttributeNameWithNameAndId');
 		
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':name',$name);
@@ -576,7 +576,7 @@ class product_model extends CI_Model
     
     function selectAttributeNameWithTypeAndId($groupID,$datatypeID)
 	{
-		$query = $this->sqlmap->getFilenameID('product', 'selectAttributeNameWithTypeAndId');
+		$query = $this->xmlmap->getFilenameID('sql/product', 'selectAttributeNameWithTypeAndId');
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':id_attr',$groupID, PDO::PARAM_INT);
 		$sth->bindParam(':datatype_id',$datatypeID,PDO::PARAM_INT);
@@ -599,7 +599,7 @@ class product_model extends CI_Model
 	{
 
 		# this function for adding new product to es_product table.
-		$query = $this->sqlmap->getFilenameID('product','addNewProduct_es_product');
+		$query = $this->xmlmap->getFilenameID('sql/product','addNewProduct_es_product');
 		
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':name',$product_title);
@@ -632,7 +632,7 @@ class product_model extends CI_Model
 	function addNewAttributeByProduct($product_id,$attribute_id,$value,$price)
 	{
 		# this function for adding new attribute of the product to es_product_attr table.
-		$query = $this->sqlmap->getFilenameID('product','addNewAttribute');
+		$query = $this->xmlmap->getFilenameID('sql/product','addNewAttribute');
 
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':product_id',$product_id , PDO::PARAM_INT);
@@ -655,7 +655,7 @@ class product_model extends CI_Model
 	function addNewAttributeByProduct_others_name($product_id,$name)
 	{
 		# this function for adding new attribute of the product to es_product_attr table.
-		$query = $this->sqlmap->getFilenameID('product','addNewAttributeOtherName');
+		$query = $this->xmlmap->getFilenameID('sql/product','addNewAttributeOtherName');
 
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':product_id',$product_id);
@@ -668,7 +668,7 @@ class product_model extends CI_Model
 	function addNewAttributeByProduct_others_name_value($others_id,$name,$price,$imageid)
 	{
 		# this function for adding new attribute of the product to es_product_attr table.
-		$query = $this->sqlmap->getFilenameID('product','addNewAttributeOtherNameValue');
+		$query = $this->xmlmap->getFilenameID('sql/product','addNewAttributeOtherNameValue');
 
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':head_id',$others_id);
@@ -683,7 +683,7 @@ class product_model extends CI_Model
 	function addNewProductImage($path,$file_type,$product_id,$is_primary)
 	{
 		# this function for adding new image of the product to es_product_image table.
-		$query = $this->sqlmap->getFilenameID('product','addNewProductImage');
+		$query = $this->xmlmap->getFilenameID('sql/product','addNewProductImage');
 
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':product_image_path',$path);
@@ -697,7 +697,7 @@ class product_model extends CI_Model
 
 	function addNewCombination($product_id,$qty)
 	{
-		$query = $this->sqlmap->getFilenameID('product','addNewCombination');
+		$query = $this->xmlmap->getFilenameID('sql/product','addNewCombination');
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':product_id',$product_id,PDO::PARAM_INT);
 		$sth->bindParam(':qty',$qty,PDO::PARAM_INT);	
@@ -707,7 +707,7 @@ class product_model extends CI_Model
     
     function updateCombination($product_id,$product_item_id,$qty)
 	{
-		$query = $this->sqlmap->getFilenameID('product','updateCombination');
+		$query = $this->xmlmap->getFilenameID('sql/product','updateCombination');
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':product_id',$product_id,PDO::PARAM_INT);
         $sth->bindParam(':product_item_id',$product_item_id,PDO::PARAM_INT);	
@@ -717,7 +717,7 @@ class product_model extends CI_Model
     
     function updateCombinationAttribute($product_id_item,$product_attr_id,$other_identifier, $product_item_attr_id)
 	{
-		$query = $this->sqlmap->getFilenameID('product','updateCombinationAtrribute');
+		$query = $this->xmlmap->getFilenameID('sql/product','updateCombinationAtrribute');
 		$sth = $this->db->conn_id->prepare($query);
 
 		$sth->bindParam(':product_id_item',$product_id_item,PDO::PARAM_INT);
@@ -728,7 +728,7 @@ class product_model extends CI_Model
 	}
 
     function selectProductItemAttr($product_item_id,$product_attr_id, $is_other){
-        $query = $this->sqlmap->getFilenameID('product','selectProductItemAttr');
+        $query = $this->xmlmap->getFilenameID('sql/product','selectProductItemAttr');
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':product_item_id',$product_item_id,PDO::PARAM_INT);
 		$sth->bindParam(':product_attr_id',$product_attr_id,PDO::PARAM_INT);
@@ -740,7 +740,7 @@ class product_model extends CI_Model
     
 	function selectProductAttribute($attribute_id,$product_id)
 	{
-		$query = $this->sqlmap->getFilenameID('product','selectProductAttribute');
+		$query = $this->xmlmap->getFilenameID('sql/product','selectProductAttribute');
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':lookupId',$attribute_id,PDO::PARAM_INT);
 		$sth->bindParam(':productID',$product_id,PDO::PARAM_INT);	
@@ -752,7 +752,7 @@ class product_model extends CI_Model
 
 	function selectProductAttributeOther($other_group,$other_value,$product_id)
 	{
-		$query = $this->sqlmap->getFilenameID('product','selectProductAttributeOther');
+		$query = $this->xmlmap->getFilenameID('sql/product','selectProductAttributeOther');
 		$sth = $this->db->conn_id->prepare($query);
         $sth->bindParam(':valueGroup',$other_group,PDO::PARAM_STR);	
 		$sth->bindParam(':valueName',$other_value,PDO::PARAM_STR);
@@ -765,7 +765,7 @@ class product_model extends CI_Model
 
 	function addNewCombinationAttribute($product_id_item,$product_attr_id,$other_identifier)
 	{
-		$query = $this->sqlmap->getFilenameID('product','addNewCombinationAtrribute');
+		$query = $this->xmlmap->getFilenameID('sql/product','addNewCombinationAtrribute');
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':product_id_item',$product_id_item,PDO::PARAM_INT);
 		$sth->bindParam(':product_attr_id',$product_attr_id,PDO::PARAM_INT);
@@ -777,7 +777,7 @@ class product_model extends CI_Model
 	function getAttributeByCategoryIdWithDistinct($id)
 	{
 		# get attribute by selecting category id for filtering item for searcing of the user
-		$query = $this->sqlmap->getFilenameID('product','getAttributeByCategoryIdWithDistinct');
+		$query = $this->xmlmap->getFilenameID('sql/product','getAttributeByCategoryIdWithDistinct');
 
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':cat_id',$id); 
@@ -791,7 +791,7 @@ class product_model extends CI_Model
 	function getAttributeByCategoryIdWithName($id,$name)
 	{
 		
-		$query = $this->sqlmap->getFilenameID('product','getAttributeByCategoryIdWithName');
+		$query = $this->xmlmap->getFilenameID('sql/product','getAttributeByCategoryIdWithName');
 
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':cat_id',$id); 
@@ -922,7 +922,7 @@ class product_model extends CI_Model
 
 	function addProductReview($memberid, $productid, $rating, $title, $review)
 	{
-		$query = $this->sqlmap->getFilenameID('product','submitReview');
+		$query = $this->xmlmap->getFilenameID('sql/product','submitReview');
 
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':member_id',$memberid); 
@@ -937,14 +937,14 @@ class product_model extends CI_Model
 
 	function getProductReview($productid,$last_id = 0){
 		if($last_id === 0){
-			$query = $this->sqlmap->getFilenameID('product','getRecentProductReviews');
+			$query = $this->xmlmap->getFilenameID('sql/product','getRecentProductReviews');
 			$sth = $this->db->conn_id->prepare($query);
 			$sth->bindParam(':id',$productid);	
 			$sth->execute();
 			$row = $sth->fetchAll(PDO::FETCH_ASSOC);
 		}
 		else{
-			$query = $this->sqlmap->getFilenameID('product','getMoreProductReviews');
+			$query = $this->xmlmap->getFilenameID('sql/product','getMoreProductReviews');
 			$sth = $this->db->conn_id->prepare($query);
 			$sth->bindParam(':id',$productid);	
 			$sth->bindParam(':last_id',$last_id);
@@ -955,7 +955,7 @@ class product_model extends CI_Model
 	}
 	
 	function getReviewReplies($temp, $id){
-		$query = $this->sqlmap->getFilenameID('product','getReviewReplies');
+		$query = $this->xmlmap->getFilenameID('sql/product','getReviewReplies');
 		$sth = $this->db->conn_id->prepare($query);
 		$size = count($temp);
 		
@@ -972,7 +972,7 @@ class product_model extends CI_Model
 
 	function getAllowedReviewers($productid)
 	{
-		$query = $this->sqlmap->getFilenameID('product','getAllowedReviewers');
+		$query = $this->xmlmap->getFilenameID('sql/product','getAllowedReviewers');
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':id',$productid);	
 		$sth->execute();
@@ -990,7 +990,7 @@ class product_model extends CI_Model
 	
 	function getCurrUserDetails($uid)
 	{
-		$query = $this->sqlmap->getFilenameID('users','getUserDetails');
+		$query = $this->xmlmap->getFilenameID('sql/users','getUserDetails');
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':id',$uid);	
 		$sth->execute();
@@ -1001,7 +1001,7 @@ class product_model extends CI_Model
 
 	function getVendorRating($uid)
 	{
-		$query = $this->sqlmap->getFilenameID('users','getUserRating');
+		$query = $this->xmlmap->getFilenameID('sql/users','getUserRating');
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':id',$uid);	
 		$sth->execute();
@@ -1031,7 +1031,7 @@ class product_model extends CI_Model
 
 	function getFirstLevelNode($is_main = false, $is_alpha = false) # get all main/parent/first level category from database
 	{
-        $query = $this->sqlmap->getFilenameID('product', 'selectFirstLevel');
+        $query = $this->xmlmap->getFilenameID('sql/product', 'selectFirstLevel');
         if(($is_main)&&(!$is_alpha)){
             $query = $query.' AND c.is_main = 1 ORDER BY c.sort_order ASC, c.id_cat ASC';
         }
@@ -1130,7 +1130,7 @@ class product_model extends CI_Model
 
 	function addReply($data = array())
 	{
-		$query = $this->sqlmap->getFilenameID('product','addReply');
+		$query = $this->xmlmap->getFilenameID('sql/product','addReply');
 
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':review',$data['review']);
@@ -1142,7 +1142,7 @@ class product_model extends CI_Model
 	}
 	
 	function updateIsDelete($productid, $memberid,$is_delete){
-		$query = $this->sqlmap->getFIlenameID('product', 'updateIsDelete');
+		$query = $this->xmlmap->getFilenameID('sql/product', 'updateIsDelete');
 
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':productid',$productid,PDO::PARAM_INT);
@@ -1210,11 +1210,11 @@ class product_model extends CI_Model
 
             if(strlen(trim($slug)) == 0 ){
                 $slug = $this->createSlug($title);
-                $query = $this->sqlmap->getFIlenameID('product', 'finalizeProduct');
+                $query = $this->xmlmap->getFilenameID('sql/product', 'finalizeProduct');
                 $sth = $this->db->conn_id->prepare($query);
                 $sth->bindParam(':slug',$slug ,PDO::PARAM_STR);
             }else{
-                $query = $this->sqlmap->getFIlenameID('product', 'finalizeProductKeepSlug');
+                $query = $this->xmlmap->getFilenameID('sql/product', 'finalizeProductKeepSlug');
                 $sth = $this->db->conn_id->prepare($query);
             }
             $sth->bindParam(':productid',$productid,PDO::PARAM_INT);
@@ -1233,7 +1233,7 @@ class product_model extends CI_Model
 
 	function checkifexistcategory($cat_id)
 	{
-		$query = $this->sqlmap->getFIlenameID('product', 'checkifexistcategory');
+		$query = $this->xmlmap->getFilenameID('sql/product', 'checkifexistcategory');
 
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':cat_id',$cat_id,PDO::PARAM_STR); 
@@ -1244,7 +1244,7 @@ class product_model extends CI_Model
 	
 	function getPopularitem($cat_ids,$limit)
 	{	 
-		$query = $this->sqlmap->getFilenameID('product','getPopularitem');
+		$query = $this->xmlmap->getFilenameID('sql/product','getPopularitem');
         
         $qmarks = implode(',', array_fill(0, count($cat_ids), '?'));
         $query = $query.'('.$qmarks.') ORDER BY `clickcount` DESC LIMIT ?';
@@ -1264,7 +1264,7 @@ class product_model extends CI_Model
 		
 	function getRecommendeditem($cat_id,$limit,$prod_id)
 	{	 
-		$query = $this->sqlmap->getFilenameID('product','getPopularitem');
+		$query = $this->xmlmap->getFilenameID('sql/product','getPopularitem');
         $query = $query.'(?) ORDER BY `clickcount` DESC LIMIT ?';
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(1,$cat_id, PDO::PARAM_INT);
@@ -1281,7 +1281,7 @@ class product_model extends CI_Model
 	}
 	
     function getProductById($id){
-		$query = $this->sqlmap->getFilenameID('product','getProductById');
+		$query = $this->xmlmap->getFilenameID('sql/product','getProductById');
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':id',$id);
 		$sth->execute();
@@ -1302,7 +1302,7 @@ class product_model extends CI_Model
 		
 	function getProductCount($down_cat){
         $qmarks = implode(',', array_fill(0, count($down_cat), '?'));
-		$query = $this->sqlmap->getFilenameID('product','getProductCount');
+		$query = $this->xmlmap->getFilenameID('sql/product','getProductCount');
         $query = $query.'('.$qmarks.')';
 		$sth = $this->db->conn_id->prepare($query);
         $sth->execute($down_cat);
@@ -1311,7 +1311,7 @@ class product_model extends CI_Model
 	}
 	
 	function getProductEdit($product_id, $member_id){
-		$query = $this->sqlmap->getFilenameID('product','getProductEdit');
+		$query = $this->xmlmap->getFilenameID('sql/product','getProductEdit');
 
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':product_id',$product_id);
@@ -1327,7 +1327,7 @@ class product_model extends CI_Model
 	}
     
     function editProduct($product_details=array(),$member_id){
-        $query = $this->sqlmap->getFilenameID('product','editProduct');
+        $query = $this->xmlmap->getFilenameID('sql/product','editProduct');
 
         $sth = $this->db->conn_id->prepare($query);
         $sth->bindParam(':name',$product_details['name']);
@@ -1356,7 +1356,7 @@ class product_model extends CI_Model
     }
     
     function editProductCategory($cat_id,$product_id,$member_id){
-        $query = $this->sqlmap->getFilenameID('product','editProductCategory');
+        $query = $this->xmlmap->getFilenameID('sql/product','editProductCategory');
         
         $sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':id',$product_id);
@@ -1373,13 +1373,13 @@ class product_model extends CI_Model
     function deleteAttributeByProduct($product_id,$attribute_id=0)
 	{
         if($attribute_id !== 0){
-            $query = $this->sqlmap->getFilenameID('product','deleteProductAttributeByIDs');
+            $query = $this->xmlmap->getFilenameID('sql/product','deleteProductAttributeByIDs');
             $sth = $this->db->conn_id->prepare($query);
             $sth->bindParam(':product_id',$product_id);
             $sth->bindParam(':attr_id',$attribute_id);
         }
         else{
-            $query = $this->sqlmap->getFilenameID('product','deleteProductAttributes');
+            $query = $this->xmlmap->getFilenameID('sql/product','deleteProductAttributes');
             $sth = $this->db->conn_id->prepare($query);
             $sth->bindParam(':product_id',$product_id);
         }
@@ -1390,7 +1390,7 @@ class product_model extends CI_Model
     #Deletes product image in es_product_image table, returns number of affected rows
     function deleteProductImage($product_id, $image_id)
     {
-        $query = $this->sqlmap->getFilenameID('product','deleteProductImage');
+        $query = $this->xmlmap->getFilenameID('sql/product','deleteProductImage');
         
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':product_id',$product_id);
@@ -1402,12 +1402,12 @@ class product_model extends CI_Model
 
     function deleteAttrOthers($other_head_id)
     {
-        $query = $this->sqlmap->getFilenameID('product','deleteOtherDetail');
+        $query = $this->xmlmap->getFilenameID('sql/product','deleteOtherDetail');
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':head_id',$other_head_id);
 		$sth->execute();
 
-        $query = $this->sqlmap->getFilenameID('product','deleteOtherHead');
+        $query = $this->xmlmap->getFilenameID('sql/product','deleteOtherHead');
         $sth = $this->db->conn_id->prepare($query);
         $sth->bindParam(':head_id',$other_head_id);
         $sth->execute();
@@ -1415,7 +1415,7 @@ class product_model extends CI_Model
     
 
 	function updateImageIsPrimary($image_id, $is_primary){
-		$query = $this->sqlmap->getFilenameID('product','updateImageIsPrimary');
+		$query = $this->xmlmap->getFilenameID('sql/product','updateImageIsPrimary');
         
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':image_id',$image_id, PDO::PARAM_INT);
@@ -1454,10 +1454,10 @@ class product_model extends CI_Model
 
     public function getProductQuantity($product_id, $verbose = false){
         if($verbose){
-            $query = $this->sqlmap->getFilenameID('product','getProductQuantityVerbose');
+            $query = $this->xmlmap->getFilenameID('sql/product','getProductQuantityVerbose');
         }
         else{
-            $query = $this->sqlmap->getFilenameID('product','getProductQuantity');
+            $query = $this->xmlmap->getFilenameID('sql/product','getProductQuantity');
         }
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':product_id',$product_id, PDO::PARAM_INT);
@@ -1484,7 +1484,7 @@ class product_model extends CI_Model
         // result due to the INNER JOIN with es_product_item_attr (which happens with the default qty), we
         // query using the non-verbose version to get the default quantity result set.
         if(($verbose)&&(count($data) === 0)){
-            $query = $this->sqlmap->getFilenameID('product','getProductQuantity');
+            $query = $this->xmlmap->getFilenameID('sql/product','getProductQuantity');
             $sth = $this->db->conn_id->prepare($query);
             $sth->bindParam(':product_id',$product_id, PDO::PARAM_INT);
             $sth->execute();
@@ -1637,7 +1637,7 @@ class product_model extends CI_Model
     }
     
     public function getCategoriesNavigation(){
-        $query = $this->sqlmap->getFilenameID('product','getCategoriesNavigation');
+        $query = $this->xmlmap->getFilenameID('sql/product','getCategoriesNavigation');
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->execute();
         $rows = $sth->fetchAll(PDO::FETCH_ASSOC);
@@ -1662,7 +1662,7 @@ class product_model extends CI_Model
     */
 	public function getLocation()
     {
-    	$query = $this->sqlmap->getFilenameID('product','getLocation');
+    	$query = $this->xmlmap->getFilenameID('sql/product','getLocation');
         $sth = $this->db->conn_id->prepare($query);
         $sth->execute();
         $row = $sth->fetchAll(PDO::FETCH_ASSOC);
@@ -1682,7 +1682,7 @@ class product_model extends CI_Model
      */
 	public function getPrdShippingAttr($prd_id)
 	{
-		$query = $this->sqlmap->getFilenameID('product','getPrdShippingAttr');
+		$query = $this->xmlmap->getFilenameID('sql/product','getPrdShippingAttr');
         $sth = $this->db->conn_id->prepare($query);
         $sth->bindParam(":id", $prd_id);
         $sth->execute();
@@ -1716,7 +1716,7 @@ class product_model extends CI_Model
     */
     public function storeShippingPrice ($locationKey, $price, $productId)
     {
-    	$query = $this->sqlmap->getFilenameID('product','storeShippingPrice');
+    	$query = $this->xmlmap->getFilenameID('sql/product','storeShippingPrice');
     	$sth = $this->db->conn_id->prepare($query);
     	$sth->bindParam(':location_id', $locationKey, PDO::PARAM_INT);
     	$sth->bindParam(':price', $price, PDO::PARAM_INT);
@@ -1732,7 +1732,7 @@ class product_model extends CI_Model
      */
     public function storeProductShippingMap($shippingId, $attrCombinationId)
     {
-		$query = $this->sqlmap->getFilenameID('product','storeProductShippingMap');
+		$query = $this->xmlmap->getFilenameID('sql/product','storeProductShippingMap');
     	$sth = $this->db->conn_id->prepare($query);
     	$sth->bindParam(':shipping_id', $shippingId, PDO::PARAM_INT);
     	$sth->bindParam(':product_item_id', $attrCombinationId, PDO::PARAM_INT);
@@ -1746,7 +1746,7 @@ class product_model extends CI_Model
 	 */
 	public function storeShippingPreferenceHead($member_id, $title)
 	{
-		$query = $this->sqlmap->getFilenameID('product','storeShippingPreferenceHead');
+		$query = $this->xmlmap->getFilenameID('sql/product','storeShippingPreferenceHead');
     	$sth = $this->db->conn_id->prepare($query);
     	$sth->bindParam(':title', $title, PDO::PARAM_STR);
     	$sth->bindParam(':member_id', $member_id, PDO::PARAM_INT);
@@ -1760,7 +1760,7 @@ class product_model extends CI_Model
 	 */
 	public function storeShippingPreferenceDetail($headId, $locId, $price)
 	{
-		$query = $this->sqlmap->getFilenameID('product','storeShippingPreferenceDetail');
+		$query = $this->xmlmap->getFilenameID('sql/product','storeShippingPreferenceDetail');
     	$sth = $this->db->conn_id->prepare($query);
     	$sth->bindParam(':loc', $locId, PDO::PARAM_INT);
     	$sth->bindParam(':price', $price, PDO::PARAM_STR);
@@ -1775,7 +1775,7 @@ class product_model extends CI_Model
 	 */
 	public function getShippingPreferenceHead($headId, $member_id)
 	{
-		$query = $this->sqlmap->getFilenameID('product','getShippingPreferenceHead');
+		$query = $this->xmlmap->getFilenameID('sql/product','getShippingPreferenceHead');
     	$sth = $this->db->conn_id->prepare($query);
     	$sth->bindParam(':member_id', $member_id, PDO::PARAM_INT);
 		$sth->bindParam(':head_id', $headId, PDO::PARAM_INT);
@@ -1790,7 +1790,7 @@ class product_model extends CI_Model
 	 */
 	public function deleteShippingPreference($headId, $member_id)
 	{
-		$query = $this->sqlmap->getFilenameID('product','deleteShippingPreference');
+		$query = $this->xmlmap->getFilenameID('sql/product','deleteShippingPreference');
     	$sth = $this->db->conn_id->prepare($query);
     	$sth->bindParam(':member_id', $member_id, PDO::PARAM_INT);
 		$sth->bindParam(':head_id', $headId, PDO::PARAM_INT);
@@ -1801,7 +1801,7 @@ class product_model extends CI_Model
 	
 	public function getProductItem($productId, $memberId)
 	{
-		$query = $this->sqlmap->getFilenameID('product','getProductItem');
+		$query = $this->xmlmap->getFilenameID('sql/product','getProductItem');
     	$sth = $this->db->conn_id->prepare($query);
     	$sth->bindParam(':product_id', $productId, PDO::PARAM_INT);
     	$sth->bindParam(':member_id', $memberId, PDO::PARAM_INT);
@@ -1813,7 +1813,7 @@ class product_model extends CI_Model
 	
 	public function getShippingSummary($prod_id)
 	{
-		$query = $this->sqlmap->getFilenameID('product', 'getShippingSummary');
+		$query = $this->xmlmap->getFilenameID('sql/product', 'getShippingSummary');
     	$sth = $this->db->conn_id->prepare($query);
     	$sth->bindParam(':prod_id', $prod_id, PDO::PARAM_INT);
     	$result = $sth->execute();
@@ -1854,7 +1854,7 @@ class product_model extends CI_Model
 	public function getShippingPreference($member_id)
 	{
 		// Get shipping_id from es_product_shipping_detail before delete
-		$query = $this->sqlmap->getFilenameID('product', 'getShippingPreference');
+		$query = $this->xmlmap->getFilenameID('sql/product', 'getShippingPreference');
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':member_id', $member_id);
 		$sth->execute();
@@ -1878,7 +1878,7 @@ class product_model extends CI_Model
 	public function getShippingPreference($member_id)
 	{
 		// Get shipping_id from es_product_shipping_detail before delete
-		$query = $this->sqlmap->getFilenameID('product', 'getShippingPreference');
+		$query = $this->xmlmap->getFilenameID('sql/product', 'getShippingPreference');
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':member_id', $member_id);
 		$sth->execute();
@@ -1898,7 +1898,7 @@ class product_model extends CI_Model
 	public function deleteShippingSummaryOnEdit($arrProductItemId)
 	{
 		// Get shipping_id from es_product_shipping_detail before delete
-		$query = $this->sqlmap->getFilenameID('product', 'getShippingIdFromShippingDetail');
+		$query = $this->xmlmap->getFilenameID('sql/product', 'getShippingIdFromShippingDetail');
 		for( $i=0; $i<count($arrProductItemId); $i++ ){
 			$query .= '?,';
 		}
@@ -1914,7 +1914,7 @@ class product_model extends CI_Model
 		}
 		
 		// Delete Shipping Detail Entries
-		$query = $this->sqlmap->getFilenameID('product', 'deleteShippingDetail');
+		$query = $this->xmlmap->getFilenameID('sql/product', 'deleteShippingDetail');
 		for( $i=0; $i<count($arrProductItemId); $i++ ){
 			$query .= '?,';
 		}
@@ -1924,7 +1924,7 @@ class product_model extends CI_Model
     	$sth->execute($arrProductItemId);
 		
 		// Delete Shipping Head Entries
-		$query = $this->sqlmap->getFilenameID('product', 'deleteShippingHead');
+		$query = $this->xmlmap->getFilenameID('sql/product', 'deleteShippingHead');
 		for( $i=0; $i<count($arrShippingId); $i++ ){
 			$query .= '?,';
 		}
@@ -1939,7 +1939,7 @@ class product_model extends CI_Model
      * Returns all matched category names.
      */
     public function searchCategory($string){
-        $query = $this->sqlmap->getFilenameID('product','searchCategory');
+        $query = $this->xmlmap->getFilenameID('sql/product','searchCategory');
     	$sth = $this->db->conn_id->prepare($query);
     	$sth->bindParam(':sch_string', $string, PDO::PARAM_STR);
         $sth->execute();
@@ -1954,7 +1954,7 @@ class product_model extends CI_Model
      * Returns all matched brand names.
      */
     public function searchBrand($string){
-        $query = $this->sqlmap->getFilenameID('product','searchBrand');
+        $query = $this->xmlmap->getFilenameID('sql/product','searchBrand');
     	$sth = $this->db->conn_id->prepare($query);
     	$sth->bindParam(':sch_string', $string, PDO::PARAM_STR);
         $sth->execute();
@@ -1968,7 +1968,7 @@ class product_model extends CI_Model
      * @member_id
      */
     public function getDraftItems($member_id){
-    	$query = $this->sqlmap->getFilenameID('product','getDraftItems');
+    	$query = $this->xmlmap->getFilenameID('sql/product','getDraftItems');
     	$sth = $this->db->conn_id->prepare($query);
     	$sth->bindParam(':member_id', $member_id, PDO::PARAM_INT);
     	$sth->execute();
@@ -1978,7 +1978,7 @@ class product_model extends CI_Model
     }
 
     public function deleteDraft($member_id,$product_id){
-    	$query = $this->sqlmap->getFilenameID('product','deleteDraft');
+    	$query = $this->xmlmap->getFilenameID('sql/product','deleteDraft');
     	$sth = $this->db->conn_id->prepare($query);
     	$sth->bindParam(':member_id', $member_id, PDO::PARAM_INT);
     	$sth->bindParam(':product_id', $product_id, PDO::PARAM_INT);
@@ -1991,7 +1991,7 @@ class product_model extends CI_Model
     }
      
     public function getShipmentInformation($product_id){
-        $query = $this->sqlmap->getFilenameID('product','getShipmentInformation');
+        $query = $this->xmlmap->getFilenameID('sql/product','getShipmentInformation');
     	$sth = $this->db->conn_id->prepare($query);
     	$sth->bindParam(':prod_id', $product_id, PDO::PARAM_INT);
     	$result = $sth->execute();
@@ -2020,56 +2020,56 @@ class product_model extends CI_Model
 		$rows = $sth->fetchAll(PDO::FETCH_ASSOC);
         $return  = array();
 		if( count($rows) != 1 ){
-			$return['id_cat'] = 0;
-            $return['name'] = '';
-            $return['description'] = '';
+			$return['id_cat'] = 0; $return['name'] = ''; $return['description'] = '';
 		}else{
             $return = $rows[0];
         }
 		
         return $return;  
 	}
-    
-    
-    public function getHomeXML($file){
-        $xml = simplexml_load_file(APPPATH . "resources/" . $file . ".xml");
-        $simple = json_decode(json_encode($xml), 1);
+        
+    public function getHomeContent($file = 'page/home_files'){
+        $xml_content = $this->xmlmap->getFilename($file);
         $home_view_data = array();
-        foreach ($simple as $key => $element){
-            if(isset($element['value']) &&  isset($element['type'])){   
-                if($element['type'] === 'product'){
-                    $productdata = $this->getProductById($element['value']);
-                    if (!empty($productdata)){
-                        $home_view_data[$key] = $productdata;                
-                    }
-                    else{
-                        $home_view_data[$key] = array();
-                    }
-                }else if($element['type'] === 'date'){
-                        $home_view_data[$key] = date('M d,Y H:i:s',strtotime($element['value']));
-                }else{
-                    $home_view_data[$key] = $element['value'];
-                }
+        foreach ($xml_content as $key => $element){
+            if(isset($element['value']) &&  isset($element['type'])){    
+                $home_view_data[$key] = $this->createHomeElement($element, $key); 
             }else{
                 foreach ($element as $key2 => $inner_el){
-                    if($inner_el['type'] === 'product'){
-                        $productdata = $this->getProductById($inner_el['value']);
-                        if (!empty($productdata)){
-                            $home_view_data[$key][$key2] = $productdata;
-                        }
-                        else{
-                            $home_view_data[$key][$key2] = array();
-                        }
-                    }else if($inner_el['type'] === 'date'){
-                        $home_view_data[$key][$key2] = date('M d,Y H:i:s',strtotime($inner_el['value']));
-                    }
-                    else{
-                        $home_view_data[$key][$key2] = $inner_el['value'];
-                    }
+                    $home_view_data[$key][$key2] = $this->createHomeElement($inner_el, $key); 
                 }
             }    
        }
        return $home_view_data;
+    }
+    
+    private function createHomeElement($element, $key){
+        $home_view_data = array();
+        if($element['type'] === 'product'){
+            $productdata = $this->getProductById($element['value']);
+            /* Getting if product is sold out for countdown items*/
+            if($key === 'cd_product'){
+                $product_quantity = $this->getProductQuantity($element['value']);
+                $productdata['is_soldout'] = true;
+                foreach($product_quantity as $q){
+                    if($q['quantity'] > 0){
+                        $productdata['is_soldout'] = false;
+                        break;
+                    }
+                }
+            } 
+            if (!empty($productdata)){
+                $home_view_data = $productdata;                
+            }
+            else{
+                $home_view_data = array();
+            }
+        }else if($element['type'] === 'date'){
+                $home_view_data = date('M d,Y H:i:s',strtotime($element['value']));
+        }else{
+            $home_view_data = $element['value'];
+        }
+        return $home_view_data;
     }
 
     

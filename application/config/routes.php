@@ -98,8 +98,11 @@ $route['(?i)pay/paypal'] = 'payment/paypal';  # ryan vasquez
 
 $route['(?i)payment/success/(:any)'] = 'payment/paymentSuccess/$1';
 
+#MAINTENANCE ROUTE
+$route['(?i)maintenance'] = 'home/splash';
 
-
+#PROMO CATEGORY PAGE
+$route['(?i)deals'] = 'product/category_promo';
 
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */

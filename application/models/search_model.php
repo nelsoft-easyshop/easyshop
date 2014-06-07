@@ -7,14 +7,14 @@ class search_model extends CI_Model
 	function __construct() 
 	{
 		parent::__construct();
-		$this->load->library("sqlmap");
+		$this->load->library("xmlmap");
 	}
 	
 	# get all down level category on selected category from database
 	# parent -> child -> child
 	function getDownLevelNode($id) 
 	{
-		$query = $this->sqlmap->getFilenameID('product', 'selectDownLevel');
+		$query = $this->xmlmap->getFilenameID('sql/product', 'selectDownLevel');
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':parent_id', $id);
 		$sth->execute();
@@ -26,7 +26,7 @@ class search_model extends CI_Model
 	# child -> parent -> parent
 	function getParentId($id) 
 	{
-		$query = $this->sqlmap->getFilenameID('product','getParent');
+		$query = $this->xmlmap->getFilenameID('sql/product','getParent');
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':id',$id);
 		$sth->execute();
@@ -50,7 +50,7 @@ class search_model extends CI_Model
 	function selectChild($id) # get all down level category on selected category from database
 	{
 
-		$query = $this->sqlmap->getFilenameID('product', 'selectChild');
+		$query = $this->xmlmap->getFilenameID('sql/product', 'selectChild');
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':cat_id', $id);
 		$sth->execute();
@@ -62,7 +62,7 @@ class search_model extends CI_Model
 	}
     
     function getAllKeywords(){
-        $query = $this->sqlmap->getFilenameID('product','getAllKeyword');
+        $query = $this->xmlmap->getFilenameID('sql/product','getAllKeyword');
         $sth = $this->db->conn_id->prepare($query);
 		$sth->execute();       
         $row = $sth->fetchAll(PDO::FETCH_ASSOC);

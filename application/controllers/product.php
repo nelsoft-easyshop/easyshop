@@ -1003,6 +1003,22 @@ class product extends MY_Controller
         $this->load->view('templates/footer_full');
     } 
 
+    
+    public function category_promo(){
+        $this->load->library('xmlmap');
+    	$data = $this->fill_header();
+        $data['title'] = 'Deals | Easyshop.ph';
+        
+        $startdate_xml_obj = $this->xmlmap->getFilenameNode('page/home_files', 'cd_startdate');
+        $enddate_xml_obj = $this->xmlmap->getFilenameNode('page/home_files', 'cd_startdate');
+        $view_data['startdate'] = date('M d,Y H:i:s',strtotime($startdate_xml_obj['value']));
+        $view_data['enddate'] = date('M d,Y H:i:s',strtotime($enddate_xml_obj['value'])); 
+        
+        $this->load->view('templates/header', $data); 
+        $this->load->view('pages/product/product_promo_category', $view_data); 
+        $this->load->view('templates/footer_full');
+    }
+    
 }
 
 

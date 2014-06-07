@@ -12,7 +12,7 @@ class Home extends MY_Controller {
     public function index() {
         $this->load->model('product_model');
 		$data = array('title' => 'Home | Easyshop.ph',
-                'data' => $this->product_model->getHomeXML('page/home_files'),
+                'data' => $this->product_model->getHomeContent(),
                 'category_navigation' => $this->load->view('templates/category_navigation',array('cat_items' =>  $this->getcat(),), TRUE ),
 				);
         $data = array_merge($data, $this->fill_header());
@@ -64,12 +64,7 @@ class Home extends MY_Controller {
         echo date('M d,Y H:i:s');
     }
     
-    public function sam(){
-                $this->load->model('product_model');
-        $this->product_model->getHomeXML('page/home_files');
-    }
 
-	
 
 }
 

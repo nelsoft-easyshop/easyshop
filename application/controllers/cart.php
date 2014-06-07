@@ -103,6 +103,11 @@ class Cart extends MY_Controller{
     }
     
     function add_item(){
+        IF(ENVIRONMENT === 'production'){
+            $this->cart->destroy();
+            exit();
+        }
+    
         $result='';
         if(intval($_POST['length']) == 0 || empty($_POST['opt'])){
             $out_opt = 0;

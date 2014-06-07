@@ -1201,7 +1201,15 @@ nav ul > li:hover > div {
 }
 
 .cd_right_con {
-	vertical-align: bottom;
+    margin-left: 5px;
+	vertical-align: middle;
+    max-width: 180px;
+    width: 180px;
+}
+
+.cd_right_con img{
+	width: inherit;
+    height: inherit;
 }
 
 .countdown_top_right_content {
@@ -1248,6 +1256,7 @@ nav ul > li:hover > div {
 	-webkit-border-radius: 90px;
 	-moz-border-radius: 90px;
 	border-radius: 90px;
+    margin-right: 3px;
 }
 
 .cd_discount_tag > span {
@@ -1259,6 +1268,10 @@ nav ul > li:hover > div {
 	font-size: 30px;
 	width: 230px;
     word-wrap: break-word;
+} 
+
+.cd_prod_name a{
+	color: #f18200;
 }
 
 .cd_prod_base_price,
@@ -1278,9 +1291,16 @@ nav ul > li:hover > div {
 	font-size: 24px;
 }
 
+
+.cd_prod_disclaimer {
+	font-size: 10px;
+    font-weight: bold;
+    line-height: 10px;
+}
+
 .cd_buy_btn {
 	font-weight: bold;
-	margin-top: 20px;
+	margin-top: 5px;
 	text-align: center;
 }
 
@@ -1380,7 +1400,7 @@ nav ul > li:hover > div {
 .cd_slide_rleft span img {
 	height: auto;
     max-height: 135px;
-    max-width: 120px;
+    max-width: 110px;
     width: auto;
 }
 
@@ -1408,8 +1428,31 @@ nav ul > li:hover > div {
     right: 0;
     text-align: center;
     vertical-align: middle;
-    width: 70px;
+    width: 65px;
+    margin-right: 3px;
 }
+
+.cd_main_slide_soldout{
+    position: relative;
+}
+
+.cd_main_slide_soldout:before {
+    background-color: rgba(172,5,5,0.8);
+    color: #FFFFFF;
+    content: "SOLD OUT";
+    font-weight: bold;
+    height:70px;
+    line-height: 65px;
+    position: absolute;
+    right: 0;
+    text-align: center;
+    vertical-align: middle;
+    width: 70px;
+    margin-right: 3px;
+}
+
+
+
 
 .disable_btn {
 	background-color: #cccccc;

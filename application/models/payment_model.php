@@ -7,13 +7,13 @@ class payment_model extends CI_Model
 	function __construct() 
 	{
 		parent::__construct();
-		$this->load->library("sqlmap");
+		$this->load->library("xmlmap");
 	}	
 
 
 	   function getUserAddress($member_id)
     {
-        $query = $this->sqlmap->getFilenameID('payment', 'get_address');
+        $query = $this->xmlmap->getFilenameID('sql/payment', 'get_address');
         $sth = $this->db->conn_id->prepare($query);
         $sth->bindParam(':id_member', $member_id);
         $sth->execute();
@@ -24,7 +24,7 @@ class payment_model extends CI_Model
 
     function payment($paymentType,$invoice_no,$ItemTotalPrice,$ip,$member_id,$productstring,$productCount,$apiResponse,$tid)
     {
-        $query = $this->sqlmap->getFilenameID('payment','payment_transaction');
+        $query = $this->xmlmap->getFilenameID('sql/payment','payment_transaction');
         $sth = $this->db->conn_id->prepare($query);
         $sth->bindParam(':payment_type',$paymentType,PDO::PARAM_INT);
         $sth->bindParam(':invoice_no',$invoice_no,PDO::PARAM_STR);
@@ -128,7 +128,7 @@ class payment_model extends CI_Model
 
     function updatePaymentIfComplete($id,$data,$tid,$paymentType)
     {
-        $query = $this->sqlmap->getFilenameID('payment','updatePaymentIfComplete');
+        $query = $this->xmlmap->getFilenameID('sql/payment','updatePaymentIfComplete');
     	$sth = $this->db->conn_id->prepare($query);
 
     	$orderStatus = ($paymentType == 2) ? 99 : 0;
@@ -224,7 +224,7 @@ class payment_model extends CI_Model
 	 */
 	public function getPurchaseTransactionDetails($data)
 	{
-		$query = $this->sqlmap->getFilenameID('payment','getPurchaseTransactionDetails');
+		$query = $this->xmlmap->getFilenameID('sql/payment','getPurchaseTransactionDetails');
         $sth = $this->db->conn_id->prepare($query);
         $sth->bindParam(':buyer_id',$data['member_id']);
         $sth->bindParam(':order_id',$data['order_id']);
@@ -293,7 +293,7 @@ class payment_model extends CI_Model
 	 */
 	public function getOrderProductTransactionDetails($data)
 	{
-		$query = $this->sqlmap->getFilenameID('payment','getOrderProductTransactionDetails');
+		$query = $this->xmlmap->getFilenameID('sql/payment','getOrderProductTransactionDetails');
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':order_product_id', $data['order_product_id']);
 		$sth->bindParam(':order_id', $data['transaction_num']);
@@ -340,7 +340,7 @@ class payment_model extends CI_Model
 	 */
 	function updateTransactionStatus($data)
 	{
-		$query = $this->sqlmap->getFilenameID('payment','updateTransactionStatus');
+		$query = $this->xmlmap->getFilenameID('sql/payment','updateTransactionStatus');
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':status', $data['status']);
 		$sth->bindParam(':order_product_id', $data['order_product_id']);
@@ -461,7 +461,7 @@ class payment_model extends CI_Model
 
 	// Used by add feedback - memberpage
 	function checkTransaction($temp){
-		$query = $this->sqlmap->getFilenameID('payment','checkTransaction');
+		$query = $this->xmlmap->getFilenameID('sql/payment','checkTransaction');
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':buyer', $temp['buyer']);
 		$sth->bindParam(':seller', $temp['seller']);
@@ -475,7 +475,7 @@ class payment_model extends CI_Model
 	// Used by dragonpay - memberpage
 	function checkTransactionBasic($temp)
 	{
-		$query = $this->sqlmap->getFilenameID('payment','checkTransactionBasic');
+		$query = $this->xmlmap->getFilenameID('sql/payment','checkTransactionBasic');
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':transaction_num', $temp['transaction_num']);
 		$sth->bindParam(':invoice_num', $temp['invoice_num']);
@@ -489,7 +489,7 @@ class payment_model extends CI_Model
 	// Check order product before saving comment
 	function checkOrderProductBasic($temp)
 	{
-		$query = $this->sqlmap->getFilenameID('payment','checkOrderProductBasic');
+		$query = $this->xmlmap->getFilenameID('sql/payment','checkOrderProductBasic');
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':id_order_product', $temp['order_product']);
 		$sth->bindParam(':order_id', $temp['transact_num']);
@@ -503,7 +503,7 @@ class payment_model extends CI_Model
 	// Add shipping comment, binded to order_product
 	function addShippingComment($temp)
 	{
-		$query = $this->sqlmap->getFilenameID('payment','addShippingComment');
+		$query = $this->xmlmap->getFilenameID('sql/payment','addShippingComment');
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':order_product', $temp['order_product']);
 		$sth->bindParam(':comment', $temp['comment']);
@@ -519,7 +519,7 @@ class payment_model extends CI_Model
 	
 	function addBankDepositDetails($temp)
 	{
-		$query = $this->sqlmap->getFilenameID('payment','addBankDepositDetails');
+		$query = $this->xmlmap->getFilenameID('sql/payment','addBankDepositDetails');
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':order_id', $temp['order_id']);
 		$sth->bindParam(':bank', $temp['bank']);
@@ -535,7 +535,7 @@ class payment_model extends CI_Model
 	// Used by dragonpay - memberpage
 	function updateTransactionStatusBasic($temp)
 	{
-		$query = $this->sqlmap->getFilenameID('payment','updateTransactionStatusBasic');
+		$query = $this->xmlmap->getFilenameID('sql/payment','updateTransactionStatusBasic');
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':transaction_num', $temp['transaction_num']);
 		$sth->bindParam(':invoice_num', $temp['invoice_num']);
@@ -549,7 +549,7 @@ class payment_model extends CI_Model
 	// Function for product rejection. Handles both reject and unreject buttons
 	function responseReject($temp)
 	{
-		$query = $this->sqlmap->getFilenameID('payment','responseReject');
+		$query = $this->xmlmap->getFilenameID('sql/payment','responseReject');
 		$sth = $this->db->conn_id->prepare($query);
 		
 		if($temp['method'] === 'reject'){
@@ -570,7 +570,7 @@ class payment_model extends CI_Model
 	// Used by dragonpay - memberpage
 	function addOrderHistory($temp)
 	{
-		$query = $this->sqlmap->getFilenameID('payment','addOrderHistory');
+		$query = $this->xmlmap->getFilenameID('sql/payment','addOrderHistory');
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':order_id', $temp['order_id']);
 		$sth->bindParam(':order_status', $temp['order_status']);
@@ -582,7 +582,7 @@ class payment_model extends CI_Model
 	
 	function addOrderProductHistory($temp)
 	{
-		$query = $this->sqlmap->getFilenameID('payment','addOrderProductHistory');
+		$query = $this->xmlmap->getFilenameID('sql/payment','addOrderProductHistory');
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':order_product_id', $temp['order_product_id']);
 		$sth->bindParam(':order_product_status', $temp['order_product_status']);

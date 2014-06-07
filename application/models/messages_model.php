@@ -7,11 +7,11 @@ class messages_model extends CI_Model
     function __construct()
     {
 	parent::__construct();
-        $this->load->library("sqlmap");
+        $this->load->library("xmlmap");
     }
     public function send_message($sender,$recipient,$msg){
            
-		$query = $this->sqlmap->getFilenameID('messages', 'send_message');
+		$query = $this->xmlmap->getFilenameID('sql/messages', 'send_message');
 			
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':to_id',$recipient, PDO::PARAM_INT);
@@ -23,14 +23,14 @@ class messages_model extends CI_Model
     }
 	        
     public function get_message($user_id){
-        $query = $this->sqlmap->getFilenameID('messages', 'inbox_message');
+        $query = $this->xmlmap->getFilenameID('sql/messages', 'inbox_message');
 	
         $sth = $this->db->conn_id->prepare($query);
         $sth->bindParam(':id',$user_id, PDO::PARAM_INT);
         $sth->execute();
         $recieveditems = $sth->fetchAll(PDO::FETCH_ASSOC);
 	
-        $query = $this->sqlmap->getFilenameID('messages', 'sentbox_message');
+        $query = $this->xmlmap->getFilenameID('sql/messages', 'sentbox_message');
 	
         $sth = $this->db->conn_id->prepare($query);
         $sth->bindParam(':id',$user_id, PDO::PARAM_INT);
@@ -52,9 +52,9 @@ class messages_model extends CI_Model
     
     public function get_recepientID($username){
         if(is_numeric($username)){
-            $query = $this->sqlmap->getFilenameID('messages', 'check_recepientID');
+            $query = $this->xmlmap->getFilenameID('sql/messages', 'check_recepientID');
         }else {
-            $query = $this->sqlmap->getFilenameID('messages', 'get_recepientID');
+            $query = $this->xmlmap->getFilenameID('sql/messages', 'get_recepientID');
         }
 		
         $sth = $this->db->conn_id->prepare($query);
@@ -86,7 +86,7 @@ class messages_model extends CI_Model
     }
 	public function get_all_messages ($id,$todo) {
 		
-		$query = $this->sqlmap->getFilenameID('messages', 'all_messages');
+		$query = $this->xmlmap->getFilenameID('sql/messages', 'all_messages');
 			
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':id',$id, PDO::PARAM_INT);

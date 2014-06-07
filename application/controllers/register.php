@@ -401,7 +401,7 @@ class Register extends MY_Controller
 		
 	}
 
-	function unload(){
+	private function unload(){
 		if($this->session->userdata('register_username')){
 			$this->session->unset_userdata('captcha_word');
 			$this->session->unset_userdata('temp_memberid');

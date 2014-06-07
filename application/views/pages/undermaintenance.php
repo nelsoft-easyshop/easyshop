@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
       <meta charset="utf-8" />
-      <title>Easyshop.com | Under Maintenance</title>
+      <title>Easyshop.ph | Under Maintenance</title>
       <meta name="description" content="" />
       <meta name="keywords" content=""/>
       <link rel="shortcut icon" href="<?php echo base_url()?>assets/images/favicon.ico" type="image/x-icon"/>

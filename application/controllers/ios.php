@@ -15,7 +15,7 @@ class Ios extends MY_Controller {
     }
 
     public function home(){
-        $items =  $this->getHomeXML('page/home_files');
+        $items =  $this->product_model->getHomeContent();
         echo json_encode($items,JSON_PRETTY_PRINT);
     }
 
@@ -387,10 +387,9 @@ class Ios extends MY_Controller {
 	}
 
     public function version(){
-        $xml = simplexml_load_file(APPPATH . "resources/page/ios_files.xml");
-        $simple = json_decode(json_encode($xml), 1);
-        echo $simple['version'];
-        exit();
+        $this->load->library("xmlmap");
+        $xml_element = $this->xmlmap->getFilenameID('page/mobile_files','version');
+        echo $xml_element;
     }
     
     public function getKeywords(){
@@ -399,32 +398,7 @@ class Ios extends MY_Controller {
         exit();
     }
     
-    private function getHomeXML($file){
-        $this->load->model('product_model');
-        $xml = simplexml_load_file(APPPATH . "resources/" . $file . ".xml");
-       
-        $simple = json_decode(json_encode($xml), 1);
-        $data = array();
-        foreach ($simple as $key => $product){
-            if (is_array($product) && $key != "mainSlide"){
-                foreach ($product as $id => $key2){
-                    $result = $this->product_model->getProductById($key2);
-                    if (!empty($result)){
-                        $data[$key][$id] = $result;
-                    }
-                    else{
-                        $data[$key][$id] = "empty";
-                    }
-                }
-            }
-            else{
-                $data[$key] = $product;
-            }
-       }
-       $data['category1_pid_main'] = array($this->product_model->getProductById($data['category1_pid_main']));
-       return $data;
-    }
-    
+   
 
 
 	

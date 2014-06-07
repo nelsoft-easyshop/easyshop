@@ -5,7 +5,7 @@ class user_model extends CI_Model {
     function __construct() 
     {
         parent::__construct();
-        $this->load->library("sqlmap");
+        $this->load->library("xmlmap");
     }
 	
 	public function getRealIpAddr() {
@@ -22,7 +22,7 @@ class user_model extends CI_Model {
         $username = $data['login_username'];
         $password = $data['login_password'];
         $ip = $this->getRealIpAddr();
-        $query = $this->sqlmap->getFilenameID('users', 'user_login');
+        $query = $this->xmlmap->getFilenameID('sql/users', 'user_login');
         $sth = $this->db->conn_id->prepare($query);
         $sth->bindParam(':username', $username);
         $sth->bindParam(':password', $password);
@@ -37,7 +37,7 @@ class user_model extends CI_Model {
     function logout(){
         $sid = $this->session->userdata('member_id');
         $sname = $this->session->userdata('usersession');
-        $query = $this->sqlmap->getFilenameID('users','user_logout');
+        $query = $this->xmlmap->getFilenameID('sql/users','user_logout');
         $sth = $this->db->conn_id->prepare($query);
         $sth->bindParam(':user_session',$sname);
         $sth->bindParam(':id_member',$sid);
@@ -47,7 +47,7 @@ class user_model extends CI_Model {
     }
 	
 	function getUsername($id){
-        $query = $this->sqlmap->getFilenameID('users','getUserName');
+        $query = $this->xmlmap->getFilenameID('sql/users','getUserName');
 		
         $sth = $this->db->conn_id->prepare($query);
         $sth->bindParam(':id',$id);
@@ -68,7 +68,7 @@ class user_model extends CI_Model {
 	}
 	
 	function dbsave_cookie_keeplogin($temp = array()){
-		$query = $this->sqlmap->getFilenameID('users', 'store_cookie_keeplogin');
+		$query = $this->xmlmap->getFilenameID('sql/users', 'store_cookie_keeplogin');
         $sth = $this->db->conn_id->prepare($query);
         $sth->bindParam(':id_member', $temp['member_id']);
 		$sth->bindParam(':ip', $temp['ip']);
@@ -81,7 +81,7 @@ class user_model extends CI_Model {
 	
 	
 	function cookie_login($temp){
-		$query = $this->sqlmap->getFilenameID('users', 'cookie_login');
+		$query = $this->xmlmap->getFilenameID('sql/users', 'cookie_login');
         $sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':userip', $temp['userip']);
 		$sth->bindParam(':useragent', $temp['useragent']);
@@ -94,7 +94,7 @@ class user_model extends CI_Model {
 	}
 	
 	function dbdelete_cookie_keeplogin($temp = array()){
-		$query = $this->sqlmap->getFilenameID('users', 'delete_cookie_keeplogin');
+		$query = $this->xmlmap->getFilenameID('sql/users', 'delete_cookie_keeplogin');
         $sth = $this->db->conn_id->prepare($query);
         $sth->bindParam(':id_member', $temp['member_id']);
 		$sth->bindParam(':ip', $temp['ip']);
