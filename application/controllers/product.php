@@ -32,6 +32,14 @@ class product extends MY_Controller
         $categoryName = $category_array['name'];
         $categoryDescription = $category_array['description'];
 
+        $this->config->load('protected_category', TRUE);
+        $protected_categories = $this->config->config['protected_category'];
+     
+        if(in_array(intval($categoryId,10), $protected_categories)){
+            redirect('/cat/all', 'refresh');
+        }
+
+        
     	$sortString = ""; 
     	$conditionArray = array(); 
        
@@ -117,65 +125,64 @@ class product extends MY_Controller
     		}
     	}    
 
-    	if($categoryId != 0){
- 
-       			$downCategory = $this->product_model->selectChild($categoryId);
-    			array_push($downCategory, $categoryId);
-    			$categories = implode(",", $downCategory);
-    			$items = $this->product_model->getProductsByCategory($categories,$conditionArray,$count,$operator,$start,$perPage,$sortString);
-    			
-                $ids = array();
-    			foreach ($items as $key) {
-    				array_push($ids, $key['product_id']);
-    			}
-    			$ids = implode(',',$ids);
-    			$attributes = $this->product_model->getProductAttributesByCategory($ids);
-    			$itemCondition = $this->product_model->getProductConditionByCategory($ids);
-    			$brand = $this->product_model->getProductBrandsByCategory($ids); 
+        $downCategory = $this->product_model->selectChild($categoryId);
+        if(empty($downCategory)){
+            $downCategory = array();
+        }
+        array_push($downCategory, $categoryId);
+        $categories = implode(",", $downCategory);
+        $items = $this->product_model->getProductsByCategory($categories,$conditionArray,$count,$operator,$start,$perPage,$sortString);
+        
+        $ids = array();
+        foreach ($items as $key) {
+            array_push($ids, $key['product_id']);
+        }
+        $ids = implode(',',$ids);
+        $attributes = $this->product_model->getProductAttributesByCategory($ids);
+        $itemCondition = $this->product_model->getProductConditionByCategory($ids);
+        $brand = $this->product_model->getProductBrandsByCategory($ids); 
 
-    			$organizedAttribute = array();
-    			$organizedAttribute['Brand'] = $brand;
-    			$organizedAttribute['Condition'] = $itemCondition;
-    			for ($i=0; $i < sizeof($attributes) ; $i++) { 
-    				$head = urlencode($attributes[$i]['attr_name']);
-    				if(!array_key_exists($head,$organizedAttribute)){
-    					$organizedAttribute[$head] = array();	
-    				}
-    				array_push($organizedAttribute[$head],  $attributes[$i]['attr_value']);
-    			}
-    			$subcategories = $this->product_model->getDownLevelNode($categoryId);
-    			$breadcrumbs = $this->product_model->getParentId($categoryId);
-                
-    			$data = array( 
-    				'title' => es_string_limit(html_escape($categoryName), 60, '...', ' | Easyshop.ph'),
-                    'metadescription' => es_string_limit(html_escape($categoryDescription), 60),
-    				); 
-    			$data = array_merge($data, $this->fill_header());
+        $organizedAttribute = array();
+        $organizedAttribute['Brand'] = $brand;
+        $organizedAttribute['Condition'] = $itemCondition;
+        for ($i=0; $i < sizeof($attributes) ; $i++) { 
+            $head = urlencode($attributes[$i]['attr_name']);
+            if(!array_key_exists($head,$organizedAttribute)){
+                $organizedAttribute[$head] = array();	
+            }
+            array_push($organizedAttribute[$head],  $attributes[$i]['attr_value']);
+        }
+        $subcategories = $this->product_model->getDownLevelNode($categoryId);
+        $breadcrumbs = $this->product_model->getParentId($categoryId);
+        
+        $data = array( 
+            'title' => es_string_limit(html_escape($categoryName), 60, '...', ' | Easyshop.ph'),
+            'metadescription' => es_string_limit(html_escape($categoryDescription), 60),
+            ); 
+        $data = array_merge($data, $this->fill_header());
 
-    			$response['main_categories'] = $this->product_model->getFirstLevelNode(true);
-    			$response['breadcrumbs'] = $breadcrumbs;
-    			$response['subcategories'] = $subcategories;
-    			for($x=0; $x <= sizeof($response['subcategories']) -1 ; $x++){
-					$id = $response['subcategories'][$x][3]; //id_cat
-					$down_cat = $this->product_model->selectChild($id);		
-					if((count($down_cat) === 1)&&(trim($down_cat[0]) === ''))
-						$down_cat = array();
-					array_push($down_cat, $id);
-					$db_cat_item = $this->product_model->getPopularitem($down_cat,1);
-					$response['subcategories'][$x]['popular'] = $db_cat_item;
-				}
-				
-				$response['items'] = $items;
-				$response['attributes'] = $organizedAttribute;
-				$response['id_cat'] = $categoryId;
-				$response['category_navigation'] = $this->load->view('templates/category_navigation',array('cat_items' =>  $this->getcat(),), TRUE );
+        $response['main_categories'] = $this->product_model->getFirstLevelNode(true);
+        $response['breadcrumbs'] = $breadcrumbs;
+        $response['subcategories'] = $subcategories;
+        for($x=0; $x <= sizeof($response['subcategories']) -1 ; $x++){
+            $id = $response['subcategories'][$x][3]; //id_cat
+            $down_cat = $this->product_model->selectChild($id);		
+            if((count($down_cat) === 1)&&(trim($down_cat[0]) === ''))
+                $down_cat = array();
+            array_push($down_cat, $id);
+            $db_cat_item = $this->product_model->getPopularitem($down_cat,1);
+            $response['subcategories'][$x]['popular'] = $db_cat_item;
+        }
+        
+        $response['items'] = $items;
+        $response['attributes'] = $organizedAttribute;
+        $response['id_cat'] = $categoryId;
+        $response['category_navigation'] = $this->load->view('templates/category_navigation',array('cat_items' =>  $this->getcat(),), TRUE );
 
-				$this->load->view('templates/header', $data); 
-				$this->load->view('pages/product/product_search_by_category_final',$response);
-				$this->load->view('templates/footer_full'); 
-		}else{
-			redirect('/cat/all', 'refresh');
-		}
+        $this->load->view('templates/header', $data); 
+        $this->load->view('pages/product/product_search_by_category_final',$response);
+        $this->load->view('templates/footer_full'); 
+	
 
 	}
 
@@ -1012,7 +1019,7 @@ class product extends MY_Controller
         $enddate_xml_obj = $this->xmlmap->getFilenameNode('page/home_files', 'cd_startdate');
         $view_data['startdate'] = date('M d,Y H:i:s',strtotime((string)$startdate_xml_obj->value));
         $view_data['enddate'] = date('M d,Y H:i:s',strtotime((string)$enddate_xml_obj->value));
-        
+
         $this->load->view('templates/header', $data); 
         $this->load->view('pages/product/product_promo_category', $view_data); 
         $this->load->view('templates/footer_full');
