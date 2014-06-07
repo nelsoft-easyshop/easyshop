@@ -588,14 +588,14 @@
 <?php echo form_close();?>
 
 
-<script src="<?=base_url()?>assets/JavaScript/js/jquery-1.9.1.js"></script>
-<script src="<?=base_url()?>assets/JavaScript/landingpage/responsive-nav.js"></script>
-<script type='text/javascript' src="<?=base_url()?>assets/JavaScript/js/jquery-ui.js"></script>
+<script src="<?=base_url()?>assets/js/src/vendor/jquery-1.9.1.js"></script>
+<script src="<?=base_url()?>assets/js/src/landingpage-responsive-nav.js"></script>
+<script type='text/javascript' src="<?=base_url()?>assets/js/src/vendor/jquery-ui.js"></script>
 
-<script type='text/javascript' src='<?=base_url()?>assets/JavaScript/js/jquery.numeric.js'></script>
-<script type='text/javascript' src='<?=base_url()?>assets/JavaScript/js/jquery.validate.js'></script>
-<script type='text/javascript' src='<?=base_url()?>assets/JavaScript/landingpage/landingpage.js?ver=1.0'></script>
-<script src="<?=base_url()?>assets/JavaScript/js/jquery.bxslider.min.js"></script>
+<script type='text/javascript' src='<?=base_url()?>assets/js/src/vendor/jquery.numeric.js'></script>
+<script type='text/javascript' src='<?=base_url()?>assets/js/src/vendor/jquery.validate.js'></script>
+<script type='text/javascript' src='<?=base_url()?>assets/js/src/landingpage.js?ver=1.0'></script>
+<script src="<?=base_url()?>assets/js/src/vendor/jquery.bxslider.min.js"></script>
 
 <script type="text/javascript">
     var config = {
@@ -627,8 +627,8 @@
 
 
 <!-- password meter: uses mootool, consider replacing -->
-<script type="text/javascript" src="<?=base_url()?>assets/JavaScript/js/mootools-core-1.4.5-full-compat.js"></script>
-<script type="text/javascript" src="<?=base_url()?>assets/JavaScript/js/password_meter.js"></script>
+<script type="text/javascript" src="<?=base_url()?>assets/js/src/vendor/mootools-core-1.4.5-full-compat.js"></script>
+<script type="text/javascript" src="<?=base_url()?>assets/js/src/vendor/password_meter.js"></script>
 <!-- end mootool -->
 
 

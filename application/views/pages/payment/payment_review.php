@@ -1,6 +1,6 @@
 <link rel="stylesheet" href="<?=base_url()?>assets/css/my_cart_css.css?ver=1.0" type="text/css" media="screen"/>
 
-<script src="<?=base_url() ?>assets/JavaScript/js/jquery.idTabs.min.js"></script>
+<script src="<?=base_url() ?>assets/js/src/vendor/jquery.idTabs.min.js"></script>
 <style type="text/css">
  /* Overlay */
  #simplemodal-overlay {
@@ -344,6 +344,6 @@
     }
 </script>
 
-<script type='text/javascript' src='<?=base_url()?>assets/JavaScript/payment.js'></script>
+<script type='text/javascript' src='<?=base_url()?>assets/js/src/payment.js'></script>
 
-<script type='text/javascript' src='<?=base_url()?>assets/JavaScript/js/jquery.simplemodal.js'></script>
+<script type='text/javascript' src='<?=base_url()?>assets/js/src/vendor/jquery.simplemodal.js'></script>

@@ -970,7 +970,6 @@ class product extends MY_Controller
     		$this->session->set_userdata('product_id', $id);
     		$product_catid = $product_row['cat_id'];
             $data = array_merge($data,array( 
-    			'page_javascript' => 'assets/JavaScript/productpage.js',
     			'breadcrumbs' =>  $this->product_model->getParentId($product_row['cat_id']),
     			'product' => $product_row,
     			'product_options' => $product_options,

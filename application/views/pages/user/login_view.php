@@ -59,5 +59,5 @@
    <div class="clear"></div>
 
    
-<script type='text/javascript' src='<?=base_url()?>assets/JavaScript/js/jquery.validate.js'></script>   
-<script src="<?=base_url().$page_javascript.'?ver=1.0';?>" type="text/javascript"></script>
+<script type='text/javascript' src='<?=base_url()?>assets/js/src/vendor/jquery.validate.js'></script>   
+<script src="<?=base_url()?>assets/js/src/login.js" type="text/javascript"></script>

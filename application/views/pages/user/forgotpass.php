@@ -51,6 +51,6 @@
 </section>
 <div class="clear"></div>
 
-<script type='text/javascript' src='<?=base_url()?>assets/JavaScript/js/jquery.numeric.js'></script>
-<script type='text/javascript' src='<?=base_url()?>assets/JavaScript/js/jquery.validate.js'></script>
-<script type='text/javascript' src='<?=base_url()?>assets/JavaScript/register.js?ver=1.0'></script>
+<script type='text/javascript' src='<?=base_url()?>assets/js/src/vendor/jquery.numeric.js'></script>
+<script type='text/javascript' src='<?=base_url()?>assets/js/src/vendor/jquery.validate.js'></script>
+<script type='text/javascript' src='<?=base_url()?>assets/js/src/register.js?ver=1.0'></script>

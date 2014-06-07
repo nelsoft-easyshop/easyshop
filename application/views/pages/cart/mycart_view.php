@@ -1,5 +1,5 @@
 <link rel="stylesheet" href="<?=base_url()?>assets/css/my_cart_css.css?ver=1.0" type="text/css" media="screen"/>
-<script src="<?=base_url()?>assets/js/src/vendor/numeral.min.js"></script>
+
         <div class="clear"></div>
 
         <section>
@@ -97,8 +97,10 @@
         </section>
 
         <div class="clear"></div>
+        
+<script src="<?=base_url()?>assets/js/src/vendor/numeral.min.js"></script>
+<script src="<?=base_url()?>assets/js/src/cart.js" type="text/javascript"></script>
 
-<script src="<?=base_url().$page_javascript.'?ver=1.0'?>" type="text/javascript"></script>
 <script>
     $(document).ready(function(){
         $('#checkAll').click(function () {

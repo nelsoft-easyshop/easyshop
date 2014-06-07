@@ -20,7 +20,6 @@ class Cart extends MY_Controller{
             $cart = $this->cart_items($this->cart->contents());
             $id = $this->session->userdata('usersession');
             $data['title'] = 'Cart | Easyshop.ph';
-            $data['page_javascript'] = 'assets/JavaScript/cart.js';
             $data['cart_items'] =$cart;
             $data['total'] = $this->get_total_price();
             $this->load->view('templates/header', $data);

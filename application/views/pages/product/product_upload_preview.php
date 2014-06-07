@@ -301,7 +301,7 @@
 	<?php echo form_close();?>
     
 </div>
-<script src="<?=base_url()?>assets/JavaScript/js/jquery.idTabs.min.js" type="text/javascript"></script>
-<script type="text/javascript" src="<?=base_url()?>assets/JavaScript/productUpload_preview.js?ver=1.0"></script>
+<script src="<?=base_url()?>assets/js/src/vendor/jquery.idTabs.min.js" type="text/javascript"></script>
+<script type="text/javascript" src="<?=base_url()?>assets/js/src/productUpload_preview.js?ver=1.0"></script>
 
 <?php endif;?>

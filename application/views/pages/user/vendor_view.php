@@ -1,5 +1,5 @@
 <!--[if lt IE 9]>
-        <script src="<?=base_url()?>assets/JavaScript/js/excanvas.js"></script>
+        <script src="<?=base_url()?>assets/js/src/vendor/excanvas.js"></script>
 <![endif]-->
 
 <!--Pagination CSS-->
@@ -493,11 +493,11 @@
 			<button id="modal_send_btn">Send</button>
 		</div>
 		
-<script src="<?=base_url()?>assets/JavaScript/js/jquery.raty.min.js" type="text/javascript"></script>
-<script type='text/javascript' src='<?=base_url()?>assets/JavaScript/js/jquery.jqpagination.min.js'></script>
-<script src="<?=base_url()?>assets/JavaScript/js/jquery.idTabs.min.js" type="text/javascript"></script>
-<script src="<?=base_url()?>assets/JavaScript/js/jquery.knob.js" type="text/javascript"></script>
-<script type="text/javascript" src="<?=base_url()?>assets/JavaScript/vendorpage.js?ver=1.0"></script>
+<script src="<?=base_url()?>assets/js/src/vendor/jquery.raty.min.js" type="text/javascript"></script>
+<script type='text/javascript' src='<?=base_url()?>assets/js/src/vendor/jquery.jqpagination.min.js'></script>
+<script src="<?=base_url()?>assets/js/src/vendor/jquery.idTabs.min.js" type="text/javascript"></script>
+<script src="<?=base_url()?>assets/js/src/vendor/jquery.knob.js" type="text/javascript"></script>
+<script type="text/javascript" src="<?=base_url()?>assets/js/src/vendorpage.js?ver=1.0"></script>
 
 <script>
     $(function(){

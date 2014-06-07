@@ -781,7 +781,7 @@
        </div>
        </form> 
 
-<script type='text/javascript' src='<?=base_url()?>assets/JavaScript/js/jquery.numeric.js'></script>
+<script type='text/javascript' src='<?=base_url()?>assets/js/src/vendor/jquery.numeric.js'></script>
 <script type="text/javascript">
     $('.view_more_product_details').on('click', function() {
         $('.more_product_details_container,.prod-details-add-more-link').slideToggle();
@@ -789,10 +789,10 @@
     });
 </script>
  
-<script type="text/javascript" src="<?=base_url()?>assets/JavaScript/productUpload_step2.js?ver=1.0"></script> 
+<script type="text/javascript" src="<?=base_url()?>assets/js/src/productUpload_step2.js?ver=1.0"></script> 
 <script src="<?php echo base_url() ?>assets/tinymce/plugins/jbimages/js/jquery.form.js"></script>
-<script type='text/javascript' src="<?=base_url()?>assets/JavaScript/js/jquery.simplemodal.js"></script>
-<script type='text/javascript' src='<?=base_url()?>assets/JavaScript/js/jquery.jqpagination.min.js'></script>
+<script type='text/javascript' src="<?=base_url()?>assets/js/src/vendor/jquery.simplemodal.js"></script>
+<script type='text/javascript' src='<?=base_url()?>assets/js/src/vendor/jquery.jqpagination.min.js'></script>
 <script src="<?php echo base_url(); ?>assets/tinymce/tinymce.min.js" type="text/javascript"></script>
 <script type="text/javascript">
 $(document).ready(function(){

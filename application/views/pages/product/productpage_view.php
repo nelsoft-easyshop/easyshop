@@ -448,15 +448,15 @@
   
 </section>
 
-<script src="<?=base_url()?>assets/JavaScript/js/jquery.jqzoom-core.js" type="text/javascript"></script>
-<script src="<?=base_url()?>assets/JavaScript/js/jquery.bxslider.min.js" type="text/javascript"></script>
-<script src="<?=base_url()?>assets/JavaScript/js/jquery.idTabs.min.js" type="text/javascript"></script>
-<script src="<?=base_url()?>assets/JavaScript/js/jquery.raty.min.js" type="text/javascript"></script>
-<script src="<?= base_url() ?>assets/JavaScript/categorynavigation.js?ver=1.0" type="text/javascript"></script>
-<script type='text/javascript' src='<?=base_url()?>assets/JavaScript/js/jquery.numeric.js'></script>
-<script type='text/javascript' src='<?=base_url()?>assets/JavaScript/js/jquery.simplemodal.js'></script>
-<script type='text/javascript' src='<?=base_url()?>assets/JavaScript/js/jquery.validate.js'></script>
-<script src="<?=base_url().$page_javascript.'?ver=1.0'?>" type="text/javascript"></script>
+<script src="<?=base_url()?>assets/js/src/vendor/jquery.jqzoom-core.js" type="text/javascript"></script>
+<script src="<?=base_url()?>assets/js/src/vendor/jquery.bxslider.min.js" type="text/javascript"></script>
+<script src="<?=base_url()?>assets/js/src/vendor/jquery.idTabs.min.js" type="text/javascript"></script>
+<script src="<?=base_url()?>assets/js/src/vendor/jquery.raty.min.js" type="text/javascript"></script>
+<script src="<?= base_url() ?>assets/js/src/categorynavigation.js?ver=1.0" type="text/javascript"></script>
+<script type='text/javascript' src='<?=base_url()?>assets/js/src/vendor/jquery.numeric.js'></script>
+<script type='text/javascript' src='<?=base_url()?>assets/js/src/vendor/jquery.simplemodal.js'></script>
+<script type='text/javascript' src='<?=base_url()?>assets/js/src/vendor/jquery.validate.js'></script>
+<script src="<?=base_url()?>assets/js/src/productpage.js?ver=1.0" type="text/javascript"></script>
 
 <style type="text/css">
       nav {

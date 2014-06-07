@@ -218,8 +218,8 @@ $_SESSION['start'] = "0";
 
 
 
-<script src="<?= base_url() ?>assets/JavaScript/js/jquery.easing.min.js" type="text/javascript"></script>
-<script src="<?= base_url() ?>assets/JavaScript/js/jquery.scrollUp.min.js" type="text/javascript"></script>
+<script src="<?= base_url() ?>assets/js/src/vendor/jquery.easing.min.js" type="text/javascript"></script>
+<script src="<?= base_url() ?>assets/js/src/vendor/jquery.scrollUp.min.js" type="text/javascript"></script>
 <script type="text/javascript">
 $(function () {
     $.scrollUp({
@@ -240,8 +240,8 @@ $(function () {
 });
 
 </script>
-<script src="<?= base_url() ?>assets/JavaScript/js/jquery.bxslider.min.js" type="text/javascript"></script>
-<script src="<?= base_url() ?>assets/JavaScript/categorynavigation.js?ver=1.0" type="text/javascript"></script>
+<script src="<?= base_url() ?>assets/js/src/vendor/jquery.bxslider.min.js" type="text/javascript"></script>
+<script src="<?= base_url() ?>assets/js/src/categorynavigation.js?ver=1.0" type="text/javascript"></script>
 
 <?php
 $price1= "";

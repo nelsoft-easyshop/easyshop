@@ -16,7 +16,6 @@ class Login extends MY_Controller {
     function index() {
         $data = array(
             'title' => 'Login | Easyshop.ph',
-            'page_javascript' => 'assets/JavaScript/login.js',
 			);
 		$data = array_merge($data, $this->fill_header());
         $response['url'] = $this->session->userdata('uri_string');  

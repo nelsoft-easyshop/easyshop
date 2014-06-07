@@ -278,21 +278,21 @@
 		  <input type="hidden" name="referrer" class="referrer" value="landingpage"/>
 	 <?php echo form_close();?>
 
-        <?php // sample usage of new way to include js?>
+    <?php // sample usage of new way to include js?>
 	<?php //include_javascripts('vendor/jquery-1.9.1.js'); ?>
-	<script type='text/javascript' src="<?=base_url()?>assets/JavaScript/js/jquery-1.9.1.js" ></script>
-	<script type='text/javascript' src="<?=base_url()?>assets/JavaScript/js/jquery-ui.js"></script>
-	<script type='text/javascript' src='<?=base_url()?>assets/JavaScript/landingpage/bootstrap.min.js'></script>
+	<script type='text/javascript' src="<?=base_url()?>assets/js/src/vendor/jquery-1.9.1.js" ></script>
+	<script type='text/javascript' src="<?=base_url()?>assets/js/src/vendor/jquery-ui.js"></script>
+	<script type='text/javascript' src='<?=base_url()?>assets/js/src/landingpage-bootstrap.min.js'></script>
 	
 	<!-- Form Plugins -->
-	<script type='text/javascript' src='<?=base_url()?>assets/JavaScript/js/jquery.numeric.js'></script>
-	<script type='text/javascript' src='<?=base_url()?>assets/JavaScript/js/jquery.validate.js'></script>
+	<script type='text/javascript' src='<?=base_url()?>assets/js/src/vendor/jquery.numeric.js'></script>
+	<script type='text/javascript' src='<?=base_url()?>assets/js/src/vendor/jquery.validate.js'></script>
 	
-	<script type='text/javascript' src='<?=base_url()?>assets/JavaScript/landingpage/landingpage.js?ver=1.0'></script>
+	<script type='text/javascript' src='<?=base_url()?>assets/js/src/landingpage.js?ver=1.0'></script>
 	
 	<!-- Password Strength -->
-	<script type="text/javascript" src="<?=base_url()?>assets/JavaScript/js/mootools-core-1.4.5-full-compat.js"></script>
-	<script type="text/javascript" src="<?=base_url()?>assets/JavaScript/js/password_meter.js"></script>
+	<script type="text/javascript" src="<?=base_url()?>assets/js/src/vendor/mootools-core-1.4.5-full-compat.js"></script>
+	<script type="text/javascript" src="<?=base_url()?>assets/js/src/vendor/password_meter.js"></script>
 	
 	
 	

@@ -149,5 +149,5 @@ echo form_open('sell/edit/step2', $attributesForm);
 
 </div>
 
-<script type='text/javascript' src='<?=base_url()?>assets/JavaScript/productUpload_step1.js?ver=1.0'></script>
-<script type='text/javascript' src='<?=base_url()?>assets/JavaScript/js/jquery.simplemodal.js'></script>
+<script type='text/javascript' src='<?=base_url()?>assets/js/src/productUpload_step1.js?ver=1.0'></script>
+<script type='text/javascript' src='<?=base_url()?>assets/js/src/vendor/jquery.simplemodal.js'></script>

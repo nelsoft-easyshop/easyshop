@@ -2340,17 +2340,17 @@
 		</div>
 
 
-		<script type='text/javascript' src='<?=base_url()?>assets/JavaScript/js/jquery.simplemodal.js'></script>
-		<script type='text/javascript' src='<?=base_url()?>assets/JavaScript/js/jquery.numeric.js'></script>
-		<script type='text/javascript' src='<?=base_url()?>assets/JavaScript/js/jquery.validate.js'></script>
-		<script type='text/javascript' src='<?=base_url()?>assets/JavaScript/js/jquery.Jcrop.min.js'></script>
-		<script src="<?=base_url()?>assets/JavaScript/js/jquery.raty.min.js" type="text/javascript"></script>
-		<script type='text/javascript' src='<?=base_url()?>assets/JavaScript/js/jquery.jqpagination.min.js'></script>
-		<script src="<?=base_url()?>assets/JavaScript/js/jquery.idTabs.min.js" type="text/javascript"></script>
-		<script src="<?=base_url()?>assets/JavaScript/js/jquery.knob.js" type="text/javascript"></script>
-		<script src="<?=base_url()?>assets/JavaScript/js/chosen.jquery.min.js" type="text/javascript"></script>
+		<script type='text/javascript' src='<?=base_url()?>assets/js/src/vendor/jquery.simplemodal.js'></script>
+		<script type='text/javascript' src='<?=base_url()?>assets/js/src/vendor/jquery.numeric.js'></script>
+		<script type='text/javascript' src='<?=base_url()?>assets/js/src/vendor/jquery.validate.js'></script>
+		<script type='text/javascript' src='<?=base_url()?>assets/js/src/vendor/jquery.Jcrop.min.js'></script>
+		<script src="<?=base_url()?>assets/js/src/vendor/jquery.raty.min.js" type="text/javascript"></script>
+		<script type='text/javascript' src='<?=base_url()?>assets/js/src/vendor/jquery.jqpagination.min.js'></script>
+		<script src="<?=base_url()?>assets/js/src/vendor/jquery.idTabs.min.js" type="text/javascript"></script>
+		<script src="<?=base_url()?>assets/js/src/vendor/jquery.knob.js" type="text/javascript"></script>
+		<script src="<?=base_url()?>assets/js/src/vendor/chosen.jquery.min.js" type="text/javascript"></script>
 		<!-- MEMBERPAGE JS-->
-		<script type="text/javascript" src="<?=base_url()?>assets/JavaScript/memberpage.js?ver=1.0"></script>
+		<script type="text/javascript" src="<?=base_url()?>assets/js/src/memberpage.js?ver=1.0"></script>
 		<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=&sensor=false"></script>
 
 		<script type="text/javascript">
@@ -2416,8 +2416,8 @@
 			        });
 
 					</script>
-<script src="<?= base_url() ?>assets/JavaScript/js/jquery.easing.min.js" type="text/javascript"></script>
-<script src="<?= base_url() ?>assets/JavaScript/js/jquery.scrollUp.min.js" type="text/javascript"></script>
+<script src="<?= base_url() ?>assets/js/src/vendor/jquery.easing.min.js" type="text/javascript"></script>
+<script src="<?= base_url() ?>assets/js/src/vendor/jquery.scrollUp.min.js" type="text/javascript"></script>
 <script type="text/javascript">
 $(function () {
     $.scrollUp({

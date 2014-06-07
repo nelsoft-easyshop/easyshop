@@ -71,12 +71,8 @@
                
             </div>
         </div>
-       
-        
-        
-        
-       
-         <div class="footer2">
+
+        <div class="footer2">
             <div class="container">
                 <span class="help-block spnmsg"><br>Copryright &#169; 2014 easyshop.ph. All rights reserved<br></span>
             </div>
@@ -84,9 +80,9 @@
     </body>
 
     
-    <script type='text/javascript' src="<?=base_url()?>assets/JavaScript/js/jquery-1.9.1.js" ></script>
-    <script type='text/javascript' src="<?=base_url()?>assets/JavaScript/js/jquery-ui.js"></script>
-    <script type='text/javascript' src='<?=base_url()?>assets/JavaScript/landingpage/bootstrap.min.js'></script>
+    <script type='text/javascript' src="<?=base_url()?>assets/js/src/vendor/jquery-1.9.1.js" ></script>
+    <script type='text/javascript' src="<?=base_url()?>assets/js/src/vendor/jquery-ui.js"></script>
+    <script type='text/javascript' src='<?=base_url()?>assets/js/src/landingpage-bootstrap.min.js'></script>
     
     <!-- Form Plugins -->
 

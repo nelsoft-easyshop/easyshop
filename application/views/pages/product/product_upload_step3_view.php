@@ -458,13 +458,13 @@
 </div>
 
 
-<script type="text/javascript" src="<?=base_url()?>assets/JavaScript/js/jquery.numeric.js"></script>
-<script type='text/javascript' src="<?=base_url()?>assets/JavaScript/js/jquery-ui.js"></script>
-<script type='text/javascript' src='<?=base_url()?>assets/JavaScript/js/jquery.jqpagination.min.js'></script>
-<script type='text/javascript' src="<?=base_url()?>assets/JavaScript/js/jquery.simplemodal.js"></script>
-<script type="text/javascript" src="<?=base_url()?>assets/JavaScript/productUpload_step3.js?ver=1.0"></script>
-<script type="text/javascript" src="<?=base_url()?>assets/JavaScript/productUpload_preview.js?ver=1.0"></script>
-<script src="<?=base_url()?>assets/JavaScript/js/jquery.idTabs.min.js" type="text/javascript"></script>
+<script type="text/javascript" src="<?=base_url()?>assets/js/src/vendor/jquery.numeric.js"></script>
+<script type='text/javascript' src="<?=base_url()?>assets/js/src/vendor/jquery-ui.js"></script>
+<script type='text/javascript' src='<?=base_url()?>assets/js/src/vendor/jquery.jqpagination.min.js'></script>
+<script type='text/javascript' src="<?=base_url()?>assets/js/src/vendor/jquery.simplemodal.js"></script>
+<script type="text/javascript" src="<?=base_url()?>assets/js/src/productUpload_step3.js?ver=1.0"></script>
+<script type="text/javascript" src="<?=base_url()?>assets/js/src/productUpload_preview.js?ver=1.0"></script>
+<script src="<?=base_url()?>assets/js/src/vendor/jquery.idTabs.min.js" type="text/javascript"></script>
 <script type="text/javascript">
 
 

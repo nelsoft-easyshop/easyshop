@@ -216,9 +216,9 @@ function in_array_r($needle, $haystack, $strict = false) {
 <input class='rec' type='hidden' value='<?php echo $rec; ?>'/>
 <input class='condition' type='hidden' value='<?php echo json_encode($condition); ?>'/>
 <?php echo form_close();?>
-<script src="<?= base_url() ?>assets/JavaScript/js/jquery.easing.min.js" type="text/javascript"></script> 
-<script src="<?= base_url() ?>assets/JavaScript/js/jquery.scrollUp.min.js" type="text/javascript"></script>
-<script src="<?= base_url() ?>assets/JavaScript/advsearch.js?ver=1.0" type="text/javascript"></script>
+<script src="<?= base_url() ?>assets/js/src/vendor/jquery.easing.min.js" type="text/javascript"></script> 
+<script src="<?= base_url() ?>assets/js/src/vendor/jquery.scrollUp.min.js" type="text/javascript"></script>
+<script src="<?= base_url() ?>assets/js/src/advsearch.js?ver=1.0" type="text/javascript"></script>
 <script type="text/javascript">
 $(function () {
 	$.scrollUp({
