@@ -20,9 +20,8 @@
         SELECT c.name,c.description,c.keywords,c.id_cat, c.slug, c.sort_order,c.parent_id,c.is_main, i.path
         FROM es_cat c
         LEFT JOIN es_cat_img i ON c.id_cat = i.id_cat
-        WHERE c.parent_id = 1 AND c.id_cat != 1
+        WHERE c.parent_id = 1
     </select>
- 
 
     <select id="selectDownLevel">
         SELECT
@@ -34,9 +33,7 @@
         is_main,
         slug
         FROM es_cat
-        WHERE parent_id = :parent_id
-        and id_cat != 1
-        ORDER BY sort_order ASC
+        WHERE parent_id = ? 
     </select>
 
     <select id="selectChild">
@@ -133,6 +130,7 @@
   COUNT(*) AS cnt_all
   , item_list_attribute.product_id
   , item_list_attribute.slug
+  , item_list_attribute.brand_id
   , item_list_attribute.product_image_path
   , item_list_attribute.`name`
   , item_list_attribute.price
@@ -933,8 +931,8 @@ FROM
     SELECT `id_brand`, `name` FROM `es_brand` WHERE MATCH(`name`) AGAINST (CONCAT(:sch_string,'*') IN BOOLEAN MODE)
 </select>
 
-<select id="getBrandName">
-    SELECT name FROM `es_brand` WHERE id_brand = :brand_id
+<select id="getBrandById">
+    SELECT name, id_brand, image, description FROM `es_brand` WHERE id_brand = :brand_id
 </select>
 
 <select id="getDraftItems">

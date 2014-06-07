@@ -3,6 +3,8 @@
 <link rel="stylesheet" href="<?= base_url() ?>assets/css/jquery.bxslider.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/> 
 
 <?php
+
+
 session_start();
 $_SESSION['start'] = "0";
 ?>
@@ -171,7 +173,6 @@ $_SESSION['start'] = "0";
             <?php
             if (isset($items)) {
                 for ($i = 0; $i < sizeof($items); $i++) {
-                    $pic = explode('/', $items[$i]['product_image_path']);
 
                     $typeOfView = "product";
                     if(isset($_COOKIE['view']))
@@ -184,7 +185,7 @@ $_SESSION['start'] = "0";
                     <a href="<?= base_url() ?>item/<?php echo $items[$i]['slug']; ?>">
                         <span class="prod_img_wrapper">
                             <span class="prod_img_container">
-                                <img alt="<?php echo html_escape($items[$i]['name']); ?>" src="<?php echo base_url() . $pic[0] . '/' . $pic[1] . '/' . $pic[2] . '/' . $pic[3] . '/' . 'categoryview' . '/' . $pic[4]; ?>">
+                                <img alt="<?php echo html_escape($items[$i]['name']); ?>" src="<?php echo base_url() .$items[$i]['path'].'categoryview/'.$items[$i]['file']; ?>">
                             </span>
                         </span>
                     </a>
@@ -333,10 +334,9 @@ $(document).ready(function() {
                 if (request_ajax === true && ajax_is_on === false) {
                     ajax_is_on = true; 
                     $.ajax({
-                        url: base_url + 'cat/loadproduct',
-                        data:{page_number:offset,id_cat:'<?php echo $id_cat ?>',type:type,parameters:'<?php echo json_encode($_GET); ?>', csrfname : csrftoken},
+                        url: base_url + 'category_more',
+                        data:{page_number:offset,id_cat:'<?php echo $id_cat ?>',type:type, parameters:'<?php echo  json_encode($_GET); ?>', csrfname : csrftoken},
                         type: 'post',
-                        //async: false,
                         dataType: 'JSON',
                         onLoading:jQuery(".loading_products").html('<img src="<?= base_url() ?>assets/images/orange_loader.gif" />').show(),
                         success: function(d) {

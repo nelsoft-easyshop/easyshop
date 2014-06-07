@@ -321,7 +321,7 @@ class productUpload extends MY_Controller
             $brand_id = 1;
         }
         else{
-            if($this->product_model->getBrandName($brand_id)){
+            if($this->product_model->getBrandById($brand_id)){
                 $brand_valid = true;
             }
         }
@@ -1041,7 +1041,7 @@ class productUpload extends MY_Controller
             $brand_id = 1;
         }
         else{
-            if($this->product_model->getBrandName($brand_id)){
+            if($this->product_model->getBrandById($brand_id)){
                 $brand_valid = true;
             }
         }

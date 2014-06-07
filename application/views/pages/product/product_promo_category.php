@@ -32,6 +32,37 @@
     </div>
     <div class="cd_product_container">
         <div>
+            <?php foreach($items as $item): ?>
+                <div class="cd_product">
+                    <div class="product_buy_con">
+                            <span><a href="" class="orange_btn3">BUY NOW</a></span>
+                    </div>
+                    <div class="cd_soldout">
+                        <p>SOLDOUT</p>
+                    </div>
+                    <div>
+                        <span class="cd_slide_discount">
+                            <span>77%<br>OFF</span>
+                        </span>
+                    </div>
+                    <a href="">
+                        <span class="cd_prod_img_con">
+                            <img src="<?= base_url() ?>assets/images/img_cd_prod1.jpg">
+                        </span>
+                    </a>
+                    <h3>
+                        <a href="">iPhone 5s(16GB)</a>
+                    </h3>
+                    <div class="price-cnt">
+                        <div class="price"> Php 1,000.00 </div>
+                        <div class="discount_price">Php 100.00</div>
+                    </div>
+                    <div class="cd_condition">
+                        Condition: NEW
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        
             <div class="cd_product">
                 <div class="product_buy_con">
                         <span><a href="" class="orange_btn3">BUY NOW</a></span>

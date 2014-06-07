@@ -11,15 +11,13 @@ class product extends MY_Controller
 		$this->load->model("product_model");
 	}
     
-
-    
-	public $per_page = 9;
+	public $per_page = 12;
 	public $start_irrelevant = 0;
 
     /*     
      *   Displays products in each category
      */
-	function categorySearch($url_string="")
+	function category_page($url_string="")
     {
     	$start = 0;
     	$count = 0;
@@ -32,7 +30,7 @@ class product extends MY_Controller
         $categoryName = $category_array['name'];
         $categoryDescription = $category_array['description'];
 
-        $this->config->load('protected_category', TRUE);
+        $this->load->config('protected_category', TRUE);
         $protected_categories = $this->config->config['protected_category'];
      
         if(in_array(intval($categoryId,10), $protected_categories)){
@@ -190,9 +188,17 @@ class product extends MY_Controller
      *    Returns more products as user scroll down the page  
      */
 
-    function loadOtherCategorySearch(){
+    function category_page_more(){
 
-    	$categoryId = $this->input->post('id_cat');				  
+    	$categoryId = $this->input->post('id_cat');
+    
+        $this->load->config('protected_category',TRUE);
+        $promo_category_id = $this->config->item('promo');
+        
+        if(intval($categoryId) === intval($promo_category_id)){
+            exit();
+        }
+
     	$perPage = $this->per_page;
     	$start = $this->input->post('page_number') * $perPage;
     	$count = 0;
@@ -211,8 +217,8 @@ class product extends MY_Controller
     	if(!count($get) <= 0){
     		foreach ($get as $key => $value) {
 
-    			if($key == "Brand"){
-
+    			if(ucfirst(strtolower($key)) == "Brand"){
+  
     				if(strpos($get[$key], '-|-') !== false) {
     					$var = explode('-|-',$get[$key]);
     					$needString = array();
@@ -302,7 +308,8 @@ class product extends MY_Controller
     	session_start();
         
     	$items = $this->product_model->getProductsByCategory($categories,$conditionArray,$count,$operator,$start,$perPage,$sortString);
-    	$response['items'] = $items; 
+
+        $response['items'] = $items; 
     	$response['id_cat'] = $categoryId;
     	$response['typeofview'] = $type;
 
@@ -357,367 +364,6 @@ class product extends MY_Controller
     	exit();
     }
 
-
-    /*   
-     *   Returns recommended keywords for search bar
-     */
-    
-    function sch_onpress()
-    {  
-    	header('Content-Type: text/plain'); 	 
-    	if($this->input->get('q')){
-
-    		$html = "";
-    		$stringData =  $this->input->get('q'); 
-    		$string = ltrim($stringData);  
-    		$words = explode(" ",trim($string)); 
-    		$keywords = $this->product_model->itemKeySearch($words);
-           
-    		if(count($keywords) <= 0){
-    			$html = 0;
-    		}else{
-    			$html .= "<ul>";
-    			foreach ($keywords as $value) {
-    				$showValue = $this->highlight($value,$stringData);
-    				$html .= "<li><a href='".base_url()."search/search.html?q_str=".urlencode($value)."&q_cat=1'>".$showValue."</a></li>";
-
-    			}
-    			$html .= "</ul>";
-    		}
-
-    		echo $html;
-    	}
-
-    }
-
-    /*   
-     *   Returns results of searching products through the search bar
-     */
-    
-	function sch($string="search.html") # ROUTING: search/(:any)
-	{
-		$values = array();
-		$string_sort = "";
-		$start = 0;
-		$usable_string;
-		$perPage = $this->per_page;
-
-		$category = $this->input->get('q_cat')?$this->input->get('q_cat'):1;
-        $search_string =  $this->input->get('q_str')?$this->input->get('q_str'):'';
-        $response['string'] = $search_string;
-        $category_details = $this->product_model->selectCategoryDetails($category);
-        $category_name = $category_details['name'];
-        
-        if($search_string == "" && $category == 1){
-            redirect('/cat/all/', 'refresh');
-        }elseif($search_string == "" && $category != 1){
-            redirect('/category/'. $category_details['slug'], 'refresh');
-        }else{
-            $string = html_escape(ltrim($this->input->get('q_str')));
-            $ins = $this->product_model->insertSearch($string);
-            $words = explode(" ",trim($string)); 
-
-            $checkifexistcategory = $this->product_model->checkifexistcategory($category);
-
-            unset($_GET['q_str']);
-            unset($_GET['q_cat']);
-            unset($_GET['q_catname']);
-
-            if($checkifexistcategory == 0 || $category == 1)
-            {		  
-                $categories = "SELECT cat_id FROM es_product WHERE is_delete = 0 AND is_draft = 0";
-            }else{ 
-
-                $down_cat = $this->product_model->selectChild($category);
-                array_push($down_cat, $category);
-                $categories = implode(",", $down_cat);
-            }
-
- 
-                    $count = 0; 
-                    $operator = " = ";    
-                    $sortString = ""; 
-                    $conditionArray = array(); 
- 
-
-                    if(!count($_GET) <= 0){
-                        foreach ($_GET as $key => $value) {
-
-                            if(ucfirst(strtolower($key)) == "Brand"){
-
-                                if(strpos($_GET[$key], '-|-') !== false) {
-                                    $var = explode('-|-',$_GET[$key]);
-                                    $needString = array();
-                                    foreach ($var as $varkey => $varvalue) {
-                                        array_push($needString, "'$varvalue'");
-                                    } 
-                                    $conditionArray['brand'] = array(
-                                        'value' => $var,
-                                        'count' => count($var)
-                                        );
-                                }else{ 
-                                    $conditionArray['brand'] = array(
-                                        'value' => $value,
-                                        'count' => 1
-                                        );
-                                }   
-                            }
-                            elseif (ucfirst(strtolower($key)) == "Condition") { 
-
-                                $conditionArray['condition'] = array(
-                                    'value' => $value,
-                                    );   
-
-                            }elseif (ucfirst(strtolower($key)) == "Sop") { 
-
-                                $sortValue = ucfirst(strtolower($_GET[$key]));
-                                if($sortValue == ucfirst(strtolower('hot'))){
-                                    $sortString = " is_hot DESC , ";
-                                }elseif ($sortValue == ucfirst(strtolower('new'))) {
-                                    $sortString = " is_new DESC , ";
-                                }elseif ($sortValue == ucfirst(strtolower('popular'))) {
-                                    $sortString = " clickcount DESC , ";
-                                }else{
-                                    $sortString = "";
-                                } 
-
-                            }elseif (ucfirst(strtolower($key)) == "Price") { 
-
-                                if(strpos($_GET[$key], 'to') !== false) {   
-
-                                    $price = explode('to', $_GET[$key]);
-                                }else{
-
-                                    $price = explode('to', '0.00to99999999.99');
-                                }    
-                                $a = str_replace( ',', '', $price[0]);
-                                $b = str_replace( ',', '', $price[1]);
-                                if(is_numeric($a) && is_numeric($b)){
-
-                                    $conditionArray['price'] = array(
-                                        'start' => $a,
-                                        'end'=> $b
-                                        );
-                                }
-
-
-                            }else{
-
-                                $count++; 
-                                if(!isset($conditionArray['attributes'])){
-                                    $conditionArray['attributes'] = array();
-                                }
-
-                                if(strpos($_GET[$key], '-|-') !== false) {
-                                    $var = explode('-|-',$_GET[$key]);      
-                                    $key = strtolower(str_replace("_", " ", $key));
-                                    foreach ($var as $varkey => $varvalue) {
-                                        $conditionArray['attributes'][$key] = $var;
-                                    }    
-                                }else{
-                                    $key = strtolower(str_replace("_", " ", $key)); 
-                                    $conditionArray['attributes'][$key] = $value; 
-                                }           
-                            }
-                        }
-                    }    
-
-                    $response['items'] = $this->product_model->getProductsByCategory($categories,$conditionArray,$count,$operator,$start,$perPage,$sortString,$words);
-
-
-                // GETTING ALL ATTRIBUTES
-
-                    $ids = array();
-                    foreach ($response['items'] as $key) {
-                        array_push($ids, $key['product_id']);
-                    }
-                    $ids = implode(',',$ids);
-                    $attributes = $this->product_model->getProductAttributesByCategory($ids);
-                    $itemCondition = $this->product_model->getProductConditionByCategory($ids);
-                    $brand = $this->product_model->getProductBrandsByCategory($ids); 
-
-                    $organizedAttribute = array();
-                    $organizedAttribute['Brand'] = $brand;
-                    $organizedAttribute['Condition'] = $itemCondition;
-                    for ($i=0; $i < sizeof($attributes) ; $i++) { 
-                        $head = urlencode($attributes[$i]['attr_name']);
-                        if(!array_key_exists($head,$organizedAttribute)){
-                            $organizedAttribute[$head] = array();   
-                        }
-                        array_push($organizedAttribute[$head],  $attributes[$i]['attr_value']);
-                    }
-
-                    $response['attributes'] = $organizedAttribute;
-
-				// start here GET DOWN CATEGORIES
-                $firstdownlevel = $this->product_model->getDownLevelNode($category); 
-				$newbuiltarray = array();
-				$cnt = 0;
-				$item_total_cnt = 0;
-
-                foreach ($firstdownlevel as $keyfirstlevel => $value) {
-                    $count_main = 0;
-                    $noitem = false; 
-                    $newcat = $value['id_cat'];  
-                    $down_cat = $this->product_model->selectChild($newcat);
-                    array_push($down_cat,$value['id_cat']);
-                    $catlist_down = implode(",", $down_cat);
-                    $count_main_new = count($this->product_model->getProductInCategoryAndUnder($words,$catlist_down,0,9999999999));
-
-                    $count_main += $count_main_new;
-                    $item_total_cnt += $count_main;
-                    $cnt = $keyfirstlevel;
-                    array_push($newbuiltarray, array("name"=>$value['name'],"item_id"=> $value['id_cat'],"parent_id"=> $value['parent_id'],"count"=>0,"children"=>array()));
-                    $secondlevel = $this->product_model->getDownLevelNode($value['id_cat']);
-
-                    foreach ($secondlevel as $key){
-                        $count = 0;
-                        $newcat = $key['id_cat'];  
-                        $down_cat = $this->product_model->selectChild($newcat);
-                        array_push($down_cat,$newcat);
-                        $catlist_down = implode(",", $down_cat); 
-                        $count_new = count($this->product_model->getProductInCategoryAndUnder($words,$catlist_down,0,9999999999));	
-                        $count += $count_new;
-                        if(!$count <= 0)
-                        {
-                            array_push($newbuiltarray[$cnt]['children'], array("name"=>$key['name'],"item_id"=> $key['id_cat'],"parent_id"=> $key['parent_id'],"count"=>$count));
-                        }
-                    }
-                    $newbuiltarray[$cnt]['count'] = $count_main;
-                }
-
-				$newbuiltarray = array("name"=>$category_name,"children" => $newbuiltarray);
-
-				$list = $this->toUL($newbuiltarray['children'],$string);
-
-				if($category_name == "PARENT" || $category == 1){
-					$response['category_cnt'] = '<h3>Categories</h3>' . $list;
-				}else{
-					$vcnt = "";
-					if($item_total_cnt > 0){
-						$vcnt = "(" . $item_total_cnt . ")";
-					}
-					$response['category_cnt'] = '<h3>Categories</h3><ul><li>'.$category_name. $vcnt .'</li><li>'.$list.'</li></ul>';
-				}
-				
-				$response['cntr'] = $item_total_cnt;
-
-				// end here
-
-				$response['id_cat'] = $category;
-				$data = array(
-					'title' => (trim($search_string)==='')?'Search | Easyshop.ph':html_escape($search_string).' | Easyshop.ph',
-					);
-
-				$data = array_merge($data, $this->fill_header());
-				$response['category_navigation'] = $this->load->view('templates/category_navigation',array('cat_items' =>  $this->getcat(),), TRUE );
-				$this->load->view('templates/header', $data); 
-				$this->load->view('pages/product/product_search_by_searchbox',$response);
-				$this->load->view('templates/footer_full'); 
-			}
-		 
- 
-	}	
-
-    /*   
-     *   Load more products as user scroll through the search results through
-     *   the search bar
-     */
-    
-	function sch_scroll() ##ROUTING : search/load_search_other_product
-	{
-		$string_sort = "";
-		$per_page = $this->per_page;
-		$category_id = $_POST['id_cat']; 
-		$start = $_POST['page_number'] * $per_page;
-		$type = $_POST['type'];	
-
-		$string = ' '.ltrim($_POST['parameters']['q_str']);
-		$category = $_POST['parameters']['q_cat']; 
-		$words = explode(" ",trim($string));  
-		$checkifexistcategory = $this->product_model->checkifexistcategory($category);
-
-		
-		if($checkifexistcategory == 0 || $category == 1)
-		{ 
-			$response['items'] = $this->product_model->itemSearchNoCategory($words,$start,$per_page);	
-		}else{ 
-			$down_cat = $this->product_model->selectChild($category);
-			array_push($down_cat, $category);
-			$catlist_down = implode(",", $down_cat);
-			$response['items'] = $this->product_model->getProductInCategoryAndUnder($words,$catlist_down,$start,$per_page);
-
-		}
-
-		
-		$response['typeofview'] = $type;
-		$response['id_cat'] = $category; 
-		if(count($response['items']) <= 0)
-		{
-			$data = json_encode('0');
-		}else{
-			$data = json_encode($this->load->view('pages/product/product_search_by_searchbox2',$response,TRUE));
-		}
-		
-		echo $data; 
-	}
-
-	function highlight($str, $search) {
-    // $highlightcolor = "#daa732";
-    $highlightcolor = "#808080";
-    $occurrences = substr_count(strtolower($str), strtolower($search));
-    $newstring = $str;
-    $match = array();
- 
-    for ($i=0;$i<$occurrences;$i++) {
-        $match[$i] = stripos($str, $search, $i);
-        $match[$i] = substr($str, $match[$i], strlen($search));
-        $newstring = str_replace($match[$i], '[#]'.$match[$i].'[@]', strip_tags($newstring));
-    }
- 
-    $newstring = str_replace('[#]', '<mark><span style="color: '.$highlightcolor.';font-weight:bold">', $newstring);
-    $newstring = str_replace('[@]', '</span></mark>', $newstring);
-    return $newstring;
- 
-}
-
-	function highlights($text, $words)
-	{
-
-		$words = preg_replace('/\s+/', ' ',$words);
-		$split_words = explode(" ", $words);
-		foreach($split_words as $word)
-		{
-			$color = "#e5e5e5";
-			$text = preg_replace("|($word)|Ui","<mark>$1</mark>" , $text );
-		} 
-		return $text;
-
- 
-	}
-
-
-	function toUL(array $array,$string)
-	{
-		$html = '<ul>' . PHP_EOL;
-
-		foreach ($array as $value)
-		{
-			if($value['count'] <= 0){
-				continue;
-			}
-			$html .= '<li><a href="search.html?q_str=' . $string .'&q_cat='.$value['item_id'].'">' . $value['name'].'('.$value['count'].')</a>';
-			if (!empty($value['children']))
-			{
-				$html .= $this->toUL($value['children'],$string);
-			}
-			$html .= '</li>' . PHP_EOL;
-		}
-
-		$html .= '</ul>' . PHP_EOL;
-
-		return $html;
-	}
 
 	
 	// Assemble SEO Review tags
@@ -1011,6 +657,9 @@ class product extends MY_Controller
 
     
     public function category_promo(){
+        $this->load->config('protected_category', TRUE);
+        $category_id = $this->config->item('promo', 'protected_category');
+        
         $this->load->library('xmlmap');
     	$data = $this->fill_header();
         $data['title'] = 'Deals | Easyshop.ph';
@@ -1020,6 +669,8 @@ class product extends MY_Controller
         $view_data['startdate'] = date('M d,Y H:i:s',strtotime((string)$startdate_xml_obj->value));
         $view_data['enddate'] = date('M d,Y H:i:s',strtotime((string)$enddate_xml_obj->value));
 
+        $view_data['items'] = $this->product_model->getProductsByCategory($category_id);
+        print_r(        $view_data);
         $this->load->view('templates/header', $data); 
         $this->load->view('pages/product/product_promo_category', $view_data); 
         $this->load->view('templates/footer_full');

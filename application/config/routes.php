@@ -44,24 +44,25 @@ $route['404_override'] = 'home/pagenotfound';
 #route maintenance: home/splash
 
 # CATEGORY
-$route['(?i)category/(:any)'] = 'product/categorySearch/$1'; # janz serafico
-$route['(?i)cat/loadproduct'] = 'product/loadOtherCategorySearch'; # ryan vasquez
+$route['(?i)category/(:any)'] = 'product/category_page/$1'; # janz serafico
+$route['(?i)category_more'] = 'product/category_page_more'; # ryan vasquez
 $route['(?i)cat/all'] = 'product/categories_all'; # ryan vasquez
 
 #SEARCHING
-$route['(?i)search/(:any)'] = 'product/sch/$1'; # ryan vasquez
-$route['search/load_search_other_product'] = 'product/sch_scroll'; # ryan vasquez
+$route['(?i)search/(:any)'] = 'product_search/search/$1'; # ryan vasquez
+$route['search_more'] = 'product_search/search_more'; # ryan vasquez
+$route['search/suggest'] = 'product_search/sch_onpress'; # ryan vasquez
 
 #ADVANCE SEARCH
-$route['(?i)advsrch'] = 'product_search/advsrch'; # new search - rain jorque
-$route['(?i)advsrch/scroll_product'] = 'product_search/load_product'; # new search - rain jorque
+$route['(?i)advsrch'] = 'product_search/advance_search'; # new search - rain jorque
+$route['(?i)advsrch/more'] = 'product_search/advance_search_more'; # new search - rain jorque
 
 #PASSWORD
 $route['(?i)chngepaswd'] = 'register/changepass'; # rain jorque 
 
 #ITEMS
 $route['(?i)item/(:any)'] = 'product/item/$1'; # sam gavinio
-$route['search/suggest'] = 'product/sch_onpress'; # ryan vasquez
+
 
 #SELL ITEM
 $route['(?i)sell/step1'] = 'productUpload/step1'; # ryan vasquez

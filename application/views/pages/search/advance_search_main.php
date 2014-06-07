@@ -153,20 +153,11 @@ function in_array_r($needle, $haystack, $strict = false) {
 			</span>
 		</div>
 	</div>
-	<?php 
-		$rec = 0;
-		if(!empty($cntr)):
-		  $rec = $cntr[0]['ctr'];
-		  	if($rec > 0):
-				$s = "";
-				if($rec > 1){
-					$s = "s";
-				}
-	?>
-				<div class="adv_ctr"><strong style="font-size:14px"><?php echo number_format($rec);?></strong> result<?php echo $s;?></div>
-	<?php 	endif; 
-		endif;
-	?>
+
+    <?php if(isset($cntr)): ?>
+        <div class="adv_ctr"><strong style="font-size:14px"><?php echo ($cntr>0)?number_format($cntr):'No';?></strong> result<?php echo ($cntr>1)?'s':'';?> found</div>
+    <?php endif ?>
+    
     <!-- Buttons start -->
     <div id="list" class="list list-active" title="List"></div>
     <div id="grid" class="grid" title="Grid"></div>
@@ -177,13 +168,12 @@ function in_array_r($needle, $haystack, $strict = false) {
       <?php
         if(!empty($items)) {
             for ($i = 0; $i < sizeof($items); $i++) {
-                $pic = explode('/', $items[$i]['product_image_path']);
       ?>
 				<div class="product-list"> 
 					<a href="<?php echo base_url() . "item/" . $items[$i]['slug']; ?>">
 						<span class="prod_img_wrapper">
 							<span class="prod_img_container">
-								<img alt="<?php echo html_escape($items[$i]['product_name']); ?>" src="<?php echo base_url() . $pic[0] . "/" . $pic[1] . "/" . $pic[2] . "/" . $pic[3] . "/" . "categoryview" . "/" . $pic[4]; ?>">
+								<img alt="<?php echo html_escape($items[$i]['product_name']); ?>" src="<?php echo base_url() .$items[$i]['path']. "categoryview/" .$items[$i]['file']; ?>">
 							</span>
 						</span>	
 					</a>
@@ -213,7 +203,7 @@ function in_array_r($needle, $haystack, $strict = false) {
 	<div class="loading_products" style="display: inline-block;text-align: center;width: 100%;"></div>
   </div>
 </div>
-<input class='rec' type='hidden' value='<?php echo $rec; ?>'/>
+
 <input class='condition' type='hidden' value='<?php echo json_encode($condition); ?>'/>
 <?php echo form_close();?>
 <script src="<?= base_url() ?>assets/js/src/vendor/jquery.easing.min.js" type="text/javascript"></script> 

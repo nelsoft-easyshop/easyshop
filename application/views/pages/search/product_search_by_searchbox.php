@@ -1,6 +1,7 @@
 <link rel="stylesheet" type="text/css" href="<?=base_url()?>assets/css/product_search_category.css?ver=<?=ES_FILE_VERSION?>"   media="screen"/>
 <link rel="stylesheet" type="text/css" href="<?=base_url()?>assets/css/style_new.css?ver=<?=ES_FILE_VERSION?>" media="screen"/>
 <div class="clear"></div>
+
 <section class="top_margin">
 	<div class="wrapper">
 		<div class="prod_categories">
@@ -142,7 +143,6 @@
     <?php
           if(isset($items)):
             for ($i=0; $i < sizeof($items); $i++): 
-              $pic = explode('/', $items[$i]['product_image_path']);
                 $typeOfView = "product";
                 if(isset($_COOKIE['view'])){
                     $cookieView = $_COOKIE['view'];
@@ -157,7 +157,7 @@
             <a href="<?php echo base_url() . "item/" . $items[$i]['slug']; ?>">
               <span class="prod_img_wrapper">
                 <span class="prod_img_container">
-                  <img alt="<?php echo html_escape($items[$i]['name']); ?>" src="<?php echo base_url() . $pic[0] . "/" . $pic[1] . "/" . $pic[2] . "/" . $pic[3] . "/" . "categoryview" . "/" . $pic[4]; ?>">
+                  <img alt="<?php echo html_escape($items[$i]['name']); ?>" src="<?php echo base_url() . $items[$i]['path'] . "categoryview/" . $items[$i]['file']; ?>">
                 </span>
               </span> 
             </a>
@@ -311,8 +311,8 @@ $(document).ready(function(){
         if (request_ajax === true && ajax_is_on === false) {
           ajax_is_on = true;
           $.ajax({
-            url: base_url + 'category/loadproduct',
-            data:{page_number:offset,id_cat:<?php echo $id_cat ?>,type:type,parameters:'<?php echo json_encode($_GET); ?>', csrfname : csrftoken},
+            url: base_url + 'search_more',
+            data:{page_number:offset,id_cat:<?php echo $id_cat ?>,type:type,parameters:'<?php echo json_encode($get_params) ?>', csrfname : csrftoken},
             type: 'post',
             async: false,
             dataType: 'json',

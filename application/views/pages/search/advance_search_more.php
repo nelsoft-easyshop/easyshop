@@ -9,13 +9,12 @@
 
 	if(isset($items)):
 		for ($i=0; $i < sizeof($items); $i++): 
-		$pic = explode('/', $items[$i]['product_image_path']);
 ?>
 			<div class="<?php echo $class;?>"> 
 				<a href="<?php echo base_url() . "item/" . $items[$i]['slug']; ?>">
 					<span class="prod_img_wrapper">
 						<span class="prod_img_container">
-							<img alt="<?php echo html_escape($items[$i]['product_name']); ?>" src="<?php echo base_url() . $pic[0] . "/" . $pic[1] . "/" . $pic[2] . "/" . $pic[3] . "/" . "categoryview" . "/" . $pic[4]; ?>">
+							<img alt="<?php echo html_escape($items[$i]['product_name']); ?>" src="<?php echo base_url() .$items[$i]['path']."categoryview/" . $items[$i]['file']; ?>">
 						</span>
 					</span>	
 				</a>
