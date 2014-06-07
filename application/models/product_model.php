@@ -2293,5 +2293,15 @@ class product_model extends CI_Model
 		return $products;			
 	}
 
+        
+    function getAllKeywords(){
+        $query = $this->xmlmap->getFilenameID('sql/product','getAllKeyword');
+        $sth = $this->db->conn_id->prepare($query);
+		$sth->execute();       
+        $row = $sth->fetchAll(PDO::FETCH_ASSOC);
+        return $row;
+    }
+
+	
     
 }

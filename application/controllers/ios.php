@@ -393,8 +393,7 @@ class Ios extends MY_Controller {
     }
     
     public function getKeywords(){
-        $this->load->model('search_model');
-        echo json_encode($this->search_model->getAllKeywords(), JSON_PRETTY_PRINT);
+        echo json_encode($this->product_model->getAllKeywords(), JSON_PRETTY_PRINT);
         exit();
     }
     
