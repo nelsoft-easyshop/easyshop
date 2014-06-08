@@ -478,11 +478,17 @@ class product_model extends CI_Model
 		$sth->bindParam(':condition',$product_condition);
 		$sth->bindParam(':cat_other_name',$other_category_name);
         $sth->bindParam(':brand_other_name',$other_brand_name);
-        
+        $now = date('Y-m-d H:i:s');
+        $sth->bindParam(':startdate',$now);
+        $sth->bindParam(':enddate',$now);
+        $sth->bindParam(':createdate',$now);
+        $sth->bindParam(':lastmodifieddate',$now);
+
 		$bool = $sth->execute();
         
         if(!$bool){
             $errorInfo = $sth->errorInfo();
+            print_R($errorInfo);
             log_message('error', 'PDO::ADD: 0=>'. $errorInfo[0]);
             log_message('error', 'PDO::ADD: 1=>'. $errorInfo[1]);
             log_message('error', 'PDO::ADD: 2=>'. $errorInfo[2]);

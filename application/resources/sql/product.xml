@@ -482,7 +482,9 @@ FROM
         ,`lastmodifieddate`
         ,`cat_other_name`
         ,`brand_other_name`
-        ,`is_draft`)
+        ,`is_draft`
+        ,`enddate`
+        ,`startdate`)
         VALUES 
         (
         :name
@@ -497,11 +499,14 @@ FROM
         , :price
         , :discount
         , :condition
-        ,NOW()
-        ,NOW()
+        , :createdate
+        , :lastmodifieddate
         , :cat_other_name
         , :brand_other_name
-        , '1')
+        , '1'
+        , :enddate
+        , :startdate
+        )
     </select>
 
     <select id="addNewAttribute">
