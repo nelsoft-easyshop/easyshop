@@ -30,11 +30,16 @@ if ( ! function_exists('explodeImagePath')){
                 }
             }
             else{
-                #$row['product_image_path'] = ($row['product_image_path'][0]=='.')?substr($row['product_image_path'],1,strlen($row['product_image_path'])):$row['product_image_path'];
-                #$row['product_image_path'] = ($row['product_image_path'][0]=='/')?substr($row['product_image_path'],1,strlen($row['product_image_path'])):$row['product_image_path'];
-                $rev_url = strrev($row['product_image_path']);
-                $row['path'] = substr($row['product_image_path'],0,strlen($rev_url)-strpos($rev_url,'/'));
-                $row['file'] = substr($row['product_image_path'],strlen($rev_url)-strpos($rev_url,'/'),strlen($rev_url));
+                if(file_exists($row['product_image_path'])){
+                    #$row['product_image_path'] = ($row['product_image_path'][0]=='.')?substr($row['product_image_path'],1,strlen($row['product_image_path'])):$row['product_image_path'];
+                    #$row['product_image_path'] = ($row['product_image_path'][0]=='/')?substr($row['product_image_path'],1,strlen($row['product_image_path'])):$row['product_image_path'];
+                    $rev_url = strrev($row['product_image_path']);
+                    $row['path'] = substr($row['product_image_path'],0,strlen($rev_url)-strpos($rev_url,'/'));
+                    $row['file'] = substr($row['product_image_path'],strlen($rev_url)-strpos($rev_url,'/'),strlen($rev_url));
+                }else{
+                    $row['path'] = 'assets/product/unavailable/';
+                    $row['file'] = 'unavailable_product_img.jpg';
+                }
             }
             #unset($row['product_image_path']);
             $array[$key] = $row;
