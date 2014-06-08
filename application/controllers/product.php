@@ -34,7 +34,11 @@ class product extends MY_Controller
         $protected_categories = $this->config->config['protected_category'];
      
         if(in_array(intval($categoryId,10), $protected_categories)){
-            redirect('/cat/all', 'refresh');
+            if(intval($categoryId) === $protected_categories['promo']){
+                redirect('/deals', 'refresh');
+            }else{          
+                redirect('/cat/all', 'refresh');
+            }
         }
 
         
