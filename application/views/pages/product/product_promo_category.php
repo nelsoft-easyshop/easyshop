@@ -31,243 +31,46 @@
         <div class='cd_timerlabel_container'><span class='cd_timerlabel'><?php echo (strtotime(date('M d,Y H:i:s')) < strtotime($startdate))?'STARTS IN':'TIME LEFT';?></span></div>
     </div>
     <div class="cd_product_container">
-        <div>
+        <div class='product_list'>
             <?php foreach($items as $item): ?>
                 <div class="cd_product">
                     <div class="product_buy_con">
-                            <span><a href="" class="orange_btn3">BUY NOW</a></span>
+                            <span><a href="<?=base_url().'item/'.$item['slug'];?>" class="orange_btn3 <?php echo $item['is_soldout']?'disabled':'';?>">BUY NOW</a></span>
                     </div>
-                    <div class="cd_soldout">
-                        <p>SOLDOUT</p>
-                    </div>
+                    <?php if($item['is_soldout']): ?>
+                        <div class="cd_soldout">
+                            <p>SOLDOUT</p>
+                        </div>
+                    <?php endif; ?>
                     <div>
                         <span class="cd_slide_discount">
-                            <span>77%<br>OFF</span>
+                            <span><?php echo ($item['start_promo'])?$item['percentage']:'2';?>%<br>OFF</span>
                         </span>
                     </div>
-                    <a href="">
+                    <a href="<?=base_url().'item/'.$item['slug'];?>">
                         <span class="cd_prod_img_con">
-                            <img src="<?= base_url() ?>assets/images/img_cd_prod1.jpg">
+                            <img src="<?= base_url().$item['path'].'categoryview/'.$item['file']; ?>">
                         </span>
                     </a>
                     <h3>
-                        <a href="">iPhone 5s(16GB)</a>
+                        <a href="<?=base_url().'item/'.$item['slug'];?>"><?php echo html_escape($item['name']);?></a>
                     </h3>
                     <div class="price-cnt">
-                        <div class="price"> Php 1,000.00 </div>
-                        <div class="discount_price">Php 100.00</div>
+                        <?php if(($item['start_promo'])):  ?>
+                            <div class="price">PHP <?php echo number_format($item['price'],2,'.',',');?></div>
+                            <div class="discount_price">PHP <?php echo number_format($item['original_price'],2,'.',',');?></div>
+                        <?php else: ?>
+                            <div class="price"><span style='font-size:11px; font-weight:bold;'>as low as </span>PHP <?php echo number_format($item['original_price']*(1-0.99),2,'.',',');?>*</div>
+                            <div class="discount_price">PHP <?php echo number_format($item['original_price'],2,'.',',');?></div>
+                            <div></div>
+                       <?php endif;  ?>
+   
                     </div>
                     <div class="cd_condition">
-                        Condition: NEW
+                        Condition: <?=strtoupper(html_escape($item['condition']));?>
                     </div>
                 </div>
             <?php endforeach; ?>
-        
-            <div class="cd_product">
-                <div class="product_buy_con">
-                        <span><a href="" class="orange_btn3">BUY NOW</a></span>
-                </div>
-                <div class="cd_soldout">
-
-                    <p>SOLDOUT</p>
-                </div>
-                <div>
-                    <span class="cd_slide_discount">
-                        <span>77%<br>OFF</span>
-                    </span>
-                </div>
-                <a href="">
-                    <span class="cd_prod_img_con">
-                        <img src="<?= base_url() ?>assets/images/img_cd_prod1.jpg">
-                    </span>
-                </a>
-                <h3>
-                    <a href="">iPhone 5s(16GB)</a>
-                </h3>
-                <div class="price-cnt">
-                    <div class="price"> Php 1,000.00 </div>
-                    <div class="discount_price">Php 100.00</div>
-                </div>
-                <div class="cd_condition">
-                    Condition: NEW
-                </div>
-            </div>
-            <div class="cd_product">
-                <div class="product_buy_con">
-                        <span><a href="" class="orange_btn3">BUY NOW</a></span>
-                </div>
-                <div>
-                    <span class="cd_slide_discount">
-                        <span>77%<br>OFF</span>
-                    </span>
-                </div>
-                <a href="">
-                    <span class="cd_prod_img_con">
-                        <img src="<?= base_url() ?>assets/images/landingpage/img_canon60d.png">
-                    </span>
-                </a>
-                <h3>
-                    <a href="">Canon DSLR 60D</a>
-                </h3>
-                <div class="price-cnt">
-                    <div class="price"> Php 23,900.00 </div>
-                    <div class="discount_price">Php 32,900.00</div>
-                </div>
-                <div class="cd_condition">
-                    Condition: NEW
-                </div>
-            </div>
-            <div class="cd_product">
-                <div class="product_buy_con">
-                        <span><a href="" class="orange_btn3">BUY NOW</a></span>
-                </div>
-                <div>
-                    <span class="cd_slide_discount">
-                        <span>77%<br>OFF</span>
-                    </span>
-                </div>
-                <a href="">
-                    <span class="cd_prod_img_con">
-                        <img src="<?= base_url() ?>assets/images/landingpage/img_samsung_ref.png">
-                    </span>
-                </a>
-                <h3>
-                    <a href="">Samsung 7 cu. ft. REFRIGERATOR</a>
-                </h3>
-                <div class="price-cnt">
-                    <div class="price"> Php 1,000.00 </div>
-                    <div class="discount_price">Php 100.00</div>
-                </div>
-                <div class="cd_condition">
-                    Condition: NEW
-                </div>
-            </div>
-            <div class="cd_product">
-                <div class="product_buy_con">
-                        <span><a href="" class="orange_btn3">BUY NOW</a></span>
-                </div>
-                <div>
-                    <span class="cd_slide_discount">
-                        <span>77%<br>OFF</span>
-                    </span>
-                </div>
-                <a href="">
-                    <span class="cd_prod_img_con">
-                        <img src="<?= base_url() ?>assets/images/landingpage/img_samsung_ledtv.png">
-                    </span>
-                </a>
-                <h3>
-                    <a href="">Canon DSLR 60D</a>
-                </h3>
-                <div class="price-cnt">
-                    <div class="price"> Php 1,000.00 </div>
-                    <div class="discount_price">Php 100.00</div>
-                </div>
-                <div class="cd_condition">
-                    Condition: NEW
-                </div>
-            </div>
-
-            <div class="cd_product">
-                <div class="product_buy_con">
-                        <span><a href="" class="orange_btn3">BUY NOW</a></span>
-                </div>
-                <div>
-                    <span class="cd_slide_discount">
-                        <span>77%<br>OFF</span>
-                    </span>
-                </div>
-                <a href="">
-                    <span class="cd_prod_img_con">
-                        <img src="<?= base_url() ?>assets/images/img_cd_prod1.jpg">
-                    </span>
-                </a>
-                <h3>
-                    <a href="">iPhone 5s(16GB)</a>
-                </h3>
-                <div class="price-cnt">
-                    <div class="price"> Php 1,000.00 </div>
-                    <div class="discount_price">Php 100.00</div>
-                </div>
-                <div class="cd_condition">
-                    Condition: NEW
-                </div>
-            </div>
-            <div class="cd_product">
-                <div class="product_buy_con">
-                        <span><a href="" class="orange_btn3">BUY NOW</a></span>
-                </div>
-                <div>
-                    <span class="cd_slide_discount">
-                        <span>77%<br>OFF</span>
-                    </span>
-                </div>
-                <a href="">
-                    <span class="cd_prod_img_con">
-                        <img src="<?= base_url() ?>assets/images/img_cd_prod1.jpg">
-                    </span>
-                </a>
-                <h3>
-                    <a href="">iPhone 5s(16GB)</a>
-                </h3>
-                <div class="price-cnt">
-                    <div class="price"> Php 1,000.00 </div>
-                    <div class="discount_price">Php 100.00</div>
-                </div>
-                <div class="cd_condition">
-                    Condition: NEW
-                </div>
-            </div>
-            <div class="cd_product">
-                <div class="product_buy_con">
-                        <span><a href="" class="orange_btn3">BUY NOW</a></span>
-                </div>
-                <div>
-                    <span class="cd_slide_discount">
-                        <span>77%<br>OFF</span>
-                    </span>
-                </div>
-                <a href="">
-                    <span class="cd_prod_img_con">
-                        <img src="<?= base_url() ?>assets/images/img_cd_prod1.jpg">
-                    </span>
-                </a>
-                <h3>
-                    <a href="">iPhone 5s(16GB)</a>
-                </h3>
-                <div class="price-cnt">
-                    <div class="price"> Php 1,000.00 </div>
-                    <div class="discount_price">Php 100.00</div>
-                </div>
-                <div class="cd_condition">
-                    Condition: NEW
-                </div>
-            </div>
-            <div class="cd_product">
-                <div class="product_buy_con">
-                        <span><a href="" class="orange_btn3">BUY NOW</a></span>
-                </div>
-                <div>
-                    <span class="cd_slide_discount">
-                        <span>77%<br>OFF</span>
-                    </span>
-                </div>
-                <a href="">
-                    <span class="cd_prod_img_con">
-                        <img src="<?= base_url() ?>assets/images/img_cd_prod1.jpg">
-                    </span>
-                </a>
-                <h3>
-                    <a href="">iPhone 5s(16GB)</a>
-                </h3>
-                <div class="price-cnt">
-                    <div class="price"> Php 1,000.00 </div>
-                    <div class="discount_price">Php 100.00</div>
-                </div>
-                <div class="cd_condition">
-                    Condition: NEW
-                </div>
-            </div>
         </div>
     </div>
 
@@ -292,6 +95,45 @@
     }
     
     $(document).ready(function(){
+        var base_url = config.base_url;
+        var offset = 1;
+        var request_ajax = true;
+        var ajax_is_on = false;
+        var objHeight = $(window).height() - 50;
+        var last_scroll_top = 0;
+    
+        var csrftoken = $("meta[name='csrf-token']").attr('content');
+        var csrfname = $("meta[name='csrf-name']").attr('content');
+        $(window).scroll(function(event) {
+            var st = $(this).scrollTop();
+            if(st > last_scroll_top){
+                if ($(window).scrollTop() + 100 > $(document).height() - $(window).height()) {
+                    if (request_ajax === true && ajax_is_on === false) {
+                        ajax_is_on = true; 
+                        $.ajax({
+                            url: base_url + 'deals_more',
+                            data:{page_number:offset,csrfname : csrftoken},
+                            type: 'post',
+                            dataType: 'JSON',
+                            onLoading:jQuery(".loading_products").html('<img src="<?= base_url() ?>assets/images/orange_loader.gif" />').show(),
+                            success: function(d) {
+                                if(d == "0"){
+                                    ajax_is_on = true;
+                                }else{ 
+                                    $($.parseHTML(d.trim())).appendTo($('.product_list'));
+                                    ajax_is_on = false;
+                                    offset += 1;   
+                                }
+                               jQuery(".loading_products").fadeOut();    
+                            }
+                        });
+                    }
+                }
+            }
+            last_scroll_top = st;
+        });
+
+
         var timer_date = new Date($('#timer_date').val());
         $('.cd_timer_container').countdown({
             until : timer_date,

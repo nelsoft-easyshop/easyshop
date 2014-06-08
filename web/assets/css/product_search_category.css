@@ -827,7 +827,7 @@ Advanced Search Filters
   background-color: #f18200;
 }
 
-.cd_product .cd_prod_img_con {
+.cd_product{
     display: table;
     width: 220px;
 }
@@ -839,7 +839,7 @@ Advanced Search Filters
     overflow: hidden;
     position: relative;
     vertical-align: middle;
-    width: 210px;
+    width: 220px;
 }
 
 .cd_prod_img_con img {

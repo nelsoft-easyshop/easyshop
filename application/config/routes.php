@@ -104,6 +104,7 @@ $route['(?i)maintenance'] = 'home/splash';
 
 #PROMO CATEGORY PAGE
 $route['(?i)deals'] = 'product/category_promo';
+$route['(?i)deals_more'] = 'product/category_promo_more';
 
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */

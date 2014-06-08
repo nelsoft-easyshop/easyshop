@@ -196,19 +196,15 @@ class product_model extends CI_Model
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':slug',$slug);
 		$sth->execute();
-		$row = $sth->fetch(PDO::FETCH_ASSOC);
-        if(intval($row['o_success']) !== 0){
-            if(strlen(trim($row['userpic']))===0)
-                 $row['userpic'] = 'assets/user/default';
-            if(intval($row['brand_id'],10) === 1)
-                $row['brand_name'] = ($row['custombrand']!=='')?$row['custombrand']:'Custom brand';
+		$product = $sth->fetch(PDO::FETCH_ASSOC);
+        if(intval($product['o_success']) !== 0){
+            if(strlen(trim($product['userpic']))===0)
+                 $product['userpic'] = 'assets/user/default';
+            if(intval($product['brand_id'],10) === 1)
+                $product['brand_name'] = ($product['custombrand']!=='')?$product['custombrand']:'Custom brand';
         }  
-        $row['original_price'] = $row['price'];
-        $row['price'] = $this->GetPromoPrice($row['price'],$row['startdate'],$row['enddate'],$row['is_promote'],$row['promo_type']);
-        $row['start_promo'] = ((intval($row['is_promote']) === 1)&&(strtotime($row['startdate']) < strtotime(date('Y-m-d H:i:s'))));
-        $row['percentage'] = ($row['start_promo'])?($row['original_price'] - $row['price'])/$row['original_price'] * 100.00:0.00;
-        
-		return $row;
+        applyPriceDiscount($product);
+		return $product;
 	}
     
     function getProductPreview($id, $memberid, $is_draft = 1){
@@ -1184,11 +1180,14 @@ class product_model extends CI_Model
 		$sth->bindParam(':per_page',$per_page,PDO::PARAM_INT);
         
 		$sth->execute(); 
-        
-		$rows = $sth->fetchAll(PDO::FETCH_ASSOC);	
-        explodeImagePath($rows);
-        
-		return $rows;
+
+		$products = $sth->fetchAll(PDO::FETCH_ASSOC);	
+        explodeImagePath($products);
+        for($k = 0; $k<count($products); $k++){
+            applyPriceDiscount($products[$k]);
+        }
+
+		return $products;
 	}
     
 
@@ -1246,19 +1245,14 @@ class product_model extends CI_Model
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':id',$id);
 		$sth->execute();
-		$rows = $sth->fetch(PDO::FETCH_ASSOC);
+		$product = $sth->fetch(PDO::FETCH_ASSOC);
         /* Get actual price, apply any promo calculation */
-
-        $rows['original_price'] = $rows['price'];
-        $rows['price'] = $this->GetPromoPrice($rows['price'],$rows['startdate'],$rows['enddate'],$rows['is_promote'],$rows['promo_type']);
-        $rows['start_promo'] = ((intval($rows['is_promote']) === 1)&&(strtotime($rows['startdate']) < strtotime(date('Y-m-d H:i:s'))));
-        $rows['percentage'] = ($rows['start_promo'])?($rows['original_price'] - $rows['price'])/$rows['original_price'] * 100.00:0.00;
-
+        applyPriceDiscount($product);
         /* Separate image file path and file name */
-        $temp = array($rows);
+        $temp = array($product);
         explodeImagePath($temp);
-        $rows = $temp[0];
-        return $rows;
+        $product = $temp[0];
+        return $product;
 	}
 		
 	function getProductCount($down_cat){
@@ -1997,6 +1991,7 @@ class product_model extends CI_Model
                 $PromoPrice = $baseprice;
                 break;
         }
+        $PromoPrice = ($PromoPrice < 0)?0:$PromoPrice;
         return (intval($is_promo) === 1)?$PromoPrice:$baseprice;
     }
     

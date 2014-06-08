@@ -1476,6 +1476,11 @@ nav ul > li:hover > div {
 	color: #fff;
 }
 
+.countdown_top_right_content .disable_btn {
+	margin-left: 27%;
+    width: 110px;
+}
+
 /*** Category Page ***/
 .right_panel_sub_page {
 	float: left;

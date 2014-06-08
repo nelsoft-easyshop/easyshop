@@ -21,26 +21,28 @@
             
             <div class="countdown_container">
                 <div class="countdown_top_content">
-                    <div class="countdown_top_left_content">
-                       <div class="cd_timer_container">
-                        <div class="cd_timer_days">
-                            <span id='countdown_days'>00</span>
-                            <span>DAYS</span>
+                    <a href='<?=base_url()?>deals'>
+                        <div class="countdown_top_left_content">
+                           <div class="cd_timer_container">
+                            <div class="cd_timer_days">
+                                <span id='countdown_days'>00</span>
+                                <span>DAYS</span>
+                            </div>
+                            <div class="cd_timer_hours">
+                                <span id='countdown_hours'>00</span>
+                                <span>HOURS</span>
+                            </div>
+                            <div class="cd_timer_minutes">
+                                <span id='countdown_minutes'>00</span>
+                                <span>MINUTES</span>
+                            </div>
+                            <div class="cd_timer_seconds">
+                                <span id="countdown_second">00</span>
+                                <span>SECONDS</span> 
+                            </div>
+                           </div>
                         </div>
-                        <div class="cd_timer_hours">
-                            <span id='countdown_hours'>00</span>
-                            <span>HOURS</span>
-                        </div>
-                        <div class="cd_timer_minutes">
-                            <span id='countdown_minutes'>00</span>
-                            <span>MINUTES</span>
-                        </div>
-                        <div class="cd_timer_seconds">
-                            <span id="countdown_second">00</span>
-                            <span>SECONDS</span> 
-                        </div>
-                       </div>
-                    </div>
+                    </a>
                     <div class="countdown_top_right_content">
                         <div class="cd_left_con">
                             <div class="cd_top_content <?php echo ($data['cd_product'][0]['is_soldout'])?'cd_main_slide_soldout':''?>">
@@ -58,7 +60,7 @@
                                 <p class="cd_prod_base_price">Php <?php echo number_format($data['cd_product'][0]['original_price'],2,'.',',');?></p>
                                 <?php if($data['cd_product'][0]['start_promo']):  ?>
                                     <p class="cd_prod_discount_price">Php <?php echo number_format($data['cd_product'][0]['price'],2,'.',',');?></p>
-                                    <p class="cd_buy_btn"><a href="<?=base_url()?>item/<?=$data['cd_product'][0]['slug']?>  " class="orange_btn3">BUY NOW</a></p>
+                                    <p class="cd_buy_btn"><a href="<?=base_url()?>item/<?=$data['cd_product'][0]['slug']?>  " class="<?php echo $data['cd_product'][0]['is_soldout']?'disable_btn':'orang_btn3';?>">BUY NOW</a></p>
                                 <?php else: ?>
                                     <p class="cd_prod_discount_price">Php <?php echo number_format($data['cd_product'][0]['original_price']*(1-0.99),2,'.',',');?>*</p>
                                     <p class='cd_prod_disclaimer'>* Lowest possible price</p>
@@ -90,7 +92,7 @@
                                         
                                         <?php if($data['cd_product'][1]['start_promo']):  ?>
                                             <p class="cd_slide_discount_price">Php <?php echo number_format($countdown_slide['price'],2,'.',','); ?></p>
-                                            <p class="cd_slide_buy_btn"><a href="" class="orange_btn">BUY NOW</a></p>
+                                            <p class="cd_slide_buy_btn"><a href="" class="<?php echo $countdown_slide['is_soldout']?'disable_btn':'orang_btn3';?>">BUY NOW</a></p>
                                         <?php else: ?>
                                             <p class="cd_slide_discount_price">Php <?php echo number_format($countdown_slide['original_price']*(1-0.99),2,'.',',');?>*</p>
                                             <p class='cd_prod_disclaimer'>* for as low as</p>
@@ -108,7 +110,6 @@
                         </li>
                     <?php endforeach; ?>
                 </ul>
-
 
                 <div class="clear"></div>
             </div>

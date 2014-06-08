@@ -133,12 +133,16 @@
   , item_list_attribute.brand_id
   , item_list_attribute.product_image_path
   , item_list_attribute.`name`
-  , item_list_attribute.price
+  , item_list_attribute.`price`
   , item_list_attribute.`condition`
-  , item_list_attribute.brief
-  , item_list_attribute.is_hot
-  , item_list_attribute.is_new
-  , item_list_attribute.clickcount
+  , item_list_attribute.`brief`
+  , item_list_attribute.`is_hot`
+  , item_list_attribute.`is_new`
+  , item_list_attribute.`clickcount`
+  , item_list_attribute.`promo_type`
+  , item_list_attribute.`is_promote`
+  , item_list_attribute.`startdate`
+  , item_list_attribute.`enddate`
   
 FROM
   (SELECT 
@@ -205,7 +209,10 @@ FROM
       , a.`member_id`
       , a.`createddate`
       , a.`lastmodifieddate`
-      , a.`sku` 
+      , a.`sku`
+      , a.`promo_type`
+      , a.`enddate`
+      , a.`startdate`
     FROM
       `es_product` a
       , `es_product_image` b

@@ -160,6 +160,9 @@ class search_model extends CI_Model
 		$sth->execute();
 		$products = $sth->fetchAll(PDO::FETCH_ASSOC);
         explodeImagePath($products);
+        for($k = 0; $k<count($products); $k++){
+            applyPriceDiscount($products[$k]);
+        }
 		return $products;			
 	}
     
