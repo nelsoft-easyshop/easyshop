@@ -57,12 +57,12 @@
                             <div>
                                 <p class="txt_buy">Buy an</p>
                                 <p class="cd_prod_name"><a href="<?=base_url()?>item/<?=$data['cd_product'][0]['slug']?>"><?php echo html_escape($data['cd_product'][0]['product']);?></a></p>
-                                <p class="cd_prod_base_price">Php <?php echo number_format($data['cd_product'][0]['original_price'],2,'.',',');?></p>
+                                <p class="cd_prod_base_price">&#8369; <?php echo number_format($data['cd_product'][0]['original_price'],2,'.',',');?></p>
                                 <?php if($data['cd_product'][0]['start_promo']):  ?>
-                                    <p class="cd_prod_discount_price">Php <?php echo number_format($data['cd_product'][0]['price'],2,'.',',');?></p>
+                                    <p class="cd_prod_discount_price">&#8369; <?php echo number_format($data['cd_product'][0]['price'],2,'.',',');?></p>
                                     <p class="cd_buy_btn"><a href="<?=base_url()?>item/<?=$data['cd_product'][0]['slug']?>  " class="<?php echo $data['cd_product'][0]['is_soldout']?'disable_btn':'orang_btn3';?>">BUY NOW</a></p>
                                 <?php else: ?>
-                                    <p class="cd_prod_discount_price">Php <?php echo number_format($data['cd_product'][0]['original_price']*(1-0.99),2,'.',',');?>*</p>
+                                    <p class="cd_prod_discount_price">&#8369; <?php echo number_format($data['cd_product'][0]['original_price']*(1-0.99),2,'.',',');?>*</p>
                                     <p class='cd_prod_disclaimer'>* Lowest possible price</p>
                                     <p class="cd_buy_btn"><a href="" class="disable_btn">BUY NOW</a></p>
                                 <?php endif;  ?>
@@ -88,13 +88,13 @@
                                 </div>
                                 <div>
                                     <div class="cd_slide_bleft">
-                                        <p class="cd_slide_base_price">Php <?php echo number_format($countdown_slide['original_price'],2,'.',','); ?></p>
+                                        <p class="cd_slide_base_price">&#8369;<?php echo number_format($countdown_slide['original_price'],2,'.',','); ?></p>
                                         
                                         <?php if($data['cd_product'][1]['start_promo']):  ?>
-                                            <p class="cd_slide_discount_price">Php <?php echo number_format($countdown_slide['price'],2,'.',','); ?></p>
+                                            <p class="cd_slide_discount_price">&#8369;<?php echo number_format($countdown_slide['price'],2,'.',','); ?></p>
                                             <p class="cd_slide_buy_btn"><a href="" class="<?php echo $countdown_slide['is_soldout']?'disable_btn':'orang_btn3';?>">BUY NOW</a></p>
                                         <?php else: ?>
-                                            <p class="cd_slide_discount_price">Php <?php echo number_format($countdown_slide['original_price']*(1-0.99),2,'.',',');?>*</p>
+                                            <p class="cd_slide_discount_price">&#8369;<?php echo number_format($countdown_slide['original_price']*(1-0.99),2,'.',',');?>*</p>
                                             <p class='cd_prod_disclaimer'>* for as low as</p>
                                             <p class="cd_slide_buy_btn"><a href="<?=base_url()?>item/<?=$countdown_slide['slug']?>" class="disable_btn">BUY NOW</a></p>
                                         <?php endif;  ?>
