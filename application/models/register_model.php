@@ -67,7 +67,6 @@ class Register_model extends CI_Model
 		$sth->bindParam(':password', $data['password']);
 		$sth->bindParam(':email', $data['email']);
 		$sth->bindParam(':contactno', $blank);
-		$sth->bindParam(':region', $blank);
         $sth->execute();
         $row = $sth->fetch(PDO::FETCH_ASSOC);
 
@@ -329,9 +328,7 @@ class Register_model extends CI_Model
 		$sth->bindParam(':emailcode', $data['emailcode']);
 		$sth->bindParam(':mobile', $data['mobile']);
 		$sth->bindParam(':email', $data['email']);
-		
         $result = $sth->execute();
-		
 		return $result;
 	}
 	
@@ -563,7 +560,6 @@ class Register_model extends CI_Model
 		$sth->bindParam(':password', $data['password']);
 		$sth->bindParam(':email', $data['email']);
 		$sth->bindParam(':contactno', $data['mobile']);
-		$sth->bindParam(':region', $blank);
         $sth->execute();
         $row = $sth->fetch(PDO::FETCH_ASSOC);
 

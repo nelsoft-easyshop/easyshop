@@ -58,7 +58,7 @@
 </select>
 
 <select id="signup_member">
-	CALL `es_sp_Signup_user` (:username, :password, :contactno, :email, :region)
+	CALL `es_sp_Signup_user` (:username, :password, :contactno, :email)
 </select>
 
 <select id="check_contactinfo">
