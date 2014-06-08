@@ -304,12 +304,8 @@ class product_search extends MY_Controller {
 			}						
 		} 
 	} 
-    
-    
-    
-    
-    
-       /*   
+
+     /*   
      *   Returns recommended keywords for search bar
      */
     
@@ -338,7 +334,6 @@ class product_search extends MY_Controller {
 
     		echo $html;
     	}
-
     }
 
     /*   

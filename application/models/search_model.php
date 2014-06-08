@@ -112,7 +112,7 @@ class search_model extends CI_Model
 			ep.`cat_id`, ep.`name` AS 'product_name', 
 			ep.`price` AS 'product_price', ep.`brief` AS 'product_brief', ep.`condition` AS 'product_condition',
 			epi.`product_image_path`,
-			eb.`name` AS 'product_brand'
+			eb.`name` AS 'product_brand', ep.`price`, ep.`enddate`, ep.`startdate`, ep.`is_promote`, ep.`promo_type`
 			FROM `es_product` ep
 			LEFT JOIN `es_product_image` epi ON ep.`id_product` = epi.`product_id` AND epi.`is_primary` = 1
 			LEFT JOIN `es_brand` eb ON ep.`brand_id` = eb.`id_brand` 
@@ -158,6 +158,7 @@ class search_model extends CI_Model
 			$sth->bindParam(':gp2',$gp2,PDO::PARAM_INT);		
 		}
 		$sth->execute();
+  
 		$products = $sth->fetchAll(PDO::FETCH_ASSOC);
         explodeImagePath($products);
         for($k = 0; $k<count($products); $k++){

@@ -62,6 +62,7 @@ if ( ! function_exists('applyPriceDiscount')){
     function applyPriceDiscount(&$product = array()){
         $CI = get_instance();
         $CI->load->model('product_model');
+
         $product['original_price'] = $product['price'];
         $product['price'] = $CI->product_model->GetPromoPrice($product['price'],$product['startdate'],$product['enddate'],$product['is_promote'],$product['promo_type']);
         $product['start_promo'] = ((intval($product['is_promote']) === 1)&&(strtotime($product['startdate']) < strtotime(date('Y-m-d H:i:s'))));

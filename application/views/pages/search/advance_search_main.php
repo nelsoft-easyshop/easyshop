@@ -155,7 +155,7 @@ function in_array_r($needle, $haystack, $strict = false) {
 	</div>
 
     <?php if(isset($cntr)): ?>
-        <div class="adv_ctr"><strong style="font-size:14px"><?php echo ($cntr>0)?number_format($cntr):'No';?></strong> result<?php echo ($cntr>1)?'s':'';?> found</div>
+        <div class="adv_ctr"><strong style="font-size:14px"><?php echo ($cntr>0)?number_format($cntr):'No';?></strong> result<?php echo  ($cntr>1 || $cntr === 0)?'s':'';?> found</div>
     <?php endif ?>
     
     <!-- Buttons start -->
