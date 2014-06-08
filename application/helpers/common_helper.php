@@ -44,11 +44,20 @@ if ( ! function_exists('es_url_clean'))
  * @param    string    path to source dir
  * @param    string    path to destination dir
  * @return    array
+ *
+ *  This is a potentially very dangerous function. Make sure that $srcdir and $dstdir
+ *  have been validated before calling this. This function will allow for movement of 
+ *  files within the project.
+ *  
+ *  AGAIN, PLEASE MAKE SURE THAT SRCDIR AND DSTDIR HAVE BEEN VALIDATED ESPECIALLY IF THEY
+ *  COME FROM USER INPUT. 
+ * 
  */    
 if(!function_exists('directory_copy'))
 {
     function directory_copy($srcdir, $dstdir,$pid,$arrayNameOnly)
     {
+
         //preparing the paths
         $srcdir=rtrim($srcdir,'/');
         $dstdir=rtrim($dstdir,'/');
@@ -62,7 +71,6 @@ if(!function_exists('directory_copy'))
 
         foreach($dir_map as $object_key=>$object_value)
         {
-        	
         	if(is_numeric($object_key)){
         		if(in_array(strtolower($object_value),$arrayNameOnly)){   	 
 	                copy($srcdir.'/'.$object_value,$dstdir.'/'.$object_value);//This is a File not a directory

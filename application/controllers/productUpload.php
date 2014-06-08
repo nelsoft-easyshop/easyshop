@@ -374,9 +374,6 @@ class productUpload extends MY_Controller
 				} 
 			}
 
-
-
-			 
 			$arraynameoffiles = array_values($arraynameoffiles);
 			$arrayNameOnly = array_values($arrayNameOnly); 
 			$key = array_search ($primaryName, $arrayNameOnly);
@@ -416,28 +413,10 @@ class productUpload extends MY_Controller
                     $x++;
                 }
             }
- 
 
 			$product_id = $this->product_model->addNewProduct($product_title,$sku,$product_brief,$product_description,$keyword,$brand_id,$cat_id,$style_id,$member_id,$product_price,$product_discount,$product_condition,$otherCategory, $otherBrand);
             # product_id = is the id_product for the new item. if 0 no new item added process will stop
-
-            #ERROR TRACKING: 
-            if(intval($product_id,10) === 0){
-                log_message('error', 'Add new: title=>'. $product_title);
-                log_message('error', 'Add new: sku=>'. $sku); 
-                log_message('error', 'Add new: brief=>'. $product_brief);
-                log_message('error', 'Add new: desc=>'. $product_description);
-                log_message('error', 'Add new: keyword=>'. $keyword);
-                log_message('error', 'Add new: brand_id=>'. $brand_id);
-                log_message('error', 'Add new: cat_id=>'. $cat_id);
-                log_message('error', 'Add new: style_id=>'. $style_id);
-                log_message('error', 'Add new: member_id=>'. $member_id);
-                log_message('error', 'Add new: price=>'. $product_price);
-                log_message('error', 'Add new: condition=>'. $product_condition);
-                log_message('error', 'Add new: other_cat=>'. $otherCategory);
-            }
             
- 
 			#image directory
 			$path_directory = './assets/product/'.$product_id.'_'.$member_id.'_'.$date.'/';
 			$other_path_directory = $path_directory.'other/';
@@ -453,6 +432,10 @@ class productUpload extends MY_Controller
 
 
 			$tempdirectory = $this->input->post('tempdirectory');
+            if(dirname($tempdirectory) !== './assets/temp_product'){
+                exit();
+            }
+
 			directory_copy($tempdirectory, $path_directory,$product_id,$arrayNameOnly); 
 
 			if($product_id > 0) # id_product is 0 means no item inserted. the process will stop.
@@ -977,7 +960,9 @@ class productUpload extends MY_Controller
 
 		$response['product_attributes_opt'] = array();
 		$response['product_attributes_spe'] = array();
-
+        $response['memid'] = $member_id;
+        
+        
 		foreach($this->product_model->getProductAttributes($product_id, 'ALL') as $key=>$attribute){
 			if(strtolower(gettype($key)) === 'string'){ 		#OPTIONAL ATTRIBUTES: BY NAME
 				foreach($attribute as $product_attribute){
@@ -1007,8 +992,8 @@ class productUpload extends MY_Controller
 		$this->load->view('templates/footer'); 
 
 	}
-        
-    public function editStep2Submit()
+
+     public function editStep2Submit()
 	{
      
 		$product_title = trim($this->input->post('prod_title'));
@@ -1084,10 +1069,12 @@ class productUpload extends MY_Controller
             $primaryId = $this->input->post('primaryPicture');
             $primaryName =""; 
 
-            $arraynameoffiles = $this->input->post('arraynameoffiles');
-			$arraynameoffiles = explode('==', substr($arraynameoffiles, 0, -2));
+            	
+ 			$arraynameoffiles = $this->input->post('arraynameoffiles');
+			$arraynameoffiles = json_decode($arraynameoffiles);
 			$arrayNameOnly = array();
 
+            
 			foreach($arraynameoffiles as $key => $value ) {
 				$explodearraynameoffiles = explode('||', $value);
 				$nameOfFile = $explodearraynameoffiles[0];
@@ -1168,15 +1155,7 @@ class productUpload extends MY_Controller
             
 
 			$rowCount = $this->product_model->editProduct($product_details, $member_id);
-            
-            #ERROR TRACKING: SAM
-            if(intval($rowCount,10) === 0){
-                foreach($product_details as $idx=>$value){
-                    log_message('error', 'edit: '.$idx. '=>'.$value);
-                }
-                log_message('error', 'edit: member_id=>'.$member_id);
-            }
-     
+
 			if($rowCount>0){
                 $itemcombinations = $this->product_model->getProductQuantity($product_id, true);
                 $update_product_item_obj = array();
@@ -1526,6 +1505,9 @@ class productUpload extends MY_Controller
                     if($i == 0)
                     {
                         $tempdirectory = $this->input->post('tempdirectory');
+                        if(dirname($tempdirectory) !== './assets/temp_product'){
+                            exit();
+                        }
                         directory_copy($tempdirectory, $path_directory,$product_id,$arrayNameOnly); 
                         $is_primary = $primary_image_bool?0:1;
                     }
@@ -1547,6 +1529,7 @@ class productUpload extends MY_Controller
 		}
 		echo $data;        
 	}
+    
 
 	public function deleteDraft(){
 		$productId = $this->input->post('p_id');
