@@ -444,7 +444,7 @@ class memberpage_model extends CI_Model
 		$sth->bindParam(':id', $member_id);
 		$sth->execute();
 		$row = $sth->fetchAll(PDO::FETCH_ASSOC);
-		
+
 		$data = array();
 		$fdata = array('buy' => array(), 'sell' => array(), 'complete' => array('buy'=>array(), 'sell'=>array()));
 		
@@ -476,7 +476,7 @@ class memberpage_model extends CI_Model
 				if($temp['transac_stat'] == 99 && $temp['payment_method'] == 5){
 					if( !isset( $data[$temp['id_order']]['bd_details'] ) )
 						$data[$temp['id_order']]['bd_details'] = array_splice($temp, 39, 6);
-						$data[$temp['id_order']]['bd_details']['is_invalid'] = $temp['is_invalid'];
+						$data[$temp['id_order']]['bd_details']['is_valid'] = $temp['is_valid'];
 				}
 				
 				if(!array_key_exists('users', $data[$temp['id_order']]))
