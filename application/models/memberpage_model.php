@@ -437,6 +437,8 @@ class memberpage_model extends CI_Model
 	 *	Obtain Transaction Details for Transaction Tab
 	 */
 	function getTransactionDetails($member_id){
+        $this->load->helper('product');
+    
 		$query = $this->xmlmap->getFilenameID('sql/users','getTransactionDetails');
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':id', $member_id);
@@ -526,7 +528,7 @@ class memberpage_model extends CI_Model
 					$imagepath[0] = array(
 						'product_image_path' => $temp['product_image_path']
 					);
-					$this->product_model->explodeImagePath($imagepath);
+					explodeImagePath($imagepath);
 					$data[$temp['id_order']]['products'][$temp['id_order_product']]['product_image_path'] = $imagepath[0]['path'] . 'thumbnail/' . $imagepath[0]['file'];
 				}
 				

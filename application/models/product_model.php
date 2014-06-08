@@ -7,6 +7,7 @@ class product_model extends CI_Model
 	function __construct() 
 	{
 		parent::__construct();  
+        $this->load->helper('product');
         $this->load->library("xmlmap");
 	}
 
@@ -250,7 +251,7 @@ class product_model extends CI_Model
 				$data[$row['name_id']] = array();
 				
 			$temp = array(0=>$row);
-			$this->explodeImagePath($temp,true);
+			explodeImagePath($temp,true);
 			$row = $temp[0];
 			
 			if($key === 'NAME')
@@ -298,7 +299,7 @@ class product_model extends CI_Model
 		$sth->execute();
 		$rows = $sth->fetchAll(PDO::FETCH_ASSOC);
 		
-		$this->explodeImagePath($rows);
+		explodeImagePath($rows);
 		
 		if($getById){
 			$rowsById = array();
@@ -310,171 +311,7 @@ class product_model extends CI_Model
 		return $rows;
 	}
        
-	// // start of new 
-	function getProductsByCategory($categories,$conditionArray=array(),$countMatch=0,$operator = "<",$start=0,$per_page= PHP_INT_MAX ,$sortString = '',$words = array())
-	{	
-		$concatQuery = "";
-		$arrayCount = count($conditionArray);
-		if ($arrayCount > 0) {
-			krsort($conditionArray);
-			if(!empty($conditionArray['attributes'])) {  
-				arsort($conditionArray['attributes']);
-			}
-		}
-
-		if(count($words) > 0){
-			
-			foreach ($words as $key => $value) {
-				$concatQuery .= " AND  ( `name` LIKE :like".$key." OR `keywords` LIKE :like".$key." )";
-			}
-		}
-
-		$condition_string = "";
-		$attributeString = "";
-		$brand_string = "";  		
-		$start = (int)$start;
-		$per_page = (int)$per_page;
-		$havingString = ""; 
-
-		if ($arrayCount > 0) {
-			foreach ($conditionArray as $key => $value) {
-				if($key == 'attributes'){
-					$attrCount = count($conditionArray['attributes']);
-				 	$counterAttrName = 0;
-				 	$counterAttrValue = 0;
-					foreach ($conditionArray[$key] as $keyatt => $valueatt) {
-						$count = count($conditionArray[$key][$keyatt]); 
-
-						if($count == 1){
-							$attributeString .= " OR    ( `attr_name` = :attrname$counterAttrName AND attr_value = :attrvalue$counterAttrValue )  ";
-							$counterAttrValue++;
-						}else{
-							foreach ($conditionArray[$key][$keyatt] as $key2 => $value2) {
-								$attributeString .= " OR    ( `attr_name` = :attrname$counterAttrName AND attr_value = :attrvalue$counterAttrValue )  ";
-								$counterAttrValue++;
-							}
-						}
-						$counterAttrName++;
-					}
-
-				}elseif($key == 'brand'){
-					if($conditionArray[$key]['count'] == 1){
-						$condition_string .= " AND brand = :brand";
-					}else{
-						$condition_string .= " AND brand IN (";
-						foreach ($conditionArray[$key]['value'] as $keybrand => $valuebrand) {
-							$brand_string .= ",:brand".$keybrand;
-						}
-						$brand_string = ltrim ($brand_string,',');
-						$condition_string .= $brand_string. ")";
-					}
-				}elseif($key == 'condition'){
-					$condition_string .= " AND `condition` = :condition";
-				}elseif($key == 'price'){
-					$condition_string .= " AND price BETWEEN :startprice AND :endprice";
-				}
-			}
-		}  
-		
-		if($countMatch > 0){
-			// $havingString = " HAVING cnt_all ".$operator. $countMatch." ";
-			$attributeString = substr_replace($attributeString," AND",1,3); 
-			$condition_string .= $attributeString;	
-		}
-
 	
-
-		$query = $this->xmlmap->getFilenameID('sql/product', 'getProducts');
-		$query = $query."
-		 WHERE cat_id IN (".$categories.")  ".$concatQuery." 
-		 AND is_delete = 0 AND is_draft = 0
-		 ".$condition_string."
-		 GROUP BY product_id , `name`,price,`condition`,brief,product_image_path,
-         item_list_attribute.is_new, item_list_attribute.is_hot, item_list_attribute.clickcount,item_list_attribute.slug 
-         ".$havingString."
-  	   	 ORDER BY ".$sortString." cnt_all DESC, `name` ASC
-		 LIMIT :start, :per_page 
-		 ";
-	
-
-
-		$sth = $this->db->conn_id->prepare($query); 
-	 
-			if(count($words) > 0){
-
-				foreach ($words as $key => $value) {
-					$newValue = '%'.$value.'%';
-					$sth->bindParam(':like'.$key,$newValue,PDO::PARAM_STR);
-				}
-			}
-
-			if ($arrayCount > 0) {
-			foreach ($conditionArray as $key => $value) {
-				if($key == 'attributes'){
-
-					$attrCount = count($conditionArray['attributes']);
-				 	$counterAttrName = 0;
-				 	$counterAttrValue = 0;
-					foreach ($conditionArray[$key] as $keyatt => $valueatt) {
-
-						$count = count($conditionArray[$key][$keyatt]); 
-						$attrNameBind = ':attrname'.$counterAttrName;
-					 	$sth->bindParam($attrNameBind,$keyatt,PDO::PARAM_STR);
-
-						if($count == 1){
-							$attrValueBind = ':attrvalue'.$counterAttrValue;
-							$sth->bindParam($attrValueBind,$valueatt,PDO::PARAM_STR);
-						 
-							$counterAttrValue++;		 
-						}else{
-						 	 
-							foreach ($conditionArray[$key][$keyatt] as $key2 => $value2) {
-								$attrValueBind = ':attrvalue'.$counterAttrValue;
-								$sth->bindParam($attrValueBind,$value2,PDO::PARAM_STR);
-							 
-								$counterAttrValue++;
-
-							}
-						}
-						$counterAttrName++;
-					}
-
-				}elseif($key == 'brand'){
-
-					if($conditionArray[$key]['count'] == 1){
-						$brandValue = $conditionArray[$key]['value'];
-						$sth->bindParam(':brand',$brandValue,PDO::PARAM_STR);				 
-					}else{
-						foreach ($conditionArray[$key]['value'] as $keybrand => $valuebrand) {	  
-							$sth->bindParam(":brand".$keybrand,$valuebrand,PDO::PARAM_STR);
-						}
-					}
-				}elseif($key == 'condition'){
-
-					$conditionValue = $conditionArray[$key]['value']; 
-					$sth->bindParam(':condition',$conditionValue,PDO::PARAM_STR);
-							 
-				}elseif($key == 'price'){
-
-					$priceStartValue = $conditionArray[$key]['start']; 
-					$priceEndValue = $conditionArray[$key]['end'];  
-					$sth->bindParam(':startprice',$priceStartValue,PDO::PARAM_STR);		 
-					$sth->bindParam(':endprice',$priceEndValue,PDO::PARAM_STR);
-				
-				}
-			}  
-		}
- 
-		$sth->bindParam(':start',$start,PDO::PARAM_INT);			 
-		$sth->bindParam(':per_page',$per_page,PDO::PARAM_INT);
-        
-		$sth->execute(); 
-        
-		$rows = $sth->fetchAll(PDO::FETCH_ASSOC);	
-        $this->explodeImagePath($rows);
-        
-		return $rows;
-	}
 
 	function getProductAttributesByCategory($ids)
 	{
@@ -833,17 +670,7 @@ class product_model extends CI_Model
 	}
 
 
-	function insertSearch($value)
-	{
-		$query = "INSERT INTO es_keywords_temp (keywords) VALUES(:value)"; 
-        $sth = $this->db->conn_id->prepare($query);
-        $sth->bindParam(':value',$value,PDO::PARAM_STR);
-        $sth->execute();
-       
-        $row = $sth->fetch(PDO::FETCH_ASSOC);
-  
-        return $row;
-	}	
+
 
 	function getProductInCategoryAndUnder($words,$items,$start,$per_page)
 	{
@@ -1094,81 +921,7 @@ class product_model extends CI_Model
 		return $row;
 	}
 
-	function itemSearchNoCategory($words,$start,$per_page)
-	{
-		$start = (int)$start;
-	 	$per_page = (int)$per_page;
- 		$concatQuery = "";
- 		foreach ($words as $key => $value) {
- 			$concatQuery .= " AND  ( `name` LIKE :like".$key." OR `keywords` LIKE :like".$key." )";
- 		}
-  
-		$query = "
-	 	SELECT 
-	      main_tbl.*
-	      , es_product_image.product_image_path 
-	    FROM
-	      `es_product_image` 
-	      LEFT JOIN 
-	        (SELECT 
-	          `id_product` AS product_id
-	          , `slug` as product_slug
-	          , `name` AS product_name
-	          , `price` AS product_price
-	          , `brief` AS product_brief
-	          , `condition` AS product_condition 
-	        FROM
-	          `es_product` 
-	        WHERE is_delete = 0 AND `is_draft` = 0
-	          ".$concatQuery."
-	          ) AS main_tbl 
-	        ON main_tbl.product_id = es_product_image.`product_id` 
-	    WHERE `es_product_image`.`is_primary` = 1 
-	      AND main_tbl.product_id = es_product_image.`product_id` 
-	    LIMIT :start, :per_page 
-    ";  
- 	 
-		$sth = $this->db->conn_id->prepare($query);
-		
-		foreach ($words as $key => $value) {
-			$newValue = '%'.$value.'%';
- 			$sth->bindParam(':like'.$key,$newValue,PDO::PARAM_STR);
- 		}
-   
-		$sth->bindParam(':start',$start,PDO::PARAM_INT);
-		$sth->bindParam(':per_page',$per_page,PDO::PARAM_INT);
-		$sth->execute();
-		$row = $sth->fetchAll(PDO::FETCH_ASSOC);
-		 
-		return $row;
-	}
-
-	function itemKeySearch($words)
-	{		 
-		$totalKeywords = count($words);
-
-        $query = "
-           SELECT DISTINCT(`keywords`) FROM `es_keywords` WHERE  `keywords` LIKE ?
-           ";
-       
-        for($i=1 ; $i < $totalKeywords; $i++){
-        	$query .= " AND  keywords LIKE ?";
-        }
- 	
- 		$query .= "LIMIT 12";
-		$sth = $this->db->conn_id->prepare($query);
-
-		foreach($words as $key => $keyword){
-			$keyword = '%'.$keyword.'%';
-			$key = $key+1;
-			$sth->bindValue($key, $keyword , PDO::PARAM_STR);
-
-		}
-   
-		$sth->execute();
-		$row = $sth->fetchAll(PDO::FETCH_COLUMN, 0);
-		return $row;
-	}
+	
 
 	function addReply($data = array())
 	{
@@ -1270,7 +1023,173 @@ class product_model extends CI_Model
         }
 	}
     
-    
+    /*
+     *    Function that returns products within a category and applies all available filters
+     */
+	function getProductsByCategory($categories,$conditionArray=array(),$countMatch=0,$operator = "<",$start=0,$per_page= PHP_INT_MAX ,$sortString = '',$words = array())
+	{	
+		$concatQuery = "";
+		$arrayCount = count($conditionArray);
+		if ($arrayCount > 0) {
+			krsort($conditionArray);
+			if(!empty($conditionArray['attributes'])) {  
+				arsort($conditionArray['attributes']);
+			}
+		}
+
+		if(count($words) > 0){
+			
+			foreach ($words as $key => $value) {
+				$concatQuery .= " AND  ( `name` LIKE :like".$key." OR `keywords` LIKE :like".$key." )";
+			}
+		}
+
+		$condition_string = "";
+		$attributeString = "";
+		$brand_string = "";  		
+		$start = (int)$start;
+		$per_page = (int)$per_page;
+		$havingString = ""; 
+
+		if ($arrayCount > 0) {
+			foreach ($conditionArray as $key => $value) {
+				if($key == 'attributes'){
+					$attrCount = count($conditionArray['attributes']);
+				 	$counterAttrName = 0;
+				 	$counterAttrValue = 0;
+					foreach ($conditionArray[$key] as $keyatt => $valueatt) {
+						$count = count($conditionArray[$key][$keyatt]); 
+
+						if($count == 1){
+							$attributeString .= " OR    ( `attr_name` = :attrname$counterAttrName AND attr_value = :attrvalue$counterAttrValue )  ";
+							$counterAttrValue++;
+						}else{
+							foreach ($conditionArray[$key][$keyatt] as $key2 => $value2) {
+								$attributeString .= " OR    ( `attr_name` = :attrname$counterAttrName AND attr_value = :attrvalue$counterAttrValue )  ";
+								$counterAttrValue++;
+							}
+						}
+						$counterAttrName++;
+					}
+
+				}elseif($key == 'brand'){
+					if($conditionArray[$key]['count'] == 1){
+						$condition_string .= " AND brand = :brand";
+					}else{
+						$condition_string .= " AND brand IN (";
+						foreach ($conditionArray[$key]['value'] as $keybrand => $valuebrand) {
+							$brand_string .= ",:brand".$keybrand;
+						}
+						$brand_string = ltrim ($brand_string,',');
+						$condition_string .= $brand_string. ")";
+					}
+				}elseif($key == 'condition'){
+					$condition_string .= " AND `condition` = :condition";
+				}elseif($key == 'price'){
+					$condition_string .= " AND price BETWEEN :startprice AND :endprice";
+				}
+			}
+		}  
+		
+		if($countMatch > 0){
+			// $havingString = " HAVING cnt_all ".$operator. $countMatch." ";
+			$attributeString = substr_replace($attributeString," AND",1,3); 
+			$condition_string .= $attributeString;	
+		}
+
+	
+
+		$query = $this->xmlmap->getFilenameID('sql/product', 'getProducts');
+		$query = $query."
+		 WHERE cat_id IN (".$categories.")  ".$concatQuery." 
+		 AND is_delete = 0 AND is_draft = 0
+		 ".$condition_string."
+		 GROUP BY product_id , `name`,price,`condition`,brief,product_image_path,
+         item_list_attribute.is_new, item_list_attribute.is_hot, item_list_attribute.clickcount,item_list_attribute.slug 
+         ".$havingString."
+  	   	 ORDER BY ".$sortString." cnt_all DESC, `name` ASC
+		 LIMIT :start, :per_page 
+		 ";
+	
+
+
+		$sth = $this->db->conn_id->prepare($query); 
+	 
+			if(count($words) > 0){
+
+				foreach ($words as $key => $value) {
+					$newValue = '%'.$value.'%';
+					$sth->bindParam(':like'.$key,$newValue,PDO::PARAM_STR);
+				}
+			}
+
+			if ($arrayCount > 0) {
+			foreach ($conditionArray as $key => $value) {
+				if($key == 'attributes'){
+
+					$attrCount = count($conditionArray['attributes']);
+				 	$counterAttrName = 0;
+				 	$counterAttrValue = 0;
+					foreach ($conditionArray[$key] as $keyatt => $valueatt) {
+
+						$count = count($conditionArray[$key][$keyatt]); 
+						$attrNameBind = ':attrname'.$counterAttrName;
+					 	$sth->bindParam($attrNameBind,$keyatt,PDO::PARAM_STR);
+
+						if($count == 1){
+							$attrValueBind = ':attrvalue'.$counterAttrValue;
+							$sth->bindParam($attrValueBind,$valueatt,PDO::PARAM_STR);
+						 
+							$counterAttrValue++;		 
+						}else{
+						 	 
+							foreach ($conditionArray[$key][$keyatt] as $key2 => $value2) {
+								$attrValueBind = ':attrvalue'.$counterAttrValue;
+								$sth->bindParam($attrValueBind,$value2,PDO::PARAM_STR);
+							 
+								$counterAttrValue++;
+
+							}
+						}
+						$counterAttrName++;
+					}
+
+				}elseif($key == 'brand'){
+
+					if($conditionArray[$key]['count'] == 1){
+						$brandValue = $conditionArray[$key]['value'];
+						$sth->bindParam(':brand',$brandValue,PDO::PARAM_STR);				 
+					}else{
+						foreach ($conditionArray[$key]['value'] as $keybrand => $valuebrand) {	  
+							$sth->bindParam(":brand".$keybrand,$valuebrand,PDO::PARAM_STR);
+						}
+					}
+				}elseif($key == 'condition'){
+
+					$conditionValue = $conditionArray[$key]['value']; 
+					$sth->bindParam(':condition',$conditionValue,PDO::PARAM_STR);
+							 
+				}elseif($key == 'price'){
+
+					$priceStartValue = $conditionArray[$key]['start']; 
+					$priceEndValue = $conditionArray[$key]['end'];  
+					$sth->bindParam(':startprice',$priceStartValue,PDO::PARAM_STR);		 
+					$sth->bindParam(':endprice',$priceEndValue,PDO::PARAM_STR);
+				
+				}
+			}  
+		}
+ 
+		$sth->bindParam(':start',$start,PDO::PARAM_INT);			 
+		$sth->bindParam(':per_page',$per_page,PDO::PARAM_INT);
+        
+		$sth->execute(); 
+        
+		$rows = $sth->fetchAll(PDO::FETCH_ASSOC);	
+        explodeImagePath($rows);
+        
+		return $rows;
+	}
     
 
 	function checkifexistcategory($cat_id)
@@ -1298,7 +1217,7 @@ class product_model extends CI_Model
         $sth->execute();   
 		$rows = $sth->fetchAll(PDO::FETCH_ASSOC);
              
-		$this->explodeImagePath($rows);
+		explodeImagePath($rows);
               
 		return $rows;
 	}
@@ -1313,7 +1232,7 @@ class product_model extends CI_Model
 		$sth->bindParam(2,$limit, PDO::PARAM_INT);
 		$sth->execute();
 		$rows = $sth->fetchAll(PDO::FETCH_ASSOC);	
-        $this->explodeImagePath($rows);
+        explodeImagePath($rows);
 		foreach($rows as $key=>$row){
 			if(intval($row['id_product']) == intval($prod_id)){
 				unset($rows[$key]);
@@ -1337,7 +1256,7 @@ class product_model extends CI_Model
 
         /* Separate image file path and file name */
         $temp = array($rows);
-        $this->explodeImagePath($temp);
+        explodeImagePath($temp);
         $rows = $temp[0];
         return $rows;
 	}
@@ -1464,34 +1383,6 @@ class product_model extends CI_Model
 		$sth->bindParam(':is_primary',$is_primary, PDO::PARAM_INT);
 		
 		$sth->execute();
-	}
-    
-	#Separates img path and img file from product_image_path
-	#Result is stored back to the original array by reference
-	#Arguments: $array: 1D array data from database fetch
-	#           $empty: (boolean value) if true, the default path and file are set to empty strings
-	function explodeImagePath(&$array=array(), $empty = false){	
-		foreach($array as $key=>$row){		
-			if(trim($row['product_image_path']) === ''){
-				if(!$empty){
-					$row['path'] = 'assets/product/default/';
-					$row['file'] = 'default_product_img.jpg';
-				}
-				else{
-					$row['path'] = '';
-					$row['file'] = '';
-				}
-			}
-			else{
-				#$row['product_image_path'] = ($row['product_image_path'][0]=='.')?substr($row['product_image_path'],1,strlen($row['product_image_path'])):$row['product_image_path'];
-				#$row['product_image_path'] = ($row['product_image_path'][0]=='/')?substr($row['product_image_path'],1,strlen($row['product_image_path'])):$row['product_image_path'];
-				$rev_url = strrev($row['product_image_path']);
-				$row['path'] = substr($row['product_image_path'],0,strlen($rev_url)-strpos($rev_url,'/'));
-				$row['file'] = substr($row['product_image_path'],strlen($rev_url)-strpos($rev_url,'/'),strlen($rev_url));
-			}
-			#unset($row['product_image_path']);
-			$array[$key] = $row;
-		}
 	}
 
     public function getProductQuantity($product_id, $verbose = false){
@@ -1976,35 +1867,6 @@ class product_model extends CI_Model
     	$sth->execute($arrShippingId);
 	}
 	
-    /*
-     * Use fulltext search to find strings in es_cat.name 
-     * Returns all matched category names.
-     */
-    public function searchCategory($string){
-        $query = $this->xmlmap->getFilenameID('sql/product','searchCategory');
-    	$sth = $this->db->conn_id->prepare($query);
-    	$sth->bindParam(':sch_string', $string, PDO::PARAM_STR);
-        $sth->execute();
-    	$result = $sth->fetchAll(PDO::FETCH_ASSOC);
-        
-        return $result;
-    }
-    
-    
-    /*
-     * Use fulltext search to find strings in es_cat.name 
-     * Returns all matched brand names.
-     */
-    public function searchBrand($string){
-        $query = $this->xmlmap->getFilenameID('sql/product','searchBrand');
-    	$sth = $this->db->conn_id->prepare($query);
-    	$sth->bindParam(':sch_string', $string, PDO::PARAM_STR);
-        $sth->execute();
-    	$result = $sth->fetchAll(PDO::FETCH_ASSOC);
-        
-        return $result;
-    }
-
     /* 
      * Return All Draft items by the user.
      * @member_id
@@ -2139,169 +2001,6 @@ class product_model extends CI_Model
     }
     
     
-    
 
-	function advance_search($catID, $start, $per_page, $sort, $gis, $gus, $gcon, $gloc, $gp1, $gp2, $gsubcat, $othr_att, $brnd_att){ 
-		
-
-		//// MAIN CATEGORY /////////////////////////////////////////////////
-		$mc = "";
-		if($catID != 1){
-			$mc = "AND ep.`cat_id` IN (". $catID . ") ";
-		}
-		//// SUBCAT ///////////////////////////////////////////////////////		
-		$sc = "";			
-		if($gsubcat){
-			$sc = " AND ep.`cat_id` IN (" . $gsubcat . ") ";
-		}
-		
-		//// OTHER ATTRIBUTES /////////////////////////////////////////////
-		$oa = "";
-		if(!empty($othr_att)){
-			$fin_attrib = "";
-			$or = "";
-			foreach($othr_att as $rows => $values){
-				if($rows > 0){
-					$or = " OR ";
-				}
-				$fin_attrib .= $or . $values['q'];
-			}
-
-			$oa = " AND ep.`id_product` IN (SELECT epa.`product_id` FROM `es_attr` ea
-				LEFT JOIN `es_product_attr` epa ON ea.`id_attr` = epa.`attr_id`
-				WHERE epa.`product_id` IS NOT NULL 
-					AND ea.`cat_id` IN (". $catID .")
-					AND (". $fin_attrib .")
-				GROUP BY epa.`product_id`
-				HAVING COUNT(*) = :sc )";	
-
-		}
-
-		//// BRAND //////////////////////////////////////////////////////
-		$ba = "";
-		if(!empty($brnd_att)){
-			$bpdo = "";
-			foreach($brnd_att as $rows => $values){
-				$bpdo .= ":bn" . $rows . ", ";
-			}
-
-			$ba = " AND eb.`name` IN (". substr($bpdo,0,strlen($bpdo)-2) . ") ";
-			 
-		}		
-		
-		//// SORT ///////////////////////////////////////////////////////
-		if($sort){
-			switch($sort){
-				case "hot": $colsort = "ep.is_hot"; break;
-				case "new": $colsort = "ep.is_new"; break;
-				case "popular": $colsort = "ep.clickcount"; break;
-				case "con": $colsort = "ep.condition"; break;
-				default: $colsort = "ep.clickcount";							
-			}
-			unset($sort);
-		}else{
-			$colsort = "ep.`id_product`";
-		}		
-
-		//// KEYWORD //////////////////////////////////////////////////////
-		$is = "";
-		if(strlen($gis) > 0){
-			$is = " AND MATCH(ep.`name`,keywords) AGAINST(CONCAT(:gis,'*') IN BOOLEAN MODE) ";
-		}
-		
-		//// USERNAME /////////////////////////////////////////////////////
-		$us = "";
-		if(strlen($gus) > 0){
-			$us = " AND em.username = :gus";
-		}			
-
-		//// CONDITION ////////////////////////////////////////////////////
-		$con = "";
-		if(strlen($gcon) > 0){
-			$con = " AND ep.`condition` = :gcon ";
-		}
-		
-		//// LOCATION /////////////////////////////////////////////////////		
-		$loc = "";
-		if($gloc){
-			$loc = " AND ep.`id_product` IN (SELECT `product_id` FROM `es_product_shipping_head` WHERE `location_id` = :gloc) ";
-		}		
-	
-		//// PRICE ///////////////////////////////////////////////////////	
-		$gp = "";
-		if(strlen($gp1) > 0 && strlen($gp2) > 0){
-			$gp = " AND ep.`price` BETWEEN :gp1 AND :gp2 ";
-		}	
-	
-		################################################################
-		
-		$start = intval($start);
-		$per_page = intval($per_page);
-			
-		$query = "SELECT em.`username`, ep.`slug`, ep.`id_product` AS 'product_id', ep.`brand_id` AS 'brand_id', 
-			ep.`cat_id`, ep.`name` AS 'product_name', 
-			ep.`price` AS 'product_price', ep.`brief` AS 'product_brief', ep.`condition` AS 'product_condition',
-			epi.`product_image_path`,
-			eb.`name` AS 'product_brand'
-			FROM `es_product` ep
-			LEFT JOIN `es_product_image` epi ON ep.`id_product` = epi.`product_id` AND epi.`is_primary` = 1
-			LEFT JOIN `es_brand` eb ON ep.`brand_id` = eb.`id_brand` 
-			LEFT JOIN `es_member` em ON ep.`member_id` = em.`id_member` 
-			WHERE ep.`is_draft` = 0 AND ep.`is_delete` = 0 ". $mc ."   
-			". $oa . " ". $sc ." ". $loc . " " . $is ." " . $us . " ". $con ." ". $gp ." " . $ba . "   
-			ORDER BY :colsort DESC 
-			LIMIT :start, :per_page ";
-	
-		$sth = $this->db->conn_id->prepare($query);
-		$sth->bindParam(':start',$start,PDO::PARAM_INT);
-		$sth->bindParam(':per_page',$per_page,PDO::PARAM_INT);
-		$sth->bindParam(':colsort',$colsort,PDO::PARAM_INT);
-		if(!empty($othr_att)){
-			$ctr = 0;
-			foreach($othr_att as $rows => $values){
-				$snf = ':sn'.$values['c'];
-				$snv = $values['n'];
-				$sth->bindValue($snf,$snv,PDO::PARAM_STR);
-				
-				$saf = ':sa'.$values['c'];
-				$sav = $values['a'];				
-				$sth->bindValue($saf,$sav,PDO::PARAM_STR);
-				
-				$ctr = $ctr + 1;
-			}
-
-			$sth->bindParam(':sc',$ctr ,PDO::PARAM_STR);
-		}
-		if(!empty($brnd_att)){
-			foreach($brnd_att as $rows => $values){
-				$bnf = ':bn'.$rows;
-				$bnv = $values; 
-	 			$sth->bindValue($bnf,$bnv,PDO::PARAM_STR); 
-			}
-		}	
-		(strlen($gis)>0)? $sth->bindParam(':gis',$gis,PDO::PARAM_STR) : null;
-		(strlen($gus)>0)? $sth->bindParam(':gus',$gus,PDO::PARAM_STR) : null;
-		(strlen($gcon)>0)? $sth->bindParam(':gcon',$gcon,PDO::PARAM_STR) : null;
-		(strlen($gloc)>0)? $sth->bindParam(':gloc',$gloc,PDO::PARAM_INT) : null;
-		if(strlen($gp1)>0 && strlen($gp2)>0){
-			$sth->bindParam(':gp1',$gp1,PDO::PARAM_INT);
-			$sth->bindParam(':gp2',$gp2,PDO::PARAM_INT);		
-		}
-		$sth->execute();
-		$products = $sth->fetchAll(PDO::FETCH_ASSOC);
-        $this->explodeImagePath($products);
-		return $products;			
-	}
-
-        
-    function getAllKeywords(){
-        $query = $this->xmlmap->getFilenameID('sql/product','getAllKeyword');
-        $sth = $this->db->conn_id->prepare($query);
-		$sth->execute();       
-        $row = $sth->fetchAll(PDO::FETCH_ASSOC);
-        return $row;
-    }
-
-	
     
 }

@@ -676,9 +676,6 @@ FROM
         SELECT DISTINCT(`keywords`) FROM `es_keywords` WHERE  MATCH(`keywords`) AGAINST (:words IN BOOLEAN MODE)
 </select>
 
-<select id="getAllKeyword">
-        SELECT `id_keywords`,`keywords` FROM es_keywords WHERE 1
-</select>
 
 
 <select id="fullDeleteItem">
@@ -923,13 +920,7 @@ FROM
 	WHERE id_shipping IN (
 </select>
 
-<select id="searchCategory">
-    SELECT `id_cat`, `name` FROM `es_cat` WHERE MATCH(`name`) AGAINST (CONCAT(:sch_string,'*') IN BOOLEAN MODE)
-</select>
 
-<select id="searchBrand">
-    SELECT `id_brand`, `name` FROM `es_brand` WHERE MATCH(`name`) AGAINST (CONCAT(:sch_string,'*') IN BOOLEAN MODE)
-</select>
 
 <select id="getBrandById">
     SELECT name, id_brand, image, description FROM `es_brand` WHERE id_brand = :brand_id

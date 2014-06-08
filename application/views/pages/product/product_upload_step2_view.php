@@ -2088,7 +2088,7 @@ $(document).on('change','.other_name_value',function(){
         if(searchQuery != ""){
             currentRequest = jQuery.ajax({
                 type: "GET",
-                url: '<?php echo base_url();?>product/searchBrand', 
+                url: '<?php echo base_url();?>product_search/searchBrand', 
                 onLoading:jQuery(".brand_sch_loading").html('<img src="<?= base_url() ?>assets/images/orange_loader_small.gif" />').show().css('display','inline-block'),
                 data: "data="+searchQuery+"&"+csrfname+"="+csrftoken, 
                 beforeSend : function(){       

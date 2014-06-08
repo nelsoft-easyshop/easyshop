@@ -185,7 +185,7 @@ class product extends MY_Controller
 	}
 
     /*     
-     *    Returns more products as user scroll down the page  
+     *    Returns more products as user scrolls down the page  
      */
 
     function category_page_more(){
@@ -580,21 +580,6 @@ class product extends MY_Controller
 				$this->product_model->updateIsDelete($productid, $memberid, 2);
 		}
 		redirect('me', 'refresh');
-	}
-
-	function searchCategory(){  
-		$string = $this->input->get('data');
-		$rows = $this->product_model->searchCategory($string);
-		foreach($rows as $idx=>$row){
-			$rows[$idx]['parent'] = $this->product_model->getParentId($row['id_cat']);
-		}
-		echo json_encode($rows);
-	}
-
-	function searchBrand(){
-		$string = $this->input->get('data');
-		$rows = $this->product_model->searchBrand($string);
-		echo json_encode($rows);
 	}
 
 	function prodjson(){

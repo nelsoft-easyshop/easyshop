@@ -388,7 +388,7 @@
         if(searchQuery != ""){  
             currentRequest = jQuery.ajax({
                 type: "GET",
-                url: config.base_url + 'product/searchCategory', 
+                url: config.base_url + 'product_search/searchCategory', 
                 data: "data="+searchQuery+"&"+csrfname+"="+csrftoken, 
                 onLoading:jQuery(".cat_sch_loading").html('<img src="'+config.base_url+'assets/images/orange_loader_small.gif" />').show(),
                 beforeSend : function(){       

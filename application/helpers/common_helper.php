@@ -2,7 +2,7 @@
 
 
 /**
-*    Additional helper function for easyshop project
+*    UTILITY functions for easyshop project
 *    @Author: easyshop dev team
 *    
 *    These functions were originally located in Common.php in System/Core.

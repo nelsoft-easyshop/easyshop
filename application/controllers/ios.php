@@ -321,6 +321,7 @@ class Ios extends MY_Controller {
     
     function sch_onpress()
 	{  
+       $this->load->model('search_model');
        if($this->input->get('q')){
 
 			$html = "";
@@ -329,7 +330,7 @@ class Ios extends MY_Controller {
 			$string = ltrim($stringData); 
 			// $words = "+".implode("*,+",explode(" ",trim($string)))."*"; 
 			$words = explode(" ",trim($string)); 
-			$keywords = $this->product_model->itemKeySearch($words);
+			$keywords = $this->search_model->itemKeySearch($words);
  			echo json_encode($keywords);
 			 
 		}
@@ -341,12 +342,9 @@ class Ios extends MY_Controller {
         echo json_encode($this->product_model->getFirstLevelNode(), JSON_PRETTY_PRINT);exit();
 	}
         
-
-    
-    
-
 	function search()
-	{  
+	{   
+        $this->load->model('search_model');
 		$values = array();
 		$string_sort = "";
 		$start = 0;
@@ -366,14 +364,14 @@ class Ios extends MY_Controller {
 					$category_name = $category_details['name'];
 				}
 				$string = ltrim($this->input->get('q_str')); 
-				$ins = $this->product_model->insertSearch($string);
+				$ins = $this->search_model->insertSearch($string);
 				// $words = "+".implode("*,+",explode(" ",trim($string)))."*";
 				$words = explode(" ",trim($string)); 
 				$checkifexistcategory = $this->product_model->checkifexistcategory($category);
 				if($checkifexistcategory == 0 || $category == 1)
 				{		 
 					// $usable_string = " AND  MATCH(`name`,keywords) AGAINST('".$words."' IN BOOLEAN MODE)";
-					$response['items'] = $this->product_model->itemSearchNoCategory($words,$start,$per_page);
+					$response['items'] = $this->search_model->itemSearchNoCategory($words,$start,$per_page);
 				}else{
 					// $usable_string = " AND  MATCH(a.name,keywords) AGAINST('".$words."' IN BOOLEAN MODE)";
 					$down_cat = $this->product_model->selectChild($category);
@@ -393,7 +391,8 @@ class Ios extends MY_Controller {
     }
     
     public function getKeywords(){
-        echo json_encode($this->product_model->getAllKeywords(), JSON_PRETTY_PRINT);
+        $this->load->model('search_model');
+        echo json_encode($this->search_model->getAllKeywords(), JSON_PRETTY_PRINT);
         exit();
     }
     

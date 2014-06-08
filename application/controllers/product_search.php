@@ -10,7 +10,8 @@ class product_search extends MY_Controller {
 	{ 
 		parent::__construct(); 
 		$this->load->helper('htmlpurifier');	
-        $this->load->model("product_model");				
+        $this->load->model("product_model");	
+        $this->load->model("search_model");				
 	}
     
     /*   
@@ -18,6 +19,8 @@ class product_search extends MY_Controller {
      */
     
     public $per_page = 12; 
+    
+
 	
     /*   
      *  Advance search main function
@@ -134,8 +137,8 @@ class product_search extends MY_Controller {
 			##### Parameters end here ####################################################
 								
 			# get all items here (right pane)			
-			$items = $this->product_model->advance_search($catID, $start, $per_page, $sort, $gis, $gus, $gcon, $gloc, $gp1, $gp2, $gsubcat, $othr_att, $brnd_att);
-			$cntr = count($this->product_model->advance_search($catID, 0, PHP_INT_MAX, $sort, $gis, $gus, $gcon, $gloc, $gp1, $gp2, $gsubcat, $othr_att, $brnd_att));
+			$items = $this->search_model->advance_search($catID, $start, $per_page, $sort, $gis, $gus, $gcon, $gloc, $gp1, $gp2, $gsubcat, $othr_att, $brnd_att);
+			$cntr = count($this->search_model->advance_search($catID, 0, PHP_INT_MAX, $sort, $gis, $gus, $gcon, $gloc, $gp1, $gp2, $gsubcat, $othr_att, $brnd_att));
 	
 			$response['items'] = $items; ### pass to view
 			$response['cntr'] = $cntr;   ### pass to view
@@ -291,7 +294,7 @@ class product_search extends MY_Controller {
 			
 					
 			# get all items here (right pane)
-			$items = $this->product_model->advance_search($catID, $start, $per_page, $sort, $gis, $gus, $gcon, $gloc, $gp1, $gp2, $gsubcat, $othr_att, $brnd_att);
+			$items = $this->search_model->advance_search($catID, $start, $per_page, $sort, $gis, $gus, $gcon, $gloc, $gp1, $gp2, $gsubcat, $othr_att, $brnd_att);
 			if(isset($items) && !empty($items)){ # check if it has items		
 				$response['items'] = $items; ### pass to view	
 				$data = json_encode($this->load->view('pages/search/advance_search_more',$response,TRUE));
@@ -319,7 +322,7 @@ class product_search extends MY_Controller {
     		$stringData =  $this->input->get('q'); 
     		$string = ltrim($stringData);  
     		$words = explode(" ",trim($string)); 
-    		$keywords = $this->product_model->itemKeySearch($words);
+    		$keywords = $this->search_model->itemKeySearch($words);
            
     		if(count($keywords) <= 0){
     			$html = 0;
@@ -369,7 +372,7 @@ class product_search extends MY_Controller {
             redirect('/category/'. $category_details['slug'], 'refresh');
         }else{
             $response['get_params'] = $this->input->get();
-            #$ins = $this->product_model->insertSearch($string);
+            #$ins = $this->search_model->insertSearch($string);
             $words = explode(" ",trim($string)); 
 
             $checkifexistcategory = $this->product_model->checkifexistcategory($category);
@@ -714,6 +717,23 @@ class product_search extends MY_Controller {
 		
 		echo $data; 
     }
+    
+    
+	function searchCategory(){  
+		$string = $this->input->get('data');
+		$rows = $this->search_model->searchCategory($string);
+		foreach($rows as $idx=>$row){
+			$rows[$idx]['parent'] = $this->product_model->getParentId($row['id_cat']);
+		}
+		echo json_encode($rows);
+	}
+
+	function searchBrand(){
+		$string = $this->input->get('data');
+		$rows = $this->search_model->searchBrand($string);
+		echo json_encode($rows);
+	}
+
     
 
 	private function highlights($text, $words)
