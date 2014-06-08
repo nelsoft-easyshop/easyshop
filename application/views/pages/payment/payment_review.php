@@ -49,56 +49,13 @@
                     <div>
                         <p class="fl_pay"><strong>How would you like to pay?</strong></p>
                         <ul class="idTabs payment_options_tabs">
-                            <li><a href="#cod">Cash on Delivery</a></li>
                             <li><a href="#cdb">Credit or Debit Card</a></li>
                             <li><a href="#paypal">Paypal</a></li>
                             <li><a href="#dragonpay">Dragon Pay</a></li>
                             <li><a href="#dbd">Direct Bank Deposit</a></li>
+                            <li><a href="#cod">Cash on Delivery</a></li>
                         </ul>
 
-<!-- #### CASH ON DELIVERY #### -->
-
-                        <div id="cod" class="payment_inner_content">
-                            <?php if($codsuccess): ?>
-
-                                <p class="cod_desc"><strong>You can pay in cash to our courier when you receive the goods at your doorstep.</strong></p> <br>
-                                <?php 
-                                $attr = array('class' => 'codFrm','id' => 'codFrm','name' => 'codFrm');
-                                echo form_open('pay/cashondelivery/', $attr);
-                                ?>
-                                <p class="chck_privacy"><input type="checkbox" checked  id="chk_cod" name='chk_cod'><label for='chk_cod'> I acknowledge I have read and understood Easyshop.ph's</label> <a href="">Privacy Policy</a>.</p><br>
-                                <input type="button" class="payment_cod" value="Proceed to Payment"> 
-                                <input type="hidden" value="<?php echo md5(uniqid(mt_rand(), true)).'1';?>" name="paymentToken">   
-                                <?php echo form_close();?>
-                                <p class="notify">You will be notified regarding your order status via email or sms.</p>
-
-                            <?php else: ?>
-
-                                <span><strong>NOTE: one or more of your chosen items are not available for cash on delivery.</strong></span>
-                                <div class="pay_sum_head">
-                                      <div class="pay_sum_c1">Seller</div>
-                                      <div class="pay_sum_c2">Product</div>
-                                      <div class="pay_sum_c3">Quantity</div>
-                                      <div class="pay_sum_c4">Price</div>
-                                </div>
-               
-                                <?php foreach ($cat_item as $key => $value): ?>
-                                <div class="payment_sum_con">
-                                      <div class="pay_sum_c1"><?php echo $value['seller_username'] ?></div>
-                                      <div class="pay_sum_c2"><?php echo $value['name'] ?></div>
-                                      <div class="pay_sum_c3"><?php echo $value['qty'] ?></div>
-                                      <div class="pay_sum_c4"><?php echo number_format($value['price'], 2, '.',',') ?></div>
-                                      <div class="cod_status_con"><?php echo ($value['cash_delivery'] ? "<span style='color:green'>Available for Cash on Delivery</span>" : "<span style='color:red; font-weight:bold;'>Not available for Cash on Delivery</span> (Go to your <a href='".base_url()."cart' style='color:#0654BA'>Cart</a> and Remove this Item)") ;?></div>
-                                      <?php if(!$value['availability']): ?>
-                                          <div style="color:red">
-                                              Please <a style="color:#0654BA" href="javascript:{}" class="link_address">change your shipping address</a> or go to remove this from your <a href="<?=base_url()?>cart" style="color:#0654BA">Cart</a>.
-                                          </div>
-                                      <?php endif; ?>  
-                                </div>
-                                <?php endforeach; ?>
-
-                            <?php endif; ?>  
-                        </div>
 
 <!-- #### CREDIT CARD / DEBIT CARD #### -->
 
@@ -174,6 +131,51 @@
                             <input type="hidden" value="<?php echo md5(uniqid(mt_rand(), true)).'2';?>" name="paymentToken">   
                             <?php echo form_close();?>
                             <p class="notify">You will be notified regarding your order status via email or sms.</p>
+                        </div>
+                        
+
+<!-- #### CASH ON DELIVERY #### -->
+
+                        <div id="cod" class="payment_inner_content">
+                            <?php if($codsuccess): ?>
+
+                                <p class="cod_desc"><strong>You can pay in cash to our courier when you receive the goods at your doorstep.</strong></p> <br>
+                                <?php 
+                                $attr = array('class' => 'codFrm','id' => 'codFrm','name' => 'codFrm');
+                                echo form_open('pay/cashondelivery/', $attr);
+                                ?>
+                                <p class="chck_privacy"><input type="checkbox" checked  id="chk_cod" name='chk_cod'><label for='chk_cod'> I acknowledge I have read and understood Easyshop.ph's</label> <a href="">Privacy Policy</a>.</p><br>
+                                <input type="button" class="payment_cod" value="Proceed to Payment"> 
+                                <input type="hidden" value="<?php echo md5(uniqid(mt_rand(), true)).'1';?>" name="paymentToken">   
+                                <?php echo form_close();?>
+                                <p class="notify">You will be notified regarding your order status via email or sms.</p>
+
+                            <?php else: ?>
+
+                                <span><strong>NOTE: one or more of your chosen items are not available for cash on delivery.</strong></span>
+                                <div class="pay_sum_head">
+                                      <div class="pay_sum_c1">Seller</div>
+                                      <div class="pay_sum_c2">Product</div>
+                                      <div class="pay_sum_c3">Quantity</div>
+                                      <div class="pay_sum_c4">Price</div>
+                                </div>
+               
+                                <?php foreach ($cat_item as $key => $value): ?>
+                                <div class="payment_sum_con">
+                                      <div class="pay_sum_c1"><?php echo $value['seller_username'] ?></div>
+                                      <div class="pay_sum_c2"><?php echo $value['name'] ?></div>
+                                      <div class="pay_sum_c3"><?php echo $value['qty'] ?></div>
+                                      <div class="pay_sum_c4"><?php echo number_format($value['price'], 2, '.',',') ?></div>
+                                      <div class="cod_status_con"><?php echo ($value['cash_delivery'] ? "<span style='color:green'>Available for Cash on Delivery</span>" : "<span style='color:red; font-weight:bold;'>Not available for Cash on Delivery</span> (Go to your <a href='".base_url()."cart' style='color:#0654BA'>Cart</a> and Remove this Item)") ;?></div>
+                                      <?php if(!$value['availability']): ?>
+                                          <div style="color:red">
+                                              Please <a style="color:#0654BA" href="javascript:{}" class="link_address">change your shipping address</a> or go to remove this from your <a href="<?=base_url()?>cart" style="color:#0654BA">Cart</a>.
+                                          </div>
+                                      <?php endif; ?>  
+                                </div>
+                                <?php endforeach; ?>
+
+                            <?php endif; ?>  
                         </div>
 
 <!-- #### MORE PAYMENT HERE! #### -->
