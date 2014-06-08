@@ -58,21 +58,29 @@
             <a href="javascript:void(0)" class="jcarousel-control-next inactive">&rsaquo;</a>
         </div>
       </div>
+      
+      <?php if(intval($product['is_promote']) === 1): ?>
       <div class="right_header_discount">
           <div id="dsc_cont">
 
               <span class="dsc_header_txt">
                 COUNTDOWN SALE
               </span>
-              <span class="dsc_prp_txt">
-                2% OFF
-              </span>
-              <span class="dsc_prp_txt2">EVERY HOUR UNTIL SOLD</span>
 
-              <span class="dsc_prp_txt3">STARTS ON</span>
+              <?php if($product['start_promo']): ?>
+              <span class="dsc_prp_txt">
+            
+              <span class="dsc_prp_txt2" style='margin-top:5px;'>2% OFF PER HOUR</span>
+              TIME LEFT
+              </span>
+             
+              <?php else: ?>  
+              <span class="dsc_prp_txt3"> 2% OFF STARTS ON</span>
+              <?php endif; ?>
+              
           </div>
           <div class="dsc_tmr">
-              <div class="cd_timer_container product_view">
+              <div class="cd_timer_container product_view <?php echo ($product['start_promo'])?'':'float';?>">
                   <div class="cd_timer_days">
                       <span id='countdown_days'>00</span>
                       <span class="cnt_lgnd">DAYS</span>
@@ -91,10 +99,15 @@
                   </div>
               </div>
           </div>
+          <?php if($product['start_promo']): ?>
           <div class="discount_perc">
-              <p id="percentage"></p>
+              <p id="percentage"><?php echo $product['percentage'];?>%<br/>OFF</p>
           </div>
+          <?php endif;?>
       </div>
+      <?php endif; ?>
+      
+      
       <div class="product_inner_content_info" >
         <h1 class="id-class" id="<?php echo $product['id_product'];?>"> 
           <span id="pname"> <?php echo html_escape($product['product_name'])?> </span>
@@ -592,22 +605,7 @@ $(document).on('click','.prod_cat_drop',function() {
         return time;
     }
 
-    function to_disp(){
-        var start_promote = <?=($product['start_promo']=="" ? 0 : $product['start_promo'])?> ;
-        var percentage = <?=$product['percentage']?> ;
-        var is_promote = <?=$product['is_promote']?> ;
-
-        if(is_promote === 1){
-            $(".right_header_discount").show();
-            if(start_promote == 1){
-                $(".dsc_prp_txt").css("display", "block");
-                $(".dsc_prp_txt2").show();
-                $(".discount_perc").show();
-                $(".dsc_prp_txt3").hide();
-                $("#percentage").show().html(percentage + "% <br> OFF")
-            }
-        }
-    }
+    
     $(document).ready(function(){
         var endDate = new Date($('#cd_enddate').val());
         $('.cd_timer_container').countdown({
@@ -681,7 +679,6 @@ $(document).on('click','.prod_cat_drop',function() {
         $('.side_menu_slides').parent('.bx-wrapper').addClass('side_menu_nav_slides');
         $('.side_menu_nav_slides').children('.bx-controls').addClass('side_menu_nav_arrow');
 
-        to_disp();
 
     });
 

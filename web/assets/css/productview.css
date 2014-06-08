@@ -1,5 +1,5 @@
 .cd_timer_container{;
-    margin: 1px !important;
+    margin-top: 15px !important; 
 }
 .dsc_tmr{
     bottom: 74px;
@@ -8,7 +8,6 @@
     width: 287px;
 }
 .right_header_discount{
-    display: none;
     border : 1px #dd0000 solid;
     float: left;
     height: 53px;
@@ -24,15 +23,11 @@
     font-size: 22px;
 }
 .dsc_prp_txt{
-    display: none;
+    display: block;
     font-size: 23px;
 }
 .dsc_prp_txt2{
-    bottom: 20px;
-    display: none;
-    font-size: 11px;
-    left: 89px;
-    position: relative;
+    font-size: 10px;
 }
 
 .cd_timer_container div > span:first-child {
@@ -46,6 +41,11 @@
     margin: 175px auto 0;
     width: 302px;
 }
+
+.cd_timer_container.float{
+    margin-left: 35px !important;
+}
+
 .cd_timer_container div {
     float: left;
     margin-top: 14px;
@@ -56,24 +56,25 @@
     font-size: 8px;
 }
 .discount_perc{
-    display: none;
+    display: inline;
     background-color: #dd0000;
     bottom: 155px;
     color: #FFFFFF;
     float: right;
     font-size: 25px;
-    height: 73px;
+    height: 74px;
     left: 10px;
     position: relative;
-    width: 63px;
+    width: 70px;
 }
 
 .discount_perc p{
     line-height: 29px !important;
-    padding: 7px;
+    padding: 7px 7px 7px 3px;
+    text-align: center;
 }
 .dsc_prp_txt3{
     display: block;
-    font-size: 34px;
-    text-indent: 23px;
+    font-size: 22px;
+ 
 }
