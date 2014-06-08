@@ -1016,22 +1016,22 @@ $(document).ready(function(){
           },
           error: function (request, status, error) {
           
-          response = request.responseText;
-              if (response.toLowerCase().indexOf("1001") >= 0){
+            response = request.responseText;
+            if (response.toLowerCase().indexOf("1001") >= 0){
                 alert('Sorry, the images you are uploading are too large.');
-              }else{
+            }else{
                 alert('<b>Sorry, we have encountered a problem.</b><br/>Please try again.');
-              }
-              $.each( arrayUpload, function( key, value ) {
-                 removeThisPictures.push(value); 
-                 $('#previewList'+value).remove();
-              });
- 
-              canProceed = true;
-              if(badIE == true){
+            }
+            $.each( arrayUpload, function( key, value ) {
+                removeThisPictures.push(value); 
+                $('#previewList'+value).remove();
+            });
+
+            canProceed = true;
+            if(badIE == true){
                 $(".files").remove();
                 $('#inputList').append('<input type="file"  id="files" class="files active" name="files[]"  accept="image/*" required = "required"  /> ');
-              }
+            }
 
 
           }
