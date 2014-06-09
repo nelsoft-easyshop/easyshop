@@ -75,7 +75,7 @@
               </span>
              
               <?php else: ?>  
-              <span class="dsc_prp_txt3"> 2% OFF STARTS ON</span>
+              <span class="dsc_prp_txt3"> 2% OFF STARTS IN</span>
               <?php endif; ?>
               
           </div>
