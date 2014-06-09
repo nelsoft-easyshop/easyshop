@@ -1267,7 +1267,7 @@
 							</div>
 							<?php endif;?>
 							<div id="bi_check_bictr<?php echo $rows; ?>"  style="display:none; width: 38px;" >
-                                <span>Saved</span>
+                                <!-- <span>Saved</span> -->
 							</div>
 							<span id="bi_err_bictr<?php echo $rows; ?>" style="display:none; width:auto; margin-top:0px;" >
                                 <br/><span style='color:red; font-weight:bold;'>* Duplicate Account Number</span>
@@ -1620,7 +1620,8 @@
 											<div><span class="shipping_comment">+ View shipment detail</span></div>
 											<div class="shipping_comment_cont" style="display:none;">
 												<h2>Shipping Details</h2>
-												<div>
+												<div>   
+                                                    <br/>
 													<label for="courier">Courier: </label>
 													<input type="text" name="courier" value="<?php echo html_escape($product['courier']);?>" disabled ><br/>
 													<label for="tracking_num">Tracking Number: </label>
@@ -1629,9 +1630,10 @@
 													<input type="text" name="delivery_date" value="<?php echo html_escape($product['delivery_date'])?>" disabled> <br/>
 													<label for="expected_date">Expected Date of Arrival: </label>
 													<input type="text" name="expected_date" value="<?php echo html_escape($product['expected_date'])?>" disabled><br/>
-													<label for="comment">Comments: </label>
+													<br/>
+                                                    <label for="comment">Comments: </label>
 													<textarea name="comment" cols="55" rows="5" disabled ><?php echo html_escape($product['shipping_comment']); ?></textarea>								
-													<span style="display: block;margin-left: 33em;padding: 10px 0;"><?php echo $product['datemodified'];?></span>
+													<span style="display: block;margin-left: 33em;padding: 10px 0; font-weight:bold;"><?php echo $product['datemodified'];?></span>
 												</div>
 											</div>
 										<?php endif;?>
@@ -1873,6 +1875,7 @@
 													$attr = array('class'=>'shipping_details');
 													echo form_open('',$attr);
 												?>
+                                                    <br/>
 													<label for="courier">Courier: </label>
 													<input type="text" name="courier" value="<?php echo html_escape($product['courier']);?>" <?php echo $disable ? 'disabled':''; ?> ><br/>
 													<label for="tracking_num">Tracking Number: </label>
@@ -1881,7 +1884,8 @@
 													<input type="text" class="modal_date" name="delivery_date" value="<?php echo html_escape($product['delivery_date'])?>" <?php echo $disable ? 'disabled':''; ?> > <br/>
 													<label for="expected_date">Expected Date of Arrival: </label>
 													<input type="text" class="modal_date" name="expected_date" value="<?php echo html_escape($product['expected_date'])?>" <?php echo $disable ? 'disabled':''; ?> ><br/>
-													<label for="comment">Comments: </label>
+                                                    <br/>
+                                                    <label for="comment">Comments: </label>
 													<textarea name="comment" cols="55" rows="5" data-value="<?php echo html_escape($product['shipping_comment']); ?>" <?php echo $disable ? 'disabled':''; ?>><?php echo html_escape($product['shipping_comment']); ?></textarea>
 													<input name="order_product" type="hidden" value="<?php echo $opk;?>">
 													<input name="transact_num" type="hidden" value="<?php echo $tk;?>">
