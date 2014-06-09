@@ -45,7 +45,7 @@ class messages extends MY_Controller
         $q_result = $this->messages_model->get_recepientID($val);
         if($session_data['member_id'] == $val || $q_result == "false"){
             $result['success'] = 0;
-            $result['msg'] = "Username doesnt exist";
+            $result['msg'] = "Username does not exist";
         }else{
             $msg = trim($this->input->post("msg"));
             $result = $this->messages_model->send_message($session_data['member_id'],$q_result,$msg);
