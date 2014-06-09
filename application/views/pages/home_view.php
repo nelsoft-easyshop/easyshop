@@ -70,7 +70,7 @@
                             </div>
                         </div>                        
                         <div class="cd_right_con">
-                        <img src="<?= base_url().$data['cd_product'][0]['path'].'categoryview/'.$data['cd_product'][0]['file']?>" alt="<?php echo html_escape($data['cd_product'][0]['product']);?>">
+                        <img src="<?= base_url().$data['cd_product'][0]['path'].'small/'.$data['cd_product'][0]['file']?>" alt="<?php echo html_escape($data['cd_product'][0]['product']);?>">
                         </div>     
                     </div>
                 </div>

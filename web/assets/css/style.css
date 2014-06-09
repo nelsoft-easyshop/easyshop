@@ -1208,7 +1208,7 @@ nav ul > li:hover > div {
 }
 
 .cd_right_con img{
-    height: inherit;
+    width: inherit;
     float: right;
 }
 
