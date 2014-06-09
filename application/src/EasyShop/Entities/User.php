@@ -73,19 +73,19 @@ class User
     protected $birthday;
     
     /**
-     * @Column(name="datecreated", type="datetime", options={"default"="0001-01-01 01:01:01"})
+     * @Column(name="datecreated", type="datetime", options={"default"="CURRENT_TIMESTAMP"})
      * @var DateTime
      */
     protected $creationDate;
     
     /**
-     * @Column(name="lastmodifieddate", type="datetime", options={"default"="0001-01-01 01:01:01"})
+     * @Column(name="lastmodifieddate", type="datetime", options={"default"="CURRENT_TIMESTAMP"})
      * @var DateTime
      */
     protected $lastModifiedDate;
     
     /**
-     * @Column(name="last_login_datetime", type="datetime", options={"default"="0001-01-01 01:01:01"})
+     * @Column(name="last_login_datetime", type="datetime", options={"default"="CURRENT_TIMESTAMP"})
      * @var DateTime
      */
     protected $lastLoginDate;
