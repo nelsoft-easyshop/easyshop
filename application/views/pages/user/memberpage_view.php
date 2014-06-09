@@ -187,9 +187,6 @@
 		<a href="#" class="last" data-action="last">&raquo;</a>
 	</div>
 	
-	<?php if(count($active_products) == 0):?>
-		<p><strong>No items on sale.</strong></p>
-	<?php else:?>
 	<div class="post_item_srch_container">
 		<input type="text" class="box sch_box" placeholder="Search" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Search'" />
 		<span class="span_bg sch_btn"></span>
@@ -202,6 +199,10 @@
 		<span class="span_bg arrow_sort"></span>
 		<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" class="loading_img" style="display:none;"/>
 	</div>
+	
+	<?php if(count($active_products) == 0):?>
+		<p><strong>No items on sale.</strong></p>
+	<?php else:?>
 	
 	<div class="paging">					
 		<?php $product_counter = $mycounter = 0; 
@@ -311,10 +312,6 @@
 		<a href="#" class="last" data-action="last">&raquo;</a>
 	</div>
 	
-	<?php if(count($deleted_products) == 0):?>
-		<p><strong>No deleted items.</strong></p>
-	<?php else:?>
-
 	<div class="post_item_srch_container">
 		<input type="text" class="box sch_box" placeholder="Search" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Search'" />
 		<span class="span_bg sch_btn"></span>
@@ -328,6 +325,10 @@
 		<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" class="loading_img" style="display:none;"/>
 	</div>
 	
+	<?php if(count($deleted_products) == 0):?>
+		<p><strong>No deleted items.</strong></p>
+	<?php else:?>
+
 	<div class="paging">
 		<?php $product_counter =0; $mycounter = 0;?>
 		<?php foreach($deleted_products as $deleted_product):?>
