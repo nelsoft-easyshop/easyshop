@@ -258,6 +258,7 @@
 		ON for.id_member = fb.for_memberid
 	WHERE fb.member_id = :id OR fb.for_memberid = :id
 	ORDER BY fb.dateadded
+	LIMIT 400
 </select>
 
 <select id="getTransactionDetails">
