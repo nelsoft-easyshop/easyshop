@@ -42,7 +42,7 @@
                     </div>
 
                     <div class="change_shipping_btn_con">
-                        <a href="javascript:void(0);"  class="link_address orange_btn3">Change Shipping Address</a> 
+                        <a href="javascript:void(0);"  class="link_address grey_btn">Change Shipping Address</a> 
                     </div>
 
                     <?php if($success && $qtysuccess): ?>
@@ -115,7 +115,7 @@
 
                         <div id="dragonpay" class="payment_inner_content">
                             <p class="chck_privacy"><input type="checkbox" checked id="chk_dp" name='chk_dp'> <label for='chk_dp'>I acknowledge I have read and understood Easyshop.ph's  </label><a href="">Privacy Policy</a>.</p><br>
-                            <input type="button" class="btnDp" value="Pay via DRAGON PAY">
+                            <input type="button" class="btnDp orange_btn3" value="Pay via DRAGON PAY">
                         </div>
 
 <!-- #### DIRECT BANK DEPOSIT #### -->
@@ -127,7 +127,7 @@
                             echo form_open('pay/directbank/', $attr);
                             ?>
                             <p class="chck_privacy"><input type="checkbox" checked  id="chk_dbd" name='chk_dbd'><label for='chk_dbd'> I acknowledge I have read and understood Easyshop.ph's</label> <a href="">Privacy Policy</a>.</p><br>
-                            <input type="button" class="payment_dbd" value="Proceed to Payment"> 
+                            <input type="button" class="payment_dbd orange_btn3" value="Proceed to Payment"> 
                             <input type="hidden" value="<?php echo md5(uniqid(mt_rand(), true)).'2';?>" name="paymentToken">   
                             <?php echo form_close();?>
                             <p class="notify">You will be notified regarding your order status via email or sms.</p>
@@ -145,7 +145,7 @@
                                 echo form_open('pay/cashondelivery/', $attr);
                                 ?>
                                 <p class="chck_privacy"><input type="checkbox" checked  id="chk_cod" name='chk_cod'><label for='chk_cod'> I acknowledge I have read and understood Easyshop.ph's</label> <a href="">Privacy Policy</a>.</p><br>
-                                <input type="button" class="payment_cod" value="Proceed to Payment"> 
+                                <input type="button" class="payment_cod orange_btn3" value="Proceed to Payment"> 
                                 <input type="hidden" value="<?php echo md5(uniqid(mt_rand(), true)).'1';?>" name="paymentToken">   
                                 <?php echo form_close();?>
                                 <p class="notify">You will be notified regarding your order status via email or sms.</p>
