@@ -1688,7 +1688,7 @@
 						<?php if( $user['has_feedb'] == 0 ): ?>
 							<p class="transac-feedback-btn"> + Feedback for <?php echo $user['name'];?></p>
 							<div class="transac-feedback-container">
-								 <!--<form class="transac-feedback-form"> -->
+								<h2>Feedback</h2>
 								<?php
 								$attr = array('class'=>'transac-feedback-form');
 								echo form_open('',$attr);
@@ -1696,15 +1696,20 @@
 								<input type="hidden" name="feedb_kind" value="0">
 								<input type="hidden" name="order_id" value="<?php echo $tk;?>">
 								<input type="hidden" name="for_memberid" value="<?php echo $uk;?>">
-								<textarea rows="4" cols="50" name="feedback-field"></textarea><br>
+								<textarea rows="4" cols="50" name="feedback-field"></textarea>
 								<span class="red ci_form_validation_error"><?php echo form_error('feedback-field'); ?></span>
-								<span><?php echo $this->lang->line('rating')[0].':'; ?>  </span><div class="feedb-star rating1"></div><br>
+								<br>
+								<span class="star-label"><?php echo $this->lang->line('rating')[0].':'; ?>  </span><div class="feedb-star rating1"></div>
 								<span class="red ci_form_validation_error"><?php echo form_error('rating1'); ?></span>
-								<span><?php echo $this->lang->line('rating')[1].':'; ?> </span><div class="feedb-star rating2"></div><br>
+								<br>
+								<span class="star-label"><?php echo $this->lang->line('rating')[1].':'; ?> </span><div class="feedb-star rating2"></div>
 								<span class="red ci_form_validation_error"><?php echo form_error('rating2'); ?></span>
-								<span><?php echo $this->lang->line('rating')[2].':'; ?>  </span><div class="feedb-star rating3"></div><br>
+								<br>
+								<span class="star-label"><?php echo $this->lang->line('rating')[2].':'; ?>  </span><div class="feedb-star rating3"></div>
 								<span class="red ci_form_validation_error"><?php echo form_error('rating3'); ?></span>
-								<span class="raty-error error red"></span>
+								<br>
+								<span class="raty-error"></span>
+								<br>
 								<span class="feedback-submit">Submit</span><span class="feedback-cancel">Cancel</span>
 								<?php echo form_close();?>
 							</div>
@@ -1955,7 +1960,7 @@
 					<?php if( $user['has_feedb'] == 0 ): ?>
 						<p class="transac-feedback-btn"> + Feedback for <?php echo $user['name'];?></p>
 						<div class="transac-feedback-container">
-							<!-- <form class="transac-feedback-form"> -->
+							<h2>Feedback</h2>
 							<?php
 							$attr = array('class'=>'transac-feedback-form');
 							echo form_open('',$attr);
@@ -1963,15 +1968,20 @@
 							<input type="hidden" name="feedb_kind" value="1">
 							<input type="hidden" name="order_id" value="<?php echo $tk;?>">
 							<input type="hidden" name="for_memberid" value="<?php echo $uk;?>">
-							<textarea rows="4" cols="50" name="feedback-field"></textarea><br>
+							<textarea rows="4" cols="50" name="feedback-field"></textarea>
 							<span class="red ci_form_validation_error"><?php echo form_error('feedback-field'); ?></span>
-							<span><?php echo $this->lang->line('rating')[0].':'; ?>  </span><div class="feedb-star rating1"></div><br>
+							<br>
+							<span class="star-label"><?php echo $this->lang->line('rating')[0].':'; ?>  </span><div class="feedb-star rating1"></div>
 							<span class="red ci_form_validation_error"><?php echo form_error('rating1'); ?></span>
-							<span><?php echo $this->lang->line('rating')[1].':'; ?>  </span><div class="feedb-star rating2"></div><br>
+							<br>
+							<span class="star-label"><?php echo $this->lang->line('rating')[1].':'; ?> </span><div class="feedb-star rating2"></div>
 							<span class="red ci_form_validation_error"><?php echo form_error('rating2'); ?></span>
-							<span><?php echo $this->lang->line('rating')[2].':'; ?>  </span><div class="feedb-star rating3"></div><br>
+							<br>
+							<span class="star-label"><?php echo $this->lang->line('rating')[2].':'; ?>  </span><div class="feedb-star rating3"></div>
 							<span class="red ci_form_validation_error"><?php echo form_error('rating3'); ?></span>
-							<span class="raty-error error red"></span>
+							<br>
+							<span class="raty-error"></span>
+							<br>
 							<span class="feedback-submit">Submit</span> <span class="feedback-cancel">Cancel</span>
 							<?php echo form_close();?>
 						</div>
@@ -2091,7 +2101,7 @@
 							<?php if( $user['has_feedb'] == 0 ): ?>
 								<p class="transac-feedback-btn"> + Feedback for <?php echo $user['name'];?></p>
 								<div class="transac-feedback-container">
-									<!--<form class="transac-feedback-form">-->
+									<h2>Feedback</h2>
 									<?php
 									$attr = array('class'=>'transac-feedback-form');
 									echo form_open('',$attr);
@@ -2099,15 +2109,20 @@
 									<input type="hidden" name="feedb_kind" value="0">
 									<input type="hidden" name="order_id" value="<?php echo $tk;?>">
 									<input type="hidden" name="for_memberid" value="<?php echo $uk;?>">
-									<textarea rows="4" cols="50" name="feedback-field"></textarea><br>
+									<textarea rows="4" cols="50" name="feedback-field"></textarea>
 									<span class="red ci_form_validation_error"><?php echo form_error('feedback-field'); ?></span>
-									<span><?php echo $this->lang->line('rating')[0].':'; ?>  </span><div class="feedb-star rating1"></div><br>
+									<br>
+									<span class="star-label"><?php echo $this->lang->line('rating')[0].':'; ?>  </span><div class="feedb-star rating1"></div>
 									<span class="red ci_form_validation_error"><?php echo form_error('rating1'); ?></span>
-									<span><?php echo $this->lang->line('rating')[1].':'; ?> </span><div class="feedb-star rating2"></div><br>
+									<br>
+									<span class="star-label"><?php echo $this->lang->line('rating')[1].':'; ?> </span><div class="feedb-star rating2"></div>
 									<span class="red ci_form_validation_error"><?php echo form_error('rating2'); ?></span>
-									<span><?php echo $this->lang->line('rating')[2].':'; ?>  </span><div class="feedb-star rating3"></div><br>
+									<br>
+									<span class="star-label"><?php echo $this->lang->line('rating')[2].':'; ?>  </span><div class="feedb-star rating3"></div>
 									<span class="red ci_form_validation_error"><?php echo form_error('rating3'); ?></span>
-									<span class="raty-error error red"></span>
+									<br>
+									<span class="raty-error"></span>
+									<br>
 									<span class="feedback-submit">Submit</span><span class="feedback-cancel">Cancel</span>
 									<?php echo form_close();?>
 								</div>
@@ -2264,7 +2279,7 @@
 						<?php if( $user['has_feedb'] == 0 ): ?>
 							<p class="transac-feedback-btn"> + Feedback for <?php echo $user['name'];?></p>
 							<div class="transac-feedback-container">
-								<!--<form class="transac-feedback-form">-->
+								<h2>Feedback</h2>
 								<?php
 								$attr = array('class'=>'transac-feedback-form');
 								echo form_open('',$attr);
@@ -2272,15 +2287,20 @@
 								<input type="hidden" name="feedb_kind" value="1">
 								<input type="hidden" name="order_id" value="<?php echo $tk;?>">
 								<input type="hidden" name="for_memberid" value="<?php echo $uk;?>">
-								<textarea rows="4" cols="50" name="feedback-field"></textarea><br>
+								<textarea rows="4" cols="50" name="feedback-field"></textarea>
 								<span class="red ci_form_validation_error"><?php echo form_error('feedback-field'); ?></span>
-								<span><?php echo $this->lang->line('rating')[0].':'; ?>  </span><div class="feedb-star rating1"></div><br>
+								<br>
+								<span class="star-label"><?php echo $this->lang->line('rating')[0].':'; ?>  </span><div class="feedb-star rating1"></div>
 								<span class="red ci_form_validation_error"><?php echo form_error('rating1'); ?></span>
-								<span><?php echo $this->lang->line('rating')[1].':'; ?>  </span><div class="feedb-star rating2"></div><br>
+								<br>
+								<span class="star-label"><?php echo $this->lang->line('rating')[1].':'; ?> </span><div class="feedb-star rating2"></div>
 								<span class="red ci_form_validation_error"><?php echo form_error('rating2'); ?></span>
-								<span><?php echo $this->lang->line('rating')[2].':'; ?>  </span><div class="feedb-star rating3"></div><br>
+								<br>
+								<span class="star-label"><?php echo $this->lang->line('rating')[2].':'; ?>  </span><div class="feedb-star rating3"></div>
 								<span class="red ci_form_validation_error"><?php echo form_error('rating3'); ?></span>
-								<span class="raty-error error red"></span>
+								<br>
+								<span class="raty-error"></span>
+								<br>
 								<span class="feedback-submit">Submit</span> <span class="feedback-cancel">Cancel</span>
 								<?php echo form_close();?>
 							</div>

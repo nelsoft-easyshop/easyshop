@@ -1143,41 +1143,58 @@ $(document).ready(function(){
 	});
 	
 	$('.transac-feedback-btn').on('click', function(){
-		$(this).siblings('.transac-feedback-container').fadeIn();
-		$(this).fadeOut();
-	});
-	
-	$('.feedback-cancel').on('click', function(){
-		$(this).closest('.transac-feedback-container').fadeOut();
-		$(this).closest('.transac-feedback-container').siblings('.transac-feedback-btn').fadeIn();
-		$(this).siblings('[name="feedback-field"]').val('');
-	});
-	
-	$('.feedback-submit').on('click', function(event){
-		var form = $(this).parent('form.transac-feedback-form');
-		var feedbackfield = $(this).siblings('[name="feedback-field"]');
-		var rating1 = $(this).siblings('div.rating1').children('input[name="rating1"]').val();
-		var rating2 = $(this).siblings('div.rating2').children('input[name="rating2"]').val();
-		var rating3 = $(this).siblings('div.rating3').children('input[name="rating3"]').val();
-		var econt = $(this).siblings('.raty-error');
+		var divcont = $(this).siblings('.transac-feedback-container');
+		var form = divcont.children('form.transac-feedback-form');
+		var thisbtn = $(this);
 		
-		if($.trim(feedbackfield.val()).length < 1)
-			feedbackfield.effect('pulsate',{times:3},800);
-		else if(rating1 === '' || rating2 === '' || rating3 ==='')
-			econt.html('Please rate this user!');
-		else{
-			$(this).hide();
-			$.post(config.base_url+'memberpage/addFeedback',form.serialize(),function(data){
-				if(data == 1){
-					form.parent().fadeOut();
-					form.closest('div.feedback_container').html('<p>Your feedback has been submitted.</p>');
-				}
-				else{
-					form.parent().fadeOut();
-					form.closest('div.feedback_container').html('<p class="error red">An error was encountered. Try again later.</p>');
-				}
-			});
-		}
+		var starset = form.children('div.feedb-star');
+		var textarea = form.children('textarea[name="feedback-field"]');
+		var econt = form.children('.raty-error');
+	
+		divcont.modal({
+			onShow: function(){
+				this.setPosition();
+				var submitbtn = form.children('.feedback-submit');
+				submitbtn.off('click').on('click', function(event){
+					var rating1 = $(this).siblings('div.rating1').children('input[name="rating1"]').val();
+					var rating2 = $(this).siblings('div.rating2').children('input[name="rating2"]').val();
+					var rating3 = $(this).siblings('div.rating3').children('input[name="rating3"]').val();
+					var econt = $(this).siblings('.raty-error');
+					
+					if($.trim(textarea.val()).length < 1)
+						textarea.effect('pulsate',{times:3},800);
+					else if(rating1 === '' || rating2 === '' || rating3 ==='')
+						econt.html('Please rate this user!');
+					else{
+						$.post(config.base_url+'memberpage/addFeedback',form.serialize(),function(data){
+							submitbtn.attr('disabled',false);
+							submitbtn.val('Submit');
+							if(data == 1){
+								divcont.parent('div.feedback_container').html('<p>Your feedback has been submitted.</p>');
+							}
+							else{
+								form.closest('div.feedback_container').html('<p class="error red">An error was encountered. Try again later.</p>');
+							}
+						});
+						submitbtn.attr('disabled',true);
+						submitbtn.val('Sending...');
+						$.modal.close();
+						return false;
+					}
+				});
+			},
+			onClose: function(){
+				starset.raty('reload');
+				textarea.val('');
+				econt.html('');
+				$.modal.close();
+			}
+		});
+		
+	});
+
+	$('.feedback-cancel').on('click', function(){
+		$.modal.close();
 	});
 	
 	$('#tx_dialog input[type="password"]').on('keypress', function(){
