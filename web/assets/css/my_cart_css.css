@@ -618,6 +618,7 @@ a.delete:hover .del {
 	border:1px solid #EBE9E9;
 /*	border-top: none;*/
 /*	margin-top: -1px;*/
+	min-height: 230px;
 	padding:20px 10px 10px;
 	width: 546px;
 }
@@ -673,7 +674,14 @@ p.notify {
 
 p.chck_privacy {
 	display: inline-block;
+}
 
+.btnDp.orange_btn3,
+.payment_dbd.orange_btn3,
+.payment_cod.orange_btn3 {
+    border: medium none;
+    cursor: pointer;
+    margin-top: 20px;
 }
 
 p.chck_privacy input {
@@ -810,8 +818,6 @@ input.cc_check {
 	width: 580px
 }
 
- 
-
 .txt_change_shipping_address {
     background-color: #FFEFEF;
     border: 1px solid #FF0000;
@@ -821,6 +827,7 @@ input.cc_check {
 }
 
 .link_address {
+	display: inline-block;
     margin-top: 15px;
 }
 
