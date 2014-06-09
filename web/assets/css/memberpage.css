@@ -91,6 +91,8 @@ box-shadow:         0px 0px 10px 0px rgba(50, 50, 50, 0.75);
     
 }
 
+
+
 .shipping_comment_cont{
 	width: 500px;
 }
@@ -99,6 +101,8 @@ box-shadow:         0px 0px 10px 0px rgba(50, 50, 50, 0.75);
 	padding: 5px;
 	background-color: #F48000;
 	color: white;
+    font-weight: bold;
+    font-size: 16px;
 }
 
 .shipping_comment_cont input, .shipping_comment_cont label,
@@ -115,15 +119,27 @@ box-shadow:         0px 0px 10px 0px rgba(50, 50, 50, 0.75);
 	width: 90px;
 }
 
+
+
 .shipping_comment_cont label, .payment_details_cont label{
 	width: 30%;
 	margin-left: 5px;
 }
 
+.shipping_comment_cont label{
+	font-weight: bold;
+    margin-left: 15px;
+}
+
+
 .shipping_comment_cont textarea{
 	display:block;
 	margin: 3px;
-	margin-left: 5px;
+	margin-left: 15px;
+}
+
+.shipping_comment_submit{
+    margin-left: 15px !important;
 }
 
 .css_modal_edit, .css_modal_cancel{
