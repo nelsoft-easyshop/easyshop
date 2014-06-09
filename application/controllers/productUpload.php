@@ -435,12 +435,8 @@ class productUpload extends MY_Controller
 
 			// $tempdirectory = $this->input->post('tempdirectory');
             $tempdirectory = $this->session->userdata('tempId'); 
-
-
-            if(dirname($tempdirectory) !== './assets/temp_product'){
-                exit();
-            }
-
+            $tempdirectory = $tempdirectory.'_'.$member_id.'_'.$date;
+            $tempdirectory = './assets/temp_product/'.$tempdirectory.'/'; 
 			directory_copy($tempdirectory, $path_directory,$product_id,$arrayNameOnly); 
 
 			if($product_id > 0) # id_product is 0 means no item inserted. the process will stop.
