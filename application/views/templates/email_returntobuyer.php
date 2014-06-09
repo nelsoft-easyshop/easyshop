@@ -16,6 +16,9 @@
 				<tr>
 					<td colspan="3">
 						<span style="color:#f18200;font-weight:bold;">{user}</span> has just confirmed to return your payment for the following product:
+						<span style="margin-left:1em;">
+							<a href="{store_link}" style="color:#f18200;">View Store</a> || <a href="{msg_link}" style="color:#f18200;">Send Message</a>
+						</span>
 					</td>
 				</tr>
 				<tr>
@@ -63,8 +66,8 @@
 				</tr>
 				{attr}
 				<tr>
-					<td>{field} : </td>
-					<td>{value}</td>
+					<td><span style="margin-left:2em;">{field} : </span></td>
+					<td><span style="margin-left:2em;">{value}</span></td>
 				</tr>
 				{/attr}
 			</tbody>

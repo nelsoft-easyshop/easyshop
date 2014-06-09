@@ -46,7 +46,8 @@
             <tbody>
               <tr>
                 <td>
-				  <span style="display:inline-block;font-weight:bold;width:150px;">Purchased from : </span>{seller} <br>
+				  <span style="display:inline-block;font-weight:bold;width:150px;">Purchased from : </span>{seller} <br> 
+				  <span style="display:inline-block;width:250px;margin-left:3em;"><a href="{store_link}{seller}" target="_blank" style="color:orange;">View Store</a> || <a href="{msg_link}{seller}" target="_blank" style="color:orange;">Send Message</a></span> <br><br>
 				  <span style="display:inline-block;font-weight:bold;width:150px;">Product Order #: </span>{order_product_id} <br>
                   <span style="display:inline-block;font-weight:bold;width:150px;">Product : </span>{name} <br>
 				  <span style="display:inline-block;font-weight:bold;width:150px;">Base Price :</span> Php {baseprice} <br>
@@ -55,7 +56,7 @@
                   <span style="display:inline-block;font-weight:bold;width:150px;">Final Price :</span> Php {finalprice} <br>
                   <span style="display:inline-block;font-weight:bold;width:150px;">Product Specifications:</span> <br>
                   {attr}
-                    <span style="display:inline-block;font-weight:bold;width:150px;">{attr_name} :</span> {attr_value} <br>
+                    <span style="display:inline-block;font-weight:bold;width:150px;margin-left:2em;">{attr_name} :</span> {attr_value} <br>
                   {/attr} 
                   <br>
                 </td>

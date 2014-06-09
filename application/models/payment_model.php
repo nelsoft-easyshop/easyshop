@@ -159,14 +159,21 @@ class payment_model extends CI_Model
 		
 		if($string === 'buyer'){
 			$this->email->subject($this->lang->line('notification_subject_buyer'));
+			#user appended at template
+			$data['store_link'] = base_url() . "vendor/";
+			$data['msg_link'] = base_url() . "messages/#";
 			$msg = $this->parser->parse('templates/email_purchase_notification_buyer',$data,true);
 		}
 		else if($string === 'seller'){
 			$this->email->subject($this->lang->line('notification_subject_seller'));
+			$data['store_link'] = base_url() . "vendor/" . $data['buyer_name'];
+			$data['msg_link'] = base_url() . "messages/#" . $data['buyer_name'];
 			$msg = $this->parser->parse('templates/email_purchase_notification_seller',$data,true);
 		}
 		else if($string === 'return_payment'){
 			$this->email->subject($this->lang->line('notification_returntobuyer'));
+			$data['store_link'] = base_url() . "vendor/" . $data['user'];
+			$data['msg_link'] = base_url() . "messages/#" . $data['user'];
 			$msg = $this->parser->parse('templates/email_returntobuyer',$data,true);
 		}
 		
@@ -320,6 +327,8 @@ class payment_model extends CI_Model
 				array_push($parseData['attr'], array('field' => ucwords(strtolower($r['attr_name'])), 'value' => ucwords(strtolower($r['attr_value'])) ));
 			}else if($r['is_other'] === '1'){
 				array_push($parseData['attr'], array('field' => ucwords(strtolower($r['field_name'])), 'value' => ucwords(strtolower($r['value_name'])) ));
+			}else{
+				array_push($parseData['attr'], array('field' => 'N/A', 'value' => 'N/A' ));
 			}
 		}
 		

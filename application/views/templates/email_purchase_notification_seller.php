@@ -13,7 +13,12 @@
 			<tbody>
 				<tr>
 					<td>
-						<h2 style="font-size:16px;"><span style="color:#f18200;">{buyer_name}</span> purchased from you!</h2>
+						<h2 style="font-size:16px;">
+							<span style="color:#f18200;">{buyer_name}</span> purchased from you! 
+							<span style="font-weight:normal;font-size:12px;margin-left:1em;">
+								<a href="{store_link}" style="color:#f18200;">View Store</a> || <a href="{msg_link}" style="color:#f18200;">Send Message</a>
+							</span>
+						</h2>
 						<p>
 							Dear {seller_name},
 						</p>
@@ -61,7 +66,7 @@
 									<span style="display:inline-block;font-weight:bold;width:150px;">Net Amount to be received:</span> Php {net} <br>
 									<span style="display:inline-block;font-weight:bold;width:150px;">Product Specifications:</span> <br>
 									{attr}
-										<span style="display:inline-block;font-weight:bold;width:150px;">{attr_name} :</span> {attr_value} <br>
+										<span style="display:inline-block;font-weight:bold;width:150px;margin-left:2em;">{attr_name} :</span> {attr_value} <br>
 									{/attr} 
 									<br>
 								</td>
