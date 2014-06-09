@@ -1150,6 +1150,19 @@ nav ul > li:hover > div {
 	width: 782px;
 }
 
+.countdown_top_left_content span.cd_timerlabel{
+    color: white; 
+    font-size: 20px; 
+    text-shadow: black 0.1em 0.1em 0.2em;
+    font-family: calibri;
+}
+
+.countdown_top_left_content div.cd_timerlabel_container{
+    position: absolute;
+    right: 136px;
+    top: 160px;
+}
+
 .countdown_top_left_content,
 .countdown_top_right_content {
 	float: left;
@@ -1160,6 +1173,7 @@ nav ul > li:hover > div {
 	background:#fff url(../../assets/images/img_countdown_banner.png) no-repeat center top;
 	width: 348px;
 	height: 277px;
+	position: relative;
 }
 
 .cd_timer_container {
@@ -1208,8 +1222,11 @@ nav ul > li:hover > div {
 }
 
 .cd_right_con img{
-    width: inherit;
     float: right;
+    height: auto;
+    max-height: 266px;
+    max-width: 180px;
+    width: auto;
 }
 
 .countdown_top_right_content {
@@ -1304,6 +1321,16 @@ nav ul > li:hover > div {
 	text-align: center;
 }
 
+.cd_view_all {
+	margin:10px;
+	text-align: right;
+}
+
+.cd_view_all a {
+	font-weight: bold;
+	padding:8px 35px;
+}
+
 /***** countdown slides ******/
 
 .bx-wrapper.countdown_slides_wrapper .bx-viewport {
@@ -1315,6 +1342,7 @@ nav ul > li:hover > div {
     margin-bottom: 5px !important;
     margin-top: 5px !important;
     max-width: 770px !important;
+    padding-bottom: 5px !important;
 }
 
 .countdown_slides_wrapper .bx-controls-direction {
@@ -1450,9 +1478,6 @@ nav ul > li:hover > div {
     width: 70px;
     margin-right: 3px;
 }
-
-
-
 
 .disable_btn {
 	background-color: #cccccc;
