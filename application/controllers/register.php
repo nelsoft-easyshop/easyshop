@@ -321,7 +321,9 @@ class Register extends MY_Controller
 			$this->register_model->update_verification_status($temp);
 			
 			$data['verification_msg'] = $this->lang->line('success_email_verification');
-			$this->load->view('templates/header_topnavsolo', $data);
+            $data['render_searchbar'] = false;
+            $data['render_logo'] = false;
+			$this->load->view('templates/header', $data);
 			$this->load->view('pages/user/register_form3_view', $data);
 			$this->load->view('templates/footer');
 		}
