@@ -1062,6 +1062,7 @@ $(document).ready(function(){
              
             for(var i = 0; i < fileList.length; i++){
                 var size = fileList[i].size
+                console.log(size);
                 var val = fileList[i].name;
                 var extension = val.substring(val.lastIndexOf('.') + 1).toLowerCase();
                 var objectUrl = anyWindow.createObjectURL(fileList[i]);
@@ -1079,7 +1080,7 @@ $(document).ready(function(){
                      $('.filescnt'+filescnt+' > .makeprimary').hide(); 
 
                 }else{
-                    if(size < 1242880){
+                    if(size < 5*1024*1024){
                         errorValues += val + "\n(Invalid file type).\n<br>";
                     }else{
                          errorValues += val + "\n(The file size exceeds 5 MB).\n<br>";
