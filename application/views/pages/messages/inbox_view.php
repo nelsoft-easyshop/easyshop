@@ -72,6 +72,7 @@
     </div>
     <button id="modal_send_btn">Send</button>
 </div>
+
 <script src="/assets/js/src/messaging.js"></script>
 <script>
 	$(document).ready(function() {
@@ -108,8 +109,26 @@
         var objDiv = document.getElementById("msg_field");	
         objDiv.scrollTop = objDiv.scrollHeight;
 		});
-		
-    
+
+
+        $(function(){
+            initSectorUI();
+
+            $("#navigator a").click(function(){
+                showSectorMini($(this).attr('href'));
+            });
+        });
+
+        var initSectorUI = function(){
+            if (location.hash) showSectorMini(location.hash);
+        };
+        var showSectorMini = function(sector){
+            var username = sector.replace('#', '');
+            $("#msg_name").val(username);
+            $("#modal-container, #modal-background").toggleClass("active");
+            $("#modal-container").show();
+        };
+
         /*
          * We only enable this when web socket fails
          */
