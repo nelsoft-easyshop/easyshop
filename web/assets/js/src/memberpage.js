@@ -2735,7 +2735,7 @@ $(document).ready(function(){
 						$("#bi_bank, #bi_acct_name, #bi_acct_no").val('');
 						window.location.href = config.base_url+'me?me=pmnt';
 					}else{
-                        alert('Something went wrong. Pleasy try again later.');
+                        alert('Something went wrong. Please try again later.');
                     }
 				}
 			});		

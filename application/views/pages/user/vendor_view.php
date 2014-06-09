@@ -24,9 +24,12 @@
 					</ul>
 				</div>
 				<div class="member_srch_wrapper">
-					<input type="text" onblur="this.placeholder = 'Search'" onfocus="this.placeholder = ''" placeholder="Search">
-					<input type="submit" value="" class="span_bg">
-				</div>         	
+                    <form method="get" action="<?=base_url()?>search/search.html">
+                        <input type="text" name="q_str" id="member_sch" onblur="this.placeholder = 'Search'" onfocus="this.placeholder = ''" placeholder="Search">
+                        <input type="submit" value="" class="span_bg">
+                    </form>
+				</div>   
+                <div id="search_content" class="member_srch_container"></div>  
 			</div>
 		</div>
 	</section>
@@ -542,6 +545,59 @@
             });
 	});
 	
+    });
+    
+    
+    
+    $(document).ready(function() {
+        var currentRequest = null;
+     
+        $('#member_sch').on('input propertychange', function() {
+            var searchQuery = $.trim( $(this).val());
+            searchQuery = searchQuery.replace(/ +(?= )/g,'');
+            var fulltext = searchQuery; 
+                if(searchQuery != ""){
+                    currentRequest = $.ajax({
+                        type: "GET",
+                         url: '<?php echo base_url();?>search/suggest', 
+                        cache: false,
+                        data: "q="+fulltext, 
+                        beforeSend: function(jqxhr, settings) { 
+                            $("#search_content").empty();
+                            if(currentRequest != null) {
+                                currentRequest.abort();
+                            }
+                        },
+                        success: function(html) {
+                            $("#search_content").empty();
+
+
+                            if(html==0){
+                                $("#search_content").append('No result found');
+                            }
+                            else{
+                                $("#search_content").append(html);
+                                $("#search_content").show();
+                            }
+                        }
+                    });
+                }else{
+                    $("#search_content").hide();
+                }
+        });
+    });
+
+    $(document).ready(function() { 
+
+        $('#member_sch').focus(function() {
+        $('#search_content').show();
+        $(document).bind('focusin.member_srch_container click.member_srch_container',function(e) {
+            if ($(e.target).closest('#search_content, #member_sch').length) return;
+            $('#search_content').hide();
+            });
+         });
+
+        $('#search_content').hide();
     });
     
 </script>

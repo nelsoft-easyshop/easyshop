@@ -39,7 +39,6 @@
 				</div>
 				<div class="member_srch_wrapper">
 					<form method="get" action="<?=base_url()?>search/search.html">
-					<span class="member_srch_img_con"></span>
 					<input type="text" name="q_str" id="member_sch" onblur="this.placeholder = 'Search'" onfocus="this.placeholder = ''" placeholder="Search">
 					
 					
@@ -2374,7 +2373,6 @@
 								currentRequest = $.ajax({
 									type: "GET",
 									 url: '<?php echo base_url();?>search/suggest', 
-									onLoading:jQuery(".member_srch_img_con").html('<img src="<?= base_url() ?>assets/images/orange_loader_small.gif" />').show(),
 									cache: false,
 									data: "q="+fulltext, 
 									beforeSend: function(jqxhr, settings) { 
@@ -2394,7 +2392,6 @@
 											$("#search_content").append(html);
 											$("#search_content").show();
 										}
-										$(".member_srch_img_con").hide();
 									}
 								});
 							}else{
