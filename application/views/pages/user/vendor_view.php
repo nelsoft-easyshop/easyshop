@@ -128,7 +128,7 @@
 				<?php $items_per_page = 10; ?>
 
 				<!-- Echoes last fetched product ID for dashboard item list -->
-				<input id="last_dashboard_item_id" type="hidden" value="<?php echo $last_dashboard_item_id;?>">
+				<input id="last_dashboard_product" type="hidden" value="<?php echo $last_dashboard_product;?>">
 				<input id="mid" type="hidden" value="<?php echo $vendordetails['id_member'];?>">
 				
 				<div class="dashboard_table" id="active_items">

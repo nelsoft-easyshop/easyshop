@@ -175,7 +175,7 @@
 <?php $items_per_page = 10; ?>
 
 <!-- Echoes last fetched product ID for dashboard item list -->
-<input id="last_dashboard_item_id" type="hidden" value="<?php echo $last_dashboard_item_id;?>">
+<input id="last_dashboard_product" type="hidden" value="<?php echo $last_dashboard_product;?>">
 
 <div class="dashboard_table" id="active_items">
 	<h2>Active Items</h2>
@@ -215,6 +215,7 @@
 					<img src="<?php echo base_url().$active_product['path'].'categoryview/'.$active_product['file']; ?>" class="product_img">
 				</span>
 				</div>
+				<p><small>Last modified : <?php echo date_format(date_create($active_product['lastmodifieddate']),'Y-m-d')?></small></p>
 				<p class="star_rating_reviews">
 					<?php $rounded_score = round($active_product['average_rating']); ?>
 					<?php for($i = 0; $i < $rounded_score;$i++): ?>
@@ -339,7 +340,7 @@
                         <img src="<?php echo base_url().$deleted_product['path'].'categoryview/'.$deleted_product['file']; ?>" class="product_img">
                     </span>
 				</div>
-            
+				<p><small>Last modified : <?php echo date_format(date_create($deleted_product['lastmodifieddate']),'Y-m-d')?></small></p>
 				<p>
 					<?php $rounded_score = round($deleted_product['average_rating']); ?>
 					<?php for($i = 0; $i < $rounded_score ;$i++): ?>

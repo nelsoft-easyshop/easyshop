@@ -12,9 +12,9 @@ $(document).ready(function(){
 	
 	var csrftoken = $("meta[name='csrf-token']").attr('content');
     var csrfname = $("meta[name='csrf-name']").attr('content');
-	var lastid = parseInt($('#last_dashboard_item_id').val());
+	var lastproduct = $('#last_dashboard_product').val();
 
-	$.post(config.base_url+'memberpage/getMoreUserItems',{csrfname:csrftoken, lastid:lastid}, function(data){
+	$.post(config.base_url+'memberpage/getMoreUserItems',{csrfname:csrftoken, lastproduct:lastproduct}, function(data){
 		try{
 			var obj = jQuery.parseJSON(data);
 		}
@@ -1478,7 +1478,7 @@ $(document).ready(function(){
 								editbtn.show();
 								cancelbtn.hide();
 								
-								txStatus.replaceWith('<span class="trans_alert trans_red">PROCESSING DEPOSIT DETAILS</span>');
+								txStatus.replaceWith('<span class="trans_alert trans_orange">PROCESSING DEPOSIT DETAILS</span>');
 								
 								$.modal.close();
 							}else{

@@ -6,6 +6,7 @@
                    <img src="<?php echo base_url().$deleted_product['path'].'categoryview/'.$deleted_product['file']; ?>" class="product_img">
                 </span>
             </div>
+			<p><small>Last modified : <?php echo date_format(date_create($deleted_product['lastmodifieddate']),'Y-m-d')?></small></p>
 			<p>
 				<?php $rounded_score = round($deleted_product['average_rating']); ?>
 				<?php for($i = 0; $i < $rounded_score ;$i++): ?>

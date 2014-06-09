@@ -355,9 +355,9 @@ class memberpage_model extends CI_Model
 	}
 	
 	
-	function getUserItems($member_id, $lastid = 0) 	#Retrieves user items to be displayed on dashboard
+	function getUserItems($member_id, $lastproduct = 0) 	#Retrieves user items to be displayed on dashboard
 	{
-		if($lastid === 0){
+		if($lastproduct === 0){
 			$query = $this->xmlmap->getFilenameID('sql/product','getUserItems');
 			$sth = $this->db->conn_id->prepare($query);
 			$sth->bindParam(':id',$member_id);
@@ -368,13 +368,13 @@ class memberpage_model extends CI_Model
 			$query = $this->xmlmap->getFilenameID('sql/product','getMoreUserItems');
 			$sth = $this->db->conn_id->prepare($query);
 			$sth->bindParam(':id',$member_id);
-			$sth->bindParam(':last_id',$lastid);
+			$sth->bindParam(':last_product',$lastproduct);
 			$sth->execute();
 			$rows = $sth->fetchAll(PDO::FETCH_ASSOC);
 			$data = array('active'=>array(),'deleted'=>array(), 'sold_count'=>0);
 		}
 		
-		$data['last_id'] = end($rows)['id_product'];
+		$data['last_product'] = end($rows)['lastmodifieddate'];
 		
 		foreach($rows as $key=>$row){
 			$query = $this->xmlmap->getFilenameID('sql/product','getParent');

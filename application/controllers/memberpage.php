@@ -179,7 +179,7 @@ class Memberpage extends MY_Controller
 				'active_count' => $user_product_count['active'],
 				'deleted_count' => $user_product_count['deleted'],
                 'sold_count' => $user_product_count['sold'],
-				'last_dashboard_item_id' => $user_products['last_id']
+				'last_dashboard_product' => $user_products['last_product']
                 );
 		$data = array_merge($data, $this->memberpage_model->getLocationLookup());
 		$data = array_merge($data,$this->memberpage_model->get_member_by_id($uid));
@@ -594,7 +594,7 @@ class Memberpage extends MY_Controller
 					'active_count' => $user_product_count['active'],
 					'deleted_count' => $user_product_count['deleted'],
                     'sold_count' => $user_product_count['sold'],
-					'last_dashboard_item_id' => $user_products['last_id']
+					'last_dashboard_product' => $user_products['last_product']
 					));
 			$data['transaction'] = $this->memberpage_model->getTransactionDetails($sellerid);
 			$data['allfeedbacks'] = $this->memberpage_model->getFeedback($sellerid);
@@ -794,7 +794,7 @@ class Memberpage extends MY_Controller
 
 	function getMoreUserItems($string = "")
 	{
-		$lastid = $this->input->post('lastid');
+		$lastproduct = $this->input->post('lastproduct');
 		
 		if($string == "vendor"){
 			$activeView = 'vendor_activeproduct_view';
@@ -806,7 +806,7 @@ class Memberpage extends MY_Controller
 			$member_id = $this->session->userdata('member_id');
 		}
 		
-		$data = $this->memberpage_model->getUserItems($member_id, $lastid);
+		$data = $this->memberpage_model->getUserItems($member_id, $lastproduct);
 		
 		$parseData = array(
 			'active_products' => $data['active'],

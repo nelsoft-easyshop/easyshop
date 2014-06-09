@@ -6,6 +6,7 @@
 					<img src="<?php echo base_url().$active_product['path'].'categoryview/'.$active_product['file']; ?>" class="product_img">
 				</span>
 			</div>
+			<p><small>Last modified : <?php echo date_format(date_create($active_product['lastmodifieddate']),'Y-m-d')?></small></p>
 			<p class="star_rating_reviews">
 			<?php $rounded_score = round($active_product['average_rating']); ?>
 			<?php for($i = 0; $i < $rounded_score;$i++): ?>

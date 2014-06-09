@@ -11,10 +11,10 @@ $(document).ready(function(){
 	
 	var csrftoken = $("meta[name='csrf-token']").attr('content');
     var csrfname = $("meta[name='csrf-name']").attr('content');
-	var lastid = parseInt($('#last_dashboard_item_id').val());
+	var lastproduct = $('#last_dashboard_product').val();
 	var mid = parseInt($('#mid').val());
 
-	$.post(config.base_url+'memberpage/getMoreUserItems/vendor',{csrfname:csrftoken, lastid:lastid, mid:mid}, function(data){
+	$.post(config.base_url+'memberpage/getMoreUserItems/vendor',{csrfname:csrftoken, lastproduct:lastproduct, mid:mid}, function(data){
 		try{
 			var obj = jQuery.parseJSON(data);
 		}
