@@ -169,7 +169,6 @@ class productUpload extends MY_Controller
  
  	public function uploadimage()
  	{
-		 
 
  		$counter = $this->input->post('counter');
  		$temp_product_id = $this->input->post('tempid');
@@ -1104,7 +1103,9 @@ class productUpload extends MY_Controller
 			if((count($arraynameoffiles) <= 0)  && ($main_image_cnt  === count($editRemoveThisPictures))){
                 echo '{"e":"0","d":"Please select at least one photo for your listing."}';
 				exit();
-            }
+            }	
+            
+            $allowed =  array('gif','png' ,'jpg','jpeg'); # available format only for image
 
             $x = 0;
 			if(!empty($_FILES['prod_other_img']['name'][0])){
