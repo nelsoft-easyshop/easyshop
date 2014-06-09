@@ -22,7 +22,11 @@
             <div class="countdown_container">
                 <div class="countdown_top_content">
                     <a href='<?=base_url()?>deals'>
+
                         <div class="countdown_top_left_content">
+                            <div class="cd_timerlabel_container">
+                                <span class="cd_timerlabel">STARTS IN</span>
+                            </div>
                            <div class="cd_timer_container">
                             <div class="cd_timer_days">
                                 <span id='countdown_days'>00</span>
@@ -108,10 +112,14 @@
                                 </div>
                             </div>
                         </li>
+                        <li class="cd_border"></li>
                     <?php endforeach; ?>
                 </ul>
 
                 <div class="clear"></div>
+                <div class="cd_view_all">
+                     <a href='<?=base_url()?>deals' class="orange_btn3">View All Items</a>
+                </div>
             </div>
         </div>
 
