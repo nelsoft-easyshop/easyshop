@@ -1208,8 +1208,8 @@ nav ul > li:hover > div {
 }
 
 .cd_right_con img{
-	width: inherit;
     height: inherit;
+    float: right;
 }
 
 .countdown_top_right_content {
@@ -1265,7 +1265,7 @@ nav ul > li:hover > div {
 
 .cd_prod_name {
 	color: #f18200;
-	font-size: 30px;
+	font-size: 28px;
 	width: 230px;
     word-wrap: break-word;
 } 
@@ -1343,7 +1343,7 @@ nav ul > li:hover > div {
 	font-size: 20px;
 	height: 58px;
 	text-align: center;
-	vertical-align: middle;
+	vertical-align: top;
 	width: 58px;
 	-webkit-border-radius: 90px;
 	-moz-border-radius: 90px;
