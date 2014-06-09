@@ -998,6 +998,7 @@ $(document).ready(function(){
               filescntret = d.fcnt;
               $('.filescnt'+filescntret+' > .loadingfiles').remove();
               $('.filescnt'+filescntret+' > span').removeClass('loading_opacity');
+               $('.filescnt'+filescnt+' > .makeprimary').show(); 
               canProceed = true;
 
               if(d.err == '1'){
@@ -1075,7 +1076,8 @@ $(document).ready(function(){
 
                 if((extension == 'gif' || extension == 'jpg' || extension == 'png' || extension == 'jpeg') && size < 5242880){
                     $('#list').append('<div id="previewList'+pictureCount+'" class="new_img upload_img_div '+activeText+' filescnt filescntactive filescnt'+filescnt+'"><span class="upload_img_con loading_opacity"><img src="'+objectUrl+'"></span><a href="javascript:void(0)" class="removepic" data-number="'+pictureCount+'">x</a><br><a href="javascript:void(0)" class="makeprimary photoprimary'+pictureCount+'" data-number="'+pictureCount+'">'+primaryText+'</a><div class="loadingfiles"></div></div>');
-                   
+                     $('.filescnt'+filescnt+' > .makeprimary').hide(); 
+
                 }else{
                     if(size < 1242880){
                         errorValues += val + "\n(Invalid file type).\n<br>";
@@ -1130,7 +1132,7 @@ $(document).ready(function(){
               case 'gif': case 'jpg': case 'png': case 'jpeg':
 
               $('#list').append('<div id="previewList'+pictureCount+'" class="new_img upload_img_div '+activeText+' filescnt filescntactive filescnt'+filescnt+'"><span class="upload_img_con"><img src="'+imageCustom+'" alt="'+imageCustom+'" style="height:100px;"></span><a href="javascript:void(0)" class="removepic" data-number="'+pictureCount+'">x</a><br><a href="javascript:void(0)" class="makeprimary photoprimary'+pictureCount+'" data-number="'+pictureCount+'">'+primaryText+'</a><div class="loadingfiles"></div></div>');   
-              
+                 $('.filescnt'+filescnt+' > .makeprimary').hide(); 
               break;
               default:
               removeThisPictures.push(pictureCount); 

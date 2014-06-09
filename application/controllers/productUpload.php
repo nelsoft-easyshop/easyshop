@@ -151,7 +151,9 @@ class productUpload extends MY_Controller
 		 	$response['tempId'] = strtolower(substr( "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" ,mt_rand( 0 ,50 ) ,1 ) .substr( md5( time() ), 1));
 			$response['attribute'] = $attribute;
 			$response['sell'] = true;
+
             
+    		$this->session->set_userdata('tempId', $response['tempId']);
             if($this->input->post('step1_content')){
                 $response['step1_content'] = $this->input->post('step1_content');
             }
@@ -171,7 +173,8 @@ class productUpload extends MY_Controller
  	{
 
  		$counter = $this->input->post('counter');
- 		$temp_product_id = $this->input->post('tempid');
+ 
+    	$temp_product_id = $this->session->userdata('tempId'); 
  		$member_id =  $this->session->userdata('member_id');
  		$filescnttxt = $this->input->post('filescnttxt');
  		$afstart = $this->input->post('afstart');
@@ -412,7 +415,8 @@ class productUpload extends MY_Controller
                     $x++;
                 }
             }
-
+            
+            $tempdirectory = $this->session->userdata('tempId'); 
 			$product_id = $this->product_model->addNewProduct($product_title,$sku,$product_brief,$product_description,$keyword,$brand_id,$cat_id,$style_id,$member_id,$product_price,$product_discount,$product_condition,$otherCategory, $otherBrand);
             # product_id = is the id_product for the new item. if 0 no new item added process will stop
             
@@ -430,7 +434,9 @@ class productUpload extends MY_Controller
 			}   	
 
 
-			$tempdirectory = $this->input->post('tempdirectory');
+			// $tempdirectory = $this->input->post('tempdirectory');
+
+
             if(dirname($tempdirectory) !== './assets/temp_product'){
                 exit();
             }
