@@ -84,9 +84,9 @@ if(!function_exists('directory_copy'))
         	 
         }
 
-        //Deleting the directory contents
-        delete_files($srcdir, TRUE);
-        rmdir($srcdir);
+        // //Deleting the directory contents
+        // delete_files($srcdir, TRUE);
+        // rmdir($srcdir);
     }
 }
 

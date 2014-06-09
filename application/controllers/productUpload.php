@@ -268,8 +268,7 @@ class productUpload extends MY_Controller
 	   	}
 		  
 		$return = array( 
-			'msg' => $text,
-			'dr' => $path_directory,
+			'msg' => $text, 
 			'fcnt' => $filescnttxt,
 			'err' => $error
 			);
@@ -432,8 +431,7 @@ class productUpload extends MY_Controller
 				exit();
 			}   	
 
-
-			// $tempdirectory = $this->input->post('tempdirectory');
+ 
             $tempdirectory = $this->session->userdata('tempId'); 
             $tempdirectory = $tempdirectory.'_'.$member_id.'_'.$date;
             $tempdirectory = './assets/temp_product/'.$tempdirectory.'/'; 

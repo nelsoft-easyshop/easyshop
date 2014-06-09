@@ -46,10 +46,8 @@
           );
         echo isset($is_edit)?form_open('sell/edit/processing2', $attr):form_open('sell/processing', $attr);
         ?>
-
-        <input type="hidden" name="tempid" value="<?php echo $tempId; ?>">
-        <input type="hidden" class="arrayNameOfFiles" name="arraynameoffiles">
-        <input type="hidden" id="tempdirectory" name="tempdirectory">
+ 
+        <input type="hidden" class="arrayNameOfFiles" name="arraynameoffiles"> 
 
         <table class="step4" cellspacing="0" cellpadding="0">
           <tr>
@@ -770,7 +768,6 @@
           );
         echo form_open('productUpload/uploadimage', $attr);
         ?>
-        <input type="hidden" name="tempid" value="<?php echo $tempId; ?>"> 
         <input type="hidden" class="counter" name="counter" >
         <input type="hidden" class="arrayNameOfFiles" name="arraynameoffiles">
         <input type="hidden" class="filescnttxt" name="filescnttxt">
@@ -993,8 +990,7 @@ $(document).ready(function(){
               canProceed = false;
               console.log(percentComplete);
           },
-          success :function(d) {  
-              $('#tempdirectory').val(d.dr);
+          success :function(d) {   
               filescntret = d.fcnt;
               $('.filescnt'+filescntret+' > .loadingfiles').remove();
               $('.filescnt'+filescntret+' > span').removeClass('loading_opacity');
@@ -1788,7 +1784,6 @@ $(document).on('change','.other_name_value',function(){
                 proceedStep3(action);
                 confirm_unload = false;
                 $('#form_product').submit();
-
               }
 
 
