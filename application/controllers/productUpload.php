@@ -416,7 +416,6 @@ class productUpload extends MY_Controller
                 }
             }
             
-            $tempdirectory = $this->session->userdata('tempId'); 
 			$product_id = $this->product_model->addNewProduct($product_title,$sku,$product_brief,$product_description,$keyword,$brand_id,$cat_id,$style_id,$member_id,$product_price,$product_discount,$product_condition,$otherCategory, $otherBrand);
             # product_id = is the id_product for the new item. if 0 no new item added process will stop
             
@@ -435,6 +434,7 @@ class productUpload extends MY_Controller
 
 
 			// $tempdirectory = $this->input->post('tempdirectory');
+            $tempdirectory = $this->session->userdata('tempId'); 
 
 
             if(dirname($tempdirectory) !== './assets/temp_product'){
