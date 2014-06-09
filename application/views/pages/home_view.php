@@ -48,7 +48,7 @@
                             <div class="cd_top_content <?php echo ($data['cd_product'][0]['is_soldout'])?'cd_main_slide_soldout':''?>">
                                 <span class="cd_discount_tag ">
                                     <span>
-                                        <?php echo ($data['cd_product'][0]['start_promo'])?($data['cd_product'][0]['percentage']):($data['cd_product'][0]['percentage']);  ?>%
+                                        <?php echo ($data['cd_product'][0]['start_promo'])?($data['cd_product'][0]['percentage']):'2'  ?>%
                                         <br />OFF
                                     </span>
                                 </span>
@@ -64,7 +64,7 @@
                                 <?php else: ?>
                                     <p class="cd_prod_discount_price">&#8369; <?php echo number_format($data['cd_product'][0]['original_price']*(1-0.99),2,'.',',');?>*</p>
                                     <p class='cd_prod_disclaimer'>* Lowest possible price</p>
-                                    <p class="cd_buy_btn"><a href="" class="disable_btn">BUY NOW</a></p>
+                                    <p class="cd_buy_btn"><a href="<?=base_url()?>item/<?=$data['cd_product'][0]['slug']?>" class="disable_btn">BUY NOW</a></p>
                                 <?php endif;  ?>
                                
                             </div>
@@ -84,7 +84,7 @@
                             <div>
                                 <div>
                                     <span class="cd_slide_title"><a href="<?=base_url()?>item/<?=$countdown_slide['slug']?>"><?=html_escape($countdown_slide['product']);?></a></span>
-                                    <span class="cd_slide_discount"><span> <?php echo ($countdown_slide['start_promo'])?($countdown_slide['percentage']):($countdown_slide['percentage']);  ?>%<br />OFF</span></span>
+                                    <span class="cd_slide_discount"><span> <?php echo ($countdown_slide['start_promo'])?($countdown_slide['percentage']):'2';  ?>%<br />OFF</span></span>
                                 </div>
                                 <div>
                                     <div class="cd_slide_bleft">
