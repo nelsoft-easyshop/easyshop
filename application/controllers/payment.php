@@ -204,19 +204,21 @@ class Payment extends MY_Controller{
         $ip = $this->user_model->getRealIpAddr();   
         $transactionID = "";
         $prepareData = $this->processData($itemList,$city,$region,$majorIsland);
-
+    
         $shipping_amt = $prepareData['othersumfee'];
         $ItemTotalPrice = $prepareData['totalPrice'] - $shipping_amt;
         $productstring = $prepareData['productstring'];
         $itemList = $prepareData['newItemList'];
         $toBeLocked = $prepareData['toBeLocked'];
         $grandTotal= $ItemTotalPrice+$shipping_amt;
-        
-
-        if($grandTotal < 200){
-            $data = '{"e":"0","d":"Less than 200 of amount purchased is not allowed."}';
-            echo $data;
-            exit();
+        $thereIsPromote = $prepareData['thereIsPromote'];
+      
+        if($thereIsPromote <= 0){
+            if($grandTotal < '50'){
+                $data = '{"e":"0","d":"Less than 50 of amount purchased is not allowed."}';
+                echo $data;
+                exit();
+            }
         }
 
         foreach ($itemList as $key => $value) {
@@ -875,12 +877,14 @@ class Payment extends MY_Controller{
         $name = "";
         $othersumfee = 0;
         $toBeLocked = array();
+        $isPromote = 0;
         foreach ($itemList as $key => $value) {
             $sellerId = $value['member_id'];
             $productId = $value['id'];
             $orderQuantity = $value['qty'];
             $price = $value['price'];
             $tax_amt = 0;
+            $isPromote = ($value['is_promote'] == 1) ? $isPromote += 1 : $isPromote += 0;
             $productItem =  $value['product_itemID'];
             $details = $this->payment_model->getShippingDetails($productId,$productItem,$city,$region,$majorIsland);
             $shipping_amt = $details[0]['price'];
@@ -902,7 +906,8 @@ class Payment extends MY_Controller{
             'productstring' => $productstring,
             'productName' => $name,
             'toBeLocked' => $toBeLocked,
-            'othersumfee' => $othersumfee
+            'othersumfee' => $othersumfee,
+            'thereIsPromote' => $isPromote
             );
     }
 
