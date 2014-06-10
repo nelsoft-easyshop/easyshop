@@ -671,14 +671,14 @@
 		<div>
 			<table class="sales_summary" cellspacing="0" cellpadding="0">
 				<tr class="sales_info" data-div="balance">
-					<td class="label">TOTAL:</td>
+					<td class="label">Total:</td>
 					<td class="amount">Php <?php echo number_format(round($sales['balance']['balance'],2), 2)?></td>
-					<!--<td class="sales_info" data-div="balance">View more info</td>-->
+					<td class="sales_info blue" data-div="balance" align="center">View More Details</td>
 				</tr>
 				<tr class="sales_info" data-div="payout">
-					<td class="label">Next PAYOUT:</td>
+					<td class="label">Next Payout:</td>
 					<td class="amount">Php <?php echo number_format(round($sales['release']['payout'],2), 2)?></td>
-					<!--<td class="sales_info" data-div="payout">View more info</td>-->
+					<td class="sales_info blue" data-div="payout" align="center">View More Details</td>
 				</tr>
 			</table>
 		</div>
