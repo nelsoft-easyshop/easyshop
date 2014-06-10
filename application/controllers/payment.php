@@ -937,7 +937,9 @@ class Payment extends MY_Controller{
                 echo json_encode("<b>MOBILE NUMBER</b> should be numeric and hypen only. eg: 123-45-67");
             }else{
                 $postdata['default_add'] = "off";
-                $data = $this->memberpage_model->edit_consignee_address_by_id($uid, $postdata);
+                $addressId = $this->memberpage_model->getAddress($uid,'1')['id_address'];
+                
+                $data = $this->memberpage_model->editDeliveryAddress($uid, $postdata,$addressId);
                 $this->output->set_output(json_encode($data));
                 echo json_encode("success");
                 exit(); 

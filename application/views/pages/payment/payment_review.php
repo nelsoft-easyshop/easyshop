@@ -29,7 +29,8 @@
                             <h2>Ship to:</h2>
                             <div><span>Name:</span><strong><?php echo ucwords(strtolower(html_escape($consignee)));?></strong></div>
                             <div><span>Full Address:</span><?php echo ucwords(strtolower(html_escape($c_address)));?></div>
-                            <div><span>City:</span><?php echo ucwords(strtolower($c_stateregion));?></div>
+                            <div><span>State/Region:</span><?php echo ucwords(strtolower($c_stateregion));?></div>
+                            <div><span>City:</span><?php echo ucwords(strtolower($c_city));?></div>
                             <div><span>Country:</span><?php echo ucwords(strtolower($country_name));?></div>
                             <div><span>Mobile:</span><?php echo ucwords(strtolower($c_mobile));?></div>
                             <div><span>Telephone:</span><?php echo ucwords(strtolower($c_telephone));?></div> 
