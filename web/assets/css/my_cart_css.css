@@ -585,6 +585,11 @@ a.delete:hover .del {
 	display: inline-block;
 	text-align: center;
 	padding:5px 3px;
+	vertical-align: middle;
+}
+
+.pay_sum_c1,.pay_sum_c2,.pay_sum_c3 {
+    border-right: 1px solid #FFFFFF;
 }
 
 .pay_sum_head {
@@ -601,7 +606,8 @@ a.delete:hover .del {
 }
 
 .pay_sum_c3 {
-	width: 100px;
+	width: 85px;
+	/*width: 100px;*/
 }
 
 .pay_sum_c4 {
