@@ -3955,7 +3955,7 @@ div.post_item_content_left {
 }
 
 .save_lnk:hover {
-	color: #1ea010;
+	color: #0057CF;
 	background-position: -590px -78px;
 }
 
@@ -3970,27 +3970,36 @@ div.post_item_content_left {
 	background-position: -708px -78px;
 }
 
-#ubi_bictr1 {
+.billing_info_grid form {
+	border-bottom: 1px solid #cecece;
+}
+
+.billing_info_grid form:first-child {
 	border: 1px solid #F18200;
 }
 
-#ubi_bictr1:before {
-	content: "Default Account";
-	background-color: #f18200;
+.billing_info_grid form:first-child:before {
+	background-color: #f18200;	
 	color: #fff;
+	content: "Default Account";
+	display: inline-block;
+	font-weight: bold;	
+	padding: 8px 35px;
 	position: relative;
 }
 
-#bi_check_bictr1 {
-    background-color: #ff9000;
-    border-radius: 3px;
-    color: #FFFFFF;
+.txt_alert_save {
+    color: #7fba00;
     height: 24px;
     line-height: 24px;
     margin-left: 75px;
     padding: 0 10px;
     text-align: center;
     width: 105px !important;
+}
+
+.txt_alert_save > span {
+    vertical-align: middle;
 }
 
 /*.post_item_button input {
