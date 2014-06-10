@@ -25,7 +25,6 @@ class Cart extends MY_Controller{
             $this->load->view('templates/header', $data);
             $this->load->view('pages/cart/mycart_view', $data);
             $this->load->view('templates/footer_full');
-            $this->get_total_price();
         }else{
             redirect(base_url().'home', 'refresh');
         }
@@ -237,7 +236,9 @@ class Cart extends MY_Controller{
         #done checking if the attribute's are existing on DB and max_quantity
         $data = array(
             'id'      => $id,
-            'qty'     => ($userQTY > $max_qty ? $max_qty : $userQTY ), //check if qty is > max qty,if its qty=maxqty else qty
+            'qty'     => ($userQTY > $max_qty
+                    ? $max_qty
+                    : $userQTY ), //check if qty is > max qty,if its qty=maxqty else qty
             'price'   => $final_price,
             'original_price' => $product['original_price'],
             'name'    => $product['product'],

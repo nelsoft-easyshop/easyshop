@@ -2001,7 +2001,7 @@ class product_model extends CI_Model
         }
 
         $result['price'] = (intval($is_promo) === 1)?$PromoPrice:$baseprice;
-        $result['can_purchase'] = $this->is_purchase_allowed($buyer_id,$type);
+        $result['can_purchase'] = (intval($is_promo)===1)?$this->is_purchase_allowed($buyer_id,$type):true;
         return $result;
     }
 
