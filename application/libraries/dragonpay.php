@@ -3,8 +3,18 @@ class DragonPay {
     	
 	public $merchantId  = 'EASYSHOP'; 
 	public $merchantPwd = 'UT78W5VQ'; 
-	public $url = 'http://test.dragonpay.ph/DragonPayWebService/MerchantService.asmx?wsdl';
-	public $ps = "http://test.dragonpay.ph/Pay.aspx";
+
+	// TEST
+	// public $url = 'http://test.dragonpay.ph/DragonPayWebService/MerchantService.asmx?wsdl';
+	// public $ps = "http://test.dragonpay.ph/Pay.aspx";
+
+	// PRODUCTION
+	public $url = 'https://secure.dragonpay.ph/DragonPayWebService/MerchantService.asmx?wsdl';
+	public $ps = "https://gw.dragonpay.ph/Pay.aspx";
+	 
+
+
+
 	public $errorCodes = array(
 			'000' => 'SUCCESS',
 			'101' => 'Ivalid payment gateway id',

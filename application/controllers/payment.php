@@ -257,11 +257,16 @@ class Payment extends MY_Controller{
         {   
             $transactionID = urldecode($httpParsedResponseAr["TOKEN"]);
             $return = $this->payment_model->payment($paymentType,$invoice_no,$grandTotal,$ip,$member_id,$productstring,$productCount,"",$transactionID);
-            $orderId = $return['v_order_id'];
-            $locked = $this->lockItem($toBeLocked,$orderId,'insert');
-            $paypalmode = ($PayPalMode == 'sandbox' ? '.sandbox' : '');
-            $paypalurl ='https://www'.$paypalmode.'.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token='.$transactionID.'';
-            $data = '{"e":"1","d":"'.$paypalurl.'"}';   
+            
+            if($return['o_success'] <= 0){
+                $data = '{"e":"0","d":"'.$return['o_message'].'"}'; 
+            }else{
+                $orderId = $return['v_order_id'];
+                $locked = $this->lockItem($toBeLocked,$orderId,'insert');
+                $paypalmode = ($PayPalMode == 'sandbox' ? '.sandbox' : '');
+                $paypalurl ='https://www'.$paypalmode.'.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token='.$transactionID.'';
+                $data = '{"e":"1","d":"'.$paypalurl.'"}';  
+            } 
              
         }else{
             $data = '{"e":"0","d":"'.urldecode($httpParsedResponseAr["L_LONGMESSAGE0"]).'"}';
@@ -487,12 +492,13 @@ class Payment extends MY_Controller{
         $apiResponse = json_encode($apiResponseArray);
        
         $return = $this->payment_model->payment($paymentType,$invoice_no,$grandTotal,$ip,$member_id,$productstring,$productCount,$apiResponse,$transactionID);
-        $v_order_id = $return['v_order_id'];
-        $invoice_no = $return['invoice_no'];
+    
 
         if($return['o_success'] <= 0){
             $response['message'] = '<div style="color:red"><b>Error 3: </b>'.$return['o_message'].'</div>'; 
         }else{
+            $v_order_id = $return['v_order_id'];
+            $invoice_no = $return['invoice_no'];
             $response['completepayment'] = true;
             $this->removeItemFromCart(); 
             $this->session->unset_userdata('choosen_items');
@@ -560,10 +566,16 @@ class Payment extends MY_Controller{
         $ip = $this->user_model->getRealIpAddr();  
         
         $return = $this->payment_model->payment($paymentType,$invoice_no,$grandTotal,$ip,$member_id,$productstring,$productCount,"",$transactionID);
-        $orderId = $return['v_order_id'];
-        $locked = $this->lockItem($toBeLocked,$orderId,'insert');    
-        $this->session->set_userdata('dragonpayticket', true);
-        exit($dpReturn);
+        
+        if($return['o_success'] <= 0){
+            echo '{"e":"0","m":"'.$return['o_message'].'"}'; 
+            exit();
+        }else{
+            $orderId = $return['v_order_id'];
+            $locked = $this->lockItem($toBeLocked,$orderId,'insert');    
+            $this->session->set_userdata('dragonpayticket', true);
+            exit($dpReturn);
+        }
     }
 
     function dragonPayPostBack(){
