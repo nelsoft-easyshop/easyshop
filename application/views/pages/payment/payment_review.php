@@ -27,7 +27,7 @@
                     <div class="member_shipping_info_container">
                         <?php if($shippingDetails == true): ?>
                             <h2>Ship to:</h2>
-                            <div><span>Name:</span><strong><?php echo ucwords(strtolower($consignee));?></strong></div>
+                            <div><span>Name:</span><strong><?php echo ucwords(strtolower(html_escape($consignee)));?></strong></div>
                             <div><span>Full Address:</span><?php echo ucwords(strtolower(html_escape($c_address)));?></div>
                             <div><span>City:</span><?php echo ucwords(strtolower($c_stateregion));?></div>
                             <div><span>Country:</span><?php echo ucwords(strtolower($country_name));?></div>
