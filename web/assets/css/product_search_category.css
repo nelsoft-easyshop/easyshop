@@ -762,12 +762,17 @@ Advanced Search Filters
 .cd_product {
     background-color: #FFFFFF;
     border: 1px solid #ECEBEB;
+    height: 315px;
     float: left;
     margin: 8px;
     padding: 3px;
     position: relative;
     text-align: center;
     width: 220px;
+}
+
+.cd_product a:hover {
+  color: #494949;
 }
 
 .cd_soldout {
@@ -863,9 +868,6 @@ Advanced Search Filters
     width: 210px;
 }
 
-.cd_product h3 a:hover {
-  color: #f18200;
-}
 
 .cd_product .price {
   font-size: 16px;
