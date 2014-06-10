@@ -34,8 +34,9 @@
         <div class='product_list'>
             <?php foreach($items as $item): ?>
                 <div class="cd_product">
+                    <a href="<?=base_url().'item/'.$item['slug'];?>" class="cd_link_con"> 
                     <div class="product_buy_con">
-                            <span><a href="<?=base_url().'item/'.$item['slug'];?>" class="orange_btn3 <?php echo $item['is_soldout']?'disabled':'';?>">BUY NOW</a></span>
+                            <span><span href="<?=base_url().'item/'.$item['slug'];?>" class="orange_btn3 <?php echo $item['is_soldout']?'disabled':'';?>">BUY NOW</span></span>
                     </div>
                     <?php if($item['is_soldout']): ?>
                         <div class="cd_soldout">
@@ -47,13 +48,13 @@
                             <span><?php echo ($item['start_promo'])?$item['percentage']:'2';?>%<br>OFF</span>
                         </span>
                     </div>
-                    <a href="<?=base_url().'item/'.$item['slug'];?>">
+                    
                         <span class="cd_prod_img_con">
                             <img src="<?= base_url().$item['path'].'categoryview/'.$item['file']; ?>">
                         </span>
-                    </a>
+                    
                     <h3>
-                        <a href="<?=base_url().'item/'.$item['slug'];?>"><?php echo html_escape($item['name']);?></a>
+                       <?php echo html_escape($item['name']);?>
                     </h3>
                     <div class="price-cnt">
                         <?php if(($item['start_promo'])):  ?>
@@ -69,6 +70,7 @@
                     <div class="cd_condition">
                         Condition: <?=strtoupper(html_escape($item['condition']));?>
                     </div>
+                    </a>
                 </div>
             <?php endforeach; ?>
         </div>
