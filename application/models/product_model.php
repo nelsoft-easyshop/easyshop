@@ -9,6 +9,7 @@ class product_model extends CI_Model
 		parent::__construct();  
         $this->load->helper('product');
         $this->load->library("xmlmap");
+        $this->load->config("promo");
 	}
 
 	# the queries directory -- application/resources/sql/product.xml
@@ -190,7 +191,7 @@ class product_model extends CI_Model
      *  THIS INCREMENTS THE PRODUCT CLICK COUNT. USE getProductByID FOR ANYTHING ELSE.
      */
     
-    function getProductBySlug($slug) 
+    function getProductBySlug($slug)
 	{
 		$query = $this->xmlmap->getFilenameID('sql/product', 'getProductBySlug');
 		$sth = $this->db->conn_id->prepare($query);
@@ -202,7 +203,7 @@ class product_model extends CI_Model
                  $product['userpic'] = 'assets/user/default';
             if(intval($product['brand_id'],10) === 1)
                 $product['brand_name'] = ($product['custombrand']!=='')?$product['custombrand']:'Custom brand';
-        }  
+        }
         applyPriceDiscount($product);
 		return $product;
 	}
@@ -1934,8 +1935,7 @@ class product_model extends CI_Model
         return $return;  
 	}
         
-    public function getHomeContent($file = 'page/home_files'){
-        $xml_content = $this->xmlmap->getFilename($file);
+    public function getHomeContent($file = 'page/home_files'){ $xml_content = $this->xmlmap->getFilename($file);
         $home_view_data = array();
         foreach ($xml_content as $key => $element){
             if(isset($element['value']) &&  isset($element['type'])){    
@@ -1979,7 +1979,7 @@ class product_model extends CI_Model
     }
 
     
-    public function GetPromoPrice($baseprice,$start,$end,$is_promo,$type){
+    public function GetPromoPrice($baseprice,$start,$end,$is_promo,$type,$buyer_id){
         $today = strtotime( date("Y-m-d H:i:s"));
         $startdate = strtotime($start);
         $enddate = strtotime($end);
@@ -1999,11 +1999,29 @@ class product_model extends CI_Model
                 $PromoPrice = $baseprice;
                 break;
         }
-        $PromoPrice = ($PromoPrice < 0)?0:$PromoPrice;
-        return (intval($is_promo) === 1)?$PromoPrice:$baseprice;
+
+        $result['price'] = (intval($is_promo) === 1)?$PromoPrice:$baseprice;
+        $result['can_purchase'] = $this->is_purchase_allowed($buyer_id,$type);
+        return $result;
     }
-    
-    
+
+
+    public function is_purchase_allowed($buyer_id,$type){
+
+        $query = $this->xmlmap->getFilenameID('sql/product','getOrder');
+        $sth = $this->db->conn_id->prepare($query);
+        $sth->bindParam(':buyer_id',$buyer_id, PDO::PARAM_INT);
+        $sth->closeCursor();
+        $sth->execute();
+        $result = $sth->fetchAll(PDO::FETCH_ASSOC);
+
+        $promo = $this->config->item('Promo')[$type];
+        if($result[0]['cnt'] >= $promo['purchase_limit']){
+            return false;
+        }else{
+            return true;
+        }
+    }
 
     
 }

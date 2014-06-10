@@ -96,7 +96,9 @@
             </div>
         </section>
 
-        <div class="clear"></div>
+<div id="navigator">
+</div>
+<div class="clear"></div>
         
 <script src="<?=base_url()?>assets/js/src/vendor/numeral.min.js"></script>
 <script src="<?=base_url()?>assets/js/src/cart.js" type="text/javascript"></script>
@@ -111,7 +113,7 @@
 					value = Number($(".subtotal").eq(i).html().replace(/\$/g,'').replace(/,/g,'')) + value;
 				}
 				$("#total").html(Number(value).toLocaleString('en')+".00");
-				$("#total").html(parseFloat(value).toFixed(2));
+				$("#total").html(numeral(parseFloat(value).toFixed(2)).format('0,0.00'));
 			}else{
 				$("#total").html("0.00");
 			}

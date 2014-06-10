@@ -67,9 +67,11 @@ if ( ! function_exists('applyPriceDiscount')){
     function applyPriceDiscount(&$product = array()){
         $CI = get_instance();
         $CI->load->model('product_model');
-
+        $buyer_id = $CI->session->userdata('member_id');
+        $promo = $CI->product_model->GetPromoPrice($product['price'],$product['startdate'],$product['enddate'],$product['is_promote'],$product['promo_type'],$buyer_id);
         $product['original_price'] = $product['price'];
-        $product['price'] = $CI->product_model->GetPromoPrice($product['price'],$product['startdate'],$product['enddate'],$product['is_promote'],$product['promo_type']);
+        $product['price'] = $promo['price'];
+        $product['can_purchase'] = $promo['can_purchase'];
         $product['start_promo'] = ((intval($product['is_promote']) === 1)&&(strtotime($product['startdate']) < strtotime(date('Y-m-d H:i:s'))));
         $product['percentage'] = ($product['start_promo'])?($product['original_price'] - $product['price'])/$product['original_price'] * 100.00:0.00;
     }

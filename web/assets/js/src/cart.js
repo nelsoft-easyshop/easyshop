@@ -29,7 +29,7 @@ function sum(obj){
             if(data['result']==false){
                 location.reload();
             }
-            else{   
+            else{
                 $("#subtotal"+id).text(data['subtotal']);
                 $("#total").text(data['total']);
             }

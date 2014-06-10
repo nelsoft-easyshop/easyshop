@@ -602,8 +602,8 @@ class product extends MY_Controller
      */
 
     function item($slug = ''){
-    	$product_row = $this->product_model->getProductBySlug($slug);
-    	$uid = $this->session->userdata('member_id');
+        $uid = $this->session->userdata('member_id');
+    	$product_row = $this->product_model->getProductBySlug($slug,$uid);
     	$data = $this->fill_header();
     	if($product_row['o_success'] >= 1){
     		$id = $product_row['id_product'];
@@ -634,7 +634,6 @@ class product extends MY_Controller
             $data['metadescription'] = es_string_limit(html_escape($product_row['brief']), 155);
             $this->load->view('templates/header', $data); 
             $this->load->view('pages/product/productpage_view', $data);
-
         }
         else{
             $data['title'] =  'Easyshop.ph | Page Not Found';
@@ -694,7 +693,9 @@ class product extends MY_Controller
         }
         echo $data;
     }
-    
+
+
+
 }
 
 

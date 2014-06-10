@@ -120,7 +120,7 @@ class Cart extends MY_Controller{
             $result=sha1(md5("hinditanggap"));
         }
         else{
-            $data=$this->check_prod($_POST['id'],$go,$_POST['qty']);
+            $data=$this->check_prod($_POST['id'],$go,$_POST['qty'])['data'];
             $carts=$this->cart->contents();
             if(empty($carts)){
                 $this->cart->insert($data);
@@ -166,14 +166,14 @@ class Cart extends MY_Controller{
             foreach ($carts as $row ){
                 $id = $row['id'];
                 $opt =  serialize($this->cart->product_options($row['rowid']));
-                $opt_user =  serialize($data['options']);
-                if($opt == $opt_user && $id == $data['id']){ //if product exist in cart , check if qty exceeds the maximum qty, if exceed get qty = max qty else qty + cart product qty
-                    $data['rowid']= $row['rowid'];
+                $opt_user =  serialize($data['data']['options']);
+                if($opt == $opt_user && $id == $data['data']['id']){ //if product exist in cart , check if qty exceeds the maximum qty, if exceed get qty = max qty else qty + cart product qty
+                    $data['data']['rowid']= $row['rowid'];
 
-                    $this->cart->insert($data);
+                    $this->cart->insert($data['data']);
 
-                    if($data['qty'] == "0" ){
-                        $data_remove = array('rowid'=>$data['rowid'],'qty'=> 0);
+                    if($data['data']['qty'] == "0" || $data['delete_to_cart'] === true){
+                        $data_remove = array('rowid'=>$data['data']['rowid'],'qty'=> 0);
                         $this->cart->update($data_remove);
                     }
                     break;
@@ -251,7 +251,13 @@ class Cart extends MY_Controller{
             'is_promote' => $product['is_promote'],
             'additional_fee' => $add_price
         );
-        return $data;
+
+        $result['data'] = $data;
+        $result['delete_to_cart'] =( $product['is_draft'] == "1" || $product['is_delete'] == "1" || $product['can_purchase'] === false
+            ? true
+            : false
+        ) ;
+        return $result;
     }
 
     function cart_size(){

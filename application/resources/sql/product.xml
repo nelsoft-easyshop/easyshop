@@ -400,7 +400,7 @@ FROM
 	</select>
 	
     <select id="getProductById">
-        SELECT a.`name` AS `product`, a.`slug` AS slug,a.`brief`,a.`id_product`,`cat_id`, b.`product_image_path`, a.`price`, a.`member_id` as sellerid , a.`is_promote`,a.`startdate`,a.`enddate`, a.`promo_type`
+        SELECT a.`name` AS `product`, a.`slug` AS slug,a.`brief`,a.`id_product`,`cat_id`, b.`product_image_path`, a.`price`, a.`member_id` as sellerid , a.`is_promote`,a.`startdate`,a.`enddate`, a.`promo_type`,a.`is_draft`,a.`is_delete`
         FROM `es_product` a
         LEFT JOIN `es_product_image` b ON b.`product_id` = a.`id_product` AND b.is_primary = '1'
         WHERE `id_product` = :id
@@ -960,5 +960,13 @@ FROM
 <select id='getSlugByID'>
     SELECT slug, name FROM es_product WHERE id_product = :id;
 </select>
-
+<select id="getOrder">
+    SELECT
+    COUNT(id_order) AS `cnt`
+    FROM
+    es_order
+    WHERE buyer_id = :buyer_id
+    AND order_status != 99
+    AND `payment_method_id` != 1
+</select>
 </map>
