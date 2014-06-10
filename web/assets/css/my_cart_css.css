@@ -211,14 +211,23 @@
 	text-decoration: underline;
 }
 
-.delete {
+.cart_delete {
+	background-position: -358px -52px;
+}
+
+.delete:hover .cart_delete {
+	color: #ff0030;
+	background-position: -358px -83px;
+}
+
+/*.delete {
 	background: url(../images/icon_delete.png) left center no-repeat;
 }
 .delete:hover {
 	background: url(../images/icon_delete2.png) left center no-repeat;
 	color: #ea0132;
 }
-
+*/
 .my_cart_total p{
 	padding-right: 160px;
 	font-size: 30px;
@@ -321,8 +330,9 @@
     font-size: 11px;
     color: #494949;
     cursor: pointer;
-    display: block;
+    display: inline-block;
 	border: none;
+	width: 80px;
 }
 
 a.delete:hover .del {
