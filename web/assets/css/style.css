@@ -1365,6 +1365,7 @@ nav ul > li:hover > div {
 }
 
 .cd_slide_discount {
+	background-color: #fff;
 	border:2px solid #ba0000;
 	color: #ba0000;
 	display: inline-block;
