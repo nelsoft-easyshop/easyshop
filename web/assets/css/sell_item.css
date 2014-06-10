@@ -1706,7 +1706,7 @@ box-shadow:         0px 1px 5px 0px rgba(50, 50, 50, 0.75);
 
 .loadingfiles{
    background: url("../images/orange_loader.gif") no-repeat scroll 0 0 #FCFEFC;
-   height: 33%;
+   height: 36%;
    left: 32px;
    opacity: 1;
    position: absolute;
