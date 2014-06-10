@@ -105,7 +105,9 @@ class Memberpage extends MY_Controller
 			}
 
 			$uid = $this->session->userdata('member_id');
-			$result = $this->memberpage_model->edit_address_by_id($uid, $postdata);
+			$address_id = $this->memberpage_model->getAddress($uid,0)['id_address'];
+			$result = $this->memberpage_model->editAddress($uid, $postdata, $address_id);
+			
 			$data = $this->memberpage_model->get_member_by_id($uid);
 			
 			$data['result'] = $result ? 'success':'fail';
@@ -269,11 +271,21 @@ class Memberpage extends MY_Controller
 				$postdata['default_add'] = "off";
 			}
 
-			$this->memberpage_model->edit_consignee_address_by_id($uid, $postdata);
+			$address_id = $this->memberpage_model->getAddress($uid,1)['id_address'];
+			$result = $this->memberpage_model->editDeliveryAddress($uid, $postdata, $address_id);
+			
+			$data['result'] = $result[0] && $result[1] ? 'success':'fail';
+			$data['errmsg'] = $result[0] && $result[1] ? '' : 'Database update error.';
+			
 			$data['default_add'] = $postdata['default_add'];
 			$data = array_merge($data,$this->memberpage_model->get_member_by_id($uid));
-			$this->output->set_output(json_encode($data));
+			
+		}else{
+			$data['result'] = 'fail';
+			$data['errmsg'] = 'Failed to validate form.';
 		}
+		
+		$this->output->set_output(json_encode($data));
 	}
 
 	function edit_work()

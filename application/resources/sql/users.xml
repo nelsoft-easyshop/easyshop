@@ -154,12 +154,28 @@
 	WHERE id_member = :id_member
 </select>
 
+<select id="getAddress">
+	SELECT `id_address` FROM `es_address` WHERE `id_member` = :member_id and `type` = :type
+</select>
+
+<select id="insertAddress">
+	INSERT INTO `es_address` (`id_member`, `stateregion`, `city`, `address`, `country`, `type`, `telephone`, `mobile`, `consignee`, `lat`, `lng`) 
+	VALUES (:id_member,:stateregion,:city,:address,:country, :type, :telephone, :mobile, :consignee, :lat, :lng)
+</select>
+
+<select id="updateAddress">
+	UPDATE `es_address`
+	SET stateregion=:stateregion,city=:city,address=:address,country = :country,telephone=:telephone,mobile=:mobile,consignee=:consignee,lat=:lat,lng=:lng
+	WHERE `id_address` = :id_address AND `id_member` = :id_member AND `type` = :type
+</select>
+
+<!--
 <select id="edit_address">
 	INSERT INTO `es_address` (`id_member`, `stateregion`, `city`, `address`, `country`, `type`, `telephone`, `mobile`, `consignee`, `lat`, `lng`) 
 	VALUES (:id_member,:stateregion,:city,:address,:country, :type, :telephone, :mobile, :consignee, :lat, :lng)
 	ON DUPLICATE KEY UPDATE stateregion=:stateregion,city=:city,address=:address,country = :country,telephone=:telephone,mobile=:mobile,consignee=:consignee,lat=:lat,lng=:lng
 </select>
-
+-->
 
 <select id="edit_school">
 	INSERT INTO `es_school`(`id_member`, `schoolname`, `year`, `level`, `count`) 
@@ -217,26 +233,6 @@
 	DELETE FROM `es_keeplogin`
 	WHERE id_member = :id_member AND last_ip = :ip AND useragent = :useragent AND token = :token
 </select>
-
-<!-- NOT USED - quick inspection
-<select id="get_address">
-	SELECT
-	   `streetno`
-	  , `streetname`
-	  , `barangay`
-	  , `citytown`
-	  , `country`
-	  , `postalcode`
-	  , `type`
-	  , `telephone`
-	  , `mobile`
-	  , `consignee`
-	FROM `es_address`
-	WHERE TYPE = 1
-	AND id_member = :id_member
-	limit 1
-</select>
--->
 
 <select id="addFeedback">
 	INSERT INTO `es_member_feedback` (`member_id`, `for_memberid`, `feedb_msg`, `feedb_kind`, `order_id`, `dateadded`, `rating1`, `rating2`, `rating3`)

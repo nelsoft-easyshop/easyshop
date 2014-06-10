@@ -648,7 +648,7 @@ $(document).ready(function(){
 					}
 					catch(e){
 						alert('An error was encountered while submitting your form. Please try again later.');
-						window.location.reload(true);
+						//window.location.reload(true);
 						return false;
 					}
 					
@@ -1017,7 +1017,6 @@ $(document).ready(function(){
 			c_address:{
 				required: '* Please enter your full address'
 			}
-			
 		},
 		ignore: ":hidden:not(select)",
 		errorElement: "span",
@@ -1043,82 +1042,87 @@ $(document).ready(function(){
 						return false;
 					}
 					
-					//UPDATE INPUTfield ATTRIBUTE and PROPERTY VALUES in Delivery Address Page
-					$('#c_deliver_address .inner_profile_fields input[type="text"]').each(function(){
-						$(this).attr('value', htmlDecode(obj[$(this).attr('name')]));
-						$(this).prop('value', htmlDecode(obj[$(this).attr('name')]));						
-					});
+					if(obj.result === 'success'){
 					
-					// UPDATE SELECT FIELDS
-					$('#c_deliver_address .inner_profile_fields select.address_dropdown').each(function(){
-						$(this).attr('data-status', htmlDecode(obj[$(this).attr('name') + 'ID']));
-						$(this).trigger('chosen:updated');
-					});
-					
-					// Update map coordinates and status
-					$('#map_clat').val(obj['c_lat']);
-					$('#map_clng').val(obj['c_lng']);
-					
-					// Map notification status
-					if(obj['c_lat'] == 0 && obj['c_lng'] == 0){
-						$('#c_deliver_address span.maploc_stat').html('Location not marked');
-                        
-                    }else{
-						$('#c_deliver_address span.maploc_stat').html('Location marked');
-
-					}
-					
-					// Update orig checker fields
-					$('.delivery_address_content input[name="stateregion_orig"]').val(obj['stateregionID']);
-					$('.delivery_address_content input[name="city_orig"]').val(obj['cityID']);
-					$('.delivery_address_content input[name="address_orig"]').val(htmlDecode(obj['address']));
-					
-					//IF SET AS DEFAULT ADDRESS
-					if(obj['default_add'] == "on"){
-						//UPDATE INTPUTfield ATTRIBUTE and PROPERTY VALUES in Personal Information Address
-						$('.address_fields input[type="text"]').each(function(){
-								$(this).prop('value', htmlDecode(obj["c_" + $(this).attr('name')]));
-								$(this).attr('value', htmlDecode(obj["c_" + $(this).attr('name')]));
+						//UPDATE INPUTfield ATTRIBUTE and PROPERTY VALUES in Delivery Address Page
+						$('#c_deliver_address .inner_profile_fields input[type="text"]').each(function(){
+							$(this).attr('value', htmlDecode(obj[$(this).attr('name')]));
+							$(this).prop('value', htmlDecode(obj[$(this).attr('name')]));						
 						});
 						
-						//Update Select Fields
-						$('.address_fields select.address_dropdown').each(function(){
+						// UPDATE SELECT FIELDS
+						$('#c_deliver_address .inner_profile_fields select.address_dropdown').each(function(){
 							$(this).attr('data-status', htmlDecode(obj[$(this).attr('name') + 'ID']));
-							$(this).val(htmlDecode(obj[$(this).attr('name') + 'ID']));
 							$(this).trigger('chosen:updated');
 						});
 						
-						// Update orig checker fields
-						$('.address_fields input[name="stateregion_orig"]').val(obj['stateregionID']);
-						$('.address_fields input[name="city_orig"]').val(obj['cityID']);
-						$('.address_fields input[name="address_orig"]').val(htmlDecode(obj['address']));
+						// Update map coordinates and status
+						$('#map_clat').val(obj['c_lat']);
+						$('#map_clng').val(obj['c_lng']);
 						
-						//OVERWRITE DIV in Personal Information Address
-						$('.address_information .add_info').html(function(){
-							var string = obj['c_stateregion'] + ", " + obj['c_city'] + "<br>" + htmlDecode(obj['c_address']);
-							return string;
-						});
-						
-						//Update Map Coordinates
-						$('.inner_profile_fields').find('div.view_map_btn input[type="hidden"][name$="lat"]').val(obj['c_lat']);
-						$('.inner_profile_fields').find('div.view_map_btn input[type="hidden"][name$="lng"]').val(obj['c_lng']);
-						
-						//Map notification status
+						// Map notification status
 						if(obj['c_lat'] == 0 && obj['c_lng'] == 0){
-							$('#personal_profile_address span.maploc_stat').html('Location not marked');
-                           
-                        }else{
-							$('#personal_profile_address span.maploc_stat').html('Location marked');
-                         
-                        }
+							$('#c_deliver_address span.maploc_stat').html('Location not marked');
+							
+						}else{
+							$('#c_deliver_address span.maploc_stat').html('Location marked');
+
+						}
 						
-						$('#personal_profile_address .address_information').show();
-						$('#personal_profile_address .edit_profile').hide();
-						progress_update($('#personal_profile_address'));
+						// Update orig checker fields
+						$('.delivery_address_content input[name="stateregion_orig"]').val(obj['stateregionID']);
+						$('.delivery_address_content input[name="city_orig"]').val(obj['cityID']);
+						$('.delivery_address_content input[name="address_orig"]').val(htmlDecode(obj['address']));
+						
+						//IF SET AS DEFAULT ADDRESS
+						if(obj['default_add'] == "on"){
+							//UPDATE INTPUTfield ATTRIBUTE and PROPERTY VALUES in Personal Information Address
+							$('.address_fields input[type="text"]').each(function(){
+									$(this).prop('value', htmlDecode(obj["c_" + $(this).attr('name')]));
+									$(this).attr('value', htmlDecode(obj["c_" + $(this).attr('name')]));
+							});
+							
+							//Update Select Fields
+							$('.address_fields select.address_dropdown').each(function(){
+								$(this).attr('data-status', htmlDecode(obj[$(this).attr('name') + 'ID']));
+								$(this).val(htmlDecode(obj[$(this).attr('name') + 'ID']));
+								$(this).trigger('chosen:updated');
+							});
+							
+							// Update orig checker fields
+							$('.address_fields input[name="stateregion_orig"]').val(obj['stateregionID']);
+							$('.address_fields input[name="city_orig"]').val(obj['cityID']);
+							$('.address_fields input[name="address_orig"]').val(htmlDecode(obj['address']));
+							
+							//OVERWRITE DIV in Personal Information Address
+							$('.address_information .add_info').html(function(){
+								var string = obj['c_stateregion'] + ", " + obj['c_city'] + "<br>" + htmlDecode(obj['c_address']);
+								return string;
+							});
+							
+							//Update Map Coordinates
+							$('.inner_profile_fields').find('div.view_map_btn input[type="hidden"][name$="lat"]').val(obj['c_lat']);
+							$('.inner_profile_fields').find('div.view_map_btn input[type="hidden"][name$="lng"]').val(obj['c_lng']);
+							
+							//Map notification status
+							if(obj['c_lat'] == 0 && obj['c_lng'] == 0){
+								$('#personal_profile_address span.maploc_stat').html('Location not marked');
+							   
+							}else{
+								$('#personal_profile_address span.maploc_stat').html('Location marked');
+							}
+							
+							$('#personal_profile_address .address_information').show();
+							$('#personal_profile_address .edit_profile').hide();
+							progress_update($('#personal_profile_address'));
+						}
+						progress_update($('#c_deliver_address'));
+						$('.uptd').show().delay(1600).fadeOut(600);;
+					
+					}else{
+						alert(obj.errmsg);
 					}
-					progress_update($('#c_deliver_address'));
-                    $('.uptd').show().delay(1600).fadeOut(600);;
-                    
+					
 				});
 		  $('#c_deliver_address_btn').attr('disabled', true);
 		  return false;
