@@ -403,7 +403,9 @@ span.seller-name .rating_criteria{
 
 #product_content_gallery {
 	float: left;
+	position: relative;
 	width: 400px;
+	z-index: 2;
 }
 
 .product_content_info {
