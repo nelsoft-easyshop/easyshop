@@ -3974,11 +3974,11 @@ div.post_item_content_left {
 	border-bottom: 1px solid #cecece;
 }
 
-.billing_info_grid form:first-child {
+/*.billing_info_grid form:first-child {
 	border: 1px solid #F18200;
-}
+}*/
 
-.billing_info_grid form:first-child:before {
+/*.billing_info_grid form:first-child:before {
 	background-color: #f18200;	
 	color: #fff;
 	content: "Default Account";
@@ -3986,7 +3986,7 @@ div.post_item_content_left {
 	font-weight: bold;	
 	padding: 8px 35px;
 	position: relative;
-}
+}*/
 
 .txt_alert_save {
     color: #7fba00;
