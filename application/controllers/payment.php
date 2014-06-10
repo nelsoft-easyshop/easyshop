@@ -212,6 +212,13 @@ class Payment extends MY_Controller{
         $toBeLocked = $prepareData['toBeLocked'];
         $grandTotal= $ItemTotalPrice+$shipping_amt;
         
+
+        if($grandTotal < 200){
+            $data = '{"e":"0","d":"Less than 200 of amount purchased is not allowed."}';
+            echo $data;
+            exit();
+        }
+
         foreach ($itemList as $key => $value) {
             $dataitem .= '&L_PAYMENTREQUEST_0_QTY'.$cnt.'='. urlencode($value['qty']).
             '&L_PAYMENTREQUEST_0_AMT'.$cnt.'='.urlencode($value['price']).
