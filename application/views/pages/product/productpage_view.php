@@ -1,8 +1,62 @@
 <!-- REVIEW SEO TAGS -->
+
+<?php 
+
+        date_default_timezone_set('Asia/Manila');
+        $timeStart = date('H:i') ;
+        $timeEnd = date('H', time()+60*60).':00';
+        $secondsLapse = date('s');
+ 
+        $start = strtotime($timeStart);
+        $stop = strtotime($timeEnd);
+        $diff = ($stop - $start)/60;
+        $intoSeconds = $diff * 60;
+        $secondsRemaining = $intoSeconds - $secondsLapse;
+        // echo 'current time: ' .$timeStart . '<br>';
+        // echo 'refresh time: ' . $timeEnd . '<br>';
+        // echo 'minutes remaining: ' . $diff . '<br>';
+        // echo 'seconds remaining: ' . $secondsRemaining;
+?>
+<meta http-equiv="refresh" content="<?=$secondsRemaining; ?>" />
+
+
 <script type="application/ld+json">
 	<?php echo $jsonReviewSchemaData;?>
 </script>
+<!-- <div id="fb-root"></div> -->
+<!-- <script src="https://connect.facebook.net/en_US/all.js"></script> -->
+<script>
+  // FB.init({
+  //   appId  : '1395192884090886',
+  //   status : true, 
+  //   cookie : true, 
+  //   xfbml  : true  
+  // });
+</script>
+<script type="text/javascript">
+// $(document).ready(function() {
+//     FB.getLoginStatus(function(response) {
+//           if (response.status == 'connected') {
+//                 var user_id = response.authResponse.userID;
+//                 var page_id = "211771799032417"; //  
+//                 var fql_query = "SELECT uid FROM page_fan WHERE page_id=" + page_id + " and uid=" + user_id;
+                
+//                 FB.api('/me/likes/'+page_id, function(response) {
+//                       console.log(response);
+//                       if (response.data[0]) {
+//                          console.log('like');
+//                       } else {
+//                          console.log('not like');
+//                       }
+//                 });
+//           }else{
 
+//             console.log('please login')
+          
+//           } 
+//     });
+// });
+</script>
 <link rel="stylesheet" href="<?=base_url()?>assets/css/jquery.jqzoom.css?ver=<?=ES_FILE_VERSION?>" type="text/css">
 <link rel="stylesheet" href="<?=base_url()?>assets/css/style_new.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
 <link rel="stylesheet" href="<?=base_url()?>assets/css/jquery.bxslider.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
