@@ -1267,8 +1267,8 @@
 								<span class='set_default_lnk' id="bi_txt_bictr<?php echo $rows; ?>">Set as default account</span>
 							</div>
 							<?php endif;?>
-							<div id="bi_check_bictr<?php echo $rows; ?>"  style="display:none; width: 38px;" >
-                                <!-- <span>Saved</span> -->
+							<div id="bi_check_bictr<?php echo $rows; ?>"  style="display:none; width: 38px;" class="txt_alert_save " >
+                                <span class="span_bg chk_img"></span><span>Saved</span>
 							</div>
 							<span id="bi_err_bictr<?php echo $rows; ?>" style="display:none; width:auto; margin-top:0px;" >
                                 <br/><span style='color:red; font-weight:bold;'>* Duplicate Account Number</span>
@@ -1308,7 +1308,7 @@
                                             
                                             <br/><br/>
                                             <?php foreach($billing_info['products'] as $x): ?>
-                                                <div style='width:auto; height:20px;'><a href='<?=base_url()?>item/<?=$x['p_slug']?>'><span style='font-weight:bold'><?php echo html_escape($x['p_name']);?> - <?php echo date('m/d/Y', strtotime($x['p_date'])); ?></span> | <?php echo es_string_limit(html_escape($x['p_briefdesc']), 60);?></a></div>
+                                                <div style='width:auto;'><a href='<?=base_url()?>item/<?=$x['p_slug']?>'><span style='font-weight:bold'><?php echo html_escape($x['p_name']);?> - <?php echo date('m/d/Y', strtotime($x['p_date'])); ?></span> | <?php echo es_string_limit(html_escape($x['p_briefdesc']), 60);?></a></div>
                                             <?php endforeach; ?>
                                         </div>
                                    <?php endif; ?>
@@ -1318,9 +1318,7 @@
 					</div>
 					<div style="clear:both"></div>
 				</div>
-				<div>
-					<hr style="display: block; height: 1px; border: 0; border-top: 1px solid #ccc; margin: 1em 0; padding: 0;" />
-				</div>
+				
 			<?php 
 			echo form_close(); 
 			}
