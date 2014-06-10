@@ -202,7 +202,7 @@
                 </div>
                 <div class="order_summary">
                     <h2>Order Summary</h2>
-                    <p>You have <?php echo count($cat_item);?> item in your cart</p>
+                    <p>You have <?php echo count($cat_item);?> item to checkout.</p>
                     <div class="order_sum_title">
                         <div>Product</div>
                         <div>Quantity</div>
