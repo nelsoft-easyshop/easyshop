@@ -1342,35 +1342,43 @@ $(document).ready(function(){
 	$('input.modal_date').datepicker({
 		changeMonth: true,
 		changeYear: true,
-        yearRange: '2013:2050'
+        yearRange: '2013:2050',
+		dateFormat:"yy-M-dd"
+	}).on('keypress',function(){
+		return false;
 	});
 	
 	/******	Submit / View shipping Comments	******/
-	$('span.shipping_comment').on('click', function(){
-		var divcont = $(this).parent('div').siblings('div.shipping_comment_cont');
+	$('.shipping_comment').on('click', function(){
+		var divcont = $(this).parent().siblings('div.shipping_comment_cont');
 		var thisbtn = $(this);
-		var txStatus = $(this).parent('div').siblings('span.tx_cont_col3').children('span.trans_alert');
+		var txStatus = $(this).parent().siblings('span.tx_cont_col3').children('span.trans_alert');
 		
 		divcont.modal({
 			escClose: false,
 			onShow: function(){
 				if( thisbtn.hasClass('isform') ){
 					var form = divcont.find('form.shipping_details');
+					var submitbtn = $(form).children('input.shipping_comment_submit');
+					var input = $(form).children('input[type="text"]');
+					var textarea = $(form).children('textarea');
+					var editbtn = $(form).children('.tx_modal_edit');
+					var cancelbtn = $(form).children('.tx_modal_cancel');
 					form.validate({
 						rules:{
 							courier:{
 								required: true
 							},
-							tracking_num:{
+							/*tracking_num:{
 								required: true
-							},
+							},*/
 							delivery_date:{
-								required: true,
-								is_validdate:true
+								required: true
+								//is_validdate:true
 							},
-							expected_date:{
+							/*expected_date:{
 								is_validdate:true
-							}
+							}*/
 						},
 						errorElement: "span",
 						errorPlacement: function(error, element) {
@@ -1378,11 +1386,7 @@ $(document).ready(function(){
 							error.insertAfter(element);
 						},
 						submitHandler: function(form){
-							var submitbtn = $(form).children('input.shipping_comment_submit');
-							var input = $(form).children('input[type="text"]');
-							var textarea = $(form).children('textarea');
-							var editbtn = $(form).children('.tx_modal_edit');
-							var cancelbtn = $(form).children('.tx_modal_cancel');
+							
 							
 							input.attr('disabled',false);
 							textarea.attr('disabled', false);
@@ -1427,6 +1431,12 @@ $(document).ready(function(){
 					});
 				}
 				this.setPosition();
+				input.each(function(){
+					if( $.trim($(this).attr('value')).length>0 ){
+						cancelbtn.trigger('click');
+						return false;
+					}
+				});
 			},
 			onClose: function(){
 				$.modal.close();
@@ -1465,8 +1475,8 @@ $(document).ready(function(){
 							required: true
 						},
 						date:{
-							required: true,
-							is_validdate: true
+							required: true
+							//is_validdate: true
 						}
 					},
 					errorElement: "span",
@@ -1512,7 +1522,7 @@ $(document).ready(function(){
 				});
 				thisform.validate().resetForm();
 				input.each(function(){
-					if( $.trim($(this).attr('value'))>0 ){
+					if( $.trim($(this).attr('value')).length>0 ){
 						cancelbtn.trigger('click');
 						return false;
 					}
@@ -1523,7 +1533,6 @@ $(document).ready(function(){
 			}
 		});
 	});
-	
 	
 	$('.transac_prod_btns').on('click', '.reject_item', function(){
 		var form = $(this).closest('form');

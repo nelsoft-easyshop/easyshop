@@ -313,11 +313,11 @@ $config = array(
 						'label' => 'Courier',
 						'rules' => 'trim|required'
 					),
-					array(
+					/*array(
 						'field' => 'tracking_num',
 						'label' => 'Tracking Number',
 						'rules' => 'trim|required'
-					),
+					),*/
 					array(
 						'field' => 'delivery_date',
 						'label' => 'Delivery Date',

@@ -83,15 +83,18 @@ box-shadow:         0px 0px 10px 0px rgba(50, 50, 50, 0.75);
     display: inline-block;
     font-size: 11px;
     padding-top: 10px;
-    width: auto !important;
+	/*width: auto !important;*/
 }
 
-.shipping_comment.isform{
-    padding-top: 0px !important;
-    
+.transac_orange_btn{
+	background-color: #F48000 !important;
+	display: inline-block;
+	font-size: 14px;
 }
 
-
+.transac_orange_btn:hover{
+	background-color: #FF4400 !important;
+}
 
 .shipping_comment_cont{
 	width: 500px;

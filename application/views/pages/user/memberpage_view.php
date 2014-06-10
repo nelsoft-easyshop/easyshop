@@ -1590,13 +1590,13 @@
 												<?php elseif($product['status'] == 1):?>
 													<span class="trans_alert trans_green">Item Received</span>
 												<?php elseif($product['status'] == 2):?>
-													<span class="trans_alert trans_red">Order canceled</span>
+													<span class="trans_alert trans_red">Seller canceled order</span>
 												<?php elseif($product['status'] == 3):?>
 													<span class="trans_alert trans_green">Cash on delivery</span>
 												<?php elseif($product['status'] == 4):?>
 													<span class="trans_alert trans_green">Paid</span>
 												<?php elseif($product['status'] == 5):?>
-													<span class="trans_alert trans_red">Payment Returned</span>
+													<span class="trans_alert trans_red">Payment Refunded</span>
 												<?php endif;?>
 											<?php endif;?>
 										<?php else:?>
@@ -1621,7 +1621,7 @@
 												<h2>Shipping Details</h2>
 												<div>   
                                                     <br/>
-													<label for="courier">Courier: </label>
+													<label for="courier">Shipped By: </label>
 													<input type="text" name="courier" value="<?php echo html_escape($product['courier']);?>" disabled ><br/>
 													<label for="tracking_num">Tracking Number: </label>
 													<input type="text" name="tracking_num" value="<?php echo html_escape($product['tracking_num']);?>" disabled ><br/>
@@ -1847,13 +1847,13 @@
 													<span class="trans_alert trans_green">Cash on delivery</span>
 												<?php else:?>
 													<?php if( $product['has_shipping_summary'] == 0 ):?>
-														<span class="trans_alert trans_red">Pending Shipping Info</span>
+														<span class="trans_alert trans_red">Easyshop received payment</span>
 													<?php elseif( $product['has_shipping_summary'] == 1 ):?>
-														<span class="trans_alert trans_orange">Item on route</span>
+														<span class="trans_alert trans_orange">Item shipped</span>
 													<?php endif;?>
 												<?php endif;?>
 											<?php elseif($product['status'] == 1):?>
-												<span class="trans_alert trans_green">Item Delivered</span>
+												<span class="trans_alert trans_green">Buyer received item</span>
 											<?php elseif($product['status'] == 2):?>
 												<span class="trans_alert trans_red">Order Canceled</span>
 											<?php elseif($product['status'] == 3):?>
@@ -1870,7 +1870,14 @@
 									</span>
 				
 									<?php if($transact['transac_stat'] == 0 && $transact['payment_method'] != 3):?>
-										<div style="display:table-cell"><span class="shipping_comment isform">+ Update Shipping Comment</span></div>
+										
+									<?php endif;?>
+								</div>
+								
+								<div class="transac_prod_btns tx_btns">
+									<?php if($transact['transac_stat'] == 0 && $product['status'] == 0 && $transact['payment_method'] != 3):?>										
+										
+										<div style="display:inline-block;"><input type="button" class="shipping_comment isform transac_orange_btn" value="Ship Item"></div>
 										<div class="shipping_comment_cont" style="display:none;">
 											<h2>Shipping Details</h2>
 											<div>
@@ -1880,11 +1887,11 @@
 													echo form_open('',$attr);
 												?>
                                                     <br/>
-													<label for="courier">Courier: </label>
-													<input type="text" name="courier" value="<?php echo html_escape($product['courier']);?>" <?php echo $disable ? 'disabled':''; ?> ><br/>
+													<label for="courier"><span style="color:red;">*</span> Shipped By: </label>
+													<input type="text" name="courier" value="<?php echo html_escape($product['courier']);?>" placeholder="(e.g. LBC, Air21)"<?php echo $disable ? 'disabled':''; ?> ><br/>
 													<label for="tracking_num">Tracking Number: </label>
 													<input type="text" name="tracking_num" value="<?php echo html_escape($product['tracking_num']);?>" <?php echo $disable ? 'disabled':''; ?> ><br/>
-													<label for="delivery_date">Delivery Date: </label>
+													<label for="delivery_date"><span style="color:red;">*</span> Delivery Date: </label>
 													<input type="text" class="modal_date" name="delivery_date" value="<?php echo html_escape($product['delivery_date'])?>" <?php echo $disable ? 'disabled':''; ?> > <br/>
 													<label for="expected_date">Expected Date of Arrival: </label>
 													<input type="text" class="modal_date" name="expected_date" value="<?php echo html_escape($product['expected_date'])?>" <?php echo $disable ? 'disabled':''; ?> ><br/>
@@ -1900,12 +1907,7 @@
 												<?php echo form_close();?>
 											</div>
 										</div>
-									<?php endif;?>
-									
-								</div>
-								
-								<div class="transac_prod_btns tx_btns">
-									<?php if($transact['transac_stat'] == 0 && $product['status'] == 0 && $transact['payment_method'] != 3):?>										
+										
 										<?php
 											$attr = array('class'=>'transac_response');
 											echo form_open('',$attr);
