@@ -1985,6 +1985,9 @@ class product_model extends CI_Model
         $enddate = strtotime($end);
         $type = intval($type);
         switch ($type) {
+            case 0 :
+                $PromoPrice = $baseprice;
+                break;
             case 1 :
                 if(($today < $startdate) || ($enddate < $startdate)){
                     $diffHours = 0;

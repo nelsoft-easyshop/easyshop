@@ -234,11 +234,17 @@ class Cart extends MY_Controller{
             $max_qty = reset($qty)['quantity'];
         }
         #done checking if the attribute's are existing on DB and max_quantity
+        $promo = $this->config->item('Promo')[$product['promo_type']];
         $data = array(
             'id'      => $id,
-            'qty'     => ($userQTY > $max_qty
-                    ? $max_qty
-                    : $userQTY ), //check if qty is > max qty,if its qty=maxqty else qty
+//            'qty'     => ($userQTY > $max_qty
+//                    ? $max_qty
+//                    : $userQTY ),
+            'qty'     => (intval($userQTY) >= intval($promo['purchase_limit'])
+                    ? $promo['purchase_limit']
+                    : ($userQTY > $max_qty
+                        ? $max_qty
+                        : $userQTY )),
             'price'   => $final_price,
             'original_price' => $product['original_price'],
             'name'    => $product['product'],
