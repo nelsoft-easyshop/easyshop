@@ -661,7 +661,7 @@ class Payment extends MY_Controller{
                 "digest" => $digest
                 );
 
-            $transactionID = urldecode($txnId).'-'.urldecode($refNo);
+            $transactionID = urldecode($txnId);
             $apiResponse = json_encode($apiResponseArray);
 
             if($postBackCount == 0){
