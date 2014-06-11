@@ -78,9 +78,7 @@ class Payment extends MY_Controller{
         $itemArray = $carts['choosen_items'];
         $member_id =  $this->session->userdata('member_id');
 
-       # $remove_to_cart = $this->payment_model->removeToCart(intval(100),$itemArray);
         $address = $this->memberpage_model->get_member_by_id($member_id);
-
 
         $city = ($address['c_stateregionID'] > 0 ? $address['c_stateregionID'] :  0);
         if($city > 0){  
@@ -672,12 +670,17 @@ class Payment extends MY_Controller{
                     $itemComplete = $this->payment_model->deductQuantity($productId,$productItem,$orderQuantity);
                 }
             }
-
-            $locked = $this->lockItem($toBeLocked,$orderId,'delete');
-            $paymentType = (strtolower($status) == "s" ? 4 : 2);
-            // $this->sendNotification(array('member_id'=>$member_id, 'order_id'=>$orderId, 'invoice_no'=>$invoice));
+            $paymentType = 2;
+            if(strtolower($status) == "s"){
+                $locked = $this->lockItem($toBeLocked,$orderId,'delete');
+                $paymentType = 4;
+            }
+             
+            $this->sendNotification(array('member_id'=>$member_id, 'order_id'=>$orderId, 'invoice_no'=>$invoice));
             $complete = $this->payment_model->updatePaymentIfComplete($orderId,$apiResponse,$transactionID,$paymentType);
+            $remove_to_cart = $this->payment_model->removeToCart($member_id,$itemList);
             // $this->removeItemFromCart(); 
+
            
         }
 
@@ -858,67 +861,67 @@ class Payment extends MY_Controller{
 	 */
     function sendNotification($data) 
     {   
-        // if(!$this->session->userdata('member_id')){
-        //     redirect(base_url().'home', 'refresh');
-        // };
+  //       // if(!$this->session->userdata('member_id')){
+  //       //     redirect(base_url().'home', 'refresh');
+  //       // };
         
-        //devcode
-		/*$data['member_id'] = 74;
-		$data['order_id'] = 102;
-		$data['invoice_no']= 3;
-		$data['member_id'] = 74;
-		$data['order_id'] = 105;
-		$data['invoice_no']= '22-1231-2';*/
+  //       //devcode
+		// /*$data['member_id'] = 74;
+		// $data['order_id'] = 102;
+		// $data['invoice_no']= 3;
+		// $data['member_id'] = 74;
+		// $data['order_id'] = 105;
+		// $data['invoice_no']= '22-1231-2';*/
 		
-        $transactionData = $this->payment_model->getPurchaseTransactionDetails($data);
+  //       $transactionData = $this->payment_model->getPurchaseTransactionDetails($data);
         
-        //Send email to buyer
-        $buyerEmail = $transactionData['buyer_email'];
-        $buyerData = $transactionData;
-        unset($buyerData['seller']);
-        unset($buyerData['buyer_email']);
-		// 3 tries to send Email. Quit if success or 3 failed tries met
-		$emailcounter = 0;
-		do{
-			$buyerEmailResult = $this->payment_model->sendNotificationEmail($buyerData, $buyerEmail, 'buyer');
-			$emailcounter++;
-		}while(!$buyerEmailResult && $emailcounter<3);
+  //       //Send email to buyer
+  //       $buyerEmail = $transactionData['buyer_email'];
+  //       $buyerData = $transactionData;
+  //       unset($buyerData['seller']);
+  //       unset($buyerData['buyer_email']);
+		// // 3 tries to send Email. Quit if success or 3 failed tries met
+		// $emailcounter = 0;
+		// do{
+		// 	$buyerEmailResult = $this->payment_model->sendNotificationEmail($buyerData, $buyerEmail, 'buyer');
+		// 	$emailcounter++;
+		// }while(!$buyerEmailResult && $emailcounter<3);
         
-		//Send text msg to buyer if mobile provided
-		$buyerMobile = trim($buyerData['buyer_contactno']);
-		if($buyerMobile != '' && $buyerMobile != 0 ){
-			$buyerMsg = $buyerData['buyer_name'] . $this->lang->line('notification_txtmsg_buyer');
-			$buyerTxtResult = $this->payment_model->sendNotificationMobile($buyerMobile, $buyerMsg);
-		}
+		// //Send text msg to buyer if mobile provided
+		// $buyerMobile = trim($buyerData['buyer_contactno']);
+		// if($buyerMobile != '' && $buyerMobile != 0 ){
+		// 	$buyerMsg = $buyerData['buyer_name'] . $this->lang->line('notification_txtmsg_buyer');
+		// 	$buyerTxtResult = $this->payment_model->sendNotificationMobile($buyerMobile, $buyerMsg);
+		// }
 		
-        //Send email to seller of each product - once per seller
-        $sellerData = array(
-            'id_order' => $transactionData['id_order'],
-            'dateadded' => $transactionData['dateadded'],
-            'buyer_name' => $transactionData['buyer_name'],
-			'invoice_no' => $transactionData['invoice_no']
-            );
+  //       //Send email to seller of each product - once per seller
+  //       $sellerData = array(
+  //           'id_order' => $transactionData['id_order'],
+  //           'dateadded' => $transactionData['dateadded'],
+  //           'buyer_name' => $transactionData['buyer_name'],
+		// 	'invoice_no' => $transactionData['invoice_no']
+  //           );
 			
-        foreach($transactionData['seller'] as $seller){
-            $sellerEmail = $seller['email'];
-            $sellerData['totalprice'] = number_format($seller['totalprice'], 2, '.' , ',');
+  //       foreach($transactionData['seller'] as $seller){
+  //           $sellerEmail = $seller['email'];
+  //           $sellerData['totalprice'] = number_format($seller['totalprice'], 2, '.' , ',');
 		 
-            $sellerData['seller_name'] = $seller['seller_name'];
-            $sellerData['products'] = $seller['products'];
-			// 3 tries to send Email. Quit if success or 3 failed tries met
-			$emailcounter = 0;
-			do{
-				$sellerEmailResult = $this->payment_model->sendNotificationEmail($sellerData, $sellerEmail, 'seller');
-				$emailcounter++;
-			}while(!$sellerEmailResult && $emailcounter<3);
+  //           $sellerData['seller_name'] = $seller['seller_name'];
+  //           $sellerData['products'] = $seller['products'];
+		// 	// 3 tries to send Email. Quit if success or 3 failed tries met
+		// 	$emailcounter = 0;
+		// 	do{
+		// 		$sellerEmailResult = $this->payment_model->sendNotificationEmail($sellerData, $sellerEmail, 'seller');
+		// 		$emailcounter++;
+		// 	}while(!$sellerEmailResult && $emailcounter<3);
 			
-			//Send text msg to buyer if mobile provided
-			$sellerMobile = trim($seller['seller_contactno']);
-			if($sellerMobile != '' && $sellerMobile != 0 ){
-				$sellerMsg = $seller['seller_name'] . $this->lang->line('notification_txtmsg_seller');
-				$sellerTxtResult = $this->payment_model->sendNotificationMobile($sellerMobile, $sellerMsg);
-			}
-        }//close foreach seller loop
+		// 	//Send text msg to buyer if mobile provided
+		// 	$sellerMobile = trim($seller['seller_contactno']);
+		// 	if($sellerMobile != '' && $sellerMobile != 0 ){
+		// 		$sellerMsg = $seller['seller_name'] . $this->lang->line('notification_txtmsg_seller');
+		// 		$sellerTxtResult = $this->payment_model->sendNotificationMobile($sellerMobile, $sellerMsg);
+		// 	}
+  //       }//close foreach seller loop
     }
 	
 	/*
