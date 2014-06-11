@@ -629,7 +629,7 @@ class Payment extends MY_Controller{
             $member_id = $payDetails['buyer_id'];
             $itemList = json_decode($payDetails['data_response']);
             $postBackCount = $payDetails['postback_count'];
-
+            print_r( $itemList);
             $address = $this->memberpage_model->get_member_by_id($member_id); 
             $bigThree = $this->getCityRegionMajorIsland($address);
             $city = $bigThree['city'];  
