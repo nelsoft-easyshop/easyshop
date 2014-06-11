@@ -100,16 +100,15 @@
 			<div class="progress_bar_panel">
 				<div>
 					<h3>Total Posted Items</h3>
-					<input class="items db_total_items" data-width="150" data-fgColor="#FF8400" data-max="1000" data-thickness=".1" data-angleOffset="180" data-readOnly=true data-displayPrevious=true data-value="<?php echo $active_count + $deleted_count;?>"   value="<?php echo $active_count + $deleted_count;?>">
+					<input class="items db_total_items" data-width="150" data-fgColor="#FF8400" data-max="2000" data-thickness=".1" data-angleOffset="180" data-readOnly=true data-displayPrevious=true data-value="<?php echo $active_count + $deleted_count;?>"   value="<?php echo $active_count + $deleted_count;?>">
 				</div>
 				<div>
 					<h3>Active Items</h3>
-					<input class="items db_active_items" data-width="150" data-fgColor="#ff4400" data-max="1000" data-thickness=".1" data-angleOffset="180" data-readOnly=true data-displayPrevious=true data-value="<?php echo $active_count;?>"   value="<?php echo $active_count;?>">
-					
+					<input class="items db_active_items" data-width="150" data-fgColor="#ff4400" data-max="2000" data-thickness=".1" data-angleOffset="180" data-readOnly=true data-displayPrevious=true data-value="<?php echo $active_count;?>"   value="<?php echo $active_count;?>">
 				</div>
 				<div>
 					<h3>Total Sold Items</h3>
-					<input class="items db_sold_items" data-width="150" data-fgColor="#7ad014" data-max="1000" data-thickness=".1" data-angleOffset="180" data-readOnly=true data-displayPrevious=true data-value="<?php echo $sold_count;?>" value="<?php echo $sold_count;?>">
+					<input class="items db_sold_items" data-width="150" data-fgColor="#7ad014" data-max="2000" data-thickness=".1" data-angleOffset="180" data-readOnly=true data-displayPrevious=true data-value="<?php echo $sold_count;?>" value="<?php echo $sold_count;?>">
 				</div>
 			</div>
              
