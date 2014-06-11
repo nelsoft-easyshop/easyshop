@@ -25,7 +25,9 @@
 
                         <div class="countdown_top_left_content">
                             <div class="cd_timerlabel_container">
-                                <span class="cd_timerlabel">STARTS IN</span>
+                                
+                            
+                                <span class="cd_timerlabel"><?php echo (strtotime(date('M d,Y H:i:s')) < strtotime($data['cd_startdate']))?'STARTS IN':'TIME LEFT'; ?></span>
                             </div>
                            <div class="cd_timer_container">
                             <div class="cd_timer_days">
