@@ -674,11 +674,15 @@ class Payment extends MY_Controller{
                 $locked = $this->lockItem($toBeLocked,$orderId,'delete');
                 $paymentType = 4;
                 $apiResponse = json_encode($apiResponseArray);
-                $this->sendNotification(array('member_id'=>$member_id, 'order_id'=>$orderId, 'invoice_no'=>$invoice));
+                
             }
              
             $complete = $this->payment_model->updatePaymentIfComplete($orderId,$apiResponse,$transactionID,$paymentType);
             $remove_to_cart = $this->payment_model->removeToCart($member_id,$itemList);
+
+            if(strtolower($status) == "s"){
+                $this->sendNotification(array('member_id'=>$member_id, 'order_id'=>$orderId, 'invoice_no'=>$invoice));  
+            }
 
             // $this->removeItemFromCart(); 
 
@@ -737,9 +741,9 @@ class Payment extends MY_Controller{
             $response['completepayment'] = true;
             $response['message'] = '<div style="color:green">Your payment is completed through Dragon Pay.</div><div style="color:red">'.urldecode($message).'</div>';
             $response = array_merge($response,$return);  
-            // $this->removeItemFromCart(); 
-            // $this->session->unset_userdata('choosen_items');
-            // $this->sendNotification(array('member_id'=>$member_id, 'order_id'=>$orderId, 'invoice_no'=>$invoice));
+            $this->removeItemFromCart(); 
+            $this->session->unset_userdata('choosen_items');
+            $this->sendNotification(array('member_id'=>$member_id, 'order_id'=>$orderId, 'invoice_no'=>$invoice));
            
             #google analytics data
             $analytics = $this->ganalytics($itemList,$orderId);
