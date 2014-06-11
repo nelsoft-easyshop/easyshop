@@ -1,6 +1,6 @@
 <?php
 
-namespace Easyshop\Entities;
+namespace EasyShop\Entities;
 
 
 
