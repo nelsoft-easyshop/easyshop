@@ -88,14 +88,14 @@
 			$("#modal-container").hide();
 			$("#msg-message").val("");
 		});
-		
+
 		$("#modal-launcher").click(function() {
 			$("#modal-container, #modal-background").toggleClass("active");
 			$("#modal-container").show();
 		});
 
-		$("#msg_textarea").on("click","#send_btn",function(){ 
-			
+		$("#msg_textarea").on("click","#send_btn",function(){
+
         var D = eval('(' + $(this).attr('data') + ')');
         var recipient = D.name;
         var img = D.img;
@@ -105,8 +105,8 @@
         }
         send_msg(recipient,msg);
         specific_msgs();
-        
-        var objDiv = document.getElementById("msg_field");	
+
+        var objDiv = document.getElementById("msg_field");
         objDiv.scrollTop = objDiv.scrollHeight;
 		});
 
@@ -133,7 +133,7 @@
          * We only enable this when web socket fails
          */
         if (!("WebSocket" in window)) {
-            
+
             ////this is for page reload every time the user is focused on the web page/tab
             var myInterval;
             var interval_delay = 5000;
@@ -141,7 +141,7 @@
 
             $(document).ready(function () {
                 $(window).focus(function () {
-                    clearInterval(myInterval); 
+                    clearInterval(myInterval);
                     if  (!is_interval_running)
                         myInterval = setInterval(Reload, interval_delay);
                 }).blur(function () {
@@ -154,10 +154,10 @@
                  is_interval_running = true;
             }
         }
-       
-        
+
+
     });
-     
+
     function Reload() {
         var csrftoken = $("meta[name='csrf-token']").attr('content');
         var csrfname = $("meta[name='csrf-name']").attr('content');
@@ -172,11 +172,11 @@
 			success : function(d) {
                 $(".msg_countr").html(d.unread_msgs);
                 document.title = (d.unread_msgs == 0 ? "Message | Easyshop.ph" : "Message (" + d.unread_msgs + ") | Easyshop.ph");
-                
+
                 if (d.unread_msgs != 0) {
                     onFocus_Reload(d);
                 }
-            }            
+            }
         });
     }
 	$("#modal_send_btn").on("click",function(){
@@ -201,8 +201,8 @@
 		}else {
             return false;
 		}
-	});   	
-		
+	});
+
 	$("#chsn_delete_btn").on("click",function(){
 		var checked = $(".d_all:checked").map(function () {return this.value;}).get().join(",");
 		var result = delete_data(checked);
@@ -217,8 +217,8 @@
 		}
 	});
 	$("#delete_all_btn").on("click",function(){
-		var checked = $(".d_all").map(function () {return this.value;}).get().join(",");	
-		var result = delete_data(checked);	
+		var checked = $(".d_all").map(function () {return this.value;}).get().join(",");
+		var result = delete_data(checked);
 		if(result != ""){
             $("#table_id tbody").empty();
 			onFocus_Reload(result);
@@ -228,12 +228,12 @@
         }else {
             location.reload();
 		}
-	}); 
-	
+	});
+
 	function send_msg(recipient,msg){
 		var csrftoken = $("meta[name='csrf-token']").attr('content');
         var csrfname = $("meta[name='csrf-name']").attr('content');
-        
+
 		var result = "";
 		$.ajax({
 			async : false,
@@ -255,12 +255,12 @@
                     result = false;
                 }
 			}
-		});		
+		});
         $("#msg_textarea img").hide();
         $("#send_btn").show();
 		return result;
 	}
-	$("#table_id tbody").on("click",".btn_each_msg",function(){	
+	$("#table_id tbody").on("click",".btn_each_msg",function(){
 		var D = eval('(' + $(this).attr('data') + ')');
 		var html = "";
 		$("#send_btn").attr("data","{'name':'"+$(this).children(":first").html()+"','img':'"+$(this).parent().parent().children(":first").children().attr("data")+"'}");
@@ -278,7 +278,7 @@
 			$("#msg_field").prepend(html);
 		});
 		$("#msg_textarea").show();
-		var objDiv = document.getElementById("msg_field");	
+		var objDiv = document.getElementById("msg_field");
 		objDiv.scrollTop = objDiv.scrollHeight;
 		$("#delete_all_btn").show();
 		$("#chsn_delete_btn").hide();
@@ -287,7 +287,7 @@
 		$("#"+this.id+" .msg_sender span").remove();
 		seened(this);
 	});
-        
+
 	function specific_msgs() {
 		var html = "";
 		var all_messages = eval('('+ $(".Active").attr('data')+')');
@@ -360,7 +360,7 @@
 			$("#chsn_delete_btn").show();
 		}
 	});
-	function delete_data(ids) {		
+	function delete_data(ids) {
 		var csrftoken = $("meta[name='csrf-token']").attr('content');
         var csrfname = $("meta[name='csrf-name']").attr('content');
 		var data = "";
@@ -396,7 +396,7 @@
                 url : "<?=base_url()?>messages/is_seened",
                 data : {checked:checked,csrfname:csrftoken},
                 success : function(data) {
-                    if (data === true) {                        
+                    if (data === true) {
                         $(obj).parent().parent().removeClass('NS');
                     }else{
                         alert("Error loading the message.");
