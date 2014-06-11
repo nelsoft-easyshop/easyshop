@@ -589,7 +589,7 @@ class Payment extends MY_Controller{
         }
     }
 
-    function dragonPayPostBack(){
+    function dragonPayPostBack2(){
 
         header("Content-Type:text/plain");
         $status = $this->input->post('status');
