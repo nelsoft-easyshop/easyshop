@@ -573,8 +573,8 @@ class Payment extends MY_Controller{
         $paymentType = $this->PayMentDragonPay; 
         $invoice_no = date('Ymhsd'); 
         $ip = $this->user_model->getRealIpAddr();  
-        
-        $return = $this->payment_model->payment($paymentType,$invoice_no,$grandTotal,$ip,$member_id,$productstring,$productCount,"",$transactionID);
+         
+        $return = $this->payment_model->payment($paymentType,$invoice_no,$grandTotal,$ip,$member_id,$productstring,$productCount,json_encode($itemList),$transactionID);
         
         if($return['o_success'] <= 0){
             echo '{"e":"0","m":"'.$return['o_message'].'"}'; 
@@ -595,7 +595,78 @@ class Payment extends MY_Controller{
             $transactionID = $this->input->post('txnid').'-'.$this->input->post('refno');
             $this->payment_model->checkMyDp($transactionID);
         }
-        
+
+
+    }
+
+
+    function newPostBack(){
+
+        header("Content-Type:text/plain");
+
+        $txnId = $this->input->post('txnid');
+        $refNo = $this->input->post('refno');
+        $status =  $this->input->post('status');
+        $message = $this->input->post('message');
+        $digest = $this->input->post('digest');
+
+        if(strtolower($status) == "p" || strtolower($status) == "s"){
+
+            $payDetails = $this->payment_model->selectFromEsOrder($txnId,$paymentType);
+
+            $return = $this->payment_model->selectFromEsOrder($txnId,$paymentType);
+            $invoice = $payDetails['invoice_no'];
+            $orderId = $payDetails['id_order'];
+            $member_id = $payDetails['buyer_id'];
+            $itemList = $payDetails['data_response'];
+            $postBackCount = $payDetails['postback_count'];
+
+            $address = $this->memberpage_model->get_member_by_id($member_id); 
+            $bigThree = $this->getCityRegionMajorIsland($address);
+            $city = $bigThree['city'];  
+            $region = $bigThree['region'];  
+            $majorIsland = $bigThree['majorIsland'];  
+
+            $ItemTotalPrice = 0;
+            $prepareData = $this->processData($itemList,$city,$region,$majorIsland);
+            $ItemTotalPrice = $prepareData['totalPrice'];
+            $productstring = $prepareData['productstring'];
+            $itemList = $prepareData['newItemList'];
+            $toBeLocked = $prepareData['toBeLocked'];
+
+            $grandTotal = $ItemTotalPrice;
+
+            $apiResponseArray['ProductData'] = $itemList;
+            $apiResponseArray['DragonPayReturn'] = array(
+                "txnid" => $txnId,
+                "refno" => $refNo,
+                "status" => $status,
+                "message" => $message,
+                "digest" => $digest
+                );
+
+            $transactionID = urldecode($txnId).'-'.urldecode($refNo);
+            $apiResponse = json_encode($apiResponseArray);
+
+            if($postBackCount == 0){
+                foreach ($itemList as $key => $value) {               
+                    $productId = $value['id'];
+                    $productItem =  $value['product_itemID'];
+                    $orderQuantity = $value['qty'];
+                    $itemComplete = $this->payment_model->deductQuantity($productId,$productItem,$orderQuantity);
+                }
+            }
+
+            $locked = $this->lockItem($toBeLocked,$orderId,'delete');
+            $paymentType = (strtolower($status) == "s" ? 2 : 2);
+            $complete = $this->payment_model->updatePaymentIfComplete($orderId,$apiResponse,$transactionID,$paymentType);
+
+            $this->removeItemFromCart(); 
+            $this->sendNotification(array('member_id'=>$member_id, 'order_id'=>$orderId, 'invoice_no'=>$invoice));
+           
+        }
+
+
     }
 
 
@@ -626,9 +697,9 @@ class Payment extends MY_Controller{
         
         $prepareData = $this->processData($itemList,$city,$region,$majorIsland);
         $ItemTotalPrice = $prepareData['totalPrice'];
-        $productstring = $prepareData['productstring'];
+        // $productstring = $prepareData['productstring'];
         $itemList = $prepareData['newItemList'];
-        $toBeLocked = $prepareData['toBeLocked'];
+        // $toBeLocked = $prepareData['toBeLocked'];
 
         $grandTotal = $ItemTotalPrice;
 
@@ -638,44 +709,43 @@ class Payment extends MY_Controller{
         $message = $this->input->get('message');
         $digest = $this->input->get('digest');
  
-        $apiResponseArray['ProductData'] = $itemList;
-        $apiResponseArray['DragonPayReturn'] = array(
-                "txnid" => $txnId,
-                "refno" => $refNo,
-                "status" => $status,
-                "message" => $message,
-                "digest" => $digest
-        );
+        // $apiResponseArray['ProductData'] = $itemList;
+        // $apiResponseArray['DragonPayReturn'] = array(
+        //         "txnid" => $txnId,
+        //         "refno" => $refNo,
+        //         "status" => $status,
+        //         "message" => $message,
+        //         "digest" => $digest
+        // );
 
-        $transactionID = urldecode($txnId).'-'.urldecode($refNo);
-        $apiResponse = json_encode($apiResponseArray);
+        // $transactionID = urldecode($txnId).'-'.urldecode($refNo);
+        // $apiResponse = json_encode($apiResponseArray);
         
         if(strtolower($status) == "p" || strtolower($status) == "s"){
 
-        
             $return = $this->payment_model->selectFromEsOrder($txnId,$paymentType);
             $invoice = $return['invoice_no'];
             $orderId = $return['id_order'];
             $response['dateadded'] = $return['dateadded'];
             $response['total'] = $grandTotal;
 
-            foreach ($itemList as $key => $value) {               
-                $productId = $value['id'];
-                $productItem =  $value['product_itemID'];
-                $orderQuantity = $value['qty'];
-                $itemComplete = $this->payment_model->deductQuantity($productId,$productItem,$orderQuantity);
-            }
+            // foreach ($itemList as $key => $value) {               
+            //     $productId = $value['id'];
+            //     $productItem =  $value['product_itemID'];
+            //     $orderQuantity = $value['qty'];
+            //     $itemComplete = $this->payment_model->deductQuantity($productId,$productItem,$orderQuantity);
+            // }
 
-            $locked = $this->lockItem($toBeLocked,$orderId,'delete');
-            $paymentType = (strtolower($status) == "s" ? 4 : 2);
-            $complete = $this->payment_model->updatePaymentIfComplete($orderId,$apiResponse,$transactionID,$paymentType);
+            // $locked = $this->lockItem($toBeLocked,$orderId,'delete');
+            // $paymentType = (strtolower($status) == "s" ? 4 : 2);
+            // $complete = $this->payment_model->updatePaymentIfComplete($orderId,$apiResponse,$transactionID,$paymentType);
 
             $response['completepayment'] = true;
             $response['message'] = '<div style="color:green">Your payment is completed through Dragon Pay.</div><div style="color:red">'.urldecode($message).'</div>';
             $response = array_merge($response,$return);  
-            $this->removeItemFromCart(); 
-            $this->session->unset_userdata('choosen_items');
-            $this->sendNotification(array('member_id'=>$member_id, 'order_id'=>$orderId, 'invoice_no'=>$invoice));
+            // $this->removeItemFromCart(); 
+            // $this->session->unset_userdata('choosen_items');
+            // $this->sendNotification(array('member_id'=>$member_id, 'order_id'=>$orderId, 'invoice_no'=>$invoice));
            
             #google analytics data
             $analytics = $this->ganalytics($itemList,$orderId);
@@ -773,9 +843,9 @@ class Payment extends MY_Controller{
 	 */
     function sendNotification($data) 
     {   
-        if(!$this->session->userdata('member_id')){
-            redirect(base_url().'home', 'refresh');
-        };
+        // if(!$this->session->userdata('member_id')){
+        //     redirect(base_url().'home', 'refresh');
+        // };
         
         //devcode
 		/*$data['member_id'] = 74;
@@ -924,8 +994,7 @@ class Payment extends MY_Controller{
                 'address' => $this->input->post('c_address'),
                 'country' => $this->input->post('c_country'),
                 'lat' => $this->input->post('temp_lat'),
-                'lng' => $this->input->post('temp_lng'),
-				'addresstype' => 1
+                'lng' => $this->input->post('temp_lng')
             );
             if(trim($this->input->post('consignee')) == "" || $this->input->post('c_city') == 0 || $this->input->post('c_stateregion') == 0 || trim($this->input->post('c_address')) == "" || trim($this->input->post('c_mobile')) == "")
             {
@@ -940,7 +1009,7 @@ class Payment extends MY_Controller{
                 $postdata['default_add'] = "off";
                 $addressId = $this->memberpage_model->getAddress($uid,'1')['id_address'];
                 
-                $data = $this->memberpage_model->editAddress($uid, $postdata,$addressId);
+                $data = $this->memberpage_model->editDeliveryAddress($uid, $postdata,$addressId);
                 $this->output->set_output(json_encode($data));
                 echo json_encode("success");
                 exit(); 
