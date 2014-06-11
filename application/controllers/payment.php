@@ -777,9 +777,9 @@ class Payment extends MY_Controller{
         $data = $this->session->userdata('headerData');
         $response = $this->session->userdata('bodyData'); 
 
-        $this->session->unset_userdata('paymentticket');
-        $this->session->unset_userdata('headerData');
-        $this->session->unset_userdata('bodyData');
+        // $this->session->unset_userdata('paymentticket');
+        // $this->session->unset_userdata('headerData');
+        // $this->session->unset_userdata('bodyData');
 
 
         $this->load->view('templates/header', $data);
