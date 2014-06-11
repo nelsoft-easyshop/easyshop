@@ -13,6 +13,7 @@ class Payment extends MY_Controller{
         $this->load->library('dragonpay');
         $this->load->library("xmlmap");
         $this->load->model('user_model');
+        $this->load->model('cart_model');
         $this->load->model('payment_model');
         $this->load->model('product_model');
         $this->load->model('memberpage_model'); 
@@ -57,22 +58,27 @@ class Payment extends MY_Controller{
         //$this->session->unset_userdata('cart_contents');
         $cart_contentss=array('choosen_items'=>$carts);
         $this->session->set_userdata($cart_contentss);
+        //save cart to es_member -> userdata
+        $cart_items = serialize($this->session->userdata('cart_contents'));
+        $id = $this->session->userdata('member_id');
+        $this->cart_model->save_cartitems($cart_items,$id);
+
     	return true;
     }
-   
+
     function review()
-    {  
+    {
         if(!$this->session->userdata('member_id')){
             redirect(base_url().'home', 'refresh');
         }
 
-
         $qtysuccess = $this->resetPriceAndQty();
 
-        $carts = $this->session->all_userdata(); 
-
+        $carts = $this->session->all_userdata();
         $itemArray = $carts['choosen_items'];
         $member_id =  $this->session->userdata('member_id');
+
+        $remove_to_cart = $this->payment_model->removeToCart(intval(100),$itemArray);
         $address = $this->memberpage_model->get_member_by_id($member_id);
 
 

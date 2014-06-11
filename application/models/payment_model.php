@@ -8,6 +8,7 @@ class payment_model extends CI_Model
 	{
 		parent::__construct();
 		$this->load->library("xmlmap");
+        $this->load->model('cart_model');
 	}	
 
 
@@ -600,6 +601,20 @@ class payment_model extends CI_Model
 		
 		return $result;
 	}
+
+    public function removeToCart($id,$itemsToDelete){
+        $cart_items = $this->cart_model->cartdata($id);
+
+        foreach($cart_items as $c_key => $c_row){
+            foreach($itemsToDelete as $i_key => $i_row){
+                if($c_key == $i_key){
+                   unset($cart_items[$i_key]);
+                }
+            }
+        }
+        $result = $this->cart_model->save_cartitems(serialize($cart_items),$id);
+        return ($result >= 1 ? true : false);
+    }
 }
 
 

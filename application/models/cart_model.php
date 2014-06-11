@@ -55,6 +55,8 @@ class cart_model extends CI_Model
         $sth->bindParam(':id',$id); 
         $sth->bindParam(':data',$data);
         $sth->execute();
+
+        return $sth->rowCount();
     }
     
 }
