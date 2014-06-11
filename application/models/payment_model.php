@@ -71,7 +71,7 @@ class payment_model extends CI_Model
 			  	AND order_id = :order_id
     		";
     	}
-    	;
+    	echo $query;
     	$sth = $this->db->conn_id->prepare($query);
     	$sth->bindParam(':item_id',$itemId,PDO::PARAM_INT);
     	$sth->bindParam(':quantity',$qty,PDO::PARAM_INT); 
@@ -131,7 +131,7 @@ class payment_model extends CI_Model
         $query = $this->xmlmap->getFilenameID('sql/payment','updatePaymentIfComplete');
     	$sth = $this->db->conn_id->prepare($query);
 
-    	$orderStatus = ($paymentType == 2) ? 99 : 0;
+    	$orderStatus = ($paymentType == 2) ? 0 : 0;
     	$sth->bindParam(':order_status',$orderStatus,PDO::PARAM_STR);
     	$sth->bindParam(':data',$data,PDO::PARAM_STR);
     	$sth->bindParam(':id_order',$id,PDO::PARAM_INT);
