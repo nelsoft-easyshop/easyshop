@@ -100,7 +100,7 @@ class Zada implements WampServerInterface
                                                                ->getQuery());
             
             if (isset ($params['id'])) {
-                $as = $this->em->getRepository('\Easyshop\Entities\AuthenticatedSession')
+                $as = $this->em->getRepository('\EasyShop\Entities\AuthenticatedSession')
                                ->findOneBy(['session' => $params['id']]);
                 $isSessionAuthenticated = NULL !== $as;
             }
@@ -144,7 +144,7 @@ class Zada implements WampServerInterface
      */
     public function onSubscribe(ConnectionInterface $conn, $topic)
     {
-        $authenticatedSession = $this->em->getRepository('\Easyshop\Entities\AuthenticatedSession')
+        $authenticatedSession = $this->em->getRepository('\EasyShop\Entities\AuthenticatedSession')
                        ->findOneBy(['session' => $topic->getId()]);
         
         /*
