@@ -728,7 +728,7 @@ class Payment extends MY_Controller{
   
         
         if(strtolower($status) == "p" || strtolower($status) == "s"){
-
+            $paymentType = (strtolower($status) == "p") ? 2 : 4;
             $return = $this->payment_model->selectFromEsOrder($txnId,$paymentType);
             $invoice = $return['invoice_no'];
             $orderId = $return['id_order'];
