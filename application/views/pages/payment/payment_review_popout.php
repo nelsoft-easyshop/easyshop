@@ -1,6 +1,7 @@
-<div> 
-    <h2><?= $item_name; ?></h2><br>
-    Item Location Availability: <br>
+<div style='padding:10px;'> 
+    <h2 style='color:#f48000;'><?= es_string_limit($item_name, 50, $trailer = '...') ?></h2><br>
+    <hr/>
+    This item is available in the following locations:
     <input id='p_shipment' type='hidden' value='<?php echo json_encode($shipment_information);?>'>  
     <select class="shiploc" id="shipment_locations">
         <option class="default" selected="" value="0">Select Location</option>
@@ -14,6 +15,8 @@
             <?php endforeach;?>
         <?php endforeach;?>
     </select>
+    <br/>
+    <br/>
 </div>
 <script type="text/javascript">
 $(document).ready(function(){  
@@ -21,12 +24,9 @@ $(document).ready(function(){
    
     var shipment = JSON.parse($('#p_shipment').val());        
     var iid = '<?php echo $item_id;?>';
- 
+   
     $.each(shipment, function(index, value){
-            
-            
-            if(iid == index){
-
+            if(iid == value.product_item_id){
                 var option =  $('#locationID_' + value.location_id);
                 option.data('price',value.price);
                 option.prop('disabled', false);
@@ -37,8 +37,7 @@ $(document).ready(function(){
                     $(this).prop('disabled', false);
                     $(this).data('price',value.price);
                 }); 
-
-            }
+            }            
     });
 
     if($('#shipment_locations :selected').is(':disabled')){

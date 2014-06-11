@@ -273,8 +273,8 @@ $(document).ready(function(){
             escClose: true,
             draggable: true,
             containerCss:{
-                maxWidth: '300px',
-                minWidth: '300px',
+                maxWidth: '600px',
+                minWidth: '600px',
                 maxHeight: '300px',
                 minHeight: '100px',
             }

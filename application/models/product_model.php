@@ -1899,10 +1899,12 @@ class product_model extends CI_Model
      
     public function getShipmentInformation($product_id){
         $query = $this->xmlmap->getFilenameID('sql/product','getShipmentInformation');
+        
     	$sth = $this->db->conn_id->prepare($query);
     	$sth->bindParam(':prod_id', $product_id, PDO::PARAM_INT);
     	$result = $sth->execute();
 		$rows = $sth->fetchAll(PDO::FETCH_ASSOC);
+
         $data = array();
         foreach($rows as $row){
             if(!array_key_exists($row['id_shipping'], $data)){
@@ -1911,6 +1913,7 @@ class product_model extends CI_Model
                 $data[$row['id_shipping']]['price'] = $row['price'];
                 $data[$row['id_shipping']]['location_type'] = $row['type'];
                 $data[$row['id_shipping']]['location_id'] = $row['id_location'];
+                $data[$row['id_shipping']]['product_item_id'] = $row['product_item_id'];
                 $data[$row['id_shipping']]['product_attribute_ids'] = array();
             }  
             array_push($data[$row['id_shipping']]['product_attribute_ids'], array('id' => $row['product_attr_id'], 'is_other' => $row['is_other']));                        
