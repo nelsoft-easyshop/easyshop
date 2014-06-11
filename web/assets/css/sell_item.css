@@ -1641,16 +1641,11 @@ li.brand_result:hover{
 .discounted_price_container {
     display: block;
     margin-left: 12px;
-    margin-top: 10px;
-}
-#discounted_percent_con,
-#discounted_price_con {
-    color: #f00;
+    margin-top: 15px;
 }
 
-#discounted_percent_con {
-    display: inline-block;
-    width: 30px;
+#discounted_price_con {
+    color: #f00;
 }
 
 #discnt_btn {
