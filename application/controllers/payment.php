@@ -588,7 +588,7 @@ class Payment extends MY_Controller{
             $orderId = $return['v_order_id'];
             $locked = $this->lockItem($toBeLocked,$orderId,'insert');  
             $this->session->set_userdata('dragonpayticket', true);
-            // exit($dpReturn);
+            exit($dpReturn);
         }
     }
 
