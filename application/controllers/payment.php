@@ -627,7 +627,7 @@ class Payment extends MY_Controller{
             $invoice = $payDetails['invoice_no'];
             $orderId = $payDetails['id_order'];
             $member_id = $payDetails['buyer_id'];
-            $itemList = json_decode(json_encode($payDetails['data_response']));
+            $itemList = json_decode($payDetails['data_response'],true);
             $postBackCount = $payDetails['postback_count'];
             print_r( $itemList);
             $address = $this->memberpage_model->get_member_by_id($member_id); 
