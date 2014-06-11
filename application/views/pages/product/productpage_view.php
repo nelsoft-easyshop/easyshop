@@ -1,4 +1,3 @@
-<!-- REVIEW SEO TAGS -->
 
 <?php 
 
@@ -19,7 +18,7 @@
 ?>
 <meta http-equiv="refresh" content="<?=$secondsRemaining; ?>" />
 
-
+<!-- REVIEW SEO TAGS -->
 <script type="application/ld+json">
 	<?php echo $jsonReviewSchemaData;?>
 </script>
@@ -251,7 +250,7 @@
                 <?php if($uid == $product['sellerid']): ?>
                     <p class="buy_btn_sub"> This is your own listing </p>
                 <?php elseif($product['can_purchase'] === false): ?>
-                    <p class="buy_btn_sub"> Purchase limit exceed </p>
+                    <p class="buy_btn_sub"> Purchase limit exceeded </p>
                 <?php else: ?>
                     <a href="JavaScript:void(0)" id="send" class="fm1 orange_btn3 disabled">Buy Now</a> <br/>
                 <?php endif;?>
