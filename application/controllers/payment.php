@@ -629,7 +629,7 @@ class Payment extends MY_Controller{
             $member_id = $payDetails['buyer_id'];
             $itemList = json_decode($payDetails['data_response'],true);
             $postBackCount = $payDetails['postback_count'];
-            print_r( $itemList);
+             
             $address = $this->memberpage_model->get_member_by_id($member_id); 
             $bigThree = $this->getCityRegionMajorIsland($address);
             $city = $bigThree['city'];  
@@ -668,7 +668,7 @@ class Payment extends MY_Controller{
 
             $locked = $this->lockItem($toBeLocked,$orderId,'delete');
             $paymentType = (strtolower($status) == "s" ? 2 : 2);
-            $this->sendNotification(array('member_id'=>$member_id, 'order_id'=>$orderId, 'invoice_no'=>$invoice));
+            // $this->sendNotification(array('member_id'=>$member_id, 'order_id'=>$orderId, 'invoice_no'=>$invoice));
             $complete = $this->payment_model->updatePaymentIfComplete($orderId,$apiResponse,$transactionID,$paymentType);
             // $this->removeItemFromCart(); 
            
