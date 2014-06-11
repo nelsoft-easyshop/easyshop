@@ -270,11 +270,13 @@ $(document).ready(function(){
     $(document).on('click','.view_location_item',function () {
 
         $('.div_view_avail_location').modal({
-            escClose: false,
+            escClose: true,
+            draggable: true,
             containerCss:{
-                maxWidth: 900,
-                minWidth: 605,
-                maxHeight: 600,
+                maxWidth: '300px',
+                minWidth: '300px',
+                maxHeight: '300px',
+                minHeight: '100px',
             }
         }); 
         var csrftoken = $("meta[name='csrf-token']").attr('content');
