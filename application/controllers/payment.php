@@ -660,7 +660,7 @@ class Payment extends MY_Controller{
                 );
 
             $transactionID = urldecode($txnId);
-            $apiResponse = json_encode($apiResponseArray);
+            $apiResponse = json_encode($itemList);
 
             if($postBackCount == 0){
                 foreach ($itemList as $key => $value) {               
