@@ -939,6 +939,16 @@ div.reply_content_shown > p {
 	color: #FF4400;
 }
 
+.cd_promo_badge_con {
+	width: 65px;
+	height: 65px;
+	left: 5px;
+	position: absolute;
+	top: -2px;
+	z-index: 9;
+	padding-top: 5px;
+}
+
 
 
 
