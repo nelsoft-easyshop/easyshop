@@ -435,6 +435,7 @@ class productUpload extends MY_Controller
             $tempdirectory = $this->session->userdata('tempId'); 
             $tempdirectory = $tempdirectory.'_'.$member_id.'_'.$date;
             $tempdirectory = './assets/temp_product/'.$tempdirectory.'/'; 
+
 			directory_copy($tempdirectory, $path_directory,$product_id,$arrayNameOnly); 
 
 			if($product_id > 0) # id_product is 0 means no item inserted. the process will stop.
@@ -983,8 +984,10 @@ class productUpload extends MY_Controller
 			}
 		}	
         
-        $response['tempId'] = strtolower(substr( "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" ,mt_rand( 0 ,50 ) ,1 ) .substr( md5( time() ), 1));
-		$response['main_images'] = $main_images;	
+        $response['tempId'] = strtolower(substr( "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" ,mt_rand( 0 ,50 ) ,1 ) .substr( md5( time() ), 1));            
+        $this->session->set_userdata('tempId', $response['tempId']);
+            
+        $response['main_images'] = $main_images;	
 		$response['item_quantity'] =  $this->product_model->getProductQuantity($product_id, true);
 		$response['img_max_dimension'] = $this->img_dimension['usersize'];
         $this->load->view('pages/product/product_upload_step2_view', $response);
@@ -1011,9 +1014,15 @@ class productUpload extends MY_Controller
 		$style_id = 1;
 		$member_id =  $this->session->userdata('member_id');
 		$inputs = $this->input->post('inputs'); 
-		$explode_inputs = explode("|", substr($inputs, 1));
 		$combination = json_decode($this->input->post('combination'));
 		$checkIfCombination = $this->input->post('noCombination');
+        
+        $inputs_exp = false;
+		if(strpos($inputs, '|') !== false) {
+			$explode_inputs = explode("|", substr($inputs, 1));
+			$inputs_exp = true;
+		}
+        
         
 		$cat_id = $this->input->post('id');
 		$date = date("Ymd");
@@ -1226,41 +1235,43 @@ class productUpload extends MY_Controller
                 #THAT ARE NOT IN THE object
                 $this->product_model->deleteShippingInfomation($product_id, $keep_ids);
                 $this->product_model->deleteProductQuantityCombination($product_id, $keep_ids);
-
-				foreach($explode_inputs as $input){
-					$explode_id = explode('/', $input);
-					$explode_value = $explode_id[0];
-					$attribute_id = $explode_id[1];
-					$post_attributes = $this->input->post($explode_value);
-					$dataType = substr($explode_value,0,strpos($explode_value,'_'));
-					$rowCount = $this->product_model->deleteAttributeByProduct($product_id, $attribute_id);
-                    
-					if($post_attributes){
-						if(is_array($post_attributes)){
-							$post_attributes_arr = $post_attributes;
-						}else{
-							$post_attributes_arr = (strlen(trim($post_attributes)) === 0)?array():array(0=>$post_attributes);
-						}
-						foreach($post_attributes_arr as $attribute){
-                            //validate information before inserting
-							$valid = false;
-							switch($dataType){
-								case 'TEXT':
-								$valid = (count($this->product_model->selectAttributeNameWithTypeAndId($attribute_id,1))>0);
-								break;
-								case 'TEXTAREA':
-								$valid = (count($this->product_model->selectAttributeNameWithTypeAndId($attribute_id,2))>0);
-								break;
-								default: 
-								$valid = (count($this->product_model->selectAttributeNameWithNameAndId($attribute,$attribute_id))>0);
-								break;
-							}
-							if($valid){
-								$this->product_model->addNewAttributeByProduct($product_id, $attribute_id, $attribute, '0');
-							}
-						}
-					}                    
-				}
+                
+                if($inputs_exp){
+                    foreach($explode_inputs as $input){
+                        $explode_id = explode('/', $input);
+                        $explode_value = $explode_id[0];
+                        $attribute_id = $explode_id[1];
+                        $post_attributes = $this->input->post($explode_value);
+                        $dataType = substr($explode_value,0,strpos($explode_value,'_'));
+                        $rowCount = $this->product_model->deleteAttributeByProduct($product_id, $attribute_id);
+                        
+                        if($post_attributes){
+                            if(is_array($post_attributes)){
+                                $post_attributes_arr = $post_attributes;
+                            }else{
+                                $post_attributes_arr = (strlen(trim($post_attributes)) === 0)?array():array(0=>$post_attributes);
+                            }
+                            foreach($post_attributes_arr as $attribute){
+                                //validate information before inserting
+                                $valid = false;
+                                switch($dataType){
+                                    case 'TEXT':
+                                    $valid = (count($this->product_model->selectAttributeNameWithTypeAndId($attribute_id,1))>0);
+                                    break;
+                                    case 'TEXTAREA':
+                                    $valid = (count($this->product_model->selectAttributeNameWithTypeAndId($attribute_id,2))>0);
+                                    break;
+                                    default: 
+                                    $valid = (count($this->product_model->selectAttributeNameWithNameAndId($attribute,$attribute_id))>0);
+                                    break;
+                                }
+                                if($valid){
+                                    $this->product_model->addNewAttributeByProduct($product_id, $attribute_id, $attribute, '0');
+                                }
+                            }
+                        }                    
+                    }
+                }
 				
 				$newarray = array();
                 $option_image_idx = 0;
@@ -1505,10 +1516,10 @@ class productUpload extends MY_Controller
                     $is_primary = 0;
                     if($i == 0)
                     {
-                        $tempdirectory = $this->input->post('tempdirectory');
-                        if(dirname($tempdirectory) !== './assets/temp_product'){
-                            exit();
-                        }
+                        $tempdirectory = $this->session->userdata('tempId'); 
+                        $tempdirectory = $tempdirectory.'_'.$member_id.'_'.$date;
+                        $tempdirectory = './assets/temp_product/'.$tempdirectory.'/'; 
+
                         directory_copy($tempdirectory, $path_directory,$product_id,$arrayNameOnly); 
                         $is_primary = $primary_image_bool?0:1;
                     }
