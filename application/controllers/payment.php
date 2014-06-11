@@ -581,7 +581,8 @@ class Payment extends MY_Controller{
             exit();
         }else{
             $orderId = $return['v_order_id'];
-            $locked = $this->lockItem($toBeLocked,$orderId,'insert');    
+            $locked = $this->lockItem($toBeLocked,$orderId,'insert');   
+            print_r($locked);
             $this->session->set_userdata('dragonpayticket', true);
             exit($dpReturn);
         }
@@ -659,10 +660,9 @@ class Payment extends MY_Controller{
 
             $locked = $this->lockItem($toBeLocked,$orderId,'delete');
             $paymentType = (strtolower($status) == "s" ? 2 : 2);
-            $complete = $this->payment_model->updatePaymentIfComplete($orderId,$apiResponse,$transactionID,$paymentType);
-
-            $this->removeItemFromCart(); 
             $this->sendNotification(array('member_id'=>$member_id, 'order_id'=>$orderId, 'invoice_no'=>$invoice));
+            $complete = $this->payment_model->updatePaymentIfComplete($orderId,$apiResponse,$transactionID,$paymentType);
+            $this->removeItemFromCart(); 
            
         }
 
