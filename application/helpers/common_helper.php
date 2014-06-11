@@ -48,9 +48,6 @@ if ( ! function_exists('es_url_clean'))
  *  This is a potentially very dangerous function. Make sure that $srcdir and $dstdir
  *  have been validated before calling this. This function will allow for movement of 
  *  files within the project.
- *  
- *  AGAIN, PLEASE MAKE SURE THAT SRCDIR AND DSTDIR HAVE BEEN VALIDATED ESPECIALLY IF THEY
- *  COME FROM USER INPUT. 
  * 
  */    
 if(!function_exists('directory_copy'))
@@ -66,7 +63,6 @@ if(!function_exists('directory_copy'))
         if(!is_dir($dstdir))mkdir($dstdir, 0777, true);
         
         //Mapping the directory
-        
         $dir_map = directory_map($srcdir);
 
         foreach($dir_map as $object_key=>$object_value)
@@ -80,8 +76,7 @@ if(!function_exists('directory_copy'))
 	            }
 	        }else{
                 directory_copy($srcdir.'/'.$object_key,$dstdir.'/'.$object_key,$pid,$arrayNameOnly);//this is a directory
-            }
-        	 
+            }        	 
         }
 
         // //Deleting the directory contents
