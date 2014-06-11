@@ -661,6 +661,7 @@ class Payment extends MY_Controller{
             $transactionID = urldecode($txnId);
             $apiResponse = json_encode($itemList);
             $paymentType = 2;
+
             if(strtolower($status) == "s"){
 
                 foreach ($itemList as $key => $value) {               
@@ -673,13 +674,12 @@ class Payment extends MY_Controller{
                 $locked = $this->lockItem($toBeLocked,$orderId,'delete');
                 $paymentType = 4;
                 $apiResponse = json_encode($apiResponseArray);
+                $this->sendNotification(array('member_id'=>$member_id, 'order_id'=>$orderId, 'invoice_no'=>$invoice));
             }
              
             $complete = $this->payment_model->updatePaymentIfComplete($orderId,$apiResponse,$transactionID,$paymentType);
-
             $remove_to_cart = $this->payment_model->removeToCart($member_id,$itemList);
-            
-            $this->sendNotification(array('member_id'=>$member_id, 'order_id'=>$orderId, 'invoice_no'=>$invoice));
+
             // $this->removeItemFromCart(); 
 
            
