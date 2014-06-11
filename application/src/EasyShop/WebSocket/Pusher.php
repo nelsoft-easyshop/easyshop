@@ -42,7 +42,7 @@ class Pusher
             // push notif TODO: abstract
             $result2 = $this->messages_model->get_all_messages($q_result, "Get_UnreadMsgs");
             $em = $this->serviceContainer['entity_manager'];
-            $authenticatedSessions = $em->getRepository('\Easyshop\Entities\AuthenticatedSession')
+            $authenticatedSessions = $em->getRepository('\EasyShop\Entities\AuthenticatedSession')
                                           ->findBy(['user' => $q_result]);
             $pusher = $this->serviceContainer['pusher'];
             $pusher->addData('messageCount', $result2['unread_msgs']);
