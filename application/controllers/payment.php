@@ -611,7 +611,7 @@ class Payment extends MY_Controller{
     function dragonPayPostBack(){
 
         header("Content-Type:text/plain");
-        
+
         $paymentType = $this->PayMentDragonPay; 
 
         $txnId = $this->input->post('txnid');
@@ -627,7 +627,7 @@ class Payment extends MY_Controller{
             $invoice = $payDetails['invoice_no'];
             $orderId = $payDetails['id_order'];
             $member_id = $payDetails['buyer_id'];
-            $itemList = $payDetails['data_response'];
+            $itemList = json_decode($payDetails['data_response']);
             $postBackCount = $payDetails['postback_count'];
 
             $address = $this->memberpage_model->get_member_by_id($member_id); 
