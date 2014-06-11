@@ -517,30 +517,34 @@
           </tr> 
           <tr>
               <td width="110px" class="border-left">Base Price <font color="red"> *</font></td>
-              <td class="border-right" colspan="3"> &#8369; <input type="text" autocomplete="off" onkeypress="return isNumberKey(event)"  name="prod_price" id="prod_price" placeholder="Enter price (0.00)" value="<?php echo (isset($product_details['price']))?number_format($product_details['price'],2,'.',','):'';?>">
+              <td class="border-right" colspan="3"> 
+                &#8369; <input type="text" autocomplete="off" onkeypress="return isNumberKey(event)"  name="prod_price" id="prod_price" placeholder="Enter price (0.00)" value="<?php echo (isset($product_details['price']))?number_format($product_details['price'],2,'.',','):'';?>">
                 
                 <a class="tooltips" href="javascript:void(0)">
                   <img src="<?= base_url() ?>assets/images/icon_qmark.png" alt="">
                   <span>Set the base price for your listing. You may set the shipment fee separately in the following step.
                   </span>
                 </a>
-                <br><a id="discnt_btn">Add discount price</a>
+                
+                <br><a id="discnt_btn" class="blue">Add discount price</a>
+                <div class="discounted_price_container">
+                    <strong>Discount Percentage:</strong>
+                    <span id="discounted_percent_con"></span> 
+                    <strong>Discounted Price:</strong> &#8369;
+                    <span id="discounted_price_con"></span>
+                </div>
+                <div id="dsc_frm">
+                  <nobr class="discount_price_con_top">
+                    <label id="lbl_discount"><strong>Discount Percentage</strong></label><input type="text" id="slider_val" placeholder="0%" maxlength="3">
+                  </nobr>     
+                  <input type="text" id="range_1" name="discount" value=""/>           
+                  <nobr class="discount_price_con">
+                  <label id="lbl_realPrc"><strong>Discounted Price:</strong> &#8369;</label><input type="text" id="discountedP" class="blue" name="discountedP" value="" disabled="disable"/>
+                  </nobr> 
+                </div>
               </td>
           </tr>
-          <tr>
-            <td width="110px" class="border-left"></td>
-            <td>
-              <div id="dsc_frm">
-                <nobr>
-                  <label id="lbl_discount">Discount Percentage</label><input type="text" id="slider_val" placeholder="0%" maxlength="3">
-                </nobr>     
-                <input type="text" id="range_1" name="discount" value=""/>           
-                <nobr>
-                <label id="lbl_realPrc">Discounted Price : &#8369;</label><input type="text" id="discountedP" name="discountedP" value="" disabled="disable"/>
-                </nobr> 
-              </div>
-            </td>
-          </tr>
+          
           <!-- end of Price Content -->
 
           <!-- start of sku code -->
@@ -2225,11 +2229,13 @@ $(document).ready(function(){
    
     $("#slider_val").val("");
     $("#slider_val").val(prcnt+"%");
+    $( "span#discounted_percent_con" ).text( prcnt+"%" );
     discounted = act_price * (prcnt/100);
     var v = parseFloat(act_price - discounted);
     tempval = Math.abs(v);
     disc_price = ReplaceNumberWithCommas(tempval.toFixed(2));
     $("#discountedP").val(disc_price);
+    $( "span#discounted_price_con" ).text( disc_price );
   }
 //  END Discount compt
 
