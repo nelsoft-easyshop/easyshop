@@ -582,8 +582,6 @@ class Payment extends MY_Controller{
         }else{
             $orderId = $return['v_order_id'];
             $locked = $this->lockItem($toBeLocked,$orderId,'insert');   
-        
- 
             $this->session->set_userdata('dragonpayticket', true);
             exit($dpReturn);
         }
@@ -601,6 +599,14 @@ class Payment extends MY_Controller{
 
     }
 
+function test(){
+    echo "<form method='POST' action='http://nelsoft.dyndns.org:81/payment/dragonPayPostBack'>
+    <input type='text'  name='status' placeholder='status' />
+    <input type='text'  name='refno' placeholder='refno' />
+    <input type='text'  name='txnid' placeholder='txnid' />
+    <input type='submit'>
+    </form>";
+}
 
     function dragonPayPostBack(){
 
@@ -615,8 +621,7 @@ class Payment extends MY_Controller{
         if(strtolower($status) == "p" || strtolower($status) == "s"){
 
             $payDetails = $this->payment_model->selectFromEsOrder($txnId,$paymentType);
-
-            $return = $this->payment_model->selectFromEsOrder($txnId,$paymentType);
+ 
             $invoice = $payDetails['invoice_no'];
             $orderId = $payDetails['id_order'];
             $member_id = $payDetails['buyer_id'];
