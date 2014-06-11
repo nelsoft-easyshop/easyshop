@@ -764,7 +764,7 @@ class Payment extends MY_Controller{
         $this->session->set_userdata('headerData', $data);
         $this->session->set_userdata('bodyData', $response);
         $this->session->unset_userdata('dragonpayticket');
-        redirect(base_url().'payment/success/dragonpay', 'refresh');
+        // redirect(base_url().'payment/success/dragonpay', 'refresh');
         
   
     }
