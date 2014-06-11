@@ -96,9 +96,11 @@
     <div class="content_wrapper">
       <div  id="product_content_gallery">
         <div class="cd_promo_badge_con">
-          <span class="cd_slide_discount">
-            <span>2%<br>OFF</span>
-          </span>
+            <?php if($product['start_promo']): ?>
+                <span class="cd_slide_discount">
+                    <span><?php echo $product['percentage'];?>%<br>OFF</span>
+                </span>
+            <?php endif; ?>
         </div>
         <div class="prod_con_gal"> <a href="<?=base_url()?><?php echo $product_images[0]['path']; ?><?php echo $product_images[0]['file']; ?>" class="jqzoom" rel='gal1'  title="Easyshop.ph" > <img src="<?=base_url()?><?php echo $product_images[0]['path']; ?>small/<?php echo $product_images[0]['file']; ?>"  title="product"> </a> </div>
         <br/>
