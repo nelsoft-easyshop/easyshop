@@ -755,9 +755,13 @@ class Payment extends MY_Controller{
         $data['cat_item'] = $this->cart->contents();
         $data['title'] = 'Payment | Easyshop.ph';
         $data = array_merge($data,$this->fill_header());
-        $this->session->set_userdata('headerData', $data);
-        $this->session->set_userdata('bodyData', $response); 
-        redirect(base_url().'payment/success/dragonpay', 'refresh');
+
+         $this->load->view('templates/header', $data);
+        $this->load->view('pages/payment/payment_response' ,$response);  
+        $this->load->view('templates/footer_full'); 
+        // $this->session->set_userdata('headerData', $data);
+        // $this->session->set_userdata('bodyData', $response); 
+        // redirect(base_url().'payment/success/dragonpay', 'refresh');
         
   
     }
