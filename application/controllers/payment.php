@@ -713,10 +713,8 @@ class Payment extends MY_Controller{
         $ItemTotalPrice = 0;
         
         $prepareData = $this->processData($itemList,$city,$region,$majorIsland);
-        $ItemTotalPrice = $prepareData['totalPrice'];
-        // $productstring = $prepareData['productstring'];
-        $itemList = $prepareData['newItemList'];
-        // $toBeLocked = $prepareData['toBeLocked'];
+        $ItemTotalPrice = $prepareData['totalPrice']; 
+        $itemList = $prepareData['newItemList']; 
 
         $grandTotal = $ItemTotalPrice;
 
@@ -725,18 +723,7 @@ class Payment extends MY_Controller{
         $status =  $this->input->get('status');
         $message = $this->input->get('message');
         $digest = $this->input->get('digest');
- 
-        // $apiResponseArray['ProductData'] = $itemList;
-        // $apiResponseArray['DragonPayReturn'] = array(
-        //         "txnid" => $txnId,
-        //         "refno" => $refNo,
-        //         "status" => $status,
-        //         "message" => $message,
-        //         "digest" => $digest
-        // );
-
-        // $transactionID = urldecode($txnId).'-'.urldecode($refNo);
-        // $apiResponse = json_encode($apiResponseArray);
+  
         
         if(strtolower($status) == "p" || strtolower($status) == "s"){
 
@@ -745,18 +732,6 @@ class Payment extends MY_Controller{
             $orderId = $return['id_order'];
             $response['dateadded'] = $return['dateadded'];
             $response['total'] = $grandTotal;
-
-            // foreach ($itemList as $key => $value) {               
-            //     $productId = $value['id'];
-            //     $productItem =  $value['product_itemID'];
-            //     $orderQuantity = $value['qty'];
-            //     $itemComplete = $this->payment_model->deductQuantity($productId,$productItem,$orderQuantity);
-            // }
-
-            // $locked = $this->lockItem($toBeLocked,$orderId,'delete');
-            // $paymentType = (strtolower($status) == "s" ? 4 : 2);
-            // $complete = $this->payment_model->updatePaymentIfComplete($orderId,$apiResponse,$transactionID,$paymentType);
-
             $response['completepayment'] = true;
             $response['message'] = '<div style="color:green">Your payment is completed through Dragon Pay.</div><div style="color:red">'.urldecode($message).'</div>';
             $response = array_merge($response,$return);  
@@ -860,67 +835,67 @@ class Payment extends MY_Controller{
 	 */
     function sendNotification($data) 
     {   
-  //       // if(!$this->session->userdata('member_id')){
-  //       //     redirect(base_url().'home', 'refresh');
-  //       // };
+        // if(!$this->session->userdata('member_id')){
+        //     redirect(base_url().'home', 'refresh');
+        // };
         
-  //       //devcode
-		// /*$data['member_id'] = 74;
-		// $data['order_id'] = 102;
-		// $data['invoice_no']= 3;
-		// $data['member_id'] = 74;
-		// $data['order_id'] = 105;
-		// $data['invoice_no']= '22-1231-2';*/
+        //devcode
+		/*$data['member_id'] = 74;
+		$data['order_id'] = 102;
+		$data['invoice_no']= 3;
+		$data['member_id'] = 74;
+		$data['order_id'] = 105;
+		$data['invoice_no']= '22-1231-2';*/
 		
-  //       $transactionData = $this->payment_model->getPurchaseTransactionDetails($data);
+        $transactionData = $this->payment_model->getPurchaseTransactionDetails($data);
         
-  //       //Send email to buyer
-  //       $buyerEmail = $transactionData['buyer_email'];
-  //       $buyerData = $transactionData;
-  //       unset($buyerData['seller']);
-  //       unset($buyerData['buyer_email']);
-		// // 3 tries to send Email. Quit if success or 3 failed tries met
-		// $emailcounter = 0;
-		// do{
-		// 	$buyerEmailResult = $this->payment_model->sendNotificationEmail($buyerData, $buyerEmail, 'buyer');
-		// 	$emailcounter++;
-		// }while(!$buyerEmailResult && $emailcounter<3);
+        //Send email to buyer
+        $buyerEmail = $transactionData['buyer_email'];
+        $buyerData = $transactionData;
+        unset($buyerData['seller']);
+        unset($buyerData['buyer_email']);
+		// 3 tries to send Email. Quit if success or 3 failed tries met
+		$emailcounter = 0;
+		do{
+			$buyerEmailResult = $this->payment_model->sendNotificationEmail($buyerData, $buyerEmail, 'buyer');
+			$emailcounter++;
+		}while(!$buyerEmailResult && $emailcounter<3);
         
-		// //Send text msg to buyer if mobile provided
-		// $buyerMobile = trim($buyerData['buyer_contactno']);
-		// if($buyerMobile != '' && $buyerMobile != 0 ){
-		// 	$buyerMsg = $buyerData['buyer_name'] . $this->lang->line('notification_txtmsg_buyer');
-		// 	$buyerTxtResult = $this->payment_model->sendNotificationMobile($buyerMobile, $buyerMsg);
-		// }
+		//Send text msg to buyer if mobile provided
+		$buyerMobile = trim($buyerData['buyer_contactno']);
+		if($buyerMobile != '' && $buyerMobile != 0 ){
+			$buyerMsg = $buyerData['buyer_name'] . $this->lang->line('notification_txtmsg_buyer');
+			$buyerTxtResult = $this->payment_model->sendNotificationMobile($buyerMobile, $buyerMsg);
+		}
 		
-  //       //Send email to seller of each product - once per seller
-  //       $sellerData = array(
-  //           'id_order' => $transactionData['id_order'],
-  //           'dateadded' => $transactionData['dateadded'],
-  //           'buyer_name' => $transactionData['buyer_name'],
-		// 	'invoice_no' => $transactionData['invoice_no']
-  //           );
+        //Send email to seller of each product - once per seller
+        $sellerData = array(
+            'id_order' => $transactionData['id_order'],
+            'dateadded' => $transactionData['dateadded'],
+            'buyer_name' => $transactionData['buyer_name'],
+			'invoice_no' => $transactionData['invoice_no']
+            );
 			
-  //       foreach($transactionData['seller'] as $seller){
-  //           $sellerEmail = $seller['email'];
-  //           $sellerData['totalprice'] = number_format($seller['totalprice'], 2, '.' , ',');
+        foreach($transactionData['seller'] as $seller){
+            $sellerEmail = $seller['email'];
+            $sellerData['totalprice'] = number_format($seller['totalprice'], 2, '.' , ',');
 		 
-  //           $sellerData['seller_name'] = $seller['seller_name'];
-  //           $sellerData['products'] = $seller['products'];
-		// 	// 3 tries to send Email. Quit if success or 3 failed tries met
-		// 	$emailcounter = 0;
-		// 	do{
-		// 		$sellerEmailResult = $this->payment_model->sendNotificationEmail($sellerData, $sellerEmail, 'seller');
-		// 		$emailcounter++;
-		// 	}while(!$sellerEmailResult && $emailcounter<3);
+            $sellerData['seller_name'] = $seller['seller_name'];
+            $sellerData['products'] = $seller['products'];
+			// 3 tries to send Email. Quit if success or 3 failed tries met
+			$emailcounter = 0;
+			do{
+				$sellerEmailResult = $this->payment_model->sendNotificationEmail($sellerData, $sellerEmail, 'seller');
+				$emailcounter++;
+			}while(!$sellerEmailResult && $emailcounter<3);
 			
-		// 	//Send text msg to buyer if mobile provided
-		// 	$sellerMobile = trim($seller['seller_contactno']);
-		// 	if($sellerMobile != '' && $sellerMobile != 0 ){
-		// 		$sellerMsg = $seller['seller_name'] . $this->lang->line('notification_txtmsg_seller');
-		// 		$sellerTxtResult = $this->payment_model->sendNotificationMobile($sellerMobile, $sellerMsg);
-		// 	}
-  //       }//close foreach seller loop
+			//Send text msg to buyer if mobile provided
+			$sellerMobile = trim($seller['seller_contactno']);
+			if($sellerMobile != '' && $sellerMobile != 0 ){
+				$sellerMsg = $seller['seller_name'] . $this->lang->line('notification_txtmsg_seller');
+				$sellerTxtResult = $this->payment_model->sendNotificationMobile($sellerMobile, $sellerMsg);
+			}
+        }//close foreach seller loop
     }
 	
 	/*
