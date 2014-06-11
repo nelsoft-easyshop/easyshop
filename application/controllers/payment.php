@@ -757,7 +757,7 @@ class Payment extends MY_Controller{
         $data = array_merge($data,$this->fill_header());
         $this->session->set_userdata('headerData', $data);
         $this->session->set_userdata('bodyData', $response); 
-        // redirect(base_url().'payment/success/dragonpay', 'refresh');
+        redirect(base_url().'payment/success/dragonpay', 'refresh');
         
   
     }
