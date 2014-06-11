@@ -578,7 +578,7 @@ class Payment extends MY_Controller{
         $invoice_no = date('Ymhsd'); 
         $ip = $this->user_model->getRealIpAddr();  
          
-        // $return = $this->payment_model->payment($paymentType,$invoice_no,$grandTotal,$ip,$member_id,$productstring,$productCount,json_encode($itemList),$transactionID);
+        $return = $this->payment_model->payment($paymentType,$invoice_no,$grandTotal,$ip,$member_id,$productstring,$productCount,json_encode($itemList),$transactionID);
         
         if($return['o_success'] <= 0){
             echo '{"e":"0","m":"'.$return['o_message'].'"}'; 
@@ -586,9 +586,9 @@ class Payment extends MY_Controller{
         }else{
 
             $orderId = $return['v_order_id'];
-            $locked = $this->lockItem($toBeLocked,$orderId,'insert');  
+            // $locked = $this->lockItem($toBeLocked,$orderId,'insert');  
             $this->session->set_userdata('dragonpayticket', true);
-            exit($dpReturn);
+            // exit($dpReturn);
         }
     }
 
