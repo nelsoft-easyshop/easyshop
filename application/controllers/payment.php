@@ -650,20 +650,20 @@ class Payment extends MY_Controller{
             $transactionID = urldecode($txnId).'-'.urldecode($refNo);
             $apiResponse = json_encode($apiResponseArray);
 
-            // if($postBackCount == 0){
-            //     foreach ($itemList as $key => $value) {               
-            //         $productId = $value['id'];
-            //         $productItem =  $value['product_itemID'];
-            //         $orderQuantity = $value['qty'];
-            //         $itemComplete = $this->payment_model->deductQuantity($productId,$productItem,$orderQuantity);
-            //     }
-            // }
+            if($postBackCount == 0){
+                foreach ($itemList as $key => $value) {               
+                    $productId = $value['id'];
+                    $productItem =  $value['product_itemID'];
+                    $orderQuantity = $value['qty'];
+                    $itemComplete = $this->payment_model->deductQuantity($productId,$productItem,$orderQuantity);
+                }
+            }
 
             $locked = $this->lockItem($toBeLocked,$orderId,'delete');
             $paymentType = (strtolower($status) == "s" ? 2 : 2);
             $this->sendNotification(array('member_id'=>$member_id, 'order_id'=>$orderId, 'invoice_no'=>$invoice));
             $complete = $this->payment_model->updatePaymentIfComplete($orderId,$apiResponse,$transactionID,$paymentType);
-            $this->removeItemFromCart(); 
+            // $this->removeItemFromCart(); 
            
         }
 
