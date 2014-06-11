@@ -602,7 +602,7 @@ class Payment extends MY_Controller{
     }
 
 
-    function newPostBack(){
+    function dragonPayPostBack(){
 
         header("Content-Type:text/plain");
 
