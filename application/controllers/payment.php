@@ -583,7 +583,7 @@ class Payment extends MY_Controller{
 
             $orderId = $return['v_order_id'];
             $locked = $this->lockItem($toBeLocked,$orderId,'insert');   
-            if($locked <= 0){
+            if($locked){
                  echo '{"e":"0","m":"Something went wrong. Please try again."}';
                  exit();
             }
