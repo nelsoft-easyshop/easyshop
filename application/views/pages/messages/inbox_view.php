@@ -224,7 +224,7 @@
 			onFocus_Reload(result);
 			$("#msg_field").empty();
 			$("#msg_textarea").hide();
-            $("#head_container span").hide();
+            $("#chsn_delete_btn,#delete_all_btn").hide();
         }else {
             location.reload();
 		}
