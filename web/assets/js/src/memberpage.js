@@ -1280,7 +1280,7 @@ $(document).ready(function(){
 								if(txResponseBtn.hasClass('tx_forward')){
 									txStatus.replaceWith('<span class="trans_alert trans_green">Item Received</span>');
 								}else if(txResponseBtn.hasClass('tx_return')){
-									txStatus.replaceWith('<span class="trans_alert trans_red">Item Returned</span>');
+									txStatus.replaceWith('<span class="trans_alert trans_red">Order Canceled</span>');
 								}else if(txResponseBtn.hasClass('tx_cod')){
 									txStatus.replaceWith('<span class="trans_alert trans_green">Completed</span>');
 								}
@@ -1417,7 +1417,7 @@ $(document).ready(function(){
 									cancelbtn.hide();
 									
 									if(thisbtn.hasClass('isform')){
-										txStatus.replaceWith('<span class="trans_alert trans_orange">Item on route</span>');
+										txStatus.replaceWith('<span class="trans_alert trans_orange">Item shipped</span>');
 									}
 									
 									$.modal.close();
