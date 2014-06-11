@@ -599,18 +599,20 @@ class Payment extends MY_Controller{
 
     }
 
-function test(){
-    echo "<form method='POST' action='http://nelsoft.dyndns.org:81/payment/dragonPayPostBack'>
-    <input type='text'  name='status' placeholder='status' />
-    <input type='text'  name='refno' placeholder='refno' />
-    <input type='text'  name='txnid' placeholder='txnid' />
-    <input type='submit'>
-    </form>";
-}
+    function test(){
+        echo "<form method='POST' action='http://nelsoft.dyndns.org:81/payment/dragonPayPostBack'>
+        <input type='text'  name='status' placeholder='status' />
+        <input type='text'  name='refno' placeholder='refno' />
+        <input type='text'  name='txnid' placeholder='txnid' />
+        <input type='submit'>
+        </form>";
+    }
 
     function dragonPayPostBack(){
 
         header("Content-Type:text/plain");
+        
+        $paymentType = $this->PayMentDragonPay; 
 
         $txnId = $this->input->post('txnid');
         $refNo = $this->input->post('refno');
