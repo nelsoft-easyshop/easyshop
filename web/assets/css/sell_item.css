@@ -1637,6 +1637,22 @@ li.brand_result:hover{
 .ship_pref_option label{
 	margin-left: 5px;
 }
+
+.discounted_price_container {
+    display: block;
+    margin-left: 12px;
+    margin-top: 10px;
+}
+#discounted_percent_con,
+#discounted_price_con {
+    color: #f00;
+}
+
+#discounted_percent_con {
+    display: inline-block;
+    width: 30px;
+}
+
 #discnt_btn {
     border-bottom: 1px dotted #fff;
     cursor: pointer;
