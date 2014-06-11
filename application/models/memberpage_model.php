@@ -113,10 +113,9 @@ class memberpage_model extends CI_Model
 	//function edit_address_by_id($member_id, $data=array())
 	function editAddress($member_id, $data=array(), $address_id)
 	{	
-		if($address_id === ''){
+		if( (string)$address_id === '' ){
 			$query = $this->xmlmap->getFilenameID('sql/users', 'insertAddress');
 			$sth = $this->db->conn_id->prepare($query);
-
 		}else{
 			$query = $this->xmlmap->getFilenameID('sql/users', 'updateAddress');
 			$sth = $this->db->conn_id->prepare($query);
@@ -129,9 +128,6 @@ class memberpage_model extends CI_Model
 		$sth->bindParam(':city', $data['city']);
 		$sth->bindParam(':address', $data['address']);
 		$sth->bindParam(':country', $data['country']);
-		$data['consignee'] = "";
-		$data['mobile'] = "";
-		$data['telephone'] = "";
 		$sth->bindparam(':consignee', $data['consignee']);
 		$sth->bindparam(':mobile', $data['mobile']);
 		$sth->bindparam(':telephone', $data['telephone']);
@@ -140,51 +136,6 @@ class memberpage_model extends CI_Model
 		$sth->bindParam(':lng', $data['lng']);
 		
 		$result = $sth->execute();
-		
-		return $result;
-	}
-	
-	//function edit_consignee_address_by_id($member_id, $data=array(), $address_id)
-	function editDeliveryAddress($member_id, $data=array(), $address_id)
-	{	
-		$i = 0; 
-		$type = 1;
-		$result = array(false,false);
-		do
-		{
-			if($address_id === ''){
-				$query = $this->xmlmap->getFilenameID('sql/users', 'insertAddress');
-				$sth = $this->db->conn_id->prepare($query);
-			}else{
-				$query = $this->xmlmap->getFilenameID('sql/users', 'updateAddress');
-				$sth = $this->db->conn_id->prepare($query);
-				$sth->bindParam(':id_address', $address_id);
-			}
-			$sth->bindparam(':id_member', $member_id);
-			$sth->bindparam(':type', $type);
-			$sth->bindparam(':consignee', $data['consignee']);
-			$sth->bindparam(':mobile', $data['mobile']);
-			$sth->bindparam(':telephone', $data['telephone']);
-			$sth->bindparam(':stateregion', $data['stateregion']);
-			$sth->bindparam(':city', $data['city']);
-			$sth->bindparam(':address', $data['address']);
-			$sth->bindparam(':country', $data['country']);
-			$sth->bindparam(':lat', $data['lat']);
-			$sth->bindparam(':lng', $data['lng']);
-			$result[$type] = $sth->execute();
-			if($data['default_add'] == "on")
-			{
-				$type = 0;
-				$data['consignee']="";
-				$data['mobile']="";
-				$data['telephone']="";
-			}
-			else{
-				$result[0] = true;
-				break;
-			}
-			
-		}while($i++<2);	
 		
 		return $result;
 	}

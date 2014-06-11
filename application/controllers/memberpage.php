@@ -85,7 +85,10 @@ class Memberpage extends MY_Controller
 				'city' => $this->input->post('city'),
 				'address' => $this->input->post('address'),
 				'country' => $this->input->post('country'),
-				'addresstype' => $this->input->post('addresstype'),
+				'addresstype' => 0,
+				'consignee' => '',
+				'mobile' => '',
+				'telephone' => '',
 				'lat' => $this->input->post('temp_lat'),
 				'lng' => $this->input->post('temp_lng')
 			);
@@ -236,6 +239,8 @@ class Memberpage extends MY_Controller
 	{
 		if(($this->input->post('c_deliver_address_btn'))&&($this->form_validation->run('c_deliver_address'))){
 			$uid = $this->session->userdata('member_id');
+			$result = array(false,false);
+			
 			$postdata = array(
 				'consignee' => $this->input->post('consignee'),
 				'mobile' => $this->input->post('c_mobile'),
@@ -245,7 +250,8 @@ class Memberpage extends MY_Controller
 				'address' => $this->input->post('c_address'),
 				'country' => $this->input->post('c_country'),
 				'lat' => $this->input->post('temp_lat'),
-				'lng' => $this->input->post('temp_lng')
+				'lng' => $this->input->post('temp_lng'),
+				'addresstype' => 1
 			);
 
 			$temp = array(
@@ -262,22 +268,22 @@ class Memberpage extends MY_Controller
 				$postdata['lng'] = 0;
 			}
 			
-			if($this->input->post('c_def_address'))
-			{
-				$postdata['default_add'] = $this->input->post('c_def_address');
-			}
-			else
-			{
-				$postdata['default_add'] = "off";
-			}
-
 			$address_id = $this->memberpage_model->getAddress($uid,1)['id_address'];
-			$result = $this->memberpage_model->editDeliveryAddress($uid, $postdata, $address_id);
+			$result[0] = $this->memberpage_model->editAddress($uid, $postdata, $address_id);
+			
+			if($this->input->post('c_def_address')){
+				$address_id = $this->memberpage_model->getAddress($uid,0)['id_address'];
+				$postdata['addresstype'] = 0;
+				$result[1] = $this->memberpage_model->editAddress($uid, $postdata, $address_id);
+				$data['default_add'] = $this->input->post('c_def_address');
+			}else{
+				$result[1] = true;
+				$data['default_add'] = 'off';
+			}
 			
 			$data['result'] = $result[0] && $result[1] ? 'success':'fail';
 			$data['errmsg'] = $result[0] && $result[1] ? '' : 'Database update error.';
 			
-			$data['default_add'] = $postdata['default_add'];
 			$data = array_merge($data,$this->memberpage_model->get_member_by_id($uid));
 			
 		}else{

@@ -1038,7 +1038,7 @@ $(document).ready(function(){
 					}
 					catch(e){
 						alert('An error was encountered while submitting your form. Please try again later.');
-						window.location.reload(true);
+						//window.location.reload(true);
 						return false;
 					}
 					

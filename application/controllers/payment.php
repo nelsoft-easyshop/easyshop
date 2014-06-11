@@ -924,7 +924,8 @@ class Payment extends MY_Controller{
                 'address' => $this->input->post('c_address'),
                 'country' => $this->input->post('c_country'),
                 'lat' => $this->input->post('temp_lat'),
-                'lng' => $this->input->post('temp_lng')
+                'lng' => $this->input->post('temp_lng'),
+				'addresstype' => 1
             );
             if(trim($this->input->post('consignee')) == "" || $this->input->post('c_city') == 0 || $this->input->post('c_stateregion') == 0 || trim($this->input->post('c_address')) == "" || trim($this->input->post('c_mobile')) == "")
             {
@@ -939,7 +940,7 @@ class Payment extends MY_Controller{
                 $postdata['default_add'] = "off";
                 $addressId = $this->memberpage_model->getAddress($uid,'1')['id_address'];
                 
-                $data = $this->memberpage_model->editDeliveryAddress($uid, $postdata,$addressId);
+                $data = $this->memberpage_model->editAddress($uid, $postdata,$addressId);
                 $this->output->set_output(json_encode($data));
                 echo json_encode("success");
                 exit(); 
