@@ -135,8 +135,12 @@
                 <thead>
                   <tr>
                      <td colspan="3" class="step3_title">
-                        <h4 style="width: 70%;display:inline-block;">Set shipment fee</h4>
-						
+                        <h4 style="width: 70%;display:inline-block;">Set shipment fee
+                            <a style='' class="tooltips" href="javascript:void(0)">
+                                 <img src="<?= base_url() ?>assets/images/icon_qmark.png" alt="">
+                                 <span>This  corresponds to the unit shipment cost of your item.  </span>
+                            </a>
+                        </h4>                          
 							<a id="shipping_preference" class="tooltips" style="cursor:pointer; text-decoration:underline; font-size:11px; margin-left:12px;">Shipping Preferences
 							<span style='font-size:12px;'>You may use the shipment details you have used from previous products</span>
 							</a>
