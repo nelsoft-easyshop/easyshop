@@ -53,10 +53,11 @@ class Version20140611103914 extends AbstractMigration
             if(strlen(trim($sql_statement['create'])) > 0){
                 $this->addSql($sql_statement['create']);
             }
+           
             if(strlen(trim($sql_statement['insert'])) > 0){
+                
                 $this->addSql($sql_statement['insert']);
             }
-            break;
         }
         
         /*
