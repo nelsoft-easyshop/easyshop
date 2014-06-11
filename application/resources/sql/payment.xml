@@ -42,7 +42,6 @@
 	  , `data_response` = :data 
 	  , `transaction_id` = :tid
 	  , `payment_method_id` = :payment_id
-	  , `postback_count` = postback_count + 1
 	WHERE `id_order` = :id_order 
 </select>
 

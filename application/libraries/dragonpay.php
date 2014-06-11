@@ -11,7 +11,7 @@ class DragonPay {
 	// PRODUCTION
 	// public $url = 'https://secure.dragonpay.ph/DragonPayWebService/MerchantService.asmx?wsdl';
 	// public $ps = "https://gw.dragonpay.ph/Pay.aspx";
-	 
+	
 
 
 
