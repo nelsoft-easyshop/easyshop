@@ -679,7 +679,7 @@ class Payment extends MY_Controller{
 
             $remove_to_cart = $this->payment_model->removeToCart($member_id,$itemList);
             
-            // $this->sendNotification(array('member_id'=>$member_id, 'order_id'=>$orderId, 'invoice_no'=>$invoice));
+            $this->sendNotification(array('member_id'=>$member_id, 'order_id'=>$orderId, 'invoice_no'=>$invoice));
             // $this->removeItemFromCart(); 
 
            
