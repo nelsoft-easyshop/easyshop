@@ -78,7 +78,7 @@ class Payment extends MY_Controller{
         $itemArray = $carts['choosen_items'];
         $member_id =  $this->session->userdata('member_id');
 
-        $remove_to_cart = $this->payment_model->removeToCart(intval(100),$itemArray);
+       # $remove_to_cart = $this->payment_model->removeToCart(intval(100),$itemArray);
         $address = $this->memberpage_model->get_member_by_id($member_id);
 
 
