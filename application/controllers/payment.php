@@ -632,8 +632,7 @@ class Payment extends MY_Controller{
             $invoice = $payDetails['invoice_no'];
             $orderId = $payDetails['id_order'];
             $member_id = $payDetails['buyer_id'];
-            $itemList = json_decode($payDetails['data_response'],true);
-            $postBackCount = $payDetails['postback_count'];
+            $itemList = json_decode($payDetails['data_response'],true); 
              
             $address = $this->memberpage_model->get_member_by_id($member_id); 
             $bigThree = $this->getCityRegionMajorIsland($address);
@@ -661,19 +660,19 @@ class Payment extends MY_Controller{
 
             $transactionID = urldecode($txnId);
             $apiResponse = json_encode($itemList);
+            $paymentType = 2;
+            if(strtolower($status) == "s"){
 
-            if($postBackCount == 0){
                 foreach ($itemList as $key => $value) {               
                     $productId = $value['id'];
                     $productItem =  $value['product_itemID'];
                     $orderQuantity = $value['qty'];
                     $itemComplete = $this->payment_model->deductQuantity($productId,$productItem,$orderQuantity);
                 }
-            }
-            $paymentType = 2;
-            if(strtolower($status) == "s"){
+
                 $locked = $this->lockItem($toBeLocked,$orderId,'delete');
                 $paymentType = 4;
+                $apiResponse = json_encode($apiResponseArray);
             }
              
             $this->sendNotification(array('member_id'=>$member_id, 'order_id'=>$orderId, 'invoice_no'=>$invoice));
