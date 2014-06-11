@@ -674,7 +674,7 @@ class Payment extends MY_Controller{
             }
 
             $locked = $this->lockItem($toBeLocked,$orderId,'delete');
-            $paymentType = (strtolower($status) == "s" ? 2 : 2);
+            $paymentType = (strtolower($status) == "s" ? 4 : 2);
             // $this->sendNotification(array('member_id'=>$member_id, 'order_id'=>$orderId, 'invoice_no'=>$invoice));
             $complete = $this->payment_model->updatePaymentIfComplete($orderId,$apiResponse,$transactionID,$paymentType);
             // $this->removeItemFromCart(); 
