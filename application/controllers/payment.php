@@ -737,8 +737,8 @@ class Payment extends MY_Controller{
             $response['completepayment'] = true;
             $response['message'] = '<div style="color:green">Your payment is completed through Dragon Pay.</div><div style="color:red">'.urldecode($message).'</div>';
             $response = array_merge($response,$return);  
-            // $this->removeItemFromCart(); 
-            // $this->session->unset_userdata('choosen_items');
+            $this->removeItemFromCart(); 
+            $this->session->unset_userdata('choosen_items');
             // $this->sendNotification(array('member_id'=>$member_id, 'order_id'=>$orderId, 'invoice_no'=>$invoice));
            
             #google analytics data
@@ -756,7 +756,7 @@ class Payment extends MY_Controller{
         $data['title'] = 'Payment | Easyshop.ph';
         $data = array_merge($data,$this->fill_header());
 
-         $this->load->view('templates/header', $data);
+        $this->load->view('templates/header', $data);
         $this->load->view('pages/payment/payment_response' ,$response);  
         $this->load->view('templates/footer_full'); 
         // $this->session->set_userdata('headerData', $data);
