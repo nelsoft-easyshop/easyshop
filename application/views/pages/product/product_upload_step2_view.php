@@ -528,8 +528,6 @@
                 
                 <br><a id="discnt_btn" class="blue">Add discount price</a>
                 <div class="discounted_price_container">
-                    <strong>Discount Percentage:</strong>
-                    <span id="discounted_percent_con"></span> 
                     <strong>Discounted Price:</strong> &#8369;
                     <span id="discounted_price_con"></span>
                 </div>
@@ -2229,7 +2227,6 @@ $(document).ready(function(){
    
     $("#slider_val").val("");
     $("#slider_val").val(prcnt+"%");
-    $( "span#discounted_percent_con" ).text( prcnt+"%" );
     discounted = act_price * (prcnt/100);
     var v = parseFloat(act_price - discounted);
     tempval = Math.abs(v);
