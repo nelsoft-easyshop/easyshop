@@ -239,9 +239,6 @@ class Cart extends MY_Controller{
         $promo = $this->config->item('Promo')[$product['promo_type']];
         $data = array(
             'id'      => $id,
-//            'qty'     => ($userQTY > $max_qty
-//                    ? $max_qty
-//                    : $userQTY ),
             'qty'     => (intval($userQTY) >= intval($promo['purchase_limit'])
                     ? $promo['purchase_limit']
                     : ($userQTY > $max_qty
