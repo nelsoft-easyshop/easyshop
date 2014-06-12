@@ -529,7 +529,7 @@
                 <br><a id="discnt_btn" class="blue">Add discount price</a>
                 <div class="discounted_price_container">
                     <strong>Discounted Price:</strong> &#8369;
-                    <span id="discounted_price_con"></span>
+                    <span id="discounted_price_con">0.00</span>
                 </div>
                 <div id="dsc_frm">
                   <nobr class="discount_price_con_top">
@@ -794,6 +794,51 @@
 <script type='text/javascript' src='<?=base_url()?>assets/js/src/vendor/jquery.jqpagination.min.js'></script>
 <script src="<?php echo base_url(); ?>assets/tinymce/tinymce.min.js" type="text/javascript"></script>
 <script type="text/javascript">
+
+$(document).ready(function(){
+    $("#range_1").ionRangeSlider({
+        min: 0,
+        max: 100,
+        type: 'single',
+        step: 1,
+        postfix: "%",
+        prettify: true,
+        hasGrid: true,
+        onChange: function (obj) {        // callback is called after slider load and update
+            var value = obj.fromNumber;
+            $("#slider_val").val(value);
+            get_discPrice();
+        }
+    });
+    
+
+    $("#slider_val").on('change',function(){
+        var thisslider = $(this);
+        var newval = parseInt($(this).val());
+        get_discPrice();
+        $("#range_1").ionRangeSlider("update", {
+            from: newval,                       // change default FROM setting
+            onChange: function (obj) {        // callback is called after slider load and update
+                var value = obj.fromNumber;
+                thisslider.val(value);
+                get_discPrice();
+            }
+        });  
+    });
+
+	$('#prod_price').on('change', function(){
+		var prcnt = parseFloat($("#slider_val").val().replace("%",''));
+		if( !isNaN(prcnt) ){
+			get_discPrice();
+		}
+	});
+	
+    $("#discnt_btn").on("click",function(){
+        $("#dsc_frm").toggle();      
+    });    
+});
+
+
 $(document).ready(function(){
 
   if(window.FileReader) {   
@@ -1061,7 +1106,6 @@ $(document).ready(function(){
              
             for(var i = 0; i < fileList.length; i++){
                 var size = fileList[i].size
-                console.log(size);
                 var val = fileList[i].name;
                 var extension = val.substring(val.lastIndexOf('.') + 1).toLowerCase();
                 var objectUrl = anyWindow.createObjectURL(fileList[i]);
@@ -1189,7 +1233,6 @@ $(document).ready(function(){
         if(text == "Your Primary"){
             var first_img_div = $("#list > div:first-child" );
             var primary_control_anchor = $("#list > div:first-child > .makeprimary");
-            console.log(primary_control_anchor[0]);
             if(typeof primary_control_anchor[0] !== 'undefined'){
                 if(first_img_div.hasClass('new_img')){
                     primaryPicture = primary_control_anchor.data('number');
@@ -1208,7 +1251,7 @@ $(document).ready(function(){
             primary_control_anchor.text('Your Primary');     
             first_img_div.addClass("active_img"); 
         }
-        console.log(editPrimaryPicture);
+
 
     });
 
@@ -2005,6 +2048,13 @@ $(document).on('change','.other_name_value',function(){
     if(typeof prev_content.prod_sku !== "undefined"){
         $('#prod_sku').val(prev_content.prod_sku);
     }
+    
+    if(typeof prev_content.prod_discount_percentage !== "undefined"){
+       $('#slider_val').val(prev_content.prod_discount_percentage); 
+       $('#slider_val').trigger( "change" );
+    }
+    
+    $("#dsc_frm").hide();
 
     var temp_content = new Object();
     temp_content.prod_title = $('#prod_title').val();
@@ -2016,7 +2066,10 @@ $(document).on('change','.other_name_value',function(){
     temp_content.prod_keyword = $('#prod_keyword').val();
     temp_content.prod_price = $('#prod_price').val();
     temp_content.prod_sku = $('#prod_sku').val();
+    temp_content.prod_discount_percentage = $('#slider_val').val();
+    
     $('#step2_content').val(JSON.stringify(temp_content));
+    
 
     $('#prod_title').change(function(){
         temp_content.prod_title = $(this).val();
@@ -2070,7 +2123,6 @@ $(document).on('change','.other_name_value',function(){
    
    $('#brand_search_drop_content').on('click', 'li.brand_result', function(){
         $this = $(this);     
-        console.log($this.data('brandid'));
         $('#prod_brand').val($this.data('brandid'));
         $("#brand_sch").val($this.text());
         $('#prod_brand').trigger( "change" );
@@ -2156,85 +2208,43 @@ $(document).on('change','.other_name_value',function(){
                 addNewBrand();
             }
         });
-    });    
-});
+    });   
 
-
-$(document).ready(function(){
-    $("#range_1").ionRangeSlider({
-        min: 0,
-        max: 100,
-        type: 'single',
-        step: 1,
-        postfix: "%",
-        prettify: true,
-        hasGrid: true,
-        onChange: function (obj) {        // callback is called after slider load and update
-		  var value = obj.fromNumber;
-          $("#slider_val").val(value);
-          get_discPrice();
-      }
+    $(document).mouseup(function (e)
+    {
+        var container = $("#dsc_frm");
+        if (!container.is(e.target) // if the target of the click isn't the container...
+            && container.has(e.target).length === 0) // ... nor a descendant of the container
+        {
+            temp_content.prod_discount_percentage = $('#slider_val').val();
+            $('#step2_content').val(JSON.stringify(temp_content));
+            container.hide(); 
+        }
     });
-	
-    $("#slider_val").on('change',function(){
-	  var thisslider = $(this);
-      var newval = parseInt($(this).val());
-	  get_discPrice();
-	  $('#range_1').ionRangeSlider('remove');
-	  $('#range_1').ionRangeSlider({
-        min: 0,
-        max: 100,
-        type: 'single',
-        step: 1,
-        postfix: "%",
-        prettify: true,
-        hasGrid: true,
-		from: newval,
-        onChange: function (obj) {        // callback is called after slider load and update
-		  var value = obj.fromNumber;
-          thisslider.val(value);
-          get_discPrice();
-		}
-	  });
-	});
-	
-	$('#prod_price').on('change', function(){
-		var prcnt = parseFloat($("#slider_val").val().replace("%",''));
-		if( !isNaN(prcnt) ){
-			get_discPrice();
-		}
-	});
-	
-    $("#discnt_btn").on("click",function(){
-      $("#dsc_frm").toggle();      
-    });
-    $("#dsc_frm").hide();
-});
 
-
-//  START discount compt
-  function get_discPrice() {
-    var prcnt = $("#slider_val").val().replace("%",'');
-    var act_price =$("#prod_price").val().replace(/,/g,'');
     
-    if (prcnt > 100) {
-      prcnt = 100;
+});
+
+    function get_discPrice() {
+        var prcnt = $("#slider_val").val().replace("%",'');
+        var act_price =$("#prod_price").val().replace(/,/g,'');
+        if (prcnt > 100) {
+            prcnt = 100;
+        }
+        if (act_price == 0 || act_price == null ) {      
+            validateRedTextBox("#prod_price");
+            act_price = 0;
+        }
+        $("#slider_val").val("");
+        $("#slider_val").val(prcnt+"%");
+        discounted = act_price * (prcnt/100);
+        var v = parseFloat(act_price - discounted);
+        tempval = Math.abs(v);
+        disc_price = ReplaceNumberWithCommas(tempval.toFixed(2));
+        $("#discountedP").val(disc_price);
+        $( "span#discounted_price_con" ).text( disc_price );
     }
-    if (act_price == 0 || act_price == null ) {      
-      validateRedTextBox("#prod_price");
-      return false;
-    }
-   
-    $("#slider_val").val("");
-    $("#slider_val").val(prcnt+"%");
-    discounted = act_price * (prcnt/100);
-    var v = parseFloat(act_price - discounted);
-    tempval = Math.abs(v);
-    disc_price = ReplaceNumberWithCommas(tempval.toFixed(2));
-    $("#discountedP").val(disc_price);
-    $( "span#discounted_price_con" ).text( disc_price );
-  }
-//  END Discount compt
+
 
     function removeSelected(row){
         delete arraySelected[row];
@@ -2268,9 +2278,7 @@ $(document).ready(function(){
             link = '<a class="removeOptionGroup" data-cnt='+cnt+' href="javascript:void(0)">Remove This Group</a>';
             title = '';
         }
-        $('.main'+cnt).empty();
-        console.log( $('.main'+cnt));
-        
+        $('.main'+cnt).empty();        
         $('.main'+cnt).append('<td class="border-left">'+title+'</td> \
             <td class="border-right" colspan="3"> \
             <input type="text" placeholder="Item property title" autocomplete="off" class="prod_'+cnt+' other_name_class" data-cnt="'+cnt+'" name="prod_other_name[]"> \

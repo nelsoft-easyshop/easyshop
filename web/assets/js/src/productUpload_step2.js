@@ -211,22 +211,3 @@ $(document).ready(function() {
  
   /** Hide discount container when click outside ***/
 
-
-// $(document).ready(
-//     function(){
-//         $("#discnt_btn").click(function () {
-//             $("#dsc_frm").show().css('display';'block');
-//         });
-
-//     });
-
-$(document).mouseup(function (e)
-{
-    var container = $("#dsc_frm");
-
-    if (!container.is(e.target) // if the target of the click isn't the container...
-        && container.has(e.target).length === 0) // ... nor a descendant of the container
-    {
-        container.hide();
-    }
-});
