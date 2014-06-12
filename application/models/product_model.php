@@ -203,8 +203,8 @@ class product_model extends CI_Model
                  $product['userpic'] = 'assets/user/default';
             if(intval($product['brand_id'],10) === 1)
                 $product['brand_name'] = ($product['custombrand']!=='')?$product['custombrand']:'Custom brand';
+           applyPriceDiscount($product);
         }
-        applyPriceDiscount($product);
 		return $product;
 	}
     
