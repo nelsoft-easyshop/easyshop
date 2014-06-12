@@ -506,7 +506,7 @@ return array(
                 SET v_order_product_status = 3;
                 SET v_external_charge = 0;
             WHEN '4' THEN
-                SET v_order_status = 0;
+                SET v_order_status = 99;
                 SET v_order_product_status = 0;
                 SET v_external_charge = 20;
             WHEN '5' THEN
@@ -567,11 +567,12 @@ return array(
                     VALUES 
                     (v_order_product_id);
                     
-                    IF i_payment_type != 1 THEN
-                    
+                    CASE
+                    WHEN i_payment_type IN (3,5) THEN
                         UPDATE `es_product_item` SET `quantity` = `quantity` - v_quantity WHERE `product_id` = v_product_id AND `id_product_item` = v_product_item;
-                    
-                    END IF;
+                    ELSE 
+                    BEGIN END;
+                    END CASE;
                     
                     SET v_product_counter = v_product_counter + 1;
                             
@@ -579,12 +580,9 @@ return array(
                 
                         SET o_message ='Success! Transaction Saved';
                         SET o_success = TRUE;
-                    
             COMMIT;
-                
                 SELECT o_success, o_message,v_order_id,`invoice_no`,total,dateadded FROM `es_order` WHERE `id_order` = v_order_id;
-            
-        END ",
+        END",
     
     "es_sp_Remove_draft" => 
         "
