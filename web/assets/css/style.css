@@ -5003,6 +5003,10 @@ box-shadow:         inset 0px -10px 12px -8px rgba(255, 255, 255, 0.75);
 	border: none !important;
 	cursor:pointer;
 	width: 200px;
+	-webkit-transition: all 0.3s ease-in-out;
+	-moz-transition: 	all 0.3s ease-in-out;
+	-o-transition:	    all 0.3s ease-in-out;
+	 transition: 		all 0.3s ease-in-out;
 }
 
 .css_dp_btn:hover{
