@@ -1352,7 +1352,8 @@ $(document).ready(function(){
 	$('.shipping_comment').on('click', function(){
 		var divcont = $(this).parent().siblings('div.shipping_comment_cont');
 		var thisbtn = $(this);
-		var txStatus = $(this).parent().siblings('span.tx_cont_col3').children('span.trans_alert');
+		//var txStatus = $(this).parent().siblings('span.tx_cont_col3').children('span.trans_alert');
+		var txStatus = $(this).closest('div.tx_btns').siblings('div.tx_cont').find('span.trans_alert');
 		
 		divcont.modal({
 			escClose: false,

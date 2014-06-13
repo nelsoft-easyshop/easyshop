@@ -262,8 +262,8 @@
 		pi.product_image_path, attr.name as attr_name, pattr.attr_value, pitemattr.is_other, oah.field_name, oad.value_name, buyer.email as buyer_email, 
 		badd.consignee, badd.mobile, badd.telephone, l0.location as stateregion, l1.location as city, badd.address as fulladd, COALESCE(badd.lat, '0') as lat, COALESCE(badd.lng, '0') as lng,
 		o.invoice_no, o.payment_method_id as payment_method,
-		pbd.bank, pbd.ref_num, pbd.amount, pbd.date_deposit, pbd.comment, DATE_FORMAT(pbd.datemodified, "%D %M %Y") as bd_datemodified,
-		op.is_reject, pbd.is_invalid
+		pbd.bank, pbd.ref_num, pbd.amount, pbd.date_deposit, pbd.comment, DATE_FORMAT(pbd.datemodified, "%D %M %Y") as bd_datemodified, pbd.is_invalid,
+		op.is_reject 
 	FROM es_order o
 	INNER JOIN es_order_product op 
 		ON op.order_id = o.id_order AND (op.seller_id = :id OR o.buyer_id = :id)
@@ -287,10 +287,6 @@
 		ON o.buyer_id = buyer.id_member
 	LEFT JOIN es_member_feedback fb
 		ON fb.order_id = o.id_order AND (fb.for_memberid = op.seller_id OR fb.for_memberid = o.buyer_id) AND fb.member_id = :id
-	<!--
-	LEFT JOIN es_address badd
-		ON o.buyer_id = badd.id_member AND badd.type = 1
-	-->
 	LEFT JOIN es_order_shipping_address badd
 		ON o.shipping_address_id = badd.id_order_shipping_address
 	LEFT JOIN es_location_lookup l0

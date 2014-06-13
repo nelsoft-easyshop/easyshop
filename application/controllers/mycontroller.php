@@ -71,6 +71,22 @@ class Mycontroller extends MY_Controller
 		
 		return $output;
 	}
+	
+	function emailTest($msg){
+		$this->load->library('email');	
+		
+		$this->email->set_newline("\r\n");
+		$this->email->to('janz.stephen@gmail.com');
+		$this->email->from('noreply@easyshop.ph', 'Easyshop.ph');		
+		$this->email->subject('Easyshop Test email.');
+
+		$this->email->message($msg);
+		$result = $this->email->send();
+
+		print('Email Data response:<br>');
+		print_r($this->email->print_debugger());
+		print_r($result);
+	}
 
 }
 

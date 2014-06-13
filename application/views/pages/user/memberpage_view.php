@@ -1518,13 +1518,13 @@
 									echo form_open('',$attr);
 								?>
 									<h2>Payment Details</h2>
-									<label for="bank">Bank: </label> 
+									<label for="bank"><span style="color:red;">*</span> Bank: </label> 
 									<input type="text" name="bank" value="<?php echo html_escape($transact['bd_details']['bank'])?>" <?php echo $disable ? 'disabled':''?>><br/>
-									<label for="ref_num">Reference #: </label>
+									<label for="ref_num"><span style="color:red;">*</span> Reference #: </label>
 									<input type="text" name="ref_num" value="<?php echo html_escape($transact['bd_details']['ref_num'])?>" <?php echo $disable ? 'disabled':''?>><br/>
-									<label for="amount">Amount Deposited: </label>
+									<label for="amount"><span style="color:red;">*</span> Amount Deposited: </label>
 									<input type="text" name="amount" class="bankdeposit_amount" value="<?php echo html_escape($transact['bd_details']['amount'])?>" <?php echo $disable ? 'disabled':''?>><br/>
-									<label for="date">Date of Deposit: </label>
+									<label for="date"><span style="color:red;">*</span> Date of Deposit: </label>
 									<input type="text" name="date" class="modal_date" value="<?php echo html_escape($transact['bd_details']['date_deposit'])?>" <?php echo $disable ? 'disabled':''?>><br/>
 									<label for="comment">Comments: </label>
 									<textarea name="comment" cols="55" rows="5" data-value="<?php echo html_escape($transact['bd_details']['comment'])?>" <?php echo $disable ? 'disabled':''?>><?php echo html_escape($transact['bd_details']['comment'])?></textarea>
@@ -1542,6 +1542,21 @@
 					<!-- End of dragonpay / direct bank deposit button-->
 				</div>
 			</div>
+			
+			<?php if( $transact['payment_method'] == 5 && $transact['transac_stat'] == 99 ):?>
+				<div style="margin-left:5px;border-bottom:1px dotted #CECECE;margin-bottom:10px;padding-bottom:10px;">
+					<p><strong>Deposit payment to:</strong></p>
+					<p>
+						<span style="margin:0px 5px 0px 3em;">Bank:</span>
+						<span style="padding-right:2em;margin-right:3em;border-right:1px dotted #CECECE;font-weight:bold;"><?php echo $transaction['bank_name']?></span>
+						<span style="margin-right:5px;">Bank Account Name:</span>
+						<span style="padding-right:2em;margin-right:3em;border-right:1px dotted #CECECE;font-weight:bold;"><?php echo $transaction['bank_accname']?></span>
+						<span style="margin-right:5px;">Bank Account Number:</span>
+						<span style="padding-right:2em;margin-right:3em;font-weight:bold;"><?php echo $transaction['bank_accnum']?></span>
+					</p>
+				</div>
+			<?php endif;?>
+			
 				<div class="transac_prod_wrapper">
 					<div class="transac-product-container">
 						<?php foreach($transact['products'] as $opk=>$product):?>
@@ -1637,8 +1652,9 @@
 										<?php endif;?>
 									</span>
 								</div>
-								<div class="transac_prod_btns tx_btns">
-									<?php if( $product['has_shipping_summary'] == 1 && $transact['transac_stat'] == 0 && $product['status'] == 0 && $transact['payment_method'] != 3):?>
+								
+								<?php if( $product['has_shipping_summary'] == 1 && $transact['transac_stat'] == 0 && $product['status'] == 0 && $transact['payment_method'] != 3):?>
+									<div class="transac_prod_btns tx_btns">
 										<?php
 											$attr = array('class'=>'transac_response');
 											echo form_open('',$attr);
@@ -1661,9 +1677,10 @@
 											<input type="hidden" name="order_product" value="<?php echo $opk;?>">
 											<input type="hidden" name="transact_num" value="<?php echo $tk;?>">
 											<input type="hidden" name="seller_id" value="<?php echo $product['seller_id']?>">
-										<?php echo form_close();?>
-									<?php endif; ?>
-								</div>
+										<?php echo form_close();?>										
+									</div>
+								<?php endif; ?>
+								
 								<?php if( count($product['attr']) !== 0 ):?>
 									<div class="show_more_options blue">										
 										<span class="span_bg"></span>
@@ -1917,9 +1934,6 @@
 										<input type="hidden" name="invoice_num" value="<?php echo $transact['invoice_no'];?>">
 										<?php echo form_close();?>
 										
-										<?php if($product['is_reject'] == 1):?>
-											<span class="trans_alert">Item Rejected!</span>
-										<?php endif;?>
 									<?php elseif( $transact['transac_stat'] == 0 && $product['status'] == 0 && $transact['payment_method'] == 3 ):?>
 										<?php
 											$attr = array('class'=>'transac_response');

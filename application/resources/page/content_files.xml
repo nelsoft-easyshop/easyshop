@@ -7,5 +7,10 @@
     <select id="bank-name">
         Banco de Oro Unibank (BDO) 
     </select>
+	
+	<select id="bank-account-name">
+		Easyshop Inc
+	</select>
+	
     
 </map>

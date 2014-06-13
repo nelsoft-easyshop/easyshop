@@ -159,24 +159,36 @@ class payment_model extends CI_Model
 		$this->email->from('noreply@easyshop.ph', 'Easyshop.ph');
 		$this->email->attach(getcwd() . "/assets/images/img_logo.png", "inline");
 		
-		if($string === 'buyer'){
-			$this->email->subject($this->lang->line('notification_subject_buyer'));
-			#user appended at template
-			$data['store_link'] = base_url() . "vendor/";
-			$data['msg_link'] = base_url() . "messages/#";
-			$msg = $this->parser->parse('templates/email_purchase_notification_buyer',$data,true);
-		}
-		else if($string === 'seller'){
-			$this->email->subject($this->lang->line('notification_subject_seller'));
-			$data['store_link'] = base_url() . "vendor/" . $data['buyer_name'];
-			$data['msg_link'] = base_url() . "messages/#" . $data['buyer_name'];
-			$msg = $this->parser->parse('templates/email_purchase_notification_seller',$data,true);
-		}
-		else if($string === 'return_payment'){
-			$this->email->subject($this->lang->line('notification_returntobuyer'));
-			$data['store_link'] = base_url() . "vendor/" . $data['user'];
-			$data['msg_link'] = base_url() . "messages/#" . $data['user'];
-			$msg = $this->parser->parse('templates/email_returntobuyer',$data,true);
+		switch($string){
+			case 'buyer':
+				$this->email->subject($this->lang->line('notification_subject_buyer'));
+				#user appended at template
+				$data['store_link'] = base_url() . "vendor/";
+				$data['msg_link'] = base_url() . "messages/#";
+				$msg = $this->parser->parse('templates/email_purchase_notification_buyer',$data,true);
+				break;
+			case 'bankdeposit':
+				$this->email->subject($this->lang->line('notification_subject_buyer'));
+				#user appended at template
+				$data['store_link'] = base_url() . "vendor/";
+				$data['msg_link'] = base_url() . "messages/#";
+				$data['bank_name'] = $this->xmlmap->getFilenameID('page/content_files','bank-name');
+				$data['bank_accname'] = $this->xmlmap->getFilenameID('page/content_files','bank-account-name');
+				$data['bank_accnum'] = $this->xmlmap->getFilenameID('page/content_files','bank-account-number');
+				$msg = $this->parser->parse('templates/email_purchase_notification_buyer_bankdeposit',$data,true);
+				break;
+			case 'seller':
+				$this->email->subject($this->lang->line('notification_subject_seller'));
+				$data['store_link'] = base_url() . "vendor/" . $data['buyer_name'];
+				$data['msg_link'] = base_url() . "messages/#" . $data['buyer_name'];
+				$msg = $this->parser->parse('templates/email_purchase_notification_seller',$data,true);
+				break;
+			case 'return_payment':
+				$this->email->subject($this->lang->line('notification_returntobuyer'));
+				$data['store_link'] = base_url() . "vendor/" . $data['user'];
+				$data['msg_link'] = base_url() . "messages/#" . $data['user'];
+				$msg = $this->parser->parse('templates/email_returntobuyer',$data,true);
+				break;
 		}
 		
 		$this->email->to($email);
@@ -249,6 +261,7 @@ class payment_model extends CI_Model
 			'buyer_contactno' => $row[0]['buyer_contactno'],
 			'totalprice' => $row[0]['totalprice'],
 			'invoice_no' => $row[0]['invoice_no'],
+			'payment_method' => (int)$row[0]['payment_method_id'],
 			'products' => array()
 		);
 		
@@ -265,8 +278,9 @@ class payment_model extends CI_Model
 			if(!isset($data['seller'][$value['seller_id']])){
 				$data['seller'][$value['seller_id']]['email'] = $value['seller_email'];
 				$data['seller'][$value['seller_id']]['seller_name'] = $value['seller'];
-				$data['seller'][$value['seller_id']]['seller_contactno'] = $value['seller_contactno'];
+				$data['seller'][$value['seller_id']]['seller_contactno'] = $value['seller_contactno'] != '' ? $value['seller_contactno'] : 'N/A';
 				$data['seller'][$value['seller_id']]['totalprice'] = 0;
+				$data['seller'][$value['seller_id']] = array_merge( $data['seller'][$value['seller_id']], array_slice($temp,25,3) );
 			}
 			if(!isset($data['seller'][$value['seller_id']]['products'][$value['id_order_product']])){
 				$data['seller'][$value['seller_id']]['products'][$value['id_order_product']] = array_slice($temp,9,8);
@@ -288,8 +302,8 @@ class payment_model extends CI_Model
 				array_push($data['products'][$value['id_order_product']]['attr'], array('attr_name' => $temp['field_name'], 'attr_value' => $temp['value_name']));
 				array_push($data['seller'][$value['seller_id']]['products'][$value['id_order_product']]['attr'], array('attr_name' => $temp['field_name'],'attr_value' => $temp['value_name']));
 			}else{
-				array_push($data['products'][$value['id_order_product']]['attr'], array('attr_name' => 'N/A', 'attr_value' => 'N/A'));
-				array_push($data['seller'][$value['seller_id']]['products'][$value['id_order_product']]['attr'], array('attr_name' => 'N/A','attr_value' => 'N/A'));
+				array_push($data['products'][$value['id_order_product']]['attr'], array('attr_name' => 'Attribute', 'attr_value' => 'N/A'));
+				array_push($data['seller'][$value['seller_id']]['products'][$value['id_order_product']]['attr'], array('attr_name' => 'Attribute','attr_value' => 'N/A'));
 			}
 		}
 		

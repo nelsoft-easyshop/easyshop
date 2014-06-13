@@ -460,9 +460,12 @@ class memberpage_model extends CI_Model
 				
 				//IF DIRECT BANK DEPOSIT
 				if($temp['transac_stat'] == 99 && $temp['payment_method'] == 5){
-					if( !isset( $data[$temp['id_order']]['bd_details'] ) )
-						$data[$temp['id_order']]['bd_details'] = array_splice($temp, 39, 6);
-						$data[$temp['id_order']]['bd_details']['is_invalid'] = $temp['is_invalid'];
+					if( !isset( $data[$temp['id_order']]['bd_details'] ) ){
+						$data[$temp['id_order']]['bd_details'] = array_splice($temp, 39, 7);
+						$fdata['bank_name'] = $this->xmlmap->getFilenameID('page/content_files','bank-name');
+						$fdata['bank_accname'] = $this->xmlmap->getFilenameID('page/content_files','bank-account-name');
+						$fdata['bank_accnum'] = $this->xmlmap->getFilenameID('page/content_files','bank-account-number');
+					}
 				}
 				
 				if(!array_key_exists('users', $data[$temp['id_order']]))

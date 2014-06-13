@@ -850,21 +850,24 @@ class Payment extends MY_Controller{
 		/*$data['member_id'] = 74;
 		$data['order_id'] = 102;
 		$data['invoice_no']= 3;
-		$data['member_id'] = 74;
-		$data['order_id'] = 105;
-		$data['invoice_no']= '22-1231-2';*/
+		$data['member_id'] = 56;
+		$data['order_id'] = 156;
+		$data['invoice_no']= '156-2014061247';*/
 		
         $transactionData = $this->payment_model->getPurchaseTransactionDetails($data);
         
+		$viewSelector = $transactionData['payment_method'] === 5 ? 'bankdeposit' : 'buyer';
+		
         //Send email to buyer
         $buyerEmail = $transactionData['buyer_email'];
         $buyerData = $transactionData;
         unset($buyerData['seller']);
         unset($buyerData['buyer_email']);
+		
 		// 3 tries to send Email. Quit if success or 3 failed tries met
 		$emailcounter = 0;
 		do{
-			$buyerEmailResult = $this->payment_model->sendNotificationEmail($buyerData, $buyerEmail, 'buyer');
+			$buyerEmailResult = $this->payment_model->sendNotificationEmail($buyerData, $buyerEmail, $viewSelector);
 			$emailcounter++;
 		}while(!$buyerEmailResult && $emailcounter<3);
         
@@ -880,15 +883,14 @@ class Payment extends MY_Controller{
             'id_order' => $transactionData['id_order'],
             'dateadded' => $transactionData['dateadded'],
             'buyer_name' => $transactionData['buyer_name'],
-			'invoice_no' => $transactionData['invoice_no']
+			'invoice_no' => $transactionData['invoice_no'],
             );
 			
         foreach($transactionData['seller'] as $seller){
             $sellerEmail = $seller['email'];
-            $sellerData['totalprice'] = number_format($seller['totalprice'], 2, '.' , ',');
-		 
-            $sellerData['seller_name'] = $seller['seller_name'];
-            $sellerData['products'] = $seller['products'];
+			$sellerData = array_merge( $sellerData, array_slice($seller,1,7) );
+			$sellerData['totalprice'] = number_format($seller['totalprice'], 2, '.' , ',');
+			
 			// 3 tries to send Email. Quit if success or 3 failed tries met
 			$emailcounter = 0;
 			do{
@@ -907,8 +909,6 @@ class Payment extends MY_Controller{
 	
 	/*
 	 *	Function to revert back order quantity when dragon pay transaction expires
-	 *
-	 *
 	 */
 	function ganalytics($itemList,$v_order_id)
 	{  
