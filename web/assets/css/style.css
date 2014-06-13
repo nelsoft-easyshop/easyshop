@@ -4995,6 +4995,21 @@ box-shadow:         inset 0px -10px 12px -8px rgba(255, 255, 255, 0.75);
     word-wrap: break-word;
 }
 
+.css_dp_btn{
+	background-color:#F48000;
+	color: #FFFFFF;
+	font-size: 14px;
+	border-radius: 3px;
+	border: none;
+	cursor:pointer;
+}
+
+.css_dp_btn:hover{
+	background-color: #FF4400;
+	box-shadow: inset 0px -10px 12px -8px rgba(255, 255, 255, 0.75);
+	transition: all linear 0.2s;
+}
+
 .transac_prod_btns form{
     display: inline-block;
 }

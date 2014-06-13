@@ -1502,7 +1502,7 @@
 							<?php $attr = array('class'=>'');
 								echo form_open('',$attr);
 							?>
-								<input type="submit" class="dragonpay_update_btn" name="dragonpay_update_btn" value="Confirm Dragonpay Payment">
+								<input type="button" class="dragonpay_update_btn css_dp_btn" name="dragonpay_update_btn" value="Confirm Dragonpay Payment">
                                 <input type="hidden" name="invoice_num" value="<?php echo $transact['invoice_no'];?>">
 								<input type="hidden" name="transaction_num" value="<?php echo $tk;?>">
 								<input type="hidden" name="dragonpay" value="1">
@@ -1522,7 +1522,7 @@
 									<label for="ref_num"><span style="color:red;">*</span> Reference #: </label>
 									<input type="text" name="ref_num" value="<?php echo html_escape($transact['bd_details']['ref_num'])?>" <?php echo $disable ? 'disabled':''?>><br/>
 									<label for="amount"><span style="color:red;">*</span> Amount Deposited: </label>
-									<input type="text" name="amount" class="bankdeposit_amount price" value="<?php echo html_escape(number_format($transact['bd_details']['amount'],2,'.',','))?>" <?php echo $disable ? 'disabled':''?>><br/>
+									<input type="text" name="amount" class="bankdeposit_amount price" value="<?php echo  $transact['bd_details']['amount'] != '' ? html_escape(number_format($transact['bd_details']['amount'],2,'.',',')) : '';?>" <?php echo $disable ? 'disabled':''?>><br/>
 									<label for="date"><span style="color:red;">*</span> Date of Deposit: </label>
 									<input type="text" name="date" class="modal_date" value="<?php echo html_escape($transact['bd_details']['date_deposit'])?>" <?php echo $disable ? 'disabled':''?>><br/>
 									<label for="comment">Comments: </label>
