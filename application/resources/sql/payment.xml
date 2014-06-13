@@ -121,7 +121,7 @@
 
 <!-- Used to check for dragonpay transaction-->
 <select id="checkTransactionBasic">
-	SELECT id_order, data_response
+	SELECT id_order, data_response,transaction_id
 	FROM es_order
 	WHERE id_order = :transaction_num AND invoice_no = :invoice_num AND buyer_id = :member_id
 </select>

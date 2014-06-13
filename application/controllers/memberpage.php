@@ -469,8 +469,9 @@ class Memberpage extends MY_Controller
 			
 			if(count($checkTransaction) == 1){
 				// fetch dragonpay data
-				$dragonpayData = json_decode($checkTransaction[0]['data_response'], true);
-				$txnId = $dragonpayData['DragonPayReturn']['txnId'];
+				//$dragonpayData = json_decode($checkTransaction[0]['data_response'], true);
+				//$txnId = $dragonpayData['DragonPayReturn']['txnId'];
+				$txnId = $checkTransaction[0]['transaction_id'];
 				// Check dragonpay transaction status - connects to Dragonpay
 				$dragonpayResult = $this->dragonpay->getStatus($txnId);
 				
