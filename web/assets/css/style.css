@@ -5914,5 +5914,45 @@ margin-right: 10px;
     overflow: hidden;
 }
 
+/*** terms and conditions CSS ****/
+.content_wrapper {
+   padding-top: 30px;	
+}
 
+.htitle {
+	font-size: 30px;
+	font-weight: 300;
+   font-family: 'Roboto',sans-serif;	
+   margin-top: 20px;
+}
 
+.htitle2 {
+	color: #494949;
+	border-bottom: 3px solid #cecece;
+	display: inline-block;
+	font-size: 18px;
+	font-weight: 300;
+    font-family: 'Roboto',sans-serif;	
+    padding:20px 0px 3px 0px;
+    margin-bottom: 15px;
+    width: 250px;
+}
+
+.content_wrapper p {
+	text-align: justify;
+	margin-bottom: 15px;
+}
+
+.content_wrapper p strong {
+	display: block;
+	color: #003e91;
+	margin-top: 20px;
+}
+
+.content_wrapper > ul {
+    margin-left: 35px;
+}
+
+.content_wrapper li {
+    margin: 15px 0;
+}
