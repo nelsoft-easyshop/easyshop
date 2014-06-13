@@ -79,6 +79,22 @@ class Home extends MY_Controller {
         $this->load->view('pages/terms');
         $this->load->view('templates/footer_full');
     }
+    
+    public function faq(){
+        $data = array('title' => 'F.A.Q | Easyshop.ph',);
+        $data = array_merge($data, $this->fill_header());
+		$this->load->view('templates/header', $data);
+        $this->load->view('pages/faq');
+        $this->load->view('templates/footer_full');
+    }
+    
+    public function about(){
+        $data = array('title' => 'About us | Easyshop.ph',);
+        $data = array_merge($data, $this->fill_header());
+		$this->load->view('templates/header', $data);
+        $this->load->view('pages/about');
+        $this->load->view('templates/footer_full');
+    }
 }
 
 /* End of file home.php */
