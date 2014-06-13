@@ -5976,3 +5976,8 @@ margin-right: 10px;
 .content_wrapper li {
     margin: 15px 0;
 }
+
+.txt_label {
+	display: inline-block;
+	width: 65px;
+}
