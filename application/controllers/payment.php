@@ -659,7 +659,7 @@ class Payment extends MY_Controller{
             $orderId = $payDetails['id_order'];
             $member_id = $payDetails['buyer_id'];
             $itemList = json_decode($payDetails['data_response'],true); 
-            $postBackCount = $payDetails['postback_count'];
+            $postBackCount = $payDetails['postbackcount'];
 
 
             $address = $this->memberpage_model->get_member_by_id($member_id); 
@@ -710,7 +710,7 @@ class Payment extends MY_Controller{
 
             // if(strtolower($status) == "s"){
             if($postBackCount == "0"){
-                
+
                 $remove_to_cart = $this->payment_model->removeToCart($member_id,$itemList);
                 $this->sendNotification(array('member_id'=>$member_id, 'order_id'=>$orderId, 'invoice_no'=>$invoice));  
             }
