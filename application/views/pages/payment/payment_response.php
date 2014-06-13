@@ -29,7 +29,7 @@
       </div>
         <?php
       } ?>
-      <h2>Purchased Product</h2>
+      <h2>List of Products</h2>
       <div class="payment_items_con">
          <?php 
          foreach ($itemList as $key => $value) {
