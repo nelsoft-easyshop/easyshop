@@ -236,7 +236,6 @@
 
 		var result = "";
 		$.ajax({
-			async : false,
 			type : "POST",
 			dataType : "json",
 			url : "<?=base_url()?>messages/send_msg",
