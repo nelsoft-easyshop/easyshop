@@ -602,6 +602,7 @@ class product extends MY_Controller
      */
 
     function item($slug = ''){
+        $this->load->config('promo', TRUE);
         $uid = $this->session->userdata('member_id');
     	$product_row = $this->product_model->getProductBySlug($slug,$uid);
     	$data = $this->fill_header();
@@ -611,6 +612,13 @@ class product extends MY_Controller
     		$product_options = $this->product_model->implodeAttributesByName($product_options);
     		$this->session->set_userdata('product_id', $id);
     		$product_catid = $product_row['cat_id'];
+
+            $banner_view = '';  
+            if(intval($product_row['is_promote']) === 1){
+                $bannerfile = $this->config->item('Promo')[$product_row['promo_type']]['banner'];
+                $banner_view = $this->load->view('templates/promo_banners/'.$bannerfile, $product_row, TRUE); 
+            }
+            
             $data = array_merge($data,array( 
     			'breadcrumbs' =>  $this->product_model->getParentId($product_row['cat_id']),
     			'product' => $product_row,
@@ -626,6 +634,7 @@ class product extends MY_Controller
     			'product_quantity' => $this->product_model->getProductQuantity($id),
     			'shipment_information' => $this->product_model->getShipmentInformation($id),
     			'shiploc' => $this->product_model->getLocation(),
+                'banner_view' => $banner_view,
     			'category_navigation' => $this->load->view('templates/category_navigation',array('cat_items' =>  $this->getcat(),), TRUE ),
     			));
             $data['vendorrating'] = $this->product_model->getVendorRating($data['product']['sellerid']);

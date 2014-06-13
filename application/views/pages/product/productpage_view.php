@@ -119,55 +119,8 @@
         </div>
       </div>
       
-      <?php if(intval($product['is_promote']) === 1): ?>
-      <div class="right_header_discount">
-          <div id="dsc_cont">
+      <?php echo $banner_view; ?>
 
-              <span class="dsc_header_txt">
-                COUNTDOWN SALE
-              </span>
-
-              <?php if($product['start_promo']): ?>
-              <span class="dsc_prp_txt">
-            
-              <span class="dsc_prp_txt2" style='margin-top:5px;'>2% OFF PER HOUR</span>
-              TIME LEFT
-              </span>
-             
-              <?php else: ?>  
-              <span class="dsc_prp_txt3"> 2% OFF STARTS IN</span>
-              <?php endif; ?>
-              
-          </div>
-          <div class="dsc_tmr">
-              <div class="cd_timer_container product_view <?php echo ($product['start_promo'])?'':'float';?>">
-                  <div class="cd_timer_days">
-                      <span id='countdown_days'>00</span>
-                      <span class="cnt_lgnd">DAYS</span>
-                  </div>
-                  <div class="cd_timer_hours">
-                      <span id='countdown_hours'>00</span>
-                      <span class="cnt_lgnd">HOURS</span>
-                  </div>
-                  <div class="cd_timer_minutes">
-                      <span id='countdown_minutes'>00</span>
-                      <span class="cnt_lgnd">MINUTES</span>
-                  </div>
-                  <div class="cd_timer_seconds">
-                      <span id="countdown_second">00</span>
-                      <span class="cnt_lgnd">SECONDS</span>
-                  </div>
-              </div>
-          </div>
-          <?php if($product['start_promo']): ?>
-          <div class="discount_perc">
-              <p id="percentage"><?php echo number_format( $product['percentage'],0,'.',',');?>%<br/>OFF</p>
-          </div>
-          <?php endif;?>
-      </div>
-      <?php endif; ?>
-      
-      
       <div class="product_inner_content_info" >
         <h1 class="id-class" id="<?php echo $product['id_product'];?>"> 
           <span id="pname"> <?php echo html_escape($product['product_name'])?> </span>

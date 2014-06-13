@@ -2002,14 +2002,15 @@ class product_model extends CI_Model
         $today = strtotime( date("Y-m-d H:i:s"));
         $startdate = strtotime($start);
         $enddate = strtotime($end);
-        $type = intval($type);
         $is_promo = intval($is_promo);
         $result['price'] = $baseprice;
         $result['can_purchase']  = true;
         $result['sold_price'] = 0;
-        $result['is_soldout'] = false;
+        $result['is_soldout'] = false; 
+        $calculation_id = $this->config->item('Promo')[$type]['calculation_id'];
+        
         if($is_promo === 1){
-            switch ($type) {
+            switch ($calculation_id) {
                 case 0 :
                     $PromoPrice = $baseprice;
                     break;
@@ -2023,6 +2024,12 @@ class product_model extends CI_Model
                     }
                     $PromoPrice = $baseprice - (($diffHours * 0.02) * $baseprice);
                     break;
+                case 2:
+                    if(($today < $startdate) || ($enddate < $startdate) || ($today > $enddate)){
+                        $PromoPrice = $baseprice;
+                    }else{
+                        $PromoPrice = $baseprice - ($baseprice)*0.20;
+                    }
                 default :
                     $PromoPrice = $baseprice;
                     break;
