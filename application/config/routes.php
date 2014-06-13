@@ -106,5 +106,8 @@ $route['(?i)maintenance'] = 'home/splash';
 $route['(?i)deals'] = 'product/category_promo';
 $route['(?i)deals_more'] = 'product/category_promo_more';
 
+$route['(?i)policy'] = 'home/policy';
+$route['(?i)terms'] = 'home/terms';
+
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */
