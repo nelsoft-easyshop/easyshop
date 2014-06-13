@@ -58,6 +58,41 @@ img.img_main_product {
   width: 100%;
 }
 
+.img_cd_others {
+   display: block;
+  max-width: 1123px;
+  width: 100%; 
+}
+
+.img_cd_others2 {
+   display: inline-block;
+  max-width: 330px;
+  width: 46%; 
+  min-width: 175px;
+}
+
+.img_cd_others3 {
+   display: inline-block;
+  max-width: 474px;
+  width: 53%;
+  min-width: 175px;
+}
+
+.cd_others2_con {
+    background-color: #fff;
+    margin: 0 auto;
+    width: 73%;
+}
+
+.cd_others_txt {
+    margin-top: -50px;
+    text-align: center;
+}
+
+.cd_others_txt p {
+  font-size: 34px;
+}
+
 .product_content2 {
   display: none;
 }
@@ -389,6 +424,9 @@ img.img_main_product {
   .reg2_tc .terms_con {
     width: auto;
   }
+  .cd_others_txt {
+    margin-top: 0;
+  }
 }
 
 @media only screen and (max-width : 320px) {
@@ -441,6 +479,11 @@ img.img_main_product {
   #userpage {
     width: 76% !important;
   }
+
+
+  .cd_others_txt p {
+  font-size: 16px;
+}
 }
 
 
@@ -464,6 +507,10 @@ img.img_main_product {
 @media only screen and (max-width : 644px) {
 /*  .footer_payment{
     display:none;*/
+    .cd_others2_con {
+      text-align: center;
+    }
+
   }
 
   
