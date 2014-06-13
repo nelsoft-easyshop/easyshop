@@ -58,7 +58,17 @@ class cart_model extends CI_Model
 
         return $sth->rowCount();
     }
-    
+
+
+    public function check_promo($cart,$case){
+        foreach($cart as $key => $row){
+            if(intval($row['is_promote']) == intval($case)){
+                return true;
+                break;
+            }
+        }
+        return false;
+    }
 }
 
 /* End of file cart_model.php */

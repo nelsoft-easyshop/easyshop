@@ -104,6 +104,7 @@ class Cart extends MY_Controller{
     
     function add_item(){    
         $result='';
+        $carts=$this->cart->contents();
         if(intval($_POST['length']) == 0 || empty($_POST['opt'])){
             $out_opt = 0;
             $go=array();
@@ -117,9 +118,11 @@ class Cart extends MY_Controller{
         }
         else{
             $data=$this->check_prod($_POST['id'],$go,$_POST['qty'])['data'];
-            
-            $carts=$this->cart->contents();
-            if(empty($carts)){
+            $has_promo = $this->cart_model->check_promo($carts,"1");
+            if($has_promo === true && $data['is_promote'] == "1"){
+                $result="You can only buy 1 promo item.";
+            }
+            else if(empty($carts)){
                 $this->cart->insert($data);
                 $result= sha1(md5("tanggap"));
             }
@@ -156,7 +159,6 @@ class Cart extends MY_Controller{
 		$this->session->set_userdata('cart_total_perItem',$this->cart_size());
         echo json_encode($result);
     }
-    
 
     public function cart_items($carts){
         foreach($carts as $key => $row1){

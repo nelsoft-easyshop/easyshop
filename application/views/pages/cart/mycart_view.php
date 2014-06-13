@@ -154,9 +154,14 @@
                         async:true,
                         url:"<?=base_url()?>payment/cart_items",
                         type:"POST",
+                        dataType:"json",
                         data:{itm:data1, csrfname:csrftoken},
                         success:function(data){
-                            window.location.replace("<?=base_url()?>payment/review");
+                            if(data == true){
+                                window.location.replace("<?=base_url()?>payment/review");
+                            }else{
+                                alert(data);
+                            }
                         }
                     });
             }

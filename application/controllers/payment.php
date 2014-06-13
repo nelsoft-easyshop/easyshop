@@ -45,11 +45,11 @@ class Payment extends MY_Controller{
     public $PayPalCurrencyCode     = 'PHP';
 
     function cart_items()
-    {   
+    {
+        $res = true;
         if(!$this->session->userdata('member_id')){
             redirect(base_url().'home', 'refresh');
         };
-        
         $unchecked = $this->input->post('itm');
         $carts = $this->cart->contents();
         for($x=0;$x < sizeof($unchecked);$x++):
@@ -63,7 +63,12 @@ class Payment extends MY_Controller{
         $id = $this->session->userdata('member_id');
         $this->cart_model->save_cartitems($cart_items,$id);
 
-    	return true;
+        $has_promo = $this->cart_model->check_promo($cart_contentss['choosen_items'],"0");
+        if($has_promo == true){
+            $res = "You can only purchase promo items";
+        }
+
+        echo json_encode($res);
     }
 
     function review()

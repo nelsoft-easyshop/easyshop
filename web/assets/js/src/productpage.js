@@ -492,6 +492,8 @@ $(function(){
                         alert("An error occured,Try refreshing the site.");
                     }else if(data == "d3d34a1c4cb94f516ae916e4b8b4be80d50c8f7a"){
                         window.location.replace(config.base_url + "cart");
+                    }else{
+                        alert(data);
                     }
                 }
 
