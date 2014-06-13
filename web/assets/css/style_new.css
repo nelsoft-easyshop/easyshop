@@ -949,6 +949,12 @@ div.reply_content_shown > p {
 	padding-top: 5px;
 }
 
+.cd_soldout {
+	left: 0;
+    position: absolute;
+    top: -6px;
+}
+
 
 
 
