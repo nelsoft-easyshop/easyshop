@@ -116,7 +116,7 @@ class payment_model extends CI_Model
 
     function selectFromEsOrder($token,$paymentType)
     {
-    	$query = "SELECT invoice_no,id_order,dateadded,buyer_id,data_response FROM es_order WHERE transaction_id = :token AND payment_method_id = :payment_id";
+    	$query = "SELECT invoice_no,id_order,dateadded,buyer_id,data_response,postback_count FROM es_order WHERE transaction_id = :token AND payment_method_id = :payment_id";
         $sth = $this->db->conn_id->prepare($query);
         $sth->bindParam(':token',$token,PDO::PARAM_STR);
         $sth->bindParam(':payment_id',$paymentType,PDO::PARAM_STR);

@@ -3909,6 +3909,7 @@ return array(
               `easyshop_charge` decimal(15,4) unsigned NOT NULL DEFAULT '0.0000',
               `payment_method_charge` decimal(15,4) unsigned NOT NULL DEFAULT '0.0000',
               `net` decimal(15,4) unsigned NOT NULL DEFAULT '0.0000',
+              `postback_count` tinyint(4) DEFAULT '0',
               PRIMARY KEY (`id_order`),
               KEY `fk_es_order_es_member_idx` (`buyer_id`),
               KEY `fk_es_order_es_order_status_idx` (`order_status`),
