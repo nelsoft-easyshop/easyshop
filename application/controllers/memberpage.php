@@ -491,7 +491,7 @@ class Memberpage extends MY_Controller
 					'order_id' => $data['transaction_num'],
 					'bank' => $this->input->post('bank'),
 					'ref_num' => $this->input->post('ref_num'),
-					'amount' => $this->input->post('amount'),
+					'amount' => preg_replace('/,/', '', $this->input->post('amount')),
 					'date_deposit' => date("Y-m-d H:i:s", strtotime($this->input->post('date'))),
 					'comment' => $this->input->post('comment')
 				);

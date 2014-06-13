@@ -1,3 +1,15 @@
+/**
+* Function to handle display of Price Value
+**/
+function ReplaceNumberWithCommas(thisnumber){
+    //Seperates the components of the number
+    var n = thisnumber.toString().split(".");
+    //Comma-fies the first part
+    n[0] = n[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    //Combines the two sections
+    return n.join(".");
+}
+
 /**	Populate product item display **/
 $(document).ready(function(){
 		
@@ -1442,6 +1454,18 @@ $(document).ready(function(){
 		});
 	});
 	
+	//$('input.bankdeposit_amount').numeric({negative:false});
+	$('input.price').on('blur',function(){
+		var price = $.trim($(this).val());
+		var newPrice = price.replace(new RegExp(",", "g"), '');
+		newPrice = parseFloat(newPrice).toFixed(2);
+		if( $.isNumeric(newPrice) ){
+			$(this).val( ReplaceNumberWithCommas(newPrice) );
+		}else{
+			$(this).val('');
+		}
+	});
+	
 	/***************	BANK DEPOSIT HANDLERS	*********************/
 	$('.payment_details_btn').on('click', function(){
 		var thisdiv = $(this).siblings('div.payment_details_cont');
@@ -1454,8 +1478,6 @@ $(document).ready(function(){
 		var editbtn = thisform.children('.tx_modal_edit');
 		
 		var txStatus = $(this).closest('div.transac_title').siblings('div.transac_prod_wrapper').find('.tx_cont .tx_cont_col3 span.trans_alert');
-		
-		$('input.bankdeposit_amount').numeric({negative:false});
 		
 		thisdiv.modal({
 			escClose: false,
@@ -2777,3 +2799,5 @@ $(document).ready(function(){
     });
 	
 });
+
+

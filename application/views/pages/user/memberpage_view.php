@@ -1522,7 +1522,7 @@
 									<label for="ref_num"><span style="color:red;">*</span> Reference #: </label>
 									<input type="text" name="ref_num" value="<?php echo html_escape($transact['bd_details']['ref_num'])?>" <?php echo $disable ? 'disabled':''?>><br/>
 									<label for="amount"><span style="color:red;">*</span> Amount Deposited: </label>
-									<input type="text" name="amount" class="bankdeposit_amount" value="<?php echo html_escape($transact['bd_details']['amount'])?>" <?php echo $disable ? 'disabled':''?>><br/>
+									<input type="text" name="amount" class="bankdeposit_amount price" value="<?php echo html_escape(number_format($transact['bd_details']['amount'],2,'.',','))?>" <?php echo $disable ? 'disabled':''?>><br/>
 									<label for="date"><span style="color:red;">*</span> Date of Deposit: </label>
 									<input type="text" name="date" class="modal_date" value="<?php echo html_escape($transact['bd_details']['date_deposit'])?>" <?php echo $disable ? 'disabled':''?>><br/>
 									<label for="comment">Comments: </label>

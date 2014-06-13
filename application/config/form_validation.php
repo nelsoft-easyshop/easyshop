@@ -338,7 +338,7 @@ $config = array(
 					array(
 						'field' => 'amount',
 						'label' => 'Amount',
-						'rules' => 'trim|required|numeric'
+						'rules' => 'trim|required'
 					),
 					array(
 						'field' => 'date',
