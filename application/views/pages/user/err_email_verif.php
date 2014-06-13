@@ -23,7 +23,11 @@
         </div>
         <div class="success_content">
           <div>
-            <p>Failed to verify account information.</p>
+            <p style = 'text-decoration:underline;'>This verification link is invalid.</p>
+            <br/>
+            <p style='font-size: 14px; color:black;'>If you have recently requested for another verification link, please
+            make use of the link provided from the most recent e-mail response from Easyshop.ph.
+            </p>
           </div>
         </div>
       </div>
