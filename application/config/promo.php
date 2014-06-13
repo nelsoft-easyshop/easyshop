@@ -12,11 +12,19 @@ $config = array(
             'calculation_id' => '0',
             'purchase_limit' => PHP_INT_MAX,
             'payment_method' => array(PAYPAL,DRAGONPAY_OFFLINE,CASH_ON_DELIVERY,DRAGONPAY_ONLINE,DIRECT_BANK),
+            'banner' => '',
         ),
         '1' => array(
             'calculation_id' => '1',
             'purchase_limit' => '1',
             'payment_method' => array(PAYPAL),
+            'banner' => 'countdown',
+        ),
+        '2' => array(
+            'calculation_id' => '2',
+            'purchase_limit' => PHP_INT_MAX,
+            'payment_method' => array(PAYPAL,DRAGONPAY_OFFLINE,CASH_ON_DELIVERY,DRAGONPAY_ONLINE,DIRECT_BANK),
+            'banner' => 'fixeddiscount',
         ),
     )
 );
