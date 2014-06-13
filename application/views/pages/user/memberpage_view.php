@@ -865,7 +865,7 @@
                 
 				<div class="save_con">
 					<input type="submit" name="personal_profile_main" value="Save" id="ppm_btn"/>
-					<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" id="load_personalinfo" style="display:none"/>
+				
 				</div>
 
 				<input type="hidden" class="progress_update_hidden" value="">
@@ -976,7 +976,7 @@
 						<div class="btn_con">
 							<span class="cancel" name="cancel_address">Cancel</span>
 							<input type="submit" name="personal_profile_address_btn" class="save_address" value="save">
-							<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" id="load_address" style="position: relative; display:none"/>
+						
 						</div>
 					</div>
 					<div class="clear"></div>
@@ -1088,7 +1088,7 @@
 				<div class="btn_con">						
 					<span class="cancel" name="cancel_school">Cancel</span>
 					<input type="submit" class="save_school" name="personal_profile_school" value="Save"/>
-					<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" id="load_school" style="position: relative; display:none"/>
+				
 				</div>	
 			</div>
 			<div class="clear"></div>
@@ -1178,7 +1178,6 @@
 		<div class="btn_con">
 			<span class="cancel" name="cancel_work">Cancel</span>
 			<input type="submit" name="personal_profile_work_btn" value="Save" class="save_work">
-			<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" id="load_work" style="position: relative; display:none"/>
 		</div>	
 	</div>
 </div>

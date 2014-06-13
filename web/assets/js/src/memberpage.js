@@ -184,13 +184,11 @@ $(document).ready(function(){
 				error.appendTo(element.parent());
 		},	
 		submitHandler: function(form) {
-		   $('#load_personalinfo').css('display', 'inline');
 		   $('#mobile, #email').attr('disabled', false);
 		   $('#ppm_btn').attr('disabled', true);
 		   $.post(config.base_url+'memberpage/edit_personal',$('#personal_profile_main').serializeArray(),
 				function(data){
 					$('#ppm_btn').attr('disabled', false);
-					$('#load_personalinfo').css('display', 'none');
 					if(data == 1){
 						progress_update($('#personal_profile_main'));
 						
@@ -637,11 +635,11 @@ $(document).ready(function(){
 		},
 		ignore: ":hidden:not(select)",
 		submitHandler: function(form){
-			$('#load_address').css('display', 'inline');
+
 			$.post(config.base_url+'memberpage/edit_address',$('#personal_profile_address').serializeArray(),
 				function(data){
 					$(form).find('input[type="submit"]').attr('disabled', false);
-					$('#load_address').css('display', 'none');
+
 					
 					try{
 						var obj = jQuery.parseJSON(data);
@@ -771,11 +769,10 @@ $(document).ready(function(){
 				error.appendTo(element.parent());
 		},
 		submitHandler: function(form) {
-		   $('#load_school').css('display', 'inline');
+
 		   $.post(config.base_url+'memberpage/edit_school',$('#personal_profile_school').serializeArray(),
 				function(data){
 					$(form).find('input[type="submit"]').attr('disabled', false);
-					$('#load_school').css('display', 'none');
 					
 					try{
 						var obj = jQuery.parseJSON(data);
@@ -913,10 +910,10 @@ $(document).ready(function(){
 				//console.log(element.parent());
 		},
 		submitHandler: function(form){
-			$('#load_work').css('display','inline');
+
 			$.post(config.base_url+'memberpage/edit_work', $('#personal_profile_work').serializeArray(),
 				function(data){
-					$('#load_work').css('display','none');
+
 					$(form).find('input[type="submit"]').attr('disabled', false);
 					
 					try{
