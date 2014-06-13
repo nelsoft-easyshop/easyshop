@@ -182,6 +182,22 @@
 			<div class="grid-11">
         
 				<ul class="bxslider_slides">
+					<li>
+						<div>
+							<img src="<?=base_url()?>assets/images/landingpage/img_cd_others.png" class="img_cd_others">
+							<div class="cd_others_txt">
+								<p>Enjoy a special discounts</p>
+								<p>from our partners!</p>
+								<p>(June 15-17,2014.)</p>
+							</div>
+							<div>
+								<div class="cd_others2_con">
+									<img src="<?=base_url()?>assets/images/landingpage/img_cd_michaela.png" class="img_cd_others2">
+									<img src="<?=base_url()?>assets/images/landingpage/img_cd_others2.png" class="img_cd_others3">
+								</div>
+							</div>
+						</div>
+					</li>
 					<li class="slide-1">
 						<div class="product_content">
 							<div>
