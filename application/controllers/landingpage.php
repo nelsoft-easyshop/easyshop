@@ -23,22 +23,7 @@ class Landingpage extends MY_Controller
 		$this->load->view('pages/landingpage', $data);
 	}
 	
-	/*
-	 *	Subscription Handler
-	 */
-	public function subscribe()
-	{
-		if($this->input->post('subscribe_btn') && $this->form_validation->run('subscription_form')){
-			$data['email'] = $this->input->post('subscribe_email');
-			$result = $this->register_model->subscribe($data['email']);
-			
-			// Send notification email to user
-			$this->register_model->sendNotification($data, 'subscribe');
-			
-			echo $result ? 1 : 0;
-		}
-	}
-	
+  	
 	/*
 	 *	Registration Handler
 	 */
@@ -200,12 +185,8 @@ class Landingpage extends MY_Controller
         }
         else{
             if($action === 'register'){
-            	$data['content'] = 'You have successfully registered!';
+                $data['content'] = 'You have successfully registered!';
                 $data['sub_content'] =  'You have successfully registered with Easyshop.ph. Verify your e-mail to begin selling your products online.';
-            }
-            else if($action === 'subscribe'){
-                $data['content'] = 'You have successfully Subscribed!';
-                $data['sub_content'] =  'Thank you for choosing to keep in touch with Easyshop.ph. Expect to hear many things from us soon.';
             }
             else{
                 redirect('', 'refresh');  //redirect to index page
@@ -213,6 +194,7 @@ class Landingpage extends MY_Controller
             $this->load->view('pages/landingpage_success', $data);
         }
     } 
+
     
 }// close class
 

@@ -29,19 +29,7 @@ class Home extends MY_Controller {
         $this->load->view('templates/footer_full');
 	}
 	
-	public function underConstructionSubscribe()
-	{
-        $this->load->model('register_model');
-		if( $this->input->post('uc_subscribe') && $this->form_validation->run('subscription_form')){
-			$data['email'] = $this->input->post('subscribe_email');
-			$this->register_model->subscribe($data['email']);
-			
-			// Send notification email to user
-			$this->register_model->sendNotification($data, 'subscribe');
-			
-			redirect(base_url().'home/under_construction');
-		}
-	}
+
 	
 	public function pagenotfound(){
 		$data = array('title' => 'Page Not Found | Easyshop.ph',);
@@ -95,6 +83,31 @@ class Home extends MY_Controller {
         $this->load->view('pages/web/contact');
         $this->load->view('templates/footer_full');
     }
+    
+    /*
+	 *	Subscription Handler
+	 */
+	public function subscribe()
+	{
+		if($this->input->post('subscribe_btn') && $this->form_validation->run('subscription_form')){
+            $this->load->model('register_model');
+			$data['email'] = $this->input->post('subscribe_email');
+            $result = $this->register_model->subscribe($data['email']);
+			// Send notification email to user 
+			if($result){		
+              $this->register_model->sendNotification($data, 'subscribe');
+              $data['title'] = 'Successful Subscription | Easyshop.ph';
+              $data['content'] = 'You have successfully Subscribed!';
+              $data['sub_content'] =  'Thank you for choosing to keep in touch with Easyshop.ph. Expect to hear many things from us soon.';
+              $this->load->view('pages/landingpage_success', $data);
+            }else{
+                redirect('home','refresh');
+            }
+		}else{
+            redirect('home','refresh');
+        }
+
+	}
 }
 
 /* End of file home.php */

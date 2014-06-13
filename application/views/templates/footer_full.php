@@ -10,7 +10,10 @@
 		  -->
           <div class="signup">
 			<h2>Signup for Newsletter</h2>
-            <input type="text"><input type="submit" value="Submit">
+            <?php echo form_open('subscribe');?>
+			<input type="text" name="subscribe_email"><input type="submit" value="Submit" name="subscribe_btn">
+            <?php echo form_close();?>
+
           </div>
         </div>
 
