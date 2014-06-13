@@ -415,6 +415,11 @@ div.pass-bar {
     padding-bottom: 5px;
 }
 
+.t_and_c ul {
+    font-size:0.75em;
+    margin-left: 20px;
+}
+
 
 .t_and_c p {
     padding-bottom: 20px;

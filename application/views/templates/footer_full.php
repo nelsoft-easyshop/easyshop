@@ -9,18 +9,18 @@
           <span class="span_bg pinterest"></span>
 		  -->
           <div class="signup">
-            <!--
 			<h2>Signup for Newsletter</h2>
             <input type="text"><input type="submit" value="Submit">
-			-->
           </div>
         </div>
 
         <div class="about_footer">
           <h2>About</h2>
           <ul>
+            <li><a href="<?=base_url()?>contact">Contact Us</a></li>
             <li><a href="<?=base_url()?>policy">Privacy Policy</a></li>
             <li><a href="<?=base_url()?>terms">Terms &amp; Conditions</a></li>
+            <li><a href="<?=base_url()?>faq">F.A.Q.</a></li>
           </ul>
         </div>
 

@@ -109,7 +109,7 @@ $route['(?i)deals_more'] = 'product/category_promo_more';
 $route['(?i)policy'] = 'home/policy';
 $route['(?i)terms'] = 'home/terms';
 $route['(?i)faq'] = 'home/faq';
-$route['(?i)about'] = 'home/about';
+$route['(?i)contact'] = 'home/contact';
 
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */

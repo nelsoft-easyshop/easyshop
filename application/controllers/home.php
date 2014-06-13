@@ -68,7 +68,7 @@ class Home extends MY_Controller {
         $data = array('title' => 'Privacy Policy | Easyshop.ph',);
         $data = array_merge($data, $this->fill_header());
 		$this->load->view('templates/header', $data);
-        $this->load->view('pages/policy');
+        $this->load->view('pages/web/policy');
         $this->load->view('templates/footer_full');
     }
     
@@ -76,23 +76,23 @@ class Home extends MY_Controller {
         $data = array('title' => 'Terms and Conditions | Easyshop.ph',);
         $data = array_merge($data, $this->fill_header());
 		$this->load->view('templates/header', $data);
-        $this->load->view('pages/terms');
+        $this->load->view('pages/web/terms');
         $this->load->view('templates/footer_full');
     }
     
     public function faq(){
-        $data = array('title' => 'F.A.Q | Easyshop.ph',);
+        $data = array('title' => 'F.A.Q. | Easyshop.ph',);
         $data = array_merge($data, $this->fill_header());
 		$this->load->view('templates/header', $data);
-        $this->load->view('pages/faq');
+        $this->load->view('pages/web/faq');
         $this->load->view('templates/footer_full');
     }
     
-    public function about(){
-        $data = array('title' => 'About us | Easyshop.ph',);
+    public function contact(){
+        $data = array('title' => 'Contact us | Easyshop.ph',);
         $data = array_merge($data, $this->fill_header());
 		$this->load->view('templates/header', $data);
-        $this->load->view('pages/about');
+        $this->load->view('pages/web/contact');
         $this->load->view('templates/footer_full');
     }
 }
