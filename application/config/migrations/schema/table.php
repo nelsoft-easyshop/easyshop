@@ -4106,7 +4106,7 @@ return array(
     
     "es_product_item_lock" => array(
         "create" => "CREATE TABLE `es_product_item_lock` (
-              `id_item_lock` int(10) NOT NULL,
+              `id_item_lock` int(10) NOT NULL AUTO_INCREMENT,
               `order_id` int(10) unsigned NOT NULL,
               `product_item_id` int(10) unsigned NOT NULL,
               `qty` int(10) DEFAULT '0',
@@ -4287,7 +4287,7 @@ return array(
     "es_address" => array(
         "create" =>
             "CREATE TABLE `es_address` (
-              `id_address` int(10) NOT NULL,
+              `id_address` int(10) NOT NULL AUTO_INCREMENT,
               `id_member` int(10) unsigned NOT NULL,
               `stateregion` int(10) unsigned DEFAULT '0',
               `city` int(10) unsigned DEFAULT '0',
