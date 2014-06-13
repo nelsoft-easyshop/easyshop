@@ -378,7 +378,7 @@ FROM
          LEFT JOIN es_product_item pi ON pi.product_id = p.id_product
          LEFT JOIN (SELECT product_id, SUM(order_quantity) as sum_quantity FROM es_order_product op
                     LEFT JOIN es_order o ON o.id_order = op.order_id
-                    WHERE status != 2 AND op.seller_id != o.buyer_id AND o.order_status != 99 GROUP BY product_id) order_product_temp
+                    WHERE op.status NOT IN (2,5,6) AND op.seller_id != o.buyer_id AND o.order_status != 99 GROUP BY product_id) order_product_temp
                     ON order_product_temp.product_id = p.id_product
          WHERE p.member_id = :id AND p.is_draft = 0
          GROUP BY p.`id_product`, p.`slug`, p.`name`, p.`brief`, p.`price`, p.`member_id`, i.product_image_path, p.`is_delete`,p.`cat_id`,p.lastmodifieddate,order_product_temp.sum_quantity
@@ -397,7 +397,7 @@ FROM
          LEFT JOIN es_product_item pi ON pi.product_id = p.id_product
          LEFT JOIN (SELECT product_id, SUM(order_quantity) as sum_quantity FROM es_order_product op
                     LEFT JOIN es_order o ON o.id_order = op.order_id
-                    WHERE status != 2 AND op.seller_id != o.buyer_id AND o.order_status != 99 GROUP BY product_id) order_product_temp
+                    WHERE op.status NOT IN (2,5,6) AND op.seller_id != o.buyer_id AND o.order_status != 99 GROUP BY product_id) order_product_temp
                     ON order_product_temp.product_id = p.id_product
          WHERE p.member_id = :id AND p.is_draft = 0 AND :last_product > p.lastmodifieddate 
          GROUP BY p.`id_product`, p.`slug`, p.`name`, p.`brief`, p.`price`, p.`member_id`, i.product_image_path, p.`is_delete`,p.`cat_id`,p.lastmodifieddate,order_product_temp.sum_quantity
