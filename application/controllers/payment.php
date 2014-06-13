@@ -78,7 +78,7 @@ class Payment extends MY_Controller{
         }
 
         $qtySuccess = $this->resetPriceAndQty();
-
+        $configPromo = $this->config->item('Promo');
         $carts = $this->session->all_userdata();
         $itemArray = $carts['choosen_items'];
         $member_id =  $this->session->userdata('member_id');
@@ -97,6 +97,7 @@ class Payment extends MY_Controller{
         $codCount = 0; 
         $promoCount = 0;
         $data['shippingDetails'] = false; 
+
 
         foreach ($itemArray as $key => $value) {
 
@@ -127,30 +128,28 @@ class Payment extends MY_Controller{
             $itemArray[$value['rowid']]['availability'] = ($availability == "Available" ? true : false);
             $itemArray[$value['rowid']]['seller_username'] = $sellerDetails['username'];
         }
-
-        $paymentType = array(
-            'cdb'=>'Credit or Debit Card',
-            'paypal'=>'Paypal',
-            'dragonpay'=>'Dragon Pay',
-            'dbd'=>'Direct Bank Deposit',
-            'cod'=>'Cash on Delivery'
-            );
-
+        
+        
+        $paymentType = $configPromo[0]['payment_method'];
+        $purchaseLimit = $configPromo[0]['purchase_limit'];
         $promoteSuccess = true;
+
         if($promoCount <= 0){
             $paymentType = $paymentType;
         }else{
             if($promoCount == $itemCount){
-                if($itemCount == 1){
-                    $paymentType = array(
-                        'cdb'=>'Credit or Debit Card',
-                        'paypal'=>'Paypal'
-                        );  
-                }else{
-                    $promoteSuccess = false;    
-                }
+                $paymentType = $configPromo[1]['payment_method'];
+                $purchaseLimit = $configPromo[1]['purchase_limit'];
             }else{
                 $promoteSuccess = false;
+            }
+        }
+
+        foreach ($itemArray as $key => $value) {
+            $qty = $value['qty'];
+            if($purchaseLimit < $qty){
+                $promoteSuccess = false;
+                break;
             }
         }
 
