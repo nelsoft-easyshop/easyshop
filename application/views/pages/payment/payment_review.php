@@ -46,20 +46,20 @@
                         <a href="javascript:void(0);"  class="link_address grey_btn">Change Shipping Address</a> 
                     </div>
 
-                    <?php if($success && $qtysuccess): ?>
+                    <?php if($success && $qtysuccess && $promoteSuccess): ?>
                     <div>
                         <p class="fl_pay"><strong>How would you like to pay?</strong></p>
                         <ul class="idTabs payment_options_tabs">
-                            <li><a href="#cdb">Credit or Debit Card</a></li>
-                            <li><a href="#paypal">Paypal</a></li>
-                            <li><a href="#dragonpay">Dragon Pay</a></li>
-                            <li><a href="#dbd">Direct Bank Deposit</a></li>
-                            <li><a href="#cod">Cash on Delivery</a></li>
+                            <?php foreach($paymentType as $key => $value):?>
+                                <li><a href="#<?=$key;?>"><?=$value;?></a></li> 
+                            <?php endforeach; ?>
                         </ul>
 
+                   <?php foreach($paymentType as $key => $value):?> 
 
 <!-- #### CREDIT CARD / DEBIT CARD #### -->
-
+                        
+                        <?php if($key == 'cdb'): ?>
                         <div id="cdb" class="payment_inner_content">
                             <p class="cod_desc"><strong>Pay using  Credit or Debit Card. You will be redirected to the PayPal system to complete the payment.</strong></p>  <br />
                             <a href="https://www.paypal.com/webapps/mpp/paypal-popup" title="How PayPal Works" onclick="javascript:window.open('https://www.paypal.com/webapps/mpp/paypal-popup','WIPaypal','toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width=700, height=350'); return false;"><img src="https://www.paypalobjects.com/webstatic/mktg/logo/pp_cc_mark_37x23.jpg" border="0" alt="PayPal Logo" style="vertical-align:middle;text-decoration: underline;"> What is PayPal?</a><br/>
@@ -84,9 +84,10 @@
                             <div style="clear:both"></div>
                             <p class="notify">You will be notified regarding your order status via email or sms.</p>
                         </div>
+                        <?php endif; ?>
 
 <!-- #### PAYPAL #### -->
-
+                        <?php if($key == 'paypal'): ?>
                         <div id="paypal" class="payment_inner_content">
                             <p class="cod_desc"><strong>Pay using your PayPal account. You will be redirected to the PayPal system to complete the payment.</strong></p>  <br />
                             <a href="https://www.paypal.com/webapps/mpp/paypal-popup" title="How PayPal Works" onclick="javascript:window.open('https://www.paypal.com/webapps/mpp/paypal-popup','WIPaypal','toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width=700, height=350'); return false;"><img src="https://www.paypalobjects.com/webstatic/mktg/logo/pp_cc_mark_37x23.jpg" border="0" alt="PayPal Logo" style="vertical-align:middle;text-decoration: underline;"> What is PayPal?</a><br />
@@ -111,16 +112,18 @@
                             <div style="clear:both"></div>
                             <p class="notify">You will be notified regarding your order status via email or sms.</p>
                         </div>
+                        <?php endif; ?>
 
 <!-- #### DRAGON PAY #### -->
-
+                        <?php if($key == 'dragonpay'): ?>
                         <div id="dragonpay" class="payment_inner_content">
                             <p class="chck_privacy"><input type="checkbox" checked id="chk_dp" name='chk_dp'> <label for='chk_dp'>I acknowledge I have read and understood Easyshop.ph's  </label><a href="">Privacy Policy</a>.</p><br>
                             <input type="button" class="btnDp orange_btn3" value="Pay via DRAGON PAY">
                         </div>
+                        <?php endif; ?>
 
 <!-- #### DIRECT BANK DEPOSIT #### -->
-
+                        <?php if($key == 'dbd'): ?>
                         <div id="dbd" class="payment_inner_content">
                             <p class="cod_desc"><strong>You can pay in cash to our courier when you receive the goods at your doorstep.</strong></p><br>
                             <?php 
@@ -133,10 +136,11 @@
                             <?php echo form_close();?>
                             <p class="notify">You will be notified regarding your order status via email or sms.</p>
                         </div>
+                        <?php endif; ?>
                         
 
 <!-- #### CASH ON DELIVERY #### -->
-
+                        <?php if($key == 'cod'): ?>
                         <div id="cod" class="payment_inner_content">
                             <?php if($codsuccess): ?>
 
@@ -178,21 +182,25 @@
 
                             <?php endif; ?>  
                         </div>
+                        <?php endif; ?>
 
 <!-- #### MORE PAYMENT HERE! #### -->
-
+                    <?php endforeach; ?>
                     </div>
 
                     
                     <?php else: ?>
 
-                        <?php if(!$success && $qtysuccess):?>
+                        <?php if(!$success && $qtysuccess && $promoteSuccess):?>
                             <br/>
                             <span style='padding:8px; font-size: 12px; font-weight:bold;color:red'>NOTE!: One or more of your item(s) is unavailable in your location. </span>
                       
-                        <?php elseif($success && !$qtysuccess):?>
+                        <?php elseif($success && !$qtysuccess  && $promoteSuccess):?>
                             <br/>
                             <span style='padding:8px; font-size: 12px; font-weight:bold;color:red'>NOTE!: One or more of your item(s) is not available for desired quantity you want. </span>
+                        <?php elseif($success && $qtysuccess  && !$promoteSuccess):?>
+                            <br/>
+                            <span style='padding:8px; font-size: 12px; font-weight:bold;color:red'>NOTE!: You only allow to checkout one promo item. </span>
                         <?php else:?>
                             <br/>
                             <span style='padding:8px; font-size: 12px; font-weight:bold;color:red'>NOTE!: One or more of your item(s) is unavailable in your location. </span>
@@ -216,7 +224,8 @@
                     $shipping_fee = 0;
                     foreach ($cat_item as $key => $value):
                         $total += $value['subtotal'] ;
-                        $shipping_fee = (isset($value['shipping_fee'])) ? $shipping_fee += $value['shipping_fee'] : $shipping_fee;
+                        $shipping_fee = (isset($value['shipping_fee'])) ? $shipping_fee += $value['shipping_fee'] * $value['qty'] : $shipping_fee * $value['qty'];
+                         $value['qty'];
                     ?>
                     <div class="order_sum_content">
                         <div class="sum_con_name"><?php echo $value['name'] ?></div>

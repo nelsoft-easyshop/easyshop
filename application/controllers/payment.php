@@ -72,7 +72,7 @@ class Payment extends MY_Controller{
             redirect(base_url().'home', 'refresh');
         }
 
-        $qtysuccess = $this->resetPriceAndQty();
+        $qtySuccess = $this->resetPriceAndQty();
 
         $carts = $this->session->all_userdata();
         $itemArray = $carts['choosen_items'];
@@ -88,23 +88,22 @@ class Payment extends MY_Controller{
             $majorIsland = $cityDetails['parent_id'];
         }
         $itemCount = count($itemArray);
-        $successcount = 0;
+        $successCount = 0;
         $codCount = 0; 
+        $promoCount = 0;
         $data['shippingDetails'] = false; 
-
 
         foreach ($itemArray as $key => $value) {
 
             $productId = $value['id']; 
             $itemId = $value['product_itemID']; 
-
             $availability = "Not Available";
 
             if($city > 0){  
                 $details = $this->payment_model->getShippingDetails($productId,$itemId,$city,$region,$majorIsland);
 
                 if(count($details) >= 1){
-                    $successcount++;
+                    $successCount++;
                     $availability = "Available";
                     $itemArray[$value['rowid']]['shipping_fee'] = $details[0]['price'];
                 } 
@@ -116,19 +115,45 @@ class Payment extends MY_Controller{
 
                 $data['shippingDetails'] = true; 
             }
+            $promoCount = ($value['is_promote'] == "1" ? $promoCount += 1 : $promoCount += 0);
           
-                $seller = $value['member_id'];
-                $sellerDetails = $this->memberpage_model->get_member_by_id($seller);
-                $itemArray[$value['rowid']]['availability'] = ($availability == "Available" ? true : false);
-                $itemArray[$value['rowid']]['seller_username'] = $sellerDetails['username'];
+            $seller = $value['member_id'];
+            $sellerDetails = $this->memberpage_model->get_member_by_id($seller);
+            $itemArray[$value['rowid']]['availability'] = ($availability == "Available" ? true : false);
+            $itemArray[$value['rowid']]['seller_username'] = $sellerDetails['username'];
         }
 
+        $paymentType = array(
+            'cdb'=>'Credit or Debit Card',
+            'paypal'=>'Paypal',
+            'dragonpay'=>'Dragon Pay',
+            'dbd'=>'Direct Bank Deposit',
+            'cod'=>'Cash on Delivery'
+            );
+
+        $promoteSuccess = true;
+        if($promoCount <= 0){
+            $paymentType = $paymentType;
+        }else{
+            if($promoCount == $itemCount){
+                $paymentType = array(
+                    'cdb'=>'Credit or Debit Card',
+                    'paypal'=>'Paypal'
+                    );
+            }else{
+                $promoteSuccess = false;
+            }
+        }
+
+        $data['paymentType'] = $paymentType;
+        $data['promoteSuccess'] = $promoteSuccess;
+
         if(!count($itemArray) <= 0){ 
-  
+            
             $data['cat_item'] = $itemArray;
             $data['title'] = 'Payment | Easyshop.ph';
-            $data['qtysuccess'] = ($qtysuccess == $itemCount ? true : false);
-            $data['success'] = ($successcount == $itemCount ? true : false);
+            $data['qtysuccess'] = ($qtySuccess == $itemCount ? true : false);
+            $data['success'] = ($successCount == $itemCount ? true : false);
             $data['codsuccess'] = ($codCount == $itemCount ? true : false);
 
             $data = array_merge($data,$this->fill_header()); 
@@ -137,7 +162,7 @@ class Payment extends MY_Controller{
 
             $this->load->view('templates/header', $data);
             $this->load->view('pages/payment/payment_review' ,$data);  
-            $this->load->view('templates/footer' ,$data);  
+            $this->load->view('templates/footer');  
         }else{
            redirect('/cart/', 'refresh'); 
        }
@@ -207,13 +232,13 @@ class Payment extends MY_Controller{
         $ip = $this->user_model->getRealIpAddr();   
         $transactionID = "";
         $prepareData = $this->processData($itemList,$city,$region,$majorIsland);
-    
         $shipping_amt = $prepareData['othersumfee'];
+
         $ItemTotalPrice = $prepareData['totalPrice'] - $shipping_amt;
         $productstring = $prepareData['productstring'];
         $itemList = $prepareData['newItemList'];
         $toBeLocked = $prepareData['toBeLocked'];
-        $grandTotal= $ItemTotalPrice+$shipping_amt;
+        $grandTotal= $ItemTotalPrice+$shipping_amt; 
         $thereIsPromote = $prepareData['thereIsPromote'];
       
         if($thereIsPromote <= 0){
@@ -675,7 +700,6 @@ class Payment extends MY_Controller{
                 $locked = $this->lockItem($toBeLocked,$orderId,'delete');
                 $paymentType = 4;
                 $apiResponse = json_encode($apiResponseArray);
-                
             }
              
             $complete = $this->payment_model->updatePaymentIfComplete($orderId,$apiResponse,$transactionID,$paymentType);
@@ -951,7 +975,7 @@ class Payment extends MY_Controller{
             $productItem =  $value['product_itemID'];
             $details = $this->payment_model->getShippingDetails($productId,$productItem,$city,$region,$majorIsland);
             $shipping_amt = $details[0]['price'];
-            $otherFee = $tax_amt + $shipping_amt;
+            $otherFee = ($tax_amt + $shipping_amt) * $orderQuantity;
             $othersumfee += $otherFee;
             $total =  $value['subtotal'] + $otherFee;
             $productstring .= '<||>'.$sellerId."{+}".$productId."{+}".$orderQuantity."{+}".$price."{+}".$otherFee."{+}".$total."{+}".$productItem;
