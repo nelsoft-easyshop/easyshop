@@ -3810,7 +3810,7 @@ return array(
    
     "es_messages" => array(
         "create" => "CREATE TABLE `es_messages` (
-              `id_msg` int(10) NOT NULL,
+              `id_msg` int(10) NOT NULL AUTO_INCREMENT,
               `to_id` int(10) unsigned NOT NULL,
               `from_id` int(10) unsigned NOT NULL,
               `time_sent` datetime DEFAULT NULL,
