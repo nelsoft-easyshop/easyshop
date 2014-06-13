@@ -1935,9 +1935,11 @@ return array(
             (13,1,'2014-06-12','Independence Day'),
             (14,1,'2014-08-25','National Heroes Day'),
             (15,2,'2014-01-31','Chinese New Year'),
-            (16,1,'2014-02-08','sample'),
-            (17,3,'2014-02-14','sample 2'),
-            (18,4,'2014-02-11','sample 3');",
+            (16,1,'2014-01-01','New Years Day'),
+            (17,1,'2014-02-25','EDSA Revolution'),
+            (18,1,'2014-04-09','Araw ng Kagitingan'),
+            (19,2,'2014-12-24','Christmas Eve'),
+            (20,2,'2014-12-26','Post Christmas');",
     ),
 
     
