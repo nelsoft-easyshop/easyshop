@@ -54,6 +54,30 @@ class payment_model extends CI_Model
     	$sth->execute();
     }
 
+    public function releaseAllLock($member_id)
+    {
+    	$query = "
+		DELETE 
+		FROM
+		  `es_product_item_lock` 
+		WHERE id_item_lock IN 
+		  (SELECT 
+		    * FROM
+		    (SELECT 
+		      b.`id_item_lock` 
+		    FROM
+		      es_order a
+		      , `es_product_item_lock` b 
+		    WHERE a.buyer_id = :member_id 
+		      AND a.`order_status` = 99 
+		      AND a.`id_order` = b.`order_id`) AS tbl)
+    	";
+
+    	$sth = $this->db->conn_id->prepare($query);
+    	$sth->bindParam(':member_id',$member_id,PDO::PARAM_INT); 
+    	$sth->execute();
+    }
+
     public function lockItem($itemId,$qty,$orderId,$action)
     {
     	$query = "

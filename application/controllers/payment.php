@@ -98,7 +98,6 @@ class Payment extends MY_Controller{
         $promoCount = 0;
         $data['shippingDetails'] = false; 
 
-
         foreach ($itemArray as $key => $value) {
 
             $productId = $value['id']; 
@@ -213,6 +212,7 @@ class Payment extends MY_Controller{
 
 
         $member_id =  $this->session->userdata('member_id');
+        $remove = $this->payment_model->releaseAllLock($member_id);
         $address = $this->memberpage_model->get_member_by_id($member_id); 
         $name = $address['consignee'];
         $street = $address['c_address']; 
@@ -585,7 +585,8 @@ class Payment extends MY_Controller{
         if($qtysuccess != $productCount){
             echo  '{"e":"0","m":"Item quantity not available."}';
             exit();
-        }  
+        } 
+        $remove = $this->payment_model->releaseAllLock($member_id);
         $address = $this->memberpage_model->get_member_by_id($member_id); 
         $email = $address['email'];
 
