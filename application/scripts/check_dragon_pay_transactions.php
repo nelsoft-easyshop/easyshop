@@ -11,7 +11,7 @@ if (mysqli_connect_errno()) {
 
 $sql = "
 SELECT 
-    SPLIT_STRING(transaction_id, '-',1) AS txnid
+    transaction_id AS txnid
     ,transaction_id AS tid
     , dateadded  
 FROM 
