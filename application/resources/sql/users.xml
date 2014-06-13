@@ -258,11 +258,11 @@
 </select>
 
 <select id="getTransactionDetails">
-	SELECT o.id_order, o.buyer_id, buyer.username as buyer, DATE_FORMAT(o.dateadded, "%D %M %Y") as dateadded, o.order_status as transac_stat, fb.for_memberid, fb.feedb_msg, op.id_order_product, op.product_id, op.seller_id, seller.username as seller, p.name, op.order_quantity, op.total as price, op.status, p.slug, sc.comment as shipping_comment, sc.courier, sc.tracking_num, sc.delivery_date, sc.expected_date, DATE_FORMAT(sc.datemodified, "%D %M %Y") as datemodified,
+	SELECT o.id_order, o.buyer_id, buyer.username as buyer, DATE_FORMAT(o.dateadded, "%D %M %Y") as dateadded, o.order_status as transac_stat, fb.for_memberid, fb.feedb_msg, op.id_order_product, op.product_id, op.seller_id, seller.username as seller, p.name, op.order_quantity, op.total as price, op.status, p.slug, sc.comment as shipping_comment, sc.courier, sc.tracking_num, DATE_FORMAT(sc.delivery_date, "%Y-%b-%d") as delivery_date, DATE_FORMAT(sc.expected_date, "%Y-%b-%d") as expected_date, DATE_FORMAT(sc.datemodified, "%D %M %Y") as datemodified,
 		pi.product_image_path, attr.name as attr_name, pattr.attr_value, pitemattr.is_other, oah.field_name, oad.value_name, buyer.email as buyer_email, 
 		badd.consignee, badd.mobile, badd.telephone, l0.location as stateregion, l1.location as city, badd.address as fulladd, COALESCE(badd.lat, '0') as lat, COALESCE(badd.lng, '0') as lng,
 		o.invoice_no, o.payment_method_id as payment_method,
-		pbd.bank, pbd.ref_num, pbd.amount, pbd.date_deposit, pbd.comment, DATE_FORMAT(pbd.datemodified, "%D %M %Y") as bd_datemodified, pbd.is_invalid,
+		pbd.bank, pbd.ref_num, pbd.amount, DATE_FORMAT(pbd.date_deposit, "%Y-%b-%d") as date_deposit, pbd.comment, DATE_FORMAT(pbd.datemodified, "%D %M %Y") as bd_datemodified, pbd.is_invalid,
 		op.is_reject 
 	FROM es_order o
 	INNER JOIN es_order_product op 

@@ -509,7 +509,7 @@ class Memberpage extends MY_Controller
 					'bank' => $this->input->post('bank'),
 					'ref_num' => $this->input->post('ref_num'),
 					'amount' => $this->input->post('amount'),
-					'date_deposit' => $this->input->post('date'),
+					'date_deposit' => date("Y-m-d H:i:s", strtotime($this->input->post('date'))),
 					'comment' => $this->input->post('comment')
 				);
 				$result = $this->payment_model->addBankDepositDetails($postData);
@@ -536,8 +536,8 @@ class Memberpage extends MY_Controller
 				'transact_num' => $this->input->post('transact_num'),
 				'courier' => $this->input->post('courier'),
 				'tracking_num' => $this->input->post('tracking_num'),
-				'expected_date' => $this->input->post('expected_date'),
-				'delivery_date' => $this->input->post('delivery_date')
+				'expected_date' => date("Y-m-d H:i:s", strtotime($this->input->post('expected_date'))),
+				'delivery_date' => date("Y-m-d H:i:s", strtotime($this->input->post('delivery_date')))
 			);
 			
 			$result = $this->payment_model->checkOrderProductBasic($postData);
