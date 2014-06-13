@@ -118,10 +118,10 @@ class Cart extends MY_Controller{
         }
         else{
             $data=$this->check_prod($_POST['id'],$go,$_POST['qty'])['data'];
-            $has_promo = $this->cart_model->check_promo($carts,"1");
-            if($has_promo === true && $data['is_promote'] == "1"){
-                $result="You can only buy 1 promo item.";
+            if(!$this->cart_model->isCartInsertPromoAllow($carts, $data)){
+                $result = '<b>This item can no longer be added to your cart. </b><hr/> This item or another item in your cart can only be purchased individually. ';
             }
+
             else if(empty($carts)){
                 $this->cart->insert($data);
                 $result= sha1(md5("tanggap"));

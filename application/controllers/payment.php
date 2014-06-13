@@ -63,11 +63,10 @@ class Payment extends MY_Controller{
         $id = $this->session->userdata('member_id');
         $this->cart_model->save_cartitems($cart_items,$id);
 
-        $has_promo = $this->cart_model->check_promo($cart_contentss['choosen_items'],"0");
-        if($has_promo == true){
-            $res = "You can only purchase promo items";
+        $promo_allow = $this->cart_model->isCartCheckoutPromoAllow($cart_contentss['choosen_items']);
+        if(!$promo_allow){
+            $res = "Some items in your cart can only be purchased individually. <hr/><b> Remove these items from your cart to proceed with your checkout. </b> ";
         }
-
         echo json_encode($res);
     }
 
@@ -95,9 +94,8 @@ class Payment extends MY_Controller{
         $itemCount = count($itemArray);
         $successCount = 0;
         $codCount = 0; 
-        $promoCount = 0;
         $data['shippingDetails'] = false; 
-
+        
         foreach ($itemArray as $key => $value) {
 
             $productId = $value['id']; 
@@ -120,39 +118,34 @@ class Payment extends MY_Controller{
 
                 $data['shippingDetails'] = true; 
             }
-            $promoCount = ($value['is_promote'] == "1" ? $promoCount += 1 : $promoCount += 0);
-          
+
             $seller = $value['member_id'];
             $sellerDetails = $this->memberpage_model->get_member_by_id($seller);
             $itemArray[$value['rowid']]['availability'] = ($availability == "Available" ? true : false);
             $itemArray[$value['rowid']]['seller_username'] = $sellerDetails['username'];
         }
         
-        
-        $paymentType = $configPromo[0]['payment_method'];
-        $purchaseLimit = $configPromo[0]['purchase_limit'];
+        $paymentType = $configPromo[0]['payment_method'];        
         $promoteSuccess = true;
-
-        if($promoCount <= 0){
-            $paymentType = $paymentType;
+        
+        /*  
+         *   Changed code to be able to adopt for any promo type
+         */
+        if($this->cart_model->isCartCheckoutPromoAllow($itemArray)){    
+            foreach ($itemArray as $key => $value) {
+                $qty = $value['qty'];
+                $paymentType = array_intersect ( $paymentType , $configPromo[$value['promo_type']]['payment_method']);
+                $purchase_limit = $configPromo[$value['promo_type']]['purchase_limit'];
+                if($purchase_limit < $qty){
+                    $promoteSuccess = false;
+                    break;
+                }
+            }
         }else{
-            if($promoCount == $itemCount){
-                $paymentType = $configPromo[1]['payment_method'];
-                $purchaseLimit = $configPromo[1]['purchase_limit'];
-            }else{
-                $promoteSuccess = false;
-            }
+            $promoteSuccess = false;
         }
 
-        foreach ($itemArray as $key => $value) {
-            $qty = $value['qty'];
-            if($purchaseLimit < $qty){
-                $promoteSuccess = false;
-                break;
-            }
-        }
-
-        $data['paymentType'] = $paymentType;
+        $data['paymentType'] = $paymentType;        
         $data['promoteSuccess'] = $promoteSuccess;
 
         if(!count($itemArray) <= 0){ 

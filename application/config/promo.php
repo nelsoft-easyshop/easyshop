@@ -13,6 +13,7 @@ $config = array(
                             'cod'=>'Cash on Delivery'
             ),
             'banner' => '',
+            'cart_solo_restriction' => false,
         ),
         '1' => array(
             'calculation_id' => '1',
@@ -22,6 +23,7 @@ $config = array(
                             'paypal'=>'Paypal'
             ),
             'banner' => 'countdown',
+            'cart_solo_restriction' => true,
         ),
         '2' => array(
             'calculation_id' => '2',
@@ -34,6 +36,7 @@ $config = array(
                             'cod'=>'Cash on Delivery'
             ),
             'banner' => 'fixeddiscount',
+            'cart_solo_restriction' => false,
         ),
     )
 );

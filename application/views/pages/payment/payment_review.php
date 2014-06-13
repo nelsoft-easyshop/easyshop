@@ -71,7 +71,8 @@
                             <?php else: ?> 
 
                                 <br/> <br/>
-                                <p class="chck_privacy"><input type="checkbox" checked id="chk_paypal2" name='chk_paypal2'><label for='chk_paypal2'> I acknowledge I have read and understood Easyshop.ph's</label><a href="<?=base_url()?>policy" target='_blank'>Privacy Policy</a>.</p><br>
+                                <p class="chck_privacy"><input type="checkbox" checked id="chk_paypal2" name='chk_paypal2'><label for='chk_paypal2'> I acknowledge I have read and understood Easyshop.ph's</label><a href="<?=base_url()?>policy" target='_blank'><span style='border-bottom:1px dotted'> Privacy Policy </span></a>.</p><br>
+                                <br/>
                                 <div class="paypal_button">
                                     <a style="cursor:pointer" data-type="2"  class="paypal">
                                     <img src="<?php echo base_url()?>assets/images/paypal_checkout_button.png" alt="Paypal Credit/Debit Card Checkout" align="left" style="margin-right:7px;">
@@ -99,7 +100,8 @@
                             <?php else: ?> 
 
                             <br /> <br />
-                            <p class="chck_privacy"><input type="checkbox" checked  id="chk_paypal1" name='chk_paypal1'><label for='chk_paypal1'> I acknowledge I have read and understood Easyshop.ph's </label><a href="<?=base_url()?>policy" target='_blank'>Privacy Policy</a>.</p><br>
+                            <p class="chck_privacy"><input type="checkbox" checked  id="chk_paypal1" name='chk_paypal1'><label for='chk_paypal1'> I acknowledge I have read and understood Easyshop.ph's </label><a href="<?=base_url()?>policy" target='_blank'><span style='border-bottom:1px dotted'> Privacy Policy </span></a>.</p><br>
+                            <br/>
                             <div class="paypal_button">
                                 <a style="cursor:pointer" data-type="1"  class="paypal">
                                 <img src="https://www.paypal.com/en_US/i/btn/btn_xpressCheckout.gif" alt="Paypal Checkout" align="left" style="margin-right:7px;">
@@ -117,7 +119,8 @@
 <!-- #### DRAGON PAY #### -->
                         <?php if($key == 'dragonpay'): ?>
                         <div id="dragonpay" class="payment_inner_content">
-                            <p class="chck_privacy"><input type="checkbox" checked id="chk_dp" name='chk_dp'> <label for='chk_dp'>I acknowledge I have read and understood Easyshop.ph's  </label><a href="<?=base_url()?>policy" target='_blank'>Privacy Policy</a>.</p><br>
+                            <p class="chck_privacy"><input type="checkbox" checked id="chk_dp" name='chk_dp'> <label for='chk_dp'>I acknowledge I have read and understood Easyshop.ph's  </label><a href="<?=base_url()?>policy" target='_blank'><span style='border-bottom:1px dotted'> Privacy Policy </span></a>.</p><br>
+                            <br/>
                             <input type="button" class="btnDp orange_btn3" value="Pay via DRAGON PAY">
                         </div>
                         <?php endif; ?>
@@ -130,7 +133,8 @@
                             $attr = array('class' => 'dbdFrm','id' => 'dbdFrm','name' => 'dbdFrm');
                             echo form_open('pay/directbank/', $attr);
                             ?>
-                            <p class="chck_privacy"><input type="checkbox" checked  id="chk_dbd" name='chk_dbd'><label for='chk_dbd'> I acknowledge I have read and understood Easyshop.ph's</label> <a href="<?=base_url()?>policy" target='_blank'>Privacy Policy.</a>.</p><br>
+                            <p class="chck_privacy"><input type="checkbox" checked  id="chk_dbd" name='chk_dbd'><label for='chk_dbd'> I acknowledge I have read and understood Easyshop.ph's</label> <a href="<?=base_url()?>policy" target='_blank'><span style='border-bottom:1px dotted'> Privacy Policy </span>.</a>.</p><br>
+                            <br/>
                             <input type="button" class="payment_dbd orange_btn3" value="Proceed to Payment"> 
                             <input type="hidden" value="<?php echo md5(uniqid(mt_rand(), true)).'2';?>" name="paymentToken">   
                             <?php echo form_close();?>
@@ -149,7 +153,8 @@
                                 $attr = array('class' => 'codFrm','id' => 'codFrm','name' => 'codFrm');
                                 echo form_open('pay/cashondelivery/', $attr);
                                 ?>
-                                <p class="chck_privacy"><input type="checkbox" checked  id="chk_cod" name='chk_cod'><label for='chk_cod'> I acknowledge I have read and understood Easyshop.ph's</label> <a href="<?=base_url()?>policy" target='_blank'>Privacy Policy</a>.</p><br>
+                                <p class="chck_privacy"><input type="checkbox" checked  id="chk_cod" name='chk_cod'><label for='chk_cod'> I acknowledge I have read and understood Easyshop.ph's</label> <a href="<?=base_url()?>policy" target='_blank'> <span style='border-bottom:1px dotted'> Privacy Policy </span></a>.</p><br>
+                                <br/>
                                 <input type="button" class="payment_cod orange_btn3" value="Proceed to Payment"> 
                                 <input type="hidden" value="<?php echo md5(uniqid(mt_rand(), true)).'1';?>" name="paymentToken">   
                                 <?php echo form_close();?>
@@ -174,7 +179,7 @@
                                       <div class="cod_status_con"><?php echo ($value['cash_delivery'] ? "<span style='color:green'>Available for Cash on Delivery</span>" : "<span style='color:red; font-weight:bold;'>Not available for Cash on Delivery</span> (Go to your <a href='".base_url()."cart' style='color:#0654BA'>Cart</a> and Remove this Item)") ;?></div>
                                       <?php if(!$value['availability']): ?>
                                           <div style="color:red">
-                                              Please <a style="color:#0654BA" href="javascript:{}" class="link_address">change your shipping address</a> or go to remove this from your <a href="<?=base_url()?>cart" style="color:#0654BA">Cart</a>.
+                                              Please <a style="color:#0654BA" href="javascript:{}" class="link_address">change your shipping address</a> or remove this from your <a href="<?=base_url()?>cart" style="color:#0654BA">Cart</a>.
                                           </div>
                                       <?php endif; ?>  
                                 </div>
@@ -184,7 +189,7 @@
                         </div>
                         <?php endif; ?>
 
-<!-- #### MORE PAYMENT HERE! #### -->
+                    <!-- #### MORE PAYMENT HERE! #### -->
                     <?php endforeach; ?>
                     </div>
 
@@ -193,19 +198,19 @@
 
                         <?php if(!$success && $qtysuccess && $promoteSuccess):?>
                             <br/>
-                            <span style='padding:8px; font-size: 12px; font-weight:bold;color:red'>NOTE!: One or more of your item(s) is unavailable in your location. </span>
+                            <span style='padding:8px; font-size: 12px; font-weight:bold;color:red'>NOTE: One or more of your item(s) is unavailable in your location. </span>
                       
                         <?php elseif($success && !$qtysuccess  && $promoteSuccess):?>
                             <br/>
-                            <span style='padding:8px; font-size: 12px; font-weight:bold;color:red'>NOTE!: One or more of your item(s) is not available for desired quantity you want. </span>
+                            <span style='padding:8px; font-size: 12px; font-weight:bold;color:red'>NOTE: One or more of your item(s) is not available for desired quantity you want. </span>
                         <?php elseif($success && $qtysuccess  && !$promoteSuccess):?>
                             <br/>
-                            <span style='padding:8px; font-size: 12px; font-weight:bold;color:red'>NOTE!: You only allow to checkout one promo item. </span>
+                            <span style='padding:8px; font-size: 12px; font-weight:bold;color:red'>NOTE: One or more of your item(s) can only be purchased individually. </span>
                         <?php else:?>
                             <br/>
-                            <span style='padding:8px; font-size: 12px; font-weight:bold;color:red'>NOTE!: One or more of your item(s) is unavailable in your location. </span>
+                            <span style='padding:8px; font-size: 12px; font-weight:bold;color:red'>NOTE: One or more of your item(s) is unavailable in your location. </span>
                             <br/> <br/>
-                            <span style='padding:8px; font-size: 12px; font-weight:bold;color:red'>NOTE!: One or more of your item(s) is not available for desired quantity you want. </span>
+                            <span style='padding:8px; font-size: 12px; font-weight:bold;color:red'>NOTE: One or more of your item(s) is not available for desired quantity you want. </span>
                         <?php endif;?>
                     <?php endif; ?>
                 </div>

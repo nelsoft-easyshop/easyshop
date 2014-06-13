@@ -58,17 +58,44 @@ class cart_model extends CI_Model
 
         return $sth->rowCount();
     }
+    
+    public function isCartCheckoutPromoAllow($cart){
+        $this->load->config('promo', TRUE);
+        $count_solo_items = 0;
+        foreach($cart as $cart_item){
+            $promo_solo_restriction = $this->config->item('Promo')[$cart_item['promo_type']]['cart_solo_restriction'];
+            if ((intval($cart_item['is_promote']) === 1) && $promo_solo_restriction ) {
+                $count_solo_items ++;
+            }
+        }
+        if(($count_solo_items === 0) || ($count_solo_items === 1 && count($cart) === 1)){
+            return true;
+        }else{
+            return false;
+        }
 
-
-    public function check_promo($cart,$case){
-        foreach($cart as $key => $row){
-            if(intval($row['is_promote']) == intval($case)){
-                return true;
+    }
+    
+    public function isCartInsertPromoAllow($cart, $item = array()){
+        $this->load->config('promo', TRUE);
+        $can_insert_cart = true;
+        
+        if(count($item) > 0){
+            $cart['temporary'] = $item;
+        }
+        
+        foreach($cart as $cart_item){
+            $promo_solo_restriction = $this->config->item('Promo')[$cart_item['promo_type']]['cart_solo_restriction'];
+            if ((intval($cart_item['is_promote']) === 1) && $promo_solo_restriction ) {
+                $can_insert_cart = false;
                 break;
             }
         }
-        return false;
+        
+        return $can_insert_cart;
     }
+
+    
 }
 
 /* End of file cart_model.php */
