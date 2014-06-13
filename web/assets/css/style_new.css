@@ -659,7 +659,7 @@ div.html_description {
 }
 
 .html_description table{
-	max-width: 100% !important;
+	width: 100% !important;
 }
 
 /*** Reviews Tab ***/
