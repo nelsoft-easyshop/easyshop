@@ -17,7 +17,7 @@ $lang['success_registration'] = "Thank You for registering to Easyshop.ph! <br> 
 
 $lang['success_email_verification'] = 'You have successfully verified your email address.';
 $lang['success_mobile_verification'] = 'You have successfully verified your mobile number.';
-$lang['expired_email_verification'] = 'This verification link has expired. This email was already verified.';
+$lang['expired_email_verification'] = 'This verification link has already expired or this email has already been verified.';
 
 $lang['email_subject'] = "Easyshop.ph - Please verify your email address.";
 
