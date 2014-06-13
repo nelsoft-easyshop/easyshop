@@ -2030,6 +2030,7 @@ class product_model extends CI_Model
                     }else{
                         $PromoPrice = $baseprice - ($baseprice)*0.20;
                     }
+                    break;
                 default :
                     $PromoPrice = $baseprice;
                     break;
