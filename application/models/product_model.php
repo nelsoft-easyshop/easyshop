@@ -1445,7 +1445,7 @@ class product_model extends CI_Model
         $lockdata = $sth->fetchAll(PDO::FETCH_ASSOC);
         foreach($lockdata as $lock){
             //DELETE LOCK ITEMS THAT ARE 10 MINUTES IN LIFE TIME
-            if(round((strtotime($lock['timenow']) - strtotime($lock['timestamp']))/60) > 10){
+            if(round((strtotime($lock['timenow']) - strtotime($lock['timestamp']))/60) > 5){
                 $this->deleteProductItemLock($lock['id_item_lock']);
             }else{
                 if(isset($data[$lock['id_product_item']])){
