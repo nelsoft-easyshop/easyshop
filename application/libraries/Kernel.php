@@ -56,7 +56,7 @@ class Kernel
         
         // Doctrine ORM
         $paths = array('src/EasyShop/Entities');
-        $isDevMode = (ENVIRONMENT === 'development');
+        $isDevMode = (ENVIRONMENT === 'development') && false;    // set to false to avoid concurrency problems in staging
         
         $dbConfig = require APPPATH . '/config/param/database.php';
         $config = Doctrine\ORM\Tools\Setup::createAnnotationMetadataConfiguration($paths, $isDevMode);

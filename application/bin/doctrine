@@ -25,7 +25,7 @@ $dbConfig = require __DIR__ . '/../config/param/database.php';
 
 $entityManager = Doctrine\ORM\EntityManager::create(
     $dbConfig,
-    Doctrine\ORM\Tools\Setup::createAnnotationMetadataConfiguration([__DIR__ . '/../src/EasyShop/Entities'], true)
+    Doctrine\ORM\Tools\Setup::createAnnotationMetadataConfiguration([__DIR__ . '/../src/EasyShop/Entities'], false)
 );
 
 $entityManager->getConnection()
