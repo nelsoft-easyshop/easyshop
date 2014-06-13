@@ -167,16 +167,6 @@ class payment_model extends CI_Model
 				$data['msg_link'] = base_url() . "messages/#";
 				$msg = $this->parser->parse('templates/email_purchase_notification_buyer',$data,true);
 				break;
-			case 'bankdeposit':
-				$this->email->subject($this->lang->line('notification_subject_buyer'));
-				#user appended at template
-				$data['store_link'] = base_url() . "vendor/";
-				$data['msg_link'] = base_url() . "messages/#";
-				$data['bank_name'] = $this->xmlmap->getFilenameID('page/content_files','bank-name');
-				$data['bank_accname'] = $this->xmlmap->getFilenameID('page/content_files','bank-account-name');
-				$data['bank_accnum'] = $this->xmlmap->getFilenameID('page/content_files','bank-account-number');
-				$msg = $this->parser->parse('templates/email_purchase_notification_buyer_bankdeposit',$data,true);
-				break;
 			case 'seller':
 				$this->email->subject($this->lang->line('notification_subject_seller'));
 				$data['store_link'] = base_url() . "vendor/" . $data['buyer_name'];
@@ -264,6 +254,28 @@ class payment_model extends CI_Model
 			'payment_method' => (int)$row[0]['payment_method_id'],
 			'products' => array()
 		);
+		
+		#get payment method instructions
+		switch($data['payment_method']){
+			case 1:
+				$data['payment_msg'] = $this->lang->line('payment_paypal');
+				break;
+			case 2:
+			case 4:
+				$data['payment_msg'] = $this->lang->line('payment_dp');
+				break;
+			case 3:
+				$data['payment_msg'] = $this->lang->line('payment_cod');
+				break;
+			case 5:
+				$this->load->library('parser');
+				$paymentMsg = $this->lang->line('payment_bd');
+				$bankparse['bank_name'] = $this->xmlmap->getFilenameID('page/content_files','bank-name');
+				$bankparse['bank_accname'] = $this->xmlmap->getFilenameID('page/content_files','bank-account-name');
+				$bankparse['bank_accnum'] = $this->xmlmap->getFilenameID('page/content_files','bank-account-number');
+				$data['payment_msg'] = $this->parser->parse_string($paymentMsg, $bankparse, true);
+				break;
+		}
 		
 		foreach($row as $value){
 			$temp = $value;

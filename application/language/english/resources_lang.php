@@ -30,6 +30,50 @@ $lang['msg3'] = "Unable to send, please try again later.";
 $lang['notification_subject_buyer'] = "Easyshop.ph - Purchased Item Transaction Details";
 $lang['notification_subject_seller'] = "Easyshop.ph - Sold Item Transaction Details";
 
+#Purchase Notification - Email Payment Method Guidelines
+$lang['payment_paypal'] = "Easyshop.ph has received your payment and has notified the seller(s) of the items you have purchased to 
+ship your items at the soonest possible time. You may view and manage your orders through your transactions 
+page by going to your page at <a href='https://easyshop.ph/me'>https://easyshop.ph/me</a> and by clicking on on-going transactions. 
+<br><br>
+Thank you and we hope you continue to use Easyshop.ph, where shopping is made easy.";
+
+$lang['payment_cod'] = "Easyshop.ph has notified the seller(s) of the items you have purchased to ship your items at the soonest possible time.
+You may view and manage your orders through your transactions page by going to your page at <a href='https://easyshop.ph/me'>https://easyshop.ph/me</a> and by clicking on on-going transactions. 
+<br><br>
+Thank you and we hope you continue to use Easyshop.ph, where shopping is made easy.";
+
+$lang['payment_dp'] = "Please follow Dragonpay's instructions regarding the necessary steps you need to accomplish to complete your purchase.
+Once confirmed, you may view and manage your orders through your transactions page by going to your page at <a href='https://easyshop.ph/me'>https://easyshop.ph/me</a> and by clicking on on-going transactions. 
+We will also notify the seller(s) of the items you have purchased to ship your items at the soonest possible time.
+<br><br>
+Thank you and we hope you continue to use Easyshop.ph, where shopping is made easy.";
+
+$lang['payment_bd'] = "Your order has been placed at Easyshop.ph and is currently awaiting confirmation. Deposit the specified amount at
+the bank account listed below to complete the purchase of your items.
+<br><br>
+<table>
+	<tr>
+		<td>Bank : </td>
+		<td><strong>{bank_name}</strong></td>
+	</tr>
+	<tr>
+		<td>Bank Account Name : </td>
+		<td><strong>{bank_accname}</strong></td>
+	</tr>
+	<tr>
+		<td>Bank Account # :</td>
+		<td><strong>{bank_accnum}</strong></td>
+	</tr>
+</table>
+<br>
+Once complete, you will need to enter the deposit details at your transaction page by going to <a href='https://easyshop.ph/me'>https://easyshop.ph/me</a> and by clicking on on-going transactions.
+Look for your transaction,click on Enter Deposit Details and fill in the necessary information.
+<br>
+We will notify the seller(s) of the items you have purchased to ship your items at the soonest possible time once you have
+accomplished all the necessary steps.
+<br><br>
+Thank you and we hope you continue to use Easyshop.ph, where shopping is made easy.";
+
 #Purchase Notification - Mobile
 $lang['notification_txtmsg_buyer'] = ' - This is to notify you that you have made a purchase through Easyshop.ph. Transaction details have been sent to your email.';
 $lang['notification_txtmsg_seller'] = ' - This is to notify you that you have sold an item(s) through Easyshop.ph. Transaction details have been sent to your email. Kindly ship the item(s) as soon as possible.';

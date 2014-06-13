@@ -842,10 +842,6 @@ class Payment extends MY_Controller{
 	 */
     function sendNotification($data) 
     {   
-        // if(!$this->session->userdata('member_id')){
-        //     redirect(base_url().'home', 'refresh');
-        // };
-        
         //devcode
 		/*$data['member_id'] = 74;
 		$data['order_id'] = 102;
@@ -856,8 +852,6 @@ class Payment extends MY_Controller{
 		
         $transactionData = $this->payment_model->getPurchaseTransactionDetails($data);
         
-		$viewSelector = $transactionData['payment_method'] === 5 ? 'bankdeposit' : 'buyer';
-		
         //Send email to buyer
         $buyerEmail = $transactionData['buyer_email'];
         $buyerData = $transactionData;
@@ -867,7 +861,7 @@ class Payment extends MY_Controller{
 		// 3 tries to send Email. Quit if success or 3 failed tries met
 		$emailcounter = 0;
 		do{
-			$buyerEmailResult = $this->payment_model->sendNotificationEmail($buyerData, $buyerEmail, $viewSelector);
+			$buyerEmailResult = $this->payment_model->sendNotificationEmail($buyerData, $buyerEmail, 'buyer');
 			$emailcounter++;
 		}while(!$buyerEmailResult && $emailcounter<3);
         

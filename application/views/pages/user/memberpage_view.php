@@ -1548,8 +1548,9 @@
 					<p><strong>Deposit payment to:</strong></p>
 					<p>
 						<span style="margin:0px 5px 0px 3em;">Bank:</span>
-						<span style="padding-right:2em;margin-right:3em;border-right:1px dotted #CECECE;font-weight:bold;"><?php echo $transaction['bank_name']?></span>
-						<span style="margin-right:5px;">Bank Account Name:</span>
+						<span style="padding-right:2em;margin-right:3em;font-weight:bold;"><?php echo $transaction['bank_name']?></span>
+						<br>
+						<span style="margin-right:5px;margin-left:3em;">Bank Account Name:</span>
 						<span style="padding-right:2em;margin-right:3em;border-right:1px dotted #CECECE;font-weight:bold;"><?php echo $transaction['bank_accname']?></span>
 						<span style="margin-right:5px;">Bank Account Number:</span>
 						<span style="padding-right:2em;margin-right:3em;font-weight:bold;"><?php echo $transaction['bank_accnum']?></span>

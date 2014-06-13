@@ -16,8 +16,11 @@
             <p>
               Dear {buyer_name},
             </p>
+			<p style="text-align:justify;text-justify:inter-word;">
+				{payment_msg}
+			</p>
             <p>
-              Thank you for purchasing through Easyshop.ph! Details for the item(s) you've purchased are as follows:
+              Details for the item(s) you've purchased are as follows:
             </p>
           </td>
         </tr>
