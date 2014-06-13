@@ -1498,7 +1498,7 @@
 					</div>
 					<!-- If payment method is dragon pay / direct bank deposit-->
 					<div class="transac_title_col3">
-						<?php if($transact['payment_method'] == 2 && $transact['transac_stat'] == 99):?>
+						<?php if( ($transact['payment_method'] == 2 || $transact['payment_method'] == 4) && $transact['transac_stat'] == 99):?>
 							<?php $attr = array('class'=>'');
 								echo form_open('',$attr);
 							?>

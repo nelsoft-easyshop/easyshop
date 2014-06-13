@@ -466,34 +466,17 @@ class Memberpage extends MY_Controller
 			
 			// Fetch transaction data
 			$checkTransaction = $this->payment_model->checkTransactionBasic($data);
+			$txnId = $checkTransaction[0]['transaction_id'];
 			
 			if(count($checkTransaction) == 1){
-				// fetch dragonpay data
-				//$dragonpayData = json_decode($checkTransaction[0]['data_response'], true);
-				//$txnId = $dragonpayData['DragonPayReturn']['txnId'];
-				$txnId = $checkTransaction[0]['transaction_id'];
 				// Check dragonpay transaction status - connects to Dragonpay
 				$dragonpayResult = $this->dragonpay->getStatus($txnId);
 				
 				if($dragonpayResult == 'S'){ // Transaction Complete
-					$data['order_status'] = 0;
-					$updateResult = $this->payment_model->updateTransactionStatusBasic($data);
-					$serverResponse['result'] = $updateResult ? 'success' : 'fail';
-					$serverResponse['error'] = $updateResult ? '' : 'Failed to update Dragonpay order status.';
-					
-					if($updateResult){
-						$orderLogData = array(
-							'order_id' => $data['transaction_num'],
-							'order_status' => 0,
-							'comment' => 'Dragonpay transaction confirmed'
-						);
-						$this->payment_model->addOrderHistory($orderLogData);
-					}
-					
-				}else if($dragonpayResult == 'P'){
-					$serverResponse['error'] = 'Transaction with Dragonpay is still in pending status.';
-				}else if($dragonpayResult == 'U'){
-					$serverResponse['error'] = 'Error with Dragonpay itself. Please check your payment with Dragonpay.';
+					$serverResponse['result'] = 'success';
+					$serverResponse['error'] = '';
+				}else if($dragonpayResult == 'P' || $dragonpayResult == 'U'){
+					$serverResponse['error'] = 'Kindly click the link in the email sent by Dragonpay to verify your payment.';
 				}
 			}else{
 				$serverResponse['error'] = 'Transaction does not exist.';
