@@ -93,7 +93,7 @@
 <section>
 
   <div class="wrapper">
-    <div class="content_wrapper">
+    <div class="">
       <div  id="product_content_gallery">
         <div class="cd_promo_badge_con">
             <?php if($product['start_promo']): ?>
@@ -101,6 +101,9 @@
                     <span><?php echo  number_format( $product['percentage'],0,'.',',');?>%<br>OFF</span>
                 </span>
             <?php endif; ?>
+            <span class="cd_soldout">
+              <img src="<?=base_url()?>/assets/images/img_cd_soldout.png" alt="Sold Out">
+            </span>
         </div>
         <div class="prod_con_gal"> <a href="<?=base_url()?><?php echo $product_images[0]['path']; ?><?php echo $product_images[0]['file']; ?>" class="jqzoom" rel='gal1'  title="Easyshop.ph" > <img src="<?=base_url()?><?php echo $product_images[0]['path']; ?>small/<?php echo $product_images[0]['file']; ?>"  title="product"> </a> </div>
         <br/>
