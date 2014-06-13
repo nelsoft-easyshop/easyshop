@@ -534,6 +534,9 @@ input.error + span.error {
 .img_sc_1 {
     margin-right: 40px;
 }
+.img_sc_1 {
+    margin-left: 20px;
+}
 
 .img_social_media img {
     width: 72px;
