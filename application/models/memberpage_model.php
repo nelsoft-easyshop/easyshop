@@ -121,7 +121,7 @@ class memberpage_model extends CI_Model
 			$sth = $this->db->conn_id->prepare($query);
 			$sth->bindParam(':id_address', $address_id);
 		}
-		
+        
 		$sth->bindParam(':type', $data['addresstype']);
 		$sth->bindParam(':id_member', $member_id);
         $sth->bindParam(':stateregion', $data['stateregion']);
@@ -136,7 +136,7 @@ class memberpage_model extends CI_Model
 		$sth->bindParam(':lng', $data['lng']);
 		
 		$result = $sth->execute();
-		
+	
 		return $result;
 	}
 	

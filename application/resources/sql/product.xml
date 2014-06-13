@@ -965,13 +965,20 @@ FROM
 <select id='getSlugByID'>
     SELECT slug, name FROM es_product WHERE id_product = :id;
 </select>
-<select id="getOrder">
+
+<select id="getPromoOrderCount">
     SELECT
-    COUNT(id_order) AS `cnt`
-    FROM
-    es_order
-    WHERE buyer_id = :buyer_id
-    AND order_status != 99
-    AND `payment_method_id` != 1
+    COUNT(id_order) AS `cnt` FROM es_order o
+	INNER JOIN es_order_product op ON o.id_order = op.order_id 
+	INNER JOIN es_product p ON p.id_product = op.product_id AND p.promo_type = :type
+    WHERE o.`buyer_id` = :buyer_id
+    AND NOT (o.`order_status` = 99 AND o.`payment_method_id` = 1)
 </select>
+
+<select id="getProductSoldPrice">
+    SELECT COALESCE(AVG(op.price),0) as sold_price FROM es_order_product op
+    INNER JOIN es_order o ON op.order_id = o.id_order AND o.dateadded BETWEEN :datefrom AND :dateto
+    WHERE op.product_id = :id
+</select>
+
 </map>

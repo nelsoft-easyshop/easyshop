@@ -1193,6 +1193,7 @@ class product_model extends CI_Model
 		$products = $sth->fetchAll(PDO::FETCH_ASSOC);	
         explodeImagePath($products);
         for($k = 0; $k<count($products); $k++){
+            $products[$k]['id_product'] = $products[$k]['product_id'];
             applyPriceDiscount($products[$k]);
         }
 
@@ -1956,17 +1957,6 @@ class product_model extends CI_Model
         $home_view_data = array();
         if($element['type'] === 'product'){
             $productdata = $this->getProductById($element['value']);
-            /* Getting if product is sold out for countdown items*/
-            if($key === 'cd_product'){
-                $product_quantity = $this->getProductQuantity($element['value']);
-                $productdata['is_soldout'] = true;
-                foreach($product_quantity as $q){
-                    if($q['quantity'] > 0){
-                        $productdata['is_soldout'] = false;
-                        break;
-                    }
-                }
-            } 
             if (!empty($productdata)){
                 $home_view_data = $productdata;                
             }
@@ -1980,45 +1970,79 @@ class product_model extends CI_Model
         }
         return $home_view_data;
     }
+    
+    public function is_sold_out($id){
+        $product_quantity = $this->getProductQuantity($id);
+        $is_sold_out = true;
+        foreach($product_quantity as $q){
+            if($q['quantity'] > 0){
+                $is_sold_out = false;
+                break;
+            }
+        }
+        return $is_sold_out;
+    }
+    
+    public function get_sold_price($id, $datefrom = '0001-01-01', $dateto = '0001-01-01'){
+        if($dateto === '0001-01-01'){
+            $dateto = date('Y-m-d');
+        }
+        $query = $this->xmlmap->getFilenameID('sql/product','getProductSoldPrice');
+        $sth = $this->db->conn_id->prepare($query);
+        $sth->bindParam(':id',$id, PDO::PARAM_INT);
+        $sth->bindParam(':datefrom',$datefrom, PDO::PARAM_STR);
+        $sth->bindParam(':dateto',$dateto, PDO::PARAM_STR);
+        $sth->execute();
+        $price = $sth->fetch(PDO::FETCH_ASSOC)['sold_price'];
+        return $price;
+    }
 
     
-    public function GetPromoPrice($baseprice,$start,$end,$is_promo,$type,$buyer_id){
+    public function GetPromoPrice($baseprice,$start,$end,$is_promo,$type,$buyer_id, $product_id){
         $today = strtotime( date("Y-m-d H:i:s"));
         $startdate = strtotime($start);
         $enddate = strtotime($end);
         $type = intval($type);
-        switch ($type) {
-            case 0 :
-                $PromoPrice = $baseprice;
-                break;
-            case 1 :
-                if(($today < $startdate) || ($enddate < $startdate)){
-                    $diffHours = 0;
-                }else if($today >= $enddate){
-                    $diffHours = 49.5;
-                }else{
-                    $diffHours = floor(($today - $startdate) / 3600.0);
-                }
-                $PromoPrice = $baseprice - (($diffHours * 0.02) * $baseprice);
-                break;
-            default :
-                $PromoPrice = $baseprice;
-                break;
+        $is_promo = intval($is_promo);
+        $result['price'] = $baseprice;
+        $result['can_purchase']  = true;
+        $result['sold_price'] = 0;
+        $result['is_soldout'] = false;
+        if($is_promo === 1){
+            switch ($type) {
+                case 0 :
+                    $PromoPrice = $baseprice;
+                    break;
+                case 1 :
+                    if(($today < $startdate) || ($enddate < $startdate)){
+                        $diffHours = 0;
+                    }else if($today >= $enddate){
+                        $diffHours = 49.5;
+                    }else{
+                        $diffHours = floor(($today - $startdate) / 3600.0);
+                    }
+                    $PromoPrice = $baseprice - (($diffHours * 0.02) * $baseprice);
+                    break;
+                default :
+                    $PromoPrice = $baseprice;
+                    break;
+            }
+            $result['price'] = $PromoPrice;
+            $result['can_purchase'] = $this->is_purchase_allowed($buyer_id,$type);
+            $result['is_soldout'] = $this->is_sold_out($product_id);
+            $result['sold_price'] = $this->get_sold_price($product_id, date('Y-m-d',$startdate), date('Y-m-d',$enddate));
         }
-
-        $result['price'] = (intval($is_promo) === 1)?$PromoPrice:$baseprice;
         $result['price'] = ($result['price']>=0)?$result['price']:0;
-
-        $result['can_purchase'] = (intval($is_promo)===1)?$this->is_purchase_allowed($buyer_id,$type):true;
         return $result;
-    }
+   }
 
 
     public function is_purchase_allowed($buyer_id,$type){
 
-        $query = $this->xmlmap->getFilenameID('sql/product','getOrder');
+        $query = $this->xmlmap->getFilenameID('sql/product','getPromoOrderCount');
         $sth = $this->db->conn_id->prepare($query);
         $sth->bindParam(':buyer_id',$buyer_id, PDO::PARAM_INT);
+        $sth->bindParam(':type',$type, PDO::PARAM_INT);
         $sth->closeCursor();
         $sth->execute();
         $result = $sth->fetchAll(PDO::FETCH_ASSOC);

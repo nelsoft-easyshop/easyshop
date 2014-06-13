@@ -123,7 +123,6 @@ class Payment extends MY_Controller{
                 $itemArray[$value['rowid']]['seller_username'] = $sellerDetails['username'];
         }
 
-        
         if(!count($itemArray) <= 0){ 
   
             $data['cat_item'] = $itemArray;
@@ -398,7 +397,7 @@ class Payment extends MY_Controller{
 						);
 						$this->payment_model->addOrderHistory($orderHistory);
                         $response['completepayment'] = true;
-                        $response['message'] = '<div style="color:green">Your payment is completed through Paypal</div>';            
+                        $response['message'] = '<div style="color:green">Your payment has been completed through Paypal</div>';            
                         $response = array_merge($response,$return);
                         $this->removeItemFromCart();
                         $this->session->unset_userdata('choosen_items');
@@ -454,17 +453,19 @@ class Payment extends MY_Controller{
         if($lastDigit == 1){
             $paymentType = $this->PayMentCashOnDelivery;
             $textType = 'cashondelivery';
-            $response['message'] = '<div style="color:green">Your payment is completed through Cash on Delivery.</div>';
+            $response['message'] = '<div style="color:green">Your payment has been completed through Cash on Delivery.</div>';
               
         }elseif ($lastDigit == 2) {
             $paymentType = $this->PayMentDirectBankDeposit;
             $esAccountNumber = $this->xmlmap->getFilenameID('page/content_files','bank-account-number');
+            $esBank = $this->xmlmap->getFilenameID('page/content_files','bank-name');
             $textType = 'directbankdeposit';
             $response['message'] = '
-            <div style="color:green">Your payment is completed through Direct Bank Deposit.</div>
-            <div>Step to complete to your transactions:
+            <div style="color:green">Your payment has been completed through Direct Bank Deposit.</div>
+            <br/>
+            <div>Follow the following steps to complete your purchase.
                 <ul>
-                    <li>Go to your bank.</li>
+                    <li>Go to your nearest '.$esBank.'</li>
                     <li>Deposit to this account number: '.$esAccountNumber .'</li>
                 </ul>
             </div>
@@ -473,7 +474,7 @@ class Payment extends MY_Controller{
         }else{
             $paymentType = $this->PayMentCashOnDelivery;  
             $textType = 'cashondelivery';
-            $response['message'] = '<div style="color:green">Your payment is completed through Cash on Delivery.</div>';
+            $response['message'] = '<div style="color:green">Your payment has been completed through Cash on Delivery.</div>';
         }
  
         $apiResponseArray = array();   
@@ -739,7 +740,7 @@ class Payment extends MY_Controller{
             $response['dateadded'] = $return['dateadded'];
             $response['total'] = $grandTotal;
             $response['completepayment'] = true;
-            $response['message'] = '<div style="color:green">Your payment is completed through Dragon Pay.</div><div style="color:red">'.urldecode($message).'</div>';
+            $response['message'] = '<div style="color:green">Your payment has been completed through Dragon Pay.</div><div style="color:red">'.urldecode($message).'</div>';
             $response = array_merge($response,$return);  
             $this->removeItemFromCart(); 
             $this->session->unset_userdata('choosen_items');
@@ -774,20 +775,18 @@ class Payment extends MY_Controller{
     function paymentSuccess($mode = "easyshop"){
 
         $ticket = $this->session->userdata('paymentticket');
-        // if($ticket){
-        $data = $this->session->userdata('headerData');
-        $response = $this->session->userdata('bodyData'); 
-
-        // $this->session->unset_userdata('paymentticket');
-        // $this->session->unset_userdata('headerData');
-        // $this->session->unset_userdata('bodyData');
- 
-        $this->load->view('templates/header', $data);
-        $this->load->view('pages/payment/payment_response' ,$response);  
-        $this->load->view('templates/footer_full'); 
-        // }else{
-        //     redirect(base_url().'home/', 'refresh');
-        // }
+        if($ticket){
+            $data = $this->session->userdata('headerData');
+            $response = $this->session->userdata('bodyData'); 
+            $this->session->unset_userdata('paymentticket');
+            $this->session->unset_userdata('headerData');
+            $this->session->unset_userdata('bodyData');
+            $this->load->view('templates/header', $data);
+            $this->load->view('pages/payment/payment_response' ,$response);  
+            $this->load->view('templates/footer_full'); 
+        }else{
+             redirect(base_url().'home', 'refresh');
+        }
 
     }
 
@@ -994,22 +993,22 @@ class Payment extends MY_Controller{
                 'address' => $this->input->post('c_address'),
                 'country' => $this->input->post('c_country'),
                 'lat' => $this->input->post('temp_lat'),
-                'lng' => $this->input->post('temp_lng')
+                'lng' => $this->input->post('temp_lng'),
+                'addresstype' => 1,
             );
             if(trim($this->input->post('consignee')) == "" || $this->input->post('c_city') == 0 || $this->input->post('c_stateregion') == 0 || trim($this->input->post('c_address')) == "" || trim($this->input->post('c_mobile')) == "")
             {
                 echo json_encode("Fill the required fields!");
                 exit();
-            }else if(!is_numeric($this->input->post('c_mobile')) || strlen($this->input->post('c_mobile')) != 10){
-                echo json_encode("<b>MOBILE NUMBER</b> should be numeric and 10 digits. eg: 9051235678");
+            }else if(!is_numeric($this->input->post('c_mobile')) || strlen($this->input->post('c_mobile')) != 10 || (!preg_match("/^(9|8)[0-9]{9}$/", $this->input->post('c_mobile')))){
+                echo json_encode("<b>MOBILE NUMBER</b> should be 10 digits long and starts with 9. eg: 9051235678");
                 exit();
             }else if(trim($this->input->post('c_telephone')) != "" && (preg_match("/^([0-9]{4}-){3}[0-9]{4}$/", $this->input->post('c_telephone')) || !is_numeric(str_replace('-', '', $this->input->post('c_telephone'))))){
-                echo json_encode("<b>MOBILE NUMBER</b> should be numeric and hypen only. eg: 123-45-67");
+                echo json_encode("<b>TELEPHONE NUMBER</b> can only be numbers and hyphen. eg: 354-5973");
             }else{
                 $postdata['default_add'] = "off";
                 $addressId = $this->memberpage_model->getAddress($uid,'1')['id_address'];
-                
-                $data = $this->memberpage_model->editDeliveryAddress($uid, $postdata,$addressId);
+                $data = $this->memberpage_model->editAddress($uid, $postdata,$addressId);
                 $this->output->set_output(json_encode($data));
                 echo json_encode("success");
                 exit(); 

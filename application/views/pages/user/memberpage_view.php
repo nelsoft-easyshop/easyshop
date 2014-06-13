@@ -87,7 +87,7 @@
 					<li><a href="#personal_information" class="<?php echo ($tab=='myinfo')?'selected':'';?>">Personal Information</a></li>
 					<li><a href="#delivery_address">Delivery Address</a></li>
 					<li><a href="#payment" class="<?php echo ($tab=='pmnt')?'selected':'';?>">Payment Accounts</a></li>
-					<li><a href="#transactions">On-going Transactions</a></li>
+					<li><a href="#transactions" class="<?php echo ($tab=='pending')?'selected':'';?>">On-going Transactions</a></li>
 					<li><a href="#complete_transactions">Completed Transactions</a></li>
                     <!-- <li><a href="#privacy_settings">Privacy Settings</a></li> -->
 					<li><a href="#security_settings">Security Settings</a></li>
@@ -200,7 +200,7 @@
 	</div>
 	
 	<?php if(count($active_products) == 0):?>
-		<p><strong>No items on sale.</strong></p>
+		<p><span class='nocontent'>No items on sale.</span></p>
 	<?php else:?>
 	
 	<div class="paging">					
@@ -325,7 +325,7 @@
 	</div>
 	
 	<?php if(count($deleted_products) == 0):?>
-		<p><strong>No deleted items.</strong></p>
+		<p><span class='nocontent'>No deleted items.</span></p>
 	<?php else:?>
 
 	<div class="paging">
@@ -444,7 +444,7 @@
 		<div id="op_buyer">
 			<h4>Feedbacks others left for you as a buyer</h4>
 			<?php if(count($allfeedbacks['otherspost_buyer'])==0):?>
-			<p><strong>You have not yet received any feedbacks for this category.</strong></p>
+			<p><span class='nocontent'>You have not yet received any feedbacks for this category.</span></p>
 		<?php else:?>
 		<?php $afb_counter = 0;?>
 		<div class="paging posted_feedbacks">
@@ -501,7 +501,7 @@
 <div id="op_seller">
 	<h4>Feedbacks others left for you as a seller</h4>
 	<?php if(count($allfeedbacks['otherspost_seller'])==0):?>
-	<p><strong>You have not yet received any feedbacks for this category.</strong></p>
+	<p><span class='nocontent'>You have not yet received any feedbacks for this category.</span></p>
 <?php else:?>
 	<?php $afb_counter = 0;?>
 	<div class="paging posted_feedbacks">
@@ -556,7 +556,7 @@
 <div id="yp_buyer">
 	<h4>Feedbacks you posted as a buyer</h4>
 	<?php if(count($allfeedbacks['youpost_buyer'])==0):?>
-	<p><strong>You have not yet received any feedbacks for this category.</strong></p>
+	<p><span class='nocontent'>You have not yet received any feedbacks for this category.</span></p>
 <?php else:?>
 	<?php $afb_counter = 0;?>
 	<div class="paging posted_feedbacks">
@@ -610,7 +610,7 @@
 <div id="yp_seller">
 	<h4>Feedbacks you posted as a seller</h4>
 	<?php if(count($allfeedbacks['youpost_seller'])==0):?>
-	<p><strong>You have not yet received any feedbacks for this category.</strong></p>
+	<p><span  class='nocontent'>You have not yet received any feedbacks for this category.</span></p>
 <?php else:?>
 	<?php $afb_counter = 0;?>
 	<div class="paging posted_feedbacks">
@@ -840,11 +840,11 @@
 					<input type="hidden" name="is_email_verify" value="<?php echo $is_email_verify;?>">
 					
 					<span class="verify toverify" style="<?php echo $is_email_verify == 0 && trim($email) !== ''?'':'display:none;'?>">
-						<span class="verify_now">Verify</span>
+						<span class="verify_now">Verify Now</span>
 						<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" class="verify_img" style="display:none"/>
 					</span>	
 					<span class="verify doneverify" style="<?php echo $is_email_verify == 0?'display:none;':''?>">
-						<span class="span_bg chk_img"></span><span><strong>Verified</strong></span>
+						<span class="span_bg chk_img"></span><span style='font-size:14px; font-weight:bold; color:#1f4f98;'><strong>Verified</strong></span>
 					</span>
 					
 					<span class="personal_contact_cont" style="<?php echo trim($email)!==''?'':'display:none;' ?>">
@@ -1481,7 +1481,7 @@
 		<h2>Bought Items</h2>
 		<?php if(count($transaction['buy'])===0):?>
 		<br/>
-		<div><span style='margin-left: 10px; font-weight:bold'>You have not bought any items yet.</span></div>
+		<div><span class='nocontent'>You have not bought any items yet.</span></div>
 	<?php else: ?>
 	<?php $transac_counter = 0;?>
 	<div class="paging">
@@ -1742,7 +1742,7 @@
 		<h2>Sold Items</h2>
 		<?php if(count($transaction['sell'])===0):?>
 		<br/>
-		<div><span style='margin-left: 10px; font-weight:bold'>You have not sold any items yet.</span></div>
+		<div><span class='nocontent'>You have not sold any items yet.</span></div>
 	<?php else: ?>
 		<?php $transac_counter = 0;?>
 		<div class="paging">
@@ -2019,7 +2019,7 @@
 		<h2>Bought Items</h2>
 		<?php if(count($transaction['complete']['buy'])===0):?>
 			<br/>
-			<div><span style='margin-left:10px; font-weight:bold;'>No transaction for this category.</span></div>
+			<div><span class='nocontent'>There are no transactions for this category.</span></div>
 		<?php else: ?>
 		<?php $transac_counter = 0;?>
 		<div class="paging">
@@ -2154,7 +2154,7 @@
 		<h2>Sold Items</h2>
 		<?php if(count($transaction['complete']['sell'])===0):?>
 		<br/>
-		<div><span style='margin-left:10px; font-weight:bold;'>No transaction for this category.</span></div>
+		<div><span class='nocontent'>There are no transactions for this category.</span></div>
 		<?php else: ?>
 		<?php $transac_counter = 0;?>
 		<div class="paging">
@@ -2332,13 +2332,7 @@
 		<div class="profile_main_content" id="security_settings">
 			<h2>Security Settings</h2>
 			<div class="profile_fields">
-                            <!--
-							<p>Username:</p>
-							<div>
-								<p>dem0123 <a href="" class="change_password">change username</a></p>
-							</div>
-						-->
-						
+
 						<p>Login password</p>
 						<div>
 							<p>****************** <a href="<?=base_url()?>chngepaswd" class="change_password">change password</a></p>
@@ -2346,16 +2340,7 @@
 								Having a strong password makes your account more secure. We recommend that you change your password regularly. For the best security, use a combination of numbers, letters and special characters.
 							</p>
 						</div>
-                            <!--
-							<p>Security question</p>
-							<div>
-								<p>Not set <a href="">Set up</a></p>
-								<p>Strength: <span class="strength_green">Strong</span></p>
-								<p>
-									Forget your login password is one way. We recommend that you set up an easy to remember, and most questions and answers are not easy to get the others to more effectively protect your passwords secure.
-								</p>
-							</div>
-						-->
+    
 					</div>
 				</div>			
 				

@@ -1,9 +1,12 @@
 $(document).ready(function(){
+
  
     $('.paypal_loader').hide();
     $('.div_change_addree').hide();
     $('.paypal_button').show(); 
     $('.div_view_avail_location').hide();
+    
+    $('#c_mobile').numeric({negative : false});
     
 
     function cityFilter(stateregionselect,cityselect){
@@ -228,14 +231,16 @@ $(document).ready(function(){
 
 
         if(consignee.val().length == 0 || stateregion.val() == '0' || cityselect.val() == '0' || address.val().length == 0 || mobile.val().length == 0){
-            alert('Fill up Required Fields!');
+            alert('Please fill up all required fields.');
             return false;
-        }else if(mobile.val().length != 10){
-            alert('Mobile number should be numeric and 10 digits. eg: 9051235678');
+        }
+        
+        if(!/^(9|8)[0-9]{9}$/.test(mobile.val())){
+            alert('Mobile numbers be should 10 digits and start with 9. eg: 9051235678');
             validateRedTextBox('#c_mobile');
             return false;
         }
-
+        
         var formD = $('#delAddressFrm').serializeArray();
         formD.push({name:'temp_lat', value:0});
         formD.push({name:'temp_lng', value:0});

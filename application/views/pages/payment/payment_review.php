@@ -278,7 +278,7 @@
 
         <div>
           <label  >Telephone No:</label>
-          <input type="text" name="c_telephone" id="c_telephone" onkeypress="return isNumberKeyAndDash(event);" placeholder="eg. 123-45-67" maxlength="15" value="<?php echo $c_telephone?>">
+          <input type="text" name="c_telephone" id="c_telephone" onkeypress="return isNumberKeyAndDash(event);" placeholder="eg. 354-5973" maxlength="15" value="<?php echo $c_telephone?>">
         </div> 
 
         <div>
@@ -348,5 +348,5 @@
 </script>
 
 <script type='text/javascript' src='<?=base_url()?>assets/js/src/payment.js'></script>
-
+<script type='text/javascript' src='<?=base_url()?>assets/js/src/vendor/jquery.numeric.js'></script>
 <script type='text/javascript' src='<?=base_url()?>assets/js/src/vendor/jquery.simplemodal.js'></script>

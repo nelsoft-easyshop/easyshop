@@ -73,6 +73,7 @@ class payment_model extends CI_Model
     		";
     	}
     	;
+        
     	$sth = $this->db->conn_id->prepare($query);
     	$sth->bindParam(':item_id',$itemId,PDO::PARAM_INT);
     	$sth->bindParam(':quantity',$qty,PDO::PARAM_INT); 

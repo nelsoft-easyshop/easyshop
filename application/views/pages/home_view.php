@@ -54,7 +54,7 @@
                             <div class="cd_top_content <?php echo ($data['cd_product'][0]['is_soldout'])?'cd_main_slide_soldout':''?>">
                                 <span class="cd_discount_tag ">
                                     <span>
-                                        <?php echo ($data['cd_product'][0]['start_promo'])?($data['cd_product'][0]['percentage']):'2'  ?>%
+                                        <?php echo ($data['cd_product'][0]['start_promo'])?(number_format($data['cd_product'][0]['percentage'],'0','.',',')):'2'  ?>%
                                         <br />OFF
                                     </span>
                                 </span>
@@ -66,17 +66,19 @@
                                 <p class="cd_prod_base_price">&#8369; <?php echo number_format($data['cd_product'][0]['original_price'],2,'.',',');?></p>
                                 <?php if($data['cd_product'][0]['start_promo']):  ?>
                                     <p class="cd_prod_discount_price">&#8369; <?php echo number_format($data['cd_product'][0]['price'],2,'.',',');?></p>
-                                    <p class="cd_buy_btn"><a href="<?=base_url()?>item/<?=$data['cd_product'][0]['slug']?>  " class="<?php echo $data['cd_product'][0]['is_soldout']?'disable_btn':'orang_btn3';?>">BUY NOW</a></p>
+                                    <p class="cd_buy_btn"><a href="<?php echo $data['cd_product'][0]['is_soldout']?'javascript:void(0)': base_url().'item/'.$data['cd_product'][0]['slug']?>" class="<?php echo $data['cd_product'][0]['is_soldout']?'disable_btn':'orange_btn3';?>">BUY NOW</a></p>
                                 <?php else: ?>
                                     <p class="cd_prod_discount_price">&#8369; <?php echo number_format($data['cd_product'][0]['original_price']*(1-0.99),2,'.',',');?>*</p>
                                     <p class='cd_prod_disclaimer'>* Lowest possible price</p>
-                                    <p class="cd_buy_btn"><a href="<?=base_url()?>item/<?=$data['cd_product'][0]['slug']?>" class="disable_btn">BUY NOW</a></p>
+                                    <p class="cd_buy_btn"><a href="javascript:void(0);" class="disable_btn">BUY NOW</a></p>
                                 <?php endif;  ?>
                                
                             </div>
                         </div>                        
                         <div class="cd_right_con">
-                        <img src="<?= base_url().$data['cd_product'][0]['path'].'small/'.$data['cd_product'][0]['file']?>" alt="<?php echo html_escape($data['cd_product'][0]['product']);?>">
+                        <a href="<?=base_url()?>item/<?=$data['cd_product'][0]['slug']?>">
+                            <img src="<?= base_url().$data['cd_product'][0]['path'].'small/'.$data['cd_product'][0]['file']?>" alt="<?php echo html_escape($data['cd_product'][0]['product']);?>">
+                        </a>
                         </div>     
                     </div>
                 </div>
@@ -90,7 +92,7 @@
                             <div>
                                 <div>
                                     <span class="cd_slide_title"><a href="<?=base_url()?>item/<?=$countdown_slide['slug']?>"><?=html_escape($countdown_slide['product']);?></a></span>
-                                    <span class="cd_slide_discount"><span> <?php echo ($countdown_slide['start_promo'])?($countdown_slide['percentage']):'2';  ?>%<br />OFF</span></span>
+                                    <span class="cd_slide_discount"><span> <?php echo ($countdown_slide['start_promo'])?(  number_format($countdown_slide['percentage'],'0','.',',')   ):'2';  ?>%<br />OFF</span></span>
                                 </div>
                                 <div>
                                     <div class="cd_slide_bleft">
@@ -98,17 +100,19 @@
                                         
                                         <?php if($data['cd_product'][1]['start_promo']):  ?>
                                             <p class="cd_slide_discount_price">&#8369;<?php echo number_format($countdown_slide['price'],2,'.',','); ?></p>
-                                            <p class="cd_slide_buy_btn"><a href="" class="<?php echo $countdown_slide['is_soldout']?'disable_btn':'orang_btn3';?>">BUY NOW</a></p>
+                                            <p class="cd_slide_buy_btn"><a href="<?php echo $countdown_slide['is_soldout']?'javascript:void(0)':base_url().'item/'.$countdown_slide['slug'];?>" class="<?php echo $countdown_slide['is_soldout']?'disable_btn':'orange_btn3';?>">BUY NOW</a></p>
                                         <?php else: ?>
                                             <p class="cd_slide_discount_price">&#8369;<?php echo number_format($countdown_slide['original_price']*(1-0.99),2,'.',',');?>*</p>
                                             <p class='cd_prod_disclaimer'>* for as low as</p>
-                                            <p class="cd_slide_buy_btn"><a href="<?=base_url()?>item/<?=$countdown_slide['slug']?>" class="disable_btn">BUY NOW</a></p>
+                                            <p class="cd_slide_buy_btn"><a "javascript:void(0)" class="disable_btn">BUY NOW</a></p>
                                         <?php endif;  ?>
 
                                     </div>
                                     <div class="cd_slide_rleft">
                                         <span>
+                                            <a href="<?=base_url()?>item/<?=$countdown_slide['slug']?>">
                                             <img src="<?= base_url().$countdown_slide['path'].'categoryview/'.$countdown_slide['file']?>" alt="<?php echo html_escape($countdown_slide['product']);?>">
+                                            </a>
                                         </span>
                                     </div>
                                 </div>

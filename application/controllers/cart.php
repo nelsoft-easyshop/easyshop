@@ -102,12 +102,7 @@ class Cart extends MY_Controller{
         return $data;
     }
     
-    function add_item(){
-        IF(ENVIRONMENT === 'production'){
-            $this->cart->destroy();
-            exit();
-        }
-    
+    function add_item(){    
         $result='';
         if(intval($_POST['length']) == 0 || empty($_POST['opt'])){
             $out_opt = 0;
@@ -122,6 +117,7 @@ class Cart extends MY_Controller{
         }
         else{
             $data=$this->check_prod($_POST['id'],$go,$_POST['qty'])['data'];
+            
             $carts=$this->cart->contents();
             if(empty($carts)){
                 $this->cart->insert($data);
@@ -160,6 +156,7 @@ class Cart extends MY_Controller{
 		$this->session->set_userdata('cart_total_perItem',$this->cart_size());
         echo json_encode($result);
     }
+    
 
     public function cart_items($carts){
         foreach($carts as $key => $row1){
@@ -184,7 +181,7 @@ class Cart extends MY_Controller{
         return $this->cart->contents();
     }
 
-	private function check_prod($id,$opt,$userQTY){
+	private function check_prod($id,$opt,$userQTY){    
         $product = $this->product_model->getProductById($id);
         $final_price = $product['price']; //product['price'] already has the promo calculations applied to it
         $product_attr_id = "0";
@@ -255,14 +252,13 @@ class Cart extends MY_Controller{
             'maxqty' => $max_qty,
             'slug' => $product['slug'],
             'is_promote' => $product['is_promote'],
-            'additional_fee' => $add_price
+            'additional_fee' => $add_price,
+            'promo_type' => $product['promo_type'],
         );
 
         $result['data'] = $data;
-        $result['delete_to_cart'] =( $product['is_draft'] == "1" || $product['is_delete'] == "1" || $product['can_purchase'] === false
-            ? true
-            : false
-        ) ;
+        $result['delete_to_cart'] =($product['is_draft'] == "1" || $product['is_delete'] == "1" || $product['can_purchase'] === false);
+        
         return $result;
     }
 

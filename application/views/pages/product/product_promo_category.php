@@ -34,9 +34,13 @@
         <div class='product_list'>
             <?php foreach($items as $item): ?>
                 <div class="cd_product">
-                    <a href="<?=base_url().'item/'.$item['slug'];?>" class="cd_link_con"> 
+                    <?php if($item['is_soldout']): ?>
+                        <a href="javascript:void(0)" style='cursor: default;' class="cd_link_con"> 
+                    <?php else: ?>
+                        <a href="<?=base_url().'item/'.$item['slug'];?>" class="cd_link_con"> 
+                    <?php endif; ?> 
                     <div class="product_buy_con">
-                            <span><span href="<?=base_url().'item/'.$item['slug'];?>" class="orange_btn3 <?php echo $item['is_soldout']?'disabled':'';?>">BUY NOW</span></span>
+                            <span><span class="orange_btn3 <?php echo $item['is_soldout']||(!$item['start_promo'])?'disabled':'enabled';?>">BUY NOW</span></span>
                     </div>
                     <?php if($item['is_soldout']): ?>
                         <div class="cd_soldout">
@@ -45,7 +49,7 @@
                     <?php endif; ?>
                     <div>
                         <span class="cd_slide_discount">
-                            <span><?php echo ($item['start_promo'])?$item['percentage']:'2';?>%<br>OFF</span>
+                            <span><?php echo ($item['start_promo'])?number_format($item['percentage'],0,'.',','):'2';?>%<br>OFF</span>
                         </span>
                     </div>
                     
@@ -84,17 +88,7 @@
 <script src="<?=base_url()?>/assets/js/src/vendor/jquery.plugin.min.js" type="text/javascript"></script>
 <script src="<?=base_url()?>/assets/js/src/vendor/jquery.countdown.min.js" type="text/javascript"></script>
 <script>
-    function serverTime() { 
-        var time = null; 
-        $.ajax({url: config.base_url + 'home/getServerTime', 
-            async: false, dataType: 'text', 
-            success: function(text) { 
-                time = new Date(text); 
-            }, error: function(http, message, exc) { 
-                time = new Date(); 
-        }}); 
-        return time; 
-    }
+    
     
     $(document).ready(function(){
         var base_url = config.base_url;
@@ -143,7 +137,8 @@
             layout: ' <div class="cd_timer_days"><span id="countdown_days">{dnn}</span> <span>DAYS</span> </div>'+
                     ' <div class="cd_timer_hours"><span id="countdown_hours">{hnn}</span> <span>HOURS</span> </div>'+
                     ' <div class="cd_timer_minutes"><span id="countdown_minutes">{mnn}</span> <span>MINUTES</span> </div>' +
-                    ' <div class="cd_timer_seconds"><span id="countdown_second">{snn}</span> <span>SECONDS</span> </div>'
+                    ' <div class="cd_timer_seconds"><span id="countdown_second">{snn}</span> <span>SECONDS</span> </div>',
+            onExpiry: reload,
         });
     })
 

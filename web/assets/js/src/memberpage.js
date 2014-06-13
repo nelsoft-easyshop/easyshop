@@ -431,7 +431,7 @@ $(document).ready(function(){
 					else if(field==='email'){
 						if(obj === 'success'){
 							parentdiv.find('span.doneverify').show();
-							parentdiv.find('span.doneverify span:nth-child(2)').html('<strong>Email sent.</strong>');
+							parentdiv.find('span.doneverify span:nth-child(2)').html('An email has been sent. Please check your e-mail.');
 							errorspan.html('');
 							contdiv.hide();
 						}

@@ -98,7 +98,7 @@
         <div class="cd_promo_badge_con">
             <?php if($product['start_promo']): ?>
                 <span class="cd_slide_discount">
-                    <span><?php echo $product['percentage'];?>%<br>OFF</span>
+                    <span><?php echo  number_format( $product['percentage'],0,'.',',');?>%<br>OFF</span>
                 </span>
             <?php endif; ?>
         </div>
@@ -161,7 +161,7 @@
           </div>
           <?php if($product['start_promo']): ?>
           <div class="discount_perc">
-              <p id="percentage"><?php echo $product['percentage'];?>%<br/>OFF</p>
+              <p id="percentage"><?php echo number_format( $product['percentage'],0,'.',',');?>%<br/>OFF</p>
           </div>
           <?php endif;?>
       </div>
@@ -239,7 +239,7 @@
                     </span> 
                 </div>
                 <?PHP if(intval($product['is_promote']) === 1): ?>   
-                    <div><span class="recent_price"> PHP <?php echo number_format($product['original_price'],2,'.',','); ?></span> | <strong> <?php echo round(($product['original_price'] - $product['price'])/$product['original_price'] * 100);?> % OFF  </strong></div>          
+                    <div><span class="recent_price"> PHP <?php echo number_format($product['original_price'],2,'.',','); ?></span> | <strong> <?php echo number_format( $product['percentage'],0,'.',',');?> % OFF  </strong></div>          
                 <?PHP endif;?>
           </div>
           <div class="availability">
@@ -257,7 +257,9 @@
                     <a href="JavaScript:void(0)" id="send" class="fm1 orange_btn3 disabled">Buy Now</a> <br/>
                 <?php endif;?>
             <?php else: ?>
-            <a href="<?PHP echo base_url();echo $logged_in?'me':'login';?>" id="unablesend" class="add_to_cart"><span></span> Buy Now</a> <br />
+            
+            <a href="<?PHP echo base_url();echo $logged_in?'me?me=myinfo':'login';?>" id="unablesend" class="add_to_cart">
+            <span></span>  <?PHP echo $logged_in?'Verify now':'Login now';?></a> <br />
 			<p class="buy_btn_sub">
 				<?php if( !$logged_in && $userdetails['is_email_verify'] == 1 ){
 					echo "Sign-in to purchase this product.";
@@ -655,18 +657,6 @@ $(document).on('click','.prod_cat_drop',function() {
 <script src="<?=base_url()?>/assets/js/src/vendor/jquery.plugin.min.js" type="text/javascript"></script>
 <script src="<?=base_url()?>/assets/js/src/vendor/jquery.countdown.min.js" type="text/javascript"></script>
 <script>
-    function serverTime() {
-        var time = null;
-        $.ajax({url: config.base_url + 'home/getServerTime',
-            async: false, dataType: 'text',
-            success: function(text) {
-                time = new Date(text);
-            }, error: function(http, message, exc) {
-                time = new Date();
-            }});
-        return time;
-    }
-
     
     $(document).ready(function(){
         var endDate = new Date($('#cd_enddate').val());
@@ -676,7 +666,8 @@ $(document).on('click','.prod_cat_drop',function() {
             layout: ' <div class="cd_timer_days"><span id="countdown_days">{dnn}</span> <span class="cnt_lgnd">DAYS</span> </div>'+
                 ' <div class="cd_timer_hours"><span id="countdown_hours">{hnn}</span> <span class="cnt_lgnd">HOURS</span> </div>'+
                 ' <div class="cd_timer_minutes"><span id="countdown_minutes">{mnn}</span> <span class="cnt_lgnd">MINUTES</span> </div>' +
-                ' <div class="cd_timer_seconds"><span id="countdown_second">{snn}</span> <span class="cnt_lgnd">SECONDS</span> </div>'
+                ' <div class="cd_timer_seconds"><span id="countdown_second">{snn}</span> <span class="cnt_lgnd">SECONDS</span> </div>',
+             onExpiry: reload,
         });
 
         $('.mid_slide1').bxSlider({

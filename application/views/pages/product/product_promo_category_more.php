@@ -2,8 +2,13 @@
         <div>
             <?php foreach($items as $item): ?>
                 <div class="cd_product">
+                   <?php if($item['is_soldout']): ?>
+                        <a href="javascript:void(0)" style='cursor: default;' class="cd_link_con"> 
+                    <?php else: ?>
+                        <a href="<?=base_url().'item/'.$item['slug'];?>" class="cd_link_con"> 
+                    <?php endif; ?> 
                     <div class="product_buy_con">
-                            <span><a href="<?=base_url().'item/'.$item['slug'];?>" class="orange_btn3 <?php echo $item['is_soldout']?'disabled':'';?>">BUY NOW</a></span>
+                            <span><span class="orange_btn3 <?php echo $item['is_soldout']||(!$item['start_promo'])?'disabled':'enabled';?>">BUY NOW</span></span>
                     </div>
                     <?php if($item['is_soldout']): ?>
                         <div class="cd_soldout">
@@ -12,7 +17,7 @@
                     <?php endif; ?>
                     <div>
                         <span class="cd_slide_discount">
-                            <span><?php echo ($item['start_promo'])?$item['percentage']:'2';?>%<br>OFF</span>
+                            <span><?php echo ($item['start_promo'])?number_format($item['percentage'],0,'.',','):'2';?>%<br>OFF</span>
                         </span>
                     </div>
                     <a href="<?=base_url().'item/'.$item['slug'];?>">
