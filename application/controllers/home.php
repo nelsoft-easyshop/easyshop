@@ -64,8 +64,21 @@ class Home extends MY_Controller {
         echo date('M d,Y H:i:s');
     }
     
-
-
+    public function policy(){
+        $data = array('title' => 'Privacy Policy | Easyshop.ph',);
+        $data = array_merge($data, $this->fill_header());
+		$this->load->view('templates/header', $data);
+        $this->load->view('pages/policy');
+        $this->load->view('templates/footer_full');
+    }
+    
+    public function terms(){
+        $data = array('title' => 'Terms and Conditions | Easyshop.ph',);
+        $data = array_merge($data, $this->fill_header());
+		$this->load->view('templates/header', $data);
+        $this->load->view('pages/terms');
+        $this->load->view('templates/footer_full');
+    }
 }
 
 /* End of file home.php */

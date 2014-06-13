@@ -1,15 +1,16 @@
 <div class="right_header_discount">
       <div id="dsc_cont">
           <span class="dsc_header_txt">
-            20% DISCOUNT
+            <?php echo number_format( $percentage,0,'.',','); ?> % DISCOUNT
           </span>
           <?php if($start_promo): ?>
               <span class="dsc_prp_txt">
-              <span class="dsc_prp_txt2" style='margin-top:5px;'>2% OFF PER HOUR</span>
-              TIME LEFT
+                <span class="dsc_prp_txt2" style='margin-top:5px;'>
+                    PROMO LASTS UNTIL
+                </span>
               </span>
           <?php else: ?>  
-            <span class="dsc_prp_txt3"> 2% OFF STARTS IN</span>
+            <span class="dsc_prp_txt3">PROMO STARTS ON</span>
           <?php endif; ?>
       </div>
       <div class="dsc_tmr">
