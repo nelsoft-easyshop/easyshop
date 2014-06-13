@@ -9,7 +9,7 @@ $config = array(
                             'cdb'=>'Credit or Debit Card',
                             'paypal'=>'Paypal',
                             'dragonpay'=>'Dragon Pay',
-                            'dbd'=>'Direct Bank Deposit',
+                            // 'dbd'=>'Direct Bank Deposit',
                             'cod'=>'Cash on Delivery'
             ),
             'banner' => '',
@@ -30,7 +30,7 @@ $config = array(
                             'cdb'=>'Credit or Debit Card',
                             'paypal'=>'Paypal',
                             'dragonpay'=>'Dragon Pay',
-                            'dbd'=>'Direct Bank Deposit',
+                            // 'dbd'=>'Direct Bank Deposit',
                             'cod'=>'Cash on Delivery'
             ),
             'banner' => 'fixeddiscount',
