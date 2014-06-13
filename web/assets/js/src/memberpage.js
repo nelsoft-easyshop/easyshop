@@ -1326,6 +1326,8 @@ $(document).ready(function(){
 	$('.dragonpay_update_btn').on('click', function(){
 		var form = $(this).closest('form');
 		var thisbtn = $(this);
+		var origval = $(this).val();
+		
 		
 		$.post(config.base_url+'memberpage/transactionResponse', $(form).serializeArray(), function(data){
 			try{
@@ -1343,7 +1345,9 @@ $(document).ready(function(){
 				alert(obj.error);
 				thisbtn.attr('disabled',false);
 			}
+			thisbtn.val(origval);
 		});
+		thisbtn.val('Checking...');
 		thisbtn.attr('disabled',true);
 		return false;
 	});

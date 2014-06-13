@@ -5000,8 +5000,9 @@ box-shadow:         inset 0px -10px 12px -8px rgba(255, 255, 255, 0.75);
 	color: #FFFFFF;
 	font-size: 14px;
 	border-radius: 3px;
-	border: none;
+	border: none !important;
 	cursor:pointer;
+	width: 200px;
 }
 
 .css_dp_btn:hover{
