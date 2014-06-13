@@ -71,7 +71,7 @@
                             <?php else: ?> 
 
                                 <br/> <br/>
-                                <p class="chck_privacy"><input type="checkbox" checked id="chk_paypal2" name='chk_paypal2'><label for='chk_paypal2'> I acknowledge I have read and understood Easyshop.ph's</label> <a href="">Privacy Policy</a>.</p><br>
+                                <p class="chck_privacy"><input type="checkbox" checked id="chk_paypal2" name='chk_paypal2'><label for='chk_paypal2'> I acknowledge I have read and understood Easyshop.ph's</label><a href="<?=base_url()?>policy" target='_blank'>Privacy Policy</a>.</p><br>
                                 <div class="paypal_button">
                                     <a style="cursor:pointer" data-type="2"  class="paypal">
                                     <img src="<?php echo base_url()?>assets/images/paypal_checkout_button.png" alt="Paypal Credit/Debit Card Checkout" align="left" style="margin-right:7px;">
@@ -99,7 +99,7 @@
                             <?php else: ?> 
 
                             <br /> <br />
-                            <p class="chck_privacy"><input type="checkbox" checked  id="chk_paypal1" name='chk_paypal1'><label for='chk_paypal1'> I acknowledge I have read and understood Easyshop.ph's </label><a href="">Privacy Policy</a>.</p><br>
+                            <p class="chck_privacy"><input type="checkbox" checked  id="chk_paypal1" name='chk_paypal1'><label for='chk_paypal1'> I acknowledge I have read and understood Easyshop.ph's </label><a href="<?=base_url()?>policy" target='_blank'>Privacy Policy</a>.</p><br>
                             <div class="paypal_button">
                                 <a style="cursor:pointer" data-type="1"  class="paypal">
                                 <img src="https://www.paypal.com/en_US/i/btn/btn_xpressCheckout.gif" alt="Paypal Checkout" align="left" style="margin-right:7px;">
@@ -117,7 +117,7 @@
 <!-- #### DRAGON PAY #### -->
                         <?php if($key == 'dragonpay'): ?>
                         <div id="dragonpay" class="payment_inner_content">
-                            <p class="chck_privacy"><input type="checkbox" checked id="chk_dp" name='chk_dp'> <label for='chk_dp'>I acknowledge I have read and understood Easyshop.ph's  </label><a href="">Privacy Policy</a>.</p><br>
+                            <p class="chck_privacy"><input type="checkbox" checked id="chk_dp" name='chk_dp'> <label for='chk_dp'>I acknowledge I have read and understood Easyshop.ph's  </label><a href="<?=base_url()?>policy" target='_blank'>Privacy Policy</a>.</p><br>
                             <input type="button" class="btnDp orange_btn3" value="Pay via DRAGON PAY">
                         </div>
                         <?php endif; ?>
@@ -130,7 +130,7 @@
                             $attr = array('class' => 'dbdFrm','id' => 'dbdFrm','name' => 'dbdFrm');
                             echo form_open('pay/directbank/', $attr);
                             ?>
-                            <p class="chck_privacy"><input type="checkbox" checked  id="chk_dbd" name='chk_dbd'><label for='chk_dbd'> I acknowledge I have read and understood Easyshop.ph's</label> <a href="">Privacy Policy</a>.</p><br>
+                            <p class="chck_privacy"><input type="checkbox" checked  id="chk_dbd" name='chk_dbd'><label for='chk_dbd'> I acknowledge I have read and understood Easyshop.ph's</label> <a href="<?=base_url()?>policy" target='_blank'>Privacy Policy.</a>.</p><br>
                             <input type="button" class="payment_dbd orange_btn3" value="Proceed to Payment"> 
                             <input type="hidden" value="<?php echo md5(uniqid(mt_rand(), true)).'2';?>" name="paymentToken">   
                             <?php echo form_close();?>
@@ -149,7 +149,7 @@
                                 $attr = array('class' => 'codFrm','id' => 'codFrm','name' => 'codFrm');
                                 echo form_open('pay/cashondelivery/', $attr);
                                 ?>
-                                <p class="chck_privacy"><input type="checkbox" checked  id="chk_cod" name='chk_cod'><label for='chk_cod'> I acknowledge I have read and understood Easyshop.ph's</label> <a href="">Privacy Policy</a>.</p><br>
+                                <p class="chck_privacy"><input type="checkbox" checked  id="chk_cod" name='chk_cod'><label for='chk_cod'> I acknowledge I have read and understood Easyshop.ph's</label> <a href="<?=base_url()?>policy" target='_blank'>Privacy Policy</a>.</p><br>
                                 <input type="button" class="payment_cod orange_btn3" value="Proceed to Payment"> 
                                 <input type="hidden" value="<?php echo md5(uniqid(mt_rand(), true)).'1';?>" name="paymentToken">   
                                 <?php echo form_close();?>
