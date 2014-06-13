@@ -141,10 +141,14 @@ class Payment extends MY_Controller{
             $paymentType = $paymentType;
         }else{
             if($promoCount == $itemCount){
-                $paymentType = array(
-                    'cdb'=>'Credit or Debit Card',
-                    'paypal'=>'Paypal'
-                    );
+                if($itemCount == 1){
+                    $paymentType = array(
+                        'cdb'=>'Credit or Debit Card',
+                        'paypal'=>'Paypal'
+                        );  
+                }else{
+                    $promoteSuccess = false;    
+                }
             }else{
                 $promoteSuccess = false;
             }
