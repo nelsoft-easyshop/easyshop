@@ -15,20 +15,15 @@
 			-->
           </div>
         </div>
-        <!--
+
         <div class="about_footer">
           <h2>About</h2>
           <ul>
-            <li><a href="<?=base_url()?>home/under_construction">About Us</a></li>
-            <li><a href="<?=base_url()?>home/under_construction">User Guide</a></li>
-            <li><a href="<?=base_url()?>home/under_construction">Press Release</a></li>
-            <li><a href="<?=base_url()?>home/under_construction">User Services</a></li>
-            <li><a href="<?=base_url()?>home/under_construction">Privacy Policy</a></li>
-            <li><a href="<?=base_url()?>home/under_construction">Terms &amp; Conditions</a></li>
-            <li><a href="<?=base_url()?>home/under_construction">Contact Us</a></li>
+            <li><a href="<?=base_url()?>policy">Privacy Policy</a></li>
+            <li><a href="<?=base_url()?>terms">Terms &amp; Conditions</a></li>
           </ul>
         </div>
-        -->
+
         <div class="footer_payment">
           <h2>Payment</h2>
             <span class="span_bg mastercard"></span>
