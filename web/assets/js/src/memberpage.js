@@ -1342,7 +1342,7 @@ $(document).ready(function(){
 				alert('Payment confirmed.');
 				window.location.reload(true);
 			}else if(obj.result === 'fail'){
-				alert(obj.error);
+				alert(obj.error, 'Should you require further assistance, go to our Contact Us page to get in touch with us.');
 				thisbtn.attr('disabled',false);
 			}
 			thisbtn.val(origval);
