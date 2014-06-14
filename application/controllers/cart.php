@@ -118,11 +118,14 @@ class Cart extends MY_Controller{
         }
         else{
             $data=$this->check_prod($_POST['id'],$go,$_POST['qty'])['data'];
+                        
+            /*
+             *  Validation is performed upon checkout. This is less imposing on the users.
+             *
             if(!$this->cart_model->isCartInsertPromoAllow($carts, $data)){
                 $result = 'This item or another item in your cart can only be purchased individually. ';
-            }
-
-            else if(empty($carts)){
+            }*/
+            if(empty($carts)){
                 $this->cart->insert($data);
                 $result= sha1(md5("tanggap"));
             }
