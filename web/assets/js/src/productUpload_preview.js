@@ -146,13 +146,13 @@ $(document).ready(function(){
                     new_option.data('acctname',account_name);
                     new_option.data('acctno',account_no);
                     new_option.text('Bank: '+bank_name+' - '+ account_name);
-                    var new_id = parseInt(d.id,10);
+                    var new_id = parseInt(obj.id,10);
                     new_option.val(new_id);
                     new_option.insertBefore($('#deposit_info').find(':selected'));
                     $('#deposit_info').find(':selected').prop('selected', false);
                     $('#deposit_info').find('option[value = "'+new_id+'"]').prop('selected', true);
                     $('#prod_billing_id').val(new_id);
-                    
+                                        console.log(new_id);
                     $('#deposit_acct_name').attr('readonly', true);
                     $('#deposit_acct_no').attr('readonly', true);
                     $('#bank_list').attr('disabled', true);

@@ -479,9 +479,8 @@ $(function(){
                                         data: "bi_payment_type=Bank&bi_bank="+bank_list+"&bi_acct_no="+account_no+"&bi_acct_name="+account_name+"&"+csrfname+"="+csrftoken, 
                                         success: function(response) {
                                                 var obj = JSON.parse(response);
-                                                console.log(obj.e);
                                                 if((parseInt(obj.e,10) == 1) && (obj.d == 'success')){
-                                                    var new_id = parseInt(response,10);
+                                                    var new_id = parseInt(obj.id,10);
                                                     $('#prod_billing_id').val(new_id);
                                                     $('#step4_form').submit();
                                                 }else if((parseInt(obj.e,10) == 0) && (obj.d == 'duplicate')){
