@@ -138,8 +138,12 @@
               <img class=" seller-img" src="<?php echo base_url() . $product['userpic']?>/60x60.png?<?php echo time();?>"><br />
               <span class="name"><?php echo html_escape($product['sellerusername']);?></span> 
             </a><br/>
-           <span><a id="modal-launcher2" href="javascript:void(0)" title="Send a message"><span class="span_bg prod_message"></span></a></span>
-            <span>
+            
+            
+            <a id="modal-launcher2" href="javascript:void(0)" title="Send a message">
+            
+            <span><span class="span_bg prod_message"></span> </span>
+            
                 <br/>
                 <?php if(($vendorrating['rate_count'] <=0)):?>
                   <p><span style="font-size:11px; margin-left:8px;">No ratings received yet.</span></p>
@@ -148,7 +152,8 @@
                   <p><span class="rating_criteria"><?php echo $this->lang->line('rating')[1].':';?></span><span class="rating_value" > <?php echo number_format($vendorrating['rating2'],2,'.',',');?> </span> <img src="<?=base_url()?>assets/images/star-on.png" alt="*" title=""></p>
                   <p><span class="rating_criteria"><?php echo $this->lang->line('rating')[2].':';?></span><span class="rating_value"> <?php echo number_format($vendorrating['rating3'],2,'.',',');?></span> <img src="<?=base_url()?>assets/images/star-on.png" alt="*" title=""></p>
                 <?php endif;?>
-            </span>   
+      
+            </a>            
          </span> 
         
         <div class="clear prod_inner_border"></div>
@@ -478,7 +483,7 @@
   </div>
 
 
-  <input type = 'hidden' id='cd_enddate' value='<?php echo date('M d,Y H:i:s',strtotime(($product['start_promo'] == "1" ? $product['enddate'] : $product['startdate']))); ?>'/>
+  <input type = 'hidden' id='cd_enddate' value="<?php echo date('M d,Y H:i:s',strtotime(($product['start_promo'] == "1" ? $product['enddate'] : $product['startdate']))); ?>"/>
   <input id='p_qty' type='hidden' value=' <?php echo json_encode($product_quantity);?>'>
   <input id='p_shipment' type='hidden' value='<?php echo json_encode($shipment_information);?>'>
   <input id='p_itemid' type='hidden' value='0'/>
@@ -556,7 +561,7 @@
 </script>
 <script type="text/javascript">
 
-    $(function(){
+    $(function(){    
         var uid = <?php echo json_encode(!empty($uid)?$uid:0);?>;
         var seller_id = <?php echo $product['sellerid']; ?>;
         if (uid ==  seller_id || uid == 0  ) {
