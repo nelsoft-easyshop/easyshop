@@ -3925,15 +3925,17 @@ return array(
     
     "es_order_history" => array(
         "create" => "CREATE TABLE `es_order_history` (
-              `id_order_history` int(10) unsigned NOT NULL AUTO_INCREMENT,
+              `id_order_history` int(10) NOT NULL AUTO_INCREMENT,
               `order_id` int(10) unsigned NOT NULL DEFAULT '0',
               `comment` varchar(150) NOT NULL DEFAULT '',
               `date_added` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-              `order_status` int(10) unsigned NOT NULL DEFAULT '0',
+              `order_status` int(10) NOT NULL DEFAULT '0',
               PRIMARY KEY (`id_order_history`),
               KEY `fk_es_order_es_order_history_idx` (`order_id`),
+              KEY `fk_es_order_status_es_order_history_idx` (`order_status`),
+              CONSTRAINT `fk_es_order_status_es_order_history` FOREIGN KEY (`order_status`) REFERENCES `es_order_history` (`id_order_history`) ON DELETE NO ACTION ON UPDATE NO ACTION,
               CONSTRAINT `fk_es_order_es_order_history` FOREIGN KEY (`order_id`) REFERENCES `es_order` (`id_order`) ON DELETE NO ACTION ON UPDATE NO ACTION
-            ) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8;",
+            ) ENGINE=InnoDB AUTO_INCREMENT=78 DEFAULT CHARSET=utf8;",
         "insert" => "",
     ),
     
@@ -3973,10 +3975,11 @@ return array(
               `order_product_id` int(10) unsigned NOT NULL,
               `comment` varchar(150) NOT NULL DEFAULT '',
               `date_added` datetime DEFAULT CURRENT_TIMESTAMP,
-              `order_product_status` tinyint(3) DEFAULT '0',
+              `order_product_status` int(10) NOT NULL DEFAULT '0',
               PRIMARY KEY (`id_order_product_history`),
               UNIQUE KEY `UNIQUE` (`order_product_status`,`order_product_id`),
               KEY `fk_es_order_product_idx` (`order_product_id`),
+              CONSTRAINT `fk_es_order_product_status_es_order_product_history` FOREIGN KEY (`order_product_status`) REFERENCES `es_order_product_status` (`id_order_product_status`) ON DELETE NO ACTION ON UPDATE NO ACTION,
               CONSTRAINT `fk_es_order_product_history_es_order_product` FOREIGN KEY (`order_product_id`) REFERENCES `es_order_product` (`id_order_product`) ON DELETE NO ACTION ON UPDATE NO ACTION
             ) ENGINE=InnoDB AUTO_INCREMENT=68 DEFAULT CHARSET=utf8;",
         "insert" => "",
