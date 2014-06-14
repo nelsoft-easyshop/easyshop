@@ -705,6 +705,7 @@ class Payment extends MY_Controller{
                 $apiResponse = json_encode($apiResponseArray);
 
             }
+            
             if(strtolower($status) == "s"){
                 $paymentType = 4;
             }
@@ -778,7 +779,7 @@ class Payment extends MY_Controller{
             $response = array_merge($response,$return);  
             $this->removeItemFromCart(); 
             $this->session->unset_userdata('choosen_items');
-            $this->sendNotification(array('member_id'=>$member_id, 'order_id'=>$orderId, 'invoice_no'=>$invoice));
+            // $this->sendNotification(array('member_id'=>$member_id, 'order_id'=>$orderId, 'invoice_no'=>$invoice));
            
             #google analytics data
             $analytics = $this->ganalytics($itemList,$orderId);
