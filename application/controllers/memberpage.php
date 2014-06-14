@@ -476,7 +476,7 @@ class Memberpage extends MY_Controller
 					$serverResponse['result'] = 'success';
 					$serverResponse['error'] = '';
 				}else if($dragonpayResult == 'P' || $dragonpayResult == 'U'){
-					$serverResponse['error'] = 'Kindly click the link in the email sent by Dragonpay to verify your payment.';
+					$serverResponse['error'] = 'Kindly follow the instructions in the e-mail sent to you by Dragonpay.';
 				}
 			}else{
 				$serverResponse['error'] = 'Transaction does not exist.';
