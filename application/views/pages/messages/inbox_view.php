@@ -179,6 +179,7 @@
             }
         });
     }
+    
 	$("#modal_send_btn").on("click",function(){
 		var recipient = $("#msg_name").val().trim();
 		var msg = $("#msg-message").val().trim();
@@ -234,10 +235,11 @@
 		var csrftoken = $("meta[name='csrf-token']").attr('content');
         var csrfname = $("meta[name='csrf-name']").attr('content');
 
-		var result = "";
+		var result = false;
 		$.ajax({
 			type : "POST",
 			dataType : "json",
+            async: false,
 			url : "<?=base_url()?>messages/send_msg",
             beforeSend :function(){
                 $("#msg_textarea img").show();
@@ -245,6 +247,8 @@
             },
 			data : {recipient:recipient,msg:msg,csrfname:csrftoken},
 			success : function(data) {
+                $("#msg_textarea img").hide();
+                $("#send_btn").show();
                 if (data.success != 0) {
                     $("#table_id tbody").empty();
                     onFocus_Reload(data)
@@ -255,10 +259,10 @@
                 }
 			}
 		});
-        $("#msg_textarea img").hide();
-        $("#send_btn").show();
-		return result;
+        return result;
 	}
+    
+    
 	$("#table_id tbody").on("click",".btn_each_msg",function(){
 		var D = eval('(' + $(this).attr('data') + ')');
 		var html = "";
