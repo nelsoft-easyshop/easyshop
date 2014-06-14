@@ -259,11 +259,22 @@
           </p>
         </div>
         <p class="product_content_payment"> <strong>Payment:</strong><br />
-          <span class="mastercard"></span>
-          <span class="visa"></span>
-          <span class="dragonpay"></span>
-          <span class="paypal"></span>
-          <?php if(intval($product['is_cod'],10) === 1): ?>
+
+          <?php if(isset($payment_method['cdb'])): ?>
+            <span class="mastercard"></span>
+            <span class="visa"></span>
+          <?php endif; ?>
+          
+           <?php if(isset($payment_method['dragonpay'])) : ?>
+            <span class="dragonpay"></span>
+          <?php endif; ?>
+          
+          <?php if(isset($payment_method['paypal'])) : ?>
+             <span class="paypal"></span>
+          <?php endif; ?>
+
+         
+          <?php if( isset($payment_method['cod']) && intval($product['is_cod'],10) === 1): ?>
                 <span class="cod"></span>
           <?php endif; ?>
          
