@@ -624,16 +624,6 @@ $(document).on('click','.prod_cat_drop',function() {
 <script>
     
     $(document).ready(function(){
-        var endDate = new Date($('#cd_enddate').val());
-        $('.cd_timer_container').countdown({
-            until : endDate,
-            serverSync: serverTime,
-            layout: ' <div class="cd_timer_days"><span id="countdown_days">{dnn}</span> <span class="cnt_lgnd">DAYS</span> </div>'+
-                ' <div class="cd_timer_hours"><span id="countdown_hours">{hnn}</span> <span class="cnt_lgnd">HOURS</span> </div>'+
-                ' <div class="cd_timer_minutes"><span id="countdown_minutes">{mnn}</span> <span class="cnt_lgnd">MINUTES</span> </div>' +
-                ' <div class="cd_timer_seconds"><span id="countdown_second">{snn}</span> <span class="cnt_lgnd">SECONDS</span> </div>',
-             onExpiry: reload,
-        });
 
         $('.mid_slide1').bxSlider({
             mode: 'horizontal',

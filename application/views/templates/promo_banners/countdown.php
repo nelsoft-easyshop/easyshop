@@ -41,7 +41,7 @@
   
   <script type='text/javascript'>
         $(document).ready(function(){
-            var endDate = new Date(<?php echo date('M d,Y H:i:s',strtotime(($start_promo == "1" ? $enddate: $startdate))); ?>);
+            var endDate = new Date(<?php echo json_encode(date('M d,Y H:i:s',strtotime(($start_promo == "1" ? $enddate: $startdate)))); ?>);
             $('.cd_timer_container').countdown({
                 until : endDate,
                 serverSync: serverTime,
@@ -50,5 +50,6 @@
                     ' <div class="cd_timer_minutes"><span id="countdown_minutes">{mnn}</span> <span class="cnt_lgnd">MINUTES</span> </div>' +
                     ' <div class="cd_timer_seconds"><span id="countdown_second">{snn}</span> <span class="cnt_lgnd">SECONDS</span> </div>',
                  onExpiry: reload,
+            });
         });
   </script>
