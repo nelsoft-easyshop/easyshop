@@ -21,7 +21,7 @@ function sum(obj){
     
     $.ajax({
         async:false,
-        url: config.base_url + "cart/change_qty",
+        url: config.base_url + "cart/fnc_qty",
         type:"POST",
         dataType:"JSON",
         data:{id:id,qty:value, csrfname:csrftoken},
