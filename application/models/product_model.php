@@ -2047,14 +2047,14 @@ class product_model extends CI_Model
 
     public function is_purchase_allowed($buyer_id,$type){
 
-        $query = $this->xmlmap->getFilenameID('sql/product','getPromoOrderCount');
+        $query = $this->xmlmap->getFilenameID('sql/product','getPromoOrderQuantity');
         $sth = $this->db->conn_id->prepare($query);
         $sth->bindParam(':buyer_id',$buyer_id, PDO::PARAM_INT);
         $sth->bindParam(':type',$type, PDO::PARAM_INT);
         $sth->closeCursor();
         $sth->execute();
         $result = $sth->fetchAll(PDO::FETCH_ASSOC);
-
+  
         $promo = $this->config->item('Promo')[$type];
         if($result[0]['cnt'] >= $promo['purchase_limit']){
             return false;

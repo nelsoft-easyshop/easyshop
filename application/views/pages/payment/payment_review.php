@@ -46,7 +46,7 @@
                         <a href="javascript:void(0);"  class="link_address grey_btn">Change Shipping Address</a> 
                     </div>
 
-                    <?php if($success && $qtysuccess && $promoteSuccess): ?>
+                    <?php if($success && $qtysuccess && $promoteSuccess['purchase_limit'] && $promoteSuccess['solo_restriction']): ?>
                     <div>
                         <p class="fl_pay"><strong>How would you like to pay?</strong></p>
                         <ul class="idTabs payment_options_tabs">
@@ -193,15 +193,18 @@
                     <?php endforeach; ?>
                     </div>                
                     <?php else: ?>
-                        <?php if(!$success && $qtysuccess && $promoteSuccess):?>
+                        <?php if(!$success):?>
                             <br/>
                             <span style='padding-top:8px; font-size: 12px; font-weight:bold;color:red;'>NOTE: One or more of your item(s) is unavailable in your location. </span>
-                        <?php elseif($success && !$qtysuccess  && $promoteSuccess ):?>
+                        <?php elseif(!$qtysuccess):?>
                             <br/>
                             <span style='padding-top:8px; font-size: 12px; font-weight:bold;color:red; '>NOTE: The availability of one of your items is less than your desired quantity. Someone may have purchased the item before you can complete your payment. Check the availability of your item and try again.</span>
-                        <?php elseif($success && $qtysuccess  && !$promoteSuccess):?>
+                        <?php elseif(!$promoteSuccess['solo_restriction']):?>
                             <br/>
-                            <span style='padding-top:8px; font-size: 12px; font-weight:bold;color:red'>NOTE: One or more of your item(s) can only be purchased individually. </span>
+                            <span style='padding-top:8px; font-size: 12px; font-weight:bold;color:red'>NOTE: One of your items can only be purchased  individually.</span>
+                        <?php elseif(!$promoteSuccess['purchase_limit']):?>
+                            <br/>
+                            <span style='padding-top:8px; font-size: 12px; font-weight:bold;color:red'>NOTE: You have exceeded your purchase limit for a promo of an item in your cart.</span>
                         <?php else:?>
                             <br/>
                             <span style='padding-top:8px; font-size: 12px; font-weight:bold;color:red'>NOTE: One or more of your item(s) is unavailable in your location. </span>
@@ -276,12 +279,12 @@
     <div class="del_address">
         <div>
           <label >Consignee Name:<font color="red">*</font></label>           
-          <input type="text" name="consignee" id="consignee" value="<?php echo $consignee?>">
+          <input type="text" name="consignee" id="consignee" value="<?php echo (strlen(trim($consignee)) !== 0)?$consignee:$fullname;  ?>">
         </div>
 
         <div>
           <label >Mobile No:<font color="red">*</font></label> 
-          <input maxlength="10" placeholder="eg. 9051235678" type="text" name="c_mobile" id="c_mobile" value="<?php echo $c_mobile?>"> 
+          <input maxlength="10" placeholder="eg. 9051235678" type="text" name="c_mobile" id="c_mobile" value="<?php echo (strlen(trim($c_mobile)) !== 0)?$c_mobile:$contactno;?>"> 
         </div>
 
         <div>

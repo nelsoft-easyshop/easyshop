@@ -126,7 +126,8 @@ class Payment extends MY_Controller{
         }
         
         $paymentType = $configPromo[0]['payment_method'];        
-        $promoteSuccess = true;
+        $promoteSuccess['purchase_limit'] = true;
+        $promoteSuccess['solo_restriction'] = true;
         
         /*  
          *   Changed code to be able to adopt for any promo type
@@ -136,13 +137,14 @@ class Payment extends MY_Controller{
                 $qty = $value['qty'];
                 $paymentType = array_intersect ( $paymentType , $configPromo[$value['promo_type']]['payment_method']);
                 $purchase_limit = $configPromo[$value['promo_type']]['purchase_limit'];
-                if($purchase_limit < $qty){
-                    $promoteSuccess = false;
+                $can_purchase = $this->product_model->is_purchase_allowed($member_id ,$value['promo_type']);
+                if($purchase_limit < $qty || (!$can_purchase) ){
+                    $promoteSuccess['purchase_limit'] = false;
                     break;
                 }
             }
         }else{
-            $promoteSuccess = false;
+            $promoteSuccess['solo_restriction'] = false;
         }
 
         $data['paymentType'] = $paymentType;        
@@ -191,7 +193,7 @@ class Payment extends MY_Controller{
         $carts = $this->session->all_userdata();
 
         if(count($carts['choosen_items']) <= 0){
-            echo  '{"e":"0","d":"No item in cart."}';
+            echo  '{"e":"0","d":"There are no items in your cart."}';
             exit();
         } 
 
@@ -199,7 +201,7 @@ class Payment extends MY_Controller{
         $productCount = count($itemList);  
 
         if($qtysuccess != $productCount){
-            echo  '{"e":"0","d":"Item quantity not available."}';
+            echo  '{"e":"0","d":"One of the items in your cart is unavailable."}';
             exit();
         } 
 
@@ -249,7 +251,7 @@ class Payment extends MY_Controller{
                 exit();
             }
         }
-
+        
         foreach ($itemList as $key => $value) {
             $dataitem .= '&L_PAYMENTREQUEST_0_QTY'.$cnt.'='. urlencode($value['qty']).
             '&L_PAYMENTREQUEST_0_AMT'.$cnt.'='.urlencode($value['price']).
@@ -288,6 +290,7 @@ class Payment extends MY_Controller{
            $padata .= '&LANDINGPAGE='.urlencode('Login'); 
         }
         $httpParsedResponseAr = $this->paypal->PPHttpPost('SetExpressCheckout', $padata, $PayPalApiUsername, $PayPalApiPassword, $PayPalApiSignature, $PayPalMode);
+
         $pdataarray = json_encode(explode('&',substr($padata, 1)));
         
 

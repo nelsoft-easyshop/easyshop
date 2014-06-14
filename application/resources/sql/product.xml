@@ -966,9 +966,9 @@ FROM
     SELECT slug, name FROM es_product WHERE id_product = :id;
 </select>
 
-<select id="getPromoOrderCount">
+<select id="getPromoOrderQuantity">
     SELECT
-    COUNT(id_order) AS `cnt` FROM es_order o
+    COALESCE(SUM(op.order_quantity),0) AS `cnt` FROM es_order o
 	INNER JOIN es_order_product op ON o.id_order = op.order_id 
 	INNER JOIN es_product p ON p.id_product = op.product_id AND p.promo_type = :type
     WHERE o.`buyer_id` = :buyer_id
