@@ -160,7 +160,7 @@
                             if(data == true){
                                 window.location.replace("<?=base_url()?>payment/review");
                             }else{
-                                alert(data);
+                                alert(data,  'Remove these items from your cart to proceed with your checkout.');
                             }
                         }
                     });

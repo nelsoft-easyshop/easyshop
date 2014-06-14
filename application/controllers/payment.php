@@ -65,7 +65,7 @@ class Payment extends MY_Controller{
 
         $promo_allow = $this->cart_model->isCartCheckoutPromoAllow($cart_contentss['choosen_items']);
         if(!$promo_allow){
-            $res = "Some items in your cart can only be purchased individually. <hr/><b> Remove these items from your cart to proceed with your checkout. </b> ";
+            $res = "Some items in your cart can only be purchased individually.";
         }
         echo json_encode($res);
     }
