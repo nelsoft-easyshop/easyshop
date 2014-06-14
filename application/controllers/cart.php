@@ -238,11 +238,11 @@ class Cart extends MY_Controller{
         $promo = $this->config->item('Promo')[$product['promo_type']];
         $data = array(
             'id'      => $id,
-            'qty'     => (intval($userQTY) >= intval($promo['purchase_limit'])
+            'qty'     => ($product['is_promote'] == "1" && intval($userQTY) >= intval($promo['purchase_limit'])
                     ? $promo['purchase_limit']
                     : ($userQTY > $max_qty
                         ? $max_qty
-                        : $userQTY )),
+                        : $userQTY )), #check check check! -_-
             'price'   => $final_price,
             'original_price' => $product['original_price'],
             'name'    => $product['product'],
@@ -286,32 +286,60 @@ class Cart extends MY_Controller{
     }
     
     function change_qty(){
-        $result=array();
-        $result['result'] = false;
-        $cart = $this->cart->contents();
-            foreach($cart as $keys => $child){
-                if($_POST['id']==$keys){
-                    $max_qty = $cart[$keys]['maxqty'];
-                    $data = array(
-                           'rowid' => $_POST['id'],
-                           'qty'   => ($_POST['qty'] > $max_qty ? $max_qty : $_POST['qty'])
-                        );
-                    if($this->cart->update($data)){
-                        if($this->input->post('qty') != 0){
-                            $carts=$this->cart->contents();
-                            $totalprice = ($carts[$_POST['id']]['price']) * $_POST['qty'];
-                            $result=array(
-                                'subtotal'=>  number_format($totalprice,2,'.',','),
-                                'total' =>  $this->get_total_price(),
-                                'result' => true,
-                                'maxqty' => $max_qty);
-                        }
-                    }
-                }
-            }
-        echo json_encode($result);
+//        $result=array();
+//        $result['result'] = false;
+//        $cart = $this->cart->contents();
+//        foreach($cart as $keys => $child){
+//            if($_POST['id']==$keys){
+//                $max_qty = $cart[$keys]['maxqty'];
+//                $data = array(
+//                       'rowid' => $_POST['id'],
+//                       'qty'   => ($_POST['qty'] > $max_qty ? $max_qty : $_POST['qty'])
+//                    );
+//                if($this->cart->update($data)){
+//                    if($this->input->post('qty') != 0){
+//                        $carts=$this->cart->contents();
+//                        $totalprice = ($carts[$_POST['id']]['price']) * $_POST['qty'];
+//                        $result=array(
+//                            'subtotal'=>  number_format($totalprice,2,'.',','),
+//                            'total' =>  $this->get_total_price(),
+//                            'result' => true,
+//                            'maxqty' => $max_qty);
+//                    }
+//                }
+//            }
+//        }
+        $qty = intval($this->input->post("qty"));
+        $id = $this->input->post("id");
+        $cart = $this->cart_items($this->cart->contents());
+        $result2 = $this->change_quantity($id,$cart[$id],$qty);
+        echo json_encode($result2);
     }
-    
+    public function change_quantity($id,$cart_item,$qty){
+        $data['rowid'] = $id;
+        $data['qty'] = $qty;
+        $purchase_limit = $this->config->item('Promo')[$cart_item['promo_type']]['purchase_limit'];
+        $max_qty = $cart_item['maxqty'];
+        if($cart_item['is_promote'] == "1" && $qty > $purchase_limit){
+            $data['qty'] = $purchase_limit;
+        }else if ($qty > $max_qty ){
+            $data['qty'] = $max_qty;
+        }
+        $this->cart->update($data);
+        if($qty != 0){
+            $cart=$this->cart->contents();
+            $totalprice = ($cart[$id]['price']) * $cart[$id]['qty'];
+            $result=array(
+                'subtotal'=>  number_format($totalprice,2,'.',','),
+                'total' =>  $this->get_total_price(),
+                'result' => true,
+                'qty' =>$cart[$id]['qty'],
+                'maxqty' => $max_qty);
+        }
+
+        return $result;
+
+    }
     function get_total_price(){
         $cart = $this->cart->contents();
         $total = 0;
