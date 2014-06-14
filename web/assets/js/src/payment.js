@@ -100,7 +100,7 @@ $(document).ready(function(){
         var csrfname = $("meta[name='csrf-name']").attr('content');
         var type = $(this).data('type');
     
-        $(this).val('Submiting...'); 
+        $(this).val('Please wait'); 
         $(this).attr('disabled','disabled');
 
         if($('#chk_dp').is(':checked')){

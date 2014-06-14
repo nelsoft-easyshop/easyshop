@@ -121,7 +121,7 @@
                         <div id="dragonpay" class="payment_inner_content">
                             <p class="chck_privacy"><input type="checkbox" checked id="chk_dp" name='chk_dp'> <label for='chk_dp'>I acknowledge I have read and understood Easyshop.ph's  </label><a href="<?=base_url()?>policy" target='_blank'><span style='border-bottom:1px dotted'> Privacy Policy </span></a>.</p><br>
                             <br/>
-                            <input type="button" class="btnDp orange_btn3" value="Pay via DRAGON PAY">
+                            <input type="button" style='width: 153px;' class="btnDp orange_btn3" value="Pay via DRAGON PAY">
                         </div>
                         <?php endif; ?>
 
