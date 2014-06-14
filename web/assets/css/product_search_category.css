@@ -783,7 +783,7 @@ Advanced Search Filters
     left: 0;
     line-height: 50px;
     position: absolute;
-    top: 110px;
+    top: 110px !important;
     width: 100%;
     z-index: 3;
 }
