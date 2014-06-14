@@ -31,7 +31,7 @@
                         </a>
                         <div style='float:right; margin-right: 130px;'>
                             <?PHP if($row['is_promote'] === "1"): ?>
-                                <span style="float: right; margin-right: -125px; margin-top: 23px; color: red; font-size: 15px;">DISCOUNTED</span>
+                                <span style="float: right; margin-right: -125px; color: #ff4400; font-size: 12px; border-bottom: 1px dotted;">PROMO ITEM</span>           
                             <?PHP endif; ?>
                             <span class="product_title" style='width:300px !important'>  <a href="<?=base_url().'item/'.$row['slug'];?>"> <?PHP echo html_escape($row['name']); ?></a></span>
                             <br/>
