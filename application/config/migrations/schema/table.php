@@ -3925,17 +3925,17 @@ return array(
     
     "es_order_history" => array(
         "create" => "CREATE TABLE `es_order_history` (
-              `id_order_history` int(10) NOT NULL AUTO_INCREMENT,
-              `order_id` int(10) unsigned NOT NULL DEFAULT '0',
-              `comment` varchar(150) NOT NULL DEFAULT '',
-              `date_added` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-              `order_status` int(10) NOT NULL DEFAULT '0',
-              PRIMARY KEY (`id_order_history`),
-              KEY `fk_es_order_es_order_history_idx` (`order_id`),
-              KEY `fk_es_order_status_es_order_history_idx` (`order_status`),
-              CONSTRAINT `fk_es_order_status_es_order_history` FOREIGN KEY (`order_status`) REFERENCES `es_order_history` (`id_order_history`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-              CONSTRAINT `fk_es_order_es_order_history` FOREIGN KEY (`order_id`) REFERENCES `es_order` (`id_order`) ON DELETE NO ACTION ON UPDATE NO ACTION
-            ) ENGINE=InnoDB AUTO_INCREMENT=78 DEFAULT CHARSET=utf8;",
+          `id_order_history` int(10) NOT NULL AUTO_INCREMENT,
+          `order_id` int(10) unsigned NOT NULL DEFAULT '0',
+          `comment` varchar(150) NOT NULL DEFAULT '',
+          `date_added` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+          `order_status` int(10) NOT NULL DEFAULT '0',
+          PRIMARY KEY (`id_order_history`),
+          KEY `fk_es_order_es_order_history_idx` (`order_id`),
+          KEY `fk_es_order_status_es_order_history_idx` (`order_status`),
+          CONSTRAINT `fk_es_order_status_es_order_history` FOREIGN KEY (`order_status`) REFERENCES `es_order_status` (`order_status`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+          CONSTRAINT `fk_es_order_es_order_history` FOREIGN KEY (`order_id`) REFERENCES `es_order` (`id_order`) ON DELETE NO ACTION ON UPDATE NO ACTION
+        ) ENGINE=InnoDB AUTO_INCREMENT=89 DEFAULT CHARSET=utf8;",
         "insert" => "",
     ),
     
