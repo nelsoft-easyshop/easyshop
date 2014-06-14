@@ -322,7 +322,6 @@ class Payment extends MY_Controller{
             redirect(base_url().'home', 'refresh');
         };
 
-        $qtysuccess = $this->resetPriceAndQty();
         $carts = $this->session->all_userdata();
         if(!isset($carts['choosen_items'])){
             redirect(base_url().'home', 'refresh');
@@ -356,45 +355,48 @@ class Payment extends MY_Controller{
         $majorIsland = $bigThree['majorIsland'];   
 
         $transactionID = "";
- 
-        if($qtysuccess != $productCount){
+
+        if(isset($_GET["token"]) && isset($_GET["PayerID"]))
+        {
+
+            $payerid = $_GET["PayerID"];
+            $token= $_GET["token"];
+
+            $return = $this->payment_model->selectFromEsOrder($token,$paymentType);
+            $invoice = $return['invoice_no'];
+            $orderId = $return['id_order'];
+            $response['dateadded'] = $return['dateadded'];
+
             $prepareData = $this->processData($itemList,$city,$region,$majorIsland);
             $itemList = $prepareData['newItemList'];
-            $response['itemList'] = $itemList;
-            $response['message'] = '<div style="color:red"><b>Error 1011: </b>One of the item was unable to proceed in terms of lack of quantity</div>';
-        }else{
-            if(isset($_GET["token"]) && isset($_GET["PayerID"]))
-            {
-            
-                $prepareData = $this->processData($itemList,$city,$region,$majorIsland);
-                $ItemTotalPrice = $prepareData['totalPrice'];
-                $productstring = $prepareData['productstring'];
-                $itemList = $prepareData['newItemList'];
-                $toBeLocked = $prepareData['toBeLocked'];
+            $ItemTotalPrice = $prepareData['totalPrice'];
+            $productstring = $prepareData['productstring']; 
+            $toBeLocked = $prepareData['toBeLocked'];
 
-                $response['itemList'] = $itemList;
+            $locked = $this->lockItem($toBeLocked,$orderId,'delete');
+
+            $qtysuccess = $this->resetPriceAndQty();
+
+            if($qtysuccess != $productCount){
+                $response['message'] = '<div style="color:red"><b>Error 1011: </b>One of the item was unable to proceed in terms of lack of quantity</div>';
+            }else{ 
+
+             
                 $grandTotal= $ItemTotalPrice;
-                $payerid = $_GET["PayerID"];
-                $token= $_GET["token"];
-
+                $response['total'] = $grandTotal;
+        
                 $padata =   '&TOKEN='.urlencode($token).
                 '&PAYERID='.urlencode($payerid).
                 '&PAYMENTACTION='.urlencode("SALE").
                 '&AMT='.urlencode($grandTotal).
                 '&CURRENCYCODE='.urlencode($PayPalCurrencyCode);
-                
-                $return = $this->payment_model->selectFromEsOrder($token,$paymentType);
-                $invoice = $return['invoice_no'];
-                $orderId = $return['id_order'];
-                $response['dateadded'] = $return['dateadded'];
-                $response['total'] = $grandTotal;
 
                 $httpParsedResponseArGECD = $this->paypal->PPHttpPost('GetExpressCheckoutDetails', $padata, $PayPalApiUsername, $PayPalApiPassword, $PayPalApiSignature, $PayPalMode);
                 $apiResponseArray['GetExpressCheckoutDetails '] =  $httpParsedResponseArGECD;
-                   
+
                 $httpParsedResponseAr = $this->paypal->PPHttpPost('DoExpressCheckoutPayment', $padata, $PayPalApiUsername, $PayPalApiPassword, $PayPalApiSignature, $PayPalMode);
                 $apiResponseArray['DoExpressCheckoutPayment'] = $httpParsedResponseAr;
-                
+
                 if(("SUCCESS" == strtoupper($httpParsedResponseAr["ACK"]) || "SUCCESSWITHWARNING" == strtoupper($httpParsedResponseAr["ACK"])) && ("SUCCESS" == strtoupper($httpParsedResponseArGECD["ACK"])))
                 {
                     $transactionID = urldecode($httpParsedResponseAr["TRANSACTIONID"]);
@@ -403,11 +405,11 @@ class Payment extends MY_Controller{
                     $nvpStr = "&TRANSACTIONID=".$transactionID;
                     $httpParsedResponseAr =  $this->paypal->PPHttpPost('GetTransactionDetails', $nvpStr, $PayPalApiUsername, $PayPalApiPassword, $PayPalApiSignature, $PayPalMode);
                     $apiResponseArray['GetTransactionDetails'] =  $httpParsedResponseAr;
-      
-                    if("SUCCESS" == strtoupper($httpParsedResponseAr["ACK"]) || "SUCCESSWITHWARNING" == strtoupper($httpParsedResponseAr["ACK"])) {
-     
-                        # START SAVING TO DATABASE HERE
-                  
+
+                    if("SUCCESS" == strtoupper($httpParsedResponseAr["ACK"]) || "SUCCESSWITHWARNING" == strtoupper($httpParsedResponseAr["ACK"]))
+                    {
+                            # START SAVING TO DATABASE HERE
+
                         $apiResponseArray['ProductData'] =   $itemList;
                         $apiResponse = json_encode($apiResponseArray);
                         foreach ($itemList as $key => $value) {               
@@ -416,41 +418,40 @@ class Payment extends MY_Controller{
                             $orderQuantity = $value['qty'];
                             $itemComplete = $this->payment_model->deductQuantity($productId,$productItem,$orderQuantity);
                         }
-                        $locked = $this->lockItem($toBeLocked,$orderId,'delete');
                         $complete = $this->payment_model->updatePaymentIfComplete($orderId,$apiResponse,$token . '-' .$transactionID,$paymentType);
-                         
+
                         if($complete <= 0){
                             $response['message'] = '
                             <div style="color:red"><b>Error 4: </b>Someting went wrong. Please contact us immediately. Your INVOICE NUMBER: '.$invoice.'</div>
                             '; 
                         }else{
-    						$orderHistory = array(
-    							'order_id' => $orderId,
-    							'order_status' => 0,
-    							'comment' => 'Paypal transaction confirmed'
-    						);
-    						$this->payment_model->addOrderHistory($orderHistory);
+                            $orderHistory = array(
+                                'order_id' => $orderId,
+                                'order_status' => 0,
+                                'comment' => 'Paypal transaction confirmed'
+                                );
+                            $this->payment_model->addOrderHistory($orderHistory);
                             $response['completepayment'] = true;
                             $response['message'] = '<div style="color:green">Your payment has been completed through Paypal</div>';            
                             $response = array_merge($response,$return);
                             $this->removeItemFromCart();
                             $this->session->unset_userdata('choosen_items');
                             $this->sendNotification(array('member_id'=>$member_id, 'order_id'=>$orderId, 'invoice_no'=>$invoice));
-                            
+
                             #google analytics data
                             $analytics = $this->ganalytics($itemList,$orderId);
                             #end of google analytics data
-                        }
+                        } 
                     }else{
                         $response['message'] = '<div style="color:red"><b>Error 3: (GetTransactionDetails failed):</b>'.urldecode($httpParsedResponseAr["L_LONGMESSAGE0"]).'</div>';
-    				}
+                    }                       
                 }else{
                     $response['message'] = '<div style="color:red"><b>Error 2: </b>'.urldecode($httpParsedResponseAr["L_LONGMESSAGE0"]).'</div>';
                 }
             }
         }
-  
 
+        $response['itemList'] = $itemList;
         $response['analytics'] = $analytics;
         $member_id =  $this->session->userdata('member_id'); 
         $data['cat_item'] = $this->cart->contents();
@@ -629,26 +630,7 @@ class Payment extends MY_Controller{
         }
     }
 
-    function dragonPayPostBack2(){
-
-        header("Content-Type:text/plain");
-        $status = $this->input->post('status');
-        if(strtolower($status) == "p" || strtolower($status) == "s"){
-            $transactionID = $this->input->post('txnid').'-'.$this->input->post('refno');
-            $this->payment_model->checkMyDp($transactionID);
-        }
-
-
-    }
-
-    function test(){
-        echo "<form method='POST' action='http://nelsoft.dyndns.org:81/payment/dragonPayPostBack'>
-        <input type='text'  name='status' placeholder='status' />
-        <input type='text'  name='refno' placeholder='refno' />
-        <input type='text'  name='txnid' placeholder='txnid' />
-        <input type='submit'>
-        </form>";
-    }
+ 
 
     function dragonPayPostBack(){
 
@@ -671,7 +653,6 @@ class Payment extends MY_Controller{
             $member_id = $payDetails['buyer_id'];
             $itemList = json_decode($payDetails['data_response'],true); 
             $postBackCount = $payDetails['postbackcount'];
-
 
             $address = $this->memberpage_model->get_member_by_id($member_id); 
             $bigThree = $this->getCityRegionMajorIsland($address);
