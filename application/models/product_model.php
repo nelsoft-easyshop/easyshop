@@ -996,16 +996,6 @@ class product_model extends CI_Model
             $title = $product['name'];
             $slug = $product['slug'];
             
-            $deposit_details = array('bank_id'=>'0','acct_no'=>'','acct_name'=>'');
-            $user_accounts = $this->memberpage_model->get_billing_info($memberid);
-            foreach($user_accounts as $account){
-                if(intval($account['id_billing_info']) === intval($billing_id)){
-                    $deposit_details['bank_id'] = $account['bank_id'];
-                    $deposit_details['acct_name'] = $account['bank_account_name'];
-                    $deposit_details['acct_no'] = $account['bank_account_number'];
-                }
-            }
-
             if(strlen(trim($slug)) == 0 ){
                 $slug = $this->createSlug($title);
                 $query = $this->xmlmap->getFilenameID('sql/product', 'finalizeProduct');
