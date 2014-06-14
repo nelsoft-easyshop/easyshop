@@ -30,9 +30,12 @@
                             </span>
                         </a>
                         <div style='float:right; margin-right: 130px;'>
-                        <span class="product_title" style='width:300px !important'>  <a href="<?=base_url().'item/'.$row['slug'];?>"> <?PHP echo html_escape($row['name']); ?></a></span>
-                        <br/>
-                        <span class="attr_container" style='width:300px !important'>
+                            <?PHP if($row['is_promote'] === "1"): ?>
+                                <span style="float: right; margin-right: -125px; margin-top: 23px; color: red; font-size: 15px;">DISCOUNTED</span>
+                            <?PHP endif; ?>
+                            <span class="product_title" style='width:300px !important'>  <a href="<?=base_url().'item/'.$row['slug'];?>"> <?PHP echo html_escape($row['name']); ?></a></span>
+                            <br/>
+                            <span class="attr_container" style='width:300px !important'>
                             <table>
                                 <?PHP 
                                 if(!array_filter($row['options'])){
