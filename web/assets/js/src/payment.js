@@ -99,6 +99,9 @@ $(document).ready(function(){
         var csrftoken = $("meta[name='csrf-token']").attr('content');
         var csrfname = $("meta[name='csrf-name']").attr('content');
         var type = $(this).data('type');
+    
+        $(this).val('Submiting...'); 
+        $(this).attr('disabled','disabled');
 
         if($('#chk_dp').is(':checked')){
             $.ajax({
@@ -109,11 +112,15 @@ $(document).ready(function(){
                 success: function(d) {
                     if(d.e == 1){ 
                         window.location.replace(d.u);
-                    }else{       
+                    }else{   
+
+                        $('.btnDp').val('Pay via DRAGON PAY'); 
+                        $('.btnDp').removeAttr('disabled');    
                         if(d.m == 'Item quantity not available.'){
                             location.reload();
                         }
                         alert(d.m);
+
                     }
                 }
             });
