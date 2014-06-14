@@ -119,7 +119,7 @@ class Cart extends MY_Controller{
         else{
             $data=$this->check_prod($_POST['id'],$go,$_POST['qty'])['data'];
             if(!$this->cart_model->isCartInsertPromoAllow($carts, $data)){
-                $result = '<b>This item can no longer be added to your cart. </b><hr/> This item or another item in your cart can only be purchased individually. ';
+                $result = 'This item or another item in your cart can only be purchased individually. ';
             }
 
             else if(empty($carts)){

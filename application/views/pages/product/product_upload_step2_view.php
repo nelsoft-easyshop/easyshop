@@ -1065,7 +1065,7 @@ $(document).ready(function(){
             if (response.toLowerCase().indexOf("1001") >= 0){
                 alert('Sorry, the images you are uploading are too large.');
             }else{
-                alert('<b>Sorry, we have encountered a problem.</b><br/>Please try again.');
+                alert('Sorry, we have encountered a problem.','Please try again after a few minutes.');
             }
             $.each( arrayUpload, function( key, value ) {
                 removeThisPictures.push(value); 
@@ -1144,7 +1144,7 @@ $(document).ready(function(){
             }
 
             if(errorValues != ""){
-              alert("<b>Sorry, the following files cannot be uploaded:</b> <br><br>\n"+errorValues)
+              alert("Sorry, the following files cannot be uploaded:", errorValues)
             }
 
             $(".files").hide();  

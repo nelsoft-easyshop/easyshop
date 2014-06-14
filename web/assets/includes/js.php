@@ -26,10 +26,12 @@
          badIE : badIE
     };
 
-   window.alert = function(message){
+   window.alert = function(message, detail){
+        var detail = (typeof detail === "undefined") ? "" : '<hr/>'+detail;
+        var html_content = '<b>'+message+'</b>'+detail;        
         $(document.createElement('div'))
             .attr({title: 'Easyshop.ph', class: 'alert'})
-            .html(message)
+            .html(html_content)
             .dialog({
                 buttons: {OK: function(){$(this).dialog('close');}},
                 close: function(){$(this).remove();},

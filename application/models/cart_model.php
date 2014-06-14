@@ -79,8 +79,8 @@ class cart_model extends CI_Model
     public function isCartInsertPromoAllow($cart, $item = array()){
         $this->load->config('promo', TRUE);
         $can_insert_cart = true;
-        
-        if(count($item) > 0){
+
+        if(count($item) > 0 && count($cart) > 0){
             $cart['temporary'] = $item;
         }
         

@@ -191,26 +191,21 @@
 
                     <!-- #### MORE PAYMENT HERE! #### -->
                     <?php endforeach; ?>
-                    </div>
-
-                    
+                    </div>                
                     <?php else: ?>
-
                         <?php if(!$success && $qtysuccess && $promoteSuccess):?>
                             <br/>
-                            <span style='padding:8px; font-size: 12px; font-weight:bold;color:red'>NOTE: One or more of your item(s) is unavailable in your location. </span>
-                      
-                        <?php elseif($success && !$qtysuccess  && $promoteSuccess):?>
+                            <span style='padding-top:8px; font-size: 12px; font-weight:bold;color:red;'>NOTE: One or more of your item(s) is unavailable in your location. </span>
+                        <?php elseif($success && !$qtysuccess  && $promoteSuccess ):?>
                             <br/>
-                            <span style='padding:8px; font-size: 12px; font-weight:bold;color:red'>NOTE: One or more of your item(s) is not available for desired quantity you want. </span>
+                            <span style='padding-top:8px; font-size: 12px; font-weight:bold;color:red; '>NOTE: The availability of one of your items is less than your desired quantity. Someone may have purchased the item before you can complete your payment. Check the availability of your item and try again.</span>
                         <?php elseif($success && $qtysuccess  && !$promoteSuccess):?>
                             <br/>
-                            <span style='padding:8px; font-size: 12px; font-weight:bold;color:red'>NOTE: One or more of your item(s) can only be purchased individually. </span>
+                            <span style='padding-top:8px; font-size: 12px; font-weight:bold;color:red'>NOTE: One or more of your item(s) can only be purchased individually. </span>
                         <?php else:?>
                             <br/>
-                            <span style='padding:8px; font-size: 12px; font-weight:bold;color:red'>NOTE: One or more of your item(s) is unavailable in your location. </span>
-                            <br/> <br/>
-                            <span style='padding:8px; font-size: 12px; font-weight:bold;color:red'>NOTE: One or more of your item(s) is not available for desired quantity you want. </span>
+                            <span style='padding-top:8px; font-size: 12px; font-weight:bold;color:red'>NOTE: One or more of your item(s) is unavailable in your location. </span>
+                            <span style='padding-top:8px; font-size: 12px; font-weight:bold;color:red'>Also, the availability of one of your items is less than your desired quantity. Someone may have purchased the item before you can complete your payment. Check the availability of your item and try again. </span>
                         <?php endif;?>
                     <?php endif; ?>
                 </div>
@@ -243,16 +238,15 @@
                                     <span>
                                         This item is not available in your location. 
                                         <a style="color:#0654BA" href="javascript:{}" data-slug="<?= $value['id'] ?>" data-name="<?= $value['name'] ?>" data-iid="<?= $value['product_itemID']; ?>" class="view_location_item">See the item location availability here.</a>
-                                        or <a href="javascript:void(0);" class="removeitem" data-slug="<?= $value['slug'] ?>" style="color:red">Remove</a> this item from your selected item to checkout.
-                                    </span>
+                                        or <a href="javascript:void(0);" class="removeitem" data-slug="<?= $value['slug'] ?>" style="color:red">Remove</a> this item from your cart checkout to proceed.
                                 </div>
                             <?php endif; ?>
 
                             <?php if($value['qty'] > $value['maxqty']): ?>
                                 <div class="error_shipping_address">
                                     <span>
-                                        This item is  not available for desired quantity you want.
-                                        <br><a href="javascript:void(0);" class="removeitem" data-slug="<?= $value['slug'] ?>" style="color:red">Remove</a> this item from your selected item to checkout.
+                                        The availability of this items is below your quantity order.
+                                        <br><a href="javascript:void(0);" class="removeitem" data-slug="<?= $value['slug'] ?>" style="color:red">Remove</a> this item from your cart checkout to proceed.
                                     </span>
                                 </div>
                             <?php endif; ?>

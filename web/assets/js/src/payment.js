@@ -83,7 +83,7 @@ $(document).ready(function(){
              
             }, 
             error: function (request, status, error) {
-                    alert('Something Went Wrong. Please try again.');
+                    alert('We are currently experiencing problems.','Please try again after a few minutes.');
                     $('.paypal_loader').hide();
                     $('.paypal_button').show();      
             }
