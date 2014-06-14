@@ -775,7 +775,7 @@ class Payment extends MY_Controller{
             $response['dateadded'] = $return['dateadded'];
             $response['total'] = $grandTotal;
             $response['completepayment'] = true;
-            $response['message'] = '<div style="color:green">Your payment has been completed through Dragon Pay.</div><div style="color:red">'.urldecode($message).'</div>';
+            $response['message'] = '<div style="color:green">Your payment has been completed through Dragon Pay.</div><div style="color:black">'.urldecode($message).'</div>';
             $response = array_merge($response,$return);  
             $this->removeItemFromCart(); 
             $this->session->unset_userdata('choosen_items');
