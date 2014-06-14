@@ -616,7 +616,9 @@ class product extends MY_Controller
             $banner_view = '';  
             if(intval($product_row['is_promote']) === 1){
                 $bannerfile = $this->config->item('Promo')[$product_row['promo_type']]['banner'];
-                $banner_view = $this->load->view('templates/promo_banners/'.$bannerfile, $product_row, TRUE); 
+                if(strlen(trim($bannerfile)) > 0){
+                    $banner_view = $this->load->view('templates/promo_banners/'.$bannerfile, $product_row, TRUE); 
+                }
             }
             
             $data = array_merge($data,array( 
