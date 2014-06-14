@@ -78,6 +78,17 @@ class payment_model extends CI_Model
     	$sth->execute();
     }
 
+    public function lockcount($orderId)
+    {
+    	$query = "Select count(*) as cnt from `es_product_item_lock` where order_id = :order_id limit 1";
+    	$sth = $this->db->conn_id->prepare($query);
+    	$sth->bindParam(':order_id',$orderId,PDO::PARAM_INT);
+     	$sth->execute();
+		$row = $sth->fetchAll(PDO::FETCH_ASSOC);
+		return $row[0]['cnt'];
+ 
+    }
+
     public function lockItem($itemId,$qty,$orderId,$action)
     {
     	$query = "

@@ -373,81 +373,88 @@ class Payment extends MY_Controller{
             $productstring = $prepareData['productstring']; 
             $toBeLocked = $prepareData['toBeLocked'];
 
-            $locked = $this->lockItem($toBeLocked,$orderId,'delete');
-
-            $qtysuccess = $this->resetPriceAndQty();
-
-            if($qtysuccess != $productCount){
-                $response['message'] = '<div style="color:red"><b>Error 1011: </b>One of the item was unable to proceed in terms of lack of quantity</div>';
-            }else{ 
-
+            $lockCountExist = $this->payment_model->lockcount($orderId);
              
-                $grandTotal= $ItemTotalPrice;
-                $response['total'] = $grandTotal;
-        
-                $padata =   '&TOKEN='.urlencode($token).
-                '&PAYERID='.urlencode($payerid).
-                '&PAYMENTACTION='.urlencode("SALE").
-                '&AMT='.urlencode($grandTotal).
-                '&CURRENCYCODE='.urlencode($PayPalCurrencyCode);
 
-                $httpParsedResponseArGECD = $this->paypal->PPHttpPost('GetExpressCheckoutDetails', $padata, $PayPalApiUsername, $PayPalApiPassword, $PayPalApiSignature, $PayPalMode);
-                $apiResponseArray['GetExpressCheckoutDetails '] =  $httpParsedResponseArGECD;
+            if($lockCountExist >= 1){
+                $locked = $this->lockItem($toBeLocked,$orderId,'delete');
+                $qtysuccess = $this->resetPriceAndQty();
 
-                $httpParsedResponseAr = $this->paypal->PPHttpPost('DoExpressCheckoutPayment', $padata, $PayPalApiUsername, $PayPalApiPassword, $PayPalApiSignature, $PayPalMode);
-                $apiResponseArray['DoExpressCheckoutPayment'] = $httpParsedResponseAr;
+                if($qtysuccess != $productCount){
+                    $response['message'] = '<div style="color:red"><b>Error 1011: </b>One of the item was unable to proceed in terms of lack of quantity</div>';
+                }else{ 
 
-                if(("SUCCESS" == strtoupper($httpParsedResponseAr["ACK"]) || "SUCCESSWITHWARNING" == strtoupper($httpParsedResponseAr["ACK"])) && ("SUCCESS" == strtoupper($httpParsedResponseArGECD["ACK"])))
-                {
-                    $transactionID = urldecode($httpParsedResponseAr["TRANSACTIONID"]);
-                    $response['message_status'] = 'Your PayPal Transaction ID : '.$transactionID; 
-                    $transactionID = urlencode($httpParsedResponseAr["TRANSACTIONID"]);
-                    $nvpStr = "&TRANSACTIONID=".$transactionID;
-                    $httpParsedResponseAr =  $this->paypal->PPHttpPost('GetTransactionDetails', $nvpStr, $PayPalApiUsername, $PayPalApiPassword, $PayPalApiSignature, $PayPalMode);
-                    $apiResponseArray['GetTransactionDetails'] =  $httpParsedResponseAr;
 
-                    if("SUCCESS" == strtoupper($httpParsedResponseAr["ACK"]) || "SUCCESSWITHWARNING" == strtoupper($httpParsedResponseAr["ACK"]))
+                    $grandTotal= $ItemTotalPrice;
+                    $response['total'] = $grandTotal;
+
+                    $padata =   '&TOKEN='.urlencode($token).
+                    '&PAYERID='.urlencode($payerid).
+                    '&PAYMENTACTION='.urlencode("SALE").
+                    '&AMT='.urlencode($grandTotal).
+                    '&CURRENCYCODE='.urlencode($PayPalCurrencyCode);
+
+                    $httpParsedResponseArGECD = $this->paypal->PPHttpPost('GetExpressCheckoutDetails', $padata, $PayPalApiUsername, $PayPalApiPassword, $PayPalApiSignature, $PayPalMode);
+                    $apiResponseArray['GetExpressCheckoutDetails '] =  $httpParsedResponseArGECD;
+
+                    $httpParsedResponseAr = $this->paypal->PPHttpPost('DoExpressCheckoutPayment', $padata, $PayPalApiUsername, $PayPalApiPassword, $PayPalApiSignature, $PayPalMode);
+                    $apiResponseArray['DoExpressCheckoutPayment'] = $httpParsedResponseAr;
+
+                    if(("SUCCESS" == strtoupper($httpParsedResponseAr["ACK"]) || "SUCCESSWITHWARNING" == strtoupper($httpParsedResponseAr["ACK"])) && ("SUCCESS" == strtoupper($httpParsedResponseArGECD["ACK"])))
                     {
+                        $transactionID = urldecode($httpParsedResponseAr["TRANSACTIONID"]);
+                        $response['message_status'] = 'Your PayPal Transaction ID : '.$transactionID; 
+                        $transactionID = urlencode($httpParsedResponseAr["TRANSACTIONID"]);
+                        $nvpStr = "&TRANSACTIONID=".$transactionID;
+                        $httpParsedResponseAr =  $this->paypal->PPHttpPost('GetTransactionDetails', $nvpStr, $PayPalApiUsername, $PayPalApiPassword, $PayPalApiSignature, $PayPalMode);
+                        $apiResponseArray['GetTransactionDetails'] =  $httpParsedResponseAr;
+
+                        if("SUCCESS" == strtoupper($httpParsedResponseAr["ACK"]) || "SUCCESSWITHWARNING" == strtoupper($httpParsedResponseAr["ACK"]))
+                        {
                             # START SAVING TO DATABASE HERE
 
-                        $apiResponseArray['ProductData'] =   $itemList;
-                        $apiResponse = json_encode($apiResponseArray);
-                        foreach ($itemList as $key => $value) {               
-                            $productId = $value['id'];
-                            $productItem =  $value['product_itemID'];
-                            $orderQuantity = $value['qty'];
-                            $itemComplete = $this->payment_model->deductQuantity($productId,$productItem,$orderQuantity);
-                        }
-                        $complete = $this->payment_model->updatePaymentIfComplete($orderId,$apiResponse,$token . '-' .$transactionID,$paymentType);
+                            $apiResponseArray['ProductData'] =   $itemList;
+                            $apiResponse = json_encode($apiResponseArray);
+                            foreach ($itemList as $key => $value) {               
+                                $productId = $value['id'];
+                                $productItem =  $value['product_itemID'];
+                                $orderQuantity = $value['qty'];
+                                $itemComplete = $this->payment_model->deductQuantity($productId,$productItem,$orderQuantity);
+                            }
+                            $complete = $this->payment_model->updatePaymentIfComplete($orderId,$apiResponse,$token . '-' .$transactionID,$paymentType);
 
-                        if($complete <= 0){
-                            $response['message'] = '
-                            <div style="color:red"><b>Error 4: </b>Someting went wrong. Please contact us immediately. Your INVOICE NUMBER: '.$invoice.'</div>
-                            '; 
-                        }else{
-                            $orderHistory = array(
-                                'order_id' => $orderId,
-                                'order_status' => 0,
-                                'comment' => 'Paypal transaction confirmed'
-                                );
-                            $this->payment_model->addOrderHistory($orderHistory);
-                            $response['completepayment'] = true;
-                            $response['message'] = '<div style="color:green">Your payment has been completed through Paypal</div>';            
-                            $response = array_merge($response,$return);
-                            $this->removeItemFromCart();
-                            $this->session->unset_userdata('choosen_items');
-                            $this->sendNotification(array('member_id'=>$member_id, 'order_id'=>$orderId, 'invoice_no'=>$invoice));
+                            if($complete <= 0){
+                                $response['message'] = '
+                                <div style="color:red"><b>Error 4: </b>Someting went wrong. Please contact us immediately. Your INVOICE NUMBER: '.$invoice.'</div>
+                                '; 
+                            }else{
+                                $orderHistory = array(
+                                    'order_id' => $orderId,
+                                    'order_status' => 0,
+                                    'comment' => 'Paypal transaction confirmed'
+                                    );
+                                $this->payment_model->addOrderHistory($orderHistory);
+                                $response['completepayment'] = true;
+                                $response['message'] = '<div style="color:green">Your payment has been completed through Paypal</div>';            
+                                $response = array_merge($response,$return);
+                                $this->removeItemFromCart();
+                                $this->session->unset_userdata('choosen_items');
+                                $this->sendNotification(array('member_id'=>$member_id, 'order_id'=>$orderId, 'invoice_no'=>$invoice));
 
                             #google analytics data
-                            $analytics = $this->ganalytics($itemList,$orderId);
+                                $analytics = $this->ganalytics($itemList,$orderId);
                             #end of google analytics data
-                        } 
+                            } 
+                        }else{
+                            $response['message'] = '<div style="color:red"><b>Error 3: (GetTransactionDetails failed):</b>'.urldecode($httpParsedResponseAr["L_LONGMESSAGE0"]).'</div>';
+                        }                       
                     }else{
-                        $response['message'] = '<div style="color:red"><b>Error 3: (GetTransactionDetails failed):</b>'.urldecode($httpParsedResponseAr["L_LONGMESSAGE0"]).'</div>';
-                    }                       
-                }else{
-                    $response['message'] = '<div style="color:red"><b>Error 2: </b>'.urldecode($httpParsedResponseAr["L_LONGMESSAGE0"]).'</div>';
+                        $response['message'] = '<div style="color:red"><b>Error 2: </b>'.urldecode($httpParsedResponseAr["L_LONGMESSAGE0"]).'</div>';
+                    }
                 }
+            }else{
+                $response['message'] = '<div style="color:red"><b>Error 2: </b>Your session is already expired for this payment.</div>';
+
             }
         }
 
