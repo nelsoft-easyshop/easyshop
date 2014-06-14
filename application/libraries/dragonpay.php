@@ -5,12 +5,12 @@ class DragonPay {
 	public $merchantPwd = 'UT78W5VQ'; 
 
 	// TEST
-	//public $url = 'http://test.dragonpay.ph/DragonPayWebService/MerchantService.asmx?wsdl';
-	//public $ps = "http://test.dragonpay.ph/Pay.aspx";
+	public $url = 'http://test.dragonpay.ph/DragonPayWebService/MerchantService.asmx?wsdl';
+	public $ps = "http://test.dragonpay.ph/Pay.aspx";
 
 	// PRODUCTION
-	public $url = 'https://secure.dragonpay.ph/DragonPayWebService/MerchantService.asmx?wsdl';
-    public $ps = "https://gw.dragonpay.ph/Pay.aspx";
+	//public $url = 'https://secure.dragonpay.ph/DragonPayWebService/MerchantService.asmx?wsdl';
+    //public $ps = "https://gw.dragonpay.ph/Pay.aspx";
 	
 
 
