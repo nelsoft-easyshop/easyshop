@@ -281,8 +281,12 @@
 							</div>
 							<div class="cd_others_image">
 								<div class="cd_others2_con">
+                                    <a href='<?=base_url()?>advsrch?_is=&_cat=1&_us=05272014&_loc=&_con=&_price1=&_price2=&_sop=popular'>
 									<img src="<?=base_url()?>assets/images/landingpage/img_cd_michaela.png" class="img_cd_others2">
-									<img src="<?=base_url()?>assets/images/landingpage/img_cd_others2.png" class="img_cd_others3">
+									</a>
+                                    <a href='<?=base_url()?>advsrch?_is=ckk&_cat=1&_us=nelsoft02&_loc=&_con=&_price1=&_price2=&_sop=popular'>
+                                    <img src="<?=base_url()?>assets/images/landingpage/img_cd_others2.png" class="img_cd_others3">
+                                    </a>
 								</div>
 							</div>
 						</div>
