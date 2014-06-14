@@ -81,12 +81,20 @@ img.img_main_product {
 .cd_others2_con {
     background-color: #fff;
     margin: 0 auto;
-    width: 73%;
+    width: 76%;
+    max-width: 76% !important;
+    float: none !important;
+    text-align: center;
 }
 
 .cd_others_txt {
+    float: none !important;
     margin-top: -50px;
     text-align: center;
+}
+
+.cd_others_image {
+  float: none !important;
 }
 
 .cd_others_txt p {
@@ -289,6 +297,10 @@ img.img_main_product {
   .fs2 {
     font-size: 2em;
   }
+  .cd_others2_con {
+    text-align: center;
+  }
+
 }
 
 @media only screen and (max-width : 620px) {
