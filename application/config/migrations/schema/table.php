@@ -33,7 +33,7 @@ return array(
         "insert" => "INSERT INTO `es_style` VALUES (1,'Style','Style');",
     ),
             
-        "es_member" => array(
+    "es_member" => array(
         "create" => "CREATE TABLE `es_member` (
               `id_member` int(10) unsigned NOT NULL AUTO_INCREMENT,
               `username` varchar(255) NOT NULL DEFAULT '',
@@ -3975,8 +3975,10 @@ return array(
               `date_added` datetime DEFAULT CURRENT_TIMESTAMP,
               `order_product_status` tinyint(3) DEFAULT '0',
               PRIMARY KEY (`id_order_product_history`),
-              UNIQUE KEY `UNIQUE` (`order_product_status`,`order_product_id`)
-            ) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8;",
+              UNIQUE KEY `UNIQUE` (`order_product_status`,`order_product_id`),
+              KEY `fk_es_order_product_idx` (`order_product_id`),
+              CONSTRAINT `fk_es_order_product_history_es_order_product` FOREIGN KEY (`order_product_id`) REFERENCES `es_order_product` (`id_order_product`) ON DELETE NO ACTION ON UPDATE NO ACTION
+            ) ENGINE=InnoDB AUTO_INCREMENT=68 DEFAULT CHARSET=utf8;",
         "insert" => "",
     ),
 
