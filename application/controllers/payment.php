@@ -244,7 +244,7 @@ class Payment extends MY_Controller{
       
         if($thereIsPromote <= 0){
             if($grandTotal < '50'){
-                $data = '{"e":"0","d":"Less than 50 of amount purchased is not allowed."}';
+                $data = '{"e":"0","d":"We only accept payments of at least PHP 50.00 in total value."}';
                 echo $data;
                 exit();
             }
@@ -363,6 +363,7 @@ class Payment extends MY_Controller{
             $token= $_GET["token"];
 
             $return = $this->payment_model->selectFromEsOrder($token,$paymentType);
+
             $invoice = $return['invoice_no'];
             $orderId = $return['id_order'];
             $response['dateadded'] = $return['dateadded'];
@@ -374,7 +375,7 @@ class Payment extends MY_Controller{
             $toBeLocked = $prepareData['toBeLocked'];
 
             $lockCountExist = $this->payment_model->lockcount($orderId);
-             
+            
 
             if($lockCountExist >= 1){
                 $locked = $this->lockItem($toBeLocked,$orderId,'delete');
@@ -469,7 +470,7 @@ class Payment extends MY_Controller{
         $this->session->set_userdata('headerData', $data);
         $this->session->set_userdata('bodyData', $response);
 
-        redirect(base_url().'payment/success/paypal', 'refresh'); 
+       redirect(base_url().'payment/success/paypal', 'refresh'); 
     }
 
 
