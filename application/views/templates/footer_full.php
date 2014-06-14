@@ -37,6 +37,27 @@
         </div>   
       </div>
       <div class="clear"></div>
+      <div class="wrapper footer_panel about_us_panel">
+          <p><strong class="orange f16">WE ARE SHOPPING MADE EASY!</strong></p>
+          <p>
+            From the latest trends in fashion, gadgets and accessories to whatever you need to make life EASY, EASYSHOP.PH is here to give you the widest range of choices at very competitive prices!
+          </p>
+          <p>
+            Soon to be the leading online shopping website in South East Asia, EasyShop.ph gives you an online shopping experience that is <strong>FAST, SAFE, EASY and CONVENIENT!</strong> EasyShop.ph is a partner of Nelsoft Technology, Inc. and PoziHongkong Technology Ltd. Co.
+          </p>
+          <p>
+            <strong>EASYSHOP.PH</strong> gives you the widest range of options available in the market. It’s a place where Online Buyers and Sellers converge, while letting you enjoy the benefits of one-stop shopping in the comfort of your home.
+          </p>
+          <p>
+            <strong>EASYSHOP.PH</strong> also provides you with up-to-date information from Online Sellers giving you a clear picture of the items you are eyeing, thus helping you make the right purchasing decision!
+          </p>
+          <p>
+            Earning an income is EASY at <strong>EASYSHOP.PH</strong>. As the online shopping website of choice, it gives you the chance to offer, promote and sell your goods to millions of people across the Philippines.
+          </p>
+          <p>
+            <strong class="orange f16">WELCOME TO EASYSHOP.PH and HAPPY SHOPPING!</strong>
+          </p>
+      </div>
       <div class="copyright">
            <p style='font-weight:bold'>This page is best viewed with one of these browsers:
                 <a href='https://www.google.com/intl/en/chrome/browser/' target="_blank"><img src='<?=base_url()?>assets/images/icon_browser_chrome.png' style='margin-left:2px; margin-top:3px;'/> <span style='position:absolute;'>Chrome</span></a>
