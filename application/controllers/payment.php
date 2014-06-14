@@ -701,10 +701,14 @@ class Payment extends MY_Controller{
                 }
 
                 $locked = $this->lockItem($toBeLocked,$orderId,'delete');
-                $paymentType = 4;
+                
                 $apiResponse = json_encode($apiResponseArray);
 
             }
+            if(strtolower($status) == "s"){
+                $paymentType = 4;
+            }
+ 
              
             $complete = $this->payment_model->updatePaymentIfComplete($orderId,$apiResponse,$transactionID,$paymentType);
 
