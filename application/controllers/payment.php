@@ -316,6 +316,19 @@ class Payment extends MY_Controller{
         exit();
     }
 
+    // function test()
+    // {
+    //     echo '
+
+    //     <form action="https://staging.easyshop.ph/payment/dragonPayPostBack" method="POST">
+    //     <input type="text" name="refno" placeholder="refno"/>
+    //     <input type="text" name="txnid" placeholder="txnId"/>
+    //     <input type="text" name="status" placeholder="status" />
+    //     <input type="submit" name="submit" value="ok"/>
+    //     </form>
+    //     ';
+    // }
+
 
 
     #PROCESS PAYPAL
@@ -789,7 +802,7 @@ class Payment extends MY_Controller{
             #end of google analytics data    
 
         }else{
-            $response['message'] = '<div style="color:red">Transaction Not Completed.</div>';
+            $response['message'] = '<div style="color:red">Transaction Not Completed.</div><div style="color:red">'.urldecode($message).'</div>';
         }
  
 
