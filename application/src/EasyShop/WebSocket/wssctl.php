@@ -22,7 +22,7 @@ function start_web_socket_server($rootDir)
 
 
     $paths      = array('src/EasyShop/Entities');
-    $isDevMode  = true;
+    $isDevMode  = false;
     $dbConfig   = require $rootDir . 'application/config/param/database.php';
     $config     = Doctrine\ORM\Tools\Setup::createAnnotationMetadataConfiguration([$rootDir . 'application/src/EasyShop/Entities'], $isDevMode);
 
