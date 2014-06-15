@@ -678,6 +678,12 @@
 							
 						</div>
 					</li>
+                        <li>
+                        <div class="footer_payment">
+                            <p><strong><a style="font-size:12.5px;color:#00a7ee" href="https://easyshop.ph/countdown_sale.html">Countdown Sale Promo Mechanics</a></strong></p>
+                      
+                        </div>
+                    </li>
 				</ul>
 				
 			</div>
