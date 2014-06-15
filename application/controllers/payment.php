@@ -188,7 +188,9 @@ class Payment extends MY_Controller{
         $PayPalReturnURL    = base_url().'pay/paypal'; 
         $PayPalCancelURL    = base_url().'payment/review'; 
 
-
+        $member_id =  $this->session->userdata('member_id');
+        $remove = $this->payment_model->releaseAllLock($member_id);
+        
         $qtysuccess = $this->resetPriceAndQty();
         $carts = $this->session->all_userdata();
 
@@ -206,8 +208,7 @@ class Payment extends MY_Controller{
         } 
 
 
-        $member_id =  $this->session->userdata('member_id');
-        $remove = $this->payment_model->releaseAllLock($member_id);
+
         $address = $this->memberpage_model->get_member_by_id($member_id); 
         $name = $address['consignee'];
         $street = $address['c_address']; 
@@ -603,17 +604,18 @@ class Payment extends MY_Controller{
     function payDragonPay(){
         header('Content-type: application/json');
 
+
+        $member_id =  $this->session->userdata('member_id'); 
+        $remove = $this->payment_model->releaseAllLock($member_id);
         $qtysuccess = $this->resetPriceAndQty();
 
         $carts = $this->session->all_userdata();
-        $member_id =  $this->session->userdata('member_id'); 
         $itemList =  $carts['choosen_items'];
         $productCount = count($itemList);
         if($qtysuccess != $productCount){
             echo  '{"e":"0","m":"Item quantity not available."}';
             exit();
         } 
-        $remove = $this->payment_model->releaseAllLock($member_id);
         $address = $this->memberpage_model->get_member_by_id($member_id); 
         $email = $address['email'];
 
