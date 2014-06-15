@@ -1513,7 +1513,16 @@ nav ul > li:hover > div {
 	width: 784px;
 }
 
+.cd_announcement {
+	border: 1px solid #f00;
+	font-size: 16px;
+	padding:10px 5px;
+	text-align: center;
+}
 
+.cd_announcement strong {
+		color: #f18200;
+}
 
 /*** Right Panel ***/
 .right_panel {
