@@ -668,7 +668,8 @@ class product extends MY_Controller
         $enddate_xml_obj = $this->xmlmap->getFilenameNode('page/home_files', 'cd_enddate');
         $view_data['startdate'] = date('M d,Y H:i:s',strtotime((string)$startdate_xml_obj->value));
         $view_data['enddate'] = date('M d,Y H:i:s',strtotime((string)$enddate_xml_obj->value));
-        $view_data['items'] = $this->product_model->getProductsByCategory($category_id,array(),0,"<",0,$this->per_page);
+        #$view_data['items'] = $this->product_model->getProductsByCategory($category_id,array(),0,"<",0,$this->per_page);
+        $view_data['items'] = $this->product_model->getProductsByCategory($category_id,array(),0,"<",0,PHP_INT_MAX);
         foreach($view_data['items'] as $x=>$item){
             $view_data['items'][$x]['is_soldout'] = true;
             $product_quantity = $this->product_model->getProductQuantity($item['product_id']);
@@ -689,7 +690,8 @@ class product extends MY_Controller
         $this->load->config('protected_category', TRUE);
         $category_id = $this->config->item('promo', 'protected_category');
         $start = $this->input->post('page_number') * $this->per_page;
-        $view_data['items'] = $this->product_model->getProductsByCategory($category_id,array(),0,"<",$start,$this->per_page);
+        $view_data['items'] = $this->product_model->getProductsByCategory($category_id,array(),0,"<",$start,0);
+        #$view_data['items'] = $this->product_model->getProductsByCategory($category_id,array(),0,"<",$start,$this->per_page);
         if(count($view_data['items']) === 0){
             $data = json_encode('0');
         }else{
