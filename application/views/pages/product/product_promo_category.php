@@ -58,7 +58,7 @@
                         </span>
                     
                     <h3>
-                       <?php echo  es_string_limit(html_escape($item['name']), 55, '...');?>
+                       <?php echo  es_string_limit(html_escape($item['name']), 54, '...');?>
                     </h3>
                     <div class="price-cnt">
                         <?php if(($item['start_promo'])):  ?>
