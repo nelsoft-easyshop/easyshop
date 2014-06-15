@@ -30,6 +30,10 @@
         </div>
         <div class='cd_timerlabel_container'><span class='cd_timerlabel'><?php echo (strtotime(date('M d,Y H:i:s')) < strtotime($startdate))?'STARTS IN':'TIME LEFT';?></span></div>
     </div>
+    <div class="cd_announcement">
+        Due to our users' popular demand, we are now opening our promo items for our regular payment methods 
+        like <br /><strong>DragonPay</strong> and <strong>COD (Cash-on-Delivery)</strong>.
+    </div>
     <div class="cd_product_container">
         <div class='product_list'>
             <?php foreach($items as $item): ?>
