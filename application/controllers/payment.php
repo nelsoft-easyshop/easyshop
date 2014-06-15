@@ -29,17 +29,17 @@ class Payment extends MY_Controller{
     public $PayMentDirectBankDeposit = 5;
 
     // SANDBOX
-    public $PayPalMode             = 'sandbox'; 
-    public $PayPalApiUsername      = 'easyseller_api1.yahoo.com'; 
-    public $PayPalApiPassword      = '1396000698'; 
-    public $PayPalApiSignature     = 'AFcWxV21C7fd0v3bYYYRCpSSRl31Au1bGvwwVcv0garAliLq12YWfivG';  
+    //public $PayPalMode             = 'sandbox'; 
+    //public $PayPalApiUsername      = 'easyseller_api1.yahoo.com'; 
+    //public $PayPalApiPassword      = '1396000698'; 
+    //public $PayPalApiSignature     = 'AFcWxV21C7fd0v3bYYYRCpSSRl31Au1bGvwwVcv0garAliLq12YWfivG';  
 
 
     // LIVE
-    // public $PayPalMode             = ''; 
-    // public $PayPalApiUsername      = 'admin_api1.easyshop.ph'; 
-    // public $PayPalApiPassword      = 'GDWFS6D9ACFG45E7'; 
-    // public $PayPalApiSignature     = 'AFcWxV21C7fd0v3bYYYRCpSSRl31Adro7yAfl2NInYAAVfFFipJ-QQhT'; 
+    public $PayPalMode             = ''; 
+    public $PayPalApiUsername      = 'admin_api1.easyshop.ph'; 
+    public $PayPalApiPassword      = 'GDWFS6D9ACFG45E7'; 
+    public $PayPalApiSignature     = 'AFcWxV21C7fd0v3bYYYRCpSSRl31Adro7yAfl2NInYAAVfFFipJ-QQhT'; 
 
     
     public $PayPalCurrencyCode     = 'PHP';
@@ -398,7 +398,7 @@ class Payment extends MY_Controller{
                 $qtysuccess = $this->resetPriceAndQty();
 
                 if($qtysuccess != $productCount){
-                    $response['message'] = '<div style="color:red"><b>Error 1011: </b>One of the item was unable to proceed in terms of lack of quantity</div>';
+                    $response['message'] = '<div style="color:red"><b>Error 1011:The availability of one of your items is below your desired quantity. Someone may have purchased the item before you completed your payment.</b></div>';
                 }else{ 
 
 
@@ -1083,9 +1083,9 @@ class Payment extends MY_Controller{
         }
     }
 
-    function resetPriceAndQty()
+    function resetPriceAndQty($condition = FALSE)
     {
- 
+  
         $carts = $this->session->all_userdata(); 
         $itemArray = $carts['choosen_items'];
         $qtysuccess = 0;
@@ -1096,12 +1096,12 @@ class Payment extends MY_Controller{
             $itemId = $value['product_itemID']; 
 
         /** NEW QUANTITY **/
-            $newQty = $this->product_model->getProductQuantity($productId,FALSE,TRUE);
+            $newQty = $this->product_model->getProductQuantity($productId, FALSE, $condition);
             $maxqty = $newQty[$itemId]['quantity'];
             $qty = $value['qty']; 
             $itemArray[$value['rowid']]['maxqty'] = $maxqty;
              
-        $qtysuccess = ($maxqty >= $qty ? $qtysuccess + 1: $qtysuccess + 0);
+            $qtysuccess = ($maxqty >= $qty ? $qtysuccess + 1: $qtysuccess + 0);
 
         /** NEW PRICE **/
             $promoPrice = $this->product_model->getProductById($productId)['price']; 
