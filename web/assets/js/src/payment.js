@@ -139,7 +139,7 @@ $(document).ready(function(){
 
     $(document).on('click','.payment_cod',function () {
         if($('#chk_cod').is(':checked')){
-            var r = confirm('Are you sure you want to buy this using our Cash on delivery?');
+            var r = confirm('Are you sure you want to buy this using through Cash on delivery?');
             if(r == true){
                 $('#codFrm').submit();
             }
