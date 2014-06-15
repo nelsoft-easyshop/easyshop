@@ -20,7 +20,7 @@
 		<!-- CSS -->
         <link rel="stylesheet" href="<?=base_url()?>assets/css/landingpage/style_v2.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
         <link rel="stylesheet" href="<?=base_url()?>assets/css/landingpage/jquery.bxslider.css" type="text/css" media="screen"/> <!-- Slider CSS -->
-        <link rel="stylesheet" href="<?=base_url()?>assets/css/landingpage/responsive-nav.css"><!-- responsive menu -->
+        <link rel="stylesheet" href="<?=base_url()?>assets/css/landingpage/responsive-nav.css?ver=<?=ES_FILE_VERSION?>"><!-- responsive menu -->
 
 		<!-- Contact Form CSS files -->
 		<link type='text/css' href='<?=base_url()?>assets/css/basic.css?ver=<?=ES_FILE_VERSION?>' rel='stylesheet' media='screen' />
