@@ -1379,7 +1379,7 @@ class product_model extends CI_Model
 		$sth->execute();
 	}
 
-    public function getProductQuantity($product_id, $verbose = false, $lockbool = false){
+    public function getProductQuantity($product_id, $verbose = false, $check_lock = false){
         if($verbose){
             $query = $this->xmlmap->getFilenameID('sql/product','getProductQuantityVerbose');
         }
@@ -1439,7 +1439,7 @@ class product_model extends CI_Model
             if(round((strtotime($lock['timenow']) - strtotime($lock['timestamp']))/60) > 10){
                 $this->deleteProductItemLock($lock['id_item_lock']);
             }else{
-                if(isset($data[$lock['id_product_item']]) && $lockbool ){
+                if(isset($data[$lock['id_product_item']]) && $check_lock){
                     $data[$lock['id_product_item']]['quantity'] -=  $lock['lock_qty'];
                     $data[$lock['id_product_item']]['quantity'] = ($data[$lock['id_product_item']]['quantity'] >= 0)?$data[$lock['id_product_item']]['quantity']:0;
                 }
