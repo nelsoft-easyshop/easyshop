@@ -26,7 +26,7 @@
                         </span>
                     </a>
                     <h3>
-                        <a href="<?=base_url().'item/'.$item['slug'];?>"><?php echo html_escape($item['name']);?></a>
+                        <a href="<?=base_url().'item/'.$item['slug'];?>"><?php echo es_string_limit(html_escape($item['name']) .'', 55, '...');?></a>
                     </h3>
                     <div class="price-cnt">
                         <?php if(($item['start_promo'])):  ?>

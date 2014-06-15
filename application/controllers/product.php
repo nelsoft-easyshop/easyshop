@@ -183,7 +183,7 @@ class product extends MY_Controller
 
         $this->load->view('templates/header', $data); 
         $this->load->view('pages/product/product_search_by_category_final',$response);
-        $this->load->view('templates/footer_full'); 
+        $this->load->view('templates/footer'); 
 	
 
 	}
@@ -681,7 +681,7 @@ class product extends MY_Controller
         }
         $this->load->view('templates/header', $data); 
         $this->load->view('pages/product/product_promo_category', $view_data); 
-        $this->load->view('templates/footer_full');
+        $this->load->view('templates/footer');
     }
     
     

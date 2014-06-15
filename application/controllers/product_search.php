@@ -182,7 +182,7 @@ class product_search extends MY_Controller {
         $data['render_searchbar'] = false;
         $this->load->view('templates/header', $data); 
         $this->load->view('pages/search/advance_search_main',$response);
-        $this->load->view('templates/footer_full');		
+        $this->load->view('templates/footer');		
     }
 
 
@@ -569,7 +569,7 @@ class product_search extends MY_Controller {
             $response['category_navigation'] = $this->load->view('templates/category_navigation',array('cat_items' =>  $this->getcat(),), TRUE );
             $this->load->view('templates/header', $data); 
             $this->load->view('pages/search/product_search_by_searchbox',$response);
-            $this->load->view('templates/footer_full'); 
+            $this->load->view('templates/footer'); 
         }
 		 
  
