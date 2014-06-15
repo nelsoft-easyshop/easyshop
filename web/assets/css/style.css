@@ -3577,18 +3577,48 @@ a:hover.tooltips span {
 }
 
 .progress_bar_panel > div {
-	float: left;
-	text-align: center;
-	margin-right: 30px;
+    background-color: #f8f7f7;
+    border: 1px solid #cecece;
+    float: left;
+    margin-right: 10px;
+    padding: 10px;
+    text-align: center;
+
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
+	border-radius: 2px;
 }
 
 .progress_bar_panel h3 {
-	font-family: 'Roboto',sans-serif;
-    font-size: 18px;
-    font-weight: 300;
+	border-bottom: 1px solid #cecece;
+    font-size: 12px;
+    font-weight: bold;
+	text-transform: uppercase;
     margin-bottom: 10px;
+    padding-bottom: 8px;
 }
 
+.progress_bar_panel div input {
+	background-color: #f8f7f7;
+	border: none;
+    font-size: 50px;
+    height: 135px;
+    line-height: 135px;
+    padding: 0;
+    text-align: center;
+    width: 150px;
+}
+
+/*.db_total_items {
+	color: rgb(255, 132, 0);
+}
+
+.db_active_items {
+	color: rgb(255, 68, 0);
+}
+.db_sold_items {
+	color: rgb(122, 208, 20);
+}*/
 /**** Member page Dashboard panel *****/
 #active_items h2, #latest_post_item h2, #deleted_items h2, 
 #dashboard-feedbacks h2, #dashboard-sales h2 {
