@@ -607,7 +607,7 @@ class Payment extends MY_Controller{
 
         $member_id =  $this->session->userdata('member_id'); 
         $remove = $this->payment_model->releaseAllLock($member_id);
-        $qtysuccess = $this->resetPriceAndQty();
+        $qtysuccess = $this->resetPriceAndQty(TRUE);
 
         $carts = $this->session->all_userdata();
         $itemList =  $carts['choosen_items'];
