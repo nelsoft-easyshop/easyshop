@@ -1379,7 +1379,7 @@ class product_model extends CI_Model
 		$sth->execute();
 	}
 
-    public function getProductQuantity($product_id, $verbose = false){
+    public function getProductQuantity($product_id, $verbose = false, $lock = false){
         if($verbose){
             $query = $this->xmlmap->getFilenameID('sql/product','getProductQuantityVerbose');
         }
@@ -1427,22 +1427,29 @@ class product_model extends CI_Model
             }
         }
         
-        $query = 'SELECT lck.id_item_lock, pi.id_product_item, lck.qty as lock_qty, lck.timestamp, NOW() as timenow,
-        pi.quantity FROM es_product_item_lock lck INNER JOIN es_product_item pi ON pi.product_id = :product_id AND lck.product_item_id = pi.id_product_item';
-        $sth = $this->db->conn_id->prepare($query);
-		$sth->bindParam(':product_id',$product_id, PDO::PARAM_INT);
-		$sth->execute();
-        $lockdata = $sth->fetchAll(PDO::FETCH_ASSOC);
-        foreach($lockdata as $lock){
-            //DELETE LOCK ITEMS THAT ARE 5 MINUTES IN LIFE TIME
-            if(round((strtotime($lock['timenow']) - strtotime($lock['timestamp']))/60) > 10){
-                $this->deleteProductItemLock($lock['id_item_lock']);
-            }else{
-                if(isset($data[$lock['id_product_item']])){
-                    $data[$lock['id_product_item']]['quantity'] -=  $lock['lock_qty'];
+        if($lock){
+            $query = 'SELECT lck.id_item_lock, pi.id_product_item, lck.qty as lock_qty, lck.timestamp, NOW() as timenow,
+            pi.quantity FROM es_product_item_lock lck INNER JOIN es_product_item pi ON pi.product_id = :product_id AND lck.product_item_id = pi.id_product_item';
+            $sth = $this->db->conn_id->prepare($query);
+            $sth->bindParam(':product_id',$product_id, PDO::PARAM_INT);
+            $sth->execute();
+            $lockdata = $sth->fetchAll(PDO::FETCH_ASSOC);
+            foreach($lockdata as $lock){
+                //DELETE LOCK ITEMS THAT ARE 5 MINUTES IN LIFE TIME
+                if(round((strtotime($lock['timenow']) - strtotime($lock['timestamp']))/60) > 10){
+                    $this->deleteProductItemLock($lock['id_item_lock']);
+                }else{
+                    if(isset($data[$lock['id_product_item']])){
+                        $data[$lock['id_product_item']]['quantity'] -=  $lock['lock_qty'];
+                    }
                 }
             }
+            
         }
+        
+        
+
+        
         return $data;
     }
     
