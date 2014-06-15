@@ -1096,7 +1096,7 @@ class Payment extends MY_Controller{
             $itemId = $value['product_itemID']; 
 
         /** NEW QUANTITY **/
-            $newQty = $this->product_model->getProductQuantity($productId);
+            $newQty = $this->product_model->getProductQuantity($productId,FALSE,TRUE);
             $maxqty = $newQty[$itemId]['quantity'];
             $qty = $value['qty']; 
             $itemArray[$value['rowid']]['maxqty'] = $maxqty;
