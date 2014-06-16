@@ -20,7 +20,7 @@ class Payment extends MY_Controller{
         $this->load->model('memberpage_model'); 
         session_start();
     }
-    
+
     public $PayMentPayPal = 1;
     public $PayMentDragonPay = 2;
     public $PayMentCashOnDelivery = 3;
@@ -221,12 +221,12 @@ class Payment extends MY_Controller{
         $grandTotal= $ItemTotalPrice+$shipping_amt; 
         $thereIsPromote = $prepareData['thereIsPromote'];
       
-        if($thereIsPromote <= 0){
-            if($grandTotal < '50'){
-                echo '{"e":"0","d":"We only accept payments of at least PHP 50.00 in total value."}';
-                exit();
-            }
-        }
+        // if($thereIsPromote <= 0){
+        //     if($grandTotal < '50'){
+        //         echo '{"e":"0","d":"We only accept payments of at least PHP 50.00 in total value."}';
+        //         exit();
+        //     }
+        // }
         
         foreach ($itemList as $key => $value) {
             $dataitem .= '&L_PAYMENTREQUEST_0_QTY'.$cnt.'='. urlencode($value['qty']).
@@ -286,6 +286,51 @@ class Payment extends MY_Controller{
         }else{
             echo '{"e":"0","d":"'.urldecode($httpParsedResponseAr["L_LONGMESSAGE0"]).'"}';
             exit();
+        }
+    }
+
+    function ipn(){
+        if($_POST)
+        {
+            if($paypalmode=='sandbox')
+            {
+                $paypalmode     =   '.sandbox';
+            }
+            $req = 'cmd=' . urlencode('_notify-validate');
+            foreach ($_POST as $key => $value) {
+                $value = urlencode(stripslashes($value));
+                $req .= "&$key=$value";
+            }
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, 'https://www'.$paypalmode.'.paypal.com/cgi-bin/webscr');
+            curl_setopt($ch, CURLOPT_HEADER, 0);
+            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER,1);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $req);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 1);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Host: www'.$paypalmode.'.sandbox.paypal.com'));
+            $res = curl_exec($ch);
+            curl_close($ch);
+
+            if (strcmp ($res, "VERIFIED") == 0)
+            {
+                // $transaction_id = $_POST['txn_id'];
+                // $payerid = $_POST['payer_id'];
+                // $firstname = $_POST['first_name'];
+                // $lastname = $_POST['last_name'];
+                // $payeremail = $_POST['payer_email'];
+                // $paymentdate = $_POST['payment_date'];
+                // $paymentstatus = $_POST['payment_status'];
+                // $mdate= date('Y-m-d h:i:s',strtotime($paymentdate));
+                $otherstuff = json_encode($_POST);
+
+
+                $ins = $this->search_model->insertSearch($otherstuff);
+
+
+
+            }
         }
     }
 
@@ -373,7 +418,8 @@ class Payment extends MY_Controller{
                         $apiResponseArray['GetTransactionDetails'] =  $httpParsedResponseAr;
 
                         if("SUCCESS" == strtoupper($httpParsedResponseAr["ACK"]) || "SUCCESSWITHWARNING" == strtoupper($httpParsedResponseAr["ACK"]))
-                        {
+                        {   
+ 
                             # START SAVING TO DATABASE HERE
                             $apiResponseArray['ProductData'] =   $itemList;
                             $apiResponse = json_encode($apiResponseArray);
@@ -383,7 +429,17 @@ class Payment extends MY_Controller{
                                 $orderQuantity = $value['qty'];
                                 $itemComplete = $this->payment_model->deductQuantity($productId,$productItem,$orderQuantity);
                             }
-                            $complete = $this->payment_model->updatePaymentIfComplete($orderId,$apiResponse,$token . '-' .$transactionID,$paymentType);
+
+                            $flag = 0;
+
+                            if($httpParsedResponseAr['PAYMENTSTATUS'] == 'Pending'){
+                                $flag = 1;
+                            }else{
+                                $flag = 0;
+                            } 
+
+                            $orderStatus = 0;
+                            $complete = $this->payment_model->updatePaymentIfComplete($orderId,$apiResponse,$token . '-' .$transactionID,$paymentType,$orderStatus,$flag);
 
                             if($complete <= 0){
                                 $response['message'] = '
@@ -672,8 +728,13 @@ class Payment extends MY_Controller{
                 $apiResponse = json_encode($apiResponseArray);
             }
             
+            
+            $orderStatus = 99;
+
             if(strtolower($status) == "s"){
-                $paymentType = 4;
+                $orderStatus = 0;
+            }else{
+                $orderStatus = 99;
             }
  
             $complete = $this->payment_model->updatePaymentIfComplete($orderId,$apiResponse,$transactionID,$paymentType);
@@ -730,7 +791,7 @@ class Payment extends MY_Controller{
         $digest = $this->input->get('digest');
   
         if(strtolower($status) == "p" || strtolower($status) == "s"){
-            $paymentType = (strtolower($status) == "p") ? 2 : 4;
+            
             $return = $this->payment_model->selectFromEsOrder($txnId,$paymentType);
             $invoice = $return['invoice_no'];
             $orderId = $return['id_order'];

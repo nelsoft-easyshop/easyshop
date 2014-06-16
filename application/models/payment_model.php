@@ -163,17 +163,18 @@ class payment_model extends CI_Model
 
     }
 
-    function updatePaymentIfComplete($id,$data,$tid,$paymentType)
+    function updatePaymentIfComplete($id,$data,$tid,$paymentType,$orderStatus = 99,$flag = 0)
     {
         $query = $this->xmlmap->getFilenameID('sql/payment','updatePaymentIfComplete');
     	$sth = $this->db->conn_id->prepare($query);
 
-    	$orderStatus = ($paymentType == 2) ? 99 : 0;
+    	// $orderStatus = ($paymentType == 2) ? 99 : 0;
     	$sth->bindParam(':order_status',$orderStatus,PDO::PARAM_STR);
     	$sth->bindParam(':data',$data,PDO::PARAM_STR);
     	$sth->bindParam(':id_order',$id,PDO::PARAM_INT);
     	$sth->bindParam(':tid',$tid,PDO::PARAM_STR);
     	$sth->bindParam(':payment_id',$paymentType,PDO::PARAM_STR);
+    	$sth->bindParam(':flag',$flag,PDO::PARAM_STR);
     	
     	if ($sth->execute()){
 		  // success

@@ -82,6 +82,9 @@ class CSRF_Protection
             elseif($_SERVER['REQUEST_URI'] === '/payment/dragonPayPostBack'){
                 return true;
             }
+            elseif($_SERVER['REQUEST_URI'] === '/payment/ipn'){
+                return true;
+            }
             else{
                  // Is the token field set and valid?
                 $posted_token = $this->CI->input->post(self::$token_name);

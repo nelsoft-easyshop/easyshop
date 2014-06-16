@@ -43,6 +43,7 @@
 	  , `transaction_id` = :tid
 	  , `payment_method_id` = :payment_id
 	  , `postbackcount` = postbackcount + 1
+	  , `is_flag` = :flag  
 	WHERE `id_order` = :id_order 
 </select>
 
