@@ -2675,10 +2675,9 @@ div.pass-hint {
     border: 1px solid #CECECE;
     display: inline-block;
     min-height: 500px;
-    padding: 10px;
+    padding: 9px;
     width: 780px;
- /*   margin-left: 178px;*/
-/*    float: right;*/
+
 }
 
 .profile_main_content h2 {
