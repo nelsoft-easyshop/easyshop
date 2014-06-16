@@ -292,10 +292,10 @@ class Payment extends MY_Controller{
     function ipn(){
         if($_POST)
         {
-            if($paypalmode=='sandbox')
-            {
+            // if($paypalmode=='sandbox')
+            // {
                 $paypalmode     =   '.sandbox';
-            }
+            // }
             $req = 'cmd=' . urlencode('_notify-validate');
             foreach ($_POST as $key => $value) {
                 $value = urlencode(stripslashes($value));
