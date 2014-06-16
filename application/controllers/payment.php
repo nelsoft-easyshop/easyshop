@@ -12,7 +12,7 @@ class Payment extends MY_Controller{
         $this->load->library('paypal');
         $this->load->library('dragonpay');
         $this->load->library('paypal');
-        $this->load->library("xmlmap");
+        $this->load->library('xmlmap');
         $this->load->model('user_model');
         $this->load->model('cart_model');
         $this->load->model('payment_model');
@@ -20,6 +20,7 @@ class Payment extends MY_Controller{
         $this->load->model('memberpage_model'); 
         session_start();
     }
+    
     public $PayMentPayPal = 1;
     public $PayMentDragonPay = 2;
     public $PayMentCashOnDelivery = 3;
