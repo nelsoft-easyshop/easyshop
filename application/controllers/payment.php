@@ -18,6 +18,7 @@ class Payment extends MY_Controller{
         $this->load->model('payment_model');
         $this->load->model('product_model');
         $this->load->model('memberpage_model'); 
+        $this->load->model('search_model'); 
         session_start();
     }
 
