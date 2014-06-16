@@ -358,8 +358,7 @@ class memberpage_model extends CI_Model
 	
 	function getUserItems($member_id, $deleteStatus, $start=0, $nf='%', $of="p.lastmodifieddate" , $osf="DESC" , $itemPerPage=10)
 	{
-		//$query = $this->xmlmap->getFilenameID('sql/product','getUserItems');
-		$query = $this->xmlmap->getFilenameID('sql/product','getUserItems_new');
+		$query = $this->xmlmap->getFilenameID('sql/product','getUserItems');
 		$parseData = array(
 			'order_filter' => $of,
 			'order_sequence_filter' => $osf

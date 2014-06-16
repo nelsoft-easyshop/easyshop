@@ -373,7 +373,7 @@ FROM
 		WHERE name LIKE :schval AND member_id = :member_id AND is_draft = 0 AND is_delete = :delete_status
 	</select>
 	
-	<select id="getUserItems_new">
+	<select id="getUserItems">
 		SELECT p.`slug`, p.`id_product`,p.`name`, p.`brief`, p.`price`, p.`member_id`, 
 		AVG(COALESCE((r.`rating`),0)) as average_rating, COUNT(r.`rating`) as review_count, 
 		COALESCE(i.product_image_path,'') as product_image_path, p.`cat_id`, p.`is_delete` ,
