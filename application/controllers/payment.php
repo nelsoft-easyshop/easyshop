@@ -504,6 +504,8 @@ class Payment extends MY_Controller{
 
         $token = $this->input->post('paymentToken');
         $lastDigit = substr($token, -1);
+
+        $qtysuccess = $this->resetPriceAndQty();
         $carts = $this->session->all_userdata();
         
         if(!isset($carts['choosen_items'])){
@@ -565,28 +567,31 @@ class Payment extends MY_Controller{
 
         $apiResponseArray['ProductData'] = $itemList;
         $apiResponse = json_encode($apiResponseArray);
-       
-        $return = $this->payment_model->payment($paymentType,$invoice_no,$grandTotal,$ip,$member_id,$productstring,$productCount,$apiResponse,$transactionID);
-    
 
-        if($return['o_success'] <= 0){
-            $response['message'] = '<div style="color:red"><b>Error 3: </b>'.$return['o_message'].'</div>'; 
+        if($qtysuccess == $productCount){
+            $return = $this->payment_model->payment($paymentType,$invoice_no,$grandTotal,$ip,$member_id,$productstring,$productCount,$apiResponse,$transactionID);
+            if($return['o_success'] <= 0){
+                $response['message'] = '<div style="color:red"><b>Error 3: </b>'.$return['o_message'].'</div>'; 
+            }else{
+                $v_order_id = $return['v_order_id'];
+                $invoice_no = $return['invoice_no'];
+                $response['completepayment'] = true;
+                $this->removeItemFromCart(); 
+                $this->session->unset_userdata('choosen_items');
+                $this->sendNotification(array('member_id'=>$member_id, 'order_id'=>$v_order_id, 'invoice_no'=>$invoice_no));
+
+                #google analytics data
+                $analytics = $this->ganalytics($itemList,$v_order_id);
+                #end of google analytics data
+            }   
         }else{
-            $v_order_id = $return['v_order_id'];
-            $invoice_no = $return['invoice_no'];
-            $response['completepayment'] = true;
-            $this->removeItemFromCart(); 
-            $this->session->unset_userdata('choosen_items');
-			$this->sendNotification(array('member_id'=>$member_id, 'order_id'=>$v_order_id, 'invoice_no'=>$invoice_no));
-
-            #google analytics data
-            $analytics = $this->ganalytics($itemList,$v_order_id);
-            #end of google analytics data
-        }   
-
+           $response['message'] = ' <div style="color:red"><b>Error 1011:The availability of one of your items is below your desired quantity. Someone may have purchased the item before you completed your payment.</b></div>'; 
+       } 
         $response['itemList'] = $itemList;
         $response['analytics'] = $analytics;
-        $response = array_merge($response,$return);   
+        if($qtysuccess == $productCount){
+            $response = array_merge($response,$return);   
+        }
         $data['cat_item'] = $this->cart->contents();
         $data['title'] = 'Payment | Easyshop.ph';
         $data = array_merge($data,$this->fill_header());
