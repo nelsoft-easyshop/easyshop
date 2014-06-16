@@ -34,7 +34,7 @@
 												}
 											$x++;
 									?>		
-										    <li><a href="<?=base_url()?>category/<?php echo $subcategory['slug']?>"><?php echo $subcategory['name'].' ('.$subcategory['product_count'].')';?></a></li>
+										    <li><a href="<?=base_url()?>category/<?php echo $subcategory['slug']?>"><?php echo $subcategory['name'] /*.'('.$subcategory['product_count'].')' */ ;?></a></li>
 									<?php endforeach; ?>
 									</ul>
 								</li>
