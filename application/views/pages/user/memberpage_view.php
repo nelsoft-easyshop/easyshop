@@ -172,16 +172,13 @@
 
 <?php $items_per_page = 10; ?>
 
-<!-- Echoes last fetched product ID for dashboard item list -->
-<input id="last_dashboard_product" type="hidden" value="<?php echo $last_dashboard_product;?>">
-
-<div class="dashboard_table" id="active_items">
+<div class="dashboard_table" id="active_items" data-key="active">
 	<h2>Active Items</h2>
 	
 	<div class="pagination" id="pagination_active">
 		<a href="#" class="first" data-action="first">&laquo;</a>
 		<a href="#" class="previous" data-action="previous">&lsaquo;</a>
-		<input type="text" readonly="readonly" data-max-page="<?php echo (count($active_products)===0)?1:(ceil(count($active_products)/$items_per_page));?>" />
+		<input type="text" readonly="readonly" data-max-page="<?php echo ($active_count===0)?1:(ceil($active_count/$items_per_page));?>" data-origmaxpage = "<?php echo ($active_count===0)?1:(ceil($active_count/$items_per_page));?>"/>
 		<a href="#" class="next" data-action="next">&rsaquo;</a>
 		<a href="#" class="last" data-action="last">&raquo;</a>
 	</div>
@@ -191,19 +188,26 @@
 		<span class="span_bg sch_btn"></span>
 		<label for="active_sort">Sort By</label>
 		<select name="active_sort" class="post_active_sort sort_select">
-			<option value="date">Date of Entry</option>
-			<option value="name">Name</option>
-			<option value="price">Price</option>
+			<option value="1">Date of Entry</option>
+			<option value="2">Name</option>
+			<option value="3">Price</option>
+			<option value="4">Availability</option>
 		</select>
 		<span class="span_bg arrow_sort"></span>
 		<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" class="loading_img" style="display:none;"/>
 	</div>
 	
-	<?php if(count($active_products) == 0):?>
+	
+	<?php if($active_count === 0):?>
 		<p><span class='nocontent'>No items on sale.</span></p>
 	<?php else:?>
 	
-	<div class="paging">					
+	<div class="page_load" style="display:none;">
+		<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" class="loading_img"/>
+	</div>
+	
+	<?php $pageNum = 0;?>
+	<div class="paging" data-page="<?php echo $pageNum;?>">					
 		<?php $product_counter = $mycounter = 0; 
 		foreach($active_products as $active_product): ?>
 		<div class="post_items_content" data-order = "<?php echo $mycounter;?>">
@@ -289,9 +293,12 @@
 </div>
 
 <?php $product_counter++;$mycounter++; ?>
-<?php if($product_counter === $items_per_page): $product_counter = 0; ?>
-</div><div class="paging">
-<?php endif;  ?>
+	<?php if($product_counter === $items_per_page): 
+		$product_counter = 0;
+		$pageNum++;
+	?>
+		</div><div class="paging" data-page="<?php echo $pageNum;?>">
+	<?php endif;  ?>
 
 <?php endforeach; ?>
 </div> 	
@@ -300,13 +307,13 @@
 
 
 
-<div class="dashboard_table" id="deleted_items">
+<div class="dashboard_table" id="deleted_items" data-key="deleted">
 	<h2>Deleted Items</h2>
 	
 	<div class="pagination" id="pagination_deleted">
 		<a href="#" class="first" data-action="first">&laquo;</a>
 		<a href="#" class="previous" data-action="previous">&lsaquo;</a>
-		<input type="text" readonly="readonly" data-max-page="<?php echo (count($deleted_products)===0)?1:(ceil(count($deleted_products)/$items_per_page));?>" />
+		<input type="text" readonly="readonly" data-max-page="<?php echo ($deleted_count===0)?1:(ceil($deleted_count/$items_per_page));?>" data-origmaxpage = "<?php echo ($deleted_count===0)?1:(ceil($deleted_count/$items_per_page));?>" />
 		<a href="#" class="next" data-action="next">&rsaquo;</a>
 		<a href="#" class="last" data-action="last">&raquo;</a>
 	</div>
@@ -316,24 +323,29 @@
 		<span class="span_bg sch_btn"></span>
 		<label for="active_sort">Sort By</label>
 		<select name="active_sort" class="post_active_sort sort_select">
-			<option value="date">Date of Entry</option>
-			<option value="name">Name</option>
-			<option value="price">Price</option>
+			<option value="1">Date of Entry</option>
+			<option value="2">Name</option>
+			<option value="3">Price</option>
+			<option value="4">Availability</option>
 		</select>
 		<span class="span_bg arrow_sort"></span>
 		<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" class="loading_img" style="display:none;"/>
 	</div>
 	
-	<?php if(count($deleted_products) == 0):?>
+	<?php if($deleted_count == 0):?>
 		<p><span class='nocontent'>No deleted items.</span></p>
 	<?php else:?>
-
-	<div class="paging">
+	
+	<div class="page_load" style="display:none;">
+		<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" class="loading_img"/>
+	</div>
+	
+	<?php $pageNum = 0;?>
+	<div class="paging" data-page="<?php echo $pageNum;?>">
 		<?php $product_counter =0; $mycounter = 0;?>
 		<?php foreach($deleted_products as $deleted_product):?>
-		<div class="post_items_content" data-order = "<?php echo $mycounter;?>">
+		<div class="post_items_content">
 			<div class="post_item_content_left">
-            
                 <div class="post_item_img_table">
                     <span class="post_item_img_con">
                         <img src="<?php echo base_url().$deleted_product['path'].'categoryview/'.$deleted_product['file']; ?>" class="product_img">
@@ -421,9 +433,12 @@
 
 
 <?php $product_counter++;$mycounter++;?>
-<?php if($product_counter === $items_per_page): $product_counter = 0; ?>
-</div><div class="paging">
-<?php endif;  ?>
+	<?php if($product_counter === $items_per_page): 
+		$product_counter = 0; 
+		$pageNum++;
+	?>
+	</div><div class="paging" data-page="<?php echo $pageNum?>">
+	<?php endif;  ?>
 <?php endforeach; ?>
 </div>
 <?php endif;?>

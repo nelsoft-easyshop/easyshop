@@ -367,41 +367,29 @@ FROM
 		WHERE p.is_draft = 0 and p.member_id = :member_id;
 	</select>
 	
-    <select id="getUserItems">
-         SELECT p.`slug`, p.`id_product`,p.`name`, p.`brief`, p.`price`, p.`member_id`, 
-         AVG(COALESCE((r.`rating`),0)) as average_rating, COUNT(r.`rating`) as review_count, 
-         COALESCE(i.product_image_path,'') as product_image_path, p.`cat_id`, p.`is_delete` ,
-         SUM(pi.quantity) as availability, COALESCE(order_product_temp.sum_quantity, 0) as sold,p.lastmodifieddate
-         FROM es_product p 
-         LEFT JOIN es_product_review r ON p.`id_product` = r.`product_id` AND r.`is_show` = 1 
-         LEFT JOIN es_product_image i ON i.`product_id` = p.`id_product` AND i.`is_primary` = 1 
-         LEFT JOIN es_product_item pi ON pi.product_id = p.id_product
-         LEFT JOIN (SELECT product_id, SUM(order_quantity) as sum_quantity FROM es_order_product op
-                    LEFT JOIN es_order o ON o.id_order = op.order_id
-                    WHERE op.status NOT IN (2,5,6) AND op.seller_id != o.buyer_id AND o.order_status != 99 GROUP BY product_id) order_product_temp
-                    ON order_product_temp.product_id = p.id_product
-         WHERE p.member_id = :id AND p.is_draft = 0
-         GROUP BY p.`id_product`, p.`slug`, p.`name`, p.`brief`, p.`price`, p.`member_id`, i.product_image_path, p.`is_delete`,p.`cat_id`,p.lastmodifieddate,order_product_temp.sum_quantity
-         ORDER BY p.`lastmodifieddate` DESC 
-		 LIMIT 10
-    </select>
+	<select id="getUserItemSearchCount">
+		SELECT COUNT(id_product) as product_count
+		FROM es_product
+		WHERE name LIKE :schval AND member_id = :member_id AND is_draft = 0 AND is_delete = :delete_status
+	</select>
 	
-	<select id="getMoreUserItems">
+	<select id="getUserItems_new">
 		SELECT p.`slug`, p.`id_product`,p.`name`, p.`brief`, p.`price`, p.`member_id`, 
-         AVG(COALESCE((r.`rating`),0)) as average_rating, COUNT(r.`rating`) as review_count, 
-         COALESCE(i.product_image_path,'') as product_image_path, p.`cat_id`, p.`is_delete` ,
-         SUM(pi.quantity) as availability, COALESCE(order_product_temp.sum_quantity, 0) as sold, p.lastmodifieddate
-         FROM es_product p 
-         LEFT JOIN es_product_review r ON p.`id_product` = r.`product_id` AND r.`is_show` = 1 
-         LEFT JOIN es_product_image i ON i.`product_id` = p.`id_product` AND i.`is_primary` = 1 
-         LEFT JOIN es_product_item pi ON pi.product_id = p.id_product
-         LEFT JOIN (SELECT product_id, SUM(order_quantity) as sum_quantity FROM es_order_product op
-                    LEFT JOIN es_order o ON o.id_order = op.order_id
-                    WHERE op.status NOT IN (2,5,6) AND op.seller_id != o.buyer_id AND o.order_status != 99 GROUP BY product_id) order_product_temp
-                    ON order_product_temp.product_id = p.id_product
-         WHERE p.member_id = :id AND p.is_draft = 0 AND :last_product > p.lastmodifieddate 
-         GROUP BY p.`id_product`, p.`slug`, p.`name`, p.`brief`, p.`price`, p.`member_id`, i.product_image_path, p.`is_delete`,p.`cat_id`,p.lastmodifieddate,order_product_temp.sum_quantity
-         ORDER BY p.`lastmodifieddate` DESC 
+		AVG(COALESCE((r.`rating`),0)) as average_rating, COUNT(r.`rating`) as review_count, 
+		COALESCE(i.product_image_path,'') as product_image_path, p.`cat_id`, p.`is_delete` ,
+		SUM(pi.quantity) as availability, COALESCE(order_product_temp.sum_quantity, 0) as sold,p.lastmodifieddate
+		FROM es_product p 
+		LEFT JOIN es_product_review r ON p.`id_product` = r.`product_id` AND r.`is_show` = 1 
+		LEFT JOIN es_product_image i ON i.`product_id` = p.`id_product` AND i.`is_primary` = 1 
+		LEFT JOIN es_product_item pi ON pi.product_id = p.id_product
+		LEFT JOIN (SELECT product_id, SUM(order_quantity) as sum_quantity FROM es_order_product op
+				LEFT JOIN es_order o ON o.id_order = op.order_id
+				WHERE op.status NOT IN (2,5,6) AND op.seller_id != o.buyer_id AND o.order_status != 99 GROUP BY product_id) order_product_temp
+				ON order_product_temp.product_id = p.id_product
+		WHERE p.member_id = :id AND p.is_draft = 0 AND p.is_delete = :delete_status AND p.name LIKE :name_filter
+		GROUP BY p.`id_product`, p.`slug`, p.`name`, p.`brief`, p.`price`, p.`member_id`, i.product_image_path, p.`is_delete`,p.`cat_id`,p.lastmodifieddate,order_product_temp.sum_quantity
+		ORDER BY {order_filter} {order_sequence_filter}
+		LIMIT :start, :number
 	</select>
 	
     <select id="getProductById">
@@ -410,7 +398,6 @@ FROM
         LEFT JOIN `es_product_image` b ON b.`product_id` = a.`id_product` AND b.is_primary = '1'
         WHERE `id_product` = :id
     </select>
-
 
     <select id="getPopularitem">
 		SELECT `name` AS `product`, `slug` AS `slug`, `id_product`,`cat_id`,`clickcount`, `product_image_path` ,`price`

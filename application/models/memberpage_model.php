@@ -5,6 +5,7 @@ class memberpage_model extends CI_Model
 	{
 		parent::__construct();
 		$this->load->library("xmlmap");
+		$this->load->library("parser");
 		$this->config->load("image_path");
 	}	
 	
@@ -340,7 +341,86 @@ class memberpage_model extends CI_Model
 		return $row;
 	}
 	
+	function getUserItemSearchCount($member_id, $schVal,$deleteStatus)
+	{
+		$query = $this->xmlmap->getFilenameID('sql/product','getUserItemSearchCount');
+		$sth = $this->db->conn_id->prepare($query);
+		$sth->bindParam(':member_id',$member_id, PDO::PARAM_INT);
+		$sth->bindParam(':schval', $schVal, PDO::PARAM_STR);
+		$sth->bindParam(':delete_status',$deleteStatus, PDO::PARAM_INT);
+		$sth->execute();
+		$row = $sth->fetch(PDO::FETCH_ASSOC);
+		
+		$count = (int)$row['product_count'];
+		
+		return $count;
+	}
 	
+	function getUserItems($member_id, $deleteStatus, $start=0, $nf='%', $of="p.lastmodifieddate" , $osf="DESC" , $itemPerPage=10)
+	{
+		//$query = $this->xmlmap->getFilenameID('sql/product','getUserItems');
+		$query = $this->xmlmap->getFilenameID('sql/product','getUserItems_new');
+		$parseData = array(
+			'order_filter' => $of,
+			'order_sequence_filter' => $osf
+		);
+		$query = $this->parser->parse_string($query,$parseData,true);
+		
+		$sth = $this->db->conn_id->prepare($query);
+		$sth->bindParam(':id',$member_id, PDO::PARAM_INT);
+		$sth->bindParam(':delete_status',$deleteStatus, PDO::PARAM_INT);
+		$sth->bindParam(':start',$start, PDO::PARAM_INT);
+		$sth->bindParam(':number',$itemPerPage, PDO::PARAM_INT);
+		$sth->bindParam(':name_filter',$nf, PDO::PARAM_INT);
+		$sth->execute();
+		$rows = $sth->fetchAll(PDO::FETCH_ASSOC);
+		$data = array();
+		
+		foreach($rows as $key=>$row){
+			$query = $this->xmlmap->getFilenameID('sql/product','getParent');
+			$sth = $this->db->conn_id->prepare($query);
+			$sth->bindParam(':id',$row['cat_id']);
+			$sth->execute();
+			$parents = $sth->fetchAll(PDO::FETCH_ASSOC);
+			$row['parents'] = array();
+			foreach($parents as $parent){
+				array_push($row['parents'], $parent['name']);
+			}
+			
+			$query = $this->xmlmap->getFilenameID('sql/product','getProductAttributes');
+			$sth = $this->db->conn_id->prepare($query);
+			$sth->bindParam(':id',$row['id_product']);
+			$sth->execute();
+			$attributes = $sth->fetchAll(PDO::FETCH_ASSOC);
+
+			$data_attr = array();
+			foreach($attributes as $attribute){
+				$index = $attribute['name'];
+				if(!array_key_exists($index, $data_attr))
+					$data_attr[$index] = array();
+				array_push($data_attr[$index],array('value' => $attribute['attr_value'], 'price'=>$attribute['attr_price']));
+			}
+			$row['data_attr'] = $data_attr;
+			
+			if(trim($row['product_image_path']) === ''){
+				$row['path'] = 'assets/product/default/';
+				$row['file'] = 'default_product_img.jpg';
+			}
+			else{
+				$row['product_image_path'] = ($row['product_image_path'][0]=='.')?substr($row['product_image_path'],1,strlen($row['product_image_path'])):$row['product_image_path'];
+				$row['product_image_path'] = ($row['product_image_path'][0]=='/')?substr($row['product_image_path'],1,strlen($row['product_image_path'])):$row['product_image_path'];
+				$rev_url = strrev($row['product_image_path']);
+				$row['path'] = substr($row['product_image_path'],0,strlen($rev_url)-strpos($rev_url,'/'));
+				$row['file'] = substr($row['product_image_path'],strlen($rev_url)-strpos($rev_url,'/'),strlen($rev_url));
+			}
+			unset($row['product_image_path']);
+			$data[] = $row;
+		}
+		
+		return $data;
+	}	
+	
+	/*
 	function getUserItems($member_id, $lastproduct = 0) 	#Retrieves user items to be displayed on dashboard
 	{
 		if($lastproduct === 0){
@@ -348,17 +428,16 @@ class memberpage_model extends CI_Model
 			$sth = $this->db->conn_id->prepare($query);
 			$sth->bindParam(':id',$member_id);
 			$sth->execute();
-			$rows = $sth->fetchAll(PDO::FETCH_ASSOC);
-			$data = array('active'=>array(),'deleted'=>array(), 'sold_count'=>0);
 		}else{
 			$query = $this->xmlmap->getFilenameID('sql/product','getMoreUserItems');
 			$sth = $this->db->conn_id->prepare($query);
-			$sth->bindParam(':id',$member_id);
+			$sth->bindParam(':id',$member_id);	
 			$sth->bindParam(':last_product',$lastproduct);
 			$sth->execute();
-			$rows = $sth->fetchAll(PDO::FETCH_ASSOC);
-			$data = array('active'=>array(),'deleted'=>array(), 'sold_count'=>0);
 		}
+		
+		$rows = $sth->fetchAll(PDO::FETCH_ASSOC);
+		$data = array('active'=>array(),'deleted'=>array(), 'sold_count'=>0);
 		
 		$data['last_product'] = end($rows)['lastmodifieddate'];
 		
@@ -408,6 +487,7 @@ class memberpage_model extends CI_Model
 		
 		return $data;
 	}
+	*/
 	
 	function getVendorDetails($selleruname){
 		$query = $this->xmlmap->getFilenameID('sql/users','get_member_by_username');

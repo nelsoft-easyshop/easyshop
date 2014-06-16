@@ -174,17 +174,15 @@ class Memberpage extends MY_Controller
 	function fill_view()
 	{
 		$uid = $this->session->userdata('member_id');
-		$user_products = $this->memberpage_model->getUserItems($uid);
 		$user_product_count = $this->memberpage_model->getUserItemCount($uid);
 		$data = array(
 				'title' => 'Easyshop.ph - Member Profile',
 				'image_profile' => $this->memberpage_model->get_image($uid),
-				'active_products' => $user_products['active'],
-				'deleted_products' => $user_products['deleted'],
-				'active_count' => $user_product_count['active'],
-				'deleted_count' => $user_product_count['deleted'],
-                'sold_count' => $user_product_count['sold'],
-				'last_dashboard_product' => $user_products['last_product']
+				'active_products' => $this->memberpage_model->getUserItems($uid,0),
+				'deleted_products' => $this->memberpage_model->getUserItems($uid,1),
+				'active_count' => intval($user_product_count['active']),
+				'deleted_count' => intval($user_product_count['deleted']),
+                'sold_count' => intval($user_product_count['sold'])
                 );
 		$data = array_merge($data, $this->memberpage_model->getLocationLookup());
 		$data = array_merge($data,$this->memberpage_model->get_member_by_id($uid));
@@ -793,14 +791,14 @@ class Memberpage extends MY_Controller
 			$this->memberpage_model->billing_info_default($data);
 		}
 	}	
-
-	function getMoreUserItems($string = "")
+	
+	# FUNCTION USED BY PAGING AJAX REQUESTS
+	function getMoreUserItems($who = "")
 	{
-		$lastproduct = $this->input->post('lastproduct');
+		$itemPerPage = 10;
 		
-		if($string == "vendor"){
+		if($who == "vendor"){
 			$activeView = 'vendor_activeproduct_view';
-			$deletedView = 'memberpage_deletedproduct_view';
 			$member_id = $this->input->post('mid');
 		}else{
 			$activeView = 'memberpage_activeproduct_view';
@@ -808,17 +806,56 @@ class Memberpage extends MY_Controller
 			$member_id = $this->session->userdata('member_id');
 		}
 		
-		$data = $this->memberpage_model->getUserItems($member_id, $lastproduct);
+		$deleteStatus = intval($this->input->get('s'));
+		$start = intval($this->input->get('p'));
+		$rawnf = trim((string)$this->input->get('nf'));
+		$nf = '%' . $rawnf . '%'; #name_filter / searched name
+		$of = (int)$this->input->get('of'); #order filter
+		$osf = (int)$this->input->get('osf'); #order sequence filter
 		
-		$parseData = array(
-			'active_products' => $data['active'],
-			'deleted_products' => $data['deleted']
-		);
+		switch($of){
+			case 1:
+				$myof = 'p.lastmodifieddate';
+				break;
+			case 2:
+				$myof = 'p.name';
+				break;
+			case 3:
+				$myof = 'p.price';
+				break;
+			case 4:
+				$myof = 'availability';
+				break;
+			default:
+				$myof = 'p.lastmodifieddate';
+		}
 		
-		$jsonData = array(
-			'active' => $this->load->view('pages/user/'.$activeView, $parseData, true),
-			'deleted' => $this->load->view('pages/user/'.$deletedView, $parseData, true),
-		);
+		switch($osf){
+			case 1:
+				$myosf = 'DESC';
+				break;
+			case 2:
+				$myosf = 'ASC';
+				break;
+			default:
+				$myosf = 'DESC';
+		}
+		
+		if( $this->input->get('c') == 'count' ){
+			$jsonData['count'] = 0;
+			if ( $rawnf !== '' ){
+				$jsonData['count'] = $this->memberpage_model->getUserItemSearchCount($member_id,$nf,$deleteStatus);
+			}
+		}
+		
+		$key = $deleteStatus === 0 ? 'active_products' : 'deleted_products';
+		$data[$key] = $this->memberpage_model->getUserItems($member_id, $deleteStatus, $start, $nf,$myof,$myosf, $itemPerPage);
+		
+		if($deleteStatus === 0){ #if active items
+			$jsonData['html'] = $this->load->view('pages/user/'.$activeView, $data, true);
+		}else if($deleteStatus === 1){
+			$jsonData['html'] = $this->load->view('pages/user/'.$deletedView, $data, true);
+		}
 		
 		echo json_encode($jsonData);
 	}
