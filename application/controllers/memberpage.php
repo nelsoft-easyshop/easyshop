@@ -584,17 +584,15 @@ class Memberpage extends MY_Controller
             $data['render_searchbar'] = false;
             $this->load->view('templates/header', $data);
 			$sellerid = $vendordetails['id_member'];
-			$user_products = $this->memberpage_model->getUserItems($sellerid);
 			$user_product_count = $this->memberpage_model->getUserItemCount($sellerid);
 			$data = array_merge($data,array(
 					'vendordetails' => $vendordetails,
 					'image_profile' => $this->memberpage_model->get_Image($sellerid),
-					'active_products' => $user_products['active'],
-					'deleted_products' => $user_products['deleted'],
+					'active_products' => $this->memberpage_model->getUserItems($sellerid,0),
+					'deleted_products' => $this->memberpage_model->getUserItems($sellerid,1),
 					'active_count' => $user_product_count['active'],
 					'deleted_count' => $user_product_count['deleted'],
-                    'sold_count' => $user_product_count['sold'],
-					'last_dashboard_product' => $user_products['last_product']
+                    'sold_count' => $user_product_count['sold']
 					));
 			$data['transaction'] = $this->memberpage_model->getTransactionDetails($sellerid);
 			$data['allfeedbacks'] = $this->memberpage_model->getFeedback($sellerid);
@@ -799,7 +797,7 @@ class Memberpage extends MY_Controller
 		
 		if($who == "vendor"){
 			$activeView = 'vendor_activeproduct_view';
-			$member_id = $this->input->post('mid');
+			$member_id = $this->input->get('mid');
 		}else{
 			$activeView = 'memberpage_activeproduct_view';
 			$deletedView = 'memberpage_deletedproduct_view';
@@ -825,6 +823,9 @@ class Memberpage extends MY_Controller
 				break;
 			case 4:
 				$myof = 'availability';
+				break;
+			case 5:
+				$myof = 'sold';
 				break;
 			default:
 				$myof = 'p.lastmodifieddate';

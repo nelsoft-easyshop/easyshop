@@ -130,37 +130,42 @@
 				
 				<?php $items_per_page = 10; ?>
 
-				<!-- Echoes last fetched product ID for dashboard item list -->
-				<input id="last_dashboard_product" type="hidden" value="<?php echo $last_dashboard_product;?>">
 				<input id="mid" type="hidden" value="<?php echo $vendordetails['id_member'];?>">
 				
-				<div class="dashboard_table" id="active_items">
+				<div class="dashboard_table" id="active_items" data-key="active">
 					<h2>Active Items</h2>
-					<?php if(count($active_products) == 0):?>
+					<?php if($active_count === 0):?>
 						<p><strong>No items on sale.</strong></p>
 					<?php else:?>
 					<div class="pagination" id="pagination_active">
 						<a href="#" class="first" data-action="first">&laquo;</a>
 						<a href="#" class="previous" data-action="previous">&lsaquo;</a>
-						<input type="text" readonly="readonly" data-max-page="<?php echo (count($active_products)===0)?1:(ceil(count($active_products)/$items_per_page));?>" />
+						<input type="text" readonly="readonly" data-max-page="<?php echo ($active_count===0)?1:(ceil($active_count/$items_per_page));?>" data-origmaxpage = "<?php echo ($active_count===0)?1:(ceil($active_count/$items_per_page));?>"/>
 						<a href="#" class="next" data-action="next">&rsaquo;</a>
 						<a href="#" class="last" data-action="last">&raquo;</a>
 					</div>
+					
 					<div class="post_item_srch_container">
-						<input type="text" class="box" id="schbox_active" placeholder="Search" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Search'" />
-						<span id="active_schbtn" class="span_bg sch_btn"></span>
+						<input type="text" class="box sch_box" placeholder="Search" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Search'" />
+						<span class="span_bg sch_btn"></span>
 						<label for="active_sort">Sort By</label>
-						<select name="active_sort" id="active_sort" class="post_active_sort">
-							<option value="date">Date of Entry</option>
-							<option value="name">Name</option>
-							<option value="price">Price</option>
+						<select name="active_sort" class="post_active_sort sort_select">
+							<option value="1">Date of Entry</option>
+							<option value="2">Name</option>
+							<option value="3">Price</option>
+							<option value="4">Availability</option>
+							<option value="5"># of Sold Items</option>
 						</select>
-						<span id="active_sortorder" class="span_bg arrow_sort"></span>
-                        <a href='<?=base_url()?>advsrch?_is=&_cat=1&_us=<?php echo $vendordetails['username'];?>&_loc=&_con=&_price1=&_price2=&_sop=popular' style='margin-left: 7px; border-bottom: 1px dotted #000000;'>Advanced</a>
+						<span class="span_bg arrow_sort"></span>
+						<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" class="loading_img" style="display:none;"/>
 					</div>
 					
+					<div class="page_load" style="display:none;">
+						<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" class="loading_img"/>
+					</div>
                     
-					<div class="paging">					
+					<?php $pageNum = 0;?>
+					<div class="paging" data-page="<?php echo $pageNum;?>">					
 					<?php $product_counter = $mycounter = 0; 
 					     foreach($active_products as $active_product): ?>
 							<div class="post_items_content" data-order = "<?php echo $mycounter;?>">
@@ -230,8 +235,11 @@
 							</div>
 							
 							<?php $product_counter++;$mycounter++; ?>
-							<?php if($product_counter === $items_per_page): $product_counter = 0; ?>
-								</div><div class="paging">
+							<?php if($product_counter === $items_per_page): 
+								$product_counter = 0;
+								$pageNum++;
+							?>
+								</div><div class="paging" data-page="<?php echo $pageNum;?>">
 							<?php endif;  ?>
 							
 					<?php endforeach; ?>

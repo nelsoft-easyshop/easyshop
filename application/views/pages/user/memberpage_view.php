@@ -192,6 +192,7 @@
 			<option value="2">Name</option>
 			<option value="3">Price</option>
 			<option value="4">Availability</option>
+			<option value="5"># of Sold Items</option>
 		</select>
 		<span class="span_bg arrow_sort"></span>
 		<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" class="loading_img" style="display:none;"/>

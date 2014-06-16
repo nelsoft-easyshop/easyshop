@@ -39,7 +39,7 @@ function ItemListAjax(ItemDiv,start,pageindex,count=false){
 	
 	memconf.ajaxStat = jQuery.ajax({
 		type: "GET",
-		url: config.base_url+'memberpage/getMoreUserItems/'+c,
+		url: config.base_url+'memberpage/getMoreUserItems',
 		data: "s="+memconf[key].deleteStatus+"&p="+start+"&"+memconf.csrfname+"="+memconf.csrftoken+"&nf="+memconf[key].schVal+
 			"&of="+memconf[key].sortVal+"&osf="+memconf[key].sortOrder+"&c="+c,
 		beforeSend: function(){
