@@ -160,7 +160,7 @@
 						<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" class="loading_img" style="display:none;"/>
 					</div>
 					
-					<div class="page_load" style="display:none;">
+					<div class="page_load" style="display:none;text-align:center;">
 						<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" class="loading_img"/>
 					</div>
                     
