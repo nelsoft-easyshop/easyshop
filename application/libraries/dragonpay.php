@@ -57,7 +57,8 @@ class DragonPay {
         		'amount' => $amount,
         		'ccy' => $ccy,
         		'description' => $description,
-        		'email' => $email
+        		'email' => $email,
+        		'mode'=>'1'
         	);
         $client = new nusoap_client($this->url, 'wsdl');
         $result = $client->call('GetTxnToken',$param);
@@ -67,7 +68,7 @@ class DragonPay {
         	return '{"e":"0","m":"'.$errorCodes[$token].'","c":"'.$token.'"}';
         	exit();
         }else{
-    		return '{"e":"1","m":"SUCCESS","c":"'.$token.'","tid":"'.$txnId.'","u":"'.$this->ps.'?tokenid='.$token.'"}';
+    		return '{"e":"1","m":"SUCCESS","c":"'.$token.'","tid":"'.$txnId.'","u":"'.$this->ps.'?tokenid='.$token.'&mode=7"}';
     		exit();
         }
 	}
