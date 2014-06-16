@@ -113,12 +113,12 @@ $(function($) {
 
 $(document).ready(function(){
 
-	$(".show_prod_desc").click(function(){
+	$('div.dashboard_table').on('click', '.show_prod_desc', function(){
 		$(this).siblings('.item_prod_desc_content').addClass('show_desc');
 		$(this).fadeOut();
 	});
 
-	$(".show_more_options").click(function(){
+	$('div.dashboard_table').on('click', '.show_more_options', function(){
 		$(this).siblings('.attr_hide').slideToggle();
 		$(this).toggleClass("active");
 	});
