@@ -119,9 +119,16 @@
 <!-- #### DRAGON PAY #### -->
                         <?php if($key == 'dragonpay'): ?>
                         <div id="dragonpay" class="payment_inner_content">
+
+                           <img src="<?php echo base_url()?>assets/images/dp-icons.png" alt="Dragon Pay Icons" align="left" style="margin-right:7px;">
+                           <br><br><br><br> 
+
                             <p class="chck_privacy"><input type="checkbox" checked id="chk_dp" name='chk_dp'> <label for='chk_dp'>I acknowledge I have read and understood Easyshop.ph's  </label><a href="<?=base_url()?>policy" target='_blank'><span style='border-bottom:1px dotted'> Privacy Policy </span></a>.</p><br>
-                            <br/>
+                          
                             <input type="button" style='width: 153px;' class="btnDp orange_btn3" value="Pay via DRAGON PAY">
+                            <br>
+                            <br>
+                            <span style="font-size: 12px;font-style: italic;"><b>Note:</b> Dragonpay is a Philippines-based alternative payments solution company that allows buyers to pay for good or services through direct bank debit or over-the-counter (OTC). Note that BDO mall branches are open on weekends. You may also choose SM or LBC as most branches are open on weekends and holidays.</span>
                         </div>
                         <?php endif; ?>
 
@@ -154,8 +161,8 @@
                                 echo form_open('pay/cashondelivery/', $attr);
                                 ?>
                                 <p class="chck_privacy"><input type="checkbox" checked  id="chk_cod" name='chk_cod'><label for='chk_cod'> I acknowledge I have read and understood Easyshop.ph's</label> <a href="<?=base_url()?>policy" target='_blank'> <span style='border-bottom:1px dotted'> Privacy Policy </span></a>.</p><br>
-                                <br/>
-                                <input type="button" class="payment_cod orange_btn3" value="Proceed to Payment"> 
+                               
+                                <input type="button" class="payment_cod orange_btn3" value="Pay via Cash On Delivery"> 
                                 <input type="hidden" value="<?php echo md5(uniqid(mt_rand(), true)).'1';?>" name="paymentToken">   
                                 <?php echo form_close();?>
                                 <p class="notify">You will be notified regarding your order status via email or sms.</p>

@@ -1,23 +1,33 @@
 <?php
 class PayPal {
+
+	// SANDBOX
+    public $PayPalMode             = 'sandbox'; 
+    public $PayPalApiUsername      = 'easyseller_api1.yahoo.com'; 
+    public $PayPalApiPassword      = '1396000698'; 
+    public $PayPalApiSignature     = 'AFcWxV21C7fd0v3bYYYRCpSSRl31Au1bGvwwVcv0garAliLq12YWfivG';  
+
+    // LIVE
+    // public $PayPalMode             = ''; 
+    // public $PayPalApiUsername      = 'admin_api1.easyshop.ph'; 
+    // public $PayPalApiPassword      = 'GDWFS6D9ACFG45E7'; 
+    // public $PayPalApiSignature     = 'AFcWxV21C7fd0v3bYYYRCpSSRl31Adro7yAfl2NInYAAVfFFipJ-QQhT'; 
     	
-	function PPHttpPost($methodName_, $nvpStr_, $PayPalApiUsername, $PayPalApiPassword, $PayPalApiSignature, $PayPalMode) {
+	function PPHttpPost($methodName_, $nvpStr_) {
 			// Set up your API credentials, PayPal end point, and API version.
-			$API_UserName = urlencode($PayPalApiUsername);
-			$API_Password = urlencode($PayPalApiPassword);
-			$API_Signature = urlencode($PayPalApiSignature);
+			$API_UserName = urlencode($this->PayPalApiUsername);
+			$API_Password = urlencode($this->PayPalApiPassword);
+			$API_Signature = urlencode($this->PayPalApiSignature);
+			$API_Mode = urlencode($this->PayPalMode);
 			
-			if($PayPalMode=='sandbox')
-			{
+			if($API_Mode=='sandbox'){
 				$paypalmode 	=	'.sandbox';
-			}
-			else
-			{
+			}else{
 				$paypalmode 	=	'';
 			}
 	
 			$API_Endpoint = "https://api-3t".$paypalmode.".paypal.com/nvp";
-			$version = urlencode('76.0');
+			$version = urlencode('98.0');
 		
 			// Set the curl parameters.
 			$ch = curl_init();
@@ -33,7 +43,6 @@ class PayPal {
 		
 			// Set the API operation, version, and API signature in the request.
 			$nvpreq = "METHOD=$methodName_&VERSION=$version&PWD=$API_Password&USER=$API_UserName&SIGNATURE=$API_Signature$nvpStr_";
-		
 			// Set the request as a POST FIELD for curl.
 			curl_setopt($ch, CURLOPT_POSTFIELDS, $nvpreq);
 		
@@ -60,6 +69,18 @@ class PayPal {
 			}
 		
 		return $httpParsedResponseAr;
+	}
+
+	function getMode()
+	{
+		$API_Mode = urlencode($this->PayPalMode);
+		if($API_Mode=='sandbox'){
+			$paypalmode 	=	'.sandbox';
+		}else{
+			$paypalmode 	=	'';
+		}
+
+		return $paypalmode;
 	}
 		
 }

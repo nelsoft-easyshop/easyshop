@@ -11,6 +11,7 @@ class Payment extends MY_Controller{
         $this->load->library('cart');
         $this->load->library('paypal');
         $this->load->library('dragonpay');
+        $this->load->library('paypal');
         $this->load->library("xmlmap");
         $this->load->model('user_model');
         $this->load->model('cart_model');
@@ -19,30 +20,11 @@ class Payment extends MY_Controller{
         $this->load->model('memberpage_model'); 
         session_start();
     }
-
- 
-    
     public $PayMentPayPal = 1;
     public $PayMentDragonPay = 2;
     public $PayMentCashOnDelivery = 3;
     public $PayMentDragonPayOnlineBanking = 4;
     public $PayMentDirectBankDeposit = 5;
-
-    // SANDBOX
-    //public $PayPalMode             = 'sandbox'; 
-    //public $PayPalApiUsername      = 'easyseller_api1.yahoo.com'; 
-    //public $PayPalApiPassword      = '1396000698'; 
-    //public $PayPalApiSignature     = 'AFcWxV21C7fd0v3bYYYRCpSSRl31Au1bGvwwVcv0garAliLq12YWfivG';  
-
-
-    // LIVE
-    public $PayPalMode             = ''; 
-    public $PayPalApiUsername      = 'admin_api1.easyshop.ph'; 
-    public $PayPalApiPassword      = 'GDWFS6D9ACFG45E7'; 
-    public $PayPalApiSignature     = 'AFcWxV21C7fd0v3bYYYRCpSSRl31Adro7yAfl2NInYAAVfFFipJ-QQhT'; 
-
-    
-    public $PayPalCurrencyCode     = 'PHP';
 
     function cart_items()
     {
@@ -160,7 +142,7 @@ class Payment extends MY_Controller{
 
             $data = array_merge($data,$this->fill_header()); 
             $data = array_merge($data, $this->memberpage_model->getLocationLookup());
-            $data = array_merge($data,$this->memberpage_model->get_member_by_id($member_id));
+            $data = array_merge($data,$address);
 
             $this->load->view('templates/header', $data);
             $this->load->view('pages/payment/payment_review' ,$data);  
@@ -175,39 +157,32 @@ class Payment extends MY_Controller{
     # https://developer.paypal.com/webapps/developer/docs/classic/express-checkout/integration-guide/ECCustomizing/
     function paypal_setexpresscheckout() 
     {      
+
         header('Content-type: application/json');
         if(!$this->session->userdata('member_id')){
             redirect(base_url().'home', 'refresh');
         };
         
-        $PayPalMode         = $this->PayPalMode; 
-        $PayPalApiUsername  = $this->PayPalApiUsername;
-        $PayPalApiPassword  = $this->PayPalApiPassword;
-        $PayPalApiSignature = $this->PayPalApiSignature;
-        $PayPalCurrencyCode = $this->PayPalCurrencyCode; 
+        $PayPalMode         = $this->paypal->getMode(); 
         $PayPalReturnURL    = base_url().'pay/paypal'; 
         $PayPalCancelURL    = base_url().'payment/review'; 
 
         $member_id =  $this->session->userdata('member_id');
         $remove = $this->payment_model->releaseAllLock($member_id);
-        
         $qtysuccess = $this->resetPriceAndQty();
         $carts = $this->session->all_userdata();
+        $itemList = $carts['choosen_items'];
+        $productCount = count($itemList);  
 
-        if(count($carts['choosen_items']) <= 0){
+        if(count($itemList) <= 0){
             echo  '{"e":"0","d":"There are no items in your cart."}';
             exit();
         } 
-
-        $itemList = $carts['choosen_items'];
-        $productCount = count($itemList);  
 
         if($qtysuccess != $productCount){
             echo  '{"e":"0","d":"One of the items in your cart is unavailable."}';
             exit();
         } 
-
-
 
         $address = $this->memberpage_model->get_member_by_id($member_id); 
         $name = $address['consignee'];
@@ -235,9 +210,9 @@ class Payment extends MY_Controller{
         $invoice_no = date('Ymhs'); 
         $ip = $this->user_model->getRealIpAddr();   
         $transactionID = "";
+
         $prepareData = $this->processData($itemList,$city,$region,$majorIsland);
         $shipping_amt = $prepareData['othersumfee'];
-
         $ItemTotalPrice = $prepareData['totalPrice'] - $shipping_amt;
         $productstring = $prepareData['productstring'];
         $itemList = $prepareData['newItemList'];
@@ -247,8 +222,7 @@ class Payment extends MY_Controller{
       
         if($thereIsPromote <= 0){
             if($grandTotal < '50'){
-                $data = '{"e":"0","d":"We only accept payments of at least PHP 50.00 in total value."}';
-                echo $data;
+                echo '{"e":"0","d":"We only accept payments of at least PHP 50.00 in total value."}';
                 exit();
             }
         }
@@ -266,8 +240,8 @@ class Payment extends MY_Controller{
                 '&RETURNURL='.urlencode($PayPalReturnURL).
                 '&CANCELURL='.urlencode($PayPalCancelURL).
                 '&PAYMENTACTION=Sale'. 
-                '&PAYMENTREQUEST_0_CURRENCYCODE='.urlencode($PayPalCurrencyCode).
-                '&CURRENCYCODE='.urlencode($PayPalCurrencyCode).
+                '&PAYMENTREQUEST_0_CURRENCYCODE='.urlencode('PHP').
+                '&CURRENCYCODE='.urlencode('PHP').
         $dataitem. 
                 '&PAYMENTREQUEST_0_ITEMAMT='.urlencode($ItemTotalPrice).   
                 '&PAYMENTREQUEST_0_SHIPPINGAMT='.urlencode($shipping_amt).
@@ -290,47 +264,29 @@ class Payment extends MY_Controller{
         }else{
            $padata .= '&LANDINGPAGE='.urlencode('Login'); 
         }
-        $httpParsedResponseAr = $this->paypal->PPHttpPost('SetExpressCheckout', $padata, $PayPalApiUsername, $PayPalApiPassword, $PayPalApiSignature, $PayPalMode);
-
-        $pdataarray = json_encode(explode('&',substr($padata, 1)));
+        $httpParsedResponseAr = $this->paypal->PPHttpPost('SetExpressCheckout', $padata); 
         
-
         if("SUCCESS" == strtoupper($httpParsedResponseAr["ACK"]) || "SUCCESSWITHWARNING" == strtoupper($httpParsedResponseAr["ACK"]))
         {   
             $transactionID = urldecode($httpParsedResponseAr["TOKEN"]);
             $return = $this->payment_model->payment($paymentType,$invoice_no,$grandTotal,$ip,$member_id,$productstring,$productCount,"",$transactionID);
             
             if($return['o_success'] <= 0){
-                $data = '{"e":"0","d":"'.$return['o_message'].'"}'; 
+                echo '{"e":"0","d":"'.$return['o_message'].'"}'; 
+                exit();
             }else{
                 $orderId = $return['v_order_id'];
                 $locked = $this->lockItem($toBeLocked,$orderId,'insert');
-                $paypalmode = ($PayPalMode == 'sandbox' ? '.sandbox' : '');
+                $paypalmode = ($PayPalMode == '.sandbox' ? '.sandbox' : '');
                 $paypalurl ='https://www'.$paypalmode.'.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token='.$transactionID.'';
-                $data = '{"e":"1","d":"'.$paypalurl.'"}';  
-            } 
-             
+                echo '{"e":"1","d":"'.$paypalurl.'"}';  
+                exit();
+            }        
         }else{
-            $data = '{"e":"0","d":"'.urldecode($httpParsedResponseAr["L_LONGMESSAGE0"]).'"}';
+            echo '{"e":"0","d":"'.urldecode($httpParsedResponseAr["L_LONGMESSAGE0"]).'"}';
+            exit();
         }
-        echo $data;
-        exit();
     }
-
-    // function test()
-    // {
-    //     echo '
-
-    //     <form action="https://staging.easyshop.ph/payment/dragonPayPostBack" method="POST">
-    //     <input type="text" name="refno" placeholder="refno"/>
-    //     <input type="text" name="txnid" placeholder="txnId"/>
-    //     <input type="text" name="status" placeholder="status" />
-    //     <input type="submit" name="submit" value="ok"/>
-    //     </form>
-    //     ';
-    // }
-
-
 
     #PROCESS PAYPAL
     function paypal(){
@@ -344,12 +300,7 @@ class Payment extends MY_Controller{
             redirect(base_url().'home', 'refresh');
         }
 
-        $this->session->set_userdata('paymentticket', true);
-        $PayPalMode         = $this->PayPalMode; 
-        $PayPalApiUsername  = $this->PayPalApiUsername;
-        $PayPalApiPassword  = $this->PayPalApiPassword;
-        $PayPalApiSignature = $this->PayPalApiSignature; 
-        $PayPalCurrencyCode = $this->PayPalCurrencyCode; 
+        $this->session->set_userdata('paymentticket', true); 
 
         $response['message_status'] = "";
         $response['message'] = "";
@@ -378,22 +329,17 @@ class Payment extends MY_Controller{
 
             $payerid = $_GET["PayerID"];
             $token= $_GET["token"];
-
             $return = $this->payment_model->selectFromEsOrder($token,$paymentType);
-
             $invoice = $return['invoice_no'];
             $orderId = $return['id_order'];
             $response['dateadded'] = $return['dateadded'];
-
             $prepareData = $this->processData($itemList,$city,$region,$majorIsland);
             $itemList = $prepareData['newItemList'];
             $ItemTotalPrice = $prepareData['totalPrice'];
             $productstring = $prepareData['productstring']; 
             $toBeLocked = $prepareData['toBeLocked'];
-
             $lockCountExist = $this->payment_model->lockcount($orderId);
             
-
             if($lockCountExist >= 1){
                 $locked = $this->lockItem($toBeLocked,$orderId,'delete');
                 $qtysuccess = $this->resetPriceAndQty();
@@ -402,20 +348,18 @@ class Payment extends MY_Controller{
                     $response['message'] = '<div style="color:red"><b>Error 1011:The availability of one of your items is below your desired quantity. Someone may have purchased the item before you completed your payment.</b></div>';
                 }else{ 
 
-
                     $grandTotal= $ItemTotalPrice;
                     $response['total'] = $grandTotal;
-
                     $padata =   '&TOKEN='.urlencode($token).
                     '&PAYERID='.urlencode($payerid).
                     '&PAYMENTACTION='.urlencode("SALE").
                     '&AMT='.urlencode($grandTotal).
-                    '&CURRENCYCODE='.urlencode($PayPalCurrencyCode);
+                    '&CURRENCYCODE='.urlencode('PHP');
 
-                    $httpParsedResponseArGECD = $this->paypal->PPHttpPost('GetExpressCheckoutDetails', $padata, $PayPalApiUsername, $PayPalApiPassword, $PayPalApiSignature, $PayPalMode);
+                    $httpParsedResponseArGECD = $this->paypal->PPHttpPost('GetExpressCheckoutDetails', $padata);
                     $apiResponseArray['GetExpressCheckoutDetails '] =  $httpParsedResponseArGECD;
 
-                    $httpParsedResponseAr = $this->paypal->PPHttpPost('DoExpressCheckoutPayment', $padata, $PayPalApiUsername, $PayPalApiPassword, $PayPalApiSignature, $PayPalMode);
+                    $httpParsedResponseAr = $this->paypal->PPHttpPost('DoExpressCheckoutPayment', $padata);
                     $apiResponseArray['DoExpressCheckoutPayment'] = $httpParsedResponseAr;
 
                     if(("SUCCESS" == strtoupper($httpParsedResponseAr["ACK"]) || "SUCCESSWITHWARNING" == strtoupper($httpParsedResponseAr["ACK"])) && ("SUCCESS" == strtoupper($httpParsedResponseArGECD["ACK"])))
@@ -424,13 +368,12 @@ class Payment extends MY_Controller{
                         $response['message_status'] = 'Your PayPal Transaction ID : '.$transactionID; 
                         $transactionID = urlencode($httpParsedResponseAr["TRANSACTIONID"]);
                         $nvpStr = "&TRANSACTIONID=".$transactionID;
-                        $httpParsedResponseAr =  $this->paypal->PPHttpPost('GetTransactionDetails', $nvpStr, $PayPalApiUsername, $PayPalApiPassword, $PayPalApiSignature, $PayPalMode);
+                        $httpParsedResponseAr =  $this->paypal->PPHttpPost('GetTransactionDetails', $nvpStr);
                         $apiResponseArray['GetTransactionDetails'] =  $httpParsedResponseAr;
 
                         if("SUCCESS" == strtoupper($httpParsedResponseAr["ACK"]) || "SUCCESSWITHWARNING" == strtoupper($httpParsedResponseAr["ACK"]))
                         {
                             # START SAVING TO DATABASE HERE
-
                             $apiResponseArray['ProductData'] =   $itemList;
                             $apiResponse = json_encode($apiResponseArray);
                             foreach ($itemList as $key => $value) {               
@@ -459,9 +402,9 @@ class Payment extends MY_Controller{
                                 $this->session->unset_userdata('choosen_items');
                                 $this->sendNotification(array('member_id'=>$member_id, 'order_id'=>$orderId, 'invoice_no'=>$invoice));
 
-                            #google analytics data
+                                #google analytics data
                                 $analytics = $this->ganalytics($itemList,$orderId);
-                            #end of google analytics data
+                                #end of google analytics data
                             } 
                         }else{
                             $response['message'] = '<div style="color:red"><b>Error 3: (GetTransactionDetails failed):</b>'.urldecode($httpParsedResponseAr["L_LONGMESSAGE0"]).'</div>';
@@ -487,7 +430,7 @@ class Payment extends MY_Controller{
         $this->session->set_userdata('headerData', $data);
         $this->session->set_userdata('bodyData', $response);
 
-       redirect(base_url().'payment/success/paypal', 'refresh'); 
+        redirect(base_url().'payment/success/paypal', 'refresh'); 
     }
 
 
@@ -504,7 +447,6 @@ class Payment extends MY_Controller{
 
         $token = $this->input->post('paymentToken');
         $lastDigit = substr($token, -1);
-
         $qtysuccess = $this->resetPriceAndQty();
         $carts = $this->session->all_userdata();
         
@@ -541,23 +483,21 @@ class Payment extends MY_Controller{
         }
  
         $apiResponseArray = array();   
-        $analytics = array(); 
+        $analytics = array();   
+        $ItemTotalPrice = 0;
+        $transactionID = "";
+        $ip = $this->user_model->getRealIpAddr();
+        $invoice_no = date('Ymhsd');    
 
         $member_id =  $this->session->userdata('member_id');
         $itemList =  $carts['choosen_items'];
-        $productCount = count($itemList); 
-        $invoice_no = date('Ymhsd'); 
-        $ip = $this->user_model->getRealIpAddr();     
+        $productCount = count($itemList);   
+
         $address = $this->memberpage_model->get_member_by_id($member_id); 
-       
         $bigThree = $this->getCityRegionMajorIsland($address);
         $city = $bigThree['city'];  
         $region = $bigThree['region'];  
         $majorIsland = $bigThree['majorIsland']; 
-
- 
-        $ItemTotalPrice = 0;
-        $transactionID = "";
 
         $prepareData = $this->processData($itemList,$city,$region,$majorIsland);
         $ItemTotalPrice = $prepareData['totalPrice'];
@@ -585,13 +525,16 @@ class Payment extends MY_Controller{
                 #end of google analytics data
             }   
         }else{
-           $response['message'] = ' <div style="color:red"><b>Error 1011:The availability of one of your items is below your desired quantity. Someone may have purchased the item before you completed your payment.</b></div>'; 
-       } 
+            $response['message'] = ' <div style="color:red"><b>Error 1011:The availability of one of your items is below your desired quantity. Someone may have purchased the item before you completed your payment.</b></div>'; 
+        } 
+
         $response['itemList'] = $itemList;
         $response['analytics'] = $analytics;
+
         if($qtysuccess == $productCount){
             $response = array_merge($response,$return);   
         }
+
         $data['cat_item'] = $this->cart->contents();
         $data['title'] = 'Payment | Easyshop.ph';
         $data = array_merge($data,$this->fill_header());
@@ -607,20 +550,23 @@ class Payment extends MY_Controller{
 
 
     function payDragonPay(){
+
         header('Content-type: application/json');
 
+        $paymentType = $this->PayMentDragonPay; 
 
         $member_id =  $this->session->userdata('member_id'); 
         $remove = $this->payment_model->releaseAllLock($member_id);
         $qtysuccess = $this->resetPriceAndQty(TRUE);
-
         $carts = $this->session->all_userdata();
         $itemList =  $carts['choosen_items'];
         $productCount = count($itemList);
+
         if($qtysuccess != $productCount){
             echo  '{"e":"0","m":"Item quantity not available."}';
             exit();
         } 
+
         $address = $this->memberpage_model->get_member_by_id($member_id); 
         $email = $address['email'];
 
@@ -643,7 +589,6 @@ class Payment extends MY_Controller{
         $dpReturn = $this->dragonpay->getTxnToken($grandTotal,$name,$email);
         $dpReturnArray = json_decode($dpReturn);
         $transactionID =  $dpReturnArray->tid;
-        $paymentType = $this->PayMentDragonPay; 
         $invoice_no = date('Ymhsd'); 
         $ip = $this->user_model->getRealIpAddr();  
          
@@ -713,7 +658,6 @@ class Payment extends MY_Controller{
             $apiResponse = json_encode($itemList);
             $paymentType = 2;
 
-            // if(strtolower($status) == "s"){
             if($postBackCount == "0"){
 
                 foreach ($itemList as $key => $value) {               
@@ -724,21 +668,16 @@ class Payment extends MY_Controller{
                 }
 
                 $locked = $this->lockItem($toBeLocked,$orderId,'delete');
-                
                 $apiResponse = json_encode($apiResponseArray);
-
             }
             
             if(strtolower($status) == "s"){
                 $paymentType = 4;
             }
  
-             
             $complete = $this->payment_model->updatePaymentIfComplete($orderId,$apiResponse,$transactionID,$paymentType);
 
-            // if(strtolower($status) == "s"){
             if($postBackCount == "0"){
-
                 $remove_to_cart = $this->payment_model->removeToCart($member_id,$itemList);
                 $this->sendNotification(array('member_id'=>$member_id, 'order_id'=>$orderId, 'invoice_no'=>$invoice));  
             }
@@ -789,7 +728,6 @@ class Payment extends MY_Controller{
         $message = $this->input->get('message');
         $digest = $this->input->get('digest');
   
-        
         if(strtolower($status) == "p" || strtolower($status) == "s"){
             $paymentType = (strtolower($status) == "p") ? 2 : 4;
             $return = $this->payment_model->selectFromEsOrder($txnId,$paymentType);
@@ -801,8 +739,7 @@ class Payment extends MY_Controller{
             $response['message'] = '<div style="color:green">Your payment has been completed through Dragon Pay.</div><div style="color:black">'.urldecode($message).'</div>';
             $response = array_merge($response,$return);  
             $this->removeItemFromCart(); 
-            $this->session->unset_userdata('choosen_items');
-            // $this->sendNotification(array('member_id'=>$member_id, 'order_id'=>$orderId, 'invoice_no'=>$invoice));
+            $this->session->unset_userdata('choosen_items'); 
            
             #google analytics data
             $analytics = $this->ganalytics($itemList,$orderId);
@@ -1034,37 +971,37 @@ class Payment extends MY_Controller{
 
     function changeAddress()
     {   
-            header('Content-type: application/json');
-            $uid = $this->session->userdata('member_id');
-            $postdata = array(
-                'consignee' => $this->input->post('consignee'),
-                'mobile' => $this->input->post('c_mobile'),
-                'telephone' => $this->input->post('c_telephone'),
-                'stateregion' => $this->input->post('c_stateregion'),
-                'city' => $this->input->post('c_city'),
-                'address' => $this->input->post('c_address'),
-                'country' => $this->input->post('c_country'),
-                'lat' => $this->input->post('temp_lat'),
-                'lng' => $this->input->post('temp_lng'),
-                'addresstype' => 1,
+        header('Content-type: application/json');
+        $uid = $this->session->userdata('member_id');
+        $postdata = array(
+            'consignee' => $this->input->post('consignee'),
+            'mobile' => $this->input->post('c_mobile'),
+            'telephone' => $this->input->post('c_telephone'),
+            'stateregion' => $this->input->post('c_stateregion'),
+            'city' => $this->input->post('c_city'),
+            'address' => $this->input->post('c_address'),
+            'country' => $this->input->post('c_country'),
+            'lat' => $this->input->post('temp_lat'),
+            'lng' => $this->input->post('temp_lng'),
+            'addresstype' => 1,
             );
-            if(trim($this->input->post('consignee')) == "" || $this->input->post('c_city') == 0 || $this->input->post('c_stateregion') == 0 || trim($this->input->post('c_address')) == "" || trim($this->input->post('c_mobile')) == "")
-            {
-                echo json_encode("Fill the required fields!");
-                exit();
-            }else if(!is_numeric($this->input->post('c_mobile')) || strlen($this->input->post('c_mobile')) != 10 || (!preg_match("/^(9|8)[0-9]{9}$/", $this->input->post('c_mobile')))){
-                echo json_encode("<b>MOBILE NUMBER</b> should be 10 digits long and starts with 9. eg: 9051235678");
-                exit();
-            }else if(trim($this->input->post('c_telephone')) != "" && (preg_match("/^([0-9]{4}-){3}[0-9]{4}$/", $this->input->post('c_telephone')) || !is_numeric(str_replace('-', '', $this->input->post('c_telephone'))))){
-                echo json_encode("<b>TELEPHONE NUMBER</b> can only be numbers and hyphen. eg: 354-5973");
-            }else{
-                $postdata['default_add'] = "off";
-                $addressId = $this->memberpage_model->getAddress($uid,'1')['id_address'];
-                $data = $this->memberpage_model->editAddress($uid, $postdata,$addressId);
-                $this->output->set_output(json_encode($data));
-                echo json_encode("success");
-                exit(); 
-            }
+        if(trim($this->input->post('consignee')) == "" || $this->input->post('c_city') == 0 || $this->input->post('c_stateregion') == 0 || trim($this->input->post('c_address')) == "" || trim($this->input->post('c_mobile')) == "")
+        {
+            echo json_encode("Fill the required fields!");
+            exit();
+        }else if(!is_numeric($this->input->post('c_mobile')) || strlen($this->input->post('c_mobile')) != 10 || (!preg_match("/^(9|8)[0-9]{9}$/", $this->input->post('c_mobile')))){
+            echo json_encode("<b>MOBILE NUMBER</b> should be 10 digits long and starts with 9. eg: 9051235678");
+            exit();
+        }else if(trim($this->input->post('c_telephone')) != "" && (preg_match("/^([0-9]{4}-){3}[0-9]{4}$/", $this->input->post('c_telephone')) || !is_numeric(str_replace('-', '', $this->input->post('c_telephone'))))){
+            echo json_encode("<b>TELEPHONE NUMBER</b> can only be numbers and hyphen. eg: 354-5973");
+        }else{
+            $postdata['default_add'] = "off";
+            $addressId = $this->memberpage_model->getAddress($uid,'1')['id_address'];
+            $data = $this->memberpage_model->editAddress($uid, $postdata,$addressId);
+            $this->output->set_output(json_encode($data));
+            echo json_encode("success");
+            exit(); 
+        }
         
     }
 
@@ -1092,7 +1029,6 @@ class Payment extends MY_Controller{
 
     function resetPriceAndQty($condition = FALSE)
     {
-  
         $carts = $this->session->all_userdata(); 
         $itemArray = $carts['choosen_items'];
         $qtysuccess = 0;
@@ -1102,26 +1038,23 @@ class Payment extends MY_Controller{
             $productId = $value['id']; 
             $itemId = $value['product_itemID']; 
 
-        /** NEW QUANTITY **/
+            /** NEW QUANTITY **/
             $newQty = $this->product_model->getProductQuantity($productId, FALSE, $condition);
             $maxqty = $newQty[$itemId]['quantity'];
             $qty = $value['qty']; 
             $itemArray[$value['rowid']]['maxqty'] = $maxqty;
-             
             $qtysuccess = ($maxqty >= $qty ? $qtysuccess + 1: $qtysuccess + 0);
 
-        /** NEW PRICE **/
+            /** NEW PRICE **/
             $promoPrice = $this->product_model->getProductById($productId)['price']; 
             $additionalPrice = $value['additional_fee'];
             $finalPromoPrice = $promoPrice + $additionalPrice;
             $itemArray[$value['rowid']]['price'] = $finalPromoPrice;
             $subtotal = $finalPromoPrice * $qty;
             $itemArray[$value['rowid']]['subtotal'] = $subtotal;
-
         }
 
-        $this->session->set_userdata('choosen_items', $itemArray);
-        // echo '<pre>',print_r($itemArray);exit();
+        $this->session->set_userdata('choosen_items', $itemArray); 
         return $qtysuccess;
     }
 

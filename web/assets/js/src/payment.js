@@ -100,7 +100,7 @@ $(document).ready(function(){
         var csrfname = $("meta[name='csrf-name']").attr('content');
         var type = $(this).data('type');
     
-        $(this).val('Please wait'); 
+        $(this).val('Please wait...'); 
         $(this).attr('disabled','disabled');
 
         if($('#chk_dp').is(':checked')){
@@ -140,7 +140,10 @@ $(document).ready(function(){
     $(document).on('click','.payment_cod',function () {
         if($('#chk_cod').is(':checked')){
             var r = confirm('Are you sure you want to make a purchase through Cash on Delivery?');
+
             if(r == true){
+               $(this).val('Please wait...'); 
+               $(this).attr('disabled','disabled');
                 $('#codFrm').submit();
             }
         }else{
