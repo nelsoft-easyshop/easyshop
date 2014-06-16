@@ -503,7 +503,7 @@ return array(
                 SET v_external_charge = 20;
             WHEN '3' THEN
                 SET v_order_status = 0;
-                SET v_order_product_status = 3;
+                SET v_order_product_status = 0;
                 SET v_external_charge = 0;
             WHEN '4' THEN
                 SET v_order_status = 99;
