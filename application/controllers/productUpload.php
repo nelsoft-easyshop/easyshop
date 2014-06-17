@@ -337,7 +337,7 @@ class productUpload extends MY_Controller
 			echo '{"e":"0","d":"Condition selected not available. Please select another."}';	 
 			exit();
 		}
-
+ 
 		if(strlen(trim($product_title)) == 0 || $product_title == "" 
 			|| strlen(trim($product_brief)) == 0 || $product_brief == "" 
 			|| strlen(trim($product_price)) == 0 || $product_price <= 0)
@@ -387,7 +387,6 @@ class productUpload extends MY_Controller
 				$arrayNameOnly[0] = $arrayNameOnly[$key];
 				$arrayNameOnly[$key] = $temp;
 			}
-
 			if(count($arraynameoffiles) <= 0){
 				echo '{"e":"0","d":"Please select at least one photo for your listing."}';
 				exit();
@@ -542,6 +541,7 @@ class productUpload extends MY_Controller
                         }
                         array_push($newarray[trim(ucfirst(strtolower($_POST['prod_other_name'][$i])))], ucfirst(strtolower($other_name)) .'|'.$other_price.'|'.$other_image.'|'.$other_image_type.'|'.$other_tmp);
                     }
+
                     $filenames_ar = array();					
                     $path = $other_path_directory;
                     $is_primary = 0;
@@ -551,9 +551,27 @@ class productUpload extends MY_Controller
                         if(trim($key) == "" || strlen(trim($key)) <= 0 ){
                             continue;
                         }
+
                         if(count($valuex) <= 1 && $valuex[0] == '--no name|0.00|--no image|--no type|--no temp'){
                             continue;
                         }
+                        if(count($valuex) <= 1 && $valuex[0] == '--no name|0|--no image|--no type|--no temp'){
+                        	continue;
+                        }
+
+                        $passCheck = 0;
+                        foreach ($valuex as $xkey => $xvalue) {
+                        	$explodeChecker = explode('|', $xvalue);
+                        	 
+                        	if($explodeChecker[0] !== '--no name'){
+                        		$passCheck++;
+                        	}
+                        }
+
+                        if($passCheck == 0){
+                        	continue;
+                        }
+
                         $others_id = $this->product_model->addNewAttributeByProduct_others_name($product_id,$key);
                         foreach ($valuex as $keyvalue => $value) {
                             $eval = explode("|", $value);
