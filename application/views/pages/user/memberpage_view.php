@@ -1867,8 +1867,8 @@
 										<strong>Address:</strong>
 										<span><?php echo html_escape($user['address']['fulladd']);?></span> 
 									</span>
-									<span class="tsold_viewmap" data-lat="<?php echo $user['address']['lat'];?>" data-lng="<?php echo $user['address']['lng'];?>">View Map</span>
 									<?php if( $user['address']['lat']!=0 && $user['address']['lng']!=0 ):?>
+										<span class="tsold_viewmap" data-lat="<?php echo $user['address']['lat'];?>" data-lng="<?php echo $user['address']['lng'];?>">View Map</span>
 										<div class="map_modalcont" style="display:none;"></div>
 									<?php endif;?>
 								<?php endforeach;?>

@@ -16,12 +16,12 @@ $(document).ready(function(){
 	
 	$('.address_dropdown, .disabled_country').chosen({width:'200px'});
 	
-	$('.transac_address_details_show').on('click', function(){
+	$('.dashboard_table').on('click','.transac_address_details_show', function(){
 		$(this).siblings('div.transac_address_cont').slideToggle();
 		$(this).hide();
 	});
 	
-	$('.transac_address_details_hide').on('click', function(){
+	$('.dashboard_table').on('click','.transac_address_details_hide', function(){
 		$(this).parent('div').slideToggle();
 		$(this).parent('div').siblings('span.transac_address_details_show').fadeIn();
 	});
@@ -1259,7 +1259,7 @@ $(document).ready(function(){
 		$(this).siblings('.raty-error').html('');
 	});
 	
-	$('.transac-feedback-btn').on('click', function(){
+	$('.dashboard_table').on('click', '.transac-feedback-btn', function(){
 		var divcont = $(this).siblings('.transac-feedback-container');
 		var form = divcont.children('form.transac-feedback-form');
 		var thisbtn = $(this);
@@ -1310,7 +1310,7 @@ $(document).ready(function(){
 		
 	});
 
-	$('.feedback-cancel').on('click', function(){
+	$('.dashboard_table').on('click', '.feedback-cancel', function(){
 		$.modal.close();
 	});
 	
@@ -1318,7 +1318,7 @@ $(document).ready(function(){
 		$(this).siblings('span.error').text('');
 	});
 	
-	$('.transac_response_btn').on('click', function(){
+	$('.dashboard_table').on('click', '.transac_response_btn', function(){
 		var txResponseBtn = $(this);
 		var txStatus = $(this).closest('div.tx_btns').siblings('div.tx_cont').find('.tx_cont_col3 .trans_alert');
 		// tx object located in view. contains username and password( requires once every memberpage load )
@@ -1427,7 +1427,7 @@ $(document).ready(function(){
 	
 	
 	/********** DRAGONPAY HANDLER *****************/
-	$('.dragonpay_update_btn').on('click', function(){
+	$('.dashboard_table').on('click','.dragonpay_update_btn', function(){
 		var form = $(this).closest('form');
 		var thisbtn = $(this);
 		var origval = $(this).val();
@@ -1465,7 +1465,7 @@ $(document).ready(function(){
 	});
 	
 	/******	Submit / View shipping Comments	******/
-	$('.shipping_comment').on('click', function(){
+	$('.dashboard_table').on('click', '.shipping_comment', function(){
 		var divcont = $(this).parent().siblings('div.shipping_comment_cont');
 		var thisbtn = $(this);
 		//var txStatus = $(this).parent().siblings('span.tx_cont_col3').children('span.trans_alert');
@@ -1563,7 +1563,7 @@ $(document).ready(function(){
 	});
 	
 	//$('input.bankdeposit_amount').numeric({negative:false});
-	$('input.price').on('blur',function(){
+	$('.dashboard_table').on('blur','input.price',function(){
 		var price = $.trim($(this).val());
 		var newPrice = price.replace(new RegExp(",", "g"), '');
 		newPrice = parseFloat(newPrice).toFixed(2);
@@ -1575,7 +1575,7 @@ $(document).ready(function(){
 	});
 	
 	/***************	BANK DEPOSIT HANDLERS	*********************/
-	$('.payment_details_btn').on('click', function(){
+	$('.dashboard_table').on('click', '.payment_details_btn', function(){
 		var thisdiv = $(this).siblings('div.payment_details_cont');
 		var thisform = thisdiv.children('form.payment_bankdeposit');
 		var submitbtn = thisform.children('input[type="submit"]');
@@ -1662,7 +1662,7 @@ $(document).ready(function(){
 		});
 	});
 	
-	$('.transac_prod_btns').on('click', '.reject_item', function(){
+	$('.dashboard_table').on('click', '.reject_item', function(){
 		var form = $(this).closest('form');
 		var thisbtn = $(this);
 		var thismethod = $(this).siblings('input[name="method"]');
@@ -1697,13 +1697,13 @@ $(document).ready(function(){
 		return false;
 	});
 	
-	$('.tx_modal_edit').on('click', function(){
+	$('.dashboard_table').on('click','.tx_modal_edit', function(){
 		$(this).siblings('input[type="text"],textarea').attr('disabled', false);
 		$(this).hide();
 		$(this).siblings('.tx_modal_cancel').show();
 	});
 	
-	$('.tx_modal_cancel').on('click', function(){
+	$('.dashboard_table').on('click','.tx_modal_cancel', function(){
 		var input = $(this).siblings('input[type="text"]');
 		var textarea = $(this).siblings('textarea');
 		
@@ -2393,7 +2393,7 @@ $(document).ready(function(){
 	
 	var map, marker;
 	
-	$('.tsold_viewmap').on('click', function(){
+	$('.dashboard_table').on('click','.tsold_viewmap', function(){
 	
 		var maplat = $(this).attr('data-lat');
 		var maplng = $(this).attr('data-lng');
