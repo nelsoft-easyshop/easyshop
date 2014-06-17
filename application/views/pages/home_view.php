@@ -13,122 +13,88 @@
 <section>
     <div class="wrapper">
         <div class="left_navigation">
-			<div class="nav_title">Categories</div>
+            <div class="nav_title">Categories</div>
             <?php echo $category_navigation; ?> 
-		</div>
+        </div>
 
-        <div class="middle_content2">
-            
-            <div class="countdown_container">
-                <div class="countdown_top_content">
-                    <a href='<?=base_url()?>deals'>
+        <div class="middle_content">
+            <ul class="mid_slide1">
+                <?PHP foreach ($data['mainSlide'] as $rows): ?>
+                <li><img style="width:520px;height:270px" src="<?= base_url().$rows.'?ver=1.0' ?>" /></li>
+                <?PHP endforeach; ?>
+            </ul>
 
-                        <div class="countdown_top_left_content">
-                            <div class="cd_timerlabel_container">
-                                
-                            
-                                <span class="cd_timerlabel"><?php echo (strtotime(date('M d,Y H:i:s')) < strtotime($data['cd_startdate']))?'STARTS IN':'TIME LEFT'; ?></span>
-                            </div>
-                           <div class="cd_timer_container">
-                            <div class="cd_timer_days">
-                                <span id='countdown_days'>00</span>
-                                <span>DAYS</span>
-                            </div>
-                            <div class="cd_timer_hours">
-                                <span id='countdown_hours'>00</span>
-                                <span>HOURS</span>
-                            </div>
-                            <div class="cd_timer_minutes">
-                                <span id='countdown_minutes'>00</span>
-                                <span>MINUTES</span>
-                            </div>
-                            <div class="cd_timer_seconds">
-                                <span id="countdown_second">00</span>
-                                <span>SECONDS</span> 
-                            </div>
-                           </div>
-                        </div>
+            <h2><?=$data['productSlide_title'] ?></h2>
+            <ul class="mid_slide2">
+                <?PHP foreach ($data['productSlide_id'] as $rows): ?>
+                  <li>
+                    <a href ="<?=base_url()."item/".$rows['slug']; ?>" >
+                        <span class="mid_bottom_img_con">
+                            <span class="mid_bottom_img">
+                                <img src="<?=  base_url().$rows['path'].'categoryview/'.$rows['file']; ?>" />
+                            </span>
+                        </span>
+                        <br />
+                           <?=html_escape($rows['product']); ?> 
                     </a>
-                    <div class="countdown_top_right_content">
-                        <div class="cd_left_con">
-                            <div class="cd_top_content <?php echo ($data['cd_product'][0]['is_soldout'])?'cd_main_slide_soldout':''?>">
-                                <span class="cd_discount_tag ">
-                                    <span>
-                                        <?php echo ($data['cd_product'][0]['start_promo'])?(number_format($data['cd_product'][0]['percentage'],'0','.',',')):'2'  ?>%
-                                        <br />OFF
-                                    </span>
-                                </span>
+                </li> 
+                <?PHP endforeach; ?>
+            </ul>
 
-                            </div>
-                            <div>
-                                <p class="txt_buy">Buy an</p>
-                                <p class="cd_prod_name"><a href="<?=base_url()?>item/<?=$data['cd_product'][0]['slug']?>"><?php echo html_escape($data['cd_product'][0]['product']);?></a></p>
-                                <p class="cd_prod_base_price">&#8369; <?php echo number_format($data['cd_product'][0]['original_price'],2,'.',',');?></p>
-                                <?php if($data['cd_product'][0]['start_promo']):  ?>
-                                    <p class="cd_prod_discount_price">&#8369; <?php echo number_format($data['cd_product'][0]['price'],2,'.',',');?></p>
-                                    <p class="cd_buy_btn"><a href="<?php echo $data['cd_product'][0]['is_soldout']?'javascript:void(0)': base_url().'item/'.$data['cd_product'][0]['slug']?>" class="<?php echo $data['cd_product'][0]['is_soldout']?'disable_btn':'orange_btn3';?>">BUY NOW</a></p>
-                                <?php else: ?>
-                                    <p class="cd_prod_discount_price">&#8369; <?php echo number_format($data['cd_product'][0]['original_price']*(1-0.99),2,'.',',');?>*</p>
-                                    <p class='cd_prod_disclaimer'>* Lowest possible price</p>
-                                    <p class="cd_buy_btn"><a href="javascript:void(0);" class="disable_btn">BUY NOW</a></p>
-                                <?php endif;  ?>
-                               
-                            </div>
-                        </div>                        
-                        <div class="cd_right_con">
-                        <a href="<?=base_url()?>item/<?=$data['cd_product'][0]['slug']?>">
-                            <img src="<?= base_url().$data['cd_product'][0]['path'].'small/'.$data['cd_product'][0]['file']?>" alt="<?php echo html_escape($data['cd_product'][0]['product']);?>">
-                        </a>
+
+            <div class="clear"></div>
+        </div>
+
+        <!-- Start Right -->
+
+        <div class="right_panel">
+            
+            <div class="right_panel_box">
+                <div class="sign_in_register">
+                    
+                    <?php if(!$logged_in): ?>
+                        <div>
+                            <a href="<?=base_url()?>login" class="orange_btn"> Sign In</a>
+                        </div>                    
+                        <div>
+                           <a href="<?=base_url()?>#register" class="orange_btn"> Register</a>
+                        </div>
+                    <?php else: ?>
+                        <div>
+                            <a href="<?=base_url()?>sell/step1" class="orange_btn" style='width:240px;'>Sell Now</a>
                         </div>     
-                    </div>
+                    <?php endif; ?>
+                    
+                    
                 </div>
                 <div class="clear"></div>
-                <ul class="countdown_slides">
-                        <?php $cnt = 0;
-                        foreach($data['cd_product'] as $countdown_slide): 
-                        $cnt++; ?>
-                        <?php if($cnt === 1 ) continue; ?>
-                        <li class='<?php echo ($countdown_slide['is_soldout'])?'cd_slide_soldout':''?>'>
-                            <div>
-                                <div>
-                                    <span class="cd_slide_title"><a href="<?=base_url()?>item/<?=$countdown_slide['slug']?>"><?=html_escape($countdown_slide['product']);?></a></span>
-                                    <span class="cd_slide_discount"><span> <?php echo ($countdown_slide['start_promo'])?(  number_format($countdown_slide['percentage'],'0','.',',')   ):'2';  ?>%<br />OFF</span></span>
-                                </div>
-                                <div>
-                                    <div class="cd_slide_bleft">
-                                        <p class="cd_slide_base_price">&#8369;<?php echo number_format($countdown_slide['original_price'],2,'.',','); ?></p>
-                                        
-                                        <?php if($data['cd_product'][1]['start_promo']):  ?>
-                                            <p class="cd_slide_discount_price">&#8369;<?php echo number_format($countdown_slide['price'],2,'.',','); ?></p>
-                                            <p class="cd_slide_buy_btn"><a href="<?php echo $countdown_slide['is_soldout']?'javascript:void(0)':base_url().'item/'.$countdown_slide['slug'];?>" class="<?php echo $countdown_slide['is_soldout']?'disable_btn':'orange_btn3';?>">BUY NOW</a></p>
-                                        <?php else: ?>
-                                            <p class="cd_slide_discount_price">&#8369;<?php echo number_format($countdown_slide['original_price']*(1-0.99),2,'.',',');?>*</p>
-                                            <p class='cd_prod_disclaimer'>* for as low as</p>
-                                            <p class="cd_slide_buy_btn"><a "javascript:void(0)" class="disable_btn">BUY NOW</a></p>
-                                        <?php endif;  ?>
-
-                                    </div>
-                                    <div class="cd_slide_rleft">
-                                        <span>
-                                            <a href="<?=base_url()?>item/<?=$countdown_slide['slug']?>">
-                                            <img src="<?= base_url().$countdown_slide['path'].'categoryview/'.$countdown_slide['file']?>" alt="<?php echo html_escape($countdown_slide['product']);?>">
-                                            </a>
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="cd_border"></li>
-                    <?php endforeach; ?>
-                </ul>
-
-                <div class="clear"></div>
-                <div class="cd_view_all">
-                     <a href='<?=base_url()?>deals' class="orange_btn3">View All Items</a>
+                <div class="guides_panel">
+                    <div>
+                        <a href="<?= base_url() ?>home/under_construction"><span class="span_bg privacy_policy"></span>Pricacy Policy</a>
+                    </div>
+                    <div>
+                        <a href="<?= base_url() ?>home/under_construction"><span class="q_and_a"></span>FAQ</a>
+                    </div>
+                    <div>
+                        <a href="<?= base_url() ?>home/under_construction"><span class="terms"></span>Terms &amp; Condition</a>
+                    </div>
+                    <div>
+                        <a href="<?= base_url() ?>home/under_construction"><span class="contactus"></span>Contact Us</a>
+                    </div>
+                </div>
+            </div>
+            <br/>
+            <div class="global_secure_payment">
+                <p><strong>Payment Methods</strong></p>
+                <div>
+                    <span class="mastercard"></span>
+                    <span class="visa"></span>
+                    <span class="paypal"></span><br />
+                    <span class="dragonpay"></span>
+                    <span class="cod"></span>
                 </div>
             </div>
         </div>
-
     </div>
 </section>
 
