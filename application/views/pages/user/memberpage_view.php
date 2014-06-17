@@ -1483,6 +1483,10 @@
 	<br/>
 </div>
 
+<div id="map_modalcont" style="display:none;">
+	<div id="tsold_mapview" style="height: 400px; width: 650px; "></div>
+</div>
+
 <div class="profile_main_content" id="transactions">
 	<h2>On-going Transactions</h2>
 	
@@ -1496,10 +1500,34 @@
 	<div id="bought" class="transactions-buy dashboard_table">
 		<h2>Bought Items</h2>
 		<?php if(count($transaction['buy'])===0):?>
-		<br/>
-		<div><span class='nocontent'>You have not bought any items yet.</span></div>
-	<?php else: ?>
+			<br/>
+			<div><span class='nocontent'>You have not bought any items yet.</span></div>
+		<?php else: ?>
 	<?php $transac_counter = 0;?>
+	
+	<div class="post_item_srch_container">
+		<input type="text" class="box sch_box" placeholder="Search" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Search'" />
+		<span class="span_bg sch_btn"></span>
+		<label for="active_sort">Sort By</label>
+		<select name="active_sort" class="post_active_sort sort_select">
+			<option value="1">Date of Entry</option>
+			<option value="2">Name</option>
+			<option value="3">Price</option>
+			<option value="4">Availability</option>
+			<option value="5"># of Sold Items</option>
+		</select>
+		<span class="span_bg arrow_sort"></span>
+		<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" class="loading_img" style="display:none;"/>
+	</div>
+	
+	<div class="pagination" id="pagination-bought">
+		<a href="#" class="first" data-action="first">&laquo;</a>
+		<a href="#" class="previous" data-action="previous">&lsaquo;</a>
+		<input type="text" readonly="readonly" data-max-page="<?php echo (count($transaction['buy'])===0)?1:(ceil(count($transaction['buy'])/$items_per_page));?>" />
+		<a href="#" class="next" data-action="next">&rsaquo;</a>
+		<a href="#" class="last" data-action="last">&raquo;</a>
+	</div>
+	
 	<div class="paging">
 		<?php foreach($transaction['buy'] as $tk=>$transact):?>
 		<div class="transac-container">
@@ -1758,18 +1786,8 @@
 <?php endif;?>
 <?php endforeach;?>
 </div>
-<div class="pagination" id="pagination-bought">
-	<a href="#" class="first" data-action="first">&laquo;</a>
-	<a href="#" class="previous" data-action="previous">&lsaquo;</a>
-	<input type="text" readonly="readonly" data-max-page="<?php echo (count($transaction['buy'])===0)?1:(ceil(count($transaction['buy'])/$items_per_page));?>" />
-	<a href="#" class="next" data-action="next">&rsaquo;</a>
-	<a href="#" class="last" data-action="last">&raquo;</a>
-</div>
-<?php endif; ?>
-</div>
 
-<div id="map_modalcont" style="display:none;">
-	<div id="tsold_mapview" style="height: 400px; width: 650px; "></div>
+<?php endif; ?>
 </div>
 
 	<div id="sold" class="transactions-sell dashboard_table">
