@@ -30,12 +30,12 @@ var memconf = {
 	itemPerPage: 10
 };
 
-function ItemListAjax(ItemDiv,start,pageindex,count=false){
+function ItemListAjax(ItemDiv,start,pageindex,count){
 	var loadingDiv = ItemDiv.children('div.page_load');
 	var key = ItemDiv.data('key');
 	var thisdiv = ItemDiv.children('div.paging[data-page="'+pageindex+'"]');
 	
-	var c = count ? 'count' : '';
+	var c = typeof(count) !== 'undefined' ? 'count' : '';
 	
 	memconf.ajaxStat = jQuery.ajax({
 		type: "GET",
@@ -59,7 +59,7 @@ function ItemListAjax(ItemDiv,start,pageindex,count=false){
 				return false;
 			}
 			
-			if(count){
+			if( typeof(count) !== 'undefined' ){
 				var pagingDivBtn = ItemDiv.children('div.pagination');
 				pagingDivBtn.jqPagination('option', 'current_page', 1);
 				if(obj.count === 0){
