@@ -2,7 +2,8 @@ $(document).ready(function(){
     
     var modal = $('#modal').val();
     if(parseInt(modal,10) === 0){
-         $('#tabs').tabs();         
+        $('#tabs').tabs();         
+        $('#prod_billing_id').val( $('#billing_info_id').val());
     }
     
     $('#previewProduct').on('click', '.deposit_edit', function(){
@@ -254,6 +255,7 @@ $(document).ready(function(){
      */
     
     $(document).on('click', '#previewSubmit', function(){
+    
             var csrftoken = $("meta[name='csrf-token']").attr('content');
             var csrfname = $("meta[name='csrf-name']").attr('content');
             var account_name = $('#deposit_acct_name').val();
@@ -261,6 +263,7 @@ $(document).ready(function(){
             var account_no = $('#deposit_acct_no').val();
             var bank_list = $('#bank_list').val();
             var prod_billing_id = parseInt($('#prod_billing_id').val(),10);
+
             var cod_only = ((prod_billing_id === 0)&&($('#allow_cashondelivery').is(':checked')))?true:false;
             var valid = true;
             if(!cod_only){
@@ -291,11 +294,11 @@ $(document).ready(function(){
                     data: "bi_payment_type=Bank&bi_bank="+bank_list+"&bi_acct_no="+account_no+"&bi_acct_name="+account_name+"&"+csrfname+"="+csrftoken, 
                     success: function(response) {
                             var obj = JSON.parse(response);
-                            if((parseInt(obj.e,10) == 1) && (parseInt(obj.d == 'success'))){
+                            if((parseInt(obj.e,10) == 1) && (obj.d == 'success')){
                                 var new_id = parseInt(obj.id,10);
                                 $('#prod_billing_id').val(new_id);
                                 $('#step4_form').submit();
-                            }else if((parseInt(obj.e,10) == 0) && (parseInt(obj.d == 'duplicate'))){
+                            }else if((parseInt(obj.e,10) == 0) && (obj.d == 'duplicate')){
                                 alert('You are already using this account number.');
                             }else{
                                 alert('Something went wrong please try again later.');
