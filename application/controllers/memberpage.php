@@ -590,9 +590,9 @@ class Memberpage extends MY_Controller
 					'image_profile' => $this->memberpage_model->get_Image($sellerid),
 					'active_products' => $this->memberpage_model->getUserItems($sellerid,0),
 					'deleted_products' => $this->memberpage_model->getUserItems($sellerid,1),
-					'active_count' => $user_product_count['active'],
-					'deleted_count' => $user_product_count['deleted'],
-                    'sold_count' => $user_product_count['sold']
+					'active_count' => intval($user_product_count['active']),
+					'deleted_count' => intval($user_product_count['deleted']),
+                    'sold_count' => intval($user_product_count['sold'])
 					));
 			$data['transaction'] = $this->memberpage_model->getTransactionDetails($sellerid);
 			$data['allfeedbacks'] = $this->memberpage_model->getFeedback($sellerid);
