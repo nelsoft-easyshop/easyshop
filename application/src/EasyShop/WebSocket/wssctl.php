@@ -20,9 +20,11 @@ function start_web_socket_server($rootDir, $isDev = true)
     // register 3rd party autoloader
     require_once $rootDir . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
 
-    $isDevMode  = false;
+    $isDevMode  = true;
     $dbConfig   = require $rootDir . 'application/config/param/database.php';
     $doctrineConfig     = \Doctrine\ORM\Tools\Setup::createAnnotationMetadataConfiguration([$rootDir . 'application/src/EasyShop/Entities'], $isDevMode);
+    $doctrineConfig->setProxyDir($rootDir . 'application/src/EasyShop/Doctrine/Proxies');
+    $doctrineConfig->setProxyNamespace('EasyShop\Doctrine\Proxies');
     
     $wsServerConfig     = require $rootDir . 'application/config/param/websocket.php';
     
