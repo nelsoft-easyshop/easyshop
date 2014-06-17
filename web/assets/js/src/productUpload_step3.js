@@ -969,8 +969,7 @@ $(function(){
 
 
 function isMobile(){
-    console.log(screen.width);
-    return true;
+
     if(screen.width < 500 ||
      navigator.userAgent.match(/Android/i) ||
      navigator.userAgent.match(/webOS/i) ||
