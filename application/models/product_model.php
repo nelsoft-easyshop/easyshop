@@ -2035,7 +2035,8 @@ class product_model extends CI_Model
             $result['is_soldout'] = $this->is_sold_out($product_id);
             $result['sold_price'] = $this->get_sold_price($product_id, date('Y-m-d',$startdate), date('Y-m-d',$enddate));
         }
-        $result['price'] = (intval($result['price'])>0)?$result['price']:0.01;
+        
+        $result['price'] = (floatval($result['price'])>0)?$result['price']:0.01;
         return $result;
    }
 
