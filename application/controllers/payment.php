@@ -28,6 +28,22 @@ class Payment extends MY_Controller{
     public $PayMentDragonPayOnlineBanking = 4;
     public $PayMentDirectBankDeposit = 5;
 
+    // SANDBOX
+    public $PayPalMode             = 'sandbox'; 
+    public $PayPalApiUsername      = 'easyseller_api1.yahoo.com'; 
+    public $PayPalApiPassword      = '1396000698'; 
+    public $PayPalApiSignature     = 'AFcWxV21C7fd0v3bYYYRCpSSRl31Au1bGvwwVcv0garAliLq12YWfivG';  
+
+
+    // LIVE
+   // public $PayPalMode             = ''; 
+   // public $PayPalApiUsername      = 'admin_api1.easyshop.ph'; 
+   // public $PayPalApiPassword      = 'GDWFS6D9ACFG45E7'; 
+   // public $PayPalApiSignature     = 'AFcWxV21C7fd0v3bYYYRCpSSRl31Adro7yAfl2NInYAAVfFFipJ-QQhT'; 
+
+    
+    public $PayPalCurrencyCode     = 'PHP';
+
     function cart_items()
     {
         $res = true;
