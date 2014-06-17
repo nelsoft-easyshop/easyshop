@@ -320,7 +320,7 @@ class Payment extends MY_Controller{
             curl_setopt($ch, CURLOPT_POSTFIELDS, $req);
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 1);
             curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
-            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Host: www'.$paypalmode.'.sandbox.paypal.com'));
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Host: www'.$paypalmode.'.paypal.com'));
             $res = curl_exec($ch);
             curl_close($ch); 
 
