@@ -1569,6 +1569,10 @@ span.shopping_guide {
 	background-position: -5px -120px;   
 }
 
+span.privacy_policy {
+	background-position: -5px -120px;   
+}
+
 span.q_and_a {
 	background-position: -87px -120px;    
 }
@@ -1577,16 +1581,26 @@ span.shipping {
 	background-position: -170px -114px;
 }
 
+span.terms {
+	background-position: -170px -117px;
+}
+
 span.secure_payment {
 	background-position: -260px -120px;	
 }
 
+span.contactus {
+	background-position: -260px -120px;	
+}
+
 .guides_panel div {
-	background-color: #5FC7B6;
+	/*background-color: #5FC7B6;*/
+	background-color: #fff;
 	border-radius: 3px;
 	width: 97px;
 	height: 88px;
 	float: left;
+	font-size: 11px;
 	display: block;
 	margin-bottom: 10px;
 	text-align: center;
@@ -1654,7 +1668,7 @@ span.paypal {
 }
 
 span.dragonpay {
-	background-position: -244px -173px;		
+	background-position: -244px -182px;		
 	width: 95px;
 }
 span.cod {
@@ -3183,7 +3197,7 @@ padding: 8px 0;
 .login_box input[type="checkbox"] {
 	border:none;
 	height: 15px;
-    width: 30px;	
+    width: auto;	
     vertical-align: middle;
 /*   	margin-left: 100px;*/
 }
@@ -3226,10 +3240,10 @@ padding: 8px 0;
 	cursor: pointer;
 	background-color: #f18200;
 /*	display: block;*/
-	height: 30px;
-	line-height: 22px;
+	height: inherit;
+/*	line-height: 22px;*/
 	margin: 10px auto;
-	padding:5px 10px;
+/*	padding:5px 10px;*/
 	width: 240px;
 	text-align: center;
 	-webkit-transition: all 0.2s ease-in-out;
