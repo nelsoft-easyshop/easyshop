@@ -38,7 +38,7 @@
 |
 */
 
-$route['default_controller'] = "landingpage";
+$route['default_controller'] = "home";
 $route['404_override'] = 'home/pagenotfound';
 
 #route maintenance: home/splash
@@ -86,7 +86,7 @@ $route['sell/edit/processing2'] = 'productUpload/editStep2Submit';  # sam gavini
 $route['(?i)sell/draft/remove'] = 'productUpload/deleteDraft';  # sam gavinio
 
 #LANDING PAGE 
-$route['(?i)registration/success'] = 'landingpage/success/register';  # sam gavinio
+$route['(?i)registration/success'] = 'register/success';  # sam gavinio
 
 #PAYMENT CASH ON DELIVERY
 $route['(?i)pay/cashondelivery'] = 'payment/payCashOnDelivery';  # ryan vasquez
@@ -109,7 +109,8 @@ $route['(?i)policy'] = 'home/policy';
 $route['(?i)terms'] = 'home/terms';
 $route['(?i)faq'] = 'home/faq';
 $route['(?i)contact'] = 'home/contact';
-$route['(?i)subscribe'] = 'home/subscribe';  # sam gavinio
+
+$route['(?i)subscribe'] = 'register/subscribe';  
 
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */

@@ -2,59 +2,143 @@
 
 if (!defined('BASEPATH'))
 	exit('No direct script access allowed');
-
+	
 class Register extends MY_Controller
 {
-	var $vals;
+
 	function __construct() 
 	{
 		parent::__construct();
 		$this->load->model("register_model");
 		$this->load->library('encrypt');
-
-        $base_url = base_url();
-		$img_url = $base_url.'assets/captcha/';
-		$this->vals = array(
-            'word_length'   => 6,
-			'img_path' => './assets/captcha/',
-			'img_url' => $img_url,
-			'img_width' => '140',
-            'img_height' => '30',
-			'font_path' => './assets/fonts/monofont.ttf',
-			'expiration' => 7200
-		);	
 		$this->form_validation->set_error_delimiters('', '');
 	}
 	
-	function index()
+	public function index()
 	{
 		$data = array(
-				'title' => 'Easyshop.ph - Account Registration',
-			);		
-		$data = array_merge($data, $this->fill_header());
-		$data['reg_username'] = '';
-		$view = 'register_form1_view';
-
-		if(($this->input->post('register_page1'))&&($this->form_validation->run('register_form1')))
-		{
-            //$this->session->unset_userdata('captcha_word');
+			'title' => 'Easyshop.ph - Welcome to Easyshop.ph'
+		);
+        $data = array_merge($data, $this->fill_header());
+		$this->load->view('pages/user/register', $data);
+	}
+	
+  	
+	/*
+	 *	Registration Handler
+	 */
+	public function signup()
+	{
+		$serverResponse = array(
+			'result' => 0,
+			'error' => array()
+		);
+		
+		if(($this->input->post('register_form1'))&&($this->form_validation->run('landing_form'))){
 			
 			$data['username'] = $this->input->post('username');
 			$data['password'] = $this->input->post('password');
 			$data['email'] = $this->input->post('email');
+            $data['mobile'] = substr($this->input->post('mobile'),1);
 			
-			$result = $this->sendVerificationCode($data);
+			$registrationFlag = false;
 			
-			$view = 'register_form3_view';
-			$data['member_username'] = $data['username'];
-			$data['verification_msg'] = $this->lang->line('success_registration');
+			// REGISTER MEMBER IN DATABASE
+			$data['member_id'] = $this->register_model->signupMember_landingpage($data)['id_member'];
+			
+			//GENERATE MOBILE CONFIRMATION CODE
+			$temp['mobilecode'] = $this->register_model->rand_alphanumeric(6);
+			//GENERATE HASH FOR EMAIL VERIFICATION
+			$temp['emailcode'] = sha1($this->session->userdata('session_id').time());
+			$temp['member_id'] = $data['member_id'];
+			
+			// Send notification email to user, max try = 3
+			$data['emailcode'] = $temp['emailcode'];
+			$emailCount = 0;
+			do{
+				$emailResult = $this->register_model->sendNotification($data, 'signup');
+				$emailCount++;
+			}while(!$emailResult && $emailCount < 3);
+			
+			$temp['email'] = $emailResult ? 1 : 0;
+			
+			//Store verification details and increase limit count when necessary
+			$result = $this->register_model->store_verifcode($temp);
+			
+			// If verification code failed to enter database
+			if(!$result){
+				array_push($serverResponse['error'], 'Database verifcode error <br>');
+			}
+			// If registration failed
+			if( is_null($data['member_id']) || $data['member_id'] == 0 || $data['member_id'] == ''){
+				array_push($serverResponse['error'], 'Database registration failure <br>');
+				$registrationFlag = false;
+			}else{
+				$registrationFlag = true;
+			}
+			if(!$emailResult){
+				array_push($serverResponse['error'], 'Failed to send verification email. Please verify in user page upon logging in.');
+			}
+			
+			if( $registrationFlag && $result ){
+				$serverResponse['result'] = 1;
+			}
+			else{
+				$serverResponse['result'] = 0;
+			}
+			
 		}
-        $data['render_searchbar'] = false;
-		$this->load->view('templates/header', $data);
-		$this->load->view("pages/user/".$view, $data);
-		$this->load->view('templates/footer');
+		else{
+			if( !($this->input->post('register_form1')) ){
+				array_push($serverResponse['error'], 'Failed to submit form. <br>');
+			}
+			if( !($this->form_validation->run('landing_form')) ){
+				array_push($serverResponse['error'], 'Failed to validate form. <br>');
+			}
+		}
+		
+		echo json_encode($serverResponse);
 	}
 	
+	
+	public function username_check()
+	{
+		if($this->input->post('username')){
+			//$username = htmlspecialchars($this->input->post('username'));
+			$username = $this->input->post('username');
+			if($this->register_model->get_member_by_username($username))
+				echo 0;
+			else
+				echo 1;
+		}
+	}
+	
+	public function email_check()
+	{
+		if($this->input->post('email')){
+			$email = $this->input->post('email');
+			if($this->register_model->checkEmailIfExists($email)){
+				echo 0;
+			}
+			else {
+				echo 1;
+			}
+		}
+	}
+	
+	public function mobile_check()
+	{
+		if($this->input->post('mobile')){
+			$mobile = $this->input->post('mobile');
+			if($this->register_model->checkMobileIfExists($mobile)){
+				echo 0;
+			}
+			else {
+				echo 1;
+			}
+		}
+	}
+
 	public function external_callbacks( $postdata, $param )
 	{
 		 $param_values = explode( ',', $param ); 
@@ -88,186 +172,96 @@ class Register extends MY_Controller
 		 }
 		 return $callback_result;
 	}
-	
-	function recreate_captcha()
+
+    public function success($action = ''){
+        $data['title'] = 'Easyshop.ph - Thank You';
+        $referrer = ($this->input->post('referrer'))?$this->input->post('referrer'):'';
+        if($referrer != 'landingpage'){
+		    $data['title'] = 'Page not found';
+            $data = array_merge($data,$this->fill_header());
+            $this->load->view('templates/header', $data); 
+            $this->load->view('pages/general_error'); 		
+            $this->load->view('templates/footer_full');
+        }
+        else{
+            $data['content'] = 'You have successfully registered!';
+            $data['sub_content'] =  'You have successfully registered with Easyshop.ph. Verify your e-mail to begin selling your products online.';
+            $this->load->view('pages/user/register_subscribe_success', $data);
+        }
+    } 
+    
+    /*
+     *	Subscription Handler
+     */
+	public function subscribe()
 	{
-		$cap = create_captcha($this->vals);
-		$this->session->set_userdata('captcha_word', $cap['word']);
-		$base_url = base_url();
-		$filename = $base_url.'assets/captcha/'.$cap['time'].'.jpg';
-		echo $filename;
-	}
-		
-	function sendVerificationCode($data)
-	{
-		//GENERATE MOBILE CONFIRMATION CODE
-		$temp['mobilecode'] = $this->register_model->rand_alphanumeric(6);
-		//GENERATE HASH FOR EMAIL VERIFICATION
-		$temp['emailcode'] = sha1($this->session->userdata('session_id').time());
-		//Register user to database and pull member id
-		$temp['member_id'] = $this->register_model->signupMember($data)['id_member'];
-		//Send confirmation email
-		$status = $this->register_model->send_email_msg($data['email'], $data['username'], $temp['emailcode']);
-		//$status = 'success';
-		
-		//Determine if count limit for verification will be increased
-		if($status === 'success'){
-			$temp['email'] = 1;
+		if($this->input->post('subscribe_btn') && $this->form_validation->run('subscription_form')){
+            $this->load->model('register_model');
+			$data['email'] = $this->input->post('subscribe_email');
+            $result = $this->register_model->subscribe($data['email']);
+			// Send notification email to user 
+			if($result){		
+              $this->register_model->sendNotification($data, 'subscribe');
+              $data['title'] = 'Successful Subscription | Easyshop.ph';
+              $data['content'] = 'You have successfully Subscribed!';
+              $data['sub_content'] =  'Thank you for choosing to keep in touch with Easyshop.ph. Expect to hear many things from us soon.';
+              $this->load->view('pages/user/register_subscribe_success', $data);
+            }else{
+                redirect('home','refresh');
+            }
 		}else{
-			$temp['email'] = 0;
-		}
-		//Store verification details and increase limit count when necessary
-		$result = $this->register_model->store_verifcode($temp);
+            redirect('home','refresh');
+        }
+
+	}
+    
+
+    
+    public function changepass(){
+		$data = array(
+			'title' => 'Change Password | Easyshop.com',
+            'render_searchbar' => false,
+		);
+		$data = array_merge($data, $this->fill_header());
 		
-		return $result;
-	}
-	
-	/*function send_verification_code() {
-		if($this->input->post('register_form2_a_btn')){
-			if($this->form_validation->run('register_form2_a')){
-				$data_val = array(
-					'register_username' => $this->session->userdata('register_username'),
-					'register_password' => $this->session->userdata('register_password'),
-					'register_mobile' => $this->input->post('register_mobile'),
-					'register_region' => $this->input->post('register_region'),
-					'register_email' => $this->input->post('register_email')
-				);
-			
-				//INITIALIZE VARIABLES
-				$username = $data_val['register_username'];
-				$data = array('mobilestat' => "", 'emailstat' => "");
-				//GENERATE MOBILE CONFIRMATION CODE
-				$confirmation_code = $this->register_model->rand_alphanumeric(6);
-				//GENERATE HASH FOR EMAIL VERIFICATION
-				$hash = sha1($this->session->userdata('session_id'));
-				
-				//Check if email or mobile already used by other users
-				//User will not be registered until valid contact info is/are provided
-				$checkdata = array(
-					//'member_id' => 0,
-					'contactno' => html_escape($this->input->post('register_mobile')),
-					'email' => html_escape($this->input->post('register_email'))
-				);
-				
-				if($this->session->userdata('temp_memberid')){
-					$checkdata['member_id'] = $this->session->userdata('temp_memberid');
-				}
-				else{
-					$checkdata['member_id'] = 0;
-				}
+		$this->load->view('templates/header', $data);
+		$temp['toggle_view'] = "1";
+		$temp['err'] = "";
+        $result = true;
 
-				
-				$check = $this->register_model->check_contactinfo($checkdata);
-				if($check['mobile'] !== 0 || $check['email'] !== 0){
-					$data['mobilestat'] = $check['mobile'] == 0 ? '' : 'exists';
-					$data['emailstat'] = $check['email'] == 0 ? '' : 'exists';
-					echo json_encode($data);
-					return;
-				}
-
-				//REGISTER MEMBER IN DATABASE
-				$member_id = $this->register_model->signup_member($data_val)['id_member'];
-				$this->session->set_userdata('temp_memberid', $member_id);
-				
-				$temp = array(
-					'member_id' => $member_id,
-					'mobilecode' => $confirmation_code,
-					'emailcode' => $hash,
-					'mobile' => 0,
-					'email' => 0
-				);
-
-				$stat = $this->register_model->get_verifcode($member_id);
-
-				if($this->input->post('register_mobile')){
-					if($stat['mobilecount'] < 4 || $stat['time'] > 30 ){
-						$data['mobile'] = $this->input->post('register_mobile');
-						$data['mobilestat'] = $this->register_model->send_mobile_msg($username, $data['mobile'], $confirmation_code);
-						
-						if($data['mobilestat'] === 'success'){
-							$this->session->set_userdata('confirmation_code', $confirmation_code);
-							//$this->session->set_userdata('temp_memberid' , $member_id);
-							$temp['mobile'] = 1;
-						}
-					}
-					else
-						$data['mobilestat'] = 'exceed';
-				}
-				
-				if($this->input->post('register_email') ){
-					if($stat['emailcount'] < 4 || $stat['time'] > 30 ){
-						$data['email'] = $this->input->post('register_email');
-						$data['emailstat'] = $this->register_model->send_email_msg($data['email'], $username, $hash);
-
-						if($data['emailstat'] === 'success')
-							$temp['email'] = 1;
-					}
-					else
-						$data['emailstat'] = 'exceed';
-				}
-
-				//STORE VERIFICATION CODE
-				$this->register_model->store_verifcode($temp);
-				
-				echo json_encode($data);
-
-			}//close if for form check
-			else{
-				echo 0;
-			}
-		}//close if for button submit
-		else{
-			redirect(base_url().'home');
-		}
-	}
-	
-
-	//Function used to verify modal form
-	function mobile_verification()
-	{
-		if(($this->input->post('register_form2_b_btn')) && ($this->form_validation->run('register_form2_b'))){
-			$member_id = $this->session->userdata('temp_memberid');
-
-			$user_confirmation_code = $this->input->post('verification_code');
-			$data = $this->register_model->get_verifcode($member_id);
-
-			if(($user_confirmation_code == $this->session->userdata('confirmation_code')) && ($this->session->userdata('confirmation_code') == $data['mobilecode']))
-			{
-				$data['is_contactno_verify'] = 1;
-				$this->register_model->update_verification_status($data);
-				$this->session->unset_userdata('confirmation_code');
-				$this->session->unset_userdata('temp_memberid');
-				$this->session->set_userdata('temp_memberuname', $data['username']);
-				echo true;
-			}
-			else 
-				echo false;
-		}
-	}
-
-	function success_mobile_verification(){
-		if($this->input->post('mobile_verify') === 'submit_mobilenum'){
+		$username = $this->input->post('wsx');
+		$cur_password = $this->input->post('cur_password');
+		$password = $this->input->post('password');			
 		
-			//UNSET REGISTER SESSION VARIABLES
-			$this->session->unset_userdata('register_username');
-			$this->session->unset_userdata('register_password');
-			
-			$data = array(
-				'verification_msg' => $this->lang->line('success_mobile_verification'),
-				'member_username' => $this->session->userdata('temp_memberuname'),
-				'logged_in' => false
-			);
+		if(($username) && ($this->form_validation->run('changepass'))){  
+		
+			$dataval = array('login_username' => $username, 'login_password' => $cur_password);
+			$row = $this->user_model->verify_member($dataval);
 
-			$this->session->unset_userdata('temp_memberuname');
-			echo $this->load->view('pages/user/register_form3_view', $data, true);
+			if ($row['o_success'] >= 1){
+				$data = array(
+					'username' => $username,
+					'cur_password' => $cur_password,
+					'password' => $password
+				);
+				
+				$result = $this->register_model->changepass($data);       
+				if($result){
+					$temp['toggle_view'] = "";
+				}
+			}else{
+				$temp['toggle_view'] = "1";
+				$temp['err'] = "69";
+			}
 		}
-		else{
-			redirect(base_url().'register');
-		}
+		
+        $temp['result'] = $result;
+		$this->load->view('pages/user/changepassword', $temp);
+		$this->load->view('templates/footer');		
+		
 	}
-	*/
-	
-	function email_verification(){
+    
+    function email_verification(){
 	
 		$this->load->library('encrypt');
 
@@ -333,90 +327,8 @@ class Register extends MY_Controller
 			$this->load->view('templates/footer');
 		}
 	}
+ 
+ 
+    
+}// close class
 
-	function username_check()
-	{
-		if($this->input->post('username')){
-			//$username = htmlspecialchars($this->input->post('username'));
-			$username = $this->input->post('username');
-			if($this->register_model->get_member_by_username($username))
-				echo 0;
-			else
-				echo 1;
-		}
-	}
-	
-	function email_check()
-	{
-		if($this->input->post('email')){
-			$email = $this->input->post('email');
-			if($this->register_model->checkEmailIfExists($email)){
-				echo 0;
-			}
-			else {
-				echo 1;
-			}
-		}
-	}
-
-	function changepass(){
-		$data = array(
-			'title' => 'Change Password | Easyshop.com',
-            'render_searchbar' => false,
-		);
-		$data = array_merge($data, $this->fill_header());
-		
-		$this->load->view('templates/header', $data);
-		$temp['toggle_view'] = "1";
-		$temp['err'] = "";
-        $result = true;
-
-		$username = $this->input->post('wsx');
-		$cur_password = $this->input->post('cur_password');
-		$password = $this->input->post('password');			
-		
-		if(($username) && ($this->form_validation->run('changepass'))){  
-		
-			$dataval = array('login_username' => $username, 'login_password' => $cur_password);
-			$row = $this->user_model->verify_member($dataval);
-
-			if ($row['o_success'] >= 1){
-				$data = array(
-					'username' => $username,
-					'cur_password' => $cur_password,
-					'password' => $password
-				);
-				
-				$result = $this->register_model->changepass($data);       
-				if($result){
-					$temp['toggle_view'] = "";
-				}
-			}else{
-				$temp['toggle_view'] = "1";
-				$temp['err'] = "69";
-			}
-		}
-		
-        $temp['result'] = $result;
-		$this->load->view('pages/user/changepassword', $temp);
-		$this->load->view('templates/footer');		
-		
-	}
-
-	private function unload(){
-		if($this->session->userdata('register_username')){
-			$this->session->unset_userdata('captcha_word');
-			$this->session->unset_userdata('temp_memberid');
-			$this->session->unset_userdata('temp_memberuname');
-			$this->session->unset_userdata('register_username');
-			$this->session->unset_userdata('register_password');	
-		}
-	}
-	
-	
-}
-
-
-  
-/* End of file register.php */
-/* Location: ./application/controllers/register.php */

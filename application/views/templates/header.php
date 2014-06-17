@@ -112,8 +112,7 @@
     <?php if(!$logged_in): ?>
     <div  class="top_links_right"> 
         <a href="<?=base_url()?>login" class="top_border">Login</a> 
-        <!-- <a href="<?=base_url()?>register">Register</a> -->
-        <a href="<?=base_url()?>#register">Register</a> 
+        <a href="<?=base_url()?>register">Register</a> 
     </div> 
 
     <?php else: ?>

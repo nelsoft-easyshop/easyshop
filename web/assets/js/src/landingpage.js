@@ -230,7 +230,7 @@ jQuery(document).ready(function(){
 				jQuery('#register_form1_loadingimg').show().css('display','inline-block');
 				jQuery('#register_form1_btn').attr('disabled', true);
 
-			 	jQuery.post(config.base_url + 'landingpage/signup', jQuery(form).serializeArray(), function(data){
+			 	jQuery.post(config.base_url + 'register/signup', jQuery(form).serializeArray(), function(data){
 					jQuery('#register_form1_loadingimg').hide();
 					jQuery('#register_form1_btn').attr('disabled', false);
 					
@@ -291,7 +291,7 @@ function username_check(){
 	var csrftoken = jQuery("meta[name='csrf-token']").attr('content');
     var csrfname = jQuery("meta[name='csrf-name']").attr('content');
 	var field = jQuery('#username');
-	jQuery.post(config.base_url+'landingpage/username_check', {username: username, csrfname : csrftoken}, function(result){
+	jQuery.post(config.base_url+'register/username_check', {username: username, csrfname : csrftoken}, function(result){
 		if(result == 1){
 			showcheck(jQuery('#username'));
 			jQuery('.username_availability').html('');
@@ -313,7 +313,7 @@ function email_check(){
 	var csrftoken = jQuery("meta[name='csrf-token']").attr('content');
     var csrfname = jQuery("meta[name='csrf-name']").attr('content');
 	var field = jQuery('#email');
-	jQuery.post(config.base_url+'landingpage/email_check', {email: email, csrfname : csrftoken}, function(result){
+	jQuery.post(config.base_url+'register/email_check', {email: email, csrfname : csrftoken}, function(result){
 		if(result == 1){
 			showcheck(jQuery('#email'));
 			jQuery('.email_availability').html('');
@@ -341,7 +341,7 @@ function mobile_check(){
 	var csrftoken = jQuery("meta[name='csrf-token']").attr('content');
     var csrfname = jQuery("meta[name='csrf-name']").attr('content');
 	var field = jQuery('#mobile');
-	jQuery.post(config.base_url+'landingpage/mobile_check', {mobile: mobile, csrfname : csrftoken}, function(result){
+	jQuery.post(config.base_url+'register/mobile_check', {mobile: mobile, csrfname : csrftoken}, function(result){
 		if(result == 1){
 			showcheck(jQuery('#mobile'));
 			jQuery('.mobile_availability').html('');
@@ -388,7 +388,7 @@ jQuery(document).ready(function(){
 		 submitHandler: function(form){
 			jQuery('#subscribe_btn').attr('disabled', true);
 
-			jQuery.post(config.base_url + 'landingpage/subscribe', jQuery(form).serializeArray(), function(data){
+			jQuery.post(config.base_url + 'register/subscribe', jQuery(form).serializeArray(), function(data){
 				jQuery('#subscribe_loadingimg').hide();
 				jQuery('#subscribe_btn').attr('disabled', false);
 				if(data == 1){
@@ -508,6 +508,8 @@ jQuery(function() {
         jQuery(".dialog" ).dialog( "open" );
         jQuery(".dialog").siblings().parent('.ui-dialog').addClass('terms_container');
     });
+    
+    
 });
 
 
