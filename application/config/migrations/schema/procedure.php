@@ -427,7 +427,7 @@ return array(
             IN i_transaction_id VARCHAR(1024)
             
         )
-        BEGIN
+       BEGIN
             # ACCESSIBLE VARIABLES
             DECLARE o_success BOOLEAN;
             DECLARE	o_message VARCHAR(50);
@@ -445,6 +445,7 @@ return array(
             DECLARE v_tax  DECIMAL(15,4);
             DECLARE v_total DECIMAL(15,4);
             DECLARE v_product_item INT(10);
+            DECLARE v_billing_info_id INT(10);
             
             DECLARE v_order_product_id INT(10); 
             DECLARE v_order_product_status INT(10);
@@ -549,12 +550,18 @@ return array(
                     SELECT SPLIT_STRING(v_product_data, '{+}',7) INTO v_product_item;
                     
                     SET v_product_external_charge = (v_total/i_total_amount) * v_external_charge;
-                    SET o_message = 'Error Code: Payment007';
+                    
+                    SET o_message = 'Error Code: Payment007a';
+                    SELECT billing_info_id INTO v_billing_info_id
+                        FROM es_product
+                        WHERE id_product = v_product_id;
+                        
+                    SET o_message = 'Error Code: Payment007b';
                     SET v_net = v_total - v_product_external_charge;
                     INSERT INTO `es_order_product` 
-                    (`order_id`,`seller_id`,`product_id`,`order_quantity`,`price`,`handling_fee`,`total`,`product_item_id`,`status`, `payment_method_charge`, `net`)
+                    (`order_id`,`seller_id`,`product_id`,`order_quantity`,`price`,`handling_fee`,`total`,`product_item_id`,`status`, `payment_method_charge`, `net`,`seller_billing_id`)
                     VALUES
-                    (v_order_id,v_seller_id,v_product_id,v_quantity,v_price,v_tax,v_total,v_product_item,v_order_product_status,v_product_external_charge,v_net);
+                    (v_order_id,v_seller_id,v_product_id,v_quantity,v_price,v_tax,v_total,v_product_item,v_order_product_status,v_product_external_charge,v_net,v_billing_info_id);
                     
                     SET o_message = 'Error Code: Payment008';
                     SELECT `id_order_product` INTO v_order_product_id FROM `es_order_product` 
@@ -580,8 +587,11 @@ return array(
                 
                         SET o_message ='Success! Transaction Saved';
                         SET o_success = TRUE;
+                    
             COMMIT;
+                
                 SELECT o_success, o_message,v_order_id,`invoice_no`,total,dateadded FROM `es_order` WHERE `id_order` = v_order_id;
+            
         END",
     
     "es_sp_Remove_draft" => 
