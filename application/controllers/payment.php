@@ -322,13 +322,14 @@ class Payment extends MY_Controller{
     }
 
     function ipn(){
-        echo 'Curl: ', function_exists('curl_version') ? 'Enabled' : 'Disabled';
+
         $req = 'cmd=_notify-validate';
         foreach ($_POST as $key => $value)  
         {  
            $value =  urlencode(stripslashes($value));  
            $req .=  "&" . $key . "=" . $value;  
        }
+       echo $req ;
 
        $curl_result=$curl_err='';
        $ch = curl_init();
