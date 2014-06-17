@@ -965,7 +965,7 @@ FROM
 <select id="getProductSoldPrice">
     SELECT COALESCE(AVG(op.price),0) as sold_price FROM es_order_product op
     INNER JOIN es_order o ON op.order_id = o.id_order AND o.dateadded BETWEEN :datefrom AND :dateto
-    WHERE op.product_id = :id
+    WHERE op.product_id = :id AND o.order_status = 0
 </select>
 
 </map>
