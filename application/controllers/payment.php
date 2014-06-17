@@ -290,58 +290,67 @@ class Payment extends MY_Controller{
         }
     }
 
-    function test(){
+    function paypaltest(){
         echo '
-
-        <form method="POST"></form>
+        <form method="post"  action="http://nelsoft.dyndns.org:81/payment/ipn">
+  <input  type="hidden" name="payment_date" value="11:02:34 Feb  02, 2009 PST">
+  <input  type="hidden" name="txn_type"  value="subscr_signup">
+  <input  type="hidden" name="subscr_id"  value="S-5XY9936967688525N">
+  <input  type="hidden" name="last_name"  value="Testerson">
+  <input  type="hidden" name="residence_country"  value="US">
+  <input  type="hidden" name="item_name" value="Test  Membership">
+  <input  type="hidden" name="business"  value="sandbo_1215254764_biz@angelleye.com">
+  <input  type="hidden" name="amount3" value="5.99">
+  <input  type="hidden" name="recurring" value="1">
+  <input  type="hidden" name="payer_status"  value="verified">
+  <input  type="hidden" name="test_ipn" value="1">
+  <input  type="hidden" name="payer_email"  value="sandbo_1204199080_biz@angelleye.com">
+  <input  type="hidden" name="first_name" value="Drew">
+  <input  type="hidden" name="receiver_email"  value="sandbo_1215254764_biz@angelleye.com">
+  <input  type="hidden" name="payer_id"  value="E7BTGVXBFSUAU">
+  <input  type="hidden" name="reattempt" value="1">
+  <input  type="hidden" name="password" value="JTB8PgSy6jyiM">
+  <input  type="hidden" name="payer_business_name" value="Drew  Angells Test Store">
+  <input  type="hidden" name="subscr_date" value="11:02:33 Feb  02, 2009 PST">
+  <input  type="hidden" name="username"  value="pp-usurydaze">
+  <input type="hidden"  name="period3" value="1 M">
+  <input  type="hidden" name="mc_amount3" value="5.99">
+  <input  type="submit" name="Submit" value="Submit" />
+  </form>
 
         ';
     }
 
     function ipn(){
+        $req = 'cmd=_notify-validate';
+        foreach ($_POST as $key => $value)  
+        {  
+           $value =  urlencode(stripslashes($value));  
+           $req .=  "&" . $key . "=" . $value;  
+       }
 
-       
-        // if($_POST)
-        // {
-            // if($paypalmode=='sandbox')
-            // {
-            $paypalmode     =   '.sandbox';
-            // }
-            $req = 'cmd=' . urlencode('_notify-validate');
-            foreach ($_POST as $key => $value) {
-                $value = urlencode(stripslashes($value));
-                $req .= "&$key=$value";
-            }
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, 'https://www'.$paypalmode.'.paypal.com/cgi-bin/webscr');
-            curl_setopt($ch, CURLOPT_HEADER, 0);
-            curl_setopt($ch, CURLOPT_POST, 1);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER,1);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $req);
-            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 1);
-            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
-            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Host: www'.$paypalmode.'.paypal.com'));
-            $res = curl_exec($ch);
-            curl_close($ch); 
+       $curl_result=$curl_err='';
+       $ch = curl_init();
+       curl_setopt($ch, CURLOPT_URL,'www.sandbox.paypal.com');
+       curl_setopt($ch, CURLOPT_RETURNTRANSFER,1);
+       curl_setopt($ch, CURLOPT_POST, 1);
+       curl_setopt($ch, CURLOPT_POSTFIELDS, $req);
+       curl_setopt($ch, CURLOPT_HTTPHEADER,  array("Content-Type: application/x-www-form-urlencoded",  "Content-Length: " . strlen($req)));
+       curl_setopt($ch, CURLOPT_HEADER , 0);  
+       curl_setopt($ch, CURLOPT_VERBOSE, 1);
+       curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
+       curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+       $curl_result = @curl_exec($ch);
+       $curl_err = curl_error($ch);
+       curl_close($ch);
 
-            $otherstuff = json_encode($_POST);
-            $ins = $this->search_model->insertSearch($otherstuff);
-            // if (strcmp ($res, "VERIFIED") == 0)
-            // {
-                // $transaction_id = $_POST['txn_id'];
-                // $payerid = $_POST['payer_id'];
-                // $firstname = $_POST['first_name'];
-                // $lastname = $_POST['last_name'];
-                // $payeremail = $_POST['payer_email'];
-                // $paymentdate = $_POST['payment_date'];
-                // $paymentstatus = $_POST['payment_status'];
-                // $mdate= date('Y-m-d h:i:s',strtotime($paymentdate));
-
-
-
-            // }
-        // }
-    }
+       if (strpos($curl_result, "VERIFIED")!==false){
+           $valid  = true;
+       }else{
+           $valid  = false;
+       }
+       echo $valid;
+   }
 
     #PROCESS PAYPAL
     function paypal(){
