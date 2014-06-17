@@ -10,7 +10,7 @@ ini_set('display_errors', 1);
 
 
 
-function start_web_socket_server($rootDir)
+function start_web_socket_server($rootDir, $isDev = true)
 {
     // register easyshop autoloader
     require_once $rootDir . 'application/src/EasyShop/Core/ClassAutoloader/PSR0Autoloader.php';
@@ -20,20 +20,19 @@ function start_web_socket_server($rootDir)
     // register 3rd party autoloader
     require_once $rootDir . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
 
-
-    $paths      = array('src/EasyShop/Entities');
     $isDevMode  = false;
     $dbConfig   = require $rootDir . 'application/config/param/database.php';
-    $config     = Doctrine\ORM\Tools\Setup::createAnnotationMetadataConfiguration([$rootDir . 'application/src/EasyShop/Entities'], $isDevMode);
-
+    $doctrineConfig     = \Doctrine\ORM\Tools\Setup::createAnnotationMetadataConfiguration([$rootDir . 'application/src/EasyShop/Entities'], $isDevMode);
+    
+    $wsServerConfig     = require $rootDir . 'application/config/param/websocket.php';
+    
     $eventLoop          = \React\EventLoop\Factory::create();
-    $socketHandler      = new \EasyShop\WebSocket\Handler\Zada(new EasyShop\Utility\StringUtility(), \Doctrine\ORM\EntityManager::create($dbConfig, $config));
+    $socketHandler      = new \EasyShop\WebSocket\Handler\Zada(new EasyShop\Utility\StringUtility(), \Doctrine\ORM\EntityManager::create($dbConfig, $doctrineConfig));
     $webSocketServer    = new \EasyShop\WebSocket\WebSocketServer($eventLoop, $socketHandler);
-    $webSocketServer->listenToPusher($socketHandler->getHandlerMethod(), $socketHandler->getPushURL());
-    $webSocketServer->listenToClient(8080, '0.0.0.0');
+    $webSocketServer->listenToPusher($socketHandler->getHandlerMethod(), $wsServerConfig['pushUrl']);
+    $webSocketServer->listenToClient($wsServerConfig['listenPort'], $wsServerConfig['listenIp']);
     $webSocketServer->start();
 }
-
 
 
 if (__DIR__ !== getcwd()) {
