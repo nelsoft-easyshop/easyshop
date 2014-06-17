@@ -70,16 +70,16 @@
                 <div class="clear"></div>
                 <div class="guides_panel">
                     <div>
-                        <a href="<?= base_url() ?>home/under_construction"><span class="span_bg privacy_policy"></span>Pricacy Policy</a>
+                        <a href="<?=base_url()?>policy"><span class="span_bg privacy_policy"></span>Privacy Policy</a>
                     </div>
                     <div>
-                        <a href="<?= base_url() ?>home/under_construction"><span class="q_and_a"></span>FAQ</a>
+                        <a href="<?=base_url()?>faq"><span class="q_and_a"></span>FAQ</a>
                     </div>
                     <div>
-                        <a href="<?= base_url() ?>home/under_construction"><span class="terms"></span>Terms &amp; Condition</a>
+                        <a href="<?=base_url()?>terms"><span class="terms"></span>Terms &amp; Conditions</a>
                     </div>
                     <div>
-                        <a href="<?= base_url() ?>home/under_construction"><span class="contactus"></span>Contact Us</a>
+                        <a href="<?=base_url()?>contact"><span class="contactus"></span>Contact Us</a>
                     </div>
                 </div>
             </div>
