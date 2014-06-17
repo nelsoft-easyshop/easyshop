@@ -322,6 +322,7 @@ class Payment extends MY_Controller{
     }
 
     function ipn(){
+        echo 'Curl: ', function_exists('curl_version') ? 'Enabled' : 'Disabled';
         $req = 'cmd=_notify-validate';
         foreach ($_POST as $key => $value)  
         {  
