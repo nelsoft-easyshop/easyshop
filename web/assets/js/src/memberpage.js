@@ -1,7 +1,6 @@
-/**	Populate product item display **/
 $(document).ready(function(){
-		
-    /* 
+
+	/* 
      *   Fix for the stupid behaviour of jpagination with chrome when pressing the back button.
      *   See next two lines of code.
      */
@@ -9,7 +8,82 @@ $(document).ready(function(){
 	$('input.items').each(function(k,v){
 		$(this).val($(this).data('value'));
 	});
+	
+	progress_update('');
+	handle_fields('');
+	
+	$.modal.defaults.persist = true;
+	
+	$('.address_dropdown, .disabled_country').chosen({width:'200px'});
+	
+	$('.transac_address_details_show').on('click', function(){
+		$(this).siblings('div.transac_address_cont').slideToggle();
+		$(this).hide();
+	});
+	
+	$('.transac_address_details_hide').on('click', function(){
+		$(this).parent('div').slideToggle();
+		$(this).parent('div').siblings('span.transac_address_details_show').fadeIn();
+	});
+	
+	//disable decimal point
+	$('#mobile,#c_mobile').on('keypress',function(e){
+		var code = e.keyCode || e.which;
+		return (code != 46);
+	});
+	$('#personal_information').on('keypress', 'input.year', function(e){
+		var code = e.keyCode || e.which;
+		return (code != 46);
+	});
+	
+	// Trigger Search on 'Enter' key press
+	$('.sch_box').on('keydown', function(e){
+		var code = e.keyCode || e.which;
+		if(code===13){
+			$(this).siblings('.sch_btn').trigger('click');
+			return false;
+		}
+	});
+	
+	/******* rotate sort arrow when click *****/
+	$(".arrow_sort").on("click", function () {
+		$(this).toggleClass("rotate_arrow");
+	});
 });
+
+$(document).ready(function(){
+	jQuery.validator.addMethod("select_is_set", function(value, element, arg) {
+		return this.optional(element) || (arg != value?true:false);
+	 }, "* This field must be set");
+	 
+	 jQuery.validator.addMethod("is_validmobile", function(value, element) {
+		return this.optional(element) || /^(8|9)[0-9]{9}/.test(value);
+	 }, "Must begin with 8 or 9");
+	 
+	 $.datepicker.setDefaults({dateFormat: 'yy-mm-dd'}, $.extend($.datepicker.regional['']));
+
+	 jQuery.validator.addMethod("is_validdate", function(value, element) {
+		var comp = value.split( /[-\/]+/);
+        if(comp.length > 3){
+            return this.optional(element) || false;
+        }
+		var y = parseInt(comp[0], 10);
+		var m = parseInt(comp[1], 10);
+		var d = parseInt(comp[2], 10);
+		var date = new Date(y,m-1,d);
+
+		if ((date.getFullYear() == y) && ((date.getMonth() + 1) == m) && (date.getDate() == d)) 
+			 return this.optional(element) || true;
+		else 
+			 return this.optional(element) || false;
+	 }, "This date is invalid");
+	 
+});
+
+
+
+
+
 
 var memconf = {
 	csrftoken: $("meta[name='csrf-token']").attr('content'),
@@ -30,6 +104,8 @@ var memconf = {
 	itemPerPage: 10
 };
 
+
+/*********	ACTIVE and DELETED PRODUCTS AJAX PAGING	************/
 function ItemListAjax(ItemDiv,start,pageindex,count){
 	var loadingDiv = ItemDiv.children('div.page_load');
 	var key = ItemDiv.data('key');
@@ -88,7 +164,6 @@ function ItemListAjax(ItemDiv,start,pageindex,count){
 	});//close ajax
 }
 
-/*********	ACTIVE and DELETED PRODUCTS AJAX PAGING	************/
 $(document).ready(function(){
 	$('#active_items .paging:not(:first)').hide();
 	$('#deleted_items .paging:not(:first)').hide();
@@ -120,14 +195,14 @@ function defaultPaging(pagingDivBtn){
 	});
 }
 
-/******************* Search Functions ***********************/
+/******************* ACTIVE and DELETED Search Functions ***********************/
 $(document).ready(function(){
-	$('span.sch_btn').on('click',function(){
+	$('span.item_sch_btn').on('click',function(){
 		var ItemDiv = $(this).closest('div.dashboard_table');
 		var key = ItemDiv.data('key');
 		var pagingDivBtn = ItemDiv.children('div.pagination');
 		
-		var schVal = $.trim($(this).siblings('input.sch_box').val());
+		var schVal = $.trim($(this).siblings('input.item_sch_box').val());
 		memconf[key].schVal = schVal;
 		
 		ItemDiv.children('div.paging:not(:first)').remove();
@@ -142,20 +217,13 @@ $(document).ready(function(){
 		}
 	});
 	
-	// Trigger Search on 'Enter' key press
-	$('.sch_box').on('keydown', function(e){
-		var code = e.keyCode || e.which;
-		if(code===13){
-			$(this).siblings('.sch_btn').trigger('click');
-			return false;
-		}
-	});
+	
 });
 
 
-/******************* Sort Functions ***********************/
+/******************* ACTIVE and DELETED Sort Functions ***********************/
 $(document).ready(function(){
-	$('select.sort_select').on('change',function(){
+	$('select.item_sort_select').on('change',function(){
 		var ItemDiv = $(this).closest('div.dashboard_table');
 		var key = ItemDiv.data('key');
 		var pagingDivBtn = ItemDiv.children('div.pagination');
@@ -168,7 +236,7 @@ $(document).ready(function(){
 		pagingDivBtn.jqPagination('option','current_page', 1);
 	});
 	
-	$('.arrow_sort').on('click', function(){
+	$('.item_arrow_sort').on('click', function(){
 		var ItemDiv = $(this).closest('div.dashboard_table');
 		var key = ItemDiv.data('key');
 		var pagingDivBtn = ItemDiv.children('div.pagination');
@@ -184,141 +252,6 @@ $(document).ready(function(){
 		ItemDiv.children('div.paging:first').show();
 		pagingDivBtn.jqPagination('option','current_page', 1);
 	});
-});
-
-
-/******************	DASHBOARD Search Box	********************/
-/*
-$(function(){
-	var schResult = [];
-	var schValue = '';
-	
-	$('.sch_btn').on('click', function(){
-		// Remove filter result and re-append new one
-		var ItemList = $(this).closest('div.dashboard_table');
-		ItemList.children('div.filter_result').remove();
-		ItemList.append('<div class="filter_result" style="display:none;"></div>');
-		var filterDiv = ItemList.children('div.filter_result:last');
-		var sortSelect = $(this).siblings('.sort_select');
-		var sortArrow = $(this).siblings('.arrow_sort');
-		var paginationButton = $(this).parent('div').siblings('div.pagination');
-		var divPaging = ItemList.children('div.paging');
-		var resultCounter = 0;
-		var schValue = $(this).siblings('input.sch_box').val().toLowerCase().replace(/\s/g,'');
-		sortSelect.val('date');
-		sortArrow.removeClass('rotate_arrow');
-		$(this).siblings('img.loading_img').show();
-		
-		if(schValue !== ''){
-			divPaging.hide();
-			
-			//cycle through each Product Title
-			divPaging.children('div.post_items_content').each(function(){
-				var prodTitle = $(this).find('div.post_item_content_right').find('.post_item_product_title').text();
-				prodTitle = prodTitle.toLowerCase().replace(/\s/g,'');
-				// Search for search string in product title
-				if(prodTitle.indexOf(schValue) != -1){
-					if(resultCounter % 10 === 0 && resultCounter !== 0){
-						ItemList.append('<div class="filter_result" style="display:none;"></div>');
-						filterDiv = ItemList.children('div.filter_result:last');
-					}
-					filterDiv.append($(this).clone());
-					resultCounter++;
-				}
-			});
-			var divFilter = ItemList.children('div.filter_result');
-			setFilterResultPagination(paginationButton, divFilter, resultCounter);
-			
-			if( !sortSelect.hasClass('hasSearch') ) {
-				sortSelect.addClass('hasSearch');
-			}
-		}
-		else if(schValue === ''){
-			ItemList.children('div.filter_result').remove();
-			ItemList.children('div.paging:first').show();
-			paginationButton.jqPagination('destroy');
-			//setDefaultActivePagination();
-			setDefaultPagination(paginationButton, divPaging);
-			sortSelect.removeClass('hasSearch');
-		}
-		$(this).siblings('img.loading_img').hide();
-	});
-	
-	// Trigger Search on 'Enter' key press
-	$('.sch_box').on('keydown', function(e){
-		var code = e.keyCode || e.which;
-		if(code===13){
-			$(this).siblings('.sch_btn').trigger('click');
-			return false;
-		}
-	});
-	
-});
-*/
-
-
-$(document).ready(function(){
-	progress_update('');
-	handle_fields('');
-	
-	$.modal.defaults.persist = true;
-	
-	$('.address_dropdown, .disabled_country').chosen({width:'200px'});
-	
-	$('.transac_address_details_show').on('click', function(){
-		$(this).siblings('div.transac_address_cont').slideToggle();
-		$(this).hide();
-	});
-	
-	$('.transac_address_details_hide').on('click', function(){
-		$(this).parent('div').slideToggle();
-		$(this).parent('div').siblings('span.transac_address_details_show').fadeIn();
-	});
-	
-	//disable decimal point
-	$('#mobile,#c_mobile').on('keypress',function(e){
-		var code = e.keyCode || e.which;
-		return (code != 46);
-	});
-	$('#personal_information').on('keypress', 'input.year', function(e){
-		var code = e.keyCode || e.which;
-		return (code != 46);
-	});
-});
-
-$(document).ready(function(){
-	jQuery.validator.addMethod("select_is_set", function(value, element, arg) {
-		return this.optional(element) || (arg != value?true:false);
-	 }, "* This field must be set");
-	 
-	 jQuery.validator.addMethod("is_validmobile", function(value, element) {
-		return this.optional(element) || /^(8|9)[0-9]{9}/.test(value);
-	 }, "Must begin with 8 or 9");
-	 
-	 $.datepicker.setDefaults({dateFormat: 'yy-mm-dd'}, $.extend($.datepicker.regional['']));
-
-	 jQuery.validator.addMethod("is_validdate", function(value, element) {
-		var comp = value.split( /[-\/]+/);
-        if(comp.length > 3){
-            return this.optional(element) || false;
-        }
-		var y = parseInt(comp[0], 10);
-		var m = parseInt(comp[1], 10);
-		var d = parseInt(comp[2], 10);
-		var date = new Date(y,m-1,d);
-
-		if ((date.getFullYear() == y) && ((date.getMonth() + 1) == m) && (date.getDate() == d)) 
-			 return this.optional(element) || true;
-		else 
-			 return this.optional(element) || false;
-	 }, "This date is invalid");
-	 
-});
-
-
-/******* rotate sort arrow when click *****/
-$(".arrow_sort").on("click", function () {
-    $(this).toggleClass("rotate_arrow");
 });
 
 /**************************************************************************************************************/	
@@ -1499,7 +1432,6 @@ $(document).ready(function(){
 		var thisbtn = $(this);
 		var origval = $(this).val();
 		
-		
 		$.post(config.base_url+'memberpage/transactionResponse', $(form).serializeArray(), function(data){
 			try{
 				var obj = jQuery.parseJSON(data);
@@ -1790,6 +1722,118 @@ $(document).ready(function(){
 	
 });
 
+/*********************************************************************/
+/***********	TRANSACTIONS SEARCH FEATURE		**********************/
+/*********************************************************************/
+$(document).ready(function(){
+	/******************	Transactions Search Box	********************/
+	// Search for Transaction/Invoice Number
+	$('.tx_sch_btn').on('click', function(){
+		var ItemDiv = $(this).closest('div.dashboard_table');
+		var pagingDivBtn = $(this).parent('div').siblings('div.pagination');
+		
+		var origDiv = ItemDiv.children('div.paging.orig');
+		ItemDiv.children('div.paging:not(.orig)').remove();
+		
+		var schValue = $(this).siblings('input.tx_sch_box').val().toLowerCase().replace(/\s/g,'');
+		$(this).siblings('select.tx_sort_select').val(0);
+		$(this).siblings('span.tx_arrow_sort').removeClass('rotate_arrow');
+		
+		var resultCounter = 0;
+		
+		if(schValue != ''){ // If search value provided
+			origDiv.hide();
+			origDiv.removeClass('enable');
+			// Cycle through each transaction entry
+			origDiv.children('div.transac-container').each(function(){
+				var InvoiceNum = $(this).data('invoice').toString();
+				//If found
+				if( InvoiceNum.indexOf(schValue) != -1 ){
+					if(resultCounter % memconf.itemPerPage === 0){
+						var thisdiv = $('<div/>', {'class':'paging filter enable'}).hide().appendTo(ItemDiv);
+					}else{
+						var thisdiv = ItemDiv.children('div.paging.filter:last');
+					}
+					thisdiv.append($(this).clone());
+					thisdiv.append('<div class="clear"></div>');
+					resultCounter++;
+				}
+			});
+			pagingDivBtn.jqPagination('option','current_page',1);
+			pagingDivBtn.jqPagination('option','max_page', resultCounter === 0 ? 1 : Math.ceil(resultCounter/memconf.itemPerPage));
+		}else{
+			ItemDiv.children('div.paging:not(.orig)').remove();
+			if( ! origDiv.hasClass('enable') ){
+				origDiv.addClass('enable');
+			}
+			pagingDivBtn.jqPagination('option','current_page', 1);
+			pagingDivBtn.jqPagination('option','max_page', pagingDivBtn.children('input').data('origmaxpage'));
+		}
+	});
+	
+	/**************** Transactions Sort *********************/
+	$('.tx_arrow_sort').on('click',function(){
+		var ItemDiv = $(this).closest('div.dashboard_table');
+		var activeDiv = ItemDiv.children('div.paging.enable');
+		var contentDiv = activeDiv.children('div.transac-container');
+		var newContent = $(contentDiv.get().reverse());
+		
+		var resultCounter = divCounter = 0;
+		
+		activeDiv.children().remove();
+
+		newContent.each(function(){
+			if( resultCounter % memconf.itemPerPage === 0 && resultCounter !== 0){
+				divCounter++;
+			}
+			resultCounter++;
+			activeDiv.eq(divCounter).append($(this));
+		});
+	});
+	
+	/**************** Transactions Filter Payment Method *********************/
+	$('.tx_sort_select').on('change', function(){
+		var ItemDiv = $(this).closest('div.dashboard_table');
+		var pagingDivBtn = $(this).parent('div').siblings('div.pagination');
+		
+		var selectedOption = parseInt($(this).val());
+		var resultCounter = 0;
+		
+		ItemDiv.children('div.paging').removeClass('enable');
+		ItemDiv.children('div.paging.newfilter').remove();
+		
+		if( ItemDiv.children('div.paging.filter').length > 0 ){
+			var activeDiv = ItemDiv.children('div.paging.filter');
+			var contentDiv = activeDiv.children('div.transac-container');
+		}else{
+			var activeDiv = ItemDiv.children('div.paging.orig');
+			var contentDiv = activeDiv.children('div.transac-container');
+		}
+		
+		if( selectedOption === 0 ){
+			activeDiv.addClass('enable');
+			pagingDivBtn.jqPagination('option','current_page',1);
+			pagingDivBtn.jqPagination('option','max_page', Math.ceil(contentDiv.length/memconf.itemPerPage));
+		}else{
+			contentDiv.each(function(){
+				var paymentMethod = parseInt($(this).data('pm'));
+				if( selectedOption == paymentMethod ){
+					if( resultCounter % memconf.itemPerPage === 0 ){
+						var thisdiv = $('<div/>', {'class':'paging newfilter enable'}).hide().appendTo(ItemDiv);
+					}else{
+						var thisdiv = ItemDiv.children('div.paging.newfilter:last');
+					}
+					thisdiv.append($(this).clone());
+					thisdiv.append('<div class="clear"></div>');
+					resultCounter++;
+				}
+			});
+			pagingDivBtn.jqPagination('option','current_page',1);
+			pagingDivBtn.jqPagination('option','max_page', resultCounter === 0 ? 1 : Math.ceil(resultCounter/memconf.itemPerPage));
+		}		
+	});
+	
+});
 
 /*******************	HTML Decoder	********************************/
 function htmlDecode(value) {
@@ -2104,10 +2148,10 @@ $(document).ready(function(){
 
 $(document).ready(function(){
 	
-	$('#bought .paging:not(:first)').hide();
-	$('#sold .paging:not(:first)').hide();
-	$('#complete_buy .paging:not(:first)').hide();
-	$('#complete_sell .paging:not(:first)').hide();
+	$('#bought .paging.enable:not(:first)').hide();
+	$('#sold .paging.enable:not(:first)').hide();
+	$('#complete_buy .paging.enable:not(:first)').hide();
+	$('#complete_sell .paging.enable:not(:first)').hide();
 	
 	$('#op_buyer .paging:not(:first)').hide();
 	$('#op_seller .paging:not(:first)').hide();
@@ -2117,28 +2161,28 @@ $(document).ready(function(){
 	$('#pagination-bought').jqPagination({
 		paged: function(page) {
 			$('#bought .paging').hide();
-			$($('#bought .paging')[page-1]).show();
+			$($('#bought .paging.enable')[page-1]).show();
 		}
 	});
 	
 	$('#pagination-sold').jqPagination({
 		paged: function(page) {
 			$('#sold .paging').hide();
-			$($('#sold .paging')[page-1]).show();
+			$($('#sold .paging.enable')[page-1]).show();
 		}
 	});
 	
 	$('#pagination-complete-bought').jqPagination({
 		paged: function(page) {
 			$('#complete_buy .paging').hide();
-			$($('#complete_buy .paging')[page-1]).show();
+			$($('#complete_buy .paging.enable')[page-1]).show();
 		}
 	});
 	
 	$('#pagination-complete-sold').jqPagination({
 		paged: function(page) {
 			$('#complete_sell .paging').hide();
-			$($('#complete_sell .paging')[page-1]).show();
+			$($('#complete_sell .paging.enable')[page-1]).show();
 		}
 	});
 	

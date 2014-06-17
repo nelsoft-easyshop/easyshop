@@ -184,17 +184,17 @@
 	</div>
 	
 	<div class="post_item_srch_container">
-		<input type="text" class="box sch_box" placeholder="Search" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Search'" />
-		<span class="span_bg sch_btn"></span>
+		<input type="text" class="box sch_box item_sch_box" placeholder="Search" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Search'" />
+		<span class="span_bg sch_btn item_sch_btn"></span>
 		<label for="active_sort">Sort By</label>
-		<select name="active_sort" class="post_active_sort sort_select">
+		<select name="active_sort" class="post_active_sort item_sort_select">
 			<option value="1">Date of Entry</option>
 			<option value="2">Name</option>
 			<option value="3">Price</option>
 			<option value="4">Availability</option>
 			<option value="5"># of Sold Items</option>
 		</select>
-		<span class="span_bg arrow_sort"></span>
+		<span class="span_bg arrow_sort item_arrow_sort"></span>
 		<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" class="loading_img" style="display:none;"/>
 	</div>
 	
@@ -320,17 +320,17 @@
 	</div>
 	
 	<div class="post_item_srch_container">
-		<input type="text" class="box sch_box" placeholder="Search" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Search'" />
-		<span class="span_bg sch_btn"></span>
+		<input type="text" class="box sch_box item_sch_box" placeholder="Search" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Search'" />
+		<span class="span_bg sch_btn item_sch_btn"></span>
 		<label for="active_sort">Sort By</label>
-		<select name="active_sort" class="post_active_sort sort_select">
+		<select name="active_sort" class="post_active_sort item_sort_select">
 			<option value="1">Date of Entry</option>
 			<option value="2">Name</option>
 			<option value="3">Price</option>
 			<option value="4">Availability</option>
 			<option value="5"># of Sold Items</option>
 		</select>
-		<span class="span_bg arrow_sort"></span>
+		<span class="span_bg arrow_sort item_arrow_sort"></span>
 		<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" class="loading_img" style="display:none;"/>
 	</div>
 	
@@ -1497,7 +1497,7 @@
 		</ul>
 	</div>
 	
-	<div id="bought" class="transactions-buy dashboard_table">
+	<div id="bought" class="transactions-buy dashboard_table" data-key="buy">
 		<h2>Bought Items</h2>
 		<?php if(count($transaction['buy'])===0):?>
 			<br/>
@@ -1505,32 +1505,31 @@
 		<?php else: ?>
 	<?php $transac_counter = 0;?>
 	
-	<div class="post_item_srch_container">
-		<input type="text" class="box sch_box" placeholder="Search" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Search'" />
-		<span class="span_bg sch_btn"></span>
-		<label for="active_sort">Sort By</label>
-		<select name="active_sort" class="post_active_sort sort_select">
-			<option value="1">Date of Entry</option>
-			<option value="2">Name</option>
-			<option value="3">Price</option>
-			<option value="4">Availability</option>
-			<option value="5"># of Sold Items</option>
-		</select>
-		<span class="span_bg arrow_sort"></span>
-		<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" class="loading_img" style="display:none;"/>
-	</div>
-	
 	<div class="pagination" id="pagination-bought">
 		<a href="#" class="first" data-action="first">&laquo;</a>
 		<a href="#" class="previous" data-action="previous">&lsaquo;</a>
-		<input type="text" readonly="readonly" data-max-page="<?php echo (count($transaction['buy'])===0)?1:(ceil(count($transaction['buy'])/$items_per_page));?>" />
+		<input type="text" readonly="readonly" data-max-page="<?php echo (count($transaction['buy'])===0)?1:(ceil(count($transaction['buy'])/$items_per_page));?>" data-origmaxpage="<?php echo (count($transaction['buy'])===0)?1:(ceil(count($transaction['buy'])/$items_per_page));?>" />
 		<a href="#" class="next" data-action="next">&rsaquo;</a>
 		<a href="#" class="last" data-action="last">&raquo;</a>
 	</div>
 	
-	<div class="paging">
+	<div class="post_item_srch_container">
+			<input type="text" class="box sch_box tx_sch_box" placeholder="Search" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Search'" />
+			<span class="span_bg sch_btn tx_sch_btn"></span>
+			<label for="active_sort">Payment Filter</label>
+			<select name="active_sort" class="post_active_sort tx_sort_select">
+				<option value="0">Show All</option>
+				<option value="1">PayPal</option>
+				<option value="2">DragonPay</option>
+				<option value="3">Cash on Delivery</option>
+				<option value="5">Direct Bank Deposit</option>
+			</select>
+			<span class="span_bg arrow_sort tx_arrow_sort"></span>
+		</div>
+	
+	<div class="paging enable orig">
 		<?php foreach($transaction['buy'] as $tk=>$transact):?>
-		<div class="transac-container">
+		<div class="transac-container" data-pm="<?php echo $transact['payment_method']?>" data-invoice="<?php echo $transact['invoice_no']?>">
 			<div class="transac_title">
 				<div class="transac_title_table">
 					<div class="transac_title_col1">
@@ -1782,7 +1781,7 @@
 <div class="clear"></div>
 <?php $transac_counter++;?>
 <?php if($transac_counter === $items_per_page): $transac_counter = 0;?>
-</div><div class="paging">
+</div><div class="paging enable orig">
 <?php endif;?>
 <?php endforeach;?>
 </div>
@@ -1796,10 +1795,33 @@
 		<br/>
 		<div><span class='nocontent'>You have not sold any items yet.</span></div>
 	<?php else: ?>
+	
+		<div class="pagination" id="pagination-sold">
+			<a href="#" class="first" data-action="first">&laquo;</a>
+			<a href="#" class="previous" data-action="previous">&lsaquo;</a>
+			<input type="text" readonly="readonly" data-max-page="<?php echo (count($transaction['sell'])===0)?1:(ceil(count($transaction['sell'])/$items_per_page));?>" data-origmaxpage="<?php echo (count($transaction['sell'])===0)?1:(ceil(count($transaction['sell'])/$items_per_page));?>"/>
+			<a href="#" class="next" data-action="next">&rsaquo;</a>
+			<a href="#" class="last" data-action="last">&raquo;</a>
+		</div>
+		
+		<div class="post_item_srch_container">
+			<input type="text" class="box sch_box tx_sch_box" placeholder="Search" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Search'" />
+			<span class="span_bg sch_btn tx_sch_btn"></span>
+			<label for="active_sort">Payment Filter</label>
+			<select name="active_sort" class="post_active_sort tx_sort_select">
+				<option value="0">Show All</option>
+				<option value="1">PayPal</option>
+				<option value="2">DragonPay</option>
+				<option value="3">Cash on Delivery</option>
+				<option value="5">Direct Bank Deposit</option>
+			</select>
+			<span class="span_bg arrow_sort tx_arrow_sort"></span>
+		</div>
+		
 		<?php $transac_counter = 0;?>
-		<div class="paging">
+		<div class="paging enable orig">
 			<?php foreach($transaction['sell'] as $tk=>$transact):?>
-			<div class="transac-container">
+			<div class="transac-container" data-pm="<?php echo $transact['payment_method']?>" data-invoice="<?php echo $transact['invoice_no']?>">
 				<div class="transac_title">
 					<?php if($transact['transac_stat'] != 99): ?>
 					<div class="transac_title_table">
@@ -1999,7 +2021,6 @@
 						</div>
 					</div>
 				<?php endforeach;?>
-				
 			</div>
 
 			<div class="feedback_wrapper">
@@ -2043,17 +2064,11 @@
 	<div class="clear"></div>
 	<?php $transac_counter++;?>
 	<?php if($transac_counter === $items_per_page): $transac_counter = 0;?>
-	</div><div class="paging">
+	</div><div class="paging enable orig">
 	<?php endif;?>
 	<?php endforeach;?>
 	</div>
-	<div class="pagination" id="pagination-sold">
-		<a href="#" class="first" data-action="first">&laquo;</a>
-		<a href="#" class="previous" data-action="previous">&lsaquo;</a>
-		<input type="text" readonly="readonly" data-max-page="<?php echo (count($transaction['sell'])===0)?1:(ceil(count($transaction['sell'])/$items_per_page));?>" />
-		<a href="#" class="next" data-action="next">&rsaquo;</a>
-		<a href="#" class="last" data-action="last">&raquo;</a>
-	</div>
+	
 	<?php endif; ?>					
 	</div>
 </div>
@@ -2070,10 +2085,33 @@
 			<br/>
 			<div><span class='nocontent'>There are no transactions for this category.</span></div>
 		<?php else: ?>
+		
+		<div class="pagination" id="pagination-complete-bought">
+			<a href="#" class="first" data-action="first">&laquo;</a>
+			<a href="#" class="previous" data-action="previous">&lsaquo;</a>
+			<input type="text" readonly="readonly" data-max-page="<?php echo (count($transaction['complete']['buy'])===0)?1:(ceil(count($transaction['complete']['buy'])/$items_per_page));?>" data-origmaxpage="<?php echo (count($transaction['complete']['buy'])===0)?1:(ceil(count($transaction['complete']['buy'])/$items_per_page));?>"/>
+			<a href="#" class="next" data-action="next">&rsaquo;</a>
+			<a href="#" class="last" data-action="last">&raquo;</a>
+		</div>
+		
+		<div class="post_item_srch_container">
+			<input type="text" class="box sch_box tx_sch_box" placeholder="Search" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Search'" />
+			<span class="span_bg sch_btn tx_sch_btn"></span>
+			<label for="active_sort">Payment Filter</label>
+			<select name="active_sort" class="post_active_sort tx_sort_select">
+				<option value="0">Show All</option>
+				<option value="1">PayPal</option>
+				<option value="2">DragonPay</option>
+				<option value="3">Cash on Delivery</option>
+				<option value="5">Direct Bank Deposit</option>
+			</select>
+			<span class="span_bg arrow_sort tx_arrow_sort"></span>
+		</div>
+		
 		<?php $transac_counter = 0;?>
-		<div class="paging">
+		<div class="paging enable orig">
 			<?php foreach($transaction['complete']['buy'] as $tk=>$transact):?>
-			<div class="transac-container">
+			<div class="transac-container" data-pm="<?php echo $transact['payment_method']?>" data-invoice="<?php echo $transact['invoice_no']?>">
 				<div class="transac_title">
 					<div class="transac_title_table">
 						<div class="transac_title_col1">
@@ -2184,16 +2222,9 @@
 	<div class="clear"></div>
 	<?php $transac_counter++;?>
 	<?php if($transac_counter === $items_per_page): $transac_counter = 0;?>
-	</div><div class="paging">
+	</div><div class="paging enable orig">
 	<?php endif;?>
 	<?php endforeach;?>
-	</div>
-	<div class="pagination" id="pagination-complete-bought">
-		<a href="#" class="first" data-action="first">&laquo;</a>
-		<a href="#" class="previous" data-action="previous">&lsaquo;</a>
-		<input type="text" readonly="readonly" data-max-page="<?php echo (count($transaction['complete']['buy'])===0)?1:(ceil(count($transaction['complete']['buy'])/$items_per_page));?>" />
-		<a href="#" class="next" data-action="next">&rsaquo;</a>
-		<a href="#" class="last" data-action="last">&raquo;</a>
 	</div>
 	<?php endif; ?>
 	</div>
@@ -2205,10 +2236,33 @@
 		<br/>
 		<div><span class='nocontent'>There are no transactions for this category.</span></div>
 		<?php else: ?>
+		
+		<div class="pagination" id="pagination-complete-sold">
+			<a href="#" class="first" data-action="first">&laquo;</a>
+			<a href="#" class="previous" data-action="previous">&lsaquo;</a>
+			<input type="text" readonly="readonly" data-max-page="<?php echo (count($transaction['complete']['sell'])===0)?1:(ceil(count($transaction['complete']['sell'])/$items_per_page));?>" data-origmaxpage="<?php echo (count($transaction['complete']['sell'])===0)?1:(ceil(count($transaction['complete']['sell'])/$items_per_page));?>"/>
+			<a href="#" class="next" data-action="next">&rsaquo;</a>
+			<a href="#" class="last" data-action="last">&raquo;</a>
+		</div>
+		
+		<div class="post_item_srch_container">
+			<input type="text" class="box sch_box tx_sch_box" placeholder="Search" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Search'" />
+			<span class="span_bg sch_btn tx_sch_btn"></span>
+			<label for="active_sort">Payment Filter</label>
+			<select name="active_sort" class="post_active_sort tx_sort_select">
+				<option value="0">Show All</option>
+				<option value="1">PayPal</option>
+				<option value="2">DragonPay</option>
+				<option value="3">Cash on Delivery</option>
+				<option value="5">Direct Bank Deposit</option>
+			</select>
+			<span class="span_bg arrow_sort tx_arrow_sort"></span>
+		</div>
+		
 		<?php $transac_counter = 0;?>
-		<div class="paging">
+		<div class="paging enable orig">
 			<?php foreach($transaction['complete']['sell'] as $tk=>$transact):?>
-			<div class="transac-container">
+			<div class="transac-container" data-pm="<?php echo $transact['payment_method']?>" data-invoice="<?php echo $transact['invoice_no']?>">
 				<div class="transac_title">
 					<div class="transac_title_table">
 						<div class="transac_title_col1">
@@ -2361,16 +2415,9 @@
 	<div class="clear"></div>
 	<?php $transac_counter++;?>
 	<?php if($transac_counter === $items_per_page): $transac_counter = 0;?>
-	</div><div class="paging">
+	</div><div class="paging enable orig">
 	<?php endif;?>
 	<?php endforeach;?>
-	</div>
-	<div class="pagination" id="pagination-complete-sold">
-		<a href="#" class="first" data-action="first">&laquo;</a>
-		<a href="#" class="previous" data-action="previous">&lsaquo;</a>
-		<input type="text" readonly="readonly" data-max-page="<?php echo (count($transaction['complete']['sell'])===0)?1:(ceil(count($transaction['complete']['sell'])/$items_per_page));?>" />
-		<a href="#" class="next" data-action="next">&rsaquo;</a>
-		<a href="#" class="last" data-action="last">&raquo;</a>
 	</div>
 	<?php endif; ?>					
 	</div>
