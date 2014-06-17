@@ -63,17 +63,18 @@
 				<div class="progress_bar_panel">
 					<div>
 						<h3>Total Posted Items</h3>
-						<input class="items db_total_items" data-width="150" data-fgColor="#FF8400" data-max="1000" data-thickness=".1" data-angleOffset="180" data-readOnly=true data-displayPrevious=true data-value="<?php echo $active_count + $deleted_count;?>" value="<?php echo $active_count + $deleted_count;?>">
+						<input class="db_total_items fm1" readonly="readonly"  data-value="<?php echo $active_count + $deleted_count;?>" value="<?php echo $active_count + $deleted_count;?>">
 					</div>
 					<div>
 						<h3>Active Items</h3>
-						<input class="items db_active_items" data-width="150" data-fgColor="#ff4400" data-max="1000" data-thickness=".1" data-angleOffset="180" data-readOnly=true data-displayPrevious=true data-value="<?php echo $active_count;?>" value="<?php echo $active_count;?>">
+						<input class="db_total_items fm1" readonly="readonly" data-value="<?php echo $active_count;?>" value="<?php echo $active_count;?>">
 					</div>
 					<div>
 						<h3>Sold Items</h3>
-						<input class="items db_sold_items" data-width="150" data-fgColor="#7ad014" data-max="1000" data-thickness=".1" data-angleOffset="180" data-readOnly=true data-displayPrevious=true data-value="<?php echo $sold_count;?>" value="<?php echo $sold_count;?>">
+						<input class="db_total_items fm1" readonly="readonly" data-value="<?php echo $sold_count;?>" value="<?php echo $sold_count;?>">
 					</div>
 				</div>
+
 				<div class="posted_feedbacks_top">
 					<h3 class="fm1 f18">Feedback Score:</h3>
 					<span>(<?php echo $allfeedbacks['rcount'];?> Feedback/s received)</span>
@@ -160,7 +161,7 @@
 						<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" class="loading_img" style="display:none;"/>
 					</div>
 					
-					<div class="page_load" style="display:none;text-align:center;">
+					<div class="page_load" style="display:none;text-align:center; margin-top: 50px;">
 						<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" class="loading_img"/>
 					</div>
                     

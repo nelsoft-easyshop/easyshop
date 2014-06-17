@@ -203,7 +203,7 @@
 		<p><span class='nocontent'>No items on sale.</span></p>
 	<?php else:?>
 	
-	<div class="page_load" style="display:none;text-align:center;">
+	<div class="page_load" style="display:none;text-align:center; margin-top: 50px;">
 		<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" class="loading_img"/>
 	</div>
 	
@@ -338,7 +338,7 @@
 		<p><span class='nocontent'>No deleted items.</span></p>
 	<?php else:?>
 	
-	<div class="page_load" style="display:none;text-align:center;">
+	<div class="page_load" style="display:none;text-align:center; margin-top:50px;">
 		<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" class="loading_img"/>
 	</div>
 	
