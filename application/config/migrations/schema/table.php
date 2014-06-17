@@ -3912,6 +3912,7 @@ return array(
               `payment_method_charge` decimal(15,4) NOT NULL DEFAULT '0.0000',
               `net` decimal(15,4) NOT NULL DEFAULT '0.0000',
               `postbackcount` tinyint(4) DEFAULT '0',
+              `is_flag` tinyint(1) DEFAULT '0',
               PRIMARY KEY (`id_order`),
               KEY `fk_es_order_es_member_idx` (`buyer_id`),
               KEY `fk_es_order_es_order_status_idx` (`order_status`),
@@ -3919,7 +3920,8 @@ return array(
               CONSTRAINT `fk_es_order_es_member` FOREIGN KEY (`buyer_id`) REFERENCES `es_member` (`id_member`) ON DELETE NO ACTION ON UPDATE NO ACTION,
               CONSTRAINT `fk_es_order_es_order_status` FOREIGN KEY (`order_status`) REFERENCES `es_order_status` (`order_status`) ON DELETE NO ACTION ON UPDATE NO ACTION,
               CONSTRAINT `fk_es_order_es_payment_method` FOREIGN KEY (`payment_method_id`) REFERENCES `es_payment_method` (`id_payment_method`) ON DELETE NO ACTION ON UPDATE NO ACTION
-            ) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8;",
+            ) ENGINE=InnoDB AUTO_INCREMENT=71 DEFAULT CHARSET=utf8;
+            ",
         "insert" => "",
     ),
     
@@ -3956,6 +3958,7 @@ return array(
               `easyshop_charge` decimal(15,4) NOT NULL DEFAULT '0.0000',
               `payment_method_charge` decimal(15,4) NOT NULL DEFAULT '0.0000',
               `net` decimal(15,4) NOT NULL DEFAULT '0.0000',
+              `seller_billing_id` int(10) unsigned NOT NULL DEFAULT '0',
               PRIMARY KEY (`id_order_product`),
               KEY `fk_es_order_product_es_order_idx` (`order_id`),
               KEY `fk_es_order_product_es_member_idx` (`seller_id`),
@@ -3965,7 +3968,8 @@ return array(
               CONSTRAINT `fk_es_order_product_es_order` FOREIGN KEY (`order_id`) REFERENCES `es_order` (`id_order`) ON DELETE NO ACTION ON UPDATE NO ACTION,
               CONSTRAINT `fk_es_order_product_es_order_product_status` FOREIGN KEY (`status`) REFERENCES `es_order_product_status` (`id_order_product_status`) ON DELETE NO ACTION ON UPDATE NO ACTION,
               CONSTRAINT `fk_es_order_product_es_product` FOREIGN KEY (`product_id`) REFERENCES `es_product` (`id_product`) ON DELETE NO ACTION ON UPDATE NO ACTION
-            ) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;",
+            ) ENGINE=InnoDB AUTO_INCREMENT=63 DEFAULT CHARSET=utf8;
+            ",
         "insert" => "",
     ),
     
