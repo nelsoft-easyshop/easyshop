@@ -521,8 +521,8 @@ class productUpload extends MY_Controller
                         $other_tmp = "--no temp";
                         if(strlen(trim($_POST['prod_other_price'][$i])) != 0 || $_POST['prod_other_price'][$i] != ""){
                             $other_price = $_POST['prod_other_price'][$i];
+                            $other_price = abs(str_replace(',','',$other_price));
                         }
-                        $other_price = abs(str_replace(',','',$other_price));
                         if(isset($_FILES['prod_other_img'])){
                             if(intval($_POST['prod_other_img_idx'][$i],10) === 1){
                                 if(!empty($_FILES['prod_other_img']['name'][$option_image_idx])){
@@ -547,27 +547,22 @@ class productUpload extends MY_Controller
                     $is_primary = 0;
                     
                     foreach ($newarray as $key => $valuex) {
-
                         if(trim($key) == "" || strlen(trim($key)) <= 0 ){
                             continue;
                         }
 
                         if(count($valuex) <= 1 && $valuex[0] == '--no name|0.00|--no image|--no type|--no temp'){
-                            continue;
-                        }
-                        if(count($valuex) <= 1 && $valuex[0] == '--no name|0|--no image|--no type|--no temp'){
                         	continue;
                         }
+
 
                         $passCheck = 0;
                         foreach ($valuex as $xkey => $xvalue) {
                         	$explodeChecker = explode('|', $xvalue);
-                        	 
                         	if($explodeChecker[0] !== '--no name'){
                         		$passCheck++;
                         	}
                         }
-
                         if($passCheck == 0){
                         	continue;
                         }
@@ -885,8 +880,14 @@ class productUpload extends MY_Controller
 		$this->load->view('templates/header', $data); 
         $memberId =  $this->session->userdata('member_id');
 		if($this->input->post('prod_h_id')){
-            $billing_id = $this->input->post('prod_billing_id'); 
-            $is_cod =($this->input->post('allow_cod'))?1:0;
+            $billing_id = intval($this->input->post('prod_billing_id')); 
+            $is_cod = ($this->input->post('allow_cod'))?1:0;
+            
+            $payment_accounts = $this->memberpage_model->get_billing_info($memberId);
+            if(!(array_key_exists($billing_id,$payment_accounts) ||  ($billing_id === 0 && $is_cod === 1))){
+                redirect('/sell/step1/', 'refresh');
+            }
+        
 			$response['id'] = $this->input->post('prod_h_id');
             $this->product_model->finalizeProduct($response['id'] , $memberId, $billing_id, $is_cod);
             $product = $this->product_model->getProductById($response['id']);
@@ -1360,17 +1361,32 @@ class productUpload extends MY_Controller
 
 				$is_primary = 0;
 				foreach ($newarray as $key => $valuex) {
+             
                     //If OTHER GROUP NAME is empty: skip 
 					if(trim($key) == "" || strlen(trim($key)) <= 0 ){
 						continue;
 					}
-                    //If FIRST OTHER ATTRIBUTE is empty: skip (assumption here is that there is always one
-                    //attribute that is passed)
+                    
 					if(count($valuex) <= 1 && $valuex[0] == '--no name|0.00|--no image|--no type|--no temp|--no id'){
 						continue;
 					}
-					$others_id = $this->product_model->addNewAttributeByProduct_others_name($product_id,$key);
+                            
+                    # check if the rest of the fields are empty before inserting to es_optional_attr_head
                     
+                    
+                    $passCheck = 0;
+                    foreach ($valuex as $xkey => $xvalue) {
+                        $explodeChecker = explode('|', $xvalue);
+                        if($explodeChecker[0] !== '--no name'){
+                            $passCheck++;
+                        }
+                    }
+                    if($passCheck == 0){
+                        continue;
+                    }
+
+					$others_id = $this->product_model->addNewAttributeByProduct_others_name($product_id,$key);
+                  
 					foreach ($valuex as $keyvalue => $value) {
 						$imageid = 0;
                         $eval = explode("|", $value); 
