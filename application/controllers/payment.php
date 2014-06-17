@@ -349,7 +349,9 @@ class Payment extends MY_Controller{
        }else{
            $valid  = false;
        }
-       echo $valid;
+       if($valid){
+        echo 'something';
+       }
    }
 
     #PROCESS PAYPAL
