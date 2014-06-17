@@ -291,34 +291,7 @@ class Payment extends MY_Controller{
     }
 
     function paypaltest(){
-        echo '
-        <form method="post"  action="http://nelsoft.dyndns.org:81/payment/ipn2">
-  <input  type="hidden" name="payment_date" value="11:02:34 Feb  02, 2009 PST">
-  <input  type="hidden" name="txn_type"  value="subscr_signup">
-  <input  type="hidden" name="subscr_id"  value="S-5XY9936967688525N">
-  <input  type="hidden" name="last_name"  value="Testerson">
-  <input  type="hidden" name="residence_country"  value="US">
-  <input  type="hidden" name="item_name" value="Test  Membership">
-  <input  type="hidden" name="business"  value="sandbo_1215254764_biz@angelleye.com">
-  <input  type="hidden" name="amount3" value="5.99">
-  <input  type="hidden" name="recurring" value="1">
-  <input  type="hidden" name="payer_status"  value="verified">
-  <input  type="hidden" name="test_ipn" value="1">
-  <input  type="hidden" name="payer_email"  value="sandbo_1204199080_biz@angelleye.com">
-  <input  type="hidden" name="first_name" value="Drew">
-  <input  type="hidden" name="receiver_email"  value="sandbo_1215254764_biz@angelleye.com">
-  <input  type="hidden" name="payer_id"  value="E7BTGVXBFSUAU">
-  <input  type="hidden" name="reattempt" value="1">
-  <input  type="hidden" name="password" value="JTB8PgSy6jyiM">
-  <input  type="hidden" name="payer_business_name" value="Drew  Angells Test Store">
-  <input  type="hidden" name="subscr_date" value="11:02:33 Feb  02, 2009 PST">
-  <input  type="hidden" name="username"  value="pp-usurydaze">
-  <input type="hidden"  name="period3" value="1 M">
-  <input  type="hidden" name="mc_amount3" value="5.99">
-  <input  type="submit" name="Submit" value="Submit" />
-  </form>
-
-        ';
+       $this->load->view('pages/payment/ipn');
     }
 
     function ipn(){
@@ -339,7 +312,7 @@ class Payment extends MY_Controller{
        curl_setopt($ch, CURLOPT_HTTPHEADER,  array("Content-Type: application/x-www-form-urlencoded",  "Content-Length: " . strlen($req)));
        curl_setopt($ch, CURLOPT_HEADER , 0);  
        curl_setopt($ch, CURLOPT_VERBOSE, 1);
-       curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
+       curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
        curl_setopt($ch, CURLOPT_TIMEOUT, 30);
        $curl_result = @curl_exec($ch);
        $curl_err = curl_error($ch);
@@ -411,7 +384,7 @@ curl_setopt($ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
 curl_setopt($ch, CURLOPT_POST, 1);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER,1);
 curl_setopt($ch, CURLOPT_POSTFIELDS, $req);
-curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 1);
+curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
 curl_setopt($ch, CURLOPT_FORBID_REUSE, 1);
 
@@ -479,8 +452,6 @@ if (strcmp ($res, "VERIFIED") == 0) {
         error_log(date('[Y-m-d H:i e] '). "Verified IPN: $req ". PHP_EOL, 3, LOG_FILE);
     }
 } else if (strcmp ($res, "INVALID") == 0) {
-    // log for manual investigation
-    // Add business logic here which deals with invalid IPN messages
     if(DEBUG == true) {
         error_log(date('[Y-m-d H:i e] '). "Invalid IPN: $req" . PHP_EOL, 3, LOG_FILE);
     }
