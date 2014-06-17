@@ -290,12 +290,22 @@ class Payment extends MY_Controller{
         }
     }
 
+    function test(){
+        echo '
+
+        <form method="POST"></form>
+
+        ';
+    }
+
     function ipn(){
-        if($_POST)
-        {
+
+       
+        // if($_POST)
+        // {
             // if($paypalmode=='sandbox')
             // {
-                $paypalmode     =   '.sandbox';
+            $paypalmode     =   '.sandbox';
             // }
             $req = 'cmd=' . urlencode('_notify-validate');
             foreach ($_POST as $key => $value) {
@@ -312,10 +322,12 @@ class Payment extends MY_Controller{
             curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
             curl_setopt($ch, CURLOPT_HTTPHEADER, array('Host: www'.$paypalmode.'.sandbox.paypal.com'));
             $res = curl_exec($ch);
-            curl_close($ch);
+            curl_close($ch); 
 
-            if (strcmp ($res, "VERIFIED") == 0)
-            {
+            $otherstuff = json_encode($_POST);
+            $ins = $this->search_model->insertSearch($otherstuff);
+            // if (strcmp ($res, "VERIFIED") == 0)
+            // {
                 // $transaction_id = $_POST['txn_id'];
                 // $payerid = $_POST['payer_id'];
                 // $firstname = $_POST['first_name'];
@@ -324,15 +336,11 @@ class Payment extends MY_Controller{
                 // $paymentdate = $_POST['payment_date'];
                 // $paymentstatus = $_POST['payment_status'];
                 // $mdate= date('Y-m-d h:i:s',strtotime($paymentdate));
-                $otherstuff = json_encode($_POST);
-
-
-                $ins = $this->search_model->insertSearch($otherstuff);
 
 
 
-            }
-        }
+            // }
+        // }
     }
 
     #PROCESS PAYPAL
