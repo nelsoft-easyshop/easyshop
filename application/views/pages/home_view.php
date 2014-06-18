@@ -20,79 +20,54 @@
         <div class="middle_content">
             <ul class="mid_slide1">
                 <?PHP foreach ($data['mainSlide'] as $rows): ?>
-                <li><img style="width:520px;height:270px" src="<?= base_url().$rows.'?ver=1.0' ?>" /></li>
+                <li><img src="<?= base_url().$rows.'?ver=1.0' ?>" /></li>
                 <?PHP endforeach; ?>
             </ul>
-
-            <h2><?=$data['productSlide_title'] ?></h2>
-            <ul class="mid_slide2">
-                <?PHP foreach ($data['productSlide_id'] as $rows): ?>
-                  <li>
-                    <a href ="<?=base_url()."item/".$rows['slug']; ?>" >
-                        <span class="mid_bottom_img_con">
-                            <span class="mid_bottom_img">
-                                <img src="<?=  base_url().$rows['path'].'categoryview/'.$rows['file']; ?>" />
-                            </span>
+            <div class="middle_content_items">
+                <div>
+                    <a href=""><h2>Galaxy Camera - WiFi</h2>
+                        <span class="mid_con_price">Php 23,788</span>
+                        <span class="mid_img_con">
+                            <img src="<?= base_url() ?>assets/images/img_mid_item1.jpg" alt="Galaxy Camera - WiFi">
                         </span>
-                        <br />
-                           <?=html_escape($rows['product']); ?> 
                     </a>
-                </li> 
-                <?PHP endforeach; ?>
-            </ul>
-
-
-            <div class="clear"></div>
+                </div>
+                <div>
+                     <a href=""><h2>Apple iPad Mini 2 128GB</h2>
+                        <span class="mid_con_price">Php 40,949</span>
+                        <span class="mid_img_con">
+                            <img src="<?= base_url() ?>assets/images/img_mid_item2.jpg" alt="Apple iPad Mini 2 128GB">
+                        </span>
+                    </a>
+                </div>
+                <div>
+                     <a href=""><h2>APPLE IPOD TOUCH 32GB 5TH GENERATION</h2>
+                        <span class="mid_con_price">Php 13,799</span>
+                        <span class="mid_img_con">
+                            <img src="<?= base_url() ?>assets/images/img_mid_item3.jpg" alt="APPLE IPOD TOUCH 32GB 5TH GENERATION">
+                        </span>
+                    </a>
+                </div>
+            </div>
+           
         </div>
-
+        
         <!-- Start Right -->
 
         <div class="right_panel">
-            
-            <div class="right_panel_box">
-                <div class="sign_in_register">
-                    
-                    <?php if(!$logged_in): ?>
-                        <div>
-                            <a href="<?=base_url()?>login" class="orange_btn"> Sign In</a>
-                        </div>                    
-                        <div>
-                           <a href="<?=base_url()?>register" class="orange_btn"> Register</a>
-                        </div>
-                    <?php else: ?>
-                        <div>
-                            <a href="<?=base_url()?>sell/step1" class="orange_btn" style='width:240px;'>Sell Now</a>
-                        </div>     
-                    <?php endif; ?>
-                    
-                    
-                </div>
-                <div class="clear"></div>
-                <div class="guides_panel">
-                    <div>
-                        <a href="<?=base_url()?>policy"><span class="span_bg privacy_policy"></span>Privacy Policy</a>
-                    </div>
-                    <div>
-                        <a href="<?=base_url()?>faq"><span class="q_and_a"></span>FAQ</a>
-                    </div>
-                    <div>
-                        <a href="<?=base_url()?>terms"><span class="terms"></span>Terms &amp; Conditions</a>
-                    </div>
-                    <div>
-                        <a href="<?=base_url()?>contact"><span class="contactus"></span>Contact Us</a>
-                    </div>
-                </div>
+            <div>
+                <img src="<?= base_url() ?>assets/images/img_easy_treat.jpg" alt="Easy Treat: Best price offer for the day">
             </div>
-            <br/>
-            <div class="global_secure_payment">
-                <p><strong>Payment Methods</strong></p>
-                <div>
-                    <span class="mastercard"></span>
-                    <span class="visa"></span>
-                    <span class="paypal"></span><br />
-                    <span class="dragonpay"></span>
-                    <span class="cod"></span>
-                </div>
+            <div class="easy_treat_item">
+                <a href="">
+                    <h2>ASUS FONEPAD 7 DUAL-SIM</h2>
+                    <span>
+                        <img src="<?= base_url() ?>assets/images/img_easy_treat_item1.jpg" alt="ASUS FONEPAD 7 DUAL-SIM">
+                    </span>
+                </a>
+            </div>
+            <div>
+                <object width="198" height="179" data="<?= base_url() ?>assets/images/Set-A-Box.swf"></object> 
             </div>
         </div>
     </div>
