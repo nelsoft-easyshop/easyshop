@@ -169,13 +169,19 @@ class Cart extends MY_Controller{
         }
         #done checking if the attribute's are existing on DB and max_quantity
         $promo = $this->config->item('Promo')[$product['promo_type']];
+        $d_quantity = 0;
+        if(($product['is_promote'] == 1 && intval($userQTY) >= intval($promo['purchase_limit'])) &&  $max_qty != 0){
+            $d_quantity = $promo['purchase_limit'];
+        }else{
+            if($userQTY > $max_qty || $max_qty == 0){
+                $d_quantity = $max_qty;
+            }else{
+                $d_quantity = $userQTY;
+            }
+        }
         $data = array(
             'id'      => $id,
-            'qty'     => ($product['is_promote'] == "1" && intval($userQTY) >= intval($promo['purchase_limit'])
-                    ? $promo['purchase_limit']
-                    : ($userQTY > $max_qty
-                        ? $max_qty
-                        : $userQTY )), #check check check! -_-
+            'qty' => $d_quantity,
             'price'   => $final_price,
             'original_price' => $product['original_price'],
             'name'    => $product['product'],
@@ -212,7 +218,7 @@ class Cart extends MY_Controller{
         if($this->cart->update($data)){
             $result=array(
                 'result'=>true,
-                'total'=>  $this->cart->total(),
+                'total'=>  $this->get_total_price(),
                 'total_items'=>  $this->cart_size());
         } 
         echo json_encode($result);
