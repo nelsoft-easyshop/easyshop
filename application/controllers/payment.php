@@ -433,10 +433,12 @@ class Payment extends MY_Controller{
 
             if($payment_status == 'Completed')
             {
+                error_log(date('[Y-m-d H:i e] '). "STATUS IPN: $payment_status ". PHP_EOL, 3, LOG_FILE);
                 $this->payment_model->updateFlag($txn_id);
             }
             else if($payment_status == 'Denied' || $payment_status == 'Failed' || $payment_status == 'Refunded' || $payment_status == 'Reversed' || $payment_status == 'Voided')
             {
+                   error_log(date('[Y-m-d H:i e] '). "STATUS IPN: $payment_status ". PHP_EOL, 3, LOG_FILE);
                 $orderId = $this->payment_model->cancelTransaction($txn_id,true);
                 $orderHistory = array(
                     'order_id' => $orderId,
@@ -449,10 +451,11 @@ class Payment extends MY_Controller{
             }
             else if($payment_status == 'Pending' || $payment_status == 'Processed')
             {
-                     
+                 error_log(date('[Y-m-d H:i e] '). "STATUS IPN: $payment_status ". PHP_EOL, 3, LOG_FILE);    
             }
             else if($payment_status == 'Canceled_Reversal')
             {
+                error_log(date('[Y-m-d H:i e] '). "STATUS IPN: $payment_status ". PHP_EOL, 3, LOG_FILE);
                 $this->payment_model->updateFlag($txn_id);
             }
 
@@ -465,6 +468,19 @@ class Payment extends MY_Controller{
             }
         }
    }
+
+
+    function voidme(){ 
+         $orderId = $this->payment_model->cancelTransaction('4UL72904844972205',true);
+         
+                $orderHistory = array(
+                    'order_id' => $orderId,
+                    'order_status' => 2,
+                    'comment' => 'Paypal transaction ' . $payment_status
+                    );
+                $this->payment_model->addOrderHistory($orderHistory);
+    }
+
 
     #PROCESS PAYPAL
     function paypal(){
@@ -620,10 +636,6 @@ class Payment extends MY_Controller{
         $this->session->set_userdata('bodyData', $response);
 
         redirect(base_url().'payment/success/paypal', 'refresh'); 
-    }
-
-    function voidme(){
-        $this->payment_model->cancelTransaction('36555519XX058151X');
     }
 
 
