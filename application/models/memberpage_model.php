@@ -394,10 +394,12 @@ class memberpage_model extends CI_Model
 
 			$data_attr = array();
 			foreach($attributes as $attribute){
-				$index = $attribute['name'];
-				if(!array_key_exists($index, $data_attr))
-					$data_attr[$index] = array();
-				array_push($data_attr[$index],array('value' => $attribute['attr_value'], 'price'=>$attribute['attr_price']));
+				if( (int)$attribute['datatype_id'] !== 2){
+					$index = $attribute['name'];
+					if(!array_key_exists($index, $data_attr))
+						$data_attr[$index] = array();
+					array_push($data_attr[$index],array('value' => $attribute['attr_value'], 'price'=>$attribute['attr_price']));
+				}
 			}
 			$row['data_attr'] = $data_attr;
 			
@@ -415,7 +417,6 @@ class memberpage_model extends CI_Model
 			unset($row['product_image_path']);
 			$data[] = $row;
 		}
-		
 		return $data;
 	}	
 	
