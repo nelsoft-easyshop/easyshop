@@ -472,13 +472,8 @@ class Payment extends MY_Controller{
 
     function voidme(){ 
          $orderId = $this->payment_model->cancelTransaction('4UL72904844972205',true);
-         
-                $orderHistory = array(
-                    'order_id' => $orderId,
-                    'order_status' => 2,
-                    'comment' => 'Paypal transaction ' . $payment_status
-                    );
-                $this->payment_model->addOrderHistory($orderHistory);
+
+            
     }
 
 
