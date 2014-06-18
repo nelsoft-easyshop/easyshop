@@ -16,7 +16,8 @@
         });
         
         /* Begin listening for events */
-        easyshop.websocket.client.listen($('#user-session').val(), function (topic, data) {
+        var url = 'ws://ws.' + window.location.hostname;
+        easyshop.websocket.client.listen(url, $('#user-session').val(), function (topic, data) {
             easyshop.eventDispatcher.dispatch(data);
         });
     });

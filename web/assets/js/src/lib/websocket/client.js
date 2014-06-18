@@ -12,15 +12,17 @@ var easyshop = (function (es) {
              * 
              * @returns {wsClientient} Self
              */
-            wsClient.listen = function (sid, onPushAction) {
+            wsClient.listen = function (url, id, onPushAction) {
 
+                //url = 'wss://' + window.location.hostname + '/ws/?id=' + sid;
+                
                 /* Warning: ab is a legacy verison of AutobahnJS. We'll settle on it for now */
                 abConnection = new ab.Session(
-                    'wss://' + window.location.hostname + '/ws/?id=' + sid,
+                    url + '?id=' + id,
                     function() {
 
                         // Once the connection has been established
-                        abConnection.subscribe(sid, onPushAction);
+                        abConnection.subscribe(id, onPushAction);
                     },
                     function() {
                         console.warn('WebSocket connection closed');
