@@ -3,12 +3,11 @@
          #Change filelocation as needed, e.g.: $filelocation = "C:/Users/Administrator/Dropbox/sitemap/";
          $filelocation = dirname(__FILE__).'/../../web/';
 
-
-        
         $DBServer = '127.0.0.1';
-        $DBUser   = 'root';
-        $DBPass   = '121586';
+        $DBUser   = 'easyshop';
+        $DBPass   = 'MYSQL345y5h0p';
         $DBName   = 'easyshop';
+        
         $conn = new mysqli($DBServer, $DBUser, $DBPass, $DBName);
         if ($conn->connect_error) {
             exit('Database connection failed: '  . $conn->connect_error);
