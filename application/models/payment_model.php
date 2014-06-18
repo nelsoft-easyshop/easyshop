@@ -245,8 +245,7 @@ class payment_model extends CI_Model
 	    	$query = 'UPDATE es_order_product set status = 6 WHERE order_id = :order_id';
 	    	$sth4 = $this->db->conn_id->prepare($query);
 	    	$sth4->bindParam(':order_id',$orderId,PDO::PARAM_INT);
-	    	$sth4->execute();
-	    	print_r($sth4->errorInfo());
+	    	$sth4->execute(); 
 	    	return $orderId;
 	    	
     	} 
