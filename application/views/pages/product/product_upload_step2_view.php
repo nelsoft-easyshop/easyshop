@@ -533,7 +533,7 @@
                 </div>
                 <div id="dsc_frm">
                   <nobr class="discount_price_con_top">
-                    <label id="lbl_discount"><strong>Discount Percentage</strong></label><input type="text" id="slider_val" placeholder="0%" maxlength="3">
+                    <label id="lbl_discount"><strong>Discount Percentage</strong></label><input type="text" id="slider_val" placeholder="0%" maxlength="3" data-value='<?php echo isset( $product_details['discount'])?$product_details['discount']:0;?>' >
                   </nobr>     
                   <input type="text" id="range_1" name="discount" value=""/>           
                   <nobr class="discount_price_con">
@@ -832,10 +832,19 @@ $(document).ready(function(){
 			get_discPrice();
 		}
 	});
+    
 	
     $("#discnt_btn").on("click",function(){
         $("#dsc_frm").toggle();      
     });    
+    
+    var slider_val = parseInt($('#slider_val').data('value'),10);
+    if(slider_val !== 0 && !isNaN(slider_val)){
+       $('#slider_val').val(slider_val); 
+       $('#slider_val').trigger( "change" );
+    }
+    
+
 });
 
 
@@ -1787,8 +1796,6 @@ $(document).on('change','.other_name_value',function(){
             // });
 
             //     }
-
-
 
             var pricevalue = price.val().replace(new RegExp(",", "g"), '');
             if(pricevalue <= 0 || !$.isNumeric(pricevalue)){

@@ -484,16 +484,7 @@ class product_model extends CI_Model
         $sth->bindParam(':enddate',$now);
         $sth->bindParam(':createdate',$now);
         $sth->bindParam(':lastmodifieddate',$now);
-
 		$bool = $sth->execute();
-        
-        if(!$bool){
-            $errorInfo = $sth->errorInfo();
-            print_R($errorInfo);
-            log_message('error', 'PDO::ADD: 0=>'. $errorInfo[0]);
-            log_message('error', 'PDO::ADD: 1=>'. $errorInfo[1]);
-            log_message('error', 'PDO::ADD: 2=>'. $errorInfo[2]);
-        }
 
 		return $this->db->conn_id->lastInsertId('id_product');
 	}
@@ -1297,15 +1288,10 @@ class product_model extends CI_Model
         $sth->bindParam(':p_id',$product_details['product_id']);
 		$sth->bindParam(':member_id',$member_id);
         $sth->bindParam(':brand_other_name',$product_details['brand_other_name']);
+        $sth->bindParam(':modifieddate', date('Y-m-d H:i:s'));
+        $sth->bindParam(':discount', $product_details['discount']);
         
         $bool = $sth->execute();
-        
-        if(!$bool){
-            $errorInfo = $sth->errorInfo();
-            log_message('error', 'PDO::EDIT: 0=>'. $errorInfo[0]);
-            log_message('error', 'PDO::EDIT: 1=>'. $errorInfo[1]);
-            log_message('error', 'PDO::EDIT: 2=>'. $errorInfo[2]);
-        }
 		
 		return $sth->rowCount();
     }

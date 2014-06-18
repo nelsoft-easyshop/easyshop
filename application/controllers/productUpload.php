@@ -304,7 +304,9 @@ class productUpload extends MY_Controller
 		$product_description =  $this->input->post('desc');
 
 		$product_price = str_replace(',', '', $this->input->post('prod_price')) ;
-		$product_discount = ($this->input->post('discount'))?$this->input->post('discount'):0;
+		$product_discount = ($this->input->post('discount'))?intval($this->input->post('discount')):0;
+        $product_discount = ($product_discount <= 100)?$product_discount:100;
+
 		$product_condition = $this->input->post('prod_condition');
 		$sku = trim($this->input->post('prod_sku'));
 		
@@ -1027,6 +1029,10 @@ class productUpload extends MY_Controller
 		$keyword = str_replace('-', ' ',$keyword);
 		$product_id = $this->input->post('p_id');
 		$brand_id =  $this->input->post('prod_brand');
+        
+        $product_discount = ($this->input->post('discount'))?intval($this->input->post('discount')):0;
+        $product_discount = ($product_discount <= 100)?$product_discount:100;
+
         $brand_valid = false;
         $otherBrand = '';
         
@@ -1180,9 +1186,9 @@ class productUpload extends MY_Controller
 				'price' => $product_price,
 				'condition' => $product_condition,
                 'brand_other_name' => $otherBrand,
-				);
+                'discount' => $product_discount,
+			);
             
-
 			$rowCount = $this->product_model->editProduct($product_details, $member_id);
 
 			if($rowCount>0){

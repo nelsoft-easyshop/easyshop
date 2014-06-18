@@ -729,7 +729,7 @@ FROM
 
 <select id="getProductEdit">
     SELECT a.`id_product`, a.`cat_id`, a.`brand_id`, b.name as 'brandname', a.brand_other_name,
-    a.`name`, a.`condition`, a.`brief`, a.`description`, a.`sku`, a.`price`, a.`keywords`, a.`slug` 
+    a.`name`, a.`condition`, a.`brief`, a.`description`, a.`discount`, a.`sku`, a.`price`, a.`keywords`, a.`slug` 
     FROM es_product a LEFT JOIN es_brand b ON a.brand_id = b.id_brand
     WHERE id_product = :product_id AND member_id = :member_id
 </select>
@@ -738,7 +738,8 @@ FROM
     UPDATE es_product SET 
     `name` = :name, `is_draft` = 1,`sku` = :sku, `brief` = :brief, `description` = :description,
     `keywords` = :keywords, `brand_id` = :brand_id, `style_id` = :style_id, `price` = :price,
-    `condition` = :condition, `lastmodifieddate` = NOW(), `brand_other_name` = :brand_other_name
+    `condition` = :condition, `lastmodifieddate` = :modifieddate, `brand_other_name` = :brand_other_name,
+    `discount` = :discount
     WHERE `id_product` = :p_id AND `member_id` = :member_id;
 </select>
 
