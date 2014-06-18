@@ -424,6 +424,7 @@ class Payment extends MY_Controller{
             $pending_reason = (isset($_POST['pending_reason']) ? $_POST['pending_reason'] : '');
             $reason_code = (isset($_POST['reason_code']) ? $_POST['reason_code'] : '');
             $txn_id = $_POST['txn_id'];
+            $parent_txn_id = (isset($_POST['parent_txn_id']) ? $_POST['parent_txn_id'] : '');
             //$item_name = $_POST['item_name'];
             //$item_number = $_POST['item_number'];
             //$payment_currency = $_POST['mc_currency'];
@@ -436,9 +437,9 @@ class Payment extends MY_Controller{
                 error_log(date('[Y-m-d H:i e] '). "STATUS IPN: $payment_status ". PHP_EOL, 3, LOG_FILE);
                 $this->payment_model->updateFlag($txn_id);
             }
-            else if($payment_status == 'Denied' || $payment_status == 'Failed' || $payment_status == 'Refunded' || $payment_status == 'Reversed' || $payment_status == 'Voided')
+            else if($payment_status == 'Denied' || $payment_status == 'Failed' || $payment_status == 'Voided')
             {
-                   error_log(date('[Y-m-d H:i e] '). "STATUS IPN: $payment_status ". PHP_EOL, 3, LOG_FILE);
+                error_log(date('[Y-m-d H:i e] '). "STATUS IPN: $payment_status ". PHP_EOL, 3, LOG_FILE);
                 $orderId = $this->payment_model->cancelTransaction($txn_id,true);
                 $orderHistory = array(
                     'order_id' => $orderId,
@@ -448,15 +449,25 @@ class Payment extends MY_Controller{
                 $this->payment_model->addOrderHistory($orderHistory);
 
 
+            }else if ($payment_status == 'Refunded' || $payment_status == 'Reversed') {
+                
+                error_log(date('[Y-m-d H:i e] '). "STATUS IPN: $payment_status ". PHP_EOL, 3, LOG_FILE);
+                $orderId = $this->payment_model->cancelTransaction($parent_txn_id,true);
+                $orderHistory = array(
+                    'order_id' => $orderId,
+                    'order_status' => 2,
+                    'comment' => 'Paypal transaction ' . $payment_status
+                    );
+                $this->payment_model->addOrderHistory($orderHistory);
             }
             else if($payment_status == 'Pending' || $payment_status == 'Processed')
             {
-                 error_log(date('[Y-m-d H:i e] '). "STATUS IPN: $payment_status ". PHP_EOL, 3, LOG_FILE);    
+                error_log(date('[Y-m-d H:i e] '). "STATUS IPN: $payment_status ". PHP_EOL, 3, LOG_FILE);    
             }
             else if($payment_status == 'Canceled_Reversal')
             {
                 error_log(date('[Y-m-d H:i e] '). "STATUS IPN: $payment_status ". PHP_EOL, 3, LOG_FILE);
-                $this->payment_model->updateFlag($txn_id);
+                $this->payment_model->updateFlag($parent_txn_id);
             }
 
             if(DEBUG == true) {
