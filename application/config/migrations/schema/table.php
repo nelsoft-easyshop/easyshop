@@ -3889,7 +3889,7 @@ return array(
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8;",
         "insert" => "INSERT INTO `es_order_product_status`
             VALUES (0,'On-going'),(1,'Forward-Seller'),(2,'Returned-Buyer'),
-            (3,'Cash on Delivery'),(4,'Paid - Forwarded'),(5,'Paid - Returned');",
+            (3,'Cash on Delivery'),(4,'Paid - Forwarded'),(5,'Paid - Returned'),(6, 'Cancel');",
     ),
     
     
