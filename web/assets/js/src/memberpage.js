@@ -1302,7 +1302,6 @@ $(document).ready(function(){
 				});
 			},
 			onClose: function(){
-				starset.raty('destroy');
 				textarea.val('');
 				econt.html('');
 				$.modal.close();
