@@ -833,10 +833,10 @@ section {
 
 .middle_content {
 	float: left;
-	width: 520px;
+	width: 588px;
 }
 
-.middle_content h2 {
+/*.middle_content h2 {
 	font-size: 18px;
 	color: #f18200;
 	position: relative;
@@ -844,8 +844,65 @@ section {
 	left: 0;
 	padding:4px 4px 20px 10px;
 	display: inline-block;
+}*/
+
+.middle_content_items {
+    border-bottom: 1px solid #cecece;
+    display: inline-block;
+    padding-bottom: 2px;
+    width: 100%;
 }
 
+.middle_content_items > div {
+	border-right: 1px solid #cecece;
+	float: left;
+	height: 160px;
+	padding: 15px 5px 0px;
+	width:184px;
+
+	  -webkit-transition: all 0.3s ease-in-out;
+  -moz-transition:    all 0.3s ease-in-out;
+  -o-transition:      all 0.3s ease-in-out;
+  transition:         all 0.3s ease-in-out;
+}
+
+.middle_content_items > div:hover,
+.right_panel div:hover {
+  -webkit-box-shadow: 0 14px 15px -12px #333333;
+     -moz-box-shadow: 0 14px 15px -12px #333333;
+          box-shadow: 0 14px 15px -12px #333333;
+}
+
+.middle_content_items div h2 {
+	font-size: 14px;
+	font-weight: bold;
+	height: 35px;
+	overflow: hidden;
+}
+
+.mid_con_price {
+    color: #f18200;
+    display: block;
+    font-size: 14px;
+    font-weight: bold;
+    height: 18px;
+    margin-bottom: 11px;
+}
+
+.mid_img_con {
+	display: table-cell;
+	height: 95px;
+	text-align: center;
+	vertical-align: middle;
+	width: 184px;
+}
+
+.mid_img_con img {
+	height: auto;
+	max-height: 95px;
+	max-width: 184px;
+	width: auto;
+}
 
 /** Side Navigation Menu **/
 
@@ -862,7 +919,7 @@ section {
 	width: 160px;
 	line-height: 35px;
 	height: 35px;
-	margin-right: 10px;
+	margin-right: 3px;
 }
 
 
@@ -1526,8 +1583,11 @@ nav ul > li:hover > div {
 
 /*** Right Panel ***/
 .right_panel {
-	width: 264px;
-	float: left;
+	border-bottom: 1px solid #cecece;
+    border-right: 1px solid #cecece;
+    float: left;
+    height: 539px;
+    width: 201px;
 }
 
 .right_panel_box {
@@ -1674,6 +1734,50 @@ span.dragonpay {
 span.cod {
 	background-position: -339px -176px;		
 	width: 95px;
+}
+
+.right_panel div {
+	border-bottom: 1px solid #cecece;
+	display: inline-block;
+	margin-left: 1px;
+	margin-bottom: 1px;
+	width: 198px;
+
+	 -webkit-transition: all 0.3s ease-in-out;
+ 	 -moz-transition:    all 0.3s ease-in-out;
+ 	 -o-transition:      all 0.3s ease-in-out;
+ 	 transition:         all 0.3s ease-in-out;
+}
+
+.right_panel div:last-child {
+	border-bottom: none;
+}
+
+
+.right_panel div.easy_treat_item {
+	height: 163px;
+	padding:12px 5px 5px;
+	width: 188px;
+}
+
+.easy_treat_item h2 {
+	font-size: 14px;
+	padding-bottom: 3px;
+}
+
+.easy_treat_item span {
+	display: table-cell;
+	height: 130px;
+	text-align: center;
+	vertical-align: middle;
+	width: 198px;
+}
+
+.easy_treat_item img {
+	height: auto;
+	max-height: 130px;
+	max-width: 198px;
+	width: auto;
 }
 
 /*** fashion product ***/

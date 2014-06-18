@@ -221,15 +221,26 @@
 
 /***Middle top slide **/
 
-.mid_top_slides,
+/*.mid_top_slides,
 .mid_bottom_slides {
 	width: 510px;
+}*/
+
+.mid_top_slides {
+	height: 352px !important;
+	width: 587px;
+
 }
+
+.mid_top_slides +  .bx-controls.bx-has-pager.bx-has-controls-auto {
+	/*display: none;*/
+}
+/*
 
 .mid_slide1 > li {
 	width: 510px !important;
 }
-
+*/
 .mid_bottom_slides .bx-controls .bx-controls-direction .bx-next {
 	right: -3px;
 }
