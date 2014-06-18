@@ -17,7 +17,7 @@ $(document).ready(function(){
       autoControls: true,
       pause: 3500,
       controls:false,
-      slideWidth: 510
+      slideWidth: 587
     });
 
     $('.mid_slide2').bxSlider({
