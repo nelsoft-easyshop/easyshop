@@ -560,7 +560,7 @@ class memberpage_model extends CI_Model
 				$product['has_shipping_summary'] = 0;
 				$product['is_reject'] = $temp['is_reject'];
 				//Check if shipping comments exist
-				if( trim(strlen($product['courier'])) > 0 && trim(strlen($product['tracking_num'])) > 0 && trim(strlen($product['delivery_date'])) > 0){
+				if( trim(strlen($product['courier'])) > 0 && trim(strlen($product['delivery_date'])) > 0){
 					$product['has_shipping_summary'] = 1;
 				}
 				
