@@ -81,10 +81,7 @@ class CSRF_Protection
             }
             elseif($_SERVER['REQUEST_URI'] === '/payment/dragonPayPostBack'){
                 return true;
-            }
-            elseif($_SERVER['REQUEST_URI'] === '/payment/ipn'){
-                return true;
-            }
+            } 
             elseif($_SERVER['REQUEST_URI'] === '/payment/ipn2'){
                 return true;
             }

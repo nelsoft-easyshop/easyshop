@@ -184,6 +184,74 @@ class payment_model extends CI_Model
 		  	return 0;
 		}
     }
+
+    function updateFlag($txnId)
+    {
+    	$newValue = '%'.$txnId.'%';
+    	$query = 'UPDATE es_order set is_flag = 0 WHERE transaction_id like :txnid';
+
+    	$sth = $this->db->conn_id->prepare($query);
+    	$sth->bindParam(':txnid',$newValue,PDO::PARAM_STR);
+    	
+    	if ($sth->execute()){
+		  // success
+    		return 1;
+    	}
+    	else{
+    		return 0;
+    	}
+    }
+
+    function cancelTransaction($txnId,$quantity = true)
+    {
+    	$newValue = '%'.$txnId.'%';
+    	$query = 'UPDATE es_order set order_status = 2 WHERE transaction_id like :txnid';
+    	$sth = $this->db->conn_id->prepare($query);
+    	$sth->bindParam(':txnid',$newValue,PDO::PARAM_STR);
+    	if ($sth->execute()){ 
+
+    		$query = 'SELECT id_order from es_order where transaction_id like :txnid LIMIT 1'; 
+	    	$sth2 = $this->db->conn_id->prepare($query);
+	    	$sth2->bindParam(':txnid',$newValue,PDO::PARAM_STR);
+	    	$sth2->execute();
+	    	$row = $sth2->fetch(PDO::FETCH_ASSOC); 
+
+	    	$orderId = $row['id_order']; 
+	    	$query = 'SELECT * from es_order_product where order_id = :order_id';
+	    	$sth3 = $this->db->conn_id->prepare($query);
+	    	$sth3->bindParam(':order_id',$orderId,PDO::PARAM_INT);
+	    	$sth3->execute();
+
+	    	$orderProduct = $sth3->fetchAll(PDO::FETCH_ASSOC); 
+	    	
+	    	if($quantity){
+	    		foreach ($orderProduct as $key => $value) {
+	    			$query = 'UPDATE es_product_item set quantity = quantity + :returnqty where id_product_item = :item_id';
+	    			$sth3 = $this->db->conn_id->prepare($query);
+	    			$sth3->bindParam(':returnqty',$value['order_quantity'],PDO::PARAM_INT);
+	    			$sth3->bindParam(':item_id',$value['product_id'],PDO::PARAM_INT);
+	    			$sth3->execute();
+
+	    			$historyData = array(
+	    				'order_product_id' => $value['product_id'],
+	    				'order_product_status' => '6',
+	    				'comment' => 'REJECTED'
+	    				);
+	    		 
+	    			$this->addOrderProductHistory($historyData);
+	    		}
+	    	}
+
+	    	$query = 'UPDATE es_order_product set status = 6 WHERE order_id = :order_id';
+	    	$sth4 = $this->db->conn_id->prepare($query);
+	    	$sth4->bindParam(':order_id',$orderId,PDO::PARAM_INT);
+	    	$sth4->execute();
+
+	    	return $orderId;
+	    	
+    	} 
+    	 
+    }
 	
 	
 	public function sendNotificationEmail($data, $email, $string)
