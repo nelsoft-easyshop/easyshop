@@ -1310,7 +1310,7 @@ $(document).ready(function(){
 		
 	});
 
-	$('.dashboard_table').on('click', '.feedback-cancel', function(){
+	$(document).on('click', '.feedback-cancel', function(){
 		$.modal.close();
 	});
 	
