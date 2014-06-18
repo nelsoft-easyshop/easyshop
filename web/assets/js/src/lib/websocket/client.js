@@ -7,7 +7,8 @@ var easyshop = (function (es) {
             /**
              * Connect to websocket server using specified identification
              * 
-             * @param string sid Session id
+             * @param string url Url to listen for pushes
+             * @param string id Session identifier
              * @param fn onPushAction Receives 2 params `topic` and `data` respectively
              * 
              * @returns {wsClientient} Self
