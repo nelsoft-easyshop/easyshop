@@ -1247,15 +1247,12 @@ $(document).ready(function(){
 /****************************  TRANSACTIONS    **************************************/   
 /***********************************************************************************/
 $(document).ready(function(){
-	$('.rating1').raty({scoreName: 'rating1'});
-	$('.rating2').raty({scoreName: 'rating2'});
-	$('.rating3').raty({scoreName: 'rating3'});
-	
+
 	jQuery.validator.addMethod("notEqual", function(value, element, param) {
 	  return this.optional(element) || value != param;
 	}, "Please specify a different (non-default) value");
 	
-	$('.feedb-star').on('mouseover', function(){
+	$(document).on('mouseover','.feedb-star', function(){
 		$(this).siblings('.raty-error').html('');
 	});
 	
@@ -1270,6 +1267,10 @@ $(document).ready(function(){
 	
 		divcont.modal({
 			onShow: function(){
+				$('.rating1').raty('destroy').raty({scoreName: 'rating1'});
+				$('.rating2').raty('destroy').raty({scoreName: 'rating2'});
+				$('.rating3').raty('destroy').raty({scoreName: 'rating3'});
+				
 				this.setPosition();
 				var submitbtn = form.children('.feedback-submit');
 				submitbtn.off('click').on('click', function(event){
@@ -1301,7 +1302,7 @@ $(document).ready(function(){
 				});
 			},
 			onClose: function(){
-				starset.raty('reload');
+				starset.raty('destroy');
 				textarea.val('');
 				econt.html('');
 				$.modal.close();
@@ -1310,10 +1311,6 @@ $(document).ready(function(){
 		
 	});
 
-	$(document).on('click', '.feedback-cancel', function(){
-		$.modal.close();
-	});
-	
 	$('#tx_dialog input[type="password"]').on('keypress', function(){
 		$(this).siblings('span.error').text('');
 	});
@@ -1455,15 +1452,6 @@ $(document).ready(function(){
 		return false;
 	});
 	
-	$('input.modal_date').datepicker({
-		changeMonth: true,
-		changeYear: true,
-        yearRange: '2013:2050',
-		dateFormat:"yy-M-dd"
-	}).on('keypress',function(){
-		return false;
-	});
-	
 	/******	Submit / View shipping Comments	******/
 	$('.dashboard_table').on('click', '.shipping_comment', function(){
 		var divcont = $(this).parent().siblings('div.shipping_comment_cont');
@@ -1482,6 +1470,15 @@ $(document).ready(function(){
 			escClose: false,
 			onShow: function(){
 				if( thisbtn.hasClass('isform') ){
+					$('input.modal_date').datepicker({
+						changeMonth: true,
+						changeYear: true,
+						yearRange: '2013:2050',
+						dateFormat:"yy-M-dd"
+					}).on('keypress',function(){
+						return false;
+					});
+				
 					form.validate({
 						rules:{
 							courier:{
@@ -1557,13 +1554,14 @@ $(document).ready(function(){
 				});
 			},
 			onClose: function(){
+				$('input.modal_date').datepicker('destroy').removeClass('hasDatepicker').removeAttr('id');
 				$.modal.close();
 			}
 		});
 	});
 	
 	//$('input.bankdeposit_amount').numeric({negative:false});
-	$('.dashboard_table').on('blur','input.price',function(){
+	$(document).on('blur','input.price',function(){
 		var price = $.trim($(this).val());
 		var newPrice = price.replace(new RegExp(",", "g"), '');
 		newPrice = parseFloat(newPrice).toFixed(2);
@@ -1590,6 +1588,15 @@ $(document).ready(function(){
 		thisdiv.modal({
 			escClose: false,
 			onShow: function(){
+				$('input.modal_date').datepicker({
+					changeMonth: true,
+					changeYear: true,
+					yearRange: '2013:2050',
+					dateFormat:"yy-M-dd"
+				}).on('keypress',function(){
+					return false;
+				});
+			
 				this.setPosition();
 				thisform.validate({
 					rules: {
@@ -1697,13 +1704,17 @@ $(document).ready(function(){
 		return false;
 	});
 	
-	$('.dashboard_table').on('click','.tx_modal_edit', function(){
+	$(document).on('click', '.feedback-cancel', function(){
+		$.modal.close();
+	});
+	
+	$(document).on('click','.tx_modal_edit', function(){
 		$(this).siblings('input[type="text"],textarea').attr('disabled', false);
 		$(this).hide();
 		$(this).siblings('.tx_modal_cancel').show();
 	});
 	
-	$('.dashboard_table').on('click','.tx_modal_cancel', function(){
+	$(document).on('click','.tx_modal_cancel', function(){
 		var input = $(this).siblings('input[type="text"]');
 		var textarea = $(this).siblings('textarea');
 		
@@ -1787,7 +1798,7 @@ $(document).ready(function(){
 				divCounter++;
 			}
 			resultCounter++;
-			activeDiv.eq(divCounter).append($(this));
+			activeDiv.eq(divCounter).append($(this).clone());
 		});
 	});
 	
