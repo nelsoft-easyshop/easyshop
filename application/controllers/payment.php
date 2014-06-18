@@ -468,13 +468,7 @@ class Payment extends MY_Controller{
             }
         }
    }
-
-
-    function voidme(){ 
-         $orderId = $this->payment_model->cancelTransaction('4UL72904844972205',true);
-
-            
-    }
+ 
 
 
     #PROCESS PAYPAL

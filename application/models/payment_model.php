@@ -229,16 +229,16 @@ class payment_model extends CI_Model
 	    			$query = 'UPDATE es_product_item set quantity = quantity + :returnqty where id_product_item = :item_id';
 	    			$sth3 = $this->db->conn_id->prepare($query);
 	    			$sth3->bindParam(':returnqty',$value['order_quantity'],PDO::PARAM_INT);
-	    			$sth3->bindParam(':item_id',$value['product_id'],PDO::PARAM_INT);
+	    			$sth3->bindParam(':item_id',$value['product_item_id'],PDO::PARAM_INT);
 	    			$sth3->execute();
 
-	    			// $historyData = array(
-	    			// 	'order_product_id' => $value['product_id'],
-	    			// 	'order_product_status' => '6',
-	    			// 	'comment' => 'REJECTED'
-	    			// 	);
+	    			$historyData = array(
+	    				'order_product_id' => $value['product_item_id'],
+	    				'order_product_status' => '6',
+	    				'comment' => 'REJECTED'
+	    				);
 	    		 
-	    			// $this->addOrderProductHistory($historyData);
+	    			$this->addOrderProductHistory($historyData);
 	    		}
 	    	}
 
