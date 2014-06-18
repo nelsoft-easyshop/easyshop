@@ -1,6 +1,6 @@
 <?php 
 
-$path = '../../web/assets/temp_product/*';
+$path = dirname(__FILE__).'/../../web/assets/temp_product/*';
 $files = glob($path);
 
 foreach($files as $file){ 
