@@ -69,21 +69,28 @@ if ( ! function_exists('applyPriceDiscount')){
         $CI = get_instance();
         $CI->load->model('product_model');
         $buyer_id = $CI->session->userdata('member_id');
-        $promo = $CI->product_model->GetPromoPrice($product['price'],$product['startdate'],$product['enddate'],$product['is_promote'],$product['promo_type'],$buyer_id,$product['id_product']);
-        $product['original_price'] = $product['price'];
-    
-        $product['can_purchase'] = $promo['can_purchase'];
-        $product['is_soldout'] = $promo['is_soldout'];
-
-        if($promo['is_soldout']){
-            $product['price'] = $promo['sold_price'];
-        }else{  
-            $product['price'] = $promo['price'];
-        }
+        $product['start_promo'] = false;
         
-        $product['sold_price'] = $promo['sold_price'];
-        $product['start_promo'] = ((intval($product['is_promote']) === 1)&&(strtotime($product['startdate']) < strtotime(date('Y-m-d H:i:s'))));
-        $product['percentage'] = ($product['start_promo'])?($product['original_price'] - $product['price'])/$product['original_price'] * 100.00:0.00;
+        if(intval($product['is_promote']) === 1){
+            $promo = $CI->product_model->GetPromoPrice($product['price'],$product['startdate'],$product['enddate'],$product['is_promote'],$product['promo_type'],$buyer_id,$product['id_product']);
+            $product['original_price'] = $product['price'];    
+            $product['can_purchase'] = $promo['can_purchase'];
+            $product['is_soldout'] = $promo['is_soldout'];
+            if($promo['is_soldout']){
+                $product['price'] = $promo['sold_price'];
+            }else{  
+                $product['price'] = $promo['price'];
+            }
+            $product['sold_price'] = $promo['sold_price'];
+            $product['start_promo'] = ((intval($product['is_promote']) === 1)&&(strtotime($product['startdate']) < strtotime(date('Y-m-d H:i:s'))));
+            $product['percentage'] = ($product['start_promo'])?($product['original_price'] - $product['price'])/$product['original_price'] * 100.00:0.00;
+        }else{
+            $product['original_price'] = $product['price']; 
+            if(intval($product['discount']) > 0){
+                $product['price'] = $product['price'] * ($product['discount']/100.0);
+            }
+            $product['percentage'] = ($product['original_price'] - $product['price'])/$product['original_price'] * 100.00;      
+        }
    }
 }
 
