@@ -232,13 +232,13 @@ class payment_model extends CI_Model
 	    			$sth3->bindParam(':item_id',$value['product_id'],PDO::PARAM_INT);
 	    			$sth3->execute();
 
-	    			$historyData = array(
-	    				'order_product_id' => $value['product_id'],
-	    				'order_product_status' => '6',
-	    				'comment' => 'REJECTED'
-	    				);
+	    			// $historyData = array(
+	    			// 	'order_product_id' => $value['product_id'],
+	    			// 	'order_product_status' => '6',
+	    			// 	'comment' => 'REJECTED'
+	    			// 	);
 	    		 
-	    			$this->addOrderProductHistory($historyData);
+	    			// $this->addOrderProductHistory($historyData);
 	    		}
 	    	}
 
