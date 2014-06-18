@@ -897,7 +897,7 @@ class productUpload extends MY_Controller
                 $response['is_edit'] = true;
             }
             $this->load->view('pages/product/product_upload_step4_view',$response);
-			$this->load->view('templates/footer'); 
+			$this->load->view('templates/footer_full'); 
 		}else{
             redirect('/sell/step1/', 'refresh');
 		}

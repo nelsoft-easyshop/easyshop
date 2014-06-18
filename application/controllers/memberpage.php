@@ -597,12 +597,14 @@ class Memberpage extends MY_Controller
 			$data['transaction'] = $this->memberpage_model->getTransactionDetails($sellerid);
 			$data['allfeedbacks'] = $this->memberpage_model->getFeedback($sellerid);
 			$this->load->view('pages/user/vendor_view', $data);
+            $this->load->view('templates/footer');
 		}
 		else{
             $this->load->view('templates/header', $data);
 			$this->load->view('pages/user/user_error');
+            $this->load->view('templates/footer_full');
 		}
-		$this->load->view('templates/footer');
+	
 	}
 
 

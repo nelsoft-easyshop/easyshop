@@ -257,7 +257,7 @@ class Register extends MY_Controller
 		
         $temp['result'] = $result;
 		$this->load->view('pages/user/changepassword', $temp);
-		$this->load->view('templates/footer');		
+		$this->load->view('templates/footer_full');		
 		
 	}
     
@@ -289,7 +289,7 @@ class Register extends MY_Controller
 		if($member_id === 0){
 			$this->load->view('templates/header', $data);
 			$this->load->view('pages/user/err_email_verif', $data);
-			$this->load->view('templates/footer');
+			$this->load->view('templates/footer_full');
 			return;
 		}
 
@@ -303,7 +303,7 @@ class Register extends MY_Controller
 				$data['verification_msg'] = $this->lang->line('expired_email_verification');
 				$this->load->view('templates/header', $data);
 				$this->load->view('pages/user/register_form3_view', $data);
-				$this->load->view('templates/footer');
+				$this->load->view('templates/footer_full');
 				return;
 			}
 
@@ -319,12 +319,12 @@ class Register extends MY_Controller
             $data['render_logo'] = false;
 			$this->load->view('templates/header', $data);
 			$this->load->view('pages/user/register_form3_view', $data);
-			$this->load->view('templates/footer');
+			$this->load->view('templates/footer_full');
 		}
 		else{
 			$this->load->view('templates/header', $data);
 			$this->load->view('pages/user/err_email_verif', $data);
-			$this->load->view('templates/footer');
+			$this->load->view('templates/footer_full');
 		}
 	}
  
