@@ -143,7 +143,7 @@
   , item_list_attribute.`is_promote`
   , item_list_attribute.`startdate`
   , item_list_attribute.`enddate`
-  
+  , item_list_attribute.`discount`
 FROM
   (SELECT 
     `item_list_attribute_only`.*
@@ -213,6 +213,7 @@ FROM
       , a.`promo_type`
       , a.`enddate`
       , a.`startdate`
+      , a.`discount`
     FROM
       `es_product` a
       , `es_product_image` b
@@ -393,7 +394,7 @@ FROM
 	</select>
 	
     <select id="getProductById">
-        SELECT a.`name` AS `product`, a.`slug` AS slug,a.`brief`,a.`id_product`,`cat_id`, b.`product_image_path`, a.`price`, a.`member_id` as sellerid , a.`is_promote`,a.`startdate`,a.`enddate`, a.`promo_type`,a.`is_draft`,a.`is_delete`
+        SELECT a.`name` AS `product`, a.`slug` AS slug, a.`discount`, a.`brief`,a.`id_product`,`cat_id`, b.`product_image_path`, a.`price`, a.`member_id` as sellerid , a.`is_promote`,a.`startdate`,a.`enddate`, a.`promo_type`,a.`is_draft`,a.`is_delete`
         FROM `es_product` a
         LEFT JOIN `es_product_image` b ON b.`product_id` = a.`id_product` AND b.is_primary = '1'
         WHERE `id_product` = :id
