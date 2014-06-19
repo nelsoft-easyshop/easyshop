@@ -860,7 +860,7 @@ class Payment extends MY_Controller{
 
             $transactionID = urldecode($txnId);
             $apiResponse = json_encode($itemList);
-            $paymentType = 2;
+             
 
             if($postBackCount == "0"){
 
@@ -884,7 +884,7 @@ class Payment extends MY_Controller{
                 $orderStatus = 99;
             }
  
-            $complete = $this->payment_model->updatePaymentIfComplete($orderId,$apiResponse,$transactionID,$paymentType);
+            $complete = $this->payment_model->updatePaymentIfComplete($orderId,$apiResponse,$transactionID,$paymentType,0);
 
             if($postBackCount == "0"){
                 $remove_to_cart = $this->payment_model->removeToCart($member_id,$itemList);
