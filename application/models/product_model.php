@@ -1091,7 +1091,7 @@ class product_model extends CI_Model
 		 GROUP BY product_id , `name`,price,`condition`,brief,product_image_path,
          item_list_attribute.is_new, item_list_attribute.is_hot, item_list_attribute.clickcount,item_list_attribute.slug,
          item_list_attribute.brand_id,   item_list_attribute.`promo_type`, item_list_attribute.`is_promote`,
-         item_list_attribute.`startdate`, item_list_attribute.`enddate`         
+         item_list_attribute.`startdate`, item_list_attribute.`enddate`  , item_list_attribute.`discount`         
          ".$havingString."
   	   	 ORDER BY ".$sortString." cnt_all DESC, `name` ASC
 		 LIMIT :start, :per_page 
@@ -1945,9 +1945,17 @@ class product_model extends CI_Model
                 $home_view_data = array();
             }
         }else if($element['type'] === 'date'){
+            $home_view_data = date('M d,Y H:i:s',strtotime($element['value']));
+        }else if($element['type'] === 'image'){
+            if(isset($element['imagemap'])){    
+                $element['imagemap']['coordinate'] = count($element['imagemap']['coordinate'])>0?$element['imagemap']['coordinate']:'';
+                $home_view_data = array('src' => $element['value'], 'imagemap' => $element['imagemap']);
+            }
+            else{
                 $home_view_data = date('M d,Y H:i:s',strtotime($element['value']));
+            }
         }else{
-            $home_view_data = $element['value'];
+            $home_view_data = $element['value'];            
         }
         return $home_view_data;
     }
@@ -1988,9 +1996,9 @@ class product_model extends CI_Model
         $result['can_purchase']  = true;
         $result['sold_price'] = 0;
         $result['is_soldout'] = false; 
-        $calculation_id = $this->config->item('Promo')[$type]['calculation_id'];
         
         if($is_promo === 1){
+            $calculation_id = $this->config->item('Promo')[$type]['calculation_id'];
             switch ($calculation_id) {
                 case 0 :
                     $PromoPrice = $baseprice;
@@ -2021,7 +2029,6 @@ class product_model extends CI_Model
             $result['is_soldout'] = $this->is_sold_out($product_id);
             $result['sold_price'] = $this->get_sold_price($product_id, date('Y-m-d',$startdate), date('Y-m-d',$enddate));
         }
-        
         $result['price'] = (floatval($result['price'])>0)?$result['price']:0.01;
         return $result;
    }

@@ -19,35 +19,51 @@
 
         <div class="middle_content">
             <ul class="mid_slide1">
-                <?PHP foreach ($data['mainSlide'] as $rows): ?>
-                <li><img src="<?= base_url().$rows.'?ver=1.0' ?>" /></li>
+                <?PHP foreach ($data['mainSlide'] as $idx=>$row): ?>
+                <li><img style="width:520px;height:270px" src="<?= base_url().$row['src'].'?ver='.ES_FILE_VERSION ?>"  usemap=" <?php echo isset($row['imagemap'])?'#'.$idx.'_image_map':''?>"/></li>
                 <?PHP endforeach; ?>
             </ul>
+
+            <?PHP foreach ($data['mainSlide'] as $idx=>$row): ?>
+           
+                <map name='<?php echo $idx?>_image_map'>
+                    <!-- COORDS: left, top, right, bottom -->
+                    <area style='color:' shape="rect" coords="<?=$row['imagemap']['coordinate']?>" href="<?= base_url().$row['imagemap']['target']?>" alt="<?=$row['imagemap']['target']?>">
+                </map>
+                
+            <?PHP endforeach; ?>
+            
+            <!--
+            <h2><?=$data['productSlide_title'] ?></h2>
+            <ul class="mid_slide2">
+                <?PHP foreach ($data['productSlide_id'] as $rows): ?>
+                  <li>
+                    <a href ="<?=base_url()."item/".$rows['slug']; ?>" >
+                        <span class="mid_bottom_img_con">
+                            <span class="mid_bottom_img">
+                                <img src="<?=  base_url().$rows['path'].'categoryview/'.$rows['file']; ?>" />
+                            </span>
+                        <span>
+                    </a>
+                    </li>
+                 <?php endforeach; ?>
+             </ul>
+             -->
+                                       
             <div class="middle_content_items">
-                <div>
-                    <a href=""><h2>Galaxy Camera - WiFi</h2>
-                        <span class="mid_con_price">Php 23,788</span>
-                        <span class="mid_img_con">
-                            <img src="<?= base_url() ?>assets/images/img_mid_item1.jpg" alt="Galaxy Camera - WiFi">
-                        </span>
-                    </a>
-                </div>
-                <div>
-                     <a href=""><h2>Apple iPad Mini 2 128GB</h2>
-                        <span class="mid_con_price">Php 40,949</span>
-                        <span class="mid_img_con">
-                            <img src="<?= base_url() ?>assets/images/img_mid_item2.jpg" alt="Apple iPad Mini 2 128GB">
-                        </span>
-                    </a>
-                </div>
-                <div>
-                     <a href=""><h2>APPLE IPOD TOUCH 32GB 5TH GENERATION</h2>
-                        <span class="mid_con_price">Php 13,799</span>
-                        <span class="mid_img_con">
-                            <img src="<?= base_url() ?>assets/images/img_mid_item3.jpg" alt="APPLE IPOD TOUCH 32GB 5TH GENERATION">
-                        </span>
-                    </a>
-                </div>
+                <?PHP for($i = 0; $i < 3; $i++): ?>
+                    <?PHP $row = $data['productSlide_id'][$i]; ?>
+                    <div>
+                        <a href=""><h2><?php echo html_escape($row['product']);?></h2>
+                            <span class="mid_con_price">&#8369;<?php echo number_format($row['price'],2,'.',',');?></span>
+                            <span class="mid_img_con">
+                                <img src="<?= base_url().$rows['path'].'categoryview/'.$rows['file'];?>" alt="<?php echo html_escape($row['product']);?>">
+                            </span>
+                        </a>
+                    </div>
+                
+                <?php endfor; ?>
+                
             </div>
            
         </div>
@@ -58,18 +74,23 @@
             <div>
                 <img src="<?= base_url() ?>assets/images/img_easy_treat.jpg" alt="Easy Treat: Best price offer for the day">
             </div>
+            
             <div class="easy_treat_item">
                 <a href="">
-                    <h2>ASUS FONEPAD 7 DUAL-SIM</h2>
+                    <h2><?php echo html_escape($data['productSlide_id'][$i]['product']); ?></h2>
                     <span>
-                        <img src="<?= base_url() ?>assets/images/img_easy_treat_item1.jpg" alt="ASUS FONEPAD 7 DUAL-SIM">
+                        <img src="<?= base_url().$data['productSlide_id'][$i]['path'].'categoryview/'.$data['productSlide_id'][$i]['file']; ?>" alt="<?php echo html_escape($data['productSlide_id'][$i]['product']); ?>">
                     </span>
                 </a>
             </div>
+            
             <div>
                 <object width="198" height="179" data="<?= base_url() ?>assets/images/Set-A-Box.swf"></object> 
             </div>
         </div>
+        
+        
+        
     </div>
 </section>
 
