@@ -20,7 +20,7 @@
       <div class="payment_items_con">
         <div><span>Invoice Number:</span>  <?php echo $invoice_no; ?></div>
         <div><span>Total Amount:</span>  P <?php echo $total; ?></div>
-        <div><span>Date Added:</span>  <?php echo date("D-m-Y h:m", strtotime($dateadded)); ?></div>
+        <div><span>Date Added:</span>  <?php echo date("d/m/Y H:i", strtotime($dateadded)); ?></div>
       </div>
       <?php }else{
         ?>
