@@ -92,18 +92,27 @@
         CALL `es_sp_getProductBySlug` (:slug)
     </select>
     
-    <select id="getProductPreview">
+    <select id="getProductById">
+        SELECT a.`name` AS `product`, a.`slug` AS slug, a.`discount`, a.`brief`,a.`id_product`,`cat_id`, b.`product_image_path`, a.`price`, a.`member_id` as sellerid , a.`is_promote`,a.`startdate`,a.`enddate`, a.`promo_type`,a.`is_draft`,a.`is_delete`
+        FROM `es_product` a
+        LEFT JOIN `es_product_image` b ON b.`product_id` = a.`id_product` AND b.is_primary = '1'
+        WHERE `id_product` = :id
+    </select>
+    
+    <select id="getProductByIdExtended">
         SELECT p.id_product AS id_product, p.condition, p.brand_id AS brand_id, p.brand_other_name AS custombrand, 
         p.name AS product_name, p.description AS description, p.is_promote, p.discount,
         p.cat_id AS cat_id, p.price AS price, p.brief AS brief, p.sku AS sku,
         s.name AS style_name, b.name AS brand_name, p.member_id AS sellerid, m.nickname AS sellernickname, 
-        m.username AS sellerusername, m.imgurl AS userpic, c.name AS category
+        m.username AS sellerusername, m.imgurl AS userpic, c.name AS category, i.`product_image_path`,     
+        p.`is_promote`,p.`startdate`,p.`enddate`, p.`promo_type`
         FROM es_product p 
         LEFT JOIN es_style s ON p.style_id = s.id_style
         LEFT JOIN es_brand b ON p.brand_id = b.id_brand
         LEFT JOIN es_member m ON p.member_id = m.id_member  
         LEFT JOIN es_cat c ON p.`cat_id` = c.`id_cat`
-        WHERE p.id_product = :product_id AND p.is_draft = :is_draft	AND p.member_id = :member_id
+        LEFT JOIN `es_product_image` i ON i.`product_id` = p.`id_product` AND i.is_primary = '1'
+        WHERE p.id_product = :id
     </select>
   
 	
@@ -393,15 +402,10 @@ FROM
 		LIMIT :start, :number
 	</select>
 	
-    <select id="getProductById">
-        SELECT a.`name` AS `product`, a.`slug` AS slug, a.`discount`, a.`brief`,a.`id_product`,`cat_id`, b.`product_image_path`, a.`price`, a.`member_id` as sellerid , a.`is_promote`,a.`startdate`,a.`enddate`, a.`promo_type`,a.`is_draft`,a.`is_delete`
-        FROM `es_product` a
-        LEFT JOIN `es_product_image` b ON b.`product_id` = a.`id_product` AND b.is_primary = '1'
-        WHERE `id_product` = :id
-    </select>
+
 
     <select id="getPopularitem">
-		SELECT `name` AS `product`, `slug` AS `slug`, `id_product`,`cat_id`,`clickcount`, `product_image_path` ,`price`
+		SELECT `name` AS `product`, `slug` AS `slug`, `id_product`,`cat_id`,`clickcount`, `product_image_path` ,`price`, `is_promote`, `discount`
         FROM `es_product` a
         LEFT JOIN `es_product_image` b ON b.`product_id` = a.`id_product` AND b.is_primary = '1'
         WHERE a.`is_delete` = 0 AND a.`is_draft` = 0 AND `cat_id` IN 

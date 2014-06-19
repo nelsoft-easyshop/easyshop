@@ -1223,6 +1223,12 @@ class product_model extends CI_Model
 		$sth->bindParam(2,$limit, PDO::PARAM_INT);
 		$sth->execute();
 		$rows = $sth->fetchAll(PDO::FETCH_ASSOC);	
+        
+        foreach($rows as $idx => $row){
+            applyPriceDiscount($row);
+            $rows[$idx] = $row;
+        }
+
         explodeImagePath($rows);
 		foreach($rows as $key=>$row){
 			if(intval($row['id_product']) == intval($prod_id)){
@@ -1232,8 +1238,15 @@ class product_model extends CI_Model
 		return array_values($rows);
 	}
 	
-    function getProductById($id){
-		$query = $this->xmlmap->getFilenameID('sql/product','getProductById');
+    function getProductById($id, $extended = false){
+            
+        if($extended){
+            $query = $this->xmlmap->getFilenameID('sql/product', 'getProductByIdExtended');
+        }
+        else{
+            $query = $this->xmlmap->getFilenameID('sql/product','getProductById');
+        }
+        
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':id',$id);
 		$sth->execute();

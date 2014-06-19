@@ -1608,8 +1608,9 @@ class productUpload extends MY_Controller
         }
         $this->load->model("memberpage_model");
         $memberId =  $this->session->userdata('member_id');
-        $product_row = $this->product_model->getProductPreview($id, $memberId);
-        if(empty($product_row)){
+        $product_row = $this->product_model->getProductById($id, true);
+
+        if(empty($product_row) || (intval($product_row['sellerid']) !== intval($memberId))){
             redirect('sell/step1', 'refresh');
         }
         $quantities = $this->product_model->getProductQuantity($id);
