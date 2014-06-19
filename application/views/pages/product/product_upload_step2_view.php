@@ -1181,11 +1181,13 @@ $(document).ready(function(){
          
             var id = "imgid" + pictureCount;
             imageCustom = document.getElementById('files').value;
+            
+              var filename = imageCustom.match(/[^\/\\]+$/);
             extension = val.substring(val.lastIndexOf('.') + 1).toLowerCase();
             switch(extension){
               case 'gif': case 'jpg': case 'png': case 'jpeg':
 
-              $('#list').append('<div id="previewList'+pictureCount+'" class="new_img upload_img_div '+activeText+' filescnt filescntactive filescnt'+filescnt+'"><span class="upload_img_con"><img src="'+imageCustom+'" alt="'+imageCustom+'" style="height:100px;"></span><a href="javascript:void(0)" class="removepic" data-number="'+pictureCount+'">x</a><br><a href="javascript:void(0)" class="makeprimary photoprimary'+pictureCount+'" data-number="'+pictureCount+'">'+primaryText+'</a><div class="loadingfiles"></div></div>');   
+              $('#list').append('<div id="previewList'+pictureCount+'" class="new_img upload_img_div '+activeText+' filescnt filescntactive filescnt'+filescnt+'"><span class="upload_img_con"><img src="'+imageCustom+'" alt="'+filename+'" style="height:100px;"></span><a href="javascript:void(0)" class="removepic" data-number="'+pictureCount+'">x</a><br><a href="javascript:void(0)" class="makeprimary photoprimary'+pictureCount+'" data-number="'+pictureCount+'">'+primaryText+'</a><div class="loadingfiles"></div></div>');   
               $('.filescnt'+filescnt+' > .makeprimary').hide(); 
               $('.filescnt'+filescnt+' > .removepic').hide(); 
               break;
@@ -1207,7 +1209,7 @@ $(document).ready(function(){
               $(this).removeClass('active');
             });
 
-            startUpload(pictureCount,filescnt,arrayUpload);
+            startUpload(pictureCount,filescnt,arrayUpload,afstart);
             filescnt++;
             // $('#inputList').append('<input type="file"  id="files" class="files active" name="files[]" multiple accept="image/*" required = "required"  /> ');
             // $(this).remove();
