@@ -238,12 +238,12 @@ class Payment extends MY_Controller{
         $grandTotal= $ItemTotalPrice+$shipping_amt; 
         $thereIsPromote = $prepareData['thereIsPromote'];
       
-        // if($thereIsPromote <= 0){
-        //     if($grandTotal < '50'){
-        //         echo '{"e":"0","d":"We only accept payments of at least PHP 50.00 in total value."}';
-        //         exit();
-        //     }
-        // }
+        if($thereIsPromote <= 0){
+            if($grandTotal < '50'){
+                echo '{"e":"0","d":"We only accept payments of at least PHP 50.00 in total value."}';
+                exit();
+            }
+        }
         
         foreach ($itemList as $key => $value) {
             $dataitem .= '&L_PAYMENTREQUEST_0_QTY'.$cnt.'='. urlencode($value['qty']).
