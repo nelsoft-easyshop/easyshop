@@ -16,7 +16,10 @@
         });
         
         /* Begin listening for events */
-        var url = 'ws://ws.' + window.location.hostname;
+        var host = window.location.hostname;
+        var domainNamePos = host.indexOf('easyshop');
+        var url = 'ws://ws.' + (0 === domainNamePos ? host : host.substr(domainNamePos));
+        
         easyshop.websocket.client.listen(url, $('#user-session').val(), function (topic, data) {
             easyshop.eventDispatcher.dispatch(data);
         });
