@@ -1,4 +1,5 @@
 <?php
+
 require_once(dirname(__FILE__).'/../libraries/dragonpay.php');
 
 $currentDate = date('Y-m-d');
@@ -85,7 +86,7 @@ while($r = mysqli_fetch_array($sth)) {
               $newstatus = $t->getStatus($txnid); 
         }
 
-    }elseif (strtolower($status) == 'v') {
+    }elseif (strtolower($status) == 'v' || strtolower($status) == 'f') {
 
        $message = 'ALREADY VOIDED!';
        $voidResult = $t->voidTransaction($txnid);
@@ -106,6 +107,9 @@ while($r = mysqli_fetch_array($sth)) {
               ";
         $sthReturn = mysqli_query($con,$sqlUpdate) or die(mysqli_error($con));
         
+    }else{
+      $newstatus = $status;
+      $message = 'NOTHING TO DO';
     }
     echo $counter.') '.$tid.' : '.$status.' -> '. $newstatus  .' : ' .$message .  PHP_EOL;   
     

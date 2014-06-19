@@ -824,28 +824,30 @@ class Payment extends MY_Controller{
         $message = $this->input->post('message');
         $digest = $this->input->post('digest');
 
+
+        $payDetails = $this->payment_model->selectFromEsOrder($txnId,$paymentType);
+        $invoice = $payDetails['invoice_no'];
+        $orderId = $payDetails['id_order'];
+        $member_id = $payDetails['buyer_id'];
+        $itemList = json_decode($payDetails['data_response'],true); 
+        $postBackCount = $payDetails['postbackcount'];
+
+        $address = $this->memberpage_model->get_member_by_id($member_id); 
+        $bigThree = $this->getCityRegionMajorIsland($address);
+
+        $city = $bigThree['city'];  
+        $region = $bigThree['region'];  
+        $majorIsland = $bigThree['majorIsland'];  
+
+
+        $ItemTotalPrice = 0;
+        $prepareData = $this->processData($itemList,$city,$region,$majorIsland);
+        $ItemTotalPrice = $prepareData['totalPrice'];
+        $productstring = $prepareData['productstring'];
+        $itemList = $prepareData['newItemList'];
+        $toBeLocked = $prepareData['toBeLocked'];
+
         if(strtolower($status) == "p" || strtolower($status) == "s"){
-
-            $payDetails = $this->payment_model->selectFromEsOrder($txnId,$paymentType);
- 
-            $invoice = $payDetails['invoice_no'];
-            $orderId = $payDetails['id_order'];
-            $member_id = $payDetails['buyer_id'];
-            $itemList = json_decode($payDetails['data_response'],true); 
-            $postBackCount = $payDetails['postbackcount'];
-
-            $address = $this->memberpage_model->get_member_by_id($member_id); 
-            $bigThree = $this->getCityRegionMajorIsland($address);
-            $city = $bigThree['city'];  
-            $region = $bigThree['region'];  
-            $majorIsland = $bigThree['majorIsland'];  
-
-            $ItemTotalPrice = 0;
-            $prepareData = $this->processData($itemList,$city,$region,$majorIsland);
-            $ItemTotalPrice = $prepareData['totalPrice'];
-            $productstring = $prepareData['productstring'];
-            $itemList = $prepareData['newItemList'];
-            $toBeLocked = $prepareData['toBeLocked'];
 
             $grandTotal = $ItemTotalPrice;
 
@@ -894,7 +896,18 @@ class Payment extends MY_Controller{
             // $this->removeItemFromCart(); 
 
            
+        }elseif(strtolower($status) == "f" ){
+
+            $locked = $this->lockItem($toBeLocked,$orderId,'delete');
+            $orderId = $this->payment_model->cancelTransaction($txnId,true);
+            $orderHistory = array(
+                'order_id' => $orderId,
+                'order_status' => 2,
+                'comment' => 'Dragonpay transaction failed: ' . $message
+                );
+            $this->payment_model->addOrderHistory($orderHistory);
         }
+
         echo 'result=OK';
 
     }
