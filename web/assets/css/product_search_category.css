@@ -187,7 +187,7 @@ div.product-list {
   /*border:1px solid #e5e5e5;*/
   display: table-cell;
   height: 220px;
-  line-height: 220px;
+/*  line-height: 220px;*/
   width: 220px;
   overflow: hidden;
   position: relative;

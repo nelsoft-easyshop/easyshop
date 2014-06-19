@@ -1761,8 +1761,11 @@ span.cod {
 }
 
 .easy_treat_item h2 {
-	font-size: 14px;
-	padding-bottom: 3px;
+    font-size: 14px;
+    height: 35px;
+    overflow: hidden;
+    padding-bottom: 3px;
+    word-wrap: break-word;
 }
 
 .easy_treat_item span {
