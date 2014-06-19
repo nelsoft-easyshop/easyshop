@@ -1,5 +1,5 @@
 <?php
-require_once('../libraries/dragonpay.php');
+require_once(dirname(__FILE__).'/../libraries/dragonpay.php');
 
 $currentDate = date('Y-m-d');
 $holiday_arr = array();
@@ -71,11 +71,11 @@ while($r = mysqli_fetch_array($sth)) {
 
     $status = $t->getStatus($txnid);
    
-    if(strtolower($status) == 'p' || strtolower($status) == 'v'){
+    if(strtolower($status) == 'p'){
 
         if($currentDate >= $expiredDate){
                
-              $message = (strtolower($status) == 'p' ? 'VOIDED!' : 'ALREADY VOIDED!');
+              $message =  'VOIDED!';
               $voidResult = $t->voidTransaction($txnid);
               $sqlVoid = "
               CALL `es_sp_expiredDragonpayTransaction`('".$tid."')
@@ -84,6 +84,18 @@ while($r = mysqli_fetch_array($sth)) {
               mysqli_next_result($con);
               $newstatus = $t->getStatus($txnid); 
         }
+
+    }elseif (strtolower($status) == 'v') {
+
+       $message = 'ALREADY VOIDED!';
+       $voidResult = $t->voidTransaction($txnid);
+       $sqlVoid = "
+       CALL `es_sp_expiredDragonpayTransaction`('".$tid."')
+       ";
+       $sthReturn = mysqli_query($con,$sqlVoid) or die(mysqli_error($con));
+       mysqli_next_result($con);
+       $newstatus = $t->getStatus($txnid); 
+
 
     }elseif (strtolower($status) == 's') {
       $newstatus = $t->getStatus($txnid);
