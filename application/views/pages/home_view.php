@@ -20,7 +20,7 @@
         <div class="middle_content">
             <ul class="mid_slide1">
                 <?PHP foreach ($data['mainSlide'] as $idx=>$row): ?>
-                <li><img style="width:520px;height:270px" src="<?= base_url().$row['src'].'?ver='.ES_FILE_VERSION ?>"  usemap=" <?php echo isset($row['imagemap'])?'#'.$idx.'_image_map':''?>"/></li>
+                <li><img src="<?= base_url().$row['src'].'?ver='.ES_FILE_VERSION ?>"  usemap=" <?php echo isset($row['imagemap'])?'#'.$idx.'_image_map':''?>"/></li>
                 <?PHP endforeach; ?>
             </ul>
 
@@ -85,7 +85,11 @@
             </div>
             
             <div>
-                <object width="198" height="179" data="<?= base_url() ?>assets/images/Set-A-Box.swf"></object> 
+                <object type="application/x-shockwave-flash" data="<?= base_url() ?>assets/images/Set-A-Box.swf" width="198" height="179" WMODE="transparent">
+                    <param name="movie" value="<?= base_url() ?>assets/images/Set-A-Box.swf" />
+                    <param name="quality" value="high"/>
+             </object>
+             <!-- <iframe src="<?= base_url() ?>assets/images/Set-A-Box.swf" width="198" height="179"></iframe> -->
             </div>
         </div>
         
@@ -267,3 +271,8 @@
 <script src="<?=base_url()?>assets/js/src/home.js?ver=<?=ES_FILE_VERSION?>" type="text/javascript"></script>
 <script src="<?=base_url()?>/assets/js/src/vendor/jquery.plugin.min.js" type="text/javascript"></script>
 <script src="<?=base_url()?>/assets/js/src/vendor/jquery.countdown.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+$("body").bind("unloadingChild", function(){
+    console.log("child unloaded");
+});
+</script>
