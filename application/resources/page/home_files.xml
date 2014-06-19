@@ -14,16 +14,28 @@
     <mainSlide>
         <value>assets/images/mainslide/1.jpg</value>
         <type>image</type>
+        <imagemap>
+              <coordinate>70,150,270,200</coordinate>
+            <target>register</target>
+        </imagemap>
     </mainSlide>
     
     <mainSlide> 
         <value>assets/images/mainslide/2.jpg</value>
         <type>image</type> 
+        <imagemap>
+            <coordinate>430,200,470,250</coordinate>
+            <target>register</target>
+        </imagemap>
     </mainSlide>
     
     <mainSlide> 
         <value>assets/images/mainslide/3.jpg</value> 
         <type>image</type>
+        <imagemap>
+            <coordinate>350,200,500,250</coordinate>
+            <target>search/search.html?q_str=epson&amp;q_cat=1 </target>
+        </imagemap>
     </mainSlide>
     
     <productSlide_title>
