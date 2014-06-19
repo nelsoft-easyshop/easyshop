@@ -1949,6 +1949,7 @@ class product_model extends CI_Model
         }else if($element['type'] === 'image'){
             if(isset($element['imagemap'])){    
                 $element['imagemap']['coordinate'] = count($element['imagemap']['coordinate'])>0?$element['imagemap']['coordinate']:'';
+                $element['imagemap']['target'] = count($element['imagemap']['target'])>0?$element['imagemap']['target']:'';
                 $home_view_data = array('src' => $element['value'], 'imagemap' => $element['imagemap']);
             }
             else{
