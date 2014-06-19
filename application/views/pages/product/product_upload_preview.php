@@ -208,10 +208,22 @@
                   </div>
                 </div>
                 <div class="price_details">
-                  <div class="price_box">
-                    <div class="pbt pbt1">Price</div>
-                    <div>PHP <span class="current_price fm1" data-baseprice="<?php echo $product['price']?>"> <?php echo number_format($product['price'],2,'.',',');?> </span> </div>
-                  </div>
+                
+                
+     
+                <div class="price_box">
+                <div class="pbt pbt1">Price</div>
+                    <div>PHP 
+                        <span class="current_price fm1" data-baseprice="<?php echo $product['price']?>"> 
+                            <?php echo number_format($product['price'],2,'.',',');?> 
+                        </span> 
+                    </div>
+                    <?PHP if((intval($product['is_promote']) === 1) || ($product['discount'] > 0)): ?>   
+                        <div><span class="recent_price"> PHP <?php echo number_format($product['original_price'],2,'.',','); ?></span> | <strong> <?php echo number_format( $product['percentage'],0,'.',',');?> % OFF  </strong></div>          
+                    <?PHP endif;?>
+                </div>
+                  
+                  
                   <div class="availability">
                     <p> Availability <br />
                         <span class="quantity" id="p_availability"><?php echo $availability;?></span>

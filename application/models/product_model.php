@@ -221,6 +221,7 @@ class product_model extends CI_Model
                  $row['userpic'] = 'assets/user/default';
             }
         }
+        applyPriceDiscount($row);
         
         return $row;
     }
