@@ -38,79 +38,93 @@
 |
 */
 
-$route['default_controller'] = "home";
-$route['404_override'] = 'home/pagenotfound';
+$enable_splash = false;
+$bypass_IP = '127.0.0.1';
 
-#route maintenance: home/splash
+//CLOUDFLARE REAL VISITOR IP
+$_SERVER["HTTP_CF_CONNECTING_IP"] = isset($_SERVER["HTTP_CF_CONNECTING_IP"])?$_SERVER["HTTP_CF_CONNECTING_IP"]:$_SERVER['REMOTE_ADDR'];
 
-# CATEGORY
-$route['(?i)category/(:any)'] = 'product/category_page/$1'; # janz serafico
-$route['(?i)category_more'] = 'product/category_page_more'; # ryan vasquez
-$route['(?i)cat/all'] = 'product/categories_all'; # ryan vasquez
+if ($enable_splash && (($bypass_IP !== $_SERVER['REMOTE_ADDR']) ||  ($bypass_IP !==  $_SERVER["HTTP_CF_CONNECTING_IP"]))){
+    $route['default_controller'] = "home/splash";
+    $route['404_override'] = 'home/pagenotfound';
+    $route['(:any)'] = "home/splash";   
+}
+else {
+    $route['default_controller'] = "home";
+    $route['404_override'] = 'home/pagenotfound';
 
-#SEARCHING
-$route['(?i)search/(:any)'] = 'product_search/search/$1'; # ryan vasquez
-$route['search_more'] = 'product_search/search_more'; # ryan vasquez
-$route['search/suggest'] = 'product_search/sch_onpress'; # ryan vasquez
+    #route maintenance: home/splash
 
-#ADVANCE SEARCH
-$route['(?i)advsrch'] = 'product_search/advance_search'; # new search - rain jorque
-$route['(?i)advsrch/more'] = 'product_search/advance_search_more'; # new search - rain jorque
+    # CATEGORY
+    $route['(?i)category/(:any)'] = 'product/category_page/$1'; # janz serafico
+    $route['(?i)category_more'] = 'product/category_page_more'; # ryan vasquez
+    $route['(?i)cat/all'] = 'product/categories_all'; # ryan vasquez
 
-#PASSWORD
-$route['(?i)chngepaswd'] = 'register/changepass'; # rain jorque 
+    #SEARCHING
+    $route['(?i)search/(:any)'] = 'product_search/search/$1'; # ryan vasquez
+    $route['search_more'] = 'product_search/search_more'; # ryan vasquez
+    $route['search/suggest'] = 'product_search/sch_onpress'; # ryan vasquez
 
-#ITEMS
-$route['(?i)item/(:any)'] = 'product/item/$1'; # sam gavinio
+    #ADVANCE SEARCH
+    $route['(?i)advsrch'] = 'product_search/advance_search'; # new search - rain jorque
+    $route['(?i)advsrch/more'] = 'product_search/advance_search_more'; # new search - rain jorque
+
+    #PASSWORD
+    $route['(?i)chngepaswd'] = 'register/changepass'; # rain jorque 
+
+    #ITEMS
+    $route['(?i)item/(:any)'] = 'product/item/$1'; # sam gavinio
 
 
-#SELL ITEM
-$route['(?i)sell/step1'] = 'productUpload/step1'; # ryan vasquez
-$route['(?i)sell/step2'] = 'productUpload/step2'; # ryan vasquez
-$route['sell/processing'] = 'productUpload/step2_2'; # ryan vasquez
-$route['(?i)sell/step3'] = 'productUpload/step3'; # ryan vasquez
-$route['sell/shippinginfo'] = 'productUpload/step3Submit';
-$route['sell/preview'] = 'productUpload/previewItem';
-$route['(?i)sell/step4'] = 'productUpload/step4'; # ryan vasquez
+    #SELL ITEM
+    $route['(?i)sell/step1'] = 'productUpload/step1'; # ryan vasquez
+    $route['(?i)sell/step2'] = 'productUpload/step2'; # ryan vasquez
+    $route['sell/processing'] = 'productUpload/step2_2'; # ryan vasquez
+    $route['(?i)sell/step3'] = 'productUpload/step3'; # ryan vasquez
+    $route['sell/shippinginfo'] = 'productUpload/step3Submit';
+    $route['sell/preview'] = 'productUpload/previewItem';
+    $route['(?i)sell/step4'] = 'productUpload/step4'; # ryan vasquez
 
-#User and Vendor
-$route['(?i)me'] = 'memberpage'; # janz
-$route['(?i)vendor/(:any)'] = 'memberpage/vendor/$1'; # janz
+    #User and Vendor
+    $route['(?i)me'] = 'memberpage'; # janz
+    $route['(?i)vendor/(:any)'] = 'memberpage/vendor/$1'; # janz
 
-#EDIT ITEM
-$route['(?i)sell/edit/step1'] = 'productUpload/editStep1'; # sam gavinio
-$route['(?i)sell/edit/step2'] = 'productUpload/editStep2'; # sam gavinio
-$route['sell/edit/processing2'] = 'productUpload/editStep2Submit';  # sam gavinio
+    #EDIT ITEM
+    $route['(?i)sell/edit/step1'] = 'productUpload/editStep1'; # sam gavinio
+    $route['(?i)sell/edit/step2'] = 'productUpload/editStep2'; # sam gavinio
+    $route['sell/edit/processing2'] = 'productUpload/editStep2Submit';  # sam gavinio
 
-#REMOVE DRAFT
-$route['(?i)sell/draft/remove'] = 'productUpload/deleteDraft';  # sam gavinio
+    #REMOVE DRAFT
+    $route['(?i)sell/draft/remove'] = 'productUpload/deleteDraft';  # sam gavinio
 
-#LANDING PAGE 
-$route['(?i)registration/success'] = 'register/success';  # sam gavinio
+    #LANDING PAGE 
+    $route['(?i)registration/success'] = 'register/success';  # sam gavinio
 
-#PAYMENT CASH ON DELIVERY
-$route['(?i)pay/cashondelivery'] = 'payment/payCashOnDelivery';  # ryan vasquez
-#PAYMENT DIRECT BANK DEPOSIT
-$route['(?i)pay/directbank'] = 'payment/payCashOnDelivery';  # ryan vasquez
-#PAYMENT PAYPAL
-$route['(?i)pay/setting/paypal'] = 'payment/paypal_setexpresscheckout';  # ryan vasquez
-$route['(?i)pay/paypal'] = 'payment/paypal';  # ryan vasquez
+    #PAYMENT CASH ON DELIVERY
+    $route['(?i)pay/cashondelivery'] = 'payment/payCashOnDelivery';  # ryan vasquez
+    #PAYMENT DIRECT BANK DEPOSIT
+    $route['(?i)pay/directbank'] = 'payment/payCashOnDelivery';  # ryan vasquez
+    #PAYMENT PAYPAL
+    $route['(?i)pay/setting/paypal'] = 'payment/paypal_setexpresscheckout';  # ryan vasquez
+    $route['(?i)pay/paypal'] = 'payment/paypal';  # ryan vasquez
 
-$route['(?i)payment/success/(:any)'] = 'payment/paymentSuccess/$1';
+    $route['(?i)payment/success/(:any)'] = 'payment/paymentSuccess/$1';
 
-#MAINTENANCE ROUTE
-$route['(?i)maintenance'] = 'home/splash';
+    #MAINTENANCE ROUTE
+    $route['(?i)maintenance'] = 'home/splash';
 
-#PROMO CATEGORY PAGE
-$route['(?i)deals'] = 'product/category_promo';
-$route['(?i)deals_more'] = 'product/category_promo_more';
+    #PROMO CATEGORY PAGE
+    $route['(?i)deals'] = 'product/category_promo';
+    $route['(?i)deals_more'] = 'product/category_promo_more';
 
-$route['(?i)policy'] = 'home/policy';
-$route['(?i)terms'] = 'home/terms';
-$route['(?i)faq'] = 'home/faq';
-$route['(?i)contact'] = 'home/contact';
+    $route['(?i)policy'] = 'home/policy';
+    $route['(?i)terms'] = 'home/terms';
+    $route['(?i)faq'] = 'home/faq';
+    $route['(?i)contact'] = 'home/contact';
 
-$route['(?i)subscribe'] = 'register/subscribe';  
+    $route['(?i)subscribe'] = 'register/subscribe';  
+
+}
 
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */
