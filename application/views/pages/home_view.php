@@ -54,7 +54,7 @@
                 <?PHP for($i = 0; $i < 3; $i++): ?>
                     <?PHP $row = $data['productSlide_id'][$i]; ?>
                     <div>
-                        <a href=""><h2><?php echo html_escape($row['product']);?></h2>
+                        <a href="<?= base_url().'item/'.$rows['slug'];?>"><h2><?php echo html_escape($row['product']);?></h2>
                             <span class="mid_con_price">&#8369;<?php echo number_format($row['price'],2,'.',',');?></span>
                             <span class="mid_img_con">
                                 <img src="<?= base_url().$rows['path'].'categoryview/'.$rows['file'];?>" alt="<?php echo html_escape($row['product']);?>">
@@ -76,7 +76,7 @@
             </div>
             
             <div class="easy_treat_item">
-                <a href="">
+                <a href="<?= base_url().'item/'.$data['productSlide_id'][$i]['slug'];?>">
                     <h2><?php echo html_escape($data['productSlide_id'][$i]['product']); ?></h2>
                     <span>
                         <img src="<?= base_url().$data['productSlide_id'][$i]['path'].'categoryview/'.$data['productSlide_id'][$i]['file']; ?>" alt="<?php echo html_escape($data['productSlide_id'][$i]['product']); ?>">
