@@ -1,5 +1,4 @@
 $(document).ready(function(){
-
 	/* 
      *   Fix for the stupid behaviour of jpagination with chrome when pressing the back button.
      *   See next two lines of code.
@@ -80,44 +79,72 @@ $(document).ready(function(){
 	 
 });
 
-
-
-
-
-
 var memconf = {
 	csrftoken: $("meta[name='csrf-token']").attr('content'),
 	csrfname: $("meta[name='csrf-name']").attr('content'),
 	ajaxStat: null,
+	itemPerPage: 10,
 	active: {
 		schVal: '',
 		sortVal: 1,
 		sortOrder: 1,
-		deleteStatus: 0,
+		status: 0,
 	},
 	deleted: {
 		schVal: '',
 		sortVal: 1,
 		sortOrder: 1,
-		deleteStatus: 1,
+		status: 1,
 	},
-	itemPerPage: 10
+	buy: {
+		status : 0,
+		schVal: '',
+		sortVal: 0,
+		sortOrder: 2
+	},
+	sell: {
+		status : 0,
+		schVal: '',
+		sortVal: 0,
+		sortOrder: 2
+	},
+	cbuy: {
+		status : 1,
+		schVal: '',
+		sortVal: 0,
+		sortOrder: 2
+	},
+	csell: {
+		status : 1,
+		schVal: '',
+		sortVal: 0,
+		sortOrder: 2
+	}
 };
 
-
-/*********	ACTIVE and DELETED PRODUCTS AJAX PAGING	************/
+/*********	AJAX PAGING	************/
 function ItemListAjax(ItemDiv,start,pageindex,count){
 	var loadingDiv = ItemDiv.children('div.page_load');
 	var key = ItemDiv.data('key');
+	var contkey = parseInt(ItemDiv.data('controller'));
 	var thisdiv = ItemDiv.children('div.paging[data-page="'+pageindex+'"]');
 	
 	var c = typeof(count) !== 'undefined' ? 'count' : '';
 	
+	switch(contkey){
+		case 1:
+			var controller = 'getMoreUserItems';
+			break;
+		case 2:
+			var controller = 'getMoreTransactions';
+			break;
+	}
+	
 	memconf.ajaxStat = jQuery.ajax({
 		type: "GET",
-		url: config.base_url+'memberpage/getMoreUserItems',
-		data: "s="+memconf[key].deleteStatus+"&p="+start+"&"+memconf.csrfname+"="+memconf.csrftoken+"&nf="+memconf[key].schVal+
-			"&of="+memconf[key].sortVal+"&osf="+memconf[key].sortOrder+"&c="+c,
+		url: config.base_url+'memberpage/'+controller,
+		data: "s="+memconf[key].status+"&p="+start+"&"+memconf.csrfname+"="+memconf.csrftoken+"&nf="+memconf[key].schVal+
+			"&of="+memconf[key].sortVal+"&osf="+memconf[key].sortOrder+"&c="+c+"&k="+key,
 		beforeSend: function(){
 			if(memconf.ajaxStat != null){
 				memconf.ajaxStat.abort();
@@ -144,7 +171,9 @@ function ItemListAjax(ItemDiv,start,pageindex,count){
 				}else{
 					pagingDivBtn.jqPagination('option', 'max_page', Math.ceil(obj.count/memconf.itemPerPage));
 				}
-				memconf.ajaxStat.abort(); //abort all ajax triggered by updating pagination page
+				if(memconf.ajaxStat != null){
+					memconf.ajaxStat.abort(); //abort all ajax triggered by updating pagination page
+				}
 				loadingDiv.hide();
 				thisdiv.show();
 			}
@@ -168,8 +197,18 @@ $(document).ready(function(){
 	$('#active_items .paging:not(:first)').hide();
 	$('#deleted_items .paging:not(:first)').hide();
 	
+	$('#bought .paging.enable:not(:first)').hide();
+	$('#sold .paging.enable:not(:first)').hide();
+	$('#complete_buy .paging.enable:not(:first)').hide();
+	$('#complete_sell .paging.enable:not(:first)').hide();
+	
 	defaultPaging($('#pagination_active'));
 	defaultPaging($('#pagination_deleted'));
+	
+	defaultPaging($('#pagination-bought'));
+	defaultPaging($('#pagination-sold'));
+	defaultPaging($('#pagination-complete-bought'));
+	defaultPaging($('#pagination-complete-sold'));
 });
 
 function defaultPaging(pagingDivBtn){
@@ -181,14 +220,14 @@ function defaultPaging(pagingDivBtn){
 			
 			ItemDiv.children('div.paging').hide();
 			
-			if( ItemDiv.find('div[data-page="'+pageindex+'"] div.post_items_content').length == 0 ){
+			if( ItemDiv.find('div[data-page="'+pageindex+'"] div.content-paging').length == 0 ){
 				if( ItemDiv.children('div[data-page="'+pageindex+'"]').length == 0 ){
 					ItemDiv.append("<div class='paging' data-page='"+pageindex+"' style='display:none;'></div>");
 				}
 				ItemListAjax(ItemDiv,start,pageindex);
 				
 			}else{
-				ItemDiv.children(' .paging[data-page="'+pageindex+'"]').show();
+				ItemDiv.children('.paging[data-page="'+pageindex+'"]').show();
 			}
 			
 		}
@@ -197,19 +236,16 @@ function defaultPaging(pagingDivBtn){
 
 /******************* ACTIVE and DELETED Search Functions ***********************/
 $(document).ready(function(){
-	$('span.item_sch_btn').on('click',function(){
+	$('span.item_sch_btn, span.tx_sch_btn').on('click',function(){
 		var ItemDiv = $(this).closest('div.dashboard_table');
 		var key = ItemDiv.data('key');
 		var pagingDivBtn = ItemDiv.children('div.pagination');
 		
-		var schVal = $.trim($(this).siblings('input.item_sch_box').val());
-		memconf[key].schVal = schVal;
-		
 		ItemDiv.children('div.paging:not(:first)').remove();
-		ItemDiv.find('div.post_items_content').remove();
+		ItemDiv.find('div.content-paging').remove();
 		ItemDiv.children('div.paging:first').show();
 		ItemDiv.find('div.paging:first h2').remove();
-		if(schVal.length > 0){
+		if(memconf[key].schVal.length > 0){
 			ItemListAjax(ItemDiv,0,0,true); // true = update maxpage of pagination
 		}else{
 			pagingDivBtn.jqPagination('option','max_page',pagingDivBtn.children('input').data('origmaxpage'));
@@ -217,13 +253,17 @@ $(document).ready(function(){
 		}
 	});
 	
+	$('.item_sch_box, .tx_sch_box').on('keyup',function(){
+		var ItemDiv = $(this).closest('div.dashboard_table');
+		var key = ItemDiv.data('key');
+		memconf[key].schVal = $.trim($(this).val());
+	});
 	
 });
 
-
 /******************* ACTIVE and DELETED Sort Functions ***********************/
 $(document).ready(function(){
-	$('select.item_sort_select').on('change',function(){
+	$('select.item_sort_select, select.tx_sort_select').on('change',function(){
 		var ItemDiv = $(this).closest('div.dashboard_table');
 		var key = ItemDiv.data('key');
 		var pagingDivBtn = ItemDiv.children('div.pagination');
@@ -231,12 +271,27 @@ $(document).ready(function(){
 		memconf[key].sortVal = $(this).val();
 		
 		ItemDiv.children('div.paging:not(:first)').remove();
-		ItemDiv.find('div.post_items_content').remove();
+		ItemDiv.find('div.content-paging').remove();
 		ItemDiv.children('div.paging:first').show();
 		pagingDivBtn.jqPagination('option','current_page', 1);
 	});
 	
-	$('.item_arrow_sort').on('click', function(){
+	$('select.tx_sort_select').on('change',function(){
+		var ItemDiv = $(this).closest('div.dashboard_table');
+		var key = ItemDiv.data('key');
+		var pagingDivBtn = ItemDiv.children('div.pagination');
+		
+		memconf[key].sortVal = $(this).val();
+		
+		ItemDiv.children('div.paging:not(:first)').remove();
+		ItemDiv.find('div.content-paging').remove();
+		ItemDiv.children('div.paging:first').show();
+		ItemDiv.find('div.paging:first h2').remove();
+		pagingDivBtn.jqPagination('option','current_page', 1);
+		ItemListAjax(ItemDiv,0,0,true);
+	});
+	
+	$('.item_arrow_sort, .tx_arrow_sort').on('click', function(){
 		var ItemDiv = $(this).closest('div.dashboard_table');
 		var key = ItemDiv.data('key');
 		var pagingDivBtn = ItemDiv.children('div.pagination');
@@ -248,10 +303,11 @@ $(document).ready(function(){
 		}
 		
 		ItemDiv.children('div.paging:not(:first)').remove();
-		ItemDiv.find('div.post_items_content').remove();
+		ItemDiv.find('div.content-paging').remove();
 		ItemDiv.children('div.paging:first').show();
 		pagingDivBtn.jqPagination('option','current_page', 1);
 	});
+	
 });
 
 /**************************************************************************************************************/	
@@ -1738,7 +1794,7 @@ $(document).ready(function(){
 $(document).ready(function(){
 	/******************	Transactions Search Box	********************/
 	// Search for Transaction/Invoice Number
-	$('.tx_sch_btn').on('click', function(){
+	/*$('.tx_sch_btn').on('click', function(){
 		var ItemDiv = $(this).closest('div.dashboard_table');
 		var pagingDivBtn = $(this).parent('div').siblings('div.pagination');
 		
@@ -1779,10 +1835,10 @@ $(document).ready(function(){
 			pagingDivBtn.jqPagination('option','current_page', 1);
 			pagingDivBtn.jqPagination('option','max_page', pagingDivBtn.children('input').data('origmaxpage'));
 		}
-	});
+	});*/
 	
 	/**************** Transactions Sort *********************/
-	$('.tx_arrow_sort').on('click',function(){
+	/*$('.tx_arrow_sort').on('click',function(){
 		var ItemDiv = $(this).closest('div.dashboard_table');
 		var activeDiv = ItemDiv.children('div.paging.enable');
 		var contentDiv = activeDiv.children('div.transac-container');
@@ -1799,10 +1855,10 @@ $(document).ready(function(){
 			resultCounter++;
 			activeDiv.eq(divCounter).append($(this).clone());
 		});
-	});
+	});*/
 	
 	/**************** Transactions Filter Payment Method *********************/
-	$('.tx_sort_select').on('change', function(){
+	/*$('.tx_sort_select').on('change', function(){
 		var ItemDiv = $(this).closest('div.dashboard_table');
 		var pagingDivBtn = $(this).parent('div').siblings('div.pagination');
 		
@@ -1842,7 +1898,7 @@ $(document).ready(function(){
 			pagingDivBtn.jqPagination('option','max_page', resultCounter === 0 ? 1 : Math.ceil(resultCounter/memconf.itemPerPage));
 		}		
 	});
-	
+	*/
 });
 
 /*******************	HTML Decoder	********************************/
@@ -2155,46 +2211,12 @@ $(document).ready(function(){
 });
 
 /********************	PAGING FUNCTIONS	************************************************/
-
 $(document).ready(function(){
-	
-	$('#bought .paging.enable:not(:first)').hide();
-	$('#sold .paging.enable:not(:first)').hide();
-	$('#complete_buy .paging.enable:not(:first)').hide();
-	$('#complete_sell .paging.enable:not(:first)').hide();
 	
 	$('#op_buyer .paging:not(:first)').hide();
 	$('#op_seller .paging:not(:first)').hide();
 	$('#yp_buyer .paging:not(:first)').hide();
 	$('#yp_seller .paging:not(:first)').hide();
-	
-	$('#pagination-bought').jqPagination({
-		paged: function(page) {
-			$('#bought .paging').hide();
-			$($('#bought .paging.enable')[page-1]).show();
-		}
-	});
-	
-	$('#pagination-sold').jqPagination({
-		paged: function(page) {
-			$('#sold .paging').hide();
-			$($('#sold .paging.enable')[page-1]).show();
-		}
-	});
-	
-	$('#pagination-complete-bought').jqPagination({
-		paged: function(page) {
-			$('#complete_buy .paging').hide();
-			$($('#complete_buy .paging.enable')[page-1]).show();
-		}
-	});
-	
-	$('#pagination-complete-sold').jqPagination({
-		paged: function(page) {
-			$('#complete_sell .paging').hide();
-			$($('#complete_sell .paging.enable')[page-1]).show();
-		}
-	});
 	
 	$('#pagination-opbuyer').jqPagination({
 		paged: function(page) {

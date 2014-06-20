@@ -189,7 +189,20 @@ class Memberpage extends MY_Controller
 		$data = array_merge($data,$this->memberpage_model->get_work_by_id($uid));
 		$data =  array_merge($data,$this->memberpage_model->get_school_by_id($uid));
 		$data['bill'] =  $this->memberpage_model->get_billing_info($uid);
-		$data['transaction'] = $this->memberpage_model->getTransactionDetails($uid);
+		//$data['transaction'] = $this->memberpage_model->getTransactionDetails($uid);
+		
+		$data['transaction'] = array(
+			'buy' => $this->memberpage_model->getBuyTransactionDetails($uid, 0),
+			'sell' => $this->memberpage_model->getSellTransactionDetails($uid, 0),
+			'complete' => array(
+				'buy' => $this->memberpage_model->getBuyTransactionDetails($uid, 1),
+				'sell' => $this->memberpage_model->getSellTransactionDetails($uid, 1)
+			)
+		);
+		//$data['transaction']['buy'] = $this->memberpage_model->getBuyTransactionDetails($uid, 0);
+		//$data['transaction']['sell'] = $this->memberpage_model->getSellTransactionDetails($uid, 0);
+		
+		$data['transaction']['count'] = $this->memberpage_model->getTransactionCount($uid);
 		$data['allfeedbacks'] = $this->memberpage_model->getFeedback($uid);
 		$data['sales'] = array(
 			'release' => $this->memberpage_model->getNextPayout($uid),
@@ -792,7 +805,7 @@ class Memberpage extends MY_Controller
 		}
 	}	
 	
-	# FUNCTION USED BY PAGING AJAX REQUESTS
+	# FUNCTION USED BY ITEM LIST PAGING AJAX REQUESTS
 	function getMoreUserItems($who = "")
 	{
 		$itemPerPage = 10;
@@ -859,6 +872,84 @@ class Memberpage extends MY_Controller
 		}else if($deleteStatus === 1){
 			$jsonData['html'] = $this->load->view('pages/user/'.$deletedView, $data, true);
 		}
+		
+		echo json_encode($jsonData);
+	}
+	
+	#FUNCTION USED BY TRANSACTIONS AJAX PAGING REQUESTS
+	function getMoreTransactions()
+	{
+		$itemPerPage = 10;
+		
+		$completeStatus = intval($this->input->get('s'));
+		$k = (string)$this->input->get('k');
+		$start = intval($this->input->get('p'));
+		$member_id = $this->session->userdata('member_id');
+		
+		$rawnf = trim((string)$this->input->get('nf'));
+		$nf = '%' . $rawnf . '%'; #Transaction Invoice Filter
+		$of = (int)$this->input->get('of'); #Payment Filter
+		$osf = (int)$this->input->get('osf'); #order sequence filter (ASC or DESC)
+		
+		switch($of){
+			case 0:
+				$myof = '1,2,3,5';
+				break;
+			case 1:
+				$myof = '1';
+				break;
+			case 2:
+				$myof = '2';
+				break;
+			case 3:
+				$myof = '3';
+				break;
+			case 5:
+				$myof = '5';
+				break;
+			default:
+				$myof = '1,2,3,5';
+		}
+		
+		switch($osf){
+			case 1:
+				$myosf = 'DESC';
+				break;
+			case 2:
+				$myosf = 'ASC';
+				break;
+			default:
+				$myosf = 'ASC';
+		}
+		
+		switch($k){
+			case 'buy':
+				$data['transaction']['buy'] = $this->memberpage_model->getBuyTransactionDetails($member_id,$completeStatus,$start,$nf,$myof,$myosf);;
+				$view = 'memberpage_tx_buy_view';
+				$querySelect = 'buy';
+				break;
+			case 'sell':				
+				$data['transaction']['sell'] = $this->memberpage_model->getSellTransactionDetails($member_id,$completeStatus,$start,$nf,$myof,$myosf);;
+				$view = 'memberpage_tx_sell_view';
+				$querySelect = 'sell';
+				break;
+			case 'cbuy':
+				$data['transaction']['complete']['buy'] = $this->memberpage_model->getBuyTransactionDetails($member_id,$completeStatus,$start,$nf,$myof,$myosf);;
+				$view = 'memberpage_tx_cbuy_view';
+				$querySelect = 'buy';
+				break;
+			case 'csell':
+				$data['transaction']['complete']['sell'] = $this->memberpage_model->getSellTransactionDetails($member_id,$completeStatus,$start,$nf,$myof,$myosf);;
+				$view = 'memberpage_tx_csell_view';
+				$querySelect = 'sell';
+				break;
+		}
+		
+		if( $this->input->get('c') == 'count' ){
+			$jsonData['count'] = $this->memberpage_model->getFilteredTransactionCount($member_id, $completeStatus, $nf, $myof, $myosf, $querySelect);
+		}
+		
+		$jsonData['html'] = $this->load->view('pages/user/'.$view, $data, true);
 		
 		echo json_encode($jsonData);
 	}

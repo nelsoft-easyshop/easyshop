@@ -7,6 +7,7 @@ class memberpage_model extends CI_Model
 		$this->load->library("xmlmap");
 		$this->load->library("parser");
 		$this->config->load("image_path");
+		$this->load->helper('product');
 	}	
 	
 	function getLocationLookup()
@@ -420,75 +421,6 @@ class memberpage_model extends CI_Model
 		return $data;
 	}	
 	
-	/*
-	function getUserItems($member_id, $lastproduct = 0) 	#Retrieves user items to be displayed on dashboard
-	{
-		if($lastproduct === 0){
-			$query = $this->xmlmap->getFilenameID('sql/product','getUserItems');
-			$sth = $this->db->conn_id->prepare($query);
-			$sth->bindParam(':id',$member_id);
-			$sth->execute();
-		}else{
-			$query = $this->xmlmap->getFilenameID('sql/product','getMoreUserItems');
-			$sth = $this->db->conn_id->prepare($query);
-			$sth->bindParam(':id',$member_id);	
-			$sth->bindParam(':last_product',$lastproduct);
-			$sth->execute();
-		}
-		
-		$rows = $sth->fetchAll(PDO::FETCH_ASSOC);
-		$data = array('active'=>array(),'deleted'=>array(), 'sold_count'=>0);
-		
-		$data['last_product'] = end($rows)['lastmodifieddate'];
-		
-		foreach($rows as $key=>$row){
-			$query = $this->xmlmap->getFilenameID('sql/product','getParent');
-			$sth = $this->db->conn_id->prepare($query);
-			$sth->bindParam(':id',$row['cat_id']);
-			$sth->execute();
-			$parents = $sth->fetchAll(PDO::FETCH_ASSOC);
-			$row['parents'] = array();
-			foreach($parents as $parent){
-				array_push($row['parents'], $parent['name']);
-			}
-			
-			$query = $this->xmlmap->getFilenameID('sql/product','getProductAttributes');
-			$sth = $this->db->conn_id->prepare($query);
-			$sth->bindParam(':id',$row['id_product']);
-			$sth->execute();
-			$attributes = $sth->fetchAll(PDO::FETCH_ASSOC);
-
-			$data_attr = array();
-			foreach($attributes as $attribute){
-				$index = $attribute['name'];
-				if(!array_key_exists($index, $data_attr))
-					$data_attr[$index] = array();
-				array_push($data_attr[$index],array('value' => $attribute['attr_value'], 'price'=>$attribute['attr_price']));
-			}
-			$row['data_attr'] = $data_attr;
-			
-			if(trim($row['product_image_path']) === ''){
-				$row['path'] = 'assets/product/default/';
-				$row['file'] = 'default_product_img.jpg';
-			}
-			else{
-				$row['product_image_path'] = ($row['product_image_path'][0]=='.')?substr($row['product_image_path'],1,strlen($row['product_image_path'])):$row['product_image_path'];
-				$row['product_image_path'] = ($row['product_image_path'][0]=='/')?substr($row['product_image_path'],1,strlen($row['product_image_path'])):$row['product_image_path'];
-				$rev_url = strrev($row['product_image_path']);
-				$row['path'] = substr($row['product_image_path'],0,strlen($rev_url)-strpos($rev_url,'/'));
-				$row['file'] = substr($row['product_image_path'],strlen($rev_url)-strpos($rev_url,'/'),strlen($rev_url));
-			}
-			unset($row['product_image_path']);
-			if($row['is_delete'] === '0')
-				array_push($data['active'],$row);
-			else if($row['is_delete'] === '1')
-				array_push($data['deleted'],$row);
-		}
-		
-		return $data;
-	}
-	*/
-	
 	function getVendorDetails($selleruname){
 		$query = $this->xmlmap->getFilenameID('sql/users','get_member_by_username');
 		$sth = $this->db->conn_id->prepare($query);
@@ -497,6 +429,262 @@ class memberpage_model extends CI_Model
 		$row = $sth->fetch(PDO::FETCH_ASSOC);
 		
 		return $row;
+	}
+	
+	/*
+	 * Status = 0 for ongoing (default), 1 for complete
+	 */
+	function getBuyTransactionDetails($member_id, $status = 0, $start = 0, $nf='%', $of="1,2,3,5" , $osf="ASC" , $itemPerPage=10)
+	{
+		$query = $this->xmlmap->getFilenameID('sql/users','getBuyTransactionDetails');
+		$strStatus = $status === 1 ? '1' : '0,99';
+		$parseData = array(
+			'order_status' => $strStatus,
+			'payment_filter' => $of,
+			'order_sequence_filter' => $osf,
+			'limit' => 'LIMIT :start, :number'
+		);
+		$query = $this->parser->parse_string($query,$parseData,true);
+		$sth = $this->db->conn_id->prepare($query);
+		$sth->bindParam(':id', $member_id, PDO::PARAM_INT);
+		$sth->bindParam(':start', $start, PDO::PARAM_INT);
+		$sth->bindParam(':number', $itemPerPage, PDO::PARAM_INT);
+		$sth->bindParam(':name_filter', $nf, PDO::PARAM_STR);
+		
+		$sth->execute();
+		$row = $sth->fetchAll(PDO::FETCH_ASSOC);
+		$data = array();
+		
+		foreach( $row as $r){
+			// Assemble Outer data array
+			if( !isset($data[$r['id_order']]) ){
+				$data[$r['id_order']] = array_slice($r,1,4);
+				$data[$r['id_order']] = array_merge( $data[$r['id_order']], array('users'=>array(),'products'=>array()) );
+			}
+			
+			#Fetch order product details
+			$query = $this->xmlmap->getFilenameID('sql/users','getOrderProductTransactionDetails');
+			$sth = $this->db->conn_id->prepare($query);
+			$sth->bindParam(':order_id', $r['id_order'], PDO::PARAM_INT);
+			$sth->execute();
+			$op = $sth->fetchAll(PDO::FETCH_ASSOC);
+			
+			foreach($op as $p){
+				//Assemble User Array
+				if( !isset($data[$r['id_order']]['users'][$p['seller_id']]) ){
+					$data[$r['id_order']]['users'][$p['seller_id']] = array(
+						'name' => $p['seller'],
+						'has_feedb' => (int)$p['for_memberid'] === 0 ? 0 : 1
+					);
+				}
+			
+				//Assemble Product Array
+				if( !isset($data[$r['id_order']]['products'][$p['id_order_product']]) ){
+					$product = array_slice($p,1,13);
+					$product['has_shipping_summary'] = 0;
+					$product['seller_id'] = $p['seller_id'];
+					$product['seller'] = $p['seller'];
+					if( trim(strlen($p['courier']))>0 && trim(strlen($p['datemodified']))>0 ){
+						$product['has_shipping_summary'] = 1;
+					}
+					$data[$r['id_order']]['products'][$p['id_order_product']] = $product;
+					$imagepath[0] = array(
+						'product_image_path' => $p['product_image_path']
+					);
+					explodeImagePath($imagepath);
+					$data[$r['id_order']]['products'][$p['id_order_product']]['product_image_path'] = $imagepath[0]['path'] . 'thumbnail/' . $imagepath[0]['file'];
+				}
+				
+				//Assemble product attribute array
+				if(!isset($data[$r['id_order']]['products'][$p['id_order_product']]['attr'])){
+					$data[$r['id_order']]['products'][$p['id_order_product']]['attr'] = array();
+				}
+				if($p['is_other'] === '0'){
+					array_push($data[$r['id_order']]['products'][$p['id_order_product']]['attr'], array('field' => ucwords(strtolower($p['attr_name'])), 'value' => ucwords(strtolower($p['attr_value'])) ));
+				}else if($p['is_other'] === '1'){
+					array_push($data[$r['id_order']]['products'][$p['id_order_product']]['attr'], array('field' => ucwords(strtolower($p['field_name'])), 'value' => ucwords(strtolower($p['value_name'])) ));
+				}
+			}
+			//IF BANK DEPOSIT
+			if( (int)$r['payment_method'] === 5 && (int)$r['transac_stat'] === 99 ){
+				$query = $this->xmlmap->getFilenameID('sql/users','getTransactionBankDepositDetails');
+				$sth = $this->db->conn_id->prepare($query);
+				$sth->bindParam(':order_id', $r['id_order']);
+				$sth->execute();
+				$pbd = $sth->fetch(PDO::FETCH_ASSOC);
+				$data[$r['id_order']]['bd_details'] = $pbd;
+				if(!isset($data['bank_template'])){
+					$data[$r['id_order']]['bank_template']['bank_name'] = $this->xmlmap->getFilenameID('page/content_files','bank-name');
+					$data[$r['id_order']]['bank_template']['bank_accname'] = $this->xmlmap->getFilenameID('page/content_files','bank-account-name');
+					$data[$r['id_order']]['bank_template']['bank_accnum'] = $this->xmlmap->getFilenameID('page/content_files','bank-account-number');
+				}
+				
+			}
+		}
+		return $data;
+	}
+	
+	/*
+	 * Status = 0 for ongoing (default), 1 for complete
+	 */
+	function getSellTransactionDetails($member_id,$status,$start=0, $nf='%', $of="1,2,3,5" , $osf="ASC" , $itemPerPage=10)
+	{	
+		#Fetch order details
+		$query = $this->xmlmap->getFilenameID('sql/users','getSellTransactionDetails');
+		$strStatus = $status === 1 ? 'total=responsed' : 'total>responsed';
+		$parseData = array(
+			'response_stat' => $strStatus,
+			'payment_filter' => $of,
+			'order_sequence_filter' => $osf,
+			'limit' => 'LIMIT :start, :number'
+		);
+		$query = $this->parser->parse_string($query,$parseData,true);
+		$sth = $this->db->conn_id->prepare($query);
+		$sth->bindParam(':id', $member_id, PDO::PARAM_INT);
+		$sth->bindParam(':start', $start, PDO::PARAM_INT);
+		$sth->bindParam(':number', $itemPerPage, PDO::PARAM_INT);
+		$sth->bindParam(':name_filter', $nf, PDO::PARAM_STR);
+		$sth->execute();
+		$row = $sth->fetchAll(PDO::FETCH_ASSOC);
+		$data = array();
+		
+		foreach( $row as $r ){
+			// Assemble Outer data array
+			if( !isset($data[$r['id_order']]) ){
+				$data[$r['id_order']] = array_slice($r,1,6);
+				$data[$r['id_order']] = array_merge( $data[$r['id_order']], array('users'=>array(),'products'=>array()) );
+			}
+			
+			//Assemble User Array
+			if( !isset($data[$r['id_order']]['users'][$r['buyer_id']]) ){
+				$data[$r['id_order']]['users'][$r['buyer_id']] = array(
+					'name' => $r['buyer'],
+					'has_feedb' => (int)$r['for_memberid'] === 0 ? 0 : 1,
+					'address' => array_slice($r,7,8)
+				);
+			}
+			
+			#Fetch order product details
+			$query = $this->xmlmap->getFilenameID('sql/users','getOrderProductTransactionDetails');
+			$sth = $this->db->conn_id->prepare($query);
+			$sth->bindParam(':order_id', $r['id_order'], PDO::PARAM_INT);
+			$sth->execute();
+			$op = $sth->fetchAll(PDO::FETCH_ASSOC);
+			
+			foreach($op as $p){
+				if( (int)$member_id !== (int)$p['seller_id'] ){
+					continue;
+				}
+			
+				//Assemble Product Array
+				if( !isset($data[$r['id_order']]['products'][$p['id_order_product']]) ){
+					$product = array_slice($p,1,13);
+					$product['has_shipping_summary'] = 0;
+					if( trim(strlen($p['courier']))>0 && trim(strlen($p['datemodified']))>0 ){
+						$product['has_shipping_summary'] = 1;
+					}
+					$data[$r['id_order']]['products'][$p['id_order_product']] = $product;
+					$imagepath[0] = array(
+						'product_image_path' => $p['product_image_path']
+					);
+					explodeImagePath($imagepath);
+					$data[$r['id_order']]['products'][$p['id_order_product']]['product_image_path'] = $imagepath[0]['path'] . 'thumbnail/' . $imagepath[0]['file'];
+				}
+				
+				//Assemble product attribute array
+				if(!isset($data[$r['id_order']]['products'][$p['id_order_product']]['attr'])){
+					$data[$r['id_order']]['products'][$p['id_order_product']]['attr'] = array();
+				}
+				if($p['is_other'] === '0'){
+					array_push($data[$r['id_order']]['products'][$p['id_order_product']]['attr'], array('field' => ucwords(strtolower($p['attr_name'])), 'value' => ucwords(strtolower($p['attr_value'])) ));
+				}else if($p['is_other'] === '1'){
+					array_push($data[$r['id_order']]['products'][$p['id_order_product']]['attr'], array('field' => ucwords(strtolower($p['field_name'])), 'value' => ucwords(strtolower($p['value_name'])) ));
+				}
+			}
+		}
+		
+		return $data;
+	}
+	
+	function getFilteredTransactionCount($member_id, $status, $nf='%', $of="1,2,3,5" , $osf="ASC" , $querySelect)
+	{
+		switch($querySelect){
+			case 'buy':
+				$query = $this->xmlmap->getFilenameID('sql/users','getBuyTransactionDetails');
+				$strStatus = $status === 1 ? '1' : '0,99';
+				$parseData = array(
+					'order_status' => $strStatus,
+					'payment_filter' => $of,
+					'order_sequence_filter' => $osf,
+					'limit' => ''
+				);
+				$query = $this->parser->parse_string($query,$parseData,true);
+				$sth = $this->db->conn_id->prepare($query);
+				$sth->bindParam(':id', $member_id, PDO::PARAM_INT);
+				$sth->bindParam(':name_filter', $nf, PDO::PARAM_STR);
+				
+				$sth->execute();
+				$row = $sth->fetchAll(PDO::FETCH_ASSOC);
+				break;
+			case 'sell':
+				$query = $this->xmlmap->getFilenameID('sql/users','getSellTransactionDetails');
+				$strStatus = $status === 1 ? 'total=responsed' : 'total>responsed';
+				$parseData = array(
+					'response_stat' => $strStatus,
+					'payment_filter' => $of,
+					'order_sequence_filter' => $osf,
+					'limit' => ''
+				);
+				$query = $this->parser->parse_string($query,$parseData,true);
+				$sth = $this->db->conn_id->prepare($query);
+				$sth->bindParam(':id', $member_id, PDO::PARAM_INT);
+				$sth->bindParam(':name_filter', $nf, PDO::PARAM_STR);
+				$sth->execute();
+				$row = $sth->fetchAll(PDO::FETCH_ASSOC);
+				break;
+		}
+		
+		return count($row);
+	}
+	
+	function getTransactionCount($member_id)
+	{
+		$query = $this->xmlmap->getFilenameID('sql/users','getTransactionCount');
+		$sth = $this->db->conn_id->prepare($query);
+		$sth->bindParam(':id', $member_id, PDO::PARAM_INT);
+		$sth->execute();
+		$row = $sth->fetchAll(PDO::FETCH_ASSOC);
+		$data = array(
+			'buy' => array(),
+			'sell' => array(),
+			'cbuy' => array(),
+			'csell' => array()
+		);
+		
+		foreach( $row as $r ){
+			if( intval($member_id) === intval($r['seller_id']) ){ #you are seller, consider your total number of response
+				if( $r['total']===$r['responsed'] && !in_array($r['id_order'],$data['csell']) ){ #complete
+					$data['csell'][] = $r['id_order'];
+				}else if( $r['total']>$r['responsed'] && !in_array($r['id_order'],$data['sell']) ){ #ongoing
+					$data['sell'][] = $r['id_order'];
+				}
+			}else{ #you are buyer (consider only order_status)
+				if( intval($r['order_status']) !== 1 && !in_array($r['id_order'],$data['buy']) ){ #ongoing
+					$data['buy'][] = $r['id_order'];
+				}else if( intval($r['order_status']) === 1 && !in_array($r['id_order'],$data['cbuy']) ){ #complete
+					$data['cbuy'][] = $r['id_order'];
+				}
+			}
+		}
+		
+		$fdata = array(
+			'buy' => count($data['buy']),
+			'sell' => count($data['sell']),
+			'cbuy' => count($data['cbuy']),
+			'csell' => count($data['csell'])
+		);
+		
+		return $fdata;
 	}
 	
 	/*
@@ -648,10 +836,16 @@ class memberpage_model extends CI_Model
 						$fdata['buy'][$k] = $temp2;
 				}
 			}
-		}		
+		}
+		
+		print('<pre>');
+		print_r($row);
+		print_r($fdata);
+		die();
 		
 		return $fdata;
 	}
+	
 	
 	function authenticateUser($data)
 	{

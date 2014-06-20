@@ -1,5 +1,5 @@
 <?php foreach($active_products as $active_product): ?>
-	<div class="post_items_content">
+	<div class="post_items_content content-paging">
 		<div class="post_item_content_left">
 			<div class="post_item_img_table">
 				<span class="post_item_img_con">

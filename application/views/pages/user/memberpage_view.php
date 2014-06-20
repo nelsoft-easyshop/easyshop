@@ -172,7 +172,7 @@
 
 <?php $items_per_page = 10; ?>
 
-<div class="dashboard_table" id="active_items" data-key="active">
+<div class="dashboard_table" id="active_items" data-key="active" data-controller="1">
 	<h2>Active Items</h2>
 	
 	<div class="pagination" id="pagination_active">
@@ -209,10 +209,9 @@
 	
 	<?php $pageNum = 0;?>
 	<div class="paging" data-page="<?php echo $pageNum;?>">					
-		<?php $product_counter = $mycounter = 0; 
+		<?php $product_counter = 0; 
 		foreach($active_products as $active_product): ?>
-		<div class="post_items_content" data-order = "<?php echo $mycounter;?>">
-			
+		<div class="post_items_content content-paging">
 			<div class="post_item_content_left">
 				<div class="post_item_img_table">
 				<span class="post_item_img_con">
@@ -293,7 +292,7 @@
 </div>
 </div>
 
-<?php $product_counter++;$mycounter++; ?>
+<?php $product_counter++;?>
 	<?php if($product_counter === $items_per_page): 
 		$product_counter = 0;
 		$pageNum++;
@@ -308,7 +307,7 @@
 
 
 
-<div class="dashboard_table" id="deleted_items" data-key="deleted">
+<div class="dashboard_table" id="deleted_items" data-key="deleted" data-controller="1">
 	<h2>Deleted Items</h2>
 	
 	<div class="pagination" id="pagination_deleted">
@@ -346,7 +345,7 @@
 	<div class="paging" data-page="<?php echo $pageNum;?>">
 		<?php $product_counter =0; $mycounter = 0;?>
 		<?php foreach($deleted_products as $deleted_product):?>
-		<div class="post_items_content">
+		<div class="post_items_content content-paging">
 			<div class="post_item_content_left">
                 <div class="post_item_img_table">
                     <span class="post_item_img_con">
@@ -1492,23 +1491,22 @@
 	
 	<div>
 		<ul class="idTabs transact_tabs">
-			<li><a href="#bought">Bought <span><?php echo count($transaction['buy']);?></span></a> </li>
-			<li><a href="#sold">Sold 	<span><?php echo count($transaction['sell']);?></span></a> </li>
+			<li><a href="#bought">Bought <span><?php echo $transaction['count']['buy'];?></span></a> </li>
+			<li><a href="#sold">Sold 	<span><?php echo $transaction['count']['sell'];?></span></a> </li>
 		</ul>
 	</div>
 	
-	<div id="bought" class="transactions-buy dashboard_table" data-key="buy">
+	<div id="bought" class="transactions-buy dashboard_table" data-key="buy" data-controller="2">
 		<h2>Bought Items</h2>
-		<?php if(count($transaction['buy'])===0):?>
+		<?php if($transaction['count']['buy']===0):?>
 			<br/>
 			<div><span class='nocontent'>You have not bought any items yet.</span></div>
 		<?php else: ?>
-	<?php $transac_counter = 0;?>
-	
+
 	<div class="pagination" id="pagination-bought">
 		<a href="#" class="first" data-action="first">&laquo;</a>
 		<a href="#" class="previous" data-action="previous">&lsaquo;</a>
-		<input type="text" readonly="readonly" data-max-page="<?php echo (count($transaction['buy'])===0)?1:(ceil(count($transaction['buy'])/$items_per_page));?>" data-origmaxpage="<?php echo (count($transaction['buy'])===0)?1:(ceil(count($transaction['buy'])/$items_per_page));?>" />
+		<input type="text" readonly="readonly" data-max-page="<?php echo ($transaction['count']['buy']===0)?1:(ceil($transaction['count']['buy']/$items_per_page));?>" data-origmaxpage="<?php echo ($transaction['count']['buy']===0)?1:(ceil($transaction['count']['buy']/$items_per_page));?>" />
 		<a href="#" class="next" data-action="next">&rsaquo;</a>
 		<a href="#" class="last" data-action="last">&raquo;</a>
 	</div>
@@ -1524,12 +1522,17 @@
 				<option value="3">Cash on Delivery</option>
 				<option value="5">Direct Bank Deposit</option>
 			</select>
-			<span class="span_bg arrow_sort tx_arrow_sort"></span>
+			<span class="span_bg arrow_sort tx_arrow_sort rotate_arrow"></span>
 		</div>
+		
+	<div class="page_load" style="display:none;text-align:center; margin-top: 50px;">
+		<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" class="loading_img"/>
+	</div>
 	
-	<div class="paging enable orig">
+	<?php $transac_counter = 0;$pageNum = 0;?>
+	<div class="paging" data-page="<?php echo $pageNum?>">
 		<?php foreach($transaction['buy'] as $tk=>$transact):?>
-		<div class="transac-container" data-pm="<?php echo $transact['payment_method']?>" data-invoice="<?php echo $transact['invoice_no']?>">
+		<div class="transac-container content-paging" data-pm="<?php echo $transact['payment_method']?>" data-invoice="<?php echo $transact['invoice_no']?>">
 			<div class="transac_title">
 				<div class="transac_title_table">
 					<div class="transac_title_col1">
@@ -1591,12 +1594,12 @@
 					<p><strong>Deposit payment to:</strong></p>
 					<p>
 						<span style="margin:0px 5px 0px 3em;">Bank:</span>
-						<span style="padding-right:2em;margin-right:3em;font-weight:bold;"><?php echo $transaction['bank_name']?></span>
+						<span style="padding-right:2em;margin-right:3em;font-weight:bold;"><?php echo $transact['bank_template']['bank_name']?></span>
 						<br>
 						<span style="margin-right:5px;margin-left:3em;">Bank Account Name:</span>
-						<span style="padding-right:2em;margin-right:3em;border-right:1px dotted #CECECE;font-weight:bold;"><?php echo $transaction['bank_accname']?></span>
+						<span style="padding-right:2em;margin-right:3em;border-right:1px dotted #CECECE;font-weight:bold;"><?php echo $transact['bank_template']['bank_accname']?></span>
 						<span style="margin-right:5px;">Bank Account Number:</span>
-						<span style="padding-right:2em;margin-right:3em;font-weight:bold;"><?php echo $transaction['bank_accnum']?></span>
+						<span style="padding-right:2em;margin-right:3em;font-weight:bold;"><?php echo $transact['bank_template']['bank_accnum']?></span>
 					</p>
 				</div>
 			<?php endif;?>
@@ -1778,10 +1781,10 @@
 				</div> 
 </div>
 </div>
-<div class="clear"></div>
+<!--<div class="clear"></div>-->
 <?php $transac_counter++;?>
-<?php if($transac_counter === $items_per_page): $transac_counter = 0;?>
-</div><div class="paging enable orig">
+<?php if($transac_counter === $items_per_page): $transac_counter = 0;$pageNum++;?>
+</div><div class="paging">
 <?php endif;?>
 <?php endforeach;?>
 </div>
@@ -1789,9 +1792,9 @@
 <?php endif; ?>
 </div>
 
-	<div id="sold" class="transactions-sell dashboard_table">
+	<div id="sold" class="transactions-sell dashboard_table" data-key="sell" data-controller="2">
 		<h2>Sold Items</h2>
-		<?php if(count($transaction['sell'])===0):?>
+		<?php if($transaction['count']['sell']===0):?>
 		<br/>
 		<div><span class='nocontent'>You have not sold any items yet.</span></div>
 	<?php else: ?>
@@ -1799,7 +1802,7 @@
 		<div class="pagination" id="pagination-sold">
 			<a href="#" class="first" data-action="first">&laquo;</a>
 			<a href="#" class="previous" data-action="previous">&lsaquo;</a>
-			<input type="text" readonly="readonly" data-max-page="<?php echo (count($transaction['sell'])===0)?1:(ceil(count($transaction['sell'])/$items_per_page));?>" data-origmaxpage="<?php echo (count($transaction['sell'])===0)?1:(ceil(count($transaction['sell'])/$items_per_page));?>"/>
+			<input type="text" readonly="readonly" data-max-page="<?php echo ($transaction['count']['sell']===0)?1:(ceil($transaction['count']['sell']/$items_per_page));?>" data-origmaxpage="<?php echo ($transaction['count']['sell']===0)?1:(ceil($transaction['count']['sell']/$items_per_page));?>"/>
 			<a href="#" class="next" data-action="next">&rsaquo;</a>
 			<a href="#" class="last" data-action="last">&raquo;</a>
 		</div>
@@ -1815,13 +1818,17 @@
 				<option value="3">Cash on Delivery</option>
 				<option value="5">Direct Bank Deposit</option>
 			</select>
-			<span class="span_bg arrow_sort tx_arrow_sort"></span>
+			<span class="span_bg arrow_sort tx_arrow_sort rotate_arrow"></span>
 		</div>
 		
-		<?php $transac_counter = 0;?>
-		<div class="paging enable orig">
+		<div class="page_load" style="display:none;text-align:center; margin-top: 50px;">
+			<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" class="loading_img"/>
+		</div>
+		
+		<?php $transac_counter = 0; $pageNum = 0;?>
+		<div class="paging" data-page="<?php echo $pageNum?>">
 			<?php foreach($transaction['sell'] as $tk=>$transact):?>
-			<div class="transac-container" data-pm="<?php echo $transact['payment_method']?>" data-invoice="<?php echo $transact['invoice_no']?>">
+			<div class="transac-container content-paging" data-pm="<?php echo $transact['payment_method']?>" data-invoice="<?php echo $transact['invoice_no']?>">
 				<div class="transac_title">
 					<?php if($transact['transac_stat'] != 99): ?>
 					<div class="transac_title_table">
@@ -2061,10 +2068,13 @@
 			<?php endforeach;?>
 			</div>
 	</div>
-	<div class="clear"></div>
+	<!--<div class="clear"></div>-->
 	<?php $transac_counter++;?>
-	<?php if($transac_counter === $items_per_page): $transac_counter = 0;?>
-	</div><div class="paging enable orig">
+	<?php if($transac_counter === $items_per_page): 
+		$transac_counter = 0;
+		$pageNum++;
+	?>
+		</div><div class="paging" data-page="<?php echo $pageNum?>">
 	<?php endif;?>
 	<?php endforeach;?>
 	</div>
@@ -2073,15 +2083,16 @@
 	</div>
 </div>
 
+
 <div id="complete_transactions" class="profile_main_content">
 	<h2>Completed Transactions</h2>
 	<ul class="idTabs transact_tabs">
-		<li><a href="#complete_buy">Bought<span><?php echo count($transaction['complete']['buy']);?></span></a></li>
-		<li><a href="#complete_sell">Sold<span><?php echo count($transaction['complete']['sell']);?></span></a></li>
+		<li><a href="#complete_buy">Bought<span><?php echo $transaction['count']['cbuy'];?></span></a></li>
+		<li><a href="#complete_sell">Sold<span><?php echo $transaction['count']['csell'];?></span></a></li>
 	</ul>
-	<div id="complete_buy" class="dashboard_table">
+	<div id="complete_buy" class="dashboard_table" data-key="cbuy" data-controller="2">
 		<h2>Bought Items</h2>
-		<?php if(count($transaction['complete']['buy'])===0):?>
+		<?php if($transaction['count']['cbuy']===0):?>
 			<br/>
 			<div><span class='nocontent'>There are no transactions for this category.</span></div>
 		<?php else: ?>
@@ -2089,7 +2100,7 @@
 		<div class="pagination" id="pagination-complete-bought">
 			<a href="#" class="first" data-action="first">&laquo;</a>
 			<a href="#" class="previous" data-action="previous">&lsaquo;</a>
-			<input type="text" readonly="readonly" data-max-page="<?php echo (count($transaction['complete']['buy'])===0)?1:(ceil(count($transaction['complete']['buy'])/$items_per_page));?>" data-origmaxpage="<?php echo (count($transaction['complete']['buy'])===0)?1:(ceil(count($transaction['complete']['buy'])/$items_per_page));?>"/>
+			<input type="text" readonly="readonly" data-max-page="<?php echo ($transaction['count']['cbuy']===0)?1:(ceil($transaction['count']['cbuy']/$items_per_page));?>" data-origmaxpage="<?php echo ($transaction['count']['cbuy']===0)?1:(ceil($transaction['count']['cbuy']/$items_per_page));?>"/>
 			<a href="#" class="next" data-action="next">&rsaquo;</a>
 			<a href="#" class="last" data-action="last">&raquo;</a>
 		</div>
@@ -2105,13 +2116,17 @@
 				<option value="3">Cash on Delivery</option>
 				<option value="5">Direct Bank Deposit</option>
 			</select>
-			<span class="span_bg arrow_sort tx_arrow_sort"></span>
+			<span class="span_bg arrow_sort tx_arrow_sort rotate_arrow"></span>
 		</div>
 		
-		<?php $transac_counter = 0;?>
-		<div class="paging enable orig">
+		<div class="page_load" style="display:none;text-align:center; margin-top: 50px;">
+			<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" class="loading_img"/>
+		</div>
+		
+		<?php $transac_counter = 0; $pageNum = 0;?>
+		<div class="paging" data-page="<?php echo $pageNum?>">
 			<?php foreach($transaction['complete']['buy'] as $tk=>$transact):?>
-			<div class="transac-container" data-pm="<?php echo $transact['payment_method']?>" data-invoice="<?php echo $transact['invoice_no']?>">
+			<div class="transac-container content-paging" data-pm="<?php echo $transact['payment_method']?>" data-invoice="<?php echo $transact['invoice_no']?>">
 				<div class="transac_title">
 					<div class="transac_title_table">
 						<div class="transac_title_col1">
@@ -2219,10 +2234,10 @@
 					</div>
 	</div>
 	</div>
-	<div class="clear"></div>
+	<!--<div class="clear"></div>-->
 	<?php $transac_counter++;?>
-	<?php if($transac_counter === $items_per_page): $transac_counter = 0;?>
-	</div><div class="paging enable orig">
+	<?php if($transac_counter === $items_per_page): $transac_counter = 0;$pageNum++;?>
+	</div><div class="paging" data-page="<?php echo $pageNum?>">
 	<?php endif;?>
 	<?php endforeach;?>
 	</div>
@@ -2230,9 +2245,9 @@
 	</div>
 	
 	
-	<div id="complete_sell" class="dashboard_table">
+	<div id="complete_sell" class="dashboard_table" data-key="csell" data-controller="2">
 		<h2>Sold Items</h2>
-		<?php if(count($transaction['complete']['sell'])===0):?>
+		<?php if($transaction['count']['csell']===0):?>
 		<br/>
 		<div><span class='nocontent'>There are no transactions for this category.</span></div>
 		<?php else: ?>
@@ -2240,7 +2255,7 @@
 		<div class="pagination" id="pagination-complete-sold">
 			<a href="#" class="first" data-action="first">&laquo;</a>
 			<a href="#" class="previous" data-action="previous">&lsaquo;</a>
-			<input type="text" readonly="readonly" data-max-page="<?php echo (count($transaction['complete']['sell'])===0)?1:(ceil(count($transaction['complete']['sell'])/$items_per_page));?>" data-origmaxpage="<?php echo (count($transaction['complete']['sell'])===0)?1:(ceil(count($transaction['complete']['sell'])/$items_per_page));?>"/>
+			<input type="text" readonly="readonly" data-max-page="<?php echo ($transaction['count']['csell']===0)?1:(ceil($transaction['count']['csell']/$items_per_page));?>" data-origmaxpage="<?php echo ($transaction['count']['csell']===0)?1:(ceil($transaction['count']['csell']/$items_per_page));?>"/>
 			<a href="#" class="next" data-action="next">&rsaquo;</a>
 			<a href="#" class="last" data-action="last">&raquo;</a>
 		</div>
@@ -2256,13 +2271,17 @@
 				<option value="3">Cash on Delivery</option>
 				<option value="5">Direct Bank Deposit</option>
 			</select>
-			<span class="span_bg arrow_sort tx_arrow_sort"></span>
+			<span class="span_bg arrow_sort tx_arrow_sort rotate_arrow"></span>
 		</div>
 		
-		<?php $transac_counter = 0;?>
-		<div class="paging enable orig">
+		<div class="page_load" style="display:none;text-align:center; margin-top: 50px;">
+			<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" class="loading_img"/>
+		</div>
+		
+		<?php $transac_counter = 0;$pageNum=0;?>
+		<div class="paging" data-page="<?php echo $pageNum?>">
 			<?php foreach($transaction['complete']['sell'] as $tk=>$transact):?>
-			<div class="transac-container" data-pm="<?php echo $transact['payment_method']?>" data-invoice="<?php echo $transact['invoice_no']?>">
+			<div class="transac-container content-paging" data-pm="<?php echo $transact['payment_method']?>" data-invoice="<?php echo $transact['invoice_no']?>">
 				<div class="transac_title">
 					<div class="transac_title_table">
 						<div class="transac_title_col1">
@@ -2412,10 +2431,10 @@
 				<?php endforeach;?>
 			</div>
 	</div>
-	<div class="clear"></div>
+	<!--<div class="clear"></div>-->
 	<?php $transac_counter++;?>
-	<?php if($transac_counter === $items_per_page): $transac_counter = 0;?>
-	</div><div class="paging enable orig">
+	<?php if($transac_counter === $items_per_page): $transac_counter = 0;$pageNum++;?>
+	</div><div class="paging" data-page="<?php echo $pageNum?>">
 	<?php endif;?>
 	<?php endforeach;?>
 	</div>
@@ -2423,7 +2442,6 @@
 	</div>
 
 </div>
-
 		
 		<div class="profile_main_content" id="security_settings">
 			<h2>Security Settings</h2>
