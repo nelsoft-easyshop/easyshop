@@ -39,12 +39,12 @@
 */
 
 $enable_splash = false;
-$bypass_IP = '127.0.0.1';
+$bypass_IP = '124.104.99.90';
 
 //CLOUDFLARE REAL VISITOR IP
 $_SERVER["HTTP_CF_CONNECTING_IP"] = isset($_SERVER["HTTP_CF_CONNECTING_IP"])?$_SERVER["HTTP_CF_CONNECTING_IP"]:$_SERVER['REMOTE_ADDR'];
 
-if ($enable_splash && (($bypass_IP !== $_SERVER['REMOTE_ADDR']) ||  ($bypass_IP !==  $_SERVER["HTTP_CF_CONNECTING_IP"]))){
+if ($enable_splash && ($bypass_IP !== $_SERVER["HTTP_CF_CONNECTING_IP"]) ){
     $route['default_controller'] = "home/splash";
     $route['404_override'] = 'home/pagenotfound';
     $route['(:any)'] = "home/splash";   
