@@ -85,7 +85,7 @@
             </div>
             
             <div>
-                <object type="application/x-shockwave-flash" data="<?= base_url() ?>assets/images/Set-A-Box.swf" width="198" height="179" WMODE="transparent">
+                <object type="application/x-shockwave-flash" data="<?= base_url() ?>assets/images/companion-site.swf" width="198" height="179" WMODE="transparent">
                     <param name="movie" value="<?= base_url() ?>assets/images/companion-site.swf" />
                     <param name="quality" value="high"/>
              </object>
