@@ -531,7 +531,9 @@ class memberpage_model extends CI_Model
 	{	
 		#Fetch order details
 		$query = $this->xmlmap->getFilenameID('sql/users','getSellTransactionDetails');
-		$strStatus = $status === 1 ? 'total=responsed' : 'total>responsed';
+		$total = 'COUNT(op.status)';
+		$responsed = 'SUM( CASE WHEN op.status != 0 THEN 1 ELSE 0 END )';
+		$strStatus = $status === 1 ? $total.'='.$responsed : $total.'>'.$responsed;
 		$parseData = array(
 			'response_stat' => $strStatus,
 			'payment_filter' => $of,
@@ -628,7 +630,9 @@ class memberpage_model extends CI_Model
 				break;
 			case 'sell':
 				$query = $this->xmlmap->getFilenameID('sql/users','getSellTransactionDetails');
-				$strStatus = $status === 1 ? 'total=responsed' : 'total>responsed';
+				$total = 'COUNT(op.status)';
+				$responsed = 'SUM( CASE WHEN op.status != 0 THEN 1 ELSE 0 END )';
+				$strStatus = $status === 1 ? $total.'='.$responsed : $total.'>'.$responsed;
 				$parseData = array(
 					'response_stat' => $strStatus,
 					'payment_filter' => $of,
