@@ -26,7 +26,7 @@ function sum(obj){
         dataType:"JSON",
         data:{id:id,qty:value, csrfname:csrftoken},
         success:function(data){      
-            if(data['result']==false){
+            if(data==false){
                 location.reload();
             }
             else{
