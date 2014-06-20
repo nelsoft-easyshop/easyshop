@@ -543,6 +543,10 @@ span.seller-name .rating_criteria{
     height: auto !important;
 }
 
+div.html_description img {
+    max-width: 100% !important;
+}	
+
 .recommendation_list {
     background-color: #F8F7F7;
     float: right;
