@@ -270,7 +270,7 @@
 	INNER JOIN es_order_product op
 		ON o.id_order = op.order_id
 	WHERE NOT (o.payment_method_id = 1 AND o.order_status = 99)  AND o.order_status IN ({order_status}) AND o.buyer_id = :id AND o.invoice_no LIKE :name_filter AND o.payment_method_id IN ({payment_filter})
-	GROUP BY id_order
+	GROUP BY id_order, dateadded, transac_stat, o.invoice_no, payment_method
 	ORDER BY o.id_order {order_sequence_filter}
 	{limit}
 </select>
