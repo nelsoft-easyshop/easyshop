@@ -142,17 +142,17 @@ $(function(){
 
 
 $(function(){
-    //VER IMPORTANT ASSUMPTION: the default shipment exists with the default quantity
+    //VERY IMPORTANT ASSUMPTION: the default shipment exists with the default quantity
 
     //Loads the defaults quantity
     var qty = JSON.parse($('#p_qty').val());
     var shipment = JSON.parse($('#p_shipment').val());
-    //wrapped in each for the meantime, just in case default quantity is not the
-    //only content of $('#p_qty').val()   
-    $.each(qty, function(index, value){
+
+    var total_qty = 0;
+    
+    $.each(qty, function(index, value){ 
+        total_qty = total_qty + parseInt(value.quantity,10);
         if((value.product_attribute_ids.length == 1)&&(parseInt(value.product_attribute_ids[0].id)==0)&&(parseInt(value.product_attribute_ids[0].is_other)==0)){
-            $('.quantity').data('qty',value.quantity);
-            $('.quantity')[0].innerHTML = value.quantity;
             $('.quantity').data('default','true');
             $('.product_quantity').val(1);
             $('#p_itemid').val(index);
@@ -162,24 +162,26 @@ $(function(){
             }
             return false;
         }
-    });      
+    });  
+   
+    $('.quantity').data('qty',total_qty);
+    $('.quantity')[0].innerHTML = total_qty;
+    
     
     //Loads the default shipment locations
+
     $.each(shipment, function(index, value){
-        if((value.product_attribute_ids.length == 1)&&(parseInt(value.product_attribute_ids[0].id)==0)&&(parseInt(value.product_attribute_ids[0].is_other)==0)){
-            var option =  $('#locationID_' + value.location_id);
-            option.data('price',value.price);
-            option.prop('disabled', false);
-            $.each(option.nextAll(), function(){
-                if($(this).data('type') === option.data('type')){
-                   return false;
-                }
-                $(this).prop('disabled', false);
-                $(this).data('price',value.price);
-            }); 
-        }  
+        var option =  $('#locationID_' + value.location_id);
+        option.data('price',value.price);
+        option.prop('disabled', false);
+        $.each(option.nextAll(), function(){
+            if($(this).data('type') === option.data('type')){
+               return false;
+            }
+            $(this).prop('disabled', false);
+            $(this).data('price',value.price);
+        }); 
     });
-   
 
 });
 
@@ -297,18 +299,21 @@ function attrClick(target, $this){
         
         //** Determine shipment location
         
+        var sel_visible_length = sel_id.length - $('.product_option[style*="display:none"]').length;
+        
+        
         var shipment = JSON.parse($('#p_shipment').val());        
         var option = document.createElement("option");
         $('#shipment_locations').find('option').not('.default').each(function(){
             $(this).prop('disabled', true);
             $(this).data('price', 0);
         });
-        $.each(shipment, function(index, value){ 
+        $.each(shipment, function(index, value){    
             var value_arr = new Array();
             $.each(value.product_attribute_ids, function(y,x){
                 value_arr.push([x.id, x.is_other]);
-            });
-            if(value_arr.sort().join(',') === sel_id.sort().join(',')){
+            });            
+            if((sel_visible_length === 0)||(value_arr.sort().join(',') === sel_id.sort().join(','))){
                 var option =  $('#locationID_' + value.location_id);
                 option.data('price',value.price);
                 option.prop('disabled', false);
@@ -319,12 +324,12 @@ function attrClick(target, $this){
                     $(this).prop('disabled', false);
                     $(this).data('price',value.price);
                 }); 
-            }
+            }    
         });
         
         if($('#shipment_locations :selected').is(':disabled')){
             $('#shipment_locations :nth-child(1)').prop('selected', true);
-            $('.shipping_fee').html("Select location to view shipping fee");
+            $('.shipping_fee').html("<span class='loc_invalid'>Select location*</span>");
         }
         
         //**trigger keyup event of product_quantity textbox
@@ -420,6 +425,9 @@ function attrClick(target, $this){
                 }
             }
         });
+        
+        $('#shipment_locations').change();
+        
         if(!isActiveBool){
             target.removeClass('disable');
         }
@@ -475,11 +483,6 @@ $(function(){
                 i_opt[id] =attr;
                 
             });
-            //    if (i_loc == 0) {
-                    // alert("Select shipping location");
-                    // return false;
-            //    }
-            // var i_loc_name =  $("#locationID_"+i_loc).html().replace(/&nbsp;/g,'');
             $.ajax({
                 async:false,
                 url: config.base_url + "cart/add_item",
