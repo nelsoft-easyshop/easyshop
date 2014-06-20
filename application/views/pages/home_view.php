@@ -77,7 +77,7 @@
             
             <div class="easy_treat_item">
                 <a href="<?= base_url().'item/'.$data['productSlide_id'][$i]['slug'];?>">
-                    <h2><?php echo html_escape($data['productSlide_id'][$i]['product']); ?></h2>
+                    <h2><?php echo es_string_limit(html_escape($data['productSlide_id'][$i]['product']), 48); ?></h2>
                     <span>
                         <img src="<?= base_url().$data['productSlide_id'][$i]['path'].'categoryview/'.$data['productSlide_id'][$i]['file']; ?>" alt="<?php echo html_escape($data['productSlide_id'][$i]['product']); ?>">
                     </span>
