@@ -1512,7 +1512,7 @@
 	</div>
 	
 	<div class="post_item_srch_container">
-			<input type="text" class="box sch_box tx_sch_box" placeholder="Search" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Search'" />
+			<input type="text" class="box sch_box tx_sch_box" placeholder="Transaction No." onfocus="this.placeholder = ''" onblur="this.placeholder = 'Search'" />
 			<span class="span_bg sch_btn tx_sch_btn"></span>
 			<label for="active_sort">Payment Filter</label>
 			<select name="active_sort" class="post_active_sort tx_sort_select">
@@ -1808,7 +1808,7 @@
 		</div>
 		
 		<div class="post_item_srch_container">
-			<input type="text" class="box sch_box tx_sch_box" placeholder="Search" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Search'" />
+			<input type="text" class="box sch_box tx_sch_box" placeholder="Transaction No." onfocus="this.placeholder = ''" onblur="this.placeholder = 'Search'" />
 			<span class="span_bg sch_btn tx_sch_btn"></span>
 			<label for="active_sort">Payment Filter</label>
 			<select name="active_sort" class="post_active_sort tx_sort_select">
@@ -2106,7 +2106,7 @@
 		</div>
 		
 		<div class="post_item_srch_container">
-			<input type="text" class="box sch_box tx_sch_box" placeholder="Search" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Search'" />
+			<input type="text" class="box sch_box tx_sch_box" placeholder="Transaction No." onfocus="this.placeholder = ''" onblur="this.placeholder = 'Search'" />
 			<span class="span_bg sch_btn tx_sch_btn"></span>
 			<label for="active_sort">Payment Filter</label>
 			<select name="active_sort" class="post_active_sort tx_sort_select">
@@ -2261,7 +2261,7 @@
 		</div>
 		
 		<div class="post_item_srch_container">
-			<input type="text" class="box sch_box tx_sch_box" placeholder="Search" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Search'" />
+			<input type="text" class="box sch_box tx_sch_box" placeholder="Transaction No." onfocus="this.placeholder = ''" onblur="this.placeholder = 'Search'" />
 			<span class="span_bg sch_btn tx_sch_btn"></span>
 			<label for="active_sort">Payment Filter</label>
 			<select name="active_sort" class="post_active_sort tx_sort_select">
