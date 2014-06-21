@@ -132,7 +132,6 @@ $(document).ready(function() {
                         url: base_url + 'advsrch/more',
                         data:{page_number:offset,id_cat:cat,parameters:condition,csrfname:csrftoken},
                         type: 'post',
-                        async: true,
                         dataType: 'JSON',
                         onLoading:jQuery(".loading_products").html("<img src='"+ base_url +"assets/images/orange_loader.gif' />").show(),						
                         success: function(d){
