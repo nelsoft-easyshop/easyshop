@@ -2,12 +2,17 @@
          $base_url= "https://easyshop.ph/";
          #Change filelocation as needed, e.g.: $filelocation = "C:/Users/Administrator/Dropbox/sitemap/";
          $filelocation = dirname(__FILE__).'/../../web/';
-
+        /*
         $DBServer = '127.0.0.1';
         $DBUser   = 'easyshop';
         $DBPass   = 'MYSQL345y5h0p';
         $DBName   = 'easyshop';
+        */
         
+          $DBServer = '127.0.0.1';
+        $DBUser   = 'root';
+        $DBPass   = '121586';
+        $DBName   = 'easyshop';
         $conn = new mysqli($DBServer, $DBUser, $DBPass, $DBName);
         if ($conn->connect_error) {
             exit('Database connection failed: '  . $conn->connect_error);
@@ -22,6 +27,11 @@
          $xml_urlset->appendChild( $xml_url );
          $xml_url = write_url_xml($xml, array('loc' => $base_url.'cart', 'priority' => 0.5, 'changefreq' => 'never'));
          $xml_urlset->appendChild( $xml_url );
+         $xml_url = write_url_xml($xml, array('loc' => $base_url.'login', 'priority' => 0.5, 'changefreq' => 'never'));
+         $xml_urlset->appendChild( $xml_url );
+         $xml_url = write_url_xml($xml, array('loc' => $base_url.'register', 'priority' => 0.5, 'changefreq' => 'never'));
+         $xml_urlset->appendChild( $xml_url );
+         
          
          $xml->appendChild( $xml_urlset );  
          $xml->save($filelocation.'sitemap.xml');
