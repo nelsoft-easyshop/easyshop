@@ -28,6 +28,7 @@ class productUpload extends MY_Controller
 	{
 		$data = array(
 			'title' => 'Sell Product | Easyshop.ph',
+            'metadescription' => 'Take your business online by selling your items at Easyshop.ph'
 			);
 		$data = array_merge($data, $this->fill_header());
 

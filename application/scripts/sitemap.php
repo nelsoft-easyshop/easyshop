@@ -21,18 +21,16 @@
          $xml = new DOMDocument();
          $xml_urlset = $xml->createElement("urlset");
          $xml_urlset->setAttribute( "xmlns", "http://www.sitemaps.org/schemas/sitemap/0.9" );     
+        
          $xml_url = write_url_xml($xml, array('loc' => $base_url, 'priority' => 1, 'changefreq' => 'never'));
          $xml_urlset->appendChild( $xml_url ); 
-         $xml_url = write_url_xml($xml, array('loc' => $base_url.'sell/step1', 'priority' => 0.5, 'changefreq' => 'never'));
-         $xml_urlset->appendChild( $xml_url );
-         $xml_url = write_url_xml($xml, array('loc' => $base_url.'cart', 'priority' => 0.5, 'changefreq' => 'never'));
-         $xml_urlset->appendChild( $xml_url );
-         $xml_url = write_url_xml($xml, array('loc' => $base_url.'login', 'priority' => 0.5, 'changefreq' => 'never'));
-         $xml_urlset->appendChild( $xml_url );
-         $xml_url = write_url_xml($xml, array('loc' => $base_url.'register', 'priority' => 0.5, 'changefreq' => 'never'));
-         $xml_urlset->appendChild( $xml_url );
-         
-         
+        
+         $common_url = array('sell/step1','cart','login','register','faq','policy','terms','contact');
+         foreach($common_url as $url){
+            $xml_url = write_url_xml($xml, array('loc' => $base_url.$url, 'priority' => 0.5, 'changefreq' => 'never'));
+            $xml_urlset->appendChild( $xml_url );
+         }
+
          $xml->appendChild( $xml_urlset );  
          $xml->save($filelocation.'sitemap.xml');
 
