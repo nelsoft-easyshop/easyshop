@@ -14,7 +14,8 @@ class Home extends MY_Controller {
 		$data = array('title' => 'Home | Easyshop.ph',
                 'data' => $this->product_model->getHomeContent(),
                 'category_navigation' => $this->load->view('templates/category_navigation',array('cat_items' =>  $this->getcat(),), TRUE ),
-				);
+				'metadescription' => 'Easyshop.ph - a place where Online Buyers and Sellers converge, while letting you enjoy the benefits of one-stop shopping at the comforts of your own home.',
+                );
         $data = array_merge($data, $this->fill_header());
 		$this->load->view('templates/header', $data);
         $this->load->view('pages/home_view', $data);

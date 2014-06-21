@@ -1657,7 +1657,7 @@ class productUpload extends MY_Controller
         $prev_cat_name ='';
         foreach($cat_arr as $idx=>$id){
             $response['cat_id'] = $id;
-            $response['name'] = $this->product_model->getCategoryDetails($id)['name'];
+            $response['name'] = $this->product_model->selectCategoryDetails($id)['name'];
             $response['node'] = $this->product_model->getDownLevelNode($id); # get all down level category based on selected parent category            
             $response['level'] = $level;
             $data[$idx] = $this->load->view('pages/product/product_upload_step1_view2',$response,TRUE);

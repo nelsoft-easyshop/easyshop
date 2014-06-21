@@ -61,8 +61,6 @@
         <ul>
           <li class="top_nav_main">I want to visit
             <ul>
-              <!-- <li><a href="<?=base_url()?>home/under_construction">Visiting a new Shop</a></li> -->
-              <!-- <li><a href="<?=base_url()?>home/under_construction">Discounts</a></li> -->
               <li><a href="<?=base_url()?>cat/all">Shopping Categories</a></li>
 			  <li><a href="<?=base_url()?>advsrch">Advance Search</a></li>
             </ul>
@@ -70,10 +68,6 @@
           <li class="top_nav_main">Seller Center
             <ul>
               <li><a href="<?=base_url()?>sell/step1">Sell an Item</a></li>
-              <!-- <li><a href="<?=base_url()?>home/under_construction">Orders being processed</a></li> -->
-              <!-- <li><a href="<?=base_url()?>home/under_construction">seller services</a></li> -->
-              <!-- <li><a href="<?=base_url()?>home/under_construction">market sellers</a></li> -->
-              <!-- <li><a href="<?=base_url()?>home/under_construction">Training Center</a></li> -->
             </ul>
           </li>
           <li class="top_nav_main"><span class="span_bg cart"></span><span class="cart_no"><?PHP echo isset($total_items)?$total_items:0; ?></span>Shopping Cart
@@ -81,29 +75,7 @@
               <li><a href="<?php echo base_url()."cart/"; ?>">View my Cart</a></li>
             </ul>
           </li>
-          
-          <!-- <li class="top_nav_main">Favorites
-            <ul>    
-               
-              <li><a href="<?=base_url()?>home/under_construction">Favorite</a></li> 
-              <li><a href="<?=base_url()?>home/under_construction">Products</a></li> 
-              <li><a href="<?=base_url()?>home/under_construction">My Favorite Shops</a></li> 
-              <li><a href="<?=base_url()?>home/under_construction">market sellers</a></li> 
-              <li><a href="<?=base_url()?>home/under_construction">Training Center</a></li> 
-              
-            </ul>
-          </li>-->
-          <!--<li class="top_nav_main">Southeast Asia
-            <ul>
-                
-              <li><a href="<?=base_url()?>home/under_construction">Hong Kong</a></li>
-              <li><a href="<?=base_url()?>home/under_construction">Taiwan</a></li>
-              <li><a href="<?=base_url()?>home/under_construction">Southeast Asia</a></li>
-              <li><a href="<?=base_url()?>home/under_construction">Chinese mainland</a></li>
-              <li><a href="<?=base_url()?>home/under_construction">Other regions</a></li>
-              
-            </ul>
-          </li> -->
+
          
         </ul>
       </div>

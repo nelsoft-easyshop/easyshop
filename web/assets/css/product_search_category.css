@@ -751,6 +751,14 @@ Advanced Search Filters
     width: 980px;
 }
 
+.easydeals_category_banner {
+    background:#FFFFFF url("../../assets/images/img_easy_treat_v1.jpg") no-repeat center top ;
+    height: 205px;
+    padding-top: 25px;
+    position: relative;
+    width: 980px;
+}
+
 .countdown_category_banner .cd_timer_container {
   margin: 0 auto;
   position: absolute;

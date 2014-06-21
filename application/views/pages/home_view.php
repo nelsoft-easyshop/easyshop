@@ -36,7 +36,7 @@
             <!--
             <h2><?=$data['productSlide_title'] ?></h2>
             <ul class="mid_slide2">
-                <?PHP foreach ($data['productSlide_id'] as $rows): ?>
+                <?PHP foreach ($data['productSlide'] as $rows): ?>
                   <li>
                     <a href ="<?=base_url()."item/".$rows['slug']; ?>" >
                         <span class="mid_bottom_img_con">
@@ -51,13 +51,14 @@
              -->
                                        
             <div class="middle_content_items">
+
                 <?PHP for($i = 0; $i < 3; $i++): ?>
-                    <?PHP $row = $data['productSlide_id'][$i]; ?>
+                    <?PHP $row = $data['productSlide'][$i]; ?>
                     <div>
-                        <a href="<?= base_url().'item/'.$rows['slug'];?>"><h2><?php echo html_escape($row['product']);?></h2>
+                        <a href="<?= base_url().'item/'.$rows['slug'];?>"><h2><?php echo html_escape($row['product_name']);?></h2>
                             <span class="mid_con_price">&#8369;<?php echo number_format($row['price'],2,'.',',');?></span>
                             <span class="mid_img_con">
-                                <img src="<?= base_url().$rows['path'].'categoryview/'.$rows['file'];?>" alt="<?php echo html_escape($row['product']);?>">
+                                <img src="<?= base_url().$rows['path'].'categoryview/'.$rows['file'];?>" alt="<?php echo html_escape($row['product_name']);?>">
                             </span>
                         </a>
                     </div>
@@ -76,10 +77,10 @@
             </div>
             
             <div class="easy_treat_item">
-                <a href="<?= base_url().'item/'.$data['productSlide_id'][$i]['slug'];?>">
-                    <h2><?php echo es_string_limit(html_escape($data['productSlide_id'][$i]['product']), 48); ?></h2>
+                <a href="<?= base_url().'item/'.$data['productSideBanner']['slug'];?>">
+                    <h2><?php echo es_string_limit(html_escape($data['productSideBanner']['product_name']), 48); ?></h2>
                     <span>
-                        <img src="<?= base_url().$data['productSlide_id'][$i]['path'].'categoryview/'.$data['productSlide_id'][$i]['file']; ?>" alt="<?php echo html_escape($data['productSlide_id'][$i]['product']); ?>">
+                        <img src="<?= base_url().$data['productSideBanner']['path'].'categoryview/'.$data['productSideBanner']['file']; ?>" alt="<?php echo html_escape($data['productSideBanner']['product_name']); ?>">
                     </span>
                 </a>
             </div>
@@ -112,7 +113,7 @@
                 <img id="cat1_main_prod" src="<?=base_url().$data['category1_pid_main']['path'].'small/'.$data['category1_pid_main']['file']; ?>">
                 <div id="cat_1_main_details">
                     <a href="<?= base_url()."item/".$data['category1_pid_main']['slug']; ?>">
-                        <h2><?=html_escape($data['category1_pid_main']['product']);?></h2>
+                        <h2><?=html_escape($data['category1_pid_main']['product_name']);?></h2>
                     </a>
               
                     <p>Price: <span>&#8369;<?php echo number_format($data['category1_pid_main']['price'],2,'.',',');?></span> onwards</p>
@@ -122,14 +123,14 @@
                     <div>
                         <a href="<?= base_url()."item/".$data['category1_pid'][0]['slug']; ?>">
                             <span class="home_product_img_container"><img src="<?= base_url().$data['category1_pid'][0]['path'].'categoryview/'.$data['category1_pid'][0]['file']; ?>"></span>
-                            <h2><?=html_escape($data['category1_pid'][0]['product']);?></h2>
+                            <h2><?=html_escape($data['category1_pid'][0]['product_name']);?></h2>
                         </a>
                         <p>Price: <span>&#8369;<?php echo number_format($data['category1_pid'][0]['price'],2,'.',',');?> </span> onwards</p>
                     </div>
                     <div>
                         <a href="<?= base_url()."item/".$data['category1_pid'][1]['slug']; ?>">
                             <span class="home_product_img_container"><img src="<?= base_url().$data['category1_pid'][1]['path'].'categoryview/'.$data['category1_pid'][1]['file'] ?>"></span>
-                            <h2><?=html_escape($data['category1_pid'][1]['product']);?></h2>
+                            <h2><?=html_escape($data['category1_pid'][1]['product_name']);?></h2>
                         </a>
                         <p>Price: <span>&#8369;<?php echo number_format($data['category1_pid'][1]['price'],2,'.',',');?></span> onwards</p>
                     </div>
@@ -138,14 +139,14 @@
                     <div>
                         <a href="<?= base_url()."item/".$data['category1_pid'][2]['slug']; ?>">
                             <span class="home_product_img_container"><img src="<?= base_url().$data['category1_pid'][2]['path'].'categoryview/'.$data['category1_pid'][2]['file'] ?>"></span>
-                            <h2><?=html_escape($data['category1_pid'][2]['product']);?></h2>
+                            <h2><?=html_escape($data['category1_pid'][2]['product_name']);?></h2>
                         </a>
                         <p>Price: <span>&#8369;<?php echo number_format($data['category1_pid'][2]['price'],2,'.',',');?></span> onwards</p>
                     </div>
                     <div>
                         <a href="<?= base_url()."item/".$data['category1_pid'][3]['slug']; ?>">
                             <span class="home_product_img_container"><img src="<?= base_url().$data['category1_pid'][3]['path'].'categoryview/'.$data['category1_pid'][3]['file']?>"></span>
-                            <h2><?=html_escape($data['category1_pid'][3]['product']);?></h2>
+                            <h2><?=html_escape($data['category1_pid'][3]['product_name']);?></h2>
                         </a>
                         <p>Price: <span>&#8369;<?php echo number_format($data['category1_pid'][3]['price'],2,'.',',');?></span> onwards</p>
                     </div>
@@ -154,14 +155,14 @@
                     <div>
                         <a href="<?= base_url()."item/".$data['category1_pid'][4]['slug']; ?>">
                             <span class="home_product_img_container"><img src="<?= base_url().$data['category1_pid'][4]['path'].'categoryview/'.$data['category1_pid'][4]['file'] ?>"></span>
-                            <h2><?=html_escape($data['category1_pid'][4]['product']);?></h2>
+                            <h2><?=html_escape($data['category1_pid'][4]['product_name']);?></h2>
                         </a>
                         <p>Price: <span>&#8369;<?php echo number_format($data['category1_pid'][4]['price'],2,'.',',');?></span> onwards</p>
                     </div>
                     <div>
                         <a href="<?= base_url()."item/".$data['category1_pid'][5]['slug']; ?>">
                             <span class="home_product_img_container"><img src="<?= base_url().$data['category1_pid'][5]['path'].'categoryview/'.$data['category1_pid'][5]['file'] ?>"></span>
-                            <h2><?=html_escape($data['category1_pid'][5]['product']);?></h2>
+                            <h2><?=html_escape($data['category1_pid'][5]['product_name']);?></h2>
                         </a>
                         <p>Price: <span>&#8369;<?php echo number_format($data['category1_pid'][5]['price'],2,'.',',');?></span> onwards</p>
                     </div>
@@ -182,14 +183,14 @@
                 <div>
                     <a href="<?= base_url()."item/".$data['category2_pid'][1]['slug']; ?>">
                         <span class="home_product_img_container"><img src="<?= base_url().$data['category2_pid'][1]['path'].'categoryview/'.$data['category2_pid'][1]['file']; ?>"></span>
-                        <h2><?=html_escape($data['category2_pid'][1]['product']);?></h2>
+                        <h2><?=html_escape($data['category2_pid'][1]['product_name']);?></h2>
                     </a>
                     <p>Price: <span>&#8369;<?php echo number_format($data['category2_pid'][1]['price'],2,'.',',');?></span> onwards</p>
                 </div>
                 <div>
                     <a href="<?= base_url()."item/".$data['category2_pid'][2]['slug']; ?>">
                         <span class="home_product_img_container"><img src="<?= base_url().$data['category2_pid'][2]['path'].'categoryview/'.$data['category2_pid'][2]['file']; ?>"></span>
-                        <h2><?=html_escape($data['category2_pid'][2]['product']);?></h2>
+                        <h2><?=html_escape($data['category2_pid'][2]['product_name']);?></h2>
                     </a>
                     <p>Price: <span>&#8369;<?php echo number_format($data['category2_pid'][2]['price'],2,'.',',');?></span> onwards</p>
                 </div>
@@ -205,7 +206,7 @@
                         </a> 
                         <span class="electronics_slider_price_con">
                             <a href="<?=base_url()."item/".$data['category2_pid_mainslide'][0]['slug']; ?>">
-                                <h2><?=html_escape($data['category2_pid_mainslide'][0]['product']);?></h2>
+                                <h2><?=html_escape($data['category2_pid_mainslide'][0]['product_name']);?></h2>
                             </a>
                             <p>Price: <span>&#8369;<?php echo number_format($data['category2_pid_mainslide'][0]['price'],2,'.',',');?></span> onwards</p>
                         </span>
@@ -220,7 +221,7 @@
                         </a>
                         <span class="electronics_slider_price_con">
                             <a href="<?=base_url()."item/".$data['category2_pid_mainslide'][1]['slug']; ?>">
-                                <h2><?=html_escape($data['category2_pid_mainslide'][1]['product']);?></h2>
+                                <h2><?=html_escape($data['category2_pid_mainslide'][1]['product_name']);?></h2>
                             </a>
                             <p>Price: <span>&#8369;<?php echo number_format($data['category2_pid_mainslide'][1]['price'],2,'.',',');?></span> onwards</p>
                             </span>
@@ -235,7 +236,7 @@
                         </a>
                         <span class="electronics_slider_price_con">
                             <a href="<?=base_url()."item/".$data['category2_pid_mainslide'][2]['slug']; ?>">
-                                <h2><?=html_escape($data['category2_pid_mainslide'][2]['product']);?></h2>
+                                <h2><?=html_escape($data['category2_pid_mainslide'][2]['product_name']);?></h2>
                             </a>
                             <p>Price: <span>&#8369;<?php echo number_format($data['category2_pid_mainslide'][2]['price'],2,'.',',');?></span> onwards</p>
                             </span>
@@ -246,14 +247,14 @@
                 <div>
                     <a href="<?= base_url()."item/".$data['category2_pid'][3]['slug']; ?>">
                         <span class="home_product_img_container"><img src="<?= base_url().$data['category2_pid'][3]['path'].'categoryview/'.$data['category2_pid'][3]['file'];  ?>"></span>
-                        <h2><?=html_escape($data['category2_pid'][3]['product']);?></h2>
+                        <h2><?=html_escape($data['category2_pid'][3]['product_name']);?></h2>
                     </a>
                     <p>Price: <span>&#8369;<?php echo number_format($data['category2_pid'][3]['price'],2,'.',',');?></span> onwards</p>
                 </div>
                 <div>
                     <a href="<?= base_url()."item/".$data['category2_pid'][0]['slug']; ?>">
                         <span class="home_product_img_container"><img src="<?= base_url().$data['category2_pid'][0]['path'].'categoryview/'.$data['category2_pid'][0]['file'];  ?>"></span>
-                        <h2><?=html_escape($data['category2_pid'][0]['product']);?></h2>
+                        <h2><?=html_escape($data['category2_pid'][0]['product_name']);?></h2>
                     </a>
                     <p>Price: <span>&#8369;<?php echo number_format($data['category2_pid'][0]['price'],2,'.',',');?></span> onwards</p>
                 </div>

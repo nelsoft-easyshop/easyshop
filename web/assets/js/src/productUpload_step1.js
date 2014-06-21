@@ -335,7 +335,7 @@
     
     /*
      *   Event action when any of the category search results is clicked.
-     *   Re-factored on May 20, 2014: no longer required asynchronous = false     
+     *   Re-factored on May 20, 2014: no longer requires asynchronous = false     
      */
     
     $('#cat_search_drop_content').on('click', 'li.cat_result', function(){

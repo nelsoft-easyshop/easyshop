@@ -14,7 +14,7 @@ class product_model extends CI_Model
 
 	# the queries directory -- application/resources/sql/product.xml
 
-	function selectCategoryDetails($id) # get all down level category on selected category from database
+	function selectCategoryDetails($id) 
 	{
 		$query = $this->xmlmap->getFilenameID('sql/product', 'selectCategoryDetails');
 		$sth = $this->db->conn_id->prepare($query);
@@ -92,14 +92,6 @@ class product_model extends CI_Model
 		return $row;
 	}
 
-    function getCategoryDetails($id){
-        $query = $this->xmlmap->getFilenameID('sql/product','getCategoryDetails');
-		$sth = $this->db->conn_id->prepare($query);
-		$sth->bindParam(':id',$id);
-		$sth->execute();
-		$row = $sth->fetch(PDO::FETCH_ASSOC);
-		return $row;
-    }
 
 	function getAttributesByParent($parents) # get all attributes from all parents from to the last selected category
 	{
@@ -187,16 +179,21 @@ class product_model extends CI_Model
 		return $row['slug'];
 	}
     
-    /*  DO NOT USE THIS FUNCTION FOR ANYTHING OTHER THAN DISPLAYING THE PRODUCT PAGE.
-     *  THIS INCREMENTS THE PRODUCT CLICK COUNT. USE getProductByID FOR ANYTHING ELSE.
+    /* 
+     *   SET second parameter to false to prevent increment of click count
      */
     
-    function getProductBySlug($slug)
+    function getProductBySlug($slug, $add_click_count = true)
 	{
-		$query = $this->xmlmap->getFilenameID('sql/product', 'getProductBySlug');
+        if($add_click_count){
+            $query = $this->xmlmap->getFilenameID('sql/product', 'getProductBySlug');
+        }else{
+            $query = $this->xmlmap->getFilenameID('sql/product', 'getProductBySlugNoIncrement');
+        }
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':slug',$slug);
 		$sth->execute();
+
 		$product = $sth->fetch(PDO::FETCH_ASSOC);
         if(intval($product['o_success']) !== 0){
             if(strlen(trim($product['userpic']))===0)
@@ -204,6 +201,11 @@ class product_model extends CI_Model
             if(intval($product['brand_id'],10) === 1)
                 $product['brand_name'] = ($product['custombrand']!=='')?$product['custombrand']:'Custom brand';
            applyPriceDiscount($product);
+           if($product['product_image_path']){
+                $temp = array($product); 
+                explodeImagePath($temp); 
+                $product = $temp[0];
+           } 
         }
 		return $product;
 	}
@@ -1934,7 +1936,8 @@ class product_model extends CI_Model
         return $return;  
 	}
         
-    public function getHomeContent($file = 'page/home_files'){ $xml_content = $this->xmlmap->getFilename($file);
+    public function getHomeContent($file = 'page/home_files'){ 
+        $xml_content = $this->xmlmap->getFilename($file);
         $home_view_data = array();
         foreach ($xml_content as $key => $element){
             if(isset($element['value']) &&  isset($element['type'])){    
@@ -1944,14 +1947,15 @@ class product_model extends CI_Model
                     $home_view_data[$key][$key2] = $this->createHomeElement($inner_el, $key); 
                 }
             }    
-       }
+       } 
+
        return $home_view_data;
     }
     
     private function createHomeElement($element, $key){
         $home_view_data = array();
         if($element['type'] === 'product'){
-            $productdata = $this->getProductById($element['value']);
+            $productdata = $this->getProductBySlug($element['value'], false);
             if (!empty($productdata)){
                 $home_view_data = $productdata;                
             }
@@ -1969,9 +1973,16 @@ class product_model extends CI_Model
             else{
                 $home_view_data = date('M d,Y H:i:s',strtotime($element['value']));
             }
+        }else if($element['type'] === 'category'){ 
+                $home_view_data['category_detail'] = $this->selectCategoryDetails($element['value']);
+                $home_view_data['product'] = array(); 
+                foreach($element['product'] as $key => $inner_el){
+                    array_push($home_view_data['product'], $this->createHomeElement($inner_el, $key));
+                }
         }else{
             $home_view_data = $element['value'];            
         }
+        
         return $home_view_data;
     }
     

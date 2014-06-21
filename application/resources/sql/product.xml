@@ -49,9 +49,7 @@
      AND id_cat = :cat_id ;
     </select>
 
-    <select id="getCategoryDetails">
-        SELECT id_cat,name, description, keywords, parent_id, is_main, sort_order from es_cat WHERE id_cat = :id
-    </select>
+ 
     
     <select id="getParent">
         SELECT T2.id_cat, T2.name, T2.slug
@@ -83,14 +81,23 @@
     <select id="editProductCategory">
         UPDATE es_product SET cat_id = :cat_id, is_draft = 1 WHERE id_product = :id AND member_id = :member_id
     </select>
-	
-    <select id="getProduct">
-        CALL `es_sp_getProduct` (:id)
-    </select>
-    
+
     <select id="getProductBySlug">
         CALL `es_sp_getProductBySlug` (:slug)
     </select>
+    
+    <select id="getProductBySlugNoIncrement">
+        SELECT p.id_product as id_product, p.slug as slug, p.promo_type, p.condition, p.slug,p.brand_id as brand_id, p.brand_other_name as custombrand, p.name as product_name, p.description as description, 
+        p.is_promote, p.startdate, p.enddate, p.cat_id as cat_id, p.price as price,  p.brief as brief, p.sku as sku, i.`product_image_path`,
+        p.is_cod, p.discount, s.name as style_name, b.name as brand_name, p.member_id as sellerid, m.nickname as sellernickname, m.username as sellerusername, m.imgurl as userpic, '1' as o_success, '' as o_message
+        FROM es_product p 
+        LEFT JOIN es_style s ON p.style_id = s.id_style
+        LEFT JOIN es_brand b ON p.brand_id = b.id_brand
+        LEFT JOIN es_member m on p.member_id = m.id_member 
+        LEFT JOIN `es_product_image` i ON i.`product_id` = p.`id_product` AND i.is_primary = '1'
+        WHERE p.slug = :slug AND p.is_delete = 0 AND p.is_draft = 0;				
+    </select>
+    
     
     <select id="getProductById">
         SELECT a.`name` AS `product`, a.`slug` AS slug, a.`discount`, a.`brief`,a.`id_product`,`cat_id`, b.`product_image_path`, a.`price`, a.`member_id` as sellerid , a.`is_promote`,a.`startdate`,a.`enddate`, a.`promo_type`,a.`is_draft`,a.`is_delete`

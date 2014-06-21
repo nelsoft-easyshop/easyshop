@@ -15,7 +15,7 @@
         <value>assets/images/mainslide/1.jpg</value>
         <type>image</type>
         <imagemap>
-              <coordinate>70,150,270,200</coordinate>
+            <coordinate>70,200,350,350</coordinate>
             <target>register</target>
         </imagemap>
     </mainSlide>
@@ -24,8 +24,8 @@
         <value>assets/images/mainslide/2.jpg</value>
         <type>image</type> 
         <imagemap>
-            <coordinate>430,200,470,250</coordinate>
-            <target>register</target>
+            <coordinate>0,0,0,0</coordinate>
+            <target></target>
         </imagemap>
     </mainSlide>
     
@@ -33,8 +33,8 @@
         <value>assets/images/mainslide/3.jpg</value> 
         <type>image</type>
         <imagemap>
-            <coordinate>350,200,500,250</coordinate>
-            <target>search/search.html?q_str=epson&amp;q_cat=1 </target>
+            <coordinate>0,0,0,0</coordinate>
+            <target></target>
         </imagemap>
     </mainSlide>
     
@@ -43,69 +43,130 @@
         <type>text</type>
     </productSlide_title>
     
-    
-    <productSlide_id>
-        <value>141</value>
+    <productSlide>
+        <value>shipment-test</value>
         <type>product</type>
-    </productSlide_id>
+    </productSlide>
     
-     <productSlide_id>
-        <value>141</value>
+    <productSlide>
+        <value>shipment-test</value>
         <type>product</type>
-    </productSlide_id>
+    </productSlide>
     
-    <productSlide_id>
-        <value>141</value>
+    <productSlide>
+        <value>shipment-test</value>
         <type>product</type>
-    </productSlide_id>
+    </productSlide>
     
-     <productSlide_id>
-        <value>141</value>
+    <productSideBanner>
+        <value>shipment-test</value>
         <type>product</type>
-    </productSlide_id>
-    
-     <productSlide_id>
-        <value>141</value>
-        <type>product</type>
-    </productSlide_id>
+    </productSideBanner>
 
+
+   <category>
+    
+        <type>category</type>
+        <value>2</value>
+
+        <product>
+            <value>shipment-test</value>
+            <type>product</type>
+        </product>
+        
+        <product>
+            <value>shipment-test</value>
+            <type>product</type>
+        </product>
+        
+        <product>
+            <value>shipment-test</value>
+            <type>product</type>
+        </product>
+        
+        <product>
+            <value>shipment-test</value>
+            <type>product</type>
+        </product>
+        
+        <product>
+            <value>shipment-test</value>
+            <type>product</type>
+        </product>
+        
+        <product>
+            <value>shipment-test</value>
+            <type>product</type>
+        </product>
+        
+        <product>
+            <value>shipment-test</value>
+            <type>product</type>
+        </product>
+        
+        <product>
+            <value>shipment-test</value>
+            <type>product</type>
+        </product>
+        
+        <product_main>
+            <value>shipment-test</value>
+            <type>product</type>
+        </product_main>
+        
+        <product_main>
+            <value>shipment-test</value>
+            <type>product</type>
+        </product_main>
+        
+        <product_main>
+            <value>shipment-test</value>
+            <type>product</type>
+        </product_main>
+
+    </category>
+    
+    
+    
+    
+        
     <category1_title>
         <value>Fashion</value>
         <type>text</type>
     </category1_title>
     
     <category1_pid_main>
-        <value>141</value>
+        <value>shipment-test</value>
         <type>product</type>
     </category1_pid_main>
 
     <category1_pid>
-        <value>141</value>
+        <value>shipment-test</value>
         <type>product</type>
     </category1_pid>
     
     <category1_pid>
-        <value>141</value>
+        <value>shipment-test</value>
         <type>product</type>
     </category1_pid>
 
     <category1_pid>
-        <value>141</value>
+        <value>shipment-test</value>
         <type>product</type>
     </category1_pid>
 
     <category1_pid>
-        <value>141</value>
+        <value>shipment-test</value>
         <type>product</type>
     </category1_pid>
 
     <category1_pid>
-        <value>141</value>
+        <value>shipment-test</value>
         <type>product</type>
     </category1_pid>
     
     <category1_pid>
-        <value>141</value>
+        <value>shipment-test</value>
         <type>product</type>
     </category1_pid>
 
@@ -115,40 +176,41 @@
     </category2_title>
     
     <category2_pid_mainslide>
-        <value>141</value>
+        <value>shipment-test</value>
         <type>product</type>
     </category2_pid_mainslide>
     
     <category2_pid_mainslide>
-        <value>141</value>
+        <value>shipment-test</value>
         <type>product</type>
     </category2_pid_mainslide>
     
     <category2_pid_mainslide>
-        <value>141</value>
+        <value>shipment-test</value>
         <type>product</type>
     </category2_pid_mainslide>
     
     <category2_pid>
-        <value>141</value>
+        <value>shipment-test</value>
         <type>product</type>
     </category2_pid>
     
     <category2_pid>
-        <value>141</value>
+        <value>shipment-test</value>
         <type>product</type>
     </category2_pid>
     
    <category2_pid>
-        <value>141</value>
+        <value>shipment-test</value>
         <type>product</type>
     </category2_pid>
     
     <category2_pid>
-        <value>141</value>
+        <value>shipment-test</value>
         <type>product</type>
     </category2_pid>
     
+
     <cd_startdate>
         <value>June 12, 2014 21:50:00</value>
         <type>date</type>
@@ -162,24 +224,26 @@
     </cd_enddate>
     
     <cd_product>
-        <value>141</value>
+        <value>shipment-test</value>
         <type>product</type>
     </cd_product>
     
     <cd_product>
-        <value>141</value>
+        <value>shipment-test</value>
         <type>product</type>
     </cd_product>
     
     <cd_product>
-        <value>141</value>
+        <value>shipment-test</value>
         <type>product</type>
     </cd_product>
     
     <cd_product>
-        <value>141</value>
+        <value>shipment-test</value>
         <type>product</type>
     </cd_product>
-            
+    
+    
+    
     
 </map>
