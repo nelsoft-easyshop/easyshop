@@ -54,7 +54,8 @@ class Home extends MY_Controller {
     }
     
     public function policy(){
-        $data = array('title' => 'Privacy Policy | Easyshop.ph',);
+        $data = array('title' => 'Privacy Policy | Easyshop.ph',
+                      'metadescription' => "Read Easyshop.ph's Privacy Policy",);
         $data = array_merge($data, $this->fill_header());
 		$this->load->view('templates/header', $data);
         $this->load->view('pages/web/policy');
@@ -62,7 +63,9 @@ class Home extends MY_Controller {
     }
     
     public function terms(){
-        $data = array('title' => 'Terms and Conditions | Easyshop.ph',);
+        $data = array('title' => 'Terms and Conditions | Easyshop.ph',
+                      'metadescription' => "Read Easyshop.ph's Terms and Conditions",
+                   );
         $data = array_merge($data, $this->fill_header());
 		$this->load->view('templates/header', $data);
         $this->load->view('pages/web/terms');
@@ -70,7 +73,9 @@ class Home extends MY_Controller {
     }
     
     public function faq(){
-        $data = array('title' => 'F.A.Q. | Easyshop.ph',);
+        $data = array('title' => 'F.A.Q. | Easyshop.ph',
+                      'metadescription' => 'Get in the know, read the Frequently Asked Questions at Easyshop.ph',
+                      );
         $data = array_merge($data, $this->fill_header());
 		$this->load->view('templates/header', $data);
         $this->load->view('pages/web/faq');
@@ -78,7 +83,9 @@ class Home extends MY_Controller {
     }
     
     public function contact(){
-        $data = array('title' => 'Contact us | Easyshop.ph',);
+        $data = array('title' => 'Contact us | Easyshop.ph',
+                      'metadescription' => 'Get in touch with our Customer Support',
+                );
         $data = array_merge($data, $this->fill_header());
 		$this->load->view('templates/header', $data);
         $this->load->view('pages/web/contact');
