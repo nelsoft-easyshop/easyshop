@@ -3877,7 +3877,7 @@ return array(
               PRIMARY KEY (`order_status`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8;",
         "insert" => 
-            "INSERT INTO `es_order_status` VALUES (0,'UNPAID'),(1,'COMPLETE'),(2,'DRAGONPAY EXPIRED'),(99,'DRAFT');",
+            "INSERT INTO `es_order_status` VALUES (0,'PAID'),(1,'COMPLETE'),(2,'DRAGONPAY EXPIRED'),(99,'DRAFT');",
     ),
     
         
