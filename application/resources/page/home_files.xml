@@ -24,8 +24,8 @@
         <value>assets/images/mainslide/2.jpg</value>
         <type>image</type> 
         <imagemap>
-            <coordinate>0,0,0,0</coordinate>
-            <target></target>
+            <coordinate>0,0,589,352</coordinate>
+            <target>deals</target>
         </imagemap>
     </mainSlide>
     
