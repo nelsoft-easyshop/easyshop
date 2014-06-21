@@ -73,7 +73,7 @@
 
         <div class="right_panel">
             <div>
-                <img src="<?= base_url() ?>assets/images/img_easy_treat.jpg" alt="Easy Treat: Best price offer for the day">
+                <a href='<?=base_url()?>deals'><img src="<?= base_url() ?>assets/images/img_easy_treat.jpg" alt="Easy Treat: Best price offer for the day"></a>
             </div>
             
             <div class="easy_treat_item">
