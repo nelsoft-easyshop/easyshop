@@ -17,7 +17,8 @@ class Register extends MY_Controller
 	public function index()
 	{
 		$data = array(
-			'title' => 'Easyshop.ph - Welcome to Easyshop.ph'
+			'title' => 'Easyshop.ph - Welcome to Easyshop.ph',
+            'metadescription' => 'Register now at Easyshop.ph to start your buying and selling experience',
 		);
         $data = array_merge($data, $this->fill_header());
 		$this->load->view('pages/user/register', $data);

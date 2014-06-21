@@ -16,10 +16,11 @@ class Login extends MY_Controller {
     function index() {
         $data = array(
             'title' => 'Login | Easyshop.ph',
+            'metadescription' => 'Sign-in at Easyshop.ph to start your buying and selling experience.',
 			);
 		$data = array_merge($data, $this->fill_header());
         $response['url'] = $this->session->userdata('uri_string');  
-        
+
         if($this->input->post('login_form')){
             $row = array();
             if($this->form_validation->run('login_form')){
