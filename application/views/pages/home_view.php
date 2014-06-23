@@ -1,4 +1,5 @@
 <link href="<?= base_url() ?>assets/css/jquery.bxslider.css" rel="stylesheet" />
+
 <div class="clear"></div>
 
 <section>
@@ -55,11 +56,17 @@
                 <?PHP for($i = 0; $i < 3; $i++): ?>
                     <?PHP $row = $data['productSlide'][$i]; ?>
                     <div>
-                        <a href="<?= base_url().'item/'.$row['slug'];?>"><h2><?php echo html_escape($row['product_name']);?></h2>
-                            <span class="mid_con_price">&#8369;<?php echo number_format($row['price'],2,'.',',');?></span>
+                        <span class="span_bg home_hot_item">HOT ITEM</span>
+
+                        <a href="<?= base_url().'item/'.$row['slug'];?>">
                             <span class="mid_img_con">
                                 <img src="<?= base_url().$row['path'].'categoryview/'.$row['file'];?>" alt="<?php echo html_escape($row['product_name']);?>">
                             </span>
+                            <h2><?php echo html_escape($row['product_name']);?></h2>
+                            <span class="mid_con_price">&#8369;<?php echo number_format($row['price'],2,'.',',');?> 
+                                <small class="span_bg c_small_btn"></small>
+                            </span>
+                           
                         </a>
                     </div>
                 
@@ -86,130 +93,116 @@
             </div>
             
             <div>
-                <object type="application/x-shockwave-flash" data="<?= base_url() ?>assets/images/companion-site.swf" width="198" height="179" WMODE="transparent">
-                    <param name="movie" value="<?= base_url() ?>assets/images/companion-site.swf" />
+                <object type="application/x-shockwave-flash" data="<?= base_url() ?>assets/images/Set-A-Box.swf" width="198" height="179" WMODE="transparent">
+                    <param name="movie" value="<?= base_url() ?>assets/images/Set-A-Box.swf" />
                     <param name="quality" value="high"/>
              </object>
              <!-- <iframe src="<?= base_url() ?>assets/images/Set-A-Box.swf" width="198" height="179"></iframe> -->
             </div>
-        </div>
-        
-        
-        
+        </div>       
     </div>
 </section>
 
 <div class="clear"></div>
 
 <section>
-    <div class="wrapper">
-        <div class="product_title">
-            <div><h2><?=$data['category1_title'] ?></h2></div>
-            <!-- <div><span><a href="">view more</a></span></div> -->
+    <div class="wrapper electronics_gadgets_section">
+        <div class="home_cat_product_title">
+            <img src="<?=base_url()?>assets/images/img_icon_title_electronics.png">
+            <h2>Electronics and Gadgets</h2>          
         </div>
-        <div class="clear"></div>
-        <div class="border fashion_products">
-            <div>
-                <img id="cat1_main_prod" src="<?=base_url().$data['category1_pid_main']['path'].'small/'.$data['category1_pid_main']['file']; ?>">
-                <div id="cat_1_main_details">
-                    <a href="<?= base_url()."item/".$data['category1_pid_main']['slug']; ?>">
-                        <h2><?=html_escape($data['category1_pid_main']['product_name']);?></h2>
+
+        <div class="home_cat_tabs">
+            <ul>
+                <li><a href="#mobile-phones">MOBILE PHONES</a></li>
+                <li><a href="#tablets">TABLETS</a></li>
+                <li><a href="#cameras-imaging">CAMERAS &amp; IMAGING</a></li>
+                <li><a href="#tv-video-home-audio">TV, Video &amp; Home Audio</a></li>
+                <li><a href="#computer-networking">Computer &amp; Networking</a></li>
+            </ul>
+        </div>
+        <div class="home_cat_items">
+            <div class="first_panel_left">
+                <div class="home_cat_item1_con border_btm">
+                    <div class="home_cat_item_link">
+                        <a href="">
+                            <div>                            
+                                <p>ACER LIQUID E2 </p>
+                                <p class="orange">PHP 12,739.00</p>                            
+                            </div>
+                            <div>
+                                <small class="span_bg c_small_btn"></small>
+                            </div>
+                        </a>
+                    </div>
+
+                    <a href="">
+                        <span>
+                            <img src="<?=base_url()?>assets/images/img_mid_item2.jpg" alt="ipad mini">
+                        </span>
                     </a>
-              
-                    <p>Price: <span>&#8369;<?php echo number_format($data['category1_pid_main']['price'],2,'.',',');?></span> onwards</p>
+                </div>
+
+                <div class="home_cat_item1_con border_btm">
+                    <div class="home_cat_item_link">
+                        <a href="">
+                            <div>                            
+                                <p>ffdsfsdsdfsdfsdfsdfsdfsdfsdfsdfsdfsdffsdfsd</p>
+                                <p class="orange">PHP 12,739.00</p>                            
+                            </div>
+                            <div>
+                                <small class="span_bg c_small_btn"></small>
+                            </div>
+                        </a>
+                    </div>
+                    <a href="">
+                        <span>
+                            <img src="<?=base_url()?>assets/images/img_mid_item2.jpg" alt="ipad mini">
+                        </span>
+                    </a>
+                </div>
+
+                <div class="home_cat_item1_con">
+                    <div class="home_cat_item_link">
+                        <a href="">
+                            <div>                            
+                                <p>ACER LIQUID E2 </p>
+                                <p class="orange">PHP 12,739.00</p>                            
+                            </div>
+                            <div>
+                                <small class="span_bg c_small_btn"></small>
+                            </div>
+                        </a>
+                    </div>
+                    <a href="">
+                        <span>
+                            <img src="<?=base_url()?>assets/images/img_mid_item2.jpg" alt="ipad mini">
+                        </span>
+                    </a>
                 </div>
             </div>
-                <div class="products border2">
-                    <div>
-                        <a href="<?= base_url()."item/".$data['category1_pid'][0]['slug']; ?>">
-                            <span class="home_product_img_container"><img src="<?= base_url().$data['category1_pid'][0]['path'].'categoryview/'.$data['category1_pid'][0]['file']; ?>"></span>
-                            <h2><?=html_escape($data['category1_pid'][0]['product_name']);?></h2>
-                        </a>
-                        <p>Price: <span>&#8369;<?php echo number_format($data['category1_pid'][0]['price'],2,'.',',');?> </span> onwards</p>
-                    </div>
-                    <div>
-                        <a href="<?= base_url()."item/".$data['category1_pid'][1]['slug']; ?>">
-                            <span class="home_product_img_container"><img src="<?= base_url().$data['category1_pid'][1]['path'].'categoryview/'.$data['category1_pid'][1]['file'] ?>"></span>
-                            <h2><?=html_escape($data['category1_pid'][1]['product_name']);?></h2>
-                        </a>
-                        <p>Price: <span>&#8369;<?php echo number_format($data['category1_pid'][1]['price'],2,'.',',');?></span> onwards</p>
-                    </div>
-                </div>
-                <div class="products border2">
-                    <div>
-                        <a href="<?= base_url()."item/".$data['category1_pid'][2]['slug']; ?>">
-                            <span class="home_product_img_container"><img src="<?= base_url().$data['category1_pid'][2]['path'].'categoryview/'.$data['category1_pid'][2]['file'] ?>"></span>
-                            <h2><?=html_escape($data['category1_pid'][2]['product_name']);?></h2>
-                        </a>
-                        <p>Price: <span>&#8369;<?php echo number_format($data['category1_pid'][2]['price'],2,'.',',');?></span> onwards</p>
-                    </div>
-                    <div>
-                        <a href="<?= base_url()."item/".$data['category1_pid'][3]['slug']; ?>">
-                            <span class="home_product_img_container"><img src="<?= base_url().$data['category1_pid'][3]['path'].'categoryview/'.$data['category1_pid'][3]['file']?>"></span>
-                            <h2><?=html_escape($data['category1_pid'][3]['product_name']);?></h2>
-                        </a>
-                        <p>Price: <span>&#8369;<?php echo number_format($data['category1_pid'][3]['price'],2,'.',',');?></span> onwards</p>
-                    </div>
-                </div>
-                <div class="products">
-                    <div>
-                        <a href="<?= base_url()."item/".$data['category1_pid'][4]['slug']; ?>">
-                            <span class="home_product_img_container"><img src="<?= base_url().$data['category1_pid'][4]['path'].'categoryview/'.$data['category1_pid'][4]['file'] ?>"></span>
-                            <h2><?=html_escape($data['category1_pid'][4]['product_name']);?></h2>
-                        </a>
-                        <p>Price: <span>&#8369;<?php echo number_format($data['category1_pid'][4]['price'],2,'.',',');?></span> onwards</p>
-                    </div>
-                    <div>
-                        <a href="<?= base_url()."item/".$data['category1_pid'][5]['slug']; ?>">
-                            <span class="home_product_img_container"><img src="<?= base_url().$data['category1_pid'][5]['path'].'categoryview/'.$data['category1_pid'][5]['file'] ?>"></span>
-                            <h2><?=html_escape($data['category1_pid'][5]['product_name']);?></h2>
-                        </a>
-                        <p>Price: <span>&#8369;<?php echo number_format($data['category1_pid'][5]['price'],2,'.',',');?></span> onwards</p>
-                    </div>
-                </div>
-        </div>
-    </div>
-</section>
 
-<section>
-    <div class="wrapper electronics_products">
-        <div class="product_title">
-            <div><h2><?=$data['category2_title'] ?></h2></div>
-            <!-- <div><span><a href="">view more</a></span></div> -->
-        </div>
-        <div class="clear"></div>
-        <div class="border">
-            <div class="electronics_product_sides products border2">
-                <div>
-                    <a href="<?= base_url()."item/".$data['category2_pid'][1]['slug']; ?>">
-                        <span class="home_product_img_container"><img src="<?= base_url().$data['category2_pid'][1]['path'].'categoryview/'.$data['category2_pid'][1]['file']; ?>"></span>
-                        <h2><?=html_escape($data['category2_pid'][1]['product_name']);?></h2>
-                    </a>
-                    <p>Price: <span>&#8369;<?php echo number_format($data['category2_pid'][1]['price'],2,'.',',');?></span> onwards</p>
-                </div>
-                <div>
-                    <a href="<?= base_url()."item/".$data['category2_pid'][2]['slug']; ?>">
-                        <span class="home_product_img_container"><img src="<?= base_url().$data['category2_pid'][2]['path'].'categoryview/'.$data['category2_pid'][2]['file']; ?>"></span>
-                        <h2><?=html_escape($data['category2_pid'][2]['product_name']);?></h2>
-                    </a>
-                    <p>Price: <span>&#8369;<?php echo number_format($data['category2_pid'][2]['price'],2,'.',',');?></span> onwards</p>
-                </div>
-            </div>           
-            <div class="product_slide">
-                <ul class="slider3">
+            <div class="first_panel_middle">
+                 <ul class="slider3">
                     <li>
-                        <a href="<?=base_url()."item/".$data['category2_pid_mainslide'][0]['slug']; ?>">
+                        <a href="<?=base_url()."item/".$data['category2_pid_mainslide'][0]['slug']; ?>">                        
                             <span class="elec_slide_img_con">
                             <img class="cat2_slide_prod" src="<?=base_url().$data['category2_pid_mainslide'][0]['path'].'/'.$data['category2_pid_mainslide'][0]['file']; ?>" />
                             </span>
-                           
-                        </a> 
+                        </a>                      
                         <span class="electronics_slider_price_con">
                             <a href="<?=base_url()."item/".$data['category2_pid_mainslide'][0]['slug']; ?>">
-                                <h2><?=html_escape($data['category2_pid_mainslide'][0]['product_name']);?></h2>
+
+                                <div>
+                                    <h2><?=html_escape($data['category2_pid_mainslide'][0]['product_name']);?></h2>
+                                
+                                    <p>Price: <span>&#8369;<?php echo number_format($data['category2_pid_mainslide'][0]['price'],2,'.',',');?></span> onwards</p>
+                                </div>
+                                <div>
+                                    <span class="cat_slide_btn">Buy Now  <small class="span_bg c_small_btn"></small></span>
+                                </div>                                
                             </a>
-                            <p>Price: <span>&#8369;<?php echo number_format($data['category2_pid_mainslide'][0]['price'],2,'.',',');?></span> onwards</p>
-                        </span>
+                    </span>
                     </li>
                     
                     <li>
@@ -220,11 +213,17 @@
                             
                         </a>
                         <span class="electronics_slider_price_con">
-                            <a href="<?=base_url()."item/".$data['category2_pid_mainslide'][1]['slug']; ?>">
-                                <h2><?=html_escape($data['category2_pid_mainslide'][1]['product_name']);?></h2>
-                            </a>
-                            <p>Price: <span>&#8369;<?php echo number_format($data['category2_pid_mainslide'][1]['price'],2,'.',',');?></span> onwards</p>
-                            </span>
+
+                            <div>
+                                <a href="<?=base_url()."item/".$data['category2_pid_mainslide'][1]['slug']; ?>">
+                                    <h2><?=html_escape($data['category2_pid_mainslide'][1]['product_name']);?></h2>
+                                </a>
+                                <p>Price: <span>&#8369;<?php echo number_format($data['category2_pid_mainslide'][1]['price'],2,'.',',');?></span> onwards</p>
+                                </span>
+                            </div>
+                            <div>
+                                <span class="cat_slide_btn">Buy Now  <small class="span_bg c_small_btn"></small></span>
+                            </div>    
                     </li>
                     
                     <li>
@@ -235,33 +234,126 @@
                             
                         </a>
                         <span class="electronics_slider_price_con">
+                            <div>
                             <a href="<?=base_url()."item/".$data['category2_pid_mainslide'][2]['slug']; ?>">
                                 <h2><?=html_escape($data['category2_pid_mainslide'][2]['product_name']);?></h2>
                             </a>
                             <p>Price: <span>&#8369;<?php echo number_format($data['category2_pid_mainslide'][2]['price'],2,'.',',');?></span> onwards</p>
                             </span>
+                            </div>
+                            <div>
+                                <span class="cat_slide_btn">Buy Now  <small class="span_bg c_small_btn"></small></span>
+                            </div> 
                     </li>
-                </ul>
-            </div>
-            <div class="electronics_product_sides products border3">
-                <div>
-                    <a href="<?= base_url()."item/".$data['category2_pid'][3]['slug']; ?>">
-                        <span class="home_product_img_container"><img src="<?= base_url().$data['category2_pid'][3]['path'].'categoryview/'.$data['category2_pid'][3]['file'];  ?>"></span>
-                        <h2><?=html_escape($data['category2_pid'][3]['product_name']);?></h2>
-                    </a>
-                    <p>Price: <span>&#8369;<?php echo number_format($data['category2_pid'][3]['price'],2,'.',',');?></span> onwards</p>
+                </ul> 
+                <div class="fpm_btm_items_con">
+                    <div class="fpm_btm_items_left_con">
+                        <div class="home_cat_item1_con">
+                            <div class="home_cat_item_link">
+                                <a href="">
+                                    <div>                            
+                                        <p>ACER LIQUID E2 </p>
+                                        <p class="orange">PHP 12,739.00</p>                            
+                                    </div>
+                                    <div>
+                                        <small class="span_bg c_small_btn"></small>
+                                    </div>
+                                </a>
+                            </div>
+                            <a href="">
+                                <span>
+                                    <img src="<?=base_url()?>assets/images/img_mid_item2.jpg" alt="ipad mini">
+                                </span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="fpm_btm_items_right_con">
+                        <div class="home_cat_item1_con">
+                            <div class="home_cat_item_link">
+                                <a href="">
+                                    <div>                            
+                                        <p>ACER LIQUID E2 </p>
+                                        <p class="orange">PHP 12,739.00</p>                            
+                                    </div>
+                                    <div>
+                                        <small class="span_bg c_small_btn"></small>
+                                    </div>
+                                </a>
+                            </div>
+                            <a href="">
+                                <span>
+                                    <img src="<?=base_url()?>assets/images/img_mid_item2.jpg" alt="ipad mini">
+                                </span>
+                            </a>
+                        </div>
+                    </div>
                 </div>
-                <div>
-                    <a href="<?= base_url()."item/".$data['category2_pid'][0]['slug']; ?>">
-                        <span class="home_product_img_container"><img src="<?= base_url().$data['category2_pid'][0]['path'].'categoryview/'.$data['category2_pid'][0]['file'];  ?>"></span>
-                        <h2><?=html_escape($data['category2_pid'][0]['product_name']);?></h2>
+                <div class="clear"></div>
+            </div>
+
+
+            <div class="first_panel_right">
+                <div class="home_cat_item1_con border_btm">
+                    <div class="home_cat_item_link">
+                        <a href="">
+                            <div>                            
+                                <p>ACER LIQUID E2 </p>
+                                <p class="orange">PHP 12,739.00</p>                            
+                            </div>
+                            <div>
+                               <small class="span_bg c_small_btn"></small>
+                            </div>
+                        </a>
+                    </div>
+                    <a href="">
+                        <span>
+                            <img src="<?=base_url()?>assets/images/img_mid_item2.jpg" alt="ipad mini">
+                        </span>
                     </a>
-                    <p>Price: <span>&#8369;<?php echo number_format($data['category2_pid'][0]['price'],2,'.',',');?></span> onwards</p>
+                </div>
+                <div class="home_cat_item1_con border_btm">
+                    <div class="home_cat_item_link">
+                        <a href="">
+                            <div>                            
+                                <p>ACER LIQUID E2 </p>
+                                <p class="orange">PHP 12,739.00</p>                            
+                            </div>
+                            <div>
+                                <img src="<?=base_url()?>assets/images/img_small_btn.png">
+                            </div>
+                        </a>
+                    </div>
+                    <a href="">
+                        <span>
+                            <img src="<?=base_url()?>assets/images/img_mid_item2.jpg" alt="ipad mini">
+                        </span>
+                    </a>
+                </div>
+                <div class="home_cat_item1_con">
+                    <div class="home_cat_item_link">
+                        <a href="">
+                            <div>                            
+                                <p>ACER LIQUID E2 </p>
+                                <p class="orange">PHP 12,739.00</p>                            
+                            </div>
+                            <div>
+                                <img src="<?=base_url()?>assets/images/img_small_btn.png">
+                            </div>
+                        </a>
+                    </div>
+                    <a href="">
+                        <span>
+                            <img src="<?=base_url()?>assets/images/img_mid_item2.jpg" alt="ipad mini">
+                        </span>
+                    </a>
                 </div>
             </div>
         </div>
+        
     </div>
 </section>
+
+
 
 <input type = 'hidden' id='timer_date' value='<?php echo (strtotime(date('M d,Y H:i:s')) < strtotime($data['cd_startdate']))?$data['cd_startdate']:$data['cd_enddate']; ?>'/>
 
@@ -272,6 +364,7 @@
 <script src="<?=base_url()?>assets/js/src/home.js?ver=<?=ES_FILE_VERSION?>" type="text/javascript"></script>
 <script src="<?=base_url()?>/assets/js/src/vendor/jquery.plugin.min.js" type="text/javascript"></script>
 <script src="<?=base_url()?>/assets/js/src/vendor/jquery.countdown.min.js" type="text/javascript"></script>
+
 <script type="text/javascript">
 $("body").bind("unloadingChild", function(){
     console.log("child unloaded");
