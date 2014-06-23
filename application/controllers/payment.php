@@ -25,7 +25,7 @@ class Payment extends MY_Controller{
     public $PayMentPayPal = 1;
     public $PayMentDragonPay = 2;
     public $PayMentCashOnDelivery = 3;
-    public $PayMentDragonPayOnlineBanking = 4;
+    public $PayMentPesoPayCC = 4;
     public $PayMentDirectBankDeposit = 5;
 
     function cart_items()
@@ -767,7 +767,6 @@ class Payment extends MY_Controller{
             echo '{"e":"0","m":"'.$return['o_message'].'"}'; 
             exit();
         }else{
-
             $orderId = $return['v_order_id'];
             $locked = $this->lockItem($toBeLocked,$orderId,'insert');  
             $this->session->set_userdata('dragonpayticket', true);
@@ -936,7 +935,58 @@ class Payment extends MY_Controller{
 
      #START OF PESOPAY PAYMENT
     function payPesoPay(){
-        echo 'OK';
+        header('Content-type: application/json');
+
+        $paymentType = $this->PayMentPesoPayCC; 
+
+        $member_id =  $this->session->userdata('member_id'); 
+        $remove = $this->payment_model->releaseAllLock($member_id);
+        $qtysuccess = $this->resetPriceAndQty(TRUE);
+        $carts = $this->session->all_userdata();
+        $itemList =  $carts['choosen_items'];
+        $productCount = count($itemList);
+
+        if($qtysuccess != $productCount){
+            echo  '{"e":"0","m":"Item quantity not available."}';
+            exit();
+        } 
+
+        $address = $this->memberpage_model->get_member_by_id($member_id); 
+        $email = $address['email'];
+
+        $bigThree = $this->getCityRegionMajorIsland($address);
+        $city = $bigThree['city'];  
+        $region = $bigThree['region'];  
+        $majorIsland = $bigThree['majorIsland']; 
+    
+        $ItemTotalPrice = 0;
+        $name = ""; 
+
+        $prepareData = $this->processData($itemList,$city,$region,$majorIsland);
+        $ItemTotalPrice = $prepareData['totalPrice'];
+        $productstring = $prepareData['productstring'];
+        $itemList = $prepareData['newItemList'];
+        $toBeLocked = $prepareData['toBeLocked'];
+        $name = $prepareData['productName'];
+
+        $grandTotal = $ItemTotalPrice;
+        $dpReturn = $this->dragonpay->getTxnToken($grandTotal,$name,$email);
+        $dpReturnArray = json_decode($dpReturn);
+        $transactionID =  $dpReturnArray->tid;
+        $invoice_no = date('Ymhsd'); 
+        $ip = $this->user_model->getRealIpAddr();  
+         
+        $return = $this->payment_model->payment($paymentType,$invoice_no,$grandTotal,$ip,$member_id,$productstring,$productCount,json_encode($itemList),$transactionID);
+        
+        if($return['o_success'] <= 0){
+            echo '{"e":"0","m":"'.$return['o_message'].'"}'; 
+            exit();
+        }else{
+            $orderId = $return['v_order_id'];
+            $locked = $this->lockItem($toBeLocked,$orderId,'insert');  
+            $this->session->set_userdata('dragonpayticket', true);
+            exit($dpReturn);
+        }
     }
 
     function pesoPaySuccess(){
@@ -949,6 +999,10 @@ class Payment extends MY_Controller{
 
     function pesoPayFail(){
 
+    }
+
+    function pesoPayDataFeed(){
+        echo 'OK';
     }
  
 
