@@ -204,6 +204,14 @@ class Memberpage extends MY_Controller
 			'balance' => $this->memberpage_model->getUserBalance($uid)
 		);
 		
+		//If delivery address is equal to personal address, hide setasdefaultaddress in delivery address tab
+		if( $data['cityID']===$data['c_cityID'] && $data['stateregionID']===$data['c_stateregionID'] && 
+		$data['address']===$data['c_address'] ){
+			$data['show_default_address'] = false;
+		}else{
+			$data['show_default_address'] = true;
+		}
+		
 		return $data;
 	}
 

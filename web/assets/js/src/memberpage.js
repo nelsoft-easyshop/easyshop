@@ -758,6 +758,15 @@ $(document).ready(function(){
 	
 });
 
+function displaySetDefaultAddress(o)
+{
+	if( o.cityID == o.c_cityID && o.stateregionID == o.c_stateregionID && o.address == o.c_address ){
+		$('#c_defaddress_div').css('display','none');
+	}else{
+		$('#c_defaddress_div').css('display','block');
+	}
+}
+
 /**************************************************************************************************************/	
 /**************************************  PERSONAL INFORMATION ADDRESS    ***************************************/   
 /**************************************************************************************************************/
@@ -812,7 +821,6 @@ $(document).ready(function(){
 				function(data){
 					$(form).find('input[type="submit"]').attr('disabled', false);
 
-					
 					try{
 						var obj = jQuery.parseJSON(data);
 					}
@@ -865,6 +873,9 @@ $(document).ready(function(){
 							$('#personal_profile_address span.maploc_stat').html('Location marked');
 
 						}
+						
+						//manage display of default address option
+						displaySetDefaultAddress(obj);
 					}
 				});
 			$(form).find('input[type="submit"]').attr('disabled', true);
@@ -1285,6 +1296,10 @@ $(document).ready(function(){
 							$('#personal_profile_address .edit_profile').hide();
 							progress_update($('#personal_profile_address'));
 						}
+						
+						//manage display of default address option
+						displaySetDefaultAddress(obj);
+						
 						progress_update($('#c_deliver_address'));
 						$('.uptd').show().delay(1600).fadeOut(600);;
 					

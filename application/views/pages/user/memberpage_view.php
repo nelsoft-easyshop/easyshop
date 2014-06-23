@@ -1411,7 +1411,7 @@
 					</div>
 				</div>
 			</div>
-			<div>
+			<div id="c_defaddress_div" style="<?php echo $show_default_address ? '':'display:none;' ?>" >
 				<label></label>
 				<input type="checkbox" name="c_def_address" id="c_def_address"> <span>Set as Default Address</span>
 				<a class="tooltips" href="javascript:void(0)"><p class="span_bg"></p><!-- <img src="<?=base_url()?>/assets/images/icon_qmark.png"> --><span>Setting as default updates address in Personal Information</span></a>
