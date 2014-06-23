@@ -22,6 +22,9 @@
 						<p>
 							Dear {seller_name},
 						</p>
+						<p style="text-align:justify;text-justify:inter-word;">
+							{payment_msg_seller}
+						</p>
 						<p>
 							Thank you for selling through Easyshop.ph! Details for the item(s) you've sold are as follows:
 						</p>

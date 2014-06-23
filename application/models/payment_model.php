@@ -358,28 +358,6 @@ class payment_model extends CI_Model
 			'products' => array()
 		);
 		
-		#get payment method instructions
-		switch($data['payment_method']){
-			case 1:
-				$data['payment_msg'] = $this->lang->line('payment_paypal');
-				break;
-			case 2:
-			case 4:
-				$data['payment_msg'] = $this->lang->line('payment_dp');
-				break;
-			case 3:
-				$data['payment_msg'] = $this->lang->line('payment_cod');
-				break;
-			case 5:
-				$this->load->library('parser');
-				$paymentMsg = $this->lang->line('payment_bd');
-				$bankparse['bank_name'] = $this->xmlmap->getFilenameID('page/content_files','bank-name');
-				$bankparse['bank_accname'] = $this->xmlmap->getFilenameID('page/content_files','bank-account-name');
-				$bankparse['bank_accnum'] = $this->xmlmap->getFilenameID('page/content_files','bank-account-number');
-				$data['payment_msg'] = $this->parser->parse_string($paymentMsg, $bankparse, true);
-				break;
-		}
-		
 		foreach($row as $value){
 			$temp = $value;
 			

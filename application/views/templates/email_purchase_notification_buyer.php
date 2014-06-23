@@ -17,7 +17,7 @@
               Dear {buyer_name},
             </p>
 			<p style="text-align:justify;text-justify:inter-word;">
-				{payment_msg}
+				{payment_msg_buyer}
 			</p>
             <p>
               Details for the item(s) you've purchased are as follows:

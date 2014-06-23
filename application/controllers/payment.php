@@ -1085,6 +1085,32 @@ class Payment extends MY_Controller{
 		
         $transactionData = $this->payment_model->getPurchaseTransactionDetails($data);
         
+		#get payment method instructions
+		switch($transactionData['payment_method']){
+			case 1:
+				$transactionData['payment_msg_buyer'] = $this->lang->line('payment_paypal_buyer');
+				$transactionData['payment_msg_seller'] = $this->lang->line('payment_ppdp_seller');
+				break;
+			case 2:
+			case 4:
+				$transactionData['payment_msg_buyer'] = $this->lang->line('payment_dp_buyer');
+				$transactionData['payment_msg_seller'] = $this->lang->line('payment_ppdp_seller');
+				break;
+			case 3:
+				$transactionData['payment_msg_buyer'] = $this->lang->line('payment_cod_buyer');
+				$transactionData['payment_msg_seller'] = $this->lang->line('payment_cod_seller');
+				break;
+			case 5:
+				$this->load->library('parser');
+				$paymentMsg = $this->lang->line('payment_bd_buyer');
+				$bankparse['bank_name'] = $this->xmlmap->getFilenameID('page/content_files','bank-name');
+				$bankparse['bank_accname'] = $this->xmlmap->getFilenameID('page/content_files','bank-account-name');
+				$bankparse['bank_accnum'] = $this->xmlmap->getFilenameID('page/content_files','bank-account-number');
+				$transactionData['payment_msg_buyer'] = $this->parser->parse_string($paymentMsg, $bankparse, true);
+				$transactionData['payment_msg_seller'] = '';
+				break;
+		}
+		
         //Send email to buyer
         $buyerEmail = $transactionData['buyer_email'];
         $buyerData = $transactionData;
@@ -1111,6 +1137,7 @@ class Payment extends MY_Controller{
             'dateadded' => $transactionData['dateadded'],
             'buyer_name' => $transactionData['buyer_name'],
 			'invoice_no' => $transactionData['invoice_no'],
+			'payment_msg_seller' => $transactionData['payment_msg_seller']
             );
 			
         foreach($transactionData['seller'] as $seller){

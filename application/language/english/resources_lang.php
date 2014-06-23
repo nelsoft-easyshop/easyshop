@@ -31,24 +31,24 @@ $lang['notification_subject_buyer'] = "Easyshop.ph - Purchased Item Transaction 
 $lang['notification_subject_seller'] = "Easyshop.ph - Sold Item Transaction Details";
 
 #Purchase Notification - Email Payment Method Guidelines
-$lang['payment_paypal'] = "Easyshop.ph has received your payment and has notified the seller(s) of the items you have purchased to 
+$lang['payment_paypal_buyer'] = "Easyshop.ph has received your payment and has notified the seller(s) of the items you have purchased to 
 ship your items at the soonest possible time. You may view and manage your orders through your transactions 
 page by going to your page at <a href='https://easyshop.ph/me'>https://easyshop.ph/me</a> and by clicking on on-going transactions. 
 <br><br>
 Thank you and we hope you continue to use Easyshop.ph, where shopping is made easy.";
 
-$lang['payment_cod'] = "Easyshop.ph has notified the seller(s) of the items you have purchased to ship your items at the soonest possible time.
+$lang['payment_cod_buyer'] = "Easyshop.ph has notified the seller(s) of the items you have purchased to ship your items at the soonest possible time.
 You may view and manage your orders through your transactions page by going to your page at <a href='https://easyshop.ph/me'>https://easyshop.ph/me</a> and by clicking on on-going transactions. 
 <br><br>
 Thank you and we hope you continue to use Easyshop.ph, where shopping is made easy.";
 
-$lang['payment_dp'] = "Please follow Dragonpay's instructions regarding the necessary steps you need to accomplish to complete your purchase.
+$lang['payment_dp_buyer'] = "Please follow Dragonpay's instructions regarding the necessary steps you need to accomplish to complete your purchase.
 Once confirmed, you may view and manage your orders through your transactions page by going to your page at <a href='https://easyshop.ph/me'>https://easyshop.ph/me</a> and by clicking on on-going transactions. 
 We will also notify the seller(s) of the items you have purchased to ship your items at the soonest possible time.
 <br><br>
 Thank you and we hope you continue to use Easyshop.ph, where shopping is made easy.";
 
-$lang['payment_bd'] = "Your order has been placed at Easyshop.ph and is currently awaiting confirmation. Deposit the specified amount at
+$lang['payment_bd_buyer'] = "Your order has been placed at Easyshop.ph and is currently awaiting confirmation. Deposit the specified amount at
 the bank account listed below to complete the purchase of your items.
 <br><br>
 <table>
@@ -73,6 +73,18 @@ We will notify the seller(s) of the items you have purchased to ship your items 
 accomplished all the necessary steps.
 <br><br>
 Thank you and we hope you continue to use Easyshop.ph, where shopping is made easy.";
+
+$lang['payment_ppdp_seller'] = "A purchase has been made for your listing(s) at Easyshop.ph. The details of your sale
+and the shipment information of your buyer is included in the summary below.
+We have received the payment for this transaction and will move the payment to your
+account as soon as the buyer has acknowledge that he has received your item.
+<br><br>
+Kindly ship/deliver your item at the soonest possible time. ";
+
+$lang['payment_cod_seller'] = "A purchase has been made for your listing(s) at Easyshop.ph through Cash on Delivery.
+The details of your sale and the shipment information of your buyer is included in the summary below.
+<br><br>
+Kindly ship/deliver your item at the soonest possible time.";
 
 #Purchase Notification - Mobile
 $lang['notification_txtmsg_buyer'] = ' - This is to notify you that you have made a purchase through Easyshop.ph. Transaction details have been sent to your email.';
