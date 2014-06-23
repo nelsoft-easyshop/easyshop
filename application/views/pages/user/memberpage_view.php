@@ -195,7 +195,7 @@
 			<option value="5"># of Sold Items</option>
 		</select>
 		<span class="span_bg arrow_sort item_arrow_sort"></span>
-		<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" class="loading_img" style="display:none;"/>
+		<img src="<?=base_url()?>assets/images/orange_loader_small.gif" class="loading_img" style="display:none;"/>
 	</div>
 	
 	
@@ -204,7 +204,7 @@
 	<?php else:?>
 	
 	<div class="page_load" style="display:none;text-align:center; margin-top: 50px;">
-		<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" class="loading_img"/>
+		<img src="<?=base_url()?>assets/images/orange_loader_small.gif" class="loading_img"/>
 	</div>
 	
 	<?php $pageNum = 0;?>
@@ -330,7 +330,7 @@
 			<option value="5"># of Sold Items</option>
 		</select>
 		<span class="span_bg arrow_sort item_arrow_sort"></span>
-		<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" class="loading_img" style="display:none;"/>
+		<img src="<?=base_url()?>assets/images/orange_loader_small.gif" class="loading_img" style="display:none;"/>
 	</div>
 	
 	<?php if($deleted_count == 0):?>
@@ -338,7 +338,7 @@
 	<?php else:?>
 	
 	<div class="page_load" style="display:none;text-align:center; margin-top:50px;">
-		<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" class="loading_img"/>
+		<img src="<?=base_url()?>assets/images/orange_loader_small.gif" class="loading_img"/>
 	</div>
 	
 	<?php $pageNum = 0;?>
@@ -819,7 +819,7 @@
 					<!--
 					<span class="verify toverify" style="<?php echo $is_contactno_verify == 0 && trim($contactno) !== ''?'':'display:none;'?>">
 						<span class="verify_now">Verify</span>
-						<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" class="verify_img" style="display:none;"/>
+						<img src="<?=base_url()?>assets/images/orange_loader_small.gif" class="verify_img" style="display:none;"/>
 					</span>
 					<span class="verify doneverify" style="<?php echo $is_contactno_verify == 0?'display:none;':''?>">
 						<span class="span_bg chk_img"></span><span><strong>Verified</strong></span>
@@ -857,7 +857,7 @@
 					
 					<span class="verify toverify" style="<?php echo $is_email_verify == 0 && trim($email) !== ''?'':'display:none;'?>">
 						<span class="verify_now">Verify Now</span>
-						<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" class="verify_img" style="display:none"/>
+						<img src="<?=base_url()?>assets/images/orange_loader_small.gif" class="verify_img" style="display:none"/>
 					</span>	
 					<span class="verify doneverify" style="<?php echo $is_email_verify == 0?'display:none;':''?>">
 						<span class="span_bg chk_img"></span><span style='font-size:14px; font-weight:bold; color:#1f4f98;'><strong>Verified</strong></span>
@@ -1246,7 +1246,7 @@
 		<div class="clear"></div>
 		<div class="bottom_save" style="text-align:left">
 			<input type="button" name="billing_info_btn" id="billing_info_btn" class="orange_btn3" value="Save">
-			<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" id="load_deliver_address" style="position: relative; top:12px; left:15px;  display:none"/>
+			<img src="<?=base_url()?>assets/images/orange_loader_small.gif" id="load_deliver_address" style="position: relative; top:12px; left:15px;  display:none"/>
 		</div>
 		<?php echo form_close();?>			
 	</div>
@@ -1414,7 +1414,7 @@
 			<div id="c_defaddress_div" style="<?php echo $show_default_address ? '':'display:none;' ?>" >
 				<label></label>
 				<input type="checkbox" name="c_def_address" id="c_def_address"> <span>Set as Default Address</span>
-				<a class="tooltips" href="javascript:void(0)"><p class="span_bg"></p><!-- <img src="<?=base_url()?>/assets/images/icon_qmark.png"> --><span>Setting as default updates address in Personal Information</span></a>
+				<a class="tooltips" href="javascript:void(0)"><p class="span_bg"></p><!-- <img src="<?=base_url()?>assets/images/icon_qmark.png"> --><span>Setting as default updates address in Personal Information</span></a>
 			</div>
 			
 			
@@ -1457,7 +1457,7 @@
 	<div class="clear"></div>
 	<div class="bottom_save" style='text-align:left;'>
 		<input type="submit" name="c_deliver_address_btn" value="Save" id="c_deliver_address_btn" style="position: relative; left:40%;">
-		<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" id="load_cdeliver_address" style="position: relative; top:12px; left:42%;  display:none"/>
+		<img src="<?=base_url()?>assets/images/orange_loader_small.gif" id="load_cdeliver_address" style="position: relative; top:12px; left:42%;  display:none"/>
 	</div>	
 	<?php echo form_close();?>
 
@@ -1474,10 +1474,10 @@
 		<label for="tx_password">Enter your password:</label>
 		<input type="password" id="tx_password" name="tx_password">
 		<span class="error red"></span>
-		<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" class="loading_img" style="display:none;vertical-align:middle;margin-left:3px;"/>
+		<img src="<?=base_url()?>assets/images/orange_loader_small.gif" class="loading_img" style="display:none;vertical-align:middle;margin-left:3px;"/>
 	</div>
 	<div id="tx_dialog_loadingimg" style="text-align:center;">
-		<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" class="loading_img" style="display:none;"/>
+		<img src="<?=base_url()?>assets/images/orange_loader_small.gif" class="loading_img" style="display:none;"/>
 	</div>
 	<br/>
 </div>
@@ -1526,7 +1526,7 @@
 		</div>
 		
 	<div class="page_load" style="display:none;text-align:center; margin-top: 50px;">
-		<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" class="loading_img"/>
+		<img src="<?=base_url()?>assets/images/orange_loader_small.gif" class="loading_img"/>
 	</div>
 	
 	<?php $transac_counter = 0;$pageNum = 0;?>
@@ -1822,7 +1822,7 @@
 		</div>
 		
 		<div class="page_load" style="display:none;text-align:center; margin-top: 50px;">
-			<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" class="loading_img"/>
+			<img src="<?=base_url()?>assets/images/orange_loader_small.gif" class="loading_img"/>
 		</div>
 		
 		<?php $transac_counter = 0; $pageNum = 0;?>
@@ -2120,7 +2120,7 @@
 		</div>
 		
 		<div class="page_load" style="display:none;text-align:center; margin-top: 50px;">
-			<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" class="loading_img"/>
+			<img src="<?=base_url()?>assets/images/orange_loader_small.gif" class="loading_img"/>
 		</div>
 		
 		<?php $transac_counter = 0; $pageNum = 0;?>
@@ -2275,7 +2275,7 @@
 		</div>
 		
 		<div class="page_load" style="display:none;text-align:center; margin-top: 50px;">
-			<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" class="loading_img"/>
+			<img src="<?=base_url()?>assets/images/orange_loader_small.gif" class="loading_img"/>
 		</div>
 		
 		<?php $transac_counter = 0;$pageNum=0;?>

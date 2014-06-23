@@ -158,11 +158,11 @@
 							<option value="5"># of Sold Items</option>
 						</select>
 						<span class="span_bg arrow_sort"></span>
-						<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" class="loading_img" style="display:none;"/>
+						<img src="<?=base_url()?>assets/images/orange_loader_small.gif" class="loading_img" style="display:none;"/>
 					</div>
 					
 					<div class="page_load" style="display:none;text-align:center; margin-top: 50px;">
-						<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" class="loading_img"/>
+						<img src="<?=base_url()?>assets/images/orange_loader_small.gif" class="loading_img"/>
 					</div>
                     
 					<?php $pageNum = 0;?>

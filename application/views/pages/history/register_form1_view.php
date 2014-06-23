@@ -44,10 +44,10 @@
             <label for="username"><strong>Username:</strong></label>
             <input id="username" name="username" type="text" maxlength="25" autocomplete="off" value="<?php echo $reg_username?>"/>
 			<input type="hidden" id="usernamecheck" value="">
-			<img class="check_loader" src="<?=base_url()?>/assets/images/orange_loader_small.gif" style="display:none;">
+			<img class="check_loader" src="<?=base_url()?>assets/images/orange_loader_small.gif" style="display:none;">
 			<div id="username_status" style="display:inline;">
-				<img src="<?=base_url()?>/assets/images/check_icon.png" id="username_check" style="position: relative;display:none;vertical-align:middle"/>
-				<img src="<?=base_url()?>/assets/images/x_icon.png" id="username_x" style="position: relative;display:none;vertical-align:middle"/>
+				<img src="<?=base_url()?>assets/images/check_icon.png" id="username_check" style="position: relative;display:none;vertical-align:middle"/>
+				<img src="<?=base_url()?>assets/images/x_icon.png" id="username_x" style="position: relative;display:none;vertical-align:middle"/>
 				<span class="username_availability"></span>
 			</div>
 			<span class="red ci_form_validation_error"><?php echo form_error('username'); ?></span>
@@ -71,8 +71,8 @@
           <div class="field">
             <label><strong>Confirm Password:</strong></label>
             <input id="cpassword" name="cpassword" type="password" maxlength="100" disabled="true">
-			<img src="<?=base_url()?>/assets/images/check_icon.png" id="cpassword_check" style="position: relative;display:none;"/>
-			<img src="<?=base_url()?>/assets/images/x_icon.png" id="cpassword_x" style="position: relative;display:none; "/>
+			<img src="<?=base_url()?>assets/images/check_icon.png" id="cpassword_check" style="position: relative;display:none;"/>
+			<img src="<?=base_url()?>assets/images/x_icon.png" id="cpassword_x" style="position: relative;display:none; "/>
 			<span class="red ci_form_validation_error"><?php echo form_error('cpassword'); ?></span>
           </div>
 		  
@@ -80,10 +80,10 @@
 				<label for="email"><strong>Email Address:</strong></label>
 				<input type="text" name="email" class="contactinfo" id="email" maxlength="40">
 				<input type="hidden" id="emailcheck" value="">
-				<img class="check_loader" src="<?=base_url()?>/assets/images/orange_loader_small.gif" style="display:none;">
+				<img class="check_loader" src="<?=base_url()?>assets/images/orange_loader_small.gif" style="display:none;">
 				<div id="email_status" style="display:inline;">
-					<img src="<?=base_url()?>/assets/images/check_icon.png" id="email_check" style="position: relative;display:none;vertical-align:middle"/>
-					<img src="<?=base_url()?>/assets/images/x_icon.png" id="email_x" style="position: relative;display:none;vertical-align:middle"/>
+					<img src="<?=base_url()?>assets/images/check_icon.png" id="email_check" style="position: relative;display:none;vertical-align:middle"/>
+					<img src="<?=base_url()?>assets/images/x_icon.png" id="email_x" style="position: relative;display:none;vertical-align:middle"/>
 					<span class="email_availability"></span>
 				</div>
 				<span class="red ci_form_validation_error"><?php echo form_error('email'); ?></span>
@@ -100,7 +100,7 @@
 		  <div class="field" style="padding-top:25px">
 			<input type="submit" id="register_page1_btn" value="Register"/>
             <input type="hidden"  name="register_page1" value="register_page1"/>
-            <img src="<?=base_url()?>/assets/images/orange_loader_small.gif" id="register_form1_loadingimg" style="position: relative; left:20px; display:none"/>
+            <img src="<?=base_url()?>assets/images/orange_loader_small.gif" id="register_form1_loadingimg" style="position: relative; left:20px; display:none"/>
 		  </div>
 		  
 	  </div>

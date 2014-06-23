@@ -99,7 +99,7 @@
             <?php if($product['start_promo']): ?>
                 <?php if($product['is_soldout']): ?>
                     <span class="cd_soldout">
-                        <img src="<?=base_url()?>/assets/images/img_cd_soldout.png" alt="Sold Out">
+                        <img src="<?=base_url()?>assets/images/img_cd_soldout.png" alt="Sold Out">
                     </span>
                 <?php else: ?>
                     <span class="cd_slide_discount">
@@ -367,7 +367,7 @@
                   <textarea name="comment"></textarea>
                 </div>
                 <input type="submit" value="Submit" class="orange_btn" name="review_form">
-                <img src="<?=base_url()?>/assets/images/bx_loader.gif" id="load_submitreview" style="position: relative; top:18px; left:30px; display:none"/>
+                <img src="<?=base_url()?>assets/images/bx_loader.gif" id="load_submitreview" style="position: relative; top:18px; left:30px; display:none"/>
               <!-- </form> -->
               <?php echo form_close(); ?>
             </div>
@@ -429,7 +429,7 @@
                   <textarea class="reply_field" name="reply_field" cols=50 rows=4></textarea>
                   <br>
                   <span class="reply_save orange_btn3">Save</span> 
-                  <img src="<?=base_url()?>/assets/images/orange_loader_small.gif" id="savereply_loadingimg" style="position: relative; top:12px; left:15px; display:none"/>
+                  <img src="<?=base_url()?>assets/images/orange_loader_small.gif" id="savereply_loadingimg" style="position: relative; top:12px; left:15px; display:none"/>
                   <span class="reply_cancel">Cancel</span>
                 <?php echo form_close();?>
               </div>
@@ -439,7 +439,7 @@
             <div class="clear"></div>
             <div class="review_last"> 
               <span id="see_more_reviews" style="font-weight:bold;"><a href="">See more reviews.</a></span> 
-              <img src="<?=base_url()?>/assets/images/orange_loader_small.gif" id="more_review_loading_img" style="position: relative; top:12px; left:15px; display:none; "/>
+              <img src="<?=base_url()?>assets/images/orange_loader_small.gif" id="more_review_loading_img" style="position: relative; top:12px; left:15px; display:none; "/>
               <br/><br/>
            </diV>
             <?php endif; ?>
@@ -630,8 +630,8 @@ $(document).on('click','.prod_cat_drop',function() {
               $('.prod_cat_drop').removeClass('active_prod_cat_drop_arrow');
 </script>
 
-<script src="<?=base_url()?>/assets/js/src/vendor/jquery.plugin.min.js" type="text/javascript"></script>
-<script src="<?=base_url()?>/assets/js/src/vendor/jquery.countdown.min.js" type="text/javascript"></script>
+<script src="<?=base_url()?>assets/js/src/vendor/jquery.plugin.min.js" type="text/javascript"></script>
+<script src="<?=base_url()?>assets/js/src/vendor/jquery.countdown.min.js" type="text/javascript"></script>
 <script>
     
     $(document).ready(function(){

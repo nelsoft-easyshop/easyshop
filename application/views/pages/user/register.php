@@ -281,8 +281,8 @@
 							<input  type="hidden" id="usernamecheck" value="" name="usernamecheck">
 							<span class="red ci_form_validation_error"><?php echo form_error('username'); ?></span>
 							<div id="username_status">
-								<img class="fieldstatus" src="<?=base_url()?>/assets/images/check_icon.png" id="username_check" style="position: relative;display:none;vertical-align:middle"/>
-								<img class="fieldstatus" src="<?=base_url()?>/assets/images/x_icon.png" id="username_x" style="position: relative;display:none;vertical-align:middle"/>
+								<img class="fieldstatus" src="<?=base_url()?>assets/images/check_icon.png" id="username_check" style="position: relative;display:none;vertical-align:middle"/>
+								<img class="fieldstatus" src="<?=base_url()?>assets/images/x_icon.png" id="username_x" style="position: relative;display:none;vertical-align:middle"/>
 								<span class="username_availability"></span>
 							</div>
 						</div>
@@ -295,8 +295,8 @@
 							<h4 class="txt_cp">Confirm Password</h4>
 							<input type="password" placeholder="" id="cpassword" name="cpassword" class="reqfield" disabled>
 							<span class="field_pword_status">
-								<img class="fieldstatus" src="<?=base_url()?>/assets/images/check_icon.png" id="cpassword_check" style="position: relative;display:none;"/>
-								<img class="fieldstatus" src="<?=base_url()?>/assets/images/x_icon.png" id="cpassword_x" style="position: relative;display:none; "/>
+								<img class="fieldstatus" src="<?=base_url()?>assets/images/check_icon.png" id="cpassword_check" style="position: relative;display:none;"/>
+								<img class="fieldstatus" src="<?=base_url()?>assets/images/x_icon.png" id="cpassword_x" style="position: relative;display:none; "/>
 							</span>
 							<span class="red ci_form_validation_error"><?php echo form_error('cpassword'); ?></span>
 							<span class="help-block spnmsg padding1" style="text-align:left"></span>
@@ -306,8 +306,8 @@
 							<input type="text" placeholder="" id="email" name="email" class="reqfield" autocomplete="off">
 							<input type="hidden" id="emailcheck" value="">
 							<div id="email_status">
-								<img class="fieldstatus" src="<?=base_url()?>/assets/images/check_icon.png" id="email_check" style="position: relative;display:none;vertical-align:middle"/>
-								<img class="fieldstatus" src="<?=base_url()?>/assets/images/x_icon.png" id="email_x" style="position: relative;display:none;vertical-align:middle"/>
+								<img class="fieldstatus" src="<?=base_url()?>assets/images/check_icon.png" id="email_check" style="position: relative;display:none;vertical-align:middle"/>
+								<img class="fieldstatus" src="<?=base_url()?>assets/images/x_icon.png" id="email_x" style="position: relative;display:none;vertical-align:middle"/>
 							</div>
 							<br/>
 							<span class="red email_availability"></span>
@@ -319,8 +319,8 @@
 							<input type="text" placeholder="e.g. 09051234567" name="mobile" class="reqfield" id="mobile" maxlength="11">
 							<input type="hidden" id="mobilecheck" value="">
 							<div id="mobile_status">
-								<img class="fieldstatus" src="<?=base_url()?>/assets/images/check_icon.png" id="mobile_check" style="position: relative;display:none;vertical-align:middle"/>
-								<img class="fieldstatus" src="<?=base_url()?>/assets/images/x_icon.png" id="mobile_x" style="position: relative;display:none;vertical-align:middle"/>
+								<img class="fieldstatus" src="<?=base_url()?>assets/images/check_icon.png" id="mobile_check" style="position: relative;display:none;vertical-align:middle"/>
+								<img class="fieldstatus" src="<?=base_url()?>assets/images/x_icon.png" id="mobile_x" style="position: relative;display:none;vertical-align:middle"/>
 								<span class=" red  mobile_availability"></span>
 							</div>
 							<span class="red ci_form_validation_error"><?php echo form_error('mobile'); ?></span>
@@ -336,7 +336,7 @@
 							<!--<button type="button" class="btn btn-warning btn-large">SEND</button>-->
 							<input type="submit" class="btn btn_send" value="SEND" name="register_form1" id="register_form1_btn" >
 							<div style='display:inline-block; position:absolute;'>
-							<img style='display:none;margin-top:5px;margin-left:5px;' src="<?=base_url()?>/assets/images/orange_loader_small.gif" class="img_loader_small2" id="register_form1_loadingimg"/>
+							<img style='display:none;margin-top:5px;margin-left:5px;' src="<?=base_url()?>assets/images/orange_loader_small.gif" class="img_loader_small2" id="register_form1_loadingimg"/>
 							</div>
 						</div>				
 					</fieldset>

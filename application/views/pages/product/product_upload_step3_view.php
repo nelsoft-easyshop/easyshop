@@ -225,7 +225,7 @@
 	<div id="dialog_preference_name" style="display:none;">
 		<label for="preference_name">Name: </label>
 		<input type="text" id="preference_name" name="preference_name" maxlength="30">
-		<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" class="loading" style="display:none;vertical-align:middle; float: right;"/>
+		<img src="<?=base_url()?>assets/images/orange_loader_small.gif" class="loading" style="display:none;vertical-align:middle; float: right;"/>
 	</div>
 	 
       <!-- start of shipping summary -->
@@ -378,7 +378,7 @@
 
       <div class="clear"></div>
       <span id="btnShippingDetailsSubmit" class="tablehide orange_btn3">Submit</span>
-      <img src="<?=base_url()?>/assets/images/orange_loader.gif" class="loading_img_step3" style="display:none; margin-left:470px;"/>
+      <img src="<?=base_url()?>assets/images/orange_loader.gif" class="loading_img_step3" style="display:none; margin-left:470px;"/>
 
     </div>
     <!-- End of Shipping Content -->

@@ -58,8 +58,8 @@
 					<span class="red ci_form_validation_error"><?php echo form_error('register_mobile'); ?></span>
 					<label for="cregister_mobile">Confirm Mobile Numer:</label>
 					<input type="text" name="cregister_mobile" id="cregister_mobile" maxlength="11" disabled="true" autocomplete="off">
-					<img src="<?=base_url()?>/assets/images/check_icon.png" id="cregister_mobile_check" style="position: relative; display:none;"/>
-					<img src="<?=base_url()?>/assets/images/x_icon.png" id="cregister_mobile_x" style="position: relative; display:none;"/>
+					<img src="<?=base_url()?>assets/images/check_icon.png" id="cregister_mobile_check" style="position: relative; display:none;"/>
+					<img src="<?=base_url()?>assets/images/x_icon.png" id="cregister_mobile_x" style="position: relative; display:none;"/>
 					<span class="red ci_form_validation_error"><?php echo form_error('cregister_mobile'); ?></span>
 			</div>
 			
@@ -73,8 +73,8 @@
 					<span class="red ci_form_validation_error"><?php echo form_error('register_email'); ?></span>
 					<label for="cregister_email">Confirm Email Address:</label>
 					<input type="text" name="cregister_email" id="cregister_email" disabled="true" maxlength="40" autocomplete="off">
-					<img src="<?=base_url()?>/assets/images/check_icon.png" id="cregister_email_check" style="position: relative; display:none;"/>
-					<img src="<?=base_url()?>/assets/images/x_icon.png" id="cregister_email_x" style="position: relative; display:none;"/>
+					<img src="<?=base_url()?>assets/images/check_icon.png" id="cregister_email_check" style="position: relative; display:none;"/>
+					<img src="<?=base_url()?>assets/images/x_icon.png" id="cregister_email_x" style="position: relative; display:none;"/>
 					<span class="red ci_form_validation_error"><?php echo form_error('cregister_email'); ?></span>
 			</div>
 
@@ -87,7 +87,7 @@
 			</div>
 			<input type="submit" class="verify" name="register_form2_a_btn" value="submit" id="register_form2_a_btn">
 			<strong><span class="countdown_submit"></span></strong>
-			<img src="<?=base_url()?>/assets/images/bx_loader.gif" id="register_loading" style="position: relative; top:12px; left:15px; display:none"/>
+			<img src="<?=base_url()?>assets/images/bx_loader.gif" id="register_loading" style="position: relative; top:12px; left:15px; display:none"/>
 		<!--</form>	  -->
 		<?php echo form_close();?>
 		

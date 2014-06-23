@@ -53,7 +53,7 @@
                 	<a href="<?=base_url();?>login" class="">Log In</a>
                 </div>
                 <div id="himg" class="text-center"> 
-                	<a href="<?=base_url()?>home"><img title='Click here to checkout our site' src="<?=base_url()?>/assets/images/landingpage/img_logo.png"></a>
+                	<a href="<?=base_url()?>home"><img title='Click here to checkout our site' src="<?=base_url()?>assets/images/landingpage/img_logo.png"></a>
 
                 </div>
                 
@@ -68,7 +68,7 @@
                       Manage your business anytime, anywhere!
                    </p>
                    <span class="img_scroll">
-					<a href="<?=base_url()?>home" class="lnk_homepage well-small" ><img src="<?=base_url()?>/assets/images/landingpage/img_home.png">Visit Homepage</a>
+					<a href="<?=base_url()?>home" class="lnk_homepage well-small" ><img src="<?=base_url()?>assets/images/landingpage/img_home.png">Visit Homepage</a>
 					<!--<a id="gotoHome" class="btn btn-warning btn-large" href="<?=base_url()?>home" >Visit home page</a>-->
 				   </span>
                 </div>
@@ -86,10 +86,10 @@
 											<input type="text" placeholder="" id="username" name="username" class="reqfield" autocomplete="off"/>
 											<input type="hidden" id="usernamecheck" value="" name="usernamecheck">
 											<span class="red ci_form_validation_error"><?php echo form_error('username'); ?></span>
-											<img id="username_loader" class="img_loader_small" src="<?=base_url()?>/assets/images/orange_loader_small.gif" style="display:none;">
+											<img id="username_loader" class="img_loader_small" src="<?=base_url()?>assets/images/orange_loader_small.gif" style="display:none;">
 											<div id="username_status">
-												<img class="fieldstatus" src="<?=base_url()?>/assets/images/check_icon.png" id="username_check" style="position: relative;display:none;vertical-align:middle"/>
-												<img class="fieldstatus" src="<?=base_url()?>/assets/images/x_icon.png" id="username_x" style="position: relative;display:none;vertical-align:middle"/>
+												<img class="fieldstatus" src="<?=base_url()?>assets/images/check_icon.png" id="username_check" style="position: relative;display:none;vertical-align:middle"/>
+												<img class="fieldstatus" src="<?=base_url()?>assets/images/x_icon.png" id="username_x" style="position: relative;display:none;vertical-align:middle"/>
 												<span class="username_availability"></span>
 											</div>
 											<span class="help-block spnmsg text-center">The username must be 5-25 characters long.</span>
@@ -105,8 +105,8 @@
 										
 											<h4>Confirm Password</h4>
 											<input type="password" placeholder="" id="cpassword" name="cpassword" class="reqfield" disabled>
-											<img class="fieldstatus" src="<?=base_url()?>/assets/images/check_icon.png" id="cpassword_check" style="position: relative;display:none;"/>
-											<img class="fieldstatus" src="<?=base_url()?>/assets/images/x_icon.png" id="cpassword_x" style="position: relative;display:none; "/>
+											<img class="fieldstatus" src="<?=base_url()?>assets/images/check_icon.png" id="cpassword_check" style="position: relative;display:none;"/>
+											<img class="fieldstatus" src="<?=base_url()?>assets/images/x_icon.png" id="cpassword_x" style="position: relative;display:none; "/>
 											<span class="red ci_form_validation_error"><?php echo form_error('cpassword'); ?></span>
 											<span class="help-block spnmsg" style="text-align:left"></span>
 										
@@ -114,10 +114,10 @@
 											<h4>Email Address</h4>
 											<input type="text" placeholder="" id="email" name="email" class="reqfield" autocomplete="off">
 											<input type="hidden" id="emailcheck" value="">
-											<img id="email_loader" class="img_loader_small" src="<?=base_url()?>/assets/images/orange_loader_small.gif" style="display:none;">
+											<img id="email_loader" class="img_loader_small" src="<?=base_url()?>assets/images/orange_loader_small.gif" style="display:none;">
 											<div id="email_status">
-												<img class="fieldstatus" src="<?=base_url()?>/assets/images/check_icon.png" id="email_check" style="position: relative;display:none;vertical-align:middle"/>
-												<img class="fieldstatus" src="<?=base_url()?>/assets/images/x_icon.png" id="email_x" style="position: relative;display:none;vertical-align:middle"/>
+												<img class="fieldstatus" src="<?=base_url()?>assets/images/check_icon.png" id="email_check" style="position: relative;display:none;vertical-align:middle"/>
+												<img class="fieldstatus" src="<?=base_url()?>assets/images/x_icon.png" id="email_x" style="position: relative;display:none;vertical-align:middle"/>
 												<span class="email_availability"></span>
 											</div>
 											<span class="red ci_form_validation_error"><?php echo form_error('email'); ?></span>
@@ -126,10 +126,10 @@
 											<h4>Mobile Number</h4>
 											<input type="text" placeholder="e.g. 09051234567" name="mobile" class="reqfield" id="mobile" maxlength="11">
 											<input type="hidden" id="mobilecheck" value="">
-											<img id="mobile_loader" class="img_loader_small" src="<?=base_url()?>/assets/images/orange_loader_small.gif" style="display:none;">
+											<img id="mobile_loader" class="img_loader_small" src="<?=base_url()?>assets/images/orange_loader_small.gif" style="display:none;">
 											<div id="mobile_status">
-												<img class="fieldstatus" src="<?=base_url()?>/assets/images/check_icon.png" id="mobile_check" style="position: relative;display:none;vertical-align:middle"/>
-												<img class="fieldstatus" src="<?=base_url()?>/assets/images/x_icon.png" id="mobile_x" style="position: relative;display:none;vertical-align:middle"/>
+												<img class="fieldstatus" src="<?=base_url()?>assets/images/check_icon.png" id="mobile_check" style="position: relative;display:none;vertical-align:middle"/>
+												<img class="fieldstatus" src="<?=base_url()?>assets/images/x_icon.png" id="mobile_x" style="position: relative;display:none;vertical-align:middle"/>
 												<span class="mobile_availability"></span>
 											</div>
 											<span class="red ci_form_validation_error"><?php echo form_error('mobile'); ?></span>
@@ -139,7 +139,7 @@
 											
 										<!--<button type="button" class="btn btn-warning btn-large">SEND</button>-->
 										<input type="submit" class="btn btn-warning btn-large" value="SEND" name="register_form1" id="register_form1_btn" >
-										<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" class="img_loader_small2" id="register_form1_loadingimg" style="display:none"/>
+										<img src="<?=base_url()?>assets/images/orange_loader_small.gif" class="img_loader_small2" id="register_form1_loadingimg" style="display:none"/>
 									
 										<p class="terms_con">By registering to Easyshop.ph, you agree to comply with our <span class="terms_and_conditions">Terms and Conditions</span></p>
 										<div class="dialog t_and_c">
@@ -211,7 +211,7 @@
 									<input placeholder="e-mail address" class="subscribe_input" id="appendedInputButton" type="text" name="subscribe_email">
 									<!--<button class="btn btn-warning btn-large" type="button">Subscribe</button>-->
 									<input type="submit" class="btn btn-warning btn-large subscribe_btn" value="Subscribe" name="subscribe_btn" id="subscribe_btn" >
-									<img src="<?=base_url()?>/assets/images/orange_loader_small.gif" class="img_loader_small2 sub_loading_img" id="subscribe_loadingimg" style="display:none"/>
+									<img src="<?=base_url()?>assets/images/orange_loader_small.gif" class="img_loader_small2 sub_loading_img" id="subscribe_loadingimg" style="display:none"/>
 								<?php echo form_close();?>
 								</div>
                         </div>                
