@@ -28,22 +28,6 @@ class Payment extends MY_Controller{
     public $PayMentDragonPayOnlineBanking = 4;
     public $PayMentDirectBankDeposit = 5;
 
-    // SANDBOX
-    public $PayPalMode             = 'sandbox'; 
-    public $PayPalApiUsername      = 'easyseller_api1.yahoo.com'; 
-    public $PayPalApiPassword      = '1396000698'; 
-    public $PayPalApiSignature     = 'AFcWxV21C7fd0v3bYYYRCpSSRl31Au1bGvwwVcv0garAliLq12YWfivG';  
-
-
-    // LIVE
-   // public $PayPalMode             = ''; 
-   // public $PayPalApiUsername      = 'admin_api1.easyshop.ph'; 
-   // public $PayPalApiPassword      = 'GDWFS6D9ACFG45E7'; 
-   // public $PayPalApiSignature     = 'AFcWxV21C7fd0v3bYYYRCpSSRl31Adro7yAfl2NInYAAVfFFipJ-QQhT'; 
-
-    
-    public $PayPalCurrencyCode     = 'PHP';
-
     function cart_items()
     {
         $res = true;
@@ -68,6 +52,7 @@ class Payment extends MY_Controller{
             $res = "Some items in your cart can only be purchased individually.";
         }
         echo json_encode($res);
+        exit();
     }
 
     function review()
@@ -170,6 +155,7 @@ class Payment extends MY_Controller{
        }
     }
 
+    #START OF PAYPAL PAYMENT
 	#SET UP PAYPAL FOR PARAMETERS
     #SEE REFERENCE SITE FOR THE PARAMETERS
     # https://developer.paypal.com/webapps/developer/docs/classic/express-checkout/integration-guide/ECCustomizing/
@@ -207,8 +193,7 @@ class Payment extends MY_Controller{
         $street = $address['c_address']; 
         $cityDescription = $address['c_city'];
         $email = $address['email']; 
-        $telephone = $address['c_telephone'];
-        $zipCode = "";
+        $telephone = $address['c_telephone']; 
 
         $bigThree = $this->getCityRegionMajorIsland($address);
         $city = $bigThree['city'];  
@@ -217,9 +202,7 @@ class Payment extends MY_Controller{
         $majorIsland = $bigThree['majorIsland']; 
         
         $ItemTotalPrice = 0;
-        $cnt = 0;
-        $solutionType = "Sole"; 
-        $landingPage = "Billing";
+        $cnt = 0; 
         $paypalType = $this->input->post('paypal'); 
         $dataitem = ""; 
         $toBeLocked = array(); 
@@ -264,7 +247,7 @@ class Payment extends MY_Controller{
                 '&PAYMENTREQUEST_0_ITEMAMT='.urlencode($ItemTotalPrice).   
                 '&PAYMENTREQUEST_0_SHIPPINGAMT='.urlencode($shipping_amt).
                 '&PAYMENTREQUEST_0_AMT='.urlencode($grandTotal).
-                '&SOLUTIONTYPE='.urlencode($solutionType).
+                '&SOLUTIONTYPE='.urlencode('Sole').
                 '&ALLOWNOTE=0'.
                 '&NOSHIPPING=1'.
                 '&PAYMENTREQUEST_0_SHIPTONAME='.urlencode($name).
@@ -272,13 +255,13 @@ class Payment extends MY_Controller{
                 '&PAYMENTREQUEST_0_SHIPTOCITY='.urlencode($cityDescription).
                 '&PAYMENTREQUEST_0_SHIPTOSTATE='.urlencode($regionDesc).
                 '&PAYMENTREQUEST_0_SHIPTOCOUNTRYCODE=PH'.
-                '&PAYMENTREQUEST_0_SHIPTOZIP='.urlencode($zipCode).
+                '&PAYMENTREQUEST_0_SHIPTOZIP='.urlencode('').
                 '&PAYMENTREQUEST_0_EMAIL='.urlencode($email).
                 '&EMAIL='.urlencode($email).
                 '&PAYMENTREQUEST_0_SHIPTOPHONENUM='.urlencode($telephone);
 
         if($paypalType == 2){
-           $padata .= '&LANDINGPAGE='.urlencode($landingPage);
+           $padata .= '&LANDINGPAGE='.urlencode('Billing');
         }else{
            $padata .= '&LANDINGPAGE='.urlencode('Login'); 
         }
@@ -306,11 +289,6 @@ class Payment extends MY_Controller{
         }
     }
 
-    function paypaltest(){
-       $this->load->view('pages/payment/ipn');
-    }
-
-
     function ipn2(){
         // CONFIG: Enable debug mode. This means we'll log requests into 'ipn.log' in the same directory.
         // Especially useful if you encounter network errors or other intermittent problems with IPN (validation).
@@ -318,7 +296,7 @@ class Payment extends MY_Controller{
         define("DEBUG", 1);
 
         // Set to 0 once you're ready to go live
-        define("USE_SANDBOX", 1);
+        define("USE_SANDBOX", 0);
 
 
         define("LOG_FILE", "./ipn.log");
@@ -478,10 +456,8 @@ class Payment extends MY_Controller{
                 error_log(date('[Y-m-d H:i e] '). "Invalid IPN: $req" . PHP_EOL, 3, LOG_FILE);
             }
         }
-   }
+    }
  
-
-
     #PROCESS PAYPAL
     function paypal(){
 
@@ -515,8 +491,6 @@ class Payment extends MY_Controller{
         $city = $bigThree['city'];  
         $region = $bigThree['region'];  
         $majorIsland = $bigThree['majorIsland'];   
-
-        $transactionID = "";
 
         if(isset($_GET["token"]) && isset($_GET["PayerID"]))
         {
@@ -577,17 +551,11 @@ class Payment extends MY_Controller{
                                 $orderQuantity = $value['qty'];
                                 $itemComplete = $this->payment_model->deductQuantity($productId,$productItem,$orderQuantity);
                             }
-
-                            $flag = 0;
-
-                            if($httpParsedResponseAr['PAYMENTSTATUS'] == 'Pending'){
-                                $flag = 1;
-                            }else{
-                                $flag = 0;
-                            } 
+ 
+                            $flag = ($httpParsedResponseAr['PAYMENTSTATUS'] == 'Pending' ? 1 : 0);
 
                             $orderStatus = 0;
-                            $complete = $this->payment_model->updatePaymentIfComplete($orderId,$apiResponse,$token . '-' .$transactionID,$paymentType,$orderStatus,$flag);
+                            $complete = $this->payment_model->updatePaymentIfComplete($orderId,$apiResponse,$transactionID,$paymentType,$orderStatus,$flag);
 
                             if($complete <= 0){
                                 $response['message'] = '
@@ -638,7 +606,7 @@ class Payment extends MY_Controller{
         redirect(base_url().'payment/success/paypal', 'refresh'); 
     }
 
-
+    #START OF CASH ON DELIVERY, DIRECT BANK DEPOSIT PAYMENT
     function payCashOnDelivery(){
    
         if(!$this->session->userdata('member_id')){
@@ -749,10 +717,7 @@ class Payment extends MY_Controller{
         redirect(base_url().'payment/success/'.$textType, 'refresh');
     }
 
-  
-
-
-
+    #START OF DRAGONPAY PAYMENT
     function payDragonPay(){
 
         header('Content-type: application/json');
@@ -810,8 +775,6 @@ class Payment extends MY_Controller{
         }
     }
 
- 
-
     function dragonPayPostBack(){
 
         header("Content-Type:text/plain");
@@ -839,7 +802,6 @@ class Payment extends MY_Controller{
         $region = $bigThree['region'];  
         $majorIsland = $bigThree['majorIsland'];  
 
-
         $ItemTotalPrice = 0;
         $prepareData = $this->processData($itemList,$city,$region,$majorIsland);
         $ItemTotalPrice = $prepareData['totalPrice'];
@@ -863,7 +825,6 @@ class Payment extends MY_Controller{
             $transactionID = urldecode($txnId);
             $apiResponse = json_encode($itemList);
              
-
             if($postBackCount == "0"){
 
                 foreach ($itemList as $key => $value) {               
@@ -876,16 +837,8 @@ class Payment extends MY_Controller{
                 $locked = $this->lockItem($toBeLocked,$orderId,'delete');
                 $apiResponse = json_encode($apiResponseArray);
             }
-            
-            
-            $orderStatus = 99;
-
-            if(strtolower($status) == "s"){
-                $orderStatus = 0;
-            }else{
-                $orderStatus = 99;
-            }
- 
+    
+            $orderStatus = (strtolower($status) == "s" ? 0 : 99); 
             $complete = $this->payment_model->updatePaymentIfComplete($orderId,$apiResponse,$transactionID,$paymentType,0);
 
             if($postBackCount == "0"){
@@ -893,9 +846,6 @@ class Payment extends MY_Controller{
                 $this->sendNotification(array('member_id'=>$member_id, 'order_id'=>$orderId, 'invoice_no'=>$invoice));  
             }
 
-            // $this->removeItemFromCart(); 
-
-           
         }elseif(strtolower($status) == "f" ){
 
             $locked = $this->lockItem($toBeLocked,$orderId,'delete');
@@ -911,7 +861,6 @@ class Payment extends MY_Controller{
         echo 'result=OK';
 
     }
-
 
     function dragonPayReturn(){
      
@@ -971,7 +920,6 @@ class Payment extends MY_Controller{
             $response['message'] = '<div style="color:red">Transaction Not Completed.</div><div style="color:red">'.urldecode($message).'</div>';
         }
  
-
         $response['itemList'] = $itemList;
         $response['analytics'] = $analytics;
         $data['cat_item'] = $this->cart->contents();
@@ -984,11 +932,27 @@ class Payment extends MY_Controller{
         // $this->session->set_userdata('headerData', $data);
         // $this->session->set_userdata('bodyData', $response); 
         // redirect(base_url().'payment/success/dragonpay', 'refresh');
-        
-  
     }
 
+     #START OF PESOPAY PAYMENT
+    function payPesoPay(){
+        echo 'OK';
+    }
 
+    function pesoPaySuccess(){
+
+    }
+
+    function pesoPayCancel(){
+
+    }
+
+    function pesoPayFail(){
+
+    }
+ 
+
+    #PAYMENT PAGE SUCCESS/ERROR
     function paymentSuccess($mode = "easyshop"){
 
         $ticket = $this->session->userdata('paymentticket');
@@ -1004,9 +968,7 @@ class Payment extends MY_Controller{
         }else{
              redirect(base_url().'home', 'refresh');
         }
-
     }
-
 
     function getCityRegionMajorIsland($address)
     {
@@ -1028,24 +990,24 @@ class Payment extends MY_Controller{
     }
 
     function removeItemFromCart(){
-            $carts = $this->session->all_userdata();
-            if(isset($carts['choosen_items'])){
-                foreach ($carts['choosen_items'] as $key => $value) {
-                    
-                    $carts['cart_contents'][$key]['qty'] = 0 ;
-                    $this->cart->update($carts['cart_contents'][$key]);
-                    unset($carts['cart_contents'][$key]);
-                    $carts['cart_contents']['total_items'] =  $carts['cart_contents']['total_items'] - 1;
-                    $carts['cart_contents']['cart_total'] =  $carts['cart_contents']['cart_total'] - $value['subtotal'];
-                }
-              
-                if(sizeof($carts['cart_contents']) == 2){
-                    unset($carts['cart_contents']['total_items']);
-                    unset($carts['cart_contents']['cart_total']);
-                }   
-                $this->session->unset_userdata('choosen_items');
+        $carts = $this->session->all_userdata();
+        if(isset($carts['choosen_items'])){
+            foreach ($carts['choosen_items'] as $key => $value) {
+
+                $carts['cart_contents'][$key]['qty'] = 0 ;
+                $this->cart->update($carts['cart_contents'][$key]);
+                unset($carts['cart_contents'][$key]);
+                $carts['cart_contents']['total_items'] =  $carts['cart_contents']['total_items'] - 1;
+                $carts['cart_contents']['cart_total'] =  $carts['cart_contents']['cart_total'] - $value['subtotal'];
             }
-      
+
+            if(sizeof($carts['cart_contents']) == 2){
+                unset($carts['cart_contents']['total_items']);
+                unset($carts['cart_contents']['cart_total']);
+            }   
+            $this->session->unset_userdata('choosen_items');
+        }
+
     }
  
 	/*
