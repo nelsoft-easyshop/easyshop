@@ -1,18 +1,37 @@
 <?php
 class PayPal {
 
-	// SANDBOX
-    public $PayPalMode             = 'sandbox'; 
-    public $PayPalApiUsername      = 'easyseller_api1.yahoo.com'; 
-    public $PayPalApiPassword      = '1396000698'; 
-    public $PayPalApiSignature     = 'AFcWxV21C7fd0v3bYYYRCpSSRl31Au1bGvwwVcv0garAliLq12YWfivG';  
+	public $PayPalMode; 
+	public $PayPalApiUsername; 
+	public $PayPalApiPassword; 
+	public $PayPalApiSignature;  
 
-    // LIVE
-    // public $PayPalMode             = ''; 
-    // public $PayPalApiUsername      = 'admin_api1.easyshop.ph'; 
-    // public $PayPalApiPassword      = 'GDWFS6D9ACFG45E7'; 
-    // public $PayPalApiSignature     = 'AFcWxV21C7fd0v3bYYYRCpSSRl31Adro7yAfl2NInYAAVfFFipJ-QQhT'; 
-    	
+	public function __construct()
+	{
+
+		$this->declareEnvironment();
+	}
+    
+
+    function declareEnvironment(){
+
+    	if(ES_PRODUCTION){
+
+			// LIVE
+    		$this->PayPalMode             = ''; 
+    		$this->PayPalApiUsername      = 'admin_api1.easyshop.ph'; 
+    		$this->PayPalApiPassword      = 'GDWFS6D9ACFG45E7'; 
+    		$this->PayPalApiSignature     = 'AFcWxV21C7fd0v3bYYYRCpSSRl31Adro7yAfl2NInYAAVfFFipJ-QQhT'; 
+    	}else{
+			// SANDBOX
+    		$this->PayPalMode             = 'sandbox'; 
+    		$this->PayPalApiUsername      = 'easyseller_api1.yahoo.com'; 
+    		$this->PayPalApiPassword      = '1396000698'; 
+    		$this->PayPalApiSignature     = 'AFcWxV21C7fd0v3bYYYRCpSSRl31Au1bGvwwVcv0garAliLq12YWfivG';  	
+    	}
+    }
+
+
 	function PPHttpPost($methodName_, $nvpStr_) {
 			// Set up your API credentials, PayPal end point, and API version.
 			$API_UserName = urlencode($this->PayPalApiUsername);

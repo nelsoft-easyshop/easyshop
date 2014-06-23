@@ -293,14 +293,10 @@ class Payment extends MY_Controller{
         // CONFIG: Enable debug mode. This means we'll log requests into 'ipn.log' in the same directory.
         // Especially useful if you encounter network errors or other intermittent problems with IPN (validation).
         // Set this to 0 once you go live or don't require logging.
+        $PayPalMode = $this->paypal->getMode(); 
+        $paypalmode = ($PayPalMode == '.sandbox' ? '.sandbox' : '');
         define("DEBUG", 1);
-
-        // Set to 0 once you're ready to go live
-        define("USE_SANDBOX", 0);
-
-
         define("LOG_FILE", "./ipn.log");
-
 
         // Read POST data
         // reading posted data directly from $_POST causes serialization
@@ -330,11 +326,7 @@ class Payment extends MY_Controller{
         // Post IPN data back to PayPal to validate the IPN data is genuine
         // Without this step anyone can fake IPN data
 
-        if(USE_SANDBOX == true) {
-            $paypal_url = "https://www.sandbox.paypal.com/cgi-bin/webscr";
-        } else {
-            $paypal_url = "https://www.paypal.com/cgi-bin/webscr";
-        }
+        $paypal_url = "https://www".$paypalmode.".paypal.com/cgi-bin/webscr";
 
         $ch = curl_init($paypal_url);
         if ($ch == FALSE) {
@@ -866,7 +858,7 @@ class Payment extends MY_Controller{
         if(!$this->session->userdata('dragonpayticket')){
              redirect(base_url().'home/', 'refresh'); 
              exit();
-        } 
+        }
 
         $this->session->set_userdata('paymentticket', true);
         
@@ -970,9 +962,8 @@ class Payment extends MY_Controller{
         $name = $prepareData['productName'];
 
         $grandTotal = $ItemTotalPrice;
-        $dpReturn = $this->dragonpay->getTxnToken($grandTotal,$name,$email);
-        $dpReturnArray = json_decode($dpReturn);
-        $transactionID =  $dpReturnArray->tid;
+
+        $transactionID = substr( "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" ,mt_rand( 0 ,50 ) ,1 ) .substr( md5( time() ), 1);
         $invoice_no = date('Ymhsd'); 
         $ip = $this->user_model->getRealIpAddr();  
          
@@ -982,23 +973,58 @@ class Payment extends MY_Controller{
             echo '{"e":"0","m":"'.$return['o_message'].'"}'; 
             exit();
         }else{
+            $data = array(
+                'orderRef' => $transactionID,
+                'amount' => $grandTotal,
+                'url' => 'https://test.pesopay.com/b2cDemo/eng/payment/payForm.jsp'
+                );
             $orderId = $return['v_order_id'];
             $locked = $this->lockItem($toBeLocked,$orderId,'insert');  
-            $this->session->set_userdata('dragonpayticket', true);
-            exit($dpReturn);
+            $this->session->set_userdata('pesopayticket', true);
+            echo '{"e":"1","d":'.json_encode($this->load->view('pages/payment/pesopayform',$data,TRUE)).'}';
+            exit();
         }
-    }
-
-    function pesoPaySuccess(){
-
-    }
-
-    function pesoPayCancel(){
-
     }
 
     function pesoPayFail(){
 
+        if(!$this->session->userdata('pesopayticket')){
+            redirect(base_url().'home/', 'refresh'); 
+            exit();
+        }
+        
+        $this->session->set_userdata('paymentticket', true);
+        $apiResponseArray = array();
+        $analytics = array();
+
+        $carts = $this->session->all_userdata();
+        $member_id =  $this->session->userdata('member_id'); 
+        $itemList =  $carts['choosen_items'];   
+        $address = $this->memberpage_model->get_member_by_id($member_id); 
+
+        $bigThree = $this->getCityRegionMajorIsland($address);
+        $city = $bigThree['city'];  
+        $region = $bigThree['region'];  
+        $majorIsland = $bigThree['majorIsland']; 
+
+        $ItemTotalPrice = 0;
+
+        $prepareData = $this->processData($itemList,$city,$region,$majorIsland);
+        $ItemTotalPrice = $prepareData['totalPrice']; 
+        $itemList = $prepareData['newItemList']; 
+        $response['message'] = '<div style="color:red">Transaction Not Completed.</div><div style="color:red"></div>';
+        $response['itemList'] = $itemList;
+        $response['analytics'] = $analytics;
+        $data['cat_item'] = $this->cart->contents();
+        $data['title'] = 'Payment | Easyshop.ph';
+        $data = array_merge($data,$this->fill_header());
+
+        $this->session->set_userdata('headerData', $data);
+        $this->session->set_userdata('bodyData', $response); 
+        redirect(base_url().'payment/success/debitcreditcard', 'refresh');
+        // $this->load->view('templates/header', $data);
+        // $this->load->view('pages/payment/payment_response' ,$response);  
+        // $this->load->view('templates/footer_full'); 
     }
 
     function pesoPayDataFeed(){

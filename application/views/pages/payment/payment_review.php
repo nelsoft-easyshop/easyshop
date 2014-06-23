@@ -195,6 +195,13 @@
                             <?php endif; ?>  
                         </div>
                         <?php endif; ?>
+<!-- #### DRAGON PAY #### -->
+                        <?php if($key == 'pesopaycdb'): ?>
+                        <div id="pesopaycdb" class="payment_inner_content">                          
+                            <p class="chck_privacy"><input type="checkbox" checked id="chk_ppcdb" name='chk_ppcdb'> <label for='chk_ppcdb'>I acknowledge I have read and understood Easyshop.ph's  </label><a href="<?=base_url()?>policy" target='_blank'><span style='border-bottom:1px dotted'> Privacy Policy </span></a>.</p><br><br>
+                            <input type="button" style='width: 153px;' class="pesopaycdb orange_btn3" value="Pay via Credit or Debit Card">
+                         </div>
+                        <?php endif; ?>
 
                     <!-- #### MORE PAYMENT HERE! #### -->
                     <?php endforeach; ?>

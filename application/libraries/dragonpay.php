@@ -3,14 +3,23 @@ class DragonPay {
     	
 	public $merchantId  = 'EASYSHOP'; 
 	public $merchantPwd = 'UT78W5VQ';  
-    
-	// TEST
-	public $url = 'http://test.dragonpay.ph/DragonPayWebService/MerchantService.asmx?wsdl';
-	public $ps = "http://test.dragonpay.ph/Pay.aspx";
+    public $url;
+    public $ps;
 
-	// PRODUCTION
-	//public $url = 'https://secure.dragonpay.ph/DragonPayWebService/MerchantService.asmx?wsdl';
-    //public $ps = "https://gw.dragonpay.ph/Pay.aspx";
+
+    function declareEnvironment(){
+
+        if(ES_PRODUCTION){
+            // LIVE
+            $this->url = 'https://secure.dragonpay.ph/DragonPayWebService/MerchantService.asmx?wsdl';
+            $this->ps = "https://gw.dragonpay.ph/Pay.aspx";
+        }else{
+            // SANDBOX
+            $this->url = 'http://test.dragonpay.ph/DragonPayWebService/MerchantService.asmx?wsdl';
+            $this->ps = "http://test.dragonpay.ph/Pay.aspx"; 
+        }
+    }
+
 	
 	public $errorCodes = array(
 			'000' => 'SUCCESS',
@@ -30,7 +39,8 @@ class DragonPay {
 		);
 
     public function __construct() {
-        require_once('NuSOAP/lib/nusoap.php');  
+        require_once('NuSOAP/lib/nusoap.php'); 
+        $this->declareEnvironment(); 
     }
 
     function getProcessors()
