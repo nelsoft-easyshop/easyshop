@@ -46,14 +46,11 @@ var jbImagesDialog = {
 		var oldIE;
 		if ($('html').is('.ie')) {
 			oldIE = true;
-			console.log('oldie');
 		}
 
 		if (oldIE) {
 			document.getElementById('upl1').submit();
-			console.log('oldie');
 		} else {
-			console.log('else oldie');
 			var origForm = document.getElementById('upl' + this.uploadCounter);
 			var filenames = origForm.children[0].children[0].files;
 			
@@ -110,10 +107,8 @@ var jbImagesDialog = {
 			this.timeoutStore = window.setTimeout(function(){
 				document.getElementById("upload_additional_info").innerHTML = 'This is taking longer than usual.' + '<br />' + 'An error may have occurred.' + '<br /><a href="#" onClick="jbImagesDialog.showIframe()">' + 'View script\'s output' + '</a>';
 				// tinyMCEPopup.editor.windowManager.resizeBy(0, 30, tinyMCEPopup.id);
-			}, 40000);
+			}, 100000);
 		}
-		
-		console.log('end inprogress');
 	},
 	
 	showIframe : function() {
