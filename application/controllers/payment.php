@@ -1115,7 +1115,7 @@ class Payment extends MY_Controller{
 			
         foreach($transactionData['seller'] as $seller){
             $sellerEmail = $seller['email'];
-			$sellerData = array_merge( $sellerData, array_slice($seller,1,7) );
+			$sellerData = array_merge( $sellerData, array_slice($seller,1,8) );
 			$sellerData['totalprice'] = number_format($seller['totalprice'], 2, '.' , ',');
 			
 			// 3 tries to send Email. Quit if success or 3 failed tries met

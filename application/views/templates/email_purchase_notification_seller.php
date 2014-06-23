@@ -43,7 +43,8 @@
 						<span style="display:inline-block;font-weight:bold;width:100px;margin-left:2em;">State/Region :</span> {stateregion} <br>
 						<span style="display:inline-block;font-weight:bold;width:100px;margin-left:2em;">City :</span> {city} <br>
 						<span style="display:inline-block;font-weight:bold;width:100px;margin-left:2em;">Address :</span> {address} <br>
-						<span style="display:inline-block;font-weight:bold;width:100px;margin-left:2em;">Contact# :</span> {seller_contactno} <br><br>
+						<span style="display:inline-block;font-weight:bold;width:100px;margin-left:2em;">Contact# :</span> 0{seller_contactno} <br>
+						<span style="display:inline-block;font-weight:bold;width:100px;margin-left:2em;">Telephone# :</span> {seller_telephone} <br><br>
 					</td>
 				</tr>
 				<tr>

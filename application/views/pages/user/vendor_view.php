@@ -46,7 +46,7 @@
                     <br/>
 					<div class="vendor-profile">
 						<p>Joined: <?php echo $vendordetails['datecreated'] != '' ? $vendordetails['datecreated'] : 'N/A';?></p>
-						<p>Contact #: <?php echo $vendordetails['contactno'] != '' ? $vendordetails['contactno'] : 'N/A'?></p>
+						<p>Contact #: <?php echo $vendordetails['contactno'] != '' ? '0'.$vendordetails['contactno'] : 'N/A'?></p>
 						<p>
 						<span class="span_bg vendor_map"></span> 
 							<?php echo $vendordetails['stateregionname'] != '' && $vendordetails['cityname'] != '' ? $vendordetails['stateregionname'] . ", " . $vendordetails['cityname'] : "Location not set."?>

@@ -607,7 +607,6 @@ class Memberpage extends MY_Controller
 					'deleted_count' => intval($user_product_count['deleted']),
                     'sold_count' => intval($user_product_count['sold'])
 					));
-			$data['transaction'] = $this->memberpage_model->getTransactionDetails($sellerid);
 			$data['allfeedbacks'] = $this->memberpage_model->getFeedback($sellerid);
 			$this->load->view('pages/user/vendor_view', $data);
             $this->load->view('templates/footer');

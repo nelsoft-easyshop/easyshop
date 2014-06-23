@@ -52,7 +52,7 @@
 	SELECT o.id_order, buyer.username as buyer, buyer.email as buyer_email, DATE_FORMAT(o.dateadded, "%D %M %Y") as dateadded, FORMAT(o.total,2) as totalprice, op.id_order_product, seller.id_member as seller_id, seller.username as seller, seller.email as seller_email, p.name, op.order_quantity, FORMAT(op.price,2) as baseprice, FORMAT(op.handling_fee,2) as handling_fee, FORMAT(op.total,2) as finalprice, FORMAT(op.easyshop_charge,2) as easyshop_charge, FORMAT(op.payment_method_charge,2) as payment_method_charge, FORMAT(op.net,2) as net,
 		attr.name as attr_name, pattr.attr_value,  pitemattr.is_other, oah.field_name, oad.value_name, buyer.email as buyer_email, o.invoice_no, 
 		COALESCE(buyer.contactno, '0') as buyer_contactno, COALESCE(seller.contactno, '0') as seller_contactno,
-		l0.location as stateregion, l1.location as city, badd.address,
+		l0.location as stateregion, l1.location as city, badd.address,COALESCE(badd.telephone, 'N/A') as seller_telephone,
 		o.payment_method_id
 	FROM es_order o
 	INNER JOIN es_order_product op 

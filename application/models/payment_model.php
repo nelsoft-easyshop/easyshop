@@ -395,7 +395,7 @@ class payment_model extends CI_Model
 				$data['seller'][$value['seller_id']]['seller_name'] = $value['seller'];
 				$data['seller'][$value['seller_id']]['seller_contactno'] = $value['seller_contactno'] != '' ? $value['seller_contactno'] : 'N/A';
 				$data['seller'][$value['seller_id']]['totalprice'] = 0;
-				$data['seller'][$value['seller_id']] = array_merge( $data['seller'][$value['seller_id']], array_slice($temp,25,3) );
+				$data['seller'][$value['seller_id']] = array_merge( $data['seller'][$value['seller_id']], array_slice($temp,25,4) );
 			}
 			if(!isset($data['seller'][$value['seller_id']]['products'][$value['id_order_product']])){
 				$data['seller'][$value['seller_id']]['products'][$value['id_order_product']] = array_slice($temp,9,8);
@@ -459,7 +459,7 @@ class payment_model extends CI_Model
 			}else if($r['is_other'] === '1'){
 				array_push($parseData['attr'], array('field' => ucwords(strtolower($r['field_name'])), 'value' => ucwords(strtolower($r['value_name'])) ));
 			}else{
-				array_push($parseData['attr'], array('field' => 'N/A', 'value' => 'N/A' ));
+				array_push($parseData['attr'], array('field' => 'Attribute', 'value' => 'N/A' ));
 			}
 		}
 		
