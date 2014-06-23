@@ -8,8 +8,8 @@
 <script language="javascript" type="text/javascript">
 	var htmlclass = document.documentElement.className;
 	var isNewIE = false;
-	// Detect IE 11
-	if(navigator.appName == 'Netscape' && navigator.userAgent.indexOf('Trident') != -1)
+
+	if( (navigator.appName.indexOf('Netscape') != -1 || navigator.appName.indexOf('Explorer') != -1) && navigator.userAgent.indexOf('Trident') != -1 )
 		isNewIE = true;
 	
 	if( htmlclass == 'ie' || isNewIE) {

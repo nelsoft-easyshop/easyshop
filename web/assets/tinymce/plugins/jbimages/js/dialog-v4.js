@@ -43,16 +43,17 @@ var jbImagesDialog = {
 	allowedFileType : ['jpg', 'gif', 'png', 'jpeg'],
 	
 	inProgress : function() {
-		
 		var oldIE;
 		if ($('html').is('.ie')) {
 			oldIE = true;
+			console.log('oldie');
 		}
 
 		if (oldIE) {
 			document.getElementById('upl1').submit();
-			console.log('oldIE');
+			console.log('oldie');
 		} else {
+			console.log('else oldie');
 			var origForm = document.getElementById('upl' + this.uploadCounter);
 			var filenames = origForm.children[0].children[0].files;
 			
@@ -111,8 +112,8 @@ var jbImagesDialog = {
 				// tinyMCEPopup.editor.windowManager.resizeBy(0, 30, tinyMCEPopup.id);
 			}, 40000);
 		}
-		console.log('end of inprogress');
 		
+		console.log('end inprogress');
 	},
 	
 	showIframe : function() {
@@ -125,7 +126,6 @@ var jbImagesDialog = {
 	},
 	
 	uploadFinish : function(result) {
-		console.log('pasok sa upload finish');
 		if (result.resultCode == 'failed')
 		{
 			this.hasError = true;
@@ -145,7 +145,6 @@ var jbImagesDialog = {
 			tinymce.EditorManager.activeEditor.insertContent('<img src="' + mybaseurl + result.filename +'" data-mce-src="' + mybaseurl + result.filename +'">');
 
 			this.hasSuccess = true;
-			console.log('pasok finish');
 		}
 
 		//Added condition
@@ -162,7 +161,6 @@ var jbImagesDialog = {
 				this.myformdata.shift();
 				document.getElementById("upload_infobar").style.display = 'none';
 				document.getElementById("upload_infobar").innerHTML = '';
-				console.log('last');
 			} else {
 				this.isInProgress = false;
 				document.getElementById("upload_in_progress").style.display = 'none';
@@ -177,7 +175,6 @@ var jbImagesDialog = {
 					document.getElementById("upload_infobar").innerHTML = 'Upload Complete. One or more files failed to upload.';
 				}
 				this.hasError = this.hasSuccess = false;
-				console.log('notlast');
 			}
 		}
 	},
