@@ -85,6 +85,9 @@ class CSRF_Protection
             elseif($_SERVER['REQUEST_URI'] === '/payment/ipn2'){
                 return true;
             }
+            elseif($_SERVER['REQUEST_URI'] === '/payment/pesoPayDataFeed'){
+                return true;
+            }
             else{
                  // Is the token field set and valid?
                 $posted_token = $this->CI->input->post(self::$token_name);
