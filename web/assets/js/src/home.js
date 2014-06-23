@@ -1,4 +1,5 @@
 
+
 $(document).ready(function(){
     var timer_date = new Date($('#timer_date').val());
     $('.cd_timer_container').countdown({
@@ -43,7 +44,7 @@ $(document).ready(function(){
     });
 
     $('.slider3').bxSlider({
-      slideWidth: 452,
+      slideWidth: 486,
        minSlides: 1,
         maxSlides: 1,
         moveSlides: 1,
