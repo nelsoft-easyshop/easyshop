@@ -56,7 +56,7 @@ $(document).ready(function(){
 	 }, "* This field must be set");
 	 
 	 jQuery.validator.addMethod("is_validmobile", function(value, element) {
-		return this.optional(element) || /^(8|9)[0-9]{9}/.test(value);
+		return this.optional(element) || /^(08|09)[0-9]{9}/.test(value);
 	 }, "Must begin with 8 or 9");
 	 
 	 $.datepicker.setDefaults({dateFormat: 'yy-mm-dd'}, $.extend($.datepicker.regional['']));
@@ -335,8 +335,8 @@ $(document).ready(function(){
 			},
 			mobile:{
 				digits: true,
-				minlength: 10,
-				maxlength: 10,
+				minlength: 11,
+				maxlength: 11,
 				is_validmobile: true
 			},
 			email:{
@@ -347,7 +347,7 @@ $(document).ready(function(){
 		},
 		messages:{
 			mobile: {
-				minlength: 'Please enter at least 10 characters'
+				minlength: 'Please enter at least 11 characters'
 			}
 		},
 		errorElement: "span",
@@ -1150,8 +1150,8 @@ $(document).ready(function(){
 			},
 			c_mobile: {
 				digits: true,
-				minlength: 10,
-				maxlength: 10,
+				minlength: 11,
+				maxlength: 11,
 				is_validmobile: true,
 				required: true
 			},

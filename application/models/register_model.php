@@ -522,31 +522,17 @@ class Register_model extends CI_Model
 
 		return $result;
 	}
-	
-	function is_validmobile_register($mobile)
-	{
-		if($mobile == '' ){
-			return true;
-		}
-		if(preg_match('/^(09|08)[0-9]{9}/', $mobile)){
-			return true;
-		}
-		else{
-			$this->form_validation->set_message('external_callbacks', 'Mobile number must begin with 09 or 08');
-			return false;
-		}
-	}
     
     function is_validmobile($mobile)
 	{
 		if($mobile == '' ){
 			return true;
 		}
-		if(preg_match('/^(8|9)[0-9]{9}/', $mobile)){
+		if(preg_match('/^(08|09)[0-9]{9}/', $mobile)){
 			return true;
 		}
 		else{
-			$this->form_validation->set_message('external_callbacks', 'Mobile number must begin with 9 or 8');
+			$this->form_validation->set_message('external_callbacks', 'Mobile number must begin with 09 or 08');
 			return false;
 		}
 	}

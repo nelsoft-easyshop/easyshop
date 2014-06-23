@@ -812,7 +812,7 @@
 
 				<div id="mobilediv">
 					<label for="mobile">Mobile:</label>
-					<input type="text" name="mobile" id="mobile" maxlength="10" value="<?php echo html_escape($contactno);?>" <?php echo (trim($contactno)==''?'':'disabled');?> placeholder="e.g. 9051234567">
+					<input type="text" name="mobile" id="mobile" maxlength="11" value="<?php echo html_escape($contactno);?>" <?php echo (trim($contactno)==''?'':'disabled');?> placeholder="e.g. 09051234567">
 					<span class="red ci_form_validation_error"><?php echo form_error('mobile'); ?></span>
 					<input type="hidden" name="mobile_orig" value="<?php echo $contactno;?>">
 					<input type="hidden" name="is_contactno_verify" value="<?php echo $is_contactno_verify;?>">
@@ -1359,7 +1359,7 @@
 			</div>
 			<div>
 				<label for="mobile_num">Mobile No:</label>
-				<input maxlength="10" placeholder="eg. 9051235678" type="text" name="c_mobile" id="c_mobile" value="<?php echo html_escape($c_mobile)?>">
+				<input maxlength="11" placeholder="eg. 09051235678" type="text" name="c_mobile" id="c_mobile" value="<?php echo html_escape($c_mobile)?>">
 				<span class="red ci_form_validation_error"><?php echo form_error('c_mobile');?></span>
 			</div>
 			<div>

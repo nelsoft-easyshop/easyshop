@@ -53,7 +53,7 @@ class Memberpage extends MY_Controller
 				'nickname' => $this->input->post('nickname'),
 				'gender' => $this->input->post('gender'),
 				'birthday' => $this->input->post('dateofbirth'),
-				'contactno' => $this->input->post('mobile'),
+				'contactno' => ltrim($this->input->post('mobile'), '0'),
 				'email' => $this->input->post('email')
 			);
 
@@ -189,8 +189,6 @@ class Memberpage extends MY_Controller
 		$data = array_merge($data,$this->memberpage_model->get_work_by_id($uid));
 		$data =  array_merge($data,$this->memberpage_model->get_school_by_id($uid));
 		$data['bill'] =  $this->memberpage_model->get_billing_info($uid);
-		//$data['transaction'] = $this->memberpage_model->getTransactionDetails($uid);
-		
 		$data['transaction'] = array(
 			'buy' => $this->memberpage_model->getBuyTransactionDetails($uid, 0),
 			'sell' => $this->memberpage_model->getSellTransactionDetails($uid, 0),
@@ -199,9 +197,6 @@ class Memberpage extends MY_Controller
 				'sell' => $this->memberpage_model->getSellTransactionDetails($uid, 1)
 			)
 		);
-		//$data['transaction']['buy'] = $this->memberpage_model->getBuyTransactionDetails($uid, 0);
-		//$data['transaction']['sell'] = $this->memberpage_model->getSellTransactionDetails($uid, 0);
-		
 		$data['transaction']['count'] = $this->memberpage_model->getTransactionCount($uid);
 		$data['allfeedbacks'] = $this->memberpage_model->getFeedback($uid);
 		$data['sales'] = array(
@@ -254,7 +249,7 @@ class Memberpage extends MY_Controller
 			
 			$postdata = array(
 				'consignee' => $this->input->post('consignee'),
-				'mobile' => $this->input->post('c_mobile'),
+				'mobile' => ltrim($this->input->post('c_mobile'), '0'),
 				'telephone' => $this->input->post('c_telephone'),
 				'stateregion' => $this->input->post('c_stateregion'),
 				'city' => $this->input->post('c_city'),

@@ -92,22 +92,6 @@
 	WHERE id_member = :member_id
 </select>
 
-<!--
-<select id="get_member">
-	SELECT m.`id_member`, m.`nickname`, m.`fullname`, m.`gender`, m.`birthday`, m.contactno, m.is_contactno_verify, m.email, m.is_email_verify,
-	COALESCE(a0.`streetno`, '') as streetno, COALESCE(a0.`streetname`, '') as streetname, COALESCE(a0.`barangay`, '') as barangay, 
-	COALESCE(a0.`citytown`, '') as citytown, COALESCE(a0.`country`, '') as country, COALESCE(a0.`postalcode`, '') as postalcode,
-	COALESCE(a1.`streetno`, '') as c_streetno, COALESCE(a1.`streetname`, '') as c_streetname, COALESCE(a1.`barangay`, '') as c_barangay, 
-	COALESCE(a1.`citytown`, '') as c_citytown, COALESCE(a1.`country`, '') as c_country, COALESCE(a1.`postalcode`, '') as c_postalcode,
-	COALESCE(a1.`telephone`, '') as c_telephone, COALESCE(a1.`mobile`, '') as c_mobile, COALESCE(a1.`consignee`, '') as consignee,
-	a0.lat, a0.lng
-	from es_member m 
-	LEFT JOIN es_address a0 ON m.id_member=a0.id_member AND a0.`type`=0
-	LEFT JOIN es_address a1 ON m.id_member=a1.id_member AND a1.`type`=1
-	where m.id_member=:id_member
-</select>	
--->
-
 <select id="getLocationLookup">
 	SELECT id_location, parent_id, location, type
 	FROM es_location_lookup
@@ -117,10 +101,10 @@
 
 
 <select id="get_member">
-	SELECT m.`id_member`,m.username, m.`nickname`, m.`fullname`, m.`gender`, m.`birthday`, m.contactno, m.is_contactno_verify, m.email, m.is_email_verify,
+	SELECT m.`id_member`,m.username, m.`nickname`, m.`fullname`, m.`gender`, m.`birthday`, CONCAT('0', m.contactno) as contactno , m.is_contactno_verify, m.email, m.is_email_verify,
 	a0.stateregion as stateregionID, a0.city as cityID, a1.stateregion as c_stateregionID, a1.city as c_cityID,
 	COALESCE(loc0.location,'') as stateregion, COALESCE(loc1.location, '') as city, COALESCE(a0.address,'') as address,
-	a1.consignee, a1.mobile as c_mobile, a1.telephone as c_telephone,
+	a1.consignee, CONCAT('0', a1.mobile) as c_mobile, a1.telephone as c_telephone,
 	COALESCE(loc2.location, '') as c_stateregion, COALESCE(loc3.location,'') as c_city, COALESCE(a1.address, '') as c_address,
 	COALESCE(a0.lat, 0) as lat, COALESCE(a0.lng, 0) as lng, COALESCE(a1.lat, 0) as c_lat, COALESCE(a1.lng, 0) as c_lng
 	FROM es_member m
