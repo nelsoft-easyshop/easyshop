@@ -201,7 +201,7 @@ class product_model extends CI_Model
             if(intval($product['brand_id'],10) === 1)
                 $product['brand_name'] = ($product['custombrand']!=='')?$product['custombrand']:'Custom brand';
            applyPriceDiscount($product);
-           if($product['product_image_path']){
+           if(isset($product['product_image_path'])){
                 $temp = array($product); 
                 explodeImagePath($temp); 
                 $product = $temp[0];

@@ -87,7 +87,7 @@ if ( ! function_exists('applyPriceDiscount')){
             $product['original_price'] = $product['price']; 
             $product['can_purchase'] = true;
             if(intval($product['discount']) > 0){
-                $product['price'] = $product['price'] * ($product['discount']/100.0);
+                $product['price'] = $product['price'] * (1.0-($product['discount']/100.0));
             }
             $product['percentage'] = ($product['original_price'] - $product['price'])/$product['original_price'] * 100.00;      
         }

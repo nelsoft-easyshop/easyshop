@@ -55,10 +55,10 @@
                 <?PHP for($i = 0; $i < 3; $i++): ?>
                     <?PHP $row = $data['productSlide'][$i]; ?>
                     <div>
-                        <a href="<?= base_url().'item/'.$rows['slug'];?>"><h2><?php echo html_escape($row['product_name']);?></h2>
+                        <a href="<?= base_url().'item/'.$row['slug'];?>"><h2><?php echo html_escape($row['product_name']);?></h2>
                             <span class="mid_con_price">&#8369;<?php echo number_format($row['price'],2,'.',',');?></span>
                             <span class="mid_img_con">
-                                <img src="<?= base_url().$rows['path'].'categoryview/'.$rows['file'];?>" alt="<?php echo html_escape($row['product_name']);?>">
+                                <img src="<?= base_url().$row['path'].'categoryview/'.$row['file'];?>" alt="<?php echo html_escape($row['product_name']);?>">
                             </span>
                         </a>
                     </div>
