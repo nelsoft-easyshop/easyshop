@@ -1254,8 +1254,6 @@ class productUpload extends MY_Controller
                 foreach($update_product_item_obj as $x){
                     array_push($keep_ids, $x['id']);
                 }
-                
-           
 
                 #DELETE PRODUCT ITEM, PRODUCT ITEM ATTR, SHIPPING HEAD AND SHIPPING DETAIL
                 #THAT ARE NOT IN THE object
@@ -1366,6 +1364,8 @@ class productUpload extends MY_Controller
 					$this->product_model->deleteAttrOthers($head_id);
 				}
 
+       
+                $new_optional_detail_id = array(); 
 				$is_primary = 0;
 				foreach ($newarray as $key => $valuex) {
              
@@ -1393,7 +1393,7 @@ class productUpload extends MY_Controller
                     }
 
 					$others_id = $this->product_model->addNewAttributeByProduct_others_name($product_id,$key);
-                  
+
 					foreach ($valuex as $keyvalue => $value) {
 						$imageid = 0;
                         $eval = explode("|", $value); 
@@ -1404,6 +1404,7 @@ class productUpload extends MY_Controller
 						if($eval[2] != "--no image"){
 							if($eval[5] != "--no id"){
 								$int_img_id = intval($eval[5]);
+                                array_push($new_optional_detail_id, $int_img_id);
 								if(isset($attr_opt_det_idx[$int_img_id])){
 									$this->product_model->deleteProductImage($product_id, $attr_opt_det_idx[$int_img_id]['img_id']);
 								}
@@ -1421,11 +1422,13 @@ class productUpload extends MY_Controller
 						else if($eval[2] == "--no image"){
 							if($eval[5] != "--no id"){
 								$int_img_id = intval($eval[5]);
+                                array_push($new_optional_detail_id, $int_img_id);
 								if(isset($attr_opt_det_idx[$int_img_id])){
 									$imageid = $attr_opt_det_idx[$int_img_id]['img_id'];
 								}
 							}
 						}  
+
 						$this->product_model->addNewAttributeByProduct_others_name_value($others_id,$eval[0],$eval[1],$imageid);
                     }
 				}
@@ -1436,6 +1439,12 @@ class productUpload extends MY_Controller
 					unset($main_images[$img_id]);
 				}
 				
+                foreach($attr_opt_det_idx as $key=>$optional_detail){
+                    if(!in_array($key, $new_optional_detail_id)){
+                       $this->product_model->deleteProductImage($product_id, $optional_detail['img_id']);
+                    }
+                }
+  
 				$currentPrimaryId = 0;
                 $primary_image_bool = false;
 				foreach($main_images as $main_image){
