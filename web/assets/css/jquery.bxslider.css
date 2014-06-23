@@ -34,8 +34,8 @@
 
 .bx-wrapper .bx-viewport {
 
-/*	border: solid #fff 5px;*/
-	background: #fff;
+/*	border: solid #fff 5px;
+	background: #fff;*/
 /*	margin:0 10px;*/
 }
 
@@ -297,8 +297,14 @@
 /** Electronics slides **/
 
 .electronic_slides {
-    margin-left: 27px;
-    width: 456px;
+/*    margin-left: 27px;*/
+    width: 486px;
+    margin-top: 5px;
+    height: 355px !important;
+}
+
+.electronic_slides + .bx-controls .bx-controls-direction {
+	top: -205px;
 }
 
 .product_slides {

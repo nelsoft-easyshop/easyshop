@@ -856,8 +856,8 @@ section {
 .middle_content_items > div {
 	border-right: 1px solid #cecece;
 	float: left;
-	height: 160px;
-	padding: 15px 5px 0px;
+	height: 175px;
+	padding: 0 5px;
 	width:184px;
 
 	  -webkit-transition: all 0.3s ease-in-out;
@@ -874,10 +874,11 @@ section {
 }
 
 .middle_content_items div h2 {
-	font-size: 14px;
+	font-size: 12px;
 	font-weight: bold;
-	height: 35px;
+	height: 30px;
 	overflow: hidden;
+	word-wrap:break-word;
 }
 
 .mid_con_price {
@@ -886,12 +887,11 @@ section {
     font-size: 14px;
     font-weight: bold;
     height: 18px;
-    margin-bottom: 11px;
 }
 
 .mid_img_con {
 	display: table-cell;
-	height: 95px;
+	height: 110px;
 	text-align: center;
 	vertical-align: middle;
 	width: 184px;
@@ -899,9 +899,25 @@ section {
 
 .mid_img_con img {
 	height: auto;
-	max-height: 95px;
+	max-height: 110px;
 	max-width: 184px;
 	width: auto;
+}
+
+.home_hot_item {
+	background-position: -744px -312px;
+    color: #fff;
+    font-size: 11px;
+    font-weight: bold;
+    height: 22px;
+    line-height: 22px;
+    position: absolute;
+    text-align: center;
+    width: 82px;
+}
+
+.middle_content_items div small {
+	float: right;
 }
 
 /** Side Navigation Menu **/
@@ -1829,17 +1845,224 @@ span.cod {
 	height: auto;
 	width: auto;      
 }
-.product_title {
-	width: 100% !important;
+.home_cat_product_title {
+	padding:4px 7px;
+/*	width: 100% !important;*/
 /*	margin-bottom: 8px;*/
 }
 
-.product_title h2 {
-	font-size: 18px;
-	font-weight: normal;
-	color:#f18200;
-	padding:8px 0;
+.electronics_gadgets_section {
+	padding-top: 20px;
 }
+
+.electronics_gadgets_section .home_cat_product_title {
+	background-color: #0078d5;
+}
+
+.home_cat_product_title img {
+	vertical-align: middle;
+	margin-right: 7px;
+}
+
+.home_cat_product_title h2 {
+	color:#fff;
+	display: inline-block;
+	font-size: 14px;
+	font-weight: bold;	
+	text-transform: uppercase;
+	vertical-align: middle;
+}
+
+.home_cat_tabs ul {
+	border-bottom: 1px solid #cecece;
+	border-left: 1px solid #cecece;
+	display: inline-block;
+	list-style: none;
+	height: 40px;
+	width: 100%;
+}
+
+.home_cat_tabs ul li {
+	border-bottom: 2px solid rgba(0,0,0,0.0);
+	border-right: 1px solid #cecece;
+	font-size: 12px;
+	float: left;
+	height: 40px;
+	line-height: 40px;
+	text-align: center;
+	width: 19.88%;
+	position: relative;
+}
+
+.home_cat_tabs a {
+    display: block;
+}
+
+.home_cat_tabs a:hover {
+	color: #494949;
+}
+
+.home_cat_tabs ul li.active,
+.electronics_gadgets_section .home_cat_tabs ul li:hover {
+	border-bottom: 2px solid #0078d5;
+	background-color: #fff;
+		-webkit-transition: all 0.3s ease-in-out;
+  	-moz-transition:    all 0.3s ease-in-out;
+  	-o-transition:      all 0.3s ease-in-out;
+  	transition:         all 0.3s ease-in-out;
+}
+
+.home_cat_tabs ul li.active:after,.home_cat_tabs ul li.active:before,
+.home_cat_tabs ul li:hover:after, .home_cat_tabs ul li:hover:before { 
+	bottom: -2px; 
+	left: 50%; 
+	border: solid transparent; 
+	content: " "; 
+	height: 0; 
+	width: 0; 
+	position: 
+	absolute; 
+	pointer-events: none; 
+}
+.home_cat_tabs ul li.active:after, 
+.home_cat_tabs ul li:hover:after { 
+	border-color: rgba(0, 0, 0, 0); 
+	border-bottom-color: #fff; 
+	border-width: 10px; 
+	margin-left: -10px; 
+} 
+
+.home_cat_tabs ul li.active:before,
+.home_cat_tabs ul li:hover:before { 
+	border-color: rgba(0, 120, 213, 0); 
+	border-bottom-color: #0078d5; 
+	border-width: 13px; 
+	margin-left: -13px; 
+}
+
+.home_cat_items {
+	border-left: 1px solid #cecece;
+	border-right: 1px solid #cecece;
+	border-bottom: 1px solid #cecece;
+	display: inline-block;
+}
+
+.first_panel_left {
+/*	border-bottom: 1px solid #cecece;*/
+	border-right: 1px solid #cecece;
+	float: left;
+	padding: 2px;
+	width: 239px;
+}
+
+.border_btm {
+	border-bottom: 1px solid #cecece;
+	margin-bottom: 1px;
+}
+
+.home_cat_item1_con {
+    height: 176px;
+    padding-bottom: 2px;
+    position: relative;
+    width: 239px;
+}
+
+.home_cat_item_link {
+	background-color: rgba(0,0,0,0.75);
+	bottom: 0;
+	margin-bottom: 1px;
+	position: absolute;
+    width: 239px;
+	-webkit-transition: all 0.3s ease-in-out;
+  	-moz-transition:    all 0.3s ease-in-out;
+  	-o-transition:      all 0.3s ease-in-out;
+  	transition:         all 0.3s ease-in-out;
+}
+
+.home_cat_item_link:hover,
+.electronics_slider_price_con:hover {
+	background-color: rgba(0,0,0,0.55);	
+}
+
+.home_cat_item_link div {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.home_cat_item_link div:first-child {
+	padding-left: 10px;
+	width: 205px;
+}
+
+.home_cat_item_link a {
+	color: #fff;
+}
+
+.home_cat_item_link a > div > p {
+	font-weight: bold;
+}
+
+.home_cat_item_link a > div > p:first-child {
+    height: 24px;
+    overflow: hidden;
+    text-overflow:ellipsis;
+    width: 205px;
+}
+
+.c_small_btn {
+	background-position: -837px -318px;
+	height: 15px;
+	width: 15px;
+}
+
+.home_cat_item1_con span {
+	display: table-cell;
+	height: 176px;
+    width: 239px;
+	text-align: center;
+	vertical-align: middle;
+}
+
+.home_cat_item1_con span img {
+	height: auto;
+	max-height: 176px;
+	max-width: 239px;
+	width: auto;
+}
+
+
+.first_panel_middle {
+    border-right: 1px solid #cecece;
+    float: left;
+/*    height: 355px;
+    padding: 2px;*/
+    vertical-align: top;
+    width: 489px;
+}
+
+.fpm_btm_items_con {
+	border-top: 1px solid #cecece;
+}
+
+.fpm_btm_items_left_con {
+	border-right: 1px solid #cecece;
+	float: left;
+	padding: 1px 2px;
+	width: 240px;
+}
+.fpm_btm_items_right_con {
+	float: right;
+	padding: 1px 2px;
+	width: 239px;
+}
+
+.first_panel_right {
+    float: right;
+    padding: 2px;
+    position: relative;
+    width: 240px;
+} 
+
 
 .product_title div:first-child {
 	float: left;
@@ -1949,46 +2172,75 @@ div.electronics_product_sides {
 
 
 .product_slide ul li {
-	height: 462px;
-	line-height: 462px;
+	height: 350px;
+	line-height: 350px;
 	text-align: center;
 	width: 456px !important;
 }
 
 .elec_slide_img_con {
-	background-color: #fff;
     display: table-cell;
-    height: 420px;
+    height: 351px;
     vertical-align: middle;
-    width: 456px;
+    width: 486px;
 }
 
 .elec_slide_img_con img {
 	height: auto;
-    max-height: 420px;
-    max-width: 440px;
+    max-height: 351px;
+    max-width: 480px;
     width: auto;
 }
 
 .electronics_slider_price_con {
-	background: none repeat scroll center rgba(255, 255, 255, 0.7);
+	background: none repeat scroll center rgba(0, 0, 0, 0.7);
     bottom: 0;
     display: inline-block;
     left: 0;
     line-height: normal;
-    padding: 10px 0;
+    padding: 10px;
     position: absolute;
-    text-align: center;
-    width: 446px;
+    margin-bottom: 1px;
+    text-align: left;
+    width: 466px;
+
+    	-webkit-transition: all 0.3s ease-in-out;
+  	-moz-transition:    all 0.3s ease-in-out;
+  	-o-transition:      all 0.3s ease-in-out;
+  	transition:         all 0.3s ease-in-out;
+}
+
+.electronics_slider_price_con div {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.electronics_slider_price_con div img {
+	display: inline-block;
+}
+
+.electronics_slider_price_con div:first-child {
+	width: 365px;
 }
 
 .electronics_slider_price_con h2 {
-	font-size: 18px;
-	font-weight: normal;
+	color: #fff;
 }
 
-.electronics_slider_price_con span {
+.electronics_slider_price_con h2,
+.electronics_slider_price_con p {
+	font-size: 14px;
+	font-weight: bold;
+	text-transform: uppercase;
+}
+
+.electronics_slider_price_con p {
 	color: #f18200;
+}
+.cat_slide_btn {
+	color: #f18200;
+	font-size: 14px;
+	font-weight: bold;
 }
 
 /*** Filters ***/
