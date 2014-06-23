@@ -28,8 +28,9 @@ class productUpload extends MY_Controller
 	{
 		$data = array(
 			'title' => 'Sell Product | Easyshop.ph',
-            'metadescription' => 'Take your business online by selling your items at Easyshop.ph'
-			);
+            'metadescription' => 'Take your business online by selling your items at Easyshop.ph',
+			'render_searchbar' => false, 
+            );
 		$data = array_merge($data, $this->fill_header());
 
 		return $data;
@@ -74,6 +75,7 @@ class productUpload extends MY_Controller
 		$data_item['firstlevel'] = $this->product_model->getFirstLevelNode(); # getting first category level from database.
 		$userdetails = $this->product_model->getCurrUserDetails($uid);
 		$data = $this->fill_view();
+        $data['$render_searchbar'] = false; 
 		$this->load->view('templates/header', $data); 
 
 		if($data['logged_in'] && ($userdetails['is_contactno_verify'] || $userdetails['is_email_verify']) )
