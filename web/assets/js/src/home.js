@@ -1,16 +1,6 @@
 
 
 $(document).ready(function(){
-    var timer_date = new Date($('#timer_date').val());
-    $('.cd_timer_container').countdown({
-        until : timer_date,
-        serverSync: serverTime,
-        layout: ' <div class="cd_timer_days"><span id="countdown_days">{dnn}</span> <span>DAYS</span> </div>'+
-                ' <div class="cd_timer_hours"><span id="countdown_hours">{hnn}</span> <span>HOURS</span> </div>'+
-                ' <div class="cd_timer_minutes"><span id="countdown_minutes">{mnn}</span> <span>MINUTES</span> </div>' +
-                ' <div class="cd_timer_seconds"><span id="countdown_second">{snn}</span> <span>SECONDS</span> </div>',
-        onExpiry: reload,
-    });
 
     $('.mid_slide1').bxSlider({
       mode: 'horizontal',
