@@ -533,7 +533,7 @@
                 </div>
                 <div id="dsc_frm">
                   <nobr class="discount_price_con_top">
-                    <label id="lbl_discount"><strong>Discount Percentage</strong></label><input type="text" id="slider_val" placeholder="0%" maxlength="3" data-value='<?php echo isset( $product_details['discount'])?$product_details['discount']:0;?>' >
+                    <label id="lbl_discount"><strong>Discount Percentage</strong></label><input type="text" id="slider_val" placeholder="0%" maxlength="10" data-value='<?php echo isset( $product_details['discount'])?$product_details['discount']:0;?>' >
                   </nobr>     
                   <input type="text" id="range_1" name="discount" value=""/>           
                   <nobr class="discount_price_con">
@@ -814,7 +814,7 @@ $(document).ready(function(){
 
     $("#slider_val").on('change',function(){
         var thisslider = $(this);
-        var newval = parseInt($(this).val());
+        var newval = parseFloat($(this).val());
         get_discPrice();
         $("#range_1").ionRangeSlider("update", {
             from: newval,                       // change default FROM setting
@@ -838,7 +838,8 @@ $(document).ready(function(){
         $("#dsc_frm").toggle();      
     });    
     
-    var slider_val = parseInt($('#slider_val').data('value'),10);
+    var slider_val = parseFloat($('#slider_val').data('value')); 
+    //var slider_val = parseInt($('#slider_val').data('value'),10);
     if(slider_val !== 0 && !isNaN(slider_val)){
        $('#slider_val').val(slider_val); 
        $('#slider_val').trigger( "change" );
@@ -1838,6 +1839,7 @@ $(document).on('change','.other_name_value',function(){
               }else{
                 var action = $('#form_product').attr('action');
                 $('.arrayNameOfFiles').val(JSON.stringify(af)); 
+
                 proceedStep3(action);
                 confirm_unload = false;
                 $('#form_product').submit();
@@ -2236,7 +2238,7 @@ $(document).on('change','.other_name_value',function(){
 
     function get_discPrice() {
         var prcnt = $("#slider_val").val().replace("%",'');
-        var act_price =$("#prod_price").val().replace(/,/g,'');
+        var act_price = $("#prod_price").val().replace(/,/g,'');
         if (prcnt > 100) {
             prcnt = 100;
         }
@@ -2244,6 +2246,7 @@ $(document).on('change','.other_name_value',function(){
             validateRedTextBox("#prod_price");
             act_price = 0;
         }
+        
         $("#slider_val").val("");
         $("#slider_val").val(prcnt+"%");
         discounted = act_price * (prcnt/100);
