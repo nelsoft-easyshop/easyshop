@@ -374,7 +374,7 @@
 								</li>
 								<li>
 									<a href="https://twitter.com/EasyShopPH" class="twitter-follow-button" data-show-count="false" data-size="large" data-show-screen-name="false">Follow @EasyShopPH</a>
-                                <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+                             
 								</li> 
 							</ul>
 							
@@ -446,5 +446,7 @@
 <script type="text/javascript" src="<?=base_url()?>assets/js/src/vendor/password_meter.js"></script>
 <!-- end mootool -->
 
-
+<script>
+    !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');
+</script>
   
