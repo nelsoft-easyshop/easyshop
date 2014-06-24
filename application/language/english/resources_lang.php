@@ -75,14 +75,14 @@ accomplished all the necessary steps.
 Thank you and we hope you continue to use Easyshop.ph, where shopping is made easy.";
 
 $lang['payment_ppdp_seller'] = "A purchase has been made for your listing(s) at Easyshop.ph. The details of your sale
-and the shipment information of your buyer is included in the summary below.
+and the shipment information of your buyer are included in the summary below.
 We have received the payment for this transaction and will move the payment to your
 account as soon as the buyer has acknowledge that he has received your item.
 <br><br>
 Kindly ship/deliver your item at the soonest possible time. ";
 
 $lang['payment_cod_seller'] = "A purchase has been made for your listing(s) at Easyshop.ph through Cash on Delivery.
-The details of your sale and the shipment information of your buyer is included in the summary below.
+The details of your sale and the shipment information of your buyer are included in the summary below.
 <br><br>
 Kindly ship/deliver your item at the soonest possible time.";
 
