@@ -20,9 +20,8 @@ class MY_Controller extends CI_Controller
     {
         parent::__construct();
 		//$this->config->set_item('base_url',"https://".$_SERVER["SERVER_NAME"].":".$_SERVER["SERVER_PORT"]."/");
-        //$this->config->set_item('base_url',"https://".$_SERVER["SERVER_NAME"]."/");
-       $this->config->set_item('base_url',"/");
- 
+        $this->config->set_item('base_url',"https://".$_SERVER["SERVER_NAME"]."/");
+
         $url = uri_string();
         if($url !== 'login'){
             $this->session->set_userdata('uri_string', $url);
