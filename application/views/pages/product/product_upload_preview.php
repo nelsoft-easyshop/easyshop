@@ -236,7 +236,6 @@
                 <p class="product_content_payment"> <strong>Payment:</strong><br />
                   <span class="mastercard"></span>
                   <span class="visa"></span>
-                  <span class="jcb"></span>
                   <span class="paypal"></span>
                 </p>
               </div>
