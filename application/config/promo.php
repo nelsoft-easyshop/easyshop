@@ -6,11 +6,12 @@ $config = array(
             'calculation_id' => '0',
             'purchase_limit' => PHP_INT_MAX,
             'payment_method' => array(
-                            'cdb'=>'Credit or Debit Card',
+                            // 'cdb'=>'Credit or Debit Card',
                             'paypal'=>'Paypal',
                             'dragonpay'=>'Dragon Pay',
                             // 'dbd'=>'Direct Bank Deposit',
-                            'cod'=>'Cash on Delivery'
+                            'cod'=>'Cash on Delivery',
+                            'pesopaycdb'=>'Credit or Debit Card'
             ),
             'banner' => '',
             'cart_solo_restriction' => false,
