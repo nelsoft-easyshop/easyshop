@@ -100,10 +100,11 @@ $(document).ready(function(){
         var csrfname = $("meta[name='csrf-name']").attr('content');
         var type = $(this).data('type');
     
-        $(this).val('Please wait...'); 
-        $(this).attr('disabled','disabled');
+
 
         if($('#chk_dp').is(':checked')){
+            $(this).val('Please wait...'); 
+            $(this).attr('disabled','disabled');
             $.ajax({
                 type: "POST",
                 url:  action, 
@@ -172,6 +173,48 @@ $(document).ready(function(){
     });
 
 // -- END OF DIRECT BANK DEPOSIT PROCESS PAYMENT SECTION -- // 
+
+// -- PESO PAY CC PROCESS PAYMENT SECTION -- // 
+
+    $(document).on('click','.pesopaycdb',function () {
+        var action = config.base_url + "payment/payPesoPay"; 
+        var csrftoken = $("meta[name='csrf-token']").attr('content');
+        var csrfname = $("meta[name='csrf-name']").attr('content');
+
+        if($('#chk_ppcdb').is(':checked')){
+            $(this).val('Please wait...'); 
+            $(this).attr('disabled','disabled');
+            $.ajax({
+                type: "POST",
+                url:  action, 
+                dataType: "json",
+                data: csrfname+"="+csrftoken, 
+                success: function(d) {
+                     
+                    if(d.e == 1){ 
+                        $('#pesopaycdb').append(d.d); 
+                        $('#payFormCcard').submit();
+                    }else{   
+
+                        $('.btnDp').val('Pay via Credit or Debit Card'); 
+                        $('.btnDp').removeAttr('disabled');    
+                        if(d.m == 'Item quantity not available.'){
+                            location.reload();
+                        }
+                        alert(d.m);
+                    }
+                }
+            });
+        }else{
+            $("#chk_ppcdb").css({"-webkit-box-shadow": "0px 0px 2px 2px #FF0000",
+                "-moz-box-shadow": "0px 0px 2px 2px #FF0000",
+                "box-shadow": "0px 0px 2px 2px #FF0000"}); 
+            $('#pesopaycdb > .chck_privacy > p').empty();
+            $('#pesopaycdb > .chck_privacy').append('<p><span style="color:red"> * Please acknowledge that you have read and understood our privacy policy.</span></p>');
+        }
+    });
+
+// -- END OF PESO PAY CC PROCESS PAYMENT SECTION -- // 
 
 // -- CHANGE ADDRESS SECTION -- // 
 
