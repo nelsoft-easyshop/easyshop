@@ -533,11 +533,12 @@
                 </div>
                 <div id="dsc_frm">
                   <nobr class="discount_price_con_top">
-                    <label id="lbl_discount"><strong>Discount Percentage</strong></label><input type="text" id="slider_val" placeholder="0%" maxlength="10" data-value='<?php echo isset( $product_details['discount'])?$product_details['discount']:0;?>' >
+                    <label id="lbl_discount"><strong>Discount Percentage</strong></label><input type="text" id="slider_val" placeholder="0%" onkeypress="return isNumberKey(event)" data-value='<?php echo isset( $product_details['discount'])?$product_details['discount']:0;?>' >
+
                   </nobr>     
                   <input type="text" id="range_1" name="discount" value=""/>           
                   <nobr class="discount_price_con">
-                  <label id="lbl_realPrc"><strong>Discounted Price:</strong> &#8369;</label><input type="text" id="discountedP" class="blue" name="discountedP" value="" disabled="disable"/>
+                  <label id="lbl_realPrc"><strong>Discounted Price:</strong> &#8369;</label><input type="text" id="discountedP" class="blue" name="discountedP" value="" onkeypress="return isNumberKey(event)" />
                   </nobr> 
                 </div>
               </td>
@@ -814,7 +815,7 @@ $(document).ready(function(){
 
     $("#slider_val").on('change',function(){
         var thisslider = $(this);
-        var newval = parseFloat($(this).val());
+        var newval = (parseInt($(this).val()) > 100) ? 99 : parseInt($(this).val());
         get_discPrice();
         $("#range_1").ionRangeSlider("update", {
             from: newval,                       // change default FROM setting
@@ -824,6 +825,31 @@ $(document).ready(function(){
                 get_discPrice();
             }
         });  
+    });
+
+    $("#discountedP").on('change',function(){
+        var disc_price = parseInt($(this).val());
+        var base_price = parseInt($("#prod_price").val().replace(/,/g,''));
+        var sum = ((base_price - disc_price) / base_price) * 100;
+        if(disc_price > base_price){
+            alert("Discount Price cannot be greater than base price.");
+            $(this).val("0.00");
+            validateRedTextBox("#discountedP");
+            return false;
+        }
+        if(disc_price <= 0){
+            alert("Discount Price cannot be equal or less than 0.");
+            $(this).val("0.00");
+            validateRedTextBox("#discountedP");
+            return false;
+        }
+        $("#range_1").ionRangeSlider("update", {
+            from: sum
+        });
+        $("#slider_val").val(sum+"%");
+        tempval = Math.abs(disc_price);
+        disc_price = ReplaceNumberWithCommas(tempval.toFixed(2));
+        $(this).val(disc_price);
     });
 
 	$('#prod_price').on('change', function(){
@@ -2239,8 +2265,8 @@ $(document).on('change','.other_name_value',function(){
     function get_discPrice() {
         var prcnt = $("#slider_val").val().replace("%",'');
         var act_price = $("#prod_price").val().replace(/,/g,'');
-        if (prcnt > 100) {
-            prcnt = 100;
+        if (prcnt >= 100) {
+            prcnt = 99;
         }
         if (act_price == 0 || act_price == null ) {      
             validateRedTextBox("#prod_price");
