@@ -1197,7 +1197,7 @@ class Payment extends MY_Controller{
         $analytics = array(); 
         foreach ($itemList as $key => $value) {
 
-            $product = $this->product_model->getProductPreview($value['id'],$value['member_id'],"0");
+            $product = $this->product_model->getProductById($value['id'], true);
 
             $tempAnalytics = array(
                 'id' => $v_order_id,

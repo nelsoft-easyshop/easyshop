@@ -209,24 +209,7 @@ class product_model extends CI_Model
         }
 		return $product;
 	}
-    
-    function getProductPreview($id, $memberid, $is_draft = 1){
-        $query = $this->xmlmap->getFilenameID('sql/product', 'getProductPreview');
-        $sth = $this->db->conn_id->prepare($query);
-        $sth->bindParam(':product_id',$id);
-        $sth->bindParam(':member_id',$memberid);
-        $sth->bindParam(':is_draft',$is_draft);
-        $sth->execute();
-		$row = $sth->fetch(PDO::FETCH_ASSOC);
-        if(count($row) > 0){
-            if(strlen(trim($row['userpic']))===0){
-                 $row['userpic'] = 'assets/user/default';
-            }
-        }
-        applyPriceDiscount($row);
-        
-        return $row;
-    }
+ 
 
 
     /*
