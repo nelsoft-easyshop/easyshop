@@ -228,7 +228,15 @@ class Memberpage extends MY_Controller
 		$this->load->library('image_lib');
 		$result = $this->memberpage_model->upload_img($uid, $data);
 		//echo error may be here: $result['error']
-		redirect('me');
+		
+		if(isset($result['error'])){
+			echo "<h2 style='color:red;'>Unable to upload image.</h2>
+				<p style='font-size:20px;'><strong>You can only upload JPEG, JPG, GIF, and PNG files with a max size of 5MB</strong></p>";
+			echo "<script type='text/javascript'>setTimeout(function(){window.location.href='".base_url()."me'},3000);</script>";
+		}else{
+			redirect('me');
+		}
+		
 	}
 
 	public function external_callbacks( $postdata, $param )
