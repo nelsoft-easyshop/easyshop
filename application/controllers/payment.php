@@ -1062,6 +1062,18 @@ class Payment extends MY_Controller{
         // $this->load->view('templates/footer_full'); 
     }
 
+    function test(){
+        echo '
+
+            <form action="http://staging.easyshop.ph/payment/pesoPayDataFeed" method="POST">
+            <input type="text" name="Ref" value="i682decd2dd32eb9a0f3f693269be564" />
+            <input type="text" name="successcode" value="0" /> 
+            <input type="submit"   /> 
+            </form>
+
+        ';
+    }
+
     function pesoPayDataFeed(){
 
         header("Content-Type:text/plain");
@@ -1097,7 +1109,7 @@ class Payment extends MY_Controller{
         $toBeLocked = $prepareData['toBeLocked'];
 
         $locked = $this->lockItem($toBeLocked,$orderId,'delete');
-        if($successCode === 0){
+        if($successCode == "0"){
 
             $grandTotal = $ItemTotalPrice;
 
