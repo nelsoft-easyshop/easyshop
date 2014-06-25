@@ -3855,7 +3855,7 @@ return array(
         "insert" => "",
     ),
    
-     "es_payment_method" => array(
+    "es_payment_method" => array(
         "create" => "CREATE TABLE `es_payment_method` (
               `id_payment_method` int(11) NOT NULL,
               `name` varchar(45) DEFAULT NULL,
