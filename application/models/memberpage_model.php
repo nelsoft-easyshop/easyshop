@@ -87,7 +87,7 @@ class memberpage_model extends CI_Model
 		$sth->bindParam(':type', $type);
 		$sth->execute();
 		$row = $sth->fetch(PDO::FETCH_ASSOC);
-		
+
 		return $row;
 	}
 	
@@ -138,7 +138,7 @@ class memberpage_model extends CI_Model
 		$sth->bindParam(':lng', $data['lng']);
 		
 		$result = $sth->execute();
-	
+
 		return $result;
 	}
 	

@@ -59,7 +59,14 @@ class MY_Controller extends CI_Controller
 			$uname = '';
 		}
 		$carts=$this->session->userdata('cart_contents');
-		$ss = (empty($carts) ? 0 : sizeof($this->session->userdata('cart_contents'))-2);
+        $ss = 0;
+        if(!empty($carts)){
+            if(isset($carts['total_items'])){
+                $ss = sizeof($carts) - 2 ;
+            }else{
+                $ss = sizeof($carts);
+            }
+        }
 		$unread = $this->messages_model->get_all_messages($this->session->userdata('member_id'),"Get_UnreadMsgs");
 		$msgs['unread_msgs'] = (isset($unread['unread_msgs']) ?$unread['unread_msgs'] : 0);
 		$msgs['msgs'] = (isset($unread['unread_msgs']) ? ($unread['unread_msgs'] != 0 ? reset($unread['messages']) : ""):0);		
