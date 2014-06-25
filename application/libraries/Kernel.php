@@ -60,6 +60,9 @@ class Kernel
         
         $dbConfig = require APPPATH . '/config/param/database.php';
         $config = Doctrine\ORM\Tools\Setup::createAnnotationMetadataConfiguration($paths, $isDevMode);
+        $config->setProxyDir(APPPATH . '/src/EasyShop/Doctrine/Proxies');
+        $config->setProxyNamespace('EasyShop\Doctrine\Proxies');
+        
         $container['entity_manager'] = function ($c) use ($dbConfig, $config){
             return Doctrine\ORM\EntityManager::create($dbConfig, $config);
         };
