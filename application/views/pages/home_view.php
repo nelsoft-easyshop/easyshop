@@ -108,8 +108,10 @@
 <section>
     <div class="wrapper electronics_gadgets_section">
         <div class="home_cat_product_title">
-            <img src="<?=base_url()?>assets/images/img_icon_title_electronics.png">
-            <h2>Electronics and Gadgets</h2>          
+            <a href="">
+                <img src="<?=base_url()?>assets/images/img_icon_cat_electronics.png">
+                <h2>Electronics and Gadgets</h2>  
+            </a>        
         </div>
 
         <div class="home_cat_tabs">
@@ -319,7 +321,7 @@
                                 <p class="orange">PHP 12,739.00</p>                            
                             </div>
                             <div>
-                                <img src="<?=base_url()?>assets/images/img_small_btn.png">
+                               <small class="span_bg c_small_btn"></small>
                             </div>
                         </a>
                     </div>
@@ -337,7 +339,7 @@
                                 <p class="orange">PHP 12,739.00</p>                            
                             </div>
                             <div>
-                                <img src="<?=base_url()?>assets/images/img_small_btn.png">
+                               <small class="span_bg c_small_btn"></small>
                             </div>
                         </a>
                     </div>
