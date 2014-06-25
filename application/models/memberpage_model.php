@@ -234,10 +234,10 @@ class memberpage_model extends CI_Model
 				$imageData['image_height'] = $data['h'] - $data['y'];
 			}
 			
-			if( $imageData['image_width'] > 768 || $imageData['image_height'] > 1024 ){				
+			if( $imageData['image_width'] > 1024 || $imageData['image_height'] > 768 ){				
 				$config['new_image'] = $path.'/usersize.png';
-				$config['width'] = 768;
-				$config['height'] = 1024;
+				$config['width'] = 1024;
+				$config['height'] = 768;
 				$this->image_lib->initialize($config);  
 				$this->image_lib->resize();	
 			}
