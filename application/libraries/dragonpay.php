@@ -97,7 +97,7 @@ class DragonPay {
         		'password' => $this->merchantPwd,
         		'merchantTxnId' => $txnId
         	);
-        $client = new nusoap_client($this->url, 'wsdl');
+        $client = new nusoap_client('https://secure.dragonpay.ph/DragonPayWebService/MerchantService.asmx?wsdl', 'wsdl');
         $result = $client->call('CancelTransaction',$param);
         return $result['CancelTransactionResult'];
 	}
