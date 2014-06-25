@@ -462,8 +462,6 @@ class Payment extends MY_Controller{
             redirect(base_url().'home', 'refresh');
         }
 
-        $this->session->set_userdata('paymentticket', true); 
-
         $response['message_status'] = "";
         $response['message'] = "";
 
@@ -591,9 +589,9 @@ class Payment extends MY_Controller{
         $data['title'] = 'Payment | Easyshop.ph';
         $data = array_merge($data,$this->fill_header());
 
-        $this->session->set_userdata('paymentticket', true);
-        $this->session->set_userdata('headerData', $data);
-        $this->session->set_userdata('bodyData', $response);
+        $_SESSION['headerData'] = $data;
+        $_SESSION['bodyData'] = $response; 
+        $_SESSION['paymentticket'] = true;
 
         redirect(base_url().'payment/success/paypal', 'refresh'); 
     }
@@ -618,7 +616,6 @@ class Payment extends MY_Controller{
             redirect(base_url().'home', 'refresh');
         }
         
-        $this->session->set_userdata('paymentticket', true);
         if($lastDigit == 1){
             $paymentType = $this->PayMentCashOnDelivery;
             $textType = 'cashondelivery';
@@ -703,9 +700,12 @@ class Payment extends MY_Controller{
         $data['title'] = 'Payment | Easyshop.ph';
         $data = array_merge($data,$this->fill_header());
        
-        $this->session->set_userdata('headerData', $data);
-        $this->session->set_userdata('bodyData', $response);
+        // $this->session->set_userdata('headerData', $data);
+        // $this->session->set_userdata('bodyData', $response);
 
+        $_SESSION['headerData'] = $data;
+        $_SESSION['bodyData'] = $response; 
+        $_SESSION['paymentticket'] = true;
         redirect(base_url().'payment/success/'.$textType, 'refresh');
     }
 
@@ -761,7 +761,7 @@ class Payment extends MY_Controller{
         }else{
             $orderId = $return['v_order_id'];
             $locked = $this->lockItem($toBeLocked,$orderId,'insert');  
-            $this->session->set_userdata('dragonpayticket', true);
+            $_SESSION['dragonpayticket'] = true;
             exit($dpReturn);
         }
     }
@@ -812,8 +812,7 @@ class Payment extends MY_Controller{
                 "message" => $message,
                 "digest" => $digest
                 );
-
-            $transactionID = urldecode($txnId);
+ 
             $apiResponse = json_encode($itemList);
              
             if($postBackCount == "0"){
@@ -830,7 +829,7 @@ class Payment extends MY_Controller{
             }
     
             $orderStatus = (strtolower($status) == "s" ? 0 : 99); 
-            $complete = $this->payment_model->updatePaymentIfComplete($orderId,$apiResponse,$transactionID,$paymentType,$orderStatus,0);
+            $complete = $this->payment_model->updatePaymentIfComplete($orderId,$apiResponse,$txnId,$paymentType,$orderStatus,0);
 
             if($postBackCount == "0"){
                 $remove_to_cart = $this->payment_model->removeToCart($member_id,$itemList);
@@ -855,12 +854,11 @@ class Payment extends MY_Controller{
 
     function dragonPayReturn(){
      
-        if(!$this->session->userdata('dragonpayticket')){
+        if($_SESSION['dragonpayticket']){
              redirect(base_url().'home/', 'refresh'); 
              exit();
         }
-
-        $this->session->set_userdata('paymentticket', true);
+ 
         
         $paymentType = $this->PayMentDragonPay; 
         $apiResponseArray = array();
@@ -917,12 +915,10 @@ class Payment extends MY_Controller{
         $data['title'] = 'Payment | Easyshop.ph';
         $data = array_merge($data,$this->fill_header());
 
-        $this->load->view('templates/header', $data);
-        $this->load->view('pages/payment/payment_response' ,$response);  
-        $this->load->view('templates/footer_full'); 
-        // $this->session->set_userdata('headerData', $data);
-        // $this->session->set_userdata('bodyData', $response); 
-        // redirect(base_url().'payment/success/dragonpay', 'refresh');
+        $_SESSION['headerData'] = $data;
+        $_SESSION['bodyData'] = $response; 
+        $_SESSION['paymentticket'] = true;
+        redirect(base_url().'payment/success/dragonpay', 'refresh');
     }
 
      #START OF PESOPAY PAYMENT
@@ -980,20 +976,26 @@ class Payment extends MY_Controller{
                 );
             $orderId = $return['v_order_id'];
             $locked = $this->lockItem($toBeLocked,$orderId,'insert');  
-            $this->session->set_userdata('pesopayticket', true);
+            // $this->session->set_userdata('pesopayticket', true);
+            $_SESSION['pesopayticket'] = true;
             echo '{"e":"1","d":'.json_encode($this->load->view('pages/payment/pesopayform',$data,TRUE)).'}';
             exit();
         }
     }
 
-    function pesoPayFail(){
 
-        if(!$this->session->userdata('pesopayticket')){
+    function pesoPayReturnUrl(){
+
+        if($_SESSION['pesopayticket']){
             redirect(base_url().'home/', 'refresh'); 
             exit();
         }
         
-        $this->session->set_userdata('paymentticket', true);
+        $status =  $this->input->get('status');
+        $txnId = $this->input->get('Ref');
+ 
+        
+        $paymentType = $this->PayMentPesoPayCC; 
         $apiResponseArray = array();
         $analytics = array();
 
@@ -1006,21 +1008,54 @@ class Payment extends MY_Controller{
         $city = $bigThree['city'];  
         $region = $bigThree['region'];  
         $majorIsland = $bigThree['majorIsland']; 
-
+ 
         $ItemTotalPrice = 0;
-
+        
         $prepareData = $this->processData($itemList,$city,$region,$majorIsland);
         $ItemTotalPrice = $prepareData['totalPrice']; 
         $itemList = $prepareData['newItemList']; 
-        $response['message'] = '<div style="color:red">Transaction Not Completed.</div><div style="color:red"></div>';
+
+        $grandTotal = $ItemTotalPrice;
+  
+        if(strtolower($status) == "s"){
+
+            $return = $this->payment_model->selectFromEsOrder($txnId,$paymentType);
+            $invoice = $return['invoice_no'];
+            $orderId = $return['id_order'];
+            $response['dateadded'] = $return['dateadded'];
+            $response['total'] = $grandTotal;
+            $response['completepayment'] = true;
+            $response['message'] = '<div style="color:green">Your payment has been completed through Credit/Debit Card.</div><div style="color:black">Your reference number from EasyShop : '.$txnId.'</div>';
+            $response = array_merge($response,$return);  
+            $this->removeItemFromCart(); 
+            $this->session->unset_userdata('choosen_items'); 
+
+            #google analytics data
+            $analytics = $this->ganalytics($itemList,$orderId);
+            #end of google analytics data    
+
+        }else{
+            $response['message'] = '<div style="color:red">Transaction Not Completed.</div><div style="color:red"></div>';
+        }
+
+
         $response['itemList'] = $itemList;
         $response['analytics'] = $analytics;
+ 
         $data['cat_item'] = $this->cart->contents();
         $data['title'] = 'Payment | Easyshop.ph';
         $data = array_merge($data,$this->fill_header());
 
-        $this->session->set_userdata('headerData', $data);
-        $this->session->set_userdata('bodyData', $response); 
+
+        // $this->session->set_userdata('paymentticket', true);
+        // $this->session->set_userdata('headerData', $data);
+        // $this->session->set_userdata('bodyData', $response); 
+
+        $_SESSION['headerData'] = $data;
+        $_SESSION['bodyData'] = $response;
+        $_SESSION['paymentticket'] = true;
+        $_SESSION['pesopayticket'] = false;
+
         redirect(base_url().'payment/success/debitcreditcard', 'refresh');
         // $this->load->view('templates/header', $data);
         // $this->load->view('pages/payment/payment_response' ,$response);  
@@ -1028,22 +1063,89 @@ class Payment extends MY_Controller{
     }
 
     function pesoPayDataFeed(){
-        $this->input->post('Ref');
-        $this->input->post('successcode');
-        echo 'OK';
+
+        header("Content-Type:text/plain");
+
+        $ref = $this->input->post('Ref'); 
+        $successCode = $this->input->post('successcode');
+        $postData = json_encode($this->input->post());
+
+        echo 'OK'; # acknowledgemenet
+        
+        $paymentType = $this->PayMentPesoPayCC; 
+
+        $txnId = $ref;
+        $payDetails = $this->payment_model->selectFromEsOrder($txnId,$paymentType);
+        $invoice = $payDetails['invoice_no'];
+        $orderId = $payDetails['id_order'];
+        $member_id = $payDetails['buyer_id'];
+        $itemList = json_decode($payDetails['data_response'],true); 
+        $postBackCount = $payDetails['postbackcount'];
+
+        $address = $this->memberpage_model->get_member_by_id($member_id); 
+        $bigThree = $this->getCityRegionMajorIsland($address);
+
+        $city = $bigThree['city'];  
+        $region = $bigThree['region'];  
+        $majorIsland = $bigThree['majorIsland'];  
+
+        $ItemTotalPrice = 0;
+        $prepareData = $this->processData($itemList,$city,$region,$majorIsland);
+        $ItemTotalPrice = $prepareData['totalPrice'];
+        $productstring = $prepareData['productstring'];
+        $itemList = $prepareData['newItemList'];
+        $toBeLocked = $prepareData['toBeLocked'];
+
+        $locked = $this->lockItem($toBeLocked,$orderId,'delete');
+        if($successCode === 0){
+
+            $grandTotal = $ItemTotalPrice;
+
+            $apiResponseArray['ProductData'] = $itemList;
+            $apiResponseArray['PesoPayReturn'] = $this->input->post();
+             
+            foreach ($itemList as $key => $value) {               
+                $productId = $value['id'];
+                $productItem =  $value['product_itemID'];
+                $orderQuantity = $value['qty'];
+                $itemComplete = $this->payment_model->deductQuantity($productId,$productItem,$orderQuantity);
+            }
+ 
+            $apiResponse = json_encode($apiResponseArray);
+
+            $orderStatus = 0; 
+            $complete = $this->payment_model->updatePaymentIfComplete($orderId,$apiResponse,$txnId,$paymentType,$orderStatus,0);
+
+            $remove_to_cart = $this->payment_model->removeToCart($member_id,$itemList);
+            $this->sendNotification(array('member_id'=>$member_id, 'order_id'=>$orderId, 'invoice_no'=>$invoice));  
+
+        }else{
+
+            $orderId = $this->payment_model->cancelTransaction($txnId,true);
+            $orderHistory = array(
+                'order_id' => $orderId,
+                'order_status' => 2,
+                'comment' => 'Dragonpay transaction failed: ' . $message
+                );
+            $this->payment_model->addOrderHistory($orderHistory);
+        }
     }
  
 
     #PAYMENT PAGE SUCCESS/ERROR
     function paymentSuccess($mode = "easyshop"){
 
-        $ticket = $this->session->userdata('paymentticket');
+        // $ticket = $this->session->userdata('paymentticket');
+        $ticket = $_SESSION['paymentticket'];
         if($ticket){
-            $data = $this->session->userdata('headerData');
-            $response = $this->session->userdata('bodyData'); 
+            $data = $_SESSION['headerData'];
+            $response = $_SESSION['bodyData']; 
             $this->session->unset_userdata('paymentticket');
             $this->session->unset_userdata('headerData');
             $this->session->unset_userdata('bodyData');
+            $_SESSION['headerData'] = "";
+            $_SESSION['bodyData'] = ""; 
+            $_SESSION['paymentticket'] = false; 
             $this->load->view('templates/header', $data);
             $this->load->view('pages/payment/payment_response' ,$response);  
             $this->load->view('templates/footer_full'); 
