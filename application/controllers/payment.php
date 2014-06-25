@@ -830,7 +830,7 @@ class Payment extends MY_Controller{
             }
     
             $orderStatus = (strtolower($status) == "s" ? 0 : 99); 
-            $complete = $this->payment_model->updatePaymentIfComplete($orderId,$apiResponse,$transactionID,$paymentType,0);
+            $complete = $this->payment_model->updatePaymentIfComplete($orderId,$apiResponse,$transactionID,$paymentType,$orderStatus,0);
 
             if($postBackCount == "0"){
                 $remove_to_cart = $this->payment_model->removeToCart($member_id,$itemList);
@@ -1028,6 +1028,8 @@ class Payment extends MY_Controller{
     }
 
     function pesoPayDataFeed(){
+        $this->input->post('Ref');
+        $this->input->post('successcode');
         echo 'OK';
     }
  
