@@ -229,7 +229,12 @@ class memberpage_model extends CI_Model
 				$this->image_lib->initialize($config);  
 				$this->image_lib->image_process_gd('crop');
 				$config['x_axis'] = $config['y_axis'] = '';
-			}else if( $imageData['image_width'] > 768 || $imageData['image_height'] > 1024 ){				
+				
+				$imageData['image_width'] = $data['w'] - $data['x'];
+				$imageData['image_height'] = $data['h'] - $data['y'];
+			}
+			
+			if( $imageData['image_width'] > 768 || $imageData['image_height'] > 1024 ){				
 				$config['new_image'] = $path.'/usersize.png';
 				$config['width'] = 768;
 				$config['height'] = 1024;
