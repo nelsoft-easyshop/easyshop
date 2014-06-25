@@ -3863,9 +3863,9 @@ return array(
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8;",
         "insert" => 
             "INSERT INTO `es_payment_method` (`id_payment_method`,`name`) VALUES (1,'PAYPAL/PAYPAL CC/DB'),
-            (2,'DRAGONPAY PENDING'),
+            (2,'DRAGONPAY'),
             (3,'CASH ON DELIVERY'),
-            (4,'DRAGONPAY SUCCESS'),
+            (4,'UNUSED'),
             (5,'DIRECT BANK DEPOSIT')",
     ),
     
