@@ -72,7 +72,7 @@ while($r = mysqli_fetch_array($sth)) {
 
     $status = $t->getStatus($txnid);
    
-    if(strtolower($status) == 'p'){
+    if(strtolower($status) == 'p' || strtolower($status) == 'u'){
 
         if($currentDate >= $expiredDate){
                
@@ -84,6 +84,9 @@ while($r = mysqli_fetch_array($sth)) {
               $sthReturn = mysqli_query($con,$sqlVoid) or die(mysqli_error($con));
               mysqli_next_result($con);
               $newstatus = $t->getStatus($txnid); 
+        }else{
+              $newstatus = $status;
+              $message = 'NOTHING TO DO';
         }
 
     }elseif (strtolower($status) == 'v' || strtolower($status) == 'f') {
