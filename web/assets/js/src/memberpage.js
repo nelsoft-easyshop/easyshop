@@ -100,25 +100,25 @@ var memconf = {
 		status : 0,
 		schVal: '',
 		sortVal: 0,
-		sortOrder: 2
+		sortOrder: 1
 	},
 	sell: {
 		status : 0,
 		schVal: '',
 		sortVal: 0,
-		sortOrder: 2
+		sortOrder: 1
 	},
 	cbuy: {
 		status : 1,
 		schVal: '',
 		sortVal: 0,
-		sortOrder: 2
+		sortOrder: 1
 	},
 	csell: {
 		status : 1,
 		schVal: '',
 		sortVal: 0,
-		sortOrder: 2
+		sortOrder: 1
 	}
 };
 

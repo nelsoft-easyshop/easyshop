@@ -1522,7 +1522,7 @@
 				<option value="3">Cash on Delivery</option>
 				<option value="5">Direct Bank Deposit</option>
 			</select>
-			<span class="span_bg arrow_sort tx_arrow_sort rotate_arrow"></span>
+			<span class="span_bg arrow_sort tx_arrow_sort"></span>
 		</div>
 		
 	<div class="page_load" style="display:none;text-align:center; margin-top: 50px;">
@@ -1818,7 +1818,7 @@
 				<option value="3">Cash on Delivery</option>
 				<option value="5">Direct Bank Deposit</option>
 			</select>
-			<span class="span_bg arrow_sort tx_arrow_sort rotate_arrow"></span>
+			<span class="span_bg arrow_sort tx_arrow_sort"></span>
 		</div>
 		
 		<div class="page_load" style="display:none;text-align:center; margin-top: 50px;">
@@ -2116,7 +2116,7 @@
 				<option value="3">Cash on Delivery</option>
 				<option value="5">Direct Bank Deposit</option>
 			</select>
-			<span class="span_bg arrow_sort tx_arrow_sort rotate_arrow"></span>
+			<span class="span_bg arrow_sort tx_arrow_sort"></span>
 		</div>
 		
 		<div class="page_load" style="display:none;text-align:center; margin-top: 50px;">
@@ -2271,7 +2271,7 @@
 				<option value="3">Cash on Delivery</option>
 				<option value="5">Direct Bank Deposit</option>
 			</select>
-			<span class="span_bg arrow_sort tx_arrow_sort rotate_arrow"></span>
+			<span class="span_bg arrow_sort tx_arrow_sort "></span>
 		</div>
 		
 		<div class="page_load" style="display:none;text-align:center; margin-top: 50px;">

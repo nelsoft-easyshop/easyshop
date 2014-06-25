@@ -439,7 +439,7 @@ class memberpage_model extends CI_Model
 	/*
 	 * Status = 0 for ongoing (default), 1 for complete
 	 */
-	function getBuyTransactionDetails($member_id, $status = 0, $start = 0, $nf='%', $of="1,2,3,5" , $osf="ASC" , $itemPerPage=10)
+	function getBuyTransactionDetails($member_id, $status = 0, $start = 0, $nf='%', $of="1,2,3,5" , $osf="DESC" , $itemPerPage=10)
 	{
 		$query = $this->xmlmap->getFilenameID('sql/users','getBuyTransactionDetails');
 		$strStatus = $status === 1 ? '1' : '0,99';
@@ -532,7 +532,7 @@ class memberpage_model extends CI_Model
 	/*
 	 * Status = 0 for ongoing (default), 1 for complete
 	 */
-	function getSellTransactionDetails($member_id,$status,$start=0, $nf='%', $of="1,2,3,5" , $osf="ASC" , $itemPerPage=10)
+	function getSellTransactionDetails($member_id,$status,$start=0, $nf='%', $of="1,2,3,5" , $osf="DESC" , $itemPerPage=10)
 	{	
 		#Fetch order details
 		$query = $this->xmlmap->getFilenameID('sql/users','getSellTransactionDetails');
@@ -613,7 +613,7 @@ class memberpage_model extends CI_Model
 		return $data;
 	}
 	
-	function getFilteredTransactionCount($member_id, $status, $nf='%', $of="1,2,3,5" , $osf="ASC" , $querySelect)
+	function getFilteredTransactionCount($member_id, $status, $nf='%', $of="1,2,3,5" , $osf="DESC" , $querySelect)
 	{
 		switch($querySelect){
 			case 'buy':
