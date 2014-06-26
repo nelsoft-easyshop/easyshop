@@ -852,7 +852,7 @@ $(document).ready(function(){
 
     $("#slider_val").on('change',function(){
         var thisslider = $(this);
-        var newval = (parseInt($(this).val()) > 100) ? 99 : parseInt($(this).val());
+        var newval = (parseFloat($(this).val()) > 100) ? 99 : parseFloat($(this).val());
         get_discPrice();
         $("#range_1").ionRangeSlider("update", {
             from: newval,                       // change default FROM setting
@@ -865,9 +865,11 @@ $(document).ready(function(){
     });
 
     $("#discountedP").on('change',function(){
+        validateWhiteTextBox("#discountedP");
         var disc_price = parseInt($(this).val());
         var base_price = parseInt($("#prod_price").val().replace(/,/g,''));
         var sum = ((base_price - disc_price) / base_price) * 100;
+        sum = sum.toFixed(4);
         if(disc_price > base_price){
             alert("Discount Price cannot be greater than base price.");
             $(this).val("0.00");
@@ -904,7 +906,6 @@ $(document).ready(function(){
     });    
     
     var slider_val = parseFloat($('#slider_val').data('value')); 
-    //var slider_val = parseInt($('#slider_val').data('value'),10);
     if(slider_val !== 0 && !isNaN(slider_val)){
        $('#slider_val').val(slider_val); 
        $('#slider_val').trigger( "change" );
@@ -2107,7 +2108,8 @@ $(document).on('change','.other_name_value',function(){
         $('#prod_keyword').val(prev_content.prod_keyword);
     }
     if(typeof prev_content.prod_price !== "undefined"){
-        $('#prod_price').val(prev_content.prod_price);
+        var priceval = prev_content.prod_price.replace(new RegExp(",", "g"), '');
+        $('#prod_price').val( ReplaceNumberWithCommas(parseFloat(priceval).toFixed(2)));
     }
     if(typeof prev_content.prod_sku !== "undefined"){
         $('#prod_sku').val(prev_content.prod_sku);
