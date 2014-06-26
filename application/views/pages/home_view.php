@@ -355,8 +355,856 @@
     </div>
 </section>
 
+<section>
+    <div class="wrapper electronics_gadgets_section">
+        <div class="home_cat_product_title">
+            <a href="">
+                <img src="<?=base_url()?>assets/images/img_icon_cat_electronics.png">
+                <h2>Electronics and Gadgets</h2>  
+            </a>        
+        </div>
+
+        <div class="home_cat_tabs">
+            <ul>
+                <li><a href="#mobile-phones">MOBILE PHONES</a></li>
+                <li><a href="#tablets">TABLETS</a></li>
+                <li><a href="#cameras-imaging">CAMERAS &amp; IMAGING</a></li>
+                <li><a href="#tv-video-home-audio">TV, Video &amp; Home Audio</a></li>
+                <li><a href="#computer-networking">Computer &amp; Networking</a></li>
+            </ul>
+        </div>
+        <div class="home_cat_items">
+            <div class="first_panel_middle">
+                 <ul class="slider3">
+                    <li>
+                        <a href="<?=base_url()."item/".$data['category2_pid_mainslide'][0]['slug']; ?>">                        
+                            <span class="elec_slide_img_con">
+                            <img class="cat2_slide_prod" src="<?=base_url().$data['category2_pid_mainslide'][0]['path'].'/'.$data['category2_pid_mainslide'][0]['file']; ?>" />
+                            </span>
+                        </a>                      
+                        <span class="electronics_slider_price_con">
+                            <a href="<?=base_url()."item/".$data['category2_pid_mainslide'][0]['slug']; ?>">
+
+                                <div>
+                                    <h2><?=html_escape($data['category2_pid_mainslide'][0]['product_name']);?></h2>
+                                
+                                    <p>Price: <span>&#8369;<?php echo number_format($data['category2_pid_mainslide'][0]['price'],2,'.',',');?></span> onwards</p>
+                                </div>
+                                <div>
+                                    <span class="cat_slide_btn">Buy Now  <small class="span_bg c_small_btn"></small></span>
+                                </div>                                
+                            </a>
+                    </span>
+                    </li>
+                    
+                    <li>
+                        <a href="<?=base_url()."item/".$data['category2_pid_mainslide'][1]['slug']; ?>">
+                            <span class="elec_slide_img_con">
+                            <img class="cat2_slide_prod" src="<?=base_url().$data['category2_pid_mainslide'][1]['path'].'/'.$data['category2_pid_mainslide'][1]['file']; ?>" />
+                            </span>
+                            
+                        </a>
+                        <span class="electronics_slider_price_con">
+
+                            <div>
+                                <a href="<?=base_url()."item/".$data['category2_pid_mainslide'][1]['slug']; ?>">
+                                    <h2><?=html_escape($data['category2_pid_mainslide'][1]['product_name']);?></h2>
+                                </a>
+                                <p>Price: <span>&#8369;<?php echo number_format($data['category2_pid_mainslide'][1]['price'],2,'.',',');?></span> onwards</p>
+                                </span>
+                            </div>
+                            <div>
+                                <span class="cat_slide_btn">Buy Now  <small class="span_bg c_small_btn"></small></span>
+                            </div>    
+                    </li>
+                    
+                    <li>
+                        <a href="<?=base_url()."item/".$data['category2_pid_mainslide'][2]['slug']; ?>">
+                            <span class="elec_slide_img_con">
+                            <img class="cat2_slide_prod" src="<?=base_url().$data['category2_pid_mainslide'][2]['path'].'/'.$data['category2_pid_mainslide'][2]['file'] ?>" />
+                            </span>
+                            
+                        </a>
+                        <span class="electronics_slider_price_con">
+                            <div>
+                            <a href="<?=base_url()."item/".$data['category2_pid_mainslide'][2]['slug']; ?>">
+                                <h2><?=html_escape($data['category2_pid_mainslide'][2]['product_name']);?></h2>
+                            </a>
+                            <p>Price: <span>&#8369;<?php echo number_format($data['category2_pid_mainslide'][2]['price'],2,'.',',');?></span> onwards</p>
+                            </span>
+                            </div>
+                            <div>
+                                <span class="cat_slide_btn">Buy Now  <small class="span_bg c_small_btn"></small></span>
+                            </div> 
+                    </li>
+                </ul> 
+                <div class="fpm_btm_items_con">
+                    <div class="fpm_btm_items_left_con">
+                        <div class="home_cat_item1_con">
+                            <div class="home_cat_item_link">
+                                <a href="">
+                                    <div>                            
+                                        <p>ACER LIQUID E2 </p>
+                                        <p class="orange">PHP 12,739.00</p>                            
+                                    </div>
+                                    <div>
+                                        <small class="span_bg c_small_btn"></small>
+                                    </div>
+                                </a>
+                            </div>
+                            <a href="">
+                                <span>
+                                    <img src="<?=base_url()?>assets/images/img_mid_item2.jpg" alt="ipad mini">
+                                </span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="fpm_btm_items_right_con">
+                        <div class="home_cat_item1_con">
+                            <div class="home_cat_item_link">
+                                <a href="">
+                                    <div>                            
+                                        <p>ACER LIQUID E2 </p>
+                                        <p class="orange">PHP 12,739.00</p>                            
+                                    </div>
+                                    <div>
+                                        <small class="span_bg c_small_btn"></small>
+                                    </div>
+                                </a>
+                            </div>
+                            <a href="">
+                                <span>
+                                    <img src="<?=base_url()?>assets/images/img_mid_item2.jpg" alt="ipad mini">
+                                </span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="clear"></div>
+            </div>
+            <div class="first_panel_left">
+                <div class="home_cat_item2_con border_btm">
+                    <div class="home_cat_item_link">
+                        <a href="">
+                            <div>                            
+                                <p>ACER LIQUID E2 </p>
+                                <p class="orange">PHP 12,739.00</p>                            
+                            </div>
+                            <div>
+                                <small class="span_bg c_small_btn"></small>
+                            </div>
+                        </a>
+                    </div>
+
+                    <a href="">
+                        <span>
+                            <img src="<?=base_url()?>assets/images/img_cd_prod1.jpg" alt="Clothing">
+                        </span>
+                    </a>
+                </div>
+                <div class="home_cat_item1_con">
+                    <div class="home_cat_item_link">
+                        <a href="">
+                            <div>                            
+                                <p>ACER LIQUID E2 </p>
+                                <p class="orange">PHP 12,739.00</p>                            
+                            </div>
+                            <div>
+                                <small class="span_bg c_small_btn"></small>
+                            </div>
+                        </a>
+                    </div>
+                    <a href="">
+                        <span>
+                            <img src="<?=base_url()?>assets/images/img_mid_item2.jpg" alt="ipad mini">
+                        </span>
+                    </a>
+                </div>
+            </div>
+
+            
 
 
+            <div class="first_panel_right">
+                <div class="home_cat_item2_con border_btm">
+                    <div class="home_cat_item_link">
+                        <a href="">
+                            <div>                            
+                                <p>ACER LIQUID E2 </p>
+                                <p class="orange">PHP 12,739.00</p>                            
+                            </div>
+                            <div>
+                               <small class="span_bg c_small_btn"></small>
+                            </div>
+                        </a>
+                    </div>
+                    <a href="">
+                        <span>
+                            <img src="<?=base_url()?>assets/images/img_cd_prod1.jpg" alt="ipad mini">
+                        </span>
+                    </a>
+                </div>
+                
+                <div class="home_cat_item1_con">
+                    <div class="home_cat_item_link">
+                        <a href="">
+                            <div>                            
+                                <p>ACER LIQUID E2 </p>
+                                <p class="orange">PHP 12,739.00</p>                            
+                            </div>
+                            <div>
+                               <small class="span_bg c_small_btn"></small>
+                            </div>
+                        </a>
+                    </div>
+                    <a href="">
+                        <span>
+                            <img src="<?=base_url()?>assets/images/img_mid_item2.jpg" alt="ipad mini">
+                        </span>
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+</section>
+
+
+<section>
+    <div class="wrapper electronics_gadgets_section">
+        <div class="home_cat_product_title">
+            <a href="">
+                <img src="<?=base_url()?>assets/images/img_icon_cat_electronics.png">
+                <h2>Electronics and Gadgets</h2>  
+            </a>        
+        </div>
+
+        <div class="home_cat_tabs">
+            <ul>
+                <li><a href="#mobile-phones">MOBILE PHONES</a></li>
+                <li><a href="#tablets">TABLETS</a></li>
+                <li><a href="#cameras-imaging">CAMERAS &amp; IMAGING</a></li>
+                <li><a href="#tv-video-home-audio">TV, Video &amp; Home Audio</a></li>
+                <li><a href="#computer-networking">Computer &amp; Networking</a></li>
+            </ul>
+        </div>
+        <div class="home_cat_items">
+             <div class="first_panel_left">
+                <div class="home_cat_item2_con border_btm">
+                    <div class="home_cat_item_link">
+                        <a href="">
+                            <div>                            
+                                <p>ACER LIQUID E2 </p>
+                                <p class="orange">PHP 12,739.00</p>                            
+                            </div>
+                            <div>
+                                <small class="span_bg c_small_btn"></small>
+                            </div>
+                        </a>
+                    </div>
+
+                    <a href="">
+                        <span>
+                            <img src="<?=base_url()?>assets/images/img_cd_prod1.jpg" alt="Clothing">
+                        </span>
+                    </a>
+                </div>
+                <div class="home_cat_item1_con">
+                    <div class="home_cat_item_link">
+                        <a href="">
+                            <div>                            
+                                <p>ACER LIQUID E2 </p>
+                                <p class="orange">PHP 12,739.00</p>                            
+                            </div>
+                            <div>
+                                <small class="span_bg c_small_btn"></small>
+                            </div>
+                        </a>
+                    </div>
+                    <a href="">
+                        <span>
+                            <img src="<?=base_url()?>assets/images/img_mid_item2.jpg" alt="ipad mini">
+                        </span>
+                    </a>
+                </div>
+            </div>
+            <div class="first_panel_middle">
+                 <ul class="slider3">
+                    <li>
+                        <a href="<?=base_url()."item/".$data['category2_pid_mainslide'][0]['slug']; ?>">                        
+                            <span class="elec_slide_img_con">
+                            <img class="cat2_slide_prod" src="<?=base_url().$data['category2_pid_mainslide'][0]['path'].'/'.$data['category2_pid_mainslide'][0]['file']; ?>" />
+                            </span>
+                        </a>                      
+                        <span class="electronics_slider_price_con">
+                            <a href="<?=base_url()."item/".$data['category2_pid_mainslide'][0]['slug']; ?>">
+
+                                <div>
+                                    <h2><?=html_escape($data['category2_pid_mainslide'][0]['product_name']);?></h2>
+                                
+                                    <p>Price: <span>&#8369;<?php echo number_format($data['category2_pid_mainslide'][0]['price'],2,'.',',');?></span> onwards</p>
+                                </div>
+                                <div>
+                                    <span class="cat_slide_btn">Buy Now  <small class="span_bg c_small_btn"></small></span>
+                                </div>                                
+                            </a>
+                    </span>
+                    </li>
+                    
+                    <li>
+                        <a href="<?=base_url()."item/".$data['category2_pid_mainslide'][1]['slug']; ?>">
+                            <span class="elec_slide_img_con">
+                            <img class="cat2_slide_prod" src="<?=base_url().$data['category2_pid_mainslide'][1]['path'].'/'.$data['category2_pid_mainslide'][1]['file']; ?>" />
+                            </span>
+                            
+                        </a>
+                        <span class="electronics_slider_price_con">
+
+                            <div>
+                                <a href="<?=base_url()."item/".$data['category2_pid_mainslide'][1]['slug']; ?>">
+                                    <h2><?=html_escape($data['category2_pid_mainslide'][1]['product_name']);?></h2>
+                                </a>
+                                <p>Price: <span>&#8369;<?php echo number_format($data['category2_pid_mainslide'][1]['price'],2,'.',',');?></span> onwards</p>
+                                </span>
+                            </div>
+                            <div>
+                                <span class="cat_slide_btn">Buy Now  <small class="span_bg c_small_btn"></small></span>
+                            </div>    
+                    </li>
+                    
+                    <li>
+                        <a href="<?=base_url()."item/".$data['category2_pid_mainslide'][2]['slug']; ?>">
+                            <span class="elec_slide_img_con">
+                            <img class="cat2_slide_prod" src="<?=base_url().$data['category2_pid_mainslide'][2]['path'].'/'.$data['category2_pid_mainslide'][2]['file'] ?>" />
+                            </span>
+                            
+                        </a>
+                        <span class="electronics_slider_price_con">
+                            <div>
+                            <a href="<?=base_url()."item/".$data['category2_pid_mainslide'][2]['slug']; ?>">
+                                <h2><?=html_escape($data['category2_pid_mainslide'][2]['product_name']);?></h2>
+                            </a>
+                            <p>Price: <span>&#8369;<?php echo number_format($data['category2_pid_mainslide'][2]['price'],2,'.',',');?></span> onwards</p>
+                            </span>
+                            </div>
+                            <div>
+                                <span class="cat_slide_btn">Buy Now  <small class="span_bg c_small_btn"></small></span>
+                            </div> 
+                    </li>
+                </ul> 
+                <div class="fpm_btm_items_con">
+                    <div class="fpm_btm_items_left_con">
+                        <div class="home_cat_item1_con">
+                            <div class="home_cat_item_link">
+                                <a href="">
+                                    <div>                            
+                                        <p>ACER LIQUID E2 </p>
+                                        <p class="orange">PHP 12,739.00</p>                            
+                                    </div>
+                                    <div>
+                                        <small class="span_bg c_small_btn"></small>
+                                    </div>
+                                </a>
+                            </div>
+                            <a href="">
+                                <span>
+                                    <img src="<?=base_url()?>assets/images/img_mid_item2.jpg" alt="ipad mini">
+                                </span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="fpm_btm_items_right_con">
+                        <div class="home_cat_item1_con">
+                            <div class="home_cat_item_link">
+                                <a href="">
+                                    <div>                            
+                                        <p>ACER LIQUID E2 </p>
+                                        <p class="orange">PHP 12,739.00</p>                            
+                                    </div>
+                                    <div>
+                                        <small class="span_bg c_small_btn"></small>
+                                    </div>
+                                </a>
+                            </div>
+                            <a href="">
+                                <span>
+                                    <img src="<?=base_url()?>assets/images/img_mid_item2.jpg" alt="ipad mini">
+                                </span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="clear"></div>
+            </div> 
+
+
+            <div class="first_panel_right">
+                <div class="home_cat_item2_con border_btm">
+                    <div class="home_cat_item_link">
+                        <a href="">
+                            <div>                            
+                                <p>ACER LIQUID E2 </p>
+                                <p class="orange">PHP 12,739.00</p>                            
+                            </div>
+                            <div>
+                               <small class="span_bg c_small_btn"></small>
+                            </div>
+                        </a>
+                    </div>
+                    <a href="">
+                        <span>
+                            <img src="<?=base_url()?>assets/images/img_minion.png" alt="ipad mini">
+                        </span>
+                    </a>
+                </div>
+                
+                <div class="home_cat_item1_con">
+                    <div class="home_cat_item_link">
+                        <a href="">
+                            <div>                            
+                                <p>ACER LIQUID E2 </p>
+                                <p class="orange">PHP 12,739.00</p>                            
+                            </div>
+                            <div>
+                               <small class="span_bg c_small_btn"></small>
+                            </div>
+                        </a>
+                    </div>
+                    <a href="">
+                        <span>
+                            <img src="<?=base_url()?>assets/images/img_mid_item2.jpg" alt="ipad mini">
+                        </span>
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+</section>
+
+<section>
+    <div class="wrapper electronics_gadgets_section">
+        <div class="home_cat_product_title">
+            <a href="">
+                <img src="<?=base_url()?>assets/images/img_icon_cat_electronics.png">
+                <h2>Electronics and Gadgets</h2>  
+            </a>        
+        </div>
+
+        <div class="home_cat_tabs">
+            <ul>
+                <li><a href="#mobile-phones">MOBILE PHONES</a></li>
+                <li><a href="#tablets">TABLETS</a></li>
+                <li><a href="#cameras-imaging">CAMERAS &amp; IMAGING</a></li>
+                <li><a href="#tv-video-home-audio">TV, Video &amp; Home Audio</a></li>
+                <li><a href="#computer-networking">Computer &amp; Networking</a></li>
+            </ul>
+        </div>
+        <div class="home_cat_items">
+            <div class="first_panel_middle">
+                 <ul class="slider3">
+                    <li>
+                        <a href="<?=base_url()."item/".$data['category2_pid_mainslide'][0]['slug']; ?>">                        
+                            <span class="elec_slide_img_con">
+                            <img class="cat2_slide_prod" src="<?=base_url().$data['category2_pid_mainslide'][0]['path'].'/'.$data['category2_pid_mainslide'][0]['file']; ?>" />
+                            </span>
+                        </a>                      
+                        <span class="electronics_slider_price_con">
+                            <a href="<?=base_url()."item/".$data['category2_pid_mainslide'][0]['slug']; ?>">
+
+                                <div>
+                                    <h2><?=html_escape($data['category2_pid_mainslide'][0]['product_name']);?></h2>
+                                
+                                    <p>Price: <span>&#8369;<?php echo number_format($data['category2_pid_mainslide'][0]['price'],2,'.',',');?></span> onwards</p>
+                                </div>
+                                <div>
+                                    <span class="cat_slide_btn">Buy Now  <small class="span_bg c_small_btn"></small></span>
+                                </div>                                
+                            </a>
+                    </span>
+                    </li>
+                    
+                    <li>
+                        <a href="<?=base_url()."item/".$data['category2_pid_mainslide'][1]['slug']; ?>">
+                            <span class="elec_slide_img_con">
+                            <img class="cat2_slide_prod" src="<?=base_url().$data['category2_pid_mainslide'][1]['path'].'/'.$data['category2_pid_mainslide'][1]['file']; ?>" />
+                            </span>
+                            
+                        </a>
+                        <span class="electronics_slider_price_con">
+
+                            <div>
+                                <a href="<?=base_url()."item/".$data['category2_pid_mainslide'][1]['slug']; ?>">
+                                    <h2><?=html_escape($data['category2_pid_mainslide'][1]['product_name']);?></h2>
+                                </a>
+                                <p>Price: <span>&#8369;<?php echo number_format($data['category2_pid_mainslide'][1]['price'],2,'.',',');?></span> onwards</p>
+                                </span>
+                            </div>
+                            <div>
+                                <span class="cat_slide_btn">Buy Now  <small class="span_bg c_small_btn"></small></span>
+                            </div>    
+                    </li>
+                    
+                    <li>
+                        <a href="<?=base_url()."item/".$data['category2_pid_mainslide'][2]['slug']; ?>">
+                            <span class="elec_slide_img_con">
+                            <img class="cat2_slide_prod" src="<?=base_url().$data['category2_pid_mainslide'][2]['path'].'/'.$data['category2_pid_mainslide'][2]['file'] ?>" />
+                            </span>
+                            
+                        </a>
+                        <span class="electronics_slider_price_con">
+                            <div>
+                            <a href="<?=base_url()."item/".$data['category2_pid_mainslide'][2]['slug']; ?>">
+                                <h2><?=html_escape($data['category2_pid_mainslide'][2]['product_name']);?></h2>
+                            </a>
+                            <p>Price: <span>&#8369;<?php echo number_format($data['category2_pid_mainslide'][2]['price'],2,'.',',');?></span> onwards</p>
+                            </span>
+                            </div>
+                            <div>
+                                <span class="cat_slide_btn">Buy Now  <small class="span_bg c_small_btn"></small></span>
+                            </div> 
+                    </li>
+                </ul> 
+                <div class="fpm_btm_items_con">
+                    <div class="fpm_btm_items_left_con">
+                        <div class="home_cat_item1_con">
+                            <div class="home_cat_item_link">
+                                <a href="">
+                                    <div>                            
+                                        <p>ACER LIQUID E2 </p>
+                                        <p class="orange">PHP 12,739.00</p>                            
+                                    </div>
+                                    <div>
+                                        <small class="span_bg c_small_btn"></small>
+                                    </div>
+                                </a>
+                            </div>
+                            <a href="">
+                                <span>
+                                    <img src="<?=base_url()?>assets/images/img_mid_item2.jpg" alt="ipad mini">
+                                </span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="fpm_btm_items_right_con">
+                        <div class="home_cat_item1_con">
+                            <div class="home_cat_item_link">
+                                <a href="">
+                                    <div>                            
+                                        <p>ACER LIQUID E2 </p>
+                                        <p class="orange">PHP 12,739.00</p>                            
+                                    </div>
+                                    <div>
+                                        <small class="span_bg c_small_btn"></small>
+                                    </div>
+                                </a>
+                            </div>
+                            <a href="">
+                                <span>
+                                    <img src="<?=base_url()?>assets/images/img_mid_item2.jpg" alt="ipad mini">
+                                </span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="clear"></div>
+            </div>
+            <div class="first_panel_left">
+                <div class="home_cat_item2_con border_btm">
+                    <div class="home_cat_item_link">
+                        <a href="">
+                            <div>                            
+                                <p>ACER LIQUID E2 </p>
+                                <p class="orange">PHP 12,739.00</p>                            
+                            </div>
+                            <div>
+                                <small class="span_bg c_small_btn"></small>
+                            </div>
+                        </a>
+                    </div>
+
+                    <a href="">
+                        <span>
+                            <img src="<?=base_url()?>assets/images/img_cd_prod1.jpg" alt="Clothing">
+                        </span>
+                    </a>
+                </div>
+                <div class="home_cat_item1_con">
+                    <div class="home_cat_item_link">
+                        <a href="">
+                            <div>                            
+                                <p>ACER LIQUID E2 </p>
+                                <p class="orange">PHP 12,739.00</p>                            
+                            </div>
+                            <div>
+                                <small class="span_bg c_small_btn"></small>
+                            </div>
+                        </a>
+                    </div>
+                    <a href="">
+                        <span>
+                            <img src="<?=base_url()?>assets/images/img_mid_item2.jpg" alt="ipad mini">
+                        </span>
+                    </a>
+                </div>
+            </div>
+
+            
+
+
+            <div class="first_panel_right">
+                <div class="home_cat_item1_con border_btm">
+                    <div class="home_cat_item_link">
+                        <a href="">
+                            <div>                            
+                                <p>ACER LIQUID E2 </p>
+                                <p class="orange">PHP 12,739.00</p>                            
+                            </div>
+                            <div>
+                               <small class="span_bg c_small_btn"></small>
+                            </div>
+                        </a>
+                    </div>
+                    <a href="">
+                        <span>
+                            <img src="<?=base_url()?>assets/images/img_minion.png" alt="ipad mini">
+                        </span>
+                    </a>
+                </div>
+                 <div class="home_cat_item1_con border_btm">
+                    <div class="home_cat_item_link">
+                        <a href="">
+                            <div>                            
+                                <p>ACER LIQUID E2 </p>
+                                <p class="orange">PHP 12,739.00</p>                            
+                            </div>
+                            <div>
+                               <small class="span_bg c_small_btn"></small>
+                            </div>
+                        </a>
+                    </div>
+                    <a href="">
+                        <span>
+                            <img src="<?=base_url()?>assets/images/img_minion.png" alt="ipad mini">
+                        </span>
+                    </a>
+                </div>
+                
+                <div class="home_cat_item1_con">
+                    <div class="home_cat_item_link">
+                        <a href="">
+                            <div>                            
+                                <p>ACER LIQUID E2 </p>
+                                <p class="orange">PHP 12,739.00</p>                            
+                            </div>
+                            <div>
+                               <small class="span_bg c_small_btn"></small>
+                            </div>
+                        </a>
+                    </div>
+                    <a href="">
+                        <span>
+                            <img src="<?=base_url()?>assets/images/img_mid_item2.jpg" alt="ipad mini">
+                        </span>
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+</section>
+
+<section>
+    <div class="wrapper electronics_gadgets_section">
+        <div class="home_cat_product_title">
+            <a href="">
+                <img src="<?=base_url()?>assets/images/img_icon_cat_electronics.png">
+                <h2>Electronics and Gadgets</h2>  
+            </a>        
+        </div>
+
+        <div class="home_cat_tabs">
+            <ul>
+                <li><a href="#mobile-phones">MOBILE PHONES</a></li>
+                <li><a href="#tablets">TABLETS</a></li>
+                <li><a href="#cameras-imaging">CAMERAS &amp; IMAGING</a></li>
+                <li><a href="#tv-video-home-audio">TV, Video &amp; Home Audio</a></li>
+                <li><a href="#computer-networking">Computer &amp; Networking</a></li>
+            </ul>
+        </div>
+        <div class="home_cat_items">
+            <div class="first_panel_left">
+                <div class="home_cat_item2_con border_btm">
+                    <div class="home_cat_item_link">
+                        <a href="">
+                            <div>                            
+                                <p>ACER LIQUID E2 </p>
+                                <p class="orange">PHP 12,739.00</p>                            
+                            </div>
+                            <div>
+                                <small class="span_bg c_small_btn"></small>
+                            </div>
+                        </a>
+                    </div>
+
+                    <a href="">
+                        <span>
+                            <img src="<?=base_url()?>assets/images/img_cd_prod1.jpg" alt="ipad mini">
+                        </span>
+                    </a>
+                </div>
+
+                
+
+                <div class="home_cat_item1_con">
+                    <div class="home_cat_item_link">
+                        <a href="">
+                            <div>                            
+                                <p>ACER LIQUID E2 </p>
+                                <p class="orange">PHP 12,739.00</p>                            
+                            </div>
+                            <div>
+                                <small class="span_bg c_small_btn"></small>
+                            </div>
+                        </a>
+                    </div>
+                    <a href="">
+                        <span>
+                            <img src="<?=base_url()?>assets/images/img_mid_item2.jpg" alt="ipad mini">
+                        </span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="first_panel_left">
+                <div class="home_cat_item1_con border_btm">
+                    <div class="home_cat_item_link">
+                        <a href="">
+                            <div>                            
+                                <p>ACER LIQUID E2 </p>
+                                <p class="orange">PHP 12,739.00</p>                            
+                            </div>
+                            <div>
+                                <small class="span_bg c_small_btn"></small>
+                            </div>
+                        </a>
+                    </div>
+
+                    <a href="">
+                        <span>
+                            <img src="<?=base_url()?>assets/images/img_mid_item2.jpg" alt="ipad mini">
+                        </span>
+                    </a>
+                </div>
+
+                <div class="home_cat_item2_con">
+                    <div class="home_cat_item_link">
+                        <a href="">
+                            <div>                            
+                                <p>ffdsfsdsdfsdfsdfsdfsdfsdfsdfsdfsdfsdffsdfsd</p>
+                                <p class="orange">PHP 12,739.00</p>                            
+                            </div>
+                            <div>
+                                <small class="span_bg c_small_btn"></small>
+                            </div>
+                        </a>
+                    </div>
+                    <a href="">
+                        <span>
+                            <img src="<?=base_url()?>assets/images/img_cd_prod1.jpg" alt="ipad mini">
+                        </span>
+                    </a>
+                </div>
+
+                
+            </div>
+            <div class="first_panel_left">
+                <div class="home_cat_item2_con border_btm">
+                    <div class="home_cat_item_link">
+                        <a href="">
+                            <div>                            
+                                <p>ACER LIQUID E2 </p>
+                                <p class="orange">PHP 12,739.00</p>                            
+                            </div>
+                            <div>
+                                <small class="span_bg c_small_btn"></small>
+                            </div>
+                        </a>
+                    </div>
+
+                    <a href="">
+                        <span>
+                            <img src="<?=base_url()?>assets/images/img_mid_item2.jpg" alt="ipad mini">
+                        </span>
+                    </a>
+                </div>
+
+                
+
+                <div class="home_cat_item1_con">
+                    <div class="home_cat_item_link">
+                        <a href="">
+                            <div>                            
+                                <p>ACER LIQUID E2 </p>
+                                <p class="orange">PHP 12,739.00</p>                            
+                            </div>
+                            <div>
+                                <small class="span_bg c_small_btn"></small>
+                            </div>
+                        </a>
+                    </div>
+                    <a href="">
+                        <span>
+                            <img src="<?=base_url()?>assets/images/img_cd_prod1.jpg" alt="ipad mini">
+                        </span>
+                    </a>
+                </div>
+            </div>
+
+
+            <div class="first_panel_right">
+                <div class="home_cat_item1_con border_btm">
+                    <div class="home_cat_item_link">
+                        <a href="">
+                            <div>                            
+                                <p>ACER LIQUID E2 </p>
+                                <p class="orange">PHP 12,739.00</p>                            
+                            </div>
+                            <div>
+                               <small class="span_bg c_small_btn"></small>
+                            </div>
+                        </a>
+                    </div>
+                    <a href="">
+                        <span>
+                            <img src="<?=base_url()?>assets/images/img_mid_item2.jpg" alt="ipad mini">
+                        </span>
+                    </a>
+                </div>
+                <div class="home_cat_item2_con">
+                    <div class="home_cat_item_link">
+                        <a href="">
+                            <div>                            
+                                <p>ACER LIQUID E2 </p>
+                                <p class="orange">PHP 12,739.00</p>                            
+                            </div>
+                            <div>
+                               <small class="span_bg c_small_btn"></small>
+                            </div>
+                        </a>
+                    </div>
+                    <a href="">
+                        <span>
+                            <img src="<?=base_url()?>assets/images/img_mid_item2.jpg" alt="ipad mini">
+                        </span>
+                    </a>
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</section>
 <input type = 'hidden' id='timer_date' value='<?php echo (strtotime(date('M d,Y H:i:s')) < strtotime($data['cd_startdate']))?$data['cd_startdate']:$data['cd_enddate']; ?>'/>
 
 <div class="clear"></div>
