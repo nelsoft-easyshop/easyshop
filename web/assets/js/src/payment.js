@@ -291,8 +291,8 @@ $(document).ready(function(){
             return false;
         }
         
-        if(!/^(9|8)[0-9]{9}$/.test(mobile.val())){
-            alert('Mobile numbers be should 10 digits and start with 9. eg: 9051235678');
+        if(!/^(09|08)[0-9]{9}$/.test(mobile.val())){
+            alert('Mobile numbers be should 11 digits long and start with 09. eg: 09051235678');
             validateRedTextBox('#c_mobile');
             return false;
         }
