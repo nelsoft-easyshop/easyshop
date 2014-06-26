@@ -16,6 +16,7 @@ class Payment extends MY_Controller{
         $this->load->model('user_model');
         $this->load->model('cart_model');
         $this->load->model('payment_model');
+        $this->load->model('messages_model');
         $this->load->model('product_model');
         $this->load->model('memberpage_model'); 
         $this->load->model('search_model'); 
@@ -1224,9 +1225,14 @@ class Payment extends MY_Controller{
 		$data['member_id'] = 56;
 		$data['order_id'] = 156;
 		$data['invoice_no']= '156-2014061247';*/
-		
+        //Easyshop ID
+        $easyID = 89;
+        //Message = seller to buyer
+        $msg_2_buyer = "Message here to notify the buyer.This message is from easyshop.Do not reply.";
+        //Message = buyer to seller
+        $msg_2_seller = "Message here to notify the seller.This message is from easyshop.Do not reply.";
+
         $transactionData = $this->payment_model->getPurchaseTransactionDetails($data);
-        
 		#get payment method instructions
 		switch($transactionData['payment_method']){
 			case 1:
@@ -1272,7 +1278,10 @@ class Payment extends MY_Controller{
 			$buyerMsg = $buyerData['buyer_name'] . $this->lang->line('notification_txtmsg_buyer');
 			$buyerTxtResult = $this->payment_model->sendNotificationMobile($buyerMobile, $buyerMsg);
 		}
-		
+        
+        //Send private msg to buyer via EasyShop messaging
+        $this->messages_model->send_message($easyID,$data['member_id'],$msg_2_buyer);
+
         //Send email to seller of each product - once per seller
         $sellerData = array(
             'id_order' => $transactionData['id_order'],
@@ -1281,8 +1290,8 @@ class Payment extends MY_Controller{
 			'invoice_no' => $transactionData['invoice_no'],
 			'payment_msg_seller' => $transactionData['payment_msg_seller']
             );
-			
-        foreach($transactionData['seller'] as $seller){
+
+        foreach($transactionData['seller'] as $buyer_id => $seller){
             $sellerEmail = $seller['email'];
 			$sellerData = array_merge( $sellerData, array_slice($seller,1,8) );
 			$sellerData['totalprice'] = number_format($seller['totalprice'], 2, '.' , ',');
@@ -1300,7 +1309,10 @@ class Payment extends MY_Controller{
 				$sellerMsg = $seller['seller_name'] . $this->lang->line('notification_txtmsg_seller');
 				$sellerTxtResult = $this->payment_model->sendNotificationMobile($sellerMobile, $sellerMsg);
 			}
+            //Send private msg to seller via EasyShop messaging
+            $this->messages_model->send_message($buyer_id,$easyID,$msg_2_seller);
         }//close foreach seller loop
+
     }
 	
 	/*

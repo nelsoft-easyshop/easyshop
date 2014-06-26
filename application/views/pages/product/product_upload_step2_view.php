@@ -840,6 +840,7 @@ $(document).ready(function(){
         if(disc_price <= 0){
             alert("Discount Price cannot be equal or less than 0.");
             $(this).val("0.00");
+            $( "span#discounted_price_con" ).text( "0.00" );
             validateRedTextBox("#discountedP");
             return false;
         }
@@ -850,6 +851,7 @@ $(document).ready(function(){
         tempval = Math.abs(disc_price);
         disc_price = ReplaceNumberWithCommas(tempval.toFixed(2));
         $(this).val(disc_price);
+        $( "span#discounted_price_con" ).text( disc_price );
     });
 
 	$('#prod_price').on('change', function(){
