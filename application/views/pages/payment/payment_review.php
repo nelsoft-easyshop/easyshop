@@ -373,6 +373,6 @@
     }
 </script>
 
-<script type='text/javascript' src='<?=base_url()?>assets/js/src/payment.js'></script>
+<script type='text/javascript' src='<?=base_url()?>assets/js/src/payment.js?ver=<?=ES_FILE_VERSION?>'></script>
 <script type='text/javascript' src='<?=base_url()?>assets/js/src/vendor/jquery.numeric.js'></script>
 <script type='text/javascript' src='<?=base_url()?>assets/js/src/vendor/jquery.simplemodal.js'></script>
