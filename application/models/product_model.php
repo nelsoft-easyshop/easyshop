@@ -1930,9 +1930,18 @@ class product_model extends CI_Model
                     $home_view_data[$key][$key2] = $this->createHomeElement($inner_el, $key); 
                 }
             }    
-       } 
+        } 
+        
+        /*
+         *  If there is only one section element, add it to its own array.
+         */
+        if(isset($home_view_data['section']) && isset($home_view_data['section']['category_detail'])){
+            $temp = $home_view_data['section'];
+            $home_view_data['section'] = array();
+            $home_view_data['section'][0] = $temp;
+        }
 
-       return $home_view_data;
+        return $home_view_data;
     }
     
     private function createHomeElement($element, $key){
@@ -1956,12 +1965,31 @@ class product_model extends CI_Model
             else{
                 $home_view_data = date('M d,Y H:i:s',strtotime($element['value']));
             }
-        }else if($element['type'] === 'category'){ 
-                $home_view_data['category_detail'] = $this->selectCategoryDetails($element['value']);
-                $home_view_data['product'] = array(); 
-                foreach($element['product'] as $key => $inner_el){
-                    array_push($home_view_data['product'], $this->createHomeElement($inner_el, $key));
+        }else if(($element['type'] === 'category') || ($element['type'] === 'custom')) { 
+            if($element['type'] === 'category'){
+               $home_view_data['category_detail'] = $this->selectCategoryDetails($element['value']);
+               $home_view_data['category_detail']['url'] = 'category/'.$home_view_data['category_detail']['slug'];
+            }
+            else if($element['type'] === 'custom'){
+               $home_view_data['category_detail']['imagepath'] = '';
+               $home_view_data['category_detail']['name'] = $element['value'];
+               $home_view_data['category_detail']['url'] = 'vendor/'.$element['value'];
+            }
+            $home_view_data['category_detail']['css_class'] = $element['css_class'];
+            $home_view_data['category_detail']['subcategory'] = $this->getDownLevelNode($element['value']);
+            unset($element['value']);
+            unset($element['css_class']);
+            unset($element['type']);
+            foreach($element as $key=>$cat_el){
+                if(is_array($cat_el)){
+                    foreach($cat_el as $inner_key => $cat_inner_el){
+                        $home_view_data[$key][$inner_key] =  $this->createHomeElement($cat_inner_el, $inner_key);
+                    }
+                }else{
+                    $home_view_data[$key] = $this->createHomeElement($cat_el, $key);
                 }
+
+            }
         }else{
             $home_view_data = $element['value'];            
         }
