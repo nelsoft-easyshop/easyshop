@@ -34,8 +34,8 @@
          <?php 
          foreach ($itemList as $key => $value) {
             ?>
-            <div><span>Product:</span> <?php echo $value['name']; ?></div>
-            <div><span>Name of Seller:</span> <?php echo $value['seller_username']; ?></div>
+            <div><span>Product:</span> <?php echo html_escape($value['name']); ?></div>
+            <div><span>Name of Seller:</span> <?php echo html_escape($value['seller_username']); ?></div>
             <div><span>Price:</span> <?php echo $value['price']; ?></div>
             <div><span>Quantity:</span> <?php echo $value['qty']; ?></div>
             <div><span>Subtotal:</span> <?php echo $value['subtotal']; ?></div>
