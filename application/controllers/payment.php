@@ -70,6 +70,7 @@ class Payment extends MY_Controller{
 
         $address = $this->memberpage_model->get_member_by_id($member_id);
 
+        
         $city = ($address['c_stateregionID'] > 0 ? $address['c_stateregionID'] :  0);
         if($city > 0){  
             $cityDetails = $this->payment_model->getCityOrRegionOrMajorIsland($city);
@@ -1443,13 +1444,14 @@ class Payment extends MY_Controller{
         {
             echo json_encode("Fill the required fields!");
             exit();
-        }else if(!is_numeric($this->input->post('c_mobile')) || strlen($this->input->post('c_mobile')) != 10 || (!preg_match("/^(9|8)[0-9]{9}$/", $this->input->post('c_mobile')))){
-            echo json_encode("<b>MOBILE NUMBER</b> should be 10 digits long and starts with 9. eg: 9051235678");
+        }else if(!is_numeric($this->input->post('c_mobile')) || strlen($this->input->post('c_mobile')) != 11 || (!preg_match("/^(09|08)[0-9]{9}$/", $this->input->post('c_mobile')))){
+            echo json_encode("<b>MOBILE NUMBER</b> should be 11 digits long and starts with 09. eg: 09051235678");
             exit();
         }else if(trim($this->input->post('c_telephone')) != "" && (preg_match("/^([0-9]{4}-){3}[0-9]{4}$/", $this->input->post('c_telephone')) || !is_numeric(str_replace('-', '', $this->input->post('c_telephone'))))){
             echo json_encode("<b>TELEPHONE NUMBER</b> can only be numbers and hyphen. eg: 354-5973");
         }else{
             $postdata['default_add'] = "off";
+            $postdata['mobile'] = substr($postdata['mobile'], 1);            
             $addressId = $this->memberpage_model->getAddress($uid,'1')['id_address'];
             $data = $this->memberpage_model->editAddress($uid, $postdata,$addressId);
             $this->output->set_output(json_encode($data));
