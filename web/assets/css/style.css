@@ -305,6 +305,51 @@ textarea:focus {
 	border:1px solid #ff4400;
 }
 
+.span_bg {
+	background-image: url('../images/global_sprite.png');
+	background-repeat: no-repeat;
+	display: inline-block;
+	vertical-align: middle;
+}
+
+.chk_img {
+    background-position: -92px -260px;
+    height: 16px;
+    margin-right: 5px;
+    width: 16px;
+}
+
+.edit_btn {
+	background-position: -125px -263px;
+    height: 10px;
+    width: 11px;	
+}
+
+.delete_btn {
+	background-position: -167px -262px;
+    height: 11px;
+    width: 13px;	
+}
+
+.cancel_btn {
+	background-position: -340px -260px;
+    height: 13px;
+    width: 13px;
+    margin-right: 3px;		
+}
+
+.prod_message {
+	background-position: -542px -261px;
+	height: 10px;
+	width: 15px;
+}
+
+.border_radius1 {
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+}
+
 /***** Scroll Up style ****/
 #scrollUp {
   background:#cecece url(../images/img_scroll_up_arrow.png) center 10px no-repeat;
@@ -682,7 +727,7 @@ a.msgs_link:hover {
 }
 
 .logo span {
-	background-position: 0px 5px;	
+	background-position: 0 -9px;	
 	height: 79px;
 	width: 240px;
 }
@@ -1935,7 +1980,7 @@ span.cod {
 .home_cat_tabs ul li.active:before,
 .home_cat_tabs ul li:hover:before { 
 	border-color: rgba(0, 120, 213, 0); 
-	border-bottom-color: #0078d5; 
+	border-bottom-color: #f18200; 
 	border-width: 13px; 
 	margin-left: -13px; 
 }
@@ -1967,6 +2012,13 @@ span.cod {
     width: 239px;
 }
 
+.home_cat_item2_con {
+    height: 356px;
+    padding-bottom: 2px;
+    position: relative;
+    width: 239px;	
+}
+
 .home_cat_item_link {
 	background-color: rgba(0,0,0,0.75);
 	bottom: 0;
@@ -1981,7 +2033,7 @@ span.cod {
 
 .home_cat_item_link:hover,
 .electronics_slider_price_con:hover {
-	background-color: rgba(0,0,0,0.55);	
+	background-color: rgba(0,0,0,0.90);	
 }
 
 .home_cat_item_link div {
@@ -2030,6 +2082,20 @@ span.cod {
 	width: auto;
 }
 
+.home_cat_item2_con span {
+	display: table-cell;
+	height: 356px;
+    width: 239px;
+	text-align: center;
+	vertical-align: middle;
+}
+
+.home_cat_item2_con span img {
+	height: auto;
+	max-height: 356px;
+	max-width: 239px;
+	width: auto;
+}
 
 .first_panel_middle {
     border-right: 1px solid #cecece;
@@ -3353,40 +3419,6 @@ padding: 8px 0;
 #personal_profile_address div:first-child div img {
 	vertical-align: middle;
 }
-
-.span_bg {
-	background-image: url('../images/global_sprite.png');
-	background-repeat: no-repeat;
-	display: inline-block;
-	vertical-align: middle;
-}
-
-.chk_img {
-    background-position: -92px -260px;
-    height: 16px;
-    margin-right: 5px;
-    width: 16px;
-}
-
-.edit_btn {
-	background-position: -125px -263px;
-    height: 10px;
-    width: 11px;	
-}
-
-.delete_btn {
-	background-position: -167px -262px;
-    height: 11px;
-    width: 13px;	
-}
-
-.cancel_btn {
-	background-position: -340px -260px;
-    height: 13px;
-    width: 13px;
-    margin-right: 3px;		
-}
-
 
 /** PERSONAL INFORMATION MAIN - CONTACT INFO (EMAIL MOBILE)**/
 
@@ -4757,12 +4789,84 @@ div.post_item_content_left {
 }
 
 /**	VENDOR VIEW CSS	**/
+.vendor_cover {
+	position: relative;
+}
+.edit_vendor_cover {
+    background-color: #fff;
+    cursor: pointer;
+    height: 30px;
+    line-height: 29px;
+    position: absolute;
+    right: 15px;
+    text-align: center;
+    top: 15px;
+    width: 100px;
+}
+
+.vendor-avatar div {
+    background-color: #fff;
+    border: 1px solid #cacaca;
+    height: 20px;
+    padding-top: 5px;
+    position: absolute;
+    right: 5px;
+    text-align: center;
+    top: 5px;
+    width: 50px;
+}
+
+.edit_vendor_cover:hover {
+	background-color: #cecece;
+}
+
+.edit_vendor_cover span {
+	margin-right: 5px;
+}
+
+.vendor_info_wrapper {
+    background-color: rgba(255, 255, 255, 0.95);
+    display: inline-block;
+    margin-left: 15px;
+    margin-top: -40px;
+    padding: 20px 10px;
+    position: relative;
+    width: 930px;
+}
+
+.vendor_info_con {
+	display: inline-block;
+	width: 82%;
+}
+
+.vendor_info_con_left {
+    float: left;
+    width: 61%;
+}
+
+.vendor_info_member_details p {
+    border-right: 1px solid #cecece;
+    display: inline-block;
+    font-size: 11px;
+    height: 20px;
+    line-height: 20px;
+    margin-right: 10px;
+    padding-right: 10px;
+}
+
+.vendor_info_con p:last-child {
+	border-right: none;
+}
+
 .vendor-avatar{
+	float: left;
 	text-align: center;
 	height: 150px;
 	width: 150px;
     border: #DDDCDC 1px solid;
     background-color: white;
+    margin-right: 15px;
+    position: relative;
 }
 
 .vendor-avatar span{
@@ -4777,6 +4881,18 @@ div.post_item_content_left {
 	width: auto;
 	max-height: 150px;
 	max-width: 150px;
+}
+
+.vendor_store_desc {
+	margin:10px 0;
+	position: relative;
+}
+
+.vendor_store_desc textarea {
+	font-family: arial, sans-serif;
+	font-size: 12px;
+	height: 55px;
+	width: 450px;
 }
 
 .vendor-profile{
@@ -4796,12 +4912,38 @@ div.post_item_content_left {
 	height: 20px;
 }
 
+.vendor_info_con_right {
+	display: inline-block;
+	width: 38%;
+}
+
+.vendor_info_con_right .posted_feedbacks_top {
+	width: auto;
+}
+
+.vendor_info_con_right .posted_feedbacks_top span {
+	height: 24px;
+    overflow: hidden;
+	width: 275px;
+}
+
 .vendor-profile > p {
 	word-wrap:break-word;
 }
 
 .vendor-profile > *{
 	padding-left: 5px;
+}
+
+.product.vendor_product {
+    width: 221px !important;
+}
+
+.txt_load_more_con {
+    display: inline-block;
+    padding: 30px 0;
+    text-align: center;
+    width: 100%;
 }
 
 /** TRANSACTIONS CSS **/
