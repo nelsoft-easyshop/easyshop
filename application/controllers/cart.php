@@ -197,9 +197,7 @@ class Cart extends MY_Controller{
         );
         $result['data'] = $data;
         $result['delete_to_cart'] =($product['is_draft'] == "1" || $product['is_delete'] == "1" || $product['can_purchase'] === false);
-        print "<pre>";
-        print_r($result);
-        print "</pre>";
+        
         return $result;
     }
 
