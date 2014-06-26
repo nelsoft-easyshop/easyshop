@@ -219,15 +219,15 @@ class Payment extends MY_Controller{
         $toBeLocked = $prepareData['toBeLocked'];
         $grandTotal= $ItemTotalPrice+$shipping_amt; 
         $thereIsPromote = $prepareData['thereIsPromote'];
-      
+
         if($thereIsPromote <= 0 && $grandTotal < '50'){
             echo '{"e":"0","d":"We only accept payments of at least PHP 50.00 in total value."}';
             exit();
         }
         
         foreach ($itemList as $key => $value) {
+            '&L_PAYMENTREQUEST_0_AMT'.$cnt.'='.urlencode(round($value['price'],2)).
             $dataitem .= '&L_PAYMENTREQUEST_0_QTY'.$cnt.'='. urlencode($value['qty']).
-            '&L_PAYMENTREQUEST_0_AMT'.$cnt.'='.urlencode($value['price']).
             '&L_PAYMENTREQUEST_0_NAME'.$cnt.'='.urlencode($value['name']).
             '&L_PAYMENTREQUEST_0_NUMBER'.$cnt.'='.urlencode($value['id']).
             '&L_PAYMENTREQUEST_0_DESC'.$cnt.'=' .urlencode($value['brief']);
@@ -241,9 +241,9 @@ class Payment extends MY_Controller{
                 '&PAYMENTREQUEST_0_CURRENCYCODE='.urlencode('PHP').
                 '&CURRENCYCODE='.urlencode('PHP').
         $dataitem. 
-                '&PAYMENTREQUEST_0_ITEMAMT='.urlencode($ItemTotalPrice).   
-                '&PAYMENTREQUEST_0_SHIPPINGAMT='.urlencode($shipping_amt).
-                '&PAYMENTREQUEST_0_AMT='.urlencode($grandTotal).
+                '&PAYMENTREQUEST_0_ITEMAMT='.urlencode(round($ItemTotalPrice,2)).   
+                '&PAYMENTREQUEST_0_SHIPPINGAMT='.urlencode(round($shipping_amt,2)).
+                '&PAYMENTREQUEST_0_AMT='.urlencode(round($grandTotal,2)).
                 '&SOLUTIONTYPE='.urlencode('Sole').
                 '&ALLOWNOTE=0'.
                 '&NOSHIPPING=1'.
