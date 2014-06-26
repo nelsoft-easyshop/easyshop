@@ -287,11 +287,15 @@
 
 <select id="getOrderProductTransactionDetails">
 	SELECT op.id_order_product, op.product_id, p.name, op.order_quantity, op.total as price, op.status, p.slug, sc.comment as shipping_comment, sc.courier, sc.tracking_num, DATE_FORMAT(sc.delivery_date, "%Y-%b-%d") as delivery_date, DATE_FORMAT(sc.expected_date, "%Y-%b-%d") as expected_date, DATE_FORMAT(sc.datemodified, "%D %M %Y") as datemodified, op.is_reject,
-		pi.product_image_path, attr.name as attr_name, pattr.attr_value, pitemattr.is_other, oah.field_name, oad.value_name,
+		<!--pi.product_image_path, attr.name as attr_name, pattr.attr_value, pitemattr.is_other, oah.field_name, oad.value_name,-->
+		pi.product_image_path, opa.attr_name, opa.attr_value,
 		op.seller_id, seller.username as seller, COALESCE(fb.for_memberid,'0') as for_memberid
 	FROM es_order_product op
 	INNER JOIN es_product p
 		ON op.product_id = p.id_product
+	LEFT JOIN es_order_product_attr opa
+		ON op.id_order_product = opa.order_product_id
+	<!--
 	LEFT JOIN es_product_item_attr pitemattr
 		ON op.product_item_id = pitemattr.product_id_item
 	LEFT JOIN es_product_attr pattr
@@ -302,6 +306,7 @@
 		ON	oad.id_optional_attrdetail = pitemattr.product_attr_id
 	LEFT JOIN es_optional_attrhead oah
 		ON oah.id_optional_attrhead = oad.head_id
+	-->
 	LEFT JOIN es_product_image pi
 		ON op.product_id = pi.product_id AND pi.is_primary = 1
 	LEFT JOIN es_product_shipping_comment sc

@@ -504,11 +504,16 @@ class memberpage_model extends CI_Model
 				if(!isset($data[$r['id_order']]['products'][$p['id_order_product']]['attr'])){
 					$data[$r['id_order']]['products'][$p['id_order_product']]['attr'] = array();
 				}
+				if( (string)$p['attr_name']!=='' && (string)$p['attr_value']!=='' ){
+					array_push($data[$r['id_order']]['products'][$p['id_order_product']]['attr'], array('field' => ucwords(strtolower($p['attr_name'])), 'value' => ucwords(strtolower($p['attr_value'])) ));
+				}
+				/*
 				if($p['is_other'] === '0'){
 					array_push($data[$r['id_order']]['products'][$p['id_order_product']]['attr'], array('field' => ucwords(strtolower($p['attr_name'])), 'value' => ucwords(strtolower($p['attr_value'])) ));
 				}else if($p['is_other'] === '1'){
 					array_push($data[$r['id_order']]['products'][$p['id_order_product']]['attr'], array('field' => ucwords(strtolower($p['field_name'])), 'value' => ucwords(strtolower($p['value_name'])) ));
-				}
+				}*/
+				
 			}
 			//IF BANK DEPOSIT
 			if( (int)$r['payment_method'] === 5 && (int)$r['transac_stat'] === 99 ){
@@ -602,11 +607,15 @@ class memberpage_model extends CI_Model
 				if(!isset($data[$r['id_order']]['products'][$p['id_order_product']]['attr'])){
 					$data[$r['id_order']]['products'][$p['id_order_product']]['attr'] = array();
 				}
+				if( (string)$p['attr_name']!=='' && (string)$p['attr_value']!=='' ){
+					array_push($data[$r['id_order']]['products'][$p['id_order_product']]['attr'], array('field' => ucwords(strtolower($p['attr_name'])), 'value' => ucwords(strtolower($p['attr_value'])) ));
+				}
+				/*
 				if($p['is_other'] === '0'){
 					array_push($data[$r['id_order']]['products'][$p['id_order_product']]['attr'], array('field' => ucwords(strtolower($p['attr_name'])), 'value' => ucwords(strtolower($p['attr_value'])) ));
 				}else if($p['is_other'] === '1'){
 					array_push($data[$r['id_order']]['products'][$p['id_order_product']]['attr'], array('field' => ucwords(strtolower($p['field_name'])), 'value' => ucwords(strtolower($p['value_name'])) ));
-				}
+				}*/
 			}
 		}
 		
