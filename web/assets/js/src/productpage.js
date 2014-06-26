@@ -258,15 +258,16 @@ function attrClick(target, $this){
          *  Enable buy button if an attribute is selected in all the rows.
          */
          
+        var allAttributeSelected = true;
+        $('.product_option .options').each(function(){
+            if($(this).find('.active')[0] === undefined){
+                allAttributeSelected = false;
+            }
+        }); 
+         
         if($('.quantity').data('default') === 'true'){
-            var defaultBuyEnable = true;
-            $('.product_option .options').each(function(){
-                if($(this).find('.active')[0] === undefined){
-                    defaultBuyEnable = false;
-                }
-            });
             var availability = parseInt($('.quantity').data('qty'),10);
-            if((defaultBuyEnable) && (availability > 0)){
+            if((allAttributeSelected) && (availability > 0)){
                 $('.orange_btn3').removeClass("disabled").addClass("enabled");
             }
             else{
@@ -277,7 +278,8 @@ function attrClick(target, $this){
         
         //**Calculate quantity          
         var qty = JSON.parse($('#p_qty').val());
-        
+        var qty_match_found = false;
+   
         $.each(qty, function(index, value){
             var value_arr = new Array();
             $.each(value.product_attribute_ids, function(y,x){
@@ -289,6 +291,7 @@ function attrClick(target, $this){
                if(parseInt(value.quantity,10) > 0){
                   $('.orange_btn3').removeClass("disabled").addClass("enabled"); //REMOVED TO DISABLE BUY NOW BUTTON ACTIVATION
                }
+               qty_match_found = true;
                return false;
             }
             else{
@@ -297,9 +300,13 @@ function attrClick(target, $this){
             }
         });
         
-        
+        if((allAttributeSelected)&&(!qty_match_found)){
+            $('.orange_btn3').removeClass("enabled").addClass("disabled");
+            $('.quantity')[0].innerHTML = 0;
+        }
+    
         //** Determine shipment location
-        
+
         var sel_visible_length = sel_id.length - $('.product_option[style*="display:none"]').length;
         
         
@@ -464,6 +471,7 @@ $(function(){
     });
     
     var qty = JSON.parse($('#p_qty').val());
+
     var firstLexicalKey = Object.keys(qty)[0];
 
     $.each(qty[firstLexicalKey].product_attribute_ids, function(idx, value){
@@ -479,7 +487,6 @@ $(function(){
             var i_id = $(".id-class").attr("id");
             var i_name =  $("#pname").text().trim();
             var i_qty =  $(".product_quantity").val();
-            //var i_loc =  $(".shiploc").val();
             var i_price =  $(".current_price").text().trim();
             var i_opt = {};
             var length = parseInt($('.product_option').length) - 1;
