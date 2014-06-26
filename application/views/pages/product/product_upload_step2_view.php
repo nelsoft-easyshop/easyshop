@@ -591,12 +591,11 @@
             <?php echo form_close();?>
 
             <?php 
-            $attributesForm = array('id' => 'hidden_form',
-            'name'=>'hidden_form');
+            $attributesForm = array('id' => 'hidden_form','name'=>'hidden_form');
             echo form_open('sell/step3', $attributesForm);
             ?>
                 <input type="hidden" name="prod_h_id" id="prod_h_id"> 
-
+                
                 <?php if(isset($is_edit)): ?>
                     <input type="hidden" name="is_edit" value="true">
                 <?php endif; ?>
@@ -796,7 +795,45 @@
 <script src="<?php echo base_url(); ?>assets/tinymce/tinymce.min.js" type="text/javascript"></script>
 <script type="text/javascript">
 
+
+
+ jQuery(function($){
+    var confirm_unload = true;
+    window.onbeforeunload = function (e) {
+        if(confirm_unload){
+          e = e || window.event;
+          var str = 'Some of your data may be lost.'
+          // For IE and Firefox prior to version 4
+          if (e) {
+            e.returnValue = str;
+          }
+          // For others
+          return str;
+        }
+    };
+
+  
+    //store onbeforeunload for later use
+    $(window).data('beforeunload',window.onbeforeunload);  
+
+    $(document).on('mouseover mouseout','a[href="javascript:void(0)"]', function(event) {
+        if (event.type == 'mouseover') {
+            window.onbeforeunload=null;
+        } else {
+            window.onbeforeunload=$(window).data('beforeunload');
+        }
+    });
+    
+    $(document).on('click', '#proceed_form', function(event){
+         window.onbeforeunload=null;
+    });
+    
+
+  });
+
+
 $(document).ready(function(){
+
     $("#range_1").ionRangeSlider({
         min: 0,
         max: 100,
@@ -875,6 +912,8 @@ $(document).ready(function(){
     
 
 });
+
+
 
 
 $(document).ready(function(){
@@ -2032,21 +2071,7 @@ $(document).on('change','.other_name_value',function(){
         }
     }
 
-    
-    var confirm_unload = true;
-    window.onbeforeunload = function (e) {
-        if(confirm_unload){
-          e = e || window.event;
-          var str = 'Some of your data may be lost.'
-          // For IE and Firefox prior to version 4
-          if (e) {
-            e.returnValue = str;
-          }
-          // For others
-          return str;
-        }
-  
-    };
+
 
     
     $('.step1_link').on('click', function(){
@@ -2261,7 +2286,6 @@ $(document).on('change','.other_name_value',function(){
         }
     });
 
-    
 });
 
     function get_discPrice() {
@@ -2423,6 +2447,8 @@ $(document).on('change','.qtyTextClass',function(){
   } else {
     this.value = v;
   }
+
+  
 });
 
 </script>
@@ -2440,6 +2466,9 @@ $(document).on('change','.qtyTextClass',function(){
 
         $('#brand_search_drop_content').hide();
     });
+ 
+    
+    
 </script>
 
  
