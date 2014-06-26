@@ -245,7 +245,7 @@
                          $value['qty'];
                     ?>
                     <div class="order_sum_content">
-                        <div class="sum_con_name"><?php echo $value['name'] ?></div>
+                        <div class="sum_con_name"><?php echo html_escape($value['name']); ?></div>
                         <div class="sum_con_qty"><?php echo $value['qty'] ?></div>
                         <div class="sum_con_ship_fee"><?php echo (isset($value['shipping_fee'])) ? number_format($value['shipping_fee'], 2, '.',',') : '<span style="color:red">Not available.</span>' ?></div>
                         <div class="sum_con_price"><?php echo number_format($value['price'], 2, '.',',') ?></div> 
