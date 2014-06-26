@@ -32,7 +32,7 @@
                             <div><span>State/Region:</span><?php echo ucwords(strtolower($c_stateregion));?></div>
                             <div><span>City:</span><?php echo ucwords(strtolower($c_city));?></div>
                             <div><span>Country:</span><?php echo ucwords(strtolower($country_name));?></div>
-                            <div><span>Mobile:</span><?php echo (intval($c_mobile) !== 0)?ucwords(strtolower($c_mobile)):'';?></div>
+                            <div><span>Mobile:</span><?php echo (strlen(trim($c_mobile)) !== 0)?ucwords(strtolower($c_mobile)):'';?></div>
                             <div><span>Telephone:</span><?php echo ucwords(strtolower($c_telephone));?></div> 
                             <?php else: ?> 
                             <div style='margin-left:10px; font-weight:bold;'>
@@ -299,7 +299,7 @@
         <div>
           <label >Mobile No:<font color="red">*</font></label> 
 
-          <input maxlength="11" placeholder="eg. 9051235678" type="text" name="c_mobile" id="c_mobile" value="<?php echo (intval($c_mobile) !== 0)?$c_mobile:$contactno;?>"> 
+          <input maxlength="11" placeholder="eg. 9051235678" type="text" name="c_mobile" id="c_mobile" value="<?php echo (strlen(trim($c_mobile)) !== 0)?$c_mobile:$contactno;?>"> 
         </div>
 
         <div>
