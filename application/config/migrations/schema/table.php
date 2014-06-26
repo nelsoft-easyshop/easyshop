@@ -4325,6 +4325,22 @@ return array(
         "insert" => "" ,
     ),
     
+    "es_order_product_attr" => array(
+        "create" => 
+            "CREATE TABLE `es_order_product_attr` (
+            `id_order_option` int(10) unsigned NOT NULL AUTO_INCREMENT,
+            `order_product_id` int(10) unsigned NOT NULL,
+            `attr_name` varchar(150) NOT NULL,
+            `attr_value` varchar(150) NOT NULL,
+            `attr_price` decimal(15,4) DEFAULT NULL,
+            PRIMARY KEY (`id_order_option`),
+            KEY `fk_es_order_product_attr_es_order_product_idx` (`order_product_id`),
+            CONSTRAINT `fk_es_order_product_attr_es_order_product` FOREIGN KEY (`order_product_id`) REFERENCES `es_order_product` (`id_order_product`) ON DELETE NO ACTION ON UPDATE NO ACTION
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8;",
+        "isnert" => "",
+    ),
+
+    
 );
 
 
