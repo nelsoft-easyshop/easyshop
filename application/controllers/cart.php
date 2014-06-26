@@ -124,18 +124,17 @@ class Cart extends MY_Controller{
         if(!empty($opt)){
             $product_attr_id = "";
             $key =  array_keys($opt); //get the key of options,used in checking the product in the database
-            
             for($a=0;$a < sizeof($key);$a++){//check attr if exist and sum all the attr's price
                 $attr=$key[$a];
                 $attr_value=$opt[$key[$a]];
                 $sum = $this->cart_model->checkProductAttributes($id,$attr,$attr_value);
                 if($sum['result']== true){ //if sum result = true , attr will add price, else return false (will return false if user tries changed it)
                     $add_price +=  $sum['price'];
+                    $opt[$attr] = $attr_value.'~'.$sum['price'];
                 }else{
                     return false;
                 }
                 $product_attr_id .= ($a === sizeof($key)-1 ? $sum['attr_id'] : $sum['attr_id'].",");
-
             }
             $final_price = $product['price'] + $add_price;
         }
@@ -196,10 +195,11 @@ class Cart extends MY_Controller{
             'additional_fee' => $add_price,
             'promo_type' => $product['promo_type'],
         );
-
         $result['data'] = $data;
         $result['delete_to_cart'] =($product['is_draft'] == "1" || $product['is_delete'] == "1" || $product['can_purchase'] === false);
-        
+        print "<pre>";
+        print_r($result);
+        print "</pre>";
         return $result;
     }
 

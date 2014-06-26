@@ -1920,16 +1920,20 @@ class product_model extends CI_Model
 	}
         
     public function getHomeContent($file = 'page/home_files'){ 
+
         $xml_content = $this->xmlmap->getFilename($file);
         $home_view_data = array();
-        foreach ($xml_content as $key => $element){
+        foreach ($xml_content as $key => $element){	
+
             if(isset($element['value']) &&  isset($element['type'])){    
                 $home_view_data[$key] = $this->createHomeElement($element, $key); 
             }else{
                 foreach ($element as $key2 => $inner_el){
                     $home_view_data[$key][$key2] = $this->createHomeElement($inner_el, $key); 
                 }
-            }    
+            }
+
+			
         } 
         
         /*
@@ -1940,7 +1944,6 @@ class product_model extends CI_Model
             $home_view_data['section'] = array();
             $home_view_data['section'][0] = $temp;
         }
-
         return $home_view_data;
     }
     

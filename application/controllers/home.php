@@ -10,7 +10,11 @@ class Home extends MY_Controller {
     }
     
     public function index() {
+
+	
+	
         $this->load->model('product_model');
+
 		$data = array('title' => 'Home | Easyshop.ph',
                 'data' => $this->product_model->getHomeContent(),
                 'category_navigation' => $this->load->view('templates/category_navigation',array('cat_items' =>  $this->getcat(),), TRUE ),
@@ -20,6 +24,7 @@ class Home extends MY_Controller {
 		$this->load->view('templates/header', $data);
         $this->load->view('pages/home_view', $data);
         $this->load->view('templates/footer_full');
+
     }
     
 	public function under_construction(){
