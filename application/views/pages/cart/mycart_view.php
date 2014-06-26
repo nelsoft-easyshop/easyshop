@@ -45,7 +45,8 @@
                                 for($a=0;$a < sizeof($key);$a++){
                                     $attr=$key[$a];
                                     $attr_value=$row['options'][$key[$a]];
-                                    echo  '<tr><td><span class="attr">'.html_escape($attr).':</span></td><td> <span class="attr_content">'.html_escape($attr_value).'</span></td></tr>';
+                                    $attr_value2 = explode('~', $attr_value);
+                                    echo  '<tr><td><span class="attr">'.html_escape($attr).':</span></td><td> <span class="attr_content">'.html_escape($attr_value2[0]).'</span></td></tr>';
                                 }
                                 }
                                 ?>
