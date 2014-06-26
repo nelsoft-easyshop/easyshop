@@ -415,22 +415,23 @@ return array(
     
     "es_sp_Payment_order" => 
         "
-        CREATE DEFINER=`root`@`localhost` PROCEDURE `es_sp_Payment_order`(
-            IN i_payment_type INT(10),
-            IN i_invoice_no VARCHAR(150),
-            IN i_total_amount DECIMAL(15,4),
-            IN i_ip VARCHAR(50),
-            IN i_member_id INT(10),
-            IN i_product_string TEXT,
-            IN i_product_count INT,
-            IN i_data_response TEXT,
-            IN i_transaction_id VARCHAR(1024)
-            
-        )
-       BEGIN
-            # ACCESSIBLE VARIABLES
-            DECLARE o_success BOOLEAN;
-            DECLARE	o_message VARCHAR(50);
+       
+CREATE DEFINER = `root` @`localhost` PROCEDURE `es_sp_Payment_order` (
+  IN i_payment_type INT (10)
+  , IN i_invoice_no VARCHAR (150)
+  , IN i_total_amount DECIMAL (15, 4)
+  , IN i_ip VARCHAR (50)
+  , IN i_member_id INT (10)
+  , IN i_product_string TEXT
+  , IN i_product_count INT
+  , IN i_data_response TEXT
+  , IN i_transaction_id VARCHAR (1024)
+) 
+BEGIN
+  # ACCESSIBLE VARIABLES
+  DECLARE o_success BOOLEAN ;
+  
+              DECLARE   o_message VARCHAR(50);
             DECLARE v_order_id INT(10);
             DECLARE v_address_id INT(10);
             DECLARE v_order_status INT(10);
@@ -446,6 +447,13 @@ return array(
             DECLARE v_total DECIMAL(15,4);
             DECLARE v_product_item INT(10);
             DECLARE v_billing_info_id INT(10);
+            DECLARE v_attr_count INT(10);
+            DECLARE v_attr_string TEXT;
+            DECLARE v_attr_string1 TEXT;
+            DECLARE v_attr_string_name TEXT;
+            DECLARE v_attr_string_value TEXT;
+            DECLARE v_attr_string_price DECIMAL(15,4);
+            DECLARE v_productattr_counter INT DEFAULT 1;
             
             DECLARE v_order_product_id INT(10); 
             DECLARE v_order_product_status INT(10);
@@ -524,13 +532,13 @@ return array(
                 SET v_net = i_total_amount - v_external_charge;
                 INSERT INTO `es_order` (`invoice_no`,`buyer_id`,`total`,`dateadded`,`ip`,`shipping_address_id`,`payment_method_id`,`order_status`,`data_response`,`transaction_id`,`payment_method_charge`, `net`) 
                 VALUES (i_invoice_no,i_member_id,i_total_amount,NOW(),i_ip,v_address_id,i_payment_type,v_order_status,i_data_response,i_transaction_id,v_external_charge, v_net);
-                SET o_message = 'Error Code: Payment003';				
+                SET o_message = 'Error Code: Payment003';               
                 SELECT `id_order` INTO v_order_id FROM `es_order` WHERE buyer_id = i_member_id  ORDER BY `id_order` DESC LIMIT 1; 
                   
                 SET o_message = 'Error Code: [HISTORY]Payment003';
                 INSERT INTO `es_order_history` (`order_id`,`comment`,`date_added`,`order_status`) VALUES (v_order_id,'CREATED',NOW(),v_order_status);
                 
-                SET o_message = 'Error Code: Payment003.1';	
+                SET o_message = 'Error Code: Payment003.1'; 
                 UPDATE `es_order` SET `invoice_no` = CONCAT(v_order_id,'-',i_invoice_no) WHERE `id_order` = v_order_id;
                 
                 SET o_message = 'Error Code: Payment004';
@@ -541,13 +549,16 @@ return array(
                     
                     
                     SET o_message = 'Error Code: Payment006';
-                    SELECT SPLIT_STRING(v_product_data, '{+}',1) INTO v_seller_id;	
+                    SELECT SPLIT_STRING(v_product_data, '{+}',1) INTO v_seller_id;  
                     SELECT SPLIT_STRING(v_product_data, '{+}',2) INTO v_product_id;
                     SELECT SPLIT_STRING(v_product_data, '{+}',3) INTO v_quantity;
                     SELECT SPLIT_STRING(v_product_data, '{+}',4) INTO v_price;
                     SELECT SPLIT_STRING(v_product_data, '{+}',5) INTO v_tax;
                     SELECT SPLIT_STRING(v_product_data, '{+}',6) INTO v_total;
                     SELECT SPLIT_STRING(v_product_data, '{+}',7) INTO v_product_item;
+                    SELECT SPLIT_STRING(v_product_data, '{+}',8) INTO v_attr_count;
+                    SELECT SPLIT_STRING(v_product_data, '{+}',9) INTO v_attr_string;
+                    
                     
                     SET v_product_external_charge = (v_total/i_total_amount) * v_external_charge;
                     
@@ -566,6 +577,28 @@ return array(
                     SET o_message = 'Error Code: Payment008';
                     SELECT `id_order_product` INTO v_order_product_id FROM `es_order_product` 
                     WHERE order_id = v_order_id  ORDER BY `id_order_product` DESC LIMIT 1;
+                    
+                    
+                    SET o_message = 'Error Code: Payment008a';
+                    CASE
+                    WHEN v_attr_count > 0 THEN
+                        
+                        SET o_message = 'Error Code: Payment008b';
+                        WHILE v_productattr_counter <= v_attr_count DO
+                            SELECT SPLIT_STRING(v_attr_string, '(-)',v_productattr_counter) INTO v_attr_string1;
+
+                                SELECT SPLIT_STRING(v_attr_string1, '[]',1) INTO v_attr_string_name;
+                                SELECT SPLIT_STRING(v_attr_string1, '[]',2) INTO v_attr_string_value;
+                                SELECT SPLIT_STRING(v_attr_string1, '[]',3) INTO v_attr_string_price;
+                            
+                                INSERT INTO `es_order_product_attr` (`order_product_id`,`attr_name`,`attr_value`,`attr_price`)
+                                VALUES(v_order_product_id,v_attr_string_name,v_attr_string_value,v_attr_string_price);
+                            SET v_productattr_counter = v_productattr_counter + 1;
+                        END WHILE;
+                    ELSE 
+                        BEGIN END;
+                    END CASE;
+                    
                     
                     SET o_message = 'Error Code: Payment009';
          
