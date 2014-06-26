@@ -1355,6 +1355,39 @@ class Payment extends MY_Controller{
         $othersumfee = 0;
         $toBeLocked = array();
         $isPromote = 0;
+        
+        foreach ($itemList as $key => $value) {
+            $sellerId = $value['member_id'];
+            $productId = $value['id'];
+            $orderQuantity = $value['qty'];
+            $price = $value['price'];
+            $tax_amt = 0;
+            $isPromote = ($value['is_promote'] == 1) ? $isPromote += 1 : $isPromote += 0;
+            $productItem =  $value['product_itemID'];
+            $details = $this->payment_model->getShippingDetails($productId,$productItem,$city,$region,$majorIsland);
+            $shipping_amt = $details[0]['price'];
+            $otherFee = ($tax_amt + $shipping_amt) * $orderQuantity;
+            $othersumfee += $otherFee;
+            $total =  $value['subtotal'] + $otherFee;
+
+            $optionCount = count($value['options']);
+            $optionString = '';
+            foreach ($value['options'] as $keyopt => $valopt) {
+                $optValueandPrice = explode('~', $valopt);
+                $optionString .= '(-)'.$keyopt.'[]'.$optValueandPrice[0].'[]'.$optValueandPrice[1];
+            } 
+
+            $optionString = ($optionCount <= 0) ? '0[]0[]0' : substr($optionString,3); 
+            $productstring .= '<||>'.$sellerId."{+}".$productId."{+}".$orderQuantity."{+}".$price."{+}".$otherFee."{+}".$total."{+}".$productItem."{+}".$optionCount."{+}".$optionString;
+            $itemList[$key ]['otherFee'] = $otherFee;
+            $sellerDetails = $this->memberpage_model->get_member_by_id($sellerId); 
+            $itemList[$key]['seller_username'] = $sellerDetails['username'];
+            $ItemTotalPrice += $total;  
+            $name .= " ".$value['name'];
+            $toBeLocked[$productItem] = $orderQuantity;
+        }
+        
+        /*
         foreach ($itemList as $key => $value) {
             $sellerId = $value['member_id'];
             $productId = $value['id'];
@@ -1376,6 +1409,8 @@ class Payment extends MY_Controller{
             $name .= "<br>".$value['name'];
             $toBeLocked[$productItem] = $orderQuantity;
         }
+        */
+        
         $productstring = substr($productstring,4);
         return array(
             'totalPrice' => $ItemTotalPrice,
