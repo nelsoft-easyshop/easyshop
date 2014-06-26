@@ -85,9 +85,6 @@
 
 </div>
 
-
-<input type = 'hidden' id='timer_date' value='<?php echo (strtotime(date('M d,Y H:i:s')) < strtotime($startdate))?$startdate:$enddate; ?>'/>
-
 <script src="<?=base_url()?>assets/js/src/vendor/jquery.plugin.min.js" type="text/javascript"></script>
 <script src="<?=base_url()?>assets/js/src/vendor/jquery.countdown.min.js" type="text/javascript"></script>
 <script>
