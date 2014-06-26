@@ -3,16 +3,18 @@
     
     <select id="selectCategoryDetails">
         SELECT
-        `id_cat`
-        , `name`
-        , `description`
-        , `keywords`
-        , `parent_id`
-        , `sort_order`
-        , `is_main` 
-        , `slug`
-        FROM `es_cat`
-        WHERE id_cat = :id_cat
+        c.`id_cat`
+        , c.`name`
+        , c.`description`
+        , c.`keywords`
+        , c.`parent_id`
+        , c.`sort_order`
+        , c.`is_main` 
+        , c.`slug`
+        , COALESCE(i.path, '') as imagepath
+        FROM `es_cat` c
+        LEFT JOIN es_cat_img i  ON c.id_cat = i.id_cat
+        WHERE c.id_cat = :id_cat
         LIMIT 1
     </select>
 	
