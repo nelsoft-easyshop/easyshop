@@ -21,10 +21,10 @@ if (empty($node)) { # if no more available item on selected category the button 
 </ul>
 </div>
 <script type="text/javascript">
-$(document).ready(function() {
-$(".add_category_submit").empty();
-$(".add_category_submit").append('<input type="hidden" name="hidden_attribute" value="'+<?php echo $cat_id ?>+'" class="hidden_attribute"><input class="proceed_form" id="proceed_form" type="submit" value="Proceed with <?php echo html_escape($name) ?>">');
-});     
+
+    $(".add_category_submit").empty();
+    $(".add_category_submit").append('<input type="hidden" name="hidden_attribute" value="'+<?php echo $cat_id ?>+'" class="hidden_attribute"><input class="proceed_form" id="proceed_form" type="submit" value="Proceed with <?php echo html_escape($name) ?>">');
+  
 </script>
 <?php
 } else {  # if there is more available item on selected category the list will generate
@@ -42,10 +42,10 @@ foreach ($node as $row) { # generating all child category base on selected paren
 </ul>
 </div>
 <script type="text/javascript">
-$(document).ready(function() {
-$(".add_category_submit").empty();
-$(".add_category_submit").append('<input type="hidden" name="hidden_attribute" value="'+<?php echo $cat_id ?>+'" class="hidden_attribute"><input class="proceed_form" id="proceed_form" type="submit" value="Proceed with <?php echo html_escape($name) ?>">');
-});     
+
+    $(".add_category_submit").empty();
+    $(".add_category_submit").append('<input type="hidden" name="hidden_attribute" value="'+<?php echo $cat_id ?>+'" class="hidden_attribute"><input class="proceed_form" id="proceed_form" type="submit" value="Proceed with <?php echo html_escape($name) ?>">');
+    
 </script>
 <?php
 }
