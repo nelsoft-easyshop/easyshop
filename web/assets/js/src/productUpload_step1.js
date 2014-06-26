@@ -463,7 +463,6 @@ $(document).ready(function() {
     var obj = JSON.parse($('#edit_cat_tree').val());
     if(obj.length > 0){
     
-    
         var parent_ids = eval('('+$(this).attr('data-parent')+')');
         $('li .select').removeClass('active');
         $('li .select').each(function(){
