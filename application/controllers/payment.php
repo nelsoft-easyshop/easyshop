@@ -19,9 +19,6 @@ class Payment extends MY_Controller{
         $this->load->model('memberpage_model');  
         session_start();
 
-        $this->session->keep_flashdata('headerData');
-        $this->session->keep_flashdata('bodyData');
-        $this->session->keep_flashdata('paymentticket');
     }
 
     public $PayMentPayPal = 1;
