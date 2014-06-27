@@ -464,6 +464,7 @@ class memberpage_model extends CI_Model
 			// Assemble Outer data array
 			if( !isset($data[$r['id_order']]) ){
 				$data[$r['id_order']] = array_slice($r,1,4);
+				$data[$r['id_order']]['is_flag'] = $r['is_flag'];
 				$data[$r['id_order']] = array_merge( $data[$r['id_order']], array('users'=>array(),'products'=>array()) );
 			}
 			
@@ -564,6 +565,7 @@ class memberpage_model extends CI_Model
 			// Assemble Outer data array
 			if( !isset($data[$r['id_order']]) ){
 				$data[$r['id_order']] = array_slice($r,1,6);
+				$data[$r['id_order']]['is_flag'] = $r['is_flag'];
 				$data[$r['id_order']] = array_merge( $data[$r['id_order']], array('users'=>array(),'products'=>array()) );
 			}
 			

@@ -1,6 +1,9 @@
 <?php foreach($transaction['buy'] as $tk=>$transact):?>
 		<div class="transac-container content-paging" data-pm="<?php echo $transact['payment_method']?>" data-invoice="<?php echo $transact['invoice_no']?>">
 			<div class="transac_title">
+				<?php if($transact['is_flag'] == 1):?>
+					<span><strong>ON HOLD - PAYPAL PAYMENT UNDER REVIEW</strong></span>
+				<?php else:?>
 				<div class="transac_title_table">
 					<div class="transac_title_col1">
 						<span><strong>Transaction No.:</strong></span>
@@ -54,6 +57,7 @@
 					</div>
 					<!-- End of dragonpay / direct bank deposit button-->
 				</div>
+				<?php endif;?>
 			</div>
 			
 			<?php if( $transact['payment_method'] == 5 && $transact['transac_stat'] == 99 ):?>
@@ -140,6 +144,8 @@
 												<?php else:?>
 													<span class="trans_alert trans_red">DEPOSIT DETAILS REQUIRED</span>
 												<?php endif;?>
+											<?php elseif($transact['payment_method'] == 1 && $transact['is_flag'] == 1):?>
+												<span class="trans_alert trans_red">ON HOLD</span>
 											<?php endif;?>
 										<?php endif;?>
                                         

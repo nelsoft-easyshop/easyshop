@@ -60,6 +60,8 @@
 							<span><strong>ON HOLD - PENDING DRAGONPAY PAYMENT FROM <?php echo $transact['buyer']?></strong></span>
 						<?php elseif($transact['payment_method'] == 5):?>
 							<span><strong>ON HOLD - PENDING BANK DEPOSIT DETAILS FROM <?php echo $transact['buyer']?></strong></span>
+						<?php elseif($transact['payment_method'] == 1 && $transact['is_flag'] == 1):?>
+							<span><strong>ON HOLD - PAYPAL PAYMENT UNDER REVIEW FROM <?php echo $transact['buyer']?></strong></span>
 						<?php endif;?>
 					<?php endif;?>
 				</div>
