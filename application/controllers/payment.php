@@ -158,26 +158,26 @@ class Payment extends MY_Controller{
 	#SET UP PAYPAL FOR PARAMETERS
     #SEE REFERENCE SITE FOR THE PARAMETERS
     # https://developer.paypal.com/webapps/developer/docs/classic/express-checkout/integration-guide/ECCustomizing/
- function paypal_setexpresscheckout() 
- {
-    header('Content-type: application/json');
-    if(!$this->session->userdata('member_id')){
-        redirect(base_url().'home', 'refresh');
-    };
+    function paypal_setexpresscheckout() 
+    {
+        header('Content-type: application/json');
+        if(!$this->session->userdata('member_id')){
+            redirect(base_url().'home', 'refresh');
+        };
 
-    $paypalMode         = $this->paypal->getMode(); 
-    $paypalReturnURL    = base_url().'pay/paypal'; 
-    $paypalCancelURL    = base_url().'payment/review'; 
+        $paypalMode         = $this->paypal->getMode(); 
+        $paypalReturnURL    = base_url().'pay/paypal'; 
+        $paypalCancelURL    = base_url().'payment/review'; 
 
-    $member_id =  $this->session->userdata('member_id');
-    $remove = $this->payment_model->releaseAllLock($member_id);
-    $qtysuccess = $this->resetPriceAndQty(); 
-    $itemList = $this->session->userdata('choosen_items'); 
-    $productCount = count($itemList);  
+        $member_id =  $this->session->userdata('member_id');
+        $remove = $this->payment_model->releaseAllLock($member_id);
+        $qtysuccess = $this->resetPriceAndQty(); 
+        $itemList = $this->session->userdata('choosen_items'); 
+        $productCount = count($itemList);  
 
-    $cnt = 0; 
-    $paypalType = $this->input->post('paypal'); 
-    $dataitem = '';  
+        $cnt = 0; 
+        $paypalType = $this->input->post('paypal'); 
+        $dataitem = '';  
         $paymentType = $this->PayMentPayPal; #paypal 
 
         if($productCount <= 0){
@@ -774,7 +774,7 @@ class Payment extends MY_Controller{
             $message = 'Transaction Not Completed. '.urldecode($message);
         }
   
-        redirect(base_url().'payment/success/'.$textType.'?txnid='.$txnId.'&msg='.$message.'&status='.$status, 'refresh');
+        redirect(base_url().'payment/success/dragonpay?txnid='.$txnId.'&msg='.$message.'&status='.$status, 'refresh');
     }
 
      #START OF PESOPAY PAYMENT
