@@ -57,7 +57,7 @@ $(document).ready(function(){
 	 
 	 jQuery.validator.addMethod("is_validmobile", function(value, element) {
 		return this.optional(element) || /^(08|09)[0-9]{9}/.test(value);
-	 }, "Must begin with 8 or 9");
+	 }, "Must begin with 09 or 08");
 	 
 	 $.datepicker.setDefaults({dateFormat: 'yy-mm-dd'}, $.extend($.datepicker.regional['']));
 
