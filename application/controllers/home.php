@@ -11,12 +11,19 @@ class Home extends MY_Controller {
     
     public function index() {
 
-	
-	
         $this->load->model('product_model');
 
+        $home_content = $this->product_model->getHomeContent();
+
+        $layout_arr = array();
+ 
+        foreach($home_content['section'] as $section){
+            array_push($layout_arr,$this->load->view('templates/home_layout/'.$section['category_detail']['layout'], array('section' => $section), TRUE));
+        }
+
 		$data = array('title' => 'Home | Easyshop.ph',
-                'data' => $this->product_model->getHomeContent(),
+                'data' => $home_content,
+                'sections' => $layout_arr,
                 'category_navigation' => $this->load->view('templates/category_navigation',array('cat_items' =>  $this->getcat(),), TRUE ),
 				'metadescription' => 'Easyshop.ph - a place where Online Buyers and Sellers converge, while letting you enjoy the benefits of one-stop shopping at the comforts of your own home.',
                 );

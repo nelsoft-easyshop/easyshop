@@ -1980,7 +1980,9 @@ class product_model extends CI_Model
             }
             $home_view_data['category_detail']['css_class'] = $element['css_class'];
             $home_view_data['category_detail']['subcategory'] = $this->getDownLevelNode($element['value']);
+            $home_view_data['category_detail']['layout'] = $element['layout'];
             unset($element['value']);
+            unset($element['layout']);
             unset($element['css_class']);
             unset($element['type']);
             foreach($element as $key=>$cat_el){

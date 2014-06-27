@@ -1370,15 +1370,6 @@ nav ul > li:hover > div {
 	text-align: right;
 }
 
-/*.txt_title_new {
-    background-color: #494949;
-    color: #FFFFFF;
-    font-size: 18px;
-    margin-right: 20px;
-    padding: 5px 3px;
-    text-align: center;
-    width: 120px;
-}*/
 
 .cd_discount_tag {
 	border:2px solid #ba0000;
@@ -1896,13 +1887,10 @@ span.cod {
 /*	margin-bottom: 8px;*/
 }
 
-.electronics_gadgets_section {
+.category_section {
 	padding-top: 20px;
 }
 
-.electronics_gadgets_section .home_cat_product_title {
-	background-color: #0078d5;
-}
 
 .home_cat_product_title img {
 	vertical-align: middle;
@@ -1917,6 +1905,8 @@ span.cod {
 	text-transform: uppercase;
 	vertical-align: middle;
 }
+
+
 
 .home_cat_tabs ul {
 	border-bottom: 1px solid #cecece;
@@ -1948,10 +1938,9 @@ span.cod {
 }
 
 .home_cat_tabs ul li.active,
-.electronics_gadgets_section .home_cat_tabs ul li:hover {
-	border-bottom: 2px solid #0078d5;
+.category_section .home_cat_tabs ul li:hover {
 	background-color: #fff;
-		-webkit-transition: all 0.3s ease-in-out;
+    -webkit-transition: all 0.3s ease-in-out;
   	-moz-transition:    all 0.3s ease-in-out;
   	-o-transition:      all 0.3s ease-in-out;
   	transition:         all 0.3s ease-in-out;
@@ -1969,7 +1958,7 @@ span.cod {
 	absolute; 
 	pointer-events: none; 
 }
-.home_cat_tabs ul li.active:after, 
+
 .home_cat_tabs ul li:hover:after { 
 	border-color: rgba(0, 0, 0, 0); 
 	border-bottom-color: #fff; 
@@ -1977,13 +1966,13 @@ span.cod {
 	margin-left: -10px; 
 } 
 
-.home_cat_tabs ul li.active:before,
+
 .home_cat_tabs ul li:hover:before { 
 	border-color: rgba(0, 120, 213, 0); 
-	border-bottom-color: #f18200; 
 	border-width: 13px; 
 	margin-left: -13px; 
 }
+
 
 .home_cat_items {
 	border-left: 1px solid #cecece;
@@ -6546,3 +6535,37 @@ margin-right: 10px;
 	display: inline-block;
 	width: 65px;
 }
+
+
+
+
+
+/*   
+ *  Category color styles
+ */
+
+/* BLUE */ 
+.home_cat_tabs.blue_cat ul li:hover:before { 
+	border-bottom-color: #0078d5;
+}
+.home_cat_tabs.blue_cat ul li:hover{
+    border-bottom-color: #0078d5;
+}
+.home_cat_product_title.blue_cat{
+    background-color:  #0078d5;
+}
+
+/* RED */ 
+.home_cat_tabs.red_cat ul li:hover:before { 
+	border-bottom-color: #d5002d;
+}
+.home_cat_tabs.red_cat ul li:hover{
+    border-bottom-color: #d5002d;
+}
+.home_cat_product_title.red_cat{
+    background-color:  #d5002d;
+}
+
+
+
+
