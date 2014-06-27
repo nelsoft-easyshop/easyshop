@@ -182,8 +182,7 @@ $(document).ready(function(){
         var csrfname = $("meta[name='csrf-name']").attr('content');
 
         if($('#chk_ppcdb').is(':checked')){
-            $(this).val('Please wait...'); 
-            $(this).attr('disabled','disabled');
+            $(this).val('Please wait...');  
             $.ajax({
                 type: "POST",
                 url:  action, 
@@ -192,6 +191,7 @@ $(document).ready(function(){
                 success: function(d) {
                      
                     if(d.e == 1){ 
+                        console.log(d.d);
                         $('#pesopaycdb').append(d.d); 
                         $('#payFormCcard').submit();
                     }else{   
@@ -203,6 +203,11 @@ $(document).ready(function(){
                         }
                         alert(d.m);
                     }
+                },
+                error: function(err){
+                    alert('Something went wrong. Please try again later');
+                      $('.btnDp').val('Pay via Credit or Debit Card'); 
+                        $('.btnDp').removeAttr('disabled');    
                 }
             });
         }else{

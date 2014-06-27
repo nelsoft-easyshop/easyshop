@@ -9,10 +9,11 @@ class payment_model extends CI_Model
 		parent::__construct();
 		$this->load->library("xmlmap");
         $this->load->model('cart_model');
+        $this->load->model('user_model');
 	}	
 
 
-	   function getUserAddress($member_id)
+   	function getUserAddress($member_id)
     {
         $query = $this->xmlmap->getFilenameID('sql/payment', 'get_address');
         $sth = $this->db->conn_id->prepare($query);
@@ -23,8 +24,12 @@ class payment_model extends CI_Model
         
     }
 
-    function payment($paymentType,$invoice_no,$ItemTotalPrice,$ip,$member_id,$productstring,$productCount,$apiResponse,$tid)
+    function payment($paymentType,$ItemTotalPrice,$member_id,$productstring,$productCount,$apiResponse,$tid)
     {
+
+    	$invoice_no = $member_id.'-'.date('Ymhsd'); 
+        $ip = $this->user_model->getRealIpAddr();  
+
         $query = $this->xmlmap->getFilenameID('sql/payment','payment_transaction');
         $sth = $this->db->conn_id->prepare($query);
         $sth->bindParam(':payment_type',$paymentType,PDO::PARAM_INT);
@@ -151,7 +156,7 @@ class payment_model extends CI_Model
 
     function selectFromEsOrder($token,$paymentType)
     {
-    	$query = "SELECT invoice_no,id_order,dateadded,buyer_id,data_response,postbackcount FROM es_order WHERE transaction_id = :token AND payment_method_id = :payment_id";
+    	$query = "SELECT invoice_no,id_order,dateadded,buyer_id,data_response,postbackcount,total,order_status FROM es_order WHERE transaction_id = :token AND payment_method_id = :payment_id";
         $sth = $this->db->conn_id->prepare($query);
         $sth->bindParam(':token',$token,PDO::PARAM_STR);
         $sth->bindParam(':payment_id',$paymentType,PDO::PARAM_STR);
@@ -167,8 +172,7 @@ class payment_model extends CI_Model
     {
         $query = $this->xmlmap->getFilenameID('sql/payment','updatePaymentIfComplete');
     	$sth = $this->db->conn_id->prepare($query);
-
-    	// $orderStatus = ($paymentType == 2) ? 99 : 0;
+ 
     	$sth->bindParam(':order_status',$orderStatus,PDO::PARAM_STR);
     	$sth->bindParam(':data',$data,PDO::PARAM_STR);
     	$sth->bindParam(':id_order',$id,PDO::PARAM_INT);
