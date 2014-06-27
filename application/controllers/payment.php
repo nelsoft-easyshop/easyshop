@@ -212,25 +212,21 @@ class Payment extends MY_Controller{
         $ip = $this->user_model->getRealIpAddr();    
 
         $prepareData = $this->processData($itemList,$city,$region,$majorIsland);
-        $shipping_amt = round($prepareData['othersumfee'],2);
-        $ItemTotalPrice = round($prepareData['totalPrice'],2) - $shipping_amt;
+        $shipping_amt = round(floatval($prepareData['othersumfee']),2);
+        $ItemTotalPrice = round(floatval($prepareData['totalPrice']),2) - $shipping_amt;
         $productstring = $prepareData['productstring'];
         $itemList = $prepareData['newItemList'];
         $toBeLocked = $prepareData['toBeLocked'];
         $grandTotal= $ItemTotalPrice+$shipping_amt; 
         $thereIsPromote = $prepareData['thereIsPromote'];
-        
-        log_message('error', 'ItemTotalPrice: '.$ItemTotalPrice.' shipping_amt: '.$shipping_amt.' grandTotal: '.$grandTotal);
-      
+
         if($thereIsPromote <= 0 && $grandTotal < '50'){
             echo '{"e":"0","d":"We only accept payments of at least PHP 50.00 in total value."}';
             exit();
         }
         
         foreach ($itemList as $key => $value) {
-            
-            log_message('error', 'ITEM LIST AMT: '.$value['price']);
-      
+            $value['price'] = round(floatval($value['price']),2);
             $dataitem .= '&L_PAYMENTREQUEST_0_QTY'.$cnt.'='. urlencode($value['qty']).
             '&L_PAYMENTREQUEST_0_AMT'.$cnt.'='.urlencode($value['price']).
             '&L_PAYMENTREQUEST_0_NAME'.$cnt.'='.urlencode($value['name']).
