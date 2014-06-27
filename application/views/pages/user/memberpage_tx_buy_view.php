@@ -1,7 +1,7 @@
 <?php foreach($transaction['buy'] as $tk=>$transact):?>
 		<div class="transac-container content-paging" data-pm="<?php echo $transact['payment_method']?>" data-invoice="<?php echo $transact['invoice_no']?>">
 			<div class="transac_title">
-				<?php if($transact['is_flag'] == 1):?>
+				<?php if($transact['payment_method']==1 && $transact['is_flag'] == 1):?>
 					<span><strong>ON HOLD - PAYPAL PAYMENT UNDER REVIEW</strong></span>
 				<?php else:?>
 				<div class="transac_title_table">
