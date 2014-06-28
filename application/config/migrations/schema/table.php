@@ -4236,7 +4236,7 @@ return array(
     
     "es_school" => array(
         "create" => "CREATE TABLE `es_school` (
-              `id` int(10) NOT NULL,
+              `id` int(10) NOT NULL AUTO_INCREMENT,
               `id_member` int(10) unsigned NOT NULL,
               `schoolname` varchar(45) DEFAULT '',
               `year` year(4) DEFAULT '2001',
