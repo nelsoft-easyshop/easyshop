@@ -911,8 +911,8 @@ $(document).ready(function(){
 			'class': 'add_another_school dynamic_dd',
 			html: GetHtml2()
 		}).hide().appendTo('#container_school').fadeIn('slow');
-		cont.find('*[name^="schoolyear"]').rules('add', {required: true, digits: true,
-										   messages: {required: '* The year field is required'}});
+		cont.find('*[name^="schoolyear"]').rules('add', {required: true, digits: true,  range: [1901, 2155],
+										   messages: {required: '* The year field is required', range: '* This is an invalid year' }});
 		cont.find('*[name^="schoolname"]').rules('add', {required: true, 
 										   messages: {required: '* The school field is required'}});
 		cont.find('*[name^="schoollevel"]').rules('add', {select_is_set: 0});		   
@@ -932,7 +932,8 @@ $(document).ready(function(){
 			},
 			schoolyear1:{
 				required: true,
-				digits: true
+				digits: true,
+                range: [1901, 2155],
 			},
 			schoollevel1:{
 				select_is_set: '0'
@@ -943,7 +944,8 @@ $(document).ready(function(){
 				required: '* The school field is required'
 			},
 			schoolyear1:{
-				required: '* The year field is required'
+				required: '* The year field is required',
+                range: '* This is an invalid year',
 			}
 		},
 		errorElement: "p",
@@ -1047,9 +1049,9 @@ $(document).ready(function(){
 				html: GetHtml()
 			}).hide().appendTo('#container_work').fadeIn('slow');
 			
-			cont.find("*[name^='companyname']").rules('add',{required: true, messages:{required: '* Company name is required'}});
+			cont.find("*[name^='companyname']").rules('add',{required: true,range: [1901, 2155], messages:{required: '* Company name is required'}});
 			cont.find("*[name^='designation']").rules('add',{required: true, messages:{required: '* Designation is required'}});
-			cont.find("*[name^='year']").rules('add',{required: true, digits: true, messages:{required: '* Year of service is required'}});
+			cont.find("*[name^='year']").rules('add',{required: true, digits: true, range: [1901, 2155], messages:{required: '* Year of service is required', range: '* This is an invalid year'}});
 			cont.find("*[name^='year']").numeric({negative : false});	
 			
 			var len = $("#container_work").find(".add_another_work").length;
@@ -1072,7 +1074,8 @@ $(document).ready(function(){
 			},
 			year1:{
 				required:true,
-				digits: true
+				digits: true,
+                range: [1901, 2155]
 			}
 		},
 		messages:{
@@ -1083,7 +1086,8 @@ $(document).ready(function(){
 				required: '* Designation is required'
 			},
 			year1:{
-				required: '* Year of service is required'
+				required: '* Year of service is required',
+                range: '* This is an invalid year'
 			}
 		},
 		errorElement: 'p',

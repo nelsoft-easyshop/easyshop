@@ -158,8 +158,9 @@ class memberpage_model extends CI_Model
 		$sth->bindParam(':level', $data['level']);
 		$sth->bindParam(':school_count', $data['school_count']);
 		$sth->bindParam(':id_member', $member_id);
+        
 		$result = $sth->execute();
-		
+
 		return $result;
 	}
 

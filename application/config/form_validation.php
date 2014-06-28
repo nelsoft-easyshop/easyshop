@@ -121,7 +121,7 @@ $config = array(
 					array(
 						'field' => 'schoolyear1',
 						'label' => 'School Year',
-						'rules' => 'required|is_numeric'
+						'rules' => 'required|is_numeric|min_length[4]|max_length[4]|greater_than[1900]|less_than[2156]'
 					),
 					array(
 						'field' => 'schoollevel1',
@@ -143,7 +143,7 @@ $config = array(
 					array(
 						'field' => 'year1',
 						'label' => 'Year',
-						'rules' => 'required|is_numeric'
+						'rules' => 'required|is_numeric|min_length[4]|max_length[4]|greater_than[1900]|less_than[2156]'
 					),
 				),
 			'c_deliver_address' => array(
