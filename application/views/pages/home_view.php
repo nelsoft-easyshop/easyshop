@@ -1,4 +1,4 @@
-<link href="<?= base_url() ?>assets/css/jquery.bxslider.css" rel="stylesheet" />
+<link href="<?= base_url() ?>assets/css/jquery.bxslider.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet" />
 
 
 <div class="clear"></div>
