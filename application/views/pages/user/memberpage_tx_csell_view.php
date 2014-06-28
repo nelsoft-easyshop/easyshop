@@ -12,7 +12,7 @@
 						</div>
 						<div class="transac_title_col3">
 							<strong>Sold to: </strong>
-							<a href="<?php echo base_url();?>vendor/<?php echo $transact['buyer']?>"><?php echo $transact['buyer']?></a> <br />
+							<a href="<?php echo base_url();?>vendor/<?php echo $transact['buyer']?>"><?php echo html_escape($transact['buyer'])?></a> <br />
 							<span class="transac_address_details_show" style="color:#0191C8;cursor:pointer;font-size:10px;text-decoration:underline;">View Delivery details</span>
 							<div style="display:none;" class="transac_address_cont">
 								<?php foreach($transact['users'] as $uk=>$user):?>
@@ -117,7 +117,7 @@
 				<?php foreach($transact['users'] as $uk=>$user):?>
 					<div class="feedback_container">
 						<?php if( $user['has_feedb'] == 0 ): ?>
-							<p class="transac-feedback-btn"> + Feedback for <?php echo $user['name'];?></p>
+							<p class="transac-feedback-btn"> + Feedback for <?php echo html_escape($user['name']);?></p>
 							<div class="transac-feedback-container">
 								<h2>Feedback</h2>
 								<?php

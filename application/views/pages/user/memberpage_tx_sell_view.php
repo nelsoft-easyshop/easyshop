@@ -57,11 +57,11 @@
 					</div>
 					<?php else:?>
 						<?php if($transact['payment_method'] == 2):?>
-							<span><strong>ON HOLD - PENDING DRAGONPAY PAYMENT FROM <?php echo $transact['buyer']?></strong></span>
+							<span><strong>ON HOLD - PENDING DRAGONPAY PAYMENT FROM <?php echo html_escape($transact['buyer'])?></strong></span>
 						<?php elseif($transact['payment_method'] == 5):?>
-							<span><strong>ON HOLD - PENDING BANK DEPOSIT DETAILS FROM <?php echo $transact['buyer']?></strong></span>
+							<span><strong>ON HOLD - PENDING BANK DEPOSIT DETAILS FROM <?php echo html_escape($transact['buyer'])?></strong></span>
 						<?php elseif($transact['payment_method'] == 1 && $transact['is_flag'] == 1):?>
-							<span><strong>ON HOLD - PAYPAL PAYMENT UNDER REVIEW FROM <?php echo $transact['buyer']?></strong></span>
+							<span><strong>ON HOLD - PAYPAL PAYMENT UNDER REVIEW FROM <?php echo html_escape($transact['buyer'])?></strong></span>
 						<?php endif;?>
 					<?php endif;?>
 				</div>
@@ -78,7 +78,7 @@
 							<div class="info_transac_prod_con">
 								<div class="title_top_transac_table">
 									<span class="title_top_transac_col1">
-										<a href="<?php echo base_url();?>item/<?php echo $product['slug'];?>"><?php echo $product['name'];?></a>
+										<a href="<?php echo base_url();?>item/<?php echo $product['slug'];?>"><?php echo html_escape($product['name']);?></a>
 									</span>
 									<span class="title_top_transac_col2">
 										Quantity:<span><?php echo $product['order_quantity']?></span>
@@ -208,7 +208,7 @@
 				<?php if($transact['transac_stat'] != 99):?>
 				<div class="feedback_container">
 					<?php if( $user['has_feedb'] == 0 ): ?>
-						<p class="transac-feedback-btn"> + Feedback for <?php echo $user['name'];?></p>
+						<p class="transac-feedback-btn"> + Feedback for <?php echo html_escape($user['name']);?></p>
 						<div class="transac-feedback-container">
 							<h2>Feedback</h2>
 							<?php

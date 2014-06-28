@@ -65,12 +65,12 @@
 					<p><strong>Deposit payment to:</strong></p>
 					<p>
 						<span style="margin:0px 5px 0px 3em;">Bank:</span>
-						<span style="padding-right:2em;margin-right:3em;font-weight:bold;"><?php echo $transact['bank_template']['bank_name']?></span>
+						<span style="padding-right:2em;margin-right:3em;font-weight:bold;"><?php echo html_escape($transact['bank_template']['bank_name']);?></span>
 						<br>
 						<span style="margin-right:5px;margin-left:3em;">Bank Account Name:</span>
-						<span style="padding-right:2em;margin-right:3em;border-right:1px dotted #CECECE;font-weight:bold;"><?php echo $transact['bank_template']['bank_accname']?></span>
+						<span style="padding-right:2em;margin-right:3em;border-right:1px dotted #CECECE;font-weight:bold;"><?php echo html_escape($transact['bank_template']['bank_accname']);?></span>
 						<span style="margin-right:5px;">Bank Account Number:</span>
-						<span style="padding-right:2em;margin-right:3em;font-weight:bold;"><?php echo $transact['bank_template']['bank_accnum']?></span>
+						<span style="padding-right:2em;margin-right:3em;font-weight:bold;"><?php echo html_escape($transact['bank_template']['bank_accnum']);?></span>
 					</p>
 				</div>
 			<?php endif;?>
@@ -100,7 +100,7 @@
 									<span class="transac_bought_con_col1">Bought from: </span>
 									<span class="transac_bought_con_col2">
 										<a href="<?php echo base_url();?>vendor/<?php echo $product['seller'];?>">
-											<?php echo $product['seller'];?>
+											<?php echo html_escape($product['seller']);?>
 										</a>
 									</span>
 									<span class="transac_bought_con_col3 tx_cont_col3">
@@ -221,7 +221,7 @@
 					<?php foreach($transact['users'] as $uk=>$user):?>
 					<div class="feedback_container">
 						<?php if( $user['has_feedb'] == 0 ): ?>
-							<p class="transac-feedback-btn"> + Feedback for <?php echo $user['name'];?></p>
+							<p class="transac-feedback-btn"> + Feedback for <?php echo html_escape($user['name']);?></p>
 							<div class="transac-feedback-container">
 								<h2>Feedback</h2>
 								<?php

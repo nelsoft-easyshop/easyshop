@@ -1633,7 +1633,7 @@
 									<span class="transac_bought_con_col1">Bought from: </span>
 									<span class="transac_bought_con_col2">
 										<a href="<?php echo base_url();?>vendor/<?php echo $product['seller'];?>">
-											<?php echo $product['seller'];?>
+											<?php echo html_escape($product['seller']);?>
 										</a>
 									</span>
 									<span class="transac_bought_con_col3 tx_cont_col3">
@@ -1847,7 +1847,7 @@
 							<span class="transac_title_date"><?php echo $transact['dateadded']?></span>
 						</div>
 						<div class="transac_title_col3">
-							<strong>Sold to: </strong> <a href="<?php echo base_url();?>vendor/<?php echo $transact['buyer']?>"><?php echo $transact['buyer']?></a> <br />
+							<strong>Sold to: </strong> <a href="<?php echo base_url();?>vendor/<?php echo $transact['buyer']?>"><?php echo html_escape($transact['buyer']);?></a> <br />
 							<span class="transac_address_details_show" style="color:#0191C8;cursor:pointer;font-size:10px;text-decoration:underline;">View Delivery details</span>
 							<div style="display:none;" class="transac_address_cont">
 								<?php foreach($transact['users'] as $uk=>$user):?>
@@ -1870,11 +1870,11 @@
 									<span style="display:block;"></span>
 									<span class="tad_2 stateregion">
 										<strong>State/Region:</strong>
-										<span><?php echo $user['address']['stateregion']?></span> 
+										<span><?php echo html_escape($user['address']['stateregion'])?></span> 
 									</span>
 									<span class="tad_2 city">
 										<strong>City:</strong>
-										<span><?php echo $user['address']['city'];?></span> 
+										<span><?php echo html_escape($user['address']['city']);?></span> 
 									</span>
 									<span class="tad_3 fulladdress">
 										<strong>Address:</strong>
@@ -1913,7 +1913,7 @@
 							<div class="info_transac_prod_con">
 								<div class="title_top_transac_table">
 									<span class="title_top_transac_col1">
-										<a href="<?php echo base_url();?>item/<?php echo $product['slug'];?>"><?php echo $product['name'];?></a>
+										<a href="<?php echo base_url();?>item/<?php echo $product['slug'];?>"><?php echo html_escape($product['name']);?></a>
 									</span>
 									<span class="title_top_transac_col2">
 										Quantity:<span><?php echo $product['order_quantity']?></span>
@@ -2173,7 +2173,7 @@
 								</div>
 								<div class="transac_bought_con">
 									<span class="transac_bought_con_col1">Bought from: </span>
-									<span class="transac_bought_con_col2"><a href="<?php echo base_url();?>vendor/<?php echo $product['seller'];?>"><?php echo $product['seller'];?></a></span>
+									<span class="transac_bought_con_col2"><a href="<?php echo base_url();?>vendor/<?php echo $product['seller'];?>"><?php echo html_escape($product['seller']);?></a></span>
 									<span class="transac_bought_con_col3">
 										Status:
 										<?php if($product['status'] == 1):?>
