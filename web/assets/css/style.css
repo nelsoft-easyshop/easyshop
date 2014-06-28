@@ -6543,6 +6543,17 @@ margin-right: 10px;
 /*   
  *  Category color styles
  */
+ 
+/* Orange */ 
+.home_cat_tabs.orange_cat ul li:hover:before { 
+	border-bottom-color: #f28300;
+}
+.home_cat_tabs.orange_cat ul li:hover{
+    border-bottom-color: #f28300;
+}
+.home_cat_product_title.orange_cat{
+    background-color: #f28300;
+}
 
 /* BLUE */ 
 .home_cat_tabs.blue_cat ul li:hover:before { 
