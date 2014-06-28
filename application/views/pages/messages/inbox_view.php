@@ -1,4 +1,4 @@
-<script type="text/javascript" src="<?=base_url()?>assets/js/src/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="<?=base_url()?>assets/js/src/vendor/jquery.dataTables.min.js"></script>
 <div class="container">
     <div id="head_container">       
         <div><input type="button" id="modal-launcher" value="Compose"></div>
