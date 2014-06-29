@@ -1968,16 +1968,19 @@ class product_model extends CI_Model
             }
             else if($element['type'] === 'custom'){
                $home_view_data['category_detail']['imagepath'] = '';
-               $home_view_data['category_detail']['name'] = $element['value'];
+               $home_view_data['category_detail']['name'] = $element['title'];
                $home_view_data['category_detail']['url'] = 'vendor/'.$element['value'];
             }
             $home_view_data['category_detail']['css_class'] = $element['css_class'];
             $home_view_data['category_detail']['subcategory'] = $this->getDownLevelNode($element['value']);
             $home_view_data['category_detail']['layout'] = $element['layout'];
+            
             unset($element['value']);
             unset($element['layout']);
             unset($element['css_class']);
             unset($element['type']);
+            unset($element['title']);
+            
             foreach($element as $key=>$cat_el){
                 if(is_array($cat_el)){
                     foreach($cat_el as $inner_key => $cat_inner_el){
