@@ -52,15 +52,15 @@
       <?php  if(isset($completepayment)): ?>
         <div style='font-size: 17px;'>
             <p>
-            You have made a successful purchase on Easyshop.ph. An e-mail has been sent to you and the people from whom you purchased
-            regarding the status of your transaction. Please complete any necessary steps that are stated and thank you for using Easyshop.ph.
+            You have made a successful purchase at Easyshop.ph. An e-mail has been sent to you and the users you purchased from
+            regarding the status of your transaction. Please complete any necessary steps that are included in the e-mail and thank you for using Easyshop.ph.
             You may view your pending transactions by clicking <a style='text-decoration:underline; color:#f48000' href='<?=base_url()?>me?me=pending'>here </a>
             </p>
         </div>
       <?php else: ?>
         <div style='font-size: 17px;'>
             <p>
-            We are sorry, your purchase cannot be completed at this time. Should you need any further assistance you may reach us through our customer hotline. Thank you for using Easyshop.ph. 
+            We are sorry, your purchase cannot be completed at this time. Should you need any further assistance you may reach us through our <a href='<?=base_url()?>contact'>customer hotline</a>. Thank you for using Easyshop.ph. 
             </p>
         </div>
       <?php endif ?>
