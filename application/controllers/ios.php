@@ -77,8 +77,6 @@ class Ios extends MY_Controller {
 				'reviews' => $this->getReviews($id,$product_row['sellerid']),
 				//'recommended_items'=> $this->product_model->getRecommendeditem($product_catid,5,$id),
 				'allowed_reviewers' => $this->product_model->getAllowedReviewers($id),
-				//userdetails --- email/mobile verification info
-				'userdetails' => $this->product_model->getCurrUserDetails($uid),
 				'uid' => $uid,
                 'product_quantity' => $this->product_model->getProductQuantity($id)
 				));

@@ -602,6 +602,7 @@ class product extends MY_Controller
      */
 
     function item($slug = ''){
+        $this->load->model("user_model");
         $this->load->config('promo', TRUE);
         $uid = $this->session->userdata('member_id');
     	$product_row = $this->product_model->getProductBySlug($slug,$uid);
@@ -634,7 +635,7 @@ class product extends MY_Controller
     			'recommended_items'=> $this->product_model->getRecommendeditem($product_catid,5,$id),
     			'allowed_reviewers' => $this->product_model->getAllowedReviewers($id),
 				//userdetails --- email/mobile verification info
-    			'userdetails' => $this->product_model->getCurrUserDetails($uid),
+    			'userdetails' => $this->user_model->getUserAccessDetails($uid),
     			'product_quantity' => $this->product_model->getProductQuantity($id),
     			'shipment_information' => $this->product_model->getShipmentInformation($id),
     			'shiploc' => $this->product_model->getLocation(),

@@ -55,6 +55,7 @@ return array(
               `imgurl` varchar(255) DEFAULT '',
               `userdata` text,
               `remarks` varchar(255) DEFAULT '',
+              `is_admin` tinyint(3) NOT NULL DEFAULT '0',
               PRIMARY KEY (`id_member`),
               KEY `username_idx` (`username`)
             ) ENGINE=InnoDB AUTO_INCREMENT=128 DEFAULT CHARSET=utf8;",

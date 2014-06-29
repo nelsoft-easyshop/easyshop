@@ -18,7 +18,7 @@ class user_model extends CI_Model {
         return $ip;
     }
 
-    function verify_member($data = array()) {
+    public function verify_member($data = array()) {
         $username = $data['login_username'];
         $password = $data['login_password'];
         $ip = $this->getRealIpAddr();
@@ -34,7 +34,7 @@ class user_model extends CI_Model {
 
     }
 
-    function logout(){
+    public function logout(){
         $sid = $this->session->userdata('member_id');
         $sname = $this->session->userdata('usersession');
         $query = $this->xmlmap->getFilenameID('sql/users','user_logout');
@@ -46,7 +46,7 @@ class user_model extends CI_Model {
         return $row;
     }
 	
-	function getUsername($id){
+	public function getUsername($id){
         $query = $this->xmlmap->getFilenameID('sql/users','getUserName');
 		
         $sth = $this->db->conn_id->prepare($query);
@@ -58,7 +58,7 @@ class user_model extends CI_Model {
 	}
 	
 	//COOKIE FUNCTIONS
-	function create_cookie($cookieval){
+	public function create_cookie($cookieval){
 		$cookiedata = array(
 			'name' => 'es_usr',
 			'value' => $cookieval,
@@ -67,7 +67,7 @@ class user_model extends CI_Model {
 		set_cookie($cookiedata);
 	}
 	
-	function dbsave_cookie_keeplogin($temp = array()){
+	public function dbsave_cookie_keeplogin($temp = array()){
 		$query = $this->xmlmap->getFilenameID('sql/users', 'store_cookie_keeplogin');
         $sth = $this->db->conn_id->prepare($query);
         $sth->bindParam(':id_member', $temp['member_id']);
@@ -80,7 +80,7 @@ class user_model extends CI_Model {
 	}
 	
 	
-	function cookie_login($temp){
+	public function cookie_login($temp){
 		$query = $this->xmlmap->getFilenameID('sql/users', 'cookie_login');
         $sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':userip', $temp['userip']);
@@ -93,7 +93,7 @@ class user_model extends CI_Model {
 		return $row;
 	}
 	
-	function dbdelete_cookie_keeplogin($temp = array()){
+	public function dbdelete_cookie_keeplogin($temp = array()){
 		$query = $this->xmlmap->getFilenameID('sql/users', 'delete_cookie_keeplogin');
         $sth = $this->db->conn_id->prepare($query);
         $sth->bindParam(':id_member', $temp['member_id']);
@@ -103,6 +103,18 @@ class user_model extends CI_Model {
         $sth->execute();
 	}
 
+    public function getUserAccessDetails($uid)
+	{
+		$query = $this->xmlmap->getFilenameID('sql/users','getUserAccessDetails');
+		$sth = $this->db->conn_id->prepare($query);
+		$sth->bindParam(':id',$uid);	
+		$sth->execute();
+		$row = $sth->fetch(PDO::FETCH_ASSOC);
+
+		return $row;
+	}
+    
+    
 
 
 	

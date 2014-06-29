@@ -39,6 +39,7 @@ class productUpload extends MY_Controller
 
 	function step1() #this function for selecting categories from parent category to the last possible category
 	{		
+        $this->load->model("user_model");
         if($this->input->post('c_id')){
             $cat_id = $this->input->post('c_id');    
             $cat_tree = $this->product_model->getParentId($cat_id);
@@ -72,8 +73,12 @@ class productUpload extends MY_Controller
 		} 
  
 		$data_item['draftItems'] = $draftItems;
-		$data_item['firstlevel'] = $this->product_model->getFirstLevelNode(); # getting first category level from database.
-		$userdetails = $this->product_model->getCurrUserDetails($uid);
+        $userdetails = $this->user_model->getUserAccessDetails($uid);
+
+        # getting first category level from database.
+        $is_admin = (intval($userdetails['is_admin']) === 1);
+		$data_item['firstlevel'] = $this->product_model->getFirstLevelNode(false, false,$is_admin);
+        
 		$data = $this->fill_view();
         $data['$render_searchbar'] = false; 
 		$this->load->view('templates/header', $data); 
@@ -87,12 +92,22 @@ class productUpload extends MY_Controller
 
 	function getChild() # this function for getting the under category from selected category 
 	{	
+        $this->load->model('user_model');
 		header('Content-Type: application/json');
 		$id = $this->input->post('cat_id'); 
-		$name = $this->input->post('name'); 
+		$name = $this->input->post('name');
 		$response['cat_id'] = $id;
-		$response['name'] = $name;
-		$response['node'] = $this->product_model->getDownLevelNode($id); # get all down level category based on selected parent category
+		$response['name'] = $name;        
+        
+        $uid =	$this->session->userdata('member_id');
+        $is_admin = false;
+        if($uid){
+            $user_access_level = $this->user_model->getUserAccessDetails($uid);
+            $is_admin = (intval($user_access_level['is_admin']) === 1);
+        }            
+        $response['node'] = $this->product_model->getDownLevelNode($id, $is_admin); 
+
+
 		$response['level'] = $this->input->post('level');
 		$data = json_encode($this->load->view('pages/product/product_upload_step1_view2',$response,TRUE));
 		echo $data;
@@ -118,6 +133,17 @@ class productUpload extends MY_Controller
 		$this->load->view('templates/header', $data); 
 		if(isset($_POST['hidden_attribute'])){ # if no item selected cant go to the link. it will redirect to step 1
 			$id = $this->input->post('hidden_attribute'); 
+            $response['memid'] = $this->session->userdata('member_id');
+            
+            $userdetails = $this->user_model->getUserAccessDetails($response['memid']);
+            $is_admin = (intval($userdetails['is_admin']) === 1);
+            
+            $this->config->load('protected_category', TRUE);
+            $protected_categories = $this->config->config['protected_category'];
+            if( !is_numeric($id) ||  (!$is_admin && in_array($id, $protected_categories))){
+                redirect('/sell/step1/', 'refresh');
+            }
+
 			$otherCategory = html_escape($this->input->post('othernamecategory'));
 			$response['id'] = $id; # id is the selected category
 			$response['otherCategory'] = $otherCategory; # id is the selected category
@@ -150,7 +176,7 @@ class productUpload extends MY_Controller
 				$lookuplist = $this->product_model->getLookItemListById($attribute[$i]['attr_lookuplist_id']);
 				array_push($attribute[$i],$lookuplist);
 			}
-			$response['memid'] = $this->session->userdata('member_id');
+			
 		 	$response['tempId'] = strtolower(substr( "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" ,mt_rand( 0 ,50 ) ,1 ) .substr( md5( time() ), 1));
 			$response['attribute'] = $attribute;
 			$response['sell'] = true;
@@ -912,15 +938,19 @@ class productUpload extends MY_Controller
 	}
 	
     public function editStep1(){
+        $this->load->model('user_model');
         if($this->input->post('p_id'))
 			 $product_id = $this->input->post('p_id');
 		else
 			redirect('me', 'refresh'); 
         
         $member_id = $this->session->userdata('member_id');
+        $userdetails = $this->user_model->getUserAccessDetails($member_id);
+        # getting first category level from database.
         $cat_tree = $this->product_model->getParentIdByProduct($product_id, $member_id);
         if(count($cat_tree)>0){  
-            $data_item['firstlevel'] = $this->product_model->getFirstLevelNode(); # getting first category level from database.
+            $is_admin = (intval($userdetails['is_admin']) === 1);
+            $data_item['firstlevel'] = $this->product_model->getFirstLevelNode(false, false, $is_admin); # getting first category level from database.
             $data = $this->fill_view();
             $data['cat_tree_edit'] = json_encode($cat_tree);
             $data['product_id_edit'] = $product_id;
@@ -943,10 +973,17 @@ class productUpload extends MY_Controller
 		$data = array('title'=>'Edit Product');
 		$data = array_merge($data,$this->fill_header());
 		$this->load->view('templates/header',$data); 
-        
+
         $product = $this->product_model->getProductEdit($product_id, $member_id);  
         if($this->input->post('hidden_attribute')){
             $new_cat_id = $this->input->post('hidden_attribute');
+            $userdetails = $this->user_model->getUserAccessDetails($member_id);
+            $is_admin = (intval($userdetails['is_admin']) === 1);
+            $this->config->load('protected_category', TRUE);
+            $protected_categories = $this->config->config['protected_category'];
+            if( !is_numeric($new_cat_id) ||  (!$is_admin && in_array($new_cat_id, $protected_categories))){
+                redirect('/sell/step1/', 'refresh');
+            }
             if($this->product_model->editProductCategory($new_cat_id, $product_id, $member_id)>0){
                 if(intval($product['cat_id'],10)!==intval($new_cat_id,10)){
                     $this->product_model->deleteShippingInfomation($product_id);

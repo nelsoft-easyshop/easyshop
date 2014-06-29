@@ -25,15 +25,17 @@ class product_model extends CI_Model
 		return $row[0];
 	}
 
-	function getDownLevelNode($id) # get all down level category on selected category from database
+	function getDownLevelNode($id, $is_admin = false) # get all down level category on selected category from database
 	{
 		$query = $this->xmlmap->getFilenameID('sql/product', 'selectDownLevel');
-        
-        $this->config->load('protected_category', TRUE);
-        $protected_categories = $this->config->config['protected_category'];
-
-        $qmarks = implode(',', array_fill(0, count($protected_categories), '?'));
-        $query = $query.' AND id_cat NOT IN ('.$qmarks.') ORDER BY sort_order ASC';
+        $protected_categories = array();
+        if(!$is_admin){
+           $this->config->load('protected_category', TRUE);
+            $protected_categories = $this->config->config['protected_category'];
+            $qmarks = implode(',', array_fill(0, count($protected_categories), '?'));
+            $query = $query.' AND id_cat NOT IN ('.$qmarks.') ORDER BY sort_order ASC';
+        }
+     
 		$sth = $this->db->conn_id->prepare($query);
         $sth->bindValue(1, $id, PDO::PARAM_INT);    
         $k = 1;
@@ -822,17 +824,6 @@ class product_model extends CI_Model
 
 		return $row2;
 	}
-	
-	function getCurrUserDetails($uid)
-	{
-		$query = $this->xmlmap->getFilenameID('sql/users','getUserDetails');
-		$sth = $this->db->conn_id->prepare($query);
-		$sth->bindParam(':id',$uid);	
-		$sth->execute();
-		$row = $sth->fetch(PDO::FETCH_ASSOC);
-
-		return $row;
-	}
 
 	function getVendorRating($uid)
 	{
@@ -864,15 +855,17 @@ class product_model extends CI_Model
 		return $data;
 	}
 
-	function getFirstLevelNode($is_main = false, $is_alpha = false) # get all main/parent/first level category from database
+	function getFirstLevelNode($is_main = false, $is_alpha = false, $is_admin = false) # get all main/parent/first level category from database
 	{
 
-        $this->config->load('protected_category', TRUE);
-        $protected_categories = $this->config->config['protected_category'];
-        
         $query = $this->xmlmap->getFilenameID('sql/product', 'selectFirstLevel');
-        $qmarks = implode(',', array_fill(0, count($protected_categories), '?'));
-        $query = $query.' AND c.id_cat NOT IN ('.$qmarks.') ';
+        $protected_categories = array();
+        if(!$is_admin){
+            $this->config->load('protected_category', TRUE);
+            $protected_categories = $this->config->config['protected_category'];
+            $qmarks = implode(',', array_fill(0, count($protected_categories), '?'));
+            $query = $query.' AND c.id_cat NOT IN ('.$qmarks.') ';
+        }
 
         if(($is_main)&&(!$is_alpha)){
             $query = $query.' AND c.is_main = 1 ORDER BY c.sort_order ASC, c.id_cat ASC';

@@ -45,8 +45,8 @@
 	where m.username=:username
 </select>
 
-<select id="getUserDetails">
-	SELECT id_member, is_contactno_verify, is_email_verify
+<select id="getUserAccessDetails">
+	SELECT id_member, is_contactno_verify, is_email_verify, is_admin
 	FROM es_member
 	WHERE id_member = :id
 </select>
