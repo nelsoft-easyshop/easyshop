@@ -47,6 +47,15 @@
         </imagemap>
     </mainSlide>
     
+    <mainSlide> 
+        <value>assets/images/mainslide/5.jpg</value> 
+        <type>image</type>
+        <imagemap>
+            <coordinate>0,0,589,352</coordinate>
+            <target>item/shake-n-take-2</target>
+        </imagemap>
+    </mainSlide>
+    
     <productSlide_title>
         <value>Hot and New</value>
         <type>text</type>
