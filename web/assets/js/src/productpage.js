@@ -141,50 +141,7 @@ $(function(){
 });
 
 
-$(function(){
-    //VERY IMPORTANT ASSUMPTION: the default shipment exists with the default quantity
 
-    //Loads the defaults quantity
-    var qty = JSON.parse($('#p_qty').val());
-    var shipment = JSON.parse($('#p_shipment').val());
-
-    var total_qty = 0;
-
-    $.each(qty, function(index, value){ 
-        total_qty = total_qty + parseInt(value.quantity,10);
-        if((value.product_attribute_ids.length == 1)&&(parseInt(value.product_attribute_ids[0].id)==0)&&(parseInt(value.product_attribute_ids[0].is_other)==0)){
-            $('.quantity').data('default','true');
-            $('.product_quantity').val(1);
-            $('#p_itemid').val(index);
-            //if there are no attributes to choose from: enable buy button
-            if(($('.product_option').find('ul.options')[0] === undefined) && (parseInt(value.quantity,10) > 0))  {
-                 $('.orange_btn3').removeClass("disabled").addClass("enabled");
-            }
-            return false;
-        }
-    });  
-   
-    $('.quantity').data('qty',total_qty);
-    $('.quantity')[0].innerHTML = total_qty;
-    
-    
-    //Loads the default shipment locations
-
-    $.each(shipment, function(index, value){
-        var option =  $('#locationID_' + value.location_id);
-        option.data('price',value.price);
-        option.prop('disabled', false);
-        $.each(option.nextAll(), function(){
-            if($(this).data('type') === option.data('type')){
-               return false;
-            }
-            $(this).prop('disabled', false);
-            $(this).data('price',value.price);
-        }); 
-    });
-    
-
-});
 
 
 var sel_id_ordered = new Array();
@@ -463,22 +420,70 @@ $(function(){
 });
 
 
+$(function(){
+    //VERY IMPORTANT ASSUMPTION: the default shipment exists with the default quantity
+
+    //Loads the defaults quantity
+    var qty = JSON.parse($('#p_qty').val());
+    var shipment = JSON.parse($('#p_shipment').val());
+
+    var total_qty = 0;
+    
+    var firstAvailableCombination = false;
+
+    $.each(qty, function(index, value){ 
+    
+        if((parseInt(value.quantity,10) !== 0)&&(firstAvailableCombination === false)){
+            firstAvailableCombination = value;
+        }
+    
+        total_qty = total_qty + parseInt(value.quantity,10);
+        if((value.product_attribute_ids.length == 1)&&(parseInt(value.product_attribute_ids[0].id)==0)&&(parseInt(value.product_attribute_ids[0].is_other)==0)){
+            $('.quantity').data('default','true');
+            $('.product_quantity').val(1);
+            $('#p_itemid').val(index);
+            //if there are no attributes to choose from: enable buy button
+            if(($('.product_option').find('ul.options')[0] === undefined) && (parseInt(value.quantity,10) > 0))  {
+                 $('.orange_btn3').removeClass("disabled").addClass("enabled");
+            }
+            return false;
+        }
+    });  
+   
+    $('.quantity').data('qty',total_qty);
+    $('.quantity')[0].innerHTML = total_qty;
+
+    $.each(firstAvailableCombination.product_attribute_ids, function(idx, value){
+        $('.options [data-type = '+value.is_other+'][data-attrid = '+value.id+']').trigger( "click" );
+    });
+
+    
+    
+    //Loads the default shipment locations
+
+    $.each(shipment, function(index, value){
+        var option =  $('#locationID_' + value.location_id);
+        option.data('price',value.price);
+        option.prop('disabled', false);
+        $.each(option.nextAll(), function(){
+            if($(this).data('type') === option.data('type')){
+               return false;
+            }
+            $(this).prop('disabled', false);
+            $(this).data('price',value.price);
+        }); 
+    });
+    
+
+});
+
 
 
 $(function(){
     $('li[data-hidden="true"]').each(function(){
         $(this).trigger( "click" );
     });
-    
-    var qty = JSON.parse($('#p_qty').val());
 
-    var firstLexicalKey = Object.keys(qty)[0];
-
-    $.each(qty[firstLexicalKey].product_attribute_ids, function(idx, value){
-        $('.options [data-type = '+value.is_other+'][data-attrid = '+value.id+']').trigger( "click" );
-    });
-
- 
 });
 
  
