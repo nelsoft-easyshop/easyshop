@@ -1968,7 +1968,7 @@ class product_model extends CI_Model
             }
             else if($element['type'] === 'custom'){
                $home_view_data['category_detail']['imagepath'] = '';
-               $home_view_data['category_detail']['name'] = $element['title'];
+               $home_view_data['category_detail']['name'] = isset($element['title'])?$element['title']:$element['value'];
                $home_view_data['category_detail']['url'] = 'vendor/'.$element['value'];
             }
             $home_view_data['category_detail']['css_class'] = $element['css_class'];
