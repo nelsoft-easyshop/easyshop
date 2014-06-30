@@ -1390,32 +1390,32 @@ $(document).ready(function(){
         }
         htmlEach += '<div class="input_qty"><input type="textbox" class="quantityText" value="'+qtyTextbox.val()+'" data-cnt="'+thisValueCount+'"></div><div class="mid_inner_con_list">';
 
-        $(function() { 
-            $('.quantity_attrs_content option:selected').each(function(){
-                haveValue = true;
-                noCombination = false;
-                var eachValue = $(this).val();
-                var eachValueString = $(this).text();
-                var eachGroup = $(this).data('group');  
-                var eachDataValue = $(this).data('value');  
-                combinationVal.push(eachDataValue+':'+eachValue+':'+eachGroup);
-                htmlEach += '<div>'+ eachGroup +': ' + eachValueString +'</div>';
-            });
-
-            sortCombination = combinationVal.sort();
-
-            for (var i = 0; i < sortCombination.length; i++) {
-                arrayCombinationString += sortCombination[i] + '-';
-            };
-
-            for (var key in arraySelected) { 
-                if (arraySelected.hasOwnProperty(key))
-                if(arraySelected[key]['value'] === arrayCombinationString.slice(0, - 1)){
-                    alreadyExist = true;
-                    break;
-                }
-            }
+       
+        $('.quantity_attrs_content option:selected').each(function(){
+          haveValue = true;
+          noCombination = false;
+          var eachValue = $(this).val();
+          var eachValueString = $(this).text();
+          var eachGroup = $(this).data('group');  
+          var eachDataValue = $(this).data('value');  
+          combinationVal.push(eachDataValue+':'+eachValue+':'+eachGroup);
+          htmlEach += '<div>'+ eachGroup +': ' + eachValueString +'</div>';
         });
+
+        sortCombination = combinationVal.sort();
+
+        for (var i = 0; i < sortCombination.length; i++) {
+          arrayCombinationString += sortCombination[i] + '-';
+        };
+
+        for (var key in arraySelected) { 
+          if (arraySelected.hasOwnProperty(key))
+            if(arraySelected[key]['value'] === arrayCombinationString.slice(0, - 1)){
+              alreadyExist = true;
+              break;
+            }
+          }
+          
 
         if(haveValue === true){
             if(alreadyExist === false){
