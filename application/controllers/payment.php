@@ -1067,8 +1067,8 @@ class Payment extends MY_Controller{
      }while(!$buyerEmailResult && $emailcounter<3);
 
 		//Send text msg to buyer if mobile provided
-     $buyerMobile = trim($buyerData['buyer_contactno']);
-     if($buyerMobile != '' && $buyerMobile != 0 ){
+     $buyerMobile = ltrim($buyerData['buyer_contactno'], '0');
+     if( is_numeric($buyerMobile) && $buyerMobile != 0 ){
          $buyerMsg = $buyerData['buyer_name'] . $this->lang->line('notification_txtmsg_buyer');
          $buyerTxtResult = $this->payment_model->sendNotificationMobile($buyerMobile, $buyerMsg);
      }
@@ -1084,7 +1084,7 @@ class Payment extends MY_Controller{
 
      foreach($transactionData['seller'] as $seller){
         $sellerEmail = $seller['email'];
-        $sellerData = array_merge( $sellerData, array_slice($seller,1,8) );
+        $sellerData = array_merge( $sellerData, array_slice($seller,1,9) );
         $sellerData['totalprice'] = number_format($seller['totalprice'], 2, '.' , ',');
 
 			// 3 tries to send Email. Quit if success or 3 failed tries met
@@ -1094,9 +1094,9 @@ class Payment extends MY_Controller{
             $emailcounter++;
         }while(!$sellerEmailResult && $emailcounter<3);
 
-			//Send text msg to buyer if mobile provided
-        $sellerMobile = trim($seller['seller_contactno']);
-        if($sellerMobile != '' && $sellerMobile != 0 ){
+			//Send text msg to seller if mobile provided
+        $sellerMobile = ltrim($seller['seller_contactno'],'0');
+        if( is_numeric($sellerMobile) && $sellerMobile != 0 ){
             $sellerMsg = $seller['seller_name'] . $this->lang->line('notification_txtmsg_seller');
             $sellerTxtResult = $this->payment_model->sendNotificationMobile($sellerMobile, $sellerMsg);
         }
