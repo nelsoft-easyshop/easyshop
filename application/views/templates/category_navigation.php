@@ -9,6 +9,7 @@
 					<span><?PHP echo html_escape($cat_items[$x]['NAME']); ?></span>
 				</a>
 			</p>
+            <!--
 			<?PHP if(sizeof($cat_items[$x][0]) >= 1): ?>
 			<div id="<?PHP echo $cat_items[$x]['id_cat']; ?>childs" class="childs">               
 				<?PHP for($x2=0;$x2 < sizeof($cat_items[$x][0]);$x2++): ?>     
@@ -32,6 +33,7 @@
 			   <?php endfor; ?>
 			</div>
 			<?PHP endif;?>
+            -->
 		</li>
 	<?php endfor; ?>
 	</ul>
