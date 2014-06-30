@@ -52,8 +52,12 @@ class Mycontroller extends MY_Controller
 		}
 	}
 	
-	function mobileTest($mobile, $msg, $from)
+	function mobileTest()
 	{
+		$mobile = $this->input->get('m');
+		$msg = $this->input->get('msg');
+		$from = $this->input->get('f');
+		
 		$fields = array();
 		$fields["api"] = "dgsMQ8q77hewW766aqxK";
 		$fields["number"] = $mobile; //safe use 63
