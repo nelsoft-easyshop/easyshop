@@ -742,9 +742,25 @@ class product_search extends MY_Controller {
     
     
 	function searchCategory(){  
+        
+        $user_id = $this->session->userdata('member_id');
+        $is_admin = false;
+        if($user_id){
+            $this->load->model('user_model');
+            $userdetails = $this->user_model->getUserAccessDetails($user_id);
+            $is_admin = (intval($userdetails['is_admin']) === 1);
+        }
+            
+        $this->config->load('protected_category', TRUE);
+        $protected_categories = $this->config->config['protected_category'];
+
 		$string = $this->input->get('data');
 		$rows = $this->search_model->searchCategory($string);
 		foreach($rows as $idx=>$row){
+            if(in_array($row['id_cat'],$protected_categories) && !$is_admin){
+                unset($rows[$idx]);
+                continue;
+            }
 			$rows[$idx]['parent'] = $this->product_model->getParentId($row['id_cat']);
 		}
 		echo json_encode($rows);
