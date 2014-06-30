@@ -27,7 +27,7 @@ class payment_model extends CI_Model
     function payment($paymentType,$ItemTotalPrice,$member_id,$productstring,$productCount,$apiResponse,$tid)
     {
 
-    	$invoice_no = $member_id.'-'.date('Ymhsd'); 
+    	$invoice_no = $member_id.'-'.date('ymdhs'); 
         $ip = $this->user_model->getRealIpAddr();  
 
         $query = $this->xmlmap->getFilenameID('sql/payment','payment_transaction');

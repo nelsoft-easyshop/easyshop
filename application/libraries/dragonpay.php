@@ -50,10 +50,10 @@ class DragonPay {
     	return $result['GetProcessorsResult']['ProcessorInfo'];
     }
 
-    function getTxnToken($amount,$description,$email)
+    function getTxnToken($amount,$description,$email,$txnId)
     {
     	$errorCodes = $this->errorCodes;
-    	$txnId = substr( "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" ,mt_rand( 0 ,50 ) ,1 ) .substr( md5( time() ), 1);
+    	 
     	$ccy = 'PHP';
     	$param = array(
     		'merchantId' => $this->merchantId,
