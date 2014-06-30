@@ -105,7 +105,7 @@
 									</span>
 									<span class="transac_bought_con_col3 tx_cont_col3">
 										Status:
-										<?php if($transact['transac_stat'] == 0):?>
+										<?php if($transact['transac_stat'] == 0 && $transact['is_flag'] == 0):?>
 											<?php if($product['is_reject'] == 1):?>
 												<span class="trans_alert trans_red">Item Rejected</span>
 											<?php else:?>
@@ -173,7 +173,7 @@
 									</span>
 								</div>
 								
-								<?php if( $product['has_shipping_summary'] == 1 && $transact['transac_stat'] == 0 && $product['status'] == 0 && $transact['payment_method'] != 3):?>
+								<?php if( $product['has_shipping_summary'] == 1 && $transact['transac_stat'] == 0 && $product['status'] == 0 && $transact['payment_method'] != 3 && $transact['is_flag'] == 0):?>
 									<div class="transac_prod_btns tx_btns">
 										<?php
 											$attr = array('class'=>'transac_response');

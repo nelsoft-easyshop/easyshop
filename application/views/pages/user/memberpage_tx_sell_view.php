@@ -1,7 +1,7 @@
 <?php foreach($transaction['sell'] as $tk=>$transact):?>
 			<div class="transac-container content-paging" data-pm="<?php echo $transact['payment_method']?>" data-invoice="<?php echo $transact['invoice_no']?>">
 				<div class="transac_title">
-					<?php if($transact['transac_stat'] != 99): ?>
+					<?php if($transact['transac_stat'] != 99 && $transact['is_flag'] == 0): ?>
 					<div class="transac_title_table">
 						<div class="transac_title_col1">
 							<span><strong>Transaction No.: </strong></span>		
@@ -91,7 +91,7 @@
 									
 									<span class="transac_bought_con_col3 tx_cont_col3">
 										Status:
-									<?php if($transact['transac_stat'] == 0):?>
+									<?php if($transact['transac_stat'] == 0 && $transact['is_flag'] == 0):?>
 										<?php if($product['is_reject'] == 1):?>
 											<span class="trans_alert trans_red">Item Rejected</span>
 										<?php else:?>
@@ -122,13 +122,10 @@
 									<?php endif;?>
 									</span>
 				
-									<?php if($transact['transac_stat'] == 0 && $transact['payment_method'] != 3):?>
-										
-									<?php endif;?>
 								</div>
 								
 								<div class="transac_prod_btns tx_btns">
-									<?php if($transact['transac_stat'] == 0 && $product['status'] == 0 && $transact['payment_method'] != 3):?>										
+									<?php if($transact['transac_stat'] == 0 && $product['status'] == 0 && $transact['payment_method'] != 3  && $transact['is_flag'] == 0):?>										
 										
 										<div style="display:inline-block;"><input type="button" class="shipping_comment isform transac_orange_btn" value="Ship Item"></div>
 										<div class="shipping_comment_cont" style="display:none;">

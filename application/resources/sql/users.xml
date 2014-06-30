@@ -253,7 +253,7 @@
 	FROM es_order o
 	INNER JOIN es_order_product op
 		ON o.id_order = op.order_id
-	WHERE NOT (o.payment_method_id = 1 AND o.order_status = 99 AND o.is_flag = 0)  AND o.order_status IN ({order_status}) AND o.buyer_id = :id AND o.invoice_no LIKE :name_filter AND o.payment_method_id IN ({payment_filter})
+	WHERE NOT (o.payment_method_id = 1 AND o.order_status = 99)  AND o.order_status IN ({order_status}) AND o.buyer_id = :id AND o.invoice_no LIKE :name_filter AND o.payment_method_id IN ({payment_filter})
 	GROUP BY id_order, dateadded, o.order_status, o.invoice_no, o.payment_method_id, o.is_flag
 	ORDER BY o.id_order {order_sequence_filter}
 	{limit}
@@ -276,7 +276,7 @@
 		ON badd.stateregion = l0.id_location
 	LEFT JOIN es_location_lookup l1
 		ON badd.city = l1.id_location
-	WHERE NOT (o.payment_method_id = 1 AND o.order_status = 99 AND o.is_flag = 0) AND o.order_status != 2 AND o.invoice_no LIKE :name_filter AND o.payment_method_id IN ({payment_filter})
+	WHERE NOT (o.payment_method_id = 1 AND o.order_status = 99) AND o.order_status != 2 AND o.invoice_no LIKE :name_filter AND o.payment_method_id IN ({payment_filter})
 	GROUP BY o.id_order, dateadded, o.order_status, o.invoice_no, o.payment_method_id, o.buyer_id,  buyer.username,
 		badd.consignee, badd.mobile, badd.telephone,l0.location,l1.location,badd.address,lat,lng,
 		for_memberid, o.is_flag
