@@ -516,7 +516,7 @@ span.seller-name .rating_criteria{
 }
 
 #tabs-1 p img {
-	width: 750px;
+	max-width: 750px;
 }
 
 #tabs-1 ul {
