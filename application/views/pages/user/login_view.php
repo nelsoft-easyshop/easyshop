@@ -1,3 +1,4 @@
+<link rel="canonical" href="<?php echo base_url()?>login"/>
 
 <div class="clear"></div>
 

@@ -4,6 +4,8 @@
 
 <!--Pagination CSS-->
 <link  type="text/css"  href='<?=base_url()?>assets/css/jqpagination.css' rel="stylesheet" media='screen'/>
+<link rel="canonical" href="<?php echo base_url()?>vendor/<?php echo $vendordetails['username']; ?>"/>
+
 
 <div id = "member_page_body">
 	<div class="clear"></div>

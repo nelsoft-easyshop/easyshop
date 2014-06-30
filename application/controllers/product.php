@@ -25,7 +25,7 @@ class product extends MY_Controller
     	$operator = " = ";
     	$data =  $this->fill_header();	
 		$category_array = $this->product_model->getCategoryBySlug($url_string);
-
+        
         $categoryId = $category_array['id_cat'];
         $categoryName = $category_array['name'];
         $categoryDescription = $category_array['description'];
@@ -41,7 +41,6 @@ class product extends MY_Controller
             }
         }
 
-        
     	$sortString = ""; 
     	$conditionArray = array(); 
        
@@ -180,7 +179,8 @@ class product extends MY_Controller
         $response['attributes'] = $organizedAttribute;
         $response['id_cat'] = $categoryId;
         $response['category_navigation'] = $this->load->view('templates/category_navigation',array('cat_items' =>  $this->getcat(),), TRUE );
-
+        $response['category_slug'] = $category_array['slug'];
+        
         $this->load->view('templates/header', $data); 
         $this->load->view('pages/product/product_search_by_category_final',$response);
         $this->load->view('templates/footer'); 

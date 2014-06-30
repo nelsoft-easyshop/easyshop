@@ -61,6 +61,8 @@
 <link rel="stylesheet" href="<?=base_url()?>assets/css/jquery.bxslider.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
 <link rel="stylesheet" href="<?=base_url()?>assets/css/productview.css" type="text/css" media="screen"/>
 
+<link rel="canonical" href="<?php echo base_url()?>item/<?php echo $product['slug'];?>"/>
+
 <div class="clear"></div>
 <section class="top_margin">
   <div class="wrapper">

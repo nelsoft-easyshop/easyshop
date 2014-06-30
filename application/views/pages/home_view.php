@@ -1,5 +1,5 @@
 <link href="<?= base_url() ?>assets/css/jquery.bxslider.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet" />
-
+<link rel="canonical" href="<?php echo base_url();?>"/>
 
 <div class="clear"></div>
 
