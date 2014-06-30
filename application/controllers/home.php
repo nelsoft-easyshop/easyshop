@@ -21,11 +21,11 @@ class Home extends MY_Controller {
             array_push($layout_arr,$this->load->view('templates/home_layout/'.$section['category_detail']['layout'], array('section' => $section), TRUE));
         }
 
-		$data = array('title' => 'Home | Easyshop.ph',
+		$data = array('title' => ' Shopping made easy | Easyshop.ph',
                 'data' => $home_content,
                 'sections' => $layout_arr,
                 'category_navigation' => $this->load->view('templates/category_navigation',array('cat_items' =>  $this->getcat(),), TRUE ),
-				'metadescription' => 'Easyshop.ph - a place where Online Buyers and Sellers converge, while letting you enjoy the benefits of one-stop shopping at the comforts of your own home.',
+				'metadescription' => 'Enjoy the benefits of one-stop shopping at the comforts of your own home.',
                 );
         $data = array_merge($data, $this->fill_header());
 		$this->load->view('templates/header', $data);
