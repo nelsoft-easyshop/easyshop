@@ -39,8 +39,7 @@
 				</div>
 				<div class="member_srch_wrapper">
 					<form method="get" action="<?=base_url()?>search/search.html">
-					<input type="text" name="q_str" id="member_sch" onblur="this.placeholder = 'Search'" onfocus="this.placeholder = ''" placeholder="Search">
-					
+					<input type="text" name="q_str" id="member_sch" autocomplete='off'  onblur="this.placeholder = 'Search'" onfocus="this.placeholder = ''" placeholder="Search">
 					
 					<input type="submit" class="span_bg" value="">
 					 </form>
@@ -2490,6 +2489,7 @@
 						p:''
 					};
 
+                    /*
 					$(document).ready(function() {
                         var currentRequest = null;
 					 
@@ -2527,19 +2527,29 @@
 							}
 						});
 					});
+                    */
 
-					$(document).ready(function() { 
+                    
+                    
+                    $(document).ready(function() { 
+                        var srchdropcontent= $('#search_content');
+                        $('#member_sch').focus(function() {
+                            if(srchdropcontent.find("ul").length > 0){
+                                $('#search_content').fadeIn(150);
+                            }
 
-			            $('#member_sch').focus(function() {
-			            $('#search_content').show();
-			            $(document).bind('focusin.member_srch_container click.member_srch_container',function(e) {
-			                if ($(e.target).closest('#search_content, #member_sch').length) return;
-			                $('#search_content').hide();
-			                });
-			             });
-			 
-			            $('#search_content').hide();
-			        });
+                            $(document).bind('focusin.search_content click.search_content',function(e) {
+                                if ($(e.target).closest('#search_content, #member_sch').length) 
+                                    return;
+                                $('#search_content').fadeOut('fast');
+                            });
+                        });
+ 
+                        $('#search_content').hide();
+           
+                    });
+                    
+                    
 
 					</script>
 <script src="<?= base_url() ?>assets/js/src/vendor/jquery.easing.min.js" type="text/javascript"></script>

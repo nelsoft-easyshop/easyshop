@@ -612,7 +612,8 @@ $(function(){
                 $('.shipping_fee').html("<span class='shipping_fee_php'>PHP <span><span class='shipping_fee_price'>"+fee.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")+"</span>");
             }
             else{
-                 $('.shipping_fee').html("<span class='shipping_fee_php' style='font-weight:bold; font-size:10px; color:#F18200;'>Free shipping</span>");
+                 //$('.shipping_fee').html("<span class='free_shipping_logo'></span>");
+                 $('.shipping_fee').html("<span class='free_shipping_logo'><span class='shipping_fee_php' style='font-weight:bold; font-size:10px; color:#F18200;'>Free shipping</span></span>");
             }
             
          

@@ -452,6 +452,19 @@ span.seller-name .rating_criteria{
 	min-width: 60px;
 }
 
+/*
+span.free_shipping_logo {
+    background-position: -444px -190px;
+    background-image: url('../images/global_sprite.png');
+    background-repeat: no-repeat;
+    display: inline-block;
+    height: 30px;
+    min-width: 60px;
+    vertical-align: middle;
+}
+*/
+
+
 /** product tab **/
 
 .ui-tabs.ui-widget.ui-widget-content.ui-corner-all {

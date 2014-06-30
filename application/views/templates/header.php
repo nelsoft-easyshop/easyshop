@@ -149,7 +149,7 @@
 
 
 <script type="text/javascript">
-
+/*
 $(document).ready(function() {
   var currentRequest = null;
 
@@ -203,7 +203,7 @@ $('#main_search').on('input propertychange', function() {
           }
       });
 });
-
+*/
       
 </script>
 
