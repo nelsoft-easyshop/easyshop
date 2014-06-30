@@ -263,7 +263,7 @@ return array(
             IF o_success = TRUE THEN
                 SELECT p.id_product as id_product, p.promo_type, p.condition, p.slug,p.brand_id as brand_id, p.brand_other_name as custombrand, p.name as product_name, p.description as description, 
                       p.is_promote, p.startdate, p.enddate, p.cat_id as cat_id, p.price as price,  p.brief as brief, p.sku as sku,
-                      p.is_cod, s.name as style_name, b.name as brand_name, p.member_id as sellerid, m.nickname as sellernickname, m.username as sellerusername, m.imgurl as userpic, o_success, o_message
+                      p.is_cod, p.discount, s.name as style_name, b.name as brand_name, p.member_id as sellerid, m.nickname as sellernickname, m.username as sellerusername, m.imgurl as userpic, o_success, o_message
                       FROM es_product p 
                       LEFT JOIN es_style s ON p.style_id = s.id_style
                       LEFT JOIN es_brand b ON p.brand_id = b.id_brand
