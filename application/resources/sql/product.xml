@@ -488,6 +488,7 @@ FROM
         ,`lastmodifieddate`
         ,`cat_other_name`
         ,`brand_other_name`
+        ,`search_keyword`
         ,`is_draft`
         ,`enddate`
         ,`startdate`)
@@ -509,6 +510,7 @@ FROM
         , :lastmodifieddate
         , :cat_other_name
         , :brand_other_name
+        , :search_keyword
         , '1'
         , :enddate
         , :startdate

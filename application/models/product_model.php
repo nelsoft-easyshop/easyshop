@@ -446,7 +446,7 @@ class product_model extends CI_Model
 	}
 
 
-	function addNewProduct($product_title,$sku,$product_brief,$product_description,$keyword,$brand_id,$cat_id,$style_id,$member_id,$product_price,$product_discount,$product_condition,$other_category_name, $other_brand_name)
+	function addNewProduct($product_title,$sku,$product_brief,$product_description,$keyword,$brand_id,$cat_id,$style_id,$member_id,$product_price,$product_discount,$product_condition,$other_category_name, $other_brand_name,$search_keyword)
 	{
 
 		# this function for adding new product to es_product table.
@@ -467,6 +467,7 @@ class product_model extends CI_Model
 		$sth->bindParam(':condition',$product_condition);
 		$sth->bindParam(':cat_other_name',$other_category_name);
         $sth->bindParam(':brand_other_name',$other_brand_name);
+        $sth->bindParam(':search_keyword',$search_keyword);
         $now = date('Y-m-d H:i:s');
         $sth->bindParam(':startdate',$now);
         $sth->bindParam(':enddate',$now);

@@ -332,7 +332,6 @@ class productUpload extends MY_Controller
 		$product_brief = trim($this->input->post('prod_brief_desc'));
 		$product_description =  $this->input->post('desc');
 
-        
 		$product_price = str_replace(',', '', $this->input->post('prod_price')) ;
         
 		$product_discount = ($this->input->post('discount'))?floatval($this->input->post('discount')):0;
@@ -342,8 +341,7 @@ class productUpload extends MY_Controller
 		$product_condition = $this->input->post('prod_condition');
 		$sku = trim($this->input->post('prod_sku'));
 		
-		$keyword = es_url_clean(trim($product_title).' '.trim($this->input->post('prod_keyword')));
-		$keyword = str_replace('-', ' ',$keyword);
+		$keyword = trim($this->input->post('prod_keyword'));
 		$style_id = 1;
 		$member_id =  $this->session->userdata('member_id');
 		
@@ -362,8 +360,10 @@ class productUpload extends MY_Controller
         }
 
 		if($brand_valid === FALSE){
-			echo '{"e":"0","d":"The selected brand is unavailable. Please specify a valid one."}';	 
-			exit();
+			// echo '{"e":"0","d":"The selected brand is unavailable. Please specify a valid one."}';	 
+			// exit();
+			$brand_id = 1;
+			$otherBrand = 'No brand specified';
 		} 
         
 		if (!in_array($product_condition, $this->lang->line('product_condition')))
@@ -372,9 +372,7 @@ class productUpload extends MY_Controller
 			exit();
 		}
  
-		if(strlen(trim($product_title)) == 0 || $product_title == "" 
-			|| strlen(trim($product_brief)) == 0 || $product_brief == "" 
-			|| strlen(trim($product_price)) == 0 || $product_price <= 0)
+		if(strlen(trim($product_title)) == 0 || $product_title == "" || strlen(trim($product_price)) == 0 || $product_price <= 0 || strlen(trim($product_description)) == 0)
 		{
 			echo '{"e":"0","d":"Fill (*) All Required Fields Properly!"}';		
 			exit();
@@ -383,10 +381,10 @@ class productUpload extends MY_Controller
  			$arraynameoffiles = $this->input->post('arraynameoffiles');
 			$arraynameoffiles = json_decode($arraynameoffiles);
  	 
-			if(count($arraynameoffiles) <= 0){ 
-				echo '{"e":"0","d":"Please select at least one photo for your listing."}';
-				exit();
-			}
+			// if(count($arraynameoffiles) <= 0){ 
+			// 	echo '{"e":"0","d":"Please select at least one photo for your listing."}';
+			// 	exit();
+			// }
 
 			$removeThisPictures = json_decode($this->input->post('removeThisPictures')); 
 			$primaryId = $this->input->post('primaryPicture');
@@ -421,10 +419,11 @@ class productUpload extends MY_Controller
 				$arrayNameOnly[0] = $arrayNameOnly[$key];
 				$arrayNameOnly[$key] = $temp;
 			}
-			if(count($arraynameoffiles) <= 0){
-				echo '{"e":"0","d":"Please select at least one photo for your listing."}';
-				exit();
-			}
+
+			// if(count($arraynameoffiles) <= 0){
+			// 	echo '{"e":"0","d":"Please select at least one photo for your listing."}';
+			// 	exit();
+			// }
 
 			$allowed =  array('gif','png' ,'jpg','jpeg'); # available format only for image
 			$x = 0; 
@@ -448,7 +447,13 @@ class productUpload extends MY_Controller
                 }
             }
             
-			$product_id = $this->product_model->addNewProduct($product_title,$sku,$product_brief,$product_description,$keyword,$brand_id,$cat_id,$style_id,$member_id,$product_price,$product_discount,$product_condition,$otherCategory, $otherBrand);
+            $categoryDetails = $this->product_model->selectCategoryDetails($cat_id);
+            $categoryName =  $categoryDetails['name'];
+            $categorykeywords =  $categoryDetails['keywords']; 
+
+			$brandName = $this->product_model->getBrandById($brand_id)[0]['name']; 
+            $search_keyword = preg_replace('!\s+!', ' ',$brandName .' '. $otherBrand .' '. $product_title .' '. $otherCategory . ' ' . $categoryName . ' '. $categorykeywords . ' '.$keyword);
+			$product_id = $this->product_model->addNewProduct($product_title,$sku,$product_brief,$product_description,$keyword,$brand_id,$cat_id,$style_id,$member_id,$product_price,$product_discount,$product_condition,$otherCategory, $otherBrand,$search_keyword);
             # product_id = is the id_product for the new item. if 0 no new item added process will stop
             
 			#image directory
@@ -469,7 +474,9 @@ class productUpload extends MY_Controller
             $tempdirectory = $tempdirectory.'_'.$member_id.'_'.$date;
             $tempdirectory = './assets/temp_product/'.$tempdirectory.'/'; 
 
-			directory_copy($tempdirectory, $path_directory,$product_id,$arrayNameOnly); 
+            if(!count($arraynameoffiles) <= 0){ 
+            	directory_copy($tempdirectory, $path_directory,$product_id,$arrayNameOnly); 
+            }
 
 			if($product_id > 0) # id_product is 0 means no item inserted. the process will stop.
 			{

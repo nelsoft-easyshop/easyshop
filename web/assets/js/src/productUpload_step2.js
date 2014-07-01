@@ -101,103 +101,96 @@ $(document).ready(function(){
         });
     });
     
-    
+    // if keyword change. counter will change also either increase or decrease until reach its limit..
+    updateCountdown();
+    $('#prod_keyword').change(updateCountdown);
+    $('#prod_keyword').keyup(updateCountdown); 
 
+    // search brand 
 
-   
+    $('#brand_sch').focus(function() {
+        $('#brand_search_drop_content').show();
+        $(document).bind('focusin.brand_sch_drop_content click.brand_sch_drop_content',function(e) {
+          if ($(e.target).closest('#brand_search_drop_content, #brand_sch').length) return;
+          $('#brand_search_drop_content').hide();
+        });
+    });
+
+    $('#brand_search_drop_content').hide();
+ 
 });
 
 
 // TINYMCE
 $(function(){
-  tinymce.init({
- mode : "specific_textareas",
- editor_selector : "mceEditor",
- //selector: "textarea",
-  menubar: "table format view insert edit",
-  statusbar: false,
-  //selector: "textarea",
+    tinymce.init({
+        mode : "specific_textareas",
+        editor_selector : "mceEditor", 
+        menubar: "table format view insert edit",
+        statusbar: false, 
+        height: 300,
+        plugins: ["lists link preview","table jbimages fullscreen","textcolor" ],  
+        toolbar: "insertfile undo redo | sizeselect | fontselect  fontsizeselect styleselect  forecolor backcolor | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | jbimages | image_advtab: true ",  
+        relative_urls: false,
+        setup: function(editor) {
+            editor.on('change', function(e) {
+                $('#prod_description').val(tinyMCE.get('prod_description').getContent());
+                $('#prod_description').trigger( "change" );
+            });
+        }
+    });
 
-  statusbar: false,
-  height: 300,
-  plugins: [
-  "lists link preview",
-  "table jbimages fullscreen",
-  "textcolor"
-  //"advlist autolink link image lists charmap print preview hr anchor pagebreak",
-  //"searchreplace wordcount visualblocks visualchars insertdatetime media nonbreaking",
-  //"table contextmenu directionality emoticons paste textcolor responsivefilemanager"
-  ],  
-  toolbar: "insertfile undo redo | sizeselect | fontselect  fontsizeselect styleselect  forecolor backcolor | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | jbimages | image_advtab: true ",  
-  //toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | image_advtab: true ",  
-  relative_urls: false,
-  
-  //external_filemanager_path:"/assets/filemanager/",
-  //filemanager_title:"Responsive Filemanager" ,
-  //external_plugins: { "filemanager" : "/assets/filemanager/plugin.min.js"}
-  
-  
-   setup: function(editor) {
-        editor.on('change', function(e) {
-            $('#prod_description').val(tinyMCE.get('prod_description').getContent());
-            $('#prod_description').trigger( "change" );
-        });
-   }
-
+    tinymce.init({
+        mode : "specific_textareas",
+        editor_selector : "mceEditor_attr", 
+        menubar: "table format view insert edit",
+        statusbar: false,
+        height: 200,
+        plugins: [
+            "lists link preview ",
+            "table jbimages fullscreen" 
+        ],  
+        toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | jbimages | image_advtab: true ",  
+        relative_urls: false
+    });
 });
 
-tinymce.init({
-    mode : "specific_textareas",
-    editor_selector : "mceEditor_attr",
-    //selector: "textarea",
-    menubar: "table format view insert edit",
-
-    statusbar: false,
-    height: 200,
-    plugins: [
-        "lists link preview ",
-        "table jbimages fullscreen" 
-    ],  
-    toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | jbimages | image_advtab: true ",  
-    relative_urls: false
-});
-
-});
-
+// FUNCTION FOR KEYWORD COUNTER
+    function updateCountdown() {
+        // 140 is the max message length
+        var remaining = 150 - $('#prod_keyword').val().length;
+        $('.countdown').text(remaining + ' characters remaining.');
+    }
 
 // ERROR HANDLER
-
-      function validateRedTextBox(idclass)
+    function validateRedTextBox(idclass)
     {
-      $(idclass).css({"-webkit-box-shadow": "0px 0px 2px 2px #FF0000",
-        "-moz-box-shadow": "0px 0px 2px 2px #FF0000",
-        "box-shadow": "0px 0px 2px 2px #FF0000"});
+        $(idclass).css({"-webkit-box-shadow": "0px 0px 2px 2px #FF0000",
+          "-moz-box-shadow": "0px 0px 2px 2px #FF0000",
+          "box-shadow": "0px 0px 2px 2px #FF0000"});
     } 
+
     function validateWhiteTextBox(idclass)
     {
-      $(idclass).css({"-webkit-box-shadow": "0px 0px 2px 2px #FFFFFF",
-        "-moz-box-shadow": "0px 0px 2px 2px #FFFFFF",
-        "box-shadow": "0px 0px 2px 2px #FFFFFF"});
+        $(idclass).css({"-webkit-box-shadow": "0px 0px 2px 2px #FFFFFF",
+          "-moz-box-shadow": "0px 0px 2px 2px #FFFFFF",
+          "box-shadow": "0px 0px 2px 2px #FFFFFF"});
     }
 
 
 // NUMBER ONLY IN SPECIFIC FIELDS
-     function isNumberKey(evt)
-       {
-          var charCode = (evt.which) ? evt.which : event.keyCode;
-          if (charCode != 46 && charCode > 31 
-            && (charCode < 48 || charCode > 57))
-             return false;
+    function isNumberKey(evt)
+    {
+        var charCode = (evt.which) ? evt.which : event.keyCode;
+        if (charCode != 46 && charCode > 31 
+          && (charCode < 48 || charCode > 57))
+           return false;
 
-          return true;
-       }
-
-
+        return true;
+    }
 
 
  // ES_UPLOADER BETA
- 
-
 $(document).ready(function() {
 
     $(".labelfiles").click(function(){
@@ -205,9 +198,7 @@ $(document).ready(function() {
     });
 
 });
-
-
- // ES_UPLOADER BETA END
+// ES_UPLOADER BETA END
  
-  /** Hide discount container when click outside ***/
+/** Hide discount container when click outside ***/
 
