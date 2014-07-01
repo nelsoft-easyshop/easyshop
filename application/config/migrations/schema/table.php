@@ -4256,9 +4256,11 @@ return array(
         "create" => "CREATE TABLE `es_subscribe` (
               `id_subscribe` int(10) unsigned NOT NULL AUTO_INCREMENT,
               `email` varchar(50) NOT NULL,
+              `datecreated` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
               PRIMARY KEY (`id_subscribe`),
               UNIQUE KEY `email_UNIQUE` (`email`)
-            ) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8;",
+            ) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8;
+            ",
         "insert" => "",
     ),
     
