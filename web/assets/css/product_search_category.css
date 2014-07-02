@@ -165,7 +165,8 @@ nav {
   width: 237px !important;
 /*  width: 29.5% !important;*/
   min-height: 114px;
-  height: 315px;
+  height: 330px;
+  position: relative;
 }
 
 div.product-list {
@@ -223,11 +224,11 @@ div.product-list {
 }
 
 div.product-list .price-cnt {
-  float: right;
+/*  float: right;*/
 }
 
 .product-list .price {
-  float: right;
+/*  float: right;*/
 }
 
 .product-list div.product_info_bottom div:first-child {
@@ -513,10 +514,16 @@ _filter: progid:DXImageTransform.Microsoft.Chroma(color='#000000');
 
 .product .price{
 /*  width: 60px;*/
-  display: inline; 
+  display: block; 
   font-size: 18px;
   font-family: 'Roboto',sans-serif;
   color: #f18200;
+  height: 25px;
+  overflow: hidden;
+}
+
+.original_price {
+  text-decoration: line-through;
 }
 
 .price span {
@@ -559,6 +566,7 @@ _filter: progid:DXImageTransform.Microsoft.Chroma(color='#000000');
   background-color: #fff;
   border: 1px solid #ecebeb;
   margin-top: 10px;
+  position: relative;
 /*  -webkit-transition: all 0.5s ease-in-out;
   -moz-transition:    all 0.5s ease-in-out;
   -o-transition:      all 0.5s ease-in-out;
@@ -600,7 +608,7 @@ _filter: progid:DXImageTransform.Microsoft.Chroma(color='#000000');
   line-height: 20px;
   margin: 0px 10px 10px 10px;  
   overflow: hidden;
-  width:575px;
+  width:370px;
 }
 
 .product-list .buy-ico{
@@ -629,14 +637,15 @@ _filter: progid:DXImageTransform.Microsoft.Chroma(color='#000000');
   font-style: 18px;
   text-decoration: line-through;
 }
-.product-list .price{
+.product-list .price {
   margin-right: 10px;
   display: block; 
   font-size: 18px;
   font-family: 'Roboto',sans-serif;
-  color: #ff4400;
+  color: #f18200;
   margin:7px;
 }
+
 .product-list .price-cnt{ 
   width: 220px;
   height: auto; 
@@ -653,7 +662,7 @@ _filter: progid:DXImageTransform.Microsoft.Chroma(color='#000000');
 }
 
 .product-list div.product_info_bottom div + div {
-  text-align: right;
+  text-align: center;
 }
 
 
@@ -800,10 +809,12 @@ Advanced Search Filters
   line-height: 50px;
 }
 
-.cd_product .cd_slide_discount {
+.cd_product .cd_slide_discount,
+.product .cd_slide_discount,
+.product-list .cd_slide_discount {
     background-color: #FFFFFF;
     position: absolute;
-    right: 5px;
+    left: 5px;
     z-index: 2;
 }
 

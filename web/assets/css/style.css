@@ -344,6 +344,12 @@ textarea:focus {
 	width: 15px;
 }
 
+.img_free_shipping {
+	background-position: -451px -194px;
+	height: 20px;
+	width: 44px;	
+}
+
 .border_radius1 {
 	-webkit-border-radius: 3px;
 	-moz-border-radius: 3px;
