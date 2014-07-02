@@ -155,7 +155,7 @@ $(function(){
 	if(hasAttr === 1){
 		$('.product_combination.active').each(function(){
 		  var attrText = $(this).text();
-		  attrText = attrText.replace(/[^\w\s:]/gi, '-');
+		  attrText = attrText.replace(/[^\w\s:]/gi, '||');
 		  attrText = $.trim(attrText.replace(/\r?\n|\r/g, ''));
 		  attrText = attrText.replace(/\s+/g,' ');
 		  shipObj.attr[$(this).val()] = attrText;
@@ -247,7 +247,7 @@ $(function(){
         addDispGroup = true;
         $('#summaryrowcount').val(+i+1);
         jQuery.each(shipObj.attr, function(arrkey,rawString){
-			arr = rawString.split('- ');
+			arr = rawString.split('|| ');
 			jQuery.each(arr, function(k,v){
 				if(v !== ''){
 					row.children('td:first').append('<p>' + v + "</p>");
