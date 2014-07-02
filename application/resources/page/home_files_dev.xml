@@ -1,0 +1,421 @@
+<?xml version='1.0' ?>
+<map>
+
+    <header>
+        <value>Announcement</value>
+        <type>text</type>
+    </header>
+    
+    <text>
+        <value>Welcome to Easyshop.ph! We are making the website available to the public for the first time. Feel free to report any bugs you find.</value>
+        <type>text</type>
+    </text>
+    
+    <mainSlide>
+        <value>assets/images/mainslide/1.jpg</value>
+        <type>image</type>
+        <imagemap>
+            <coordinate>70,200,350,350</coordinate>
+            <target>register</target>
+        </imagemap>
+    </mainSlide>
+    
+    <mainSlide> 
+        <value>assets/images/mainslide/2.jpg</value>
+        <type>image</type> 
+        <imagemap>
+            <coordinate>0,0,589,352</coordinate>
+            <target>deals</target>
+        </imagemap>
+    </mainSlide>
+    
+    <mainSlide> 
+        <value>assets/images/mainslide/3.jpg</value> 
+        <type>image</type>
+        <imagemap>
+            <coordinate>0,0,0,0</coordinate>
+            <target></target>
+        </imagemap>
+    </mainSlide>
+    
+    <mainSlide> 
+        <value>assets/images/mainslide/4.jpg</value> 
+        <type>image</type>
+        <imagemap>
+            <coordinate>0,0,589,352</coordinate>
+            <target>item/hiefier-mc-091-pocket-magic-karaoke</target>
+        </imagemap>
+    </mainSlide>
+    
+    <mainSlide> 
+        <value>assets/images/mainslide/5.jpg</value> 
+        <type>image</type>
+        <imagemap>
+            <coordinate>0,0,589,352</coordinate>
+            <target>item/shake-n-take-2</target>
+        </imagemap>
+    </mainSlide>
+    
+    <productSlide_title>
+        <value>Hot and New</value>
+        <type>text</type>
+    </productSlide_title>
+    
+    <productSlide>
+        <value>shipment-test</value>
+        <type>product</type>
+    </productSlide>
+    
+    <productSlide>
+        <value>shipment-test</value>
+        <type>product</type>
+    </productSlide>
+    
+    <productSlide>
+        <value>shipment-test</value>
+        <type>product</type>
+    </productSlide>
+    
+    <productSideBanner>
+        <value>shipment-test</value>
+        <type>product</type>
+    </productSideBanner>
+
+   <section>
+
+        <type>custom</type>
+        <value>patriots21</value>
+        <css_class>red_cat</css_class>
+        <layout>layoutA</layout>
+
+        <product_panel_main>
+            <value>shipment-test</value>
+            <type>product</type>
+        </product_panel_main>
+        
+         <product_panel_main>
+            <value>shipment-test</value>
+            <type>product</type>
+       </product_panel_main>
+        
+         <product_panel_main>
+            <value>shipment-test</value>
+            <type>product</type>
+        </product_panel_main>
+        
+        <product_panel>
+            <value>shipment-test</value>
+            <type>product</type>
+        </product_panel>
+        
+       <product_panel>
+            <value>shipment-test</value>
+            <type>product</type>
+        </product_panel>
+        
+        <product_panel>
+            <value>shipment-test</value>
+            <type>product</type>
+        </product_panel>
+
+        <product_panel>
+            <value>shipment-test</value>
+            <type>product</type>
+        </product_panel>
+        
+        <product_panel>
+            <value>shipment-test</value>
+            <type>product</type>
+        </product_panel>
+        
+        <product_panel>
+            <value>shipment-test</value>
+            <type>product</type>
+        </product_panel>
+        
+        <product_panel>
+            <value>shipment-test</value>
+            <type>product</type>
+        </product_panel>
+        
+        <product_panel>
+            <value>shipment-test</value>
+            <type>product</type>
+        </product_panel>
+      
+    </section>
+    
+    
+    <section>
+
+        <type>category</type>
+        <value>2</value>
+        <css_class>blue_cat</css_class>
+        <layout>layoutB</layout>
+        
+        <product_panel_main>
+            <value>shipment-test</value>
+            <type>product</type>
+        </product_panel_main>
+        
+         <product_panel_main>
+            <value>shipment-test</value>
+            <type>product</type>
+       </product_panel_main>
+        
+         <product_panel_main>
+            <value>shipment-test</value>
+            <type>product</type>
+        </product_panel_main>
+        
+        <product_panel>
+            <value>shipment-test</value>
+            <type>product</type>
+        </product_panel>
+        
+       <product_panel>
+            <value>shipment-test</value>
+            <type>product</type>
+        </product_panel>
+        
+        <product_panel>
+            <value>shipment-test</value>
+            <type>product</type>
+        </product_panel>
+
+        
+        <product_panel>
+            <value>shipment-test</value>
+            <type>product</type>
+        </product_panel>
+        
+        <product_panel>
+            <value>shipment-test</value>
+            <type>product</type>
+        </product_panel>
+        
+        <product_panel>
+            <value>shipment-test</value>
+            <type>product</type>
+        </product_panel>
+        
+        <product_panel>
+            <value>shipment-test</value>
+            <type>product</type>
+        </product_panel>
+        
+        <product_panel>
+            <value>shipment-test</value>
+            <type>product</type>
+        </product_panel>
+      
+    </section>
+    
+    
+    
+   <section>
+
+        <type>category</type>
+        <value>2</value>
+        <css_class>blue_cat</css_class>
+        <layout>layoutC</layout>
+        
+        <product_panel_main>
+            <value>shipment-test</value>
+            <type>product</type>
+        </product_panel_main>
+        
+         <product_panel_main>
+            <value>shipment-test</value>
+            <type>product</type>
+       </product_panel_main>
+        
+         <product_panel_main>
+            <value>shipment-test</value>
+            <type>product</type>
+        </product_panel_main>
+        
+        <product_panel>
+            <value>shipment-test</value>
+            <type>product</type>
+        </product_panel>
+        
+       <product_panel>
+            <value>shipment-test</value>
+            <type>product</type>
+        </product_panel>
+        
+        <product_panel>
+            <value>shipment-test</value>
+            <type>product</type>
+        </product_panel>
+
+        
+        <product_panel>
+            <value>shipment-test</value>
+            <type>product</type>
+        </product_panel>
+        
+        <product_panel>
+            <value>shipment-test</value>
+            <type>product</type>
+        </product_panel>
+        
+        <product_panel>
+            <value>shipment-test</value>
+            <type>product</type>
+        </product_panel>
+        
+        <product_panel>
+            <value>shipment-test</value>
+            <type>product</type>
+        </product_panel>
+        
+        <product_panel>
+            <value>shipment-test</value>
+            <type>product</type>
+        </product_panel>
+      
+    </section>
+    
+    
+    <section>
+
+        <type>category</type>
+        <value>2</value>
+        <css_class>blue_cat</css_class>
+        <layout>layoutD</layout>
+        
+        <product_panel_main>
+            <value>shipment-test</value>
+            <type>product</type>
+        </product_panel_main>
+        
+         <product_panel_main>
+            <value>shipment-test</value>
+            <type>product</type>
+       </product_panel_main>
+        
+         <product_panel_main>
+            <value>shipment-test</value>
+            <type>product</type>
+        </product_panel_main>
+        
+        <product_panel>
+            <value>shipment-test</value>
+            <type>product</type>
+        </product_panel>
+        
+       <product_panel>
+            <value>shipment-test</value>
+            <type>product</type>
+        </product_panel>
+        
+        <product_panel>
+            <value>shipment-test</value>
+            <type>product</type>
+        </product_panel>
+
+        
+        <product_panel>
+            <value>shipment-test</value>
+            <type>product</type>
+        </product_panel>
+        
+        <product_panel>
+            <value>shipment-test</value>
+            <type>product</type>
+        </product_panel>
+        
+        <product_panel>
+            <value>shipment-test</value>
+            <type>product</type>
+        </product_panel>
+        
+        <product_panel>
+            <value>shipment-test</value>
+            <type>product</type>
+        </product_panel>
+        
+        <product_panel>
+            <value>shipment-test</value>
+            <type>product</type>
+        </product_panel>
+      
+    </section>
+    
+   
+     <section>
+
+        <type>category</type>
+        <value>2</value>
+        <css_class>orange_cat</css_class>
+        <layout>layoutE</layout>
+        
+        <product_panel_main>
+            <value>shipment-test</value>
+            <type>product</type>
+        </product_panel_main>
+        
+         <product_panel_main>
+            <value>shipment-test</value>
+            <type>product</type>
+       </product_panel_main>
+        
+         <product_panel_main>
+            <value>shipment-test</value>
+            <type>product</type>
+        </product_panel_main>
+        
+        <product_panel>
+            <value>shipment-test</value>
+            <type>product</type>
+        </product_panel>
+        
+       <product_panel>
+            <value>shipment-test</value>
+            <type>product</type>
+        </product_panel>
+        
+        <product_panel>
+            <value>shipment-test</value>
+            <type>product</type>
+        </product_panel>
+
+        
+        <product_panel>
+            <value>shipment-test</value>
+            <type>product</type>
+        </product_panel>
+        
+        <product_panel>
+            <value>shipment-test</value>
+            <type>product</type>
+        </product_panel>
+        
+        <product_panel>
+            <value>shipment-test</value>
+            <type>product</type>
+        </product_panel>
+        
+        <product_panel>
+            <value>shipment-test</value>
+            <type>product</type>
+        </product_panel>
+        
+        <product_panel>
+            <value>shipment-test</value>
+            <type>product</type>
+        </product_panel>
+      
+    </section>
+    
+    
+   
+    
+    
+    
+    
+    
+    
+</map>

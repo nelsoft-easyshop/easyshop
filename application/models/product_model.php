@@ -1915,9 +1915,11 @@ class product_model extends CI_Model
         return $return;  
 	}
         
-    public function getHomeContent($file = 'page/home_files'){ 
-
+    public function getHomeContent($devfile = 'page/home_files_dev', $prodfile = 'page/home_files_prod'){ 
+	$file = ES_PRODUCTION?$prodfile:$devfile;
+	
         $xml_content = $this->xmlmap->getFilename($file);
+
         $home_view_data = array();
         foreach ($xml_content as $key => $element){	
 

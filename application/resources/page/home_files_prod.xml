@@ -1,0 +1,290 @@
+<?xml version='1.0' ?>
+<map>
+
+    <header>
+        <value>Announcement</value>
+        <type>text</type>
+    </header>
+
+    <text>
+        <value>Welcome to Easyshop.ph, enjoy the benefits of one-stop shopping at the comforts of your own home.</value>
+        <type>text</type>
+    </text>
+
+    <mainSlide>
+        <value>assets/images/mainslide/1.jpg</value>
+        <type>image</type>
+        <imagemap>
+            <coordinate>70,200,350,350</coordinate>
+            <target>register</target>
+        </imagemap>
+    </mainSlide>
+
+    <mainSlide>
+        <value>assets/images/mainslide/2.jpg</value>
+        <type>image</type>
+        <imagemap>
+            <coordinate>0,0,589,352</coordinate>
+            <target>deals</target>
+        </imagemap>
+    </mainSlide>
+
+    <mainSlide>
+        <value>assets/images/mainslide/3.jpg</value>
+        <type>image</type>
+        <imagemap>
+            <coordinate>0,0,0,0</coordinate>
+            <target></target>
+        </imagemap>
+    </mainSlide>
+
+    <mainSlide>
+        <value>assets/images/mainslide/4.jpg</value>
+        <type>image</type>
+        <imagemap>
+            <coordinate>0,0,589,352</coordinate>
+            <target>item/hiefier-mc-091-pocket-magic-karaoke</target>
+        </imagemap>
+    </mainSlide>
+
+	<mainSlide>
+	<value>assets/images/mainslide/5.jpg</value>
+	<type>image</type>
+	<imagemap>
+	<coordinate>0,0,589,352</coordinate>
+	<target>item/shake-n-take-3</target>
+	</imagemap>
+	</mainSlide>
+
+
+    <productSlide_title>
+        <value>Hot and New</value>
+        <type>text</type>
+    </productSlide_title>
+
+    <productSlide>
+        <value>bavin-ipower-pc226</value>
+        <type>product</type>
+    </productSlide>
+
+    <productSlide>
+        <value>hiefier-mc-091-pocket-magic-karaoke</value>
+        <type>product</type>
+    </productSlide>
+
+    <productSlide>
+        <value>shake-n-take-3</value>
+        <type>product</type>
+    </productSlide>
+
+    <productSideBanner>
+        <value>diy-colourful-rubber-band</value>
+        <type>product</type>
+    </productSideBanner>
+
+	  <section>
+
+        <type>custom</type>
+        <value>05272014</value>
+        <css_class>red_cat</css_class>
+        <title>Michaela</title>
+        <layout>layoutA</layout>
+
+        <product_panel_main>
+            <value>mhb05133u2ne4</value>
+            <type>product</type>
+        </product_panel_main>
+
+         <product_panel_main>
+            <value>mhb05123u2ne4</value>
+            <type>product</type>
+       </product_panel_main>
+
+         <product_panel_main>
+            <value>mhb05113u2ne4</value>
+            <type>product</type>
+        </product_panel_main>
+
+        <product_panel>
+            <value>mhb05213u2ne4</value>
+            <type>product</type>
+        </product_panel>
+
+       <product_panel>
+            <value>mlp09211l2nf4</value>
+            <type>product</type>
+        </product_panel>
+
+        <product_panel>
+            <value>mlp03733v2ne4-1</value>
+            <type>product</type>
+        </product_panel>
+
+	   <product_panel>
+            <value>msh18022u2nd4</value>
+            <type>product</type>
+        </product_panel>
+
+        <product_panel>
+            <value>msh18012u2nd4</value>
+            <type>product</type>
+        </product_panel>
+
+        <product_panel>
+            <value>msh19011u2ne4</value>
+            <type>product</type>
+        </product_panel>
+
+        <product_panel>
+            <value>msh20333u2ne4</value>
+            <type>product</type>
+        </product_panel>
+
+        <product_panel>
+            <value>msh20713u2ne4</value>
+            <type>product</type>
+        </product_panel>
+
+ </section>
+
+
+
+
+    <section>
+
+        <type>category</type>
+        <value>327</value>
+        <css_class>blue_cat</css_class>
+        <layout>layoutB</layout>
+
+      <product_panel_main>
+            <value>apple-ipod-touch-32gb-5th-generation-blackwhiteredblueyellowpink</value>
+            <type>product</type>
+        </product_panel_main>
+
+         <product_panel_main>
+            <value>apple-ipad-air-128gb-wi-fi-the-power-of-lightness</value>
+            <type>product</type>
+       </product_panel_main>
+
+         <product_panel_main>
+            <value>apple-ipad-mini-16gb-wi-fi-black-white</value>
+            <type>product</type>
+        </product_panel_main>
+
+        <product_panel>
+            <value>asus-memo-pad-hd-7-8gb-quad-core-ips-1280x800-display-dual-camera-android-42-tablet-5-colors</value>
+            <type>product</type>
+        </product_panel>
+
+       <product_panel>
+            <value>microsoft-surface-64gb-106-touch-coverkeyboard-black-with-windows-rt-office-home-student-2013-rt</value>
+            <type>product</type>
+        </product_panel>
+
+    <product_panel>
+            <value>samsung-galaxy-note-gt-n8000-tablet-pc-and-full-phone-function-with-s-pen</value>
+            <type>product</type>
+        </product_panel>
+
+        <product_panel>
+            <value>asus-fonepad-7-me175cg-dual-sim-7-intel-atom-z25201gb8gbandroid-43-black-white</value>
+            <type>product</type>
+        </product_panel>
+
+        <product_panel>
+            <value>asus-google-nexus-7-32gb-android-41-jelly-bean-tablet-nvidia-tegra-3-quad-core</value>
+            <type>product</type>
+        </product_panel>
+
+        <product_panel>
+            <value>asus-transformer-book-trio-tx201la-cq003h-intel-core-i7z2560-processor-android-42windows-8</value>
+            <type>product</type>
+        </product_panel>
+
+        <product_panel>
+            <value>archos-a70-250gb-wi-fi-7-slim-and-light-android-internet-tablet</value>
+            <type>product</type>
+        </product_panel>
+
+        <product_panel>
+            <value>asus-memo-pad-me172v-7-android-41-jelly-bean-tablet</value>
+            <type>product</type>
+        </product_panel>
+
+    </section>
+
+ <section>
+
+        <type>category</type>
+        <value>326</value>
+        <css_class>orange_cat</css_class>
+        <layout>layoutE</layout>
+
+       <product_panel_main>
+            <value>apple-macbook-air-md711zpa</value>
+            <type>product</type>
+        </product_panel_main>
+
+         <product_panel_main>
+            <value>apple-macbook-air-md760zpa</value>
+            <type>product</type>
+       </product_panel_main>
+
+         <product_panel_main>
+            <value>apple-macbook-pro-md101zpa</value>
+            <type>product</type>
+        </product_panel_main>
+
+        <product_panel>
+            <value>alienware-alw14-5312slv-1</value>
+            <type>product</type>
+        </product_panel>
+
+       <product_panel>
+            <value>armaggeddon-ak-300-usb-media-gaming-keyboard</value>
+            <type>product</type>
+        </product_panel>
+
+        <product_panel>
+            <value>epson-eb-1860</value>
+            <type>product</type>
+        </product_panel>
+
+
+	        <product_panel>
+            <value>acer-aspire-v5-132-10192g50nss</value>
+            <type>product</type>
+        </product_panel>
+
+        <product_panel>
+            <value>epson-eb-g6900wunl</value>
+            <type>product</type>
+        </product_panel>
+
+        <product_panel>
+            <value>cooler-master-notepal-l1-cm-r9-nbc-npl1-gp</value>
+            <type>product</type>
+        </product_panel>
+
+        <product_panel>
+            <value>asus-km-61-keyboard-mouse-set</value>
+            <type>product</type>
+        </product_panel>
+
+        <product_panel>
+            <value>apple-macbook-pro-me865</value>
+            <type>product</type>
+        </product_panel>
+
+    </section>
+
+
+</map>
+
+
+
+
+
+	
+
