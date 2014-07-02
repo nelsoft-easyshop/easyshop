@@ -3771,6 +3771,7 @@ return array(
               `description` text NOT NULL,
               `condition` varchar(255) DEFAULT '',
               `keywords` varchar(1024) NOT NULL DEFAULT '',
+              `search_keyword` text,
               `price` decimal(15,4) NOT NULL DEFAULT '0.0000',
               `brand_id` int(10) unsigned NOT NULL DEFAULT '0',
               `cat_id` int(10) unsigned NOT NULL DEFAULT '0',
