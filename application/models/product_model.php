@@ -33,9 +33,9 @@ class product_model extends CI_Model
            $this->config->load('protected_category', TRUE);
             $protected_categories = $this->config->config['protected_category'];
             $qmarks = implode(',', array_fill(0, count($protected_categories), '?'));
-            $query = $query.' AND id_cat NOT IN ('.$qmarks.') ORDER BY sort_order ASC';
+            $query = $query.' AND id_cat NOT IN ('.$qmarks.') AND id_cat != 1 ORDER BY sort_order ASC';
         }
-     
+     	
 		$sth = $this->db->conn_id->prepare($query);
         $sth->bindValue(1, $id, PDO::PARAM_INT);    
         $k = 1;
@@ -868,6 +868,8 @@ class product_model extends CI_Model
             $query = $query.' AND c.id_cat NOT IN ('.$qmarks.') ';
         }
 
+        $query .= ' AND c.id_cat != 1';
+        
         if(($is_main)&&(!$is_alpha)){
             $query = $query.' AND c.is_main = 1 ORDER BY c.sort_order ASC, c.id_cat ASC';
         }

@@ -2,6 +2,6 @@
 
 $config = array(
     'error'  => 0,     //non-existent category id
-    'parent' => 1,     //top parent category
+    // 'parent' => 1,     //top parent category
     'promo'  => 1000,  //'promoted items'  
 );
