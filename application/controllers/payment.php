@@ -17,7 +17,8 @@ class Payment extends MY_Controller{
         $this->load->model('cart_model');
         $this->load->model('payment_model');
         $this->load->model('product_model');
-        $this->load->model('memberpage_model');  
+        $this->load->model('messages_model');
+        $this->load->model('memberpage_model');
         session_start();
 
     }
@@ -944,10 +945,10 @@ class Payment extends MY_Controller{
 		$data['member_id'] = 56;
 		$data['order_id'] = 156;
 		$data['invoice_no']= '156-2014061247';*/
-		
+        $sender = intval($this->payment_model->get_contentFile('message-sender-id'));
         $transactionData = $this->payment_model->getPurchaseTransactionDetails($data);
-        
-		#get payment method instructions
+
+        #get payment method instructions
         switch($transactionData['payment_method']){
             case 1:
             $transactionData['payment_msg_buyer'] = $this->lang->line('payment_paypal_buyer');
@@ -993,7 +994,10 @@ class Payment extends MY_Controller{
            $buyerMsg = $buyerData['buyer_name'] . $this->lang->line('notification_txtmsg_buyer');
            $buyerTxtResult = $this->payment_model->sendNotificationMobile($buyerMobile, $buyerMsg);
         }
- 
+
+        #Send message via easyshop_messaging to buyer
+        $this->messages_model->send_message($sender,$data['member_id'],$this->lang->line('message_to_buyer'));
+
 
         //Send email to seller of each product - once per seller
         $sellerData = array(
@@ -1005,11 +1009,14 @@ class Payment extends MY_Controller{
             );
 
  
-        foreach($transactionData['seller'] as $seller){
+        foreach($transactionData['seller'] as $seller_id => $seller){
             $sellerEmail = $seller['email'];
             $sellerData = array_merge( $sellerData, array_slice($seller,1,9) );
             $sellerData['totalprice'] = number_format($seller['totalprice'], 2, '.' , ',');
 
+
+            #Send message via easyshop_messaging to seller
+            $this->messages_model->send_message($sender,$seller_id,$this->lang->line('message_to_seller'));
 
             // 3 tries to send Email. Quit if success or 3 failed tries met
             $emailcounter = 0;

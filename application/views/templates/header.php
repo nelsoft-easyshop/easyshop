@@ -70,7 +70,7 @@
               <li><a href="<?=base_url()?>sell/step1">Sell an Item</a></li>
             </ul>
           </li>
-          <li class="top_nav_main"><span class="span_bg cart"></span><span class="cart_no"><?PHP echo isset($total_items)?$total_items:0; ?></span>Shopping Cart
+            <li class="top_nav_main"><span class="span_bg cart"></span><span class="cart_no"><?PHP echo ($total_items) &&  ($logged_in)?$total_items:0; ?></span>Shopping Cart
             <ul>
               <li><a href="<?php echo base_url()."cart/"; ?>">View my Cart</a></li>
             </ul>

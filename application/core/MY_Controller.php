@@ -59,12 +59,12 @@ class MY_Controller extends CI_Controller
 			$uname = '';
 		}
 		$carts=$this->session->userdata('cart_contents');
-        $ss = 0;
+        $sizecart = 0;
         if(!empty($carts)){
             if(isset($carts['total_items'])){
-                $ss = sizeof($carts) - 2 ;
+                $sizecart = sizeof($carts) - 2 ;
             }else{
-                $ss = sizeof($carts);
+                $sizecart = sizeof($carts);
             }
         }
 		$unread = $this->messages_model->get_all_messages($this->session->userdata('member_id'),"Get_UnreadMsgs");
@@ -73,7 +73,7 @@ class MY_Controller extends CI_Controller
 		$data = array(
 			'logged_in' => $logged_in,
 			'uname' => $uname,
-			'total_items'=> $ss,
+			'total_items'=> $sizecart,
 			'msgs'=> $msgs,
 			'category_search' => $this->product_model->getFirstLevelNode(),
 			);

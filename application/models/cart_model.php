@@ -38,27 +38,47 @@ class cart_model extends CI_Model
             return $data;
 	}
         
-    function cartdata($id){
+    function cartdata($id,$cartItems_loggedOut=false){
         $query = $this->xmlmap->getFilenameID('sql/cart', 'get_cart_data');
         
         $sth = $this->db->conn_id->prepare($query);
         $sth->bindParam(':id',$id);
         $sth->execute();
-        $rows =  $sth->fetchAll(PDO::FETCH_ASSOC) ;	
-        $aa = unserialize($rows[0]['userdata']);
-        return $aa;
+        $rows =  $sth->fetchAll(PDO::FETCH_ASSOC) ;
+        $cart_items_user = unserialize($rows[0]['userdata']);
+        if($cartItems_loggedOut){
+            unset($cartItems_loggedOut['total_items']);
+            unset($cartItems_loggedOut['cart_total']);
+            unset($cart_items_user['total_items']);
+            unset($cart_items_user['cart_total']);
+
+            foreach($cart_items_user as $key_user => $row_user){
+                foreach($cartItems_loggedOut as $key_loggedout => $row_loggedout){
+                    if($key_loggedout == $key_user){
+                        $qty =  intval($cartItems_loggedOut[$key_loggedout]['qty']) + intval($cart_items_user[$key_user]['qty']);
+                        $cart_items_user[$key_user]['qty'] =($qty > $cart_items_user[$key_user]['maxqty'])? $cart_items_user[$key_user]['maxqty'] : $qty;
+                        unset($cartItems_loggedOut[$key_loggedout]);
+                    }else{
+                        $cart_items_user[$key_loggedout] = $row_loggedout;
+                    }
+                }
+            }
+            $sizeCart = sizeof($cart_items_user);
+            $cart_items_user['total_items'] = $sizeCart;
+            $cart_items_user['cart_total'] = 1;
+        }
+        return $cart_items_user;
     }
-    
+
     function save_cartitems($data,$id){
         $query = $this->xmlmap->getFilenameID('sql/cart', 'save_cart_data');
         $sth = $this->db->conn_id->prepare($query);
-        $sth->bindParam(':id',$id); 
+        $sth->bindParam(':id',$id);
         $sth->bindParam(':data',$data);
         $sth->execute();
 
         return $sth->rowCount();
     }
-    
     public function isCartCheckoutPromoAllow($cart){
         $this->load->config('promo', TRUE);
         $count_solo_items = 0;

@@ -12,7 +12,7 @@ class messages_model extends CI_Model
     public function send_message($sender,$recipient,$msg){
            
 		$query = $this->xmlmap->getFilenameID('sql/messages', 'send_message');
-			
+
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':to_id',$recipient, PDO::PARAM_INT);
 		$sth->bindParam(':from_id',$sender, PDO::PARAM_INT);

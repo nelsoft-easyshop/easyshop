@@ -190,7 +190,7 @@ class productUpload extends MY_Controller
             $response['img_max_dimension'] = $this->img_dimension['usersize'];
                
 			$this->load->view('pages/product/product_upload_step2_view',$response);
-			$this->load->view('templates/footer'); 
+			$this->load->view('templates/footer');
 		}else{
 			redirect('/sell/step1/', 'refresh');
 		}
@@ -460,6 +460,7 @@ class productUpload extends MY_Controller
 			$path_directory = './assets/product/'.$product_id.'_'.$member_id.'_'.$date.'/';
 			$other_path_directory = $path_directory.'other/';
 			# creating new directory for each product
+
 			if(!mkdir($path_directory)) {  
 				echo '{"e":"0","d":"There was a problem. \n Please try again! - Error[0010]"}'; 
 				exit();
@@ -467,9 +468,10 @@ class productUpload extends MY_Controller
 			if(!mkdir($other_path_directory)) {  
 				echo '{"e":"0","d":"There was a problem. \n Please try again! - Error[0012]"}'; 
 				exit();
-			}   	
+			}
 
- 
+
+
             $tempdirectory = $this->session->userdata('tempId'); 
             $tempdirectory = $tempdirectory.'_'.$member_id.'_'.$date;
             $tempdirectory = './assets/temp_product/'.$tempdirectory.'/'; 

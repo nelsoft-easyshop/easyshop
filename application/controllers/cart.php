@@ -48,13 +48,7 @@ class Cart extends MY_Controller{
         }
         else{
             $data=$this->check_prod($_POST['id'],$go,$_POST['qty'])['data'];
-                        
-            /*
-             *  Validation is performed upon checkout. This is less imposing on the users.
-             *
-            if(!$this->cart_model->isCartInsertPromoAllow($carts, $data)){
-                $result = 'This item or another item in your cart can only be purchased individually. ';
-            }*/
+
             if(empty($carts)){
                 $this->cart->insert($data);
                 $result= sha1(md5("tanggap"));
@@ -90,6 +84,11 @@ class Cart extends MY_Controller{
             }
         }
 		$this->session->set_userdata('cart_total_perItem',$this->cart_size());
+
+        if(!($this->session->userdata('usersession'))){
+            $result = "login_to_add_item2cart";
+        }
+
         echo json_encode($result);
     }
 

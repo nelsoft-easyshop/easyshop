@@ -3,14 +3,17 @@
     <select id="bank-account-number">
         345-3415-85455434433434
     </select>
-    
+
     <select id="bank-name">
-        Banco de Oro Unibank (BDO) 
+        Banco de Oro Unibank (BDO)
     </select>
-	
+
 	<select id="bank-account-name">
 		Easyshop Inc
 	</select>
-	
+
+    <select id="message-sender-id">
+        3
+    </select>
     
 </map>

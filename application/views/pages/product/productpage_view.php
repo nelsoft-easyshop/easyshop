@@ -214,30 +214,36 @@
                 <span class="quantity" data-qty="" data-default="false" id="p_availability"></span>
             </p>
           </div>
-          <div class="buy_box"> 
-            <?PHP if($logged_in && $userdetails['is_email_verify'] == 1 ): ?>
-                <?php if($uid == $product['sellerid']): ?>
-                    <p class="buy_btn_sub"> This is your own listing </p>
-                <?php elseif($product['can_purchase'] === false): ?>
-                    <p class="buy_btn_sub"> Purchase limit exceeded </p>
+            <div class="buy_box">
+                <?PHP if($logged_in && $userdetails['is_email_verify'] == 1 ): ?>
+                    <?php if($uid == $product['sellerid']): ?>
+                        <p class="buy_btn_sub"> This is your own listing </p>
+                    <?php elseif($product['can_purchase'] === false): ?>
+                        <p class="buy_btn_sub"> Purchase limit exceeded </p>
+                    <?php else: ?>
+                        <a href="JavaScript:void(0)" id="send" class="fm1 orange_btn3 disabled">Buy Now</a> <br/>
+                    <?php endif;?>
                 <?php else: ?>
-                    <a href="JavaScript:void(0)" id="send" class="fm1 orange_btn3 disabled">Buy Now</a> <br/>
-                <?php endif;?>
-            <?php else: ?>
-            
-            <a href="<?PHP echo base_url();echo $logged_in?'me?me=myinfo':'login';?>" id="unablesend" class="add_to_cart">
-            <span></span>  <?PHP echo $logged_in?'Verify now':'Login now';?></a> <br />
-			<p class="buy_btn_sub">
-				<?php if( !$logged_in && $userdetails['is_email_verify'] == 1 ){
-					echo "Sign-in to purchase this product.";
-				} else if( $logged_in && !($userdetails['is_email_verify'] == 1) ){
-					echo "Verify your email to purchase.";
-				} else if( !$logged_in && !($userdetails['is_email_verify'] == 1) ){
-					echo "Sign-in to purchase this product.";
-				}?>
-			</p>
-            <?php endif; ?>
-            <span>Delivers upon seller confirmation*</span>
+
+                    <?php if( (!$logged_in && $userdetails['is_email_verify'] == 1 ) || (!$logged_in && !($userdetails['is_email_verify'] == 1)) ): ?>
+                        <a href="JavaScript:void(0)" id="send" class="fm1 orange_btn3 disabled">Buy Now</a> <br/>
+                    <?php elseif( $logged_in && !($userdetails['is_email_verify'] == 1) ):
+                        echo "Verify your email to purchase.";
+                    endif; ?>
+
+             <!--   <a href="<?PHP /*echo base_url();echo $logged_in?'me?me=myinfo':'login';*/?>" id="unablesend" class="add_to_cart">
+                <span></span>  <?PHP /*echo $logged_in?'Verify now':'Login now';*/?></a> <br />
+                <p class="buy_btn_sub">
+                    <?php /*if( !$logged_in && $userdetails['is_email_verify'] == 1 ){
+                        echo "Sign-in to purchase this product.";
+                    } else if( $logged_in && !($userdetails['is_email_verify'] == 1) ){
+                        echo "Verify your email to purchase.";
+                    } else if( !$logged_in && !($userdetails['is_email_verify'] == 1) ){
+                        echo "Sign-in to purchase this product.";
+                    }*/?>
+                </p>-->
+                <?php endif; ?>
+                <span>Delivers upon seller confirmation*</span>
             </div>
         </div>
         <div class="prod_loc_areas">

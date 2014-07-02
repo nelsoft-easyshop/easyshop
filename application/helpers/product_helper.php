@@ -77,7 +77,7 @@ if ( ! function_exists('applyPriceDiscount')){
             $product['is_soldout'] = $promo['is_soldout'];
             if($promo['is_soldout']){
                 $product['price'] = $promo['sold_price'];
-            }else{  
+            }else{
                 $product['price'] = $promo['price'];
             }
             $product['sold_price'] = $promo['sold_price'];
@@ -86,6 +86,7 @@ if ( ! function_exists('applyPriceDiscount')){
         }else{
             $product['original_price'] = $product['price']; 
             $product['can_purchase'] = true;
+
             if(intval($product['discount']) > 0){
                 $product['price'] = $product['price'] * (1.0-($product['discount']/100.0));
             }

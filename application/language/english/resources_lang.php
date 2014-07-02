@@ -98,6 +98,9 @@ $lang['notification_returntobuyer'] = "Easyshop.ph - Returned Payment Confirmati
 $lang['subscription_subject'] = "Easyshop.ph - Thank you for subscribing!";
 $lang['registration_subject'] = "Easyshop.ph - Thank you for registering!";
 
+#Notification to Seller and Buyer
+$lang['message_to_seller'] = "message to seller......";
+$lang['message_to_buyer'] = "message to buyer......";
 
 
 ?>

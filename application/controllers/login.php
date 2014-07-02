@@ -62,7 +62,8 @@ class Login extends MY_Controller {
         if ($row['o_success'] >= 1) {
             $this->session->set_userdata('member_id', $row['o_memberid']);
             $this->session->set_userdata('usersession', $row['o_session']);
-            $this->session->set_userdata('cart_contents', $this->cart_model->cartdata($row['o_memberid']));
+            $this->session->set_userdata('cart_contents', $this->cart_model->cartdata($row['o_memberid'],$this->session->userdata('cart_contents')));
+
             if($this->input->post('keepmeloggedin') == 'on'){ //create cookie bound to memberid||ip||browser 
                 $temp = array(
                     'member_id' => $this->session->userdata('member_id'),
