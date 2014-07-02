@@ -186,6 +186,9 @@ $_SESSION['start'] = "0";
                 <div class="<?php echo $typeOfView; ?>">
                     <a href="<?= base_url() ?>item/<?php echo $items[$i]['slug']; ?>">
                         <span class="prod_img_wrapper">
+                            <span class="cd_slide_discount">
+                                <span>50%<br>OFF</span>
+                            </span>
                             <span class="prod_img_container">
                                 <img alt="<?php echo html_escape($items[$i]['name']); ?>" src="<?php echo base_url() .$items[$i]['path'].'categoryview/'.$items[$i]['file']; ?>">
                             </span>
@@ -200,9 +203,13 @@ $_SESSION['start'] = "0";
                         <div class="price">
                             Php <?php echo number_format($items[$i]['price'], 2); ?>
                         </div>
+                        <div class="original_price">
+                            Php 10.00
+                        </div>
                     </div>
                     <div class="product_info_bottom">
                         <div>Condition: <strong><?php echo html_escape($items[$i]['condition']); ?></strong></div>
+                        <div><span class="span_bg img_free_shipping"></span></div>
                     </div>
                     <p>
                         <?php echo html_escape($items[$i]['brief']); ?>
