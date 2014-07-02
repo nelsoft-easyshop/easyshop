@@ -46,26 +46,30 @@ class cart_model extends CI_Model
         $sth->execute();
         $rows =  $sth->fetchAll(PDO::FETCH_ASSOC) ;
         $cart_items_user = unserialize($rows[0]['userdata']);
-        if($cartItems_loggedOut){
-            unset($cartItems_loggedOut['total_items']);
-            unset($cartItems_loggedOut['cart_total']);
-            unset($cart_items_user['total_items']);
-            unset($cart_items_user['cart_total']);
 
-            foreach($cart_items_user as $key_user => $row_user){
-                foreach($cartItems_loggedOut as $key_loggedout => $row_loggedout){
-                    if($key_loggedout == $key_user){
-                        $qty =  intval($cartItems_loggedOut[$key_loggedout]['qty']) + intval($cart_items_user[$key_user]['qty']);
-                        $cart_items_user[$key_user]['qty'] =($qty > $cart_items_user[$key_user]['maxqty'])? $cart_items_user[$key_user]['maxqty'] : $qty;
-                        unset($cartItems_loggedOut[$key_loggedout]);
-                    }else{
-                        $cart_items_user[$key_loggedout] = $row_loggedout;
+        if($cartItems_loggedOut){
+            if(!($cart_items_user)){
+                $cart_items_user = $cartItems_loggedOut;
+            }else{
+                unset($cartItems_loggedOut['total_items']);
+                unset($cartItems_loggedOut['cart_total']);
+                unset($cart_items_user['total_items']);
+                unset($cart_items_user['cart_total']);
+                foreach($cart_items_user as $key_user => $row_user){
+                    foreach($cartItems_loggedOut as $key_loggedout => $row_loggedout){
+                        if($key_loggedout == $key_user){
+                            $qty =  intval($cartItems_loggedOut[$key_loggedout]['qty']) + intval($cart_items_user[$key_user]['qty']);
+                            $cart_items_user[$key_user]['qty'] =($qty > $cart_items_user[$key_user]['maxqty'])? $cart_items_user[$key_user]['maxqty'] : $qty;
+                            unset($cartItems_loggedOut[$key_loggedout]);
+                        }else{
+                            $cart_items_user[$key_loggedout] = $row_loggedout;
+                        }
                     }
                 }
+                $sizeCart = sizeof($cart_items_user);
+                $cart_items_user['total_items'] = $sizeCart;
+                $cart_items_user['cart_total'] = 1;
             }
-            $sizeCart = sizeof($cart_items_user);
-            $cart_items_user['total_items'] = $sizeCart;
-            $cart_items_user['cart_total'] = 1;
         }
         return $cart_items_user;
     }
