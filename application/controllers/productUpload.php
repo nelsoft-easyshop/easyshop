@@ -655,9 +655,9 @@ class productUpload extends MY_Controller
                                 $quantitycombination = abs(str_replace(',','',$keyCombination->quantity)); 
                             }
                             $idProductItem = $this->product_model->addNewCombination($product_id,$quantitycombination);
-                            if(strpos($keyCombination->value, '-') !== false) {
+                            if(strpos($keyCombination->value, '~-~') !== false) {
 
-                                $explodeCombination = explode("-",  $keyCombination->value);
+                                $explodeCombination = explode("~-~",  $keyCombination->value);
                                 foreach ($explodeCombination as $value) {
 
                                     $explodeOther = explode(":",  $value);

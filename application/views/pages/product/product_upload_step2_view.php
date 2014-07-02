@@ -1391,12 +1391,12 @@ $(document).on('click','.makeprimary',function(){
       sortCombination = combinationVal.sort();
 
       for (var i = 0; i < sortCombination.length; i++) {
-        arrayCombinationString += sortCombination[i] + '-';
+        arrayCombinationString += sortCombination[i] + '~-~';
       };
 
       for (var key in arraySelected) { 
         if (arraySelected.hasOwnProperty(key))
-          if(arraySelected[key]['value'] === arrayCombinationString.slice(0, - 1)){
+          if(arraySelected[key]['value'] === arrayCombinationString.slice(0, - 3)){
             alreadyExist = true;
             break;
           }
@@ -1408,7 +1408,7 @@ $(document).on('click','.makeprimary',function(){
 
             $('.combinationContainer').append('<div class="inner_quantity_list innerContainer'+thisValueCount+'"> '+ htmlEach +'</div> <a href="javascript:void(0)" class="removeSelected" data-row="'+thisValueCount+'"   style="color:Red">Remove</a></div>');
             dataCombination['quantity'] = qtyTextbox.val();
-            dataCombination['value'] = arrayCombinationString.slice(0, - 1);
+            dataCombination['value'] = arrayCombinationString.slice(0, - 3);
             arraySelected[thisValueCount] = dataCombination;
             thisValueCount++;
             $(this).data('value',thisValueCount);
