@@ -197,6 +197,8 @@
                     });
                 });
             },
+
+
             load: function () {
                 if (el.largeimageloaded == false && el.largeimageloading == false) {
                     var url = $(el).attr('href');
@@ -256,7 +258,9 @@
                 }
                 return false;
             }
+
         });
+
         //sometimes image is already loaded and onload will not fire
         if (img[0].complete) {
             //fetching data from sallimage if was previously loaded
@@ -373,39 +377,15 @@
                     $(this.node).empty().append(this.image);
                 }
             };
+
             this.setdimensions = function () {
                 this.node.w = (parseInt((settings.zoomWidth) / el.scale.x) > smallimage.w ) ? smallimage.w : (parseInt(settings.zoomWidth / el.scale.x)); 
                 this.node.h = (parseInt((settings.zoomHeight) / el.scale.y) > smallimage.h ) ? smallimage.h : (parseInt(settings.zoomHeight / el.scale.y)); 
                 this.node.top = (smallimage.oh - this.node.h - 2) / 2;
                 this.node.left = (smallimage.ow - this.node.w - 2) / 2;
                 //centering lens
-                this.node.css({
-                    top: 0,
-                    left: 0,
-                    width: this.node.w + 'px',
-                    height: this.node.h + 'px',
-                    position: 'absolute',
-                    display: 'none',
-                    borderWidth: 1 + 'px'
-                });
-/***************************** *********************************/
-/***************************** *********************************/
-/***************** zoom len customized *************************/
-/***************************** *********************************/
-/***************************** *********************************/
-                $(function(){
-                    
-                    var zoombigview= $('.zoomWindow');
-                    var img= $('.zoomPad img');
-                    var zoomwindowpos= (400 - img.height() )/ 2;
-                    if(img.height() < 400)
-                    {
-                        zoombigview.css('top', -zoomwindowpos + 'px');
-                    }
-                });
 
-                $(function(){
-                    
+                /*****start add margin left to fixed zoom lens position ****/    
                     var zoomlensview= $('.zoomPup');
                     var img= $('.zoomPad img');
                     var zoomlenssize= (400 - img.width() )/ 2;
@@ -415,31 +395,34 @@
                     }
                     if (img.width() == 400)
                     {
-                         zoomlensview.css('margin-left', '0px');
+                        zoomlensview.css('margin-left', '0px');
                     }
+                /*** end here ****/
+
+                /**** start fixed height of large image window ****/
+                    var zoombigview= $('.zoomWindow');
+                    var img= $('.zoomPad img');
+                    var zoomwindowpos= (400 - img.height() )/ 2;
+                    if(img.height() < 400)
+                    {
+                        zoombigview.css('top', -zoomwindowpos + 'px');
+                    }
+
+                   if (img.height() == 400)
+                    {
+                        zoombigview.css('top', '0px');
+                    }
+                /*** end here ****/
+                
+                this.node.css({
+                    top: 0,
+                    left: 0,
+                    width: this.node.w + 'px',
+                    height: this.node.h + 'px',
+                    position: 'absolute',
+                    display: 'none',
+                    borderWidth: 1 + 'px',
                 });
-
-                // $(function(){
-                //     var zoompupcon= $('.zoomPup'); 
-                //     var img= $('.zoomPad img');
-                //     if(img.height() < 170)
-                //     {
-                //         zoompupcon.css('min-width','400px');
-                //         $('.zoomWrapper').css('display','table');
-                //         $('.zoomWrapperImage').css({'display':'table-cell','vertical-align':'middle'});
-                //         img.css({'display':'table-cell','position':'inherit'});
-                //     }
-                // });
-
-                // $(function(){
-                //     var zoompad2= $('.zoomPad');
-                //     var zoompadimg= $('.zoomPad img');
-                //     if(zoompadimg.width() < 400)
-                //     {
-                //         zoompad2.css({'top','40px'});
-                //     }
-                // });
-/***************************** *********************************/
 
 
                 if (settings.zoomType == 'reverse') {
@@ -594,10 +577,14 @@
                         this.node.toppos = Math.abs(settings.yOffset);
                         break;
                     }
-                }
+                } 
+
+
                 this.node.css({
-                    'left': this.node.leftpos + 'px',
-                    'top': this.node.toppos + 'px'
+                    // 'left': this.node.leftpos + 'px',
+                    // 'top': this.node.toppos + 'px',
+                     'left': '410px',
+                     
                 });
                 return this;
             };
@@ -734,6 +721,7 @@
                     lens.setcenter();
                 }
             };
+            
             this.setposition = function () {
                 var left = -el.scale.x * (lens.getoffset().left - smallimage.bleft + 1);
                 var top = -el.scale.y * (lens.getoffset().top - smallimage.btop + 1);
