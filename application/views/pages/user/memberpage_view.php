@@ -213,6 +213,9 @@
 		<div class="post_items_content content-paging">
 			<div class="post_item_content_left">
 				<div class="post_item_img_table">
+					 <span class="cd_slide_discount">
+                                <span>50%<br>OFF</span>
+                            </span>
 				<span class="post_item_img_con">
 					<img src="<?php echo base_url().$active_product['path'].'categoryview/'.$active_product['file']; ?>" class="product_img">
 				</span>
@@ -250,9 +253,22 @@
 			</div>
 		</div>
 		<div class="price_container" data-prodprice="<?php echo $active_product['price'];?>">
-			<p><span class="fm1 f24 orange">PHP <?php echo number_format($active_product['price'],2,'.',',');?></span><br />Price</p>
-			<p><span class="fm1 f24 grn"><?php echo $active_product['sold'];?></span><br />Sold Items</p>
-			<p><span class="fm1 f24"><?php echo $active_product['availability'];?></span><br />Available Stock</p>
+			<p>
+				<span class="f24">&#8369;</span>
+				<span class="fm1 f24 orange pad_btm10">
+					 <?php echo number_format($active_product['price'],2,'.',',');?>
+				</span>
+				<br />Price<br />
+				<small>Orginal Price:</small> <small class="original_price"> &#8369; 2,000.00</small>
+					
+			</p>
+			
+			<p><span class="fm1 f24 grn pad_btm10"><?php echo $active_product['sold'];?></span><br />Sold Items</p>
+			<p>
+				<span class="fm1 f24 pad_btm10"><?php echo $active_product['availability'];?></span>
+				<br />Available Stock<br />
+				<span class="span_bg img_free_shipping"></span>
+			</p>
 		</div>
 		<p><strong>Description:</strong><br />
 			<span class="item_prod_desc_content">
