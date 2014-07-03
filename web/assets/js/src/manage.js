@@ -16,7 +16,7 @@ $(document).ready(function() {
             dataType: 'json',
             success: function(d) {   
                 if(d.e == 0){
-                    
+                    alert('Successfully modified');
                 }else{
                     alert(d.m);
                 }
