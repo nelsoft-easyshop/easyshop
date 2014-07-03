@@ -223,22 +223,33 @@ class Memberpage extends MY_Controller
 			'w' => $this->input->post('w'),
 			'h' => $this->input->post('h')
 		);
+		$isVendor = $this->input->post('vendor') ? true : false;
 		$uid = $this->session->userdata('member_id');
 		$this->load->library('upload');
 		$this->load->library('image_lib');
 		$result = $this->memberpage_model->upload_img($uid, $data);
 		//echo error may be here: $result['error']
+
+		if($isVendor){
+			$temp = $this->fill_header();
+		}
 		
 		if(isset($result['error'])){
 			echo "<h2 style='color:red;'>Unable to upload image.</h2>
 				<p style='font-size:20px;'><strong>You can only upload JPEG, JPG, GIF, and PNG files with a max size of 5MB</strong></p>";
-			echo "<script type='text/javascript'>setTimeout(function(){window.location.href='".base_url()."me'},3000);</script>";
+			if($isVendor)
+				echo "<script type='text/javascript'>setTimeout(function(){window.location.href='".base_url()."vendor/".$temp['uname']."'},3000);</script>";
+			else
+				echo "<script type='text/javascript'>setTimeout(function(){window.location.href='".base_url()."me'},3000);</script>";
 		}else{
-			redirect('me');
+			if($isVendor)
+				redirect('vendor/'.$temp['uname']);
+			else
+				redirect('me');
 		}
 		
 	}
-
+	
 	public function external_callbacks( $postdata, $param )
 	{
 		 $param_values = explode( ',', $param );
@@ -595,9 +606,117 @@ class Memberpage extends MY_Controller
 		echo json_encode($serverResponse);
 	}
 
-	/***	VENDOR DASHBOARD CONTROLLER	***/
+	/****************************	VENDOR CONTROLLER	***********************************/
+	function vendorSubscription()
+	{
+		$memberID = $this->session->userdata('member_id');
+		$sellername = $this->input->post('name');
+		
+		$checkData = $this->memberpage_model->checkVendorSubscription($memberID,$sellername);
+		
+		if( (int)$checkData['vendor_id'] !== 0  ){ //if seller exists and is not the same user
+			switch( (int)$checkData['subscription'] ){
+				case 0: # no entry - unfollowed
+					$boolResult = $this->memberpage_model->vendorSubscriptionFollow($memberID,$checkData['vendor_id']);
+					break;
+				case 1: # has entry - followed
+					$boolResult = $this->memberpage_model->vendorSubscriptionUnfollow($memberID,$checkData['vendor_id']);
+					break;
+			}
+			$serverResponse = array(
+				'result' => $boolResult ? 'success' : 'fail',
+				'error' => $boolResult ? '' : 'Failed to update database'
+			);
+		}else{
+			$serverResponse = array(
+				'result' => 'fail',
+				'error' => 'Incorrect data submitted to server. Please try again later.'
+			);
+		}
+	}
+	
+	function vendorStoreDesc()
+	{
+		$serverResponse = array(
+			'result' => 'fail',
+			'error' => 'Failed to submit form.'
+		);
+		
+		if($this->input->post('store_desc')){
+			$desc = $this->input->post('desc');
+			$member_id = $this->session->userdata('member_id');
+			$boolResult = $this->memberpage_model->updateStoreDesc($member_id, $desc);
+			
+			$serverResponse['result'] = $boolResult ? 'success' : 'fail';
+			$serverResponse['error'] = $boolResult ? '' : 'Unable to update database.';
+		}
+		
+		echo json_encode($serverResponse);
+	}
+	
+	function banner_upload()
+	{
+		$data = array(
+			'x' => $this->input->post('x'),
+			'y' => $this->input->post('y'),
+			'w' => $this->input->post('w'),
+			'h' => $this->input->post('h')
+		);
+		$uid = $this->session->userdata('member_id');
+		$this->load->library('upload');
+		$this->load->library('image_lib');
+		$result = $this->memberpage_model->banner_upload($uid, $data);
+		$data = $this->fill_header();
+		//echo error may be here: $result['error']
+		if(isset($result['error'])){
+			echo "<h2 style='color:red;'>Unable to upload image.</h2>
+				<p style='font-size:20px;'><strong>You can only upload JPEG, JPG, GIF, and PNG files with a max size of 5MB</strong></p>";
+			echo "<script type='text/javascript'>setTimeout(function(){window.location.href='".base_url()."vendor/".$data['uname']."'},3000);</script>";
+		}else{
+			redirect('vendor/'.$data['uname']);
+		}
+		
+	}
 	/*** 	memberpage/vendor/username	***/
 	function vendor($selleruname){
+		$session_data = $this->session->all_userdata();
+		$vendordetails = $this->memberpage_model->getVendorDetails($selleruname);
+		$data['title'] = 'Vendor Profile | Easyshop.ph';
+		$data['my_id'] = (empty($session_data['member_id']) ? 0 : $session_data['member_id']);
+		$data = array_merge($data, $this->fill_header());
+		
+		if($vendordetails){
+            $data['render_logo'] = false;
+            $data['render_searchbar'] = false;
+            $this->load->view('templates/header', $data);
+			$sellerid = $vendordetails['id_member'];
+			$user_product_count = $this->memberpage_model->getUserItemCount($sellerid);
+			$data = array_merge($data,array(
+					'vendordetails' => $vendordetails,
+					'image_profile' => $this->memberpage_model->get_Image($sellerid),
+					'banner' => $this->memberpage_model->get_Image($sellerid,'vendor'),
+					'products' => $this->memberpage_model->getVendorCatItems($sellerid),
+					'active_count' => intval($user_product_count['active']),
+					'deleted_count' => intval($user_product_count['deleted']),
+                    'sold_count' => intval($user_product_count['sold']),
+					));
+			$data['allfeedbacks'] = $this->memberpage_model->getFeedback($sellerid);
+			
+			$data['hasStoreDesc'] = (string)$data['vendordetails']['store_desc'] !== '' ? true : false;
+			$data['product_count'] = count($data['products']);
+			$data['renderEdit'] = (int)$sellerid === (int)$data['my_id'] ? true : false;
+			
+			$this->load->view('pages/user/vendor_view', $data);
+            $this->load->view('templates/footer');
+			
+		}
+		else{
+            $this->load->view('templates/header', $data);
+			$this->load->view('pages/user/user_error');
+            $this->load->view('templates/footer_full');
+		}
+	}
+	/*function vendor($selleruname){
 		$session_data = $this->session->all_userdata();
 		$vendordetails = $this->memberpage_model->getVendorDetails($selleruname);
 		$data['title'] = 'Vendor Profile | Easyshop.ph';
@@ -616,10 +735,17 @@ class Memberpage extends MY_Controller
 					'deleted_products' => $this->memberpage_model->getUserItems($sellerid,1),
 					'active_count' => intval($user_product_count['active']),
 					'deleted_count' => intval($user_product_count['deleted']),
-                    'sold_count' => intval($user_product_count['sold'])
+                    'sold_count' => intval($user_product_count['sold']),
+					'banner' => $this->memberpage_model->get_Image($sellerid,'vendor')
 					));
 			$data['allfeedbacks'] = $this->memberpage_model->getFeedback($sellerid);
-			$this->load->view('pages/user/vendor_view', $data);
+			$data['hasStoreDesc'] = (string)$data['vendordetails']['store_desc'] !== '' ? true : false;
+			
+			if( (int)$session_data['member_id']===(int)$sellerid ){
+				$this->load->view('pages/user/vendor_view_own', $data);
+			}else{
+				$this->load->view('pages/user/vendor_view', $data);
+			}
             $this->load->view('templates/footer');
 		}
 		else{
@@ -627,8 +753,7 @@ class Memberpage extends MY_Controller
 			$this->load->view('pages/user/user_error');
             $this->load->view('templates/footer_full');
 		}
-	
-	}
+	}*/
 
 
 	/**	VERIFY CONTACT DETAILS SECTION **/

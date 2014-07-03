@@ -266,6 +266,63 @@ class memberpage_model extends CI_Model
 		}
 	}
 	
+	function banner_upload($uid, $data=array()){
+		$query = $this->xmlmap->getFilenameID('sql/users', 'get_image');
+        $sth = $this->db->conn_id->prepare($query);
+        $sth->bindParam(':id', $uid);
+        $sth->execute();
+        $row = $sth->fetch(PDO::FETCH_ASSOC);
+		$path = $row['imgurl'];	
+		
+		if(trim($path) === ''){
+			$path = $this->config->item('user_img_directory').$path.$row['id_member'].'_'.$row['username'];
+		}		
+		if(!is_dir($path))
+		{
+		  mkdir($path,0755,TRUE); 
+		}
+		$config['overwrite'] = TRUE;
+		$config['file_name'] = 'banner.png';
+		$config['upload_path'] = $path; 
+		$config['allowed_types'] = 'gif|jpg|png|jpeg';
+		$config['max_size']	= '5000';
+		$config['max_width']  = '5000';
+		$config['max_height']  = '5000';
+		$this->upload->initialize($config);  
+		
+		if ( ! $this->upload->do_upload())
+		{
+			return array('error' => $this->upload->display_errors());
+		}
+		else
+		{
+			$config['image_library'] = 'gd2';
+			$config['source_image'] = $path.'/banner.png';
+			$config['maintain_ratio'] = false;
+			
+			$imageData = $this->upload->data();
+			
+			// If cropped
+			if($data['w'] > 0 && $data['h'] > 0){			
+				$config['new_image'] = $path.'/banner.png';
+				$config['width'] = $data['w'];
+				$config['height'] = $data['h'];
+				$config['x_axis'] = $data['x'];
+				$config['y_axis'] = $data['y'];
+				$this->image_lib->initialize($config);  
+				$this->image_lib->image_process_gd('crop');
+				$config['x_axis'] = $config['y_axis'] = '';
+			}
+			
+			//Resize to standard banner size
+			$config['new_image'] = $path.'/banner.png';
+			$config['width'] = 980;
+			$config['height'] = 270;
+			$this->image_lib->initialize($config);  
+			$this->image_lib->resize();				
+		}
+	}
+	
 	function edit_work_by_id($member_id, $data=array())
 	{
 		$rowcount = count($data) / 4;
@@ -290,21 +347,42 @@ class memberpage_model extends CI_Model
 		return $result;
 	}
 	
-	function get_image($member_id){		
+	function get_image($member_id, $selector=""){		
 		$path = $this->config->item('user_img_directory');
 		$query = $this->xmlmap->getFilenameID('sql/users', 'get_image');
         $sth = $this->db->conn_id->prepare($query);
         $sth->bindParam(':id', $member_id);
         $sth->execute();
         $row = $sth->fetch(PDO::FETCH_ASSOC);
-		$img_file = $row['imgurl'].'/150x150.png';
-		if(!file_exists($img_file)||(trim($row['imgurl']) === ''))
-			$user_image = img(array('src' => $path.'default/150x150.png?'.time(), 'id' => 'user_image'));
-		else
-			$user_image = img(array('src' => $img_file.'?'.time(), 'id' => 'user_image'));
-		return $user_image;
-	}	
 		
+		switch($selector){
+			case "vendor":
+				$img_file = $row['imgurl'].'/banner.png';
+				if(!file_exists($img_file)||(trim($row['imgurl']) === ''))
+					$user_image = base_url().$path.'default/banner.png?'.time();
+				else
+					$user_image = base_url().$img_file.'?'.time();
+				break;
+			case "feedback":
+				$img_file = $row['imgurl'].'/60x60.png';
+				if(!file_exists($img_file)||(trim($row['imgurl']) === ''))
+					$user_image = base_url().$path.'default/60x60.png?'.time();
+				else
+					$user_image = base_url().$img_file.'?'.time();
+				break;
+			default:
+				$img_file = $row['imgurl'].'/150x150.png';
+				if(!file_exists($img_file)||(trim($row['imgurl']) === ''))
+					$user_image = img(array('src' => $path.'default/150x150.png?'.time(), 'id' => 'user_image'));
+				else
+					$user_image = img(array('src' => $img_file.'?'.time(), 'id' => 'user_image'));
+				break;
+		}
+		
+		return $user_image;
+	
+	}
+	
 	function select_set($val, $arg=array())
 	{
 		if($val !== $arg[0])
@@ -773,6 +851,7 @@ class memberpage_model extends CI_Model
 				unset($result['member_id']);
 				unset($result['member_name']);
 				$temp = array_slice($result,0,7);
+				$temp['user_image'] = $this->get_image($result['for_memberid'], 'feedback');
 				if($result['feedb_kind'] == 0){ //you are buyer
 					$data['youpost_buyer'][$result['order_id']][] = $temp;
 				}
@@ -784,6 +863,7 @@ class memberpage_model extends CI_Model
 				unset($result['for_memberid']);
 				unset($result['for_membername']);
 				$temp = array_slice($result,0,7);
+				$temp['user_image'] = $this->get_image($result['member_id'], 'feedback');
 				$data['rating1'] += $result['rating1'];
 				$data['rating2'] += $result['rating2'];
 				$data['rating3'] += $result['rating3'];
@@ -1116,6 +1196,116 @@ class memberpage_model extends CI_Model
 		return $data;
 	}
 	
+	/***********	NEW VENDOR FUNCTIONS	*****************/
+	
+	function checkVendorSubscription($member_id, $username)
+	{
+		$query = $this->xmlmap->getFilenameID('sql/users','checkVendorSubscription');
+		$sth = $this->db->conn_id->prepare($query);
+		$sth->bindParam(':member_id',$member_id);
+		$sth->bindParam(':username',$username);
+		$sth->execute();
+		$row = $sth->fetch(PDO::FETCH_ASSOC);
+		
+		return $row;
+	}
+	
+	function vendorSubscriptionFollow($member_id,$vendor_id)
+	{
+		$query = $this->xmlmap->getFilenameID('sql/users','insertVendorSubscription');
+		$sth = $this->db->conn_id->prepare($query);
+		$sth->bindParam(':member_id',$member_id, PDO::PARAM_INT);
+		$sth->bindParam(':vendor_id',$vendor_id, PDO::PARAM_INT);
+		$sth->execute();
+	}
+	
+	function vendorSubscriptionUnfollow($member_id,$vendor_id)
+	{
+		$query = $this->xmlmap->getFilenameID('sql/users','deleteVendorSubscription');
+		$sth = $this->db->conn_id->prepare($query);
+		$sth->bindParam(':member_id',$member_id, PDO::PARAM_INT);
+		$sth->bindParam(':vendor_id',$vendor_id, PDO::PARAM_INT);
+		$sth->execute();
+	}
+	
+	function updateStoreDesc($member_id, $desc)
+	{
+		$query = $this->xmlmap->getFilenameID('sql/users','updateStoreDesc');
+		$sth = $this->db->conn_id->prepare($query);
+		$sth->bindParam(':store_desc',$desc, PDO::PARAM_STR);
+		$sth->bindParam(':member_id', $member_id, PDO::PARAM_INT);
+		$boolResult = $sth->execute();
+		
+		return $boolResult;
+	}
+	
+	function getVendorCatItems($member_id)
+	{
+		
+		$categoryItemCount = 4;
+		$otherItemCount = 4;
+	
+		$query = $this->xmlmap->getFilenameID('sql/product','getVendorCatProdCount');
+		$sth = $this->db->conn_id->prepare($query);
+		$sth->bindParam(':member_id', $member_id, PDO::PARAM_INT);
+		$sth->execute();
+		$row = $sth->fetchAll(PDO::FETCH_ASSOC);
+		$data = array();
+		
+		foreach($row as $r){
+		
+			$query = $this->xmlmap->getFilenameID('sql/product','getTopXCatItems');
+			$sth = $this->db->conn_id->prepare($query);
+			$sth->bindParam(':member_id', $member_id, PDO::PARAM_INT);
+			$sth->bindParam(':cat_id', $r['id_cat'], PDO::PARAM_INT);
+			$sth->bindParam(':item_count', $categoryItemCount, PDO::PARAM_INT);
+			$sth->execute();
+			$products = $sth->fetchAll(PDO::FETCH_ASSOC);
+		
+			if( (int)$r['product_count'] >= 4 ){
+				$data[$r['id_cat']] = array(
+					'cat_name' => $r['parent_cat'],
+					'cat_slug' => $r['slug'],
+					'loadmore_link' => base_url() . "advsrch/?_cat=" . $r['id_cat'] . "&_us=",
+					'cat_link' => base_url() . "category/" . $r['slug'],
+					'products' => array()
+				);
+				$key = $r['id_cat'];
+			} else { 
+				if( !isset($data['others']) ){
+					$data['others'] = array(
+						'cat_name'=>'Others',
+						'cat_slug'=>'others',
+						'products'=>array(),
+						'loadmore_link' => base_url() . "advsrch/?_us=",
+						'cat_link' => '',
+						'is_other'=>true
+					);	
+				}
+				$key = 'others';				
+			}
+			
+			foreach( $products as $p ){
+				$imagepath[0] = array(
+					'product_image_path' => $p['product_image_path']
+				);
+				explodeImagePath($imagepath);
+				$p['product_image_path'] = $imagepath[0]['path'] . 'categoryview/' . $imagepath[0]['file'];
+			
+				if( is_numeric($key) || ($key==='others' && count($data['others']['products'])<$otherItemCount)  ){
+					array_push( $data[$key]['products'], $p );
+				}
+			}
+			
+			#Exit if item count for others is 4, #of item count per cat is arranged in Desc, so once 'others'
+			#exist, all cat items > 4 are already listed
+			if( isset($data['others']) && count($data['others']['products']) >= $otherItemCount ){
+				break;
+			}
+			
+		}
+		return  $data;
+	}
 }
 
 /* End of file memberpage_model.php */

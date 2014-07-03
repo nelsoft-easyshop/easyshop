@@ -37,7 +37,7 @@
 
 <!-- Used for vendor details and username check- memberpage -->
 <select id="get_member_by_username">
-	SELECT m.id_member, m.username, m.contactno, m.email, a.stateregion, a.city, l1.location as stateregionname, l2.location as cityname, DATE_FORMAT(datecreated, "%M %Y") as datecreated
+	SELECT m.id_member, m.username, m.contactno, m.email, a.stateregion, a.city, l1.location as stateregionname, l2.location as cityname, DATE_FORMAT(datecreated, "%M %Y") as datecreated, store_desc
 	FROM es_member m
 	LEFT JOIN es_address a on m.id_member = a.id_member AND a.type=0
 	LEFT JOIN es_location_lookup l1 ON a.stateregion =  l1.id_location
@@ -399,6 +399,29 @@
 		ON o.id_order = op.order_id AND o.order_status IN (0,1) AND o.payment_method_id != 3
 	INNER JOIN es_product p
 		ON op.product_id = p.id_product
+</select>
+
+<select id="checkVendorSubscription">
+	SELECT COUNT(vs.id_vendor_subscribe) as subscription, COALESCE(vs.vendor_id,'0') as vendor_id
+	FROM es_vendor_subscribe vs
+	INNER JOIN es_member m 
+		ON vs.vendor_id = m.id_member AND vs.member_id = :member_id and m.username = :username AND vs.vendor_id != :member_id
+</select>
+
+<select id="insertVendorSubscription">
+	INSERT INTO es_vendor_subscribe(`member_id`,`vendor_id`)
+	VALUES(:member_id, :vendor_id)
+</select>
+
+<select id="deleteVendorSubscription">
+	DELETE FROM es_vendor_subscribe
+	WHERE `member_id` = :member_id AND `vendor_id` = :vendor_id
+</select>
+
+<select id="updateStoreDesc">
+	UPDATE `es_member`
+	SET `store_desc` = :store_desc
+	WHERE `id_member` = :member_id
 </select>
 
 </map>

@@ -1,4 +1,13 @@
-/**	Populate product item display **/
+/*******************	HTML Decoder	********************************/
+function htmlDecode(value) {
+	if (value) {
+        return $('<div />').html(value).text();
+    } else {
+        return '';
+    }
+}
+
+/**	Populate product item dislay **/
 $(document).ready(function(){
 		
     /* 
@@ -28,8 +37,200 @@ var memconf = {
 		deleteStatus: 1,
 	},
 	itemPerPage: 10,
-	mid: parseInt($('#mid').val())
+	mid: parseInt($('#mid').val()),
+	bannerWidth: 980,
+	bannerHeight: 270,
+	form: null
 };
+
+/*******************************************************************************************/
+/************************	NEW VENDOR FUNCTIONS	****************************************/
+/*******************************************************************************************/
+
+/***********	BANNER EDIT 	****************/
+$(function(){
+	$('.img_edit').on('click',function(){
+		$(this).siblings('form').children('input.img_file_input').click();
+		memconf.form = $(this).siblings('form');
+	});
+	
+	$('input.img_file_input').on('change',function(){
+		var oldIE;
+		if ($('html').is('.ie6, .ie7, .ie8, .ie9')) {
+			oldIE = true;
+		}
+
+		if (oldIE) {
+			memconf.form.submit();
+		} else {
+			imageprev(this);
+		}
+	});
+	
+});
+
+function imageprev(input) {
+
+	var jcrop_api, width, height;
+	
+    if (input.files && input.files[0] && input.files[0].type.match(/(gif|png|jpeg|jpg)/g) && input.files[0].size <= 5000000) {
+		var reader = new FileReader();
+
+		reader.onload = function(e){
+			var image = new Image();
+			image.src = e.target.result;
+			image.onload = function(){
+				width = this.width;
+				height = this.height;
+				$('#user_image_prev').attr('src', this.src);
+				if(width >10 && height > 10 && width <= 5000 && height <= 5000)
+					deploy_imageprev();
+				else if(width > 5000 || height > 5000)
+					alert('Failed to upload image. Max image dimensions: 5000px x 5000px');
+				else
+					$('#div_user_image_prev span:first').html('Preview');
+			}
+		}
+		reader.readAsDataURL(input.files[0]);
+    }
+	else
+		alert('You can only upload gif|png|jpeg|jpg files at a max size of 5MB! ');
+	
+	
+	function deploy_imageprev(){
+		$('#div_user_image_prev').modal({
+				escClose: false,
+				containerCss:{
+					maxWidth: 600,
+					minWidth: 505,
+					maxHeight: 600
+				},
+				onShow: function(){
+					$('#div_user_image_prev button').on('click', function(){
+						memconf.form.submit();
+						$.modal.close();
+					});
+					if(memconf.form.data('tag') == 'banner'){
+						jcrop_api = $.Jcrop($('#user_image_prev'),{
+							aspectRatio: memconf.bannerWidth/memconf.bannerHeight,
+							allowSelect: false,
+							setSelect:[0,0,width*0.5,height*0.5],
+							boxWidth: 500,
+							boxHeight: 500,
+							minSize: [width*0.3,height*0.3],
+							trueSize: [width,height],
+							onChange: showCoords,
+							onSelect: showCoords,
+							onRelease: resetCoords
+						});
+					}else if(memconf.form.data('tag') == 'avatar'){
+						jcrop_api = $.Jcrop($('#user_image_prev'),{
+							aspectRatio: width/height,
+							boxWidth: 500,
+							boxHeight: 500,
+							minSize: [width*0.1,height*0.1],
+							trueSize: [width,height],
+							onChange: showCoords,
+							onSelect: showCoords,
+							onRelease: resetCoords
+						});
+					}
+					this.setPosition();
+				},
+				onClose: function(){
+					$('#user_image_prev').attr('src', '');
+					resetCoords();
+					jcrop_api.destroy();
+					$('#div_user_image_prev span').after('<img src="" id="user_image_prev">');
+					$.modal.close();
+				}
+			});
+	}
+}
+
+function showCoords(c){
+	memconf.form.children('input.image_x').val(c.x);
+	memconf.form.children('input.image_y').val(c.y);
+	memconf.form.children('input.image_w').val(c.w);
+	memconf.form.children('input.image_h').val(c.h);
+}
+
+function resetCoords(){
+	memconf.form.children('input.image_x').val(0);
+	memconf.form.children('input.image_y').val(0);
+	memconf.form.children('input.image_w').val(0);
+	memconf.form.children('input.image_h').val(0);
+}
+
+/**********	VENDOR SUBSCRIPTION	**************/
+$(function(){
+
+	$('#test').on('click',function(){
+		$.post(config.base_url+'memberpage/vendorSubscription', $(form).serializeArray(), function(data){
+			try{
+				var obj = jQuery.parseJSON(data);
+			}
+			catch(e){
+				alert('There was an error while processing your request. Please try again later.');
+				return false;
+			}
+		});
+	});
+	
+});
+
+/*****************	STORE DESCRIPTION	******************************/
+$(function(){
+	$('#store_desc_echo').on('mouseover', function(){
+		$(this).children('span').show();
+	}).on('mouseleave', function(){
+		$(this).children('span').hide();
+	});
+	
+	$('#store_desc_edit').on('click',function(){
+		$(this).parent('div').hide();
+		$(this).parent('div').siblings('div').show();
+	});
+
+	$('#store_desc_submit').on('click',function(){
+		var form = $(this).parent('form');
+		var textarea = $(this).siblings('textarea');
+		var divEchoData = $(this).closest('div').siblings('div');
+		var divEditData = $(this).closest('div');
+		var thisbtn = $(this);
+		
+		
+		
+		$.post(config.base_url+'memberpage/vendorStoreDesc', $(form).serializeArray(), function(data){
+			thisbtn.attr('disabled', false);
+			thisbtn.val('Save');
+			
+			try{
+				var obj = jQuery.parseJSON(data);
+			}
+			catch(e){
+				alert('There was an error while processing your request. Please try again later.');
+				return false;
+			}
+			
+			if(obj.result==='success'){
+				var desc = $.trim(textarea.val());
+				if( desc.length > 0 ){
+					divEchoData.show();
+					divEditData.hide();
+					divEchoData.children('p').text(desc);
+				}
+			}else{
+				alert(obj.error);
+			}
+			
+		});
+		thisbtn.val('Saving...');
+		thisbtn.attr('disabled', true);
+		return false;
+	});
+});
+
 
 function ItemListAjax(ItemDiv,start,pageindex,count_i){
 
@@ -207,30 +408,10 @@ $(document).ready(function(){
 /********************	PAGING FUNCTIONS	************************************************/
 
 $(document).ready(function(){
-	
-	$('#bought .paging:not(:first)').hide();
-	$('#sold .paging:not(:first)').hide();
-	
 	$('#op_buyer .paging:not(:first)').hide();
 	$('#op_seller .paging:not(:first)').hide();
 	$('#yp_buyer .paging:not(:first)').hide();
 	$('#yp_seller .paging:not(:first)').hide();
-	
-	
-	$('#pagination-bought').jqPagination({
-		paged: function(page) {
-			$('#bought .paging').hide();
-			$($('#bought .paging')[page-1]).show();
-		}
-	});
-	
-	$('#pagination-sold').jqPagination({
-		paged: function(page) {
-			$('#bought .paging').hide();
-			$($('#bought .paging')[page-1]).show();
-		}
-	});
-	
 	
 	$('#pagination-opbuyer').jqPagination({
 		paged: function(page) {
@@ -296,9 +477,8 @@ $(document).ready(function(){
 
 });
 
-
-
 /******* rotate sort arrow when click *****/
 $(".arrow_sort").on("click", function () {
     $(this).toggleClass("rotate_arrow");
 });
+
