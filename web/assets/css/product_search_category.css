@@ -522,10 +522,6 @@ _filter: progid:DXImageTransform.Microsoft.Chroma(color='#000000');
   overflow: hidden;
 }
 
-.original_price {
-  text-decoration: line-through;
-}
-
 .price span {
   color: #494949;
 }

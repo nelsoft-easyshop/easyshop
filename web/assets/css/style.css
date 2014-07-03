@@ -294,6 +294,11 @@ a.orange2:hover {
 	text-decoration: underline;
 }
 
+/**** Paddings ******/
+.pad_btm10 {
+	padding-bottom: 10px;
+}
+
 input,
 textarea {
 	border:1px solid #cecece;
@@ -4195,6 +4200,7 @@ div.post_item_content_left {
 	display: table;
 	table-layout: fixed;
 	width: 140px;
+	position: relative;
 }
 
 .post_item_img_con {
@@ -4215,6 +4221,12 @@ div.post_item_content_left {
 	max-width: 140px;
 	width: auto;
 	height: auto;
+}
+
+.post_item_img_table .cd_slide_discount {
+    left: 5px;
+    position: absolute;
+    z-index: 2;
 }
 
 .star_on {
@@ -4486,6 +4498,29 @@ div.post_item_content_left {
     width: 100%;
 }
 
+.original_price {
+    display: inline-block;
+    font-size: 12px;
+    height: 20px;
+    overflow: hidden;
+    text-decoration: line-through;
+    text-overflow: ellipsis;
+    width: 125px;
+    vertical-align: middle;
+}
+
+.price_container .original_price {
+	width: 110px;
+	text-align: left;
+}
+
+.price_container small {
+    display: inline-block;
+    font-size: 12px;
+    height: 20px;
+    line-height: 20px;
+}
+
 .price_container p {
 	float: left;
 	text-align: center;
@@ -4494,7 +4529,6 @@ div.post_item_content_left {
 
 .price_container p span {
 	display: inline-block;
-	padding-bottom: 10px;
 }
 
 .price_container p,
