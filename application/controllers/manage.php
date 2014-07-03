@@ -143,7 +143,7 @@ class Manage extends MY_Controller {
 
             $file_data = $this->upload->get_multi_upload_data();
             if(isset($file_data[0])){
-                if(($file_data[0]['image_width'] != $this->img_dimension['usersize'][0]) || ($file_data[0]['image_height'] != $this->img_dimension['usersize'][1])){
+                if(($file_data[0]['image_width'] > $this->img_dimension['usersize'][0]) || ($file_data[0]['image_height'] > $this->img_dimension['usersize'][1])){
                     $this->es_img_resize($file_data[0]['file_name'],$path_directory,'', $this->img_dimension['usersize']);
                 }   
             }
