@@ -172,6 +172,9 @@ function in_array_r($needle, $haystack, $strict = false) {
 				<div class="product-list"> 
 					<a href="<?php echo base_url() . "item/" . $items[$i]['slug']; ?>">
 						<span class="prod_img_wrapper">
+							<span class="cd_slide_discount">
+                                <span>50%<br>OFF</span>
+                            </span>
 							<span class="prod_img_container">
 								<img alt="<?php echo html_escape($items[$i]['product_name']); ?>" src="<?php echo base_url() .$items[$i]['path']. "categoryview/" .$items[$i]['file']; ?>">
 							</span>
@@ -186,9 +189,13 @@ function in_array_r($needle, $haystack, $strict = false) {
 					  	<div class="price"> 
 					  		<span>&#8369;</span> <?php echo number_format($items[$i]['product_price'], 2);?>
 						</div>
+						<div class="original_price">
+                           &#8369; 10.00
+                        </div>
 					</div>
 					<div class="product_info_bottom">
 					  	<div>Condition: <strong><?php echo $items[$i]['product_condition']; ?></strong></div>
+					  	<div><span class="span_bg img_free_shipping"></span></div>
 					</div>
 					<p><?php echo html_escape($items[$i]['product_brief']); ?></p>
 				</div>
