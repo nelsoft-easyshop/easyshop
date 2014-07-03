@@ -95,9 +95,7 @@ class Manage extends MY_Controller {
             $doc->asXml($file);
         }
 
-
-
-
+        die('{"e":"0","m":"Success"}');
     }
 
     function uploadMainSlide()
