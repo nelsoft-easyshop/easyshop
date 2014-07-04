@@ -1221,7 +1221,7 @@ class product_model extends CI_Model
 		$temp = array($product);
 		explodeImagePath($temp);
 		$product = $temp[0];		
-		if(strlen(trim($product['userpic']))===0){
+		if(isset($product['userpic']) && strlen(trim($product['userpic']))===0){
 		    $product['userpic'] = 'assets/user/default';
 		}
 
