@@ -169,31 +169,31 @@ class product_model extends CI_Model
      */
     
     function getProductBySlug($slug, $add_click_count = true)
-	{
+    {
         if($add_click_count){
             $query = $this->xmlmap->getFilenameID('sql/product', 'getProductBySlug');
         }else{
             $query = $this->xmlmap->getFilenameID('sql/product', 'getProductBySlugNoIncrement');
         }
-		$sth = $this->db->conn_id->prepare($query);
-		$sth->bindParam(':slug',$slug);
-		$sth->execute();
+	$sth = $this->db->conn_id->prepare($query);
+	$sth->bindParam(':slug',$slug);
+	$sth->execute();
 
-		$product = $sth->fetch(PDO::FETCH_ASSOC);
+	$product = $sth->fetch(PDO::FETCH_ASSOC);
         if(intval($product['o_success']) !== 0){
-            if(strlen(trim($product['userpic']))===0)
-                 $product['userpic'] = 'assets/user/default';
+	    if(strlen(trim($product['userpic']))===0)
+	      $product['userpic'] = 'assets/user/default';
             if(intval($product['brand_id'],10) === 1)
-                $product['brand_name'] = ($product['custombrand']!=='')?$product['custombrand']:'Custom brand';
-           applyPriceDiscount($product);
-           if(isset($product['product_image_path'])){
+	      $product['brand_name'] = ($product['custombrand']!=='')?$product['custombrand']:'Custom brand';
+	    applyPriceDiscount($product);
+	    if(isset($product['product_image_path'])){
                 $temp = array($product); 
                 explodeImagePath($temp); 
                 $product = $temp[0];
-           } 
+	    } 
         }
-		return $product;
-	}
+	return $product;
+    }
  
 
 
@@ -1220,7 +1220,11 @@ class product_model extends CI_Model
 		/* Separate image file path and file name */
 		$temp = array($product);
 		explodeImagePath($temp);
-		$product = $temp[0];
+		$product = $temp[0];		
+		if(strlen(trim($product['userpic']))===0){
+		    $product['userpic'] = 'assets/user/default';
+		}
+
 		return $product;
 	}
 		
