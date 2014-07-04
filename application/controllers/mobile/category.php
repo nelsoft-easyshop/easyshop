@@ -18,25 +18,24 @@ class Category extends MY_Controller {
         header('Content-type: application/json');
     }
 
-    public function home()
-    {
-        $items =  $this->product_model->getHomeContent(); 
-        die(json_encode($items,JSON_PRETTY_PRINT));
-    }
-
     public function getCategories()
     { 
-    	$categorySlug = urldecode($this->input->get('slug')); 
+        $categorySlug = urldecode($this->input->get('slug'));
+        $param = urldecode($this->input->get('detail')); 
+        $need = 
     	$all = $this->product_model->selectAllCategory(); 
     	$categoryId = 1;
 
     	if($categorySlug){
     		$category_array = $this->product_model->getCategoryBySlug($categorySlug);
+            if($param){
+                die(json_encode($category_array,JSON_PRETTY_PRINT));
+            }
     		$categoryId = $category_array['id_cat']; 
+             
     	}
 
-    	$jsonCategory = $this->buildTree($all,$categoryId);
-
+    	$jsonCategory = $this->buildTree($all,$categoryId); 
  		die(json_encode($jsonCategory,JSON_PRETTY_PRINT));
     }
    
