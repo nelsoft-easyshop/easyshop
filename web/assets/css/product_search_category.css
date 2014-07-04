@@ -1031,3 +1031,32 @@ div.cd_timerlabel_container{
   /*border-color: #f38000 transparent transparent transparent;*/
   border-color: inherit;
 }
+
+#_is{
+  width: 316px;
+}
+#_cat{
+  width:199px;
+}
+#btn_srch{
+  width:68px;
+}
+#_us{
+  width: 256px;
+}
+#_loc{
+  width: 198px;
+}
+#_con{
+  width: 256px;
+}
+#_price1{
+  width: 52px;
+}
+#_price2{
+  width: 52px;
+}
+#_sop{
+  width: 109px;
+}
+

@@ -110,7 +110,7 @@ function in_array_r($needle, $haystack, $strict = false) {
 		<div class="inputRow">
 			<span class="adv_us">
 				<label>Seller:</label>	
-				<input type="text" name="_us" id="_us" value="<?php echo html_escape($getus);?>" size="40" maxlength="30" placeholder="Find items offered by a particular seller" />
+				<input type="text" name="_us" id="_us" value="<?php echo html_escape($getus);?>" size="40" maxlength="30" placeholder="Search for a seller's item" />
 			</span>
 			<span class="adv_us">
 			<label>Location:</label>
