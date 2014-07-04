@@ -1909,7 +1909,7 @@ class product_model extends CI_Model
     
 	public function getCategoryBySlug($slug)
 	{
-		$query = "SELECT id_cat, name, description, slug FROM es_cat WHERE slug = :slug";
+		$query = "SELECT id_cat, name, description, slug,parent_id FROM es_cat WHERE slug = :slug";
     	$sth = $this->db->conn_id->prepare($query);
     	$sth->bindParam(':slug', $slug, PDO::PARAM_STR);
     	$result = $sth->execute();
@@ -2102,6 +2102,28 @@ class product_model extends CI_Model
         }else{
             return true;
         }
+    }
+
+    public function check_if_soldout($product_id)
+    {
+    	$query = "
+		UPDATE 
+		  es_product 
+		SET
+		  `is_sold_out` = 
+		  (SELECT 
+		    IF(SUM(quantity) <= 0, '1', '0') AS soldout 
+		  FROM
+		    `es_product_item` 
+		  WHERE product_id = :product_id) 
+		WHERE id_product = :product_id;
+    	";
+    	;
+    	$sth0 = $this->db->conn_id->prepare($query); 
+    	$sth0->bindParam(':product_id',$product_id,PDO::PARAM_INT); 
+        $sth0->execute();
+
+    	return true;
     }
 
     

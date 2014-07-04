@@ -1,4 +1,4 @@
-<?xml version='1.0' ?>
+<?xml version="1.0"?>
 <map>
 
     <header>
@@ -34,7 +34,7 @@
         <type>image</type>
         <imagemap>
             <coordinate>0,0,0,0</coordinate>
-            <target></target>
+            <target/>
         </imagemap>
     </mainSlide>
     
@@ -62,22 +62,22 @@
     </productSlide_title>
     
     <productSlide>
-        <value>shipment-test</value>
+        <value>samsung-galaxy-tab-3-lite-7-t110-8gb-wifi-tablet</value>
         <type>product</type>
     </productSlide>
     
     <productSlide>
-        <value>shipment-test</value>
+        <value>starmobile-octa-32gb-android-42</value>
         <type>product</type>
     </productSlide>
     
     <productSlide>
-        <value>shipment-test</value>
+        <value>starmobile-octa-32gb-android-42</value>
         <type>product</type>
     </productSlide>
     
     <productSideBanner>
-        <value>shipment-test</value>
+        <value>samsung-galaxy-tab-3-lite-7-t110-8gb-wifi-tablet</value>
         <type>product</type>
     </productSideBanner>
 
@@ -89,57 +89,57 @@
         <layout>layoutA</layout>
 
         <product_panel_main>
-            <value>shipment-test</value>
+            <value>starmobile-octa-32gb-android-42</value>
             <type>product</type>
         </product_panel_main>
         
          <product_panel_main>
-            <value>shipment-test</value>
+            <value>starmobile-octa-32gb-android-42</value>
             <type>product</type>
        </product_panel_main>
         
          <product_panel_main>
-            <value>shipment-test</value>
+            <value>starmobile-octa-32gb-android-42</value>
             <type>product</type>
         </product_panel_main>
         
         <product_panel>
-            <value>shipment-test</value>
+            <value>starmobile-octa-32gb-android-42</value>
             <type>product</type>
         </product_panel>
         
        <product_panel>
-            <value>shipment-test</value>
+            <value>starmobile-octa-32gb-android-42</value>
             <type>product</type>
         </product_panel>
         
         <product_panel>
-            <value>shipment-test</value>
+            <value>starmobile-octa-32gb-android-42</value>
             <type>product</type>
         </product_panel>
 
         <product_panel>
-            <value>shipment-test</value>
+            <value>starmobile-octa-32gb-android-42</value>
             <type>product</type>
         </product_panel>
         
         <product_panel>
-            <value>shipment-test</value>
+            <value>starmobile-octa-32gb-android-42</value>
             <type>product</type>
         </product_panel>
         
         <product_panel>
-            <value>shipment-test</value>
+            <value>starmobile-octa-32gb-android-42</value>
             <type>product</type>
         </product_panel>
         
         <product_panel>
-            <value>shipment-test</value>
+            <value>starmobile-octa-32gb-android-42</value>
             <type>product</type>
         </product_panel>
         
         <product_panel>
-            <value>shipment-test</value>
+            <value>starmobile-octa-32gb-android-42</value>
             <type>product</type>
         </product_panel>
       
@@ -154,58 +154,58 @@
         <layout>layoutB</layout>
         
         <product_panel_main>
-            <value>shipment-test</value>
+            <value>starmobile-octa-32gb-android-42</value>
             <type>product</type>
         </product_panel_main>
         
          <product_panel_main>
-            <value>shipment-test</value>
+            <value>starmobile-octa-32gb-android-42</value>
             <type>product</type>
        </product_panel_main>
         
          <product_panel_main>
-            <value>shipment-test</value>
+            <value>starmobile-octa-32gb-android-42</value>
             <type>product</type>
         </product_panel_main>
         
         <product_panel>
-            <value>shipment-test</value>
+            <value>starmobile-octa-32gb-android-42</value>
             <type>product</type>
         </product_panel>
         
        <product_panel>
-            <value>shipment-test</value>
+            <value>starmobile-octa-32gb-android-42</value>
             <type>product</type>
         </product_panel>
         
         <product_panel>
-            <value>shipment-test</value>
+            <value>starmobile-octa-32gb-android-42</value>
             <type>product</type>
         </product_panel>
 
         
         <product_panel>
-            <value>shipment-test</value>
+            <value>starmobile-octa-32gb-android-42</value>
             <type>product</type>
         </product_panel>
         
         <product_panel>
-            <value>shipment-test</value>
+            <value>starmobile-octa-32gb-android-42</value>
             <type>product</type>
         </product_panel>
         
         <product_panel>
-            <value>shipment-test</value>
+            <value>starmobile-octa-32gb-android-42</value>
             <type>product</type>
         </product_panel>
         
         <product_panel>
-            <value>shipment-test</value>
+            <value>starmobile-octa-32gb-android-42</value>
             <type>product</type>
         </product_panel>
         
         <product_panel>
-            <value>shipment-test</value>
+            <value>starmobile-octa-32gb-android-42</value>
             <type>product</type>
         </product_panel>
       
@@ -221,58 +221,58 @@
         <layout>layoutC</layout>
         
         <product_panel_main>
-            <value>shipment-test</value>
+            <value>starmobile-octa-32gb-android-42</value>
             <type>product</type>
         </product_panel_main>
         
          <product_panel_main>
-            <value>shipment-test</value>
+            <value>starmobile-octa-32gb-android-42</value>
             <type>product</type>
        </product_panel_main>
         
          <product_panel_main>
-            <value>shipment-test</value>
+            <value>starmobile-octa-32gb-android-42</value>
             <type>product</type>
         </product_panel_main>
         
         <product_panel>
-            <value>shipment-test</value>
+            <value>starmobile-octa-32gb-android-42</value>
             <type>product</type>
         </product_panel>
         
        <product_panel>
-            <value>shipment-test</value>
+            <value>starmobile-octa-32gb-android-42</value>
             <type>product</type>
         </product_panel>
         
         <product_panel>
-            <value>shipment-test</value>
+            <value>starmobile-octa-32gb-android-42</value>
             <type>product</type>
         </product_panel>
 
         
         <product_panel>
-            <value>shipment-test</value>
+            <value>starmobile-octa-32gb-android-42</value>
             <type>product</type>
         </product_panel>
         
         <product_panel>
-            <value>shipment-test</value>
+            <value>starmobile-octa-32gb-android-42</value>
             <type>product</type>
         </product_panel>
         
         <product_panel>
-            <value>shipment-test</value>
+            <value>starmobile-octa-32gb-android-42</value>
             <type>product</type>
         </product_panel>
         
         <product_panel>
-            <value>shipment-test</value>
+            <value>starmobile-octa-32gb-android-42</value>
             <type>product</type>
         </product_panel>
         
         <product_panel>
-            <value>shipment-test</value>
+            <value>starmobile-octa-32gb-android-42</value>
             <type>product</type>
         </product_panel>
       
@@ -287,58 +287,58 @@
         <layout>layoutD</layout>
         
         <product_panel_main>
-            <value>shipment-test</value>
+            <value>starmobile-octa-32gb-android-42</value>
             <type>product</type>
         </product_panel_main>
         
          <product_panel_main>
-            <value>shipment-test</value>
+            <value>starmobile-octa-32gb-android-42</value>
             <type>product</type>
        </product_panel_main>
         
          <product_panel_main>
-            <value>shipment-test</value>
+            <value>starmobile-octa-32gb-android-42</value>
             <type>product</type>
         </product_panel_main>
         
         <product_panel>
-            <value>shipment-test</value>
+            <value>starmobile-octa-32gb-android-42</value>
             <type>product</type>
         </product_panel>
         
        <product_panel>
-            <value>shipment-test</value>
+            <value>starmobile-octa-32gb-android-42</value>
             <type>product</type>
         </product_panel>
         
         <product_panel>
-            <value>shipment-test</value>
+            <value>starmobile-octa-32gb-android-42</value>
             <type>product</type>
         </product_panel>
 
         
         <product_panel>
-            <value>shipment-test</value>
+            <value>starmobile-octa-32gb-android-42</value>
             <type>product</type>
         </product_panel>
         
         <product_panel>
-            <value>shipment-test</value>
+            <value>starmobile-octa-32gb-android-42</value>
             <type>product</type>
         </product_panel>
         
         <product_panel>
-            <value>shipment-test</value>
+            <value>starmobile-octa-32gb-android-42</value>
             <type>product</type>
         </product_panel>
         
         <product_panel>
-            <value>shipment-test</value>
+            <value>starmobile-octa-32gb-android-42</value>
             <type>product</type>
         </product_panel>
         
         <product_panel>
-            <value>shipment-test</value>
+            <value>starmobile-octa-32gb-android-42</value>
             <type>product</type>
         </product_panel>
       
@@ -353,58 +353,58 @@
         <layout>layoutE</layout>
         
         <product_panel_main>
-            <value>shipment-test</value>
+            <value>starmobile-octa-32gb-android-42</value>
             <type>product</type>
         </product_panel_main>
         
          <product_panel_main>
-            <value>shipment-test</value>
+            <value>starmobile-octa-32gb-android-42</value>
             <type>product</type>
        </product_panel_main>
         
          <product_panel_main>
-            <value>shipment-test</value>
+            <value>starmobile-octa-32gb-android-42</value>
             <type>product</type>
         </product_panel_main>
         
         <product_panel>
-            <value>shipment-test</value>
+            <value>starmobile-octa-32gb-android-42</value>
             <type>product</type>
         </product_panel>
         
        <product_panel>
-            <value>shipment-test</value>
+            <value>starmobile-octa-32gb-android-42</value>
             <type>product</type>
         </product_panel>
         
         <product_panel>
-            <value>shipment-test</value>
+            <value>starmobile-octa-32gb-android-42</value>
             <type>product</type>
         </product_panel>
 
         
         <product_panel>
-            <value>shipment-test</value>
+            <value>starmobile-octa-32gb-android-42</value>
             <type>product</type>
         </product_panel>
         
         <product_panel>
-            <value>shipment-test</value>
+            <value>starmobile-octa-32gb-android-42</value>
             <type>product</type>
         </product_panel>
         
         <product_panel>
-            <value>shipment-test</value>
+            <value>starmobile-octa-32gb-android-42</value>
             <type>product</type>
         </product_panel>
         
         <product_panel>
-            <value>shipment-test</value>
+            <value>starmobile-octa-32gb-android-42</value>
             <type>product</type>
         </product_panel>
         
         <product_panel>
-            <value>shipment-test</value>
+            <value>starmobile-octa-32gb-android-42</value>
             <type>product</type>
         </product_panel>
       

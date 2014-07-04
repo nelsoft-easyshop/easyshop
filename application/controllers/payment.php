@@ -482,6 +482,7 @@ class Payment extends MY_Controller{
                             # START SAVING TO DATABASE HERE 
                             foreach ($itemList as $key => $value) {     
                                 $itemComplete = $this->payment_model->deductQuantity($value['id'],$value['product_itemID'],$value['qty']);
+                                $this->product_model->check_if_soldout($value['id']);
                             }
 
                             $flag = ($httpParsedResponseAr['PAYMENTSTATUS'] == 'Pending' ? 1 : 0);
@@ -569,6 +570,12 @@ class Payment extends MY_Controller{
                 $v_order_id = $return['v_order_id'];
                 $invoice = $return['invoice_no'];
                 $status = 's';
+
+                foreach ($itemList as $key => $value) {               
+                    $itemComplete = $this->payment_model->deductQuantity($value['id'],$value['product_itemID'],$value['qty']);
+                    $this->product_model->check_if_soldout($value['id']);
+                }
+
                 $this->removeItemFromCart();  
                 $this->sendNotification(array('member_id'=>$member_id, 'order_id'=>$v_order_id, 'invoice_no'=>$invoice));
             }   
@@ -653,7 +660,8 @@ class Payment extends MY_Controller{
             if($postBackCount == "0"){
 
                 foreach ($itemList as $key => $value) {               
-                    $itemComplete = $this->payment_model->deductQuantity($value['id'],$value['product_itemID'],$value['qty']);              
+                    $itemComplete = $this->payment_model->deductQuantity($value['id'],$value['product_itemID'],$value['qty']);  
+                    $this->product_model->check_if_soldout($value['id']);            
                 }
 
                 $locked = $this->lockItem($toBeLocked,$orderId,'delete'); 
@@ -817,6 +825,7 @@ class Payment extends MY_Controller{
 
             foreach ($itemList as $key => $value) {               
                 $itemComplete = $this->payment_model->deductQuantity($value['id'],$value['product_itemID'],$value['qty']);
+                $this->product_model->check_if_soldout($value['id']);
             }
 
             $complete = $this->payment_model->updatePaymentIfComplete($orderId,json_encode($itemList),$txnId,$paymentType,0,0);

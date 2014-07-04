@@ -11,7 +11,8 @@
           <div class="signup">
 			<h2>Signup for Newsletter</h2>
             <?php echo form_open('subscribe');?>
-			<input type="text" name="subscribe_email"><input type="submit" value="Submit" name="subscribe_btn">
+			<input type="text" class="subscribe_email" name="subscribe_email">
+			<input type="submit" value="Submit" class="subscribe_btn" name="subscribe_btn">
             <?php echo form_close();?>
 
           </div>
