@@ -21,7 +21,7 @@
                         <a href="<?=base_url().'item/'.$item['slug'];?>" class="cd_link_con"> 
                     <?php endif; ?> 
                     <?php if(intval($item['is_promote']) === 1): ?> 
-                        <div class="product_buy_con prod_disable">                            
+                        <div class="product_buy_con prod_date">                            
                             <span>
                                 <p>July 7</p>
                             </span>
