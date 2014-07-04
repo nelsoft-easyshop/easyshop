@@ -384,7 +384,7 @@
               <p> <img src="<?=base_url()?>assets/images/img_success.png"> </p>
               <div style="">
                 <p><strong>Your review has been submitted. Reload the page to view your review. </strong></p>
-                <p><strong><a href="">Click here to return to the product page.</a></strong></p>
+                <p><strong><a href="<?php echo base_url()?>item/<?php echo $product['slug'];?>">Click here to return to the product page.</a></strong></p>
               </div>
             </div>
           </div>
