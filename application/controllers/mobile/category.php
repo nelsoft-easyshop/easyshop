@@ -18,62 +18,34 @@ class Category extends MY_Controller {
         header('Content-type: application/json');
     }
 
+    public function home()
+    {
+        $items =  $this->product_model->getHomeContent(); 
+        die(json_encode($items,JSON_PRETTY_PRINT));
+    }
+
     public function getCategories()
     { 
-        $categorySlug = urldecode($this->input->get('slug'));
-        $param = urldecode($this->input->get('detail')); 
-        $need = 
+    	$categorySlug = urldecode($this->input->get('slug')); 
     	$all = $this->product_model->selectAllCategory(); 
     	$categoryId = 1;
 
     	if($categorySlug){
-    		$categoryArray = $this->product_model->getCategoryBySlug($categorySlug);
-            if($param){
-                die(json_encode($categoryArray,JSON_PRETTY_PRINT));
-            }
-    
-            $categoryId = $categoryArray['id_cat']; 
-            $parentId = $categoryArray['parent_id']; 
+    		$category_array = $this->product_model->getCategoryBySlug($categorySlug);
+    		$categoryId = $category_array['id_cat']; 
     	}
- 
-        if($this->input->get('up')){
-            if($parentId != 1){
-              $categoryArrayParent = $this->product_model->selectCategoryDetails($parentId);   
-              $categoryId = $categoryArrayParent['parent_id'];
-            }
-  
-        }
 
-    	$jsonCategory = $this->buildTree($all,$categoryId); 
-        echo '<pre>',print_r($jsonCategory);exit();
+    	$jsonCategory = $this->buildTree($all,$categoryId);
 
  		die(json_encode($jsonCategory,JSON_PRETTY_PRINT));
     }
-
-    public function getCategoriesProduct()
-    {
-        $categorySlug = $this->input->get('slug');
-        $category_array = $this->product_model->getCategoryBySlug($categorySlug);
-        $categoryId = $category_array['id_cat']; 
-        $downCategory = $this->product_model->selectChild($categoryId);
-
-        if(empty($downCategory)){
-            $downCategory = array();
-        }
-        
-        array_push($downCategory, $categoryId);
-        $categories = implode(",", $downCategory);
-        $items = $this->product_model->getProductsByCategory($categories,$conditionArray,$count,$operator,$start,$perPage,$sortString);
-
-    }
-
+   
     private function buildTree(array $elements, $parentId = 1)
-    {   
+    {
         $branch = array();
 
         foreach ($elements as $element) {
-             
-            if ($element['parent_id'] == $parentId) { 
+            if ($element['parent_id'] == $parentId) {
                 $children = $this->buildTree($elements, $element['id_cat']);
                 if ($children) {
                     $element['children'] = $children;
