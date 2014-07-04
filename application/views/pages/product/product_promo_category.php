@@ -10,7 +10,7 @@
 
     <?php echo $deals_banner; ?>
     
-    <div class="cd_product_container">
+    <div class="cd_product_container" id="promo1">
         <div class='product_list'>
             <?php foreach($items as $item): ?>
                 <div class="cd_product">
@@ -81,6 +81,9 @@
                 </div>
             <?php endforeach; ?>
         </div>
+    </div>
+    <div id="promo2">
+        easy treat Promo
     </div>
 
 </div>
