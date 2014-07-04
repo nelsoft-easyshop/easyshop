@@ -111,7 +111,10 @@
      * requesting the child category from selected first level parent category
      */
     $(document).on('click','.select',function () { 
-        $(".add_category_submit").empty();
+        $(".add_category_submit").empty();	
+	$('.othercategory input,.othercategory_main input').val('');
+	$('.othercategory input,.othercategory_main input').blur();
+
         var D = eval('(' + $(this).attr('data') + ')');
         var action = 'productUpload/getChild';
         var catId = D.cat_id;
@@ -158,6 +161,9 @@
      * requesting the child category from non-main selected category
      */
     $(document).on('click','.child',function () { 
+	$('.othercategory input,.othercategory_main input').val('');
+	$('.othercategory input,.othercategory_main input').blur();
+	
         var D = eval('(' + $(this).attr('data') + ')');
         var nlevel = parseInt(D.level) + 1;
         var action = 'productUpload/getChild';
@@ -235,7 +241,7 @@
     });
 
 
-    $(document).ready(function() {
+    $(document).ready(function() {      
         $(window).keydown(function(event){
             if(event.keyCode == 13) {
                 event.preventDefault();
@@ -295,6 +301,8 @@
             $(".add_category_submit").append('<input type="hidden" name="hidden_attribute" value="'+realparent+'" class="hidden_attribute"><input class="proceed_form" id="proceed_form" type="submit" value="Proceed with '+escapeHtml(otherName.replace(/'/g, "\\'"))+'">');    
         }
     });
+    
+    
 
     $(document).on('click','.othercategory a',function () {
         var selfAttrParent = $(this).data('parent');
@@ -309,6 +317,15 @@
         $('.product_sub_items'+selfLevel+' .othercategory'+selfLevel).append('<input type="text" style="background:none;padding:5px" placeholder="Add a category" id="otherNameCategory" class="otherNameCategoryClass'+selfLevel+'" data-parentname="'+parentName+'" data-level="'+selfLevel+'" data-final="'+finalValue+'" data-rp="'+selfAttrParent+'" autocomplete="off" name="othernamecategory" />');
         $('.product_sub_items'+selfLevel+' .otherNameCategoryClass'+selfLevel).focus();
         // $(".add_category_submit").empty();
+
+	var other_cat_name = $('.other_cat_name').val();
+	if(other_cat_name != '' &&   typeof(other_cat_name) != 'undefined'){
+	  var input =  $('.product_sub_items'+selfLevel+' .othercategory'+selfLevel).find('input:visible');
+	  input.val(other_cat_name);
+	  input.blur();
+	  $('.other_cat_name').val('')
+	}
+
     });
 
 
@@ -320,6 +337,15 @@
         $('.othercategory_main').append('<input type="text" id="otherNameCategory_main" style="background:none;padding:5px" placeholder="Add a category"  class="otherNameCategory_main" data-parentname="" data-level="" data-final="" autocomplete="off" name="othernamecategory" />');
         $('.othercategory_main .otherNameCategory_main').focus();
         // $(".add_category_submit").empty();
+	
+	var other_cat_name = $('.other_cat_name').val();
+	if(other_cat_name != '' &&   typeof(other_cat_name) != 'undefined'){
+	  var input =  $('.product_sub_items'+selfLevel+' .othercategory'+selfLevel).find('input:visible');
+	  input.val(other_cat_name);
+	  input.blur();
+	  $('.other_cat_name').val('')
+	}
+	
     });
 
 
@@ -501,9 +527,21 @@ $(document).ready(function() {
                         }
                     });
                 });
+		
+		          
+	      var other_cat_name = $('.other_cat_name').val();
+
+	      if(other_cat_name != '' &&   typeof(other_cat_name) != 'undefined'){
+		var last_add_category = $('li.othercategory_main:visible,li.othercategory:visible').last();
+		last_add_category.find('a').trigger('click');
+	      }
+				
             }
         });
     }
+    
+    
+
     
 });
 

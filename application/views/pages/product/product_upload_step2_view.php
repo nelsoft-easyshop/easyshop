@@ -30,6 +30,7 @@
     <?php else: ?>
     <?php echo form_open('sell/step1', array('id'=>'edit_step1'));?>
     <input type="hidden" name="c_id" id="c_id" value="<?php echo $id;?>">
+    <input type="hidden" name="other_cat_name" id="other_cat_name" value="<?php echo $otherCategory;?>">
     <input type="hidden" name="step2_content" id="step2_content"/>
     <?php echo form_close();?>
   <?php endif; ?>
@@ -893,9 +894,9 @@ $(document).ready(function(){
 
   var slider_val = parseFloat($('#slider_val').data('value')); 
   if(slider_val !== 0 && !isNaN(slider_val)){
-   $('#slider_val').val(slider_val); 
-   $('#slider_val').trigger( "change" );
- }
+	   $('#slider_val').val(slider_val); 
+	   $('#slider_val').trigger( "change" );
+   }
 
 
 });
@@ -1776,7 +1777,7 @@ $(".proceed_form").unbind("click").click(function(){
   var title = $("#prod_title");
   var brief = $("#prod_brief_desc"); 
   var combinationSelected = JSON.stringify(arraySelected);
-  var otherCategory = escapeHtml("<?php echo isset( $otherCategory)? html_escape($otherCategory) :''; ?>");
+  var otherCategory = escapeHtml("<?php echo isset( $otherCategory)? html_escape($otherCategory) : (isset( $product_details['otherCategory'])?html_escape($product_details['otherCategory']):'' ); ?>");
 
   g_input_name = input_name;
   g_id = id;
@@ -2026,12 +2027,12 @@ $(".proceed_form").unbind("click").click(function(){
       sortCombination = combinationVal.sort();
 
       for (var i = 0; i < sortCombination.length; i++) {
-        arrayCombinationString += sortCombination[i] + '-';
+        arrayCombinationString += sortCombination[i] + '~-~';
       };
 
       for (var key in arraySelected) { 
         if (arraySelected.hasOwnProperty(key))
-          if(arraySelected[key]['value'] === arrayCombinationString.slice(0, - 1)){
+          if(arraySelected[key]['value'] === arrayCombinationString.slice(0, - 3)){
             alreadyExist = true;
             break;
           }
@@ -2041,7 +2042,7 @@ $(".proceed_form").unbind("click").click(function(){
           if(alreadyExist === false){      
             $('.combinationContainer').append('<div class="inner_quantity_list innerContainer'+thisValueCount+'"> '+ htmlEach +'</div> <a href="javascript:void(0)" class="removeSelected" data-row="'+thisValueCount+'"   style="color:Red">Remove</a></div>');
             dataCombination['quantity'] = qtyTextbox.val();
-            dataCombination['value'] = arrayCombinationString.slice(0, - 1);
+            dataCombination['value'] = arrayCombinationString.slice(0, - 3);
             arraySelected[thisValueCount] = dataCombination;
             thisValueCount++;
             $('.quantity_attr_done.orange_btn3').data('value', thisValueCount);
@@ -2090,9 +2091,11 @@ $(".proceed_form").unbind("click").click(function(){
       if(typeof prev_content.prod_price !== "undefined"){
         var priceval = prev_content.prod_price.replace(new RegExp(",", "g"), '');
         priceval = parseFloat(priceval);
-        if(isNaN(priceval))
-          priceval = 0;
-        $('#prod_price').val( ReplaceNumberWithCommas(priceval.toFixed(2)));
+        if(!isNaN(priceval) && !(priceval <= 0 ) ){
+	    $('#prod_price').val( ReplaceNumberWithCommas(priceval.toFixed(2)));
+        }
+ 
+        
       }
       if(typeof prev_content.prod_sku !== "undefined"){
         $('#prod_sku').val(prev_content.prod_sku);
@@ -2100,10 +2103,14 @@ $(".proceed_form").unbind("click").click(function(){
 
       if(typeof prev_content.prod_discount_percentage !== "undefined"){
        var slider_temp_val = parseFloat(prev_content.prod_discount_percentage);
-       if(isNaN(slider_temp_val))
-        slider_temp_val = 0;
-      $('#slider_val').val(slider_temp_val); 
-      $('#slider_val').trigger( "change" );
+       if(isNaN(slider_temp_val)){
+          slider_temp_val = 0;
+       }
+       if( parseFloat($('#prod_price').val(),10) > 0){
+	  $('#slider_val').val(slider_temp_val); 
+	  $('#slider_val').trigger( "change" );
+       }
+
     }
     
     $("#dsc_frm").hide();

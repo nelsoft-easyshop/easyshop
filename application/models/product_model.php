@@ -75,24 +75,7 @@ class product_model extends CI_Model
 		return $row;
 	}
     
-    function getParentIdByProduct($product_id, $member_id) #get all parent category from selected product
-	{
-        $query = $this->xmlmap->getFilenameID('sql/product','getProductCategory');
-		$sth = $this->db->conn_id->prepare($query);
-		$sth->bindParam(':id',$product_id);
-        $sth->bindParam(':member_id',$member_id);
-		$sth->execute();
-		$p_row = $sth->fetch(PDO::FETCH_ASSOC);
-        $row = array();
-        if($sth->rowCount() > 0){
-            $query = $this->xmlmap->getFilenameID('sql/product','getParent');
-            $sth = $this->db->conn_id->prepare($query);
-            $sth->bindParam(':id',$p_row['cat_id']);
-            $sth->execute();
-            $row = $sth->fetchAll(PDO::FETCH_ASSOC);
-        }
-		return $row;
-	}
+
 
 
 	function getAttributesByParent($parents) # get all attributes from all parents from to the last selected category
@@ -963,7 +946,7 @@ class product_model extends CI_Model
         return $slugGenerate;
     } 
 
-	function finalizeProduct($productid, $memberid,$billing_id, $is_cod){
+    function finalizeProduct($productid, $memberid,$billing_id, $is_cod){
         $product = $this->getProductEdit($productid, $memberid);
         if($product){
             $title = $product['name'];
@@ -1219,34 +1202,34 @@ class product_model extends CI_Model
 		return array_values($rows);
 	}
 	
-    function getProductById($id, $extended = false){
-            
-        if($extended){
-            $query = $this->xmlmap->getFilenameID('sql/product', 'getProductByIdExtended');
-        }
-        else{
-            $query = $this->xmlmap->getFilenameID('sql/product','getProductById');
-        }
-        
+	function getProductById($id, $extended = false){
+	    
+		if($extended){
+		    $query = $this->xmlmap->getFilenameID('sql/product', 'getProductByIdExtended');
+		}
+		else{
+		    $query = $this->xmlmap->getFilenameID('sql/product','getProductById');
+		}
+
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':id',$id);
 		$sth->execute();
 		$product = $sth->fetch(PDO::FETCH_ASSOC);
-        /* Get actual price, apply any promo calculation */
-        applyPriceDiscount($product);
-        /* Separate image file path and file name */
-        $temp = array($product);
-        explodeImagePath($temp);
-        $product = $temp[0];
-        return $product;
+		/* Get actual price, apply any promo calculation */
+		applyPriceDiscount($product);
+		/* Separate image file path and file name */
+		$temp = array($product);
+		explodeImagePath($temp);
+		$product = $temp[0];
+		return $product;
 	}
 		
 	function getProductCount($down_cat){
-        $qmarks = implode(',', array_fill(0, count($down_cat), '?'));
+		$qmarks = implode(',', array_fill(0, count($down_cat), '?'));
 		$query = $this->xmlmap->getFilenameID('sql/product','getProductCount');
-        $query = $query.'('.$qmarks.')';
+		$query = $query.'('.$qmarks.')';
 		$sth = $this->db->conn_id->prepare($query);
-        $sth->execute($down_cat);
+		$sth->execute($down_cat);
 		$row = $sth->fetch(PDO::FETCH_ASSOC);
 		return $row;
 	}
@@ -1260,9 +1243,9 @@ class product_model extends CI_Model
 		$sth->execute();
 		
 		$row = $sth->fetch(PDO::FETCH_ASSOC);
-        if(intval($row['brand_id'],10) === 1){
-            $row['brandname'] = ($row['brand_other_name'] !== '')?$row['brand_other_name']:'Custom brand';
-        }
+		if(intval($row['brand_id'],10) === 1){
+		    $row['brandname'] = ($row['brand_other_name'] !== '')?$row['brand_other_name']:'Custom brand';
+		}
         
 		return $row;
 	}
@@ -1281,28 +1264,41 @@ class product_model extends CI_Model
         $sth->bindParam(':price',$product_details['price']);
         $sth->bindParam(':condition',$product_details['condition']);
         $sth->bindParam(':p_id',$product_details['product_id']);
-		$sth->bindParam(':member_id',$member_id);
+	$sth->bindParam(':member_id',$member_id);
         $sth->bindParam(':brand_other_name',$product_details['brand_other_name']);
         $sth->bindParam(':modifieddate', date('Y-m-d H:i:s'));
         $sth->bindParam(':discount', $product_details['discount']);
+        $sth->bindParam(':search_keyword', $product_details['search_keyword']);
         
         $bool = $sth->execute();
 		
-		return $sth->rowCount();
+	return $sth->rowCount();
     }
     
-    function editProductCategory($cat_id,$product_id,$member_id){
+    function editProductCategory($cat_id,$product_id,$member_id, $other_cat_name = ''){
+       
         $query = $this->xmlmap->getFilenameID('sql/product','editProductCategory');
         
         $sth = $this->db->conn_id->prepare($query);
-		$sth->bindParam(':id',$product_id);
+	$sth->bindParam(':id',$product_id);
         $sth->bindParam(':member_id',$member_id);
-		$sth->bindParam(':cat_id',$cat_id);
+	$sth->bindParam(':cat_id',$cat_id);
         $sth->execute();
+	$bool_update_count = $sth->rowCount();
+	if($other_cat_name !== ''){
+	    $query = 'UPDATE es_product SET cat_other_name = :other_cat_name WHERE id_product = :id AND member_id = :member_id';
+	    $xth = $this->db->conn_id->prepare($query);
+	    $xth->bindParam(':id',$product_id);
+	    $xth->bindParam(':member_id',$member_id);
+	    $xth->bindParam(':other_cat_name',$other_cat_name);
+	    $xth->execute();
 
-		return($sth->rowCount());
+	}
+	
+	return $bool_update_count;
         
     }
+
     
     
     #Deletes product attributes in es_product_attr table, returns number of affected rows
@@ -1319,7 +1315,7 @@ class product_model extends CI_Model
             $sth = $this->db->conn_id->prepare($query);
             $sth->bindParam(':product_id',$product_id);
         }
-		$sth->execute();
+	$sth->execute();
         return $sth->rowCount(); 
 	}
     
@@ -1328,10 +1324,10 @@ class product_model extends CI_Model
     {
         $query = $this->xmlmap->getFilenameID('sql/product','deleteProductImage');
         
-		$sth = $this->db->conn_id->prepare($query);
-		$sth->bindParam(':product_id',$product_id);
-		$sth->bindParam(':image_id',$image_id);
-		$sth->execute();
+	$sth = $this->db->conn_id->prepare($query);
+	$sth->bindParam(':product_id',$product_id);
+	$sth->bindParam(':image_id',$image_id);
+	$sth->execute();
         
         return $sth->rowCount();
     }
@@ -1339,9 +1335,9 @@ class product_model extends CI_Model
     function deleteAttrOthers($other_head_id)
     {
         $query = $this->xmlmap->getFilenameID('sql/product','deleteOtherDetail');
-		$sth = $this->db->conn_id->prepare($query);
-		$sth->bindParam(':head_id',$other_head_id);
-		$sth->execute();
+	$sth = $this->db->conn_id->prepare($query);
+	$sth->bindParam(':head_id',$other_head_id);
+	$sth->execute();
 
         $query = $this->xmlmap->getFilenameID('sql/product','deleteOtherHead');
         $sth = $this->db->conn_id->prepare($query);
@@ -1350,15 +1346,15 @@ class product_model extends CI_Model
     }
     
 
-	function updateImageIsPrimary($image_id, $is_primary){
-		$query = $this->xmlmap->getFilenameID('sql/product','updateImageIsPrimary');
-        
-		$sth = $this->db->conn_id->prepare($query);
-		$sth->bindParam(':image_id',$image_id, PDO::PARAM_INT);
-		$sth->bindParam(':is_primary',$is_primary, PDO::PARAM_INT);
-		
-		$sth->execute();
-	}
+    function updateImageIsPrimary($image_id, $is_primary){
+	$query = $this->xmlmap->getFilenameID('sql/product','updateImageIsPrimary');
+
+	$sth = $this->db->conn_id->prepare($query);
+	$sth->bindParam(':image_id',$image_id, PDO::PARAM_INT);
+	$sth->bindParam(':is_primary',$is_primary, PDO::PARAM_INT);
+	
+	$sth->execute();
+    }
 
     public function getProductQuantity($product_id, $verbose = false, $check_lock = false){
         if($verbose){
@@ -1834,7 +1830,7 @@ class product_model extends CI_Model
 		$query = substr($query, 0, -1);
 		$query .= ' )';	
 		$sth = $this->db->conn_id->prepare($query);
-    	$sth->execute($arrProductItemId);
+    		$sth->execute($arrProductItemId);
 		
 		// Delete Shipping Head Entries
 		$query = $this->xmlmap->getFilenameID('sql/product', 'deleteShippingHead');
@@ -1844,7 +1840,7 @@ class product_model extends CI_Model
 		$query = substr($query, 0, -1);
 		$query .= ' )';	
 		$sth = $this->db->conn_id->prepare($query);
-    	$sth->execute($arrShippingId);
+    		$sth->execute($arrShippingId);
 	}
 	
     /* 
@@ -1943,6 +1939,7 @@ class product_model extends CI_Model
             $home_view_data['section'][0] = $temp;
         }
         return $home_view_data;
+
     }
     
     private function createHomeElement($element, $key){
