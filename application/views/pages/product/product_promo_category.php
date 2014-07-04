@@ -21,9 +21,13 @@
                         <a href="<?=base_url().'item/'.$item['slug'];?>" class="cd_link_con"> 
                     <?php endif; ?> 
                     <?php if(intval($item['is_promote']) === 1): ?> 
-                  
-                        <div class="product_buy_con">
-                                <span><span class="orange_btn3 <?php echo $item['is_soldout']||(!$item['start_promo'])?'disabled':'enabled';?>">BUY NOW</span></span>
+                        <div class="product_buy_con prod_disable">                            
+                            <span>
+                                <p>July 7</p>
+                            </span>
+                        </div>
+                        <div class="product_buy_con">                            
+                                 <span><span class="orange_btn3 <?php echo $item['is_soldout']||(!$item['start_promo'])?'disabled':'enabled';?>">BUY NOW</span></span>
                         </div>
                       
                     <?php else: ?>
