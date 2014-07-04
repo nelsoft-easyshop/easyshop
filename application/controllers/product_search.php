@@ -370,15 +370,15 @@ class product_search extends MY_Controller {
 
     }
     
-	function search($string="search.html") 
-	{
-		$values = array();
-		$string_sort = "";
-		$start = 0;
-		$usable_string;
-		$perPage = $this->per_page;
+    function search($string="search.html") 
+    {
+	$values = array();
+	$string_sort = "";
+	$start = 0;
+	$usable_string;
+	$perPage = $this->per_page;
 
-		$category = $this->input->get('q_cat')?$this->input->get('q_cat'):1;
+	$category = $this->input->get('q_cat')?$this->input->get('q_cat'):1;
         $string =  $this->input->get('q_str')?$this->input->get('q_str'):'';
         $string = html_escape(ltrim($string));
         $response['string'] = $string;
@@ -742,7 +742,7 @@ class product_search extends MY_Controller {
     }
     
     
-	function searchCategory(){  
+    function searchCategory(){  
         
         $user_id = $this->session->userdata('member_id');
         $is_admin = false;
@@ -765,53 +765,53 @@ class product_search extends MY_Controller {
 			$rows[$idx]['parent'] = $this->product_model->getParentId($row['id_cat']);
 		}
 		echo json_encode($rows);
-	}
+    }
 
-	function searchBrand(){
-		$string = $this->input->get('data');
-		$rows = $this->search_model->searchBrand($string);
-		echo json_encode($rows);
-	}
+    function searchBrand(){
+	    $string = $this->input->get('data');
+	    $rows = $this->search_model->searchBrand($string);
+	    echo json_encode($rows);
+    }
 
     
 
-	private function highlights($text, $words)
-	{
+    private function highlights($text, $words)
+    {
 
-		$words = preg_replace('/\s+/', ' ',$words);
-		$split_words = explode(" ", $words);
-		foreach($split_words as $word)
-		{
-			$color = "#e5e5e5";
-			$text = preg_replace("|($word)|Ui","<mark>$1</mark>" , $text );
-		} 
-		return $text;
-
- 
-	}
+	    $words = preg_replace('/\s+/', ' ',$words);
+	    $split_words = explode(" ", $words);
+	    foreach($split_words as $word)
+	    {
+		    $color = "#e5e5e5";
+		    $text = preg_replace("|($word)|Ui","<mark>$1</mark>" , $text );
+	    } 
+	    return $text;
 
 
-	private function toUL($array = array(), $string = '')
-	{
-		$html = '<ul>' . PHP_EOL;
+    }
 
-		foreach ($array as $value)
-		{
-			if($value['count'] <= 0){
-				continue;
-			}
-			$html .= '<li><a href="search.html?q_str=' . $string .'&q_cat='.$value['item_id'].'">' . $value['name'].'('.$value['count'].')</a>';
-			if (!empty($value['children']))
-			{
-				$html .= $this->toUL($value['children'], $string);
-			}
-			$html .= '</li>' . PHP_EOL;
-		}
 
-		$html .= '</ul>' . PHP_EOL;
+    private function toUL($array = array(), $string = '')
+    {
+	    $html = '<ul>' . PHP_EOL;
 
-		return $html;
-	}
+	    foreach ($array as $value)
+	    {
+		    if($value['count'] <= 0){
+			    continue;
+		    }
+		    $html .= '<li><a href="search.html?q_str=' . $string .'&q_cat='.$value['item_id'].'">' . $value['name'].'('.$value['count'].')</a>';
+		    if (!empty($value['children']))
+		    {
+			    $html .= $this->toUL($value['children'], $string);
+		    }
+		    $html .= '</li>' . PHP_EOL;
+	    }
+
+	    $html .= '</ul>' . PHP_EOL;
+
+	    return $html;
+    }
 
 
 }
