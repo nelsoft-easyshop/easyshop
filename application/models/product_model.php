@@ -2038,10 +2038,11 @@ class product_model extends CI_Model
         $result['price'] = $baseprice;
         $result['can_purchase']  = true;
         $result['sold_price'] = 0;
-        $result['is_soldout'] = false; 
-        
+        $result['is_soldout'] = false;
+
         if($is_promo === 1){
             $calculation_id = $this->config->item('Promo')[$type]['calculation_id'];
+            $LimitPerProductId = false;
             switch ($calculation_id) {
                 case 0 :
                     $PromoPrice = $baseprice;
@@ -2063,32 +2064,53 @@ class product_model extends CI_Model
                         $PromoPrice = $baseprice - ($baseprice)*0.20;
                     }
                     break;
+                case 3:
+                    #items should be can_purchase = 1 AND start_promo = 1 to be sell
+                    $LimitPerProductId = $product_id;
+                    $PromoPrice = $baseprice;
+                    break;
                 default :
                     $PromoPrice = $baseprice;
                     break;
             }
             $result['price'] = $PromoPrice;
-            $result['can_purchase'] = $this->is_purchase_allowed($buyer_id,$type);
+            $result['can_purchase'] = $this->is_purchase_allowed($buyer_id,$type,$LimitPerProductId, $startdate,$enddate);
             $result['is_soldout'] = $this->is_sold_out($product_id);
             $result['sold_price'] = $this->get_sold_price($product_id, date('Y-m-d',$startdate), date('Y-m-d',$enddate));
         }
         $result['price'] = (floatval($result['price'])>0)?$result['price']:0.01;
+
         return $result;
    }
 
 
-    public function is_purchase_allowed($buyer_id,$type){
-
-        $query = $this->xmlmap->getFilenameID('sql/product','getPromoOrderQuantity');
+    public function is_purchase_allowed($buyer_id,$type,$product_id=false,$start,$end){
+        $condition = !($product_id===false) ? " AND  op.`product_id` = :product_id " : " AND  o.`buyer_id` = :buyer_id ";
+        $query = "
+            SELECT
+            COALESCE(SUM(op.order_quantity),0) AS `cnt` FROM es_order o
+            INNER JOIN es_order_product op ON o.id_order = op.order_id
+            INNER JOIN es_product p ON p.id_product = op.product_id AND p.promo_type = :type
+            WHERE NOT (o.`order_status` = 99 AND o.`payment_method_id` = 1) " . $condition;
         $sth = $this->db->conn_id->prepare($query);
-        $sth->bindParam(':buyer_id',$buyer_id, PDO::PARAM_INT);
+        !($product_id===false) ? $sth->bindParam(':product_id',$product_id, PDO::PARAM_INT) : $sth->bindParam(':buyer_id',$buyer_id, PDO::PARAM_INT);
         $sth->bindParam(':type',$type, PDO::PARAM_INT);
         $sth->closeCursor();
         $sth->execute();
         $result = $sth->fetchAll(PDO::FETCH_ASSOC);
-  
         $promo = $this->config->item('Promo')[$type];
-        if($result[0]['cnt'] >= $promo['purchase_limit']){
+        $PurchaseLimit = $promo['purchase_limit'];
+        if(is_string($PurchaseLimit)){
+            $PurchaseLimit = $promo[$PurchaseLimit];
+            foreach($PurchaseLimit as $items){
+                if(($start > strtotime($items['start'])) || $end < strtotime($items['end']) ) {
+                    $PurchaseLimit = 0;
+                }else{
+                    $PurchaseLimit = $items['purchase_limit'];
+                }
+            }
+        }
+        if($result[0]['cnt'] >= $PurchaseLimit){
             return false;
         }else{
             return true;

@@ -669,7 +669,6 @@ class product extends MY_Controller
         
         $banner_data = array();
         $view_data['deals_banner'] = $this->load->view('templates/dealspage/easydeals', $banner_data, TRUE);
-
         #$view_data['items'] = $this->product_model->getProductsByCategory($category_id,array(),0,"<",0,$this->per_page);
         $view_data['items'] = $this->product_model->getProductsByCategory($category_id,array(),0,"<",0,PHP_INT_MAX);
         foreach($view_data['items'] as $x=>$item){
@@ -682,6 +681,7 @@ class product extends MY_Controller
                 }
             }
         }
+        $view_data['peak_hour_items'] = $this->PeakHourPromo();
         $this->load->view('templates/header', $data); 
         $this->load->view('pages/product/product_promo_category', $view_data); 
         $this->load->view('templates/footer');
@@ -702,8 +702,24 @@ class product extends MY_Controller
         echo $data;
     }
 
+    public function PeakHourPromo()
+    {
+        $this->load->config('protected_category',TRUE);
+        $categoryId = $this->config->item('peak_hour_promo','protected_category');
+        $view_data['items'] = $this->product_model->getProductsByCategory($categoryId,array(),0,"<",0,PHP_INT_MAX);
+        foreach($view_data['items'] as $x=>$item){
+            $view_data['items'][$x]['is_soldout'] = true;
+            $product_quantity = $this->product_model->getProductQuantity($item['product_id']);
+            foreach($product_quantity as $q){
+                if($q['quantity'] > 0){
+                    $view_data['items'][$x]['is_soldout'] = false;
+                    break;
+                }
+            }
+        }
 
-
+        return $view_data;
+    }
 }
 
 

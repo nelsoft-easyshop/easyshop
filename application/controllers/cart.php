@@ -88,7 +88,6 @@ class Cart extends MY_Controller{
         if(!($this->session->userdata('usersession'))){
             $result = "login_to_add_item2cart";
         }
-
         echo json_encode($result);
     }
 
@@ -168,8 +167,20 @@ class Cart extends MY_Controller{
         #done checking if the attribute's are existing on DB and max_quantity
         $promo = $this->config->item('Promo')[$product['promo_type']];
         $d_quantity = 0;
-        if(($product['is_promote'] == 1 && intval($userQTY) >= intval($promo['purchase_limit'])) &&  $max_qty != 0){
-            $d_quantity = $promo['purchase_limit'];
+        $PurchaseLimit = $promo['purchase_limit'];
+
+        if(is_string($PurchaseLimit)){
+            $PurchaseLimit = $this->config->item('Promo')[$product['promo_type']][$PurchaseLimit];
+            foreach($PurchaseLimit as $items){
+                if((strtotime(date('H:i:s')) > strtotime($items['start'])) && (strtotime(date('H:i:s')) < strtotime($items['end'])) ) {
+                    $PurchaseLimit = $max_qty;
+                }else{
+                    $PurchaseLimit = 0;
+                }
+            }
+        }
+        if(($product['is_promote'] == 1 && intval($userQTY) >= intval($PurchaseLimit)) &&  $max_qty != 0){
+            $d_quantity = $PurchaseLimit;
         }else{
             if($userQTY > $max_qty || $max_qty == 0){
                 $d_quantity = $max_qty;
@@ -196,7 +207,7 @@ class Cart extends MY_Controller{
         );
         $result['data'] = $data;
         $result['delete_to_cart'] =($product['is_draft'] == "1" || $product['is_delete'] == "1" || $product['can_purchase'] === false);
-        
+
         return $result;
     }
 
@@ -231,12 +242,25 @@ class Cart extends MY_Controller{
     public function change_quantity($id,$cart_item,$qty){
         $data['rowid'] = $id;
         $data['qty'] = $qty;
-        $purchase_limit = $this->config->item('Promo')[$cart_item['promo_type']]['purchase_limit'];
+        $PurchaseLimit = $this->config->item('Promo')[$cart_item['promo_type']];
+
         $max_qty = $cart_item['maxqty'];
 
+        $PurchaseLimit = $PurchaseLimit['purchase_limit'];
+
+        if(is_string($PurchaseLimit)){
+            $PurchaseLimit = $this->config->item('Promo')[$cart_item['promo_type']][$PurchaseLimit];
+            foreach($PurchaseLimit as $items){
+                if((strtotime(date('H:i:s')) > strtotime($items['start'])) && (strtotime(date('H:i:s')) < strtotime($items['end'])) ) {
+                    $PurchaseLimit = $max_qty;
+                }else{
+                    $PurchaseLimit = 0;
+                }
+            }
+        }
         $result = false;
-        if($cart_item['is_promote'] == "1" && $qty > $purchase_limit){
-            $data['qty'] = $purchase_limit;
+        if($cart_item['is_promote'] == "1" && $qty > $PurchaseLimit){
+            $data['qty'] = $PurchaseLimit;
         }else if ($qty > $max_qty ){
             $data['qty'] = $max_qty;
         }

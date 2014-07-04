@@ -18,7 +18,7 @@ $config = array(
         ),
         '1' => array(
             'calculation_id' => '1',
-            'purchase_limit' => '1',
+            'purchase_limit' => 1,
             'payment_method' => array(
                             'cdb'=>'Credit or Debit Card',
                             'paypal'=>'Paypal'
@@ -39,6 +39,29 @@ $config = array(
             'banner' => 'fixeddiscount',
             'cart_solo_restriction' => false,
         ),
+        '3' => array(
+            'calculation_id' => '3',
+            'purchase_limit' => 'peak_hour_and_limit',
+            'payment_method' =>  array(
+                'cdb'=>'Credit or Debit Card',
+                'paypal'=>'Paypal',
+                'dragonpay'=>'Dragon Pay',
+                // 'dbd'=>'Direct Bank Deposit',
+                'cod'=>'Cash on Delivery'
+            ),
+            'banner' => '',
+            'cart_solo_restriction' => false,
+            'peak_hour_and_limit' => array(
+                0 => array(
+                    'start' => '12:00:00',
+                    'end' => '13:59:59',
+                    'purchase_limit' => 5),
+                1 => array(
+                    'start' => '20:00:00',
+                    'end' => '23:59:59',
+                    'purchase_limit' => PHP_INT_MAX)
+            )
+        )
     )
 );
 

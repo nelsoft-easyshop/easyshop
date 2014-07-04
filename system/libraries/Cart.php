@@ -97,6 +97,7 @@ class CI_Cart {
 		// at the top level. If it's not found, we will assume it's a multi-dimensional array.
 
 		$save_cart = FALSE;
+
 		if (isset($items['id']))
 		{
 			if (($rowid = $this->_insert($items)))
@@ -124,7 +125,6 @@ class CI_Cart {
 			$this->_save_cart();
 			return isset($rowid) ? $rowid : TRUE;
 		}
-
 		return FALSE;
 	}
 
