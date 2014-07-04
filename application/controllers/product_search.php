@@ -6,26 +6,24 @@ if (!defined('BASEPATH'))
 
 class product_search extends MY_Controller {
 	
-	function __construct()  
-	{ 
-		parent::__construct(); 
-		$this->load->helper('htmlpurifier');	
-        $this->load->model("product_model");	
-        $this->load->model("search_model");				
-	}
-    
+    function __construct()  
+    { 
+      parent::__construct(); 
+      $this->load->helper('htmlpurifier');	
+      $this->load->model("product_model");	
+      $this->load->model("search_model");				
+    }
+  
     /*   
      *   Number of returned products per request
      */
     
     public $per_page = 12; 
-    
-
 	
-    /*   
-     *  Advance search main function
-     *  route: advsrch
-     */
+	/*   
+	*  Advance search main function
+	*  route: advsrch
+	*/
 
 	function advance_search(){
 
@@ -194,7 +192,7 @@ class product_search extends MY_Controller {
 	
 	function advance_search_more() # ROUTING
 	{
-
+	    
 		if($this->input->post()){
 				
 			$start = $this->input->post('page_number') * $this->per_page; # start series
@@ -222,6 +220,9 @@ class product_search extends MY_Controller {
 			$othr_att = array();
 			$brnd_att = array();
 			$ctrO = 0;
+
+			$condition = ($condition !== 'false')?$condition:array();
+		      
 			foreach ($condition as $name => $val) {
 				
 				$chk = strpos($name, "_");
@@ -608,12 +609,12 @@ class product_search extends MY_Controller {
      *   Route: search_more
      */
     function search_more() 
-	{
-		$string_sort = "";
-		$per_page = $this->per_page;
+    {
+	$string_sort = "";
+	$per_page = $this->per_page;
         
         $post_data = $this->input->post();
-		$category_id = $post_data['id_cat']; 
+	$category_id = $post_data['id_cat']; 
    
         $this->load->config('protected_category', TRUE);
         $promo_category_id = $this->config->item('promo');
@@ -621,15 +622,15 @@ class product_search extends MY_Controller {
             exit();
         }
         
-		$start = $post_data['page_number'] * $per_page;
-		$type = $post_data['type'];	
+	$start = $post_data['page_number'] * $per_page;
+	$type = $post_data['type'];	
         
         $params = get_object_vars(json_decode($post_data['parameters']));
 
-		$string = ' '.ltrim($params['q_str']);
-		$category =  $params['q_cat']; 
-		$words = explode(" ",trim($string));  
-		$checkifexistcategory = $this->product_model->checkifexistcategory($category);
+	$string = ' '.ltrim($params['q_str']);
+	$category =  $params['q_cat']; 
+	$words = explode(" ",trim($string));  
+	$checkifexistcategory = $this->product_model->checkifexistcategory($category);
    
         unset($params['q_str']);
         unset($params['q_cat']);
