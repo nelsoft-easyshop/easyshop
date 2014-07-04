@@ -817,6 +817,31 @@ Advanced Search Filters
 .cd_product:hover .product_buy_con {
   display: block;
 }
+
+.product_buy_con.prod_disable > span {
+  height: auto;
+}
+
+.product_buy_con.prod_disable {
+  display: block;
+      /* Fallback for web browsers that doesn't support RGBa */
+    background: rgb(0, 0, 0) transparent;
+    /* RGBa with 0.6 opacity */
+    background: rgba(0, 0, 0, 0.7);
+    /* For IE 5.5 - 7*/
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#70000000, endColorstr=#70000000);
+    /* For IE 8*/
+    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#70000000, endColorstr=#70000000)";
+    height: 24px;
+    margin-top: 0px;
+    position: absolute;
+    text-align: center;
+    top: 0;
+    right: 0;
+    width: 100px;
+    z-index: 999999;
+}
+
 .product_buy_con {
     /* Fallback for web browsers that doesn't support RGBa */
     background: rgb(0, 0, 0) transparent;
@@ -834,6 +859,13 @@ Advanced Search Filters
     top: 0;
     width: 220px;
     z-index: 999999;
+}
+
+.product_buy_con p {
+  color: #fff;
+  font-weight: bold;
+  font-size: 14px;
+  text-transform: uppercase;
 }
 
 .product_buy_con > span {
