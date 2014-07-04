@@ -82,7 +82,6 @@ class cart_model extends CI_Model
         $sth->execute();
 
         return $sth->rowCount();
-        //try to merge...again...
     }
     public function isCartCheckoutPromoAllow($cart){
         $this->load->config('promo', TRUE);

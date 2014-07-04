@@ -71,7 +71,7 @@ if ( ! function_exists('applyPriceDiscount')){
         $buyer_id = $CI->session->userdata('member_id');
         $product['start_promo'] = false;
         if(intval($product['is_promote']) === 1){
-            $promo = $CI->product_model->GetPromoPrice($product['price'],$product['startdate'],$product['enddate'],$product['is_promote'],$product['promo_type'],$buyer_id,$product['id_product']);
+            $promo = $CI->product_model->GetPromoPrice($product['price'],$product['discount'],$product['startdate'],$product['enddate'],$product['is_promote'],$product['promo_type'],$buyer_id,$product['id_product']);
             $product['original_price'] = $product['price'];    
             $product['can_purchase'] = $promo['can_purchase'];
             $product['is_soldout'] = $promo['is_soldout'];

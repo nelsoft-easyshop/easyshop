@@ -2031,7 +2031,7 @@ class product_model extends CI_Model
     }
 
     
-    public function GetPromoPrice($baseprice,$start,$end,$is_promo,$type,$buyer_id, $product_id){
+    public function GetPromoPrice($baseprice,$discount,$start,$end,$is_promo,$type,$buyer_id, $product_id){
         $today = strtotime( date("Y-m-d H:i:s"));
         $startdate = strtotime($start);
         $enddate = strtotime($end);
@@ -2068,12 +2068,13 @@ class product_model extends CI_Model
                 case 3:
                     #items should be can_purchase = 1 AND start_promo = 1 to be sell
                     $LimitPerProductId = $product_id;
-                    $PromoPrice = $baseprice;
+                    $PromoPrice = $baseprice -   $baseprice*($discount / 100) ;
                     break;
                 default :
                     $PromoPrice = $baseprice;
                     break;
             }
+
             $result['price'] = $PromoPrice;
             $result['can_purchase'] = $this->is_purchase_allowed($buyer_id,$type,$LimitPerProductId, $startdate,$enddate);
             $result['is_soldout'] = $this->is_sold_out($product_id);
