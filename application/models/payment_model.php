@@ -10,6 +10,7 @@ class payment_model extends CI_Model
 		$this->load->library("xmlmap");
         $this->load->model('cart_model');
         $this->load->model('user_model');
+        $this->load->model('product_model');
 	}	
 
 
@@ -235,6 +236,8 @@ class payment_model extends CI_Model
 	    			$sth3->bindParam(':returnqty',$value['order_quantity'],PDO::PARAM_INT);
 	    			$sth3->bindParam(':item_id',$value['product_item_id'],PDO::PARAM_INT);
 	    			$sth3->execute();
+
+	    			$this->product_model->check_if_soldout($value['product_id']);
 
 	    			$historyData = array(
 	    				'order_product_id' => $value['product_item_id'],

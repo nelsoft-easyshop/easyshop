@@ -2095,5 +2095,27 @@ class product_model extends CI_Model
         }
     }
 
+    public function check_if_soldout($product_id)
+    {
+    	$query = "
+		UPDATE 
+		  es_product 
+		SET
+		  `is_sold_out` = 
+		  (SELECT 
+		    IF(SUM(quantity) <= 0, '1', '0') AS soldout 
+		  FROM
+		    `es_product_item` 
+		  WHERE product_id = :product_id) 
+		WHERE id_product = :product_id;
+    	";
+    	;
+    	$sth0 = $this->db->conn_id->prepare($query); 
+    	$sth0->bindParam(':product_id',$product_id,PDO::PARAM_INT); 
+        $sth0->execute();
+
+    	return true;
+    }
+
     
 }
