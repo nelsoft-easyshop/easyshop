@@ -69,12 +69,13 @@
     <div class="prod_categories">
       <div class="nav_title">Categories <img src="<?=base_url()?>assets/images/img_arrow_down.png"></div>
       <?php echo $category_navigation; ?>
-    </div>
+    </div> 
     <div class="prob_cat_nav">
       <div class="category_nav product_content">
         <ul>
+ 
           <?php foreach($main_categories as $category): ?>
-          <li class = <?php echo (($category['id_cat'] === $breadcrumbs[0]['id_cat'])?"active":"");?>> <a href="<?=base_url()?>category/<?php echo $category['slug']?>"> <?php echo html_escape($category['name']);?> </a> </li>
+          <li class = <?php echo ((isset($breadcrumbs[0]['id_cat']) &&  $category['id_cat'] === $breadcrumbs[0]['id_cat'])?"active":"");?>> <a href="<?=base_url()?>category/<?php echo $category['slug']?>"> <?php echo html_escape($category['name']);?> </a> </li>
           <?php endforeach;?>
         </ul>
         <span class="span_bg prod_cat_drop"></span>
