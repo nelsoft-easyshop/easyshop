@@ -818,11 +818,11 @@ Advanced Search Filters
   display: block;
 }
 
-.product_buy_con.prod_disable > span {
+.product_buy_con.prod_date > span {
   height: auto;
 }
 
-.product_buy_con.prod_disable {
+.product_buy_con.prod_date {
   display: block;
       /* Fallback for web browsers that doesn't support RGBa */
     background: rgb(0, 0, 0) transparent;
