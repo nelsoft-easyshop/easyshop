@@ -825,13 +825,13 @@ Advanced Search Filters
 .product_buy_con.prod_date {
   display: block;
       /* Fallback for web browsers that doesn't support RGBa */
-    background: rgb(0, 0, 0) transparent;
+    background: rgb(242, 123, 3) transparent;
     /* RGBa with 0.6 opacity */
-    background: rgba(0, 0, 0, 0.7);
+    background: rgba(242, 123, 3, 0.9);
     /* For IE 5.5 - 7*/
-    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#70000000, endColorstr=#70000000);
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#900f38000, endColorstr=#90f38000);
     /* For IE 8*/
-    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#70000000, endColorstr=#70000000)";
+    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#90f38000, endColorstr=#90f38000)";
     height: 24px;
     margin-top: 0px;
     position: absolute;
