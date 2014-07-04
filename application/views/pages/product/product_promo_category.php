@@ -14,6 +14,7 @@
         <div class='product_list'>
 
             <?php foreach($peak_hour_items['items'] as $item): ?>
+                <?php if($item['is_promote'] == 1 && $item['promo_type'] == 3): ?>
                 <div class="cd_product">
 
                     <?php if($item['is_soldout']): ?>
@@ -73,9 +74,6 @@
                                         <div class="discount_price">PHP <?php echo number_format($item['original_price'],2,'.',',');?></div>
                                         <div></div>
                                     <?php endif;  ?>
-                                <?php else: ?>
-                                    <div class="price">PHP <?php echo number_format($item['price'],2,'.',',');?></div>
-                                    <div class="discount_price">PHP <?php echo number_format($item['original_price'],2,'.',',');?></div>
                                 <?php endif; ?>
 
                             </div>
@@ -84,6 +82,7 @@
                             </div>
                         </a>
                 </div>
+            <?php endif; ?>
             <?php endforeach; ?>
         </div>
     </div>
