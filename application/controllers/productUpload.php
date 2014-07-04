@@ -381,10 +381,10 @@ class productUpload extends MY_Controller
  			$arraynameoffiles = $this->input->post('arraynameoffiles');
 			$arraynameoffiles = json_decode($arraynameoffiles);
  	 
-			// if(count($arraynameoffiles) <= 0){ 
-			// 	echo '{"e":"0","d":"Please select at least one photo for your listing."}';
-			// 	exit();
-			// }
+			if(count($arraynameoffiles) <= 0){ 
+				echo '{"e":"0","d":"Please select at least one photo for your listing."}';
+				exit();
+			}
 
 			$removeThisPictures = json_decode($this->input->post('removeThisPictures')); 
 			$primaryId = $this->input->post('primaryPicture');
@@ -420,10 +420,10 @@ class productUpload extends MY_Controller
 				$arrayNameOnly[$key] = $temp;
 			}
 
-			// if(count($arraynameoffiles) <= 0){
-			// 	echo '{"e":"0","d":"Please select at least one photo for your listing."}';
-			// 	exit();
-			// }
+			if(count($arraynameoffiles) <= 0){
+				echo '{"e":"0","d":"Please select at least one photo for your listing."}';
+				exit();
+			}
 
 			$allowed =  array('gif','png' ,'jpg','jpeg'); # available format only for image
 			$x = 0; 
