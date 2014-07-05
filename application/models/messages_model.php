@@ -171,10 +171,10 @@ class messages_model extends CI_Model
 	    
 	    $row = $sth->rowCount();
 	    if($row == 0 ){
-			    return false;
+		return false;
 	    }
 	    else{
-			    return true;
+		return true;
 	    }
     }
 }
