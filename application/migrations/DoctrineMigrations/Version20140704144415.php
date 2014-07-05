@@ -21,22 +21,20 @@ class Version20140704144415 extends AbstractMigration
 
        	$this->addSql('CREATE TABLE `es_order_billing_info` (
 			  `id_es_order_billing_info` int(10) NOT NULL AUTO_INCREMENT,
-			  `order_id` int(10) DEFAULT '0',
-			  `order_product_id` int(10) DEFAULT '0',
-			  `bank_name` varchar(1024) DEFAULT '',
-			  `account_name` varchar(1024) DEFAULT '',
-			  `account_number` varchar(1024) DEFAULT '',
+			  `order_id` int(10) DEFAULT "0",
+			  `order_product_id` int(10) DEFAULT "0",
+			  `bank_name` varchar(1024) DEFAULT "",
+			  `account_name` varchar(1024) DEFAULT "",
+			  `account_number` varchar(1024) DEFAULT "",
 			  PRIMARY KEY (`id_es_order_billing_info`)
 			) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
        	'); 
 
 
        	$this->addSql("
-			DELIMITER $$
 
-			USE `easyshop`$$
 
-			DROP PROCEDURE IF EXISTS `es_sp_Payment_order`$$
+			DROP PROCEDURE IF EXISTS `es_sp_Payment_order`;
 
 			CREATE DEFINER=`root`@`localhost` PROCEDURE `es_sp_Payment_order`(
 			          IN i_payment_type INT (10)
@@ -267,9 +265,8 @@ class Version20140704144415 extends AbstractMigration
 			                        
 			                        SELECT o_success, o_message,v_order_id,`invoice_no`,total,dateadded FROM `es_order` WHERE `id_order` = v_order_id;
 			                    
-			                END$$
+			                END
 
-			DELIMITER ;
 		"); 
 
 
@@ -284,15 +281,13 @@ class Version20140704144415 extends AbstractMigration
 		");
 
     	$this->addSql("
-    			DROP TABLE `es_order_billing_info`
+    			DROP TABLE `es_order_billing_info`;
 		");
 
         $this->addSql("
-        	DELIMITER $$
 
-			USE `easyshop`$$
 
-			DROP PROCEDURE IF EXISTS `es_sp_Payment_order`$$
+			DROP PROCEDURE IF EXISTS `es_sp_Payment_order`;
 
 			CREATE DEFINER=`root`@`localhost` PROCEDURE `es_sp_Payment_order`(
 			          IN i_payment_type INT (10)
@@ -503,9 +498,8 @@ class Version20140704144415 extends AbstractMigration
 			                        
 			                        SELECT o_success, o_message,v_order_id,`invoice_no`,total,dateadded FROM `es_order` WHERE `id_order` = v_order_id;
 			                    
-			                END$$
+			                END
 
-			DELIMITER ;
         ");
 
     }
