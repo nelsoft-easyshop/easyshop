@@ -6,73 +6,73 @@ class product_model extends CI_Model
 {
 	function __construct() 
 	{
-		parent::__construct();  
-        $this->load->helper('product');
-        $this->load->library("xmlmap");
-        $this->load->config("promo");
+	    parent::__construct();  
+	    $this->load->helper('product');
+	    $this->load->library("xmlmap");
+	    $this->load->config("promo");
 	}
 
 	# the queries directory -- application/resources/sql/product.xml
 
 	function selectCategoryDetails($id) 
 	{
-		$query = $this->xmlmap->getFilenameID('sql/product', 'selectCategoryDetails');
-		$sth = $this->db->conn_id->prepare($query);
-		$sth->bindParam(':id_cat', $id);
-		$sth->execute();
-		$row = $sth->fetchAll(PDO::FETCH_ASSOC);
- 	
-		return $row[0];
+	    $query = $this->xmlmap->getFilenameID('sql/product', 'selectCategoryDetails');
+	    $sth = $this->db->conn_id->prepare($query);
+	    $sth->bindParam(':id_cat', $id);
+	    $sth->execute();
+	    $row = $sth->fetchAll(PDO::FETCH_ASSOC);
+    
+	    return $row[0];
 	}
 
 	function getDownLevelNode($id, $is_admin = false) # get all down level category on selected category from database
 	{
-		$query = $this->xmlmap->getFilenameID('sql/product', 'selectDownLevel');
-        $protected_categories = array();
-        if(!$is_admin){
-           $this->config->load('protected_category', TRUE);
-            $protected_categories = $this->config->config['protected_category'];
-            $qmarks = implode(',', array_fill(0, count($protected_categories), '?'));
-            $query = $query.' AND id_cat NOT IN ('.$qmarks.') AND id_cat != 1 ORDER BY sort_order ASC';
-        }
+	    $query = $this->xmlmap->getFilenameID('sql/product', 'selectDownLevel');
+	    $protected_categories = array();
+	    if(!$is_admin){
+		$this->config->load('protected_category', TRUE);
+		$protected_categories = $this->config->config['protected_category'];
+		$qmarks = implode(',', array_fill(0, count($protected_categories), '?'));
+		$query = $query.' AND id_cat NOT IN ('.$qmarks.') AND id_cat != 1 ORDER BY sort_order ASC';
+	    }
      	
-		$sth = $this->db->conn_id->prepare($query);
-        $sth->bindValue(1, $id, PDO::PARAM_INT);    
-        $k = 1;
-        foreach ($protected_categories as $x){
-            $sth->bindValue(($k+1), $x, PDO::PARAM_INT);   
-            $k++;
-        }           
-		$sth->execute();
-		$row = $sth->fetchAll();
-		return $row;
+	    $sth = $this->db->conn_id->prepare($query);
+	    $sth->bindValue(1, $id, PDO::PARAM_INT);    
+	    $k = 1;
+	    foreach ($protected_categories as $x){
+		$sth->bindValue(($k+1), $x, PDO::PARAM_INT);   
+		$k++;
+	    }           
+	    $sth->execute();
+	    $row = $sth->fetchAll();
+	    return $row;
 	}
 
 	function selectChild($id) # get all down level category on selected category from database
 	{
-		$query = $this->xmlmap->getFilenameID('sql/product', 'selectChild');
-		$sth = $this->db->conn_id->prepare($query);
-		$sth->bindParam(':cat_id', $id);
-		$sth->execute();
-		$row = $sth->fetchAll(PDO::FETCH_COLUMN, 0);
+	    $query = $this->xmlmap->getFilenameID('sql/product', 'selectChild');
+	    $sth = $this->db->conn_id->prepare($query);
+	    $sth->bindParam(':cat_id', $id);
+	    $sth->execute();
+	    $row = $sth->fetchAll(PDO::FETCH_COLUMN, 0);
 
-        
-		if (isset($row[0])){ // Added - Rain 02/25/14
-			return explode(',', $row[0]);
-		}	
+    
+	    if (isset($row[0])){ // Added - Rain 02/25/14
+		    return explode(',', $row[0]);
+	    }	
 	}
 	
 	function getParentId($id) #get all parent category from selected id.
 	{
 
-		$query = $this->xmlmap->getFilenameID('sql/product','getParent');
-		$sth = $this->db->conn_id->prepare($query);
-		$sth->bindParam(':id',$id);
-		$sth->execute();
-     
-		$row = $sth->fetchAll(PDO::FETCH_ASSOC);
+	    $query = $this->xmlmap->getFilenameID('sql/product','getParent');
+	    $sth = $this->db->conn_id->prepare($query);
+	    $sth->bindParam(':id',$id);
+	    $sth->execute();
+  
+	    $row = $sth->fetchAll(PDO::FETCH_ASSOC);
 
-		return $row;
+	    return $row;
 	}
     
 
@@ -80,64 +80,64 @@ class product_model extends CI_Model
 
 	function getAttributesByParent($parents) # get all attributes from all parents from to the last selected category
 	{
-		$array = $parents;
+	    $array = $parents;
 
-		$keys = array();
+	    $keys = array();
 
-		for ($i=0 ; $i < sizeof($parents) ; $i++ ) { 
-			$keys[] = $parents[$i]['id_cat'];
-		}
-		$value = implode(',',$keys);
+	    for ($i=0 ; $i < sizeof($parents) ; $i++ ) { 
+		    $keys[] = $parents[$i]['id_cat'];
+	    }
+	    $value = implode(',',$keys);
 
-		$query = " 
-		SELECT DISTINCT
-		  a.name AS cat_name
-		  , a.id_attr
-		  , a.attr_lookuplist_id
-		  , b.name AS input_type
-		  , c.name AS input_name 
-		FROM
-		  es_attr a
-		  , es_datatype b
-		  , es_attr_lookuplist c 
-		WHERE a.datatype_id = b.id_datatype 
-		  AND a.attr_lookuplist_id = c.id_attr_lookuplist 
-		  AND a.cat_id IN (" .$value .")
-		  GROUP BY cat_name, a.id_attr, a.attr_lookuplist_id, input_type, input_name
-		ORDER BY cat_name ASC ";
+	    $query = " 
+	    SELECT DISTINCT
+	      a.name AS cat_name
+	      , a.id_attr
+	      , a.attr_lookuplist_id
+	      , b.name AS input_type
+	      , c.name AS input_name 
+	    FROM
+	      es_attr a
+	      , es_datatype b
+	      , es_attr_lookuplist c 
+	    WHERE a.datatype_id = b.id_datatype 
+	      AND a.attr_lookuplist_id = c.id_attr_lookuplist 
+	      AND a.cat_id IN (" .$value .")
+	      GROUP BY cat_name, a.id_attr, a.attr_lookuplist_id, input_type, input_name
+	    ORDER BY cat_name ASC ";
 
-		$sth = $this->db->conn_id->prepare($query);
-		$sth->execute();
-		$row = $sth->fetchAll(PDO::FETCH_ASSOC);
-		return $row;
+	    $sth = $this->db->conn_id->prepare($query);
+	    $sth->execute();
+	    $row = $sth->fetchAll(PDO::FETCH_ASSOC);
+	    return $row;
 
 	}
 
 	function getAttributesBySelf($selfId) # get all attributes from all parents from to the last selected category
 	{
 
-		$query = " 
-		SELECT DISTINCT
-		  a.name AS cat_name
-		  , a.id_attr
-		  , a.attr_lookuplist_id
-		  , b.name AS input_type
-		  , c.name AS input_name 
-		FROM
-		  es_attr a
-		  , es_datatype b
-		  , es_attr_lookuplist c 
-		WHERE a.datatype_id = b.id_datatype 
-		  AND a.attr_lookuplist_id = c.id_attr_lookuplist 
-		  AND a.cat_id = :cat_id
-		  GROUP BY cat_name, a.id_attr, a.attr_lookuplist_id, input_type, input_name
-		ORDER BY cat_name ASC ";
+	    $query = " 
+	    SELECT DISTINCT
+	      a.name AS cat_name
+	      , a.id_attr
+	      , a.attr_lookuplist_id
+	      , b.name AS input_type
+	      , c.name AS input_name 
+	    FROM
+	      es_attr a
+	      , es_datatype b
+	      , es_attr_lookuplist c 
+	    WHERE a.datatype_id = b.id_datatype 
+	      AND a.attr_lookuplist_id = c.id_attr_lookuplist 
+	      AND a.cat_id = :cat_id
+	      GROUP BY cat_name, a.id_attr, a.attr_lookuplist_id, input_type, input_name
+	    ORDER BY cat_name ASC ";
 
-		$sth = $this->db->conn_id->prepare($query);
-		$sth->bindParam(':cat_id',$selfId,PDO::PARAM_INT);
-		$sth->execute();
-		$row = $sth->fetchAll(PDO::FETCH_ASSOC);
-		return $row;
+	    $sth = $this->db->conn_id->prepare($query);
+	    $sth->bindParam(':cat_id',$selfId,PDO::PARAM_INT);
+	    $sth->execute();
+	    $row = $sth->fetchAll(PDO::FETCH_ASSOC);
+	    return $row;
 
 	## need to loop so i do it manual to generate dynamic query (but not advisable please dont do this)
 	## - Prepared by: Ryan Vasquez
@@ -145,56 +145,56 @@ class product_model extends CI_Model
 
 	function getLookItemListById($id) # getting item list from database. EG: Color -- (White,Blue,Yellow)
 	{
-		$query = $this->xmlmap->getFilenameID('sql/product','getLookupListItem');
-		$sth = $this->db->conn_id->prepare($query);
-		$sth->bindParam(':id',$id);
-		$sth->execute();
-		$row = $sth->fetchAll();
+	    $query = $this->xmlmap->getFilenameID('sql/product','getLookupListItem');
+	    $sth = $this->db->conn_id->prepare($query);
+	    $sth->bindParam(':id',$id);
+	    $sth->execute();
+	    $row = $sth->fetchAll();
 
-		return $row;
+	    return $row;
 	}
 
 	function getSlug($id) 
 	{
-		$query = $this->xmlmap->getFilenameID('sql/product', 'getSlugByID');
-		$sth = $this->db->conn_id->prepare($query);
-		$sth->bindParam(':id',$id);
-		$sth->execute();
-		$row = $sth->fetch(PDO::FETCH_ASSOC);
-		return $row['slug'];
+	    $query = $this->xmlmap->getFilenameID('sql/product', 'getSlugByID');
+	    $sth = $this->db->conn_id->prepare($query);
+	    $sth->bindParam(':id',$id);
+	    $sth->execute();
+	    $row = $sth->fetch(PDO::FETCH_ASSOC);
+	    return $row['slug'];
 	}
     
-    /* 
-     *   SET second parameter to false to prevent increment of click count
-     */
-    
-    function getProductBySlug($slug, $add_click_count = true)
-    {
-        if($add_click_count){
-            $query = $this->xmlmap->getFilenameID('sql/product', 'getProductBySlug');
-        }else{
-            $query = $this->xmlmap->getFilenameID('sql/product', 'getProductBySlugNoIncrement');
-        }
-	$sth = $this->db->conn_id->prepare($query);
-	$sth->bindParam(':slug',$slug);
-	$sth->execute();
+	/* 
+	  *   SET second parameter to false to prevent increment of click count
+	  */
+	
+	function getProductBySlug($slug, $add_click_count = true)
+	{
+	    if($add_click_count){
+		$query = $this->xmlmap->getFilenameID('sql/product', 'getProductBySlug');
+	    }else{
+		$query = $this->xmlmap->getFilenameID('sql/product', 'getProductBySlugNoIncrement');
+	    }
+	    $sth = $this->db->conn_id->prepare($query);
+	    $sth->bindParam(':slug',$slug);
+	    $sth->execute();
 
-	$product = $sth->fetch(PDO::FETCH_ASSOC);
-        if(intval($product['o_success']) !== 0){
-	    if(strlen(trim($product['userpic']))===0)
-	      $product['userpic'] = 'assets/user/default';
-            if(intval($product['brand_id'],10) === 1)
-	      $product['brand_name'] = ($product['custombrand']!=='')?$product['custombrand']:'Custom brand';
-	    applyPriceDiscount($product);
-	    if(isset($product['product_image_path'])){
-                $temp = array($product); 
-                explodeImagePath($temp); 
-                $product = $temp[0];
-	    } 
-        }
-	return $product;
-    }
- 
+	    $product = $sth->fetch(PDO::FETCH_ASSOC);
+	    if(intval($product['o_success']) !== 0){
+		if(strlen(trim($product['userpic']))===0)
+		  $product['userpic'] = 'assets/user/default';
+		if(intval($product['brand_id'],10) === 1)
+		  $product['brand_name'] = ($product['custombrand']!=='')?$product['custombrand']:'Custom brand';
+		applyPriceDiscount($product);
+		if(isset($product['product_image_path'])){
+		    $temp = array($product); 
+		    explodeImagePath($temp); 
+		    $product = $temp[0];
+		} 
+	    }
+	    return $product;
+	}
+
 
 
     /*
