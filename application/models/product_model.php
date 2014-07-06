@@ -1732,10 +1732,10 @@ class product_model extends CI_Model
 	public function deleteShippingPreference($headId, $member_id)
 	{
 		$query = $this->xmlmap->getFilenameID('sql/product','deleteShippingPreference');
-    	$sth = $this->db->conn_id->prepare($query);
-    	$sth->bindParam(':member_id', $member_id, PDO::PARAM_INT);
+		$sth = $this->db->conn_id->prepare($query);
+		$sth->bindParam(':member_id', $member_id, PDO::PARAM_INT);
 		$sth->bindParam(':head_id', $headId, PDO::PARAM_INT);
-    	$result = $sth->execute();	
+		$result = $sth->execute();	
 		
 		return $result;
 	}
@@ -1743,10 +1743,10 @@ class product_model extends CI_Model
 	public function getProductItem($productId, $memberId)
 	{
 		$query = $this->xmlmap->getFilenameID('sql/product','getProductItem');
-    	$sth = $this->db->conn_id->prepare($query);
-    	$sth->bindParam(':product_id', $productId, PDO::PARAM_INT);
-    	$sth->bindParam(':member_id', $memberId, PDO::PARAM_INT);
-    	$result = $sth->execute();
+		$sth = $this->db->conn_id->prepare($query);
+		$sth->bindParam(':product_id', $productId, PDO::PARAM_INT);
+		$sth->bindParam(':member_id', $memberId, PDO::PARAM_INT);
+		$result = $sth->execute();
 		$row = $sth->fetchAll(PDO::FETCH_ASSOC);
 
     	return $row;
@@ -1755,9 +1755,9 @@ class product_model extends CI_Model
 	public function getShippingSummary($prod_id)
 	{
 		$query = $this->xmlmap->getFilenameID('sql/product', 'getShippingSummary');
-    	$sth = $this->db->conn_id->prepare($query);
-    	$sth->bindParam(':prod_id', $prod_id, PDO::PARAM_INT);
-    	$result = $sth->execute();
+		$sth = $this->db->conn_id->prepare($query);
+		$sth->bindParam(':prod_id', $prod_id, PDO::PARAM_INT);
+		$result = $sth->execute();
 		$row = $sth->fetchAll(PDO::FETCH_ASSOC);
         
 		$data = array();
@@ -2110,10 +2110,11 @@ class product_model extends CI_Model
 			}
 		      }
 		    }
-		    
+		    /*
 		    if((!$bool_start_promo) && ($today >= $enddate)){
 			$bool_start_promo = true;
 		    }
+		    */
 		    
                     $PromoPrice = $baseprice -   $baseprice*($discount_percentage / 100) ;
                     break;
