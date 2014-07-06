@@ -8,12 +8,12 @@
         Banco de Oro Unibank (BDO)
     </select>
 
-	<select id="bank-account-name">
-		Easyshop Inc
-	</select>
+    <select id="bank-account-name">
+	Easyshop Inc
+    </select>
 
     <select id="message-sender-id">
-        3
+        11279
     </select>
     
 </map>
