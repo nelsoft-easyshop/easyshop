@@ -4076,6 +4076,7 @@ a:hover.tooltips span {
 	color: #353535;
 	height: 18px;
 	vertical-align: middle;
+	width: 170px;
 }
 
 .post_item_srch_container input[type="text"]::-webkit-input-placeholder { /* WebKit browsers */
@@ -4527,16 +4528,14 @@ div.post_item_content_left {
 .original_price {
     display: inline-block;
     font-size: 12px;
-    height: 20px;
     overflow: hidden;
     text-decoration: line-through;
     text-overflow: ellipsis;
-    width: 125px;
     vertical-align: middle;
 }
 
 .price_container .original_price {
-	width: 110px;
+	width: auto;
 	text-align: left;
 }
 
@@ -6888,11 +6887,6 @@ margin-right: 10px;
 .txt_label {
 	display: inline-block;
 	width: 65px;
-}
-
-
-.item_sch_box{
-    width: 150px;
 }
 
 

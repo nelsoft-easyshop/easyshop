@@ -22,17 +22,18 @@ class cart_model extends CI_Model
             $sth->execute();
             $rows = $sth->fetchAll(PDO::FETCH_ASSOC);	
             $data = array();
+
             if(empty($rows)){
                 $data['result'] = false;
             }
             else{
                 foreach($rows as $row){
-					$index = $row['name'];
-					if(!array_key_exists($index, $data))
-					$data[$index] =$row['attr_value']; 
-					$data['price'] = $row['attr_price'];
-					$data['result'] = true;
-					$data['attr_id'] = $row['id_optional_attrdetail'];
+		    $index = $row['name'];
+		    if(!array_key_exists($index, $data))
+		    $data[$index] =$row['attr_value']; 
+		    $data['price'] = $row['attr_price'];
+		    $data['result'] = true;
+		    $data['attr_id'] = $row['id_optional_attrdetail'];
                 }
             }
             return $data;
@@ -83,11 +84,18 @@ class cart_model extends CI_Model
 
         return $sth->rowCount();
     }
+    
+    
+    /*  
+     *  Checks if @cart array has items that are allowed to be purchased only one at a time.
+     *  Typically used before payment is validated.
+     */
+    
     public function isCartCheckoutPromoAllow($cart){
         $this->load->config('promo', TRUE);
         $count_solo_items = 0;
         foreach($cart as $cart_item){
-            $promo_solo_restriction = $this->config->item('Promo')[$cart_item['promo_type']]['cart_solo_restriction'];
+            $promo_solo_restriction = $this->config->item('Promo')[$cart_item['promo_type']]['cart_solo_restriction'];           
             if ((intval($cart_item['is_promote']) === 1) && $promo_solo_restriction ) {
                 $count_solo_items ++;
             }
@@ -99,6 +107,11 @@ class cart_model extends CI_Model
         }
 
     }
+    
+    
+    /*   
+     *   Function is unused. Remove if not needed.
+     */ 
     
     public function isCartInsertPromoAllow($cart, $item = array()){
         $this->load->config('promo', TRUE);

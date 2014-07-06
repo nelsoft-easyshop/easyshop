@@ -122,19 +122,22 @@
 				$("#total").html("0.00");
 			}
         });
+        
         $('.rad').click(function () {
-			var value = Number($("#subtotal"+$(this).val()).html().replace(/\$/g,'').replace(/,/g,''));
-			var total = Number($("#total").html().replace(/\$/g,'').replace(/,/g,''));    
-			var sum = 0;
-			if ($(this).prop('checked')) {
-			sum = value + total;
-			}else {
-			sum = total - value;
-			}
-			//$("#total").html(Number(sum).toLocaleString('en')+".00");
+	    var value = Number($("#subtotal"+$(this).val()).html().replace(/\$/g,'').replace(/,/g,''));
+	    var total = Number($("#total").html().replace(/\$/g,'').replace(/,/g,''));    
+	    var sum = 0;
+	    if ($(this).prop('checked')) {
+	      sum = value + total;
+	    }else {
+	      sum = total - value;
+	    }
+	    //$("#total").html(Number(sum).toLocaleString('en')+".00");
             var ttl = numeral(parseFloat(sum).toFixed(2)).format('0,0.00');
-			$("#total").html(ttl);
+	    $("#total").html(ttl);
         });
+        
+        
         $("#proceed_payment").click(function(event){
             event.preventDefault();
             var csrftoken = $("meta[name='csrf-token']").attr('content');

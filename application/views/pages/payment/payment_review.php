@@ -299,7 +299,7 @@
         <div>
           <label >Mobile No:<font color="red">*</font></label> 
 
-          <input maxlength="11" placeholder="eg. 9051235678" type="text" name="c_mobile" id="c_mobile" value="<?php echo (strlen(trim($c_mobile)) !== 0)?$c_mobile:$contactno;?>"> 
+          <input maxlength="11" placeholder="eg. 09051235678" type="text" name="c_mobile" id="c_mobile" value="<?php echo (strlen(trim($c_mobile)) !== 0)?$c_mobile:$contactno;?>"> 
         </div>
 
         <div>

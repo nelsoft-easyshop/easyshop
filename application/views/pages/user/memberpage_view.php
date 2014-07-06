@@ -88,7 +88,6 @@
 					<li><a href="#payment" class="<?php echo ($tab=='pmnt')?'selected':'';?>">Payment Accounts</a></li>
 					<li><a href="#transactions" class="<?php echo ($tab=='pending')?'selected':'';?>">On-going Transactions</a></li>
 					<li><a href="#complete_transactions">Completed Transactions</a></li>
-                    <!-- <li><a href="#privacy_settings">Privacy Settings</a></li> -->
 					<li><a href="#security_settings">Security Settings</a></li>
 				</ul> 
 			</div>	
@@ -212,10 +211,8 @@
 		foreach($active_products as $active_product): ?>
 		<div class="post_items_content content-paging">
 			<div class="post_item_content_left">
-				<div class="post_item_img_table">
-					 <span class="cd_slide_discount">
-                                <span>50%<br>OFF</span>
-                            </span>
+			    <div class="post_item_img_table">
+				                     		                                  
 				<span class="post_item_img_con">
 					<img src="<?php echo base_url().$active_product['path'].'categoryview/'.$active_product['file']; ?>" class="product_img">
 				</span>
@@ -259,7 +256,10 @@
 					 <?php echo number_format($active_product['price'],2,'.',',');?>
 				</span>
 				<br />Price<br />
-				<small>Orginal Price:</small> <small class="original_price"> &#8369; 2,000.00</small>
+
+				<?PHP if($active_product['discount'] > 0): ?>   
+				    <small class="original_price"> &#8369; <?php echo number_format($active_product['original_price'],2,'.',','); ?> </small> | <strong> <?php echo number_format( $active_product['percentage'],0,'.',',');?> % OFF  </strong>
+				<?PHP endif;?>	
 					
 			</p>
 			
@@ -267,7 +267,12 @@
 			<p>
 				<span class="fm1 f24 pad_btm10"><?php echo $active_product['availability'];?></span>
 				<br />Available Stock<br />
-				<span class="span_bg img_free_shipping"></span>
+				
+				 <?PHP IF($active_product['is_free_shipping']): ?>
+				    <span class="span_bg img_free_shipping"></span>
+				 <?PHP ENDIF; ?>
+				
+				
 			</p>
 		</div>
 		<p><strong>Description:</strong><br />
@@ -361,8 +366,9 @@
 		<?php $product_counter =0; $mycounter = 0;?>
 		<?php foreach($deleted_products as $deleted_product):?>
 		<div class="post_items_content content-paging">
-			<div class="post_item_content_left">
+		<div class="post_item_content_left">
                 <div class="post_item_img_table">
+
                     <span class="post_item_img_con">
                         <img src="<?php echo base_url().$deleted_product['path'].'categoryview/'.$deleted_product['file']; ?>" class="product_img">
                     </span>
@@ -404,12 +410,24 @@
 		<div class="price_container"> 
 			<p>
 				<span class="fm1 f24 orange">PHP <?php echo number_format($deleted_product['price'],2,'.',',');?></span>
-				<br />Price
+				<br />Price <br/>
+				
+				
+				<?PHP if($deleted_product['discount'] > 0): ?>   
+				    <small class="original_price"> &#8369; <?php echo number_format($deleted_product['original_price'],2,'.',','); ?> </small> | <strong> <?php echo number_format( $deleted_product['percentage'],0,'.',',');?> % OFF  </strong>
+				<?PHP endif;?>	
+
 			</p>
-			<p>
-                <p><span class="fm1 f24 grn"><?php echo $deleted_product['sold'];?></span><br />Sold Items</p>
-                <p><span class="fm1 f24"><?php echo $deleted_product['availability'];?></span><br />Available Stock</p>
-			</p>
+		  <p>
+		      <p><span class="fm1 f24 grn"><?php echo $deleted_product['sold'];?></span><br />Sold Items</p>
+		      <p><span class="fm1 f24"><?php echo $deleted_product['availability'];?></span>
+			  <br />Available Stock <br/>
+		      
+			  <?PHP IF($deleted_product['is_free_shipping'] || TRUE): ?>
+			    <span class="span_bg img_free_shipping"></span>
+			  <?PHP ENDIF; ?>
+		      </p>
+		  </p>
 		</div>
 		<p><strong>Description:</strong><br />
 			<span class="item_prod_desc_content">

@@ -4,7 +4,6 @@ $(document).ready(function(){
 });
 
 $(document).ready(function(){
-    
    $("#login_form").validate({
          rules: {
             login_username: {
@@ -42,25 +41,28 @@ $(document).ready(function(){
                 data: $(form).serializeArray(),
                 success:function(data){
                     if(data.o_success <= 0){
-						$("#login_error").empty();
+			$("#login_error").empty();
                         $("#login_error").html(data[3]);
-						$('#loading_img').hide();
-						$('#login').show();
+			$('#loading_img').hide();
+			$('#login').show();
                     }
                     else{
-						var curl = $.cookie('rn');
+			var curl = $.cookie('rn');
                         $('.error_cont').text('');
-						$('#login_error').text('');
+			$('#login_error').text('');
                         $('#loading_img').hide();
                         $('#login').val('Redirecting...');
                         $('#login')[0].disabled = true;
                         $('#login').show();
 
                         var url = $('#redirect_url').val();
-                        var first_uri_segment = url.substring(0, url.indexOf('/'));
+                        var first_uri_segment = url.substring(0, url.indexOf('/'));			
                         if((url == 'sell/step1')||(first_uri_segment == 'item')){
-                            window.location = config.base_url+ url;
+                          window.location = config.base_url+ url;
                         }
+                        else if(first_uri_segment == 'cart'){
+			  window.location = config.base_url + first_uri_segment;
+			}
                         else{
                             window.location = config.base_url+ 'home';
                         }                        
@@ -75,4 +77,6 @@ $(document).ready(function(){
 		$('#login_error').text('');
     });
 
+   $
+    
 });

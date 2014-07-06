@@ -48,7 +48,6 @@ class Cart extends MY_Controller{
         }
         else{
             $data=$this->check_prod($_POST['id'],$go,$_POST['qty'])['data'];
-
             if(empty($carts)){
                 $this->cart->insert($data);
                 $result= sha1(md5("tanggap"));
@@ -139,8 +138,8 @@ class Cart extends MY_Controller{
             }
             $final_price = $product['price'] + $add_price;
         }
-        #from this part, u already have (Price,prod_attr_id,prodID)
-        $qty = $this->product_model->getProductQuantity($id);
+        $qty = $this->product_model->getProductQuantity($id, false, false, $product['start_promo']);
+
         $ss = array_keys($qty);
         $ff = $qty[$ss[0]];
         $attr = explode(",",$product_attr_id);
@@ -196,6 +195,7 @@ class Cart extends MY_Controller{
             'is_promote' => $product['is_promote'],
             'additional_fee' => $add_price,
             'promo_type' => $product['promo_type'],
+            'start_promo' => $product['start_promo'] , 
         );
         $result['data'] = $data;
         $result['delete_to_cart'] =($product['sellerid'] == $member_id || $useraccessdetails['is_email_verify'] != 1  ||  $product['is_draft'] == "1" || $product['is_delete'] == "1" || $product['can_purchase'] === false);

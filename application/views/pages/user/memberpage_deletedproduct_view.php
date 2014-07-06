@@ -2,6 +2,7 @@
 	<div class="post_items_content content-paging">
 		<div class="post_item_content_left">
             <div class="post_item_img_table">
+            
                 <span class="post_item_img_con">
                    <img src="<?php echo base_url().$deleted_product['path'].'categoryview/'.$deleted_product['file']; ?>" class="product_img">
                 </span>
@@ -48,11 +49,21 @@
 			<div class="price_container"> 
 				<p>
 					<span class="fm1 f24 orange">PHP <?php echo number_format($deleted_product['price'],2,'.',',');?></span>
-					<br />Price
+					<br />Price<br/>
+					<?PHP if($deleted_product['discount'] > 0): ?>   
+					    <small class="original_price"> &#8369; <?php echo number_format($deleted_product['original_price'],2,'.',','); ?> </small> | <strong> <?php echo number_format( $deleted_product['percentage'],0,'.',',');?> % OFF  </strong>
+					<?PHP endif;?>	
 				</p>
 				<p>
 					<p><span class="fm1 f24 grn"><?php echo $deleted_product['sold'];?></span><br />Sold Items</p>
-					<p><span class="fm1 f24"><?php echo $deleted_product['availability'];?></span><br />Available Stock</p>
+					<p><span class="fm1 f24"><?php echo $deleted_product['availability'];?></span>
+					    <br />Available Stock<br/>
+					    <br/>
+		      
+					    <?PHP IF($deleted_product['is_free_shipping'] || TRUE): ?>
+					      <span class="span_bg img_free_shipping"></span>
+					    <?PHP ENDIF; ?>
+					</p>
 				</p>
 			</div>
 			<p><strong>Description:</strong><br />

@@ -46,7 +46,7 @@
 </select>
 
 <select id="getUserAccessDetails">
-	SELECT id_member, is_contactno_verify, is_email_verify, is_admin
+	SELECT id_member, username, is_contactno_verify, is_email_verify, is_admin
 	FROM es_member
 	WHERE id_member = :id
 </select>

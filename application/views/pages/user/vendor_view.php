@@ -208,7 +208,8 @@
 												<!--<h3>Feedback from Transaction#: <?php echo $k;?></h3>-->
 												<?php foreach($tempafb as $key=>$afb):?>
 												<div class="fbck_info_con">
-													<a href="<?php echo base_url();?>vendor/<?php echo $afb['member_name'];?>">
+													<a href="<?php echo base_url();?>
+													<?php echo $afb['member_name'];?>">
 														<img src="<?php echo $afb['user_image']?>" class="img_feedback">
 													</a>
 													<p>
@@ -553,7 +554,7 @@
 					<div class="vendor_prod_items">
 						<?php foreach($p['products'] as $prod):?>
 							<div class="product vendor_product">
-								<a href="">
+								<a href="<?=base_url()?>item/<?=$prod['slug'];?>">
 									<span class="prod_img_wrapper">
 										<span class="prod_img_container">
 										   <img src="<?=base_url()?><?php echo $prod['product_image_path']?>">
@@ -561,7 +562,7 @@
 									</span>
 								</a>    
 								<h3>
-									<a href="">
+									<a href="<?=base_url()?>item/<?=$prod['slug'];?>">
 									   <?php echo $prod['name']?>
 									</a>
 								</h3>

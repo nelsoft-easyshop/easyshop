@@ -961,11 +961,15 @@ div.reply_content_shown > p {
 }
 
 .cd_soldout {
-	left: 0;
+    left: 0px;
     position: absolute;
     top: -6px;
 }
 
-
+.cd_soldout_product_page {
+    left: 265px;
+    position: absolute;
+    top: -6px;
+}
 
 

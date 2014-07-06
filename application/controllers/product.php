@@ -4,20 +4,20 @@ if (!defined('BASEPATH'))
 
 class product extends MY_Controller 
 { 
-	function __construct()  
-	{ 
-		parent::__construct(); 
-		$this->load->helper('htmlpurifier');
-		$this->load->model("product_model");
-	}
-    
-	public $per_page = 12;
-	public $start_irrelevant = 0;
+    function __construct()  
+    { 
+      parent::__construct(); 
+      $this->load->helper('htmlpurifier');
+      $this->load->model("product_model");
+    }
+
+    public $per_page = 12;
+    public $start_irrelevant = 0;
 
     /*     
      *   Displays products in each category
      */
-	function category_page($url_string="")
+    function category_page($url_string="")
     {
     	$start = 0;
     	$count = 0;
@@ -188,185 +188,184 @@ class product extends MY_Controller
 
 	}
 
-    /*     
-     *    Returns more products as user scrolls down the page  
-     */
+	/*     
+	*    Returns more products as user scrolls down the page  
+	*/
 
-    function category_page_more(){
+	function category_page_more(){
 
-    	$categoryId = $this->input->post('id_cat');
-    
-        $this->load->config('protected_category',TRUE);
-        $promo_category_id = $this->config->item('promo');
-        
-        if(intval($categoryId) === intval($promo_category_id)){
-            exit();
-        }
+	    $categoryId = $this->input->post('id_cat');
+	
+	    $this->load->config('protected_category',TRUE);
+	    $promo_category_id = $this->config->item('promo');
+	    
+	    if(intval($categoryId) === intval($promo_category_id)){
+		exit();
+	    }
 
-    	$perPage = $this->per_page;
-    	$start = $this->input->post('page_number') * $perPage;
-    	$count = 0;
-    	$parameter = $this->input->post('parameters');
-    	$get = json_decode($parameter,true);
-    	$operator = ' = ';
-    	$type = $this->input->post('type');
-    	$condition = "";
-    	$notIrrelivant = false;
-    	$haveSort = false;
-    	$sortString = "";
-    	$tempcondition = "";
+	    $perPage = $this->per_page;
+	    $start = $this->input->post('page_number') * $perPage;
+	    $count = 0;
+	    $parameter = $this->input->post('parameters');
+	    $get = json_decode($parameter,true);
+	    $operator = ' = ';
+	    $type = $this->input->post('type');
+	    $condition = "";
+	    $notIrrelivant = false;
+	    $haveSort = false;
+	    $sortString = "";
+	    $tempcondition = "";
 
-    	$conditionArray = array();
+	    $conditionArray = array();
 
-    	if(!count($get) <= 0){
-    		foreach ($get as $key => $value) {
+	    if(!count($get) <= 0){
+		    foreach ($get as $key => $value) {
 
-    			if(ucfirst(strtolower($key)) == "Brand"){
-  
-    				if(strpos($get[$key], '-|-') !== false) {
-    					$var = explode('-|-',$get[$key]);
-    					$needString = array();
-    					foreach ($var as $varkey => $varvalue) {
-    						array_push($needString, "'$varvalue'");
-    					} 
-    					$conditionArray['brand'] = array(
-    						'value' => $var,
-    						'count' => count($var)
-    						);
-    				}else{ 
-    					$conditionArray['brand'] = array(
-    						'value' => $value,
-    						'count' => 1
-    						);
-    				}	
+			    if(ucfirst(strtolower($key)) == "Brand"){
+      
+				    if(strpos($get[$key], '-|-') !== false) {
+					    $var = explode('-|-',$get[$key]);
+					    $needString = array();
+					    foreach ($var as $varkey => $varvalue) {
+						    array_push($needString, "'$varvalue'");
+					    } 
+					    $conditionArray['brand'] = array(
+						    'value' => $var,
+						    'count' => count($var)
+						    );
+				    }else{ 
+					    $conditionArray['brand'] = array(
+						    'value' => $value,
+						    'count' => 1
+						    );
+				    }	
 
-    			}elseif (ucfirst(strtolower($key)) == "Condition") { 
+			    }elseif (ucfirst(strtolower($key)) == "Condition") { 
 
-    				$conditionArray['condition'] = array(
-    					'value' => $value,
-    					);	 
+				    $conditionArray['condition'] = array(
+					    'value' => $value,
+					    );	 
 
-    			}elseif (ucfirst(strtolower($key)) == "Sop") { 
-    				$haveSort = true;
-    				$sortValue = ucfirst(strtolower($get[$key]));
-    				if($sortValue == ucfirst(strtolower('hot'))){
-    					$sortString = " is_hot DESC , ";
-    				}elseif ($sortValue == ucfirst(strtolower('new'))) {
-    					$sortString = " is_new DESC , ";
-    				}elseif ($sortValue == ucfirst(strtolower('popular'))) {
-    					$sortString = " clickcount DESC , ";
-    				}else{
-    					$sortString = "";
-    				} 
+			    }elseif (ucfirst(strtolower($key)) == "Sop") { 
+				    $haveSort = true;
+				    $sortValue = ucfirst(strtolower($get[$key]));
+				    if($sortValue == ucfirst(strtolower('hot'))){
+					    $sortString = " is_hot DESC , ";
+				    }elseif ($sortValue == ucfirst(strtolower('new'))) {
+					    $sortString = " is_new DESC , ";
+				    }elseif ($sortValue == ucfirst(strtolower('popular'))) {
+					    $sortString = " clickcount DESC , ";
+				    }else{
+					    $sortString = "";
+				    } 
 
-    			}elseif (ucfirst(strtolower($key)) == "Price") { 
+			    }elseif (ucfirst(strtolower($key)) == "Price") { 
 
-    				if(strpos($get[$key], 'to') !== false) {	
+				    if(strpos($get[$key], 'to') !== false) {	
 
-    					$price = explode('to', $get[$key]);
-    				}else{
+					    $price = explode('to', $get[$key]);
+				    }else{
 
-    					$price = explode('to', '0.00to99999999.99');
-    				}	 
-    				if(is_numeric($price[0]) && is_numeric($price[1])){
-    					$conditionArray['price'] = array(
-    						'start' => $price[0],
-    						'end'=> $price[1]
-    						);
-    				}
+					    $price = explode('to', '0.00to99999999.99');
+				    }	 
+				    if(is_numeric($price[0]) && is_numeric($price[1])){
+					    $conditionArray['price'] = array(
+						    'start' => $price[0],
+						    'end'=> $price[1]
+						    );
+				    }
 
-    			}else{
+			    }else{
 
-    				if(strpos($get[$key], '-|-') !== false) {
-    					$var = explode('-|-',$get[$key]);		
-    					$key = strtolower(str_replace("_", " ", $key));
-    					if(!isset($conditionArray['attributes'])){
-    						$conditionArray['attributes'] = array();
-    					} 
-    					$count++; 
-    					foreach ($var as $varkey => $varvalue) {
-    						$conditionArray['attributes'][$key] = $var;
-    					}	 
-    				}else{
-    					$key = strtolower(str_replace("_", " ", $key)); 
-    					$count++;
-    					if(!isset($conditionArray['attributes'])){
-    						$conditionArray['attributes'] = array();
-    					} 
-    					$conditionArray['attributes'][$key] = $value; 
-    				}			
-    			}
-    		}
-    	}
+				    if(strpos($get[$key], '-|-') !== false) {
+					    $var = explode('-|-',$get[$key]);		
+					    $key = strtolower(str_replace("_", " ", $key));
+					    if(!isset($conditionArray['attributes'])){
+						    $conditionArray['attributes'] = array();
+					    } 
+					    $count++; 
+					    foreach ($var as $varkey => $varvalue) {
+						    $conditionArray['attributes'][$key] = $var;
+					    }	 
+				    }else{
+					    $key = strtolower(str_replace("_", " ", $key)); 
+					    $count++;
+					    if(!isset($conditionArray['attributes'])){
+						    $conditionArray['attributes'] = array();
+					    } 
+					    $conditionArray['attributes'][$key] = $value; 
+				    }			
+			    }
+		    }
+	    }
 
-        if($categoryId == 1 || $categoryId == 0){
+	    if($categoryId == 1 || $categoryId == 0){
 
-            $categories = "SELECT cat_id FROM es_product WHERE is_delete = 0 AND is_draft = 0";
-        }else{
-            $downCategory = $this->product_model->selectChild($categoryId);
-            array_push($downCategory, $categoryId);
-            $categories = implode(",", $downCategory);
-        }
-
-
-    	session_start();
-        
-    	$items = $this->product_model->getProductsByCategory($categories,$conditionArray,$count,$operator,$start,$perPage,$sortString);
-
-        $response['items'] = $items; 
-    	$response['id_cat'] = $categoryId;
-    	$response['typeofview'] = $type;
-
-    	if(count($items) <= 0)
-    	{	  
-    		// if($count <= 0){
-
-    			$data = json_encode('0');
-    			echo $data;
-    			exit();
-    		// }else{
-
-    		// 	$notIrrelivant = TRUE;
-    		// }
-
-    	}else{
-
-    		$response['irrelivant'] = false;
-    		$data = json_encode($this->load->view('pages/product/product_search_by_category2_final',$response,TRUE));
-    		echo $data;
-    		exit();
-    	}
-
-    	// if($notIrrelivant){
-    	// 	$newoperator = ' < ';
-    	// 	$start = $_SESSION['start'] * $perPage;
-    	// 	$items = $this->product_model->getProductsByCategory($categories,$conditionArray,$count,$newoperator,$start,$perPage,$sortString);
-    	// 	$response['items'] = $items; 
-    	// 	$response['id_cat'] = $categoryId;
-    	// 	$response['typeofview'] = $type;
-    	// 	$response['irrelivant'] = true;
-    	// 	$response['count'] = $_SESSION['start'];
-    	// 	if(count($items) <= 0)
-    	// 	{
-    	// 		$data = json_encode('0');
-    	// 		echo $data;
-    	// 		exit();
-    	// 	}else{
-
-    	// 		$data = json_encode($this->load->view('pages/product/product_search_by_category2_final',$response,TRUE));
-    	// 		echo $data;
-    	// 		$_SESSION['start'] += 1;
-
-    	// 		exit();
-    	// 	}
-    	// 	echo $data;
-    	// 	exit();
-    	// }
+		$categories = "SELECT cat_id FROM es_product WHERE is_delete = 0 AND is_draft = 0";
+	    }else{
+		$downCategory = $this->product_model->selectChild($categoryId);
+		array_push($downCategory, $categoryId);
+		$categories = implode(",", $downCategory);
+	    }
 
 
-    	echo $data;
-    	exit();
-    }
+	    session_start();
+	    
+	    $items = $this->product_model->getProductsByCategory($categories,$conditionArray,$count,$operator,$start,$perPage,$sortString);
+
+	    $response['items'] = $items; 
+	    $response['id_cat'] = $categoryId;
+	    $response['typeofview'] = $type;
+
+	    if(count($items) <= 0)
+	    {	  
+		    // if($count <= 0){
+			$data = json_encode('0');
+			echo $data;
+			exit();
+		    // }else{
+
+		    // 	$notIrrelivant = TRUE;
+		    // }
+
+	    }else{
+
+		    $response['irrelivant'] = false;
+		    $data = json_encode($this->load->view('pages/product/product_search_by_category2_final',$response,TRUE));
+		    echo $data;
+		    exit();
+	    }
+
+	    // if($notIrrelivant){
+	    // 	$newoperator = ' < ';
+	    // 	$start = $_SESSION['start'] * $perPage;
+	    // 	$items = $this->product_model->getProductsByCategory($categories,$conditionArray,$count,$newoperator,$start,$perPage,$sortString);
+	    // 	$response['items'] = $items; 
+	    // 	$response['id_cat'] = $categoryId;
+	    // 	$response['typeofview'] = $type;
+	    // 	$response['irrelivant'] = true;
+	    // 	$response['count'] = $_SESSION['start'];
+	    // 	if(count($items) <= 0)
+	    // 	{
+	    // 		$data = json_encode('0');
+	    // 		echo $data;
+	    // 		exit();
+	    // 	}else{
+
+	    // 		$data = json_encode($this->load->view('pages/product/product_search_by_category2_final',$response,TRUE));
+	    // 		echo $data;
+	    // 		$_SESSION['start'] += 1;
+
+	    // 		exit();
+	    // 	}
+	    // 	echo $data;
+	    // 	exit();
+	    // }
+
+
+	    echo $data;
+	    exit();
+	}
 
 
 	
@@ -605,55 +604,55 @@ class product extends MY_Controller
         $this->load->model("user_model");
         $this->load->config('promo', TRUE);
         $uid = $this->session->userdata('member_id');
-    	$product_row = $this->product_model->getProductBySlug($slug,$uid);
+    	$product_row = $this->product_model->getProductBySlug($slug);  	
     	$data = $this->fill_header();
     	if($product_row['o_success'] >= 1){
-    		$id = $product_row['id_product'];
-    		$product_options = $this->product_model->getProductAttributes($id, 'NAME');
-    		$product_options = $this->product_model->implodeAttributesByName($product_options);
-    		$this->session->set_userdata('product_id', $id);
-    		$product_catid = $product_row['cat_id'];
-            
-            $banner_view = '';  
-            $payment_method_array = $this->config->item('Promo')[0]['payment_method'];
-            if(intval($product_row['is_promote']) === 1){
-                $bannerfile = $this->config->item('Promo')[$product_row['promo_type']]['banner'];
-                if(strlen(trim($bannerfile)) > 0){
-                    $banner_view = $this->load->view('templates/promo_banners/'.$bannerfile, $product_row, TRUE); 
-                }
-                $payment_method_array = $this->config->item('Promo')[$product_row['promo_type']]['payment_method'];
-            }
-            
-            $data = array_merge($data,array( 
-    			'breadcrumbs' =>  $this->product_model->getParentId($product_row['cat_id']),
-    			'product' => $product_row,
-    			'product_options' => $product_options,
-    			'product_images' => $this->product_model->getProductImages($id),
-    			'main_categories' => $this->product_model->getFirstLevelNode(TRUE),
-    			'reviews' => $this->getReviews($id,$product_row['sellerid']),
-    			'uid' => $uid,
-    			'recommended_items'=> $this->product_model->getRecommendeditem($product_catid,5,$id),
-    			'allowed_reviewers' => $this->product_model->getAllowedReviewers($id),
-				//userdetails --- email/mobile verification info
-    			'userdetails' => $this->user_model->getUserAccessDetails($uid),
-    			'product_quantity' => $this->product_model->getProductQuantity($id),
-    			'shipment_information' => $this->product_model->getShipmentInformation($id),
-    			'shiploc' => $this->product_model->getLocation(),
-                'banner_view' => $banner_view,
-                'payment_method' => $payment_method_array,
-    			'category_navigation' => $this->load->view('templates/category_navigation',array('cat_items' =>  $this->getcat(),), TRUE ),
-    			));
-            $data['vendorrating'] = $this->product_model->getVendorRating($data['product']['sellerid']);
-            $data['jsonReviewSchemaData'] = $this->assembleJsonReviewSchemaData($data);
-            $data['title'] = es_string_limit(html_escape($product_row['product_name']), 60, '...', ' | Easyshop.ph');
-            $data['metadescription'] = es_string_limit(html_escape($product_row['brief']), 155);
-            $this->load->view('templates/header', $data); 
-            $this->load->view('pages/product/productpage_view', $data);
+	  $id = $product_row['id_product'];
+	  $product_options = $this->product_model->getProductAttributes($id, 'NAME');
+	  $product_options = $this->product_model->implodeAttributesByName($product_options);
+	  $this->session->set_userdata('product_id', $id);
+	  $product_catid = $product_row['cat_id'];
+      
+	  $banner_view = '';  
+	  $payment_method_array = $this->config->item('Promo')[0]['payment_method'];
+	  if(intval($product_row['is_promote']) === 1){
+	      $bannerfile = $this->config->item('Promo')[$product_row['promo_type']]['banner'];
+	      if(strlen(trim($bannerfile)) > 0){
+		  $banner_view = $this->load->view('templates/promo_banners/'.$bannerfile, $product_row, TRUE); 
+	      }
+	      $payment_method_array = $this->config->item('Promo')[$product_row['promo_type']]['payment_method'];
+	  }
+      
+	  $data = array_merge($data,array( 
+		  'breadcrumbs' =>  $this->product_model->getParentId($product_row['cat_id']),
+		  'product' => $product_row,
+		  'product_options' => $product_options,
+		  'product_images' => $this->product_model->getProductImages($id),
+		  'main_categories' => $this->product_model->getFirstLevelNode(TRUE),
+		  'reviews' => $this->getReviews($id,$product_row['sellerid']),
+		  'uid' => $uid,
+		  'recommended_items'=> $this->product_model->getRecommendeditem($product_catid,5,$id),
+		  'allowed_reviewers' => $this->product_model->getAllowedReviewers($id),
+		  //userdetails --- email/mobile verification info
+		  'userdetails' => $this->user_model->getUserAccessDetails($uid),
+		  'product_quantity' => $this->product_model->getProductQuantity($id),
+		  'shipment_information' => $this->product_model->getShipmentInformation($id),
+		  'shiploc' => $this->product_model->getLocation(),
+		  'banner_view' => $banner_view,
+		  'payment_method' => $payment_method_array,
+		  'category_navigation' => $this->load->view('templates/category_navigation',array('cat_items' =>  $this->getcat(),), TRUE ),
+		  ));
+	    $data['vendorrating'] = $this->product_model->getVendorRating($data['product']['sellerid']);
+	    $data['jsonReviewSchemaData'] = $this->assembleJsonReviewSchemaData($data);
+	    $data['title'] = es_string_limit(html_escape($product_row['product_name']), 60, '...', ' | Easyshop.ph');
+	    $data['metadescription'] = es_string_limit(html_escape($product_row['brief']), 155);
+	    $this->load->view('templates/header', $data); 
+	    $this->load->view('pages/product/productpage_view', $data);
         }
         else{
-            $data['title'] =  'Easyshop.ph | Page Not Found';
-            $this->load->view('templates/header', $data); 
-            $this->load->view('pages/general_error', $data); 
+	    $data['title'] =  'Easyshop.ph | Page Not Found';
+	    $this->load->view('templates/header', $data); 
+	    $this->load->view('pages/general_error', $data); 
         }
         $this->load->view('templates/footer_full');
     } 
@@ -671,25 +670,21 @@ class product extends MY_Controller
         $view_data['deals_banner'] = $this->load->view('templates/dealspage/easydeals', $banner_data, TRUE);
         #$view_data['items'] = $this->product_model->getProductsByCategory($category_id,array(),0,"<",0,$this->per_page);
         $view_data['items'] = $this->product_model->getProductsByCategory($category_id,array(),0,"<",0,PHP_INT_MAX);
-        foreach($view_data['items'] as $x=>$item){
-            $view_data['items'][$x]['is_soldout'] = true;
-            $product_quantity = $this->product_model->getProductQuantity($item['product_id']);
-            foreach($product_quantity as $q){
-                if($q['quantity'] > 0){
-                    $view_data['items'][$x]['is_soldout'] = false;
-                    break;
-                }
-            }
-        }
-        $view_data['peak_hour_items'] = $this->PeakHourPromo();
+        #PEAK HOUR PROMO		
+        $categoryId = $this->config->item('peak_hour_promo', 'protected_category');
+        $view_data['peak_hour_items'] =$this->product_model->getProductsByCategory($categoryId,array(),0,"<",0,PHP_INT_MAX);
+        
         $this->load->view('templates/header', $data); 
         $this->load->view('pages/product/product_promo_category', $view_data); 
         $this->load->view('templates/footer');
     }
     
-    
+
+  
+
+    //OUTDATED FUNCTION: MARKED FOR REMOVAL
     public function category_promo_more(){
-        $this->load->config('protected_category', TRUE);
+      $this->load->config('protected_category', TRUE);
         $category_id = $this->config->item('promo', 'protected_category');
         $start = $this->input->post('page_number') * $this->per_page;
         $view_data['items'] = $this->product_model->getProductsByCategory($category_id,array(),0,"<",$start,0);
@@ -702,24 +697,7 @@ class product extends MY_Controller
         echo $data;
     }
 
-    public function PeakHourPromo()
-    {
-        $this->load->config('protected_category',TRUE);
-        $categoryId = $this->config->item('peak_hour_promo','protected_category');
-        $view_data['items'] = $this->product_model->getProductsByCategory($categoryId,array(),0,"<",0,PHP_INT_MAX);
-        foreach($view_data['items'] as $x=>$item){
-            $view_data['items'][$x]['is_soldout'] = true;
-            $product_quantity = $this->product_model->getProductQuantity($item['product_id']);
-            foreach($product_quantity as $q){
-                if($q['quantity'] > 0){
-                    $view_data['items'][$x]['is_soldout'] = false;
-                    break;
-                }
-            }
-        }
 
-        return $view_data;
-    }
 }
 
 

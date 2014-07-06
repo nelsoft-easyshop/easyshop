@@ -445,8 +445,8 @@ class memberpage_model extends CI_Model
 	{
 		$query = $this->xmlmap->getFilenameID('sql/product','getUserItems');
 		$parseData = array(
-			'order_filter' => $of,
-			'order_sequence_filter' => $osf
+		  'order_filter' => $of,
+		  'order_sequence_filter' => $osf
 		);
 		$query = $this->parser->parse_string($query,$parseData,true);
 		
@@ -461,6 +461,9 @@ class memberpage_model extends CI_Model
 		$data = array();
 		
 		foreach($rows as $key=>$row){
+		
+		        applyPriceDiscount($row);
+		
 			$query = $this->xmlmap->getFilenameID('sql/product','getParent');
 			$sth = $this->db->conn_id->prepare($query);
 			$sth->bindParam(':id',$row['cat_id']);

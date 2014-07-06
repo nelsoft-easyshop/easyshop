@@ -225,7 +225,7 @@
 
     <tr>
         <td class="border-left" style="width:130px">Brief description:</td><!-- Brief of the product -->
-        <td colspan="2"><input type="text" autocomplete="off" maxlength="255" placeholder="Enter brief description" id="prod_brief_desc" name="prod_brief_desc"  value="<?php echo (isset($product_details['brief']))?$product_details['brief']:'';?>">
+        <td colspan="2"><input type="text" style="wdith:400px;" autocomplete="off" maxlength="255" placeholder="Enter brief description" id="prod_brief_desc" name="prod_brief_desc"  value="<?php echo (isset($product_details['brief']))?$product_details['brief']:'';?>">
             <a class="tooltips" href="javascript:void(0)">
                 <img src="<?= base_url() ?>assets/images/icon_qmark.png" alt="">
                 <span>Describe your item in a brief but precise way.</span>

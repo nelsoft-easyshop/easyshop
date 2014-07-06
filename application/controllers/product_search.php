@@ -155,7 +155,7 @@ class product_search extends MY_Controller {
 			# brands
 			$get_brand_array = array();
 			$brand_names = $this->product_model->getBrandById($bid_values);
-            $brand_names = ($brand_names)?$brand_names:array();
+			$brand_names = ($brand_names)?$brand_names:array();
  
 			foreach ($brand_names as $bn) {
 				array_push($get_brand_array,$bn['name']);	
@@ -547,7 +547,6 @@ class product_search extends MY_Controller {
                 array_push($down_cat,$value['id_cat']);
                 $catlist_down = implode(",", $down_cat);
                 $count_main_new = count($this->product_model->getProductInCategoryAndUnder($words,$catlist_down,0,9999999999));
-
                 $count_main += $count_main_new;
                 $item_total_cnt += $count_main;
                 $cnt = $keyfirstlevel;
@@ -601,7 +600,7 @@ class product_search extends MY_Controller {
         }
 		 
  
-	}	
+    }	
 
     /*   
      *   Load more products as user scroll through the search results through

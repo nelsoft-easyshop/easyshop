@@ -40,25 +40,24 @@ class MY_Controller extends CI_Controller
     #fill_header is not run in the constructor of MY_Controller despite that fact that all pages need it
     #because it would add unnecessary overhead for all ajax calls. Instead it is called only in the 
     #controller functions that need it
-	function fill_header()
-	{   
+    function fill_header()
+    {   
         $this->load->model("user_model");
         $this->load->model("product_model");
         $this->load->model("messages_model");
-		$usersession = $this->session->userdata('usersession');
-		if(!empty($usersession) || $this->check_cookie()){
+	$usersession = $this->session->userdata('usersession');
+	if(!empty($usersession) || $this->check_cookie()){
+	    $uid = $this->session->userdata('member_id'); 
+	    $row = $this->user_model->getUsername($uid);
 
-			$uid = $this->session->userdata('member_id'); 
-			$row = $this->user_model->getUsername($uid);
-
-			$logged_in = true;
-			$uname = $row['username'];
-		}
-		else{
-			$logged_in = false;
-			$uname = '';
-		}
-		$carts=$this->session->userdata('cart_contents');
+	    $logged_in = true;
+	    $uname = $row['username'];
+	}
+	else{
+	    $logged_in = false;
+	    $uname = '';
+	}
+	$carts=$this->session->userdata('cart_contents');
         $sizecart = 0;
         if(!empty($carts)){
             if(isset($carts['total_items'])){
@@ -67,22 +66,22 @@ class MY_Controller extends CI_Controller
                 $sizecart = sizeof($carts);
             }
         }
-		$unread = $this->messages_model->get_all_messages($this->session->userdata('member_id'),"Get_UnreadMsgs");
-		$msgs['unread_msgs'] = (isset($unread['unread_msgs']) ?$unread['unread_msgs'] : 0);
-		$msgs['msgs'] = (isset($unread['unread_msgs']) ? ($unread['unread_msgs'] != 0 ? reset($unread['messages']) : ""):0);		
-		$data = array(
-			'logged_in' => $logged_in,
-			'uname' => $uname,
-			'total_items'=> $sizecart,
-			'msgs'=> $msgs,
-			'category_search' => $this->product_model->getFirstLevelNode(),
-			);
-		return $data;
-	}
+	$unread = $this->messages_model->get_all_messages($this->session->userdata('member_id'),"Get_UnreadMsgs");
+	$msgs['unread_msgs'] = (isset($unread['unread_msgs']) ?$unread['unread_msgs'] : 0);
+	$msgs['msgs'] = (isset($unread['unread_msgs']) ? ($unread['unread_msgs'] != 0 ? reset($unread['messages']) : ""):0);		
+	$data = array(
+		'logged_in' => $logged_in,
+		'uname' => $uname,
+		'total_items'=> $sizecart,
+		'msgs'=> $msgs,
+		'category_search' => $this->product_model->getFirstLevelNode(),
+		);
+	return $data;
+    }
     
 
 	
-	function check_cookie(){
+    function check_cookie(){
         $this->load->model("cart_model");
         $this->load->model("user_model");
 		$cookieval = get_cookie('es_usr');
@@ -106,7 +105,7 @@ class MY_Controller extends CI_Controller
 		}
 		else
 			return false;
-	}
+    }
     
 
     /*

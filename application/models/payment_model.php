@@ -237,7 +237,7 @@ class payment_model extends CI_Model
 	    			$sth3->bindParam(':item_id',$value['product_item_id'],PDO::PARAM_INT);
 	    			$sth3->execute();
 
-	    			$this->product_model->check_if_soldout($value['product_id']);
+	    			$this->product_model->update_soldout_status($value['product_id']);
 
 	    			$historyData = array(
 	    				'order_product_id' => $value['product_item_id'],

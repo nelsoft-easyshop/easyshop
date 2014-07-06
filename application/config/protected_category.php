@@ -2,7 +2,6 @@
 
 $config = array(
     'error'  => 0,     //non-existent category id
-    // 'parent' => 1,     //top parent category
     'promo'  => 1000,  //'promoted items'
-    'peak_hour_promo' => 2, //peak hour promo items
+    'peak_hour_promo' => 1, //peak hour promo items
 );

@@ -308,7 +308,8 @@ class productUpload extends MY_Controller
 
 	function step2_2() # function for processing the adding of new item
 	{	   
-
+		$this->load->model("user_model");
+		
 		$combination = json_decode($this->input->post('combination'));
 
 		$checkIfCombination = $this->input->post('noCombination');
@@ -451,7 +452,9 @@ class productUpload extends MY_Controller
 			$categorykeywords =  $categoryDetails['keywords']; 
 
 		        $brandName = ($otherBrand === '')?$this->product_model->getBrandById($brand_id)[0]['name']:$otherBrand;
-			$search_keyword = preg_replace('!\s+!', ' ',$brandName .' '. $product_title .' '. $otherCategory . ' ' . $categoryName . ' '. $categorykeywords . ' '.$keyword);
+			$username= $this->user_model->getUsername($member_id)['username'];
+		        
+			$search_keyword = preg_replace('!\s+!', ' ',$brandName .' '. $product_title .' '. $otherCategory . ' ' . $categoryName . ' '. $categorykeywords . ' '.$keyword.' '.$username);
 			$product_id = $this->product_model->addNewProduct($product_title,$sku,$product_brief,$product_description,$keyword,$brand_id,$cat_id,$style_id,$member_id,$product_price,$product_discount,$product_condition,$otherCategory, $otherBrand,$search_keyword);
             		# product_id = is the id_product for the new item. if 0 no new item added process will stop
             
@@ -1228,13 +1231,13 @@ class productUpload extends MY_Controller
 			}
 			$other_path_directory = $path_directory.'other/';
 
-
+			$username= $this->user_model->getUsername($member_id)['username'];
 			$brandName = ($otherBrand === '')?$this->product_model->getBrandById($brand_id)[0]['name']:$otherBrand;
 			$categoryDetails = $this->product_model->selectCategoryDetails($cat_id);
 			$categoryName =  $categoryDetails['name'];
 			$categorykeywords =  $categoryDetails['keywords']; 
 	
-            		$search_keyword = preg_replace('!\s+!', ' ', $brandName .' '. $product_title .' '. $otherCategory . ' ' . $categoryName . ' '. $categorykeywords . ' '.$keyword);
+            		$search_keyword = preg_replace('!\s+!', ' ', $brandName .' '. $product_title .' '. $otherCategory . ' ' . $categoryName . ' '. $categorykeywords . ' '.$keyword.' '.$username);
 			$product_details = array('product_id' => $product_id,
 				'name' => $product_title,
 				'sku' => $sku,

@@ -17,17 +17,17 @@ class Memberpage extends MY_Controller
     
 	function index()
 	{        
-        $data = $this->fill_header();
-		if(!$this->session->userdata('member_id')){
-            redirect(base_url().'home', 'refresh');
-        }
-        $data['tab'] = $this->input->get('me');        
-		$data = array_merge($data, $this->fill_view());
-        $data['render_logo'] = false;
-        $data['render_searchbar'] = false;
-		$this->load->view('templates/header', $data);
-		$this->load->view('pages/user/memberpage_view', $data);
-		$this->load->view('templates/footer');
+	    $data = $this->fill_header();
+		    if(!$this->session->userdata('member_id')){
+		redirect(base_url().'home', 'refresh');
+	    }
+	    $data['tab'] = $this->input->get('me');        
+	    $data = array_merge($data, $this->fill_view());
+	    $data['render_logo'] = false;
+	    $data['render_searchbar'] = false;
+	    $this->load->view('templates/header', $data);
+	    $this->load->view('pages/user/memberpage_view', $data);
+	    $this->load->view('templates/footer');
 	}
 
 	function edit_personal()
@@ -176,13 +176,13 @@ class Memberpage extends MY_Controller
 		$uid = $this->session->userdata('member_id');
 		$user_product_count = $this->memberpage_model->getUserItemCount($uid);
 		$data = array(
-				'title' => 'Easyshop.ph - Member Profile',
-				'image_profile' => $this->memberpage_model->get_image($uid),
-				'active_products' => $this->memberpage_model->getUserItems($uid,0),
-				'deleted_products' => $this->memberpage_model->getUserItems($uid,1),
-				'active_count' => intval($user_product_count['active']),
-				'deleted_count' => intval($user_product_count['deleted']),
-                'sold_count' => intval($user_product_count['sold'])
+		    'title' => 'Easyshop.ph - Member Profile',
+		    'image_profile' => $this->memberpage_model->get_image($uid),
+		    'active_products' => $this->memberpage_model->getUserItems($uid,0),
+		    'deleted_products' => $this->memberpage_model->getUserItems($uid,1),
+		    'active_count' => intval($user_product_count['active']),
+		    'deleted_count' => intval($user_product_count['deleted']),
+		    'sold_count' => intval($user_product_count['sold'])
                 );
 		$data = array_merge($data, $this->memberpage_model->getLocationLookup());
 		$data = array_merge($data,$this->memberpage_model->get_member_by_id($uid));

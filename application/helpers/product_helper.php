@@ -65,33 +65,34 @@ if ( ! function_exists('explodeImagePath')){
  */
 
 if ( ! function_exists('applyPriceDiscount')){
-    function applyPriceDiscount(&$product = array()){  
+    function applyPriceDiscount(&$product = array()){
         $CI = get_instance();
         $CI->load->model('product_model');
         $buyer_id = $CI->session->userdata('member_id');
         $product['start_promo'] = false;
         if(intval($product['is_promote']) === 1){
-            $promo = $CI->product_model->GetPromoPrice($product['price'],$product['discount'],$product['startdate'],$product['enddate'],$product['is_promote'],$product['promo_type'],$buyer_id,$product['id_product']);
+            $promo = $CI->product_model->GetPromoPrice($product['price'],$product['startdate'],$product['enddate'],$product['is_promote'],$product['promo_type'], $product['discount']);
+	    $product['start_promo'] = $promo['start_promo'];   
             $product['original_price'] = $product['price'];    
-            $product['can_purchase'] = $promo['can_purchase'];
-            $product['is_soldout'] = $promo['is_soldout'];
-            if($promo['is_soldout']){
-                $product['price'] = $promo['sold_price'];
+            $product['can_purchase'] =  $CI->product_model->is_purchase_allowed($buyer_id,$product['promo_type'],$product['start_promo']);
+            $product['sold_price'] = $CI->product_model->get_sold_price($product['id_product'], date('Y-m-d',strtotime($product['startdate'])), date('Y-m-d',strtotime($product['enddate'])));
+            if($product['is_sold_out']){
+                $product['price'] = $product['sold_price'];
             }else{
                 $product['price'] = $promo['price'];
-            }
-            $product['sold_price'] = $promo['sold_price'];
-            $product['start_promo'] = ((intval($product['is_promote']) === 1)&&(strtotime($product['startdate']) < strtotime(date('Y-m-d H:i:s'))));
-            $product['percentage'] = ($product['start_promo'])?($product['original_price'] - $product['price'])/$product['original_price'] * 100.00:0.00;
+            }            
+            $product['percentage'] = ($product['original_price'] - $product['price'])/$product['original_price'] * 100.00;
         }else{
             $product['original_price'] = $product['price']; 
             $product['can_purchase'] = true;
-
             if(intval($product['discount']) > 0){
                 $product['price'] = $product['price'] * (1.0-($product['discount']/100.0));
             }
             $product['percentage'] = ($product['original_price'] - $product['price'])/$product['original_price'] * 100.00;      
         }
+        
+        $product['is_free_shipping'] = $CI->product_model->is_free_shipping($product['id_product']);
+        
    }
 }
 

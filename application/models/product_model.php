@@ -1,6 +1,6 @@
 <?php
 if (!defined('BASEPATH'))
-	exit('No direct script access allowed');
+    exit('No direct script access allowed');
 
 class product_model extends CI_Model
 {
@@ -178,8 +178,8 @@ class product_model extends CI_Model
 	    $sth = $this->db->conn_id->prepare($query);
 	    $sth->bindParam(':slug',$slug);
 	    $sth->execute();
-
 	    $product = $sth->fetch(PDO::FETCH_ASSOC);
+	   
 	    if(intval($product['o_success']) !== 0){
 		if(strlen(trim($product['userpic']))===0)
 		  $product['userpic'] = 'assets/user/default';
@@ -646,7 +646,7 @@ class product_model extends CI_Model
 	 	$concatQuery = "";
         
  		foreach ($words as $key => $value) {
- 			$concatQuery .= " AND  ( a.`name` LIKE :like".$key." OR `keywords` LIKE :like".$key." )";
+ 			$concatQuery .= " AND  ( a.`name` LIKE :like".$key." OR `search_keyword` LIKE :like".$key." )";
  		}
   
 
@@ -687,6 +687,8 @@ class product_model extends CI_Model
 		$sth->bindParam(':start',$start,PDO::PARAM_INT); 
 		$sth->bindParam(':per_page',$per_page,PDO::PARAM_INT);
 		$sth->execute();
+
+		
 		$row = $sth->fetchAll(PDO::FETCH_ASSOC);
 	 
 		return $row;
@@ -989,7 +991,7 @@ class product_model extends CI_Model
 		if(count($words) > 0){
 			
 			foreach ($words as $key => $value) {
-				$concatQuery .= " AND  ( `name` LIKE :like".$key." OR `keywords` LIKE :like".$key." )";
+				$concatQuery .= " AND  ( `name` LIKE :like".$key." OR `search_keyword` LIKE :like".$key." )";
 			}
 		}
 
@@ -1049,6 +1051,7 @@ class product_model extends CI_Model
 	
 
 		$query = $this->xmlmap->getFilenameID('sql/product', 'getProducts');
+		
 		$query = $query."
 		 WHERE cat_id IN (".$categories.")  ".$concatQuery." 
 		 AND is_delete = 0 AND is_draft = 0
@@ -1056,7 +1059,7 @@ class product_model extends CI_Model
 		 GROUP BY product_id , `name`,price,`condition`,brief,product_image_path,
          item_list_attribute.is_new, item_list_attribute.is_hot, item_list_attribute.clickcount,item_list_attribute.slug,
          item_list_attribute.brand_id,   item_list_attribute.`promo_type`, item_list_attribute.`is_promote`,
-         item_list_attribute.`startdate`, item_list_attribute.`enddate`  , item_list_attribute.`discount`         
+         item_list_attribute.`startdate`, item_list_attribute.`enddate`  , item_list_attribute.`discount`   , item_list_attribute.`is_sold_out`       
          ".$havingString."
   	   	 ORDER BY ".$sortString." cnt_all DESC, `name` ASC
 		 LIMIT :start, :per_page 
@@ -1135,13 +1138,13 @@ class product_model extends CI_Model
 		$sth->bindParam(':per_page',$per_page,PDO::PARAM_INT);
         
 		$sth->execute(); 
-
-		$products = $sth->fetchAll(PDO::FETCH_ASSOC);	
-        explodeImagePath($products);
-        for($k = 0; $k<count($products); $k++){
-            $products[$k]['id_product'] = $products[$k]['product_id'];
-            applyPriceDiscount($products[$k]);
-        }
+		
+		$products = $sth->fetchAll(PDO::FETCH_ASSOC);
+		explodeImagePath($products);
+		for($k = 0; $k<count($products); $k++){
+		    $products[$k]['id_product'] = $products[$k]['product_id'];
+		    applyPriceDiscount($products[$k]);
+		}
 
 		return $products;
 	}
@@ -1160,45 +1163,45 @@ class product_model extends CI_Model
 	
 	function getPopularitem($cat_ids,$limit)
 	{	 
-		$query = $this->xmlmap->getFilenameID('sql/product','getPopularitem');
+	    $query = $this->xmlmap->getFilenameID('sql/product','');
+	    
+	    $qmarks = implode(',', array_fill(0, count($cat_ids), '?'));
+	    $query = $query.'('.$qmarks.') ORDER BY `clickcount` DESC LIMIT ?';
         
-        $qmarks = implode(',', array_fill(0, count($cat_ids), '?'));
-        $query = $query.'('.$qmarks.') ORDER BY `clickcount` DESC LIMIT ?';
-        
-		$sth = $this->db->conn_id->prepare($query);
-        array_push($cat_ids, intval($limit));  
-        foreach ($cat_ids as $k => $id)
-            $sth->bindValue(($k+1), $id, PDO::PARAM_INT);   
-        $sth->execute();   
-		$rows = $sth->fetchAll(PDO::FETCH_ASSOC);
-             
-		explodeImagePath($rows);
-              
-		return $rows;
+	    $sth = $this->db->conn_id->prepare($query);
+	    array_push($cat_ids, intval($limit));  
+	    foreach ($cat_ids as $k => $id)
+		$sth->bindValue(($k+1), $id, PDO::PARAM_INT);   
+	    $sth->execute();   
+	    $rows = $sth->fetchAll(PDO::FETCH_ASSOC);
+	    explodeImagePath($rows);
+	  
+	    return $rows;
 	}
         
 		
 	function getRecommendeditem($cat_id,$limit,$prod_id)
 	{	 
 		$query = $this->xmlmap->getFilenameID('sql/product','getPopularitem');
-        $query = $query.'(?) ORDER BY `clickcount` DESC LIMIT ?';
+		$query = $query.'(?) ORDER BY `clickcount` DESC LIMIT ?';
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(1,$cat_id, PDO::PARAM_INT);
 		$sth->bindParam(2,$limit, PDO::PARAM_INT);
 		$sth->execute();
-		$rows = $sth->fetchAll(PDO::FETCH_ASSOC);	
-        
-        foreach($rows as $idx => $row){
-            applyPriceDiscount($row);
-            $rows[$idx] = $row;
-        }
-
-        explodeImagePath($rows);
+		$rows = $sth->fetchAll(PDO::FETCH_ASSOC);
 		foreach($rows as $key=>$row){
-			if(intval($row['id_product']) == intval($prod_id)){
-				unset($rows[$key]);
-			}
+		    if(intval($row['id_product']) == intval($prod_id)){
+			    unset($rows[$key]);
+		    }
 		}
+		
+		foreach($rows as $idx => $row){
+		    applyPriceDiscount($row);
+		    $rows[$idx] = $row;
+		}
+
+		explodeImagePath($rows);
+		
 		return array_values($rows);
 	}
 	
@@ -1215,6 +1218,7 @@ class product_model extends CI_Model
 		$sth->bindParam(':id',$id);
 		$sth->execute();
 		$product = $sth->fetch(PDO::FETCH_ASSOC);
+			
 		/* Get actual price, apply any promo calculation */
 		applyPriceDiscount($product);
 		/* Separate image file path and file name */
@@ -1255,8 +1259,8 @@ class product_model extends CI_Model
 	}
     
     function editProduct($product_details=array(),$member_id){
+	$is_sold_out = '0';
         $query = $this->xmlmap->getFilenameID('sql/product','editProduct');
-
         $sth = $this->db->conn_id->prepare($query);
         $sth->bindParam(':name',$product_details['name']);
         $sth->bindParam(':sku',$product_details['sku']);
@@ -1271,6 +1275,7 @@ class product_model extends CI_Model
 	$sth->bindParam(':member_id',$member_id);
         $sth->bindParam(':brand_other_name',$product_details['brand_other_name']);
         $sth->bindParam(':modifieddate', date('Y-m-d H:i:s'));
+        $sth->bindParam(':is_sold_out', $is_sold_out);
         $sth->bindParam(':discount', $product_details['discount']);
         $sth->bindParam(':search_keyword', $product_details['search_keyword']);
         
@@ -1360,23 +1365,48 @@ class product_model extends CI_Model
 	$sth->execute();
     }
 
-    public function getProductQuantity($product_id, $verbose = false, $check_lock = false){
+    public function getProductQuantity($product_id, $verbose = false, $check_lock = false, $start_promo = false){
+    
+        /*
+         *  Check is their is a quantity limit enforced by promo
+         */ 
+    
+	$promo_quantity_limit = PHP_INT_MAX;
+	if($start_promo){
+	    $query = "SELECT promo_type, is_promote FROM es_product WHERE id_product = :product_id";
+	    $sth = $this->db->conn_id->prepare($query);
+	    $sth->bindParam(':product_id',$product_id, PDO::PARAM_INT);
+	    $sth->execute();
+	    $product_promo = $sth->fetch(PDO::FETCH_ASSOC);
+	    if(intval($product_promo['is_promote']) === 1){
+		$promo_option =  $this->config->item('Promo')[$product_promo['promo_type']]['option'];
+		$His = strtotime(date('H:i:s'));
+		foreach($promo_option as $opt ){
+		    if((strtotime($opt['start']) <= $His) && (strtotime($opt['end']) > $His)){
+			$promo_quantity_limit = $opt['purchase_limit'];
+		      break;
+		    }
+		}
+	    }	  
+        }
+    
+    
         if($verbose){
             $query = $this->xmlmap->getFilenameID('sql/product','getProductQuantityVerbose');
         }
         else{
             $query = $this->xmlmap->getFilenameID('sql/product','getProductQuantity');
         }
-		$sth = $this->db->conn_id->prepare($query);
-		$sth->bindParam(':product_id',$product_id, PDO::PARAM_INT);
-		$sth->execute();
+	$sth = $this->db->conn_id->prepare($query);
+	$sth->bindParam(':product_id',$product_id, PDO::PARAM_INT);
+	$sth->execute();
         $rows = $sth->fetchAll(PDO::FETCH_ASSOC);
         
         $data = array();
         foreach($rows as $row){
             if(!array_key_exists($row['id_product_item'],  $data)){
                 $data[$row['id_product_item']] = array();
-                $data[$row['id_product_item']]['quantity'] = $row['quantity'];
+                $data[$row['id_product_item']]['quantity'] = ($row['quantity'] <= $promo_quantity_limit)?$row['quantity']:$promo_quantity_limit;
                 $data[$row['id_product_item']]['product_attribute_ids'] = array();
                 $data[$row['id_product_item']]['attr_lookuplist_item_id'] = array();
                 $data[$row['id_product_item']]['attr_name'] = array();
@@ -1425,10 +1455,8 @@ class product_model extends CI_Model
                     $data[$lock['id_product_item']]['quantity'] = ($data[$lock['id_product_item']]['quantity'] >= 0)?$data[$lock['id_product_item']]['quantity']:0;
                 }
             }
-       
         }
-        
-
+  
         return $data;
     }
     
@@ -1443,8 +1471,8 @@ class product_model extends CI_Model
     public function deleteShippingInfomation($product_id, $keep_product_item_id = array()){
         $query = "SELECT id_shipping FROM es_product_shipping_head WHERE product_id = :product_id";
         $sth = $this->db->conn_id->prepare($query);
-		$sth->bindParam(':product_id',$product_id, PDO::PARAM_INT);
-		$sth->execute();
+	$sth->bindParam(':product_id',$product_id, PDO::PARAM_INT);
+	$sth->execute();
         $rows = $sth->fetchAll(PDO::FETCH_ASSOC);
         if(count($rows) > 0){
             $query = "DELETE FROM es_product_shipping_detail WHERE shipping_id IN ";
@@ -1898,8 +1926,8 @@ class product_model extends CI_Model
         return $data;  
     }
     
-	public function getCategoryBySlug($slug)
-	{
+    public function getCategoryBySlug($slug)
+    {
 		$query = "SELECT id_cat, name, description, slug FROM es_cat WHERE slug = :slug";
     	$sth = $this->db->conn_id->prepare($query);
     	$sth->bindParam(':slug', $slug, PDO::PARAM_STR);
@@ -1913,7 +1941,7 @@ class product_model extends CI_Model
         }
 		
         return $return;  
-	}
+    }
         
     public function getHomeContent($devfile = 'page/home_files_dev', $prodfile = 'page/home_files_prod'){ 
 	$file = ES_PRODUCTION?$prodfile:$devfile;
@@ -2004,22 +2032,17 @@ class product_model extends CI_Model
         return $home_view_data;
     }
     
-    public function is_sold_out($id){
-        $product_quantity = $this->getProductQuantity($id);
-        $is_sold_out = true;
-        foreach($product_quantity as $q){
-            if($q['quantity'] > 0){
-                $is_sold_out = false;
-                break;
-            }
-        }
-        return $is_sold_out;
-    }
-    
+    /*  
+     *	 Get the average price of all instances of a sold item between specified dates
+     *   @id: product_id
+     *   @datefrom: datelimit start
+     *   @dateto: datelimit end
+     */ 
+
     public function get_sold_price($id, $datefrom = '0001-01-01', $dateto = '0001-01-01'){
-        if($dateto === '0001-01-01'){
-            $dateto = date('Y-m-d');
-        }
+	if($dateto === '0001-01-01' ){
+	  $dateto = date('Y-m-d');
+	}
         $query = $this->xmlmap->getFilenameID('sql/product','getProductSoldPrice');
         $sth = $this->db->conn_id->prepare($query);
         $sth->bindParam(':id',$id, PDO::PARAM_INT);
@@ -2030,20 +2053,28 @@ class product_model extends CI_Model
         return $price;
     }
 
+    /*
+     *  Calculate promo price. Add the different calculations here.
+     *
+     *  @baseprice: base price of the product
+     *  @start: start datetime of the promo
+     *  @end: end datetime of the promo
+     *  @type: promo type
+     *  @default_percentage: discount percentage during product upload
+     */
     
-    public function GetPromoPrice($baseprice,$discount,$start,$end,$is_promo,$type,$buyer_id, $product_id){
+    public function GetPromoPrice($baseprice, $start, $end, $is_promo, $type, $discount_percentage = 0){
         $today = strtotime( date("Y-m-d H:i:s"));
         $startdate = strtotime($start);
         $enddate = strtotime($end);
         $is_promo = intval($is_promo);
-        $result['price'] = $baseprice;
-        $result['can_purchase']  = true;
-        $result['sold_price'] = 0;
-        $result['is_soldout'] = false;
-
-        if($is_promo === 1){
-            $calculation_id = $this->config->item('Promo')[$type]['calculation_id'];
-            $LimitPerProductId = false;
+        $result['price'] = $baseprice;        
+	$bool_start_promo = false;
+        if(intval($is_promo) === 1){
+	    $promo_array = $this->config->item('Promo')[$type];
+	    //OPTION CONTAINS PROMO SPECIFIC ADDITIONAL DATA
+	    $option = isset($promo_array['option'])?$promo_array['option']:array();
+            $calculation_id = $promo_array['calculation_id'];
             switch ($calculation_id) {
                 case 0 :
                     $PromoPrice = $baseprice;
@@ -2053,8 +2084,10 @@ class product_model extends CI_Model
                         $diffHours = 0;
                     }else if($today >= $enddate){
                         $diffHours = 49.5;
+                        $bool_start_promo = true;
                     }else{
                         $diffHours = floor(($today - $startdate) / 3600.0);
+                        $bool_start_promo = true;
                     }
                     $PromoPrice = $baseprice - (($diffHours * 0.02) * $baseprice);
                     break;
@@ -2063,12 +2096,26 @@ class product_model extends CI_Model
                         $PromoPrice = $baseprice;
                     }else{
                         $PromoPrice = $baseprice - ($baseprice)*0.20;
+			$bool_start_promo = true;
                     }
                     break;
                 case 3:
-                    #items should be can_purchase = 1 AND start_promo = 1 to be sell
-                    $LimitPerProductId = $product_id;
-                    $PromoPrice = $baseprice -   $baseprice*($discount / 100) ;
+		    $Ymd = strtotime(date('Y-m-d', $today));
+		    $His = strtotime(date('H:i:s', $today));
+		    if($Ymd === strtotime(date('Y-m-d',$startdate)) ){
+		      foreach($option as $opt){
+			if((strtotime($opt['start']) <= $His) && (strtotime($opt['end']) > $His)){
+			  $bool_start_promo = true;
+			  break;
+			}
+		      }
+		    }
+		    
+		    if((!$bool_start_promo) && ($today >= $enddate)){
+			$bool_start_promo = true;
+		    }
+		    
+                    $PromoPrice = $baseprice -   $baseprice*($discount_percentage / 100) ;
                     break;
                 default :
                     $PromoPrice = $baseprice;
@@ -2076,50 +2123,47 @@ class product_model extends CI_Model
             }
 
             $result['price'] = $PromoPrice;
-            $result['can_purchase'] = $this->is_purchase_allowed($buyer_id,$type,$LimitPerProductId, $startdate,$enddate);
-            $result['is_soldout'] = $this->is_sold_out($product_id);
-            $result['sold_price'] = $this->get_sold_price($product_id, date('Y-m-d',$startdate), date('Y-m-d',$enddate));
         }
         $result['price'] = (floatval($result['price'])>0)?$result['price']:0.01;
-
+	$result['start_promo'] = $bool_start_promo;
+    
         return $result;
    }
+   
+   
+    /*
+     *   Check if an item can be purchased based on the purchase limit
+     *   @buyer_id: id of the user
+     *   @type: promo type
+     *   @start_promo: boolean value whether the promo is active or not
+     */ 
 
-
-    public function is_purchase_allowed($buyer_id,$type,$product_id=false,$start,$end){
-        $condition = !($product_id===false) ? " AND  op.`product_id` = :product_id " : " AND  o.`buyer_id` = :buyer_id ";
-        $query = "
-            SELECT
-            COALESCE(SUM(op.order_quantity),0) AS `cnt` FROM es_order o
+    public function is_purchase_allowed($buyer_id,$type, $start_promo = false)
+    {    
+        $query = "SELECT COALESCE(SUM(op.order_quantity),0) AS `cnt` FROM es_order o
             INNER JOIN es_order_product op ON o.id_order = op.order_id
             INNER JOIN es_product p ON p.id_product = op.product_id AND p.promo_type = :type
-            WHERE NOT (o.`order_status` = 99 AND o.`payment_method_id` = 1) " . $condition;
+            WHERE NOT (o.`order_status` = 99 AND o.`payment_method_id` = 1) AND o.`buyer_id` = :buyer_id "; 
         $sth = $this->db->conn_id->prepare($query);
-        !($product_id===false) ? $sth->bindParam(':product_id',$product_id, PDO::PARAM_INT) : $sth->bindParam(':buyer_id',$buyer_id, PDO::PARAM_INT);
+        $sth->bindParam(':buyer_id',$buyer_id, PDO::PARAM_INT);
         $sth->bindParam(':type',$type, PDO::PARAM_INT);
-        $sth->closeCursor();
+	$sth->closeCursor();
         $sth->execute();
         $result = $sth->fetchAll(PDO::FETCH_ASSOC);
-        $promo = $this->config->item('Promo')[$type];
-        $PurchaseLimit = $promo['purchase_limit'];
-        if(is_string($PurchaseLimit)){
-            $PurchaseLimit = $promo[$PurchaseLimit];
-            foreach($PurchaseLimit as $items){
-                if(($start > strtotime($items['start'])) || $end < strtotime($items['end']) ) {
-                    $PurchaseLimit = 0;
-                }else{
-                    $PurchaseLimit = $items['purchase_limit'];
-                }
-            }
-        }
-        if($result[0]['cnt'] >= $PurchaseLimit){
+        $promo = $this->config->item('Promo')[$type];      
+        if(($result[0]['cnt'] >= $promo['purchase_limit']) || 
+           (!$promo['is_buyable_outside_promo'] && !$start_promo)){
             return false;
         }else{
             return true;
         }
     }
+    
+    /*
+     *   Check if an item is sold out, if yes set is_sold_out flag to 1
+     */  
 
-    public function check_if_soldout($product_id)
+    public function update_soldout_status($product_id)
     {
     	$query = "
 		UPDATE 
@@ -2140,6 +2184,20 @@ class product_model extends CI_Model
 
     	return true;
     }
-
+    
+    
+    function is_free_shipping($product_id){
+	$query = "SELECT SUM(price) as shipping_total FROM es_product_shipping_head WHERE product_id = :product_id";
+	$sth = $this->db->conn_id->prepare($query); 
+	$sth->bindParam(':product_id',$product_id,PDO::PARAM_INT); 
+	$sth->closeCursor();
+	$sth->execute();
+	$total_shipping_fee = $sth->fetch(PDO::FETCH_ASSOC)['shipping_total'];
+	if($total_shipping_fee > 0){
+	  return false;
+	}else{
+	  return true;
+	}
+    }
     
 }

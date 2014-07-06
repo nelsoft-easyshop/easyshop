@@ -1,4 +1,4 @@
-
+  
 #main_search_container{
   display: table;
   padding-top: 10px;
@@ -554,6 +554,10 @@ _filter: progid:DXImageTransform.Microsoft.Chroma(color='#000000');
   float: right;
 }
 
+.cd_condition div + div {
+  float: right;
+}
+
 /* List View Style */
 .product-list {
   height: 150px;
@@ -651,6 +655,7 @@ _filter: progid:DXImageTransform.Microsoft.Chroma(color='#000000');
 
 .product-list div.product_info_bottom {
   display: inline-block;
+  width: 500px;
 }
 
 .product-list div.product_info_bottom div {
@@ -822,9 +827,13 @@ Advanced Search Filters
   height: auto;
 }
 
+.product_buy_con.prod_date.disabled {
+    background:  #505050;
+}
+
 .product_buy_con.prod_date {
-  display: block;
-      /* Fallback for web browsers that doesn't support RGBa */
+    display: block;
+    /* Fallback for web browsers that doesn't support RGBa */
     background: rgb(242, 123, 3) transparent;
     /* RGBa with 0.6 opacity */
     background: rgba(242, 123, 3, 0.9);
@@ -924,10 +933,13 @@ Advanced Search Filters
   text-decoration: line-through;
 }
 
+
 .cd_condition {
-  margin-top: 20px;
-  text-align: left;
+    margin-left: 10px;
+    margin-top: 20px;
+    text-align: left;
 }
+  
 
 span.cd_timerlabel{
     color: white; 
