@@ -92,9 +92,8 @@ class Cart extends MY_Controller{
     }
 
     public function cart_items($carts){
-        foreach($carts as $key => $row1){
-            $data = $this->check_prod($row1['id'],$row1['options'],$row1['qty']);
-            foreach ($carts as $row ){
+            foreach ($carts as $row){
+		$data = $this->check_prod($row['id'],$row['options'],$row['qty']);			    
                 $id = $row['id'];
                 $opt =  serialize($this->cart->product_options($row['rowid']));
                 $opt_user =  serialize($data['data']['options']);
@@ -110,13 +109,16 @@ class Cart extends MY_Controller{
                     break;
                 }
             }
-        }
         return $this->cart->contents();
     }
 
-	private function check_prod($id,$opt,$userQTY){    
+    private function check_prod($id,$opt,$userQTY){    
+	$member_id = $this->session->userdata('member_id');
+	$useraccessdetails = $this->user_model->getUserAccessDetails($member_id);
+	
         $product = $this->product_model->getProductById($id);
-        $final_price = $product['price']; //product['price'] already has the promo calculations applied to it
+        //product['price'] already has the promo calculations applied to it
+        $final_price = $product['price'];
         $product_attr_id = "0";
         $add_price = 0;
         if(!empty($opt)){
@@ -125,6 +127,7 @@ class Cart extends MY_Controller{
             for($a=0;$a < sizeof($key);$a++){//check attr if exist and sum all the attr's price
                 $attr=$key[$a];
                 $attr_value=$opt[$key[$a]];
+                $attr_value = (strpos($attr_value, "~"))? explode("~", $attr_value)[0]:$attr_value;
                 $sum = $this->cart_model->checkProductAttributes($id,$attr,$attr_value);
                 if($sum['result']== true){ //if sum result = true , attr will add price, else return false (will return false if user tries changed it)
                     $add_price +=  $sum['price'];
@@ -165,20 +168,9 @@ class Cart extends MY_Controller{
             $max_qty = reset($qty)['quantity'];
         }
         #done checking if the attribute's are existing on DB and max_quantity
-        $promo = $this->config->item('Promo')[$product['promo_type']];
-        $d_quantity = 0;
+        $promo = $this->config->item('Promo')[$product['promo_type']];       
         $PurchaseLimit = $promo['purchase_limit'];
-
-        if(is_string($PurchaseLimit)){
-            $PurchaseLimit = $this->config->item('Promo')[$product['promo_type']][$PurchaseLimit];
-            foreach($PurchaseLimit as $items){
-                if((strtotime(date('H:i:s')) > strtotime($items['start'])) && (strtotime(date('H:i:s')) < strtotime($items['end'])) ) {
-                    $PurchaseLimit = $max_qty;
-                }else{
-                    $PurchaseLimit = 0;
-                }
-            }
-        }
+        $d_quantity = 0;
         if(($product['is_promote'] == 1 && intval($userQTY) >= intval($PurchaseLimit)) &&  $max_qty != 0){
             $d_quantity = $PurchaseLimit;
         }else{
@@ -206,8 +198,7 @@ class Cart extends MY_Controller{
             'promo_type' => $product['promo_type'],
         );
         $result['data'] = $data;
-        $result['delete_to_cart'] =($product['is_draft'] == "1" || $product['is_delete'] == "1" || $product['can_purchase'] === false);
-
+        $result['delete_to_cart'] =($product['sellerid'] == $member_id || $useraccessdetails['is_email_verify'] != 1  ||  $product['is_draft'] == "1" || $product['is_delete'] == "1" || $product['can_purchase'] === false);
         return $result;
     }
 
@@ -239,6 +230,7 @@ class Cart extends MY_Controller{
         $result2 = $this->change_quantity($id,$cart[$id],$qty);
         echo json_encode($result2);
     }
+    
     public function change_quantity($id,$cart_item,$qty){
         $data['rowid'] = $id;
         $data['qty'] = $qty;
