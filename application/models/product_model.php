@@ -1373,7 +1373,7 @@ class product_model extends CI_Model
     
 	$promo_quantity_limit = PHP_INT_MAX;
 	if($start_promo){
-	    $query = "SELECT promo_type, is_promote FROM es_product WHERE id_product = :product_id";
+	    $query = "SELECT promo_type, is_promote, startdate, enddate FROM es_product WHERE id_product = :product_id";
 	    $sth = $this->db->conn_id->prepare($query);
 	    $sth->bindParam(':product_id',$product_id, PDO::PARAM_INT);
 	    $sth->execute();
@@ -1383,10 +1383,25 @@ class product_model extends CI_Model
 		$His = strtotime(date('H:i:s'));
 		foreach($promo_option as $opt ){
 		    if((strtotime($opt['start']) <= $His) && (strtotime($opt['end']) > $His)){
-			$promo_quantity_limit = $opt['purchase_limit'];
+		      $promo_quantity_limit = $opt['purchase_limit'];
 		      break;
 		    }
 		}
+		
+		$query = "SELECT COALESCE(SUM(op.order_quantity),0) as sold_count FROM es_order_product op
+			  INNER JOIN es_order o ON o.id_order = op.order_id AND o.dateadded between :start AND :end
+			WHERE product_id = :product_id";
+		$start_datetime = date('Y-m-d',strtotime($product_promo['startdate'])).' '.$opt['start'];
+		$end_datetime = date('Y-m-d',strtotime($product_promo['enddate'])).' '.$opt['end'];
+		$sth = $this->db->conn_id->prepare($query);
+		$sth->bindParam(':product_id',$product_id, PDO::PARAM_INT);
+		$sth->bindParam(':start',$start_datetime, PDO::PARAM_STR);
+		$sth->bindParam(':end',$end_datetime, PDO::PARAM_STR);
+		$sth->execute();
+		$sold_count = $sth->fetch(PDO::FETCH_ASSOC)['sold_count'];	
+		$promo_quantity_limit = $opt['purchase_limit'] - $sold_count;
+		$promo_quantity_limit = ($promo_quantity_limit >= 0)?$promo_quantity_limit:0;
+		
 	    }	  
         }
     
