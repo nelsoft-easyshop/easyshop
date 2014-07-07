@@ -431,9 +431,9 @@ class Payment extends MY_Controller{
     #PROCESS PAYPAL
     function paypal()
     { 
-        // if(!$this->session->userdata('member_id') || !$this->session->userdata('choosen_items')){
-        //     redirect(base_url().'home', 'refresh');
-        // }
+        if(!$this->session->userdata('member_id') || !$this->session->userdata('choosen_items')){
+            redirect(base_url().'home', 'refresh');
+        }
  
         $status = 'f';
         $paymentType = $this->PayMentPayPal; #paypal 
