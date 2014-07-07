@@ -1075,7 +1075,7 @@ class productUpload extends MY_Controller
 
      	public function editStep2Submit()
 	{
-     
+		$this->load->model('user_model');
 		$product_title = trim($this->input->post('prod_title'));
 		$product_brief = trim($this->input->post('prod_brief_desc'));
 		$product_description = trim($this->input->post('desc')) ;
