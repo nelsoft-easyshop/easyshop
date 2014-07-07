@@ -210,14 +210,14 @@ class payment_model extends CI_Model
     function cancelTransaction($txnId,$quantity = true)
     {
     	$newValue = '%'.$txnId.'%';
-    	$query = 'UPDATE es_order set order_status = 2 WHERE transaction_id like :txnid';
+    	$query = 'UPDATE es_order set order_status = 2 WHERE transaction_id = :txnid';
     	$sth = $this->db->conn_id->prepare($query);
-    	$sth->bindParam(':txnid',$newValue,PDO::PARAM_STR);
+    	$sth->bindParam(':txnid',$txnId,PDO::PARAM_STR);
     	if ($sth->execute()){ 
 
-    		$query = 'SELECT id_order from es_order where transaction_id like :txnid LIMIT 1'; 
+    		$query = 'SELECT id_order from es_order where transaction_id = :txnid LIMIT 1'; 
 	    	$sth2 = $this->db->conn_id->prepare($query);
-	    	$sth2->bindParam(':txnid',$newValue,PDO::PARAM_STR);
+	    	$sth2->bindParam(':txnid',$txnId,PDO::PARAM_STR);
 	    	$sth2->execute();
 	    	$row = $sth2->fetch(PDO::FETCH_ASSOC); 
 
