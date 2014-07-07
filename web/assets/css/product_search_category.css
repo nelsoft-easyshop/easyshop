@@ -888,9 +888,11 @@ Advanced Search Filters
   background-color: #f18200;
 }
 
+.cd_product{
+     display: table;
+}
 
-
-#promo1>.cd_product, #promo2>.cd_product{
+#peak_hour_sale>.cd_product, #easytreats>.cd_product{
      display: inline-block !important;
 }
 
