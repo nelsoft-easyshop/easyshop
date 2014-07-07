@@ -62,13 +62,13 @@ $config = array(
             'cart_solo_restriction' => false,
             'option' => array(
 		0 => array(
-                    'start' => '00:00:00',
-                    'end' => '06:59:59',
-                    'purchase_limit' => 2),
+                    'start' => '12:00:00',
+                    'end' => '13:00:00',
+                    'purchase_limit' => 5),
                 1 => array(
-                    'start' => '07:00:00',
-                    'end' => '23:59:59',
-                    'purchase_limit' => 15)
+                    'start' => '20:00:00',
+                    'end' => '21:00:00',
+                    'purchase_limit' => 5)
              ),
  
             
