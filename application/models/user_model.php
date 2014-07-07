@@ -46,7 +46,7 @@ class user_model extends CI_Model {
         return $row;
     }
 	
-	public function getUsername($id){
+    public function getUsername($id){
         $query = $this->xmlmap->getFilenameID('sql/users','getUserName');
 		
         $sth = $this->db->conn_id->prepare($query);
@@ -55,7 +55,7 @@ class user_model extends CI_Model {
         $row = $sth->fetch();
 		
         return $row;
-	}
+    }
 	
 	//COOKIE FUNCTIONS
 	public function create_cookie($cookieval){

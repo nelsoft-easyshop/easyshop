@@ -635,7 +635,7 @@ class product extends MY_Controller
 		  'allowed_reviewers' => $this->product_model->getAllowedReviewers($id),
 		  //userdetails --- email/mobile verification info
 		  'userdetails' => $this->user_model->getUserAccessDetails($uid),
-		  'product_quantity' => $this->product_model->getProductQuantity($id),
+		  'product_quantity' => $this->product_model->getProductQuantity($id, false, false, $product_row['start_promo']),
 		  'shipment_information' => $this->product_model->getShipmentInformation($id),
 		  'shiploc' => $this->product_model->getLocation(),
 		  'banner_view' => $banner_view,

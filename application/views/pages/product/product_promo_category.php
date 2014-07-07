@@ -22,12 +22,15 @@
                         <?php else: ?>
 			  <a href="<?=base_url().'item/'.$item['slug'];?>" class="cd_link_con">
 			<?php endif; ?>
-						
-			<div class="product_buy_con prod_date <?PHP echo ($item['can_purchase'])?'':'disabled'; ?>">
+				
+				
+			<?PHP $Md_start =  date('M d', strtotime($item['startdate'])); ?>
+			<div class="product_buy_con prod_date <?PHP echo ($item['can_purchase'] || strtotime(date('M d'))===strtotime($Md_start) )  ?'':'disabled'; ?>">
 			<span>
-			    <p><?php echo date('M d', strtotime($item['startdate'])); ?></p>
+			    <p><?php echo $Md_start; ?></p>
 			</span>
 
+			
 			</div>
 			<div class="product_buy_con">
 			    <span><span class="orange_btn3 <?php echo $item['is_sold_out']||(!$item['start_promo'])?'disabled':'enabled';?>">BUY NOW</span></span>
