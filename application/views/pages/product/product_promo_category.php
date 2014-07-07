@@ -10,7 +10,7 @@
   
     <?php echo $deals_banner; ?>
 	
-    <div class="cd_product_container" id="promo1">
+    <div class="cd_product_container" id="peak_hour_sale">
         <div class='product_list'>
 
             <?php foreach($peak_hour_items as $item): ?>
@@ -83,7 +83,7 @@
     
     
     
-    <div id="promo2">
+    <div id="easytreats">
         <?php foreach($items as $item): ?>
             <div class="cd_product">
 
