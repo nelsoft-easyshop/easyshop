@@ -61,4 +61,4 @@
 
    
 <script type='text/javascript' src='<?=base_url()?>assets/js/src/vendor/jquery.validate.js'></script>   
-<script src="<?=base_url()?>assets/js/src/login.js<?=ES_FILE_VERSION?>" type="text/javascript"></script>
+<script src="<?=base_url()?>assets/js/src/login.js?ver=<?=ES_FILE_VERSION?>" type="text/javascript"></script>
