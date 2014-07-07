@@ -892,10 +892,14 @@ Advanced Search Filters
      display: table;
 }
 
-#peak_hour_sale>.cd_product, #easytreats>.cd_product{
+#easytreats .cd_product{
      display: inline-block !important;
 }
 
+#peak_hour_sale .cd_product {
+     display: inline-block !important;
+  
+}
 
 .cd_prod_img_con {
     display: table-cell;
