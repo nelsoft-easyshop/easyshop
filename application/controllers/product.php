@@ -672,8 +672,8 @@ class product extends MY_Controller
         $view_data['items'] = $this->product_model->getProductsByCategory($category_id,array(),0,"<",0,PHP_INT_MAX);
         #PEAK HOUR PROMO		
         $categoryId = $this->config->item('peak_hour_promo', 'protected_category');
-        $view_data['peak_hour_items'] =$this->product_model->getProductsByCategory($categoryId,array(),0,"<",0,PHP_INT_MAX);
-        
+        $view_data['peak_hour_items'] =$this->product_model->getProductsByCategory($categoryId,array(),0,"<",0,PHP_INT_MAX,'createddate ASC,');
+
         $this->load->view('templates/header', $data); 
         $this->load->view('pages/product/product_promo_category', $view_data); 
         $this->load->view('templates/footer');
