@@ -677,6 +677,8 @@ class Memberpage extends MY_Controller
 		}
 		
 	}
+	
+	
 	/*** 	memberpage/vendor/username	***/
 	function vendor($selleruname){
 		$session_data = $this->session->all_userdata();
@@ -684,77 +686,31 @@ class Memberpage extends MY_Controller
 		$data['title'] = 'Vendor Profile | Easyshop.ph';
 		$data['my_id'] = (empty($session_data['member_id']) ? 0 : $session_data['member_id']);
 		$data = array_merge($data, $this->fill_header());
-		
 		if($vendordetails){
-            $data['render_logo'] = false;
-            $data['render_searchbar'] = false;
-            $this->load->view('templates/header', $data);
-			$sellerid = $vendordetails['id_member'];
-			$user_product_count = $this->memberpage_model->getUserItemCount($sellerid);
-			$data = array_merge($data,array(
-					'vendordetails' => $vendordetails,
-					'image_profile' => $this->memberpage_model->get_Image($sellerid),
-					'banner' => $this->memberpage_model->get_Image($sellerid,'vendor'),
-					'products' => $this->memberpage_model->getVendorCatItems($sellerid),
-					'active_count' => intval($user_product_count['active']),
-					'deleted_count' => intval($user_product_count['deleted']),
-                    'sold_count' => intval($user_product_count['sold']),
-					));
-			$data['allfeedbacks'] = $this->memberpage_model->getFeedback($sellerid);
-			
-			$data['hasStoreDesc'] = (string)$data['vendordetails']['store_desc'] !== '' ? true : false;
-			$data['product_count'] = count($data['products']);
-			$data['renderEdit'] = (int)$sellerid === (int)$data['my_id'] ? true : false;
-			
-			$this->load->view('pages/user/vendor_view', $data);
-            $this->load->view('templates/footer');
-			
-		}
-		else{
-            $this->load->view('templates/header', $data);
-			$this->load->view('pages/user/user_error');
-            $this->load->view('templates/footer_full');
-		}
-	}
-	/*function vendor($selleruname){
-		$session_data = $this->session->all_userdata();
-		$vendordetails = $this->memberpage_model->getVendorDetails($selleruname);
-		$data['title'] = 'Vendor Profile | Easyshop.ph';
-		$data['my_id'] = (empty($session_data['member_id']) ? 0 : $session_data['member_id']);
-		$data = array_merge($data, $this->fill_header());
-		if($vendordetails){
-            $data['render_logo'] = false;
-            $data['render_searchbar'] = false;
-            $this->load->view('templates/header', $data);
-			$sellerid = $vendordetails['id_member'];
-			$user_product_count = $this->memberpage_model->getUserItemCount($sellerid);
-			$data = array_merge($data,array(
+		    $data['render_logo'] = false;
+		    $data['render_searchbar'] = false;
+		    $this->load->view('templates/header', $data);
+		    $sellerid = $vendordetails['id_member'];
+		    $user_product_count = $this->memberpage_model->getUserItemCount($sellerid);
+		    $data = array_merge($data,array(
 					'vendordetails' => $vendordetails,
 					'image_profile' => $this->memberpage_model->get_Image($sellerid),
 					'active_products' => $this->memberpage_model->getUserItems($sellerid,0),
 					'deleted_products' => $this->memberpage_model->getUserItems($sellerid,1),
 					'active_count' => intval($user_product_count['active']),
 					'deleted_count' => intval($user_product_count['deleted']),
-                    'sold_count' => intval($user_product_count['sold']),
-					'banner' => $this->memberpage_model->get_Image($sellerid,'vendor')
-					));
-			$data['allfeedbacks'] = $this->memberpage_model->getFeedback($sellerid);
-			$data['hasStoreDesc'] = (string)$data['vendordetails']['store_desc'] !== '' ? true : false;
-			
-			if( (int)$session_data['member_id']===(int)$sellerid ){
-				$this->load->view('pages/user/vendor_view_own', $data);
-			}else{
-				$this->load->view('pages/user/vendor_view', $data);
-			}
-            $this->load->view('templates/footer');
+                    'sold_count' => intval($user_product_count['sold'])));
+		    $data['allfeedbacks'] = $this->memberpage_model->getFeedback($sellerid);
+		    $this->load->view('pages/user/vendor_view', $data);
+		    $this->load->view('templates/footer');
 		}
 		else{
-            $this->load->view('templates/header', $data);
-			$this->load->view('pages/user/user_error');
-            $this->load->view('templates/footer_full');
+		    $this->load->view('templates/header', $data);
+		    $this->load->view('pages/user/user_error');
+		    $this->load->view('templates/footer_full');
 		}
-	}*/
-
+	
+	}	
 
 	/**	VERIFY CONTACT DETAILS SECTION **/
 	function verify(){
