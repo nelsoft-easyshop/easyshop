@@ -1008,7 +1008,7 @@ class Payment extends MY_Controller{
         }
 
         #Send message via easyshop_messaging to buyer
-        if(!empty($this->user_model->getUsername($sender))){    
+        if($this->user_model->getUsername($sender)){    
 	    $this->messages_model->send_message($sender,$data['member_id'],$this->lang->line('message_to_buyer'));
         }
 
@@ -1030,7 +1030,7 @@ class Payment extends MY_Controller{
 
 
             #Send message via easyshop_messaging to seller
-            if(!empty($this->user_model->getUsername($sender))){        
+            if($this->user_model->getUsername($sender)){        
 		$this->messages_model->send_message($sender,$seller_id,$this->lang->line('message_to_seller'));
             }
 

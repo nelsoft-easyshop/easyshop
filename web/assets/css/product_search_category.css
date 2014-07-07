@@ -888,10 +888,12 @@ Advanced Search Filters
   background-color: #f18200;
 }
 
-.cd_product{
-    display: table;
-    width: 220px;
+
+
+#promo1>.cd_product, #promo2>.cd_product{
+     display: inline-block !important;
 }
+
 
 .cd_prod_img_con {
     display: table-cell;
