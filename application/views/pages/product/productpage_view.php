@@ -1,61 +1,10 @@
 
-<?php 
-
-        date_default_timezone_set('Asia/Manila');
-        $timeStart = date('H:i') ;
-        $timeEnd = date('H', time()+60*60).':00';
-        $secondsLapse = date('s');
- 
-        $start = strtotime($timeStart);
-        $stop = strtotime($timeEnd);
-        $diff = ($stop - $start)/60;
-        $intoSeconds = $diff * 60;
-        $secondsRemaining = $intoSeconds - $secondsLapse;
-        // echo 'current time: ' .$timeStart . '<br>';
-        // echo 'refresh time: ' . $timeEnd . '<br>';
-        // echo 'minutes remaining: ' . $diff . '<br>';
-        // echo 'seconds remaining: ' . $secondsRemaining;
-?>
-<meta http-equiv="refresh" content="<?=$secondsRemaining; ?>" />
-
 <!-- REVIEW SEO TAGS -->
 <script type="application/ld+json">
 	<?php echo $jsonReviewSchemaData;?>
 </script>
-<!-- <div id="fb-root"></div> -->
-<!-- <script src="https://connect.facebook.net/en_US/all.js"></script> -->
-<script>
-  // FB.init({
-  //   appId  : '1395192884090886',
-  //   status : true, 
-  //   cookie : true, 
-  //   xfbml  : true  
-  // });
-</script>
-<script type="text/javascript">
-// $(document).ready(function() {
-//     FB.getLoginStatus(function(response) {
-//           if (response.status == 'connected') {
-//                 var user_id = response.authResponse.userID;
-//                 var page_id = "211771799032417"; //  
-//                 var fql_query = "SELECT uid FROM page_fan WHERE page_id=" + page_id + " and uid=" + user_id;
-                
-//                 FB.api('/me/likes/'+page_id, function(response) {
-//                       console.log(response);
-//                       if (response.data[0]) {
-//                          console.log('like');
-//                       } else {
-//                          console.log('not like');
-//                       }
-//                 });
-//           }else{
 
-//             console.log('please login')
-          
-//           } 
-//     });
-// });
-</script>
+
 <link rel="stylesheet" href="<?=base_url()?>assets/css/jquery.jqzoom.css?ver=<?=ES_FILE_VERSION?>" type="text/css">
 <link rel="stylesheet" href="<?=base_url()?>assets/css/style_new.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
 <link rel="stylesheet" href="<?=base_url()?>assets/css/jquery.bxslider.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
@@ -99,17 +48,18 @@
     <div class="">
       <div  id="product_content_gallery">
         <div class="cd_promo_badge_con">
-            <?php if($product['start_promo']): ?>
-                <?php if($product['is_soldout']): ?>
-                    <span class="cd_soldout">
+            <?php if($product['is_sold_out']): ?>
+                    <span class="cd_soldout_product_page">
                         <img src="<?=base_url()?>assets/images/img_cd_soldout.png" alt="Sold Out">
                     </span>
-                <?php else: ?>
-                    <span class="cd_slide_discount">
-                        <span><?php echo  number_format( $product['percentage'],0,'.',',');?>%<br>OFF</span>
-                    </span>
-                <?php endif; ?>
-            <?php endif; ?>
+	    <?php endif; ?>
+            
+            <?php if(isset($product['percentage']) && $product['percentage'] > 0): ?>
+		<span class="cd_slide_discount">
+		    <span><?php echo  number_format( $product['percentage'],0,'.',',');?>%<br>OFF</span>
+		</span>
+	    <?php endif; ?>
+
     
         </div>
         <div class="prod_con_gal"> <a href="<?=base_url()?><?php echo $product_images[0]['path']; ?><?php echo $product_images[0]['file']; ?>" class="jqzoom" rel='gal1'  title="Easyshop.ph" > <img src="<?=base_url()?><?php echo $product_images[0]['path']; ?>small/<?php echo $product_images[0]['file']; ?>"  title="product"> </a> </div>
@@ -216,34 +166,25 @@
             </p>
           </div>
             <div class="buy_box">
-                <?PHP if($logged_in && $userdetails['is_email_verify'] == 1 ): ?>
-                    <?php if($uid == $product['sellerid']): ?>
-                        <p class="buy_btn_sub"> This is your own listing </p>
-                    <?php elseif($product['can_purchase'] === false): ?>
-                        <p class="buy_btn_sub"> Purchase limit exceeded </p>
-                    <?php else: ?>
-                        <a href="JavaScript:void(0)" id="send" class="fm1 orange_btn3 disabled">Buy Now</a> <br/>
-                    <?php endif;?>
-                <?php else: ?>
+             
+		     
+		    <?php if($product['can_purchase'] === false): ?>
+                        <a href="JavaScript:void(0)" class="orange_btn3 disabled">Buy Now</a> <br/>
+		    <?php elseif($logged_in): ?>
+			<?php if(intval($userdetails['is_email_verify']) !== 1): ?>
+			    <p class="buy_btn_sub"> Verify your email </p>
+			<?php elseif($uid == $product['sellerid']): ?>
+			    <p class="buy_btn_sub"> This is your own listing </p>
+			<?php else: ?>
+			    <a href="JavaScript:void(0)" id="send" class="fm1 orange_btn3 disabled">Buy Now</a> <br/>
+			<?php endif;?>
+		    <?php ?>
+		    <?php elseif(!$logged_in): ?>
+			<a href="JavaScript:void(0)" id="send" class="fm1 orange_btn3 disabled">Buy Now</a> <br/>
+		    <?php endif; ?>
+		    
 
-                    <?php if( (!$logged_in && $userdetails['is_email_verify'] == 1 ) || (!$logged_in && !($userdetails['is_email_verify'] == 1)) ): ?>
-                        <a href="JavaScript:void(0)" id="send" class="fm1 orange_btn3 disabled">Buy Now</a> <br/>
-                    <?php elseif( $logged_in && !($userdetails['is_email_verify'] == 1) ):
-                        echo "Verify your email to purchase.";
-                    endif; ?>
 
-             <!--   <a href="<?PHP /*echo base_url();echo $logged_in?'me?me=myinfo':'login';*/?>" id="unablesend" class="add_to_cart">
-                <span></span>  <?PHP /*echo $logged_in?'Verify now':'Login now';*/?></a> <br />
-                <p class="buy_btn_sub">
-                    <?php /*if( !$logged_in && $userdetails['is_email_verify'] == 1 ){
-                        echo "Sign-in to purchase this product.";
-                    } else if( $logged_in && !($userdetails['is_email_verify'] == 1) ){
-                        echo "Verify your email to purchase.";
-                    } else if( !$logged_in && !($userdetails['is_email_verify'] == 1) ){
-                        echo "Sign-in to purchase this product.";
-                    }*/?>
-                </p>-->
-                <?php endif; ?>
                 <span>Delivers upon seller confirmation*</span>
             </div>
         </div>
@@ -263,8 +204,11 @@
                 <?php endforeach;?>
             </select>
      
-            <span class="shipping_fee"> <span class="loc_invalid"> Select location* </span></span>
-         
+	    <?PHP if($product['is_free_shipping']):  ?>
+		<span style="margin-left: 15px;"><span class="span_bg img_free_shipping"></span></span>
+	    <?PHP else: ?>
+		<span class="shipping_fee"> <span class="loc_invalid"> Select location* </span></span>
+	    <?PHP endif; ?>
           </p>
         </div>
         <p class="product_content_payment"> <strong>Payment:</strong><br />
@@ -502,8 +446,6 @@
     </div>
   </div>
 
-
-  <input type = 'hidden' id='cd_enddate' value="<?php echo date('M d,Y H:i:s',strtotime(($product['start_promo'] == "1" ? $product['enddate'] : $product['startdate']))); ?>"/>
   <input id='p_qty' type='hidden' value=' <?php echo json_encode($product_quantity);?>'>
   <input id='p_shipment' type='hidden' value='<?php echo json_encode($shipment_information);?>'>
   <input id='p_itemid' type='hidden' value='0'/>

@@ -8,7 +8,7 @@ class user_model extends CI_Model {
         $this->load->library("xmlmap");
     }
 	
-	public function getRealIpAddr() {
+    public function getRealIpAddr() {
         if (!empty($_SERVER['HTTP_CLIENT_IP'])) //check ip from share internet 
             $ip = $_SERVER['HTTP_CLIENT_IP'];
         elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) //to check ip if pass from proxy 
@@ -46,7 +46,7 @@ class user_model extends CI_Model {
         return $row;
     }
 	
-	public function getUsername($id){
+    public function getUsername($id){
         $query = $this->xmlmap->getFilenameID('sql/users','getUserName');
 		
         $sth = $this->db->conn_id->prepare($query);
@@ -55,7 +55,7 @@ class user_model extends CI_Model {
         $row = $sth->fetch();
 		
         return $row;
-	}
+    }
 	
 	//COOKIE FUNCTIONS
 	public function create_cookie($cookieval){
@@ -81,29 +81,29 @@ class user_model extends CI_Model {
 	
 	
 	public function cookie_login($temp){
-		$query = $this->xmlmap->getFilenameID('sql/users', 'cookie_login');
-        $sth = $this->db->conn_id->prepare($query);
-		$sth->bindParam(':userip', $temp['userip']);
-		$sth->bindParam(':useragent', $temp['useragent']);
-		$sth->bindParam(':token', $temp['token']);
-		$sth->bindParam(':usersession', $temp['usersession']);
-        $sth->execute();
-		$row = $sth->fetch(PDO::FETCH_ASSOC);
+	    $query = $this->xmlmap->getFilenameID('sql/users', 'cookie_login');
+	    $sth = $this->db->conn_id->prepare($query);
+	    $sth->bindParam(':userip', $temp['userip']);
+	    $sth->bindParam(':useragent', $temp['useragent']);
+	    $sth->bindParam(':token', $temp['token']);
+	    $sth->bindParam(':usersession', $temp['usersession']);
+	    $sth->execute();
+	    $row = $sth->fetch(PDO::FETCH_ASSOC);
 
-		return $row;
+	    return $row;
 	}
 	
 	public function dbdelete_cookie_keeplogin($temp = array()){
-		$query = $this->xmlmap->getFilenameID('sql/users', 'delete_cookie_keeplogin');
-        $sth = $this->db->conn_id->prepare($query);
-        $sth->bindParam(':id_member', $temp['member_id']);
-		$sth->bindParam(':ip', $temp['ip']);
-		$sth->bindParam(':useragent', $temp['useragent']);
-		$sth->bindParam(':token', $temp['token']);
-        $sth->execute();
+	    $query = $this->xmlmap->getFilenameID('sql/users', 'delete_cookie_keeplogin');
+	    $sth = $this->db->conn_id->prepare($query);
+	    $sth->bindParam(':id_member', $temp['member_id']);
+	    $sth->bindParam(':ip', $temp['ip']);
+	    $sth->bindParam(':useragent', $temp['useragent']);
+	    $sth->bindParam(':token', $temp['token']);
+	    $sth->execute();
 	}
 
-    public function getUserAccessDetails($uid)
+	public function getUserAccessDetails($uid)
 	{
 		$query = $this->xmlmap->getFilenameID('sql/users','getUserAccessDetails');
 		$sth = $this->db->conn_id->prepare($query);

@@ -14,10 +14,17 @@
 }
 
 .paid_section_container input[name="deposit_acct_name"],
-.paid_section_container input[name="deposit_acct_no"],
+.paid_section_container input[name="deposit_acct_no"]{
+	margin-right: 10px;
+	width: 146px;
+}
+
+
 #bank_list {
 	margin-right: 10px;
+	width: 349px;
 }
+
 
 .deposit_edit,
 .deposit_update,

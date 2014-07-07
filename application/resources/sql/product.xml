@@ -91,7 +91,7 @@
     <select id="getProductBySlugNoIncrement">
         SELECT p.id_product as id_product, p.slug as slug, p.promo_type, p.condition, p.slug,p.brand_id as brand_id, p.brand_other_name as custombrand, p.name as product_name, p.description as description, 
         p.is_promote, p.startdate, p.enddate, p.cat_id as cat_id, p.price as price,  p.brief as brief, p.sku as sku, i.`product_image_path`,
-        p.is_cod, p.discount, s.name as style_name, b.name as brand_name, p.member_id as sellerid, m.nickname as sellernickname, m.username as sellerusername, m.imgurl as userpic, '1' as o_success, '' as o_message
+        p.is_sold_out, p.is_cod, p.discount, s.name as style_name, b.name as brand_name, p.member_id as sellerid, m.nickname as sellernickname, m.username as sellerusername, m.imgurl as userpic, '1' as o_success, '' as o_message
         FROM es_product p 
         LEFT JOIN es_style s ON p.style_id = s.id_style
         LEFT JOIN es_brand b ON p.brand_id = b.id_brand
@@ -102,14 +102,14 @@
     
     
     <select id="getProductById">
-        SELECT a.`name` AS `product`, a.`slug` AS slug, a.`discount`, a.`brief`,a.`id_product`,`cat_id`, b.`product_image_path`, a.`price`, a.`member_id` as sellerid , a.`is_promote`,a.`startdate`,a.`enddate`, a.`promo_type`,a.`is_draft`,a.`is_delete`
+        SELECT a.`name` AS `product`, a.`slug` AS slug, a.is_sold_out, a.`discount`, a.`brief`,a.`id_product`,`cat_id`, b.`product_image_path`, a.`price`, a.`member_id` as sellerid , a.`is_promote`,a.`startdate`,a.`enddate`, a.`promo_type`,a.`is_draft`,a.`is_delete`
         FROM `es_product` a
         LEFT JOIN `es_product_image` b ON b.`product_id` = a.`id_product` AND b.is_primary = '1'
         WHERE `id_product` = :id
     </select>
     
     <select id="getProductByIdExtended">
-        SELECT p.id_product AS id_product, p.condition, p.brand_id AS brand_id, p.brand_other_name AS custombrand, 
+        SELECT p.id_product AS id_product, p.condition, p.is_sold_out,p.brand_id AS brand_id, p.brand_other_name AS custombrand, 
         p.name AS product_name, p.description AS description, p.is_promote, p.discount,
         p.cat_id AS cat_id, p.price AS price, p.brief AS brief, p.sku AS sku,
         s.name AS style_name, b.name AS brand_name, p.member_id AS sellerid, m.nickname AS sellernickname, 
@@ -162,6 +162,8 @@
   , item_list_attribute.`startdate`
   , item_list_attribute.`enddate`
   , item_list_attribute.`discount`
+  , item_list_attribute.`is_sold_out`
+  , item_list_attribute.`search_keyword`
 FROM
   (SELECT 
     `item_list_attribute_only`.*
@@ -232,6 +234,8 @@ FROM
       , a.`enddate`
       , a.`startdate`
       , a.`discount`
+      , a.`is_sold_out`
+      , a.`search_keyword`
     FROM
       `es_product` a
       , `es_product_image` b
@@ -393,7 +397,7 @@ FROM
 	</select>
 	
 	<select id="getUserItems">
-		SELECT p.`slug`, p.`id_product`,p.`name`, p.`brief`, p.`price`, p.`member_id`, 
+		SELECT p.`slug`, p.`discount`, p.`is_promote`, p.`startdate`, p.`enddate`, p.`promo_type`, p.`is_sold_out`, p.`id_product`,p.`name`, p.`brief`, p.`price`, p.`member_id`, 
 		AVG(COALESCE((r.`rating`),0)) as average_rating, COUNT(r.`rating`) as review_count, 
 		COALESCE(i.product_image_path,'') as product_image_path, p.`cat_id`, p.`is_delete` ,
 		SUM(pi.quantity) as availability, COALESCE(order_product_temp.sum_quantity, 0) as sold,p.lastmodifieddate
@@ -414,10 +418,10 @@ FROM
 
 
     <select id="getPopularitem">
-		SELECT `name` AS `product`, `slug` AS `slug`, `id_product`,`cat_id`,`clickcount`, `product_image_path` ,`price`, `is_promote`, `discount`
-        FROM `es_product` a
+	SELECT `name` AS `product`, `is_sold_out` , `slug` AS `slug`, `id_product`,`cat_id`,`clickcount`, `product_image_path` ,`price`, `is_promote`, `discount`,
+	`startdate`, `enddate`, `promo_type` FROM `es_product` a
         LEFT JOIN `es_product_image` b ON b.`product_id` = a.`id_product` AND b.is_primary = '1'
-        WHERE a.`is_delete` = 0 AND a.`is_draft` = 0 AND `cat_id` IN 
+        WHERE a.`is_delete` = 0 AND a.`is_draft` = 0 AND  a.`is_sold_out` = 0 AND `cat_id` IN 
         <!-- Rest of query completed in the model: -->
         <!-- (:cat_id) ORDER BY `clickcount` DESC LIMIT :limit; -->
     </select>
@@ -745,7 +749,7 @@ FROM
 
 <select id="getProductEdit">
     SELECT a.`id_product`, a.`cat_id`, a.`brand_id`, b.name as 'brandname', a.brand_other_name,
-    a.`name`, a.`condition`, a.`brief`, a.`description`, a.`discount`, a.`sku`, a.`price`, a.`keywords`, a.`slug` 
+    a.`name`, a.`condition`, a.`brief`, a.`description`, a.`discount`, a.`sku`, a.`price`, a.`keywords`, a.`slug`, COALESCE(a.`cat_other_name`,'') as otherCategory
     FROM es_product a LEFT JOIN es_brand b ON a.brand_id = b.id_brand
     WHERE id_product = :product_id AND member_id = :member_id
 </select>
@@ -755,7 +759,7 @@ FROM
     `name` = :name, `is_draft` = 1,`sku` = :sku, `brief` = :brief, `description` = :description,
     `keywords` = :keywords, `brand_id` = :brand_id, `style_id` = :style_id, `price` = :price,
     `condition` = :condition, `lastmodifieddate` = :modifieddate, `brand_other_name` = :brand_other_name,
-    `discount` = :discount
+    `discount` = :discount, `search_keyword` = :search_keyword, `is_sold_out` = :is_sold_out
     WHERE `id_product` = :p_id AND `member_id` = :member_id;
 </select>
 
@@ -968,15 +972,6 @@ FROM
 
 <select id='getSlugByID'>
     SELECT slug, name FROM es_product WHERE id_product = :id;
-</select>
-
-<select id="getPromoOrderQuantity">
-    SELECT
-    COALESCE(SUM(op.order_quantity),0) AS `cnt` FROM es_order o
-	INNER JOIN es_order_product op ON o.id_order = op.order_id 
-	INNER JOIN es_product p ON p.id_product = op.product_id AND p.promo_type = :type
-    WHERE o.`buyer_id` = :buyer_id
-    AND NOT (o.`order_status` = 99 AND o.`payment_method_id` = 1)
 </select>
 
 <select id="getProductSoldPrice">

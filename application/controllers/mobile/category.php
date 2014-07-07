@@ -37,15 +37,23 @@ class Category extends MY_Controller {
     	}
  
         if($this->input->get('up')){
+            $categoryId = 1;
+
+            for ($i=1; $i < $this->input->get('up'); $i++) { 
+                $categoryArrayParent = $this->product_model->selectCategoryDetails($parentId);   
+                $parentId = $categoryId = $categoryArrayParent['parent_id'];
+                if($parentId == 1){
+                    break;
+                }
+            }
+
             if($parentId != 1){
               $categoryArrayParent = $this->product_model->selectCategoryDetails($parentId);   
-              $categoryId = $categoryArrayParent['parent_id'];
+              $categoryId = $categoryArrayParent['id_cat'];
             }
-  
         }
 
-    	$jsonCategory = $this->buildTree($all,$categoryId); 
-        echo '<pre>',print_r($jsonCategory);exit();
+    	$jsonCategory = $this->buildTree($all,$categoryId);  
 
  		die(json_encode($jsonCategory,JSON_PRETTY_PRINT));
     }

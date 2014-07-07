@@ -15,6 +15,7 @@ class Payment extends MY_Controller{
         $this->load->library('pesopay');
         $this->load->library('xmlmap'); 
         $this->load->model('cart_model');
+        $this->load->model('user_model');
         $this->load->model('payment_model');
         $this->load->model('product_model');
         $this->load->model('messages_model');
@@ -56,6 +57,7 @@ class Payment extends MY_Controller{
         exit();
     }
 
+    
     function review()
     {
         if(!$this->session->userdata('member_id') || !$this->session->userdata('choosen_items')){
@@ -112,7 +114,8 @@ class Payment extends MY_Controller{
         }
 
         $paymentType = $configPromo[0]['payment_method'];        
-        $promoteSuccess['purchase_limit'] = $promoteSuccess['solo_restriction'] = true; 
+        $promoteSuccess['purchase_limit'] = true;
+        $promoteSuccess['solo_restriction'] = true; 
 
         /*  
          *   Changed code to be able to adopt for any promo type
@@ -122,7 +125,7 @@ class Payment extends MY_Controller{
                 $qty = $value['qty'];
                 $paymentType = array_intersect ( $paymentType , $configPromo[$value['promo_type']]['payment_method']);
                 $purchase_limit = $configPromo[$value['promo_type']]['purchase_limit'];
-                $can_purchase = $this->product_model->is_purchase_allowed($member_id ,$value['promo_type']);
+                $can_purchase = $this->product_model->is_purchase_allowed($member_id ,$value['promo_type'], intval($value['start_promo']) === 1);
                 if($purchase_limit < $qty || (!$can_purchase) ){
                     $promoteSuccess['purchase_limit'] = false;
                     break;
@@ -156,7 +159,7 @@ class Payment extends MY_Controller{
     }
 
     #START OF PAYPAL PAYMENT
-	#SET UP PAYPAL FOR PARAMETERS
+    #SET UP PAYPAL FOR PARAMETERS
     #SEE REFERENCE SITE FOR THE PARAMETERS
     # https://developer.paypal.com/webapps/developer/docs/classic/express-checkout/integration-guide/ECCustomizing/
     function paypal_setexpresscheckout() 
@@ -482,7 +485,7 @@ class Payment extends MY_Controller{
                             # START SAVING TO DATABASE HERE 
                             foreach ($itemList as $key => $value) {     
                                 $itemComplete = $this->payment_model->deductQuantity($value['id'],$value['product_itemID'],$value['qty']);
-                                $this->product_model->check_if_soldout($value['id']);
+                                $this->product_model->update_soldout_status($value['id']);
                             }
 
                             $flag = ($httpParsedResponseAr['PAYMENTSTATUS'] == 'Pending' ? 1 : 0);
@@ -573,7 +576,7 @@ class Payment extends MY_Controller{
 
                 foreach ($itemList as $key => $value) {               
                     $itemComplete = $this->payment_model->deductQuantity($value['id'],$value['product_itemID'],$value['qty']);
-                    $this->product_model->check_if_soldout($value['id']);
+                    $this->product_model->update_soldout_status($value['id']);
                 }
 
                 $this->removeItemFromCart();  
@@ -661,7 +664,7 @@ class Payment extends MY_Controller{
 
                 foreach ($itemList as $key => $value) {               
                     $itemComplete = $this->payment_model->deductQuantity($value['id'],$value['product_itemID'],$value['qty']);  
-                    $this->product_model->check_if_soldout($value['id']);            
+                    $this->product_model->update_soldout_status($value['id']);            
                 }
 
                 $locked = $this->lockItem($toBeLocked,$orderId,'delete'); 
@@ -825,7 +828,7 @@ class Payment extends MY_Controller{
 
             foreach ($itemList as $key => $value) {               
                 $itemComplete = $this->payment_model->deductQuantity($value['id'],$value['product_itemID'],$value['qty']);
-                $this->product_model->check_if_soldout($value['id']);
+                $this->product_model->update_soldout_status($value['id']);
             }
 
             $complete = $this->payment_model->updatePaymentIfComplete($orderId,json_encode($itemList),$txnId,$paymentType,0,0);
@@ -948,12 +951,12 @@ class Payment extends MY_Controller{
     function sendNotification($data) 
     {
         //devcode
-		/*$data['member_id'] = 74;
-		$data['order_id'] = 102;
-		$data['invoice_no']= 3;
-		$data['member_id'] = 56;
-		$data['order_id'] = 156;
-		$data['invoice_no']= '156-2014061247';*/
+	/*$data['member_id'] = 74;
+	$data['order_id'] = 102;
+	$data['invoice_no']= 3;
+	$data['member_id'] = 56;
+	$data['order_id'] = 156;
+	$data['invoice_no']= '156-2014061247';*/
         $sender = intval($this->payment_model->get_contentFile('message-sender-id'));
         $transactionData = $this->payment_model->getPurchaseTransactionDetails($data);
 
@@ -997,7 +1000,7 @@ class Payment extends MY_Controller{
         }while(!$buyerEmailResult && $emailcounter<3);
 
  
-		//Send text msg to buyer if mobile provided
+	//Send text msg to buyer if mobile provided
         $buyerMobile = ltrim($buyerData['buyer_contactno'], '0');
         if( is_numeric($buyerMobile) && $buyerMobile != 0 ){
            $buyerMsg = $buyerData['buyer_name'] . $this->lang->line('notification_txtmsg_buyer');
@@ -1005,7 +1008,9 @@ class Payment extends MY_Controller{
         }
 
         #Send message via easyshop_messaging to buyer
-        $this->messages_model->send_message($sender,$data['member_id'],$this->lang->line('message_to_buyer'));
+        if(!empty($this->user_model->getUsername($sender))){    
+	    $this->messages_model->send_message($sender,$data['member_id'],$this->lang->line('message_to_buyer'));
+        }
 
 
         //Send email to seller of each product - once per seller
@@ -1025,7 +1030,10 @@ class Payment extends MY_Controller{
 
 
             #Send message via easyshop_messaging to seller
-            $this->messages_model->send_message($sender,$seller_id,$this->lang->line('message_to_seller'));
+            if(!empty($this->user_model->getUsername($sender))){        
+		$this->messages_model->send_message($sender,$seller_id,$this->lang->line('message_to_seller'));
+            }
+
 
             // 3 tries to send Email. Quit if success or 3 failed tries met
             $emailcounter = 0;
@@ -1048,8 +1056,8 @@ class Payment extends MY_Controller{
 	/*
 	 *	Function to generate google analytics data
 	 */
-	function ganalytics($itemList,$v_order_id)
-	{
+    function ganalytics($itemList,$v_order_id)
+    {
         $analytics = array(); 
         foreach ($itemList as $key => $value) {
 
@@ -1203,16 +1211,18 @@ class Payment extends MY_Controller{
 
             $productId = $value['id']; 
             $itemId = $value['product_itemID']; 
-
+            
+            $product_array =  $this->product_model->getProductById($productId);
+  
             /** NEW QUANTITY **/
-            $newQty = $this->product_model->getProductQuantity($productId, FALSE, $condition);
+            $newQty = $this->product_model->getProductQuantity($productId, FALSE, $condition, $product_array['start_promo']);
             $maxqty = $newQty[$itemId]['quantity'];
             $qty = $value['qty']; 
             $itemArray[$value['rowid']]['maxqty'] = $maxqty;
             $qtysuccess = ($maxqty >= $qty ? $qtysuccess + 1: $qtysuccess + 0);
 
             /** NEW PRICE **/
-            $promoPrice = $this->product_model->getProductById($productId)['price']; 
+            $promoPrice = $product_array['price']; 
             $additionalPrice = $value['additional_fee'];
             $finalPromoPrice = $promoPrice + $additionalPrice;
             $itemArray[$value['rowid']]['price'] = $finalPromoPrice;

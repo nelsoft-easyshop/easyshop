@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "173e4bb9172df218f6553dbfad270e1c",
+    "hash": "f8c7f1a9b496976250556c7f351dfe60",
     "packages": [
         {
             "name": "cboden/ratchet",
@@ -638,7 +638,7 @@
             ],
             "authors": [
                 {
-                    "name": "Jonathan Wage",
+                    "name": "Jonathan H. Wage",
                     "email": "jonwage@gmail.com",
                     "homepage": "http://www.jwage.com/",
                     "role": "Creator"

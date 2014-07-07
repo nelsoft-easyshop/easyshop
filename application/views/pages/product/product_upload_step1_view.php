@@ -126,7 +126,8 @@ echo form_open('sell/edit/step2', $attributesForm);
             <?php echo form_close();?>
         </div>
         <input type='hidden' class='draftCount' value="<?php echo (isset($draftItems))?count($draftItems):'0';?>"/>
-        
+        <input type='hidden' class='other_cat_name' value="<?php echo (isset($other_cat_name)?html_escape($other_cat_name):'') ?>"/>
+
         <div class="clear"></div>  
 
 
