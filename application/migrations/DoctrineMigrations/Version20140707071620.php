@@ -16,7 +16,7 @@ class Version20140707071620 extends AbstractMigration
     {
         // this up() migration is auto-generated, please modify it to your needs
 		$this->addSql("
-			ALTER TABLE easyshop.es_member MODIFY store_desc VARCHAR(1024) DEFAULT ''
+			ALTER TABLE es_member MODIFY store_desc VARCHAR(1024) DEFAULT ''
 		");
     }
 
@@ -24,7 +24,7 @@ class Version20140707071620 extends AbstractMigration
     {
         // this down() migration is auto-generated, please modify it to your needs
 		$this->addSql("
-			ALTER TABLE easyshop.es_member MODIFY store_desc TEXT
+			ALTER TABLE es_member MODIFY store_desc TEXT
 		");
     }
 }
