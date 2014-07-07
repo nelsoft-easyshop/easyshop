@@ -1059,7 +1059,9 @@ class product_model extends CI_Model
 		 GROUP BY product_id , `name`,price,`condition`,brief,product_image_path,
 		  item_list_attribute.is_new, item_list_attribute.is_hot, item_list_attribute.clickcount,item_list_attribute.slug,
 		  item_list_attribute.brand_id,   item_list_attribute.`promo_type`, item_list_attribute.`is_promote`,
-		  item_list_attribute.`startdate`, item_list_attribute.`enddate`  , item_list_attribute.`discount`   , item_list_attribute.`is_sold_out`       
+		  item_list_attribute.`startdate`, item_list_attribute.`enddate`  , item_list_attribute.`discount`   , item_list_attribute.`is_sold_out`,       
+		  item_list_attribute.`createddate`, item_list_attribute.search_keyword
+		  
 		  ".$havingString."
   	   	 ORDER BY ".$sortString." cnt_all DESC, `name` ASC
 		 LIMIT :start, :per_page 
