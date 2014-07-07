@@ -209,6 +209,12 @@ class payment_model extends CI_Model
 
     function cancelTransaction($txnId,$quantity = true)
     {
+
+    	if($txnId == ''){
+    		
+    		return 0;
+    	}
+
     	$newValue = '%'.$txnId.'%';
     	$query = 'UPDATE es_order set order_status = 2 WHERE transaction_id = :txnid';
     	$sth = $this->db->conn_id->prepare($query);
