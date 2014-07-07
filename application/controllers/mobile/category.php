@@ -5,7 +5,7 @@ if (!defined('BASEPATH'))
 
 class Category extends MY_Controller {
 
-    public $per_page;
+    public $per_page = 12;
 
     function __construct() {
         parent::__construct();
@@ -61,6 +61,7 @@ class Category extends MY_Controller {
     public function getCategoriesProduct()
     {
         $categorySlug = $this->input->get('slug');
+        $start = $this->input->get('start');
         $category_array = $this->product_model->getCategoryBySlug($categorySlug);
         $categoryId = $category_array['id_cat']; 
         $downCategory = $this->product_model->selectChild($categoryId);
@@ -71,8 +72,9 @@ class Category extends MY_Controller {
         
         array_push($downCategory, $categoryId);
         $categories = implode(",", $downCategory);
-        $items = $this->product_model->getProductsByCategory($categories,$conditionArray,$count,$operator,$start,$perPage,$sortString);
+        $items = $this->product_model->getProductsByCategory($categories,array(),0,"<",$start,$this->per_page,"");
 
+        die(json_encode($items,JSON_PRETTY_PRINT));
     }
 
     private function buildTree(array $elements, $parentId = 1)
