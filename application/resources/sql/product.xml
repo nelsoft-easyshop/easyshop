@@ -411,6 +411,7 @@ FROM
 				ON order_product_temp.product_id = p.id_product
 		WHERE p.member_id = :id AND p.is_draft = 0 AND p.is_delete = :delete_status AND p.name LIKE :name_filter
 		GROUP BY p.`id_product`, p.`slug`, p.`name`, p.`brief`, p.`price`, p.`member_id`, i.product_image_path, p.`is_delete`,p.`cat_id`,p.lastmodifieddate,order_product_temp.sum_quantity
+		,p.discount, p.is_promote, p.startdate, p.enddate, p.promo_type, p.is_sold_out
 		ORDER BY {order_filter} {order_sequence_filter}
 		LIMIT :start, :number
 	</select>
