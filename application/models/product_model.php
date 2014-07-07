@@ -1390,9 +1390,11 @@ class product_model extends CI_Model
 		    }
 		}
 		
-		$query = "SELECT COALESCE(SUM(op.order_quantity),0) as sold_count FROM es_order_product op
-			  INNER JOIN es_order o ON o.id_order = op.order_id AND o.dateadded between :start AND :end
-			WHERE product_id = :product_id";
+		    $query = "SELECT COALESCE(SUM(op.order_quantity),0) as sold_count FROM es_order_product op
+			      INNER JOIN es_order o ON o.id_order = op.order_id AND o.dateadded between :start AND :end
+			      AND o.order_status != 99 AND o.order_status != 2 
+			      WHERE product_id = :product_id";
+			    
 		$start_datetime = date('Y-m-d',strtotime($product_promo['startdate'])).' '.$opt['start'];
 		$end_datetime = date('Y-m-d',strtotime($product_promo['enddate'])).' '.$opt['end'];
 		$sth = $this->db->conn_id->prepare($query);
