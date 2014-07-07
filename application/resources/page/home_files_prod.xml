@@ -39,22 +39,13 @@
     </mainSlide>
 
     <mainSlide>
-        <value>assets/images/mainslide/6.jpg</value>
-        <type>image</type>
-        <imagemap>
-            <coordinate>0,0,589,352</coordinate>
-            <target>item/action-camcorder-hd-720p</target>
-        </imagemap>
-    </mainSlide>
-
-	<mainSlide>
-	<value>assets/images/mainslide/5.jpg</value>
+	<value>assets/images/mainslide/8.jpg</value>
 	<type>image</type>
 	<imagemap>
 	<coordinate>0,0,589,352</coordinate>
-	<target>item/shake-n-take-3</target>
+	<target>item/huawei-ascend-p7-white</target>
 	</imagemap>
-	</mainSlide>
+    </mainSlide>
 
 
     <productSlide_title>
@@ -78,7 +69,7 @@
     </productSlide>
 
     <productSideBanner>
-        <value>action-camcorder-hd-720p</value>
+        <value>huawei-ascend-p7-white</value>
         <type>product</type>
     </productSideBanner>
 
