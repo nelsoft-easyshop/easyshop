@@ -12,8 +12,8 @@ class Version20140707094120 extends AbstractMigration
 {
     public function up(Schema $schema)
     {
-        $this->addSql("INSERT INTO `es_cat` (`id_cat`, `name`, `description`, `keywords`, `parent_id`, `sort_order`, `is_main`, `design1`, `design2`, `design3`, `slug`) VALUES ('1110', 'PROMO_SPECIAL', 'Special Promotional Items', 'Special Promotional', '1', '0', '0', '', '', '', 'promo-special');");
-        $this->addSql("UPDATE es_cat SET name = 'PROMO_DAILY', description = 'Daily Promotional Items', keywords = 'Daily Promo', slug = 'promo-daily' WHERE id_cat = 1000");
+        $this->addSql("INSERT INTO `es_cat` (`id_cat`, `name`, `description`, `keywords`, `parent_id`, `sort_order`, `is_main`, `design1`, `design2`, `design3`, `slug`) VALUES ('1110', 'Special Promo', 'Special Promotional Items', 'Special Promotional', '1', '0', '0', '', '', '', 'promo-special');");
+        $this->addSql("UPDATE es_cat SET name = 'Easydeals', description = 'Daily Promotional Items', keywords = 'Daily Promo', slug = 'promo-daily' WHERE id_cat = 1000");
         
     }
 
