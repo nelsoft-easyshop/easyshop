@@ -13,15 +13,6 @@ class product_model extends CI_Model
 	}
 
 	# the queries directory -- application/resources/sql/product.xml
-	function selectAllCategory()
-	{
-		$query = 'Select id_cat,parent_id,name,slug from es_cat where id_cat not in (1)';
-		$sth = $this->db->conn_id->prepare($query);
-		$sth->bindParam(':id_cat', $id);
-		$sth->execute();
-		$row = $sth->fetchAll(PDO::FETCH_ASSOC);
-		return $row;
-	}
 
 	function selectCategoryDetails($id) 
 	{
@@ -1952,7 +1943,7 @@ class product_model extends CI_Model
     
     public function getCategoryBySlug($slug)
     {
-		$query = "SELECT id_cat, name, description, slug,parent_id FROM es_cat WHERE slug = :slug";
+		$query = "SELECT id_cat, name, description, slug FROM es_cat WHERE slug = :slug";
     	$sth = $this->db->conn_id->prepare($query);
     	$sth->bindParam(':slug', $slug, PDO::PARAM_STR);
     	$result = $sth->execute();

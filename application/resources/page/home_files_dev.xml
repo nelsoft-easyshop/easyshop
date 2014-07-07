@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version='1.0' ?>
 <map>
 
     <header>
@@ -34,25 +34,16 @@
         <type>image</type>
         <imagemap>
             <coordinate>0,0,0,0</coordinate>
-            <target/>
+            <target></target>
         </imagemap>
     </mainSlide>
     
     <mainSlide> 
-        <value>assets/images/mainslide/4.jpg</value> 
+        <value>assets/images/mainslide/6.jpg</value> 
         <type>image</type>
         <imagemap>
             <coordinate>0,0,589,352</coordinate>
-            <target>item/hiefier-mc-091-pocket-magic-karaoke</target>
-        </imagemap>
-    </mainSlide>
-    
-    <mainSlide> 
-        <value>assets/images/mainslide/5.jpg</value> 
-        <type>image</type>
-        <imagemap>
-            <coordinate>0,0,589,352</coordinate>
-            <target>item/shake-n-take-2</target>
+            <target>item/camping-lantern</target>
         </imagemap>
     </mainSlide>
     
@@ -62,22 +53,22 @@
     </productSlide_title>
     
     <productSlide>
-        <value>samsung-galaxy-tab-3-lite-7-t110-8gb-wifi-tablet</value>
+        <value>ubuntu-valid-gd</value>
         <type>product</type>
     </productSlide>
     
     <productSlide>
-        <value>starmobile-octa-32gb-android-42</value>
+        <value>ubuntu-valid-gd</value>
         <type>product</type>
     </productSlide>
     
     <productSlide>
-        <value>starmobile-octa-32gb-android-42</value>
+        <value>ubuntu-valid-gd</value>
         <type>product</type>
     </productSlide>
     
     <productSideBanner>
-        <value>samsung-galaxy-tab-3-lite-7-t110-8gb-wifi-tablet</value>
+        <value>ubuntu-valid-gd</value>
         <type>product</type>
     </productSideBanner>
 
@@ -89,57 +80,57 @@
         <layout>layoutA</layout>
 
         <product_panel_main>
-            <value>starmobile-octa-32gb-android-42</value>
+            <value>ubuntu-valid-gd</value>
             <type>product</type>
         </product_panel_main>
         
          <product_panel_main>
-            <value>starmobile-octa-32gb-android-42</value>
+            <value>ubuntu-valid-gd</value>
             <type>product</type>
        </product_panel_main>
         
          <product_panel_main>
-            <value>starmobile-octa-32gb-android-42</value>
+            <value>ubuntu-valid-gd</value>
             <type>product</type>
         </product_panel_main>
         
         <product_panel>
-            <value>starmobile-octa-32gb-android-42</value>
+            <value>ubuntu-valid-gd</value>
             <type>product</type>
         </product_panel>
         
        <product_panel>
-            <value>starmobile-octa-32gb-android-42</value>
+            <value>ubuntu-valid-gd</value>
             <type>product</type>
         </product_panel>
         
         <product_panel>
-            <value>starmobile-octa-32gb-android-42</value>
+            <value>ubuntu-valid-gd</value>
             <type>product</type>
         </product_panel>
 
         <product_panel>
-            <value>starmobile-octa-32gb-android-42</value>
+            <value>ubuntu-valid-gd</value>
             <type>product</type>
         </product_panel>
         
         <product_panel>
-            <value>starmobile-octa-32gb-android-42</value>
+            <value>ubuntu-valid-gd</value>
             <type>product</type>
         </product_panel>
         
         <product_panel>
-            <value>starmobile-octa-32gb-android-42</value>
+            <value>ubuntu-valid-gd</value>
             <type>product</type>
         </product_panel>
         
         <product_panel>
-            <value>starmobile-octa-32gb-android-42</value>
+            <value>ubuntu-valid-gd</value>
             <type>product</type>
         </product_panel>
         
         <product_panel>
-            <value>starmobile-octa-32gb-android-42</value>
+            <value>ubuntu-valid-gd</value>
             <type>product</type>
         </product_panel>
       
@@ -154,58 +145,58 @@
         <layout>layoutB</layout>
         
         <product_panel_main>
-            <value>starmobile-octa-32gb-android-42</value>
+            <value>ubuntu-valid-gd</value>
             <type>product</type>
         </product_panel_main>
         
          <product_panel_main>
-            <value>starmobile-octa-32gb-android-42</value>
+            <value>ubuntu-valid-gd</value>
             <type>product</type>
        </product_panel_main>
         
          <product_panel_main>
-            <value>starmobile-octa-32gb-android-42</value>
+            <value>ubuntu-valid-gd</value>
             <type>product</type>
         </product_panel_main>
         
         <product_panel>
-            <value>starmobile-octa-32gb-android-42</value>
+            <value>ubuntu-valid-gd</value>
             <type>product</type>
         </product_panel>
         
        <product_panel>
-            <value>starmobile-octa-32gb-android-42</value>
+            <value>ubuntu-valid-gd</value>
             <type>product</type>
         </product_panel>
         
         <product_panel>
-            <value>starmobile-octa-32gb-android-42</value>
+            <value>ubuntu-valid-gd</value>
             <type>product</type>
         </product_panel>
 
         
         <product_panel>
-            <value>starmobile-octa-32gb-android-42</value>
+            <value>ubuntu-valid-gd</value>
             <type>product</type>
         </product_panel>
         
         <product_panel>
-            <value>starmobile-octa-32gb-android-42</value>
+            <value>ubuntu-valid-gd</value>
             <type>product</type>
         </product_panel>
         
         <product_panel>
-            <value>starmobile-octa-32gb-android-42</value>
+            <value>ubuntu-valid-gd</value>
             <type>product</type>
         </product_panel>
         
         <product_panel>
-            <value>starmobile-octa-32gb-android-42</value>
+            <value>ubuntu-valid-gd</value>
             <type>product</type>
         </product_panel>
         
         <product_panel>
-            <value>starmobile-octa-32gb-android-42</value>
+            <value>ubuntu-valid-gd</value>
             <type>product</type>
         </product_panel>
       
@@ -221,58 +212,58 @@
         <layout>layoutC</layout>
         
         <product_panel_main>
-            <value>starmobile-octa-32gb-android-42</value>
+            <value>ubuntu-valid-gd</value>
             <type>product</type>
         </product_panel_main>
         
          <product_panel_main>
-            <value>starmobile-octa-32gb-android-42</value>
+            <value>ubuntu-valid-gd</value>
             <type>product</type>
        </product_panel_main>
         
          <product_panel_main>
-            <value>starmobile-octa-32gb-android-42</value>
+            <value>ubuntu-valid-gd</value>
             <type>product</type>
         </product_panel_main>
         
         <product_panel>
-            <value>starmobile-octa-32gb-android-42</value>
+            <value>ubuntu-valid-gd</value>
             <type>product</type>
         </product_panel>
         
        <product_panel>
-            <value>starmobile-octa-32gb-android-42</value>
+            <value>ubuntu-valid-gd</value>
             <type>product</type>
         </product_panel>
         
         <product_panel>
-            <value>starmobile-octa-32gb-android-42</value>
+            <value>ubuntu-valid-gd</value>
             <type>product</type>
         </product_panel>
 
         
         <product_panel>
-            <value>starmobile-octa-32gb-android-42</value>
+            <value>ubuntu-valid-gd</value>
             <type>product</type>
         </product_panel>
         
         <product_panel>
-            <value>starmobile-octa-32gb-android-42</value>
+            <value>ubuntu-valid-gd</value>
             <type>product</type>
         </product_panel>
         
         <product_panel>
-            <value>starmobile-octa-32gb-android-42</value>
+            <value>ubuntu-valid-gd</value>
             <type>product</type>
         </product_panel>
         
         <product_panel>
-            <value>starmobile-octa-32gb-android-42</value>
+            <value>ubuntu-valid-gd</value>
             <type>product</type>
         </product_panel>
         
         <product_panel>
-            <value>starmobile-octa-32gb-android-42</value>
+            <value>ubuntu-valid-gd</value>
             <type>product</type>
         </product_panel>
       
@@ -287,58 +278,58 @@
         <layout>layoutD</layout>
         
         <product_panel_main>
-            <value>starmobile-octa-32gb-android-42</value>
+            <value>ubuntu-valid-gd</value>
             <type>product</type>
         </product_panel_main>
         
          <product_panel_main>
-            <value>starmobile-octa-32gb-android-42</value>
+            <value>ubuntu-valid-gd</value>
             <type>product</type>
        </product_panel_main>
         
          <product_panel_main>
-            <value>starmobile-octa-32gb-android-42</value>
+            <value>ubuntu-valid-gd</value>
             <type>product</type>
         </product_panel_main>
         
         <product_panel>
-            <value>starmobile-octa-32gb-android-42</value>
+            <value>ubuntu-valid-gd</value>
             <type>product</type>
         </product_panel>
         
        <product_panel>
-            <value>starmobile-octa-32gb-android-42</value>
+            <value>ubuntu-valid-gd</value>
             <type>product</type>
         </product_panel>
         
         <product_panel>
-            <value>starmobile-octa-32gb-android-42</value>
+            <value>ubuntu-valid-gd</value>
             <type>product</type>
         </product_panel>
 
         
         <product_panel>
-            <value>starmobile-octa-32gb-android-42</value>
+            <value>ubuntu-valid-gd</value>
             <type>product</type>
         </product_panel>
         
         <product_panel>
-            <value>starmobile-octa-32gb-android-42</value>
+            <value>ubuntu-valid-gd</value>
             <type>product</type>
         </product_panel>
         
         <product_panel>
-            <value>starmobile-octa-32gb-android-42</value>
+            <value>ubuntu-valid-gd</value>
             <type>product</type>
         </product_panel>
         
         <product_panel>
-            <value>starmobile-octa-32gb-android-42</value>
+            <value>ubuntu-valid-gd</value>
             <type>product</type>
         </product_panel>
         
         <product_panel>
-            <value>starmobile-octa-32gb-android-42</value>
+            <value>ubuntu-valid-gd</value>
             <type>product</type>
         </product_panel>
       
@@ -353,58 +344,58 @@
         <layout>layoutE</layout>
         
         <product_panel_main>
-            <value>starmobile-octa-32gb-android-42</value>
+            <value>ubuntu-valid-gd</value>
             <type>product</type>
         </product_panel_main>
         
          <product_panel_main>
-            <value>starmobile-octa-32gb-android-42</value>
+            <value>ubuntu-valid-gd</value>
             <type>product</type>
        </product_panel_main>
         
          <product_panel_main>
-            <value>starmobile-octa-32gb-android-42</value>
+            <value>ubuntu-valid-gd</value>
             <type>product</type>
         </product_panel_main>
         
         <product_panel>
-            <value>starmobile-octa-32gb-android-42</value>
+            <value>ubuntu-valid-gd</value>
             <type>product</type>
         </product_panel>
         
        <product_panel>
-            <value>starmobile-octa-32gb-android-42</value>
+            <value>ubuntu-valid-gd</value>
             <type>product</type>
         </product_panel>
         
         <product_panel>
-            <value>starmobile-octa-32gb-android-42</value>
+            <value>ubuntu-valid-gd</value>
             <type>product</type>
         </product_panel>
 
         
         <product_panel>
-            <value>starmobile-octa-32gb-android-42</value>
+            <value>ubuntu-valid-gd</value>
             <type>product</type>
         </product_panel>
         
         <product_panel>
-            <value>starmobile-octa-32gb-android-42</value>
+            <value>ubuntu-valid-gd</value>
             <type>product</type>
         </product_panel>
         
         <product_panel>
-            <value>starmobile-octa-32gb-android-42</value>
+            <value>ubuntu-valid-gd</value>
             <type>product</type>
         </product_panel>
         
         <product_panel>
-            <value>starmobile-octa-32gb-android-42</value>
+            <value>ubuntu-valid-gd</value>
             <type>product</type>
         </product_panel>
         
         <product_panel>
-            <value>starmobile-octa-32gb-android-42</value>
+            <value>ubuntu-valid-gd</value>
             <type>product</type>
         </product_panel>
       
