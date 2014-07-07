@@ -39,11 +39,11 @@
     </mainSlide>
 
     <mainSlide>
-        <value>assets/images/mainslide/4.jpg</value>
+        <value>assets/images/mainslide/6.jpg</value>
         <type>image</type>
         <imagemap>
             <coordinate>0,0,589,352</coordinate>
-            <target>item/hiefier-mc-091-pocket-magic-karaoke</target>
+            <target>item/action-camcorder-hd-720p</target>
         </imagemap>
     </mainSlide>
 
