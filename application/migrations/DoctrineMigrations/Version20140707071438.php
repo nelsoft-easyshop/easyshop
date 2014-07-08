@@ -20,11 +20,8 @@ class Version20140707071438 extends AbstractMigration
     	 	");
 
     	 $this->addSql("
-    	 	 DELIMITER $$
 
-USE `easyshop`$$
-
-DROP PROCEDURE IF EXISTS `es_sp_Payment_order`$$
+DROP PROCEDURE IF EXISTS `es_sp_Payment_order`;
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `es_sp_Payment_order`(
           IN i_payment_type INT (10)
@@ -255,9 +252,7 @@ BEGIN
                         
                         SELECT o_success, o_message,v_order_id,`invoice_no`,total,dateadded FROM `es_order` WHERE `id_order` = v_order_id;
                     
-                END$$
-
-DELIMITER ;
+                END;
     	 	");
     }
 
@@ -272,11 +267,9 @@ ALTER TABLE `easyshop`.`es_product`
 
   	");
     	$this->addSql("
-    		DELIMITER $$
 
-USE `easyshop`$$
 
-DROP PROCEDURE IF EXISTS `es_sp_Payment_order`$$
+DROP PROCEDURE IF EXISTS `es_sp_Payment_order`;
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `es_sp_Payment_order`(
           IN i_payment_type INT (10)
@@ -506,9 +499,7 @@ BEGIN
                         
                         SELECT o_success, o_message,v_order_id,`invoice_no`,total,dateadded FROM `es_order` WHERE `id_order` = v_order_id;
                     
-                END$$
-
-DELIMITER ;
+                END;
     		");
     }
 }

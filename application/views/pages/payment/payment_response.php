@@ -39,7 +39,7 @@
                 </div> 
 
  
-                <?php if(isset($completepayment)): ?>
+                <?php if($completepayment): ?>
                     <div style='font-size: 17px;'>
                         <p>
                             You have made a successful purchase on Easyshop.ph. An e-mail has been sent to you and the people from whom you purchased

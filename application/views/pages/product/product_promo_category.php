@@ -10,7 +10,7 @@
   
     <?php echo $deals_banner; ?>
 	
-    <div class="cd_product_container" id="promo1">
+    <div class="cd_product_container" id="peak_hour_sale">
         <div class='product_list'>
 
             <?php foreach($peak_hour_items as $item): ?>
@@ -25,9 +25,10 @@
 				
 				
 			<?PHP $Md_start =  date('M d', strtotime($item['startdate'])); ?>
+			<?PHP $D_start =  date('d', strtotime($item['startdate'])); ?>
 			<div class="product_buy_con prod_date <?PHP echo ($item['can_purchase'] || strtotime(date('M d'))===strtotime($Md_start) )  ?'':'disabled'; ?>">
 			<span>
-			    <p><?php echo $Md_start; ?></p>
+			    <p><?php echo $Md_start . " and " . ($D_start + 7); ?></p>
 			</span>
 
 			
@@ -83,7 +84,7 @@
     
     
     
-    <div id="promo2">
+    <div id="easytreats">
         <?php foreach($items as $item): ?>
             <div class="cd_product">
 

@@ -847,7 +847,7 @@ Advanced Search Filters
     text-align: center;
     top: 0;
     right: 0;
-    width: 100px;
+    width: 110px;
     z-index: 999999;
 }
 
@@ -888,12 +888,18 @@ Advanced Search Filters
   background-color: #f18200;
 }
 
+.cd_product{
+     display: table;
+}
 
-
-#promo1>.cd_product, #promo2>.cd_product{
+#easytreats .cd_product{
      display: inline-block !important;
 }
 
+#peak_hour_sale .cd_product {
+     display: inline-block !important;
+  
+}
 
 .cd_prod_img_con {
     display: table-cell;

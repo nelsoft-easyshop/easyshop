@@ -1133,12 +1133,12 @@ class Payment extends MY_Controller{
         
         $productstring = substr($productstring,4);
         return array(
-            'totalPrice' => $grandTotal,
+            'totalPrice' => round(floatval($grandTotal),2), 
             'newItemList' => $itemList,
             'productstring' => $productstring,
             'productName' => $name,
             'toBeLocked' => $toBeLocked,
-            'othersumfee' => $othersumfee,
+            'othersumfee' => round(floatval($othersumfee),2), 
             'thereIsPromote' => $isPromote
             );
     }
