@@ -1165,11 +1165,11 @@ class product_model extends CI_Model
 	
 	function getPopularitem($cat_ids,$limit)
 	{	 
-	    $query = $this->xmlmap->getFilenameID('sql/product','');
+	    $query = $this->xmlmap->getFilenameID('sql/product','getPopularitem');
 	    
 	    $qmarks = implode(',', array_fill(0, count($cat_ids), '?'));
 	    $query = $query.'('.$qmarks.') ORDER BY `clickcount` DESC LIMIT ?';
-        
+	    
 	    $sth = $this->db->conn_id->prepare($query);
 	    array_push($cat_ids, intval($limit));  
 	    foreach ($cat_ids as $k => $id)
