@@ -72,7 +72,7 @@ class Manage extends MY_Controller {
 
         $productdata = $this->product_model->getProductBySlug($productSideBanner, false);
         if (empty($productdata)){
-            die('{"e":"1","m":"Product side banner slug not available!"}');
+            die('{"e":"1","m":"Companion Box Item slug not available!"}');
         }
 
         $doc = new SimpleXMLElement(file_get_contents($file));
@@ -86,7 +86,7 @@ class Manage extends MY_Controller {
             $cnt = $key+1;
             $productdata = $this->product_model->getProductBySlug($item[$key], false);
             if (empty($productdata)){
-                die('{"e":"1","m":"Product slide '.$cnt.' slug not available!"}');
+                die('{"e":"1","m":"Party Items '.$cnt.' slug not available!"}');
             }  
 
             $doc = new SimpleXMLElement(file_get_contents($file));
