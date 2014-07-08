@@ -39,7 +39,7 @@ define('FOPEN_READ_WRITE_CREATE_STRICT',		'x+b');
 /*   
  *  EASYSHOP CUSTOM CONSTANTS
  */
-define('ES_FILE_VERSION','3.6.91');
+define('ES_FILE_VERSION','3.6.92');
 define('ES_PRODUCTION',TRUE);
 
 
