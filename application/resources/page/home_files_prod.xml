@@ -12,10 +12,10 @@
     </text>
 
     <mainSlide>
-        <value>assets/images/mainslide/1.jpg</value>
+        <value>assets/images/mainslide/140607080614.jpg</value>
         <type>image</type>
         <imagemap>
-            <coordinate>70,200,350,350</coordinate>
+            <coordinate>0,0,0,0</coordinate>
             <target>register</target>
         </imagemap>
     </mainSlide>
@@ -29,24 +29,37 @@
         </imagemap>
     </mainSlide>
 
+
+
     <mainSlide>
         <value>assets/images/mainslide/3.jpg</value>
         <type>image</type>
         <imagemap>
             <coordinate>0,0,0,0</coordinate>
-            <target></target>
+            <target/>
         </imagemap>
     </mainSlide>
 
     <mainSlide>
-	<value>assets/images/mainslide/8.jpg</value>
-	<type>image</type>
-	<imagemap>
-	<coordinate>0,0,589,352</coordinate>
-	<target>item/huawei-ascend-p7-white</target>
-	</imagemap>
+        <value>assets/images/mainslide/140607080636.jpg</value>
+        <type>image</type>
+        <imagemap>
+            <coordinate>0,0,589,351.77813992311667</coordinate>
+            <target>item/self-stirring-mug-4</target>
+        </imagemap>
     </mainSlide>
 
+    <mainSlide>
+        <value>assets/images/mainslide/140507080527.jpg</value>
+        <type>image</type>
+        <imagemap>
+            <coordinate>0,0,589,351.77813992311667</coordinate>
+            <target>item/samsung-galaxy-k-zoom-lte</target>
+        </imagemap>
+    </mainSlide>
+
+
+    
 
     <productSlide_title>
         <value>Hot and New</value>
@@ -69,7 +82,7 @@
     </productSlide>
 
     <productSideBanner>
-        <value>huawei-ascend-p7-white</value>
+        <value>self-stirring-mug-4</value>
         <type>product</type>
     </productSideBanner>
 
