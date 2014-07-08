@@ -1,8 +1,6 @@
 
 $(document).ready(function() { 
     
-    $('#pop_up_image_edit , .div_content').hide();
-
     $(document).on('click',".showDiv",function (e){
         div = $(this).data('div');
         $('.div_content').hide();
@@ -29,49 +27,35 @@ $(document).ready(function() {
         startUpload();
     });
 
-    $("#add_more_photo").click(function(){
-        $('#add_more_photo_input').click(); 
-    });
-
-
-
-
     $(document).on('click','.removePic',function () { 
-        removePhoto($(this).data('node'),$(this).data('div')); 
+        var r = confirm('Are you sure you want to remove this photo in home page?');
+        var div = $(this).data('div');
+        if(r == true){
+            $('#'+div).fadeOut(500, function() { $('#'+div).remove(); });
+            removePhoto($(this).data('node'),div);
+
+        }
     });
-
-    $(document).on('click','.moveUp',function () { 
+ 
+    $(document).on('click','.movePosition',function () { 
         div = $(this).data('div');
+        action = ($(this).data('action') == 'up' ? 'up' : 'down');
+        node = $(this).data('node'); 
         item = $('#'+div);
-        item.insertBefore(item.prev());
 
-        node = $(this).data('node');
+        if(action == 'up'){
+            item.insertBefore(item.prev());
+        }else{
+            item.insertAfter(item.next());
+        } 
         $.ajax({
             type: "GET",
-            url: config.base_url +  'manage/moveNodeXml/up',
+            url: config.base_url +  'manage/moveNodeXml/'+action,
             data: "node="+ node,
             dataType: "json",
             cache: false,
             success: function(d) {
-                
-           }
-       });
-    });
-
-    $(document).on('click','.moveDown',function () { 
-        div = $(this).data('div');
-        item = $('#'+div);
-        item.insertAfter(item.next());
-
-        node = $(this).data('node');
-        $.ajax({
-            type: "GET",
-            url: config.base_url +  'manage/moveNodeXml/down',
-            data: "node="+ node,
-            dataType: "json",
-            cache: false,
-            success: function(d) {
-
+                console.log('moving '+action+' complete');
             }
         });
     });
@@ -107,7 +91,8 @@ $(document).ready(function() {
                 maxWidth: 600,
                 minWidth: 505 
             },
-            onShow: function(){
+            onShow: function(dialog){
+                $(dialog.container).draggable();
                 $('#saveImage').on('click', function(){
                     node = encodeURI(node);
                     target = encodeURI($('#link').val());
@@ -139,21 +124,18 @@ $(document).ready(function() {
                     $('#image_yy').val(defyy);
                     $('#link').val(deftarget);
                 });
-                jcrop_api = $.Jcrop($('#image_prev'),{
-                    aspectRatio: width/height,
+                jcrop_api = $.Jcrop($('#image_prev'),{ 
                     boxWidth: 500,
                     boxHeight: 500,
                     minSize: [width*0.1,height*0.1],
                     trueSize: [width,height],
                     onChange: showCoords,
-                    onSelect: showCoords,
-                    onRelease: resetCoords(defx,defxx,defy,defyy)
+                    onSelect: showCoords
                 });
                 this.setPosition();
             },
             onClose: function(){
-                $('#image_prev').attr('src', '');
-                onRelease: resetCoords(defx,defxx,defy,defyy)
+                $('#image_prev').attr('src', ''); 
                 jcrop_api.destroy();
                 $('#image_prev span').after('<img src="" id="image_prev">');
                 $.modal.close();
@@ -167,14 +149,7 @@ $(document).ready(function() {
         $('#image_y').val(c.y);
         $('#image_yy').val(c.y2);
     }
-
-    function resetCoords(defx,defxx,defy,defyy){
-        $('#image_x').val(defx);
-        $('#image_xx').val(defxx);
-        $('#image_y').val(defy);
-        $('#image_yy').val(defyy);
-    }
-
+ 
     function startUpload()
     {  
         $('#picform').ajaxForm({
@@ -183,14 +158,13 @@ $(document).ready(function() {
             dataType: 'json',
             success: function(d) {   
                if(d.e == 0){
-                    $('.current_selected').append('<div id="'+d.d+'"><img src="'+config.base_url+'assets/images/mainslide/'+d.f+'"><a href="javascript:void(0)" data-node="'+d.u+'"  data-div="'+d.d+'" class="editPic" data-ratiox="0" data-ratioy="0" data-ratioxx="0" data-ratioyy="0" data-link="home" >edit</a> | <a data-node="'+d.u+'"  data-div="'+d.d+'" class="removePic" href="javascript:void(0)">remove</a> | <a data-node="'+d.u+'"  data-div="'+d.d+'" class="moveUp" href="javascript:void(0)">up</a> | <a data-node="'+d.u+'"  data-div="'+d.d+'" class="moveDown" href="javascript:void(0)">down</a></div>');
+                    $('.current_selected').append('<div class="main_images" id="'+d.d+'"><a href="javascript:void(0)" data-node="'+d.u+'"  data-div="'+d.d+'" class="editPic imglink" data-ratiox="0" data-ratioy="0" data-ratioxx="0" data-ratioyy="0" data-link="home" >E</a>  <a data-node="'+d.u+'"  data-div="'+d.d+'" class="removePic imglink" href="javascript:void(0)">X</a>  <a data-node="'+d.u+'"  data-div="'+d.d+'" class="imglink movePosition moveUp" data-action="up" href="javascript:void(0)">&#10096;</a>  <a data-node="'+d.u+'"  data-div="'+d.d+'" class="imglink movePosition moveDown" data-action="down" href="javascript:void(0)">&#10097;</a><div><img src="'+config.base_url+'assets/images/mainslide/'+d.f+'"></div></div>');
                }else{
                     alert(d.m);
                }
             }
         }); 
         $('#picform').submit();
- 
     }
 
     function removePhoto(node,id)
@@ -201,9 +175,7 @@ $(document).ready(function() {
             data: "node="+ node,
             dataType: "json",
             cache: false,
-            success: function(d) {
-                 $('#'+id).remove();
-            }
+            success: function(d) {}
         });
     }
 });

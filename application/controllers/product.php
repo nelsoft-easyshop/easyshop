@@ -24,7 +24,7 @@ class product extends MY_Controller
     	$perPage = $this->per_page;
     	$operator = " = ";
     	$data =  $this->fill_header();	
-		$category_array = $this->product_model->getCategoryBySlug($url_string);
+	$category_array = $this->product_model->getCategoryBySlug($url_string);
         
         $categoryId = $category_array['id_cat'];
         $categoryName = $category_array['name'];
