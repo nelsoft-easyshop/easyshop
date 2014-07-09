@@ -9,11 +9,12 @@ class DragonPay {
 
     function declareEnvironment(){
 
-        if(ES_PRODUCTION){
+        if(strtolower(ENVIRONMENT) == 'production'){
             // LIVE
             $this->url = 'https://secure.dragonpay.ph/DragonPayWebService/MerchantService.asmx?wsdl';
             $this->ps = "https://gw.dragonpay.ph/Pay.aspx";
-        }else{
+        }
+        else{
             // SANDBOX
             $this->url = 'http://test.dragonpay.ph/DragonPayWebService/MerchantService.asmx?wsdl';
             $this->ps = "http://test.dragonpay.ph/Pay.aspx"; 

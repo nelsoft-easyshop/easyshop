@@ -32,18 +32,21 @@ class Manage extends MY_Controller {
     }
 
     function declareEnvironment(){
-        if(ES_PRODUCTION){
 
-            // LIVE
-            $this->file = APPPATH . "resources/page/home_files_prod.xml"; 
-            $this->var = 'page/home_files_prod';
-        }else{
+        $env = strtolower(ENVIRONMENT);
+
+        if($env  == 'development'){
             // DEVELOPMENT
             $this->file = APPPATH . "resources/page/home_files_dev.xml"; 
             $this->var = 'page/home_files_dev';
-     
+        }
+        else{
+            // LIVE
+            $this->file = APPPATH . "resources/page/home_files_prod.xml"; 
+            $this->var = 'page/home_files_prod';
         }
     }
+
     function index()
     { 
          

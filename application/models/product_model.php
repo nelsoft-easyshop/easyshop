@@ -1973,12 +1973,12 @@ class product_model extends CI_Model
         return $return;  
     }
         
-    public function getHomeContent($devfile = 'page/home_files_dev', $prodfile = 'page/home_files_prod'){ 
-	$file = ES_PRODUCTION?$prodfile:$devfile;
-	
+    public function getHomeContent($devfile = 'page/home_files_dev', $prodfile = 'page/home_files_prod')
+    { 
+		$file = (strtolower(ENVIRONMENT) == 'development')?$devfile:$prodfile;
         $xml_content = $this->xmlmap->getFilename($file);
-
         $home_view_data = array();
+        
         foreach ($xml_content as $key => $element){	
 
             if(isset($element['value']) &&  isset($element['type'])){    

@@ -7,22 +7,21 @@ class PayPal {
 	public $PayPalApiSignature;  
 
 	public function __construct()
-	{
-
+	{	 
 		$this->declareEnvironment();
 	}
     
 
     function declareEnvironment(){
 
-    	if(ES_PRODUCTION){
-
+    	if(strtolower(ENVIRONMENT) == 'production'){
 			// LIVE
     		$this->PayPalMode             = ''; 
     		$this->PayPalApiUsername      = 'admin_api1.easyshop.ph'; 
     		$this->PayPalApiPassword      = 'GDWFS6D9ACFG45E7'; 
     		$this->PayPalApiSignature     = 'AFcWxV21C7fd0v3bYYYRCpSSRl31Adro7yAfl2NInYAAVfFFipJ-QQhT'; 
-    	}else{
+    	}
+    	else{
 			// SANDBOX
     		$this->PayPalMode             = 'sandbox'; 
     		$this->PayPalApiUsername      = 'easyseller_api1.yahoo.com'; 
