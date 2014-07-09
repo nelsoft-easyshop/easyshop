@@ -149,7 +149,7 @@
     <section>
 
         <type>category</type>
-        <value>327</value>
+        <value>14</value>
         <css_class>blue_cat</css_class>
         <layout>layoutB</layout>
 
@@ -213,7 +213,7 @@
     <section>
 
         <type>category</type>
-        <value>326</value>
+        <value>138</value>
         <css_class>orange_cat</css_class>
         <layout>layoutE</layout>
 
