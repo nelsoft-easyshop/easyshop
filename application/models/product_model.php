@@ -61,9 +61,7 @@ class product_model extends CI_Model
 
 	function selectChild($id) # get all down level category on selected category from database
 	{
-		echo  $id;
 	    $query = $this->xmlmap->getFilenameID('sql/product', 'selectChild');
-	    echo  $query;
 	    $sth = $this->db->conn_id->prepare($query);
 	    $sth->bindParam(':cat_id', $id);
 	    $sth->execute();
