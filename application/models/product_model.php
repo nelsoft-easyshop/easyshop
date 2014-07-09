@@ -1964,7 +1964,7 @@ class product_model extends CI_Model
         
     public function getHomeContent($devfile = 'page/home_files_dev', $prodfile = 'page/home_files_prod')
     { 
-		$file = (strtolower(ENVIRONMENT) == 'development')?$devfile:$prodfile;
+	$file = (strtolower(ENVIRONMENT) == 'development')?$devfile:$prodfile;
         $xml_content = $this->xmlmap->getFilename($file);
         $home_view_data = array();
         
@@ -1980,19 +1980,26 @@ class product_model extends CI_Model
 
 			
         } 
-        
+
         /*
-         *  If there is only one section element, add it to its own array.
+         *  If there is only one element, add it to its own array.
          */
         if(isset($home_view_data['section']) && isset($home_view_data['section']['category_detail'])){
-            $temp = $home_view_data['section'];
-            $home_view_data['section'] = array();
-            $home_view_data['section'][0] = $temp;
+            $home_view_data['section'] = make_array($home_view_data['section']);            
         }
+	if(isset($home_view_data['mainSlide']) && isset($home_view_data['mainSlide']['src'])){
+            $home_view_data['mainSlide'] = make_array($home_view_data['mainSlide']);
+        }
+        
+        
+        
+ 
+        
         return $home_view_data;
 
     }
     
+
     private function createHomeElement($element, $key){
         $home_view_data = array();
         if($element['type'] === 'product'){
@@ -2219,5 +2226,7 @@ class product_model extends CI_Model
 	  return true;
 	}
     }
+    
+
     
 }
