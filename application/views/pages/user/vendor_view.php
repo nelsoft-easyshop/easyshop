@@ -81,8 +81,12 @@
 					
 					<?php if( !$renderEdit && $logged_in ):?>
 						<?php echo form_open('');?>
-						<p class="subscription_btn" style="display:<?php echo $subscribe_status==='unfollowed'?'':'none'?>">Follow</p>
-						<p class="subscription_btn" style="display:<?php echo $subscribe_status==='followed'?'':'none'?>">Unfollow</p>
+						<p class="subscription_btn" style="display:<?php echo $subscribe_status==='unfollowed'?'':'none'?>">
+							<small class="span_bg plus_btn"></small> Follow
+						</p>
+						<p class="subscription_btn" style="display:<?php echo $subscribe_status==='followed'?'':'none'?>">
+							<small class="span_bg minus_btn"></small> Unfollow
+						</p>
 						<input type="hidden" value="<?php echo $vendordetails['username']?>" name="name">
 						<?php echo form_close();?>
 					<?php endif;?>
@@ -553,18 +557,18 @@
 				<div class="vendor_products_wrapper">
 				<?php if($product_count > 0):?>
 					<?php foreach($products as $catID=>$p):?>
-					<div class="vendor_txt_prod_header">
+					<div class="vendor_txt_prod_header" class="<?php echo $p['slug']?>">
 						<div class="home_cat_product_title" style="background-color:#0078d5;">
-							<a href="<?php echo $p['cat_link']?>">
+							<a target="_blank" href="<?php echo $p['cat_link']?>" <?php echo $p['cat_link']==="" ? 'onclick="return false"':""?> >
 								<img src="<?=base_url()?>assets/images/img_icon_electronics_small.png">
-								<h2><?php echo $p['cat_name']?></h2> 
+								<h2><?php echo $p['name']?></h2> 
 							</a>   
 						</div>
 					</div>
 					<div class="vendor_prod_items">
 						<?php foreach($p['products'] as $prod):?>
 							<div class="product vendor_product">
-								<a href="<?php echo base_url() . 'item/' . $prod['slug']?>">
+								<a target="_blank" href="<?php echo base_url() . 'item/' . $prod['slug']?>">
 									<span class="prod_img_wrapper">
 										<span class="prod_img_container">
 										   <img src="<?=base_url()?><?php echo $prod['product_image_path']?>">
@@ -572,7 +576,7 @@
 									</span>
 								</a>    
 								<h3>
-									<a href="<?php echo base_url() . 'item/' . $prod['slug']?>">
+									<a target="_blank" href="<?php echo base_url() . 'item/' . $prod['slug']?>">
 									   <?php echo html_escape($prod['name'])?>
 									</a>
 								</h3>
@@ -585,7 +589,7 @@
 						<?php endforeach;?>
 					</div>
 					<div class="txt_load_more_con">
-						<a href="<?php echo $p['loadmore_link'].$vendordetails['username']?>" class="grey_btn">LOAD MORE ITEMS</a>
+						<a target="_blank" href="<?php echo $p['loadmore_link']?>" class="grey_btn">LOAD MORE ITEMS</a>
 					</div>
 					<?php endforeach;?>
 				<?php endif;?>

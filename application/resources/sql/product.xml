@@ -982,16 +982,8 @@ FROM
 </select>
 
 <!-- Vendor Product Fetch -->
-<select id="getVendorCatProdCount">
-	SELECT c2.id_cat, COUNT(c2.name) as product_count, c2.slug, c2.name as parent_cat
-	FROM es_product p 
-	LEFT JOIN es_cat c1
-		ON p.cat_id = c1.id_cat
-	LEFT JOIN es_cat c2
-		ON c1.parent_id = c2.id_cat
-	WHERE p.member_id = :member_id AND c2.id_cat != 1 AND p.is_draft = 0 AND p.is_delete = 0
-	GROUP BY c2.id_cat, c2.name
-	ORDER BY COUNT(c2.name) DESC
+<select id="getVendorProdCatDetails">
+	call `es_sp_vendorProdCatDetails`(:member_id)
 </select>
 
 <select id="getTopXCatItems">
@@ -999,9 +991,9 @@ FROM
 	FROM es_product p
 	INNER JOIN es_cat c
 		ON c.id_cat = p.cat_id AND p.member_id = :member_id
-	INNER JOIN es_product_image pi
+	LEFT JOIN es_product_image pi
 		ON pi.product_id = p.id_product and pi.is_primary = 0
-	WHERE ( c.id_cat = :cat_id OR c.parent_id = :cat_id ) AND p.is_draft = 0 AND p.is_delete = 0
+	WHERE p.cat_id IN ({in_condition}) AND p.is_draft = 0 AND p.is_delete = 0
 	ORDER BY p.id_product DESC
 	LIMIT :item_count
 </select>

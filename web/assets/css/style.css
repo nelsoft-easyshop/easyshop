@@ -4920,6 +4920,7 @@ div.post_item_content_left {
 	font-size: 11px !important;
 	height: auto;
 	margin-right: 0px;
+	margin-top: 0;
 	width: auto !important;
 }
 
@@ -4982,6 +4983,10 @@ div.post_item_content_left {
 	width: auto;
 	max-height: 150px;
 	max-width: 150px;
+}
+
+.subscription_btn {
+	text-align: left;
 }
 
 .vendor_store_desc {
@@ -6950,6 +6955,17 @@ margin-right: 10px;
     background-color:  #d5002d;
 }
 
+
+/***** How to buy and How to sell page ****/
+.info_wrapper {
+    width: 100%;
+    text-align: center;
+}
+
+.info_wrapper img {
+    max-width: 980px;
+    width: 100%;
+}
 
 
 
