@@ -1077,7 +1077,9 @@ class product_model extends CI_Model
   	   	 ORDER BY ".$sortString." cnt_all DESC, `name` ASC
 		 LIMIT :start, :per_page 
 		 ";
-	
+		 echo $categories;
+		echo $query;
+		exit();
 
 
 		$sth = $this->db->conn_id->prepare($query); 
