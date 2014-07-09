@@ -105,14 +105,12 @@
   </div>
 </header>
 
-
-
     <form action="<?php echo base_url(); ?>search/search.html" name="search_form" method="get">
       <section>
         <div class="wrapper search_wrapper">
         
           <?php if(!(isset($render_logo) && ($render_logo === false))): ?>
-            <div class="logo"> <a href="<?=base_url()?>home"><span class="span_bg"></span></a> </div>
+            <div class="logo"> <a href="<?=base_url()?>"><span class="span_bg"></span></a> </div>
           <?php endif; ?>
           
           <?php if(!(isset($render_searchbar) && ($render_searchbar === false))): ?>

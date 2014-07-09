@@ -27,7 +27,7 @@
 			<?php if($logged_in == false):?>
 				<a href="<?=base_url()?>login" class="continue">Go to Login Page</a>
 			<?php elseif($logged_in == true):?>
-				<a href="<?=base_url()?>home" class="continue">Go to Home Page</a>
+				<a href="<?=base_url()?>" class="continue">Go to Home Page</a>
 			<?php endif;?>
 			
           </div> 

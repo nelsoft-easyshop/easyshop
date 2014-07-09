@@ -38,7 +38,7 @@
         <div class = "container header_bg">
             <div class="row-fluid">
                 <div id="himg" class="text-center"> 
-                  <a href="<?=base_url();?>home"><img src="<?=base_url()?>assets/images/landingpage/img_logo.png"></a>
+                  <a href="<?=base_url();?>"><img src="<?=base_url()?>assets/images/landingpage/img_logo.png"></a>
                   <div class="login_btn">
                     <a href="<?=base_url()?>login" class="">Log In</a>
                   </div>

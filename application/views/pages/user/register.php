@@ -76,7 +76,7 @@
 	<header id="header" class="">
 		<div class="header">
 				<div class="logo_con">
-					<a href='<?=base_url()?>home'><span class="span_bg logo"></span></a>
+					<a href='<?=base_url()?>'><span class="span_bg logo"></span></a>
 				</div>
 				<div class="nav_container">
 					<nav class="nav-collapse">
