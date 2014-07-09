@@ -16,17 +16,17 @@ class Home extends MY_Controller {
         $home_content = $this->product_model->getHomeContent();
 
         $layout_arr = array();
- 
+
         foreach($home_content['section'] as $section){
             array_push($layout_arr,$this->load->view('templates/home_layout/'.$section['category_detail']['layout'], array('section' => $section), TRUE));
         }
 
-		$data = array('title' => ' Shopping made easy | Easyshop.ph',
-                'data' => $home_content,
-                'sections' => $layout_arr,
-                'category_navigation' => $this->load->view('templates/category_navigation',array('cat_items' =>  $this->getcat(),), TRUE ),
-				'metadescription' => 'Enjoy the benefits of one-stop shopping at the comforts of your own home.',
-                );
+	$data = array('title' => ' Shopping made easy | Easyshop.ph',
+	    'data' => $home_content,
+	    'sections' => $layout_arr,
+	    'category_navigation' => $this->load->view('templates/category_navigation',array('cat_items' =>  $this->getcat(),), TRUE ),
+	    'metadescription' => 'Enjoy the benefits of one-stop shopping at the comforts of your own home.',
+	);
         $data = array_merge($data, $this->fill_header());
 		$this->load->view('templates/header', $data);
         $this->load->view('pages/home_view', $data);
