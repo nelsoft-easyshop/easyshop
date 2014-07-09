@@ -33,6 +33,7 @@ function sum(obj){
                 $("#subtotal"+id).text(data['subtotal']);
                 $("#total").text(data['total']);
                 $(obj).val(data.qty);
+                $('#rad_'+id).val(data.subtotal);
             }
             $(obj).attr("mx",data['maxqty']);
         }

@@ -6460,6 +6460,14 @@ box-shadow:         inset 0px -10px 12px -8px rgba(255, 255, 255, 0.75);
     width: 677px;	
 	overflow-y: scroll;
 }
+.float_left span{
+    bottom: 34px;
+    color: #9a9795;
+    font-size: 10.5px;
+    left: 340px;
+    position: relative;
+    width: 118px;
+}
 .float_left{
     display: block;
     height: auto;
@@ -6507,11 +6515,19 @@ box-shadow:         inset 0px -10px 12px -8px rgba(255, 255, 255, 0.75);
 }
 /**/
 
+.float_right span{
+    bottom: 88px;
+    color: #9a9795;
+    font-size: 10.5px;
+    left: 250px;
+    position: relative;
+    width: 118px;
+}
 .float_right{
-    margin-top: 5px;
     display: block;
     height: auto;
     margin-bottom: -75px;
+    margin-top: 5px;
     max-width: 620px;
     min-height: 120px;
     min-width: 620px;
@@ -6640,6 +6656,12 @@ margin-right: 10px;
 }
 #chsn_delete_btn ,#delete_all_btn{
 		display:none;
+}
+#chsn_username{
+    display: inline-block;
+    left: 150px;
+    position: relative;
+    top: 5px;
 }
 #table_id_length
 {

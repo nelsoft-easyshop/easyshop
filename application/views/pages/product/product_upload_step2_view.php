@@ -780,7 +780,7 @@ $('.view_more_product_details').on('click', function() {
 <script type='text/javascript' src="<?=base_url()?>assets/js/src/vendor/jquery.simplemodal.js"></script>
 <script type='text/javascript' src='<?=base_url()?>assets/js/src/vendor/jquery.jqpagination.min.js'></script>
 <script src="<?php echo base_url(); ?>assets/tinymce/tinymce.min.js" type="text/javascript"></script>
-<script type="text/javascript">
+    <script type="text/javascript">
 
 
 
@@ -837,19 +837,19 @@ $(document).ready(function(){
       });
 
 
-  $("#slider_val").on('change',function(){
-    var thisslider = $(this);
-    var newval = (parseFloat($(this).val()) > 100) ? 99 : parseFloat($(this).val());
-    get_discPrice();
-    $("#range_1").ionRangeSlider("update", {
-            from: newval,                       // change default FROM setting
-            onChange: function (obj) {        // callback is called after slider load and update
-              var value = obj.fromNumber;
-              thisslider.val(value);
-              get_discPrice();
-            }
-          });  
-  });
+    $("#slider_val").on('change',function(){
+        var thisslider = $(this);
+        var newval = (parseFloat($(this).val()) > 100) ? 99 : (parseFloat($(this).val()) == 0 || isNaN(parseFloat($(this).val())))? 0 : parseFloat($(this).val());
+        get_discPrice();
+        $("#range_1").ionRangeSlider("update", {
+                from: newval,                       // change default FROM setting
+                onChange: function (obj) {        // callback is called after slider load and update
+                  var value = obj.fromNumber;
+                  thisslider.val(value);
+                  get_discPrice();
+                }
+          });
+    });
 
   $("#discountedP").on('change',function(){
     validateWhiteTextBox("#discountedP");
@@ -2446,7 +2446,7 @@ function ReplaceNumberWithCommas(thisnumber){
 
       });
 
-      </script>
+</script>
 
       <div class="clear"></div>  
 

@@ -2,7 +2,13 @@
 <div class="container">
     <div id="head_container">       
         <div><input type="button" id="modal-launcher" value="Compose"></div>
-		<div><span> <button id="chsn_delete_btn"> Delete selected </button> <button id="delete_all_btn"> Delete this conversation </button></span></div>
+		<div>
+            <h3 id="chsn_username"></h3>
+            <span>
+                <button id="chsn_delete_btn"> Delete selected </button>
+                <button id="delete_all_btn"> Delete this conversation </button>
+            </span>
+        </div>
     </div>
     <div id="panel_container">
 		<table id="table_id">
@@ -212,7 +218,7 @@
 			onFocus_Reload(result);
 			$("#msg_field").empty();
 			$("#msg_textarea").hide();
-            $("#chsn_delete_btn,#delete_all_btn").hide();
+            $("#chsn_delete_btn,#delete_all_btn,#chsn_username").hide();
 		}else {
             location.reload();
 		}
@@ -225,7 +231,7 @@
 			onFocus_Reload(result);
 			$("#msg_field").empty();
 			$("#msg_textarea").hide();
-            $("#chsn_delete_btn,#delete_all_btn").hide();
+            $("#chsn_delete_btn,#delete_all_btn,#chsn_username").hide();
         }else {
             location.reload();
 		}
@@ -267,7 +273,8 @@
 		var D = eval('(' + $(this).attr('data') + ')');
 		var html = "";
 		$("#send_btn").attr("data","{'name':'"+$(this).children(":first").html()+"','img':'"+$(this).parent().parent().children(":first").children().attr("data")+"'}");
-		$.each(D,function(key,val){
+		$("#chsn_username").html($(this).children(":first").html()).show();
+        $.each(D,function(key,val){
 			if (val.status == "reciever") {
 				html += '<span class="float_left">';
 			} else {
@@ -276,7 +283,8 @@
 			html += '<img src="'+val.sender_img+'/60x60.png">';
 			html += '<div></div>';
 			html += '<input type="checkbox" class="d_all" value="'+val.id_msg+'">';
-			html += '<p>'+escapeHtml(val.message)+'</p></span>';
+			html += '<p>'+escapeHtml(val.message)+'</p>';
+            html += '<span>'+escapeHtml(val.time_sent)+'</span></span>';
 			$("#msg_field").empty();
 			$("#msg_field").prepend(html);
 		});
@@ -304,7 +312,8 @@
 			html += '<img src="'+val.sender_img+'/60x60.png">';
 			html += '<div></div>';
 			html += '<input type="checkbox" class="d_all" value="'+val.id_msg+'">';
-			html += '<p>'+escapeHtml(val.message)+'</p></span>';
+            html += '<p>'+escapeHtml(val.message)+'</p>';
+            html += '<span>'+escapeHtml(val.time_sent)+'</span></span>';
 			$("#msg_field").empty();
 			$("#msg_field").append(html);
 		});

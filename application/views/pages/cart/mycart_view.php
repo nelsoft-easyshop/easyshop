@@ -20,7 +20,7 @@
                 <div class="my_cart_content" id="row<?PHP echo $row['rowid']; ?>">
                     
                     <div>
-                        <input type="checkbox" class="rad" value="<?PHP echo $row['rowid']; ?>" checked="checked">
+                        <input type="checkbox" class="rad" id="rad_<?PHP echo $row['rowid'] ?>" value="<?PHP echo number_format($row['price'] * $row['qty'],2,'.',','); ?>" checked="checked" name="checkbx[]">
 
                         <a href="<?=base_url().'item/'.$row['slug'];?>" class="has-tooltip" data-image="<?=base_url()?><?php echo $row['img'][0]['path']; ?>categoryview/<?php echo $row['img'][0]['file']; ?>"> 
                             <span style='background-color: #FFFFFF; border: 1px solid #E5E5E5; display: inline-block;'>
@@ -122,19 +122,15 @@
 				$("#total").html("0.00");
 			}
         });
-        
-        $('.rad').click(function () {
-	    var value = Number($("#subtotal"+$(this).val()).html().replace(/\$/g,'').replace(/,/g,''));
-	    var total = Number($("#total").html().replace(/\$/g,'').replace(/,/g,''));    
-	    var sum = 0;
-	    if ($(this).prop('checked')) {
-	      sum = value + total;
-	    }else {
-	      sum = total - value;
-	    }
-	    //$("#total").html(Number(sum).toLocaleString('en')+".00");
-            var ttl = numeral(parseFloat(sum).toFixed(2)).format('0,0.00');
-	    $("#total").html(ttl);
+        $('.rad').on("click", function () {
+            var total = 0;
+            $('.rad').each(function(){
+                if($(this).prop('checked')){
+                    total += parseFloat($(this).val());
+                }
+            });
+            var ttl = numeral(parseFloat(total).toFixed(2)).format('0,0.00');
+            $("#total").html(ttl);
         });
         
         
