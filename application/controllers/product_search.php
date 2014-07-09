@@ -134,7 +134,8 @@ class product_search extends MY_Controller {
 
 			##### Parameters end here ####################################################
 								
-			# get all items here (right pane)			
+			# get all items here (right pane)
+			
 			$items = $this->search_model->advance_search($catID, $start, $per_page, $sort, $gis, $gus, $gcon, $gloc, $gp1, $gp2, $gsubcat, $othr_att, $brnd_att);
 			$cntr = count($this->search_model->advance_search($catID, 0, PHP_INT_MAX, $sort, $gis, $gus, $gcon, $gloc, $gp1, $gp2, $gsubcat, $othr_att, $brnd_att));
 	

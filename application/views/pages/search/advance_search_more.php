@@ -31,7 +31,7 @@
 				</h3>
 				<div class="price-cnt">
 					<div class="price"> 
-						<span>&#8369;</span> <?php echo number_format($items[$i]['product_price'], 2);?>
+						<span>&#8369;</span> <?php echo number_format($items[$i]['price'], 2);?>
 					</div>
 					
 					<?php if(isset($items[$i]['percentage']) && $items[$i]['percentage'] > 0):?>

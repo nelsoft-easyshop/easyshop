@@ -109,8 +109,7 @@ class search_model extends CI_Model
 	$per_page = intval($per_page);
 		
 	$query = "SELECT em.`username`, ep.`discount`, ep.`is_sold_out`, ep.`slug`, ep.`id_product` AS 'id_product', ep.`brand_id` AS 'brand_id', 
-		ep.`cat_id`, ep.`name` AS 'product_name', 
-		ep.`price` AS 'product_price', ep.`brief` AS 'product_brief', ep.`condition` AS 'product_condition',
+		ep.`cat_id`, ep.`name` AS 'product_name', ep.`brief` AS 'product_brief', ep.`condition` AS 'product_condition',
 		epi.`product_image_path`,
 		eb.`name` AS 'product_brand', ep.`price`, ep.`enddate`, ep.`startdate`, ep.`is_promote`, ep.`promo_type`
 		FROM `es_product` ep
@@ -160,7 +159,9 @@ class search_model extends CI_Model
 	$sth->execute();
 
 	$products = $sth->fetchAll(PDO::FETCH_ASSOC);
+
 	explodeImagePath($products);
+
 	for($k = 0; $k<count($products); $k++){
 	    applyPriceDiscount($products[$k]);
 	}
