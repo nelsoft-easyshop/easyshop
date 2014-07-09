@@ -209,8 +209,9 @@ class Cart extends MY_Controller{
     }
     
     function remove_item(){
+        $MemberId =  $this->session->userdata('member_id');
         $data = array(
-               'rowid' => $_POST['id'],
+               'rowid' => $this->input->post('id'),
                'qty'   => 0
             );
         $result=false;
@@ -219,7 +220,9 @@ class Cart extends MY_Controller{
                 'result'=>true,
                 'total'=>  $this->get_total_price(),
                 'total_items'=>  $this->cart_size());
-        } 
+            $Cart = $this->cart_items($this->cart->contents());
+            $this->cart_model->save_cartitems(serialize($Cart),$MemberId);
+        }
         echo json_encode($result);
     }
     
