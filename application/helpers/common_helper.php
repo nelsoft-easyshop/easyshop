@@ -132,3 +132,14 @@ if ( ! function_exists('es_string_limit'))
         return $final_string;
     }
 }
+
+if ( ! function_exists('make_array'))
+{
+    function make_array($array = array(), $key = ''){
+	  $key = ($key = '')?key($array):$key;
+	  $temp = $array;
+	  $array = array();
+	  $array[0] = $temp;
+	  return $array;
+    }
+}
