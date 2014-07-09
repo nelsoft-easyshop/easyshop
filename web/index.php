@@ -12,13 +12,32 @@
  * This can be set to anything, but default usage is:
  *
  *     development
- *     testing
+ *     staging
  *     production
  *
  * NOTE: If you change these, also change the error_reporting() code below
  *
  */
-	define('ENVIRONMENT', 'development');
+
+	$glob = glob($_SERVER["DOCUMENT_ROOT"].'/../../*.environment');
+	if (count($glob) > 0) 
+	{	
+		$filename = pathinfo($glob[0])['filename'];
+
+		if($filename == 'production'){
+			define('ENVIRONMENT', 'production');
+		}
+		elseif($filename == 'staging'){
+			define('ENVIRONMENT', 'staging');
+		}
+		else{
+			define('ENVIRONMENT', 'development');
+		}
+	}
+	else{
+		define('ENVIRONMENT', 'development');
+	}
+
 /*
  *---------------------------------------------------------------
  * ERROR REPORTING
@@ -34,10 +53,10 @@ if (defined('ENVIRONMENT'))
 	{
 		case 'development':
 			//error_reporting(0);
-                    ini_set('display_errors', 1);
+			ini_set('display_errors', 1);
 			error_reporting(E_ALL);
 			break;
-		case 'testing':
+		case 'staging':
 			error_reporting(0);
 			break;
 		case 'production':

@@ -6,18 +6,18 @@ class PesoPay {
 
 	public function __construct()
 	{
-
 		$this->declareEnvironment();
 	}
 
 	function declareEnvironment(){
 
-		if(ES_PRODUCTION){
-        // LIVE
+		if(strtolower(ENVIRONMENT) == 'production'){
+        	// LIVE
 			$this->url = 'https://www.pesopay.com/b2c2/eng/payment/payForm.jsp';
 			$this->merchantId = "18139485";
-		}else{
-        // SANDBOX
+		}
+		else{
+        	// SANDBOX
 			$this->url = 'https://test.pesopay.com/b2cDemo/eng/payment/payForm.jsp';
 			$this->merchantId = "18061489"; 
 		}
