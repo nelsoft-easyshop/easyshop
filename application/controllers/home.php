@@ -35,11 +35,11 @@ class Home extends MY_Controller {
     }
     
 	public function under_construction(){
-		$data = array('title' => 'Under Construction | Easyshop.ph',);
-		$data = array_merge($data, $this->fill_header());
-		$this->load->view('templates/header', $data);
-        $this->load->view('pages/underconstruction_view');
-        $this->load->view('templates/footer_full');
+	  $data = array('title' => 'Under Construction | Easyshop.ph',);
+	  $data = array_merge($data, $this->fill_header());
+	  $this->load->view('templates/header', $data);
+	  $this->load->view('pages/underconstruction_view');
+	  $this->load->view('templates/footer_full');
 	}
 	
 
