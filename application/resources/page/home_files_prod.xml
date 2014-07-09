@@ -1,4 +1,4 @@
-<?xml version='1.0' ?>
+<?xml version="1.0"?>
 <map>
 
     <header>
@@ -15,7 +15,7 @@
         <value>assets/images/mainslide/140607080614.jpg</value>
         <type>image</type>
         <imagemap>
-            <coordinate>0,0,0,0</coordinate>
+            <coordinate>60.077999999999996,191.89297658862878,312.3841818181818,342.5819397993311</coordinate>
             <target>register</target>
         </imagemap>
     </mainSlide>
@@ -40,23 +40,20 @@
         </imagemap>
     </mainSlide>
 
-    <mainSlide>
-        <value>assets/images/mainslide/140607080636.jpg</value>
+	<mainSlide> 
+        <value>assets/images/mainslide/140207100202.jpg</value> 
         <type>image</type>
         <imagemap>
             <coordinate>0,0,589,351.77813992311667</coordinate>
-            <target>item/self-stirring-mug-4</target>
+            <target>item/lenovo-vibe-z-super-fast-4g-android-smartphone</target>
         </imagemap>
     </mainSlide>
 
-    <mainSlide>
-        <value>assets/images/mainslide/140507080527.jpg</value>
-        <type>image</type>
-        <imagemap>
-            <coordinate>0,0,589,351.77813992311667</coordinate>
-            <target>item/samsung-galaxy-k-zoom-lte</target>
-        </imagemap>
-    </mainSlide>
+    
+
+    
+
+	
 
 
     
@@ -67,22 +64,22 @@
     </productSlide_title>
 
     <productSlide>
-        <value>bavin-ipower-pc226</value>
-        <type>product</type>
-    </productSlide>
-
-    <productSlide>
-        <value>hiefier-mc-091-pocket-magic-karaoke</value>
-        <type>product</type>
-    </productSlide>
-
-    <productSlide>
         <value>shake-n-take-3</value>
         <type>product</type>
     </productSlide>
 
+    <productSlide>
+        <value>action-camcorder-hd-720p</value>
+        <type>product</type>
+    </productSlide>
+
+    <productSlide>
+        <value>camping-lantern</value>
+        <type>product</type>
+    </productSlide>
+
     <productSideBanner>
-        <value>samsung-galaxy-k-zoom-lte</value>
+        <value>lenovo-vibe-z-super-fast-4g-android-smartphone</value>
         <type>product</type>
     </productSideBanner>
 
@@ -277,10 +274,3 @@
 
 
 </map>
-
-
-
-
-
-	
-
