@@ -1966,6 +1966,7 @@ class product_model extends CI_Model
     { 
 	$file = (strtolower(ENVIRONMENT) == 'development')?$devfile:$prodfile;
         $xml_content = $this->xmlmap->getFilename($file);
+
         $home_view_data = array();
         
         foreach ($xml_content as $key => $element){	
@@ -2002,6 +2003,7 @@ class product_model extends CI_Model
 
     private function createHomeElement($element, $key){
         $home_view_data = array();
+        
         if($element['type'] === 'product'){
             $productdata = $this->getProductBySlug($element['value'], false);
             if (!empty($productdata)){
@@ -2019,8 +2021,10 @@ class product_model extends CI_Model
                 $home_view_data = array('src' => $element['value'], 'imagemap' => $element['imagemap']);
             }
             else{
-                $home_view_data = date('M d,Y H:i:s',strtotime($element['value']));
+                $home_view_data = array('src' => $element['value']);
             }
+        }else if($element['type'] === 'image'){    
+             $home_view_data = date('M d,Y H:i:s',strtotime($element['value']));
         }else if(($element['type'] === 'category') || ($element['type'] === 'custom')) { 
             if($element['type'] === 'category'){
                $home_view_data['category_detail'] = $this->selectCategoryDetails($element['value']);
@@ -2042,15 +2046,16 @@ class product_model extends CI_Model
             unset($element['title']);
             
             foreach($element as $key=>$cat_el){
-                if(is_array($cat_el)){
+                if(!isset($cat_el['value']) && !isset($cat_el['type'])){
                     foreach($cat_el as $inner_key => $cat_inner_el){
-                        $home_view_data[$key][$inner_key] =  $this->createHomeElement($cat_inner_el, $inner_key);
+                        $home_view_data[$key][$inner_key] =  $this->createHomeElement($cat_inner_el, $inner_key);                        
                     }
                 }else{
                     $home_view_data[$key] = $this->createHomeElement($cat_el, $key);
                 }
-
             }
+   
+            
         }else{
             $home_view_data = $element['value'];            
         }
