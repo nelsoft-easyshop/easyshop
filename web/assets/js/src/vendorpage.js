@@ -165,7 +165,10 @@ function resetCoords(){
 /**********	VENDOR SUBSCRIPTION	**************/
 $(function(){
 
-	$('#test').on('click',function(){
+	$('.subscription_btn').on('click',function(){
+		var form = $(this).closest('form');
+		var $this = $(this);
+		var sibling = $(this).siblings('.subscription_btn');
 		$.post(config.base_url+'memberpage/vendorSubscription', $(form).serializeArray(), function(data){
 			try{
 				var obj = jQuery.parseJSON(data);
@@ -174,7 +177,16 @@ $(function(){
 				alert('There was an error while processing your request. Please try again later.');
 				return false;
 			}
+			
+			if(obj.result === 'success'){
+				$this.hide();
+				sibling.show();
+			}
+			else{
+				alert(obj.error);
+			}
 		});
+		return false;
 	});
 	
 });
@@ -218,7 +230,7 @@ $(function(){
 				if( desc.length > 0 ){
 					divEchoData.show();
 					divEditData.hide();
-					divEchoData.children('p').text(desc);
+					divEchoData.children('p').text(htmlDecode(desc));
 				}
 			}else{
 				alert(obj.error);

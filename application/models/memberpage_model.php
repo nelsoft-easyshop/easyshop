@@ -1201,34 +1201,53 @@ class memberpage_model extends CI_Model
 	
 	/***********	NEW VENDOR FUNCTIONS	*****************/
 	
-	function checkVendorSubscription($member_id, $username)
+	function checkVendorSubscription($member_id, $sellername)
 	{
 		$query = $this->xmlmap->getFilenameID('sql/users','checkVendorSubscription');
 		$sth = $this->db->conn_id->prepare($query);
-		$sth->bindParam(':member_id',$member_id);
-		$sth->bindParam(':username',$username);
+		$sth->bindParam(':member_id',$member_id, PDO::PARAM_INT);
+		$sth->bindParam(':sellername',$sellername, PDO::PARAM_STR);
+		$sth->execute();
+		$row = $sth->fetch(PDO::FETCH_ASSOC);
+		
+		if( isset($row['vendor_id']) ){ //if seller exists and is not the same user
+			if( (int)$row['member_id'] === 0 ) {# no entry - unfollowed
+				$result['stat'] = 'unfollowed';
+			}else if( (int)$row['member_id'] !== 0 ) { #has entry - followed
+				$result['stat'] = 'followed';
+			}
+			$result['vendor_id'] = $row['vendor_id'];
+		}else{
+			$result['stat'] = 'error';
+		}
+		
+		return $result;
+	}
+	
+	function countVendorSubscription($member_id, $sellername){
+		$query = $this->xmlmap->getFilenameID('sql/users','countVendorSubscription');
+		$sth = $this->db->conn_id->prepare($query);
+		$sth->bindParam(':member_id',$member_id, PDO::PARAM_INT);
+		$sth->bindParam(':sellername',$sellername, PDO::PARAM_STR);
 		$sth->execute();
 		$row = $sth->fetch(PDO::FETCH_ASSOC);
 		
 		return $row;
 	}
 	
-	function vendorSubscriptionFollow($member_id,$vendor_id)
+	function setVendorSubscription($member_id, $vendor_id, $method)
 	{
-		$query = $this->xmlmap->getFilenameID('sql/users','insertVendorSubscription');
+		if($method === 'unfollowed'){ #then follow
+			$query = $this->xmlmap->getFilenameID('sql/users','insertVendorSubscription');
+		}else if($method === 'followed'){ #then unfollow
+			$query = $this->xmlmap->getFilenameID('sql/users','deleteVendorSubscription');
+		}
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':member_id',$member_id, PDO::PARAM_INT);
 		$sth->bindParam(':vendor_id',$vendor_id, PDO::PARAM_INT);
-		$sth->execute();
-	}
-	
-	function vendorSubscriptionUnfollow($member_id,$vendor_id)
-	{
-		$query = $this->xmlmap->getFilenameID('sql/users','deleteVendorSubscription');
-		$sth = $this->db->conn_id->prepare($query);
-		$sth->bindParam(':member_id',$member_id, PDO::PARAM_INT);
-		$sth->bindParam(':vendor_id',$vendor_id, PDO::PARAM_INT);
-		$sth->execute();
+		$boolResult = $sth->execute();
+		
+		return $boolResult;
 	}
 	
 	function updateStoreDesc($member_id, $desc)

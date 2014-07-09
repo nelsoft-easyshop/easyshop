@@ -76,7 +76,17 @@
 					<span>
 						<?php echo $image_profile?>	
 					</span>
-
+					
+					<p><?php echo $subscribe_count?> subscriber(s)</p>
+					
+					<?php if( !$renderEdit && $logged_in ):?>
+						<?php echo form_open('');?>
+						<p class="subscription_btn" style="display:<?php echo $subscribe_status==='unfollowed'?'':'none'?>">Follow</p>
+						<p class="subscription_btn" style="display:<?php echo $subscribe_status==='followed'?'':'none'?>">Unfollow</p>
+						<input type="hidden" value="<?php echo $vendordetails['username']?>" name="name">
+						<?php echo form_close();?>
+					<?php endif;?>
+					
 					<div class="vendor-msg-modal">
 					    <p><a id="modal-launcher" href="javascript:void(0)" class="orange_btn3 modal-launcher2"><small class="span_bg prod_message"></small> Send a message</a></p> 
 					</div>
@@ -86,7 +96,7 @@
 						<h2><?php echo $vendordetails['username'];?></h2>
 						<div class="vendor_store_desc">
 							<div id="store_desc_echo" style="display:<?php echo $hasStoreDesc ? '' : 'none'?>;" class="vendor_desc_dis_con">
-								<p><?php echo $vendordetails['store_desc'];?></p>
+								<p><?php echo html_escape($vendordetails['store_desc']);?></p>
 								<?php if($renderEdit):?>
 								<span id="store_desc_edit" style="display:none;" class="border_radius1"><small class="span_bg edit_btn"></small> Edit</span>
 								<?php endif;?>
@@ -103,7 +113,7 @@
 						</div>
 						<div class="vendor_info_member_details">
 							<p><strong>Member since: </strong><?php echo $vendordetails['datecreated'] != '' ? $vendordetails['datecreated'] : 'N/A';?></p>
-							<p><strong>Contact No.: </strong><?php echo $vendordetails['contactno'] != '' ? '0'.$vendordetails['contactno'] : 'N/A'?></p>
+							<p><strong>Contact No.: </strong><?php echo $vendordetails['contactno'] != '' ? '0'.html_escape($vendordetails['contactno']) : 'N/A'?></p>
 							<p>
 							<span class="span_bg vendor_map"></span> 
 								<?php echo $vendordetails['stateregionname'] != '' && $vendordetails['cityname'] != '' ? $vendordetails['stateregionname'] . ", " . $vendordetails['cityname'] : "Location not set."?>
@@ -545,7 +555,7 @@
 					<?php foreach($products as $catID=>$p):?>
 					<div class="vendor_txt_prod_header">
 						<div class="home_cat_product_title" style="background-color:#0078d5;">
-							<a href="">
+							<a href="<?php echo $p['cat_link']?>">
 								<img src="<?=base_url()?>assets/images/img_icon_electronics_small.png">
 								<h2><?php echo $p['cat_name']?></h2> 
 							</a>   
@@ -554,7 +564,7 @@
 					<div class="vendor_prod_items">
 						<?php foreach($p['products'] as $prod):?>
 							<div class="product vendor_product">
-								<a href="<?=base_url()?>item/<?=$prod['slug'];?>">
+								<a href="<?php echo base_url() . 'item/' . $prod['slug']?>">
 									<span class="prod_img_wrapper">
 										<span class="prod_img_container">
 										   <img src="<?=base_url()?><?php echo $prod['product_image_path']?>">
@@ -562,20 +572,20 @@
 									</span>
 								</a>    
 								<h3>
-									<a href="<?=base_url()?>item/<?=$prod['slug'];?>">
-									   <?php echo $prod['name']?>
+									<a href="<?php echo base_url() . 'item/' . $prod['slug']?>">
+									   <?php echo html_escape($prod['name'])?>
 									</a>
 								</h3>
 								 <div class="price-cnt">
 									<div class="price">
-										Php <?php echo $prod['price']?>
+										Php <?php echo html_escape($prod['price'])?>
 									</div>
 								</div>
 							</div>
 						<?php endforeach;?>
 					</div>
 					<div class="txt_load_more_con">
-						<a href="" class="grey_btn">LOAD MORE ITEMS</a>
+						<a href="<?php echo $p['loadmore_link'].$vendordetails['username']?>" class="grey_btn">LOAD MORE ITEMS</a>
 					</div>
 					<?php endforeach;?>
 				<?php endif;?>
