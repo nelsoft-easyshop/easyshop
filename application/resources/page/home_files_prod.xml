@@ -1,4 +1,4 @@
-<?xml version='1.0' ?>
+<?xml version="1.0"?>
 <map>
 
     <header>
@@ -15,7 +15,7 @@
         <value>assets/images/mainslide/140607080614.jpg</value>
         <type>image</type>
         <imagemap>
-            <coordinate>0,0,0,0</coordinate>
+            <coordinate>60.077999999999996,191.89297658862878,312.3841818181818,342.5819397993311</coordinate>
             <target>register</target>
         </imagemap>
     </mainSlide>
@@ -40,23 +40,20 @@
         </imagemap>
     </mainSlide>
 
-    <mainSlide>
-        <value>assets/images/mainslide/140607080636.jpg</value>
+	<mainSlide> 
+        <value>assets/images/mainslide/140207100202.jpg</value> 
         <type>image</type>
         <imagemap>
             <coordinate>0,0,589,351.77813992311667</coordinate>
-            <target>item/self-stirring-mug-4</target>
+            <target>item/lenovo-vibe-z-super-fast-4g-android-smartphone</target>
         </imagemap>
     </mainSlide>
 
-    <mainSlide>
-        <value>assets/images/mainslide/140507080527.jpg</value>
-        <type>image</type>
-        <imagemap>
-            <coordinate>0,0,589,351.77813992311667</coordinate>
-            <target>item/samsung-galaxy-k-zoom-lte</target>
-        </imagemap>
-    </mainSlide>
+    
+
+    
+
+	
 
 
     
@@ -67,217 +64,209 @@
     </productSlide_title>
 
     <productSlide>
-        <value>bavin-ipower-pc226</value>
-        <type>product</type>
-    </productSlide>
-
-    <productSlide>
-        <value>hiefier-mc-091-pocket-magic-karaoke</value>
-        <type>product</type>
-    </productSlide>
-
-    <productSlide>
         <value>shake-n-take-3</value>
         <type>product</type>
     </productSlide>
 
+    <productSlide>
+        <value>action-camcorder-hd-720p</value>
+        <type>product</type>
+    </productSlide>
+
+    <productSlide>
+        <value>camping-lantern</value>
+        <type>product</type>
+    </productSlide>
+
     <productSideBanner>
-        <value>self-stirring-mug-4</value>
+        <value>lenovo-vibe-z-super-fast-4g-android-smartphone</value>
         <type>product</type>
     </productSideBanner>
 
-	  <section>
+    <section>
 
         <type>custom</type>
-        <value>05272014</value>
+        <value>skkmobile2014</value>
         <css_class>red_cat</css_class>
-        <title>Michaela</title>
+        <title>SKK Mobile</title>
         <layout>layoutA</layout>
 
         <product_panel_main>
-            <value>mhb05133u2ne4</value>
-            <type>product</type>
-        </product_panel_main>
+	    <value>assets/images/partner/skkmobile.jpg</value>    
+            <type>image</type>
+	    <imagemap>
+		<coordinate>0,0,486,351</coordinate>
+		<target>vendor/skkmobile2014</target>
+	    </imagemap>
 
-         <product_panel_main>
-            <value>mhb05123u2ne4</value>
-            <type>product</type>
-       </product_panel_main>
-
-         <product_panel_main>
-            <value>mhb05113u2ne4</value>
-            <type>product</type>
         </product_panel_main>
 
         <product_panel>
-            <value>mhb05213u2ne4</value>
+            <value>skk-evolve</value>
             <type>product</type>
         </product_panel>
 
        <product_panel>
-            <value>mlp09211l2nf4</value>
+            <value>skk-a12-black</value>
             <type>product</type>
         </product_panel>
 
         <product_panel>
-            <value>mlp03733v2ne4-1</value>
+            <value>skk-extreme-android-42-tablet-black</value>
             <type>product</type>
         </product_panel>
 
 	   <product_panel>
-            <value>msh18022u2nd4</value>
+            <value>skk-a12-white</value>
             <type>product</type>
         </product_panel>
 
         <product_panel>
-            <value>msh18012u2nd4</value>
+            <value>skk-e99-wi-fi-dual-sim-red</value>
             <type>product</type>
         </product_panel>
 
         <product_panel>
-            <value>msh19011u2ne4</value>
+            <value>skk-bubble-gum-wi-fi-tablet-blue</value>
             <type>product</type>
         </product_panel>
 
         <product_panel>
-            <value>msh20333u2ne4</value>
+            <value>skk-mirage-s1-white-1</value>
             <type>product</type>
         </product_panel>
 
         <product_panel>
-            <value>msh20713u2ne4</value>
-            <type>product</type>
-        </product_panel>
-
- </section>
-
-
-
-
-    <section>
-
-        <type>category</type>
-        <value>327</value>
-        <css_class>blue_cat</css_class>
-        <layout>layoutB</layout>
-
-      <product_panel_main>
-            <value>apple-ipod-touch-32gb-5th-generation-blackwhiteredblueyellowpink</value>
-            <type>product</type>
-        </product_panel_main>
-
-         <product_panel_main>
-            <value>apple-ipad-air-128gb-wi-fi-the-power-of-lightness</value>
-            <type>product</type>
-       </product_panel_main>
-
-         <product_panel_main>
-            <value>apple-ipad-mini-16gb-wi-fi-black-white</value>
-            <type>product</type>
-        </product_panel_main>
-
-        <product_panel>
-            <value>asus-memo-pad-hd-7-8gb-quad-core-ips-1280x800-display-dual-camera-android-42-tablet-5-colors</value>
-            <type>product</type>
-        </product_panel>
-
-       <product_panel>
-            <value>microsoft-surface-64gb-106-touch-coverkeyboard-black-with-windows-rt-office-home-student-2013-rt</value>
-            <type>product</type>
-        </product_panel>
-
-    <product_panel>
-            <value>samsung-galaxy-note-gt-n8000-tablet-pc-and-full-phone-function-with-s-pen</value>
-            <type>product</type>
-        </product_panel>
-
-        <product_panel>
-            <value>asus-fonepad-7-me175cg-dual-sim-7-intel-atom-z25201gb8gbandroid-43-black-white</value>
-            <type>product</type>
-        </product_panel>
-
-        <product_panel>
-            <value>asus-google-nexus-7-32gb-android-41-jelly-bean-tablet-nvidia-tegra-3-quad-core</value>
-            <type>product</type>
-        </product_panel>
-
-        <product_panel>
-            <value>asus-transformer-book-trio-tx201la-cq003h-intel-core-i7z2560-processor-android-42windows-8</value>
-            <type>product</type>
-        </product_panel>
-
-        <product_panel>
-            <value>archos-a70-250gb-wi-fi-7-slim-and-light-android-internet-tablet</value>
-            <type>product</type>
-        </product_panel>
-
-        <product_panel>
-            <value>asus-memo-pad-me172v-7-android-41-jelly-bean-tablet</value>
+            <value>skk-phoenix-tab-4</value>
             <type>product</type>
         </product_panel>
 
     </section>
 
- <section>
+    <section>
 
         <type>category</type>
-        <value>326</value>
-        <css_class>orange_cat</css_class>
-        <layout>layoutE</layout>
+        <value>14</value>
+        <css_class>blue_cat</css_class>
+        <layout>layoutB</layout>
 
-       <product_panel_main>
-            <value>apple-macbook-air-md711zpa</value>
+      <product_panel_main>
+            <value>dress-17</value>
             <type>product</type>
         </product_panel_main>
 
          <product_panel_main>
-            <value>apple-macbook-air-md760zpa</value>
+            <value>shirt-4</value>
             <type>product</type>
        </product_panel_main>
 
          <product_panel_main>
-            <value>apple-macbook-pro-md101zpa</value>
+            <value>t-shirt-8</value>
             <type>product</type>
         </product_panel_main>
 
         <product_panel>
-            <value>alienware-alw14-5312slv-1</value>
+            <value>scottie-dog-and-polka-pj-set</value>
             <type>product</type>
         </product_panel>
 
        <product_panel>
-            <value>armaggeddon-ak-300-usb-media-gaming-keyboard</value>
+            <value>t-shirt-6</value>
+            <type>product</type>
+        </product_panel>
+
+	<product_panel>
+            <value>rhinestone-racerback-style-push-up-bra</value>
             <type>product</type>
         </product_panel>
 
         <product_panel>
-            <value>epson-eb-1860</value>
-            <type>product</type>
-        </product_panel>
-
-
-	        <product_panel>
-            <value>acer-aspire-v5-132-10192g50nss</value>
+            <value>dress-10</value>
             <type>product</type>
         </product_panel>
 
         <product_panel>
-            <value>epson-eb-g6900wunl</value>
+            <value>dress-20</value>
             <type>product</type>
         </product_panel>
 
         <product_panel>
-            <value>cooler-master-notepal-l1-cm-r9-nbc-npl1-gp</value>
+            <value>black-and-white-stripes-shirt-1</value>
             <type>product</type>
         </product_panel>
 
         <product_panel>
-            <value>asus-km-61-keyboard-mouse-set</value>
+	   <value>casual-dress</value>
             <type>product</type>
         </product_panel>
 
         <product_panel>
-            <value>apple-macbook-pro-me865</value>
+            <value>fashionable-dresses</value>
+            <type>product</type>
+        </product_panel>
+
+    </section>
+
+    <section>
+
+        <type>category</type>
+        <value>138</value>
+        <css_class>orange_cat</css_class>
+        <layout>layoutE</layout>
+
+        <product_panel_main>
+            <value>eiffel-tower-studded-miniature-watch</value>
+            <type>product</type>
+        </product_panel_main>
+
+         <product_panel_main>
+            <value>simple-candy-colored-watch</value>
+            <type>product</type>
+       </product_panel_main>
+
+         <product_panel_main>
+            <value>tribal-inspired-fashion-watch</value>
+            <type>product</type>
+        </product_panel_main>
+
+        <product_panel>
+            <value>elite-stripes-watch</value>
+            <type>product</type>
+        </product_panel>
+
+       <product_panel>
+            <value>moustache-watch</value>
+            <type>product</type>
+        </product_panel>
+
+        <product_panel>
+            <value>4gb-pedometer-calorimeter-usb-watch</value>
+            <type>product</type>
+        </product_panel>
+
+
+	<product_panel>
+            <value>futuristic-changeable-backlight-color-led-watch</value>
+            <type>product</type>
+        </product_panel>
+
+        <product_panel>
+            <value>spy-hd-video-recorder-watch</value>
+            <type>product</type>
+        </product_panel>
+
+        <product_panel>
+            <value>womens-lacoste-biarritz-crystal-watch</value>
+            <type>product</type>
+        </product_panel>
+
+        <product_panel>
+            <value>aztec-fashion-watch</value>
+            <type>product</type>
+        </product_panel>
+
+        <product_panel>
+            <value>marc-by-marc-jacobs-stainless-black-ion-women</value>
             <type>product</type>
         </product_panel>
 
@@ -285,10 +274,3 @@
 
 
 </map>
-
-
-
-
-
-	
-
