@@ -1,4 +1,4 @@
-<?xml version='1.0' ?>
+<?xml version="1.0"?>
 <map>
 
     <header>
@@ -11,18 +11,22 @@
         <type>text</type>
     </text>
     
-    <mainSlide>
-        <value>assets/images/mainslide/1.jpg</value>
+    
+    
+    
+
+	<mainSlide> 
+        <value>assets/images/mainslide/1.jpg</value> 
         <type>image</type>
         <imagemap>
             <coordinate>70,200,350,350</coordinate>
             <target>register</target>
         </imagemap>
     </mainSlide>
-    
-    <mainSlide> 
-        <value>assets/images/mainslide/2.jpg</value>
-        <type>image</type> 
+
+	<mainSlide> 
+        <value>assets/images/mainslide/2.jpg</value> 
+        <type>image</type>
         <imagemap>
             <coordinate>0,0,589,352</coordinate>
             <target>deals</target>
@@ -34,18 +38,24 @@
         <type>image</type>
         <imagemap>
             <coordinate>0,0,0,0</coordinate>
-            <target></target>
+            <target/>
         </imagemap>
     </mainSlide>
-    
-    <mainSlide> 
-        <value>assets/images/mainslide/6.jpg</value> 
+
+	<mainSlide> 
+        <value>assets/images/mainslide/141107081128.jpg</value> 
         <type>image</type>
         <imagemap>
-            <coordinate>0,0,589,352</coordinate>
-            <target>item/camping-lantern</target>
+            <coordinate>0,0,589,351.77813992311667</coordinate>
+            <target>item/ubuntu-valid-gd</target>
         </imagemap>
     </mainSlide>
+
+	
+
+	
+    
+    
     
     <productSlide_title>
         <value>Hot and New</value>
@@ -53,7 +63,7 @@
     </productSlide_title>
     
     <productSlide>
-        <value>ubuntu-valid-gd</value>
+        <value>twitter</value>
         <type>product</type>
     </productSlide>
     
@@ -63,7 +73,7 @@
     </productSlide>
     
     <productSlide>
-        <value>ubuntu-valid-gd</value>
+        <value>twitter</value>
         <type>product</type>
     </productSlide>
     

@@ -31,7 +31,6 @@
 			<span>
 			    <p><?php echo $Md_start . " and " . date('d',strtotime($Md_second_start)); ?></p>
 			</span>
-
 			
 			</div>
 			<div class="product_buy_con">
