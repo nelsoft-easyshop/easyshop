@@ -57,7 +57,7 @@ $(document).ready(function(){
 
                         var url = $('#redirect_url').val();
                         var first_uri_segment = url.substring(0, url.indexOf('/'));			
-                        if((url == 'sell/step1')||(first_uri_segment == 'item')){
+                        if((url == 'sell/step1')||(first_uri_segment == 'item')|| (url == 'cart')){
                           window.location = config.base_url+ url;
                         }
                         else if(first_uri_segment == 'cart'){

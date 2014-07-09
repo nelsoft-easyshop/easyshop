@@ -28,7 +28,7 @@ class Cart extends MY_Controller{
             $this->load->view('pages/cart/mycart_view', $data);
             $this->load->view('templates/footer_full');
         }else{
-            redirect(base_url().'home', 'refresh');
+            redirect(base_url().'login', 'refresh');
         }
     }
 
