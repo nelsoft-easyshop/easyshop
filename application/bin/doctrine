@@ -26,7 +26,18 @@ $commands = [
     new \Doctrine\DBAL\Migrations\Tools\Console\Command\VersionCommand()
 ];
 
-$dbConfig = require __DIR__ . '/../config/param/database.php';
+
+if(strtolower(ENVIRONMENT) == 'production'){
+      $dbConfig = require __DIR__ . '/../config/param/database/production.php';
+}else if(strtolower(ENVIRONMENT) == 'staging'){
+      $dbConfig = require __DIR__ . '/../config/param/database/staging.php';
+}else if(strtolower(ENVIRONMENT) == 'development'){
+      $dbConfig = require __DIR__ . '/../config/param/database/development.php';
+}
+
+
+
+
 $doctrineConfig = Doctrine\ORM\Tools\Setup::createAnnotationMetadataConfiguration([__DIR__ . '/../src/EasyShop/Entities'], false);
 $doctrineConfig->setProxyDir(__DIR__ . '/../src/EasyShop/Doctrine/Proxies');
 $doctrineConfig->setProxyNamespace('EasyShop\Doctrine\Proxies');
