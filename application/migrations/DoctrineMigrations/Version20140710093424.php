@@ -15,7 +15,7 @@ class Version20140710093424 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
     	$this->addSql("
 
-DROP PROCEDURE IF EXISTS `es_sp_Payment_order`$$
+DROP PROCEDURE IF EXISTS `es_sp_Payment_order`
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `es_sp_Payment_order`(
           IN i_payment_type INT (10)
@@ -256,7 +256,7 @@ BEGIN
     	    $this->addSql("
  
 
-DROP PROCEDURE IF EXISTS `es_sp_Payment_order`$$
+DROP PROCEDURE IF EXISTS `es_sp_Payment_order`
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `es_sp_Payment_order`(
           IN i_payment_type INT (10)
