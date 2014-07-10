@@ -41,6 +41,8 @@
 </script>
 <!-- End of Google Analytics -->
  
+ <a href="https://plus.google.com/108994197867506780841" rel="publisher"></a>
+ 
 </head>
 <body>
 
