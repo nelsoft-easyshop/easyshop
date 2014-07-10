@@ -126,7 +126,7 @@
             var total = 0;
             $('.rad').each(function(){
                 if($(this).prop('checked')){
-                    total += parseFloat($(this).val());
+                    total += parseFloat($(this).val().replace(/,/g,''));
                 }
             });
             var ttl = numeral(parseFloat(total).toFixed(2)).format('0,0.00');
@@ -142,8 +142,9 @@
            var data1 = $(".wrapper input:checkbox:not(:checked)").map(function(){
                 return $(this).val();
             }).toArray();
-                var a = parseInt(0);
-                var b = parseInt(0);
+            
+	    var a = parseInt(0);
+	    var b = parseInt(0);
             $(".wrapper").find(".rad").each(function(){
                 if ($(this).prop('checked')==false){
                     a ++;
@@ -161,7 +162,7 @@
                         data:{itm:data1, csrfname:csrftoken},
                         success:function(data){
                             if(data == true){
-                                window.location.replace("<?=base_url()?>payment/review");
+                             //  window.location.replace("<?=base_url()?>payment/review");
                             }else{
                                 alert(data,  'Remove these items from your cart to proceed with your checkout.');
                             }
