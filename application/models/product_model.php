@@ -457,6 +457,9 @@ class product_model extends CI_Model
         $sth->bindParam(':createdate',$now);
         $sth->bindParam(':lastmodifieddate',$now);
 		$bool = $sth->execute();
+		if(!$bool){
+		  print_r($sth->errorInfo());
+		}
 
 		return $this->db->conn_id->lastInsertId('id_product');
 	}
