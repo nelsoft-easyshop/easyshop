@@ -162,7 +162,7 @@
                         data:{itm:data1, csrfname:csrftoken},
                         success:function(data){
                             if(data == true){
-                             //  window.location.replace("<?=base_url()?>payment/review");
+                                window.location.replace("<?=base_url()?>payment/review");
                             }else{
                                 alert(data,  'Remove these items from your cart to proceed with your checkout.');
                             }
