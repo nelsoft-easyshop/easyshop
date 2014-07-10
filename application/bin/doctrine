@@ -2,8 +2,6 @@
 <?php
 
 
-
-
 echo getcwd();
 
 error_reporting(E_ALL);
@@ -26,17 +24,7 @@ $commands = [
     new \Doctrine\DBAL\Migrations\Tools\Console\Command\VersionCommand()
 ];
 
-
-if(strtolower(ENVIRONMENT) == 'production'){
-      $dbConfig = require __DIR__ . '/../config/param/database/production.php';
-}else if(strtolower(ENVIRONMENT) == 'staging'){
-      $dbConfig = require __DIR__ . '/../config/param/database/staging.php';
-}else if(strtolower(ENVIRONMENT) == 'development'){
-      $dbConfig = require __DIR__ . '/../config/param/database/development.php';
-}
-
-
-
+$dbConfig = require __DIR__ . '/../config/param/database/development.php';
 
 $doctrineConfig = Doctrine\ORM\Tools\Setup::createAnnotationMetadataConfiguration([__DIR__ . '/../src/EasyShop/Entities'], false);
 $doctrineConfig->setProxyDir(__DIR__ . '/../src/EasyShop/Doctrine/Proxies');
