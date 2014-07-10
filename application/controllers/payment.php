@@ -1190,6 +1190,7 @@ class Payment extends MY_Controller{
             'item_id' => $itemId,
             'item_name' => $itemName
             );
+
         $data = json_encode($this->load->view('pages/payment/payment_review_popout',$data,TRUE));  
         echo $data;
     }
