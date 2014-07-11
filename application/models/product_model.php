@@ -1966,7 +1966,6 @@ class product_model extends CI_Model
     { 
 	$file = (strtolower(ENVIRONMENT) == 'development')?$devfile:$prodfile;
         $xml_content = $this->xmlmap->getFilename($file);
-
         $home_view_data = array();
         
         foreach ($xml_content as $key => $element){	

@@ -11,7 +11,11 @@
         <type>text</type>
     </text>
     
-    <mainSlide> 
+    
+    
+    
+
+	<mainSlide> 
         <value>assets/images/mainslide/1.jpg</value> 
         <type>image</type>
         <imagemap>
@@ -20,7 +24,39 @@
         </imagemap>
     </mainSlide>
 
+	<mainSlide> 
+        <value>assets/images/mainslide/2.jpg</value> 
+        <type>image</type>
+        <imagemap>
+            <coordinate>0,0,589,352</coordinate>
+            <target>deals</target>
+        </imagemap>
+    </mainSlide>
+    
+    <mainSlide> 
+        <value>assets/images/mainslide/3.jpg</value> 
+        <type>image</type>
+        <imagemap>
+            <coordinate>0,0,0,0</coordinate>
+            <target/>
+        </imagemap>
+    </mainSlide>
 
+	<mainSlide> 
+        <value>assets/images/mainslide/141107081128.jpg</value> 
+        <type>image</type>
+        <imagemap>
+            <coordinate>0,0,589,351.77813992311667</coordinate>
+            <target>item/ubuntu-valid-gd</target>
+        </imagemap>
+    </mainSlide>
+
+	
+
+	
+    
+    
+    
     <productSlide_title>
         <value>Hot and New</value>
         <type>text</type>
@@ -54,15 +90,20 @@
         <layout>layoutA</layout>
 
         <product_panel_main>
-            <value>assets/images/partner/skkmobile.jpg</value>    
-            <type>image</type>
-	    <imagemap>
-		<coordinate>0,0,486,351</coordinate>
-		<target>vendor/skkmobile2014</target>
-	    </imagemap>
-
+            <value>ubuntu-valid-gd</value>
+            <type>product</type>
         </product_panel_main>
-
+        
+         <product_panel_main>
+            <value>ubuntu-valid-gd</value>
+            <type>product</type>
+       </product_panel_main>
+        
+         <product_panel_main>
+            <value>ubuntu-valid-gd</value>
+            <type>product</type>
+        </product_panel_main>
+        
         <product_panel>
             <value>ubuntu-valid-gd</value>
             <type>product</type>
