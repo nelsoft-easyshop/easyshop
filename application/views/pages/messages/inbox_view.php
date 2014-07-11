@@ -140,7 +140,7 @@
          */
         if (!("WebSocket" in window)) {
 
-            ////this is for page reload every time the user is focused on the web page/tab
+            //this is for page reload every time the user is focused on the web page/tab
             var myInterval;
             var interval_delay = 5000;
             var is_interval_running = false;
@@ -157,11 +157,10 @@
             });
 
             interval_function = function () {
-                 is_interval_running = true;
+                is_interval_running = true;
             }
         }
-
-
+        arrage_by_timeSent();
     });
 
     function Reload() {
@@ -274,6 +273,8 @@
 		var html = "";
 		$("#send_btn").attr("data","{'name':'"+$(this).children(":first").html()+"','img':'"+$(this).parent().parent().children(":first").children().attr("data")+"'}");
 		$("#chsn_username").html($(this).children(":first").html()).show();
+
+        $("#msg_field").empty();
         $.each(D,function(key,val){
 			if (val.status == "reciever") {
 				html += '<span class="float_left">';
@@ -285,8 +286,12 @@
 			html += '<input type="checkbox" class="d_all" value="'+val.id_msg+'">';
 			html += '<p>'+escapeHtml(val.message)+'</p>';
             html += '<span>'+escapeHtml(val.time_sent)+'</span></span>';
-			$("#msg_field").empty();
-			$("#msg_field").prepend(html);
+            if(/^((?!chrome).)*safari/i.test(navigator.userAgent)){ //if safari
+                $("#msg_field").prepend(html);
+            }else{
+                $("#msg_field").append(html);
+            }
+            html = "";
 		});
 		$("#msg_textarea").show();
 		var objDiv = document.getElementById("msg_field");
@@ -303,6 +308,7 @@
 		var html = "";
 		var all_messages = eval('('+ $(".Active").attr('data')+')');
         var objDiv = document.getElementById("msg_field");
+        $("#msg_field").empty();
 		$.each(all_messages,function(key,val){
 			if (val.status == "reciever") {
 				html += '<span class="float_left">';
@@ -314,8 +320,12 @@
 			html += '<input type="checkbox" class="d_all" value="'+val.id_msg+'">';
             html += '<p>'+escapeHtml(val.message)+'</p>';
             html += '<span>'+escapeHtml(val.time_sent)+'</span></span>';
-			$("#msg_field").empty();
-			$("#msg_field").append(html);
+            if(/^((?!chrome).)*safari/i.test(navigator.userAgent)){ //if safari
+                $("#msg_field").prepend(html);
+            }else{
+                $("#msg_field").append(html);
+            }
+            html = "";
 		});
 		$("#out_txtarea").val("");
 		$("#msg_textarea").show();
@@ -327,9 +337,15 @@
         D = msgs.messages;
 		$.each(D,function(key,val){
 			var cnt = parseInt(Object.keys(val).length)- 1;
-			var Nav_msg = D[key][Object.keys(val)[cnt]]; //first element of object
+            if(/^((?!chrome).)*safari/i.test(navigator.userAgent)){ //if safari
+                for (var first_key in val) if (val.hasOwnProperty(first_key)) break;
+                var Nav_msg = D[key][first_key]; //first element of object
+            }else{
+                var Nav_msg = D[key][Object.keys(val)[cnt]]; //first element of object
+            }
             if ($('#ID_'+Nav_msg.name).length) { //if existing on the conve
                 $('#ID_'+Nav_msg.name).children('.msg_message').text(Nav_msg.message);
+                $('#ID_'+Nav_msg.name).children('.msg_date').text(Nav_msg.time_sent);
                 $('#ID_'+Nav_msg.name).attr('data',JSON.stringify(val));
                 $('#ID_'+Nav_msg.name).parent().parent().addClass('NS');
                 $('#ID_'+Nav_msg.name+" .unreadConve").html("("+Nav_msg.unreadConve+")");
@@ -338,7 +354,11 @@
                     seened($('#ID_'+Nav_msg.name));
                     $('#ID_'+Nav_msg.name+" .unreadConve").html("");
                 }
+                html = $('#ID_'+Nav_msg.name).parent().parent();
             }else{
+                if($(".dataTables_empty").length){
+                    $(".dataTables_empty").parent().remove();
+                }
                 html +='<tr class="'+(Nav_msg.opened == "0" && Nav_msg.status == "reciever" ? "NS" : "")+' odd">';
                 html +='<td class=" sorting_1">';
                 if (Nav_msg.status == "sender") {
@@ -360,6 +380,7 @@
 		});
         if(msgs.Case == "UnreadMsgs"){
             $("#table_id tbody").prepend(html);
+            arrage_by_timeSent();
         }else{
             $("#table_id tbody").append(html);
             $("#table_id a").first().addClass("Active");
@@ -372,6 +393,20 @@
 			$("#chsn_delete_btn").show();
 		}
 	});
+    function arrage_by_timeSent(){
+        $("#table_id tbody tr").each(function(){
+            var d = new Date();
+            var msg_date_top =  new Date($("#table_id tbody").children().first().find('.msg_date').text().replace(/-/g,'/')).getTime();
+            var dt =  new Date($(this).find('.msg_date').text().replace(/-/g,'/')).getTime();
+            var tr_class = $(this).attr('class');
+            var new_tr = '<tr class ="' + tr_class + '">' + $(this).html() + '</tr>';
+            if(dt > msg_date_top){
+                $(this).remove();
+                $("#table_id tbody").prepend(new_tr);
+            }
+
+        });
+    }
 	function delete_data(ids) {
 		var csrftoken = $("meta[name='csrf-token']").attr('content');
         var csrfname = $("meta[name='csrf-name']").attr('content');
