@@ -44,10 +44,10 @@ class Home extends MY_Controller {
 	
 
 	
-	public function pagenotfound(){
-		$data = array('title' => 'Page Not Found | Easyshop.ph',);
-				$data = array_merge($data, $this->fill_header());
-		$this->load->view('templates/header', $data);
+    public function pagenotfound(){
+	$data = array('title' => 'Page Not Found | Easyshop.ph',);
+	$data = array_merge($data, $this->fill_header());
+	$this->load->view('templates/header', $data);
         $this->load->view('pages/general_error');
         $this->load->view('templates/footer_full');
 	}
@@ -99,10 +99,21 @@ class Home extends MY_Controller {
                       'metadescription' => 'Get in touch with our Customer Support',
                 );
         $data = array_merge($data, $this->fill_header());
-		$this->load->view('templates/header', $data);
+	$this->load->view('templates/header', $data);
         $this->load->view('pages/web/contact');
         $this->load->view('templates/footer_full');
     }
+    
+    public function guide_buy(){
+	$this->load->view('pages/web/how-to-buy');
+    }
+    
+    public function guide_sell(){
+	$this->load->view('pages/web/how-to-sell');
+    }
+
+
+    
     
 
 }
