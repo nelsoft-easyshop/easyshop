@@ -10,7 +10,7 @@
      * Database params
      */
     $configDatabase = array(
-            'host' => 'mysql:host=ip-172-31-3-69.ap-southeast-1.compute.internal',
+            'host' => 'ip-172-31-3-69.ap-southeast-1.compute.internal',
             'user' => 'easyshop',
             'pass' => 'SECRETmy5ql',
             'database' => 'easyshop'

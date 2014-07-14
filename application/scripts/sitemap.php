@@ -4,7 +4,7 @@
          $filelocation = dirname(__FILE__).'/../../web/';
 
         
-	$DBServer = 'mysql:host=ip-172-31-3-69.ap-southeast-1.compute.internal';
+	$DBServer = 'ip-172-31-3-69.ap-southeast-1.compute.internal';
         $DBUser   = 'easyshop';
         $DBPass   = 'SECRETmy5ql';
         $DBName   = 'easyshop';
