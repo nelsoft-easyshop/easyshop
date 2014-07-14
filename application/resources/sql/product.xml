@@ -266,6 +266,7 @@ FROM
                 `es_product_attr` a
                 , `es_attr` b 
               WHERE a.`attr_id` = b.`id_attr` 
+              AND b.datatype_id NOT IN (2)
               GROUP BY a.product_id
                 , attr_name
                 , attr_value 
