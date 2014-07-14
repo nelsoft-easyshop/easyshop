@@ -853,8 +853,8 @@ $(document).ready(function(){
 
   $("#discountedP").on('change',function(){
     validateWhiteTextBox("#discountedP");
-    var disc_price = parseInt($(this).val());
-    var base_price = parseInt($("#prod_price").val().replace(/,/g,''));
+    var disc_price = parseFloat($(this).val());
+    var base_price = parseFloat($("#prod_price").val().replace(/,/g,''));
     var sum = ((base_price - disc_price) / base_price) * 100;
     sum = sum.toFixed(4);
     if(disc_price > base_price){

@@ -9,6 +9,7 @@ class product extends MY_Controller
       parent::__construct(); 
       $this->load->helper('htmlpurifier');
       $this->load->model("product_model");
+      $this->load->model("messages_model");
     }
 
     public $per_page = 12;
@@ -679,8 +680,25 @@ class product extends MY_Controller
         $this->load->view('templates/footer');
     }
     
-
-  
+    public function triple_treats_promo(){
+        $data = $this->fill_header();
+        $data['title'] = 'Triple Treats | Easyshop.ph';
+        $this->load->view('templates/header', $data);
+        $this->load->view('pages/promo/triple_treats_view');
+        $this->load->view('templates/footer');
+    }
+    public function PromoStatusCheck(){
+        $username = $this->input->post('username');
+        $query_result = $this->messages_model->get_recepientID($username,true);
+        if(isset($query_result[0]['is_promo_valid'])){
+            echo json_encode(intval($query_result[0]['is_promo_valid']));
+        }else{
+            echo json_encode(3);
+        }
+        #return 1 if account has promo = true (QUALIFIED)
+        #return 2 if account has promo = false (PENDING)
+        #return 3 if username doesnt exist (NOT-QUALIFIED)
+    }
 
     //OUTDATED FUNCTION: MARKED FOR REMOVAL
     public function category_promo_more(){

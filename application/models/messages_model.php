@@ -50,7 +50,7 @@ class messages_model extends CI_Model
 	
     }
     
-    public function get_recepientID($username){
+    public function get_recepientID($username,$return_all=false){
         if(is_numeric($username)){
             $query = $this->xmlmap->getFilenameID('sql/messages', 'check_recepientID');
         }else {
@@ -63,7 +63,11 @@ class messages_model extends CI_Model
 
         $result = $sth->fetchAll(PDO::FETCH_ASSOC);
         if(!empty($result)){
-	    $result = $result[0]['id_member'];
+            if($return_all){
+                $result = $result;
+            }else{
+                $result = $result[0]['id_member'];
+            }
 		} else {
 			$result = "false";
 		}
