@@ -99,10 +99,29 @@ class Home extends MY_Controller {
                       'metadescription' => 'Get in touch with our Customer Support',
                 );
         $data = array_merge($data, $this->fill_header());
-		$this->load->view('templates/header', $data);
+	$this->load->view('templates/header', $data);
         $this->load->view('pages/web/contact');
         $this->load->view('templates/footer_full');
     }
+   
+    public function guide_buy(){
+        $data = array('title' => 'How to buy | Easyshop.ph',
+                      'metadescription' => 'Learn how to purchase at Easyshop.ph',
+                );
+        $data = array_merge($data, $this->fill_header());
+        $this->load->view('templates/header', $data);
+    	$this->load->view('pages/web/how-to-buy');
+    }
+    
+    public function guide_sell(){
+        $data = array('title' => 'How to sell | Easyshop.ph',
+                      'metadescription' => 'Learn how to sell your items at Easyshop.ph',
+                );
+        $data = array_merge($data, $this->fill_header());
+        $this->load->view('templates/header', $data);
+	$this->load->view('pages/web/how-to-sell');
+    }
+
     
 
 }
