@@ -31,7 +31,6 @@ class Manage extends MY_Controller {
     }
 
 
-
     function index()
     { 
          
