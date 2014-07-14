@@ -105,11 +105,21 @@ class Home extends MY_Controller {
     }
     
     public function guide_buy(){
-	$this->load->view('pages/web/how-to-buy');
+        $data = array('title' => 'How to buy | Easyshop.ph',
+                      'metadescription' => 'Learn how to purchase at Easyshop.ph',
+                );
+        $data = array_merge($data, $this->fill_header());
+        $this->load->view('templates/header', $data);
+    	$this->load->view('pages/web/how-to-buy');
     }
     
     public function guide_sell(){
-	$this->load->view('pages/web/how-to-sell');
+        $data = array('title' => 'How to sell | Easyshop.ph',
+                      'metadescription' => 'Learn how to sell your items at Easyshop.ph',
+                );
+        $data = array_merge($data, $this->fill_header());
+        $this->load->view('templates/header', $data);
+	    $this->load->view('pages/web/how-to-sell');
     }
 
 
