@@ -48,14 +48,8 @@
 $active_group = 'default';
 $active_record = TRUE;
 
-if(strtolower(ENVIRONMENT) == 'production'){
-      $dbConfig = require APPPATH . '/config/param/database/production.php';
-}else if(strtolower(ENVIRONMENT) == 'staging'){
-      $dbConfig = require APPPATH . '/config/param/database/staging.php';
-}else if(strtolower(ENVIRONMENT) == 'development'){
-      $dbConfig = require APPPATH . '/config/param/database/development.php';
-}
 
+$dbConfig = require APPPATH . '/config/param/database.php';
 
 $db['default']['hostname'] = 'mysql:host=' . $dbConfig['host'] . ';dbname=' . $dbConfig['dbname'];
 $db['default']['username'] = $dbConfig['user'];

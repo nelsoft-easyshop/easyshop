@@ -9,12 +9,9 @@
     /**
      * Database params
      */
-    $configDatabase = array(
-            'host' => '127.0.0.1',
-            'user' => 'easyshop',
-            'pass' => 'MYSQL345y5h0p',
-            'database' => 'easyshop'
-    );
+
+    $configDatabase = require dirname(__FILE__). '/../config/param/database.php';
+
 
     /**
      * Query params
@@ -38,7 +35,6 @@
             'from_email' => 'noreply@easyshop.ph',
             'from_name' => 'Easyshop.ph',
             'recipients' => array(
-                    'jerry.pereda@easyshop.ph',
                     'samgavinio@easyshop.ph',
             )
     );
@@ -46,8 +42,10 @@
     echo "Initializing database query...\n"; 
 
     /** FETCH DATABASE USER DATA **/
-    $link = mysqli_connect($configDatabase['host'], $configDatabase['user'], $configDatabase['pass'], $configDatabase['database']);
+    $link = mysqli_connect($configDatabase['host'], $configDatabase['user'], $configDatabase['password'], $configDatabase['dbname']);
 
+
+    
     //CONFIRM CONNECTION
     if (mysqli_connect_errno())
     {
@@ -63,18 +61,26 @@
                                     "ORDER BY datecreated"
     );
 
-    $arrResult = mysqli_fetch_all($rawResult, MYSQLI_ASSOC);
-    mysqli_close($link);
+
+ 
 
     echo "SQL connection closed. Data fetched. \n";
     echo "Preparing CSV data... \n";
 
     /**	Generate CSV Data	**/
-    $csvData = 'USERNAME,CONTACT NO,EMAIL,NICKNAME,FULLNAME,DATE CREATED' . PHP_EOL;		
-    foreach($arrResult as $userData){
-            $csvData .= $userData['username'] . ',' . $userData['contactno'] . ',' . $userData['email'] . ',' . $userData['nickname'] . 
-                                    ',' . $userData['fullname'] . ',' . $userData['datecreated'] . PHP_EOL;
+    $csvData = 'USERNAME,CONTACT NO,EMAIL,NICKNAME,FULLNAME,DATE CREATED' . PHP_EOL;
+
+    
+    while($userData = $rawResult->fetch_assoc()){
+
+	$csvData .= $userData['username'] . ',' . $userData['contactno'] . ',' . $userData['email'] . ',' . $userData['nickname'] . 
+				    ',' . $userData['fullname'] . ',' . $userData['datecreated'] . PHP_EOL;
+
     }
+    
+    
+    mysqli_close($link);
+
 
     echo "Preparing email... \n";
 

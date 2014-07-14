@@ -19,24 +19,19 @@
  *
  */
 
-	$glob = glob($_SERVER["DOCUMENT_ROOT"].'/../../*.environment');
-	if (count($glob) > 0) 
-	{	
-		$filename = pathinfo($glob[0])['filename'];
+    $server_config_path = dirname(__FILE__).'/../../config.php';
+    if(file_exists ($server_config_path)){
+	$serverConfig = require  $server_config_path;
+	if(isset($serverConfig['environment'])){
+	    define('ENVIRONMENT', $serverConfig['environment']);
+	}else{
+	    define('ENVIRONMENT', 'development');
+	}
+    }else{
+	define('ENVIRONMENT', 'development');
+    }
 
-		if($filename == 'production'){
-			define('ENVIRONMENT', 'production');
-		}
-		elseif($filename == 'staging'){
-			define('ENVIRONMENT', 'staging');
-		}
-		else{
-			define('ENVIRONMENT', 'development');
-		}
-	}
-	else{
-		define('ENVIRONMENT', 'development');
-	}
+
 
 /*
  *---------------------------------------------------------------

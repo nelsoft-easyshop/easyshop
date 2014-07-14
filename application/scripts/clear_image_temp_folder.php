@@ -4,11 +4,12 @@ $path = dirname(__FILE__).'/../../web/assets/temp_product/*';
 $files = glob($path);
 
 foreach($files as $file){ 
+ 
+
     $datecreated = date ("Y-m-d H:i:s.", filectime($file));
     $now = date("Y-m-d H:i:s");
-  
-    //DELETE ALL CONTENT THAT IS AT LEAST 3 HOUR OLD
-    if(intval(round((strtotime($now)) - strtotime($datecreated))/3600) > 3){
+
+    if(intval(round((strtotime($now)) - strtotime($datecreated))/3600) >= 3){
         if(is_dir($file)){
             deleteDir($file);
         }
@@ -16,6 +17,7 @@ foreach($files as $file){
              unlink($file);
         }
     }
+
 
 }
 echo 'Done. The directory '.$path.' has been emptied.';

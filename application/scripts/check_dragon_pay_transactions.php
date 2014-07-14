@@ -5,7 +5,11 @@ require_once(dirname(__FILE__).'/../libraries/dragonpay.php');
 $currentDate = date('Y-m-d');
 $holiday_arr = array();
 $t = new Dragonpay;
-$con = mysqli_connect("localhost","easyshop","MYSQL345y5h0p","easyshop");
+
+$configDatabase = require dirname(__FILE__). '/../config/param/database.php';
+
+$con = mysqli_connect($configDatabase['host'],$configDatabase['user'],$configDatabase['password'],$configDatabase['dbname']);
+
 if (mysqli_connect_errno()) {
   echo "Failed to connect to MySQL: " . mysqli_connect_error();
 }

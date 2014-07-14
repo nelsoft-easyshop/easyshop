@@ -24,7 +24,7 @@ $commands = [
     new \Doctrine\DBAL\Migrations\Tools\Console\Command\VersionCommand()
 ];
 
-$dbConfig = require __DIR__ . '/../config/param/database/development.php';
+$dbConfig = require dirname(__FILE__). '/../config/param/database.php';
 
 $doctrineConfig = Doctrine\ORM\Tools\Setup::createAnnotationMetadataConfiguration([__DIR__ . '/../src/EasyShop/Entities'], false);
 $doctrineConfig->setProxyDir(__DIR__ . '/../src/EasyShop/Doctrine/Proxies');
