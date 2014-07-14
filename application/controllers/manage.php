@@ -26,31 +26,16 @@ class Manage extends MY_Controller {
         }else{
             die('Forbidden directory <br> Click here <a href="/home">Home</a>');
         }
-
-        $this->declareEnvironment();
+	$this->file = APPPATH . "resources/page/home_files.xml"; 
         $this->img_dimension['usersize'] = array(589,352);
     }
 
-    function declareEnvironment(){
 
-        $env = strtolower(ENVIRONMENT);
-
-        if($env  == 'development'){
-            // DEVELOPMENT
-            $this->file = APPPATH . "resources/page/home_files_dev.xml"; 
-            $this->var = 'page/home_files_dev';
-        }
-        else{
-            // LIVE
-            $this->file = APPPATH . "resources/page/home_files_prod.xml"; 
-            $this->var = 'page/home_files_prod';
-        }
-    }
 
     function index()
     { 
          
-        $home_content = $this->product_model->getHomeContent('page/home_files_dev');
+        $home_content = $this->product_model->getHomeContent('page/home_files');
         $viewdata['bannerImages'] = $home_content['mainSlide'];   
         $viewdata['productSlide'] = $home_content['productSlide'];    
 
