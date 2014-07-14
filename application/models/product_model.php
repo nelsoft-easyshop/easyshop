@@ -456,12 +456,10 @@ class product_model extends CI_Model
         $sth->bindParam(':enddate',$now);
         $sth->bindParam(':createdate',$now);
         $sth->bindParam(':lastmodifieddate',$now);
-		$bool = $sth->execute();
-		if(!$bool){
-		  print_r($sth->errorInfo());
-		}
+	$bool = $sth->execute();
 
-		return $this->db->conn_id->lastInsertId('id_product');
+
+	return $this->db->conn_id->lastInsertId('id_product');
 	}
 
 	function addNewAttributeByProduct($product_id,$attribute_id,$value,$price)
