@@ -295,6 +295,11 @@ a.orange2:hover {
 	text-decoration: underline;
 }
 
+/**** background colors ****/
+.bg_lt_grey {
+	background-color: #b7b7b7;
+}
+
 /**** Paddings ******/
 .pad_btm10 {
 	padding-bottom: 10px;
@@ -419,8 +424,18 @@ input[type="button"] {
 	border:1px solid;
 }
 
+.brdr2 {
+	border-right: 1px solid;
+	border-left: 1px solid;
+	border-bottom: 1px solid;
+}
+
 .brdr_clrd_grn {
 	border-color: #7ad014;
+}
+
+.brdr_clrd_lt_grey {
+	border-color: #cecece;
 }
 
 .border_radius1 {
@@ -430,6 +445,9 @@ input[type="button"] {
 }
 
 /**** Margins ****/
+.mrgin-deflt {
+	margin: 0 auto;
+}
 
 .mrgntop-10 {
     margin-top: 10px;
@@ -446,6 +464,26 @@ input[type="button"] {
 /***** Paddings ****/
 .pd-8-12 {
 	padding:8px 12px;
+}
+
+.pd-all-30 {
+	padding:30px;
+}
+
+.pd-top-30 {
+	padding-top: 30px;
+}
+
+.pd-bttm-30 {
+	padding-bottom: 30px;
+}
+/**** width ****/
+.width-300 {
+	width: 300px;
+}
+
+.width-600 {
+	width: 600px;
 }
 
 /***** Scroll Up style ****/
@@ -7195,6 +7233,15 @@ margin-right: 10px;
 }*/
 
 /**** Deals ******/
+.deals_header_con {height: 35px;
+	  	 -moz-border-radius-topleft: 5px;
+	 -webkit-border-top-left-radius: 5px;
+ 			 border-top-left-radius: 5px;
+		-moz-border-radius-topright: 5px;
+	-webkit-border-top-right-radius: 5px;
+			border-top-right-radius: 5px;
+}
+
 .status {
 	max-width: 300px;
 	margin:10px 0;
