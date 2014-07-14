@@ -24,7 +24,19 @@ $commands = [
     new \Doctrine\DBAL\Migrations\Tools\Console\Command\VersionCommand()
 ];
 
+
+
+$server_config_path = dirname(__FILE__).'/../../../config.php';
+
 $dbConfig = require dirname(__FILE__). '/../config/param/database.php';
+
+if(file_exists ($server_config_path)){
+    $server_config = require $server_config_path;
+    if(isset($server_config['DB_superuser']) && isset($server_config['DB_superpassword'])  ){
+	$dbConfig['user'] = $server_config['DB_superuser'];
+	$dbConfig['passwor'] = $server_config['DB_password'];
+    }
+}
 
 $doctrineConfig = Doctrine\ORM\Tools\Setup::createAnnotationMetadataConfiguration([__DIR__ . '/../src/EasyShop/Entities'], false);
 $doctrineConfig->setProxyDir(__DIR__ . '/../src/EasyShop/Doctrine/Proxies');
