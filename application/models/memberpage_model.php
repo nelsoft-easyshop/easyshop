@@ -1201,34 +1201,53 @@ class memberpage_model extends CI_Model
 	
 	/***********	NEW VENDOR FUNCTIONS	*****************/
 	
-	function checkVendorSubscription($member_id, $username)
+	function checkVendorSubscription($member_id, $sellername)
 	{
 		$query = $this->xmlmap->getFilenameID('sql/users','checkVendorSubscription');
 		$sth = $this->db->conn_id->prepare($query);
-		$sth->bindParam(':member_id',$member_id);
-		$sth->bindParam(':username',$username);
+		$sth->bindParam(':member_id',$member_id, PDO::PARAM_INT);
+		$sth->bindParam(':sellername',$sellername, PDO::PARAM_STR);
+		$sth->execute();
+		$row = $sth->fetch(PDO::FETCH_ASSOC);
+		
+		if( isset($row['vendor_id']) ){ //if seller exists and is not the same user
+			if( (int)$row['member_id'] === 0 ) {# no entry - unfollowed
+				$result['stat'] = 'unfollowed';
+			}else if( (int)$row['member_id'] !== 0 ) { #has entry - followed
+				$result['stat'] = 'followed';
+			}
+			$result['vendor_id'] = $row['vendor_id'];
+		}else{
+			$result['stat'] = 'error';
+		}
+		
+		return $result;
+	}
+	
+	function countVendorSubscription($member_id, $sellername){
+		$query = $this->xmlmap->getFilenameID('sql/users','countVendorSubscription');
+		$sth = $this->db->conn_id->prepare($query);
+		$sth->bindParam(':member_id',$member_id, PDO::PARAM_INT);
+		$sth->bindParam(':sellername',$sellername, PDO::PARAM_STR);
 		$sth->execute();
 		$row = $sth->fetch(PDO::FETCH_ASSOC);
 		
 		return $row;
 	}
 	
-	function vendorSubscriptionFollow($member_id,$vendor_id)
+	function setVendorSubscription($member_id, $vendor_id, $method)
 	{
-		$query = $this->xmlmap->getFilenameID('sql/users','insertVendorSubscription');
+		if($method === 'unfollowed'){ #then follow
+			$query = $this->xmlmap->getFilenameID('sql/users','insertVendorSubscription');
+		}else if($method === 'followed'){ #then unfollow
+			$query = $this->xmlmap->getFilenameID('sql/users','deleteVendorSubscription');
+		}
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':member_id',$member_id, PDO::PARAM_INT);
 		$sth->bindParam(':vendor_id',$vendor_id, PDO::PARAM_INT);
-		$sth->execute();
-	}
-	
-	function vendorSubscriptionUnfollow($member_id,$vendor_id)
-	{
-		$query = $this->xmlmap->getFilenameID('sql/users','deleteVendorSubscription');
-		$sth = $this->db->conn_id->prepare($query);
-		$sth->bindParam(':member_id',$member_id, PDO::PARAM_INT);
-		$sth->bindParam(':vendor_id',$vendor_id, PDO::PARAM_INT);
-		$sth->execute();
+		$boolResult = $sth->execute();
+		
+		return $boolResult;
 	}
 	
 	function updateStoreDesc($member_id, $desc)
@@ -1242,51 +1261,92 @@ class memberpage_model extends CI_Model
 		return $boolResult;
 	}
 	
-	function getVendorCatItems($member_id)
+	
+	function getVendorCatItems($member_id, $username)
 	{
-		
 		$categoryItemCount = 4;
 		$otherItemCount = 4;
 	
-		$query = $this->xmlmap->getFilenameID('sql/product','getVendorCatProdCount');
+		$query = $this->xmlmap->getFilenameID('sql/product','getVendorProdCatDetails');
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':member_id', $member_id, PDO::PARAM_INT);
 		$sth->execute();
 		$row = $sth->fetchAll(PDO::FETCH_ASSOC);
 		$data = array();
 		
-		foreach($row as $r){
+		foreach( $row as $r ){
+			if( !isset($data[$r['parent_cat']]) ){
+				$data[$r['parent_cat']] = array(
+					'name' => $r['p_cat_name'],
+					'slug' => $r['p_cat_slug'],
+					'child_cat' => array(),
+					'products' => array(),
+					'count' => 0,
+					'loadmore_link' => base_url() . 'advsrch?_us=' . $username . '&_cat=' . $r['parent_cat'],
+					'cat_link' => base_url(). 'category/' . $r['p_cat_slug']
+				);
+			}
+			$data[$r['parent_cat']]['child_cat'][] = $r['cat_id'];
+			$data[$r['parent_cat']]['count'] += $r['prd_count'];
+		}
 		
+		$temp = array();
+		$otherCount = 0;
+		
+		foreach($data as $k=>$d){
+			#If category has 4 or more products - to be displayed as specific category
+			if( (int)$d['count'] >=4 && (int)$k !== 1){
+				$parseData['in_condition'] = implode(',',$d['child_cat']);
+				
+				$query = $this->xmlmap->getFilenameID('sql/product','getTopXCatItems');
+				$query = $this->parser->parse_string($query, $parseData, true);
+				$sth = $this->db->conn_id->prepare($query);
+				$sth->bindParam(':member_id', $member_id, PDO::PARAM_INT);
+				$sth->bindParam(':item_count', $categoryItemCount, PDO::PARAM_INT);
+				$sth->execute();
+				$products = $sth->fetchAll(PDO::FETCH_ASSOC);
+				
+				foreach( $products as $p ){
+					$imagepath[0] = array(
+						'product_image_path' => $p['product_image_path']
+					);
+					explodeImagePath($imagepath);
+					$p['product_image_path'] = $imagepath[0]['path'] . 'categoryview/' . $imagepath[0]['file'];
+				
+					array_push( $data[$k]['products'], $p );
+				}
+			#If less than 4, push all child cat into temp array
+			}else{
+				$temp = array_merge($temp, $d['child_cat']);
+				$otherCount += $d['count'];
+				unset($data[$k]);
+			}
+		}
+		
+		#If temp array has value, get top products to be categorized as others
+		if( count($temp) > 0 ){
+			$parseData['in_condition'] = implode(',',$temp);
+			
+			array_push($data, array(
+				'name' => 'Others',
+				'slug' => 'others',
+				'child_cat' => $temp,
+				'products' => array(),
+				'count' => $otherCount,
+				'loadmore_link' => base_url() . 'advsrch?_us=' . $username,
+				'cat_link' => ''
+			));
+			
+			end($data);
+			$last_id = key($data);
+			
 			$query = $this->xmlmap->getFilenameID('sql/product','getTopXCatItems');
+			$query = $this->parser->parse_string($query, $parseData, true);
 			$sth = $this->db->conn_id->prepare($query);
 			$sth->bindParam(':member_id', $member_id, PDO::PARAM_INT);
-			$sth->bindParam(':cat_id', $r['id_cat'], PDO::PARAM_INT);
 			$sth->bindParam(':item_count', $categoryItemCount, PDO::PARAM_INT);
 			$sth->execute();
 			$products = $sth->fetchAll(PDO::FETCH_ASSOC);
-		
-			if( (int)$r['product_count'] >= 4 ){
-				$data[$r['id_cat']] = array(
-					'cat_name' => $r['parent_cat'],
-					'cat_slug' => $r['slug'],
-					'loadmore_link' => base_url() . "advsrch/?_cat=" . $r['id_cat'] . "&_us=",
-					'cat_link' => base_url() . "category/" . $r['slug'],
-					'products' => array()
-				);
-				$key = $r['id_cat'];
-			} else { 
-				if( !isset($data['others']) ){
-					$data['others'] = array(
-						'cat_name'=>'Others',
-						'cat_slug'=>'others',
-						'products'=>array(),
-						'loadmore_link' => base_url() . "advsrch/?_us=",
-						'cat_link' => '',
-						'is_other'=>true
-					);	
-				}
-				$key = 'others';				
-			}
 			
 			foreach( $products as $p ){
 				$imagepath[0] = array(
@@ -1294,21 +1354,14 @@ class memberpage_model extends CI_Model
 				);
 				explodeImagePath($imagepath);
 				$p['product_image_path'] = $imagepath[0]['path'] . 'categoryview/' . $imagepath[0]['file'];
-			
-				if( is_numeric($key) || ($key==='others' && count($data['others']['products'])<$otherItemCount)  ){
-					array_push( $data[$key]['products'], $p );
-				}
+				
+				array_push( $data[$last_id]['products'], $p );
 			}
-			
-			#Exit if item count for others is 4, #of item count per cat is arranged in Desc, so once 'others'
-			#exist, all cat items > 4 are already listed
-			if( isset($data['others']) && count($data['others']['products']) >= $otherItemCount ){
-				break;
-			}
-			
 		}
-		return  $data;
+		
+		return $data;
 	}
+	
 }
 
 /* End of file memberpage_model.php */

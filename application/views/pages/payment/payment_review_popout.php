@@ -19,13 +19,12 @@
     <br/>
 </div>
 <script type="text/javascript">
-$(document).ready(function(){  
-
    
     var shipment = JSON.parse($('#p_shipment').val());        
     var iid = '<?php echo $item_id;?>';
    
     $.each(shipment, function(index, value){
+
             if(iid == value.product_item_id){
                 var option =  $('#locationID_' + value.location_id);
                 option.data('price',value.price);
@@ -45,5 +44,5 @@ $(document).ready(function(){
         $('.shipping_fee').html("Select location to view shipping fee");
     }
 
-});
+
 </script>

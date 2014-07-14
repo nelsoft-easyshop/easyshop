@@ -460,10 +460,9 @@ $(function(){
 
 
     $.each(firstAvailableCombination.product_attribute_ids, function(idx, value){
-        $('.options [data-type = '+value.is_other+'][data-attrid = '+value.id+']').trigger( "click" );
+        $('.product_option:visible .options [data-type = '+value.is_other+'][data-attrid = '+value.id+']').trigger( "click" );
     });
 
-    
     
     //Loads the default shipment locations
 

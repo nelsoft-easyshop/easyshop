@@ -57,8 +57,9 @@ class Kernel
         // Doctrine ORM
         $paths = array('src/EasyShop/Entities');
         $isDevMode = (ENVIRONMENT === 'development') && false;    // set to false to avoid concurrency problems in staging
-        
-        $dbConfig = require APPPATH . '/config/param/database.php';
+
+	$dbConfig = require APPPATH . '/config/param/database.php';
+
         $config = Doctrine\ORM\Tools\Setup::createAnnotationMetadataConfiguration($paths, $isDevMode);
         $config->setProxyDir(APPPATH . '/src/EasyShop/Doctrine/Proxies');
         $config->setProxyNamespace('EasyShop\Doctrine\Proxies');

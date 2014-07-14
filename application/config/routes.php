@@ -41,6 +41,22 @@
 $enable_splash = false;
 $bypass_IP = '124.104.99.90';
 
+$server_config_path = dirname(__FILE__).'/../../../config.php';
+
+if(file_exists ($server_config_path)){
+  $serverConfig = require  $server_config_path;
+  if(isset($serverConfig['maintenance_on'])){
+      $enable_splash = $serverConfig['maintenance_on'];
+  }
+  if(isset($serverConfig['maintenance_bypass_ip'])){
+      $bypass_IP = $serverConfig['maintenance_bypass_ip'];
+  }
+  
+  
+}
+
+
+
 //CLOUDFLARE REAL VISITOR IP
 $_SERVER["HTTP_CF_CONNECTING_IP"] = isset($_SERVER["HTTP_CF_CONNECTING_IP"])?$_SERVER["HTTP_CF_CONNECTING_IP"]:$_SERVER['REMOTE_ADDR'];
 
@@ -121,6 +137,8 @@ else {
     $route['(?i)terms'] = 'home/terms';
     $route['(?i)faq'] = 'home/faq';
     $route['(?i)contact'] = 'home/contact';
+    $route['(?i)guide/buy'] = 'home/guide_buy';
+    $route['(?i)guide/sell'] = 'home/guide_sell';
 
     $route['(?i)subscribe'] = 'register/subscribe';  
 

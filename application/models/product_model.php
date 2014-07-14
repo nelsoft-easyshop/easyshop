@@ -1973,9 +1973,8 @@ class product_model extends CI_Model
         return $return;  
     }
         
-    public function getHomeContent($devfile = 'page/home_files_dev', $prodfile = 'page/home_files_prod')
+    public function getHomeContent($file = 'page/home_files')
     { 
-		$file = (strtolower(ENVIRONMENT) == 'development')?$devfile:$prodfile;
         $xml_content = $this->xmlmap->getFilename($file);
         $home_view_data = array();
         
@@ -1991,21 +1990,26 @@ class product_model extends CI_Model
 
 			
         } 
-        
+
         /*
-         *  If there is only one section element, add it to its own array.
+         *  If there is only one element, add it to its own array.
          */
         if(isset($home_view_data['section']) && isset($home_view_data['section']['category_detail'])){
-            $temp = $home_view_data['section'];
-            $home_view_data['section'] = array();
-            $home_view_data['section'][0] = $temp;
+            $home_view_data['section'] = make_array($home_view_data['section']);            
         }
+	if(isset($home_view_data['mainSlide']) && isset($home_view_data['mainSlide']['src'])){
+            $home_view_data['mainSlide'] = make_array($home_view_data['mainSlide']);
+        }
+
+        
         return $home_view_data;
 
     }
     
+
     private function createHomeElement($element, $key){
         $home_view_data = array();
+        
         if($element['type'] === 'product'){
             $productdata = $this->getProductBySlug($element['value'], false);
             if (!empty($productdata)){
@@ -2023,8 +2027,10 @@ class product_model extends CI_Model
                 $home_view_data = array('src' => $element['value'], 'imagemap' => $element['imagemap']);
             }
             else{
-                $home_view_data = date('M d,Y H:i:s',strtotime($element['value']));
+                $home_view_data = array('src' => $element['value']);
             }
+        }else if($element['type'] === 'image'){    
+             $home_view_data = date('M d,Y H:i:s',strtotime($element['value']));
         }else if(($element['type'] === 'category') || ($element['type'] === 'custom')) { 
             if($element['type'] === 'category'){
                $home_view_data['category_detail'] = $this->selectCategoryDetails($element['value']);
@@ -2046,15 +2052,16 @@ class product_model extends CI_Model
             unset($element['title']);
             
             foreach($element as $key=>$cat_el){
-                if(is_array($cat_el)){
+                if(!isset($cat_el['value']) && !isset($cat_el['type'])){
                     foreach($cat_el as $inner_key => $cat_inner_el){
-                        $home_view_data[$key][$inner_key] =  $this->createHomeElement($cat_inner_el, $inner_key);
+                        $home_view_data[$key][$inner_key] =  $this->createHomeElement($cat_inner_el, $inner_key);                        
                     }
                 }else{
                     $home_view_data[$key] = $this->createHomeElement($cat_el, $key);
                 }
-
             }
+   
+            
         }else{
             $home_view_data = $element['value'];            
         }
@@ -2230,5 +2237,7 @@ class product_model extends CI_Model
 	  return true;
 	}
     }
+    
+
     
 }

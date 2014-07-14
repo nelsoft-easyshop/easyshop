@@ -614,25 +614,20 @@ class Memberpage extends MY_Controller
 		
 		$checkData = $this->memberpage_model->checkVendorSubscription($memberID,$sellername);
 		
-		if( (int)$checkData['vendor_id'] !== 0  ){ //if seller exists and is not the same user
-			switch( (int)$checkData['subscription'] ){
-				case 0: # no entry - unfollowed
-					$boolResult = $this->memberpage_model->vendorSubscriptionFollow($memberID,$checkData['vendor_id']);
-					break;
-				case 1: # has entry - followed
-					$boolResult = $this->memberpage_model->vendorSubscriptionUnfollow($memberID,$checkData['vendor_id']);
-					break;
-			}
-			$serverResponse = array(
-				'result' => $boolResult ? 'success' : 'fail',
-				'error' => $boolResult ? '' : 'Failed to update database'
-			);
-		}else{
-			$serverResponse = array(
-				'result' => 'fail',
-				'error' => 'Incorrect data submitted to server. Please try again later.'
-			);
+		switch( $checkData['stat'] ){
+			case 'unfollowed':
+			case 'followed':
+				$boolResult = $this->memberpage_model->setVendorSubscription($memberID,$checkData['vendor_id'], $checkData['stat']);
+				$serverResponse['result'] = $boolResult ? 'success' : 'fail';
+				$serverResponse['error'] = $boolResult ? '' : 'Failed to update database.';
+				break;
+			case 'error':
+				$serverResponse['result'] = 'fail';
+				$serverResponse['error'] = 'Incorrect data submitted to server. Please try again later.';
+				break;
 		}
+		
+		echo json_encode($serverResponse);
 	}
 	
 	function vendorStoreDesc()
@@ -677,7 +672,7 @@ class Memberpage extends MY_Controller
 		}
 		
 	}
-	/*** 	memberpage/vendor/username	***/
+
 	function vendor($selleruname){
 		$session_data = $this->session->all_userdata();
 		$vendordetails = $this->memberpage_model->getVendorDetails($selleruname);
@@ -695,7 +690,7 @@ class Memberpage extends MY_Controller
 					'vendordetails' => $vendordetails,
 					'image_profile' => $this->memberpage_model->get_Image($sellerid),
 					'banner' => $this->memberpage_model->get_Image($sellerid,'vendor'),
-					'products' => $this->memberpage_model->getVendorCatItems($sellerid),
+					'products' => $this->memberpage_model->getVendorCatItems($sellerid,$selleruname),
 					'active_count' => intval($user_product_count['active']),
 					'deleted_count' => intval($user_product_count['deleted']),
                     'sold_count' => intval($user_product_count['sold']),
@@ -705,6 +700,10 @@ class Memberpage extends MY_Controller
 			$data['hasStoreDesc'] = (string)$data['vendordetails']['store_desc'] !== '' ? true : false;
 			$data['product_count'] = count($data['products']);
 			$data['renderEdit'] = (int)$sellerid === (int)$data['my_id'] ? true : false;
+			#if 0 : no entry - unfollowed, hence display follow
+			#if 1 : has entry - followed, hence display unfollow
+			$data['subscribe_status'] = $this->memberpage_model->checkVendorSubscription($data['my_id'],$selleruname)['stat'];
+			$data['subscribe_count'] = (int)$this->memberpage_model->countVendorSubscription($data['my_id'], $selleruname)['subscription_count'];
 			
 			$this->load->view('pages/user/vendor_view', $data);
             $this->load->view('templates/footer');
@@ -716,46 +715,7 @@ class Memberpage extends MY_Controller
             $this->load->view('templates/footer_full');
 		}
 	}
-	/*function vendor($selleruname){
-		$session_data = $this->session->all_userdata();
-		$vendordetails = $this->memberpage_model->getVendorDetails($selleruname);
-		$data['title'] = 'Vendor Profile | Easyshop.ph';
-		$data['my_id'] = (empty($session_data['member_id']) ? 0 : $session_data['member_id']);
-		$data = array_merge($data, $this->fill_header());
-		if($vendordetails){
-            $data['render_logo'] = false;
-            $data['render_searchbar'] = false;
-            $this->load->view('templates/header', $data);
-			$sellerid = $vendordetails['id_member'];
-			$user_product_count = $this->memberpage_model->getUserItemCount($sellerid);
-			$data = array_merge($data,array(
-					'vendordetails' => $vendordetails,
-					'image_profile' => $this->memberpage_model->get_Image($sellerid),
-					'active_products' => $this->memberpage_model->getUserItems($sellerid,0),
-					'deleted_products' => $this->memberpage_model->getUserItems($sellerid,1),
-					'active_count' => intval($user_product_count['active']),
-					'deleted_count' => intval($user_product_count['deleted']),
-                    'sold_count' => intval($user_product_count['sold']),
-					'banner' => $this->memberpage_model->get_Image($sellerid,'vendor')
-					));
-			$data['allfeedbacks'] = $this->memberpage_model->getFeedback($sellerid);
-			$data['hasStoreDesc'] = (string)$data['vendordetails']['store_desc'] !== '' ? true : false;
-			
-			if( (int)$session_data['member_id']===(int)$sellerid ){
-				$this->load->view('pages/user/vendor_view_own', $data);
-			}else{
-				$this->load->view('pages/user/vendor_view', $data);
-			}
-            $this->load->view('templates/footer');
-		}
-		else{
-            $this->load->view('templates/header', $data);
-			$this->load->view('pages/user/user_error');
-            $this->load->view('templates/footer_full');
-		}
-	}*/
-
-
+	
 	/**	VERIFY CONTACT DETAILS SECTION **/
 	function verify(){
 		if($this->input->post('reverify') === 'true'){

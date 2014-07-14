@@ -132,3 +132,28 @@ if ( ! function_exists('es_string_limit'))
         return $final_string;
     }
 }
+
+if ( ! function_exists('make_array'))
+{
+    function make_array($array = array(), $key = ''){
+	  $key = ($key = '')?key($array):$key;
+	  $temp = $array;
+	  $array = array();
+	  $array[0] = $temp;
+	  return $array;
+    }
+}
+
+if ( ! function_exists('is_assoc'))
+{
+    function is_assoc($array) {
+	return (bool)count(array_filter(array_keys($array), 'is_string'));
+    }
+}
+
+
+
+
+
+
+

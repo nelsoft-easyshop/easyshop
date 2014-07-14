@@ -60,7 +60,7 @@
 					    <br />Available Stock<br/>
 					    <br/>
 		      
-					    <?PHP IF($deleted_product['is_free_shipping'] || TRUE): ?>
+					    <?PHP IF($deleted_product['is_free_shipping']): ?>
 					      <span class="span_bg img_free_shipping"></span>
 					    <?PHP ENDIF; ?>
 					</p>

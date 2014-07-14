@@ -63,12 +63,12 @@ $config = array(
             'option' => array(
 		0 => array(
                     'start' => '00:00:00',
-                    'end' => '03:59:59',
+                    'end' => '06:59:59',
                     'purchase_limit' => 2),
                 1 => array(
-                    'start' => '15:00:00',
+                    'start' => '07:00:00',
                     'end' => '23:59:59',
-                    'purchase_limit' => 5)
+                    'purchase_limit' => 15)
              ),
  
             
