@@ -5,7 +5,7 @@ require_once(dirname(__FILE__).'/../libraries/dragonpay.php');
 $currentDate = date('Y-m-d');
 $holiday_arr = array();
 $t = new Dragonpay;
-$con = mysqli_connect("localhost","easyshop","MYSQL345y5h0p","easyshop");
+$con = mysqli_connect("mysql:host=ip-172-31-3-69.ap-southeast-1.compute.internalt","easyshop","SECRETmy5ql","easyshop");
 if (mysqli_connect_errno()) {
   echo "Failed to connect to MySQL: " . mysqli_connect_error();
 }

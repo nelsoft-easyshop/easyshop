@@ -51,7 +51,6 @@ $active_record = TRUE;
 $dbConfig = require APPPATH . '/config/param/database.php';
 
 $db['default']['hostname'] = 'mysql:host=' . $dbConfig['host'] . ';dbname=' . $dbConfig['dbname'];
-#$db['default']['hostname'] = 'mysql:host=192.168.1.50;dbname=easyshop';
 $db['default']['username'] = $dbConfig['user'];
 $db['default']['password'] = $dbConfig['password'];
 $db['default']['database'] = '';

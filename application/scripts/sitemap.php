@@ -1,18 +1,15 @@
 <?php     
-         $base_url= "https://easyshop.ph/";
+         $base_url= "https://www.easyshop.ph/";
          #Change filelocation as needed, e.g.: $filelocation = "C:/Users/Administrator/Dropbox/sitemap/";
          $filelocation = dirname(__FILE__).'/../../web/';
-        /*
-        $DBServer = '127.0.0.1';
-        $DBUser   = 'easyshop';
-        $DBPass   = 'MYSQL345y5h0p';
-        $DBName   = 'easyshop';
-        */
+
         
-          $DBServer = '127.0.0.1';
-        $DBUser   = 'root';
-        $DBPass   = '121586';
+	$DBServer = 'mysql:host=ip-172-31-3-69.ap-southeast-1.compute.internal';
+        $DBUser   = 'easyshop';
+        $DBPass   = 'SECRETmy5ql';
         $DBName   = 'easyshop';
+
+        
         $conn = new mysqli($DBServer, $DBUser, $DBPass, $DBName);
         if ($conn->connect_error) {
             exit('Database connection failed: '  . $conn->connect_error);
