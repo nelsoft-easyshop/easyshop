@@ -1295,7 +1295,7 @@ class memberpage_model extends CI_Model
 		
 		foreach($data as $k=>$d){
 			#If category has 4 or more products - to be displayed as specific category
-			if( (int)$d['count'] >=4 ){
+			if( (int)$d['count'] >=4 && (int)$k !== 1){
 				$parseData['in_condition'] = implode(',',$d['child_cat']);
 				
 				$query = $this->xmlmap->getFilenameID('sql/product','getTopXCatItems');
