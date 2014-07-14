@@ -25,11 +25,11 @@
 				
 				
 			<?PHP $Md_start =  date('M d', strtotime($item['startdate'])); ?>
-			<?PHP $Md_second_start = date('M d', strtotime("+7 day",strtotime($item['startdate'])))?>
+			<?PHP $Md_second_start = date('M d', strtotime("-7 day",strtotime($item['startdate'])))?>
 			
 			<div class="product_buy_con prod_date <?PHP echo ($item['can_purchase'] || strtotime(date('M d'))===strtotime($Md_start) )  ?'':'disabled'; ?>">
 			<span>
-			    <p><?php echo $Md_start . " and " . date('d',strtotime($Md_second_start)); ?></p>
+			    <p><?php echo date('d',strtotime($Md_second_start)) . " and " . $Md_start; ?></p>
 			</span>
 			
 			</div>
