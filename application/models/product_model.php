@@ -1947,7 +1947,7 @@ class product_model extends CI_Model
     
     public function getCategoryBySlug($slug)
     {
-		$query = "SELECT id_cat, name, description, slug FROM es_cat WHERE slug = :slug";
+	$query = "SELECT id_cat, name, description, slug FROM es_cat WHERE slug = :slug";
     	$sth = $this->db->conn_id->prepare($query);
     	$sth->bindParam(':slug', $slug, PDO::PARAM_STR);
     	$result = $sth->execute();
