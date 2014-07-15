@@ -1,0 +1,133 @@
+<?xml version="1.0"?>
+<map>
+
+    <promoSection>
+        <slide> 
+            <value>assets/images/mainslide/1.jpg</value> 
+            <type>image</type> 
+            <target>register</target>
+            <order>0</order> 
+        </slide>
+        <slide> 
+            <value>assets/images/mainslide/1.jpg</value> 
+            <type>image</type> 
+            <target>register</target> 
+            <order>1</order>
+        </slide>
+        <slide> 
+            <value>assets/images/mainslide/1.jpg</value> 
+            <type>image</type> 
+            <target>register</target> 
+            <order>2</order>
+        </slide>
+        <slide> 
+            <value>assets/images/mainslide/1.jpg</value> 
+            <type>image</type> 
+            <target>register</target> 
+            <order>3</order>
+        </slide>
+    </promoSection>    
+
+    <themeSection> 
+        <item>
+            <value>assets/images/mainslide/1.jpg</value>
+            <target>register</target> 
+            <box>big</box>
+            <type>image</type> 
+            <order>0</order>
+        </item>
+        <item>
+            <value>assets/images/mainslide/1.jpg</value>
+            <target>register</target>
+            <box>small</box> 
+            <type>image</type> 
+            <order>1</order>
+        </item>
+        <item>
+            <value>assets/images/mainslide/1.jpg</value>
+            <target>register</target> 
+            <box>small</box>
+            <type>image</type> 
+            <order>2</order>
+        </item>
+    </themeSection>
+
+    <themeSection> 
+        <item>
+            <value>assets/images/mainslide/1.jpg</value>
+            <target>register</target> 
+            <box>big</box>
+            <type>image</type> 
+            <order>2</order>
+        </item>
+        <item>
+            <value>assets/images/mainslide/1.jpg</value>
+            <target>register</target>
+            <box>small</box> 
+            <type>image</type> 
+            <order>0</order>
+        </item>
+        <item>
+            <value>assets/images/mainslide/1.jpg</value>
+            <target>register</target> 
+            <box>small</box>
+            <type>image</type> 
+            <order>1</order>
+        </item>
+    </themeSection>
+
+    <themeSection> 
+        <item>
+            <value>assets/images/mainslide/1.jpg</value>
+            <target>register</target>
+            <box>small</box> 
+            <type>image</type> 
+            <order>0</order>
+        </item>
+        <item>
+            <value>assets/images/mainslide/1.jpg</value>
+            <target>register</target> 
+            <box>small</box>
+            <type>image</type> 
+            <order>1</order>
+        </item>
+        <item>
+            <value>assets/images/mainslide/1.jpg</value>
+            <target>register</target> 
+            <box>small</box>
+            <type>image</type> 
+            <order>2</order>
+        </item>
+        <item>
+            <value>assets/images/mainslide/1.jpg</value>
+            <target>register</target> 
+            <box>small</box>
+            <type>image</type> 
+            <order>3</order>
+        </item>
+    </themeSection>
+
+    <categorySection>
+        <category>
+            <name>Clothing  &amp; Accessories</name> 
+            <slug>clothing-accessories</slug>
+            <icon>images/img_icon_clothing.png</icon>
+            <order>0</order>
+        </category>
+
+        <category>
+            <name>Electronics &amp; Gadgets</name> 
+            <slug>electronics-gadgets</slug>
+            <icon>images/img_icon_electronics.png</icon>
+            <order>1</order>
+        </category>
+
+        <category>
+            <name>Books, Music &amp; Movies</name> 
+            <slug>books-music-movies</slug>
+            <icon>images/img_icon_books.png</icon>
+            <order>2</order>
+        </category>
+    </categorySection>
+    
+</map>
