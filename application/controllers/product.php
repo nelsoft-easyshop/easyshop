@@ -690,6 +690,7 @@ class product extends MY_Controller
     public function PromoStatusCheck(){
         $username = $this->input->post('username');
         $query_result = $this->messages_model->get_recepientID($username,true);
+        print_r($query_result);
         if(isset($query_result[0]['is_promo_valid'])){
             echo json_encode(intval($query_result[0]['is_promo_valid']));
         }else{

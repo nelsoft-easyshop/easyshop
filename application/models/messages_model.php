@@ -59,9 +59,7 @@ class messages_model extends CI_Model
 		
         $sth = $this->db->conn_id->prepare($query);
         $sth->bindParam(':val',$username, PDO::PARAM_INT);
-        if(!$sth->execute()){
-	  print_r($sth->errorInfo());
-        }
+        $sth->execute();
 
         $result = $sth->fetchAll(PDO::FETCH_ASSOC);
         if(!empty($result)){
