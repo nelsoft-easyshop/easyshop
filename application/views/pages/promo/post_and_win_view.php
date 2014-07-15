@@ -48,10 +48,10 @@
             <h3 class="htitle2">Mechanics and Prizes</h3>
             <ul>
                 <li>
-                    Like us on Facebook
-                    <a href="https://facebook.com/easyshopphilippines" class="blue">(https://facebook.com/easyshopphilippines)</a>
+                    Like us on 
+                    <a href="https://facebook.com/easyshopphilippines" class="blue">Facebook</a>
                 </li>
-                <li>Upload three items at <a href="" class="blue">EasyShop.ph</a></li>
+                <li>Upload three items at <a href="<?=base_url()?>" class="blue">EasyShop.ph</a></li>
                 <li>Leave your EasyShop.ph username in the comment box</li>
             </ul>
             <p class="pd-top-30">
