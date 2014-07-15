@@ -294,6 +294,11 @@ a.orange2:hover {
 	text-decoration: underline;
 }
 
+/**** background colors ****/
+.bg_lt_grey {
+	background-color: #b7b7b7;
+}
+
 /**** Paddings ******/
 .pad_btm10 {
 	padding-bottom: 10px;
@@ -385,10 +390,95 @@ textarea:focus {
     width: 18px;	
 }
 
+.icon_cancel_red {
+	background-position: -712px -88px;
+	height: 15px;
+	width: 17px;
+}
+
+.img_check {
+	background-position: -903px -317px;
+	height: 16px;
+	width: 16px;	
+}
+
+.img_cross {
+	background-position: -925px -318px;
+	height: 16px;
+	width: 16px;	
+}
+
+.img_pending {
+	background-position: -942px -318px;
+	height: 16px;
+	width: 16px;		
+}
+
+/*** Borders ****/
+.brdr {
+	border:1px solid;
+}
+
+.brdr2 {
+	border-right: 1px solid;
+	border-left: 1px solid;
+	border-bottom: 1px solid;
+}
+
+.brdr_clrd_grn {
+	border-color: #7ad014;
+}
+
+.brdr_clrd_lt_grey {
+	border-color: #cecece;
+}
+
 .border_radius1 {
 	-webkit-border-radius: 3px;
 	-moz-border-radius: 3px;
 	border-radius: 3px;
+}
+
+/**** Margins ****/
+.mrgin-deflt {
+	margin: 0 auto;
+}
+
+.mrgntop-10 {
+    margin-top: 10px;
+}
+
+.mrgntop-30 {
+    margin-top: 30px;
+}
+
+.mrginrght-5 {
+	margin-right: 5px;
+}
+
+/***** Paddings ****/
+.pd-8-12 {
+	padding:8px 12px;
+}
+
+.pd-all-30 {
+	padding:30px;
+}
+
+.pd-top-30 {
+	padding-top: 30px;
+}
+
+.pd-bttm-30 {
+	padding-bottom: 30px;
+}
+/**** width ****/
+.width-300 {
+	width: 300px;
+}
+
+.width-600 {
+	width: 600px;
 }
 
 /***** Scroll Up style ****/
@@ -7104,4 +7194,59 @@ margin-right: 10px;
     max-width: 980px;
     width: 100%;
 }*/
+
+/**** Deals ******/
+.deals_header_con {height: 35px;
+	  	 -moz-border-radius-topleft: 5px;
+	 -webkit-border-top-left-radius: 5px;
+ 			 border-top-left-radius: 5px;
+		-moz-border-radius-topright: 5px;
+	-webkit-border-top-right-radius: 5px;
+			border-top-right-radius: 5px;
+}
+
+.status {
+	max-width: 300px;
+	margin:10px 0;
+}
+
+.status .qualified {
+	border:1px solid #7ad014;
+}
+
+.status .notqualified {
+	border:1px solid #c90000;
+}
+
+.status .pending {
+	border:1px solid #e3ab02;
+}
+
+.status p {
+    display: table-cell;
+    font-size: 16px;
+    font-weight: bold;
+    padding-left: 10px;
+    vertical-align: middle;
+}
+
+.img_status_con {
+	display: table-cell;
+	height: 40px;
+	width: 40px;
+	text-align: center;
+	vertical-align: middle;
+}
+.status .qualified .img_status_con {
+	background-color: #7ad014;
+}
+
+.status .notqualified .img_status_con {
+	background-color: #c90000;
+}
+
+.status .pending .img_status_con {
+	background-color: #e3ab02;
+}
+
 
