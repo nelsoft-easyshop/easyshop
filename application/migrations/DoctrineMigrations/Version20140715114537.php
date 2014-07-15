@@ -16,7 +16,7 @@ class Version20140715114537 extends AbstractMigration
     {
         // this up() migration is auto-generated, please modify it to your needs
         $this->addSql(" ALTER TABLE `es_member`
-                        ADD COLUMN TABLE `is_promo_valid` TINYINT(3) DEFAULT 0 NOT NULL AFTER `store_desc`;");
+                        ADD COLUMN `is_promo_valid` TINYINT(3) DEFAULT 0 NOT NULL AFTER `store_desc`;");
     }
 
     public function down(Schema $schema)
