@@ -688,6 +688,7 @@ class product extends MY_Controller
         $this->load->view('templates/footer');
     }
     public function PromoStatusCheck(){
+	$this->load->model("messages_model");
         $username = $this->input->post('username');
         $query_result = $this->messages_model->get_recepientID($username,true);
         if(isset($query_result[0]['is_promo_valid'])){
