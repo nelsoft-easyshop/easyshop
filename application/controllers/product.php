@@ -680,11 +680,11 @@ class product extends MY_Controller
         $this->load->view('templates/footer');
     }
     
-    public function triple_treats_promo(){
+    public function post_and_win_promo(){
         $data = $this->fill_header();
-        $data['title'] = 'Triple Treats | Easyshop.ph';
+        $data['title'] = 'Post and Win | Easyshop.ph';
         $this->load->view('templates/header', $data);
-        $this->load->view('pages/promo/triple_treats_view');
+        $this->load->view('pages/promo/post_and_win_view');
         $this->load->view('templates/footer');
     }
     public function PromoStatusCheck(){
