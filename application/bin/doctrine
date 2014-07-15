@@ -35,7 +35,7 @@ if(file_exists ($server_config_path)){
     if(isset($server_config['DB_superuser'])  && strlen(trim($server_config['DB_superuser'])) > 0  && 
        isset($server_config['DB_superpassword']) ){
 	$dbConfig['user'] = $server_config['DB_superuser'];
-	$dbConfig['password'] = $server_config['DB_password'];
+	$dbConfig['password'] = $server_config['DB_superpassword'];
     }
 }
 
