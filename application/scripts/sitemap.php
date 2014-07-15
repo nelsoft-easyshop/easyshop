@@ -8,9 +8,9 @@
         $DBUser   = 'easyshop';
         $DBPass   = 'SECRETmy5ql';
         $DBName   = 'easyshop';
-
         
-        $conn = new mysqli($DBServer, $DBUser, $DBPass, $DBName);
+        $conn = mysqli_connect($DBServer,$DBUser,$DBPass,$DBName);
+
         if ($conn->connect_error) {
             exit('Database connection failed: '  . $conn->connect_error);
         }
@@ -33,15 +33,13 @@
 
    
         $sql="SELECT name, id_cat FROM es_cat WHERE parent_id = 1 AND id_cat != 1 AND is_main = 1";
-        $rs=$conn->query($sql);
-        if($rs === false) {
+        $rs_cat=$conn->query($sql);
+        if($rs_cat === false) {
             exit('SQL Query Error: '  . $conn->error);
-        } else {
-            $rows = $rs->fetch_all(MYSQLI_ASSOC);
-        }
+        } 
         $main_categories = array();
          
-        foreach($rows as $row){
+        while($row = $rs_cat->fetch_assoc()){
   
             $xml = new DOMDocument();
             $xml_urlset = $xml->createElement("urlset");
@@ -56,31 +54,27 @@
             if($rs === false) {
                 exit('SQL Query Error: '  . $conn->error);
             } else {
-                $cat_list= $rs->fetch_all(MYSQLI_ASSOC)[0]['catlist'];
+                $cat_list= $rs->fetch_assoc()['catlist'];
             }
           
             $sql = "SELECT CONCAT('category/',slug) as url FROM es_cat WHERE id_cat IN (".$cat_list.")";
             $rs=$conn->query($sql);
             if($rs === false) {
                 exit('SQL Query Error: '  . $conn->error);
-            } else {
-                $cats = $rs->fetch_all(MYSQLI_ASSOC);
-            }
+            } 
 
-            
-            foreach($cats as $x){
+
+            while($x = $rs->fetch_assoc()){
                 $xml_url = write_url_xml($xml, array('loc' => $base_url.$x['url'], 'priority' => 0.5, 'changefreq' => 'monthly'));
                 $xml_urlset->appendChild( $xml_url ); 
             }
  
-            $sql="SELECT CONCAT('item/',slug) as url FROM es_product WHERE cat_id IN (".$cat_list.")";
+            $sql="SELECT CONCAT('item/',slug) as url FROM es_product WHERE cat_id IN (".$cat_list.") AND is_draft = 0 AND is_delete = 0";
             $rs=$conn->query($sql);
             if($rs === false) {
                 exit('SQL Query Error: '  . $conn->error);
-            } else {
-                $products = $rs->fetch_all(MYSQLI_ASSOC);
-            }
-            foreach($products as $x){
+            } 
+            while($x = $rs->fetch_assoc()){
                 $xml_url = write_url_xml($xml, array('loc' => $base_url.$x['url'], 'priority' => 0.5, 'changefreq' => 'weekly'));
                 $xml_urlset->appendChild( $xml_url );  
             }
@@ -102,10 +96,8 @@
         $rs=$conn->query($sql);
         if($rs === false) {
             exit('SQL Query Error: '  . $conn->error);
-        } else {
-            $vendors = $rs->fetch_all(MYSQLI_ASSOC);
-        }
-        foreach($vendors as $x){
+        } 
+        while($x = $rs->fetch_assoc()){
             $xml_url = write_url_xml($xml, array('loc' => $base_url.$x['url'], 'priority' => 0.5, 'changefreq' => 'monthly'));
             $xml_urlset->appendChild( $xml_url ); 
         }
@@ -154,36 +146,36 @@
          
        
          
-           
-    function write_url_xml($xml, $data){
-        $xml_url = $xml->createElement("url");
-        $xml_loc = $xml->createElement("loc", htmlentities($data['loc']));
-        $xml_priority = $xml->createElement("priority", $data['priority']);
-        $xml_lastmod = $xml->createElement("lastmod", date('Y-m-d'));
-        $xml_changefreq = $xml->createElement("changefreq", $data['changefreq']);
-        $xml_url->appendChild( $xml_loc );
-        $xml_url->appendChild( $xml_priority );
-        $xml_url->appendChild($xml_lastmod);
-        $xml_url->appendChild($xml_changefreq);
-        return $xml_url;
-    }
+	      
+	function write_url_xml($xml, $data){
+	    $xml_url = $xml->createElement("url");
+	    $xml_loc = $xml->createElement("loc", htmlentities($data['loc']));
+	    $xml_priority = $xml->createElement("priority", $data['priority']);
+	    $xml_lastmod = $xml->createElement("lastmod", date('Y-m-d'));
+	    $xml_changefreq = $xml->createElement("changefreq", $data['changefreq']);
+	    $xml_url->appendChild( $xml_loc );
+	    $xml_url->appendChild( $xml_priority );
+	    $xml_url->appendChild($xml_lastmod);
+	    $xml_url->appendChild($xml_changefreq);
+	    return $xml_url;
+	}
     
-    function compress_gz($filelocation, $filename){
-        // Name of the gz file we are creating
-        $gzfile = $filelocation.$filename.".gz";
-        // Open the gz file (w9 is the highest compression)
-        $fp = gzopen ($gzfile, 'w9');
-        // Compress the file
-        gzwrite ($fp, file_get_contents($filelocation.$filename));
-        // Close the gz file and we are done
-        gzclose($fp);
-        // Delete original file
-        if (is_file($filelocation.$filename)){
-            unlink($filelocation.$filename);
-        }
-        return $filename.".gz";
-        
-    }
+	function compress_gz($filelocation, $filename){
+	    // Name of the gz file we are creating
+	    $gzfile = $filelocation.$filename.".gz";
+	    // Open the gz file (w9 is the highest compression)
+	    $fp = gzopen ($gzfile, 'w9');
+	    // Compress the file
+	    gzwrite ($fp, file_get_contents($filelocation.$filename));
+	    // Close the gz file and we are done
+	    gzclose($fp);
+	    // Delete original file
+	    if (is_file($filelocation.$filename)){
+		unlink($filelocation.$filename);
+	    }
+	    return $filename.".gz";
+	    
+	}
     
 	function url_clean($string)
 	{
@@ -200,3 +192,36 @@
 	}	
 
 ?>
+
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+    
