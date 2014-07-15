@@ -15,14 +15,14 @@ class Version20140715114537 extends AbstractMigration
     public function up(Schema $schema)
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql(" ALTER TABLE `easyshop`.`es_member`
-                        ADD COLUMN TABLE `is_promo_valid` TINYINT(3) DEFAULT 0 NOT NULL AFTER `store_desc`;");
+        $this->addSql(" ALTER TABLE `es_member`
+                        ADD COLUMN `is_promo_valid` TINYINT(3) DEFAULT 0 NOT NULL AFTER `store_desc`;");
     }
 
     public function down(Schema $schema)
     {
         // this down() migration is auto-generated, please modify it to your needs
-        $this->addSql("ALTER TABLE `easyshop`.`es_member`
+        $this->addSql("ALTER TABLE `es_member`
                         DROP COLUMN `is_promo_valid`;");
     }
 }
