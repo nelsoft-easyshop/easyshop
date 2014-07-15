@@ -19,7 +19,7 @@ class Home extends MY_Controller {
     {
         // $items =  $this->product_model->getHomeContent(); 
         // die(json_encode($items,JSON_PRETTY_PRINT));
-    
+ 
         $pageContent = $this->xmlmap->getFilename("page/mobile_home_files"); 
         echo json_encode($pageContent,JSON_PRETTY_PRINT);
     }
