@@ -23,6 +23,6 @@ class Version20140715114537 extends AbstractMigration
     {
         // this down() migration is auto-generated, please modify it to your needs
         $this->addSql("ALTER TABLE `es_member`
-                        DROP COLUMN `is_promo_valid`;");
+                        DROP COLUMN `is_promo_valid`");
     }
 }

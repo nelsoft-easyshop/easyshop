@@ -10,6 +10,7 @@
         <div>
             <input type="text" class="pd-8-12 width-300" id="txt_status">
             <input type="button" value="Status" class="orange_btn3" id="btn_status_check">
+            <img src="<?=base_url()?>assets/images/orange_loader_small.gif" id="loading_img" class="login_loading_img" style="display:none"/>
         </div>
         <div class="status">
             <div class="qualified border_radius1">
@@ -41,10 +42,6 @@
             <div class="mrgntop-10 notf">
                 <span class="span_bg " id="notf_itm"></span>UPLOAD THREE ITEMS (JULY 16 - 31)
             </div>
-<!--
-    chk_img ->check icon
-    icon_cancel_red mrginrght-5 -> X icon
--->
         </div>
 
         <div class="mrgntop-10 content_wrapper">
@@ -105,15 +102,18 @@
                 alert('Invalid username');
                 return false;
             }
-            $('.border_radius1').hide();
             $.ajax({
                 url: base_url + 'product/PromoStatusCheck',
                 dataType : 'JSON',
                 type : 'POST',
                 async : false,
                 data : {'username':txt_status.val(),csrfname : csrftoken},
+                beforeSend : function(){
+                    $("#loading_img").show();
+                    $("#btn_status_check ,.border_radius1 , .notf").hide();},
                 success : function(result){
-                    $('.notf').show();
+                    $('.notf , #btn_status_check').show();
+                    $("#loading_img").hide();
                     notf_user.removeClass('chk_img icon_cancel_red');
                     notf_fb.removeClass('chk_img icon_cancel_red');
                     notf_itm.removeClass('chk_img icon_cancel_red');
