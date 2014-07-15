@@ -15,7 +15,7 @@ class Version20140707071438 extends AbstractMigration
     {
         // this up() migration is auto-generated, please modify it to your needs
     	 $this->addSql("
-			ALTER TABLE `easyshop`.`es_product`   
+			ALTER TABLE `es_product`   
 			  CHANGE `search_keyword` `search_keyword` VARCHAR(1024) CHARSET utf8 COLLATE utf8_general_ci DEFAULT ''  NULL;
     	 	");
 
@@ -190,7 +190,7 @@ BEGIN
                             WHEN v_billing_info_id = 0 THEN
 								BEGIN END;
                             ELSE
-							   INSERT INTO `easyshop`.`es_order_billing_info` (
+							   INSERT INTO `es_order_billing_info` (
 								  `order_id`
 								  , `order_product_id`
 								  , `bank_name`
@@ -262,7 +262,7 @@ BEGIN
 
 
   $this->addSql("
-ALTER TABLE `easyshop`.`es_product`   
+ALTER TABLE `es_product`   
   CHANGE `search_keyword` `search_keyword` TEXT CHARSET utf8 COLLATE utf8_general_ci NULL;
 
   	");
@@ -438,7 +438,7 @@ BEGIN
                             WHEN v_billing_info_id = 0 THEN
 								BEGIN END;
                             ELSE
-							   INSERT INTO `easyshop`.`es_order_billing_info` (
+							   INSERT INTO `es_order_billing_info` (
 								  `order_id`
 								  , `order_product_id`
 								  , `bank_name`

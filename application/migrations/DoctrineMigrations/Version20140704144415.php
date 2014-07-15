@@ -15,7 +15,7 @@ class Version20140704144415 extends AbstractMigration
     public function up(Schema $schema)
     {
         // this up() migration is auto-generated, please modify it to your needs
-       	$this->addSql('ALTER TABLE `easyshop`.`es_product`   
+       	$this->addSql('ALTER TABLE `es_product`   
   			ADD COLUMN `is_sold_out` TINYINT(1) DEFAULT 0  NOT NULL AFTER `promo_type`;
 		'); 
 
@@ -203,7 +203,7 @@ class Version20140704144415 extends AbstractMigration
 			                            WHEN v_billing_info_id = 0 THEN
 											BEGIN END;
 			                            ELSE
-										   INSERT INTO `easyshop`.`es_order_billing_info` (
+										   INSERT INTO `es_order_billing_info` (
 											  `order_id`
 											  , `order_product_id`
 											  , `bank_name`
@@ -276,7 +276,7 @@ class Version20140704144415 extends AbstractMigration
     {
         // this down() migration is auto-generated, please modify it to your needs
 
-    	$this->addSql("ALTER TABLE `easyshop`.`es_product`   
+    	$this->addSql("ALTER TABLE `es_product`   
 			  DROP COLUMN `is_sold_out`;
 		");
 
