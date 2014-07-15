@@ -680,7 +680,26 @@ class product extends MY_Controller
     }
     
 
-  
+    public function post_and_win_promo(){
+        $data = $this->fill_header();
+        $data['title'] = 'Post and Win | Easyshop.ph';
+        $this->load->view('templates/header', $data);
+        $this->load->view('pages/promo/post_and_win_view');
+        $this->load->view('templates/footer');
+    }
+    public function PromoStatusCheck(){
+        $username = $this->input->post('username');
+        $query_result = $this->messages_model->get_recepientID($username,true);
+        if(isset($query_result[0]['is_promo_valid'])){
+            echo json_encode(intval($query_result[0]['is_promo_valid']));
+        }else{
+            echo json_encode(3);
+        }
+        #return 1 if account has promo = true (QUALIFIED)
+        #return 2 if account has promo = false (PENDING)
+        #return 3 if username doesnt exist (NOT-QUALIFIED)
+    }
+
 
     //OUTDATED FUNCTION: MARKED FOR REMOVAL
     public function category_promo_more(){
