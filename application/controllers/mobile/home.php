@@ -9,7 +9,8 @@ class Home extends MY_Controller {
 
     function __construct() {
         parent::__construct(); 
-        $this->load->library("xmlmap");  
+        $this->load->library("xmlmap");
+        $this->load->model("product_model");  
 
         //Making response json type
         header('Content-type: application/json'); 
@@ -17,9 +18,8 @@ class Home extends MY_Controller {
 
     public function index()
     {
-        // $items =  $this->product_model->getHomeContent(); 
-        // die(json_encode($items,JSON_PRETTY_PRINT));
  
+
         $pageContent = $this->xmlmap->getFilename("page/mobile_home_files"); 
         echo json_encode($pageContent,JSON_PRETTY_PRINT);
     }
