@@ -39,7 +39,7 @@
     </select>
     <select id="get_recepientID">
         SELECT
-        `id_member`
+        *
         FROM `es_member`
         WHERE username = :val;
     </select>
