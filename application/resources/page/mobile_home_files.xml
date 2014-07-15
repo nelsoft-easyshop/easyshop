@@ -1,25 +1,20 @@
 <?xml version="1.0"?>
+<!-- show product list, go to site, show product details -->
 <map>
 
     <section>
         <type>theme 1</type>
         <data>
             <name>0</name>
-            <image>asd</image>
-            <actionType>asd</actionType><!-- show product list, go to site, show product details -->
-            <target>sd</target>
-        </data>
+            <image>./assets/product/555_128_20140715/555_128_20140715355340.jpg</image>
+            <actionType>show product list</actionType>
+            <target>item/mi-3-16gb</target>
+        </data> 
         <data>
             <name>0</name>
-            <image>asd</image>
-            <actionType>asd</actionType><!-- show product list, go to site, show product details -->
-            <target>asd</target>
-        </data>
-        <data>
-            <name>0</name>
-            <image>asd</image>
-            <actionType>asd</actionType><!-- show product list, go to site, show product details -->
-            <target>asd</target>
+            <image>./assets/product/555_128_20140715/555_128_20140715355340.jpg</image>
+            <actionType>show product details</actionType>
+            <target>item/mi-3-16gb</target>
         </data>
     </section>
 
@@ -27,21 +22,21 @@
         <type>categories</type>
         <data>
             <name>0</name>
-            <image>asd</image>
-            <actionType>asd</actionType><!-- show product list, go to site, show product details -->
-            <target>sd</target>
+            <image>./assets/product/555_128_20140715/555_128_20140715355340.jpg</image>
+            <actionType>asd</actionType>
+            <target>item/mi-3-16gb</target>
         </data>
         <data>
             <name>0</name>
             <image></image>
-            <actionType>asd</actionType><!-- show product list, go to site, show product details -->
+            <actionType>asd</actionType>
             <target>asd</target>
         </data>
         <data>
             <name>0</name>
             <image></image>
-            <actionType>asd</actionType><!-- show product list, go to site, show product details -->
-            <target>asd</target>
+            <actionType>asd</actionType>
+            <target>item/mi-3-16gb</target>
         </data>
     </section>
 
