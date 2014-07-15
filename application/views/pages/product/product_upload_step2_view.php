@@ -837,47 +837,53 @@ $(document).ready(function(){
       });
 
 
-    $("#slider_val").on('change',function(){
+    $("#slider_val").bind('change keyup',function(e){
+        if(e.which > 13 || e.which < 13){
+            return false;
+        }
         var thisslider = $(this);
         var newval = (parseFloat($(this).val()) > 100) ? 99 : (parseFloat($(this).val()) == 0 || isNaN(parseFloat($(this).val())))? 0 : parseFloat($(this).val());
         get_discPrice();
         $("#range_1").ionRangeSlider("update", {
-                from: newval,                       // change default FROM setting
-                onChange: function (obj) {        // callback is called after slider load and update
-                  var value = obj.fromNumber;
-                  thisslider.val(value);
-                  get_discPrice();
-                }
-          });
+            from: newval,                       // change default FROM setting
+            onChange: function (obj) {        // callback is called after slider load and update
+                var value = obj.fromNumber;
+                thisslider.val(value);
+                get_discPrice();
+            }
+        });
     });
 
-  $("#discountedP").on('change',function(){
-    validateWhiteTextBox("#discountedP");
-    var disc_price = parseFloat($(this).val());
-    var base_price = parseFloat($("#prod_price").val().replace(/,/g,''));
-    var sum = ((base_price - disc_price) / base_price) * 100;
-    sum = sum.toFixed(4);
-    if(disc_price > base_price){
-      alert("Discount Price cannot be greater than base price.");
-      $(this).val("0.00");
-      validateRedTextBox("#discountedP");
-      return false;
-    }
-    if(disc_price <= 0){
-      alert("Discount Price cannot be equal or less than 0.");
-      $(this).val("0.00");
-      $( "span#discounted_price_con" ).text( "0.00" );
-      validateRedTextBox("#discountedP");
-      return false;
-    }
-    $("#range_1").ionRangeSlider("update", {
-      from: sum
-    });
-    $("#slider_val").val(sum+"%");
-    tempval = Math.abs(disc_price);
-    disc_price = ReplaceNumberWithCommas(tempval.toFixed(2));
-    $(this).val(disc_price);
-    $( "span#discounted_price_con" ).text( disc_price );
+  $("#discountedP").bind('change keyup',function(e){
+      if(e.which > 13 || e.which < 13){
+          return false;
+      }
+      validateWhiteTextBox("#discountedP");
+      var disc_price = parseFloat($(this).val());
+      var base_price = parseFloat($("#prod_price").val().replace(/,/g,''));
+      var sum = ((base_price - disc_price) / base_price) * 100;
+      sum = sum.toFixed(4);
+      if(disc_price > base_price){
+          alert("Discount Price cannot be greater than base price.");
+          $(this).val("0.00");
+          validateRedTextBox("#discountedP");
+          return false;
+      }
+      if(disc_price <= 0){
+          alert("Discount Price cannot be equal or less than 0.");
+          $(this).val("0.00");
+          $( "span#discounted_price_con" ).text( "0.00" );
+          validateRedTextBox("#discountedP");
+          return false;
+      }
+      $("#range_1").ionRangeSlider("update", {
+          from: sum
+      });
+      $("#slider_val").val(sum+"%");
+      tempval = Math.abs(disc_price);
+      disc_price = ReplaceNumberWithCommas(tempval.toFixed(2));
+      $(this).val(disc_price);
+      $( "span#discounted_price_con" ).text( disc_price );
   });
 
   $('#prod_price').on('change', function(){

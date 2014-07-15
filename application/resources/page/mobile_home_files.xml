@@ -4,6 +4,7 @@
 
     <section>
         <name>Section 1</name>
+        <bgcolor>white</bgcolor>
         <type>theme 1</type>
         <data>
             <name>0</name>
@@ -27,6 +28,7 @@
 
     <section>
         <name>Categories</name>
+        <bgcolor>white</bgcolor>
         <type>categories</type>
         <data>
             <name>Clothing  &amp; Accessories</name>

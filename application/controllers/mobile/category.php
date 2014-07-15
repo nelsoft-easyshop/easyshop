@@ -60,6 +60,7 @@ class Category extends MY_Controller {
 
     public function getCategoriesProduct()
     {
+        $perPage = $this->per_page;
         $categorySlug = $this->input->get('slug');
         $start = $this->input->get('start');
         $category_array = $this->product_model->getCategoryBySlug($categorySlug);
@@ -72,7 +73,7 @@ class Category extends MY_Controller {
         
         array_push($downCategory, $categoryId);
         $categories = implode(",", $downCategory);
-        $items = $this->product_model->getProductsByCategory($categories,array(),0,"<",$start,$this->per_page,"");
+        $items = $this->product_model->getProductsByCategory($categories,array(),0,"<",$start * $perPage,$perPage,"");
 
         die(json_encode($items,JSON_PRETTY_PRINT));
     }
