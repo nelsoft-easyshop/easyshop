@@ -40,7 +40,7 @@
                 <span class="span_bg " id="notf_fb"></span>LIKE US ON FB
             </div>
             <div class="mrgntop-10 notf">
-                <span class="span_bg " id="notf_itm"></span>UPLOAD THREE ITEMS (JULY 16 - 31)
+                <span class="span_bg " id="notf_itm"></span>UPLOAD THREE ITEMS (JULY 16 - 30)
             </div>
         </div>
 
