@@ -18,8 +18,6 @@ class Home extends MY_Controller {
 
     public function index()
     {
- 
-
         $pageContent = $this->xmlmap->getFilename("page/mobile_home_files"); 
         echo json_encode($pageContent,JSON_PRETTY_PRINT);
     }
