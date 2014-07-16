@@ -75,7 +75,7 @@ class productUpload extends MY_Controller
 		} 
  
 		$data_item['draftItems'] = $draftItems;
-        	$userdetails = $this->user_model->getUserAccessDetails($uid);
+        	$userdetails = $this->user_model->getUserById($uid);
 
 		# getting first category level from database.
 		$is_admin = (intval($userdetails['is_admin']) === 1);
@@ -104,7 +104,7 @@ class productUpload extends MY_Controller
 		$uid =	$this->session->userdata('member_id');
 		$is_admin = false;
 		if($uid){
-		    $user_access_level = $this->user_model->getUserAccessDetails($uid);
+		    $user_access_level = $this->user_model->getUserById($uid);
 		    $is_admin = (intval($user_access_level['is_admin']) === 1);
 		}            
         	$response['node'] = $this->product_model->getDownLevelNode($id, $is_admin); 
@@ -136,7 +136,7 @@ class productUpload extends MY_Controller
 			$id = $this->input->post('hidden_attribute'); 
             		$response['memid'] = $this->session->userdata('member_id');
             
-			$userdetails = $this->user_model->getUserAccessDetails($response['memid']);
+			$userdetails = $this->user_model->getUserById($response['memid']);
 			$is_admin = (intval($userdetails['is_admin']) === 1);
 
 			$this->config->load('protected_category', TRUE);
@@ -452,7 +452,8 @@ class productUpload extends MY_Controller
 			$categorykeywords =  $categoryDetails['keywords']; 
 
 		        $brandName = ($otherBrand === '')?$this->product_model->getBrandById($brand_id)[0]['name']:$otherBrand;
-			$username= $this->user_model->getUsername($member_id)['username'];
+			$username= $this->user_model->getUserById($member_id)['username'];
+
 		        
 			$search_keyword = preg_replace('!\s+!', ' ',$brandName .' '. $product_title .' '. $otherCategory . ' ' . $categoryName . ' '. $categorykeywords . ' '.$keyword.' '.$username);
 			$product_id = $this->product_model->addNewProduct($product_title,$sku,$product_brief,$product_description,$keyword,$brand_id,$cat_id,$style_id,$member_id,$product_price,$product_discount,$product_condition,$otherCategory, $otherBrand,$search_keyword);
@@ -950,7 +951,7 @@ class productUpload extends MY_Controller
 		    redirect('me', 'refresh'); 
 		}
 		$member_id = $this->session->userdata('member_id');
-		$userdetails = $this->user_model->getUserAccessDetails($member_id);
+		$userdetails = $this->user_model->getUserById($member_id);
 		
 		$product = $this->product_model->getProductEdit($product_id, $member_id);  
 		$cat_tree = $this->product_model->getParentId($product['cat_id']);
@@ -984,7 +985,7 @@ class productUpload extends MY_Controller
 
 		if($this->input->post('hidden_attribute')){
 		    $new_cat_id = $this->input->post('hidden_attribute');
-		    $userdetails = $this->user_model->getUserAccessDetails($member_id);
+		    $userdetails = $this->user_model->getUserById($member_id);
 		    $is_admin = (intval($userdetails['is_admin']) === 1);
 		    $this->config->load('protected_category', TRUE);
 		    $protected_categories = $this->config->config['protected_category'];
@@ -1231,7 +1232,7 @@ class productUpload extends MY_Controller
 			}
 			$other_path_directory = $path_directory.'other/';
 
-			$username= $this->user_model->getUsername($member_id)['username'];
+			$username= $this->user_model->getUserById($member_id)['username'];
 			$brandName = ($otherBrand === '')?$this->product_model->getBrandById($brand_id)[0]['name']:$otherBrand;
 			$categoryDetails = $this->product_model->selectCategoryDetails($cat_id);
 			$categoryName =  $categoryDetails['name'];

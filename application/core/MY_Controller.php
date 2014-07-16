@@ -48,7 +48,7 @@ class MY_Controller extends CI_Controller
 	$usersession = $this->session->userdata('usersession');
 	if(!empty($usersession) || $this->check_cookie()){
 	    $uid = $this->session->userdata('member_id'); 
-	    $row = $this->user_model->getUsername($uid);
+	    $row = $this->user_model->getUserById($uid);
 
 	    $logged_in = true;
 	    $uname = $row['username'];
