@@ -47,6 +47,16 @@
         </imagemap>
     </mainSlide>
     
+    <mainSlide> 
+        <value>assets/images/mainslide/140107170107.jpg</value> 
+        <type>image</type>
+        <imagemap>
+            <coordinate>0,0,589,351.77813992311667</coordinate>
+            <target>item/lenovo-yoga-tablet-10-b880</target>
+        </imagemap>
+    </mainSlide>
+    
+    
     <productSlide_title>
         <value>Hot and New</value>
         <type>text</type>
@@ -68,7 +78,7 @@
     </productSlide>
 
     <productSideBanner>
-        <value>lenovo-vibe-z-super-fast-4g-android-smartphone</value>
+        <value>lenovo-yoga-tablet-10-b880</value>
         <type>product</type>
     </productSideBanner>
 
