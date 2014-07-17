@@ -153,7 +153,7 @@ $(document).ready(function(){
                     $('#deposit_info').find(':selected').prop('selected', false);
                     $('#deposit_info').find('option[value = "'+new_id+'"]').prop('selected', true);
                     $('#prod_billing_id').val(new_id);
-                                        console.log(new_id);
+                    $('#billing_info_id').val(new_id);
                     $('#deposit_acct_name').attr('readonly', true);
                     $('#deposit_acct_no').attr('readonly', true);
                     $('#bank_list').attr('disabled', true);
