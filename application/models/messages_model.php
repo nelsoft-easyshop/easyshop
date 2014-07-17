@@ -65,7 +65,7 @@ class messages_model extends CI_Model
 		return $sth->rowCount();
     }
 	  
-    public function get_all_messages ($id,$todo) {
+    public function get_all_messages ($id,$todo=false) {
 		
 	$query = $this->xmlmap->getFilenameID('sql/messages', 'all_messages');
 		
