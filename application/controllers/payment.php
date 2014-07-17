@@ -620,9 +620,8 @@ class Payment extends MY_Controller{
         $txnid = $this->generateReferenceNumber($paymentType,$member_id);
         $dpReturn = $this->dragonpay->getTxnToken($grandTotal,$name,$address['email'],$txnid);
         $dpReturnArray = json_decode($dpReturn);
-        $transactionID =  $dpReturnArray->tid; 
 
-        $return = $this->payment_model->payment($paymentType,$grandTotal,$member_id,$productstring,$productCount,json_encode($itemList),$transactionID);
+        $return = $this->payment_model->payment($paymentType,$grandTotal,$member_id,$productstring,$productCount,json_encode($itemList),$txnid);
         
         if($return['o_success'] <= 0){
            die('{"e":"0","m":"'.$return['o_message'].'"}');  
