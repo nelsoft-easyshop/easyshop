@@ -50,30 +50,6 @@ class messages_model extends CI_Model
 	
     }
     
-    public function get_recepientID($username,$return_all=false){
-        if(is_numeric($username)){
-            $query = $this->xmlmap->getFilenameID('sql/messages', 'check_recepientID');
-        }else {
-            $query = $this->xmlmap->getFilenameID('sql/messages', 'get_recepientID');
-        }
-		
-        $sth = $this->db->conn_id->prepare($query);
-        $sth->bindParam(':val',$username, PDO::PARAM_INT);
-        $sth->execute();
-
-        $result = $sth->fetchAll(PDO::FETCH_ASSOC);
-        if(!empty($result)){
-            if($return_all){
-                $result = $result;
-            }else{
-                $result = $result[0]['id_member'];
-            }
-		} else {
-			$result = "false";
-		}
-
-        return $result;
-    }
     
     public function delete_msg($id,$user_id) {
 		$query = "UPDATE `es_messages`
@@ -89,7 +65,7 @@ class messages_model extends CI_Model
 		return $sth->rowCount();
     }
 	  
-    public function get_all_messages ($id,$todo) {
+    public function get_all_messages ($id,$todo=false) {
 		
 	$query = $this->xmlmap->getFilenameID('sql/messages', 'all_messages');
 		

@@ -18,7 +18,7 @@ class Manage extends MY_Controller {
          
         $is_admin = false;
         if($uid){
-            $user_access_level = $this->user_model->getUserAccessDetails($uid);
+            $user_access_level = $this->user_model->getUserById($uid);
             $is_admin = (intval($user_access_level['is_admin']) === 1);
             if(!$is_admin){
                die('Forbidden directory <br> Click here <a href="/home">Home</a>'); 

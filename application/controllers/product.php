@@ -635,7 +635,7 @@ class product extends MY_Controller
 		  'recommended_items'=> $this->product_model->getRecommendeditem($product_catid,5,$id),
 		  'allowed_reviewers' => $this->product_model->getAllowedReviewers($id),
 		  //userdetails --- email/mobile verification info
-		  'userdetails' => $this->user_model->getUserAccessDetails($uid),
+		  'userdetails' => $this->user_model->getUserById($uid),
 		  'product_quantity' => $this->product_model->getProductQuantity($id, false, false, $product_row['start_promo']),
 		  'shipment_information' => $this->product_model->getShipmentInformation($id),
 		  'shiploc' => $this->product_model->getLocation(),
@@ -680,18 +680,20 @@ class product extends MY_Controller
         $this->load->view('templates/footer');
     }
     
-    public function triple_treats_promo(){
+    public function post_and_win_promo(){
         $data = $this->fill_header();
-        $data['title'] = 'Triple Treats | Easyshop.ph';
+        $data['title'] = 'Post and Win | Easyshop.ph';
         $this->load->view('templates/header', $data);
-        $this->load->view('pages/promo/triple_treats_view');
+        $this->load->view('pages/promo/post_and_win_view');
         $this->load->view('templates/footer');
     }
+    
     public function PromoStatusCheck(){
+	$this->load->model('user_model');
         $username = $this->input->post('username');
-        $query_result = $this->messages_model->get_recepientID($username,true);
-        if(isset($query_result[0]['is_promo_valid'])){
-            echo json_encode(intval($query_result[0]['is_promo_valid']));
+        $query_result = $this->user_model->getUserByUsername($username);
+        if(isset($query_result['is_promo_valid'])){
+            echo json_encode(intval($query_result['is_promo_valid']));
         }else{
             echo json_encode(3);
         }
@@ -700,20 +702,7 @@ class product extends MY_Controller
         #return 3 if username doesnt exist (NOT-QUALIFIED)
     }
 
-    //OUTDATED FUNCTION: MARKED FOR REMOVAL
-    public function category_promo_more(){
-      $this->load->config('protected_category', TRUE);
-        $category_id = $this->config->item('promo', 'protected_category');
-        $start = $this->input->post('page_number') * $this->per_page;
-        $view_data['items'] = $this->product_model->getProductsByCategory($category_id,array(),0,"<",$start,0);
-        #$view_data['items'] = $this->product_model->getProductsByCategory($category_id,array(),0,"<",$start,$this->per_page);
-        if(count($view_data['items']) === 0){
-            $data = json_encode('0');
-        }else{
-            $data = json_encode($this->load->view('pages/product/product_promo_category_more', $view_data,TRUE)); 
-        }
-        echo $data;
-    }
+
 
 
 }

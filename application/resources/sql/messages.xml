@@ -1,5 +1,7 @@
 <?xml version='1.0' ?>
 <map>
+  
+  
     <select id="send_message">
         INSERT INTO `es_messages`
             (`to_id`,
@@ -13,6 +15,8 @@
                 :message,
                 '0');
     </select>
+    
+    
     <select id="all_messages">
     SELECT 
       a.`id_msg`,
@@ -37,21 +41,12 @@
       
     ORDER BY time_sent DESC 
     </select>
-    <select id="get_recepientID">
-        SELECT
-        *
-        FROM `es_member`
-        WHERE username = :val;
-    </select>
-    <select id="check_recepientID">
-        SELECT
-        *
-        FROM `es_member`
-        WHERE id_member = :val;
-    </select>
+
     <select id="is_seened">
         UPDATE `es_messages`
         SET `opened` = 1
         where `to_id` = :id
     </select>
+    
+    
 </map>

@@ -747,7 +747,7 @@ class product_search extends MY_Controller {
         $is_admin = false;
         if($user_id){
             $this->load->model('user_model');
-            $userdetails = $this->user_model->getUserAccessDetails($user_id);
+            $userdetails = $this->user_model->getUserById($user_id);
             $is_admin = (intval($userdetails['is_admin']) === 1);
         }
             

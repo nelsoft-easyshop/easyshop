@@ -71,10 +71,8 @@ class DragonPay {
 
     	if(strlen($token) <= 3){
     		return '{"e":"0","m":"'.$errorCodes[$token].'","c":"'.$token.'"}';
-    		exit();
     	}else{
     		return '{"e":"1","m":"SUCCESS","c":"'.$token.'","tid":"'.$txnId.'","u":"'.$this->ps.'?tokenid='.$token.'&mode=7"}';
-    		exit();
     	}
     }
 

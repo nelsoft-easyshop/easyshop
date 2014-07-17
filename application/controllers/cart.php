@@ -113,7 +113,7 @@ class Cart extends MY_Controller{
 
     private function check_prod($id,$opt,$userQTY){    
 	$member_id = $this->session->userdata('member_id');
-	$useraccessdetails = $this->user_model->getUserAccessDetails($member_id);
+	$useraccessdetails = $this->user_model->getUserById($member_id);
 	
         $product = $this->product_model->getProductById($id);
         //product['price'] already has the promo calculations applied to it

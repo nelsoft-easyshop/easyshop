@@ -620,9 +620,8 @@ class Payment extends MY_Controller{
         $txnid = $this->generateReferenceNumber($paymentType,$member_id);
         $dpReturn = $this->dragonpay->getTxnToken($grandTotal,$name,$address['email'],$txnid);
         $dpReturnArray = json_decode($dpReturn);
-        $transactionID =  $dpReturnArray->tid; 
 
-        $return = $this->payment_model->payment($paymentType,$grandTotal,$member_id,$productstring,$productCount,json_encode($itemList),$transactionID);
+        $return = $this->payment_model->payment($paymentType,$grandTotal,$member_id,$productstring,$productCount,json_encode($itemList),$txnid);
         
         if($return['o_success'] <= 0){
            die('{"e":"0","m":"'.$return['o_message'].'"}');  
@@ -1008,7 +1007,7 @@ class Payment extends MY_Controller{
         }
 
         #Send message via easyshop_messaging to buyer
-        if($this->user_model->getUsername($sender)){    
+        if($this->user_model->getUserById($sender)){    
 	    $this->messages_model->send_message($sender,$data['member_id'],$this->lang->line('message_to_buyer'));
         }
 
@@ -1030,7 +1029,7 @@ class Payment extends MY_Controller{
 
 
             #Send message via easyshop_messaging to seller
-            if($this->user_model->getUsername($sender)){        
+            if($this->user_model->getUserById($sender)){        
 		$this->messages_model->send_message($sender,$seller_id,$this->lang->line('message_to_seller'));
             }
 
