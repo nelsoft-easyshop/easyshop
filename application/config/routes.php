@@ -115,7 +115,7 @@ else {
 
     #PROMO CATEGORY PAGE
     $route['(?i)deals'] = 'product/category_promo';
-    $route['(?i)post-and-win'] = 'product/post_and_win_promo';
+    #$route['(?i)post-and-win'] = 'product/post_and_win_promo';
     $route['(?i)deals_more'] = 'product/category_promo_more';
 
     $route['(?i)policy'] = 'home/policy';

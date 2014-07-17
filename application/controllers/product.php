@@ -679,7 +679,8 @@ class product extends MY_Controller
         $this->load->view('templates/footer');
     }
     
-
+    /*
+    
     public function post_and_win_promo(){
         $data = $this->fill_header();
         $data['title'] = 'Post and Win | Easyshop.ph';
@@ -687,6 +688,7 @@ class product extends MY_Controller
         $this->load->view('pages/promo/post_and_win_view');
         $this->load->view('templates/footer');
     }
+    
     public function PromoStatusCheck(){
 	$this->load->model("messages_model");
         $username = $this->input->post('username');
@@ -700,6 +702,8 @@ class product extends MY_Controller
         #return 2 if account has promo = false (PENDING)
         #return 3 if username doesnt exist (NOT-QUALIFIED)
     }
+    
+    */
 
 
     //OUTDATED FUNCTION: MARKED FOR REMOVAL
