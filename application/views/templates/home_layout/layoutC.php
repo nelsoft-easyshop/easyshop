@@ -115,11 +115,13 @@
 			    <span class="elec_slide_img_con">
 			      <img class="cat2_slide_prod" src="/<?PHP echo $main_panel['src']; ?>"  usemap="<?php echo isset($main_panel['imagemap'])?'#'.$idx.'_image_map_sec':''?>" />
 			    </span>
-			 
-			    <map name='<?php echo $idx?>_image_map_sec'>
-				<!-- COORDS: left, top, right, bottom -->
-				<area style='color:' shape="rect" coords="<?=$main_panel['imagemap']['coordinate']?>" href="<?= base_url().$main_panel['imagemap']['target']?>" alt="<?=$main_panel['imagemap']['target']?>">
-			    </map>
+			    
+			    <?PHP if(isset($main_panel['imagemap'])): ?>
+			      <map name='<?php echo $idx?>_image_map_sec'>
+				  <!-- COORDS: left, top, right, bottom -->
+				  <area style='color:' shape="rect" coords="<?=$main_panel['imagemap']['coordinate']?>" href="<?= base_url().$main_panel['imagemap']['target']?>" alt="<?=$main_panel['imagemap']['target']?>">
+			      </map>
+			    <?PHP endif; ?>
 
 			<?PHP endif; ?>
                     </li>
