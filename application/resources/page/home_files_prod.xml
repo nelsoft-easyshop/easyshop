@@ -12,7 +12,7 @@
     </text>
 
     <mainSlide>
-        <value>assets/images/mainslide/140607080614.jpg</value>
+        <value>assets/images/mainslide/141007101002.jpg</value>
         <type>image</type>
         <imagemap>
             <coordinate>60.077999999999996,191.89297658862878,312.3841818181818,342.5819397993311</coordinate>
@@ -29,8 +29,6 @@
         </imagemap>
     </mainSlide>
 
-
-
     <mainSlide>
         <value>assets/images/mainslide/3.jpg</value>
         <type>image</type>
@@ -40,24 +38,15 @@
         </imagemap>
     </mainSlide>
 
-	<mainSlide> 
-        <value>assets/images/mainslide/140207100202.jpg</value> 
+    <mainSlide> 
+        <value>assets/images/mainslide/141207111212.jpg</value> 
         <type>image</type>
         <imagemap>
             <coordinate>0,0,589,351.77813992311667</coordinate>
-            <target>item/lenovo-vibe-z-super-fast-4g-android-smartphone</target>
+            <target>item/kj-star-wireless-mobile-phone-monopod</target>
         </imagemap>
     </mainSlide>
-
     
-
-    
-
-	
-
-
-    
-
     <productSlide_title>
         <value>Hot and New</value>
         <type>text</type>
@@ -86,13 +75,13 @@
     <section>
 
         <type>custom</type>
-        <value>skkmobile2014</value>
+        <value>ckkmobile</value>
         <css_class>red_cat</css_class>
-        <title>SKK Mobile</title>
+        <title>CKK Mobile</title>
         <layout>layoutA</layout>
 
         <product_panel_main>
-	    <value>assets/images/partner/skkmobile.jpg</value>    
+	    <value>assets/images/partner/ckkmobile.jpg</value>    
             <type>image</type>
 	    <imagemap>
 		<coordinate>0,0,486,351</coordinate>
@@ -101,172 +90,171 @@
 
         </product_panel_main>
 
+
+
         <product_panel>
-            <value>skk-evolve</value>
+            <value>ckk-c77tv-smart-phone</value>
             <type>product</type>
         </product_panel>
 
        <product_panel>
-            <value>skk-a12-black</value>
+            <value>ckk-7562-smart-phone</value>
             <type>product</type>
         </product_panel>
 
         <product_panel>
-            <value>skk-extreme-android-42-tablet-black</value>
-            <type>product</type>
-        </product_panel>
-
-	   <product_panel>
-            <value>skk-a12-white</value>
-            <type>product</type>
-        </product_panel>
-
-        <product_panel>
-            <value>skk-e99-wi-fi-dual-sim-red</value>
-            <type>product</type>
-        </product_panel>
-
-        <product_panel>
-            <value>skk-bubble-gum-wi-fi-tablet-blue</value>
-            <type>product</type>
-        </product_panel>
-
-        <product_panel>
-            <value>skk-mirage-s1-white-1</value>
-            <type>product</type>
-        </product_panel>
-
-        <product_panel>
-            <value>skk-phoenix-tab-4</value>
-            <type>product</type>
-        </product_panel>
-
-    </section>
-
-    <section>
-
-        <type>category</type>
-        <value>14</value>
-        <css_class>blue_cat</css_class>
-        <layout>layoutB</layout>
-
-      <product_panel_main>
-            <value>dress-17</value>
-            <type>product</type>
-        </product_panel_main>
-
-         <product_panel_main>
-            <value>shirt-4</value>
-            <type>product</type>
-       </product_panel_main>
-
-         <product_panel_main>
-            <value>t-shirt-8</value>
-            <type>product</type>
-        </product_panel_main>
-
-        <product_panel>
-            <value>scottie-dog-and-polka-pj-set</value>
-            <type>product</type>
-        </product_panel>
-
-       <product_panel>
-            <value>t-shirt-6</value>
+            <value>ckk-c66-smart-phone</value>
             <type>product</type>
         </product_panel>
 
 	<product_panel>
-            <value>rhinestone-racerback-style-push-up-bra</value>
+            <value>ckk-s8-smart-phone</value>
             <type>product</type>
         </product_panel>
 
         <product_panel>
-            <value>dress-10</value>
+            <value>ckk-c11-smart-phone</value>
             <type>product</type>
         </product_panel>
 
         <product_panel>
-            <value>dress-20</value>
+            <value>ckk-c505-smart-phone</value>
             <type>product</type>
         </product_panel>
 
         <product_panel>
-            <value>black-and-white-stripes-shirt-1</value>
+            <value>ckk-s6-smart-phone</value>
             <type>product</type>
         </product_panel>
 
         <product_panel>
-	   <value>casual-dress</value>
+            <value>ckk-desire-q60-smart-phone</value>
+            <type>product</type>
+        </product_panel>
+
+    </section>
+    
+    <section>
+
+      <type>category</type>
+      <value>16</value>
+      <css_class>blue_cat</css_class>
+      <layout>layoutB</layout>
+
+        <product_panel_main>
+          <value>anchor-designed-shorts</value>
+          <type>product</type>
+        </product_panel_main>
+	
+	<product_panel_main>
+	   <value>multi-striped-shirt</value>
+           <type>product</type>
+        </product_panel_main>
+
+        <product_panel>
+            <value>tough-guys-pants</value>
+            <type>product</type>
+        </product_panel>
+
+       <product_panel>
+            <value>handsome-jacket</value>
+            <type>product</type>
+        </product_panel>
+
+	<product_panel>
+            <value>styleboy-shirt</value>
+            <type>product</type>
+        </product_panel>
+	
+	
+        <product_panel>
+            <value>statement-shirt</value>
             <type>product</type>
         </product_panel>
 
         <product_panel>
-            <value>fashionable-dresses</value>
+            <value>christian-shirt</value>
             <type>product</type>
         </product_panel>
+
+        <product_panel>
+            <value>simple-gentlemans-polo-shirt</value>
+            <type>product</type>
+        </product_panel>
+
+        <product_panel>
+            <value>plaid-round-neck-shirt</value>
+            <type>product</type>
+        </product_panel>
+
+        <product_panel>
+	   <value>multi-striped-shirt</value>
+            <type>product</type>
+        </product_panel>
+
 
     </section>
 
     <section>
 
         <type>category</type>
-        <value>138</value>
+        <value>3</value>
         <css_class>orange_cat</css_class>
         <layout>layoutE</layout>
 
         <product_panel_main>
-            <value>eiffel-tower-studded-miniature-watch</value>
+	    <value>naturactor-coverface-concealer-1</value>
             <type>product</type>
         </product_panel_main>
 
          <product_panel_main>
-            <value>simple-candy-colored-watch</value>
+            <value>aqua-de-gio</value>
             <type>product</type>
        </product_panel_main>
 
          <product_panel_main>
-            <value>tribal-inspired-fashion-watch</value>
+            <value>christian-dior-jadore-edp-perfume-for-women</value>
             <type>product</type>
         </product_panel_main>
 
         <product_panel>
-            <value>elite-stripes-watch</value>
+            <value>ck-be-jumbo-edt-perfume-unisex</value>
             <type>product</type>
         </product_panel>
 
        <product_panel>
-            <value>moustache-watch</value>
+            <value>aveeno-skin-relief-moisturising-cream</value>
             <type>product</type>
         </product_panel>
 
         <product_panel>
-            <value>4gb-pedometer-calorimeter-usb-watch</value>
+            <value>cleansing-lotion</value>
             <type>product</type>
         </product_panel>
 
 
 	<product_panel>
-            <value>futuristic-changeable-backlight-color-led-watch</value>
+            <value>collagen-jella-pack-1</value>
             <type>product</type>
         </product_panel>
 
         <product_panel>
-            <value>spy-hd-video-recorder-watch</value>
+            <value>cyleina-black-pearl-supreme-soap</value>
             <type>product</type>
         </product_panel>
 
         <product_panel>
-            <value>womens-lacoste-biarritz-crystal-watch</value>
+            <value>my-beauty-diary-red-wine-mask</value>
             <type>product</type>
         </product_panel>
 
         <product_panel>
-            <value>aztec-fashion-watch</value>
+            <value>thursday-plantation-aloe-vera-gel-30g</value>
             <type>product</type>
         </product_panel>
 
         <product_panel>
-            <value>marc-by-marc-jacobs-stainless-black-ion-women</value>
+            <value>advanced-skin-care-refinisher</value>
             <type>product</type>
         </product_panel>
 
