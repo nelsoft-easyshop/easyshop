@@ -58,7 +58,6 @@
  <!-- End Google Tag Manager -->
  
 <header>
-  <div>
     <div class="wrapper header_wrapper">
       <div class="top_links_left">
         <div class="top_nav">
@@ -107,7 +106,6 @@
   		<span><?PHP echo isset($msgs['msgs']['name'])?$msgs['msgs']['name']:'';?> :</span>
   		<span><?PHP echo isset($msgs['msgs']['message'])?html_escape($msgs['msgs']['message']):'';?> </span>
   	</div>
-    </div>
     <div class="need_help_con">
       <div class="need_help_icons_con">
         <p><a href="<?=base_url()?>guide/buy"><img src="<?=base_url()?>/assets/images/img_icon_shop.png"><br /><span>How to Shop</span></a></p>
@@ -118,7 +116,7 @@
         <span class="txt_need_help"><span class="span_bg icon_help"></span><span class="txt_help">Need Help?</span></span>
       </div>
     </div>
-  </div>
+    </div>
 </header>
 
     <form action="<?php echo base_url(); ?>search/search.html" name="search_form" method="get">
@@ -244,7 +242,7 @@ $('#main_search').on('input propertychange', function() {
             $('.need_help_icons_con').slideToggle();
         });
 
-        $('.need_help_icons_con').hide();
+        $('.need_help_icons_con').show();
         
         // Hide Need help how to sell and how to buy when click outside the container
       //   $(document).on('click','.txt_need_help',function() {
