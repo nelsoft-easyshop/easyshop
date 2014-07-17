@@ -85,7 +85,7 @@
             <type>image</type>
 	    <imagemap>
 		<coordinate>0,0,486,351</coordinate>
-		<target>vendor/skkmobile2014</target>
+		<target>vendor/ckkmobile</target>
 	    </imagemap>
 
         </product_panel_main>
