@@ -87,23 +87,21 @@ class Product extends MY_Controller {
             'shipping_summary' => $this->product_model->getShippingSummary($id)  
             );
 
-        $jsonDisplayGroup = $jsonFdata = array();
+        $jsonFdata = array();
         if($data['shipping_summary']['has_shippingsummary']){
             if($data['attr']['has_attr'] === 1){
                 $i = 0;
                 foreach($data['attr']['attributes'] as $attrk=>$attrarr){
-                    if( isset($data['shipping_summary'][$attrk]) ){
-                        $jsonDisplayGroup[$i][$attrk] = $attrk;
+                    if( isset($data['shipping_summary'][$attrk]) ){ 
                         foreach($data['shipping_summary'][$attrk] as $lockey=>$price){
                             $jsonFdata[$attrk][$data['shipping_summary']['location'][$lockey]] = $price;
                         }
                         $i++;
                     }
                 }
-            } else {
-                $jsonDisplayGroup[0][$data['attr']['product_item_id']] = $data['attr']['product_item_id'];
+            } else { 
                 foreach($data['shipping_summary'][$data['attr']['product_item_id']] as $lockey=>$price){
-                    $jsonFdata[$data['attr']['product_item_id']][$lockey] = $price;
+                    $jsonFdata[$data['attr']['product_item_id']][$data['shipping_summary']['location'][$lockey]] = $price;
                 }
             }
         }
@@ -112,7 +110,6 @@ class Product extends MY_Controller {
         $productQuantity[$key]['location'] = $jsonFdata[$key];
     }
     
-
         $data = array( 
             "productDetails" => $productDetails,
             "productImages" => $productImages,
