@@ -126,7 +126,7 @@
             var total = 0;
             $('.rad').each(function(){
                 if($(this).prop('checked')){
-                    total += parseFloat($(this).val());
+                    total += parseFloat($(this).val().replace(/,/g,''));
                 }
             });
             var ttl = numeral(parseFloat(total).toFixed(2)).format('0,0.00');
