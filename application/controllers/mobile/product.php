@@ -35,37 +35,41 @@ class Product extends MY_Controller {
 
         foreach ($productAttributes as $key => $productOption) {
 
+            $newArrayOption = array();
             for ($i=0; $i < count($productOption) ; $i++) { 
                 $type = ($productAttributes[$key][$i]['type'] == 'specific' ? 'a' : 'b');
-                $productAttributes[$key][$i]['select_id'] = $type.'_'.$productAttributes[$key][$i]['value_id'];
+                $newKey = $type.'_'.$productAttributes[$key][$i]['value_id']; 
+                $newArrayOption[$newKey] = $productOption[$i];
+      
             }
- 
             if(count($productOption)>1){
-                $productCombinationAttributes[$key] = $productOption;
+                $productCombinationAttributes[$key] = $newArrayOption;
             }
             elseif((count($productOption) === 1)&&(($productOption[0]['datatype'] === '5'))||($productOption[0]['type'] === 'option')){
-                $productCombinationAttributes[$key] = $productOption;
-                $productSpecification[$key] = $productOption;
+                $productCombinationAttributes[$key] = $newArrayOption;
+                $productSpecification[$key] = $newArrayOption;
             }
             else{
-                $productSpecification[$key] = $productOption;
-            } 
+                $productSpecification[$key] = $newArrayOption;
+            }
+
+
         }
 
         foreach ($productQuantity as $key => $valuex) {
             unset($productQuantity[$key]['attr_lookuplist_item_id']);
             unset($productQuantity[$key]['attr_name']);
-            for ($i=0; $i < count($valuex['product_attribute_ids']); $i++) { 
-                $type = ($valuex['product_attribute_ids'][$i]['is_other'] == '0' ? 'a' : 'b');
-                $productQuantity[$key]['product_attribute_ids'][$i]['select_id'] = $type.'_'.$valuex['product_attribute_ids'][$i]['id'];
-            }
-        }
- 
 
-        foreach ($productQuantity as $key => $value) {
-            unset($productQuantity[$key]['attr_lookuplist_item_id']);
-            unset($productQuantity[$key]['attr_name']);
-        } 
+
+            $newCombinationKey = array();
+            for ($i=0; $i < count($valuex['product_attribute_ids']); $i++) { 
+                $type = ($valuex['product_attribute_ids'][$i]['is_other'] == '0' ? 'a' : 'b'); 
+                array_push($newCombinationKey, $type.'_'.$valuex['product_attribute_ids'][$i]['id']);
+
+            }
+            unset($productQuantity[$key]['product_attribute_ids']);
+            $productQuantity[$key]['combinationId'] = $newCombinationKey;
+        }
 
         $productDetails = array(
             'name' => $productRow['product_name'],
@@ -128,7 +132,7 @@ class Product extends MY_Controller {
 
         $reviews = $this->getReviews($id,$sellerId);
         $relatedItems = $this->product_model->getRecommendeditem($productCategoryId,5,$id);
-         
+
         $data = array( 
             "productDetails" => $productDetails,
             "productImages" => $productImages,
@@ -140,7 +144,7 @@ class Product extends MY_Controller {
             "reviews" => $reviews,
             "relatedItems" => $relatedItems
             ); 
-        
+
         die(json_encode($data,JSON_PRETTY_PRINT));
     }
 }
