@@ -59,8 +59,8 @@ class Product extends MY_Controller {
             'discount' => $productRow['discount'],
             'basePrice' => $productRow['price']
 
-            ); 
-
+            );  
+        
         $sellerRating = array();
         $sellerRating['rateCount'] = $rating['rate_count'];  
         $sellerRating['rateDescription'][$this->lang->line('rating')[0]] = $rating['rating1'];
@@ -69,7 +69,8 @@ class Product extends MY_Controller {
         $sellerDetails = array(
             'sellerName' => $productRow['sellerusername'],
             'sellerRating' => $sellerRating,
-            'sellerContactNumber' => $seller['contactno']
+            'sellerContactNumber' => $seller['contactno'],
+            'sellerEmail ' => $seller['email']
             );
 
         $paymentMethodArray = $this->config->item('Promo')[0]['payment_method'];
