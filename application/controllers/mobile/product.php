@@ -23,6 +23,7 @@ class Product extends MY_Controller {
         $productRow = $this->product_model->getProductBySlug($slug);  
         $id = $productRow['id_product'];
         $sellerId = $productRow['sellerid'];
+        $productCategoryId = $productRow['cat_id'];
         $productImages = $this->product_model->getProductImages($id);
         $productAttributes = $this->product_model->getProductAttributes($id, 'NAME');
         $productAttributes = $this->product_model->implodeAttributesByName($productAttributes);
@@ -112,7 +113,8 @@ class Product extends MY_Controller {
         }
 
         $reviews = $this->getReviews($id,$sellerId);
-  
+        $relatedItems = $this->product_model->getRecommendeditem($productCategoryId,5,$id);
+         
         $data = array( 
             "productDetails" => $productDetails,
             "productImages" => $productImages,
@@ -121,7 +123,8 @@ class Product extends MY_Controller {
             "productSpecification" => $productSpecification,
             "paymentMethod" => $paymentMethodArray,
             "productCombinatiobDetails" => $productQuantity,
-            "reviews" => $reviews
+            "reviews" => $reviews,
+            "relatedItems" => $relatedItems
             );
 
         die(json_encode($data,JSON_PRETTY_PRINT));
