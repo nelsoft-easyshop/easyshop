@@ -26,7 +26,30 @@ class Product extends MY_Controller {
         $productAttributes = $this->product_model->implodeAttributesByName($productAttributes);
         $productQuantity = $this->product_model->getProductQuantity($id, false, false, $productRow['start_promo']);
         $rating = $this->product_model->getVendorRating($productRow['sellerid']);
+
+        $productSpecification = array();
+        $productCombinationAttributes = array();
+
+        foreach ($productAttributes as $key => $productOption) {
+
+            if(count($productOption)>1){
+                $productCombinationAttributes[$key] = $productOption;
+            }
+            elseif((count($productOption) === 1)&&(($productOption[0]['datatype'] === '5'))||($productOption[0]['type'] === 'option')){
+                $productCombinationAttributes[$key] = $productOption;
+                $productSpecification[$key] = $productOption;
+            }
+            else{
+                $productSpecification[$key] = $productOption;
+            } 
+        }
+
  
+        foreach ($productQuantity as $key => $value) {
+            unset($productQuantity[$key]['attr_lookuplist_item_id']);
+            unset($productQuantity[$key]['attr_name']);
+        } 
+
         $productDetails = array(
             'name' => $productRow['product_name'],
             'description' => $productRow['description'],
@@ -55,15 +78,38 @@ class Product extends MY_Controller {
             }
             $paymentMethodArray = $this->config->item('Promo')[$productRow['promo_type']]['payment_method'];
         }
-  
+
+        $shipment_information =  $this->product_model->getShipmentInformation($id);
+        $shiploc = $this->product_model->getLocation(); 
+      
+        // foreach ($shipment_information as $key => $value) {
+        //     $shipment_information[$key]['quantity'] = $productQuantity[$value['product_item_id']]['quantity'];
+
+ 
+
+        //     if($value['location_type'] ==  3){
+        //         $shipment_information[$key]['available_location'] = $value['location'];
+        //     }
+        //     elseif ($value['location_type'] ==  1) {
+        //         $shipment_information[$key]['available_location'][$value['location']] = $shiploc['area'][$shipment_information[$key]['location']];
+        //     }
+        //     else{
+        //         if
+        //     }
+
+            
+        // }
+ 
+
         $data = array( 
             "productDetails" => $productDetails,
             "productImages" => $productImages,
             "sellerDetails" => $sellerDetails,
-            "productAttributes" => $productAttributes,
-            "paymentMethod" => $paymentMethodArray
+            "productCombinationAttributes" => $productCombinationAttributes,
+            "productSpecification" => $productSpecification,
+            "paymentMethod" => $paymentMethodArray 
             );
-
+ 
         die(json_encode($data,JSON_PRETTY_PRINT));
     }
 }
