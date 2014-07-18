@@ -64,7 +64,7 @@ $(document).ready(function(){
 			  window.location = config.base_url + first_uri_segment;
 			}
                         else{
-                            window.location = config.base_url+ 'home';
+                            window.location = config.base_url;
                         }                        
                     }
                 }
