@@ -12,6 +12,7 @@ class Product extends MY_Controller {
 
         //Loading Models
         $this->load->model('product_model'); 
+        $this->load->model('memberpage_model'); 
 
         //Making response json type
         header('Content-type: application/json');
@@ -26,7 +27,7 @@ class Product extends MY_Controller {
         $productAttributes = $this->product_model->implodeAttributesByName($productAttributes);
         $productQuantity = $this->product_model->getProductQuantity($id, false, false, $productRow['start_promo']);
         $rating = $this->product_model->getVendorRating($productRow['sellerid']);
-
+        $seller = $this->memberpage_model->get_member_by_id($productRow['sellerid']); 
         $productSpecification = array();
         $productCombinationAttributes = array();
 
@@ -67,7 +68,8 @@ class Product extends MY_Controller {
         $sellerRating['rateDescription'][$this->lang->line('rating')[2]] = $rating['rating3'];  
         $sellerDetails = array(
             'sellerName' => $productRow['sellerusername'],
-            'sellerRating' => $sellerRating
+            'sellerRating' => $sellerRating,
+            'sellerContactNumber' => $seller['contactno']
             );
 
         $paymentMethodArray = $this->config->item('Promo')[0]['payment_method'];
@@ -82,24 +84,26 @@ class Product extends MY_Controller {
         $shipment_information =  $this->product_model->getShipmentInformation($id);
         $shiploc = $this->product_model->getLocation(); 
       
-        // foreach ($shipment_information as $key => $value) {
-        //     $shipment_information[$key]['quantity'] = $productQuantity[$value['product_item_id']]['quantity'];
+        foreach ($shipment_information as $key => $value) {
+            $shipment_information[$key]['quantity'] = $productQuantity[$value['product_item_id']]['quantity'];
 
  
 
-        //     if($value['location_type'] ==  3){
-        //         $shipment_information[$key]['available_location'] = $value['location'];
-        //     }
-        //     elseif ($value['location_type'] ==  1) {
-        //         $shipment_information[$key]['available_location'][$value['location']] = $shiploc['area'][$shipment_information[$key]['location']];
-        //     }
-        //     else{
-        //         if
-        //     }
+            if($value['location_type'] ==  3){
+                $shipment_information[$key]['available_location'] = $value['location'];
+            }
+            elseif ($value['location_type'] ==  1) {
+                $shipment_information[$key]['available_location'][$value['location']] = $shiploc['area'][$shipment_information[$key]['location']];
+            }
+            else{
+               
+            }
 
             
-        // }
- 
+        }
+
+        // echo '<pre>',print_r($shipment_information);exit();
+   
 
         $data = array( 
             "productDetails" => $productDetails,
