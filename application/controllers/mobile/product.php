@@ -60,10 +60,7 @@ class Product extends MY_Controller {
                 $productQuantity[$key]['product_attribute_ids'][$i]['select_id'] = $type.'_'.$valuex['product_attribute_ids'][$i]['id'];
             }
         }
-
-        echo '<pre>',print_r($productAttributes); 
-        echo '<pre>',print_r($productQuantity);exit();
-
+ 
 
         foreach ($productQuantity as $key => $value) {
             unset($productQuantity[$key]['attr_lookuplist_item_id']);
@@ -142,8 +139,8 @@ class Product extends MY_Controller {
             "productCombinatiobDetails" => $productQuantity,
             "reviews" => $reviews,
             "relatedItems" => $relatedItems
-            );
-        echo '<pre>',print_r($productQuantity);exit();
+            ); 
+        
         die(json_encode($data,JSON_PRETTY_PRINT));
     }
 }
