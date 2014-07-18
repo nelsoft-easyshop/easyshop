@@ -35,6 +35,11 @@ class Product extends MY_Controller {
 
         foreach ($productAttributes as $key => $productOption) {
 
+            for ($i=0; $i < count($productOption) ; $i++) { 
+                $type = ($productAttributes[$key][$i]['type'] == 'specific' ? 'a' : 'b');
+                $productAttributes[$key][$i]['select_id'] = $type.'_'.$productAttributes[$key][$i]['value_id'];
+            }
+ 
             if(count($productOption)>1){
                 $productCombinationAttributes[$key] = $productOption;
             }
@@ -46,6 +51,18 @@ class Product extends MY_Controller {
                 $productSpecification[$key] = $productOption;
             } 
         }
+
+        foreach ($productQuantity as $key => $valuex) {
+            unset($productQuantity[$key]['attr_lookuplist_item_id']);
+            unset($productQuantity[$key]['attr_name']);
+            for ($i=0; $i < count($valuex['product_attribute_ids']); $i++) { 
+                $type = ($valuex['product_attribute_ids'][$i]['is_other'] == '0' ? 'a' : 'b');
+                $productQuantity[$key]['product_attribute_ids'][$i]['select_id'] = $type.'_'.$valuex['product_attribute_ids'][$i]['id'];
+            }
+        }
+
+        echo '<pre>',print_r($productAttributes); 
+        echo '<pre>',print_r($productQuantity);exit();
 
 
         foreach ($productQuantity as $key => $value) {
@@ -126,7 +143,7 @@ class Product extends MY_Controller {
             "reviews" => $reviews,
             "relatedItems" => $relatedItems
             );
-
+        echo '<pre>',print_r($productQuantity);exit();
         die(json_encode($data,JSON_PRETTY_PRINT));
     }
 }
