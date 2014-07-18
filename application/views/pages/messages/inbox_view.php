@@ -93,6 +93,7 @@
 			$("#modal-container, #modal-background").toggleClass("active");
 			$("#modal-container").hide();
 			$("#msg-message").val("");
+			$("#msg_name").val("");
 		});
 
 		$("#modal-launcher").click(function() {
@@ -101,19 +102,18 @@
 		});
 
 		$("#msg_textarea").on("click","#send_btn",function(){
+            var D = eval('(' + $(this).attr('data') + ')');
+            var recipient = D.name;
+            var img = D.img;
+            var msg = $("#out_txtarea").val();
+            if (msg == "") {
+                return false;
+            }
+            send_msg(recipient,msg);
+            specific_msgs();
 
-        var D = eval('(' + $(this).attr('data') + ')');
-        var recipient = D.name;
-        var img = D.img;
-        var msg = $("#out_txtarea").val();
-        if (msg == "") {
-            return false;
-        }
-        send_msg(recipient,msg);
-        specific_msgs();
-
-        var objDiv = document.getElementById("msg_field");
-        objDiv.scrollTop = objDiv.scrollHeight;
+            var objDiv = document.getElementById("msg_field");
+            objDiv.scrollTop = objDiv.scrollHeight;
 		});
 
 
