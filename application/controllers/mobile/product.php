@@ -32,30 +32,40 @@ class Product extends MY_Controller {
         $seller = $this->memberpage_model->get_member_by_id($sellerId); 
         $productSpecification = array();
         $productCombinationAttributes = array();
-
+        $complete = array();
         foreach ($productAttributes as $key => $productOption) {
 
             $newArrayOption = array();
+            
             for ($i=0; $i < count($productOption) ; $i++) { 
                 $type = ($productAttributes[$key][$i]['type'] == 'specific' ? 'a' : 'b');
                 $newKey = $type.'_'.$productAttributes[$key][$i]['value_id']; 
                 $newArrayOption[$newKey] = $productOption[$i];
-      
+                $newArrayOption[$newKey]['name'] = $key; 
             }
+
             if(count($productOption)>1){
-                $productCombinationAttributes[$key] = $newArrayOption;
+                $productCombinationAttributes[$key] = $newArrayOption; 
             }
             elseif((count($productOption) === 1)&&(($productOption[0]['datatype'] === '5'))||($productOption[0]['type'] === 'option')){
-                $productCombinationAttributes[$key] = $newArrayOption;
+                $productCombinationAttributes[$key] = $newArrayOption; 
                 $productSpecification[$key] = $newArrayOption;
             }
             else{
-                $productSpecification[$key] = $newArrayOption;
+                $productSpecification[$key] = $newArrayOption; 
             }
 
 
         }
 
+        foreach ($productCombinationAttributes as $key => $value) {
+ 
+             foreach ($productCombinationAttributes[$key] as $key2 => $value2) {
+                    $complete[$key2] = $value2;
+             }
+            
+        }
+  
         foreach ($productQuantity as $key => $valuex) {
             unset($productQuantity[$key]['attr_lookuplist_item_id']);
             unset($productQuantity[$key]['attr_name']);
@@ -69,7 +79,7 @@ class Product extends MY_Controller {
             }
             unset($productQuantity[$key]['product_attribute_ids']);
             $productQuantity[$key]['combinationId'] = $newCombinationKey;
-        }
+        }  
 
         $productDetails = array(
             'name' => $productRow['product_name'],
@@ -137,7 +147,7 @@ class Product extends MY_Controller {
             "productDetails" => $productDetails,
             "productImages" => $productImages,
             "sellerDetails" => $sellerDetails,
-            "productCombinationAttributes" => $productCombinationAttributes,
+            "productCombinationAttributes" => $complete,
             "productSpecification" => $productSpecification,
             "paymentMethod" => $paymentMethodArray,
             "productCombinatiobDetails" => $productQuantity,
