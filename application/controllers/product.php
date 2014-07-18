@@ -432,44 +432,6 @@ class product extends MY_Controller
 		else
 			return false;
 	}
-	
-	#new query for getting reviews (top5 Main reviews) - Janz
-	function getReviews($product_id, $sellerid)
-	{
-		$recent = array();
-		$recent = $this->product_model->getProductReview($product_id);
-		
-		if(count($recent)>0){
-			$retrieve = array();
-			foreach($recent as $data){
-				array_push($retrieve, $data['id_review']);
-			}
-			$replies = $this->product_model->getReviewReplies($retrieve, $product_id);
-			foreach($replies as $key=>$temp){
-				$temp['review'] = html_escape($temp['review']);
-			}
-			$i = 0;
-			$userid = $this->session->userdata('member_id');
-			foreach($recent as $review){
-				$recent[$i]['replies'] = array();
-				$recent[$i]['reply_count'] = 0;
-				if($userid === $review['reviewerid'])
-					$recent[$i]['is_reviewer'] = 1;
-				else
-					$recent[$i]['is_reviewer'] = 0;
-
-				foreach($replies as $reply){
-					if($review['id_review'] == $reply['replyto']){
-						array_push($recent[$i]['replies'], $reply);
-						$recent[$i]['reply_count']++;
-					}
-				}
-				$i++;
-			}
-		}
-		
-		return $recent;
-	}
 
 	# Retrieve more reviews from es_product_review_table
 	# Arguments: $lastreview_id = id of the latest loaded review

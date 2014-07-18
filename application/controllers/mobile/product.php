@@ -22,12 +22,13 @@ class Product extends MY_Controller {
     {
         $productRow = $this->product_model->getProductBySlug($slug);  
         $id = $productRow['id_product'];
+        $sellerId = $productRow['sellerid'];
         $productImages = $this->product_model->getProductImages($id);
         $productAttributes = $this->product_model->getProductAttributes($id, 'NAME');
         $productAttributes = $this->product_model->implodeAttributesByName($productAttributes);
         $productQuantity = $this->product_model->getProductQuantity($id, false, false, $productRow['start_promo']);
-        $rating = $this->product_model->getVendorRating($productRow['sellerid']);
-        $seller = $this->memberpage_model->get_member_by_id($productRow['sellerid']); 
+        $rating = $this->product_model->getVendorRating($sellerId);
+        $seller = $this->memberpage_model->get_member_by_id($sellerId); 
         $productSpecification = array();
         $productCombinationAttributes = array();
 
@@ -45,7 +46,7 @@ class Product extends MY_Controller {
             } 
         }
 
- 
+
         foreach ($productQuantity as $key => $value) {
             unset($productQuantity[$key]['attr_lookuplist_item_id']);
             unset($productQuantity[$key]['attr_name']);
@@ -81,7 +82,7 @@ class Product extends MY_Controller {
             }
             $paymentMethodArray = $this->config->item('Promo')[$productRow['promo_type']]['payment_method'];
         }
- 
+
         $data = array ( 
             'attr' => $this->product_model->getPrdShippingAttr($id), 
             'shipping_summary' => $this->product_model->getShippingSummary($id)  
@@ -106,10 +107,12 @@ class Product extends MY_Controller {
             }
         }
 
-    foreach ($jsonFdata as $key => $value) {
-        $productQuantity[$key]['location'] = $jsonFdata[$key];
-    }
-    
+        foreach ($jsonFdata as $key => $value) {
+            $productQuantity[$key]['location'] = $jsonFdata[$key];
+        }
+
+        $reviews = $this->getReviews($id,$sellerId);
+  
         $data = array( 
             "productDetails" => $productDetails,
             "productImages" => $productImages,
@@ -117,9 +120,10 @@ class Product extends MY_Controller {
             "productCombinationAttributes" => $productCombinationAttributes,
             "productSpecification" => $productSpecification,
             "paymentMethod" => $paymentMethodArray,
-            "productCombinatiobDetails" => $productQuantity
+            "productCombinatiobDetails" => $productQuantity,
+            "reviews" => $reviews
             );
- 
+
         die(json_encode($data,JSON_PRETTY_PRINT));
     }
 }
