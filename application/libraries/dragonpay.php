@@ -66,6 +66,7 @@ class DragonPay {
     		);
     	$client = new nusoap_client($this->url, 'wsdl');
     	$result = $client->call('GetTxnToken',$param);
+        print_r($client);
     	$token = $result['GetTxnTokenResult'];
 
     	if(strlen($token) <= 3){
