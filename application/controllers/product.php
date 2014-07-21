@@ -679,7 +679,6 @@ class product extends MY_Controller
         $this->load->view('templates/footer');
     }
     
-    /*
     
     public function post_and_win_promo(){
         $data = $this->fill_header();
@@ -703,7 +702,7 @@ class product extends MY_Controller
         #return 3 if username doesnt exist (NOT-QUALIFIED)
     }
     
-    */
+  
 
 
     //OUTDATED FUNCTION: MARKED FOR REMOVAL
