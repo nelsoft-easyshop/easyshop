@@ -240,6 +240,7 @@ $('#main_search').on('input propertychange', function() {
         
         $(".txt_need_help_con").click(function(){
             $('.need_help_icons_con').slideToggle();
+            $(this).toggleClass("arrow-switch");
         });
 
         $('.need_help_icons_con').show();

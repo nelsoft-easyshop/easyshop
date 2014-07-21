@@ -25,18 +25,27 @@ class Product extends MY_Controller {
         $sellerId = $productRow['sellerid'];
         $productCategoryId = $productRow['cat_id'];
         $productImages = $this->product_model->getProductImages($id);
+        $mainImage = $productImages[0]['id_product_image'];
         $productAttributes = $this->product_model->getProductAttributes($id, 'NAME');
         $productAttributes = $this->product_model->implodeAttributesByName($productAttributes);
         $productQuantity = $this->product_model->getProductQuantity($id, false, false, $productRow['start_promo']);
         $rating = $this->product_model->getVendorRating($sellerId);
-        $seller = $this->memberpage_model->get_member_by_id($sellerId); 
-        $productSpecification = array();
-        $productCombinationAttributes = array();
-        $complete = array();
-        foreach ($productAttributes as $key => $productOption) {
+        $seller = $this->memberpage_model->get_member_by_id($sellerId);  
+        $reviews = $this->getReviews($id,$sellerId);
+        $relatedItems = $this->product_model->getRecommendeditem($productCategoryId,5,$id);
+        $productSpecification = $productCombinationAttributes = $complete = $newProductImageArray = array();
 
-            $newArrayOption = array();
-            
+        foreach ($productImages as $key => $value) {
+            unset($productImages[$key]['is_primary']);
+            unset($productImages[$key]['path']);
+            unset($productImages[$key]['file']);
+            unset($productImages[$key]['id_product_image']);
+            $newProductImageArray[$value['id_product_image']] = $productImages[$key];
+        }
+
+        foreach ($productAttributes as $key => $productOption) {
+            $newArrayOption = array(); 
+
             for ($i=0; $i < count($productOption) ; $i++) { 
                 $type = ($productAttributes[$key][$i]['type'] == 'specific' ? 'a' : 'b');
                 $newKey = $type.'_'.$productAttributes[$key][$i]['value_id']; 
@@ -44,39 +53,47 @@ class Product extends MY_Controller {
                 $newArrayOption[$newKey]['name'] = $key; 
             }
 
+            foreach ($newArrayOption as $key => $value) {
+                unset($newArrayOption[$key]['type']);
+                unset($newArrayOption[$key]['datatype']);
+                unset($newArrayOption[$key]['datatype']);
+                unset($newArrayOption[$key]['img_path']);
+                unset($newArrayOption[$key]['img_file']);
+                unset($newArrayOption[$key]['value_id']);
+
+                if($newArrayOption[$key]['img_id'] == 0){
+                    $newArrayOption[$key]['img_id'] = $mainImage;
+                }
+            }
+
             if(count($productOption)>1){
                 $productCombinationAttributes[$key] = $newArrayOption; 
             }
             elseif((count($productOption) === 1)&&(($productOption[0]['datatype'] === '5'))||($productOption[0]['type'] === 'option')){
                 $productCombinationAttributes[$key] = $newArrayOption; 
-                $productSpecification[$key] = $newArrayOption;
+                $productSpecification = $newArrayOption;
             }
             else{
-                $productSpecification[$key] = $newArrayOption; 
+                $productSpecification = $newArrayOption; 
             }
-
-
         }
 
         foreach ($productCombinationAttributes as $key => $value) {
- 
              foreach ($productCombinationAttributes[$key] as $key2 => $value2) {
-                    $complete[$key2] = $value2;
+                    $complete[$key2] = $value2; 
              }
-            
         }
-  
+
         foreach ($productQuantity as $key => $valuex) {
             unset($productQuantity[$key]['attr_lookuplist_item_id']);
             unset($productQuantity[$key]['attr_name']);
-
-
             $newCombinationKey = array();
+
             for ($i=0; $i < count($valuex['product_attribute_ids']); $i++) { 
                 $type = ($valuex['product_attribute_ids'][$i]['is_other'] == '0' ? 'a' : 'b'); 
                 array_push($newCombinationKey, $type.'_'.$valuex['product_attribute_ids'][$i]['id']);
-
             }
+
             unset($productQuantity[$key]['product_attribute_ids']);
             $productQuantity[$key]['combinationId'] = $newCombinationKey;
         }  
@@ -88,7 +105,6 @@ class Product extends MY_Controller {
             'condition' => $productRow['condition'],
             'discount' => $productRow['discount'],
             'basePrice' => $productRow['price']
-
             );  
 
         $sellerRating = array();
@@ -129,7 +145,8 @@ class Product extends MY_Controller {
                         $i++;
                     }
                 }
-            } else { 
+            }
+            else{ 
                 foreach($data['shipping_summary'][$data['attr']['product_item_id']] as $lockey=>$price){
                     $jsonFdata[$data['attr']['product_item_id']][$data['shipping_summary']['location'][$lockey]] = $price;
                 }
@@ -140,12 +157,38 @@ class Product extends MY_Controller {
             $productQuantity[$key]['location'] = $jsonFdata[$key];
         }
 
-        $reviews = $this->getReviews($id,$sellerId);
-        $relatedItems = $this->product_model->getRecommendeditem($productCategoryId,5,$id);
+            foreach ($relatedItems as $key => $value) {
+            unset($relatedItems[$key]['is_sold_out']);
+            unset($relatedItems[$key]['cat_id']);
+            unset($relatedItems[$key]['clickcount']);
+            unset($relatedItems[$key]['is_promote']);
+            unset($relatedItems[$key]['is_promote']);
+            unset($relatedItems[$key]['startdate']);
+            unset($relatedItems[$key]['enddate']);
+            unset($relatedItems[$key]['enddate']);
+            unset($relatedItems[$key]['promo_type']);
+            unset($relatedItems[$key]['start_promo']);
+            unset($relatedItems[$key]['is_free_shipping']);
+            unset($relatedItems[$key]['path']);
+            unset($relatedItems[$key]['file']);
+            unset($relatedItems[$key]['can_purchase']);
+            unset($relatedItems[$key]['id_product']);
+        } 
+
+        foreach ($reviews as $key => $value) {
+            unset($reviews[$key]['reviewerid']);
+            unset($reviews[$key]['ISOdate']); 
+
+            foreach ($reviews[$key]['replies'] as $key2 => $value2) {
+                unset($reviews[$key]['replies'][$key2]['replyto']);
+                unset($reviews[$key]['replies'][$key2]['reviewerid']);
+                unset($reviews[$key]['replies'][$key2]['title']);
+            }
+        } 
 
         $data = array( 
             "productDetails" => $productDetails,
-            "productImages" => $productImages,
+            "productImages" => $newProductImageArray,
             "sellerDetails" => $sellerDetails,
             "productCombinationAttributes" => $complete,
             "productSpecification" => $productSpecification,
