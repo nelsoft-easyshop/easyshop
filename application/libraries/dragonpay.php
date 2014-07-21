@@ -50,29 +50,33 @@ class DragonPay {
     }
 
     function getTxnToken($amount,$description,$email,$txnId)
-    {
-    	$errorCodes = $this->errorCodes;
-    	 
+    { 
+    	$errorCodes = $this->errorCodes; 
     	$ccy = 'PHP';
+        $amount = number_format(round(floatval($amount),2), 2, '.', ''); 
     	$param = array(
-    		'merchantId' => $this->merchantId,
-    		'password' => $this->merchantPwd,
+    		'merchantId' => $this->merchantId, 
     		'merchantTxnId' => $txnId,
     		'amount' => $amount,
     		'ccy' => $ccy,
-    		'description' => $description,
-    		'email' => $email,
-    		'mode'=>'1'
-    		);
-    	$client = new nusoap_client($this->url, 'wsdl');
-    	$result = $client->call('GetTxnToken',$param); 
-    	$token = $result['GetTxnTokenResult'];
+            'description' => $description, 
+            'email' => $email, 
+            'password' => $this->merchantPwd,
+    		); 
+        $digest = sha1(implode(':', $param));  
+        $description =  urlencode($description);
+        $email = urlencode($email); 
 
-    	if(strlen($token) <= 3){
-    		return '{"e":"0","m":"'.$errorCodes[$token].'","c":"'.$token.'"}';
-    	}else{
-    		return '{"e":"1","m":"SUCCESS","c":"'.$token.'","tid":"'.$txnId.'","u":"'.$this->ps.'?tokenid='.$token.'&mode=7"}';
-    	}
+    	// $client = new nusoap_client($this->url, 'wsdl');
+    	// $result = $client->call('GetTxnToken',$param); 
+    	// $token = $result['GetTxnTokenResult'];
+        $token = $txnId;
+        $url = $this->ps.'?merchantid='.$this->merchantId.'&txnid='.$txnId.'&amount='.$amount.'&ccy='.$ccy.'&description='.$description.'&email='.$email.'&digest='.$digest.'&mode=7';
+    	// if(strlen($token) <= 3){
+    	// 	return '{"e":"0","m":"'.$errorCodes[$token].'","c":"'.$token.'"}';
+    	// }else{
+            return '{"e":"1","m":"SUCCESS","c":"'.$token.'","tid":"'.$txnId.'","u":"'.$url.'"}';
+    	// }
     }
 
 	function getStatus($txnId)
