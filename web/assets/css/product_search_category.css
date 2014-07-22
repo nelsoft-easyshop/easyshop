@@ -1100,4 +1100,11 @@ div.cd_timerlabel_container{
 #_sop{
   width: 109px;
 }
+.easytreats_banner{
+    background: url("../../assets/images/img_easy_treat_v1.jpg") no-repeat scroll center top #ffffff;
+    height: 205px;
+    padding-top: 25px;
+    position: relative;
+    width: 980px;
+}
 
