@@ -12,7 +12,7 @@
 	
     <div class="cd_product_container" id="peak_hour_sale">
         <div class='product_list'>
-
+            <?php if(isset($peak_hour_items)) : ?>
             <?php foreach($peak_hour_items as $item): ?>
                 <?php if($item['is_promote'] == 1 && $item['promo_type'] == 3): ?>
                 <div class="cd_product">	
@@ -80,6 +80,7 @@
                 </div>
             <?php endif; ?>
             <?php endforeach; ?>
+            <?php endif; ?>
         </div>
     </div>
     
