@@ -127,6 +127,11 @@ class Product extends MY_Controller {
             }
             $paymentMethodArray = $this->config->item('Promo')[$productRow['promo_type']]['payment_method'];
         }
+		
+		$paymentMethodNoKey = array();
+		foreach ($paymentMethodArray as $keyPm => $valuePm) {
+			array_push($paymentMethodNoKey,$valuePm);
+		}
 
         $data = array ( 
             'attr' => $this->product_model->getPrdShippingAttr($id), 
@@ -192,7 +197,7 @@ class Product extends MY_Controller {
             "sellerDetails" => $sellerDetails,
             "productCombinationAttributes" => $complete,
             "productSpecification" => $productSpecification,
-            "paymentMethod" => $paymentMethodArray,
+            "paymentMethod" => $paymentMethodNoKey,
             "productCombinatiobDetails" => $productQuantity,
             "reviews" => $reviews,
             "relatedItems" => $relatedItems
