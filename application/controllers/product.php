@@ -9,6 +9,7 @@ class product extends MY_Controller
       parent::__construct(); 
       $this->load->helper('htmlpurifier');
       $this->load->model("product_model");
+      $this->load->model("messages_model");
     }
 
     public $per_page = 12;
@@ -24,7 +25,7 @@ class product extends MY_Controller
     	$perPage = $this->per_page;
     	$operator = " = ";
     	$data =  $this->fill_header();	
-		$category_array = $this->product_model->getCategoryBySlug($url_string);
+	$category_array = $this->product_model->getCategoryBySlug($url_string);
         
         $categoryId = $category_array['id_cat'];
         $categoryName = $category_array['name'];
@@ -634,7 +635,7 @@ class product extends MY_Controller
 		  'recommended_items'=> $this->product_model->getRecommendeditem($product_catid,5,$id),
 		  'allowed_reviewers' => $this->product_model->getAllowedReviewers($id),
 		  //userdetails --- email/mobile verification info
-		  'userdetails' => $this->user_model->getUserAccessDetails($uid),
+		  'userdetails' => $this->user_model->getUserById($uid),
 		  'product_quantity' => $this->product_model->getProductQuantity($id, false, false, $product_row['start_promo']),
 		  'shipment_information' => $this->product_model->getShipmentInformation($id),
 		  'shiploc' => $this->product_model->getLocation(),
@@ -667,18 +668,17 @@ class product extends MY_Controller
         $data['metadescription'] = 'Get the best price offers for the day at Easyshop.ph.';
         
         $banner_data = array();
-        $view_data['deals_banner'] = $this->load->view('templates/dealspage/easydeals', $banner_data, TRUE);
+        $view_data['deals_banner'] = $this->load->view('templates/dealspage/easytreats', $banner_data, TRUE);
         #$view_data['items'] = $this->product_model->getProductsByCategory($category_id,array(),0,"<",0,$this->per_page);
         $view_data['items'] = $this->product_model->getProductsByCategory($category_id,array(),0,"<",0,PHP_INT_MAX);
-        #PEAK HOUR PROMO		
-        $categoryId = $this->config->item('peak_hour_promo', 'protected_category');
-        $view_data['peak_hour_items'] =$this->product_model->getProductsByCategory($categoryId,array(),0,"<",0,PHP_INT_MAX,'createddate ASC,');
+        #PEAK HOUR PROMO ,To activate: change deals_banner = easydeals
+        #$categoryId = $this->config->item('peak_hour_promo', 'protected_category');
+        #$view_data['peak_hour_items'] =$this->product_model->getProductsByCategory($categoryId,array(),0,"<",0,PHP_INT_MAX,'createddate ASC,');
 
         $this->load->view('templates/header', $data); 
         $this->load->view('pages/product/product_promo_category', $view_data); 
         $this->load->view('templates/footer');
     }
-    
     
     public function post_and_win_promo(){
         $data = $this->fill_header();
@@ -689,11 +689,11 @@ class product extends MY_Controller
     }
     
     public function PromoStatusCheck(){
-	$this->load->model("messages_model");
+	$this->load->model('user_model');
         $username = $this->input->post('username');
-        $query_result = $this->messages_model->get_recepientID($username,true);
-        if(isset($query_result[0]['is_promo_valid'])){
-            echo json_encode(intval($query_result[0]['is_promo_valid']));
+        $query_result = $this->user_model->getUserByUsername($username);
+        if(isset($query_result['is_promo_valid'])){
+            echo json_encode(intval($query_result['is_promo_valid']));
         }else{
             echo json_encode(3);
         }
@@ -701,24 +701,8 @@ class product extends MY_Controller
         #return 2 if account has promo = false (PENDING)
         #return 3 if username doesnt exist (NOT-QUALIFIED)
     }
-    
-  
 
 
-    //OUTDATED FUNCTION: MARKED FOR REMOVAL
-    public function category_promo_more(){
-      $this->load->config('protected_category', TRUE);
-        $category_id = $this->config->item('promo', 'protected_category');
-        $start = $this->input->post('page_number') * $this->per_page;
-        $view_data['items'] = $this->product_model->getProductsByCategory($category_id,array(),0,"<",$start,0);
-        #$view_data['items'] = $this->product_model->getProductsByCategory($category_id,array(),0,"<",$start,$this->per_page);
-        if(count($view_data['items']) === 0){
-            $data = json_encode('0');
-        }else{
-            $data = json_encode($this->load->view('pages/product/product_promo_category_more', $view_data,TRUE)); 
-        }
-        echo $data;
-    }
 
 
 }
