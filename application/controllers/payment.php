@@ -634,6 +634,10 @@ class Payment extends MY_Controller{
 
     function dragonPayPostBack()
     {
+    
+        print('1');
+        print_r($this->input->post());
+        
         header("Content-Type:text/plain");
 
         $paymentType = $this->PayMentDragonPay; 
@@ -644,9 +648,15 @@ class Payment extends MY_Controller{
         $message = $this->input->post('message');
         $digest = $this->input->post('digest');
 
+        print('2');
+        print_r($this->input->post());
+        
         $payDetails = $this->payment_model->selectFromEsOrder($txnId,$paymentType);
 
+        print('3');
         print_r($this->input->post());
+        
+        
         print_r($payDetails);
         $invoice = $payDetails['invoice_no'];
         $orderId = $payDetails['id_order'];
