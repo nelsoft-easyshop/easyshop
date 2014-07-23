@@ -817,7 +817,15 @@ class Payment extends MY_Controller{
     {
 
         header("Content-Type:text/plain");
-
+        print_r('1');
+        print_r($this->input->post());
+        print_r($_POST);
+        print_r('2');
+        print_r($this->input->post());
+        print_r($_POST);
+        print_r('3');
+        print_r($this->input->post());
+        print_r($_POST);
         $ref = $this->input->post('Ref'); 
         $successCode = $this->input->post('successcode'); 
 
