@@ -645,10 +645,15 @@ class Payment extends MY_Controller{
         $digest = $this->input->post('digest');
 
         $payDetails = $this->payment_model->selectFromEsOrder($txnId,$paymentType);
+
+        print_r($this->input->post());
+        print_r($payDetails);
         $invoice = $payDetails['invoice_no'];
         $orderId = $payDetails['id_order'];
         $member_id = $payDetails['buyer_id'];
         $itemList = json_decode($payDetails['data_response'],true); 
+
+        print_r($itemList);
         $postBackCount = $payDetails['postbackcount']; 
 
         $address = $this->memberpage_model->get_member_by_id($member_id);  
@@ -656,6 +661,7 @@ class Payment extends MY_Controller{
         $prepareData = $this->processData($itemList,$address);  
         $itemList = $prepareData['newItemList'];
         $toBeLocked = $prepareData['toBeLocked'];
+        print_r($prepareData);
 
         if(strtolower($status) == "p" || strtolower($status) == "s"){
 
