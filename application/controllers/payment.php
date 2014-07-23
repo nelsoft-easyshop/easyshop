@@ -634,10 +634,6 @@ class Payment extends MY_Controller{
 
     function dragonPayPostBack()
     {
-    
-        print('1');
-        print_r($this->input->post());
-        
         header("Content-Type:text/plain");
 
         $paymentType = $this->PayMentDragonPay; 
@@ -648,22 +644,11 @@ class Payment extends MY_Controller{
         $message = $this->input->post('message');
         $digest = $this->input->post('digest');
 
-        print('2');
-        print_r($this->input->post());
-        
         $payDetails = $this->payment_model->selectFromEsOrder($txnId,$paymentType);
-
-        print('3');
-        print_r($this->input->post());
-        
-        
-        print_r($payDetails);
         $invoice = $payDetails['invoice_no'];
         $orderId = $payDetails['id_order'];
         $member_id = $payDetails['buyer_id'];
         $itemList = json_decode($payDetails['data_response'],true); 
-
-        print_r($itemList);
         $postBackCount = $payDetails['postbackcount']; 
 
         $address = $this->memberpage_model->get_member_by_id($member_id);  
@@ -671,7 +656,6 @@ class Payment extends MY_Controller{
         $prepareData = $this->processData($itemList,$address);  
         $itemList = $prepareData['newItemList'];
         $toBeLocked = $prepareData['toBeLocked'];
-        print_r($prepareData);
 
         if(strtolower($status) == "p" || strtolower($status) == "s"){
 
@@ -817,15 +801,7 @@ class Payment extends MY_Controller{
     {
 
         header("Content-Type:text/plain");
-        print_r('1');
-        print_r($this->input->post());
-        print_r($_POST);
-        print_r('2');
-        print_r($this->input->post());
-        print_r($_POST);
-        print_r('3');
-        print_r($this->input->post());
-        print_r($_POST);
+
         $ref = $this->input->post('Ref'); 
         $successCode = $this->input->post('successcode'); 
 
