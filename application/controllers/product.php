@@ -630,12 +630,12 @@ class product extends MY_Controller
         $data['metadescription'] = 'Get the best price offers for the day at Easyshop.ph.';
         
         $banner_data = array();
-        $view_data['deals_banner'] = $this->load->view('templates/dealspage/easydeals', $banner_data, TRUE);
+        $view_data['deals_banner'] = $this->load->view('templates/dealspage/easytreats', $banner_data, TRUE);
         #$view_data['items'] = $this->product_model->getProductsByCategory($category_id,array(),0,"<",0,$this->per_page);
         $view_data['items'] = $this->product_model->getProductsByCategory($category_id,array(),0,"<",0,PHP_INT_MAX);
-        #PEAK HOUR PROMO		
-        $categoryId = $this->config->item('peak_hour_promo', 'protected_category');
-        $view_data['peak_hour_items'] =$this->product_model->getProductsByCategory($categoryId,array(),0,"<",0,PHP_INT_MAX,'createddate ASC,');
+        #PEAK HOUR PROMO ,To activate: change deals_banner = easydeals
+        #$categoryId = $this->config->item('peak_hour_promo', 'protected_category');
+        #$view_data['peak_hour_items'] =$this->product_model->getProductsByCategory($categoryId,array(),0,"<",0,PHP_INT_MAX,'createddate ASC,');
 
         $this->load->view('templates/header', $data); 
         $this->load->view('pages/product/product_promo_category', $view_data); 
