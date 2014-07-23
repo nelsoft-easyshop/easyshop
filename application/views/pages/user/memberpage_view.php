@@ -31,7 +31,7 @@
 								<li><a href="javascript:void(0)" onclick="triggerTab('delivery_address');">Delivery Address</a></li>
 								<li><a href="javascript:void(0)" onclick="triggerTab('transactions');">On-going Transactions</a></li>
 								<li><a href="javascript:void(0)" onclick="triggerTab('complete_transactions');">Completed Transactions</a></li>
-								<li><a href="javascript:void(0)" onclick="triggerTab('security_settings');">Security Settings</a></li>
+								<li><a href="javascript:void(0)" onclick="triggerTab('security_settings');">Settings</a></li>
 							</ul>
 						</li>
 						<li><a href="<?=base_url()?>home/under_construction">News</a></li>
@@ -50,6 +50,21 @@
 	</section>
 	<div class="clear"></div>
 	<section>
+		<div class="wrapper quickheader quickheader_css" style="display:<?php echo $hide_quickheader ? "none":""?>;">
+			<span>Store URL: </span>
+			<div class="disp_vendor_url">
+				<a href="<?php echo base_url() . $userslug?>" target="_blank">
+				<strong><?php echo base_url()?><span class="disp_userslug"><?php echo $userslug?></span></strong>
+				</a>
+				<?php if( $render_userslug_edit ):?>
+					<span class="edit_userslug edit_userslug_css" style="display:none;">Edit</span>
+				<?php endif;?>
+			</div>
+			<span class="quickheader_close" style="cursor:pointer;border:medium 1px;">X</span>
+		</div>
+		
+		<div class="clear"></div>
+		
 		<div class="wrapper profile_wrapper">
 			<div class="profile_left_nav">
 				<div>
@@ -88,7 +103,7 @@
 					<li><a href="#payment" class="<?php echo ($tab=='pmnt')?'selected':'';?>">Payment Accounts</a></li>
 					<li><a href="#transactions" class="<?php echo ($tab=='pending')?'selected':'';?>">On-going Transactions</a></li>
 					<li><a href="#complete_transactions">Completed Transactions</a></li>
-					<li><a href="#security_settings">Security Settings</a></li>
+					<li><a href="#security_settings">Settings</a></li>
 				</ul> 
 			</div>	
 		</div>
@@ -2478,11 +2493,48 @@
 	</div>
 	<?php endif; ?>					
 	</div>
-
+	
 </div>
-		
+
+<div id="vendor_url_dialog" style="display:none;">
+	This is a one time change of URL! You won't be able to change this again!<br><br>
+	Continue?
+</div>
+
 		<div class="profile_main_content" id="security_settings">
-			<h2>Security Settings</h2>
+			<h2>Settings</h2>
+			
+			<div class="profile_fields">
+				<p>Store URL</p>
+				<div>
+				
+					<div class="disp_vendor_url settings_vendordiv_css">
+						<a href="<?php echo base_url() . $userslug?>" target="_blank">
+						<strong><?php echo base_url()?><span class="disp_userslug"><?php echo $userslug?></span></strong>
+						</a>
+						<?php if( $render_userslug_edit ):?>
+							<span class="edit_userslug edit_userslug_css">Edit</span>
+						<?php endif;?>
+					</div>
+					
+					<?php if( $render_userslug_edit ):?>
+					<div class="datafield settings_vendordiv_css" style="display:none;">
+						<?php echo form_open('',array('id'=>'form_userslug'));?>
+							<strong><?php echo base_url()?></strong><input type="text" name="userslug" value="<?php echo html_escape($userslug)?>">
+							<input type="submit" class="save_userslug editslug_btn_css" name="userslug_save" value="Save">
+							<input type="button" class="cancel_userslug editslug_btn_css" value="Cancel">
+						<?php echo form_close();?>
+					</div>
+					<?php endif;?>
+					
+					<p>
+						NOTE: You can change your store URL only once! <br>
+						Visit your store and use the editable fields to advertise your products!
+					</p>
+					
+				</div>
+			</div>
+			
 			<div class="profile_fields">
 
 						<p>Login password</p>
@@ -2508,8 +2560,8 @@
 		<script src="<?=base_url()?>assets/js/src/vendor/jquery.raty.min.js" type="text/javascript"></script>
 		<script type='text/javascript' src='<?=base_url()?>assets/js/src/vendor/jquery.jqpagination.min.js'></script>
 		<script src="<?=base_url()?>assets/js/src/vendor/jquery.idTabs.min.js" type="text/javascript"></script>
-		<!--<script src="<?=base_url()?>assets/js/src/vendor/jquery.knob.js" type="text/javascript"></script>-->
 		<script src="<?=base_url()?>assets/js/src/vendor/chosen.jquery.min.js" type="text/javascript"></script>
+		<script src="<?=base_url()?>assets/js/src/vendor/jquery.cookie.js" type="text/javascript"></script>
 		<!-- MEMBERPAGE JS-->
 		<script type="text/javascript" src="<?=base_url()?>assets/js/src/memberpage.js?ver=<?=ES_FILE_VERSION?>"></script>
 		<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=&sensor=false"></script>

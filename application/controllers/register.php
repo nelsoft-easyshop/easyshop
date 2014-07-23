@@ -105,9 +105,8 @@ class Register extends MY_Controller
 	public function username_check()
 	{
 		if($this->input->post('username')){
-			//$username = htmlspecialchars($this->input->post('username'));
 			$username = $this->input->post('username');
-			if($this->register_model->get_member_by_username($username))
+			if($this->register_model->validate_username($username))
 				echo 0;
 			else
 				echo 1;

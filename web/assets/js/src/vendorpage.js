@@ -50,8 +50,8 @@ var memconf = {
 /***********	BANNER EDIT 	****************/
 $(function(){
 	$('.img_edit').on('click',function(){
-		$(this).siblings('form').children('input.img_file_input').click();
 		memconf.form = $(this).siblings('form');
+		$(this).siblings('form').children('input.img_file_input').click();
 	});
 	
 	$('input.img_file_input').on('change',function(){
@@ -61,9 +61,12 @@ $(function(){
 		}
 
 		if (oldIE) {
+			console.log(memconf.form);
 			memconf.form.submit();
+			console.log('old');
 		} else {
 			imageprev(this);
+			console.log('new');
 		}
 	});
 	

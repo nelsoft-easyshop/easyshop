@@ -313,3 +313,62 @@ table.sales_summary tr.sales_info:hover td.amount{
 .sales_info td {
 	border-bottom: 1px dotted #cecece;
 }
+
+/* MINI TOP HEADER */
+
+.quickheader_css{
+	margin-bottom:10px;
+	height: 35px;
+	line-height: 35px;
+	background-color:#E9E9E9;
+	vertical-align: middle;
+}
+
+.quickheader_css > *{
+	margin-left: 5px;
+}
+
+.quickheader_css > div{
+	display: inline-block;
+	width: 90%;
+}
+
+.edit_userslug_css{
+	color: #06F;
+	cursor: pointer;
+	font-size: 10px;
+	margin-left: 5px;
+}
+
+.editslug_btn_css{
+	cursor:pointer;
+	width: 50px;
+}
+
+/**	Security Settings VENDOR URL CSS **/
+
+#security_settings .settings_vendordiv_css{
+	height: 60px;
+	line-height: 40px;
+}
+
+#security_settings .settings_vendordiv_css > a{
+	font-size: 12px ;
+	color: #494949 ;
+	margin: 0px 0px 0px 0px ; 
+	padding: 0px 0px 0px 0px ;
+}
+
+#security_settings .settings_vendordiv_css > a:hover{
+	color:#F18200;
+}
+
+#security_settings .editslug_btn_css{
+	width: 55px;
+	border: none;
+	border-radius: 3px;
+	height: 30px;
+	padding: 5px 10px;
+	margin-left: 5px;
+	margin-right: 0px;
+}

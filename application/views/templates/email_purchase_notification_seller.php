@@ -69,8 +69,8 @@
 									<span style="display:inline-block;font-weight:bold;width:170px;">Handling Fee :</span> Php {handling_fee} <br>
 									<span style="display:inline-block;font-weight:bold;width:170px;">Product Final Price :</span> Php {finalprice} <br>
 									<span style="display:inline-block;font-weight:bold;width:170px;">Deductions :</span><br>
-									<span style="display:inline-block;font-weight:bold;width:170px;margin-left:2em;">Easyshop charge :</span> Php {easyshop_charge} <br>
-									<span style="display:inline-block;font-weight:bold;width:170px;margin-left:2em;">Payment Method charge :</span> Php {payment_method_charge} <br>
+									<span style="display:inline-block;font-weight:bold;width:170px;margin-left:2em;">Easyshop Charge :</span> Php {easyshop_charge} <br>
+									<span style="display:inline-block;font-weight:bold;width:170px;margin-left:2em;">{payment_method_name} Charge :</span> Php {payment_method_charge} <br>
 									<span style="display:inline-block;font-weight:bold;width:170px;">Net Amount to be received:</span> Php {net} <br>
 									<span style="display:inline-block;font-weight:bold;width:170px;">Product Specifications:</span> <br>
 									{attr}

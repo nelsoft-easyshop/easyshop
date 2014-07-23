@@ -508,10 +508,10 @@ class memberpage_model extends CI_Model
 		return $data;
 	}	
 	
-	function getVendorDetails($selleruname){
-		$query = $this->xmlmap->getFilenameID('sql/users','get_member_by_username');
+	function getVendorDetails($sellerslug){
+		$query = $this->xmlmap->getFilenameID('sql/users','getVendorDetails');
 		$sth = $this->db->conn_id->prepare($query);
-		$sth->bindParam(':username',$selleruname);
+		$sth->bindParam(':userslug',$sellerslug);
 		$sth->execute();
 		$row = $sth->fetch(PDO::FETCH_ASSOC);
 		
@@ -1360,6 +1360,31 @@ class memberpage_model extends CI_Model
 		}
 		
 		return $data;
+	}
+	
+	function validateUserSlugChange( $memberID, $userslug )	
+	{
+		$query = "SELECT id_member
+			FROM es_member
+			WHERE (username = :userslug OR slug = :userslug) AND id_member != :member_id";
+		$sth = $this->db->conn_id->prepare($query);
+		$sth->bindParam(':member_id', $memberID, PDO::PARAM_INT);
+		$sth->bindParam(':userslug', $userslug, PDO::PARAM_STR);
+		$sth->execute();
+		$row = $sth->fetchAll(PDO::FETCH_ASSOC);
+		
+		return $row;
+	}
+	
+	function editUserSlug($memberID, $userslug)
+	{
+		$query = "UPDATE `es_member` SET slug = :userslug WHERE id_member = :member_id";
+		$sth = $this->db->conn_id->prepare($query);
+		$sth->bindParam(':member_id', $memberID, PDO::PARAM_INT);
+		$sth->bindParam(':userslug', $userslug, PDO::PARAM_STR);
+		$result = $sth->execute();
+		
+		return $result;
 	}
 	
 }

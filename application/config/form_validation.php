@@ -345,6 +345,13 @@ $config = array(
 						'label' => 'Date',
 						'rules' => 'trim|required'
 					),
+			),
+			'edit_userslug' => array(
+				array(
+					'field' => 'userslug',
+					'label' => 'URL',
+					'rules' => 'trim|required|alpha_numeric|min_length[3]|max_length[25]'
+				)
 			)
 		);
 

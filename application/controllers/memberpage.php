@@ -18,13 +18,17 @@ class Memberpage extends MY_Controller
 	function index()
 	{        
 	    $data = $this->fill_header();
-		    if(!$this->session->userdata('member_id')){
-		redirect(base_url().'home', 'refresh');
+		if(!$this->session->userdata('member_id')){
+			redirect(base_url().'home', 'refresh');
 	    }
 	    $data['tab'] = $this->input->get('me');        
 	    $data = array_merge($data, $this->fill_view());
 	    $data['render_logo'] = false;
 	    $data['render_searchbar'] = false;
+		
+		$data['render_userslug_edit'] = $data['username'] === $data['userslug'] ? true:false;
+		$data['hide_quickheader'] = get_cookie('es_qh') ? true:false;
+		
 	    $this->load->view('templates/header', $data);
 	    $this->load->view('pages/user/memberpage_view', $data);
 	    $this->load->view('templates/footer');
@@ -664,16 +668,69 @@ class Memberpage extends MY_Controller
 		$data = $this->fill_header();
 		//echo error may be here: $result['error']
 		if(isset($result['error'])){
-			echo "<h2 style='color:red;'>Unable to upload image.</h2>
+			print "<h2 style='color:red;'>Unable to upload image.</h2>
 				<p style='font-size:20px;'><strong>You can only upload JPEG, JPG, GIF, and PNG files with a max size of 5MB</strong></p>";
-			echo "<script type='text/javascript'>setTimeout(function(){window.location.href='".base_url()."vendor/".$data['uname']."'},3000);</script>";
+			print "<script type='text/javascript'>setTimeout(function(){window.location.href='".base_url()."vendor/".$data['uname']."'},3000);</script>";
 		}else{
 			redirect('vendor/'.$data['uname']);
 		}
-		
 	}
 
-	function vendor($selleruname){
+/*
+ |	Function used when changing store URL
+ */
+	function editUserSlug()
+	{
+		# Require config file for list of controllers (filenames) ; returns $controllerConfig
+		require_once(APPPATH . 'config/param/controllers.php');
+	
+		$serverResponse = array(
+			'result' => 'fail',
+			'error' => 'Failed to validate form.'
+		);
+		if( $this->input->post('userslug') && $this->form_validation->run('edit_userslug') ){
+			$memberID = $this->session->userdata('member_id');
+			$userslug = strtolower($this->input->post('userslug'));
+			
+			#Check database if this slug can be used, if size>0, slug already used (hence cannot be used again)
+			$resultCount = $this->memberpage_model->validateUserSlugChange($memberID,$userslug);
+			
+			#Check if slug is currently used for routing
+			$myRoutes = $this->router->routes;
+			$restrictedList = array();
+			foreach( $myRoutes as $ro=>$co ){
+				#get 1st restricted word from key
+				$thisroute = preg_replace('/\(.{2,5}\)/','',$ro);
+				$block1 = explode("/", $thisroute);
+				#get next restricted work (controller / .php file)
+				$block2 = explode("/", $co);
+				if( !in_array($block1[0], $restrictedList) ){
+					$restrictedList[] = $block1[0];
+				}
+				if( !in_array($block2[0], $restrictedList) ){
+					$restrictedList[] = $block2[0];
+				}
+			}
+			
+			# Get union of controller list and restricted list
+			$restrictedList = array_unique(array_merge($restrictedList , $controllerConfig));
+			
+			if( count($resultCount) > 0 || in_array($userslug, $restrictedList)){
+				$serverResponse['error'] = "URL already in use.";
+			}else{
+				$boolResult = $this->memberpage_model->editUserSlug($memberID, $userslug);
+				$serverResponse['result'] = $boolResult ? 'success':'fail';
+				$serverResponse['error'] = $boolResult? '':'Failed to update database. Please try again later';
+			}			
+		}
+		
+		echo json_encode($serverResponse);
+	}
+	
+	
+	# THIS FUNCTION (vendor) IS TRANSFERRED TO HOME CONTROLLER FOR ROUTING PURPOSES
+	# CHECK 404_override in routing.php
+	/*function vendor($selleruname){
 		$session_data = $this->session->all_userdata();
 		$vendordetails = $this->memberpage_model->getVendorDetails($selleruname);
 		$data['title'] = 'Vendor Profile | Easyshop.ph';
@@ -714,7 +771,7 @@ class Memberpage extends MY_Controller
 			$this->load->view('pages/user/user_error');
             $this->load->view('templates/footer_full');
 		}
-	}
+	}*/
 	
 	/**	VERIFY CONTACT DETAILS SECTION **/
 	function verify(){

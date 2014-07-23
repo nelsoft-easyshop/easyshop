@@ -58,7 +58,11 @@ $(document).ready(function(){
 	 jQuery.validator.addMethod("is_validmobile", function(value, element) {
 		return this.optional(element) || /^(08|09)[0-9]{9}/.test(value);
 	 }, "Must begin with 09 or 08");
-	 
+	
+	jQuery.validator.addMethod("alphanumeric", function(value, element, arg) {
+		return this.optional(element) || /^[A-Za-z0-9]+$/.test(value);
+	}, "Only alphanumeric characters are allowed");
+	
 	 $.datepicker.setDefaults({dateFormat: 'yy-mm-dd'}, $.extend($.datepicker.regional['']));
 
 	 jQuery.validator.addMethod("is_validdate", function(value, element) {
@@ -121,6 +125,119 @@ var memconf = {
 		sortOrder: 1
 	}
 };
+
+/******************	EDIT USER SLUG	******************************/
+(function($){
+	$('div.quickheader').on('mouseover','div.disp_vendor_url',function(){
+		$(this).children('span.edit_userslug').show();
+	}).on('mouseleave','div.disp_vendor_url', function(){
+		$(this).children('span.edit_userslug').hide();
+	});
+
+	$('div.quickheader').on('click', '.edit_userslug', function(){
+		$('a[href="#security_settings"]').trigger('click');
+		$('#security_settings .edit_userslug').trigger('click');
+	});
+	
+	$('.quickheader_close').on('click',function(){
+		$(this).parent('div.quickheader').slideUp();
+		alert("You can visit and edit your store from the Settings Tab.");
+		
+		$.cookie("es_qh", 1, {expires:10});
+		
+	});
+	
+	$('#security_settings').on('click', '.edit_userslug', function(){
+		var urlDisplay = $(this).parent('div');
+		var datafield = urlDisplay.siblings('div.datafield');
+		
+		datafield.find('p.error').remove();
+		
+		urlDisplay.hide();
+		datafield.show();
+	});
+	
+	$('#security_settings').on('click', '.cancel_userslug', function(){		
+		var datafield = $(this).closest('div');
+		var urlDisplay = datafield.siblings('div.disp_vendor_url');
+		var inputSlug = $(this).siblings('input[name="userslug"]');
+		
+		inputSlug.val(inputSlug.attr('value'));
+		
+		datafield.hide();
+		urlDisplay.show();
+	});
+	
+	$('#form_userslug').validate({
+		rules:{
+			userslug:{
+				required: true,
+				alphanumeric: true,
+				minlength: 3,
+				maxlength: 25
+			}
+		},
+		errorElement: "p",
+		errorPlacement: function(error, element) {
+				error.addClass('red');
+				error.appendTo(element.parent());
+		},	
+		submitHandler: function(form){
+			var datafield = $(form).closest('div.datafield');
+			var urlDisplay = $('div.disp_vendor_url');
+			var inputSlug = $(form).children('input[name="userslug"]');
+			var slugVal = $.trim(inputSlug.val()).toLowerCase();
+			var saveBtn = datafield.find('.save_userslug');
+			
+			$('#vendor_url_dialog').dialog({
+				autoOpen: false,
+				title: "Confirm URL change",
+				modal: true,
+				closeOnEscape: false,
+				buttons:{
+					OK: function(){
+						$.post(config.base_url+'memberpage/editUserSlug', $(form).serializeArray(), function(data){
+							try{
+								var obj = jQuery.parseJSON(data);
+							}
+							catch(e){
+								alert('Failed to process your request. Please try again later.');
+								return false;
+							}
+							
+							if(obj.result === 'success'){
+								datafield.siblings('div.disp_vendor_url').show();
+								urlDisplay.children('.edit_userslug').remove();
+								urlDisplay.find('span.disp_userslug').text(htmlDecode(slugVal));
+								urlDisplay.find('a').attr('href',config.base_url+htmlDecode(slugVal));
+								datafield.remove();
+								$(form).remove();
+							}else{
+								inputSlug.attr('disabled',false);
+								saveBtn.attr('disabled',false);
+								saveBtn.val('Save');
+								alert(obj.error);
+								inputSlug.val(inputSlug.attr('value'));
+							}
+							
+						});
+						inputSlug.attr('disabled',true);
+						saveBtn.attr('disabled',true);
+						saveBtn.val('Saving...');
+						$(this).dialog('close');
+					},
+					Cancel: function(){
+						$(this).dialog( "close" );
+					}
+				}
+			});
+			$('#vendor_url_dialog').dialog('open');
+			return false;
+		}
+	});
+	
+})(window.jQuery)
+
 
 /*********	AJAX PAGING	************/
 function ItemListAjax(ItemDiv,start,pageindex,count){
@@ -1807,119 +1924,6 @@ $(document).ready(function(){
 	
 });
 
-/*********************************************************************/
-/***********	TRANSACTIONS SEARCH FEATURE		**********************/
-/*********************************************************************/
-$(document).ready(function(){
-	/******************	Transactions Search Box	********************/
-	// Search for Transaction/Invoice Number
-	/*$('.tx_sch_btn').on('click', function(){
-		var ItemDiv = $(this).closest('div.dashboard_table');
-		var pagingDivBtn = $(this).parent('div').siblings('div.pagination');
-		
-		var origDiv = ItemDiv.children('div.paging.orig');
-		ItemDiv.children('div.paging:not(.orig)').remove();
-		
-		var schValue = $(this).siblings('input.tx_sch_box').val().toLowerCase().replace(/\s/g,'');
-		$(this).siblings('select.tx_sort_select').val(0);
-		$(this).siblings('span.tx_arrow_sort').removeClass('rotate_arrow');
-		
-		var resultCounter = 0;
-		
-		if(schValue != ''){ // If search value provided
-			origDiv.hide();
-			origDiv.removeClass('enable');
-			// Cycle through each transaction entry
-			origDiv.children('div.transac-container').each(function(){
-				var InvoiceNum = $(this).data('invoice').toString();
-				//If found
-				if( InvoiceNum.indexOf(schValue) != -1 ){
-					if(resultCounter % memconf.itemPerPage === 0){
-						var thisdiv = $('<div/>', {'class':'paging filter enable'}).hide().appendTo(ItemDiv);
-					}else{
-						var thisdiv = ItemDiv.children('div.paging.filter:last');
-					}
-					thisdiv.append($(this).clone());
-					thisdiv.append('<div class="clear"></div>');
-					resultCounter++;
-				}
-			});
-			pagingDivBtn.jqPagination('option','current_page',1);
-			pagingDivBtn.jqPagination('option','max_page', resultCounter === 0 ? 1 : Math.ceil(resultCounter/memconf.itemPerPage));
-		}else{
-			ItemDiv.children('div.paging:not(.orig)').remove();
-			if( ! origDiv.hasClass('enable') ){
-				origDiv.addClass('enable');
-			}
-			pagingDivBtn.jqPagination('option','current_page', 1);
-			pagingDivBtn.jqPagination('option','max_page', pagingDivBtn.children('input').data('origmaxpage'));
-		}
-	});*/
-	
-	/**************** Transactions Sort *********************/
-	/*$('.tx_arrow_sort').on('click',function(){
-		var ItemDiv = $(this).closest('div.dashboard_table');
-		var activeDiv = ItemDiv.children('div.paging.enable');
-		var contentDiv = activeDiv.children('div.transac-container');
-		var newContent = $(contentDiv.get().reverse());
-		
-		var resultCounter = divCounter = 0;
-		
-		activeDiv.children().remove();
-
-		newContent.each(function(){
-			if( resultCounter % memconf.itemPerPage === 0 && resultCounter !== 0){
-				divCounter++;
-			}
-			resultCounter++;
-			activeDiv.eq(divCounter).append($(this).clone());
-		});
-	});*/
-	
-	/**************** Transactions Filter Payment Method *********************/
-	/*$('.tx_sort_select').on('change', function(){
-		var ItemDiv = $(this).closest('div.dashboard_table');
-		var pagingDivBtn = $(this).parent('div').siblings('div.pagination');
-		
-		var selectedOption = parseInt($(this).val());
-		var resultCounter = 0;
-		
-		ItemDiv.children('div.paging').removeClass('enable');
-		ItemDiv.children('div.paging.newfilter').remove();
-		
-		if( ItemDiv.children('div.paging.filter').length > 0 ){
-			var activeDiv = ItemDiv.children('div.paging.filter');
-			var contentDiv = activeDiv.children('div.transac-container');
-		}else{
-			var activeDiv = ItemDiv.children('div.paging.orig');
-			var contentDiv = activeDiv.children('div.transac-container');
-		}
-		
-		if( selectedOption === 0 ){
-			activeDiv.addClass('enable');
-			pagingDivBtn.jqPagination('option','current_page',1);
-			pagingDivBtn.jqPagination('option','max_page', Math.ceil(contentDiv.length/memconf.itemPerPage));
-		}else{
-			contentDiv.each(function(){
-				var paymentMethod = parseInt($(this).data('pm'));
-				if( selectedOption == paymentMethod ){
-					if( resultCounter % memconf.itemPerPage === 0 ){
-						var thisdiv = $('<div/>', {'class':'paging newfilter enable'}).hide().appendTo(ItemDiv);
-					}else{
-						var thisdiv = ItemDiv.children('div.paging.newfilter:last');
-					}
-					thisdiv.append($(this).clone());
-					thisdiv.append('<div class="clear"></div>');
-					resultCounter++;
-				}
-			});
-			pagingDivBtn.jqPagination('option','current_page',1);
-			pagingDivBtn.jqPagination('option','max_page', resultCounter === 0 ? 1 : Math.ceil(resultCounter/memconf.itemPerPage));
-		}		
-	});
-	*/
-});
-
 /*******************	HTML Decoder	********************************/
 function htmlDecode(value) {
     
@@ -2139,64 +2143,6 @@ function resetCoords(){
 	$('#image_h').val(0);
 }
 
-/*************** Personal Profile Dashboard circular progress bar **************/
-/*$(function($) {
-	$(".items").knob({
-		change : function (value) {
-			//console.log("change : " + value);
-		},
-		release : function (value) {
-			//console.log(this.$.attr('value'));
-			//console.log("release : " + value);
-		},
-		cancel : function () {
-			//console.log("cancel : ", this);
-		},
-		draw : function () {
-
-			// "tron" case
-			if(this.$.data('skin') == 'tron') {
-
-				var a = this.angle(this.cv)  // Angle
-					, sa = this.startAngle          // Previous start angle
-					, sat = this.startAngle         // Start angle
-					, ea                            // Previous end angle
-					, eat = sat + a                 // End angle
-					, r = 1;
-
-				this.g.lineWidth = this.lineWidth;
-
-				this.o.cursor
-					&& (sat = eat - 0.3)
-					&& (eat = eat + 0.3);
-
-				if (this.o.displayPrevious) {
-					ea = this.startAngle + this.angle(this.v);
-					this.o.cursor
-						&& (sa = ea - 0.3)
-						&& (ea = ea + 0.3);
-					this.g.beginPath();
-					this.g.strokeStyle = this.pColor;
-					this.g.arc(this.xy, this.xy, this.radius - this.lineWidth, sa, ea, false);
-					this.g.stroke();
-				}
-
-				this.g.beginPath();
-				this.g.strokeStyle = r ? this.o.fgColor : this.fgColor ;
-				this.g.arc(this.xy, this.xy, this.radius - this.lineWidth, sat, eat, false);
-				this.g.stroke();
-
-				this.g.lineWidth = 2;
-				this.g.beginPath();
-				this.g.strokeStyle = this.o.fgColor;
-				this.g.arc( this.xy, this.xy, this.radius - this.lineWidth + 1 + this.lineWidth * 2 / 3, 0, 2 * Math.PI, false);
-				this.g.stroke();
-
-				return false;
-			}
-		}
-	});
-});*/
 
 /*********	DASHBOARD BUTTONS - ETC	***************/
 $(document).ready(function(){

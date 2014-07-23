@@ -8,9 +8,6 @@ class Register_model extends CI_Model
 		$this->load->library('xmlmap');
 	}
 	
-	/*
-	 *	Function used to check if username exists in registration page
-	 */
 	function get_member_by_username($member_username)
 	{
 		$query = $this->xmlmap->getFilenameID('sql/users', 'get_member_by_username');
@@ -99,9 +96,13 @@ class Register_model extends CI_Model
 		}
 	}
 	
+	/*
+	 *	Function used to check if username exists in registration page
+	 *	Checks for both username and slug fields under es_member table
+	 */
 	function validate_username($username)
 	{
-		$query = $this->xmlmap->getFilenameID('sql/users', 'get_member_by_username');
+		$query = $this->xmlmap->getFilenameID('sql/users', 'getUsernameOrSlug');
         $sth = $this->db->conn_id->prepare($query);
         $sth->bindParam(':username', $username);
         $sth->execute();	
