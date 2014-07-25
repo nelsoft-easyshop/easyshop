@@ -632,19 +632,7 @@ class Payment extends MY_Controller{
         }
     }
 
-    function test()
-    {
-        echo '
-        <form action="https://easyshop.ph.rb/payment/dragonPayPostBack" method="POST">
-            <input type="text" name="txnid" placeholder="txnid">
-            <input type="text" name="refno" placeholder="refno">
-            <input type="text" name="status" placeholder="status">
-            <input type="text" name="message" placeholder="message">
-            <input type="text" name="digest" placeholder="digest">
-            <input type="submit" name="digest" placeholder="digest">
-        </form>
-        ';
-    }
+
 
     function dragonPayPostBack()
     {
