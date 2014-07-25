@@ -1,11 +1,14 @@
 <div class="right_header_discount">
       <div id="dsc_cont">
-          <span class="dsc_header_txt">
-            <?php echo number_format( $percentage,0,'.',','); ?>% DISCOUNT
-          </span>
           <?php if($start_promo): ?>
-              <span class="dsc_prp_txt3">TIME REMAINING</span>
+                <span class="dsc_header_txt">
+                    <?php echo number_format( $percentage,0,'.',','); ?>% DISCOUNT
+                </span>
+                <span class="dsc_prp_txt3">TIME REMAINING</span>
           <?php else: ?>  
+            <span class="dsc_header_txt">
+                <?php echo number_format( $discount,0,'.',','); ?>% DISCOUNT
+            </span>
             <span class="dsc_prp_txt3">PROMO STARTS IN</span>
           <?php endif; ?>
       </div>

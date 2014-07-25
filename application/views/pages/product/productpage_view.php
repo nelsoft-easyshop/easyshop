@@ -52,13 +52,13 @@
                     <span class="cd_soldout_product_page">
                         <img src="<?=base_url()?>assets/images/img_cd_soldout.png" alt="Sold Out">
                     </span>
-	    <?php endif; ?>
+        <?php endif; ?>
             
-            <?php if(isset($product['percentage']) && $product['percentage'] > 0): ?>
-		<span class="cd_slide_discount">
-		    <span><?php echo  number_format( $product['percentage'],0,'.',',');?>%<br>OFF</span>
-		</span>
-	    <?php endif; ?>
+        <?php if(isset($product['percentage']) && $product['percentage'] > 0): ?>
+            <span class="cd_slide_discount">
+                <span><?php echo  number_format( $product['percentage'],0,'.',',');?>%<br>OFF</span>
+            </span>
+        <?php endif; ?>
 
     
         </div>
@@ -156,7 +156,8 @@
                         <?php echo number_format($product['price'],2,'.',',');?> 
                     </span> 
                 </div>
-                <?PHP if((intval($product['is_promote']) === 1) || ($product['discount'] > 0)): ?>   
+                <?PHP if( ((intval($product['is_promote']) === 1) && $product['start_promo'] && !$product['end_promo'])
+                        || ((intval($product['is_promote']) === 0) && $product['discount'] > 0)): ?>   
                     <div><span class="recent_price"> PHP <?php echo number_format($product['original_price'],2,'.',','); ?></span> | <strong> <?php echo number_format( $product['percentage'],0,'.',',');?> % OFF  </strong></div>          
                 <?PHP endif;?>
           </div>
