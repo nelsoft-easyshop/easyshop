@@ -2100,11 +2100,12 @@ class product_model extends CI_Model
         $enddate = strtotime($end);
         $is_promo = intval($is_promo);
         $result['price'] = $baseprice;        
-	$bool_start_promo = false;
+        $bool_start_promo = false;
+        $bool_end_promo = false;
         if(intval($is_promo) === 1){
-	    $promo_array = $this->config->item('Promo')[$type];
-	    //OPTION CONTAINS PROMO SPECIFIC ADDITIONAL DATA
-	    $option = isset($promo_array['option'])?$promo_array['option']:array();
+            $promo_array = $this->config->item('Promo')[$type];
+            //OPTION CONTAINS PROMO SPECIFIC ADDITIONAL DATA
+            $option = isset($promo_array['option'])?$promo_array['option']:array();
             $calculation_id = $promo_array['calculation_id'];
             switch ($calculation_id) {
                 case 0 :
@@ -2126,27 +2127,21 @@ class product_model extends CI_Model
                     if(($today < $startdate) || ($enddate < $startdate) || ($today > $enddate)){
                         $PromoPrice = $baseprice;
                     }else{
-                        $PromoPrice = $baseprice - ($baseprice)*0.20;
-			$bool_start_promo = true;
+                        $PromoPrice = $baseprice - ($baseprice)*($discount_percentage / 100) ;
+                        $bool_start_promo = true;
                     }
                     break;
                 case 3:
-		    $Ymd = strtotime(date('Y-m-d', $today));
-		    $His = strtotime(date('H:i:s', $today));
-		    if($Ymd === strtotime(date('Y-m-d',$startdate)) ){
-		      foreach($option as $opt){
-			if((strtotime($opt['start']) <= $His) && (strtotime($opt['end']) > $His)){
-			  $bool_start_promo = true;
-			  break;
-			}
-		      }
-		    }
-		    /*
-		    if((!$bool_start_promo) && ($today >= $enddate)){
-			$bool_start_promo = true;
-		    }
-		    */
-		    
+                    $Ymd = strtotime(date('Y-m-d', $today));
+                    $His = strtotime(date('H:i:s', $today));
+                    if($Ymd === strtotime(date('Y-m-d',$startdate)) ){
+                        foreach($option as $opt){
+                            if((strtotime($opt['start']) <= $His) && (strtotime($opt['end']) > $His)){
+                                $bool_start_promo = true;
+                                break;
+                            }
+                        }
+                    }
                     $PromoPrice = $baseprice -   $baseprice*($discount_percentage / 100) ;
                     break;
                 default :
@@ -2154,13 +2149,18 @@ class product_model extends CI_Model
                     break;
             }
 
+            if($today > $enddate){
+                $bool_end_promo= true;
+            }
+            
             $result['price'] = $PromoPrice;
         }
         $result['price'] = (floatval($result['price'])>0)?$result['price']:0.01;
-	$result['start_promo'] = $bool_start_promo;
-    
+        $result['start_promo'] = $bool_start_promo;
+        $result['end_promo'] = $bool_end_promo;
+
         return $result;
-   }
+    }
    
    
     /*

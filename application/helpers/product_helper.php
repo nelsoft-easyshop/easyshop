@@ -63,16 +63,18 @@ if ( ! function_exists('explodeImagePath')){
  *    @percentage - the percentage of the discount
  *    @can_purchase - boolean, whether user can buy the item or not
  */
-
+ 
 if ( ! function_exists('applyPriceDiscount')){
     function applyPriceDiscount(&$product = array()){
         $CI = get_instance();
         $CI->load->model('product_model');
         $buyer_id = $CI->session->userdata('member_id');
         $product['start_promo'] = false;
+        $product['end_promo'] = false;
         if(intval($product['is_promote']) === 1){
             $promo = $CI->product_model->GetPromoPrice($product['price'],$product['startdate'],$product['enddate'],$product['is_promote'],$product['promo_type'], $product['discount']);
-	    $product['start_promo'] = $promo['start_promo'];   
+            $product['start_promo'] = $promo['start_promo'];   
+            $product['end_promo'] = $promo['end_promo'];  
             $product['original_price'] = $product['price'];    
             $product['can_purchase'] =  $CI->product_model->is_purchase_allowed($buyer_id,$product['promo_type'],$product['start_promo']);
             $product['sold_price'] = $CI->product_model->get_sold_price($product['id_product'], date('Y-m-d',strtotime($product['startdate'])), date('Y-m-d',strtotime($product['enddate'])));
