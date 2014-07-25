@@ -1369,57 +1369,64 @@ class product_model extends CI_Model
     }
 
     public function getProductQuantity($product_id, $verbose = false, $check_lock = false, $start_promo = false){
-    
+
         /*
-         *  Check is their is a quantity limit enforced by promo
-         */ 
-    
-	$promo_quantity_limit = PHP_INT_MAX;
-	if($start_promo){
-	    $query = "SELECT promo_type, is_promote, startdate, enddate FROM es_product WHERE id_product = :product_id";
-	    $sth = $this->db->conn_id->prepare($query);
-	    $sth->bindParam(':product_id',$product_id, PDO::PARAM_INT);
-	    $sth->execute();
-	    $product_promo = $sth->fetch(PDO::FETCH_ASSOC);
-	    if(intval($product_promo['is_promote']) === 1){
-		$promo_option =  $this->config->item('Promo')[$product_promo['promo_type']]['option'];
-		$His = strtotime(date('H:i:s'));
-		foreach($promo_option as $opt ){
-		    if((strtotime($opt['start']) <= $His) && (strtotime($opt['end']) > $His)){
-		      $promo_quantity_limit = $opt['purchase_limit'];
-		      break;
-		    }
-		}
-		
-		    $query = "SELECT COALESCE(SUM(op.order_quantity),0) as sold_count FROM es_order_product op
-			      INNER JOIN es_order o ON o.id_order = op.order_id AND o.dateadded between :start AND :end
-			      AND o.order_status != 99 AND o.order_status != 2 
-			      WHERE product_id = :product_id";
-			    
-		$start_datetime = date('Y-m-d',strtotime($product_promo['startdate'])).' '.$opt['start'];
-		$end_datetime = date('Y-m-d',strtotime($product_promo['enddate'])).' '.$opt['end'];
-		$sth = $this->db->conn_id->prepare($query);
-		$sth->bindParam(':product_id',$product_id, PDO::PARAM_INT);
-		$sth->bindParam(':start',$start_datetime, PDO::PARAM_STR);
-		$sth->bindParam(':end',$end_datetime, PDO::PARAM_STR);
-		$sth->execute();
-		$sold_count = $sth->fetch(PDO::FETCH_ASSOC)['sold_count'];	
-		$promo_quantity_limit = $opt['purchase_limit'] - $sold_count;
-		$promo_quantity_limit = ($promo_quantity_limit >= 0)?$promo_quantity_limit:0;
-		
-	    }	  
+        *  Check is their is a quantity limit enforced by promo
+        */ 
+
+        $promo_quantity_limit = PHP_INT_MAX;
+        if($start_promo){
+            $query = "SELECT promo_type, is_promote, startdate, enddate FROM es_product WHERE id_product = :product_id";
+            $sth = $this->db->conn_id->prepare($query);
+            $sth->bindParam(':product_id',$product_id, PDO::PARAM_INT);
+            $sth->execute();
+            $product_promo = $sth->fetch(PDO::FETCH_ASSOC);
+            if(intval($product_promo['is_promote']) === 1){
+                $promo_option =  $this->config->item('Promo')[$product_promo['promo_type']]['option'];
+                $His = strtotime(date('H:i:s'));
+                
+                $start_datetime = $product_promo['startdate'];
+                $end_datetime = $product_promo['enddate'];
+                
+                foreach($promo_option as $opt ){
+                    if((strtotime($opt['start']) <= $His) && (strtotime($opt['end']) > $His)){
+                        $promo_quantity_limit = $opt['purchase_limit'];
+                        $start_datetime = date('Y-m-d',strtotime($start_datetime)).' '.$opt['start'];
+                        $end_datetime = date('Y-m-d',strtotime($end_datetime)).' '.$opt['end'];
+                        break;
+                    }
+                }
+                if(isset($opt['puchase_limit'])){
+                    $query = "SELECT COALESCE(SUM(op.order_quantity),0) as sold_count FROM es_order_product op
+                            INNER JOIN es_order o ON o.id_order = op.order_id AND o.dateadded between :start AND :end
+                            AND o.order_status != 99 AND o.order_status != 2 
+                            WHERE product_id = :product_id";
+
+                    $sth = $this->db->conn_id->prepare($query);
+                    $sth->bindParam(':product_id',$product_id, PDO::PARAM_INT);
+                    $sth->bindParam(':start',$start_datetime, PDO::PARAM_STR);
+                    $sth->bindParam(':end',$end_datetime, PDO::PARAM_STR);
+                    $sth->execute();
+                    $sold_count = $sth->fetch(PDO::FETCH_ASSOC)['sold_count'];
+                    
+                    $promo_quantity_limit = $opt['purchase_limit'] - $sold_count;
+                    $promo_quantity_limit = ($promo_quantity_limit >= 0)?$promo_quantity_limit:0;
+                }
+                
+                
+            } 
         }
-    
-    
+
+
         if($verbose){
             $query = $this->xmlmap->getFilenameID('sql/product','getProductQuantityVerbose');
         }
         else{
             $query = $this->xmlmap->getFilenameID('sql/product','getProductQuantity');
         }
-	$sth = $this->db->conn_id->prepare($query);
-	$sth->bindParam(':product_id',$product_id, PDO::PARAM_INT);
-	$sth->execute();
+        $sth = $this->db->conn_id->prepare($query);
+        $sth->bindParam(':product_id',$product_id, PDO::PARAM_INT);
+        $sth->execute();
         $rows = $sth->fetchAll(PDO::FETCH_ASSOC);
         
         $data = array();
@@ -1476,10 +1483,9 @@ class product_model extends CI_Model
                 }
             }
         }
-  
+
         return $data;
     }
-    
     
     public function deleteProductItemLock($item_lock_id){
         $query = 'DELETE FROM es_product_item_lock WHERE id_item_lock = :id';
