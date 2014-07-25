@@ -615,7 +615,7 @@ class Payment extends MY_Controller{
         $productstring = $prepareData['productstring'];
         $itemList = $prepareData['newItemList'];
         $toBeLocked = $prepareData['toBeLocked'];
-        $name = $prepareData['productName'];
+        $name = trim($prepareData['productName']);
 
         $txnid = $this->generateReferenceNumber($paymentType,$member_id);
         $dpReturn = $this->dragonpay->getTxnToken($grandTotal,$name,$address['email'],$txnid);
@@ -632,17 +632,39 @@ class Payment extends MY_Controller{
         }
     }
 
+    function test()
+    {
+        echo '
+        <form action="https://easyshop.ph.rb/payment/dragonPayPostBack" method="POST">
+            <input type="text" name="txnid" placeholder="txnid">
+            <input type="text" name="refno" placeholder="refno">
+            <input type="text" name="status" placeholder="status">
+            <input type="text" name="message" placeholder="message">
+            <input type="text" name="digest" placeholder="digest">
+            <input type="submit" name="digest" placeholder="digest">
+        </form>
+        ';
+    }
+
     function dragonPayPostBack()
     {
         header("Content-Type:text/plain");
 
         $paymentType = $this->PayMentDragonPay; 
 
-        $txnId = $this->input->post('txnid');
-        $refNo = $this->input->post('refno');
-        $status =  $this->input->post('status');
-        $message = $this->input->post('message');
-        $digest = $this->input->post('digest');
+        $txnId = urldecode($this->input->post('txnid'));
+        $refNo = urldecode($this->input->post('refno'));
+        $status =  urldecode($this->input->post('status'));
+        $message = urldecode($this->input->post('message'));
+        $digest = urldecode($this->input->post('digest'));
+
+        $secretKey = $this->dragonpay->getCredentials()['merchantPwd'];
+        
+        $appDigest = sha1($txnId.':'.$refNo.':'.$status.':'.$message.':'.$secretKey);
+
+        if($digest != $appDigest){
+            die();
+        } 
 
         $payDetails = $this->payment_model->selectFromEsOrder($txnId,$paymentType);
         $invoice = $payDetails['invoice_no'];

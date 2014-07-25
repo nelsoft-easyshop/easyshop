@@ -42,6 +42,13 @@ class DragonPay {
         $this->declareEnvironment(); 
     }
 
+    function getCredentials()
+    {   
+        $data['merchantId'] = $this->merchantId;
+        $data['merchantPwd'] = $this->merchantPwd;
+        return $data;
+    }
+
     function getProcessors()
     { 
     	$client = new nusoap_client($this->url, 'wsdl');
