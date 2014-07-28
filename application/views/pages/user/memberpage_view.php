@@ -1140,7 +1140,7 @@
 						<?php endif;?>
 					</div>
 					<div class="clear"></div>
-					<p href="#" id="addRow_school"> + Add another school</p>		
+					<p href="#" id="addRow_school" class="add_new_dynamicdd"> + Add another school</p>		
 					<div>
 						<span class="red ci_form_validation_error"><?php echo form_error('schoolname'); ?></span>
 						<span class="red ci_form_validation_error"><?php echo form_error('schoolyear'); ?></span>
@@ -1229,7 +1229,7 @@
 				<?php endif;?>
 			</div>
 			<div class="clear"></div>
-			<p href="#" id="addRow_work"> + Add another work</p>
+			<p href="#" id="addRow_work" class="add_new_dynamicdd"> + Add another work</p>
 			<div>
 				<label></label>
 				<span class="red ci_form_validation_error"><?php echo form_error('companyname1');?></span>

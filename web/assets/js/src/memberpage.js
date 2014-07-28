@@ -835,15 +835,29 @@ $(document).ready(function(){
 			$(this).val($(this).attr('data-status'));
 		});
 		
-		if(cancelname === 'cancel_school' || cancelname === 'cancel_work'){			
+		if(cancelname === 'cancel_school' || cancelname === 'cancel_work'){		
 			innerfields.find('div.dynamic_dd').find('input[type="text"]').each(function(){
 				if(!($.trim($(this).attr('value')))){
 					$(this).closest('div.dynamic_dd').remove();
 				}
 			});
+			
+			var len = parseInt(innerfields.find('div.dynamic_dd').length);
+			
+			if(len < 3){
+				innerfields.find('.add_new_dynamicdd').show();
+				console.log(innerfields.find('.add_new_dynamicdd'));
+				console.log('lessthan3');
+			}else{
+				innerfields.find('.add_new_dynamicdd').hide();
+				console.log(innerfields.find('.add_new_dynamicdd'));
+				console.log('greaterthan3');
+			};
+			
 		}else if( cancelname === 'cancel_address' ){
 			var cityselect = innerfields.find('select.cityselect');
 			var stateregionselect = innerfields.find('select.stateregionselect');
+			
 			cityFilter(stateregionselect, cityselect);
 			cityselect.val(cityselect.attr('data-status'));
 			cityselect.trigger('chosen:updated');
@@ -1158,24 +1172,22 @@ $(document).ready(function(){
 		return $html.html();
 	}
 
-   //add additional work 
-	$(document).ready(function () {
-		$('#addRow_work').click(function (){        
-			var cont = $('<div/>', {
-				'class': 'add_another_work dynamic_dd',
-				html: GetHtml()
-			}).hide().appendTo('#container_work').fadeIn('slow');
-			
-			cont.find("*[name^='companyname']").rules('add',{required: true,range: [1901, 2155], messages:{required: '* Company name is required'}});
-			cont.find("*[name^='designation']").rules('add',{required: true, messages:{required: '* Designation is required'}});
-			cont.find("*[name^='year']").rules('add',{required: true, digits: true, range: [1901, 2155], messages:{required: '* Year of service is required', range: '* This is an invalid year'}});
-			cont.find("*[name^='year']").numeric({negative : false});	
-			
-			var len = $("#container_work").find(".add_another_work").length;
-			if(len == 3){
-				$('#addRow_work').hide();
-			}
-		});
+	//add additional work 
+	$('#addRow_work').click(function (){        
+		var cont = $('<div/>', {
+			'class': 'add_another_work dynamic_dd',
+			html: GetHtml()
+		}).hide().appendTo('#container_work').fadeIn('slow');
+		
+		cont.find("*[name^='companyname']").rules('add',{required: true,range: [1901, 2155], messages:{required: '* Company name is required'}});
+		cont.find("*[name^='designation']").rules('add',{required: true, messages:{required: '* Designation is required'}});
+		cont.find("*[name^='year']").rules('add',{required: true, digits: true, range: [1901, 2155], messages:{required: '* Year of service is required', range: '* This is an invalid year'}});
+		cont.find("*[name^='year']").numeric({negative : false});	
+		
+		var len = $("#container_work").find(".add_another_work").length;
+		if(len == 3){
+			$('#addRow_work').hide();
+		}
 	});
 
 	//***************	PERSONAL PROFILE WORK	************************//
