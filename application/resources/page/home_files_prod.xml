@@ -1,5 +1,5 @@
-<?xml version="1.0"?>
-<map>
+    <?xml version="1.0"?>
+    <map>
 
     <header>
         <value>Announcement</value>
@@ -39,166 +39,180 @@
     </mainSlide>
 
     <mainSlide> 
-        <value>assets/images/mainslide/141207111212.jpg</value> 
+        <value>assets/images/mainslide/141007281058.jpg</value> 
         <type>image</type>
         <imagemap>
             <coordinate>0,0,589,351.77813992311667</coordinate>
-            <target>item/kj-star-wireless-mobile-phone-monopod</target>
+            <target>item/cnaier-multi-function-face-massager</target>
         </imagemap>
     </mainSlide>
-    
-    <mainSlide> 
-        <value>assets/images/mainslide/140107170107.jpg</value> 
-        <type>image</type>
-        <imagemap>
-            <coordinate>0,0,589,351.77813992311667</coordinate>
-            <target>item/lenovo-yoga-tablet-10-b880</target>
-        </imagemap>
-    </mainSlide>
-    
-    
+
+
+
     <productSlide_title>
         <value>Hot and New</value>
         <type>text</type>
     </productSlide_title>
 
     <productSlide>
-        <value>shake-n-take-3</value>
+        <value>kj-star-wireless-mobile-phone-monopod</value>
         <type>product</type>
     </productSlide>
 
     <productSlide>
-        <value>action-camcorder-hd-720p</value>
+        <value>sports-cam</value>
         <type>product</type>
     </productSlide>
 
     <productSlide>
-        <value>camping-lantern</value>
+        <value>nova-2-in-1-curling-iron</value>
         <type>product</type>
     </productSlide>
 
     <productSideBanner>
-        <value>lenovo-yoga-tablet-10-b880</value>
+        <value>cnaier-multi-function-face-massager</value>
         <type>product</type>
     </productSideBanner>
 
     <section>
 
         <type>custom</type>
-        <value>ckkmobile</value>
+        <value>suanti</value>
         <css_class>red_cat</css_class>
-        <title>CKK Mobile</title>
+        <title>Suanti</title>
         <layout>layoutA</layout>
 
         <product_panel_main>
-	    <value>assets/images/partner/ckkmobile.jpg</value>    
+        <value>assets/images/partner/suanti.jpg</value>    
             <type>image</type>
-	    <imagemap>
-		<coordinate>0,0,486,351</coordinate>
-		<target>vendor/ckkmobile</target>
-	    </imagemap>
+        <imagemap>
+        <coordinate>0,0,486,351</coordinate>
+        <target>vendor/suanti</target>
+        </imagemap>
 
         </product_panel_main>
 
 
 
         <product_panel>
-            <value>ckk-c77tv-smart-phone</value>
-            <type>product</type>
-        </product_panel>
-
-       <product_panel>
-            <value>ckk-7562-smart-phone</value>
+            <value>crystalline-nobility-strength-horses-11-34</value>
             <type>product</type>
         </product_panel>
 
         <product_panel>
-            <value>ckk-c66-smart-phone</value>
-            <type>product</type>
-        </product_panel>
-
-	<product_panel>
-            <value>ckk-s8-smart-phone</value>
+            <value>welcome-stonio-25inch</value>
             <type>product</type>
         </product_panel>
 
         <product_panel>
-            <value>ckk-c11-smart-phone</value>
+            <value>crystalline-longevity-tortoise-65-x-6inch</value>
             <type>product</type>
         </product_panel>
 
         <product_panel>
-            <value>ckk-c505-smart-phone</value>
+            <value>thai-buddha-lying-12inch</value>
             <type>product</type>
         </product_panel>
 
         <product_panel>
-            <value>ckk-s6-smart-phone</value>
+            <value>thai-buddha-head-13inch</value>
             <type>product</type>
         </product_panel>
 
         <product_panel>
-            <value>ckk-desire-q60-smart-phone</value>
+            <value>immaculate-heart-of-mary-25inch</value>
+            <type>product</type>
+        </product_panel>
+
+        <product_panel>
+            <value>holy-family-25inch</value>
+            <type>product</type>
+        </product_panel>
+
+        <product_panel>
+            <value>thai-buddha-sitting-10inch</value>
             <type>product</type>
         </product_panel>
 
     </section>
-    
+
     <section>
 
-      <type>category</type>
-      <value>16</value>
-      <css_class>blue_cat</css_class>
-      <layout>layoutB</layout>
+        <type>category</type>
+        <value>12</value>
+        <css_class>blue_cat</css_class>
+        <layout>layoutB</layout>
 
         <product_panel_main>
-          <value>anchor-designed-shorts</value>
-          <type>product</type>
-        </product_panel_main>
-	
-	<product_panel_main>
-	   <value>multi-striped-shirt</value>
-           <type>product</type>
+            <value>zodiac-sign-cup</value>
+            <type>product</type>
         </product_panel_main>
 
-        <product_panel>
-            <value>tough-guys-pants</value>
+        <product_panel_main>
+            <value>heart-in-love-with-spoon-and-cover</value>
             <type>product</type>
-        </product_panel>
-
-       <product_panel>
-            <value>handsome-jacket</value>
+        </product_panel_main>
+        
+         <product_panel_main>
+            <value>table-mate-ii</value>
             <type>product</type>
-        </product_panel>
-
-	<product_panel>
-            <value>styleboy-shirt</value>
+        </product_panel_main>
+        
+         <product_panel_main>
+            <value>stainless-steel-pineapple-corer</value>
             <type>product</type>
-        </product_panel>
-	
-	
-        <product_panel>
-            <value>statement-shirt</value>
+        </product_panel_main>
+        
+          
+         <product_panel_main>
+            <value>versatile-11-in-1-pocket-multi-tool-card</value>
             <type>product</type>
-        </product_panel>
-
-        <product_panel>
-            <value>christian-shirt</value>
+        </product_panel_main>
+        
+        <product_panel_main>
+            <value>drinklip-cup-holder</value>
             <type>product</type>
-        </product_panel>
-
-        <product_panel>
-            <value>simple-gentlemans-polo-shirt</value>
-            <type>product</type>
-        </product_panel>
+        </product_panel_main>
+        
 
         <product_panel>
-            <value>plaid-round-neck-shirt</value>
+            <value>charm-stripe-tumbler</value>
             <type>product</type>
         </product_panel>
 
         <product_panel>
-	   <value>multi-striped-shirt</value>
+            <value>stripes-feelings-mug-with-cover</value>
+            <type>product</type>
+        </product_panel>
+
+        <product_panel>
+            <value>cute-3-in-1-keyboard-shaped-brush-puncher-stapler</value>
+            <type>product</type>
+        </product_panel>
+
+
+        <product_panel>
+            <value>fashionable-piano-inspired-clothing-hanger</value>
+            <type>product</type>
+        </product_panel>
+
+        <product_panel>
+            <value>fastest-egg-steamer-poacher</value>
+            <type>product</type>
+        </product_panel>
+
+        <product_panel>
+            <value>portable-water-bottle-wringtoss-game</value>
+            <type>product</type>
+        </product_panel>
+
+        <product_panel>
+            <value>smart-foldable-pocket-knife</value>
+            <type>product</type>
+        </product_panel>
+
+        <product_panel>
+        <value>smart-digital-measuring-cup</value>
             <type>product</type>
         </product_panel>
 
@@ -208,67 +222,69 @@
     <section>
 
         <type>category</type>
-        <value>3</value>
+        <value>4</value>
         <css_class>orange_cat</css_class>
         <layout>layoutE</layout>
 
+        
+        
         <product_panel_main>
-	    <value>naturactor-coverface-concealer-1</value>
+            <value>crystal-pearl-earrings-stud-set</value>
             <type>product</type>
         </product_panel_main>
 
-         <product_panel_main>
-            <value>aqua-de-gio</value>
+        <product_panel_main>
+            <value>925-silver-peach-freshwater-pearl</value>
             <type>product</type>
-       </product_panel_main>
+        </product_panel_main>
 
-         <product_panel_main>
-            <value>christian-dior-jadore-edp-perfume-for-women</value>
+        <product_panel_main>
+            <value>flower-beaded-necklace</value>
             <type>product</type>
         </product_panel_main>
 
         <product_panel>
-            <value>ck-be-jumbo-edt-perfume-unisex</value>
-            <type>product</type>
-        </product_panel>
-
-       <product_panel>
-            <value>aveeno-skin-relief-moisturising-cream</value>
+            <value>lucky-chain-pink-for-love-marriage-</value>
             <type>product</type>
         </product_panel>
 
         <product_panel>
-            <value>cleansing-lotion</value>
-            <type>product</type>
-        </product_panel>
-
-
-	<product_panel>
-            <value>collagen-jella-pack-1</value>
+            <value>lucky-chain-8</value>
             <type>product</type>
         </product_panel>
 
         <product_panel>
-            <value>cyleina-black-pearl-supreme-soap</value>
+            <value>lucky-chain-16</value>
+            <type>product</type>
+        </product_panel>
+
+
+        <product_panel>
+            <value>lucky-chain-22</value>
             <type>product</type>
         </product_panel>
 
         <product_panel>
-            <value>my-beauty-diary-red-wine-mask</value>
+            <value>candy-geometric-earrings</value>
             <type>product</type>
         </product_panel>
 
         <product_panel>
-            <value>thursday-plantation-aloe-vera-gel-30g</value>
+            <value>bowknot-earring</value>
             <type>product</type>
         </product_panel>
 
         <product_panel>
-            <value>advanced-skin-care-refinisher</value>
+            <value>double-triangle-stud-long-earrings</value>
+            <type>product</type>
+        </product_panel>
+
+        <product_panel>
+            <value>antique-rectangle-tassel-dangle-earring</value>
             <type>product</type>
         </product_panel>
 
     </section>
 
 
-</map>
+    </map>
