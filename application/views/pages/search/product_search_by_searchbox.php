@@ -339,7 +339,6 @@ $(document).ready(function(){
             url: base_url + 'search_more',
             data:{page_number:offset,id_cat:<?php echo $id_cat ?>,type:type,parameters:'<?php echo json_encode($get_params) ?>', csrfname : csrftoken},
             type: 'post',
-            async: false,
             dataType: 'json',
             success: function(d) {
                if(d == "0"){
