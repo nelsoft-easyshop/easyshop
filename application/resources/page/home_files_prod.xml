@@ -1,5 +1,5 @@
-    <?xml version="1.0"?>
-    <map>
+<?xml version="1.0"?>
+<map>
 
     <header>
         <value>Announcement</value>
@@ -287,4 +287,4 @@
     </section>
 
 
-    </map>
+</map>
