@@ -91,10 +91,10 @@ class Register extends MY_Controller
 		}
 		else{
 			if( !($this->input->post('register_form1')) ){
-				array_push($serverResponse['error'], 'Failed to submit form. <br>');
+				array_push($serverResponse['error'], 'Failed to submit form.');
 			}
 			if( !($this->form_validation->run('landing_form')) ){
-				array_push($serverResponse['error'], 'Failed to validate form. <br>');
+				array_push($serverResponse['error'], 'Failed to validate form.');
 			}
 		}
 		

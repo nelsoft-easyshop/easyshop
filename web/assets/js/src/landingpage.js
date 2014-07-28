@@ -255,6 +255,7 @@ jQuery(document).ready(function(){
                         jQuery('#success_register').submit();
 					}
 					else{
+						/*
 						jQuery('#result_desc').html(serverResponse['error']);
 						var title= "Failed to Register";
                         
@@ -271,7 +272,8 @@ jQuery(document).ready(function(){
                                 }
                             }
                         });
-                        jQuery('#register_result').dialog('open');
+                        jQuery('#register_result').dialog('open');*/
+						alert(serverResponse['error']);
 					}
 					
 				});
@@ -341,6 +343,7 @@ function mobile_check(){
 	var csrftoken = jQuery("meta[name='csrf-token']").attr('content');
     var csrfname = jQuery("meta[name='csrf-name']").attr('content');
 	var field = jQuery('#mobile');
+	
 	jQuery.post(config.base_url+'register/mobile_check', {mobile: mobile, csrfname : csrftoken}, function(result){
 		if(result == 1){
 			showcheck(jQuery('#mobile'));

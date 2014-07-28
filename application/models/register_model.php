@@ -36,6 +36,7 @@ class Register_model extends CI_Model
 	// USED BY AJAX CHECK
 	function checkMobileIfExists($mobile)
 	{
+		$mobile = ltrim($mobile,'0');
 		$query = $this->xmlmap->getFilenameID('sql/users', 'getMobile');
         $sth = $this->db->conn_id->prepare($query);
         $sth->bindParam(':contactno', $mobile);
@@ -130,9 +131,10 @@ class Register_model extends CI_Model
 		}
 	}
     
-	// FOR FIRST TIME REGISTRATION ONLY
+	// FOR FIRST TIME REGISTRATION ONLY - used by form_validation.php config
 	function validate_mobile($mobile)
 	{
+		$mobile = ltrim($mobile,'0');
 		$query = $this->xmlmap->getFilenameID('sql/users', 'getMobile');
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':contactno', $mobile);
@@ -292,7 +294,7 @@ class Register_model extends CI_Model
 		$query = $this->xmlmap->getFilenameID('sql/users', 'check_contactinfo');
         $sth = $this->db->conn_id->prepare($query);
 
-        $data['contactno'] = $data['contactno'] === '' ? 0:$data['contactno'];
+        $data['contactno'] = $data['contactno'] === '' ? 0:ltrim($data['contactno'],'0');
         $data['email'] = $data['email'] === '' ? 0:$data['email'];
 
 		$sth->bindParam(':contactno', $data['contactno']);
