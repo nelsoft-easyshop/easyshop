@@ -2,9 +2,8 @@
 /**************************	SIGNUP/REGISTER ***************************/
 /**********************************************************************/
 
-var ajaxStat = {};
-
 jQuery(document).ready(function(){
+	  
 	  jQuery('#username').on('focus', function() {
 		  jQuery(document).bind('focusin.example click.example',function(e) {
 			  if (jQuery(e.target).closest('.username_info, #username').length) return;
@@ -19,12 +18,14 @@ jQuery(document).ready(function(){
 			hidecheckx(jQuery('#username'));
 			jQuery('.username_availability').html('');
 		}
-	  }).on('input', function(){
+	  }).on('keyup', function(){
 		var fieldlength = jQuery.trim(jQuery('#username').val()).length;
 		hidecheckx(jQuery(this));
 		jQuery('.username_availability').html('');
 		
-		jQuery(this).removeClass('pass');
+		if(jQuery(this).hasClass('pass')){
+			jQuery(this).removeClass('pass');
+		}
 		
 		if(!jQuery(this).hasClass('forSearch') && fieldlength >= 5){
 			jQuery(this).addClass('forSearch');
@@ -99,12 +100,14 @@ jQuery(document).ready(function(){
 			hidecheckx(jQuery('#email'));
 			jQuery('.email_availability').html('');
 		}
-	  }).on('input', function(){
+	  }).on('keyup', function(){
 		var fieldlength = jQuery.trim(jQuery('#email').val()).length;
 		hidecheckx(jQuery(this));
 		jQuery('.email_availability').html('');
 		
-		jQuery(this).removeClass('pass');
+		if(jQuery(this).hasClass('pass')){
+			jQuery(this).removeClass('pass');
+		}
 		
 		if(!jQuery(this).hasClass('forSearch') && fieldlength >= 6){
 			jQuery(this).addClass('forSearch');
@@ -119,25 +122,26 @@ jQuery(document).ready(function(){
 	  jQuery('#mobile').on('blur', function(){
 		var fieldlength = jQuery.trim(jQuery('#mobile').val()).length;
 
-		if(fieldlength === 11 && jQuery(this).hasClass('forSearch') && jQuery(this).hasClass('valid')){
+		if(fieldlength >= 6 && jQuery(this).hasClass('forSearch') && jQuery(this).hasClass('valid')){
 			setTimeout(mobile_check,500);
 		}
-		else if(fieldlength < 11){
+		else if(fieldlength < 6){
 			hidecheckx(jQuery('#mobile'));
 			jQuery('.mobile_availability').html('');
 		}
-	  }).on('input', function(){
+	  }).on('keyup', function(){
 		var fieldlength = jQuery.trim(jQuery('#mobile').val()).length;
 		hidecheckx(jQuery(this));
 		jQuery('.mobile_availability').html('');
 		
-		jQuery(this).removeClass('pass');
-		jQuery(this).removeClass('fail');
+		if(jQuery(this).hasClass('pass')){
+			jQuery(this).removeClass('pass');
+		}
 		
-		if(!jQuery(this).hasClass('forSearch') && fieldlength === 11){
+		if(!jQuery(this).hasClass('forSearch') && fieldlength >= 6){
 			jQuery(this).addClass('forSearch');
 		}
-		else if(fieldlength < 11){
+		else if(fieldlength < 6){
 			jQuery(this).removeClass('forSearch');
 			hidecheckx(jQuery('#mobile'));
 			jQuery('.mobile_availability').html('');
@@ -222,17 +226,14 @@ jQuery(document).ready(function(){
 				}
 		 },
 		 submitHandler: function(form){
-			var userfield = jQuery('#username');
-			var emailfield = jQuery('#email');
-			var mobilefield = jQuery('#mobile');
-			var thisbtn = jQuery('#register_form1_btn');
-			
-			if( userfield.hasClass('pass') && emailfield.hasClass('pass') && !(mobilefield.hasClass('fail')) && !(mobilefield.hasClass('forSearch')) ){
+			if( jQuery('#username').hasClass('pass') && jQuery('#email').hasClass('pass') && !(jQuery('#mobile').hasClass('fail')) && !(jQuery('#mobile').hasClass('forSearch')) ){
 				jQuery('#register_form1_loadingimg').show().css('display','inline-block');
-				
+				jQuery('#register_form1_btn').attr('disabled', true);
+
 			 	jQuery.post(config.base_url + 'register/signup', jQuery(form).serializeArray(), function(data){
 					jQuery('#register_form1_loadingimg').hide();
-					thisbtn.attr('disabled', false);
+					jQuery('#register_form1_btn').attr('disabled', false);
+					
 					try{
 						var serverResponse = jQuery.parseJSON(data);
 					}
@@ -254,28 +255,28 @@ jQuery(document).ready(function(){
                         jQuery('#success_register').submit();
 					}
 					else{
+						/*
+						jQuery('#result_desc').html(serverResponse['error']);
+						var title= "Failed to Register";
+                        
+                        jQuery('#register_result').dialog({
+                        width:'65%',
+                        autoOpen: false,
+                        title: title,
+                        modal: true,
+                        closeOnEscape: false,
+                        draggable:false,
+                        buttons:{
+                                OK: function(){
+                                    jQuery(this).dialog("close");
+                                }
+                            }
+                        });
+                        jQuery('#register_result').dialog('open');*/
 						alert(serverResponse['error']);
-						thisbtn.attr('disabled',false);
-						thisbtn.val('SEND');
 					}
 					
 				});
-				thisbtn.attr('disabled',true);
-				thisbtn.val('SAVING...');
-			}else{
-				// Codes below will execute only once as compensation for slow loaders.
-				if( !userfield.hasClass('exec') ){
-					username_check(1);
-					ajaxStat.username = true;
-				}
-				if( !emailfield.hasClass('exec') ){
-					email_check(1);
-					ajaxStat.email = true;
-				}
-				if( $.trim(mobilefield.val()).length == 11 && !mobilefield.hasClass('exec') ){
-					mobile_check(1);
-					ajaxStat.mobile = true;
-				}
 			}
 			return false;
 		 }
@@ -287,37 +288,11 @@ jQuery(document).ready(function(){
 	
 });
 
-function ajaxCheck(key){
-	var count = 0;
-	var i;
-	var submitbtn = jQuery('#register_form1_btn');
-	
-	delete ajaxStat[key];
-	
-	for (i in ajaxStat){
-		if( ajaxStat.hasOwnProperty(i) ){
-			count++;
-		}
-	}
-	
-	if( count === 0 ){
-		submitbtn.submit();
-	}
-}
-
-function username_check(trigger=0){
+function username_check(){
 	var username = jQuery('#username').val();
 	var csrftoken = jQuery("meta[name='csrf-token']").attr('content');
     var csrfname = jQuery("meta[name='csrf-name']").attr('content');
 	var field = jQuery('#username');
-	
-	//Prevents execution of post triggered by blur from field, (fixes dual request due to setTimeout)
-	if(typeof ajaxStat.username != "undefined"){
-		return false;
-	}
-	
-	field.addClass('exec');
-	
 	jQuery.post(config.base_url+'register/username_check', {username: username, csrfname : csrftoken}, function(result){
 		if(result == 1){
 			showcheck(jQuery('#username'));
@@ -332,25 +307,14 @@ function username_check(trigger=0){
 		}
 		field.removeClass('forSearch');
 		jQuery('#username_loader').hide();
-		if( trigger === 1 ){
-			ajaxCheck('username');
-		}
 	});
 }
 
-function email_check(trigger=0){
+function email_check(){
 	var email = jQuery('#email').val();
 	var csrftoken = jQuery("meta[name='csrf-token']").attr('content');
     var csrfname = jQuery("meta[name='csrf-name']").attr('content');
 	var field = jQuery('#email');
-	
-	//Prevents execution of post triggered by blur from field, (fixes dual request due to setTimeout)
-	if(typeof ajaxStat.email != "undefined"){
-		return false;
-	}
-	
-	field.addClass('exec');
-	
 	jQuery.post(config.base_url+'register/email_check', {email: email, csrfname : csrftoken}, function(result){
 		if(result == 1){
 			showcheck(jQuery('#email'));
@@ -365,13 +329,10 @@ function email_check(trigger=0){
 		}
 		field.removeClass('forSearch');
 		jQuery('#email_loader').hide();
-		if( trigger === 1 ){
-			ajaxCheck('email');
-		}
 	});
 }
 
-function mobile_check(trigger=0){
+function mobile_check(){
 	var mobile = jQuery('#mobile').val();
 	//If mobile is 11 digit long, get the digit value
 	if(parseInt($.trim(mobile).length,10) === 11){
@@ -382,13 +343,6 @@ function mobile_check(trigger=0){
 	var csrftoken = jQuery("meta[name='csrf-token']").attr('content');
     var csrfname = jQuery("meta[name='csrf-name']").attr('content');
 	var field = jQuery('#mobile');
-	
-	//Prevents execution of post triggered by blur from field, (fixes dual request due to setTimeout)
-	if(typeof ajaxStat.mobile != "undefined"){
-		return false;
-	}
-	
-	field.addClass('exec');
 	
 	jQuery.post(config.base_url+'register/mobile_check', {mobile: mobile, csrfname : csrftoken}, function(result){
 		if(result == 1){
@@ -406,9 +360,6 @@ function mobile_check(trigger=0){
 		}
 		field.removeClass('forSearch');
 		jQuery('#mobile_loader').hide();
-		if( trigger === 1 ){
-			ajaxCheck('mobile');
-		}
 	});
 }
 
