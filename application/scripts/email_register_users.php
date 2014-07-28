@@ -21,7 +21,9 @@
      */
     $configQuery = array(
             'this_date' => date("Y-m-d H:i:s"),
-            'past_date' => date("Y-m-d H:i:s",strtotime("-1 days")),
+			'past_date' => date("Y-m-d H:i:s",strtotime("-7 days"))
+			
+            //'past_date' => date("Y-m-d H:i:s",strtotime("-1 days")),
             //'this_date' => date("Y-m-d H:i:s", mktime(0,0,0,9,9,2015)),
             //'past_date' => date("Y-m-d H:i:s", mktime(0,0,0,0,0,0)),
     );
@@ -57,8 +59,15 @@
     $rawResult = mysqli_query($link,
                                     "SELECT username, contactno, email, nickname, fullname, datecreated
                                     FROM es_member
-                                    WHERE datecreated BETWEEN '" . $configQuery['past_date'] . "' AND '" . $configQuery['this_date'] . "' " .
-                                    "ORDER BY datecreated"
+                                    WHERE datecreated BETWEEN '" . $configQuery['past_date'] . "' AND '" . $configQuery['this_date'] . "' 
+									
+									UNION
+									
+									SELECT '','',email,'','',datecreated
+									FROM es_subscribe
+									WHERE datecreated BETWEEN '" . $configQuery['past_date'] . "' AND '" . $configQuery['this_date'] . "' 
+									
+									ORDER BY datecreated"
     );
 
 
