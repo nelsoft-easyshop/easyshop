@@ -72,19 +72,21 @@ ul.slides_prod li a:hover {
 }
 
 .prod_alert_box {
-	border: 1px solid #0d7aff;
+	background-color: #e42626;
+	border: 1px solid #c52020;
+	color: #fff;
 	border-radius: 3px;
 	padding: 8px 12px;
 	margin-bottom: 12px;
 }
 
 .prod_alert_box a {
-	color: #494949;
-	border-bottom: 1px dotted #494949;
+	color: #fff;
+	border-bottom: 1px dotted #fff;
 }
 
 .prod_alert_box a:hover {
-	color: #0d7aff;
+	color: #fff;
 }
 
 
