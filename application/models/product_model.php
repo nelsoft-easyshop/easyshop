@@ -1370,7 +1370,7 @@ class product_model extends CI_Model
     public function getProductQuantity($product_id, $verbose = false, $check_lock = false, $start_promo = false){
 
         /*
-        *  Check is their is a quantity limit enforced by promo
+        *  Check if their is a quantity limit enforced by promo
         */ 
 
         $promo_quantity_limit = PHP_INT_MAX;
@@ -2146,11 +2146,19 @@ class product_model extends CI_Model
                     }
                     $PromoPrice = $baseprice -   $baseprice*($discount_percentage / 100) ;
                     break;
+                case 4 :
+                    $PromoPrice = $baseprice;
+                    if(!( ($today < $startdate) || ($enddate < $startdate) || ($today > $enddate))){
+                        $bool_start_promo = true;
+                    }
+                    break;
                 default :
                     $PromoPrice = $baseprice;
                     break;
             }
 
+            
+            
             if($today > $enddate){
                 $bool_end_promo= true;
             }

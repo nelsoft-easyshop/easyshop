@@ -82,10 +82,7 @@
       <?php echo $banner_view; ?>
 
       <div class="product_inner_content_info" >
-        <div class="prod_alert_box">
-          <span class="span_bg icon_info"></span> <strong>This product is for promo use only. For more information, visit our 
-            <a href="https://www.facebook.com/EasyShopPhilippines">Facebook page</a></strong>
-        </div>
+  
         <h1 class="id-class" id="<?php echo $product['id_product'];?>"> 
           <span id="pname"> <?php echo html_escape($product['product_name'])?> </span>
         </h1>
@@ -160,7 +157,7 @@
                         <?php echo number_format($product['price'],2,'.',',');?> 
                     </span> 
                 </div>
-                <?PHP if( ((intval($product['is_promote']) === 1) && $product['start_promo'] && !$product['end_promo'])
+                <?PHP if( ((intval($product['is_promote']) === 1) && $product['start_promo'] && !$product['end_promo'] && $product['percentage'] > 0)
                         || ((intval($product['is_promote']) === 0) && $product['discount'] > 0)): ?>   
                     <div><span class="recent_price"> PHP <?php echo number_format($product['original_price'],2,'.',','); ?></span> | <strong> <?php echo number_format( $product['percentage'],0,'.',',');?> % OFF  </strong></div>          
                 <?PHP endif;?>
