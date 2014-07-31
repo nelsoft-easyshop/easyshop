@@ -81,7 +81,7 @@ $config = array(
                 'cod'=>'Cash on Delivery'
             ),
             'banner' => 'generic',
-            'is_buyable_outside_promo' => false,
+            'is_buyable_outside_promo' => true,
             'cart_solo_restriction' => false,
             'option' => array(
                 0 => array(
