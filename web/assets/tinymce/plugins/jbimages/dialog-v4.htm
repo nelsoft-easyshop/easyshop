@@ -25,6 +25,19 @@
 	<div id="upload_infobar" class="upload_infobar"></div>
 	<div id="fileupload_list">
 	</div>
+	
+	<form class="form-inline" id="cloneForm" name="upl" action="ci/index.php/upload/english" method="post" enctype="multipart/form-data" target="upload_target" style="display:none;">
+		<!--Modified name of input from userfile to descriptionfile[]; also added multiple attr-->
+		<p id="upload_form_container">
+			<!--
+			<input id="uploader" name="descriptionfile[]" type="file" class="jbFileBox" onChange="document.upl.submit(); jbImagesDialog.inProgress();" multiple="">
+			-->
+			<input id="uploader" name="descriptionfile[]" type="file" class="jbFileBox" onChange="jbImagesDialog.inProgress();" multiple="" accept="image/*">
+		</p>
+		
+		<p id="the_plugin_name"><a href="http://easyshop.com/" target="_blank" title="easyshop.com">Easyshop</a></p>
+	</form>
+	
 	<form class="form-inline" id="upl1" name="upl" action="ci/index.php/upload/english" method="post" enctype="multipart/form-data" target="upload_target">
 		<!--Modified name of input from userfile to descriptionfile[]; also added multiple attr-->
 		<p id="upload_form_container">

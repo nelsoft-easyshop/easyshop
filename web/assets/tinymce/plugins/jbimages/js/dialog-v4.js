@@ -65,7 +65,7 @@ var jbImagesDialog = {
 					notAllowedFiles += filenames[i].name + '\n';
 				}
 			}
-			
+
 			if(filesAllowed){
 				var uploadlist = document.getElementById("fileupload_list");
 				for (var i = 0; i<filenames.length; i++){
@@ -87,10 +87,12 @@ var jbImagesDialog = {
 					$(origForm).ajaxSubmit(options);
 					document.getElementById('progressbox').style.display = 'block';
 				}
-				var newForm = origForm.cloneNode(true);
+				//var newForm = origForm.cloneNode(true);
+				var newForm = document.getElementById('cloneForm').cloneNode(true);
 				this.uploadCounter++;
 				origForm.style.display = 'none';
 				newForm.id = "upl" + this.uploadCounter;
+				newForm.style.display = 'block';
 				origForm.parentNode.appendChild(newForm);
 			// If one of the files selected is not allowed, exit function.
 			} else {
