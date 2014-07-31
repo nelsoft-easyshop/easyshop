@@ -61,7 +61,7 @@ $config = array(
             'is_buyable_outside_promo' => false,
             'cart_solo_restriction' => false,
             'option' => array(
-		0 => array(
+                0 => array(
                     'start' => '12:00:00',
                     'end' => '13:00:00',
                     'purchase_limit' => 5),
@@ -69,10 +69,28 @@ $config = array(
                     'start' => '20:00:00',
                     'end' => '21:00:00',
                     'purchase_limit' => 5)
-             ),
- 
-            
-        )
+             ),  
+        ),
+        '4' => array(
+            'calculation_id' => '4',
+            'purchase_limit' => PHP_INT_MAX,
+            'payment_method' =>  array(
+                'cdb'=>'Credit or Debit Card',
+                'paypal'=>'Paypal',
+                'dragonpay'=>'Dragon Pay',
+                'cod'=>'Cash on Delivery'
+            ),
+            'banner' => 'generic',
+            'is_buyable_outside_promo' => false,
+            'cart_solo_restriction' => false,
+            'option' => array(
+                0 => array(
+                    'start' => '00:00:00',
+                    'end' => '23:59:59',
+                    'purchase_limit' => 0
+                ),
+             )
+        ),
     )
 );
 

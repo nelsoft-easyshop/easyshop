@@ -2150,6 +2150,12 @@ class product_model extends CI_Model
                     }
                     $PromoPrice = $baseprice -   $baseprice*($discount_percentage / 100) ;
                     break;
+                case 4 :
+                    $PromoPrice = $baseprice;
+                    if(!( ($today < $startdate) || ($enddate < $startdate) || ($today > $enddate))){
+                        $bool_start_promo = true;
+                    }
+                    break;
                 default :
                     $PromoPrice = $baseprice;
                     break;

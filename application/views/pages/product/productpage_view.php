@@ -156,7 +156,7 @@
                         <?php echo number_format($product['price'],2,'.',',');?> 
                     </span> 
                 </div>
-                <?PHP if( ((intval($product['is_promote']) === 1) && $product['start_promo'] && !$product['end_promo'])
+                <?PHP if( ((intval($product['is_promote']) === 1) && $product['start_promo'] && !$product['end_promo'] && ($product['percentage'] > 0))
                         || ((intval($product['is_promote']) === 0) && $product['discount'] > 0)): ?>   
                     <div><span class="recent_price"> PHP <?php echo number_format($product['original_price'],2,'.',','); ?></span> | <strong> <?php echo number_format( $product['percentage'],0,'.',',');?> % OFF  </strong></div>          
                 <?PHP endif;?>
