@@ -71,6 +71,22 @@ ul.slides_prod li a:hover {
 	float: left;
 }
 
+.prod_alert_box {
+	border: 1px solid #0d7aff;
+	border-radius: 3px;
+	padding: 8px 12px;
+	margin-bottom: 12px;
+}
+
+.prod_alert_box a {
+	color: #494949;
+	border-bottom: 1px dotted #494949;
+}
+
+.prod_alert_box a:hover {
+	color: #0d7aff;
+}
+
 
 .product_inner_content_info {
     background-color: #f8f7f7;
@@ -532,8 +548,9 @@ span.free_shipping_logo {
 	max-width: 750px;
 }
 
-#tabs-1 ul {
+#tabs-1 .prod_details_list {
 	list-style: none;
+	clear: both;
 
 }
 

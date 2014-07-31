@@ -419,6 +419,12 @@ input[type="button"] {
 	width: 16px;		
 }
 
+.icon_info {
+	background-position: -744px -253px;
+    height: 25px;
+    width: 25px;
+}
+
 /*** Borders ****/
 .brdr {
 	border:1px solid;
@@ -455,6 +461,10 @@ input[type="button"] {
 
 .mrgntop-30 {
     margin-top: 30px;
+}
+
+.mrginrght-20 {
+    margin-right: 20px;
 }
 
 .mrginrght-5 {
@@ -933,6 +943,10 @@ a.msgs_link:hover {
 .txt_need_help_con .up_arrow {
 	display: block;
 	margin: 0 auto;
+}
+
+.arrow-switch .up_arrow {
+	background-position: -866px -333px;
 }
 
 .icon_help {
