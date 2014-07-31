@@ -107,9 +107,9 @@ class Register extends MY_Controller
 		if($this->input->post('username')){
 			$username = $this->input->post('username');
 			if($this->register_model->validate_username($username))
-				echo 0;
-			else
 				echo 1;
+			else
+				echo 0;
 		}
 	}
 	

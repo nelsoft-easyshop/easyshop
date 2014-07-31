@@ -305,7 +305,7 @@ function ajaxCheck(key){
 	}
 }
 
-function username_check(trigger=0){
+function username_check(trigger){
 	var username = jQuery('#username').val();
 	var csrftoken = jQuery("meta[name='csrf-token']").attr('content');
     var csrfname = jQuery("meta[name='csrf-name']").attr('content');
@@ -332,13 +332,13 @@ function username_check(trigger=0){
 		}
 		field.removeClass('forSearch');
 		jQuery('#username_loader').hide();
-		if( trigger === 1 ){
+		if( typeof trigger != "undefined" ){
 			ajaxCheck('username');
 		}
 	});
 }
 
-function email_check(trigger=0){
+function email_check(trigger){
 	var email = jQuery('#email').val();
 	var csrftoken = jQuery("meta[name='csrf-token']").attr('content');
     var csrfname = jQuery("meta[name='csrf-name']").attr('content');
@@ -365,13 +365,13 @@ function email_check(trigger=0){
 		}
 		field.removeClass('forSearch');
 		jQuery('#email_loader').hide();
-		if( trigger === 1 ){
+		if( typeof trigger != "undefined" ){
 			ajaxCheck('email');
 		}
 	});
 }
 
-function mobile_check(trigger=0){
+function mobile_check(trigger){
 	var mobile = jQuery('#mobile').val();
 	//If mobile is 11 digit long, get the digit value
 	if(parseInt($.trim(mobile).length,10) === 11){
@@ -406,7 +406,7 @@ function mobile_check(trigger=0){
 		}
 		field.removeClass('forSearch');
 		jQuery('#mobile_loader').hide();
-		if( trigger === 1 ){
+		if( typeof trigger != "undefined" ){
 			ajaxCheck('mobile');
 		}
 	});
