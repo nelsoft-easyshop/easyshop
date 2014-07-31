@@ -82,6 +82,10 @@
       <?php echo $banner_view; ?>
 
       <div class="product_inner_content_info" >
+        <div class="prod_alert_box">
+          <span class="span_bg icon_info"></span> <strong>This product is for promo use only. For more information, visit our 
+            <a href="https://www.facebook.com/EasyShopPhilippines">Facebook page</a></strong>
+        </div>
         <h1 class="id-class" id="<?php echo $product['id_product'];?>"> 
           <span id="pname"> <?php echo html_escape($product['product_name'])?> </span>
         </h1>
@@ -262,7 +266,7 @@
                     ?>
                 </div></p>
 
-            <ul>
+            <ul class="prod_details_list">
             <li><strong>Brand: </strong><?php echo html_escape(ucfirst(strtolower($product['brand_name'])));?></li>
             <li><strong>Additional description: </strong><?php echo html_escape($product['brief']);?></li>
             <li><strong>Condition: </strong><?php echo html_escape($product['condition']);?></li>
