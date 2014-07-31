@@ -312,7 +312,8 @@ function username_check(trigger){
 	var field = jQuery('#username');
 	
 	//Prevents execution of post triggered by blur from field, (fixes dual request due to setTimeout)
-	if(typeof ajaxStat.username != "undefined"){
+	if(typeof ajaxStat.username != "undefined" && typeof trigger == "undefined"){
+		ajaxCheck('username');
 		return false;
 	}
 	
@@ -332,9 +333,6 @@ function username_check(trigger){
 		}
 		field.removeClass('forSearch');
 		jQuery('#username_loader').hide();
-		if( typeof trigger != "undefined" ){
-			ajaxCheck('username');
-		}
 	});
 }
 
@@ -345,7 +343,8 @@ function email_check(trigger){
 	var field = jQuery('#email');
 	
 	//Prevents execution of post triggered by blur from field, (fixes dual request due to setTimeout)
-	if(typeof ajaxStat.email != "undefined"){
+	if(typeof ajaxStat.email != "undefined" && typeof trigger == "undefined"){
+		ajaxCheck('email');
 		return false;
 	}
 	
@@ -365,9 +364,6 @@ function email_check(trigger){
 		}
 		field.removeClass('forSearch');
 		jQuery('#email_loader').hide();
-		if( typeof trigger != "undefined" ){
-			ajaxCheck('email');
-		}
 	});
 }
 
@@ -384,7 +380,8 @@ function mobile_check(trigger){
 	var field = jQuery('#mobile');
 	
 	//Prevents execution of post triggered by blur from field, (fixes dual request due to setTimeout)
-	if(typeof ajaxStat.mobile != "undefined"){
+	if(typeof ajaxStat.mobile != "undefined" && typeof trigger == "undefined"){
+		ajaxCheck('mobile');
 		return false;
 	}
 	
@@ -406,9 +403,6 @@ function mobile_check(trigger){
 		}
 		field.removeClass('forSearch');
 		jQuery('#mobile_loader').hide();
-		if( typeof trigger != "undefined" ){
-			ajaxCheck('mobile');
-		}
 	});
 }
 
