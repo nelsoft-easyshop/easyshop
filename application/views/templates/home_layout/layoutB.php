@@ -27,52 +27,51 @@
         <?PHP endif; ?>
 
         
-             <?php $count = 0; ?>
+        <?php $count = 0; ?>
         <div class="home_cat_items">
             <div class="first_panel_middle">
                  <ul class="slider3">
 		    
-		    <?PHP if(is_assoc($section['product_panel_main'])){ 
-			$section['product_panel_main'] = make_array($section['product_panel_main']);}
-		    ?>
+                <?PHP if(is_assoc($section['product_panel_main'])){ 
+                    $section['product_panel_main'] = make_array($section['product_panel_main']);
+                }?>
 
-                    <?php foreach($section['product_panel_main'] as $main_panel): ?>
-                    <li>
-			<?PHP if(isset($main_panel['id_product'])): ?>
-			    <a href="<?=base_url()."item/".$main_panel['slug']; ?>">                        
-				<span class="elec_slide_img_con">
-				<img class="cat2_slide_prod" src="<?=base_url().$main_panel['path'].'/'.$main_panel['file']; ?>" />
-				</span>
-			    </a>                      
-			    <span class="electronics_slider_price_con">
-				<a href="<?=base_url()."item/".$main_panel['slug']; ?>">
+                <?php foreach($section['product_panel_main'] as $idx => $main_panel): ?>
+                        <li>
+                        <?PHP if(isset($main_panel['id_product'])): ?>
+                            <a href="<?=base_url()."item/".$main_panel['slug']; ?>">                        
+                                <span class="elec_slide_img_con">
+                                    <img class="cat2_slide_prod" src="<?=base_url().$main_panel['path'].'/'.$main_panel['file']; ?>" />
+                                </span>
+                            </a>                      
+                            <span class="electronics_slider_price_con">
+                                <a href="<?=base_url()."item/".$main_panel['slug']; ?>">
+                                    <div>
+                                        <h2><?=html_escape($main_panel['product_name']);?></h2>
+                                
+                                        <p>Price: <span>&#8369;<?php echo number_format($main_panel['price'],2,'.',',');?></span> onwards</p>
+                                    </div>
+                                    <div>
+                                        <span class="cat_slide_btn">Buy Now  <small class="span_bg c_small_btn"></small></span>
+                                    </div>                                
+                                </a>
+                            </span>
+                        <?PHP elseif(isset($main_panel['src'])): ?>
+                            
+                            <span class="elec_slide_img_con">
+                                <img class="cat2_slide_prod" src="/<?PHP echo $main_panel['src']; ?>"  usemap="<?php echo isset($main_panel['imagemap'])?'#'.$idx.'_image_map_sec':''?>" />
+                            </span>
+                        
+                            <?PHP if(isset($main_panel['imagemap'])): ?>
+                                <map name='<?php echo $idx?>_image_map_sec'>
+                                    <!-- COORDS: left, top, right, bottom -->
+                                    <area style='color:' shape="rect" coords="<?=$main_panel['imagemap']['coordinate']?>" href="<?= base_url().$main_panel['imagemap']['target']?>" alt="<?=$main_panel['imagemap']['target']?>">
+                                </map>
+                            <?PHP endif; ?>
 
-				    <div>
-					<h2><?=html_escape($main_panel['product_name']);?></h2>
-				    
-					<p>Price: <span>&#8369;<?php echo number_format($main_panel['price'],2,'.',',');?></span> onwards</p>
-				    </div>
-				    <div>
-					<span class="cat_slide_btn">Buy Now  <small class="span_bg c_small_btn"></small></span>
-				    </div>                                
-				</a>
-			    </span>
-			<?PHP elseif(isset($main_panel['src'])): ?>
-                 
-			    <span class="elec_slide_img_con">
-			      <img class="cat2_slide_prod" src="/<?PHP echo $main_panel['src']; ?>"  usemap="<?php echo isset($main_panel['imagemap'])?'#'.$idx.'_image_map_sec':''?>" />
-			    </span>
-			   
-			    <?PHP if(isset($main_panel['imagemap'])): ?>
-			      <map name='<?php echo $idx?>_image_map_sec'>
-				  <!-- COORDS: left, top, right, bottom -->
-				  <area style='color:' shape="rect" coords="<?=$main_panel['imagemap']['coordinate']?>" href="<?= base_url().$main_panel['imagemap']['target']?>" alt="<?=$main_panel['imagemap']['target']?>">
-			      </map>
-			    <?PHP endif; ?>
-
-			<?PHP endif; ?>
-			
-                    </li>
+                        <?PHP endif; ?>
+            
+                        </li>
                     <?php endforeach; ?>
                 </ul> 
                 
