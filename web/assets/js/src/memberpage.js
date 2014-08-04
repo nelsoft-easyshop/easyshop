@@ -1511,7 +1511,6 @@ $(document).ready(function(){
 				$.modal.close();
 			}
 		});
-		
 	});
 
 	$('#tx_dialog input[type="password"]').on('keypress', function(){

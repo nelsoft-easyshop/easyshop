@@ -5504,7 +5504,7 @@ span.star-label{
     display: none;
     padding: 3px;
     text-align: left;
-    width: 300px;
+    width: 500px;
 }
 
 .transac-feedback-container h2{
@@ -5521,8 +5521,8 @@ span.star-label{
     font-family: arial;
     font-size: 12px;
     padding: 5px;
-    width: 288px;
-	height: 90px;
+    width: 488px;
+	height: 150px;
 }
 
 .transac-feedback-btn {
