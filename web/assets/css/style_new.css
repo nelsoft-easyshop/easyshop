@@ -550,7 +550,8 @@ span.free_shipping_logo {
 	max-width: 750px;
 }
 
-#tabs-1 .prod_details_list {
+#tabs-1 .prod_details_list,
+#tabs-1 ul {
 	list-style: none;
 	clear: both;
 
