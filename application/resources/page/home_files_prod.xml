@@ -83,11 +83,11 @@
         <layout>layoutA</layout>
 
         <product_panel_main>
-        <value>assets/images/partner/suanti.jpg</value>    
+        <value>assets/images/partner/apt.jpg</value>    
             <type>image</type>
         <imagemap>
         <coordinate>0,0,486,351</coordinate>
-        <target>vendor/suanti</target>
+        <target>vendor/asianpokertour</target>
         </imagemap>
 
         </product_panel_main>
@@ -95,42 +95,42 @@
 
 
         <product_panel>
-            <value>crystalline-nobility-strength-horses-11-34</value>
+            <value>apt-college-jacket</value>
             <type>product</type>
         </product_panel>
 
         <product_panel>
-            <value>welcome-stonio-25inch</value>
+            <value>apt-loose-chips</value>
             <type>product</type>
         </product_panel>
 
         <product_panel>
-            <value>crystalline-longevity-tortoise-65-x-6inch</value>
+            <value>apt-donkey-stuffed-toy</value>
             <type>product</type>
         </product_panel>
 
         <product_panel>
-            <value>thai-buddha-lying-12inch</value>
+            <value>ladies-apt-collared-shirt</value>
             <type>product</type>
         </product_panel>
 
         <product_panel>
-            <value>thai-buddha-head-13inch</value>
+            <value>apt-graffiti-shirt</value>
             <type>product</type>
         </product_panel>
 
         <product_panel>
-            <value>immaculate-heart-of-mary-25inch</value>
+            <value>apt-poker-chip-set</value>
             <type>product</type>
         </product_panel>
 
         <product_panel>
-            <value>holy-family-25inch</value>
+            <value>apt-rectangular-patch</value>
             <type>product</type>
         </product_panel>
 
         <product_panel>
-            <value>thai-buddha-sitting-10inch</value>
+            <value>apt-laptop-bag</value>
             <type>product</type>
         </product_panel>
 
