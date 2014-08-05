@@ -79,8 +79,8 @@
         <type>custom</type>
         <value>asianpokertour</value>
         <css_class>red_cat</css_class>
-        <title>Asia Poker Tour</title>
-        <layout>layoutA</layout>
+        <title>Asian Poker Tour</title>
+        <layout>layoutA</layout>    
 
         <product_panel_main>
         <value>assets/images/partner/apt.jpg</value>    
