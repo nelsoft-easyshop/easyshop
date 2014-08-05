@@ -6,12 +6,12 @@ class payment_model extends CI_Model
 {
     function __construct() 
     {
-	parent::__construct();
-	$this->load->library("xmlmap");
+        parent::__construct();
+        $this->load->library("xmlmap");
         $this->load->model('cart_model');
         $this->load->model('user_model');
         $this->load->model('product_model');
-    }	
+    }   
 
 
     function getUserAddress($member_id)
