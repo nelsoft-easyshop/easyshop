@@ -184,9 +184,11 @@ function fill_view()
 		'image_profile' => $this->memberpage_model->get_image($uid),
 		'active_products' => $this->memberpage_model->getUserItems($uid,0),
 		'deleted_products' => $this->memberpage_model->getUserItems($uid,1),
+			'draft_products' => $this->memberpage_model->getUserItems($uid,0,1),
 		'active_count' => intval($user_product_count['active']),
 		'deleted_count' => intval($user_product_count['deleted']),
-		'sold_count' => intval($user_product_count['sold'])
+		    'sold_count' => intval($user_product_count['sold']),
+			'draft_count' => intval($user_product_count['draft'])
 		);
 	$data = array_merge($data, $this->memberpage_model->getLocationLookup());
 	$data = array_merge($data,$this->memberpage_model->get_member_by_id($uid));
@@ -972,6 +974,7 @@ function edit_work()
 		}
 		
 		$deleteStatus = intval($this->input->get('s'));
+		$draftStatus = intval($this->input->get('s2'));
 		$start = intval($this->input->get('p'));
 		$rawnf = trim((string)$this->input->get('nf'));
 		$nf = '%' . $rawnf . '%'; #name_filter / searched name
@@ -1012,12 +1015,12 @@ function edit_work()
 		if( $this->input->get('c') == 'count' ){
 			$jsonData['count'] = 0;
 			if ( $rawnf !== '' ){
-				$jsonData['count'] = $this->memberpage_model->getUserItemSearchCount($member_id,$nf,$deleteStatus);
+				$jsonData['count'] = $this->memberpage_model->getUserItemSearchCount($member_id,$nf,$deleteStatus, $draftStatus);
 			}
 		}
 		
 		$key = $deleteStatus === 0 ? 'active_products' : 'deleted_products';
-		$data[$key] = $this->memberpage_model->getUserItems($member_id, $deleteStatus, $start, $nf,$myof,$myosf, $itemPerPage);
+		$data[$key] = $this->memberpage_model->getUserItems($member_id, $deleteStatus, $draftStatus, $start, $nf,$myof,$myosf, $itemPerPage);
 		
 		if($deleteStatus === 0){ #if active items
 			$jsonData['html'] = $this->load->view('pages/user/'.$activeView, $data, true);

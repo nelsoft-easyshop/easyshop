@@ -426,13 +426,14 @@ class memberpage_model extends CI_Model
 		return $row;
 	}
 	
-	function getUserItemSearchCount($member_id, $schVal,$deleteStatus)
+	function getUserItemSearchCount($member_id, $schVal,$deleteStatus, $draftStatus)
 	{
 		$query = $this->xmlmap->getFilenameID('sql/product','getUserItemSearchCount');
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':member_id',$member_id, PDO::PARAM_INT);
 		$sth->bindParam(':schval', $schVal, PDO::PARAM_STR);
 		$sth->bindParam(':delete_status',$deleteStatus, PDO::PARAM_INT);
+		$sth->bindParam(':draft_status',$draftStatus, PDO::PARAM_INT);
 		$sth->execute();
 		$row = $sth->fetch(PDO::FETCH_ASSOC);
 		
@@ -441,7 +442,7 @@ class memberpage_model extends CI_Model
 		return $count;
 	}
 	
-	function getUserItems($member_id, $deleteStatus, $start=0, $nf='%', $of="p.lastmodifieddate" , $osf="DESC" , $itemPerPage=10)
+	function getUserItems($member_id, $deleteStatus, $draftStatus=0, $start=0, $nf='%', $of="p.lastmodifieddate" , $osf="DESC" , $itemPerPage=10)
 	{
 		$query = $this->xmlmap->getFilenameID('sql/product','getUserItems');
 		$parseData = array(
@@ -453,6 +454,7 @@ class memberpage_model extends CI_Model
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':id',$member_id, PDO::PARAM_INT);
 		$sth->bindParam(':delete_status',$deleteStatus, PDO::PARAM_INT);
+		$sth->bindParam(':draft_status',$draftStatus, PDO::PARAM_INT);
 		$sth->bindParam(':start',$start, PDO::PARAM_INT);
 		$sth->bindParam(':number',$itemPerPage, PDO::PARAM_INT);
 		$sth->bindParam(':name_filter',$nf, PDO::PARAM_INT);

@@ -92,37 +92,50 @@ var memconf = {
 		schVal: '',
 		sortVal: 1,
 		sortOrder: 1,
-		status: 0,
+		status: 0, //Delete Status
+		status2: 0 //Draft Status
 	},
 	deleted: {
 		schVal: '',
 		sortVal: 1,
 		sortOrder: 1,
-		status: 1,
+		status: 1, //Delete Status
+		status2: 0 //Draft Status
+	},
+	draft:{
+		schVal: '',
+		sortVal: 1,
+		sortOrder: 1,
+		status: 0, //Delete Status
+		status2: 1 //Draft Status
 	},
 	buy: {
 		status : 0,
 		schVal: '',
 		sortVal: 0,
-		sortOrder: 1
+		sortOrder: 1,
+		status2: ""
 	},
 	sell: {
 		status : 0,
 		schVal: '',
 		sortVal: 0,
-		sortOrder: 1
+		sortOrder: 1,
+		status2: ""
 	},
 	cbuy: {
 		status : 1,
 		schVal: '',
 		sortVal: 0,
-		sortOrder: 1
+		sortOrder: 1,
+		status2: ""
 	},
 	csell: {
 		status : 1,
 		schVal: '',
 		sortVal: 0,
-		sortOrder: 1
+		sortOrder: 1,
+		status2: ""
 	}
 };
 
@@ -261,7 +274,7 @@ function ItemListAjax(ItemDiv,start,pageindex,count){
 		type: "GET",
 		url: config.base_url+'memberpage/'+controller,
 		data: "s="+memconf[key].status+"&p="+start+"&"+memconf.csrfname+"="+memconf.csrftoken+"&nf="+memconf[key].schVal+
-			"&of="+memconf[key].sortVal+"&osf="+memconf[key].sortOrder+"&c="+c+"&k="+key,
+			"&of="+memconf[key].sortVal+"&osf="+memconf[key].sortOrder+"&c="+c+"&k="+key+"&s2="+memconf[key].status2,
 		beforeSend: function(){
 			if(memconf.ajaxStat != null){
 				memconf.ajaxStat.abort();
@@ -313,6 +326,7 @@ function ItemListAjax(ItemDiv,start,pageindex,count){
 $(document).ready(function(){
 	$('#active_items .paging:not(:first)').hide();
 	$('#deleted_items .paging:not(:first)').hide();
+	$('#draft_items .paging:not(:first)').hide();
 	
 	$('#bought .paging.enable:not(:first)').hide();
 	$('#sold .paging.enable:not(:first)').hide();
@@ -321,6 +335,7 @@ $(document).ready(function(){
 	
 	defaultPaging($('#pagination_active'));
 	defaultPaging($('#pagination_deleted'));
+	defaultPaging($('#pagination_draft'));
 	
 	defaultPaging($('#pagination-bought'));
 	defaultPaging($('#pagination-sold'));
@@ -380,7 +395,7 @@ $(document).ready(function(){
 
 /******************* ACTIVE and DELETED Sort Functions ***********************/
 $(document).ready(function(){
-	$('select.item_sort_select, select.tx_sort_select').on('change',function(){
+	$('select.item_sort_select').on('change',function(){
 		var ItemDiv = $(this).closest('div.dashboard_table');
 		var key = ItemDiv.data('key');
 		var pagingDivBtn = ItemDiv.children('div.pagination');

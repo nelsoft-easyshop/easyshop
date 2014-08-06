@@ -82,31 +82,31 @@
 						<input type='hidden' name='y' value='0' id='image_y'>
 						<input type='hidden' name='w' value='0' id='image_w'>
 						<input type='hidden' name='h' value='0' id='image_h'>
-					</form>
+						</form>
+					</div>
+					<div id="div_user_image_prev">
+						<span> Crop your Photo! </span>
+						<img src="" id="user_image_prev">
+						<button>OK</button>
+					</div>
+					<div class="profile_completeness">
+						<span>Profile Completeness</span>
+						<span id="profprog_percentage" value=""></span>
+						<div id="progressbar" class="profile_progress"></div>
+					</div>
 				</div>
-				<div id="div_user_image_prev">
-					<span> Crop your Photo! </span>
-					<img src="" id="user_image_prev">
-					<button>OK</button>
-				</div>
-				<div class="profile_completeness">
-					<span>Profile Completeness</span>
-					<span id="profprog_percentage" value=""></span>
-					<div id="progressbar" class="profile_progress"></div>
-				</div>
+				<div>
+					<ul class="idTabs member_side_nav"> 
+						<li><a href="#dashboard">Dashboard</a></li>
+						<li><a href="#personal_information" class="<?php echo ($tab=='myinfo')?'selected':'';?>">Personal Information</a></li>
+						<li><a href="#delivery_address">Delivery Address</a></li>
+						<li><a href="#payment" class="<?php echo ($tab=='pmnt')?'selected':'';?>">Payment Accounts</a></li>
+						<li><a href="#transactions" class="<?php echo ($tab=='pending')?'selected':'';?>">On-going Transactions</a></li>
+						<li><a href="#complete_transactions">Completed Transactions</a></li>
+						<li><a href="#security_settings">Settings</a></li>
+					</ul> 
+				</div>	
 			</div>
-			<div>
-				<ul class="idTabs member_side_nav"> 
-					<li><a href="#dashboard">Dashboard</a></li>
-					<li><a href="#personal_information" class="<?php echo ($tab=='myinfo')?'selected':'';?>">Personal Information</a></li>
-					<li><a href="#delivery_address">Delivery Address</a></li>
-					<li><a href="#payment" class="<?php echo ($tab=='pmnt')?'selected':'';?>">Payment Accounts</a></li>
-					<li><a href="#transactions" class="<?php echo ($tab=='pending')?'selected':'';?>">On-going Transactions</a></li>
-					<li><a href="#complete_transactions">Completed Transactions</a></li>
-					<li><a href="#security_settings">Settings</a></li>
-				</ul> 
-			</div>	
-		</div>
 
 		<div class="profile_main_content" id="dashboard">
 			<h2>Dashboard</h2>
@@ -177,6 +177,7 @@
 	<ul class="idTabs post_items">
 		<li><a href="#active_items">Active Items <span class="db_active_items"><?php echo $active_count;?></span></a></li>
 		<li><a href="#deleted_items">Deleted Items<span class="db_deleted_items"><?php echo $deleted_count;?></span></a></li>
+		<li><a href="#draft_items">Draft Items<span class="db_deleted_items"><?php echo $draft_count;?></span></a></li>
 		<li><a href="#dashboard-feedbacks">Feedbacks <span><?php echo $allfeedbacks['afbcount'];?></span></a></li>
 		<li><a href="#dashboard-sales">Sales</a></li>
 	</ul>
@@ -492,6 +493,166 @@
 </div>
 <?php endif;?>
 </div>
+
+<!-- Start of draft items dashboard -->
+<div class="dashboard_table" id="draft_items" data-key="draft" data-controller="1">
+	<h2>Draft Items</h2>
+	
+	<div class="pagination" id="pagination_draft">
+		<a href="#" class="first" data-action="first">&laquo;</a>
+		<a href="#" class="previous" data-action="previous">&lsaquo;</a>
+		<input type="text" readonly="readonly" data-max-page="<?php echo ($draft_count===0)?1:(ceil($draft_count/$items_per_page));?>" data-origmaxpage = "<?php echo ($draft_count===0)?1:(ceil($draft_count/$items_per_page));?>"/>
+		<a href="#" class="next" data-action="next">&rsaquo;</a>
+		<a href="#" class="last" data-action="last">&raquo;</a>
+	</div>
+	
+	<div class="post_item_srch_container">
+		<input type="text" class="box sch_box item_sch_box" placeholder="Search" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Search'" />
+		<span class="span_bg sch_btn item_sch_btn"></span>
+		<label for="active_sort">Sort By</label>
+		<select name="active_sort" class="post_active_sort item_sort_select">
+			<option value="1">Date of Entry</option>
+			<option value="2">Name</option>
+			<option value="3">Price</option>
+			<option value="4">Availability</option>
+			<option value="5"># of Sold Items</option>
+		</select>
+		<span class="span_bg arrow_sort item_arrow_sort"></span>
+		<img src="<?=base_url()?>assets/images/orange_loader_small.gif" class="loading_img" style="display:none;"/>
+	</div>
+	
+	
+	<?php if($draft_count === 0):?>
+		<p><span class='nocontent'>No items on sale.</span></p>
+	<?php else:?>
+	
+	<div class="page_load" style="display:none;text-align:center; margin-top: 50px;">
+		<img src="<?=base_url()?>assets/images/orange_loader_small.gif" class="loading_img"/>
+	</div>
+	
+	<?php $pageNum = 0;?>
+	<div class="paging" data-page="<?php echo $pageNum;?>">					
+		<?php $product_counter = 0; 
+		foreach($draft_products as $draft_product): ?>
+		<div class="post_items_content content-paging">
+			<div class="post_item_content_left">
+			    <div class="post_item_img_table">
+				                     		                                  
+				<span class="post_item_img_con">
+					<img src="<?php echo base_url().$draft_product['path'].'categoryview/'.$draft_product['file']; ?>" class="product_img">
+				</span>
+				</div>
+				<p><small>Last modified : <?php echo date_format(date_create($draft_product['lastmodifieddate']),'Y-m-d')?></small></p>
+				<p class="star_rating_reviews">
+					<?php $rounded_score = round($draft_product['average_rating']); ?>
+					<?php for($i = 0; $i < $rounded_score;$i++): ?>
+					<span class="span_bg star_on"></span>
+				<?php endfor; ?>
+				<?php for($i = 0; $i < 5-$rounded_score;$i++): ?>
+				<span class="span_bg star_off"></span>
+			<?php endfor; ?>
+			<br />
+			<span class="span_bg reviews"></span><?php echo $draft_product['review_count']; ?> Reviews
+		</p>
+	</div>
+	<div class="post_item_content_right">
+		<div class="product_title_container">
+			<p class="post_item_product_title fm1"><a href="<?=base_url();?>item/<?php echo $draft_product['slug'];?>"><?php echo html_escape($draft_product['name']);?></a></p>
+			
+			<div class="post_item_button">
+				<?php echo form_open('sell/edit/step2'); ?>
+				<input type="hidden" name="p_id" value ="<?php echo $draft_product['id_product'];?>" /> 
+				<input class="manage_lnk edit_lnk span_bg" type = "submit" value="Edit Item"> </input>
+				<?php echo form_close(); ?> 
+				<span class="border_white">|</span>
+				
+				<?php echo form_open('product/changeDelete'); ?>
+				<input type="hidden" name="p_id" value ="<?php echo $draft_product['id_product'];?>" /> 
+				<input type="hidden" name="action" value ="delete" /> 
+				<input class="delete_lnk span_bg" type = "submit" value="Delete Item"> </input>
+				<?php echo form_close(); ?>
+				
+			</div>
+		</div>
+		<div class="price_container" data-prodprice="<?php echo $draft_product['price'];?>">
+			<p>
+				<span class="f24">&#8369;</span>
+				<span class="fm1 f24 orange pad_btm10">
+					 <?php echo number_format($draft_product['price'],2,'.',',');?>
+				</span>
+				<br />Price<br />
+
+				<?PHP if($draft_product['discount'] > 0): ?>   
+				    <small class="original_price"> &#8369; <?php echo number_format($draft_product['original_price'],2,'.',','); ?> </small> | <strong> <?php echo number_format( $draft_product['percentage'],0,'.',',');?> % OFF  </strong>
+				<?PHP endif;?>	
+					
+			</p>
+			
+			<p><span class="fm1 f24 grn pad_btm10"><?php echo $draft_product['sold'];?></span><br />Sold Items</p>
+			<p>
+				<span class="fm1 f24 pad_btm10"><?php echo $draft_product['availability'];?></span>
+				<br />Available Stock<br />
+				
+				 <?PHP IF($draft_product['is_free_shipping']): ?>
+				    <span class="span_bg img_free_shipping"></span>
+				 <?PHP ENDIF; ?>
+				
+				
+			</p>
+		</div>
+		<p><strong>Description:</strong><br />
+			<span class="item_prod_desc_content">
+				<?php echo html_escape($draft_product['brief']); ?>
+			</span>
+			<span class="show_prod_desc blue f11">Read more</span>
+		</p>
+		<div class="clear"></div>
+		<p class="post_item_category">
+			<strong>Category:</strong><br />
+			<?php foreach($draft_product['parents'] as $parent):?>
+			<?php echo $parent;?><?php echo (end($draft_product['parents'])===$parent)?'':'<span class="span_bg img_arrow_right"></span>'; ?>
+		<?php endforeach; ?>
+	</p>
+	
+	<div class="show_more_options blue"><span class="span_bg"></span><p>View Features and Specifications</p></div>
+	<div class="attr_hide">
+		<?php $i = 0; 
+		foreach($draft_product['data_attr'] as $key=>$data_attr): ?>								
+		<div class="item_attr_container">
+			<div class="item_attr"><?php echo html_escape($key); ?>:</div>
+			<div class="item_attr_content">
+				<ul>
+					<?php foreach($data_attr as $foo): ?>
+					
+					<li><span><?php echo html_escape($foo['value']);?></span></li>
+					
+				<?php endforeach; $i++;?>
+			</ul>
+		</div>
+	</div>
+<?php endforeach; ?>
+</div>	
+
+
+</div>
+</div>
+
+<?php $product_counter++;?>
+	<?php if($product_counter === $items_per_page): 
+		$product_counter = 0;
+		$pageNum++;
+	?>
+		</div><div class="paging" data-page="<?php echo $pageNum;?>">
+	<?php endif;  ?>
+
+<?php endforeach; ?>
+</div> 	
+<?php endif;?>
+</div>
+<!-- End of draft items dashboard -->
+
+
+
 
 <div class="dashboard_table" id="dashboard-feedbacks">
 	<h2>Feedbacks</h2>
