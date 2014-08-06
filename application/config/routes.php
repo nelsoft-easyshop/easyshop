@@ -98,17 +98,18 @@ else {
     $route['(?i)sell/step2'] = 'productUpload/step2'; # ryan vasquez
     $route['sell/processing'] = 'productUpload/step2_2'; # ryan vasquez
     $route['(?i)sell/step3'] = 'productUpload/step3'; # ryan vasquez
-    $route['sell/shippinginfo'] = 'productUpload/step3Submit';
+	$route['sell/shippinginfo'] = 'productUpload/step3Submit';
     $route['sell/preview'] = 'productUpload/previewItem';
     $route['(?i)sell/step4'] = 'productUpload/step4'; # ryan vasquez
+	$route['(?i)sell/finishupload'] = 'productUpload/finishProductUpload'; #js
 
     # USER
     $route['(?i)me'] = 'memberpage'; # janz
 
     #EDIT ITEM
     $route['(?i)sell/edit/step1'] = 'productUpload/editStep1'; # sam gavinio
-    $route['(?i)sell/edit/step2'] = 'productUpload/editStep2'; # sam gavinio
-    $route['sell/edit/processing2'] = 'productUpload/editStep2Submit';  # sam gavinio
+    $route['(?i)sell/edit/step2'] = 'productUpload/step2edit2'; # sam gavinio
+    $route['sell/edit/processing'] = 'productUpload/step2edit2Submit';  # sam gavinio
 
     #REMOVE DRAFT
     $route['(?i)sell/draft/remove'] = 'productUpload/deleteDraft';  # sam gavinio

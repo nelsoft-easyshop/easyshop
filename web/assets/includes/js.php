@@ -4,6 +4,7 @@
  */
 ?>
 <script type='text/javascript' src="<?=base_url()?>assets/js/src/vendor/jquery-1.9.1.js" ></script>
+<script type='text/javascript' src="<?=base_url()?>assets/js/src/landingpage-responsive-nav.js" ></script>
 <script type='text/javascript' src="<?=base_url()?>assets/js/src/vendor/jquery-ui.js"></script>
 <script type='text/javascript' src="<?=base_url()?>assets/js/src/vendor/jquery.jcarousel.min.js"></script>
 <script type='text/javascript' src="<?=base_url()?>assets/js/src/vendor/jquery.cookie.js"></script>

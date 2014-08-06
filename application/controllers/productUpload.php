@@ -23,7 +23,6 @@ class productUpload extends MY_Controller
 		$this->img_dimension['thumbnail'] = array(60,80);
 	}
 
-
 	function fill_view()
 	{
 		$data = array(
@@ -39,35 +38,47 @@ class productUpload extends MY_Controller
 
 	function step1() #this function for selecting categories from parent category to the last possible category
 	{		
+
 		$this->load->model("user_model");
-		if($this->input->post('c_id')){
-		    $cat_id = $this->input->post('c_id');    
-		    $other_cat_name = $this->input->post('other_cat_name');
-		    $cat_tree = $this->product_model->getParentId($cat_id);
-		    $data_item['cat_tree_edit'] = json_encode($cat_tree);
-		    $data_item['other_cat_name'] = $other_cat_name;		    
+		$uid = $this->session->userdata('member_id');
+    	$userdetails = $this->user_model->getUserById($uid);
+
+		if ($this->input->post('p_id')) {
+			$product_id = $data_item['product_id_edit'] = $this->input->post('p_id');
+			$product = $this->product_model->getProductEdit($product_id, $uid);  
+			$cat_tree = $this->product_model->getParentId($product['cat_id']);
+			$data_item['cat_tree_edit'] = json_encode($cat_tree);
+			$data_item['other_cat_name'] = $product['otherCategory'];
+			$data_item['categoryId'] = $product['cat_id'];
 		}
-		if($this->input->post('step2_content')){
-		    $data_item['step2_content'] = $this->input->post('step2_content');
+		else{
+			if($this->input->post('step2_content')){
+				$data_item['step2_content'] = $this->input->post('step2_content');
+			}
+
+			if($this->input->post('c_id')){
+				$cat_id = $data_item['categoryId'] = $this->input->post('c_id');    
+				$other_cat_name = $this->input->post('other_cat_name');
+				$cat_tree = $this->product_model->getParentId($cat_id); 
+				$data_item['cat_tree_edit'] = json_encode($cat_tree);
+				$data_item['other_cat_name'] = $other_cat_name;	
+			}
 		}
 
-		$usersession = $this->session->userdata('usersession');	
-		$uid = $this->session->userdata('member_id');
 		$draftItems = $this->product_model->getDraftItems($uid);
 
 		for ($i=0; $i < sizeof($draftItems); $i++) { 
 			$parents = $this->product_model->getParentId($draftItems[$i]['cat_id']); # getting all the parent from selected category	
 			$str_parents_to_last = "";
+			$lastElement = end($parents);
 
-			$lastElement = end($parents);	
 			foreach($parents as $k => $v) { # creating the bread crumbs from parent category to the last selected category
 				$str_parents_to_last = $str_parents_to_last  .' '. $v['name'];
-				if($v == $lastElement) {
-
-				}else{
+				if($v != $lastElement) {
 					$str_parents_to_last = $str_parents_to_last.' &#10140;';
 				}
 			}
+
 			if($draftItems[$i]['cat_other_name'] != ""){
 				$str_parents_to_last = $str_parents_to_last.' &#10140; ' . $draftItems[$i]['cat_other_name'];
 			}
@@ -75,43 +86,43 @@ class productUpload extends MY_Controller
 		} 
  
 		$data_item['draftItems'] = $draftItems;
-        	$userdetails = $this->user_model->getUserById($uid);
 
 		# getting first category level from database.
 		$is_admin = (intval($userdetails['is_admin']) === 1);
 		$data_item['firstlevel'] = $this->product_model->getFirstLevelNode(false, false,$is_admin);
         
 		$data = $this->fill_view();
-        	$data['$render_searchbar'] = false; 
+    	$data['$render_searchbar'] = false; 
 		$this->load->view('templates/header', $data); 
 
-		if($data['logged_in'] && ($userdetails['is_contactno_verify'] || $userdetails['is_email_verify']) )
+		if($data['logged_in'] && ($userdetails['is_contactno_verify'] || $userdetails['is_email_verify']) ){
 			$this->load->view('pages/product/product_upload_step1_view',$data_item);
-		else
+		}
+		else{
 			$this->load->view('pages/product/product_upload_error');
+		}
+
 		$this->load->view('templates/footer'); 
 	}
 
 	function getChild() # this function for getting the under category from selected category 
 	{	
-		$this->load->model('user_model');
 		header('Content-Type: application/json');
-		$id = $this->input->post('cat_id'); 
-		$name = $this->input->post('name');
-		$response['cat_id'] = $id;
-		$response['name'] = $name;        
-        
+		$this->load->model('user_model');
+		$id = $response['cat_id'] = $this->input->post('cat_id');     
+  
 		$uid =	$this->session->userdata('member_id');
 		$is_admin = false;
+
 		if($uid){
 		    $user_access_level = $this->user_model->getUserById($uid);
 		    $is_admin = (intval($user_access_level['is_admin']) === 1);
-		}            
-        	$response['node'] = $this->product_model->getDownLevelNode($id, $is_admin); 
+		}  
 
+    	$response['node'] = $this->product_model->getDownLevelNode($id, $is_admin); 
 		$response['level'] = $this->input->post('level');
-		$data = json_encode($this->load->view('pages/product/product_upload_step1_view2',$response,TRUE));
-		echo $data;
+		$data['html'] = $this->load->view('pages/product/product_upload_step1_view2',$response,TRUE);
+		die(json_encode($data));
 	}
 
 	function add_category(){
@@ -121,7 +132,6 @@ class productUpload extends MY_Controller
 		$key = $this->input->post('key');
 		$sort =(int) $this->input->post('sort');
 		$is_main = (int) 1;
-
 		$data = $this->product_model->addCategory($ids,$name,$desc,$key,$sort,$is_main);
 
 		echo json_encode($data);
@@ -129,39 +139,37 @@ class productUpload extends MY_Controller
 
 	function step2()
 	{ 
-
 		$data = $this->fill_view();
+    	$data['$render_searchbar'] = false; 
 		$this->load->view('templates/header', $data); 
-		if(isset($_POST['hidden_attribute'])){ # if no item selected cant go to the link. it will redirect to step 1
+		if($this->input->post('hidden_attribute')){ # if no item selected cant go to the link. it will redirect to step 1
 			$id = $this->input->post('hidden_attribute'); 
-            		$response['memid'] = $this->session->userdata('member_id');
-            
+    		$response['memid'] = $this->session->userdata('member_id');
 			$userdetails = $this->user_model->getUserById($response['memid']);
 			$is_admin = (intval($userdetails['is_admin']) === 1);
 
 			$this->config->load('protected_category', TRUE);
 			$protected_categories = $this->config->config['protected_category'];
+
 			if( !is_numeric($id) ||  (!$is_admin && in_array($id, $protected_categories))){
 				redirect('/sell/step1/', 'refresh');
 			}
 
 			$otherCategory = html_escape($this->input->post('othernamecategory'));
-			$response['id'] = $id; # id is the selected category
-			$response['otherCategory'] = $otherCategory; # id is the selected category
-			$parents = $this->product_model->getParentId($id); # getting all the parent from selected category
-			#$attribute = $this->product_model->getAttributesBySelf($id); # getting all attribute from all parent from selected category
+			$parents = $this->product_model->getParentId($id); # getting all the parent from selected category 
 			$attribute = $this->product_model->getAttributesByParent($parents);
-           		$str_parents_to_last = "";
+       		$str_parents_to_last = '';
+       		$attributeArray = array();
 
-			if($id ==1){
-			 	$str_parents_to_last = $otherCategory;
+			if($id == 1){
+			 	$str_parents_to_last = $otherCategory; 
 			}else{
 				$lastElement = end($parents);	
+				 
 				foreach($parents as $k => $v) { # creating the bread crumbs from parent category to the last selected category
 					$str_parents_to_last = $str_parents_to_last  .' '. $v['name'];
-					if($v == $lastElement) {
-
-					}else{
+					 
+					if($v != $lastElement) {
 						$str_parents_to_last = $str_parents_to_last.' &#10140;';
 					}
 				}
@@ -169,45 +177,216 @@ class productUpload extends MY_Controller
 				if(!$otherCategory == ""){
 					$str_parents_to_last = $str_parents_to_last.' &#10140; ' . $otherCategory;
 				}
-			}
-			
-			$response['parent_to_last'] = $str_parents_to_last;
-			for ($i=0 ; $i < sizeof($attribute) ; $i++ ) {  # getting all lookuplist from item attribute
-				$lookuplist = $this->product_model->getLookItemListById($attribute[$i]['attr_lookuplist_id']);
-				array_push($attribute[$i],$lookuplist);
-			}
-			
-		 	$response['tempId'] = strtolower(substr( "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" ,mt_rand( 0 ,50 ) ,1 ) .substr( md5( time() ), 1));
-			$response['attribute'] = $attribute;
-			$response['sell'] = true;
 
-    			$this->session->set_userdata('tempId', $response['tempId']);
+			}	
+
+			$response['parent_to_last'] = $str_parents_to_last;
+ 
+			foreach ($attribute as $key => $value) { 
+				$attrName = ucfirst(strtolower($value['cat_name']));
+				$attributeArray[$attrName] = array(); 
+				
+				$data = $this->product_model->getLookItemListById($value['attr_lookuplist_id']) ;
+				foreach ($data as $key2 => $value2) {
+					array_push($attributeArray[$attrName], $value2['name']);
+				}
+			} 
+
+		 	$response['tempId'] = strtolower(substr( "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" ,mt_rand( 0 ,50 ) ,1 ) .substr( md5( time() ), 1));
+			$response['attributeArray'] = $attributeArray;
+			$response['id'] = $id; # id is the selected category
+			$response['otherCategory'] = $otherCategory; # id is the selected category
+			$response['sell'] = true;
+			$response['img_max_dimension'] = $this->img_dimension['usersize'];
+
+			$date = date("Ymd");
+			$tempDirectory = './assets/temp_product/'. $response['tempId'].'_'.$response['memid'].'_'.$date.'/';
+			$response['tempdirectory'] = $tempDirectory;
+			$this->session->set_userdata('tempId', $response['tempId']);
+			$this->session->set_userdata('tempDirectory',  $tempDirectory);
+			mkdir($tempDirectory, 0777, true);
+			mkdir($tempDirectory.'categoryview/', 0777, true);
+			mkdir($tempDirectory.'small/', 0777, true);
+			mkdir($tempDirectory.'thumbnail/', 0777, true);
+			mkdir($tempDirectory.'other/', 0777, true);
+
 			if($this->input->post('step1_content')){
 				$response['step1_content'] = $this->input->post('step1_content');
 			}
-
-            		$response['img_max_dimension'] = $this->img_dimension['usersize'];
-               
+    
 			$this->load->view('pages/product/product_upload_step2_view',$response);
 			$this->load->view('templates/footer');
 		}else{
 			redirect('/sell/step1/', 'refresh');
 		}
-
 	}
 
+	public function step2edit2()
+	{ 
+		if($this->input->post('p_id')){
+			$product_id = $response['p_id'] = $this->input->post('p_id');
+		}
+		else{
+			redirect('me', 'refresh');
+		}
+
+		$response['tempId'] = $tempId = strtolower(substr( "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" ,mt_rand( 0 ,50 ) ,1 ) .substr( md5( time() ), 1));
+
+		$response['memid'] = $member_id = $this->session->userdata('member_id');
+
+		$dir    = './assets/product/'; 
+		$path = glob($dir."{$product_id}_{$member_id}*", GLOB_BRACE)[0].'/'; 
+
+		$other_category_name = $this->input->post("othernamecategory");  
+		$product = $this->product_model->getProductEdit($product_id, $member_id);
+ 		$response['id'] = $cat_id = ($this->input->post('hidden_attribute')) ? $this->input->post('hidden_attribute') : $product['cat_id'];  
+
+ 		if($product['brand_other_name'] === '' 
+ 			&& $product['brand_id'] == 1){
+ 			$product['brandname'] = '';	
+ 		}
+ 		elseif($product['brand_other_name'] === '' 
+ 			&& $product['brand_id'] != 1){
+ 			$product['brandname'] = $this->product_model->getBrandById($brand_id)[0]['name'];
+ 		}else{
+ 			$product['brandname'] = $product['brand_other_name'];
+ 		}
+
+ 		// Loading Categories
+		$otherCategory  = $response['otherCategory'] = ($this->input->post('othernamecategory')) ? $this->input->post('othernamecategory') : $product['otherCategory'];
+		$str_parents_to_last = '';
+		$parents = $this->product_model->getParentId($cat_id); 
+
+		if($cat_id == 1){
+			$str_parents_to_last = $otherCategory;
+		}
+		else{
+			$lastElement = end($parents);	
+			foreach($parents as $k => $v) { 
+				$str_parents_to_last = ($v != $lastElement) ? $str_parents_to_last.' &#10140;' : $str_parents_to_last  .' '. $v['name'];
+			}
+
+			if(!$otherCategory == ""){
+				$str_parents_to_last = $str_parents_to_last.' &#10140; ' . $otherCategory;
+			}
+		}
+
+		// Loading images
+		$images = $this->product_model->getProductImages($product_id);
+		$main_images = $arrayNameOnly = array();  
+		foreach($images as $imagekey => $imagevalue){
+
+			if(strpos(($imagevalue['path']),'other') === FALSE){
+
+				$file = explode('_',$imagevalue['file']);
+				$tempFile = $tempId.'_'.$member_id.'_'.end($file);
+				$imagevalue['temp'] = $tempFile;
+				$imagevalue['type'] = end(explode('.', end($file)));
+				array_push($main_images, $imagevalue);
+			}
+
+			array_push($arrayNameOnly, $imagevalue['file']);
+		}
+
+		$response['main_images'] = $main_images; 
+
+		// Loading attributes
+		$attribute = $this->product_model->getAttributesByParent($parents); 
+		$attributeArray = $eachAttribute = $soloAttribute = array();
+
+		foreach ($attribute as $key => $value) { 
+			$attrName = ucfirst(strtolower($value['cat_name']));
+			$attributeArray[$attrName] = array(); 
+			
+			$data = $this->product_model->getLookItemListById($value['attr_lookuplist_id']) ;
+			foreach ($data as $key2 => $value2) {
+				array_push($attributeArray[$attrName], $value2['name']);
+			}
+		} 
+
+		foreach ($this->product_model->getProductAttributes($product_id, 'NAME') as $key => $value) {
+			$key =  ucfirst(strtolower(str_replace("'", "", $key)));
+			if (!array_key_exists($key, $attributeArray)) {
+				$attributeArray[$key] = array();
+			}
+
+			foreach ($value as $key1 => $value1) {
+				if($value1['datatype'] == 0 || $value1['datatype'] == 5){
+					if (!array_key_exists($value1['value'], $attributeArray[$key])) {
+						array_push($attributeArray[$key], $value1['value']);
+					}
+					$eachAttribute[$key] = $this->product_model->getProductAttributesByHead($product_id,$key);
+
+					foreach ($eachAttribute[$key] as $key2 => $value2) {
+						if(!$eachAttribute[$key][$key2]['img_path'] == ''){
+							$file = explode('_',end(explode('/', $eachAttribute[$key][$key2]['img_path'])));
+				 			$eachAttribute[$key][$key2]['img_path'] = $tempId.'_'.$member_id.'_'.end($file);
+						}
+					}
+				}
+				else{
+					$soloAttribute[$key] = $value1['value'];
+				}
+			}
+		} 
+ 
+		$response['soloAttribute'] =  $soloAttribute;  
+		$response['eachAttribute'] =  $eachAttribute;  
+  		
+  		// Loading Combinations
+ 		$newItemQuantityArray = array();
+		$itemQuantity =  $this->product_model->getProductQuantity($product_id, true);	
+ 
+		foreach($itemQuantity as $keyid => $value){
+			if(count($value['product_attribute_ids'])===1){
+				if(($value['product_attribute_ids'][0]['id'] == 0)&&($value['product_attribute_ids'][0]['is_other'] == 0)){
+					$response['noCombination'] = true;
+					$response['noCombinationQuantity'] = $value['quantity'];
+				}
+			}
+			$itemAttrData = $this->product_model->getItemAttributes($keyid);
+			$newData = array();
+			foreach ($itemAttrData as $keyy => $valuee) {
+				$head = ucfirst(strtolower(str_replace("'", "", $valuee['head'])));
+				$newData[$head] = $valuee['value'];
+			}
+			$newItemQuantityArray[$keyid] = array("quantity" => $value['quantity'],"data" => $newData);
+		}
+
+ 		$response['itemQuantity'] = $newItemQuantityArray;
+		$response['attributeArray'] = $attributeArray;
+		$response['parent_to_last'] = $str_parents_to_last;
+		$response['product_details'] = $product;
+		$response['is_edit'] = 'is_edit';
+ 
+		$date = end(explode('_', explode('/', $path)[3]));
+ 
+		$tempdirectory = $tempId.'_'.$member_id.'_'.$date;
+		$tempdirectory = $response['tempdirectory'] = './assets/temp_product/'.$tempdirectory.'/'; 
+
+		$this->session->set_userdata('tempId', $response['tempId']); 
+		$this->session->set_userdata('tempDirectory',  $tempdirectory);
+		$this->session->set_userdata('originalPath',  $path);
+
+		directory_copy($path, $tempdirectory,$tempId,$arrayNameOnly); 
+		
+		$data = array('title'=>'Edit Product');
+		$data = array_merge($data,$this->fill_view());
+		$data['$render_searchbar'] = false; 
+		$this->load->view('templates/header', $data);   
+		$this->load->view('pages/product/product_upload_step2_view',$response);
+		$this->load->view('templates/footer');
+	}
  
  	public function uploadimage()
  	{
-
  		$counter = $this->input->post('counter');
- 
-    		$temp_product_id = $this->session->userdata('tempId'); 
+		$temp_product_id = $this->session->userdata('tempId'); 
+		$tempDirectory = $this->session->userdata('tempDirectory'); 
  		$member_id =  $this->session->userdata('member_id');
  		$filescnttxt = $this->input->post('filescnttxt');
  		$afstart = $this->input->post('afstart');
  		$afstartArray = json_decode($afstart);
- 		 
  		$date = date("Ymd");
 	 	$fulldate = date("YmdGis");
  		$filenames_ar = array(); 
@@ -251,7 +430,7 @@ class productUpload extends MY_Controller
  		$_FILES['files']['size'] = array_values($_FILES['files']['size']);
 		$filenames_ar = array_values($filenames_ar);
 
- 		$path_directory = './assets/temp_product/'.$temp_product_id.'_'.$member_id.'_'.$date.'/';
+ 		$path_directory = $tempDirectory;
 
 		if (!file_exists ($path_directory)){
 			mkdir($path_directory, 0777, true);;
@@ -277,7 +456,7 @@ class productUpload extends MY_Controller
 	   			$this->es_img_resize($filenames_ar[$i],$path_directory, 'small/', $this->img_dimension['small']); 
 	   			$this->es_img_resize($filenames_ar[$i],$path_directory.'small/', '../categoryview/', $this->img_dimension['categoryview']);
 	   			$this->es_img_resize($filenames_ar[$i],$path_directory.'categoryview/','../thumbnail/', $this->img_dimension['thumbnail']);
-                		//If user uploaded image is too large, resize and overwrite original image
+        		//If user uploaded image is too large, resize and overwrite original image
 	   			if(isset($file_data[$i])){
 		   			if(($file_data[$i]['image_width'] > $this->img_dimension['usersize'][0]) || ($file_data[$i]['image_height'] > $this->img_dimension['usersize'][1])){
 		   				$this->es_img_resize($file_data[$i]['file_name'],$path_directory,'', $this->img_dimension['usersize']);
@@ -304,50 +483,69 @@ class productUpload extends MY_Controller
 		echo json_encode($return);
  	}
 
+ 	function uploadimageOther()
+ 	{
+ 		$temp_product_id = $this->session->userdata('tempId'); 
+ 		$tempDirectory = $this->session->userdata('tempDirectory'); 
+ 		$memberId =  $this->session->userdata('member_id');	
+ 		$filename =  $this->input->post('pictureName');		 
+ 		$date = date("Ymd");
+	 	$fulldate = date("YmdGis"); 
+ 
+ 		$path_directory = $tempDirectory.'/other/';
+
+ 		if (!file_exists ($path_directory)){
+ 			mkdir($path_directory, 0777, true);;
+ 		}
+
+ 		$this->upload->initialize(array( 
+ 			"upload_path" => $path_directory,
+ 			"overwrite" => FALSE,
+ 			"file_name"=> $filename,
+ 			"encrypt_name" => FALSE,
+ 			"remove_spaces" => TRUE,
+ 			"allowed_types" => "jpg|jpeg|png|gif",
+ 			"max_size" => $this->max_file_size_mb * 1024,
+ 			"xss_clean" => FALSE
+ 			)); 
+
+ 		$this->upload->do_multi_upload('attr-image-input');
+ 		$this->es_img_resize($filename,$path_directory, 'small/', $this->img_dimension['small']); 
+ 		$this->es_img_resize($filename,$path_directory.'small/', '../categoryview/', $this->img_dimension['categoryview']);
+ 		$this->es_img_resize($filename,$path_directory.'categoryview/','../thumbnail/', $this->img_dimension['thumbnail']);
+ 		die('{"result":"ok"}');
+ 	}
+
 
 
 	function step2_2() # function for processing the adding of new item
 	{	   
 		$this->load->model("user_model");
-		
-		$combination = json_decode($this->input->post('combination'));
 
-		$checkIfCombination = $this->input->post('noCombination');
-		$inputs = $this->input->post('inputs'); 
-		$inputs_exp = false;
-
-		if(strpos($inputs, '|') !== false) {
-			$explode_inputs = explode("|", substr($inputs, 1));
-			$inputs_exp = true;
-		}
-
+		$combination = json_decode($this->input->post('combination'),true); 
+		$attributes = json_decode($this->input->post('attributes'),true);
 		$data = $this->input->post('data');
 		$cat_id = $this->input->post('id');
 		$otherCategory = $this->input->post('otherCategory');
 		$brand_id =  $this->input->post('prod_brand'); 
 		$brand_valid = false;
 		$otherBrand = '';
-
 		$product_title = trim($this->input->post('prod_title'));
 		$product_brief = trim($this->input->post('prod_brief_desc'));
-		$product_description =  $this->input->post('desc');
-
+		$product_description =  $this->input->post('prod_description');
 		$product_price = str_replace(',', '', $this->input->post('prod_price')) ;
-        
 		$product_discount = ($this->input->post('discount'))?floatval($this->input->post('discount')):0;
-        	$product_discount = ($product_discount <= 100)?$product_discount:100;
-
-        
+    	$product_discount = ($product_discount <= 100)?$product_discount:100;
 		$product_condition = $this->input->post('prod_condition');
 		$sku = trim($this->input->post('prod_sku'));
-		
 		$keyword = trim($this->input->post('prod_keyword'));
 		$style_id = 1;
 		$member_id =  $this->session->userdata('member_id');
-		
+		$tempDirectory = $this->session->userdata('tempDirectory');
 		$date = date("Ymd");
-        	$fulldate = date("YmdGis");
-                
+    	$fulldate = date("YmdGis"); 
+    	$savingAsDraft = ($this->input->post('savedraft'))?'1':'0';
+
 		if(intval($brand_id,10) == 1){
 		    $brand_valid = true;
 		    $otherBrand = $this->input->post('brand_sch');
@@ -359,31 +557,34 @@ class productUpload extends MY_Controller
 		    }
 		}
 
-		if($brand_valid === FALSE){
-			// echo '{"e":"0","d":"The selected brand is unavailable. Please specify a valid one."}';	 
-			// exit();
+		if($brand_valid === FALSE){ 
 			$brand_id = 1;
-			$otherBrand = 'Custom';
+			$otherBrand = '';
 		} 
         
-		if (!in_array($product_condition, $this->lang->line('product_condition')))
-		{
-			echo '{"e":"0","d":"Condition selected not available. Please select another."}';	 
-			exit();
+        if($savingAsDraft == 0){
+        	if (!in_array($product_condition, $this->lang->line('product_condition'))){
+        		die('{"e":"0","d":"Condition selected not available. Please select another."}');	 
+        	}
+        }
+
+
+		if((strlen(trim($product_title)) == 0 
+			|| $product_title == "" 
+			|| strlen(trim($product_price)) == 0 
+			|| $product_price <= 0 
+			|| strlen(trim($product_description)) == 0) && $savingAsDraft == 0){
+
+			die('{"e":"0","d":"Fill (*) All Required Fields Properly!"}');		
 		}
- 
-		if(strlen(trim($product_title)) == 0 || $product_title == "" || strlen(trim($product_price)) == 0 || $product_price <= 0 || strlen(trim($product_description)) == 0)
-		{
-			echo '{"e":"0","d":"Fill (*) All Required Fields Properly!"}';		
-			exit();
-		}else{
+		else{
  			
- 			$arraynameoffiles = $this->input->post('arraynameoffiles');
-			$arraynameoffiles = json_decode($arraynameoffiles);
- 	 
-			if(count($arraynameoffiles) <= 0){ 
-				echo '{"e":"0","d":"Please select at least one photo for your listing."}';
-				exit();
+			$arraynameoffiles = json_decode($this->input->post('arraynameoffiles')); 
+			$arraynameoffiles = (count($arraynameoffiles) > 0) ? $arraynameoffiles : array();
+			if($savingAsDraft == 0){
+				if(count($arraynameoffiles) <= 0){ 
+					die('{"e":"0","d":"Please select at least one photo for your listing."}');
+				}
 			}
 
 			$removeThisPictures = json_decode($this->input->post('removeThisPictures')); 
@@ -397,9 +598,7 @@ class productUpload extends MY_Controller
 				$nameOfFile = $explodearraynameoffiles[0];
 				$arrayNameOnly[$key] = strtolower($nameOfFile); 
 
-				if($primaryId == $key){
-					$primaryName =	strtolower($nameOfFile);
-				}
+				$primaryName = ($primaryId == $key) ? strtolower($nameOfFile) : "";
 
 				if (in_array($key, $removeThisPictures) || $arraynameoffiles[$key] == "") {
 					unset($arraynameoffiles[$key]);
@@ -420,433 +619,275 @@ class productUpload extends MY_Controller
 				$arrayNameOnly[$key] = $temp;
 			}
 
-			if(count($arraynameoffiles) <= 0){
-				echo '{"e":"0","d":"Please select at least one photo for your listing."}';
-				exit();
+			if($savingAsDraft == 0){
+				if(count($arraynameoffiles) <= 0){ 
+					die('{"e":"0","d":"Please select at least one photo for your listing."}');
+				}
 			}
 
-			$allowed =  array('gif','png' ,'jpg','jpeg'); # available format only for image
-			$x = 0; 
+			$allowed =  array('gif','png' ,'jpg','jpeg'); # available format only for image 
 
-			if(!empty($_FILES['prod_other_img']['name'][0])){
-				foreach($_FILES['prod_other_img']['name'] as $k) { # validating image format.
-					$filename = $_FILES['prod_other_img']['name'][$x];
-					$ext = pathinfo($filename, PATHINFO_EXTENSION);
-					$file_temp =  $_FILES['prod_other_img']['tmp_name'][$x];
-				   	if(!in_array(strtolower($ext),$allowed) || (getimagesize($file_temp) === FALSE)) 
-					{
-						echo '{"e":"0","d":"For Additional Information: File Selected not valid. \n Please choose another image."}';
-						exit();
-					}
-					if($_FILES["prod_other_img"]["size"][$x] >= $this->max_file_size_mb * 1024 * 1024) # size of image must be 5mb only
-					{
-						echo '{"e":"0","d":"For Additional Information: File size not valid. Please choose another image with smaller size. \n The maximum allowable file size is '.$this->max_file_size_mb.'mB."}';
-						exit();
-					}
-				   	$x++;
-				 }
-            		}
-            
 			$categoryDetails = $this->product_model->selectCategoryDetails($cat_id);
 			$categoryName =  $categoryDetails['name'];
 			$categorykeywords =  $categoryDetails['keywords']; 
 
-		        $brandName = ($otherBrand === '')?$this->product_model->getBrandById($brand_id)[0]['name']:$otherBrand;
-			$username= $this->user_model->getUserById($member_id)['username'];
+	        $brandName = ($otherBrand === '')?$this->product_model->getBrandById($brand_id)[0]['name']:$otherBrand;
+			$username = $this->user_model->getUserById($member_id)['username'];
 
-		        
 			$search_keyword = preg_replace('!\s+!', ' ',$brandName .' '. $product_title .' '. $otherCategory . ' ' . $categoryName . ' '. $categorykeywords . ' '.$keyword.' '.$username);
+
 			$product_id = $this->product_model->addNewProduct($product_title,$sku,$product_brief,$product_description,$keyword,$brand_id,$cat_id,$style_id,$member_id,$product_price,$product_discount,$product_condition,$otherCategory, $otherBrand,$search_keyword);
-            		# product_id = is the id_product for the new item. if 0 no new item added process will stop
+    		# product_id = is the id_product for the new item. if 0 no new item added process will stop
             
 			#image directory
 			$path_directory = './assets/product/'.$product_id.'_'.$member_id.'_'.$date.'/';
 			$other_path_directory = $path_directory.'other/';
+
 			# creating new directory for each product
-
 			if(!mkdir($path_directory)) {  
-				echo '{"e":"0","d":"There was a problem. \n Please try again! - Error[0010]"}'; 
-				exit();
-			}   
-			if(!mkdir($other_path_directory)) {  
-				echo '{"e":"0","d":"There was a problem. \n Please try again! - Error[0012]"}'; 
-				exit();
+				die('{"e":"0","d":"There was a problem. \n Please try again! - Error[0010]"}'); 
+			}
+			if(!mkdir($other_path_directory)) { 
+				die('{"e":"0","d":"There was a problem. \n Please try again! - Error[0012]"}');
+			}
+			if(!mkdir($path_directory.'categoryview/')) { 
+				die('{"e":"0","d":"There was a problem. \n Please try again! - Error[0012]"}');
+			}
+			if(!mkdir($path_directory.'small/')) { 
+				die('{"e":"0","d":"There was a problem. \n Please try again! - Error[0012]"}');
+			}
+			if(!mkdir($path_directory.'thumbnail/')) { 
+				die('{"e":"0","d":"There was a problem. \n Please try again! - Error[0012]"}');
 			}
 
-			$tempdirectory = $this->session->userdata('tempId'); 
-			$tempdirectory = $tempdirectory.'_'.$member_id.'_'.$date;
-			$tempdirectory = './assets/temp_product/'.$tempdirectory.'/'; 
+			if($product_id > 0){ # id_product is 0 means no item inserted. the process will stop.
 
-			if(!count($arraynameoffiles) <= 0){ 
-				directory_copy($tempdirectory, $path_directory,$product_id,$arrayNameOnly); 
-			}
-
-			if($product_id > 0) # id_product is 0 means no item inserted. the process will stop.
-			{
 				foreach ($arraynameoffiles as $key => $value) {
-				    	$explodearraynameoffiles = explode('||', $arraynameoffiles[$key]);
-				    	$nameOfFile = $explodearraynameoffiles[0];
-				    	$nameOfFileArray = explode('_', $nameOfFile);
-				    	$newName = $product_id.'_'.$nameOfFileArray[1].'_'.$nameOfFileArray[2];
-				    	$path = $path_directory.$newName;
-				    	array_push($arrayNameOnly, $nameOfFile);
-				    	$typeOfFile = $explodearraynameoffiles[1];
-				  	$is_primary = ($key == 0 ? 1 : 0);
+					$explodearraynameoffiles = explode('||', $arraynameoffiles[$key]);
+					$nameOfFile = $explodearraynameoffiles[0];
+					$nameOfFileArray = explode('_', $nameOfFile);
+					$newName = $product_id.'_'.$nameOfFileArray[1].'_'.$nameOfFileArray[2];
+					$path = $path_directory.$newName;
+					$typeOfFile = $explodearraynameoffiles[1];
+					$is_primary = ($key == 0 ? 1 : 0);
 					$product_image = $this->product_model->addNewProductImage($path,$typeOfFile,$product_id,$is_primary);
-                    		}
-
-				if($inputs_exp == true){
-					for ($i=0; $i < sizeof($explode_inputs) ; $i++) {
-					    $explode_id = explode('/', $explode_inputs[$i]);
-					    $explode_value = $explode_id[0];
-					    $attribute_id = $explode_id[1];
-					    $extraPrice = '0';
-					    $dataType = substr($explode_value,0,strpos($explode_value,'_'));
-
-					    switch ($dataType) {
-						# if the input type is checkbox possible many item will insert to the database.
-						case 'CHECKBOX': 
-						if(isset($_POST[$explode_value])){
-						    for ($x=0; $x < sizeof($_POST[$explode_value]) ; $x++) {
-							$attributeCount = count($this->product_model->selectAttributeNameWithNameAndId($_POST[$explode_value][$x],$attribute_id));
-							if($attributeCount > 0){
-							    $prod_attr_id = $this->product_model->addNewAttributeByProduct($product_id,$attribute_id,$_POST[$explode_value][$x],$extraPrice);
-							}
-						    }
-						}
-						break;
-						#input type is textarea
-						case 'TEXTAREA':
-						if(isset($_POST[$explode_value]) && (strlen(trim($_POST[$explode_value])) != 0 )){
-						    $attributeCount = count($this->product_model->selectAttributeNameWithTypeAndId($attribute_id,2));
-						    if($attributeCount > 0){
-							$prod_attr_id = $this->product_model->addNewAttributeByProduct($product_id,$attribute_id,$_POST[$explode_value],$extraPrice);
-						    }
-						}
-						break;
-						#input type is simple textbox
-						case 'TEXT':
-						if(isset($_POST[$explode_value]) && (strlen(trim($_POST[$explode_value])) != 0 )){
-						    $attributeCount = count($this->product_model->selectAttributeNameWithTypeAndId($attribute_id,1));
-						    if($attributeCount > 0){
-							$prod_attr_id = $this->product_model->addNewAttributeByProduct($product_id,$attribute_id,$_POST[$explode_value],$extraPrice);
-						    }
-						}
-						break;
-
-						default: # default input type (SELECT& RADIO)
-						if(isset($_POST[$explode_value]) && strlen(trim($_POST[$explode_value])) != 0 ){
-						    $attributeCount = count($this->product_model->selectAttributeNameWithNameAndId($_POST[$explode_value],$attribute_id));
-						    if($attributeCount > 0){
-							$prod_attr_id = $this->product_model->addNewAttributeByProduct($product_id,$attribute_id,$_POST[$explode_value],$extraPrice);
-						    }	
-						}
-						break;	
-					    }			
-					}
 				}
 
-
-                   		# start of saving other/custom attribute
-
-				$newarray = array();
-				$option_image_idx = 0;
-
-				for ($i=0; $i < sizeof($_POST['prod_other_name']); $i++) { 
-					$newarray[trim(ucfirst(strtolower($_POST['prod_other_name'][$i])))] = array();
+                # start of saving other/custom attribute 
+				foreach ($attributes as $key => $valuex) {
+					$others_id = $this->product_model->addNewAttributeByProduct_others_name($product_id,$key);
+					foreach ($valuex as $keyvalue => $value) {
+						$imageid = 0;
+						if($value['image'] != ""){ 
+							$nameOfFileArray = explode('_', $value['image']);
+							$fileType = end(explode('.', $value['image']));
+							$newOtherName = $product_id.'_'.$nameOfFileArray[1].'_'.$nameOfFileArray[2];
+							array_push($arrayNameOnly, $value['image']);
+							$imageid = $this->product_model->addNewProductImage($other_path_directory.$newOtherName,$fileType,$product_id,0);
+						}
+						$this->product_model->addNewAttributeByProduct_others_name_value($others_id,$value['value'],$value['price'],$imageid);
+					}
+				}
+		    	#end of other 
+ 
+				if(!count($arraynameoffiles) <= 0){ 
+					directory_copy($tempDirectory, $path_directory,$product_id,$arrayNameOnly); 
 				}
 
-				for ($i=0; $i < sizeof($_POST['prod_other_name']); $i++) {
-					$other_name = "--no name";
-					$other_price = "0.00";
-					$other_image = "--no image";
-					$other_image_type = "--no type";
-					$other_tmp = "--no temp";
-					if(strlen(trim($_POST['prod_other_price'][$i])) != 0 || $_POST['prod_other_price'][$i] != ""){
-					    $other_price = $_POST['prod_other_price'][$i];
-					    $other_price = abs(str_replace(',','',$other_price));
-					}
-					if(isset($_FILES['prod_other_img'])){
-					    if(intval($_POST['prod_other_img_idx'][$i],10) === 1){
-						if(!empty($_FILES['prod_other_img']['name'][$option_image_idx])){
-						    $other_image_type = $_FILES['prod_other_img']['type'][$option_image_idx];
-						    $file_ext = explode('.', $_FILES['prod_other_img']['name'][$option_image_idx]);
-						    $file_ext = strtolower(end($file_ext));
-						    $other_image = "{$product_id}_{$member_id}_{$fulldate}{$i}_o.{$file_ext}";
-						    $other_tmp = $_FILES["prod_other_img"]["tmp_name"][$option_image_idx];
-						}
-						$option_image_idx++;
-					    }
-					}
-
-					if(strlen(trim($_POST['prod_other'][$i])) != 0 ||  trim($_POST['prod_other'][$i]) != ""){
-					    $other_name = $_POST['prod_other'][$i];
-					}
-					array_push($newarray[trim(ucfirst(strtolower($_POST['prod_other_name'][$i])))], ucfirst(strtolower($other_name)) .'|'.$other_price.'|'.$other_image.'|'.$other_image_type.'|'.$other_tmp);
-				}
-
-				$filenames_ar = array();					
-				$path = $other_path_directory;
-				$is_primary = 0;
-                    
-                    		foreach ($newarray as $key => $valuex) {
-						if(trim($key) == "" || strlen(trim($key)) <= 0 ){
-						    continue;
-						}
-
-						if(count($valuex) <= 1 && $valuex[0] == '--no name|0.00|--no image|--no type|--no temp'){
-							continue;
-						}
-
-
-						$passCheck = 0;
-						foreach ($valuex as $xkey => $xvalue) {
-							$explodeChecker = explode('|', $xvalue);
-							if($explodeChecker[0] !== '--no name'){
-								$passCheck++;
-							}
-						}
-						if($passCheck == 0){
-							continue;
-						}
-
-						$others_id = $this->product_model->addNewAttributeByProduct_others_name($product_id,$key);
-						foreach ($valuex as $keyvalue => $value) {
-						    $eval = explode("|", $value);
-
-						    if(trim($eval[0]) == "--no name"){
-						        continue;
-						    }
-
-						    $imageid = 0;
-						    if($eval[2] != "--no image"){
-						        $imageid = $this->product_model->addNewProductImage($path.$eval[2],$eval[3],$product_id,$is_primary);
-						        move_uploaded_file($eval[4], $path.$eval[2]);
-						        list($o_width, $o_height) = getimagesize($path.$eval[2]);
-						        //If user uploaded image is too large, resize and overwrite original image
-						        if(($o_width > $this->img_dimension['usersize'][0])||($o_height > $this->img_dimension['usersize'][1])){
-						            $this->es_img_resize($eval[2],$path,'', $this->img_dimension['usersize']);
-						        }
-						        $this->es_img_resize($eval[2],$other_path_directory, 'small/', $this->img_dimension['small']);
-
-						        $this->es_img_resize($eval[2],$other_path_directory.'small/', '../thumbnail/', $this->img_dimension['thumbnail']);
-						        
-			 
-						    }
-						    $this->product_model->addNewAttributeByProduct_others_name_value($others_id,$eval[0],$eval[1],$imageid);
-
-						}
-				    }
-				    # end of other
-
-				# start of saving combination
-				if($checkIfCombination == 'true' || $checkIfCombination == 1){
-					$quantitySolo = 1;
-				if($this->input->post('quantitySolo')){
-					$quantitySolo = $this->input->post('quantitySolo');
-					$quantitySolo = abs(str_replace(',','',$quantitySolo));
-				}
-					$idProductItem = $this->product_model->addNewCombination($product_id,$quantitySolo);
-
-				}else{
-					foreach ($combination as $keyCombination) {
-						$quantitycombination = 1;
-						if(!$quantitycombination <= 0){
-							$quantitycombination = abs(str_replace(',','',$keyCombination->quantity)); 
-						}
-						$idProductItem = $this->product_model->addNewCombination($product_id,$quantitycombination);
-						if(strpos($keyCombination->value, '~-~') !== false) {
-
-							$explodeCombination = explode("~-~",  $keyCombination->value);
-							foreach ($explodeCombination as $value) {
-
-							    $explodeOther = explode(":",  $value);
-							    $otherAttrIdentifier = $explodeOther[0];
-							    $otherAttrValue = $explodeOther[1];
-							    $otherAttrGroup = $explodeOther[2];
-							    if($otherAttrIdentifier == 1){
-								$productAttributeId = $this->product_model->selectProductAttributeOther($otherAttrGroup,$otherAttrValue,$product_id);
-							    }else{
-								$productAttributeId = $this->product_model->selectProductAttribute($otherAttrValue,$product_id);
-							    }
-
-							    $this->product_model->addNewCombinationAttribute($idProductItem,$productAttributeId,$otherAttrIdentifier);
-							}
-						}else{
-							$explodeOther = explode(":",  $keyCombination->value);
-							$otherAttrIdentifier = $explodeOther[0];
-							$otherAttrValue = $explodeOther[1];
-							$otherAttrGroup = $explodeOther[2];
-							if($otherAttrIdentifier == 1){
-							    $productAttributeId = $this->product_model->selectProductAttributeOther($otherAttrGroup,$otherAttrValue,$product_id);
-							}else{
-							    $productAttributeId = $this->product_model->selectProductAttribute($otherAttrValue,$product_id);
-							}
-
-							$this->product_model->addNewCombinationAttribute($idProductItem,$productAttributeId,$otherAttrIdentifier);
-						}	
-					}
-
-				    } 
-				    # end of combination
-		            $data = '{"e":"1","d":"'.$product_id.'"}';
-		            echo $data;
-		            exit();	
+		    	#saving combination
+		    	if(count($combination) <= 0){
+		    		$idProductItem = $this->product_model->addNewCombination($product_id,$this->input->post('allQuantity'));
+		    	}
+		    	else{
+		    		foreach ($combination as $key => $value) {
+		    			$idProductItem = $this->product_model->addNewCombination($product_id,$value['quantity']);
+		    			foreach ($value['data'] as $keydata => $valuedata) {
+		    				$productAttributeId = $this->product_model->selectProductAttributeOther($keydata,$valuedata,$product_id);
+		    				$this->product_model->addNewCombinationAttribute($idProductItem,$productAttributeId,1);
+		    			}
+		    		}
+		    	}
+		    	#end of saving combination
+				$this->session->set_userdata('originalPath',  $path_directory);
+				die('{"e":"1","d":"'.$product_id.'"}'); 
 		    }else{
-		        $data = '{"e":"0","d":"There was a problem. \n Please try again later! - Error[0011]"}';
-		        echo $data;
-		        exit();
+		        die('{"e":"0","d":"There was a problem. \n Please try again later! - Error[0011]"}');
 		    }
 	    }
-	    echo $data;
 	}
 
-
-	/**
-	 *	View function for Product Upload Step 3
-	 */
-	function step3()
+	public function step2edit2Submit()
 	{
-		if($this->input->post('prod_h_id')){
-			$id = $this->input->post('prod_h_id');
-			$member_id = $this->session->userdata('member_id');
+		$this->load->model("user_model");
 
-			$data = array (
-				'shiploc' => $this->product_model->getLocation(),
-				'attr' => $this->product_model->getPrdShippingAttr($id),
-				'product_id' => $id,
-				'shipping_summary' => $this->product_model->getShippingSummary($id),
-				'shipping_preference' => $this->product_model->getShippingPreference($member_id), 
-           		 );
-            
-			$data = array_merge($data, $this->fill_view());
-			$jsonDisplayGroup = $jsonFdata = array();
-			
-			if($data['shipping_summary']['has_shippingsummary']){
-				if($data['attr']['has_attr'] === 1){
-					$i = 0;
-					foreach($data['attr']['attributes'] as $attrk=>$attrarr){
-						if( isset($data['shipping_summary'][$attrk]) ){
-							$jsonDisplayGroup[$i][$attrk] = $attrk;
-							foreach($data['shipping_summary'][$attrk] as $lockey=>$price){
-								$jsonFdata[$i][$attrk][$lockey] = $price;
-							}
-							$i++;
-						}
-					}
-				} else {
-					$jsonDisplayGroup[0][$data['attr']['product_item_id']] = $data['attr']['product_item_id'];
-					foreach($data['shipping_summary'][$data['attr']['product_item_id']] as $lockey=>$price){
-						$jsonFdata[0][$data['attr']['product_item_id']][$lockey] = $price;
-					}
-				}
-			}
-			$data['json_displaygroup'] = json_encode($jsonDisplayGroup, JSON_FORCE_OBJECT);
-			$data['json_fdata'] = json_encode($jsonFdata, JSON_FORCE_OBJECT);
-			$data['json_id_product_item'] = json_encode($data['shipping_summary']['id_product_item']);
-			
-			$locationGroup = array();
-			$islandLookup = [2,3,4];
-			$data['inc_location'] = false;
-			$data['inc_locationmsg'] = '';
-			if($data['shipping_summary']['has_shippingsummary']){
-				foreach($data['shipping_summary']['location'] as $locKey=>$locV){
-					if(!in_array($locKey,$locationGroup)){
-						$locationGroup[] = $locKey;
-					}
-				}
-				foreach($islandLookup as $locId){
-					if(!in_array($locId, $locationGroup)){
-						$data['inc_location'] = true;
-						switch($locId){
-							case 2:
-								$data['inc_locationmsg'] .= 'Luzon ';
-								break;
-							case 3:
-								$data['inc_locationmsg'] .= 'Visayas ';
-								break;
-							case 4:
-								$data['inc_locationmsg'] .= 'Mindanao ';
-								break;
-						}
-					}
-				}
-			}
-			
-			$data['json_locationgroup'] = json_encode($locationGroup);
-			$data['json_islandlookup'] = json_encode($islandLookup);
-			
-			$data['json_shippingpreference'] = json_encode($data['shipping_preference'], JSON_FORCE_OBJECT);
-			
-			if($this->input->post('is_edit')){
-				$data['is_edit'] = true;
-			}
-			$this->load->view('templates/header', $data);
-			$this->load->view('pages/product/product_upload_step3_view', $data);
-			$this->load->view('templates/footer');
-			
-		}
-		else {
-			redirect(base_url().'sell/step1', 'refresh');
-		}
-	}
-	
-	/**
-	 *	Function used when shipping details are submitted in Product Upload Step 3. 
-	 *	Stores shipping data in `es_shipping_price` and `es_product_shipping_map`
-	 */
-	function step3Submit(){
-		$fdata = $this->input->post('fdata');
-		//$arrProductItemId = json_decode($this->input->post('productitemid'));
-		$arrProductItemId = $this->input->post('productitemid');
-		$productId = $this->input->post('productid');
-        	$memberId =  $this->session->userdata('member_id');
-		$attrCounter = 0;
-		
-		//Fetch db data
-		$dbProductItem = $this->product_model->getProductItem($productId, $memberId);
-		//Assemble product item id from db similar to arrProductItemId structure
-		$dbtemp = array();
-		foreach($dbProductItem as $db){
-			$dbtemp[] = $db['id_product_item'];
-		}
-		//Compare 'posted' product item id array with 'server' product item id array
-		if($dbtemp == $arrProductItemId){
-			// Check if all attributes have assigned shipping details
-			foreach($arrProductItemId as $pid){
-				foreach($fdata as $arrAttr){
-					if(array_key_exists($pid,$arrAttr) && count($arrAttr[$pid]) !== 0){
-						$attrCounter++;
-						break;
-					}
-				}
-			}
-			
-			if( count($arrProductItemId) <= $attrCounter ){
-				//DELETE EXISTING ENTRIES IN DATABASE
-				$this->product_model->deleteShippingSummaryOnEdit($arrProductItemId);
-				
-				foreach($fdata as $group){
-					foreach($group as $attrCombinationId=>$attrGroup){
-						foreach($attrGroup as $locationKey=>$price){
-							if(is_numeric($price)){
-								$shippingId = $this->product_model->storeShippingPrice($locationKey, $price, $productId);
-								$this->product_model->storeProductShippingMap($shippingId, $attrCombinationId);
-							}
-						}
-					}
-				}
-				echo 1;
-			}
-			else{
-				echo 0;
-			}
+		$combination = json_decode($this->input->post('combination'),true); 
+		$attributes = json_decode($this->input->post('attributes'),true);
+		$product_id = $this->input->post('p_id');
+		$memberId = $this->session->userdata('member_id');
+		$cat_id = $this->input->post('id');
+		$product_title = trim($this->input->post('prod_title'));
+		$product_brief = trim($this->input->post('prod_brief_desc'));
+		$product_description =  $this->input->post('prod_description');
+		$product_price = str_replace(',', '', $this->input->post('prod_price')) ;
+		$product_discount = ($this->input->post('discount'))?floatval($this->input->post('discount')):0;
+		$product_discount = ($product_discount <= 100)?$product_discount:100;
+		$product_condition = $this->input->post('prod_condition');
+		$otherCategory = html_escape($this->input->post('othernamecategory'));
+		$sku = trim($this->input->post('prod_sku'));
+		$brand_id =  $this->input->post('prod_brand'); 
+		$keyword = trim($this->input->post('prod_keyword'));
+		$style_id = 1;
+		$brand_valid = FALSE;
+		$otherBrand = ""; $primaryName ="";
+		$username = $this->user_model->getUserById($memberId)['username'];
+		$originalPath = $this->session->userdata('originalPath'); 
+		$tempDirectory = $this->session->userdata('tempDirectory'); 
+    	$savingAsDraft = ($this->input->post('savedraft'))?'1':'0'; 
+
+		if(intval($brand_id,10) == 1){
+			$brand_valid = true;
+			$otherBrand = $this->input->post('brand_sch');
+			$brand_id = 1;
 		}
 		else{
-			echo 2;
+			if($this->product_model->getBrandById($brand_id)){
+				$brand_valid = true;
+			} 
+		}
+
+		if($brand_valid === FALSE){ 
+			$brand_id = 1;
+			$otherBrand = "";
+		}
+
+		$brandName = ($otherBrand === '')?$this->product_model->getBrandById($brand_id)[0]['name']:$otherBrand;
+		$categoryDetails = $this->product_model->selectCategoryDetails($cat_id);
+		$categoryName =  $categoryDetails['name'];
+		$categorykeywords =  $categoryDetails['keywords']; 
+		$search_keyword = preg_replace('!\s+!', ' ',$brandName .' '. $product_title .' '. $otherCategory . ' ' . $categoryName . ' '. $categorykeywords . ' '.$keyword.' '.$username);
+ 
+		$arraynameoffiles = json_decode($this->input->post('arraynameoffiles')); 
+		$arraynameoffiles = (count($arraynameoffiles) > 0) ? $arraynameoffiles : array();
+
+		if($savingAsDraft == 0){
+			if(count($arraynameoffiles) <= 0){ 
+				die('{"e":"0","d":"Please select at least one photo for your listing."}');
+			}
+		}
+
+		$removeThisPictures = json_decode($this->input->post('removeThisPictures')); 
+		$primaryId = $this->input->post('primaryPicture'); 
+		$arrayNameOnly = array();
+
+		foreach($arraynameoffiles as $key => $value ) {
+			$nameOfFile = explode('||', $value)[0];
+			$arrayNameOnly[$key] = strtolower($nameOfFile); 
+			$primaryName = ($primaryId == $key) ? strtolower($nameOfFile) : "";
+
+			if(in_array($key, $removeThisPictures) || $arraynameoffiles[$key] == "") {
+				unset($arraynameoffiles[$key],$arrayNameOnly[$key]); 
+			} 
+		}
+
+		$arraynameoffiles = array_values($arraynameoffiles);
+		$arrayNameOnly = array_values($arrayNameOnly); 
+		$key = array_search ($primaryName, $arrayNameOnly);
+
+		if(!count($arraynameoffiles) <= 0){
+			$temp = $arraynameoffiles[0];
+			$arraynameoffiles[0] = $arraynameoffiles[$key];
+			$arraynameoffiles[$key] = $temp;
+
+			$temp = $arrayNameOnly[0];
+			$arrayNameOnly[0] = $arrayNameOnly[$key];
+			$arrayNameOnly[$key] = $temp;
+		}
+
+		if($savingAsDraft == 0){
+			if(count($arraynameoffiles) <= 0){ 
+				die('{"e":"0","d":"Please select at least one photo for your listing."}');
+			}
+		}
+
+		if (file_exists($originalPath)){
+			recursiveRemoveDirectory($originalPath);
+			if(!mkdir($originalPath, 0777, true)) {  
+				die('{"e":"0","d":"There was a problem. \n Please try again! - Error[0010]"}'); 
+			}
+			if(!mkdir($originalPath.'other/', 0777, true)) { 
+				die('{"e":"0","d":"There was a problem. \n Please try again! - Error[0012]"}');
+			}			
+		}
+		else{
+			die('{"e":"0","d":"There was a problem. \n Please try again! - Error[00107]"}'); 
+		}
+ 
+		$product_details = array('product_id' => $product_id,
+			'name' => $product_title,
+			'sku' => $sku,
+			'brief' => $product_brief,
+			'description' => $product_description,
+			'keyword' => $keyword,
+			'brand_id' => $brand_id,
+			'style_id' => $style_id,
+			'price' => $product_price,
+			'condition' => $product_condition,
+			'brand_other_name' => $otherBrand,
+			'discount' => $product_discount,
+			'search_keyword' => $search_keyword,
+			);
+
+		$rowCount = $this->product_model->editProduct($product_details, $memberId);
+
+		if($rowCount>0){
+
+			$removeProductDetails = $this->product_model->removeProductDetails($product_id); 
+
+			# saving images
+			foreach ($arraynameoffiles as $key => $value) {
+				$explodearraynameoffiles = explode('||', $arraynameoffiles[$key]);
+				$nameOfFile = $explodearraynameoffiles[0];
+				$nameOfFileArray = explode('_', $nameOfFile);
+				$newName = $product_id.'_'.$nameOfFileArray[1].'_'.$nameOfFileArray[2];
+				$path = $originalPath.$newName;
+				$typeOfFile = $explodearraynameoffiles[1];
+				$is_primary = ($key == 0 ? 1 : 0);
+				$product_image = $this->product_model->addNewProductImage($path,$typeOfFile,$product_id,$is_primary);
+			}
+
+            # start of saving other/custom attribute 
+			foreach ($attributes as $key => $valuex) {
+				$others_id = $this->product_model->addNewAttributeByProduct_others_name($product_id,$key);
+				foreach ($valuex as $keyvalue => $value) {
+					$imageid = 0;
+					if($value['image'] != ""){ 
+						$nameOfFileArray = explode('_', $value['image']);
+						$fileType = end(explode('.', $value['image']));
+						$newOtherName = $product_id.'_'.$nameOfFileArray[1].'_'.$nameOfFileArray[2];
+						array_push($arrayNameOnly, $value['image']);
+						$imageid = $this->product_model->addNewProductImage($originalPath.'other/'.$newOtherName,$fileType,$product_id,0);
+					}
+					$this->product_model->addNewAttributeByProduct_others_name_value($others_id,$value['value'],$value['price'],$imageid);
+				}
+			}
+			directory_copy($tempDirectory, $originalPath,$product_id,$arrayNameOnly); 
+
+	    	#saving combination
+	    	if(count($combination) <= 0){
+	    		$idProductItem = $this->product_model->addNewCombination($product_id,$this->input->post('allQuantity'));
+	    	}
+	    	else{
+	    		foreach ($combination as $key => $value) {
+	    			$idProductItem = $this->product_model->addNewCombination($product_id,$value['quantity']);
+	    			foreach ($value['data'] as $keydata => $valuedata) {
+	    				$productAttributeId = $this->product_model->selectProductAttributeOther($keydata,$valuedata,$product_id);
+	    				$this->product_model->addNewCombinationAttribute($idProductItem,$productAttributeId,1);
+	    			}
+	    		}
+	    	} 
+	    	die('{"e":"1","d":"'.$product_id.'"}'); 
 		}
 	}
-	
 	
 	function step3_addPreference()
 	{
@@ -913,60 +954,6 @@ class productUpload extends MY_Controller
 		echo json_encode($serverResponse, JSON_FORCE_OBJECT);
 	}
 	
-	
-	function step4() # uploading of product is successful.
-	{	
-		$this->load->model('memberpage_model');
-		$data = $this->fill_view();
-		$this->load->view('templates/header', $data); 
-		$memberId =  $this->session->userdata('member_id');
-		if($this->input->post('prod_h_id')){
-			$billing_id = intval($this->input->post('prod_billing_id')); 
-			$is_cod = ($this->input->post('allow_cod'))?1:0;
-			$payment_accounts = $this->memberpage_model->get_billing_info($memberId);
-			if(!(array_key_exists($billing_id,$payment_accounts) ||  ($billing_id === 0 && $is_cod === 1))){
-				redirect('/sell/step1/', 'refresh');
-			}
-			$response['id'] = $this->input->post('prod_h_id');
-			$this->product_model->finalizeProduct($response['id'] , $memberId, $billing_id, $is_cod);
-			$product = $this->product_model->getProductById($response['id']);
-			$response['slug'] = $product['slug'];
-			$response['productname'] = $product['product'];
-			if($this->input->post('is_edit')){
-				$response['is_edit'] = true;
-			}
-			$this->load->view('pages/product/product_upload_step4_view',$response);
-			$this->load->view('templates/footer_full'); 
-		}else{
-			redirect('/sell/step1/', 'refresh');
-		}
-	}
-	
-	public function editStep1(){
-		$this->load->model('user_model');
-		if($this->input->post('p_id')){
-		    $product_id = $this->input->post('p_id');
-		}
-		else{
-		    redirect('me', 'refresh'); 
-		}
-		$member_id = $this->session->userdata('member_id');
-		$userdetails = $this->user_model->getUserById($member_id);
-		
-		$product = $this->product_model->getProductEdit($product_id, $member_id);  
-		$cat_tree = $this->product_model->getParentId($product['cat_id']);
-
-		$is_admin = (intval($userdetails['is_admin']) === 1);
-		$data_item['firstlevel'] = $this->product_model->getFirstLevelNode(false, false, $is_admin); # getting first category level from database.
-		$data = $this->fill_view();
-		$data['cat_tree_edit'] = json_encode($cat_tree);
-		$data['product_id_edit'] = $product_id;
-		$data['other_cat_name'] = $product['otherCategory'];
-		$this->load->view('templates/header', $data); 
-		$this->load->view('pages/product/product_upload_step1_view',$data_item);
-		$this->load->view('templates/footer'); 
-	}
-    
 	public function editStep2(){
 		if($this->input->post('p_id')){
 		  $product_id = $this->input->post('p_id');
@@ -1003,7 +990,7 @@ class productUpload extends MY_Controller
 		    }           
 		}
 		
-        	$parents = $this->product_model->getParentId($product['cat_id']); # getting all the parent from selected category
+    	$parents = $this->product_model->getParentId($product['cat_id']); # getting all the parent from selected category
 		$lastElement = end($parents);	
 		$str_parents_to_last = "";
 		foreach($parents as $k => $v) { # creating the bread crumbs from parent category to the last selected category
@@ -1039,7 +1026,7 @@ class productUpload extends MY_Controller
 
 		$response['product_attributes_opt'] = array();
 		$response['product_attributes_spe'] = array();
-        	$response['memid'] = $member_id;
+    	$response['memid'] = $member_id;
         
         
 		foreach($this->product_model->getProductAttributes($product_id, 'ALL') as $key=>$attribute){
@@ -1066,596 +1053,13 @@ class productUpload extends MY_Controller
 		$response['tempId'] = strtolower(substr( "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" ,mt_rand( 0 ,50 ) ,1 ) .substr( md5( time() ), 1));            
 		$this->session->set_userdata('tempId', $response['tempId']);
             
-        	$response['main_images'] = $main_images;	
+    	$response['main_images'] = $main_images;	
 		$response['item_quantity'] =  $this->product_model->getProductQuantity($product_id, true);
 		$response['img_max_dimension'] = $this->img_dimension['usersize'];
-        	$this->load->view('pages/product/product_upload_step2_view', $response);
+    	$this->load->view('pages/product/product_upload_step2_view', $response);
 		$this->load->view('templates/footer'); 
 
 	}
-
-     	public function editStep2Submit()
-	{
-		$this->load->model('user_model');
-		$product_title = trim($this->input->post('prod_title'));
-		$product_brief = trim($this->input->post('prod_brief_desc'));
-		$product_description = trim($this->input->post('desc')) ;
-        	$product_price = str_replace(',', '', $this->input->post('prod_price')) ;
-		$product_condition = $this->input->post('prod_condition');
-		$sku = trim($this->input->post('prod_sku'));
-        	$keyword = es_url_clean(trim($this->input->post('prod_keyword')));
-		$product_id = $this->input->post('p_id');
-		$brand_id =  $this->input->post('prod_brand');
-        
-		$product_discount = ($this->input->post('discount'))?floatval($this->input->post('discount')):0;
-		$product_discount = ($product_discount <= 100)?$product_discount:100;
-
-		$otherCategory = $this->input->post('otherCategory');
-		$brand_valid = false;
-		$otherBrand = '';
-
-		$style_id = 1;
-		$member_id =  $this->session->userdata('member_id');
-		$inputs = $this->input->post('inputs'); 
-		$combination = json_decode($this->input->post('combination'));
-		$checkIfCombination = $this->input->post('noCombination');
-        
-        	$inputs_exp = false;
-		if(strpos($inputs, '|') !== false) {
-			$explode_inputs = explode("|", substr($inputs, 1));
-			$inputs_exp = true;
-		}
-        
-        
-		$cat_id = $this->input->post('id');
-		$date = date("Ymd");
-        	$fulldate = date("YmdGis");
-
-		if(intval($brand_id,10) == 1){
-		    $brand_valid = true;
-		    $otherBrand = $this->input->post('brand_sch');
-		    $brand_id = 1;
-		}
-		else{
-		    if($this->product_model->getBrandById($brand_id)){
-		        $brand_valid = true;
-		    }
-		}
-
-		if($brand_valid === FALSE){
-			$brand_id = 1;
-			$otherBrand = 'Custom';
-		} 
-
-		if (!in_array($product_condition, $this->lang->line('product_condition')))
-		{
-			echo '{"e":"0","d":"Condition selected not available. Please select another."}';	 
-			exit();
-		}
-
-		if(strlen(trim($product_title)) == 0 || $product_title == "" 
-			|| strlen(trim($product_description)) <= 4
-			|| strlen(trim($product_price)) == 0 || $product_price <= 0)
-		{
-			echo '{"e":"0","d":"Fill (*) All Required Fields Properly!"}';		
-            		exit();
-		}else{
-
-			$images = $this->product_model->getProductImages($product_id, true);
-			$main_images = array();
-			$other_images = array();
-			foreach($images as $key=>$image){
-				if(strpos(($image['path']),'other') === FALSE){
-					$main_images[$key] = $image;
-				}else{
-					$other_images[$key] = $image;
-				}
-			}
-			$main_image_cnt = count($main_images);
-
-			$editRemoveThisPictures = json_decode($this->input->post('editRemoveThisPictures')); 
-			$editPrimaryId = $this->input->post('editPrimaryPicture');
-			$removeThisPictures = json_decode($this->input->post('removeThisPictures')); 
-			$primaryId = $this->input->post('primaryPicture');
-			$primaryName =""; 
-
-            	
- 			$arraynameoffiles = $this->input->post('arraynameoffiles');
-			$arraynameoffiles = json_decode($arraynameoffiles);
-			$arrayNameOnly = array();
-
-            
-			foreach($arraynameoffiles as $key => $value ) {
-				$explodearraynameoffiles = explode('||', $value);
-				$nameOfFile = $explodearraynameoffiles[0];
-				$arrayNameOnly[$key] = strtolower($nameOfFile); 
-                		if($primaryId == $key){
-					$primaryName =	strtolower($nameOfFile);
-				}
-				if (in_array($key, $removeThisPictures) || $arraynameoffiles[$key] == "") {
-					unset($arraynameoffiles[$key]);
-					unset($arrayNameOnly[$key]);
-				} 
-			}
-
-			$arraynameoffiles = array_values($arraynameoffiles);
-			$arrayNameOnly = array_values($arrayNameOnly); 
-			# primary image is brought to the start of the array
-			$key = array_search ($primaryName, $arrayNameOnly);
-			if(!count($arraynameoffiles) <= 0){
-				$temp = $arraynameoffiles[0];
-				$arraynameoffiles[0] = $arraynameoffiles[$key];
-				$arraynameoffiles[$key] = $temp;
-				$temp = $arrayNameOnly[0];
-				$arrayNameOnly[0] = $arrayNameOnly[$key];
-				$arrayNameOnly[$key] = $temp;
-			}
-            
-			if((count($arraynameoffiles) <= 0)  && ($main_image_cnt  === count($editRemoveThisPictures))){
-                		echo '{"e":"0","d":"Please select at least one photo for your listing."}';
-				exit();
-            		}	
-            
-            		$allowed =  array('gif','png' ,'jpg','jpeg'); # available format only for image
-
-            		$x = 0;
-			if(!empty($_FILES['prod_other_img']['name'][0])){
-				foreach($_FILES['prod_other_img']['name'] as $k) { # validating image format.
-				    $filename = $_FILES['prod_other_img']['name'][$x];
-				    $ext = pathinfo($filename, PATHINFO_EXTENSION);
-				    $file_temp =  $_FILES['prod_other_img']['tmp_name'][$x];
-				    if(!in_array(strtolower($ext),$allowed) || (getimagesize($file_temp) === FALSE)) 
-				    {
-					echo '{"e":"0","d":"For Additional Information: File Selected not valid. \n Please choose another image."}';
-					exit();
-				    }
-				    if($_FILES["prod_other_img"]["size"][$x] >= $this->max_file_size_mb * 1024 * 1024 ) 
-				    {
-					echo '{"e":"0","d":"For Additional Information: File size not valid. Please choose another image with smaller size. \n The maximum allowable file size is '.$this->max_file_size_mb.'mB."}';
-					exit();
-				    }
-				    $x++;
-				}
-			}
-            
-			#image directory
-			
-			if($main_image_cnt === 0){
-		        /* 
-		         *  THIS SHOULD NEVER HAPPEN. IF IT DID, AN ERROR SAYING THE UPLOAD PATH IS INVALID WILL PROMPT THE USER
-		         *  REASON FOR THIS HAPPENING: no image exists in es_product_image at the time of the edit
-		         */
-				$path_directory = './assets/product/'.$product_id.'_'.$member_id.'_'.$date.'/';
-			}
-			else{
-				$path_directory = reset($main_images)['path'];
-			}
-			$other_path_directory = $path_directory.'other/';
-
-			$username= $this->user_model->getUserById($member_id)['username'];
-			$brandName = ($otherBrand === '')?$this->product_model->getBrandById($brand_id)[0]['name']:$otherBrand;
-			$categoryDetails = $this->product_model->selectCategoryDetails($cat_id);
-			$categoryName =  $categoryDetails['name'];
-			$categorykeywords =  $categoryDetails['keywords']; 
-	
-            		$search_keyword = preg_replace('!\s+!', ' ', $brandName .' '. $product_title .' '. $otherCategory . ' ' . $categoryName . ' '. $categorykeywords . ' '.$keyword.' '.$username);
-			$product_details = array('product_id' => $product_id,
-				'name' => $product_title,
-				'sku' => $sku,
-				'brief' => $product_brief,
-				'description' => $product_description,
-				'keyword' => $keyword,
-				'brand_id' => $brand_id,
-				'style_id' => $style_id,
-				'price' => $product_price,
-				'condition' => $product_condition,
-				'brand_other_name' => $otherBrand,
-				'discount' => $product_discount,
-				'search_keyword' => $search_keyword,
-			);
-            
-			$rowCount = $this->product_model->editProduct($product_details, $member_id);
-
-			if($rowCount>0){
-				$itemcombinations = $this->product_model->getProductQuantity($product_id, true);
-				$update_product_item_obj = array();
-				$default_retain_shipment = false;
-               
-				if($checkIfCombination == 'true' || $checkIfCombination == 1){
-				    if(count($itemcombinations) === 1){
-				        $combo_element = reset($itemcombinations);
-				        $idx = key($itemcombinations);
-				        if((count($combo_element['product_attribute_ids']) === 1)&& (intval($combo_element['product_attribute_ids'][0]['id'],10) === 0) &&(intval($combo_element['product_attribute_ids'][0]['is_other'],10) === 0)){
-				            $quantitySolo = 1;
-				            if($this->input->post('quantitySolo')){
-				                $quantitySolo = $this->input->post('quantitySolo');
-				                $quantitySolo = abs(str_replace(',','',$quantitySolo));
-				            }
-				            $default_retain_shipment = true;
-				            array_push($update_product_item_obj, array('id' => $idx, 'qty' =>$quantitySolo));
-				        }           
-				    }
-				}else{
-				    foreach($combination as $index=>$new_elem){
-				        $value_arr = explode('~-~',$new_elem->value);
-				        $search_arr = array();
-				        foreach($value_arr as $x){
-				            $temp_arr = array();
-				            $temp_arr = explode(':',$x);
-				            if($temp_arr[0] == 0){
-				                $temp_arr[2] = 'attr_lookuplist_item_id';
-				            }
-				            else if($temp_arr[0] == 1){
-				                $temp_arr[2] = 'attr_name';
-				            }        
-				            array_push($search_arr, $temp_arr);
-				        }
-				        foreach($itemcombinations as $idx=>$old_elem){
-				            $bool = true;
-				            foreach($search_arr as $x){
-				                if((!in_array($x[1],$old_elem[$x[2]])) || (count($search_arr) != count($old_elem[$x[2]]))){
-				                    $bool = false;
-				                    break;
-				                }
-				            }
-				            if($bool){
-				                //Form old product attribute/optional detail info string
-				                $old_prod_attr_detail = '';
-				                foreach($old_elem['product_attribute_ids'] as $y){
-				                    $old_prod_attr_detail = $old_prod_attr_detail.(($old_prod_attr_detail=='')?'':'~-~').$y['is_other'].':'.$y['id'];
-				                }
-				                $combination->$index->item_id = $idx;
-				                $combination->$index->old_prod_attr_id = $old_prod_attr_detail;
-				                array_push($update_product_item_obj, array('id' => $idx, 'qty' =>$new_elem->quantity));
-				                break;
-				            }
-				        }
-				    }
-				
-				}
-
-				$keep_ids = array();
-				foreach($update_product_item_obj as $x){
-				    array_push($keep_ids, $x['id']);
-				}
-
-				#DELETE PRODUCT ITEM, PRODUCT ITEM ATTR, SHIPPING HEAD AND SHIPPING DETAIL
-				#THAT ARE NOT IN THE object
-				$this->product_model->deleteShippingInfomation($product_id, $keep_ids);
-				$this->product_model->deleteProductQuantityCombination($product_id, $keep_ids);
-				
-				if($inputs_exp){
-				    foreach($explode_inputs as $input){
-				        $explode_id = explode('/', $input);
-				        $explode_value = $explode_id[0];
-				        $attribute_id = $explode_id[1];
-				        $post_attributes = $this->input->post($explode_value);
-				        $dataType = substr($explode_value,0,strpos($explode_value,'_'));
-				        $rowCount = $this->product_model->deleteAttributeByProduct($product_id, $attribute_id);
-				        
-				        if($post_attributes){
-				            if(is_array($post_attributes)){
-				                $post_attributes_arr = $post_attributes;
-				            }else{
-				                $post_attributes_arr = (strlen(trim($post_attributes)) === 0)?array():array(0=>$post_attributes);
-				            }
-				            foreach($post_attributes_arr as $attribute){
-				                //validate information before inserting
-				                $valid = false;
-				                switch($dataType){
-				                    case 'TEXT':
-				                    $valid = (count($this->product_model->selectAttributeNameWithTypeAndId($attribute_id,1))>0);
-				                    break;
-				                    case 'TEXTAREA':
-				                    $valid = (count($this->product_model->selectAttributeNameWithTypeAndId($attribute_id,2))>0);
-				                    break;
-				                    default: 
-				                    $valid = (count($this->product_model->selectAttributeNameWithNameAndId($attribute,$attribute_id))>0);
-				                    break;
-				                }
-				                if($valid){
-				                    $this->product_model->addNewAttributeByProduct($product_id, $attribute_id, $attribute, '0');
-				                }
-				            }
-				        }                    
-				    }
-				}
-				
-				$newarray = array();
-		        	$option_image_idx = 0;
-
-				$prod_other = $this->input->post('prod_other');
-				$prod_other_name = $this->input->post('prod_other_name');
-				$prod_other_id = $this->input->post('prod_other_id');
-				$prod_other_price = $this->input->post('prod_other_price');
-		        	$prod_other_img_idx = $this->input->post('prod_other_img_idx');
-
-			 	for ($i=0; $i < sizeof($prod_other_name); $i++) { 
-					if(!array_key_exists($prod_other_name[$i],$newarray)){
-						$newarray[$prod_other_name[$i]] = array();
-					}
-					
-					$other_name = "--no name";
-					$other_price = "0.00";
-					$other_image = "--no image";
-					$other_image_type = "--no type";
-					$other_tmp = "--no temp";
-					$other_id = "--no id";
-					if(strlen(trim($prod_other_price[$i])) != 0 || $prod_other_price[$i] != "") 
-					{
-	       					$other_price = abs(str_replace(',','',$prod_other_price[$i]));
-					}
-		            
-					if(isset($_FILES['prod_other_img'])){
-						if(intval($prod_other_img_idx[$i],10) === 1){
-						    if(!empty($_FILES['prod_other_img']['name'][$option_image_idx])){
-							$other_image_type = $_FILES['prod_other_img']['type'][$option_image_idx];
-							$file_ext = explode('.', $_FILES['prod_other_img']['name'][$option_image_idx]);
-							$other_image = $product_id.'_'.$member_id.'_'.$fulldate.$i.'_o.'.strtolower($file_ext[1]);
-							$other_tmp = $_FILES["prod_other_img"]["tmp_name"][$option_image_idx];
-						    }
-						    $option_image_idx++;
-						}
-					}
-
-					if(isset($prod_other_id[$i]) && strlen(trim($prod_other_id[$i]) != 0) ){
-						$other_id = $prod_other_id[$i];
-					}
-
-					if(strlen(trim($prod_other[$i])) != 0 ||  trim($_POST['prod_other'][$i]) != ""){
-						$other_name = $prod_other[$i];
-					}
-
-					array_push($newarray[$prod_other_name[$i]], $other_name .'|'.$other_price.'|'.$other_image.'|'.$other_image_type.'|'.$other_tmp.'|'.$other_id);
-				}
-		        
-				$attr_opt_head = array();
-				$attr_opt_det_idx = array();
-	
-				$product_attr = $this->product_model->getProductAttributes($product_id, 'ID');
-				foreach($product_attr as $key=>$attribute){
-					foreach($attribute as $attr_item){
-						if($attr_item['type']  === 'option'){
-							if(!in_array($key,$attr_opt_head)){
-								array_push($attr_opt_head, $key);
-							}
-							$attr_opt_det_idx[$attr_item['value_id']] = $attr_item;
-						}
-					}	
-				}
-		        
-				foreach($attr_opt_head as $head_id){
-					$this->product_model->deleteAttrOthers($head_id);
-				}
-
-	       
-		        	$new_optional_detail_id = array(); 
-				$is_primary = 0;
-				foreach ($newarray as $key => $valuex) {
-	     
-		            		//If OTHER GROUP NAME is empty: skip 
-					if(trim($key) == "" || strlen(trim($key)) <= 0 ){
-						continue;
-					}
-		    
-					if(count($valuex) <= 1 && $valuex[0] == '--no name|0.00|--no image|--no type|--no temp|--no id'){
-						continue;
-					}
-		            
-		            		# check if the rest of the fields are empty before inserting to es_optional_attr_head
-		            
-		            
-					$passCheck = 0;
-					foreach ($valuex as $xkey => $xvalue) {
-						$explodeChecker = explode('|', $xvalue);
-						if($explodeChecker[0] !== '--no name'){
-						    $passCheck++;
-						}
-					}
-					if($passCheck == 0){
-						continue;
-					}
-
-					$others_id = $this->product_model->addNewAttributeByProduct_others_name($product_id,$key);
-
-					foreach ($valuex as $keyvalue => $value) {
-						$imageid = 0;
-						$eval = explode("|", $value); 
-						//IF OTHER ATTRIBUTE is empty, skip the rest
-						if(trim($eval[0]) == "--no name"){
-							continue;
-						}
-						if($eval[2] != "--no image"){
-							if($eval[5] != "--no id"){
-								$int_img_id = intval($eval[5]);
-		                        			array_push($new_optional_detail_id, $int_img_id);
-								if(isset($attr_opt_det_idx[$int_img_id])){
-									$this->product_model->deleteProductImage($product_id, $attr_opt_det_idx[$int_img_id]['img_id']);
-								}
-							}
-							$imageid = $this->product_model->addNewProductImage($other_path_directory.$eval[2],$eval[3],$product_id,$is_primary);
-							move_uploaded_file($eval[4], $other_path_directory.$eval[2]);
-							    list($o_width, $o_height) = getimagesize($other_path_directory.$eval[2]);
-							    //If user uploaded image is too large, resize and overwrite original image
-							    if(($o_width > $this->img_dimension['usersize'][0])||($o_height > $this->img_dimension['usersize'][1])){
-								$this->es_img_resize($eval[2],$other_path_directory,'', $this->img_dimension['usersize']);
-							    }
-							$this->es_img_resize($eval[2],$other_path_directory, 'small/', $this->img_dimension['small']);
-							$this->es_img_resize($eval[2],$other_path_directory.'small/', '../thumbnail/', $this->img_dimension['thumbnail']);  
-						}
-						else if($eval[2] == "--no image"){
-							if($eval[5] != "--no id"){
-								$int_img_id = intval($eval[5]);
-		                        			array_push($new_optional_detail_id, $int_img_id);
-								if(isset($attr_opt_det_idx[$int_img_id])){
-									$imageid = $attr_opt_det_idx[$int_img_id]['img_id'];
-								}
-							}
-						}  
-
-						$this->product_model->addNewAttributeByProduct_others_name_value($others_id,$eval[0],$eval[1],$imageid);
-		    			}
-				}
-				#end other
-
-				foreach($editRemoveThisPictures as $img_id){
-					$this->product_model->deleteProductImage($product_id, $img_id);
-					unset($main_images[$img_id]);
-				}
-			
-				foreach($attr_opt_det_idx as $key=>$optional_detail){
-				    if(!in_array($key, $new_optional_detail_id)){
-				       $this->product_model->deleteProductImage($product_id, $optional_detail['img_id']);
-				    }
-				}
-	  
-				$currentPrimaryId = 0;
-		        	$primary_image_bool = false;
-				foreach($main_images as $main_image){
-					if(intval($main_image['is_primary']) === 1){
-						$currentPrimaryId = $main_image['id_product_image'];
-						break;
-					}
-				}
-		        
-				#New primary image from previous images, old primary image retained
-				if((intval($editPrimaryId,10) > 0)&&(intval($currentPrimaryId,10)!==0)){
-				    $this->product_model->updateImageIsPrimary($currentPrimaryId, 0);
-				    $this->product_model->updateImageIsPrimary($editPrimaryId, 1);
-				    $primary_image_bool = true;
-				}
-				#New primary image from previous images, old primary image deleted
-				else if((intval($editPrimaryId,10) > 0)&&(intval($currentPrimaryId,10)===0)){   
-				    $this->product_model->updateImageIsPrimary($editPrimaryId, 1);
-				    $primary_image_bool = true;
-				}
-				#No new primary image from previous images, old primary image is not deleted and remains the primary
-				#Simple image add/remove without affecting primary
-				else if((intval($editPrimaryId,10) === 0)&&(intval($currentPrimaryId,10)!==0)){
-				    $primary_image_bool = true;
-				}
-				#No new primary image from previous images, old primary image is not deleted
-				#But new primary image is chosen from newly uploaded image
-				else if((intval($editPrimaryId,10) === -1)&&(intval($currentPrimaryId,10)!==0)){
-				    $this->product_model->updateImageIsPrimary($currentPrimaryId, 0);
-				    $primary_image_bool = false;
-				}
-				#No new primary image from previous images, old primary image is deleted
-				#New primary image is chosen from newly uploaded images
-				else if((intval($editPrimaryId,10) === -1)&&(intval($currentPrimaryId,10)===0)){
-				     $primary_image_bool = false;
-				}
-				
-				# start of saving combination qty
-
-				if($checkIfCombination == 'true' || $checkIfCombination == 1){
-				    #SHIPMENT RETAIN: UPDATE
-				    if(($default_retain_shipment)&&(count($update_product_item_obj) == 1)){
-				        $x = reset($update_product_item_obj);
-				        $this->product_model->updateCombination($product_id, $x['id'], $x['qty']);
-				    }
-				    #NEW ATTRIBUTE: INSERT
-				    else{
-				        $quantitySolo = 1;
-				        if($this->input->post('quantitySolo')){
-				            $quantitySolo = $this->input->post('quantitySolo');
-				            $quantitySolo = abs(str_replace(',','',$quantitySolo));
-				        }
-				        $idProductItem = $this->product_model->addNewCombination($product_id,$quantitySolo);
-				    }
-				}else{
-				    foreach ($combination as $keyCombination) {
-				        if(isset($keyCombination->item_id)){
-				            $this->product_model->updateCombination($product_id, $keyCombination->item_id, $keyCombination->quantity);
-				            $explodeOldProdAttr = explode("~-~",  $keyCombination->old_prod_attr_id);
-				            $explodeCombination = explode("~-~",  $keyCombination->value);
-				            for($i = 0;$i < count($explodeCombination);$i++){
-				                $explodeOld = explode(":",  $explodeOldProdAttr[$i]);
-				                $is_other = $explodeOld[0];
-				                $old_product_attr_id = $explodeOld[1];
-				                $product_item_attr_id = $this->product_model->selectProductItemAttr($keyCombination->item_id,$old_product_attr_id, $is_other);
-				                $explodeOther = explode(":",  $explodeCombination[$i]);
-				                $otherAttrIdentifier = $explodeOther[0];
-				                $otherAttrValue = $explodeOther[1];
-				                $otherAttrGroup = $explodeOther[2];
-				                if($otherAttrIdentifier == 1){
-				                    $productAttributeId = $this->product_model->selectProductAttributeOther($otherAttrGroup, $otherAttrValue,$product_id);
-				                }else{
-				                    $productAttributeId = $this->product_model->selectProductAttribute($otherAttrValue,$product_id);
-				                }
-				                $this->product_model->updateCombinationAttribute($keyCombination->item_id, $productAttributeId  ,$otherAttrIdentifier, $product_item_attr_id);
-				            }
-				        }
-				        else{
-				            $quantitycombination = 1;
-				            if(!$quantitycombination <= 0){
-				                $quantitycombination = $keyCombination->quantity;
-				            }
-				            $idProductItem = $this->product_model->addNewCombination($product_id,$quantitycombination);
-				            if(strpos($keyCombination->value, '~-~') !== false) {
-				                $explodeCombination = explode("~-~",  $keyCombination->value);
-				                foreach ($explodeCombination as $value) {
-				                    $explodeOther = explode(":",  $value);
-				                    $otherAttrIdentifier = $explodeOther[0];
-				                    $otherAttrValue = $explodeOther[1];
-				                    $otherAttrGroup = $explodeOther[2];
-				                    if($otherAttrIdentifier == 1){
-				                        $productAttributeId = $this->product_model->selectProductAttributeOther($otherAttrGroup,$otherAttrValue,$product_id);
-				                    }else{
-				                        $productAttributeId = $this->product_model->selectProductAttribute($otherAttrValue,$product_id);
-				                    }
-
-				                    $this->product_model->addNewCombinationAttribute($idProductItem,$productAttributeId,$otherAttrIdentifier);
-				                }
-				            }else{
-				                $explodeOther = explode(":",  $keyCombination->value);
-				                $otherAttrIdentifier = $explodeOther[0];
-				                $otherAttrValue = $explodeOther[1];
-				                $otherAttrGroup = $explodeOther[2];
-				                if($otherAttrIdentifier == 1){
-				                    $productAttributeId = $this->product_model->selectProductAttributeOther($otherAttrGroup,$otherAttrValue,$product_id);
-				                }else{
-				                    $productAttributeId = $this->product_model->selectProductAttribute($otherAttrValue,$product_id);
-				                }
-				                $this->product_model->addNewCombinationAttribute($idProductItem,$productAttributeId,$otherAttrIdentifier);
-				            }
-				        }   
-				    }
-				} 
-				
-				#end combination qty    
-
-				$i = 0;
-				foreach ($arraynameoffiles as $key => $value) {
-				    $is_primary = 0;
-				    if($i == 0)
-				    {
-				        $tempdirectory = $this->session->userdata('tempId'); 
-				        $tempdirectory = $tempdirectory.'_'.$member_id.'_'.$date;
-				        $tempdirectory = './assets/temp_product/'.$tempdirectory.'/'; 
-
-				        directory_copy($tempdirectory, $path_directory,$product_id,$arrayNameOnly); 
-				        $is_primary = $primary_image_bool?0:1;
-				    }
-				    $explodearraynameoffiles = explode('||', $arraynameoffiles[$key]);
-				    $nameOfFile = $explodearraynameoffiles[0];
-				    $nameOfFileArray = explode('_', $nameOfFile);
-				    $newName = $product_id.'_'.$nameOfFileArray[1].'_'.$nameOfFileArray[2];
-				    $path = $path_directory.$newName;
-				    $typeOfFile = $explodearraynameoffiles[1];                 
-				    $this->product_model->addNewProductImage($path,$typeOfFile,$product_id,$is_primary);
-				    $i++;
-				}
-				
-				$data = '{"e":"1","d":"'.$product_id.'"}';
-			}
-			else{
-				$data = '{"e":"0","d":"There was a problem. \n Please try again later! - Error[0011]"}';	
-			}
-		}
-		echo $data;        
-	}
-    
 
 	public function deleteDraft(){
 		$productId = $this->input->post('p_id');
@@ -1669,7 +1073,7 @@ class productUpload extends MY_Controller
 		echo $data; 
 	}
     
-    	public function previewItem(){
+	public function previewItem(){
 		if($this->input->post('p_id'))
 			$id = $this->input->post('p_id');
 		else
@@ -1722,21 +1126,20 @@ class productUpload extends MY_Controller
 		    $this->load->view('templates/footer_full');
 		}
 	}
-    
 
-    
 	public function getAllChildren(){
 		$cat_arr = json_decode($this->input->get('cat_array'));
-		$level = 0;
+		$level = 1;
 		$prev_cat_name ='';
 		foreach($cat_arr as $idx=>$id){
-			$response['cat_id'] = $id;
-			$response['name'] = $this->product_model->selectCategoryDetails($id)['name'];
-			$response['node'] = $this->product_model->getDownLevelNode($id); # get all down level category based on selected parent category            
-			$response['level'] = $level;
-			$data[$idx] = $this->load->view('pages/product/product_upload_step1_view2',$response,TRUE);
+			$data[$idx]['cat_id'] = $response['cat_id'] = $id;
+			$data[$idx]['name'] = $response['name'] = $this->product_model->selectCategoryDetails($id)['name'];
+			$data[$idx]['node'] = $response['node'] = $this->product_model->getDownLevelNode($id); # get all down level category based on selected parent category            
+			$data[$idx]['level'] = $response['level'] = $level;
+			$data[$idx]['html'] = $this->load->view('pages/product/product_upload_step1_view2',$response,TRUE);
 			$level++;
 		}
+
 		echo json_encode($data);
 	}
 
@@ -1763,8 +1166,225 @@ class productUpload extends MY_Controller
 		$this->image_lib->resize();
 		$this->image_lib->clear();
 	}
-
-
+	
+	/*******************	NEW PRODUCT UPLOAD FUNCTIONS	***************************************/
+	
+	# Renders newStep3 view
+	public function step3()
+	{
+		if( $this->input->post('prod_h_id') ){
+			$this->load->model("memberpage_model");
+			$memberId =  $this->session->userdata('member_id');
+			$productID = $this->input->post('prod_h_id');
+			
+			$product = $this->product_model->getProductById($productID, true);
+			
+			if(empty($product) || (intval($product['sellerid']) !== intval($memberId))){
+				redirect('sell/step1', 'refresh');
+			}
+			
+			$data = array(
+				'product' => $product,
+				'billing_info' => $this->memberpage_model->get_billing_info($memberId),
+				'bank_list' =>  $this->memberpage_model->getAllBanks(),
+				#Shipping queries
+				'shiploc' => $this->product_model->getLocation(),
+				'attr' => $this->product_model->getPrdShippingAttr($productID),
+				'product_id' => $productID,
+				'shipping_summary' => $this->product_model->getShippingSummary($productID),
+				'shipping_preference' => $this->product_model->getShippingPreference($memberId)
+			);
+			$data = array_merge($data, $this->fill_view());
+			$data['json_check_data'] = json_encode($data['shipping_summary']['shipping_locations']);
+			$data['json_shippingpreference'] = json_encode($data['shipping_preference'], JSON_FORCE_OBJECT);
+			
+            if($this->input->post('is_edit')){
+                $data['is_edit'] = true;
+            }
+			
+			#Update product entry in es_product to be ready for purchase
+            $this->product_model->newFinalizeProduct($productID , $memberId);
+            
+			$this->load->view('templates/header', $data);
+			$this->load->view('pages/product/product_upload_step3_view',$data);
+			$this->load->view('templates/footer_full');
+		
+		}else{
+            redirect('/sell/step1/', 'refresh');
+		}
+	}
+	
+/*
+ |	Handler for additional info in product uploads
+ |	Update billing info, CoD and meetup in product table
+ |	Upload shipping details if for delivery
+*/
+	public function step4()
+	{
+		$this->load->model('memberpage_model');
+		$memberID =  $this->session->userdata('member_id');
+		$deliveryOption = $this->input->post('delivery_option') ? $this->input->post('delivery_option') : array();
+		
+		$serverResponse = array(
+			'result' => 'fail',
+			'error' => 'Incomplete Details submitted. Please select at least one delivery option.'
+		);
+		
+		if( $this->input->post('prod_h_id') && (in_array("meetup", $deliveryOption) || in_array("delivery", $deliveryOption)) ){
+			$productID = $this->input->post('prod_h_id');
+			$billingID = (int)$this->input->post('billing_info_id');
+			$isMeetup = in_array("meetup", $deliveryOption) ? 1:0;
+			$isDelivery = in_array("delivery", $deliveryOption) ? true:false;
+			$isCOD = strtolower($this->input->post('allow_cod')) === 'on' ? 1:0;
+			
+			$isEdit = $this->input->post('is_edit') ? true:false;
+			
+			// Check if billing id is owned by user in database
+			if( $billingID !== 0 ){
+				$payment_accounts = $this->memberpage_model->get_billing_info($memberID);
+				if(!(array_key_exists($billingID,$payment_accounts))){
+					$serverResponse['error'] = 'Billing ID database mismatch!';
+					echo json_encode($serverResponse);
+					exit();
+				}
+			}
+			
+			# Fetch for database Product Item ID to be used in processing later. (for this ProductID)
+			$dbProductItemID_temp = $this->product_model->getProductItem($productID, $memberID);
+			foreach( $dbProductItemID_temp as $arr ){
+				$dbProductItemID[] = $arr['id_product_item'];
+			}
+			
+			//DELETE EXISTING SHIPPING SUMMARY ENTRIES IN DATABASE
+			$this->product_model->deleteShippingSummaryOnEdit($dbProductItemID);
+			
+			$myProceedVar = true;
+			
+			// If delivery option "for delivery" is selected
+			if($isDelivery){
+				# DeliveryCost can be one of the ff: free, details, or off
+				$deliveryCost = $this->input->post('prod_delivery_cost');
+				if( $deliveryCost === "free" ){
+					$locationID = 1; #FOR PHILIPPINES
+					$priceValue = 0; #FREE
+					foreach( $dbProductItemID as $attrCombinationID ){
+						$shippingID = $this->product_model->storeShippingPrice($locationID,$priceValue,$productID);
+						$this->product_model->storeProductShippingMap($shippingID, $attrCombinationID);
+					}
+				# If shipping details provided, start verification of details
+				}else if( $deliveryCost === "details"){
+					$shipPrice = $this->input->post('shipprice');
+					$shipLoc = $this->input->post('shiploc');
+					$shipAttr = $this->input->post('shipattr');
+					
+					#Fetch client ProductItemID based on submitted(checked) attributes
+					$clientProductItemID = array();
+					foreach( $shipAttr  as $grouparr){
+						foreach( $grouparr as $pid){
+							if( !(in_array((int)$pid,$clientProductItemID)) )
+							$clientProductItemID[] = $pid;
+						}
+					}
+					#If ProductItemID matches for client and server, also verifies that all attributes have been checked
+					#or provided with a shipping location
+					if( $clientProductItemID == $dbProductItemID ){
+						#Check if array for details have same size ( partial check for complete data submitted )
+						$shipPriceCount = count($shipPrice);
+						$shipLocCount = count($shipLoc);
+						$shipAttrCount = count($shipAttr);
+						if($shipPriceCount === $shipLocCount && $shipLocCount === $shipAttrCount){
+							#Check if for every price, a location is provided  ( completes check for data submitted )
+							$completePriceToLoc = true;
+							foreach( $shipAttr as $gkey=>$garr ){
+								if( count($shipLoc[$gkey]) !== count($shipPrice[$gkey]) ){
+									$completePriceToLoc = false;
+									break;
+								}
+							}
+							#Execute entry to database
+							if($completePriceToLoc){
+								foreach( $shipAttr as $gkey=>$garr ){
+									foreach( $shipLoc[$gkey] as $ikey=>$locationArray ){
+										$priceValue = $shipPrice[$gkey][$ikey];
+										$priceValue = str_replace(',','',$priceValue);
+										foreach( $locationArray as $locationID ){
+											$shippingID = $this->product_model->storeShippingPrice($locationID,$priceValue,$productID);
+											foreach($garr as $attrCombinationID){
+												$this->product_model->storeProductShippingMap($shippingID, $attrCombinationID);
+											}
+										}
+									}
+								}
+							}else{
+								$serverResponse['error'] = "Some locations have no shipping fee provided.";
+								$myProceedVar = false;
+							}
+						}else{
+							$serverResponse['error'] = "Incomplete details submitted. Please fill-up all fields.";
+							$myProceedVar = false;
+						}
+					}else{
+						$serverResponse['error'] = "Please provide shipping details for all attributes.";
+						$myProceedVar = false;
+					}
+				}
+			}
+			// EXECUTE ONLY IF NO ERRORS HAVE BEEN ENCOUNTERED IN STEPS ABOVE (delivery details)
+			if($myProceedVar){
+				$prodUploadBoolResult = $this->product_model->updateProductUploadAdditionalInfo($productID, $memberID, $billingID, $isCOD, $isMeetup);
+				$serverResponse['result'] = $prodUploadBoolResult ? 'success' : 'fail';
+				$serverResponse['error'] = $prodUploadBoolResult ? '' : 'Error updating database.';
+			}	
+		}
+		echo json_encode($serverResponse);
+	}
+	
+	function finishProductUpload()
+	{
+		$this->load->model("memberpage_model");
+		
+		if( $this->input->post('prod_h_id') ){
+			$productID = $this->input->post('prod_h_id');
+			$memberID = $this->session->userdata('member_id');
+			
+			$product_row = $this->product_model->getProductById($productID, true);
+			if(empty($product_row) || (intval($product_row['sellerid']) !== intval($memberID))){
+				redirect('sell/step1', 'refresh');
+			}
+			$quantities = $this->product_model->getProductQuantity($productID);
+			$availability = "varies";
+		 
+			foreach($quantities as $qty){
+				if(count($qty['product_attribute_ids'])===1){
+					if(($qty['product_attribute_ids'][0]['id'] == 0)&&($qty['product_attribute_ids'][0]['is_other'] == 0)){
+						$availability = $qty['quantity'];
+					}
+				}   
+			}
+			$product_options = $this->product_model->getProductAttributes($productID, 'NAME');
+			$product_options = $this->product_model->implodeAttributesByName($product_options);
+			
+			$data = array(
+				'breadcrumbs' =>  $this->product_model->getParentId($product_row['cat_id']),
+				'product' => $product_row,
+				'product_images' => $this->product_model->getProductImages($productID),
+				'product_options' => $product_options,
+				'availability' => $availability,
+				'shipping_summary' => $this->product_model->getShippingSummary($productID),
+				'attr' => $this->product_model->getPrdShippingAttr($productID),
+				'product_billingdetails' => $this->product_model->getProductBillingDetails($memberID, $productID)
+			);
+			$data = array_merge($data, $this->fill_view());
+			
+			//print('<pre>');
+			//print_r($data['shipping_summary']);
+			//die();
+			
+			$this->load->view('templates/header', $data);
+			$this->load->view('pages/product/product_upload_step4_view',$data);
+			$this->load->view('templates/footer_full');
+		}
+	}
 }
 
 

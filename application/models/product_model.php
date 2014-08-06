@@ -111,38 +111,55 @@ class product_model extends CI_Model
 	    $sth->execute();
 	    $row = $sth->fetchAll(PDO::FETCH_ASSOC);
 	    return $row;
-
 	}
 
-	function getAttributesBySelf($selfId) # get all attributes from all parents from to the last selected category
+	
+    function getProductAttributesByHead($productid,$head) 
 	{
 
 	    $query = " 
-	    SELECT DISTINCT
-	      a.name AS cat_name
-	      , a.id_attr
-	      , a.attr_lookuplist_id
-	      , b.name AS input_type
-	      , c.name AS input_name 
+        SELECT 
+            b.value_name
+            , b.`value_price`
+            ,  IF(b.product_img_id = '0', '', (SELECT `product_image_path` FROM `es_product_image` WHERE `id_product_image` = b.product_img_id)) AS img_path
 	    FROM
+            `es_optional_attrhead` a
+            , `es_optional_attrdetail` b 
+        WHERE a.`id_optional_attrhead` = b.`head_id`
+        AND a.`product_id` = :productid
+        AND a.`field_name` = :head
+
+        UNION DISTINCT
+        SELECT 
+            b.attr_value
+            ,'0.00'
+            ,'' 
+        FROM 
 	      es_attr a
-	      , es_datatype b
-	      , es_attr_lookuplist c 
-	    WHERE a.datatype_id = b.id_datatype 
-	      AND a.attr_lookuplist_id = c.id_attr_lookuplist 
-	      AND a.cat_id = :cat_id
-	      GROUP BY cat_name, a.id_attr, a.attr_lookuplist_id, input_type, input_name
-	    ORDER BY cat_name ASC ";
+            , es_product_attr b 
+        WHERE a.`id_attr` = b.`attr_id`
+        AND b.product_id = :productid
+        AND a.name = :head
+        ";
 
 	    $sth = $this->db->conn_id->prepare($query);
-	    $sth->bindParam(':cat_id',$selfId,PDO::PARAM_INT);
+        $sth->bindParam(':productid',$productid,PDO::PARAM_INT);
+        $sth->bindParam(':head',$head,PDO::PARAM_STR);
 	    $sth->execute();
 	    $row = $sth->fetchAll(PDO::FETCH_ASSOC);
 	    return $row;
 
-	## need to loop so i do it manual to generate dynamic query (but not advisable please dont do this)
-	## - Prepared by: Ryan Vasquez
 	}
+
+    function getItemAttributes($itemId){
+       $query = $this->xmlmap->getFilenameID('sql/product','getItemAttributes');
+       $sth = $this->db->conn_id->prepare($query);
+       $sth->bindParam(':itemId',$itemId);
+       $sth->execute();
+       $row = $sth->fetchAll(PDO::FETCH_ASSOC);
+       
+       return $row;
+    }
 
 	function getLookItemListById($id) # getting item list from database. EG: Color -- (White,Blue,Yellow)
 	{
@@ -150,7 +167,7 @@ class product_model extends CI_Model
 	    $sth = $this->db->conn_id->prepare($query);
 	    $sth->bindParam(':id',$id);
 	    $sth->execute();
-	    $row = $sth->fetchAll();
+	    $row = $sth->fetchAll(PDO::FETCH_ASSOC);
 
 	    return $row;
 	}
@@ -1287,6 +1304,38 @@ class product_model extends CI_Model
 	return $sth->rowCount();
     }
     
+    function removeProductDetails($productId){
+        $query1 = $this->xmlmap->getFilenameID('sql/product','removeProductImage');
+        $sth1 = $this->db->conn_id->prepare($query1);
+        $sth1->bindParam(':productId',$productId);
+        $sth1->execute();
+
+        $query2 = $this->xmlmap->getFilenameID('sql/product','removeProductOptionalAttributeDetails');
+        $sth2 = $this->db->conn_id->prepare($query2);
+        $sth2->bindParam(':productId',$productId);
+        $sth2->execute(); 
+
+        $query3 = $this->xmlmap->getFilenameID('sql/product','removeProductOptionalAttributeHead');
+        $sth3 = $this->db->conn_id->prepare($query3);
+        $sth3->bindParam(':productId',$productId);
+        $sth3->execute(); 
+
+        $query4 = $this->xmlmap->getFilenameID('sql/product','removeProductItemAttr');
+        $sth4 = $this->db->conn_id->prepare($query4);
+        $sth4->bindParam(':productId',$productId);
+        $sth4->execute();
+
+        $query5 = $this->xmlmap->getFilenameID('sql/product','removeProductItem');
+        $sth5 = $this->db->conn_id->prepare($query5);
+        $sth5->bindParam(':productId',$productId);
+        $sth5->execute();
+
+        $query6 = $this->xmlmap->getFilenameID('sql/product','removeProductAttr');
+        $sth6 = $this->db->conn_id->prepare($query6);
+        $sth6->bindParam(':productId',$productId);
+        $sth6->execute();
+    }
+
     function editProductCategory($cat_id,$product_id,$member_id, $other_cat_name = ''){
        
         $query = $this->xmlmap->getFilenameID('sql/product','editProductCategory');
@@ -1304,11 +1353,9 @@ class product_model extends CI_Model
 	    $xth->bindParam(':member_id',$member_id);
 	    $xth->bindParam(':other_cat_name',$other_cat_name);
 	    $xth->execute();
-
 	}
 	
 	return $bool_update_count;
-        
     }
 
     
@@ -1328,6 +1375,7 @@ class product_model extends CI_Model
             $sth->bindParam(':product_id',$product_id);
         }
 	$sth->execute();
+
         return $sth->rowCount(); 
 	}
     
@@ -1787,61 +1835,176 @@ class product_model extends CI_Model
 		$result = $sth->execute();
 		$row = $sth->fetchAll(PDO::FETCH_ASSOC);
         
-		$data = array();
-		$data['id_product_item'] = array();
-		$data['has_shippingsummary'] = false;
+		$data = array(
+			'has_shippingsummary' => false,
+			'is_freeshipping' => false,
+			'location_lookup' => array(),
+			'shipping_locations' => array(), # json_encode to use for checkdata
+			'shipping_display' => array(
+				''=>array(
+					'location' => array(
+							'' => array(
+								''=>''
+							)
+						),
+					'attr' => array(''=>''),
+					'disable_lookup' => array()
+				)
+			) # array for displaying set location and price
+		);
 		
-	// Every attribute combination should have shipping location/price
-	// Checking first entry is sufficient to determine if shipping details exist for a product
+		$locationPriceArray = array();
+		
+		$deliveryCount = $summaryCount = $freeCount = 0;
+		
 		foreach($row as $r){
-			// Create array for list of product items
-			if ( !in_array($r['id_product_item'], $data['id_product_item']) ) {
-				$data['id_product_item'][] = $r['id_product_item'];
+			$pid = (int)$r['id_product_item'];
+			$locid = (int)$r['id_location'];
+			$price = (int)$r['price'];
+			
+			#assemble json data
+			if( !isset($data['shipping_locations'][$pid]) ){
+				$data['shipping_locations'][$pid] = array();
 			}
-			// Set has_shippingsummary to true (once only) if fetched product item has location
-			if( !$data['has_shippingsummary'] && $r['id_location'] != '' ){
-				$data['has_shippingsummary'] = true;
-			}
-			// If product item has assigned location
-			if( $r['id_location'] != '' ){
-				// Set location id VS price
-				if ( !isset($data[$r['id_product_item']][$r['id_location']]) ) {
-					$data[$r['id_product_item']][$r['id_location']] = $r['price'];
-				}
-				// Set location name
-				if ( !isset($data['location']['id_location']) ) {
-					$data['location'][$r['id_location']] = $r['location'];
-				}
+			$data['location_lookup'][$r['id_location']] = $r['location'];
+			
+			if( $locid === 0 && $price === 0 ){ #no shipping detail provided
+				$deliveryCount++;
+			}else if( $locid === 1 && $price === 0 ){ #Philippines with 0 shipping fee - FREE SHIPPING
+				$freeCount++;
+			}else{ #Shipping detail provided - HAS SHIPPING SUMMARY
+				$summaryCount++;
 			}
 		}
 		
-    	return $data;
+		$data['is_delivery'] = count($row) === $deliveryCount ? false:true;
+		
+		if( $data['is_delivery'] ){
+			if( $freeCount > $summaryCount ){
+				$data['is_freeshipping'] = true;
+			}else if( $summaryCount > $freeCount ){
+				$data['has_shippingsummary'] = true;
+			}
+		
+			if( $data['has_shippingsummary'] ){
+				#assemble all necessary arrays to build final array
+				foreach( $row as $r ){
+					$pid = (int)$r["id_product_item"];
+					$loc = (int)$r["id_location"];
+					$price = number_format($r["price"], 2, '.', ',');
+					
+					if( $loc !== 0 && $loc !== 1 ){		
+						#Push location for product item id
+						if( !in_array($loc, $data['shipping_locations'][$pid]) ){
+							$data['shipping_locations'][$pid][] = $loc;
+				}
+						#Create array with location vs price
+						if( !isset( $locationPriceArray[$pid][$loc] ) ){
+							$locationPriceArray[$pid][$loc] = $price;
+				}
+			}
+		
 	}
 	
-	/*
-	public function getShippingPreference($member_id)
-	{
-		// Get shipping_id from es_product_shipping_detail before delete
-		$query = $this->xmlmap->getFilenameID('sql/product', 'getShippingPreference');
-		$sth = $this->db->conn_id->prepare($query);
-		$sth->bindParam(':member_id', $member_id);
-		$sth->execute();
-		$row = $sth->fetchAll(PDO::FETCH_ASSOC);
-		$data = array();
+				#assemble display array
+				$arr1 = $locationPriceArray;
+				$arr2 = $locationPriceArray; #array being reduced
 		
-		foreach($row as $r){
-			if(!isset($data[$r['id_product']][$r['location_id']])){
-				$data[$r['id_product']][$r['location_id']] = $r['price'];
+				$finalarr = array();
+				
+				foreach( $arr1 as $attr1=>$t1 ){
+					do{
+						$isFound = false;
+						$minIntersectCount = 0;
+						$intersectArray = array();
+						foreach( $arr2 as $attr2=>$t2 ){
+							if( $attr1 === $attr2 ){
+								continue;
+							}else{
+								#get array intersection comparing keys and values
+								$temp1 = array_intersect_assoc($t1, $t2);
+								#if array intersection is not empty, push to new array
+								if( count($temp1) > 0 ){
+									$isFound = true;
+									if($minIntersectCount === 0 || count($temp1) < $minIntersectCount){
+										$minIntersectCount = count($temp1);
+										$intersectArray = array(
+											'location' => $temp1,
+											'attr' => array($attr1,$attr2)
+										);
+										$intersectKey = $attr2;
 			}
-			if(!isset($data['name'][$r['id_product']])){
-				$data['name'][$r['id_product']] = $r['name'];
-                $data['brief'][$r['id_product']] = $r['brief'];
-                $data['date'][$r['id_product']] = date('M-d-Y',strtotime($r['lastmodifieddate']));
 			}
+		}
+						}
+						if($isFound){
+							$isExist = false;
+							foreach( $finalarr as $fkey=>$farr ){
+								#If array set extracted already exists, push new attributes to attribute array
+								if( count(array_diff_assoc($farr['location'],$intersectArray['location'])) === 0 && count($farr['location']) === count($intersectArray['location']) ){
+									#if attr1 not in attr array, then push
+									if( !in_array($attr1, $farr['attr']) ){
+										$finalarr[$fkey]['attr'][] = $attr1;
+									}
+									#if intersectkey not in attr array, then push
+									if( !in_array($intersectKey, $farr['attr']) ){
+										$finalarr[$fkey]['attr'][] = $intersectKey;
+									}
+									$isExist = true;
+									break; #exit foreach since set has been found
+								}
+							}
+							if(!$isExist){
+								$finalarr[] = $intersectArray;
+							}
+		
+							$t1 = array_diff_assoc($t1,$intersectArray['location']);
+							$arr2[$intersectKey] = array_diff_assoc($arr2[$intersectKey],$intersectArray['location']);
+						}
+					}while($isFound);
+				}
+				#Push all remaining attribute location price with no pair from $arr2 into $finalarr
+				foreach($arr2 as $attrk=>$locpricearr){
+					if(count($locpricearr) > 0){
+						$finalarr[] = array(
+							'location' => $locpricearr,
+							'attr' => array($attrk)
+						);
+					}
+				}
+				#Group location by same price
+				foreach( $finalarr as $fkey=>$farr ){
+					$locPriceFilter = array();
+					$disablearr = array();
+					foreach($farr['location'] as $locid=>$price){
+						if( !isset($locPriceFilter[$price]) ){
+							$locPriceFilter[$price] = array();
+						}
+						if( !in_array($locid, $locPriceFilter[$price]) ){
+							$locPriceFilter[$price][] = $locid;
+						}
+						# Push each location once to disable array for disabling purposes on php load of view
+						if( !in_array($locid,$disablearr) ){
+							$disablearr[] = $locid;
+						}
+					}
+					$finalarr[$fkey]['location'] = $locPriceFilter;
+					$finalarr[$fkey]['disable_lookup'] = $disablearr;
+				}
+				$data['shipping_display'] = $finalarr;
+			}
+		}
+		
+		if( $data['has_shippingsummary'] && !$data['is_freeshipping']){
+			$data['str_deliverycost'] = "details";
+		}else if( $data['is_freeshipping'] && !$data['has_shippingsummary'] ){
+			$data['str_deliverycost'] = "free";
+		}else{
+			$data['str_deliverycost'] = "off";
 		}
 		
 		return $data;
-	}*/
+	}
 	
 	public function getShippingPreference($member_id)
 	{
@@ -1854,10 +2017,12 @@ class product_model extends CI_Model
 		$data = array();
 		
 		foreach($row as $r){
-			if( !isset($data[$r['head_id']]['title']) ){
+			$r['price'] = number_format($r['price'], 2, '.', ',');
+			
+			if( !isset( $data['name'][$r['head_id']] ) ){
 				$data['name'][$r['head_id']] = $r['title'];
 			}
-			$data[$r['head_id']][$r['location_id']] = $r['price'];
+			$data[$r['head_id']][$r['price']][] = (int)$r['location_id'];
 		}
 		
 		return $data;
@@ -2202,10 +2367,65 @@ class product_model extends CI_Model
         }
     }
     
-    /*
-     *   Check if an item is sold out, if yes set is_sold_out flag to 1
-     */  
+	/*******************	NEW PRODUCT UPLOAD STEP 3 FUNCTIONS	***************************************/
 
+	function newFinalizeProduct($productid, $memberid){
+        $product = $this->getProductEdit($productid, $memberid);
+        if($product){
+            $title = $product['name'];
+            $slug = $product['slug'];
+            
+            if(strlen(trim($slug)) == 0 ){
+                $slug = $this->createSlug($title);
+                $query = $this->xmlmap->getFilenameID('sql/product', 'newfinalizeProduct');
+                $sth = $this->db->conn_id->prepare($query);
+                $sth->bindParam(':slug',$slug ,PDO::PARAM_STR);
+            }else{
+                $query = $this->xmlmap->getFilenameID('sql/product', 'newfinalizeProductKeepSlug');
+                $sth = $this->db->conn_id->prepare($query);
+            }
+            $sth->bindParam(':productid',$productid,PDO::PARAM_INT);
+            $sth->bindParam(':memberid',$memberid,PDO::PARAM_INT);
+            $sth->execute();
+            return true;
+        }else{
+            return false;
+        }
+	}
+	
+	function updateProductUploadAdditionalInfo($productid, $memberid, $billing_id, $is_cod, $is_meetup){
+        $product = $this->getProductEdit($productid, $memberid);
+        if($product){
+			$query = $this->xmlmap->getFilenameID('sql/product', 'updateProductUploadAdditionalInfo');
+            $sth = $this->db->conn_id->prepare($query);
+            $sth->bindParam(':productid',$productid,PDO::PARAM_INT);
+            $sth->bindParam(':memberid',$memberid,PDO::PARAM_INT);
+            $sth->bindParam(':is_cod',$is_cod,PDO::PARAM_INT);
+            $sth->bindParam(':billing_id', $billing_id,PDO::PARAM_INT);
+			$sth->bindParam(':is_meetup', $is_meetup, PDO::PARAM_INT);
+            $sth->execute();
+            return true;
+        }else{
+            return false;
+        }
+	}
+
+	function getProductBillingDetails($memberID, $productID){
+		$query = "SELECT COALESCE(p.billing_info_id, 0) as billing_info_id, b.bank_account_name, b.bank_account_number, bank.bank_name
+			FROM es_product p 
+			INNER JOIN es_billing_info b
+				ON p.billing_info_id = b.id_billing_info AND b.member_id = :member_id AND p.id_product = :product_id
+			INNER JOIN es_bank_info bank
+				ON b.bank_id = bank.id_bank";
+		$sth = $this->db->conn_id->prepare($query);		
+		$sth->bindParam(':member_id',$memberID,PDO::PARAM_INT);
+		$sth->bindParam(':product_id',$productID,PDO::PARAM_INT);
+		$sth->execute();
+		$row = $sth->fetch(PDO::FETCH_ASSOC);
+		
+		return $row;
+	}
+	
     public function update_soldout_status($product_id)
     {
     	$query = "

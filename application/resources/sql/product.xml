@@ -114,7 +114,7 @@
         p.cat_id AS cat_id, p.price AS price, p.brief AS brief, p.sku AS sku,
         s.name AS style_name, b.name AS brand_name, p.member_id AS sellerid, m.nickname AS sellernickname, 
         m.username AS sellerusername, m.imgurl AS userpic, c.name AS category, i.`product_image_path`,     
-        p.`is_promote`,p.`startdate`,p.`enddate`, p.`promo_type`
+        p.`is_promote`,p.`startdate`,p.`enddate`, p.`promo_type`, p.`slug` AS slug, p.is_cod, p.is_meetup, p.billing_info_id
         FROM es_product p 
         LEFT JOIN es_style s ON p.style_id = s.id_style
         LEFT JOIN es_brand b ON p.brand_id = b.id_brand
@@ -765,6 +765,30 @@ FROM
     WHERE `id_product` = :p_id AND `member_id` = :member_id;
 </select>
 
+<select id="removeProductImage">
+    DELETE FROM `es_product_image` WHERE `product_id` = :productId
+</select>
+
+<select id="removeProductOptionalAttributeDetails">
+    DELETE FROM `es_optional_attrdetail` WHERE `head_id` IN (SELECT `id_optional_attrhead` FROM `es_optional_attrhead` WHERE `product_id` = :productId)
+</select>
+
+<select id="removeProductOptionalAttributeHead">
+    DELETE FROM `es_optional_attrhead` WHERE `product_id` = :productId
+</select>
+
+<select id="removeProductItemAttr">
+    DELETE FROM `es_product_item_attr` WHERE `product_id_item` IN (SELECT `id_product_item` FROM `es_product_item` WHERE product_id = :productId)
+</select>
+
+<select id="removeProductItem">
+    DELETE FROM `es_product_item` WHERE product_id = :productId
+</select>
+
+<select id="removeProductAttr">
+    DELETE FROM es_product_attr WHERE `product_id` = :productId
+</select>
+
 <select id="deleteProductAttributeByIDs">
     DELETE FROM es_product_attr WHERE `product_id` = :product_id AND `attr_id` = :attr_id;
 </select>
@@ -913,7 +937,7 @@ FROM
 </select>
 
 <select id="getShippingSummary">
-	SELECT pi.id_product_item, loc.id_location, loc.location, sh.price, sd.id_shipping_detail
+	SELECT pi.id_product_item, COALESCE(loc.id_location,'0') as id_location, loc.location, COALESCE(sh.price,'0') as price, sd.id_shipping_detail
 	FROM es_product_item pi
 	LEFT JOIN es_product_shipping_detail sd
 		ON sd.product_item_id = pi.id_product_item
@@ -980,6 +1004,26 @@ FROM
     SELECT COALESCE(AVG(op.price),0) as sold_price FROM es_order_product op
     INNER JOIN es_order o ON op.order_id = o.id_order AND o.dateadded BETWEEN :datefrom AND :dateto
     WHERE op.product_id = :id AND o.order_status != 99
+</select>
+
+
+<!-- NEW PRODUCT UPLOAD STEP 3-->
+<select id="newfinalizeProduct">
+	UPDATE `es_product` 
+	SET slug = :slug, is_draft = 0
+	WHERE member_id = :memberid AND id_product = :productid
+</select>
+
+<select id="newfinalizeProductKeepSlug">
+	UPDATE `es_product` 
+	SET is_draft = 0  
+	WHERE member_id = :memberid AND id_product = :productid
+</select>
+
+<select id="updateProductUploadAdditionalInfo">
+	UPDATE `es_product`
+	SET is_cod = :is_cod, billing_info_id = :billing_id, is_meetup = :is_meetup
+	WHERE member_id = :memberid AND id_product = :productid
 </select>
 
 <!-- Vendor Product Fetch -->
@@ -1098,5 +1142,53 @@ FROM
 	LIMIT {limit}
 </select>
  
+
+<select id="getItemAttributes">
+    SELECT 
+        IF(
+            a1.`is_other` = '0'
+            , 
+            (SELECT 
+                a.`name` 
+            FROM
+                `es_attr` a
+                , `es_product_attr` b 
+            WHERE a.`id_attr` = b.`attr_id` 
+                AND b.id_product_attr = a1.product_attr_id)
+            , 
+            (SELECT 
+                a.`field_name` 
+            FROM
+                `es_optional_attrhead` a
+                , `es_optional_attrdetail` b 
+            WHERE a.`id_optional_attrhead` = b.`head_id` 
+                AND b.`id_optional_attrdetail` = a1.product_attr_id)
+        ) AS head
+        , IF(
+            a1.`is_other` = '0'
+            , 
+            (SELECT 
+                b.attr_value 
+            FROM
+                `es_attr` a
+                , `es_product_attr` b 
+            WHERE a.`id_attr` = b.`attr_id` 
+                AND b.id_product_attr = a1.product_attr_id)
+            , 
+            (SELECT 
+                b.`value_name` 
+            FROM
+                `es_optional_attrhead` a
+                , `es_optional_attrdetail` b 
+            WHERE a.`id_optional_attrhead` = b.`head_id` 
+                AND b.`id_optional_attrdetail` = a1.product_attr_id)
+        ) AS `value` 
+    FROM
+        `es_product_item_attr` a1 
+    WHERE `product_id_item` = :itemId
+</select>
+
+
+
 
 </map>
