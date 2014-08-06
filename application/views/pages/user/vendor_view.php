@@ -227,7 +227,7 @@
 														<img src="<?php echo $afb['user_image']?>" class="img_feedback">
 													</a>
 													<p>
-														<a href="<?php echo base_url();?>vendor/<?php echo $afb['member_name'];?>">
+														<a href="<?php echo base_url();?><?php echo $afb['member_name'];?>">
 															<?php echo $afb['member_name'];?>
 														</a> <br />
 														<?php echo $afb['dateadded'];?>
@@ -312,11 +312,11 @@
 												<!--<h3>Feedback from Transaction#: <?php echo $k;?></h3>-->
 												<?php foreach($tempafb as $afb):?>
 												<div class="fbck_info_con">
-													<a href="<?php echo base_url();?>vendor/<?php echo $afb['member_name'];?>">
+													<a href="<?php echo base_url();?><?php echo $afb['member_name'];?>">
 														<img src="<?php echo $afb['user_image']?>" class="img_feedback">
 													</a>											
 													<p>
-														<a href="<?php echo base_url();?>vendor/<?php echo $afb['member_name'];?>">
+														<a href="<?php echo base_url();?><?php echo $afb['member_name'];?>">
 															<?php echo $afb['member_name'];?>
 														</a><br />
 														<?php echo $afb['dateadded'];?>
@@ -401,7 +401,7 @@
 										<div class="fbck_rating_message_con">
 											<p class="fbck_membername">
 												For:
-												<a href="<?php echo base_url();?>vendor/<?php echo $afb['for_membername'];?>">
+												<a href="<?php echo base_url();?><?php echo $afb['for_membername'];?>">
 													 <strong><?php echo $afb['for_membername'];?></strong> 
 												</a>												
 											</p>
@@ -489,7 +489,7 @@
 											<div class="fbck_rating_message_con">
 												<p>
 													For:
-													<a href="<?php echo base_url();?>vendor/<?php echo $afb['for_membername'];?>">
+													<a href="<?php echo base_url();?><?php echo $afb['for_membername'];?>">
 														<strong><?php echo $afb['for_membername'];?></strong>
 													</a>
 												</p>
