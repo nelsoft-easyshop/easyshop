@@ -14,24 +14,24 @@ class Memberpage extends MY_Controller
 		$this->load->model('payment_model');
 		$this->form_validation->set_error_delimiters('', '');
 	}
-    
+
 	function index()
 	{        
-	    $data = $this->fill_header();
+		$data = $this->fill_header();
 		if(!$this->session->userdata('member_id')){
 			redirect(base_url().'home', 'refresh');
-	    }
-	    $data['tab'] = $this->input->get('me');        
-	    $data = array_merge($data, $this->fill_view());
-	    $data['render_logo'] = false;
-	    $data['render_searchbar'] = false;
+		}
+		$data['tab'] = $this->input->get('me');        
+		$data = array_merge($data, $this->fill_view());
+		$data['render_logo'] = false;
+		$data['render_searchbar'] = false;
 		
 		$data['render_userslug_edit'] = $data['username'] === $data['userslug'] ? true:false;
 		$data['hide_quickheader'] = get_cookie('es_qh') ? true:false;
 		
-	    $this->load->view('templates/header', $data);
-	    $this->load->view('pages/user/memberpage_view', $data);
-	    $this->load->view('templates/footer');
+		$this->load->view('templates/header', $data);
+		$this->load->view('pages/user/memberpage_view', $data);
+		$this->load->view('templates/footer');
 	}
 
 	function edit_personal()
@@ -43,7 +43,7 @@ class Memberpage extends MY_Controller
 				'member_id' => $uid,
 				'contactno' => $this->input->post('mobile'),
 				'email' => $this->input->post('email')
-			);
+				);
 
 			$check = $this->register_model->check_contactinfo($checkdata);
 			if($check['mobile'] !== 0 || $check['email'] !== 0){
@@ -59,7 +59,7 @@ class Memberpage extends MY_Controller
 				'birthday' => $this->input->post('dateofbirth'),
 				'contactno' => ltrim($this->input->post('mobile'), '0'),
 				'email' => $this->input->post('email')
-			);
+				);
 
 			if($postdata['email'] === $this->input->post('email_orig'))
 				$postdata['is_email_verify'] = $this->input->post('is_email_verify');
@@ -95,7 +95,7 @@ class Memberpage extends MY_Controller
 				'telephone' => '',
 				'lat' => $this->input->post('temp_lat'),
 				'lng' => $this->input->post('temp_lng')
-			);
+				);
 
 			$temp = array(
 				'stateregion_orig' => $this->input->post('stateregion_orig'),
@@ -103,270 +103,270 @@ class Memberpage extends MY_Controller
 				'address_orig' => $this->input->post('address_orig'),
 				'map_lat' => $this->input->post('map_lat'),
 				'map_lng' => $this->input->post('map_lng')
-			);
+				);
 
 			if( ( ($temp['stateregion_orig'] != $postdata['stateregion']) || ($temp['city_orig'] != $postdata['city']) || ($temp['address_orig'] != $postdata['address']) ) 
 				&& ($temp['map_lat'] == $postdata['lat'] && $temp['map_lng'] == $postdata['lng']) ) {
 				$postdata['lat'] = 0;
-				$postdata['lng'] = 0;
-			}
-
-			$uid = $this->session->userdata('member_id');
-			$address_id = $this->memberpage_model->getAddress($uid,0)['id_address'];
-			$result = $this->memberpage_model->editAddress($uid, $postdata, $address_id);
-			
-			$data = $this->memberpage_model->get_member_by_id($uid);
-			
-			$data['result'] = $result ? 'success':'fail';
-			$data['errmsg'] = $result ? '' : 'Database update error.';
-			
-		}else{
-			$data['result'] = 'error';
-			$data['errmsg'] = 'Failed to validate form.';
+			$postdata['lng'] = 0;
 		}
-		$this->output->set_output(json_encode($data));
-	}
 
-	function edit_school()
-	{
-		if(($this->input->post('personal_profile_school'))&&($this->form_validation->run('personal_profile_school')))
-		{
-			$arr = $this->input->post();
-			for($i = 1; $i<=count($arr)>>2; $i++)
-			{
-				$postdata = array(
-					'school' => $arr['schoolname'.$i],
-					'year' => $arr['schoolyear'.$i],
-					'level' => $arr['schoollevel'.$i],
-					'school_count' => $arr['schoolcount'.$i],
-				);
-				$uid = $this->session->userdata('member_id');
-				$result = $this->memberpage_model->edit_school_by_id($uid, $postdata);
-				// If database entry fails, break
-				if(!$result){
-					break;
-				}
-			}
-			$uid = $this->session->userdata('member_id');
-			$data = $this->memberpage_model->get_school_by_id($uid);
-			
-			$data['result'] = $result ? 'success' : 'fail';
-			$data['errmsg'] = $result ? '' : 'Database update error';
-		}else{
-			$data['result'] = 'error';
-			$data['errmsg'] = 'Failed to validate form.';
-		}
-		
-		echo json_encode($data);
-	}
-
-	function deletePersonalInfo()
-	{
-		$field = html_escape($this->input->post('field'));
-		if( $field !== '' ){
-			$member_id = $this->session->userdata('member_id');
-			$result = $this->memberpage_model->deletePersonalInformation($member_id, $field);
-			if($result){
-				echo 1;
-			}
-			else{
-				echo 0;
-			}
-		}
-	}
-
-	function fill_view()
-	{
 		$uid = $this->session->userdata('member_id');
-		$user_product_count = $this->memberpage_model->getUserItemCount($uid);
-		$data = array(
-		    'title' => 'Easyshop.ph - Member Profile',
-		    'image_profile' => $this->memberpage_model->get_image($uid),
-		    'active_products' => $this->memberpage_model->getUserItems($uid,0),
-		    'deleted_products' => $this->memberpage_model->getUserItems($uid,1),
-		    'active_count' => intval($user_product_count['active']),
-		    'deleted_count' => intval($user_product_count['deleted']),
-		    'sold_count' => intval($user_product_count['sold'])
-                );
-		$data = array_merge($data, $this->memberpage_model->getLocationLookup());
-		$data = array_merge($data,$this->memberpage_model->get_member_by_id($uid));
-		$data = array_merge($data,$this->memberpage_model->get_work_by_id($uid));
-		$data =  array_merge($data,$this->memberpage_model->get_school_by_id($uid));
-		$data['bill'] =  $this->memberpage_model->get_billing_info($uid);
-		$data['transaction'] = array(
-			'buy' => $this->memberpage_model->getBuyTransactionDetails($uid, 0),
-			'sell' => $this->memberpage_model->getSellTransactionDetails($uid, 0),
-			'complete' => array(
-				'buy' => $this->memberpage_model->getBuyTransactionDetails($uid, 1),
-				'sell' => $this->memberpage_model->getSellTransactionDetails($uid, 1)
+		$address_id = $this->memberpage_model->getAddress($uid,0)['id_address'];
+		$result = $this->memberpage_model->editAddress($uid, $postdata, $address_id);
+
+		$data = $this->memberpage_model->get_member_by_id($uid);
+
+		$data['result'] = $result ? 'success':'fail';
+		$data['errmsg'] = $result ? '' : 'Database update error.';
+
+	}else{
+		$data['result'] = 'error';
+		$data['errmsg'] = 'Failed to validate form.';
+	}
+	$this->output->set_output(json_encode($data));
+}
+
+function edit_school()
+{
+	if(($this->input->post('personal_profile_school'))&&($this->form_validation->run('personal_profile_school')))
+	{
+		$arr = $this->input->post();
+		for($i = 1; $i<=count($arr)>>2; $i++)
+		{
+			$postdata = array(
+				'school' => $arr['schoolname'.$i],
+				'year' => $arr['schoolyear'.$i],
+				'level' => $arr['schoollevel'.$i],
+				'school_count' => $arr['schoolcount'.$i],
+				);
+			$uid = $this->session->userdata('member_id');
+			$result = $this->memberpage_model->edit_school_by_id($uid, $postdata);
+				// If database entry fails, break
+			if(!$result){
+				break;
+			}
+		}
+		$uid = $this->session->userdata('member_id');
+		$data = $this->memberpage_model->get_school_by_id($uid);
+
+		$data['result'] = $result ? 'success' : 'fail';
+		$data['errmsg'] = $result ? '' : 'Database update error';
+	}else{
+		$data['result'] = 'error';
+		$data['errmsg'] = 'Failed to validate form.';
+	}
+
+	echo json_encode($data);
+}
+
+function deletePersonalInfo()
+{
+	$field = html_escape($this->input->post('field'));
+	if( $field !== '' ){
+		$member_id = $this->session->userdata('member_id');
+		$result = $this->memberpage_model->deletePersonalInformation($member_id, $field);
+		if($result){
+			echo 1;
+		}
+		else{
+			echo 0;
+		}
+	}
+}
+
+function fill_view()
+{
+	$uid = $this->session->userdata('member_id');
+	$user_product_count = $this->memberpage_model->getUserItemCount($uid);
+	$data = array(
+		'title' => 'Easyshop.ph - Member Profile',
+		'image_profile' => $this->memberpage_model->get_image($uid),
+		'active_products' => $this->memberpage_model->getUserItems($uid,0),
+		'deleted_products' => $this->memberpage_model->getUserItems($uid,1),
+		'active_count' => intval($user_product_count['active']),
+		'deleted_count' => intval($user_product_count['deleted']),
+		'sold_count' => intval($user_product_count['sold'])
+		);
+	$data = array_merge($data, $this->memberpage_model->getLocationLookup());
+	$data = array_merge($data,$this->memberpage_model->get_member_by_id($uid));
+	$data = array_merge($data,$this->memberpage_model->get_work_by_id($uid));
+	$data =  array_merge($data,$this->memberpage_model->get_school_by_id($uid));
+	$data['bill'] =  $this->memberpage_model->get_billing_info($uid);
+	$data['transaction'] = array(
+		'buy' => $this->memberpage_model->getBuyTransactionDetails($uid, 0),
+		'sell' => $this->memberpage_model->getSellTransactionDetails($uid, 0),
+		'complete' => array(
+			'buy' => $this->memberpage_model->getBuyTransactionDetails($uid, 1),
+			'sell' => $this->memberpage_model->getSellTransactionDetails($uid, 1)
 			)
 		);
-		$data['transaction']['count'] = $this->memberpage_model->getTransactionCount($uid);
-		$data['allfeedbacks'] = $this->memberpage_model->getFeedback($uid);
-		$data['sales'] = array(
-			'release' => $this->memberpage_model->getNextPayout($uid),
-			'balance' => $this->memberpage_model->getUserBalance($uid)
+	$data['transaction']['count'] = $this->memberpage_model->getTransactionCount($uid);
+	$data['allfeedbacks'] = $this->memberpage_model->getFeedback($uid);
+	$data['sales'] = array(
+		'release' => $this->memberpage_model->getNextPayout($uid),
+		'balance' => $this->memberpage_model->getUserBalance($uid)
 		);
-		
-		//If delivery address is equal to personal address, hide setasdefaultaddress in delivery address tab
-		if( $data['cityID']===$data['c_cityID'] && $data['stateregionID']===$data['c_stateregionID'] && 
-		$data['address']===$data['c_address'] ){
-			$data['show_default_address'] = false;
-		}else{
-			$data['show_default_address'] = true;
-		}
-		
-		return $data;
-	}
 
-	function upload_img()
-	{
-		$data = array(
-			'x' => $this->input->post('x'),
-			'y' => $this->input->post('y'),
-			'w' => $this->input->post('w'),
-			'h' => $this->input->post('h')
+		//If delivery address is equal to personal address, hide setasdefaultaddress in delivery address tab
+	if( $data['cityID']===$data['c_cityID'] && $data['stateregionID']===$data['c_stateregionID'] && 
+		$data['address']===$data['c_address'] ){
+		$data['show_default_address'] = false;
+}else{
+	$data['show_default_address'] = true;
+}
+
+return $data;
+}
+
+function upload_img()
+{
+	$data = array(
+		'x' => $this->input->post('x'),
+		'y' => $this->input->post('y'),
+		'w' => $this->input->post('w'),
+		'h' => $this->input->post('h')
 		);
-		$isVendor = $this->input->post('vendor') ? true : false;
-		$uid = $this->session->userdata('member_id');
-		$this->load->library('upload');
-		$this->load->library('image_lib');
-		$result = $this->memberpage_model->upload_img($uid, $data);
+	$isVendor = $this->input->post('vendor') ? true : false;
+	$uid = $this->session->userdata('member_id');
+	$this->load->library('upload');
+	$this->load->library('image_lib');
+	$result = $this->memberpage_model->upload_img($uid, $data);
 		//echo error may be here: $result['error']
 
-		if($isVendor){
-			$temp = $this->fill_header();
-		}
-		
-		if(isset($result['error'])){
-			echo "<h2 style='color:red;'>Unable to upload image.</h2>
-				<p style='font-size:20px;'><strong>You can only upload JPEG, JPG, GIF, and PNG files with a max size of 5MB</strong></p>";
-			if($isVendor)
-				echo "<script type='text/javascript'>setTimeout(function(){window.location.href='".base_url()."vendor/".$temp['uname']."'},3000);</script>";
-			else
-				echo "<script type='text/javascript'>setTimeout(function(){window.location.href='".base_url()."me'},3000);</script>";
-		}else{
-			if($isVendor)
-				redirect('vendor/'.$temp['uname']);
-			else
-				redirect('me');
-		}
-		
-	}
-	
-	public function external_callbacks( $postdata, $param )
-	{
-		 $param_values = explode( ',', $param );
-		 $model = $param_values[0];
-		 $this->load->model( $model );
-		 $method = $param_values[1];
-		 if( count( $param_values ) > 2 ) {
-			  array_shift( $param_values );
-			  array_shift( $param_values );
-			  $argument = $param_values;
-		 }
-		 if( isset( $argument ))
-			$callback_result = $this->$model->$method( $postdata, $argument );
-		 else
-			$callback_result = $this->$model->$method( $postdata );
-		 return $callback_result;
+	if($isVendor){
+		$temp = $this->fill_header();
 	}
 
-	function edit_consignee_address()
+	if(isset($result['error'])){
+		echo "<h2 style='color:red;'>Unable to upload image.</h2>
+		<p style='font-size:20px;'><strong>You can only upload JPEG, JPG, GIF, and PNG files with a max size of 5MB</strong></p>";
+		if($isVendor)
+			echo "<script type='text/javascript'>setTimeout(function(){window.location.href='".base_url()."vendor/".$temp['uname']."'},3000);</script>";
+		else
+			echo "<script type='text/javascript'>setTimeout(function(){window.location.href='".base_url()."me'},3000);</script>";
+	}else{
+		if($isVendor)
+			redirect('vendor/'.$temp['uname']);
+		else
+			redirect('me');
+	}
+
+}
+
+public function external_callbacks( $postdata, $param )
+{
+	$param_values = explode( ',', $param );
+	$model = $param_values[0];
+	$this->load->model( $model );
+	$method = $param_values[1];
+	if( count( $param_values ) > 2 ) {
+		array_shift( $param_values );
+		array_shift( $param_values );
+		$argument = $param_values;
+	}
+	if( isset( $argument ))
+		$callback_result = $this->$model->$method( $postdata, $argument );
+	else
+		$callback_result = $this->$model->$method( $postdata );
+	return $callback_result;
+}
+
+function edit_consignee_address()
+{
+	if(($this->input->post('c_deliver_address_btn'))&&($this->form_validation->run('c_deliver_address'))){
+		$uid = $this->session->userdata('member_id');
+		$result = array(false,false);
+
+		$postdata = array(
+			'consignee' => $this->input->post('consignee'),
+			'mobile' => ltrim($this->input->post('c_mobile'), '0'),
+			'telephone' => $this->input->post('c_telephone'),
+			'stateregion' => $this->input->post('c_stateregion'),
+			'city' => $this->input->post('c_city'),
+			'address' => $this->input->post('c_address'),
+			'country' => $this->input->post('c_country'),
+			'lat' => $this->input->post('temp_lat'),
+			'lng' => $this->input->post('temp_lng'),
+			'addresstype' => 1
+			);
+
+		$temp = array(
+			'stateregion' => $this->input->post('cstateregion_orig'),
+			'city' => $this->input->post('ccity_orig'),
+			'address' => $this->input->post('caddress_orig'),
+			'map_lat' => $this->input->post('map_lat'),
+			'map_lng' => $this->input->post('map_lng')
+			);
+
+		if( ( ($temp['stateregion'] != $postdata['stateregion']) || ($temp['city'] != $postdata['city']) || ($temp['address'] != $postdata['address']) ) 
+			&& ($temp['map_lat'] == $postdata['lat'] && $temp['map_lng'] == $postdata['lng']) ) {
+			$postdata['lat'] = 0;
+		$postdata['lng'] = 0;
+	}
+
+	$address_id = $this->memberpage_model->getAddress($uid,1)['id_address'];
+	$result[0] = $this->memberpage_model->editAddress($uid, $postdata, $address_id);
+
+	if($this->input->post('c_def_address')){
+		$address_id = $this->memberpage_model->getAddress($uid,0)['id_address'];
+		$postdata['addresstype'] = 0;
+		$result[1] = $this->memberpage_model->editAddress($uid, $postdata, $address_id);
+		$data['default_add'] = $this->input->post('c_def_address');
+	}else{
+		$result[1] = true;
+		$data['default_add'] = 'off';
+	}
+
+	$data['result'] = $result[0] && $result[1] ? 'success':'fail';
+	$data['errmsg'] = $result[0] && $result[1] ? '' : 'Database update error.';
+
+	$data = array_merge($data,$this->memberpage_model->get_member_by_id($uid));
+
+}else{
+	$data['result'] = 'fail';
+	$data['errmsg'] = 'Failed to validate form.';
+}
+
+$this->output->set_output(json_encode($data));
+}
+
+function edit_work()
+{
+	if(($this->input->post('personal_profile_work_btn'))&&($this->form_validation->run('personal_profile_work')))
 	{
-		if(($this->input->post('c_deliver_address_btn'))&&($this->form_validation->run('c_deliver_address'))){
-			$uid = $this->session->userdata('member_id');
-			$result = array(false,false);
-			
+		$rowcount = count($this->input->post()) - 1;
+		$rowcount = $rowcount / 4;
+		$postdata = array();
+		for($x=1;$x<=$rowcount;$x++){
 			$postdata = array(
-				'consignee' => $this->input->post('consignee'),
-				'mobile' => ltrim($this->input->post('c_mobile'), '0'),
-				'telephone' => $this->input->post('c_telephone'),
-				'stateregion' => $this->input->post('c_stateregion'),
-				'city' => $this->input->post('c_city'),
-				'address' => $this->input->post('c_address'),
-				'country' => $this->input->post('c_country'),
-				'lat' => $this->input->post('temp_lat'),
-				'lng' => $this->input->post('temp_lng'),
-				'addresstype' => 1
-			);
-
-			$temp = array(
-				'stateregion' => $this->input->post('cstateregion_orig'),
-				'city' => $this->input->post('ccity_orig'),
-				'address' => $this->input->post('caddress_orig'),
-				'map_lat' => $this->input->post('map_lat'),
-				'map_lng' => $this->input->post('map_lng')
-			);
-			
-			if( ( ($temp['stateregion'] != $postdata['stateregion']) || ($temp['city'] != $postdata['city']) || ($temp['address'] != $postdata['address']) ) 
-				&& ($temp['map_lat'] == $postdata['lat'] && $temp['map_lng'] == $postdata['lng']) ) {
-				$postdata['lat'] = 0;
-				$postdata['lng'] = 0;
-			}
-			
-			$address_id = $this->memberpage_model->getAddress($uid,1)['id_address'];
-			$result[0] = $this->memberpage_model->editAddress($uid, $postdata, $address_id);
-			
-			if($this->input->post('c_def_address')){
-				$address_id = $this->memberpage_model->getAddress($uid,0)['id_address'];
-				$postdata['addresstype'] = 0;
-				$result[1] = $this->memberpage_model->editAddress($uid, $postdata, $address_id);
-				$data['default_add'] = $this->input->post('c_def_address');
-			}else{
-				$result[1] = true;
-				$data['default_add'] = 'off';
-			}
-			
-			$data['result'] = $result[0] && $result[1] ? 'success':'fail';
-			$data['errmsg'] = $result[0] && $result[1] ? '' : 'Database update error.';
-			
-			$data = array_merge($data,$this->memberpage_model->get_member_by_id($uid));
-			
-		}else{
-			$data['result'] = 'fail';
-			$data['errmsg'] = 'Failed to validate form.';
-		}
-		
-		$this->output->set_output(json_encode($data));
-	}
-
-	function edit_work()
-	{
-		if(($this->input->post('personal_profile_work_btn'))&&($this->form_validation->run('personal_profile_work')))
-		{
-			$rowcount = count($this->input->post()) - 1;
-			$rowcount = $rowcount / 4;
-			$postdata = array();
-			for($x=1;$x<=$rowcount;$x++){
-				$postdata = array(
-					'companyname' => $this->input->post('companyname'.$x),
-					'designation' => $this->input->post('designation'.$x),
-					'year' => $this->input->post('year'.$x),
-					'count' => $this->input->post('workcount'.$x)
+				'companyname' => $this->input->post('companyname'.$x),
+				'designation' => $this->input->post('designation'.$x),
+				'year' => $this->input->post('year'.$x),
+				'count' => $this->input->post('workcount'.$x)
 				);
-				$uid = $this->session->userdata('member_id');
-				$result = $this->memberpage_model->edit_work_by_id($uid, $postdata);
-				
-				if(!$result){
-					break;
-				}
-			}
 			$uid = $this->session->userdata('member_id');
-			$data = $this->memberpage_model->get_work_by_id($uid);
-			
-			$data['result'] = $result ? 'success' : 'fail';
-			$data['errmsg'] = $result ? '' : 'Database update error.';
-			
-		}else{
-			$data['result'] = 'error';
-			$data['errmsg'] = 'Failed to validate form.';
+			$result = $this->memberpage_model->edit_work_by_id($uid, $postdata);
+
+			if(!$result){
+				break;
+			}
 		}
-		
-		echo json_encode($data);
+		$uid = $this->session->userdata('member_id');
+		$data = $this->memberpage_model->get_work_by_id($uid);
+
+		$data['result'] = $result ? 'success' : 'fail';
+		$data['errmsg'] = $result ? '' : 'Database update error.';
+
+	}else{
+		$data['result'] = 'error';
+		$data['errmsg'] = 'Failed to validate form.';
 	}
 
-	/*****************	TRANSACTION CONTROLLER	*******************/
+	echo json_encode($data);
+}
+
+/*****************	TRANSACTION CONTROLLER	*******************/
 
 	/*
 	 *	Function to add feedback to USER for every transaction made
@@ -383,7 +383,7 @@ class Memberpage extends MY_Controller
 				'rating1' => $this->input->post('rating1'),
 				'rating2' => $this->input->post('rating2'),
 				'rating3' => $this->input->post('rating3')
-			);
+				);
 			
 			/******** Check if transaction exists based on post details ***********/
 			// current user is buyer
@@ -392,14 +392,14 @@ class Memberpage extends MY_Controller
 					'buyer' => $data['uid'],
 					'seller' => $data['for_memberid'],
 					'order_id' => $data['order_id']
-				);
+					);
 			// current user is seller
 			}else if($data['feedb_kind'] == 1){
 				$transacData = array(					
 					'buyer' => $data['for_memberid'],
 					'seller' => $data['uid'],
 					'order_id' => $data['order_id']
-				);
+					);
 			}
 			$checkTransaction = $this->payment_model->checkTransaction($transacData);
 			
@@ -427,7 +427,7 @@ class Memberpage extends MY_Controller
 		$serverResponse = array(
 			'result' => 'fail',
 			'error' => 'Failed to validate form'
-		);
+			);
 		
 		$data['transaction_num'] = $this->input->post('transaction_num');
 		$data['invoice_num'] = $this->input->post('invoice_num');
@@ -439,13 +439,13 @@ class Memberpage extends MY_Controller
 				'username' => $this->input->post('username'),
 				'password' => $this->input->post('password'),
 				'member_id' => $this->session->userdata('member_id')
-			);
+				);
 			
 			if( ! $this->memberpage_model->authenticateUser($authenticateData) ){
 				$serverResponse = array(
 					'result' => 'invalid',
 					'error' => 'Incorrect password.'
-				);
+					);
 				echo json_encode($serverResponse);
 				exit;
 			}
@@ -467,7 +467,7 @@ class Memberpage extends MY_Controller
 			// Returns : o_success, o_message
 			//$result['o_success'] = 1; // DEV code
 			$result = $this->payment_model->updateTransactionStatus($data);
-            
+
 			// If database update is successful and response is 'return to buyer', 
 			// get order_product transaction details and send notification (email mobile)
 			if( $result['o_success'] >= 1 && $data['status'] == 2 ){
@@ -488,7 +488,7 @@ class Memberpage extends MY_Controller
 			}else if( $result['o_success'] >= 1 && ( $data['status'] === 1 || $data['status'] === 3) ){
 				$emailstat = true;
 			}
-		
+
 			$serverResponse['error'] = $result['o_success'] >= 1 ? '' : 'Server unable to update database.';
 			$serverResponse['result'] = $result['o_success'] >= 1 ? 'success':'fail';
 			
@@ -497,7 +497,7 @@ class Memberpage extends MY_Controller
 					$serverResponse['error'] = 'Failed to send notification email.';
 				}
 			}
-		/*************	DRAGONPAY HANDLER	************************/
+			/*************	DRAGONPAY HANDLER	************************/
 		}else if( $this->input->post('dragonpay') ){
 			$this->load->library('dragonpay');
 			
@@ -518,7 +518,7 @@ class Memberpage extends MY_Controller
 			}else{
 				$serverResponse['error'] = 'Transaction does not exist.';
 			}
-		/*************	BANK DEPOSIT HANDLER	************************/
+			/*************	BANK DEPOSIT HANDLER	************************/
 		}else if( $this->input->post('bank_deposit') && $this->form_validation->run('bankdeposit') ) {
 			// Fetch transaction data
 			$checkTransaction = $this->payment_model->checkTransactionBasic($data);
@@ -531,7 +531,7 @@ class Memberpage extends MY_Controller
 					'amount' => preg_replace('/,/', '', $this->input->post('amount')),
 					'date_deposit' => date("Y-m-d H:i:s", strtotime($this->input->post('date'))),
 					'comment' => $this->input->post('comment')
-				);
+					);
 				$result = $this->payment_model->addBankDepositDetails($postData);
 				
 				$serverResponse['result'] = $result ? 'success' : 'fail';
@@ -558,7 +558,7 @@ class Memberpage extends MY_Controller
 				'tracking_num' => $this->input->post('tracking_num'),
 				'expected_date' => date("Y-m-d H:i:s", strtotime($this->input->post('expected_date'))),
 				'delivery_date' => date("Y-m-d H:i:s", strtotime($this->input->post('delivery_date')))
-			);
+				);
 			
 			$result = $this->payment_model->checkOrderProductBasic($postData);
 			
@@ -582,12 +582,12 @@ class Memberpage extends MY_Controller
 			'transact_num' => $this->input->post('transact_num'),
 			'member_id' => $this->input->post('seller_id'),
 			'method' => $this->input->post('method')
-		);
+			);
 		
 		$serverResponse = array(
 			'result' => 'fail',
 			'error' => 'Transaction does not exist.'
-		);
+			);
 		
 		$result = $this->payment_model->checkOrderProductBasic($data);
 		
@@ -621,14 +621,14 @@ class Memberpage extends MY_Controller
 		switch( $checkData['stat'] ){
 			case 'unfollowed':
 			case 'followed':
-				$boolResult = $this->memberpage_model->setVendorSubscription($memberID,$checkData['vendor_id'], $checkData['stat']);
-				$serverResponse['result'] = $boolResult ? 'success' : 'fail';
-				$serverResponse['error'] = $boolResult ? '' : 'Failed to update database.';
-				break;
+			$boolResult = $this->memberpage_model->setVendorSubscription($memberID,$checkData['vendor_id'], $checkData['stat']);
+			$serverResponse['result'] = $boolResult ? 'success' : 'fail';
+			$serverResponse['error'] = $boolResult ? '' : 'Failed to update database.';
+			break;
 			case 'error':
-				$serverResponse['result'] = 'fail';
-				$serverResponse['error'] = 'Incorrect data submitted to server. Please try again later.';
-				break;
+			$serverResponse['result'] = 'fail';
+			$serverResponse['error'] = 'Incorrect data submitted to server. Please try again later.';
+			break;
 		}
 		
 		echo json_encode($serverResponse);
@@ -639,7 +639,7 @@ class Memberpage extends MY_Controller
 		$serverResponse = array(
 			'result' => 'fail',
 			'error' => 'Failed to submit form.'
-		);
+			);
 		
 		if($this->input->post('store_desc')){
 			$desc = $this->input->post('desc');
@@ -660,7 +660,7 @@ class Memberpage extends MY_Controller
 			'y' => $this->input->post('y'),
 			'w' => $this->input->post('w'),
 			'h' => $this->input->post('h')
-		);
+			);
 		$uid = $this->session->userdata('member_id');
 		$this->load->library('upload');
 		$this->load->library('image_lib');
@@ -669,13 +669,13 @@ class Memberpage extends MY_Controller
 		//echo error may be here: $result['error']
 		if(isset($result['error'])){
 			print "<h2 style='color:red;'>Unable to upload image.</h2>
-				<p style='font-size:20px;'><strong>You can only upload JPEG, JPG, GIF, and PNG files with a max size of 5MB</strong></p>";
+			<p style='font-size:20px;'><strong>You can only upload JPEG, JPG, GIF, and PNG files with a max size of 5MB</strong></p>";
 			print "<script type='text/javascript'>setTimeout(function(){window.location.href='".base_url()."vendor/".$data['uname']."'},3000);</script>";
 		}else{
 			redirect('vendor/'.$data['uname']);
 		}
 	}
-
+		
 /*
  |	Function used when changing store URL
  */
@@ -706,12 +706,12 @@ class Memberpage extends MY_Controller
 				$block2 = explode("/", $co);
 				if( !in_array($block1[0], $restrictedList) ){
 					$restrictedList[] = $block1[0];
-				}
+	}
 				if( !in_array($block2[0], $restrictedList) ){
 					$restrictedList[] = $block2[0];
 				}
 			}
-			
+
 			# Get union of controller list and restricted list
 			$restrictedList = array_unique(array_merge($restrictedList , $controllerConfig));
 			
@@ -738,20 +738,20 @@ class Memberpage extends MY_Controller
 		$data = array_merge($data, $this->fill_header());
 		
 		if($vendordetails){
-            $data['render_logo'] = false;
-            $data['render_searchbar'] = false;
-            $this->load->view('templates/header', $data);
+			$data['render_logo'] = false;
+			$data['render_searchbar'] = false;
+			$this->load->view('templates/header', $data);
 			$sellerid = $vendordetails['id_member'];
 			$user_product_count = $this->memberpage_model->getUserItemCount($sellerid);
 			$data = array_merge($data,array(
-					'vendordetails' => $vendordetails,
-					'image_profile' => $this->memberpage_model->get_Image($sellerid),
-					'banner' => $this->memberpage_model->get_Image($sellerid,'vendor'),
-					'products' => $this->memberpage_model->getVendorCatItems($sellerid,$selleruname),
-					'active_count' => intval($user_product_count['active']),
-					'deleted_count' => intval($user_product_count['deleted']),
-                    'sold_count' => intval($user_product_count['sold']),
-					));
+				'vendordetails' => $vendordetails,
+				'image_profile' => $this->memberpage_model->get_Image($sellerid),
+				'banner' => $this->memberpage_model->get_Image($sellerid,'vendor'),
+				'products' => $this->memberpage_model->getVendorCatItems($sellerid,$selleruname),
+				'active_count' => intval($user_product_count['active']),
+				'deleted_count' => intval($user_product_count['deleted']),
+				'sold_count' => intval($user_product_count['sold']),
+				));
 			$data['allfeedbacks'] = $this->memberpage_model->getFeedback($sellerid);
 			
 			$data['hasStoreDesc'] = (string)$data['vendordetails']['store_desc'] !== '' ? true : false;
@@ -763,13 +763,13 @@ class Memberpage extends MY_Controller
 			$data['subscribe_count'] = (int)$this->memberpage_model->countVendorSubscription($data['my_id'], $selleruname)['subscription_count'];
 			
 			$this->load->view('pages/user/vendor_view', $data);
-            $this->load->view('templates/footer');
+			$this->load->view('templates/footer');
 			
 		}
 		else{
-            $this->load->view('templates/header', $data);
+			$this->load->view('templates/header', $data);
 			$this->load->view('pages/user/user_error');
-            $this->load->view('templates/footer_full');
+			$this->load->view('templates/footer_full');
 		}
 	}*/
 	
@@ -791,7 +791,7 @@ class Memberpage extends MY_Controller
 					'emailcode' => $hash,
 					'mobile' => 0,
 					'email' => 0
-				);
+					);
 
 				if($data['mobilecount'] < 4 || $data['time'] > 30){
 					$result = $this->register_model->send_mobile_msg($data['username'], $data['contactno'], $confirmation_code);
@@ -817,7 +817,7 @@ class Memberpage extends MY_Controller
 					'emailcode' => $hash,
 					'mobile' => 0,
 					'email' => 0
-				);
+					);
 
 				if($data['emailcount'] < 4 || $data['time'] > 30){
 					$result = $this->register_model->send_email_msg($data['email'], $data['username'], $hash);
@@ -846,7 +846,7 @@ class Memberpage extends MY_Controller
 				$data = array(
 					'is_contactno_verify' => 1,
 					'member_id' => $this->session->userdata('member_id')
-				);
+					);
 				$this->session->unset_userdata('mobilecode');
 				$this->register_model->update_verification_status($data);
 				echo 1;
@@ -866,7 +866,7 @@ class Memberpage extends MY_Controller
 
 	function billing_info(){
         # if(($this->input->post('bi_acct_no')) && ($this->form_validation->run('billing_info'))){
-	
+
 		if($this->input->post('bi_acct_no')){
 
 			$member_id = $this->session->userdata('member_id');
@@ -882,11 +882,11 @@ class Memberpage extends MY_Controller
 				'bank_id' => $bi_bank,
 				'bank_account_name' => $bi_acct_name,
 				'bank_account_number' => $bi_acct_no
-			);
+				);
 			
 			if($this->memberpage_model->isBankAccountUnique($data)){
 				$result = $this->memberpage_model->billing_info($data);
-                echo '{"e":"1","d":"success","id":'.$result.'}';
+				echo '{"e":"1","d":"success","id":'.$result.'}';
 			}else{
 				echo '{"e":"0","d":"duplicate"}';
 			}			
@@ -897,62 +897,62 @@ class Memberpage extends MY_Controller
 	}
 
 	function billing_info_u(){
-	    if($this->input->post('bi_id')){
-		    $member_id = $this->session->userdata('member_id');
-		    $bi_id = $this->input->post('bi_id');
-		    $bi_bank = $this->input->post('bi_bank');
-		    $bi_payment_type = $this->input->post('bi_payment_type');
-		    $bi_acct_name = $this->input->post('bi_acct_name');
-		    $bi_acct_no = $this->input->post('bi_acct_no');
-		    $bi_def = $this->input->post('bi_def');
-		    $bi_user_account = "";
-		    $data = array(
-			  'member_id' => $member_id,
-			  'payment_type' => $bi_payment_type,
-			  'ibi' => $bi_id,
-			  'bank_id' => $bi_bank,
-			  'bank_account_name' => $bi_acct_name,
-			  'bank_account_number' => $bi_acct_no,
-			  'is_default' => $bi_def,
-			  'user_account' => $bi_user_account,
-			);
-		if($this->memberpage_model->isBankAccountUnique($data)){
-		    $this->memberpage_model->billing_info_update($data);
-		    $return = '{"e":"1","d":"success"}';
+		if($this->input->post('bi_id')){
+			$member_id = $this->session->userdata('member_id');
+			$bi_id = $this->input->post('bi_id');
+			$bi_bank = $this->input->post('bi_bank');
+			$bi_payment_type = $this->input->post('bi_payment_type');
+			$bi_acct_name = $this->input->post('bi_acct_name');
+			$bi_acct_no = $this->input->post('bi_acct_no');
+			$bi_def = $this->input->post('bi_def');
+			$bi_user_account = "";
+			$data = array(
+				'member_id' => $member_id,
+				'payment_type' => $bi_payment_type,
+				'ibi' => $bi_id,
+				'bank_id' => $bi_bank,
+				'bank_account_name' => $bi_acct_name,
+				'bank_account_number' => $bi_acct_no,
+				'is_default' => $bi_def,
+				'user_account' => $bi_user_account,
+				);
+			if($this->memberpage_model->isBankAccountUnique($data)){
+				$this->memberpage_model->billing_info_update($data);
+				$return = '{"e":"1","d":"success"}';
+			}
+			else{
+				$return = '{"e":"0","d":"duplicate"}';
+			}
 		}
 		else{
-		    $return = '{"e":"0","d":"duplicate"}';
+			$return = '{"e":"0","d":"fail"}';
 		}
-	  }
-	  else{
-            $return = '{"e":"0","d":"fail"}';
-	  }
-	  echo $return;
+		echo $return;
 	}
 
 	function billing_info_d(){
 		if($this->input->post('bi_id')){
 			$member_id = $this->session->userdata('member_id');
 			$bi_id = $this->input->post('bi_id');
-            $member_id = $this->session->userdata('member_id');
+			$member_id = $this->session->userdata('member_id');
 			$data = array(
-					'member_id' => $member_id,
-					'ibi' => $bi_id
-			);
+				'member_id' => $member_id,
+				'ibi' => $bi_id
+				);
 			$this->memberpage_model->billing_info_delete($data);
 		}
 	}
 	
 	function billing_info_f(){
-	   
+
 		if($this->input->post('bi_id')){
 			$member_id = $this->session->userdata('member_id');
 			$bi_id = $this->input->post('bi_id');
-            $member_id = $this->session->userdata('member_id');
+			$member_id = $this->session->userdata('member_id');
 			$data = array(
-					'member_id' => $member_id,
-					'ibi' => $bi_id
-			);
+				'member_id' => $member_id,
+				'ibi' => $bi_id
+				);
 			$this->memberpage_model->billing_info_default($data);
 		}
 	}	
@@ -980,33 +980,33 @@ class Memberpage extends MY_Controller
 		
 		switch($of){
 			case 1:
-				$myof = 'p.lastmodifieddate';
-				break;
+			$myof = 'p.lastmodifieddate';
+			break;
 			case 2:
-				$myof = 'p.name';
-				break;
+			$myof = 'p.name';
+			break;
 			case 3:
-				$myof = 'p.price';
-				break;
+			$myof = 'p.price';
+			break;
 			case 4:
-				$myof = 'availability';
-				break;
+			$myof = 'availability';
+			break;
 			case 5:
-				$myof = 'sold';
-				break;
+			$myof = 'sold';
+			break;
 			default:
-				$myof = 'p.lastmodifieddate';
+			$myof = 'p.lastmodifieddate';
 		}
 		
 		switch($osf){
 			case 1:
-				$myosf = 'DESC';
-				break;
+			$myosf = 'DESC';
+			break;
 			case 2:
-				$myosf = 'ASC';
-				break;
+			$myosf = 'ASC';
+			break;
 			default:
-				$myosf = 'DESC';
+			$myosf = 'DESC';
 		}
 		
 		if( $this->input->get('c') == 'count' ){
@@ -1045,56 +1045,56 @@ class Memberpage extends MY_Controller
 		
 		switch($of){
 			case 0:
-				$myof = '1,2,3,5';
-				break;
+			$myof = '1,2,3,5';
+			break;
 			case 1:
-				$myof = '1';
-				break;
+			$myof = '1';
+			break;
 			case 2:
-				$myof = '2';
-				break;
+			$myof = '2';
+			break;
 			case 3:
-				$myof = '3';
-				break;
+			$myof = '3';
+			break;
 			case 5:
-				$myof = '5';
-				break;
+			$myof = '5';
+			break;
 			default:
-				$myof = '1,2,3,5';
+			$myof = '1,2,3,5';
 		}
 		
 		switch($osf){
 			case 1:
-				$myosf = 'DESC';
-				break;
+			$myosf = 'DESC';
+			break;
 			case 2:
-				$myosf = 'ASC';
-				break;
+			$myosf = 'ASC';
+			break;
 			default:
-				$myosf = 'ASC';
+			$myosf = 'ASC';
 		}
 		
 		switch($k){
 			case 'buy':
-				$data['transaction']['buy'] = $this->memberpage_model->getBuyTransactionDetails($member_id,$completeStatus,$start,$nf,$myof,$myosf);;
-				$view = 'memberpage_tx_buy_view';
-				$querySelect = 'buy';
-				break;
+			$data['transaction']['buy'] = $this->memberpage_model->getBuyTransactionDetails($member_id,$completeStatus,$start,$nf,$myof,$myosf);;
+			$view = 'memberpage_tx_buy_view';
+			$querySelect = 'buy';
+			break;
 			case 'sell':				
-				$data['transaction']['sell'] = $this->memberpage_model->getSellTransactionDetails($member_id,$completeStatus,$start,$nf,$myof,$myosf);;
-				$view = 'memberpage_tx_sell_view';
-				$querySelect = 'sell';
-				break;
+			$data['transaction']['sell'] = $this->memberpage_model->getSellTransactionDetails($member_id,$completeStatus,$start,$nf,$myof,$myosf);;
+			$view = 'memberpage_tx_sell_view';
+			$querySelect = 'sell';
+			break;
 			case 'cbuy':
-				$data['transaction']['complete']['buy'] = $this->memberpage_model->getBuyTransactionDetails($member_id,$completeStatus,$start,$nf,$myof,$myosf);;
-				$view = 'memberpage_tx_cbuy_view';
-				$querySelect = 'buy';
-				break;
+			$data['transaction']['complete']['buy'] = $this->memberpage_model->getBuyTransactionDetails($member_id,$completeStatus,$start,$nf,$myof,$myosf);;
+			$view = 'memberpage_tx_cbuy_view';
+			$querySelect = 'buy';
+			break;
 			case 'csell':
-				$data['transaction']['complete']['sell'] = $this->memberpage_model->getSellTransactionDetails($member_id,$completeStatus,$start,$nf,$myof,$myosf);;
-				$view = 'memberpage_tx_csell_view';
-				$querySelect = 'sell';
-				break;
+			$data['transaction']['complete']['sell'] = $this->memberpage_model->getSellTransactionDetails($member_id,$completeStatus,$start,$nf,$myof,$myosf);;
+			$view = 'memberpage_tx_csell_view';
+			$querySelect = 'sell';
+			break;
 		}
 		
 		if( $this->input->get('c') == 'count' ){

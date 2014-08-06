@@ -106,15 +106,17 @@
     </div>
 </section>
 
-<div class="clear"></div>
+<div class="clear before-feed"></div>
 
-
-
-    <?php foreach($sections as $section): ?>
-        <section>
-            <?php echo $section;?>
-        </section>
-    <?php endforeach; ?>
+    <?php
+    if(!$this->session->userdata('member_id')):
+        foreach($sections as $section): ?>
+            <section>
+                <?php echo $section;?>
+            </section>
+    <?php 
+        endforeach;
+    endif; ?>
                 
 <div class="clear"></div>
 
@@ -133,7 +135,61 @@ $("body").bind("unloadingChild", function(){
 
 
 
+$( document ).ready(function( $ ) {
+    
+    var ids;
 
+    function loadFeed(postids)
+    {
+        var csrftoken = $("meta[name='csrf-token']").attr('content');
+        var csrfname = $("meta[name='csrf-name']").attr('content');
+        var itmcount;
+        $.ajax({ 
+            type: "POST",
+            url: config.base_url+'product/getFeed', 
+            data: "ids=" + postids + "&"+csrfname+"=" + csrftoken,
+            dataType : "json",
+            success: function(data){
+                request_ajax = true; 
+                console.log('loading feed complete.');
+                // $( data.html ).insertAfter( $('.before-feed') );
+                itmcount = data.count;
+                if(itmcount <= 0){
+                    ajax_is_on = true;
+                }else{
+                    ajax_is_on = false;  
+                    $('.home_feed_items').append(data.html);
+                    ids = data.product_ids;
+                }
+            }
+        });   
+    }
 
+    console.log('ready');
+    <?php if($this->session->userdata('member_id')): ?>
+        console.log('loading feed.');
+        $('<section><div class="wrapper category_section"><div class=" home_cat_product_title red_cat"><a>FEED</a></div><div class="home_feed_items"></div></div></section><br/>').insertAfter( $('.before-feed') );
+        loadFeed(0);
+
+        // START OF INFINITE SCROLLING FUNCTION  
+        var ajax_is_on = false; 
+        var last_scroll_top = 0;
+        var itmcnt;
+     
+        $(window).scroll(function(event) {
+            var st = $(this).scrollTop();
+            if(st > last_scroll_top){
+                if ($(window).scrollTop() + 500 > $(document).height() - $(window).height()) {
+                    if (request_ajax === true && ajax_is_on === false) {
+                        request_ajax = false; 
+                        itmcnt = loadFeed(ids);  
+                    }
+                }
+            }
+            last_scroll_top = st;
+        });
+        // END OF INFINITE SCROLLING FUNCTION
+    <?php endif; ?>
+});
 
 </script>

@@ -999,5 +999,104 @@ FROM
 	LIMIT :item_count
 </select>
 
+<select id="getProductFeed">
+    SELECT 
+        * 
+    FROM
+        (SELECT 
+            *
+            , 'Following' AS feed_type
+            , @a := @a + 2 AS rank 
+        FROM
+            (SELECT 
+                c.username
+                , c.imgurl
+                , a.`vendor_id` AS member_id
+                , b.id_product
+                , b.name
+				, b.brief
+                , b.slug
+                , b.createddate
+				, b.condition
+				, FORMAT(b.price,2) as price
+                , d.product_image_path
+            FROM
+                `es_vendor_subscribe` a
+                , `es_product` b
+                , es_member c
+                , `es_product_image` d 
+            WHERE a.`vendor_id` = b.`member_id` 
+                AND a.`member_id` = :member_id 
+                AND a.vendor_id = c.id_member 
+                AND b.`id_product` = d.`product_id` 
+                AND d.`is_primary` = 1 
+                AND (b.`is_delete` 
+                    AND b.`is_draft`) = 0 
+                AND b.id_product NOT IN ({product_ids})
+            ORDER BY createddate DESC) AS tbl 
+        UNION
+        ALL 
+        SELECT 
+            *
+            , 'Partners' AS feed_type
+            , @b := @b + 2 AS rank 
+        FROM
+            (SELECT 
+                a.username
+                , a.imgurl
+                , b.member_id
+                , b.id_product
+                , b.`name`
+				, b.brief
+                , b.slug
+                , b.createddate
+				, b.condition
+				, FORMAT(b.price,2) as price
+                , c.product_image_path
+            FROM
+                es_product b
+                , es_member a
+                , `es_product_image` c 
+            WHERE b.member_id IN ({partners_id}) 
+                AND b.member_id NOT IN 
+                (SELECT 
+                    vendor_id 
+                FROM
+                    `es_vendor_subscribe` 
+                WHERE member_id = :member_id) 
+                AND a.id_member = b.member_id 
+                AND b.`id_product` = c.`product_id` 
+                AND b.id_product NOT IN ({product_ids}) 
+                AND c.is_primary = 1 
+                AND (b.`is_delete` 
+                    AND b.`is_draft`) = 0 
+            ORDER BY RAND()) AS tbl2) table_feed 
+    ORDER BY rank LIMIT {limit}
+
+</select>
+
+<select id="getNewProducts">
+	SELECT 
+		m.username
+		, m.imgurl
+		, p.member_id
+		, p.id_product
+		, p.name
+		, p.brief
+		, p.slug
+		, p.createddate
+		, p.condition
+		, FORMAT(p.price,2) as price
+		, pi.product_image_path
+	FROM es_product p
+	INNER JOIN es_member m
+		ON m.id_member = p.member_id
+	INNER JOIN es_product_image pi
+		ON pi.product_id = p.id_product AND pi.is_primary = 1
+	WHERE p.is_draft = 0 AND p.is_delete = 0
+	ORDER BY p.createddate DESC
+	LIMIT {limit}
+</select>
+ 
 
 </map>

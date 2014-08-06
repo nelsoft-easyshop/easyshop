@@ -12,7 +12,8 @@ class product extends MY_Controller
         $this->load->model("messages_model");
     }
 
-    public $per_page = 12;
+	public $feeds_prodperpage = 5;
+    public $per_page = 2;
     public $start_irrelevant = 0;
 
     /*     
@@ -20,12 +21,12 @@ class product extends MY_Controller
         */
     function category_page($url_string="")
     {
-        $start = 0;
-        $count = 0;
-        $perPage = $this->per_page;
-        $operator = " = ";
-        $data =  $this->fill_header();	
-    $category_array = $this->product_model->getCategoryBySlug($url_string);
+    	$start = 0;
+    	$count = 0;
+    	$perPage = $this->per_page;
+    	$operator = " = ";
+    	$data =  $this->fill_header();	
+		$category_array = $this->product_model->getCategoryBySlug($url_string);
         
         $categoryId = $category_array['id_cat'];
         $categoryName = $category_array['name'];
@@ -702,8 +703,6 @@ class product extends MY_Controller
         #return 2 if account has promo = false (PENDING)
         #return 3 if username doesnt exist (NOT-QUALIFIED)
     }
-
-
 
 
 }

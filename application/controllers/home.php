@@ -7,30 +7,43 @@ class Home extends MY_Controller {
 
     function __construct() {
         parent::__construct();
+		$this->load->library('xmlmap');
+		$this->load->model('product_model');
     }
     
+	public $feeds_prodperpage = 5;
+	
     public function index() {
-
-        $this->load->model('product_model');
 
         $home_content = $this->product_model->getHomeContent();
 
         $layout_arr = array();
-
-        foreach($home_content['section'] as $section){
-            array_push($layout_arr,$this->load->view('templates/home_layout/'.$section['category_detail']['layout'], array('section' => $section), TRUE));
+        if(!$this->session->userdata('member_id')){
+            foreach($home_content['section'] as $section){
+                array_push($layout_arr,$this->load->view('templates/home_layout/'.$section['category_detail']['layout'], array('section' => $section), TRUE));
+            }
         }
 
-	$data = array('title' => ' Shopping made easy | Easyshop.ph',
-	    'data' => $home_content,
-	    'sections' => $layout_arr,
-	    'category_navigation' => $this->load->view('templates/category_navigation',array('cat_items' =>  $this->getcat(),), TRUE ),
-	    'metadescription' => 'Enjoy the benefits of one-stop shopping at the comforts of your own home.',
-	);
+    	$data = array('title' => ' Shopping made easy | Easyshop.ph',
+    	    'data' => $home_content,
+    	    'sections' => $layout_arr,
+    	    'category_navigation' => $this->load->view('templates/category_navigation',array('cat_items' =>  $this->getcat(),), TRUE ),
+    	    'metadescription' => 'Enjoy the benefits of one-stop shopping at the comforts of your own home.',
+    	);
+
         $data = array_merge($data, $this->fill_header());
 		$this->load->view('templates/header', $data);
-        $this->load->view('pages/home_view', $data);
-        $this->load->view('templates/footer_full');
+		
+		if( $data['logged_in'] ){
+			$data = array_merge($data, $this->getFeed());
+			$this->load->view("templates/home_layout/layoutF",$data);
+		}else{
+			$this->load->view('pages/home_view', $data);
+		}
+        
+        
+		
+		$this->load->view('templates/footer_full');
 
     }
     
@@ -110,7 +123,7 @@ class Home extends MY_Controller {
                 );
         $data = array_merge($data, $this->fill_header());
         $this->load->view('templates/header', $data);
-    	$this->load->view('pages/web/how-to-buy');
+	$this->load->view('pages/web/how-to-buy');
     }
     
     public function guide_sell(){
@@ -119,17 +132,17 @@ class Home extends MY_Controller {
                 );
         $data = array_merge($data, $this->fill_header());
         $this->load->view('templates/header', $data);
-	    $this->load->view('pages/web/how-to-sell');
+	$this->load->view('pages/web/how-to-sell');
     }
 
 	function userprofile(){
 		$this->load->model('memberpage_model');
-		
+
 		$sellerslug = $this->uri->segment(1);
-		
+    
 		$session_data = $this->session->all_userdata();
 		$vendordetails = $this->memberpage_model->getVendorDetails($sellerslug);
-		
+    
 		if($vendordetails){
 			$data['title'] = 'Vendor Profile | Easyshop.ph';
 			$data['my_id'] = (empty($session_data['member_id']) ? 0 : $session_data['member_id']);
@@ -149,7 +162,7 @@ class Home extends MY_Controller {
                     'sold_count' => intval($user_product_count['sold']),
 					));
 			$data['allfeedbacks'] = $this->memberpage_model->getFeedback($sellerid);
-			
+
 			$data['hasStoreDesc'] = (string)$data['vendordetails']['store_desc'] !== '' ? true : false;
 			$data['product_count'] = count($data['products']);
 			$data['renderEdit'] = (int)$sellerid === (int)$data['my_id'] ? true : false;
@@ -161,7 +174,7 @@ class Home extends MY_Controller {
 			$this->load->view('pages/user/vendor_view', $data);
             $this->load->view('templates/footer');
 			
-		}
+}
 		else{
 			$data = array('title' => 'Page Not Found | Easyshop.ph',);
 			$data = array_merge($data, $this->fill_header());
@@ -171,7 +184,76 @@ class Home extends MY_Controller {
 		}
 	}
 
-    
+    public function getFeed()
+	{
+    	$perPage = $this->feeds_prodperpage;
+		$memberId = $this->session->userdata('member_id');
+		$easyshopId = trim($this->xmlmap->getFilenameID('page/content_files','easyshop-member-id'));
+		$partnersId = explode(',',trim($this->xmlmap->getFilenameID('page/content_files','partners-member-id')));
+		array_push($partnersId, $easyshopId);
+
+		$prodId = ($this->input->post('ids')) ? $this->input->post('ids') : 0; 
+
+		$data = array(
+			'featured_prod' => $this->product_model->getProductFeed($memberId,$partnersId,$prodId,$perPage),
+			'new_prod' => $this->product_model->getNewProducts($perPage),
+			'followed_users' => $this->product_model->getVendorSubscription($memberId)
+		);
+		
+		#Assemble featured product ID array for exclusion on LOAD MORE request
+		$fpID = array();
+		foreach( $data['featured_prod'] as $fp ){
+			if( !in_array($fp['id_product'],$fpID) ){
+				$fpID[] = $fp['id_product'];
+			}
+		}
+		$data['fpID'] = json_encode($fpID);
+		
+		return $data;
+	}
+	
+	public function getMoreFeeds()
+	{
+		if( $this->input->post("feed_page") && $this->input->post("feed_set") ){
+			$perPage = $this->feeds_prodperpage;
+			$memberId = $this->session->userdata('member_id');
+			
+			$page = $this->input->post("feed_page") * 10 - $perPage;
+			$productFeedSet = $this->input->post("feed_set");
+			
+			switch( (int)$productFeedSet ){
+				case 1: #Featured Tab
+					$easyshopId = trim($this->xmlmap->getFilenameID('page/content_files','easyshop-member-id'));
+					$partnersId = explode(',',trim($this->xmlmap->getFilenameID('page/content_files','partners-member-id')));
+					array_push($partnersId, $easyshopId);
+					$prodIdRaw = ($this->input->post('ids')) ? json_decode($this->input->post('ids')) : array(0); 
+					$prodId = implode(",",$prodIdRaw);
+					
+					$products = $this->product_model->getProductFeed($memberId,$partnersId,$prodId,$perPage,$page);
+					
+					#Assemble featured product ID array for exclusion on LOAD MORE request
+					$fpID = array();
+					foreach( $products as $fp ){
+						if( !in_array($fp['id_product'],$fpID) ){
+							$fpID[] = $fp['id_product'];
+						}
+					}
+					
+					$prodIDArray = array_merge($prodIdRaw,$fpID);
+					$data['fpID'] = json_encode($prodIDArray);
+					
+					break;
+				case 2: #New Products Tab
+					$products = $this->product_model->getNewProducts($perPage,$page);
+					break;
+			}
+			
+			$temp['products'] = $products;
+			$data['view'] = $this->load->view("templates/home_layout/layoutF_products",$temp,true);
+			
+			echo json_encode($data);
+		}
+	}
     
 
 }

@@ -15,5 +15,14 @@
     <select id="message-sender-id">
         11279
     </select>
-    
+
+    <select id="easyshop-member-id">
+        56
+    </select>
+
+    <select id="partners-member-id">
+        <!-- eg: if only 1 (1) -->
+        <!-- eg: if more than 1 (1,2,3,4,5) -->
+        57,74
+    </select>
 </map>
