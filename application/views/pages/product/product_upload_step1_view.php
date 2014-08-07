@@ -14,7 +14,7 @@
     echo form_close();
 ?>
 
-<div class="container"> 
+<div class="res_wrapper"> 
     <input type="hidden" id="edit_cat_tree" value='<?php echo isset($cat_tree_edit)? html_escape($cat_tree_edit):json_encode(array()); ?>'/>
 
     <div class="clear"></div>

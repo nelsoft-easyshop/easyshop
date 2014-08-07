@@ -8,7 +8,7 @@
 
 	<div class="clear"></div>
 
-	<div class="container seller_product_content">
+	<div class="res_wrapper seller_product_content">
 		<div class="inner_seller_product_content">
 			<h2 class="f24">Sell an Item</h2>
 			<div class="sell_steps sell_steps3"> 
@@ -87,10 +87,10 @@
 			<?php endif; ?>       
 		<?php endforeach; ?>
 
-		<div class="step3_header_title container">
+		<div class="step3_header_title res_wrapper">
 			<h2 class="f24">Optional</h2>
 		</div>
-		<div class="container">
+		<div class="res_wrapper">
 			<div class="paid_section_container table-bordered">
 				<div class="col-xs-12 bg-cl-e5e5e5">
 					<h4>How am I going to be paid</h3> 
@@ -219,13 +219,13 @@
 <?php echo form_open('sell/step4', array("id"=>"form_shipping"));?>
 	<input id="has_attr" name="has_attr" value="<?php echo $attr["has_attr"]?>" type="hidden">
 	
-<div class="container">
+<div class="res_wrapper">
 	<div class="step3_shipping_options table-bordered">
 		<div class="col-xs-12 bg-cl-e5e5e5">
 			<h4>How would you like to deliver your item</h3>
 		</div>
 		<div class="clear"></div>
-		<div class="row pd-top-20 pd-bottom-20">
+		<div class="pd-top-20 pd-bottom-20">
 			<div class="pd-8-12">
 				<div class="step3_shipping_option_meetup sh1 pd-bottom-20 pd-lr-10">
 					<span>
@@ -237,7 +237,7 @@
 				</div>
 				<div class="border-bottom-dotted"></div>
 				<div id="delivery_options" class="sh2" style="display: <?php echo $shipping_summary['is_delivery'] ? '' : 'none'?> ">
-					<div class="pd-tb-20 pd-lr-10">
+					<div class="pd-tb-20">
 						<div class="delivery_cost gbtn1 btn-block-2 <?php echo $shipping_summary['is_freeshipping'] ? 'active':''?>" id="set_free_shipping">Free Shipping
 						</div>
 						<div class="delivery_cost gbtn1 btn-block-2 <?php echo $shipping_summary['has_shippingsummary'] ? 'active':''?>" id="set_shipping_details">
@@ -271,17 +271,16 @@
 							</div>
 						</div>
 					
-						<div class="data_group dg_css bg-cl-f0f0f0 pd-13-12 mrgntop-10">
+						<div class="data_group dg_css bg-cl-f0f0f0 pd-top-20 mrgntop-10">
 							<?php foreach($shiparr['location'] as $price=>$locarr):?>
 							<div class="clear"></div>
-							<div class="shipping_input si_css pd-8-12 mrgin-bttm-8" data-sikey="<?php echo $siCounter;?>">
+							<div class="shipping_input si_css mrgin-bttm-8" data-sikey="<?php echo $siCounter;?>">
 								<div class="col-xs-4 col-sm-4 col-md-3">
 									<label for="price">Php</label>
 									<input type="text" class="shipprice form-control" name="shipprice[<?php echo $sgCounter?>][<?php echo $siCounter?>]" value="<?php echo html_escape($price);?>">
 								</div>
 								<div class="col-xs-6 col-sm-6 col-md-7 upload_chosen">
-									<label for="location">Select Location</label>  
-									<select class="shiploc form-control" name="shiploc[<?php echo $sgCounter?>][<?php echo $siCounter?>][]" multiple data-placeholder="Select location(s)">
+									<label for="location">Select Location</label><select class="shiploc form-control" name="shiploc[<?php echo $sgCounter?>][<?php echo $siCounter?>][]" multiple data-placeholder="Select location(s)">
 										<?php foreach($shiploc['area'] as $island=>$loc):?>
 											<option value="<?php echo $shiploc['islandkey'][$island];?>" <?php echo in_array($shiploc['islandkey'][$island],$locarr) ? 'selected':''?> <?php echo in_array($shiploc['islandkey'][$island],$shiparr['disable_lookup']) && !in_array($shiploc['islandkey'][$island],$locarr) ? 'disabled':''?>><?php echo $island;?></option>
 												<?php foreach($loc as $region=>$subloc):?>
@@ -308,7 +307,7 @@
 
 							<!-- Display Attribute Div List and advanced button if attributes were provided-->
 							<?php if((int)$attr['has_attr'] === 1):?>
-							<div class="shipping_attr sa_css">
+							<div class="shipping_attr sa_css pd-8-12">
 								<h5>Item Properties</h5>
 								<?php foreach($attr['attributes'] as $attrkey=>$temp):?>
 								<div class="attr_cont_css">
@@ -370,6 +369,7 @@
 					<?php endif;?>
 					
 				</div>
+				<div class="clear"></div>
 			</div>
 			<!--CLOSE id=SHIPPING DIV-->
 		</div>
@@ -378,7 +378,7 @@
 	<!-- CLOSE step3_shipping_options-->
 
 	<div style="margin-top: 3em;text-align:center;">
-		<input id="finish_step3" type="button" value="Finish" class="orange_btn3">
+		<input id="finish_step3" type="button" value="Finish" class="orange_btn3 width-20p">
 		<input type="hidden" id="prod_h_id" name="prod_h_id" value="<?php echo $product['id_product']?>">
 		<input type="hidden" id="billing_info_id" name="billing_info_id" value="<?php echo isset($first_accnt['id_billing_info'])?$first_accnt['id_billing_info']:'0'; ?>"/>
 		<input type="hidden" id="allow_cod" name="allow_cod" value="<?php echo (int)$product['is_cod'] === 1 ? 'on':'off'?>">

@@ -1,9 +1,8 @@
 <link type="text/css" href="<?=base_url()?>assets/css/sell_item.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet" />
-<link type="text/css" href="<?=base_url()?>assets/css/responsive_css.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet"  media="screen"/>
 <link rel="stylesheet" href="<?=base_url()?>assets/css/product_preview.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
 <link type="text/css" href="<?=base_url()?>assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet" />
-<div class="container">
-	<div class="seller_product_content row">
+<div class="res_wrapper">
+	<div class="seller_product_content">
 		<div class="inner_seller_product_content pd-bottom-20">
 			<h2 class="f24">Sell an Item</h2>
 				<div class="sell_steps sell_steps4">
@@ -154,7 +153,7 @@
 					<div class="clear"></div>
 					<section class="top_margin">
 					  <!-- <div class="prod_preview_bread_crumbs">
-						<div class="clear"></div>
+https://www.google.com.ph/webhp?tab=ww&authuser=0&ei=IgHjU7iSBJHIoAS05YGQDw&ved=0CBUQ1S4						<div class="clear"></div>
 						<div class="bread_crumbs">
 						  <ul>
 							<li class=""><a href="javascript:void(0);">Home</a></li>
@@ -167,8 +166,8 @@
 					  </div> -->
 					</section>
 					<section class="step4_prod_preview">
-						<div class="row">
-							<div class="col-md-4">
+						<div class="">
+							<div class="col-md-5">
 								<div id="product_content_gallery" class="step4_prod_cont_gal">
 									<div class="prod_con_gal"> <a class="jqzoom"  href="javascript:void"> <img src="<?=base_url()?><?php echo $product_images[0]['path']; ?>small/<?php echo $product_images[0]['file']; ?>"  title="product"> </a> </div>
 									<br/>
@@ -192,7 +191,7 @@
 							</div>
 					 
 						
-						<div class="col-md-8">
+						<div class="col-md-7">
 						<h4 class="id-class" id="<?php echo $product['id_product'];?>"> 
 						  <span id="pname"> <?php echo html_escape($product['product_name'])?> </span> 
 						  <!-- <span class="seller-name"> 
@@ -244,7 +243,7 @@
 						
 						
 			 
-						<div class="price_box col-sx-4 col-sm-4 col-md-4">
+						<div class="price_box col-xs-4 col-sm-4 col-md-4">
 						<div class="pbt pbt1">Price</div>
 							<div>PHP 
 								<span class="current_price fm1" data-baseprice="<?php echo $product['price']?>"> 
@@ -257,24 +256,26 @@
 						</div>
 						  
 						  
-						  <div class="availability col-sx-4 col-sm-4 col-md-4">
+						  <div class="availability col-xs-3 col-sm-3 col-md-3">
 							<p> Availability <br />
 								<span class="quantity" id="p_availability"><?php echo $availability;?></span>
 							</p>
 						  </div>
-						  <div class="buy_box col-sx-4 col-sm-4 col-md-4"> 
+						  <div class="buy_box col-xs-5 col-sm-5 col-md-5"> 
 							<!-- <a href="JavaScript:void(0)" id="send" class="fm1 preview_buy_btn disabled">Buy Now</a> <br/>
 							<span>Delivers in 5-8 business days*</span>  -->
+							<p class="product_content_payment"> <strong>Payment:</strong><br />
+							  <span class="mastercard"></span>
+							  <span class="visa"></span>
+							  <span class="paypal"></span>
+							</p>
 						  </div>
+						  <div class="clear"></div>
 						</div>
+						
 						<div class="clear"></div>
-						<p class="product_content_payment"> <strong>Payment:</strong><br />
-						  <span class="mastercard"></span>
-						  <span class="visa"></span>
-						  <span class="paypal"></span>
-						</p>
 					  </div>
-					  <div class="clear"></div>
+					  
 					  
 					  <div id="tabs" class="prod_previews_tabs">
 						<ul>

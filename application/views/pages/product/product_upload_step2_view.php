@@ -10,7 +10,7 @@
     var af = new Array();
 </script>
 <!--  END OF simple slider-->
-<div class="container">
+<div class="res_wrapper">
 
   <div class="clear"></div>
 
@@ -121,7 +121,7 @@
       <div class="product_upload_step2">
           <div class="border-all">
               <div class="upload_step2_title col-xs-12 bg-cl-e5e5e5">
-                  <h4>
+                  <h5>
                     Categories where your listing will appear 
                     <a class="tooltips" href="javascript:void(0)">
                         <img src="<?= base_url() ?>assets/images/icon_qmark.png" alt="">
@@ -129,7 +129,7 @@
                             Your item will be listed under this EasyShop category
                         </span>
                     </a> 
-                  </h4> 
+                  </h5> 
               </div>
               <div class="clear"></div>
               <div class="pd-8-12">
@@ -142,9 +142,9 @@
           </div>
           <div class="border-all mrgn-top-20">
               <div class="upload_step2_title pd-8-12">
-                  <h4>Describe your item <strong class="required">(*) required fields</strong> </h4> 
+                  <h5>Describe your item <span class="required">(*) required fields</span> </h5> 
               </div>
-              <div class="pd-8-12">
+              <div class="pd-8-12 row">
                   <!-- Title of the product -->
                   <div class="col-sx-12 col-sm-2 col-md-2">
                       Product Name: <font color="red">*</font>
@@ -162,8 +162,7 @@
               </div>
              
               <!-- Start Condition of the product -->
-              <div class="pd-8-12">
-                  
+              <div class="pd-8-12 row">                  
                       <div class="col-sx-12 col-sm-2 col-md-2">
                           Condition: <font color="red">*</font>
                       </div>
@@ -190,7 +189,7 @@
           <!-- Upload Image Content -->
           <div class="border-all mrgn-top-20">
               <div class="upload_step2_title col-xs-12 bg-cl-e5e5e5"> 
-                  <h4>
+                  <h5>
                     Add Photos
                     <span class="required">You are required to have a minimum of 1 photo</span>
                     <a class="tooltips" href="javascript:void(0)">
@@ -199,7 +198,7 @@
                             Upload images for your listing. We recommend that you keep the image resolution within <?php echo $img_max_dimension[0].'x'.$img_max_dimension[1]; ?> for best quality of your images
                         </span>
                     </a>
-                  </h4>
+                  </h5>
               </div>
               <div class="clear"></div>
               <div class="pd-8-12 display-ib">
@@ -242,24 +241,24 @@
 
           <div class="border-all mrgn-top-20">
               <div class="upload_step2_title col-xs-12 bg-cl-e5e5e5">
-                  <h4>
+                  <h5>
                     Add a description
-                    <strong class="required">(*) required fields</strong> 
-                  </h4>
+                    <span class="required">(*) required fields</span> 
+                  </h5>
               </div>
               <div class="clear"></div>
-              <div class="pd-8-12">
+              <div class="pd-8-12 row">
                   <!-- Main Description of the product --> 
-                  <div class="display-ib width-15p-10min vrtcl-top pd-tb-8">
+                  <div class="col-sx-12 col-sm-2 col-md-2">
                       Product Details: <font color="red">*</font>
                   </div>
-                  <div class="display-ib width-100p-84max">
+                  <div class="col-sx-12 col-sm-10 col-md-10">
                       <textarea style="width: 100%;height:100%" name="prod_description" class="mceEditor"  id="prod_description" placeholder="Enter description..."><?php echo (isset($product_details['description']))?$product_details['description']:'';?></textarea>
                   </div>
                   <!-- end of Description -->
               </div>
 
-              <div class="pd-8-12">
+              <div class="pd-8-12 row">
                   <!-- Price of the product -->
                   <div class="col-sx-12 col-sm-2 col-md-2"> Base Price: <font color="red"> *</font></div>
                   <div class="col-sx-12 col-sm-10 col-md-10">
@@ -290,7 +289,7 @@
               </div>
 
               <!-- start of keywords -->
-              <div class="pd-8-12">
+              <div class="pd-8-12 row">
                   <div class="col-sx-12 col-sm-2 col-md-2">Additional Keywords
                       <br>
                       <span class="f11">(Seperated by spaces.)</span>
@@ -319,20 +318,20 @@
 
                       <!-- Start hide of more product details -->
                       <div class="col-sx-12 bg-cl-e5e5e5">
-                          <h4 class="pd-8-12">Add item specifics 
-                            <small>
-                              <a id="tutSpec" class="tooltips" href="javascript:void(0)" style='text-decoration:underline'>
+                          <h5 class="pd-8-12">Add item specifics 
+                            
+                              <a id="tutSpec" class="tooltips" href="javascript:void(0)">
                                  <img src="<?= base_url() ?>assets/images/icon_qmark.png" alt="">  
                                  What's this?
                                  <span>Click here to read more. Your progress will not be lost. </span>
                               </a>
-                            </small>
-                          </h4>
+                            
+                          </h5>
                       </div>
                       <div class="pd-8-12">
                       <!-- Add item specifics -->
 
-                          <div class="pd-tb-8">
+                          <div class="pd-tb-8 row">
                               <!-- Brief of the product -->
                               <div class="col-sx-12 col-sm-2 col-md-2">Brief description:</div>
                               <div class="col-sx-12 col-sm-10 col-md-10">
@@ -345,7 +344,7 @@
                               <div class="clear"></div>
                           </div>
                           <!-- start of brand -->
-                          <div class="pd-tb-8">
+                          <div class="pd-tb-8 row">
                               <div class="col-sx-12 col-sm-2 col-md-2">Brand:</div> 
                               <div class="col-sx-12 col-sm-10 col-md-10">
                                   <input type = "hidden" id="prod_brand" name="prod_brand" value="<?php echo isset($product_details['brand_id'])?$product_details['brand_id']:0?>"/>
@@ -357,7 +356,7 @@
                           </div>
                           <!-- end of brand -->
                           <!-- start of sku code -->
-                          <div class="pd-tb-8">
+                          <div class="pd-tb-8 row">
                               <div class="col-sx-12 col-sm-2 col-md-2">SKU Code: </div> <!-- SKU of the product -->
                               <div class="col-sx-12 col-sm-10 col-md-10">
                                   <input class="width-30p-245min ui-form-control" type="text" autocomplete="off"  maxlength="45" placeholder="Enter SKU" id="prod_sku" name="prod_sku" value="<?php echo (isset($product_details['sku']))?$product_details['sku']:'';?>">
@@ -372,16 +371,16 @@
 
                       <!-- Start hide of more product details -->
                       <div class="col-sx-12 bg-cl-e5e5e5">
-                          <h4 class="pd-8-12">
+                          <h5 class="pd-8-12">
                             Quantity
-                            <small>
-                              <a id="tutSpec" class="tooltips" href="javascript:void(0)" style='text-decoration:underline'>
+                            
+                              <a id="tutSpec" class="tooltips" href="javascript:void(0)">
                                  <img src="<?= base_url() ?>assets/images/icon_qmark.png" alt="">  
                                  What's this?
                                  <span>Click here to read more. Your progress will not be lost. </span>
                               </a>
-                            </small>
-                          </h4>
+                            
+                          </h5>
                       </div>
                       <div class="row pd-8-12 quantity-panel">
                       <!-- Add item specifics -->
@@ -400,7 +399,7 @@
                           <div class="control-panel-container col-sx-12 col-sm-7 col-md-7">
                             <p>Item Property Value:</p>
                               <div class="control-panel">
-                                  <div class="control-panel-1 ctrl">
+                                  <div class="control-panel-1 ctrl row">
                                       <div class="display-ib width-100p-40max"></div>
                                       <div class="value-section col-sx-12 col-sm-6 col-md-6 pd-bttm-10">
                                           <div class="select-value-section">
@@ -429,56 +428,56 @@
                           </div>
                           <div class="col-sx-12 col-sm-2 col-md-2 text-center">
                               <p>Actions:</p>
-                              <div class="display-ib width-100p-40max">
-                                  <input type="button" class="add-property orange_btn3" value="Add Property" />
+                              <div class="">
+                                  <input type="button" class="add-property orange_btn3 width-80p mrgin-bttm-10" value="Add Property" />
                               </div>
                           </div>
 
                       </div>
                       <div class="pd-8-12">
                             <div class="row pd-8-12 choosen-combination-div">
-                                <div class="col-xs-2 col-sm-2 col-md-2 div1 bg-cl-e5e5e5">
+                                <div class="col-xs-1 col-sm-1 col-md-1 div1 bg-cl-e5e5e5">
                                   <h5>Quantity</h5>
                                 </div>
-                                <div class="col-xs-8 col-sm-8 col-md-8 div2 bg-cl-e5e5e5">
+                                <div class="col-xs-9 col-sm-9 col-md-9 div2 bg-cl-e5e5e5">
                                   <h5>Item Property</h5>
                                 </div>
                                 <div class="col-xs-2 col-sm-2 col-md-2 div3 bg-cl-e5e5e5 text-center">
                                   <h5>Actions</h5>
                                 </div> 
                             </div>
-                            <div class="pd-8-12 list-choosen-combination-div">
+                            <div class="list-choosen-combination-div">
                                 <?php $cmbcounter = 1; ?>
                                 <?php if(isset($eachAttribute) && count($eachAttribute) > 0):?>
                                     <?php if(isset($noCombination)): ?>
                                     <div class="div-combination combinationAll">
-                                        <div class="col-xs-2 col-sm-2 col-md-2 div1">
-                                            <input type="text" value="<?=$noCombinationQuantity;?>" size="3" class="qty" onkeypress="return isNumberKey(event)">
+                                        <div class="col-xs-1 col-sm-1 col-md-1 div1">
+                                            <input type="text" value="<?=$noCombinationQuantity;?>" size="3" class="qty ui-form-control" onkeypress="return isNumberKey(event)">
                                         </div>
-                                        <div class="col-xs-8 col-sm-8 col-md-8 div2">
+                                        <div class="col-xs-9 col-sm-9 col-md-9 div2">
                                             <?php foreach ($eachAttribute as $key => $value): ?>
                                             <span class="spanSelect<?=strtolower($key)?>">
-                                                <select id="<?=strtolower($key)?>" class="selection width-30p" data-id="<?=strtolower($key)?>">
+                                                <select id="<?=strtolower($key)?>" class="selection ui-form-control width-30p" data-id="<?=strtolower($key)?>">
                                                     <option>All Combination</option>
                                                 </select>
                                             </span>
                                             <?php endforeach;?> 
                                         </div>
                                         <div class="col-xs-2 col-sm-2 col-md-2 div3 text-center">
-                                            <input type="button" value="Remove" data-cmbcnt="All" class="remove-combination btn btn-danger">
+                                            <input type="button" value="Remove" data-cmbcnt="All" class="remove-combination btn btn-danger width-70p">
                                         </div>
                                     </div>
                                     <?php else: ?>
                                         
                                         <?php foreach ($itemQuantity as $keyq => $valueq): ?>
-                                            <div class="div-combination combination<?=$cmbcounter;?>">
-                                                <div class="col-xs-2 col-sm-2 col-md-2 div1">
-                                                    <input type="text"  size="3" value="<?=$valueq['quantity']; ?>" class="qty"  onkeypress="return isNumberKey(event)">
+                                            <div class="mrgin-bttm-10 div-combination combination<?=$cmbcounter;?>">
+                                                <div class="col-xs-1 col-sm-1 col-md-1 div1">
+                                                    <input type="text"  size="3" value="<?=$valueq['quantity']; ?>" class="qty ui-form-control"  onkeypress="return isNumberKey(event)">
                                                 </div>
-                                                <div class="col-xs-8 col-sm-8 col-md-8 div2">
+                                                <div class="col-xs-9 col-sm-9 col-md-9 div2">
                                                     <?php foreach ($eachAttribute as $key => $value): ?>
                                                     <span class="spanSelect<?=strtolower($key)?>">
-                                                        <select id="<?=strtolower($key)?>" class="selection width-30p" data-id="<?=strtolower($key)?>">
+                                                        <select id="<?=strtolower($key)?>" class="selection ui-form-control width-30p" data-id="<?=strtolower($key)?>">
                                                            <?php foreach ($value as $key2 => $value2): ?>
                                                               <option data-image="<?=$value2['img_path']?>" <?php echo ($valueq['data'][$key] == $value2['value_name']) ? 'selected' : ''; ?>  data-price="<?=$value2['value_price']?>" data-head="<?=$key?>" data-value="<?=$value2['value_name']?>"><?=$value2['value_name'] . ' - '.$value2['value_price']; ?></option>
                                                            <?php endforeach; ?>
@@ -490,7 +489,7 @@
                                                     <?php endforeach;?> 
                                                 </div>
                                                 <div class="col-xs-2 col-sm-2 col-md-2 div3 text-center">
-                                                    <input type="button" value="Remove" data-cmbcnt="<?=$cmbcounter;?>" class="remove-combination btn btn-danger ">
+                                                    <input type="button" value="Remove" data-cmbcnt="<?=$cmbcounter;?>" class="remove-combination btn btn-danger width-70p">
                                                 </div>
                                                 <div class="clear"></div>
                                             </div>
@@ -500,16 +499,16 @@
                                 <?php endif; ?>
 
                             </div>
-                            <div class="container-select-control-panel-option clear">
-                                <div class="pd-8-12 select-control-panel-option">
-                                    <div class="col-xs-2 col-sm-2 col-md-2 div1">
-                                        <input type="text" name="allQuantity" value="<?=(isset($noCombinationQuantity))?$noCombinationQuantity:'1'; ?>" size="3"  onkeypress="return isNumberKey(event)" class="qty">
+                            <div class="container-select-control-panel-option clear bg-color">
+                                <div class="select-control-panel-option">
+                                    <div class="col-xs-1 col-sm-1 col-md-1 div1">
+                                        <input type="text" name="allQuantity" value="<?=(isset($noCombinationQuantity))?$noCombinationQuantity:'1'; ?>" size="3"  onkeypress="return isNumberKey(event)" class="qty ui-form-control">
                                     </div>           
-                                    <div class="col-xs-8 col-sm-8 col-md-8 div2">
+                                    <div class="col-xs-9 col-sm-9 col-md-9 div2">
                                         <?php if(isset($eachAttribute) && count($eachAttribute) > 0):?> 
                                             <?php foreach ($eachAttribute as $key => $value): ?>
                                                 <span class="spanSelect<?=strtolower($key)?>">
-                                                    <select id="<?=strtolower($key)?>" class="selection width-30p" data-id="<?=strtolower($key)?>">
+                                                    <select id="<?=strtolower($key)?>" class="selection ui-form-control width-30p" data-id="<?=strtolower($key)?>">
                                                         <?php foreach ($value as $key2 => $value2): ?>
                                                             <option data-image="<?=$value2['img_path']?>" data-price="<?=$value2['value_price']?>" data-head="<?=$key?>" data-value="<?=$value2['value_name']?>"><?=$value2['value_name'] . ' - '.$value2['value_price']; ?></option>
                                                         <?php endforeach; ?>
@@ -522,7 +521,7 @@
                                     </div>              
                                     <div class="col-xs-2 col-sm-2 col-md-2 div3 text-center">
                                         <?php if(isset($eachAttribute)):?> 
-                                            <input class="select-combination orange_btn3" type="button" value="Add">
+                                            <input class="select-combination orange_btn3 width-70p" type="button" value="Add">
                                         <?php endif; ?>
                                     </div>
                                 </div>
