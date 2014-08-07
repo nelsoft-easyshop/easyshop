@@ -197,7 +197,11 @@ class Home extends MY_Controller {
 		$data = array(
 			'featured_prod' => $this->product_model->getProductFeed($memberId,$partnersId,$prodId,$perPage),
 			'new_prod' => $this->product_model->getNewProducts($perPage),
-			'followed_users' => $this->product_model->getVendorSubscription($memberId)
+			'followed_users' => $this->product_model->getVendorSubscription($memberId),
+			'banners' => $this->product_model->getStaticBannerFeed(),
+			'promo_items' => $this->product_model->getStaticProductFeed('promo'),
+			'popular_items' => $this->product_model->getStaticProductFeed('popular'),
+			'featured_product' => $this->product_model->getStaticFeaturedProduct()
 		);
 		
 		#Assemble featured product ID array for exclusion on LOAD MORE request

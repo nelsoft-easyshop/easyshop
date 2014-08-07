@@ -25,4 +25,45 @@
         <!-- eg: if more than 1 (1,2,3,4,5) -->
         57,74
     </select>
+	
+	<feedBanner>
+		<left>assets/user/default/banner.png</left>
+		<mid>assets/user/default/banner.png</mid>
+		<right>assets/user/default/banner.png</right>
+	</feedBanner>
+	
+	<feedFeaturedProduct>
+		<image>assets/product/default/categoryview/default_product_img.jpg</image>
+		<name>Nikon x500</name>
+		<desc>Camera with lorem ipsum categories</desc>
+		<price>3,222.99</price>
+		<condition>New</condition>
+		<slug>nikon-x500</slug>
+	</feedFeaturedProduct>
+	
+	<feedPopularItems>
+		<product>
+			<image>assets/product/default/thumbnail/default_product_img.jpg</image>
+			<name>Spicy Banana</name>
+			<price>1,223.00</price>
+		</product>
+		<product>
+			<image>assets/product/default/thumbnail/default_product_img.jpg</image>
+			<name>Spicy Banana</name>
+			<price>1,223.00</price>
+		</product>
+	</feedPopularItems>
+	
+	<feedPromoItems>
+		<product>
+			<image>assets/product/default/thumbnail/default_product_img.jpg</image>
+			<name>Spicy Banana</name>
+			<price>1,223.00</price>
+		</product>
+		<product>
+			<image>assets/product/default/thumbnail/default_product_img.jpg</image>
+			<name>Spicy Banana</name>
+			<price>1,223.00</price>
+		</product>
+	</feedPromoItems>
 </map>

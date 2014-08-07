@@ -51,7 +51,7 @@
 		</div>
 		<div class="row mrgin-bttm-8">
 			<div class="col-md-12 ">
-				<img class="img-responsive" src="<?=base_url()?>assets/user/default/banner.png">
+				<img class="img-responsive" src="<?=base_url()?><?php echo $banners['left']?>">
 			</div>
 		</div>
 	</div>
@@ -60,7 +60,7 @@
 	<div class="col-md-6 ">
 		<div class="row mrgin-bttm-8">
 			<div class="col-md-12 ">
-				<img class="img-responsive" src="<?=base_url()?>assets/user/default/banner.png">
+				<img class="img-responsive" src="<?=base_url()?><?php echo $banners['mid']?>">
 			</div>
 		</div>
 		<div class="row mrgin-bttm-8">
@@ -78,21 +78,21 @@
 				</div>
 				<div class="media table-bordered mrgin-bttm-8 product feature">
 					<div class="col-md-10 col-sm-10 media-sub media-content">
-						<a class="pull-left" href="#">
-							<img class="media-object" src="<?=base_url()?>assets/product/default/categoryview/default_product_img.jpg">
+						<a class="pull-left" target="_blank" href="<?php echo base_url() . "item/" . $featured_product['slug']?>">
+							<img class="media-object" src="<?=base_url()?><?php echo $featured_product['image']?>">
 						</a>
 						<div class="media-body">
 							<div class="content">
-								<h5 class="title">SALKSJDLKASD</h5>
-								The following two divs contains a long text that will not fit in the box. As you can see, the text is clipped
+								<h5 class="title"><?php echo $featured_product['name']?></h5>
+								<?php echo $featured_product['desc']?>
 							</div>
-							<div class="condition">Condition: NEW</div>
+							<div class="condition">Condition: <?php echo $featured_product['condition']?></div>
 						</div>
 					</div>
 					<div class="col-md-2 col-sm-2 media-sub media-btn-panel">
 						<p>Php</p>
-						<p class="feed-price">531,000.00</p>
-						<div class="orange-btn">Buy Now</div>
+						<p class="feed-price"><?php echo $featured_product['price']?></p>
+						<div class="orange-btn"><a target="_blank" href="<?php echo base_url() . "item/" . $featured_product['slug']?>">Buy Now</a></div>
 					</div>
 				</div>
 				<div id="featured_prod" class="row feed-prod-cont" style="display:block;">
@@ -184,42 +184,17 @@
 						<div class="col-md-12 ">
 							<div class="row ">
 								<div class="col-md-12 ">
+									<?php foreach($popular_items as $p):?>
 									<div class="media pd-8-12 ">
 										<a class="pull-left" href="#">
-											<img class="media-object" src="<?=base_url()?>assets/user/default/60x60.png">
+											<img class="media-object" src="<?=base_url()?><?php echo $p['image']?>">
 										</a>
 										<div class="media-body">
-											<h5 class="title">Walking Shoes</h5>
-											P 450.00
+											<h5 class="title"><?php echo html_escape($p['name'])?></h5>
+											Php <?php echo html_escape($p['price'])?>
 										</div>
 									</div>
-									<div class="media pd-8-12 ">
-										<a class="pull-left" href="#">
-											<img class="media-object" src="<?=base_url()?>assets/user/default/60x60.png">
-										</a>
-										<div class="media-body">
-											<h5 class="title">Sexy Grinder</h5>
-											P 250.00
-										</div>
-									</div>
-									<div class="media pd-8-12 ">
-										<a class="pull-left" href="#">
-											<img class="media-object" src="<?=base_url()?>assets/user/default/60x60.png">
-										</a>
-										<div class="media-body">
-											<h5 class="title">Transparent Undies</h5>
-											P 150.00
-										</div>
-									</div>
-									<div class="media pd-8-12 ">
-										<a class="pull-left" href="#">
-											<img class="media-object" src="<?=base_url()?>assets/user/default/60x60.png">
-										</a>
-										<div class="media-body">
-											<h5 class="title">Expired Milk</h5>
-											P 2,550.00
-										</div>
-									</div>
+									<?php endforeach;?>
 								</div>
 							</div>
 						</div>
@@ -229,7 +204,7 @@
 		</div>
 		<div class="row mrgin-bttm-8">
 			<div class="col-md-12 ">
-				<img class="img-responsive" src="<?=base_url()?>assets/user/default/banner.png">
+				<img class="img-responsive" src="<?=base_url()?><?php echo $banners['right']?>">
 			</div>
 		</div>
 		<div class="row mrgin-bttm-8">
@@ -244,42 +219,17 @@
 						<div class="col-md-12 ">
 							<div class="row ">
 								<div class="col-md-12 ">
+									<?php foreach($promo_items as $p):?>
 									<div class="media pd-8-12 ">
 										<a class="pull-left" href="#">
-											<img class="media-object" src="<?=base_url()?>assets/user/default/60x60.png">
+											<img class="media-object" src="<?=base_url()?><?php echo $p['image']?>">
 										</a>
 										<div class="media-body">
-											<h5 class="title">Walking Shoes</h5>
-											P 450.00
+											<h5 class="title"><?php echo html_escape($p['name'])?></h5>
+											Php <?php echo html_escape($p['price'])?>
 										</div>
 									</div>
-									<div class="media pd-8-12 ">
-										<a class="pull-left" href="#">
-											<img class="media-object" src="<?=base_url()?>assets/user/default/60x60.png">
-										</a>
-										<div class="media-body">
-											<h5 class="title">Sexy Grinder</h5>
-											P 250.00
-										</div>
-									</div>
-									<div class="media pd-8-12 ">
-										<a class="pull-left" href="#">
-											<img class="media-object" src="<?=base_url()?>assets/user/default/60x60.png">
-										</a>
-										<div class="media-body">
-											<h5 class="title">Transparent Undies</h5>
-											P 150.00
-										</div>
-									</div>
-									<div class="media pd-8-12 ">
-										<a class="pull-left" href="#">
-											<img class="media-object" src="<?=base_url()?>assets/user/default/60x60.png">
-										</a>
-										<div class="media-body">
-											<h5 class="title">Expired Milk</h5>
-											P 2,550.00
-										</div>
-									</div>
+									<?php endforeach;?>
 								</div>
 							</div>
 						</div>

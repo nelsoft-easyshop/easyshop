@@ -2532,4 +2532,40 @@ class product_model extends CI_Model
 		
 		return $row;
 	}
+	
+	public function getStaticProductFeed($string)
+	{
+		switch($string){
+			case "popular":
+				$node = "feedPopularItems";
+				break;
+			case "promo":
+				$node = "feedPromoItems";
+				break;
+		}
+		
+		$products = $this->xmlmap->getFilenameNode('page/content_files', $node);
+		$data = array();
+		foreach( $products as $p ){
+			$data[] = json_decode(json_encode($p),true);
+		}
+		
+		return $data;
+	}
+	
+	public function getStaticBannerFeed()
+	{
+		$banner = $this->xmlmap->getFilenameNode('page/content_files', 'feedBanner');
+		$b = json_decode(json_encode($banner),true);
+		
+		return $b;
+	}
+	
+	public function getStaticFeaturedProduct()
+	{
+		$product = $this->xmlmap->getFilenameNode('page/content_files', 'feedFeaturedProduct');
+		$p = json_decode(json_encode($product),true);
+		
+		return $p;
+	}
 }
