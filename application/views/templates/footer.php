@@ -1,5 +1,5 @@
 	<footer>
-		  <div class="wrapper container">
+		  <div class="res_wrapper container">
             
 			<div class="copyright">
             <p style='font-weight:bold'>This page is best viewed with one of these browsers:

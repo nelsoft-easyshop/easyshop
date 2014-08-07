@@ -1,5 +1,5 @@
 <footer>
-      <div class="container footer_panel wrapper">
+      <div class="res_wrapper footer_panel res_wrapper">
         <div class="social_media col-xs-12 col-sm-4 col-md-4 pd-bttm-10">
           
             <h5>Stay in Touch</h5>
@@ -41,7 +41,7 @@
           </div>  
       </div>
       <div class="clear"></div>
-      <div class="container footer_panel about_us_panel">
+      <div class="res_wrapper footer_panel about_us_panel">
           <p><strong class="orange f16">WE ARE SHOPPING MADE EASY!</strong></p>
           <p>
             From the latest trends in fashion, gadgets and accessories to whatever you need to make life EASY, EASYSHOP.PH is here to give you the widest range of choices at very competitive prices!
@@ -50,7 +50,7 @@
             Soon to be the leading online shopping website in South East Asia, EasyShop.ph gives you an online shopping experience that is <strong>FAST, SAFE, EASY and CONVENIENT!</strong> EasyShop.ph is a partner of Nelsoft Technology, Inc. and PoziHongkong Technology Ltd. Co.
           </p>
           <p>
-            <strong>EASYSHOP.PH</strong> gives you the widest range of options available in the market. It’s a place where Online Buyers and Sellers converge, while letting you enjoy the benefits of one-stop shopping in the comfort of your home.
+            <strong>EASYSHOP.PH</strong> gives you the widest range of options available in the market. It's a place where Online Buyers and Sellers converge, while letting you enjoy the benefits of one-stop shopping in the comfort of your home.
           </p>
           <p>
             <strong>EASYSHOP.PH</strong> also provides you with up-to-date information from Online Sellers giving you a clear picture of the items you are eyeing, thus helping you make the right purchasing decision!

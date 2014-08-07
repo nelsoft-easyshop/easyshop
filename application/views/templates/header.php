@@ -31,35 +31,16 @@
 </title>
 
 
-<script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-  ga('create', 'UA-48811886-1', 'easyshop.ph');
-  ga('send', 'pageview');
-</script>
-<!-- End of Google Analytics -->
- 
- <a href="https://plus.google.com/108994197867506780841" rel="publisher"></a>
  
  
 </head>
 <body>
 
-<!-- Google Tag Manager -->
- <noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-KP5F8R"
- height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
- <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
- new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
- j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
- '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
- })(window,document,'script','dataLayer','GTM-KP5F8R');</script>
- <!-- End Google Tag Manager -->
+
  
 <header>
-    <div class="container res_wrapper pos-rel">
+    <div class="res_wrapper pos-rel">
       <div class="top_links_left pd-right-20">
         <div class="top_nav">
           <ul class="ul-li-fl-left">      
@@ -270,7 +251,7 @@ $('#main_search').on('input propertychange', function() {
             $(this).toggleClass("arrow-switch");
         });
 
-        $('.need_help_icons_con').show();
+        $('.need_help_icons_con').hide();
         
         // Hide Need help how to sell and how to buy when click outside the container
       //   $(document).on('click','.txt_need_help',function() {
