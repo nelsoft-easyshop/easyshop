@@ -386,7 +386,7 @@ input[type="button"] {
 }
 
 .up_arrow {
-	background-position: -866px -317px;
+	background-position: -866px -333px;
     height: 12px;
     width: 25px;
 }
@@ -840,7 +840,7 @@ a.msgs_link:hover {
 }
 
 .arrow-switch .up_arrow {
-	background-position: -866px -333px;
+	background-position: -866px -317px;
 }
 
 .icon_help {

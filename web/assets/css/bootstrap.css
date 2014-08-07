@@ -335,7 +335,8 @@ th {
 .glyphicon-ok:before {
   content: "\e013";
 }
-.glyphicon-remove:before {
+.glyphicon-remove:before,
+.search-choice-close:before {
   content: "\e014";
 }
 .glyphicon-zoom-in:before {
@@ -918,11 +919,11 @@ a:focus {
   color: #2a6496;
   text-decoration: underline;
 }
-a:focus {
+/*a:focus {
   outline: thin dotted;
   outline: 5px auto -webkit-focus-ring-color;
   outline-offset: -2px;
-}
+}*/
 figure {
   margin: 0;
 }
@@ -6201,3 +6202,106 @@ button.close {
   }
 }
 /*# sourceMappingURL=bootstrap.css.map */
+
+/*** fixed in upload products ***/
+/*.wrapper.container {
+  width: auto !important;
+}
+.container.res_wrapper {
+  max-width: inherit !important;
+}*/
+
+.res_wrapper .top_nav ul li a,
+.res_wrapper .top_links_right a {
+  font-size: 1em;
+}
+
+.simplemodal-wrap {
+  overflow: inherit !important;
+}
+
+#simplemodal-data h3 {
+  font-size: 1.5em;
+  font-weight: bold;
+}
+
+.draft_items_container {
+  font-size: 1.2em;
+}
+
+.tooltips {
+  text-decoration: none;
+}
+
+.tooltips span {
+  font-size: 0.85em;
+}
+
+a.tooltips span {
+    line-height: 20px;
+}
+
+.required {
+  font-size: 0.85em;
+}
+
+.ui-dialog-title {
+  width: 245px !important;
+}
+
+.alert.ui-dialog-content.ui-widget-content {
+    color: #f00;
+}
+
+.price_details {
+  border-top: 1px solid #DBD8D7;
+  border-bottom: 1px solid #DBD8D7;
+  margin-bottom: 30px;
+}
+
+.step4_prod_preview .price_box, 
+.step4_prod_preview .availability, 
+.step4_prod_preview .buy_box {
+  float: left;
+  text-align: center;
+  margin: 10px 0;
+}
+
+.step4_prod_preview .buy_box {
+    padding: 1px;
+}
+
+.prod_con_gal {
+    border:1px solid #cecece;
+    display: inline-block;
+    margin: 0 auto 20px;
+    max-height: 400px;
+    overflow: hidden;
+    text-align: center;
+    vertical-align: middle;
+    width: 100%;
+} 
+
+.prod_con_gal a {
+    display: table-cell;
+    height: 400px;
+    width: 400px;
+    vertical-align: middle;
+    text-align: center;
+}
+
+.step4_prod_preview .id-class {
+    height: 50px;
+    line-height: 50px;
+}
+
+.step4_prod_preview .product_option_preview {
+  margin-top: 30px;
+  padding-bottom: 30px;
+}
+
+@media only screen and (max-width : 62em) { /*** 992px ***/
+  .prod_con_gal {
+    max-width: 400px;
+  }
+}
