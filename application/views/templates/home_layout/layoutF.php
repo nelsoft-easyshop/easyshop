@@ -76,25 +76,27 @@
 						</div>
 					</div>
 				</div>
+				<?php foreach($featured_product as $p):?>
 				<div class="media table-bordered mrgin-bttm-8 product feature">
 					<div class="col-md-10 col-sm-10 media-sub media-content">
-						<a class="pull-left" target="_blank" href="<?php echo base_url() . "item/" . $featured_product['slug']?>">
-							<img class="media-object" src="<?=base_url()?><?php echo $featured_product['image']?>">
+						<a class="pull-left" target="_blank" href="<?php echo base_url() . "item/" . $p['slug']?>">
+							<img class="media-object" src="<?=base_url()?><?php echo $p['path'] . "categoryview/" . $p['file']?>">
 						</a>
 						<div class="media-body">
 							<div class="content">
-								<h5 class="title"><?php echo $featured_product['name']?></h5>
-								<?php echo $featured_product['desc']?>
+								<h5 class="title"><a target="_blank" href="<?php echo base_url() . "item/" . $p['slug']?>"><?php echo $p['product_name']?></a></h5>
+								<?php echo $p['brief']?>
 							</div>
-							<div class="condition">Condition: <?php echo $featured_product['condition']?></div>
+							<div class="condition">Condition: <?php echo $p['condition']?></div>
 						</div>
 					</div>
 					<div class="col-md-2 col-sm-2 media-sub media-btn-panel">
 						<p>Php</p>
-						<p class="feed-price"><?php echo $featured_product['price']?></p>
-						<div class="orange-btn"><a target="_blank" href="<?php echo base_url() . "item/" . $featured_product['slug']?>">Buy Now</a></div>
+						<p class="feed-price"><?php echo html_escape(number_format($p['original_price'], 2, '.', ','))?></p>
+						<div class="orange-btn"><a target="_blank" href="<?php echo base_url() . "item/" . $p['slug']?>">Buy Now</a></div>
 					</div>
 				</div>
+				<?php endforeach;?>
 				<div id="featured_prod" class="row feed-prod-cont" style="display:block;">
 					<div class="col-md-12 ">
 						<?php foreach( $featured_prod as $prod ):?>
@@ -186,12 +188,12 @@
 								<div class="col-md-12 ">
 									<?php foreach($popular_items as $p):?>
 									<div class="media pd-8-12 ">
-										<a class="pull-left" href="#">
-											<img class="media-object" src="<?=base_url()?><?php echo $p['image']?>">
+										<a class="pull-left" target="_blank" href="<?php echo base_url() . "item/" . $p['slug']?>">
+											<img class="media-object" src="<?=base_url()?><?php echo $p['path'] . "thumbnail/" . $p['file']?>">
 										</a>
 										<div class="media-body">
-											<h5 class="title"><?php echo html_escape($p['name'])?></h5>
-											Php <?php echo html_escape($p['price'])?>
+											<h5 class="title"><a target="_blank" href="<?php echo base_url() . "item/" . $p['slug']?>"><?php echo html_escape($p['product_name'])?></a></h5>
+											Php <?php echo html_escape(number_format($p['original_price'], 2, '.', ','))?>
 										</div>
 									</div>
 									<?php endforeach;?>
@@ -221,12 +223,12 @@
 								<div class="col-md-12 ">
 									<?php foreach($promo_items as $p):?>
 									<div class="media pd-8-12 ">
-										<a class="pull-left" href="#">
-											<img class="media-object" src="<?=base_url()?><?php echo $p['image']?>">
+										<a class="pull-left" target="_blank" href="<?php echo base_url() . "item/" . $p['slug']?>">
+											<img class="media-object" src="<?=base_url()?><?php echo $p['path'] . "thumbnail/" . $p['file']?>">
 										</a>
 										<div class="media-body">
-											<h5 class="title"><?php echo html_escape($p['name'])?></h5>
-											Php <?php echo html_escape($p['price'])?>
+											<h5 class="title"><a target="_blank" href="<?php echo base_url() . "item/" . $p['slug']?>"><?php echo html_escape($p['product_name'])?></a></h5>
+											Php <?php echo html_escape(number_format($p['original_price'], 2, '.', ','))?>
 										</div>
 									</div>
 									<?php endforeach;?>

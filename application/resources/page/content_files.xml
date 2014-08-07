@@ -33,37 +33,29 @@
 	</feedBanner>
 	
 	<feedFeaturedProduct>
-		<image>assets/product/default/categoryview/default_product_img.jpg</image>
-		<name>Nikon x500</name>
-		<desc>Camera with lorem ipsum categories</desc>
-		<price>3,222.99</price>
-		<condition>New</condition>
-		<slug>nikon-x500</slug>
+		<product>
+			<slug>qtqwsad</slug>
+		</product>
 	</feedFeaturedProduct>
 	
 	<feedPopularItems>
 		<product>
-			<image>assets/product/default/thumbnail/default_product_img.jpg</image>
-			<name>Spicy Banana</name>
-			<price>1,223.00</price>
+			<slug>qtqwsad</slug>
 		</product>
 		<product>
-			<image>assets/product/default/thumbnail/default_product_img.jpg</image>
-			<name>Spicy Banana</name>
-			<price>1,223.00</price>
+			<slug>qtqwsad</slug>
+		</product>
+		<product>
+			<slug>qtqwsad</slug>
 		</product>
 	</feedPopularItems>
 	
 	<feedPromoItems>
 		<product>
-			<image>assets/product/default/thumbnail/default_product_img.jpg</image>
-			<name>Spicy Banana</name>
-			<price>1,223.00</price>
+			<slug>qtqwsad</slug>
 		</product>
 		<product>
-			<image>assets/product/default/thumbnail/default_product_img.jpg</image>
-			<name>Spicy Banana</name>
-			<price>1,223.00</price>
+			<slug>qtqwsad</slug>
 		</product>
 	</feedPromoItems>
 </map>

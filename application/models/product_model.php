@@ -2542,12 +2542,19 @@ class product_model extends CI_Model
 			case "promo":
 				$node = "feedPromoItems";
 				break;
+			case "featured":
+				$node = "feedFeaturedProduct";
+				break;
 		}
 		
 		$products = $this->xmlmap->getFilenameNode('page/content_files', $node);
 		$data = array();
+		
 		foreach( $products as $p ){
-			$data[] = json_decode(json_encode($p),true);
+			$item = $this->getProductBySlug($p->slug, false);
+			$temp = array($item);
+			explodeImagePath($temp);
+			$data[]= $item;
 		}
 		
 		return $data;
@@ -2561,11 +2568,4 @@ class product_model extends CI_Model
 		return $b;
 	}
 	
-	public function getStaticFeaturedProduct()
-	{
-		$product = $this->xmlmap->getFilenameNode('page/content_files', 'feedFeaturedProduct');
-		$p = json_decode(json_encode($product),true);
-		
-		return $p;
-	}
 }

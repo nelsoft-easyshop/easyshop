@@ -201,7 +201,7 @@ class Home extends MY_Controller {
 			'banners' => $this->product_model->getStaticBannerFeed(),
 			'promo_items' => $this->product_model->getStaticProductFeed('promo'),
 			'popular_items' => $this->product_model->getStaticProductFeed('popular'),
-			'featured_product' => $this->product_model->getStaticFeaturedProduct()
+			'featured_product' => $this->product_model->getStaticProductFeed('featured')
 		);
 		
 		#Assemble featured product ID array for exclusion on LOAD MORE request
