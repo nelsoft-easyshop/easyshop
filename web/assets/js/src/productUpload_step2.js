@@ -104,7 +104,7 @@ function isNumberKey(evt)
 
 function appendNewSelectionRow(){
     cnt++;  
-    var stringAppend = '<div class="control-panel-'+cnt+' ctrl mrgin-bttm-10 height-35">\
+    var stringAppend = '<div class="control-panel-'+cnt+' ctrl row mrgin-bttm-10 height-35">\
     <div class="display-ib width-100p-40max"></div>\
     <div class="value-section col-xs-12 col-sm-6 col-md-6 pd-bttm-10">\
     <div class="select-value-section">\
@@ -212,19 +212,19 @@ function checkCombination(currentStringId)
 
 function resetControlPanel()
 {
-    var defaultString = '<div class="control-panel-1 ctrl">\
+    var defaultString = '<div class="control-panel-1 ctrl row">\
     <div class="display-ib width-100p-40max"></div>\
-    <div class="display-ib width-100p-40max value-section vrtcl-top">\
+    <div class="value-section col-sx-12 col-sm-6 col-md-6 pd-bttm-10">\
     <div class="select-value-section">\
     <select data-placeholder="(e.g Blue, Red, Small, Large,...) " data-cnt="1" class="value-data" id="value-data-1">\
     <option value="0"></option> \
     </select>\
     </div> \
     </div>\
-    <div class="display-ib width-100p-40max price-div vrtcl-top">\
-    <input type="text" placeholder="0.00" class="price-val price1">\
+    <div class="price-div col-sx-12 col-sm-3 col-md-3 pd-bttm-10">\
+    <input type="text" placeholder="0.00" class="price-val price1 ui-form-control width-100p">\
     </div>\
-    <div class="display-ib width-100p-40max image-div vrtcl-top">\
+    <div class="image-div col-sx-12 col-sm-3 col-md-3 pd-bttm-10">\
     <input type="hidden" class="image-val imageText1"/>\
     <a class="attr-image image1" data-cnt="1" href="javascript:void(0)"><img src="'+config.base_url+'assets/images/img_upload_photo.jpg"></a>\
     <a class="remove-attr-image vrtcl-top" data-cnt="1" href="javascript:void(0)"><span style="color:red" class="glyphicon glyphicon-remove"></span></a>\
@@ -478,14 +478,14 @@ $(document).ready(function() {
             if(optionString == ""){
                 return false;
             }
-            var selectString = "<span class='spanSelect"+cleanString+"'><select class='selection' id='"+cleanString+"' data-id='"+cleanString+"'>";
+            var selectString = "<span class='spanSelect"+cleanString+"'><select class='selection ui-form-control' id='"+cleanString+"' data-id='"+cleanString+"'>";
             selectString += optionString + "</select><a data-id='"+cleanString+"' data-head='"+selectedValue+"' class='edit-attr' href='javascript:void(0)'><span class='glyphicon glyphicon-pencil'></span></a>  <a data-id='"+cleanString+"' data-head='"+selectedValue+"' class='remove-attr' href='javascript:void(0)'><span class='glyphicon glyphicon-remove'></span></a></span>";
 
             if( !$.trim( $('.select-control-panel-option > .div2').html() ).length ) {
 
-                var rowString = '<div class="col-xs-2 col-sm-2 col-md-2 div1"><input class="qty" onkeypress="return isNumberKey(event)" name="allQuantity" type="text" size=3 value="1" /></div>\
-                <div class="col-xs-8 col-sm-8 col-md-8  div2">'+selectString+'</div>\
-                <div class="col-xs-2 col-sm-2 col-md-2 div3"><input type="button" class="select-combination  orange_btn3" value="Add" /><input class="set-default" type="checkbox" /></div>';
+                var rowString = '<div class="col-xs-1 col-sm-1 col-md-1 div1"><input class="qty ui-form-control" onkeypress="return isNumberKey(event)" name="allQuantity" type="text" size=3 value="1" /></div>\
+                <div class="col-xs-9 col-sm-9 col-md-9  div2">'+selectString+'</div>\
+                <div class="col-xs-2 col-sm-2 col-md-2 div3 text-center"><input type="button" class="select-combination bg-color orange_btn3 width-70p" value="Add" /> <input class="set-default" type="checkbox" /></div>';
 
                 $('.select-control-panel-option').empty().append(rowString);
             }
@@ -524,11 +524,11 @@ $(document).ready(function() {
                 if( !$.trim( $('.select-control-panel-option > .div2').html() ).length ) {
                     $('.list-choosen-combination-div,.select-control-panel-option ').empty();
                     $('.select-control-panel-option').append('\
-                        <div class="col-xs-2 col-sm-2 col-md-2 div1">\
-                        <input type="text" value="1" name="allQuantity" size="3" class="qty" onkeypress="return isNumberKey(event)">\
+                        <div class="col-xs-1 col-sm-1 col-md-1 div1">\
+                        <input type="text" value="1" name="allQuantity" size="3" class="qty ui-form-control" onkeypress="return isNumberKey(event)">\
                         </div>\
-                        <div class="col-xs-8 col-sm-8 col-md-8 div2"></div>\
-                        <div class="col-xs-2 col-sm-2 col-md-2 div3"></div>');
+                        <div class="col-xs-9 col-sm-9 col-md-9 div2"></div>\
+                        <div class="col-xs-2 col-sm-2 col-md-2 div3 text-center"></div>');
                     resetControlPanel();
                 }
             }
@@ -573,7 +573,7 @@ $(document).ready(function() {
                 });
             });
 
-            $('.list-choosen-combination-div').append('<div class="div-combination combination'+combinationcnt+'"></div>');
+            $('.list-choosen-combination-div').append('<div class="mrgin-bttm-10 div-combination combination'+combinationcnt+'"></div>');
             $('.combination'+combinationcnt).append($('.select-control-panel-option').children().clone());
             $('.list-choosen-combination-div > .div-combination > .div2 > span > .remove-attr').remove();
             $(".select-control-panel-option > .div2 > span > .selection").each(function() {
@@ -581,7 +581,7 @@ $(document).ready(function() {
                 $(".combination"+combinationcnt+" > .div2 > span > #" + $(this).data('id')).val(selValue);
             });
 
-            $('.combination'+combinationcnt +' > .div3').empty().append('<input class="remove-combination btn btn-danger" data-cmbcnt="'+combinationcnt+'" type="button" value="Remove">')
+            $('.combination'+combinationcnt +' > .div3').empty().append('<input class="remove-combination btn btn-danger width-70p" data-cmbcnt="'+combinationcnt+'" type="button" value="Remove">')
             $('.combination'+combinationcnt).append('<div class="clear"></div>');
             combinationcnt++; 
         }
@@ -592,8 +592,9 @@ $(document).ready(function() {
             $('.list-choosen-combination-div > .div-combination > .div2 > span > .remove-attr').remove(); 
             $('.list-choosen-combination-div > .div-combination > .div2 > span > .edit-attr').remove();    
             $('.combinationAll > .div2 > span > .selection').empty().append('<option>All Combination</option>');
-            $('.combinationAll > .div3').empty().append('<input class="remove-combination btn btn-danger" data-cmbcnt="All" type="button" value="Remove">')
-        }
+            $('.combinationAll > .div3').empty().append('<input class="remove-combination btn btn-danger width-70p" data-cmbcnt="All" type="button" value="Remove">')
+        }        
+
     });
 
     $(document).on("click",".remove-combination",function (){
@@ -618,11 +619,11 @@ $(document).ready(function() {
             if( !$.trim( $('.select-control-panel-option > .div2').html() ).length ) {
                 $('.list-choosen-combination-div,.select-control-panel-option ').empty();
                 $('.select-control-panel-option').append('\
-                    <div class="col-xs-2 col-sm-2 col-md-2 div1">\
-                    <input type="text" name="allQuantity" value="1" size="3" class="qty" onkeypress="return isNumberKey(event)">\
+                    <div class="col-xs-1 col-sm-1 col-md-1 div1">\
+                    <input type="text" name="allQuantity" value="1" size="3" class="qty ui-form-control" onkeypress="return isNumberKey(event)">\
                     </div>\
-                    <div class="col-xs-8 col-sm-8 col-md-8 div2"></div>\
-                    <div class="col-xs-2 col-sm-2 col-md-2 div3"></div>');
+                    <div class="col-xs-9 col-sm-9 col-md-9 div2"></div>\
+                    <div class="col-xs-2 col-sm-2 col-md-2 div3 text-center"></div>');
             }
         }
         removeDuplicateCombination();
@@ -634,7 +635,7 @@ $(document).ready(function() {
         var id = editSelectedId = selector.data('id'); 
 
         $('.add-property').val('Save Property').nextAll().remove();
-        $('.add-property').after('<input type="button" id="cancel-changes" value="Cancel" />')
+        $('.add-property').after('<input type="button" id="cancel-changes" class="btn btn-default width-80p" value="Cancel" />')
         $('#head-data').val(head).trigger("liszt:updated");
         $('.control-panel').empty();
         $(".select-control-panel-option > .div2 > span > #"+id +" option").each(function(){
