@@ -16,28 +16,27 @@
                     <li class="steps_txt_hide">
 	                    <a href="javascript:void(0)" id="step1_link">
 	                        <span class="span_bg left-arrow-shape2"></span>
-	                        <span class="steps_txt">
-	                          <span class="f18">Step 1: </span> Select Category
-	                        </span>
-	                        <span class="span_bg right-arrow-shape"></span>
+	                        <span class="steps_txt">Step 1: Select Category
+	                        </span><span class="span_bg right-arrow-shape"></span>
 	                    </a>
                     </li>
                     <li class="steps_txt_hide">
 	                    <a href="javascript:void(0)" id="step2_link">
 	                        <span class="span_bg left-arrow-shape2"></span>
-	                        <span class="steps_txt">
-	                          Step 2: Upload Item
-	                        </span>
-	                         <span class="span_bg right-arrow-shape"></span>
+	                        <span class="steps_txt">Step 2: Upload Item</span>
+	                        <span class="span_bg right-arrow-shape"></span>
 	                    </a>
                     </li>                   
-                    <li >
+                    <li>
                         <span class="span_bg left-arrow-shape ar_active"></span>
-	                        <span class="steps_txt_active">
-                          		Step 3: Success
-                        	</span>
+	                    <span class="steps_txt_active"><span class="f18">Step 3:</span> Shipping Location</span>
                         <span class="span_bg right-arrow-shape ar_r_active"></span>
                     </li>
+                    <li class="steps_txt_hide">
+	                    <span class="span_bg left-arrow-shape2"></span>
+	                    <span class="steps_txt">Success</span>
+	                    <span class="span_bg right-arrow-shape"></span>
+                	</li>
                   </ul>
 			</div>
 			<div class="clear"></div>
@@ -50,7 +49,7 @@
 				<input type="hidden" name="p_id" id="p_id" value="<?php echo $product_id;?>">
 			<?php echo form_close();?>
 			
-			<div class="product_upload_success pd-top-20">
+			<div class="product_upload_success pd-top-30">
 				<p>
 					<img src="<?=base_url()?>assets/images/img_success.png">
 						<?php if(!isset($is_edit)): ?>
@@ -93,51 +92,48 @@
 		<div class="res_wrapper">
 			<div class="paid_section_container table-bordered">
 				<div class="col-xs-12 bg-cl-e5e5e5">
-					<h4>How am I going to be paid</h3> 
+					<h5>How am I going to be paid</h5> 
 				</div>
 				<div class="clear"></div>
-				<div class="step3_content_con row pd-top-20">
+				<div class="step3_content_con pd-tb-15">
 					<div class="col-md-8">
-						<div class="pd-lr-10">
-							<div class="col-xs-8 col-sm-3">
-								<label for="deposit_info">Deposit to: </label>
-							</div>
-							<div class="col-xs-12 col-sm-9">
-								<div class="pd-bttm-10">
+						<div class="">
+							<div class="row pd-bttm-15">
+								<div class="col-xs-12 col-sm-3">
+									<label for="deposit_info">Deposit to: </label>
+								</div>
+								<div class="col-xs-12 col-sm-9">									
 									<select id="deposit_info" class="form-control">
 										<?php foreach($billing_info as $x): ?>
 											<option data-bankname="<?php echo html_escape($x['bank_name']);?>" data-bankid="<?php echo $x['bank_id'];?>" data-acctname="<?php echo  html_escape($x['bank_account_name']); ?>" data-acctno="<?php echo  html_escape($x['bank_account_number']); ?>"    value="<?php echo $x['id_billing_info'];?>"><?php echo  html_escape($x['payment_type']).': '. html_escape($x['bank_name']).' - '. html_escape($x['bank_account_name']);?>
 											</option>
 										<?php endforeach; ?>
 										<option value="0">ADD NEW PAYMENT ACCOUNT</option>
-									</select>
+									</select>									
 								</div>
 							</div>
-							<div class="clear"></div>
 							<?php $first_accnt = reset($billing_info);?>
+							<div class="row pd-bttm-15">
 								<div class="col-xs-8 col-sm-3">
 									<label for="deposit_acct_name">Account name: </label>
 								</div>
 								<div class="col-xs-12 col-sm-9">
-									<div class="pd-bttm-10">
-										<input class="form-control" name="deposit_acct_name" id="deposit_acct_name" type ="text" value="<?php echo  html_escape(isset($first_accnt['bank_account_name'])?$first_accnt['bank_account_name']:''); ?>"  <?php echo isset($first_accnt['bank_account_name'])?'readonly':''; ?>/>
-									</div>
+									<input class="form-control" name="deposit_acct_name" id="deposit_acct_name" type ="text" value="<?php echo  html_escape(isset($first_accnt['bank_account_name'])?$first_accnt['bank_account_name']:''); ?>"  <?php echo isset($first_accnt['bank_account_name'])?'readonly':''; ?>/>
 								</div>
-							<div class="clear"></div>
+							</div>
+							<div class="row pd-bttm-15">
 								<div class="col-xs-8 col-sm-3">
 									<label for="deposit_acct_no">Account number:</label>
 								</div>
-								<div class="col-xs-12 col-sm-9">
-									<div class="pd-bttm-10">						
-										<input class="form-control" name="deposit_acct_no" id="deposit_acct_no" type ="text" value="<?php echo  html_escape(isset($first_accnt['bank_account_number'])?$first_accnt['bank_account_number']:''); ?>" <?php echo isset($first_accnt['bank_account_number'])?'readonly':''; ?>/>
-									</div>	
+								<div class="col-xs-12 col-sm-9">						
+									<input class="form-control" name="deposit_acct_no" id="deposit_acct_no" type ="text" value="<?php echo  html_escape(isset($first_accnt['bank_account_number'])?$first_accnt['bank_account_number']:''); ?>" <?php echo isset($first_accnt['bank_account_number'])?'readonly':''; ?>/>
 								</div>
-							<div class="clear"></div>
+							</div>
+							<div class="row pd-bttm-15">
 								<div class="col-xs-8 col-sm-3">
 									<label for="bank_list">Bank:</label>
 								</div>
 								<div class="col-xs-12 col-sm-9">
-									<div class="pd-bttm-10">
 										<select class="form-control" id="bank_list" <?php echo (isset($first_accnt['bank_id']))?'disabled':'';?>>
 											<option value="0">Please select a bank</option>
 											<?php foreach($bank_list as $x): ?>
@@ -150,30 +146,29 @@
 												<?php endif; ?>
 											<?php endforeach; ?>
 										</select>
-									</div>
 								</div>
-							<div class="clear"></div>
-									<div class="col-xs-12 col-sm-12 text-right">	
-										<div class="pd-bttm-10">
-											<input type="hidden" id="bank_name" value="<?php echo  html_escape(isset($first_accnt['bank_name'])?$first_accnt['bank_name']:''); ?>"/>
+							</div>
+							<div class="row pd-bttm-15">
+								<div class="col-xs-12 col-sm-12 text-right">
+										<input type="hidden" id="bank_name" value="<?php echo  html_escape(isset($first_accnt['bank_name'])?$first_accnt['bank_name']:''); ?>"/>
 											
-											<?php if(count($billing_info) > 0): ?>
-												<span class="deposit_edit btn btn-default"><span class="span_bg"></span>Edit</span>
-												<span class="deposit_save btn btn-default" style="display:none">Save</span>
-											<?php else: ?>
-												<span class="deposit_edit btn btn-default" style="display:none">Edit</span>
-												<span class="deposit_save btn btn-default btn-primary">Save</span>
-											<?php endif; ?>
+										<?php if(count($billing_info) > 0): ?>
+											<span class="deposit_edit btn btn-default"><span class="span_bg"></span>Edit</span>
+											<span class="deposit_save btn btn-default" style="display:none">Save</span>
+										<?php else: ?>
+											<span class="deposit_edit btn btn-default" style="display:none">Edit</span>
+											<span class="deposit_save btn btn-default btn-primary">Save</span>
+										<?php endif; ?>
 											
-											<span class="deposit_update btn btn-default btn-primary" style="display:none">Update</span>
-											<span class="deposit_cancel btn btn-default" style="display:none">Cancel</span>
+										<span class="deposit_update btn btn-default btn-primary" style="display:none">Update</span>
+										<span class="deposit_cancel btn btn-default" style="display:none">Cancel</span>
 											
-											<input type="hidden" id="temp_deposit_acct_name" value=""/>
-											<input type="hidden" id="temp_deposit_acct_no" value=""/>
-											<input type="hidden" id="temp_bank_list" value=""/>
-											<input type="hidden" id="temp_bank_name" value=""/>
-										</div>
-									</div>
+										<input type="hidden" id="temp_deposit_acct_name" value=""/>
+										<input type="hidden" id="temp_deposit_acct_no" value=""/>
+										<input type="hidden" id="temp_bank_list" value=""/>
+										<input type="hidden" id="temp_bank_name" value=""/>
+								</div>
+							</div>
 						</div>
 						<div class="clear"></div>	
 					</div>
@@ -190,6 +185,7 @@
 						</div>
 					</div>			
 				</div>
+				<div class="clear"></div>
 			</div>
 			<div class="clear"></div>
 		</div>
@@ -220,24 +216,22 @@
 	<input id="has_attr" name="has_attr" value="<?php echo $attr["has_attr"]?>" type="hidden">
 	
 <div class="res_wrapper">
-	<div class="step3_shipping_options table-bordered">
+	<div class="step3_shipping_options table-bordered mrgn-top-35">
 		<div class="col-xs-12 bg-cl-e5e5e5">
-			<h4>How would you like to deliver your item</h3>
+			<h5>How would you like to deliver your item</h5>
 		</div>
 		<div class="clear"></div>
-		<div class="pd-top-20 pd-bottom-20">
-			<div class="pd-8-12">
-				<div class="step3_shipping_option_meetup sh1 pd-bottom-20 pd-lr-10">
-					<span>
+			<div class="col-xs-12 pd-bttm-15">
+				<div class="step3_shipping_option_meetup sh1">
+					<span class="">
 						<input class="delivery_option" type="checkbox" id="meetup" name="delivery_option[]" value="meetup" <?php echo (int)$product['is_meetup']===1 ? 'checked':''?> > <label for="meetup">Meet Up</label>
 					</span>
 					<span>
 						<input class="delivery_option" type="checkbox" id="delivery" name="delivery_option[]" value="delivery" <?php echo $shipping_summary['is_delivery'] ? 'checked' : ''?>> <label for="delivery">For Delivery</label>
 					</span>
 				</div>
-				<div class="border-bottom-dotted"></div>
 				<div id="delivery_options" class="sh2" style="display: <?php echo $shipping_summary['is_delivery'] ? '' : 'none'?> ">
-					<div class="pd-tb-20">
+					<div class="pd-bottom-20 delivery-btn-con">
 						<div class="delivery_cost gbtn1 btn-block-2 <?php echo $shipping_summary['is_freeshipping'] ? 'active':''?>" id="set_free_shipping">Free Shipping
 						</div>
 						<div class="delivery_cost gbtn1 btn-block-2 <?php echo $shipping_summary['has_shippingsummary'] ? 'active':''?>" id="set_shipping_details">
@@ -257,26 +251,23 @@
 					
 						<div class="prefsel_css row prefsel">
 							<div class="col-xs-12 col-sm-7 col-md-7 hidden-xs"></div>
-							<div class="col-xs-12 col-sm-5">
-								
+							<div class="col-xs-12 col-sm-5">								
 									<select class="shipping_preference form-control">
 										<option value="0">Select Preference</option>
 										<?php foreach($shipping_preference['name'] as $headID=>$prefName):?>
 											<option class="allow_del" value="<?php echo $headID?>"><?php echo $prefName?></option>								
 										<?php endforeach;?>
-									</select>
-								
-									<span class="delete_ship_pref del_pref_css">Delete Preference</span>
-									
+									</select>								
+									<span class="delete_ship_pref del_pref_css">Delete Preference</span>									
 							</div>
 						</div>
 					
-						<div class="data_group dg_css bg-cl-f0f0f0 pd-top-20 mrgntop-10">
+						<div class="data_group dg_css bg-cl-f0f0f0 pd-top-15 mrgntop-10">
 							<?php foreach($shiparr['location'] as $price=>$locarr):?>
 							<div class="clear"></div>
-							<div class="shipping_input si_css mrgin-bttm-8" data-sikey="<?php echo $siCounter;?>">
+							<div class="shipping_input si_css mrgn-bttm-15" data-sikey="<?php echo $siCounter;?>">
 								<div class="col-xs-4 col-sm-4 col-md-3">
-									<label for="price">Php</label>
+									<label for="price">&#8369;</label>
 									<input type="text" class="shipprice form-control" name="shipprice[<?php echo $sgCounter?>][<?php echo $siCounter?>]" value="<?php echo html_escape($price);?>">
 								</div>
 								<div class="col-xs-6 col-sm-6 col-md-7 upload_chosen">
@@ -321,6 +312,7 @@
 									<br/>
 								</div>
 								<?php endforeach;?>
+								<div class="clear"></div>
 							</div>
 							<?php else:?>
 							<div class="shipping_attr" style="display:none;">
@@ -371,8 +363,9 @@
 				</div>
 				<div class="clear"></div>
 			</div>
+			<div class="clear"></div>
 			<!--CLOSE id=SHIPPING DIV-->
-		</div>
+		
 </div>	
 	</div>
 	<!-- CLOSE step3_shipping_options-->
