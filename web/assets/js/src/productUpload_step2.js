@@ -776,10 +776,10 @@ $(document).ready(function() {
 
     if(window.FileReader) {   
         badIE = false;
-        $('#inputList').append('<input type="file" id="files" class="files active" name="files[]" multiple accept="image/*" required = "required"  /><br/><br/>');
+        $('#inputList').append('<input type="file" id="files" class="files active" name="files[]" multiple accept="image/*" required = "required"  />');
     } else { 
         badIE = true;
-        $('#inputList').append('<input type="file" id="files" class="files active" name="files[]" accept="image/*" required = "required"  /><br/><br/>');
+        $('#inputList').append('<input type="file" id="files" class="files active" name="files[]" accept="image/*" required = "required"  />');
     }
 
     $(".labelfiles").click(function(){
