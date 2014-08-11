@@ -3,59 +3,61 @@
 <link type="text/css" href="<?=base_url()?>assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet" />
 <div class="res_wrapper">
 	<div class="seller_product_content">
-		<div class="inner_seller_product_content pd-bottom-20">
+		<div class="inner_seller_product_content">
 			<h2 class="f24">Sell an Item</h2>
 				<div class="sell_steps sell_steps4">
 					<ul> 
-                    <li class="steps_txt_hide">
-                        <span class="span_bg left-arrow-shape2"></span>
-                        <span class="steps_txt">
-                           Step 1: Select Category
-                        </span>
-                        <span class="span_bg right-arrow-shape"></span>
-                    </li>
-                    <li class="steps_txt_hide">
-                        <span class="span_bg left-arrow-shape2"></span>
-                        <span class="steps_txt">
-                          Step 2: Upload Item
-                        </span>
-                         <span class="span_bg right-arrow-shape"></span>
-                    </li>                   
-                    <li>
-                        <span class="span_bg left-arrow-shape ar_active"></span>
-                        <span class="steps_txt_active">
-                          <span class="f18">Step 3:</span> Success
-                        </span>
-                         <span class="span_bg right-arrow-shape ar_r_active"></span>
-                    </li>
-                  </ul>
+	                    <li class="steps_txt_hide">
+	                      <a href="javascript:void(0)" class="steps_link">
+	                        <span class="span_bg left-arrow-shape2"></span>
+	                        <span class="steps_txt">Step 1: Select Category</span>
+	                        <span class="span_bg right-arrow-shape"></span>
+	                      </a>
+                   		 </li>
+	                    <li class="steps_txt_hide">
+	                    	<a href="javascript:void(0)" id="step2_link">
+		                        <span class="span_bg left-arrow-shape2"></span>
+		                        <span class="steps_txt">Step 2: Upload Item</span>
+		                        <span class="span_bg right-arrow-shape"></span>
+		                    </a>
+	                    </li>                   
+	                    <li class="steps_txt_hide">
+	                    	<a href="javascript:void(0)" id="step2_link">
+		                       <span class="span_bg left-arrow-shape2"></span>
+		                       <span class="steps_txt">Step 3: Shipping Location</span>
+		                       <span class="span_bg right-arrow-shape"></span>
+	                     	</a>
+	                    </li>
+	                    <li>
+		                    <span class="span_bg left-arrow-shape ar_active"></span>
+		                    <span class="steps_txt_active"><span class="f18">Success</span></span>
+		                    <span class="span_bg right-arrow-shape ar_r_active"></span>
+	                	</li>
+                  	</ul>
 				</div>
 			<div class="clear"></div>
 		</div>
 		
-		<div class="step4_section">
-			<div class="step4_header">
+		<div class="step4_section mrgn-top-35">
+			<div class="step4_header col-xs-12">
 				<h5>How you will be paid</h5>
 			</div>
+			<div class="clear"></div>
 			<div class="step4_content step4_paysel">
 				<?php if( count($product_billingdetails) !== 0 ):?>
-				<div class="step4_bankdetails col-sx-12 col-sm-9 col-md-9">
-					<h5 class="text-uppercase"><strong>Bank Deposit</strong></h5>
-					<div>
-						<div class="col-xs-3 col-sm-4 col-md-3"><strong>Bank account name:</strong></div>	
-						<div class="col-xs-9 col-sm-8 col-md-9"><?php echo $product_billingdetails['bank_account_name']?></div>
+				<div class="step4_bankdetails col-sx-12 col-sm-9 col-md-9 pd-bttm-15">					
+					<div class="row pd-top-15">
+						<div class="col-xs-3 col-sm-4 col-md-4"><strong>Bank account name:</strong></div>	
+						<div class="col-xs-9 col-sm-8 col-md-8"><?php echo $product_billingdetails['bank_account_name']?></div>
 					</div>
-					<div class="clear"></div>
-					<div>
-						<div class="col-xs-3 col-sm-4 col-md-3"><strong>Bank account number:</strong></div>
-						<div class="col-xs-9 col-sm-8 col-md-9"><?php echo $product_billingdetails['bank_account_number']?></div>
+					<div class="row pd-top-15">
+						<div class="col-xs-3 col-sm-4 col-md-4"><strong>Bank account number:</strong></div>
+						<div class="col-xs-9 col-sm-8 col-md-8"><?php echo $product_billingdetails['bank_account_number']?></div>
 					</div>
-					<div class="clear"></div>
-					<div>
-						<div class="col-xs-3 col-sm-4 col-md-3"><strong>Bank name:</strong></div>
-						<div class="col-xs-9 col-sm-8 col-md-9"><?php echo $product_billingdetails['bank_name']?></div>
+					<div class="row pd-top-15">
+						<div class="col-xs-3 col-sm-4 col-md-4"><strong>Bank name:</strong></div>
+						<div class="col-xs-9 col-sm-8 col-md-8"><?php echo $product_billingdetails['bank_name']?></div>
 					</div>
-					<div class="clear"></div>
 				</div>
 				<?php endif;?>
 				<?php if( (int)$product['is_cod'] === 1 ):?>
@@ -70,25 +72,31 @@
 			<div class="clear"></div>
 		</div>
 		
-		<div class="step4_section">
-			<div class="step4_header">
+		<div class="step4_section mrgn-top-35">
+			<div class="step4_header col-xs-12">
 				<h5>Product Delivery</h5>
 			</div>
-			<div class="step4_content step4_delivery">
+			<div class="clear"></div>
+			<div class="step4_content step4_delivery col-xs-12 pd-top-15">
 				<?php if( (int)$product['is_meetup'] === 1 ):?>
-					<div class="mrgin-bttm-10">
-						<div class="">
-							<div class="ok-btn glyphicon glyphicon-ok pd-8-12"></div> 
-							<span class="pd-lr-10">For meetup</span>
+				<div class="row">
+					<div class="col-sx-12 col-sm-12 col-md-9">
+						<div class="row">
+							<div class="col-sx-12 col-sm-12 col-md-3 pd-bttm-15">						
+								<div class="ok-btn glyphicon glyphicon-ok pd-8-12"></div> 
+								<span class="pd-lr-10">For meetup</span>
+							</div>
+					<?php endif;?>
+					<?php if( $shipping_summary['is_delivery'] ):?>
+							<div class="col-sx-12 col-sm-12 col-md-3">
+								<div class="ok-btn glyphicon glyphicon-ok pd-8-12"></div> 
+								<span class="pd-lr-10">For delivery</span>
+							</div>
 						</div>
 					</div>
-				<?php endif;?>
-				<?php if( $shipping_summary['is_delivery'] ):?>
+				</div>
+				<div class="clear"></div>
 					<div>
-						<div class="">
-							<div class="ok-btn glyphicon glyphicon-ok pd-8-12"></div> 
-							<span class="pd-lr-10">For delivery</span>
-						</div>
 						<div class="step4_delivery_sub">
 							
 							<div class="clear"></div>
@@ -99,18 +107,18 @@
 							<?php foreach( $shipping_summary['shipping_display'] as $garr ):?>
 							<div>
 								<div class="clear"></div>
-								<div class="pd-8-12">
+								<div class="pd-top-4">
 									<?php foreach( $garr['location'] as $price=>$locarr ):?>
 									<div class="row col-sx-mrgn">
 										<div class="col-sx-12 col-sm-4 col-md-4">
-											Php
-											<div class="delivery-sub-box width-70p pd-8-12"><?php echo html_escape($price)?></div>
+											<span>&#8369;</span>
+											<div class="delivery-sub-box step4-price"><?php echo html_escape($price)?></div>
 										</div>									
 									<!-- </div>
 									<div class="row col-sx-mrgn"> -->
 										<div class="col-sx-12 col-sm-8 col-md-8">
 											<span class="display-ib line-height">Locations:</span>
-											<div class="delivery-sub-box width-75p vrtcl-top pd-lr-10 pd-top-4">
+											<div class="delivery-sub-box width-75p">
 												<?php foreach($locarr as $locID):?>
 												<span class="delivery-sub-box-item"><?php echo $shipping_summary['location_lookup'][$locID]?></span>
 												<?php endforeach;?>
@@ -144,6 +152,7 @@
 					</div>
 				<?php endif;?>
 			</div>
+			<div class="clear"></div>
 		</div>
 		
 		<div style="margin-top:3em;">
@@ -191,14 +200,14 @@ https://www.google.com.ph/webhp?tab=ww&authuser=0&ei=IgHjU7iSBJHIoAS05YGQDw&ved=
 							</div>
 					 
 						
-						<div class="col-md-7">
+						<div class="col-md-7 bg-cl-f7f7f7">
 						<h4 class="id-class" id="<?php echo $product['id_product'];?>"> 
 						  <span id="pname"> <?php echo html_escape($product['product_name'])?> </span> 
-						  <!-- <span class="seller-name"> 
+						  <span class="seller-name"> 
 							  <img src="<?php echo base_url() . $product['userpic']?>/60x60.png"><br />
 							  <span><?php echo html_escape($product['sellerusername']);?></span> 
-							  <p style='font-size:8px;'>No ratings received.</p>
-						  </span>  -->
+							  <p>No ratings received.</p>
+						  </span>  
 						</h4>
 						<div class="clear prod_inner_border"></div>
 						
@@ -280,7 +289,7 @@ https://www.google.com.ph/webhp?tab=ww&authuser=0&ei=IgHjU7iSBJHIoAS05YGQDw&ved=
 					  <div id="tabs" class="prod_previews_tabs">
 						<ul>
 						  <li><a href="#tabs-1">Product Details</a></li>
-						  <li><a href="#tabs-2">Specification</a></li>						  
+						  <!-- <li><a href="#tabs-2">Specification</a></li> -->						  
 						</ul>
 						
 						<div class="clear"></div>
@@ -290,10 +299,32 @@ https://www.google.com.ph/webhp?tab=ww&authuser=0&ei=IgHjU7iSBJHIoAS05YGQDw&ved=
 							<p> <strong>Description: </strong><?php echo html_purify($product['description']);?> </p>
 							<li><strong>Brand: </strong><?php echo html_escape(ucfirst(strtolower($product['brand_name'])));?></li>
 							<li><strong>Additional description: </strong><?php echo html_escape($product['brief']);?></li>
-							<li><strong>Condition: </strong><?php echo html_escape($product['condition']);?></li
+							<li><strong>Condition: </strong><?php echo html_escape($product['condition']);?></li>
 						  </ul>
+
+						  
+						  <div class="spec_panel">
+						  <h4 class="spec_heading">Specification</h4>
+						  <h5>Specifications of <?php echo html_escape($product['product_name']);?></h5>
+							  <div> <span>SKU</span> <span><?php echo html_escape($product['sku']);?></span> </div>
+							  <?php foreach($product_options as $key=>$product_option):?>
+							  <?php if(count($product_option)===1): ?>
+								  <?php if(intval($product_option[0]['datatype'],10) === 2): ?>
+										<div class="tab2_html_con">
+											<strong><?php echo html_escape(str_replace("'", '', $key));?> </strong>
+											<?php echo html_purify($product_option[0]['value']);?>
+										</div>
+								   <?php else: ?>   
+										<div> 
+											<span><?php echo html_escape(str_replace("'", '', $key));?></span> 
+											<span><?php echo html_escape($product_option[0]['value']);?></span>
+										</div>
+							   <?php endif; ?>
+							  <?php endif; ?>
+							  <?php endforeach;?>
+							</div>
 						</div>
-						<div id="tabs-2">
+						<!-- <div id="tabs-2">
 						  <h3>Specifications of <?php echo html_escape($product['product_name']);?></h3>
 						  <div> <span>SKU</span> <span><?php echo html_escape($product['sku']);?></span> </div>
 						  <?php foreach($product_options as $key=>$product_option):?>
@@ -311,7 +342,7 @@ https://www.google.com.ph/webhp?tab=ww&authuser=0&ei=IgHjU7iSBJHIoAS05YGQDw&ved=
 							   <?php endif; ?>
 						  <?php endif; ?>
 						  <?php endforeach;?>
-						</div>						
+						</div> -->						
 					  </div>
 					  
 					 					  
