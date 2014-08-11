@@ -123,9 +123,6 @@ p.active {
     padding:0 3px;
 }
 
-.inner_seller_product_content {
-    background-color: #fff;
-}
 
 /*.sell_steps {
     background: url(../images/global_sprite.png) 0 0 no-repeat;
@@ -158,10 +155,6 @@ p.active {
     font-weight: normal;
 }
 
-.add_product_category {
-    display: inline-block;
-    margin-top: 20px;
-}
 
 
 /***** Draft Content ******/
@@ -340,12 +333,6 @@ p.active {
     border:1px solid #ff4400;
 }
 
-.add_category_submit {
-    margin-top: 30px;
-    text-align: center;
-}
-
-
 
 /****************** Upload product step 2 ****************/
 /*********************************************************/
@@ -386,20 +373,6 @@ p.active {
 .form_input textarea:focus               {
     border: 1px solid #ff4400;
 }*/
-
-.form_input input[type="radio"] {
-    padding: 0px 15px 15px 0px;
-    vertical-align: middle;
-}
-
-
-.form_input input[type='text'],
-.form_input input[type='select'],
-.form_input textarea                {
-    border: 1px solid #B3B3B3;
-    color: #494949;
-    padding:10px 2px;
-}
 
 
 .step4 tr td {
@@ -554,9 +527,6 @@ p.active {
 
 }
 
-.inputfiles {
-    padding: 10px 0;
-}
 
 .add_photo {
     background-position: -633px -307px;
@@ -740,82 +710,6 @@ a:hover.tooltips span {
 .lines_tooltip {
 /*    top: -24px !important;*/
     top: 0px !important;
-}
-
-/**** image upload ***/
-
-#list > div {
-    border: 1px solid #7e7e7e;
-    float: left;
-    margin: 5px;
-    min-height: 132px;
-    padding: 5px;
-    position: relative;
-}
-
-#list > div:hover {
-    border: 1px solid #f18200;
-}
-
-#list div.active_img {
-    border: 1px solid #f18200;   
-}
-
-#list div.active_img .makeprimary {
-    color: #f18200;
-}
-
-.active_img:after {
-    background: url('../images/global_sprite.png') -556px -307px no-repeat;
-    bottom: 0;
-    content: "";
-    display: inline-block;
-    height: 25px;
-    position: absolute;
-    right: 0;
-    width: 25px;
-}
-
-.upload_img_con {
-    background-color: #FFFFFF;
-    border: 1px solid #E5E5E5;
-    display: table-cell;
-    height: 100px;
-    text-align: center;
-    vertical-align: middle;
-    width: 100px;
-}
-
-.upload_img_con img {
-    height: auto;
-    max-height: 100px;
-    max-width: 100px;
-    width: auto;
-}
-
-.active_img .removepic {
-    background-color: #f18200;  
-}
-
-.removepic:hover {
-    color: #fff;
-    background-color: #f18200; 
-}
-
-.removepic {
-    background-color: #7e7e7e;
-    color: #FFFFFF;
-    height: 15px;
-    position: absolute;
-    right: 0;
-    text-align: center;
-    top: 0;
-    width: 15px;
-}
-
-.percentage {
-    font-size: 10px;
-    margin-top: -30px;
 }
 
 /***** Admin upload step 2 ****/
@@ -1424,10 +1318,6 @@ li.brand_result:hover{
     padding: 8px 0;
 }
 
-.step3_shipping_option_meetup {
-    border-bottom: 1px dotted #cecece;
-}
-
 #finish_step3 {
     border: none;
     cursor: pointer;
@@ -1584,9 +1474,9 @@ li.brand_result:hover{
 	margin-bottom: 1em;
 }
 
-.step4_section > div{
+/*.step4_section > div{
 	padding: 5px;
-}
+}*/
 
 .step4_header{
 	background-color: #E5E5E5;
@@ -1613,9 +1503,9 @@ li.brand_result:hover{
 	margin-left: 1em;
 }*/
 
-.step4_delivery {
+/*.step4_delivery {
 	padding-left:10px;
-}
+}*/
 
 /*.step4_delivery_sub > div{
 	display: inline-block;

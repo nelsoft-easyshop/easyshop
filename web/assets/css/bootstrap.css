@@ -914,11 +914,15 @@ a {
   color: #428bca;
   text-decoration: none;
 }
-a:hover,
-a:focus {
+a:hover {
   color: #2a6496;
   text-decoration: underline;
 }
+/*a:hover,
+a:focus {
+  color: #2a6496;
+  text-decoration: underline;
+}*/
 /*a:focus {
   outline: thin dotted;
   outline: 5px auto -webkit-focus-ring-color;
@@ -6249,8 +6253,8 @@ a.tooltips span {
   width: 245px !important;
 }
 
-.alert.ui-dialog-content.ui-widget-content {
-    color: #f00;
+.alert.ui-dialog-content.ui-widget-content b {
+    font-weight: normal;
 }
 
 .price_details {
