@@ -37,47 +37,49 @@
                     <li>
                       <a href="javascript:void(0)" class="steps_link">
                         <span class="span_bg left-arrow-shape ar_active"></span>
-                        <span class="steps_txt_active">
-                          <span class="f18">Step 1: </span> Select Category
-                        </span>
+                        <span class="steps_txt_active"><span class="f18">Step 1: </span> Select Category</span>
                         <span class="span_bg right-arrow-shape ar_r_active"></span>
                       </a>
                     </li>
                     <li class="steps_txt_hide">
                         <span class="span_bg left-arrow-shape2"></span>
-                        <span class="steps_txt">
-                          Step 2: Upload Item
-                        </span>
-                         <span class="span_bg right-arrow-shape"></span>
+                        <span class="steps_txt">Step 2: Upload Item</span>
+                        <span class="span_bg right-arrow-shape"></span>
                     </li>                   
                     <li class="steps_txt_hide">
                         <span class="span_bg left-arrow-shape2"></span>
-                        <span class="steps_txt">
-                          Step 3: Success
-                        </span>
-                         <span class="span_bg right-arrow-shape"></span>
+                        <span class="steps_txt">Step 3: Shipping Location</span>
+                        <span class="span_bg right-arrow-shape"></span>
+                    </li>
+                    <li class="steps_txt_hide">
+                        <span class="span_bg left-arrow-shape2"></span>
+                        <span class="steps_txt">Success</span>
+                        <span class="span_bg right-arrow-shape"></span>
                     </li>
                   </ul>
             </div>
 
             <div class="clear"></div>
 
-            <div class="cat_sch_container">
-                <b>Search for category: &nbsp;</b>
-                <div class="display-ib">
-                  <span class="span_bg icon-search icon-hide-show"></span><input type="text" class="box" id="cat_sch" autocomplete="off">
+            <div class="cat_sch_container text-center">
+                   <div class="form-group">
+                  <div class="input-group col-xs-12 col-sm-6 col-md-6 mrgin-deflt">
+                    <div class="input-group-addon"><span class="span_bg icon_srch"></span></div>
+                    <input type="text" class="box form-control width-50p" id="cat_sch" autocomplete="off" placeholder="Search for category">
+                  </div>
+                  </div>
                 </div>
-                <div class="cat_sch_loading"></div>
+                <!-- <div class="cat_sch_loading"></div> -->
                 <div id="cat_search_drop_content" class="cat_sch_drop_content"></div>
 
-                <?php if(!isset($product_id_edit)): ?>
+              <!--   <?php if(!isset($product_id_edit)): ?>
                 <div class="draft_txt">
                     <a href="javascript:void(0);" class="show_draft_link blue">View your draft items.</a>
                     <span class='draft-cnt'>(<?php echo count($draftItems) ?>)</span> Item(s)
                 </div>
-                <?php endif; ?>
-            </div>
+                <?php endif; ?> -->
 
+            <div class="clear"></div>
             <!-- NEW START HERE -->
             <div class="clear"></div>  
             <div class="add_product_category width-100p">
@@ -92,14 +94,14 @@
                           <div class="category_list_container" id="container_level01">
                               <?php foreach ($firstlevel as $row): ?>
                                   <div class="border-rad-3">
-                                      <a href="javascript:void(0)" data-parentid="<?=$row['parent_id']; ?>" data-catid="<?=$row['id_cat']; ?>" data-level="0" data-name="<?=addslashes ($row['name']); ?>"  class="category_link display-ib pd-13-12">
+                                      <a href="javascript:void(0)" data-parentid="<?=$row['parent_id']; ?>" data-catid="<?=$row['id_cat']; ?>" data-level="0" data-name="<?=addslashes ($row['name']); ?>"  class="category_link display-ib">
                                          <?=$row['name']; ?>
                                       </a>
                                   </div>
                               <?php endforeach; ?>
 
                               <div class="border-rad-3 add-cat-con bl">
-                                <a class="custom_category_link pd-13-12 display-ib" data-level="0" data-catid="1">Add Category
+                                <a class="custom_category_link display-ib" data-level="0" data-catid="1">Add Category
                                     <span class="span_bg icon-add border-rad-90"></span>
                                 </a>
                               </div>
