@@ -22,24 +22,24 @@
             <ul> 
                 <li class="steps_txt_hide">
                     <a href="javascript:void(0)" class="steps_link">
-                    <span class="span_bg left-arrow-shape2"></span>
-                    <span class="steps_txt">
-                    Step 1: Select Category</span>
-                    <span class="span_bg right-arrow-shape"></span>
+                      <span class="span_bg left-arrow-shape2"></span>
+                      <span class="steps_txt">Step 1: Select Category</span>
+                      <span class="span_bg right-arrow-shape"></span>
                     </a>
                 </li>
                 <li>
                     <span class="span_bg left-arrow-shape ar_active"></span>
-                    <span class="steps_txt_active">
-                    <span class="f18">Step 2: </span> Upload Item
-                    </span>
+                    <span class="steps_txt_active"><span class="f18">Step 2: </span> Upload Item</span>
                     <span class="span_bg right-arrow-shape ar_r_active"></span>
                 </li>                   
                 <li class="steps_txt_hide">
                     <span class="span_bg left-arrow-shape2"></span>
-                    <span class="steps_txt">
-                    Step 3: Success
-                    </span>
+                    <span class="steps_txt">Step 3: Shipping Location</span>
+                    <span class="span_bg right-arrow-shape"></span>
+                </li>
+                <li class="steps_txt_hide">
+                    <span class="span_bg left-arrow-shape2"></span>
+                    <span class="steps_txt">Success</span>
                     <span class="span_bg right-arrow-shape"></span>
                 </li>
             </ul>
@@ -102,7 +102,7 @@
 
   </form> 
 
-  <div class="upload_input_form form_input">
+  <div class="upload_input_form form_input mrgn-top-35">
     <?php 
     $attr = array(
       'class' => 'form_product',
@@ -132,25 +132,26 @@
                   </h5> 
               </div>
               <div class="clear"></div>
-              <div class="pd-8-12">
-                  <div>
-                      <?php echo $parent_to_last; ?> <!-- will show the parent category until to the last category selected (bread crumbs) -->
-                      <br>
+              <div class="col-xs-12">
+                  <div class="pd-tb-15">
+                      <p><?php echo $parent_to_last; ?></p> <!-- will show the parent category until to the last category selected (bread crumbs) -->
                       <a href="javascript:void(0)" style="color:#0654BA;" class="step1_link prevent">Change category</a>
                   </div>
               </div>
+              <div class="clear"></div>
           </div>
-          <div class="border-all mrgn-top-20">
-              <div class="upload_step2_title pd-8-12">
+          <div class="border-all mrgn-top-35">
+              <div class="upload_step2_title col-xs-12">
                   <h5>Describe your item <span class="required">(*) required fields</span> </h5> 
               </div>
-              <div class="pd-8-12 row">
+              <div class="clear"></div>
+              <div class="pd-top-15">
                   <!-- Title of the product -->
-                  <div class="col-sx-12 col-sm-2 col-md-2">
+                  <div class="col-xs-12 col-sm-2 col-md-2 pd-tb-8">
                       Product Name: <font color="red">*</font>
                   </div>
-                  <div class="col-sx-12 col-sm-10 col-md-10">
-                      <input class="width-30p-245min ui-form-control" type="text" maxlength="255" placeholder="Enter title" autocomplete="off" id="prod_title" maxlength="255" name="prod_title" value="<?php echo (isset($product_details['name']))?$product_details['name']:'';?>">
+                  <div class="col-xs-12 col-sm-10 col-md-10">
+                      <input class="width-50p ui-form-control" type="text" maxlength="255" placeholder="Enter title" autocomplete="off" id="prod_title" maxlength="255" name="prod_title" value="<?php echo (isset($product_details['name']))?$product_details['name']:'';?>">
                       <a  class="tooltips" href="javascript:void(0)">
                           <img src="<?= base_url() ?>assets/images/icon_qmark.png" alt="">
                           <span class="lines_tooltip">
@@ -162,12 +163,12 @@
               </div>
              
               <!-- Start Condition of the product -->
-              <div class="pd-8-12 row">                  
-                      <div class="col-sx-12 col-sm-2 col-md-2">
+              <div class="pd-tb-15">                  
+                      <div class="col-xs-12 col-sm-2 col-md-2 pd-tb-8">
                           Condition: <font color="red">*</font>
                       </div>
-                      <div class="col-sx-12 col-sm-10 col-md-10">
-                          <select name="prod_condition" id="prod_condition" class="width-30p-245min ui-form-control">
+                      <div class="col-xs-12 col-sm-10 col-md-10">
+                          <select name="prod_condition" id="prod_condition" class="width-50p ui-form-control">
                               <option value="">--Select Condition--</option>          
                               <?php foreach($this->lang->line('product_condition') as $x): ?>
                               <option value="<?php echo $x;?>" <?php if(isset($product_details['condition'])){echo ($product_details['condition'])===$x?'selected':'';}?>><?php echo $x; ?></option>
@@ -180,14 +181,14 @@
                               </span>
                           </a>
                       </div>
-                <div class="clear"></div>  
+                      <div class="clear"></div>  
               </div>
               
           </div>
           <!-- end Condition of the product -->
 
           <!-- Upload Image Content -->
-          <div class="border-all mrgn-top-20">
+          <div class="border-all mrgn-top-35">
               <div class="upload_step2_title col-xs-12 bg-cl-e5e5e5"> 
                   <h5>
                     Add Photos
@@ -201,7 +202,7 @@
                   </h5>
               </div>
               <div class="clear"></div>
-              <div class="pd-8-12 display-ib">
+              <div class="col-xs-12 upload-photo-con">
                   <div class="inputfiles"> 
                       <span class="labelfiles">
                           <span class="add_photo span_bg"></span>Browse Photo
@@ -236,10 +237,11 @@
                   </output>
                   <!-- end of output -->
               </div>
+              <div class="clear"></div>
           </div>
           <!-- end of upload image -->
 
-          <div class="border-all mrgn-top-20">
+          <div class="border-all mrgn-top-35">
               <div class="upload_step2_title col-xs-12 bg-cl-e5e5e5">
                   <h5>
                     Add a description
@@ -247,22 +249,23 @@
                   </h5>
               </div>
               <div class="clear"></div>
-              <div class="pd-8-12 row">
+              <div class="pd-top-15">
                   <!-- Main Description of the product --> 
-                  <div class="col-sx-12 col-sm-2 col-md-2">
+                  <div class="col-xs-12 col-sm-2 col-md-2 pd-tb-8">
                       Product Details: <font color="red">*</font>
                   </div>
-                  <div class="col-sx-12 col-sm-10 col-md-10">
+                  <div class="col-xs-12 col-sm-10 col-md-10">
                       <textarea style="width: 100%;height:100%" name="prod_description" class="mceEditor"  id="prod_description" placeholder="Enter description..."><?php echo (isset($product_details['description']))?$product_details['description']:'';?></textarea>
                   </div>
                   <!-- end of Description -->
+                  <div class="clear"></div>
               </div>
 
-              <div class="pd-8-12 row">
+              <div class="pd-top-15">
                   <!-- Price of the product -->
-                  <div class="col-sx-12 col-sm-2 col-md-2"> Base Price: <font color="red"> *</font></div>
-                  <div class="col-sx-12 col-sm-10 col-md-10">
-                      <input type="text" class="width-30p-245min ui-form-control" autocomplete="off" onkeypress="return isNumberKey(event)"  name="prod_price" id="prod_price" placeholder="Enter price (0.00)" value="<?php echo (isset($product_details['price']))?number_format($product_details['price'],2,'.',','):'';?>">
+                  <div class="col-xs-12 col-sm-2 col-md-2 pd-tb-8"> Base Price: <font color="red"> *</font></div>
+                  <div class="col-xs-12 col-sm-10 col-md-10">
+                      <input type="text" class="width-50p ui-form-control" autocomplete="off" onkeypress="return isNumberKey(event)"  name="prod_price" id="prod_price" placeholder="Enter price (0.00)" value="<?php echo (isset($product_details['price']))?number_format($product_details['price'],2,'.',','):'';?>">
                       <a class="tooltips" href="javascript:void(0)">
                           <img src="<?= base_url() ?>assets/images/icon_qmark.png" alt="">
                           <span>Set the base price for your listing. You may set the shipment fee separately in the following step.
@@ -283,19 +286,19 @@
                           <nobr class="discount_price_con">
                               <label id="lbl_realPrc"><strong>Discounted Price:</strong> &#8369;</label><input type="text" id="discountedP" class="blue" name="discountedP" value="" onkeypress="return isNumberKey(event)" />
                           </nobr> 
-                      </div>
+                      </div>                 
+                  </div> 
                   <div class="clear"></div>
-                  </div>
               </div>
 
               <!-- start of keywords -->
-              <div class="pd-8-12 row">
-                  <div class="col-sx-12 col-sm-2 col-md-2">Additional Keywords
+              <div class="pd-top-15">
+                  <div class="col-xs-12 col-sm-2 col-md-2 pd-tb-8">Additional Keywords
                       <br>
                       <span class="f11">(Seperated by spaces.)</span>
                   </div>
-                  <div class="col-sx-12 col-sm-10 col-md-10">
-                      <input class="width-30p-245min ui-form-control" type="text" autocomplete="off" maxlength="150" name="prod_keyword" id="prod_keyword" placeholder="Enter keyword for you item" value="<?php echo (isset($product_details['keywords']))?$product_details['keywords']:'';?>">
+                  <div class="col-xs-12 col-sm-10 col-md-10">
+                      <input class="width-50p ui-form-control" type="text" autocomplete="off" maxlength="150" name="prod_keyword" id="prod_keyword" placeholder="Enter keyword for you item" value="<?php echo (isset($product_details['keywords']))?$product_details['keywords']:'';?>">
                       <a class="tooltips" href="javascript:void(0)">
                           <img src="<?= base_url() ?>assets/images/icon_qmark.png" alt="">
                           <span>
@@ -308,17 +311,17 @@
                   <div class="clear"></div>
               </div>
               <!-- end of keywords -->
-              <div class="pd-8-12">
+              <div class="col-xs-12 pd-tb-15">
                   <p class="view_more_product_details blue"><span class="span_bg vmd_img"></span>View more product details</p>
               </div>
-
+              <div class="clear"></div>
 
               <div class="more_product_details_container">
                   <div class="step4_2">
 
                       <!-- Start hide of more product details -->
-                      <div class="col-sx-12 bg-cl-e5e5e5">
-                          <h5 class="pd-8-12">Add item specifics 
+                      <div class="col-xs-12 bg-cl-e5e5e5">
+                          <h5>Add item specifics 
                             
                               <a id="tutSpec" class="tooltips" href="javascript:void(0)">
                                  <img src="<?= base_url() ?>assets/images/icon_qmark.png" alt="">  
@@ -328,14 +331,15 @@
                             
                           </h5>
                       </div>
-                      <div class="pd-8-12">
+                      <div class="clear"></div>
+                      <div class="pd-top-15">
                       <!-- Add item specifics -->
 
-                          <div class="pd-tb-8 row">
+                          <div class="">
                               <!-- Brief of the product -->
-                              <div class="col-sx-12 col-sm-2 col-md-2">Brief description:</div>
-                              <div class="col-sx-12 col-sm-10 col-md-10">
-                                  <input class="width-30p-245min ui-form-control" type="text" autocomplete="off" maxlength="255" placeholder="Enter brief description" id="prod_brief_desc" name="prod_brief_desc"  value="<?php echo (isset($product_details['brief']))?$product_details['brief']:'';?>">
+                              <div class="col-xs-12 col-sm-2 col-md-2 pd-tb-8">Brief description:</div>
+                              <div class="col-xs-12 col-sm-10 col-md-10">
+                                  <input class="width-50p ui-form-control" type="text" autocomplete="off" maxlength="255" placeholder="Enter brief description" id="prod_brief_desc" name="prod_brief_desc"  value="<?php echo (isset($product_details['brief']))?$product_details['brief']:'';?>">
                                   <a class="tooltips" href="javascript:void(0)">
                                       <img src="<?= base_url() ?>assets/images/icon_qmark.png" alt="">
                                       <span>Describe your item in a brief but precise way.</span>
@@ -344,22 +348,22 @@
                               <div class="clear"></div>
                           </div>
                           <!-- start of brand -->
-                          <div class="pd-tb-8 row">
-                              <div class="col-sx-12 col-sm-2 col-md-2">Brand:</div> 
-                              <div class="col-sx-12 col-sm-10 col-md-10">
+                          <div class="pd-top-15">
+                              <div class="col-xs-12 col-sm-2 col-md-2 pd-tb-8">Brand:</div> 
+                              <div class="col-xs-12 col-sm-10 col-md-10">
                                   <input type = "hidden" id="prod_brand" name="prod_brand" value="<?php echo isset($product_details['brand_id'])?$product_details['brand_id']:0?>"/>
-                                  <input class="width-30p-245min ui-form-control" type = "text" id="brand_sch" name="brand_sch" autocomplete="off" placeholder="Search for your brand" value="<?php echo isset($product_details['brandname'])?$product_details['brandname']:''?>"/>
-                                  <div class="brand_sch_loading"></div>
+                                  <input class="width-50p ui-form-control" type = "text" id="brand_sch" name="brand_sch" autocomplete="off" placeholder="Search for your brand" value="<?php echo isset($product_details['brandname'])?$product_details['brandname']:''?>"/>
+                                  <!-- <div class="brand_sch_loading"></div> -->
                                   <div id="brand_search_drop_content" class="brand_sch_drop_content"></div>
                               </div>
                               <div class="clear"></div>
                           </div>
                           <!-- end of brand -->
                           <!-- start of sku code -->
-                          <div class="pd-tb-8 row">
-                              <div class="col-sx-12 col-sm-2 col-md-2">SKU Code: </div> <!-- SKU of the product -->
-                              <div class="col-sx-12 col-sm-10 col-md-10">
-                                  <input class="width-30p-245min ui-form-control" type="text" autocomplete="off"  maxlength="45" placeholder="Enter SKU" id="prod_sku" name="prod_sku" value="<?php echo (isset($product_details['sku']))?$product_details['sku']:'';?>">
+                          <div class="pd-top-15">
+                              <div class="col-xs-12 col-sm-2 col-md-2 pd-tb-8">SKU Code: </div> <!-- SKU of the product -->
+                              <div class="col-xs-12 col-sm-10 col-md-10">
+                                  <input class="width-50p ui-form-control" type="text" autocomplete="off"  maxlength="45" placeholder="Enter SKU" id="prod_sku" name="prod_sku" value="<?php echo (isset($product_details['sku']))?$product_details['sku']:'';?>">
                                   <a class="tooltips" href="javascript:void(0)"><img src="<?= base_url() ?>assets/images/icon_qmark.png" alt="">
                                       <span class="2lines_tooltip">Stock Keeping Unit: you can assign any code in order to keep track of your items</span>
                                   </a>
@@ -370,8 +374,8 @@
                       </div>
 
                       <!-- Start hide of more product details -->
-                      <div class="col-sx-12 bg-cl-e5e5e5">
-                          <h5 class="pd-8-12">
+                      <div class="col-xs-12 bg-cl-e5e5e5 mrgn-top-35">
+                          <h5 class="">
                             Quantity
                             
                               <a id="tutSpec" class="tooltips" href="javascript:void(0)">
@@ -382,6 +386,7 @@
                             
                           </h5>
                       </div>
+                      <div class="clear"></div>
                       <div class="row pd-8-12 quantity-panel">
                       <!-- Add item specifics -->
                           <div class="col-sx-12 col-sm-3 col-md-3"> 
@@ -436,13 +441,13 @@
                       </div>
                       <div class="pd-8-12">
                             <div class="row pd-8-12 choosen-combination-div">
-                                <div class="col-xs-1 col-sm-1 col-md-1 div1 bg-cl-e5e5e5">
+                                <div class="col-xs-2 col-sm-1 col-md-1 div1 bg-cl-e5e5e5">
                                   <h5>Quantity</h5>
                                 </div>
-                                <div class="col-xs-9 col-sm-9 col-md-9 div2 bg-cl-e5e5e5">
+                                <div class="col-xs-7 col-sm-9 col-md-9 div2 bg-cl-e5e5e5">
                                   <h5>Item Property</h5>
                                 </div>
-                                <div class="col-xs-2 col-sm-2 col-md-2 div3 bg-cl-e5e5e5 text-center">
+                                <div class="col-xs-3 col-sm-2 col-md-2 div3 bg-cl-e5e5e5 text-center">
                                   <h5>Actions</h5>
                                 </div> 
                             </div>
@@ -451,10 +456,10 @@
                                 <?php if(isset($eachAttribute) && count($eachAttribute) > 0):?>
                                     <?php if(isset($noCombination)): ?>
                                     <div class="div-combination combinationAll">
-                                        <div class="col-xs-1 col-sm-1 col-md-1 div1">
+                                        <div class="col-xs-2 col-sm-1 col-md-1 div1">
                                             <input type="text" value="<?=$noCombinationQuantity;?>" size="3" class="qty ui-form-control" onkeypress="return isNumberKey(event)">
                                         </div>
-                                        <div class="col-xs-9 col-sm-9 col-md-9 div2">
+                                        <div class="col-xs-7 col-sm-9 col-md-9 div2">
                                             <?php foreach ($eachAttribute as $key => $value): ?>
                                             <span class="spanSelect<?=strtolower($key)?>">
                                                 <select id="<?=strtolower($key)?>" class="selection ui-form-control width-30p" data-id="<?=strtolower($key)?>">
@@ -463,7 +468,7 @@
                                             </span>
                                             <?php endforeach;?> 
                                         </div>
-                                        <div class="col-xs-2 col-sm-2 col-md-2 div3 text-center">
+                                        <div class="col-xs-3 col-sm-2 col-md-2 div3 text-center">
                                             <input type="button" value="Remove" data-cmbcnt="All" class="remove-combination btn btn-danger width-70p">
                                         </div>
                                     </div>
@@ -471,10 +476,10 @@
                                         
                                         <?php foreach ($itemQuantity as $keyq => $valueq): ?>
                                             <div class="mrgin-bttm-10 div-combination combination<?=$cmbcounter;?>">
-                                                <div class="col-xs-1 col-sm-1 col-md-1 div1">
+                                                <div class="col-xs-2 col-sm-1 col-md-1 div1">
                                                     <input type="text"  size="3" value="<?=$valueq['quantity']; ?>" class="qty ui-form-control"  onkeypress="return isNumberKey(event)">
                                                 </div>
-                                                <div class="col-xs-9 col-sm-9 col-md-9 div2">
+                                                <div class="col-xs-7 col-sm-9 col-md-9 div2">
                                                     <?php foreach ($eachAttribute as $key => $value): ?>
                                                     <span class="spanSelect<?=strtolower($key)?>">
                                                         <select id="<?=strtolower($key)?>" class="selection ui-form-control width-30p" data-id="<?=strtolower($key)?>">
@@ -488,7 +493,7 @@
                                                     </span>
                                                     <?php endforeach;?> 
                                                 </div>
-                                                <div class="col-xs-2 col-sm-2 col-md-2 div3 text-center">
+                                                <div class="col-xs-3 col-sm-2 col-md-2 div3 text-center">
                                                     <input type="button" value="Remove" data-cmbcnt="<?=$cmbcounter;?>" class="remove-combination btn btn-danger width-70p">
                                                 </div>
                                                 <div class="clear"></div>
@@ -501,10 +506,10 @@
                             </div>
                             <div class="container-select-control-panel-option clear bg-color">
                                 <div class="select-control-panel-option">
-                                    <div class="col-xs-1 col-sm-1 col-md-1 div1">
+                                    <div class="col-xs-2 col-sm-1 col-md-1 div1">
                                         <input type="text" name="allQuantity" value="<?=(isset($noCombinationQuantity))?$noCombinationQuantity:'1'; ?>" size="3"  onkeypress="return isNumberKey(event)" class="qty ui-form-control">
                                     </div>           
-                                    <div class="col-xs-9 col-sm-9 col-md-9 div2">
+                                    <div class="col-xs-7 col-sm-9 col-md-9 div2">
                                         <?php if(isset($eachAttribute) && count($eachAttribute) > 0):?> 
                                             <?php foreach ($eachAttribute as $key => $value): ?>
                                                 <span class="spanSelect<?=strtolower($key)?>">
