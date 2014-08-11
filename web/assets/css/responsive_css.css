@@ -1737,7 +1737,18 @@ box-shadow:         0px 1px 5px 0px rgba(50, 50, 50, 0.75);
 	padding:10px;
 	background-color: #fff;
 	color:#f18200;	
+}
 
+.spec_panel {
+	text-align: left !important;
+}
+
+.spec_heading {
+	color: #f18200;
+	border-bottom: 2px solid #cecece;
+	display: inline-block;
+	font-weight: bold;
+	padding-bottom: 8px;
 }
 
 @media screen and (-webkit-min-device-pixel-ratio: 1.3), screen and (min--moz-device-pixel-ratio: 1.3), screen and (-o-min-device-pixel-ratio: 2 / 1), screen and (min-device-pixel-ratio: 1.3), screen and (min-resolution: 192dpi), screen and (min-resolution: 2dppx) {
