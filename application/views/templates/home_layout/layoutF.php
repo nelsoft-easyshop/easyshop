@@ -4,10 +4,15 @@
 	<link rel="stylesheet" href="<?=base_url()?>assets/css/bootstrap.css" type="text/css" media="screen"/>
 	<link rel="stylesheet" href="<?=base_url()?>assets/css/style.css" type="text/css" media="screen"/>
 	<link rel="stylesheet" href="<?=base_url()?>assets/css/responsive_css.css" type="text/css" media="screen"/>
+<style type="text/css">
+.res_wrapper .top_nav ul li a, .res_wrapper .top_links_right a {
+    font-size: 0.85em;
+}
+</style>
 
 <div class="clear"></div>
 
-<div class="container feeds-cont">
+<div class="container feeds-cont mrgn-top-35">
 	<!-- LEFT PANEL -->
 	<div class="col-md-3 col-sm-12 l-screen">
 		<div class="row mrgn-bttm-8">

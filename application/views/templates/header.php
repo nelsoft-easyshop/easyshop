@@ -144,7 +144,7 @@
 
     <form action="<?php echo base_url(); ?>search/search.html" name="search_form" method="get">
       <section>
-        <div class="container res_wrapper search_wrapper">
+        <div class="res_wrapper search_wrapper">
         
           <?php if(!(isset($render_logo) && ($render_logo === false))): ?>
             <div class="logo"> <a href="<?=base_url()?>"><span class="span_bg"></span></a> </div>
@@ -276,5 +276,20 @@ $('#main_search').on('input propertychange', function() {
       //       $('.need_help_icons_con').slideUp();
       //   });
       // });
+
+
+   //  $(document).mouseup(function (e) {
+   //  var container = $(".nav-collapse");
+
+   //  if (!container.is(e.target) // if the target of the click isn't the container...
+   //      && container.has(e.target).length === 0) // ... nor a descendant of the container
+   //  {
+   //      container.removeClass("opened").addClass("closed");
+   //  }
+   // $(".nav-toggle").click(function(){
+   //          $('.nav-collapse').removeClass("closed");
+   //      });
+//});
+
 
 </script>
