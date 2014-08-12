@@ -10,7 +10,7 @@
 <div class="container feeds-cont">
 	<!-- LEFT PANEL -->
 	<div class="col-md-3 col-sm-12 l-screen">
-		<div class="row mrgin-bttm-8">
+		<div class="row mrgn-bttm-8">
 			<div class="col-md-12 feed-cat">
 				<div id="feed-categories" class="pd-8-12">Categories</div>
 				<div id="feed-catlist">
@@ -18,7 +18,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="row mrgin-bttm-8">
+		<div class="row mrgn-bttm-8">
 			<div class="col-md-12 ">
 				<div class="table-bordered">
 					<div class="row ">
@@ -52,7 +52,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="row mrgin-bttm-8">
+		<div class="row mrgn-bttm-8">
 			<div class="col-md-12 ">
 				<img class="img-responsive" src="<?=base_url()?><?php echo $banners['left']?>">
 			</div>
@@ -61,14 +61,14 @@
 	
 	<!-- MID PANEL -->
 	<div class="col-md-6 col-xs-12">
-		<div class="row mrgin-bttm-8">
+		<div class="row mrgn-bttm-8">
 			<div class="col-md-12 ">
 				<img class="img-responsive" src="<?=base_url()?><?php echo $banners['mid']?>">
 			</div>
 		</div>
-		<div class="row mrgin-bttm-8">
+		<div class="row mrgn-bttm-8">
 			<div class="col-md-12">
-				<div class="row mrgin-bttm-8">
+				<div class="row mrgn-bttm-8">
 					<div class="col-md-12 ">
 						<div class="table-bordered pd-8-12 ">
 							<div class="row">
@@ -85,7 +85,7 @@
 					</div>
 				</div>
 				<?php foreach($featured_product as $p):?>
-				<div class="media table-bordered mrgin-bttm-8 product feature">
+				<div class="media table-bordered mrgn-bttm-8 product feature">
 					<div class="col-md-10 col-sm-10 media-sub media-content">
 						<div class="pull-left media-image">
 							<a target="_blank" href="<?php echo base_url() . "item/" . $p['slug']?>">
@@ -111,7 +111,7 @@
 				<div id="featured_prod" class="row feed-prod-cont" style="display:block;">
 					<div class="col-md-12 ">
 						<?php foreach( $featured_prod as $prod ):?>
-						<div class="media table-bordered mrgin-bttm-8 product">
+						<div class="media table-bordered mrgn-bttm-8 product">
 							<div class="col-md-10 col-sm-10 media-sub media-content">
 								<div class="pull-left media-image">
 									<a target="_blank" href="<?php echo base_url() . "item/" . $prod['slug']?>">
@@ -135,7 +135,7 @@
 						</div>
 						<?php endforeach;?>
 						
-						<div class="row mrgin-bttm-8 row-loadmore load_more_div">
+						<div class="row mrgn-bttm-8 row-loadmore load_more_div">
 							<div class="col-md-12">
 								<?php echo form_open("",array("class"=>"load_more_form"));?>
 								<input type="hidden" name="feed_page" value="1">
@@ -150,7 +150,7 @@
 				<div id="new_prod" class="row feed-prod-cont">
 					<div class="col-md-12 ">
 						<?php foreach( $new_prod as $prod ):?>
-						<div class="media table-bordered mrgin-bttm-8 product">
+						<div class="media table-bordered mrgn-bttm-8 product">
 							<div class="col-md-10 col-sm-10 media-sub media-content">
 								<div class="pull-left media-image">
 									<a target="_blank" href="<?php echo base_url() . "item/" . $prod['slug']?>">
@@ -174,7 +174,7 @@
 						</div>
 						<?php endforeach;?>
 						
-						<div class="row mrgin-bttm-8 row-loadmore load_more_div">
+						<div class="row mrgn-bttm-8 row-loadmore load_more_div">
 							<div class="col-md-12">
 								<?php echo form_open("",array("class"=>"load_more_form"));?>
 								<input type="hidden" name="feed_page" value="1">
@@ -218,7 +218,7 @@
 				<div id="m_promo_items" class="row feed-prod-cont">
 					<div class="col-md-12 ">
 						<?php foreach( $promo_items as $prod ):?>
-						<div class="media table-bordered mrgin-bttm-8 product">
+						<div class="media table-bordered mrgn-bttm-8 product">
 							<div class="col-md-10 col-sm-10 media-sub media-content">
 								<div class="pull-left media-image">
 									<a target="_blank" href="<?php echo base_url() . "item/" . $prod['slug']?>">
@@ -242,7 +242,7 @@
 						</div>
 						<?php endforeach;?>
 						
-						<div class="row mrgin-bttm-8 row-loadmore load_more_div">
+						<div class="row mrgn-bttm-8 row-loadmore load_more_div">
 							<div class="col-md-12">
 								<?php echo form_open("",array("class"=>"load_more_form"));?>
 								<input type="hidden" name="feed_page" value="1">
@@ -259,7 +259,7 @@
 	
 	<!-- RIGHT PANEL -->
 	<div class="col-md-3 l-screen">
-		<div class="row mrgin-bttm-8">
+		<div class="row mrgn-bttm-8">
 			<div class="col-md-12 ">
 				<div class="table-bordered">
 					<div class="row ">
@@ -291,12 +291,12 @@
 				</div>
 			</div>
 		</div>
-		<div class="row mrgin-bttm-8">
+		<div class="row mrgn-bttm-8">
 			<div class="col-md-12 ">
 				<img class="img-responsive" src="<?=base_url()?><?php echo $banners['right']?>">
 			</div>
 		</div>
-		<div class="row mrgin-bttm-8">
+		<div class="row mrgn-bttm-8">
 			<div class="col-md-12 ">
 				<div class="table-bordered">
 					<div class="row ">
