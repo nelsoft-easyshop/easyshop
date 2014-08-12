@@ -672,7 +672,7 @@ a.msgs_link:hover {
 .search_box {
 	margin: 0 auto;
 	padding-top: 15px;
-	width: 75%;
+	width: 74%;
 }
 
 #main_search {     
@@ -822,6 +822,11 @@ div.sell_steps4 ul li:nth-child(4) a {
     height: 37px;
 }
 
+.cat_sch_container .input-group-addon label {
+	margin-bottom: 0px;
+	cursor: pointer;
+}
+
 .cat_sch_loading {
     margin-left: 10px;
     display: inline-block;
@@ -836,7 +841,8 @@ div.sell_steps4 ul li:nth-child(4) a {
     border: 1px solid #CECECE;
     bottom: 0;
     display: none;
-    height: 30em;
+    /*height: 30em;*/
+    max-height: 300px;
     left: 0;
     margin: 140px auto auto;
 /*    min-width: 190px;*/

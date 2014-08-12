@@ -6215,6 +6215,18 @@ button.close {
   max-width: inherit !important;
 }*/
 
+.search_box #main_search {
+  height: 41px;
+}
+
+.footer_panel .about_footer {
+  margin-left: 0px;
+}
+
+.signup input.subscribe_email {
+  height: 39px;
+}
+
 .res_wrapper .top_nav ul li a,
 .res_wrapper .top_links_right a {
   font-size: 1em;
