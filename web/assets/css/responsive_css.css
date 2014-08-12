@@ -2098,16 +2098,22 @@ box-shadow:         0px 1px 5px 0px rgba(50, 50, 50, 0.75);
 	}
 
 	#cl_div_container div {
+		background-color: inherit;
+		border:0px;
     	position: absolute;
     	width: 10%;
     	z-index: 999;
+	}
+	#cl_div_container div:after,
+	#cl_div_container div:before {
+		border:0px;
 	}
 
 	.selected_category_link {
 		background:#fff url('../images/global_sprite.png') -974px -319px no-repeat;
 	    display: inline-block;
 	    height: 18px;
-	    line-height: 18px;
+	    line-height: 24px;
 	    left: 15px;
 	    position: absolute;
 	    text-indent: -9999px;
