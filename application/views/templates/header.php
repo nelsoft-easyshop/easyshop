@@ -83,7 +83,7 @@
           <?php #echo uri_string();?>
           <?php if(!$logged_in): ?>
               <li><a href="<?=base_url()?>login" class="top_border prevent">Login</a></li> 
-              <li><a href="<?=base_url()?>register prevent">Register</a></li> 
+              <li><a href="<?=base_url()?>register" class="prevent">Register</a></li> 
               <li class="txt_res_hide">
                 <a class="prevent" href="<?=base_url()?>guide/buy"><img src="<?=base_url()?>/assets/images/img_icon_shop.png">
                   <span>How to Shop</span>
