@@ -1,20 +1,38 @@
-
-
+/* DROP DOWN FOR CATEGORIES */
 $(function(){
-	/* Click function for feed menu */
+	$('#feed-categories').on('click',function(){
+		$('#feed-catlist').show();
+	});
+	
+	$('.feed-cat').on('mouseleave', function(){
+		$('#feed-catlist').hide();
+	});
+})
+
+/* Click function for feed menu */
+$(function(){	
 	$('.feed-menu').on('click', function(e){
 		var divId = $(this).children('a').attr('href');
-
-		$(this).siblings().removeClass('active');
+		var staticFeaturedProduct = $('div.product.feature.media');
+		
+		$('.feed-menu').removeClass('active');
 		$(this).addClass('active');
 		
 		$('.feed-prod-cont').hide();
 		$(divId).show();
 		
+		
+		if( divId === "#m_follow_seller" ){
+			staticFeaturedProduct.hide();
+		}else{
+			staticFeaturedProduct.show();
+		}
+		
 		e.preventDefault();
 	});
 });
 
+/* Load More */
 $(function(){
 	$('.feed_load_more').on('click',function(){
 		var thisbtn = $(this);
