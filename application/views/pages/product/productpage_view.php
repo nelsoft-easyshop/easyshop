@@ -262,7 +262,7 @@
                     ?>
                 </div></p>
 
-            <ul>
+            <ul class="prod_details_list">
             <li><strong>Brand: </strong><?php echo html_escape(ucfirst(strtolower($product['brand_name'])));?></li>
             <li><strong>Additional description: </strong><?php echo html_escape($product['brief']);?></li>
             <li><strong>Condition: </strong><?php echo html_escape($product['condition']);?></li>
