@@ -437,8 +437,6 @@ header {
 	max-width: 980px;
 	position: relative;
 	width: 100%;
-	padding-left: 15px;
-	padding-right: 15px;
 }
 
 .top_links_right_con2 {
@@ -865,6 +863,7 @@ div.sell_steps4 ul li:nth-child(4) a {
 
 .cat_result a {
 	color: #5c5c5c;
+    font-size: 0.85em;
 }
 
 .cat_result a:hover {
@@ -1506,6 +1505,12 @@ box-shadow:         0px 1px 5px 0px rgba(50, 50, 50, 0.75);
     text-align: center;
 }
 
+.add-property-btn-con input {
+    width: 80%;
+}
+
+
+
 .select-combination + input[type="checkbox"] {
 	margin-left: 10px;
 }
@@ -1514,6 +1519,10 @@ box-shadow:         0px 1px 5px 0px rgba(50, 50, 50, 0.75);
 	width: 30%;
 	margin-right: 10px;
 	margin-bottom: 10px;
+}
+
+.div3 {
+    text-align: center;
 }
 
 /***********   end of product upload step 2 **************/
@@ -1546,7 +1555,7 @@ box-shadow:         0px 1px 5px 0px rgba(50, 50, 50, 0.75);
 	height: 15px;
 }
 
-.cod-button{
+/*.cod-button{
 	border-radius: 2px;
 	color:white;
 	background-color: #3838D8;
@@ -1554,7 +1563,7 @@ box-shadow:         0px 1px 5px 0px rgba(50, 50, 50, 0.75);
 	font-weight:bold;
 	max-width: 15em;
 	margin:auto;
-}
+}*/
 
 .cod-container .cod-checkmark{
 	display:none;
@@ -1567,10 +1576,10 @@ box-shadow:         0px 1px 5px 0px rgba(50, 50, 50, 0.75);
 	display:inline;
 }
 
-.cod-container.active .cod-button{
+/*.cod-container.active .cod-button{
 	background-color: #5c5c5c;
     color: white;
-}
+}*/
 
 .step3_shipping_option_meetup {
     border-bottom: 1px dotted #cecece;
@@ -1582,7 +1591,9 @@ box-shadow:         0px 1px 5px 0px rgba(50, 50, 50, 0.75);
 	margin-right: 10px;
 }
 
-.btn-block-2.active:before {
+.btn-block-2.active:before,
+.cod-container.active .cod-button:before,
+.step4-cod .cod-button:before {
    position: relative;
   top: 1px;
   display: inline-block;
@@ -1620,7 +1631,9 @@ box-shadow:         0px 1px 5px 0px rgba(50, 50, 50, 0.75);
   background-image: none;
 }
 
-.btn-block-2.active {
+.btn-block-2.active,
+.cod-container.active .cod-button,
+.step4-cod .cod-button {
   background-color: #59b841;
   border-bottom: 2px solid #3d9527;
   color: #fff;
@@ -1673,18 +1686,25 @@ box-shadow:         0px 1px 5px 0px rgba(50, 50, 50, 0.75);
 }
 
 .attr_cont_css label {
-	background-color:#DBDBDB;
-	border-radius: 2px;
-	display:inline-block;
-	min-width: 20%;
-	padding: 6px 10px;
-	margin-bottom: 10px;
-	margin-right: 10px;
-}
+    background-color:#DBDBDB;
+    border-radius: 2px;
+    display:inline-block;
+    min-width: 20%;
+    padding: 6px 10px;
+    margin-bottom: 10px;
+    margin-right: 10px;
+    border: 1px solid #DBDBDB;
+}}
 
 .attr_cont_css label:checked + span {
 	border:1px solid #f00;
 	font-size: 24px;
+}
+
+.attr_cont_css label.active {
+    border:1px solid #000000;
+    background-color: #9b9bab;
+    color: #FFFFFF;
 }
 
 .attr_cont_cs label .shipattr {
@@ -1762,17 +1782,21 @@ box-shadow:         0px 1px 5px 0px rgba(50, 50, 50, 0.75);
 
 /**************  product upload step 4 *****************/
 .step4-cod .cod-button {
-	background-color: #5c5c5c;
-	position: relative;
+	/*background-color: #5c5c5c;*/
+    margin: 0 auto;
+    min-width: 170px;
+    padding: 8px;
+    position: relative;
+    width: 50%;
 }
-.step4-cod .cod-button:after {
+/*.step4-cod .cod-button:after {
 	content: "";
 	background: url("../images/btn_sprite.png") no-repeat -15px 0 rgba(0, 0, 0, 0);
     height: 15px;
     width: 18px;
     position: absolute;
     right: -18px;
-}
+}*/
 .step4_delivery_sub{
 	border-top: 1px dotted #D3D3D3;
 	padding-top: 15px;
@@ -1845,8 +1869,9 @@ box-shadow:         0px 1px 5px 0px rgba(50, 50, 50, 0.75);
 }
 
 .prod_previews_tabs .tab-1  {
-	border:1px solid #CECECE;
-	min-height: 440px;
+    border:1px solid #CECECE;
+    min-height: 440px;
+    font-size: 0.85em;
 }
 
 .tab-1 ul {
@@ -1904,6 +1929,14 @@ box-shadow:         0px 1px 5px 0px rgba(50, 50, 50, 0.75);
 
 .spec_panel {
 	text-align: left !important;
+}
+
+.spec_panel-list {
+    border-bottom: 1px dotted #e9e7e7;
+    display: table;
+    height: 30px;
+    line-height: 30px;
+    width: 100%;
 }
 
 @media screen and (-webkit-min-device-pixel-ratio: 1.3), screen and (min--moz-device-pixel-ratio: 1.3), screen and (-o-min-device-pixel-ratio: 2 / 1), screen and (min-device-pixel-ratio: 1.3), screen and (min-resolution: 192dpi), screen and (min-resolution: 2dppx) {
@@ -2472,6 +2505,10 @@ box-shadow:         0px 1px 5px 0px rgba(50, 50, 50, 0.75);
         padding: 10px 0;
     }
 
+    .remove-combination {
+        background-position: -920px -250px !important;
+    }
+
 	/***** end of Product upload step 2 ********/
 
 	/***** product preview ******/
@@ -2640,7 +2677,12 @@ box-shadow:         0px 1px 5px 0px rgba(50, 50, 50, 0.75);
         min-width: 130px;
         width: 40%;
     }
-
+    .remove-combination {
+        background-image: url('../images/global_sprite.png') !important;
+        background-position: -904px -250px;
+        background-repeat: no-repeat;
+        text-indent: -99999px;
+    }
 
 
 	/*** product upload step 4 ***/
