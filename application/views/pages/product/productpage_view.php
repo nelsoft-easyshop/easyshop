@@ -12,6 +12,7 @@
 
 <link rel="canonical" href="<?php echo base_url()?>item/<?php echo $product['slug'];?>"/>
 
+
 <div class="clear"></div>
 <section class="top_margin">
     <div class="wrapper">
@@ -180,20 +181,15 @@
                     </div>
                     
                     <div class="buy_box">
-                        <?php if($product['can_purchase'] === false): ?>
-                                <a href="JavaScript:void(0)" class="orange_btn3 disabled">Buy Now</a> <br/>
-                        <?php elseif($logged_in): ?>
-                            <?php if(intval($userdetails['is_email_verify']) !== 1): ?>
-                                <p class="buy_btn_sub"> Verify your email </p>
-                            <?php elseif($uid == $product['sellerid']): ?>
-                                <p class="buy_btn_sub"> This is your own listing </p>
-                            <?php else: ?>
-                                <a href="JavaScript:void(0)" id="send" class="fm1 orange_btn3 disabled">Buy Now</a> <br/>
-                            <?php endif;?>
-                        <?php elseif(!$logged_in): ?>
-                            <a href="JavaScript:void(0)" id="send" class="fm1 orange_btn3 disabled">Buy Now</a> <br/>
-                        <?php endif; ?>
-
+                        
+                        <?php if($logged_in && intval($userdetails['is_email_verify']) !== 1): ?>
+                            <p class="buy_btn_sub"> Verify your email </p>
+                        <?php elseif($logged_in && $uid == $product['sellerid']): ?>
+                            <p class="buy_btn_sub"> This is your own listing </p>
+                        <?php else: ?>
+                            <a href="JavaScript:void(0)" id='<?php echo $product['can_purchase']?'send':'' ?>' class="fm1 orange_btn3 disabled">Buy Now</a> <br/>
+                        <?php endif;?>
+                        
                         <span>Delivers upon seller confirmation*</span>
                     </div>
 
@@ -312,10 +308,8 @@
                     <div id="write_review_content">
                         <h3>Write a Review</h3>
                         <div id="review_container">
-                            <?php 
-                                $attr = array('id'=>'review_form');
-                                echo form_open('',$attr);
-                            ?>
+                            <?php $attr = array('id'=>'review_form'); ?>
+                            <?php echo form_open('',$attr); ?>
                                 <div>
                                     <label>Subject *</label>
                                     <input type="text" name="subject" maxlength="150">
