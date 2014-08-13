@@ -775,7 +775,7 @@ $(document).ready(function() {
         var id = editSelectedId = selector.data('id'); 
 
         $('.add-property').val('Save Property').nextAll().remove();
-        $('.add-property').after('<input type="button" id="cancel-changes" value="Cancel" />')
+        $('.add-property').after('<input type="button" id="cancel-changes" value="Cancel" class="btn btn-default width-80p" />')
         $('#head-data').val(head).trigger("liszt:updated");
         $('.control-panel').empty();
         validateRedTextBox(".div2 > span > #"+id);
