@@ -4,11 +4,10 @@
     <?php echo $jsonReviewSchemaData;?>
 </script>
 
-
 <link rel="stylesheet" href="<?=base_url()?>assets/css/jquery.jqzoom.css?ver=<?=ES_FILE_VERSION?>" type="text/css">
 <link rel="stylesheet" href="<?=base_url()?>assets/css/style_new.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
 <link rel="stylesheet" href="<?=base_url()?>assets/css/jquery.bxslider.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
-<link rel="stylesheet" href="<?=base_url()?>assets/css/productview.css" type="text/css" media="screen"/>
+<link rel="stylesheet" href="<?=base_url()?>assets/css/productview.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
 
 <link rel="canonical" href="<?php echo base_url()?>item/<?php echo $product['slug'];?>"/>
 
@@ -97,7 +96,7 @@
                     </a>
                     <br/>
                 
-                    <a id="modal-launcher2" href="javascript:void(0)" title="Send a message">
+                    <a class="modal_msg_launcher" href="javascript:void(0)" title="Send <?=html_escape($product['sellerusername'])?> a message">
                         <span>
                             <span class="span_bg prod_message"></span> 
                         </span>
@@ -187,10 +186,18 @@
                         <?php elseif($logged_in && $uid == $product['sellerid']): ?>
                             <p class="buy_btn_sub"> This is your own listing </p>
                         <?php else: ?>
-                            <a href="JavaScript:void(0)" id='<?php echo $product['can_purchase']?'send':'' ?>' class="fm1 orange_btn3 disabled">Buy Now</a> <br/>
+                            <?php if(count($shipment_information) === 0 && intval($product['is_meetup']) === 1): ?>
+                                 <a href="javascript:void(0)" class="btn-meet-up modal_msg_launcher" title="Send <?=html_escape($product['sellerusername'])?> a message">Contact Seller</a> <br/>
+                                <span>Item is listed as an ad only. *</span>
+                            <?php else: ?>
+                                 <a href="javascript:void(0)" id='<?php echo $product['can_purchase']?'send':'' ?>' class="fm1 orange_btn3 disabled">Buy Now</a> <br/>
+                                <span>Delivers upon seller confirmation*</span>
+                            <?php endif; ?>
+                        
+                           
                         <?php endif;?>
                         
-                        <span>Delivers upon seller confirmation*</span>
+                     
                     </div>
 
                 </div>
@@ -211,11 +218,18 @@
                             <?php endforeach;?>
                         </select>
                 
-                        <?PHP if($product['is_free_shipping']):  ?>
-                            <span style="margin-left: 15px;"><span class="span_bg img_free_shipping"></span></span>
-                        <?PHP else: ?>
-                            <span class="shipping_fee"> <span class="loc_invalid"> Select location* </span></span>
-                        <?PHP endif; ?>
+                        <?php if($product['is_meetup'] && count($shipment_information) === 0):  ?>
+                            <span class="shipping_fee"> <span class="loc_invalid"> Contact the seller * </span></span
+                        <?php else:?>
+                            <?PHP if($product['is_free_shipping']):  ?>
+                                <span style="margin-left: 15px;"><span class="span_bg img_free_shipping"></span></span>
+                            <?PHP else: ?>
+                                <span class="shipping_fee"> <span class="loc_invalid"> Select location* </span></span>
+                            <?PHP endif; ?>
+                        <?php endif; ?>
+                        
+                        
+                      
                     </p>
                 </div>
             
@@ -459,7 +473,7 @@
         </div>
         <button id="modal_send_btn">Send</button>
     </div>
-
+    
     <input id='p_qty' type='hidden' value=' <?php echo json_encode($product_quantity);?>'>
     <input id='p_shipment' type='hidden' value='<?php echo json_encode($shipment_information);?>'>
     <input id='p_itemid' type='hidden' value='0'/>
@@ -550,7 +564,7 @@
             $("#modal-container").hide();
             $("#msg-message").val("");
         });
-        $("#modal-launcher2").click(function() {
+        $(".modal_msg_launcher").click(function() {
             $("#modal-container, #modal-background").toggleClass("active");
             $("#modal-container").show();
         });
