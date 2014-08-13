@@ -177,13 +177,13 @@
                     </div>
 
                     <div id="cod_btn" class="col-md-4 cod-container <?php echo (int)$product['is_cod']===1 ? 'active':''?> ">
-                        <div class="pd-bttm-10">							
+                        <div class="pd-bttm-10">
                             <span class="cod-images"></span>
                             <div class="pos-rel width-185 mrgin-deflt">
-                                <span class="cod-checkmark check_bgs3"></span>
-                                <div class="cod-button button">
+                                <!-- <span class="cod-checkmark check_bgs3"></span> -->
+                                <div class="cod-button button btn-block-2">
                                     <span>Select Cash on Delivery</span>
-                                </div>								
+                                </div>
                             </div>
                         </div>
                     </div>			
