@@ -7139,21 +7139,7 @@ margin-right: 10px;
     display:block;
 }
 
-@media (min-width: 992px){
-    .s-screen,.m-screen{display:none;}
-    .l-screen{display:block;}
 
-    .feeds-cont > .col-md-3{
-        width: 20%;
-        padding-right: 5px !important;
-        padding-left: 5px !important;
-    }
-    .feeds-cont > .col-md-6{
-        width: 60%;
-        padding-right: 5px !important;
-        padding-left: 5px !important;
-    }
-}
 
 .feeds-cont > .row{
     margin-right: -5px !important;
@@ -7206,6 +7192,22 @@ margin-right: 10px;
         -ms-transform:rotate(-90deg);
         -webkit-transform:rotate(-90deg);
         z-index: 2;
+    }
+}
+
+@media (min-width: 992px){
+    .s-screen,.m-screen{display:none;}
+    .l-screen{display:block;}
+
+    .feeds-cont > .col-md-3{
+        width: 20%;
+        padding-right: 5px !important;
+        padding-left: 5px !important;
+    }
+    .feeds-cont > .col-md-6{
+        width: 60%;
+        padding-right: 5px !important;
+        padding-left: 5px !important;
     }
 }
 
