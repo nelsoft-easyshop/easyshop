@@ -2442,7 +2442,7 @@ div.electronics_product_sides {
     margin: 0 0 10px 5px;
     overflow: hidden;
     position: absolute;
-/*    width: 784px;*/
+    width: 784px;
     z-index: 1;
 }
 .category_nav ul {
