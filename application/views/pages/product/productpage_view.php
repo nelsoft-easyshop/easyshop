@@ -329,7 +329,7 @@
                                     <input type="text" name="subject" maxlength="150">
                                 </div>
                                 <div>
-                                    <label>Rating *</label>
+                                    <label>Rating</label>
                                     <div id="star"></div>
                                 </div>
                                 <div>
