@@ -72,12 +72,12 @@
                 <!-- <div class="cat_sch_loading"></div> -->
                 <div id="cat_search_drop_content" class="cat_sch_drop_content"></div>
 
-              <!--   <?php if(!isset($product_id_edit)): ?>
+                <?php if(!isset($product_id_edit)): ?>
                 <div class="draft_txt">
                     <a href="javascript:void(0);" class="show_draft_link blue">View your draft items.</a>
                     <span class='draft-cnt'>(<?php echo count($draftItems) ?>)</span> Item(s)
                 </div>
-                <?php endif; ?> -->
+                <?php endif; ?>
 
             <div class="clear"></div>
             <!-- NEW START HERE -->
