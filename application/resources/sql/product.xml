@@ -1008,13 +1008,13 @@ FROM
 <!-- NEW PRODUCT UPLOAD STEP 3-->
 <select id="finalizeProduct">
 	UPDATE `es_product` 
-	SET slug = :slug, is_draft = 0
+	SET slug = :slug, is_draft = 0, is_cod = 1
 	WHERE member_id = :memberid AND id_product = :productid
 </select>
 
 <select id="finalizeProductKeepSlug">
 	UPDATE `es_product` 
-	SET is_draft = 0  
+	SET is_draft = 0, is_cod = 1
 	WHERE member_id = :memberid AND id_product = :productid
 </select>
 
