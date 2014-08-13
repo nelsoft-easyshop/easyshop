@@ -2579,23 +2579,6 @@ class product_model extends CI_Model
         return $row;
     }
     
-    function getVendorSubscription($member_id)
-    {
-        $query = $this->xmlmap->getFilenameID('sql/users','getVendorSubscription'); 
-        $sth = $this->db->conn_id->prepare($query);
-        $sth->bindParam(':member_id',$member_id, PDO::PARAM_INT);
-        $sth->execute();
-        $row = $sth->fetchAll(PDO::FETCH_ASSOC);
-        
-        foreach($row as $k=>$r){
-            if($r['imgurl'] === ""){
-                $row[$k]['imgurl'] = "assets/user/default/60x60.png";
-            }
-        }
-        
-        return $row;
-    }
-    
     public function getStaticProductFeed($string)
     {
         switch($string){

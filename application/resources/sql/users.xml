@@ -407,7 +407,7 @@
 </select>
 
 <select id="getVendorSubscription">
-	SELECT vs.vendor_id, m.username as vendor_name, m.imgurl, DATE_FORMAT(m.datecreated, "%M %Y") as datecreated
+	SELECT vs.vendor_id, m.username as vendor_name, m.imgurl, DATE_FORMAT(m.datecreated, "%M %Y") as datecreated, m.slug as userslug
 	FROM es_vendor_subscribe vs
 	LEFT JOIN es_member m
 		ON m.id_member = vs.vendor_id
