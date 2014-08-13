@@ -1282,6 +1282,9 @@ class productUpload extends MY_Controller
                 redirect('sell/step1', 'refresh');
             }
             
+            #Update product entry in es_product to be ready for purchase
+            $this->product_model->finalizeProduct($productID , $memberId);
+            
             $data = array(
                 'product' => $product,
                 'billing_info' => $this->memberpage_model->get_billing_info($memberId),
@@ -1301,8 +1304,6 @@ class productUpload extends MY_Controller
                 $data['is_edit'] = true;
             }
             
-            #Update product entry in es_product to be ready for purchase
-            $this->product_model->finalizeProduct($productID , $memberId);
             
             $this->load->view('templates/header', $data);
             $this->load->view('pages/product/product_upload_step3_view',$data);
