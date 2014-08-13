@@ -432,7 +432,7 @@
                           <div class="col-xs-12 col-sm-2 col-md-2 add-property-con">
                               <p>Actions:</p>
                               <div class="add-property-btn-con">
-                                  <input type="button" class="add-property orange_btn3 width-80p mrgin-bttm-10" value="Add Property" />
+                                  <input type="button" class="add-property orange_btn3 width-80p mrgn-bttm-10" value="Add Property" />
                               </div>
                           </div>
 

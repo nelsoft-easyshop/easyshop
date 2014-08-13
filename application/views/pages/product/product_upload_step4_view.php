@@ -316,7 +316,7 @@
                         <!-- <div id="tabs-1"> -->
                         <div class="tab-1">
                             <div class="col-xs-12 bg-cl-e5e5e5">
-                                <h5>Product Details</h5>
+                                <h5><strong>Product Details</strong></h5>
                             </div>
                             <div class="clear"></div>
                             <div class="col-xs-12 col-sm-12 col-md-12 pd-tb-15">
@@ -330,12 +330,12 @@
                             <div class="clear"></div>
                             <div class="spec_panel">
                                 <div class="col-xs-12 bg-cl-e5e5e5">
-                                    <h5 class="bg-cl-e5e5e5 col-sx-12">Specification</h5>
+                                    <h5><strong>Specification</strong></h5>
                                 </div>
                                 <div class="clear"></div>
                                 <div class="col-xs-12 pd-tb-15">
-                                    <h5>Specifications of <?php echo html_escape($product['product_name']);?></h5>
-                                    <div> <span>SKU</span> <span><?php echo html_escape($product['sku']);?></span> </div>
+                                    <!-- <h5>Specifications of <?php echo html_escape($product['product_name']);?></h5> -->
+                                    <div class="spec_panel-list"> <span>SKU</span> <span><?php echo html_escape($product['sku']);?></span> </div>
                                       <?php foreach($product_options as $key=>$product_option):?>
                                       <?php if(count($product_option)===1): ?>
                                           <?php if(intval($product_option[0]['datatype'],10) === 2): ?>
@@ -344,7 +344,7 @@
                                                     <?php echo html_purify($product_option[0]['value']);?>
                                                 </div>
                                            <?php else: ?>   
-                                                <div> 
+                                                <div class="spec_panel-list"> 
                                                     <span><?php echo html_escape(str_replace("'", '', $key));?></span> 
                                                     <span><?php echo html_escape($product_option[0]['value']);?></span>
                                                 </div>
