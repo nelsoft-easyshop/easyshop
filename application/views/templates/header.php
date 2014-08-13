@@ -281,18 +281,26 @@ $('#main_search').on('input propertychange', function() {
       // });
 
 
-   //  $(document).mouseup(function (e) {
-   //  var container = $(".nav-collapse");
+//     $(document).mouseup(function (e) {
+//     var container = $(".nav-collapse");
 
-   //  if (!container.is(e.target) // if the target of the click isn't the container...
-   //      && container.has(e.target).length === 0) // ... nor a descendant of the container
-   //  {
-   //      container.removeClass("opened").addClass("closed");
-   //  }
-   // $(".nav-toggle").click(function(){
-   //          $('.nav-collapse').removeClass("closed");
-   //      });
-//});
-
+//     if (!container.is(e.target) // if the target of the click isn't the container...
+//         && container.has(e.target).length === 0) // ... nor a descendant of the container
+//     {
+//         container.removeClass("opened").addClass("closed");
+//         container.closest("a").removeClass("active");
+//         // container.toggleClass("opened");
+//     }
+//    $(".nav-toggle").click(function(){
+//       if($('.nav-collapse').hasClass("opened")){
+//            $('.nav-collapse').removeClass("opened").addClass("closed")
+//         }
+//       else {
+//             $('.nav-collapse').addClass('opened')
+//           }
+//             // $('.nav-collapse').removeClass("closed").addClass("opened");
+//         });
+// });
+      
 
 </script>
