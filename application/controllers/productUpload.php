@@ -1391,9 +1391,9 @@ class productUpload extends MY_Controller
                         # Cycle through each price and check if 
                         foreach( $shipPrice as $groupkey => $pricegroup ){
                             foreach( $pricegroup as $inputkey => $price ){
-                                $priceValue = str_replace(',', '', $price);
+                                $priceValue = $price !== "" ? str_replace(',', '', $price) : 0;
                                 # Check if price in submitted input field is provided (numeric and not blank)
-                                if( is_numeric($priceValue) && $price !== "" ){
+                                if( is_numeric($priceValue) && $priceValue >= 0 ){
                                     #check if shipping location is provided for the price
                                     if( isset($shipLoc[$groupkey][$inputkey]) && count($shipLoc[$groupkey][$inputkey]) > 0){
                                         # Check if attributes are provided for that group

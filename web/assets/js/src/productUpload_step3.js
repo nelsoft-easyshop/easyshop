@@ -66,7 +66,7 @@ $(function(){
         var price = $.trim($(this).val());
         var newPrice = price.replace(new RegExp(",", "g"), '');
         newPrice = parseFloat(newPrice).toFixed(2);
-        if( $.isNumeric(newPrice) ){
+        if( $.isNumeric(newPrice) && newPrice >= 0 ){
             $(this).val( ReplaceNumberWithCommas(newPrice) );
         }else{
             $(this).val('');
@@ -76,7 +76,7 @@ $(function(){
         var newPrice = price.replace(new RegExp(",", "g"), '');
         newPrice = parseFloat(newPrice).toFixed(2);
         
-        if( (e.keyCode == 13 || e.which == 13) && $.isNumeric(newPrice)){
+        if( (e.keyCode == 13 || e.which == 13) && $.isNumeric(newPrice) && newPrice >= 0){
             $(this).val( ReplaceNumberWithCommas(newPrice) );
         }else if ( (e.keyCode == 13 || e.which == 13) && !$.isNumeric(newPrice) ) {
             $(this).val('');
