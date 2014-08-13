@@ -885,7 +885,7 @@ div.sell_steps4 ul li:nth-child(4) a {
 }
 
 #cl_div_container div {
-	font-size: 1.125em;
+	font-size: 1em;
 	font-weight: bold;
 	text-align: center;
 	margin-bottom: 1.875em;
@@ -1318,7 +1318,7 @@ div.sell_steps4 ul li:nth-child(4) a {
 
 #dsc_frm{
     background-color: #FFFFFF;
-    border: 1px solid #616161;
+    border: 1px solid #cecece;
     margin-left: 190px;
     margin-top: -120px;
     padding: 8px;
@@ -1706,10 +1706,12 @@ box-shadow:         0px 1px 5px 0px rgba(50, 50, 50, 0.75);
 }
 
 .step4_prod_cont_gal .prod_con_gal .jqzoom img {
-    height: auto;
+/*    height: auto;
     max-height: 400px;
     max-width: 400px;
-    width: auto;
+    width: auto;*/
+    max-width: 400px;
+    width: 100%;
 }
 
 .thumbnails_container a,.thumbnails_container a:hover,.thumbnails_container a:focus {
@@ -1733,12 +1735,17 @@ box-shadow:         0px 1px 5px 0px rgba(50, 50, 50, 0.75);
     width: 100%;
 }
 
-#tabs-1,
-#tabs-2,
-#tabs-3 {
+.prod_previews_tabs .tab-1  {
 	border:1px solid #CECECE;
-	padding:10px;
 	min-height: 440px;
+}
+
+.tab-1 ul {
+	list-style: none;
+}
+
+.tab-1 ul li {
+	padding-bottom: 15px;
 }
 
 .ui-tabs-nav {
@@ -1788,14 +1795,6 @@ box-shadow:         0px 1px 5px 0px rgba(50, 50, 50, 0.75);
 
 .spec_panel {
 	text-align: left !important;
-}
-
-.spec_heading {
-	color: #f18200;
-	border-bottom: 2px solid #cecece;
-	display: inline-block;
-	font-weight: bold;
-	padding-bottom: 8px;
 }
 
 @media screen and (-webkit-min-device-pixel-ratio: 1.3), screen and (min--moz-device-pixel-ratio: 1.3), screen and (-o-min-device-pixel-ratio: 2 / 1), screen and (min-device-pixel-ratio: 1.3), screen and (min-resolution: 192dpi), screen and (min-resolution: 2dppx) {

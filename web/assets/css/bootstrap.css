@@ -6262,7 +6262,18 @@ a.tooltips span {
 }
 
 .ui-dialog-title {
-  width: 245px !important;
+    margin-right: 3%;
+    vertical-align: middle;
+    width: 90% !important;
+}
+
+.ui-dialog.ui-widget.ui-widget-content.ui-corner-all.ui-front.ui-dialog-buttons.ui-draggable {
+    left: 25% !important;
+    width: 50% !important;
+}
+
+.ui-button.ui-widget.ui-state-default.ui-corner-all.ui-button-icon-only.ui-dialog-titlebar-close {
+    position: absolute;
 }
 
 .alert.ui-dialog-content.ui-widget-content b {
@@ -6319,5 +6330,13 @@ a.tooltips span {
 @media only screen and (max-width : 62em) { /*** 992px ***/
   .prod_con_gal {
     max-width: 400px;
+  }
+}
+
+@media only screen and (max-width: 480px) {
+    /*** UI dialog box ***/
+  .ui-dialog.ui-widget.ui-widget-content.ui-corner-all.ui-front.ui-dialog-buttons.ui-draggable {
+    left: 10% !important;
+    width: 80% !important;
   }
 }
