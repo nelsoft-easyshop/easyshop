@@ -1320,6 +1320,10 @@ class productUpload extends MY_Controller
     
     public function step4()
     {
+        /*print('<pre>');
+        print_r($this->input->post());
+        die();*/
+    
         $this->load->model('memberpage_model');
         $memberID =  $this->session->userdata('member_id');
         $deliveryOption = $this->input->post('delivery_option') ? $this->input->post('delivery_option') : array();
@@ -1393,7 +1397,7 @@ class productUpload extends MY_Controller
                             foreach( $pricegroup as $inputkey => $price ){
                                 $priceValue = $price !== "" ? str_replace(',', '', $price) : 0;
                                 # Check if price in submitted input field is provided (numeric and not blank)
-                                if( is_numeric($priceValue) && $priceValue >= 0 ){
+                                if( is_numeric($priceValue) && $priceValue >= 0 && !preg_match('/[a-zA-Z\+]/', $priceValue) ){
                                     #check if shipping location is provided for the price
                                     if( isset($shipLoc[$groupkey][$inputkey]) && count($shipLoc[$groupkey][$inputkey]) > 0){
                                         # Check if attributes are provided for that group
@@ -1408,6 +1412,10 @@ class productUpload extends MY_Controller
                                             }
                                         }
                                     }
+                                }else{
+                                    $serverResponse['error'] = "Invalid price provided";
+                                    echo json_encode($serverResponse);
+                                    exit();
                                 }
                             }
                         }
