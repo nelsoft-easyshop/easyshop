@@ -203,7 +203,7 @@ $(document).ready(function() {
         var catId = selector.data('catid');
         var level = selector.data('level');
 
-    	if(selector.val() == "" || selector == "undefined"){
+    	if(selector.val().trim() == "" || selector == "undefined"){
     		$(this).replaceWith('<a class="custom_category_link pd-13-12 display-ib">Add Category <span class="span_bg icon-add border-rad-90"></span></a>');
     	}
     	else{
@@ -300,13 +300,11 @@ $(document).ready(function() {
 
     	$(".add_category_submit").empty();
 
-        if ($(this).attr('data-timer')) {
+        if ($(this).attr('data-catid')) {
         	$(".add_category_submit").append('<input type="hidden" name="hidden_attribute" value="'+catId+'" class="hidden_attribute"><input class="proceed_form" id="proceed_form" type="submit" value="Proceed with '+name+'">');    
         	$(".add_category_submit").append('<input type="hidden" name="othernamecategory" value="'+name+'" />');
         }
-
         $(selector).closest('div').addClass('selected_category pd-13-12');
-
     });
 
 

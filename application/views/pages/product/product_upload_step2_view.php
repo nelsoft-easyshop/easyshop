@@ -1,5 +1,4 @@
-<link type="text/css" href="<?=base_url()?>assets/css/sell_item.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet" />
-<link type="text/css" href="<?=base_url()?>assets/css/product_upload_tutorial.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet" />
+<link type="text/css" href="<?=base_url()?>assets/css/sell_item.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet" /> 
 <!-- Start of simple slider-->
 <!--<link rel="stylesheet" href="--><?//=base_url()?><!--assets/css/normalize.min.css" />-->
 <link rel="stylesheet" href="<?=base_url()?>assets/css/ion.rangeSlider.css" />
@@ -21,7 +20,7 @@
         <div class="sell_steps sell_steps2">
             <ul> 
                 <li class="steps_txt_hide">
-                    <a href="javascript:void(0)" class="steps_link">
+                    <a href="javascript:void(0)" class="step1_link">
                       <span class="span_bg left-arrow-shape2"></span>
                       <span class="steps_txt">Step 1: Select Category</span>
                       <span class="span_bg right-arrow-shape"></span>
@@ -49,6 +48,7 @@
       <?php if(isset($product_details)): ?>  
           <?php echo form_open('sell/step1', array('id'=>'edit_step1'));?>
           <input type="hidden" name="p_id" id="p_id" value="<?php echo $product_details['id_product'];?>">
+          <input type="hidden" name="other_cat_name" id="other_cat_name" value="<?php echo $otherCategory;?>">
           <?php echo form_close();?>
       <?php else: ?>
           <?php echo form_open('sell/step1', array('id'=>'edit_step1'));?>
@@ -86,10 +86,8 @@
   );
   echo form_open('productUpload/uploadimageOther', $attr);
   ?>
-      <input type="file" class="attr-image-input" style="display:none" name="attr-image-input" >
-
+      <input type="file" class="attr-image-input" accept="image/*"  style="display:none" name="attr-image-input" >
   </form> 
-
 
   <?php 
   $attributesForm = array('id' => 'hidden_form','name'=>'hidden_form');
@@ -99,7 +97,6 @@
       <?php if(isset($is_edit)): ?>
           <input type="hidden" name="is_edit" value="true">
       <?php endif; ?>
-
   </form> 
 
   <div class="upload_input_form form_input mrgn-top-35">
@@ -135,7 +132,7 @@
               <div class="col-xs-12">
                   <div class="pd-tb-15">
                       <p><?php echo $parent_to_last; ?></p> <!-- will show the parent category until to the last category selected (bread crumbs) -->
-                      <a href="javascript:void(0)" style="color:#0654BA;" class="step1_link prevent">Change category</a>
+                      <a href="javascript:void(0)" style="color:#0654BA;" class="step1_link">Change category</a>
                   </div>
               </div>
               <div class="clear"></div>
@@ -176,7 +173,7 @@
                           </select>
                           <a class="tooltips" href="javascript:void(0)">
                               <img src="<?= base_url() ?>assets/images/icon_qmark.png" alt="">
-                              <span class="lines_tooltip">\
+                              <span class="lines_tooltip">
                                   Identify the condition of your item so potential buyers may know what they should be getting.
                               </span>
                           </a>
@@ -265,7 +262,7 @@
                   <!-- Price of the product -->
                   <div class="col-xs-12 col-sm-2 col-md-2 pd-tb-8"> Base Price: <font color="red"> *</font></div>
                   <div class="col-xs-12 col-sm-10 col-md-10">
-                      <input type="text" class="width-50p ui-form-control" autocomplete="off" onkeypress="return isNumberKey(event)"  name="prod_price" id="prod_price" placeholder="Enter price (0.00)" value="<?php echo (isset($product_details['price']))?number_format($product_details['price'],2,'.',','):'';?>">
+                      <input type="text" class="width-50p ui-form-control"  maxlength="15" autocomplete="off" onkeypress="return isNumberKey(event)"  name="prod_price" id="prod_price" placeholder="Enter price (0.00)" value="<?php echo (isset($product_details['price']))?number_format($product_details['price'],2,'.',''):'';?>">
                       <a class="tooltips" href="javascript:void(0)">
                           <img src="<?= base_url() ?>assets/images/icon_qmark.png" alt="">
                           <span>Set the base price for your listing. You may set the shipment fee separately in the following step.
@@ -277,7 +274,7 @@
                           <strong>Discounted Price:</strong> &#8369;
                           <span id="discounted_price_con">0.00</span>
                       </div>
-
+ 
                       <div id="dsc_frm">
                           <nobr class="discount_price_con_top">
                               <label id="lbl_discount"><strong>Discount Percentage</strong></label><input type="text" id="slider_val" placeholder="0%" onkeypress="return isNumberKey(event)" data-value='<?php echo isset( $product_details['discount'])?$product_details['discount']:0;?>' >
@@ -323,11 +320,11 @@
                       <div class="col-xs-12 bg-cl-e5e5e5">
                           <h5>Add item specifics 
                             
-                              <a id="tutSpec" class="tooltips" href="javascript:void(0)">
+              <!--                 <a id="tutSpec" class="tooltips" href="javascript:void(0)">
                                  <img src="<?= base_url() ?>assets/images/icon_qmark.png" alt="">  
                                  What's this?
                                  <span>Click here to read more. Your progress will not be lost. </span>
-                              </a>
+                              </a> -->
                             
                           </h5>
                       </div>
@@ -378,20 +375,20 @@
                           <h5 class="">
                             Quantity
                             
-                              <a id="tutSpec" class="tooltips" href="javascript:void(0)">
+      <!--                         <a id="tutSpec" class="tooltips" href="javascript:void(0)">
                                  <img src="<?= base_url() ?>assets/images/icon_qmark.png" alt="">  
                                  What's this?
                                  <span>Click here to read more. Your progress will not be lost. </span>
-                              </a>
+                              </a> -->
                             
                           </h5>
                       </div>
                       <div class="clear"></div>
                       <div class="row pd-8-12 quantity-panel">
                       <!-- Add item specifics -->
-                          <div class="col-sx-12 col-sm-3 col-md-3"> 
-                              <div class="pd-right-20">
-                                <p>Item Property</p>
+                          <div class="col-xs-12 col-sm-3 col-md-3"> 
+                              <div class="">
+                                <p class="qty-item-title">Item Property</p>
                                   <select class="" id="head-data" data-placeholder="(e.g Color, Size,...) ">
                                       <option value="0" ></option> 
                                       <?php foreach ($attributeArray as $key => $value):?>
@@ -401,39 +398,40 @@
                               </div>
                           </div>
 
-                          <div class="control-panel-container col-sx-12 col-sm-7 col-md-7">
-                            <p>Item Property Value:</p>
+                          <div class="control-panel-container col-xs-12 col-sm-7 col-md-7">
+                            <p class="qty-item-title2">Item Property Value:</p>
                               <div class="control-panel">
                                   <div class="control-panel-1 ctrl row">
                                       <div class="display-ib width-100p-40max"></div>
-                                      <div class="value-section col-sx-12 col-sm-6 col-md-6 pd-bttm-10">
+                                      <div class="value-section col-xs-5 col-sm-5 col-md-5 pd-bttm-10">
                                           <div class="select-value-section">
                                               <select id="value-data-1" class="value-data" data-cnt='1' data-placeholder="(e.g Blue, Red, Small, Large,...) ">
                                                   <option value="0"></option> 
                                               </select>
                                           </div> 
                                       </div>
-
-                                      <div class="price-div col-sx-12 col-sm-3 col-md-3 pd-bttm-10">
-                                          <input type="text" class="price-val price1 ui-form-control width-100p" placeholder="0.00" />
+                                      <div class="price-div col-sx-3 col-sm-3 col-md-3 pd-bttm-10">
+                                          &#8369; <input type="text"  maxlength="10" class="price-val price1 ui-form-control" placeholder="0.00" />
                                       </div>
-                                      <div class="image-div col-sx-12 col-sm-3 col-md-3 pd-bttm-10">
+                                      <div class="image-div col-xs-2 col-sm-2 col-md-3 pd-bttm-10">
                                           <input type="hidden" class="image-val imageText1"/>
-                                          <a class="attr-image image1" data-cnt='1' href="javascript:void(0)"><img src="<?=base_url().'assets/images/img_upload_photo.jpg'?>"></a>
-                                          <a class="remove-attr-image vrtcl-top" data-cnt='1' href="javascript:void(0)"><span style="color:red" class="glyphicon glyphicon-remove"></span></a>
+                                          <!-- <a class="attr-image image1" data-cnt='1' href="javascript:void(0)"><img src="<?=base_url().'assets/images/img_upload_photo.jpg'?>"></a> -->
+                                          <a class="select-image qty-image-con image1" data-cnt='1' href="javascript:void(0)"><img src="<?=base_url().'assets/images/img_upload_photo.jpg'?>"></a>
+                                          <a class="select-image image1 select-image-pencil" data-cnt='1' href="javascript:void(0)"><span class="glyphicon glyphicon-pencil"></span></a>
+                                          <!-- <a class="remove-attr-image vrtcl-top" data-cnt='1' href="javascript:void(0)"><span style="color:red" class="glyphicon glyphicon-remove"></span></a> -->
                                       </div>
                                   </div>
                                   <div class="clear"></div>
                               </div>
-                              <div class="pd-tb-8 clear"> 
-                                  <div class="col-sx-12 col-sm-12 col-md-12">
+                              <div class="clear"> 
+                                  <div class="col-xs-12 col-sm-12 col-md-12">
                                       <a class="add-property-value" href="javascript:void(0)">Add more property Value</a>
                                   </div>
                               </div>
                           </div>
-                          <div class="col-sx-12 col-sm-2 col-md-2 text-center">
+                          <div class="col-xs-12 col-sm-2 col-md-2 add-property-con">
                               <p>Actions:</p>
-                              <div class="">
+                              <div class="add-property-btn-con">
                                   <input type="button" class="add-property orange_btn3 width-80p mrgin-bttm-10" value="Add Property" />
                               </div>
                           </div>
@@ -455,7 +453,7 @@
                                 <?php $cmbcounter = 1; ?>
                                 <?php if(isset($eachAttribute) && count($eachAttribute) > 0):?>
                                     <?php if(isset($noCombination)): ?>
-                                    <div class="div-combination combinationAll">
+<!--                                     <div class="div-combination combinationAll">
                                         <div class="col-xs-2 col-sm-1 col-md-1 div1">
                                             <input type="text" value="<?=$noCombinationQuantity;?>" size="3" class="qty ui-form-control" onkeypress="return isNumberKey(event)">
                                         </div>
@@ -471,23 +469,23 @@
                                         <div class="col-xs-3 col-sm-2 col-md-2 div3 text-center">
                                             <input type="button" value="Remove" data-cmbcnt="All" class="remove-combination btn btn-danger width-70p">
                                         </div>
-                                    </div>
+                                    </div> -->
                                     <?php else: ?>
                                         
                                         <?php foreach ($itemQuantity as $keyq => $valueq): ?>
-                                            <div class="mrgin-bttm-10 div-combination combination<?=$cmbcounter;?>">
+                                            <div class="div-combination zebra-div combination<?=$cmbcounter;?>" data-itemId="<?=$keyq;?>">
                                                 <div class="col-xs-2 col-sm-1 col-md-1 div1">
                                                     <input type="text"  size="3" value="<?=$valueq['quantity']; ?>" class="qty ui-form-control"  onkeypress="return isNumberKey(event)">
                                                 </div>
                                                 <div class="col-xs-7 col-sm-9 col-md-9 div2">
                                                     <?php foreach ($eachAttribute as $key => $value): ?>
-                                                    <span class="spanSelect<?=strtolower($key)?>">
-                                                        <select id="<?=strtolower($key)?>" class="selection ui-form-control width-30p" data-id="<?=strtolower($key)?>">
+                                                    <span class="spanSelect<?=str_replace(' ', '', strtolower($key))?>">
+                                                        <select disabled id="<?=str_replace(' ', '', strtolower($key))?>" class="selection width-30p ui-form-control" data-id="<?=str_replace(' ', '', strtolower($key))?>">
                                                            <?php foreach ($value as $key2 => $value2): ?>
-                                                              <option data-image="<?=$value2['img_path']?>" <?php echo ($valueq['data'][$key] == $value2['value_name']) ? 'selected' : ''; ?>  data-price="<?=$value2['value_price']?>" data-head="<?=$key?>" data-value="<?=$value2['value_name']?>"><?=$value2['value_name'] . ' - '.$value2['value_price']; ?></option>
+                                                              <option data-image="<?=$value2['img_path']?>" <?php echo ($valueq['data'][$key] == $value2['value_name']) ? 'selected' : ''; ?>  data-price="<?=$value2['value_price']?>" data-head="<?=$key?>" data-value="<?=$value2['value_name']?>"><?=$value2['value_name'] . ' - &#8369; '.$value2['value_price']; ?></option>
                                                            <?php endforeach; ?>
                                                         </select>     
-                                                        <a class="edit-attr" href="javascript:void(0)" data-head="<?=$key?>" data-id="<?=strtolower($key)?>"><span class="glyphicon glyphicon-pencil"></span></a>
+                                                        <a class="edit-attr" href="javascript:void(0)" data-head="<?=$key?>" data-id="<?=str_replace(' ', '', strtolower($key))?>"><span class="glyphicon glyphicon-pencil"></span></a>
                                                         <!-- <a class="remove-attr" href="javascript:void(0)" data-head="<?=$key?>" data-id="<?=strtolower($key)?>"><span class="glyphicon glyphicon-remove"></span></a> -->
 
                                                     </span>
@@ -512,20 +510,20 @@
                                     <div class="col-xs-7 col-sm-9 col-md-9 div2">
                                         <?php if(isset($eachAttribute) && count($eachAttribute) > 0):?> 
                                             <?php foreach ($eachAttribute as $key => $value): ?>
-                                                <span class="spanSelect<?=strtolower($key)?>">
-                                                    <select id="<?=strtolower($key)?>" class="selection ui-form-control width-30p" data-id="<?=strtolower($key)?>">
+                                                <span class="spanSelect<?=str_replace(' ', '', strtolower($key))?>">
+                                                    <select id="<?=str_replace(' ', '', strtolower($key))?>" class="selection width-30p ui-form-control" data-id="<?=str_replace(' ', '', strtolower($key))?>">
                                                         <?php foreach ($value as $key2 => $value2): ?>
-                                                            <option data-image="<?=$value2['img_path']?>" data-price="<?=$value2['value_price']?>" data-head="<?=$key?>" data-value="<?=$value2['value_name']?>"><?=$value2['value_name'] . ' - '.$value2['value_price']; ?></option>
+                                                            <option data-image="<?=$value2['img_path']?>" data-price="<?=$value2['value_price']?>" data-head="<?=$key?>" data-value="<?=$value2['value_name']?>"><?=$value2['value_name'] . ' - &#8369; '.$value2['value_price']; ?></option>
                                                         <?php endforeach; ?>
                                                     </select>
-                                                    <a class="edit-attr" href="javascript:void(0)" data-head="<?=$key?>" data-id="<?=strtolower($key)?>"><span class="glyphicon glyphicon-pencil"></span></a>
-                                                    <a class="remove-attr" href="javascript:void(0)" data-head="<?=$key?>" data-id="<?=strtolower($key)?>"><span class="glyphicon glyphicon-remove"></span></a>
+                                                    <a class="edit-attr" href="javascript:void(0)" data-head="<?=$key?>" data-id="<?=str_replace(' ', '', strtolower($key))?>"><span class="glyphicon glyphicon-pencil"></span></a>
+                                                    <a class="remove-attr" href="javascript:void(0)" data-head="<?=$key?>" data-id="<?=str_replace(' ', '', strtolower($key))?>"><span class="glyphicon glyphicon-remove"></span></a>
                                                   </span>
                                             <?php endforeach;?>   
                                         <?php endif; ?>
                                     </div>              
                                     <div class="col-xs-2 col-sm-2 col-md-2 div3 text-center">
-                                        <?php if(isset($eachAttribute)):?> 
+                                        <?php if(isset($eachAttribute) && count($eachAttribute) > 0):?> 
                                             <input class="select-combination orange_btn3 width-70p" type="button" value="Add">
                                         <?php endif; ?>
                                     </div>
@@ -548,7 +546,16 @@
     </form>
   </div>
 
-  <div style="display:none" id="question"></div>
+  <div id="question"></div>
+  <div style="display:none" id="pop-image" class="simplemodal-container">
+    <h3>Modify Your Image</h3>
+      <div class="pop-image-remove-container">
+          <a class="remove-attr-image vrtcl-top" data-cnt='1' href="javascript:void(0)"><span style="color:red" class="glyphicon glyphicon-trash"></span></a>
+      </div>
+      <div class="pop-image-container">
+          <a href="javascript:void(0)" class="attr-image"><img  src=""></a>
+      </div>  
+  </div>
 
 
     <!-- LOADING JAVASCRIPT FILES -->
@@ -580,17 +587,15 @@
     <?php endif;?>
 
     <style type="text/css">
-    
-    .attr-image > img {
-      width: 35px;
-      height: 35px;
-      border: solid 1px;
+    #simplemodal-container {
+      width: 60%;
     }
     .ui-dialog-title {
       display: inline-block;
-      font-size: 14px;
+      font-size: 18px;
       font-weight: bold;
       padding-bottom: 8px;
+      width: 475px;
     }
     .ui-button.ui-widget.ui-state-default.ui-corner-all.ui-button-text-only {
       background-color: #f18200;
@@ -603,6 +608,10 @@
       padding: 8px;
       transition: all 0.3s ease-in-out 0s;
     }
+    label.errorTxt{
+      color:red;
+      font-size: 12px;
+      margin-left: 5px;
 
     .ui-dialog-titlebar-close:before {
       line-height: 18px;

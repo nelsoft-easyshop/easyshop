@@ -1,7 +1,20 @@
 
- 
 $(document).ready(function(){
-
+    $("#range_1").ionRangeSlider({
+        min: 0,
+        max: 100,
+        type: 'single',
+        step: 1,
+        postfix: "%",
+        prettify: true,
+        hasGrid: true,
+        onChange: function (obj) {        // callback is called after slider load and update
+            var value = obj.fromNumber;
+            $("#slider_val").val(value);
+            get_discPrice();
+        }
+    });
+    
      // if keyword change. counter will change also either increase or decrease until reach its limit..
     updateCountdown();
     $('#prod_keyword').change(updateCountdown);
@@ -10,7 +23,6 @@ $(document).ready(function(){
 
 
     // search brand 
-
     $('#brand_sch').focus(function() {
         $('#brand_search_drop_content').show();
         $(document).bind('focusin.brand_sch_drop_content click.brand_sch_drop_content',function(e) {
@@ -18,16 +30,13 @@ $(document).ready(function(){
           $('#brand_search_drop_content').hide();
       });
     });
-
     $('#brand_search_drop_content').hide();
-
 });
  
-
-
 // TINYMCE
 $(function(){
-    tinymce.init({
+
+    tinymce.init({ 
         mode : "specific_textareas",
         editor_selector : "mceEditor", 
         menubar: "table format view insert edit",
@@ -96,32 +105,31 @@ function isNumberKey(evt)
     $("#head-data,.value-data").chosen({
         create_option: true,
         skip_no_results: true,
-        persistent_create_option: true,
-        create_option_text: 'Custom',
+        persistent_create_option: true,  
         width: "100%"
     });  
 }
 
 function appendNewSelectionRow(){
     cnt++;  
-    var stringAppend = '<div class="control-panel-'+cnt+' ctrl row mrgin-bttm-10 height-35">\
+    var stringAppend = '<div class="control-panel-'+cnt+' ctrl row">\
     <div class="display-ib width-100p-40max"></div>\
-    <div class="value-section col-xs-12 col-sm-6 col-md-6 pd-bttm-10">\
+    <div class="value-section col-xs-5 col-sm-5 col-md-5 pd-bttm-10">\
     <div class="select-value-section">\
     <select id="value-data-'+cnt+'" class="value-data" data-cnt="'+cnt+'" data-placeholder="(e.g Blue, Red, Small, Large,...) ">\
     <option value="0"></option>\
     </select>\
     </div>\
     </div>\
-    <div class="price-div col-xs-12 col-sm-3 col-md-3 pd-bttm-10">\
-    <input type="text" class="price-val price'+cnt+' ui-form-control width-100p" placeholder="0.00" />\
+    <div class="price-div col-xs-3 col-sm-3 col-md-3 pd-bttm-10">\
+    &#8369; <input type="text" maxlength="10" class="price-val price'+cnt+' ui-form-control" placeholder="0.00" />\
     </div>\
-    <div class="image-div col-xs-12 col-sm-2 col-md-2 pd-bttm-10">\
+    <div class="image-div col-xs-2 col-sm-2 col-md-2 pd-bttm-10">\
     <input type="hidden" class="image-val imageText'+cnt+'"/>\
-    <a class="attr-image image'+cnt+'" data-cnt="'+cnt+'" href="javascript:void(0)"><img src="'+config.base_url+'assets/images/img_upload_photo.jpg"></a>\
-    <a class="remove-attr-image vrtcl-top" data-cnt="'+cnt+'" href="javascript:void(0)"><span style="color:red" class="glyphicon glyphicon-remove"></span></a>\
+    <a class="select-image qty-image-con image'+cnt+'" data-cnt="'+cnt+'" href="javascript:void(0)"><img src="'+config.base_url+'assets/images/img_upload_photo.jpg"></a>\
+    <a class="select-image image'+cnt+' select-image-pencil" data-cnt="'+cnt+'" href="javascript:void(0)"><span class="glyphicon glyphicon-pencil"></span></a>\
     </div>\
-    <a class="remove-control-panel col-xs-12 col-sm-1 col-md-1" href="javascript:void(0)" data-cnt="'+cnt+'">Remove</a>\
+    <a class="remove-control-panel" href="javascript:void(0)" data-cnt="'+cnt+'">Remove property value</a>\
     </div><div class="clear"></div>';
 
     $('.control-panel').append(stringAppend);
@@ -197,7 +205,7 @@ function checkCombination(currentStringId)
         });
         arrayCombination.push(stringId);
     });
-    if(arrayCombination.length > 1){
+    if(arrayCombination.length > 0){
         if($.inArray(currentStringId,arrayCombination) <= -1){
             console.log('not exist');
             return true;
@@ -207,69 +215,98 @@ function checkCombination(currentStringId)
             return false;
         }
     }
-
+}
+function jqSelector(str)
+{
+    return str.replace(/([;&,\.\+\*\~':"\!\^#$%@\[\]\(\)=>\|])/g, '\\$1');
 }
 
-function resetControlPanel()
+
+function resetControlPanel(buttonReset)
 {
     var defaultString = '<div class="control-panel-1 ctrl row">\
     <div class="display-ib width-100p-40max"></div>\
-    <div class="value-section col-sx-12 col-sm-6 col-md-6 pd-bttm-10">\
+    <div class="value-section col-xs-5 col-sm-5 col-md-5 pd-bttm-10">\
     <div class="select-value-section">\
-    <select data-placeholder="(e.g Blue, Red, Small, Large,...) " data-cnt="1" class="value-data" id="value-data-1">\
-    <option value="0"></option> \
-    </select>\
+        <select data-placeholder="(e.g Blue, Red, Small, Large,...) " data-cnt="1" class="value-data" id="value-data-1">\
+            <option value="0"></option> \
+        </select>\
     </div> \
     </div>\
-    <div class="price-div col-sx-12 col-sm-3 col-md-3 pd-bttm-10">\
-    <input type="text" placeholder="0.00" class="price-val price1 ui-form-control width-100p">\
+    <div class="price-div col-xs-3 col-sm-3 col-md-3 pd-bttm-10">\
+        &#8369; <input type="text"  maxlength="10" placeholder="0.00" class="price-val price1 ui-form-control">\
     </div>\
-    <div class="image-div col-sx-12 col-sm-3 col-md-3 pd-bttm-10">\
-    <input type="hidden" class="image-val imageText1"/>\
-    <a class="attr-image image1" data-cnt="1" href="javascript:void(0)"><img src="'+config.base_url+'assets/images/img_upload_photo.jpg"></a>\
-    <a class="remove-attr-image vrtcl-top" data-cnt="1" href="javascript:void(0)"><span style="color:red" class="glyphicon glyphicon-remove"></span></a>\
+    <div class="image-div col-xs-2 col-sm-2 col-md-2 pd-bttm-10">\
+        <input type="hidden" class="image-val imageText1"/>\
+         <a class="select-image qty-image-con image1" data-cnt="1" href="javascript:void(0)"><img src="'+config.base_url+'assets/images/img_upload_photo.jpg"></a>\
+        <a class="select-image image1 select-image-pencil" data-cnt="1" href="javascript:void(0)"><span class="glyphicon glyphicon-pencil"></span></a>\
     </div>\
-    </div>';
+    </div><div class="clear"></div>';
 
     $('.control-panel').empty().append(defaultString);
     setChosen();
-    $("#head-data").val('').trigger("liszt:updated");
-    $('.add-property').val('Add Property');
-    editSelectedValue,editSelectedValue = '';
-    $('#cancel-changes').remove()
+
+    var headData = $("#head-data");
+    var valueData = $('.value-data');
+    headData.trigger("liszt:updated");
+
+    if(buttonReset){
+        headData.val('').trigger("liszt:updated");
+        $('.add-property').val('Add Property');
+        editSelectedValue,editSelectedValue = '';
+        $('#cancel-changes').remove();
+        validateWhiteTextBox(".div2 > span > .selection");
+    }
+
+    var selectedValue = headData.chosen().val();  
+    var cleanString = jqSelector(selectedValue.toLowerCase().replace(/ /g,''));
+    var attrList = attributeArray[selectedValue];
+    
+    valueData.empty(); 
+    if(attrList!==undefined){
+        valueData.append('<option></option>');
+        $.each(attrList, function(key, value){
+            valueData.append('<option>'+value+'</option>');
+        });
+    }
+    valueData.trigger("liszt:updated");
 }
 
 function ReplaceNumberWithCommas(thisnumber){
-        //Seperates the components of the number
-        var n= thisnumber.toString().split(".");
-        //Comma-fies the first part
-        n[0] = n[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-        //Combines the two sections
-        return n.join(".");
+    //Seperates the components of the number
+    var n= thisnumber.toString().split(".");
+    //Comma-fies the first part
+    n[0] = n[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    //Combines the two sections
+    return n.join(".");
+}
+
+function get_discPrice() {
+    var prcnt = $("#slider_val").val().replace("%",'');
+    var act_price = $("#prod_price").val().replace(/,/g,'');
+    if (prcnt >= 100) {
+        prcnt = 99;
+    }
+    if (act_price == 0 || act_price == null ) {      
+        validateRedTextBox("#prod_price");
+        act_price = 0;
     }
 
-    function get_discPrice() {
-        var prcnt = $("#slider_val").val().replace("%",'');
-        var act_price = $("#prod_price").val().replace(/,/g,'');
-        if (prcnt >= 100) {
-            prcnt = 99;
-        }
-        if (act_price == 0 || act_price == null ) {      
-            validateRedTextBox("#prod_price");
-            act_price = 0;
-        }
+    $("#slider_val").val("");
+    $("#slider_val").val(prcnt+"%");
+    discounted = act_price * (prcnt/100);
+    var v = parseFloat(act_price - discounted);
+    tempval = Math.abs(v);
+    disc_price = ReplaceNumberWithCommas(tempval.toFixed(2));
+    $("#discountedP").val(disc_price);
+    $( "span#discounted_price_con" ).text( disc_price );
+}
 
-        $("#slider_val").val("");
-        $("#slider_val").val(prcnt+"%");
-        discounted = act_price * (prcnt/100);
-        var v = parseFloat(act_price - discounted);
-        tempval = Math.abs(v);
-        disc_price = ReplaceNumberWithCommas(tempval.toFixed(2));
-        $("#discountedP").val(disc_price);
-        $( "span#discounted_price_con" ).text( disc_price );
-    }
-
-
+function zebraCombination()
+{
+    $(".zebra-div:even").css("background-color","#F7F7F7"); 
+    $(".zebra-div:odd").css("background-color","white"); 
+}
 
 // view more product details
 $(document).ready(function() {
@@ -282,8 +319,11 @@ $(document).ready(function() {
 
 // JS Function Discount
 $(document).ready(function(){
-
     $("#dsc_frm").hide();
+
+    $("#discnt_btn").on("click",function(){
+        $("#dsc_frm").toggle();      
+    });  
 
     $('#prod_price').on('change', function(){
         var prcnt = parseFloat($("#slider_val").val().replace("%",''));
@@ -292,20 +332,7 @@ $(document).ready(function(){
         }
     });
 
-    $("#range_1").ionRangeSlider({
-        min: 0,
-        max: 100,
-        type: 'single',
-        step: 1,
-        postfix: "%",
-        prettify: true,
-        hasGrid: true,
-        onChange: function (obj) {        // callback is called after slider load and update
-            var value = obj.fromNumber;
-            $("#slider_val").val(value);
-            get_discPrice();
-        }
-    });
+
 
 
     $("#slider_val").bind('change keyup',function(e){
@@ -325,9 +352,9 @@ $(document).ready(function(){
         });
     });
 
-    $("#discnt_btn").on("click",function(){
-        $("#dsc_frm").toggle();      
-    });  
+    $( "#prod_price" ).keypress(function() {
+        validateWhiteTextBox("#prod_price");
+    });
 
     $("#discountedP").bind('change keyup',function(e){
         if(e.which > 13 || e.which < 13){
@@ -361,6 +388,21 @@ $(document).ready(function(){
         $( "span#discounted_price_con" ).text( disc_price );
     });
 
+    $(document).mouseup(function (e){
+        var container = $("#dsc_frm");
+        if (!container.is(e.target) // if the target of the click isn't the container...
+            && container.has(e.target).length === 0) // ... nor a descendant of the container
+        {
+            container.hide(); 
+        }
+    });  
+
+    var slider_val = parseFloat($('#slider_val').data('value')); 
+    if(slider_val !== 0 && !isNaN(slider_val)){
+        $('#slider_val').val(slider_val); 
+        $('#slider_val').trigger( "change" );
+    }
+
 });
 // end of JS Function Discount
 
@@ -370,6 +412,7 @@ var previous,editSelectedValue,editSelectedId;
 $(document).ready(function() {   
 
     setChosen(); 
+    zebraCombination();
 
     $(document).on('change',".price-val,#prod_price",function () {
         var priceval = this.value.replace(new RegExp(",", "g"), '');
@@ -383,18 +426,76 @@ $(document).ready(function() {
         }
     });
 
-
     $(document).on("click","#head_data_chzn",function (){
         var selector = $("#head-data");  
-        previous = selector.chosen().val();
+        previous = selector.chosen().val(); 
     });
+
+    function checkOptionValue(selector,id,value,evt)
+    {
+        var exists = false;
+        var commonValue;
+        var valueData =  $('.value-data'); 
+        $(id).children('option').each(function(){
+            var text = $(this).text();
+            if (text.toLowerCase() == value.toLowerCase()) {
+                exists = true;
+                commonValue = text;
+                return false;
+            }
+        }); 
+
+        value = value.replace(/[^a-z0-9\s\-]/gi, '');
+        var activeSelection = selector.search_results.find('li.active-result').length;
+        var highlightSelection = selector.search_results.find('li.highlighted').length;
+
+        if(highlightSelection >= 1){
+                selector.result_highlight = selector.search_results.find('li.highlighted').first();
+                return selector.result_select(evt);
+        }
+        else{
+            $(id).append('<option>' + value + '</option>');
+            $(id).trigger('liszt:updated');
+            selector.result_highlight = selector.search_results.find('li.active-result').last();
+            return selector.result_select(evt);
+        }
+
+        if(exists == true){
+            if(id.id == 'head-data'){
+                valueData.empty().trigger("liszt:updated");
+            } 
+            console.log(commonValue);
+            if(activeSelection <= 1){
+                $(id).val(commonValue).trigger("liszt:updated");
+                var attrList = attributeArray[commonValue]; 
+                $.each(attrList, function(key, value){
+                    valueData.append('<option>'+value+'</option>');
+                });
+                valueData.trigger("liszt:updated");
+            }
+            else{
+                selector.result_highlight = selector.search_results.find('li.active-result').first();
+                return selector.result_select(evt);
+            }
+        }
+    }
+ 
+    AbstractChosen.prototype.input_blur = function(evt) {
+        checkOptionValue(this,this.form_field,$(evt.target).val(),evt);
+    }
+
+    Chosen.prototype.keydown_checker = function(evt) {
+        if(evt.which === 13)  {   
+            checkOptionValue(this,this.form_field,$(evt.target).val(),evt);
+        }
+    }
 
     $(document).on("change","#head-data",function (){
         var selector = $(this); 
         var valueData =  $('.value-data'); 
         var selectedValue = selector.chosen().val();  
-        var cleanString = selectedValue.toLowerCase().replace(/ /g,'');
-        var length = $(".select-control-panel-option > .div2 > span > #"+cleanString).length; 
+        var cleanString = jqSelector(selectedValue.toLowerCase().replace(/ /g,''));
+        var length = $(".select-control-panel-option > .div2 > span > [id="+cleanString+"]").length; 
         var buttonValue = $('.add-property').val(); 
         var attrList = attributeArray[selectedValue]; 
 
@@ -413,7 +514,7 @@ $(document).ready(function() {
 
             if(length > 0 && editSelectedValue != selectedValue){
                 $('#head-data').val(previous).trigger("liszt:updated");
-                alert('already exist');
+                alert(selectedValue +' already exist in the selection');
             }
             else{
                 $('.value-data option').not(':selected').remove();
@@ -434,13 +535,16 @@ $(document).ready(function() {
     $(document).on("click",".remove-control-panel",function (){
         var cnt = $(this).data('cnt'); 
         $('.control-panel-'+cnt).remove();
+        if( $('.ctrl').length <= 0 ) {
+            resetControlPanel(false); 
+        }
     });
 
     $(document).on("click",".add-property",function (){
         var selector = $('#head-data');
         buttonValue = $(this).val();
         var selectedValue = selector.chosen().val();
-        var cleanString = selectedValue.toLowerCase().replace(/ /g,'');
+        var cleanString = jqSelector(selectedValue.toLowerCase().replace(/ /g,''));
         var optionString = "";
         var eachCtrlValue = new Array();
         var checked = $('.set-default:checked').length > 0; 
@@ -459,13 +563,13 @@ $(document).ready(function() {
             if(selectList){
                 if($.inArray(selectList,eachCtrlValue) <= -1){
                     if($.trim( $('.select-control-panel-option > .div2').html() ).length ) {
-                        if($(".select-control-panel-option > .div2 > span >#"+cleanString).length > 0){
-                            if($('.div2 > span > #'+cleanString + ' option[data-value="'+selectList+'"]').length > 0){
-                                $('.div2 > span > #'+cleanString + ' option[data-value="'+selectList+'"]').remove()
+                        if($(".select-control-panel-option > .div2 > span > #"+cleanString).length > 0){
+                            if($('.select-control-panel-option > .div2 > span > #'+cleanString + ' option[data-value="'+selectList+'"]').length > 0){
+                                $('.select-control-panel-option > .div2 > span > #'+cleanString + ' option[data-value="'+selectList+'"]').remove()
                             }
                         } 
                     }
-                    optionString += "<option data-value='"+selectList+"' data-head='"+selectedValue+"' data-price='"+price+"' data-image='"+image+"'>"+selectList+" - "+price+"</option>";       
+                    optionString += "<option data-value='"+selectList+"' data-head='"+selectedValue+"' data-price='"+price+"' data-image='"+image+"'>"+selectList+" - &#8369; "+price+"</option>";       
                     if($.inArray(selectList,attributeArray[selectedValue]) <= -1){
                         attributeArray[selectedValue].push(selectList);
                     }
@@ -478,27 +582,28 @@ $(document).ready(function() {
             if(optionString == ""){
                 return false;
             }
-            var selectString = "<span class='spanSelect"+cleanString+"'><select class='selection ui-form-control' id='"+cleanString+"' data-id='"+cleanString+"'>";
+            var selectString = "<span class='spanSelect"+cleanString+"'><select class='selection width-30p ui-form-control' id='"+cleanString+"' data-id='"+cleanString+"'>";
             selectString += optionString + "</select><a data-id='"+cleanString+"' data-head='"+selectedValue+"' class='edit-attr' href='javascript:void(0)'><span class='glyphicon glyphicon-pencil'></span></a>  <a data-id='"+cleanString+"' data-head='"+selectedValue+"' class='remove-attr' href='javascript:void(0)'><span class='glyphicon glyphicon-remove'></span></a></span>";
 
             if( !$.trim( $('.select-control-panel-option > .div2').html() ).length ) {
 
-                var rowString = '<div class="col-xs-1 col-sm-1 col-md-1 div1"><input class="qty ui-form-control" onkeypress="return isNumberKey(event)" name="allQuantity" type="text" size=3 value="1" /></div>\
-                <div class="col-xs-9 col-sm-9 col-md-9  div2">'+selectString+'</div>\
-                <div class="col-xs-2 col-sm-2 col-md-2 div3 text-center"><input type="button" class="select-combination bg-color orange_btn3 width-70p" value="Add" /> <input class="set-default" type="checkbox" /></div>';
+                var rowString = '<div class="col-xs-2 col-sm-2 col-md-2 div1"><input class="qty ui-form-control" onkeypress="return isNumberKey(event)" name="allQuantity" type="text" size=3 value="1" /></div>\
+                <div class="col-xs-8 col-sm-8 col-md-8  div2">'+selectString+'</div>\
+                <div class="col-xs-2 col-sm-2 col-md-2 div3"><input type="button" class="select-combination  orange_btn3 width-70p" value="Add" /></div>';
 
                 $('.select-control-panel-option').empty().append(rowString);
             }
             else{
-                var length = $(".select-control-panel-option > .div2 > span >#"+cleanString).length;
+                var length = $(".select-control-panel-option > .div2 > span > #"+cleanString).length;
                 
                 if(length <= 0){
                     $('.list-choosen-combination-div > .div-combination > .div2').append(selectString);
+                    $('.list-choosen-combination-div > .div-combination > .div2 > span > .selection').prop("disabled",true); 
                     $('.select-control-panel-option > .div2').append(selectString);
                     $('.list-choosen-combination-div > .div-combination > .div2 > span > .remove-attr').remove();
                 }
                 else{
-                    $('.div2 > span > #'+cleanString).append(optionString);
+                    $('.select-control-panel-option > .div2 > span > #'+cleanString).append(optionString);
                 }
                 if(checked){
                     $('.list-choosen-combination-div > .div-combination > .div2 > span > .selection').empty().append('<option>All Combination</option>');
@@ -515,8 +620,35 @@ $(document).ready(function() {
             currentSelector.parent().removeClass().addClass('spanSelect'+cleanString)
             
             if(!checked){
-                $('.list-choosen-combination-div > .div-combination > .div2 > span > #'+editSelectedId).empty().append(optionString).attr("id",cleanString);
+                $('.list-choosen-combination-div > .div-combination > .div2 > span > #'+editSelectedId).append(optionString).attr("id",cleanString);
             }
+
+            validSelection = [];
+            currentSelector.children('option').each(function () {
+                var valx = $(this).data('value');
+                var eachCombination = {};
+                eachCombination.price = $(this).data('price');
+                eachCombination.image = $(this).data('image'); 
+                eachCombination.text = $(this).text(); 
+                validSelection[valx] = eachCombination;
+            });
+ 
+            $('.list-choosen-combination-div > .div-combination').each(function () {
+                var used = {}; 
+              
+                $(this).find(".div2").find('span').find('#'+editSelectedId).each(function () {
+                    var selectedValue = $(this).children('option:selected').data('value');
+                    if( validSelection[selectedValue] === undefined ) { 
+                        $(this).children('option:selected').remove();
+                    }
+                    else{
+                        $(this).children('option:selected').data('price',validSelection[selectedValue]['price']);
+                        $(this).children('option:selected').data('image',validSelection[selectedValue]['image']);
+                        $(this).children('option:selected').text(validSelection[selectedValue]['text']);
+                        console.log($(this).children('option:selected').data('price'));
+                    }
+                });
+            });
 
             if(optionString == "")
             {
@@ -524,18 +656,19 @@ $(document).ready(function() {
                 if( !$.trim( $('.select-control-panel-option > .div2').html() ).length ) {
                     $('.list-choosen-combination-div,.select-control-panel-option ').empty();
                     $('.select-control-panel-option').append('\
-                        <div class="col-xs-1 col-sm-1 col-md-1 div1">\
-                        <input type="text" value="1" name="allQuantity" size="3" class="qty ui-form-control" onkeypress="return isNumberKey(event)">\
+                        <div class="col-xs-2 col-sm-2 col-md-2 div1">\
+                        <input type="text" value="1" name="allQuantity" size="3" class="qty" onkeypress="return isNumberKey(event)">\
                         </div>\
-                        <div class="col-xs-9 col-sm-9 col-md-9 div2"></div>\
-                        <div class="col-xs-2 col-sm-2 col-md-2 div3 text-center"></div>');
-                    resetControlPanel();
+                        <div class="col-xs-8 col-sm-8 col-md-8 div2"></div>\
+                        <div class="col-xs-2 col-sm-2 col-md-2 div3"></div>');
+                    resetControlPanel(true);
                 }
             }
             removeDuplicateCombination();
         }
         $(".ctrl").remove();    
-        resetControlPanel();
+        resetControlPanel(true);
+        zebraCombination();
     });
 
     $(document).on("click",".select-combination",function (){
@@ -573,12 +706,12 @@ $(document).ready(function() {
                 });
             });
 
-            $('.list-choosen-combination-div').append('<div class="mrgin-bttm-10 div-combination combination'+combinationcnt+'"></div>');
+            $('.list-choosen-combination-div').append('<div class="div-combination zebra-div combination'+combinationcnt+'"></div>');
             $('.combination'+combinationcnt).append($('.select-control-panel-option').children().clone());
             $('.list-choosen-combination-div > .div-combination > .div2 > span > .remove-attr').remove();
             $(".select-control-panel-option > .div2 > span > .selection").each(function() {
                 var selValue = $('.select-control-panel-option > .div2 > span > #'+$(this).data('id') +' option:selected').text();
-                $(".combination"+combinationcnt+" > .div2 > span > #" + $(this).data('id')).val(selValue);
+                $(".combination"+combinationcnt+" > .div2 > span > #" + $(this).data('id')).val(selValue).prop("disabled",true);
             });
 
             $('.combination'+combinationcnt +' > .div3').empty().append('<input class="remove-combination btn btn-danger width-70p" data-cmbcnt="'+combinationcnt+'" type="button" value="Remove">')
@@ -587,14 +720,15 @@ $(document).ready(function() {
         }
         else{ 
             $('.select-combination').prop("disabled",true); 
-            $('.list-choosen-combination-div').append('<div class="div-combination combinationAll"></div>');
+            $('.list-choosen-combination-div').append('<div class="div-combination zebra-div combinationAll"></div>');
             $('.combinationAll').append($('.select-control-panel-option').children().clone());
             $('.list-choosen-combination-div > .div-combination > .div2 > span > .remove-attr').remove(); 
             $('.list-choosen-combination-div > .div-combination > .div2 > span > .edit-attr').remove();    
             $('.combinationAll > .div2 > span > .selection').empty().append('<option>All Combination</option>');
             $('.combinationAll > .div3').empty().append('<input class="remove-combination btn btn-danger width-70p" data-cmbcnt="All" type="button" value="Remove">')
-        }        
-
+        }
+        resetControlPanel(true);
+        zebraCombination();
     });
 
     $(document).on("click",".remove-combination",function (){
@@ -604,28 +738,34 @@ $(document).ready(function() {
         if( !$.trim( $('.list-choosen-combination-div').html() ).length ) { 
             $('.select-combination').prop("disabled",false); 
             $('.select-control-panel-option > .div3 > .set-default').remove();
-            $('.select-control-panel-option > .div3').append('<input type="checkbox" class="set-default">');
+            // $('.select-control-panel-option > .div3').append('<input type="checkbox" class="set-default">');
         }
+        resetControlPanel(true);
+        zebraCombination();
     });
 
     $(document).on("click",".remove-attr",function (){
         var selector = $(this);
         console.log('you press remove-attr class');
         console.log('confirmation ask');
-        var confirmation = confirm('Are you sure you want to remove?');
+
         var id = selector.data('id');
+        validateRedTextBox(".div2 > span > #"+id);
+        var confirmation = confirm('Are you sure you want to remove?');
         if(confirmation === true){
             $('.spanSelect'+id).remove();
             if( !$.trim( $('.select-control-panel-option > .div2').html() ).length ) {
                 $('.list-choosen-combination-div,.select-control-panel-option ').empty();
                 $('.select-control-panel-option').append('\
-                    <div class="col-xs-1 col-sm-1 col-md-1 div1">\
-                    <input type="text" name="allQuantity" value="1" size="3" class="qty ui-form-control" onkeypress="return isNumberKey(event)">\
+                    <div class="col-xs-2 col-sm-2 col-md-2 div1">\
+                    <input type="text" name="allQuantity" value="1" size="3" class="qty" onkeypress="return isNumberKey(event)">\
                     </div>\
-                    <div class="col-xs-9 col-sm-9 col-md-9 div2"></div>\
-                    <div class="col-xs-2 col-sm-2 col-md-2 div3 text-center"></div>');
+                    <div class="col-xs-8 col-sm-8 col-md-8 div2"></div>\
+                    <div class="col-xs-2 col-sm-2 col-md-2 div3"></div>');
             }
+            resetControlPanel(true);
         }
+        validateWhiteTextBox(".div2 > span > #"+id);
         removeDuplicateCombination();
     });
 
@@ -635,24 +775,26 @@ $(document).ready(function() {
         var id = editSelectedId = selector.data('id'); 
 
         $('.add-property').val('Save Property').nextAll().remove();
-        $('.add-property').after('<input type="button" id="cancel-changes" class="btn btn-default width-80p" value="Cancel" />')
+        $('.add-property').after('<input type="button" id="cancel-changes" value="Cancel" />')
         $('#head-data').val(head).trigger("liszt:updated");
         $('.control-panel').empty();
+        validateRedTextBox(".div2 > span > #"+id);
         $(".select-control-panel-option > .div2 > span > #"+id +" option").each(function(){
             var row = appendNewSelectionRow();
             var value = $(this).data('value'); 
             var price = $(this).data('price'); 
             var image = $(this).data('image'); 
+            var displayImage = (image == "") ? 'assets/images/img_upload_photo.jpg' : tempDirectory+'other/'+image;
             $('.control-panel-'+row +' > .value-section > .select-value-section > #value-data-'+row).val(value);
             $('.control-panel-'+row +' > .price-div > .price'+row).val(price);
             $('.control-panel-'+row +' > .image-div > .imageText'+row).val(image);
-            $('.control-panel-'+row +' > .image-div > .image'+row+' img').attr("src",config.base_url+tempDirectory+'other/'+image);
+            $('.control-panel-'+row +' > .image-div > .image'+row+' img').attr("src",config.base_url+displayImage);
             $('#value-data-'+row).trigger("liszt:updated");
         });
     });
 
     $(document).on("click","#cancel-changes",function (){
-        resetControlPanel();
+        resetControlPanel(true);
     });
 
 });
@@ -773,7 +915,7 @@ var canProceed = true;
 var removeThisPictures = []; var imageAttr = [];
 var pictureCountOther  = 0; var primaryPicture = 0;
 $(document).ready(function() {
-
+  
     if(window.FileReader) {   
         badIE = false;
         $('#inputList').append('<input type="file" id="files" class="files active" name="files[]" multiple accept="image/*" required = "required"  />');
@@ -786,11 +928,9 @@ $(document).ready(function() {
         $('.files.active').click(); 
     });
 
-
     var filescnt = 1;
     var imageCustom =  new Array();
     var editRemoveThisPictures = new Array();
-    var editPrimaryPicture = 0;
     var response;
     var filescntret;
     var currentCnt;
@@ -812,12 +952,12 @@ $(document).ready(function() {
                 var extension = val.substring(val.lastIndexOf('.') + 1).toLowerCase();
                 var objectUrl = anyWindow.createObjectURL(fileList[i]); 
                 pictureInDiv = $("#list > div").length;
+
                 if(pictureInDiv == 0){
                     primaryText = "Your Primary";
                     activeText = "active_img";
                     primaryPicture = pictureCount;
                 }
-                console.log(activeText);
 
                 if((extension == 'gif' || extension == 'jpg' || extension == 'png' || extension == 'jpeg') && size < 5242880){
                     $('#list').append('<div id="previewList'+pictureCount+'" class="new_img upload_img_div '+activeText+' filescnt filescntactive filescnt'+filescnt+'">\
@@ -839,17 +979,17 @@ $(document).ready(function() {
                     removeThisPictures.push(pictureCount);
                 }
 
-                af.push(tempId+'_'+memberId+'_'+fulldate+pictureCount+'.'+extension+'||'+extension); 
-                afstart.push(tempId+'_'+memberId+'_'+fulldate+pictureCount+'.'+extension); 
-
+                imageName = tempId+'_'+memberId+'_'+fulldate+pictureCount+'.'+extension;
+                af.push(imageName+'||'+extension); 
+                afstart.push(imageName); 
                 window.URL.revokeObjectURL(fileList[i]);
                 arrayUpload.push(pictureCount);
                 pictureCount++; 
-
             }
             console.log(primaryPicture);
+
             if(errorValues != ""){
-                alert("Sorry, the following files cannot be uploaded:", errorValues)
+                alert("Sorry, the following files cannot be uploaded:", errorValues);
             }
 
             $(".files").hide();  
@@ -857,8 +997,7 @@ $(document).ready(function() {
                 $(this).removeClass('active');
             });
 
-
-            startUpload(pictureCount,filescnt,arrayUpload,afstart);
+            startUpload(pictureCount,filescnt,arrayUpload,afstart,imageName);
             filescnt++;
             $('#inputList').append('<input type="file"  id="files" class="files active" name="files[]" multiple accept="image/*" required = "required"  /> ');
             $(this).remove();
@@ -870,46 +1009,47 @@ $(document).ready(function() {
             var primaryText = "Make Primary"; 
             var val = $(this).val();
             pictureInDiv = $("#list > div").length;
+
             if(pictureInDiv == 0){
                 primaryText = "Your Primary";
-                activeText = "active_img";   
+                activeText = "active_img";
                 primaryPicture = pictureCount;
             }
 
             var id = "imgid" + pictureCount;
             imageCustom = document.getElementById('files').value;
-
             var filename = imageCustom.match(/[^\/\\]+$/);
             extension = val.substring(val.lastIndexOf('.') + 1).toLowerCase();
+
             switch(extension){
                 case 'gif': case 'jpg': case 'png': case 'jpeg':
-
-                $('#list').append('<div id="previewList'+pictureCount+'" class="new_img upload_img_div '+activeText+' filescnt filescntactive filescnt'+filescnt+'"><span class="upload_img_con"><img src="'+imageCustom+'" alt="'+filename+'" style="height:100px;"></span><a href="javascript:void(0)" class="removepic" data-number="'+pictureCount+'">x</a><br><a href="javascript:void(0)" class="makeprimary photoprimary'+pictureCount+'" data-number="'+pictureCount+'">'+primaryText+'</a><div class="loadingfiles"></div></div>');   
-                $('.filescnt'+filescnt+' > .makeprimary').hide(); 
-                $('.filescnt'+filescnt+' > .removepic').hide(); 
+                    $('#list').append('<div id="previewList'+pictureCount+'" class="new_img upload_img_div '+activeText+' filescnt filescntactive filescnt'+filescnt+'"><span class="upload_img_con"><img src="'+imageCustom+'" alt="'+filename+'" style="height:100px;"></span><a href="javascript:void(0)" class="removepic" data-number="'+pictureCount+'">x</a><br><a href="javascript:void(0)" class="makeprimary photoprimary'+pictureCount+'" data-number="'+pictureCount+'">'+primaryText+'</a><div class="loadingfiles"></div></div>');   
+                    $('.filescnt'+filescnt+' > .makeprimary').hide(); 
+                    $('.filescnt'+filescnt+' > .removepic').hide(); 
                 break;
                 default:
-                removeThisPictures.push(pictureCount); 
+                    alert('Invalid file type. Please choose another.');
+                    removeThisPictures.push(pictureCount); 
+                    return false;
                 break;
             }
-
-            af.push(tempId+'_'+memberId+'_'+fulldate+pictureCount+'.'+extension+'||'+extension); 
-            afstart.push(tempId+'_'+memberId+'_'+fulldate+pictureCount+'.'+extension); 
-
-            arrayUpload.push(pictureCount);  
-            pictureCount++;
 
             $(".files").hide();  
             $(".files.active").each(function(){
                 $(this).removeClass('active');
             });
 
-            startUpload(pictureCount,filescnt,arrayUpload,afstart);
+            imageName = tempId+'_'+memberId+'_'+fulldate+pictureCount+'.'+extension;
+            af.push(imageName+'||'+extension); 
+            afstart.push(imageName); 
+            arrayUpload.push(pictureCount);  
+            pictureCount++;
+            startUpload(pictureCount,filescnt,arrayUpload,afstart,imageName);
             filescnt++;
         }
     });
 
-    function startUpload(cnt,filescnt,arrayUpload,afstart){
+    function startUpload(cnt,filescnt,arrayUpload,afstart,imageName){
 
         $('.counter').val(cnt); 
         $('.filescnttxt').val(filescnt); 
@@ -928,9 +1068,8 @@ $(document).ready(function() {
                 $('.filescnt'+filescntret+' > span').removeClass('loading_opacity');
                 $('.filescnt'+filescnt+' > .makeprimary').show(); 
                 $('.filescnt'+filescnt+' > .removepic').show(); 
-                canProceed = true;
-
-                if(d.err == '1'){
+                canProceed = true; 
+                if(d.err == '1'){ 
                     alert(d.msg);
                     $.each( arrayUpload, function( key, value ) {
                         removeThisPictures.push(value); 
@@ -938,18 +1077,21 @@ $(document).ready(function() {
                     });
                 } 
                 if(badIE == true){
+                    if(d.err != '1'){
+                        $.each( arrayUpload, function( key, value ) {
+                            $('#previewList'+value + ' > span > img').attr("src",config.base_url+tempDirectory+'/'+imageName);
+                        });
+                    } 
                     $(".files").remove();
                     $('#inputList').append('<input type="file"  id="files" class="files active" name="files[]" accept="image/*" required = "required"  /> ');
                 }
             },
             error: function (request, status, error) {
                 response = request.responseText;
-                if (response.toLowerCase().indexOf("1001") >= 0){
-                    alert('Sorry, the images you are uploading are too large.');
-                }
-                else{
-                    alert('Sorry, we have encountered a problem.','Please try again after a few minutes.');
-                }
+                var msg = (response.toLowerCase().indexOf("1001") >= 0) ? 'Sorry, the images you are uploading are too large.' : 'Sorry, we have encountered a problem.\nPlease try again after a few minutes.';
+                
+                alert(msg);
+
                 $.each( arrayUpload, function( key, value ) {
                     removeThisPictures.push(value); 
                     $('#previewList'+value).remove();
@@ -969,7 +1111,7 @@ $(document).ready(function() {
         var selector = $(this);
         currentCnt = selector.data('cnt');
         $('.imageText'+currentCnt).val('');
-        $('.image'+currentCnt+' > img').attr("src",config.base_url+"assets/images/img_upload_photo.jpg");
+        $('.image'+currentCnt+' > img,.pop-image-container > a > img').attr("src",config.base_url+"assets/images/img_upload_photo.jpg");
     });
 
     $(document).on('click',".attr-image",function (e){
@@ -978,10 +1120,36 @@ $(document).ready(function() {
         $('.attr-image-input').click(); 
     });
 
-    $(document).on('change',".attr-image-input",function (e){
+    $(document).on('click',".select-image",function (e){   
+        var cnt = $(this).data('cnt');   
+        var img = $('.image'+cnt).children('img').attr("src");
+        $('.pop-image-container > a > img').attr("src", img);
+        $('.pop-image-container > a,.pop-image-remove-container > a').data('cnt', cnt); 
+        $('#pop-image').modal({
+            escClose: false,
+            containerCss:{
+                maxHeight: 400,
+                minHeight: 400,
+            },
+            persist: true
+        });
+        $("#pop-image").parents("#simplemodal-container").addClass("prod-upload-con");
+    });
 
+    $(document).on('change',".attr-image-input",function (e){
+ 
         var val = $(this).val();
         extension = val.substring(val.lastIndexOf('.') + 1).toLowerCase();
+
+        switch(extension){
+            case 'gif': case 'jpg': case 'png': case 'jpeg':             
+            break;
+            default:
+                alert('Invalid file type. Please choose another.');
+                return false;
+            break;
+        }
+ 
         picName = tempId+'_'+memberId+'_'+fulldate+pictureCountOther+'o.'+extension;
         $('#other_files').ajaxForm({
             url: config.base_url+'productUpload/uploadimageOther',
@@ -992,27 +1160,29 @@ $(document).ready(function() {
                 arr.push({name:'pictureCount', value:pictureCountOther});
             },
             uploadProgress : function(event, position, total, percentComplete) {
-
+                canProceed = false;
             },
             success :function(d) {   
-                imageAttr.push(picName);
-                $('.imageText'+currentCnt).val(picName);
-
-                $('.image'+currentCnt+' > img').attr("src",config.base_url+tempDirectory+'other/'+picName);
-                console.log(currentCnt);
-            } 
-        }).submit(); 
-        pictureCountOther++; 
+                canProceed = true;
+                if(d.result == "ok"){
+                    imageAttr.push(picName);
+                    $('.imageText'+currentCnt).val(picName); 
+                    $('.image'+currentCnt+' > img,.pop-image-container > a > img').attr("src",config.base_url+tempDirectory+'other/'+picName);
+                    pictureCountOther++;    
+                }
+                else{
+                    alert(d.msg);
+                }
+            },
+            error: function (request, status, error) {
+                alert('Sorry, we have encountered a problem.','Please try again after a few minutes.');
+                canProceed = true;
+            }
+        }).submit();  
     });
 
 
     $(document).on('click',".removepic",function (){
-        /* 
-        * Altered ON: 5/6/2014
-        * Altered BY: SAM (for edit functionlity)
-        * Changed ".photoprimary"+idNumber selector to $(this) + sibling/closest selectors
-        * SEE REVISION 1529 for original code
-        */
         var text = $(this).siblings('.makeprimary').first().text();
         var idNumber = $(this).data('number');
         removeThisPictures.push(idNumber);
@@ -1030,24 +1200,7 @@ $(document).ready(function() {
     });
 
     $(document).on('click','.makeprimary',function(){
-        /* 
-         * Altered ON: 5/6/2014
-         * Altered BY: SAM (for edit functionlity)
-         * Changed ".photoprimary"+idNumber selector to $(this) + sibling/closest selectors
-         * SEE SVN REVISION 1529 for original code
-         */
-
-        if($(this).closest('.upload_img_div').hasClass('new_img')){
-            primaryPicture = $(this).data('number');
-            editPrimaryPicture = -1;
-        }
-        else if($(this).closest('.upload_img_div').hasClass('edit_img')){
-            editPrimaryPicture = $(this).data('imgid');
-            primaryPicture = 0;
-        }
-        else{
-            return false;
-        }
+        primaryPicture = $(this).data('number'); 
         $(".makeprimary").text('Make Primary');
         $(".upload_img_div").removeClass("active_img");
         $(this).text('Your Primary');
@@ -1056,9 +1209,6 @@ $(document).ready(function() {
 });
 // ES_UPLOADER BETA END
 
-$(function() {
-
-});
 
     // SAVING AND PROCEED 
     $(document).on('click','#proceed_form',function(){
@@ -1071,7 +1221,7 @@ $(function() {
                 prod_price :{
                     required: true,
                     number: true,
-                    range :[1,Infinity]
+                    range :[0.1,Infinity]
                 },
                 prod_condition: {
                     required: true
@@ -1087,6 +1237,15 @@ $(function() {
                     required: "Enter a valid price",
                     range : "Price must not be less than 0"
                 }
+            },
+            errorClass: "errorTxt",
+            validClass: "validateTxt",
+            highlight: function( element, errorClass, validClass ) { 
+                validateRedTextBox(element);
+            },
+            unhighlight: function( element, errorClass, validClass ) { 
+                validateWhiteTextBox(element);
+
             }
         });
 
@@ -1118,11 +1277,22 @@ $(function() {
             }  
         }
 
+        tinyMCE.triggerSave();   
+        if($('#prod_description').val().length <= 0){
+            validateRedTextBox('.mce-tinymce');
+            tinymce.execCommand('mceFocus',false,'prod_description');
+            return false; 
+        }
+        validateWhiteTextBox('.mce-tinymce');
+        
+        if(canProceed == false){
+            alert('Please wait while you image is uploading.');
+            return false;
+        }
 
         window.onbeforeunload=null;
         $('.arrayNameOfFiles').val(JSON.stringify(af));
-        tinyMCE.triggerSave();   
-        proceedStep3('processing');     
+        proceedStep3('processing');   
         $('#form_product').submit();
     });
 
@@ -1133,6 +1303,9 @@ $(function() {
             $('#prod_brand').trigger( "change" );
         }
         confirm_unload = false;
+        if(isEdit == 1){
+            saveAsDraftProceed(); 
+        }
         $('#edit_step1').submit();
     });
 
@@ -1140,23 +1313,30 @@ $(function() {
     {
         var completeCombination = [];   
         $(".div-combination").each(function(){
+
             var currentDiv = $(this);
             var selectList = currentDiv.children('.div2').children('span');
 
             var eachData = {};
             var eachCombination = {};
+            var itemId = 0;
+            if (currentDiv.data("itemid") != undefined) {
+                itemId = currentDiv.data("itemid");
+            }
 
             selectList.each(function(){
                 var currentSelect = $(this);
                 var optionSelected = $(this).children('select').children('option:selected');
                 var head = optionSelected.data('head');
-                var value = optionSelected.data('value');
+                 var value = optionSelected.data('value');
                 var price = optionSelected.data('price');
                 eachData[head] = value; 
             });
 
             eachCombination.quantity = currentDiv.children('.div1').children('.qty').val(); 
             eachCombination.data = eachData; 
+            eachCombination.itemid = itemId; 
+            console.log(eachCombination);
             completeCombination.push(eachCombination);
         });
 
@@ -1200,16 +1380,44 @@ $(function() {
             beforeSubmit : function(arr, $form, options){
 
                 var combination = processCombination();
+                console.log(combination);
                 var attributes = processAttributes(); 
+                console.log(attributes);
 
                 var percentVal = '0%';
                 $('.percentage').html(percentVal);
                 $( ".button_div" ).hide();
                 $( ".loader_div" ).show();
-                arr.push({name:'primaryPicture', value:primaryPicture});
-                arr.push({name:'removeThisPictures', value:JSON.stringify(removeThisPictures)});
-                arr.push({name:'combination',value:combination});
-                arr.push({name:'attributes',value:attributes});
+
+                $('<input type="hidden">').attr({
+                      id: 'primaryPicture',
+                      name: 'primaryPicture',
+                      value: primaryPicture
+                    }).appendTo('form');
+                arr.push({"name":"primaryPicture", "value":primaryPicture});
+
+                $('<input type="hidden">').attr({
+                      id: 'removeThisPictures',
+                      name: 'removeThisPictures',
+                      value: JSON.stringify(removeThisPictures)
+                    }).appendTo('form');
+                arr.push({"name":"removeThisPictures", "value":JSON.stringify(removeThisPictures)});
+
+                $('<input type="hidden">').attr({
+                      id: 'combination',
+                      name: 'combination',
+                      value: combination
+                    }).appendTo('form');
+                arr.push({"name":"combination","value":combination});
+
+                $('<input type="hidden">').attr({
+                      id: 'attributes',
+                      name: 'attributes',
+                      value: attributes
+                    }).appendTo('form');
+                arr.push({"name":"attributes","value":attributes});
+
+ 
             },
             uploadProgress : function(event, position, total, percentComplete) {
                 var percentVal = percentComplete + '%';
@@ -1258,11 +1466,42 @@ $(function() {
             beforeSubmit : function(arr, $form, options){
                 var combination = processCombination();
                 var attributes = processAttributes(); 
+
+                $('<input type="hidden">').attr({
+                      id: 'primaryPicture',
+                      name: 'primaryPicture',
+                      value: primaryPicture
+                }).appendTo('form');
                 arr.push({name:'primaryPicture', value:primaryPicture});
+
+                $('<input type="hidden">').attr({
+                  id: 'removeThisPictures',
+                  name: 'removeThisPictures',
+                  value: JSON.stringify(removeThisPictures)
+                }).appendTo('form');
                 arr.push({name:'removeThisPictures', value:JSON.stringify(removeThisPictures)});
+
+                $('<input type="hidden">').attr({
+                  id: 'combination',
+                  name: 'combination',
+                  value: combination
+                }).appendTo('form');
                 arr.push({name:'combination',value:combination});
+
+                $('<input type="hidden">').attr({
+                    id: 'attributes',
+                    name: 'attributes',
+                    value: attributes
+                }).appendTo('form');
                 arr.push({name:'attributes',value:attributes});
+
+                $('<input type="hidden">').attr({
+                    id: 'savedraft',
+                    name: 'savedraft',
+                    value: '1'
+                }).appendTo('form');
                 arr.push({name:'savedraft',value:'1'});
+
             },success :function(d) { 
                 $("#form_product").attr("action", "/sell/edit/processing");
                 $("#form_product").append('<input type="hidden" name="p_id" id="p_id" value="'+d.d+'">');
@@ -1301,7 +1540,7 @@ jQuery(function($){
 
     $(document).on('click', '.prevent', function(event){
         confirm_unload = false;
-        var loc = $(this).attr("href");       
+        var loc = $(this).attr("href");        
         event.preventDefault(); 
         askDraft(loc);
     });                 
@@ -1309,7 +1548,7 @@ jQuery(function($){
 
     function askDraft(location)
     {
-        if(isEdit == 0){
+        if(isEdit == 0){ 
             $("#question").dialog({
                 resizable: false,
                 height: 100,
@@ -1334,7 +1573,7 @@ jQuery(function($){
                 "title": "Your about to leave this page without saving. Do you want this to save as draft?"
             });   
         }
-        else{
+        else{ 
             $("#question").dialog({
                 resizable: false,
                 height: 100,

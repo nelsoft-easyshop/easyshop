@@ -2,399 +2,402 @@
 <link rel="stylesheet" href="<?=base_url()?>assets/css/product_preview.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
 <link rel="stylesheet" href="<?=base_url()?>assets/css/jquery.bxslider.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
 <link  type="text/css"  href='<?=base_url()?>assets/css/product_upload_tutorial.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
+<link type="text/css" href="<?=base_url()?>assets/css/responsive_css.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet"  media="screen"/>
 <!--Chosen CSS-->
 <link rel="stylesheet" href="<?=base_url()?>assets/css/chosen.min.css" type="text/css" media="screen"/>
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 
-	<div class="clear"></div>
+<div class="clear"></div>
 
-	<div class="res_wrapper seller_product_content">
-		<div class="inner_seller_product_content">
-			<h2 class="f24">Sell an Item</h2>
-			<div class="sell_steps sell_steps3"> 
-				<ul> 
+    <div class="res_wrapper seller_product_content">
+        <div class="inner_seller_product_content">
+            <h2 class="f24">Sell an Item</h2>
+            <div class="sell_steps sell_steps3"> 
+                <ul> 
                     <li class="steps_txt_hide">
-	                    <a href="javascript:void(0)" id="step1_link">
-	                        <span class="span_bg left-arrow-shape2"></span>
-	                        <span class="steps_txt">Step 1: Select Category
-	                        </span><span class="span_bg right-arrow-shape"></span>
-	                    </a>
+                        <a href="javascript:void(0)" id="step1_link">
+                            <span class="span_bg left-arrow-shape2"></span>
+                            <span class="steps_txt">Step 1: Select Category
+                            </span><span class="span_bg right-arrow-shape"></span>
+                        </a>
                     </li>
                     <li class="steps_txt_hide">
-	                    <a href="javascript:void(0)" id="step2_link">
-	                        <span class="span_bg left-arrow-shape2"></span>
-	                        <span class="steps_txt">Step 2: Upload Item</span>
-	                        <span class="span_bg right-arrow-shape"></span>
-	                    </a>
+                        <a href="javascript:void(0)" id="step2_link">
+                            <span class="span_bg left-arrow-shape2"></span>
+                            <span class="steps_txt">Step 2: Upload Item</span>
+                            <span class="span_bg right-arrow-shape"></span>
+                        </a>
                     </li>                   
                     <li>
                         <span class="span_bg left-arrow-shape ar_active"></span>
-	                    <span class="steps_txt_active"><span class="f18">Step 3:</span> Shipping Location</span>
+                        <span class="steps_txt_active"><span class="f18">Step 3:</span> Shipping Location</span>
                         <span class="span_bg right-arrow-shape ar_r_active"></span>
                     </li>
                     <li class="steps_txt_hide">
-	                    <span class="span_bg left-arrow-shape2"></span>
-	                    <span class="steps_txt">Success</span>
-	                    <span class="span_bg right-arrow-shape"></span>
-                	</li>
+                        <span class="span_bg left-arrow-shape2"></span>
+                        <span class="steps_txt">Success</span>
+                        <span class="span_bg right-arrow-shape"></span>
+                    </li>
                   </ul>
-			</div>
-			<div class="clear"></div>
-			
-			<?php echo form_open('sell/edit/step2', array('id'=>'edit_step2'));?>
-				<input type="hidden" name="p_id" id="p_id" value="<?php echo $product_id;?>">
-			<?php echo form_close();?>
+            </div>
+            <div class="clear"></div>
+                
+            <?php echo form_open('sell/edit/step2', array('id'=>'edit_step2'));?>
+                <input type="hidden" name="p_id" id="p_id" value="<?php echo $product_id;?>">
+                <input type="hidden" name="hiddenattribute" value="<?php echo $product['cat_id']?>">
+                <input type="hidden" name="othernamecategory" value="<?php echo $product['cat_other_name']?>">
+            <?php echo form_close();?>
 
-			<?php echo form_open('sell/edit/step1', array('id'=>'edit_step1'));?>
-				<input type="hidden" name="p_id" id="p_id" value="<?php echo $product_id;?>">
-			<?php echo form_close();?>
-			
-			<div class="product_upload_success pd-top-30">
-				<p>
-					<img src="<?=base_url()?>assets/images/img_success.png">
-						<?php if(!isset($is_edit)): ?>
-							You have <strong>successfully</strong> uploaded <span>1 new item</span>
-						<?php else: ?>   
-							You have <strong>successfully</strong> edited your listing for <span><?php echo html_escape($product['product_name']);?></span>. 
-						<?php endif; ?>  
-					
-					<a href="<?php echo base_url().'item/'.$product['slug']; ?>" class="blue">Click here to view</a>
-				</p>
-			</div>
-		</div>
-	</div>
+            <?php echo form_open('sell/step1', array('id'=>'edit_step1'));?>
+                <input type="hidden" name="p_id" id="p_id" value="<?php echo $product_id;?>">
+            <?php echo form_close();?>
+            
+            <div class="product_upload_success pd-top-30">
+                <p>
+                    <img src="<?=base_url()?>assets/images/img_success.png">
+                        <?php if(!isset($is_edit)): ?>
+                            You have <strong>successfully</strong> uploaded <span>1 new item</span>
+                        <?php else: ?>   
+                            You have <strong>successfully</strong> edited your listing for <span><?php echo html_escape($product['product_name']);?></span>. 
+                        <?php endif; ?>  
+                    
+                    <a href="<?php echo base_url().'item/'.$product['slug']; ?>" class="blue">Click here to view</a>
+                </p>
+            </div>
+        </div>
+    </div>
 
-	<div class="clear"></div>  
-	
-		
-	<div id="bank_details">
-		<?php foreach($billing_info as $idx=>$x): ?>
-			<?php if(count($x['products'])): ?>
-				<div style='display:none; height: 600px; overflow-y:scroll;' class='acct_prod' data-bid='<?php echo $idx; ?>'>
-					This account is currently in use for <strong><?php echo count($x['products']) ?></strong> products. Are you sure about this action?
-					<br/><br/>
-					<span style='font-size:10px;'>
-					* All purchases made for the items listed below will still be linked to the original account. We will call you to confirm if you have made any changes within the
-					current pay-out period before making a deposit. Should you wish to change the deposit account for any of your items, you can do it by editing your item listing.
-					</span>
-					
-					<br/><br/>
-					<?php foreach($x['products'] as $y): ?>
-						<div style='width:auto; height:20px;'><a href='<?=base_url()?>item/<?=$y['p_slug']?>'><span style='font-weight:bold'><?php echo html_escape($y['p_name']);?> - <?php echo date('m/d/Y', strtotime($y['p_date'])); ?></span> | <?php echo es_string_limit(html_escape($y['p_briefdesc']), 60);?></a></div>
-					<?php endforeach; ?>
-				</div>
-			<?php endif; ?>       
-		<?php endforeach; ?>
+    <div class="clear"></div>  
 
-		<div class="step3_header_title res_wrapper">
-			<h2 class="f24">Optional</h2>
-		</div>
-		<div class="res_wrapper">
-			<div class="paid_section_container table-bordered">
-				<div class="col-xs-12 bg-cl-e5e5e5">
-					<h5>How am I going to be paid</h5> 
-				</div>
-				<div class="clear"></div>
-				<div class="step3_content_con pd-tb-15">
-					<div class="col-md-8">
-						<div class="">
-							<div class="row pd-bttm-15">
-								<div class="col-xs-12 col-sm-3">
-									<label for="deposit_info">Deposit to: </label>
-								</div>
-								<div class="col-xs-12 col-sm-9">									
-									<select id="deposit_info" class="form-control">
-										<?php foreach($billing_info as $x): ?>
-											<option data-bankname="<?php echo html_escape($x['bank_name']);?>" data-bankid="<?php echo $x['bank_id'];?>" data-acctname="<?php echo  html_escape($x['bank_account_name']); ?>" data-acctno="<?php echo  html_escape($x['bank_account_number']); ?>"    value="<?php echo $x['id_billing_info'];?>"><?php echo  html_escape($x['payment_type']).': '. html_escape($x['bank_name']).' - '. html_escape($x['bank_account_name']);?>
-											</option>
-										<?php endforeach; ?>
-										<option value="0">ADD NEW PAYMENT ACCOUNT</option>
-									</select>									
-								</div>
-							</div>
-							<?php $first_accnt = reset($billing_info);?>
-							<div class="row pd-bttm-15">
-								<div class="col-xs-8 col-sm-3">
-									<label for="deposit_acct_name">Account name: </label>
-								</div>
-								<div class="col-xs-12 col-sm-9">
-									<input class="form-control" name="deposit_acct_name" id="deposit_acct_name" type ="text" value="<?php echo  html_escape(isset($first_accnt['bank_account_name'])?$first_accnt['bank_account_name']:''); ?>"  <?php echo isset($first_accnt['bank_account_name'])?'readonly':''; ?>/>
-								</div>
-							</div>
-							<div class="row pd-bttm-15">
-								<div class="col-xs-8 col-sm-3">
-									<label for="deposit_acct_no">Account number:</label>
-								</div>
-								<div class="col-xs-12 col-sm-9">						
-									<input class="form-control" name="deposit_acct_no" id="deposit_acct_no" type ="text" value="<?php echo  html_escape(isset($first_accnt['bank_account_number'])?$first_accnt['bank_account_number']:''); ?>" <?php echo isset($first_accnt['bank_account_number'])?'readonly':''; ?>/>
-								</div>
-							</div>
-							<div class="row pd-bttm-15">
-								<div class="col-xs-8 col-sm-3">
-									<label for="bank_list">Bank:</label>
-								</div>
-								<div class="col-xs-12 col-sm-9">
-										<select class="form-control" id="bank_list" <?php echo (isset($first_accnt['bank_id']))?'disabled':'';?>>
-											<option value="0">Please select a bank</option>
-											<?php foreach($bank_list as $x): ?>
-												<?php if(isset($first_accnt['bank_id'])): ?>
-													<option value="<?php echo $x['id_bank'];?>" <?php echo (intval($x['id_bank'],10) === intval($first_accnt['bank_id'],10))?'selected':'';?>><?php echo  html_escape($x['bank_name']); ?>
-													</option>
-												<?php else: ?>
-													<option value="<?php echo $x['id_bank'];?>" ><?php echo  html_escape($x['bank_name']); ?>
-													</option>
-												<?php endif; ?>
-											<?php endforeach; ?>
-										</select>
-								</div>
-							</div>
-							<div class="row pd-bttm-15">
-								<div class="col-xs-12 col-sm-12 text-right">
-										<input type="hidden" id="bank_name" value="<?php echo  html_escape(isset($first_accnt['bank_name'])?$first_accnt['bank_name']:''); ?>"/>
-											
-										<?php if(count($billing_info) > 0): ?>
-											<span class="deposit_edit btn btn-default"><span class="span_bg"></span>Edit</span>
-											<span class="deposit_save btn btn-default" style="display:none">Save</span>
-										<?php else: ?>
-											<span class="deposit_edit btn btn-default" style="display:none">Edit</span>
-											<span class="deposit_save btn btn-default btn-primary">Save</span>
-										<?php endif; ?>
-											
-										<span class="deposit_update btn btn-default btn-primary" style="display:none">Update</span>
-										<span class="deposit_cancel btn btn-default" style="display:none">Cancel</span>
-											
-										<input type="hidden" id="temp_deposit_acct_name" value=""/>
-										<input type="hidden" id="temp_deposit_acct_no" value=""/>
-										<input type="hidden" id="temp_bank_list" value=""/>
-										<input type="hidden" id="temp_bank_name" value=""/>
-								</div>
-							</div>
-						</div>
-						<div class="clear"></div>	
-					</div>
+        
+    <div id="bank_details">
+        <?php foreach($billing_info as $idx=>$x): ?>
+            <?php if(count($x['products'])): ?>
+                <div style='display:none; height: 600px; overflow-y:scroll;' class='acct_prod' data-bid='<?php echo $idx; ?>'>
+                    This account is currently in use for <strong><?php echo count($x['products']) ?></strong> products. Are you sure about this action?
+                    <br/><br/>
+                    <span style='font-size:10px;'>
+                    * All purchases made for the items listed below will still be linked to the original account. We will call you to confirm if you have made any changes within the
+                    current pay-out period before making a deposit. Should you wish to change the deposit account for any of your items, you can do it by editing your item listing.
+                    </span>
+                    
+                    <br/><br/>
+                    <?php foreach($x['products'] as $y): ?>
+                        <div style='width:auto; height:20px;'><a href='<?=base_url()?>item/<?=$y['p_slug']?>'><span style='font-weight:bold'><?php echo html_escape($y['p_name']);?> - <?php echo date('m/d/Y', strtotime($y['p_date'])); ?></span> | <?php echo es_string_limit(html_escape($y['p_briefdesc']), 60);?></a></div>
+                    <?php endforeach; ?>
+                </div>
+            <?php endif; ?>       
+        <?php endforeach; ?>
 
-					<div id="cod_btn" class="col-md-4 cod-container <?php echo (int)$product['is_cod']===1 ? 'active':''?> ">
-						<div class="pd-bttm-10">							
-							<span class="cod-images"></span>
-							<div class="pos-rel width-185 mrgin-deflt">
-								<span class="cod-checkmark check_bgs3"></span>
-								<div class="cod-button button">
-									<span>Select Cash on Delivery</span>
-								</div>								
-							</div>
-						</div>
-					</div>			
-				</div>
-				<div class="clear"></div>
-			</div>
-			<div class="clear"></div>
-		</div>
-	</div>
-	
-	<!-- Input box for preference name -->
-	<div id="dialog_preference_name" style="display:none;">
-		<label for="preference_name">Name: </label>
-		<input type="text" id="preference_name" name="preference_name" maxlength="30">
-		<img src="<?=base_url()?>assets/images/orange_loader_small.gif" class="loading" style="display:none;vertical-align:middle; float: right;"/>
-	</div>
-	
-	<select id="shiploc_clone" style="display:none;" class="shiploc" name="shiploc" multiple data-placeholder="Select location(s)">
-		<?php foreach($shiploc['area'] as $island=>$loc):?>
-			<option value="<?php echo $shiploc['islandkey'][$island];?>"><?php echo $island;?></option>
-				<?php foreach($loc as $region=>$subloc):?>
-					<option value="<?php echo $shiploc['regionkey'][$region];?>" style="margin-left:15px;" >&nbsp;&nbsp;&nbsp;<?php echo $region;?></option>
-						<?php foreach($subloc as $id_cityprov=>$cityprov):?>
-							<option value="<?php echo $id_cityprov;?>" style="margin-left:30px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $cityprov;?></option>
-						<?php endforeach;?>
-				<?php endforeach;?>
-		<?php endforeach;?>
-	</select>
-	
-	
-	
-<?php echo form_open('sell/step4', array("id"=>"form_shipping"));?>
-	<input id="has_attr" name="has_attr" value="<?php echo $attr["has_attr"]?>" type="hidden">
-	
-<div class="res_wrapper">
-	<div class="step3_shipping_options table-bordered mrgn-top-35">
-		<div class="col-xs-12 bg-cl-e5e5e5">
-			<h5>How would you like to deliver your item</h5>
-		</div>
-		<div class="clear"></div>
-			<div class="col-xs-12 pd-bttm-15">
-				<div class="step3_shipping_option_meetup sh1">
-					<span class="">
-						<input class="delivery_option" type="checkbox" id="meetup" name="delivery_option[]" value="meetup" <?php echo (int)$product['is_meetup']===1 ? 'checked':''?> > <label for="meetup">Meet Up</label>
-					</span>
-					<span>
-						<input class="delivery_option" type="checkbox" id="delivery" name="delivery_option[]" value="delivery" <?php echo $shipping_summary['is_delivery'] ? 'checked' : ''?>> <label for="delivery">For Delivery</label>
-					</span>
-				</div>
-				<div id="delivery_options" class="sh2" style="display: <?php echo $shipping_summary['is_delivery'] ? '' : 'none'?> ">
-					<div class="pd-bottom-20 delivery-btn-con">
-						<div class="delivery_cost gbtn1 btn-block-2 <?php echo $shipping_summary['is_freeshipping'] ? 'active':''?>" id="set_free_shipping">Free Shipping
-						</div>
-						<div class="delivery_cost gbtn1 btn-block-2 <?php echo $shipping_summary['has_shippingsummary'] ? 'active':''?>" id="set_shipping_details">
-								Set Shipping Details
-						</div>
-					</div>
-				</div>
-				
-				<div id="shipping_div" class="sh3 border-all col-md-12 pd-tb-20" style="display:<?php echo $shipping_summary['has_shippingsummary'] ? '' : 'none'?>;">
-					<?php $sgCounter = 0; #shipping_group counter used as input submit array key;?>
-					<input type="hidden" id="shipping_group_count" class="shipping_group_count" value="<?php echo count($shipping_summary['shipping_display'])-1?>">
-					
-					<?php foreach($shipping_summary['shipping_display'] as $shiparr):?>
-					<div class="shipping_group sg_css" data-sgkey="<?php echo $sgCounter;?>">
-						<?php $siCounter = 0; #shipping_input counter?>
-						<input type="hidden" class="shipping_input_count" value="<?php echo count($shiparr['location'])-1?>">
-					
-						<div class="prefsel_css row prefsel">
-							<div class="col-xs-12 col-sm-7 col-md-7 hidden-xs"></div>
-							<div class="col-xs-12 col-sm-5">								
-									<select class="shipping_preference form-control">
-										<option value="0">Select Preference</option>
-										<?php foreach($shipping_preference['name'] as $headID=>$prefName):?>
-											<option class="allow_del" value="<?php echo $headID?>"><?php echo $prefName?></option>								
-										<?php endforeach;?>
-									</select>								
-									<span class="delete_ship_pref del_pref_css">Delete Preference</span>									
-							</div>
-						</div>
-					
-						<div class="data_group dg_css bg-cl-f0f0f0 pd-top-15 mrgntop-10">
-							<?php foreach($shiparr['location'] as $price=>$locarr):?>
-							<div class="clear"></div>
-							<div class="shipping_input si_css mrgn-bttm-15" data-sikey="<?php echo $siCounter;?>">
-								<div class="col-xs-4 col-sm-4 col-md-3">
-									<label for="price">&#8369;</label>
-									<input type="text" class="shipprice form-control" name="shipprice[<?php echo $sgCounter?>][<?php echo $siCounter?>]" value="<?php echo html_escape($price);?>">
-								</div>
-								<div class="col-xs-6 col-sm-6 col-md-7 upload_chosen">
-									<label for="location">Select Location</label><select class="shiploc form-control" name="shiploc[<?php echo $sgCounter?>][<?php echo $siCounter?>][]" multiple data-placeholder="Select location(s)">
-										<?php foreach($shiploc['area'] as $island=>$loc):?>
-											<option value="<?php echo $shiploc['islandkey'][$island];?>" <?php echo in_array($shiploc['islandkey'][$island],$locarr) ? 'selected':''?> <?php echo in_array($shiploc['islandkey'][$island],$shiparr['disable_lookup']) && !in_array($shiploc['islandkey'][$island],$locarr) ? 'disabled':''?>><?php echo $island;?></option>
-												<?php foreach($loc as $region=>$subloc):?>
-													<option value="<?php echo $shiploc['regionkey'][$region];?>" style="margin-left:15px;" <?php echo in_array($shiploc['regionkey'][$region],$locarr) ? 'selected':''?>  <?php echo in_array($shiploc['regionkey'][$region],$shiparr['disable_lookup']) && !in_array($shiploc['regionkey'][$region],$locarr) ? 'disabled':''?> >&nbsp;&nbsp;&nbsp;<?php echo $region;?></option>
-														<?php foreach($subloc as $id_cityprov=>$cityprov):?>
-															<option value="<?php echo $id_cityprov;?>" style="margin-left:30px;" <?php echo in_array($id_cityprov,$locarr) ? 'selected':''?>  <?php echo in_array($id_cityprov,$shiparr['disable_lookup']) && !in_array($id_cityprov,$locarr) ? 'disabled':''?> >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $cityprov;?></option>
-														<?php endforeach;?>
-												<?php endforeach;?>
-										<?php endforeach;?>
-									</select>
-								</div>
-								<?php if($siCounter > 0):?>
-								<div class="del_shipping_input col-xs-12 col-sm-3">
-									<span class="del_bgs3 glyphicon glyphicon-remove"></span>
-									<span>Remove row</span>
-								</div>
-								<?php endif;?>
-								<div class="clear"></div>
-							</div>
-							
-							<?php $siCounter++; endforeach;?>
-							<div class="attr_border"></div>
-							
+        <div class="step3_header_title res_wrapper">
+            <h2 class="f24">Optional</h2>
+        </div>
+        <div class="res_wrapper">
+            <div class="paid_section_container table-bordered">
+                <div class="col-xs-12 bg-cl-e5e5e5">
+                    <h5>How am I going to be paid</h5> 
+                </div>
+                <div class="clear"></div>
+                <div class="step3_content_con pd-tb-15">
+                    <div class="col-md-8">
+                        <div class="">
+                            <div class="row pd-bttm-15">
+                                <div class="col-xs-12 col-sm-3">
+                                    <label for="deposit_info">Deposit to: </label>
+                                </div>
+                                <div class="col-xs-12 col-sm-9">									
+                                    <select id="deposit_info" class="form-control">
+                                        <?php foreach($billing_info as $x): ?>
+                                            <option data-bankname="<?php echo html_escape($x['bank_name']);?>" data-bankid="<?php echo $x['bank_id'];?>" data-acctname="<?php echo  html_escape($x['bank_account_name']); ?>" data-acctno="<?php echo  html_escape($x['bank_account_number']); ?>"    value="<?php echo $x['id_billing_info'];?>"><?php echo  html_escape($x['payment_type']).': '. html_escape($x['bank_name']).' - '. html_escape($x['bank_account_name']);?>
+                                            </option>
+                                        <?php endforeach; ?>
+                                        <option value="0">ADD NEW PAYMENT ACCOUNT</option>
+                                    </select>									
+                                </div>
+                            </div>
+                            <?php $first_accnt = reset($billing_info);?>
+                            <div class="row pd-bttm-15">
+                                <div class="col-xs-8 col-sm-3">
+                                    <label for="deposit_acct_name">Account name: </label>
+                                </div>
+                                <div class="col-xs-12 col-sm-9">
+                                    <input class="form-control" name="deposit_acct_name" id="deposit_acct_name" type ="text" value="<?php echo  html_escape(isset($first_accnt['bank_account_name'])?$first_accnt['bank_account_name']:''); ?>"  <?php echo isset($first_accnt['bank_account_name'])?'readonly':''; ?>/>
+                                </div>
+                            </div>
+                            <div class="row pd-bttm-15">
+                                <div class="col-xs-8 col-sm-3">
+                                    <label for="deposit_acct_no">Account number:</label>
+                                </div>
+                                <div class="col-xs-12 col-sm-9">						
+                                    <input class="form-control" name="deposit_acct_no" id="deposit_acct_no" type ="text" value="<?php echo  html_escape(isset($first_accnt['bank_account_number'])?$first_accnt['bank_account_number']:''); ?>" <?php echo isset($first_accnt['bank_account_number'])?'readonly':''; ?>/>
+                                </div>
+                            </div>
+                            <div class="row pd-bttm-15">
+                                <div class="col-xs-8 col-sm-3">
+                                    <label for="bank_list">Bank:</label>
+                                </div>
+                                <div class="col-xs-12 col-sm-9">
+                                        <select class="form-control" id="bank_list" <?php echo (isset($first_accnt['bank_id']))?'disabled':'';?>>
+                                            <option value="0">Please select a bank</option>
+                                            <?php foreach($bank_list as $x): ?>
+                                                <?php if(isset($first_accnt['bank_id'])): ?>
+                                                    <option value="<?php echo $x['id_bank'];?>" <?php echo (intval($x['id_bank'],10) === intval($first_accnt['bank_id'],10))?'selected':'';?>><?php echo  html_escape($x['bank_name']); ?>
+                                                    </option>
+                                                <?php else: ?>
+                                                    <option value="<?php echo $x['id_bank'];?>" ><?php echo  html_escape($x['bank_name']); ?>
+                                                    </option>
+                                                <?php endif; ?>
+                                            <?php endforeach; ?>
+                                        </select>
+                                </div>
+                            </div>
+                            <div class="row pd-bttm-15">
+                                <div class="col-xs-12 col-sm-12 text-right">
+                                        <input type="hidden" id="bank_name" value="<?php echo  html_escape(isset($first_accnt['bank_name'])?$first_accnt['bank_name']:''); ?>"/>
+                                            
+                                        <?php if(count($billing_info) > 0): ?>
+                                            <span class="deposit_edit btn btn-default"><span class="span_bg"></span>Edit</span>
+                                            <span class="deposit_save btn btn-default" style="display:none">Save</span>
+                                        <?php else: ?>
+                                            <span class="deposit_edit btn btn-default" style="display:none">Edit</span>
+                                            <span class="deposit_save btn btn-default btn-primary">Save</span>
+                                        <?php endif; ?>
+                                            
+                                        <span class="deposit_update btn btn-default btn-primary" style="display:none">Update</span>
+                                        <span class="deposit_cancel btn btn-default" style="display:none">Cancel</span>
+                                            
+                                        <input type="hidden" id="temp_deposit_acct_name" value=""/>
+                                        <input type="hidden" id="temp_deposit_acct_no" value=""/>
+                                        <input type="hidden" id="temp_bank_list" value=""/>
+                                        <input type="hidden" id="temp_bank_name" value=""/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clear"></div>	
+                    </div>
 
-							<!-- Display Attribute Div List and advanced button if attributes were provided-->
-							<?php if((int)$attr['has_attr'] === 1):?>
-							<div class="shipping_attr sa_css pd-8-12">
-								<h5>Item Properties</h5>
-								<?php foreach($attr['attributes'] as $attrkey=>$temp):?>
-								<div class="attr_cont_css">
-									<label>
-										<input class="shipattr" type="checkbox" name="shipattr[<?php echo $sgCounter?>][]" value="<?php echo $attrkey?>" <?php echo (in_array($attrkey,$shiparr['attr']) && $shipping_summary['has_shippingsummary']) || !$shipping_summary['has_shippingsummary'] ? 'checked':'' ?> >
-										
-											<?php foreach($temp as $pattr):?>
-											<span style="margin-right: 3px;"><?php echo $pattr['name'] . ' : ' . $pattr['value']?></span>
-											<?php endforeach;?>
-										</label>
-									<br/>
-								</div>
-								<?php endforeach;?>
-								<div class="clear"></div>
-							</div>
-							<?php else:?>
-							<div class="shipping_attr" style="display:none;">
-								<input class="shipattr" type="checkbox" name="shipattr[<?php echo $sgCounter?>][]" value="<?php echo $attr['product_item_id'];?>" checked onclick="return false;">
-							</div>
-							<?php endif;?>
-							<!--End of attribute section-->
-						</div>
-						
-						<div class="button_group bg-cl-f0f0f0">
-							<div class="new_shipping_input wbtn">
-								<div class="btn btn-default">
-									<span class="add_bgs3 glyphicon glyphicon-plus-sign"></span>
-									<span>ADD ROW</span>
-								</div>
-							</div>
-							
-							<?php if($sgCounter > 0):?>
-							<div class="del_shipping_group wbtn">
-								<div class="btn btn-default">
-									<span class="del_bgs3 glyphicon glyphicon-remove-sign"></span>
-									<span>REMOVE GROUP</span>
-								</div>
-							</div>
-							<?php endif;?>
-							
-							<div class="add_ship_preference wbtn preference_btn_css fl-right">
-								<div class="btn btn-default">
-									<span class="add_bgs3 glyphicon glyphicon-plus-sign"></span>
-									<span>ADD TO PREFERENCE</span>
-								</div>
-							</div>
-						</div>
-						<div class="clear"></div>
-					</div>
-					<?php $sgCounter++; endforeach;?>
-					
-					<!-- Enable adding of new group when more than 1 attr is provided -->
-					<?php if((int)$attr['has_attr'] === 1):?>
-					<div class="new_shipping_group wbtn">
-						<div class="btn btn-default">
-							<span class="add_bgs3 glyphicon glyphicon-plus-sign"></span>
-							<span>ADD GROUP</span>
-						</div>
-					</div>
-					<?php endif;?>
-					
-				</div>
-				<div class="clear"></div>
-			</div>
-			<div class="clear"></div>
-			<!--CLOSE id=SHIPPING DIV-->
-		
-</div>	
-	</div>
-	<!-- CLOSE step3_shipping_options-->
+                    <div id="cod_btn" class="col-md-4 cod-container <?php echo (int)$product['is_cod']===1 ? 'active':''?> ">
+                        <div class="pd-bttm-10">							
+                            <span class="cod-images"></span>
+                            <div class="pos-rel width-185 mrgin-deflt">
+                                <span class="cod-checkmark check_bgs3"></span>
+                                <div class="cod-button button">
+                                    <span>Select Cash on Delivery</span>
+                                </div>								
+                            </div>
+                        </div>
+                    </div>			
+                </div>
+                <div class="clear"></div>
+            </div>
+            <div class="clear"></div>
+        </div>
+    </div>
 
-	<div style="margin-top: 3em;text-align:center;">
-		<input id="finish_step3" type="button" value="Finish" class="orange_btn3 width-20p">
-		<input type="hidden" id="prod_h_id" name="prod_h_id" value="<?php echo $product['id_product']?>">
-		<input type="hidden" id="billing_info_id" name="billing_info_id" value="<?php echo isset($first_accnt['id_billing_info'])?$first_accnt['id_billing_info']:'0'; ?>"/>
-		<input type="hidden" id="allow_cod" name="allow_cod" value="<?php echo (int)$product['is_cod'] === 1 ? 'on':'off'?>">
-		<input type="hidden" id="prod_delivery_cost" name="prod_delivery_cost" value="<?php echo $shipping_summary['str_deliverycost']?>">
-		
-		<?php if( isset($is_edit) ):?>
-			<input type="hidden" name="is_edit" value="true">
-		<?php endif;?>
-	</div>
-<?php echo form_close();?>	
+    <!-- Input box for preference name -->
+    <div id="dialog_preference_name" style="display:none;">
+        <label for="preference_name">Name: </label>
+        <input type="text" id="preference_name" name="preference_name" maxlength="30">
+        <img src="<?=base_url()?>assets/images/orange_loader_small.gif" class="loading" style="display:none;vertical-align:middle; float: right;"/>
+    </div>
 
-	<?php 
-		$attr = array('id'=>'finish_upload_form');
-		echo form_open('sell/finishupload', $attr);
-	?>
-		<input type="hidden" name="prod_h_id" value="<?php echo $product_id?>">
-	<?php echo form_close();?>
-	
-<div class="clear"></div>  
+    <select id="shiploc_clone" style="display:none;" class="shiploc" name="shiploc" multiple data-placeholder="Select location(s)">
+        <?php foreach($shiploc['area'] as $island=>$loc):?>
+            <option value="<?php echo $shiploc['islandkey'][$island];?>"><?php echo $island;?></option>
+                <?php foreach($loc as $region=>$subloc):?>
+                    <option value="<?php echo $shiploc['regionkey'][$region];?>" style="margin-left:15px;" >&nbsp;&nbsp;&nbsp;<?php echo $region;?></option>
+                        <?php foreach($subloc as $id_cityprov=>$cityprov):?>
+                            <option value="<?php echo $id_cityprov;?>" style="margin-left:30px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $cityprov;?></option>
+                        <?php endforeach;?>
+                <?php endforeach;?>
+        <?php endforeach;?>
+    </select>
+
+
+
+    <?php echo form_open('sell/step4', array("id"=>"form_shipping"));?>
+    <input id="has_attr" name="has_attr" value="<?php echo $attr["has_attr"]?>" type="hidden">
+
+    <div class="res_wrapper">
+    <div class="step3_shipping_options table-bordered mrgn-top-35">
+        <div class="col-xs-12 bg-cl-e5e5e5">
+            <h5>How would you like to deliver your item</h5>
+        </div>
+        <div class="clear"></div>
+            <div class="col-xs-12 pd-bttm-15">
+                <div class="step3_shipping_option_meetup sh1">
+                    <span class="">
+                        <input class="delivery_option" type="checkbox" id="meetup" name="delivery_option[]" value="meetup" <?php echo (int)$product['is_meetup']===1 ? 'checked':''?> > <label for="meetup">Meet Up</label>
+                    </span>
+                    <span>
+                        <input class="delivery_option" type="checkbox" id="delivery" name="delivery_option[]" value="delivery" <?php echo $shipping_summary['is_delivery'] ? 'checked' : ''?>> <label for="delivery">For Delivery</label>
+                    </span>
+                </div>
+                <div id="delivery_options" class="sh2" style="display: <?php echo $shipping_summary['is_delivery'] ? '' : 'none'?> ">
+                    <div class="pd-bottom-20 delivery-btn-con">
+                        <div class="delivery_cost gbtn1 btn-block-2 <?php echo $shipping_summary['is_freeshipping'] ? 'active':''?>" id="set_free_shipping">Free Shipping
+                        </div>
+                        <div class="delivery_cost gbtn1 btn-block-2 <?php echo $shipping_summary['has_shippingsummary'] ? 'active':''?>" id="set_shipping_details">
+                                Set Shipping Details
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="shipping_div" class="sh3 border-all col-md-12 pd-tb-20" style="display:<?php echo $shipping_summary['has_shippingsummary'] ? '' : 'none'?>;">
+                    <?php $sgCounter = 0; #shipping_group counter used as input submit array key;?>
+                    <input type="hidden" id="shipping_group_count" class="shipping_group_count" value="<?php echo count($shipping_summary['shipping_display'])-1?>">
+                    
+                    <?php foreach($shipping_summary['shipping_display'] as $shiparr):?>
+                    <div class="shipping_group sg_css" data-sgkey="<?php echo $sgCounter;?>">
+                        <?php $siCounter = 0; #shipping_input counter?>
+                        <input type="hidden" class="shipping_input_count" value="<?php echo count($shiparr['location'])-1?>">
+                    
+                        <div class="prefsel_css row prefsel">
+                            <div class="col-xs-12 col-sm-7 col-md-7 hidden-xs"></div>
+                            <div class="col-xs-12 col-sm-5">								
+                                    <select class="shipping_preference form-control">
+                                        <option value="0">Select Preference</option>
+                                        <?php foreach($shipping_preference['name'] as $headID=>$prefName):?>
+                                            <option class="allow_del" value="<?php echo $headID?>"><?php echo $prefName?></option>								
+                                        <?php endforeach;?>
+                                    </select>								
+                                    <span class="delete_ship_pref del_pref_css">Delete Preference</span>									
+                            </div>
+                        </div>
+                    
+                        <div class="data_group dg_css bg-cl-f0f0f0 pd-top-15 mrgntop-10">
+                            <?php foreach($shiparr['location'] as $price=>$locarr):?>
+                            <div class="clear"></div>
+                            <div class="shipping_input si_css mrgn-bttm-15" data-sikey="<?php echo $siCounter;?>">
+                                <div class="col-xs-4 col-sm-4 col-md-3">
+                                    <label for="price">&#8369;</label>
+                                    <input type="text" class="shipprice form-control" name="shipprice[<?php echo $sgCounter?>][<?php echo $siCounter?>]" value="<?php echo html_escape($price);?>">
+                                </div>
+                                <div class="col-xs-6 col-sm-6 col-md-7 upload_chosen">
+                                    <label for="location">Select Location</label><select class="shiploc form-control" name="shiploc[<?php echo $sgCounter?>][<?php echo $siCounter?>][]" multiple data-placeholder="Select location(s)">
+                                        <?php foreach($shiploc['area'] as $island=>$loc):?>
+                                            <option value="<?php echo $shiploc['islandkey'][$island];?>" <?php echo in_array($shiploc['islandkey'][$island],$locarr) ? 'selected':''?> <?php echo in_array($shiploc['islandkey'][$island],$shiparr['disable_lookup']) && !in_array($shiploc['islandkey'][$island],$locarr) ? 'disabled':''?>><?php echo $island;?></option>
+                                                <?php foreach($loc as $region=>$subloc):?>
+                                                    <option value="<?php echo $shiploc['regionkey'][$region];?>" style="margin-left:15px;" <?php echo in_array($shiploc['regionkey'][$region],$locarr) ? 'selected':''?>  <?php echo in_array($shiploc['regionkey'][$region],$shiparr['disable_lookup']) && !in_array($shiploc['regionkey'][$region],$locarr) ? 'disabled':''?> >&nbsp;&nbsp;&nbsp;<?php echo $region;?></option>
+                                                        <?php foreach($subloc as $id_cityprov=>$cityprov):?>
+                                                            <option value="<?php echo $id_cityprov;?>" style="margin-left:30px;" <?php echo in_array($id_cityprov,$locarr) ? 'selected':''?>  <?php echo in_array($id_cityprov,$shiparr['disable_lookup']) && !in_array($id_cityprov,$locarr) ? 'disabled':''?> >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $cityprov;?></option>
+                                                        <?php endforeach;?>
+                                                <?php endforeach;?>
+                                        <?php endforeach;?>
+                                    </select>
+                                </div>
+                                <?php if($siCounter > 0):?>
+                                <div class="del_shipping_input col-xs-2">
+                                    <span class="del_bgs3 glyphicon glyphicon-remove"></span>
+                                    <span>Remove row</span>
+                                </div>
+                                <?php endif;?>
+                                <div class="clear"></div>
+                            </div>
+                            
+                            <?php $siCounter++; endforeach;?>
+                            <div class="attr_border"></div>
+                            
+
+                            <!-- Display Attribute Div List and advanced button if attributes were provided-->
+                            <?php if((int)$attr['has_attr'] === 1):?>
+                            <div class="shipping_attr sa_css pd-8-12">
+                                <h5>Item Properties</h5>
+                                <?php foreach($attr['attributes'] as $attrkey=>$temp):?>
+                                <div class="attr_cont_css">
+                                    <label class="<?php echo (in_array($attrkey,$shiparr['attr']) && $shipping_summary['has_shippingsummary']) || !$shipping_summary['has_shippingsummary'] ? 'active':'' ?>">
+                                        <input class="shipattr" type="checkbox" name="shipattr[<?php echo $sgCounter?>][]" value="<?php echo $attrkey?>" <?php echo (in_array($attrkey,$shiparr['attr']) && $shipping_summary['has_shippingsummary']) || !$shipping_summary['has_shippingsummary'] ? 'checked':'' ?> >
+                                        
+                                            <?php foreach($temp as $pattr):?>
+                                            <span style="margin-right: 3px;"><?php echo $pattr['name'] . ' : ' . $pattr['value']?></span>
+                                            <?php endforeach;?>
+                                        </label>
+                                    <br/>
+                                </div>
+                                <?php endforeach;?>
+                                <div class="clear"></div>
+                            </div>
+                            <?php else:?>
+                            <div class="shipping_attr" style="display:none;">
+                                <input class="shipattr" type="checkbox" name="shipattr[<?php echo $sgCounter?>][]" value="<?php echo $attr['product_item_id'];?>" checked onclick="return false;">
+                            </div>
+                            <?php endif;?>
+                            <!--End of attribute section-->
+                        </div>
+                        
+                        <div class="button_group bg-cl-f0f0f0">
+                            <div class="new_shipping_input wbtn">
+                                <div class="btn btn-default">
+                                    <span class="add_bgs3 glyphicon glyphicon-plus-sign"></span>
+                                    <span>ADD ROW</span>
+                                </div>
+                            </div>
+                            
+                            <?php if($sgCounter > 0):?>
+                            <div class="del_shipping_group wbtn">
+                                <div class="btn btn-default">
+                                    <span class="del_bgs3 glyphicon glyphicon-remove-sign"></span>
+                                    <span>REMOVE GROUP</span>
+                                </div>
+                            </div>
+                            <?php endif;?>
+                            
+                            <div class="add_ship_preference wbtn preference_btn_css fl-right">
+                                <div class="btn btn-default">
+                                    <span class="add_bgs3 glyphicon glyphicon-plus-sign"></span>
+                                    <span>ADD TO PREFERENCE</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clear"></div>
+                    </div>
+                    <?php $sgCounter++; endforeach;?>
+                    
+                    <!-- Enable adding of new group when more than 1 attr is provided -->
+                    <?php if((int)$attr['has_attr'] === 1):?>
+                    <div class="new_shipping_group wbtn">
+                        <div class="btn btn-default">
+                            <span class="add_bgs3 glyphicon glyphicon-plus-sign"></span>
+                            <span>ADD GROUP</span>
+                        </div>
+                    </div>
+                    <?php endif;?>
+                    
+                </div>
+                <div class="clear"></div>
+            </div>
+            <div class="clear"></div>
+            <!--CLOSE id=SHIPPING DIV-->
+        
+    </div>	
+    </div>
+    <!-- CLOSE step3_shipping_options-->
+
+    <div style="margin-top: 3em;text-align:center;">
+        <input id="finish_step3" type="button" value="Finish" class="orange_btn3 width-20p">
+        <input type="hidden" id="prod_h_id" name="prod_h_id" value="<?php echo $product['id_product']?>">
+        <input type="hidden" id="billing_info_id" name="billing_info_id" value="<?php echo isset($first_accnt['id_billing_info'])?$first_accnt['id_billing_info']:'0'; ?>"/>
+        <input type="hidden" id="allow_cod" name="allow_cod" value="<?php echo (int)$product['is_cod'] === 1 ? 'on':'off'?>">
+        <input type="hidden" id="prod_delivery_cost" name="prod_delivery_cost" value="<?php echo $shipping_summary['str_deliverycost']?>">
+        
+        <?php if( isset($is_edit) ):?>
+            <input type="hidden" name="is_edit" value="true">
+        <?php endif;?>
+    </div>
+    <?php echo form_close();?>	
+
+    <?php 
+        $attr = array('id'=>'finish_upload_form');
+        echo form_open('sell/finishupload', $attr);
+    ?>
+        <input type="hidden" name="prod_h_id" value="<?php echo $product_id?>">
+    <?php echo form_close();?>
+
+    <div class="clear"></div>  
 
 <script type="text/javascript">
-	var shippingPreference = <?php echo $json_shippingpreference;?>;
-	var checkData = <?php echo $json_check_data;?>;
+var shippingPreference = <?php echo $json_shippingpreference;?>;
+var checkData = <?php echo $json_check_data;?>;
 </script>
 
 <script src="<?=base_url()?>assets/js/src/vendor/jquery.idTabs.min.js" type="text/javascript"></script>
@@ -410,11 +413,10 @@
 -->
 
 <script type="text/javascript">
-   $(".product_combination").each(function() {
-    if ($(this).find("p").length > 6) {
-      $(this).css('overflow-y','scroll');
-    }
-  });
+$(".product_combination").each(function() {
+if ($(this).find("p").length > 6) {
+  $(this).css('overflow-y','scroll');
+}
+});
 </script>
 
-  

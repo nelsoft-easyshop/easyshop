@@ -2417,7 +2417,6 @@ $(document).ready(function(){
 	var map, marker;
 	
 	$('.dashboard_table').on('click','.tsold_viewmap', function(){
-	
 		var maplat = $(this).attr('data-lat');
 		var maplng = $(this).attr('data-lng');
 		var myLatlng =  new google.maps.LatLng(maplat,maplng);

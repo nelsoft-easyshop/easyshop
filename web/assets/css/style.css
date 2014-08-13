@@ -12,10 +12,10 @@ li, dl, dt, dd, form, a, fieldset, input, th, td, textarea  {
 
 html, body {
 /*	height: 100%;*/
-    width: 100%;
+	width: 100%;
 /*	overflow-x: hidden;*/
-    background:#fff;
-    font-family: Arial, sans-serif;
+	background:#fff;
+	font-family: Arial, sans-serif;
 /*	font-size: 1em;*/
 }
 
@@ -24,10 +24,10 @@ body{
 }
 
 .wrapper {
-    font-size: 12px;
-    width: 980px;
-    margin: 0 auto;
-    clear: both;
+	font-size: 12px;
+	width: 980px;
+	margin: 0 auto;
+	clear: both;
 }
 
 .wrapper2 {
@@ -168,6 +168,7 @@ p {
 .orange_btn3:hover {
     background-color: #ff4400;
     color: #fff;
+	text-decoration: none;
 }
 
 .grey_btn {
@@ -386,76 +387,76 @@ input[type="button"] {
 }
 
 .up_arrow {
-    background-position: -866px -333px;
+	background-position: -866px -333px;
     height: 12px;
     width: 25px;
 }
 
 .icon_help {
-    background-position: -903px -313px;
+	background-position: -903px -313px;
     height: 24px;
     width: 18px;	
 }
 
 .icon_cancel_red {
-    background-position: -712px -88px;
-    height: 15px;
-    width: 17px;
+	background-position: -712px -88px;
+	height: 15px;
+	width: 17px;
 }
 
 .img_check {
-    background-position: -903px -317px;
-    height: 16px;
-    width: 16px;	
+	background-position: -903px -317px;
+	height: 16px;
+	width: 16px;	
 }
 
 .img_cross {
-    background-position: -925px -318px;
-    height: 16px;
-    width: 16px;	
+	background-position: -925px -318px;
+	height: 16px;
+	width: 16px;	
 }
 
 .img_pending {
-    background-position: -942px -318px;
-    height: 16px;
-    width: 16px;		
+	background-position: -942px -318px;
+	height: 16px;
+	width: 16px;		
 }
 
 .icon-add {
-    background-position: -958px -319px;
-    height: 17px;
-    width: 17px;	
+	background-position: -958px -319px;
+	height: 17px;
+	width: 17px;	
 }
 
 .icon-search {
-    background-position: -247px -8px;
-    height: 37px;
-    width: 37px;
+	background-position: -247px -8px;
+	height: 37px;
+	width: 37px;
 }
 
 .icon_info {
-    background-position: -744px -253px;
+	background-position: -744px -253px;
     height: 25px;
     width: 25px;
 }
 
 /*** Borders ****/
 .brdr {
-    border:1px solid;
+	border:1px solid;
 }
 
 .brdr2 {
-    border-right: 1px solid;
-    border-left: 1px solid;
-    border-bottom: 1px solid;
+	border-right: 1px solid;
+	border-left: 1px solid;
+	border-bottom: 1px solid;
 }
 
 .brdr_clrd_grn {
-    border-color: #7ad014;
+	border-color: #7ad014;
 }
 
 .brdr_clrd_lt_grey {
-    border-color: #cecece;
+	border-color: #cecece;
 }
 
 .border_radius1 {
@@ -2441,7 +2442,7 @@ div.electronics_product_sides {
     margin: 0 0 10px 5px;
     overflow: hidden;
     position: absolute;
-    width: 784px;
+/*    width: 784px;*/
     z-index: 1;
 }
 .category_nav ul {
@@ -2468,6 +2469,7 @@ div.electronics_product_sides {
 
 .category_nav ul li a:hover {
     background-color: #f48000;
+	text-decoration: none;
 }
 
 .category_nav ul li.active {
@@ -2515,6 +2517,8 @@ footer {
     border-top: 1px solid #d9d9d9;
     font-size: 12px;
     padding-top: 15px;
+	font-size: 12px;
+	padding-top: 15px;
 }
 
 /*.social_media {
@@ -2528,6 +2532,10 @@ footer {
 
 .social_media {
     float: left;
+}*/
+
+.social_media {
+	float: left;
 }
 
 .social_media h5 {
@@ -2634,6 +2642,7 @@ span.pinterest {
     padding:20px;
     margin-top: 20px;
     font-size: 12px;
+	font-size: 12px;
 }
 
 .notification_container {
@@ -4160,6 +4169,7 @@ a:hover.tooltips span {
     height: 18px;
     vertical-align: middle;
     width: 170px;
+	width: 170px;
 }
 
 .post_item_srch_container input[type="text"]::-webkit-input-placeholder { /* WebKit browsers */
@@ -4311,6 +4321,7 @@ div.post_item_content_left {
     table-layout: fixed;
     width: 140px;
     position: relative;
+	position: relative;
 }
 
 .post_item_img_con {
@@ -5165,6 +5176,7 @@ div.post_item_content_left {
     display: inline-block;
     width: 38%;
     height: 215px;
+	height: 215px;
 }
 
 .vendor_info_con_right .posted_feedbacks_top {

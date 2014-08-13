@@ -98,8 +98,8 @@ else {
     $route['(?i)sell/step2'] = 'productUpload/step2'; # ryan vasquez
     $route['sell/processing'] = 'productUpload/step2_2'; # ryan vasquez
     $route['(?i)sell/step3'] = 'productUpload/step3'; # ryan vasquez
-	$route['sell/shippinginfo'] = 'productUpload/step3Submit';
-    $route['sell/preview'] = 'productUpload/previewItem';
+	//$route['sell/shippinginfo'] = 'productUpload/step3Submit';
+    //$route['sell/preview'] = 'productUpload/previewItem';
     $route['(?i)sell/step4'] = 'productUpload/step4'; # ryan vasquez
 	$route['(?i)sell/finishupload'] = 'productUpload/finishProductUpload'; #js
 

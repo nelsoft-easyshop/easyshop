@@ -114,7 +114,7 @@
         p.cat_id AS cat_id, p.price AS price, p.brief AS brief, p.sku AS sku,
         s.name AS style_name, b.name AS brand_name, p.member_id AS sellerid, m.nickname AS sellernickname, 
         m.username AS sellerusername, m.imgurl AS userpic, c.name AS category, i.`product_image_path`,     
-        p.`is_promote`,p.`startdate`,p.`enddate`, p.`promo_type`, p.`slug` AS slug, p.is_cod, p.is_meetup, p.billing_info_id
+        p.`is_promote`,p.`startdate`,p.`enddate`, p.`promo_type`, p.`slug` AS slug, p.is_cod, p.is_meetup, p.billing_info_id, p.cat_other_name
         FROM es_product p 
         LEFT JOIN es_style s ON p.style_id = s.id_style
         LEFT JOIN es_brand b ON p.brand_id = b.id_brand
@@ -712,14 +712,6 @@ FROM
         UPDATE `es_product` SET is_delete = :is_delete, lastmodifieddate = NOW()  where member_id = :memberid AND id_product = :productid
 </select>
 
-<select id="finalizeProduct">
-        UPDATE `es_product` SET slug = :slug, is_cod = :is_cod, is_draft = 0, billing_info_id = :billing_id  where member_id = :memberid AND id_product = :productid
-</select>
-
-<select id="finalizeProductKeepSlug">
-        UPDATE `es_product` SET is_cod = :is_cod, is_draft = 0, billing_info_id = :billing_id  where member_id = :memberid AND id_product = :productid
-</select>
-
 <select id="checkifexistcategory">
         SELECT COUNT(id_cat) AS cnt FROM `es_cat` WHERE id_cat = :cat_id
 </select>
@@ -761,7 +753,8 @@ FROM
     `name` = :name, `is_draft` = 1,`sku` = :sku, `brief` = :brief, `description` = :description,
     `keywords` = :keywords, `brand_id` = :brand_id, `style_id` = :style_id, `price` = :price,
     `condition` = :condition, `lastmodifieddate` = :modifieddate, `brand_other_name` = :brand_other_name,
-    `discount` = :discount, `search_keyword` = :search_keyword, `is_sold_out` = :is_sold_out
+    `discount` = :discount, `search_keyword` = :search_keyword, `is_sold_out` = :is_sold_out,
+    `cat_other_name` = :cat_other_name
     WHERE `id_product` = :p_id AND `member_id` = :member_id;
 </select>
 
@@ -787,6 +780,11 @@ FROM
 
 <select id="removeProductAttr">
     DELETE FROM es_product_attr WHERE `product_id` = :productId
+</select>
+
+<select id="getShippingDetailsByItemId">
+  SELECT a.*,b.* FROM `es_product_shipping_head` a,`es_product_shipping_detail` b WHERE a.`id_shipping` = b.`shipping_id`
+  AND b.`product_item_id` = :itemId
 </select>
 
 <select id="deleteProductAttributeByIDs">
@@ -1008,13 +1006,13 @@ FROM
 
 
 <!-- NEW PRODUCT UPLOAD STEP 3-->
-<select id="newfinalizeProduct">
+<select id="finalizeProduct">
 	UPDATE `es_product` 
 	SET slug = :slug, is_draft = 0
 	WHERE member_id = :memberid AND id_product = :productid
 </select>
 
-<select id="newfinalizeProductKeepSlug">
+<select id="finalizeProductKeepSlug">
 	UPDATE `es_product` 
 	SET is_draft = 0  
 	WHERE member_id = :memberid AND id_product = :productid

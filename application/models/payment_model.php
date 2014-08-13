@@ -502,6 +502,8 @@ class payment_model extends CI_Model
 			  , COALESCE(product_item_id, 'Not Available') AS product_item_id
 			  , is_cod 
 			  , CASE es_location_lookup.`type` 
+			  WHEN '0' THEN   
+					IF(es_location_lookup.id_location = (SELECT COALESCE(1,0)), 'Available', 'Not Avialable')
 			  WHEN '1' THEN   
 				  IF(es_location_lookup.id_location = (SELECT COALESCE(:major_island_id,0)), 'Available', 'Not Avialable')
 			  WHEN '2' THEN 
@@ -531,10 +533,12 @@ class payment_model extends CI_Model
 					  AND d.`id_product` = b.`product_id` 
    				) AS shipping 
 			    ON shipping.shipping_id_location = es_location_lookup.`id_location` 
-			WHERE es_location_lookup.`type` IN (1, 2, 3) 
+			WHERE es_location_lookup.`type` IN (0, 1, 2, 3) 
 			  AND COALESCE(product_item_id, 'Not Available') != 'Not Available' 
 			  AND
 			  (CASE es_location_lookup.`type` 
+			  	WHEN '0' THEN   
+					IF(es_location_lookup.id_location = (SELECT COALESCE(1,0)), 'Available', 'Not Avialable')
 			    WHEN '1' THEN   
 					IF(es_location_lookup.id_location = (SELECT COALESCE(:major_island_id,0)), 'Available', 'Not Avialable')
 			    WHEN '2' THEN 

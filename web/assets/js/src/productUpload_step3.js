@@ -2,83 +2,93 @@ $(function(){
     $('#step2_link').on('click', function(){
         $('#edit_step2').submit();
     });
-    
+
     $('#step1_link').on('click', function(){
         $('#edit_step1').submit();
     });
-	
-	$.modal.defaults.persist = true;
-	
+    
+    $.modal.defaults.persist = true;
+    
 });
 
 $(function(){
-	
-	$('#tabs').tabs();   
-	
-	$('#delivery').on('click',function(){
-		var freeShippingBtn = $('#set_free_shipping');
-		var shippingDetailsBtn = $('#set_shipping_details');
-		
-		if($(this).is(':checked')){
-			$('#delivery_options').slideDown();
-			$('#prod_delivery_cost').val('free');
-		}else{
-			$('#delivery_options').slideUp();
-			$('#prod_delivery_cost').val('off');
-		}
+    
+    $('#tabs').tabs();   
+    
+    $('#delivery').on('click',function(){
+        var freeShippingBtn = $('#set_free_shipping');
+        var shippingDetailsBtn = $('#set_shipping_details');
+        
+        if($(this).is(':checked')){
+            $('#delivery_options').slideDown();
+            $('#prod_delivery_cost').val('free');
+        }else{
+            $('#delivery_options').slideUp();
+            $('#prod_delivery_cost').val('off');
+        }
 
-		if(!freeShippingBtn.hasClass('active')){
-			freeShippingBtn.addClass('active');
-		}
-		shippingDetailsBtn.removeClass('active');
-		$('#shipping_div').hide();
-	});
-	
-	$('.delivery_cost').on('click',function(){
-		var shippingDiv = $('#shipping_div');
-		var setShippingDetailsBtn = $('#set_shipping_details');
-		
-		if( $(this).hasClass('active') ){
-			$(this).removeClass('active');
-			$(this).siblings('.delivery_cost').addClass('active');
-		}else{
-			$(this).addClass('active');
-			$(this).siblings('.delivery_cost').removeClass('active');
-		}
-		
-		if( setShippingDetailsBtn.hasClass('active') ){
-			shippingDiv.slideDown();
-			$('#prod_delivery_cost').val('details');
-		}else{
-			shippingDiv.slideUp();
-			$('#prod_delivery_cost').val('free');
-		}
-		
-	});
-	
-	$('select.shiploc:not(#shiploc_clone)').chosen({width:"480px"});
-	
-	$('#shipping_div').on('blur','input.shipprice',function(){
-		var price = $.trim($(this).val());
-		var newPrice = price.replace(new RegExp(",", "g"), '');
-		newPrice = parseFloat(newPrice).toFixed(2);
-		if( $.isNumeric(newPrice) ){
-			$(this).val( ReplaceNumberWithCommas(newPrice) );
-		}else{
-			$(this).val('');
-		}
-	}).on('keyup','input.shipprice',function(e){
-		var price = $.trim($(this).val());
-		var newPrice = price.replace(new RegExp(",", "g"), '');
-		newPrice = parseFloat(newPrice).toFixed(2);
-		
-		if( (e.keyCode == 13 || e.which == 13) && $.isNumeric(newPrice)){
-			$(this).val( ReplaceNumberWithCommas(newPrice) );
-		}else if ( (e.keyCode == 13 || e.which == 13) && !$.isNumeric(newPrice) ) {
-			$(this).val('');
-		}
-	});
-	
+        if(!freeShippingBtn.hasClass('active')){
+            freeShippingBtn.addClass('active');
+        }
+        shippingDetailsBtn.removeClass('active');
+        $('#shipping_div').hide();
+    });
+    
+    $('.delivery_cost').on('click',function(){
+        var shippingDiv = $('#shipping_div');
+        var setShippingDetailsBtn = $('#set_shipping_details');
+        
+        if( $(this).hasClass('active') ){
+            $(this).removeClass('active');
+            $(this).siblings('.delivery_cost').addClass('active');
+        }else{
+            $(this).addClass('active');
+            $(this).siblings('.delivery_cost').removeClass('active');
+        }
+        
+        if( setShippingDetailsBtn.hasClass('active') ){
+            shippingDiv.slideDown();
+            $('#prod_delivery_cost').val('details');
+        }else{
+            shippingDiv.slideUp();
+            $('#prod_delivery_cost').val('free');
+        }
+    });
+    
+    // Activate chosen for select fields and trim nbsp for display purposes
+    $('select.shiploc:not(#shiploc_clone)').chosen({width:"480px"});
+    $('select.shiploc:not(#shiploc_clone)').each(function(){
+        chosenSelectedTrimmer($(this));
+    });
+    
+    
+    $('#shipping_div').on('blur','input.shipprice',function(){
+        var price = $.trim($(this).val());
+        var newPrice = price.replace(new RegExp(",", "g"), '');
+        newPrice = parseFloat(newPrice).toFixed(2);
+        if( $.isNumeric(newPrice) ){
+            $(this).val( ReplaceNumberWithCommas(newPrice) );
+        }else{
+            $(this).val('');
+        }
+    }).on('keyup','input.shipprice',function(e){
+        var price = $.trim($(this).val());
+        var newPrice = price.replace(new RegExp(",", "g"), '');
+        newPrice = parseFloat(newPrice).toFixed(2);
+        
+        if( (e.keyCode == 13 || e.which == 13) && $.isNumeric(newPrice)){
+            $(this).val( ReplaceNumberWithCommas(newPrice) );
+        }else if ( (e.keyCode == 13 || e.which == 13) && !$.isNumeric(newPrice) ) {
+            $(this).val('');
+        }
+    });
+    
+    $('#shipping_div').on('click', 'input.shipprice,div.chosen-container', function(){
+        if( $(this).hasClass('my_err') ){
+            validateWhiteTextBox($(this));
+        }
+    });
+    
 });
 
 /*
@@ -325,256 +335,269 @@ $(document).ready(function(){
 |
 */
 $(function(){
-	$('#cod_btn').on('click',function(){
-		var codinput = $('#allow_cod');
-		if($(this).hasClass('active')){
-			$(this).removeClass('active');
-			codinput.val("off");
-		}else{
-			$(this).addClass('active');
-			codinput.val("on");
-		}
-	});
+    $('#cod_btn').on('click',function(){
+        var codinput = $('#allow_cod');
+        if($(this).hasClass('active')){
+            $(this).removeClass('active');
+            codinput.val("off");
+        }else{
+            $(this).addClass('active');
+            codinput.val("on");
+        }
+    });
 
-	// Add new price and location fields
-	$('#shipping_div').on('click', '.new_shipping_input', function(){
-		var datagroup = $(this).parent().siblings('div.data_group');
-		var clonefield = datagroup.children('div.shipping_input:first').clone();
-		var shippinginputfield = $(this).parent().siblings('.shipping_input_count');
-		var inputkey = parseInt(shippinginputfield.val()) + 1;
-		var groupkey = parseInt($(this).closest('div.shipping_group').data('sgkey'));
-		var removeRow = $('<div class="del_shipping_input col-xs-2"><span class="del_bgs3 glyphicon glyphicon-remove"></span><span>Remove row</span></div>');
-		
-		var disabledOption = datagroup.find('option:selected');
+    // Add new price and location fields
+    $('#shipping_div').on('click', '.new_shipping_input', function(){
+        var datagroup = $(this).parent().siblings('div.data_group');
+        var clonefield = datagroup.children('div.shipping_input:first').clone();
+        var shippinginputfield = $(this).parent().siblings('.shipping_input_count');
+        var inputkey = parseInt(shippinginputfield.val()) + 1;
+        var groupkey = parseInt($(this).closest('div.shipping_group').data('sgkey'));
+        var removeRow = $('<div class="del_shipping_input col-xs-2"><span class="del_bgs3 glyphicon glyphicon-remove"></span><span>Remove row</span></div>');
+        
+        var disabledOption = datagroup.find('option:selected');
 
-		var selectClone = $('#shiploc_clone').clone();
-		selectClone.removeAttr('style id');
-		
-		clonefield.find('select.shiploc').remove();
-		clonefield.find('div.chosen-container').remove();
-		clonefield.find('label[for="location"]').after(selectClone);
-		clonefield.find('.upload_chosen').after(removeRow);
-		
-		clonefield.attr('data-sikey',inputkey);
-		clonefield.find('input.shipprice').attr('name',"shipprice["+groupkey+"]["+inputkey+"]").val('');
-		clonefield.find('select.shiploc').attr('name',"shiploc["+groupkey+"]["+inputkey+"][]");
-		
-		// Disable all selected options for this clone based on its sibling selects
-		if(disabledOption.length > 0){
-			disabledOption.each(function(){
-				var disabledVal = parseInt($(this).val());
-				clonefield.find('option[value="'+disabledVal+'"]').attr('disabled',true);
-			});
-		}
-		
-		clonefield.find('select.shiploc').chosen({width:"77%"});
-		
-		datagroup.find('div.attr_border').before(clonefield.show()); //Insert clonefield before this btn
-		shippinginputfield.val(inputkey);
-	});
-	
-	// Add new group
-	$('#shipping_div').on('click', 'div.new_shipping_group', function(){
-		var clonefield = $(this).siblings('div.shipping_group:first').clone();
-		var shippinggroupfield = $(this).siblings('input.shipping_group_count');
-		var inputkey = 0;
-		var groupkey = parseInt(shippinggroupfield.val()) + 1;
-		var removegroup = $('<div class="del_shipping_group wbtn"><div class="btn btn-default"><span class="del_bgs3 glyphicon glyphicon-remove-sign"></span><span>REMOVE GROUP</span></div></div>');
-		
-		var selectClone = $('#shiploc_clone').clone();
-		selectClone.removeAttr('style id');
-		
-		clonefield.find('div.shipping_input:not(:first)').remove();
-		
-		clonefield.find('select.shiploc').remove();
-		clonefield.find('div.chosen-container').remove();
-		clonefield.find('label[for="location"]').after(selectClone);
-		
-		clonefield.attr('data-sgkey',groupkey);
-		clonefield.children('input.shipping_input_count').val(inputkey);
-		
-		clonefield.find('div.shipping_input').attr('data-sikey', inputkey);
-		clonefield.find('input.shipprice').attr('name',"shipprice["+groupkey+"]["+inputkey+"]").val('');
-		clonefield.find('select.shiploc').attr('name',"shiploc["+groupkey+"]["+inputkey+"][]");
-		clonefield.find('input.shipattr').attr('name','shipattr['+groupkey+'][]');
-		clonefield.find('select.shipping_preference').val(0);
-		clonefield.find('.delete_ship_pref').hide();
-		clonefield.find('input.shipattr').prop('checked', true);
-		
-		clonefield.find('select.shiploc').chosen({width:"480px"});
-		
-		clonefield.find('div.button_group div.new_shipping_input').after(removegroup);
-		
-		$(this).before(clonefield.show());
-		shippinggroupfield.val(groupkey);
-	});
-	
-	// Remove Group
-	$('#shipping_div').on('click','div.del_shipping_group', function(){
-		var datagroup = $(this).parent().siblings('div.data_group');
-		var divInput = datagroup.children('div.shipping_input');
-		var selectedOption = divInput.find('option:selected');
-		var divAttr = datagroup.children('div.shipping_attr');
-		var selectedAttr = divAttr.find('input:checked');
+        var selectClone = $('#shiploc_clone').clone();
+        selectClone.removeAttr('style id');
+        
+        clonefield.find('select.shiploc').remove();
+        clonefield.find('div.chosen-container').remove();
+        clonefield.find('label[for="location"]').after(selectClone);
+        clonefield.find('.upload_chosen').after(removeRow);
+        
+        clonefield.attr('data-sikey',inputkey);
+        clonefield.find('input.shipprice').attr('name',"shipprice["+groupkey+"]["+inputkey+"]").val('');
+        clonefield.find('select.shiploc').attr('name',"shiploc["+groupkey+"]["+inputkey+"][]");
+        
+        // Disable all selected options for this clone based on its sibling selects
+        if(disabledOption.length > 0){
+            disabledOption.each(function(){
+                var disabledVal = parseInt($(this).val());
+                clonefield.find('option[value="'+disabledVal+'"]').attr('disabled',true);
+            });
+        }
+        
+        clonefield.find('select.shiploc').chosen({width:"77%"});
+        
+        datagroup.find('div.attr_border').before(clonefield.show()); //Insert clonefield before this btn
+        shippinginputfield.val(inputkey);
+    });
+    
+    // Add new group
+    $('#shipping_div').on('click', 'div.new_shipping_group', function(){
+        var clonefield = $(this).siblings('div.shipping_group:first').clone();
+        var shippinggroupfield = $(this).siblings('input.shipping_group_count');
+        var inputkey = 0;
+        var groupkey = parseInt(shippinggroupfield.val()) + 1;
+        var removegroup = $('<div class="del_shipping_group wbtn"><div class="btn btn-default"><span class="del_bgs3 glyphicon glyphicon-remove-sign"></span><span>REMOVE GROUP</span></div></div>');
+        
+        var selectClone = $('#shiploc_clone').clone();
+        selectClone.removeAttr('style id');
+        
+        clonefield.find('div.shipping_input:not(:first)').remove();
+        
+        clonefield.find('select.shiploc').remove();
+        clonefield.find('div.chosen-container').remove();
+        clonefield.find('label[for="location"]').after(selectClone);
+        
+        clonefield.attr('data-sgkey',groupkey);
+        clonefield.children('input.shipping_input_count').val(inputkey);
+        
+        clonefield.find('div.shipping_input').attr('data-sikey', inputkey);
+        clonefield.find('input.shipprice').attr('name',"shipprice["+groupkey+"]["+inputkey+"]").val('');
+        clonefield.find('select.shiploc').attr('name',"shiploc["+groupkey+"]["+inputkey+"][]");
+        clonefield.find('input.shipattr').attr('name','shipattr['+groupkey+'][]');
+        clonefield.find('select.shipping_preference').val(0);
+        clonefield.find('.delete_ship_pref').hide();
+        clonefield.find('input.shipattr').prop('checked', true);
+        
+        clonefield.find('select.shiploc').chosen({width:"480px"});
+        
+        clonefield.find('div.button_group div.new_shipping_input').after(removegroup);
+        
+        $(this).before(clonefield.show());
+        shippinggroupfield.val(groupkey);
+    });
+    
+    // Remove Group
+    $('#shipping_div').on('click','div.del_shipping_group', function(){
+        var datagroup = $(this).parent().siblings('div.data_group');
+        var divInput = datagroup.children('div.shipping_input');
+        var selectedOption = divInput.find('option:selected');
+        var divAttr = datagroup.children('div.shipping_attr');
+        var selectedAttr = divAttr.find('input:checked');
 
-		if(selectedOption.length>0){
-			selectedAttr.each(function(){ // Delete selected locations from selected attributes
-				var attrkey = parseInt($(this).val());
-				selectedOption.each(function(){
-					var loc = parseInt($(this).val());
-					checkData[attrkey] = $.grep(checkData[attrkey],function(value){
-						return value != loc;
-					});
-				});
-			});		
-		}
-		$(this).closest('div.shipping_group').remove();
-		
-		console.log(checkData);
-		
-	});
-	
-	// Remove price and location fields
-	$('#shipping_div').on('click', 'div.del_shipping_input', function(){
-		var divInput = $(this).closest('div.shipping_input');
-		var selectShipLoc = divInput.find('select.shiploc');
-		var divSiblingInput = divInput.siblings('div.shipping_input');
-		
-		var divAttr = divInput.siblings('div.shipping_attr');
-		var selectedAttr = divAttr.find('input:checked');
-		
-		var selectedOption = selectShipLoc.find('option:selected');
-		
-		if(selectedOption.length>0){ //Check for selected options 
-			var siblingSelect = divSiblingInput.find('select.shiploc');
-			selectedOption.each(function(){ // Re enable selected locations in sibling selects
-				var loc = parseInt($(this).val());
-				siblingSelect.find('option[value="'+loc+'"]').attr('disabled',false);
-			});
-			siblingSelect.trigger('chosen:updated');
-			
-			selectedAttr.each(function(){ // Delete selected locations from selected attributes
-				var attrkey = parseInt($(this).val());
-				selectedOption.each(function(){
-					var loc = parseInt($(this).val());
-					checkData[attrkey] = $.grep(checkData[attrkey],function(value){
-						return value != loc;
-					});
-				});
-			});
-			
-		}
-		
-		// $(this).parent().remove();
-		divInput.remove();
-		console.log(checkData);
-	});
-	
-	// On change handler for select location
-	$('#shipping_div').on('change','select.shiploc',function(evt,params){
-		var thisSelect = $(this);
-		var divInput = thisSelect.closest('div.shipping_input');
-		var divSiblingInput = divInput.siblings('div.shipping_input');
-		var divAttr = divInput.siblings('div.shipping_attr');
-		var selectedAttr = divAttr.find('input:checked');
-		
-		var hasDuplicate = false;
-		
-		for(k in params){
-			var action = k; //selected or deselected
-			var loc = parseInt(params[action]); //location id
-		}
-		
-		if( action === 'selected' ){
-			// Disable selected option in other sister selects
-			if( divSiblingInput.length > 0 ){
-				divSiblingInput.find('option[value="'+loc+'"]').attr('disabled',true);
-				divSiblingInput.find('select.shiploc').trigger('chosen:updated');
-			}
-			
-			if( selectedAttr.length > 0 ){ //if attributes are selected
-				selectedAttr.each(function(){ //cycle through each attribute and check for duplicate
-					var attrkey = parseInt($(this).val());
-					if( $.inArray(loc,checkData[attrkey]) !== -1 ){ //if location exists for selected attribute
-						hasDuplicate = true;
-						return false; //exit .each function
-					}
-				});
-				if( !hasDuplicate ){ //if no duplicate insert in array
-					selectedAttr.each(function(){
-						var attrkey = parseInt($(this).val());
-						checkData[attrkey].push(loc);
-					});
-				}else{ //else alert and deselect location selected by user
-					alert('Location already set for selected attribute');
-					thisSelect.find('option:selected[value="'+loc+'"]').attr('selected', false);
-					thisSelect.trigger('chosen:updated');
-				}
-			}
-		}else if( action === 'deselected' ){ // delete location entry from checkData[attrkey]
-			if( divSiblingInput.length > 0 ){
-				divSiblingInput.find('option[value="'+loc+'"]').attr('disabled',false);
-				divSiblingInput.find('select.shiploc').trigger('chosen:updated');
-			}
-			if( selectedAttr.length > 0 ){
-				selectedAttr.each(function(){
-					var attrkey = parseInt($(this).val());
-					checkData[attrkey] = jQuery.grep(checkData[attrkey], function(value){
-						return value != loc;
-					});
-				});
-			}
-		}
-		
-		console.log(checkData);
-	});
-	
-	
-	// On change handler for checkbox
-	$('#shipping_div').on('change', 'input.shipattr', function(){
-		var thisCheckbox = $(this);
-		var attrkey = parseInt(thisCheckbox.val());
-		
-		var divAttr = thisCheckbox.closest('div.shipping_attr');		
-		var divInput = divAttr.siblings('div.shipping_input');
-		var selectedLoc = divInput.find('option:selected');
-		
-		var hasDuplicate = false;
-		
-		if( thisCheckbox.is(':checked') ){ //if checkbox is checked
-			if( selectedLoc.length > 0 ){ // cycle through each location and check for duplicate
-				selectedLoc.each(function(){
-					var loc = parseInt($(this).val());
-					if( $.inArray(loc, checkData[attrkey]) !== -1 ){ // if location exists for selected attr
-						hasDuplicate = true;
-						return false;
-					}
-				});
-				if( !hasDuplicate ){ // if no duplicate insert in array
-					selectedLoc.each(function(){
-						var loc = parseInt($(this).val());
-						checkData[attrkey].push(loc);
-					});
-				}else{ // if has duplicate, alert and uncheck checked textbox
-					alert('Location already set for selected attribute');
-					thisCheckbox.attr('checked',false);
-				}
-			}	
-		}else{ //if checkbox is unchecked
-			if( selectedLoc.length > 0 ){
-				selectedLoc.each(function(){
-					var loc = parseInt($(this).val());
-					checkData[attrkey] = $.grep(checkData[attrkey], function(value){
-						return value != loc;
-					});
-				});
-			}
-		}
-		
-		
-		console.log(checkData);
-	});
-	console.log(checkData);
+        if(selectedOption.length>0){
+            selectedAttr.each(function(){ // Delete selected locations from selected attributes
+                var attrkey = parseInt($(this).val());
+                selectedOption.each(function(){
+                    var loc = parseInt($(this).val());
+                    checkData[attrkey] = $.grep(checkData[attrkey],function(value){
+                        return value != loc;
+                    });
+                });
+            });		
+        }
+        $(this).closest('div.shipping_group').remove();
+        
+        console.log(checkData);
+        
+    });
+    
+    // Remove price and location fields
+    $('#shipping_div').on('click', 'div.del_shipping_input', function(){
+        var divInput = $(this).closest('div.shipping_input');
+        var selectShipLoc = divInput.find('select.shiploc');
+        var divSiblingInput = divInput.siblings('div.shipping_input');
+        
+        var divAttr = divInput.siblings('div.shipping_attr');
+        var selectedAttr = divAttr.find('input:checked');
+        
+        var selectedOption = selectShipLoc.find('option:selected');
+        
+        if(selectedOption.length>0){ //Check for selected options 
+            var siblingSelect = divSiblingInput.find('select.shiploc');
+            selectedOption.each(function(){ // Re enable selected locations in sibling selects
+                var loc = parseInt($(this).val());
+                siblingSelect.find('option[value="'+loc+'"]').attr('disabled',false);
+            });
+            siblingSelect.trigger('chosen:updated');
+            chosenSelectedTrimmer(siblingSelect);
+            
+            selectedAttr.each(function(){ // Delete selected locations from selected attributes
+                var attrkey = parseInt($(this).val());
+                selectedOption.each(function(){
+                    var loc = parseInt($(this).val());
+                    checkData[attrkey] = $.grep(checkData[attrkey],function(value){
+                        return value != loc;
+                    });
+                });
+            });
+            
+        }
+        
+        // $(this).parent().remove();
+        divInput.remove();
+        console.log(checkData);
+    });
+    
+    // On change handler for select location
+    $('#shipping_div').on('change','select.shiploc',function(evt,params){
+        var thisSelect = $(this);
+        var divInput = thisSelect.closest('div.shipping_input');
+        var divSiblingInput = divInput.siblings('div.shipping_input');
+        var divAttr = divInput.siblings('div.shipping_attr');
+        var selectedAttr = divAttr.find('input:checked');
+        
+        var hasDuplicate = false;
+        
+        for(k in params){
+            var action = k; //selected or deselected
+            var loc = parseInt(params[action]); //location id
+        }
+        
+        if( action === 'selected' ){
+            // Disable selected option in other sister selects
+            if( divSiblingInput.length > 0 ){
+                divSiblingInput.find('option[value="'+loc+'"]').attr('disabled',true);
+                divSiblingInput.find('select.shiploc').trigger('chosen:updated');
+                chosenSelectedTrimmer(divSiblingInput.find('select.shiploc'));
+            }
+            
+            if( selectedAttr.length > 0 ){ //if attributes are selected
+                selectedAttr.each(function(){ //cycle through each attribute and check for duplicate
+                    var attrkey = parseInt($(this).val());
+                    if( $.inArray(loc,checkData[attrkey]) !== -1 ){ //if location exists for selected attribute
+                        hasDuplicate = true;
+                        return false; //exit .each function
+                    }
+                });
+                if( !hasDuplicate ){ //if no duplicate insert in array
+                    selectedAttr.each(function(){
+                        var attrkey = parseInt($(this).val());
+                        checkData[attrkey].push(loc);
+                    });
+                }else{ //else alert and deselect location selected by user
+                    alert('Location already set for selected attribute');
+                    thisSelect.find('option:selected[value="'+loc+'"]').attr('selected', false);
+                    thisSelect.trigger('chosen:updated');
+                }
+            }
+            chosenSelectedTrimmer(thisSelect);
+            
+        }else if( action === 'deselected' ){ // delete location entry from checkData[attrkey]
+            if( divSiblingInput.length > 0 ){
+                divSiblingInput.find('option[value="'+loc+'"]').attr('disabled',false);
+                divSiblingInput.find('select.shiploc').trigger('chosen:updated');
+                
+                // Trim nbsp in option for display purposes
+                divSiblingInput.each(function(){
+                    var siblingChildSelect = $(this).find('select.shiploc');
+                    chosenSelectedTrimmer(siblingChildSelect);
+                });
+            }
+            if( selectedAttr.length > 0 ){
+                selectedAttr.each(function(){
+                    var attrkey = parseInt($(this).val());
+                    checkData[attrkey] = jQuery.grep(checkData[attrkey], function(value){
+                        return value != loc;
+                    });
+                });
+            }
+        }
+        
+        console.log(checkData);
+    });
+    
+    // On change handler for checkbox
+    $('#shipping_div').on('change', 'input.shipattr', function(){
+        var thisCheckbox = $(this);
+        var attrkey = parseInt(thisCheckbox.val());
+        
+        var divAttr = thisCheckbox.closest('div.shipping_attr');		
+        var divInput = divAttr.siblings('div.shipping_input');
+        var selectedLoc = divInput.find('option:selected');
+        
+        var hasDuplicate = false;
+        
+        if( thisCheckbox.is(':checked') ){ //if checkbox is checked
+            if( selectedLoc.length > 0 ){ // cycle through each location and check for duplicate
+                selectedLoc.each(function(){
+                    var loc = parseInt($(this).val());
+                    if( $.inArray(loc, checkData[attrkey]) !== -1 ){ // if location exists for selected attr
+                        hasDuplicate = true;
+                        return false;
+                    }
+                });
+                if( !hasDuplicate ){ // if no duplicate insert in array
+                    selectedLoc.each(function(){
+                        var loc = parseInt($(this).val());
+                        checkData[attrkey].push(loc);
+                    });
+                }else{ // if has duplicate, alert and uncheck checked textbox
+                    alert('Location already set for selected attribute');
+                    thisCheckbox.attr('checked',false);
+                }
+            }
+            if( !hasDuplicate ){
+                thisCheckbox.parent('label').addClass('active');
+            }
+        }else{ //if checkbox is unchecked
+            if( selectedLoc.length > 0 ){
+                selectedLoc.each(function(){
+                    var loc = parseInt($(this).val());
+                    checkData[attrkey] = $.grep(checkData[attrkey], function(value){
+                        return value != loc;
+                    });
+                });
+            }
+            thisCheckbox.parent('label').removeClass('active');
+        }
+        
+        
+        console.log(checkData);
+    });
+    console.log(checkData);
 });
 
 
@@ -582,361 +605,412 @@ $(function(){
 /************************	Submit Handler	*********************************************/
 /****************************************************************************************/
 $(function(){
-	$('#finish_step3').on('click',function(){
-		var thisbtn = $(this);
-		var form = $('#form_shipping');
-		var data = $(form).serializeArray();
-		var prodDeliveryCost = $('#prod_delivery_cost').val();
-		var shippingGroup = $('#shipping_div div.shipping_group');
-		
-		// Check for "Meetup" or "Delivery"
-		var checkedDeliveryOption = form.find('input.delivery_option:checked');
-		if( checkedDeliveryOption.length <= 0){
-			alert('Please select at least one delivery option');
-			return false;
-		}
-		
-		// Check if all fields have provided info
-		var isIncomplete = false;
-		if(prodDeliveryCost === 'details'){ // if shipping is not free, verify details
-			shippingGroup.each(function(){
-				var thisGroup = $(this);
-				var selectGroup = thisGroup.find('select.shiploc');
-				var priceGroup = thisGroup.find('input.shipprice');
-				var attr = thisGroup.find('input.shipattr:checked');
-				
-				selectGroup.each(function(){
-					if( $(this).find('option:selected').length <= 0 ){
-						isIncomplete = true;
-						return false;
-					}
-				});
-				
-				priceGroup.each(function(){
-					var price = $.trim($(this).val());
-					var newPrice = price.replace(new RegExp(",", "g"), '');
-					newPrice = parseFloat(newPrice).toFixed(2);
-					
-					if( !$.isNumeric(newPrice) ){
-						isIncomplete = true;
-						return false;
-					}
-				});
-				
-				if( attr.length <= 0 ){
-					isIncomplete = true;
-					false;
-				}
-				
-				if(isIncomplete){
-					alert('Please fill-up all fields before submitting the form.');
-					return false;
-				}
-				
-			});
-			//Check if all attributes have indicated locations
-			var incAttr = false;
-			$.each(checkData, function(attrkey,locationArr){
-				if(locationArr.length <= 0){
-					incAttr = true;
-					return false;
-				}
-			});
-			if(incAttr){
-				alert("Please provide shipping details for all attributes.");
-				return false;
-			}
-		}
-		
-		if(!isIncomplete){
-			$.post(config.base_url+"sell/step4", data, function(d){
-				thisbtn.attr('disabled', false);
-				try{
-					var obj = jQuery.parseJSON(d);
-				}
-				catch(e){
-					alert('Error submitting your request. Please try again later.');
-					return false;
-				}
-				
-				if(obj.result === 'success'){
-					$('#finish_upload_form').submit();
-				}else{
-					alert(obj.error);
-				}
-			});
-			
-			thisbtn.val('Saving...');
-			thisbtn.attr('disabled', true);
-		}
-		
-	});
+    $('#finish_step3').on('click',function(){
+        var thisbtn = $(this);
+        var form = $('#form_shipping');
+        var data = $(form).serializeArray();
+        var prodDeliveryCost = $('#prod_delivery_cost').val();
+        var shippingGroup = $('#shipping_div div.shipping_group');
+        var inputGroup = $('#shipping_div div.shipping_input');
+        
+        // Check for "Meetup" or "Delivery"
+        var checkedDeliveryOption = form.find('input.delivery_option:checked');
+        if( checkedDeliveryOption.length <= 0){
+            alert('Please select at least one delivery option');
+            return false;
+        }
+        
+        // Check if price and location pair exists for every input group
+        var isIncomplete = false;
+        if(prodDeliveryCost === 'details'){ // if shipping is not free, verify details
+            // Check all rows with data
+            inputGroup.each(function(){
+                var thisgroup = $(this);
+                var priceField = thisgroup.find('input.shipprice');
+                var price = $.trim(priceField.val());
+                var newPrice = price.replace(new RegExp(",", "g"), '');
+                newPrice = parseFloat(newPrice).toFixed(2);
+                
+                var locField = thisgroup.find('select.shiploc');
+                var selectedLoc = locField.find('option:selected');
+                var chosenDiv = locField.siblings('div.chosen-container');
+                
+                // If more than 1 input group, highlight input group with only 1 data (price or loc) provided
+                // All input groups with no price and no location are disregarded both client side and server side
+                if( inputGroup.length > 1 ){
+                    // If price provided with no location, highlight location
+                    if( $.isNumeric(newPrice) && selectedLoc.length === 0 ){
+                        isIncomplete = true;
+                        validateRedTextBox(chosenDiv);
+                    // If location provided with no price, highlight location
+                    }else if( selectedLoc.length > 0 && !$.isNumeric(newPrice) ){
+                        isIncomplete = true;
+                        validateRedTextBox(priceField);
+                    }
+                // If only 1 input group, highlight blank field since it is required
+                }else if ( inputGroup.length === 1 ){
+                    if( !$.isNumeric(newPrice) ){
+                        isIncomplete = true;
+                        validateRedTextBox(priceField);
+                    }
+                    if( selectedLoc.length === 0 ){
+                        isIncomplete = true;
+                        validateRedTextBox(chosenDiv);
+                    }
+                }
+                
+            });
+            
+            //Check if all attributes have indicated locations
+            var incAttr = false;
+            $.each(checkData, function(attrkey,locationArr){
+                if(locationArr.length <= 0){
+                    incAttr = true;
+                    return false;
+                }
+            });
+            if(incAttr){
+                alert("Please provide shipping details for all item properties.");
+                return false;
+            }
+        }
+        
+        // If incomplete, scroll to first error field,
+        if( isIncomplete ){
+            myScrollTo($('.my_err:first'));
+        }
+        // If data is complete, allow posting of data to server
+        else{
+            $.post(config.base_url+"sell/step4", data, function(d){
+                thisbtn.attr('disabled', false);
+                try{
+                    var obj = jQuery.parseJSON(d);
+                }
+                catch(e){
+                    alert('Error submitting your request. Please try again later.');
+                    return false;
+                }
+                
+                if(obj.result === 'success'){
+                    $('#finish_upload_form').submit();
+                }else{
+                    thisbtn.val("Finish");
+                    alert(obj.error);
+                }
+            });
+            
+            thisbtn.val('Saving...');
+            thisbtn.attr('disabled', true);
+        }
+        
+    });
 });
+
 
 /***********************************************************************************/
 /************************	Shipping Preference Functions	************************/
 /***********************************************************************************/
 (function($){
-	/*
-	 *	On change handler for select shipping preference
-	 */ 
-	$('#shipping_div').on('change', '.shipping_preference',function(){
-		var option = parseInt($(this).children('option:selected').val());
-		var parentDiv = $(this).closest('div.prefsel');
-		var groupDiv = parentDiv.parent('div.shipping_group');
-		var datagroup = parentDiv.siblings('div.data_group');
-		var newInput = parentDiv.siblings('div.button_group').children('div.new_shipping_input');
-		
-		var selectedLocations = groupDiv.find('select.shiploc option:selected');
-		var selectedAttributes = groupDiv.find('input.shipattr:checked');
-		var isDuplicate = false;
-		
-		var delPrefOpt = $(this).siblings('.delete_ship_pref');
-		
-		if(option === 0){
-			delPrefOpt.hide();
-			return false;
-		}else{
-			// Check if locations in preference selected are already used by selected attributes. If yes, deny usage
-			$.each(shippingPreference[option], function(price,locationArr){
-				if( !isDuplicate ){
-					$.each(locationArr, function(k,locationID){
-						if( !isDuplicate ){
-							selectedAttributes.each(function(){
-								var attrkey = parseInt($(this).val());
-								if( jQuery.inArray(locationID, checkData[attrkey]) !== -1 ){
-									isDuplicate = true;
-								}
-							});
-						}else{
-							return false;
-						}
-					});
-				}else{
-					return false;
-				}
-			});
-			
-			// If duplicate is found, exit this function and set select option to default
-			if( isDuplicate ){
-				$(this).val(0);
-				alert("Locations from selected preference are already in use by selected attributes.");
-				delPrefOpt.hide();
-				return false;
-			}
-			//else - everything below
-			
-			// Show Delete option
-			delPrefOpt.show();
-			
-			// Remove all currently selected locations from checked attributes from checkData
-			if(selectedLocations.length > 0){
-				selectedAttributes.each(function(){
-					var attrkey = parseInt($(this).val());
-					selectedLocations.each(function(){
-						var lockey = parseInt($(this).val());
-						checkData[attrkey] = $.grep(checkData[attrkey],function(value){
-							return value != lockey;
-						});
-					});
-				});
-			}
-			
-			// Remove input fields except first for cloning
-			datagroup.children('div.shipping_input:not(:first)').remove();
-			
-			var i = 0;
-			newInput.trigger('click'); // Triggers cloning
-			datagroup.find('option:selected').attr('selected',false);
-			datagroup.find('option:disabled').attr('disabled',false);
-			datagroup.find('select.shiploc').trigger('chosen:updated');
-			datagroup.children('div.shipping_input:first').remove(); // Remove first input field
-			datagroup.find('div.shipping_input:first div.del_shipping_input').remove(); // Remove "remove row" option
-			var firstLocField = datagroup.children('div.shipping_input:eq(0)').find('select.shiploc'); // Re-define first location field
-			
-			// Assign values to select.shiploc fields
-			$.each(shippingPreference[option], function(price,locationArr){
-				if( i !== 0 ){
-					newInput.trigger('click');
-				}
-				var inputDiv = datagroup.children('div.shipping_input:eq('+i+')');
-				var priceField = inputDiv.find('input.shipprice');
-				var locField = inputDiv.find('select.shiploc');
-				
-				priceField.val(price);
-				
-				$.each(locationArr, function(k,locationID){
-					// Push locations from preference to selected attributes
-					selectedAttributes.each(function(){
-						var attrkey = parseInt($(this).val());
-						checkData[attrkey].push(locationID);
-					});
-					// Select location on select element
-					locField.find('option[value="'+locationID+'"]').attr('selected', true);
-					if( i!==0 ){
-						firstLocField.find('option[value="'+locationID+'"]').attr('disabled',true);
-						firstLocField.trigger('chosen:updated');
-					}
-				});
-				locField.trigger('chosen:updated');
-				i++;
-			});
-		}
-		console.log(checkData);
-	}); 
-	
-	/*
-	 *	Add shipping preferences
-	 */
+    /*
+     *	On change handler for select shipping preference
+     */ 
+    $('#shipping_div').on('change', '.shipping_preference', function(){
+        var option = parseInt($(this).children('option:selected').val());
+        var parentDiv = $(this).closest('div.prefsel');
+        var groupDiv = parentDiv.parent('div.shipping_group');
+        var datagroup = parentDiv.siblings('div.data_group');
+        var newInput = parentDiv.siblings('div.button_group').children('div.new_shipping_input');
+        
+        var selectedLocations = groupDiv.find('select.shiploc option:selected');
+        var selectedAttributes = groupDiv.find('input.shipattr:checked');
+        var isDuplicate = false;
+        
+        var delPrefOpt = $(this).siblings('.delete_ship_pref');
+        
+        var siblingGroupDiv = groupDiv.siblings('div.shipping_group');
+        
+        if(option === 0){
+            delPrefOpt.hide();
+            return false;
+        }else{
+            
+            // Perform duplicate check with alert error when more than 1 group is created
+            if( siblingGroupDiv.length > 0 ){
+                // Check if locations in preference selected are already used by selected attributes. If yes, deny usage
+                $.each(shippingPreference[option], function(price,locationArr){
+                    if( !isDuplicate ){
+                        $.each(locationArr, function(k,locationID){
+                            if( !isDuplicate ){
+                                selectedAttributes.each(function(){
+                                    var attrkey = parseInt($(this).val());
+                                    if( jQuery.inArray(locationID, checkData[attrkey]) !== -1 ){
+                                        isDuplicate = true;
+                                    }
+                                });
+                            }else{
+                                return false;
+                            }
+                        });
+                    }else{
+                        return false;
+                    }
+                });
+                
+                // If duplicate is found, exit this function and set select option to default
+                if( isDuplicate ){
+                    $(this).val(0);
+                    alert("Locations from selected preference are already in use by selected attributes.");
+                    delPrefOpt.hide();
+                    return false;
+                }
+            }
+            
+            // Show Delete option
+            delPrefOpt.show();
+            
+            // Remove all currently selected locations from checked attributes from checkData
+            if(selectedLocations.length > 0){
+                selectedAttributes.each(function(){
+                    var attrkey = parseInt($(this).val());
+                    selectedLocations.each(function(){
+                        var lockey = parseInt($(this).val());
+                        checkData[attrkey] = $.grep(checkData[attrkey],function(value){
+                            return value != lockey;
+                        });
+                    });
+                });
+            }
+            
+            // Remove input fields except first for cloning
+            datagroup.children('div.shipping_input:not(:first)').remove();
+            
+            var i = 0;
+            newInput.trigger('click'); // Triggers cloning
+            datagroup.find('option:selected').attr('selected',false);
+            datagroup.find('option:disabled').attr('disabled',false);
+            datagroup.find('select.shiploc').trigger('chosen:updated');
+            datagroup.children('div.shipping_input:first').remove(); // Remove first input field
+            datagroup.find('div.shipping_input:first div.del_shipping_input').remove(); // Remove "remove row" option
+            var firstLocField = datagroup.children('div.shipping_input:eq(0)').find('select.shiploc'); // Re-define first location field
+            
+            // Assign values to select.shiploc fields
+            $.each(shippingPreference[option], function(price,locationArr){
+                if( i !== 0 ){
+                    newInput.trigger('click');
+                }
+                var inputDiv = datagroup.children('div.shipping_input:eq('+i+')');
+                var priceField = inputDiv.find('input.shipprice');
+                var locField = inputDiv.find('select.shiploc');
+                
+                priceField.val(price);
+                
+                $.each(locationArr, function(k,locationID){
+                    // Push locations from preference to selected attributes
+                    selectedAttributes.each(function(){
+                        var attrkey = parseInt($(this).val());
+                        checkData[attrkey].push(locationID);
+                    });
+                    // Select location on select element
+                    locField.find('option[value="'+locationID+'"]').attr('selected', true);
+                    if( i!==0 ){
+                        firstLocField.find('option[value="'+locationID+'"]').attr('disabled',true);
+                        firstLocField.trigger('chosen:updated');
+                        chosenSelectedTrimmer(firstLocField);
+                    }
+                });
+                locField.trigger('chosen:updated');
+                chosenSelectedTrimmer(locField);
+                i++;
+            });
+        }
+        console.log(checkData);
+    }); 
+    
+    /*
+     *	Add shipping preferences
+     */
     $('#shipping_div').on('click','.add_ship_preference', function(){
-		var isIncomplete = false;
-		var preferenceData = {};
-		var preferenceName = "";
-		var csrftoken = $("meta[name='csrf-token']").attr('content');
-		var csrfname = $("meta[name='csrf-name']").attr('content');
-		
-		// Get location vs price details for first attr array, since data is same for all attr arrays
-		var inputDiv = $(this).parent().siblings('div.data_group').children('div.shipping_input');
-		
-		inputDiv.each(function(){
-			var price = $.trim($(this).find('input.shipprice').val());
-			var newPrice = price.replace(new RegExp(",", "g"), '');
-			newPrice = parseFloat(newPrice).toFixed(2);
-			var locArr = $(this).find('select.shiploc option:selected');
-			
-			if( $.isNumeric(newPrice) && locArr.length > 0 ){
-				locArr.each(function(){
-					var locID = parseInt($(this).val());
-					preferenceData[locID] = newPrice;
-				});
-			}else{
-				isIncomplete = true;
-				preferenceData = {};
-				alert("Please fill-up all fields before using this function.");
-				return false;
-			}
-		});
-		
-		if( !isIncomplete ){
-			$('#dialog_preference_name').dialog({
-				height: 180,
-				autoOpen: false,
-				title: "Enter Preference name",
-				modal: true,
-				closeOnEscape: false,
-				draggable: false,
-				buttons:[
-					{
-						text: "Ok",
-						click: function(){
-							var namefield = $('#preference_name');
-							var thisdialog = $(this);
-							preferenceName = namefield.val();
-							
-							if( ($.trim(preferenceName)).length > 0){
-								$('button.ui-button').attr('disabled',true);
-								namefield.attr('disabled',true);
-								namefield.siblings('img.loading').show();
-								
-								$.post(config.base_url+'productUpload/step3_addPreference',{data:preferenceData, name:preferenceName, csrfname:csrftoken},function(data){
-									namefield.siblings('img.loading').hide();
-									namefield.attr('disabled',false);
-									$('button.ui-button').attr('disabled',false);
-									
-									try{
-										var obj = jQuery.parseJSON(data);	
-									}
-									catch(e){
-										alert('An error was encountered while processing your data. Please try again later.');
-										window.location.reload(true);
-										return false;
-									}
-									
-									if( obj['result'] === 'success' ){
-										// Recreate shippingpreference variable data
-										shippingPreference = obj['shipping_preference'];
-										//Create new list for shipping preferences
-										var prefSelect = $('select.shipping_preference');
-										
-										prefSelect.each(function(){
-											var thisSelect = $(this);
-											thisSelect.children('option:not(:first)').remove();
-											// Create new preference display contents
-											$.each(shippingPreference['name'], function(headId,name){
-												thisSelect.append('<option value="'+headId+'">'+name+'</option>');
-											});
-										});
-									}else{
-										alert(obj['error']);
-									}
-									thisdialog.dialog("close");
-								});
-							} else {
-								namefield.effect('pulsate', {times:3}, 800);
-							}
-						}
-					},
-					{
-						text: "Cancel",
-						click: function(){
-							$(this).dialog("close");
-						}
-					},
-				],
-				close: function(){
-					$('#dialog_preference_name input[name="preference_name"]').val('');
-				}
-			});
-			$('#dialog_preference_name').dialog("open");
-		}
-	});
-	
-	/*
-	 *	Delete Shipping Preference
-	 */
-	 $('#shipping_div').on('click','.delete_ship_pref', function(){
-		var allSelect = $('select.shipping_preference');
-		var siblingSelect = $(this).siblings('select.shipping_preference');
-		var headId = parseInt(siblingSelect.val());
-		var csrftoken = $("meta[name='csrf-token']").attr('content');
-		var csrfname = $("meta[name='csrf-name']").attr('content');
-		
-		var thisspan = $(this);
-		
-		var r=confirm("Confirm delete?");
-		if (r==true){
-			$.post(config.base_url+'productUpload/step3_deletePreference', {head:headId, csrfname:csrftoken}, function(data){
-				try{
-					var obj = jQuery.parseJSON(data);	
-				}
-				catch(e){
-					alert('An error was encountered while processing your data. Please try again later.');
-					window.location.reload(true);
-					return false;
-				}
-				
-				if( obj['result'] === 'success' ){				
-					// Check each select and hide delete button when headId is selected (then is removed)
-					allSelect.each(function(){
-						selectedVal = parseInt($(this).val());
-						console.log(selectedVal);
-						if( selectedVal === headId ){
-							$(this).siblings('.delete_ship_pref').hide();
-						}
-					});
-					
-					allSelect.find('option[value="'+headId+'"]').remove();
-					siblingSelect.val(0);
-					thisspan.hide();
-					
-				}else{
-					alert( obj['error'] );
-				}
-			});
-		}
-	 });
-	 
+        var isIncomplete = false;
+        var preferenceData = {};
+        var preferenceName = "";
+        var csrftoken = $("meta[name='csrf-token']").attr('content');
+        var csrfname = $("meta[name='csrf-name']").attr('content');
+        
+        // Get location vs price details for first attr array, since data is same for all attr arrays
+        var inputDiv = $(this).parent().siblings('div.data_group').children('div.shipping_input');
+        
+        inputDiv.each(function(){
+            var priceField = $(this).find('input.shipprice');
+            var locField = $(this).find('select.shiploc');
+            var price = $.trim($(this).find('input.shipprice').val());
+            var newPrice = price.replace(new RegExp(",", "g"), '');
+            newPrice = parseFloat(newPrice).toFixed(2);
+            var locArr = $(this).find('select.shiploc option:selected');
+            
+            if( $.isNumeric(newPrice) && locArr.length > 0 ){
+                locArr.each(function(){
+                    var locID = parseInt($(this).val());
+                    preferenceData[locID] = newPrice;
+                });
+            }else{
+                isIncomplete = true;
+                preferenceData = {};
+                if( !$.isNumeric(newPrice) ){
+                    validateRedTextBox(priceField);
+                }
+                if( locArr.length === 0 ){
+                    validateRedTextBox(locField);
+                }
+                myScrollTo($(this).find('.my_err:first'));
+                return false;
+            }
+        });
+        
+        if( !isIncomplete ){
+            $('#dialog_preference_name').dialog({
+                height: 180,
+                autoOpen: false,
+                title: "Enter Preference name",
+                modal: true,
+                closeOnEscape: false,
+                draggable: false,
+                buttons:[
+                    {
+                        text: "Ok",
+                        click: function(){
+                            var namefield = $('#preference_name');
+                            var thisdialog = $(this);
+                            preferenceName = namefield.val();
+                            
+                            if( ($.trim(preferenceName)).length > 0){
+                                $('button.ui-button').attr('disabled',true);
+                                namefield.attr('disabled',true);
+                                namefield.siblings('img.loading').show();
+                                
+                                $.post(config.base_url+'productUpload/step3_addPreference',{data:preferenceData, name:preferenceName, csrfname:csrftoken},function(data){
+                                    namefield.siblings('img.loading').hide();
+                                    namefield.attr('disabled',false);
+                                    $('button.ui-button').attr('disabled',false);
+                                    
+                                    try{
+                                        var obj = jQuery.parseJSON(data);	
+                                    }
+                                    catch(e){
+                                        alert('An error was encountered while processing your data. Please try again later.');
+                                        window.location.reload(true);
+                                        return false;
+                                    }
+                                    
+                                    if( obj['result'] === 'success' ){
+                                        // Recreate shippingpreference variable data
+                                        shippingPreference = obj['shipping_preference'];
+                                        //Create new list for shipping preferences
+                                        var prefSelect = $('select.shipping_preference');
+                                        
+                                        prefSelect.each(function(){
+                                            var thisSelect = $(this);
+                                            thisSelect.children('option:not(:first)').remove();
+                                            // Create new preference display contents
+                                            $.each(shippingPreference['name'], function(headId,name){
+                                                thisSelect.append('<option value="'+headId+'">'+name+'</option>');
+                                            });
+                                        });
+                                    }else{
+                                        alert(obj['error']);
+                                    }
+                                    thisdialog.dialog("close");
+                                });
+                            } else {
+                                namefield.effect('pulsate', {times:3}, 800);
+                            }
+                        }
+                    },
+                    {
+                        text: "Cancel",
+                        click: function(){
+                            $(this).dialog("close");
+                        }
+                    },
+                ],
+                close: function(){
+                    $('#dialog_preference_name input[name="preference_name"]').val('');
+                }
+            });
+            $('#dialog_preference_name').dialog("open");
+        }
+    });
+    
+    /*
+     *	Delete Shipping Preference
+     */
+     $('#shipping_div').on('click','.delete_ship_pref', function(){
+        var allSelect = $('select.shipping_preference');
+        var siblingSelect = $(this).siblings('select.shipping_preference');
+        var headId = parseInt(siblingSelect.val());
+        var csrftoken = $("meta[name='csrf-token']").attr('content');
+        var csrfname = $("meta[name='csrf-name']").attr('content');
+        
+        var thisspan = $(this);
+        
+        var r=confirm("Confirm delete?");
+        if (r==true){
+            $.post(config.base_url+'productUpload/step3_deletePreference', {head:headId, csrfname:csrftoken}, function(data){
+                try{
+                    var obj = jQuery.parseJSON(data);	
+                }
+                catch(e){
+                    alert('An error was encountered while processing your data. Please try again later.');
+                    window.location.reload(true);
+                    return false;
+                }
+                
+                if( obj['result'] === 'success' ){				
+                    // Check each select and hide delete button when headId is selected (then is removed)
+                    allSelect.each(function(){
+                        selectedVal = parseInt($(this).val());
+                        console.log(selectedVal);
+                        if( selectedVal === headId ){
+                            $(this).siblings('.delete_ship_pref').hide();
+                        }
+                    });
+                    
+                    allSelect.find('option[value="'+headId+'"]').remove();
+                    siblingSelect.val(0);
+                    thisspan.hide();
+                    
+                }else{
+                    alert( obj['error'] );
+                }
+            });
+        }
+     });
+     
 })(window.jQuery);
+
+
+/**
+ *	Function to scroll to desired element
+ */
+function myScrollTo(scrollTo){	
+    $('html, body').animate({
+        scrollTop: scrollTo.offset().top - scrollTo.offset().top * 0.05
+    });
+}
+ 
+ 
+/**
+  *	Function to fix display of chosen. removes nbsp for display purposes
+  */ 
+function chosenSelectedTrimmer(selectObj){
+    var selectedSpan = selectObj.siblings('div.chosen-container').find('.search-choice span');
+    
+    selectedSpan.each(function(){
+        var origtext = $(this).text();
+        var newtext = $.trim(origtext);
+    
+        $(this).text(newtext);
+    });
+}
 
 /**
 * Function to handle display of Price Value
@@ -954,26 +1028,15 @@ function validateRedTextBox(idclass)
 {
   $(idclass).css({"-webkit-box-shadow": "0px 0px 2px 2px #FF0000",
     "-moz-box-shadow": "0px 0px 2px 2px #FF0000",
-    "box-shadow": "0px 0px 2px 2px #FF0000"});
+    "box-shadow": "0px 0px 2px 2px #FF0000"}).addClass('my_err');
 } 
 
 function validateWhiteTextBox(idclass)
-{
+{/*
   $(idclass).css({"-webkit-box-shadow": "0px 0px 2px 2px #FFFFFF",
     "-moz-box-shadow": "0px 0px 2px 2px #FFFFFF",
-    "box-shadow": "0px 0px 2px 2px #FFFFFF"});
+    "box-shadow": "0px 0px 2px 2px #FFFFFF"}).removeClass('my_err');*/
+    $(idclass).css({"-webkit-box-shadow": "none",
+        "-moz-box-shadow": "none",
+        "box-shadow": "none"}).removeClass('my_err');
 };
-
-
-/******* MY SELECT BOX FROM UNORDERED LIST ********
-$(function(){
-	
-});
-**/
-
-
-
-
-
-
-
