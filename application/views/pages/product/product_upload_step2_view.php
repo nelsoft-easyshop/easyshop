@@ -410,7 +410,7 @@
                                               </select>
                                           </div> 
                                       </div>
-                                      <div class="price-div col-sx-3 col-sm-3 col-md-3 pd-bttm-10">
+                                      <div class="price-div col-xs-3 col-sm-3 col-md-3 pd-bttm-10">
                                           &#8369; <input type="text"  maxlength="10" class="price-val price1 ui-form-control" placeholder="0.00" />
                                       </div>
                                       <div class="image-div col-xs-2 col-sm-2 col-md-3 pd-bttm-10">
