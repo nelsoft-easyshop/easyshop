@@ -43,9 +43,9 @@
 				<h5>How you will be paid</h5>
 			</div>
 			<div class="clear"></div>
-			<div class="step4_content step4_paysel">
+			<div class="step4_content step4_paysel pd-tb-15">
 				<?php if( count($product_billingdetails) !== 0 ):?>
-				<div class="step4_bankdetails col-sx-12 col-sm-9 col-md-9 pd-bttm-15">					
+				<div class="step4_bankdetails col-sx-12 col-sm-7 col-md-7 pd-bttm-15">					
 					<div class="row pd-top-15">
 						<div class="col-xs-3 col-sm-4 col-md-4"><strong>Bank account name:</strong></div>	
 						<div class="col-xs-9 col-sm-8 col-md-8"><?php echo $product_billingdetails['bank_account_name']?></div>
@@ -61,13 +61,14 @@
 				</div>
 				<?php endif;?>
 				<?php if( (int)$product['is_cod'] === 1 ):?>
-				<div class="step4-cod col-sx-12 col-sm-3 col-md-3">
+				<div class="step4-cod col-sx-12 col-sm-5 col-md-5">
 					<span class="cod-images"></span>
 					<div class="cod-button">
 						<span>Cash on Delivery</span>
 					</div>
 				</div>
 				<?php endif;?>
+				<div class="clear"></div>
 			</div>
 			<div class="clear"></div>
 		</div>
@@ -157,11 +158,14 @@
 		
 		<div style="margin-top:3em;">
 			<div>
-				<h4><strong>Product Preview</strong></h4>
-				<div style="max-height:100%; border:1px solid #CECECE;" class="pd-8-12">
+
+				<div style="max-height:100%; border:1px solid #CECECE;">
+				<div class="step4_header col-xs-12">
+					<h5>Product Preview</h5>
+				</div>
 					<div class="clear"></div>
-					<section class="top_margin">
-					  <!-- <div class="prod_preview_bread_crumbs">
+					<!--<section class="top_margin">
+					   <div class="prod_preview_bread_crumbs">
 https://www.google.com.ph/webhp?tab=ww&authuser=0&ei=IgHjU7iSBJHIoAS05YGQDw&ved=0CBUQ1S4						<div class="clear"></div>
 						<div class="bread_crumbs">
 						  <ul>
@@ -172,9 +176,9 @@ https://www.google.com.ph/webhp?tab=ww&authuser=0&ei=IgHjU7iSBJHIoAS05YGQDw&ved=
 							<li class="bread_crumbs_last_child"><?php echo html_escape($product['product_name']);?></li>
 						  </ul>
 						</div>
-					  </div> -->
-					</section>
-					<section class="step4_prod_preview">
+					  </div> 
+					</section>-->
+					<div class="step4_prod_preview col-xs-12 pd-tb-15">
 						<div class="">
 							<div class="col-md-5">
 								<div id="product_content_gallery" class="step4_prod_cont_gal">
@@ -286,43 +290,55 @@ https://www.google.com.ph/webhp?tab=ww&authuser=0&ei=IgHjU7iSBJHIoAS05YGQDw&ved=
 					  </div>
 					  
 					  
-					  <div id="tabs" class="prod_previews_tabs">
-						<ul>
+					  <!--<div id="tabs" class="prod_previews_tabs">
+						 <ul>
 						  <li><a href="#tabs-1">Product Details</a></li>
-						  <!-- <li><a href="#tabs-2">Specification</a></li> -->						  
-						</ul>
-						
+						  <li><a href="#tabs-2">Specification</a></li>						  
+						</ul> -->
+						<div class="prod_previews_tabs">
 						<div class="clear"></div>
 					   
-						<div id="tabs-1" class="col-sx-12 col-sm-12 col-md-12">
-						  <ul>
-							<p> <strong>Description: </strong><?php echo html_purify($product['description']);?> </p>
-							<li><strong>Brand: </strong><?php echo html_escape(ucfirst(strtolower($product['brand_name'])));?></li>
-							<li><strong>Additional description: </strong><?php echo html_escape($product['brief']);?></li>
-							<li><strong>Condition: </strong><?php echo html_escape($product['condition']);?></li>
-						  </ul>
-
-						  
-						  <div class="spec_panel">
-						  <h4 class="spec_heading">Specification</h4>
-						  <h5>Specifications of <?php echo html_escape($product['product_name']);?></h5>
-							  <div> <span>SKU</span> <span><?php echo html_escape($product['sku']);?></span> </div>
-							  <?php foreach($product_options as $key=>$product_option):?>
-							  <?php if(count($product_option)===1): ?>
-								  <?php if(intval($product_option[0]['datatype'],10) === 2): ?>
-										<div class="tab2_html_con">
-											<strong><?php echo html_escape(str_replace("'", '', $key));?> </strong>
-											<?php echo html_purify($product_option[0]['value']);?>
-										</div>
-								   <?php else: ?>   
-										<div> 
-											<span><?php echo html_escape(str_replace("'", '', $key));?></span> 
-											<span><?php echo html_escape($product_option[0]['value']);?></span>
-										</div>
-							   <?php endif; ?>
-							  <?php endif; ?>
-							  <?php endforeach;?>
+						<!-- <div id="tabs-1"> -->
+						<div class="tab-1">
+							<div class="col-xs-12 bg-cl-e5e5e5">
+								<h5>Product Details</h5>
 							</div>
+							<div class="clear"></div>
+							<div class="col-xs-12 col-sm-12 col-md-12 pd-tb-15">
+								<p> <strong>Description: </strong><?php echo html_purify($product['description']);?> </p>
+							  <ul>								
+								<li><strong>Brand: </strong><?php echo html_escape(ucfirst(strtolower($product['brand_name'])));?></li>
+								<li><strong>Additional description: </strong><?php echo html_escape($product['brief']);?></li>
+								<li><strong>Condition: </strong><?php echo html_escape($product['condition']);?></li>
+							  </ul>
+							</div>
+							<div class="clear"></div>
+							<div class="spec_panel">
+								<div class="col-xs-12 bg-cl-e5e5e5">
+							  		<h5 class="bg-cl-e5e5e5 col-sx-12">Specification</h5>
+							  	</div>
+							  	<div class="clear"></div>
+							  	<div class="col-xs-12 pd-tb-15">
+								  	<h5>Specifications of <?php echo html_escape($product['product_name']);?></h5>
+									<div> <span>SKU</span> <span><?php echo html_escape($product['sku']);?></span> </div>
+									  <?php foreach($product_options as $key=>$product_option):?>
+									  <?php if(count($product_option)===1): ?>
+										  <?php if(intval($product_option[0]['datatype'],10) === 2): ?>
+												<div class="tab2_html_con">
+													<strong><?php echo html_escape(str_replace("'", '', $key));?> </strong>
+													<?php echo html_purify($product_option[0]['value']);?>
+												</div>
+										   <?php else: ?>   
+												<div> 
+													<span><?php echo html_escape(str_replace("'", '', $key));?></span> 
+													<span><?php echo html_escape($product_option[0]['value']);?></span>
+												</div>
+									   <?php endif; ?>
+									  <?php endif; ?>
+									  <?php endforeach;?>
+								</div>
+								<div class="clear"></div>
+							</div>	
 						</div>
 						<!-- <div id="tabs-2">
 						  <h3>Specifications of <?php echo html_escape($product['product_name']);?></h3>
@@ -348,8 +364,8 @@ https://www.google.com.ph/webhp?tab=ww&authuser=0&ei=IgHjU7iSBJHIoAS05YGQDw&ved=
 					 					  
 					  </div>
 					  <div class="clear"></div>
-					</section>
-
+					</div>
+					<div class="clear"></div>
 				</div>
 			</div>
 		</div>

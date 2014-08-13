@@ -37,18 +37,18 @@
                     <li>
                       <a href="javascript:void(0)" class="steps_link">
                         <span class="span_bg left-arrow-shape ar_active"></span>
-                        <span class="steps_txt_active"><span class="f18">Step 1: </span> Select Category</span>
+                        <span class="steps_txt_active"><span class="f18">Step 1 : </span> Select Category</span>
                         <span class="span_bg right-arrow-shape ar_r_active"></span>
                       </a>
                     </li>
                     <li class="steps_txt_hide">
                         <span class="span_bg left-arrow-shape2"></span>
-                        <span class="steps_txt">Step 2: Upload Item</span>
+                        <span class="steps_txt">Step 2 : Upload Item</span>
                         <span class="span_bg right-arrow-shape"></span>
                     </li>                   
                     <li class="steps_txt_hide">
                         <span class="span_bg left-arrow-shape2"></span>
-                        <span class="steps_txt">Step 3: Shipping Location</span>
+                        <span class="steps_txt">Step 3 : Shipping Location</span>
                         <span class="span_bg right-arrow-shape"></span>
                     </li>
                     <li class="steps_txt_hide">
@@ -64,7 +64,7 @@
             <div class="cat_sch_container text-center">
                    <div class="form-group">
                   <div class="input-group col-xs-12 col-sm-6 col-md-6 mrgin-deflt">
-                    <div class="input-group-addon"><span class="span_bg icon_srch"></span></div>
+                    <div class="input-group-addon"><label for="cat_sch"><span class="span_bg icon_srch"></span></label></div>
                     <input type="text" class="box form-control width-50p" id="cat_sch" autocomplete="off" placeholder="Search for category">
                   </div>
                   </div>

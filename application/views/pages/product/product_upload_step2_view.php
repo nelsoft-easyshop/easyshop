@@ -588,10 +588,9 @@
     }
     .ui-dialog-title {
       display: inline-block;
-      font-size: 18px;
+      font-size: 14px;
       font-weight: bold;
       padding-bottom: 8px;
-      width: 475px;
     }
     .ui-button.ui-widget.ui-state-default.ui-corner-all.ui-button-text-only {
       background-color: #f18200;
@@ -603,5 +602,9 @@
       min-width: 70px;
       padding: 8px;
       transition: all 0.3s ease-in-out 0s;
+    }
+
+    .ui-dialog-titlebar-close:before {
+      line-height: 18px;
     }
     </style>
