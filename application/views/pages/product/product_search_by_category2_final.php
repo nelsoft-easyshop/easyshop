@@ -85,6 +85,6 @@
                 </p>
             </div>
 
-        <?php endforeach; ?>
+        <?php endfor; ?>
 
     <?php endif; ?>
