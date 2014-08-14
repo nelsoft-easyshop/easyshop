@@ -605,8 +605,6 @@ class product extends MY_Controller
         $product_row = $this->product_model->getProductBySlug($slug);  	
         $data = $this->fill_header();
         
-        $foo = new Product_Presenter($product_row);
-        
         if($product_row['o_success'] >= 1){
             $id = $product_row['id_product'];
             $product_options = $this->product_model->getProductAttributes($id, 'NAME');
