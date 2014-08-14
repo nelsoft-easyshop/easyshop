@@ -23,14 +23,14 @@ Release Information
 
 This repo contains in-development code for future releases. To download the
 latest stable release please visit the `CodeIgniter Downloads
-<http://codeigniter.com/downloads/>`_ page.
+<http://codeigniter.com/downloads/>` page.
 
 **************************
 Changelog and New Features
 **************************
 
 You can find a list of all changes for each release in the `user
-guide change log <https://github.com/EllisLab/CodeIgniter/blob/develop/user_guide_src/source/changelog.rst>`_.
+guide change log <https://github.com/EllisLab/CodeIgniter/blob/develop/user_guide_src/source/changelog.rst>`
 
 *******************
 Server Requirements
@@ -50,16 +50,16 @@ License
 *******
 
 Please see the `license
-agreement <http://ellislab.com/codeigniter/user-guide/license.html>`_
+agreement <http://ellislab.com/codeigniter/user-guide/license.html>`
 
 *********
 Resources
 *********
 
-+  `User Guide <http://ellislab.com/codeigniter/user_guide/>`_
-+  `Community Forums <http://ellislab.com/forums/>`_
-+  `Community Wiki <https://github.com/EllisLab/CodeIgniter/wiki/>`_
-+  `Community IRC <http://ellislab.com/codeigniter/irc>`_
++  `User Guide <http://ellislab.com/codeigniter/user_guide/>`
++  `Community Forums <http://ellislab.com/forums/>`
++  `Community Wiki <https://github.com/EllisLab/CodeIgniter/wiki/>`
++  `Community IRC <http://ellislab.com/codeigniter/irc>`
 
 ***************
 Acknowledgement
