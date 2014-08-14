@@ -2,7 +2,8 @@
 ***Easyshop.ph***
 
 
-Easyshop is an e-commerce application developed on top of Codeigniter 2.1.4 along with some symfony components such as Doctrine.
+Easyshop.ph is an e-commerce application developed on top of Codeigniter 2.1.4 along with some symfony components such as Doctrine.
+
 
 
 
