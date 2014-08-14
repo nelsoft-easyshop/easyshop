@@ -1,5 +1,7 @@
-easyshop
-========
+
+###################
+   Easyshop.ph
+###################
 
 Easyshop is an e-commerce application developed on top of Codeigniter 2.1.4 along with some symfony components such as Doctrine.
 
@@ -56,10 +58,10 @@ agreement <http://ellislab.com/codeigniter/user-guide/license.html>`_
 Resources
 *********
 
--  `User Guide <http://ellislab.com/codeigniter/user_guide/>`_
--  `Community Forums <http://ellislab.com/forums/>`_
--  `Community Wiki <https://github.com/EllisLab/CodeIgniter/wiki/>`_
--  `Community IRC <http://ellislab.com/codeigniter/irc>`_
++  `User Guide <http://ellislab.com/codeigniter/user_guide/>`_
++  `Community Forums <http://ellislab.com/forums/>`_
++  `Community Wiki <https://github.com/EllisLab/CodeIgniter/wiki/>`_
++  `Community IRC <http://ellislab.com/codeigniter/irc>`_
 
 ***************
 Acknowledgement
