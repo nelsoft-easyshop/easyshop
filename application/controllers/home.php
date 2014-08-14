@@ -3,18 +3,31 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
-class Home extends MY_Controller {
+class Home extends MY_Controller 
+{
 
-    function __construct() {
+    public $feeds_prodperpage = 5;
+
+    
+    /**
+     * Load class dependencies
+     *
+     */
+    function __construct() 
+    {
         parent::__construct();
         $this->load->library('xmlmap');
         $this->load->model('product_model');
         $this->load->model('user_model');
     }
     
-    public $feeds_prodperpage = 5;
-    
-    public function index() {
+    /**
+     * Renders home page if not logged in, otherwise render feed page
+     *
+     * @return View
+     */
+    public function index() 
+    {
 
         $home_content = $this->product_model->getHomeContent();
 
@@ -41,14 +54,19 @@ class Home extends MY_Controller {
         }else{
             $this->load->view('pages/home_view', $data);
         }
-        
-        
-        
+                
         $this->load->view('templates/footer_full');
 
     }
     
-    public function under_construction(){
+    
+    /**
+     * Renders home page if not logged in, otherwise render feed page
+     *
+     * @return View
+     */
+    public function under_construction()
+    {
       $data = array('title' => 'Under Construction | Easyshop.ph',);
       $data = array_merge($data, $this->fill_header());
       $this->load->view('templates/header', $data);
@@ -56,30 +74,50 @@ class Home extends MY_Controller {
       $this->load->view('templates/footer_full');
     }
     
-
-    
-    public function pagenotfound(){
-    $data = array('title' => 'Page Not Found | Easyshop.ph',);
-    $data = array_merge($data, $this->fill_header());
-    $this->load->view('templates/header', $data);
+    /**
+     * Renders 404 page
+     *
+     * @return View
+     */
+    public function pagenotfound()
+    {
+        $data = array('title' => 'Page Not Found | Easyshop.ph',);
+        $data = array_merge($data, $this->fill_header());
+        $this->load->view('templates/header', $data);
         $this->load->view('pages/general_error');
         $this->load->view('templates/footer_full');
     }
     
-    public function splash(){
+    
+    /**
+     * Renders splash page
+     *
+     * @return View
+     */
+    public function splash()
+    {
         $this->load->view('pages/undermaintenance.php');
     }
 
-    /*  Returns server time in Month Day, Year 24Hour:Min:Sec format
-     *  Timezone is set to Asia/Manila
+    /** 
+     * Returns server time in Month Day, Year 24Hour:Min:Sec format
+     * Timezone is set to Asia/Manila
+     *
+     * @return String
      */
-    
-    public function getServerTime(){
+    public function getServerTime()
+    {
         date_default_timezone_set('Asia/Manila');
         echo date('M d,Y H:i:s');
     }
     
-    public function policy(){
+    /**
+     * Renders privacy policy page
+     *
+     * @return View
+     */
+    public function policy()
+    {
         $data = array('title' => 'Privacy Policy | Easyshop.ph',
                       'metadescription' => "Read Easyshop.ph's Privacy Policy",);
         $data = array_merge($data, $this->fill_header());
@@ -88,7 +126,14 @@ class Home extends MY_Controller {
         $this->load->view('templates/footer_full');
     }
     
-    public function terms(){
+    
+    /**
+     * Renders terms and conditions page
+     *
+     * @return View
+     */
+    public function terms()
+    {
         $data = array('title' => 'Terms and Conditions | Easyshop.ph',
                       'metadescription' => "Read Easyshop.ph's Terms and Conditions",
                    );
@@ -98,7 +143,14 @@ class Home extends MY_Controller {
         $this->load->view('templates/footer_full');
     }
     
-    public function faq(){
+    
+    /**
+     * Renders FAQ page
+     *
+     * @return View
+     */
+    public function faq()
+    {
         $data = array('title' => 'F.A.Q. | Easyshop.ph',
                       'metadescription' => 'Get in the know, read the Frequently Asked Questions at Easyshop.ph',
                       );
@@ -108,35 +160,63 @@ class Home extends MY_Controller {
         $this->load->view('templates/footer_full');
     }
     
-    public function contact(){
+    
+    /**
+     * Renders contact-us page
+     *
+     * @return View
+     */
+    public function contact()
+    {
         $data = array('title' => 'Contact us | Easyshop.ph',
                       'metadescription' => 'Get in touch with our Customer Support',
                 );
         $data = array_merge($data, $this->fill_header());
-    $this->load->view('templates/header', $data);
+        $this->load->view('templates/header', $data);
         $this->load->view('pages/web/contact');
         $this->load->view('templates/footer_full');
     }
     
-    public function guide_buy(){
+    
+      
+    /**
+     * Renders how-to-buy infographic
+     *
+     * @return View
+     */
+    public function guide_buy()
+    {
         $data = array('title' => 'How to buy | Easyshop.ph',
                       'metadescription' => 'Learn how to purchase at Easyshop.ph',
                 );
         $data = array_merge($data, $this->fill_header());
         $this->load->view('templates/header', $data);
-    $this->load->view('pages/web/how-to-buy');
+        $this->load->view('pages/web/how-to-buy');
     }
     
-    public function guide_sell(){
+    
+    /**
+     * Renders how-to-sell infographic
+     *
+     * @return View
+     */
+    public function guide_sell()
+    {
         $data = array('title' => 'How to sell | Easyshop.ph',
                       'metadescription' => 'Learn how to sell your items at Easyshop.ph',
                 );
         $data = array_merge($data, $this->fill_header());
         $this->load->view('templates/header', $data);
-    $this->load->view('pages/web/how-to-sell');
+        $this->load->view('pages/web/how-to-sell');
     }
-
-    function userprofile(){
+    
+    /**
+     * Renders memberpage
+     *
+     * @return View
+     */
+    public function userprofile()
+    {
         $this->load->model('memberpage_model');
 
         $sellerslug = $this->uri->segment(1);
@@ -174,8 +254,7 @@ class Home extends MY_Controller {
             
             $this->load->view('pages/user/vendor_view', $data);
             $this->load->view('templates/footer');
-            
-}
+        }
         else{
             $data = array('title' => 'Page Not Found | Easyshop.ph',);
             $data = array_merge($data, $this->fill_header());
@@ -185,6 +264,8 @@ class Home extends MY_Controller {
         }
     }
 
+    
+    
     public function getFeed()
     {
         $perPage = $this->feeds_prodperpage;
