@@ -454,4 +454,14 @@
 	where m.slug=:userslug
 </select>
 
+<select id='getUserCount'>
+  SELECT COUNT(*)
+  from es_member
+
+</select>
+
+
 </map>
+
+
+
