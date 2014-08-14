@@ -1186,7 +1186,22 @@ FROM
     WHERE `product_id_item` = :itemId
 </select>
 
-
+ <select id="getProdCount">
+    SELECT COUNT(*)
+    FROM es_product
+    WHERE id_product = :prodid
+    AND is_delete = '0'
+    AND is_draft = '0'
+ </select>sss
 
 
 </map>
+
+
+
+
+
+
+
+
+
