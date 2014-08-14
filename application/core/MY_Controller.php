@@ -169,6 +169,29 @@ class MY_Controller extends CI_Controller
         $array = $temp; 
     }
 
+    public function authentication($postedData, $postedHash, $evaluate = "")
+    {
+        foreach ($postedData as $data => $value) {
+            
+            if($data == "hash" || $data == "_token" || $data == "csrfname" || $data == "callback" || $data == "password")
+                continue;
+            else
+                $evaluate .= $value;
+        }
+
+        $hash = $evaluate.'$2y$10$pFrjgk6YU3r0Uo8o483RgO7fWvI/6OEkb1VLb0MaYIRTJuDAxAeSW';
+        //echo sha1($hash); echo "<br/>";
+        //echo $postedHash."<br/>";
+        //echo $hash."<br/>";
+        //print_r($postedData)."<br/>";
+        //echo "Evaluate:".$hash."<br/>";
+        //echo "Sha1:".sha1($hash)."<br/>"; 
+        //echo "PostedHash:".$postedHash."<br/>";
+        if(sha1($hash) != $postedHash){
+            $error = json_encode("error");
+                    exit($error);
+        }   
+    }
 
 
 
