@@ -18,4 +18,4 @@ you creatively focus on your project by minimizing the amount of code needed
 for a given task.
 
 
-Have a look a at the Codeigniter source code (here) [https://github.com/EllisLab/CodeIgniter]
+Have a look at the Codeigniter source code at https://github.com/EllisLab/CodeIgniter
