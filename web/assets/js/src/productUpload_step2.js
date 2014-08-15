@@ -409,6 +409,7 @@ var previous,editSelectedValue,editSelectedId;
 $(document).ready(function() {   
 
     setChosen(); 
+    $("#head-data,.value-data").val('').trigger("liszt:updated");
     zebraCombination();
 
     $(document).on('change',".price-val,#prod_price",function () {
@@ -457,10 +458,14 @@ $(document).ready(function() {
         value = value.replace(/[^a-z0-9\s\-]/gi, '');
         var activeSelection = selector.search_results.find('li.active-result').length;
         var highlightSelection = selector.search_results.find('li.highlighted').length;
+        
+        if(value === ""){
+            return false;
+        }
 
-        if(highlightSelection >= 1){
-                selector.result_highlight = selector.search_results.find('li.highlighted').first();
-                return selector.result_select(evt);
+        if(highlightSelection >= 1){ 
+            selector.result_highlight = selector.search_results.find('li.highlighted').first(); 
+            return selector.result_select(evt);
         }
         else{
             $(id).append('<option>' + value + '</option>');
@@ -498,6 +503,10 @@ $(document).ready(function() {
             checkOptionValue(this,this.form_field,$(evt.target).val(),evt);
         }
     }
+
+    $(document).on("change",".chzn-search > input[type=text]", function (){
+        $(this).val($(this).val().replace(/[^a-z0-9\s\-]/gi, '')); 
+    });
 
     $(document).on("change","#head-data",function (){
         var selector = $(this); 
@@ -781,10 +790,9 @@ $(document).ready(function() {
     $(document).on("click",".edit-attr",function (){
         var selector = $(this);
         var head = editSelectedValue = selector.data('head');
-        var id = editSelectedId = selector.data('id'); 
-
+        var id = editSelectedId = selector.data('id');  
         $('.add-property').val('Save Property').nextAll().remove();
-        $('.add-property').after('<input type="button" id="cancel-changes" value="Cancel" class="btn btn-default width-80p" />')
+        $('.add-property').after('<input type="button" id="cancel-changes" value="Cancel" class="btn btn-default width-80p" />');
         $('#head-data').val(head).trigger("liszt:updated");
         $('.control-panel').empty();
         validateRedTextBox(".div2 > span > #"+id);
