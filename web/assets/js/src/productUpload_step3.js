@@ -816,7 +816,7 @@ $(function(){
                         checkData[attrkey].push(locationID);
                     });
                     // Select location on select element
-                    locField.find('option[value="'+locationID+'"]').attr('selected', true);
+                    locField.find('option[value="'+locationID+'"]').prop('selected', true);
                     if( i!==0 ){
                         firstLocField.find('option[value="'+locationID+'"]').attr('disabled',true);
                         firstLocField.trigger('chosen:updated');
