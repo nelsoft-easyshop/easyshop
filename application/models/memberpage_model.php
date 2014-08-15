@@ -1,16 +1,34 @@
 <?php
+
+
+/**
+ *  Memberpage controller
+ *
+ *  @author Sam Gavinio
+ *  @author Stephen Janz Serafico
+ *  @author Rain Jorque
+ *
+ */
 class memberpage_model extends CI_Model
 {
-    function __construct() 
+    /**
+     *  Class Constructor
+     */
+    public function __construct() 
     {
         parent::__construct();
         $this->load->library("xmlmap");
         $this->load->library("parser");
         $this->config->load("image_path");
         $this->load->helper('product');
-    }	
+    }
     
-    function getLocationLookup()
+    /**
+     *  Fetches city, state/region, and city from database
+     *
+     *  @return $data with categorized locations
+     */
+    public function getLocationLookup()
     {
         $query = $this->xmlmap->getFilenameID('sql/users', 'getLocationLookup');
         $sth = $this->db->conn_id->prepare($query);
@@ -40,7 +58,12 @@ class memberpage_model extends CI_Model
     }
     
     
-    function get_member_by_id($member_id)
+    /**
+     *  Fetch user details
+     *
+     *  @return $row - contains all user info
+     */
+    public function get_member_by_id($member_id)
     {
         $query = $this->xmlmap->getFilenameID('sql/users', 'get_member');
         $sth = $this->db->conn_id->prepare($query);
@@ -51,7 +74,12 @@ class memberpage_model extends CI_Model
         return $row;
     }
     
-    function get_school_by_id($member_id)
+    /**
+     *  Fetch user's school information
+     *
+     *  @return $data - contains school data
+     */
+    public function get_school_by_id($member_id)
     {
         $query = $this->xmlmap->getFilenameID('sql/users', 'get_school');
         $sth = $this->db->conn_id->prepare($query);
@@ -65,7 +93,12 @@ class memberpage_model extends CI_Model
         return $data;
     }
     
-    function get_work_by_id($member_id)
+    /**
+     *  Fetch user's work information
+     *
+     *  @return $data - contains work data
+     */
+    public function get_work_by_id($member_id)
     {
         $query = $this->xmlmap->getFilenameID('sql/users', 'get_work');
         $sth = $this->db->conn_id->prepare($query);
@@ -79,7 +112,12 @@ class memberpage_model extends CI_Model
         return $data;
     }
     
-    function getAddress($member_id,$type)
+    /**
+     *  Fetch user's address information. Type 0 or 1
+     *
+     *  @return $row - contains address details
+     */
+    public function getAddress($member_id,$type)
     {
         $query = $this->xmlmap->getFilenameID('sql/users', 'getAddress');
         $sth = $this->db->conn_id->prepare($query);
@@ -91,7 +129,10 @@ class memberpage_model extends CI_Model
         return $row;
     }
     
-    function edit_member_by_id($member_id, $data=array())
+    /**
+     *  Used for editing member information
+     */
+    public function edit_member_by_id($member_id, $data=array())
     {
         if(strlen($data['birthday']) == 0)
             //$data['birthday']='0000-00-00';
@@ -112,13 +153,16 @@ class memberpage_model extends CI_Model
         return $result;
     }
     
-    //function edit_address_by_id($member_id, $data=array())
-    function editAddress($member_id, $data=array(), $address_id)
-    {	
+    /**
+     *  Function used to insert or edit address under Personal Information Tab
+     */
+    public function editAddress($member_id, $data=array(), $address_id)
+    {
         if( (string)$address_id === '' ){
             $query = $this->xmlmap->getFilenameID('sql/users', 'insertAddress');
             $sth = $this->db->conn_id->prepare($query);
-        }else{
+        }
+        else{
             $query = $this->xmlmap->getFilenameID('sql/users', 'updateAddress');
             $sth = $this->db->conn_id->prepare($query);
             $sth->bindParam(':id_address', $address_id);
@@ -142,12 +186,15 @@ class memberpage_model extends CI_Model
         return $result;
     }
     
-    function edit_school_by_id($member_id, $data=array())
+    /**
+     *  Function used to edit school information
+     */
+    public function edit_school_by_id($member_id, $data=array())
     {
-        if(strlen($data['year'])==0)
+        if(strlen($data['year'])==0){
             $data['year'] = '0000';
-        else
-        {
+        }
+        else{
             $data['year'] = ($data['year'] < 1901)?1901:$data['year'];
             $data['year']= ($data['year'] > 2155)?2155:$data['year'];
         }
@@ -164,7 +211,10 @@ class memberpage_model extends CI_Model
         return $result;
     }
 
-    function deletePersonalInformation($member_id, $field)
+    /**
+     *  Function used to delete address, school, and work information
+     */
+    public function deletePersonalInformation($member_id, $field)
     {
         if($field === 'del_address' ){
             $query = $this->xmlmap->getFilenameID('sql/users', 'delete_address');
@@ -183,7 +233,13 @@ class memberpage_model extends CI_Model
         return $result;
     }
     
-    function upload_img($uid, $data=array())
+    /**
+     *  Function used for uploading avatar image in memberpage and vendorpage
+     *  Includes resizing of image and processing of cropped image
+     *
+     *  @return <img> DOM code
+     */
+    public function upload_img($uid, $data=array())
     {
         $query = $this->xmlmap->getFilenameID('sql/users', 'get_image');
         $sth = $this->db->conn_id->prepare($query);
@@ -194,11 +250,11 @@ class memberpage_model extends CI_Model
         
         if(trim($path) === ''){
             $path = $this->config->item('user_img_directory').$path.$row['id_member'].'_'.$row['username'];
-        }		
+        }
         if(!is_dir($path))
         {
           mkdir($path,0755,TRUE); 
-        }		
+        }
         $config['overwrite'] = TRUE;
         $config['file_name'] = 'usersize.png';
         $config['upload_path'] = $path; 
@@ -208,12 +264,10 @@ class memberpage_model extends CI_Model
         $config['max_height']  = '5000';
         $this->upload->initialize($config);  
         
-        if ( ! $this->upload->do_upload())
-        {
+        if ( ! $this->upload->do_upload()){
             return array('error' => $this->upload->display_errors());
         }
-        else
-        {
+        else{
             $config['image_library'] = 'gd2';
             $config['source_image'] = $path.'/usersize.png';
             $config['maintain_ratio'] = true;
@@ -266,7 +320,11 @@ class memberpage_model extends CI_Model
         }
     }
     
-    function banner_upload($uid, $data=array()){
+    /**
+     *  Used for uploading banner in vendor page
+     *  Includes resizing of image and processing of cropped image
+     */
+    public function banner_upload($uid, $data=array()){
         $query = $this->xmlmap->getFilenameID('sql/users', 'get_image');
         $sth = $this->db->conn_id->prepare($query);
         $sth->bindParam(':id', $uid);
@@ -276,9 +334,8 @@ class memberpage_model extends CI_Model
         
         if(trim($path) === ''){
             $path = $this->config->item('user_img_directory').$path.$row['id_member'].'_'.$row['username'];
-        }		
-        if(!is_dir($path))
-        {
+        }
+        if(!is_dir($path)){
           mkdir($path,0755,TRUE); 
         }
         $config['overwrite'] = TRUE;
@@ -290,12 +347,10 @@ class memberpage_model extends CI_Model
         $config['max_height']  = '5000';
         $this->upload->initialize($config);  
         
-        if ( ! $this->upload->do_upload())
-        {
+        if ( ! $this->upload->do_upload()){
             return array('error' => $this->upload->display_errors());
         }
-        else
-        {
+        else{
             $config['image_library'] = 'gd2';
             $config['source_image'] = $path.'/banner.png';
             $config['maintain_ratio'] = false;
@@ -303,7 +358,7 @@ class memberpage_model extends CI_Model
             $imageData = $this->upload->data();
             
             // If cropped
-            if($data['w'] > 0 && $data['h'] > 0){			
+            if($data['w'] > 0 && $data['h'] > 0){
                 $config['new_image'] = $path.'/banner.png';
                 $config['width'] = $data['w'];
                 $config['height'] = $data['h'];
@@ -319,18 +374,23 @@ class memberpage_model extends CI_Model
             $config['width'] = 980;
             $config['height'] = 270;
             $this->image_lib->initialize($config);  
-            $this->image_lib->resize();				
+            $this->image_lib->resize();	
         }
     }
     
-    function edit_work_by_id($member_id, $data=array())
+    /**
+     *  Used for editing work info in Personal Information tab
+     *
+     *  @return TRUE on success, False otherwise
+     */
+    public function edit_work_by_id($member_id, $data=array())
     {
         $rowcount = count($data) / 4;
         
-        if(strlen($data['year'])==0)
+        if(strlen($data['year'])==0){
             $data['year'] = '0000';
-        else
-        {
+        }
+        else{
             $data['year'] = ($data['year'] < 1901)?1901:$data['year'];
             $data['year']= ($data['year'] > 2155)?2155:$data['year'];
         }
@@ -347,7 +407,13 @@ class memberpage_model extends CI_Model
         return $result;
     }
     
-    function get_image($member_id, $selector=""){		
+    /**
+     *  Function used to fetch user avatar and banner images
+     *  Vendor : fetches banner image (returns URL)
+     *  Feedback : fetches avatar in 60x60 png for feedback display in vendor page (returns URL)
+     *  Default : fetches user avatar for memberpage and vendorpage (returns img tag)
+     */
+    public function get_image($member_id, $selector=""){		
         $path = $this->config->item('user_img_directory');
         $query = $this->xmlmap->getFilenameID('sql/users', 'get_image');
         $sth = $this->db->conn_id->prepare($query);
@@ -358,32 +424,41 @@ class memberpage_model extends CI_Model
         switch($selector){
             case "vendor":
                 $img_file = $row['imgurl'].'/banner.png';
-                if(!file_exists($img_file)||(trim($row['imgurl']) === ''))
+                if(!file_exists($img_file)||(trim($row['imgurl']) === '')){
                     $user_image = base_url().$path.'default/banner.png?'.time();
-                else
+                }
+                else{
                     $user_image = base_url().$img_file.'?'.time();
+                }
                 break;
             case "feedback":
                 $img_file = $row['imgurl'].'/60x60.png';
-                if(!file_exists($img_file)||(trim($row['imgurl']) === ''))
+                if(!file_exists($img_file)||(trim($row['imgurl']) === '')){
                     $user_image = base_url().$path.'default/60x60.png?'.time();
-                else
+                }
+                else{
                     $user_image = base_url().$img_file.'?'.time();
+                }
                 break;
             default:
                 $img_file = $row['imgurl'].'/150x150.png';
-                if(!file_exists($img_file)||(trim($row['imgurl']) === ''))
+                if(!file_exists($img_file)||(trim($row['imgurl']) === '')){
                     $user_image = img(array('src' => $path.'default/150x150.png?'.time(), 'id' => 'user_image'));
-                else
+                }
+                else{
                     $user_image = img(array('src' => $img_file.'?'.time(), 'id' => 'user_image'));
+                }
                 break;
         }
-        
         return $user_image;
-    
     }
     
-    function select_set($val, $arg=array())
+    /**
+     *  Used by form validation to check if SELECT has value provided
+     *
+     *  @return TRUE on success, FALSE otherwise
+     */
+    public function select_set($val, $arg=array())
     {
         if($val !== $arg[0])
             return TRUE;
@@ -391,7 +466,12 @@ class memberpage_model extends CI_Model
         return FALSE;
     }
     
-    function is_validdate($date)
+    /**
+     *  Used to check if date provided is valid
+     *
+     *  @return TRUE on success, FALSE otherwise
+     */
+    public function is_validdate($date)
     {
         if(trim($date) === '')
             return true;
@@ -401,21 +481,21 @@ class memberpage_model extends CI_Model
         $month = intval($comp[1]);
         $day = intval($comp[2]);
 
-        if(checkdate($month, $day, $year)) 
-        {
+        if(checkdate($month, $day, $year)) {
             return true;
         }
-        else
-        {
+        else{
             $this->form_validation->set_message('external_callbacks', 'The date you entered is invalid');
             return false;
         }
     }
     
-    # Check query and adjust filter for order_product_status
-    # Current filter : 2 = returned , 6 = dragonpay expired
-    # Returns 'active', 'deleted' and 'sold'
-    function getUserItemCount($member_id)
+    /**
+     *  Check query and adjust filter for order_product_status 
+     *  Current filter : 2 = returned , 6 = dragonpay expired  
+     *  @return 'active', 'deleted' and 'sold' count
+     */
+    public function getUserItemCount($member_id)
     {
         $query = $this->xmlmap->getFilenameID('sql/product','getUserItemCount');
         $sth = $this->db->conn_id->prepare($query);
@@ -426,7 +506,10 @@ class memberpage_model extends CI_Model
         return $row;
     }
     
-    function getUserItemSearchCount($member_id, $schVal,$deleteStatus, $draftStatus)
+    /**
+     *  Fetch product count with filter provided
+     */
+    public function getUserItemSearchCount($member_id, $schVal,$deleteStatus, $draftStatus)
     {
         $query = $this->xmlmap->getFilenameID('sql/product','getUserItemSearchCount');
         $sth = $this->db->conn_id->prepare($query);
@@ -442,7 +525,13 @@ class memberpage_model extends CI_Model
         return $count;
     }
     
-    function getUserItems($member_id, $deleteStatus, $draftStatus=0, $start=0, $nf='%', $of="p.lastmodifieddate" , $osf="DESC" , $itemPerPage=10)
+    /**
+     *  Function used to fetch user items in dashboard.
+     *  Includes search, filter, and order by functionality.
+     *  
+     *  @return $data - contains product details for parsing of html template
+     */
+    public function getUserItems($member_id, $deleteStatus, $draftStatus=0, $start=0, $nf='%', $of="p.lastmodifieddate" , $osf="DESC" , $itemPerPage=10)
     {
         $query = $this->xmlmap->getFilenameID('sql/product','getUserItems');
         $parseData = array(
@@ -464,7 +553,7 @@ class memberpage_model extends CI_Model
         
         foreach($rows as $key=>$row){
         
-                applyPriceDiscount($row);
+            applyPriceDiscount($row);
         
             $query = $this->xmlmap->getFilenameID('sql/product','getParent');
             $sth = $this->db->conn_id->prepare($query);
@@ -508,9 +597,13 @@ class memberpage_model extends CI_Model
             $data[] = $row;
         }
         return $data;
-    }	
+    }
     
-    function getVendorDetails($sellerslug){
+    /**
+     *  Fetch vendor details (member details) using slug
+     */
+    public function getVendorDetails($sellerslug)
+    {
         $query = $this->xmlmap->getFilenameID('sql/users','getVendorDetails');
         $sth = $this->db->conn_id->prepare($query);
         $sth->bindParam(':userslug',$sellerslug);
@@ -520,10 +613,13 @@ class memberpage_model extends CI_Model
         return $row;
     }
     
-    /*
-     * Status = 0 for ongoing (default), 1 for complete
+    /**
+     *  Fetch Transactions to be categorized under Buy (on-going and complete)
+     *  Status = 0 for ongoing (default), 1 for complete
+     *
+     *  @return $data - contains transaction details for parsing html template
      */
-    function getBuyTransactionDetails($member_id, $status = 0, $start = 0, $nf='%', $of="1,2,3,5" , $osf="DESC" , $itemPerPage=10)
+    public function getBuyTransactionDetails($member_id, $status = 0, $start = 0, $nf='%', $of="1,2,3,5" , $osf="DESC" , $itemPerPage=10)
     {
         $query = $this->xmlmap->getFilenameID('sql/users','getBuyTransactionDetails');
         $strStatus = $status === 1 ? '1' : '0,99';
@@ -592,13 +688,6 @@ class memberpage_model extends CI_Model
                 if( (string)$p['attr_name']!=='' && (string)$p['attr_value']!=='' ){
                     array_push($data[$r['id_order']]['products'][$p['id_order_product']]['attr'], array('field' => ucwords(strtolower($p['attr_name'])), 'value' => ucwords(strtolower($p['attr_value'])) ));
                 }
-                /*
-                if($p['is_other'] === '0'){
-                    array_push($data[$r['id_order']]['products'][$p['id_order_product']]['attr'], array('field' => ucwords(strtolower($p['attr_name'])), 'value' => ucwords(strtolower($p['attr_value'])) ));
-                }else if($p['is_other'] === '1'){
-                    array_push($data[$r['id_order']]['products'][$p['id_order_product']]['attr'], array('field' => ucwords(strtolower($p['field_name'])), 'value' => ucwords(strtolower($p['value_name'])) ));
-                }*/
-                
             }
             //IF BANK DEPOSIT
             if( (int)$r['payment_method'] === 5 && (int)$r['transac_stat'] === 99 ){
@@ -619,11 +708,14 @@ class memberpage_model extends CI_Model
         return $data;
     }
     
-    /*
-     * Status = 0 for ongoing (default), 1 for complete
+    /**
+     *  Fetch Transactions to be categorized under Sell (on-going and complete)
+     *  Status = 0 for ongoing (default), 1 for complete
+     *
+     *  @return $data - contains transaction details for parsing html template
      */
-    function getSellTransactionDetails($member_id,$status,$start=0, $nf='%', $of="1,2,3,5" , $osf="DESC" , $itemPerPage=10)
-    {	
+    public function getSellTransactionDetails($member_id,$status,$start=0, $nf='%', $of="1,2,3,5" , $osf="DESC" , $itemPerPage=10)
+    {
         #Fetch order details
         $query = $this->xmlmap->getFilenameID('sql/users','getSellTransactionDetails');
         $total = 'COUNT(op.status)';
@@ -696,19 +788,18 @@ class memberpage_model extends CI_Model
                 if( (string)$p['attr_name']!=='' && (string)$p['attr_value']!=='' ){
                     array_push($data[$r['id_order']]['products'][$p['id_order_product']]['attr'], array('field' => ucwords(strtolower($p['attr_name'])), 'value' => ucwords(strtolower($p['attr_value'])) ));
                 }
-                /*
-                if($p['is_other'] === '0'){
-                    array_push($data[$r['id_order']]['products'][$p['id_order_product']]['attr'], array('field' => ucwords(strtolower($p['attr_name'])), 'value' => ucwords(strtolower($p['attr_value'])) ));
-                }else if($p['is_other'] === '1'){
-                    array_push($data[$r['id_order']]['products'][$p['id_order_product']]['attr'], array('field' => ucwords(strtolower($p['field_name'])), 'value' => ucwords(strtolower($p['value_name'])) ));
-                }*/
             }
         }
         
         return $data;
     }
     
-    function getFilteredTransactionCount($member_id, $status, $nf='%', $of="1,2,3,5" , $osf="DESC" , $querySelect)
+    /**
+     *  Fetch # of transactions satisfying filter. Used to update pagination
+     *
+     *  @return count($row) - quantity of products based on filter
+     */
+    public function getFilteredTransactionCount($member_id, $status, $nf='%', $of="1,2,3,5" , $osf="DESC" , $querySelect)
     {
         switch($querySelect){
             case 'buy':
@@ -751,7 +842,10 @@ class memberpage_model extends CI_Model
         return count($row);
     }
     
-    function getTransactionCount($member_id)
+    /**
+     *  Fetch initial count of all transaction categories
+     */
+    public function getTransactionCount($member_id)
     {
         $query = $this->xmlmap->getFilenameID('sql/users','getTransactionCount');
         $sth = $this->db->conn_id->prepare($query);
@@ -769,13 +863,16 @@ class memberpage_model extends CI_Model
             if( intval($member_id) === intval($r['seller_id']) ){ #you are seller, consider your total number of response
                 if( $r['total']===$r['responsed'] && !in_array($r['id_order'],$data['csell']) ){ #complete
                     $data['csell'][] = $r['id_order'];
-                }else if( $r['total']>$r['responsed'] && !in_array($r['id_order'],$data['sell']) ){ #ongoing
+                }
+                else if( $r['total']>$r['responsed'] && !in_array($r['id_order'],$data['sell']) ){ #ongoing
                     $data['sell'][] = $r['id_order'];
                 }
-            }else{ #you are buyer (consider only order_status)
+            }
+            else{ #you are buyer (consider only order_status)
                 if( intval($r['order_status']) !== 1 && !in_array($r['id_order'],$data['buy']) ){ #ongoing
                     $data['buy'][] = $r['id_order'];
-                }else if( intval($r['order_status']) === 1 && !in_array($r['id_order'],$data['cbuy']) ){ #complete
+                }
+                else if( intval($r['order_status']) === 1 && !in_array($r['id_order'],$data['cbuy']) ){ #complete
                     $data['cbuy'][] = $r['id_order'];
                 }
             }
@@ -791,7 +888,12 @@ class memberpage_model extends CI_Model
         return $fdata;
     }
     
-    function authenticateUser($data)
+    /**
+     *  Function used to authenticate user when sending response in transactions tab
+     *
+     *  @return TRUE when authenticated, FALSE otherwise
+     */
+    public function authenticateUser($data)
     {
         $query = $this->xmlmap->getFilenameID('sql/users', 'authenticateUser');
         $sth = $this->db->conn_id->prepare($query);
@@ -804,7 +906,13 @@ class memberpage_model extends CI_Model
         return $row['id_member'] ? true : false ;
     }
     
-    function addFeedback($temp){
+    /**
+     *  Used to add feedback
+     *
+     *  @return TRUE on success, FALSE otherwise
+     */
+    public function addFeedback($temp)
+    {
         $query = $this->xmlmap->getFilenameID('sql/users','addFeedback');
         $sth = $this->db->conn_id->prepare($query);
         $sth->bindParam(':member_id', $temp['uid']);
@@ -820,7 +928,14 @@ class memberpage_model extends CI_Model
         return $result;
     }
     
-    function checkFeedback( $temp ){
+    /**
+     *  Used to check if feedback has already been provided depending on
+     *      member, for member, and direction of feedback and order id
+     *
+     *  @return $row - to confirm if feedback has already been provided or not
+     */
+    public function checkFeedback( $temp )
+    {
         $query = $this->xmlmap->getFilenameID('sql/users','checkFeedback');
         $sth = $this->db->conn_id->prepare($query);
         $sth->bindParam(':member_id', $temp['uid']);
@@ -832,7 +947,11 @@ class memberpage_model extends CI_Model
         return $row;
     }
     
-    function getFeedback($member_id){
+    /**
+     *  Fetch feedbacks for user. (for user and posted by user)
+     */
+    public function getFeedback($member_id)
+    {
         $query = $this->xmlmap->getFilenameID('sql/users','getFeedback');
         $sth = $this->db->conn_id->prepare($query);
         $sth->bindParam(':id',$member_id);
@@ -892,7 +1011,12 @@ class memberpage_model extends CI_Model
         return $data;
     }
     
-    function billing_info($data){	
+    /**
+     *  Function used to check for default, and add billing info
+     *  Returns ID of billing info inserted
+     */
+    public function billing_info($data)
+    {
         $query = $this->xmlmap->getFilenameID('sql/users','getDefaultBillingAccnt');
         $sth = $this->db->conn_id->prepare($query);
         $sth->bindParam(':member_id',$data['member_id']);
@@ -916,11 +1040,12 @@ class memberpage_model extends CI_Model
         return $id;
     }
     
-    /*   The update here is implemented by updating the current entry and inserting a copy
-     *   of the previous entry for history purposes.
+    /**
+     *  The update here is implemented by updating the current entry and inserting a copy
+     *  of the previous entry for history purposes.
      */
-    
-    function billing_info_update($data){
+    public function billing_info_update($data)
+    {
 
         //GET PAYMENT ACCOUNT DETAIL
         $query =  $this->xmlmap->getFilenameID('sql/users','getBillingAccountById');
@@ -960,39 +1085,42 @@ class memberpage_model extends CI_Model
         $sth->execute();
     }
     
-    function billing_info_default($data){
-        
+    /**
+     *  Function used to set default billing info of user
+     */
+    public function billing_info_default($data)
+    {
         $query = $this->xmlmap->getFilenameID('sql/users','clearDefaultBillingAccnt');
         $sth = $this->db->conn_id->prepare($query);
-        $sth->bindParam(':member_id', $data['member_id']);		
-        $sth->execute();		
+        $sth->bindParam(':member_id', $data['member_id']);
+        $sth->execute();
 
         $query = $this->xmlmap->getFilenameID('sql/users','setDefaultBillingAccnt');
         $sth = $this->db->conn_id->prepare($query);
-        $sth->bindParam(':member_id', $data['member_id']);		
+        $sth->bindParam(':member_id', $data['member_id']);
         $sth->bindParam(':ibi', $data['ibi']);
         $sth->execute();
-
     }
     
-    function billing_info_delete($data){
-        // eto e dedelete ko na
+    /**
+     *  Used to delete billing info
+     */
+    public function billing_info_delete($data)
+    {
         $query = "UPDATE `es_billing_info` SET `is_delete` = 1, `datemodified` = NOW() WHERE `member_id`=:member_id AND `id_billing_info`=:ibi";
         $sth = $this->db->conn_id->prepare($query);
         $sth->bindParam(':member_id', $data['member_id']);		
         $sth->bindParam(':ibi', $data['ibi']);
         $sth->execute();
         
-        // dito e chcheck ko kung yung na delete ko ay hindi default
         $query = "SELECT ebi.`id_billing_info` FROM `es_billing_info` ebi 
-        WHERE ebi.`member_id`=:member_id AND `id_billing_info`=:ibi AND ebi.`is_default` = 1 LIMIT 1 ";		
+            WHERE ebi.`member_id`=:member_id AND `id_billing_info`=:ibi AND ebi.`is_default` = 1 LIMIT 1 ";
         $sth = $this->db->conn_id->prepare($query);
         $sth->bindParam(':member_id',$data['member_id']);
         $sth->bindParam(':ibi', $data['ibi']);
         $sth->execute();
 
         if($sth->rowCount() > 0){
-            // hanapin ko yung unang data na pwede e default
             $query = "SELECT ebi.`id_billing_info` FROM `es_billing_info` ebi 
             WHERE ebi.`member_id`=:member_id AND ebi.`is_delete` = 0 LIMIT 1 ";		
             $sth = $this->db->conn_id->prepare($query);
@@ -1008,13 +1136,16 @@ class memberpage_model extends CI_Model
                 $sth = $this->db->conn_id->prepare($query);
                 $sth->bindParam(':member_id',$data['member_id']);
                 $sth->bindParam(':ibi', $ibi);
-                $sth->execute();		
-            }		
+                $sth->execute();
+            }
         }
-
-    }		
+    }
     
-    function get_billing_info($data){
+    /**
+     *  Fetch billing info
+     */
+    public function get_billing_info($data)
+    {
         $query = "SELECT
             ebi.`id_billing_info`, 
             ebi.`payment_type`,
@@ -1045,28 +1176,38 @@ class memberpage_model extends CI_Model
                 $response[$row['id_billing_info']]['bank_account_number'] = $row['bank_account_number'];
                 $response[$row['id_billing_info']]['is_default'] = $row['is_default'];
                 $response[$row['id_billing_info']]['products'] = array();
-            }else{
+            }
+            else{
                 array_push($response[$row['id_billing_info']]['products'], array('p_slug' => $row['slug'], 'p_name' => $row['name'], 'p_briefdesc' => $row['brief'], 'p_date' => $row['createddate']));
             }
         }
-        return $response;	
-    }		
+        
+        return $response;
+    }
     
-
-    function getAllBanks(){
+    /**
+     *  Fetch bank list from database
+     */
+    public function getAllBanks()
+    {
         $query = "SELECT * FROM es_bank_info";
         $sth = $this->db->conn_id->prepare($query);
         $sth->execute();
         $rows= $sth->fetchAll(PDO::FETCH_ASSOC);
-        return $rows;	
+        return $rows;
     }
 
-    function get_bank($bank, $toggle){
+    /**
+     *  Fetch bank specific
+     */
+    public function get_bank($bank, $toggle)
+    {
         if($toggle == 'name'){
             $query = "SELECT `id_bank` AS 'id', `bank_name` AS 'name' FROM `es_bank_info` WHERE `bank_name` LIKE CONCAT(CONCAT('%',:bank),'%')";
             $sth = $this->db->conn_id->prepare($query);
-            $sth->bindParam(':bank', $bank, PDO::PARAM_STR);	
-        }else{
+            $sth->bindParam(':bank', $bank, PDO::PARAM_STR);
+        }
+        else{
             $query = "SELECT `id_bank` AS 'id', `bank_name` AS 'name' FROM `es_bank_info`";
             $sth = $this->db->conn_id->prepare($query);
         }
@@ -1075,7 +1216,11 @@ class memberpage_model extends CI_Model
         return $row;							
     }
     
-    function isBankAccountUnique($data){
+    /**
+     *  Check if bank account is unique
+     */
+    public function isBankAccountUnique($data)
+    {
         $query = "SELECT * FROM `es_billing_info` WHERE `member_id` = :member_id AND `bank_account_number` = :bank_account_number AND `is_delete` = 0";
         $sth = $this->db->conn_id->prepare($query);
         $sth->bindParam(':member_id',$data['member_id']);
@@ -1088,9 +1233,13 @@ class memberpage_model extends CI_Model
             $response = true;
         } 
         return $response;
-    }	
+    }
     
-    function getProductsByBillingInfo($billing_id){
+    /**
+     *  Fetch product using billing info data
+     */
+    public function getProductsByBillingInfo($billing_id)
+    {
         $query = "SELECT id_product, name, brief FROM `es_product` WHERE `billing_info_id` = :billing_id AND `is_delete` = 0 AND `is_draft` = 0";
         $sth = $this->db->conn_id->prepare($query);
         $sth->bindParam(':billing_id',$billing_id);
@@ -1099,7 +1248,10 @@ class memberpage_model extends CI_Model
         return $row;
     }
     
-    function getNextPayout($member_id)
+    /**
+     *  Fetch next payout data under sales tab
+     */
+    public function getNextPayout($member_id)
     {
         $dateToday = getdate();
         $month = $dateToday['mon'];
@@ -1111,12 +1263,14 @@ class memberpage_model extends CI_Model
             $startDate = date( "Y-m-d H:i:s", mktime(0,0,0,$month-1,16,$year) );
             $endDate = date( "Y-m-d H:i:s", mktime(23,59,59,$month-1,date('d', strtotime('last day of previous month')),$year) );
             $payoutDate = date("Y-m-d", mktime(0,0,0,$month,5,$year));
-        }else if( $day > 20 ){
+        }
+        else if( $day > 20 ){
             $startDate = date( "Y-m-d H:i:s", mktime(0,0,0,$month,16,$year) );
             $endDate = date( "Y-m-d H:i:s", mktime(23,59,59,$month,date('t'),$year) );
             $payoutDate = date("Y-m-d", mktime(0,0,0,$month+1,5,$year));
         // thismonth 1st to 15th
-        }else if( $day > 5 && $day <= 20 ){
+        }
+        else if( $day > 5 && $day <= 20 ){
             $startDate = date( "Y-m-d H:i:s", mktime(0,0,0,$month,1,$year) );
             $endDate = date( "Y-m-d H:i:s", mktime(23,59,59,$month,15,$year) );
             $payoutDate = date("Y-m-d", mktime(0,0,0,$month,20,$year));
@@ -1163,7 +1317,10 @@ class memberpage_model extends CI_Model
         return $data;
     }
     
-    function getUserBalance($member_id)
+    /**
+     *  Fetch all transactions where payment is not yet forwarded to user
+     */
+    public function getUserBalance($member_id)
     {
         $query = $this->xmlmap->getFilenameID('sql/users','getUserBalance');
         $sth = $this->db->conn_id->prepare($query);
@@ -1201,9 +1358,14 @@ class memberpage_model extends CI_Model
         return $data;
     }
     
-    /***********	NEW VENDOR FUNCTIONS	*****************/
+    /***********    NEW VENDOR FUNCTIONS    *****************/
     
-    function checkVendorSubscription($member_id, $sellername)
+    /**
+     *  Function for fetching subscription
+     *  
+     *  @return followed, unfollowed, or error
+     */
+    public function checkVendorSubscription($member_id, $sellername)
     {
         $query = $this->xmlmap->getFilenameID('sql/users','checkVendorSubscription');
         $sth = $this->db->conn_id->prepare($query);
@@ -1215,18 +1377,24 @@ class memberpage_model extends CI_Model
         if( isset($row['vendor_id']) ){ //if seller exists and is not the same user
             if( (int)$row['member_id'] === 0 ) {# no entry - unfollowed
                 $result['stat'] = 'unfollowed';
-            }else if( (int)$row['member_id'] !== 0 ) { #has entry - followed
+            }
+            else if( (int)$row['member_id'] !== 0 ) { #has entry - followed
                 $result['stat'] = 'followed';
             }
             $result['vendor_id'] = $row['vendor_id'];
-        }else{
+        }
+        else{
             $result['stat'] = 'error';
         }
         
         return $result;
     }
     
-    function countVendorSubscription($member_id, $sellername){
+    /**
+     *  Fetch number of subscribed users for a certain user
+     */
+    public function countVendorSubscription($member_id, $sellername)
+    {
         $query = $this->xmlmap->getFilenameID('sql/users','countVendorSubscription');
         $sth = $this->db->conn_id->prepare($query);
         $sth->bindParam(':member_id',$member_id, PDO::PARAM_INT);
@@ -1237,11 +1405,15 @@ class memberpage_model extends CI_Model
         return $row;
     }
     
-    function setVendorSubscription($member_id, $vendor_id, $method)
+    /**
+     *  Used to subscribe or unsubscribe
+     */
+    public function setVendorSubscription($member_id, $vendor_id, $method)
     {
         if($method === 'unfollowed'){ #then follow
             $query = $this->xmlmap->getFilenameID('sql/users','insertVendorSubscription');
-        }else if($method === 'followed'){ #then unfollow
+        }
+        else if($method === 'followed'){ #then unfollow
             $query = $this->xmlmap->getFilenameID('sql/users','deleteVendorSubscription');
         }
         $sth = $this->db->conn_id->prepare($query);
@@ -1252,7 +1424,12 @@ class memberpage_model extends CI_Model
         return $boolResult;
     }
     
-    function updateStoreDesc($member_id, $desc)
+    /**
+     *  Used to update store description
+     *
+     *  @return TRUE on success, FALSE on result
+     */
+    public function updateStoreDesc($member_id, $desc)
     {
         $query = $this->xmlmap->getFilenameID('sql/users','updateStoreDesc');
         $sth = $this->db->conn_id->prepare($query);
@@ -1263,8 +1440,10 @@ class memberpage_model extends CI_Model
         return $boolResult;
     }
     
-    
-    function getVendorCatItems($member_id, $username)
+    /**
+     *  Fetch vendor products in vendor page
+     */
+    public function getVendorCatItems($member_id, $username)
     {
         $categoryItemCount = 4;
         $otherItemCount = 4;
@@ -1318,7 +1497,8 @@ class memberpage_model extends CI_Model
                     array_push( $data[$k]['products'], $p );
                 }
             #If less than 4, push all child cat into temp array
-            }else{
+            }
+            else{
                 $temp = array_merge($temp, $d['child_cat']);
                 $otherCount += $d['count'];
                 unset($data[$k]);
@@ -1360,11 +1540,15 @@ class memberpage_model extends CI_Model
                 array_push( $data[$last_id]['products'], $p );
             }
         }
-        
         return $data;
     }
     
-    function validateUserSlugChange( $memberID, $userslug )	
+    /**
+     *  Used to check if slug is available or not. Check for username and userslug
+     *
+     *  @return $row that matches userslug
+     */
+    public function validateUserSlugChange( $memberID, $userslug )
     {
         $query = "SELECT id_member
             FROM es_member
@@ -1378,7 +1562,10 @@ class memberpage_model extends CI_Model
         return $row;
     }
     
-    function editUserSlug($memberID, $userslug)
+    /**
+     *  Used to edit userslug
+     */
+    public function editUserSlug($memberID, $userslug)
     {
         $query = "UPDATE `es_member` SET slug = :userslug WHERE id_member = :member_id";
         $sth = $this->db->conn_id->prepare($query);
