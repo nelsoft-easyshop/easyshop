@@ -51,7 +51,8 @@
     //CONFIRM CONNECTION
     if (mysqli_connect_errno()){
             echo "ERROR : Failed to connect to MySQL: " . mysqli_connect_error();
-    }else{
+    }
+    else{
             echo "Successfully connected to database! \n";
     }
 
@@ -110,6 +111,7 @@
 
     if(!$numSent){
             echo "ERROR : Failed to send all emails!\n";
-    }else{
+    }
+    else{
             echo "Successfully sent " . $numSent . "emails!\n";
     }
