@@ -20,6 +20,7 @@ class Homewebservice extends MY_Controller {
 
         $env = strtolower(ENVIRONMENT);
         $this->file = APPPATH . "resources/page/home_files.xml"; 
+        $this->json = file_get_contents(APPPATH . "resources/page/test.json");
     }
 
     public function index() {
@@ -65,11 +66,12 @@ class Homewebservice extends MY_Controller {
 
     public function setProductTitle() {
 
+        $jsonFile = $this->json;
         $map = simplexml_load_file(APPPATH . "resources/page/home_files.xml");
         
-        $userid = $this->input->post("userid");
-        $value =  $this->input->post("productslidetitle");
-        $hash = $this->input->post("hash");
+        $userid = $this->input->get("userid");
+        $value =  $this->input->get("productslidetitle");
+        $hash = $this->input->get("hash");
 
         $value = ($value == "") ? $map->productSlide_title->value : $value;
 
@@ -78,26 +80,21 @@ class Homewebservice extends MY_Controller {
         if($map->asXML(APPPATH . "resources/page/home_files.xml"))
         {
             return $this->output
-                ->set_content_type('application/json')
-                ->set_output(json_encode("success"));
+                        ->set_content_type('application/json')
+                        ->set_output($jsonFile);
         }
-        else
-        {
-            return $this->output
-                ->set_content_type('application/json')
-                ->set_output(json_encode("error"));
-        }
+
 
     }
 
 
     public function setProductSideBanner() {
-
+        $jsonFile = $this->json;
         $map = simplexml_load_file(APPPATH . "resources/page/home_files.xml");
         
-        $userid = $this->input->post("userid");
-        $value =  $this->input->post("value");
-        $hash = $this->input->post("hash");
+        $userid = $this->input->get("userid");
+        $value =  $this->input->get("value");
+        $hash = $this->input->get("hash");
         $value = ($value == "") ? $map->productSideBanner->value : $value;
 
         $map->productSideBanner->value= $value;
@@ -105,28 +102,23 @@ class Homewebservice extends MY_Controller {
         if($map->asXML(APPPATH . "resources/page/home_files.xml"))
         {
             return $this->output
-                    ->set_content_type('application/json')
-                    ->set_output(json_encode("success"));
+                        ->set_content_type('application/json')
+                        ->set_output($jsonFile);
         }
-        else
-        {
-            return $this->output
-                    ->set_content_type('application/json')
-                    ->set_output(json_encode("error"));
-        }
+
     }
 
     public function setMainSlide() {
-
+        $jsonFile = $this->json;
         $map = simplexml_load_file(APPPATH . "resources/page/home_files.xml");  
-        $index = $this->input->post("index");
-        $userid =  $this->input->post("userid");
-        $hash =  $this->input->post("hash");
-        $value =  $this->input->post("value");
-        $coordinate =  $this->input->post("coordinate");
-        $target =  $this->input->post("target");
-        $order =  $this->input->post("order");
-        $nodeName =  $this->input->post("nodename");
+        $index = $this->input->get("index");
+        $userid =  $this->input->get("userid");
+        $hash =  $this->input->get("hash");
+        $value =  $this->input->get("value");
+        $coordinate =  $this->input->get("coordinate");
+        $target =  $this->input->get("target");
+        $order =  $this->input->get("order");
+        $nodeName =  $this->input->get("nodename");
         $type = "image";
         $file = $this->file;
 
@@ -134,9 +126,7 @@ class Homewebservice extends MY_Controller {
         
         if($index > count($map->mainSlide) - 1 || $order > count($map->mainSlide) - 1 || $index < 0 || $order < 0)
         {
-            return $this->output
-                    ->set_content_type('application/json')
-                    ->set_output(json_encode("error"));
+            exit("error");
         }
         else
         {
@@ -153,13 +143,9 @@ class Homewebservice extends MY_Controller {
                 
                 if($map->asXML(APPPATH . "resources/page/home_files.xml")){
                     return $this->output
-                    ->set_content_type('application/json')
-                    ->set_output(json_encode("success"));
-                } else {
-                    return $this->output
-                    ->set_content_type('application/json')
-                    ->set_output(json_encode("error"));
-                }
+                        ->set_content_type('application/json')
+                        ->set_output($jsonFile);
+                } 
                     
             } else {
                 if($index <= $order) {
@@ -235,6 +221,10 @@ $string = '
                                           
                     }
                 }
+
+                            return $this->output
+                        ->set_content_type('application/json')
+                        ->set_output($jsonFile);
             }   
         }
     }
@@ -409,23 +399,21 @@ $string = '
 
     public function setSectionHead() 
     {
-
-        $index = $this->input->post("index");
-        $userid =  $this->input->post("userid");
-        $hash = $this->input->post("hash");
-        $type = $this->input->post("type");
-        $value =  $this->input->post("value");
-        $css_class = $this->input->post("css_class");
-        $title = $this->input->post("title");
-        $layout = $this->input->post("layout");
+        $jsonFile = $this->json;
+        $index = $this->input->get("index");
+        $userid =  $this->input->get("userid");
+        $hash = $this->input->get("hash");
+        $type = $this->input->get("type");
+        $value =  $this->input->get("value");
+        $css_class = $this->input->get("css_class");
+        $title = $this->input->get("title");
+        $layout = $this->input->get("layout");
 
         $map = simplexml_load_file(APPPATH . "resources/page/home_files.xml");
 
         if($index > count($map->section) - 1 || $index < 0)
         {
-            return $this->output
-                    ->set_content_type('application/json')
-                    ->set_output(json_encode("error"));
+            exit('Index out of bounds');
         }
         else
         {
@@ -444,16 +432,11 @@ $string = '
 
             if($map->asXML(APPPATH . "resources/page/home_files.xml"))
             {
-                    return $this->output
-                    ->set_content_type('application/json')
-                    ->set_output(json_encode("success"));
+                return $this->output
+                        ->set_content_type('application/json')
+                        ->set_output($jsonFile);
             }
-            else
-            {
-                    return $this->output
-                    ->set_content_type('application/json')
-                    ->set_output(json_encode("error"));
-            }
+
         }
     
 
@@ -462,14 +445,15 @@ $string = '
 
     public function setSectionProduct()
     {
+        $jsonFile = $this->json;
         $map = simplexml_load_file(APPPATH . "resources/page/home_files.xml");   
                 
-        $index = $this->input->post("index");
-        $userid = $this->input->post("userid");
-        $hash = $this->input->post("hash");
-        $productindex = $this->input->post("productindex");
-        $type = $this->input->post("type");
-        $value =  $this->input->post("value");
+        $index = $this->input->get("index");
+        $userid = $this->input->get("userid");
+        $hash = $this->input->get("hash");
+        $productindex = $this->input->get("productindex");
+        $type = $this->input->get("type");
+        $value =  $this->input->get("value");
 
         $index = (int)$index;
         $productindex = (int)$productindex;
@@ -477,22 +461,15 @@ $string = '
 
 
         
-        
-            $map->section[$index]->product_panel[$productindex]->value = $value;
-            $map->section[$index]->product_panel[$productindex]->type = $type;
-
-                if($map->asXML(APPPATH . "resources/page/home_files.xml"))
-                {
-                    return $this->output
+    
+        $map->section[$index]->product_panel[$productindex]->value = $value;
+        $map->section[$index]->product_panel[$productindex]->type = $type;
+            if($map->asXML(APPPATH . "resources/page/home_files.xml"))
+            {
+                return $this->output
                     ->set_content_type('application/json')
-                    ->set_output(json_encode("success"));
-                }
-                else
-                {
-                                        return $this->output
-                    ->set_content_type('application/json')
-                    ->set_output(json_encode("error2"));
-                }
+                    ->set_output($jsonFile);
+            }
 
 
     }
@@ -500,15 +477,16 @@ $string = '
     public function setSectionMainPanel()
     {
         $file = $this->file;
+        $jsonFile = $this->json;
 
-        $index = $this->input->post("index");
-        $userid = $this->input->post("userid");
-        $hash = $this->input->post("hash");
-        $productindex = $this->input->post("productindex");
-        $type = $this->input->post("type");
-        $value =  $this->input->post("value");
-        $coordinate =  $this->input->post("coordinate");
-        $target =  $this->input->post("target");
+        $index = $this->input->get("index");
+        $userid = $this->input->get("userid");
+        $hash = $this->input->get("hash");
+        $productindex = $this->input->get("productindex");
+        $type = $this->input->get("type");
+        $value =  $this->input->get("value");
+        $coordinate =  $this->input->get("coordinate");
+        $target =  $this->input->get("target");
         $nodeName = "product_panel_main";
         
         $map = simplexml_load_file(APPPATH . "resources/page/home_files.xml");   
@@ -516,14 +494,14 @@ $string = '
         $index = (int)$index;
         $productindex = (int)$productindex;
 
-            if($index > count($map->section) - 1 || $productindex > count($map->section[$index]->product_panel_main) - 1 || $index < 0 || $productindex < 0)
+/*          if($index > count($map->section) - 1 || $productindex > count($map->section[$index]->product_panel_main) - 1 || $index < 0 || $productindex < 0)
                 {
-                                return $this->output
-                    ->set_content_type('application/json')
-                    ->set_output(json_encode("error"));
+                            return $this->output
+                            ->set_content_type('application/json')
+                            ->set_output(json_encode("Index out of bounds"));
                 }
             else
-            {
+            {*/
                 if(strtolower($type) == "image")
                 {
                     if($coordinate != "" && $target != "")
@@ -546,8 +524,8 @@ $string = '
                         $this->addXmlChild($file,$q,'/map/section['.$index.']/product_panel_main['.$productindex.']');
                         $this->removeXMLForSetSectionMainPanel($file,$nodeName,$index,$productindex);
                         return $this->output
-                            ->set_content_type('application/json')
-                            ->set_output(json_encode("success"));
+                                    ->set_content_type('application/json')
+                                    ->set_output($jsonFile);
                             
                     }
                     else
@@ -571,8 +549,8 @@ $string = '
                         if($map->asXML(APPPATH . "resources/page/home_files.xml"))
                         {
                             return $this->output
-                                ->set_content_type('application/json')
-                                ->set_output(json_encode("success"));
+                                        ->set_content_type('application/json')
+                                        ->set_output($jsonFile);
                         }
                         else
                         {
@@ -584,7 +562,7 @@ $string = '
 
                 }
              
-            }
+            //}
     }
 
     public function addSectionMainPanel()
@@ -832,18 +810,17 @@ $string = '
     }
     public function setProductSlide()
     {
-        
+        $jsonFile = $this->json;
         $map = simplexml_load_file(APPPATH . "resources/page/home_files.xml");   
 
-        $index = $this->input->post("index");
-        $userid = $this->input->post("userid");
-        $hash = $this->input->post("hash");
-        $value =  $this->input->post("value");
-        $order =  $this->input->post("order");
-        $type =  $this->input->post("type");
+        $index = $this->input->get("index");
+        $userid = $this->input->get("userid");
+        $hash = $this->input->get("hash");
+        $value =  $this->input->get("value");
+        $order =  $this->input->get("order");
+        $type =  $this->input->get("type");
 
-        $nodeName =  $this->input->post("nodename");
-        // exit("index:".$index."order:".$order);
+        $nodeName =  $this->input->get("nodename");
         $index = (int)$index;
 
             if($index > count($map->productSlide) - 1    || $order > count($map->productSlide) - 1 || $index < 0 || $order < 0)
@@ -917,6 +894,10 @@ $string = '
 
 
                     }
+
+            return $this->output
+                        ->set_content_type('application/json')
+                        ->set_output($jsonFile);
             }
 
     }
@@ -1055,15 +1036,14 @@ $string = '
             if ($target_dom->nextSibling) {
                 $result =  $parentNode->insertBefore($insert_dom, $target_dom->nextSibling);
                 $parentNode->insertBefore($document->createTextNode("\n"), $result);
-                $parentNode->insertBefore($document->createTextNode("\n"), $result);
-                $parentNode->insertBefore($document->createTextNode("\t\t"), $result);
+
             } else {
                 $result =  $target_dom->parentNode->appendChild($insert_dom);
             }
         } else {
             $result =  $parentNode->insertBefore($document->createTextNode("\n"), $target_dom);
             $parentNode->insertBefore($insert_dom,$result);   
-            $parentNode->insertBefore($document->createTextNode("\n"), $result); 
+
         }
         return $result;
     }
@@ -1080,15 +1060,15 @@ $string = '
             if ($target_dom->nextSibling) {
                 $result =  $parentNode->insertBefore($insert_dom, $target_dom->nextSibling);
                 $parentNode->insertBefore($document->createTextNode("\n"), $result);
-                $parentNode->insertBefore($document->createTextNode("\n"), $result);
-                $parentNode->insertBefore($document->createTextNode("\t"), $result);
+
+
             } else {
                 $result =  $target_dom->parentNode->appendChild($insert_dom);
             }
         } else {
             $result =  $parentNode->insertBefore($document->createTextNode("\n"), $target_dom);
             $parentNode->insertBefore($insert_dom,$result);   
-            $parentNode->insertBefore($document->createTextNode("\n"), $result); 
+
         }
         return $result;
     }
@@ -1143,6 +1123,7 @@ $string = '
     public function settext() 
     {
 
+        $jsonFile = $this->json;
         $userid = $this->input->get("userid");
         $value =  $this->input->get("value");
         $hash = $this->input->get("hash");
@@ -1152,26 +1133,10 @@ $string = '
             $map->text->value= $value;
             if($map->asXML(APPPATH . "resources/page/home_files.xml"))
             {
-                /*      return $this->output
-                     ->set_content_type('application/json')
-                     ->set_output($map);*/      
-                //header("Content-type: application/json; charset=UTF-8");
-                //$map = file_get_contents(APPPATH . "resources/page/test.json");
-                //die($map);
-                // return json_encode(array("test" => "one","callback"=>"asd"));
-                //$string = "inon";
-                //die('{"e":"0","m":"uploaded","f":"'.$string.'.'.$string.'","d":"'.$string.'","u":"'.$string.'/'.$string.'.'.$string.'"}');
-                header("Content-type: application/json; charset=UTF-8"); 
-                $arr = array ('result' => $is_exists );
-                $response = json_encode($arr);
-                echo $arr;
-            }
-            else
-            {
+                
                 return $this->output
-                    ->set_content_type('application/json')
-                    ->set_output(json_encode("error"));
-                 
+                            ->set_content_type('application/json')
+                            ->set_output($jsonFile);
             }
     }
 }
