@@ -8,9 +8,13 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
 include_once __DIR__ . '/../../vendor/autoload.php';
+require_once __DIR__ . '/../src/EasyShop/Core/Configuration/Configuration.php';
 
 use Symfony\Component\Console\Helper\HelperSet;
 use Doctrine\ORM\Tools\Console\ConsoleRunner;
+
+
+
 
 // add commands here
 $commands = [
@@ -24,14 +28,12 @@ $commands = [
     new \Doctrine\DBAL\Migrations\Tools\Console\Command\VersionCommand()
 ];
 
-
-
-$server_config_path = dirname(__FILE__).'/../../config.php';
+$configService = new EasyShop\Core\Configuration\Configuration();
 
 $dbConfig = require dirname(__FILE__). '/../config/param/database.php';
 
-if(file_exists ($server_config_path)){
-    $server_config = require $server_config_path;
+if($configService->isConfigFileExists()){
+    $server_config = $configService->getConfigValue();
     if(isset($server_config['DB_superuser'])  && strlen(trim($server_config['DB_superuser'])) > 0  && 
        isset($server_config['DB_superpassword']) ){
             $dbConfig['user'] = $server_config['DB_superuser'];

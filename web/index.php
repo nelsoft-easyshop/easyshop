@@ -19,11 +19,15 @@
  *
  */
 
-    $server_config_path = dirname(__FILE__).'/../config.php';
-    if(file_exists ($server_config_path)){
-    $serverConfig = require  $server_config_path;
-        if(isset($serverConfig['environment'])){
-            define('ENVIRONMENT', $serverConfig['environment']);
+
+    require_once __DIR__ . '/../application/src/EasyShop/Core/Configuration/Configuration.php';
+    $configService = new EasyShop\Core\Configuration\Configuration();
+
+    if($configService->isConfigFileExists()){
+
+        $serverEnvironment = $configService->getConfigValue('environment');
+        if(strlen($serverEnvironment) > 0){
+            define('ENVIRONMENT', $serverEnvironment);
         }else{
             define('ENVIRONMENT', 'development');
         }

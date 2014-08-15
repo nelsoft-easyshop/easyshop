@@ -28,9 +28,14 @@ class Home extends MY_Controller
      */
     public function index() 
     {
-
-        $home_content = $this->product_model->getHomeContent();
-
+            
+        $configurationService = $this->serviceContainer['local_configuration'];
+        if($configurationService->isConfigFileExists() && strlen(trim($xmlfile = $configurationService->getConfigValue('XML_home'))) > 0){
+            $home_content = $this->product_model->getHomeContent($xmlfile);
+        }else{           
+            $home_content = $this->product_model->getHomeContent();
+        }
+            
         $layout_arr = array();
         if(!$this->session->userdata('member_id')){
             foreach($home_content['section'] as $section){
