@@ -1179,6 +1179,7 @@ $(document).ready(function() {
             },
             uploadProgress : function(event, position, total, percentComplete) {
                 canProceed = false;
+                $('.image'+currentCnt+' > img,.pop-image-container > a > img').attr("src",config.base_url+'assets/images/orange_loader.gif');
             },
             success :function(d) {   
                 canProceed = true;
