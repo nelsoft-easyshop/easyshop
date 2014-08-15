@@ -20,8 +20,6 @@ $(document).ready(function(){
     $('#prod_keyword').change(updateCountdown);
     $('#prod_keyword').keyup(updateCountdown); 
 
-
-
     // search brand 
     $('#brand_sch').focus(function() {
         $('#brand_search_drop_content').show();
@@ -79,15 +77,15 @@ function updateCountdown() {
 function validateRedTextBox(idclass)
 {
     $(idclass).css({"-webkit-box-shadow": "0px 0px 2px 2px #FF0000",
-      "-moz-box-shadow": "0px 0px 2px 2px #FF0000",
-      "box-shadow": "0px 0px 2px 2px #FF0000"});
+                "-moz-box-shadow": "0px 0px 2px 2px #FF0000",
+                "box-shadow": "0px 0px 2px 2px #FF0000"});
 } 
 
 function validateWhiteTextBox(idclass)
 {
     $(idclass).css({"-webkit-box-shadow": "0px 0px 2px 2px #FFFFFF",
-      "-moz-box-shadow": "0px 0px 2px 2px #FFFFFF",
-      "box-shadow": "0px 0px 2px 2px #FFFFFF"});
+                "-moz-box-shadow": "0px 0px 2px 2px #FFFFFF",
+                "box-shadow": "0px 0px 2px 2px #FFFFFF"});
 }
 
 // NUMBER ONLY IN SPECIFIC FIELDS
@@ -95,13 +93,13 @@ function isNumberKey(evt)
 {
     var charCode = (evt.which) ? evt.which : event.keyCode;
     if (charCode != 46 && charCode > 31 
-      && (charCode < 48 || charCode > 57))
-     return false;
+        && (charCode < 48 || charCode > 57))
+        return false;
 
- return true;
- }
+    return true;
+}
 
- function setChosen(){
+function setChosen(){
     $("#head-data,.value-data").chosen({
         create_option: true,
         skip_no_results: true,
@@ -122,7 +120,7 @@ function appendNewSelectionRow(){
     </div>\
     </div>\
     <div class="price-div col-xs-3 col-sm-3 col-md-3 pd-bttm-10">\
-    &#8369; <input type="text" maxlength="10" class="price-val price'+cnt+' ui-form-control" placeholder="0.00" />\
+    &#8369; <input type="text" maxlength="10"  onkeypress="return isNumberKey(event)"   class="price-val price'+cnt+' ui-form-control" placeholder="0.00" />\
     </div>\
     <div class="image-div col-xs-2 col-sm-2 col-md-2 pd-bttm-10">\
     <input type="hidden" class="image-val imageText'+cnt+'"/>\
@@ -151,7 +149,6 @@ function appendNewSelectionRow(){
     setChosen(); 
     return cnt;
 }
-
 
 var previousValue;
 $(document).on("click",".list-choosen-combination-div > .div-combination > .div2 > span > .selection",function(){
@@ -216,11 +213,11 @@ function checkCombination(currentStringId)
         }
     }
 }
+
 function jqSelector(str)
 {
     return str.replace(/([;&,\.\+\*\~':"\!\^#$%@\[\]\(\)=>\|])/g, '\\$1');
 }
-
 
 function resetControlPanel(buttonReset)
 {
@@ -234,7 +231,7 @@ function resetControlPanel(buttonReset)
     </div> \
     </div>\
     <div class="price-div col-xs-3 col-sm-3 col-md-3 pd-bttm-10">\
-        &#8369; <input type="text"  maxlength="10" placeholder="0.00" class="price-val price1 ui-form-control">\
+        &#8369; <input type="text"  maxlength="10" placeholder="0.00"  onkeypress="return isNumberKey(event)"   class="price-val price1 ui-form-control">\
     </div>\
     <div class="image-div col-xs-2 col-sm-2 col-md-2 pd-bttm-10">\
         <input type="hidden" class="image-val imageText1"/>\
@@ -423,6 +420,18 @@ $(document).ready(function() {
         } else {
             tempval = Math.abs(v);
             this.value = tempval.toFixed(2);
+        }
+    });
+
+    $(document).on('change',".qty",function () {
+        var qty = this.value;
+        var v = parseInt(qty);
+        var tempval;
+        if (isNaN(v)) {
+            this.value = '1';
+        } else {
+            tempval = Math.abs(v);
+            this.value = tempval;
         }
     });
 
@@ -683,7 +692,7 @@ $(document).ready(function() {
             alert('Combination Already Exist!');
             return false;
         }
-        var combinationQuantity = $('.select-control-panel-option > .div1 > .qty').val();
+        var combinationQuantity = parseInt($('.select-control-panel-option > .div1 > .qty').val());
         if( combinationQuantity <= 0 || $.isNumeric(combinationQuantity) == false){
             validateRedTextBox('.qty');
             return false;
@@ -758,7 +767,7 @@ $(document).ready(function() {
                 $('.list-choosen-combination-div,.select-control-panel-option ').empty();
                 $('.select-control-panel-option').append('\
                     <div class="col-xs-2 col-sm-2 col-md-2 div1">\
-                    <input type="text" name="allQuantity" value="1" size="3" class="qty" onkeypress="return isNumberKey(event)">\
+                    <input type="text" name="allQuantity" value="1" size="3" class="qty ui-form-control" onkeypress="return isNumberKey(event)">\
                     </div>\
                     <div class="col-xs-8 col-sm-8 col-md-8 div2"></div>\
                     <div class="col-xs-2 col-sm-2 col-md-2 div3"></div>');
@@ -990,6 +999,7 @@ $(document).ready(function() {
 
             if(errorValues != ""){
                 alert("Sorry, the following files cannot be uploaded:", errorValues);
+                return false;
             }
 
             $(".files").hide();  
@@ -1117,7 +1127,7 @@ $(document).ready(function() {
     $(document).on('click',".attr-image",function (e){
         var selector = $(this);
         currentCnt = selector.data('cnt');
-        $('.attr-image-input').click(); 
+        $('.attr-image-input').click();
     });
 
     $(document).on('click',".select-image",function (e){   
@@ -1251,7 +1261,7 @@ $(document).ready(function() {
 
         if( !$.trim( $('.list-choosen-combination-div').html() ).length ) {
             var qtySelector = $(".select-control-panel-option > .div1 > .qty");
-            var soloQty = qtySelector.val();
+            var soloQty = parseInt(qtySelector.val());
             if( soloQty <= 0 || $.isNumeric(soloQty) == false){
                 validateRedTextBox(qtySelector);
                 qtySelector.focus();
@@ -1263,7 +1273,7 @@ $(document).ready(function() {
         else{
             error = 0;
             $(".list-choosen-combination-div > .div-combination > .div1 > .qty").each(function() {
-                var combinationQuantity = $(this).val();
+                var combinationQuantity = parseInt($(this).val()); 
                 if( combinationQuantity <= 0 || $.isNumeric(combinationQuantity) == false){
                     validateRedTextBox(this);
                     this.focus();
@@ -1308,6 +1318,11 @@ $(document).ready(function() {
         }
         $('#edit_step1').submit();
     });
+
+    function processStep2Content()
+    {
+        var content = new Array(); 
+    }
 
     function processCombination()
     {
