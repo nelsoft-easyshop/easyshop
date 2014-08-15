@@ -38,7 +38,7 @@
                         <span class="steps_txt">Success</span>
                         <span class="span_bg right-arrow-shape"></span>
                     </li>
-                  </ul>
+                </ul>
             </div>
             <div class="clear"></div>
                 
@@ -182,7 +182,7 @@
                             <div class="pos-rel width-185 mrgin-deflt">
                                 <!-- <span class="cod-checkmark check_bgs3"></span> -->
                                 <div class="cod-button button btn-block-2">
-                                    <span>Select Cash on Delivery</span>
+                                    <span class="button-label"><?php echo (int)$product['is_cod'] === 1 ? "":"Allow "?>Cash on Delivery</span>
                                 </div>
                             </div>
                         </div>
