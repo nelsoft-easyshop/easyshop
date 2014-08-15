@@ -32,7 +32,8 @@ class Home extends MY_Controller
         $configurationService = $this->serviceContainer['local_configuration'];
         if($configurationService->isConfigFileExists() && strlen(trim($xmlfile = $configurationService->getConfigValue('XML_home'))) > 0){
             $home_content = $this->product_model->getHomeContent($xmlfile);
-        }else{           
+        }
+        else{           
             $home_content = $this->product_model->getHomeContent();
         }
             
@@ -43,7 +44,8 @@ class Home extends MY_Controller
             }
         }
 
-        $data = array('title' => ' Shopping made easy | Easyshop.ph',
+        $data = array(
+            'title' => ' Shopping made easy | Easyshop.ph',
             'data' => $home_content,
             'sections' => $layout_arr,
             'category_navigation' => $this->load->view('templates/category_navigation',array('cat_items' =>  $this->getcat(),), TRUE ),
@@ -56,7 +58,8 @@ class Home extends MY_Controller
         if( $data['logged_in'] ){
             $data = array_merge($data, $this->getFeed());
             $this->load->view("templates/home_layout/layoutF",$data);
-        }else{
+        }
+        else{
             $this->load->view('pages/home_view', $data);
         }
                 
@@ -123,8 +126,10 @@ class Home extends MY_Controller
      */
     public function policy()
     {
-        $data = array('title' => 'Privacy Policy | Easyshop.ph',
-                      'metadescription' => "Read Easyshop.ph's Privacy Policy",);
+        $data = array(
+            'title' => 'Privacy Policy | Easyshop.ph',
+            'metadescription' => "Read Easyshop.ph's Privacy Policy",
+        );
         $data = array_merge($data, $this->fill_header());
         $this->load->view('templates/header', $data);
         $this->load->view('pages/web/policy');
@@ -139,9 +144,10 @@ class Home extends MY_Controller
      */
     public function terms()
     {
-        $data = array('title' => 'Terms and Conditions | Easyshop.ph',
-                      'metadescription' => "Read Easyshop.ph's Terms and Conditions",
-                   );
+        $data = array(
+            'title' => 'Terms and Conditions | Easyshop.ph',
+            'metadescription' => "Read Easyshop.ph's Terms and Conditions",
+        );
         $data = array_merge($data, $this->fill_header());
         $this->load->view('templates/header', $data);
         $this->load->view('pages/web/terms');
@@ -156,9 +162,10 @@ class Home extends MY_Controller
      */
     public function faq()
     {
-        $data = array('title' => 'F.A.Q. | Easyshop.ph',
-                      'metadescription' => 'Get in the know, read the Frequently Asked Questions at Easyshop.ph',
-                      );
+        $data = array(
+            'title' => 'F.A.Q. | Easyshop.ph',
+            'metadescription' => 'Get in the know, read the Frequently Asked Questions at Easyshop.ph',
+        );
         $data = array_merge($data, $this->fill_header());
         $this->load->view('templates/header', $data);
         $this->load->view('pages/web/faq');
@@ -173,9 +180,10 @@ class Home extends MY_Controller
      */
     public function contact()
     {
-        $data = array('title' => 'Contact us | Easyshop.ph',
-                      'metadescription' => 'Get in touch with our Customer Support',
-                );
+        $data = array(
+            'title' => 'Contact us | Easyshop.ph',
+            'metadescription' => 'Get in touch with our Customer Support',
+        );
         $data = array_merge($data, $this->fill_header());
         $this->load->view('templates/header', $data);
         $this->load->view('pages/web/contact');
@@ -191,9 +199,10 @@ class Home extends MY_Controller
      */
     public function guide_buy()
     {
-        $data = array('title' => 'How to buy | Easyshop.ph',
-                      'metadescription' => 'Learn how to purchase at Easyshop.ph',
-                );
+        $data = array(
+            'title' => 'How to buy | Easyshop.ph',
+            'metadescription' => 'Learn how to purchase at Easyshop.ph',
+        );
         $data = array_merge($data, $this->fill_header());
         $this->load->view('templates/header', $data);
         $this->load->view('pages/web/how-to-buy');
@@ -207,9 +216,10 @@ class Home extends MY_Controller
      */
     public function guide_sell()
     {
-        $data = array('title' => 'How to sell | Easyshop.ph',
-                      'metadescription' => 'Learn how to sell your items at Easyshop.ph',
-                );
+        $data = array(
+            'title' => 'How to sell | Easyshop.ph',
+            'metadescription' => 'Learn how to sell your items at Easyshop.ph',
+        );
         $data = array_merge($data, $this->fill_header());
         $this->load->view('templates/header', $data);
         $this->load->view('pages/web/how-to-sell');

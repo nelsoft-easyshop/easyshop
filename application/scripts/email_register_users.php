@@ -49,8 +49,7 @@
 
     
     //CONFIRM CONNECTION
-    if (mysqli_connect_errno())
-    {
+    if (mysqli_connect_errno()){
             echo "ERROR : Failed to connect to MySQL: " . mysqli_connect_error();
     }else{
             echo "Successfully connected to database! \n";
@@ -82,8 +81,8 @@
     
     while($userData = $rawResult->fetch_assoc()){
 
-    $csvData .= $userData['username'] . ',' . $userData['contactno'] . ',' . $userData['email'] . ',' . $userData['nickname'] . 
-                    ',' . $userData['fullname'] . ',' . $userData['datecreated'] . PHP_EOL;
+        $csvData .= $userData['username'] . ',' . $userData['contactno'] . ',' . $userData['email'] . ',' . $userData['nickname'] . 
+                        ',' . $userData['fullname'] . ',' . $userData['datecreated'] . PHP_EOL;
 
     }
     
