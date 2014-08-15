@@ -2430,7 +2430,7 @@ class product_model extends CI_Model
     
     /*******************	NEW PRODUCT UPLOAD STEP 3 FUNCTIONS	***************************************/
     
-    function finalizeProduct($productid, $memberid){
+    function finalizeProduct($productid, $memberid, $cod){
         $product = $this->getProductEdit($productid, $memberid);
         if($product){
             $title = $product['name'];
@@ -2447,6 +2447,7 @@ class product_model extends CI_Model
             }
             $sth->bindParam(':productid',$productid,PDO::PARAM_INT);
             $sth->bindParam(':memberid',$memberid,PDO::PARAM_INT);
+            $sth->bindParam(':cod', $cod, PDO::PARAM_INT);
             $sth->execute();
             return true;
         }else{

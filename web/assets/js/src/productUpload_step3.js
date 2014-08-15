@@ -338,11 +338,15 @@ $(document).ready(function(){
 $(function(){
     $('#cod_btn').on('click',function(){
         var codinput = $('#allow_cod');
+        var buttonLabel = $(this).find('span.button-label');
+        
         if($(this).hasClass('active')){
             $(this).removeClass('active');
+            buttonLabel.text('Allow Cash on Delivery');
             codinput.val("off");
         }else{
             $(this).addClass('active');
+            buttonLabel.text('Cash on Delivery');
             codinput.val("on");
         }
     });
