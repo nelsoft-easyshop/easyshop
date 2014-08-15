@@ -1311,7 +1311,7 @@ $(document).ready(function() {
 
         window.onbeforeunload=null;
         $('.arrayNameOfFiles').val(JSON.stringify(af));
-        proceedStep3('processing');   
+        proceedStep3('processing');
         $('#form_product').submit();
     });
 
@@ -1322,17 +1322,10 @@ $(document).ready(function() {
             $('#prod_brand').trigger( "change" );
         }
         confirm_unload = false;
-        if(isEdit == 1){
-            saveAsDraftProceed(); 
-        }
+        saveAsDraftProceed();
         $('#edit_step1').submit();
     });
-
-    function processStep2Content()
-    {
-        var content = new Array(); 
-    }
-
+ 
     function processCombination()
     {
         var completeCombination = [];   
@@ -1398,7 +1391,7 @@ $(document).ready(function() {
 
     function proceedStep3(url)
     {
-        $('#form_product').ajaxForm({ 
+        $('#form_product').ajaxForm({
             url: url,
             dataType: "json",
             beforeSubmit : function(arr, $form, options){
@@ -1529,6 +1522,7 @@ $(document).ready(function() {
             },success :function(d) { 
                 $("#form_product").attr("action", "/sell/edit/processing");
                 $("#form_product").append('<input type="hidden" name="p_id" id="p_id" value="'+d.d+'">');
+                $("#edit_step1 > #p_id").val(d.d);
             }
         }).submit(); 
     }

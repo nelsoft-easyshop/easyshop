@@ -553,9 +553,8 @@ class productUpload extends MY_Controller
 
 
     function step2_2() # function for processing the adding of new item
-    {	   
+    {
         $this->load->model("user_model");
-
         $combination = json_decode($this->input->post('combination'),true); 
         $attributes = json_decode($this->input->post('attributes'),true);
         $data = $this->input->post('data');
@@ -567,7 +566,7 @@ class productUpload extends MY_Controller
         $product_title = trim($this->input->post('prod_title'));
         $product_brief = trim($this->input->post('prod_brief_desc'));
         $product_description =  $this->input->post('prod_description');
-        $product_price = str_replace(',', '', $this->input->post('prod_price')) ;
+        $product_price = ($this->input->post('prod_price') == "")? '0' : str_replace(',', '', $this->input->post('prod_price'));
         $product_discount = ($this->input->post('discount'))?floatval($this->input->post('discount')):0;
         $product_discount = ($product_discount <= 100)?$product_discount:100;
         $product_condition = $this->input->post('prod_condition');
@@ -601,7 +600,6 @@ class productUpload extends MY_Controller
                 die('{"e":"0","d":"Condition selected not available. Please select another."}');	 
             }
         }
-
 
         if((strlen(trim($product_title)) == 0 
             || $product_title == "" 

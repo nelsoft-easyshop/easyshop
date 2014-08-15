@@ -44,19 +44,11 @@
                 </ul>
             </div>
             <input type="hidden" name="step1_content" id="step1_content" value='<?php echo isset($step1_content)?$step1_content:json_encode(array());?>'/>
-      
-            <?php if(isset($product_details)): ?>  
-                <?php echo form_open('sell/step1', array('id'=>'edit_step1'));?>
-                <input type="hidden" name="p_id" id="p_id" value="<?php echo $product_details['id_product'];?>">
-                <input type="hidden" name="other_cat_name" id="other_cat_name" value="<?php echo $otherCategory;?>">
-                <?php echo form_close();?>
-            <?php else: ?>
-                <?php echo form_open('sell/step1', array('id'=>'edit_step1'));?>
-                <input type="hidden" name="c_id" id="c_id" value="<?php echo $id;?>">
-                <input type="hidden" name="other_cat_name" id="other_cat_name" value="<?php echo $otherCategory;?>">
-                <input type="hidden" name="step2_content" id="step2_content"/>
-                <?php echo form_close();?>
-            <?php endif; ?>
+            
+            <?php echo form_open('sell/step1', array('id'=>'edit_step1'));?> 
+                <input type="hidden" name="p_id" id="p_id" value="<?php echo (isset($product_details['id_product']))?$product_details['id_product']:'';?>">  
+                <input type="hidden" name="other_cat_name" id="other_cat_name" value="<?php echo $otherCategory;?>"> 
+            <?php echo form_close();?>
 
             <div class="clear"></div>
   
@@ -131,7 +123,7 @@
                             <div class="col-xs-12">
                                 <div class="pd-tb-15">
                                     <p><?php echo $parent_to_last; ?></p> <!-- will show the parent category until to the last category selected (bread crumbs) -->
-                                    <a href="javascript:void(0)" style="color:#0654BA;" class="step1_link">Change category</a>
+                                    <a href="javascript:void(0)" style="color:#0654BA;" class="step1_link">Change category</a> 
                                 </div>
                             </div>
                             <div class="clear"></div>
