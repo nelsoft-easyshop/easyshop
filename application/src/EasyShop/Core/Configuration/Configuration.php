@@ -57,7 +57,8 @@ class Configuration
         $localConfig = require $this->configFilePath;
         if($configName){
             return isset($localConfig[$configName]) ? $localConfig[$configName] : '';
-        }else{
+        }
+        else{
             return $localConfig;
         }
     }

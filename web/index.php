@@ -28,10 +28,12 @@
         $serverEnvironment = $configService->getConfigValue('environment');
         if(strlen($serverEnvironment) > 0){
             define('ENVIRONMENT', $serverEnvironment);
-        }else{
+        }
+        else{
             define('ENVIRONMENT', 'development');
         }
-    }else{
+    }
+    else{
         define('ENVIRONMENT', 'development');
     }
 
