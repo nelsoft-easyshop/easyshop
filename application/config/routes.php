@@ -143,6 +143,11 @@ else {
     $route['(?i)guide/sell'] = 'home/guide_sell';
 
     $route['(?i)subscribe'] = 'register/subscribe';
+
+    
+    #WEBSERVICE
+    $route['homewebservice'] = 'webservice/homewebservice';
+    $route['accountservice'] = 'webservice/accountservice';
 	
 }
 
