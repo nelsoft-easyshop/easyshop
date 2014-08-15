@@ -3,9 +3,21 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
+/**
+ *  Memberpage controller
+ *
+ *  @author Sam Gavinio
+ *  @author Stephen Janz Serafico
+ *  @author Rain Jorque
+ *
+ */
 class Memberpage extends MY_Controller
 {
-    function __construct()
+
+    /**
+     *  Class Constructor
+     */
+    public function __construct()
     {
         parent::__construct();
         $this->load->model("memberpage_model");
@@ -14,8 +26,13 @@ class Memberpage extends MY_Controller
         $this->load->model('payment_model');
         $this->form_validation->set_error_delimiters('', '');
     }
-
-    function index()
+    
+    /**
+     *  Class Index. Renders Memberpage
+     *
+     *  No return
+     */
+    public function index()
     {        
         $data = $this->fill_header();
         if(!$this->session->userdata('member_id')){
@@ -33,8 +50,14 @@ class Memberpage extends MY_Controller
         $this->load->view('pages/user/memberpage_view', $data);
         $this->load->view('templates/footer');
     }
-
-    function edit_personal()
+    
+    /**
+     *  Used to edit personal data.
+     *  Personal Information tab - immediately visible section (e.g. Nickname, birthday, mobile, etc.)
+     *
+     *  @return 1 on success, 0 otherwise
+     */
+    public function edit_personal()
     {
         if(($this->input->post('personal_profile_main'))&&($this->form_validation->run('personal_profile_main')))
         {
@@ -43,7 +66,7 @@ class Memberpage extends MY_Controller
                 'member_id' => $uid,
                 'contactno' => $this->input->post('mobile'),
                 'email' => $this->input->post('email')
-                );
+            );
 
             $check = $this->register_model->check_contactinfo($checkdata);
             if($check['mobile'] !== 0 || $check['email'] !== 0){
@@ -59,18 +82,20 @@ class Memberpage extends MY_Controller
                 'birthday' => $this->input->post('dateofbirth'),
                 'contactno' => ltrim($this->input->post('mobile'), '0'),
                 'email' => $this->input->post('email')
-                );
+            );
 
-            if($postdata['email'] === $this->input->post('email_orig'))
+            if($postdata['email'] === $this->input->post('email_orig')){
                 $postdata['is_email_verify'] = $this->input->post('is_email_verify');
-            else
+            }else{
                 $postdata['is_email_verify'] = 0;
-
-            if($postdata['contactno'] === $this->input->post('mobile_orig'))
+            }
+            
+            if($postdata['contactno'] === $this->input->post('mobile_orig')){
                 $postdata['is_contactno_verify'] = $this->input->post('is_contactno_verify');
-            else
+            }else{
                 $postdata['is_contactno_verify'] = 0;
-
+            }
+            
             $result = $this->memberpage_model->edit_member_by_id($uid, $postdata);
 
             echo 1;
@@ -80,7 +105,12 @@ class Memberpage extends MY_Controller
         }
     }
 
-    function edit_address()
+    /**
+     *  Used to edit address under Personal Information Tab
+     *
+     *  @return json encoded success, fail, or error, with error message
+     */
+    public function edit_address()
     {
         if(($this->input->post('personal_profile_address_btn'))&&($this->form_validation->run('personal_profile_address')))
         {
@@ -95,7 +125,7 @@ class Memberpage extends MY_Controller
                 'telephone' => '',
                 'lat' => $this->input->post('temp_lat'),
                 'lng' => $this->input->post('temp_lng')
-                );
+            );
 
             $temp = array(
                 'stateregion_orig' => $this->input->post('stateregion_orig'),
@@ -103,277 +133,323 @@ class Memberpage extends MY_Controller
                 'address_orig' => $this->input->post('address_orig'),
                 'map_lat' => $this->input->post('map_lat'),
                 'map_lng' => $this->input->post('map_lng')
-                );
+            );
 
             if( ( ($temp['stateregion_orig'] != $postdata['stateregion']) || ($temp['city_orig'] != $postdata['city']) || ($temp['address_orig'] != $postdata['address']) ) 
                 && ($temp['map_lat'] == $postdata['lat'] && $temp['map_lng'] == $postdata['lng']) ) {
                 $postdata['lat'] = 0;
-            $postdata['lng'] = 0;
+                $postdata['lng'] = 0;
+            }
+
+            $uid = $this->session->userdata('member_id');
+            $address_id = $this->memberpage_model->getAddress($uid,0)['id_address'];
+            $result = $this->memberpage_model->editAddress($uid, $postdata, $address_id);
+
+            $data = $this->memberpage_model->get_member_by_id($uid);
+
+            $data['result'] = $result ? 'success':'fail';
+            $data['errmsg'] = $result ? '' : 'Database update error.';
+        }else{
+            $data['result'] = 'error';
+            $data['errmsg'] = 'Failed to validate form.';
+        }
+        $this->output->set_output(json_encode($data));
+    }
+
+    /**
+     *  Used to edit School Information under Personal Information Tab
+     *
+     *  @return success, fail, or error, with error message
+     */
+    public function edit_school()
+    {
+        if(($this->input->post('personal_profile_school'))&&($this->form_validation->run('personal_profile_school')))
+        {
+            $arr = $this->input->post();
+            for($i = 1; $i<=count($arr)>>2; $i++)
+            {
+                $postdata = array(
+                    'school' => $arr['schoolname'.$i],
+                    'year' => $arr['schoolyear'.$i],
+                    'level' => $arr['schoollevel'.$i],
+                    'school_count' => $arr['schoolcount'.$i],
+                );
+                $uid = $this->session->userdata('member_id');
+                $result = $this->memberpage_model->edit_school_by_id($uid, $postdata);
+                //If database entry fails, break
+                if(!$result){
+                    break;
+                }
+            }
+            $uid = $this->session->userdata('member_id');
+            $data = $this->memberpage_model->get_school_by_id($uid);
+
+            $data['result'] = $result ? 'success' : 'fail';
+            $data['errmsg'] = $result ? '' : 'Database update error';
+        }else{
+            $data['result'] = 'error';
+            $data['errmsg'] = 'Failed to validate form.';
         }
 
-        $uid = $this->session->userdata('member_id');
-        $address_id = $this->memberpage_model->getAddress($uid,0)['id_address'];
-        $result = $this->memberpage_model->editAddress($uid, $postdata, $address_id);
-
-        $data = $this->memberpage_model->get_member_by_id($uid);
-
-        $data['result'] = $result ? 'success':'fail';
-        $data['errmsg'] = $result ? '' : 'Database update error.';
-
-    }else{
-        $data['result'] = 'error';
-        $data['errmsg'] = 'Failed to validate form.';
+        echo json_encode($data);
     }
-    $this->output->set_output(json_encode($data));
-}
-
-function edit_school()
-{
-    if(($this->input->post('personal_profile_school'))&&($this->form_validation->run('personal_profile_school')))
+    
+    /**
+     *  Function used to delete address, school, and work
+     *      under Personal Information Tab
+     *
+     *  @return 1 on success, 0 otherwise
+     */
+    public function deletePersonalInfo()
     {
-        $arr = $this->input->post();
-        for($i = 1; $i<=count($arr)>>2; $i++)
-        {
-            $postdata = array(
-                'school' => $arr['schoolname'.$i],
-                'year' => $arr['schoolyear'.$i],
-                'level' => $arr['schoollevel'.$i],
-                'school_count' => $arr['schoolcount'.$i],
-                );
-            $uid = $this->session->userdata('member_id');
-            $result = $this->memberpage_model->edit_school_by_id($uid, $postdata);
-                // If database entry fails, break
-            if(!$result){
-                break;
+        $field = html_escape($this->input->post('field'));
+        if( $field !== '' ){
+            $member_id = $this->session->userdata('member_id');
+            $result = $this->memberpage_model->deletePersonalInformation($member_id, $field);
+            if($result){
+                echo 1;
+            }
+            else{
+                echo 0;
             }
         }
+    }
+
+    /**
+     *  Function that fetches all data needed when displaying the Member page
+     *  
+     *  @return $data - contains majority of the data needed to display the Member page
+     */
+    public function fill_view()
+    {
         $uid = $this->session->userdata('member_id');
-        $data = $this->memberpage_model->get_school_by_id($uid);
-
-        $data['result'] = $result ? 'success' : 'fail';
-        $data['errmsg'] = $result ? '' : 'Database update error';
-    }else{
-        $data['result'] = 'error';
-        $data['errmsg'] = 'Failed to validate form.';
-    }
-
-    echo json_encode($data);
-}
-
-function deletePersonalInfo()
-{
-    $field = html_escape($this->input->post('field'));
-    if( $field !== '' ){
-        $member_id = $this->session->userdata('member_id');
-        $result = $this->memberpage_model->deletePersonalInformation($member_id, $field);
-        if($result){
-            echo 1;
-        }
-        else{
-            echo 0;
-        }
-    }
-}
-
-function fill_view()
-{
-    $uid = $this->session->userdata('member_id');
-    $user_product_count = $this->memberpage_model->getUserItemCount($uid);
-    $data = array(
-        'title' => 'Easyshop.ph - Member Profile',
-        'image_profile' => $this->memberpage_model->get_image($uid),
-        'active_products' => $this->memberpage_model->getUserItems($uid,0),
-        'deleted_products' => $this->memberpage_model->getUserItems($uid,1),
-            'draft_products' => $this->memberpage_model->getUserItems($uid,0,1),
-        'active_count' => intval($user_product_count['active']),
-        'deleted_count' => intval($user_product_count['deleted']),
-            'sold_count' => intval($user_product_count['sold']),
-            'draft_count' => intval($user_product_count['draft'])
+        $user_product_count = $this->memberpage_model->getUserItemCount($uid);
+        $data = array(
+            'title' => 'Easyshop.ph - Member Profile',
+            'image_profile' => $this->memberpage_model->get_image($uid),
+            'active_products' => $this->memberpage_model->getUserItems($uid,0),
+            'deleted_products' => $this->memberpage_model->getUserItems($uid,1),
+                'draft_products' => $this->memberpage_model->getUserItems($uid,0,1),
+            'active_count' => intval($user_product_count['active']),
+            'deleted_count' => intval($user_product_count['deleted']),
+                'sold_count' => intval($user_product_count['sold']),
+                'draft_count' => intval($user_product_count['draft'])
         );
-    $data = array_merge($data, $this->memberpage_model->getLocationLookup());
-    $data = array_merge($data,$this->memberpage_model->get_member_by_id($uid));
-    $data = array_merge($data,$this->memberpage_model->get_work_by_id($uid));
-    $data =  array_merge($data,$this->memberpage_model->get_school_by_id($uid));
-    $data['bill'] =  $this->memberpage_model->get_billing_info($uid);
-    $data['transaction'] = array(
-        'buy' => $this->memberpage_model->getBuyTransactionDetails($uid, 0),
-        'sell' => $this->memberpage_model->getSellTransactionDetails($uid, 0),
-        'complete' => array(
-            'buy' => $this->memberpage_model->getBuyTransactionDetails($uid, 1),
-            'sell' => $this->memberpage_model->getSellTransactionDetails($uid, 1)
+        $data = array_merge($data, $this->memberpage_model->getLocationLookup());
+        $data = array_merge($data,$this->memberpage_model->get_member_by_id($uid));
+        $data = array_merge($data,$this->memberpage_model->get_work_by_id($uid));
+        $data =  array_merge($data,$this->memberpage_model->get_school_by_id($uid));
+        $data['bill'] =  $this->memberpage_model->get_billing_info($uid);
+        $data['transaction'] = array(
+            'buy' => $this->memberpage_model->getBuyTransactionDetails($uid, 0),
+            'sell' => $this->memberpage_model->getSellTransactionDetails($uid, 0),
+            'complete' => array(
+                'buy' => $this->memberpage_model->getBuyTransactionDetails($uid, 1),
+                'sell' => $this->memberpage_model->getSellTransactionDetails($uid, 1)
             )
         );
-    $data['transaction']['count'] = $this->memberpage_model->getTransactionCount($uid);
-    $data['allfeedbacks'] = $this->memberpage_model->getFeedback($uid);
-    $data['sales'] = array(
-        'release' => $this->memberpage_model->getNextPayout($uid),
-        'balance' => $this->memberpage_model->getUserBalance($uid)
+        $data['transaction']['count'] = $this->memberpage_model->getTransactionCount($uid);
+        $data['allfeedbacks'] = $this->memberpage_model->getFeedback($uid);
+        $data['sales'] = array(
+            'release' => $this->memberpage_model->getNextPayout($uid),
+            'balance' => $this->memberpage_model->getUserBalance($uid)
         );
 
         //If delivery address is equal to personal address, hide setasdefaultaddress in delivery address tab
-    if( $data['cityID']===$data['c_cityID'] && $data['stateregionID']===$data['c_stateregionID'] && 
-        $data['address']===$data['c_address'] ){
-        $data['show_default_address'] = false;
-}else{
-    $data['show_default_address'] = true;
-}
+        if( $data['cityID']===$data['c_cityID'] && $data['stateregionID']===$data['c_stateregionID'] && 
+            $data['address']===$data['c_address'] ){
+            $data['show_default_address'] = false;
+        }else{
+            $data['show_default_address'] = true;
+        }
 
-return $data;
-}
-
-function upload_img()
-{
-    $data = array(
-        'x' => $this->input->post('x'),
-        'y' => $this->input->post('y'),
-        'w' => $this->input->post('w'),
-        'h' => $this->input->post('h')
-        );
-    $isVendor = $this->input->post('vendor') ? true : false;
-    $uid = $this->session->userdata('member_id');
-    $this->load->library('upload');
-    $this->load->library('image_lib');
-    $result = $this->memberpage_model->upload_img($uid, $data);
-        //echo error may be here: $result['error']
-
-    if($isVendor){
-        $temp = $this->memberpage_model->get_member_by_id($uid);
+        return $data;
     }
 
-    if(isset($result['error'])){
-        echo "<h2 style='color:red;'>Unable to upload image.</h2>
-        <p style='font-size:20px;'><strong>You can only upload JPEG, JPG, GIF, and PNG files with a max size of 5MB and max dimensions of 5000px by 5000px</strong></p>";
-        if($isVendor)
-            echo "<script type='text/javascript'>setTimeout(function(){window.location.href='".base_url().$temp['userslug']."'},3000);</script>";
-        else
-            echo "<script type='text/javascript'>setTimeout(function(){window.location.href='".base_url()."me'},3000);</script>";
-    }else{
-        if($isVendor)
-            redirect($temp['userslug']);
-        else
-            redirect('me');
-    }
-
-}
-
-public function external_callbacks( $postdata, $param )
-{
-    $param_values = explode( ',', $param );
-    $model = $param_values[0];
-    $this->load->model( $model );
-    $method = $param_values[1];
-    if( count( $param_values ) > 2 ) {
-        array_shift( $param_values );
-        array_shift( $param_values );
-        $argument = $param_values;
-    }
-    if( isset( $argument ))
-        $callback_result = $this->$model->$method( $postdata, $argument );
-    else
-        $callback_result = $this->$model->$method( $postdata );
-    return $callback_result;
-}
-
-function edit_consignee_address()
-{
-    if(($this->input->post('c_deliver_address_btn'))&&($this->form_validation->run('c_deliver_address'))){
-        $uid = $this->session->userdata('member_id');
-        $result = array(false,false);
-
-        $postdata = array(
-            'consignee' => $this->input->post('consignee'),
-            'mobile' => ltrim($this->input->post('c_mobile'), '0'),
-            'telephone' => $this->input->post('c_telephone'),
-            'stateregion' => $this->input->post('c_stateregion'),
-            'city' => $this->input->post('c_city'),
-            'address' => $this->input->post('c_address'),
-            'country' => $this->input->post('c_country'),
-            'lat' => $this->input->post('temp_lat'),
-            'lng' => $this->input->post('temp_lng'),
-            'addresstype' => 1
-            );
-
-        $temp = array(
-            'stateregion' => $this->input->post('cstateregion_orig'),
-            'city' => $this->input->post('ccity_orig'),
-            'address' => $this->input->post('caddress_orig'),
-            'map_lat' => $this->input->post('map_lat'),
-            'map_lng' => $this->input->post('map_lng')
-            );
-
-        if( ( ($temp['stateregion'] != $postdata['stateregion']) || ($temp['city'] != $postdata['city']) || ($temp['address'] != $postdata['address']) ) 
-            && ($temp['map_lat'] == $postdata['lat'] && $temp['map_lng'] == $postdata['lng']) ) {
-            $postdata['lat'] = 0;
-        $postdata['lng'] = 0;
-    }
-
-    $address_id = $this->memberpage_model->getAddress($uid,1)['id_address'];
-    $result[0] = $this->memberpage_model->editAddress($uid, $postdata, $address_id);
-
-    if($this->input->post('c_def_address')){
-        $address_id = $this->memberpage_model->getAddress($uid,0)['id_address'];
-        $postdata['addresstype'] = 0;
-        $result[1] = $this->memberpage_model->editAddress($uid, $postdata, $address_id);
-        $data['default_add'] = $this->input->post('c_def_address');
-    }else{
-        $result[1] = true;
-        $data['default_add'] = 'off';
-    }
-
-    $data['result'] = $result[0] && $result[1] ? 'success':'fail';
-    $data['errmsg'] = $result[0] && $result[1] ? '' : 'Database update error.';
-
-    $data = array_merge($data,$this->memberpage_model->get_member_by_id($uid));
-
-}else{
-    $data['result'] = 'fail';
-    $data['errmsg'] = 'Failed to validate form.';
-}
-
-$this->output->set_output(json_encode($data));
-}
-
-function edit_work()
-{
-    if(($this->input->post('personal_profile_work_btn'))&&($this->form_validation->run('personal_profile_work')))
+    /**
+     *  Used to upload avatar image on both Member page and Vendor page
+     *
+     *  No return. Reloads page on success.
+     *  NOTE: For browsers with minimal JS capabilities, this function reloads the page
+     *      and displays an error for 3 seconds, then reloads the page to the original URL,
+     *      member page or vendor page
+     */
+    public function upload_img()
     {
-        $rowcount = count($this->input->post()) - 1;
-        $rowcount = $rowcount / 4;
-        $postdata = array();
-        for($x=1;$x<=$rowcount;$x++){
-            $postdata = array(
-                'companyname' => $this->input->post('companyname'.$x),
-                'designation' => $this->input->post('designation'.$x),
-                'year' => $this->input->post('year'.$x),
-                'count' => $this->input->post('workcount'.$x)
-                );
-            $uid = $this->session->userdata('member_id');
-            $result = $this->memberpage_model->edit_work_by_id($uid, $postdata);
+        $data = array(
+            'x' => $this->input->post('x'),
+            'y' => $this->input->post('y'),
+            'w' => $this->input->post('w'),
+            'h' => $this->input->post('h')
+        );
+        $isVendor = $this->input->post('vendor') ? true : false;
+        $uid = $this->session->userdata('member_id');
+        $this->load->library('upload');
+        $this->load->library('image_lib');
+        
+        //echo error may be here: $result['error']
+        $result = $this->memberpage_model->upload_img($uid, $data);
+        
+        if($isVendor){
+            $temp = $this->memberpage_model->get_member_by_id($uid);
+        }
 
-            if(!$result){
-                break;
+        if(isset($result['error'])){
+            echo "<h2 style='color:red;'>Unable to upload image.</h2>
+            <p style='font-size:20px;'><strong>You can only upload JPEG, JPG, GIF, and PNG files with a max size of 5MB and max dimensions of 5000px by 5000px</strong></p>";
+            if($isVendor){
+                echo "<script type='text/javascript'>setTimeout(function(){window.location.href='".base_url().$temp['userslug']."'},3000);</script>";
+            }else{
+                echo "<script type='text/javascript'>setTimeout(function(){window.location.href='".base_url()."me'},3000);</script>";
+            }
+        }else{
+            if($isVendor){
+                redirect($temp['userslug']);
+            }else{
+                redirect('me');
             }
         }
-        $uid = $this->session->userdata('member_id');
-        $data = $this->memberpage_model->get_work_by_id($uid);
-
-        $data['result'] = $result ? 'success' : 'fail';
-        $data['errmsg'] = $result ? '' : 'Database update error.';
-
-    }else{
-        $data['result'] = 'error';
-        $data['errmsg'] = 'Failed to validate form.';
     }
 
-    echo json_encode($data);
-}
-
-/*****************	TRANSACTION CONTROLLER	*******************/
-
-    /*
-     *	Function to add feedback to USER for every transaction made
+    /**
+     *  External callback function used in form_validation of CodeIgniter
      */
-    function addFeedback(){
+    public function external_callbacks( $postdata, $param )
+    {
+        $param_values = explode( ',', $param );
+        $model = $param_values[0];
+        $this->load->model( $model );
+        $method = $param_values[1];
+        if( count( $param_values ) > 2 ) {
+            array_shift( $param_values );
+            array_shift( $param_values );
+            $argument = $param_values;
+        }
+        if( isset( $argument )){
+            $callback_result = $this->$model->$method( $postdata, $argument );
+        }else{
+            $callback_result = $this->$model->$method( $postdata );
+        }
+        
+        return $callback_result;
+    }
+
+    /**
+     *  Used to edit information under Delivery Address Tab. 
+     *  Able to detect changes in address necessary for updating
+     *      latitude and longitude values in database, used for Google Maps.
+     *
+     *  @return json encoded success or fail with error message
+     */
+    public function edit_consignee_address()
+    {
+        if(($this->input->post('c_deliver_address_btn'))&&($this->form_validation->run('c_deliver_address'))){
+            $uid = $this->session->userdata('member_id');
+            $result = array(false,false);
+
+            $postdata = array(
+                'consignee' => $this->input->post('consignee'),
+                'mobile' => ltrim($this->input->post('c_mobile'), '0'),
+                'telephone' => $this->input->post('c_telephone'),
+                'stateregion' => $this->input->post('c_stateregion'),
+                'city' => $this->input->post('c_city'),
+                'address' => $this->input->post('c_address'),
+                'country' => $this->input->post('c_country'),
+                'lat' => $this->input->post('temp_lat'),
+                'lng' => $this->input->post('temp_lng'),
+                'addresstype' => 1
+            );
+
+            $temp = array(
+                'stateregion' => $this->input->post('cstateregion_orig'),
+                'city' => $this->input->post('ccity_orig'),
+                'address' => $this->input->post('caddress_orig'),
+                'map_lat' => $this->input->post('map_lat'),
+                'map_lng' => $this->input->post('map_lng')
+            );
+
+            if( ( ($temp['stateregion'] != $postdata['stateregion']) || ($temp['city'] != $postdata['city']) || ($temp['address'] != $postdata['address']) ) 
+                && ($temp['map_lat'] == $postdata['lat'] && $temp['map_lng'] == $postdata['lng']) ) {
+                $postdata['lat'] = 0;
+                $postdata['lng'] = 0;
+            }
+
+            $address_id = $this->memberpage_model->getAddress($uid,1)['id_address'];
+            $result[0] = $this->memberpage_model->editAddress($uid, $postdata, $address_id);
+
+            if($this->input->post('c_def_address')){
+                $address_id = $this->memberpage_model->getAddress($uid,0)['id_address'];
+                $postdata['addresstype'] = 0;
+                $result[1] = $this->memberpage_model->editAddress($uid, $postdata, $address_id);
+                $data['default_add'] = $this->input->post('c_def_address');
+            }else{
+                $result[1] = true;
+                $data['default_add'] = 'off';
+            }
+
+            $data['result'] = $result[0] && $result[1] ? 'success':'fail';
+            $data['errmsg'] = $result[0] && $result[1] ? '' : 'Database update error.';
+
+            $data = array_merge($data,$this->memberpage_model->get_member_by_id($uid));
+
+        }else{
+            $data['result'] = 'fail';
+            $data['errmsg'] = 'Failed to validate form.';
+        }
+
+        $this->output->set_output(json_encode($data));
+    }
+
+    /**
+     *  Used to edit work information under Personal Information Tab
+     *
+     *  @return json encoded success, error, or fail, with error message
+     */
+    public function edit_work()
+    {
+        if(($this->input->post('personal_profile_work_btn'))&&($this->form_validation->run('personal_profile_work')))
+        {
+            $rowcount = count($this->input->post()) - 1;
+            $rowcount = $rowcount / 4;
+            $postdata = array();
+            for($x=1;$x<=$rowcount;$x++){
+                $postdata = array(
+                    'companyname' => $this->input->post('companyname'.$x),
+                    'designation' => $this->input->post('designation'.$x),
+                    'year' => $this->input->post('year'.$x),
+                    'count' => $this->input->post('workcount'.$x)
+                );
+                $uid = $this->session->userdata('member_id');
+                $result = $this->memberpage_model->edit_work_by_id($uid, $postdata);
+
+                if(!$result){
+                    break;
+                }
+            }
+            $uid = $this->session->userdata('member_id');
+            $data = $this->memberpage_model->get_work_by_id($uid);
+
+            $data['result'] = $result ? 'success' : 'fail';
+            $data['errmsg'] = $result ? '' : 'Database update error.';
+
+        }else{
+            $data['result'] = 'error';
+            $data['errmsg'] = 'Failed to validate form.';
+        }
+
+        echo json_encode($data);
+    }
+
+    /*******************************************************************/
+    /**********     TRANSACTIONS CONTROLLER SECTION     ****************/
+    /*******************************************************************/
+    
+    /*
+     *  Used to add feedback to SELLER or BUYER under Transactions Tab
+     *
+     *  @return 1 on success, 0 otherwise
+     */
+    public function addFeedback(){
         if($this->input->post('order_id') && $this->input->post('feedback-field') && $this->form_validation->run('add_feedback_transaction')){
             $result = false;
             $data = array(
@@ -385,28 +461,29 @@ function edit_work()
                 'rating1' => $this->input->post('rating1'),
                 'rating2' => $this->input->post('rating2'),
                 'rating3' => $this->input->post('rating3')
-                );
+            );
             
-            /******** Check if transaction exists based on post details ***********/
+            // Check if transaction exists based on post details
             // current user is buyer
             if($data['feedb_kind'] == 0){
                 $transacData = array(					
                     'buyer' => $data['uid'],
                     'seller' => $data['for_memberid'],
                     'order_id' => $data['order_id']
-                    );
+                );
             // current user is seller
             }else if($data['feedb_kind'] == 1){
                 $transacData = array(					
                     'buyer' => $data['for_memberid'],
                     'seller' => $data['uid'],
                     'order_id' => $data['order_id']
-                    );
+                );
             }
             $checkTransaction = $this->payment_model->checkTransaction($transacData);
             
-            if(count($checkTransaction) > 0){ // if transaction exists
-                /****** Check if feedback entry already exists ******/
+            // if transaction exists
+            if(count($checkTransaction) > 0){ 
+                // Check if feedback entry already exists
                 $checkFeedback = $this->memberpage_model->checkFeedback($data);
 
                 if(count($checkFeedback) == 0){ // if no feedback entry
@@ -420,34 +497,41 @@ function edit_work()
             echo 0;
     }
     
-    /*
-     *	Function to handle payment transfer.
-     *	Forward to seller (status = 1) or return to buyer (status = 2).
+    /**
+     *  Function used to handle user responses on transactions under Transactions Tab
+     *  Forward to seller (status = 1), return to buyer (status = 2), Cash On Delivery (status = 3)
+     *
+     *  Also handles DragonPay and Bank Deposit response functions
+     *
+     *  @return json encoded success or fail with error message
      */
-    function transactionResponse(){
+    public function transactionResponse(){
         
         $serverResponse = array(
             'result' => 'fail',
             'error' => 'Failed to validate form'
-            );
+        );
         
         $data['transaction_num'] = $this->input->post('transaction_num');
         $data['invoice_num'] = $this->input->post('invoice_num');
         $data['member_id'] = $this->session->userdata('member_id');
         
+        /**
+         *  DEFAULT RESPONSE HANDLER
+         *  Item Received / Cancel Order / Complete(CoD)
+         */
         if( $this->input->post('buyer_response') || $this->input->post('seller_response') || $this->input->post('cash_on_delivery') ){
-            
             $authenticateData = array(
                 'username' => $this->input->post('username'),
                 'password' => $this->input->post('password'),
                 'member_id' => $this->session->userdata('member_id')
-                );
+            );
             
             if( ! $this->memberpage_model->authenticateUser($authenticateData) ){
                 $serverResponse = array(
                     'result' => 'invalid',
                     'error' => 'Incorrect password.'
-                    );
+                );
                 echo json_encode($serverResponse);
                 exit;
             }
@@ -464,10 +548,14 @@ function edit_work()
                 $data['status'] = 3;
             }
             
-            // Update database entries and retrieve update stats and buyer info
-            // Also checks for data accuracy
-            // Returns : o_success, o_message
-            //$result['o_success'] = 1; // DEV code
+            /** 
+             *  NEXT LINE OF CODE:
+             *  Updates database entries and retrieve update stats and buyer info
+             *  Also checks for data accuracy
+             *  @return o_success, o_message
+             *
+             *  $result['o_success'] = 1; // DEV code
+             */
             $result = $this->payment_model->updateTransactionStatus($data);
 
             // If database update is successful and response is 'return to buyer', 
@@ -499,7 +587,9 @@ function edit_work()
                     $serverResponse['error'] = 'Failed to send notification email.';
                 }
             }
-            /*************	DRAGONPAY HANDLER	************************/
+        /**
+         *  DRAGONPAY HANDLER
+         */
         }else if( $this->input->post('dragonpay') ){
             $this->load->library('dragonpay');
             
@@ -520,7 +610,9 @@ function edit_work()
             }else{
                 $serverResponse['error'] = 'Transaction does not exist.';
             }
-            /*************	BANK DEPOSIT HANDLER	************************/
+        /**
+         *  BANK DEPOSIT HANDLER
+         */
         }else if( $this->input->post('bank_deposit') && $this->form_validation->run('bankdeposit') ) {
             // Fetch transaction data
             $checkTransaction = $this->payment_model->checkTransactionBasic($data);
@@ -533,7 +625,7 @@ function edit_work()
                     'amount' => preg_replace('/,/', '', $this->input->post('amount')),
                     'date_deposit' => date("Y-m-d H:i:s", strtotime($this->input->post('date'))),
                     'comment' => $this->input->post('comment')
-                    );
+                );
                 $result = $this->payment_model->addBankDepositDetails($postData);
                 
                 $serverResponse['result'] = $result ? 'success' : 'fail';
@@ -545,7 +637,10 @@ function edit_work()
         echo json_encode($serverResponse);
     }
     
-    function addShippingComment()
+    /**
+     *  Used when adding Shipping Comments under Transactions Tab
+     */
+    public function addShippingComment()
     {
         $serverResponse['result'] = 'fail';
         $serverResponse['error'] = 'Failed to validate form.';
@@ -560,7 +655,7 @@ function edit_work()
                 'tracking_num' => $this->input->post('tracking_num'),
                 'expected_date' => date("Y-m-d H:i:s", strtotime($this->input->post('expected_date'))),
                 'delivery_date' => date("Y-m-d H:i:s", strtotime($this->input->post('delivery_date')))
-                );
+            );
             
             $result = $this->payment_model->checkOrderProductBasic($postData);
             
@@ -569,7 +664,6 @@ function edit_work()
                 $serverResponse['result'] = $r ? 'success' : 'fail';
                 $serverResponse['error'] = $r ? '' : 'Failed to insert in database.';
             } else {
-                $serverResponse['result'] = 'success';
                 $serverResponse['error'] = 'Server data mismatch. Possible hacking attempt';
             }
         }
@@ -577,19 +671,24 @@ function edit_work()
         echo json_encode($serverResponse);
     }
     
-    function rejectItem()
+    /**
+     *  Used for the Reject Item functionality under Transactions Tab
+     *
+     *  @return json encoded success or fail with error message
+     */
+    public function rejectItem()
     {
         $data = array(
             'order_product' => $this->input->post('order_product'),
             'transact_num' => $this->input->post('transact_num'),
             'member_id' => $this->input->post('seller_id'),
             'method' => $this->input->post('method')
-            );
+        );
         
         $serverResponse = array(
             'result' => 'fail',
             'error' => 'Transaction does not exist.'
-            );
+        );
         
         $result = $this->payment_model->checkOrderProductBasic($data);
         
@@ -612,8 +711,16 @@ function edit_work()
         echo json_encode($serverResponse);
     }
 
-    /****************************	VENDOR CONTROLLER	***********************************/
-    function vendorSubscription()
+    /*******************************************************************/
+    /**********     VENDOR CONTROLLER SECTION     **********************/
+    /*******************************************************************/
+    
+    /**
+     *  Used for subscribing/following vendors.
+     *
+     *  @return json encoded success or fail with error message
+     */
+    public function vendorSubscription()
     {
         $memberID = $this->session->userdata('member_id');
         $sellername = $this->input->post('name');
@@ -636,12 +743,17 @@ function edit_work()
         echo json_encode($serverResponse);
     }
     
-    function vendorStoreDesc()
+    /**
+     *  Used to modify store description in vendor page
+     *
+     *  @return json encoded success or fail with error message
+     */
+    public function vendorStoreDesc()
     {
         $serverResponse = array(
             'result' => 'fail',
             'error' => 'Failed to submit form.'
-            );
+        );
         
         if($this->input->post('store_desc')){
             $desc = $this->input->post('desc');
@@ -655,20 +767,25 @@ function edit_work()
         echo json_encode($serverResponse);
     }
     
-    function banner_upload()
+    /**
+     *  Used for uploading banner in vendor page. 
+     *  
+     *  Behavior similar to upload_img function
+     */
+    public function banner_upload()
     {
         $data = array(
             'x' => $this->input->post('x'),
             'y' => $this->input->post('y'),
             'w' => $this->input->post('w'),
             'h' => $this->input->post('h')
-            );
+        );
         $uid = $this->session->userdata('member_id');
         $this->load->library('upload');
         $this->load->library('image_lib');
         $result = $this->memberpage_model->banner_upload($uid, $data);
         $data = $this->memberpage_model->get_member_by_id($uid);
-        //echo error may be here: $result['error']
+
         if(isset($result['error'])){
             print "<h2 style='color:red;'>Unable to upload image.</h2>
             <p style='font-size:20px;'><strong>You can only upload JPEG, JPG, GIF, and PNG files with a max size of 5MB and max dimensions of 5000px by 5000px</strong></p>";
@@ -678,10 +795,13 @@ function edit_work()
         }
     }
         
-/*
- |	Function used when changing store URL
- */
-    function editUserSlug()
+    /**
+     *  Used for changing store URL. When userslug !== username, 
+     *      user will not be able to change url again.
+     *
+     *  @return json encoded success or fail with error message
+     */
+    public function editUserSlug()
     {
         # Require config file for list of controllers (filenames) ; returns $controllerConfig
         require_once(APPPATH . 'config/param/controllers.php');
@@ -708,13 +828,13 @@ function edit_work()
                 $block2 = explode("/", $co);
                 if( !in_array($block1[0], $restrictedList) ){
                     $restrictedList[] = $block1[0];
-    }
+                }
                 if( !in_array($block2[0], $restrictedList) ){
                     $restrictedList[] = $block2[0];
                 }
             }
 
-            # Get union of controller list and restricted list
+            #Get union of controller list and restricted list
             $restrictedList = array_unique(array_merge($restrictedList , $controllerConfig));
             
             if( count($resultCount) > 0 || in_array($userslug, $restrictedList)){
@@ -723,60 +843,23 @@ function edit_work()
                 $boolResult = $this->memberpage_model->editUserSlug($memberID, $userslug);
                 $serverResponse['result'] = $boolResult ? 'success':'fail';
                 $serverResponse['error'] = $boolResult? '':'Failed to update database. Please try again later';
-            }			
+            }
         }
         
         echo json_encode($serverResponse);
     }
     
+    /*******************************************************************/
+    /**********     VERIFY CONTACT DETAILS SECTION     *****************/
+    /*******************************************************************/
     
-    # THIS FUNCTION (vendor) IS TRANSFERRED TO HOME CONTROLLER FOR ROUTING PURPOSES
-    # CHECK 404_override in routing.php
-    /*function vendor($selleruname){
-        $session_data = $this->session->all_userdata();
-        $vendordetails = $this->memberpage_model->getVendorDetails($selleruname);
-        $data['title'] = 'Vendor Profile | Easyshop.ph';
-        $data['my_id'] = (empty($session_data['member_id']) ? 0 : $session_data['member_id']);
-        $data = array_merge($data, $this->fill_header());
-        
-        if($vendordetails){
-            $data['render_logo'] = false;
-            $data['render_searchbar'] = false;
-            $this->load->view('templates/header', $data);
-            $sellerid = $vendordetails['id_member'];
-            $user_product_count = $this->memberpage_model->getUserItemCount($sellerid);
-            $data = array_merge($data,array(
-                'vendordetails' => $vendordetails,
-                'image_profile' => $this->memberpage_model->get_Image($sellerid),
-                'banner' => $this->memberpage_model->get_Image($sellerid,'vendor'),
-                'products' => $this->memberpage_model->getVendorCatItems($sellerid,$selleruname),
-                'active_count' => intval($user_product_count['active']),
-                'deleted_count' => intval($user_product_count['deleted']),
-                'sold_count' => intval($user_product_count['sold']),
-                ));
-            $data['allfeedbacks'] = $this->memberpage_model->getFeedback($sellerid);
-            
-            $data['hasStoreDesc'] = (string)$data['vendordetails']['store_desc'] !== '' ? true : false;
-            $data['product_count'] = count($data['products']);
-            $data['renderEdit'] = (int)$sellerid === (int)$data['my_id'] ? true : false;
-            #if 0 : no entry - unfollowed, hence display follow
-            #if 1 : has entry - followed, hence display unfollow
-            $data['subscribe_status'] = $this->memberpage_model->checkVendorSubscription($data['my_id'],$selleruname)['stat'];
-            $data['subscribe_count'] = (int)$this->memberpage_model->countVendorSubscription($data['my_id'], $selleruname)['subscription_count'];
-            
-            $this->load->view('pages/user/vendor_view', $data);
-            $this->load->view('templates/footer');
-            
-        }
-        else{
-            $this->load->view('templates/header', $data);
-            $this->load->view('pages/user/user_error');
-            $this->load->view('templates/footer_full');
-        }
-    }*/
-    
-    /**	VERIFY CONTACT DETAILS SECTION **/
-    function verify(){
+    /**
+     *  Used to send email / SMS when verifying email or mobile
+     *  NOTE: ONLY EMAIL FUNCTIONALITY IS USED AT THE MOMENT
+     *
+     *  @return json_encoded success, fail, or data error with error message
+     */
+    public function verify(){
         if($this->input->post('reverify') === 'true'){
             $uid = $this->session->userdata('member_id');
 
@@ -793,7 +876,7 @@ function edit_work()
                     'emailcode' => $hash,
                     'mobile' => 0,
                     'email' => 0
-                    );
+                );
 
                 if($data['mobilecount'] < 4 || $data['time'] > 30){
                     $result = $this->register_model->send_mobile_msg($data['username'], $data['contactno'], $confirmation_code);
@@ -802,9 +885,10 @@ function edit_work()
                         $temp['mobile'] = 1;
                     }
                 }
-                else
+                else{
                     $result = 'exceed';
-
+                }
+                
                 $this->register_model->store_verifcode($temp);
                 echo json_encode($result);
             }
@@ -819,28 +903,34 @@ function edit_work()
                     'emailcode' => $hash,
                     'mobile' => 0,
                     'email' => 0
-                    );
+                );
 
                 if($data['emailcount'] < 4 || $data['time'] > 30){
                     $result = $this->register_model->send_email_msg($data['email'], $data['username'], $hash);
-                    if($result === 'success')
+                    if($result === 'success'){
                         $temp['email'] = 1;
-                }
-                else
+                    }
+                }else{
                     $result = 'exceed';
-
+                }
+                
                 $this->register_model->store_verifcode($temp);
                 echo json_encode($result);
-            }
-            else
+                
+            }else{
                 echo json_encode('dataerror');
-        }
-        else
+            }
+        }else{
             echo 0;
+        }
     }
 
-
-    function verify_mobilecode(){
+    /**
+     *  Used for verifying mobile verification code input by user
+     *  NOTE : NOT USED AT THE MOMENT
+     */
+    public function verify_mobilecode()
+    {
         if($this->input->post('mobileverify') === 'true'){
             $user_mobilecode = html_escape($this->input->post('data'));
 
@@ -848,17 +938,22 @@ function edit_work()
                 $data = array(
                     'is_contactno_verify' => 1,
                     'member_id' => $this->session->userdata('member_id')
-                    );
+                );
                 $this->session->unset_userdata('mobilecode');
                 $this->register_model->update_verification_status($data);
                 echo 1;
             }
-            else
+            else{
                 echo 0;
+            }
         }
     }
 
-    function bank_info(){
+    /**
+     *  Fetch bank info
+     */
+    public function bank_info()
+    {
         $q = $this->input->get('q');
         if(!empty($q)){
             $bank_names = $this->memberpage_model->get_bank($q, 'name');
@@ -866,7 +961,11 @@ function edit_work()
         }
     }
 
-    function billing_info(){
+    /**
+     *  Fetch billing info/details of user
+     */
+    public function billing_info()
+    {
         # if(($this->input->post('bi_acct_no')) && ($this->form_validation->run('billing_info'))){
 
         if($this->input->post('bi_acct_no')){
@@ -884,21 +983,25 @@ function edit_work()
                 'bank_id' => $bi_bank,
                 'bank_account_name' => $bi_acct_name,
                 'bank_account_number' => $bi_acct_no
-                );
+            );
             
             if($this->memberpage_model->isBankAccountUnique($data)){
                 $result = $this->memberpage_model->billing_info($data);
                 echo '{"e":"1","d":"success","id":'.$result.'}';
             }else{
                 echo '{"e":"0","d":"duplicate"}';
-            }			
+            }
         }
         else{
             echo '{"e":"0","d":"fail"}';
         }
     }
 
-    function billing_info_u(){
+    /**
+     *  Used to update user's billing info
+     */
+    public function billing_info_u()
+    {
         if($this->input->post('bi_id')){
             $member_id = $this->session->userdata('member_id');
             $bi_id = $this->input->post('bi_id');
@@ -917,7 +1020,7 @@ function edit_work()
                 'bank_account_number' => $bi_acct_no,
                 'is_default' => $bi_def,
                 'user_account' => $bi_user_account,
-                );
+            );
             if($this->memberpage_model->isBankAccountUnique($data)){
                 $this->memberpage_model->billing_info_update($data);
                 $return = '{"e":"1","d":"success"}';
@@ -932,7 +1035,11 @@ function edit_work()
         echo $return;
     }
 
-    function billing_info_d(){
+    /**
+     *  Used to delete user's billing info
+     */
+    public function billing_info_d()
+    {
         if($this->input->post('bi_id')){
             $member_id = $this->session->userdata('member_id');
             $bi_id = $this->input->post('bi_id');
@@ -940,13 +1047,16 @@ function edit_work()
             $data = array(
                 'member_id' => $member_id,
                 'ibi' => $bi_id
-                );
+            );
             $this->memberpage_model->billing_info_delete($data);
         }
     }
     
-    function billing_info_f(){
-
+    /**
+     *  Used for setting default billing info
+     */
+    public function billing_info_f()
+    {
         if($this->input->post('bi_id')){
             $member_id = $this->session->userdata('member_id');
             $bi_id = $this->input->post('bi_id');
@@ -954,13 +1064,19 @@ function edit_work()
             $data = array(
                 'member_id' => $member_id,
                 'ibi' => $bi_id
-                );
+            );
             $this->memberpage_model->billing_info_default($data);
         }
-    }	
+    }
     
-    # FUNCTION USED BY ITEM LIST PAGING AJAX REQUESTS
-    function getMoreUserItems($who = "")
+    /**
+     *  Used by AJAX Requests in Memberpage Dashboard
+     *  Fetches product list for Active, Deleted, and Drafted Items
+     *  Includes Search, Sort, And order by functionality by parsing the query
+     *  
+     *  @return json_encoded html data
+     */
+    public function getMoreUserItems($who = "")
     {
         $itemPerPage = 10;
         
@@ -1031,8 +1147,14 @@ function edit_work()
         echo json_encode($jsonData);
     }
     
-    #FUNCTION USED BY TRANSACTIONS AJAX PAGING REQUESTS
-    function getMoreTransactions()
+    /**
+     *  Used by AJAX Requests in Transactions page
+     *  Fetches on-going and completed, buy and sold, category transactions
+     *  Includes searches, filters, and order by functionality
+     *
+     *  @return json encoded html data
+     */
+    public function getMoreTransactions()
     {
         $itemPerPage = 10;
         
