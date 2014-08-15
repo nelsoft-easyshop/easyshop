@@ -237,19 +237,19 @@ function upload_img()
 		//echo error may be here: $result['error']
 
 	if($isVendor){
-		$temp = $this->fill_header();
+		$temp = $this->memberpage_model->get_member_by_id($uid);
 	}
 
 	if(isset($result['error'])){
 		echo "<h2 style='color:red;'>Unable to upload image.</h2>
-		<p style='font-size:20px;'><strong>You can only upload JPEG, JPG, GIF, and PNG files with a max size of 5MB</strong></p>";
+		<p style='font-size:20px;'><strong>You can only upload JPEG, JPG, GIF, and PNG files with a max size of 5MB and max dimensions of 5000px by 5000px</strong></p>";
 		if($isVendor)
-			echo "<script type='text/javascript'>setTimeout(function(){window.location.href='".base_url()."vendor/".$temp['uname']."'},3000);</script>";
+			echo "<script type='text/javascript'>setTimeout(function(){window.location.href='".base_url().$temp['userslug']."'},3000);</script>";
 		else
 			echo "<script type='text/javascript'>setTimeout(function(){window.location.href='".base_url()."me'},3000);</script>";
 	}else{
 		if($isVendor)
-			redirect('vendor/'.$temp['uname']);
+			redirect($temp['userslug']);
 		else
 			redirect('me');
 	}
@@ -667,14 +667,14 @@ function edit_work()
 		$this->load->library('upload');
 		$this->load->library('image_lib');
 		$result = $this->memberpage_model->banner_upload($uid, $data);
-		$data = $this->fill_header();
+		$data = $this->memberpage_model->get_member_by_id($uid);
 		//echo error may be here: $result['error']
 		if(isset($result['error'])){
 			print "<h2 style='color:red;'>Unable to upload image.</h2>
-			<p style='font-size:20px;'><strong>You can only upload JPEG, JPG, GIF, and PNG files with a max size of 5MB</strong></p>";
-			print "<script type='text/javascript'>setTimeout(function(){window.location.href='".base_url()."vendor/".$data['uname']."'},3000);</script>";
+			<p style='font-size:20px;'><strong>You can only upload JPEG, JPG, GIF, and PNG files with a max size of 5MB and max dimensions of 5000px by 5000px</strong></p>";
+			print "<script type='text/javascript'>setTimeout(function(){window.location.href='".base_url().$data['userslug']."'},3000);</script>";
 		}else{
-			redirect('vendor/'.$data['uname']);
+			redirect($data['userslug']);
 		}
 	}
 		
