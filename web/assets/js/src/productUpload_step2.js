@@ -960,9 +960,10 @@ $(document).ready(function() {
             var fileList = this.files;
             var anyWindow = window.URL || window.webkitURL; 
 
+
+                var errorValues = "";
             for(var i = 0; i < fileList.length; i++){
                 var activeText= ""; 
-                var errorValues = "";
                 var primaryText = "Make Primary"; 
                 var size = fileList[i].size
                 var val = fileList[i].name;
@@ -1003,19 +1004,13 @@ $(document).ready(function() {
                 arrayUpload.push(pictureCount);
                 pictureCount++; 
             }
-            console.log(primaryPicture);
-
-            if(errorValues != ""){
-                alert("Sorry, the following files cannot be uploaded:", errorValues);
-                return false;
-            }
 
             $(".files").hide();  
             $(".files.active").each(function(){
                 $(this).removeClass('active');
             });
 
-            startUpload(pictureCount,filescnt,arrayUpload,afstart,imageName);
+            startUpload(pictureCount,filescnt,arrayUpload,afstart,imageName,errorValues);
             filescnt++;
             $('#inputList').append('<input type="file"  id="files" class="files active" name="files[]" multiple accept="image/*" required = "required"  /> ');
             $(this).remove();
@@ -1062,12 +1057,12 @@ $(document).ready(function() {
             afstart.push(imageName); 
             arrayUpload.push(pictureCount);  
             pictureCount++;
-            startUpload(pictureCount,filescnt,arrayUpload,afstart,imageName);
+            startUpload(pictureCount,filescnt,arrayUpload,afstart,imageName,"");
             filescnt++;
         }
     });
 
-    function startUpload(cnt,filescnt,arrayUpload,afstart,imageName){
+    function startUpload(cnt,filescnt,arrayUpload,afstart,imageName,errorValues){
 
         $('.counter').val(cnt); 
         $('.filescnttxt').val(filescnt); 
@@ -1088,12 +1083,17 @@ $(document).ready(function() {
                 $('.filescnt'+filescnt+' > .removepic').show(); 
                 canProceed = true; 
                 if(d.err == '1'){ 
-                    alert(d.msg);
+                    alert(d.msg, "The Following cannot be upload <br>" + errorValues);
                     $.each( arrayUpload, function( key, value ) {
                         removeThisPictures.push(value); 
                         $('#previewList'+value).remove();
                     });
-                } 
+                }
+                else{
+                    if(errorValues != ""){
+                        alert("The Following cannot be upload" ,errorValues);
+                    }
+                }
                 if(badIE == true){
                     if(d.err != '1'){
                         $.each( arrayUpload, function( key, value ) {
@@ -1108,7 +1108,7 @@ $(document).ready(function() {
                 response = request.responseText;
                 var msg = (response.toLowerCase().indexOf("1001") >= 0) ? 'Sorry, the images you are uploading are too large.' : 'Sorry, we have encountered a problem.\nPlease try again after a few minutes.';
                 
-                alert(msg);
+                alert(msg,"The Following cannot be upload",errorValues);
 
                 $.each( arrayUpload, function( key, value ) {
                     removeThisPictures.push(value); 
@@ -1208,7 +1208,7 @@ $(document).ready(function() {
 
         $(this).closest('.upload_img_div').remove();
         if(text === "Your Primary"){
-            var first_img_div = $("#list > div");
+            var first_img_div = $("#list > div:first");
             var primary_control_anchor = $("#list > div:first > .makeprimary");
             primaryPicture = 0;
             primary_control_anchor.text('Your Primary');     
