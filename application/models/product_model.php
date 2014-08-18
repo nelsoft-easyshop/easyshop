@@ -2438,7 +2438,8 @@ class product_model extends CI_Model
      *
      *  @return boolean
      */
-    function finalizeProduct($productID, $memberID){
+    public function finalizeProduct($productID, $memberID)
+    {
         $product = $this->getProductEdit($productID, $memberID);
         if($product){
             $title = $product['name'];
@@ -2474,7 +2475,8 @@ class product_model extends CI_Model
      *
      *  @return boolean
      */
-    function updateProductUploadAdditionalInfo($productID, $memberID, $billingID, $isCOD, $isMeetup){
+    public function updateProductUploadAdditionalInfo($productID, $memberID, $billingID, $isCOD, $isMeetup)
+    {
         $product = $this->getProductEdit($productID, $memberID);
         if($product){
             $query = $this->xmlmap->getFilenameID('sql/product', 'updateProductUploadAdditionalInfo');
@@ -2499,7 +2501,8 @@ class product_model extends CI_Model
      *
      *  @return array
      */
-    function getProductBillingDetails($memberID, $productID){
+    public function getProductBillingDetails($memberID, $productID)
+    {
         $query = "SELECT COALESCE(p.billing_info_id, 0) as billing_info_id, b.bank_account_name, b.bank_account_number, bank.bank_name
             FROM es_product p 
             INNER JOIN es_billing_info b
@@ -2564,7 +2567,7 @@ class product_model extends CI_Model
      *
      *  @return array
      */
-    function getProductFeed($member_id,$partners_id,$product_ids,$per_page,$page=0)
+    public function getProductFeed($member_id,$partners_id,$product_ids,$per_page,$page=0)
     { 
         $this->load->library('parser');
         
@@ -2605,7 +2608,8 @@ class product_model extends CI_Model
      *
      *  @return array
      */
-    function getNewProducts($perPage,$page=0){
+    public function getNewProducts($perPage,$page=0)
+    {
         $parseData['limit'] = implode(",", array($page,$perPage));
         $query = $this->xmlmap->getFilenameID('sql/product','getNewProducts'); 
         $query = $this->parser->parse_string($query, $parseData, true);
