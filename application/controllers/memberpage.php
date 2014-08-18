@@ -29,8 +29,6 @@ class Memberpage extends MY_Controller
     
     /**
      *  Class Index. Renders Memberpage
-     *
-     *  No return
      */
     public function index()
     {        
@@ -54,8 +52,9 @@ class Memberpage extends MY_Controller
     /**
      *  Used to edit personal data.
      *  Personal Information tab - immediately visible section (e.g. Nickname, birthday, mobile, etc.)
+     *  Returns 1 on success, 0 otherwise
      *
-     *  @return 1 on success, 0 otherwise
+     *  @return integer
      */
     public function edit_personal()
     {
@@ -109,8 +108,9 @@ class Memberpage extends MY_Controller
 
     /**
      *  Used to edit address under Personal Information Tab
+     *  Returns json encoded success, fail, or error, with error message
      *
-     *  @return json encoded success, fail, or error, with error message
+     *  @return JSON
      */
     public function edit_address()
     {
@@ -161,8 +161,9 @@ class Memberpage extends MY_Controller
 
     /**
      *  Used to edit School Information under Personal Information Tab
+     *  Returns success, fail, or error, with error message
      *
-     *  @return success, fail, or error, with error message
+     *  @return JSON
      */
     public function edit_school()
     {
@@ -201,8 +202,9 @@ class Memberpage extends MY_Controller
     /**
      *  Function used to delete address, school, and work
      *      under Personal Information Tab
+     *  Returns 1 on success, 0 otherwise
      *
-     *  @return 1 on success, 0 otherwise
+     *  @return integer
      */
     public function deletePersonalInfo()
     {
@@ -220,9 +222,9 @@ class Memberpage extends MY_Controller
     }
 
     /**
-     *  Function that fetches all data needed when displaying the Member page
+     *  Fetch all data needed when displaying the Member page
      *  
-     *  @return $data - contains majority of the data needed to display the Member page
+     *  @return array
      */
     public function fill_view()
     {
@@ -273,8 +275,8 @@ class Memberpage extends MY_Controller
 
     /**
      *  Used to upload avatar image on both Member page and Vendor page
+     *  Reloads page on success.
      *
-     *  No return. Reloads page on success.
      *  NOTE: For browsers with minimal JS capabilities, this function reloads the page
      *      and displays an error for 3 seconds, then reloads the page to the original URL,
      *      member page or vendor page
@@ -321,6 +323,8 @@ class Memberpage extends MY_Controller
 
     /**
      *  External callback function used in form_validation of CodeIgniter
+     *
+     *  @return boolean
      */
     public function external_callbacks( $postdata, $param )
     {
@@ -347,8 +351,9 @@ class Memberpage extends MY_Controller
      *  Used to edit information under Delivery Address Tab. 
      *  Able to detect changes in address necessary for updating
      *      latitude and longitude values in database, used for Google Maps.
+     *  Returns json encoded success or fail with error message
      *
-     *  @return json encoded success or fail with error message
+     *  @return JSON
      */
     public function edit_consignee_address()
     {
@@ -413,8 +418,9 @@ class Memberpage extends MY_Controller
 
     /**
      *  Used to edit work information under Personal Information Tab
+     *  Returns json encoded success, error, or fail, with error message
      *
-     *  @return json encoded success, error, or fail, with error message
+     *  @return JSON
      */
     public function edit_work()
     {
@@ -452,14 +458,11 @@ class Memberpage extends MY_Controller
         echo json_encode($data);
     }
 
-    /*******************************************************************/
-    /**********     TRANSACTIONS CONTROLLER SECTION     ****************/
-    /*******************************************************************/
-    
     /*
      *  Used to add feedback to SELLER or BUYER under Transactions Tab
+     *  Returns 1 on success, 0 otherwise
      *
-     *  @return 1 on success, 0 otherwise
+     *  @return integer
      */
     public function addFeedback(){
         if($this->input->post('order_id') && $this->input->post('feedback-field') && $this->form_validation->run('add_feedback_transaction')){
@@ -517,8 +520,9 @@ class Memberpage extends MY_Controller
      *  Forward to seller (status = 1), return to buyer (status = 2), Cash On Delivery (status = 3)
      *
      *  Also handles DragonPay and Bank Deposit response functions
+     *  Returns json encoded success or fail with error message
      *
-     *  @return json encoded success or fail with error message
+     *  @return JSON
      */
     public function transactionResponse(){
         
@@ -569,9 +573,7 @@ class Memberpage extends MY_Controller
              *  NEXT LINE OF CODE:
              *  Updates database entries and retrieve update stats and buyer info
              *  Also checks for data accuracy
-             *  @return o_success, o_message
-             *
-             *  $result['o_success'] = 1; // DEV code
+             *  Returns o_success, o_message
              */
             $result = $this->payment_model->updateTransactionStatus($data);
 
@@ -662,6 +664,8 @@ class Memberpage extends MY_Controller
     
     /**
      *  Used when adding Shipping Comments under Transactions Tab
+     *
+     *  @return JSON
      */
     public function addShippingComment()
     {
@@ -697,8 +701,9 @@ class Memberpage extends MY_Controller
     
     /**
      *  Used for the Reject Item functionality under Transactions Tab
+     *  Returns json encoded success or fail with error message
      *
-     *  @return json encoded success or fail with error message
+     *  @return JSON
      */
     public function rejectItem()
     {
@@ -736,14 +741,11 @@ class Memberpage extends MY_Controller
         echo json_encode($serverResponse);
     }
 
-    /*******************************************************************/
-    /**********     VENDOR CONTROLLER SECTION     **********************/
-    /*******************************************************************/
-    
     /**
      *  Used for subscribing/following vendors.
+     *  Returns json encoded success or fail with error message
      *
-     *  @return json encoded success or fail with error message
+     *  @return JSON
      */
     public function vendorSubscription()
     {
@@ -770,8 +772,9 @@ class Memberpage extends MY_Controller
     
     /**
      *  Used to modify store description in vendor page
+     *  Returns json encoded success or fail with error message
      *
-     *  @return json encoded success or fail with error message
+     *  @return JSON
      */
     public function vendorStoreDesc()
     {
@@ -794,8 +797,6 @@ class Memberpage extends MY_Controller
     
     /**
      *  Used for uploading banner in vendor page. 
-     *  
-     *  Behavior similar to upload_img function
      */
     public function banner_upload()
     {
@@ -824,8 +825,9 @@ class Memberpage extends MY_Controller
     /**
      *  Used for changing store URL. When userslug !== username, 
      *      user will not be able to change url again.
+     *  Returns json encoded success or fail with error message
      *
-     *  @return json encoded success or fail with error message
+     *  @return JSON
      */
     public function editUserSlug()
     {
@@ -876,15 +878,12 @@ class Memberpage extends MY_Controller
         echo json_encode($serverResponse);
     }
     
-    /*******************************************************************/
-    /**********     VERIFY CONTACT DETAILS SECTION     *****************/
-    /*******************************************************************/
-    
     /**
      *  Used to send email / SMS when verifying email or mobile
      *  NOTE: ONLY EMAIL FUNCTIONALITY IS USED AT THE MOMENT
+     *  Returns json_encoded success, fail, or data error with error message
      *
-     *  @return json_encoded success, fail, or data error with error message
+     *  @return JSON
      */
     public function verify(){
         if($this->input->post('reverify') === 'true'){
@@ -958,6 +957,8 @@ class Memberpage extends MY_Controller
     /**
      *  Used for verifying mobile verification code input by user
      *  NOTE : NOT USED AT THE MOMENT
+     *
+     *  @return integer
      */
     public function verify_mobilecode()
     {
@@ -981,6 +982,8 @@ class Memberpage extends MY_Controller
 
     /**
      *  Fetch bank info
+     *
+     *  @return JSON
      */
     public function bank_info()
     {
@@ -993,6 +996,8 @@ class Memberpage extends MY_Controller
 
     /**
      *  Fetch billing info/details of user
+     *
+     *  @return JSON
      */
     public function billing_info()
     {
@@ -1030,6 +1035,8 @@ class Memberpage extends MY_Controller
 
     /**
      *  Used to update user's billing info
+     *
+     *  @return JSON
      */
     public function billing_info_u()
     {
@@ -1104,8 +1111,9 @@ class Memberpage extends MY_Controller
      *  Used by AJAX Requests in Memberpage Dashboard
      *  Fetches product list for Active, Deleted, and Drafted Items
      *  Includes Search, Sort, And order by functionality by parsing the query
-     *  
-     *  @return json_encoded html data
+     *  Returns json_encoded html data
+     *
+     *  @return JSON
      */
     public function getMoreUserItems($who = "")
     {
@@ -1184,8 +1192,9 @@ class Memberpage extends MY_Controller
      *  Used by AJAX Requests in Transactions page
      *  Fetches on-going and completed, buy and sold, category transactions
      *  Includes searches, filters, and order by functionality
+     *  Returns json encoded html data
      *
-     *  @return json encoded html data
+     *  @return JSON
      */
     public function getMoreTransactions()
     {
