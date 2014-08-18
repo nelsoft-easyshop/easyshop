@@ -44,13 +44,16 @@ var jbImagesDialog = {
 	
 	inProgress : function() {
 		var oldIE;
+        var isSafari = Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0;
+        
 		if ($('html').is('.ie')) {
 			oldIE = true;
 		}
 
-		if (oldIE) {
+		if (oldIE || isSafari) {
 			document.getElementById('upl1').submit();
-		} else {
+		} 
+        else{
 			var origForm = document.getElementById('upl' + this.uploadCounter);
 			var filenames = origForm.children[0].children[0].files;
 			
