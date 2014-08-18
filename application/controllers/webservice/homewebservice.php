@@ -1,69 +1,62 @@
 <?php 
 
-
 class Homewebservice extends MY_Controller {
+
+    /**
+     *  Constructor call for Administrator's authentication. Authentication method is located in MY_Controller.php
+     *
+     *  
+     */
     public function __construct()
     {
         parent::__construct();
         $this->load->model('user_model');
         $this->declareEnvironment();
 
-        if($this->input->post())
-        {
-            $this->authentication($this->input->post(), $this->input->post('hash'));
+        if($this->input->get()) {
+
+            $this->authentication($this->input->get(), $this->input->get('hash'));
         }  
     }
-    
-
-    
-    function declareEnvironment(){
+  
+    /**
+     *  Environment declaration of APPPATH . "resources/page/home_files.xml"; 
+     *
+     *  
+     */
+    public function declareEnvironment() {
 
         $env = strtolower(ENVIRONMENT);
         $this->file = APPPATH . "resources/page/home_files.xml"; 
         $this->json = file_get_contents(APPPATH . "resources/page/test.json");
     }
 
+    /**
+     *  Rendering of home_cms view
+     *
+     *  @return View
+     */
     public function index() {
         $this->load->view("pages/home_cms");
     }
 
-
+    /**
+     *  Method to display the contents of the home_files.xml from the function call from Easyshop.ph.admin
+     *
+     *  @return string
+     */
     public function getContents() {
 
         $this->output
-        ->set_content_type('text/plain') // You could also use ".jpeg" which will have the full stop removed before looking in config/mimes.php
+       ->set_content_type('text/plain') 
         ->set_output(file_get_contents($this->file));
     }
 
-    public function getNode() {
-        
-        $query = simplexml_load_file(APPPATH . "resources/page/home_files.xml");   
-                
-    //posted data
-        $userid = $this->input->post("userid");
-        $nodename =  $this->input->post("nodename");
-        $hash = $this->input->post("hash");
-        $index = $this->input->post("index");
-        $innernode = $this->input->post("innernode");
-        $nodename = "text";
-        $map = simplexml_load_file(APPPATH . "resources/page/home_files.xml");
-        if($index > count($query->$nodename))
-        {
-            exit("Index out of Bounds");
-        }
-        else
-        {
-
-            $nodename1 = ($innernode == "" ? $nodename : $nodename."/".$innernode);
-
-            $query = simplexml_load_file(APPPATH . "resources/page/home_files.xml");   
-            $query = $query->xpath(' /map/'.$nodename1);
-            
-            return json_encode($query);
-            
-        }       
-    }
-
+    /**
+     *  Method used to change the contents of ProductSlide_Title node under home_files.xml
+     *
+     *  @return JSONP
+     */
     public function setProductTitle() {
 
         $jsonFile = $this->json;
@@ -77,17 +70,18 @@ class Homewebservice extends MY_Controller {
 
         $map->productSlide_title->value = $value;
 
-        if($map->asXML(APPPATH . "resources/page/home_files.xml"))
-        {
+        if($map->asXML(APPPATH . "resources/page/home_files.xml")) {
             return $this->output
                         ->set_content_type('application/json')
                         ->set_output($jsonFile);
         }
-
-
     }
 
-
+    /**
+     *  Method used to change the contents of productSideBanner node under home_files.xml
+     *
+     *  @return JSONP
+     */
     public function setProductSideBanner() {
         $jsonFile = $this->json;
         $map = simplexml_load_file(APPPATH . "resources/page/home_files.xml");
@@ -99,15 +93,18 @@ class Homewebservice extends MY_Controller {
 
         $map->productSideBanner->value= $value;
 
-        if($map->asXML(APPPATH . "resources/page/home_files.xml"))
-        {
+        if($map->asXML(APPPATH . "resources/page/home_files.xml")) {
             return $this->output
                         ->set_content_type('application/json')
                         ->set_output($jsonFile);
         }
-
     }
 
+    /**
+     *  Method used to change the contents of mainSlide node under home_files.xml
+     *
+     *  @return JSONP
+     */
     public function setMainSlide() {
         $jsonFile = $this->json;
         $map = simplexml_load_file(APPPATH . "resources/page/home_files.xml");  
@@ -123,25 +120,22 @@ class Homewebservice extends MY_Controller {
         $file = $this->file;
 
         $coordinate = ($coordinate == "") ? "0,0,0,0" : $coordinate;
-        
-        if($index > count($map->mainSlide) - 1 || $order > count($map->mainSlide) - 1 || $index < 0 || $order < 0)
-        {
+        $string = $this->getString($nodeName, $value, $type, $coordinate, $target);
+
+        if($index > count($map->mainSlide) - 1 || $order > count($map->mainSlide) - 1 || $index < 0 || $order < 0) {
             exit("error");
-        }
-        else
-        {
+        } else {
 
             $index = (int)($index); 
             
-            if($order == "")
-            {
+            if($order == "") {
                 
                 $sxe = new SimpleXMLElement(file_get_contents($file));
                 $map->mainSlide[$index]->value = $value;
                 $map->mainSlide[$index]->imagemap->coordinate = $coordinate;
                 $map->mainSlide[$index]->imagemap->target = $target;
                 
-                if($map->asXML(APPPATH . "resources/page/home_files.xml")){
+                if($map->asXML(APPPATH . "resources/page/home_files.xml")) {
                     return $this->output
                         ->set_content_type('application/json')
                         ->set_output($jsonFile);
@@ -155,37 +149,20 @@ class Homewebservice extends MY_Controller {
                     $coordinate = ($coordinate == "" ? $map->mainSlide[$index]->imagemap->coordinate : $coordinate);
                     $target = ($target == "" ? $map->mainSlide[$index]->imagemap->target : $target);
 
-$string = '    
-        <mainSlide> 
-        <value>'.$value.'</value> 
-        <type>image</type>
-        <imagemap>
-            <coordinate>'.$coordinate.'</coordinate>
-            <target>'.$target.'</target>
-        </imagemap>
-    </mainSlide>'; 
+
                     $index = ($index == 0 ? 1 : $index + 1);
                     $order = ($order == 0 ? 1 : $order + 1);
                     $this->addXml($file,$string,'/map/mainSlide['.$order.']');
                     $this->removeXML($file,$nodeName,$index);
                 } else  {
-                    if($order == 0)
-                    {
+                    if($order == 0) {
                        
                         $value = ($value == "" ? $map->mainSlide[$index]->value : $value);
                         $type = ($type == "" ? $map->mainSlide[$index]->type : $type);
                         $coordinate = ($coordinate == "" ? $map->mainSlide[$index]->imagemap->coordinate : $coordinate);
                         $target = ($target == "" ? $map->mainSlide[$index]->imagemap->target : $target);
 
-$string = '    
-        <mainSlide> 
-        <value>'.$value.'</value> 
-        <type>image</type>
-        <imagemap>
-            <coordinate>'.$coordinate.'</coordinate>
-            <target>'.$target.'</target>
-        </imagemap>
-    </mainSlide>'; 
+
                         $orindex = $index;
                         $ororder = $order;
                         $index = ($index == 0 ? 1 : $index + 1);
@@ -204,24 +181,13 @@ $string = '
                         $coordinate = ($coordinate == "" ? $map->mainSlide[$index]->imagemap->coordinate : $coordinate);
                         $target = ($target == "" ? $map->mainSlide[$index]->imagemap->target : $target);
 
-$string = '    
-        <mainSlide> 
-        <value>'.$value.'</value> 
-        <type>image</type>
-        <imagemap>
-            <coordinate>'.$coordinate.'</coordinate>
-            <target>'.$target.'</target>
-        </imagemap>
-    </mainSlide>'; 
 
                             $index = ($index == 0 ? 1 : $index + 1);
                             $this->removeXML($file,$nodeName,$index);
                             $order = ($order == 0 ? 1 : $order);
-                            $this->addXml($file,$string,'/map/mainSlide['.$order.']');
-                                          
+                            $this->addXml($file,$string,'/map/mainSlide['.$order.']');                 
                     }
                 }
-
                             return $this->output
                         ->set_content_type('application/json')
                         ->set_output($jsonFile);
@@ -229,6 +195,11 @@ $string = '
         }
     }
 
+    /**
+     *  Method used to add contents to mainSlide node under home_files.xml
+     *
+     *  
+     */
     public function addMainSlide() {
 
         $map = simplexml_load_file(APPPATH . "resources/page/home_files.xml");  
@@ -263,31 +234,19 @@ $string = '
         "xss_clean" => FALSE
         ));   
 
-        if ( ! $this->upload->do_upload("myfile"))
-        {
+        if ( ! $this->upload->do_upload("myfile")) {
             $error = array('error' => $this->upload->display_errors());
             redirect('https://easyshop.ph.admin/cms/home/?error=1', 'refresh');
 
-        }
-        else
-        {
+        } else {
             $data = array('upload_data' => $this->upload->data());
                         $file = $this->file;
-            
-        $string = '    
-        <mainSlide> 
-        <value>assets/images/mainslide/'.$filename.'.'.$file_ext.'</value> 
-        <type>image</type>
-        <imagemap>
-            <coordinate>'.$coordinate.'</coordinate>
-            <target>'.$target.'</target>
-        </imagemap>
-    </mainSlide>'; 
+        $value = "assets/images/mainslide/".$filename.'.'.$file_ext;
+        $string = $this->getString($nodeName, $value, $type, $coordinate, $target);
                 $orindex = $index;
                 $index = ($index == 0 ? 1 : $index);
 
-                if($orindex == 0)
-                {
+                if($orindex == 0) {
                     $this->addXml($file,$string,'/map/mainSlide['.$index.']');
                     $this->swapXmlForAddMainSlide($orindex, $index,$value,$type,$coordinate,$target);
                 
@@ -295,11 +254,14 @@ $string = '
                     $this->addXml($file,$string,'/map/mainSlide['.$index.']');
                 }
             redirect('https://easyshop.ph.admin/cms/home/?success=1', 'refresh');
-
         }
-            
     }
 
+    /**
+     *  Method used to add contents to productSlide node under home_files.xml
+     *
+     *  
+     */
     public function addProductSlide() {
 
         $map = simplexml_load_file(APPPATH . "resources/page/home_files.xml");  
@@ -312,38 +274,35 @@ $string = '
         $type = "product";
         $file = $this->file;
 
-
-                $file = $this->file;
-
-                $index = (int)($index); 
-                
-                $value = ($value == "" ? $map->productSlide[$index]->value : $value);
-            
-                    $string = '    
-    <productSlide> 
-        <value>'.$value.'</value> 
-        <type>product</type>
+        $index = (int)($index); 
         
-    </productSlide>'; 
-                    $orindex = $index;
-                    $index = ($index == 0 ? 1 : $index);
+        $value = ($value == "" ? $map->productSlide[$index]->value : $value);
+    
+        $string = $this->getString($nodeName, $value, $type, $coordinate, $target);
+        $orindex = $index;
+        $index = ($index == 0 ? 1 : $index);
 
-                    if($orindex == 0)
-                    {
-                        $this->addXml($file,$string,'/map/productSlide[last()]');
-                        $this->swapXmlForAddProductSlide($orindex, $index,$value);
-                        redirect('https://easyshop.ph.admin/cms/home/?success=1', 'refresh');
-                    } else {
-                        $this->addXml($file,$string,'/map/productSlide[last()]');
-                        redirect('https://easyshop.ph.admin/cms/home/?success=1', 'refresh');
+        if($orindex == 0) {
+            $this->addXml($file,$string,'/map/productSlide[last()]');
+            $this->swapXmlForAddProductSlide($orindex, $index,$value);
+            redirect('https://easyshop.ph.admin/cms/home/?success=1', 'refresh');
+        } else {
+            $this->addXml($file,$string,'/map/productSlide[last()]');
+            redirect('https://easyshop.ph.admin/cms/home/?success=1', 'refresh');
 
-                    }
+        }
                     
             
     }
 
-    public function swapXmlForAddProductSlide($orindex,$neworindex,$value)
-    {
+
+    /**
+     *  Method used to swap xml contents for addProductSlide method, user for re-ordering nodes
+     *
+     *  
+     */
+    public function swapXmlForAddProductSlide($orindex,$neworindex,$value) {
+
         $orindex = (int) $orindex;
         $neworindex = (int) $neworindex;
 
@@ -354,8 +313,13 @@ $string = '
         $map->asXML(APPPATH . "resources/page/home_files.xml");
         
     }
-    public function swapXmlForAddMainSlide($orindex,$neworindex,$value,$type,$coordinate,$target)
-    {
+
+    /**
+     *  Method used to swap xml contents for addMainSlide method, user for re-ordering nodes
+     *
+     *  
+     */
+    public function swapXmlForAddMainSlide($orindex,$neworindex,$value,$type,$coordinate,$target) {
         $orindex = (int) $orindex;
         $neworindex = (int) $neworindex;
 
@@ -372,11 +336,14 @@ $string = '
         $map->mainSlide[$orindex]->imagemap->target = $target;
 
         $map->asXML(APPPATH . "resources/page/home_files.xml");
-        
     }
 
-    public function swapXmlForSetMainSlide($orindex,$ororder, $plusin, $plusor, $value,$type,$coordinate,$target)
-    {
+    /**
+     *  Method used to swap xml contents for setMainSlide method, user for re-ordering nodes
+     *
+     *  
+     */
+    public function swapXmlForSetMainSlide($orindex,$ororder, $plusin, $plusor, $value,$type,$coordinate,$target) {
         $orindex =  (int) $orindex;
         $ororder =  (int) $ororder;
         $plusor =  (int) $plusor;
@@ -397,8 +364,12 @@ $string = '
         
     }
 
-    public function setSectionHead() 
-    {
+    /**
+     *  Method used to set xml contents for section heads under home_files.xml
+     *
+     *  @return JSONP
+     */
+    public function setSectionHead() {
         $jsonFile = $this->json;
         $index = $this->input->get("index");
         $userid =  $this->input->get("userid");
@@ -411,12 +382,9 @@ $string = '
 
         $map = simplexml_load_file(APPPATH . "resources/page/home_files.xml");
 
-        if($index > count($map->section) - 1 || $index < 0)
-        {
+        if($index > count($map->section) - 1 || $index < 0) {
             exit('Index out of bounds');
-        }
-        else
-        {
+        } else {
             $index = (int)$index;
             $type = $type == "" ? $map->section[$index]->type : $type;
             $value = $value == "" ? $map->section[$index]->value : $value;
@@ -430,19 +398,19 @@ $string = '
             $map->section[$index]->title = $title;
             $map->section[$index]->layout = $layout;
 
-            if($map->asXML(APPPATH . "resources/page/home_files.xml"))
-            {
+            if($map->asXML(APPPATH . "resources/page/home_files.xml")) {
                 return $this->output
                         ->set_content_type('application/json')
                         ->set_output($jsonFile);
             }
-
         }
-    
-
-        
     }
 
+    /**
+     *  Method used to set xml contents for product_panel nodes under home_files.xml
+     *
+     *  @return JSONP
+     */
     public function setSectionProduct()
     {
         $jsonFile = $this->json;
@@ -458,24 +426,22 @@ $string = '
         $index = (int)$index;
         $productindex = (int)$productindex;
 
-
-
-        
-    
         $map->section[$index]->product_panel[$productindex]->value = $value;
         $map->section[$index]->product_panel[$productindex]->type = $type;
-            if($map->asXML(APPPATH . "resources/page/home_files.xml"))
-            {
-                return $this->output
-                    ->set_content_type('application/json')
-                    ->set_output($jsonFile);
-            }
 
-
+        if($map->asXML(APPPATH . "resources/page/home_files.xml")) {
+            return $this->output
+                ->set_content_type('application/json')
+                ->set_output($jsonFile);
+        }
     }
 
-    public function setSectionMainPanel()
-    {
+    /**
+     *  Method used to set xml contents for product_panel_main nodes under home_files.xml
+     *
+     *  @return JSONP
+     */
+    public function setSectionMainPanel(){
         $file = $this->file;
         $jsonFile = $this->json;
 
@@ -494,31 +460,14 @@ $string = '
         $index = (int)$index;
         $productindex = (int)$productindex;
 
-/*          if($index > count($map->section) - 1 || $productindex > count($map->section[$index]->product_panel_main) - 1 || $index < 0 || $productindex < 0)
-                {
-                            return $this->output
-                            ->set_content_type('application/json')
-                            ->set_output(json_encode("Index out of bounds"));
-                }
-            else
-            {*/
-                if(strtolower($type) == "image")
-                {
-                    if($coordinate != "" && $target != "")
-                    {
+
+                if(strtolower($type) == "image") {
+                    if($coordinate != "" && $target != "") {
                         
                         $coordinate = $coordinate == "" ? "0,0,0,0" : $coordinate;
                         $target = $target == "" ? "" : $target;
-    $q = '
-                                                                                                                                                                                                <product_panel_main>
-            <value>'.$value.'</value> 
-            <type>'.$type.'</type>
-            <imagemap>
-                <coordinate>'.$coordinate.'</coordinate>
-                <target>'.$target.'</target>
-            </imagemap>
-        </product_panel_main>'; 
 
+                        $q = $this->getString($nodeName,$value,$type,$coordinate,$target);
                         $index = ($index == 0 ? 1 : $index + 1);
                         $productindex = ($productindex == 0 ? 1 : $productindex + 1);
                         $this->addXmlChild($file,$q,'/map/section['.$index.']/product_panel_main['.$productindex.']');
@@ -527,9 +476,7 @@ $string = '
                                     ->set_content_type('application/json')
                                     ->set_output($jsonFile);
                             
-                    }
-                    else
-                    {
+                    } else {
                             return $this->output
                             ->set_content_type('application/json')
                             ->set_output(json_encode("error"));
@@ -537,36 +484,33 @@ $string = '
                         
                 } else {    
                         
-                    if($coordinate != "" && $target != "")
-                    {
+                    if($coordinate != "" && $target != "") {
 
                         return $this->output
-                    ->set_content_type('application/json')
-                    ->set_output(json_encode("error"));
+                        ->set_content_type('application/json')
+                        ->set_output(json_encode("error"));
                     } else {
                         $map->section[$index]->product_panel_main[$productindex]->value = $value;
                         $map->section[$index]->product_panel_main[$productindex]->type = $type;
-                        if($map->asXML(APPPATH . "resources/page/home_files.xml"))
-                        {
+                        if($map->asXML(APPPATH . "resources/page/home_files.xml")) {
                             return $this->output
                                         ->set_content_type('application/json')
                                         ->set_output($jsonFile);
-                        }
-                        else
-                        {
+                        } else {
                             return $this->output
                                 ->set_content_type('application/json')
                                 ->set_output(json_encode("error"));
                         }
                     }
-
                 }
-             
-            //}
     }
 
-    public function addSectionMainPanel()
-    {
+    /**
+     *  Method used to add xml contents for product_panel_main nodes under home_files.xml
+     *
+     *  
+     */
+    public function addSectionMainPanel() {
 
         $file = $this->file;
         $map = simplexml_load_file(APPPATH . "resources/page/home_files.xml");   
@@ -585,48 +529,31 @@ $string = '
         $index = (int)$index;
         $productindex = (int)$productindex;
 
-            if($index > count($map->section) || $productindex > count($map->section[$index]->product_panel_main) || $index < 0 || $productindex < 0)
-            {
+            if($index > count($map->section) || $productindex > count($map->section[$index]->product_panel_main) || $index < 0 || $productindex < 0) {
                 exit("Index out of bounds");
-            }
-            else
-            {
-                if(strtolower($type) == "image" && isset($coordinate) && isset($target))
-                {           
+            } else {
+                if(strtolower($type) == "image" && isset($coordinate) && isset($target)) {           
                     $coordinate = $coordinate == "" ? "0,0,0,0" : $coordinate;
                     $target = $target == "" ? "" : $target;
-                    if($productindex == 0)
-                    {
-                        if(isset($map->section[$index]->product_panel_main[$productindex]->coordinate) && isset($map->section[$index]->product_panel_main[$productindex]->target))
-                        {   
+
+                    if($productindex == 0) {
+
+                        if(isset($map->section[$index]->product_panel_main[$productindex]->coordinate) && isset($map->section[$index]->product_panel_main[$productindex]->target)) {   
                         
                             $newindex = ($index == 0 ? 1 : $index);
                                 $newprodindex = ($productindex == 0 ? 1 : $productindex);
-                                $string = '    
-      <product_panel_main>
-            <value>'.$value.'</value> 
-            <type>'.$type.'</type>
-            <imagemap>
-                <coordinate>'.$coordinate.'</coordinate>
-                <target>'.$target.'</target>
-            </imagemap>
-        </product_panel_main>'; 
+
+                                    $string = $this->getString($nodeName, $value, $type, $coordinate, $target);
+
                                  $this->addXmlChild($file,$string,'/map/section['.$newindex.']/product_panel_main['.$newprodindex.']');
                                  $this->swapXmlForAddSectionMainSlide_notimage2($newprodindex,$newindex,$index,$productindex,$value,$type,$coordinate,$target);
                                  redirect('https://easyshop.ph.admin/cms/home/?success=1', 'refresh');
 
                         } else {
                             
-        $string = '                 
-    <product_panel_main>
-            <value>asd</value> 
-            <type>asd</type>
-            <imagemap>
-                <coordinate>asd</coordinate>
-                <target>asd</target>
-            </imagemap>
-        </product_panel_main>'; 
 
+
+                            $string = $this->getString($nodeName, $value, $type, $coordinate, $target);
                             $newindex = ($index == 0 ? 1 : $index);
                             $newprodindex = ($productindex == 0 ? 1 : $productindex);
                     
@@ -640,15 +567,7 @@ $string = '
                         $index = ($index == 0 ? 1 : $index + 1);
                         $productindex = ($productindex == 0 ? 1 : $productindex);
                             
-                        $string = '    
-        <product_panel_main>
-           <value>'.$value.'</value> 
-            <type>'.$type.'</type>
-            <imagemap>
-                <coordinate>'.$coordinate.'</coordinate>
-                <target>'.$target.'</target>
-            </imagemap>
-        </product_panel_main>'; 
+                        $string = $this->getString($nodeName, $value, $type, $coordinate, $target);
 
                         $index = ($index == 0 ? 1 : $index);
                         $productindex = ($productindex == 0 ? 1 : $productindex);
@@ -660,40 +579,30 @@ $string = '
                             }       
                 }
                 
-                else if(strtolower($type) != "image")
-                {   
+                else if(strtolower($type) != "image") {   
                         
-                    if($coordinate != "" || $target != "")
-                    {
+                    if($coordinate != "" || $target != "") {
                         echo "Only Image";
                     } else {    
 
-                        if($productindex == 0)
-                        {
-                            if(!isset($map->section[$index]->product_panel_main[$productindex]->coordinate) && !isset($map->section[$index]->product_panel_main[$productindex]->target))
-                            {
-                                
-                                $newindex = ($index == 0 ? 1 : $index);
+                        if($productindex == 0) {
+                            if(!isset($map->section[$index]->product_panel_main[$productindex]->coordinate) && !isset($map->section[$index]->product_panel_main[$productindex]->target)) {
+
+                                $newindex = ($index == 0 ? 1 : $index + 1);
                                 $newprodindex = ($productindex == 0 ? 1 : $productindex);
-                                $string = '    
-            <product_panel_main>
-                <value>'.$value.'</value> 
-                <type>'.$type.'</type>
-            </product_panel_main>'; 
-                                $this->addXmlChild($file,$string,'/map/section['.$newindex.']/product_panel_main['.$newprodindex.']');          
+
+                                $string = $this->getString($nodeName, $value, $type, "", "");
+                                $this->addXmlChild($file,$string,'/map/section['.$newindex.']/product_panel_main['.$newprodindex.']');     
+                                $this->swapXmlForAddSectionMainSlide_notimage1($newprodindex,$newindex,$index,$productindex,$value,$type);     
                                 redirect('https://easyshop.ph.admin/cms/home/?success=1', 'refresh');
 
                             } else {
-                            
+
                                 $newindex = ($index == 0 ? 1 : $index);
                                 $newprodindex = ($productindex == 0 ? 1 : $productindex);
-                                $string = '    
-                                <product_panel_main>
-                                   <value>'.$value.'</value> 
-                                    <type>'.$type.'</type>
-                                    <coordinate>'.$coordinate.'</coordinate>
-                                    <target>'.$target.'</target>
-                                </product_panel_main>'; 
+
+                                $string = $this->getString($nodeName, $value, $type, $coordinate, $target);
+
                                 $this->addXmlChild($file,$string,'/map/section['.$newindex.']/product_panel_main['.$newprodindex.']');
                                 $this->swapXmlForAddSectionMainSlide_notimage2($newprodindex,$newindex,$index,$productindex,$value,$type,$coordinate,$target);
                                 redirect('https://easyshop.ph.admin/cms/home/?success=1', 'refresh');
@@ -701,29 +610,33 @@ $string = '
                             }
                             
                         } else {
-                            
-                                $newindex = ($index == 0 ? 1 : $index);
+
+                                $newindex = ($index == 0 ? 1 : $index + 1);
                                 $newprodindex = ($productindex == 0 ? 1 : $productindex);
-                                $string = '    
-            <product_panel_main>
-           <value>'.$value.'</value> 
-            <type>'.$type.'</type>
-        </product_panel_main>'; 
+                                $string = $this->getString($nodeName, $value, $type, "", "");
                                 $this->addXmlChild($file,$string,'/map/section['.$newindex.']/product_panel_main['.$newprodindex.']');
                                 redirect('https://easyshop.ph.admin/cms/home/?success=1', 'refresh');
 
                         }       
-                    
                     }
-
                 }
-
             }
-
     }
 
-    public function swapXmlForAddSectionMainSlide_image($newprodindex,$newindex,$index,$productindex,$value,$type,$coordinate,$target)
-    {
+
+    /**
+     *  Method used to swap xml contents for product_panel_main nodes for image types under home_files.xml
+     *
+     *  @param string $newprodindex
+     *  @param string $newindex
+     *  @param string $index
+     *  @param string $productindex  
+     *  @param string $value  
+     *  @param string $type  
+     *  @param string $coordinate  
+     *  @param string $target  
+     */
+    public function swapXmlForAddSectionMainSlide_image($newprodindex,$newindex,$index,$productindex,$value,$type,$coordinate,$target) {
 
         $file = $this->file;
         $newprodindex = (int) $newprodindex;
@@ -744,8 +657,20 @@ $string = '
         $map->asXML(APPPATH . "resources/page/home_files.xml");
         
     }
-    public function swapXmlForAddSectionMainSlide_notimage2($newprodindex,$newindex,$index,$productindex,$value,$type,$coordinate,$target)
-    {
+
+    /**
+     *  Method used to swap xml contents for product_panel_main nodes for not image types under home_files.xml
+     *
+     *  @param string $newprodindex
+     *  @param string $newindex
+     *  @param string $index
+     *  @param string $productindex  
+     *  @param string $value  
+     *  @param string $type  
+     *  @param string $coordinate  
+     *  @param string $target  
+     */
+    public function swapXmlForAddSectionMainSlide_notimage2($newprodindex,$newindex,$index,$productindex,$value,$type,$coordinate,$target) {
 
         $file = $this->file;
         $newprodindex = (int) $newprodindex;
@@ -766,8 +691,17 @@ $string = '
         $map->asXML(APPPATH . "resources/page/home_files.xml");
         
     }
-    public function swapXmlForAddSectionMainSlide_notimage1($newprodindex,$newindex,$index,$productindex,$value,$type)
-    {
+
+    /**
+     *  Method used to swap xml contents for product_panel_main nodes for image types under home_files.xml
+     *
+     *  @param string $newprodindex
+     *  @param string $newindex
+     *  @param string $index
+     *  @param string $value  
+     *  @param string $type  
+     */
+    public function swapXmlForAddSectionMainSlide_notimage1($newprodindex,$newindex,$index,$productindex,$value,$type) {
     
         $newprodindex = (int) $newprodindex;
         $newindex = (int) $newindex;
@@ -783,33 +717,44 @@ $string = '
         $map->asXML(APPPATH . "resources/page/home_files.xml");
         
     }
-    public function removeXMLForSetSectionMainPanel($file,$nodeName,$index,$productindex)
-    {
+
+    /**
+     *  Method used to remove xml contents for product_panel_main nodes under home_files.xml, user for re-ordering
+     *
+     *  @param string $file
+     *  @param string $nodeName
+     *  @param string $index
+     *  @param string $productindex  
+     *  @return boolean true/false
+     */
+    public function removeXMLForSetSectionMainPanel($file,$nodeName,$index,$productindex) {
         
         $index = (int)$index;
         $productindex = (int)$productindex;
 
         $referred = "/map/section[".$index.']/product_panel_main['.$productindex.']';
         $doc = new SimpleXMLElement(file_get_contents($file));
-        if($target = current($doc->xpath($referred)))
-        {
-        $dom = dom_import_simplexml($target);
+        if($target = current($doc->xpath($referred))) {
+            $dom = dom_import_simplexml($target);
 
-        
-          $dom->parentNode->removeChild($dom);
-          if($doc->asXml($file))
-            return true;
-          else
-            return false;
+            $dom->parentNode->removeChild($dom);
+            if($doc->asXml($file)) {
+              return true;              
+            } else {
+                return false;
+            }
+
         } else {
                 return false;
             }
-            
-        
-        
     }
-    public function setProductSlide()
-    {
+
+    /**
+     *  Method used to set xml contents for product_slide nodes for image types under home_files.xml
+     *
+     *  @return JSONP
+     */
+    public function setProductSlide() {
         $jsonFile = $this->json;
         $map = simplexml_load_file(APPPATH . "resources/page/home_files.xml");   
 
@@ -823,34 +768,30 @@ $string = '
         $nodeName =  $this->input->get("nodename");
         $index = (int)$index;
 
-            if($index > count($map->productSlide) - 1    || $order > count($map->productSlide) - 1 || $index < 0 || $order < 0)
-            {
+        $string = $this->getString($nodeName, $value, $type, "", "");
+
+            if($index > count($map->productSlide) - 1    || $order > count($map->productSlide) - 1 || $index < 0 || $order < 0) {
                 exit("Index out of bounds");
             }
-            else
-            {
+            else {
                 $file = $this->file;
                 $value = ($value == "" ? $map->productSlide[$index]->value : $value);
         
-                if($order == "")
-                {
+                if($order == "") {
                     
-                    $map->productSlide[$index]->value = $value;
-                    $type->productSlide[$index]->type = $type;
-                    if($map->asXML(APPPATH . "resources/page/home_files.xml"))
-                        return true;
-                    else
-                        return false;
+                        $map->productSlide[$index]->value = $value;
+                        $type->productSlide[$index]->type = $type;
+                        if($map->asXML(APPPATH . "resources/page/home_files.xml")) {
+                            return true;
+                        } else {
+                            return false;
+                        }
 
                     } else {
                          
                         if($index <= $order) {
                         
-                           $string = '    
-           <productSlide>
-        <value>'.$value.'</value> 
-        <type>'.$type.'</type>
-   </productSlide>'; 
+
 
                             $index = ($index == 0 ? 1 : $index + 1);
                             $order = ($order == 0 ? 1 : $order + 1);
@@ -858,15 +799,10 @@ $string = '
                             $this->removeXML($file,$nodeName,$index);
                         } else {
 
-                            if($order == 0)
-                            {
+                            if($order == 0) {
                                  $value = ($value == "" ? $map->productSlide[$index]->value : $value);
                             
-                                $string = '    
-            <productSlide>
-        <value>'.$value.'</value> 
-        <type>'.$type.'</type>
-   </productSlide>'; 
+
                                 $orindex = $index;
                                 $ororder = $order;
                                 $index = ($index == 0 ? 1 : $index + 1);
@@ -878,12 +814,7 @@ $string = '
                             } else {
                                  $value = ($value == "" ? $map->productSlide[$index]->value : $value);
                     
-                                $string = '
-            <productSlide>
-        <value>'.$value.'</value> 
-        <type>'.$type.'</type>
-   </productSlide>';  
-                             
+        
                                 $index = ($index == 0 ? 1 : $index + 1);
                                 $this->removeXML($file,$nodeName,$index);
                                 $order = ($order == 0 ? 1 : $order);
@@ -891,39 +822,46 @@ $string = '
                              
                             }
                         }
-
-
                     }
 
             return $this->output
                         ->set_content_type('application/json')
                         ->set_output($jsonFile);
             }
-
     }
 
+
+    /**
+     *  Method used to swap xml contents for productSlide nodes under home_files.xml
+     *
+     *  @param string $orindex
+     *  @param string $ororder
+     *  @param string $value  
+     */
     public function swapXmlForSetProductSlide($orindex,$ororder,$value)
     {
     
         $orindex = (int) $orindex;
         $ororder = (int) $ororder;
-        if($orindex > 1)
-            $orindex = $orindex - 1;
+        if($orindex > 1) {
+            $orindex = $orindex - 1;            
+        }
 
         $map = simplexml_load_file(APPPATH . "resources/page/home_files.xml");
-
         $map->productSlide[$orindex]->value = $map->productSlide[$ororder]->value;
-
         $map->productSlide[$ororder]->value = $value;
-
         $map->asXML(APPPATH . "resources/page/home_files.xml");
         
     }
 
+    /**
+     *  Method used to add xml contents for product_panel nodes home_files.xml
+     *
+     *  
+     */
     public function addSectionProduct()
     {
-        //print_r($this->input->post());
-        //echo "asd";
+
         $file = $this->file;
         $index = $this->input->post("index");
         $userid = $this->input->post("userid");
@@ -932,42 +870,33 @@ $string = '
         $type = strtolower($this->input->post("type"));
         $value =  $this->input->post("value");
         
-        echo "<br/>productindex".$productindex;
-        echo "<br/>value".$value;
-
         $type = ($type == "") ? "product" : $type;
 
         $index = (int)$index;
         $productindex = (int)$productindex;
-
+        $nodeName = "product_panel";
         $map = simplexml_load_file(APPPATH . "resources/page/home_files.xml");   
         
-        if($index > count($map->section) - 1 || $productindex > count($map->section[$index]->product_panel) - 1 || $index < 0 || $productindex < 0)
-        {
+        if($index > count($map->section) - 1 || $productindex > count($map->section[$index]->product_panel) - 1 || $index < 0 || $productindex < 0) {
             redirect('https://easyshop.ph.admin/cms/home/?error=1', 'refresh');
-        }
-        else
-        {
+        } else {
             $node = $map->section[$index]->product_panel[$productindex];
     
-              $string = '   <product_panel>
-            <value>'.$value.'</value> 
-            <type>'.$type.'</type>
-        </product_panel>'; 
+            $string = $this->getString($nodeName,$value,$type, "", "");
 
             
             $newprodindex = ($productindex == 0 ? 1 : $productindex);
             $newindex = ($index == 0 ? 1 : $index);
             
             
-                if($index > 0)
-                {
+                if($index > 0) {
 
                     $newindex += 1;
                     $this->addXmlChild($file,$string,'/map/section['.$newindex.']/product_panel['.$newprodindex.']');
                     if($productindex == 0)
                         $this->swapXmlForSectionProduct($newprodindex,$newindex,$value,$type,$index,$productindex);
                         redirect('https://easyshop.ph.admin/cms/home/?success=1', 'refresh');
+
                 } else {
                     $this->addXmlChild($file,$string,'/map/section['.$newindex.']/product_panel['.$newprodindex.']');
                     $this->swapXmlForSectionProduct($newprodindex,$newindex,$value,$type,$index,$productindex);
@@ -977,8 +906,17 @@ $string = '
 
     }
 
-    function swapXmlForSectionProduct($newprodindex,$newindex,$value,$type,$index,$productindex)
-    {
+    /**
+     *  Method used to swap xml contents for product_panel nodes under home_files.xml, user for re-ordering
+     *
+     *  @param string $newprodindex
+     *  @param string $newindex
+     *  @param string $value
+     *  @param string $type
+     *  @param string $index
+     *  @param string $productindex
+     */
+    function swapXmlForSectionProduct($newprodindex,$newindex,$value,$type,$index,$productindex) {
         $map = simplexml_load_file(APPPATH . "resources/page/home_files.xml");
             
         $map->section[$index]->product_panel[$newprodindex]->value = $map->section[$index]->product_panel[$productindex]->value;
@@ -990,8 +928,14 @@ $string = '
         
     }
 
-    function addXmlChild($file,$xml_string,$target_node,$move = true)
-    {
+    /**
+     *  Method used to add xml contents for child nodes under home_files.xml
+     *
+     *  @param string $file
+     *  @param string $xml_string
+     *  @param boolean $move
+     */
+    function addXmlChild($file,$xml_string,$target_node,$move = true) {
         
         
         $sxe = new SimpleXMLElement(file_get_contents($file));
@@ -999,16 +943,22 @@ $string = '
         $target = current($sxe->xpath($target_node));
 
         $this->simplexml_insert_after_child($insert, $target,$move);
-         if($sxe->asXml($file))
-         {
+        if($sxe->asXml($file)) {
             return $this->output
                     ->set_content_type('application/json')
                     ->set_output(json_encode("success"));
-         }
+        }
 
     }
-    function addXml($file,$xml_string,$target_node,$move = true)
-    {
+
+    /**
+     *  Method used to add xml contents for parent nodes under home_files.xml
+     *
+     *  @param string $file
+     *  @param string $xml_string
+     *  @param boolean $move
+     */
+    function addXml($file,$xml_string,$target_node,$move = true) {
         
         
         $sxe = new SimpleXMLElement(file_get_contents($file));
@@ -1016,15 +966,21 @@ $string = '
         $target = current($sxe->xpath($target_node));
 
         $this->simplexml_insert_after($insert, $target,$move);
-         if($sxe->asXml($file))
-         {
+        if($sxe->asXml($file)) {
             return $this->output
                     ->set_content_type('application/json')
                     ->set_output(json_encode("success"));
-         }
+        }
     }
-    function simplexml_insert_after_child(SimpleXMLElement $insert, SimpleXMLElement $target,$move = true)
-    {
+
+    /**
+     *  Method used to add xml contents for child nodes under home_files.xml
+     *
+     *  @param SimpleXmlElement $insert
+     *  @param SimpleXmlElement $target
+     *  @param boolean $move 
+     */
+    function simplexml_insert_after_child(SimpleXMLElement $insert, SimpleXMLElement $target,$move = true) {
         $target_dom = dom_import_simplexml($target);
 
         $document = $target_dom->ownerDocument;
@@ -1036,7 +992,8 @@ $string = '
             if ($target_dom->nextSibling) {
                 $result =  $parentNode->insertBefore($insert_dom, $target_dom->nextSibling);
                 $parentNode->insertBefore($document->createTextNode("\n"), $result);
-
+                $parentNode->insertBefore($document->createTextNode("\n"), $result);
+                $parentNode->insertBefore($document->createTextNode("\t\t"), $result);
             } else {
                 $result =  $target_dom->parentNode->appendChild($insert_dom);
             }
@@ -1047,8 +1004,15 @@ $string = '
         }
         return $result;
     }
-    function simplexml_insert_after(SimpleXMLElement $insert, SimpleXMLElement $target,$move = true)
-    {
+
+    /**
+     *  Method used to add xml contents for parent nodes under home_files.xml
+     *
+     *  @param SimpleXmlElement $insert
+     *  @param SimpleXmlElement $target
+     *  @param boolean $move
+     */
+    function simplexml_insert_after(SimpleXMLElement $insert, SimpleXMLElement $target,$move = true) {
         $target_dom = dom_import_simplexml($target);
 
         $document = $target_dom->ownerDocument;
@@ -1060,7 +1024,8 @@ $string = '
             if ($target_dom->nextSibling) {
                 $result =  $parentNode->insertBefore($insert_dom, $target_dom->nextSibling);
                 $parentNode->insertBefore($document->createTextNode("\n"), $result);
-
+                $parentNode->insertBefore($document->createTextNode("\n"), $result);
+                $parentNode->insertBefore($document->createTextNode("\t\t"), $result);
 
             } else {
                 $result =  $target_dom->parentNode->appendChild($insert_dom);
@@ -1073,55 +1038,57 @@ $string = '
         return $result;
     }
     
-    public function removeXML($file,$nodeName,$index)
-    {
+    /**
+     *  Method used to remove xml nodes under home_files.xml
+     *
+     *  @return JSON
+     */
+    public function removeXML($file,$nodeName,$index) {
     
         $referred = "//".$nodeName.'['.$index.']';
         $doc = new SimpleXMLElement(file_get_contents($file));
         if($target = current($doc->xpath($referred)))
         {
-        $dom = dom_import_simplexml($target);
+            $dom = dom_import_simplexml($target);
 
-        
-          $dom->parentNode->removeChild($dom);
-          $doc->asXml($file);
+            $dom->parentNode->removeChild($dom);
+            $doc->asXml($file);
 
 
         } else {
                 return $this->output
                     ->set_content_type('application/json')
                     ->set_output(json_encode("Parameter out of Bounds"));
-            }
+        }
         
     }
-    public function addType()
-    {
+
+    /**
+     *  Method used to add xml contents for typeNodes under home_files.xml
+     *
+     *  @return JSONP
+     */
+    public function addType() {
+        $jsonFile = $this->json;
         $file = $this->file;
-        $userid = $this->input->post("userid");
-        $value =  $this->input->post("value");
+        $userid = $this->input->get("userid");
+        $value =  $this->input->get("value");
+        $string = $this->getString("typeNode",$value, "", "", "");
 
-$string = '
-    <typeNode>
-        <value>'.$value.'</value>
-    </typeNode >
-
-';
         
-        if($this->addXml($file,$string,'/map/typeNode[last()]'))
-        {
-            return $this->output
-                    ->set_content_type('application/json')
-                    ->set_output(json_encode("success"));
-        }
-        else
-        {
-                        return $this->output
-                    ->set_content_type('application/json')
-                    ->set_output(json_encode("error"));
-        }
+        if($this->addXml($file,$string,'/map/typeNode[last()]')) {
+                return $this->output
+                            ->set_content_type('application/json')
+                            ->set_output($jsonFile);
+        } 
     }
-    public function settext() 
-    {
+
+    /**
+     *  Method used to add xml contents for child nodes under home_files.xml
+     *
+     *  @return JSONP
+     */
+    public function settext() {
 
         $jsonFile = $this->json;
         $userid = $this->input->get("userid");
@@ -1131,12 +1098,78 @@ $string = '
             $map = simplexml_load_file(APPPATH . "resources/page/home_files.xml");
             $value = $value == "" ? $map->text->value : $value;
             $map->text->value= $value;
-            if($map->asXML(APPPATH . "resources/page/home_files.xml"))
-            {
+            if($map->asXML(APPPATH . "resources/page/home_files.xml")) {
                 
                 return $this->output
                             ->set_content_type('application/json')
                             ->set_output($jsonFile);
             }
+    }
+
+    /**
+     *  Method used to return the needed strings in adding/settings values of xml nodes. The indentions of the strings are taken 'as-is'
+     *
+     *  @return string
+     */
+    public function getString($nodeName, $value, $type, $coordinate, $target) {
+        if($nodeName == "product_panel" ) {
+            $string = '<product_panel>
+                <value>'.$value.'</value> 
+                <type>'.$type.'</type>
+            </product_panel>'; 
+        }
+        if($nodeName == "mainSlide") {
+
+ $string = '    
+        <mainSlide> 
+        <value>'.$value.'</value> 
+        <type>image</type>
+        <imagemap>
+            <coordinate>'.$coordinate.'</coordinate>
+            <target>'.$target.'</target>
+        </imagemap>
+    </mainSlide>';   
+
+        }
+        if($nodeName == "product_panel_main") {
+
+            if(strtolower($type) != "image") {
+
+            $string = '    
+                        <product_panel_main>
+                <value>'.$value.'</value> 
+                <type>'.$type.'</type>
+            </product_panel_main>'; 
+
+            } else {
+
+$string = '<product_panel_main>
+            <value>'.$value.'</value> 
+            <type>'.$type.'</type>
+            <imagemap>
+                <coordinate>'.$coordinate.'</coordinate>
+                <target>'.$target.'</target>
+            </imagemap>
+        </product_panel_main>'; 
+
+            }
+
+        }
+        if($nodeName == "productSlide") {
+
+            $string = '    
+    <productSlide>
+        <value>'.$value.'</value> 
+        <type>'.$type.'</type>
+   </productSlide>'; 
+
+        }
+        if($nodeName == "typeNode") {
+
+           $string = '<typeNode>
+        <value>'.$value.'</value>
+    </typeNode >'; 
+        }
+            return $string;
     }
 }
