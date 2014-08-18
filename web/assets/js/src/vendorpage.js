@@ -56,17 +56,17 @@ $(function(){
 	
 	$('input.img_file_input').on('change',function(){
 		var oldIE;
-		if ($('html').is('.ie6, .ie7, .ie8, .ie9')) {
+        var isSafari = Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0;
+        
+		if($('html').is('.ie6, .ie7, .ie8, .ie9')){
 			oldIE = true;
 		}
 
-		if (oldIE) {
-			console.log(memconf.form);
+		if(oldIE || isSafari){
 			memconf.form.submit();
-			console.log('old');
-		} else {
+		} 
+        else{
 			imageprev(this);
-			console.log('new');
 		}
 	});
 	

@@ -36,7 +36,7 @@
                     echo form_open_multipart('memberpage/banner_upload', $attr);
                 ?>
                     
-                    <input type="file" class="img_file_input" style="display:none" id="bannerupload" accept="image/*" name="userfile"/>
+                    <input type="file" class="img_file_input" style="visibility:hidden;height:0px;width:0px;position:absolute;" id="bannerupload" accept="image/*" name="userfile"/>
                     <input type='hidden' name='x' value='0' class='image_x'>
                     <input type='hidden' name='y' value='0' class='image_y'>
                     <input type='hidden' name='w' value='0' class='image_w'>
@@ -65,7 +65,7 @@
                         $attr = array('id'=>'avatar_form','data-tag'=>'avatar');
                         echo form_open_multipart('memberpage/upload_img', $attr);
                     ?>
-                        <input type="file" class="img_file_input" style="display:none" id="avatarupload" accept="image/*" name="userfile"/>
+                        <input type="file" class="img_file_input" style="visibility:hidden;height:0px;width:0px;position:absolute;" id="avatarupload" accept="image/*" name="userfile"/>
                         <input type='hidden' name='x' value='0' class='image_x'>
                         <input type='hidden' name='y' value='0' class='image_y'>
                         <input type='hidden' name='w' value='0' class='image_w'>

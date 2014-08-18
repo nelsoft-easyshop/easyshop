@@ -77,7 +77,7 @@
                             </span>
                         </div>
                         <?php echo form_open_multipart('memberpage/upload_img', 'id="form_image"');?>
-                        <input type="file" style="display:none" id="imgupload" accept="image/*" name="userfile"/>
+                        <input type="file" style="visibility:hidden; height:0px; width:0px; position:absolute;" id="imgupload" accept="image/*" name="userfile"/>
                         <input type='hidden' name='x' value='0' id='image_x'>
                         <input type='hidden' name='y' value='0' id='image_y'>
                         <input type='hidden' name='w' value='0' id='image_w'>
