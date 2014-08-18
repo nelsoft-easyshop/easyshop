@@ -143,6 +143,9 @@ class user_model extends CI_Model {
             if($r['imgurl'] === ""){
                 $row[$k]['imgurl'] = "assets/user/default/60x60.png";
             }
+            else{
+                $row[$k]['imgurl'] = $r['imgurl'] . "/60x60.png";
+            }
         }
         
         return $row;
