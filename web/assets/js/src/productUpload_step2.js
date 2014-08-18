@@ -1,74 +1,6 @@
-
-$(document).ready(function(){
-    $("#range_1").ionRangeSlider({
-        min: 0,
-        max: 100,
-        type: 'single',
-        step: 1,
-        postfix: "%",
-        prettify: true,
-        hasGrid: true,
-        onChange: function (obj) {        // callback is called after slider load and update
-            var value = obj.fromNumber;
-            $("#slider_val").val(value);
-            get_discPrice();
-        }
-    });
-    
-     // if keyword change. counter will change also either increase or decrease until reach its limit..
-    updateCountdown();
-    $('#prod_keyword').change(updateCountdown);
-    $('#prod_keyword').keyup(updateCountdown); 
-
-    // search brand 
-    $('#brand_sch').focus(function() {
-        $('#brand_search_drop_content').show();
-        $(document).bind('focusin.brand_sch_drop_content click.brand_sch_drop_content',function(e) {
-          if ($(e.target).closest('#brand_search_drop_content, #brand_sch').length) return;
-          $('#brand_search_drop_content').hide();
-      });
-    });
-    $('#brand_search_drop_content').hide();
-});
- 
-// TINYMCE
-$(function(){
-
-    tinymce.init({ 
-        mode : "specific_textareas",
-        editor_selector : "mceEditor", 
-        menubar: "table format view insert edit",
-        statusbar: false, 
-        height: 300,
-        plugins: ["lists link preview","table jbimages fullscreen","textcolor" ],  
-        toolbar: "insertfile undo redo | sizeselect | fontselect  fontsizeselect styleselect  forecolor backcolor | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | jbimages | image_advtab: true ",  
-        relative_urls: false,
-        setup: function(editor) {
-            editor.on('change', function(e) {
-                $('#prod_description').val(tinyMCE.get('prod_description').getContent());
-                $('#prod_description').trigger( "change" );
-            });
-        }
-    });
-
-    tinymce.init({
-        mode : "specific_textareas",
-        editor_selector : "mceEditor_attr", 
-        menubar: "table format view insert edit",
-        statusbar: false,
-        height: 200,
-        plugins: [
-        "lists link preview ",
-        "table jbimages fullscreen" 
-        ],  
-        toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | jbimages | image_advtab: true ",  
-        relative_urls: false
-    });
-});
-
 // FUNCTION FOR KEYWORD COUNTER
 function updateCountdown() {
-    // 140 is the max message length
+    // 150 is the max message length
     var remaining = 150 - $('#prod_keyword').val().length;
     $('.countdown').text(remaining + ' characters remaining.');
 }
@@ -93,8 +25,9 @@ function isNumberKey(evt)
 {
     var charCode = (evt.which) ? evt.which : event.keyCode;
     if (charCode != 46 && charCode > 31 
-        && (charCode < 48 || charCode > 57))
+        && (charCode < 48 || charCode > 57)){
         return false;
+    }
 
     return true;
 }
@@ -150,25 +83,52 @@ function appendNewSelectionRow(){
     return cnt;
 }
 
-var previousValue;
-$(document).on("click",".list-choosen-combination-div > .div-combination > .div2 > span > .selection",function(){
-    previousValue = $(this).children('option:selected').text();
-});
-
-$(document).on("change",".list-choosen-combination-div > .div-combination > .div2 > span > .selection",function(){
-    var selector = $(this);
-    var cnt = selector.parent().parent().parent().children('.div3').children('.remove-combination').data('cmbcnt');
-    var currentStringId = "";
-    $('.list-choosen-combination-div > .combination'+cnt+' > .div2 > span > .selection').each(function() {
-        currentStringId += $(this).children('option:selected').data('value');
-    });
-
-    var checkIfExist = checkCombination(currentStringId);
-    if(checkIfExist == false){
-        selector.val(previousValue);
-        alert('Combination Already Exist!');
+function askDraft(location)
+{
+    if(isEdit == 0){ 
+        $("#question").dialog({
+            resizable: false,
+            height: 100,
+            width: 530,
+            modal: true, 
+            open: function() {
+            },
+            buttons: {
+                "Yes Save as Draft and Leave": function() {
+                    $(".ui-dialog-title").text('Please wait while saving your data...'); 
+                    saveAsDraftProceed();
+                    window.location = location;
+                },
+                "Dont save as draft just leave": function() {
+                    $(".ui-dialog-title").text('Please wait...'); 
+                    window.location = location;
+                },
+                "Dont leave": function() { 
+                    $(this).dialog("close");
+                }
+            },
+            "title": "Your about to leave this page without saving. Do you want this to save as draft?"
+        });   
     }
-});
+    else{ 
+        $("#question").dialog({
+            resizable: false,
+            height: 100,
+            width: 530,
+            modal: true, 
+            open: function() {
+            },
+            buttons: {
+                "Ok I understand": function() {
+                    $(".ui-dialog-title").text('Please wait while saving your data...'); 
+                    saveAsDraftProceed();
+                    window.location = location;
+                }
+            },
+            "title": "Remember this item is in your draft you can edit this in step1 page."
+        });
+    }
+}
 
 function removeDuplicateCombination()
 {
@@ -284,7 +244,7 @@ function get_discPrice() {
     if (prcnt >= 100) {
         prcnt = 99;
     }
-    if (act_price == 0 || act_price == null ) {      
+    if (act_price == 0 || act_price == null ) {
         validateRedTextBox("#prod_price");
         act_price = 0;
     }
@@ -305,19 +265,120 @@ function zebraCombination()
     $(".zebra-div:odd").css("background-color","white"); 
 }
 
-// view more product details
-$(document).ready(function() {
-    $('.view_more_product_details').on('click', function() {
-        $('.more_product_details_container,.prod-details-add-more-link').slideToggle();
-        $('.view_more_product_details').toggleClass('active-product-details');
+function checkOptionValue(selector,id,value,evt)
+{
+    var exists = false;
+    var commonValue;
+    var activeSelection = selector.search_results.find('li.active-result').length;
+    var highlightSelection = selector.search_results.find('li.highlighted').length;
+    var valueData =  $('.value-data'); 
+    value = value.replace(/[^a-z0-9\s\-]/gi, '');
+
+    if(value === ""){
+        return false;
+        $('body').click();
+    }
+
+    $(id).children('option').each(function(){
+        var text = $(this).text(); 
+        if (text.toLowerCase() == value.toLowerCase()) {
+            exists = true;
+            commonValue = text;
+            return false;
+        }
+    });
+
+    if(highlightSelection >= 1){
+        if(exists !== true){
+            selector.result_highlight = selector.search_results.find('li.highlighted').first(); 
+            return selector.result_select(evt);
+        }
+    }
+    else{
+        if(exists !== true){
+            $(id).append('<option>' + value + '</option>');
+            $(id).trigger('liszt:updated');
+            selector.result_highlight = selector.search_results.find('li.active-result').last(); 
+            return selector.result_select(evt);   
+        }
+    }
+
+    if(exists == true){ 
+        if(id.id == 'head-data'){
+            valueData.empty().trigger("liszt:updated");
+        }
+        if(activeSelection <= 1){ 
+            $(id).val(commonValue).trigger("liszt:updated");
+            var attrList = attributeArray[commonValue]; 
+            $.each(attrList, function(key, value){
+                valueData.append('<option>'+value+'</option>');
+            });
+            valueData.trigger("liszt:updated");
+        }
+        else{ 
+            selector.result_highlight = selector.search_results.find('li.active-result').first();
+            return selector.result_select(evt);
+        }
+    }
+    $('body').click();
+}
+
+$(function(){
+
+    // Load discount range slider
+    $("#range_1").ionRangeSlider({
+        min: 0,
+        max: 100,
+        type: 'single',
+        step: 1,
+        postfix: "%",
+        prettify: true,
+        hasGrid: true,
+        onChange: function (obj) {        // callback is called after slider load and update
+            var value = obj.fromNumber;
+            $("#slider_val").val(value);
+            get_discPrice();
+        }
+    });
+    
+     // if keyword change. counter will change also either increase or decrease until reach its limit..
+    updateCountdown();
+    $('#prod_keyword').change(updateCountdown);
+    $('#prod_keyword').keyup(updateCountdown); 
+
+    // search brand 
+    $('#brand_sch').focus(function() {
+        $('#brand_search_drop_content').show();
+        $(document).bind('focusin.brand_sch_drop_content click.brand_sch_drop_content',function(e) {
+          if ($(e.target).closest('#brand_search_drop_content, #brand_sch').length) return;
+          $('#brand_search_drop_content').hide();
+      });
+    });
+    $('#brand_search_drop_content').hide();
+
+    // Load tinyMCE plugin
+    tinymce.init({ 
+        mode : "specific_textareas",
+        editor_selector : "mceEditor", 
+        menubar: "table format view insert edit",
+        statusbar: false, 
+        height: 300,
+        plugins: ["lists link preview","table jbimages fullscreen","textcolor" ],  
+        toolbar: "insertfile undo redo | sizeselect | fontselect  fontsizeselect styleselect  forecolor backcolor | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | jbimages | image_advtab: true ",  
+        relative_urls: false,
+        setup: function(editor) {
+            editor.on('change', function(e) {
+                $('#prod_description').val(tinyMCE.get('prod_description').getContent());
+                $('#prod_description').trigger( "change" );
+            });
+        }
     });
 });
-// end of view more product JS
 
-// JS Function Discount
 $(document).ready(function(){
-    $("#dsc_frm").hide();
 
+    // JS Function Discount
+    $("#dsc_frm").hide();
     $("#discnt_btn").on("click",function(){
         $("#dsc_frm").toggle();      
     });  
@@ -328,9 +389,6 @@ $(document).ready(function(){
             get_discPrice();
         }
     });
-
-
-
 
     $("#slider_val").bind('change keyup',function(e){
         if(e.which > 13 || e.which < 13){
@@ -400,17 +458,21 @@ $(document).ready(function(){
         $('#slider_val').trigger( "change" );
     }
 
+    // view more product details trigger
+    $('.view_more_product_details').on('click', function() {
+        $('.more_product_details_container,.prod-details-add-more-link').slideToggle();
+        $('.view_more_product_details').toggleClass('active-product-details');
+    });
 });
-// end of JS Function Discount
 
 // Manipulating of additional attributes
 var cnt = 1; 
 var previous,editSelectedValue,editSelectedId; 
-$(document).ready(function() {   
+$(document).ready(function(){
 
-    setChosen(); 
-    $("#head-data,.value-data").val('').trigger("liszt:updated");
+    setChosen();
     zebraCombination();
+    $("#head-data,.value-data").val('').trigger("liszt:updated");
 
     $(document).on('change',".price-val,#prod_price",function () {
         var priceval = this.value.replace(new RegExp(",", "g"), '');
@@ -441,65 +503,12 @@ $(document).ready(function() {
         previous = selector.chosen().val(); 
     });
 
-    function checkOptionValue(selector,id,value,evt)
-    {
-        var exists = false;
-        var commonValue;
-        var valueData =  $('.value-data'); 
-        $(id).children('option').each(function(){
-            var text = $(this).text();
-            if (text.toLowerCase() == value.toLowerCase()) {
-                exists = true;
-                commonValue = text;
-                return false;
-            }
-        }); 
-
-        value = value.replace(/[^a-z0-9\s\-]/gi, '');
-        var activeSelection = selector.search_results.find('li.active-result').length;
-        var highlightSelection = selector.search_results.find('li.highlighted').length;
-        
-        if(value === ""){
-            return false;
-        }
-
-        if(highlightSelection >= 1){ 
-            selector.result_highlight = selector.search_results.find('li.highlighted').first(); 
-            return selector.result_select(evt);
-        }
-        else{
-            $(id).append('<option>' + value + '</option>');
-            $(id).trigger('liszt:updated');
-            selector.result_highlight = selector.search_results.find('li.active-result').last();
-            return selector.result_select(evt);
-        }
-
-        if(exists == true){
-            if(id.id == 'head-data'){
-                valueData.empty().trigger("liszt:updated");
-            } 
-            console.log(commonValue);
-            if(activeSelection <= 1){
-                $(id).val(commonValue).trigger("liszt:updated");
-                var attrList = attributeArray[commonValue]; 
-                $.each(attrList, function(key, value){
-                    valueData.append('<option>'+value+'</option>');
-                });
-                valueData.trigger("liszt:updated");
-            }
-            else{
-                selector.result_highlight = selector.search_results.find('li.active-result').first();
-                return selector.result_select(evt);
-            }
-        }
-    }
- 
     AbstractChosen.prototype.input_blur = function(evt) {
         checkOptionValue(this,this.form_field,$(evt.target).val(),evt);
     }
 
     Chosen.prototype.keydown_checker = function(evt) {
-        if(evt.which === 13)  {   
+        if(evt.which === 13){
             checkOptionValue(this,this.form_field,$(evt.target).val(),evt);
         }
     }
@@ -529,7 +538,6 @@ $(document).ready(function() {
             }
         }
         else{
-
             if(length > 0 && editSelectedValue != selectedValue){
                 $('#head-data').val(previous).trigger("liszt:updated");
                 alert(selectedValue +' already exist in the selection');
@@ -705,12 +713,12 @@ $(document).ready(function() {
         if( combinationQuantity <= 0 || $.isNumeric(combinationQuantity) == false){
             validateRedTextBox('.qty');
             return false;
-        }else{
+        }
+        else{
             validateWhiteTextBox('.qty');
         }
 
         var checked = $('.set-default:checked').length > 0;
-
 
         if(!checked){
             $('.set-default').remove(); 
@@ -755,8 +763,7 @@ $(document).ready(function() {
         $('.combination'+cmbcnt).remove();
         if( !$.trim( $('.list-choosen-combination-div').html() ).length ) { 
             $('.select-combination').prop("disabled",false); 
-            $('.select-control-panel-option > .div3 > .set-default').remove();
-            // $('.select-control-panel-option > .div3').append('<input type="checkbox" class="set-default">');
+            $('.select-control-panel-option > .div3 > .set-default').remove(); 
         }
         resetControlPanel(true);
         zebraCombination();
@@ -933,10 +940,11 @@ var removeThisPictures = []; var imageAttr = [];
 var pictureCountOther  = 0; var primaryPicture = 0;
 $(document).ready(function() {
   
-    if(window.FileReader) {   
+    if(window.FileReader){
         badIE = false;
         $('#inputList').append('<input type="file" id="files" class="files active" name="files[]" multiple accept="image/*" required = "required"  />');
-    } else { 
+    }
+    else{
         badIE = true;
         $('#inputList').append('<input type="file" id="files" class="files active" name="files[]" accept="image/*" required = "required"  />');
     }
@@ -959,9 +967,7 @@ $(document).ready(function() {
         if(badIE == false){
             var fileList = this.files;
             var anyWindow = window.URL || window.webkitURL; 
-
-
-                var errorValues = "";
+            var errorValues = "";
             for(var i = 0; i < fileList.length; i++){
                 var activeText= ""; 
                 var primaryText = "Make Primary"; 
@@ -1014,9 +1020,8 @@ $(document).ready(function() {
             filescnt++;
             $('#inputList').append('<input type="file"  id="files" class="files active" name="files[]" multiple accept="image/*" required = "required"  /> ');
             $(this).remove();
-
-        }else{
-
+        }
+        else{
             var activeText= ""; 
             var errorValues = "";
             var primaryText = "Make Primary"; 
@@ -1197,7 +1202,7 @@ $(document).ready(function() {
                 alert('Sorry, we have encountered a problem.','Please try again after a few minutes.');
                 canProceed = true;
             }
-        }).submit();  
+        }).submit();
     });
 
 
@@ -1227,7 +1232,6 @@ $(document).ready(function() {
     });
 });
 // ES_UPLOADER BETA END
-
 
     // SAVING AND PROCEED 
     $(document).on('click','#proceed_form',function(){
@@ -1564,50 +1568,3 @@ jQuery(function($){
     });                 
 });
 
-    function askDraft(location)
-    {
-        if(isEdit == 0){ 
-            $("#question").dialog({
-                resizable: false,
-                height: 100,
-                width: 530,
-                modal: true, 
-                open: function() {
-                },
-                buttons: {
-                    "Yes Save as Draft and Leave": function() {
-                        $(".ui-dialog-title").text('Please wait while saving your data...'); 
-                        saveAsDraftProceed();
-                        window.location = location;
-                    },
-                    "Dont save as draft just leave": function() {
-                        $(".ui-dialog-title").text('Please wait...'); 
-                        window.location = location;
-                    },
-                    "Dont leave": function() { 
-                        $(this).dialog("close");
-                    }
-                },
-                "title": "Your about to leave this page without saving. Do you want this to save as draft?"
-            });   
-        }
-        else{ 
-            $("#question").dialog({
-                resizable: false,
-                height: 100,
-                width: 530,
-                modal: true, 
-                open: function() {
-                },
-                buttons: {
-                    "Ok I understand": function() {
-                        $(".ui-dialog-title").text('Please wait while saving your data...'); 
-                        saveAsDraftProceed();
-                        window.location = location;
-                    }
-                },
-                "title": "Remember this item is in your draft you can edit this in step1 page."
-            });
-        }
-
-    }
