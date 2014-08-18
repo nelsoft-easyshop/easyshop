@@ -4,15 +4,15 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-	<title>Upload an image</title>
-	<script type="text/javascript" src="js/jquery-1.9.1.js"></script>
-	<script type="text/javascript" src="js/jquery.form.js"></script>
-	
-	<script language="javascript" type="text/javascript">
-		if( (navigator.appName.indexOf('Netscape') != -1 || navigator.appName.indexOf('Explorer') != -1) && navigator.userAgent.indexOf('Trident') != -1 ){
-        	$('html').addClass('ie');
+    <title>Upload an image</title>
+    <script type="text/javascript" src="js/jquery-1.9.1.js"></script>
+    <script type="text/javascript" src="js/jquery.form.js"></script>
+    
+    <script language="javascript" type="text/javascript">
+        if( (navigator.appName.indexOf('Netscape') != -1 || navigator.appName.indexOf('Explorer') != -1) && navigator.userAgent.indexOf('Trident') != -1 ){
+            $('html').addClass('ie');
         }
-		
+        
         $(function(){
             $(document).ready(function(){
                 var isIE = $('html').hasClass('ie');
@@ -23,49 +23,49 @@
                 }
             });
         });
-	</script>
-	
-	<script type="text/javascript" src="js/dialog-v4.js?ver=4.2.29"></script>
-	<link href="css/dialog-v4.css" rel="stylesheet" type="text/css">
-	
+    </script>
+    
+    <script type="text/javascript" src="js/dialog-v4.js?ver=4.2.29"></script>
+    <link href="css/dialog-v4.css" rel="stylesheet" type="text/css">
+    
 </head>
 <body>
-	<!--
-	<form class="form-inline" id="upl" name="upl" action="ci/index.php/upload/english" method="post" enctype="multipart/form-data" target="upload_target" onsubmit="jbImagesDialog.inProgress();">
-	-->	
-	<div id="upload_in_progress" class="upload_infobar"><img src="img/spinner.gif" width="16" height="16" class="spinner">Upload in progress&hellip; <div id="upload_additional_info"></div></div>
-	<div id="upload_infobar" class="upload_infobar"></div>
-	<div id="fileupload_list">
-	</div>
-	
-	<form class="form-inline" id="cloneForm" name="upl" action="ci/index.php/upload/english" method="post" enctype="multipart/form-data" target="upload_target" style="display:none;">
-		<!--Modified name of input from userfile to descriptionfile[]; also added multiple attr-->
-		<p id="upload_form_container">
-			<!--
-			<input id="uploader" name="descriptionfile[]" type="file" class="jbFileBox" onChange="document.upl.submit(); jbImagesDialog.inProgress();" multiple="">
-			-->
-			<input id="uploader" name="descriptionfile[]" type="file" class="jbFileBox" onChange="jbImagesDialog.inProgress();" multiple="" accept="image/*">
-		</p>
-		
-		<p id="the_plugin_name"><a href="http://easyshop.com/" target="_blank" title="easyshop.com">Easyshop</a></p>
-	</form>
-	
-	<form class="form-inline" id="upl1" name="upl" action="ci/index.php/upload/english" method="post" enctype="multipart/form-data" target="upload_target">
-		<!--Modified name of input from userfile to descriptionfile[]; also added multiple attr-->
-		<p id="upload_form_container">
-			<!--
-			<input id="uploader" name="descriptionfile[]" type="file" class="jbFileBox" onChange="document.upl.submit(); jbImagesDialog.inProgress();" multiple="">
-			-->
-			<input id="uploader" name="descriptionfile[]" type="file" class="jbFileBox" onChange="jbImagesDialog.inProgress();" multiple="" accept="image/*">
-		</p>
-		
-		<p id="the_plugin_name"><a href="http://easyshop.com/" target="_blank" title="easyshop.com">Easyshop</a></p>
-	</form>
-	
-	<div id="progressbox" style="display:none;"><div id="progressbar"></div ><div id="statustxt">0%</div></div>
-	<div class="progressbox" style="display:none;"><div class="progressbar"></div ><div class="statustxt">0%</div></div>
+    <!--
+    <form class="form-inline" id="upl" name="upl" action="ci/index.php/upload/english" method="post" enctype="multipart/form-data" target="upload_target" onsubmit="jbImagesDialog.inProgress();">
+    -->	
+    <div id="upload_in_progress" class="upload_infobar"><img src="img/spinner.gif" width="16" height="16" class="spinner">Upload in progress&hellip; <div id="upload_additional_info"></div></div>
+    <div id="upload_infobar" class="upload_infobar"></div>
+    <div id="fileupload_list">
+    </div>
+    
+    <form class="form-inline" id="cloneForm" name="upl" action="ci/index.php/upload/english" method="post" enctype="multipart/form-data" target="upload_target" style="display:none;">
+        <!--Modified name of input from userfile to descriptionfile[]; also added multiple attr-->
+        <p id="upload_form_container">
+            <!--
+            <input id="uploader" name="descriptionfile[]" type="file" class="jbFileBox" onChange="document.upl.submit(); jbImagesDialog.inProgress();" multiple="">
+            -->
+            <input id="uploader" name="descriptionfile[]" type="file" class="jbFileBox" onChange="jbImagesDialog.inProgress();" multiple="" accept="image/*">
+        </p>
+        
+        <p id="the_plugin_name"><a href="http://easyshop.com/" target="_blank" title="easyshop.com">Easyshop</a></p>
+    </form>
+    
+    <form class="form-inline" id="upl1" name="upl" action="ci/index.php/upload/english" method="post" enctype="multipart/form-data" target="upload_target">
+        <!--Modified name of input from userfile to descriptionfile[]; also added multiple attr-->
+        <p id="upload_form_container">
+            <!--
+            <input id="uploader" name="descriptionfile[]" type="file" class="jbFileBox" onChange="document.upl.submit(); jbImagesDialog.inProgress();" multiple="">
+            -->
+            <input id="uploader" name="descriptionfile[]" type="file" class="jbFileBox" onChange="jbImagesDialog.inProgress();" multiple="" accept="image/*">
+        </p>
+        
+        <p id="the_plugin_name"><a href="http://easyshop.com/" target="_blank" title="easyshop.com">Easyshop</a></p>
+    </form>
+    
+    <div id="progressbox" style="display:none;"><div id="progressbar"></div ><div id="statustxt">0%</div></div>
+    <div class="progressbox" style="display:none;"><div class="progressbar"></div ><div class="statustxt">0%</div></div>
 
-	<iframe id="upload_target" name="upload_target" src="ci/index.php/blank"></iframe>
+    <iframe id="upload_target" name="upload_target" src="ci/index.php/blank"></iframe>
 
 </body>
 </html>

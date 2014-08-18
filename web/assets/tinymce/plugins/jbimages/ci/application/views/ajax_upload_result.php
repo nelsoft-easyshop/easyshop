@@ -6,31 +6,31 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>JustBoil's Result Page</title>
 <script language="javascript" type="text/javascript">
-	var htmlclass = document.documentElement.className;
-	var isNewIE = false;
+    var htmlclass = document.documentElement.className;
+    var isNewIE = false;
     var isSafari = Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0;
 
-	if( (navigator.appName.indexOf('Netscape') != -1 || navigator.appName.indexOf('Explorer') != -1) && navigator.userAgent.indexOf('Trident') != -1 )
-		isNewIE = true;
-	
-	if( htmlclass == 'ie' || isNewIE || isSafari) {
-		window.parent.window.jbImagesDialog.uploadFinish({
-			filename:'<?php echo $file_name; ?>',
-			result: '<?php echo $result; ?>',
-			resultCode: '<?php echo $resultcode; ?>',
-			<!--Added code-->
-			status: '<?php echo $status?>'
-		});
-	} 
+    if( (navigator.appName.indexOf('Netscape') != -1 || navigator.appName.indexOf('Explorer') != -1) && navigator.userAgent.indexOf('Trident') != -1 )
+        isNewIE = true;
+    
+    if( htmlclass == 'ie' || isNewIE || isSafari) {
+        window.parent.window.jbImagesDialog.uploadFinish({
+            filename:'<?php echo $file_name; ?>',
+            result: '<?php echo $result; ?>',
+            resultCode: '<?php echo $resultcode; ?>',
+            <!--Added code-->
+            status: '<?php echo $status?>'
+        });
+    } 
     else{
-		window.jbImagesDialog.uploadFinish({
-			filename:'<?php echo $file_name; ?>',
-			result: '<?php echo $result; ?>',
-			resultCode: '<?php echo $resultcode; ?>',
-			<!--Added code-->
-			status: '<?php echo $status?>'
-		});
-	}
+        window.jbImagesDialog.uploadFinish({
+            filename:'<?php echo $file_name; ?>',
+            result: '<?php echo $result; ?>',
+            resultCode: '<?php echo $resultcode; ?>',
+            <!--Added code-->
+            status: '<?php echo $status?>'
+        });
+    }
 </script>
 </head>
 
