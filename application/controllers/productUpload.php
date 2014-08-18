@@ -122,7 +122,7 @@ class productUpload extends MY_Controller
         $this->load->view('templates/footer'); 
     }
 
-    /*
+    /**
      * Display all child category of the selected category
      * and diplay on view
      *
@@ -148,7 +148,7 @@ class productUpload extends MY_Controller
         die(json_encode($data));
     }
 
-    /*
+    /**
      *  Display form and data needed for this step 
      *  create temporary directory for the storing of the uploaded images
      */
@@ -236,7 +236,7 @@ class productUpload extends MY_Controller
         }
     }
 
-    /*
+    /**
      *  Display item details of the selected
      *  product to be modify
      */
@@ -392,7 +392,7 @@ class productUpload extends MY_Controller
         $this->load->view('templates/footer');
     }
 
-    /*
+    /**
      *  Upload image for primary and other
      *  alternative of the image of the product
      *
@@ -502,7 +502,7 @@ class productUpload extends MY_Controller
         die(json_encode($return));
     }
 
-    /*
+    /**
      *  Upload image for attributes of the product
      *  
      *  @return JSON
@@ -544,7 +544,7 @@ class productUpload extends MY_Controller
         }
     }
 
-    /*
+    /**
      * Process and validate user's inputted data into form
      * insert into database
      * proceed to step3
@@ -747,7 +747,7 @@ class productUpload extends MY_Controller
         }
     }
 
-    /*
+    /**
      * Process and validate user's inputted data into form
      * update the database
      * proceed to step3
@@ -1056,7 +1056,7 @@ class productUpload extends MY_Controller
         echo json_encode($serverResponse, JSON_FORCE_OBJECT);
     }
 
-    /*
+    /**
     * Delete draft items
     */
     public function deleteDraft()
@@ -1218,12 +1218,11 @@ class productUpload extends MY_Controller
         }
     }
     
-/*
- |	Handler for additional info in product uploads
- |	Update billing info, CoD and meetup in product table
- |	Upload shipping details if for delivery
-*/
-    
+    /*
+     *Handler for additional info in product uploads
+     *Update billing info, CoD and meetup in product table
+     *Upload shipping details if for delivery
+     */
     public function step4()
     {
         /*print('<pre>');
