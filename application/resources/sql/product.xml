@@ -95,7 +95,7 @@
         LEFT JOIN es_brand b ON p.brand_id = b.id_brand
         LEFT JOIN es_member m on p.member_id = m.id_member 
         LEFT JOIN `es_product_image` i ON i.`product_id` = p.`id_product` AND i.is_primary = '1'
-        WHERE p.slug = :slug AND p.is_delete = 0 AND p.is_draft = 0;				
+        WHERE p.slug = :slug AND p.is_delete = 0 AND p.is_draft = 0;                
     </select>
     
     
@@ -734,7 +734,7 @@ FROM
     `keywords` = :keywords, `brand_id` = :brand_id, `style_id` = :style_id, `price` = :price,
     `condition` = :condition, `lastmodifieddate` = :modifieddate, `brand_other_name` = :brand_other_name,
     `discount` = :discount, `search_keyword` = :search_keyword, `is_sold_out` = :is_sold_out,
-    `cat_other_name` = :cat_other_name
+    `cat_other_name` = :cat_other_name, cat_id = :cat_id
     WHERE `id_product` = :p_id AND `member_id` = :member_id;
 </select>
 

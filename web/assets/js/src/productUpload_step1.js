@@ -302,7 +302,7 @@ $(document).ready(function() {
 
         if ($(this).attr('data-catid')) {
         	$(".add_category_submit").append('<input type="hidden" name="hidden_attribute" value="'+catId+'" class="hidden_attribute"><input class="proceed_form" id="proceed_form" type="submit" value="Proceed with '+name+'">');    
-        	$(".add_category_submit").append('<input type="hidden" name="othernamecategory" value="'+name+'" />');
+        	$(".add_category_submit").append('<input type="hidden" name="othernamecategory" value="" />');
         }
         $(selector).closest('div').addClass('selected_category pd-13-12');
     });

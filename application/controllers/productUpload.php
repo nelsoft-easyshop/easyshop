@@ -36,7 +36,7 @@ class productUpload extends MY_Controller
         return $data;
     }
 
-    /*
+    /**
      *  Display view for selecting category for the listing
      *  of the product
      */
@@ -48,44 +48,31 @@ class productUpload extends MY_Controller
 
         if ($this->input->post('p_id')) {
             $product_id = $data_item['product_id_edit'] = $this->input->post('p_id');
-            $product = $this->product_model->getProductEdit($product_id, $uid);  
+            $product = $this->product_model->getProductEdit($product_id, $uid);
             $cat_tree = $this->product_model->getParentId($product['cat_id']);
             $data_item['cat_tree_edit'] = json_encode($cat_tree);
             $data_item['other_cat_name'] = ($this->input->post('other_cat_name')) ? $this->input->post('other_cat_name') : $product['otherCategory'];
             $data_item['categoryId'] = $product['cat_id'];
         }
         else{
+            if($this->input->post('step2_content')){
+                $data_item['step2_content'] = $this->input->post('step2_content');
+            }
             if($this->input->post('c_id')){
-                $cat_id = $data_item['categoryId'] = $this->input->post('c_id');    
+                $cat_id = $data_item['categoryId'] = $this->input->post('c_id');
                 $other_cat_name = $this->input->post('other_cat_name');
-                $cat_tree = $this->product_model->getParentId($cat_id); 
+                $cat_tree = $this->product_model->getParentId($cat_id);
                 $data_item['cat_tree_edit'] = json_encode($cat_tree);
-                $data_item['other_cat_name'] = $other_cat_name;	
+                $data_item['other_cat_name'] = $other_cat_name; 
             }
         }
 
-        if ($this->input->post('p_id')) {
-            $product_id = $data_item['product_id_edit'] = $this->input->post('p_id');
-            $product = $this->product_model->getProductEdit($product_id, $uid);  
-            $cat_tree = $this->product_model->getParentId($product['cat_id']);
-            $data_item['cat_tree_edit'] = json_encode($cat_tree);
-            $data_item['other_cat_name'] = $product['otherCategory'];
-            $data_item['categoryId'] = $product['cat_id'];
-        }
-        else{
-            if($this->input->post('c_id')){
-                $cat_id = $data_item['categoryId'] = $this->input->post('c_id');    
-                $other_cat_name = $this->input->post('other_cat_name');
-                $cat_tree = $this->product_model->getParentId($cat_id); 
-                $data_item['cat_tree_edit'] = json_encode($cat_tree);
-                $data_item['other_cat_name'] = $other_cat_name;	
-            }
-        }
+        $userdetails = $this->user_model->getUserById($uid);
 
         $draftItems = $this->product_model->getDraftItems($uid);
 
         for ($i=0; $i < sizeof($draftItems); $i++) { 
-            $parents = $this->product_model->getParentId($draftItems[$i]['cat_id']); # getting all the parent from selected category	
+            $parents = $this->product_model->getParentId($draftItems[$i]['cat_id']); # getting all the parent from selected category    
             $str_parents_to_last = "";
             $lastElement = end($parents);
 
@@ -134,7 +121,7 @@ class productUpload extends MY_Controller
         $this->load->model('user_model');
         $id = $response['cat_id'] = $this->input->post('cat_id');     
   
-        $uid =	$this->session->userdata('member_id');
+        $uid =  $this->session->userdata('member_id');
         $is_admin = false;
 
         if($uid){
@@ -193,7 +180,7 @@ class productUpload extends MY_Controller
                     $str_parents_to_last = $str_parents_to_last.' &#10140; ' . $otherCategory;
                 }
 
-            }	
+            }   
 
             $response['parent_to_last'] = $str_parents_to_last;
  
@@ -286,8 +273,7 @@ class productUpload extends MY_Controller
             if(!$otherCategory == ""){
                 $breadcrumbs = $breadcrumbs.' &#10140; ' . $otherCategory;
             }
-        }
-
+        } 
         // Loading images
         $images = $this->product_model->getProductImages($product_id);
         $mainImages = $arrayNameOnly = array();  
@@ -490,6 +476,9 @@ class productUpload extends MY_Controller
                 }
             }
             $text = $this->upload->display_errors();
+            if($text == '<p>The uploaded file exceeds the maximum allowed size in your PHP configuration file.</p>'){
+                $text ='File is too large. Please select another image';
+            }
             $error = 1;
         }
           
@@ -596,7 +585,7 @@ class productUpload extends MY_Controller
         
         if($savingAsDraft == 0){
             if (!in_array($product_condition, $this->lang->line('product_condition'))){
-                die('{"e":"0","d":"Condition selected not available. Please select another."}');	 
+                die('{"e":"0","d":"Condition selected not available. Please select another."}');     
             }
         }
 
@@ -606,7 +595,7 @@ class productUpload extends MY_Controller
             || $product_price <= 0 
             || strlen(trim($product_description)) == 0) && $savingAsDraft == 0){
 
-            die('{"e":"0","d":"Fill (*) All Required Fields Properly!"}');		
+            die('{"e":"0","d":"Fill (*) All Required Fields Properly!"}');      
         }
         else{
             
@@ -765,7 +754,7 @@ class productUpload extends MY_Controller
         $product_title = trim($this->input->post('prod_title'));
         $product_brief = trim($this->input->post('prod_brief_desc'));
         $product_description =  $this->input->post('prod_description');
-        $product_price = str_replace(',', '', $this->input->post('prod_price')) ;
+        $product_price = ($this->input->post('prod_price') == "")? '0' : str_replace(',', '', $this->input->post('prod_price'));
         $product_discount = ($this->input->post('discount'))?floatval($this->input->post('discount')):0;
         $product_discount = ($product_discount <= 100)?$product_discount:100;
         $product_condition = $this->input->post('prod_condition');
@@ -783,7 +772,7 @@ class productUpload extends MY_Controller
 
         // Loading Combinations
         $newItemQuantityArray = array();
-        $itemQuantity =  $this->product_model->getProductQuantity($product_id, true);	
+        $itemQuantity =  $this->product_model->getProductQuantity($product_id, true);   
         
         if((strlen(trim($product_title)) == 0 
             || $product_title == "" 
@@ -901,7 +890,7 @@ class productUpload extends MY_Controller
             }
             if(!mkdir($originalPath.'other/', 0777, true)) { 
                 die('{"e":"0","d":"There was a problem. \n Please try again! - Error[0012]"}');
-            }			
+            }           
         }
         else{
             die('{"e":"0","d":"There was a problem. \n Please try again! - Error[00107]"}'); 
@@ -915,6 +904,7 @@ class productUpload extends MY_Controller
             'keyword' => $keyword,
             'brand_id' => $brand_id,
             'style_id' => $style_id,
+            'cat_id' => $cat_id,
             'price' => $product_price,
             'condition' => $product_condition,
             'brand_other_name' => $otherBrand,
@@ -1167,7 +1157,7 @@ class productUpload extends MY_Controller
         $this->image_lib->clear();
     }
     
-    /*******************	NEW PRODUCT UPLOAD FUNCTIONS	***************************************/
+    /*******************    NEW PRODUCT UPLOAD FUNCTIONS    ***************************************/
     
     # Renders newStep3 view
     public function step3()
