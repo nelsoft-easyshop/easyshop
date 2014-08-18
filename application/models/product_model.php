@@ -16,7 +16,11 @@ class product_model extends CI_Model
 
     # the queries directory -- application/resources/sql/product.xml
 
-    function selectCategoryDetails($id)
+    /*
+     *  Get category details by using category ID 
+     *  @param integer $id
+     */
+    public function selectCategoryDetails($id)
     {
         $query = $this->xmlmap->getFilenameID('sql/product', 'selectCategoryDetails');
         $sth = $this->db->conn_id->prepare($query);
@@ -27,30 +31,42 @@ class product_model extends CI_Model
         return $row[0];
     }
 
-    function getDownLevelNode($id, $is_admin = false) # get all down level category on selected category from database
+    /*
+     *  Get all childrden category of the selected category
+     *  @param integer $id
+     *  @param bool $is_admin  
+     *  @return ARRAY()
+     */
+    public function getDownLevelNode($id, $is_admin = false) # get all down level category on selected category from database
     {
         $query = $this->xmlmap->getFilenameID('sql/product', 'selectDownLevel');
         $protected_categories = array();
         if(!$is_admin){
-        $this->config->load('protected_category', TRUE);
-        $protected_categories = $this->config->config['protected_category'];
-        $qmarks = implode(',', array_fill(0, count($protected_categories), '?'));
-        $query = $query.' AND id_cat NOT IN ('.$qmarks.') AND id_cat != 1 ORDER BY sort_order ASC';
+            $this->config->load('protected_category', TRUE);
+            $protected_categories = $this->config->config['protected_category'];
+            $qmarks = implode(',', array_fill(0, count($protected_categories), '?'));
+            $query = $query.' AND id_cat NOT IN ('.$qmarks.') AND id_cat != 1 ORDER BY sort_order ASC';
         }
         
         $sth = $this->db->conn_id->prepare($query);
-        $sth->bindValue(1, $id, PDO::PARAM_INT);    
+        $sth->bindValue(1, $id, PDO::PARAM_INT);
         $k = 1;
         foreach ($protected_categories as $x){
-        $sth->bindValue(($k+1), $x, PDO::PARAM_INT);   
-        $k++;
-        }           
+            $sth->bindValue(($k+1), $x, PDO::PARAM_INT);
+            $k++;
+        }
         $sth->execute();
         $row = $sth->fetchAll();
+
         return $row;
     }
 
-    function selectChild($id) # get all down level category on selected category from database
+    /*
+     *  Get all children category recursively up to last category of the selected category
+     *  @param interger $id
+     *  @return ARRAY()
+     */
+    public function selectChild($id)
     {
         $query = $this->xmlmap->getFilenameID('sql/product', 'selectChild');
         $sth = $this->db->conn_id->prepare($query);
@@ -61,10 +77,15 @@ class product_model extends CI_Model
 
         if (isset($row[0])){ // Added - Rain 02/25/14
             return explode(',', $row[0]);
-        }	
+        }
     }
 
-    function getParentId($id) #get all parent category from selected id.
+    /*
+     *  Get parent recursively up to main category of the selected category
+     *  @param integer $id 
+     *  @return ARRAY()
+     */
+    public function getParentId($id)
     {
 
         $query = $this->xmlmap->getFilenameID('sql/product','getParent');
@@ -76,9 +97,6 @@ class product_model extends CI_Model
 
         return $row;
     }
-
-
-
 
     function getAttributesByParent($parents) # get all attributes from all parents from to the last selected category
     {
@@ -385,26 +403,30 @@ class product_model extends CI_Model
         return $rows;
     }
 
-
-    function getBrandById($brand_id)
+    /*
+     *  Get brand details by brand ID
+     *  @param integer $brandID
+     *  @return ARRAY()
+     */
+    public function getBrandById($brandId = 1)
     {
-        if(is_array($brand_id)){
-            if(count($brand_id) === 0){
+        if(is_array($brandId)){
+            if(count($brandId) === 0){
                 return false;
             }
             $query =  'SELECT name, id_brand, image, description FROM `es_brand` WHERE id_brand IN ';
-            $qmarks = implode(',', array_fill(0, count($brand_id), '?'));
+            $qmarks = implode(',', array_fill(0, count($brandId), '?'));
             $query = $query.'('.$qmarks.')';
             $sth = $this->db->conn_id->prepare($query);
             $k = 0;
-            foreach ($brand_id as $id){
+            foreach ($brandId as $id){
                 $sth->bindValue(($k+1), $id, PDO::PARAM_INT);   
                 $k++;
             }                  
         }else{
             $query = $this->xmlmap->getFilenameID('sql/product', 'getBrandById');
             $sth = $this->db->conn_id->prepare($query);
-            $sth->bindParam(':brand_id',$brand_id,PDO::PARAM_INT);
+            $sth->bindParam(':brand_id',$brandId,PDO::PARAM_INT);
         }
                 
         $sth->execute();
@@ -2298,15 +2320,14 @@ class product_model extends CI_Model
     }
 
     /*
-        *  Calculate promo price. Add the different calculations here.
-        *
-        *  @baseprice: base price of the product
-        *  @start: start datetime of the promo
-        *  @end: end datetime of the promo
-        *  @type: promo type
-        *  @default_percentage: discount percentage during product upload
-        */
-
+     *  Calculate promo price. Add the different calculations here.
+     *
+     *  @baseprice: base price of the product
+     *  @start: start datetime of the promo
+     *  @end: end datetime of the promo
+     *  @type: promo type
+     *  @default_percentage: discount percentage during product upload
+     */
     public function GetPromoPrice($baseprice, $start, $end, $is_promo, $type, $discount_percentage = 0){
         $today = strtotime( date("Y-m-d H:i:s"));
         $startdate = strtotime($start);
@@ -2382,33 +2403,15 @@ class product_model extends CI_Model
 
         return $result;
     }
-   
-   
+
     /*
      *   Check if an item can be purchased based on the purchase limit
      *   @buyer_id: id of the user
      *   @type: promo type
      *   @start_promo: boolean value whether the promo is active or not
-     */ 
-   
-   
-    /*
-     *   Check if an item can be purchased based on the purchase limit
-     *   @buyer_id: id of the user
-     *   @type: promo type
-     *   @start_promo: boolean value whether the promo is active or not
-     */ 
-
-
-    /*
-        *   Check if an item can be purchased based on the purchase limit
-        *   @buyer_id: id of the user
-        *   @type: promo type
-        *   @start_promo: boolean value whether the promo is active or not
-        */ 
-
+     */
     public function is_purchase_allowed($buyer_id,$type, $start_promo = false)
-    {    
+    {
         $query = "SELECT COALESCE(SUM(op.order_quantity),0) AS `cnt` FROM es_order o
             INNER JOIN es_order_product op ON o.id_order = op.order_id
             INNER JOIN es_product p ON p.id_product = op.product_id AND p.promo_type = :type
@@ -2430,7 +2433,14 @@ class product_model extends CI_Model
     
     /*******************	NEW PRODUCT UPLOAD STEP 3 FUNCTIONS	***************************************/
     
-    function finalizeProduct($productid, $memberid, $cod){
+    /*
+     *  Finalize the product and showed in the listing
+     *  @param int $productid 
+     *  @param int $memberid 
+     *  @param int $cod
+     *  @return BOOL on Success, False on Failed.
+     */
+    public function finalizeProduct($productid, $memberid, $cod){
         $product = $this->getProductEdit($productid, $memberid);
         if($product){
             $title = $product['name'];
@@ -2441,7 +2451,8 @@ class product_model extends CI_Model
                 $query = $this->xmlmap->getFilenameID('sql/product', 'finalizeProduct');
                 $sth = $this->db->conn_id->prepare($query);
                 $sth->bindParam(':slug',$slug ,PDO::PARAM_STR);
-            }else{
+            }
+            else{
                 $query = $this->xmlmap->getFilenameID('sql/product', 'finalizeProductKeepSlug');
                 $sth = $this->db->conn_id->prepare($query);
             }
@@ -2450,12 +2461,13 @@ class product_model extends CI_Model
             $sth->bindParam(':cod', $cod, PDO::PARAM_INT);
             $sth->execute();
             return true;
-        }else{
+        }
+        else{
             return false;
         }
     }
     
-    function updateProductUploadAdditionalInfo($productid, $memberid, $billing_id, $is_cod, $is_meetup){
+    public function updateProductUploadAdditionalInfo($productid, $memberid, $billing_id, $is_cod, $is_meetup){
         $product = $this->getProductEdit($productid, $memberid);
         if($product){
             $query = $this->xmlmap->getFilenameID('sql/product', 'updateProductUploadAdditionalInfo');
@@ -2472,7 +2484,7 @@ class product_model extends CI_Model
         }
     }
 
-    function getProductBillingDetails($memberID, $productID){
+    public function getProductBillingDetails($memberID, $productID){
         $query = "SELECT COALESCE(p.billing_info_id, 0) as billing_info_id, b.bank_account_name, b.bank_account_number, bank.bank_name
             FROM es_product p 
             INNER JOIN es_billing_info b

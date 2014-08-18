@@ -11,11 +11,12 @@ class productUpload extends MY_Controller
     { 
         parent::__construct(); 
         $this->load->model("product_model");
-            $this->load->helper('htmlpurifier');
-        if(!$this->session->userdata('usersession') && !$this->check_cookie())
+        $this->load->helper('htmlpurifier');
+        if(!$this->session->userdata('usersession') && !$this->check_cookie()){
             redirect(base_url().'login', 'refresh');
-            $this->max_file_size_mb = 5;
+        }
 
+        $this->max_file_size_mb = 5;
         /* Uploaded images dimensions: (w,h) */
         $this->img_dimension['usersize'] = array(1024,768);
         $this->img_dimension['small'] = array(400,535);
@@ -35,9 +36,12 @@ class productUpload extends MY_Controller
         return $data;
     }
 
-
-    function step1() #this function for selecting categories from parent category to the last possible category
-    {		 
+    /*
+     *  Display view for selecting category for the listing
+     *  of the product
+     */
+    public function step1()
+    {
         $this->load->model("user_model");
         $uid = $this->session->userdata('member_id');
         $userdetails = $this->user_model->getUserById($uid);
@@ -118,8 +122,14 @@ class productUpload extends MY_Controller
         $this->load->view('templates/footer'); 
     }
 
-    function getChild() # this function for getting the under category from selected category 
-    {	
+    /*
+     * Display all child category of the selected category
+     * and diplay on view
+     *
+     * @return JSON
+     */
+    public function getChild() # this function for getting the under category from selected category 
+    {
         header('Content-Type: application/json');
         $this->load->model('user_model');
         $id = $response['cat_id'] = $this->input->post('cat_id');     
@@ -130,7 +140,7 @@ class productUpload extends MY_Controller
         if($uid){
             $user_access_level = $this->user_model->getUserById($uid);
             $is_admin = (intval($user_access_level['is_admin']) === 1);
-        }  
+        }
 
         $response['node'] = $this->product_model->getDownLevelNode($id, $is_admin); 
         $response['level'] = $this->input->post('level');
@@ -138,19 +148,11 @@ class productUpload extends MY_Controller
         die(json_encode($data));
     }
 
-    function add_category(){
-        $ids =(int) $this->input->post('ids');
-        $name = $this->input->post('name');
-        $desc = $this->input->post('desc');
-        $key = $this->input->post('key');
-        $sort =(int) $this->input->post('sort');
-        $is_main = (int) 1;
-        $data = $this->product_model->addCategory($ids,$name,$desc,$key,$sort,$is_main);
-
-        echo json_encode($data);
-    }
-
-    function step2()
+    /*
+     *  Display form and data needed for this step 
+     *  create temporary directory for the storing of the uploaded images
+     */
+    public function step2()
     { 
         $data = $this->fill_view();
         $data['$render_searchbar'] = false; 
@@ -234,8 +236,12 @@ class productUpload extends MY_Controller
         }
     }
 
+    /*
+     *  Display item details of the selected
+     *  product to be modify
+     */
     public function step2edit2()
-    { 
+    {
         if($this->input->post('p_id')){
             $product_id = $response['p_id'] = $this->input->post('p_id');
         }
@@ -385,29 +391,29 @@ class productUpload extends MY_Controller
         $this->load->view('pages/product/product_upload_step2_view',$response);
         $this->load->view('templates/footer');
     }
- 
+
+    /*
+     *  Upload image for primary and other
+     *  alternative of the image of the product
+     *
+     *  @return JSON
+     */
     public function uploadimage()
-    {
-        $counter = $this->input->post('counter');
-        $temp_product_id = $this->session->userdata('tempId'); 
-        $tempDirectory = $this->session->userdata('tempDirectory'); 
-        $member_id =  $this->session->userdata('member_id');
+    {  
+        $pathDirectory = $this->session->userdata('tempDirectory');
         $filescnttxt = $this->input->post('filescnttxt');
         $afstart = $this->input->post('afstart');
-        $afstartArray = json_decode($afstart);
-        $date = date("Ymd");
-        $fulldate = date("YmdGis");
+        $afstartArray = json_decode($afstart); 
         $filenames_ar = array(); 
         $text = "";
         $error = 0;
- 
-        $allowed =  array('gif','png' ,'jpg','jpeg'); # available format only for image
+        $allowed =  array('gif','png' ,'jpg','jpeg'); // available format only for image
 
         foreach($_FILES['files']['name'] as $key => $value ) {
 
             $file_ext = explode('.', $value);
             $file_ext = strtolower(end($file_ext)); 
-            $filenames_ar[$key] = $afstartArray[$key];  
+            $filenames_ar[$key] = $afstartArray[$key];
 
             if(!in_array(strtolower($file_ext),$allowed))
             {
@@ -436,15 +442,12 @@ class productUpload extends MY_Controller
         $_FILES['files']['tmp_name'] = array_values($_FILES['files']['tmp_name']);
         $_FILES['files']['error'] = array_values($_FILES['files']['error']);
         $_FILES['files']['size'] = array_values($_FILES['files']['size']);
-        $filenames_ar = array_values($filenames_ar);
+        $filenames_ar = array_values($filenames_ar); 
 
-        $path_directory = $tempDirectory;
-
-        if (!file_exists ($path_directory)){
-            mkdir($path_directory, 0777, true);;
+        if (!file_exists ($pathDirectory)){
+            mkdir($pathDirectory, 0777, true);;
         }
 
-        
         if(count($filenames_ar) <= 0){
             $return = array( 
                 'msg' => "Please select valid image type.\nAllowed type: .PNG,.JPEG,.GIF\nAllowed max size: 5mb", 
@@ -456,7 +459,7 @@ class productUpload extends MY_Controller
         }
          
         $this->upload->initialize(array( 
-            "upload_path" => $path_directory,
+            "upload_path" => $pathDirectory,
             "overwrite" => FALSE,
             "file_name"=> $filenames_ar,
             "encrypt_name" => FALSE,
@@ -464,26 +467,26 @@ class productUpload extends MY_Controller
             "allowed_types" => "jpg|jpeg|png|gif",
             "max_size" => $this->max_file_size_mb * 1024,
             "xss_clean" => FALSE
-            )); 	
+            ));
 
         if($this->upload->do_multi_upload('files')){
             $file_data = $this->upload->get_multi_upload_data();
             for ($i=0; $i < sizeof($filenames_ar); $i++) { 
-                $this->es_img_resize($filenames_ar[$i],$path_directory, 'small/', $this->img_dimension['small']); 
-                $this->es_img_resize($filenames_ar[$i],$path_directory.'small/', '../categoryview/', $this->img_dimension['categoryview']);
-                $this->es_img_resize($filenames_ar[$i],$path_directory.'categoryview/','../thumbnail/', $this->img_dimension['thumbnail']);
+                $this->es_img_resize($filenames_ar[$i],$pathDirectory, 'small/', $this->img_dimension['small']); 
+                $this->es_img_resize($filenames_ar[$i],$pathDirectory.'small/', '../categoryview/', $this->img_dimension['categoryview']);
+                $this->es_img_resize($filenames_ar[$i],$pathDirectory.'categoryview/','../thumbnail/', $this->img_dimension['thumbnail']);
                 //If user uploaded image is too large, resize and overwrite original image
                 if(isset($file_data[$i])){
                     if(($file_data[$i]['image_width'] > $this->img_dimension['usersize'][0]) || ($file_data[$i]['image_height'] > $this->img_dimension['usersize'][1])){
-                        $this->es_img_resize($file_data[$i]['file_name'],$path_directory,'', $this->img_dimension['usersize']);
+                        $this->es_img_resize($file_data[$i]['file_name'],$pathDirectory,'', $this->img_dimension['usersize']);
                     }
                 }
             }
         }
         else{
             for ($i=0; $i < sizeof($filenames_ar); $i++) { 
-                if (file_exists($path_directory.$filenames_ar[$i])) {
-                    unlink($path_directory.$filenames_ar[$i]) or die('failed deleting: ' . $path);
+                if (file_exists($pathDirectory.$filenames_ar[$i])) {
+                    unlink($pathDirectory.$filenames_ar[$i]) or die('failed deleting: ' . $path);
                 }
             }
             $text = $this->upload->display_errors();
@@ -499,23 +502,28 @@ class productUpload extends MY_Controller
         die(json_encode($return));
     }
 
-    function uploadimageOther()
+    /*
+     *  Upload image for attributes of the product
+     *  
+     *  @return JSON
+     */
+    public function uploadimageOther()
     {
-        $temp_product_id = $this->session->userdata('tempId'); 
-        $tempDirectory = $this->session->userdata('tempDirectory'); 
-        $memberId =  $this->session->userdata('member_id');	
-        $filename =  $this->input->post('pictureName');		 
+        $temp_product_id = $this->session->userdata('tempId');
+        $tempDirectory = $this->session->userdata('tempDirectory');
+        $memberId =  $this->session->userdata('member_id');
+        $filename =  $this->input->post('pictureName');
         $date = date("Ymd");
         $fulldate = date("YmdGis"); 
  
-        $path_directory = $tempDirectory.'/other/';
+        $pathDirectory = $tempDirectory.'/other/';
 
-        if (!file_exists ($path_directory)){
-            mkdir($path_directory, 0777, true);;
+        if (!file_exists ($pathDirectory)){
+            mkdir($pathDirectory, 0777, true);
         }
 
         $this->upload->initialize(array( 
-            "upload_path" => $path_directory,
+            "upload_path" => $pathDirectory,
             "overwrite" => FALSE,
             "file_name"=> $filename,
             "encrypt_name" => FALSE,
@@ -526,19 +534,24 @@ class productUpload extends MY_Controller
             )); 
  
         if ($this->upload->do_multi_upload('attr-image-input')){ 
-            $this->es_img_resize($filename,$path_directory, 'small/', $this->img_dimension['small']); 
-            $this->es_img_resize($filename,$path_directory.'small/', '../categoryview/', $this->img_dimension['categoryview']);
-            $this->es_img_resize($filename,$path_directory.'categoryview/','../thumbnail/', $this->img_dimension['thumbnail']);
+            $this->es_img_resize($filename,$pathDirectory, 'small/', $this->img_dimension['small']); 
+            $this->es_img_resize($filename,$pathDirectory.'small/', '../categoryview/', $this->img_dimension['categoryview']);
+            $this->es_img_resize($filename,$pathDirectory.'categoryview/','../thumbnail/', $this->img_dimension['thumbnail']);
             die('{"result":"ok"}');
         }
-        else{ 
+        else{
             die('{"result":"false","msg":"'.$this->upload->display_errors().'"}');
         }
     }
 
-
-
-    function step2_2() # function for processing the adding of new item
+    /*
+     * Process and validate user's inputted data into form
+     * insert into database
+     * proceed to step3
+     *
+     * @return JSON 
+     */
+    public function step2_2() # function for processing the adding of new item
     {
         $this->load->model("user_model");
         $combination = json_decode($this->input->post('combination'),true); 
@@ -734,10 +747,16 @@ class productUpload extends MY_Controller
         }
     }
 
+    /*
+     * Process and validate user's inputted data into form
+     * update the database
+     * proceed to step3
+     *
+     * @return JSON 
+     */
     public function step2edit2Submit()
     {
         $this->load->model("user_model");
-
         $combination = json_decode($this->input->post('combination'),true); 
         $attributes = json_decode($this->input->post('attributes'),true);
         $product_id = $this->input->post('p_id');
@@ -772,7 +791,7 @@ class productUpload extends MY_Controller
             || $product_price <= 0 
             || strlen(trim($product_description)) == 0) && $savingAsDraft == 0){
 
-            die('{"e":"0","d":"Fill (*) All Required Fields Properly!"}');		
+            die('{"e":"0","d":"Fill (*) All Required Fields Properly!"}');
         }
 
         foreach($itemQuantity as $keyid => $value){

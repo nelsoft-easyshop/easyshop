@@ -51,8 +51,6 @@
      AND id_cat = :cat_id ;
     </select>
 
- 
-    
     <select id="getParent">
         SELECT T2.id_cat, T2.name, T2.slug
         FROM (
@@ -721,24 +719,6 @@ FROM
     SELECT id_product, name, price, lastmodifieddate, clickcount, quantity
     FROM `es_product`
     WHERE `member_id` = :sellerid
-</select>
-<select id="addCategory">
-    INSERT INTO `es_cat`
-        (
-             `name`,
-             `description`,
-             `keywords`,
-             `parent_id`,
-             `sort_order`,
-             `is_main`)
-    VALUES 
-        (
-            :name,
-            :description,
-            :keywords,
-            :parent_id,
-            :sort_order,
-            :is_main);
 </select>
 
 <select id="getProductEdit">
