@@ -2,7 +2,7 @@
 <map>
 
     <select id="getAllKeyword">
-            SELECT `id_keywords`,`keywords` FROM es_keywords WHERE 1
+        SELECT `id_keywords`,`keywords` FROM es_keywords WHERE 1
     </select>
     
     <select id="searchCategory">
@@ -12,6 +12,5 @@
     <select id="searchBrand">
         SELECT `id_brand`, `name` FROM `es_brand` WHERE MATCH(`name`) AGAINST (CONCAT(:sch_string,'*') IN BOOLEAN MODE)
     </select>
-
 
 </map>

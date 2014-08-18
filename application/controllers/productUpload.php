@@ -51,10 +51,6 @@ class productUpload extends MY_Controller
             $data_item['categoryId'] = $product['cat_id'];
         }
         else{
-            if($this->input->post('step2_content')){
-                $data_item['step2_content'] = $this->input->post('step2_content');
-            }
-
             if($this->input->post('c_id')){
                 $cat_id = $data_item['categoryId'] = $this->input->post('c_id');    
                 $other_cat_name = $this->input->post('other_cat_name');
@@ -63,8 +59,6 @@ class productUpload extends MY_Controller
                 $data_item['other_cat_name'] = $other_cat_name;	
             }
         }
-
-        $userdetails = $this->user_model->getUserById($uid);
 
         if ($this->input->post('p_id')) {
             $product_id = $data_item['product_id_edit'] = $this->input->post('p_id');
@@ -75,10 +69,6 @@ class productUpload extends MY_Controller
             $data_item['categoryId'] = $product['cat_id'];
         }
         else{
-            if($this->input->post('step2_content')){
-                $data_item['step2_content'] = $this->input->post('step2_content');
-            }
-
             if($this->input->post('c_id')){
                 $cat_id = $data_item['categoryId'] = $this->input->post('c_id');    
                 $other_cat_name = $this->input->post('other_cat_name');
@@ -187,7 +177,7 @@ class productUpload extends MY_Controller
             if($id == 1){
                 $str_parents_to_last = $otherCategory; 
             }else{
-                $lastElement = end($parents);	
+                $lastElement = end($parents);
                  
                 foreach($parents as $k => $v) { # creating the bread crumbs from parent category to the last selected category
                     $str_parents_to_last = $str_parents_to_last  .' '. $v['name'];
@@ -254,63 +244,59 @@ class productUpload extends MY_Controller
         }
 
         $response['tempId'] = $tempId = strtolower(substr( "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" ,mt_rand( 0 ,50 ) ,1 ) .substr( md5( time() ), 1));
-
         $response['memid'] = $member_id = $this->session->userdata('member_id');
-
         $dir    = './assets/product/'; 
-        $path = glob($dir."{$product_id}_{$member_id}*", GLOB_BRACE)[0].'/'; 
-
-        $other_category_name = $this->input->post("othernamecategory");  
+        $path = glob($dir."{$product_id}_{$member_id}*", GLOB_BRACE)[0].'/';
+        $other_category_name = $this->input->post("othernamecategory");
         $product = $this->product_model->getProductEdit($product_id, $member_id);
         $response['id'] = $cat_id = ($this->input->post('hidden_attribute')) ? $this->input->post('hidden_attribute') : $product['cat_id'];  
 
         if($product['brand_other_name'] === '' 
             && $product['brand_id'] == 1){
-            $product['brandname'] = '';	
+            $product['brandname'] = '';
         }
         elseif($product['brand_other_name'] === '' 
             && $product['brand_id'] != 1){
             $product['brandname'] = $this->product_model->getBrandById($product['brand_id'])[0]['name'];
-        }else{
+        }
+        else{
             $product['brandname'] = $product['brand_other_name'];
         }
 
-        // Loading Categories
+        // Loading Categories breadcrumbs
         $otherCategory  = $response['otherCategory'] = ($this->input->post('othernamecategory')) ? html_escape($this->input->post('othernamecategory')) : $product['otherCategory'];
-        $str_parents_to_last = '';
+        $breadcrumbs = '';
         $parents = $this->product_model->getParentId($cat_id); 
- 
+
         if($cat_id == 1){
-            $str_parents_to_last = $otherCategory;
+            $breadcrumbs = $otherCategory;
         }
-        else{  
-            $lastElement = end($parents);	
+        else{
+            $lastElement = end($parents);
             foreach($parents as $k => $v) {
-                 
-                $str_parents_to_last .= ($v != $lastElement) ? $v['name'].' &#10140; ' :   $v['name'];
-                
+                $breadcrumbs .= ($v != $lastElement) ? $v['name'].' &#10140; ' : $v['name'];
             }
 
             if(!$otherCategory == ""){
-                $str_parents_to_last = $str_parents_to_last.' &#10140; ' . $otherCategory;
+                $breadcrumbs = $breadcrumbs.' &#10140; ' . $otherCategory;
             }
         }
 
         // Loading images
         $images = $this->product_model->getProductImages($product_id);
-        $main_images = $arrayNameOnly = array();  
+        $mainImages = $arrayNameOnly = array();  
         foreach($images as $imagekey => $imagevalue){
             if(strpos(($imagevalue['path']),'other') === FALSE){
                 $file = explode('_',$imagevalue['file']);
                 $tempFile = $tempId.'_'.$member_id.'_'.end($file);
                 $imagevalue['temp'] = $tempFile;
                 $imagevalue['type'] = end(explode('.', end($file)));
-                array_push($main_images, $imagevalue);
+                array_push($mainImages, $imagevalue);
             }
             array_push($arrayNameOnly, $imagevalue['file']);
         }
 
-        $response['main_images'] = $main_images; 
+        $response['main_images'] = $mainImages;
 
         // Loading attributes
         $attribute = $this->product_model->getAttributesByParent($parents); 
@@ -351,12 +337,12 @@ class productUpload extends MY_Controller
             }
         } 
  
-        $response['soloAttribute'] =  $soloAttribute;  
-        $response['eachAttribute'] =  $eachAttribute;  
+        $response['soloAttribute'] =  $soloAttribute;
+        $response['eachAttribute'] =  $eachAttribute;
         
         // Loading Combinations
         $newItemQuantityArray = array();
-        $itemQuantity =  $this->product_model->getProductQuantity($product_id, true);	
+        $itemQuantity =  $this->product_model->getProductQuantity($product_id, true);
     
         foreach($itemQuantity as $keyid => $value){
             if(count($value['product_attribute_ids'])===1){
@@ -376,14 +362,14 @@ class productUpload extends MY_Controller
 
         $response['itemQuantity'] = $newItemQuantityArray;
         $response['attributeArray'] = $attributeArray;
-        $response['parent_to_last'] = $str_parents_to_last;
+        $response['parent_to_last'] = $breadcrumbs;
         $response['product_details'] = $product;
         $response['is_edit'] = 'is_edit';
         $response['img_max_dimension'] = $this->img_dimension['usersize'];
         $date = end(explode('_', explode('/', $path)[3]));
  
         $tempdirectory = $tempId.'_'.$member_id.'_'.$date;
-        $tempdirectory = $response['tempdirectory'] = './assets/temp_product/'.$tempdirectory.'/'; 
+        $tempdirectory = $response['tempdirectory'] = './assets/temp_product/'.$tempdirectory.'/';
 
         $this->session->set_userdata('tempId', $response['tempId']); 
         $this->session->set_userdata('tempDirectory',  $tempdirectory);
@@ -490,7 +476,7 @@ class productUpload extends MY_Controller
                 if(isset($file_data[$i])){
                     if(($file_data[$i]['image_width'] > $this->img_dimension['usersize'][0]) || ($file_data[$i]['image_height'] > $this->img_dimension['usersize'][1])){
                         $this->es_img_resize($file_data[$i]['file_name'],$path_directory,'', $this->img_dimension['usersize']);
-                    }	
+                    }
                 }
             }
         }
@@ -1050,124 +1036,22 @@ class productUpload extends MY_Controller
     
         echo json_encode($serverResponse, JSON_FORCE_OBJECT);
     }
-    
-    public function editStep2(){
-        if($this->input->post('p_id')){
-          $product_id = $this->input->post('p_id');
-        }
-        else{
-          redirect('me', 'refresh');
-        }
-    
-        $member_id = $this->session->userdata('member_id');
-        $data = array('title'=>'Edit Product');
-        $data = array_merge($data,$this->fill_header());
-        $other_category_name = $this->input->post("othernamecategory"); 
-        $this->load->view('templates/header',$data); 
 
-        $product = $this->product_model->getProductEdit($product_id, $member_id);  
-
-        if($this->input->post('hidden_attribute')){
-            $new_cat_id = $this->input->post('hidden_attribute');
-            $userdetails = $this->user_model->getUserById($member_id);
-            $is_admin = (intval($userdetails['is_admin']) === 1);
-            $this->config->load('protected_category', TRUE);
-            $protected_categories = $this->config->config['protected_category'];
-            if( !is_numeric($new_cat_id) ||  (!$is_admin && in_array($new_cat_id, $protected_categories))){
-                redirect('/sell/step1/', 'refresh');
-            }
-            $product['otherCategory'] = $other_category_name;
-            if($this->product_model->editProductCategory($new_cat_id, $product_id, $member_id, $other_category_name)>0){
-                if(intval($product['cat_id'],10)!==intval($new_cat_id,10)){
-                    $this->product_model->deleteShippingInfomation($product_id);
-                    $this->product_model->deleteProductQuantityCombination($product_id);
-                    $this->product_model->deleteAttributeByProduct($product_id);
-                }
-                $product['cat_id'] = $new_cat_id;
-            }           
-        }
-        
-        $parents = $this->product_model->getParentId($product['cat_id']); # getting all the parent from selected category
-        $lastElement = end($parents);	
-        $str_parents_to_last = "";
-        foreach($parents as $k => $v) { # creating the bread crumbs from parent category to the last selected category
-            $str_parents_to_last = $str_parents_to_last  .' '. $v['name'];
-            if(!($v == $lastElement))
-                $str_parents_to_last = $str_parents_to_last.' &#10140;';
-        }
-  
-        if(strlen(trim($product['otherCategory'])) > 0){
-           $str_parents_to_last =  $str_parents_to_last.((strlen(trim($str_parents_to_last))>0)?' &#10140;':'').$product['otherCategory'];
-        }
-        
-        $images = $this->product_model->getProductImages($product_id);
-        $main_images = array();
-        foreach($images as $image){
-            if(strpos(($image['path']),'other') === FALSE)
-                array_push($main_images, $image);
-        }
-        #$attribute = $this->product_model->getAttributesBySelf($product['cat_id']); # getting all attribute from all parent from selected category
-        $attribute = $this->product_model->getAttributesByParent($parents);
-            for ($i=0 ; $i < sizeof($attribute) ; $i++ ) {  # getting all lookuplist from item attribute
-            $lookuplist = $this->product_model->getLookItemListById($attribute[$i]['attr_lookuplist_id']);
-            array_push($attribute[$i],$lookuplist);
-        }		
-        
-        $response['attribute'] = $attribute;
-        $response['parent_to_last'] = $str_parents_to_last;
-
-        $response['id'] = $product['cat_id'];
-        $response['product_details'] = $product;
-
-        $response['is_edit'] = true;
-
-        $response['product_attributes_opt'] = array();
-        $response['product_attributes_spe'] = array();
-        $response['memid'] = $member_id;
-        
-        
-        foreach($this->product_model->getProductAttributes($product_id, 'ALL') as $key=>$attribute){
-            if(strtolower(gettype($key)) === 'string'){ 		#OPTIONAL ATTRIBUTES: BY NAME
-                foreach($attribute as $product_attribute){
-                    if($product_attribute['type']  === 'option'){
-                        if(!array_key_exists($key,$response['product_attributes_opt']))
-                            $response['product_attributes_opt'][$key] = array();
-                        array_push($response['product_attributes_opt'][$key], $product_attribute);
-                    }
-                }
-            }
-            else if(strtolower(gettype($key)) === 'integer'){  #SPECIFIC CATEGORY ATTRIBUTES: BY ID
-                foreach($attribute as $product_attribute){
-                    if($product_attribute['type']  === 'specific'){
-                        if(!array_key_exists($key,$response['product_attributes_spe']))
-                            $response['product_attributes_spe'][$key] = array();
-                        array_push($response['product_attributes_spe'][$key], $product_attribute);
-                    }
-                }			
-            }
-        }	
-        
-        $response['tempId'] = strtolower(substr( "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" ,mt_rand( 0 ,50 ) ,1 ) .substr( md5( time() ), 1));            
-        $this->session->set_userdata('tempId', $response['tempId']);
-            
-        $response['main_images'] = $main_images;	
-        $response['item_quantity'] =  $this->product_model->getProductQuantity($product_id, true);
-        $response['img_max_dimension'] = $this->img_dimension['usersize'];
-        $this->load->view('pages/product/product_upload_step2_view', $response);
-        $this->load->view('templates/footer'); 
-
-    }
-
-    public function deleteDraft(){
+    /*
+    * Delete draft items
+    */
+    public function deleteDraft()
+    {
         $productId = $this->input->post('p_id');
         $memberId =  $this->session->userdata('member_id');
         $output = $this->product_model->deleteDraft($memberId,$productId);
         if($output == 0){
-            $data = '{"e":"0","m":"Sorry, something went wrong. Please try again later"}';	
+            $data = '{"e":"0","m":"Sorry, something went wrong. Please try again later"}';
         }else{
-            $data = '{"e":"1","d":"Draft item successfully removed."}';	
+            $data = '{"e":"1","d":"Draft item successfully removed."}';
         }
-        echo $data; 
+
+        die($data);
     }
     
     public function previewItem(){

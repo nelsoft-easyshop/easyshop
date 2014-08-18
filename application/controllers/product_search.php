@@ -740,30 +740,35 @@ class product_search extends MY_Controller {
 		echo $data; 
     }
     
-    
+    /*
+     *   Search category list using string and organized based on its parent
+     *   through the search bar
+     *   Route: searchCategory
+     */
     function searchCategory(){  
         
-        $user_id = $this->session->userdata('member_id');
-        $is_admin = false;
-        if($user_id){
+        $userId = $this->session->userdata('member_id');
+        $isAdmin = false;
+        if($userId){
             $this->load->model('user_model');
-            $userdetails = $this->user_model->getUserById($user_id);
-            $is_admin = (intval($userdetails['is_admin']) === 1);
+            $userdetails = $this->user_model->getUserById($userId);
+            $isAdmin = (intval($userdetails['is_admin']) === 1);
         }
-            
+
         $this->config->load('protected_category', TRUE);
         $protected_categories = $this->config->config['protected_category'];
 
-		$string = $this->input->get('data');
-		$rows = $this->search_model->searchCategory($string);
-		foreach($rows as $idx=>$row){
-            if(in_array($row['id_cat'],$protected_categories) && !$is_admin){
+        $string = $this->input->get('data');
+        $rows = $this->search_model->searchCategory($string);
+        foreach($rows as $idx=>$row){
+            if(in_array($row['id_cat'],$protected_categories) && !$isAdmin){
                 unset($rows[$idx]);
                 continue;
             }
-			$rows[$idx]['parent'] = $this->product_model->getParentId($row['id_cat']);
-		}
-		echo json_encode($rows);
+            $rows[$idx]['parent'] = $this->product_model->getParentId($row['id_cat']);
+        }
+
+        echo json_encode($rows);
     }
 
     function searchBrand(){
@@ -771,8 +776,6 @@ class product_search extends MY_Controller {
 	    $rows = $this->search_model->searchBrand($string);
 	    echo json_encode($rows);
     }
-
-    
 
     private function highlights($text, $words)
     {
