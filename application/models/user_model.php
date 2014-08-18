@@ -131,11 +131,18 @@ class user_model extends CI_Model {
         return $row;
     }
     
-    function getVendorSubscription($member_id)
+    /**
+     *  Fetch users $member_id is subscribed to.
+     *
+     *  @param integer $memberID
+     *
+     *  @return array
+     */
+    function getVendorSubscription($memberID)
     {
         $query = $this->xmlmap->getFilenameID('sql/users','getVendorSubscription'); 
         $sth = $this->db->conn_id->prepare($query);
-        $sth->bindParam(':member_id',$member_id, PDO::PARAM_INT);
+        $sth->bindParam(':member_id',$memberID, PDO::PARAM_INT);
         $sth->execute();
         $row = $sth->fetchAll(PDO::FETCH_ASSOC);
         
