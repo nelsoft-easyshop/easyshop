@@ -453,7 +453,8 @@ class productUpload extends MY_Controller
             "allowed_types" => "jpg|jpeg|png|gif",
             "max_size" => $this->max_file_size_mb * 1024,
             "xss_clean" => FALSE
-            ));
+            )
+        );
 
         if($this->upload->do_multi_upload('files')){
             $file_data = $this->upload->get_multi_upload_data();
@@ -1047,8 +1048,10 @@ class productUpload extends MY_Controller
     }
 
     /**
-    * Delete draft items
-    */
+     * Delete draft items
+     *
+     * @return string
+     */
     public function deleteDraft()
     {
         $productId = $this->input->post('p_id');
@@ -1157,9 +1160,11 @@ class productUpload extends MY_Controller
         $this->image_lib->clear();
     }
     
-    /*******************    NEW PRODUCT UPLOAD FUNCTIONS    ***************************************/
     
-    # Renders newStep3 view
+    /**
+     * Renders upload step 3
+     *
+     */
     public function step3()
     {
         if( $this->input->post('prod_h_id') ){
@@ -1208,17 +1213,14 @@ class productUpload extends MY_Controller
         }
     }
     
-    /*
-     *Handler for additional info in product uploads
-     *Update billing info, CoD and meetup in product table
-     *Upload shipping details if for delivery
+    /**
+     * Handler for additional info in product uploads
+     * Update billing info, CoD and meetup in product table
+     * Upload shipping details if for delivery
+     *
      */
     public function step4()
-    {
-        /*print('<pre>');
-        print_r($this->input->post());
-        die();*/
-    
+    {    
         $this->load->model('memberpage_model');
         $memberID =  $this->session->userdata('member_id');
         $deliveryOption = $this->input->post('delivery_option') ? $this->input->post('delivery_option') : array();
@@ -1331,7 +1333,11 @@ class productUpload extends MY_Controller
         echo json_encode($serverResponse);
     }
     
-    function finishProductUpload()
+    /**
+     * Render view for last upload tsep
+     *
+     */
+    public function finishProductUpload()
     {
         $this->load->model("memberpage_model");
         
@@ -1374,6 +1380,7 @@ class productUpload extends MY_Controller
             $this->load->view('templates/footer_full');
         }
     }
+    
 }
 
 
