@@ -49,10 +49,10 @@
 
     
     //CONFIRM CONNECTION
-    if (mysqli_connect_errno())
-    {
+    if (mysqli_connect_errno()){
             echo "ERROR : Failed to connect to MySQL: " . mysqli_connect_error();
-    }else{
+    }
+    else{
             echo "Successfully connected to database! \n";
     }
 
@@ -60,14 +60,14 @@
                                     "SELECT username, contactno, email, nickname, fullname, datecreated
                                     FROM es_member
                                     WHERE datecreated BETWEEN '" . $configQuery['past_date'] . "' AND '" . $configQuery['this_date'] . "' 
-									
-									UNION
-									
-									SELECT '','',email,'','',datecreated
-									FROM es_subscribe
-									WHERE datecreated BETWEEN '" . $configQuery['past_date'] . "' AND '" . $configQuery['this_date'] . "' 
-									
-									ORDER BY datecreated"
+                                    
+                                    UNION
+                                    
+                                    SELECT '','',email,'','',datecreated
+                                    FROM es_subscribe
+                                    WHERE datecreated BETWEEN '" . $configQuery['past_date'] . "' AND '" . $configQuery['this_date'] . "' 
+                                    
+                                    ORDER BY datecreated"
     );
 
 
@@ -82,8 +82,8 @@
     
     while($userData = $rawResult->fetch_assoc()){
 
-	$csvData .= $userData['username'] . ',' . $userData['contactno'] . ',' . $userData['email'] . ',' . $userData['nickname'] . 
-				    ',' . $userData['fullname'] . ',' . $userData['datecreated'] . PHP_EOL;
+        $csvData .= $userData['username'] . ',' . $userData['contactno'] . ',' . $userData['email'] . ',' . $userData['nickname'] . 
+                        ',' . $userData['fullname'] . ',' . $userData['datecreated'] . PHP_EOL;
 
     }
     
@@ -111,6 +111,7 @@
 
     if(!$numSent){
             echo "ERROR : Failed to send all emails!\n";
-    }else{
+    }
+    else{
             echo "Successfully sent " . $numSent . "emails!\n";
     }
