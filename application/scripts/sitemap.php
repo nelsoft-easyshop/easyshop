@@ -1,12 +1,10 @@
 <?php     
-         $base_url= "https://www.easyshop.ph/";
+        $base_url= "https://www.easyshop.ph/";
 
-         $filelocation = dirname(__FILE__).'/../../web/';
+        $filelocation = dirname(__FILE__).'/../../web/';
 
-
-	$configDatabase = require dirname(__FILE__). '/../config/param/database.php';
-	$conn = mysqli_connect($configDatabase['host'],$configDatabase['user'],$configDatabase['password'],$configDatabase['dbname']);
-
+        $configDatabase = require dirname(__FILE__). '/../config/param/database.php';
+        $conn = mysqli_connect($configDatabase['host'],$configDatabase['user'],$configDatabase['password'],$configDatabase['dbname']);
 
         if ($conn->connect_error) {
             exit('Database connection failed: '  . $conn->connect_error);
@@ -174,18 +172,18 @@
         
     }
     
-	function url_clean($string)
-	{
-		$string = preg_replace("/\s+/", " ", $string);
-		$string = str_replace('-', ' ', trim($string)); 
-		$string = preg_replace("/\s+/", " ", $string);
-		$string = str_replace(' ', '-', trim($string));  
-		$string = preg_replace('/[^A-Za-z0-9\-]/', '', $string);  
+    function url_clean($string)
+    {
+        $string = preg_replace("/\s+/", " ", $string);
+        $string = str_replace('-', ' ', trim($string)); 
+        $string = preg_replace("/\s+/", " ", $string);
+        $string = str_replace(' ', '-', trim($string));  
+        $string = preg_replace('/[^A-Za-z0-9\-]/', '', $string);  
 
-		$string = str_replace('-', ' ', $string); 
-		$string = str_replace(' ', '-', $string); 
-		$string = str_replace('--', '-', $string);  
-		return preg_replace('/\s+/','-', $string);
-	}	
+        $string = str_replace('-', ' ', $string); 
+        $string = str_replace(' ', '-', $string); 
+        $string = str_replace('--', '-', $string);  
+        return preg_replace('/\s+/','-', $string);
+    }	
 
 ?>
