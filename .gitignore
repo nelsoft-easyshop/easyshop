@@ -2,6 +2,7 @@
 /web/assets/product/*
 /web/assets/temp_product
 /application/resources/local/*
+/web/assets/user/*
 
 config.php
 .DS_Store
