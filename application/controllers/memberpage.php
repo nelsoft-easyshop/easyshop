@@ -86,13 +86,15 @@ class Memberpage extends MY_Controller
 
             if($postdata['email'] === $this->input->post('email_orig')){
                 $postdata['is_email_verify'] = $this->input->post('is_email_verify');
-            }else{
+            }
+            else{
                 $postdata['is_email_verify'] = 0;
             }
             
             if($postdata['contactno'] === $this->input->post('mobile_orig')){
                 $postdata['is_contactno_verify'] = $this->input->post('is_contactno_verify');
-            }else{
+            }
+            else{
                 $postdata['is_contactno_verify'] = 0;
             }
             
@@ -149,7 +151,8 @@ class Memberpage extends MY_Controller
 
             $data['result'] = $result ? 'success':'fail';
             $data['errmsg'] = $result ? '' : 'Database update error.';
-        }else{
+        }
+        else{
             $data['result'] = 'error';
             $data['errmsg'] = 'Failed to validate form.';
         }
@@ -186,7 +189,8 @@ class Memberpage extends MY_Controller
 
             $data['result'] = $result ? 'success' : 'fail';
             $data['errmsg'] = $result ? '' : 'Database update error';
-        }else{
+        }
+        else{
             $data['result'] = 'error';
             $data['errmsg'] = 'Failed to validate form.';
         }
@@ -259,7 +263,8 @@ class Memberpage extends MY_Controller
         if( $data['cityID']===$data['c_cityID'] && $data['stateregionID']===$data['c_stateregionID'] && 
             $data['address']===$data['c_address'] ){
             $data['show_default_address'] = false;
-        }else{
+        }
+        else{
             $data['show_default_address'] = true;
         }
 
@@ -299,13 +304,16 @@ class Memberpage extends MY_Controller
             <p style='font-size:20px;'><strong>You can only upload JPEG, JPG, GIF, and PNG files with a max size of 5MB and max dimensions of 5000px by 5000px</strong></p>";
             if($isVendor){
                 echo "<script type='text/javascript'>setTimeout(function(){window.location.href='".base_url().$temp['userslug']."'},3000);</script>";
-            }else{
+            }
+            else{
                 echo "<script type='text/javascript'>setTimeout(function(){window.location.href='".base_url()."me'},3000);</script>";
             }
-        }else{
+        }
+        else{
             if($isVendor){
                 redirect($temp['userslug']);
-            }else{
+            }
+            else{
                 redirect('me');
             }
         }
@@ -327,7 +335,8 @@ class Memberpage extends MY_Controller
         }
         if( isset( $argument )){
             $callback_result = $this->$model->$method( $postdata, $argument );
-        }else{
+        }
+        else{
             $callback_result = $this->$model->$method( $postdata );
         }
         
@@ -382,7 +391,8 @@ class Memberpage extends MY_Controller
                 $postdata['addresstype'] = 0;
                 $result[1] = $this->memberpage_model->editAddress($uid, $postdata, $address_id);
                 $data['default_add'] = $this->input->post('c_def_address');
-            }else{
+            }
+            else{
                 $result[1] = true;
                 $data['default_add'] = 'off';
             }
@@ -392,7 +402,8 @@ class Memberpage extends MY_Controller
 
             $data = array_merge($data,$this->memberpage_model->get_member_by_id($uid));
 
-        }else{
+        }
+        else{
             $data['result'] = 'fail';
             $data['errmsg'] = 'Failed to validate form.';
         }
@@ -432,7 +443,8 @@ class Memberpage extends MY_Controller
             $data['result'] = $result ? 'success' : 'fail';
             $data['errmsg'] = $result ? '' : 'Database update error.';
 
-        }else{
+        }
+        else{
             $data['result'] = 'error';
             $data['errmsg'] = 'Failed to validate form.';
         }
@@ -472,7 +484,8 @@ class Memberpage extends MY_Controller
                     'order_id' => $data['order_id']
                 );
             // current user is seller
-            }else if($data['feedb_kind'] == 1){
+            }
+            else if($data['feedb_kind'] == 1){
                 $transacData = array(					
                     'buyer' => $data['for_memberid'],
                     'seller' => $data['uid'],
@@ -493,8 +506,10 @@ class Memberpage extends MY_Controller
             
             echo $result?1:0;
         }
-        else
+        else{
             echo 0;
+        }
+        
     }
     
     /**
@@ -540,10 +555,12 @@ class Memberpage extends MY_Controller
             if( $this->input->post('buyer_response') ){
                 $data['order_product_id'] = $this->input->post('buyer_response');
                 $data['status'] = 1;
-            }else if( $this->input->post('seller_response') ){
+            }
+            else if( $this->input->post('seller_response') ){
                 $data['order_product_id'] = $this->input->post('seller_response');
                 $data['status'] = 2;
-            }else if( $this->input->post('cash_on_delivery') ){
+            }
+            else if( $this->input->post('cash_on_delivery') ){
                 $data['order_product_id'] = $this->input->post('cash_on_delivery');
                 $data['status'] = 3;
             }
@@ -575,7 +592,8 @@ class Memberpage extends MY_Controller
                     $mobilestat = $this->payment_model->sendNotificationMobile($parseData['mobile'], $msg);
                 }
                 
-            }else if( $result['o_success'] >= 1 && ( $data['status'] === 1 || $data['status'] === 3) ){
+            }
+            else if( $result['o_success'] >= 1 && ( $data['status'] === 1 || $data['status'] === 3) ){
                 $emailstat = true;
             }
 
@@ -590,7 +608,8 @@ class Memberpage extends MY_Controller
         /**
          *  DRAGONPAY HANDLER
          */
-        }else if( $this->input->post('dragonpay') ){
+        }
+        else if( $this->input->post('dragonpay') ){
             $this->load->library('dragonpay');
             
             // Fetch transaction data
@@ -604,16 +623,19 @@ class Memberpage extends MY_Controller
                 if($dragonpayResult == 'S'){ // Transaction Complete
                     $serverResponse['result'] = 'success';
                     $serverResponse['error'] = '';
-                }else if($dragonpayResult == 'P' || $dragonpayResult == 'U'){
+                }
+                else if($dragonpayResult == 'P' || $dragonpayResult == 'U'){
                     $serverResponse['error'] = 'Kindly follow the instructions in the e-mail sent to you by Dragonpay.';
                 }
-            }else{
+            }
+            else{
                 $serverResponse['error'] = 'Transaction does not exist.';
             }
         /**
          *  BANK DEPOSIT HANDLER
          */
-        }else if( $this->input->post('bank_deposit') && $this->form_validation->run('bankdeposit') ) {
+        }
+        else if( $this->input->post('bank_deposit') && $this->form_validation->run('bankdeposit') ) {
             // Fetch transaction data
             $checkTransaction = $this->payment_model->checkTransactionBasic($data);
             
@@ -630,7 +652,8 @@ class Memberpage extends MY_Controller
                 
                 $serverResponse['result'] = $result ? 'success' : 'fail';
                 $serverResponse['error'] = $result ? '' : 'Failed to insert details into database.';
-            }else{
+            }
+            else{
                 $serverRespone['error'] = 'Transaction does not exist.';
             }
         }
@@ -663,7 +686,8 @@ class Memberpage extends MY_Controller
                 $r = $this->payment_model->addShippingComment($postData);
                 $serverResponse['result'] = $r ? 'success' : 'fail';
                 $serverResponse['error'] = $r ? '' : 'Failed to insert in database.';
-            } else {
+            }
+            else{
                 $serverResponse['error'] = 'Server data mismatch. Possible hacking attempt';
             }
         }
@@ -699,7 +723,8 @@ class Memberpage extends MY_Controller
                 $historyData['order_product_status'] = 99;
                 if($data['method'] === 'reject'){
                     $historyData['comment'] = 'REJECTED';
-                }else if($data['method'] === 'unreject'){
+                }
+                else if($data['method'] === 'unreject'){
                     $historyData['comment'] = 'UNREJECTED';
                 }
                 $this->payment_model->addOrderProductHistory($historyData);
@@ -790,7 +815,8 @@ class Memberpage extends MY_Controller
             print "<h2 style='color:red;'>Unable to upload image.</h2>
             <p style='font-size:20px;'><strong>You can only upload JPEG, JPG, GIF, and PNG files with a max size of 5MB and max dimensions of 5000px by 5000px</strong></p>";
             print "<script type='text/javascript'>setTimeout(function(){window.location.href='".base_url().$data['userslug']."'},3000);</script>";
-        }else{
+        }
+        else{
             redirect($data['userslug']);
         }
     }
@@ -839,7 +865,8 @@ class Memberpage extends MY_Controller
             
             if( count($resultCount) > 0 || in_array($userslug, $restrictedList)){
                 $serverResponse['error'] = "URL already in use.";
-            }else{
+            }
+            else{
                 $boolResult = $this->memberpage_model->editUserSlug($memberID, $userslug);
                 $serverResponse['result'] = $boolResult ? 'success':'fail';
                 $serverResponse['error'] = $boolResult? '':'Failed to update database. Please try again later';
@@ -910,17 +937,20 @@ class Memberpage extends MY_Controller
                     if($result === 'success'){
                         $temp['email'] = 1;
                     }
-                }else{
+                }
+                else{
                     $result = 'exceed';
                 }
                 
                 $this->register_model->store_verifcode($temp);
                 echo json_encode($result);
                 
-            }else{
+            }
+            else{
                 echo json_encode('dataerror');
             }
-        }else{
+        }
+        else{
             echo 0;
         }
     }
@@ -988,7 +1018,8 @@ class Memberpage extends MY_Controller
             if($this->memberpage_model->isBankAccountUnique($data)){
                 $result = $this->memberpage_model->billing_info($data);
                 echo '{"e":"1","d":"success","id":'.$result.'}';
-            }else{
+            }
+            else{
                 echo '{"e":"0","d":"duplicate"}';
             }
         }
@@ -1083,7 +1114,8 @@ class Memberpage extends MY_Controller
         if($who == "vendor"){
             $activeView = 'vendor_activeproduct_view';
             $member_id = $this->input->get('mid');
-        }else{
+        }
+        else{
             $activeView = 'memberpage_activeproduct_view';
             $deletedView = 'memberpage_deletedproduct_view';
             $member_id = $this->session->userdata('member_id');
@@ -1140,7 +1172,8 @@ class Memberpage extends MY_Controller
         
         if($deleteStatus === 0){ #if active items
             $jsonData['html'] = $this->load->view('pages/user/'.$activeView, $data, true);
-        }else if($deleteStatus === 1){
+        }
+        else if($deleteStatus === 1){
             $jsonData['html'] = $this->load->view('pages/user/'.$deletedView, $data, true);
         }
         
