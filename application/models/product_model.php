@@ -2428,10 +2428,19 @@ class product_model extends CI_Model
         }
     }
     
-    /*******************	NEW PRODUCT UPLOAD STEP 3 FUNCTIONS	***************************************/
-    
-    function finalizeProduct($productid, $memberid){
-        $product = $this->getProductEdit($productid, $memberid);
+    /**
+     *  Function called when loading Product Upload Step 3.
+     *  Enables product being uploaded to be ready for purchase after Step 2
+     *  Returns TRUE on success, FALSE otherwise
+     *
+     *  @param integer $productID
+     *  @param integer $memberID
+     *
+     *  @return boolean
+     */
+    public function finalizeProduct($productID, $memberID)
+    {
+        $product = $this->getProductEdit($productID, $memberID);
         if($product){
             $title = $product['name'];
             $slug = $product['slug'];
@@ -2445,8 +2454,8 @@ class product_model extends CI_Model
                 $query = $this->xmlmap->getFilenameID('sql/product', 'finalizeProductKeepSlug');
                 $sth = $this->db->conn_id->prepare($query);
             }
-            $sth->bindParam(':productid',$productid,PDO::PARAM_INT);
-            $sth->bindParam(':memberid',$memberid,PDO::PARAM_INT);
+            $sth->bindParam(':productid',$productID,PDO::PARAM_INT);
+            $sth->bindParam(':memberid',$memberID,PDO::PARAM_INT);
             $sth->execute();
             return true;
         }else{
@@ -2454,16 +2463,29 @@ class product_model extends CI_Model
         }
     }
     
-    function updateProductUploadAdditionalInfo($productid, $memberid, $billing_id, $is_cod, $is_meetup){
-        $product = $this->getProductEdit($productid, $memberid);
+    /**
+     *  Function used to store optional data provided in Product Upload Step 3
+     *  Returns TRUE on success, FALSE otherwise
+     *
+     *  @param integer $productID
+     *  @param integer $memberID
+     *  @param integer $billingID
+     *  @param integer $isCOD
+     *  @param integer $isMeetup
+     *
+     *  @return boolean
+     */
+    public function updateProductUploadAdditionalInfo($productID, $memberID, $billingID, $isCOD, $isMeetup)
+    {
+        $product = $this->getProductEdit($productID, $memberID);
         if($product){
             $query = $this->xmlmap->getFilenameID('sql/product', 'updateProductUploadAdditionalInfo');
             $sth = $this->db->conn_id->prepare($query);
-            $sth->bindParam(':productid',$productid,PDO::PARAM_INT);
-            $sth->bindParam(':memberid',$memberid,PDO::PARAM_INT);
-            $sth->bindParam(':is_cod',$is_cod,PDO::PARAM_INT);
-            $sth->bindParam(':billing_id', $billing_id,PDO::PARAM_INT);
-            $sth->bindParam(':is_meetup', $is_meetup, PDO::PARAM_INT);
+            $sth->bindParam(':productid',$productID,PDO::PARAM_INT);
+            $sth->bindParam(':memberid',$memberID,PDO::PARAM_INT);
+            $sth->bindParam(':is_cod',$isCOD,PDO::PARAM_INT);
+            $sth->bindParam(':billing_id', $billingID,PDO::PARAM_INT);
+            $sth->bindParam(':is_meetup', $isMeetup, PDO::PARAM_INT);
             $sth->execute();
             return true;
         }else{
@@ -2471,7 +2493,16 @@ class product_model extends CI_Model
         }
     }
 
-    function getProductBillingDetails($memberID, $productID){
+    /**
+     *  Fetch Billing Details for individual products. Used in displaying summary in step 4.
+     *
+     *  @param integer $memberID
+     *  @param integer $productID
+     *
+     *  @return array
+     */
+    public function getProductBillingDetails($memberID, $productID)
+    {
         $query = "SELECT COALESCE(p.billing_info_id, 0) as billing_info_id, b.bank_account_name, b.bank_account_number, bank.bank_name
             FROM es_product p 
             INNER JOIN es_billing_info b
@@ -2524,10 +2555,19 @@ class product_model extends CI_Model
         }
     }
 
-    /*
-     *	GET FEATURED PRODUCTS
+    /**
+     *  Used to fetch initial set of products and AJAX requested product list in Feeds page
+     *      under category "Featured Products"
+     *
+     *  @param integer $member_id
+     *  @param array $partners_id
+     *  @param integer $product_ids
+     *  @param integer $per_page
+     *  @param integer $page
+     *
+     *  @return array
      */
-    function getProductFeed($member_id,$partners_id,$product_ids,$per_page,$page=0)
+    public function getProductFeed($member_id,$partners_id,$product_ids,$per_page,$page=0)
     { 
         $this->load->library('parser');
         
@@ -2559,7 +2599,17 @@ class product_model extends CI_Model
         return $row;
     }
     
-    function getNewProducts($perPage,$page=0){
+    /**
+     *  Used to fetch initial set of products and AJAX requested product list in Feeds page
+     *      under category "New Products"
+     *
+     *  @param integer $per_page
+     *  @param integer $page
+     *
+     *  @return array
+     */
+    public function getNewProducts($perPage,$page=0)
+    {
         $parseData['limit'] = implode(",", array($page,$perPage));
         $query = $this->xmlmap->getFilenameID('sql/product','getNewProducts'); 
         $query = $this->parser->parse_string($query, $parseData, true);
@@ -2579,6 +2629,14 @@ class product_model extends CI_Model
         return $row;
     }
     
+    /**
+     *  Fetch static products for Feeds page 
+     *      (single item "Featured Product", Promo Items, Popular Items)
+     *
+     *  @param string $string
+     *
+     *  @return array
+     */
     public function getStaticProductFeed($string)
     {
         switch($string){
@@ -2606,6 +2664,11 @@ class product_model extends CI_Model
         return $data;
     }
     
+    /**
+     *  Fetch static banners in Feeds page (left, mid, right)
+     *
+     *  @return array
+     */
     public function getStaticBannerFeed()
     {
         $banner = $this->xmlmap->getFilenameNode('page/content_files', 'feedBanner');
