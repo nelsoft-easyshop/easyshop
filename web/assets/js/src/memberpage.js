@@ -592,13 +592,16 @@ $(document).ready(function(){
     
     $("#imgupload").on("change", function(){
         var oldIE;
-        if ($('html').is('.ie6, .ie7, .ie8, .ie9')) {
+        var isSafari = Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0;
+        
+        if ($('html').is('.ie6, .ie7, .ie8, .ie9')){
             oldIE = true;
         }
 
-        if (oldIE) {
+        if (oldIE || isSafari){
             $('#form_image').submit();
-        } else {
+        }
+        else{
             imageprev(this);
         }
     });

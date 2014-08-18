@@ -1,7 +1,13 @@
 /vendor
 /web/assets/product/*
+!/web/assets/product/unavailable
+!/web/assets/product/product_description
+!/web/assets/product/default
+
 /web/assets/temp_product
 /application/resources/local/*
+/web/assets/user/*
+!/web/assets/user/default
 
 config.php
 .DS_Store

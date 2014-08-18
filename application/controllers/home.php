@@ -6,7 +6,7 @@ if (!defined('BASEPATH'))
 class Home extends MY_Controller 
 {
 
-    public $feeds_prodperpage = 5;
+    public $feedsProdPerPage = 15;
 
     
     /**
@@ -20,7 +20,7 @@ class Home extends MY_Controller
         $this->load->model('product_model');
         $this->load->model('user_model');
     }
-    
+
     /**
      * Renders home page if not logged in, otherwise render feed page
      *
@@ -283,7 +283,7 @@ class Home extends MY_Controller
     
     public function getFeed()
     {
-        $perPage = $this->feeds_prodperpage;
+        $perPage = $this->feedsProdPerPage;
         $memberId = $this->session->userdata('member_id');
         $easyshopId = trim($this->xmlmap->getFilenameID('page/content_files','easyshop-member-id'));
         $partnersId = explode(',',trim($this->xmlmap->getFilenameID('page/content_files','partners-member-id')));
@@ -317,7 +317,7 @@ class Home extends MY_Controller
     public function getMoreFeeds()
     {
         if( $this->input->post("feed_page") && $this->input->post("feed_set") ){
-            $perPage = $this->feeds_prodperpage;
+            $perPage = $this->feedsProdPerPage;
             $memberId = $this->session->userdata('member_id');
             
             $page = $this->input->post("feed_page") * 10 - $perPage;
