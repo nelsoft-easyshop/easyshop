@@ -169,24 +169,27 @@ class MY_Controller extends CI_Controller
         $array = $temp; 
     }
 
+    /**
+     *  Authentication method for webservice
+     *
+     *  @param string $postedData
+     *  @param string $postedHash
+     *  @param string $evaluate
+     */
     public function authentication($postedData, $postedHash, $evaluate = "")
     {
         foreach ($postedData as $data => $value) {
             
-            if($data == "hash" || $data == "_token" || $data == "csrfname" || $data == "callback" || $data == "password")
-                continue;
+            if($data == "hash" || $data == "_token" || $data == "csrfname" || $data == "callback" || $data == "password" || $data == "_") {
+                 continue;               
+            }
+
             else
                 $evaluate .= $value;
         }
-
-        $hash = $evaluate.'$2y$10$pFrjgk6YU3r0Uo8o483RgO7fWvI/6OEkb1VLb0MaYIRTJuDAxAeSW';
-        //echo sha1($hash); echo "<br/>";
-        //echo $postedHash."<br/>";
-        //echo $hash."<br/>";
-        //print_r($postedData)."<br/>";
-        //echo "Evaluate:".$hash."<br/>";
-        //echo "Sha1:".sha1($hash)."<br/>"; 
-        //echo "PostedHash:".$postedHash."<br/>";
+        $this->load->model("user_model");
+        $password = $this->user_model->getAdminUser($postedData["userid"]);
+        $hash = $evaluate.$password["password"];
         if(sha1($hash) != $postedHash){
             $error = json_encode("error");
                     exit($error);
