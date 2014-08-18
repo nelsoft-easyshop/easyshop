@@ -11,11 +11,12 @@ class productUpload extends MY_Controller
     { 
         parent::__construct(); 
         $this->load->model("product_model");
-            $this->load->helper('htmlpurifier');
-        if(!$this->session->userdata('usersession') && !$this->check_cookie())
+        $this->load->helper('htmlpurifier');
+        if(!$this->session->userdata('usersession') && !$this->check_cookie()){
             redirect(base_url().'login', 'refresh');
-            $this->max_file_size_mb = 5;
+        }
 
+        $this->max_file_size_mb = 5;
         /* Uploaded images dimensions: (w,h) */
         $this->img_dimension['usersize'] = array(1024,768);
         $this->img_dimension['small'] = array(400,535);
@@ -35,16 +36,19 @@ class productUpload extends MY_Controller
         return $data;
     }
 
-
-    function step1() #this function for selecting categories from parent category to the last possible category
-    {		 
+    /**
+     *  Display view for selecting category for the listing
+     *  of the product
+     */
+    public function step1()
+    {
         $this->load->model("user_model");
         $uid = $this->session->userdata('member_id');
         $userdetails = $this->user_model->getUserById($uid);
 
         if ($this->input->post('p_id')) {
             $product_id = $data_item['product_id_edit'] = $this->input->post('p_id');
-            $product = $this->product_model->getProductEdit($product_id, $uid);  
+            $product = $this->product_model->getProductEdit($product_id, $uid);
             $cat_tree = $this->product_model->getParentId($product['cat_id']);
             $data_item['cat_tree_edit'] = json_encode($cat_tree);
             $data_item['other_cat_name'] = ($this->input->post('other_cat_name')) ? $this->input->post('other_cat_name') : $product['otherCategory'];
@@ -54,44 +58,21 @@ class productUpload extends MY_Controller
             if($this->input->post('step2_content')){
                 $data_item['step2_content'] = $this->input->post('step2_content');
             }
-
             if($this->input->post('c_id')){
-                $cat_id = $data_item['categoryId'] = $this->input->post('c_id');    
+                $cat_id = $data_item['categoryId'] = $this->input->post('c_id');
                 $other_cat_name = $this->input->post('other_cat_name');
-                $cat_tree = $this->product_model->getParentId($cat_id); 
+                $cat_tree = $this->product_model->getParentId($cat_id);
                 $data_item['cat_tree_edit'] = json_encode($cat_tree);
-                $data_item['other_cat_name'] = $other_cat_name;	
+                $data_item['other_cat_name'] = $other_cat_name; 
             }
         }
 
         $userdetails = $this->user_model->getUserById($uid);
 
-        if ($this->input->post('p_id')) {
-            $product_id = $data_item['product_id_edit'] = $this->input->post('p_id');
-            $product = $this->product_model->getProductEdit($product_id, $uid);  
-            $cat_tree = $this->product_model->getParentId($product['cat_id']);
-            $data_item['cat_tree_edit'] = json_encode($cat_tree);
-            $data_item['other_cat_name'] = $product['otherCategory'];
-            $data_item['categoryId'] = $product['cat_id'];
-        }
-        else{
-            if($this->input->post('step2_content')){
-                $data_item['step2_content'] = $this->input->post('step2_content');
-            }
-
-            if($this->input->post('c_id')){
-                $cat_id = $data_item['categoryId'] = $this->input->post('c_id');    
-                $other_cat_name = $this->input->post('other_cat_name');
-                $cat_tree = $this->product_model->getParentId($cat_id); 
-                $data_item['cat_tree_edit'] = json_encode($cat_tree);
-                $data_item['other_cat_name'] = $other_cat_name;	
-            }
-        }
-
         $draftItems = $this->product_model->getDraftItems($uid);
 
         for ($i=0; $i < sizeof($draftItems); $i++) { 
-            $parents = $this->product_model->getParentId($draftItems[$i]['cat_id']); # getting all the parent from selected category	
+            $parents = $this->product_model->getParentId($draftItems[$i]['cat_id']); # getting all the parent from selected category    
             $str_parents_to_last = "";
             $lastElement = end($parents);
 
@@ -128,19 +109,25 @@ class productUpload extends MY_Controller
         $this->load->view('templates/footer'); 
     }
 
-    function getChild() # this function for getting the under category from selected category 
-    {	
+    /**
+     * Display all child category of the selected category
+     * and diplay on view
+     *
+     * @return JSON
+     */
+    public function getChild() # this function for getting the under category from selected category 
+    {
         header('Content-Type: application/json');
         $this->load->model('user_model');
         $id = $response['cat_id'] = $this->input->post('cat_id');     
   
-        $uid =	$this->session->userdata('member_id');
+        $uid =  $this->session->userdata('member_id');
         $is_admin = false;
 
         if($uid){
             $user_access_level = $this->user_model->getUserById($uid);
             $is_admin = (intval($user_access_level['is_admin']) === 1);
-        }  
+        }
 
         $response['node'] = $this->product_model->getDownLevelNode($id, $is_admin); 
         $response['level'] = $this->input->post('level');
@@ -148,19 +135,11 @@ class productUpload extends MY_Controller
         die(json_encode($data));
     }
 
-    function add_category(){
-        $ids =(int) $this->input->post('ids');
-        $name = $this->input->post('name');
-        $desc = $this->input->post('desc');
-        $key = $this->input->post('key');
-        $sort =(int) $this->input->post('sort');
-        $is_main = (int) 1;
-        $data = $this->product_model->addCategory($ids,$name,$desc,$key,$sort,$is_main);
-
-        echo json_encode($data);
-    }
-
-    function step2()
+    /**
+     *  Display form and data needed for this step 
+     *  create temporary directory for the storing of the uploaded images
+     */
+    public function step2()
     { 
         $data = $this->fill_view();
         $data['$render_searchbar'] = false; 
@@ -187,7 +166,7 @@ class productUpload extends MY_Controller
             if($id == 1){
                 $str_parents_to_last = $otherCategory; 
             }else{
-                $lastElement = end($parents);	
+                $lastElement = end($parents);
                  
                 foreach($parents as $k => $v) { # creating the bread crumbs from parent category to the last selected category
                     $str_parents_to_last = $str_parents_to_last  .' '. $v['name'];
@@ -201,7 +180,7 @@ class productUpload extends MY_Controller
                     $str_parents_to_last = $str_parents_to_last.' &#10140; ' . $otherCategory;
                 }
 
-            }	
+            }   
 
             $response['parent_to_last'] = $str_parents_to_last;
  
@@ -244,8 +223,12 @@ class productUpload extends MY_Controller
         }
     }
 
+    /**
+     *  Display item details of the selected
+     *  product to be modify
+     */
     public function step2edit2()
-    { 
+    {
         if($this->input->post('p_id')){
             $product_id = $response['p_id'] = $this->input->post('p_id');
         }
@@ -254,63 +237,58 @@ class productUpload extends MY_Controller
         }
 
         $response['tempId'] = $tempId = strtolower(substr( "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" ,mt_rand( 0 ,50 ) ,1 ) .substr( md5( time() ), 1));
-
         $response['memid'] = $member_id = $this->session->userdata('member_id');
-
         $dir    = './assets/product/'; 
-        $path = glob($dir."{$product_id}_{$member_id}*", GLOB_BRACE)[0].'/'; 
-
-        $other_category_name = $this->input->post("othernamecategory");  
+        $path = glob($dir."{$product_id}_{$member_id}*", GLOB_BRACE)[0].'/';
+        $other_category_name = $this->input->post("othernamecategory");
         $product = $this->product_model->getProductEdit($product_id, $member_id);
         $response['id'] = $cat_id = ($this->input->post('hidden_attribute')) ? $this->input->post('hidden_attribute') : $product['cat_id'];  
 
         if($product['brand_other_name'] === '' 
             && $product['brand_id'] == 1){
-            $product['brandname'] = '';	
+            $product['brandname'] = '';
         }
         elseif($product['brand_other_name'] === '' 
             && $product['brand_id'] != 1){
             $product['brandname'] = $this->product_model->getBrandById($product['brand_id'])[0]['name'];
-        }else{
+        }
+        else{
             $product['brandname'] = $product['brand_other_name'];
         }
 
-        // Loading Categories
-        $otherCategory  = $response['otherCategory'] = ($this->input->post('othernamecategory')) ? html_escape($this->input->post('othernamecategory')) : $product['otherCategory'];
-        $str_parents_to_last = '';
+        // Loading Categories breadcrumbs
+        $otherCategory  = $response['otherCategory'] = $this->input->post('othernamecategory');
+        $breadcrumbs = '';
         $parents = $this->product_model->getParentId($cat_id); 
- 
+
         if($cat_id == 1){
-            $str_parents_to_last = $otherCategory;
+            $breadcrumbs = $otherCategory;
         }
-        else{  
-            $lastElement = end($parents);	
+        else{
+            $lastElement = end($parents);
             foreach($parents as $k => $v) {
-                 
-                $str_parents_to_last .= ($v != $lastElement) ? $v['name'].' &#10140; ' :   $v['name'];
-                
+                $breadcrumbs .= ($v != $lastElement) ? $v['name'].' &#10140; ' : $v['name'];
             }
 
             if(!$otherCategory == ""){
-                $str_parents_to_last = $str_parents_to_last.' &#10140; ' . $otherCategory;
+                $breadcrumbs = $breadcrumbs.' &#10140; ' . $otherCategory;
             }
-        }
-
+        }  
         // Loading images
         $images = $this->product_model->getProductImages($product_id);
-        $main_images = $arrayNameOnly = array();  
+        $mainImages = $arrayNameOnly = array();  
         foreach($images as $imagekey => $imagevalue){
             if(strpos(($imagevalue['path']),'other') === FALSE){
                 $file = explode('_',$imagevalue['file']);
                 $tempFile = $tempId.'_'.$member_id.'_'.end($file);
                 $imagevalue['temp'] = $tempFile;
                 $imagevalue['type'] = end(explode('.', end($file)));
-                array_push($main_images, $imagevalue);
+                array_push($mainImages, $imagevalue);
             }
             array_push($arrayNameOnly, $imagevalue['file']);
         }
 
-        $response['main_images'] = $main_images; 
+        $response['main_images'] = $mainImages;
 
         // Loading attributes
         $attribute = $this->product_model->getAttributesByParent($parents); 
@@ -351,12 +329,12 @@ class productUpload extends MY_Controller
             }
         } 
  
-        $response['soloAttribute'] =  $soloAttribute;  
-        $response['eachAttribute'] =  $eachAttribute;  
+        $response['soloAttribute'] =  $soloAttribute;
+        $response['eachAttribute'] =  $eachAttribute;
         
         // Loading Combinations
         $newItemQuantityArray = array();
-        $itemQuantity =  $this->product_model->getProductQuantity($product_id, true);	
+        $itemQuantity =  $this->product_model->getProductQuantity($product_id, true);
     
         foreach($itemQuantity as $keyid => $value){
             if(count($value['product_attribute_ids'])===1){
@@ -376,14 +354,14 @@ class productUpload extends MY_Controller
 
         $response['itemQuantity'] = $newItemQuantityArray;
         $response['attributeArray'] = $attributeArray;
-        $response['parent_to_last'] = $str_parents_to_last;
+        $response['parent_to_last'] = $breadcrumbs;
         $response['product_details'] = $product;
         $response['is_edit'] = 'is_edit';
         $response['img_max_dimension'] = $this->img_dimension['usersize'];
         $date = end(explode('_', explode('/', $path)[3]));
  
         $tempdirectory = $tempId.'_'.$member_id.'_'.$date;
-        $tempdirectory = $response['tempdirectory'] = './assets/temp_product/'.$tempdirectory.'/'; 
+        $tempdirectory = $response['tempdirectory'] = './assets/temp_product/'.$tempdirectory.'/';
 
         $this->session->set_userdata('tempId', $response['tempId']); 
         $this->session->set_userdata('tempDirectory',  $tempdirectory);
@@ -399,29 +377,29 @@ class productUpload extends MY_Controller
         $this->load->view('pages/product/product_upload_step2_view',$response);
         $this->load->view('templates/footer');
     }
- 
+
+    /**
+     *  Upload image for primary and other
+     *  alternative of the image of the product
+     *
+     *  @return JSON
+     */
     public function uploadimage()
-    {
-        $counter = $this->input->post('counter');
-        $temp_product_id = $this->session->userdata('tempId'); 
-        $tempDirectory = $this->session->userdata('tempDirectory'); 
-        $member_id =  $this->session->userdata('member_id');
+    {  
+        $pathDirectory = $this->session->userdata('tempDirectory');
         $filescnttxt = $this->input->post('filescnttxt');
         $afstart = $this->input->post('afstart');
-        $afstartArray = json_decode($afstart);
-        $date = date("Ymd");
-        $fulldate = date("YmdGis");
+        $afstartArray = json_decode($afstart); 
         $filenames_ar = array(); 
         $text = "";
         $error = 0;
- 
-        $allowed =  array('gif','png' ,'jpg','jpeg'); # available format only for image
+        $allowed =  array('gif','png' ,'jpg','jpeg'); // available format only for image
 
         foreach($_FILES['files']['name'] as $key => $value ) {
 
             $file_ext = explode('.', $value);
             $file_ext = strtolower(end($file_ext)); 
-            $filenames_ar[$key] = $afstartArray[$key];  
+            $filenames_ar[$key] = $afstartArray[$key];
 
             if(!in_array(strtolower($file_ext),$allowed))
             {
@@ -450,15 +428,12 @@ class productUpload extends MY_Controller
         $_FILES['files']['tmp_name'] = array_values($_FILES['files']['tmp_name']);
         $_FILES['files']['error'] = array_values($_FILES['files']['error']);
         $_FILES['files']['size'] = array_values($_FILES['files']['size']);
-        $filenames_ar = array_values($filenames_ar);
+        $filenames_ar = array_values($filenames_ar); 
 
-        $path_directory = $tempDirectory;
-
-        if (!file_exists ($path_directory)){
-            mkdir($path_directory, 0777, true);;
+        if (!file_exists ($pathDirectory)){
+            mkdir($pathDirectory, 0777, true);;
         }
 
-        
         if(count($filenames_ar) <= 0){
             $return = array( 
                 'msg' => "Please select valid image type.\nAllowed type: .PNG,.JPEG,.GIF\nAllowed max size: 5mb", 
@@ -470,7 +445,7 @@ class productUpload extends MY_Controller
         }
          
         $this->upload->initialize(array( 
-            "upload_path" => $path_directory,
+            "upload_path" => $pathDirectory,
             "overwrite" => FALSE,
             "file_name"=> $filenames_ar,
             "encrypt_name" => FALSE,
@@ -478,29 +453,32 @@ class productUpload extends MY_Controller
             "allowed_types" => "jpg|jpeg|png|gif",
             "max_size" => $this->max_file_size_mb * 1024,
             "xss_clean" => FALSE
-            )); 	
+            ));
 
         if($this->upload->do_multi_upload('files')){
             $file_data = $this->upload->get_multi_upload_data();
             for ($i=0; $i < sizeof($filenames_ar); $i++) { 
-                $this->es_img_resize($filenames_ar[$i],$path_directory, 'small/', $this->img_dimension['small']); 
-                $this->es_img_resize($filenames_ar[$i],$path_directory.'small/', '../categoryview/', $this->img_dimension['categoryview']);
-                $this->es_img_resize($filenames_ar[$i],$path_directory.'categoryview/','../thumbnail/', $this->img_dimension['thumbnail']);
+                $this->es_img_resize($filenames_ar[$i],$pathDirectory, 'small/', $this->img_dimension['small']); 
+                $this->es_img_resize($filenames_ar[$i],$pathDirectory.'small/', '../categoryview/', $this->img_dimension['categoryview']);
+                $this->es_img_resize($filenames_ar[$i],$pathDirectory.'categoryview/','../thumbnail/', $this->img_dimension['thumbnail']);
                 //If user uploaded image is too large, resize and overwrite original image
                 if(isset($file_data[$i])){
                     if(($file_data[$i]['image_width'] > $this->img_dimension['usersize'][0]) || ($file_data[$i]['image_height'] > $this->img_dimension['usersize'][1])){
-                        $this->es_img_resize($file_data[$i]['file_name'],$path_directory,'', $this->img_dimension['usersize']);
-                    }	
+                        $this->es_img_resize($file_data[$i]['file_name'],$pathDirectory,'', $this->img_dimension['usersize']);
+                    }
                 }
             }
         }
         else{
             for ($i=0; $i < sizeof($filenames_ar); $i++) { 
-                if (file_exists($path_directory.$filenames_ar[$i])) {
-                    unlink($path_directory.$filenames_ar[$i]) or die('failed deleting: ' . $path);
+                if (file_exists($pathDirectory.$filenames_ar[$i])) {
+                    unlink($pathDirectory.$filenames_ar[$i]) or die('failed deleting: ' . $path);
                 }
             }
             $text = $this->upload->display_errors();
+            if($text == '<p>The uploaded file exceeds the maximum allowed size in your PHP configuration file.</p>'){
+                $text ='File is too large. Please select another image';
+            }
             $error = 1;
         }
           
@@ -513,23 +491,28 @@ class productUpload extends MY_Controller
         die(json_encode($return));
     }
 
-    function uploadimageOther()
+    /**
+     *  Upload image for attributes of the product
+     *  
+     *  @return JSON
+     */
+    public function uploadimageOther()
     {
-        $temp_product_id = $this->session->userdata('tempId'); 
-        $tempDirectory = $this->session->userdata('tempDirectory'); 
-        $memberId =  $this->session->userdata('member_id');	
-        $filename =  $this->input->post('pictureName');		 
+        $temp_product_id = $this->session->userdata('tempId');
+        $tempDirectory = $this->session->userdata('tempDirectory');
+        $memberId =  $this->session->userdata('member_id');
+        $filename =  $this->input->post('pictureName');
         $date = date("Ymd");
         $fulldate = date("YmdGis"); 
  
-        $path_directory = $tempDirectory.'/other/';
+        $pathDirectory = $tempDirectory.'/other/';
 
-        if (!file_exists ($path_directory)){
-            mkdir($path_directory, 0777, true);;
+        if (!file_exists ($pathDirectory)){
+            mkdir($pathDirectory, 0777, true);
         }
 
         $this->upload->initialize(array( 
-            "upload_path" => $path_directory,
+            "upload_path" => $pathDirectory,
             "overwrite" => FALSE,
             "file_name"=> $filename,
             "encrypt_name" => FALSE,
@@ -540,22 +523,26 @@ class productUpload extends MY_Controller
             )); 
  
         if ($this->upload->do_multi_upload('attr-image-input')){ 
-            $this->es_img_resize($filename,$path_directory, 'small/', $this->img_dimension['small']); 
-            $this->es_img_resize($filename,$path_directory.'small/', '../categoryview/', $this->img_dimension['categoryview']);
-            $this->es_img_resize($filename,$path_directory.'categoryview/','../thumbnail/', $this->img_dimension['thumbnail']);
+            $this->es_img_resize($filename,$pathDirectory, 'small/', $this->img_dimension['small']); 
+            $this->es_img_resize($filename,$pathDirectory.'small/', '../categoryview/', $this->img_dimension['categoryview']);
+            $this->es_img_resize($filename,$pathDirectory.'categoryview/','../thumbnail/', $this->img_dimension['thumbnail']);
             die('{"result":"ok"}');
         }
-        else{ 
+        else{
             die('{"result":"false","msg":"'.$this->upload->display_errors().'"}');
         }
     }
 
-
-
-    function step2_2() # function for processing the adding of new item
-    {	   
+    /**
+     * Process and validate user's inputted data into form
+     * insert into database
+     * proceed to step3
+     *
+     * @return JSON 
+     */
+    public function step2_2() # function for processing the adding of new item
+    {
         $this->load->model("user_model");
-
         $combination = json_decode($this->input->post('combination'),true); 
         $attributes = json_decode($this->input->post('attributes'),true);
         $data = $this->input->post('data');
@@ -567,7 +554,7 @@ class productUpload extends MY_Controller
         $product_title = trim($this->input->post('prod_title'));
         $product_brief = trim($this->input->post('prod_brief_desc'));
         $product_description =  $this->input->post('prod_description');
-        $product_price = str_replace(',', '', $this->input->post('prod_price')) ;
+        $product_price = ($this->input->post('prod_price') == "")? '0' : str_replace(',', '', $this->input->post('prod_price'));
         $product_discount = ($this->input->post('discount'))?floatval($this->input->post('discount')):0;
         $product_discount = ($product_discount <= 100)?$product_discount:100;
         $product_condition = $this->input->post('prod_condition');
@@ -598,10 +585,9 @@ class productUpload extends MY_Controller
         
         if($savingAsDraft == 0){
             if (!in_array($product_condition, $this->lang->line('product_condition'))){
-                die('{"e":"0","d":"Condition selected not available. Please select another."}');	 
+                die('{"e":"0","d":"Condition selected not available. Please select another."}');     
             }
         }
-
 
         if((strlen(trim($product_title)) == 0 
             || $product_title == "" 
@@ -609,7 +595,7 @@ class productUpload extends MY_Controller
             || $product_price <= 0 
             || strlen(trim($product_description)) == 0) && $savingAsDraft == 0){
 
-            die('{"e":"0","d":"Fill (*) All Required Fields Properly!"}');		
+            die('{"e":"0","d":"Fill (*) All Required Fields Properly!"}');      
         }
         else{
             
@@ -750,10 +736,16 @@ class productUpload extends MY_Controller
         }
     }
 
+    /**
+     * Process and validate user's inputted data into form
+     * update the database
+     * proceed to step3
+     *
+     * @return JSON 
+     */
     public function step2edit2Submit()
     {
         $this->load->model("user_model");
-
         $combination = json_decode($this->input->post('combination'),true); 
         $attributes = json_decode($this->input->post('attributes'),true);
         $product_id = $this->input->post('p_id');
@@ -762,7 +754,7 @@ class productUpload extends MY_Controller
         $product_title = trim($this->input->post('prod_title'));
         $product_brief = trim($this->input->post('prod_brief_desc'));
         $product_description =  $this->input->post('prod_description');
-        $product_price = str_replace(',', '', $this->input->post('prod_price')) ;
+        $product_price = ($this->input->post('prod_price') == "")? '0' : str_replace(',', '', $this->input->post('prod_price'));
         $product_discount = ($this->input->post('discount'))?floatval($this->input->post('discount')):0;
         $product_discount = ($product_discount <= 100)?$product_discount:100;
         $product_condition = $this->input->post('prod_condition');
@@ -780,7 +772,7 @@ class productUpload extends MY_Controller
 
         // Loading Combinations
         $newItemQuantityArray = array();
-        $itemQuantity =  $this->product_model->getProductQuantity($product_id, true);	
+        $itemQuantity =  $this->product_model->getProductQuantity($product_id, true);   
         
         if((strlen(trim($product_title)) == 0 
             || $product_title == "" 
@@ -788,7 +780,7 @@ class productUpload extends MY_Controller
             || $product_price <= 0 
             || strlen(trim($product_description)) == 0) && $savingAsDraft == 0){
 
-            die('{"e":"0","d":"Fill (*) All Required Fields Properly!"}');		
+            die('{"e":"0","d":"Fill (*) All Required Fields Properly!"}');
         }
 
         foreach($itemQuantity as $keyid => $value){
@@ -898,7 +890,7 @@ class productUpload extends MY_Controller
             }
             if(!mkdir($originalPath.'other/', 0777, true)) { 
                 die('{"e":"0","d":"There was a problem. \n Please try again! - Error[0012]"}');
-            }			
+            }           
         }
         else{
             die('{"e":"0","d":"There was a problem. \n Please try again! - Error[00107]"}'); 
@@ -912,6 +904,7 @@ class productUpload extends MY_Controller
             'keyword' => $keyword,
             'brand_id' => $brand_id,
             'style_id' => $style_id,
+            'cat_id' => $cat_id,
             'price' => $product_price,
             'condition' => $product_condition,
             'brand_other_name' => $otherBrand,
@@ -1052,124 +1045,22 @@ class productUpload extends MY_Controller
     
         echo json_encode($serverResponse, JSON_FORCE_OBJECT);
     }
-    
-    public function editStep2(){
-        if($this->input->post('p_id')){
-          $product_id = $this->input->post('p_id');
-        }
-        else{
-          redirect('me', 'refresh');
-        }
-    
-        $member_id = $this->session->userdata('member_id');
-        $data = array('title'=>'Edit Product');
-        $data = array_merge($data,$this->fill_header());
-        $other_category_name = $this->input->post("othernamecategory"); 
-        $this->load->view('templates/header',$data); 
 
-        $product = $this->product_model->getProductEdit($product_id, $member_id);  
-
-        if($this->input->post('hidden_attribute')){
-            $new_cat_id = $this->input->post('hidden_attribute');
-            $userdetails = $this->user_model->getUserById($member_id);
-            $is_admin = (intval($userdetails['is_admin']) === 1);
-            $this->config->load('protected_category', TRUE);
-            $protected_categories = $this->config->config['protected_category'];
-            if( !is_numeric($new_cat_id) ||  (!$is_admin && in_array($new_cat_id, $protected_categories))){
-                redirect('/sell/step1/', 'refresh');
-            }
-            $product['otherCategory'] = $other_category_name;
-            if($this->product_model->editProductCategory($new_cat_id, $product_id, $member_id, $other_category_name)>0){
-                if(intval($product['cat_id'],10)!==intval($new_cat_id,10)){
-                    $this->product_model->deleteShippingInfomation($product_id);
-                    $this->product_model->deleteProductQuantityCombination($product_id);
-                    $this->product_model->deleteAttributeByProduct($product_id);
-                }
-                $product['cat_id'] = $new_cat_id;
-            }           
-        }
-        
-        $parents = $this->product_model->getParentId($product['cat_id']); # getting all the parent from selected category
-        $lastElement = end($parents);	
-        $str_parents_to_last = "";
-        foreach($parents as $k => $v) { # creating the bread crumbs from parent category to the last selected category
-            $str_parents_to_last = $str_parents_to_last  .' '. $v['name'];
-            if(!($v == $lastElement))
-                $str_parents_to_last = $str_parents_to_last.' &#10140;';
-        }
-  
-        if(strlen(trim($product['otherCategory'])) > 0){
-           $str_parents_to_last =  $str_parents_to_last.((strlen(trim($str_parents_to_last))>0)?' &#10140;':'').$product['otherCategory'];
-        }
-        
-        $images = $this->product_model->getProductImages($product_id);
-        $main_images = array();
-        foreach($images as $image){
-            if(strpos(($image['path']),'other') === FALSE)
-                array_push($main_images, $image);
-        }
-        #$attribute = $this->product_model->getAttributesBySelf($product['cat_id']); # getting all attribute from all parent from selected category
-        $attribute = $this->product_model->getAttributesByParent($parents);
-            for ($i=0 ; $i < sizeof($attribute) ; $i++ ) {  # getting all lookuplist from item attribute
-            $lookuplist = $this->product_model->getLookItemListById($attribute[$i]['attr_lookuplist_id']);
-            array_push($attribute[$i],$lookuplist);
-        }		
-        
-        $response['attribute'] = $attribute;
-        $response['parent_to_last'] = $str_parents_to_last;
-
-        $response['id'] = $product['cat_id'];
-        $response['product_details'] = $product;
-
-        $response['is_edit'] = true;
-
-        $response['product_attributes_opt'] = array();
-        $response['product_attributes_spe'] = array();
-        $response['memid'] = $member_id;
-        
-        
-        foreach($this->product_model->getProductAttributes($product_id, 'ALL') as $key=>$attribute){
-            if(strtolower(gettype($key)) === 'string'){ 		#OPTIONAL ATTRIBUTES: BY NAME
-                foreach($attribute as $product_attribute){
-                    if($product_attribute['type']  === 'option'){
-                        if(!array_key_exists($key,$response['product_attributes_opt']))
-                            $response['product_attributes_opt'][$key] = array();
-                        array_push($response['product_attributes_opt'][$key], $product_attribute);
-                    }
-                }
-            }
-            else if(strtolower(gettype($key)) === 'integer'){  #SPECIFIC CATEGORY ATTRIBUTES: BY ID
-                foreach($attribute as $product_attribute){
-                    if($product_attribute['type']  === 'specific'){
-                        if(!array_key_exists($key,$response['product_attributes_spe']))
-                            $response['product_attributes_spe'][$key] = array();
-                        array_push($response['product_attributes_spe'][$key], $product_attribute);
-                    }
-                }			
-            }
-        }	
-        
-        $response['tempId'] = strtolower(substr( "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" ,mt_rand( 0 ,50 ) ,1 ) .substr( md5( time() ), 1));            
-        $this->session->set_userdata('tempId', $response['tempId']);
-            
-        $response['main_images'] = $main_images;	
-        $response['item_quantity'] =  $this->product_model->getProductQuantity($product_id, true);
-        $response['img_max_dimension'] = $this->img_dimension['usersize'];
-        $this->load->view('pages/product/product_upload_step2_view', $response);
-        $this->load->view('templates/footer'); 
-
-    }
-
-    public function deleteDraft(){
+    /**
+    * Delete draft items
+    */
+    public function deleteDraft()
+    {
         $productId = $this->input->post('p_id');
         $memberId =  $this->session->userdata('member_id');
         $output = $this->product_model->deleteDraft($memberId,$productId);
         if($output == 0){
-            $data = '{"e":"0","m":"Sorry, something went wrong. Please try again later"}';	
+            $data = '{"e":"0","m":"Sorry, something went wrong. Please try again later"}';
         }else{
-            $data = '{"e":"1","d":"Draft item successfully removed."}';	
+            $data = '{"e":"1","d":"Draft item successfully removed."}';
         }
-        echo $data; 
+
+        die($data);
     }
     
     public function previewItem(){
@@ -1266,7 +1157,7 @@ class productUpload extends MY_Controller
         $this->image_lib->clear();
     }
     
-    /*******************	NEW PRODUCT UPLOAD FUNCTIONS	***************************************/
+    /*******************    NEW PRODUCT UPLOAD FUNCTIONS    ***************************************/
     
     # Renders newStep3 view
     public function step3()
@@ -1282,8 +1173,13 @@ class productUpload extends MY_Controller
                 redirect('sell/step1', 'refresh');
             }
             
-            #Update product entry in es_product to be ready for purchase
-            $this->product_model->finalizeProduct($productID , $memberId);
+            if( $this->input->post('is_edit') ){
+                $this->product_model->finalizeProduct($productID , $memberId, $product['is_cod']);
+            }else{
+                #Update product entry in es_product to be ready for purchase
+                $this->product_model->finalizeProduct($productID , $memberId, 1);
+                $product['is_cod'] = 1;
+            }
             
             $data = array(
                 'product' => $product,
@@ -1304,7 +1200,6 @@ class productUpload extends MY_Controller
                 $data['is_edit'] = true;
             }
             
-            
             $this->load->view('templates/header', $data);
             $this->load->view('pages/product/product_upload_step3_view',$data);
             $this->load->view('templates/footer_full');
@@ -1313,12 +1208,11 @@ class productUpload extends MY_Controller
         }
     }
     
-/*
- |	Handler for additional info in product uploads
- |	Update billing info, CoD and meetup in product table
- |	Upload shipping details if for delivery
-*/
-    
+    /*
+     *Handler for additional info in product uploads
+     *Update billing info, CoD and meetup in product table
+     *Upload shipping details if for delivery
+     */
     public function step4()
     {
         /*print('<pre>');
