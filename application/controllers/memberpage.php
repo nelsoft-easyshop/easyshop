@@ -144,8 +144,8 @@ class Memberpage extends MY_Controller
             }
 
             $uid = $this->session->userdata('member_id');
-            $address_id = $this->memberpage_model->getAddress($uid,0)['id_address'];
-            $result = $this->memberpage_model->editAddress($uid, $postdata, $address_id);
+            $addressID = $this->memberpage_model->getAddress($uid,0)['id_address'];
+            $result = $this->memberpage_model->editAddress($uid, $postdata, $addressID);
 
             $data = $this->memberpage_model->get_member_by_id($uid);
 
@@ -383,13 +383,13 @@ class Memberpage extends MY_Controller
                 $postdata['lng'] = 0;
             }
 
-            $address_id = $this->memberpage_model->getAddress($uid,1)['id_address'];
-            $result[0] = $this->memberpage_model->editAddress($uid, $postdata, $address_id);
+            $addressID = $this->memberpage_model->getAddress($uid,1)['id_address'];
+            $result[0] = $this->memberpage_model->editAddress($uid, $postdata, $addressID);
 
             if($this->input->post('c_def_address')){
-                $address_id = $this->memberpage_model->getAddress($uid,0)['id_address'];
+                $addressID = $this->memberpage_model->getAddress($uid,0)['id_address'];
                 $postdata['addresstype'] = 0;
-                $result[1] = $this->memberpage_model->editAddress($uid, $postdata, $address_id);
+                $result[1] = $this->memberpage_model->editAddress($uid, $postdata, $addressID);
                 $data['default_add'] = $this->input->post('c_def_address');
             }
             else{
