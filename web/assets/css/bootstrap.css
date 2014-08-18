@@ -6215,10 +6215,30 @@ button.close {
   max-width: inherit !important;
 }*/
 
-.res_wrapper {
-    padding-left: 15px;
-    padding-right: 15px;
+/*** modal container ****/
+#simplemodal-container {
+    padding: 5px;
 }
+.simplemodal-container.draft_container {
+    font-size: 0.75em;
+    max-width: 60em !important;
+    min-width: inherit !important;
+    width: 100% !important;
+}
+.draft_container {
+    top: 60px !important;
+}
+
+.draft_items_container {
+    overflow-x: scroll;
+    height: 500px; 
+    padding-right: 10px;
+}
+
+.add_category_submit {
+    text-align: center;
+}
+/*** end of modal ***/
 
 .search_box #main_search {
   height: 41px;
@@ -6332,10 +6352,42 @@ a.tooltips span {
   padding-bottom: 30px;
 }
 
+.footer_panel {
+    clear: both;
+}
+
+.feeds-cont div[class*="col-"] {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+#feed-catlist nav ul > li {
+  width: 100%;
+}
+
+#feed-catlist nav ul > li > p {
+  height: 53px;
+  width: 100%;
+}
+
+#feed-catlist nav ul > li > p span {
+  height: 53px;
+  line-height: 53px;
+  font-size: 0.85em;
+  width: 195px;
+}
+
 @media only screen and (max-width : 62em) { /*** 992px ***/
   .prod_con_gal {
     max-width: 400px;
   }
+}
+
+@media only screen and (min-width: 481px) {
+  /*** modal ***/
+    #simplemodal-container {
+        width: 60% !important;
+    }
 }
 
 @media only screen and (max-width: 480px) {
@@ -6344,4 +6396,11 @@ a.tooltips span {
     left: 10% !important;
     width: 80% !important;
   }
+}
+
+@media only screen and (max-width : 20em) {
+    /*** modal ***/
+    #simplemodal-container {
+        width: 95% !important;
+    }
 }
