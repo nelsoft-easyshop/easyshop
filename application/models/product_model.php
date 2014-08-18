@@ -1162,7 +1162,7 @@ class product_model extends CI_Model
             $products[$k]['id_product'] = $products[$k]['product_id'];
             applyPriceDiscount($products[$k]);
         }
- 
+
         return $products;
     }
 

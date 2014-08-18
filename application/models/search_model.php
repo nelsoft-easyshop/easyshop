@@ -169,6 +169,7 @@ class search_model extends CI_Model
     public function searchCategory($string){
         $query = $this->xmlmap->getFilenameID('sql/search','searchCategory');
         $sth = $this->db->conn_id->prepare($query);
+        $string = $string.'%';
         $sth->bindParam(':sch_string', $string, PDO::PARAM_STR);
         $sth->execute();
         $result = $sth->fetchAll(PDO::FETCH_ASSOC);

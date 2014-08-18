@@ -257,7 +257,7 @@ class productUpload extends MY_Controller
         }
 
         // Loading Categories breadcrumbs
-        $otherCategory  = $response['otherCategory'] = ($this->input->post('othernamecategory')) ? html_escape($this->input->post('othernamecategory')) : $product['otherCategory'];
+        $otherCategory  = $response['otherCategory'] = $this->input->post('othernamecategory');
         $breadcrumbs = '';
         $parents = $this->product_model->getParentId($cat_id); 
 
@@ -273,7 +273,7 @@ class productUpload extends MY_Controller
             if(!$otherCategory == ""){
                 $breadcrumbs = $breadcrumbs.' &#10140; ' . $otherCategory;
             }
-        } 
+        }  
         // Loading images
         $images = $this->product_model->getProductImages($product_id);
         $mainImages = $arrayNameOnly = array();  
