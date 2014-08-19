@@ -37,7 +37,8 @@ class messages extends MY_Controller
         }
     }
 
-    public function send_msg() {
+    public function send_msg()
+    {
         $session_data = $this->session->all_userdata();
 	    $val = trim($this->input->post("recipient"));
         $q_result = $this->user_model->getUserByUsername($val);
@@ -62,10 +63,12 @@ class messages extends MY_Controller
                 $userPusher->push($q_result['id_member'], $dc);
             }
         }
+
 	echo json_encode($result);
     }
 
-    public function delete_msg() {
+    public function delete_msg()
+    {
         $id = $this->input->post("id_msg");
 
         $result = $this->messages_model->delete_msg($id, $this->user_ID);
@@ -77,13 +80,15 @@ class messages extends MY_Controller
         echo json_encode($result);
     }
 
-    public function retrieve_msgs() {
+    public function retrieve_msgs()
+    {
         $todo = $this->input->post("todo");
         $result = $this->messages_model->get_all_messages($this->user_ID, $todo);
         echo json_encode($result);
     }
 
-    public function is_seened() {
+    public function is_seened()
+    {
         $id = $this->user_ID;
         $from_ids = $this->input->post('checked');
         $result = $this->messages_model->is_seened($id, $from_ids);
@@ -92,4 +97,3 @@ class messages extends MY_Controller
     }
 
 }
-
