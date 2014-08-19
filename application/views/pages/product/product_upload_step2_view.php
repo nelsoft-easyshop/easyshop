@@ -522,7 +522,7 @@
                                             <?php endforeach;?>   
                                         <?php endif; ?>
                                     </div>              
-                                    <div class="col-xs-2 col-sm-2 col-md-2 div3 text-center">
+                                    <div class="col-xs-3 col-sm-3 col-md-3 div3 text-center">
                                         <?php if(isset($eachAttribute) && count($eachAttribute) > 0):?> 
                                             <input class="select-combination orange_btn3 width-70p" type="button" value="Add">
                                         <?php endif; ?>
@@ -555,6 +555,9 @@
       <div class="pop-image-container">
           <a href="javascript:void(0)" class="attr-image"><img  src=""></a>
       </div>  
+      <div class="pd-tb-15 text-center">
+          <a class="simplemodal-close" title="Close"><span class="orange_btn3 width-30p img-upload-save">Save</span></a>
+      </div>
   </div>
 
 

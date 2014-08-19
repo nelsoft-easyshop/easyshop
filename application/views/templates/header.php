@@ -59,7 +59,7 @@
  <!-- End Google Tag Manager -->
  
 <header>
-    <div class="res_wrapper pos-rel">
+    <div class="res_wrapper wrapper pos-rel">
       <div class="top_links_left pd-right-20">
         <div class="top_nav">
           <ul class="ul-li-fl-left">      
@@ -147,7 +147,7 @@
 
     <form action="<?php echo base_url(); ?>search/search.html" name="search_form" method="get">
       <section>
-        <div class="res_wrapper search_wrapper">
+        <div class="res_wrapper wrapper search_wrapper">
         
           <?php if(!(isset($render_logo) && ($render_logo === false))): ?>
             <div class="logo"> <a href="<?=base_url()?>"><span class="span_bg"></span></a> </div>
@@ -183,6 +183,7 @@
           <?php endif; ?>
         </div>
       </section>
+      <div class="clear"></div>
     </form>
 
 
@@ -279,28 +280,31 @@ $('#main_search').on('input propertychange', function() {
       //       $('.need_help_icons_con').slideUp();
       //   });
       // });
+$(document).ready(function(){
+    var container = $(".nav-collapse");
+    var menubutton = $(".nav-toggle");
+    
+    $(menubutton).click(function(){
 
+        if($(container).hasClass("closed"))  {
+            $(container).removeClass("closed").addClass("opened");
+        }
 
-//     $(document).mouseup(function (e) {
-//     var container = $(".nav-collapse");
+        else {
+            $(container).addClass('closed').removeClass("opened");
+          }
+    });
 
-//     if (!container.is(e.target) // if the target of the click isn't the container...
-//         && container.has(e.target).length === 0) // ... nor a descendant of the container
-//     {
-//         container.removeClass("opened").addClass("closed");
-//         container.closest("a").removeClass("active");
-//         // container.toggleClass("opened");
-//     }
-//    $(".nav-toggle").click(function(){
-//       if($('.nav-collapse').hasClass("opened")){
-//            $('.nav-collapse').removeClass("opened").addClass("closed")
-//         }
-//       else {
-//             $('.nav-collapse').addClass('opened')
-//           }
-//             // $('.nav-collapse').removeClass("closed").addClass("opened");
-//         });
-// });
-      
+    $(document).mouseup(function (e) {   
 
+        if (!container.is(e.target) // if the target of the click isn't the container...
+            && container.has(e.target).length === 0) // ... nor a descendant of the container
+        {
+            container.removeClass("opened").addClass("closed");
+            menubutton.removeClass("active");
+        }
+
+    });
+    
+});
 </script>
