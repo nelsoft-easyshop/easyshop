@@ -340,6 +340,23 @@ $(document).ready(function(){
     });
     $('#brand_search_drop_content').hide();
 
+    $('#prod_price').on('change', function(){
+        var prcnt = parseFloat($("#slider_val").val().replace("%",''));
+        if( !isNaN(prcnt) ){
+            get_discPrice();
+        }
+    });
+    
+    $( "#prod_price" ).keypress(function() {
+        validateWhiteTextBox("#prod_price");
+    });
+
+    // view more product details trigger
+    $('.view_more_product_details').on('click', function() {
+        $('.more_product_details_container,.prod-details-add-more-link').slideToggle();
+        $('.view_more_product_details').toggleClass('active-product-details');
+    });
+
     // Load tinyMCE plugin
     tinymce.init({ 
         mode : "specific_textareas",
@@ -359,16 +376,22 @@ $(document).ready(function(){
     });
 });
 
+/**
+ * Load Discount Feature
+ */
 $(document).ready(function(){
 
-    // JS Function Discount
-    var slider_val = parseFloat($('#slider_val').data('value'));
-    if(slider_val !== 0 && !isNaN(slider_val)){
-        $('#slider_val').val(slider_val+'%');
+    var sliderValue = parseFloat($('#slider_val').data('value'));
+
+    // Load if discount is set for edit
+    if(sliderValue !== 0 && !isNaN(sliderValue)){
+        $('#slider_val').val(sliderValue+'%');
         get_discPrice();
     }
+
     // Load discount range slider
-    $("#range_1").ionRangeSlider({
+    var $rangeSlider = $("#range_1");
+    $rangeSlider.ionRangeSlider({
         min: 0,
         max: 100,
         type: 'single',
@@ -376,7 +399,7 @@ $(document).ready(function(){
         postfix: "%",
         prettify: true,
         hasGrid: true,
-        from:slider_val,
+        from:sliderValue,
         onChange: function (obj) {        // callback is called after slider load and update
             var value = obj.fromNumber;
             $("#slider_val").val(value);
@@ -389,80 +412,65 @@ $(document).ready(function(){
         $("#dsc_frm").toggle();
     });
 
-    $('#prod_price').on('change', function(){
-        var prcnt = parseFloat($("#slider_val").val().replace("%",''));
-        if( !isNaN(prcnt) ){
-            get_discPrice();
-        }
-    });
-
     $("#slider_val").bind('change keyup',function(e){
         if(e.which > 13 || e.which < 13){
             return false;
         }
-        var thisslider = $(this);
-        var newval = (parseFloat($(this).val()) > 100) ? 99 : (parseFloat($(this).val()) == 0 || isNaN(parseFloat($(this).val())))? 0 : parseFloat($(this).val());
-        get_discPrice();
-        $("#range_1").ionRangeSlider("update", {
-            from: newval,                       // change default FROM setting
-            onChange: function (obj) {        // callback is called after slider load and update
-                var value = obj.fromNumber;
-                thisslider.val(value);
-                get_discPrice();
-            }
-        });
-    });
 
-    $( "#prod_price" ).keypress(function() {
-        validateWhiteTextBox("#prod_price");
+        var $this = $(this);
+        var newval = (parseFloat($this.val()) > 100) ? 99 : (parseFloat($this.val()) == 0 || isNaN(parseFloat($this.val())))? 0 : parseFloat($this.val());
+        get_discPrice();
+        $rangeSlider.ionRangeSlider("update", {
+            from: newval 
+        });
     });
 
     $("#discountedP").bind('change keyup',function(e){
         if(e.which > 13 || e.which < 13){
             return false;
         }
-        validateWhiteTextBox("#discountedP");
-        var disc_price = parseFloat($(this).val());
-        var base_price = parseFloat($("#prod_price").val().replace(/,/g,''));
-        var sum = ((base_price - disc_price) / base_price) * 100;
+
+        var $this = $(this);
+        var discountPrice = parseFloat($this.val());
+        var basePrice = parseFloat($("#prod_price").val().replace(/,/g,''));
+        var sum = ((basePrice - discountPrice) / basePrice) * 100;
         sum = sum.toFixed(4);
-        if(disc_price > base_price){
+        validateWhiteTextBox("#discountedP");
+
+        if(discountPrice > basePrice){
             alert("Discount Price cannot be greater than base price.");
-            $(this).val("0.00");
+            $this.val("0.00");
             validateRedTextBox("#discountedP");
             return false;
         }
-        if(disc_price <= 0){
+
+        if(discountPrice <= 0){
             alert("Discount Price cannot be equal or less than 0.");
-            $(this).val("0.00");
+            $this.val("0.00");
             $( "span#discounted_price_con" ).text( "0.00" );
             validateRedTextBox("#discountedP");
             return false;
         }
-        $("#range_1").ionRangeSlider("update", {
+
+        $rangeSlider.ionRangeSlider("update", {
             from: sum
         });
+
         $("#slider_val").val(sum+"%");
-        tempval = Math.abs(disc_price);
-        disc_price = ReplaceNumberWithCommas(tempval.toFixed(2));
-        $(this).val(disc_price);
-        $( "span#discounted_price_con" ).text( disc_price );
+        tempval = Math.abs(discountPrice);
+        discountPrice = ReplaceNumberWithCommas(tempval.toFixed(2));
+        $this.val(discountPrice);
+        $("span#discounted_price_con").text(discountPrice);
     });
 
     $(document).mouseup(function (e){
-        var container = $("#dsc_frm");
-        if (!container.is(e.target) // if the target of the click isn't the container...
-            && container.has(e.target).length === 0) // ... nor a descendant of the container
-        {
-            container.hide(); 
+        var $container = $("#dsc_frm");
+
+        //Close $container if the target of the click isn't the $container
+        if (!$container.is(e.target)
+            && $container.has(e.target).length === 0){
+            $container.hide(); 
         }
-    });  
-
-
-    // view more product details trigger
-    $('.view_more_product_details').on('click', function() {
-        $('.more_product_details_container,.prod-details-add-more-link').slideToggle();
-        $('.view_more_product_details').toggleClass('active-product-details');
     });
 });
 
