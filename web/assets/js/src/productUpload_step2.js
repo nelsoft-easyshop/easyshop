@@ -323,7 +323,7 @@ function checkOptionValue(selector,id,value,evt)
     $('body').click();
 }
 
-$(document).ready(function(){
+(function($) {
     
      // if keyword change. counter will change also either increase or decrease until reach its limit..
     updateCountdown();
@@ -358,28 +358,31 @@ $(document).ready(function(){
     });
 
     // Load tinyMCE plugin
-    tinymce.init({ 
-        mode : "specific_textareas",
-        editor_selector : "mceEditor", 
-        menubar: "table format view insert edit",
-        statusbar: false, 
-        height: 300,
-        plugins: ["lists link preview","table jbimages fullscreen","textcolor" ],  
-        toolbar: "insertfile undo redo | sizeselect | fontselect  fontsizeselect styleselect  forecolor backcolor | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | jbimages | image_advtab: true ",  
-        relative_urls: false,
-        setup: function(editor) {
-            editor.on('change', function(e) {
-                $('#prod_description').val(tinyMCE.get('prod_description').getContent());
-                $('#prod_description').trigger( "change" );
-            });
-        }
+    $(function() {
+        tinyMCE.init({ 
+            mode : "specific_textareas",
+            editor_selector : "mceEditor", 
+            menubar: "table format view insert edit",
+            statusbar: false, 
+            height: 300,
+            plugins: ["lists link preview","table jbimages fullscreen","textcolor" ],  
+            toolbar: "insertfile undo redo | sizeselect | fontselect  fontsizeselect styleselect  forecolor backcolor | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | jbimages | image_advtab: true ",  
+            relative_urls: false,
+            setup: function(editor) {
+                editor.on('change', function(e) {
+                    $('#prod_description').val(tinyMCE.get('prod_description').getContent());
+                    $('#prod_description').trigger( "change" );
+                });
+            }
+        });
     });
-});
+
+})(jQuery);
 
 /**
  * Load Discount Feature
  */
-$(document).ready(function(){
+(function($) {
 
     var sliderValue = parseFloat($('#slider_val').data('value'));
 
@@ -472,12 +475,12 @@ $(document).ready(function(){
             $container.hide(); 
         }
     });
-});
+})( jQuery );
 
 // Manipulating of additional attributes
 var cnt = 1; 
 var previous,editSelectedValue,editSelectedId; 
-$(document).ready(function(){
+(function($) {
 
     setChosen();
     zebraCombination();
@@ -829,13 +832,12 @@ $(document).ready(function(){
     $(document).on("click","#cancel-changes",function (){
         resetControlPanel(true);
     });
-
-});
+})( jQuery );
 // END of Manipulating of additional attributes
 
 // BRAND SEARCH
 var currentRequest = null;
-$(document).ready(function(){
+(function($) {
     $('#brand_search_drop_content').hide();
     $(document).on('keyup','#brand_sch',function(){
 
@@ -939,7 +941,7 @@ $(document).ready(function(){
         $('#prod_brand').trigger( "change" ); 
         jQuery(".brand_sch_loading").html('<img src="'+config.base_url+'assets/images/img_new_txt.png" />').show().css('display','inline-block');
     }
-});
+})( jQuery );
 // BRAND SEARCH END
 
 
@@ -947,7 +949,7 @@ $(document).ready(function(){
 var canProceed = true; 
 var removeThisPictures = []; var imageAttr = [];
 var pictureCountOther  = 0; var primaryPicture = 0;
-$(document).ready(function() {
+(function($) {
   
     if(window.FileReader){
         badIE = false;
@@ -1239,8 +1241,10 @@ $(document).ready(function() {
         $(this).text('Your Primary');
         $(this).closest('.upload_img_div').addClass("active_img");
     });
-});
+})(jQuery);
 // ES_UPLOADER BETA END
+
+(function($) {
 
     // SAVING AND PROCEED 
     $(document).on('click','#proceed_form',function(){
@@ -1539,8 +1543,6 @@ $(document).ready(function() {
             }
         }).submit(); 
     }
- 
-jQuery(function($){
 
     function disableF5(e) { if ((e.which || e.keyCode) == 116) e.preventDefault(); };
     // To disable f5
@@ -1571,9 +1573,10 @@ jQuery(function($){
 
     $(document).on('click', '.prevent', function(event){
         confirm_unload = false;
-        var loc = $(this).attr("href");        
+        var loc = $(this).attr("href");
         event.preventDefault(); 
         askDraft(loc);
-    });                 
-});
+    });
+
+})( jQuery );
 
