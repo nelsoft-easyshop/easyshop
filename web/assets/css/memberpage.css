@@ -9,14 +9,20 @@
 
 /* Container */
 #simplemodal-container {
+    font-size: 12px;
 	height: auto !important;
-	width: auto !important; 
+    max-height: 415px !important;
+	width: 1005px !important; 
 	background-color:#0000;
 	padding: 5px;
 	-webkit-box-shadow: 0px 0px 10px 0px rgba(50, 50, 50, 0.75);
 -moz-box-shadow:    0px 0px 10px 0px rgba(50, 50, 50, 0.75);
 box-shadow:         0px 0px 10px 0px rgba(50, 50, 50, 0.75);
 }
+
+/*#simplemodal-container .simplemodal-wrap {
+    overflow: hidden !important;
+}*/
 
 .jcrop-holder{
 	margin: auto !important;
@@ -233,6 +239,7 @@ div.css_modal_date{
 	width:1000px;
 	padding: 3px;
 	height: 350px;
+    margin-top: 35px;
 	overflow-y: scroll;
 }
 
