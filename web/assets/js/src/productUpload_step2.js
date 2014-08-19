@@ -322,23 +322,15 @@ function checkOptionValue(selector,id,value,evt)
     }
     $('body').click();
 }
-
+ 
 (function($) {
+ 
     
      // if keyword change. counter will change also either increase or decrease until reach its limit..
     updateCountdown();
     $('#prod_keyword').change(updateCountdown);
     $('#prod_keyword').keyup(updateCountdown); 
 
-    // search brand 
-    $('#brand_sch').focus(function() {
-        $('#brand_search_drop_content').show();
-        $(document).bind('focusin.brand_sch_drop_content click.brand_sch_drop_content',function(e) {
-          if ($(e.target).closest('#brand_search_drop_content, #brand_sch').length) return;
-          $('#brand_search_drop_content').hide();
-      });
-    });
-    $('#brand_search_drop_content').hide();
 
     $('#prod_price').on('change', function(){
         var prcnt = parseFloat($("#slider_val").val().replace("%",''));
@@ -835,45 +827,44 @@ var previous,editSelectedValue,editSelectedId;
 })( jQuery );
 // END of Manipulating of additional attributes
 
-// BRAND SEARCH
+/**
+ * Loading Brand Search Feature
+ */
 var currentRequest = null;
+ 
 (function($) {
+ 
     $('#brand_search_drop_content').hide();
     $(document).on('keyup','#brand_sch',function(){
-
-        $('#prod_brand').val(0)
-        $('#prod_brand').trigger( "change" );
-        jQuery(".brand_sch_loading").hide();
-        var searchQuery = $(this).val();
-        var csrftoken = $("meta[name='csrf-token']").attr('content');
-        var csrfname = $("meta[name='csrf-name']").attr('content');
+        $('#prod_brand').val(0).trigger( "change" ) 
+        $(".brand_sch_loading").hide();
+        var searchQuery = $(this).val().trim();
         if(searchQuery != ""){
-            currentRequest = jQuery.ajax({
+            currentRequest = $.ajax({
                 type: "GET",
-                url: config.base_url+'product_search/searchBrand', 
-                onLoading:jQuery(".brand_sch_loading").html('<img src="'+config.base_url+'assets/images/orange_loader_small.gif" />').show().css('display','inline-block'),
-                data: "data="+searchQuery+"&"+csrfname+"="+csrftoken, 
-                beforeSend : function(){       
+                url: config.base_url+'product_search/searchBrand',
+                data: "data="+searchQuery, 
+                beforeSend : function(){
                     if(currentRequest != null) {
                         currentRequest.abort();
                     }
-                    $('.brand_sch_drop_content').show();
                 },
                 success: function(response) {
                     currentRequest = null;
-                    var obj = jQuery.parseJSON(response);
+                    var obj = $.parseJSON(response);
                     var html = '<ul>';
                     if((obj.length)>0){
-                        jQuery.each(obj,function(){
-                            html += '<li class="brand_result" data-brandid="'+(this.id_brand) +'">'+(this.name)+'</li>' ;                             
+                        $('.brand_sch_drop_content').show();
+                        $.each(obj,function(){
+                            html += '<li class="brand_result" data-brandid="'+(this.id_brand) +'">'+(this.name)+'</li>';
                         });
-                        html += '<li class="add_brand blue">Use your own brand name</li>';
-                        jQuery(".brand_sch_loading").hide();
+                        html += '<li class="add_brand blue">Use "<span style="color:red">'+searchQuery+'</span>"" as your own brand name</li>';
+                        $(".brand_sch_loading").hide();
                     }
                     else{
+                        $("#brand_search_drop_content").hide();
                         addNewBrand();
                     }
-
                     html += '</ul>';
                     $("#brand_search_drop_content").html(html);
 
@@ -896,39 +887,46 @@ var currentRequest = null;
     });
 
     $('#brand_search_drop_content').on('click', 'li.brand_result', function(){
-        $this = $(this);     
-        $('#prod_brand').val($this.data('brandid'));
-        $("#brand_sch").val($this.text());
-        $('#prod_brand').trigger( "change" );
-        $("#brand_sch").trigger( "change" );
-        jQuery(".brand_sch_loading").html('<img src="'+config.base_url+'assets/images/check_icon.png" />').show().css('display','inline-block');
-
-        $('#brand_search_drop_content').hide();
+        $this = $(this);
+        $('#prod_brand').val($this.data('brandid')).trigger( "change" );
+        $("#brand_sch").val($this.text()).trigger( "change" ); 
+        $('#brand_search_drop_content').empty().hide(); 
+        $(".brand_sch_loading").html('<img src="'+config.base_url+'assets/images/check_icon.png" />').show().css('display','inline-block');
     });
 
-    $(document).on("click",".add_brand", function(){    
-        if(currentRequest != null) {
+    $(document).on("click",".add_brand", function(){
+        if(currentRequest != null){
             currentRequest.abort();
         }
-        addNewBrand();
+
+        if($('#brand_sch').val().trim() != ""){
+            addNewBrand();
+        }
+
         $('#brand_search_drop_content').hide();
     });
 
     $('#brand_sch').focusout(function(){
         var available = false;
-        $('#brand_search_drop_content li.brand_result').each(function(){
-            if($(this).text().toLowerCase() ===  $('#brand_sch').val().toLowerCase()){
-                $(this).click();
-                available = true;
-                return false;
-            }
-            if(!available){
-                addNewBrand();
-            }
-        });
-    });  
+        var $this = $(this);
+        var brandValue = $this.val();
+        var $searchDrop = $('#brand_search_drop_content li.brand_result');
 
-    $('#brand_sch').focus(function() {
+        if(brandValue.trim() != ""){
+            $searchDrop.each(function(){
+                if($searchDrop.text().toLowerCase() ===  brandValue.toLowerCase()){
+                    $searchDrop.click();
+                    available = true;
+                    return false;
+                }
+                if(!available){
+                    addNewBrand();
+                }
+            });
+        }
+    });
+
+    $('#brand_sch').focus(function() { 
         $('#brand_search_drop_content').show();
         $(document).bind('focusin.brand_sch_drop_content click.brand_sch_drop_content',function(e) {
             if ($(e.target).closest('#brand_search_drop_content, #brand_sch').length) return;
@@ -939,10 +937,11 @@ var currentRequest = null;
     function addNewBrand(){
         $('#prod_brand').val(1)
         $('#prod_brand').trigger( "change" ); 
-        jQuery(".brand_sch_loading").html('<img src="'+config.base_url+'assets/images/img_new_txt.png" />').show().css('display','inline-block');
+        $(".brand_sch_loading").html('<img src="'+config.base_url+'assets/images/img_new_txt.png" />').show().css('display','inline-block');
     }
 })( jQuery );
 // BRAND SEARCH END
+ 
 
 
 // ES_UPLOADER BETA     
