@@ -1,4 +1,4 @@
-$(document).ready(function() {
+(function ($) {
     
     var csrftoken = $("meta[name='csrf-token']").attr('content');
     var csrfname = $("meta[name='csrf-name']").attr('content');
@@ -16,10 +16,7 @@ $(document).ready(function() {
      */
     $( "#cat_sch" ).keyup(function() {
         var searchQuery = $(this).val().trim();
-        if(searchQuery != ""){
-            if(searchQuery.length <= 1){
-                return false;
-            }
+        if(searchQuery != ""){ 
             currentRequest = jQuery.ajax({
                 type: "GET",
                 url: config.base_url + 'product_search/searchCategory', 
@@ -310,8 +307,7 @@ $(document).ready(function() {
         }
         $(selector).closest('div').addClass('selected_category pd-13-12');
     });
+})(jQuery);
 
-
-});
 
 
