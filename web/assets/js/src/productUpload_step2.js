@@ -1,76 +1,6 @@
-
-$(document).ready(function(){
-    $("#range_1").ionRangeSlider({
-        min: 0,
-        max: 100,
-        type: 'single',
-        step: 1,
-        postfix: "%",
-        prettify: true,
-        hasGrid: true,
-        onChange: function (obj) {        // callback is called after slider load and update
-            var value = obj.fromNumber;
-            $("#slider_val").val(value);
-            get_discPrice();
-        }
-    });
-    
-     // if keyword change. counter will change also either increase or decrease until reach its limit..
-    updateCountdown();
-    $('#prod_keyword').change(updateCountdown);
-    $('#prod_keyword').keyup(updateCountdown); 
-
-
-
-    // search brand 
-    $('#brand_sch').focus(function() {
-        $('#brand_search_drop_content').show();
-        $(document).bind('focusin.brand_sch_drop_content click.brand_sch_drop_content',function(e) {
-          if ($(e.target).closest('#brand_search_drop_content, #brand_sch').length) return;
-          $('#brand_search_drop_content').hide();
-      });
-    });
-    $('#brand_search_drop_content').hide();
-});
- 
-// TINYMCE
-$(function(){
-
-    tinymce.init({ 
-        mode : "specific_textareas",
-        editor_selector : "mceEditor", 
-        menubar: "table format view insert edit",
-        statusbar: false, 
-        height: 300,
-        plugins: ["lists link preview","table jbimages fullscreen","textcolor" ],  
-        toolbar: "insertfile undo redo | sizeselect | fontselect  fontsizeselect styleselect  forecolor backcolor | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | jbimages | image_advtab: true ",  
-        relative_urls: false,
-        setup: function(editor) {
-            editor.on('change', function(e) {
-                $('#prod_description').val(tinyMCE.get('prod_description').getContent());
-                $('#prod_description').trigger( "change" );
-            });
-        }
-    });
-
-    tinymce.init({
-        mode : "specific_textareas",
-        editor_selector : "mceEditor_attr", 
-        menubar: "table format view insert edit",
-        statusbar: false,
-        height: 200,
-        plugins: [
-        "lists link preview ",
-        "table jbimages fullscreen" 
-        ],  
-        toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | jbimages | image_advtab: true ",  
-        relative_urls: false
-    });
-});
-
 // FUNCTION FOR KEYWORD COUNTER
 function updateCountdown() {
-    // 140 is the max message length
+    // 150 is the max message length
     var remaining = 150 - $('#prod_keyword').val().length;
     $('.countdown').text(remaining + ' characters remaining.');
 }
@@ -79,15 +9,15 @@ function updateCountdown() {
 function validateRedTextBox(idclass)
 {
     $(idclass).css({"-webkit-box-shadow": "0px 0px 2px 2px #FF0000",
-      "-moz-box-shadow": "0px 0px 2px 2px #FF0000",
-      "box-shadow": "0px 0px 2px 2px #FF0000"});
+                "-moz-box-shadow": "0px 0px 2px 2px #FF0000",
+                "box-shadow": "0px 0px 2px 2px #FF0000"});
 } 
 
 function validateWhiteTextBox(idclass)
 {
     $(idclass).css({"-webkit-box-shadow": "0px 0px 2px 2px #FFFFFF",
-      "-moz-box-shadow": "0px 0px 2px 2px #FFFFFF",
-      "box-shadow": "0px 0px 2px 2px #FFFFFF"});
+                "-moz-box-shadow": "0px 0px 2px 2px #FFFFFF",
+                "box-shadow": "0px 0px 2px 2px #FFFFFF"});
 }
 
 // NUMBER ONLY IN SPECIFIC FIELDS
@@ -95,13 +25,14 @@ function isNumberKey(evt)
 {
     var charCode = (evt.which) ? evt.which : event.keyCode;
     if (charCode != 46 && charCode > 31 
-      && (charCode < 48 || charCode > 57))
-     return false;
+        && (charCode < 48 || charCode > 57)){
+        return false;
+    }
 
- return true;
- }
+    return true;
+}
 
- function setChosen(){
+function setChosen(){
     $("#head-data,.value-data").chosen({
         create_option: true,
         skip_no_results: true,
@@ -122,7 +53,7 @@ function appendNewSelectionRow(){
     </div>\
     </div>\
     <div class="price-div col-xs-3 col-sm-3 col-md-3 pd-bttm-10">\
-    &#8369; <input type="text" maxlength="10" class="price-val price'+cnt+' ui-form-control" placeholder="0.00" />\
+    &#8369; <input type="text" maxlength="10"  onkeypress="return isNumberKey(event)"   class="price-val price'+cnt+' ui-form-control" placeholder="0.00" />\
     </div>\
     <div class="image-div col-xs-2 col-sm-2 col-md-2 pd-bttm-10">\
     <input type="hidden" class="image-val imageText'+cnt+'"/>\
@@ -152,26 +83,52 @@ function appendNewSelectionRow(){
     return cnt;
 }
 
-
-var previousValue;
-$(document).on("click",".list-choosen-combination-div > .div-combination > .div2 > span > .selection",function(){
-    previousValue = $(this).children('option:selected').text();
-});
-
-$(document).on("change",".list-choosen-combination-div > .div-combination > .div2 > span > .selection",function(){
-    var selector = $(this);
-    var cnt = selector.parent().parent().parent().children('.div3').children('.remove-combination').data('cmbcnt');
-    var currentStringId = "";
-    $('.list-choosen-combination-div > .combination'+cnt+' > .div2 > span > .selection').each(function() {
-        currentStringId += $(this).children('option:selected').data('value');
-    });
-
-    var checkIfExist = checkCombination(currentStringId);
-    if(checkIfExist == false){
-        selector.val(previousValue);
-        alert('Combination Already Exist!');
+function askDraft(location)
+{
+    if(isEdit == 0){ 
+        $("#question").dialog({
+            resizable: false,
+            height: 100,
+            width: 530,
+            modal: true, 
+            open: function() {
+            },
+            buttons: {
+                "Yes Save as Draft and Leave": function() {
+                    $(".ui-dialog-title").text('Please wait while saving your data...'); 
+                    saveAsDraftProceed();
+                    window.location = location;
+                },
+                "Dont save as draft just leave": function() {
+                    $(".ui-dialog-title").text('Please wait...'); 
+                    window.location = location;
+                },
+                "Dont leave": function() { 
+                    $(this).dialog("close");
+                }
+            },
+            "title": "Your about to leave this page without saving. Do you want this to save as draft?"
+        });   
     }
-});
+    else{ 
+        $("#question").dialog({
+            resizable: false,
+            height: 100,
+            width: 530,
+            modal: true, 
+            open: function() {
+            },
+            buttons: {
+                "Ok I understand": function() {
+                    $(".ui-dialog-title").text('Please wait while saving your data...'); 
+                    saveAsDraftProceed();
+                    window.location = location;
+                }
+            },
+            "title": "Remember this item is in your draft you can edit this in step1 page."
+        });
+    }
+}
 
 function removeDuplicateCombination()
 {
@@ -216,11 +173,11 @@ function checkCombination(currentStringId)
         }
     }
 }
+
 function jqSelector(str)
 {
     return str.replace(/([;&,\.\+\*\~':"\!\^#$%@\[\]\(\)=>\|])/g, '\\$1');
 }
-
 
 function resetControlPanel(buttonReset)
 {
@@ -234,7 +191,7 @@ function resetControlPanel(buttonReset)
     </div> \
     </div>\
     <div class="price-div col-xs-3 col-sm-3 col-md-3 pd-bttm-10">\
-        &#8369; <input type="text"  maxlength="10" placeholder="0.00" class="price-val price1 ui-form-control">\
+        &#8369; <input type="text"  maxlength="10" placeholder="0.00"  onkeypress="return isNumberKey(event)"   class="price-val price1 ui-form-control">\
     </div>\
     <div class="image-div col-xs-2 col-sm-2 col-md-2 pd-bttm-10">\
         <input type="hidden" class="image-val imageText1"/>\
@@ -287,7 +244,7 @@ function get_discPrice() {
     if (prcnt >= 100) {
         prcnt = 99;
     }
-    if (act_price == 0 || act_price == null ) {      
+    if (act_price == 0 || act_price == null ) {
         validateRedTextBox("#prod_price");
         act_price = 0;
     }
@@ -308,19 +265,120 @@ function zebraCombination()
     $(".zebra-div:odd").css("background-color","white"); 
 }
 
-// view more product details
-$(document).ready(function() {
-    $('.view_more_product_details').on('click', function() {
-        $('.more_product_details_container,.prod-details-add-more-link').slideToggle();
-        $('.view_more_product_details').toggleClass('active-product-details');
+function checkOptionValue(selector,id,value,evt)
+{
+    var exists = false;
+    var commonValue;
+    var activeSelection = selector.search_results.find('li.active-result').length;
+    var highlightSelection = selector.search_results.find('li.highlighted').length;
+    var valueData =  $('.value-data'); 
+    value = value.replace(/[^a-z0-9\s\-]/gi, '');
+
+    if(value === ""){
+        return false;
+        $('body').click();
+    }
+
+    $(id).children('option').each(function(){
+        var text = $(this).text(); 
+        if (text.toLowerCase() == value.toLowerCase()) {
+            exists = true;
+            commonValue = text;
+            return false;
+        }
+    });
+
+    if(highlightSelection >= 1){
+        if(exists !== true){
+            selector.result_highlight = selector.search_results.find('li.highlighted').first(); 
+            return selector.result_select(evt);
+        }
+    }
+    else{
+        if(exists !== true){
+            $(id).append('<option>' + value + '</option>');
+            $(id).trigger('liszt:updated');
+            selector.result_highlight = selector.search_results.find('li.active-result').last(); 
+            return selector.result_select(evt);   
+        }
+    }
+
+    if(exists == true){ 
+        if(id.id == 'head-data'){
+            valueData.empty().trigger("liszt:updated");
+        }
+        if(activeSelection <= 1){ 
+            $(id).val(commonValue).trigger("liszt:updated");
+            var attrList = attributeArray[commonValue]; 
+            $.each(attrList, function(key, value){
+                valueData.append('<option>'+value+'</option>');
+            });
+            valueData.trigger("liszt:updated");
+        }
+        else{ 
+            selector.result_highlight = selector.search_results.find('li.active-result').first();
+            return selector.result_select(evt);
+        }
+    }
+    $('body').click();
+}
+
+$(function(){
+
+    // Load discount range slider
+    $("#range_1").ionRangeSlider({
+        min: 0,
+        max: 100,
+        type: 'single',
+        step: 1,
+        postfix: "%",
+        prettify: true,
+        hasGrid: true,
+        onChange: function (obj) {        // callback is called after slider load and update
+            var value = obj.fromNumber;
+            $("#slider_val").val(value);
+            get_discPrice();
+        }
+    });
+    
+     // if keyword change. counter will change also either increase or decrease until reach its limit..
+    updateCountdown();
+    $('#prod_keyword').change(updateCountdown);
+    $('#prod_keyword').keyup(updateCountdown); 
+
+    // search brand 
+    $('#brand_sch').focus(function() {
+        $('#brand_search_drop_content').show();
+        $(document).bind('focusin.brand_sch_drop_content click.brand_sch_drop_content',function(e) {
+          if ($(e.target).closest('#brand_search_drop_content, #brand_sch').length) return;
+          $('#brand_search_drop_content').hide();
+      });
+    });
+    $('#brand_search_drop_content').hide();
+
+    // Load tinyMCE plugin
+    tinymce.init({ 
+        mode : "specific_textareas",
+        editor_selector : "mceEditor", 
+        menubar: "table format view insert edit",
+        statusbar: false, 
+        height: 300,
+        plugins: ["lists link preview","table jbimages fullscreen","textcolor" ],  
+        toolbar: "insertfile undo redo | sizeselect | fontselect  fontsizeselect styleselect  forecolor backcolor | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | jbimages | image_advtab: true ",  
+        relative_urls: false,
+        setup: function(editor) {
+            editor.on('change', function(e) {
+                $('#prod_description').val(tinyMCE.get('prod_description').getContent());
+                $('#prod_description').trigger( "change" );
+            });
+        }
     });
 });
-// end of view more product JS
 
-// JS Function Discount
 $(document).ready(function(){
-    $("#dsc_frm").hide();
 
+    // JS Function Discount
+    $("#dsc_frm").hide();
     $("#discnt_btn").on("click",function(){
         $("#dsc_frm").toggle();      
     });  
@@ -331,9 +389,6 @@ $(document).ready(function(){
             get_discPrice();
         }
     });
-
-
-
 
     $("#slider_val").bind('change keyup',function(e){
         if(e.which > 13 || e.which < 13){
@@ -403,16 +458,21 @@ $(document).ready(function(){
         $('#slider_val').trigger( "change" );
     }
 
+    // view more product details trigger
+    $('.view_more_product_details').on('click', function() {
+        $('.more_product_details_container,.prod-details-add-more-link').slideToggle();
+        $('.view_more_product_details').toggleClass('active-product-details');
+    });
 });
-// end of JS Function Discount
 
 // Manipulating of additional attributes
 var cnt = 1; 
 var previous,editSelectedValue,editSelectedId; 
-$(document).ready(function() {   
+$(document).ready(function(){
 
-    setChosen(); 
+    setChosen();
     zebraCombination();
+    $("#head-data,.value-data").val('').trigger("liszt:updated");
 
     $(document).on('change',".price-val,#prod_price",function () {
         var priceval = this.value.replace(new RegExp(",", "g"), '');
@@ -426,69 +486,36 @@ $(document).ready(function() {
         }
     });
 
+    $(document).on('change',".qty",function () {
+        var qty = this.value;
+        var v = parseInt(qty);
+        var tempval;
+        if (isNaN(v)) {
+            this.value = '1';
+        } else {
+            tempval = Math.abs(v);
+            this.value = tempval;
+        }
+    });
+
     $(document).on("click","#head_data_chzn",function (){
         var selector = $("#head-data");  
         previous = selector.chosen().val(); 
     });
 
-    function checkOptionValue(selector,id,value,evt)
-    {
-        var exists = false;
-        var commonValue;
-        var valueData =  $('.value-data'); 
-        $(id).children('option').each(function(){
-            var text = $(this).text();
-            if (text.toLowerCase() == value.toLowerCase()) {
-                exists = true;
-                commonValue = text;
-                return false;
-            }
-        }); 
-
-        value = value.replace(/[^a-z0-9\s\-]/gi, '');
-        var activeSelection = selector.search_results.find('li.active-result').length;
-        var highlightSelection = selector.search_results.find('li.highlighted').length;
-
-        if(highlightSelection >= 1){
-                selector.result_highlight = selector.search_results.find('li.highlighted').first();
-                return selector.result_select(evt);
-        }
-        else{
-            $(id).append('<option>' + value + '</option>');
-            $(id).trigger('liszt:updated');
-            selector.result_highlight = selector.search_results.find('li.active-result').last();
-            return selector.result_select(evt);
-        }
-
-        if(exists == true){
-            if(id.id == 'head-data'){
-                valueData.empty().trigger("liszt:updated");
-            } 
-            console.log(commonValue);
-            if(activeSelection <= 1){
-                $(id).val(commonValue).trigger("liszt:updated");
-                var attrList = attributeArray[commonValue]; 
-                $.each(attrList, function(key, value){
-                    valueData.append('<option>'+value+'</option>');
-                });
-                valueData.trigger("liszt:updated");
-            }
-            else{
-                selector.result_highlight = selector.search_results.find('li.active-result').first();
-                return selector.result_select(evt);
-            }
-        }
-    }
- 
     AbstractChosen.prototype.input_blur = function(evt) {
         checkOptionValue(this,this.form_field,$(evt.target).val(),evt);
     }
 
     Chosen.prototype.keydown_checker = function(evt) {
-        if(evt.which === 13)  {   
+        if(evt.which === 13){
             checkOptionValue(this,this.form_field,$(evt.target).val(),evt);
         }
     }
+
+    $(document).on("change",".chzn-search > input[type=text]", function (){
+        $(this).val($(this).val().replace(/[^a-z0-9\s\-]/gi, '')); 
+    });
 
     $(document).on("change","#head-data",function (){
         var selector = $(this); 
@@ -511,7 +538,6 @@ $(document).ready(function() {
             }
         }
         else{
-
             if(length > 0 && editSelectedValue != selectedValue){
                 $('#head-data').val(previous).trigger("liszt:updated");
                 alert(selectedValue +' already exist in the selection');
@@ -683,16 +709,16 @@ $(document).ready(function() {
             alert('Combination Already Exist!');
             return false;
         }
-        var combinationQuantity = $('.select-control-panel-option > .div1 > .qty').val();
+        var combinationQuantity = parseInt($('.select-control-panel-option > .div1 > .qty').val());
         if( combinationQuantity <= 0 || $.isNumeric(combinationQuantity) == false){
             validateRedTextBox('.qty');
             return false;
-        }else{
+        }
+        else{
             validateWhiteTextBox('.qty');
         }
 
         var checked = $('.set-default:checked').length > 0;
-
 
         if(!checked){
             $('.set-default').remove(); 
@@ -737,8 +763,7 @@ $(document).ready(function() {
         $('.combination'+cmbcnt).remove();
         if( !$.trim( $('.list-choosen-combination-div').html() ).length ) { 
             $('.select-combination').prop("disabled",false); 
-            $('.select-control-panel-option > .div3 > .set-default').remove();
-            // $('.select-control-panel-option > .div3').append('<input type="checkbox" class="set-default">');
+            $('.select-control-panel-option > .div3 > .set-default').remove(); 
         }
         resetControlPanel(true);
         zebraCombination();
@@ -758,7 +783,7 @@ $(document).ready(function() {
                 $('.list-choosen-combination-div,.select-control-panel-option ').empty();
                 $('.select-control-panel-option').append('\
                     <div class="col-xs-2 col-sm-2 col-md-2 div1">\
-                    <input type="text" name="allQuantity" value="1" size="3" class="qty" onkeypress="return isNumberKey(event)">\
+                    <input type="text" name="allQuantity" value="1" size="3" class="qty ui-form-control" onkeypress="return isNumberKey(event)">\
                     </div>\
                     <div class="col-xs-8 col-sm-8 col-md-8 div2"></div>\
                     <div class="col-xs-2 col-sm-2 col-md-2 div3"></div>');
@@ -772,10 +797,9 @@ $(document).ready(function() {
     $(document).on("click",".edit-attr",function (){
         var selector = $(this);
         var head = editSelectedValue = selector.data('head');
-        var id = editSelectedId = selector.data('id'); 
-
+        var id = editSelectedId = selector.data('id');  
         $('.add-property').val('Save Property').nextAll().remove();
-        $('.add-property').after('<input type="button" id="cancel-changes" value="Cancel" class="btn btn-default width-80p" />')
+        $('.add-property').after('<input type="button" id="cancel-changes" value="Cancel" class="btn btn-default width-80p" />');
         $('#head-data').val(head).trigger("liszt:updated");
         $('.control-panel').empty();
         validateRedTextBox(".div2 > span > #"+id);
@@ -916,10 +940,11 @@ var removeThisPictures = []; var imageAttr = [];
 var pictureCountOther  = 0; var primaryPicture = 0;
 $(document).ready(function() {
   
-    if(window.FileReader) {   
+    if(window.FileReader){
         badIE = false;
         $('#inputList').append('<input type="file" id="files" class="files active" name="files[]" multiple accept="image/*" required = "required"  />');
-    } else { 
+    }
+    else{
         badIE = true;
         $('#inputList').append('<input type="file" id="files" class="files active" name="files[]" accept="image/*" required = "required"  />');
     }
@@ -942,10 +967,9 @@ $(document).ready(function() {
         if(badIE == false){
             var fileList = this.files;
             var anyWindow = window.URL || window.webkitURL; 
-
+            var errorValues = "";
             for(var i = 0; i < fileList.length; i++){
                 var activeText= ""; 
-                var errorValues = "";
                 var primaryText = "Make Primary"; 
                 var size = fileList[i].size
                 var val = fileList[i].name;
@@ -986,24 +1010,18 @@ $(document).ready(function() {
                 arrayUpload.push(pictureCount);
                 pictureCount++; 
             }
-            console.log(primaryPicture);
-
-            if(errorValues != ""){
-                alert("Sorry, the following files cannot be uploaded:", errorValues);
-            }
 
             $(".files").hide();  
             $(".files.active").each(function(){
                 $(this).removeClass('active');
             });
 
-            startUpload(pictureCount,filescnt,arrayUpload,afstart,imageName);
+            startUpload(pictureCount,filescnt,arrayUpload,afstart,imageName,errorValues);
             filescnt++;
             $('#inputList').append('<input type="file"  id="files" class="files active" name="files[]" multiple accept="image/*" required = "required"  /> ');
             $(this).remove();
-
-        }else{
-
+        }
+        else{
             var activeText= ""; 
             var errorValues = "";
             var primaryText = "Make Primary"; 
@@ -1044,12 +1062,12 @@ $(document).ready(function() {
             afstart.push(imageName); 
             arrayUpload.push(pictureCount);  
             pictureCount++;
-            startUpload(pictureCount,filescnt,arrayUpload,afstart,imageName);
+            startUpload(pictureCount,filescnt,arrayUpload,afstart,imageName,"");
             filescnt++;
         }
     });
 
-    function startUpload(cnt,filescnt,arrayUpload,afstart,imageName){
+    function startUpload(cnt,filescnt,arrayUpload,afstart,imageName,errorValues){
 
         $('.counter').val(cnt); 
         $('.filescnttxt').val(filescnt); 
@@ -1070,12 +1088,17 @@ $(document).ready(function() {
                 $('.filescnt'+filescnt+' > .removepic').show(); 
                 canProceed = true; 
                 if(d.err == '1'){ 
-                    alert(d.msg);
+                    alert(d.msg, "The Following cannot be upload <br>" + errorValues);
                     $.each( arrayUpload, function( key, value ) {
                         removeThisPictures.push(value); 
                         $('#previewList'+value).remove();
                     });
-                } 
+                }
+                else{
+                    if(errorValues != ""){
+                        alert("The Following cannot be upload" ,errorValues);
+                    }
+                }
                 if(badIE == true){
                     if(d.err != '1'){
                         $.each( arrayUpload, function( key, value ) {
@@ -1090,7 +1113,7 @@ $(document).ready(function() {
                 response = request.responseText;
                 var msg = (response.toLowerCase().indexOf("1001") >= 0) ? 'Sorry, the images you are uploading are too large.' : 'Sorry, we have encountered a problem.\nPlease try again after a few minutes.';
                 
-                alert(msg);
+                alert(msg,"The Following cannot be upload",errorValues);
 
                 $.each( arrayUpload, function( key, value ) {
                     removeThisPictures.push(value); 
@@ -1117,7 +1140,7 @@ $(document).ready(function() {
     $(document).on('click',".attr-image",function (e){
         var selector = $(this);
         currentCnt = selector.data('cnt');
-        $('.attr-image-input').click(); 
+        $('.attr-image-input').click();
     });
 
     $(document).on('click',".select-image",function (e){   
@@ -1161,6 +1184,7 @@ $(document).ready(function() {
             },
             uploadProgress : function(event, position, total, percentComplete) {
                 canProceed = false;
+                $('.image'+currentCnt+' > img,.pop-image-container > a > img').attr("src",config.base_url+'assets/images/orange_loader.gif');
             },
             success :function(d) {   
                 canProceed = true;
@@ -1178,7 +1202,7 @@ $(document).ready(function() {
                 alert('Sorry, we have encountered a problem.','Please try again after a few minutes.');
                 canProceed = true;
             }
-        }).submit();  
+        }).submit();
     });
 
 
@@ -1189,7 +1213,7 @@ $(document).ready(function() {
 
         $(this).closest('.upload_img_div').remove();
         if(text === "Your Primary"){
-            var first_img_div = $("#list > div");
+            var first_img_div = $("#list > div:first");
             var primary_control_anchor = $("#list > div:first > .makeprimary");
             primaryPicture = 0;
             primary_control_anchor.text('Your Primary');     
@@ -1208,7 +1232,6 @@ $(document).ready(function() {
     });
 });
 // ES_UPLOADER BETA END
-
 
     // SAVING AND PROCEED 
     $(document).on('click','#proceed_form',function(){
@@ -1251,7 +1274,7 @@ $(document).ready(function() {
 
         if( !$.trim( $('.list-choosen-combination-div').html() ).length ) {
             var qtySelector = $(".select-control-panel-option > .div1 > .qty");
-            var soloQty = qtySelector.val();
+            var soloQty = parseInt(qtySelector.val());
             if( soloQty <= 0 || $.isNumeric(soloQty) == false){
                 validateRedTextBox(qtySelector);
                 qtySelector.focus();
@@ -1263,7 +1286,7 @@ $(document).ready(function() {
         else{
             error = 0;
             $(".list-choosen-combination-div > .div-combination > .div1 > .qty").each(function() {
-                var combinationQuantity = $(this).val();
+                var combinationQuantity = parseInt($(this).val()); 
                 if( combinationQuantity <= 0 || $.isNumeric(combinationQuantity) == false){
                     validateRedTextBox(this);
                     this.focus();
@@ -1292,7 +1315,7 @@ $(document).ready(function() {
 
         window.onbeforeunload=null;
         $('.arrayNameOfFiles').val(JSON.stringify(af));
-        proceedStep3('processing');   
+        proceedStep3('processing');
         $('#form_product').submit();
     });
 
@@ -1303,12 +1326,10 @@ $(document).ready(function() {
             $('#prod_brand').trigger( "change" );
         }
         confirm_unload = false;
-        if(isEdit == 1){
-            saveAsDraftProceed(); 
-        }
+        saveAsDraftProceed();
         $('#edit_step1').submit();
     });
-
+ 
     function processCombination()
     {
         var completeCombination = [];   
@@ -1374,7 +1395,7 @@ $(document).ready(function() {
 
     function proceedStep3(url)
     {
-        $('#form_product').ajaxForm({ 
+        $('#form_product').ajaxForm({
             url: url,
             dataType: "json",
             beforeSubmit : function(arr, $form, options){
@@ -1505,6 +1526,7 @@ $(document).ready(function() {
             },success :function(d) { 
                 $("#form_product").attr("action", "/sell/edit/processing");
                 $("#form_product").append('<input type="hidden" name="p_id" id="p_id" value="'+d.d+'">');
+                $("#edit_step1 > #p_id").val(d.d);
             }
         }).submit(); 
     }
@@ -1546,50 +1568,3 @@ jQuery(function($){
     });                 
 });
 
-    function askDraft(location)
-    {
-        if(isEdit == 0){ 
-            $("#question").dialog({
-                resizable: false,
-                height: 100,
-                width: 530,
-                modal: true, 
-                open: function() {
-                },
-                buttons: {
-                    "Yes Save as Draft and Leave": function() {
-                        $(".ui-dialog-title").text('Please wait while saving your data...'); 
-                        saveAsDraftProceed();
-                        window.location = location;
-                    },
-                    "Dont save as draft just leave": function() {
-                        $(".ui-dialog-title").text('Please wait...'); 
-                        window.location = location;
-                    },
-                    "Dont leave": function() { 
-                        $(this).dialog("close");
-                    }
-                },
-                "title": "Your about to leave this page without saving. Do you want this to save as draft?"
-            });   
-        }
-        else{ 
-            $("#question").dialog({
-                resizable: false,
-                height: 100,
-                width: 530,
-                modal: true, 
-                open: function() {
-                },
-                buttons: {
-                    "Ok I understand": function() {
-                        $(".ui-dialog-title").text('Please wait while saving your data...'); 
-                        saveAsDraftProceed();
-                        window.location = location;
-                    }
-                },
-                "title": "Remember this item is in your draft you can edit this in step1 page."
-            });
-        }
-
-    }
