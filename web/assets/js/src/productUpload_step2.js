@@ -323,23 +323,7 @@ function checkOptionValue(selector,id,value,evt)
     $('body').click();
 }
 
-$(function(){
-
-    // Load discount range slider
-    $("#range_1").ionRangeSlider({
-        min: 0,
-        max: 100,
-        type: 'single',
-        step: 1,
-        postfix: "%",
-        prettify: true,
-        hasGrid: true,
-        onChange: function (obj) {        // callback is called after slider load and update
-            var value = obj.fromNumber;
-            $("#slider_val").val(value);
-            get_discPrice();
-        }
-    });
+$(document).ready(function(){
     
      // if keyword change. counter will change also either increase or decrease until reach its limit..
     updateCountdown();
@@ -378,10 +362,32 @@ $(function(){
 $(document).ready(function(){
 
     // JS Function Discount
+    var slider_val = parseFloat($('#slider_val').data('value'));
+    if(slider_val !== 0 && !isNaN(slider_val)){
+        $('#slider_val').val(slider_val+'%');
+        get_discPrice();
+    }
+    // Load discount range slider
+    $("#range_1").ionRangeSlider({
+        min: 0,
+        max: 100,
+        type: 'single',
+        step: 1,
+        postfix: "%",
+        prettify: true,
+        hasGrid: true,
+        from:slider_val,
+        onChange: function (obj) {        // callback is called after slider load and update
+            var value = obj.fromNumber;
+            $("#slider_val").val(value);
+            get_discPrice();
+        }
+    });
+
     $("#dsc_frm").hide();
     $("#discnt_btn").on("click",function(){
-        $("#dsc_frm").toggle();      
-    });  
+        $("#dsc_frm").toggle();
+    });
 
     $('#prod_price').on('change', function(){
         var prcnt = parseFloat($("#slider_val").val().replace("%",''));
@@ -452,11 +458,6 @@ $(document).ready(function(){
         }
     });  
 
-    var slider_val = parseFloat($('#slider_val').data('value')); 
-    if(slider_val !== 0 && !isNaN(slider_val)){
-        $('#slider_val').val(slider_val); 
-        $('#slider_val').trigger( "change" );
-    }
 
     // view more product details trigger
     $('.view_more_product_details').on('click', function() {
