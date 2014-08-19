@@ -890,7 +890,7 @@ var currentRequest = null;
         $this = $(this);
         $('#prod_brand').val($this.data('brandid')).trigger( "change" );
         $("#brand_sch").val($this.text()).trigger( "change" ); 
-        $('#brand_search_drop_content').hide(); 
+        $('#brand_search_drop_content').empty().hide(); 
         $(".brand_sch_loading").html('<img src="'+config.base_url+'assets/images/check_icon.png" />').show().css('display','inline-block');
     });
 
