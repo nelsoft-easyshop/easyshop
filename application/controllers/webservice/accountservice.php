@@ -10,7 +10,7 @@ class AccountService extends MY_Controller
      *  Constructor Declaration
      *  1. All posted data will be brought first for authentication evaluation
      *  2. Authentication method is located under MY_Controller.php
-     *  @return true/false
+     *  @return boolean
      */
     public function __construct()
     {   
@@ -25,15 +25,18 @@ class AccountService extends MY_Controller
      *  Loading of test view for accountservice
      *  @return View
      */
-    public function index() {
+    public function index() 
+    {
         $this->load->view("pages/accounts");
     }
 
     /**
-     *  method to access the product_model with the getProdCount method to return the count of a certain product
-     *  @return View
+     *  Method to access the product_model with the getProdCount method to return the count of a certain product
+     *
+     *  @return integer $count
      */
-    public function getProductCount() { 
+    public function getProductCount() 
+    {   
         
         $this->load->model("product_model");
         $id = $this->input->post("id");
@@ -43,17 +46,18 @@ class AccountService extends MY_Controller
     }
 
     /**
-     *  method to access the user_model with the CountUsers method to return the count of users
-     *  @return View
+     *  Method to access the user_model with the CountUsers method to return the count of users
+     *
+     *  @return integer $count
      */
-    public function getUserCount() {
+    public function getUserCount() 
+    {
 
         $this->load->model("user_model");
         $count = $this->user_model->CountUsers();
         return $count;
     }
+
 }
-
-?> 
-
+?>
 
