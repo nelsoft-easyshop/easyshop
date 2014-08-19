@@ -47,6 +47,7 @@ class product_model extends CI_Model
         }           
         $sth->execute();
         $row = $sth->fetchAll();
+
         return $row;
     }
 
@@ -1126,28 +1127,14 @@ class product_model extends CI_Model
                     $sth->bindParam(':endprice',$priceEndValue,PDO::PARAM_STR);
                 
                 }
-            }  
+            }
         }
 
-        $sth->bindParam(':start',$start,PDO::PARAM_INT);			 
+        $sth->bindParam(':start',$start,PDO::PARAM_INT);
         $sth->bindParam(':per_page',$per_page,PDO::PARAM_INT);
-        
-        $sth->execute(); 
-    
-        $products = $sth->fetchAll(PDO::FETCH_ASSOC);
-        explodeImagePath($products);
-        for($k = 0; $k<count($products); $k++){
-            $products[$k]['id_product'] = $products[$k]['product_id'];
-            applyPriceDiscount($products[$k]);
-        }
-    
-        $products = $sth->fetchAll(PDO::FETCH_ASSOC);
-        explodeImagePath($products);
-        for($k = 0; $k<count($products); $k++){
-            $products[$k]['id_product'] = $products[$k]['product_id'];
-            applyPriceDiscount($products[$k]);
-        }
 
+        $sth->execute();
+    
         $products = $sth->fetchAll(PDO::FETCH_ASSOC);
         explodeImagePath($products);
         for($k = 0; $k<count($products); $k++){
