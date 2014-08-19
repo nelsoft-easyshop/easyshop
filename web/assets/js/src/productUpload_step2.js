@@ -323,23 +323,7 @@ function checkOptionValue(selector,id,value,evt)
     $('body').click();
 }
 
-$(function(){
-
-    // Load discount range slider
-    $("#range_1").ionRangeSlider({
-        min: 0,
-        max: 100,
-        type: 'single',
-        step: 1,
-        postfix: "%",
-        prettify: true,
-        hasGrid: true,
-        onChange: function (obj) {        // callback is called after slider load and update
-            var value = obj.fromNumber;
-            $("#slider_val").val(value);
-            get_discPrice();
-        }
-    });
+(function($) {
     
      // if keyword change. counter will change also either increase or decrease until reach its limit..
     updateCountdown();
@@ -356,119 +340,147 @@ $(function(){
     });
     $('#brand_search_drop_content').hide();
 
-    // Load tinyMCE plugin
-    tinymce.init({ 
-        mode : "specific_textareas",
-        editor_selector : "mceEditor", 
-        menubar: "table format view insert edit",
-        statusbar: false, 
-        height: 300,
-        plugins: ["lists link preview","table jbimages fullscreen","textcolor" ],  
-        toolbar: "insertfile undo redo | sizeselect | fontselect  fontsizeselect styleselect  forecolor backcolor | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | jbimages | image_advtab: true ",  
-        relative_urls: false,
-        setup: function(editor) {
-            editor.on('change', function(e) {
-                $('#prod_description').val(tinyMCE.get('prod_description').getContent());
-                $('#prod_description').trigger( "change" );
-            });
-        }
-    });
-});
-
-$(document).ready(function(){
-
-    // JS Function Discount
-    $("#dsc_frm").hide();
-    $("#discnt_btn").on("click",function(){
-        $("#dsc_frm").toggle();      
-    });  
-
     $('#prod_price').on('change', function(){
         var prcnt = parseFloat($("#slider_val").val().replace("%",''));
         if( !isNaN(prcnt) ){
             get_discPrice();
         }
     });
-
-    $("#slider_val").bind('change keyup',function(e){
-        if(e.which > 13 || e.which < 13){
-            return false;
-        }
-        var thisslider = $(this);
-        var newval = (parseFloat($(this).val()) > 100) ? 99 : (parseFloat($(this).val()) == 0 || isNaN(parseFloat($(this).val())))? 0 : parseFloat($(this).val());
-        get_discPrice();
-        $("#range_1").ionRangeSlider("update", {
-            from: newval,                       // change default FROM setting
-            onChange: function (obj) {        // callback is called after slider load and update
-                var value = obj.fromNumber;
-                thisslider.val(value);
-                get_discPrice();
-            }
-        });
-    });
-
+    
     $( "#prod_price" ).keypress(function() {
         validateWhiteTextBox("#prod_price");
     });
-
-    $("#discountedP").bind('change keyup',function(e){
-        if(e.which > 13 || e.which < 13){
-            return false;
-        }
-        validateWhiteTextBox("#discountedP");
-        var disc_price = parseFloat($(this).val());
-        var base_price = parseFloat($("#prod_price").val().replace(/,/g,''));
-        var sum = ((base_price - disc_price) / base_price) * 100;
-        sum = sum.toFixed(4);
-        if(disc_price > base_price){
-            alert("Discount Price cannot be greater than base price.");
-            $(this).val("0.00");
-            validateRedTextBox("#discountedP");
-            return false;
-        }
-        if(disc_price <= 0){
-            alert("Discount Price cannot be equal or less than 0.");
-            $(this).val("0.00");
-            $( "span#discounted_price_con" ).text( "0.00" );
-            validateRedTextBox("#discountedP");
-            return false;
-        }
-        $("#range_1").ionRangeSlider("update", {
-            from: sum
-        });
-        $("#slider_val").val(sum+"%");
-        tempval = Math.abs(disc_price);
-        disc_price = ReplaceNumberWithCommas(tempval.toFixed(2));
-        $(this).val(disc_price);
-        $( "span#discounted_price_con" ).text( disc_price );
-    });
-
-    $(document).mouseup(function (e){
-        var container = $("#dsc_frm");
-        if (!container.is(e.target) // if the target of the click isn't the container...
-            && container.has(e.target).length === 0) // ... nor a descendant of the container
-        {
-            container.hide(); 
-        }
-    });  
-
-    var slider_val = parseFloat($('#slider_val').data('value')); 
-    if(slider_val !== 0 && !isNaN(slider_val)){
-        $('#slider_val').val(slider_val); 
-        $('#slider_val').trigger( "change" );
-    }
 
     // view more product details trigger
     $('.view_more_product_details').on('click', function() {
         $('.more_product_details_container,.prod-details-add-more-link').slideToggle();
         $('.view_more_product_details').toggleClass('active-product-details');
     });
-});
+
+    // Load tinyMCE plugin
+    $(function() {
+        tinyMCE.init({ 
+            mode : "specific_textareas",
+            editor_selector : "mceEditor", 
+            menubar: "table format view insert edit",
+            statusbar: false, 
+            height: 300,
+            plugins: ["lists link preview","table jbimages fullscreen","textcolor" ],  
+            toolbar: "insertfile undo redo | sizeselect | fontselect  fontsizeselect styleselect  forecolor backcolor | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | jbimages | image_advtab: true ",  
+            relative_urls: false,
+            setup: function(editor) {
+                editor.on('change', function(e) {
+                    $('#prod_description').val(tinyMCE.get('prod_description').getContent());
+                    $('#prod_description').trigger( "change" );
+                });
+            }
+        });
+    });
+
+})(jQuery);
+
+/**
+ * Load Discount Feature
+ */
+(function($) {
+
+    var sliderValue = parseFloat($('#slider_val').data('value'));
+
+    // Load if discount is set for edit
+    if(sliderValue !== 0 && !isNaN(sliderValue)){
+        $('#slider_val').val(sliderValue+'%');
+        get_discPrice();
+    }
+
+    // Load discount range slider
+    var $rangeSlider = $("#range_1");
+    $rangeSlider.ionRangeSlider({
+        min: 0,
+        max: 100,
+        type: 'single',
+        step: 1,
+        postfix: "%",
+        prettify: true,
+        hasGrid: true,
+        from:sliderValue,
+        onChange: function (obj) {        // callback is called after slider load and update
+            var value = obj.fromNumber;
+            $("#slider_val").val(value);
+            get_discPrice();
+        }
+    });
+
+    $("#dsc_frm").hide();
+    $("#discnt_btn").on("click",function(){
+        $("#dsc_frm").toggle();
+    });
+
+    $("#slider_val").bind('change keyup',function(e){
+        if(e.which > 13 || e.which < 13){
+            return false;
+        }
+
+        var $this = $(this);
+        var newval = (parseFloat($this.val()) > 100) ? 99 : (parseFloat($this.val()) == 0 || isNaN(parseFloat($this.val())))? 0 : parseFloat($this.val());
+        get_discPrice();
+        $rangeSlider.ionRangeSlider("update", {
+            from: newval 
+        });
+    });
+
+    $("#discountedP").bind('change keyup',function(e){
+        if(e.which > 13 || e.which < 13){
+            return false;
+        }
+
+        var $this = $(this);
+        var discountPrice = parseFloat($this.val());
+        var basePrice = parseFloat($("#prod_price").val().replace(/,/g,''));
+        var sum = ((basePrice - discountPrice) / basePrice) * 100;
+        sum = sum.toFixed(4);
+        validateWhiteTextBox("#discountedP");
+
+        if(discountPrice > basePrice){
+            alert("Discount Price cannot be greater than base price.");
+            $this.val("0.00");
+            validateRedTextBox("#discountedP");
+            return false;
+        }
+
+        if(discountPrice <= 0){
+            alert("Discount Price cannot be equal or less than 0.");
+            $this.val("0.00");
+            $( "span#discounted_price_con" ).text( "0.00" );
+            validateRedTextBox("#discountedP");
+            return false;
+        }
+
+        $rangeSlider.ionRangeSlider("update", {
+            from: sum
+        });
+
+        $("#slider_val").val(sum+"%");
+        tempval = Math.abs(discountPrice);
+        discountPrice = ReplaceNumberWithCommas(tempval.toFixed(2));
+        $this.val(discountPrice);
+        $("span#discounted_price_con").text(discountPrice);
+    });
+
+    $(document).mouseup(function (e){
+        var $container = $("#dsc_frm");
+
+        //Close $container if the target of the click isn't the $container
+        if (!$container.is(e.target)
+            && $container.has(e.target).length === 0){
+            $container.hide(); 
+        }
+    });
+})( jQuery );
 
 // Manipulating of additional attributes
 var cnt = 1; 
 var previous,editSelectedValue,editSelectedId; 
-$(document).ready(function(){
+(function($) {
 
     setChosen();
     zebraCombination();
@@ -820,13 +832,12 @@ $(document).ready(function(){
     $(document).on("click","#cancel-changes",function (){
         resetControlPanel(true);
     });
-
-});
+})( jQuery );
 // END of Manipulating of additional attributes
 
 // BRAND SEARCH
 var currentRequest = null;
-$(document).ready(function(){
+(function($) {
     $('#brand_search_drop_content').hide();
     $(document).on('keyup','#brand_sch',function(){
 
@@ -930,7 +941,7 @@ $(document).ready(function(){
         $('#prod_brand').trigger( "change" ); 
         jQuery(".brand_sch_loading").html('<img src="'+config.base_url+'assets/images/img_new_txt.png" />').show().css('display','inline-block');
     }
-});
+})( jQuery );
 // BRAND SEARCH END
 
 
@@ -938,7 +949,7 @@ $(document).ready(function(){
 var canProceed = true; 
 var removeThisPictures = []; var imageAttr = [];
 var pictureCountOther  = 0; var primaryPicture = 0;
-$(document).ready(function() {
+(function($) {
   
     if(window.FileReader){
         badIE = false;
@@ -1230,8 +1241,10 @@ $(document).ready(function() {
         $(this).text('Your Primary');
         $(this).closest('.upload_img_div').addClass("active_img");
     });
-});
+})(jQuery);
 // ES_UPLOADER BETA END
+
+(function($) {
 
     // SAVING AND PROCEED 
     $(document).on('click','#proceed_form',function(){
@@ -1530,8 +1543,6 @@ $(document).ready(function() {
             }
         }).submit(); 
     }
- 
-jQuery(function($){
 
     function disableF5(e) { if ((e.which || e.keyCode) == 116) e.preventDefault(); };
     // To disable f5
@@ -1562,9 +1573,10 @@ jQuery(function($){
 
     $(document).on('click', '.prevent', function(event){
         confirm_unload = false;
-        var loc = $(this).attr("href");        
+        var loc = $(this).attr("href");
         event.preventDefault(); 
         askDraft(loc);
-    });                 
-});
+    });
+
+})( jQuery );
 
