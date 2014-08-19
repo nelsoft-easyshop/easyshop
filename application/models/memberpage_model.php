@@ -1447,6 +1447,7 @@ class memberpage_model extends CI_Model
     {
         $categoryItemCount = 4;
         $otherItemCount = 4;
+        $defaultCatImg = "assets/images/default_icon_small.png";
     
         $query = $this->xmlmap->getFilenameID('sql/product','getVendorProdCatDetails');
         $sth = $this->db->conn_id->prepare($query);
@@ -1457,6 +1458,14 @@ class memberpage_model extends CI_Model
         
         foreach( $row as $r ){
             if( !isset($data[$r['parent_cat']]) ){
+                
+                if( $r['p_cat_img'] !== "" ){
+                    $catImg = "assets/" . substr($r['p_cat_img'],0,strrpos($r['p_cat_img'],'.')) . "_small.png";
+                }
+                else{
+                    $catImg = $defaultCatImg;
+                }
+                
                 $data[$r['parent_cat']] = array(
                     'name' => $r['p_cat_name'],
                     'slug' => $r['p_cat_slug'],
@@ -1464,7 +1473,8 @@ class memberpage_model extends CI_Model
                     'products' => array(),
                     'count' => 0,
                     'loadmore_link' => base_url() . 'advsrch?_us=' . $username . '&_cat=' . $r['parent_cat'],
-                    'cat_link' => base_url(). 'category/' . $r['p_cat_slug']
+                    'cat_link' => base_url(). 'category/' . $r['p_cat_slug'],
+                    'cat_img' => $catImg
                 );
             }
             $data[$r['parent_cat']]['child_cat'][] = $r['cat_id'];
@@ -1516,7 +1526,8 @@ class memberpage_model extends CI_Model
                 'products' => array(),
                 'count' => $otherCount,
                 'loadmore_link' => base_url() . 'advsrch?_us=' . $username,
-                'cat_link' => ''
+                'cat_link' => '',
+                'cat_img' => $defaultCatImg
             ));
             
             end($data);
@@ -1540,6 +1551,7 @@ class memberpage_model extends CI_Model
                 array_push( $data[$last_id]['products'], $p );
             }
         }
+        
         return $data;
     }
     
