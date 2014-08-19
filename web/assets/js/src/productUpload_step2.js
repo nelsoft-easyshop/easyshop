@@ -1222,7 +1222,7 @@ var pictureCountOther  = 0; var primaryPicture = 0;
                 imageName = tempId+'_'+memberId+'_'+fulldate+pictureCount+'.'+extension;
                 af.push(imageName+'||'+extension); 
                 afstart.push(imageName); 
-                window.URL.revokeObjectURL(fileList[i]);
+                // window.URL.revokeObjectURL(fileList[i]);
                 arrayUpload.push(pictureCount);
                 pictureCount++; 
             }
