@@ -15,8 +15,11 @@ $(document).ready(function() {
      *   Re-factored on May 20, 2014: no longer requires asynchronous = false     
      */
     $( "#cat_sch" ).keyup(function() {
-        var searchQuery = $(this).val();
-        if(searchQuery != ""){  
+        var searchQuery = $(this).val().trim();
+        if(searchQuery != ""){
+            if(searchQuery.length <= 1){
+                return false;
+            }
             currentRequest = jQuery.ajax({
                 type: "GET",
                 url: config.base_url + 'product_search/searchCategory', 
@@ -33,6 +36,7 @@ $(document).ready(function() {
                     var html = '<ul>';
                     var data_content, data_id, cnt;
                     var delim_img = ' <img src = "'+config.base_url+'assets/images/img_bullet2.jpg"/> ';
+                    console.log(obj.length);
                     if((obj.length)>0){
                         jQuery.each(obj,function(){
                             data_content = '';
@@ -180,10 +184,10 @@ $(document).ready(function() {
         }
         else{
         	if(other_cat_name != '' &&   typeof(other_cat_name) != 'undefined'){
-        		$('#first_text').empty().append('<a href="javascript:void(0)" class="selected_category_link" data-level="01">Main Category</a>');
+        		$('#first_text').empty().append('<a href="javascript:void(0)" class="selected_category_link" data-level="01">Main Category</a>').removeClass('selected_category');
         		saveValue('#container_level01');
         		$('#cr_div_container').empty(); 
-        		$('#cl_div_container').append('<div><a class="selected_category_link" data-catid="1" data-name="'+other_cat_name+'" href="javascript:void(0)">'+other_cat_name+'</a></div>');
+        		$('#cl_div_container').append('<div class="border-rad-tl-bl-3 pd-13-12 cat_arrw selected_category"><a class="selected_category_link" data-catid="1" data-name="'+other_cat_name+'" href="javascript:void(0)">'+other_cat_name+'</a></div>');
         		$(".add_category_submit").empty();
         		$(".add_category_submit").append('<input type="hidden" name="hidden_attribute" value="1" class="hidden_attribute"><input class="proceed_form" id="proceed_form" type="submit" value="Proceed with '+other_cat_name+'">');    
         		$(".add_category_submit").append('<input type="hidden" name="othernamecategory" value="'+other_cat_name+'" />');
@@ -302,7 +306,7 @@ $(document).ready(function() {
 
         if ($(this).attr('data-catid')) {
         	$(".add_category_submit").append('<input type="hidden" name="hidden_attribute" value="'+catId+'" class="hidden_attribute"><input class="proceed_form" id="proceed_form" type="submit" value="Proceed with '+name+'">');    
-        	$(".add_category_submit").append('<input type="hidden" name="othernamecategory" value="'+name+'" />');
+        	$(".add_category_submit").append('<input type="hidden" name="othernamecategory" value="" />');
         }
         $(selector).closest('div').addClass('selected_category pd-13-12');
     });

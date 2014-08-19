@@ -592,13 +592,16 @@ $(document).ready(function(){
     
     $("#imgupload").on("change", function(){
         var oldIE;
-        if ($('html').is('.ie6, .ie7, .ie8, .ie9')) {
+        var isSafari = Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0;
+        
+        if ($('html').is('.ie6, .ie7, .ie8, .ie9')){
             oldIE = true;
         }
 
-        if (oldIE) {
+        if (oldIE || isSafari){
             $('#form_image').submit();
-        } else {
+        }
+        else{
             imageprev(this);
         }
     });
@@ -1202,7 +1205,7 @@ $(document).ready(function(){
             html: GetHtml()
         }).hide().appendTo('#container_work').fadeIn('slow');
         
-        cont.find("*[name^='companyname']").rules('add',{required: true,range: [1901, 2155], messages:{required: '* Company name is required'}});
+        cont.find("*[name^='companyname']").rules('add',{required: true, messages:{required: '* Company name is required'}});
         cont.find("*[name^='designation']").rules('add',{required: true, messages:{required: '* Designation is required'}});
         cont.find("*[name^='year']").rules('add',{required: true, digits: true, range: [1901, 2155], messages:{required: '* Year of service is required', range: '* This is an invalid year'}});
         cont.find("*[name^='year']").numeric({negative : false});	
