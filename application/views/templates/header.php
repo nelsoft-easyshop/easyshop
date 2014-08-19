@@ -186,101 +186,38 @@
       <div class="clear"></div>
     </form>
 
-
-<script type="text/javascript">
-/*
-$(document).ready(function() {
-  var currentRequest = null;
-
- 
-$('#main_search').on('input propertychange', function() {
-        
-          var searchQuery = $.trim( $(this).val());
-          searchQuery = searchQuery.replace(/ +(?= )/g,'');
-          var fulltext = searchQuery; 
-          if(searchQuery != ""){
-            if(searchQuery.length > 0){
-              currentRequest = $.ajax({
-                type: "GET",
-                url: '<?php echo base_url();?>search/suggest', 
-                
-                cache: false,
-                data: "q="+fulltext, 
-                processData: false,
-                beforeSend: function(jqxhr, settings) { 
-                  if(currentRequest != null) {
-                    currentRequest.abort();
-                  }
-                },
-                success: function(html) {
-                    $("#main_search_drop_content").empty();
-                    if(html==0){
-                        $("#main_search_drop_content").fadeOut(150);
-                        // $("#main_search_drop_content").append('No Results Found');
-                        // $("#main_search_drop_content").show();
-                    }
-                    else{
-                        $("#main_search_drop_content").append(html);
-                        $("#main_search_drop_content").fadeIn(150);
-                    }
-                    $(".main_srch_img_con").hide();
-                }
-              });
-            }else{
-              if(currentRequest != null) {
-                currentRequest.abort();
-              }
-              $("#main_search_drop_content").empty();
-              $("#main_search_drop_content").fadeOut(150);
-            }
-          }else{
-            if(currentRequest != null) {
-              currentRequest.abort();
-            }  
-            $("#main_search_drop_content").empty();
-            $("#main_search_drop_content").fadeOut(150);
-          }
-      });
-});
-*/
-      
-</script>
-
 <script>
- var navigation = responsiveNav(".nav-collapse");
-         $(document).ready(function() { 
-            var srchdropcontent= $('#main_search_drop_content');
-            $('#main_search').focus(function() {
-            if(srchdropcontent.find("ul").length > 0){
-             
-              $('#main_search_drop_content').fadeIn(150);
-            }
+var navigation = responsiveNav(".nav-collapse");
 
-            $(document).bind('focusin.main_search_drop_content click.main_search_drop_content',function(e) {
-                if ($(e.target).closest('#main_search_drop_content, #main_search').length) return;
-                $('#main_search_drop_content').fadeOut('fast');
-                });
-             });
- 
-            $('#main_search_drop_content').hide();
-           
-        });
-        
-        $(".txt_need_help_con").click(function(){
-            $('.need_help_icons_con').slideToggle();
-            $(this).toggleClass("arrow-switch");
-        });
+(function ($) { 
 
-        $('.need_help_icons_con').hide();
+    var srchdropcontent= $('#main_search_drop_content');
+    
+    $('#main_search').focus(function() {
+        if(srchdropcontent.find("ul").length > 0){
+         
+          $('#main_search_drop_content').fadeIn(150);
+        }
+
+        $(document).bind('focusin.main_search_drop_content click.main_search_drop_content',function(e) {
+            if ($(e.target).closest('#main_search_drop_content, #main_search').length) return;
+            $('#main_search_drop_content').fadeOut('fast');
+            });
+         });
+
+        $('#main_search_drop_content').hide();
+       
+    })(jQuery);
+    
+    $(".txt_need_help_con").click(function(){
+        $('.need_help_icons_con').slideToggle();
+        $(this).toggleClass("arrow-switch");
+    });
+
+    $('.need_help_icons_con').hide();
         
-        // Hide Need help how to sell and how to buy when click outside the container
-      //   $(document).on('click','.txt_need_help',function() {
-      //   $(document).bind('focusin.txt_need_help click.txt_need_help',function(e) {
-      //       if ($(e.target).closest('.txt_need_help, .need_help_icons_con').length) return;
-      //       $('.need_help_icons_con').slideUp();
-      //   });
-      // });
-$(document).ready(function(){
+(function ($) {
+
     var container = $(".nav-collapse");
     var menubutton = $(".nav-toggle");
     
@@ -295,7 +232,7 @@ $(document).ready(function(){
           }
     });
 
-    $(document).mouseup(function (e) {   
+    $(document).mouseup(function (e) {
 
         if (!container.is(e.target) // if the target of the click isn't the container...
             && container.has(e.target).length === 0) // ... nor a descendant of the container
@@ -306,5 +243,6 @@ $(document).ready(function(){
 
     });
     
-});
+})(jQuery);
+
 </script>
