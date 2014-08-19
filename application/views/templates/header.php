@@ -187,62 +187,62 @@
     </form>
 
 <script>
-var navigation = responsiveNav(".nav-collapse");
+    var navigation = responsiveNav(".nav-collapse");
 
-(function ($) { 
+    (function ($) { 
+      
+        var srchdropcontent= $('#main_search_drop_content');
+        
+        $('#main_search').focus(function() {
+            if(srchdropcontent.find("ul").length > 0){
+             
+              $('#main_search_drop_content').fadeIn(150);
+            }
 
-    var srchdropcontent= $('#main_search_drop_content');
-    
-    $('#main_search').focus(function() {
-        if(srchdropcontent.find("ul").length > 0){
-         
-          $('#main_search_drop_content').fadeIn(150);
-        }
+            $(document).bind('focusin.main_search_drop_content click.main_search_drop_content',function(e) {
+                if ($(e.target).closest('#main_search_drop_content, #main_search').length) return;
+                $('#main_search_drop_content').fadeOut('fast');
+                });
+             });
 
-        $(document).bind('focusin.main_search_drop_content click.main_search_drop_content',function(e) {
-            if ($(e.target).closest('#main_search_drop_content, #main_search').length) return;
-            $('#main_search_drop_content').fadeOut('fast');
-            });
-         });
-
-        $('#main_search_drop_content').hide();
-       
+            $('#main_search_drop_content').hide();
+           
     })(jQuery);
-    
+        
     $(".txt_need_help_con").click(function(){
         $('.need_help_icons_con').slideToggle();
         $(this).toggleClass("arrow-switch");
     });
 
     $('.need_help_icons_con').hide();
+            
+    (function ($) {
+
+        var container = $(".nav-collapse");
+        var menubutton = $(".nav-toggle");
         
-(function ($) {
+        $(menubutton).click(function(){
 
-    var container = $(".nav-collapse");
-    var menubutton = $(".nav-toggle");
-    
-    $(menubutton).click(function(){
+            if($(container).hasClass("closed"))  {
+                $(container).removeClass("closed").addClass("opened");
+            }
 
-        if($(container).hasClass("closed"))  {
-            $(container).removeClass("closed").addClass("opened");
-        }
+            else {
+                $(container).addClass('closed').removeClass("opened");
+              }
+        });
 
-        else {
-            $(container).addClass('closed').removeClass("opened");
-          }
-    });
+        $(document).mouseup(function (e) {
 
-    $(document).mouseup(function (e) {
+            if (!container.is(e.target) // if the target of the click isn't the container...
+                && container.has(e.target).length === 0) // ... nor a descendant of the container
+            {
+                container.removeClass("opened").addClass("closed");
+                menubutton.removeClass("active");
+            }
 
-        if (!container.is(e.target) // if the target of the click isn't the container...
-            && container.has(e.target).length === 0) // ... nor a descendant of the container
-        {
-            container.removeClass("opened").addClass("closed");
-            menubutton.removeClass("active");
-        }
-
-    });
-    
-})(jQuery);
+        });
+        
+    })(jQuery);
 
 </script>
