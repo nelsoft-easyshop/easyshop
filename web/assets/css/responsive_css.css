@@ -431,14 +431,6 @@ header {
     z-index: 10000;
 }
 
-.res_wrapper {
-/*  font-size: 0.75em;*/
-    margin:0 auto;
-    max-width: 980px;
-    position: relative;
-    width: 100%;
-}
-
 .top_links_right_con2 {
     display: none;
 }
@@ -1482,10 +1474,8 @@ box-shadow:         0px 1px 5px 0px rgba(50, 50, 50, 0.75);
 }
 
 .add-property-btn-con input {
-    width: 80%;
+    width: 100%;
 }
-
-
 
 .select-combination + input[type="checkbox"] {
     margin-left: 10px;
@@ -1499,6 +1489,19 @@ box-shadow:         0px 1px 5px 0px rgba(50, 50, 50, 0.75);
 
 .div3 {
     text-align: center;
+}
+
+.simplemodal-container.prod-upload-con {
+    max-height: 410px !important;
+}
+
+.img-upload-save {
+    cursor: pointer;
+}
+
+.qty {
+    width: 100%;
+    min-width: 30px;
 }
 
 /***********   end of product upload step 2 **************/
@@ -2011,12 +2014,7 @@ box-shadow:         0px 1px 5px 0px rgba(50, 50, 50, 0.75);
         width: 100%;
     }
     /**** end header ****/
-    /**** moblie LOGO ***/
-    .logo {
-        float: none;
-        text-align: center;
-    }
-
+    
     /**** Search box ****/
     .prob_search_box {
         float: none;
@@ -2054,6 +2052,27 @@ box-shadow:         0px 1px 5px 0px rgba(50, 50, 50, 0.75);
 }
 
 @media screen and (max-width: 56em) { /*** 848px ****/
+    span.steps_txt_active {
+        width: 89%;
+    }
+
+    .steps_txt_hide {
+        display: none;
+    }
+
+    .sell_steps.sell_steps2 {
+        display: inline-block;
+        text-align: center;
+        width: 100%;
+    }
+
+    .sell_steps ul li {
+        float: none;
+        padding-left: 0px !important;
+        width: 100% !important;
+        text-align: center;
+    }
+
     .other_value {
         background-color: #e4e3e3;
         display: block;
@@ -2071,7 +2090,7 @@ box-shadow:         0px 1px 5px 0px rgba(50, 50, 50, 0.75);
         position: absolute;
         right: 3px;
         top: 3px;
-    }
+    }    
 }
 
 
@@ -2108,26 +2127,6 @@ box-shadow:         0px 1px 5px 0px rgba(50, 50, 50, 0.75);
 
 @media only screen and (max-width : 49em) { /*** 784px ***/
     a.tooltips {
-        display: none;
-    }
-    .sell_steps.sell_steps2 {
-        display: inline-block;
-        text-align: center;
-        width: 100%;
-    }
-
-    .sell_steps ul li {
-        float: none;
-        padding-left: 0px !important;
-        width: 100% !important;
-        text-align: center;
-    }
-
-    span.steps_txt_active {
-        width: 89%;
-    }
-
-    .steps_txt_hide {
         display: none;
     }
 }
@@ -2418,7 +2417,8 @@ box-shadow:         0px 1px 5px 0px rgba(50, 50, 50, 0.75);
         display: block;
     }
 
-    .select-control-panel-option [class*="col-"] {
+    .select-control-panel-option [class*="col-"],
+    .choosen-combination-div [class*="col-"] {
         padding-left: 5px;
         padding-right: 5px;
     }
@@ -2485,8 +2485,18 @@ box-shadow:         0px 1px 5px 0px rgba(50, 50, 50, 0.75);
         padding: 10px 0;
     }
 
-    .remove-combination {
-        background-position: -920px -250px !important;
+    .edit-attr, .remove-attr, .select-image-pencil {
+        width: 15px;
+        height: 15px;
+        top: 0px;
+    }
+
+    .edit-attr span, .remove-attr span, .select-image-pencil span {
+        line-height: 15px;
+    }
+
+    .remove-attr {
+        margin-right: 0px;
     }
 
     /***** end of Product upload step 2 ********/
@@ -2527,6 +2537,10 @@ box-shadow:         0px 1px 5px 0px rgba(50, 50, 50, 0.75);
     }
     #simplemodal-container {
         width: 95% !important;
+    }
+
+    .choosen-combination-div h5 {
+        font-size: 0.725em;
     }
 
     /*** step 4 ***/
@@ -2652,8 +2666,15 @@ box-shadow:         0px 1px 5px 0px rgba(50, 50, 50, 0.75);
         width: 40%;
     }
     .remove-combination {
-        background-image: url('../images/global_sprite.png') !important;
-        background-position: -904px -250px;
+        background-image: url('../images/icon-remove.png') !important;
+        background-position: center center;
+        background-repeat: no-repeat;
+        text-indent: -99999px;
+    }
+
+    .select-combination {
+        background-image: url('../images/icon-add.png') !important;
+        background-position: center center;
         background-repeat: no-repeat;
         text-indent: -99999px;
     }
@@ -2674,17 +2695,6 @@ box-shadow:         0px 1px 5px 0px rgba(50, 50, 50, 0.75);
         height: auto;
     }
 
-    /*** Footer ***/
-    .about_footer .border-left {
-        border-left: 0px;
-        border-top: 1px solid #cecece;
-        padding-bottom: 0.85em;
-    }
-
-    .about_footer .pd-lr-20 {
-        padding-left: 0;
-        padding-right: 0;
-    }
     /*** product upload step 4 ***/
     .step4_delivery_sub .col-sx-12 .label-view {
         display: block;
