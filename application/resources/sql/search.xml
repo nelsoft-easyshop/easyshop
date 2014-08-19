@@ -6,7 +6,7 @@
     </select>
     
     <select id="searchCategory">
-        SELECT `id_cat`, `name` FROM `es_cat` WHERE `name` LIKE :sch_string
+        SELECT `id_cat`, `name` FROM `es_cat` WHERE MATCH(`name`) AGAINST (:sch_string IN BOOLEAN MODE) 
     </select>
     
     <select id="searchBrand">
