@@ -1442,6 +1442,11 @@ class memberpage_model extends CI_Model
     
     /**
      *  Fetch vendor products in vendor page
+     *
+     *  @param integer $member_id
+     *  @param string $username
+     *
+     *  @return array
      */
     public function getVendorCatItems($member_id, $username)
     {
