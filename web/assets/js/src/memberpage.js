@@ -1205,7 +1205,7 @@ $(document).ready(function(){
             html: GetHtml()
         }).hide().appendTo('#container_work').fadeIn('slow');
         
-        cont.find("*[name^='companyname']").rules('add',{required: true,range: [1901, 2155], messages:{required: '* Company name is required'}});
+        cont.find("*[name^='companyname']").rules('add',{required: true, messages:{required: '* Company name is required'}});
         cont.find("*[name^='designation']").rules('add',{required: true, messages:{required: '* Designation is required'}});
         cont.find("*[name^='year']").rules('add',{required: true, digits: true, range: [1901, 2155], messages:{required: '* Year of service is required', range: '* This is an invalid year'}});
         cont.find("*[name^='year']").numeric({negative : false});	
