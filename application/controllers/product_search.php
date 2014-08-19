@@ -773,7 +773,9 @@ class product_search extends MY_Controller {
 
     function searchBrand(){
 	    $string = $this->input->get('data');
-	    $rows = $this->search_model->searchBrand($string);
+        $explodString = explode(' ', trim($string));
+        $newString = '+'.implode('* +', $explodString).'*';  
+	    $rows = $this->search_model->searchBrand($newString);
 	    echo json_encode($rows);
     }
 

@@ -10,7 +10,7 @@
     </select>
     
     <select id="searchBrand">
-        SELECT `id_brand`, `name` FROM `es_brand` WHERE MATCH(`name`) AGAINST (CONCAT(:sch_string,'*') IN BOOLEAN MODE)
+        SELECT `id_brand`, `name` FROM `es_brand` WHERE MATCH(`name`) AGAINST (:sch_string IN BOOLEAN MODE)
     </select>
 
 </map>

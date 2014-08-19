@@ -937,7 +937,7 @@ var currentRequest = null;
     function addNewBrand(){
         $('#prod_brand').val(1)
         $('#prod_brand').trigger( "change" ); 
-        jQuery(".brand_sch_loading").html('<img src="'+config.base_url+'assets/images/img_new_txt.png" />').show().css('display','inline-block');
+        $(".brand_sch_loading").html('<img src="'+config.base_url+'assets/images/img_new_txt.png" />').show().css('display','inline-block');
     }
 })( jQuery );
 // BRAND SEARCH END
