@@ -326,8 +326,8 @@
                                             <div class="col-xs-12 col-sm-2 col-md-2 pd-tb-8">Brand:</div> 
                                             <div class="col-xs-12 col-sm-10 col-md-10">
                                                 <input type = "hidden" id="prod_brand" name="prod_brand" value="<?php echo isset($product_details['brand_id'])?$product_details['brand_id']:0?>"/>
-                                                <input class="width-50p ui-form-control" type = "text" id="brand_sch" name="brand_sch" autocomplete="off" placeholder="Search for your brand" value="<?php echo isset($product_details['brandname'])?$product_details['brandname']:''?>"/>
-                                                <!-- <div class="brand_sch_loading"></div> -->
+                                                <input class="width-50p ui-form-control" type = "text" id="brand_sch" name="brand_sch" autocomplete="off" placeholder="Search for your brand" value="<?php echo isset($product_details['brandname'])?trim($product_details['brandname']):''?>"/>
+                                                <div class="brand_sch_loading"></div>
                                                 <div id="brand_search_drop_content" class="brand_sch_drop_content"></div>
                                             </div>
                                             <div class="clear"></div>
