@@ -320,7 +320,7 @@ class Home extends MY_Controller
             $perPage = $this->feedsProdPerPage;
             $memberId = $this->session->userdata('member_id');
             
-            $page = $this->input->post("feed_page") * 10 - $perPage;
+            $page = ($this->input->post("feed_page") + 1) * $perPage - $perPage;
             $productFeedSet = $this->input->post("feed_set");
             
             switch( (int)$productFeedSet ){

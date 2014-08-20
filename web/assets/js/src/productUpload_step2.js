@@ -323,65 +323,214 @@ function checkOptionValue(selector,id,value,evt)
     $('body').click();
 }
 
-$(function(){
+function saveAsDraftProceed(url)
+{
+    $('.arrayNameOfFiles').val(JSON.stringify(af));
+    tinyMCE.triggerSave(); 
+    $('#form_product').ajaxForm({ 
+        url: url,
+        dataType: "json",
+        async: false,
+        beforeSubmit : function(arr, $form, options){
+            var combination = processCombination();
+            var attributes = processAttributes(); 
 
-    // Load discount range slider
-    $("#range_1").ionRangeSlider({
-        min: 0,
-        max: 100,
-        type: 'single',
-        step: 1,
-        postfix: "%",
-        prettify: true,
-        hasGrid: true,
-        onChange: function (obj) {        // callback is called after slider load and update
-            var value = obj.fromNumber;
-            $("#slider_val").val(value);
-            get_discPrice();
+            $('<input type="hidden">').attr({
+                  id: 'primaryPicture',
+                  name: 'primaryPicture',
+                  value: primaryPicture
+            }).appendTo('form');
+            arr.push({name:'primaryPicture', value:primaryPicture});
+
+            $('<input type="hidden">').attr({
+              id: 'removeThisPictures',
+              name: 'removeThisPictures',
+              value: JSON.stringify(removeThisPictures)
+            }).appendTo('form');
+            arr.push({name:'removeThisPictures', value:JSON.stringify(removeThisPictures)});
+
+            $('<input type="hidden">').attr({
+              id: 'combination',
+              name: 'combination',
+              value: combination
+            }).appendTo('form');
+            arr.push({name:'combination',value:combination});
+
+            $('<input type="hidden">').attr({
+                id: 'attributes',
+                name: 'attributes',
+                value: attributes
+            }).appendTo('form');
+            arr.push({name:'attributes',value:attributes});
+
+            $('<input type="hidden">').attr({
+                id: 'savedraft',
+                name: 'savedraft',
+                value: '1'
+            }).appendTo('form');
+            arr.push({name:'savedraft',value:'1'});
+
+        },success :function(d) { 
+            $("#form_product").attr("action", "/sell/edit/processing");
+            $("#form_product").append('<input type="hidden" name="p_id" id="p_id" value="'+d.d+'">');
+            $("#edit_step1 > #p_id").val(d.d);
         }
+    }).submit(); 
+}
+
+function processCombination()
+{
+    var completeCombination = [];   
+    $(".div-combination").each(function(){
+
+        var currentDiv = $(this);
+        var selectList = currentDiv.children('.div2').children('span');
+
+        var eachData = {};
+        var eachCombination = {};
+        var itemId = 0;
+        if (currentDiv.data("itemid") != undefined) {
+            itemId = currentDiv.data("itemid");
+        }
+
+        selectList.each(function(){
+            var currentSelect = $(this);
+            var optionSelected = $(this).children('select').children('option:selected');
+            var head = optionSelected.data('head');
+             var value = optionSelected.data('value');
+            var price = optionSelected.data('price');
+            eachData[head] = value; 
+        });
+
+        eachCombination.quantity = currentDiv.children('.div1').children('.qty').val(); 
+        eachCombination.data = eachData; 
+        eachCombination.itemid = itemId; 
+        console.log(eachCombination);
+        completeCombination.push(eachCombination);
     });
-    
+
+    return JSON.stringify(completeCombination);
+}
+
+function processAttributes()
+{
+    var span = $('.select-control-panel-option > .div2 > span');
+    var completeAttributes = {}; 
+    span.each(function(){
+        var currentSelect = $(this);
+        var select = $(this).children('select').children('option');
+        var currentHead;
+        var eachHead = [];
+        select.each(function(){
+            var eachValue = {};
+            var optionSelected = $(this);
+            var head = currentHead = optionSelected.data('head');
+            var value = optionSelected.data('value');
+            var price = optionSelected.data('price');
+            var image = optionSelected.data('image');
+            eachValue.value =value;
+            eachValue.price =price;
+            eachValue.image =image;
+            eachHead.push(eachValue);
+        });
+        completeAttributes[currentHead] =  eachHead;
+        
+    });
+
+    return JSON.stringify(completeAttributes);
+}
+
+
+function proceedStep3(url)
+{
+    $('#form_product').ajaxForm({
+        url: url,
+        dataType: "json",
+        beforeSubmit : function(arr, $form, options){
+
+            var combination = processCombination();
+            console.log(combination);
+            var attributes = processAttributes(); 
+            console.log(attributes);
+
+            var percentVal = '0%';
+            $('.percentage').html(percentVal);
+            $( ".button_div" ).hide();
+            $( ".loader_div" ).show();
+
+            $('<input type="hidden">').attr({
+                  id: 'primaryPicture',
+                  name: 'primaryPicture',
+                  value: primaryPicture
+                }).appendTo('form');
+            arr.push({"name":"primaryPicture", "value":primaryPicture});
+
+            $('<input type="hidden">').attr({
+                  id: 'removeThisPictures',
+                  name: 'removeThisPictures',
+                  value: JSON.stringify(removeThisPictures)
+                }).appendTo('form');
+            arr.push({"name":"removeThisPictures", "value":JSON.stringify(removeThisPictures)});
+
+            $('<input type="hidden">').attr({
+                  id: 'combination',
+                  name: 'combination',
+                  value: combination
+                }).appendTo('form');
+            arr.push({"name":"combination","value":combination});
+
+            $('<input type="hidden">').attr({
+                  id: 'attributes',
+                  name: 'attributes',
+                  value: attributes
+                }).appendTo('form');
+            arr.push({"name":"attributes","value":attributes});
+
+
+        },
+        uploadProgress : function(event, position, total, percentComplete) {
+            var percentVal = percentComplete + '%';
+            $('.percentage').empty();
+            if(percentComplete >= 100){
+                percentVal = '100%'
+                $('.percentage').html(percentVal);
+            }else{
+                $('.percentage').html(percentVal);
+            }
+        },
+        success :function(d) { 
+            $('.percentage').html('100%');
+            if (d.e == 1) {
+                $('#prod_h_id').val(d.d); 
+                document.getElementById("hidden_form").submit();
+            } else {
+                $( ".button_div" ).show();
+                $( ".loader_div" ).hide();
+                $('.percentage').empty();
+                alert(d.d);
+            } 
+        },
+        error: function (request, status, error) {
+            $( ".button_div" ).show();
+            $( ".loader_div" ).hide();
+            $('.percentage').empty();
+            response = request.responseText;
+            if (response.toLowerCase().indexOf("1001") >= 0){
+                alert('Something Went Wrong. The images you are uploading in [OTHER ATTRIBUTES] are too large.');
+            }else{
+                alert('Something Went Wrong. Please try again.');
+            }
+        } 
+    }); 
+}
+ 
+(function($) {
+
      // if keyword change. counter will change also either increase or decrease until reach its limit..
     updateCountdown();
     $('#prod_keyword').change(updateCountdown);
     $('#prod_keyword').keyup(updateCountdown); 
 
-    // search brand 
-    $('#brand_sch').focus(function() {
-        $('#brand_search_drop_content').show();
-        $(document).bind('focusin.brand_sch_drop_content click.brand_sch_drop_content',function(e) {
-          if ($(e.target).closest('#brand_search_drop_content, #brand_sch').length) return;
-          $('#brand_search_drop_content').hide();
-      });
-    });
-    $('#brand_search_drop_content').hide();
-
-    // Load tinyMCE plugin
-    tinymce.init({ 
-        mode : "specific_textareas",
-        editor_selector : "mceEditor", 
-        menubar: "table format view insert edit",
-        statusbar: false, 
-        height: 300,
-        plugins: ["lists link preview","table jbimages fullscreen","textcolor" ],  
-        toolbar: "insertfile undo redo | sizeselect | fontselect  fontsizeselect styleselect  forecolor backcolor | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | jbimages | image_advtab: true ",  
-        relative_urls: false,
-        setup: function(editor) {
-            editor.on('change', function(e) {
-                $('#prod_description').val(tinyMCE.get('prod_description').getContent());
-                $('#prod_description').trigger( "change" );
-            });
-        }
-    });
-});
-
-$(document).ready(function(){
-
-    // JS Function Discount
-    $("#dsc_frm").hide();
-    $("#discnt_btn").on("click",function(){
-        $("#dsc_frm").toggle();      
-    });  
 
     $('#prod_price').on('change', function(){
         var prcnt = parseFloat($("#slider_val").val().replace("%",''));
@@ -389,86 +538,147 @@ $(document).ready(function(){
             get_discPrice();
         }
     });
-
-    $("#slider_val").bind('change keyup',function(e){
-        if(e.which > 13 || e.which < 13){
-            return false;
-        }
-        var thisslider = $(this);
-        var newval = (parseFloat($(this).val()) > 100) ? 99 : (parseFloat($(this).val()) == 0 || isNaN(parseFloat($(this).val())))? 0 : parseFloat($(this).val());
-        get_discPrice();
-        $("#range_1").ionRangeSlider("update", {
-            from: newval,                       // change default FROM setting
-            onChange: function (obj) {        // callback is called after slider load and update
-                var value = obj.fromNumber;
-                thisslider.val(value);
-                get_discPrice();
-            }
-        });
-    });
-
+    
     $( "#prod_price" ).keypress(function() {
         validateWhiteTextBox("#prod_price");
     });
-
-    $("#discountedP").bind('change keyup',function(e){
-        if(e.which > 13 || e.which < 13){
-            return false;
-        }
-        validateWhiteTextBox("#discountedP");
-        var disc_price = parseFloat($(this).val());
-        var base_price = parseFloat($("#prod_price").val().replace(/,/g,''));
-        var sum = ((base_price - disc_price) / base_price) * 100;
-        sum = sum.toFixed(4);
-        if(disc_price > base_price){
-            alert("Discount Price cannot be greater than base price.");
-            $(this).val("0.00");
-            validateRedTextBox("#discountedP");
-            return false;
-        }
-        if(disc_price <= 0){
-            alert("Discount Price cannot be equal or less than 0.");
-            $(this).val("0.00");
-            $( "span#discounted_price_con" ).text( "0.00" );
-            validateRedTextBox("#discountedP");
-            return false;
-        }
-        $("#range_1").ionRangeSlider("update", {
-            from: sum
-        });
-        $("#slider_val").val(sum+"%");
-        tempval = Math.abs(disc_price);
-        disc_price = ReplaceNumberWithCommas(tempval.toFixed(2));
-        $(this).val(disc_price);
-        $( "span#discounted_price_con" ).text( disc_price );
-    });
-
-    $(document).mouseup(function (e){
-        var container = $("#dsc_frm");
-        if (!container.is(e.target) // if the target of the click isn't the container...
-            && container.has(e.target).length === 0) // ... nor a descendant of the container
-        {
-            container.hide(); 
-        }
-    });  
-
-    var slider_val = parseFloat($('#slider_val').data('value')); 
-    if(slider_val !== 0 && !isNaN(slider_val)){
-        $('#slider_val').val(slider_val); 
-        $('#slider_val').trigger( "change" );
-    }
 
     // view more product details trigger
     $('.view_more_product_details').on('click', function() {
         $('.more_product_details_container,.prod-details-add-more-link').slideToggle();
         $('.view_more_product_details').toggleClass('active-product-details');
     });
-});
+
+    // Load tinyMCE plugin
+    $(function() {
+        tinyMCE.init({ 
+            mode : "specific_textareas",
+            editor_selector : "mceEditor", 
+            menubar: "table format view insert edit",
+            statusbar: false, 
+            height: 300,
+            plugins: ["lists link preview","table jbimages fullscreen","textcolor" ],  
+            toolbar: "insertfile undo redo | sizeselect | fontselect  fontsizeselect styleselect  forecolor backcolor | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | jbimages | image_advtab: true ",  
+            relative_urls: false,
+            setup: function(editor) {
+                editor.on('change', function(e) {
+                    $('#prod_description').val(tinyMCE.get('prod_description').getContent());
+                    $('#prod_description').trigger( "change" );
+                });
+            }
+        });
+    });
+
+})(jQuery);
+
+/**
+ * Load Discount Feature
+ */
+(function($) {
+
+    var sliderValue = parseFloat($('#slider_val').data('value'));
+
+    // Load if discount is set for edit
+    if(sliderValue !== 0 && !isNaN(sliderValue)){
+        $('#slider_val').val(sliderValue+'%');
+        get_discPrice();
+    }
+
+    // Load discount range slider
+    var $rangeSlider = $("#range_1");
+    $rangeSlider.ionRangeSlider({
+        min: 0,
+        max: 100,
+        type: 'single',
+        step: 1,
+        postfix: "%",
+        prettify: true,
+        hasGrid: true,
+        from:sliderValue,
+        onChange: function (obj) {        // callback is called after slider load and update
+            var value = obj.fromNumber;
+            $("#slider_val").val(value);
+            get_discPrice();
+        }
+    });
+
+    $("#dsc_frm").hide();
+    $("#discnt_btn").on("click",function(){
+        $("#dsc_frm").toggle();
+    });
+
+    $("#slider_val").bind('change keyup',function(e){
+        if(e.which > 13 || e.which < 13){
+            return false;
+        }
+
+        var $this = $(this);
+        var newval = (parseFloat($this.val()) > 100) ? 99 : (parseFloat($this.val()) == 0 || isNaN(parseFloat($this.val())))? 0 : parseFloat($this.val());
+        $(this).val(newval);
+        get_discPrice();
+        $rangeSlider.ionRangeSlider("update", {
+            from: newval 
+        });
+    });
+
+    $("#discountedP").bind('change keyup',function(e){
+        if(e.which > 13 || e.which < 13){
+            return false;
+        }
+
+        var $this = $(this);
+        var discountPrice = parseFloat($this.val());
+
+        if (isNaN(discountPrice) || $("#prod_price").val() <= 0) {
+            $(this).val('');
+            return false;
+        } 
+        var basePrice = parseFloat($("#prod_price").val().replace(/,/g,''));
+        var sum = ((basePrice - discountPrice) / basePrice) * 100;
+        sum = sum.toFixed(4);
+        validateWhiteTextBox("#discountedP");
+
+        if(discountPrice > basePrice){
+            alert("Discount Price cannot be greater than base price.");
+            $this.val("0.00");
+            validateRedTextBox("#discountedP");
+            return false;
+        }
+
+        if(discountPrice <= 0){
+            alert("Discount Price cannot be equal or less than 0.");
+            $this.val("0.00");
+            $( "span#discounted_price_con" ).text( "0.00" );
+            validateRedTextBox("#discountedP");
+            return false;
+        }
+
+        $rangeSlider.ionRangeSlider("update", {
+            from: sum
+        });
+
+        $("#slider_val").val(sum+"%");
+        tempval = Math.abs(discountPrice);
+        discountPrice = ReplaceNumberWithCommas(tempval.toFixed(2));
+        $this.val(discountPrice);
+        $("span#discounted_price_con").text(discountPrice);
+    });
+
+    $(document).mouseup(function (e){
+        var $container = $("#dsc_frm");
+
+        //Close $container if the target of the click isn't the $container
+        if (!$container.is(e.target)
+            && $container.has(e.target).length === 0){
+            $container.hide(); 
+        }
+    });
+})( jQuery );
 
 // Manipulating of additional attributes
 var cnt = 1; 
 var previous,editSelectedValue,editSelectedId; 
-$(document).ready(function(){
+(function($) {
 
     setChosen();
     zebraCombination();
@@ -820,49 +1030,47 @@ $(document).ready(function(){
     $(document).on("click","#cancel-changes",function (){
         resetControlPanel(true);
     });
-
-});
+})( jQuery );
 // END of Manipulating of additional attributes
 
-// BRAND SEARCH
+/**
+ * Loading Brand Search Feature
+ */
 var currentRequest = null;
-$(document).ready(function(){
+ 
+(function($) {
+ 
     $('#brand_search_drop_content').hide();
     $(document).on('keyup','#brand_sch',function(){
-
-        $('#prod_brand').val(0)
-        $('#prod_brand').trigger( "change" );
-        jQuery(".brand_sch_loading").hide();
-        var searchQuery = $(this).val();
-        var csrftoken = $("meta[name='csrf-token']").attr('content');
-        var csrfname = $("meta[name='csrf-name']").attr('content');
+        $('#prod_brand').val(0).trigger( "change" ) 
+        $(".brand_sch_loading").hide();
+        var searchQuery = $(this).val().trim();
         if(searchQuery != ""){
-            currentRequest = jQuery.ajax({
+            currentRequest = $.ajax({
                 type: "GET",
-                url: config.base_url+'product_search/searchBrand', 
-                onLoading:jQuery(".brand_sch_loading").html('<img src="'+config.base_url+'assets/images/orange_loader_small.gif" />').show().css('display','inline-block'),
-                data: "data="+searchQuery+"&"+csrfname+"="+csrftoken, 
-                beforeSend : function(){       
+                url: config.base_url+'product_search/searchBrand',
+                data: "data="+searchQuery, 
+                beforeSend : function(){
                     if(currentRequest != null) {
                         currentRequest.abort();
                     }
-                    $('.brand_sch_drop_content').show();
                 },
                 success: function(response) {
                     currentRequest = null;
-                    var obj = jQuery.parseJSON(response);
+                    var obj = $.parseJSON(response);
                     var html = '<ul>';
                     if((obj.length)>0){
-                        jQuery.each(obj,function(){
-                            html += '<li class="brand_result" data-brandid="'+(this.id_brand) +'">'+(this.name)+'</li>' ;                             
+                        $('.brand_sch_drop_content').show();
+                        $.each(obj,function(){
+                            html += '<li class="brand_result" data-brandid="'+(this.id_brand) +'">'+(this.name)+'</li>';
                         });
-                        html += '<li class="add_brand blue">Use your own brand name</li>';
-                        jQuery(".brand_sch_loading").hide();
+                        html += '<li class="add_brand blue">Use "<span style="color:red">'+searchQuery+'</span>"" as your own brand name</li>';
+                        $(".brand_sch_loading").hide();
                     }
                     else{
+                        $("#brand_search_drop_content").hide();
                         addNewBrand();
                     }
-
                     html += '</ul>';
                     $("#brand_search_drop_content").html(html);
 
@@ -885,39 +1093,46 @@ $(document).ready(function(){
     });
 
     $('#brand_search_drop_content').on('click', 'li.brand_result', function(){
-        $this = $(this);     
-        $('#prod_brand').val($this.data('brandid'));
-        $("#brand_sch").val($this.text());
-        $('#prod_brand').trigger( "change" );
-        $("#brand_sch").trigger( "change" );
-        jQuery(".brand_sch_loading").html('<img src="'+config.base_url+'assets/images/check_icon.png" />').show().css('display','inline-block');
-
-        $('#brand_search_drop_content').hide();
+        $this = $(this);
+        $('#prod_brand').val($this.data('brandid')).trigger( "change" );
+        $("#brand_sch").val($this.text()).trigger( "change" ); 
+        $('#brand_search_drop_content').empty().hide(); 
+        $(".brand_sch_loading").html('<img src="'+config.base_url+'assets/images/check_icon.png" />').show().css('display','inline-block');
     });
 
-    $(document).on("click",".add_brand", function(){    
-        if(currentRequest != null) {
+    $(document).on("click",".add_brand", function(){
+        if(currentRequest != null){
             currentRequest.abort();
         }
-        addNewBrand();
+
+        if($('#brand_sch').val().trim() != ""){
+            addNewBrand();
+        }
+
         $('#brand_search_drop_content').hide();
     });
 
     $('#brand_sch').focusout(function(){
         var available = false;
-        $('#brand_search_drop_content li.brand_result').each(function(){
-            if($(this).text().toLowerCase() ===  $('#brand_sch').val().toLowerCase()){
-                $(this).click();
-                available = true;
-                return false;
-            }
-            if(!available){
-                addNewBrand();
-            }
-        });
-    });  
+        var $this = $(this);
+        var brandValue = $this.val();
+        var $searchDrop = $('#brand_search_drop_content li.brand_result');
 
-    $('#brand_sch').focus(function() {
+        if(brandValue.trim() != ""){
+            $searchDrop.each(function(){
+                if($searchDrop.text().toLowerCase() ===  brandValue.toLowerCase()){
+                    $searchDrop.click();
+                    available = true;
+                    return false;
+                }
+                if(!available){
+                    addNewBrand();
+                }
+            });
+        }
+    });
+
+    $('#brand_sch').focus(function() { 
         $('#brand_search_drop_content').show();
         $(document).bind('focusin.brand_sch_drop_content click.brand_sch_drop_content',function(e) {
             if ($(e.target).closest('#brand_search_drop_content, #brand_sch').length) return;
@@ -928,17 +1143,18 @@ $(document).ready(function(){
     function addNewBrand(){
         $('#prod_brand').val(1)
         $('#prod_brand').trigger( "change" ); 
-        jQuery(".brand_sch_loading").html('<img src="'+config.base_url+'assets/images/img_new_txt.png" />').show().css('display','inline-block');
+        $(".brand_sch_loading").html('<img src="'+config.base_url+'assets/images/img_new_txt.png" />').show().css('display','inline-block');
     }
-});
+})( jQuery );
 // BRAND SEARCH END
+ 
 
 
 // ES_UPLOADER BETA     
 var canProceed = true; 
 var removeThisPictures = []; var imageAttr = [];
 var pictureCountOther  = 0; var primaryPicture = 0;
-$(document).ready(function() {
+(function($) {
   
     if(window.FileReader){
         badIE = false;
@@ -1006,7 +1222,7 @@ $(document).ready(function() {
                 imageName = tempId+'_'+memberId+'_'+fulldate+pictureCount+'.'+extension;
                 af.push(imageName+'||'+extension); 
                 afstart.push(imageName); 
-                window.URL.revokeObjectURL(fileList[i]);
+                // window.URL.revokeObjectURL(fileList[i]);
                 arrayUpload.push(pictureCount);
                 pictureCount++; 
             }
@@ -1230,8 +1446,10 @@ $(document).ready(function() {
         $(this).text('Your Primary');
         $(this).closest('.upload_img_div').addClass("active_img");
     });
-});
+})(jQuery);
 // ES_UPLOADER BETA END
+
+(function($) {
 
     // SAVING AND PROCEED 
     $(document).on('click','#proceed_form',function(){
@@ -1329,209 +1547,6 @@ $(document).ready(function() {
         saveAsDraftProceed();
         $('#edit_step1').submit();
     });
- 
-    function processCombination()
-    {
-        var completeCombination = [];   
-        $(".div-combination").each(function(){
-
-            var currentDiv = $(this);
-            var selectList = currentDiv.children('.div2').children('span');
-
-            var eachData = {};
-            var eachCombination = {};
-            var itemId = 0;
-            if (currentDiv.data("itemid") != undefined) {
-                itemId = currentDiv.data("itemid");
-            }
-
-            selectList.each(function(){
-                var currentSelect = $(this);
-                var optionSelected = $(this).children('select').children('option:selected');
-                var head = optionSelected.data('head');
-                 var value = optionSelected.data('value');
-                var price = optionSelected.data('price');
-                eachData[head] = value; 
-            });
-
-            eachCombination.quantity = currentDiv.children('.div1').children('.qty').val(); 
-            eachCombination.data = eachData; 
-            eachCombination.itemid = itemId; 
-            console.log(eachCombination);
-            completeCombination.push(eachCombination);
-        });
-
-        return JSON.stringify(completeCombination);
-    }
-
-    function processAttributes()
-    {
-        var span = $('.select-control-panel-option > .div2 > span');
-        var completeAttributes = {}; 
-        span.each(function(){
-            var currentSelect = $(this);
-            var select = $(this).children('select').children('option');
-            var currentHead;
-            var eachHead = [];
-            select.each(function(){
-                var eachValue = {};
-                var optionSelected = $(this);
-                var head = currentHead = optionSelected.data('head');
-                var value = optionSelected.data('value');
-                var price = optionSelected.data('price');
-                var image = optionSelected.data('image');
-                eachValue.value =value;
-                eachValue.price =price;
-                eachValue.image =image;
-                eachHead.push(eachValue);
-            });
-            completeAttributes[currentHead] =  eachHead;
-            
-        });
-
-        return JSON.stringify(completeAttributes);
-    }
-
-
-    function proceedStep3(url)
-    {
-        $('#form_product').ajaxForm({
-            url: url,
-            dataType: "json",
-            beforeSubmit : function(arr, $form, options){
-
-                var combination = processCombination();
-                console.log(combination);
-                var attributes = processAttributes(); 
-                console.log(attributes);
-
-                var percentVal = '0%';
-                $('.percentage').html(percentVal);
-                $( ".button_div" ).hide();
-                $( ".loader_div" ).show();
-
-                $('<input type="hidden">').attr({
-                      id: 'primaryPicture',
-                      name: 'primaryPicture',
-                      value: primaryPicture
-                    }).appendTo('form');
-                arr.push({"name":"primaryPicture", "value":primaryPicture});
-
-                $('<input type="hidden">').attr({
-                      id: 'removeThisPictures',
-                      name: 'removeThisPictures',
-                      value: JSON.stringify(removeThisPictures)
-                    }).appendTo('form');
-                arr.push({"name":"removeThisPictures", "value":JSON.stringify(removeThisPictures)});
-
-                $('<input type="hidden">').attr({
-                      id: 'combination',
-                      name: 'combination',
-                      value: combination
-                    }).appendTo('form');
-                arr.push({"name":"combination","value":combination});
-
-                $('<input type="hidden">').attr({
-                      id: 'attributes',
-                      name: 'attributes',
-                      value: attributes
-                    }).appendTo('form');
-                arr.push({"name":"attributes","value":attributes});
-
- 
-            },
-            uploadProgress : function(event, position, total, percentComplete) {
-                var percentVal = percentComplete + '%';
-                $('.percentage').empty();
-                if(percentComplete >= 100){
-                    percentVal = '100%'
-                    $('.percentage').html(percentVal);
-                }else{
-                    $('.percentage').html(percentVal);
-                }
-            },
-            success :function(d) { 
-                $('.percentage').html('100%');
-                if (d.e == 1) {
-                    $('#prod_h_id').val(d.d); 
-                    document.getElementById("hidden_form").submit();
-                } else {
-                    $( ".button_div" ).show();
-                    $( ".loader_div" ).hide();
-                    $('.percentage').empty();
-                    alert(d.d);
-                } 
-            },
-            error: function (request, status, error) {
-                $( ".button_div" ).show();
-                $( ".loader_div" ).hide();
-                $('.percentage').empty();
-                response = request.responseText;
-                if (response.toLowerCase().indexOf("1001") >= 0){
-                    alert('Something Went Wrong. The images you are uploading in [OTHER ATTRIBUTES] are too large.');
-                }else{
-                    alert('Something Went Wrong. Please try again.');
-                }
-            } 
-        }); 
-    }
-
-    function saveAsDraftProceed(url)
-    {
-        $('.arrayNameOfFiles').val(JSON.stringify(af));
-        tinyMCE.triggerSave(); 
-        $('#form_product').ajaxForm({ 
-            url: url,
-            dataType: "json",
-            async: false,
-            beforeSubmit : function(arr, $form, options){
-                var combination = processCombination();
-                var attributes = processAttributes(); 
-
-                $('<input type="hidden">').attr({
-                      id: 'primaryPicture',
-                      name: 'primaryPicture',
-                      value: primaryPicture
-                }).appendTo('form');
-                arr.push({name:'primaryPicture', value:primaryPicture});
-
-                $('<input type="hidden">').attr({
-                  id: 'removeThisPictures',
-                  name: 'removeThisPictures',
-                  value: JSON.stringify(removeThisPictures)
-                }).appendTo('form');
-                arr.push({name:'removeThisPictures', value:JSON.stringify(removeThisPictures)});
-
-                $('<input type="hidden">').attr({
-                  id: 'combination',
-                  name: 'combination',
-                  value: combination
-                }).appendTo('form');
-                arr.push({name:'combination',value:combination});
-
-                $('<input type="hidden">').attr({
-                    id: 'attributes',
-                    name: 'attributes',
-                    value: attributes
-                }).appendTo('form');
-                arr.push({name:'attributes',value:attributes});
-
-                $('<input type="hidden">').attr({
-                    id: 'savedraft',
-                    name: 'savedraft',
-                    value: '1'
-                }).appendTo('form');
-                arr.push({name:'savedraft',value:'1'});
-
-            },success :function(d) { 
-                $("#form_product").attr("action", "/sell/edit/processing");
-                $("#form_product").append('<input type="hidden" name="p_id" id="p_id" value="'+d.d+'">');
-                $("#edit_step1 > #p_id").val(d.d);
-            }
-        }).submit(); 
-    }
- 
-jQuery(function($){
 
     function disableF5(e) { if ((e.which || e.keyCode) == 116) e.preventDefault(); };
     // To disable f5
@@ -1562,9 +1577,10 @@ jQuery(function($){
 
     $(document).on('click', '.prevent', function(event){
         confirm_unload = false;
-        var loc = $(this).attr("href");        
+        var loc = $(this).attr("href");
         event.preventDefault(); 
         askDraft(loc);
-    });                 
-});
+    });
+
+})( jQuery );
 

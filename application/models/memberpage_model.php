@@ -1442,33 +1442,48 @@ class memberpage_model extends CI_Model
     
     /**
      *  Fetch vendor products in vendor page
+     *
+     *  @param integer $member_id
+     *  @param string $username
+     *
+     *  @return array
      */
     public function getVendorCatItems($member_id, $username)
     {
         $categoryItemCount = 4;
         $otherItemCount = 4;
+        $defaultCatImg = "assets/images/default_icon_small.png";
     
         $query = $this->xmlmap->getFilenameID('sql/product','getVendorProdCatDetails');
         $sth = $this->db->conn_id->prepare($query);
         $sth->bindParam(':member_id', $member_id, PDO::PARAM_INT);
         $sth->execute();
-        $row = $sth->fetchAll(PDO::FETCH_ASSOC);
+        $vendorCategories = $sth->fetchAll(PDO::FETCH_ASSOC);
         $data = array();
         
-        foreach( $row as $r ){
-            if( !isset($data[$r['parent_cat']]) ){
-                $data[$r['parent_cat']] = array(
-                    'name' => $r['p_cat_name'],
-                    'slug' => $r['p_cat_slug'],
+        foreach( $vendorCategories as $vendorCategory ){
+            if( !isset($data[$vendorCategory['parent_cat']]) ){
+                
+                if( $vendorCategory['p_cat_img'] !== "" ){
+                    $catImg = "assets/" . substr($vendorCategory['p_cat_img'],0,strrpos($vendorCategory['p_cat_img'],'.')) . "_small.png";
+                }
+                else{
+                    $catImg = $defaultCatImg;
+                }
+                
+                $data[$vendorCategory['parent_cat']] = array(
+                    'name' => $vendorCategory['p_cat_name'],
+                    'slug' => $vendorCategory['p_cat_slug'],
                     'child_cat' => array(),
                     'products' => array(),
                     'count' => 0,
-                    'loadmore_link' => base_url() . 'advsrch?_us=' . $username . '&_cat=' . $r['parent_cat'],
-                    'cat_link' => base_url(). 'category/' . $r['p_cat_slug']
+                    'loadmore_link' => base_url() . 'advsrch?_us=' . $username . '&_cat=' . $vendorCategory['parent_cat'],
+                    'cat_link' => base_url(). 'category/' . $vendorCategory['p_cat_slug'],
+                    'cat_img' => $catImg
                 );
             }
-            $data[$r['parent_cat']]['child_cat'][] = $r['cat_id'];
-            $data[$r['parent_cat']]['count'] += $r['prd_count'];
+            $data[$vendorCategory['parent_cat']]['child_cat'][] = $vendorCategory['cat_id'];
+            $data[$vendorCategory['parent_cat']]['count'] += $vendorCategory['prd_count'];
         }
         
         $temp = array();
@@ -1516,7 +1531,8 @@ class memberpage_model extends CI_Model
                 'products' => array(),
                 'count' => $otherCount,
                 'loadmore_link' => base_url() . 'advsrch?_us=' . $username,
-                'cat_link' => ''
+                'cat_link' => '',
+                'cat_img' => $defaultCatImg
             ));
             
             end($data);
@@ -1540,6 +1556,7 @@ class memberpage_model extends CI_Model
                 array_push( $data[$last_id]['products'], $p );
             }
         }
+        
         return $data;
     }
     
