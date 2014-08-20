@@ -555,6 +555,10 @@ class memberpage_model extends CI_Model
         
             applyPriceDiscount($row);
         
+            if( strlen(trim($row['name'])) === 0 ){
+                $row['name'] = "Untitled";
+            }
+
             $query = $this->xmlmap->getFilenameID('sql/product','getParent');
             $sth = $this->db->conn_id->prepare($query);
             $sth->bindParam(':id',$row['cat_id']);
@@ -563,6 +567,9 @@ class memberpage_model extends CI_Model
             $row['parents'] = array();
             foreach($parents as $parent){
                 array_push($row['parents'], $parent['name']);
+            }
+            if( strlen(trim($row['cat_other_name'])) > 0 ){
+                array_push($row['parents'], $row['cat_other_name']);
             }
             
             $query = $this->xmlmap->getFilenameID('sql/product','getProductAttributes');
@@ -596,6 +603,7 @@ class memberpage_model extends CI_Model
             unset($row['product_image_path']);
             $data[] = $row;
         }
+
         return $data;
     }
     
