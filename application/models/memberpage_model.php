@@ -619,8 +619,8 @@ class memberpage_model extends CI_Model
      *
      *  @return $data - contains transaction details for parsing html template
      */
-    public function getBuyTransactionDetails($member_id, $status = 0, $start = 0, $nf='%', $of="1,2,3,5" , $osf="DESC" , $itemPerPage=10)
-    {
+    public function getBuyTransactionDetails($contentXml, $member_id, $status = 0, $start = 0, $nf='%', $of="1,2,3,5" , $osf="DESC" , $itemPerPage=10)
+    {    
         $query = $this->xmlmap->getFilenameID('sql/users','getBuyTransactionDetails');
         $strStatus = $status === 1 ? '1' : '0,99';
         $parseData = array(
@@ -691,11 +691,6 @@ class memberpage_model extends CI_Model
             }
             //IF BANK DEPOSIT
             if( (int)$r['payment_method'] === 5 && (int)$r['transac_stat'] === 99 ){
-            
-                $this->ci =& get_instance();
-                $xmlResourceService = $this->ci->serviceContainer['xml_resource'];
-                $xmlfile =  $xmlResourceService->getContentXMLfile();
-            
                 $query = $this->xmlmap->getFilenameID('sql/users','getTransactionBankDepositDetails');
                 $sth = $this->db->conn_id->prepare($query);
                 $sth->bindParam(':order_id', $r['id_order']);
@@ -703,9 +698,9 @@ class memberpage_model extends CI_Model
                 $pbd = $sth->fetch(PDO::FETCH_ASSOC);
                 $data[$r['id_order']]['bd_details'] = $pbd;
                 if(!isset($data['bank_template'])){
-                    $data[$r['id_order']]['bank_template']['bank_name'] = $this->xmlmap->getFilenameID($xmlfile,'bank-name');
-                    $data[$r['id_order']]['bank_template']['bank_accname'] = $this->xmlmap->getFilenameID($xmlfile,'bank-account-name');
-                    $data[$r['id_order']]['bank_template']['bank_accnum'] = $this->xmlmap->getFilenameID($xmlfile,'bank-account-number');
+                    $data[$r['id_order']]['bank_template']['bank_name'] = $this->xmlmap->getFilenameID($contentXml,'bank-name');
+                    $data[$r['id_order']]['bank_template']['bank_accname'] = $this->xmlmap->getFilenameID($contentXml,'bank-account-name');
+                    $data[$r['id_order']]['bank_template']['bank_accnum'] = $this->xmlmap->getFilenameID($contentXml,'bank-account-number');
                 }
                 
             }
