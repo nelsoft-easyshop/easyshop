@@ -6462,14 +6462,15 @@ box-shadow:         inset 0px -10px 12px -8px rgba(255, 255, 255, 0.75);
 }
 #modal-container textarea {
     height: 145px;
-    margin-top: 15px;
-    resize: none;
+    margin: 15px 0px;
+    min-width: 230px;
     width: 100%;
+    -moz-box-sizing: border-box;
 }
 #modal-div-header{
         background-color: grey;
         border-radius: 3px;
-        height: 11.2%;
+        height: 10.2%;
 }
 #modal-launcher{
     
@@ -6494,13 +6495,11 @@ box-shadow:         inset 0px -10px 12px -8px rgba(255, 255, 255, 0.75);
     background-color: #FFFFFF;
     border-radius: 3px;
     border-style: none;
+    cursor: pointer;
     float: right;
     height: 30px;
-    margin: 5px 6px 0 0;
+    margin: 3px 3px 0 0;
     width: 30px;
-}
-#modal-inside-container{
-        margin: 15px;
 }
 #table_id_wrapper{
     background-color: #F3F3F3;
@@ -6532,7 +6531,6 @@ box-shadow:         inset 0px -10px 12px -8px rgba(255, 255, 255, 0.75);
     float: right;
     font-size: 15px;
     height: 30px;
-    margin-right: 15px;
     width: 107px;
 }
 #modal-background.active,#modal-content.active {

@@ -1,8 +1,11 @@
 <script type="text/javascript" src="<?=base_url()?>assets/js/src/vendor/jquery.dataTables.min.js"></script>
-<div class="container">
+
+<div class="container wrapper">
     <div id="head_container">       
-        <div><input type="button" id="modal-launcher" value="Compose"></div>
-		<div>
+        <div>
+            <input type="button" id="modal-launcher" value="Compose">
+        </div>
+        <div>
             <h3 id="chsn_username"></h3>
             <span>
                 <button id="chsn_delete_btn"> Delete selected </button>
@@ -54,7 +57,7 @@
 			<!-- <img id="msg_loader" src="<?=base_url()?>assets/images/orange_loader.gif"> -->
 		</div>
 		<div id="msg_textarea">
-			<textarea id="out_txtarea" placeholder="Write a message"></textarea>
+			<textarea id="out_txtarea" placeholder="Write a message" class="ui-form-control"></textarea>
 			<button id="send_btn" data="">Reply</button><img src="<?=base_url()?>assets/images/horizontal_bar_loader.gif">
 		</div>
     </div>
@@ -66,14 +69,14 @@
     <div id="modal-div-header">
         <button id="modal-close">X</button>        
     </div>
-    <div id="modal-inside-container">
+    <div id="modal-inside-container" class="mrgn-top-10">
 		<div>
 			<label>To : </label>
-			<input type="text" value="" id="msg_name" name="msg_name" placeholder="username">
+			<input type="text" value="" id="msg_name" name="msg_name" placeholder="username" class="ui-form-control">
 		</div>
 		<div>
 			<label>Message : </label><br>
-			<textarea cols="40" rows="5" name="msg-message" id="msg-message" placeholder="Your message here.."></textarea>		
+			<textarea cols="40" rows="5" name="msg-message" id="msg-message" class="ui-form-control" placeholder="Your message here.."></textarea>		
 		</div>	   
     </div>
     <button id="modal_send_btn">Send</button>
@@ -88,7 +91,7 @@
 			"sScrollY": "375px"
 		});
         $("#table_id_info").hide();
-        $('#table_id_filter label input').prop('placeholder','Search').prop('id','tbl_search');
+        $('#table_id_filter label input').prop('placeholder','Search').prop('id','tbl_search').prop('class','ui-form-control');
 		$("#modal-background, #modal-close").click(function() {
 			$("#modal-container, #modal-background").toggleClass("active");
 			$("#modal-container").hide();
