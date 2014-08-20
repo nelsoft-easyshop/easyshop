@@ -1,3 +1,4 @@
+
 <?xml version='1.0' ?>
 <map>
     
@@ -1165,4 +1166,7 @@ FROM
         `es_product_item_attr` a1 
     WHERE `product_id_item` = :itemId
 </select>
+
+
+
 </map>
