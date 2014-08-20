@@ -52,6 +52,25 @@ class Mycontroller extends MY_Controller
 		}
 	}
 	
+	function generateMemberSlug()
+	{
+		$member = $this->my_model->getNoSlugMember();
+		$flagger = TRUE;
+		
+		foreach( $member as $m ){
+			$slugVal = $this->my_model->createSlug($m['username']);
+			$result = $this->my_model->updateMemberSlug($m['id_member'], $slugVal);
+			if(!$result){
+				echo 'Error updating slug field of current member with username : ' . $m['username'] ;
+				$flagger = FALSE;
+				break;
+			}
+		}
+		if($flagger){
+			echo 'Successfully updated slug for ' . count($member) . ' members.';
+		}
+	}
+	
 	function mobileTest()
 	{
 		$mobile = $this->input->get('m');
@@ -91,7 +110,7 @@ class Mycontroller extends MY_Controller
 		print_r($this->email->print_debugger());
 		print_r($result);
 	}
-
+	
 }
 
 ?>

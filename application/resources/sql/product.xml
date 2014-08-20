@@ -17,7 +17,7 @@
         WHERE c.id_cat = :id_cat
         LIMIT 1
     </select>
-	
+    
     <select id="selectFirstLevel">
         SELECT c.name,c.description,c.keywords,c.id_cat, c.slug, c.sort_order,c.parent_id,c.is_main, i.path
         FROM es_cat c
@@ -51,8 +51,6 @@
      AND id_cat = :cat_id ;
     </select>
 
- 
-    
     <select id="getParent">
         SELECT T2.id_cat, T2.name, T2.slug
         FROM (
@@ -89,7 +87,7 @@
     </select>
     
     <select id="getProductBySlugNoIncrement">
-        SELECT p.id_product as id_product, p.slug as slug, p.promo_type, p.condition, p.slug,p.brand_id as brand_id, p.brand_other_name as custombrand, p.name as product_name, p.description as description, 
+        SELECT p.id_product as id_product, p.slug as slug, p.is_meetup, p.promo_type, p.condition, p.slug,p.brand_id as brand_id, p.brand_other_name as custombrand, p.name as product_name, p.description as description, 
         p.is_promote, p.startdate, p.enddate, p.cat_id as cat_id, p.price as price,  p.brief as brief, p.sku as sku, i.`product_image_path`,
         p.is_sold_out, p.is_cod, p.discount, s.name as style_name, b.name as brand_name, p.member_id as sellerid, m.nickname as sellernickname, m.username as sellerusername, m.imgurl as userpic, '1' as o_success, '' as o_message
         FROM es_product p 
@@ -97,7 +95,7 @@
         LEFT JOIN es_brand b ON p.brand_id = b.id_brand
         LEFT JOIN es_member m on p.member_id = m.id_member 
         LEFT JOIN `es_product_image` i ON i.`product_id` = p.`id_product` AND i.is_primary = '1'
-        WHERE p.slug = :slug AND p.is_delete = 0 AND p.is_draft = 0;				
+        WHERE p.slug = :slug AND p.is_delete = 0 AND p.is_draft = 0;                
     </select>
     
     
@@ -114,7 +112,7 @@
         p.cat_id AS cat_id, p.price AS price, p.brief AS brief, p.sku AS sku,
         s.name AS style_name, b.name AS brand_name, p.member_id AS sellerid, m.nickname AS sellernickname, 
         m.username AS sellerusername, m.imgurl AS userpic, c.name AS category, i.`product_image_path`,     
-        p.`is_promote`,p.`startdate`,p.`enddate`, p.`promo_type`
+        p.`is_promote`,p.`startdate`,p.`enddate`, p.`promo_type`, p.`slug` AS slug, p.is_cod, p.is_meetup, p.billing_info_id, p.cat_other_name
         FROM es_product p 
         LEFT JOIN es_style s ON p.style_id = s.id_style
         LEFT JOIN es_brand b ON p.brand_id = b.id_brand
@@ -124,7 +122,7 @@
         WHERE p.id_product = :id
     </select>
   
-	
+    
     <select id="getProductAttributes">
         SELECT h.field_name as name, h.id_optional_attrhead as 'name_id', d.value_name as attr_value, d.id_optional_attrdetail as 'attr_value_id' , d.value_price as attr_price, COALESCE(i.product_image_path,'') as product_image_path, 'option' as 'type', COALESCE(i.id_product_image,0) as 'img_id', '0' as 'datatype_id'
         FROM es_optional_attrhead h 
@@ -340,22 +338,22 @@ FROM
         INSERT INTO es_product_review (`product_id`, `review`, `is_show`, `p_reviewid`, `member_id`, `datesubmitted`)
         VALUES (:product_id, :review, '1', :p_reviewid, :member_id, NOW())
     </select>
-	
+    
     <select id="getRecentProductReviews">
         SELECT a.`id_review`, a.`title`, a.`review`, a.`rating`, DATE_FORMAT(a.`datesubmitted`, "%e-%b-%Y %k:%i") as datesubmitted, b.`username` as reviewer, b.`id_member` as reviewerid, DATE_FORMAT(a.`datesubmitted`, "%Y-%m-%d") as ISOdate
         FROM es_product_review a 
-		INNER JOIN es_member b 
+        INNER JOIN es_member b 
         ON a.`member_id` = b.`id_member`
         AND  a.`product_id` = :id AND a.`is_show` = 1
         AND a.`p_reviewid` = 0
         ORDER BY a.`id_review` DESC
         LIMIT 5;
     </select>
-	
+    
     <select id="getMoreProductReviews">
         SELECT a.`id_review`, a.`title`, a.`review`, a.`rating`,DATE_FORMAT(a.`datesubmitted`, "%e-%b-%y %k:%i") as datesubmitted, b.`username` as reviewer, b.id_member as reviewerid
         FROM es_product_review a 
-		INNER JOIN es_member b 
+        INNER JOIN es_member b 
         ON a.`member_id` = b.`id_member`
         AND  a.`product_id` = :id AND a.`is_show` = 1
         AND :last_id > a.`id_review` AND a.`p_reviewid` = 0
@@ -369,59 +367,59 @@ FROM
         ON a.`member_id` = b.`id_member`
         AND a.`is_show` = 1 AND a.`p_reviewid` IN (?,?,?,?,?)
         AND a.`product_id` = ?
-		ORDER BY a.`id_review` DESC
+        ORDER BY a.`id_review` DESC
     </select>
 
-	<select id="getAllowedReviewers">
-		SELECT o.buyer_id
-		FROM es_order_product op
-		LEFT JOIN es_order o
-			ON op.order_id = o.id_order
-		WHERE op.product_id = :id
-	</select>
-	
-	<select id="getUserItemCount">
-		SELECT COUNT(CASE WHEN p.is_delete = 0 THEN 1 END) as active, COUNT(CASE WHEN p.is_delete = 1 THEN 1 END) as deleted, 
-			(SELECT SUM(order_quantity) 
-				FROM es_order_product op
-				LEFT JOIN es_order o
-					ON o.id_order = op.order_id
-				WHERE op.seller_id = :member_id AND o.order_status NOT IN (2,99) AND op.status NOT IN (2,5,6) ) as sold
-		FROM es_product p
-		WHERE p.is_draft = 0 and p.member_id = :member_id;
-	</select>
-	
-	<select id="getUserItemSearchCount">
-		SELECT COUNT(id_product) as product_count
-		FROM es_product
-		WHERE name LIKE :schval AND member_id = :member_id AND is_draft = 0 AND is_delete = :delete_status
-	</select>
-	
-	<select id="getUserItems">
-		SELECT p.`slug`, p.`discount`, p.`is_promote`, p.`startdate`, p.`enddate`, p.`promo_type`, p.`is_sold_out`, p.`id_product`,p.`name`, p.`brief`, p.`price`, p.`member_id`, 
-		AVG(COALESCE((r.`rating`),0)) as average_rating, COUNT(r.`rating`) as review_count, 
-		COALESCE(i.product_image_path,'') as product_image_path, p.`cat_id`, p.`is_delete` ,
-		SUM(pi.quantity) as availability, COALESCE(order_product_temp.sum_quantity, 0) as sold,p.lastmodifieddate
-		FROM es_product p 
-		LEFT JOIN es_product_review r ON p.`id_product` = r.`product_id` AND r.`is_show` = 1 
-		LEFT JOIN es_product_image i ON i.`product_id` = p.`id_product` AND i.`is_primary` = 1 
-		LEFT JOIN es_product_item pi ON pi.product_id = p.id_product
-		LEFT JOIN (SELECT product_id, SUM(order_quantity) as sum_quantity FROM es_order_product op
-				LEFT JOIN es_order o ON o.id_order = op.order_id
-				WHERE op.status NOT IN (2,5,6) AND op.seller_id != o.buyer_id AND o.order_status NOT IN (2,99) GROUP BY product_id) order_product_temp
-				ON order_product_temp.product_id = p.id_product
-		WHERE p.member_id = :id AND p.is_draft = 0 AND p.is_delete = :delete_status AND p.name LIKE :name_filter
-		GROUP BY p.`id_product`, p.`slug`, p.`name`, p.`brief`, p.`price`, p.`member_id`, i.product_image_path, p.`is_delete`,p.`cat_id`,p.lastmodifieddate,order_product_temp.sum_quantity,
-		p.discount, p.is_promote, p.startdate, p.enddate, p.promo_type, p.is_sold_out
-		ORDER BY {order_filter} {order_sequence_filter}
-		LIMIT :start, :number
-	</select>
-	
+    <select id="getAllowedReviewers">
+        SELECT o.buyer_id
+        FROM es_order_product op
+        LEFT JOIN es_order o
+            ON op.order_id = o.id_order
+        WHERE op.product_id = :id
+    </select>
+    
+    <select id="getUserItemCount">
+        SELECT COUNT(CASE WHEN p.is_delete = 0 AND p.is_draft = 0 THEN 1 END) as active, COUNT(CASE WHEN p.is_delete = 1 AND p.is_draft = 0 THEN 1 END) as deleted, COUNT(CASE WHEN p.is_delete = 0 AND p.is_draft = 1 THEN 1 END) as draft,
+            (SELECT SUM(order_quantity) 
+                FROM es_order_product op
+                LEFT JOIN es_order o
+                    ON o.id_order = op.order_id
+                WHERE op.seller_id = :member_id AND o.order_status NOT IN (2,99) AND op.status NOT IN (2,5,6) ) as sold
+        FROM es_product p
+        WHERE p.member_id = :member_id;
+    </select>
+    
+    <select id="getUserItemSearchCount">
+        SELECT COUNT(id_product) as product_count
+        FROM es_product
+        WHERE name LIKE :schval AND member_id = :member_id AND is_draft = :draft_status AND is_delete = :delete_status
+    </select>
+    
+    <select id="getUserItems">
+        SELECT p.`slug`, p.`discount`, p.`is_promote`, p.`startdate`, p.`enddate`, p.`promo_type`, p.`is_sold_out`, p.`id_product`,p.`name`, p.`brief`, p.`price`, p.`member_id`, 
+        AVG(COALESCE((r.`rating`),0)) as average_rating, COUNT(r.`rating`) as review_count, 
+        COALESCE(i.product_image_path,'') as product_image_path, p.`cat_id`, p.`is_delete` ,
+        SUM(pi.quantity) as availability, COALESCE(order_product_temp.sum_quantity, 0) as sold,p.lastmodifieddate
+        FROM es_product p 
+        LEFT JOIN es_product_review r ON p.`id_product` = r.`product_id` AND r.`is_show` = 1 
+        LEFT JOIN es_product_image i ON i.`product_id` = p.`id_product` AND i.`is_primary` = 1 
+        LEFT JOIN es_product_item pi ON pi.product_id = p.id_product
+        LEFT JOIN (SELECT product_id, SUM(order_quantity) as sum_quantity FROM es_order_product op
+                LEFT JOIN es_order o ON o.id_order = op.order_id
+                WHERE op.status NOT IN (2,5,6) AND op.seller_id != o.buyer_id AND o.order_status NOT IN (2,99) GROUP BY product_id) order_product_temp
+                ON order_product_temp.product_id = p.id_product
+        WHERE p.member_id = :id AND p.is_draft = :draft_status AND p.is_delete = :delete_status AND p.name LIKE :name_filter
+        GROUP BY p.`id_product`, p.`slug`, p.`name`, p.`brief`, p.`price`, p.`member_id`, i.product_image_path, p.`is_delete`,p.`cat_id`,p.lastmodifieddate,order_product_temp.sum_quantity,
+        p.discount, p.is_promote, p.startdate, p.enddate, p.promo_type, p.is_sold_out
+        ORDER BY {order_filter} {order_sequence_filter}
+        LIMIT :start, :number
+    </select>
+    
 
 
     <select id="getPopularitem">
-	SELECT `name` AS `product`, `is_sold_out` , `slug` AS `slug`, `id_product`,`cat_id`,`clickcount`, `product_image_path` ,`price`, `is_promote`, `discount`,
-	`startdate`, `enddate`, `promo_type` FROM `es_product` a
+    SELECT `name` AS `product`, `is_sold_out` , `slug` AS `slug`, `id_product`,`cat_id`,`clickcount`, `product_image_path` ,`price`, `is_promote`, `discount`,
+    `startdate`, `enddate`, `promo_type` FROM `es_product` a
         LEFT JOIN `es_product_image` b ON b.`product_id` = a.`id_product` AND b.is_primary = '1'
         WHERE a.`is_delete` = 0 AND a.`is_draft` = 0 AND  a.`is_sold_out` = 0 AND `cat_id` IN 
         <!-- Rest of query completed in the model: -->
@@ -712,41 +710,15 @@ FROM
         UPDATE `es_product` SET is_delete = :is_delete, lastmodifieddate = NOW()  where member_id = :memberid AND id_product = :productid
 </select>
 
-<select id="finalizeProduct">
-        UPDATE `es_product` SET slug = :slug, is_cod = :is_cod, is_draft = 0, billing_info_id = :billing_id  where member_id = :memberid AND id_product = :productid
-</select>
-
-<select id="finalizeProductKeepSlug">
-        UPDATE `es_product` SET is_cod = :is_cod, is_draft = 0, billing_info_id = :billing_id  where member_id = :memberid AND id_product = :productid
-</select>
-
 <select id="checkifexistcategory">
         SELECT COUNT(id_cat) AS cnt FROM `es_cat` WHERE id_cat = :cat_id
 </select>
 
 
 <select id="getProductByVendor">
-	SELECT id_product, name, price, lastmodifieddate, clickcount, quantity
-	FROM `es_product`
-	WHERE `member_id` = :sellerid
-</select>
-<select id="addCategory">
-    INSERT INTO `es_cat`
-        (
-             `name`,
-             `description`,
-             `keywords`,
-             `parent_id`,
-             `sort_order`,
-             `is_main`)
-    VALUES 
-        (
-            :name,
-            :description,
-            :keywords,
-            :parent_id,
-            :sort_order,
-            :is_main);
+    SELECT id_product, name, price, lastmodifieddate, clickcount, quantity
+    FROM `es_product`
+    WHERE `member_id` = :sellerid
 </select>
 
 <select id="getProductEdit">
@@ -761,8 +733,38 @@ FROM
     `name` = :name, `is_draft` = 1,`sku` = :sku, `brief` = :brief, `description` = :description,
     `keywords` = :keywords, `brand_id` = :brand_id, `style_id` = :style_id, `price` = :price,
     `condition` = :condition, `lastmodifieddate` = :modifieddate, `brand_other_name` = :brand_other_name,
-    `discount` = :discount, `search_keyword` = :search_keyword, `is_sold_out` = :is_sold_out
+    `discount` = :discount, `search_keyword` = :search_keyword, `is_sold_out` = :is_sold_out,
+    `cat_other_name` = :cat_other_name, cat_id = :cat_id
     WHERE `id_product` = :p_id AND `member_id` = :member_id;
+</select>
+
+<select id="removeProductImage">
+    DELETE FROM `es_product_image` WHERE `product_id` = :productId
+</select>
+
+<select id="removeProductOptionalAttributeDetails">
+    DELETE FROM `es_optional_attrdetail` WHERE `head_id` IN (SELECT `id_optional_attrhead` FROM `es_optional_attrhead` WHERE `product_id` = :productId)
+</select>
+
+<select id="removeProductOptionalAttributeHead">
+    DELETE FROM `es_optional_attrhead` WHERE `product_id` = :productId
+</select>
+
+<select id="removeProductItemAttr">
+    DELETE FROM `es_product_item_attr` WHERE `product_id_item` IN (SELECT `id_product_item` FROM `es_product_item` WHERE product_id = :productId)
+</select>
+
+<select id="removeProductItem">
+    DELETE FROM `es_product_item` WHERE product_id = :productId
+</select>
+
+<select id="removeProductAttr">
+    DELETE FROM es_product_attr WHERE `product_id` = :productId
+</select>
+
+<select id="getShippingDetailsByItemId">
+  SELECT a.*,b.* FROM `es_product_shipping_head` a,`es_product_shipping_detail` b WHERE a.`id_shipping` = b.`shipping_id`
+  AND b.`product_item_id` = :itemId
 </select>
 
 <select id="deleteProductAttributeByIDs">
@@ -778,7 +780,7 @@ FROM
 </select>
 
 <select id="updateImageIsPrimary">
-	UPDATE es_product_image SET `is_primary` = :is_primary WHERE `id_product_image` = :image_id;
+    UPDATE es_product_image SET `is_primary` = :is_primary WHERE `id_product_image` = :image_id;
 </select>
 
 <select id="getProductCount">
@@ -807,7 +809,7 @@ FROM
     FROM es_product_item a
     INNER JOIN es_product_item_attr b ON b.product_id_item = a.id_product_item AND b.is_other = 0
     LEFT JOIN es_product_attr c ON c.id_product_attr = b.product_attr_id
-	LEFT JOIN es_attr e ON e.id_attr =  c.attr_id
+    LEFT JOIN es_attr e ON e.id_attr =  c.attr_id
     LEFT JOIN es_attr_lookuplist_item d ON LCASE(d.name) = LCASE(c.attr_value) AND e.attr_lookuplist_id = d.attr_lookuplist_id
     WHERE a.product_id = :product_id
     
@@ -817,7 +819,7 @@ FROM
     COALESCE(b.is_other,0) as is_other, '0' as attr_lookuplist_item_id, d.value_name
     FROM es_product_item a
     INNER JOIN es_product_item_attr b ON b.product_id_item = a.id_product_item AND b.is_other = 1
-	LEFT JOIN es_optional_attrdetail d ON d.id_optional_attrdetail = b.product_attr_id
+    LEFT JOIN es_optional_attrdetail d ON d.id_optional_attrdetail = b.product_attr_id
     WHERE a.product_id = :product_id
 </select>
 
@@ -837,11 +839,11 @@ FROM
 <!-- Product_upload step 3 -->
 
 <select id="getProductItem">
-	SELECT p.id_product, pi.id_product_item
-	FROM es_product p
-	INNER JOIN es_product_item pi
-		ON p.id_product = pi.product_id AND p.id_product = :product_id AND p.member_id = :member_id
-	ORDER BY p.id_product
+    SELECT p.id_product, pi.id_product_item
+    FROM es_product p
+    INNER JOIN es_product_item pi
+        ON p.id_product = pi.product_id AND p.id_product = :product_id AND p.member_id = :member_id
+    ORDER BY p.id_product
 </select>
 
 <select id="getLocation">
@@ -855,29 +857,29 @@ FROM
 </select>
 
 <select id="getPrdShippingAttr">
-	SELECT pitm.id_product_item, piattr.product_id_item, attr.name, pattr.attr_value, piattr.id_product_item_attr
+    SELECT pitm.id_product_item, piattr.product_id_item, attr.name, pattr.attr_value, piattr.id_product_item_attr
     FROM es_product_item pitm
     LEFT JOIN es_product_item_attr piattr
         ON pitm.id_product_item = piattr.product_id_item AND piattr.is_other = 0
     LEFT JOIN es_product_attr pattr
         ON piattr.product_attr_id = pattr.id_product_attr
-	LEFT JOIN es_attr attr
-		ON pattr.attr_id = attr.id_attr 
+    LEFT JOIN es_attr attr
+        ON pattr.attr_id = attr.id_attr 
     WHERE pitm.product_id = :id
-	
-	UNION
-	
-	SELECT pitm.id_product_item, piattr.product_id_item, oattrh.field_name, oattr.value_name, piattr.id_product_item_attr
+    
+    UNION
+    
+    SELECT pitm.id_product_item, piattr.product_id_item, oattrh.field_name, oattr.value_name, piattr.id_product_item_attr
     FROM es_product_item pitm
     LEFT JOIN es_product_item_attr piattr
         ON pitm.id_product_item = piattr.product_id_item AND piattr.is_other = 1
     LEFT JOIN es_optional_attrdetail oattr
         ON piattr.product_attr_id = oattr.id_optional_attrdetail
-	LEFT JOIN es_optional_attrhead oattrh
-		ON oattr.head_id = oattrh.id_optional_attrhead
+    LEFT JOIN es_optional_attrhead oattrh
+        ON oattr.head_id = oattrh.id_optional_attrhead
     WHERE pitm.product_id = :id
 </select>
-	
+    
 <select id="storeShippingPrice">
     INSERT INTO es_product_shipping_head (location_id, price, product_id)
     VALUES (:location_id, :price, :product_id)
@@ -889,62 +891,62 @@ FROM
 </select>
 
 <select id="storeShippingPreferenceHead">
-	INSERT INTO es_product_shipping_preference_head (title, member_id)
-	VALUES (:title, :member_id)
+    INSERT INTO es_product_shipping_preference_head (title, member_id)
+    VALUES (:title, :member_id)
 </select>
 
 <select id="storeShippingPreferenceDetail">
-	INSERT INTO es_product_shipping_preference_detail (location_id, price, shipping_pref_head_id)
-	VALUES (:loc, :price, :head_id)
+    INSERT INTO es_product_shipping_preference_detail (location_id, price, shipping_pref_head_id)
+    VALUES (:loc, :price, :head_id)
 </select>
 
 <select id="getShippingPreferenceHead">
-	SELECT id_shipping_pref_head
-	FROM es_product_shipping_preference_head
-	WHERE member_id = :member_id AND id_shipping_pref_head = :head_id
+    SELECT id_shipping_pref_head
+    FROM es_product_shipping_preference_head
+    WHERE member_id = :member_id AND id_shipping_pref_head = :head_id
 </select>
 
 <select id="deleteShippingPreference">
-	DELETE FROM es_product_shipping_preference_detail
-	WHERE shipping_pref_head_id = :head_id;
-	
-	DELETE FROM es_product_shipping_preference_head
-	WHERE id_shipping_pref_head = :head_id AND member_id = :member_id;
+    DELETE FROM es_product_shipping_preference_detail
+    WHERE shipping_pref_head_id = :head_id;
+    
+    DELETE FROM es_product_shipping_preference_head
+    WHERE id_shipping_pref_head = :head_id AND member_id = :member_id;
 </select>
 
 <select id="getShippingSummary">
-	SELECT pi.id_product_item, loc.id_location, loc.location, sh.price, sd.id_shipping_detail
-	FROM es_product_item pi
-	LEFT JOIN es_product_shipping_detail sd
-		ON sd.product_item_id = pi.id_product_item
-	LEFT JOIN es_product_shipping_head sh
-		ON sh.id_shipping = sd.shipping_id
-	LEFT JOIN es_location_lookup loc
-		ON sh.location_id = loc.id_location
-	WHERE pi.product_id = :prod_id
+    SELECT pi.id_product_item, COALESCE(loc.id_location,'0') as id_location, loc.location, COALESCE(sh.price,'0') as price, sd.id_shipping_detail
+    FROM es_product_item pi
+    LEFT JOIN es_product_shipping_detail sd
+        ON sd.product_item_id = pi.id_product_item
+    LEFT JOIN es_product_shipping_head sh
+        ON sh.id_shipping = sd.shipping_id
+    LEFT JOIN es_location_lookup loc
+        ON sh.location_id = loc.id_location
+    WHERE pi.product_id = :prod_id
 </select>
 
 <select id="getShippingPreference">
-	SELECT sh.id_shipping_pref_head as head_id, sh.title, sd.location_id, sd.price
-	FROM es_product_shipping_preference_head sh
-	INNER JOIN es_product_shipping_preference_detail sd
-		ON sh.id_shipping_pref_head = sd.shipping_pref_head_id AND sh.member_id = :member_id
+    SELECT sh.id_shipping_pref_head as head_id, sh.title, sd.location_id, sd.price
+    FROM es_product_shipping_preference_head sh
+    INNER JOIN es_product_shipping_preference_detail sd
+        ON sh.id_shipping_pref_head = sd.shipping_pref_head_id AND sh.member_id = :member_id
 </select>
 
 <select id="deleteShippingDetail">
-	DELETE FROM es_product_shipping_detail
-	WHERE product_item_id IN (
+    DELETE FROM es_product_shipping_detail
+    WHERE product_item_id IN (
 </select>
 
 <select id="getShippingIdFromShippingDetail">
-	SELECT shipping_id
-	FROM es_product_shipping_detail
-	WHERE product_item_id IN (
+    SELECT shipping_id
+    FROM es_product_shipping_detail
+    WHERE product_item_id IN (
 </select>
 
 <select id="deleteShippingHead">
-	DELETE FROM es_product_shipping_head
-	WHERE id_shipping IN (
+    DELETE FROM es_product_shipping_head
+    WHERE id_shipping IN (
 </select>
 
 
@@ -982,22 +984,189 @@ FROM
     WHERE op.product_id = :id AND o.order_status != 99
 </select>
 
+
+<!-- NEW PRODUCT UPLOAD STEP 3-->
+<select id="finalizeProduct">
+    UPDATE `es_product` 
+    SET slug = :slug, is_draft = 0, is_cod = :cod
+    WHERE member_id = :memberid AND id_product = :productid
+</select>
+
+<select id="finalizeProductKeepSlug">
+    UPDATE `es_product` 
+    SET is_draft = 0, is_cod = :cod
+    WHERE member_id = :memberid AND id_product = :productid
+</select>
+
+<select id="updateProductUploadAdditionalInfo">
+    UPDATE `es_product`
+    SET is_cod = :is_cod, billing_info_id = :billing_id, is_meetup = :is_meetup
+    WHERE member_id = :memberid AND id_product = :productid
+</select>
+
 <!-- Vendor Product Fetch -->
 <select id="getVendorProdCatDetails">
-	call `es_sp_vendorProdCatDetails`(:member_id)
+    call `es_sp_vendorProdCatDetails`(:member_id)
 </select>
 
 <select id="getTopXCatItems">
-	SELECT p.name, p.slug, FORMAT(p.price, 2) as price, pi.product_image_path
-	FROM es_product p
-	INNER JOIN es_cat c
-		ON c.id_cat = p.cat_id AND p.member_id = :member_id
-	LEFT JOIN es_product_image pi
-		ON pi.product_id = p.id_product and pi.is_primary = 1
-	WHERE p.cat_id IN ({in_condition}) AND p.is_draft = 0 AND p.is_delete = 0
-	ORDER BY p.id_product DESC
-	LIMIT :item_count
+    SELECT p.name, p.slug, FORMAT(p.price, 2) as price, pi.product_image_path
+    FROM es_product p
+    INNER JOIN es_cat c
+        ON c.id_cat = p.cat_id AND p.member_id = :member_id
+    LEFT JOIN es_product_image pi
+        ON pi.product_id = p.id_product and pi.is_primary = 1
+    WHERE p.cat_id IN ({in_condition}) AND p.is_draft = 0 AND p.is_delete = 0
+    ORDER BY p.id_product DESC
+    LIMIT :item_count
 </select>
+
+<select id="getProductFeed">
+    SELECT 
+        * 
+    FROM
+        (SELECT 
+            *
+            , 'Following' AS feed_type
+            , @a := @a + 2 AS rank 
+        FROM
+            (SELECT 
+                c.username
+                , c.imgurl
+                , a.`vendor_id` AS member_id
+                , b.id_product
+                , b.name
+                , b.brief
+                , b.slug
+                , b.createddate
+                , b.condition
+                , FORMAT(b.price,2) as price
+                , d.product_image_path
+            FROM
+                `es_vendor_subscribe` a
+                , `es_product` b
+                , es_member c
+                , `es_product_image` d 
+            WHERE a.`vendor_id` = b.`member_id` 
+                AND a.`member_id` = :member_id 
+                AND a.vendor_id = c.id_member 
+                AND b.`id_product` = d.`product_id` 
+                AND d.`is_primary` = 1 
+                AND (b.`is_delete` 
+                    AND b.`is_draft`) = 0 
+                AND b.id_product NOT IN ({product_ids})
+            ORDER BY createddate DESC) AS tbl 
+        UNION
+        ALL 
+        SELECT 
+            *
+            , 'Partners' AS feed_type
+            , @b := @b + 2 AS rank 
+        FROM
+            (SELECT 
+                a.username
+                , a.imgurl
+                , b.member_id
+                , b.id_product
+                , b.`name`
+                , b.brief
+                , b.slug
+                , b.createddate
+                , b.condition
+                , FORMAT(b.price,2) as price
+                , c.product_image_path
+            FROM
+                es_product b
+                , es_member a
+                , `es_product_image` c 
+            WHERE b.member_id IN ({partners_id}) 
+                AND b.member_id NOT IN 
+                (SELECT 
+                    vendor_id 
+                FROM
+                    `es_vendor_subscribe` 
+                WHERE member_id = :member_id) 
+                AND a.id_member = b.member_id 
+                AND b.`id_product` = c.`product_id` 
+                AND b.id_product NOT IN ({product_ids}) 
+                AND c.is_primary = 1 
+                AND (b.`is_delete` 
+                    AND b.`is_draft`) = 0 
+            ORDER BY RAND()) AS tbl2) table_feed 
+    ORDER BY rank LIMIT {limit}
+
+</select>
+
+<select id="getNewProducts">
+    SELECT 
+        m.username
+        , m.imgurl
+        , p.member_id
+        , p.id_product
+        , p.name
+        , p.brief
+        , p.slug
+        , p.createddate
+        , p.condition
+        , FORMAT(p.price,2) as price
+        , pi.product_image_path
+    FROM es_product p
+    INNER JOIN es_member m
+        ON m.id_member = p.member_id
+    INNER JOIN es_product_image pi
+        ON pi.product_id = p.id_product AND pi.is_primary = 1
+    WHERE p.is_draft = 0 AND p.is_delete = 0
+    ORDER BY p.createddate DESC
+    LIMIT {limit}
+</select>
+ 
+
+<select id="getItemAttributes">
+    SELECT 
+        IF(
+            a1.`is_other` = '0'
+            , 
+            (SELECT 
+                a.`name` 
+            FROM
+                `es_attr` a
+                , `es_product_attr` b 
+            WHERE a.`id_attr` = b.`attr_id` 
+                AND b.id_product_attr = a1.product_attr_id)
+            , 
+            (SELECT 
+                a.`field_name` 
+            FROM
+                `es_optional_attrhead` a
+                , `es_optional_attrdetail` b 
+            WHERE a.`id_optional_attrhead` = b.`head_id` 
+                AND b.`id_optional_attrdetail` = a1.product_attr_id)
+        ) AS head
+        , IF(
+            a1.`is_other` = '0'
+            , 
+            (SELECT 
+                b.attr_value 
+            FROM
+                `es_attr` a
+                , `es_product_attr` b 
+            WHERE a.`id_attr` = b.`attr_id` 
+                AND b.id_product_attr = a1.product_attr_id)
+            , 
+            (SELECT 
+                b.`value_name` 
+            FROM
+                `es_optional_attrhead` a
+                , `es_optional_attrdetail` b 
+            WHERE a.`id_optional_attrhead` = b.`head_id` 
+                AND b.`id_optional_attrdetail` = a1.product_attr_id)
+        ) AS `value` 
+    FROM
+        `es_product_item_attr` a1 
+    WHERE `product_id_item` = :itemId
+</select>
+
+
 
 
 </map>

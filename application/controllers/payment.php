@@ -950,39 +950,43 @@ class Payment extends MY_Controller{
     function sendNotification($data) 
     {
         //devcode
-	/*$data['member_id'] = 74;
-	$data['order_id'] = 102;
-	$data['invoice_no']= 3;
-	$data['member_id'] = 56;
-	$data['order_id'] = 156;
-	$data['invoice_no']= '156-2014061247';*/
+		/*$data['member_id'] = 74;
+		$data['order_id'] = 102;
+		$data['invoice_no']= 3;
+		$data['member_id'] = 56;
+		$data['order_id'] = 156;
+		$data['invoice_no']= '156-2014061247';*/
         $sender = intval($this->payment_model->get_contentFile('message-sender-id'));
         $transactionData = $this->payment_model->getPurchaseTransactionDetails($data);
 
         #get payment method instructions
         switch($transactionData['payment_method']){
             case 1:
-            $transactionData['payment_msg_buyer'] = $this->lang->line('payment_paypal_buyer');
-            $transactionData['payment_msg_seller'] = $this->lang->line('payment_ppdp_seller');
-            break;
+				$transactionData['payment_msg_buyer'] = $this->lang->line('payment_paypal_buyer');
+				$transactionData['payment_msg_seller'] = $this->lang->line('payment_ppdp_seller');
+				$transactionData['payment_method_name'] = "PayPal";
+				break;
             case 2:
-            case 4:
-            $transactionData['payment_msg_buyer'] = $this->lang->line('payment_dp_buyer');
-            $transactionData['payment_msg_seller'] = $this->lang->line('payment_ppdp_seller');
-            break;
+            //case 4:
+				$transactionData['payment_msg_buyer'] = $this->lang->line('payment_dp_buyer');
+				$transactionData['payment_msg_seller'] = $this->lang->line('payment_ppdp_seller');
+				$transactionData['payment_method_name'] = "DragonPay";
+				break;
             case 3:
-            $transactionData['payment_msg_buyer'] = $this->lang->line('payment_cod_buyer');
-            $transactionData['payment_msg_seller'] = $this->lang->line('payment_cod_seller');
-            break;
+				$transactionData['payment_msg_buyer'] = $this->lang->line('payment_cod_buyer');
+				$transactionData['payment_msg_seller'] = $this->lang->line('payment_cod_seller');
+				$transactionData['payment_method_name'] = "Cash on Delivery";
+				break;
             case 5:
-            $this->load->library('parser');
-            $paymentMsg = $this->lang->line('payment_bd_buyer');
-            $bankparse['bank_name'] = $this->xmlmap->getFilenameID('page/content_files','bank-name');
-            $bankparse['bank_accname'] = $this->xmlmap->getFilenameID('page/content_files','bank-account-name');
-            $bankparse['bank_accnum'] = $this->xmlmap->getFilenameID('page/content_files','bank-account-number');
-            $transactionData['payment_msg_buyer'] = $this->parser->parse_string($paymentMsg, $bankparse, true);
-            $transactionData['payment_msg_seller'] = '';
-            break;
+				$this->load->library('parser');
+				$paymentMsg = $this->lang->line('payment_bd_buyer');
+				$bankparse['bank_name'] = $this->xmlmap->getFilenameID('page/content_files','bank-name');
+				$bankparse['bank_accname'] = $this->xmlmap->getFilenameID('page/content_files','bank-account-name');
+				$bankparse['bank_accnum'] = $this->xmlmap->getFilenameID('page/content_files','bank-account-number');
+				$transactionData['payment_msg_buyer'] = $this->parser->parse_string($paymentMsg, $bankparse, true);
+				$transactionData['payment_msg_seller'] = '';
+				$transactionData['payment_method_name'] = "Bank Deposit";
+				break;
         }
 
         //Send email to buyer
@@ -1018,7 +1022,8 @@ class Payment extends MY_Controller{
             'dateadded' => $transactionData['dateadded'],
             'buyer_name' => $transactionData['buyer_name'],
             'invoice_no' => $transactionData['invoice_no'],
-            'payment_msg_seller' => $transactionData['payment_msg_seller']
+            'payment_msg_seller' => $transactionData['payment_msg_seller'],
+			'payment_method_name' => $transactionData['payment_method_name']
             );
 
  

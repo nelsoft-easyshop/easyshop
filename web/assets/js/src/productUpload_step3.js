@@ -1,900 +1,1020 @@
-/**
- *
- *  Add location on click - adds new select field for delivery location
- *
- *  Shipping summary mouse events - displays edit and delete buttons for 
- *  location vs price fields in Summary Table
- *
- */
 $(function(){
+    $('#step2_link').on('click', function(){
+        $('#edit_step2').submit();
+    });
 
-  $.modal.defaults.persist = true;
-
-  $('#add_location').on('click',function(){
-    var datacount = $('#shiploc_count').val();
-    $('#shiploc_count').val(+datacount+1);
-    var selecttrnew = $('#shiploc_selectiontbl').find('select[name="shiploc1"]').closest('tr').clone();
-    selecttrnew.find('select[name^="shiploc"]')[0].name = "shiploc"+ (+datacount+1);
-    selecttrnew.find('input[name^="shipprice"]')[0].name = "shipprice"+ (+datacount+1);
-    selecttrnew.append('<td><span class="delete_locrow button">Remove</td>');
-    $('#shiploc_selectiontbl').find('tr:last').before('<tr class="newlocrow">' + selecttrnew.html() + '</tr>');
-    $('.shipping_table2').animate({scrollTop: $('.shipping_table2').prop("scrollHeight")}, 1000);
-  });
-
-  $('#shiploc_selectiontbl').on('click', '.delete_locrow', function(){
-    $(this).closest('tr').remove();
-    var shipLocCount = $('#shiploc_count');
-    var locCount = parseInt(shipLocCount.val());
-    shipLocCount.val(locCount-1);
-  });
-
-  $('#shiploc_selectiontbl, #shipping_summary').on('keyup', '.shipprice', function(e){
-	var price = $.trim($(this).val());
-	var newPrice = price.replace(new RegExp(",", "g"), '');
-	newPrice = parseFloat(newPrice).toFixed(2);
-	
-	if( (e.keyCode == 13 || e.which == 13) && $.isNumeric(newPrice)){
-		$(this).val( ReplaceNumberWithCommas(newPrice) );
-	}else if ( (e.keyCode == 13 || e.which == 13) && !$.isNumeric(newPrice) ) {
-		$(this).val('');
-	}
-  }).on('keypress', '.shipprice', function(e){
-	var code = e.keyCode || e.which;
-	return ( (code>=48 && code<=57) || code === 46 || code === 44 || code===8 || (code>=37 && code<=40) || ((code === 97 || code === 99 || code === 118) && e.ctrlKey) );
-  }).on('blur', '.shipprice', function(){
-	var price = $.trim($(this).val());
-	var newPrice = price.replace(new RegExp(",", "g"), '');
-	newPrice = parseFloat(newPrice).toFixed(2);
-	if( $.isNumeric(newPrice) ){
-		$(this).val( ReplaceNumberWithCommas(newPrice) );
-	}else{
-		$(this).val('');
-	}
-  });
-  
-  
-  /***************		Select all attributes	*************/
-  $('#select_all_attr').on('click', function(){
-	if(this.checked){
-		$('.product_combination').addClass('active');
-	} else {
-		$('.product_combination').removeClass('active');
-	}
-	
-  });
-  
-  
-  /************ Shipping Preferences *********************/
-  $('#shipping_preference').on('click', function(){
-	$('#div_shipping_preference').modal({
-		containerCss:{
-			maxHeight: '500px',
-			maxWidth: '990px'
-		},
-		onShow: function(dialog){
-			$('#import_shipping_preference').on('click', function(){
-				var headId = $('input[name="shipping_preference"]:checked').val();
-				$('tr.newlocrow').remove();
-				$('#shiploc_count').val(1);
-				var i = 1;
-				$.each(shippingPreference[headId], function(locationId,price){
-					$('select[name="shiploc'+i+'"]').val(locationId);
-					$('input[name="shipprice'+i+'"]').val(parseFloat(price).toFixed(2));
-					i++;
-					$('#add_location').trigger('click');
-				});
-				$.modal.close();
-			});
-		},
-		onOpen: function (dialog) {
-			dialog.overlay.fadeIn(250, function () {
-				dialog.container.slideDown(250, function () {
-					dialog.data.fadeIn(250);
-				});
-			});
-		},
-		onClose: function(dialog){
-			dialog.data.fadeOut(200, function () {
-				dialog.container.slideUp(200, function () {
-					dialog.overlay.fadeOut(200, function () {
-						$.modal.close(); 
-					});
-				});
-			});
-		}
-	});
-  });
-  
-  $('#div_shipping_preference').on('mouseover', 'p.ship_pref_option', function(){
-	$(this).children('span.delete_ship_preference').show();
-  })
-  .on('mouseleave', 'p.ship_pref_option', function(){
-	$(this).children('span.delete_ship_preference').hide();
-  });
-	
-  
+    $('#step1_link').on('click', function(){
+        $('#edit_step1').submit();
+    });
+    
+    $.modal.defaults.persist = true;
+    
 });
-/********** CLOSE DOCUMENT READY FUNCTION *********/
 
+$(function(){
+    
+    $('#tabs').tabs();   
+    
+    $('#delivery').on('click',function(){
+        var freeShippingBtn = $('#set_free_shipping');
+        var shippingDetailsBtn = $('#set_shipping_details');
+        
+        if($(this).is(':checked')){
+            $('#delivery_options').slideDown();
+            $('#prod_delivery_cost').val('free');
+        }else{
+            $('#delivery_options').slideUp();
+            $('#prod_delivery_cost').val('off');
+        }
 
-/**
-*
-* This function section contains behavioral functions in creating the summary field.
-* 
-* No data is sent to the server until the submit button is hit
-*
-* fdata - contains final data to be sent to the server
-* displaygroup - temporary object to contain attributes per group(row) in the Shipping Summary Table.
-*              - used to easily identify where to insert location vs price if attr(group) already exists in summary table
-*
+        if(!freeShippingBtn.hasClass('active')){
+            freeShippingBtn.addClass('active');
+        }
+        shippingDetailsBtn.removeClass('active');
+        $('#shipping_div').hide();
+    });
+    
+    $('.delivery_cost').on('click',function(){
+        var shippingDiv = $('#shipping_div');
+        var setShippingDetailsBtn = $('#set_shipping_details');
+        
+        if( $(this).hasClass('active') ){
+            $(this).removeClass('active');
+            $(this).siblings('.delivery_cost').addClass('active');
+        }else{
+            $(this).addClass('active');
+            $(this).siblings('.delivery_cost').removeClass('active');
+        }
+        
+        if( setShippingDetailsBtn.hasClass('active') ){
+            shippingDiv.slideDown();
+            $('#prod_delivery_cost').val('details');
+        }else{
+            shippingDiv.slideUp();
+            $('#prod_delivery_cost').val('free');
+        }
+    });
+    
+    // Activate chosen for select fields and trim nbsp for display purposes
+    $('select.shiploc:not(#shiploc_clone)').chosen({width:"480px"});
+    $('select.shiploc:not(#shiploc_clone)').each(function(){
+        chosenSelectedTrimmer($(this));
+    });
+    
+    
+    $('#shipping_div').on('blur','input.shipprice',function(){
+        var price = $.trim($(this).val());
+        var newPrice = price.replace(new RegExp(",", "g"), '');
+        newPrice = parseFloat(newPrice).toFixed(2);
+        
+        if( $.isNumeric(newPrice) && newPrice >= 0 && !newPrice.match(/[a-zA-Z\+]/) ){
+            $(this).val( ReplaceNumberWithCommas(newPrice) );
+        }else{
+            $(this).val('');
+        }
+    }).on('keyup','input.shipprice',function(e){
+        var price = $.trim($(this).val());
+        var newPrice = price.replace(new RegExp(",", "g"), '');
+        newPrice = parseFloat(newPrice).toFixed(2);
+        
+        if( (e.keyCode == 13 || e.which == 13) && $.isNumeric(newPrice) && newPrice >= 0 && !newPrice.match(/[a-zA-Z\+]/) ){
+            $(this).val( ReplaceNumberWithCommas(newPrice) );
+        }else if ( (e.keyCode == 13 || e.which == 13) && !$.isNumeric(newPrice) ) {
+            $(this).val('');
+        }
+    });
+    
+    $('#shipping_div').on('click', 'input.shipprice,div.chosen-container', function(){
+        if( $(this).hasClass('my_err') ){
+            validateWhiteTextBox($(this));
+        }
+    });
+    
+});
+
+/*
+|	Bank Edit, Save, Update, Cancel, Functions
+*/
+$(document).ready(function(){
+    
+    $('#bank_details').on('click', '.deposit_edit', function(){
+        $('#temp_deposit_acct_name').val($('#deposit_acct_name').val());
+        $('#temp_deposit_acct_no').val($('#deposit_acct_no').val());
+        $('#temp_bank_list').val($('#bank_list').val());
+        $('#temp_bank_name').val($('#bank_name').val());
+
+        $('#deposit_acct_name').attr('readonly', false);
+        $('#deposit_acct_no').attr('readonly', false);
+        $('#bank_list').attr('disabled', false);
+        $('.deposit_edit').hide();
+        $('.deposit_update').show();
+        $('.deposit_cancel').show();
+    });
+    
+    $('#bank_details').on('click', '.deposit_update', function(){
+    
+        var account = {
+            account_name: $('#deposit_acct_name').val(),
+            bank_name: $('#bank_name').val(),
+            account_no: $('#deposit_acct_no').val(),
+            bank_list:  $('#bank_list').val(),
+            billing_id: $('#billing_info_id').val()
+        };
+        
+        var valid = true;
+
+        if($.trim(account.account_name) === ''){
+            validateRedTextBox('#deposit_acct_name');
+            valid = false;
+        }
+        if($.trim(account.account_no) === ''){
+            validateRedTextBox('#deposit_acct_no');
+            valid = false;
+        }
+        if(parseInt(account.bank_list,10) === 0){
+            validateRedTextBox('#bank_list');
+            valid = false;
+        }
+        if(!valid){
+            return false;
+        }
+        
+        var $prod_div = $('.acct_prod[data-bid='+account.billing_id+']');
+        if(typeof $prod_div[0] !== 'undefined'){
+            $prod_div.dialog({
+                modal:true,
+                resizable:false,
+                draggable:false,
+                width:650,
+                height: 400,
+                title: 'Confirm Changes',
+                buttons:{
+                    OK:function(){
+                        $(this).dialog('close');
+                        update_bank_account(account);
+                    },
+                    Cancel:function(){
+                        $(this).dialog('close');
+                    },
+                }
+            });
+        }
+        else{
+            update_bank_account(account);
+        }
+    });
+    
+    function update_bank_account(account){
+            
+        var selected = $('#deposit_info [value="'+account.billing_id+'"]');
+        var csrftoken = $("meta[name='csrf-token']").attr('content');
+        var csrfname = $("meta[name='csrf-name']").attr('content');
+        jQuery.ajax({
+            type: "POST",
+            url: config.base_url + 'memberpage/billing_info_u', 
+            data: "bi_id="+account.billing_id+"&bi_payment_type"+"=Bank&bi_acct_name="+account.account_name+"&bi_acct_no="+account.account_no+"&bi_bank="+account.bank_list+"&"+csrfname+"="+csrftoken, 
+            success: function(response) {
+                var obj = JSON.parse(response);
+                if((parseInt(obj.e,10) == 1) && (obj.d=='success')){
+                    selected.data('bankid',account.bank_list);
+                    selected.data('acctname',account.account_name);
+                    selected.data('acctno',account.account_no);
+                    selected.data('bankname',account.bank_name);
+                    selected.text('Bank: '+account.bank_name+' - '+ account.account_name);
+                    
+                    $('#deposit_acct_name').attr('readonly', true);
+                    $('#deposit_acct_no').attr('readonly', true);
+                    $('#bank_list').attr('disabled', true);
+                    $('.deposit_edit').show();
+                    $('.deposit_update').hide();
+                    $('.deposit_cancel').hide();
+                    
+                    
+                }else if((parseInt(obj.e,10) == 0) && (obj.d=='duplicate')){
+                    alert('You are already using this account number.');
+                }else{
+                    alert('We are having a problem right now. Refresh the page to try again.');
+                }
+            }
+        });
+    }
+    
+    $('#bank_details').on('click', '.deposit_save', function(){
+        var account_name = $('#deposit_acct_name').val();
+        var bank_name = $('#bank_name').val();
+        var account_no = $('#deposit_acct_no').val();
+        var bank_list = $('#bank_list').val();
+        var valid = true;
+        var csrftoken = $("meta[name='csrf-token']").attr('content');
+        var csrfname = $("meta[name='csrf-name']").attr('content');
+        if($.trim(account_name) === ''){
+            validateRedTextBox('#deposit_acct_name');
+            valid = false;
+        }
+        if($.trim(account_no) === ''){
+            validateRedTextBox('#deposit_acct_no');
+            valid = false;
+        }
+        if(parseInt(bank_list,10) === 0){
+            validateRedTextBox('#bank_list');
+            valid = false;
+        }
+        if(!valid){
+            return false;
+        }
+        
+        jQuery.ajax({
+            type: "POST",
+            url: config.base_url + 'memberpage/billing_info', 
+            data: "express=true&bi_payment_type=Bank&bi_bank="+bank_list+"&bi_acct_no="+account_no+"&bi_acct_name="+account_name+"&"+csrfname+"="+csrftoken, 
+            success: function(response) {
+                var obj = JSON.parse(response);
+                if((parseInt(obj.e,10) == 0)&&(obj.d=='duplicate')){
+                    alert('You are already using this account number');					
+                }else if((parseInt(obj.e,10) == 1)&&(obj.d=='success')){
+                    var new_option = $(document.createElement( "option" ));
+                    new_option.data('bankname',bank_name);
+                    new_option.data('bankid',bank_list);
+                    new_option.data('acctname',account_name);
+                    new_option.data('acctno',account_no);
+                    new_option.text('Bank: '+bank_name+' - '+ account_name);
+                    var new_id = parseInt(obj.id,10);
+                    new_option.val(new_id);
+                    new_option.insertBefore($('#deposit_info').find(':selected'));
+                    $('#deposit_info').find(':selected').prop('selected', false);
+                    $('#deposit_info').find('option[value = "'+new_id+'"]').prop('selected', true);
+                    $('#billing_info_id').val(new_id);
+                    $('#deposit_acct_name').attr('readonly', true);
+                    $('#deposit_acct_no').attr('readonly', true);
+                    $('#bank_list').attr('disabled', true);
+                    $('.deposit_edit').show();
+                    $('.deposit_save').hide();
+                    $('.deposit_update').hide();
+                    $('.deposit_cancel').hide();
+                    
+                }else{
+                    alert('Something went wrong. Pleasy try again later.');
+                }
+            }
+        });
+
+    });
+    
+    $('#bank_details').on('click', '.deposit_cancel', function(){
+        $('#deposit_acct_name').val($('#temp_deposit_acct_name').val());
+        $('#deposit_acct_no').val($('#temp_deposit_acct_no').val());
+        $('#bank_list').val($('#temp_bank_list').val());
+        $('#bank_name').val($('#temp_bank_name').val());
+        validateWhiteTextBox('#deposit_acct_name');
+        validateWhiteTextBox('#deposit_acct_no');
+        validateWhiteTextBox('#bank_list');
+        $('#deposit_acct_name').attr('readonly', true);
+        $('#deposit_acct_no').attr('readonly', true);
+        $('#bank_list').attr('disabled', true);
+        $('.deposit_edit').show();
+        $('.deposit_update').hide();
+        $('.deposit_cancel').hide();
+    });
+
+    $('#bank_details').on('change','#deposit_info',function(){
+        $('.deposit_update').hide();
+        $('.deposit_cancel').hide();
+        var selected = $('#deposit_info').find(":selected");
+        $this = $(this);
+        validateWhiteTextBox('#deposit_acct_name');
+        validateWhiteTextBox('#deposit_acct_no');
+        validateWhiteTextBox('#bank_list');
+        
+        if(parseInt(selected.val(),10) !== 0){
+            $('#deposit_acct_name').attr('readonly', true);
+            $('#deposit_acct_no').attr('readonly', true);
+            $('#bank_list').attr('disabled', true);
+            $('#billing_info_id').val( $this.val());
+            $('#deposit_acct_name').val(selected.data('acctname'));
+            $('#deposit_acct_no').val(selected.data('acctno'));
+            $('#bank_name').val(selected.data('bankname'));
+            $('#bank_list').find(':selected').prop('selected', false);
+            $('#bank_list').find('option[value = "'+selected.data('bankid')+'"]').prop('selected', true);
+            $('.deposit_edit').show();
+            $('.deposit_save').hide();
+        }
+        else{
+            $('#deposit_acct_name').val('');
+            $('#deposit_acct_name').attr('readonly', false);
+            $('#deposit_acct_no').val('');
+            $('#deposit_acct_no').attr('readonly', false);
+            $('#billing_info_id').val(0);
+            $('#bank_name').val('');
+            var default_option = $('#bank_list').find('option[value = "0"]');
+            default_option.prop('selected', true);
+            $('#bank_list').attr('disabled', false);
+            $('.deposit_save').show();
+            $('.deposit_edit').hide();
+        }
+    });
+    
+    $('#bank_details').on('change','#bank_list',function(){
+        var selected = $('#bank_list').find(":selected");
+        $('#bank_name').val(selected.text());
+    });
+    
+    $(document).on('keypress',"#deposit_acct_name,#deposit_acct_no",function () {
+        var id = $(this).attr('id');
+        validateWhiteTextBox("#"+id);
+    });
+
+    $(document).on('change',"#bank_list",function () {
+        var id = $(this).attr('id');
+        validateWhiteTextBox("#"+id);
+    });
+    
+});
+
+/*
+|
+|	Shipping Functions
+|
 */
 $(function(){
-	// located in view fdata, displaygroup, locationgroup, islandLookup
-  var divLocWarning = $('#div_locationwarning');
-  var spanLocWarning = $('#location_warning');
-  
-  var spanerror = $('#spanerror');
-  var shiplocselectiontbl = $('#shiploc_selectiontbl');
-  var hasAttr = parseInt($('#has_attr').val());
-  var prdItemId = parseInt($('#product_item_id').val());
-  
-  /**
-   * Add Shipping Details to Summary list on-click event
-   */
-  $('#add_shipping_details').on('click', function(){
-	if(checkIfEdit()){
-		alert('Please accept changes in Summary Table.');
-		return;
-	}
-    var hasActive = hasLoc = hasPrice = hasLP = false;
-    var noDuplicate = true;
-	var shipObj = { 'attr' : {},'loc' : {},'price' : {}, 'disp_attr' : {} };
-    var i = parseInt($('#summaryrowcount').val());
-	
-    //Get Product Attribute Options
-	if(hasAttr === 1){
-		$('.product_combination.active').each(function(){
-		  var attrText = $(this).text();
-		  attrText = attrText.replace(/[^\w\s:]/gi, '||');
-		  attrText = $.trim(attrText.replace(/\r?\n|\r/g, ''));
-		  attrText = attrText.replace(/\s+/g,' ');
-		  shipObj.attr[$(this).val()] = attrText;
-		  shipObj.disp_attr[$(this).val()] = $(this).val();
-		  hasActive = true;
-		});
-	}
-	else if(hasAttr === 0){
-		shipObj.attr[prdItemId] = 'All Combinations';
-		shipObj.disp_attr[prdItemId] = prdItemId.toString();
-		hasActive = true;
-	}
-    
-    //Get Shipping Location Select(s) and corresponding Price
-    $('.shiploc').each(function(){
-      var selopt = $(this).find('option:selected');
-      var price = $(this).parent('td').next('td').children('input[name^="shipprice"]');
-      
-	  hasPrice = $.trim(price.val()) !== '' ? true : false;
-	  hasLoc = selopt.val() != 0 ? true : false;
-	  
-	  if(hasLoc && hasPrice){
-		var priceVal = price.val().replace(new RegExp(",", "g"), '');
-		priceVal = parseFloat(priceVal).toFixed(2);
-		shipObj.price[selopt.val()] = priceVal;
-		shipObj.loc[selopt.val()] = $.trim(selopt.text());
-		hasLP = true;
-	  }
-    });
-
-    //Check for duplicate entry of attr vs location
-    jQuery.each(shipObj.attr, function(attrk,attrv){
-      jQuery.each(shipObj.loc, function(lock, locv){
-        jQuery.each(fdata, function(groupkey,attrObj){
-          if(attrk in attrObj){
-            if(lock in attrObj[attrk]){
-              noDuplicate = false;
-            }
-          }
-        });  
-      });
-    });
-	
-	/*******************	Executed on Complete and non-Duplicate Data	********************************/
-    if(hasActive && hasLP && noDuplicate){
-      var row = $('table#shipping_summary > tbody > tr.cloningfield').clone();
-	  row.removeClass('cloningfield');
-      row.find('td:first').html('');
-      var summaryExists = addDispGroup = false;
-      var groupkey = i;
-
-	  // Determine if new display group / display row will be created
-      if(i !== 0 ){
-        jQuery.each(displaygroup, function(k,shipObjTemp){
-		  if(objectCompare(shipObj.disp_attr, shipObjTemp)){
-              row = $('table#shipping_summary').find('tr[data-group="' + k + '"]');
-              groupkey = k;
-              summaryExists = true;
-              return;
-          }
-        });
-      }
-      else{
-        addDispGroup = true;
-        $('#summaryrowcount').val(+i+1);
-      }
-
-      //Show table and submit button
-      if($('#shipping_summary').hasClass('tablehide')){
-        $('#shipping_summary').removeClass('tablehide');
-        $('#btnShippingDetailsSubmit').removeClass('tablehide');
-      }
-
-      //Display location and price
-      var nesttable = row.find('table.shiplocprice_summary > tbody');
-      var nesttabletr = nesttable.find('tr.cloningfield').clone();
-      nesttabletr.removeClass('cloningfield');
-      jQuery.each(shipObj.loc, function(k,v){
-        nesttabletr.children('td:first').html(v);
-        nesttabletr.children('td:last').hide();
-        var PriceField = nesttabletr.children('td:nth-child(2)');
-        PriceField.attr('data-value', shipObj.price[k]);
-        PriceField.html(ReplaceNumberWithCommas(shipObj.price[k]));
-        nesttable.append('<tr data-idlocation='+k+' data-groupkey='+groupkey+'>'+nesttabletr.html()+'</tr>');
-      });
-
-      //Append new summary details as new row if summary does not exist
-      if(!summaryExists){
-        addDispGroup = true;
-        $('#summaryrowcount').val(+i+1);
-        jQuery.each(shipObj.attr, function(arrkey,rawString){
-			arr = rawString.split('|| ');
-			jQuery.each(arr, function(k,v){
-				if(v !== ''){
-					row.children('td:first').append('<p>' + v + "</p>");
-				}
-			});
-			row.children('td:first').append('<span>&nbsp;</span>');
-        });
-        $('table#shipping_summary').append('<tr class="tr_shipping_summary" data-group="'+i+'">' + row.html() + '</tr>');
-      }
-
-      //Recondition fields and variables
-      $('.shiploc').not('[name="shiploc1"]').each(function(){
-        $(this).closest('tr').remove();
-      });
-      $('.product_combination').each(function(){
-        $(this).removeClass('active');
-      });
-      shiplocselectiontbl.find('select[name="shiploc1"]').val(0);
-      shiplocselectiontbl.find('input[name="shipprice1"]').val('');
-      $('#shiploc_count').val(1);
-      
-      if(!(groupkey in fdata)){
-        fdata[groupkey] = {};
-      }
-
-      //Push data to fdata object - to be sent to server
-      jQuery.each(shipObj.attr, function(attrk, attrv){
-        if(!(attrk in fdata[groupkey])){
-          fdata[groupkey][attrk] = {};
+    $('#cod_btn').on('click',function(){
+        var codinput = $('#allow_cod');
+        var buttonLabel = $(this).find('span.button-label');
+        
+        if($(this).hasClass('active')){
+            $(this).removeClass('active');
+            buttonLabel.text('Allow Cash on Delivery');
+            codinput.val("off");
+        }else{
+            $(this).addClass('active');
+            buttonLabel.text('Cash on Delivery');
+            codinput.val("on");
         }
-        jQuery.each(shipObj.loc, function(lock, locv){
-          if( !( lock in fdata[groupkey][attrk] ) ){
-			fdata[groupkey][attrk][lock] = {};
-		  }
-		  fdata[groupkey][attrk][lock] = shipObj.price[lock];
-		  
-		  if(jQuery.inArray(lock, locationgroup) === -1){
-			locationgroup.push(parseInt(lock));
-		  }
-        });
-      });
+    });
 
-      if(addDispGroup){
-	    displaygroup[i] = shipObj.disp_attr;
-	  }
-      
-	  updateLocationError();
-	  
-	  $('#select_all_attr').attr('checked', false);
-    }//close hasloc hasactive hasprice
-	else{
-		var duperror = '';
-		var alerterror = '';
-		if(!hasActive || !hasLP){
-			alerterror = 'Please specify the following: ';
-			var counter = 0;
-			if(!hasActive){
-				alerterror += '-attribute ';
-				counter++;
-			}
-			if(!hasLoc){
-				alerterror += '-location ';
-				counter++;
-			}
-			if(!hasPrice){
-				alerterror += '-price ';
-				counter++;
-			}
-			for(var i=0;i<counter;i++){
-				if(counter === 1 || i==0){
-					alerterror = alerterror.replace('-', '');
-				}
-				else if( i==counter-1 ){
-					alerterror = alerterror.replace('-', 'and ');
-				}
-				else{
-					alerterror = alerterror.replace('-', ', ');
-				}
-			}
-			alerterror += '<br>';
-		}
-		
-		if(!noDuplicate){
-			duperror = 'Location already used for selected attribute.'
-		}
-		
-		alert(alerterror + duperror);
-		return;
-	}
-  });//close on click of adding ship details to summary
-  
-  
-  // Check Shipping Location if 3 major islands are covered
-  function updateLocationError(){
-	spanLocWarning.html("");
-	var incLocation = false;
-	$.each(islandLookup, function(key,value){
-		if( jQuery.inArray(value,locationgroup) == -1){
-			incLocation = true;
-			switch(value){
-				case 2:
-					spanLocWarning.append('Luzon ');
-					break;
-				case 3:
-					spanLocWarning.append('Visayas ');
-					break;
-				case 4:
-					spanLocWarning.append('Mindanao ');
-					break;
-				default:
-					spanLocWarning.html("");
-					break;
-			}
-		}
-	});
-	if(incLocation){
-		divLocWarning.show();
-	}else{
-		divLocWarning.hide();
-	}
-  }
-  
-  /**
-  * Submit Handler function
-  */
-  $('#btnShippingDetailsSubmit').on('click', function(){
-	
-	if(checkIfEdit()){
-		alert('Please accept changes in Summary Table.');
-		return;
-	}
-	
-	// Check if all attribute combinations have mapped locations
-	// ProductItemId located in view
-	var hasDetail = true;
-	jQuery.each(ProductItemId, function(k,v){
-		if(hasDetail){
-			jQuery.each(displaygroup, function(k2,v2){
-				hasDetail = false;
-				if( displaygroup[k2].hasOwnProperty(v) ){
-					hasDetail = true;
-					return false;
-				}
-			});
-		}		
-	});
-	
-	if(!hasDetail){
-		alert('Please add shipping details for all combinations.');
-		return false;
-	}
-	
-    if(getObjectSize(fdata) > 0){
-	  var csrftoken = $("meta[name='csrf-token']").attr('content');
-      var csrfname = $("meta[name='csrf-name']").attr('content');
-	  //var productitemid = $('#json_id_product_item').val();
-	  var productitemidlist = ProductItemId;
-	  var productid = parseInt($('#prod_h_id').val());
-	  var loadingimg = $(this).siblings('img.loading_img_step3');
-	  var thisbtn = $(this);
-	  
-	  thisbtn.hide();
-	  loadingimg.show();
+    // Add new price and location fields
+    $('#shipping_div').on('click', '.new_shipping_input', function(){
+        var datagroup = $(this).parent().siblings('div.data_group');
+        var clonefield = datagroup.children('div.shipping_input:first').clone();
+        var shippinginputfield = $(this).parent().siblings('.shipping_input_count');
+        var inputkey = parseInt(shippinginputfield.val()) + 1;
+        var groupkey = parseInt($(this).closest('div.shipping_group').data('sgkey'));
+        var removeRow = $('<div class="del_shipping_input col-xs-2"><span class="del_bgs3 glyphicon glyphicon-remove"></span><span>Remove row</span></div>');
+        
+        var disabledOption = datagroup.find('option:selected');
 
-	  $.post(config.base_url+'sell/shippinginfo', {fdata : fdata, csrfname : csrftoken, productitemid : productitemidlist, productid : productid}, function(data){
-		loadingimg.hide();
-        thisbtn.val('Please wait');
-		thisbtn.show();		
-		if(data == 1){
+        var selectClone = $('#shiploc_clone').clone();
+        selectClone.removeAttr('style id');
+        
+        clonefield.find('select.shiploc').remove();
+        clonefield.find('div.chosen-container').remove();
+        clonefield.find('label[for="location"]').after(selectClone);
+        clonefield.find('.upload_chosen').after(removeRow);
+        
+        clonefield.attr('data-sikey',inputkey);
+        clonefield.find('input.shipprice').attr('name',"shipprice["+groupkey+"]["+inputkey+"]").val('');
+        clonefield.find('select.shiploc').attr('name',"shiploc["+groupkey+"]["+inputkey+"][]");
+        
+        // Disable all selected options for this clone based on its sibling selects
+        if(disabledOption.length > 0){
+            disabledOption.each(function(){
+                var disabledVal = parseInt($(this).val());
+                clonefield.find('option[value="'+disabledVal+'"]').attr('disabled',true);
+            });
+        }
+        
+        clonefield.find('select.shiploc').chosen({width:"77%"});
+        
+        datagroup.find('div.attr_border').before(clonefield.show()); //Insert clonefield before this btn
+        shippinginputfield.val(inputkey);
+    });
+    
+    // Add new group
+    $('#shipping_div').on('click', 'div.new_shipping_group', function(){
+        var clonefield = $(this).siblings('div.shipping_group:first').clone();
+        var shippinggroupfield = $(this).siblings('input.shipping_group_count');
+        var inputkey = 0;
+        var groupkey = parseInt(shippinggroupfield.val()) + 1;
+        var removegroup = $('<div class="del_shipping_group wbtn"><div class="btn btn-default"><span class="del_bgs3 glyphicon glyphicon-remove-sign"></span><span>REMOVE GROUP</span></div></div>');
+        
+        var selectClone = $('#shiploc_clone').clone();
+        selectClone.removeAttr('style id');
+        
+        clonefield.find('div.shipping_input:not(:first)').remove();
+        
+        clonefield.find('select.shiploc').remove();
+        clonefield.find('div.chosen-container').remove();
+        clonefield.find('label[for="location"]').after(selectClone);
+        
+        clonefield.attr('data-sgkey',groupkey);
+        clonefield.children('input.shipping_input_count').val(inputkey);
+        
+        clonefield.find('div.shipping_input').attr('data-sikey', inputkey);
+        clonefield.find('input.shipprice').attr('name',"shipprice["+groupkey+"]["+inputkey+"]").val('');
+        clonefield.find('select.shiploc').attr('name',"shiploc["+groupkey+"]["+inputkey+"][]");
+        clonefield.find('input.shipattr').attr('name','shipattr['+groupkey+'][]');
+        clonefield.find('select.shipping_preference').val(0);
+        clonefield.find('.delete_ship_pref').hide();
+        clonefield.find('input.shipattr').prop('checked', true);
+        
+        clonefield.find('select.shiploc').chosen({width:"480px"});
+        
+        clonefield.find('div.button_group div.new_shipping_input').after(removegroup);
+        
+        $(this).before(clonefield.show());
+        shippinggroupfield.val(groupkey);
+    });
+    
+    // Remove Group
+    $('#shipping_div').on('click','div.del_shipping_group', function(){
+        var datagroup = $(this).parent().siblings('div.data_group');
+        var divInput = datagroup.children('div.shipping_input');
+        var selectedOption = divInput.find('option:selected');
+        var divAttr = datagroup.children('div.shipping_attr');
+        var selectedAttr = divAttr.find('input:checked');
+
+        if(selectedOption.length>0){
+            selectedAttr.each(function(){ // Delete selected locations from selected attributes
+                var attrkey = parseInt($(this).val());
+                selectedOption.each(function(){
+                    var loc = parseInt($(this).val());
+                    checkData[attrkey] = $.grep(checkData[attrkey],function(value){
+                        return value != loc;
+                    });
+                });
+            });		
+        }
+        $(this).closest('div.shipping_group').remove();
+        
+        console.log(checkData);
+        
+    });
+    
+    // Remove price and location fields
+    $('#shipping_div').on('click', 'div.del_shipping_input', function(){
+        var divInput = $(this).closest('div.shipping_input');
+        var selectShipLoc = divInput.find('select.shiploc');
+        var divSiblingInput = divInput.siblings('div.shipping_input');
+        
+        var divAttr = divInput.siblings('div.shipping_attr');
+        var selectedAttr = divAttr.find('input:checked');
+        
+        var selectedOption = selectShipLoc.find('option:selected');
+        
+        if(selectedOption.length>0){ //Check for selected options 
+            var siblingSelect = divSiblingInput.find('select.shiploc');
+            selectedOption.each(function(){ // Re enable selected locations in sibling selects
+                var loc = parseInt($(this).val());
+                siblingSelect.find('option[value="'+loc+'"]').attr('disabled',false);
+            });
+            siblingSelect.trigger('chosen:updated');
+            chosenSelectedTrimmer(siblingSelect);
             
-            if(isMobile()){
-                $('#nonmodal_preview').submit();
+            selectedAttr.each(function(){ // Delete selected locations from selected attributes
+                var attrkey = parseInt($(this).val());
+                selectedOption.each(function(){
+                    var loc = parseInt($(this).val());
+                    checkData[attrkey] = $.grep(checkData[attrkey],function(value){
+                        return value != loc;
+                    });
+                });
+            });
+            
+        }
+        
+        // $(this).parent().remove();
+        divInput.remove();
+        console.log(checkData);
+    });
+    
+    // On change handler for select location
+    $('#shipping_div').on('change','select.shiploc',function(evt,params){
+        var thisSelect = $(this);
+        var divInput = thisSelect.closest('div.shipping_input');
+        var divSiblingInput = divInput.siblings('div.shipping_input');
+        var divAttr = divInput.siblings('div.shipping_attr');
+        var selectedAttr = divAttr.find('input:checked');
+        
+        var hasDuplicate = false;
+        
+        for(k in params){
+            var action = k; //selected or deselected
+            var loc = parseInt(params[action]); //location id
+        }
+        
+        if( action === 'selected' ){
+            // Disable selected option in other sister selects
+            if( divSiblingInput.length > 0 ){
+                divSiblingInput.find('option[value="'+loc+'"]').attr('disabled',true);
+                divSiblingInput.find('select.shiploc').trigger('chosen:updated');
+                chosenSelectedTrimmer(divSiblingInput.find('select.shiploc'));
             }
-            else{
-                $.post(config.base_url+'productUpload/previewItem', {p_id: productid, csrfname : csrftoken}, function(data){
-                $('#previewProduct').html(data);
-                $('#tabs').tabs();
-                $('#previewProduct').dialog({
-                    width: 1100,
-                    height: 500,
-                    autoOpen: false,
-                    title: "Review your listing",
-                    modal: true,
-                    closeOnEscape: false,
-                    draggable: false,
-                    buttons: [
-                        {
-                            text: "Edit",
-                            "class": 'orange_btn_preview',
-                            click: function() {
-                                $(this).dialog("close");
-                            }
-                        },
-                        {
-                            text: "Finish",
-                            "class": 'orange_btn_preview',
-                            click: function() {
-                                
-                                var account_name = $('#deposit_acct_name').val();
-                                var bank_name = $('#bank_name').val();
-                                var account_no = $('#deposit_acct_no').val();
-                                var bank_list = $('#bank_list').val();
-                                var prod_billing_id = parseInt($('#prod_billing_id').val(),10);
-                                var cod_only = ((prod_billing_id === 0)&&($('#allow_cashondelivery').is(':checked')))?true:false;
-                                var valid = true;
-                            
-                                if(!cod_only){
-                                    if($.trim(account_name) === ''){
-                                        validateRedTextBox('#deposit_acct_name');
-                                        valid = false;
-                                    }
-                                    if($.trim(account_no) === ''){
-                                        validateRedTextBox('#deposit_acct_no');
-                                        valid = false;
-                                    }
-                                    if(parseInt(bank_list,10) === 0){
-                                        validateRedTextBox('#bank_list');
-                                        valid = false;
-                                    }
-                                    if(!valid){
-                                        return false;
-                                    }
-                                }
-                              
-                                if((prod_billing_id === 0)&&(!cod_only)){
-                                    jQuery.ajax({
-                                        type: "POST",
-                                        url: config.base_url + 'memberpage/billing_info', 
-                                        data: "bi_payment_type=Bank&bi_bank="+bank_list+"&bi_acct_no="+account_no+"&bi_acct_name="+account_name+"&"+csrfname+"="+csrftoken, 
-                                        success: function(response) {
-                                                var obj = JSON.parse(response);
-                                                if((parseInt(obj.e,10) == 1) && (obj.d == 'success')){
-                                                    var new_id = parseInt(obj.id,10);
-                                                    $('#prod_billing_id').val(new_id);
-                                                    $('#step4_form').submit();
-                                                }else if((parseInt(obj.e,10) == 0) && (obj.d == 'duplicate')){
-                                                    alert('You are already using this account number.');
-                                                }else{
-                                                    alert('Something went wrong please try again later.');
-                                                }
-                                            }
-                                    });
-                                }
-                                else{
-                                    $('#step4_form').submit();
-                                }
-                            }
-                        },
-                    ],
-                    show: {
-                        effect: "fade",
-                        duration: 600
-                    },
-                      hide: {
-                        effect: "fade",
-                        duration: 400
+            
+            if( selectedAttr.length > 0 ){ //if attributes are selected
+                selectedAttr.each(function(){ //cycle through each attribute and check for duplicate
+                    var attrkey = parseInt($(this).val());
+                    if( $.inArray(loc,checkData[attrkey]) !== -1 ){ //if location exists for selected attribute
+                        hasDuplicate = true;
+                        return false; //exit .each function
                     }
                 });
-                $('#previewProduct').dialog('open');
+                if( !hasDuplicate ){ //if no duplicate insert in array
+                    selectedAttr.each(function(){
+                        var attrkey = parseInt($(this).val());
+                        checkData[attrkey].push(loc);
+                    });
+                }else{ //else alert and deselect location selected by user
+                    alert('Location already set for selected attribute');
+                    thisSelect.find('option:selected[value="'+loc+'"]').attr('selected', false);
+                    thisSelect.trigger('chosen:updated');
+                }
+            }
+            chosenSelectedTrimmer(thisSelect);
+            
+        }else if( action === 'deselected' ){ // delete location entry from checkData[attrkey]
+            if( divSiblingInput.length > 0 ){
+                divSiblingInput.find('option[value="'+loc+'"]').attr('disabled',false);
+                divSiblingInput.find('select.shiploc').trigger('chosen:updated');
                 
-                $('#prod_billing_id').val( $('#billing_info_id').val());
-                $('#allow_cod').prop('checked', false);
-                $('#btnShippingDetailsSubmit').val('SUBMIT');
-            });
+                // Trim nbsp in option for display purposes
+                divSiblingInput.each(function(){
+                    var siblingChildSelect = $(this).find('select.shiploc');
+                    chosenSelectedTrimmer(siblingChildSelect);
+                });
             }
-		}
-		else if(data == 0){
-			alert('An error was encountered. Please add shipping details for all attribute combinations.');
-		}
-		else if(data == 2){
-			alert('An error was encountered. Database data mismatch!');
-		}
-      });
-    }else{
-		alert('You have no entries in the shipping summary list.');
-	}
-  });
-
-  /**
-   * On change event for Location select field
-   */
-  $('#shiploc_selectiontbl').on('change', '.shiploc', function(){
-    var currval = $(this).find('option:selected').val();
-    var thistr = $(this).closest('tr');
-    var hasDuplicate = false;
-	spanerror.hide();
-	
-	//Check if same location is selected among its select siblings
-    $('.shiploc').not(this).each(function(){
-      var otherval = $(this).find('option:selected').val();
-      if(currval === otherval){
-        hasDuplicate = true;
-        return;
-      }
-    });
-	
-	//Check if location already used for selected attribute
-	if(hasAttr === 1){
-		$('.product_combination.active').each(function(){
-		  var attrk = $(this).val();
-		  jQuery.each(fdata, function(groupkey,attrObj){
-			if(attrk in attrObj){
-			  if(currval in attrObj[attrk]){
-				hasDuplicate = true;
-				return;
-			  }
-			}
-		  });
-		});
-	} else {
-		jQuery.each(fdata, function(groupkey,attrObj){
-			if(prdItemId in attrObj){
-			  if(currval in attrObj[prdItemId]){
-				hasDuplicate = true;
-				return;
-			  }
-			}
-		});
-	}
-    
-    if(hasDuplicate){
-      thistr.find('input[name^="shipprice"]').val('');
-      $(this).val(0);
-	  spanerror.show();
-	  thistr.effect('pulsate', {times:3}, 800);
-    }
-
-  });
-
-  /**
-   * On click event for Attribute Selection
-   */ 
-  $('.product_combination').on('click', function(){
-
-	spanerror.hide();
-
-    if($(this).hasClass('active')){
-      $(this).removeClass('active');
-    }
-    else{
-      var attrk = $(this).val();
-      $(this).addClass('active');
-
-      jQuery.each(fdata, function(groupkey,attrObj){
-        if(attrk in attrObj){
-          $('.shiploc').each(function(){
-            var lock = $(this).find('option:selected').val();
-            var thistr = $(this).closest('tr');
-
-            if(lock in attrObj[attrk]){
-              thistr.find('input[name^="shipprice"]').val('');
-              //thistr.append(spanerror);
-			  spanerror.show();
-			  thistr.effect('pulsate', {times:3}, 800);
-              $(this).val(0);
+            if( selectedAttr.length > 0 ){
+                selectedAttr.each(function(){
+                    var attrkey = parseInt($(this).val());
+                    checkData[attrkey] = jQuery.grep(checkData[attrkey], function(value){
+                        return value != loc;
+                    });
+                });
             }
-          });
         }
-      });
-    }
-
-  });
-
-  /**
-  * Shipping Summary button functions
-  */ 
-  $('#shipping_summary').on('click', '.delete_summaryrow', function(){
-    var group = $(this).closest('tr').attr('data-group');
-	var locationtr = $(this).closest('td').prev('td').find('tr:not(".cloningfield")');
-    $(this).closest('tr').remove();
-    delete fdata[group];
-    delete displaygroup[group];
-	locationtr.each(function(k,v){
-		var remove = parseInt($(v).attr('data-idlocation'));
-		locationgroup = jQuery.grep(locationgroup, function(value){
-			return value != remove;
-		});
-	});
-	updateLocationError();
-    hideTable();
-  })
-  .on('click', '.edit_summaryrow', function(){
-    $(this).hide();
-    $(this).siblings('.edit_del').hide();
-    $(this).siblings('.accept_cancel').show();
-	$(this).closest('tr').addClass('inedit');
-	
-    $(this).parent('td').prev('td').find('tr').each(function(){
-      var PriceField = $(this).find('td:nth-child(2)');
-	  var PriceValue = PriceField.attr('data-value');
-      PriceField.html('<input type="text" class="shipprice" value="'+PriceValue+'">');
-	  $(this).children('td:last').show();
-    });
-  })
-  .on('click', '.accept_summaryrow', function(){
-    var PriceLocRows = $(this).parent('td').prev('td').find('tr:not(".cloningfield")');
-    var isFilled = true;
-
-    PriceLocRows.each(function(){
-      var inputPriceField = $(this).find('td:nth-child(2)').find('input');
-      var newPrice = $.trim(inputPriceField.val()).replace(new RegExp(",", "g"), '');
-	  newPrice = parseFloat(newPrice).toFixed(2);
-	  var selectCourierField = $(this).find('td:nth-child(3)').find('select');
-
-      if(isNaN(newPrice)){
-        inputPriceField.effect('pulsate',{times:3},800);
-        isFilled = false;
-        return;
-      }
-    });
-
-    if(isFilled){
-      $(this).hide();
-      $(this).siblings('.edit_del').show();
-      $(this).siblings('.accept_cancel').hide();
-	  $(this).closest('tr').removeClass('inedit');
-	  
-      PriceLocRows.each(function(){
-        var PriceField = $(this).find('td:nth-child(2)');
-        var newPrice = $.trim(PriceField.find('input').val()).replace(new RegExp(",", "g"), '');
-		newPrice = parseFloat(newPrice).toFixed(2);
-        var groupkey = $(this).attr('data-groupkey');
-        var idlocation = $(this).attr('data-idlocation');
-		
-        PriceField.attr('data-value', newPrice);
-        PriceField.html(ReplaceNumberWithCommas(newPrice));
         
-		$(this).find('td:last').hide();
-		
-        jQuery.each(fdata[groupkey], function(attrk, attrObj){
-		  //attrObj[idlocation]['price'] = newPrice;
-		  attrObj[idlocation] = newPrice;
-        });
-		
-      });
-    }
-  })
-  // Delete button per Location VS Price
-  .on('click', '.delete_priceloc', function(){
-    var parentTr = $(this).closest('tr');
-    var groupkey = parentTr.attr('data-groupkey');
-    var idlocation = parentTr.attr('data-idlocation');
-    jQuery.each(fdata[groupkey], function(attrk, attrObj){
-      delete attrObj[idlocation];
+        console.log(checkData);
     });
-	locationgroup = jQuery.grep(locationgroup, function(value){
-		return value!=idlocation;
-	});
-	updateLocationError();
-    if(parentTr.siblings('tr:not(".cloningfield")').length === 0){
-      parentTr.parent().closest('tr').remove();
-      delete fdata[groupkey];
-      delete displaygroup[groupkey];
-      hideTable();
-      $('.edit_del').show();
-      $('.accept_cancel').hide();
-    }
-    parentTr.remove();
-  });
-
-  /**
-	* Function to hide Summary Table and Submit Button.
-	* Checks if DisplayGroup Object is empty - meaning nothing displayed - before execution
-	*/
-	function hideTable(){
-		if(getObjectSize(displaygroup) === 0){
-		  $('#shipping_summary').addClass('tablehide');
-		  $('#btnShippingDetailsSubmit').addClass('tablehide');
-		  divLocWarning.hide();
-		  spanLocWarning.html("");
-		}
-	}
-  
-  
-	/*
-	 *	Add shipping preferences
-	 */
-    $('#shipping_summary').on('click','.add_ship_preference', function(){
-		var groupkey = $(this).closest('tr.tr_shipping_summary').attr('data-group');
-		var preferenceData = {};
-		var preferenceName = "";
-		var csrftoken = $("meta[name='csrf-token']").attr('content');
-		var csrfname = $("meta[name='csrf-name']").attr('content');
-		
-		// Get location vs price details for first attr array, since data is same for all attr arrays
-		$.each(fdata[groupkey], function(attrk,attrarr){
-			preferenceData = attrarr;
-			return false;
-		});
-		
-		$('#dialog_preference_name').dialog({
-			height: 180,
-			autoOpen: false,
-			title: "Enter Preference name",
-			modal: true,
-			closeOnEscape: false,
-			draggable: false,
-			buttons:[
-				{
-					text: "Ok",
-					click: function(){
-						var namefield = $('#preference_name');
-						var thisdialog = $(this);
-						var cloningfield = $('#div_shipping_preference p.cloningfield');
-						preferenceName = namefield.val();
-						
-						if( ($.trim(preferenceName)).length > 0){
-							$('button.ui-button').attr('disabled',true);
-							namefield.attr('disabled',true);
-							namefield.siblings('img.loading').show();
-							
-							$.post(config.base_url+'productUpload/step3_addPreference',{data:preferenceData, name:preferenceName, csrfname:csrftoken},function(data){
-								namefield.siblings('img.loading').hide();
-								namefield.attr('disabled',false);
-								$('button.ui-button').attr('disabled',false);
-								
-								try{
-									var obj = jQuery.parseJSON(data);	
-								}
-								catch(e){
-									alert('An error was encountered while processing your data. Please try again later.');
-									window.location.reload(true);
-									return false;
-								}
-								
-								if( obj['result'] === 'success' ){
-									// Recreate shippingpreference variable data
-									shippingPreference = obj['shipping_preference'];
-									// Clear preference DIV display									
-									$('#div_shipping_preference div.radio_container').children().not('p.cloningfield').remove();
-									
-									// Create new preference display contents
-									$.each(shippingPreference['name'], function(headId,name){
-										var thisfield = cloningfield.clone();
-										
-										thisfield.removeClass('cloningfield');
-										thisfield.find('input').attr('value', headId);
-										thisfield.find('label').html(name);
-										$('#div_shipping_preference div.radio_container').append(thisfield);
-									});
-								}else{
-									alert(obj['error']);
-								}
-								
-								thisdialog.dialog("close");
-							});
-						} else {
-							namefield.effect('pulsate', {times:3}, 800);
-						}
-					}
-				},
-				{
-					text: "Cancel",
-					click: function(){
-						$(this).dialog("close");
-					}
-				},
-			],
-			close: function(){
-				$('#dialog_preference_name input[name="preference_name"]').val('');
-			}
-		});
-		
-		$('#dialog_preference_name').dialog("open");
-		
-	});
-	
-	/*
-	 *	Delete Shipping Preference
-	 */
-	$('#div_shipping_preference').on('click','.delete_ship_preference',function(){
-		var headId = parseInt($(this).siblings('input[name="shipping_preference"]').val());
-		var csrftoken = $("meta[name='csrf-token']").attr('content');
-		var csrfname = $("meta[name='csrf-name']").attr('content');
-		
-		var thisspan = $(this);
-		
-		var r=confirm("Confirm delete?");
-		if (r==true){
-			$.post(config.base_url+'productUpload/step3_deletePreference', {head:headId, csrfname:csrftoken}, function(data){
-				try{
-					var obj = jQuery.parseJSON(data);	
-				}
-				catch(e){
-					alert('An error was encountered while processing your data. Please try again later.');
-					window.location.reload(true);
-					return false;
-				}
-				
-				if( obj['result'] === 'success' ){
-					if( thisspan.closest('p').siblings('p:not(".cloningfield")').length === 0 ){
-						$('#div_shipping_preference div.radio_container').append('<span><strong>You have no shipping preference entry to display.</strong></span>')
-					}
-					thisspan.closest('p').remove();
-				}else{
-					alert( obj['error'] );
-				}
-			});
-		}
-		
-	});
     
-    
-    
+    // On change handler for checkbox
+    $('#shipping_div').on('change', 'input.shipattr', function(){
+        var thisCheckbox = $(this);
+        var attrkey = parseInt(thisCheckbox.val());
+        
+        var divAttr = thisCheckbox.closest('div.shipping_attr');		
+        var divInput = divAttr.siblings('div.shipping_input');
+        var selectedLoc = divInput.find('option:selected');
+        
+        var hasDuplicate = false;
+        
+        if( thisCheckbox.is(':checked') ){ //if checkbox is checked
+            if( selectedLoc.length > 0 ){ // cycle through each location and check for duplicate
+                selectedLoc.each(function(){
+                    var loc = parseInt($(this).val());
+                    if( $.inArray(loc, checkData[attrkey]) !== -1 ){ // if location exists for selected attr
+                        hasDuplicate = true;
+                        return false;
+                    }
+                });
+                if( !hasDuplicate ){ // if no duplicate insert in array
+                    selectedLoc.each(function(){
+                        var loc = parseInt($(this).val());
+                        checkData[attrkey].push(loc);
+                    });
+                }else{ // if has duplicate, alert and uncheck checked textbox
+                    alert('Location already set for selected attribute');
+                    thisCheckbox.attr('checked',false);
+                }
+            }
+            if( !hasDuplicate ){
+                thisCheckbox.parent('label').addClass('active');
+            }
+        }else{ //if checkbox is unchecked
+            if( selectedLoc.length > 0 ){
+                selectedLoc.each(function(){
+                    var loc = parseInt($(this).val());
+                    checkData[attrkey] = $.grep(checkData[attrkey], function(value){
+                        return value != loc;
+                    });
+                });
+            }
+            thisCheckbox.parent('label').removeClass('active');
+        }
+        
+        
+        console.log(checkData);
+    });
+    console.log(checkData);
 });
-/********** CLOSE DOCUMENT READY FUNCTION WITH DATA variables *********/
+
+
+/****************************************************************************************/
+/************************	Submit Handler	*********************************************/
+/****************************************************************************************/
+$(function(){
+    $('#finish_step3').on('click',function(){
+        var thisbtn = $(this);
+        var form = $('#form_shipping');
+        var data = $(form).serializeArray();
+        var prodDeliveryCost = $('#prod_delivery_cost').val();
+        var shippingGroup = $('#shipping_div div.shipping_group');
+        var inputGroup = $('#shipping_div div.shipping_input');
+        
+        // Check for "Meetup" or "Delivery"
+        var checkedDeliveryOption = form.find('input.delivery_option:checked');
+        if( checkedDeliveryOption.length <= 0){
+            alert('Please select at least one delivery option');
+            return false;
+        }
+        
+        // Check if price and location pair exists for every input group
+        var isIncomplete = false;
+        if(prodDeliveryCost === 'details'){ // if shipping is not free, verify details
+            // Check all rows with data
+            inputGroup.each(function(){
+                var thisgroup = $(this);
+                var priceField = thisgroup.find('input.shipprice');
+                var price = $.trim(priceField.val());
+                var newPrice = price.replace(new RegExp(",", "g"), '');
+                newPrice = parseFloat(newPrice).toFixed(2);
+                
+                var locField = thisgroup.find('select.shiploc');
+                var selectedLoc = locField.find('option:selected');
+                var chosenDiv = locField.siblings('div.chosen-container');
+                
+                // If more than 1 input group, highlight input group with only 1 data (price or loc) provided
+                // All input groups with no price and no location are disregarded both client side and server side
+                if( inputGroup.length > 1 ){
+                    // If price provided with no location, highlight location
+                    if( $.isNumeric(newPrice) && selectedLoc.length === 0 ){
+                        isIncomplete = true;
+                        validateRedTextBox(chosenDiv);
+                    // If location provided with no price, highlight location
+                    }else if( selectedLoc.length > 0 && !$.isNumeric(newPrice) ){
+                        isIncomplete = true;
+                        validateRedTextBox(priceField);
+                    }
+                // If only 1 input group, highlight blank field since it is required
+                }else if ( inputGroup.length === 1 ){
+                    if( !$.isNumeric(newPrice) ){
+                        isIncomplete = true;
+                        validateRedTextBox(priceField);
+                    }
+                    if( selectedLoc.length === 0 ){
+                        isIncomplete = true;
+                        validateRedTextBox(chosenDiv);
+                    }
+                }
+                
+            });
+            
+            //Check if all attributes have indicated locations
+            var incAttr = false;
+            $.each(checkData, function(attrkey,locationArr){
+                if(locationArr.length <= 0){
+                    incAttr = true;
+                    return false;
+                }
+            });
+            if(incAttr){
+                alert("Please provide shipping details for all item properties.");
+                return false;
+            }
+        }
+        
+        // If incomplete, scroll to first error field,
+        if( isIncomplete ){
+            myScrollTo($('.my_err:first'));
+        }
+        // If data is complete, allow posting of data to server
+        else{
+            $.post(config.base_url+"sell/step4", data, function(d){
+                thisbtn.attr('disabled', false);
+                try{
+                    var obj = jQuery.parseJSON(d);
+                }
+                catch(e){
+                    alert('Error submitting your request. Please try again later.');
+                    return false;
+                }
+                
+                if(obj.result === 'success'){
+                    $('#finish_upload_form').submit();
+                }else{
+                    thisbtn.val("Finish");
+                    alert(obj.error);
+                }
+            });
+            
+            thisbtn.val('Saving...');
+            thisbtn.attr('disabled', true);
+        }
+        
+    });
+});
+
+
+/***********************************************************************************/
+/************************	Shipping Preference Functions	************************/
+/***********************************************************************************/
+(function($){
+    /*
+     *	On change handler for select shipping preference
+     */ 
+    $('#shipping_div').on('change', '.shipping_preference', function(){
+        var option = parseInt($(this).children('option:selected').val());
+        var parentDiv = $(this).closest('div.prefsel');
+        var groupDiv = parentDiv.parent('div.shipping_group');
+        var datagroup = parentDiv.siblings('div.data_group');
+        var newInput = parentDiv.siblings('div.button_group').children('div.new_shipping_input');
+        
+        var selectedLocations = groupDiv.find('select.shiploc option:selected');
+        var selectedAttributes = groupDiv.find('input.shipattr:checked');
+        var isDuplicate = false;
+        
+        var delPrefOpt = $(this).siblings('.delete_ship_pref');
+        
+        var siblingGroupDiv = groupDiv.siblings('div.shipping_group');
+        
+        if(option === 0){
+            delPrefOpt.hide();
+            return false;
+        }else{
+            
+            // Perform duplicate check with alert error when more than 1 group is created
+            if( siblingGroupDiv.length > 0 ){
+                // Check if locations in preference selected are already used by selected attributes. If yes, deny usage
+                $.each(shippingPreference[option], function(price,locationArr){
+                    if( !isDuplicate ){
+                        $.each(locationArr, function(k,locationID){
+                            if( !isDuplicate ){
+                                selectedAttributes.each(function(){
+                                    var attrkey = parseInt($(this).val());
+                                    if( jQuery.inArray(locationID, checkData[attrkey]) !== -1 ){
+                                        isDuplicate = true;
+                                    }
+                                });
+                            }else{
+                                return false;
+                            }
+                        });
+                    }else{
+                        return false;
+                    }
+                });
+                
+                // If duplicate is found, exit this function and set select option to default
+                if( isDuplicate ){
+                    $(this).val(0);
+                    alert("Locations from selected preference are already in use by selected attributes.");
+                    delPrefOpt.hide();
+                    return false;
+                }
+            }
+            
+            // Show Delete option
+            delPrefOpt.show();
+            
+            // Remove all currently selected locations from checked attributes from checkData
+            if(selectedLocations.length > 0){
+                selectedAttributes.each(function(){
+                    var attrkey = parseInt($(this).val());
+                    selectedLocations.each(function(){
+                        var lockey = parseInt($(this).val());
+                        checkData[attrkey] = $.grep(checkData[attrkey],function(value){
+                            return value != lockey;
+                        });
+                    });
+                });
+            }
+            
+            // Remove input fields except first for cloning
+            datagroup.children('div.shipping_input:not(:first)').remove();
+            
+            var i = 0;
+            newInput.trigger('click'); // Triggers cloning
+            datagroup.find('option:selected').attr('selected',false);
+            datagroup.find('option:disabled').attr('disabled',false);
+            datagroup.find('select.shiploc').trigger('chosen:updated');
+            datagroup.children('div.shipping_input:first').remove(); // Remove first input field
+            datagroup.find('div.shipping_input:first div.del_shipping_input').remove(); // Remove "remove row" option
+            var firstLocField = datagroup.children('div.shipping_input:eq(0)').find('select.shiploc'); // Re-define first location field
+            
+            // Assign values to select.shiploc fields
+            $.each(shippingPreference[option], function(price,locationArr){
+                if( i !== 0 ){
+                    newInput.trigger('click');
+                }
+                var inputDiv = datagroup.children('div.shipping_input:eq('+i+')');
+                var priceField = inputDiv.find('input.shipprice');
+                var locField = inputDiv.find('select.shiploc');
+                
+                priceField.val(price);
+                
+                $.each(locationArr, function(k,locationID){
+                    // Push locations from preference to selected attributes
+                    selectedAttributes.each(function(){
+                        var attrkey = parseInt($(this).val());
+                        checkData[attrkey].push(locationID);
+                    });
+                    // Select location on select element
+                    locField.find('option[value="'+locationID+'"]').prop('selected', true);
+                    if( i!==0 ){
+                        firstLocField.find('option[value="'+locationID+'"]').attr('disabled',true);
+                        firstLocField.trigger('chosen:updated');
+                        chosenSelectedTrimmer(firstLocField);
+                    }
+                });
+                locField.trigger('chosen:updated');
+                chosenSelectedTrimmer(locField);
+                i++;
+            });
+        }
+        console.log(checkData);
+    }); 
+    
+    /*
+     *	Add shipping preferences
+     */
+    $('#shipping_div').on('click','.add_ship_preference', function(){
+        var isIncomplete = false;
+        var preferenceData = {};
+        var preferenceName = "";
+        var csrftoken = $("meta[name='csrf-token']").attr('content');
+        var csrfname = $("meta[name='csrf-name']").attr('content');
+        
+        // Get location vs price details for first attr array, since data is same for all attr arrays
+        var inputDiv = $(this).parent().siblings('div.data_group').children('div.shipping_input');
+        
+        inputDiv.each(function(){
+            var priceField = $(this).find('input.shipprice');
+            var locField = $(this).find('select.shiploc');
+            var price = $.trim($(this).find('input.shipprice').val());
+            var newPrice = price.replace(new RegExp(",", "g"), '');
+            newPrice = parseFloat(newPrice).toFixed(2);
+            var locArr = $(this).find('select.shiploc option:selected');
+            
+            if( $.isNumeric(newPrice) && locArr.length > 0 ){
+                locArr.each(function(){
+                    var locID = parseInt($(this).val());
+                    preferenceData[locID] = newPrice;
+                });
+            }else{
+                isIncomplete = true;
+                preferenceData = {};
+                if( !$.isNumeric(newPrice) ){
+                    validateRedTextBox(priceField);
+                }
+                if( locArr.length === 0 ){
+                    validateRedTextBox(locField);
+                }
+                myScrollTo($(this).find('.my_err:first'));
+                return false;
+            }
+        });
+        
+        if( !isIncomplete ){
+            $('#dialog_preference_name').dialog({
+                height: 180,
+                autoOpen: false,
+                title: "Enter Preference name",
+                modal: true,
+                closeOnEscape: false,
+                draggable: false,
+                buttons:[
+                    {
+                        text: "Ok",
+                        click: function(){
+                            var namefield = $('#preference_name');
+                            var thisdialog = $(this);
+                            preferenceName = namefield.val();
+                            
+                            if( ($.trim(preferenceName)).length > 0){
+                                $('button.ui-button').attr('disabled',true);
+                                namefield.attr('disabled',true);
+                                namefield.siblings('img.loading').show();
+                                
+                                $.post(config.base_url+'productUpload/step3_addPreference',{data:preferenceData, name:preferenceName, csrfname:csrftoken},function(data){
+                                    namefield.siblings('img.loading').hide();
+                                    namefield.attr('disabled',false);
+                                    $('button.ui-button').attr('disabled',false);
+                                    
+                                    try{
+                                        var obj = jQuery.parseJSON(data);	
+                                    }
+                                    catch(e){
+                                        alert('An error was encountered while processing your data. Please try again later.');
+                                        window.location.reload(true);
+                                        return false;
+                                    }
+                                    
+                                    if( obj['result'] === 'success' ){
+                                        // Recreate shippingpreference variable data
+                                        shippingPreference = obj['shipping_preference'];
+                                        //Create new list for shipping preferences
+                                        var prefSelect = $('select.shipping_preference');
+                                        
+                                        prefSelect.each(function(){
+                                            var thisSelect = $(this);
+                                            thisSelect.children('option:not(:first)').remove();
+                                            // Create new preference display contents
+                                            $.each(shippingPreference['name'], function(headId,name){
+                                                thisSelect.append('<option value="'+headId+'">'+name+'</option>');
+                                            });
+                                        });
+                                    }else{
+                                        alert(obj['error']);
+                                    }
+                                    thisdialog.dialog("close");
+                                });
+                            } else {
+                                namefield.effect('pulsate', {times:3}, 800);
+                            }
+                        }
+                    },
+                    {
+                        text: "Cancel",
+                        click: function(){
+                            $(this).dialog("close");
+                        }
+                    },
+                ],
+                close: function(){
+                    $('#dialog_preference_name input[name="preference_name"]').val('');
+                }
+            });
+            $('#dialog_preference_name').dialog("open");
+        }
+    });
+    
+    /*
+     *	Delete Shipping Preference
+     */
+     $('#shipping_div').on('click','.delete_ship_pref', function(){
+        var allSelect = $('select.shipping_preference');
+        var siblingSelect = $(this).siblings('select.shipping_preference');
+        var headId = parseInt(siblingSelect.val());
+        var csrftoken = $("meta[name='csrf-token']").attr('content');
+        var csrfname = $("meta[name='csrf-name']").attr('content');
+        
+        var thisspan = $(this);
+        
+        var r=confirm("Confirm delete?");
+        if (r==true){
+            $.post(config.base_url+'productUpload/step3_deletePreference', {head:headId, csrfname:csrftoken}, function(data){
+                try{
+                    var obj = jQuery.parseJSON(data);	
+                }
+                catch(e){
+                    alert('An error was encountered while processing your data. Please try again later.');
+                    window.location.reload(true);
+                    return false;
+                }
+                
+                if( obj['result'] === 'success' ){				
+                    // Check each select and hide delete button when headId is selected (then is removed)
+                    allSelect.each(function(){
+                        selectedVal = parseInt($(this).val());
+                        console.log(selectedVal);
+                        if( selectedVal === headId ){
+                            $(this).siblings('.delete_ship_pref').hide();
+                        }
+                    });
+                    
+                    allSelect.find('option[value="'+headId+'"]').remove();
+                    siblingSelect.val(0);
+                    thisspan.hide();
+                    
+                }else{
+                    alert( obj['error'] );
+                }
+            });
+        }
+     });
+     
+})(window.jQuery);
+
 
 /**
- * Compares if two objects are identical
+ *	Function to scroll to desired element
  */
-function objectCompare(o1, o2){
-  for(var p in o1){
-    if(o1[p] !== o2[p]){
-      return false;
-    }
-  }
-  for(var p in o2){
-    if(o1[p] !== o2[p]){
-      return false;
-    }
-  }
-  return true;
+function myScrollTo(scrollTo){	
+    $('html, body').animate({
+        scrollTop: scrollTo.offset().top - scrollTo.offset().top * 0.05
+    });
 }
-
+ 
+ 
 /**
- * Get object size
- */
-function getObjectSize(obj) {
-    var len = 0, key;
-    for (key in obj) {
-        if (obj.hasOwnProperty(key)) len++;
-    }
-    return len;
-};
-
-/**
- *	Check if any field in summary table is in edit mode
- */
-function checkIfEdit(){
-	var hasEdit = false;
-	$('#shipping_summary').find('tr.tr_shipping_summary').each(function(){
-		if( $(this).hasClass('inedit') ){
-			hasEdit = true;
-			return;
-		}
-	});
-	return hasEdit;
+  *	Function to fix display of chosen. removes nbsp for display purposes
+  */ 
+function chosenSelectedTrimmer(selectObj){
+    var selectedSpan = selectObj.siblings('div.chosen-container').find('.search-choice span');
+    
+    selectedSpan.each(function(){
+        var origtext = $(this).text();
+        var newtext = $.trim(origtext);
+    
+        $(this).text(newtext);
+    });
 }
 
 /**
@@ -909,76 +1029,19 @@ function ReplaceNumberWithCommas(thisnumber){
     return n.join(".");
 }
 
+function validateRedTextBox(idclass)
+{
+  $(idclass).css({"-webkit-box-shadow": "0px 0px 2px 2px #FF0000",
+    "-moz-box-shadow": "0px 0px 2px 2px #FF0000",
+    "box-shadow": "0px 0px 2px 2px #FF0000"}).addClass('my_err');
+} 
 
-    
-$(function(){
-    $('#step2_link').on('click', function(){
-        $('#edit_step2').submit();
-    });
-    
-    $('#step1_link').on('click', function(){
-        $('#edit_step1').submit();
-    });
-});
-
-
-/*
- *	Step 3 tooltip / tutorial section
- */
-$(function(){
-
-	$('#div_tutShippingLoc .paging:not(:first)').hide();
-	
-	$('#tutShippingLoc').on('click',function(){
-		$('#div_tutShippingLoc').modal({
-			onShow: function(){
-				var modal = this;
-				$('#paging_tutShippingLoc').jqPagination({
-					paged: function(page) {
-						$('#div_tutShippingLoc .paging').hide();
-						$($('#div_tutShippingLoc .paging')[page - 1]).show();
-						modal.setPosition();
-					},
-					page_string:'{current_page} of {max_page}'
-				});
-				$('#paging_tutShippingLoc').jqPagination('option', 'current_page', 1);
-			},
-            onOpen: function (dialog) {
-                dialog.overlay.fadeIn(250, function () {
-                    dialog.container.slideDown(250, function () {
-                        dialog.data.fadeIn(250);
-                    });
-                });
-            },
-			onClose: function(dialog){
-				$('#paging_tutShippingLoc').jqPagination('destroy');
-				dialog.data.fadeOut(200, function () {
-                    dialog.container.slideUp(200, function () {
-                        dialog.overlay.fadeOut(200, function () {
-                            $.modal.close(); 
-                        });
-                    });
-                });
-			}
-		});
-	});
-});
-
-
-
-
-
-function isMobile(){
-
-    if(screen.width < 500 ||
-     navigator.userAgent.match(/Android/i) ||
-     navigator.userAgent.match(/webOS/i) ||
-     navigator.userAgent.match(/iPhone/i) ||
-     navigator.userAgent.match(/iPod/i) ||
-     navigator.userAgent.match(/iPad/i)){
-        return true;
-     }
-     else{
-        return false;
-     }
-}
+function validateWhiteTextBox(idclass)
+{/*
+  $(idclass).css({"-webkit-box-shadow": "0px 0px 2px 2px #FFFFFF",
+    "-moz-box-shadow": "0px 0px 2px 2px #FFFFFF",
+    "box-shadow": "0px 0px 2px 2px #FFFFFF"}).removeClass('my_err');*/
+    $(idclass).css({"-webkit-box-shadow": "none",
+        "-moz-box-shadow": "none",
+        "box-shadow": "none"}).removeClass('my_err');
+};

@@ -4,9 +4,9 @@
     /*width: 990px !important;*/
 	background-color:#fff;
 	padding: 10px;
-	left: 12.6% !important;
+/*	left: 12.6% !important;*/
 	/*max-height: inherit !important;*/
-	width: auto !important;
+	/*width: auto !important;*/
 	top: 8% !important;
 }
 
@@ -51,9 +51,9 @@
 .p_cent {
     right: 360px;
 }
-div.inner_seller_product_content > h2{
+/*div.inner_seller_product_content > h2{
 	display: inline;
-}
+}*/
 
 #tutShippingLoc > img{
 	vertical-align: middle;

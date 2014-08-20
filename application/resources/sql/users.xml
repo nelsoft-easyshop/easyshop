@@ -2,344 +2,349 @@
 <map>
 
 <select id="user_logout">
-	CALL `es_sp_Logout_user`(:user_session , :id_member)
+    CALL `es_sp_Logout_user`(:user_session , :id_member)
 </select>
-	
+    
 <select id="user_login">
-	CALL `es_sp_Login_user`(:username ,:password, :ip)
+    CALL `es_sp_Login_user`(:username ,:password, :ip)
 </select>
-	
+    
 <select id="changepass">
-	CALL `es_sp_ChangePass_User`(:username, :cur_password, :password)
+    CALL `es_sp_ChangePass_User`(:username, :cur_password, :password)
 </select>
 
 <select id="forgotpass">
-	CALL `es_sp_ForgotPass_User`(:username, :password)
+    CALL `es_sp_ForgotPass_User`(:username, :password)
 </select>
 
 <select id="getUserName">
-	SELECT username from `es_member` WHERE `id_member` = :id
+    SELECT username from `es_member` WHERE `id_member` = :id
 </select>
 
 <select id="getUserID">
-	SELECT id_member from `es_member` where username = :username
+    SELECT id_member from `es_member` where username = :username
 </select>
 
 <!-- CHECK if email already used -->
 <select id="getEmail">
-	SELECT id_member, username FROM `es_member` WHERE email = :email LIMIT 1;
+    SELECT id_member, username FROM `es_member` WHERE email = :email LIMIT 1;
 </select>
 
 <!-- CHECK if mobile is already used -->
 <select id="getMobile">
-	SELECT id_member, username FROM `es_member` WHERE contactno = :contactno LIMIT 1;
+    SELECT id_member, username FROM `es_member` WHERE contactno = :contactno LIMIT 1;
 </select>
 
-<!-- Used for vendor details and username check- memberpage -->
+<!-- Used during registration. Checks for both username and slug fields in es_member -->
+<select id="getUsernameOrSlug">
+    SELECT id_member FROM `es_member` WHERE username = :username OR slug = :username;
+</select>
+
 <select id="get_member_by_username">
-	SELECT m.id_member, m.username, m.contactno, m.email, a.stateregion, a.city, l1.location as stateregionname, l2.location as cityname, DATE_FORMAT(datecreated, "%M %Y") as datecreated, store_desc
-	FROM es_member m
-	LEFT JOIN es_address a on m.id_member = a.id_member AND a.type=0
-	LEFT JOIN es_location_lookup l1 ON a.stateregion =  l1.id_location
-	LEFT JOIN es_location_lookup l2 ON a.city = l2.id_location
-	where m.username=:username
+    SELECT m.id_member, m.username, m.contactno, m.email, a.stateregion, a.city, l1.location as stateregionname, l2.location as cityname, DATE_FORMAT(datecreated, "%M %Y") as datecreated, store_desc
+    FROM es_member m
+    LEFT JOIN es_address a on m.id_member = a.id_member AND a.type=0
+    LEFT JOIN es_location_lookup l1 ON a.stateregion =  l1.id_location
+    LEFT JOIN es_location_lookup l2 ON a.city = l2.id_location
+    where m.username=:username
 </select>
 
 <select id="getUserAccessDetails">
-	SELECT id_member, username, is_contactno_verify, is_email_verify, is_admin
-	FROM es_member
-	WHERE id_member = :id
+    SELECT id_member, username, is_contactno_verify, is_email_verify, is_admin
+    FROM es_member
+    WHERE id_member = :id
 </select>
 
 <select id="getUserRating">
-	SELECT rating1, rating2, rating3
-	FROM es_member_feedback
-	WHERE for_memberid = :id
+    SELECT rating1, rating2, rating3
+    FROM es_member_feedback
+    WHERE for_memberid = :id
 </select>
 
 <select id="signup_member">
-	CALL `es_sp_Signup_user` (:username, :password, :contactno, :email)
+    CALL `es_sp_Signup_user` (:username, :password, :contactno, :email)
 </select>
 
 <select id="check_contactinfo">
-	SELECT id_member, contactno, email
-	FROM es_member
-	WHERE (contactno = :contactno OR email = :email)
-		AND id_member != :member_id
+    SELECT id_member, contactno, email
+    FROM es_member
+    WHERE (contactno = :contactno OR email = :email)
+        AND id_member != :member_id
 </select>
 
 <select id="store_verifcode">
-	CALL `es_sp_storeVerifcode` (:member_id, :emailcode, :mobilecode, :mobile, :email)
+    CALL `es_sp_storeVerifcode` (:member_id, :emailcode, :mobilecode, :mobile, :email)
 </select>
 
 <select id="get_verifcode">
-	SELECT v.member_id, m.username, m.email, m.is_email_verify, v.emailcode, m.contactno, v.mobilecode, v.emailcount, v.mobilecount, TIMESTAMPDIFF(MINUTE, v.`date`,NOW()) as time
-	FROM es_verifcode v
-	LEFT JOIN  es_member m
-	ON m.id_member = v.member_id 
-	WHERE v.member_id = :member_id
+    SELECT v.member_id, m.username, m.email, m.is_email_verify, v.emailcode, m.contactno, v.mobilecode, v.emailcount, v.mobilecount, TIMESTAMPDIFF(MINUTE, v.`date`,NOW()) as time
+    FROM es_verifcode v
+    LEFT JOIN  es_member m
+    ON m.id_member = v.member_id 
+    WHERE v.member_id = :member_id
 </select>
 
 <select id="update_mobileverif_status">
-	UPDATE es_member
-	SET is_contactno_verify = :is_contactno_verify
-	WHERE id_member = :member_id
+    UPDATE es_member
+    SET is_contactno_verify = :is_contactno_verify
+    WHERE id_member = :member_id
 </select>
 
 <select id="update_emailverif_status">
-	UPDATE es_member
-	SET is_email_verify = :is_email_verify
-	WHERE id_member = :member_id
+    UPDATE es_member
+    SET is_email_verify = :is_email_verify
+    WHERE id_member = :member_id
 </select>
 
 <select id="getLocationLookup">
-	SELECT id_location, parent_id, location, type
-	FROM es_location_lookup
-	WHERE type = 0 OR type = 3 OR type = 4
-	ORDER BY location asc
+    SELECT id_location, parent_id, location, type
+    FROM es_location_lookup
+    WHERE type = 0 OR type = 3 OR type = 4
+    ORDER BY location asc
 </select>
 
 
 <select id="get_member">
-	SELECT m.`id_member`,m.username, m.`nickname`, m.`fullname`, m.`gender`, m.`birthday`, IF(m.contactno = '','',CONCAT('0', m.contactno)) as contactno , m.is_contactno_verify, m.email, m.is_email_verify,
-	a0.stateregion as stateregionID, a0.city as cityID, a1.stateregion as c_stateregionID, a1.city as c_cityID,
-	COALESCE(loc0.location,'') as stateregion, COALESCE(loc1.location, '') as city, COALESCE(a0.address,'') as address,
-	a1.consignee, IF(a1.mobile = '','',CONCAT('0', a1.mobile)) as c_mobile, a1.telephone as c_telephone,
-	COALESCE(loc2.location, '') as c_stateregion, COALESCE(loc3.location,'') as c_city, COALESCE(a1.address, '') as c_address,
-	COALESCE(a0.lat, 0) as lat, COALESCE(a0.lng, 0) as lng, COALESCE(a1.lat, 0) as c_lat, COALESCE(a1.lng, 0) as c_lng
-	FROM es_member m
-	LEFT JOIN es_address a0 ON m.id_member=a0.id_member AND a0.`type`=0
-	LEFT JOIN es_address a1 ON m.id_member=a1.id_member AND a1.`type`=1
-	LEFT JOIN es_location_lookup loc0 ON a0.stateregion = loc0.id_location AND loc0.type = 3
-	LEFT JOIN es_location_lookup loc1 ON a0.city = loc1.id_location AND loc1.type = 4
-	LEFT JOIN es_location_lookup loc2 ON a1.stateregion = loc2.id_location AND loc2.type = 3
-	LEFT JOIN es_location_lookup loc3 ON a1.city = loc3.id_location AND loc3.type = 4
-	where m.id_member=:id_member
+    SELECT m.`id_member`,m.username, m.`nickname`, m.`fullname`, m.`gender`, m.`birthday`, IF(m.contactno = '','',CONCAT('0', m.contactno)) as contactno , m.is_contactno_verify, m.email, m.is_email_verify,
+    a0.stateregion as stateregionID, a0.city as cityID, a1.stateregion as c_stateregionID, a1.city as c_cityID,
+    COALESCE(loc0.location,'') as stateregion, COALESCE(loc1.location, '') as city, COALESCE(a0.address,'') as address,
+    a1.consignee, IF(a1.mobile = '','',CONCAT('0', a1.mobile)) as c_mobile, a1.telephone as c_telephone,
+    COALESCE(loc2.location, '') as c_stateregion, COALESCE(loc3.location,'') as c_city, COALESCE(a1.address, '') as c_address,
+    COALESCE(a0.lat, 0) as lat, COALESCE(a0.lng, 0) as lng, COALESCE(a1.lat, 0) as c_lat, COALESCE(a1.lng, 0) as c_lng,
+    m.slug as userslug
+    FROM es_member m
+    LEFT JOIN es_address a0 ON m.id_member=a0.id_member AND a0.`type`=0
+    LEFT JOIN es_address a1 ON m.id_member=a1.id_member AND a1.`type`=1
+    LEFT JOIN es_location_lookup loc0 ON a0.stateregion = loc0.id_location AND loc0.type = 3
+    LEFT JOIN es_location_lookup loc1 ON a0.city = loc1.id_location AND loc1.type = 4
+    LEFT JOIN es_location_lookup loc2 ON a1.stateregion = loc2.id_location AND loc2.type = 3
+    LEFT JOIN es_location_lookup loc3 ON a1.city = loc3.id_location AND loc3.type = 4
+    where m.id_member=:id_member
 </select>
 
 
 <select id="get_school">
-	SELECT 
-	COALESCE(s.`schoolname`,'') as `schoolname`, COALESCE(s.`year`,'') as `schoolyear`,COALESCE(s.`level`,'') as `schoollevel`,
-	COALESCE(s.`count`,'') as `schoolcount` 
-	FROM es_school s 
-	WHERE id_member=:id_member
+    SELECT 
+    COALESCE(s.`schoolname`,'') as `schoolname`, COALESCE(s.`year`,'') as `schoolyear`,COALESCE(s.`level`,'') as `schoollevel`,
+    COALESCE(s.`count`,'') as `schoolcount` 
+    FROM es_school s 
+    WHERE id_member=:id_member
 </select>
 
 <select id="get_work">
-		SELECT
-		COALESCE(w.`companyname`, '') as companyname, COALESCE(w.`designation`, '') as designation, COALESCE(w.`year`, '') as `year`, COALESCE(w.`count`,'') as `count`
-		FROM es_work w
-		WHERE w.id_member = :id_member
+        SELECT
+        COALESCE(w.`companyname`, '') as companyname, COALESCE(w.`designation`, '') as designation, COALESCE(w.`year`, '') as `year`, COALESCE(w.`count`,'') as `count`
+        FROM es_work w
+        WHERE w.id_member = :id_member
 </select>
 
 <select id="edit_member">
-	UPDATE es_member set fullname=:fullname, nickname=:nickname,gender = :gender,birthday = :birthday, contactno = :contactno, email = :email, is_contactno_verify = :is_contactno_verify, is_email_verify = :is_email_verify, lastmodifieddate = NOW()
-	WHERE id_member = :id_member
+    UPDATE es_member set fullname=:fullname, nickname=:nickname,gender = :gender,birthday = :birthday, contactno = :contactno, email = :email, is_contactno_verify = :is_contactno_verify, is_email_verify = :is_email_verify, lastmodifieddate = NOW()
+    WHERE id_member = :id_member
 </select>
 
 <select id="getAddress">
-	SELECT `id_address` FROM `es_address` WHERE `id_member` = :member_id and `type` = :type
+    SELECT `id_address` FROM `es_address` WHERE `id_member` = :member_id and `type` = :type
 </select>
 
 <select id="insertAddress">
-	INSERT INTO `es_address` (`id_member`, `stateregion`, `city`, `address`, `country`, `type`, `telephone`, `mobile`, `consignee`, `lat`, `lng`) 
-	VALUES (:id_member,:stateregion,:city,:address,:country, :type, :telephone, :mobile, :consignee, :lat, :lng)
+    INSERT INTO `es_address` (`id_member`, `stateregion`, `city`, `address`, `country`, `type`, `telephone`, `mobile`, `consignee`, `lat`, `lng`) 
+    VALUES (:id_member,:stateregion,:city,:address,:country, :type, :telephone, :mobile, :consignee, :lat, :lng)
 </select>
 
 <select id="updateAddress">
-	UPDATE `es_address`
-	SET stateregion=:stateregion,city=:city,address=:address,country = :country,telephone=:telephone,mobile=:mobile,consignee=:consignee,lat=:lat,lng=:lng
-	WHERE `id_address` = :id_address AND `id_member` = :id_member AND `type` = :type
+    UPDATE `es_address`
+    SET stateregion=:stateregion,city=:city,address=:address,country = :country,telephone=:telephone,mobile=:mobile,consignee=:consignee,lat=:lat,lng=:lng
+    WHERE `id_address` = :id_address AND `id_member` = :id_member AND `type` = :type
 </select>
 
 <!--
 <select id="edit_address">
-	INSERT INTO `es_address` (`id_member`, `stateregion`, `city`, `address`, `country`, `type`, `telephone`, `mobile`, `consignee`, `lat`, `lng`) 
-	VALUES (:id_member,:stateregion,:city,:address,:country, :type, :telephone, :mobile, :consignee, :lat, :lng)
-	ON DUPLICATE KEY UPDATE stateregion=:stateregion,city=:city,address=:address,country = :country,telephone=:telephone,mobile=:mobile,consignee=:consignee,lat=:lat,lng=:lng
+    INSERT INTO `es_address` (`id_member`, `stateregion`, `city`, `address`, `country`, `type`, `telephone`, `mobile`, `consignee`, `lat`, `lng`) 
+    VALUES (:id_member,:stateregion,:city,:address,:country, :type, :telephone, :mobile, :consignee, :lat, :lng)
+    ON DUPLICATE KEY UPDATE stateregion=:stateregion,city=:city,address=:address,country = :country,telephone=:telephone,mobile=:mobile,consignee=:consignee,lat=:lat,lng=:lng
 </select>
 -->
 
 <select id="edit_school">
-	INSERT INTO `es_school`(`id_member`, `schoolname`, `year`, `level`, `count`) 
-	VALUES (:id_member, :schoolname, :year, :level, :school_count) 
-	ON DUPLICATE KEY UPDATE `schoolname` = :schoolname, `year` = :year, `level` = :level;
+    INSERT INTO `es_school`(`id_member`, `schoolname`, `year`, `level`, `count`) 
+    VALUES (:id_member, :schoolname, :year, :level, :school_count) 
+    ON DUPLICATE KEY UPDATE `schoolname` = :schoolname, `year` = :year, `level` = :level;
 </select>
 
 <select id="edit_work">
-	INSERT INTO `es_work` (`id_member`, `companyname`, `designation`, `year`, `count`)
-	VALUES (:id_member, :companyname, :designation, :year, :count)
-	ON DUPLICATE KEY UPDATE companyname = :companyname, designation = :designation, year = :year
+    INSERT INTO `es_work` (`id_member`, `companyname`, `designation`, `year`, `count`)
+    VALUES (:id_member, :companyname, :designation, :year, :count)
+    ON DUPLICATE KEY UPDATE companyname = :companyname, designation = :designation, year = :year
 </select>
 
 <select id="delete_address">
-	DELETE from es_address
-	WHERE id_member = :id AND type = 0
+    DELETE from es_address
+    WHERE id_member = :id AND type = 0
 </select>
 
 <select id="delete_school">
-	DELETE from es_school
-	WHERE id_member = :id
+    DELETE from es_school
+    WHERE id_member = :id
 </select>
 
 <select id="delete_work">
-	DELETE from es_work
-	WHERE id_member = :id
+    DELETE from es_work
+    WHERE id_member = :id
 </select>
 
 <select id="update_imgurl">
-	UPDATE `es_member` set `imgurl`=:path WHERE `id_member` = :id_member
+    UPDATE `es_member` set `imgurl`=:path WHERE `id_member` = :id_member
 </select>
 
 <select id="get_image">
-	SELECT `imgurl`, `id_member`, `username` FROM `es_member` WHERE `id_member` = :id
+    SELECT `imgurl`, `id_member`, `username` FROM `es_member` WHERE `id_member` = :id
 </select>
-	
-	
+    
+    
 <select id="store_cookie_keeplogin">
-	CALL `es_sp_CreateCookie_Keeplogin` (:id_member, :ip, :useragent, :usersession)
+    CALL `es_sp_CreateCookie_Keeplogin` (:id_member, :ip, :useragent, :usersession)
 </select>
 
 <!-- 
 <select id="get_cookie_keeplogin">
-	SELECT id_member, last_ip, useragent, token
-	FROM `es_keeplogin`
-	WHERE token = :token
+    SELECT id_member, last_ip, useragent, token
+    FROM `es_keeplogin`
+    WHERE token = :token
 </select>
 -->
 
 <select id="cookie_login">	
-	CALL `es_sp_CookieLogin_user` (:userip, :useragent, :token, :usersession)
+    CALL `es_sp_CookieLogin_user` (:userip, :useragent, :token, :usersession)
 </select>
 
 <select id="delete_cookie_keeplogin">
-	DELETE FROM `es_keeplogin`
-	WHERE id_member = :id_member AND last_ip = :ip AND useragent = :useragent AND token = :token
+    DELETE FROM `es_keeplogin`
+    WHERE id_member = :id_member AND last_ip = :ip AND useragent = :useragent AND token = :token
 </select>
 
 <select id="addFeedback">
-	INSERT INTO `es_member_feedback` (`member_id`, `for_memberid`, `feedb_msg`, `feedb_kind`, `order_id`, `dateadded`, `rating1`, `rating2`, `rating3`)
-	VALUES (:member_id, :for_memberid, :feedb_msg, :feedb_kind, :order_id, NOW(), :rating1, :rating2, :rating3)
+    INSERT INTO `es_member_feedback` (`member_id`, `for_memberid`, `feedb_msg`, `feedb_kind`, `order_id`, `dateadded`, `rating1`, `rating2`, `rating3`)
+    VALUES (:member_id, :for_memberid, :feedb_msg, :feedb_kind, :order_id, NOW(), :rating1, :rating2, :rating3)
 </select>
 
 <select id="checkFeedback">
-	SELECT id_feedback
-	FROM es_member_feedback
-	WHERE member_id = :member_id AND for_memberid = :for_memberid AND feedb_kind = :feedb_kind AND order_id = :order_id
+    SELECT id_feedback
+    FROM es_member_feedback
+    WHERE member_id = :member_id AND for_memberid = :for_memberid AND feedb_kind = :feedb_kind AND order_id = :order_id
 </select>
 
 <select id="getFeedback">
-	SELECT fb.member_id, from.username as member_name, fb.for_memberid, for.username as for_membername, fb.feedb_msg, DATE_FORMAT(fb.dateadded, "%D %M %Y") as dateadded, fb.rating1, fb.rating2, fb.rating3, fb.feedb_kind, fb.order_id
-	FROM `es_member_feedback` fb
-	LEFT JOIN `es_member` `from`
-		ON from.id_member = fb.member_id
-	LEFT JOIN `es_member` `for`
-		ON for.id_member = fb.for_memberid
-	WHERE fb.member_id = :id OR fb.for_memberid = :id
-	ORDER BY fb.dateadded
-	LIMIT 400
+    SELECT fb.member_id, from.username as member_name, fb.for_memberid, for.username as for_membername, fb.feedb_msg, DATE_FORMAT(fb.dateadded, "%D %M %Y") as dateadded, fb.rating1, fb.rating2, fb.rating3, fb.feedb_kind, fb.order_id
+    FROM `es_member_feedback` fb
+    LEFT JOIN `es_member` `from`
+        ON from.id_member = fb.member_id
+    LEFT JOIN `es_member` `for`
+        ON for.id_member = fb.for_memberid
+    WHERE fb.member_id = :id OR fb.for_memberid = :id
+    ORDER BY fb.dateadded
+    LIMIT 400
 </select>
 
 <select id="getTransactionBankDepositDetails">
-	SELECT pbd.bank, pbd.ref_num, pbd.amount, DATE_FORMAT(pbd.date_deposit, "%Y-%b-%d") as date_deposit, pbd.comment, DATE_FORMAT(pbd.datemodified, "%D %M %Y") as bd_datemodified, pbd.is_invalid
-	FROM es_payment_bankdeposit pbd
-	WHERE pbd.order_id = :order_id
-	LIMIT 1
+    SELECT pbd.bank, pbd.ref_num, pbd.amount, DATE_FORMAT(pbd.date_deposit, "%Y-%b-%d") as date_deposit, pbd.comment, DATE_FORMAT(pbd.datemodified, "%D %M %Y") as bd_datemodified, pbd.is_invalid
+    FROM es_payment_bankdeposit pbd
+    WHERE pbd.order_id = :order_id
+    LIMIT 1
 </select>
 
 <select id="getBuyTransactionDetails">
-	SELECT o.id_order, DATE_FORMAT(o.dateadded, "%D %M %Y") as dateadded, o.order_status as transac_stat, o.invoice_no, o.payment_method_id as payment_method, o.is_flag
-	FROM es_order o
-	INNER JOIN es_order_product op
-		ON o.id_order = op.order_id
-	WHERE NOT (o.payment_method_id = 1 AND o.order_status = 99)  AND o.order_status IN ({order_status}) AND o.buyer_id = :id AND o.invoice_no LIKE :name_filter AND o.payment_method_id IN ({payment_filter})
-	GROUP BY id_order, dateadded, o.order_status, o.invoice_no, o.payment_method_id, o.is_flag
-	ORDER BY o.id_order {order_sequence_filter}
-	{limit}
+    SELECT o.id_order, DATE_FORMAT(o.dateadded, "%D %M %Y") as dateadded, o.order_status as transac_stat, o.invoice_no, o.payment_method_id as payment_method, o.is_flag
+    FROM es_order o
+    INNER JOIN es_order_product op
+        ON o.id_order = op.order_id
+    WHERE NOT (o.payment_method_id = 1 AND o.order_status = 99)  AND o.order_status IN ({order_status}) AND o.buyer_id = :id AND o.invoice_no LIKE :name_filter AND o.payment_method_id IN ({payment_filter})
+    GROUP BY id_order, dateadded, o.order_status, o.invoice_no, o.payment_method_id, o.is_flag
+    ORDER BY o.id_order {order_sequence_filter}
+    {limit}
 </select>
 
 <select id="getSellTransactionDetails">
-	SELECT o.id_order, DATE_FORMAT(o.dateadded, "%D %M %Y") as dateadded, o.order_status as transac_stat, o.invoice_no, o.payment_method_id as payment_method, o.buyer_id, buyer.username as buyer,
-		badd.consignee, badd.mobile, badd.telephone, l0.location as stateregion, l1.location as city, badd.address as fulladd, COALESCE(badd.lat, '0') as lat, COALESCE(badd.lng, '0') as lng,
-		COALESCE(fb.for_memberid,'0') as for_memberid, COUNT(op.status) as total, SUM( CASE WHEN op.status != 0 THEN 1 ELSE 0 END ) as responsed, o.is_flag
-	FROM es_order o
-	INNER JOIN es_order_product op
-		ON o.id_order = op.order_id AND op.seller_id = :id
-	LEFT JOIN es_member buyer
-		ON o.buyer_id = buyer.id_member
-	LEFT JOIN es_member_feedback fb
-		ON fb.order_id = o.id_order AND fb.for_memberid = o.buyer_id AND fb.member_id = :id
-	LEFT JOIN es_order_shipping_address badd
-		ON o.shipping_address_id = badd.id_order_shipping_address
-	LEFT JOIN es_location_lookup l0
-		ON badd.stateregion = l0.id_location
-	LEFT JOIN es_location_lookup l1
-		ON badd.city = l1.id_location
-	WHERE NOT (o.payment_method_id = 1 AND o.order_status = 99) AND o.order_status != 2 AND o.invoice_no LIKE :name_filter AND o.payment_method_id IN ({payment_filter})
-	GROUP BY o.id_order, dateadded, o.order_status, o.invoice_no, o.payment_method_id, o.buyer_id,  buyer.username,
-		badd.consignee, badd.mobile, badd.telephone,l0.location,l1.location,badd.address,lat,lng,
-		for_memberid, o.is_flag
-	HAVING {response_stat}
-	ORDER BY o.id_order {order_sequence_filter}
-	{limit}
+    SELECT o.id_order, DATE_FORMAT(o.dateadded, "%D %M %Y") as dateadded, o.order_status as transac_stat, o.invoice_no, o.payment_method_id as payment_method, o.buyer_id, buyer.username as buyer,
+        badd.consignee, badd.mobile, badd.telephone, l0.location as stateregion, l1.location as city, badd.address as fulladd, COALESCE(badd.lat, '0') as lat, COALESCE(badd.lng, '0') as lng,
+        COALESCE(fb.for_memberid,'0') as for_memberid, COUNT(op.status) as total, SUM( CASE WHEN op.status != 0 THEN 1 ELSE 0 END ) as responsed, o.is_flag
+    FROM es_order o
+    INNER JOIN es_order_product op
+        ON o.id_order = op.order_id AND op.seller_id = :id
+    LEFT JOIN es_member buyer
+        ON o.buyer_id = buyer.id_member
+    LEFT JOIN es_member_feedback fb
+        ON fb.order_id = o.id_order AND fb.for_memberid = o.buyer_id AND fb.member_id = :id
+    LEFT JOIN es_order_shipping_address badd
+        ON o.shipping_address_id = badd.id_order_shipping_address
+    LEFT JOIN es_location_lookup l0
+        ON badd.stateregion = l0.id_location
+    LEFT JOIN es_location_lookup l1
+        ON badd.city = l1.id_location
+    WHERE NOT (o.payment_method_id = 1 AND o.order_status = 99) AND o.order_status != 2 AND o.invoice_no LIKE :name_filter AND o.payment_method_id IN ({payment_filter})
+    GROUP BY o.id_order, dateadded, o.order_status, o.invoice_no, o.payment_method_id, o.buyer_id,  buyer.username,
+        badd.consignee, badd.mobile, badd.telephone,l0.location,l1.location,badd.address,lat,lng,
+        for_memberid, o.is_flag
+    HAVING {response_stat}
+    ORDER BY o.id_order {order_sequence_filter}
+    {limit}
 </select>
 
 <select id="getOrderProductTransactionDetails">
-	SELECT op.id_order_product, op.product_id, p.name, op.order_quantity, op.total as price, op.status, p.slug, sc.comment as shipping_comment, sc.courier, sc.tracking_num, DATE_FORMAT(sc.delivery_date, "%Y-%b-%d") as delivery_date, DATE_FORMAT(sc.expected_date, "%Y-%b-%d") as expected_date, DATE_FORMAT(sc.datemodified, "%D %M %Y") as datemodified, op.is_reject,
-		<!--pi.product_image_path, attr.name as attr_name, pattr.attr_value, pitemattr.is_other, oah.field_name, oad.value_name,-->
-		pi.product_image_path, opa.attr_name, opa.attr_value,
-		op.seller_id, seller.username as seller, COALESCE(fb.for_memberid,'0') as for_memberid
-	FROM es_order_product op
-	INNER JOIN es_product p
-		ON op.product_id = p.id_product
-	LEFT JOIN es_order_product_attr opa
-		ON op.id_order_product = opa.order_product_id
-	<!--
-	LEFT JOIN es_product_item_attr pitemattr
-		ON op.product_item_id = pitemattr.product_id_item
-	LEFT JOIN es_product_attr pattr
-		ON pattr.id_product_attr = pitemattr.product_attr_id 
-	LEFT JOIN es_attr attr
-		ON pattr.attr_id = attr.id_attr
-	LEFT JOIN es_optional_attrdetail oad
-		ON	oad.id_optional_attrdetail = pitemattr.product_attr_id
-	LEFT JOIN es_optional_attrhead oah
-		ON oah.id_optional_attrhead = oad.head_id
-	-->
-	LEFT JOIN es_product_image pi
-		ON op.product_id = pi.product_id AND pi.is_primary = 1
-	LEFT JOIN es_product_shipping_comment sc
-		ON sc.order_product_id = op.id_order_product
-	LEFT JOIN es_member seller
-		ON op.seller_id = seller.id_member
-	LEFT JOIN es_member_feedback fb
-		ON fb.order_id = op.order_id AND fb.for_memberid = op.seller_id
-	WHERE op.order_id = :order_id
-	ORDER BY op.id_order_product asc
+    SELECT op.id_order_product, op.product_id, p.name, op.order_quantity, op.total as price, op.status, p.slug, sc.comment as shipping_comment, sc.courier, sc.tracking_num, DATE_FORMAT(sc.delivery_date, "%Y-%b-%d") as delivery_date, DATE_FORMAT(sc.expected_date, "%Y-%b-%d") as expected_date, DATE_FORMAT(sc.datemodified, "%D %M %Y") as datemodified, op.is_reject,
+        <!--pi.product_image_path, attr.name as attr_name, pattr.attr_value, pitemattr.is_other, oah.field_name, oad.value_name,-->
+        pi.product_image_path, opa.attr_name, opa.attr_value,
+        op.seller_id, seller.username as seller, COALESCE(fb.for_memberid,'0') as for_memberid
+    FROM es_order_product op
+    INNER JOIN es_product p
+        ON op.product_id = p.id_product
+    LEFT JOIN es_order_product_attr opa
+        ON op.id_order_product = opa.order_product_id
+    <!--
+    LEFT JOIN es_product_item_attr pitemattr
+        ON op.product_item_id = pitemattr.product_id_item
+    LEFT JOIN es_product_attr pattr
+        ON pattr.id_product_attr = pitemattr.product_attr_id 
+    LEFT JOIN es_attr attr
+        ON pattr.attr_id = attr.id_attr
+    LEFT JOIN es_optional_attrdetail oad
+        ON	oad.id_optional_attrdetail = pitemattr.product_attr_id
+    LEFT JOIN es_optional_attrhead oah
+        ON oah.id_optional_attrhead = oad.head_id
+    -->
+    LEFT JOIN es_product_image pi
+        ON op.product_id = pi.product_id AND pi.is_primary = 1
+    LEFT JOIN es_product_shipping_comment sc
+        ON sc.order_product_id = op.id_order_product
+    LEFT JOIN es_member seller
+        ON op.seller_id = seller.id_member
+    LEFT JOIN es_member_feedback fb
+        ON fb.order_id = op.order_id AND fb.for_memberid = op.seller_id
+    WHERE op.order_id = :order_id
+    ORDER BY op.id_order_product asc
 </select>
 
 <select id="getTransactionCount">
-	SELECT o.id_order, o.order_status, op.seller_id, COUNT(op.status) as total, SUM( CASE WHEN op.status != 0 THEN 1 ELSE 0 END ) as responsed
-	FROM es_order o
-	INNER JOIN es_order_product op
-		ON o.id_order = op.order_id
-	WHERE NOT (o.payment_method_id = 1 AND o.order_status = 99) AND o.order_status != 2 AND (o.buyer_id = :id OR op.seller_id = :id)
-	GROUP BY o.id_order, op.seller_id, o.order_status
+    SELECT o.id_order, o.order_status, op.seller_id, COUNT(op.status) as total, SUM( CASE WHEN op.status != 0 THEN 1 ELSE 0 END ) as responsed
+    FROM es_order o
+    INNER JOIN es_order_product op
+        ON o.id_order = op.order_id
+    WHERE NOT (o.payment_method_id = 1 AND o.order_status = 99) AND o.order_status != 2 AND (o.buyer_id = :id OR op.seller_id = :id)
+    GROUP BY o.id_order, op.seller_id, o.order_status
 </select>
 
 <select id="authenticateUser">
-	SELECT id_member
-	FROM es_member
-	WHERE username = :username AND password = reverse(PASSword(concat(md5(:username),sha1(:password)))) AND id_member = :member_id
-	LIMIT 1;
+    SELECT id_member
+    FROM es_member
+    WHERE username = :username AND password = reverse(PASSword(concat(md5(:username),sha1(:password)))) AND id_member = :member_id
+    LIMIT 1;
 </select>
 
 <!--	LANDING PAGE SUBSCRIPTION	-->
 <select id="subscribe">
-	INSERT INTO `es_subscribe` (`email`)
-	VALUES (:email)
-	ON DUPLICATE KEY UPDATE email = :email
+    INSERT INTO `es_subscribe` (`email`)
+    VALUES (:email)
+    ON DUPLICATE KEY UPDATE email = :email
 </select>
 
 <!-- Payment Account Queries -->
@@ -356,18 +361,18 @@
 
 <select id='addBillingAccnt'>
     INSERT INTO `es_billing_info` (`is_default`,`member_id`,`payment_type`,`user_account`,`bank_id`,`bank_account_name`,`bank_account_number`,`dateadded`, `datemodified`)
-	VALUES (:is_default,:member_id,:payment_type,:user_account,:bank_id,:bank_account_name,:bank_account_number, NOW(), NOW());
+    VALUES (:is_default,:member_id,:payment_type,:user_account,:bank_id,:bank_account_name,:bank_account_number, NOW(), NOW());
 </select>
 
 <select id='InsertHistoryBillingAccnt'>
     INSERT INTO `es_billing_info` (`is_default`,`is_delete`,`member_id`,`payment_type`,`user_account`,`bank_id`,`bank_account_name`,`bank_account_number`,`dateadded`, `datemodified`)
-	VALUES (:is_default,:is_delete, :member_id,:payment_type,:user_account,:bank_id,:bank_account_name,:bank_account_number, :date_added, NOW());
+    VALUES (:is_default,:is_delete, :member_id,:payment_type,:user_account,:bank_id,:bank_account_name,:bank_account_number, :date_added, NOW());
 </select>
 
 <select id='updateBillingAccnt'>
     UPDATE `es_billing_info` SET `bank_id`=:bank_id,`bank_account_name`=:bank_account_name,`bank_account_number`=:bank_account_number, `datemodified` = NOW(),
     `payment_type` = :payment_type, `user_account` = :user_account, `is_delete` = :is_delete, `is_default` = :is_default
-	WHERE `member_id`=:member_id AND `id_billing_info` = :ibi
+    WHERE `member_id`=:member_id AND `id_billing_info` = :ibi
 </select>
 
 <select id='clearDefaultBillingAccnt'>
@@ -379,57 +384,74 @@
 </select>
 
 <select id="getNextPayout">
-	SELECT op.id_order_product, op.order_id, o.invoice_no, p.name, op.order_quantity, op.price, op.handling_fee, op.total, op.payment_method_charge, op.easyshop_charge, op.net
-	FROM es_order_product op
-	INNER JOIN es_order_product_history oph
-		ON op.id_order_product = oph.order_product_id AND op.seller_id = :member_id AND op.status = oph.order_product_status AND op.is_reject = 0 AND op.status = 1
-	INNER JOIN es_order o
-		ON o.id_order = op.order_id AND o.order_status IN (0,1) AND o.payment_method_id != 3
-	INNER JOIN es_product p
-		ON op.product_id = p.id_product
-	WHERE oph.date_added BETWEEN :start_date AND :end_date
+    SELECT op.id_order_product, op.order_id, o.invoice_no, p.name, op.order_quantity, op.price, op.handling_fee, op.total, op.payment_method_charge, op.easyshop_charge, op.net
+    FROM es_order_product op
+    INNER JOIN es_order_product_history oph
+        ON op.id_order_product = oph.order_product_id AND op.seller_id = :member_id AND op.status = oph.order_product_status AND op.is_reject = 0 AND op.status = 1
+    INNER JOIN es_order o
+        ON o.id_order = op.order_id AND o.order_status IN (0,1) AND o.payment_method_id != 3
+    INNER JOIN es_product p
+        ON op.product_id = p.id_product
+    WHERE oph.date_added BETWEEN :start_date AND :end_date
 </select>
 
 <select id="getUserBalance">
-	SELECT op.id_order_product, op.order_id, o.invoice_no, p.name, op.order_quantity, op.price, op.handling_fee, op.total, op.payment_method_charge, op.easyshop_charge, op.net
-	FROM es_order_product op
-	INNER JOIN es_order_product_history oph
-		ON op.id_order_product = oph.order_product_id AND op.seller_id = :member_id AND op.status = oph.order_product_status AND op.is_reject = 0 AND op.status = 1
-	INNER JOIN es_order o
-		ON o.id_order = op.order_id AND o.order_status IN (0,1) AND o.payment_method_id != 3
-	INNER JOIN es_product p
-		ON op.product_id = p.id_product
+    SELECT op.id_order_product, op.order_id, o.invoice_no, p.name, op.order_quantity, op.price, op.handling_fee, op.total, op.payment_method_charge, op.easyshop_charge, op.net
+    FROM es_order_product op
+    INNER JOIN es_order_product_history oph
+        ON op.id_order_product = oph.order_product_id AND op.seller_id = :member_id AND op.status = oph.order_product_status AND op.is_reject = 0 AND op.status = 1
+    INNER JOIN es_order o
+        ON o.id_order = op.order_id AND o.order_status IN (0,1) AND o.payment_method_id != 3
+    INNER JOIN es_product p
+        ON op.product_id = p.id_product
+</select>
+
+<select id="getVendorSubscription">
+    SELECT vs.vendor_id, m.username as vendor_name, m.imgurl, DATE_FORMAT(m.datecreated, "%M %Y") as datecreated, m.slug as userslug
+    FROM es_vendor_subscribe vs
+    LEFT JOIN es_member m
+        ON m.id_member = vs.vendor_id
+    WHERE vs.member_id = :member_id
 </select>
 
 <select id="checkVendorSubscription">
-	SELECT m.id_member as vendor_id, COALESCE(vs.member_id,0) as member_id
-	FROM es_member m
-	LEFT JOIN es_vendor_subscribe vs
-		ON m.id_member = vs.vendor_id AND vs.member_id = :member_id AND vs.vendor_id != :member_id
-	WHERE m.username = :sellername
+    SELECT m.id_member as vendor_id, COALESCE(vs.member_id,0) as member_id
+    FROM es_member m
+    LEFT JOIN es_vendor_subscribe vs
+        ON m.id_member = vs.vendor_id AND vs.member_id = :member_id AND vs.vendor_id != :member_id
+    WHERE m.username = :sellername
 </select>
 
 <select id="countVendorSubscription">
-	SELECT COUNT(vs.id_vendor_subscribe) as subscription_count
-	FROM es_vendor_subscribe vs
-	INNER JOIN es_member m
-		ON vs.vendor_id = m.id_member AND m.username = :sellername AND vs.vendor_id != :member_id
+    SELECT COUNT(vs.id_vendor_subscribe) as subscription_count
+    FROM es_vendor_subscribe vs
+    INNER JOIN es_member m
+        ON vs.vendor_id = m.id_member AND m.username = :sellername AND vs.vendor_id != :member_id
 </select>
 
 <select id="insertVendorSubscription">
-	INSERT INTO es_vendor_subscribe(`member_id`,`vendor_id`)
-	VALUES(:member_id, :vendor_id)
+    INSERT INTO es_vendor_subscribe(`member_id`,`vendor_id`)
+    VALUES(:member_id, :vendor_id)
 </select>
 
 <select id="deleteVendorSubscription">
-	DELETE FROM es_vendor_subscribe
-	WHERE `member_id` = :member_id AND `vendor_id` = :vendor_id
+    DELETE FROM es_vendor_subscribe
+    WHERE `member_id` = :member_id AND `vendor_id` = :vendor_id
 </select>
 
 <select id="updateStoreDesc">
-	UPDATE `es_member`
-	SET `store_desc` = :store_desc
-	WHERE `id_member` = :member_id
+    UPDATE `es_member`
+    SET `store_desc` = :store_desc
+    WHERE `id_member` = :member_id
+</select>
+
+<select id="getVendorDetails">
+    SELECT m.id_member, m.username, m.contactno, m.email, a.stateregion, a.city, l1.location as stateregionname, l2.location as cityname, DATE_FORMAT(datecreated, "%M %Y") as datecreated, store_desc
+    FROM es_member m
+    LEFT JOIN es_address a on m.id_member = a.id_member AND a.type=0
+    LEFT JOIN es_location_lookup l1 ON a.stateregion =  l1.id_location
+    LEFT JOIN es_location_lookup l2 ON a.city = l2.id_location
+    where m.slug=:userslug
 </select>
 
 </map>

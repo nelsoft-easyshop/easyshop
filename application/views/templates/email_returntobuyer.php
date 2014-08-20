@@ -54,7 +54,7 @@
 					<td colspan="2">Php {easyshop_charge}</td>
 				</tr>
 				<tr>
-					<td><strong>Payment Method Charge :</strong> </td>
+					<td><strong>{payment_method_name} Charge :</strong> </td>
 					<td colspan="2">Php {payment_method_charge}</td>
 				</tr>
 				<tr>

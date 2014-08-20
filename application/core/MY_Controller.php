@@ -78,8 +78,6 @@ class MY_Controller extends CI_Controller
 		);
 	return $data;
     }
-    
-
 	
     function check_cookie(){
         $this->load->model("cart_model");

@@ -50,19 +50,22 @@ var memconf = {
 /***********	BANNER EDIT 	****************/
 $(function(){
 	$('.img_edit').on('click',function(){
-		$(this).siblings('form').children('input.img_file_input').click();
 		memconf.form = $(this).siblings('form');
+		$(this).siblings('form').children('input.img_file_input').click();
 	});
 	
 	$('input.img_file_input').on('change',function(){
 		var oldIE;
-		if ($('html').is('.ie6, .ie7, .ie8, .ie9')) {
+        var isSafari = Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0;
+        
+		if($('html').is('.ie6, .ie7, .ie8, .ie9')){
 			oldIE = true;
 		}
 
-		if (oldIE) {
+		if(oldIE || isSafari){
 			memconf.form.submit();
-		} else {
+		} 
+        else{
 			imageprev(this);
 		}
 	});

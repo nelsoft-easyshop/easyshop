@@ -1,9 +1,5 @@
 /********** How am I going to be paid CSS style *******************/
-.paid_section_container select,
 
-.paid_section_container input[type="text"] {
-	padding:8px 3px;
-}
 
 .paid_section_container {
 	margin-bottom: 20px;
@@ -13,25 +9,6 @@
 	padding:8px 0;
 }
 
-.paid_section_container input[name="deposit_acct_name"],
-.paid_section_container input[name="deposit_acct_no"]{
-	margin-right: 10px;
-	width: 146px;
-}
-
-
-#bank_list {
-	margin-right: 10px;
-	width: 349px;
-}
-
-
-.deposit_edit,
-.deposit_update,
-.deposit_cancel {
-	cursor: pointer;
-}
-
 .deposit_edit span {
 	background-position: -124px -263px;
 	height: 12px;
@@ -39,23 +16,6 @@
 	margin-right: 3px;
 }
 
-.deposit_update:hover {
-	color: #0191C8;
-}
-
-.deposit_update:after {
-    border-right: 1px solid #CECECE;
-    content: "";
-    display: inline-block;
-    height: 25px;
-    margin: 0 5px;
-    vertical-align: middle;
-    width: 2px;
-}
-
-.deposit_cancel:hover {
-	color: #f00;
-}
 /********** End of How am I going to be paid CSS style ************/ 
     
     .cod {
@@ -422,22 +382,10 @@ span.seller-name span:hover {
 	padding-left: 5px;
 }
 
-.price_details {
-	border-top: 1px solid #DBD8D7;
-	border-bottom: 1px solid #DBD8D7;
-    display: inline-block;
-}
-
-.price_details > div {
-	float: left;
-	text-align: center;
-	margin: 10px 0;
-}
-
-.price_box {
+/*.price_box {
 	width: 200px;
 }
-
+*/
 .price_box > div {
 	height: 30px;
 	line-height: 30px;
@@ -450,11 +398,11 @@ span.seller-name span:hover {
     height: 87px;
     max-height: 87px;
     min-height: 40px;
-    width: 100px;
+/*    width: 100px;*/
 }
 
 .buy_box {
-	width: 248px;
+/*	width: 248px;*/
 }
 
 .buy_btn_sub {
@@ -658,62 +606,9 @@ span.seller-name span:hover {
 
 /** product tab **/
 
-.ui-tabs.ui-widget.ui-widget-content.ui-corner-all {
-    width: 770px;
-/*    margin-top: 40px;*/
-}
 
-.ui-tabs-nav {
-	display: inline-block;
-	list-style: none;
-	position: relative;
-}
 
-.ui-tabs ul li {
-	float: left;
-	word-wrap:break-word;
-}
 
-.ui-tabs ul li a {
-	background-color: #F5F5F5;
-    border-left: 1px solid #CECECE;
-    border-top: 3px solid #CECECE;
-    display: inline-block;
-	padding: 11px 15px;
-	font-size: 14px;
-	font-weight: normal;
-}
-
-.ui-tabs ul li:last-child a {
-    border-right: 1px solid #CECECE;
-}
-
-.ui-tabs-active a {
-	padding:10px;
-    background-color: #FFFFFF !important;
-    border-bottom: 1px solid #FFFFFF;
-    border-top: 3px solid #f18200 !important;
-    color: #f18200;
-    margin-bottom: -1px;
-
-}
-
-.ui-state-hover a {
-	padding:10px;
-	background-color: #fff;
-	color:#f18200;	
-
-}
-
-#tabs-1,
-#tabs-2,
-#tabs-3 {
-	border:1px solid #CECECE;
-	display: inline-block;
-	width: 750px;
-	padding:10px;
-	min-height: 440px;
-}
 
 #tabs-1 p {
 	font-size: 14px;

@@ -8,9 +8,6 @@ class Register_model extends CI_Model
 		$this->load->library('xmlmap');
 	}
 	
-	/*
-	 *	Function used to check if username exists in registration page
-	 */
 	function get_member_by_username($member_username)
 	{
 		$query = $this->xmlmap->getFilenameID('sql/users', 'get_member_by_username');
@@ -36,6 +33,7 @@ class Register_model extends CI_Model
 	// USED BY AJAX CHECK
 	function checkMobileIfExists($mobile)
 	{
+		$mobile = ltrim($mobile,'0');
 		$query = $this->xmlmap->getFilenameID('sql/users', 'getMobile');
         $sth = $this->db->conn_id->prepare($query);
         $sth->bindParam(':contactno', $mobile);
@@ -99,9 +97,13 @@ class Register_model extends CI_Model
 		}
 	}
 	
+	/*
+	 *	Function used to check if username exists in registration page
+	 *	Checks for both username and slug fields under es_member table
+	 */
 	function validate_username($username)
 	{
-		$query = $this->xmlmap->getFilenameID('sql/users', 'get_member_by_username');
+		$query = $this->xmlmap->getFilenameID('sql/users', 'getUsernameOrSlug');
         $sth = $this->db->conn_id->prepare($query);
         $sth->bindParam(':username', $username);
         $sth->execute();	
@@ -130,9 +132,10 @@ class Register_model extends CI_Model
 		}
 	}
     
-	// FOR FIRST TIME REGISTRATION ONLY
+	// FOR FIRST TIME REGISTRATION ONLY - used by form_validation.php config
 	function validate_mobile($mobile)
 	{
+		$mobile = ltrim($mobile,'0');
 		$query = $this->xmlmap->getFilenameID('sql/users', 'getMobile');
 		$sth = $this->db->conn_id->prepare($query);
 		$sth->bindParam(':contactno', $mobile);
@@ -292,7 +295,7 @@ class Register_model extends CI_Model
 		$query = $this->xmlmap->getFilenameID('sql/users', 'check_contactinfo');
         $sth = $this->db->conn_id->prepare($query);
 
-        $data['contactno'] = $data['contactno'] === '' ? 0:$data['contactno'];
+        $data['contactno'] = $data['contactno'] === '' ? 0:ltrim($data['contactno'],'0');
         $data['email'] = $data['email'] === '' ? 0:$data['email'];
 
 		$sth->bindParam(':contactno', $data['contactno']);

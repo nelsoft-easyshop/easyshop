@@ -35,7 +35,6 @@
 
 .seller_product_content {
     display: inline-block;
-    margin-top: 30px;
     width: 100%;
 }
 
@@ -124,11 +123,8 @@ p.active {
     padding:0 3px;
 }
 
-.inner_seller_product_content {
-    background-color: #fff;
-}
 
-.sell_steps {
+/*.sell_steps {
     background: url(../images/global_sprite.png) 0 0 no-repeat;
     height: 35px;
     margin-top: 20px;
@@ -148,36 +144,8 @@ p.active {
 
 .sell_steps4 {
     background-position: 0 -677px;
-}
+}*/
 
-div.sell_steps1 ul li:first-child a,
-div.sell_steps2 ul li:nth-child(2) a,
-div.sell_steps3 ul li:nth-child(3) a,
-div.sell_steps4 ul li:nth-child(4) a {
-    color: #fff;
-}
-
-.sell_steps ul {
-    list-style: none;
-}
-
-.sell_steps ul li {
-    float: left;
-    line-height: 37px;
-    padding-left:20px;
-    width: 220px;   
-}
-
-.sell_steps ul li span {
-    font-size: 18px;
-}
-
-.sell_steps1 ul li:first-child,
-.sell_steps2 ul li:nth-child(2),
-.sell_steps3 ul li:nth-child(3),
-.sell_steps4 ul li:last-child {
-    color: #fff;
-}
 
 
 /****************** Upload product step 1 ****************/
@@ -187,61 +155,9 @@ div.sell_steps4 ul li:nth-child(4) a {
     font-weight: normal;
 }
 
-.add_product_category {
-    display: inline-block;
-    margin-top: 20px;
-}
 
-.cat_sch_container {
-    margin-top: 20px;
-}
-
-#cat_sch {
-    width: 200px;
-    height: 25px;
-}
-
-.cat_sch_loading {
-    margin-left: 10px;
-    display: inline-block;
-}
-
-.cat_sch_loading img {
-    vertical-align: middle;
-}
-
-#cat_search_drop_content {
-    background: none repeat scroll 0 0 #FFFFFF;
-    border: 1px solid #CECECE;
-    margin-left: 125px;
-    min-width: 190px;
-    padding: 10px;
-    position: absolute;
-    z-index: 1;
-    display: none;
-}
-
-#cat_search_drop_content ul {
-    list-style: none;
-}
 
 /***** Draft Content ******/
-.draft_txt {
-    float: right;
-/*    display: inline-block;
-    margin-left: 20px;
-    vertical-align: middle;*/
-}
-
-.draft_container {
-    top: 60px !important;
-}
-
-.draft_items_container {
-    overflow-x: scroll;
-    height: 500px; 
-    padding-right: 10px;
-}
 
 .div_item {
     line-height: 25px;
@@ -292,9 +208,9 @@ div.sell_steps4 ul li:nth-child(4) a {
     height: auto !important;
 }
 
-.add_product_category > div {
+/*.add_product_category > div {
     float: left;
-}
+}*/
 
 .main_product_category {
     width: 200px;
@@ -417,31 +333,6 @@ div.sell_steps4 ul li:nth-child(4) a {
     border:1px solid #ff4400;
 }
 
-.add_category_submit {
-    margin-top: 30px;
-    text-align: center;
-}
-
-.add_category_submit input {
-    color: #fff;
-    background-color: #f18200;
-    border: 1px solid #f18200;
-    padding:10px;
-    width: auto;
-    border-radius: 3px;
-    cursor: pointer;
-    margin:40px 0;
-    -webkit-transition: all 0.2s ease-in-out;
-    -moz-transition:    all 0.2s ease-in-out;
-    -o-transition:      all 0.2s ease-in-out;
-     transition:        all 0.2s ease-in-out;
-}
-
-.add_category_submit input:hover {
-    background-color: #ff4400;
-    border: 1px solid #FF4400;  
-}
-
 
 /****************** Upload product step 2 ****************/
 /*********************************************************/
@@ -452,13 +343,6 @@ div.sell_steps4 ul li:nth-child(4) a {
     margin-top: 20px;
     padding: 5px 5px 0px 5px;
     width: 980px;
-}
-
-.step4_2 {
-    padding:0px 5px 5px 5px;
-   border-left: 1px solid #cecece;
-   border-right: 1px solid #cecece;
-   border-bottom: 1px solid #cecece;  
 }
 
 .notification {
@@ -477,123 +361,19 @@ div.sell_steps4 ul li:nth-child(4) a {
     margin-right: 10px;
 }
 
-.form_input input[placeholder] {
+/*.form_input input[placeholder] {
     font-size: 11px;
-}
+}*/
 
 .form_input textarea {
     height: 60px;
 }
 
-.form_input input[type='text']:focus,
+/*.form_input input[type='text']:focus,
 .form_input textarea:focus               {
     border: 1px solid #ff4400;
-}
+}*/
 
-.form_input input[type="checkbox"] {
-    border:none;
-    padding: 0px;
-    vertical-align: middle;
-}
-
-.form_input input[type="radio"] {
-    padding: 0px 15px 15px 0px;
-    vertical-align: middle;
-}
-
-.form_input select {
-    border:1px solid #B3B3B3;
-    padding:8px 2px;
-    position: relative;
-    margin: 0 0 5px;
-    width: 204px;  
-}
-
-.form_input input[type='text'],
-.form_input input[type='select'],
-.form_input textarea                {
-    border: 1px solid #B3B3B3;
-    color: #494949;
-    padding:10px 2px;
-}
-
-.step4 input[name="prod_title"],
-.step4 input[name="prod_brief_desc"],
-.step4 input[name="prod_keyword"] {
-    width: 300px;
-}
-
-.step4 input[name="TEXT_CellularBand"],
-.step4 input[name="TEXT_Mpn"],
-.step4_2 input[name="prod_sku"] {
-    width: 193px;
-}
-
-.step4_2 input[name="prod_price"],
-.step4_2 input[name="prod_other_price[]"] {
-    width: 160px;
-}
-
-.step4_2 input[name="prod_other_name[]"],
-.step4_2 input[name="prod_other[]"] {
-    width: 250px;
-}
-
-.step4_2 input[name="prod_other_img[]"] {
-    width:200px;
-}
-
-.remove_option_long {
-    color:#f00;
-    float:left;
-    margin-top:15px;
-}
-
-.remove_option_short {
-    font-weight:bold; 
-    font-size:16px; 
-    color:#F18200; 
-    margin-left:1px;
-    cursor: pointer;
-    display:inline !important;
-    float: right;
-    margin-right: 10px;
-    margin-top: -35px;
-}
-
-
-.step4_2 input[name="prod_other_img[]"],
-.step4_2 input[type="file"] {
-    border: none;
-}
-
-.ie9 .step4_2 input[type="file"],
-.ie8 .step4_2 input[type="file"],
-.ie7 .step4_2 input[type="file"] {
-    border: 1px solid #B3B3B3;
-    background-color: #fff;
-}
-
-.step4_2 input {
-    vertical-align: middle;
-    margin-right: 5px;  
-}
-
-.add_more_link {
-    padding: 10px 15px;
-    color: #fff;
-    display: inline-block;
-    background-color: #838383;
-    margin-top: 20px;
-/*    -webkit-border-radius: 3px;
-    -moz-border-radius: 3px;
-    border-radius: 3px;*/
-}
-
-.add_more_link:hover {
-    color: #fff;
-    background-color: #4c4c4c;  
-}
 
 .step4 tr td {
     padding-left: 10px;
@@ -619,14 +399,10 @@ div.sell_steps4 ul li:nth-child(4) a {
     color: #ff4400;
 }
 
-.product_upload_success a {
-    color: #0072FF;
-    margin-left:50px;
-}
-
 .product_upload_success a:hover {
     padding:5px 0;
     border-bottom: 1px dotted #0072FF;
+    text-decoration: none;
 }
 
 .product_upload_success img {
@@ -637,32 +413,6 @@ div.sell_steps4 ul li:nth-child(4) a {
 .step4 input {
     vertical-align: middle;
     margin-right: 5px;  
-}
-
-#brand_sch {
-    display: inline-block;
-    padding-right: 45px;
-    width: 155px;
-}
-
-.brand_sch_loading {
-    display: inline-block;
-    margin-left: -42px;
-    vertical-align: middle;
-}
-
-.brand_sch_drop_content {
-    background-color: #FFFFFF;
-    border: 1px solid #CECECE;
-    display: none;
-    min-height: 25px;
-    max-height: 280px;
-    max-width: 600px;
-    overflow-y: scroll;
-    padding: 10px 5px 5px 5px;
-    position: absolute;
-    width: 192px;
-    z-index: 1;
 }
 
 .add_brand {
@@ -696,11 +446,6 @@ div.sell_steps4 ul li:nth-child(4) a {
 
 #main1 a:hover {
     text-decoration: underline;
-}
-
-.lnkClearFirst,
-.removeOptionGroup {
-    border-bottom: 1px dotted #494949;
 }
 
 .lnkClearFirst:hover,
@@ -757,20 +502,6 @@ div.sell_steps4 ul li:nth-child(4) a {
     margin: 0px 5px 0px 0px;
 }
 
-.option_image_input {
-    float:left;
-    margin-top: 7px;
-}
-
-.option_image_container {
-    display: inline !important; 
-
-}
-
-.option_image_td{
-    width: 302px;
-}
-
 .add_more_link_value{
     color: #0191C8;
 }
@@ -796,9 +527,6 @@ div.sell_steps4 ul li:nth-child(4) a {
 
 }
 
-.inputfiles {
-    padding: 10px 0;
-}
 
 .add_photo {
     background-position: -633px -307px;
@@ -814,6 +542,7 @@ div.sell_steps4 ul li:nth-child(4) a {
 }
 
 .label_bttm_txt {
+    font-size: 0.75em;
     display: inline-block;
     margin-top: 10px;
 }
@@ -825,6 +554,7 @@ div.sell_steps4 ul li:nth-child(4) a {
    color: #FFFFFF;
    cursor: pointer;
    font-weight: bold;
+   font-size: 0.75em;
    display: inline-block;
    line-height: 30px;
    text-align: center;
@@ -909,11 +639,6 @@ a.qty_tooltip {
     width: 75px;
 }
 
-.combinationContainer {
-    border-top: 1px solid #B6B6B6;
-    margin-top: 10px;
-    margin-right: 25px;
-}
 .quantityText {
     text-align: center;
     width: 50px;
@@ -937,16 +662,7 @@ a.qty_tooltip {
     vertical-align: middle;
 }
 
-.mid_inner_con_list {
-    width: 640px;
-}
 
-.mid_inner_con_list > div {
-    float: left;
-    line-height: 25px;
-    width: 200px;
-    word-wrap: break-word;
-}
 
 .form_input .proceed_form {
     border: 1px solid #f18200;
@@ -992,102 +708,15 @@ a:hover.tooltips span {
 }
 
 .lines_tooltip {
-    top: -24px !important;
-}
-
-/**** image upload ***/
-
-#list > div {
-    border: 1px solid #7e7e7e;
-    float: left;
-    margin: 5px;
-    padding: 5px;
-    position: relative;
-}
-
-#list > div:hover {
-    border: 1px solid #f18200;
-}
-
-#list div.active_img {
-    border: 1px solid #f18200;   
-}
-
-#list div.active_img .makeprimary {
-    color: #f18200;
-}
-
-.active_img:after {
-    background: url('../images/global_sprite.png') -556px -307px no-repeat;
-    bottom: 0;
-    content: "";
-    display: inline-block;
-    height: 25px;
-    position: absolute;
-    right: 0;
-    width: 25px;
-}
-
-.upload_img_con {
-    background-color: #FFFFFF;
-    border: 1px solid #E5E5E5;
-    display: table-cell;
-    height: 100px;
-    text-align: center;
-    vertical-align: middle;
-    width: 100px;
-}
-
-.upload_img_con img {
-    height: auto;
-    max-height: 100px;
-    max-width: 100px;
-    width: auto;
-}
-
-.active_img .removepic {
-    background-color: #f18200;  
-}
-
-.removepic:hover {
-    color: #fff;
-    background-color: #f18200; 
-}
-
-.removepic {
-    background-color: #7e7e7e;
-    color: #FFFFFF;
-    height: 15px;
-    position: absolute;
-    right: 0;
-    text-align: center;
-    top: 0;
-    width: 15px;
-}
-
-.percentage {
-    font-size: 10px;
-    margin-top: -30px;
+/*    top: -24px !important;*/
+    top: 0px !important;
 }
 
 /***** Admin upload step 2 ****/
-.border-left {
-    border-left: 1px solid #CECECE;
-}
-
-.border-right {
-    border-right: 1px solid #CECECE;   
-}
-
-.border-bottom {
-    border-bottom: 1px solid #CECECE;   
-}
-
 .pad-right {
     padding-right: 10px;
 }
 
-.upload_step2_title,
 .step3_title {
     background-color: #e5e5e5;
     border-top: 1px solid #CECECE;
@@ -1306,7 +935,7 @@ a:hover.tooltips span {
 }
 
 .shipping_wrapper {
-    border:1px solid #cecece;
+/*    border:1px solid #cecece;*/
     display: inline-block;
     margin-top: 30px;
     padding-bottom: 30px;
@@ -1318,9 +947,9 @@ a:hover.tooltips span {
 }
 
 .shipping_container {
-    float: left;
-    padding: 8px;
-    width: 465px;
+/*    float: left;*/
+/*    padding: 8px;*/
+/*    width: 100%;*/
 }
 
 .rate_calculator_con {
@@ -1513,10 +1142,12 @@ tr.tr_shipping_summary:nth-child(even) td {
 
 .shipping_summary_container {
     border: 1px solid #CECECE;
-    float: left;
-    margin-bottom: 10px;
-    margin-top: 8px;
-    width: 495px;
+/*    float: left;*/
+/*    margin-bottom: 10px;
+    margin-top: 8px;*/
+    padding: 8px;
+/*    margin:8px;*/
+/*    width: 100%;*/
 }
 
 .shipping_prod_attr_comb {
@@ -1608,14 +1239,6 @@ li.brand_result:hover{
 	
 }
 
-.add_ship_preference{
-	display:block;
-	font-size:10px;
-	margin-top:8px;
-	cursor:pointer;
-	color:#0191C8;
-}
-
 .delete_ship_preference{
 	color:red;
 	cursor:pointer;
@@ -1638,65 +1261,6 @@ li.brand_result:hover{
 	margin-left: 5px;
 }
 
-.discounted_price_container {
-    display: block;
-    margin-left: 12px;
-    margin-top: 15px;
-}
-
-#discounted_price_con {
-    color: #f00;
-}
-
-#discnt_btn {
-    border-bottom: 1px dotted #fff;
-    cursor: pointer;
-    margin-left: 11px;
-    position: relative;
-    top: 8px;
-}
-
-#discnt_btn:hover {
-    border-bottom: 1px dotted #0191C8;
-    text-decoration: none;
-}
-#dsc_frm{
-    background-color: #FFFFFF;
-    border: 1px solid #616161;
-    margin-left: 190px;
-    margin-top: -120px;
-    padding: 8px;
-    position: absolute;
-    width: 250px;
-    z-index: 2;
-
-    -webkit-box-shadow: 0px 1px 5px 0px rgba(50, 50, 50, 0.75);
--moz-box-shadow:    0px 1px 5px 0px rgba(50, 50, 50, 0.75);
-box-shadow:         0px 1px 5px 0px rgba(50, 50, 50, 0.75);
-    /*display: none;*/
-}
-
-#dsc_frm:before {
-    content:" ";
-    width: 0; 
-    height: 0;
-    border-style: solid;
-    border-width: 7.5px 10px 7.5px 0;
-    border-color: transparent #616161 transparent transparent;
-    left: -10px;
-    position: absolute;
-    top: 80px;
-}
-
-.discount_price_con_top {
-    display: inline-block;
-    margin-bottom: 15px;
-}
-
-.discount_price_con {
-    display: inline-block;
-    margin-top: 15px;
-}
 
 #slider_val{
     color: #f00;
@@ -1710,9 +1274,6 @@ box-shadow:         0px 1px 5px 0px rgba(50, 50, 50, 0.75);
     min-width: 120px;
     width: 75px;
 }
-
-
-
 
 
 .loadingfiles{
@@ -1731,4 +1292,233 @@ box-shadow:         0px 1px 5px 0px rgba(50, 50, 50, 0.75);
     background: #FCFEFC;
     opacity: 0.3;
 }   
- 
+
+/**** New upload step3  7-4-2014 ****/
+.step3_header_title {
+    padding-bottom: 20px;
+}
+
+.step3_header_title h2 {
+    font-weight: normal;
+}
+
+
+.step3_content_con div {
+    margin-bottom: 10px;
+}
+
+.step3_content_con label {
+    display: inline-block;
+    margin-left: 1em;
+	margin-right: 1em;
+	width: 115px;
+}
+
+.step3_shipping_options h3 {
+    padding: 8px 0;
+}
+
+#finish_step3 {
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    padding:8px 24px;
+}
+
+.del_pop{
+	display:none;
+	position:relative;
+}
+
+
+/***	NEW SELL STEP 3	****/
+
+.add_bgs3{
+	display: inline-block;
+	background: url(../images/btn_sprite.png) no-repeat 2.1px 0px;
+	width: 18px;
+	height: 15px;
+}
+
+.del_bgs3{
+	display: inline-block;
+	background: url(../images/btn_sprite.png) no-repeat -33px 0px;
+	width: 18px;
+	height: 15px;
+}
+
+.preference_btn_css{
+	float: right;
+}
+
+.advbtn_attr_css{
+	cursor:pointer;
+}
+
+.gbtn1{
+	display:inline-block;
+	background-color: #e5e5e5;
+	border-bottom: 2px solid #B9B9B9;
+	border-right: 2px solid #B9B9B9;
+	width: 150px;
+	height: 30px;
+	line-height: 30px;
+	margin-left: 2em;
+	vertical-align:middle;
+	text-align:center;
+	cursor:pointer
+}
+
+.gbtn1.active{
+	background-color: #5C5C5C;
+	color: white;
+	border:1px solid #B1B1B1;
+}
+
+.wbtn{
+	display: inline-block;
+	min-width: 80px;
+	padding: 5px 10px;
+	border-radius:3px;
+	border: 1px solid #ADADAD;
+	background-color: #FFFFFF;
+	cursor: pointer;
+	text-align: center;
+	margin-left: 10px;
+	margin-right: 10px;
+}
+
+.wbtn *{
+	vertical-align:middle;
+}
+
+.sh1 div{
+	display: inline-block;
+	width: 20%;
+}
+
+.sh3 {
+	border: 1px solid #D1D1D1;
+	padding: 10px;
+}
+
+.sh2 div{
+	display:inline-block;
+	margin-left: 3em;
+	margin-bottom: 0px;
+}
+
+.sh2 div label{
+	width: auto;
+	vertical-align: middle;
+	margin:0px;
+}
+
+.sh2 *{
+	display: inline-block;
+	vertical-align:middle;
+}
+
+.sg_css{
+	border: 1px solid #D5D5D5;
+	padding: 5px;
+}
+
+.sg_css .dg_css{
+	background-color: #F3F3F3;
+	padding: 10px;
+	border: 1px solid #D5D5D5;
+}
+
+
+/* Drop Down List Box (chosen plugin) */
+.si_css .chosen-container{
+	margin-top: 5px;
+}
+
+/* Remove Row Button */
+
+.si_css .del_shipping_input *{
+	vertical-align: middle;
+}
+
+.si_css label{
+	width: auto;
+	text-align: center;
+}
+
+.sa_css h4{
+	margin-bottom: 5px;
+}
+
+.sa_css .attr_cont_css *{
+	vertical-align:middle;
+}
+
+.prefsel_css{
+	height:20px;
+}
+
+.prefsel_css > *{
+	float:right;
+	line-height:20px;
+	vertical-align:middle;
+	margin:0px;
+}
+
+
+/*****	STEP 4 DESIGN	*******/
+
+.step4_section{
+	border: 1px solid #CECECE;
+	margin-bottom: 1em;
+}
+
+/*.step4_section > div{
+	padding: 5px;
+}*/
+
+.step4_header{
+	background-color: #E5E5E5;
+}
+
+/*.step4_content > div{
+	padding: 10px;
+}
+
+.step4_paysel > div{
+	display:inline-block;
+	margin: 0px 3em 0px 10px;
+	vertical-align:top;
+	height:150px;
+}
+
+.step4_bankdetails h4{
+	margin: 5px 3px;
+}*/
+
+/*.step4_bankdetails span{
+	display:inline-block;
+	width: 150px;
+	margin-left: 1em;
+}*/
+
+/*.step4_delivery {
+	padding-left:10px;
+}*/
+
+/*.step4_delivery_sub > div{
+	display: inline-block;
+	border: 1px solid #B6B6B6;
+	border-radius:3px;
+}
+
+.step4_attr, .step4_priceloc{
+	float:left;
+	vertical-align: middle;
+	margin: 5px 10px;
+}
+*/
+.step4-cod{
+	text-align:center;
+}

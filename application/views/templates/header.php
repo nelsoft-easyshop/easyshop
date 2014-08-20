@@ -11,6 +11,7 @@
 <?php require_once("assets/includes/css.php"); ?>
 <?php require_once("assets/includes/js.php"); ?>
 <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="description" content="<?php echo isset($metadescription)?$metadescription:''?>"  />
 <meta name="keywords" content=""/>
 <link rel="shortcut icon" href="<?php echo base_url()?>assets/images/favicon.ico" type="image/x-icon"/>
@@ -58,70 +59,95 @@
  <!-- End Google Tag Manager -->
  
 <header>
-    <div class="wrapper header_wrapper">
-      <div class="top_links_left">
+    <div class="res_wrapper wrapper pos-rel">
+      <div class="top_links_left pd-right-20">
         <div class="top_nav">
-          <ul>
-            <li class="top_nav_main">I want to visit
-              <ul>
-                <li><a href="<?=base_url()?>cat/all">Shopping Categories</a></li>
-                <li><a href="<?=base_url()?>advsrch">Advance Search</a></li>
-              </ul>
+          <ul class="ul-li-fl-left">      
+            <li class="top_nav_main pd-right-20">
+              <a class="prevent" href="<?=base_url()?>sell/step1">
+                <span class="span_bg icon_sell"></span>
+                <span class="txt_hide">Sell an Item</span>
+              </a>
             </li>
-            <li class="top_nav_main">Seller Center
-              <ul>
-                <li><a href="<?=base_url()?>sell/step1">Sell an Item</a></li>
-              </ul>
-            </li>
-            <li class="top_nav_main"><span class="span_bg cart"></span><span class="cart_no"><?PHP echo ($total_items) &&  ($logged_in)?$total_items:0; ?></span>Shopping Cart
-              <ul>
-                <li><a href="<?php echo base_url()."cart/"; ?>">View my Cart</a></li>
-              </ul>
+            <li class="top_nav_main">
+              <a class="prevent" href="<?php echo base_url()."cart/"; ?>">
+                <span class="span_bg big_cart cart"></span>
+                <span class="cart_no"><?PHP echo ($total_items) &&  ($logged_in)?$total_items:0; ?></span>
+                <span class="txt_hide">View my Cart</span>
+              </a>
             </li>         
           </ul>
         </div>
       </div>
 
-      <div class="top_links_right_con">
-        <?php #echo uri_string();?>
-        <?php if(!$logged_in): ?>
-        <div  class="top_links_right"> 
-            <a href="<?=base_url()?>login" class="top_border">Login</a> 
-            <a href="<?=base_url()?>register">Register</a> 
-        </div> 
+      <div class="pos-1 pos-rtl z-index-dflt">
+        <div class="nav-collapse top_links_right top_links_right_con">
+          <ul class="ul-li-fl-left">       
+          <?php #echo uri_string();?>
+          <?php if(!$logged_in): ?>
+              <li><a href="<?=base_url()?>login" class="top_border prevent">Login</a></li> 
+              <li><a href="<?=base_url()?>register" class="prevent">Register</a></li> 
+              <li class="txt_res_hide">
+                <a class="prevent" href="<?=base_url()?>guide/buy"><img src="<?=base_url()?>/assets/images/img_icon_shop.png">
+                  <span>How to Shop</span>
+                </a>
+               </li>
+              <li class="txt_res_hide">
+                <a class="prevent" href="<?=base_url()?>guide/sell">
+                  <img src="<?=base_url()?>/assets/images/img_icon_sell.png">
+                  <span>How to Sell</span>
+                </a>
+              </li>
 
-        <?php else: ?>
-        <div  class="top_links_right">
-            <a href="<?=base_url()?>messages" class="msgs_link">
-                <span class="span_bg img_msgs_cntr"></span>
-                <span id="unread-messages-count" class="msg_countr"><?PHP echo $msgs['unread_msgs'];?></span>
-            </a>
-            <a href="<?=base_url()?>me" class="top_border top_link_name"><?php echo $uname; ?></a>
-            <a href="<?=base_url()?>login/logout">Logout</a>
+          <?php else: ?>
+            <li>
+              <a href="<?=base_url()?>messages" class="msgs_link prevent">
+                  <span class="span_bg img_msgs_cntr"></span>
+                  <span id="unread-messages-count" class="msg_countr"><?PHP echo $msgs['unread_msgs'];?></span>
+              </a>
+              <a href="<?=base_url()?>me" class="top_border top_link_name prevent"><?php echo $uname; ?></a>
+            </li>
+            <li class="txt_res_hide">
+              <a class="prevent" href="<?=base_url()?>guide/buy"><img src="<?=base_url()?>/assets/images/img_icon_shop.png">
+                <span>How to Shop</span>
+              </a>
+            </li>
+            <li class="txt_res_hide">
+              <a class="prevent" href="<?=base_url()?>guide/sell">
+                <img src="<?=base_url()?>/assets/images/img_icon_sell.png">
+                <span>How to Sell</span>
+              </a>
+            </li>
+            <li>
+              <a class="prevent" href="<?=base_url()?>login/logout">Logout</a>
+            </li>
+          <?php endif; ?>
+            
+          </ul>
         </div>
-        <?php endif; ?>
       </div>
-  	<div class="alertUser">
-  	    <p>You have a message!</p>
-  		<span><?PHP echo isset($msgs['msgs']['name'])?$msgs['msgs']['name']:'';?> :</span>
-  		<span><?PHP echo isset($msgs['msgs']['message'])?html_escape($msgs['msgs']['message']):'';?> </span>
-  	</div>
+    <div class="alertUser">
+        <p>You have a message!</p>
+      <span><?PHP echo isset($msgs['msgs']['name'])?$msgs['msgs']['name']:'';?> :</span>
+      <span><?PHP echo isset($msgs['msgs']['message'])?html_escape($msgs['msgs']['message']):'';?> </span>
+    </div>
+    
     <div class="need_help_con">
       <div class="need_help_icons_con">
-        <p><a href="<?=base_url()?>guide/buy"><img src="<?=base_url()?>/assets/images/img_icon_shop.png"><br /><span>How to Shop</span></a></p>
-        <p><a href="<?=base_url()?>guide/sell"><img src="<?=base_url()?>/assets/images/img_icon_sell.png"><br /><span>How to Sell</span></a></p>
+        <p><a class="prevent" href="<?=base_url()?>guide/buy"><img src="<?=base_url()?>/assets/images/img_icon_shop.png"><br /><span>How to Shop</span></a></p>
+        <p><a class="prevent" href="<?=base_url()?>guide/sell"><img src="<?=base_url()?>/assets/images/img_icon_sell.png"><br /><span>How to Sell</span></a></p>
       </div>
       <div class="txt_need_help_con">
         <span class="span_bg up_arrow"></span>
         <span class="txt_need_help"><span class="span_bg icon_help"></span><span class="txt_help">Need Help?</span></span>
       </div>
     </div>
-    </div>
+  
 </header>
 
     <form action="<?php echo base_url(); ?>search/search.html" name="search_form" method="get">
       <section>
-        <div class="wrapper search_wrapper">
+        <div class="res_wrapper wrapper search_wrapper">
         
           <?php if(!(isset($render_logo) && ($render_logo === false))): ?>
             <div class="logo"> <a href="<?=base_url()?>"><span class="span_bg"></span></a> </div>
@@ -157,72 +183,17 @@
           <?php endif; ?>
         </div>
       </section>
+      <div class="clear"></div>
     </form>
 
-
-<script type="text/javascript">
-/*
-$(document).ready(function() {
-  var currentRequest = null;
-
- 
-$('#main_search').on('input propertychange', function() {
-        
-          var searchQuery = $.trim( $(this).val());
-          searchQuery = searchQuery.replace(/ +(?= )/g,'');
-          var fulltext = searchQuery; 
-          if(searchQuery != ""){
-            if(searchQuery.length > 0){
-              currentRequest = $.ajax({
-                type: "GET",
-                url: '<?php echo base_url();?>search/suggest', 
-                
-                cache: false,
-                data: "q="+fulltext, 
-                processData: false,
-                beforeSend: function(jqxhr, settings) { 
-                  if(currentRequest != null) {
-                    currentRequest.abort();
-                  }
-                },
-                success: function(html) {
-                    $("#main_search_drop_content").empty();
-                    if(html==0){
-                        $("#main_search_drop_content").fadeOut(150);
-                        // $("#main_search_drop_content").append('No Results Found');
-                        // $("#main_search_drop_content").show();
-                    }
-                    else{
-                        $("#main_search_drop_content").append(html);
-                        $("#main_search_drop_content").fadeIn(150);
-                    }
-                    $(".main_srch_img_con").hide();
-                }
-              });
-            }else{
-              if(currentRequest != null) {
-                currentRequest.abort();
-              }
-              $("#main_search_drop_content").empty();
-              $("#main_search_drop_content").fadeOut(150);
-            }
-          }else{
-            if(currentRequest != null) {
-              currentRequest.abort();
-            }  
-            $("#main_search_drop_content").empty();
-            $("#main_search_drop_content").fadeOut(150);
-          }
-      });
-});
-*/
-      
-</script>
-
 <script>
-         $(document).ready(function() { 
-            var srchdropcontent= $('#main_search_drop_content');
-            $('#main_search').focus(function() {
+    var navigation = responsiveNav(".nav-collapse");
+
+    (function ($) { 
+      
+        var srchdropcontent= $('#main_search_drop_content');
+        
+        $('#main_search').focus(function() {
             if(srchdropcontent.find("ul").length > 0){
              
               $('#main_search_drop_content').fadeIn(150);
@@ -233,24 +204,45 @@ $('#main_search').on('input propertychange', function() {
                 $('#main_search_drop_content').fadeOut('fast');
                 });
              });
- 
+
             $('#main_search_drop_content').hide();
            
-        });
+    })(jQuery);
         
-        $(".txt_need_help_con").click(function(){
-            $('.need_help_icons_con').slideToggle();
-            $(this).toggleClass("arrow-switch");
+    $(".txt_need_help_con").click(function(){
+        $('.need_help_icons_con').slideToggle();
+        $(this).toggleClass("arrow-switch");
+    });
+
+    $('.need_help_icons_con').hide();
+            
+    (function ($) {
+
+        var container = $(".nav-collapse");
+        var menubutton = $(".nav-toggle");
+        
+        $(menubutton).click(function(){
+
+            if($(container).hasClass("closed"))  {
+                $(container).removeClass("closed").addClass("opened");
+            }
+
+            else {
+                $(container).addClass('closed').removeClass("opened");
+              }
         });
 
-        $('.need_help_icons_con').show();
+        $(document).mouseup(function (e) {
+
+            if (!container.is(e.target) // if the target of the click isn't the container...
+                && container.has(e.target).length === 0) // ... nor a descendant of the container
+            {
+                container.removeClass("opened").addClass("closed");
+                menubutton.removeClass("active");
+            }
+
+        });
         
-        // Hide Need help how to sell and how to buy when click outside the container
-      //   $(document).on('click','.txt_need_help',function() {
-      //   $(document).bind('focusin.txt_need_help click.txt_need_help',function(e) {
-      //       if ($(e.target).closest('.txt_need_help, .need_help_icons_con').length) return;
-      //       $('.need_help_icons_con').slideUp();
-      //   });
-      // });
+    })(jQuery);
 
 </script>

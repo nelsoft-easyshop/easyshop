@@ -91,10 +91,10 @@ class Register extends MY_Controller
 		}
 		else{
 			if( !($this->input->post('register_form1')) ){
-				array_push($serverResponse['error'], 'Failed to submit form. <br>');
+				array_push($serverResponse['error'], 'Failed to submit form.');
 			}
 			if( !($this->form_validation->run('landing_form')) ){
-				array_push($serverResponse['error'], 'Failed to validate form. <br>');
+				array_push($serverResponse['error'], 'Failed to validate form.');
 			}
 		}
 		
@@ -105,12 +105,11 @@ class Register extends MY_Controller
 	public function username_check()
 	{
 		if($this->input->post('username')){
-			//$username = htmlspecialchars($this->input->post('username'));
 			$username = $this->input->post('username');
-			if($this->register_model->get_member_by_username($username))
-				echo 0;
-			else
+			if($this->register_model->validate_username($username))
 				echo 1;
+			else
+				echo 0;
 		}
 	}
 	

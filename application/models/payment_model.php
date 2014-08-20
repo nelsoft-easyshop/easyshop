@@ -6,12 +6,12 @@ class payment_model extends CI_Model
 {
     function __construct() 
     {
-	parent::__construct();
-	$this->load->library("xmlmap");
+        parent::__construct();
+        $this->load->library("xmlmap");
         $this->load->model('cart_model');
         $this->load->model('user_model');
         $this->load->model('product_model');
-    }	
+    }   
 
 
     function getUserAddress($member_id)
@@ -439,6 +439,17 @@ class payment_model extends CI_Model
 			$parseData['mobile'] = trim($row[0]['buyer_contactno']);
 		}
 		
+		switch( (int)$row[0]['payment_method_id'] ){
+			case 1:
+				$parseData['payment_method_name'] = "PayPal";
+			case 2:
+				$parseData['payment_method_name'] = "DragonPay";
+			case 3:
+				$parseData['payment_method_name'] = "Cash on Delivery";
+			case 5:
+				$parseData['payment_method_name'] = "Bank Deposit";
+		}
+		
 		foreach( $row as $r){
 			if( (string)$r['attr_name']!=='' && (string)$r['attr_value']!=='' ){
 				array_push($parseData['attr'], array('field' => ucwords(strtolower($r['attr_name'])), 'value' => ucwords(strtolower($r['attr_value'])) ));
@@ -491,6 +502,8 @@ class payment_model extends CI_Model
 			  , COALESCE(product_item_id, 'Not Available') AS product_item_id
 			  , is_cod 
 			  , CASE es_location_lookup.`type` 
+			  WHEN '0' THEN   
+					IF(es_location_lookup.id_location = (SELECT COALESCE(1,0)), 'Available', 'Not Avialable')
 			  WHEN '1' THEN   
 				  IF(es_location_lookup.id_location = (SELECT COALESCE(:major_island_id,0)), 'Available', 'Not Avialable')
 			  WHEN '2' THEN 
@@ -520,10 +533,12 @@ class payment_model extends CI_Model
 					  AND d.`id_product` = b.`product_id` 
    				) AS shipping 
 			    ON shipping.shipping_id_location = es_location_lookup.`id_location` 
-			WHERE es_location_lookup.`type` IN (1, 2, 3) 
+			WHERE es_location_lookup.`type` IN (0, 1, 2, 3) 
 			  AND COALESCE(product_item_id, 'Not Available') != 'Not Available' 
 			  AND
 			  (CASE es_location_lookup.`type` 
+			  	WHEN '0' THEN   
+					IF(es_location_lookup.id_location = (SELECT COALESCE(1,0)), 'Available', 'Not Avialable')
 			    WHEN '1' THEN   
 					IF(es_location_lookup.id_location = (SELECT COALESCE(:major_island_id,0)), 'Available', 'Not Avialable')
 			    WHEN '2' THEN 

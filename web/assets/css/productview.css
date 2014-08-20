@@ -78,3 +78,25 @@
     font-size: 22px;
  
 }
+
+.btn-meet-up{
+    background-color:  blue;
+    border-radius: 3px;
+    color: #FFFFFF;
+    display: inline-block;
+    font-size: 16px;
+    height: 40px;
+    line-height: 40px;
+    padding: 0;
+    text-align: center;
+    transition: all 0.3s ease-in-out 0s;
+    width: 120px;
+}
+
+.btn-meet-up:hover{
+    background-color: #5C5CFF;
+    color: #FFFFFF;
+
+}
+
+
