@@ -58,7 +58,7 @@
                 <div class="col-md-12">
                     <div class="col-md-10">
                         <div class="row">
-                            <a href="<?php echo base_url() . $banners['left']['target']?>">
+                            <a href="<?php echo $banners['left']['target']?>">
                                 <img class="img-responsive" src="<?=base_url()?><?php echo $banners['left']['img']?>">
                             </a>
                         </div>
@@ -72,7 +72,7 @@
             <div class="row-2">
                 <div class="row mrgn-bttm-8">
                     <div class="col-md-12 ">
-                        <a href="<?php echo base_url() . $banners['mid']['target']?>">
+                        <a href="<?php echo $banners['mid']['target']?>">
                             <img class="img-responsive" src="<?=base_url()?><?php echo $banners['mid']['img']?>">
                         </a>
                     </div>
@@ -294,7 +294,7 @@
                 </div>
                 <div class="col-md-10 col-md-offset-2 mrgn-bttm-8">
                     <div class="row">
-                        <a href="<?php echo base_url() . $banners['right']['target']?>">
+                        <a href="<?php echo $banners['right']['target']?>">
                             <img class="img-responsive" src="<?=base_url()?><?php echo $banners['right']['img']?>">
                         </a>
                     </div>
