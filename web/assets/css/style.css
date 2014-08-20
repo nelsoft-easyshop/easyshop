@@ -7248,6 +7248,13 @@ margin-right: 10px;
     }
 }
 
+@media (max-width: 445px){
+    .join-lbl{
+        display:none;
+    }
+    
+}
+
 .feeds-cont .media.product.feature .media-content:after{
         content:"";
         position:absolute;
@@ -7371,6 +7378,32 @@ margin-right: 10px;
     width: 4.4em;
     height: 4.4em;
 }
+
+.feeds-cont .media.seller-container .media-image a{
+    width: 62px;
+    height: 62px;
+}
+
+
+#m_follow_seller>div{
+    padding-right: 10px;
+    padding-left: 10px;
+    margin-left: 3px;
+    margin-right: 3px;
+}
+
+.feeds-cont .seller-container:hover{
+    background: F7F7F7;
+    box-shadow: 2px 2px 2px 2px #999;
+    -webkit-transition: all 0.3s linear;
+    -o-transition: all 0.3s linear;
+    -moz-transition: all 0.3s linear;
+    -ms-transition: all 0.3s linear;
+    -kthtml-transition: all 0.3s linear;
+    transition: all 0.3s linear;
+    
+}
+
 .feeds-cont .media.side-panel .media-object{
     max-height:4.4em;
     max-width:4.4em;
@@ -7393,13 +7426,32 @@ margin-right: 10px;
     display: inline-block;
 }
 
+
+
+.feeds-cont .feed-center .title{
+    font-size: 14px;
+}
+
+
+
+.feeds-cont .seller-container .title{       
+    border-bottom: 1px solid #ddd; 
+    font-size: 13px
+}
+
 .feeds-cont .title{
+    font-size: 13px;
     font-weight:bold;
     color: #636363;
 }
 
+.feeds-cont .sub-title{
+    font-size: 13px;
+}
+
+
 .feed-price{
-    font-weight: bold;
+    font-weight: lighter;
     font-size: 1.3em;
     color: #f28300;
 }
@@ -7450,7 +7502,6 @@ margin-right: 10px;
 .feeds-cont .feed-menu{
     text-align:center;
     cursor:pointer;
-    font-weight: bold;
 }
 
 .feeds-cont a{
@@ -7468,10 +7519,15 @@ margin-right: 10px;
 }
 
 .feeds-cont .feed-menu.active{
-    /*font-size: 1.2em;*/
-    color: #F18200;
+    font-weight: bold;
 }
 
 .feeds-cont .feed-prod-cont{
     display:none;
+}
+
+@media (max-width: 445px){
+    .browser-disclaimer{
+       display:none; 
+    }
 }

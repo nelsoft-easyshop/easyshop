@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 
-    <link rel="stylesheet" href="<?=base_url()?>assets/css/bootstrap.css" type="text/css" media="screen"/>
-    <link rel="stylesheet" href="<?=base_url()?>assets/css/style.css" type="text/css" media="screen"/>
-    <link rel="stylesheet" href="<?=base_url()?>assets/css/responsive_css.css" type="text/css" media="screen"/>
+    <link rel="stylesheet" href="<?=base_url()?>assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
+    <link rel="stylesheet" href="<?=base_url()?>assets/css/style.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
+    <link rel="stylesheet" href="<?=base_url()?>assets/css/responsive_css.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
     <style type="text/css">
     .res_wrapper .top_nav ul li a, .res_wrapper .top_links_right a {
         font-size: 0.85em;
@@ -36,15 +36,17 @@
                             <div class="">
                                 <?php if( count($followed_users) === 0 ):?>
                                     <p class="no-subs-lbl">You have no subscriptions.</p>
-                                    <?php else:?>
-                                        <?php foreach($followed_users as $fu):?>
-                                        <div class="media pd-8-12 ">
-                                            <a class="pull-left" target="_blank" href="<?php echo base_url() . html_escape($fu['userslug'])?>">
-                                                <img class="media-object" src="<?php echo base_url() . $fu['imgurl']?>">
-                                            </a>
+                                <?php else:?>
+                                    <?php foreach($followed_users as $fu):?>
+                                        <div class="media pd-8-12 side-panel">
+                                            <div class="pull-left media-image">
+                                                <a class="" target="_blank" href="<?php echo base_url() . html_escape($fu['userslug'])?>">
+                                                    <img class="media-object" src="<?php echo base_url() . $fu['imgurl']?>">
+                                                </a>
+                                            </div>
                                             <div class="media-body">
                                                 <h5 class="title"><a target="_blank" href="<?php echo base_url() . html_escape($fu['userslug'])?>"><?php echo html_escape($fu['vendor_name'])?></a></h5>
-                                                <?php echo $fu['datecreated']?>
+                                                <span class="sub-title"><?php echo $fu['datecreated']?></span>
                                             </div>
                                         </div>
                                     <?php endforeach;?>
@@ -77,7 +79,7 @@
                         </a>
                     </div>
                 </div>
-                <div class="row mrgn-bttm-8">
+                <div class="row mrgn-bttm-8  feed-center">
                     <div class="col-md-12">
                         <div class="mrgn-bttm-8">
                             <div class="">
@@ -201,26 +203,30 @@
                                 </div>
                             <?php else:?>
                                 <div class="col-xs-6">
-                                <?PHP $usercount = count($followed_users);
-                                    $uCounter = 0;
-                                ?>
-                                <?php foreach($followed_users as $fu):?>
-                                    <div class="media pd-8-12 ">
-                                        <a class="pull-left" target="_blank" href="<?php echo base_url() . html_escape($fu['vendor_name'])?>">
-                                            <img class="media-object" src="<?php echo base_url() . $fu['imgurl']?>">
-                                        </a>
-                                        <div class="media-body">
-                                            <h5 class="title"><a target="_blank" href="<?php echo base_url() . html_escape($fu['vendor_name'])?>"><?php echo html_escape($fu['vendor_name'])?></a></h5>
-                                            <?php echo $fu['datecreated']?>
+                                <?PHP $usercount = count($followed_users); ?>
+                                <?php $uCounter = 0; ?>
+                                    <?php foreach($followed_users as $fu):?>
+                                        <div class="media pd-8-12 seller-container">
+                                            <div class="pull-left media-image" >
+                                                <a target="_blank" href="<?php echo base_url() . html_escape($fu['vendor_name'])?>">
+                                                    <span>
+                                                        <img class="media-object" src="<?php echo base_url() . $fu['imgurl']?>">
+                                                    </span>
+                                                </a>
+                                            </div>
+                                            <div class="media-body">
+                                                <h5 class="title"><a target="_blank" href="<?php echo base_url() . html_escape($fu['vendor_name'])?>"><?php echo html_escape($fu['vendor_name'])?></a></h5>
+                                                <span class="sub-title"><span class='join-lbl'>Joined: </span><?php echo $fu['datecreated']?></span>
+                                            </div>
                                         </div>
-                                    </div>
-                                <?PHP $uCounter++;
-                                    if( $uCounter === $usercount/2 ):
-                                ?>
-                                    </div><div class="col-md-6">
-                                <?PHP endif;?>
-                                <?php endforeach;?>
-                                
+                                        <?PHP $uCounter++; ?>
+                                        <?php if( $uCounter%2 === 0): ?>
+                                            </div><div class="col-xs-6">
+                                        <?php else: ?>
+                                            </div><div>
+                                        <?PHP endif;?>
+                                    
+                                    <?php endforeach;?>
                                 </div>
                             <?php endif;?>
                         </div>
@@ -283,7 +289,7 @@
                                     </div>
                                     <div class="media-body">
                                         <h5 class="title"><a target="_blank" href="<?php echo base_url() . "item/" . $p['slug']?>"><?php echo html_escape($p['product_name'])?></a></h5>
-                                        PHP <?php echo html_escape(number_format($p['original_price'], 2, '.', ','))?>
+                                        <span class="sub-title">PHP <?php echo html_escape(number_format($p['original_price'], 2, '.', ','))?></span>
                                     </div>
                                 </div>
                             <?php endforeach;?>
@@ -310,7 +316,7 @@
                                     </div>
                                     <div class="media-body">
                                         <h5 class="title"><a target="_blank" href="<?php echo base_url() . "item/" . $p['slug']?>"><?php echo html_escape($p['product_name'])?></a></h5>
-                                        PHP <?php echo html_escape(number_format($p['original_price'], 2, '.', ','))?>
+                                        <span class="sub-title">PHP <?php echo html_escape(number_format($p['original_price'], 2, '.', ','))?></span>
                                     </div>
                                 </div>
                             <?php endforeach;?>
