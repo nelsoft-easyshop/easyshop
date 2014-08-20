@@ -1966,6 +1966,26 @@ box-shadow:         0px 1px 5px 0px rgba(50, 50, 50, 0.75);
     max-width: 50%;
     min-width: 190px;
     width: 100%;
+/**** Inforgraphic page *****/
+.img-info-main {
+    max-width: 980px;
+    width: 100%;
+}
+
+.img-social-media-con img {
+    width: 100%;
+}
+
+.img-sc-email {
+    max-width: 306px;
+}
+
+.img-sc-fb {
+    max-width: 335px;
+}
+
+.img-sc-tw {
+    max-width: 254px;
 }
 
 @media screen and (-webkit-min-device-pixel-ratio: 1.3), screen and (min--moz-device-pixel-ratio: 1.3), screen and (-o-min-device-pixel-ratio: 2 / 1), screen and (min-device-pixel-ratio: 1.3), screen and (min-resolution: 192dpi), screen and (min-resolution: 2dppx) {

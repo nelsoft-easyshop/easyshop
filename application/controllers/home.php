@@ -6,7 +6,7 @@ if (!defined('BASEPATH'))
 class Home extends MY_Controller 
 {
 
-    public $feedsProdPerPage = 15;
+    public $feedsProdPerPage = 7;
 
     
     /**
