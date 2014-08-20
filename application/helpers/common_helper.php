@@ -67,15 +67,15 @@ if(!function_exists('directory_copy'))
 
         foreach($dir_map as $object_key=>$object_value)
         {
-        	if(is_numeric($object_key)){
-        		if(in_array(strtolower($object_value),$arrayNameOnly)){   	 
-	                copy($srcdir.'/'.$object_value,$dstdir.'/'.$object_value);//This is a File not a directory
-	                $filename = explode('_', $object_value);
+            if(is_numeric($object_key)){
+                if(in_array(strtolower($object_value),$arrayNameOnly)){
+                    copy($srcdir.'/'.$object_value,$dstdir.'/'.$object_value);//This is a File not a directory
+                    $filename = explode('_', $object_value);
                     unset($filename[0]);
                     $newFileName =  $pid.'_'.implode('_', $filename);
-	                rename($dstdir.'/'.$object_value, $dstdir.'/'.$newFileName);
-	            }
-	        }
+                    rename($dstdir.'/'.$object_value, $dstdir.'/'.$newFileName);
+                }
+            }
             else{
                 directory_copy($srcdir.'/'.$object_key,$dstdir.'/'.$object_key,$pid,$arrayNameOnly);//this is a directory
             }
