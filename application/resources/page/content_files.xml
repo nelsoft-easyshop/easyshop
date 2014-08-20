@@ -25,9 +25,18 @@
     </select>
 
     <feedBanner>
-        <left>assets/images/feed/side-banner-2.jpg</left>
-        <mid>assets/images/feed/home-banner-2.jpg</mid>
-        <right>assets/images/feed/side-banner-1.jpg</right>
+        <left>
+            <img>assets/images/feed/side-banner-2.jpg</img>
+            <target>test1</target>
+        </left>
+        <mid>
+            <img>assets/images/feed/home-banner-2.jpg</img>
+            <target>test2</target>
+        </mid>
+        <right>
+            <img>assets/images/feed/side-banner-1.jpg</img>
+            <target>test3</target>
+        </right>
     </feedBanner>
 
     <feedFeaturedProduct>
