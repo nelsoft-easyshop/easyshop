@@ -6390,7 +6390,7 @@ a.tooltips span {
 }
 
 #feed-catlist nav ul > li {
-  width: 87%;
+  width: 102.2%;
 }
 
 #feed-catlist nav ul > li > p {
@@ -6402,7 +6402,8 @@ a.tooltips span {
   height: 53px;
   line-height: 53px;
   font-size: 0.85em;
-  width: 195px;
+  width: 160px;
+
 }
 @media only screen and (max-width : 979px) { 
     /**** moblie LOGO ***/

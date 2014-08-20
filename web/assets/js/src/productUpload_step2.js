@@ -323,6 +323,92 @@ function checkOptionValue(selector,id,value,evt)
     $('body').click();
 }
 
+
+function proceedStep3(url)
+{
+    $('#form_product').ajaxForm({
+        url: url,
+        dataType: "json",
+        beforeSubmit : function(arr, $form, options){
+
+            var combination = processCombination();
+            console.log(combination);
+            var attributes = processAttributes(); 
+            console.log(attributes);
+
+            var percentVal = '0%';
+            $('.percentage').html(percentVal);
+            $( ".button_div" ).hide();
+            $( ".loader_div" ).show();
+
+            $('<input type="hidden">').attr({
+                  id: 'primaryPicture',
+                  name: 'primaryPicture',
+                  value: primaryPicture
+                }).appendTo('form');
+            arr.push({"name":"primaryPicture", "value":primaryPicture});
+
+            $('<input type="hidden">').attr({
+                  id: 'removeThisPictures',
+                  name: 'removeThisPictures',
+                  value: JSON.stringify(removeThisPictures)
+                }).appendTo('form');
+            arr.push({"name":"removeThisPictures", "value":JSON.stringify(removeThisPictures)});
+
+            $('<input type="hidden">').attr({
+                  id: 'combination',
+                  name: 'combination',
+                  value: combination
+                }).appendTo('form');
+            arr.push({"name":"combination","value":combination});
+
+            $('<input type="hidden">').attr({
+                  id: 'attributes',
+                  name: 'attributes',
+                  value: attributes
+                }).appendTo('form');
+            arr.push({"name":"attributes","value":attributes});
+
+
+        },
+        uploadProgress : function(event, position, total, percentComplete) {
+            var percentVal = percentComplete + '%';
+            $('.percentage').empty();
+            if(percentComplete >= 100){
+                percentVal = '100%'
+                $('.percentage').html(percentVal);
+            }else{
+                $('.percentage').html(percentVal);
+            }
+        },
+        success :function(d) { 
+            $('.percentage').html('100%');
+            if (d.e == 1) {
+                $('#prod_h_id').val(d.d); 
+                document.getElementById("hidden_form").submit();
+            } else {
+                $( ".button_div" ).show();
+                $( ".loader_div" ).hide();
+                $('.percentage').empty();
+                alert(d.d);
+            } 
+        },
+        error: function (request, status, error) {
+            $( ".button_div" ).show();
+            $( ".loader_div" ).hide();
+            $('.percentage').empty();
+            response = request.responseText;
+            if (response.toLowerCase().indexOf("1001") >= 0){
+                alert('Something Went Wrong. The images you are uploading in [OTHER ATTRIBUTES] are too large.');
+            }else{
+                alert('Something Went Wrong. Please try again.');
+            }
+        } 
+    }); 
+}
+
+
+
 function saveAsDraftProceed(url)
 {
     $('.arrayNameOfFiles').val(JSON.stringify(af));
@@ -441,89 +527,6 @@ function processAttributes()
 }
 
 
-function proceedStep3(url)
-{
-    $('#form_product').ajaxForm({
-        url: url,
-        dataType: "json",
-        beforeSubmit : function(arr, $form, options){
-
-            var combination = processCombination();
-            console.log(combination);
-            var attributes = processAttributes(); 
-            console.log(attributes);
-
-            var percentVal = '0%';
-            $('.percentage').html(percentVal);
-            $( ".button_div" ).hide();
-            $( ".loader_div" ).show();
-
-            $('<input type="hidden">').attr({
-                  id: 'primaryPicture',
-                  name: 'primaryPicture',
-                  value: primaryPicture
-                }).appendTo('form');
-            arr.push({"name":"primaryPicture", "value":primaryPicture});
-
-            $('<input type="hidden">').attr({
-                  id: 'removeThisPictures',
-                  name: 'removeThisPictures',
-                  value: JSON.stringify(removeThisPictures)
-                }).appendTo('form');
-            arr.push({"name":"removeThisPictures", "value":JSON.stringify(removeThisPictures)});
-
-            $('<input type="hidden">').attr({
-                  id: 'combination',
-                  name: 'combination',
-                  value: combination
-                }).appendTo('form');
-            arr.push({"name":"combination","value":combination});
-
-            $('<input type="hidden">').attr({
-                  id: 'attributes',
-                  name: 'attributes',
-                  value: attributes
-                }).appendTo('form');
-            arr.push({"name":"attributes","value":attributes});
-
-
-        },
-        uploadProgress : function(event, position, total, percentComplete) {
-            var percentVal = percentComplete + '%';
-            $('.percentage').empty();
-            if(percentComplete >= 100){
-                percentVal = '100%'
-                $('.percentage').html(percentVal);
-            }else{
-                $('.percentage').html(percentVal);
-            }
-        },
-        success :function(d) { 
-            $('.percentage').html('100%');
-            if (d.e == 1) {
-                $('#prod_h_id').val(d.d); 
-                document.getElementById("hidden_form").submit();
-            } else {
-                $( ".button_div" ).show();
-                $( ".loader_div" ).hide();
-                $('.percentage').empty();
-                alert(d.d);
-            } 
-        },
-        error: function (request, status, error) {
-            $( ".button_div" ).show();
-            $( ".loader_div" ).hide();
-            $('.percentage').empty();
-            response = request.responseText;
-            if (response.toLowerCase().indexOf("1001") >= 0){
-                alert('Something Went Wrong. The images you are uploading in [OTHER ATTRIBUTES] are too large.');
-            }else{
-                alert('Something Went Wrong. Please try again.');
-            }
-        } 
-    }); 
-}
- 
 (function($) {
 
      // if keyword change. counter will change also either increase or decrease until reach its limit..
@@ -1284,7 +1287,7 @@ var pictureCountOther  = 0; var primaryPicture = 0;
     });
 
     function startUpload(cnt,filescnt,arrayUpload,afstart,imageName,errorValues){
-
+        canProceed = false;
         $('.counter').val(cnt); 
         $('.filescnttxt').val(filescnt); 
         $('#afstart').val(JSON.stringify(afstart));   
@@ -1390,6 +1393,7 @@ var pictureCountOther  = 0; var primaryPicture = 0;
         }
  
         picName = tempId+'_'+memberId+'_'+fulldate+pictureCountOther+'o.'+extension;
+        canProceed = false;
         $('#other_files').ajaxForm({
             url: config.base_url+'productUpload/uploadimageOther',
             type: "POST", 

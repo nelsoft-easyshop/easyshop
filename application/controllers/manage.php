@@ -8,8 +8,16 @@ class Manage extends MY_Controller {
     public $img_dimension = array();
     public $file;
     public $var;
+    
+    /**
+     * The xml file to be used within resources. Does not include the file extension. 
+     *
+     * @var string
+     */
+    private $xmlfile;
 
-    function __construct() {
+    function __construct() 
+    {
         parent::__construct();
         $this->load->model('product_model');
         $this->load->model('user_model');
@@ -23,10 +31,14 @@ class Manage extends MY_Controller {
             if(!$is_admin){
                die('Forbidden directory <br> Click here <a href="/home">Home</a>'); 
             }
-        }else{
+        }
+        else{
             die('Forbidden directory <br> Click here <a href="/home">Home</a>');
         }
-	$this->file = APPPATH . "resources/page/home_files.xml"; 
+        
+        $xmlResourceService = $this->serviceContainer['xml_resource'];
+        $this->xmlfile =  $xmlResourceService->getHomeXMLfile();
+        $this->file = APPPATH . "resources/". $this->xmlfile .".xml";
         $this->img_dimension['usersize'] = array(589,352);
     }
 
@@ -34,7 +46,7 @@ class Manage extends MY_Controller {
     function index()
     { 
          
-        $home_content = $this->product_model->getHomeContent('page/home_files');
+        $home_content = $this->product_model->getHomeContent($this->xmlfile);
         $viewdata['bannerImages'] = $home_content['mainSlide'];   
         $viewdata['productSlide'] = $home_content['productSlide'];    
 
@@ -302,7 +314,7 @@ class Manage extends MY_Controller {
         $this->image_lib->initialize($config); 
         $this->image_lib->resize();
         $this->image_lib->clear();
-    }  	
+    }  
 }
 
 

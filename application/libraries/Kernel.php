@@ -91,6 +91,12 @@ class Kernel
         };
         
         
+        //XML Resource accessor
+        $container['xml_resource'] = function ($c) {
+            $configurationService = new \EasyShop\Core\Configuration\Configuration();
+            return new \EasyShop\XML\Resource($configurationService);
+        };
+        
         /* Register services END */
         $this->serviceContainer = $container;
     }
