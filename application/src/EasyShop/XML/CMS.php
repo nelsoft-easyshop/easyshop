@@ -5,7 +5,6 @@ namespace EasyShop\XML;
 class CMS
 {
 
-   
     /**
      *  Method used to return the needed strings in adding/settings values of xml nodes. The indentions of the strings are taken 'as-is'
      *
