@@ -322,7 +322,207 @@ function checkOptionValue(selector,id,value,evt)
     }
     $('body').click();
 }
- 
+
+function proceedStep3(url)
+{
+    $('#form_product').ajaxForm({
+        url: url,
+        dataType: "json",
+        beforeSubmit : function(arr, $form, options){
+
+            var combination = processCombination();
+            console.log(combination);
+            var attributes = processAttributes(); 
+            console.log(attributes);
+
+            var percentVal = '0%';
+            $('.percentage').html(percentVal);
+            $( ".button_div" ).hide();
+            $( ".loader_div" ).show();
+
+            $('<input type="hidden">').attr({
+                  id: 'primaryPicture',
+                  name: 'primaryPicture',
+                  value: primaryPicture
+                }).appendTo('form');
+            arr.push({"name":"primaryPicture", "value":primaryPicture});
+
+            $('<input type="hidden">').attr({
+                  id: 'removeThisPictures',
+                  name: 'removeThisPictures',
+                  value: JSON.stringify(removeThisPictures)
+                }).appendTo('form');
+            arr.push({"name":"removeThisPictures", "value":JSON.stringify(removeThisPictures)});
+
+            $('<input type="hidden">').attr({
+                  id: 'combination',
+                  name: 'combination',
+                  value: combination
+                }).appendTo('form');
+            arr.push({"name":"combination","value":combination});
+
+            $('<input type="hidden">').attr({
+                  id: 'attributes',
+                  name: 'attributes',
+                  value: attributes
+                }).appendTo('form');
+            arr.push({"name":"attributes","value":attributes});
+
+
+        },
+        uploadProgress : function(event, position, total, percentComplete) {
+            var percentVal = percentComplete + '%';
+            $('.percentage').empty();
+            if(percentComplete >= 100){
+                percentVal = '100%'
+                $('.percentage').html(percentVal);
+            }else{
+                $('.percentage').html(percentVal);
+            }
+        },
+        success :function(d) { 
+            $('.percentage').html('100%');
+            if (d.e == 1) {
+                $('#prod_h_id').val(d.d); 
+                document.getElementById("hidden_form").submit();
+            } else {
+                $( ".button_div" ).show();
+                $( ".loader_div" ).hide();
+                $('.percentage').empty();
+                alert(d.d);
+            } 
+        },
+        error: function (request, status, error) {
+            $( ".button_div" ).show();
+            $( ".loader_div" ).hide();
+            $('.percentage').empty();
+            response = request.responseText;
+            if (response.toLowerCase().indexOf("1001") >= 0){
+                alert('Something Went Wrong. The images you are uploading in [OTHER ATTRIBUTES] are too large.');
+            }else{
+                alert('Something Went Wrong. Please try again.');
+            }
+        } 
+    }); 
+}
+
+function saveAsDraftProceed(url)
+{
+    $('.arrayNameOfFiles').val(JSON.stringify(af));
+    tinyMCE.triggerSave(); 
+    $('#form_product').ajaxForm({ 
+        url: url,
+        dataType: "json",
+        async: false,
+        beforeSubmit : function(arr, $form, options){
+            var combination = processCombination();
+            var attributes = processAttributes(); 
+
+            $('<input type="hidden">').attr({
+                  id: 'primaryPicture',
+                  name: 'primaryPicture',
+                  value: primaryPicture
+            }).appendTo('form');
+            arr.push({name:'primaryPicture', value:primaryPicture});
+
+            $('<input type="hidden">').attr({
+              id: 'removeThisPictures',
+              name: 'removeThisPictures',
+              value: JSON.stringify(removeThisPictures)
+            }).appendTo('form');
+            arr.push({name:'removeThisPictures', value:JSON.stringify(removeThisPictures)});
+
+            $('<input type="hidden">').attr({
+              id: 'combination',
+              name: 'combination',
+              value: combination
+            }).appendTo('form');
+            arr.push({name:'combination',value:combination});
+
+            $('<input type="hidden">').attr({
+                id: 'attributes',
+                name: 'attributes',
+                value: attributes
+            }).appendTo('form');
+            arr.push({name:'attributes',value:attributes});
+
+            $('<input type="hidden">').attr({
+                id: 'savedraft',
+                name: 'savedraft',
+                value: '1'
+            }).appendTo('form');
+            arr.push({name:'savedraft',value:'1'});
+
+        },success :function(d) { 
+            $("#form_product").attr("action", "/sell/edit/processing");
+            $("#form_product").append('<input type="hidden" name="p_id" id="p_id" value="'+d.d+'">');
+            $("#edit_step1 > #p_id").val(d.d);
+        }
+    }).submit(); 
+}
+
+function processCombination()
+{
+    var completeCombination = [];   
+    $(".div-combination").each(function(){
+
+        var currentDiv = $(this);
+        var selectList = currentDiv.children('.div2').children('span');
+
+        var eachData = {};
+        var eachCombination = {};
+        var itemId = 0;
+        if (currentDiv.data("itemid") != undefined) {
+            itemId = currentDiv.data("itemid");
+        }
+
+        selectList.each(function(){
+            var currentSelect = $(this);
+            var optionSelected = $(this).children('select').children('option:selected');
+            var head = optionSelected.data('head');
+             var value = optionSelected.data('value');
+            var price = optionSelected.data('price');
+            eachData[head] = value; 
+        });
+
+        eachCombination.quantity = currentDiv.children('.div1').children('.qty').val(); 
+        eachCombination.data = eachData; 
+        eachCombination.itemid = itemId; 
+        console.log(eachCombination);
+        completeCombination.push(eachCombination);
+    });
+
+    return JSON.stringify(completeCombination);
+}
+
+function processAttributes()
+{
+    var span = $('.select-control-panel-option > .div2 > span');
+    var completeAttributes = {}; 
+    span.each(function(){
+        var currentSelect = $(this);
+        var select = $(this).children('select').children('option');
+        var currentHead;
+        var eachHead = [];
+        select.each(function(){
+            var eachValue = {};
+            var optionSelected = $(this);
+            var head = currentHead = optionSelected.data('head');
+            var value = optionSelected.data('value');
+            var price = optionSelected.data('price');
+            var image = optionSelected.data('image');
+            eachValue.value =value;
+            eachValue.price =price;
+            eachValue.image =image;
+            eachHead.push(eachValue);
+        });
+        completeAttributes[currentHead] =  eachHead;
+        
+    });
+
+    return JSON.stringify(completeAttributes);
+}
+
 (function($) {
  
     
@@ -1341,207 +1541,6 @@ var pictureCountOther  = 0; var primaryPicture = 0;
         saveAsDraftProceed();
         $('#edit_step1').submit();
     });
- 
-    function processCombination()
-    {
-        var completeCombination = [];   
-        $(".div-combination").each(function(){
-
-            var currentDiv = $(this);
-            var selectList = currentDiv.children('.div2').children('span');
-
-            var eachData = {};
-            var eachCombination = {};
-            var itemId = 0;
-            if (currentDiv.data("itemid") != undefined) {
-                itemId = currentDiv.data("itemid");
-            }
-
-            selectList.each(function(){
-                var currentSelect = $(this);
-                var optionSelected = $(this).children('select').children('option:selected');
-                var head = optionSelected.data('head');
-                 var value = optionSelected.data('value');
-                var price = optionSelected.data('price');
-                eachData[head] = value; 
-            });
-
-            eachCombination.quantity = currentDiv.children('.div1').children('.qty').val(); 
-            eachCombination.data = eachData; 
-            eachCombination.itemid = itemId; 
-            console.log(eachCombination);
-            completeCombination.push(eachCombination);
-        });
-
-        return JSON.stringify(completeCombination);
-    }
-
-    function processAttributes()
-    {
-        var span = $('.select-control-panel-option > .div2 > span');
-        var completeAttributes = {}; 
-        span.each(function(){
-            var currentSelect = $(this);
-            var select = $(this).children('select').children('option');
-            var currentHead;
-            var eachHead = [];
-            select.each(function(){
-                var eachValue = {};
-                var optionSelected = $(this);
-                var head = currentHead = optionSelected.data('head');
-                var value = optionSelected.data('value');
-                var price = optionSelected.data('price');
-                var image = optionSelected.data('image');
-                eachValue.value =value;
-                eachValue.price =price;
-                eachValue.image =image;
-                eachHead.push(eachValue);
-            });
-            completeAttributes[currentHead] =  eachHead;
-            
-        });
-
-        return JSON.stringify(completeAttributes);
-    }
-
-
-    function proceedStep3(url)
-    {
-        $('#form_product').ajaxForm({
-            url: url,
-            dataType: "json",
-            beforeSubmit : function(arr, $form, options){
-
-                var combination = processCombination();
-                console.log(combination);
-                var attributes = processAttributes(); 
-                console.log(attributes);
-
-                var percentVal = '0%';
-                $('.percentage').html(percentVal);
-                $( ".button_div" ).hide();
-                $( ".loader_div" ).show();
-
-                $('<input type="hidden">').attr({
-                      id: 'primaryPicture',
-                      name: 'primaryPicture',
-                      value: primaryPicture
-                    }).appendTo('form');
-                arr.push({"name":"primaryPicture", "value":primaryPicture});
-
-                $('<input type="hidden">').attr({
-                      id: 'removeThisPictures',
-                      name: 'removeThisPictures',
-                      value: JSON.stringify(removeThisPictures)
-                    }).appendTo('form');
-                arr.push({"name":"removeThisPictures", "value":JSON.stringify(removeThisPictures)});
-
-                $('<input type="hidden">').attr({
-                      id: 'combination',
-                      name: 'combination',
-                      value: combination
-                    }).appendTo('form');
-                arr.push({"name":"combination","value":combination});
-
-                $('<input type="hidden">').attr({
-                      id: 'attributes',
-                      name: 'attributes',
-                      value: attributes
-                    }).appendTo('form');
-                arr.push({"name":"attributes","value":attributes});
-
- 
-            },
-            uploadProgress : function(event, position, total, percentComplete) {
-                var percentVal = percentComplete + '%';
-                $('.percentage').empty();
-                if(percentComplete >= 100){
-                    percentVal = '100%'
-                    $('.percentage').html(percentVal);
-                }else{
-                    $('.percentage').html(percentVal);
-                }
-            },
-            success :function(d) { 
-                $('.percentage').html('100%');
-                if (d.e == 1) {
-                    $('#prod_h_id').val(d.d); 
-                    document.getElementById("hidden_form").submit();
-                } else {
-                    $( ".button_div" ).show();
-                    $( ".loader_div" ).hide();
-                    $('.percentage').empty();
-                    alert(d.d);
-                } 
-            },
-            error: function (request, status, error) {
-                $( ".button_div" ).show();
-                $( ".loader_div" ).hide();
-                $('.percentage').empty();
-                response = request.responseText;
-                if (response.toLowerCase().indexOf("1001") >= 0){
-                    alert('Something Went Wrong. The images you are uploading in [OTHER ATTRIBUTES] are too large.');
-                }else{
-                    alert('Something Went Wrong. Please try again.');
-                }
-            } 
-        }); 
-    }
-
-    function saveAsDraftProceed(url)
-    {
-        $('.arrayNameOfFiles').val(JSON.stringify(af));
-        tinyMCE.triggerSave(); 
-        $('#form_product').ajaxForm({ 
-            url: url,
-            dataType: "json",
-            async: false,
-            beforeSubmit : function(arr, $form, options){
-                var combination = processCombination();
-                var attributes = processAttributes(); 
-
-                $('<input type="hidden">').attr({
-                      id: 'primaryPicture',
-                      name: 'primaryPicture',
-                      value: primaryPicture
-                }).appendTo('form');
-                arr.push({name:'primaryPicture', value:primaryPicture});
-
-                $('<input type="hidden">').attr({
-                  id: 'removeThisPictures',
-                  name: 'removeThisPictures',
-                  value: JSON.stringify(removeThisPictures)
-                }).appendTo('form');
-                arr.push({name:'removeThisPictures', value:JSON.stringify(removeThisPictures)});
-
-                $('<input type="hidden">').attr({
-                  id: 'combination',
-                  name: 'combination',
-                  value: combination
-                }).appendTo('form');
-                arr.push({name:'combination',value:combination});
-
-                $('<input type="hidden">').attr({
-                    id: 'attributes',
-                    name: 'attributes',
-                    value: attributes
-                }).appendTo('form');
-                arr.push({name:'attributes',value:attributes});
-
-                $('<input type="hidden">').attr({
-                    id: 'savedraft',
-                    name: 'savedraft',
-                    value: '1'
-                }).appendTo('form');
-                arr.push({name:'savedraft',value:'1'});
-
-            },success :function(d) { 
-                $("#form_product").attr("action", "/sell/edit/processing");
-                $("#form_product").append('<input type="hidden" name="p_id" id="p_id" value="'+d.d+'">');
-                $("#edit_step1 > #p_id").val(d.d);
-            }
-        }).submit(); 
-    }
 
     function disableF5(e) { if ((e.which || e.keyCode) == 116) e.preventDefault(); };
     // To disable f5
