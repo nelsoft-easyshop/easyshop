@@ -59,5 +59,4 @@ class AccountService extends MY_Controller
     }
 
 }
-?>
 
