@@ -49,7 +49,7 @@ class messages extends MY_Controller
     public function send_msg()
     {
         $sessionData = $this->session->all_userdata();
-	    $val = trim($this->input->post("recipient"));
+        $val = trim($this->input->post("recipient"));
         $qResult = $this->user_model->getUserByUsername($val);
 
         if($sessionData['member_id'] == $val || $qResult === false){
@@ -74,7 +74,7 @@ class messages extends MY_Controller
             }
         }
 
-	    echo json_encode($result);
+    echo json_encode($result);
     }
 
     /**
