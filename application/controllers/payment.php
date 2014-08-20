@@ -848,24 +848,33 @@ class Payment extends MY_Controller{
     }
 
 
-    #PAYMENT PAGE SUCCESS/ERROR
-    function paymentSuccess($mode = "easyshop")
+    /** 
+     * Generates the payment succes or error view
+     * 
+     * @param string $mode
+     */
+    public function paymentSuccess($mode = "easyshop")
     {   
         if(strtolower($mode) == 'cashondelivery'){
             $paymentType = $this->PayMentCashOnDelivery;
-        }elseif (strtolower($mode) == 'debitcreditcard') {
+        }
+        elseif (strtolower($mode) == 'debitcreditcard') {
             $paymentType = $this->PayMentPesoPayCC;
-        }elseif (strtolower($mode) == 'dragonpay') {
+        }
+        elseif (strtolower($mode) == 'dragonpay') {
             $paymentType = $this->PayMentDragonPay;
-        }elseif (strtolower($mode) == 'PayMentDirectBankDeposit') {
+        }
+        elseif (strtolower($mode) == 'PayMentDirectBankDeposit') {
             $xmlResourceService = $this->serviceContainer['xml_resource'];
             $xmlfile =  $xmlResourceService->getContentXMLfile();
             $esAccountNumber = $this->xmlmap->getFilenameID($xmlfile,'bank-account-number');
-            $esBank = $this->xmlmap->getFilenameID($xmlfile,'bank-name');
+//             $esBank = $this->xmlmap->getFilenameID($xmlfile,'bank-name');
             $paymentType = $this->PayMentPayPal;
-        }elseif (strtolower($mode) == 'paypal') {
+        }
+        elseif (strtolower($mode) == 'paypal') {
             $paymentType = $this->PayMentPayPal;
-        }else{
+        }
+        else{
             $paymentType = $this->PayMentCashOnDelivery;
         }
 
@@ -893,7 +902,8 @@ class Payment extends MY_Controller{
             $response['available'] = false;
             $response['message'] = 'This section is not available.';
             $analytics = array();
-        }else{
+        }
+        else{
             #google analytics data
             $analytics = $this->ganalytics($response['itemList'],$payDetails['id_order']);
             #end of google analytics data
