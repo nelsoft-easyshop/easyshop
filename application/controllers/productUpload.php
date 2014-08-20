@@ -767,7 +767,8 @@ class productUpload extends MY_Controller
         $brand_valid = FALSE;
         $otherBrand = ""; $primaryName ="";
         $username = $this->user_model->getUserById($memberId)['username'];
-        $originalPath = $this->session->userdata('originalPath'); 
+        $dir = './assets/product/'; 
+        $originalPath = $path = glob($dir."{$product_id}_{$memberId}*", GLOB_BRACE)[0].'/';
         $tempDirectory = $this->session->userdata('tempDirectory'); 
         $savingAsDraft = ($this->input->post('savedraft'))?'1':'0'; 
 
@@ -884,19 +885,6 @@ class productUpload extends MY_Controller
             }
         }
 
-        if (file_exists($originalPath)){
-            recursiveRemoveDirectory($originalPath);
-            if(!mkdir($originalPath, 0777, true)) {  
-                die('{"e":"0","d":"There was a problem. \n Please try again! - Error[0010]"}'); 
-            }
-            if(!mkdir($originalPath.'other/', 0777, true)) { 
-                die('{"e":"0","d":"There was a problem. \n Please try again! - Error[0012]"}');
-            }           
-        }
-        else{
-            die('{"e":"0","d":"There was a problem. \n Please try again! - Error[00107]"}'); 
-        }
- 
         $product_details = array('product_id' => $product_id,
             'name' => $product_title,
             'sku' => $sku,
