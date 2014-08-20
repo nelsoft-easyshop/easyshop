@@ -311,7 +311,9 @@ class Home extends MY_Controller
                 $fpID[] = $fp['id_product'];
             }
         }
+        
         $data['fpID'] = json_encode($fpID);
+        
         return $data;
     }
     
