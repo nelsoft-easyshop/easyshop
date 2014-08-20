@@ -235,11 +235,11 @@ class Memberpage extends MY_Controller
             'image_profile' => $this->memberpage_model->get_image($uid),
             'active_products' => $this->memberpage_model->getUserItems($uid,0),
             'deleted_products' => $this->memberpage_model->getUserItems($uid,1),
-                'draft_products' => $this->memberpage_model->getUserItems($uid,0,1),
+            'draft_products' => $this->memberpage_model->getUserItems($uid,0,1),
             'active_count' => intval($user_product_count['active']),
             'deleted_count' => intval($user_product_count['deleted']),
-                'sold_count' => intval($user_product_count['sold']),
-                'draft_count' => intval($user_product_count['draft'])
+            'sold_count' => intval($user_product_count['sold']),
+            'draft_count' => intval($user_product_count['draft'])
         );
         $data = array_merge($data, $this->memberpage_model->getLocationLookup());
         $data = array_merge($data,$this->memberpage_model->get_member_by_id($uid));

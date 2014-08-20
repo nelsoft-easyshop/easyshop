@@ -564,6 +564,9 @@ class memberpage_model extends CI_Model
             foreach($parents as $parent){
                 array_push($row['parents'], $parent['name']);
             }
+            if( strlen(trim($row['cat_other_name'])) > 0 ){
+                array_push($row['parents'], $row['cat_other_name']);
+            }
             
             $query = $this->xmlmap->getFilenameID('sql/product','getProductAttributes');
             $sth = $this->db->conn_id->prepare($query);
@@ -596,6 +599,7 @@ class memberpage_model extends CI_Model
             unset($row['product_image_path']);
             $data[] = $row;
         }
+
         return $data;
     }
     
