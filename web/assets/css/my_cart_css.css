@@ -1045,7 +1045,7 @@ input.cc_check {
 
 .font-roboto{
 	font-family: 'Roboto',sans-serif;
-	font-weight:200;
+	font-weight:normal;
 }
 
 .tr-cart-content{
@@ -1196,6 +1196,4 @@ input.cc_check {
 		padding-left: 25px !important;
 	
 	}
-	
-	
 }
