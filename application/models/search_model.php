@@ -162,9 +162,11 @@ class search_model extends CI_Model
         return $products;
     }
 
-    /*
+    /**
      * Use fulltext search to find strings in es_cat.name 
      * Returns all matched category names.
+     * @param string $string
+     * @return array
      */
     public function searchCategory($string){
         $query = $this->xmlmap->getFilenameID('sql/search','searchCategory');
@@ -176,9 +178,11 @@ class search_model extends CI_Model
         return $result;
     }
 
-    /*
+    /**
      * Use fulltext search to find strings in es_cat.name 
-     * Returns all matched brand names.
+     * Returns all matched brand names.    
+     * @param string $string
+     * @return array
      */
     public function searchBrand($string){
         $query = $this->xmlmap->getFilenameID('sql/search','searchBrand');

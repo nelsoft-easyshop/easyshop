@@ -323,6 +323,7 @@ function checkOptionValue(selector,id,value,evt)
     $('body').click();
 }
 
+
 function proceedStep3(url)
 {
     $('#form_product').ajaxForm({
@@ -405,6 +406,8 @@ function proceedStep3(url)
         } 
     }); 
 }
+
+
 
 function saveAsDraftProceed(url)
 {
@@ -523,9 +526,9 @@ function processAttributes()
     return JSON.stringify(completeAttributes);
 }
 
+
 (function($) {
- 
-    
+
      // if keyword change. counter will change also either increase or decrease until reach its limit..
     updateCountdown();
     $('#prod_keyword').change(updateCountdown);
@@ -614,6 +617,7 @@ function processAttributes()
 
         var $this = $(this);
         var newval = (parseFloat($this.val()) > 100) ? 99 : (parseFloat($this.val()) == 0 || isNaN(parseFloat($this.val())))? 0 : parseFloat($this.val());
+        $(this).val(newval);
         get_discPrice();
         $rangeSlider.ionRangeSlider("update", {
             from: newval 
@@ -627,6 +631,11 @@ function processAttributes()
 
         var $this = $(this);
         var discountPrice = parseFloat($this.val());
+
+        if (isNaN(discountPrice) || $("#prod_price").val() <= 0) {
+            $(this).val('');
+            return false;
+        } 
         var basePrice = parseFloat($("#prod_price").val().replace(/,/g,''));
         var sum = ((basePrice - discountPrice) / basePrice) * 100;
         sum = sum.toFixed(4);
@@ -1216,7 +1225,7 @@ var pictureCountOther  = 0; var primaryPicture = 0;
                 imageName = tempId+'_'+memberId+'_'+fulldate+pictureCount+'.'+extension;
                 af.push(imageName+'||'+extension); 
                 afstart.push(imageName); 
-                window.URL.revokeObjectURL(fileList[i]);
+                // window.URL.revokeObjectURL(fileList[i]);
                 arrayUpload.push(pictureCount);
                 pictureCount++; 
             }

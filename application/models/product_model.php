@@ -1148,13 +1148,13 @@ class product_model extends CI_Model
                     $sth->bindParam(':endprice',$priceEndValue,PDO::PARAM_STR);
                 
                 }
-            }  
+            }
         }
 
-        $sth->bindParam(':start',$start,PDO::PARAM_INT);             
+        $sth->bindParam(':start',$start,PDO::PARAM_INT);
         $sth->bindParam(':per_page',$per_page,PDO::PARAM_INT);
-        
-        $sth->execute(); 
+
+        $sth->execute();
     
         $products = $sth->fetchAll(PDO::FETCH_ASSOC);
         explodeImagePath($products);
@@ -2448,7 +2448,7 @@ class product_model extends CI_Model
             $sth->bindParam(':memberid',$memberid,PDO::PARAM_INT);
             $sth->bindParam(':cod', $cod, PDO::PARAM_INT);
             $sth->execute();
-            return true;
+            return $slug;
         }
         else{
             return false;

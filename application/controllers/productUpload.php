@@ -1168,10 +1168,12 @@ class productUpload extends MY_Controller
             
             if( $this->input->post('is_edit') ){
                 $this->product_model->finalizeProduct($productID , $memberId, $product['is_cod']);
-            }else{
+            }
+            else{
                 #Update product entry in es_product to be ready for purchase
-                $this->product_model->finalizeProduct($productID , $memberId, 1);
+                $productSlug = $this->product_model->finalizeProduct($productID , $memberId, 1);
                 $product['is_cod'] = 1;
+                $product['slug'] = $productSlug;
             }
             
             $data = array(

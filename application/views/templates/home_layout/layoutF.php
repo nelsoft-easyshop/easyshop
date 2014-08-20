@@ -119,6 +119,7 @@
                             </div>
                         </div>
                         <?php endforeach;?>
+
                         <div id="featured_prod" class="feed-prod-cont" style="display:block;">
                             <?php foreach( $featured_prod as $prod ):?>
                             <div class="media table-bordered mrgn-bttm-8 product">
@@ -189,6 +190,7 @@
                                     <input type="hidden" name="feed_set" value="2">
                                     <?php echo form_close();?>
                                     <input type="button" class="orange-btn load-more feed_load_more" value="Load More">
+
                                 </div>
                             </div>
                         </div>
