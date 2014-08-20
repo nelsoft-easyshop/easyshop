@@ -157,6 +157,19 @@ class user_model extends CI_Model {
         
         return $row;
     }
+
+    public function getAdminUser($userid){
+    
+        $query = "SELECT * FROM es_admin_member WHERE id_admin = :userid";
+        $sth = $this->db->conn_id->prepare($query);
+        $sth->bindParam(':userid',$userid); 
+        $sth->execute();
+        $row = $sth->fetch(PDO::FETCH_ASSOC);
+        $row = (!empty($row))?$row:false;
+        return $row;
+    
+    }
+
     
     public function CountUsers(){
       
