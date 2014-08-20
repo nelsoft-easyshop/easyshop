@@ -691,6 +691,10 @@ class memberpage_model extends CI_Model
             }
             //IF BANK DEPOSIT
             if( (int)$r['payment_method'] === 5 && (int)$r['transac_stat'] === 99 ){
+            
+                $xmlResourceService = $this->serviceContainer['xml_resource'];
+                $xmlfile =  $xmlResourceService->getContentXMLfile();
+            
                 $query = $this->xmlmap->getFilenameID('sql/users','getTransactionBankDepositDetails');
                 $sth = $this->db->conn_id->prepare($query);
                 $sth->bindParam(':order_id', $r['id_order']);
@@ -698,9 +702,9 @@ class memberpage_model extends CI_Model
                 $pbd = $sth->fetch(PDO::FETCH_ASSOC);
                 $data[$r['id_order']]['bd_details'] = $pbd;
                 if(!isset($data['bank_template'])){
-                    $data[$r['id_order']]['bank_template']['bank_name'] = $this->xmlmap->getFilenameID('page/content_files','bank-name');
-                    $data[$r['id_order']]['bank_template']['bank_accname'] = $this->xmlmap->getFilenameID('page/content_files','bank-account-name');
-                    $data[$r['id_order']]['bank_template']['bank_accnum'] = $this->xmlmap->getFilenameID('page/content_files','bank-account-number');
+                    $data[$r['id_order']]['bank_template']['bank_name'] = $this->xmlmap->getFilenameID($xmlfile,'bank-name');
+                    $data[$r['id_order']]['bank_template']['bank_accname'] = $this->xmlmap->getFilenameID($xmlfile,'bank-account-name');
+                    $data[$r['id_order']]['bank_template']['bank_accnum'] = $this->xmlmap->getFilenameID($xmlfile,'bank-account-number');
                 }
                 
             }
