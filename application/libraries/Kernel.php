@@ -90,6 +90,7 @@ class Kernel
             return new \EasyShop\XML\CMS();
         };
         
+        
         /* Register services END */
         $this->serviceContainer = $container;
     }
