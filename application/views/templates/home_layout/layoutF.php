@@ -35,7 +35,7 @@
                             <div class="border-bottom pd-8-12 title">Followed Sellers</div>
                             <div class="">
                                 <?php if( count($followed_users) === 0 ):?>
-                                    <p class="pd-8-12">No subscriptions yet</p>
+                                    <p class="no-subs-lbl">You have no subscriptions.</p>
                                     <?php else:?>
                                         <?php foreach($followed_users as $fu):?>
                                         <div class="media pd-8-12 ">
@@ -113,7 +113,7 @@
                                 <div class="condition s-screen">Condition: <?php echo $p['condition']?></div>
                             </div>
                             <div class="col-md-3 col-sm-3 media-sub media-btn-panel">
-                                <p>Php</p>
+                                <p>PHP</p>
                                 <p class="feed-price"><?php echo html_escape(number_format($p['original_price'], 2, '.', ','))?></p>
                                 <div class="orange-btn"><a target="_blank" href="<?php echo base_url() . "item/" . $p['slug']?>">Buy Now</a></div>
                             </div>
@@ -139,7 +139,7 @@
                                     <div class="condition s-screen">Condition: <?php echo $prod['condition']?></div>
                                 </div>
                                 <div class="col-md-3 col-sm-3 media-sub media-btn-panel">
-                                    <p>Php</p>
+                                    <p>PHP</p>
                                     <p class="feed-price"><?php echo $prod['price']?></p>
                                     <div class="orange-btn"><a target="_blank" href="<?php echo base_url() . "item/" . $prod['slug']?>">Buy Now</a></div>
                                 </div>
@@ -176,7 +176,7 @@
                                     <div class="condition s-screen">Condition: <?php echo $prod['condition']?></div>
                                 </div>
                                 <div class="col-md-3 col-sm-3 media-sub media-btn-panel">
-                                    <p>Php</p>
+                                    <p>PHP</p>
                                     <p class="feed-price"><?php echo $prod['price']?></p>
                                     <div class="orange-btn"><a target="_blank" href="<?php echo base_url() . "item/" . $prod['slug']?>">Buy Now</a></div>
                                 </div>
@@ -197,7 +197,7 @@
                         <div id="m_follow_seller" class="row feed-prod-cont">
                             <?php if( count($followed_users) === 0 ):?>
                                 <div class="col-md-12">
-                                    <p class="pd-8-12">No subscriptions yet</p>
+                                    <p class="no-subs-lbl-responsive">You are not subscribed to anybody yet.</p>
                                 </div>
                             <?php else:?>
                                 <div class="col-xs-6">
@@ -244,7 +244,7 @@
                                         <div class="condition s-screen">Condition: <?php echo $prod['condition']?></div>
                                     </div>
                                     <div class="col-md-3 col-sm-3 media-sub media-btn-panel">
-                                        <p>Php</p>
+                                        <p>PHP</p>
                                         <p class="feed-price"><?php echo html_escape(number_format($p['original_price'], 2, '.', ','))?></p>
                                         <div class="orange-btn"><a target="_blank" href="<?php echo base_url() . "item/" . $prod['slug']?>">Buy Now</a></div>
                                     </div>
@@ -283,7 +283,7 @@
                                     </div>
                                     <div class="media-body">
                                         <h5 class="title"><a target="_blank" href="<?php echo base_url() . "item/" . $p['slug']?>"><?php echo html_escape($p['product_name'])?></a></h5>
-                                        Php <?php echo html_escape(number_format($p['original_price'], 2, '.', ','))?>
+                                        PHP <?php echo html_escape(number_format($p['original_price'], 2, '.', ','))?>
                                     </div>
                                 </div>
                             <?php endforeach;?>
@@ -310,7 +310,7 @@
                                     </div>
                                     <div class="media-body">
                                         <h5 class="title"><a target="_blank" href="<?php echo base_url() . "item/" . $p['slug']?>"><?php echo html_escape($p['product_name'])?></a></h5>
-                                        Php <?php echo html_escape(number_format($p['original_price'], 2, '.', ','))?>
+                                        PHP <?php echo html_escape(number_format($p['original_price'], 2, '.', ','))?>
                                     </div>
                                 </div>
                             <?php endforeach;?>

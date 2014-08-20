@@ -7124,16 +7124,48 @@ margin-right: 10px;
 
 /******************* Feed Custom CSS **************************/
 
+
+.feeds-cont .condition{
+    font-size: 12px;
+}
+
+.feeds-cont .content{
+    font-size: 12px;
+}
+
+.feeds-cont .feed-menu{
+    margin-bottom: 5px;
+    font-size: 12px;
+}
+
+
+
 /**     Feedpage font size  **/
+
+.feeds-cont .no-subs-lbl{
+    font-size:12px;
+    margin: 10px;
+}
+
+.feeds-cont .no-subs-lbl-responsive{
+    font-size: 14px;
+    padding: 10px;
+    margin: 8px 8px 40px 8px;
+    background-color: #d5002d;
+    color: white;
+    border-radius: 4px;
+}
+
 @media (max-width: 767px){
     .feeds-cont{
-        font-size: 0.7em;
+        font-size: 0.8em;
     }
 }
 @media (min-width:768px) and (max-width: 991px){
     .feeds-cont{
-        font-size: 0.8em;
+        font-size: 0.9em;
     }
+    
 }
 
 .l-screen, .m-screen{
