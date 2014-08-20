@@ -692,7 +692,8 @@ class memberpage_model extends CI_Model
             //IF BANK DEPOSIT
             if( (int)$r['payment_method'] === 5 && (int)$r['transac_stat'] === 99 ){
             
-                $xmlResourceService = $this->serviceContainer['xml_resource'];
+                $this->ci =& get_instance();
+                $xmlResourceService = $this->ci->serviceContainer['xml_resource'];
                 $xmlfile =  $xmlResourceService->getContentXMLfile();
             
                 $query = $this->xmlmap->getFilenameID('sql/users','getTransactionBankDepositDetails');
