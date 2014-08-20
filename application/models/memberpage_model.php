@@ -555,6 +555,10 @@ class memberpage_model extends CI_Model
         
             applyPriceDiscount($row);
         
+            if( strlen(trim($row['name'])) === 0 ){
+                $row['name'] = "Untitled";
+            }
+
             $query = $this->xmlmap->getFilenameID('sql/product','getParent');
             $sth = $this->db->conn_id->prepare($query);
             $sth->bindParam(':id',$row['cat_id']);
