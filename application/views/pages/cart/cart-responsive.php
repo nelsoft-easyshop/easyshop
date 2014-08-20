@@ -97,14 +97,16 @@
 							<table width="100%">
 								<tr>
 									
-									<td>
+									<td width="50%">
 										<a href="<?=base_url().'item/'.$row['slug'];?>" class="has-tooltip" data-image="<?=base_url()?><?php echo $row['img'][0]['path']; ?>categoryview/<?php echo $row['img'][0]['file']; ?>">
-							
-										<img class="img-responsive thumbnail no-border" style="width:100px; height: 100px; height:auto;width: auto; vertical-align: top;" src="<?=base_url()?><?php echo $row['img'][0]['path']; ?>thumbnail/<?php echo $row['img'][0]['file']; ?>">
+											<img class="img-responsive thumbnail no-border" style="width:50px; height:50px; height:auto;width: auto; vertical-align: top;" src="<?=base_url()?><?php echo $row['img'][0]['path']; ?>thumbnail/<?php echo $row['img'][0]['file']; ?>">
 										</a>
 									</td>
-									<td style="vertical-align: top; text-align:right;" align="right">
+									<td style="vertical-align: top; text-align:right;" align="right"  width="50%">
 										<p  style="margin-top: -15px;">
+											<?php
+												$totalprice = $row['price'] * $row['qty'];
+											?>
 											<p class="subtotal pull-right" >Php <span id="subtotal<?php echo $row['rowid']; ?>"><?php echo " ".number_format($totalprice,2,'.',','); ?></span></p>
 										</p>
 										
