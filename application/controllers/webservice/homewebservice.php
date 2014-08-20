@@ -9,14 +9,16 @@ class Homewebservice extends MY_Controller
      *  
      */
     private $xmlCmsService;
+    public $xmlFileService;
 
     public function __construct() 
     {
         parent::__construct();
         $this->load->model('user_model');
-        $this->declareEnvironment();
 
         $this->xmlCmsService = $this->serviceContainer['xml_cms'];
+        $this->xmlFileService = $this->serviceContainer['xml_resource'];
+        $this->declareEnvironment();
 
         if($this->input->get()) {
             $this->authentication($this->input->get(), $this->input->get('hash'));
@@ -30,20 +32,13 @@ class Homewebservice extends MY_Controller
      */
     public function declareEnvironment()
     {
+
         $env = strtolower(ENVIRONMENT);
-        $this->file = APPPATH . "resources/page/home_files.xml"; 
+        $this->file  = APPPATH . "resources/". $this->xmlFileService->getHomeXMLfile().".xml"; 
         $this->json = file_get_contents(APPPATH . "resources/json/jsonp.json");
     }
 
-    /**
-     *  Rendering of home_cms view
-     *
-     *  @return View
-     */
-    public function index() 
-    {
-        $this->load->view("pages/home_cms");
-    }
+
 
     /**
      *  Method to display the contents of the home_files.xml from the function call from Easyshop.ph.admin
