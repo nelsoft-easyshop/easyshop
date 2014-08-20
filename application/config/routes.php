@@ -67,10 +67,8 @@ if ($enable_splash && ($bypass_IP !== $_SERVER["HTTP_CF_CONNECTING_IP"]) ){
 else {
     $route['default_controller'] = "home";
     #$route['404_override'] = 'home/pagenotfound';
-	$route['404_override'] = 'home/userprofile';
-
-    #route maintenance: home/splash
-
+    $route['404_override'] = 'home/userprofile';
+    
     # CATEGORY
     $route['(?i)category/(:any)'] = 'product/category_page/$1'; # janz serafico
     $route['(?i)category_more'] = 'product/category_page_more'; # ryan vasquez
@@ -97,10 +95,8 @@ else {
     $route['(?i)sell/step2'] = 'productUpload/step2'; # ryan vasquez
     $route['sell/processing'] = 'productUpload/step2_2'; # ryan vasquez
     $route['(?i)sell/step3'] = 'productUpload/step3'; # ryan vasquez
-	//$route['sell/shippinginfo'] = 'productUpload/step3Submit';
-    //$route['sell/preview'] = 'productUpload/previewItem';
     $route['(?i)sell/step4'] = 'productUpload/step4'; # ryan vasquez
-	$route['(?i)sell/finishupload'] = 'productUpload/finishProductUpload'; #js
+    $route['(?i)sell/finishupload'] = 'productUpload/finishProductUpload'; #js
 
     # USER
     $route['(?i)me'] = 'memberpage'; # janz
@@ -142,7 +138,7 @@ else {
     $route['(?i)guide/sell'] = 'home/guide_sell';
 
     $route['(?i)subscribe'] = 'register/subscribe';
-	
+
 }
 
 /* End of file routes.php */

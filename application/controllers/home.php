@@ -59,9 +59,6 @@ class Home extends MY_Controller
             $this->load->view('pages/home_view', $data);
             $this->load->view('templates/footer_full');
         }
-                
-
-
     }
     
     
@@ -86,6 +83,9 @@ class Home extends MY_Controller
      */
     public function pagenotfound()
     {
+        $this->output->set_status_header('404'); 
+        $page = $_SERVER['REQUEST_URI'];
+        log_message('error', '404 Page Not Found --> '.$page);
         $data = array('title' => 'Page Not Found | Easyshop.ph',);
         $data = array_merge($data, $this->fill_header());
         $this->load->view('templates/header', $data);
@@ -268,11 +268,7 @@ class Home extends MY_Controller
             $this->load->view('templates/footer');
         }
         else{
-            $data = array('title' => 'Page Not Found | Easyshop.ph',);
-            $data = array_merge($data, $this->fill_header());
-            $this->load->view('templates/header', $data);
-            $this->load->view('pages/general_error');
-            $this->load->view('templates/footer_full');
+            $this->pagenotfound();
         }
     }
 
