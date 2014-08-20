@@ -7172,9 +7172,11 @@ margin-right: 10px;
 }
 
 #feed-catlist{
+    /*
     display:none;
     position:absolute;
     z-index:10;
+    */
 }
 
 @media (min-width: 768px){
