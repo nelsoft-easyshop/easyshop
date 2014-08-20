@@ -51,7 +51,7 @@ class Home extends MY_Controller
         $this->load->view('templates/header', $data);
         
         if( $data['logged_in'] ){
-            $data = array_merge($data, $this->getFeed());
+            $data = array_merge($data, $this->getFeed());            
             $this->load->view("templates/home_layout/layoutF",$data);
             $this->load->view('templates/footer');
         }
@@ -302,7 +302,6 @@ class Home extends MY_Controller
             'promo_items' => $this->product_model->getStaticProductFeed('promo', $xmlfile),
             'popular_items' => $this->product_model->getStaticProductFeed('popular', $xmlfile),
             'featured_product' => $this->product_model->getStaticProductFeed('featured', $xmlfile),
-            'category_navigation' => $this->load->view('templates/category_navigation',array('cat_items' =>  $this->getcat(),), TRUE ),
         );
         
         #Assemble featured product ID array for exclusion on LOAD MORE request
@@ -313,7 +312,6 @@ class Home extends MY_Controller
             }
         }
         $data['fpID'] = json_encode($fpID);
-        
         return $data;
     }
     
