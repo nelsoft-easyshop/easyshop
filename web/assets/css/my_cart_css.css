@@ -1092,6 +1092,10 @@ input.cc_check {
 	font-size: 12px !important;
 	margin-top:-5px;
 }
+
+.display-when-mobile-536{
+	display:none;
+}
 @media only screen and (max-width: 979px) {
 	.display-when-mobile{
 	display:inline;
@@ -1149,4 +1153,49 @@ input.cc_check {
 		font-size: 10px;
 		margin-top:-5px;
 	}
+}
+
+@media only screen and (max-width: 536px) {
+	.product_title, .subtotal, .p-availability{
+		font-size: 12px;
+	}
+	
+	
+	
+	.display-when-mobile-536{
+		display:inline;
+	}
+	
+	.b-label{
+		font-size: 12px;
+	}
+	
+	.subtotal{
+		font-size: 14px;
+	}
+	
+	.hide-to-536{
+		display: none;
+	}
+	
+	.btn-remove{
+		font-size: 12px;
+		padding: 3px !important;
+	}
+	.may_cart_payment {
+		padding-right: 30px;
+	}
+	.my_cart_title{
+		font-size: 20px;
+	}
+	.payment, .continue{
+		font-size: 14px;
+	}
+	
+	.continue{
+		padding-left: 25px !important;
+	
+	}
+	
+	
 }
