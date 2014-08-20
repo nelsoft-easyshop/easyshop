@@ -170,7 +170,6 @@ class user_model extends CI_Model {
     
     }
 
-    
     public function CountUsers(){
       
         $query = $this->xmlmap->getFilenameID('sql/users','getUserCount');
