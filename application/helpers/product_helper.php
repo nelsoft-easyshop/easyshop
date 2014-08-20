@@ -31,17 +31,15 @@
                 }
                 else{
                     if(file_exists($row['product_image_path'])){
-                        #$row['product_image_path'] = ($row['product_image_path'][0]=='.')?substr($row['product_image_path'],1,strlen($row['product_image_path'])):$row['product_image_path'];
-                        #$row['product_image_path'] = ($row['product_image_path'][0]=='/')?substr($row['product_image_path'],1,strlen($row['product_image_path'])):$row['product_image_path'];
                         $rev_url = strrev($row['product_image_path']);
                         $row['path'] = substr($row['product_image_path'],0,strlen($rev_url)-strpos($rev_url,'/'));
                         $row['file'] = substr($row['product_image_path'],strlen($rev_url)-strpos($rev_url,'/'),strlen($rev_url));
-                    }else{
+                    }
+                    else{
                         $row['path'] = 'assets/product/unavailable/';
                         $row['file'] = 'unavailable_product_img.jpg';
                     }
                 }
-                #unset($row['product_image_path']);
                 $array[$key] = $row;
             }
         }
@@ -80,10 +78,12 @@
                 $product['sold_price'] = $CI->product_model->get_sold_price($product['id_product'], date('Y-m-d',strtotime($product['startdate'])), date('Y-m-d',strtotime($product['enddate'])));
                 if($product['is_sold_out']){
                     $product['price'] = $product['sold_price'];
-                }else{
+                }
+                else{
                     $product['price'] = $promo['price'];
                 }            
-            }else{
+            }
+            else{
                 $product['original_price'] = $product['price']; 
                 $product['can_purchase'] = true;
                 if(intval($product['discount']) > 0){
