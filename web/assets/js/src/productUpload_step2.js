@@ -1278,7 +1278,7 @@ var pictureCountOther  = 0; var primaryPicture = 0;
     });
 
     function startUpload(cnt,filescnt,arrayUpload,afstart,imageName,errorValues){
-
+        canProceed = false;
         $('.counter').val(cnt); 
         $('.filescnttxt').val(filescnt); 
         $('#afstart').val(JSON.stringify(afstart));   
@@ -1384,6 +1384,7 @@ var pictureCountOther  = 0; var primaryPicture = 0;
         }
  
         picName = tempId+'_'+memberId+'_'+fulldate+pictureCountOther+'o.'+extension;
+        canProceed = false;
         $('#other_files').ajaxForm({
             url: config.base_url+'productUpload/uploadimageOther',
             type: "POST", 
