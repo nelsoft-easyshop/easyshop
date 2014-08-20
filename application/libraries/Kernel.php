@@ -31,8 +31,8 @@ class Kernel
     private function _bootstrap()
     {
         /* We register the application class autoloader */
-        require_once APPPATH . '/src/EasyShop/Core/ClassAutoloader/PSR0Autoloader.php';
-        $psr0Autoloader = new PSR0Autoloader(APPPATH . "/src/");
+        require_once APPPATH . 'src/EasyShop/Core/ClassAutoloader/PSR0Autoloader.php';
+        $psr0Autoloader = new PSR0Autoloader(APPPATH . "src/");
         $psr0Autoloader->register();
 
         /* We register 3rd party autoloader */
@@ -67,7 +67,7 @@ class Kernel
         $container['entity_manager'] = function ($c) use ($dbConfig, $config){
             return Doctrine\ORM\EntityManager::create($dbConfig, $config);
         };
-        
+
         // ZeroMQ pusher
         $container['user_pusher'] = function ($c) {
             $wsConfig = require APPPATH . '/config/param/websocket.php';
@@ -86,7 +86,13 @@ class Kernel
             return new \EasyShop\Core\Configuration\Configuration();
         };
         
+        // Point Tracker
+        $container['point_tracker'] = function ($c) {
+            return new \EasyShop\PointTracker\PointTracker();
+        };
+
         /* Register services END */
         $this->serviceContainer = $container;
     }
+
 }

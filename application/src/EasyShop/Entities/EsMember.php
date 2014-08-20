@@ -1,0 +1,780 @@
+<?php
+
+namespace EasyShop\Entities;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * EsMember
+ *
+ * @ORM\Table(name="es_member", indexes={@ORM\Index(name="username_idx", columns={"username"})})
+ * @ORM\Entity
+ */
+class EsMember
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id_member", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $idMember;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="username", type="string", length=255, nullable=false)
+     */
+    private $username = '';
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="usersession", type="string", length=255, nullable=true)
+     */
+    private $usersession;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="password", type="string", length=255, nullable=false)
+     */
+    private $password = '';
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="contactno", type="string", length=45, nullable=false)
+     */
+    private $contactno = '';
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="is_contactno_verify", type="boolean", nullable=false)
+     */
+    private $isContactnoVerify = '0';
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="email", type="string", length=255, nullable=false)
+     */
+    private $email = '';
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="is_email_verify", type="boolean", nullable=false)
+     */
+    private $isEmailVerify = '0';
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="gender", type="string", length=1, nullable=false)
+     */
+    private $gender = '0';
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="birthday", type="date", nullable=false)
+     */
+    private $birthday = '0001-01-01';
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="datecreated", type="datetime", nullable=false)
+     */
+    private $datecreated = 'CURRENT_TIMESTAMP';
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="lastmodifieddate", type="datetime", nullable=false)
+     */
+    private $lastmodifieddate = 'CURRENT_TIMESTAMP';
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="last_login_datetime", type="datetime", nullable=false)
+     */
+    private $lastLoginDatetime = 'CURRENT_TIMESTAMP';
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="last_login_ip", type="string", length=45, nullable=false)
+     */
+    private $lastLoginIp = '';
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="login_count", type="integer", nullable=false)
+     */
+    private $loginCount = '0';
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="fullname", type="string", length=255, nullable=true)
+     */
+    private $fullname = '';
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="nickname", type="string", length=255, nullable=true)
+     */
+    private $nickname = '';
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="imgurl", type="string", length=255, nullable=true)
+     */
+    private $imgurl = '';
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="userdata", type="text", nullable=true)
+     */
+    private $userdata;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="remarks", type="string", length=255, nullable=true)
+     */
+    private $remarks = '';
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="is_admin", type="boolean", nullable=false)
+     */
+    private $isAdmin = '0';
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="store_desc", type="string", length=1024, nullable=true)
+     */
+    private $storeDesc = '';
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="is_promo_valid", type="boolean", nullable=false)
+     */
+    private $isPromoValid = '0';
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="slug", type="string", length=255, nullable=false)
+     */
+    private $slug;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="EasyShop\Entities\CiSessions", inversedBy="member")
+     * @ORM\JoinTable(name="es_authenticated_session",
+     *   joinColumns={
+     *     @ORM\JoinColumn(name="member_id", referencedColumnName="id_member")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="session_id", referencedColumnName="session_id")
+     *   }
+     * )
+     */
+    private $session;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->session = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+
+    /**
+     * Get idMember
+     *
+     * @return integer 
+     */
+    public function getIdMember()
+    {
+        return $this->idMember;
+    }
+
+    /**
+     * Set username
+     *
+     * @param string $username
+     * @return EsMember
+     */
+    public function setUsername($username)
+    {
+        $this->username = $username;
+
+        return $this;
+    }
+
+    /**
+     * Get username
+     *
+     * @return string 
+     */
+    public function getUsername()
+    {
+        return $this->username;
+    }
+
+    /**
+     * Set usersession
+     *
+     * @param string $usersession
+     * @return EsMember
+     */
+    public function setUsersession($usersession)
+    {
+        $this->usersession = $usersession;
+
+        return $this;
+    }
+
+    /**
+     * Get usersession
+     *
+     * @return string 
+     */
+    public function getUsersession()
+    {
+        return $this->usersession;
+    }
+
+    /**
+     * Set password
+     *
+     * @param string $password
+     * @return EsMember
+     */
+    public function setPassword($password)
+    {
+        $this->password = $password;
+
+        return $this;
+    }
+
+    /**
+     * Get password
+     *
+     * @return string 
+     */
+    public function getPassword()
+    {
+        return $this->password;
+    }
+
+    /**
+     * Set contactno
+     *
+     * @param string $contactno
+     * @return EsMember
+     */
+    public function setContactno($contactno)
+    {
+        $this->contactno = $contactno;
+
+        return $this;
+    }
+
+    /**
+     * Get contactno
+     *
+     * @return string 
+     */
+    public function getContactno()
+    {
+        return $this->contactno;
+    }
+
+    /**
+     * Set isContactnoVerify
+     *
+     * @param boolean $isContactnoVerify
+     * @return EsMember
+     */
+    public function setIsContactnoVerify($isContactnoVerify)
+    {
+        $this->isContactnoVerify = $isContactnoVerify;
+
+        return $this;
+    }
+
+    /**
+     * Get isContactnoVerify
+     *
+     * @return boolean 
+     */
+    public function getIsContactnoVerify()
+    {
+        return $this->isContactnoVerify;
+    }
+
+    /**
+     * Set email
+     *
+     * @param string $email
+     * @return EsMember
+     */
+    public function setEmail($email)
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+    /**
+     * Get email
+     *
+     * @return string 
+     */
+    public function getEmail()
+    {
+        return $this->email;
+    }
+
+    /**
+     * Set isEmailVerify
+     *
+     * @param boolean $isEmailVerify
+     * @return EsMember
+     */
+    public function setIsEmailVerify($isEmailVerify)
+    {
+        $this->isEmailVerify = $isEmailVerify;
+
+        return $this;
+    }
+
+    /**
+     * Get isEmailVerify
+     *
+     * @return boolean 
+     */
+    public function getIsEmailVerify()
+    {
+        return $this->isEmailVerify;
+    }
+
+    /**
+     * Set gender
+     *
+     * @param string $gender
+     * @return EsMember
+     */
+    public function setGender($gender)
+    {
+        $this->gender = $gender;
+
+        return $this;
+    }
+
+    /**
+     * Get gender
+     *
+     * @return string 
+     */
+    public function getGender()
+    {
+        return $this->gender;
+    }
+
+    /**
+     * Set birthday
+     *
+     * @param \DateTime $birthday
+     * @return EsMember
+     */
+    public function setBirthday($birthday)
+    {
+        $this->birthday = $birthday;
+
+        return $this;
+    }
+
+    /**
+     * Get birthday
+     *
+     * @return \DateTime 
+     */
+    public function getBirthday()
+    {
+        return $this->birthday;
+    }
+
+    /**
+     * Set datecreated
+     *
+     * @param \DateTime $datecreated
+     * @return EsMember
+     */
+    public function setDatecreated($datecreated)
+    {
+        $this->datecreated = $datecreated;
+
+        return $this;
+    }
+
+    /**
+     * Get datecreated
+     *
+     * @return \DateTime 
+     */
+    public function getDatecreated()
+    {
+        return $this->datecreated;
+    }
+
+    /**
+     * Set lastmodifieddate
+     *
+     * @param \DateTime $lastmodifieddate
+     * @return EsMember
+     */
+    public function setLastmodifieddate($lastmodifieddate)
+    {
+        $this->lastmodifieddate = $lastmodifieddate;
+
+        return $this;
+    }
+
+    /**
+     * Get lastmodifieddate
+     *
+     * @return \DateTime 
+     */
+    public function getLastmodifieddate()
+    {
+        return $this->lastmodifieddate;
+    }
+
+    /**
+     * Set lastLoginDatetime
+     *
+     * @param \DateTime $lastLoginDatetime
+     * @return EsMember
+     */
+    public function setLastLoginDatetime($lastLoginDatetime)
+    {
+        $this->lastLoginDatetime = $lastLoginDatetime;
+
+        return $this;
+    }
+
+    /**
+     * Get lastLoginDatetime
+     *
+     * @return \DateTime 
+     */
+    public function getLastLoginDatetime()
+    {
+        return $this->lastLoginDatetime;
+    }
+
+    /**
+     * Set lastLoginIp
+     *
+     * @param string $lastLoginIp
+     * @return EsMember
+     */
+    public function setLastLoginIp($lastLoginIp)
+    {
+        $this->lastLoginIp = $lastLoginIp;
+
+        return $this;
+    }
+
+    /**
+     * Get lastLoginIp
+     *
+     * @return string 
+     */
+    public function getLastLoginIp()
+    {
+        return $this->lastLoginIp;
+    }
+
+    /**
+     * Set loginCount
+     *
+     * @param integer $loginCount
+     * @return EsMember
+     */
+    public function setLoginCount($loginCount)
+    {
+        $this->loginCount = $loginCount;
+
+        return $this;
+    }
+
+    /**
+     * Get loginCount
+     *
+     * @return integer 
+     */
+    public function getLoginCount()
+    {
+        return $this->loginCount;
+    }
+
+    /**
+     * Set fullname
+     *
+     * @param string $fullname
+     * @return EsMember
+     */
+    public function setFullname($fullname)
+    {
+        $this->fullname = $fullname;
+
+        return $this;
+    }
+
+    /**
+     * Get fullname
+     *
+     * @return string 
+     */
+    public function getFullname()
+    {
+        return $this->fullname;
+    }
+
+    /**
+     * Set nickname
+     *
+     * @param string $nickname
+     * @return EsMember
+     */
+    public function setNickname($nickname)
+    {
+        $this->nickname = $nickname;
+
+        return $this;
+    }
+
+    /**
+     * Get nickname
+     *
+     * @return string 
+     */
+    public function getNickname()
+    {
+        return $this->nickname;
+    }
+
+    /**
+     * Set imgurl
+     *
+     * @param string $imgurl
+     * @return EsMember
+     */
+    public function setImgurl($imgurl)
+    {
+        $this->imgurl = $imgurl;
+
+        return $this;
+    }
+
+    /**
+     * Get imgurl
+     *
+     * @return string 
+     */
+    public function getImgurl()
+    {
+        return $this->imgurl;
+    }
+
+    /**
+     * Set userdata
+     *
+     * @param string $userdata
+     * @return EsMember
+     */
+    public function setUserdata($userdata)
+    {
+        $this->userdata = $userdata;
+
+        return $this;
+    }
+
+    /**
+     * Get userdata
+     *
+     * @return string 
+     */
+    public function getUserdata()
+    {
+        return $this->userdata;
+    }
+
+    /**
+     * Set remarks
+     *
+     * @param string $remarks
+     * @return EsMember
+     */
+    public function setRemarks($remarks)
+    {
+        $this->remarks = $remarks;
+
+        return $this;
+    }
+
+    /**
+     * Get remarks
+     *
+     * @return string 
+     */
+    public function getRemarks()
+    {
+        return $this->remarks;
+    }
+
+    /**
+     * Set isAdmin
+     *
+     * @param boolean $isAdmin
+     * @return EsMember
+     */
+    public function setIsAdmin($isAdmin)
+    {
+        $this->isAdmin = $isAdmin;
+
+        return $this;
+    }
+
+    /**
+     * Get isAdmin
+     *
+     * @return boolean 
+     */
+    public function getIsAdmin()
+    {
+        return $this->isAdmin;
+    }
+
+    /**
+     * Set storeDesc
+     *
+     * @param string $storeDesc
+     * @return EsMember
+     */
+    public function setStoreDesc($storeDesc)
+    {
+        $this->storeDesc = $storeDesc;
+
+        return $this;
+    }
+
+    /**
+     * Get storeDesc
+     *
+     * @return string 
+     */
+    public function getStoreDesc()
+    {
+        return $this->storeDesc;
+    }
+
+    /**
+     * Set isPromoValid
+     *
+     * @param boolean $isPromoValid
+     * @return EsMember
+     */
+    public function setIsPromoValid($isPromoValid)
+    {
+        $this->isPromoValid = $isPromoValid;
+
+        return $this;
+    }
+
+    /**
+     * Get isPromoValid
+     *
+     * @return boolean 
+     */
+    public function getIsPromoValid()
+    {
+        return $this->isPromoValid;
+    }
+
+    /**
+     * Set slug
+     *
+     * @param string $slug
+     * @return EsMember
+     */
+    public function setSlug($slug)
+    {
+        $this->slug = $slug;
+
+        return $this;
+    }
+
+    /**
+     * Get slug
+     *
+     * @return string 
+     */
+    public function getSlug()
+    {
+        return $this->slug;
+    }
+
+    /**
+     * Add session
+     *
+     * @param \EasyShop\Entities\CiSessions $session
+     * @return EsMember
+     */
+    public function addSession(\EasyShop\Entities\CiSessions $session)
+    {
+        $this->session[] = $session;
+
+        return $this;
+    }
+
+    /**
+     * Remove session
+     *
+     * @param \EasyShop\Entities\CiSessions $session
+     */
+    public function removeSession(\EasyShop\Entities\CiSessions $session)
+    {
+        $this->session->removeElement($session);
+    }
+
+    /**
+     * Get session
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getSession()
+    {
+        return $this->session;
+    }
+}
