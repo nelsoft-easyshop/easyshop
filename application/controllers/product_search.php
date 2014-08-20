@@ -755,10 +755,9 @@ class product_search extends MY_Controller {
         $protected_categories = $this->config->config['protected_category'];
 
         $string = $this->input->get('data');
-        $string = explode(' ', $string);
-        $string = implode('* +', $string);
-        $string = '+'.$string.'*'; 
-        $rows = $this->search_model->searchCategory($string);
+        $explodString = explode(' ', trim($string));
+        $newString = '+'.implode('* +', $explodString).'*';  
+        $rows = $this->search_model->searchCategory($newString);
         foreach($rows as $idx=>$row){
             if(in_array($row['id_cat'],$protected_categories) && !$isAdmin){
                 unset($rows[$idx]);
