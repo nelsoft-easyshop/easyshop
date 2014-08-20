@@ -1,15 +1,4 @@
-/* DROP DOWN FOR CATEGORIES */
-$(function(){
 
-    $('#feed-categories').on('mouseenter',function(){
-        $('#feed-catlist').show();
-    });
-    
-    $('.feed-cat').on('mouseleave', function(){
-        $('#feed-catlist').hide();
-    });
-
-})
 
 /* Click function for feed menu */
 $(function(){	

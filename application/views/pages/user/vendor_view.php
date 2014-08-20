@@ -605,14 +605,14 @@
             <div id="modal-div-header">
                 <button id="modal-close">X</button>        
             </div>
-            <div id="modal-inside-container">
+            <div id="modal-inside-container" class="mrgn-top-10">
                 <div>
                     <label>To : </label>
-                    <input type="text" value="<?=$vendordetails['username'];?>" disabled id="msg_name" name="msg_name" >
+                    <input type="text" value="<?=$vendordetails['username'];?>" disabled id="msg_name" name="msg_name" class="ui-form-control" >
                 </div>
                 <div>
                     <label>Message : </label>
-                    <textarea cols="40" rows="5" name="msg-message" id="msg-message" placeholder="Say something.."></textarea>		
+                    <textarea cols="40" rows="5" name="msg-message" id="msg-message" class="ui-form-control" placeholder="Say something.."></textarea>		
                 </div>	   
             </div>
             <button id="modal_send_btn">Send</button>

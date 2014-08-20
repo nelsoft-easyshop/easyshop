@@ -147,7 +147,7 @@ class user_model extends CI_Model {
         $row = $sth->fetchAll(PDO::FETCH_ASSOC);
         
         foreach($row as $k=>$r){
-            if($r['imgurl'] === ""){
+            if(($r['imgurl'] === "") || (!file_exists($r['imgurl']))){
                 $row[$k]['imgurl'] = "assets/user/default/60x60.png";
             }
             else{

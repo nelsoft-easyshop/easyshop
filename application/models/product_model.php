@@ -2448,7 +2448,7 @@ class product_model extends CI_Model
             $sth->bindParam(':memberid',$memberid,PDO::PARAM_INT);
             $sth->bindParam(':cod', $cod, PDO::PARAM_INT);
             $sth->execute();
-            return true;
+            return $slug;
         }
         else{
             return false;

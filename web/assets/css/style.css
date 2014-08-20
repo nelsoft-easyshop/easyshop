@@ -6462,14 +6462,15 @@ box-shadow:         inset 0px -10px 12px -8px rgba(255, 255, 255, 0.75);
 }
 #modal-container textarea {
     height: 145px;
-    margin-top: 15px;
-    resize: none;
+    margin: 15px 0px;
+    min-width: 230px;
     width: 100%;
+    -moz-box-sizing: border-box;
 }
 #modal-div-header{
         background-color: grey;
         border-radius: 3px;
-        height: 11.2%;
+        height: 10.2%;
 }
 #modal-launcher{
     
@@ -6494,13 +6495,11 @@ box-shadow:         inset 0px -10px 12px -8px rgba(255, 255, 255, 0.75);
     background-color: #FFFFFF;
     border-radius: 3px;
     border-style: none;
+    cursor: pointer;
     float: right;
     height: 30px;
-    margin: 5px 6px 0 0;
+    margin: 3px 3px 0 0;
     width: 30px;
-}
-#modal-inside-container{
-        margin: 15px;
 }
 #table_id_wrapper{
     background-color: #F3F3F3;
@@ -6532,7 +6531,6 @@ box-shadow:         inset 0px -10px 12px -8px rgba(255, 255, 255, 0.75);
     float: right;
     font-size: 15px;
     height: 30px;
-    margin-right: 15px;
     width: 107px;
 }
 #modal-background.active,#modal-content.active {
@@ -7126,16 +7124,48 @@ margin-right: 10px;
 
 /******************* Feed Custom CSS **************************/
 
+
+.feeds-cont .condition{
+    font-size: 12px;
+}
+
+.feeds-cont .content{
+    font-size: 12px;
+}
+
+.feeds-cont .feed-menu{
+    margin-bottom: 5px;
+    font-size: 12px;
+}
+
+
+
 /**     Feedpage font size  **/
+
+.feeds-cont .no-subs-lbl{
+    font-size:12px;
+    margin: 10px;
+}
+
+.feeds-cont .no-subs-lbl-responsive{
+    font-size: 14px;
+    padding: 10px;
+    margin: 8px 8px 40px 8px;
+    background-color: #d5002d;
+    color: white;
+    border-radius: 4px;
+}
+
 @media (max-width: 767px){
     .feeds-cont{
-        font-size: 0.7em;
+        font-size: 0.8em;
     }
 }
 @media (min-width:768px) and (max-width: 991px){
     .feeds-cont{
-        font-size: 0.8em;
+        font-size: 0.9em;
     }
+    
 }
 
 .l-screen, .m-screen{
@@ -7171,7 +7201,7 @@ margin-right: 10px;
     vertical-align:middle;
 }
 
-#feed-catlist{
+#feed-catlist-bck{
     display:none;
     position:absolute;
     z-index:10;
@@ -7216,6 +7246,13 @@ margin-right: 10px;
         padding-right: 5px !important;
         padding-left: 5px !important;
     }
+}
+
+@media (max-width: 445px){
+    .join-lbl{
+        display:none;
+    }
+    
 }
 
 .feeds-cont .media.product.feature .media-content:after{
@@ -7341,6 +7378,32 @@ margin-right: 10px;
     width: 4.4em;
     height: 4.4em;
 }
+
+.feeds-cont .media.seller-container .media-image a{
+    width: 62px;
+    height: 62px;
+}
+
+
+#m_follow_seller>div{
+    padding-right: 10px;
+    padding-left: 10px;
+    margin-left: 3px;
+    margin-right: 3px;
+}
+
+.feeds-cont .seller-container:hover{
+    background: F7F7F7;
+    box-shadow: 2px 2px 2px 2px #999;
+    -webkit-transition: all 0.3s linear;
+    -o-transition: all 0.3s linear;
+    -moz-transition: all 0.3s linear;
+    -ms-transition: all 0.3s linear;
+    -kthtml-transition: all 0.3s linear;
+    transition: all 0.3s linear;
+    
+}
+
 .feeds-cont .media.side-panel .media-object{
     max-height:4.4em;
     max-width:4.4em;
@@ -7363,13 +7426,32 @@ margin-right: 10px;
     display: inline-block;
 }
 
+
+
+.feeds-cont .feed-center .title{
+    font-size: 14px;
+}
+
+
+
+.feeds-cont .seller-container .title{       
+    border-bottom: 1px solid #ddd; 
+    font-size: 13px
+}
+
 .feeds-cont .title{
+    font-size: 13px;
     font-weight:bold;
     color: #636363;
 }
 
+.feeds-cont .sub-title{
+    font-size: 13px;
+}
+
+
 .feed-price{
-    font-weight: bold;
+    font-weight: lighter;
     font-size: 1.3em;
     color: #f28300;
 }
@@ -7420,7 +7502,6 @@ margin-right: 10px;
 .feeds-cont .feed-menu{
     text-align:center;
     cursor:pointer;
-    font-weight: bold;
 }
 
 .feeds-cont a{
@@ -7438,10 +7519,15 @@ margin-right: 10px;
 }
 
 .feeds-cont .feed-menu.active{
-    /*font-size: 1.2em;*/
-    color: #F18200;
+    font-weight: bold;
 }
 
 .feeds-cont .feed-prod-cont{
     display:none;
+}
+
+@media (max-width: 445px){
+    .browser-disclaimer{
+       display:none; 
+    }
 }
