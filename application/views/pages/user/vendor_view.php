@@ -81,10 +81,10 @@
                     
                     <?php if( !$renderEdit && $logged_in ):?>
                         <?php echo form_open('');?>
-                        <p class="subscription_btn" style="display:<?php echo $subscribe_status==='unfollowed'?'':'none'?>">
+                        <p class="subscription_btn" style="text-align:center; display:<?php echo $subscribe_status==='unfollowed'?'':'none'?>">
                             <small class="span_bg plus_btn"></small> Follow
                         </p>
-                        <p class="subscription_btn" style="display:<?php echo $subscribe_status==='followed'?'':'none'?>">
+                        <p class="subscription_btn" style="text-align:center; display:<?php echo $subscribe_status==='followed'?'':'none'?>">
                             <small class="span_bg minus_btn"></small> Unfollow
                         </p>
                         <input type="hidden" value="<?php echo $vendordetails['username']?>" name="name">
@@ -123,20 +123,23 @@
                                 <?php echo $vendordetails['stateregionname'] != '' && $vendordetails['cityname'] != '' ? $vendordetails['stateregionname'] . ", " . $vendordetails['cityname'] : "Location not set."?>
                             </p>
                         </div>
-                        <div class="progress_bar_panel">
-                            <div>
-                                <h3>Total Posted Items</h3>
-                                <input class="db_total_items fm1" readonly="readonly"  data-value="<?php echo $active_count + $deleted_count;?>" value="<?php echo $active_count + $deleted_count;?>">
+                        <?php if($renderEdit):?>
+                            <div class="progress_bar_panel">
+                                <div>
+                                    <h3>Total Posted Items</h3>
+                                    <input class="db_total_items fm1" readonly="readonly"  data-value="<?php echo $active_count + $deleted_count;?>" value="<?php echo $active_count + $deleted_count;?>">
+                                </div>
+                                <div>
+                                    <h3>Active Items</h3>
+                                    <input class="db_total_items fm1" readonly="readonly" data-value="<?php echo $active_count;?>" value="<?php echo $active_count;?>">
+                                </div>
+                                <div>
+                                    <h3>Sold Items</h3>
+                                    <input class="db_total_items fm1" readonly="readonly" data-value="<?php echo $sold_count;?>" value="<?php echo $sold_count;?>">
+                                </div>
                             </div>
-                            <div>
-                                <h3>Active Items</h3>
-                                <input class="db_total_items fm1" readonly="readonly" data-value="<?php echo $active_count;?>" value="<?php echo $active_count;?>">
-                            </div>
-                            <div>
-                                <h3>Sold Items</h3>
-                                <input class="db_total_items fm1" readonly="readonly" data-value="<?php echo $sold_count;?>" value="<?php echo $sold_count;?>">
-                            </div>
-                        </div>
+                        <?php endif; ?>
+                      
 
                     </div>
                     <div class="vendor_info_con_right">
