@@ -187,7 +187,8 @@ function Reload()
         dataType : "json",
         url : "<?=base_url()?>messages/retrieve_msgs",
         data : {csrfname:csrftoken,todo:todo},
-        success : function(d) {
+        success : function(d)
+        {
             $(".msg_countr").html(d.unread_msgs);
             document.title = (d.unread_msgs == 0 ? "Message | Easyshop.ph" : "Message (" + d.unread_msgs + ") | Easyshop.ph");
 
