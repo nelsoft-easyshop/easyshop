@@ -25,9 +25,9 @@
     </select>
 
     <feedBanner>
-        <left>assets/user/default/banner.png</left>
-        <mid>assets/user/default/banner.png</mid>
-        <right>assets/user/default/banner.png</right>
+        <left>assets/images/feed/side-banner-2.jpg</left>
+        <mid>assets/images/feed/home-banner-2.jpg</mid>
+        <right>assets/images/feed/side-banner-1.jpg</right>
     </feedBanner>
 
     <feedFeaturedProduct>
