@@ -1,7 +1,7 @@
         
         <div class="clear"></div>
         <footer>
-                <div class="res_wrapper">
+                <div class="res_wrapper wrapper">
                 
                 <div class="copyright">
                 <p>This page is best viewed with one of these browsers:
