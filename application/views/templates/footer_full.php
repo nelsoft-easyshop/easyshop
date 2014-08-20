@@ -1,5 +1,5 @@
 <footer>
-      <div class="res_wrapper footer_panel res_wrapper">
+      <div class="res_wrapper wrapper footer_panel">
         <div class="social_media col-xs-12 col-sm-4 col-md-4 pd-bttm-10">
           
             <h5>Stay in Touch</h5>
@@ -41,7 +41,7 @@
           </div>  
       </div>
       <div class="clear"></div>
-      <div class="res_wrapper footer_panel about_us_panel">
+      <div class="res_wrapper wrapper footer_panel about_us_panel">
           <p><strong class="orange f16">WE ARE SHOPPING MADE EASY!</strong></p>
           <p>
             From the latest trends in fashion, gadgets and accessories to whatever you need to make life EASY, EASYSHOP.PH is here to give you the widest range of choices at very competitive prices!

@@ -560,7 +560,7 @@
                     <div class="vendor_txt_prod_header" class="<?php echo $p['slug']?>">
                         <div class="home_cat_product_title" style="background-color:#0078d5;">
                             <a target="_blank" href="<?php echo $p['cat_link']?>" <?php echo $p['cat_link']==="" ? 'onclick="return false"':""?> >
-                                <img src="<?=base_url()?>assets/images/img_icon_electronics_small.png">
+                                <img src="<?=base_url()?><?php echo $p['cat_img']?>">
                                 <h2><?php echo $p['name']?></h2> 
                             </a>   
                         </div>

@@ -59,7 +59,7 @@
  <!-- End Google Tag Manager -->
  
 <header>
-    <div class="res_wrapper pos-rel">
+    <div class="res_wrapper wrapper pos-rel">
       <div class="top_links_left pd-right-20">
         <div class="top_nav">
           <ul class="ul-li-fl-left">      
@@ -147,7 +147,7 @@
 
     <form action="<?php echo base_url(); ?>search/search.html" name="search_form" method="get">
       <section>
-        <div class="res_wrapper search_wrapper">
+        <div class="res_wrapper wrapper search_wrapper">
         
           <?php if(!(isset($render_logo) && ($render_logo === false))): ?>
             <div class="logo"> <a href="<?=base_url()?>"><span class="span_bg"></span></a> </div>
@@ -183,73 +183,17 @@
           <?php endif; ?>
         </div>
       </section>
+      <div class="clear"></div>
     </form>
 
-
-<script type="text/javascript">
-/*
-$(document).ready(function() {
-  var currentRequest = null;
-
- 
-$('#main_search').on('input propertychange', function() {
-        
-          var searchQuery = $.trim( $(this).val());
-          searchQuery = searchQuery.replace(/ +(?= )/g,'');
-          var fulltext = searchQuery; 
-          if(searchQuery != ""){
-            if(searchQuery.length > 0){
-              currentRequest = $.ajax({
-                type: "GET",
-                url: '<?php echo base_url();?>search/suggest', 
-                
-                cache: false,
-                data: "q="+fulltext, 
-                processData: false,
-                beforeSend: function(jqxhr, settings) { 
-                  if(currentRequest != null) {
-                    currentRequest.abort();
-                  }
-                },
-                success: function(html) {
-                    $("#main_search_drop_content").empty();
-                    if(html==0){
-                        $("#main_search_drop_content").fadeOut(150);
-                        // $("#main_search_drop_content").append('No Results Found');
-                        // $("#main_search_drop_content").show();
-                    }
-                    else{
-                        $("#main_search_drop_content").append(html);
-                        $("#main_search_drop_content").fadeIn(150);
-                    }
-                    $(".main_srch_img_con").hide();
-                }
-              });
-            }else{
-              if(currentRequest != null) {
-                currentRequest.abort();
-              }
-              $("#main_search_drop_content").empty();
-              $("#main_search_drop_content").fadeOut(150);
-            }
-          }else{
-            if(currentRequest != null) {
-              currentRequest.abort();
-            }  
-            $("#main_search_drop_content").empty();
-            $("#main_search_drop_content").fadeOut(150);
-          }
-      });
-});
-*/
-      
-</script>
-
 <script>
- var navigation = responsiveNav(".nav-collapse");
-         $(document).ready(function() { 
-            var srchdropcontent= $('#main_search_drop_content');
-            $('#main_search').focus(function() {
+    var navigation = responsiveNav(".nav-collapse");
+
+    (function ($) { 
+      
+        var srchdropcontent= $('#main_search_drop_content');
+        
+        $('#main_search').focus(function() {
             if(srchdropcontent.find("ul").length > 0){
              
               $('#main_search_drop_content').fadeIn(150);
@@ -260,47 +204,45 @@ $('#main_search').on('input propertychange', function() {
                 $('#main_search_drop_content').fadeOut('fast');
                 });
              });
- 
+
             $('#main_search_drop_content').hide();
            
+    })(jQuery);
+        
+    $(".txt_need_help_con").click(function(){
+        $('.need_help_icons_con').slideToggle();
+        $(this).toggleClass("arrow-switch");
+    });
+
+    $('.need_help_icons_con').hide();
+            
+    (function ($) {
+
+        var container = $(".nav-collapse");
+        var menubutton = $(".nav-toggle");
+        
+        $(menubutton).click(function(){
+
+            if($(container).hasClass("closed"))  {
+                $(container).removeClass("closed").addClass("opened");
+            }
+
+            else {
+                $(container).addClass('closed').removeClass("opened");
+              }
+        });
+
+        $(document).mouseup(function (e) {
+
+            if (!container.is(e.target) // if the target of the click isn't the container...
+                && container.has(e.target).length === 0) // ... nor a descendant of the container
+            {
+                container.removeClass("opened").addClass("closed");
+                menubutton.removeClass("active");
+            }
+
         });
         
-        $(".txt_need_help_con").click(function(){
-            $('.need_help_icons_con').slideToggle();
-            $(this).toggleClass("arrow-switch");
-        });
-
-        $('.need_help_icons_con').hide();
-        
-        // Hide Need help how to sell and how to buy when click outside the container
-      //   $(document).on('click','.txt_need_help',function() {
-      //   $(document).bind('focusin.txt_need_help click.txt_need_help',function(e) {
-      //       if ($(e.target).closest('.txt_need_help, .need_help_icons_con').length) return;
-      //       $('.need_help_icons_con').slideUp();
-      //   });
-      // });
-
-
-//     $(document).mouseup(function (e) {
-//     var container = $(".nav-collapse");
-
-//     if (!container.is(e.target) // if the target of the click isn't the container...
-//         && container.has(e.target).length === 0) // ... nor a descendant of the container
-//     {
-//         container.removeClass("opened").addClass("closed");
-//         container.closest("a").removeClass("active");
-//         // container.toggleClass("opened");
-//     }
-//    $(".nav-toggle").click(function(){
-//       if($('.nav-collapse').hasClass("opened")){
-//            $('.nav-collapse').removeClass("opened").addClass("closed")
-//         }
-//       else {
-//             $('.nav-collapse').addClass('opened')
-//           }
-//             // $('.nav-collapse').removeClass("closed").addClass("opened");
-//         });
-// });
-      
+    })(jQuery);
 
 </script>
