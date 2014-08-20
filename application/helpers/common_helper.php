@@ -86,36 +86,6 @@ if(!function_exists('directory_copy'))
 }
 
 /**
- * Delete Directory
- *
- * Delete a directory recrusively ( all file and directories inside it )
- *
- * @param    string    path to source dir 
- *
- *  This is a potentially very dangerous function. Make sure that $directory
- *  have been validated before calling this. This function will allow for deleting of 
- *  files within the project.
- * 
- */  
-
-if(!function_exists('recursiveRemoveDirectory'))
-{
-    function recursiveRemoveDirectory($directory)
-    {
-        foreach(glob("{$directory}/*") as $file)
-        {
-            if(is_dir($file)) { 
-                recursiveRemoveDirectory($file);
-            } else {
-                unlink($file);
-            }
-        }
-        rmdir($directory);
-    }
-}
-
-
-/**
 * Ruthlessly strips emoji characters. 
 * The need for this can be removed by converting the db collation to utf8mb4
 * 
