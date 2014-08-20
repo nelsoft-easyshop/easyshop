@@ -27,8 +27,9 @@ class Homewebservice extends MY_Controller
     }
   
     /**
-     *  Environment declaration of APPPATH . "resources/page/home_files.xml"; 
-     *
+     *  Environment declaration:
+     *  1. APPPATH . "resources/page/home_files.xml" 
+     *  2. APPPATH . "resources/json/jsonp.json"
      *  
      */
     public function declareEnvironment()
