@@ -396,7 +396,7 @@ FROM
     </select>
     
     <select id="getUserItems">
-        SELECT p.`slug`, p.`discount`, p.`is_promote`, p.`startdate`, p.`enddate`, p.`promo_type`, p.`is_sold_out`, p.`id_product`,p.`name`, p.`brief`, p.`price`, p.`member_id`, 
+        SELECT p.`slug`, p.`discount`, p.`is_promote`, p.`startdate`, p.`enddate`, p.`promo_type`, p.`is_sold_out`, p.`id_product`,p.`name`, p.`brief`, p.`price`, p.`member_id`, p.`cat_other_name` ,
         AVG(COALESCE((r.`rating`),0)) as average_rating, COUNT(r.`rating`) as review_count, 
         COALESCE(i.product_image_path,'') as product_image_path, p.`cat_id`, p.`is_delete` ,
         SUM(pi.quantity) as availability, COALESCE(order_product_temp.sum_quantity, 0) as sold,p.lastmodifieddate
