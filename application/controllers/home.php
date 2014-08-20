@@ -53,12 +53,14 @@ class Home extends MY_Controller
         if( $data['logged_in'] ){
             $data = array_merge($data, $this->getFeed());
             $this->load->view("templates/home_layout/layoutF",$data);
+            $this->load->view('templates/footer');
         }
         else{
             $this->load->view('pages/home_view', $data);
+            $this->load->view('templates/footer_full');
         }
                 
-        $this->load->view('templates/footer_full');
+
 
     }
     
