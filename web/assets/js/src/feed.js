@@ -1,6 +1,6 @@
 /* DROP DOWN FOR CATEGORIES */
 $(function(){
-
+    /*
     $('#feed-categories').on('mouseenter',function(){
         $('#feed-catlist').show();
     });
@@ -8,6 +8,7 @@ $(function(){
     $('.feed-cat').on('mouseleave', function(){
         $('#feed-catlist').hide();
     });
+    */
 
 })
 
