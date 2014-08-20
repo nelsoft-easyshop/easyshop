@@ -75,9 +75,10 @@ if(!function_exists('directory_copy'))
                     $newFileName =  $pid.'_'.implode('_', $filename);
 	                rename($dstdir.'/'.$object_value, $dstdir.'/'.$newFileName);
 	            }
-	        }else{
+	        }
+            else{
                 directory_copy($srcdir.'/'.$object_key,$dstdir.'/'.$object_key,$pid,$arrayNameOnly);//this is a directory
-            }        	 
+            }
         }
 
         // //Deleting the directory contents

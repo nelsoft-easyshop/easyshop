@@ -1110,7 +1110,7 @@ class productUpload extends MY_Controller
             $data = $this->fill_view();
             $this->load->view('templates/header', $data);
             $this->load->view('pages/product/product_upload_preview',$preview_data);
-            $this->load->view('templates/footer_full');
+            $this->load->view('templates/footer');
         }
     }
 
@@ -1174,7 +1174,8 @@ class productUpload extends MY_Controller
             
             if( $this->input->post('is_edit') ){
                 $this->product_model->finalizeProduct($productID , $memberId, $product['is_cod']);
-            }else{
+            }
+            else{
                 #Update product entry in es_product to be ready for purchase
                 $this->product_model->finalizeProduct($productID , $memberId, 1);
                 $product['is_cod'] = 1;
@@ -1201,8 +1202,9 @@ class productUpload extends MY_Controller
             
             $this->load->view('templates/header', $data);
             $this->load->view('pages/product/product_upload_step3_view',$data);
-            $this->load->view('templates/footer_full');
-        }else{
+            $this->load->view('templates/footer');
+        }
+        else{
             redirect('/sell/step1/', 'refresh');
         }
     }
@@ -1371,7 +1373,7 @@ class productUpload extends MY_Controller
             
             $this->load->view('templates/header', $data);
             $this->load->view('pages/product/product_upload_step4_view',$data);
-            $this->load->view('templates/footer_full');
+            $this->load->view('templates/footer');
         }
     }
     
