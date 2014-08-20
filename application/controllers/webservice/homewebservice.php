@@ -6,7 +6,8 @@ class Homewebservice extends MY_Controller
     /**
      *  Constructor call for Administrator's authentication. Authentication method is located in MY_Controller.php
      *
-     *  
+     *  $xmlCmsService used for accessing functions under application/src/Easyshop/XML/CMS.php
+     *  $xmlFileService used for accessing Resource class
      */
     private $xmlCmsService;
     public $xmlFileService;
