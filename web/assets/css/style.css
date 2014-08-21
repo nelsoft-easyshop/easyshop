@@ -7646,6 +7646,18 @@ margin-right: 10px;
     display:none;
 }
 
+.feed-left-panel{
+    z-index: 500;
+}
+
+.feed-left-panel{
+    z-index: 500;
+}
+
+.followed-sellers-cont .following-lnk{
+    text-align:center;
+}
+
 
 .feed-left-panel .media{
     padding: 0.2em 0.75em;
