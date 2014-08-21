@@ -204,33 +204,33 @@ function resetCoords(){
 }
 
 /**********	VENDOR SUBSCRIPTION	**************/
-$(function(){
+(function(){
 
-	$('.subscription_btn').on('click',function(){
-		var form = $(this).closest('form');
-		var $this = $(this);
-		var sibling = $(this).siblings('.subscription_btn');
-		$.post(config.base_url+'memberpage/vendorSubscription', $(form).serializeArray(), function(data){
-			try{
-				var obj = jQuery.parseJSON(data);
-			}
-			catch(e){
-				alert('There was an error while processing your request. Please try again later.');
-				return false;
-			}
-			
-			if(obj.result === 'success'){
-				$this.hide();
-				sibling.show();
-			}
-			else{
-				alert(obj.error);
-			}
-		});
-		return false;
-	});
-	
-});
+    $('.subscription_btn').on('click',function(){
+        var form = $(this).closest('form');
+        var $this = $(this);
+        var sibling = $(this).siblings('.subscription_btn');
+        $.post(config.base_url+'memberpage/vendorSubscription', $(form).serializeArray(), function(data){
+            try{
+                var obj = jQuery.parseJSON(data);
+            }
+            catch(e){
+                alert('There was an error while processing your request. Please try again later.');
+                return false;
+            }
+            
+            if(obj.result === 'success'){
+                $this.hide();
+                sibling.show();
+            }
+            else{
+                alert(obj.error);
+            }
+        });
+        return false;
+    });
+    
+})(jQuery);
 
 /*****************	STORE DESCRIPTION	******************************/
 $(function(){
