@@ -1,11 +1,50 @@
 /*******************	HTML Decoder	********************************/
 function htmlDecode(value) {
-	if (value) {
+    if (value) {
         return $('<div />').html(value).text();
     } else {
         return '';
     }
 }
+
+(function(){
+
+    $(document).ready(function(){
+        var options = { direction: 'right' };
+        // Set the duration (default: 400 milliseconds)
+        var duration = 300;
+        var fadein_duration = 900;
+        
+        $('#following-lnk').click(function(){
+            $(".user-tab").fadeOut(duration);
+            $('#following-tab').show('slide', options, duration);
+            $(".view_all_feedbacks").fadeIn(fadein_duration);
+        });
+        
+         $('#follower-lnk').click(function(){
+            $(".user-tab").fadeOut(duration);
+            $('#follower-tab').show('slide', options, duration);
+            $(".view_all_feedbacks").fadeIn(fadein_duration);
+        });
+         
+        $(".view_all_feedbacks").click(function() {
+            $(".view_all_feedbacks,.user-tab").fadeOut();
+            $("#dashboard-feedbacks").toggle('slide', options, duration);
+        });
+        
+        $(".hide_all_feedbacks,.subscription_cont .close").click(function() {
+            $(".view_all_feedbacks,.vendor_products_wrapper").fadeIn(fadein_duration);
+            $("#dashboard-feedbacks").hide('slide', options, duration);
+        });
+
+        $('#dashboard-feedbacks').hide();
+ 
+         
+        
+    });
+    
+})(jQuery);
+
 
 /**	Populate product item dislay **/
 $(document).ready(function(){
@@ -15,9 +54,9 @@ $(document).ready(function(){
      *   See next two lines of code.
      */
     $('.sch_box').val('');
-	$('input.items').each(function(k,v){
-		$(this).val($(this).data('value'));
-	});
+    $('input.items').each(function(k,v){
+        $(this).val($(this).data('value'));
+    });
 });
 
 var memconf = {
