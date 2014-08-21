@@ -53,7 +53,7 @@ class Home extends MY_Controller
         if( $data['logged_in'] ){
             $data = array_merge($data, $this->getFeed());            
             $this->load->view("templates/home_layout/layoutF",$data);
-            $this->load->view('templates/footer');
+            $this->load->view('templates/footer', array('minborder' => true));
         }
         else{
             $this->load->view('pages/home_view', $data);
@@ -287,17 +287,18 @@ class Home extends MY_Controller
         $partnersId = explode(',',trim($this->xmlmap->getFilenameID($xmlfile,'partners-member-id')));
         
         array_push($partnersId, $easyshopId);
-
         $prodId = ($this->input->post('ids')) ? $this->input->post('ids') : 0; 
+        $followedSellers = $this->user_model->getVendorSubscription($memberId);
 
         $data = array(
             'featured_prod' => $this->product_model->getProductFeed($memberId,$partnersId,$prodId,$perPage),
             'new_prod' => $this->product_model->getNewProducts($perPage),
-            'followed_users' => $this->user_model->getVendorSubscription($memberId),
+            'followed_users' => $followedSellers,
             'banners' => $this->product_model->getStaticBannerFeed($xmlfile),
             'promo_items' => $this->product_model->getStaticProductFeed('promo', $xmlfile),
             'popular_items' => $this->product_model->getStaticProductFeed('popular', $xmlfile),
             'featured_product' => $this->product_model->getStaticProductFeed('featured', $xmlfile),
+            'isCollapseCategories' => count($followedSellers) > 2,
         );
         
         #Assemble featured product ID array for exclusion on LOAD MORE request
