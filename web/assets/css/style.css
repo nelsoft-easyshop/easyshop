@@ -6582,7 +6582,7 @@ box-shadow:         inset 0px -10px 12px -8px rgba(255, 255, 255, 0.75);
     height: 145px;
     margin: 15px 0px;
     min-width: 230px;
-    width: 100%;
+    width: 98%%;
     -moz-box-sizing: border-box;
 }
 #modal-div-header{
@@ -7675,4 +7675,21 @@ margin-right: 10px;
     }
 }
 
+.inbox-view-content .img-wrapper-div{
+    border: 1px solid #ddd;
+    height: 62px;
+
+}
+
+.inbox-view-content .img-wrapper-span{
+    display:table-cell !important;
+    vertical-align:middle;
+    height: 62px;
+    width: 62px;
+}
+
+.inbox-view-content .img-wrapper-span img{
+    width: auto !important;
+    height: auto !important;
+}
 
