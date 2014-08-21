@@ -9,6 +9,7 @@ function htmlDecode(value) {
 
 (function(){
 
+    
     $(document).ready(function(){
         var options = { direction: 'right' };
         // Set the duration (default: 400 milliseconds)
@@ -38,9 +39,23 @@ function htmlDecode(value) {
         });
 
         $('#dashboard-feedbacks').hide();
- 
-         
-        
+
+    });
+    
+    
+    $(document).ready(function(){
+        var tab = $('#tab-cmd').val();
+        switch (tab) {
+            case 'following':
+                $('#following-lnk').click();
+                break;
+            case 'follower':
+                $('#follower-lnk').click();
+                break;
+            case 'feedback':
+                $(".view_all_feedbacks").click();
+                break;
+        }
     });
     
 })(jQuery);
