@@ -51,7 +51,7 @@
                                     <p class="no-subs-lbl">You have no subscriptions.</p>
                                 <?php else:?>
                                     <?php $count = 0 ; ?>
-                                    <?php for($i = 0; $i < $maxDisplayableSellers; $i ++): ?>
+                                    <?php for($i = 0; $i < count($followed_users) && $i < $maxDisplayableSellers; $i ++): ?>
                                         <?php $fu = $followed_users[$i]; ?>
                                         <div class="media pd-8-12 side-panel">
                                             <div class="pull-left media-image">
