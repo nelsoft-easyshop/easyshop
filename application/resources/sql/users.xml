@@ -427,12 +427,13 @@
         m.id_member, 
         m.username as vendor_name, 
         m.imgurl, DATE_FORMAT(m.datecreated, "%M %Y") as datecreated,
-        m.slug as userslug 
-        COUNT(vs_cnt.vendor_id) as follower_cnt
+        m.slug as userslug, 
+        COUNT(vs_cnt.vendor_id) as follower_cnt,
+        IF(SUM(IF(vs_cnt.member_id = vs.vendor_id, 1, 0)) > 0, 1, 0) as is_followed
     FROM es_vendor_subscribe vs
     LEFT JOIN es_member m ON m.id_member = vs.member_id
     LEFT JOIN es_vendor_subscribe vs_cnt ON vs_cnt.vendor_id = m.id_member 
-    WHERE vs.member_id = :member_id
+    WHERE vs.vendor_id = :member_id
     GROUP BY vs.vendor_id, m.username, m.imgurl, m.datecreated, m.slug;
 </select>
 
