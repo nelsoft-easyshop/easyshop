@@ -1004,10 +1004,10 @@ section {
     padding: 0 5px;
     width:184px;
 
-      -webkit-transition: all 0.3s ease-in-out;
-  -moz-transition:    all 0.3s ease-in-out;
-  -o-transition:      all 0.3s ease-in-out;
-  transition:         all 0.3s ease-in-out;
+    -webkit-transition: all 0.3s ease-in-out;
+    -moz-transition:    all 0.3s ease-in-out;
+    -o-transition:      all 0.3s ease-in-out;
+    transition:         all 0.3s ease-in-out;
 }
 
 .middle_content_items > div:hover,
@@ -1156,9 +1156,9 @@ nav ul > li > p span {
 /*	width: 187px;*/
     position: relative;
     z-index: 9999;
--webkit-box-shadow: -5px 3px 6px -2px rgba(50, 50, 50, 0.3);
--moz-box-shadow: -5px 3px 6px -2px rgba(50, 50, 50, 0.3);
-box-shadow: -5px 3px 6px -2px rgba(50, 50, 50, 0.3);
+    -webkit-box-shadow: -5px 3px 6px -2px rgba(50, 50, 50, 0.3);
+    -moz-box-shadow: -5px 3px 6px -2px rgba(50, 50, 50, 0.3);
+    box-shadow: -5px 3px 6px -2px rgba(50, 50, 50, 0.3);
 }
 
 .category_item:hover > a {
@@ -1358,6 +1358,110 @@ nav ul > li:hover > div {
     color: #ff4400 !important;
     font-weight: normal;
 }
+
+.follow-cnt{
+    font-size: 11px;
+    border-bottom: 1px dashed #ddd;
+}
+.follow-cnt .span-cont{
+    display: block;
+    width: auto;
+    height: auto;
+    cursor: pointer;
+}
+
+.follow-cnt .span-cont:hover{
+    color: #f18200;
+    text-decoration:underline;
+}
+
+.follow-cnt label{
+    cursor: pointer;
+    font-weight: bold;
+}
+
+
+.subscription_cont{
+    padding: 10px;
+    margin: 0 auto; 
+    width: 70%;
+    border: 1px solid #ddd;
+    min-height: 150px;
+    display:none;
+    
+}
+
+.subscription_cont .header{
+    width: 98%;
+    background:#0078d5;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 10px;
+    margin-bottom: 10px;
+    
+}
+
+.subscription_cont .header span{
+    vertical-align: 7px;
+}
+
+.subscription_cont .header a.close{
+    margin-right: 1px;
+    border-bottom: 0px;
+}
+
+.seller_div_r3{
+    border: 1px solid #ddd; 
+    width: 31%; 
+    float:left;
+    margin-left: 5px;
+    margin-bottom: 5px;
+    padding: 3px;
+    background: white;
+}
+
+.seller_div_r3 .img-wrapper{
+    width: 60px; 
+    display:table;
+    border: 1px solid #ddd;
+}
+
+.seller_div_r3 .img-wrapper .img-cont{
+    display:table-cell; 
+    vertical-align:middle; 
+    height:60px;
+}
+
+
+
+.seller_div_r3 div{
+    float: left;
+    height: 50px;
+}
+
+.seller_div_r3 .content{
+    padding: 5px;
+}
+
+.seller_div_r3 .follow-btn{
+    margin-top: 10px;
+}
+
+.seller_div_r3 .follow-btn span{
+    font-size: 0.7em;
+    text-decoration: underline;
+    font-weight:lighter;
+}
+
+.subscription_cont .title{
+    font-size: 0.9em;
+    font-weight:bold;
+}   
+.subscription_cont .sub-title{
+    font-size: 0.7em;
+    display: block;
+}   
 
 
 /********* COUNTDOWN CONTENT STYLES **********/
@@ -5018,7 +5122,7 @@ div.post_item_content_left {
     background-color: #cecece;
 }
 
-.vendor_avatar_wrapper .vendor-msg-modal #modal-launcher {
+.vendor-msg-modal #modal-launcher {
     background-color: #fff;
     color: #0191c8;
     display: inline-block;
@@ -5026,11 +5130,11 @@ div.post_item_content_left {
     font-size: 11px !important;
     height: auto;
     margin-right: 0px;
-    margin-top: 0;
+    margin-top: 5px;
     width: auto !important;
 }
 
-.vendor_avatar_wrapper .vendor-msg-modal #modal-launcher:hover {
+.vendor-msg-modal #modal-launcher:hover {
     border-bottom: 1px dotted #0191c8;
 }
 
@@ -5093,6 +5197,11 @@ div.post_item_content_left {
 
 .subscription_btn {
     text-align: left;
+    cursor: pointer;
+}
+
+.subscription_btn:hover{
+    color: #0191C8;
 }
 
 .vendor_store_desc {
@@ -7385,8 +7494,8 @@ margin-right: 10px;
 
 /** MEDIA PANEL - a container and img **/
 .feeds-cont .media.side-panel .media-image a{
-    width: 4.4em;
-    height: 4.4em;
+    width: 4.0em;
+    height: 4.0em;
 }
 
 .feeds-cont .media.seller-container .media-image a{
@@ -7537,6 +7646,18 @@ margin-right: 10px;
     display:none;
 }
 
+.feed-left-panel{
+    z-index: 500;
+}
+
+.feed-left-panel{
+    z-index: 500;
+}
+
+.followed-sellers-cont .following-lnk{
+    text-align:center;
+}
+
 
 .feed-left-panel .media{
     padding: 0.2em 0.75em;
@@ -7553,4 +7674,5 @@ margin-right: 10px;
        display:none; 
     }
 }
+
 

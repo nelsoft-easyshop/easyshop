@@ -225,6 +225,7 @@ class Home extends MY_Controller
     /**
      * Renders memberpage
      *
+     * @param string $tab
      * @return View
      */
     public function userprofile()
@@ -232,10 +233,10 @@ class Home extends MY_Controller
         $this->load->model('memberpage_model');
 
         $sellerslug = $this->uri->segment(1);
-    
+        $tab = $this->input->get('tab') ? $this->input->get('tab') : '';
         $session_data = $this->session->all_userdata();
         $vendordetails = $this->memberpage_model->getVendorDetails($sellerslug);
-    
+            
         if($vendordetails){
             $data['title'] = 'Vendor Profile | Easyshop.ph';
             $data['my_id'] = (empty($session_data['member_id']) ? 0 : $session_data['member_id']);
@@ -244,6 +245,8 @@ class Home extends MY_Controller
             $data['render_searchbar'] = false;
             $this->load->view('templates/header', $data);
             $sellerid = $vendordetails['id_member'];
+            $usersFollowing = $this->user_model->getFollowing($sellerid);
+            $usersFollower = $this->user_model->getFollowers($sellerid);
             $user_product_count = $this->memberpage_model->getUserItemCount($sellerid);
             $data = array_merge($data,array(
                     'vendordetails' => $vendordetails,
@@ -253,6 +256,9 @@ class Home extends MY_Controller
                     'active_count' => intval($user_product_count['active']),
                     'deleted_count' => intval($user_product_count['deleted']),
                     'sold_count' => intval($user_product_count['sold']),
+                    'followers' =>  $usersFollower,
+                    'following' =>  $usersFollowing,
+                    'tab' => $tab,
                     ));
             $data['allfeedbacks'] = $this->memberpage_model->getFeedback($sellerid);
 
@@ -261,9 +267,7 @@ class Home extends MY_Controller
             $data['renderEdit'] = (int)$sellerid === (int)$data['my_id'] ? true : false;
             #if 0 : no entry - unfollowed, hence display follow
             #if 1 : has entry - followed, hence display unfollow
-            $data['subscribe_status'] = $this->memberpage_model->checkVendorSubscription($data['my_id'],$sellerslug)['stat'];
-            $data['subscribe_count'] = (int)$this->memberpage_model->countVendorSubscription($data['my_id'], $sellerslug)['subscription_count'];
-            
+            $data['subscribe_status'] = $this->memberpage_model->checkVendorSubscription($data['my_id'],$sellerslug)['stat'];   
             $this->load->view('pages/user/vendor_view', $data);
             $this->load->view('templates/footer');
         }
@@ -276,20 +280,21 @@ class Home extends MY_Controller
     
     public function getFeed()
     {
+        $followedSellerLimit = 2;
         $xmlResourceService = $this->serviceContainer['xml_resource'];
         $xmlfile =  $xmlResourceService->getContentXMLfile();
-
     
         $perPage = $this->feedsProdPerPage;
         $memberId = $this->session->userdata('member_id');
- 
+        $userdata = $this->user_model->getUserById($memberId);
+
         $easyshopId = trim($this->xmlmap->getFilenameID($xmlfile,'easyshop-member-id'));
         $partnersId = explode(',',trim($this->xmlmap->getFilenameID($xmlfile,'partners-member-id')));
         
         array_push($partnersId, $easyshopId);
         $prodId = ($this->input->post('ids')) ? $this->input->post('ids') : 0; 
-        $followedSellers = $this->user_model->getVendorSubscription($memberId);
-
+        $followedSellers = $this->user_model->getFollowing($memberId, $followedSellerLimit);
+        
         $data = array(
             'featured_prod' => $this->product_model->getProductFeed($memberId,$partnersId,$prodId,$perPage),
             'new_prod' => $this->product_model->getNewProducts($perPage),
@@ -298,7 +303,8 @@ class Home extends MY_Controller
             'promo_items' => $this->product_model->getStaticProductFeed('promo', $xmlfile),
             'popular_items' => $this->product_model->getStaticProductFeed('popular', $xmlfile),
             'featured_product' => $this->product_model->getStaticProductFeed('featured', $xmlfile),
-            'isCollapseCategories' => count($followedSellers) > 2,
+            'isCollapseCategories' => count($followedSellers) > $followedSellerLimit,
+            'userslug' => $userdata['slug'],
         );
         
         #Assemble featured product ID array for exclusion on LOAD MORE request

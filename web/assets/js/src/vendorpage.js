@@ -1,23 +1,76 @@
 /*******************	HTML Decoder	********************************/
 function htmlDecode(value) {
-	if (value) {
+    if (value) {
         return $('<div />').html(value).text();
     } else {
         return '';
     }
 }
 
+(function(){
+
+    
+    $(document).ready(function(){
+        var options = { direction: 'right' };
+        // Set the duration (default: 400 milliseconds)
+        var duration = 300;
+        var fadein_duration = 900;
+        
+        $('#following-lnk').click(function(){
+            $(".user-tab").fadeOut(duration);
+            $('#following-tab').show('slide', options, duration);
+            $(".view_all_feedbacks").fadeIn(fadein_duration);
+        });
+        
+         $('#follower-lnk').click(function(){
+            $(".user-tab").fadeOut(duration);
+            $('#follower-tab').show('slide', options, duration);
+            $(".view_all_feedbacks").fadeIn(fadein_duration);
+        });
+         
+        $(".view_all_feedbacks").click(function() {
+            $(".view_all_feedbacks,.user-tab").fadeOut();
+            $("#dashboard-feedbacks").toggle('slide', options, duration);
+        });
+        
+        $(".hide_all_feedbacks,.subscription_cont .close").click(function() {
+            $(".view_all_feedbacks,.vendor_products_wrapper").fadeIn(fadein_duration);
+            $("#dashboard-feedbacks").hide('slide', options, duration);
+        });
+
+        $('#dashboard-feedbacks').hide();
+
+    });
+    
+    
+    $(document).ready(function(){
+        var tab = $('#tab-cmd').val();
+        switch (tab) {
+            case 'following':
+                $('#following-lnk').click();
+                break;
+            case 'follower':
+                $('#follower-lnk').click();
+                break;
+            case 'feedback':
+                $(".view_all_feedbacks").click();
+                break;
+        }
+    });
+    
+})(jQuery);
+
+
 /**	Populate product item dislay **/
 $(document).ready(function(){
-		
-    /* 
+
+    /**
      *   Fix for the stupid behaviour of jpagination with chrome when pressing the back button.
-     *   See next two lines of code.
      */
     $('.sch_box').val('');
-	$('input.items').each(function(k,v){
-		$(this).val($(this).data('value'));
-	});
+    $('input.items').each(function(k,v){
+        $(this).val($(this).data('value'));
+    });
 });
 
 var memconf = {
@@ -166,33 +219,33 @@ function resetCoords(){
 }
 
 /**********	VENDOR SUBSCRIPTION	**************/
-$(function(){
+(function(){
 
-	$('.subscription_btn').on('click',function(){
-		var form = $(this).closest('form');
-		var $this = $(this);
-		var sibling = $(this).siblings('.subscription_btn');
-		$.post(config.base_url+'memberpage/vendorSubscription', $(form).serializeArray(), function(data){
-			try{
-				var obj = jQuery.parseJSON(data);
-			}
-			catch(e){
-				alert('There was an error while processing your request. Please try again later.');
-				return false;
-			}
-			
-			if(obj.result === 'success'){
-				$this.hide();
-				sibling.show();
-			}
-			else{
-				alert(obj.error);
-			}
-		});
-		return false;
-	});
-	
-});
+    $('.subscription_btn').on('click',function(){
+        var form = $(this).closest('form');
+        var $this = $(this);
+        var sibling = $(this).siblings('.subscription_btn');
+        $.post(config.base_url+'memberpage/vendorSubscription', $(form).serializeArray(), function(data){
+            try{
+                var obj = jQuery.parseJSON(data);
+            }
+            catch(e){
+                alert('There was an error while processing your request. Please try again later.');
+                return false;
+            }
+            
+            if(obj.result === 'success'){
+                $this.hide();
+                sibling.show();
+            }
+            else{
+                alert(obj.error);
+            }
+        });
+        return false;
+    });
+    
+})(jQuery);
 
 /*****************	STORE DESCRIPTION	******************************/
 $(function(){
