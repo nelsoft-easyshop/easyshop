@@ -628,9 +628,26 @@
                             <span class='title'><?php echo html_escape($user['vendor_name']); ?></span>
                         </a>
                         <span class='sub-title'><?php echo $user['follower_cnt'] ?> follower(s)</span>
-                        <div class='follow-btn'> 
-                            <span><a href="javascript:void(0)">+ Subscribe</a></span> 
-                        </div>
+                        
+                        <?php if( $renderEdit && $logged_in ):?>
+                            <?php if(intval($user['is_followed']) === 0): ?>
+                                <?php echo form_open('');?>
+                                
+                                <div class='follow-btn'> 
+                                    <span class='subscription_btn' style='display:inline'><a href="javascript:void(0)">+ Subscribe</a></span> 
+                                    <span class='subscription_btn' style='display:none'><a href="javascript:void(0)">- Unsubscribe</a></span> 
+                                </div>
+                                
+                                <input type="hidden" value="<?php echo $user['vendor_name']?>" name="name">
+                                <?php echo form_close();?>
+                            <?php else: ?>
+                                <div class='follow-btn'> 
+                                    <span>Already following</span>
+                                </div>
+                            <?php endif; ?>
+                        <?php endif;?>
+                        
+                   
                     </div>
                 </div>
             <?php endforeach; ?>
@@ -660,9 +677,19 @@
                                 <span class='title'><?php echo html_escape($user['vendor_name']); ?></span>
                             </a>
                         <span class='sub-title'><?php echo $user['follower_cnt'] ?> follower(s)</span>
-                        <div class='follow-btn'> 
-                            <span><a href="javascript:void(0)">- Unsubscribe</a></span> 
-                        </div>
+                        
+                        <?php if( $renderEdit && $logged_in ):?>
+                            <?php echo form_open('');?>
+                            
+                            <div class='follow-btn'> 
+                                <span class='subscription_btn' style='display:none'><a href="javascript:void(0)">+ Subscribe</a></span> 
+                                <span class='subscription_btn' style='display:inline'><a href="javascript:void(0)">- Unsubscribe</a></span> 
+                            </div>
+                            
+                            <input type="hidden" value="<?php echo $user['vendor_name']?>" name="name">
+                            <?php echo form_close();?>
+                        <?php endif;?>
+                        
                     </div>
                 </div>
             <?php endforeach; ?>
