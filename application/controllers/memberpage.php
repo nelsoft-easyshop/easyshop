@@ -468,13 +468,14 @@ class Memberpage extends MY_Controller
         echo json_encode($data);
     }
 
-    /*
+    /**
      *  Used to add feedback to SELLER or BUYER under Transactions Tab
      *  Returns 1 on success, 0 otherwise
      *
      *  @return integer
      */
-    public function addFeedback(){
+    public function addFeedback()
+    {
         if($this->input->post('order_id') && $this->input->post('feedback-field') && $this->form_validation->run('add_feedback_transaction')){
             $result = false;
             $data = array(
