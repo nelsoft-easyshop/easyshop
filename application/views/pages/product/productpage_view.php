@@ -4,19 +4,18 @@
     <?php echo $jsonReviewSchemaData;?>
 </script>
 
-<link rel="stylesheet" href="<?=base_url()?>assets/css/jquery.jqzoom.css?ver=<?=ES_FILE_VERSION?>" type="text/css">
-<link rel="stylesheet" href="<?=base_url()?>assets/css/style_new.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
-<link rel="stylesheet" href="<?=base_url()?>assets/css/jquery.bxslider.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
-<link rel="stylesheet" href="<?=base_url()?>assets/css/productview.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
+<link rel="stylesheet" href="/assets/css/jquery.jqzoom.css?ver=<?=ES_FILE_VERSION?>" type="text/css">
+<link rel="stylesheet" href="/assets/css/style_new.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
+<link rel="stylesheet" href="/assets/css/jquery.bxslider.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
+<link rel="stylesheet" href="/assets/css/productview.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
 
 <link rel="canonical" href="<?php echo base_url()?>item/<?php echo $product['slug'];?>"/>
 
-
 <div class="clear"></div>
-<section class="top_margin">
+<section class="top_margin product-page-section">
     <div class="wrapper">
         <div class="prod_categories">
-            <div class="nav_title">Categories <img src="<?=base_url()?>assets/images/img_arrow_down.png"></div>
+            <div class="nav_title">Categories <img src="/assets/images/img_arrow_down.png"></div>
             <?php echo $category_navigation; ?>
         </div> 
         <div class="prob_cat_nav">
@@ -477,210 +476,21 @@
     <input id='p_qty' type='hidden' value=' <?php echo json_encode($product_quantity);?>'>
     <input id='p_shipment' type='hidden' value='<?php echo json_encode($shipment_information);?>'>
     <input id='p_itemid' type='hidden' value='0'/>
+    
+    <input id='seller-id' value='<?php echo $product['sellerid']; ?>'/>
+    <input id='seller-username' value='<?php echo $product['sellerusername']; ?>'/>
+    <input id='user-id' value='<?php echo empty($uid) ? 0 : $uid;?>' />
   
 </section>
 
-<script src="<?=base_url()?>assets/js/src/vendor/jquery.jqzoom-core.js" type="text/javascript"></script>
-<script src="<?=base_url()?>assets/js/src/vendor/jquery.bxslider.min.js" type="text/javascript"></script>
-<script src="<?=base_url()?>assets/js/src/vendor/jquery.idTabs.min.js" type="text/javascript"></script>
-<script src="<?=base_url()?>assets/js/src/vendor/jquery.raty.min.js" type="text/javascript"></script>
-<script src="<?= base_url() ?>assets/js/src/categorynavigation.js?ver=<?=ES_FILE_VERSION?>" type="text/javascript"></script>
-<script type='text/javascript' src='<?=base_url()?>assets/js/src/vendor/jquery.numeric.js'></script>
-<script type='text/javascript' src='<?=base_url()?>assets/js/src/vendor/jquery.simplemodal.js'></script>
-<script type='text/javascript' src='<?=base_url()?>assets/js/src/vendor/jquery.validate.js'></script>
-<script src="<?=base_url()?>assets/js/src/productpage.js?ver=<?=ES_FILE_VERSION?>" type="text/javascript"></script>
-
-<style type="text/css">
-    nav {
-        display: none;
-        position: absolute;
-        z-index: 9999;
-        background-color: #fff;
-    }
-    .slide_arrows {
-        max-width: none !important;
-    }
-
-    #simplemodal-container {
-        height: 390px !important;
-    }
-    .bread_crumbs {
-        margin-left: 195px;
-        margin-top: 10px;
-    }
-</style>
-
-<script type="text/javascript">
-    (function($) {
-        $(function() {
-            $('.jcarousel').jcarousel();
-
-            $('.jcarousel-control-prev')
-                    .on('jcarouselcontrol:active', function() {
-                $(this).removeClass('inactive');
-            })
-                    .on('jcarouselcontrol:inactive', function() {
-                $(this).addClass('inactive');
-            })
-                    .jcarouselControl({
-                target: '-=1'
-            });
-
-            $('.jcarousel-control-next')
-                    .on('jcarouselcontrol:active', function() {
-                $(this).removeClass('inactive');
-            })
-                    .on('jcarouselcontrol:inactive', function() {
-                $(this).addClass('inactive');
-            })
-                    .jcarouselControl({
-                target: '+=1'
-            });
-
-            $('.jcarousel-pagination')
-                    .on('jcarouselpagination:active', 'a', function() {
-                $(this).addClass('active');
-            })
-                    .on('jcarouselpagination:inactive', 'a', function() {
-                $(this).removeClass('active');
-            })
-                    .jcarouselPagination();
-        });
-    })(jQuery);
-
-</script>
-<script type="text/javascript">
-
-    $(function(){    
-        var uid = <?php echo json_encode(!empty($uid)?$uid:0);?>;
-        var seller_id = <?php echo $product['sellerid']; ?>;
-        if (uid ==  seller_id || uid == 0  ) {
-            $(".vendor-msg-modal").remove();
-            $("#modal-background").remove();
-            $("#modal-container").remove();
-        }
-        $("#modal-background, #modal-close").click(function() {
-            $("#modal-container, #modal-background").toggleClass("active");
-            $("#modal-container").hide();
-            $("#msg-message").val("");
-        });
-        $(".modal_msg_launcher").click(function() {
-            $("#modal-container, #modal-background").toggleClass("active");
-            $("#modal-container").show();
-        });
-        
-        $("#modal_send_btn").on("click",function(){
-            var recipient =<?php echo $product['sellerid']; ?>;
-            var csrftoken = $("meta[name='csrf-token']").attr('content');
-            var csrfname = $("meta[name='csrf-name']").attr('content');
-            var msg = $("#msg-message").val();
-            if (msg == "") {
-                alert("Say something..");
-                return false;
-            }
-            var msg = $("#msg-message").val();
-                $.ajax({
-                    async : true,
-                    type : "POST",
-                    dataType : "json",
-                    url : "<?=base_url()?>messages/send_msg",
-                    data : {recipient:recipient,msg:msg,csrfname:csrftoken},
-                    success : function(data) {
-                $("#modal-container, #modal-background").toggleClass("active");
-                $("#modal-container").hide();
-                $("#msg-message").val("");
-                alert("Your message has been sent.");
-                    }
-                });
-        });
-        
-    });
-    
-    $(document).on('click','.prod_cat_drop',function() {
-        $(".category_nav").toggleClass("category_nav_plus");
-        $(".prod_cat_drop").toggleClass("active_prod_cat_drop_arrow");
-        
-        $(document).bind('focusin.prod_cat_drop click.prod_cat_drop',function(e) {
-                if ($(e.target).closest('.prod_cat_drop, .category_nav').length) return;
-                $('.category_nav').removeClass('category_nav_plus');
-                $('.prod_cat_drop').removeClass('active_prod_cat_drop_arrow');
-        });
-    });
- 
-    $('.category_nav').removeClass('category_nav_plus');
-    $('.prod_cat_drop').removeClass('active_prod_cat_drop_arrow');
-</script>
-
-<script src="<?=base_url()?>assets/js/src/vendor/jquery.plugin.min.js" type="text/javascript"></script>
-<script src="<?=base_url()?>assets/js/src/vendor/jquery.countdown.min.js" type="text/javascript"></script>
-<script>
-    
-    $(document).ready(function(){
-
-        $('.mid_slide1').bxSlider({
-            mode: 'horizontal',
-            auto:true,
-            autoControls: true,
-            pause: 3500,
-            controls:false,
-            slideWidth: 510
-        });
-
-        $('.mid_slide2').bxSlider({
-            slideWidth: 160,
-            minSlides: 2,
-            maxSlides: 3,
-            moveSlides: 1,
-            slideMargin: 0,
-            infiniteLoop:true,
-            autoControls: false,
-            pager:false
-        });
-
-        $('.countdown_slides').bxSlider({
-            slideWidth: 220,
-            minSlides: 3,
-            maxSlides: 4,
-            moveSlides: 2,
-            slideMargin: 0,
-            infiniteLoop:true,
-            autoControls: false,
-            pager:false
-        });
-
-        $('.slider3').bxSlider({
-            slideWidth: 452,
-            minSlides: 1,
-            maxSlides: 1,
-            moveSlides: 1,
-            slideMargin: 0,
-            infiniteLoop:true,
-            autoControls: false,
-            pager:false
-        });
-
-        $('.bx-wrapper').addClass('slide_arrows');
-
-        //middle content top slides
-        $('.mid_slide1').parent('.bx-viewport').addClass('mid_top_slides');
-
-        //middle content countdown slides
-        $('.countdown_slides').parent('.bx-viewport').parent('.bx-wrapper').addClass('countdown_slides_wrapper');
-
-        //middle content bottom slides
-        $('.mid_slide2').parent('.bx-viewport').parent('.bx-wrapper').addClass('mid_bottom_slides');
-        $('.mid_slide2').parent('.bx-viewport').addClass('inner_mid_bottom_slides');
-
-        //electronics slides
-        $('.slider3').parent('.bx-viewport').addClass('electronic_slides');
-
-        //side navigation menu slides
-        $('.slides_prod').parent('.bx-viewport').addClass('side_menu_slides');
-        $('.side_menu_slides').parent('.bx-wrapper').addClass('side_menu_nav_slides');
-        $('.side_menu_nav_slides').children('.bx-controls').addClass('side_menu_nav_arrow');
-
-
-    });
-
-
-</script>
+<script src="/assets/js/src/vendor/jquery.jqzoom-core.js" type="text/javascript"></script>
+<script src="/assets/js/src/vendor/jquery.bxslider.min.js" type="text/javascript"></script>
+<script src="/assets/js/src/vendor/jquery.idTabs.min.js" type="text/javascript"></script>
+<script src="/assets/js/src/vendor/jquery.raty.min.js" type="text/javascript"></script>
+<script src="/assets/js/src/categorynavigation.js?ver=<?=ES_FILE_VERSION?>" type="text/javascript"></script>
+<script src='/assets/js/src/vendor/jquery.numeric.js' type='text/javascript' ></script>
+<script src='/assets/js/src/vendor/jquery.simplemodal.js'  type='text/javascript'></script>
+<script src='/assets/js/src/vendor/jquery.validate.js'  type='text/javascript'></script>
+<script src="/assets/js/src/productpage.js?ver=<?=ES_FILE_VERSION?>" type="text/javascript"></script>
+<script src="/assets/js/src/vendor/jquery.plugin.min.js" type="text/javascript"></script>
+<script src="/assets/js/src/vendor/jquery.countdown.min.js" type="text/javascript"></script>
