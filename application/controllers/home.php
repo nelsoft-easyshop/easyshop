@@ -232,10 +232,9 @@ class Home extends MY_Controller
         $this->load->model('memberpage_model');
 
         $sellerslug = $this->uri->segment(1);
-    
         $session_data = $this->session->all_userdata();
         $vendordetails = $this->memberpage_model->getVendorDetails($sellerslug);
-    
+            
         if($vendordetails){
             $data['title'] = 'Vendor Profile | Easyshop.ph';
             $data['my_id'] = (empty($session_data['member_id']) ? 0 : $session_data['member_id']);
@@ -244,6 +243,8 @@ class Home extends MY_Controller
             $data['render_searchbar'] = false;
             $this->load->view('templates/header', $data);
             $sellerid = $vendordetails['id_member'];
+            $usersFollowing = $this->user_model->getFollowing($sellerid);
+            $usersFollower = $this->user_model->getFollowers($sellerid);
             $user_product_count = $this->memberpage_model->getUserItemCount($sellerid);
             $data = array_merge($data,array(
                     'vendordetails' => $vendordetails,
@@ -253,6 +254,8 @@ class Home extends MY_Controller
                     'active_count' => intval($user_product_count['active']),
                     'deleted_count' => intval($user_product_count['deleted']),
                     'sold_count' => intval($user_product_count['sold']),
+                    'followers' =>  $usersFollower,
+                    'following' =>  $usersFollowing,
                     ));
             $data['allfeedbacks'] = $this->memberpage_model->getFeedback($sellerid);
 
@@ -261,9 +264,7 @@ class Home extends MY_Controller
             $data['renderEdit'] = (int)$sellerid === (int)$data['my_id'] ? true : false;
             #if 0 : no entry - unfollowed, hence display follow
             #if 1 : has entry - followed, hence display unfollow
-            $data['subscribe_status'] = $this->memberpage_model->checkVendorSubscription($data['my_id'],$sellerslug)['stat'];
-            $data['subscribe_count'] = (int)$this->memberpage_model->countVendorSubscription($data['my_id'], $sellerslug)['subscription_count'];
-            
+            $data['subscribe_status'] = $this->memberpage_model->checkVendorSubscription($data['my_id'],$sellerslug)['stat'];   
             $this->load->view('pages/user/vendor_view', $data);
             $this->load->view('templates/footer');
         }
@@ -288,7 +289,7 @@ class Home extends MY_Controller
         
         array_push($partnersId, $easyshopId);
         $prodId = ($this->input->post('ids')) ? $this->input->post('ids') : 0; 
-        $followedSellers = $this->user_model->getVendorSubscription($memberId);
+        $followedSellers = $this->user_model->getFollowing($memberId);
 
         $data = array(
             'featured_prod' => $this->product_model->getProductFeed($memberId,$partnersId,$prodId,$perPage),

@@ -134,15 +134,14 @@ class user_model extends CI_Model {
     /**
      *  Fetch users $member_id is subscribed to.
      *
-     *  @param integer $memberID
-     *
+     *  @param integer $memberId
      *  @return array
      */
-    function getVendorSubscription($memberID)
+    function getFollowing($memberId)
     {
-        $query = $this->xmlmap->getFilenameID('sql/users','getVendorSubscription'); 
+        $query = $this->xmlmap->getFilenameID('sql/users','getFollowing'); 
         $sth = $this->db->conn_id->prepare($query);
-        $sth->bindParam(':member_id',$memberID, PDO::PARAM_INT);
+        $sth->bindParam(':member_id',$memberId, PDO::PARAM_INT);
         $sth->execute();
         $row = $sth->fetchAll(PDO::FETCH_ASSOC);
         
@@ -159,7 +158,32 @@ class user_model extends CI_Model {
     }
     
 
-
+    /**
+     * Return list of users following a certain user
+     *
+     * @param integer $memberId
+     * @return array
+     *
+     */
+    public function getFollowers($memberId)
+    {
+        $query = $this->xmlmap->getFilenameID('sql/users','getFollowers'); 
+        $sth = $this->db->conn_id->prepare($query);
+        $sth->bindParam(':member_id',$memberId, PDO::PARAM_INT);
+        $sth->execute();
+        $row = $sth->fetchAll(PDO::FETCH_ASSOC);
+        
+        foreach($row as $k=>$r){
+            if(($r['imgurl'] === "") || (!file_exists($r['imgurl']))){
+                $row[$k]['imgurl'] = "assets/user/default/60x60.png";
+            }
+            else{
+                $row[$k]['imgurl'] = $r['imgurl'] . "/60x60.png";
+            }
+        }
+        
+        return $row;
+    }
     
 }
 
