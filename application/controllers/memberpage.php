@@ -768,13 +768,13 @@ class Memberpage extends MY_Controller
         switch( $checkData['stat'] ){
             case 'unfollowed':
             case 'followed':
-            $boolResult = $this->memberpage_model->setVendorSubscription($memberID,$checkData['vendor_id'], $checkData['stat']);
-            $serverResponse['result'] = $boolResult ? 'success' : 'fail';
-            $serverResponse['error'] = $boolResult ? '' : 'Failed to update database.';
-            break;
+                $boolResult = $this->memberpage_model->setVendorSubscription($memberID,$checkData['vendor_id'], $checkData['stat']);
+                $serverResponse['result'] = $boolResult ? 'success' : 'fail';
+                $serverResponse['error'] = $boolResult ? '' : 'Failed to update database.';
+                break;
             case 'error':
-            $serverResponse['result'] = 'fail';
-            $serverResponse['error'] = 'Incorrect data submitted to server. Please try again later.';
+                $serverResponse['result'] = 'fail';
+                $serverResponse['error'] = 'Incorrect data submitted to server. Please try again later.';
             break;
         }
         
