@@ -7675,5 +7675,21 @@ margin-right: 10px;
     }
 }
 
+.inbox-view-content .img-wrapper-div{
+    border: 1px solid #ddd;
+    height: 62px;
 
+}
+
+.inbox-view-content .img-wrapper-span{
+    display:table-cell !important;
+    vertical-align:middle;
+    height: 62px;
+    width: 62px;
+}
+
+.inbox-view-content .img-wrapper-span img{
+    width: auto !important;
+    height: auto !important;
+}
 
