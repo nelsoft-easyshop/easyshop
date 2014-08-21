@@ -15,7 +15,7 @@
 <div class="res_wrapper feeds-cont">
     <div class="">
         <!-- LEFT PANEL -->
-        <div class="col-md-3 col-sm-12 l-screen">
+        <div class="col-md-3 col-sm-12 l-screen feed-left-panel">
             <div class="row mrgn-bttm-8">
                 <div class="col-md-12">
                     <div class="col-md-10">
@@ -68,7 +68,7 @@
         </div>
         
         <!-- MID PANEL -->
-        <div class="col-md-6 col-xs-12 feed-mid-panel">
+        <div class="col-md-6 col-xs-12 feed-mid-panel feed-middle-panel">
             <div class="row-2">
                 <div class="row mrgn-bttm-8">
                     <div class="col-md-12 ">
@@ -147,7 +147,7 @@
                             <?php endforeach;?>
                             
                             <div class="mrgn-bttm-8 row-loadmore load_more_div">
-                                <div class="">
+                                <div class="mrgn-top-35">
                                     <?php echo form_open("",array("class"=>"load_more_form"));?>
                                     <input type="hidden" name="feed_page" value="1">
                                     <input type="hidden" name="feed_set" value="1">
@@ -268,7 +268,7 @@
         </div>
         
         <!-- RIGHT PANEL -->
-        <div class="col-md-3 l-screen">
+        <div class="col-md-3 l-screen feed-right-panel">
             <div class="row"><div class="col-md-12">
                 <div class="col-md-10 col-md-offset-2 mrgn-bttm-8">
                     <div class="row">
@@ -323,5 +323,34 @@
 </div>
 
 <script type="text/javascript" src="<?=base_url()?>assets/js/src/feed.js"></script>
+<script type="text/javascript">
 
+var leftpanel = $(".feed-left-panel");
+var midpanel = $(".feed-middle-panel");
+var rightpanel = $(".feed-right-panel");
+var pos = leftpanel.offset().top;  
+
+   
+    $(window).scroll(function() {
+        var windowpos = $(window).scrollTop();
+         
+        if(windowpos + $(window).height() + 70 >= $(document).height()){
+            leftpanel.addClass('feed-pos-ab-bttm');
+            rightpanel.addClass('feed-pos-ab-bttm');
+        }
+
+        else if(windowpos >= pos){
+            leftpanel.addClass('feed-left-panel-fix').removeClass('feed-pos-ab-bttm');
+            midpanel.addClass('feed-middle-panel-fix');
+            rightpanel.addClass('feed-right-panel-fix').removeClass('feed-pos-ab-bttm');
+        }
+
+        else{
+            leftpanel.removeClass('feed-left-panel-fix');
+            midpanel.removeClass('feed-middle-panel-fix');
+            rightpanel.removeClass('feed-right-panel-fix');
+        }
+    });
+
+</script>
 </html>

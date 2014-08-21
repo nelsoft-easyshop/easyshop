@@ -1966,6 +1966,7 @@ box-shadow:         0px 1px 5px 0px rgba(50, 50, 50, 0.75);
     max-width: 50%;
     min-width: 190px;
     width: 100%;
+}
 /**** Inforgraphic page *****/
 .img-info-main {
     max-width: 980px;
@@ -1986,6 +1987,28 @@ box-shadow:         0px 1px 5px 0px rgba(50, 50, 50, 0.75);
 
 .img-sc-tw {
     max-width: 254px;
+}
+
+/**** feeds *****/
+.feed-left-panel-fix {
+    width: 245px !important;
+    position: fixed !important;
+    margin-top: -125px;
+}
+
+.feed-pos-ab-bttm {
+    margin-top: -312px !important;
+}
+
+.feed-middle-panel-fix {
+    margin-left: 244px;
+}
+
+.feed-right-panel-fix {
+    margin-top: -125px;
+    margin-left: 735px;
+    position: fixed !important;
+    width: 244px !important;
 }
 
 @media screen and (-webkit-min-device-pixel-ratio: 1.3), screen and (min--moz-device-pixel-ratio: 1.3), screen and (-o-min-device-pixel-ratio: 2 / 1), screen and (min-device-pixel-ratio: 1.3), screen and (min-resolution: 192dpi), screen and (min-resolution: 2dppx) {
@@ -2092,6 +2115,10 @@ box-shadow:         0px 1px 5px 0px rgba(50, 50, 50, 0.75);
     .search_box {
         text-align: center;
         width: 99%;
+    }
+
+    .feed-middle-panel-fix {
+        margin-left: 0px;
     }
 }
 
