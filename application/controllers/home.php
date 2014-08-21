@@ -297,7 +297,7 @@ class Home extends MY_Controller
         $data = array(
             'featured_prod' => $this->product_model->getProductFeed($memberId,$partnersId,$prodId,$perPage),
             'new_prod' => $this->product_model->getNewProducts($perPage),
-            'followed_users' => array_merge($followedSellers, array_merge($followedSellers, array_merge($followedSellers, $followedSellers))),
+            'followed_users' =>  $followedSellers,
             'banners' => $this->product_model->getStaticBannerFeed($xmlfile),
             'promo_items' => $this->product_model->getStaticProductFeed('promo', $xmlfile),
             'popular_items' => $this->product_model->getStaticProductFeed('popular', $xmlfile),
