@@ -135,13 +135,18 @@ class user_model extends CI_Model {
      *  Fetch users $member_id is subscribed to.
      *
      *  @param integer $memberId
+     *  @param inetger $limit
      *  @return array
      */
-    function getFollowing($memberId)
+    function getFollowing($memberId, $limit = null)
     {
         $query = $this->xmlmap->getFilenameID('sql/users','getFollowing'); 
+        $query .=  $limit === null ? '' : 'limit :limit';
         $sth = $this->db->conn_id->prepare($query);
         $sth->bindParam(':member_id',$memberId, PDO::PARAM_INT);
+        if($limit !== null){
+            $sth->bindParam(':limit',$limit, PDO::PARAM_INT);
+        }
         $sth->execute();
         $row = $sth->fetchAll(PDO::FETCH_ASSOC);
         
