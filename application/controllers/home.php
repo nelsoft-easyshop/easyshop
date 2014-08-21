@@ -280,7 +280,6 @@ class Home extends MY_Controller
     
     public function getFeed()
     {
-        $followedSellerLimit = 2;
         $xmlResourceService = $this->serviceContainer['xml_resource'];
         $xmlfile =  $xmlResourceService->getContentXMLfile();
     
@@ -293,18 +292,19 @@ class Home extends MY_Controller
         
         array_push($partnersId, $easyshopId);
         $prodId = ($this->input->post('ids')) ? $this->input->post('ids') : 0; 
-        $followedSellers = $this->user_model->getFollowing($memberId, $followedSellerLimit);
+        $followedSellers = $this->user_model->getFollowing($memberId);
         
         $data = array(
             'featured_prod' => $this->product_model->getProductFeed($memberId,$partnersId,$prodId,$perPage),
             'new_prod' => $this->product_model->getNewProducts($perPage),
-            'followed_users' => $followedSellers,
+            'followed_users' =>  $followedSellers,
             'banners' => $this->product_model->getStaticBannerFeed($xmlfile),
             'promo_items' => $this->product_model->getStaticProductFeed('promo', $xmlfile),
             'popular_items' => $this->product_model->getStaticProductFeed('popular', $xmlfile),
             'featured_product' => $this->product_model->getStaticProductFeed('featured', $xmlfile),
-            'isCollapseCategories' => count($followedSellers) > $followedSellerLimit,
+            'isCollapseCategories' => count($followedSellers) > 2,
             'userslug' => $userdata['slug'],
+            'maxDisplayableSellers' => 7,
         );
         
         #Assemble featured product ID array for exclusion on LOAD MORE request
