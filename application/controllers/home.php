@@ -280,6 +280,7 @@ class Home extends MY_Controller
     
     public function getFeed()
     {
+        $followedSellerLimit = 2;
         $xmlResourceService = $this->serviceContainer['xml_resource'];
         $xmlfile =  $xmlResourceService->getContentXMLfile();
     
@@ -292,8 +293,8 @@ class Home extends MY_Controller
         
         array_push($partnersId, $easyshopId);
         $prodId = ($this->input->post('ids')) ? $this->input->post('ids') : 0; 
-        $followedSellers = $this->user_model->getFollowing($memberId);
-
+        $followedSellers = $this->user_model->getFollowing($memberId, $followedSellerLimit);
+        
         $data = array(
             'featured_prod' => $this->product_model->getProductFeed($memberId,$partnersId,$prodId,$perPage),
             'new_prod' => $this->product_model->getNewProducts($perPage),
@@ -302,7 +303,7 @@ class Home extends MY_Controller
             'promo_items' => $this->product_model->getStaticProductFeed('promo', $xmlfile),
             'popular_items' => $this->product_model->getStaticProductFeed('popular', $xmlfile),
             'featured_product' => $this->product_model->getStaticProductFeed('featured', $xmlfile),
-            'isCollapseCategories' => count($followedSellers) > 2,
+            'isCollapseCategories' => count($followedSellers) > $followedSellerLimit,
             'userslug' => $userdata['slug'],
         );
         
