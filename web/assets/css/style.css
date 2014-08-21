@@ -5197,6 +5197,11 @@ div.post_item_content_left {
 
 .subscription_btn {
     text-align: left;
+    cursor: pointer;
+}
+
+.subscription_btn:hover{
+    color: #0191C8;
 }
 
 .vendor_store_desc {
