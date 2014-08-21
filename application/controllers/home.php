@@ -225,6 +225,7 @@ class Home extends MY_Controller
     /**
      * Renders memberpage
      *
+     * @param string $tab
      * @return View
      */
     public function userprofile()
@@ -232,6 +233,7 @@ class Home extends MY_Controller
         $this->load->model('memberpage_model');
 
         $sellerslug = $this->uri->segment(1);
+        $tab = $this->input->get('tab') ? $this->input->get('tab') : '';
         $session_data = $this->session->all_userdata();
         $vendordetails = $this->memberpage_model->getVendorDetails($sellerslug);
             
@@ -256,6 +258,7 @@ class Home extends MY_Controller
                     'sold_count' => intval($user_product_count['sold']),
                     'followers' =>  $usersFollower,
                     'following' =>  $usersFollowing,
+                    'tab' => $tab,
                     ));
             $data['allfeedbacks'] = $this->memberpage_model->getFeedback($sellerid);
 
@@ -279,11 +282,11 @@ class Home extends MY_Controller
     {
         $xmlResourceService = $this->serviceContainer['xml_resource'];
         $xmlfile =  $xmlResourceService->getContentXMLfile();
-
     
         $perPage = $this->feedsProdPerPage;
         $memberId = $this->session->userdata('member_id');
- 
+        $userdata = $this->user_model->getUserById($memberId);
+
         $easyshopId = trim($this->xmlmap->getFilenameID($xmlfile,'easyshop-member-id'));
         $partnersId = explode(',',trim($this->xmlmap->getFilenameID($xmlfile,'partners-member-id')));
         
@@ -300,6 +303,7 @@ class Home extends MY_Controller
             'popular_items' => $this->product_model->getStaticProductFeed('popular', $xmlfile),
             'featured_product' => $this->product_model->getStaticProductFeed('featured', $xmlfile),
             'isCollapseCategories' => count($followedSellers) > 2,
+            'userslug' => $userdata['slug'],
         );
         
         #Assemble featured product ID array for exclusion on LOAD MORE request
