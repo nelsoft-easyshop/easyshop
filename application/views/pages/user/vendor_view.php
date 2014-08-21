@@ -718,7 +718,9 @@
     </div>
     <button id="modal_send_btn">Send</button>
 </div>
-        
+
+
+<input type='hidden' id='tab-cmd' value='<?php echo html_escape($tab);?>'/>
         
 <script src="assets/js/src/vendor/jquery.raty.min.js" type="text/javascript"></script>
 <script type='text/javascript' src='assets/js/src/vendor/jquery.jqpagination.min.js'></script>
