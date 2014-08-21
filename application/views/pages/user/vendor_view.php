@@ -2,10 +2,10 @@
         <script src="assets/js/src/vendor/excanvas.js"></script>
 <![endif]-->
 
-<link rel="stylesheet" href="assets/css/product_search_category.css?ver=<?=ES_FILE_VERSION?>" type="text/css"  media="screen"/> 
-<link  type="text/css"  href='assets/css/jqpagination.css' rel="stylesheet" media='screen'/>
-<link type="text/css" href="assets/css/jquery.Jcrop.min.css" rel="stylesheet" media='screen'/>
-<link type="text/css" href="assets/css/memberpage.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet" media='screen'/>
+<link type="text/css" href="/assets/css/product_search_category.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet"  media="screen"/> 
+<link type="text/css" href='/assets/css/jqpagination.css' rel="stylesheet" media='screen'/>
+<link type="text/css" href="/assets/css/jquery.Jcrop.min.css" rel="stylesheet" media='screen'/>
+<link type="text/css" href="/assets/css/memberpage.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet" media='screen'/>
 
 <div id = "member_page_body">
     <div class="clear"></div>
@@ -721,120 +721,13 @@
 
 
 <input type='hidden' id='tab-cmd' value='<?php echo html_escape($tab);?>'/>
+<input type='hidden' id='user-id' value='<?php echo $my_id ?>'/>
+<input type='hidden' id='seller-id' value='<?php echo $vendordetails['id_member'] ?>'/>
+<input type='hidden' id='seller-username' value='<?php echo $vendordetails['username'] ?>'/>
         
-<script src="assets/js/src/vendor/jquery.raty.min.js" type="text/javascript"></script>
-<script type='text/javascript' src='assets/js/src/vendor/jquery.jqpagination.min.js'></script>
-<script src="assets/js/src/vendor/jquery.idTabs.min.js" type="text/javascript"></script>
-<script type='text/javascript' src='assets/js/src/vendor/jquery.Jcrop.min.js'></script>
-<script type='text/javascript' src='assets/js/src/vendor/jquery.simplemodal.js'></script>
-<script type="text/javascript" src="assets/js/src/vendorpage.js?ver=<?=ES_FILE_VERSION?>"></script>
-
-<script>
-
-    (function(){
-    
-        $(document).ready(function(){
-            if (<?=$my_id?> == <?php echo $vendordetails['id_member']; ?> || <?=$my_id?> == 0  ) {
-                $(".vendor-msg-modal").remove();
-                $("#modal-background").remove();
-                $("#modal-container").remove();
-            }
-                
-            $("#modal-background, #modal-close").click(function() {
-                $("#modal-container, #modal-background").toggleClass("active");
-                $("#modal-container").hide();
-                $("#msg-message").val("");
-            });
-            $("#modal-launcher").click(function() {
-                $("#modal-container, #modal-background").toggleClass("active");
-                $("#modal-container").show();
-            });
-            
-            $("#modal_send_btn").on("click",function(){
-                var recipient = <?php echo $vendordetails['id_member']; ?>;
-                var csrftoken = $("meta[name='csrf-token']").attr('content');
-                var csrfname = $("meta[name='csrf-name']").attr('content');
-                var msg = $("#msg-message").val();
-                if (msg == "") {
-                    alert("Say something..");
-                    return false;
-                }
-                var msg = $("#msg-message").val();
-                    $.ajax({
-                        async : true,
-                        type : "POST",
-                        dataType : "json",
-                        url : "<?=base_url()?>messages/send_msg",
-                        data : {recipient:recipient,msg:msg,csrfname:csrftoken},
-                        success : function(data) {
-                    $("#modal-container, #modal-background").toggleClass("active");
-                    $("#modal-container").hide();
-                    $("#msg-message").val("");
-                    alert("Message Sent");
-                        }
-                    });
-            });
-        });
-        
-
-        $(document).ready(function() {
-            var currentRequest = null;
-        
-            $('#member_sch').on('input propertychange', function() {
-                var searchQuery = $.trim( $(this).val());
-                searchQuery = searchQuery.replace(/ +(?= )/g,'');
-                var fulltext = searchQuery; 
-                    if(searchQuery != ""){
-                        currentRequest = $.ajax({
-                            type: "GET",
-                            url: '<?php echo base_url();?>search/suggest', 
-                            cache: false,
-                            data: "q="+fulltext, 
-                            beforeSend: function(jqxhr, settings) { 
-                                $("#search_content").empty();
-                                if(currentRequest != null) {
-                                    currentRequest.abort();
-                                }
-                            },
-                            success: function(html) {
-                                $("#search_content").empty();
-
-
-                                if(html==0){
-                                    $("#search_content").append('No result found');
-                                }
-                                else{
-                                    $("#search_content").append(html);
-                                    $("#search_content").show();
-                                }
-                            }
-                        });
-                    }else{
-                        $("#search_content").hide();
-                    }
-            });
-        });
-
-        $(document).ready(function() { 
-
-            $('#member_sch').focus(function() {
-            $('#search_content').show();
-            $(document).bind('focusin.member_srch_container click.member_srch_container',function(e) {
-                if ($(e.target).closest('#search_content, #member_sch').length) return;
-                $('#search_content').hide();
-                });
-            });
-
-            $('#search_content').hide();
-        });
-
-
-        $('.vendor_edit_con').siblings('.vendor_desc_dis_con').children('p').css({
-            "border":"1px solid #cecece",
-            "padding":"5px",
-            "overflow-y":"scroll"
-        });
-        
-    })(jQuery);
-
-</script>
+<script src="/assets/js/src/vendor/jquery.raty.min.js" type="text/javascript"></script>
+<script src='/assets/js/src/vendor/jquery.jqpagination.min.js' type='text/javascript'></script>
+<script src="/assets/js/src/vendor/jquery.idTabs.min.js" type="text/javascript"></script>
+<script src='/assets/js/src/vendor/jquery.Jcrop.min.js' type='text/javascript' ></script>
+<script src='/assets/js/src/vendor/jquery.simplemodal.js' type='text/javascript' ></script>
+<script src="/assets/js/src/vendorpage.js?ver=<?=ES_FILE_VERSION?>" type="text/javascript"></script>

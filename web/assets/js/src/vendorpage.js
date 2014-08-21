@@ -61,6 +61,67 @@ function htmlDecode(value) {
 })(jQuery);
 
 
+
+
+(function(){
+
+    $(document).ready(function(){
+        var userid = parseInt($('user-id').val(),10);
+        var sellerid = parseInt($('seller-id').val(),10);
+        
+        if (userid == sellerid || userid == 0  ) {
+            $(".vendor-msg-modal").remove();
+            $("#modal-background").remove();
+            $("#modal-container").remove();
+        }
+            
+        $("#modal-background, #modal-close").click(function() {
+            $("#modal-container, #modal-background").toggleClass("active");
+            $("#modal-container").hide();
+            $("#msg-message").val("");
+        });
+        $("#modal-launcher").click(function() {
+            $("#modal-container, #modal-background").toggleClass("active");
+            $("#modal-container").show();
+        });
+        
+        $("#modal_send_btn").on("click",function(){
+
+            var recipientUsername = $('#seller-username').val();
+            var csrftoken = $("meta[name='csrf-token']").attr('content');
+            var csrfname = $("meta[name='csrf-name']").attr('content');
+            var msg = $("#msg-message").val();
+            if (msg == "") {
+                alert("Say something..");
+                return false;
+            }
+            var msg = $("#msg-message").val();
+                $.ajax({
+                    async : true,
+                    type : "POST",
+                    dataType : "json",
+                    url : "/messages/send_msg",
+                    data : {recipient:recipientUsername,msg:msg,csrfname:csrftoken},
+                    success : function(data) {
+                $("#modal-container, #modal-background").toggleClass("active");
+                $("#modal-container").hide();
+                $("#msg-message").val("");
+                alert("Message Sent");
+                    }
+                });
+        });
+    });
+    
+    $('.vendor_edit_con').siblings('.vendor_desc_dis_con').children('p').css({
+        "border":"1px solid #cecece",
+        "padding":"5px",
+        "overflow-y":"scroll"
+    });
+    
+})(jQuery);
+
+
+
 /**	Populate product item dislay **/
 $(document).ready(function(){
 
