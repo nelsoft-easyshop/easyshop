@@ -2644,8 +2644,17 @@ span.pinterest {
     padding:20px;
     margin-top: 20px;
     font-size: 12px;
-	font-size: 12px;
+    font-size: 12px;
 }
+
+@media (min-width: 990px){
+    .copyright-min-border {
+        width: 55%;
+        margin: 0 auto;
+    }
+}
+
+
 
 .notification_container {
     background-color: #CECECE;
@@ -7178,6 +7187,7 @@ margin-right: 10px;
 
 
 
+
 .feeds-cont > .row{
     margin-right: -5px !important;
     margin-left: -5px !important;
@@ -7201,7 +7211,7 @@ margin-right: 10px;
     vertical-align:middle;
 }
 
-#feed-catlist-bck{
+.feed-catlist-collapseable{
     display:none;
     position:absolute;
     z-index:10;
@@ -7446,7 +7456,8 @@ margin-right: 10px;
 }
 
 .feeds-cont .sub-title{
-    font-size: 13px;
+    font-size: 12px;
+    font-bold: lighter;
 }
 
 
@@ -7526,8 +7537,20 @@ margin-right: 10px;
     display:none;
 }
 
+
+.feed-left-panel .media{
+    padding: 0.2em 0.75em;
+}
+
+.followed-sellers-cont{
+    margin-top: 0.3em;
+    margin-bottom: 0.3em;
+    
+}
+
 @media (max-width: 445px){
     .browser-disclaimer{
        display:none; 
     }
 }
+
