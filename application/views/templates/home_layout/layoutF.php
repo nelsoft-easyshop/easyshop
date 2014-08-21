@@ -50,7 +50,9 @@
                                 <?php if( count($followed_users) === 0 ):?>
                                     <p class="no-subs-lbl">You have no subscriptions.</p>
                                 <?php else:?>
-                                    <?php foreach($followed_users as $fu):?>
+                                    <?php $count = 0 ; ?>
+                                    <?php for($i = 0; $i < $maxDisplayableSellers; $i ++): ?>
+                                        <?php $fu = $followed_users[$i]; ?>
                                         <div class="media pd-8-12 side-panel">
                                             <div class="pull-left media-image">
                                                 <a class="" target="_blank" href="<?php echo base_url() . html_escape($fu['userslug'])?>">
@@ -63,13 +65,12 @@
                                             </div>              
                                             <hr style='margin-bottom: 3px;'/>
                                         </div>
-                          
-                                    <?php endforeach;?>     
+                                    <?php endfor?>     
                           
 
                                     <div class='following-lnk'>
                                         <a href='/<?php echo $userslug?>?tab=following'>
-                                            <h6>See all (<?php echo count($followed_users)?>) </h6>
+                                            <span>See all (<?php echo count($followed_users)?>) </span>
                                         </a>
                                     </div>
 
