@@ -1,39 +1,52 @@
-<!DOCTYPE html>
-<html lang="en">
 
-    <link rel="stylesheet" href="<?=base_url()?>assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
-    <link rel="stylesheet" href="<?=base_url()?>assets/css/style.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
-    <link rel="stylesheet" href="<?=base_url()?>assets/css/responsive_css.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
-    <style type="text/css">
-    .res_wrapper .top_nav ul li a, .res_wrapper .top_links_right a {
-        font-size: 0.85em;
-    }
-    </style>
+<link rel="stylesheet" href="<?=base_url()?>assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
+<link rel="stylesheet" href="<?=base_url()?>assets/css/style.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
+<link rel="stylesheet" href="<?=base_url()?>assets/css/responsive_css.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
+<style type="text/css">
+.res_wrapper .top_nav ul li a, .res_wrapper .top_links_right a {
+    font-size: 0.85em;
+}
+</style>
 
 <div class="clear"></div>
 <div class="mrgn-top-35"></div>
 <div class="res_wrapper feeds-cont">
     <div class="">
-        <!-- LEFT PANEL -->
+        <!-- LEFT PANEL --> 
         <div class="col-md-3 col-sm-12 l-screen feed-left-panel">
             <div class="row mrgn-bttm-8">
                 <div class="col-md-12">
                     <div class="col-md-10">
                         <div class="row feed-cat">
                             <div id="feed-categories" class="pd-8-12">Categories</div>
-                            <div id="feed-catlist">
+                            <div id="feed-catlist" class="<?php echo $isCollapseCategories ? 'feed-catlist-collapseable' : ''; ?>">
                                 <?php echo $category_navigation; ?> 
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+          
+            <?php if(!$isCollapseCategories): ?>
+                <div class="row mrgn-bttm-8">
+                    <div class="col-md-12">
+                        <div class="col-md-10">
+                            <div class="row">
+                                <a href="<?php echo $banners['left']['target']?>">
+                                    <img class="img-responsive" src="<?=base_url()?><?php echo $banners['left']['img']?>">
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <?php endif; ?>
+            
             <div class="row mrgn-bttm-8">
                 <div class="col-md-12">
                     <div class="col-md-10">
                         <div class="row table-bordered">
                             <div class="border-bottom pd-8-12 title">Followed Sellers</div>
-                            <div class="">
+                            <div class="followed-sellers-cont">
                                 <?php if( count($followed_users) === 0 ):?>
                                     <p class="no-subs-lbl">You have no subscriptions.</p>
                                 <?php else:?>
@@ -47,26 +60,34 @@
                                             <div class="media-body">
                                                 <h5 class="title"><a target="_blank" href="<?php echo base_url() . html_escape($fu['userslug'])?>"><?php echo html_escape($fu['vendor_name'])?></a></h5>
                                                 <span class="sub-title"><?php echo $fu['datecreated']?></span>
-                                            </div>
+                                            </div>              
+                                            <hr style='margin-bottom: 3px;'/>
                                         </div>
-                                    <?php endforeach;?>
+                          
+                                    <?php endforeach;?>     
+                                    
+
+                                    
                                 <?php endif;?>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="row mrgn-bttm-8">
-                <div class="col-md-12">
-                    <div class="col-md-10">
-                        <div class="row">
-                            <a href="<?php echo $banners['left']['target']?>">
-                                <img class="img-responsive" src="<?=base_url()?><?php echo $banners['left']['img']?>">
-                            </a>
+            
+            <?php if($isCollapseCategories): ?>
+                <div class="row mrgn-bttm-8">
+                    <div class="col-md-12">
+                        <div class="col-md-10">
+                            <div class="row">
+                                <a href="<?php echo $banners['left']['target']?>">
+                                    <img class="img-responsive" src="<?=base_url()?><?php echo $banners['left']['img']?>">
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            <?php endif; ?>
         </div>
         
         <!-- MID PANEL -->
@@ -326,37 +347,10 @@
             </div></div>
         </div>
     </div>
+
+    
 </div>
 
+
 <script type="text/javascript" src="<?=base_url()?>assets/js/src/feed.js"></script>
-<script type="text/javascript">
 
-var leftpanel = $(".feed-left-panel");
-var midpanel = $(".feed-middle-panel");
-var rightpanel = $(".feed-right-panel");
-var pos = leftpanel.offset().top;  
-
-   
-    $(window).scroll(function() {
-        var windowpos = $(window).scrollTop();
-         
-        if(windowpos + $(window).height() + 70 >= $(document).height()){
-            leftpanel.addClass('feed-pos-ab-bttm');
-            rightpanel.addClass('feed-pos-ab-bttm');
-        }
-
-        else if(windowpos >= pos){
-            leftpanel.addClass('feed-left-panel-fix').removeClass('feed-pos-ab-bttm');
-            midpanel.addClass('feed-middle-panel-fix');
-            rightpanel.addClass('feed-right-panel-fix').removeClass('feed-pos-ab-bttm');
-        }
-
-        else{
-            leftpanel.removeClass('feed-left-panel-fix');
-            midpanel.removeClass('feed-middle-panel-fix');
-            rightpanel.removeClass('feed-right-panel-fix');
-        }
-    });
-
-</script>
-</html>
