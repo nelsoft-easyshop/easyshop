@@ -48,10 +48,9 @@ function htmlDecode(value) {
 
 /**	Populate product item dislay **/
 $(document).ready(function(){
-		
-    /* 
+
+    /**
      *   Fix for the stupid behaviour of jpagination with chrome when pressing the back button.
-     *   See next two lines of code.
      */
     $('.sch_box').val('');
     $('input.items').each(function(k,v){
