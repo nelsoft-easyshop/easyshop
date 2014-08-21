@@ -40,13 +40,13 @@
                     </div>
                 </div>
             <?php endif; ?>
-            
+      
             <div class="row mrgn-bttm-8">
                 <div class="col-md-12">
                     <div class="col-md-10">
                         <div class="row table-bordered">
                             <div class="border-bottom pd-8-12 title">Followed Sellers</div>
-                            <div class="followed-sellers-cont">
+                            <div class="followed-sellers-cont">                            
                                 <?php if( count($followed_users) === 0 ):?>
                                     <p class="no-subs-lbl">You have no subscriptions.</p>
                                 <?php else:?>
@@ -65,9 +65,14 @@
                                         </div>
                           
                                     <?php endforeach;?>     
-                                    
+                          
 
-                                    
+                                    <div class='following-lnk'>
+                                        <a href='/<?php echo $userslug?>?tab=following'>
+                                            <h6>See all (<?php echo count($followed_users)?>) </h6>
+                                        </a>
+                                    </div>
+
                                 <?php endif;?>
                             </div>
                         </div>
