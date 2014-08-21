@@ -3,6 +3,13 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
+/**
+ * Messaging controller
+ * 
+ * This class is marked for a complete re-factor.
+ * Messaging functionality is to be moved to
+ * a separate class.
+ */ 
 class messages extends MY_Controller
 {
 
@@ -41,20 +48,24 @@ class messages extends MY_Controller
     /**
      * Ajax : Send message and push message to websocket
      *
-     * @recepient_id  recepient id
-     * @sender_id  sender id
-     * @msg  message
+     * @param string $username
+     * @param integer $sender id
+     * @param string $message
      * @return json
      */
     public function send_msg()
     {
         $sessionData = $this->session->all_userdata();
-        $val = trim($this->input->post("recipient"));
-        $qResult = $this->user_model->getUserByUsername($val);
+        $username = trim($this->input->post("recipient"));
+        $qResult = $this->user_model->getUserByUsername($username);
 
-        if($sessionData['member_id'] == $val || $qResult === false){
+        if($qResult === false){
             $result['success'] = 0;
-            $result['msg'] = "Username does not exist";
+            $result['msg'] = "The user ". html_escape($username). ' does not exist';
+        }
+        else if($sessionData['member_id'] == $qResult['id_member']){
+            $result['success'] = 0;
+            $result['msg'] = "Sorry, it seems that you are trying to send a message to yourself.";
         }
         else{
             $msg = trim($this->input->post("msg"));
@@ -80,7 +91,7 @@ class messages extends MY_Controller
     /**
      * Ajax : Delete message or conversation
      *
-     * @id_msg  id of the message that will be deleted
+     * @param inetger $id_msg  id of the message that will be deleted
      * @return json
      */
     public function delete_msg()
@@ -101,7 +112,6 @@ class messages extends MY_Controller
     /**
      * Ajax : Get unread message or conversation depending on the parameter
      *
-     * @todo  "Get_UnreadMsgs" or FALSE
      * @return json
      */
     public function retrieve_msgs()
@@ -115,7 +125,6 @@ class messages extends MY_Controller
     /**
      * Ajax : Change the message status to seened
      *
-     * @id  User id
      * @return json
      */
     public function is_seened()
