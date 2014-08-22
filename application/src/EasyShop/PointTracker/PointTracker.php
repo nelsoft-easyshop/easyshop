@@ -2,42 +2,60 @@
 
 namespace EasyShop\PointTracker;
 
-//$this->CI->load->model("register_model");
-//var_dump($this->CI->register_model->get_member_by_username('master'));
-//var_dump($this->CI);
-
-
 class PointTracker
 {
 	
-	private $CI;
+	private $em;
 
 	public function __construct()
 	{
-		$this->CI = get_instance();
+		$this->em = get_instance()->kernel->serviceContainer['entity_manager'];
 	}
 
-	public function addPoint($userId, $typeId)
+	
+
+	public function addUserPoint($userId, $actionId)
 	{
-		// get point equiv of submitted typeid
-		$query = "SELECT point FROM es_point_type WHERE id = :id LIMIT 1;";
-		$sth = $this->db->conn_id->prepare($query);
-		$sth->bindParam(':id',$typeId);
-		$sth->execute();
-		$result = $sth->fetch(PDO::FETCH_ASSOC);
 
-		print_r($result);
+		// Check if user exists
+		/*
+		$user = $this->em->getRepository('EasyShop\Entities\EsPoint')
+							->getUserPointData($userId);
+		*/
+							
+		/*
+		if($user === null){
+			echo 'whut';
+		}
+		*/
+		//echo $user->getM()->getUsername();
+		//echo $user->getId() . '|' . $user->getPoint() . '|' . $user->getM();
+		//var_dump($user);
 	}
 
+	/*
 
-
-	public function addPointType($typeName, $typePoint, $em)
+	public function getActionId($actionString)
 	{
-		$this->CI->load->model("pointtype_model");
-		//echo $this->CI->pointtype_model->add_type($typeName, $typePoint, $em);
+		
+		return $this->em->getRepository('EasyShop\Entities\EsPointType')
+								->getActionId($actionString);
+		
+		//var_dump($data);
 	}
 
 
+	public function getUserPoint($userId)
+	{
+		$data = $this->em->getRepository('EasyShop\Entities\EsPoint')
+								->getUserPointData($userId);
+
+		//var_dump($data);
+	}
+
+		
+
+	
 
 	public function getPoint($userId)
 	{
@@ -59,15 +77,5 @@ class PointTracker
 		$result = $sth->fetch(PDO::FETCH_ASSOC); 
 	}
 
-	public function getActionId($actionString)
-	{
-		// query db for actionid here, if not found, return a def value of 0
-		$query = "SELECT id FROM es_point_type WHERE name = :name LIMIT 1;";
-		$sth = $this->db->conn_id->prepare($query);
-		$sth->bindParam(':name',$actionString);
-		$sth->execute();
-		$result = $sth->fetch(PDO::FETCH_ASSOC);
-
-		print_r($result);
-	}
+	*/
 }

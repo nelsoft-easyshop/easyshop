@@ -18,13 +18,12 @@ class Register extends MY_Controller
 	{
 
 		/*TESTBENCH START*/
+
 		$pointTrackerService = $this->serviceContainer['point_tracker'];
-		//$em = $this->serviceContainer['entity_manager'];
-		//$pointTrackerService->addPointType('share',10,$em=0);
-		//$pointTrackerService->addPointType('login',5,$em);
-		//$pointTrackerService->addPointType('purchase',20,$em);
-		//echo "Success!";
-		//var_dump($this->db->conn_id);
+		//$pointTrackerService->getActionId('dummy');
+		$pointTrackerService->addUserPoint(1,4);
+		//echo "test";
+		
 		/*TESTBENCH END*/
 
 		$data = array(
