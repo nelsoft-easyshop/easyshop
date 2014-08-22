@@ -325,7 +325,7 @@
                             <?php echo form_open('',$attr); ?>
                                 <div>
                                     <label>Subject *</label>
-                                    <input type="text" name="subject" maxlength="150">
+                                    <input type="text" name="subject" maxlength="150" class="ui-form-control">
                                 </div>
                                 <div>
                                     <label>Rating</label>
@@ -333,7 +333,7 @@
                                 </div>
                                 <div>
                                     <label>Comment *</label>
-                                    <textarea name="comment"></textarea>
+                                    <textarea name="comment" class="ui-form-control"></textarea>
                                 </div>
                                 <input type="submit" value="Submit" class="orange_btn" name="review_form">
                                 <img src="<?=base_url()?>assets/images/bx_loader.gif" id="load_submitreview" style="position: relative; top:18px; left:30px; display:none"/>
@@ -463,11 +463,11 @@
         <div id="modal-inside-container">
             <div>
                 <label>To : </label>
-                <input type="text" value="<?=$product['sellerusername'];?>" disabled id="msg_name" name="msg_name" >
+                <input type="text" value="<?=$product['sellerusername'];?>" disabled id="msg_name" name="msg_name" class="ui-form-control" >
             </div>
             <div>
                 <label>Message : </label>
-                <textarea cols="40" rows="5" name="msg-message" id="msg-message" placeholder="Say something.."></textarea>		
+                <textarea cols="40" rows="5" name="msg-message" id="msg-message" class="ui-form-control" placeholder="Say something.."></textarea>		
             </div>	   
         </div>
         <button id="modal_send_btn">Send</button>

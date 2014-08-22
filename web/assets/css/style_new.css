@@ -755,6 +755,11 @@ div.html_description {
 
 
 /*** write a review dialog box ***/
+#simplemodal-container {
+    height: 400px !important;
+    font-size: 12px;
+}
+
 .write_review:hover {
 	cursor: pointer;
 	color: #ff4400;
@@ -780,20 +785,21 @@ div.html_description {
 
 
 #write_review_content input {
-	border: 1px solid #B3B3B3;
 	height: 25px;
-	width: 200px;
+    max-width: 230px;
+	width: 96%;
 	padding:3px;
 }
 
 #write_review_content input[type="submit"] {
-	width: 160px;
-	height: 30px;
+    width: 160px;
+    height: 30px;
+    line-height: 22px;
 }
 
 #write_review_content textarea {
-	border: 1px solid #B3B3B3;
-	width: 400px;
+	width: 96%;
+    max-width: 400px;
 	height: 100px;	
 }
 
@@ -804,7 +810,7 @@ div.html_description {
 
 /*** Star Rating ***/
 #review_form > div {
-	padding-bottom: 15px;
+	padding: 10px;
 }
 
 .rating {
@@ -819,6 +825,25 @@ div.html_description {
 
 #star {
 	display: inline-block;
+}
+
+@media only screen and (max-width : 30em) {
+    #write_review_content {
+        background-color: #fff;
+        height: 475px;
+    }
+    #write_review_content label {
+        display: block;
+        padding: 10px 0px;
+    }
+
+    #write_review_content input {
+        max-width: inherit;
+    }
+
+    #write_review_content input[type="submit"] {
+        margin-left: 10px;
+    }
 }
 
 
