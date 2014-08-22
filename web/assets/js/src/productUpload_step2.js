@@ -1329,15 +1329,9 @@ var pictureCountOther  = 0; var primaryPicture = 0;
                 }
             },
             error: function (request, status, error) {
-                response = request.responseText;
-                var msg = (response.toLowerCase().indexOf("1001") >= 0) ? 'Sorry, the images you are uploading are too large.' : 'Sorry, we have encountered a problem.\nPlease try again after a few minutes.';
-                
-                if(errorValues != ""){
-                    errorValues = "The following images cannot be uploaded: " + errorValues
-                }
-                
-                alert(msg,errorValues);
 
+                alert('Sorry, we have encountered a problem.\nPlease try again after a few minutes.');
+                
                 $.each( arrayUpload, function( key, value ) {
                     removeThisPictures.push(value); 
                     $('#previewList'+value).remove();
