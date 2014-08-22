@@ -376,6 +376,11 @@ class Home extends MY_Controller
                     $categoryId = $this->config->item('promo', 'protected_category');
                     $products = $this->product_model->getProductsByCategory($categoryId,array(),0,"<",$page,$perPage);
                     break;
+                default:
+                    $data['error'] = "Unable to load prouct list.";
+                    echo json_encode($data);
+                    exit();
+                    break;
             }
             
             $temp['products'] = $products;
