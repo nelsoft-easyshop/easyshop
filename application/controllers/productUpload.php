@@ -507,7 +507,15 @@ class productUpload extends MY_Controller
         $filename =  $this->input->post('pictureName');
         $date = date("Ymd");
         $fulldate = date("YmdGis"); 
- 
+        $allowed =  array('gif','png' ,'jpg','jpeg'); // available format only for image
+        $fileExtension = explode('.', $filename);
+        $fileExtension = strtolower(end($fileExtension));
+
+        if(!in_array(strtolower($fileExtension),$allowed))
+        {
+            die('{"result":"false","msg":"Invalid file type. Please choose another image."}');
+        }
+
         $pathDirectory = $tempDirectory.'/other/';
 
         if (!file_exists ($pathDirectory)){
