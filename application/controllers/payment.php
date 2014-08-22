@@ -919,7 +919,8 @@ class Payment extends MY_Controller{
         $data = array_merge($data,$this->fill_header());
 
         $this->load->view('templates/header', $data);
-        $this->load->view('pages/payment/payment_response' ,$response);  
+        // $this->load->view('pages/payment/payment_response' ,$response);  
+        $this->load->view('pages/payment/payment_response_responsive' ,$response);  
         $this->load->view('templates/footer_full'); 
  
    }
