@@ -1148,13 +1148,13 @@ class product_model extends CI_Model
                     $sth->bindParam(':endprice',$priceEndValue,PDO::PARAM_STR);
                 
                 }
-            }  
+            }
         }
 
-        $sth->bindParam(':start',$start,PDO::PARAM_INT);             
+        $sth->bindParam(':start',$start,PDO::PARAM_INT);
         $sth->bindParam(':per_page',$per_page,PDO::PARAM_INT);
-        
-        $sth->execute(); 
+
+        $sth->execute();
     
         $products = $sth->fetchAll(PDO::FETCH_ASSOC);
         explodeImagePath($products);
@@ -2179,7 +2179,7 @@ class product_model extends CI_Model
         return $return;  
     }
         
-    public function getHomeContent($file = 'page/home_files')
+    public function getHomeContent($file)
     { 
         $xml_content = $this->xmlmap->getFilename($file);
         $home_view_data = array();
@@ -2630,7 +2630,7 @@ class product_model extends CI_Model
      *
      *  @return array
      */
-    public function getStaticProductFeed($string)
+    public function getStaticProductFeed($string, $xmlfile)
     {
         switch($string){
             case "popular":
@@ -2643,8 +2643,9 @@ class product_model extends CI_Model
                 $node = "feedFeaturedProduct";
                 break;
         }
-        
-        $products = $this->xmlmap->getFilenameNode('page/content_files', $node);
+
+        $products = $this->xmlmap->getFilenameNode($xmlfile, $node);
+
         $data = array();
         
         foreach( $products as $p ){
@@ -2662,12 +2663,24 @@ class product_model extends CI_Model
      *
      *  @return array
      */
-    public function getStaticBannerFeed()
-    {
-        $banner = $this->xmlmap->getFilenameNode('page/content_files', 'feedBanner');
+    public function getStaticBannerFeed($xmlfile)
+    {    
+        $banner = $this->xmlmap->getFilenameNode($xmlfile, 'feedBanner');
         $b = json_decode(json_encode($banner),true);
         
         return $b;
+    }
+
+    public function getProdCount($prodid){
+      
+        $query = $this->xmlmap->getFilenameID('sql/product','getProdCount');
+        $sth = $this->db->conn_id->prepare($query);
+        $sth->bindParam(':prodid',$prodid); 
+        $sth->execute(); 
+        $number_of_rows = $sth->fetchColumn(); 
+        return $number_of_rows;
+        
+    
     }
     
 }

@@ -210,6 +210,7 @@
     	else{
   			$(".add_category_submit").empty();
             $('#cr_div_container').empty(); 
+            $('#first_text').empty().append('<a href="javascript:void(0)" class="selected_category_link" data-level="01">Main Category</a>');
             $('#cl_div_container').append('<div class="border-rad-tl-bl-3 pd-13-12 cat_sel1"><a class="selected_category_link" data-catid="'+catId+'" data-name="'+value+'"   href="javascript:void(0)">'+value+'</a></div>').find('.cat_sel1').addClass('selected_category cat_arrw').removeClass('cat_sel1').siblings().removeClass('selected_category');
     		$(this).replaceWith('<a class="custom_category_link">'+selector.val()+'</a>');  
     		$(".add_category_submit").append('<input type="hidden" name="hidden_attribute" value="'+catId+'" class="hidden_attribute"><input class="proceed_form" id="proceed_form" type="submit" value="Proceed with '+value+'">');    

@@ -767,7 +767,8 @@ class productUpload extends MY_Controller
         $brand_valid = FALSE;
         $otherBrand = ""; $primaryName ="";
         $username = $this->user_model->getUserById($memberId)['username'];
-        $originalPath = $this->session->userdata('originalPath'); 
+        $dir = './assets/product/'; 
+        $originalPath = $path = glob($dir."{$product_id}_{$memberId}*", GLOB_BRACE)[0].'/';
         $tempDirectory = $this->session->userdata('tempDirectory'); 
         $savingAsDraft = ($this->input->post('savedraft'))?'1':'0'; 
 
@@ -884,19 +885,6 @@ class productUpload extends MY_Controller
             }
         }
 
-        if (file_exists($originalPath)){
-            recursiveRemoveDirectory($originalPath);
-            if(!mkdir($originalPath, 0777, true)) {  
-                die('{"e":"0","d":"There was a problem. \n Please try again! - Error[0010]"}'); 
-            }
-            if(!mkdir($originalPath.'other/', 0777, true)) { 
-                die('{"e":"0","d":"There was a problem. \n Please try again! - Error[0012]"}');
-            }           
-        }
-        else{
-            die('{"e":"0","d":"There was a problem. \n Please try again! - Error[00107]"}'); 
-        }
- 
         $product_details = array('product_id' => $product_id,
             'name' => $product_title,
             'sku' => $sku,
@@ -1116,7 +1104,7 @@ class productUpload extends MY_Controller
             $data = $this->fill_view();
             $this->load->view('templates/header', $data);
             $this->load->view('pages/product/product_upload_preview',$preview_data);
-            $this->load->view('templates/footer_full');
+            $this->load->view('templates/footer');
         }
     }
 
@@ -1207,7 +1195,7 @@ class productUpload extends MY_Controller
             
             $this->load->view('templates/header', $data);
             $this->load->view('pages/product/product_upload_step3_view',$data);
-            $this->load->view('templates/footer_full');
+            $this->load->view('templates/footer');
         }else{
             redirect('/sell/step1/', 'refresh');
         }
@@ -1377,7 +1365,7 @@ class productUpload extends MY_Controller
             
             $this->load->view('templates/header', $data);
             $this->load->view('pages/product/product_upload_step4_view',$data);
-            $this->load->view('templates/footer_full');
+            $this->load->view('templates/footer');
         }
     }
     

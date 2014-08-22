@@ -130,9 +130,9 @@ else {
     $route['(?i)maintenance'] = 'home/splash';
 
     #PROMO CATEGORY PAGE
-    $route['(?i)deals'] = 'product/category_promo';
-    $route['(?i)post-and-win'] = 'product/post_and_win_promo';
-    $route['(?i)deals_more'] = 'product/category_promo_more';
+    $route['(?i)deals'] = 'promo/category_promo';
+    $route['(?i)post-and-win'] = 'promo/post_and_win_promo';
+    $route['(?i)scratch-and-win'] = 'promo/scratchCardPromo';
 
     $route['(?i)policy'] = 'home/policy';
     $route['(?i)terms'] = 'home/terms';
@@ -142,6 +142,11 @@ else {
     $route['(?i)guide/sell'] = 'home/guide_sell';
 
     $route['(?i)subscribe'] = 'register/subscribe';
+
+    
+    #WEBSERVICE
+    $route['homewebservice'] = 'webservice/homewebservice';
+    $route['accountservice'] = 'webservice/accountservice';
 	
 }
 
