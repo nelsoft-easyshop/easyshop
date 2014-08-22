@@ -637,6 +637,8 @@ a.delete:hover .del {
 	min-height: 230px;
 	padding:20px 10px 10px;
 	width: 546px;
+	margin-top: -5px;
+	width: 100%;
 }
 
 
@@ -1096,6 +1098,12 @@ input.cc_check {
 .display-when-mobile-536{
 	display:none;
 }
+
+.bg-orange{
+	background: #F48000;
+	color: #ffffff;
+}
+
 @media only screen and (max-width: 979px) {
 	.display-when-mobile{
 	display:inline;
@@ -1160,7 +1168,11 @@ input.cc_check {
 		font-size: 12px;
 	}
 	
-	
+	.checkout_title{
+		border-bottom: 0px;
+		font-size: 20px;
+		text-align: center;
+	}
 	
 	.display-when-mobile-536{
 		display:inline;
