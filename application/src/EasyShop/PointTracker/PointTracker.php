@@ -48,7 +48,7 @@
 		{
 			// Get Point Type object
 			$points = $this->em->getRepository('EasyShop\Entities\EsPointType')
-										->find($actionId);
+									->find($actionId);
 
 			if($points === null){
 				return false;
@@ -56,7 +56,7 @@
 
 			// Get Member object
 			$user = $this->em->getRepository('EasyShop\Entities\EsMember')
-										->find($userId);
+									->find($userId);
 
 			if($user === null){
 				return false;
@@ -105,7 +105,7 @@
 		public function getActionId($actionString)
 		{
 			$pointType = $this->em->getRepository('EasyShop\Entities\EsPointType')
-								->findOneBy(['name' => $actionString]);
+										->findOneBy(['name' => $actionString]);
 			
 			return $pointType === null? false : $pointType->getId();
 		}
@@ -121,8 +121,20 @@
 		public function getUserPoint($userId)
 		{
 			$user = $this->em->getRepository('EasyShop\Entities\EsPoint')
-							->findOneBy(['m' => $userId]);
+									->findOneBy(['m' => $userId]);
 
 			return $user === null? false : $user->getPoint();
 		}		
+
+
+		/**
+	     * Returns all data inside Point History Table
+	     *
+	     * @return mixed
+	     */
+		public function getPointHistory()
+		{
+			return $this->em->getRepository('EasyShop\Entities\EsPointHistory')
+									->findAll();
+		}
 	}
