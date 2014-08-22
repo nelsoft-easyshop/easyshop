@@ -93,6 +93,31 @@
 
 
         /**
+         * Updates point history and deducts point to a user
+         *
+         * @param int $userId ID of a user
+         * @param int $points Points to be deducted from the user
+         *
+         * @return boolean
+         */
+        public function spendUserPoint($userId, $points)
+        {
+            // Get Point object
+            $userPoint = $this->em->getRepository('EasyShop\Entities\EsPoint')
+                                        ->findOneBy(['m' => $userId]);
+
+            if($userPoint === null || $userPoint->getPoint() < $points){
+                return false;
+            }
+            else{
+                $userPoint->setPoint($userPoint->getPoint() - $points);
+                $this->em->flush();
+                return true;
+            }
+
+        }
+
+        /**
          * Returns the ID of a specific action string
          *
          * @param string $actionString action string to be searched
