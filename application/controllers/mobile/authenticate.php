@@ -56,28 +56,34 @@ class Authenticate extends MY_Controller {
             array_push($error, "Invalid Key");
         }
 
-        $display['passed'] = $passed = (count($error) <= 0) ? 1 : 0;
+        $passed = (count($error) <= 0) ? 1 : 0;
 
         if($passed > 0){
             $temp['mobilecode'] = $this->register_model->rand_alphanumeric(6);
             $temp['memberId'] = $data['memberId'] = $this->register_model->signupMember_landingpage($data)['id_member'];
-            $temp['emailcode'] = sha1($this->session->userdata('session_id').time()); 
+            $temp['emailcode'] = $data['emailcode'] = sha1($this->session->userdata('session_id').time()); 
             $emailCount = 0;
             do{
-                $emailResult = $this->register_model->sendNotification($data, 'signup');
+                $emailResult = false;//$this->register_model->sendNotification($data, 'signup');
                 $emailCount++;
             }while( !$emailResult && $emailCount < 3 );
             $temp['email'] = $emailResult ? 1 : 0;
             $result = $this->register_model->store_verifcode($temp);
+
+            if( is_null($data['memberId']) || $data['memberId'] == 0 || $data['memberId'] == ''){
+                array_push($error, 'Database registration failure');
+                $passed = 0;
+            }
+
             if(!$emailResult){
                 array_push($error, 'Failed to send verification email. Please verify in user page upon logging in.');
-                $passed = 1;
             }
-            else{
+
+            if(!($passed > 0 && $result) ){
                 $passed = 0;
             }
         }
-
+        $display['passed'] = $passed;
         $display['error'] = $error;
         die(json_encode($display,JSON_PRETTY_PRINT));
     }
