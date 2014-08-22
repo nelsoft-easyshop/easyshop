@@ -1999,7 +1999,12 @@ box-shadow:         0px 1px 5px 0px rgba(50, 50, 50, 0.75);
 }
 
 .feed-pos-ab-bttm {
-    margin-top: -312px !important;
+    position: absolute !important;
+    bottom: 0;
+}
+
+.feed-right-panel-fix.feed-pos-ab-bttm {
+    margin-top: 0;
 }
 
 .feed-middle-panel-fix {
