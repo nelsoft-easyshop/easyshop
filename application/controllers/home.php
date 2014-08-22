@@ -276,8 +276,11 @@ class Home extends MY_Controller
         }
     }
 
-    
-    
+    /**
+     *  Fetch information to be display in feeds page
+     *
+     *  @return array
+     */
     public function getFeed()
     {
         $xmlResourceService = $this->serviceContainer['xml_resource'];
@@ -294,9 +297,13 @@ class Home extends MY_Controller
         $prodId = ($this->input->post('ids')) ? $this->input->post('ids') : 0; 
         $followedSellers = $this->user_model->getFollowing($memberId);
         
+        $this->load->config('protected_category', TRUE);
+        $categoryId = $this->config->item('promo', 'protected_category');
+
         $data = array(
-            'featured_prod' => $this->product_model->getProductFeed($memberId,$partnersId,$prodId,$perPage),
+            'featured_prod' => $this->product_model->getFeaturedProductFeed($memberId,$partnersId,$prodId,$perPage),
             'new_prod' => $this->product_model->getNewProducts($perPage),
+            'easytreats_prod' => $this->product_model->getProductsByCategory($categoryId,array(),0,"<",0,$perPage),
             'followed_users' =>  $followedSellers,
             'banners' => $this->product_model->getStaticBannerFeed($xmlfile),
             'promo_items' => $this->product_model->getStaticProductFeed('promo', $xmlfile),
@@ -304,9 +311,9 @@ class Home extends MY_Controller
             'featured_product' => $this->product_model->getStaticProductFeed('featured', $xmlfile),
             'isCollapseCategories' => count($followedSellers) > 2,
             'userslug' => $userdata['slug'],
-            'maxDisplayableSellers' => 7,
+            'maxDisplayableSellers' => 7
         );
-        
+
         #Assemble featured product ID array for exclusion on LOAD MORE request
         $fpID = array();
         foreach( $data['featured_prod'] as $fp ){
@@ -320,15 +327,20 @@ class Home extends MY_Controller
         return $data;
     }
     
+    /**
+     *  Used by AJAX Requests to fetch for products in Feeds page
+     *
+     *  @return JSON
+     */
     public function getMoreFeeds()
     {
         if( $this->input->post("feed_page") && $this->input->post("feed_set") ){
             $perPage = $this->feedsProdPerPage;
             $memberId = $this->session->userdata('member_id');
             
-            $page = ($this->input->post("feed_page") + 1) * $perPage - $perPage;
-            $productFeedSet = $this->input->post("feed_set");
-            
+            $page = ((int)$this->input->post("feed_page") + 1) * $perPage - $perPage;
+            $productFeedSet = (int)$this->input->post("feed_set");
+
             switch( (int)$productFeedSet ){
                 case 1: #Featured Tab
 
@@ -342,7 +354,7 @@ class Home extends MY_Controller
                     $prodIdRaw = ($this->input->post('ids')) ? json_decode($this->input->post('ids')) : array(0); 
                     $prodId = implode(",",$prodIdRaw);
                     
-                    $products = $this->product_model->getProductFeed($memberId,$partnersId,$prodId,$perPage,$page);
+                    $products = $this->product_model->getFeaturedProductFeed($memberId,$partnersId,$prodId,$perPage,$page);
                     
                     #Assemble featured product ID array for exclusion on LOAD MORE request
                     $fpID = array();
@@ -358,6 +370,16 @@ class Home extends MY_Controller
                     break;
                 case 2: #New Products Tab
                     $products = $this->product_model->getNewProducts($perPage,$page);
+                    break;
+                case 3: #EasyTreats Products Tab
+                    $this->load->config('protected_category', TRUE);
+                    $categoryId = $this->config->item('promo', 'protected_category');
+                    $products = $this->product_model->getProductsByCategory($categoryId,array(),0,"<",$page,$perPage);
+                    break;
+                default:
+                    $data['error'] = "Unable to load prouct list.";
+                    echo json_encode($data);
+                    exit();
                     break;
             }
             

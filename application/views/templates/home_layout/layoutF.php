@@ -114,7 +114,7 @@
                                     <div class="row">
                                         <div class="col-md-4 col-xs-4 feed-menu active"><a href="#featured_prod">Featured Products</a></div>
                                         <div class="col-md-4 col-xs-4 feed-menu"><a href="#new_prod">New Products</a></div>
-                                        <div class="col-md-4 col-xs-4 feed-menu"><a href="#easy_treats">Easy Treats</a></div>
+                                        <div class="col-md-4 col-xs-4 feed-menu"><a href="#easytreats_prod">Easy Treats</a></div>
                                     </div>
                                     <div class="row s-screen m-screen">
                                         <div class="col-xs-4 feed-menu"><a href="#m_follow_seller">Followed Seller</a></div>
@@ -220,6 +220,42 @@
                                     <?php echo form_close();?>
                                     <input type="button" class="orange-btn load-more feed_load_more" value="Load More">
 
+                                </div>
+                            </div>
+                        </div>
+                        <div id="easytreats_prod" class="feed-prod-cont">
+                            <?php foreach( $easytreats_prod as $prod ):?>
+                            <div class="media table-bordered mrgn-bttm-8 product">
+                                <div class="col-md-9 col-sm-9 media-sub media-content">
+                                    <div class="pull-left media-image">
+                                        <a target="_blank" href="<?php echo base_url() . "item/" . $prod['slug']?>">
+                                            <img class="media-object" src="<?php echo base_url() . $prod['path'] . "categoryview/" . $prod['file']?>">
+                                        </a>
+                                    </div>
+                                    <div class="media-body">
+                                        <div class="content">
+                                            <h5 class="title"><a target="_blank" href="<?php echo base_url() . "item/" . $prod['slug']?>"><?php echo $prod['name']?></a></h5>
+                                            <?php echo $prod['brief']?>
+                                        </div>
+                                        <div class="condition m-screen l-screen">Condition: <?php echo $prod['condition']?></div>
+                                    </div>
+                                    <div class="condition s-screen">Condition: <?php echo $prod['condition']?></div>
+                                </div>
+                                <div class="col-md-3 col-sm-3 media-sub media-btn-panel">
+                                    <p>PHP</p>
+                                    <p class="feed-price"><?php echo $prod['price']?></p>
+                                    <div class="orange-btn"><a target="_blank" href="<?php echo base_url() . "item/" . $prod['slug']?>">Buy Now</a></div>
+                                </div>
+                            </div>
+                            <?php endforeach;?>
+                            
+                            <div class="mrgn-bttm-8 row-loadmore load_more_div">
+                                <div class="">
+                                    <?php echo form_open("",array("class"=>"load_more_form"));?>
+                                    <input type="hidden" name="feed_page" value="1">
+                                    <input type="hidden" name="feed_set" value="3">
+                                    <?php echo form_close();?>
+                                    <input type="button" class="orange-btn load-more feed_load_more" value="Load More">
                                 </div>
                             </div>
                         </div>

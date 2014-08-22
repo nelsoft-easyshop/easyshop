@@ -100,7 +100,11 @@
                 return false;
             }
             
-            if(obj.view==""){
+            if( typeof obj.error != "undefined" ){
+                thisbtn.replaceWith('<span>' + obj.error + '</span>');
+                return false;
+            }
+            else if(obj.view==""){
                 thisbtn.replaceWith('<span>End of list reached.</span>');
                 return false;
             }
