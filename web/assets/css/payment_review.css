@@ -40,6 +40,17 @@
 	font-weight:200;
 }
 
+.display-when-mobile-368{
+	display: none;
+
+}
+
+.div-mess{
+		font-size: 12px;
+}
+
+
+
 @media only screen and (max-width: 410px) {
 	.tbl-ship-to{
 		font-size: 12px;
@@ -98,4 +109,26 @@
 	}
 	
 	
+}
+
+@media only screen and (max-width: 368px) {
+	.hide-when-mobile-368{
+		display:none;
+	
+	}
+	.display-when-mobile-368{
+		display: inline
+	
+	}
+	
+	.div-mess{
+		font-size: 12px;
+	
+	}
+	
+	.table-list{
+		font-size: 10px;
+	
+	}
+
 }
