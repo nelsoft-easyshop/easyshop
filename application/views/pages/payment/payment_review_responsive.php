@@ -128,8 +128,8 @@
 							<div class="error_shipping_address">
 								<span>
 									This item is not available in your location. 
-									<a style="color:#0654BA" href="javascript:{}" data-slug="<?= $value['id'] ?>" data-name="<?= $value['name'] ?>" data-iid="<?= $value['product_itemID']; ?>" class="view_location_item">See the item location availability here.</a>
-									or <a href="javascript:void(0);" class="removeitem" data-slug="<?= $value['slug'] ?>" style="color:red">Remove</a> this item from your cart checkout to proceed.
+									<a style="color:#0654BA" href="javascript:{}" data-slug="<?= $value['id'] ?>" data-name="<?= $value['name'] ?>" data-iid="<?= $value['product_itemID']; ?>" class="view_location_item" data-toggle="modal" data-target="#avail_loc" >See the item location availability here.</a>
+                                        or <a href="javascript:void(0);" class="removeitem" data-slug="<?= $value['slug'] ?>" style="color:red">Remove</a> this item from your cart checkout to proceed.
 							</div>
 						</td>
 					</tr>
@@ -542,7 +542,7 @@
 
 
 
-<!-- Modal -->
+<!-- Modal Change Shipping Address-->
 <div class="modal fade" id="change_ship" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog no-border font-roboto ">
     <div class="modal-content no-border">
@@ -619,13 +619,32 @@
   </div>
 </div>
 
-<div class="div_view_avail_location">
+<!-- Modal Available Location-->
+<div class="modal fade" id="avail_loc" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog no-border font-roboto ">
+    <div class="modal-content no-border">
+      <div class="modal-header no-border bg-orange">
+        <a href="review"><span aria-hidden="true" style="color: #ffffff;" class="pull-right">&times;</span><span class="sr-only">Close</span></a>
+        <h4 class="modal-title" id="myModalLabel">Available Location</h4>
+      </div>
+	  
+      <div class="modal-body">
+		<div class="div_view_avail_location">
 
-    <div>
-        Loading details...
+			<div>
+				Loading details...
+			</div>
+
+		</div>
+      </div>
+	
+     
     </div>
-
+  </div>
 </div>
+
+
+
 
 
 <script type='text/javascript'>
@@ -642,3 +661,4 @@
 <script type='text/javascript' src='<?=base_url()?>assets/js/src/payment.js?ver=<?=ES_FILE_VERSION?>'></script>
 <script type='text/javascript' src='<?=base_url()?>assets/js/src/bootstrap.js?ver=<?=ES_FILE_VERSION?>'></script>
 <script type='text/javascript' src='<?=base_url()?>assets/js/src/vendor/jquery.numeric.js'></script>
+
