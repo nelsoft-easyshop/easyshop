@@ -1177,7 +1177,7 @@ class productUpload extends MY_Controller
             }
             else{
                 #Update product entry in es_product to be ready for purchase
-                $this->product_model->finalizeProduct($productID , $memberId, 1);
+                $product['slug'] = $this->product_model->finalizeProduct($productID , $memberId, 1);
                 $product['is_cod'] = 1;
             }
             
