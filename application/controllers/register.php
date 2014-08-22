@@ -16,16 +16,6 @@ class Register extends MY_Controller
 	
 	public function index()
 	{
-
-		/*TESTBENCH START*/
-
-		$pointTrackerService = $this->serviceContainer['point_tracker'];
-		//$pointTrackerService->getActionId('whut');
-		$pointTrackerService->addUserPoint(128,4);
-		//echo "test";
-		//$pointTrackerService->getUserPoint(128);
-		/*TESTBENCH END*/
-
 		$data = array(
 			'title' => 'Easyshop.ph - Welcome to Easyshop.ph',
             'metadescription' => 'Register now at Easyshop.ph to start your buying and selling experience',
