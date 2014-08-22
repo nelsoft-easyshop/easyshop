@@ -55,11 +55,19 @@ if($configService->isConfigFileExists()){
 }
 
 
+$headers = apache_request_headers();
+if(isset($_SERVER["HTTP_CF_CONNECTING_IP"])){
+    $clientIP = ($_SERVER["HTTP_CF_CONNECTING_IP"]);
+}
+else if(isset($headers['X-Forwarded-For'])){
+    $clientIP = $headers['X-Forwarded-For'];
+}
+else{
+    $clientIP = $_SERVER['REMOTE_ADDR'];
+}
 
-//CLOUDFLARE REAL VISITOR IP
-$_SERVER["HTTP_CF_CONNECTING_IP"] = isset($_SERVER["HTTP_CF_CONNECTING_IP"])?$_SERVER["HTTP_CF_CONNECTING_IP"]:$_SERVER['REMOTE_ADDR'];
 
-if ($enable_splash && ($bypass_IP !== $_SERVER["HTTP_CF_CONNECTING_IP"]) ){
+if ($enable_splash && ($bypass_IP !== $clientIP) ){
     $route['default_controller'] = "home/splash";
     $route['404_override'] = 'home/pagenotfound';
     $route['(:any)'] = "home/splash";   
