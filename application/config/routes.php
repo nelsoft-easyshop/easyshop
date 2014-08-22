@@ -59,7 +59,7 @@ $headers = apache_request_headers();
 if(isset($_SERVER["HTTP_CF_CONNECTING_IP"])){
     $clientIP = ($_SERVER["HTTP_CF_CONNECTING_IP"]);
 }
-else if($headers['X-Forwarded-For']){
+else if(isset($headers['X-Forwarded-For'])){
     $clientIP = $headers['X-Forwarded-For'];
 }
 else{
