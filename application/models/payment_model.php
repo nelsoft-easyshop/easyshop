@@ -744,10 +744,7 @@ class payment_model extends CI_Model
         $result = $this->cart_model->save_cartitems(serialize($cart_items),$id);
         return ($result >= 1 ? true : false);
     }
-    public function get_contentFile($file){
-        $query = $this->xmlmap->getFilenameID( 'page/content_files',$file);
-        return $query;
-    }
+
 }
 
 
