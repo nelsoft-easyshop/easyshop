@@ -13,7 +13,7 @@
         $(window).scroll(function() {
             var windowpos = $(window).scrollTop();
 
-            if( (windowpos + $(window).height() + 70 >= $(document).height()) &&
+            if( (windowpos + $(window).height() + 255 >= $(document).height()) &&
                 ($(document).height() > ($(window).height() + 151 )  )){
                 //rightpanel.switchClass( "", "feed-pos-ab-bttm", 100, "swing" );
                 //leftpanel.switchClass( "", "feed-pos-ab-bttm", 100, "swing" );        
