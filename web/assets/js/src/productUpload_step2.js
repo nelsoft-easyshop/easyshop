@@ -1332,7 +1332,11 @@ var pictureCountOther  = 0; var primaryPicture = 0;
                 response = request.responseText;
                 var msg = (response.toLowerCase().indexOf("1001") >= 0) ? 'Sorry, the images you are uploading are too large.' : 'Sorry, we have encountered a problem.\nPlease try again after a few minutes.';
                 
-                alert(msg,"The following images cannot be uploaded: ",errorValues);
+                if(errorValues != ""){
+                    errorValues = "The following images cannot be uploaded: " + errorValues
+                }
+                
+                alert(msg,errorValues);
 
                 $.each( arrayUpload, function( key, value ) {
                     removeThisPictures.push(value); 
