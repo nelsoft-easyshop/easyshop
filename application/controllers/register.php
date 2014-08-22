@@ -20,10 +20,10 @@ class Register extends MY_Controller
 		/*TESTBENCH START*/
 
 		$pointTrackerService = $this->serviceContainer['point_tracker'];
-		//$pointTrackerService->getActionId('dummy');
-		$pointTrackerService->addUserPoint(1,4);
+		//$pointTrackerService->getActionId('whut');
+		$pointTrackerService->addUserPoint(128,4);
 		//echo "test";
-		
+		//$pointTrackerService->getUserPoint(128);
 		/*TESTBENCH END*/
 
 		$data = array(

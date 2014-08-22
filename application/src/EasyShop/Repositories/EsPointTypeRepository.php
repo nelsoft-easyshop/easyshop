@@ -7,9 +7,10 @@ use EasyShop\Entities\EsPointType;
 
 class EsPointTypeRepository extends EntityRepository
 {
-
+    /*
     public function getActionId($actionString)
     {
+        
 		return $this->_em->createQueryBuilder()
 							->select('p.id')
 							->from('EasyShop\Entities\EsPointType','p')
@@ -18,6 +19,7 @@ class EsPointTypeRepository extends EntityRepository
 							->setMaxResults(1)
 							->getQuery()
 							->getResult();
+
     }
 
     public function getPointEquivalent($actionId)
@@ -31,5 +33,5 @@ class EsPointTypeRepository extends EntityRepository
     						->getQuery()
     						->getResult();
     }
-
+    */
 }

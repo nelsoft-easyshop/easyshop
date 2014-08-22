@@ -7,7 +7,7 @@ use EasyShop\Entities\EsPoint;
 
 class EsPointRepository extends EntityRepository
 {
-
+	/*
 	public function getUserPointData($userId)
 	{
 		return $this->_em->createQueryBuilder()
@@ -19,5 +19,5 @@ class EsPointRepository extends EntityRepository
 							->getOneOrNullResult();
 		
 	}
-
+	*/	
 }
