@@ -124,7 +124,7 @@
         }        
 
 
-        /**
+		/**
          * Returns all data inside Point History Table
          *
          * @return mixed
