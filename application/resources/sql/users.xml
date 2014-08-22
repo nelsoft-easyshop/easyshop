@@ -454,4 +454,10 @@
     where m.slug=:userslug
 </select>
 
+<select id="authenticateWebKey">
+    SELECT count(*) as `cnt`  from es_webservice_user where 
+    `username` = 'mobiledev' and
+    `password` = reverse(PASSword(concat(md5('mobiledev'),sha1(:key))))
+</select>
+
 </map>
