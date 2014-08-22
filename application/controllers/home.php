@@ -29,14 +29,9 @@ class Home extends MY_Controller
     public function index() 
     {
             
-        $configurationService = $this->serviceContainer['local_configuration'];
-        if($configurationService->isConfigFileExists() && strlen(trim($xmlfile = $configurationService->getConfigValue('XML_home'))) > 0){
-            $home_content = $this->product_model->getHomeContent($xmlfile);
-        }
-        else{           
-            $home_content = $this->product_model->getHomeContent();
-        }
-            
+        $xmlResourceService = $this->serviceContainer['xml_resource'];
+        $home_content = $this->product_model->getHomeContent($xmlResourceService->getHomeXMLfile());
+
         $layout_arr = array();
         if(!$this->session->userdata('member_id')){
             foreach($home_content['section'] as $section){
@@ -58,12 +53,14 @@ class Home extends MY_Controller
         if( $data['logged_in'] ){
             $data = array_merge($data, $this->getFeed());
             $this->load->view("templates/home_layout/layoutF",$data);
+            $this->load->view('templates/footer');
         }
         else{
             $this->load->view('pages/home_view', $data);
+            $this->load->view('templates/footer_full');
         }
                 
-        $this->load->view('templates/footer_full');
+
 
     }
     
@@ -283,10 +280,16 @@ class Home extends MY_Controller
     
     public function getFeed()
     {
+        $xmlResourceService = $this->serviceContainer['xml_resource'];
+        $xmlfile =  $xmlResourceService->getContentXMLfile();
+
+    
         $perPage = $this->feedsProdPerPage;
         $memberId = $this->session->userdata('member_id');
-        $easyshopId = trim($this->xmlmap->getFilenameID('page/content_files','easyshop-member-id'));
-        $partnersId = explode(',',trim($this->xmlmap->getFilenameID('page/content_files','partners-member-id')));
+ 
+        $easyshopId = trim($this->xmlmap->getFilenameID($xmlfile,'easyshop-member-id'));
+        $partnersId = explode(',',trim($this->xmlmap->getFilenameID($xmlfile,'partners-member-id')));
+        
         array_push($partnersId, $easyshopId);
 
         $prodId = ($this->input->post('ids')) ? $this->input->post('ids') : 0; 
@@ -295,10 +298,10 @@ class Home extends MY_Controller
             'featured_prod' => $this->product_model->getProductFeed($memberId,$partnersId,$prodId,$perPage),
             'new_prod' => $this->product_model->getNewProducts($perPage),
             'followed_users' => $this->user_model->getVendorSubscription($memberId),
-            'banners' => $this->product_model->getStaticBannerFeed(),
-            'promo_items' => $this->product_model->getStaticProductFeed('promo'),
-            'popular_items' => $this->product_model->getStaticProductFeed('popular'),
-            'featured_product' => $this->product_model->getStaticProductFeed('featured'),
+            'banners' => $this->product_model->getStaticBannerFeed($xmlfile),
+            'promo_items' => $this->product_model->getStaticProductFeed('promo', $xmlfile),
+            'popular_items' => $this->product_model->getStaticProductFeed('popular', $xmlfile),
+            'featured_product' => $this->product_model->getStaticProductFeed('featured', $xmlfile),
             'category_navigation' => $this->load->view('templates/category_navigation',array('cat_items' =>  $this->getcat(),), TRUE ),
         );
         
@@ -320,13 +323,18 @@ class Home extends MY_Controller
             $perPage = $this->feedsProdPerPage;
             $memberId = $this->session->userdata('member_id');
             
-            $page = $this->input->post("feed_page") * 10 - $perPage;
+            $page = ($this->input->post("feed_page") + 1) * $perPage - $perPage;
             $productFeedSet = $this->input->post("feed_set");
             
             switch( (int)$productFeedSet ){
                 case 1: #Featured Tab
-                    $easyshopId = trim($this->xmlmap->getFilenameID('page/content_files','easyshop-member-id'));
-                    $partnersId = explode(',',trim($this->xmlmap->getFilenameID('page/content_files','partners-member-id')));
+
+                    $xmlResourceService = $this->serviceContainer['xml_resource'];
+                    $xmlfile =  $xmlResourceService->getContentXMLfile();
+
+                    $easyshopId = trim($this->xmlmap->getFilenameID($xmlfile,'easyshop-member-id'));
+                    $partnersId = explode(',',trim($this->xmlmap->getFilenameID($xmlfile,'partners-member-id')));
+
                     array_push($partnersId, $easyshopId);
                     $prodIdRaw = ($this->input->post('ids')) ? json_decode($this->input->post('ids')) : array(0); 
                     $prodId = implode(",",$prodIdRaw);

@@ -251,8 +251,9 @@
             <p class="post_item_product_title fm1"><a href="<?=base_url();?>item/<?php echo $active_product['slug'];?>"><?php echo html_escape($active_product['name']);?></a></p>
             
             <div class="post_item_button">
-                <?php echo form_open('sell/edit/step2'); ?>
+                <?php echo form_open('sell/edit/step2'); ?> 
                 <input type="hidden" name="p_id" value ="<?php echo $active_product['id_product'];?>" /> 
+                <input type="hidden" name="othernamecategory" value ="<?php echo $active_product['cat_other_name'];?>" /> 
                 <input class="manage_lnk edit_lnk span_bg" type = "submit" value="Edit Item"> </input>
                 <?php echo form_close(); ?> 
                 <span class="border_white">|</span>
@@ -562,6 +563,7 @@
             <div class="post_item_button">
                 <?php echo form_open('sell/edit/step2'); ?>
                 <input type="hidden" name="p_id" value ="<?php echo $draft_product['id_product'];?>" /> 
+                <input type="hidden" name="othernamecategory" value ="<?php echo $draft_product['cat_other_name'];?>" /> 
                 <input class="manage_lnk edit_lnk span_bg" type = "submit" value="Edit Item"> </input>
                 <?php echo form_close(); ?> 
                 <span class="border_white">|</span>
