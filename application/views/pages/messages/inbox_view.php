@@ -1,7 +1,11 @@
 <script type="text/javascript" src="<?=base_url()?>assets/js/src/vendor/jquery.dataTables.min.js"></script>
-<div class="container">
-    <div id="head_container">
-        <div><input type="button" id="modal-launcher" value="Compose"></div>
+
+
+<div class="container wrapper inbox-view-content">
+    <div id="head_container">       
+        <div>
+            <input type="button" id="modal-launcher" value="Compose">
+        </div>
         <div>
             <h3 id="chsn_username"></h3>
             <span>
@@ -22,16 +26,20 @@
             <?PHP foreach($result['messages'] as $key => $row) { ?>
                 <tr class="<?=(reset($row)['opened'] == 0 && reset($row)['status'] == "reciever" ? "NS" : "")?>">
                     <td>
-                        <?PHP  if(reset($row)['status'] == "sender"){ ?>
-                            <img data="<?=reset($row)['sender_img']?>" src="<?=base_url().reset($row)['recipient_img']?>/60x60.png">
-                        <?PHP }else{ ?>
-                            <img data="<?=reset($row)['recipient_img']?>" src="<?=base_url().reset($row)['sender_img']?>/60x60.png">
-                        <?PHP }
-                        $span = (reset($row)['unreadConve'] != 0 ? '('.reset($row)['unreadConve'].')' : "");
-                        ?>
+                    
+                        <div class="img-wrapper-div">
+                            <span class="img-wrapper-span">
+                            <?php if(reset($row)['status'] == "sender"): ?>
+                                <img data="<?=reset($row)['sender_img']?>" src="/<?php echo reset($row)['recipient_img']?>/60x60.png">
+                            <?php else: ?>
+                                <img data="<?=reset($row)['recipient_img']?>" src="/<?php echo reset($row)['sender_img']?>/60x60.png">
+                            <?php endif; ?>
+                            <?php $span = (reset($row)['unreadConve'] != 0 ? '('.reset($row)['unreadConve'].')' : ""); ?>
+                            </span>
+                        </div>
+                        
                     </td>
                     <td>
-
                         <a class="btn_each_msg" id="ID_<?PHP echo reset($row)['name']; ?>" href="javascript:void(0)" data='<?=html_escape(json_encode($row))?>'>
                         <span class="msg_sender"><?PHP echo reset($row)['name']."</span><span class=\"unreadConve\">".$span."</span>"; ?>
                             <?php
@@ -50,13 +58,13 @@
         </table>
     </div>
     <div id="msg_inbox_container" class = "msg_container">
-        <div id="msg_field">
-            <!-- <img id="msg_loader" src="<?=base_url()?>assets/images/orange_loader.gif"> -->
-        </div>
-        <div id="msg_textarea">
-            <textarea id="out_txtarea" placeholder="Write a message"></textarea>
-            <button id="send_btn" data="">Reply</button><img src="<?=base_url()?>assets/images/horizontal_bar_loader.gif">
-        </div>
+		<div id="msg_field">
+			<!-- <img id="msg_loader" src="<?=base_url()?>assets/images/orange_loader.gif"> -->
+		</div>
+		<div id="msg_textarea">
+			<textarea id="out_txtarea" placeholder="Write a message" class="ui-form-control"></textarea>
+			<button id="send_btn" data="">Reply</button><img src="<?=base_url()?>assets/images/horizontal_bar_loader.gif">
+		</div>
     </div>
 </div>
 <div id="modal-background">
@@ -66,15 +74,15 @@
     <div id="modal-div-header">
         <button id="modal-close">X</button>
     </div>
-    <div id="modal-inside-container">
-        <div>
-            <label>To : </label>
-            <input type="text" value="" id="msg_name" name="msg_name" placeholder="username">
-        </div>
-        <div>
-            <label>Message : </label><br>
-            <textarea cols="40" rows="5" name="msg-message" id="msg-message" placeholder="Your message here.."></textarea>
-        </div>
+    <div id="modal-inside-container" class="mrgn-top-10">
+		<div>
+			<label>To : </label>
+			<input type="text" value="" id="msg_name" name="msg_name" placeholder="username" class="ui-form-control">
+		</div>
+		<div>
+			<label>Message : </label><br>
+			<textarea cols="40" rows="5" name="msg-message" id="msg-message" class="ui-form-control" placeholder="Your message here.."></textarea>		
+		</div>	   
     </div>
     <button id="modal_send_btn">Send</button>
 </div>
@@ -91,24 +99,21 @@
             "sScrollY": "375px"
         });
         $("#table_id_info").hide();
-        $('#table_id_filter label input').prop('placeholder','Search').prop('id','tbl_search');
 
-        $("#modal-background, #modal-close").click(function()
-        {
-            $("#modal-container, #modal-background").toggleClass("active");
-            $("#modal-container").hide();
-            $("#msg-message").val("");
-            $("#msg_name").val("");
-        });
+        $('#table_id_filter label input').prop('placeholder','Search').prop('id','tbl_search').prop('class','ui-form-control');
+		$("#modal-background, #modal-close").click(function() {
+			$("#modal-container, #modal-background").toggleClass("active");
+			$("#modal-container").hide();
+			$("#msg-message").val("");
+			$("#msg_name").val("");
+		});
 
-        $("#modal-launcher").click(function()
-        {
-            $("#modal-container, #modal-background").toggleClass("active");
-            $("#modal-container").show();
-        });
+		$("#modal-launcher").click(function() {
+			$("#modal-container, #modal-background").toggleClass("active");
+			$("#modal-container").show();
+		});
 
-        $("#msg_textarea").on("click","#send_btn",function()
-        {
+		$("#msg_textarea").on("click","#send_btn",function(){
             var D = eval('(' + $(this).attr('data') + ')');
             var recipient = D.name;
             var img = D.img;
@@ -395,10 +400,10 @@ function onFocus_Reload(msgs)
             html +='<tr class="'+(Nav_msg.opened == "0" && Nav_msg.status == "reciever" ? "NS" : "")+' odd">';
             html +='<td class=" sorting_1">';
             if (Nav_msg.status == "sender") {
-                html +='<img src=<?=base_url()?>'+Nav_msg.recipient_img+'/60x60.png data="'+Nav_msg.sender_img+'">';
+                html +='<div class="img-wrapper-div"><span class="img-wrapper-span"><img src=/'+Nav_msg.recipient_img+'/60x60.png data="'+Nav_msg.sender_img+'"></span></div>';
             }
             else {
-                html +='<img src=<?=base_url()?>'+Nav_msg.sender_img+'/60x60.png data="'+Nav_msg.recipient_img+'">';
+                html +='<div class="img-wrapper-div"><span class="img-wrapper-span"><img src=/'+Nav_msg.sender_img+'/60x60.png data="'+Nav_msg.recipient_img+'"></span></div>';
             }
             span = (Nav_msg.unreadConve != 0 ? '<span class="unreadConve">('+Nav_msg.unreadConve+')</span>' : "");
             html +='</td>';

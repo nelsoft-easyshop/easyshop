@@ -1,21 +1,17 @@
 <!--[if lt IE 9]>
-        <script src="<?=base_url()?>assets/js/src/vendor/excanvas.js"></script>
+        <script src="assets/js/src/vendor/excanvas.js"></script>
 <![endif]-->
 
-<link rel="stylesheet" href="<?= base_url() ?>assets/css/product_search_category.css?ver=<?=ES_FILE_VERSION?>" type="text/css"  media="screen"/> 
-
-<!--Pagination CSS-->
-<link  type="text/css"  href='<?=base_url()?>assets/css/jqpagination.css' rel="stylesheet" media='screen'/>
-<!--Jcrop CSS-->
-<link type="text/css" href="<?=base_url()?>assets/css/jquery.Jcrop.min.css" rel="stylesheet" media='screen'/>
-<!--Memberpage Modal custom CSS-->
-<link type="text/css" href="<?=base_url()?>assets/css/memberpage.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet" media='screen'/>
+<link type="text/css" href="/assets/css/product_search_category.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet"  media="screen"/> 
+<link type="text/css" href='/assets/css/jqpagination.css' rel="stylesheet" media='screen'/>
+<link type="text/css" href="/assets/css/jquery.Jcrop.min.css" rel="stylesheet" media='screen'/>
+<link type="text/css" href="/assets/css/memberpage.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet" media='screen'/>
 
 <div id = "member_page_body">
     <div class="clear"></div>
     <section>
         <div class="wrapper profile_content">
-            <div class="logo"> <a href="<?=base_url()?>home"><span class="span_bg"></span></a> </div>			
+            <div class="logo"> <a href="/"><span class="span_bg"></span></a> </div>			
         </div>
     </section>
     <div class="clear"></div>
@@ -77,23 +73,24 @@
                         <?php echo $image_profile?>	
                     </span>
                     
-                    <p><?php echo $subscribe_count?> subscriber(s)</p>
-                    
+
+                    <p class='follow-cnt'>
+                        <span class='span-cont' id='follower-lnk'><?php echo count($followers)?> <label>followers</label></span>
+                        <span class='span-cont' id='following-lnk'><?php echo count($following)?> <label>following</label></span>
+                    </p>
+     
                     <?php if( !$renderEdit && $logged_in ):?>
                         <?php echo form_open('');?>
-                        <p class="subscription_btn" style="display:<?php echo $subscribe_status==='unfollowed'?'':'none'?>">
+                        <p class="subscription_btn" style="text-align:center; display:<?php echo $subscribe_status==='unfollowed'?'':'none'?>">
                             <small class="span_bg plus_btn"></small> Follow
                         </p>
-                        <p class="subscription_btn" style="display:<?php echo $subscribe_status==='followed'?'':'none'?>">
+                        <p class="subscription_btn" style="text-align:center; display:<?php echo $subscribe_status==='followed'?'':'none'?>">
                             <small class="span_bg minus_btn"></small> Unfollow
                         </p>
                         <input type="hidden" value="<?php echo $vendordetails['username']?>" name="name">
                         <?php echo form_close();?>
                     <?php endif;?>
-                    
-                    <div class="vendor-msg-modal">
-                        <p><a id="modal-launcher" href="javascript:void(0)" class="orange_btn3 modal-launcher2"><small class="span_bg prod_message"></small> Send a message</a></p> 
-                    </div>
+
                 </div>
                 <div class="vendor_info_con">
                     <div class="vendor_info_con_left">
@@ -122,21 +119,31 @@
                             <span class="span_bg vendor_map"></span> 
                                 <?php echo $vendordetails['stateregionname'] != '' && $vendordetails['cityname'] != '' ? $vendordetails['stateregionname'] . ", " . $vendordetails['cityname'] : "Location not set."?>
                             </p>
+
+                            <div class="vendor-msg-modal">
+                                <p><a id="modal-launcher" href="javascript:void(0)" class="orange_btn3 modal-launcher2"><small class="span_bg prod_message"></small> Send a message</a></p> 
+                            </div>
+                            
                         </div>
-                        <div class="progress_bar_panel">
-                            <div>
-                                <h3>Total Posted Items</h3>
-                                <input class="db_total_items fm1" readonly="readonly"  data-value="<?php echo $active_count + $deleted_count;?>" value="<?php echo $active_count + $deleted_count;?>">
+
+                        
+                        <?php if($renderEdit):?>
+                            <div class="progress_bar_panel">
+                                <div>
+                                    <h3>Total Posted Items</h3>
+                                    <input class="db_total_items fm1" readonly="readonly"  data-value="<?php echo $active_count + $deleted_count;?>" value="<?php echo $active_count + $deleted_count;?>">
+                                </div>
+                                <div>
+                                    <h3>Active Items</h3>
+                                    <input class="db_total_items fm1" readonly="readonly" data-value="<?php echo $active_count;?>" value="<?php echo $active_count;?>">
+                                </div>
+                                <div>
+                                    <h3>Sold Items</h3>
+                                    <input class="db_total_items fm1" readonly="readonly" data-value="<?php echo $sold_count;?>" value="<?php echo $sold_count;?>">
+                                </div>
                             </div>
-                            <div>
-                                <h3>Active Items</h3>
-                                <input class="db_total_items fm1" readonly="readonly" data-value="<?php echo $active_count;?>" value="<?php echo $active_count;?>">
-                            </div>
-                            <div>
-                                <h3>Sold Items</h3>
-                                <input class="db_total_items fm1" readonly="readonly" data-value="<?php echo $sold_count;?>" value="<?php echo $sold_count;?>">
-                            </div>
-                        </div>
+                        <?php endif; ?>
+                      
 
                     </div>
                     <div class="vendor_info_con_right">
@@ -187,6 +194,7 @@
                             <div>
                                 <a href="javascript:void(0)" class="view_all_feedbacks blue"><small class="span_bg plus_btn"></small> View All Feedbacks</a>
                             </div>
+
                         </div>
                         <div class="clear"></div>
 
@@ -195,8 +203,8 @@
             </div>
 
             <?php $items_per_page = 10;?>
-<!-- *********** Start Feedback ********** -->
-<div class="dashboard_table vendor_feedbacks_table" id="dashboard-feedbacks">
+            <!-- *********** Start Feedback ********** -->
+            <div class="dashboard_table vendor_feedbacks_table user-tab" id="dashboard-feedbacks">
                     <h2>Feedbacks</h2><a href="javascript:void(0)" class="hide_all_feedbacks blue"><span class="span_bg minus_btn"></span> Hide All Feedbacks</a>
                         <ul class="idTabs">
                             <li><a href="#op_buyer">Feedbacks as a Buyer</a></li>
@@ -443,7 +451,7 @@
                                             <div class="fbck_message_con">
                                                 <p>"<?php echo html_escape($afb['feedb_msg'])?>"</p>
                                             </div>
-                                        </div>						
+                                        </div>
 
                                         <?php endforeach;?>
                                     </div>
@@ -554,7 +562,7 @@
 
                 <!-- ********** Start of vendor product ************ -->
                 <div class="wrapper">
-                <div class="vendor_products_wrapper">
+                <div class="vendor_products_wrapper user-tab">
                 <?php if($product_count > 0):?>
                     <?php foreach($products as $catID=>$p):?>
                     <div class="vendor_txt_prod_header" class="<?php echo $p['slug']?>">
@@ -597,158 +605,129 @@
                 </div>
             <!-- ********** end of vendor product ************ -->
         </div>
-</div>
-            
-<div id="modal-background">
-        </div>
-        <div id="modal-container">
-            <div id="modal-div-header">
-                <button id="modal-close">X</button>        
+        
+        
+        <div class='subscription_cont user-tab' id='follower-tab'>
+            <div class='header'>
+                <img src='/assets/images/img_icon_partner_small.png'/>
+                <span><?php echo count($followers) ?> follower(s)</span>
+                <a class='close'></a>
             </div>
-            <div id="modal-inside-container">
-                <div>
-                    <label>To : </label>
-                    <input type="text" value="<?=$vendordetails['username'];?>" disabled id="msg_name" name="msg_name" >
+
+            <?php foreach($followers as $user): ?>
+                <div class="seller_div_r3">
+                    <a href='/<?php echo $user['userslug']?>'>
+                        <div class='img-wrapper'>
+                            <span class='img-cont'>
+                                <img src="<?php echo $user['imgurl']?>"/>
+                            <span>
+                        </div>
+                    </a>
+                    <div class='content'>
+                        <a href='/<?php echo $user['userslug']?>'>
+                            <span class='title'><?php echo html_escape($user['vendor_name']); ?></span>
+                        </a>
+                        <span class='sub-title'><?php echo $user['follower_cnt'] ?> follower(s)</span>
+                        
+                        <?php if( $renderEdit && $logged_in ):?>
+                            <?php if(intval($user['is_followed']) === 0): ?>
+                                <?php echo form_open('');?>
+                                
+                                <div class='follow-btn'> 
+                                    <span class='subscription_btn' style='display:inline'><a href="javascript:void(0)">+ Subscribe</a></span> 
+                                    <span class='subscription_btn' style='display:none'><a href="javascript:void(0)">- Unsubscribe</a></span> 
+                                </div>
+                                
+                                <input type="hidden" value="<?php echo $user['vendor_name']?>" name="name">
+                                <?php echo form_close();?>
+                            <?php else: ?>
+                                <div class='follow-btn'> 
+                                    <span>Already following</span>
+                                </div>
+                            <?php endif; ?>
+                        <?php endif;?>
+                        
+                   
+                    </div>
                 </div>
-                <div>
-                    <label>Message : </label>
-                    <textarea cols="40" rows="5" name="msg-message" id="msg-message" placeholder="Say something.."></textarea>		
-                </div>	   
+            <?php endforeach; ?>
+
+            <div class='clear'></div>
+        
+        </div>
+        
+        <div class='subscription_cont user-tab' id='following-tab'>
+            <div class='header'>
+                <img src='/assets/images/img_icon_partner_small.png'/>
+                <span>Following <?php echo count($following) ?> user(s)</span>
+                <a class='close'></a>
             </div>
-            <button id="modal_send_btn">Send</button>
-        </div>		
+
+            <?php foreach($following as $user): ?>
+                <div class="seller_div_r3">
+                        <a href='/<?php echo $user['userslug']?>'>
+                            <div class='img-wrapper'>
+                                <span class='img-cont'>
+                                    <img src="<?php echo $user['imgurl']?>"/>
+                                <span>
+                            </div>
+                        </a>
+                        <div class='content'>
+                            <a href='/<?php echo $user['userslug']?>'>
+                                <span class='title'><?php echo html_escape($user['vendor_name']); ?></span>
+                            </a>
+                        <span class='sub-title'><?php echo $user['follower_cnt'] ?> follower(s)</span>
+                        
+                        <?php if( $renderEdit && $logged_in ):?>
+                            <?php echo form_open('');?>
+                            
+                            <div class='follow-btn'> 
+                                <span class='subscription_btn' style='display:none'><a href="javascript:void(0)">+ Subscribe</a></span> 
+                                <span class='subscription_btn' style='display:inline'><a href="javascript:void(0)">- Unsubscribe</a></span> 
+                            </div>
+                            
+                            <input type="hidden" value="<?php echo $user['vendor_name']?>" name="name">
+                            <?php echo form_close();?>
+                        <?php endif;?>
+                        
+                    </div>
+                </div>
+            <?php endforeach; ?>
+
+            <div class='clear'></div>
         
+        </div>
+
+</div>
+
+      
+<div id="modal-background"></div>
+<div id="modal-container">
+    <div id="modal-div-header">
+        <button id="modal-close">X</button>        
+    </div>
+    <div id="modal-inside-container" class="mrgn-top-10">
+        <div>
+            <label>To : </label>
+            <input type="text" value="<?=$vendordetails['username'];?>" disabled id="msg_name" name="msg_name" class="ui-form-control" >
+        </div>
+        <div>
+            <label>Message : </label>
+            <textarea cols="40" rows="5" name="msg-message" id="msg-message" class="ui-form-control" placeholder="Say something.."></textarea>		
+        </div>
+    </div>
+    <button id="modal_send_btn">Send</button>
+</div>
+
+
+<input type='hidden' id='tab-cmd' value='<?php echo html_escape($tab);?>'/>
+<input type='hidden' id='user-id' value='<?php echo $my_id ?>'/>
+<input type='hidden' id='seller-id' value='<?php echo $vendordetails['id_member'] ?>'/>
+<input type='hidden' id='seller-username' value='<?php echo $vendordetails['username'] ?>'/>
         
-<script src="<?=base_url()?>assets/js/src/vendor/jquery.raty.min.js" type="text/javascript"></script>
-<script type='text/javascript' src='<?=base_url()?>assets/js/src/vendor/jquery.jqpagination.min.js'></script>
-<script src="<?=base_url()?>assets/js/src/vendor/jquery.idTabs.min.js" type="text/javascript"></script>
-
-<script type='text/javascript' src='<?=base_url()?>assets/js/src/vendor/jquery.Jcrop.min.js'></script>
-<script type='text/javascript' src='<?=base_url()?>assets/js/src/vendor/jquery.simplemodal.js'></script>
-
-<script type="text/javascript" src="<?=base_url()?>assets/js/src/vendorpage.js?ver=<?=ES_FILE_VERSION?>"></script>
-
-<script>
-    $(function(){
-    if (<?=$my_id?> == <?php echo $vendordetails['id_member']; ?> || <?=$my_id?> == 0  ) {
-        $(".vendor-msg-modal").remove();
-        $("#modal-background").remove();
-        $("#modal-container").remove();
-    }
-        
-    $("#modal-background, #modal-close").click(function() {
-        $("#modal-container, #modal-background").toggleClass("active");
-        $("#modal-container").hide();
-        $("#msg-message").val("");
-    });
-    $("#modal-launcher").click(function() {
-        $("#modal-container, #modal-background").toggleClass("active");
-        $("#modal-container").show();
-    });
-    
-    $("#modal_send_btn").on("click",function(){
-        var recipient = <?php echo $vendordetails['id_member']; ?>;
-        var csrftoken = $("meta[name='csrf-token']").attr('content');
-        var csrfname = $("meta[name='csrf-name']").attr('content');
-        var msg = $("#msg-message").val();
-        if (msg == "") {
-            alert("Say something..");
-            return false;
-        }
-        var msg = $("#msg-message").val();
-            $.ajax({
-                async : true,
-                type : "POST",
-                dataType : "json",
-                url : "<?=base_url()?>messages/send_msg",
-                data : {recipient:recipient,msg:msg,csrfname:csrftoken},
-                success : function(data) {
-            $("#modal-container, #modal-background").toggleClass("active");
-            $("#modal-container").hide();
-            $("#msg-message").val("");
-            alert("Message Sent");
-                }
-            });
-    });
-    
-    });
-    
-    
-    
-    $(document).ready(function() {
-        var currentRequest = null;
-     
-        $('#member_sch').on('input propertychange', function() {
-            var searchQuery = $.trim( $(this).val());
-            searchQuery = searchQuery.replace(/ +(?= )/g,'');
-            var fulltext = searchQuery; 
-                if(searchQuery != ""){
-                    currentRequest = $.ajax({
-                        type: "GET",
-                         url: '<?php echo base_url();?>search/suggest', 
-                        cache: false,
-                        data: "q="+fulltext, 
-                        beforeSend: function(jqxhr, settings) { 
-                            $("#search_content").empty();
-                            if(currentRequest != null) {
-                                currentRequest.abort();
-                            }
-                        },
-                        success: function(html) {
-                            $("#search_content").empty();
-
-
-                            if(html==0){
-                                $("#search_content").append('No result found');
-                            }
-                            else{
-                                $("#search_content").append(html);
-                                $("#search_content").show();
-                            }
-                        }
-                    });
-                }else{
-                    $("#search_content").hide();
-                }
-        });
-    });
-
-    $(document).ready(function() { 
-
-        $('#member_sch').focus(function() {
-        $('#search_content').show();
-        $(document).bind('focusin.member_srch_container click.member_srch_container',function(e) {
-            if ($(e.target).closest('#search_content, #member_sch').length) return;
-            $('#search_content').hide();
-            });
-         });
-
-        $('#search_content').hide();
-    });
-
-    $(document).ready(function() { 
-        // Set the options for the effect type chosen
-        var options = { direction: 'right' };
- 
-        // Set the duration (default: 400 milliseconds)
-        var duration = 300;
-        var fadein_duration = 900;
-        $(".view_all_feedbacks").click(function() {
-            $("#dashboard-feedbacks").toggle('slide', options, duration);
-            $(".view_all_feedbacks,.vendor_products_wrapper").fadeOut();
-        });
-        $(".hide_all_feedbacks").click(function() {
-            $("#dashboard-feedbacks").toggle('slide', options, duration);
-            $(".view_all_feedbacks,.vendor_products_wrapper").fadeIn(fadein_duration);
-        });
-
-        $('#dashboard-feedbacks').hide();
-
-        
-    });
-    $('.vendor_edit_con').siblings('.vendor_desc_dis_con').children('p').css({
-        "border":"1px solid #cecece",
-        "padding":"5px",
-        "overflow-y":"scroll"
-    });
-</script>
+<script src="/assets/js/src/vendor/jquery.raty.min.js" type="text/javascript"></script>
+<script src='/assets/js/src/vendor/jquery.jqpagination.min.js' type='text/javascript'></script>
+<script src="/assets/js/src/vendor/jquery.idTabs.min.js" type="text/javascript"></script>
+<script src='/assets/js/src/vendor/jquery.Jcrop.min.js' type='text/javascript' ></script>
+<script src='/assets/js/src/vendor/jquery.simplemodal.js' type='text/javascript' ></script>
+<script src="/assets/js/src/vendorpage.js?ver=<?=ES_FILE_VERSION?>" type="text/javascript"></script>

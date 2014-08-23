@@ -468,13 +468,14 @@ class Memberpage extends MY_Controller
         echo json_encode($data);
     }
 
-    /*
+    /**
      *  Used to add feedback to SELLER or BUYER under Transactions Tab
      *  Returns 1 on success, 0 otherwise
      *
      *  @return integer
      */
-    public function addFeedback(){
+    public function addFeedback()
+    {
         if($this->input->post('order_id') && $this->input->post('feedback-field') && $this->form_validation->run('add_feedback_transaction')){
             $result = false;
             $data = array(
@@ -767,13 +768,13 @@ class Memberpage extends MY_Controller
         switch( $checkData['stat'] ){
             case 'unfollowed':
             case 'followed':
-            $boolResult = $this->memberpage_model->setVendorSubscription($memberID,$checkData['vendor_id'], $checkData['stat']);
-            $serverResponse['result'] = $boolResult ? 'success' : 'fail';
-            $serverResponse['error'] = $boolResult ? '' : 'Failed to update database.';
-            break;
+                $boolResult = $this->memberpage_model->setVendorSubscription($memberID,$checkData['vendor_id'], $checkData['stat']);
+                $serverResponse['result'] = $boolResult ? 'success' : 'fail';
+                $serverResponse['error'] = $boolResult ? '' : 'Failed to update database.';
+                break;
             case 'error':
-            $serverResponse['result'] = 'fail';
-            $serverResponse['error'] = 'Incorrect data submitted to server. Please try again later.';
+                $serverResponse['result'] = 'fail';
+                $serverResponse['error'] = 'Incorrect data submitted to server. Please try again later.';
             break;
         }
         
