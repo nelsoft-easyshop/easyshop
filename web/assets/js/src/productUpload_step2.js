@@ -1329,11 +1329,9 @@ var pictureCountOther  = 0; var primaryPicture = 0;
                 }
             },
             error: function (request, status, error) {
-                response = request.responseText;
-                var msg = (response.toLowerCase().indexOf("1001") >= 0) ? 'Sorry, the images you are uploading are too large.' : 'Sorry, we have encountered a problem.\nPlease try again after a few minutes.';
-                
-                alert(msg,"The following images cannot be uploaded: ",errorValues);
 
+                alert('Sorry, we have encountered a problem.\nPlease try again after a few minutes.');
+                
                 $.each( arrayUpload, function( key, value ) {
                     removeThisPictures.push(value); 
                     $('#previewList'+value).remove();
@@ -1381,6 +1379,8 @@ var pictureCountOther  = 0; var primaryPicture = 0;
     $(document).on('change',".attr-image-input",function (e){
  
         var val = $(this).val();
+        var size = this.files[0].size;
+
         extension = val.substring(val.lastIndexOf('.') + 1).toLowerCase();
 
         switch(extension){
@@ -1390,6 +1390,11 @@ var pictureCountOther  = 0; var primaryPicture = 0;
                 alert('Invalid file type. Please choose another image.');
                 return false;
             break;
+        }
+
+        if(size > 5*1024*1024){
+            alert('Invalid file size. Please select an image that is not larger than 5 mB in size.');
+            return false;
         }
  
         picName = tempId+'_'+memberId+'_'+fulldate+pictureCountOther+'o.'+extension;
@@ -1416,10 +1421,12 @@ var pictureCountOther  = 0; var primaryPicture = 0;
                 }
                 else{
                     alert(d.msg);
+                    $('.image'+currentCnt+' > img,.pop-image-container > a > img').attr("src",config.base_url+'assets/images/img_upload_photo.jpg');
                 }
             },
             error: function (request, status, error) {
                 alert('Sorry, we have encountered a problem.','Please try again after a few minutes.');
+                $('.image'+currentCnt+' > img,.pop-image-container > a > img').attr("src",config.base_url+'assets/images/img_upload_photo.jpg');
                 canProceed = true;
             }
         }).submit();
