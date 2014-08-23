@@ -1393,7 +1393,7 @@ var pictureCountOther  = 0; var primaryPicture = 0;
         }
 
         if(size > 5*1024*1024){
-            alert('Invalid file size. Please choose another image not more than 5mb.');
+            alert('Invalid file size. Please select an image that is not larger than 5 mB in size.');
             return false;
         }
  
@@ -1425,7 +1425,7 @@ var pictureCountOther  = 0; var primaryPicture = 0;
                 }
             },
             error: function (request, status, error) {
-                alert('Sorry, we have encountered a problem.','Please try again selecting image.');
+                alert('Sorry, we have encountered a problem.','Please try again after a few minutes.');
                 $('.image'+currentCnt+' > img,.pop-image-container > a > img').attr("src",config.base_url+'assets/images/img_upload_photo.jpg');
                 canProceed = true;
             }
