@@ -7368,9 +7368,12 @@ margin-right: 10px;
 }
 
 @media (max-width: 445px){
-    .join-lbl{
-        display:none;
+
+    #m_follow_seller .col-xs-6{
+        width: 100%;
     }
+    
+    
     
 }
 
