@@ -2448,7 +2448,7 @@ class product_model extends CI_Model
             $sth->bindParam(':memberid',$memberid,PDO::PARAM_INT);
             $sth->bindParam(':cod', $cod, PDO::PARAM_INT);
             $sth->execute();
-            return true;
+            return $slug;
         }
         else{
             return false;
@@ -2560,14 +2560,14 @@ class product_model extends CI_Model
      *
      *  @return array
      */
-    public function getProductFeed($member_id,$partners_id,$product_ids,$per_page,$page=0)
+    public function getFeaturedProductFeed($member_id,$partners_id,$product_ids,$per_page,$page=0)
     { 
         $this->load->library('parser');
         
         $parseData['partners_id'] = implode(',',$partners_id);
         $parseData['product_ids'] = $product_ids;
         $parseData['limit'] = implode(",", array($page,$per_page));
-        $query = $this->xmlmap->getFilenameID('sql/product','getProductFeed'); 
+        $query = $this->xmlmap->getFilenameID('sql/product','getFeaturedProductFeed'); 
         $query = $this->parser->parse_string($query, $parseData, true);
     
         $seta = $this->db->conn_id->prepare('SET @a = -1');

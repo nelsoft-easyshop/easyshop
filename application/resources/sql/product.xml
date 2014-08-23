@@ -1021,7 +1021,7 @@ FROM
     LIMIT :item_count
 </select>
 
-<select id="getProductFeed">
+<select id="getFeaturedProductFeed">
     SELECT 
         * 
     FROM

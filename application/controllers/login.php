@@ -3,51 +3,71 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
-class Login extends MY_Controller {
+class Login extends MY_Controller 
+{
 
-    function __construct() {
+    /**
+     * Inject dependencies
+     *
+     */
+    public function __construct() {
         parent::__construct();
         $this->load->model('register_model');
         $this->load->model('user_model');
         $this->load->model('cart_model');
-	$this->load->library('encrypt');	
+        $this->load->library('encrypt');	
     }
-    	
-    function index() {
-	  $data = array(
-	    'title' => 'Login | Easyshop.ph',
-	    'metadescription' => 'Sign-in at Easyshop.ph to start your buying and selling experience.',
-		      );
-	  $data = array_merge($data, $this->fill_header());
-	  $response['url'] = $this->session->userdata('uri_string'); 
-	  if($this->input->post('login_form')){
-	      $row = array();
-	      if($this->form_validation->run('login_form')){
-		  $uname = $this->input->post('login_username');
-		  $pass = $this->input->post('login_password');
-		  $row = $this->login($uname, $pass);
-	      }
-	      if(isset($row['o_success']) && $row['o_success'] >= 1){
-		  redirect('home'); exit();
-	      }
-	      else{
-		  $response['form_error'] = 'Invalid username or password';
-	      }  
-	  }
-	  $data['render_searchbar'] = false;
-	  $this->load->view('templates/header', $data);
-	  $this->load->view('pages/user/login_view',$response);
-	  $this->load->view('templates/footer');
+    
+    /**
+     * Renders the login page
+     *
+     */
+    function index() 
+    {
+        $data = array(
+            'title' => 'Login | Easyshop.ph',
+            'metadescription' => 'Sign-in at Easyshop.ph to start your buying and selling experience.',
+        );
+        $data = array_merge($data, $this->fill_header());
+        $response['url'] = $this->session->userdata('uri_string'); 
+        if($this->input->post('login_form')){
+            $row = array();
+            if($this->form_validation->run('login_form')){
+                $uname = $this->input->post('login_username');
+                $pass = $this->input->post('login_password');
+                $row = $this->login($uname, $pass);
+            }
+            if(isset($row['o_success']) && $row['o_success'] >= 1){
+                redirect('home');
+                exit();
+            }
+            else{
+                $response['form_error'] = 'Invalid username or password';
+            }  
+        }
+        $data['render_searchbar'] = false;
+        $this->load->view('templates/header', $data);
+        $this->load->view('pages/user/login_view',$response);
+        $this->load->view('templates/footer');
       }
 
-      function authenticate() {
-	  if(($this->input->post('login_form'))&&($this->form_validation->run('login_form'))){
-		  $uname = $this->input->post('login_username');
-		  $pass = $this->input->post('login_password');	
-		  $row =  $this->login($uname, $pass);
-	      echo json_encode($row);
-	  }
-      }
+      
+    /**
+     * Authenticates if the user is able to login succesfully or not
+     *
+     * @param string $login_uername
+     * @param string $login_password
+     * @return JSON
+     */
+    public function authenticate() 
+    {
+        if(($this->input->post('login_form'))&&($this->form_validation->run('login_form'))){
+            $uname = $this->input->post('login_username');
+            $pass = $this->input->post('login_password');	
+            $row =  $this->login($uname, $pass);
+            echo json_encode($row);
+        }
+    }
   
     
     /*   

@@ -1589,6 +1589,10 @@ class memberpage_model extends CI_Model
     
     /**
      *  Used to edit userslug
+     *
+     *  @param integer $memberID
+     *  @param string $userslug
+     *  
      */
     public function editUserSlug($memberID, $userslug)
     {
@@ -1600,7 +1604,7 @@ class memberpage_model extends CI_Model
         
         return $result;
     }
-    
+
 }
 
 /* End of file memberpage_model.php */
