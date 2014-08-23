@@ -38,7 +38,13 @@
     
     
     $(function(){    
-
+        var actionConstants = {
+            message: 0
+        }
+        
+        var action = $.cookie('es-productpage-action');
+        $.removeCookie('es-productpage-action');
+        
         var uid = parseInt($('#user-id').val(), 10);
         var seller_id = parseInt($('#seller-id').val(), 10);
         if (uid ==  seller_id || uid == 0 ) {
@@ -46,14 +52,23 @@
             $("#modal-background").remove();
             $("#modal-container").remove();
         }
+
         $("#modal-background, #modal-close").click(function() {
             $("#modal-container, #modal-background").toggleClass("active");
             $("#modal-container").hide();
             $("#msg-message").val("");
         });
-        $(".modal_msg_launcher").click(function() {
-            $("#modal-container, #modal-background").toggleClass("active");
-            $("#modal-container").show();
+        
+        $(".modal_msg_launcher").click(function() {      
+            var isLoggedIn = ($(".es-data[name='is-logged-in']").val() == 'true');
+            if(!isLoggedIn){
+                $.cookie('es-productpage-action', actionConstants.message);
+                window.location.replace("/login");
+            }
+            else{
+                $("#modal-container, #modal-background").toggleClass("active");
+                $("#modal-container").show('fade',400);
+            }
         });
         
         $("#modal_send_btn").on("click",function(){
@@ -73,13 +88,20 @@
                     url : "/messages/send_msg",
                     data : {recipient:recipientUsername,msg:msg,csrfname:csrftoken},
                     success : function(data) {
-                $("#modal-container, #modal-background").toggleClass("active");
-                $("#modal-container").hide();
-                $("#msg-message").val("");
-                alert("Your message has been sent.");
+                        $("#modal-container, #modal-background").toggleClass("active");
+                        $("#modal-container").hide();
+                        $("#msg-message").val("");
+                        alert("Your message has been sent.");
                     }
                 });
         });
+        
+        if(action == actionConstants.message){
+            $(".modal_msg_launcher").click();
+        }
+        
+        
+  
 
     });
     
@@ -695,9 +717,9 @@ $(function(){
                     if(data == "386f25bdf171542e69262bf316a8981d0ca571b8" ){
                         alert("An error occured,Try refreshing the site.");
                     }else if(data == "d3d34a1c4cb94f516ae916e4b8b4be80d50c8f7a"){
-                        window.location.replace(config.base_url + "cart");
+                       window.location.replace(config.base_url + "cart");
                     }else if(data = "login_to_add_item2cart"){
-                        window.location.replace(config.base_url + "login");
+                       window.location.replace(config.base_url + "login");
                     }
                 }
 
