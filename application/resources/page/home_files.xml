@@ -21,41 +21,33 @@
     </typeNode>
     
 
-    <mainSlide> 
-        <value>assets/images/mainslide/1.jpg</value> 
+
+    <mainSlide>
+        <value>assets/images/mainslide/140708220723.jpg</value>
         <type>image</type>
         <imagemap>
-            <coordinate>70,200,350,350</coordinate>
-            <target>register</target>
+            <coordinate>0,0,589,351.77813992311667</coordinate>
+            <target>https://www.facebook.com/EasyShopPhilippines/photos/a.214678272075103.1073741828.211771799032417/257938951082368</target>
         </imagemap>
     </mainSlide>
 
-		<mainSlide> 
-        <value>assets/images/mainslide/3.jpg</value> 
+    <mainSlide>
+        <value>assets/images/mainslide/140708220726.jpg</value>
         <type>image</type>
         <imagemap>
             <coordinate>0,0,0,0</coordinate>
-            <target/>
+            <target>home</target>
         </imagemap>
     </mainSlide>
+    
+    
 
-    <mainSlide> 
-        <value>assets/images/mainslide/2.jpg</value> 
+    <mainSlide>
+        <value>assets/images/mainslide/2.jpg</value>
         <type>image</type>
         <imagemap>
             <coordinate>0,0,589,352</coordinate>
             <target>deals</target>
-        </imagemap>
-    </mainSlide>
-    
-    
-
-    <mainSlide> 
-        <value>assets/images/mainslide/141107081128.jpg</value> 
-        <type>image</type>
-        <imagemap>
-            <coordinate>0,0,589,351.77813992311667</coordinate>
-            <target>item/test</target>
         </imagemap>
     </mainSlide>
 
