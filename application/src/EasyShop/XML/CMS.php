@@ -20,6 +20,30 @@ class CMS
 
     public function getString($nodeName, $value, $type, $coordinate, $target) 
     {
+        if($nodeName=="feedFeaturedProduct")
+        {
+            $string = '
+                    <product>
+            <slug>'.$value.'</slug>
+        </product>
+            '; 
+        }
+        if($nodeName=="feedPopularItems")
+        {
+            $string = '
+                    <product>
+            <slug>'.$value.'</slug>
+        </product>
+            ';
+        }
+        if($nodeName=="feedPromoItems")
+        {
+            $string = '
+                    <product>
+            <slug>'.$value.'</slug>
+        </product>
+            ';
+        }
         if($nodeName == "product_panel" ) {
             $string = '<product_panel>
             <value>'.$value.'</value> 
@@ -80,7 +104,72 @@ $string = '<typeNode>
         }
             return $string;
     }
+    /**
+     *  Method used to swap xml contents for feedFeaturedProduct nodes under content_files.xml
+     *  @param string $file
+     *  @param string $original_index
+     *  @param string $original_order
+     *  @param string $value  
+     */
+    public function swapXmlForSetfeedFeaturedProduct($file,$original_index,$original_order,$value)
+    {
+        
+        $original_index = (int) $original_index;
+        $original_order = (int) $original_order;
+        if($original_index > 1) {
+            $original_index = $original_index - 1;            
+        }
 
+        $map = simplexml_load_file($file);
+        $map->feedFeaturedProduct->product[$original_index]->slug = $map->feedFeaturedProduct->product[$original_order]->slug;
+        $map->feedFeaturedProduct->product[$original_order]->slug = $value;
+        $map->asXML($file);
+        
+    }
+    /**
+     *  Method used to swap xml contents for feedPopularItems nodes under content_files.xml
+     *  @param string $file
+     *  @param string $original_index
+     *  @param string $original_order
+     *  @param string $value  
+     */
+    public function swapXmlForSetfeedPopularItems($file,$original_index,$original_order,$value)
+    {
+        
+        $original_index = (int) $original_index;
+        $original_order = (int) $original_order;
+        if($original_index > 1) {
+            $original_index = $original_index - 1;            
+        }
+
+        $map = simplexml_load_file($file);
+        $map->feedPopularItems->product[$original_index]->slug = $map->feedPopularItems->product[$original_order]->slug;
+        $map->feedPopularItems->product[$original_order]->slug = $value;
+        $map->asXML($file);
+        
+    }
+    /**
+     *  Method used to swap xml contents for feedPromoItems nodes under content_files.xml
+     *  @param string $file
+     *  @param string $original_index
+     *  @param string $original_order
+     *  @param string $value  
+     */
+    public function swapXmlForSetfeedPromoItems($file,$original_index,$original_order,$value)
+    {
+        
+        $original_index = (int) $original_index;
+        $original_order = (int) $original_order;
+        if($original_index > 1) {
+            $original_index = $original_index - 1;            
+        }
+
+        $map = simplexml_load_file($file);
+        $map->feedPromoItems->product[$original_index]->slug = $map->feedPromoItems->product[$original_order]->slug;
+        $map->feedPromoItems->product[$original_order]->slug = $value;
+        $map->asXML($file);
+        
+    }
     /**
      *  Method used to swap xml contents for productSlide nodes under home_files.xml
      *  @param string $file
@@ -440,7 +529,6 @@ $string = '<typeNode>
             if ($target_dom->nextSibling) {
                 $result =  $parentNode->insertBefore($insert_dom, $target_dom->nextSibling);
                 $parentNode->insertBefore($document->createTextNode("\n"), $result);
-                $parentNode->insertBefore($document->createTextNode("\n"), $result);
                 $parentNode->insertBefore($document->createTextNode("\t\t"), $result);
             } 
             else {
@@ -477,7 +565,6 @@ $string = '<typeNode>
             if ($target_dom->nextSibling) {
                 $result =  $parentNode->insertBefore($insert_dom, $target_dom->nextSibling);
                 $parentNode->insertBefore($document->createTextNode("\n"), $result);
-                $parentNode->insertBefore($document->createTextNode("\n"), $result);
                 $parentNode->insertBefore($document->createTextNode("\t\t"), $result);
 
             } 
@@ -486,7 +573,6 @@ $string = '<typeNode>
             }
         } 
         else {
-            $result =  $parentNode->insertBefore($document->createTextNode("\n"), $target_dom);
             $parentNode->insertBefore($insert_dom,$result);   
 
         }
