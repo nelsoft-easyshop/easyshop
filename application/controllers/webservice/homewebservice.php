@@ -36,16 +36,6 @@ class Homewebservice extends MY_Controller
     }
 
     /**
-     *  Rendering of home_cms view
-     *
-     *  @return View
-     */
-    public function index() 
-    {
-        $this->load->view("pages/home_cms");
-    }
-
-    /**
      *  Method to display the contents of the home_files.xml from the function call from Easyshop.ph.admin
      *
      *  @return string
