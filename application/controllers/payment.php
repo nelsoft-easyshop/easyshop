@@ -151,7 +151,8 @@ class Payment extends MY_Controller{
             $data = array_merge($data,$address);
 
             $this->load->view('templates/header', $header);
-            $this->load->view('pages/payment/payment_review' ,$data);  
+            // $this->load->view('pages/payment/payment_review' ,$data);  
+            $this->load->view('pages/payment/payment_review_responsive' ,$data);  
             $this->load->view('templates/footer');  
         }else{
            redirect('/cart/', 'refresh'); 
@@ -918,7 +919,8 @@ class Payment extends MY_Controller{
         $data = array_merge($data,$this->fill_header());
 
         $this->load->view('templates/header', $data);
-        $this->load->view('pages/payment/payment_response' ,$response);  
+        // $this->load->view('pages/payment/payment_response' ,$response);  
+        $this->load->view('pages/payment/payment_response_responsive' ,$response);  
         $this->load->view('templates/footer_full'); 
  
    }
