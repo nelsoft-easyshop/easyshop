@@ -339,10 +339,10 @@ $(document).ready(function(){
             escClose: true,
             draggable: true,
             containerCss:{
-                maxWidth: '600px',
-                minWidth: '600px',
-                maxHeight: '300px',
-                minHeight: '100px',
+                maxWidth: '90%',
+                minWidth: '50%',
+                maxHeight: 'auto',
+                minHeight: '50%',
             }
         }); 
         var csrftoken = $("meta[name='csrf-token']").attr('content');
