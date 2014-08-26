@@ -21,6 +21,7 @@ class AccountService extends MY_Controller
 
     }
 
+
     /**
      *  Method to access the product_model with the getProdCount method to return the count of a certain product
      *

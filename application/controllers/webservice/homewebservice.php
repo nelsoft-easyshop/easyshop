@@ -6,17 +6,20 @@ class Homewebservice extends MY_Controller
     /**
      *  Constructor call for Administrator's authentication. Authentication method is located in MY_Controller.php
      *
-     *  
+     *  $xmlCmsService used for accessing functions under application/src/Easyshop/XML/CMS.php
+     *  $xmlFileService used for accessing Resource class
      */
     private $xmlCmsService;
+    public $xmlFileService;
 
     public function __construct() 
     {
         parent::__construct();
         $this->load->model('user_model');
-        $this->declareEnvironment();
 
         $this->xmlCmsService = $this->serviceContainer['xml_cms'];
+        $this->xmlFileService = $this->serviceContainer['xml_resource'];
+        $this->declareEnvironment();
 
         if($this->input->get()) {
             $this->authentication($this->input->get(), $this->input->get('hash'));
@@ -24,16 +27,19 @@ class Homewebservice extends MY_Controller
     }
   
     /**
-     *  Environment declaration of APPPATH . "resources/page/home_files.xml"; 
-     *
+     *  Environment declaration:
+     *  1. APPPATH . "resources/page/home_files.xml" 
+     *  2. APPPATH . "resources/json/jsonp.json"
      *  
      */
     public function declareEnvironment()
     {
+
         $env = strtolower(ENVIRONMENT);
-        $this->file = APPPATH . "resources/page/home_files.xml"; 
+        $this->file  = APPPATH . "resources/". $this->xmlFileService->getHomeXMLfile().".xml"; 
         $this->json = file_get_contents(APPPATH . "resources/json/jsonp.json");
     }
+
 
     /**
      *  Method to display the contents of the home_files.xml from the function call from Easyshop.ph.admin
