@@ -1471,8 +1471,8 @@ class memberpage_model extends CI_Model
         
         foreach( $vendorCategories as $vendorCategory ){
             if( !isset($data[$vendorCategory['parent_cat']]) ){
-                
-                if( $vendorCategory['p_cat_img'] !== "" ){
+                $catImgTest = "assets/" . substr($vendorCategory['p_cat_img'],0,strrpos($vendorCategory['p_cat_img'],'.')) . "_small.png";
+                if( $vendorCategory['p_cat_img'] !== "" && file_exists($catImgTest)){
                     $catImg = "assets/" . substr($vendorCategory['p_cat_img'],0,strrpos($vendorCategory['p_cat_img'],'.')) . "_small.png";
                 }
                 else{
