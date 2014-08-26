@@ -1,7 +1,7 @@
 <link rel="stylesheet" href="<?=base_url()?>assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
 <link rel="stylesheet" href="<?=base_url()?>assets/css/my_cart_css.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
 
-<div class="container" style="max-width:980px; margin-top: 15px;">	
+<div class="container container-cart-responsive">	
 	<h2 class="my_cart_title">My Cart</h2>
 	<table width="100%" class="table table-responsive font-roboto hide-to-536">
 		<tr class="tr-header-cart">
@@ -19,7 +19,7 @@
 			</td>
 			<td width="7%">
 				 <a href="<?=base_url().'item/'.$row['slug'];?>" class="has-tooltip" data-image="<?=base_url()?><?php echo $row['img'][0]['path']; ?>categoryview/<?php echo $row['img'][0]['file']; ?>">
-				<img class="img-responsive thumbnail no-border" style="max-height: 70px; max-width: 70px; height:auto;width: auto; vertical-align: top;" src="<?=base_url()?><?php echo $row['img'][0]['path']; ?>thumbnail/<?php echo $row['img'][0]['file']; ?>">
+					<img class="img-responsive thumbnail no-border thumbnail-item" src="<?=base_url()?><?php echo $row['img'][0]['path']; ?>thumbnail/<?php echo $row['img'][0]['file']; ?>">
 				</a>
 				
 			</td>
@@ -99,11 +99,11 @@
 									
 									<td width="50%">
 										<a href="<?=base_url().'item/'.$row['slug'];?>" class="has-tooltip" data-image="<?=base_url()?><?php echo $row['img'][0]['path']; ?>categoryview/<?php echo $row['img'][0]['file']; ?>">
-											<img class="img-responsive thumbnail no-border" style="width:50px; height:50px; height:auto;width: auto; vertical-align: top;" src="<?=base_url()?><?php echo $row['img'][0]['path']; ?>thumbnail/<?php echo $row['img'][0]['file']; ?>">
+											<img class="img-responsive thumbnail no-border thumbnail-item" src="<?=base_url()?><?php echo $row['img'][0]['path']; ?>thumbnail/<?php echo $row['img'][0]['file']; ?>">
 										</a>
 									</td>
 									<td style="vertical-align: top; text-align:right;" align="right"  width="50%">
-										<p  style="margin-top: -15px;">
+										<p style="margin-top:-15px;">
 											<?php
 												$totalprice = $row['price'] * $row['qty'];
 											?>
@@ -112,11 +112,11 @@
 										
 										<p align="right" style="margin-top: 52px;">
 											<a class="btn btn-orange btn-remove pull-right"><i class="glyphicon glyphicon-trash"></i> Remove</a>
-											<!-- <a href="">Move to wish list</a> -->
 										</p>
 									</td>
 								</tr>
 							</table>
+							<br/>
 						</div>
 						<div class="col-sm-1">
 							
@@ -148,7 +148,7 @@
 										<b class="b-label">Availability: </b>
 									</td>
 									<td style="padding-left: 5px;">
-										<?php echo $row['maxqty']; ?>
+										<span class="p-price"><?php echo $row['maxqty']; ?></p>
 									</td>
 								</tr>
 							</table>
@@ -160,7 +160,7 @@
 		</table>
 	</div>
 	
-	<div class="my_cart_total pull-right roboto" style="margin-right: 10px; margin-top: -20px !important;">
+	<div class="my_cart_total my_cart_total_div pull-right roboto">
 		<p>Total: &#8369;<span id="total"><?php echo $total; ?></span></p>
 		<p><span>VAT included</span></p>
 	</div>
@@ -169,7 +169,7 @@
 			<a href="<?php echo isset($_SERVER['HTTP_REFERER'])?$_SERVER['HTTP_REFERER']:base_url().'product/categories_all'; ?>" class="continue">Continue Shopping</a> 
 			<?php if(!count($cart_items) <=0){ ?>
 			 <a class="btn payment" id="proceed_payment">Proceed to Payment<span></span></a> 
-		   <?php } ?>
+		    <?php } ?>
 		   
 		</div>
 	</div>
