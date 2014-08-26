@@ -25,7 +25,6 @@ class Cart extends MY_Controller{
             $data['cart_items'] =$cart;
             $data['total'] = $this->get_total_price();
             $this->load->view('templates/header', $data);
-            //$this->load->view('pages/cart/mycart_view', $data);
             $this->load->view('pages/cart/cart-responsive', $data);
             $this->load->view('templates/footer_full');
         }else{
