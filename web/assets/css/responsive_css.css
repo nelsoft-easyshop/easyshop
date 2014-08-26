@@ -613,32 +613,31 @@ a.msgs_link:hover {
 
 /*** Mobile Menu styles ***/
 .nav-toggle {
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  color: #fff;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    color: #fff;
 /*  border:2px solid #fff;*/
-  width: 36px;
-  height: 36px;
-  line-height: 36px;
-  float: left;
-  font-size: 4em;
+    width: 36px;
+    height: 36px;
+    line-height: 36px;
+    float: left;
+    font-size: 4em;
     text-align: center;
-  /*text-indent: -9999px;*/
-  overflow: hidden;
-  background-color: #003e91;
-  margin:5px 2px 0 0;
-  /*background: #f18200 url("/assets/images/landingpage/img_menu.gif") no-repeat 50% 50%;*/
+    text-indent: -9999px;
+    overflow: hidden;
+    margin:5px 2px 0 0;
+    background: #003e91 url("/assets/images/img_menu.png") no-repeat 50% 50%;
 
-  -webkit-tap-highlight-color: rgba(0,0,0,0);
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  -o-user-select: none;
-  user-select: none;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -o-user-select: none;
+    user-select: none;
 }
 
 .nav-toggle:hover {
@@ -2048,6 +2047,7 @@ box-shadow:         0px 1px 5px 0px rgba(50, 50, 50, 0.75);
 
 @media screen and (-webkit-min-device-pixel-ratio: 1.3), screen and (min--moz-device-pixel-ratio: 1.3), screen and (-o-min-device-pixel-ratio: 2 / 1), screen and (min-device-pixel-ratio: 1.3), screen and (min-resolution: 192dpi), screen and (min-resolution: 2dppx) {
   .nav-toggle {
+    background-image: url("/assets/images/img_menu_retina.png");
     -webkit-background-size: 100px 100px;
     -moz-background-size: 100px 100px;
     -o-background-size: 100px 100px;
