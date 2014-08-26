@@ -59,6 +59,7 @@ class Home extends MY_Controller
             $this->load->view('pages/home_view', $data);
             $this->load->view('templates/footer_full');
         }
+
     }
     
     
@@ -252,7 +253,7 @@ class Home extends MY_Controller
                     'vendordetails' => $vendordetails,
                     'image_profile' => $this->memberpage_model->get_Image($sellerid),
                     'banner' => $this->memberpage_model->get_Image($sellerid,'vendor'),
-                    'products' => $this->memberpage_model->getVendorCatItems($sellerid,$sellerslug),
+                    'products' => $this->memberpage_model->getVendorCatItems($sellerid,$vendordetails['username']),
                     'active_count' => intval($user_product_count['active']),
                     'deleted_count' => intval($user_product_count['deleted']),
                     'sold_count' => intval($user_product_count['sold']),
@@ -285,7 +286,7 @@ class Home extends MY_Controller
     {
         $xmlResourceService = $this->serviceContainer['xml_resource'];
         $xmlfile =  $xmlResourceService->getContentXMLfile();
-    
+
         $perPage = $this->feedsProdPerPage;
         $memberId = $this->session->userdata('member_id');
         $userdata = $this->user_model->getUserById($memberId);

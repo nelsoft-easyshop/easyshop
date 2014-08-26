@@ -89,8 +89,8 @@
                 </h1>
         
                 <span class="seller-name"> 
-                    <a href="<?php echo base_url() . $product['sellerusername'];?>"> 
-                        <img class=" seller-img" src="<?php echo base_url() . $product['userpic']?>/60x60.png?<?php echo time();?>"><br />
+                    <a href="/<?php echo $product['sellerslug'];?>"> 
+                        <img class=" seller-img" src="/<?php echo $product['userpic']?>/60x60.png?<?php echo time();?>"><br />
                         <span class="name"><?php echo html_escape($product['sellerusername']);?></span> 
                     </a>
                     <br/>

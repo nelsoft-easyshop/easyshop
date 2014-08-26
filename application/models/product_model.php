@@ -208,9 +208,9 @@ class product_model extends CI_Model
     function getProductBySlug($slug, $add_click_count = true)
     {
         if($add_click_count){
-        $query = $this->xmlmap->getFilenameID('sql/product', 'getProductBySlug');
+            $query = $this->xmlmap->getFilenameID('sql/product', 'getProductBySlug');
         }else{
-        $query = $this->xmlmap->getFilenameID('sql/product', 'getProductBySlugNoIncrement');
+            $query = $this->xmlmap->getFilenameID('sql/product', 'getProductBySlugNoIncrement');
         }
         $sth = $this->db->conn_id->prepare($query);
         $sth->bindParam(':slug',$slug);
