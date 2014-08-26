@@ -21,14 +21,6 @@ class AccountService extends MY_Controller
 
     }
 
-    /**
-     *  Loading of test view for accountservice
-     *  @return View
-     */
-    public function index() 
-    {
-        $this->load->view("pages/accounts");
-    }
 
     /**
      *  Method to access the product_model with the getProdCount method to return the count of a certain product
