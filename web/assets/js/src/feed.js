@@ -17,8 +17,9 @@
                 ($(document).height() > ($(window).height() + 151 )  )){
                 //rightpanel.switchClass( "", "feed-pos-ab-bttm", 100, "swing" );
                 //leftpanel.switchClass( "", "feed-pos-ab-bttm", 100, "swing" );        
-                leftpanel.addClass('feed-pos-ab-bttm');
-                rightpanel.addClass('feed-pos-ab-bttm');
+                leftpanel.addClass('feed-left-panel-fix feed-pos-ab-bttm');
+                midpanel.addClass('feed-middle-panel-fix');
+                rightpanel.addClass('feed-right-panel-fix feed-pos-ab-bttm');
             }
 
             else if(windowpos >= pos){
@@ -34,6 +35,8 @@
 
             }
         });
+        
+        $(window).trigger(scroll);
         
     });
     
