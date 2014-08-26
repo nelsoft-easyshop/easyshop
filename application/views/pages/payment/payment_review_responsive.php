@@ -92,7 +92,7 @@
 		<div class="col-md-6">
 			<div class="panel panel-default no-border" style="background:#f4f4f4; border:0px; padding:10px; ">
 				<h2 class="h2-title">Order Summary</h2>
-				<p>You have 2 item/s to checkout.</p>
+				<p>You have <?php echo count($cat_item);?> item/s to checkout.</p>
 				<table width="100%" class="table font-12">
 					<tr class="tr-header-summary">
 						<th style="padding-top: 10px; padding-bottom: 10px;" width="40%">Product</th>
