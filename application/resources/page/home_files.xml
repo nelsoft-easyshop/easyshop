@@ -5,22 +5,11 @@
         <value>Announcement</value>
         <type>text</type>
     </header>
-    
+
     <text>
-        <value>Welcome to Easyshop.ph! We are making the website available to the public for the first time. Feel free to report any bugs you find.</value>
+        <value>Welcome to Easyshop.ph, enjoy the benefits of one-stop shopping at the comforts of your own home.</value>
         <type>text</type>
     </text>
-    
-    
-    <typeNode>
-        <value>Image</value>
-    </typeNode>
-
-    <typeNode>
-        <value>Product</value>
-    </typeNode>
-    
-
 
     <mainSlide>
         <value>assets/images/mainslide/140708220723.jpg</value>
@@ -39,8 +28,6 @@
             <target>home</target>
         </imagemap>
     </mainSlide>
-    
-    
 
     <mainSlide>
         <value>assets/images/mainslide/2.jpg</value>
@@ -51,372 +38,246 @@
         </imagemap>
     </mainSlide>
 
-    
 
-    
-    
-    
-    
+
     <productSlide_title>
         <value>Hot and New</value>
         <type>text</type>
     </productSlide_title>
-    
+
     <productSlide>
-        <value>test1</value>
+        <value>kj-star-wireless-mobile-phone-monopod</value>
         <type>product</type>
     </productSlide>
-    
+
     <productSlide>
-        <value>test1</value>
+        <value>sports-cam</value>
         <type>product</type>
     </productSlide>
-    
+
     <productSlide>
-        <value>test1</value>
+        <value>n9-super-smart-watch-phone</value>
         <type>product</type>
     </productSlide>
-    
+
     <productSideBanner>
-        <value>test</value>
+        <value>action-camcorder-hd-720p</value>
         <type>product</type>
     </productSideBanner>
 
-   <section>
+    <section>
 
         <type>custom</type>
-        <value>patriots21</value>
+        <value>es1td</value>
         <css_class>red_cat</css_class>
-        <layout>layoutA</layout>
+        <title>Jabra</title>
+        <layout>layoutA</layout>    
 
         <product_panel_main>
-            <value>test</value>
-            <type>product</type>
+            <value>assets/images/partner/jabra.jpg</value>    
+                <type>image</type>
+            <imagemap>
+            <coordinate>0,0,486,351</coordinate>
+            <target>es1td</target>
+            </imagemap>
+
         </product_panel_main>
-        
-         <product_panel_main>
-            <value>test</value>
-            <type>product</type>
-       </product_panel_main>
-        
-         <product_panel_main>
-            <value>test</value>
-            <type>product</type>
-        </product_panel_main>
-        
+
+
+
         <product_panel>
-            <value>test</value>
-            <type>product</type>
-        </product_panel>
-        
-       <product_panel>
-            <value>test</value>
-            <type>product</type>
-        </product_panel>
-        
-        <product_panel>
-            <value>test</value>
+            <value>jabra-classic</value>
             <type>product</type>
         </product_panel>
 
         <product_panel>
-            <value>test</value>
+            <value>jabra-freeway</value>
             <type>product</type>
         </product_panel>
-        
+
         <product_panel>
-            <value>test</value>
+            <value>jabra-solemate-mini-black</value>
             <type>product</type>
         </product_panel>
-        
+
         <product_panel>
-            <value>test</value>
+            <value>jabra-revo-wireless-headphone</value>
             <type>product</type>
         </product_panel>
-        
+
         <product_panel>
-            <value>test</value>
+            <value>jabra-play-headset</value>
             <type>product</type>
         </product_panel>
-        
+
         <product_panel>
-            <value>test</value>
+            <value>jabra-tag-mp3</value>
             <type>product</type>
         </product_panel>
-      
+
+        <product_panel>
+            <value>jabra-sport-wireless-bluetooth-stereo-headphones</value>
+            <type>product</type>
+        </product_panel>
+
+        <product_panel>
+            <value>jabra-motion-bluetooth-headset</value>
+            <type>product</type>
+        </product_panel>
+
     </section>
-    
-    
+
     <section>
 
         <type>category</type>
-        <value>2</value>
+        <value>12</value>
         <css_class>blue_cat</css_class>
         <layout>layoutB</layout>
+
+        <product_panel_main>
+            <value>zodiac-sign-cup</value>
+            <type>product</type>
+        </product_panel_main>
+
+        <product_panel_main>
+            <value>heart-in-love-with-spoon-and-cover</value>
+            <type>product</type>
+        </product_panel_main>
+        
+         <product_panel_main>
+            <value>table-mate-ii</value>
+            <type>product</type>
+        </product_panel_main>
+        
+         <product_panel_main>
+            <value>stainless-steel-pineapple-corer</value>
+            <type>product</type>
+        </product_panel_main>
+        
+          
+         <product_panel_main>
+            <value>versatile-11-in-1-pocket-multi-tool-card</value>
+            <type>product</type>
+        </product_panel_main>
         
         <product_panel_main>
-            <value>test</value>
+            <value>drinklip-cup-holder</value>
             <type>product</type>
         </product_panel_main>
         
-         <product_panel_main>
-            <value>test</value>
-            <type>product</type>
-       </product_panel_main>
-        
-         <product_panel_main>
-            <value>test</value>
-            <type>product</type>
-        </product_panel_main>
-        
+
         <product_panel>
-            <value>test</value>
-            <type>product</type>
-        </product_panel>
-        
-       <product_panel>
-            <value>test</value>
-            <type>product</type>
-        </product_panel>
-        
-        <product_panel>
-            <value>test</value>
+            <value>charm-stripe-tumbler</value>
             <type>product</type>
         </product_panel>
 
-        
         <product_panel>
-            <value>test</value>
+            <value>stripes-feelings-mug-with-cover</value>
             <type>product</type>
         </product_panel>
-        
+
         <product_panel>
-            <value>test</value>
+            <value>cute-3-in-1-keyboard-shaped-brush-puncher-stapler</value>
             <type>product</type>
         </product_panel>
-        
+
+
         <product_panel>
-            <value>test</value>
+            <value>fashionable-piano-inspired-clothing-hanger</value>
             <type>product</type>
         </product_panel>
-        
+
         <product_panel>
-            <value>test</value>
+            <value>fastest-egg-steamer-poacher</value>
             <type>product</type>
         </product_panel>
-        
+
         <product_panel>
-            <value>test</value>
+            <value>portable-water-bottle-wringtoss-game</value>
             <type>product</type>
         </product_panel>
-      
+
+        <product_panel>
+            <value>smart-foldable-pocket-knife</value>
+            <type>product</type>
+        </product_panel>
+
+        <product_panel>
+        <value>smart-digital-measuring-cup</value>
+            <type>product</type>
+        </product_panel>
+
+
     </section>
-    
-    
-    
-   <section>
 
-        <type>category</type>
-        <value>2</value>
-        <css_class>blue_cat</css_class>
-        <layout>layoutC</layout>
-        
-        <product_panel_main>
-            <value>test</value>
-            <type>product</type>
-        </product_panel_main>
-        
-         <product_panel_main>
-            <value>test</value>
-            <type>product</type>
-       </product_panel_main>
-        
-         <product_panel_main>
-            <value>test</value>
-            <type>product</type>
-        </product_panel_main>
-        
-        <product_panel>
-            <value>test</value>
-            <type>product</type>
-        </product_panel>
-        
-       <product_panel>
-            <value>test</value>
-            <type>product</type>
-        </product_panel>
-        
-        <product_panel>
-            <value>test</value>
-            <type>product</type>
-        </product_panel>
-
-        
-        <product_panel>
-            <value>test</value>
-            <type>product</type>
-        </product_panel>
-        
-        <product_panel>
-            <value>test</value>
-            <type>product</type>
-        </product_panel>
-        
-        <product_panel>
-            <value>test</value>
-            <type>product</type>
-        </product_panel>
-        
-        <product_panel>
-            <value>test</value>
-            <type>product</type>
-        </product_panel>
-        
-        <product_panel>
-            <value>test</value>
-            <type>product</type>
-        </product_panel>
-      
-    </section>
-    
-    
     <section>
 
         <type>category</type>
-        <value>2</value>
-        <css_class>blue_cat</css_class>
-        <layout>layoutD</layout>
-        
-        <product_panel_main>
-            <value>test</value>
-            <type>product</type>
-        </product_panel_main>
-        
-         <product_panel_main>
-            <value>test</value>
-            <type>product</type>
-       </product_panel_main>
-        
-         <product_panel_main>
-            <value>test</value>
-            <type>product</type>
-        </product_panel_main>
-        
-        <product_panel>
-            <value>test</value>
-            <type>product</type>
-        </product_panel>
-        
-       <product_panel>
-            <value>test</value>
-            <type>product</type>
-        </product_panel>
-        
-        <product_panel>
-            <value>test</value>
-            <type>product</type>
-        </product_panel>
-
-        
-        <product_panel>
-            <value>test</value>
-            <type>product</type>
-        </product_panel>
-        
-        <product_panel>
-            <value>test</value>
-            <type>product</type>
-        </product_panel>
-        
-        <product_panel>
-            <value>test</value>
-            <type>product</type>
-        </product_panel>
-        
-        <product_panel>
-            <value>test</value>
-            <type>product</type>
-        </product_panel>
-        
-        <product_panel>
-            <value>test</value>
-            <type>product</type>
-        </product_panel>
-      
-    </section>
-    
-   
-     <section>
-
-        <type>category</type>
-        <value>2</value>
+        <value>3</value>
         <css_class>orange_cat</css_class>
         <layout>layoutE</layout>
+
+        
         
         <product_panel_main>
-            <value>test</value>
+            <value>korean-quality-crown-lover-pony-tail</value>
             <type>product</type>
         </product_panel_main>
-        
-         <product_panel_main>
-            <value>test</value>
-            <type>product</type>
-       </product_panel_main>
-        
-         <product_panel_main>
-            <value>test</value>
+
+        <product_panel_main>
+            <value>the-make-up-of-make-up-artists</value>
             <type>product</type>
         </product_panel_main>
-        
-        <product_panel>
-            <value>test</value>
+
+        <product_panel_main>
+            <value>aqua-de-gio</value>
             <type>product</type>
-        </product_panel>
-        
-       <product_panel>
-            <value>test</value>
-            <type>product</type>
-        </product_panel>
-        
+        </product_panel_main>
+
         <product_panel>
-            <value>test</value>
+            <value>glitz-and-bling-parfum-extreme</value>
             <type>product</type>
         </product_panel>
 
-        
         <product_panel>
-            <value>test</value>
+            <value>ck-be-jumbo-edt-perfume-unisex</value>
+            <type>product</type>
+        </product_panel>
+
+        <product_panel>
+            <value>nova-2-in-1-hair-beauty-set</value>
+            <type>product</type>
+        </product_panel>
+
+
+        <product_panel>
+            <value>aveeno-skin-relief-moisturising-cream</value>
+            <type>product</type>
+        </product_panel>
+
+        <product_panel>
+            <value>one-earth-organics-cellular-regeneration-underarm-therapy</value>
             <type>product</type>
         </product_panel>
         
-        <product_panel>
-            <value>test</value>
-            <type>product</type>
-        </product_panel>
         
+
         <product_panel>
-            <value>test</value>
+            <value>korean-quality-crown-lover-pony-tail</value>
             <type>product</type>
         </product_panel>
-        
+
         <product_panel>
-            <value>test</value>
+            <value>the-make-up-of-make-up-artists</value>
             <type>product</type>
         </product_panel>
-        
+
         <product_panel>
-            <value>test</value>
+            <value>aqua-de-gio</value>
             <type>product</type>
         </product_panel>
-      
+
     </section>
-    
-    
-   
-    
-    
-    
-    
-    
-    
+
+
 </map>
