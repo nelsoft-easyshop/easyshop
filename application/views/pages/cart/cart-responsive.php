@@ -37,7 +37,7 @@
 						$attr=$key[$a];
 						$attr_value=$row['options'][$key[$a]];
 						$attr_value2 = explode('~', $attr_value);
-						echo  '<span class="attr">'.html_escape($attr).':</span></td><td> <span class="attr_content">'.html_escape($attr_value2[0]).'</span>';
+						echo  '<span class="attr">'.html_escape($attr).':</span><span >'.html_escape($attr_value2[0]).'</span><br/>';
 					}
 					}
 				?>
@@ -116,7 +116,7 @@
 									</td>
 								</tr>
 							</table>
-							<br/>
+							
 						</div>
 						<div class="col-sm-1">
 							
@@ -147,10 +147,25 @@
 									<td>
 										<b class="b-label">Availability: </b>
 									</td>
-									<td style="padding-left: 5px;">
-										<span class="p-price"><?php echo $row['maxqty']; ?></p>
+									<td style="padding-left: 5px; margin-top: 5px; font-size: 12px;">
+										
+										<?php echo $row['maxqty']; ?>
 									</td>
 								</tr>
+								<br/>
+								 <?php 
+									if(!array_filter($row['options'])){
+										echo  '<tr><td colspan=\'2\'><span class="attr b-label">No additional details</span></td></tr>';
+									}else{                                    
+									$key =  array_keys($row['options']); //get the key of options,used in checking the product in the database
+									for($a=0;$a < sizeof($key);$a++){
+										$attr=$key[$a];
+										$attr_value=$row['options'][$key[$a]];
+										$attr_value2 = explode('~', $attr_value);
+										echo  '<tr><td><span class="attr b-label"><b>'.html_escape($attr).':</b></span></td><td style="padding-left: 5px;"><span class="font-12">'.html_escape($attr_value2[0]).'</span></td></tr>';
+									}
+									}
+								?>
 							</table>
 						</div>
 					</div>
