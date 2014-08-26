@@ -102,15 +102,36 @@
          */
         public function spendUserPoint($userId, $points)
         {
+
+            // Get deduct point type instance
+            $deduct = $this->em->getRepository('EasyShop\Entities\EsPointType')
+                                            ->findOneBy(['name' => 'deduct']);
+
             // Get Point object
             $userPoint = $this->em->getRepository('EasyShop\Entities\EsPoint')
                                         ->findOneBy(['m' => $userId]);
 
-            if($userPoint === null || $userPoint->getPoint() < $points){
+            // Get Member object
+            $user = $this->em->getRepository('EasyShop\Entities\EsMember')
+                                    ->find($userId);
+
+           
+            if($userPoint === null || $userPoint->getPoint() < $points || 
+                $deduct === null){
+
                 return false;
             }
             else{
                 $userPoint->setPoint($userPoint->getPoint() - $points);
+
+                // Update points history table
+                $pointHistory = new EsPointHistory();
+                $pointHistory->setM($user);
+                $pointHistory->setType($deduct);
+                $pointHistory->setDateAdded(date_create(date("Y-m-d H:i:s")));
+                $pointHistory->setPoint(-$points);
+
+                $this->em->persist($pointHistory);
                 $this->em->flush();
                 return true;
             }
