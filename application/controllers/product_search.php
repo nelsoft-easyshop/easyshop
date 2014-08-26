@@ -338,23 +338,14 @@ class product_search extends MY_Controller {
      *   Route: search/(:any)
      */
     function searchfaster()
-    {
-        $category = $this->input->get('c')?$this->input->get('c') : 1;
-        $string =  $this->input->get('s')?$this->input->get('s') : '';
-    	if($string !== ''){
-            /* Prepare words for query. */
-            $words = explode(" ",html_escape(trim(urldecode($string))));
-            $implodeWords = implode('* ', $words) . '*';
-            echo 'Words: '. $implodeWords .'<br/>';
-            $get = $this->input->get();
-            unset($_GET['s']);
-            unset($_GET['c']);
-
-            echo 'Other parameters: ', print_r($this->input->get());
-        }
-        else{
-            echo 'no words';
-        }
+    { 
+        $searchProductService = $this->serviceContainer['search_product']; 
+        // $product = $searchProductService->filterByCategory(array('459',458)); 
+        // foreach ($product as $key => $value) {
+        //     echo $value->getName();
+        // }
+        $string = $this->input->get('q_str');
+        $product = $searchProductService->filterBySearchString($string); 
     }
     
     /**

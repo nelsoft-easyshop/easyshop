@@ -102,6 +102,11 @@ class Kernel
             return new \EasyShop\PointTracker\PointTracker();
         };
 
+        // Search product
+        $container['search_product'] = function ($c) {
+            return new \EasyShop\SearchProduct\SearchProduct();
+        };
+
         /* Register services END */
         $this->serviceContainer = $container;
     }
