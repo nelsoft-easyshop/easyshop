@@ -9,12 +9,14 @@ class Contentwebservice extends MY_Controller
      *  
      */
     private $map, $targetNode, $xmlCmsService;
+    public $xmlFileService;
     
     public function __construct()
     {
         parent::__construct();
-        $this->declareEnvironment();
         $this->xmlCmsService = $this->serviceContainer['xml_cms'];
+        $this->xmlFileService = $this->serviceContainer['xml_resource'];
+        $this->declareEnvironment();
         if($this->input->post()) {
             $this->authentication($this->input->post(), $this->input->post('hash'));
         }  
@@ -25,7 +27,7 @@ class Contentwebservice extends MY_Controller
      */
     public function declareEnvironment()
     {
-        $this->file = APPPATH . "resources/page/content_files.xml"; 
+        $this->file  = APPPATH . "resources/". $this->xmlFileService->getContentXMLfile().".xml"; 
         $this->map = new SimpleXMLElement(file_get_contents($this->file));
 
     }
