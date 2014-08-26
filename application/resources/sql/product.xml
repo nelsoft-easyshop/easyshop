@@ -1052,8 +1052,8 @@ FROM
                 AND a.vendor_id = c.id_member 
                 AND b.`id_product` = d.`product_id` 
                 AND d.`is_primary` = 1 
-                AND (b.`is_delete` 
-                    AND b.`is_draft`) = 0 
+                AND b.`is_delete` = 0
+                AND b.`is_draft` = 0
                 AND b.id_product NOT IN ({product_ids})
             ORDER BY createddate DESC) AS tbl 
         UNION
@@ -1090,8 +1090,8 @@ FROM
                 AND b.`id_product` = c.`product_id` 
                 AND b.id_product NOT IN ({product_ids}) 
                 AND c.is_primary = 1 
-                AND (b.`is_delete` 
-                    AND b.`is_draft`) = 0 
+                AND b.`is_delete` = 0
+                AND b.`is_draft` = 0
             ORDER BY RAND()) AS tbl2) table_feed 
     ORDER BY rank LIMIT {limit}
 
