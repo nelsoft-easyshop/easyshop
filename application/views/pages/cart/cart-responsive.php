@@ -26,22 +26,22 @@
 			<td style="align:left;">
 				<a class="product_title" href="<?=base_url().'item/'.$row['slug'];?>"> <?php echo html_escape($row['name']); ?></a>
 				
-				<span class="display-when-desktop" style="font-size: 12px;">
+				
 				<br/>
 				 <?php 
 					if(!array_filter($row['options'])){
-						echo  '<span class="attr">No additional details</span>';
+						echo  '<span class="attr b-label font-12">No additional details</span>';
 					}else{                                    
 					$key =  array_keys($row['options']); //get the key of options,used in checking the product in the database
 					for($a=0;$a < sizeof($key);$a++){
 						$attr=$key[$a];
 						$attr_value=$row['options'][$key[$a]];
 						$attr_value2 = explode('~', $attr_value);
-						echo  '<span class="attr">'.html_escape($attr).':</span><span >'.html_escape($attr_value2[0]).'</span><br/>';
+						echo  '<span class="attr b-label font-12">'.html_escape($attr).':</span><span class="b-label font-12">'.html_escape($attr_value2[0]).'</span><br/>';
 					}
 					}
 				?>
-				</span>
+				
 			</td>
 			<td style="vertical-align:top; text-align:center;">
 				<span class="span-price">
