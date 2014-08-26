@@ -17,7 +17,7 @@ class product_search extends MY_Controller {
     /*   
      *   Number of returned products per request
      */
-    public $per_page = 12; 
+    public $per_page = 15; 
 	
 	/**
 	*  Advance search main function
