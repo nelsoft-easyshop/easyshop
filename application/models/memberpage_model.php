@@ -1471,12 +1471,12 @@ class memberpage_model extends CI_Model
         
         foreach( $vendorCategories as $vendorCategory ){
             if( !isset($data[$vendorCategory['parent_cat']]) ){
-                
-                if( $vendorCategory['p_cat_img'] !== "" ){
-                    $catImg = "assets/" . substr($vendorCategory['p_cat_img'],0,strrpos($vendorCategory['p_cat_img'],'.')) . "_small.png";
+                $catImg = "assets/" . substr($vendorCategory['p_cat_img'],0,strrpos($vendorCategory['p_cat_img'],'.')) . "_small.png";
+                if( $vendorCategory['p_cat_img'] !== "" && file_exists($catImg)){
+                    $categoryImage = $catImg;
                 }
                 else{
-                    $catImg = $defaultCatImg;
+                    $categoryImage = $defaultCatImg;
                 }
                 
                 $data[$vendorCategory['parent_cat']] = array(
@@ -1487,7 +1487,7 @@ class memberpage_model extends CI_Model
                     'count' => 0,
                     'loadmore_link' => base_url() . 'advsrch?_us=' . $username . '&_cat=' . $vendorCategory['parent_cat'],
                     'cat_link' => base_url(). 'category/' . $vendorCategory['p_cat_slug'],
-                    'cat_img' => $catImg
+                    'cat_img' => $categoryImage
                 );
             }
             $data[$vendorCategory['parent_cat']]['child_cat'][] = $vendorCategory['cat_id'];
