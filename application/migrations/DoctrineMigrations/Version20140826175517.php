@@ -19,7 +19,7 @@ class Version20140826175517 extends AbstractMigration
             ADD COLUMN `data` VARCHAR(1024) NOT NULL DEFAULT '' AFTER `type`;");
 
         $this->addSql("
-            CREATE TABLE `easyshop`.`es_point_gateway` (
+            CREATE TABLE `easyshop`.`es_payment_gateway` (
                 `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
                 `payment_method_id` INT(11) NOT NULL DEFAULT '0',
                 `amount` DECIMAL(15,4) NULL DEFAULT '0.0000',
@@ -51,7 +51,7 @@ class Version20140826175517 extends AbstractMigration
             DROP COLUMN `data`;");
 
         $this->addSql("
-            DROP TABLE `easyshop`.`es_point_gateway`;");
+            DROP TABLE `easyshop`.`es_payment_gateway`;");
 
         $this->addSql("
             ALTER TABLE `easyshop`.`es_point_type` 
