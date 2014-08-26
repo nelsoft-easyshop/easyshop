@@ -94,20 +94,20 @@ function askDraft(location)
             open: function() {
             },
             buttons: {
-                "Yes Save as Draft and Leave": function() {
+                "Save as draft": function() {
                     $(".ui-dialog-title").text('Please wait while saving your data...'); 
                     saveAsDraftProceed();
                     window.location = location;
                 },
-                "Dont save as draft just leave": function() {
+                "Don't save as draft": function() {
                     $(".ui-dialog-title").text('Please wait...'); 
                     window.location = location;
                 },
-                "Dont leave": function() { 
+                "Cancel": function() { 
                     $(this).dialog("close");
                 }
             },
-            "title": "Your about to leave this page without saving. Do you want this to save as draft?"
+            "title": "You are about to leave the page without completing the process. Save this listing in your drafts?"
         });   
     }
     else{ 
@@ -119,13 +119,13 @@ function askDraft(location)
             open: function() {
             },
             buttons: {
-                "Ok I understand": function() {
+                "Proceed": function() {
                     $(".ui-dialog-title").text('Please wait while saving your data...'); 
                     saveAsDraftProceed();
                     window.location = location;
                 }
             },
-            "title": "Remember this item is in your draft you can edit this in step1 page."
+            "title": "This listing is about to be saved in your drafts."
         });
     }
 }
@@ -323,22 +323,217 @@ function checkOptionValue(selector,id,value,evt)
     $('body').click();
 }
 
+
+function proceedStep3(url)
+{
+    $('#form_product').ajaxForm({
+        url: url,
+        dataType: "json",
+        beforeSubmit : function(arr, $form, options){
+
+            var combination = processCombination();
+            console.log(combination);
+            var attributes = processAttributes(); 
+            console.log(attributes);
+
+            var percentVal = '0%';
+            $('.percentage').html(percentVal);
+            $( ".button_div" ).hide();
+            $( ".loader_div" ).show();
+
+            $('<input type="hidden">').attr({
+                  id: 'primaryPicture',
+                  name: 'primaryPicture',
+                  value: primaryPicture
+                }).appendTo('form');
+            arr.push({"name":"primaryPicture", "value":primaryPicture});
+
+            $('<input type="hidden">').attr({
+                  id: 'removeThisPictures',
+                  name: 'removeThisPictures',
+                  value: JSON.stringify(removeThisPictures)
+                }).appendTo('form');
+            arr.push({"name":"removeThisPictures", "value":JSON.stringify(removeThisPictures)});
+
+            $('<input type="hidden">').attr({
+                  id: 'combination',
+                  name: 'combination',
+                  value: combination
+                }).appendTo('form');
+            arr.push({"name":"combination","value":combination});
+
+            $('<input type="hidden">').attr({
+                  id: 'attributes',
+                  name: 'attributes',
+                  value: attributes
+                }).appendTo('form');
+            arr.push({"name":"attributes","value":attributes});
+
+
+        },
+        uploadProgress : function(event, position, total, percentComplete) {
+            var percentVal = percentComplete + '%';
+            $('.percentage').empty();
+            if(percentComplete >= 100){
+                percentVal = '100%'
+                $('.percentage').html(percentVal);
+            }else{
+                $('.percentage').html(percentVal);
+            }
+        },
+        success :function(d) { 
+            $('.percentage').html('100%');
+            if (d.e == 1) {
+                $('#prod_h_id').val(d.d); 
+                document.getElementById("hidden_form").submit();
+            } else {
+                $( ".button_div" ).show();
+                $( ".loader_div" ).hide();
+                $('.percentage').empty();
+                alert(d.d);
+            } 
+        },
+        error: function (request, status, error) {
+            $( ".button_div" ).show();
+            $( ".loader_div" ).hide();
+            $('.percentage').empty();
+            response = request.responseText;
+            if (response.toLowerCase().indexOf("1001") >= 0){
+                alert('Something went wrong. Some of the images you are trying to upload for this listing are too large.');
+            }else{
+                alert('Something went wrong. Please try again.');
+            }
+        } 
+    }); 
+}
+
+
+
+function saveAsDraftProceed(url)
+{
+    $('.arrayNameOfFiles').val(JSON.stringify(af));
+    tinyMCE.triggerSave(); 
+    $('#form_product').ajaxForm({ 
+        url: url,
+        dataType: "json",
+        async: false,
+        beforeSubmit : function(arr, $form, options){
+            var combination = processCombination();
+            var attributes = processAttributes(); 
+
+            $('<input type="hidden">').attr({
+                  id: 'primaryPicture',
+                  name: 'primaryPicture',
+                  value: primaryPicture
+            }).appendTo('form');
+            arr.push({name:'primaryPicture', value:primaryPicture});
+
+            $('<input type="hidden">').attr({
+              id: 'removeThisPictures',
+              name: 'removeThisPictures',
+              value: JSON.stringify(removeThisPictures)
+            }).appendTo('form');
+            arr.push({name:'removeThisPictures', value:JSON.stringify(removeThisPictures)});
+
+            $('<input type="hidden">').attr({
+              id: 'combination',
+              name: 'combination',
+              value: combination
+            }).appendTo('form');
+            arr.push({name:'combination',value:combination});
+
+            $('<input type="hidden">').attr({
+                id: 'attributes',
+                name: 'attributes',
+                value: attributes
+            }).appendTo('form');
+            arr.push({name:'attributes',value:attributes});
+
+            $('<input type="hidden">').attr({
+                id: 'savedraft',
+                name: 'savedraft',
+                value: '1'
+            }).appendTo('form');
+            arr.push({name:'savedraft',value:'1'});
+
+        },success :function(d) { 
+            $("#form_product").attr("action", "/sell/edit/processing");
+            $("#form_product").append('<input type="hidden" name="p_id" id="p_id" value="'+d.d+'">');
+            $("#edit_step1 > #p_id").val(d.d);
+        }
+    }).submit(); 
+}
+
+function processCombination()
+{
+    var completeCombination = [];   
+    $(".div-combination").each(function(){
+
+        var currentDiv = $(this);
+        var selectList = currentDiv.children('.div2').children('span');
+
+        var eachData = {};
+        var eachCombination = {};
+        var itemId = 0;
+        if (currentDiv.data("itemid") != undefined) {
+            itemId = currentDiv.data("itemid");
+        }
+
+        selectList.each(function(){
+            var currentSelect = $(this);
+            var optionSelected = $(this).children('select').children('option:selected');
+            var head = optionSelected.data('head');
+             var value = optionSelected.data('value');
+            var price = optionSelected.data('price');
+            eachData[head] = value; 
+        });
+
+        eachCombination.quantity = currentDiv.children('.div1').children('.qty').val(); 
+        eachCombination.data = eachData; 
+        eachCombination.itemid = itemId; 
+        console.log(eachCombination);
+        completeCombination.push(eachCombination);
+    });
+
+    return JSON.stringify(completeCombination);
+}
+
+function processAttributes()
+{
+    var span = $('.select-control-panel-option > .div2 > span');
+    var completeAttributes = {}; 
+    span.each(function(){
+        var currentSelect = $(this);
+        var select = $(this).children('select').children('option');
+        var currentHead;
+        var eachHead = [];
+        select.each(function(){
+            var eachValue = {};
+            var optionSelected = $(this);
+            var head = currentHead = optionSelected.data('head');
+            var value = optionSelected.data('value');
+            var price = optionSelected.data('price');
+            var image = optionSelected.data('image');
+            eachValue.value =value;
+            eachValue.price =price;
+            eachValue.image =image;
+            eachHead.push(eachValue);
+        });
+        completeAttributes[currentHead] =  eachHead;
+        
+    });
+
+    return JSON.stringify(completeAttributes);
+}
+
+
 (function($) {
-    
+
      // if keyword change. counter will change also either increase or decrease until reach its limit..
     updateCountdown();
     $('#prod_keyword').change(updateCountdown);
     $('#prod_keyword').keyup(updateCountdown); 
 
-    // search brand 
-    $('#brand_sch').focus(function() {
-        $('#brand_search_drop_content').show();
-        $(document).bind('focusin.brand_sch_drop_content click.brand_sch_drop_content',function(e) {
-          if ($(e.target).closest('#brand_search_drop_content, #brand_sch').length) return;
-          $('#brand_search_drop_content').hide();
-      });
-    });
-    $('#brand_search_drop_content').hide();
 
     $('#prod_price').on('change', function(){
         var prcnt = parseFloat($("#slider_val").val().replace("%",''));
@@ -422,6 +617,7 @@ function checkOptionValue(selector,id,value,evt)
 
         var $this = $(this);
         var newval = (parseFloat($this.val()) > 100) ? 99 : (parseFloat($this.val()) == 0 || isNaN(parseFloat($this.val())))? 0 : parseFloat($this.val());
+        $(this).val(newval);
         get_discPrice();
         $rangeSlider.ionRangeSlider("update", {
             from: newval 
@@ -435,20 +631,25 @@ function checkOptionValue(selector,id,value,evt)
 
         var $this = $(this);
         var discountPrice = parseFloat($this.val());
+
+        if (isNaN(discountPrice) || $("#prod_price").val() <= 0) {
+            $(this).val('');
+            return false;
+        } 
         var basePrice = parseFloat($("#prod_price").val().replace(/,/g,''));
         var sum = ((basePrice - discountPrice) / basePrice) * 100;
         sum = sum.toFixed(4);
         validateWhiteTextBox("#discountedP");
 
         if(discountPrice > basePrice){
-            alert("Discount Price cannot be greater than base price.");
+            alert("Discounted price cannot be greater than base price.");
             $this.val("0.00");
             validateRedTextBox("#discountedP");
             return false;
         }
 
         if(discountPrice <= 0){
-            alert("Discount Price cannot be equal or less than 0.");
+            alert("Discounted price cannot be equal or less than 0.");
             $this.val("0.00");
             $( "span#discounted_price_con" ).text( "0.00" );
             validateRedTextBox("#discountedP");
@@ -552,7 +753,7 @@ var previous,editSelectedValue,editSelectedId;
         else{
             if(length > 0 && editSelectedValue != selectedValue){
                 $('#head-data').val(previous).trigger("liszt:updated");
-                alert(selectedValue +' already exist in the selection');
+                alert(selectedValue +' already exists in the selection.');
             }
             else{
                 $('.value-data option').not(':selected').remove();
@@ -718,7 +919,7 @@ var previous,editSelectedValue,editSelectedId;
 
         var checkIfExist = checkCombination(currentStringId);
         if(checkIfExist == false){
-            alert('Combination Already Exist!');
+            alert('<span style="font-size:13px;">The quantity for this combination has already been assigned.</span>');
             return false;
         }
         var combinationQuantity = parseInt($('.select-control-panel-option > .div1 > .qty').val());
@@ -835,45 +1036,44 @@ var previous,editSelectedValue,editSelectedId;
 })( jQuery );
 // END of Manipulating of additional attributes
 
-// BRAND SEARCH
+/**
+ * Loading Brand Search Feature
+ */
 var currentRequest = null;
+ 
 (function($) {
+ 
     $('#brand_search_drop_content').hide();
     $(document).on('keyup','#brand_sch',function(){
-
-        $('#prod_brand').val(0)
-        $('#prod_brand').trigger( "change" );
-        jQuery(".brand_sch_loading").hide();
-        var searchQuery = $(this).val();
-        var csrftoken = $("meta[name='csrf-token']").attr('content');
-        var csrfname = $("meta[name='csrf-name']").attr('content');
+        $('#prod_brand').val(0).trigger( "change" ) 
+        $(".brand_sch_loading").hide();
+        var searchQuery = $(this).val().trim();
         if(searchQuery != ""){
-            currentRequest = jQuery.ajax({
+            currentRequest = $.ajax({
                 type: "GET",
-                url: config.base_url+'product_search/searchBrand', 
-                onLoading:jQuery(".brand_sch_loading").html('<img src="'+config.base_url+'assets/images/orange_loader_small.gif" />').show().css('display','inline-block'),
-                data: "data="+searchQuery+"&"+csrfname+"="+csrftoken, 
-                beforeSend : function(){       
+                url: config.base_url+'product_search/searchBrand',
+                data: "data="+searchQuery, 
+                beforeSend : function(){
                     if(currentRequest != null) {
                         currentRequest.abort();
                     }
-                    $('.brand_sch_drop_content').show();
                 },
                 success: function(response) {
                     currentRequest = null;
-                    var obj = jQuery.parseJSON(response);
+                    var obj = $.parseJSON(response);
                     var html = '<ul>';
                     if((obj.length)>0){
-                        jQuery.each(obj,function(){
-                            html += '<li class="brand_result" data-brandid="'+(this.id_brand) +'">'+(this.name)+'</li>' ;                             
+                        $('.brand_sch_drop_content').show();
+                        $.each(obj,function(){
+                            html += '<li class="brand_result" data-brandid="'+(this.id_brand) +'">'+(this.name)+'</li>';
                         });
-                        html += '<li class="add_brand blue">Use your own brand name</li>';
-                        jQuery(".brand_sch_loading").hide();
+                        html += '<li class="add_brand blue">Use <span style="font-style:italics;">'+searchQuery+'</span> as the brand of your listing</li>';
+                        $(".brand_sch_loading").hide();
                     }
                     else{
+                        $("#brand_search_drop_content").hide();
                         addNewBrand();
                     }
-
                     html += '</ul>';
                     $("#brand_search_drop_content").html(html);
 
@@ -896,39 +1096,46 @@ var currentRequest = null;
     });
 
     $('#brand_search_drop_content').on('click', 'li.brand_result', function(){
-        $this = $(this);     
-        $('#prod_brand').val($this.data('brandid'));
-        $("#brand_sch").val($this.text());
-        $('#prod_brand').trigger( "change" );
-        $("#brand_sch").trigger( "change" );
-        jQuery(".brand_sch_loading").html('<img src="'+config.base_url+'assets/images/check_icon.png" />').show().css('display','inline-block');
-
-        $('#brand_search_drop_content').hide();
+        $this = $(this);
+        $('#prod_brand').val($this.data('brandid')).trigger( "change" );
+        $("#brand_sch").val($this.text()).trigger( "change" ); 
+        $('#brand_search_drop_content').empty().hide(); 
+        $(".brand_sch_loading").html('<img src="'+config.base_url+'assets/images/check_icon.png" />').show().css('display','inline-block');
     });
 
-    $(document).on("click",".add_brand", function(){    
-        if(currentRequest != null) {
+    $(document).on("click",".add_brand", function(){
+        if(currentRequest != null){
             currentRequest.abort();
         }
-        addNewBrand();
+
+        if($('#brand_sch').val().trim() != ""){
+            addNewBrand();
+        }
+
         $('#brand_search_drop_content').hide();
     });
 
     $('#brand_sch').focusout(function(){
         var available = false;
-        $('#brand_search_drop_content li.brand_result').each(function(){
-            if($(this).text().toLowerCase() ===  $('#brand_sch').val().toLowerCase()){
-                $(this).click();
-                available = true;
-                return false;
-            }
-            if(!available){
-                addNewBrand();
-            }
-        });
-    });  
+        var $this = $(this);
+        var brandValue = $this.val();
+        var $searchDrop = $('#brand_search_drop_content li.brand_result');
 
-    $('#brand_sch').focus(function() {
+        if(brandValue.trim() != ""){
+            $searchDrop.each(function(){
+                if($searchDrop.text().toLowerCase() ===  brandValue.toLowerCase()){
+                    $searchDrop.click();
+                    available = true;
+                    return false;
+                }
+                if(!available){
+                    addNewBrand();
+                }
+            });
+        }
+    });
+
+    $('#brand_sch').focus(function() { 
         $('#brand_search_drop_content').show();
         $(document).bind('focusin.brand_sch_drop_content click.brand_sch_drop_content',function(e) {
             if ($(e.target).closest('#brand_search_drop_content, #brand_sch').length) return;
@@ -939,10 +1146,11 @@ var currentRequest = null;
     function addNewBrand(){
         $('#prod_brand').val(1)
         $('#prod_brand').trigger( "change" ); 
-        jQuery(".brand_sch_loading").html('<img src="'+config.base_url+'assets/images/img_new_txt.png" />').show().css('display','inline-block');
+        $(".brand_sch_loading").html('<img src="'+config.base_url+'assets/images/img_new_txt.png" />').show().css('display','inline-block');
     }
 })( jQuery );
 // BRAND SEARCH END
+ 
 
 
 // ES_UPLOADER BETA     
@@ -1017,7 +1225,7 @@ var pictureCountOther  = 0; var primaryPicture = 0;
                 imageName = tempId+'_'+memberId+'_'+fulldate+pictureCount+'.'+extension;
                 af.push(imageName+'||'+extension); 
                 afstart.push(imageName); 
-                window.URL.revokeObjectURL(fileList[i]);
+                // window.URL.revokeObjectURL(fileList[i]);
                 arrayUpload.push(pictureCount);
                 pictureCount++; 
             }
@@ -1057,7 +1265,7 @@ var pictureCountOther  = 0; var primaryPicture = 0;
                     $('.filescnt'+filescnt+' > .removepic').hide(); 
                 break;
                 default:
-                    alert('Invalid file type. Please choose another.');
+                    alert('Invalid file type. Please choose another image.');
                     removeThisPictures.push(pictureCount); 
                     return false;
                 break;
@@ -1079,7 +1287,7 @@ var pictureCountOther  = 0; var primaryPicture = 0;
     });
 
     function startUpload(cnt,filescnt,arrayUpload,afstart,imageName,errorValues){
-
+        canProceed = false;
         $('.counter').val(cnt); 
         $('.filescnttxt').val(filescnt); 
         $('#afstart').val(JSON.stringify(afstart));   
@@ -1099,7 +1307,7 @@ var pictureCountOther  = 0; var primaryPicture = 0;
                 $('.filescnt'+filescnt+' > .removepic').show(); 
                 canProceed = true; 
                 if(d.err == '1'){ 
-                    alert(d.msg, "The Following cannot be upload <br>" + errorValues);
+                    alert(d.msg, "The following images cannot be uploaded: <br>" + errorValues);
                     $.each( arrayUpload, function( key, value ) {
                         removeThisPictures.push(value); 
                         $('#previewList'+value).remove();
@@ -1107,7 +1315,7 @@ var pictureCountOther  = 0; var primaryPicture = 0;
                 }
                 else{
                     if(errorValues != ""){
-                        alert("The Following cannot be upload" ,errorValues);
+                        alert("The following images cannot be upload: " ,errorValues);
                     }
                 }
                 if(badIE == true){
@@ -1121,11 +1329,9 @@ var pictureCountOther  = 0; var primaryPicture = 0;
                 }
             },
             error: function (request, status, error) {
-                response = request.responseText;
-                var msg = (response.toLowerCase().indexOf("1001") >= 0) ? 'Sorry, the images you are uploading are too large.' : 'Sorry, we have encountered a problem.\nPlease try again after a few minutes.';
-                
-                alert(msg,"The Following cannot be upload",errorValues);
 
+                alert('Sorry, we have encountered a problem.\nPlease try again after a few minutes.');
+                
                 $.each( arrayUpload, function( key, value ) {
                     removeThisPictures.push(value); 
                     $('#previewList'+value).remove();
@@ -1173,18 +1379,26 @@ var pictureCountOther  = 0; var primaryPicture = 0;
     $(document).on('change',".attr-image-input",function (e){
  
         var val = $(this).val();
+        var size = this.files[0].size;
+
         extension = val.substring(val.lastIndexOf('.') + 1).toLowerCase();
 
         switch(extension){
             case 'gif': case 'jpg': case 'png': case 'jpeg':             
             break;
             default:
-                alert('Invalid file type. Please choose another.');
+                alert('Invalid file type. Please choose another image.');
                 return false;
             break;
         }
+
+        if(size > 5*1024*1024){
+            alert('Invalid file size. Please select an image that is not larger than 5 mB in size.');
+            return false;
+        }
  
         picName = tempId+'_'+memberId+'_'+fulldate+pictureCountOther+'o.'+extension;
+        canProceed = false;
         $('#other_files').ajaxForm({
             url: config.base_url+'productUpload/uploadimageOther',
             type: "POST", 
@@ -1207,10 +1421,12 @@ var pictureCountOther  = 0; var primaryPicture = 0;
                 }
                 else{
                     alert(d.msg);
+                    $('.image'+currentCnt+' > img,.pop-image-container > a > img').attr("src",config.base_url+'assets/images/img_upload_photo.jpg');
                 }
             },
             error: function (request, status, error) {
                 alert('Sorry, we have encountered a problem.','Please try again after a few minutes.');
+                $('.image'+currentCnt+' > img,.pop-image-container > a > img').attr("src",config.base_url+'assets/images/img_upload_photo.jpg');
                 canProceed = true;
             }
         }).submit();
@@ -1342,207 +1558,6 @@ var pictureCountOther  = 0; var primaryPicture = 0;
         saveAsDraftProceed();
         $('#edit_step1').submit();
     });
- 
-    function processCombination()
-    {
-        var completeCombination = [];   
-        $(".div-combination").each(function(){
-
-            var currentDiv = $(this);
-            var selectList = currentDiv.children('.div2').children('span');
-
-            var eachData = {};
-            var eachCombination = {};
-            var itemId = 0;
-            if (currentDiv.data("itemid") != undefined) {
-                itemId = currentDiv.data("itemid");
-            }
-
-            selectList.each(function(){
-                var currentSelect = $(this);
-                var optionSelected = $(this).children('select').children('option:selected');
-                var head = optionSelected.data('head');
-                 var value = optionSelected.data('value');
-                var price = optionSelected.data('price');
-                eachData[head] = value; 
-            });
-
-            eachCombination.quantity = currentDiv.children('.div1').children('.qty').val(); 
-            eachCombination.data = eachData; 
-            eachCombination.itemid = itemId; 
-            console.log(eachCombination);
-            completeCombination.push(eachCombination);
-        });
-
-        return JSON.stringify(completeCombination);
-    }
-
-    function processAttributes()
-    {
-        var span = $('.select-control-panel-option > .div2 > span');
-        var completeAttributes = {}; 
-        span.each(function(){
-            var currentSelect = $(this);
-            var select = $(this).children('select').children('option');
-            var currentHead;
-            var eachHead = [];
-            select.each(function(){
-                var eachValue = {};
-                var optionSelected = $(this);
-                var head = currentHead = optionSelected.data('head');
-                var value = optionSelected.data('value');
-                var price = optionSelected.data('price');
-                var image = optionSelected.data('image');
-                eachValue.value =value;
-                eachValue.price =price;
-                eachValue.image =image;
-                eachHead.push(eachValue);
-            });
-            completeAttributes[currentHead] =  eachHead;
-            
-        });
-
-        return JSON.stringify(completeAttributes);
-    }
-
-
-    function proceedStep3(url)
-    {
-        $('#form_product').ajaxForm({
-            url: url,
-            dataType: "json",
-            beforeSubmit : function(arr, $form, options){
-
-                var combination = processCombination();
-                console.log(combination);
-                var attributes = processAttributes(); 
-                console.log(attributes);
-
-                var percentVal = '0%';
-                $('.percentage').html(percentVal);
-                $( ".button_div" ).hide();
-                $( ".loader_div" ).show();
-
-                $('<input type="hidden">').attr({
-                      id: 'primaryPicture',
-                      name: 'primaryPicture',
-                      value: primaryPicture
-                    }).appendTo('form');
-                arr.push({"name":"primaryPicture", "value":primaryPicture});
-
-                $('<input type="hidden">').attr({
-                      id: 'removeThisPictures',
-                      name: 'removeThisPictures',
-                      value: JSON.stringify(removeThisPictures)
-                    }).appendTo('form');
-                arr.push({"name":"removeThisPictures", "value":JSON.stringify(removeThisPictures)});
-
-                $('<input type="hidden">').attr({
-                      id: 'combination',
-                      name: 'combination',
-                      value: combination
-                    }).appendTo('form');
-                arr.push({"name":"combination","value":combination});
-
-                $('<input type="hidden">').attr({
-                      id: 'attributes',
-                      name: 'attributes',
-                      value: attributes
-                    }).appendTo('form');
-                arr.push({"name":"attributes","value":attributes});
-
- 
-            },
-            uploadProgress : function(event, position, total, percentComplete) {
-                var percentVal = percentComplete + '%';
-                $('.percentage').empty();
-                if(percentComplete >= 100){
-                    percentVal = '100%'
-                    $('.percentage').html(percentVal);
-                }else{
-                    $('.percentage').html(percentVal);
-                }
-            },
-            success :function(d) { 
-                $('.percentage').html('100%');
-                if (d.e == 1) {
-                    $('#prod_h_id').val(d.d); 
-                    document.getElementById("hidden_form").submit();
-                } else {
-                    $( ".button_div" ).show();
-                    $( ".loader_div" ).hide();
-                    $('.percentage').empty();
-                    alert(d.d);
-                } 
-            },
-            error: function (request, status, error) {
-                $( ".button_div" ).show();
-                $( ".loader_div" ).hide();
-                $('.percentage').empty();
-                response = request.responseText;
-                if (response.toLowerCase().indexOf("1001") >= 0){
-                    alert('Something Went Wrong. The images you are uploading in [OTHER ATTRIBUTES] are too large.');
-                }else{
-                    alert('Something Went Wrong. Please try again.');
-                }
-            } 
-        }); 
-    }
-
-    function saveAsDraftProceed(url)
-    {
-        $('.arrayNameOfFiles').val(JSON.stringify(af));
-        tinyMCE.triggerSave(); 
-        $('#form_product').ajaxForm({ 
-            url: url,
-            dataType: "json",
-            async: false,
-            beforeSubmit : function(arr, $form, options){
-                var combination = processCombination();
-                var attributes = processAttributes(); 
-
-                $('<input type="hidden">').attr({
-                      id: 'primaryPicture',
-                      name: 'primaryPicture',
-                      value: primaryPicture
-                }).appendTo('form');
-                arr.push({name:'primaryPicture', value:primaryPicture});
-
-                $('<input type="hidden">').attr({
-                  id: 'removeThisPictures',
-                  name: 'removeThisPictures',
-                  value: JSON.stringify(removeThisPictures)
-                }).appendTo('form');
-                arr.push({name:'removeThisPictures', value:JSON.stringify(removeThisPictures)});
-
-                $('<input type="hidden">').attr({
-                  id: 'combination',
-                  name: 'combination',
-                  value: combination
-                }).appendTo('form');
-                arr.push({name:'combination',value:combination});
-
-                $('<input type="hidden">').attr({
-                    id: 'attributes',
-                    name: 'attributes',
-                    value: attributes
-                }).appendTo('form');
-                arr.push({name:'attributes',value:attributes});
-
-                $('<input type="hidden">').attr({
-                    id: 'savedraft',
-                    name: 'savedraft',
-                    value: '1'
-                }).appendTo('form');
-                arr.push({name:'savedraft',value:'1'});
-
-            },success :function(d) { 
-                $("#form_product").attr("action", "/sell/edit/processing");
-                $("#form_product").append('<input type="hidden" name="p_id" id="p_id" value="'+d.d+'">');
-                $("#edit_step1 > #p_id").val(d.d);
-            }
-        }).submit(); 
-    }
 
     function disableF5(e) { if ((e.which || e.keyCode) == 116) e.preventDefault(); };
     // To disable f5

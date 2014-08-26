@@ -67,16 +67,18 @@ if(!function_exists('directory_copy'))
 
         foreach($dir_map as $object_key=>$object_value)
         {
-        	if(is_numeric($object_key)){
-        		if(in_array(strtolower($object_value),$arrayNameOnly)){   	 
-	                copy($srcdir.'/'.$object_value,$dstdir.'/'.$object_value);//This is a File not a directory
-	                $filename = explode('_', $object_value);
-	                $newFileName = $pid.'_'.$filename[1].'_'.$filename[2];
-	                rename($dstdir.'/'.$object_value, $dstdir.'/'.$newFileName);
-	            }
-	        }else{
+            if(is_numeric($object_key)){
+                if(in_array(strtolower($object_value),$arrayNameOnly)){
+                    copy($srcdir.'/'.$object_value,$dstdir.'/'.$object_value);//This is a File not a directory
+                    $filename = explode('_', $object_value);
+                    unset($filename[0]);
+                    $newFileName =  $pid.'_'.implode('_', $filename);
+                    rename($dstdir.'/'.$object_value, $dstdir.'/'.$newFileName);
+                }
+            }
+            else{
                 directory_copy($srcdir.'/'.$object_key,$dstdir.'/'.$object_key,$pid,$arrayNameOnly);//this is a directory
-            }        	 
+            }
         }
 
         // //Deleting the directory contents
@@ -84,36 +86,6 @@ if(!function_exists('directory_copy'))
         // rmdir($srcdir);
     }
 }
-
-/**
- * Delete Directory
- *
- * Delete a directory recrusively ( all file and directories inside it )
- *
- * @param    string    path to source dir 
- *
- *  This is a potentially very dangerous function. Make sure that $directory
- *  have been validated before calling this. This function will allow for deleting of 
- *  files within the project.
- * 
- */  
-
-if(!function_exists('recursiveRemoveDirectory'))
-{
-    function recursiveRemoveDirectory($directory)
-    {
-        foreach(glob("{$directory}/*") as $file)
-        {
-            if(is_dir($file)) { 
-                recursiveRemoveDirectory($file);
-            } else {
-                unlink($file);
-            }
-        }
-        rmdir($directory);
-    }
-}
-
 
 /**
 * Ruthlessly strips emoji characters. 

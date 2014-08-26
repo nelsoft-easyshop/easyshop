@@ -1,4 +1,200 @@
 
+(function($) {
+    $(function() {
+        $('.jcarousel').jcarousel();
+
+        $('.jcarousel-control-prev')
+                .on('jcarouselcontrol:active', function() {
+            $(this).removeClass('inactive');
+        })
+                .on('jcarouselcontrol:inactive', function() {
+            $(this).addClass('inactive');
+        })
+                .jcarouselControl({
+            target: '-=1'
+        });
+
+        $('.jcarousel-control-next')
+                .on('jcarouselcontrol:active', function() {
+            $(this).removeClass('inactive');
+        })
+                .on('jcarouselcontrol:inactive', function() {
+            $(this).addClass('inactive');
+        })
+                .jcarouselControl({
+            target: '+=1'
+        });
+
+        $('.jcarousel-pagination')
+                .on('jcarouselpagination:active', 'a', function() {
+            $(this).addClass('active');
+        })
+                .on('jcarouselpagination:inactive', 'a', function() {
+            $(this).removeClass('active');
+        })
+                .jcarouselPagination();
+    });
+    
+    
+    
+    $(function(){    
+        var actionConstants = {
+            message: 0
+        }
+        
+        var action = $.cookie('es-productpage-action');
+        $.removeCookie('es-productpage-action');
+        
+        var uid = parseInt($('#user-id').val(), 10);
+        var seller_id = parseInt($('#seller-id').val(), 10);
+        if (uid ==  seller_id || uid == 0 ) {
+            $(".vendor-msg-modal").remove();
+            $("#modal-background").remove();
+            $("#modal-container").remove();
+        }
+
+        $("#modal-background, #modal-close").click(function() {
+            $("#modal-container, #modal-background").toggleClass("active");
+            $("#modal-container").hide();
+            $("#msg-message").val("");
+        });
+        
+        $(".modal_msg_launcher").click(function() {      
+            var isLoggedIn = ($(".es-data[name='is-logged-in']").val() == 'true');
+            if(!isLoggedIn){
+                $.cookie('es-productpage-action', actionConstants.message);
+                window.location.replace("/login");
+            }
+            else{
+                $("#modal-container, #modal-background").toggleClass("active");
+                $("#modal-container").show('fade',400);
+            }
+        });
+        
+        $("#modal_send_btn").on("click",function(){
+            var recipientUsername = $('#seller-username').val();
+            var csrftoken = $("meta[name='csrf-token']").attr('content');
+            var csrfname = $("meta[name='csrf-name']").attr('content');
+            var msg = $("#msg-message").val();
+            if (msg == "") {
+                alert("Say something..");
+                return false;
+            }
+            var msg = $("#msg-message").val();
+                $.ajax({
+                    async : true,
+                    type : "POST",
+                    dataType : "json",
+                    url : "/messages/send_msg",
+                    data : {recipient:recipientUsername,msg:msg,csrfname:csrftoken},
+                    success : function(data) {
+                        $("#modal-container, #modal-background").toggleClass("active");
+                        $("#modal-container").hide();
+                        $("#msg-message").val("");
+                        alert("Your message has been sent.");
+                    }
+                });
+        });
+        
+        if(action == actionConstants.message){
+            $(".modal_msg_launcher").click();
+        }
+        
+        
+  
+
+    });
+    
+    $(document).on('click','.prod_cat_drop',function() {
+        $(".category_nav").toggleClass("category_nav_plus");
+        $(".prod_cat_drop").toggleClass("active_prod_cat_drop_arrow");
+        
+        $(document).bind('focusin.prod_cat_drop click.prod_cat_drop',function(e) {
+                if ($(e.target).closest('.prod_cat_drop, .category_nav').length) return;
+                $('.category_nav').removeClass('category_nav_plus');
+                $('.prod_cat_drop').removeClass('active_prod_cat_drop_arrow');
+        });
+    });
+ 
+    $(function(){  
+        $('.category_nav').removeClass('category_nav_plus');
+        $('.prod_cat_drop').removeClass('active_prod_cat_drop_arrow');
+    });
+    
+ 
+    $(function(){  
+        
+        $('.mid_slide1').bxSlider({
+            mode: 'horizontal',
+            auto:true,
+            autoControls: true,
+            pause: 3500,
+            controls:false,
+            slideWidth: 510
+        });
+
+        $('.mid_slide2').bxSlider({
+            slideWidth: 160,
+            minSlides: 2,
+            maxSlides: 3,
+            moveSlides: 1,
+            slideMargin: 0,
+            infiniteLoop:true,
+            autoControls: false,
+            pager:false
+        });
+
+        $('.countdown_slides').bxSlider({
+            slideWidth: 220,
+            minSlides: 3,
+            maxSlides: 4,
+            moveSlides: 2,
+            slideMargin: 0,
+            infiniteLoop:true,
+            autoControls: false,
+            pager:false
+        });
+
+        $('.slider3').bxSlider({
+            slideWidth: 452,
+            minSlides: 1,
+            maxSlides: 1,
+            moveSlides: 1,
+            slideMargin: 0,
+            infiniteLoop:true,
+            autoControls: false,
+            pager:false
+        });
+
+        $('.bx-wrapper').addClass('slide_arrows');
+
+        //middle content top slides
+        $('.mid_slide1').parent('.bx-viewport').addClass('mid_top_slides');
+
+        //middle content countdown slides
+        $('.countdown_slides').parent('.bx-viewport').parent('.bx-wrapper').addClass('countdown_slides_wrapper');
+
+        //middle content bottom slides
+        $('.mid_slide2').parent('.bx-viewport').parent('.bx-wrapper').addClass('mid_bottom_slides');
+        $('.mid_slide2').parent('.bx-viewport').addClass('inner_mid_bottom_slides');
+
+        //electronics slides
+        $('.slider3').parent('.bx-viewport').addClass('electronic_slides');
+
+        //side navigation menu slides
+        $('.slides_prod').parent('.bx-viewport').addClass('side_menu_slides');
+        $('.side_menu_slides').parent('.bx-wrapper').addClass('side_menu_nav_slides');
+        $('.side_menu_nav_slides').children('.bx-controls').addClass('side_menu_nav_arrow');
+
+
+    });
+
+    
+    
+})(jQuery);
+
+
+
 $(document).ready(function() {
 
     $(".product_quantity").numeric({negative : false});
@@ -521,9 +717,9 @@ $(function(){
                     if(data == "386f25bdf171542e69262bf316a8981d0ca571b8" ){
                         alert("An error occured,Try refreshing the site.");
                     }else if(data == "d3d34a1c4cb94f516ae916e4b8b4be80d50c8f7a"){
-                        window.location.replace(config.base_url + "cart");
+                       window.location.replace(config.base_url + "cart");
                     }else if(data = "login_to_add_item2cart"){
-                        window.location.replace(config.base_url + "login");
+                       window.location.replace(config.base_url + "login");
                     }
                 }
 

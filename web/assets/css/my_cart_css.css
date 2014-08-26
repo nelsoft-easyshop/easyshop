@@ -637,6 +637,8 @@ a.delete:hover .del {
 	min-height: 230px;
 	padding:20px 10px 10px;
 	width: 546px;
+	margin-top: -5px;
+	width: 100%;
 }
 
 
@@ -926,6 +928,7 @@ input.cc_check {
 .del_address label {
 	display: inline-block;
 	width: 120px;
+	font-size: 12px;
 }
 
 .del_address input,
@@ -1107,6 +1110,10 @@ input.cc_check {
 }
 
 
+.bg-orange{
+	background: #F48000;
+	color: #ffffff;
+}
 
 @media only screen and (max-width: 979px) {
 
@@ -1175,54 +1182,56 @@ input.cc_check {
 
 @media only screen and (max-width: 536px) {
 
-.product_title, .subtotal, .p-availability{
-	font-size: 12px;
-}
+	.product_title, .subtotal, .p-availability{
+		font-size: 12px;
+	}
 
-.thumbnail-item{
-	max-height: 70px;
-	max-width: 70px;
-	height:auto;
-	width: auto;
-	vertical-align: top;
-}
+	.thumbnail-item{
+		max-height: 70px;
+		max-width: 70px;
+		height:auto;
+		width: auto;
+		vertical-align: top;
+	}
 
-.display-when-mobile-536{
-	display:inline;
-}
-	
-.b-label{
-	font-size: 12px;
-}
-	
-.subtotal{
-	font-size: 14px;
-}
-	
-.hide-to-536{
-	display: none;
-}
-	
-.btn-remove{
-	font-size: 12px;
-	padding: 3px !important;
-}
+	.display-when-mobile-536{
+		display:inline;
+	}
 
-.may_cart_payment {
-	padding-right: 30px;
-}
+		
+	.b-label{
+		font-size: 12px;
+	}
+		
+	.subtotal{
+		font-size: 14px;
+	}
+		
+	.hide-to-536{
+		display: none;
+	}
+		
 
-.my_cart_title{
-	font-size: 20px;
-}
+	.btn-remove{
+		font-size: 12px;
+		padding: 3px !important;
+	}
 
-.payment, 
-.continue{
-	font-size: 14px;
-}
+	.may_cart_payment {
+		padding-right: 30px;
+	}
 
-.continue{
-	padding-left: 25px !important;
-}
+	.my_cart_title{
+		font-size: 20px;
+	}
+
+	.payment, 
+	.continue{
+		font-size: 14px;
+	}
+
+	.continue{
+		padding-left: 25px !important;
+	}
 
 }

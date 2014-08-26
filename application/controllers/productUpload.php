@@ -280,7 +280,8 @@ class productUpload extends MY_Controller
         foreach($images as $imagekey => $imagevalue){
             if(strpos(($imagevalue['path']),'other') === FALSE){
                 $file = explode('_',$imagevalue['file']);
-                $tempFile = $tempId.'_'.$member_id.'_'.end($file);
+                unset($file[0]);
+                $tempFile =  $tempId.'_'.implode('_', $file);  
                 $imagevalue['temp'] = $tempFile;
                 $imagevalue['type'] = end(explode('.', end($file)));
                 array_push($mainImages, $imagevalue);
@@ -319,7 +320,8 @@ class productUpload extends MY_Controller
                     foreach ($eachAttribute[$key] as $key2 => $value2) {
                         if(!$eachAttribute[$key][$key2]['img_path'] == ''){
                             $file = explode('_',end(explode('/', $eachAttribute[$key][$key2]['img_path'])));
-                            $eachAttribute[$key][$key2]['img_path'] = $tempId.'_'.$member_id.'_'.end($file);
+                            unset($file[0]); 
+                            $eachAttribute[$key][$key2]['img_path'] = $tempId.'_'.implode('_', $file); 
                         }
                     }
                 }
@@ -505,7 +507,15 @@ class productUpload extends MY_Controller
         $filename =  $this->input->post('pictureName');
         $date = date("Ymd");
         $fulldate = date("YmdGis"); 
- 
+        $allowed =  array('gif','png' ,'jpg','jpeg'); // available format only for image
+        $fileExtension = explode('.', $filename);
+        $fileExtension = strtolower(end($fileExtension));
+
+        if(!in_array(strtolower($fileExtension),$allowed))
+        {
+            die('{"result":"false","msg":"Invalid file type. Please choose another image."}');
+        }
+
         $pathDirectory = $tempDirectory.'/other/';
 
         if (!file_exists ($pathDirectory)){
@@ -687,7 +697,8 @@ class productUpload extends MY_Controller
                     $explodearraynameoffiles = explode('||', $arraynameoffiles[$key]);
                     $nameOfFile = $explodearraynameoffiles[0];
                     $nameOfFileArray = explode('_', $nameOfFile);
-                    $newName = $product_id.'_'.$nameOfFileArray[1].'_'.$nameOfFileArray[2];
+                    unset($nameOfFileArray[0]);
+                    $newName =  $product_id.'_'.implode('_', $nameOfFileArray);
                     $path = $path_directory.$newName;
                     $typeOfFile = $explodearraynameoffiles[1];
                     $is_primary = ($key == 0 ? 1 : 0);
@@ -702,7 +713,8 @@ class productUpload extends MY_Controller
                         if($value['image'] != ""){ 
                             $nameOfFileArray = explode('_', $value['image']);
                             $fileType = end(explode('.', $value['image']));
-                            $newOtherName = $product_id.'_'.$nameOfFileArray[1].'_'.$nameOfFileArray[2];
+                            unset($nameOfFileArray[0]);
+                            $newOtherName =  $product_id.'_'.implode('_', $nameOfFileArray); 
                             array_push($arrayNameOnly, $value['image']);
                             $imageid = $this->product_model->addNewProductImage($other_path_directory.$newOtherName,$fileType,$product_id,0);
                         }
@@ -767,7 +779,8 @@ class productUpload extends MY_Controller
         $brand_valid = FALSE;
         $otherBrand = ""; $primaryName ="";
         $username = $this->user_model->getUserById($memberId)['username'];
-        $originalPath = $this->session->userdata('originalPath'); 
+        $dir = './assets/product/'; 
+        $originalPath = $path = glob($dir."{$product_id}_{$memberId}*", GLOB_BRACE)[0].'/';
         $tempDirectory = $this->session->userdata('tempDirectory'); 
         $savingAsDraft = ($this->input->post('savedraft'))?'1':'0'; 
 
@@ -884,19 +897,6 @@ class productUpload extends MY_Controller
             }
         }
 
-        if (file_exists($originalPath)){
-            recursiveRemoveDirectory($originalPath);
-            if(!mkdir($originalPath, 0777, true)) {  
-                die('{"e":"0","d":"There was a problem. \n Please try again! - Error[0010]"}'); 
-            }
-            if(!mkdir($originalPath.'other/', 0777, true)) { 
-                die('{"e":"0","d":"There was a problem. \n Please try again! - Error[0012]"}');
-            }           
-        }
-        else{
-            die('{"e":"0","d":"There was a problem. \n Please try again! - Error[00107]"}'); 
-        }
- 
         $product_details = array('product_id' => $product_id,
             'name' => $product_title,
             'sku' => $sku,
@@ -925,7 +925,8 @@ class productUpload extends MY_Controller
                 $explodearraynameoffiles = explode('||', $arraynameoffiles[$key]);
                 $nameOfFile = $explodearraynameoffiles[0];
                 $nameOfFileArray = explode('_', $nameOfFile);
-                $newName = $product_id.'_'.$nameOfFileArray[1].'_'.$nameOfFileArray[2];
+                unset($nameOfFileArray[0]);
+                $newName =  $product_id.'_'.implode('_', $nameOfFileArray);  
                 $path = $originalPath.$newName;
                 $typeOfFile = $explodearraynameoffiles[1];
                 $is_primary = ($key == 0 ? 1 : 0);
@@ -940,7 +941,8 @@ class productUpload extends MY_Controller
                     if($value['image'] != ""){ 
                         $nameOfFileArray = explode('_', $value['image']);
                         $fileType = end(explode('.', $value['image']));
-                        $newOtherName = $product_id.'_'.$nameOfFileArray[1].'_'.$nameOfFileArray[2];
+                        unset($nameOfFileArray[0]);
+                        $newOtherName =  $product_id.'_'.implode('_', $nameOfFileArray);  
                         array_push($arrayNameOnly, $value['image']);
                         $imageid = $this->product_model->addNewProductImage($originalPath.'other/'.$newOtherName,$fileType,$product_id,0);
                     }
@@ -1116,7 +1118,7 @@ class productUpload extends MY_Controller
             $data = $this->fill_view();
             $this->load->view('templates/header', $data);
             $this->load->view('pages/product/product_upload_preview',$preview_data);
-            $this->load->view('templates/footer_full');
+            $this->load->view('templates/footer');
         }
     }
 
@@ -1180,9 +1182,10 @@ class productUpload extends MY_Controller
             
             if( $this->input->post('is_edit') ){
                 $this->product_model->finalizeProduct($productID , $memberId, $product['is_cod']);
-            }else{
+            }
+            else{
                 #Update product entry in es_product to be ready for purchase
-                $this->product_model->finalizeProduct($productID , $memberId, 1);
+                $product['slug'] = $this->product_model->finalizeProduct($productID , $memberId, 1);
                 $product['is_cod'] = 1;
             }
             
@@ -1207,8 +1210,9 @@ class productUpload extends MY_Controller
             
             $this->load->view('templates/header', $data);
             $this->load->view('pages/product/product_upload_step3_view',$data);
-            $this->load->view('templates/footer_full');
-        }else{
+            $this->load->view('templates/footer');
+        }
+        else{
             redirect('/sell/step1/', 'refresh');
         }
     }
@@ -1377,7 +1381,7 @@ class productUpload extends MY_Controller
             
             $this->load->view('templates/header', $data);
             $this->load->view('pages/product/product_upload_step4_view',$data);
-            $this->load->view('templates/footer_full');
+            $this->load->view('templates/footer');
         }
     }
     

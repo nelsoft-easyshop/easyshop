@@ -53,16 +53,30 @@
             <?php echo form_close();?>
             
             <div class="product_upload_success pd-top-30">
-                <p>
-                    <img src="<?=base_url()?>assets/images/img_success.png">
+                <div class='row'>
+                    <div class='text-center'>
+                        <img src="/assets/images/img_success.png">
                         <?php if(!isset($is_edit)): ?>
-                            You have <strong>successfully</strong> uploaded <span>1 new item</span>
+                            You have <strong>successfully</strong> uploaded <span>1 new item.</span>
                         <?php else: ?>   
                             You have <strong>successfully</strong> edited your listing for <span><?php echo html_escape($product['product_name']);?></span>. 
                         <?php endif; ?>  
+                        <a class='desktop-item-lnk' href="<?php echo '/item/'.$product['slug']; ?>" class="blue">Click here to view your listing.</a>
+                    </div>
                     
-                    <a href="<?php echo base_url().'item/'.$product['slug']; ?>" class="blue">Click here to view</a>
+                    <div class='col-sm-6 text-center item-lnk'>
+                        <a href="<?php echo '/item/'.$product['slug']; ?>" class="blue">Click here to view your listing.</a>
+                    </div>
+
+                </div>
+                
+                <br/>
+                <p style='font-size: 13px;'>
+                    Congratulations, your item has just been uploaded as an ad-listing on the site. Complete the shipment details of your item so that
+                    other users may be able to purchase your item through Easyshop.ph. Once complete, other users can purchase your listing via the 
+                    different available payment options.
                 </p>
+                <hr/>
             </div>
         </div>
     </div>
