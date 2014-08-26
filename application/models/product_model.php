@@ -2669,5 +2669,19 @@ class product_model extends CI_Model
         
         return $b;
     }
-    
+
+    /**
+     *  Check if code exist
+     *
+     * @return boolean
+     */
+    public function validateCode($code)
+    {
+        $query = $this->xmlmap->getFilenameID('sql/product', 'validateCode');
+        $sth = $this->db->conn_id->prepare($query);
+        $sth->bindParam(':code', $code);
+        $sth->execute();
+
+        return $sth->fetchAll(PDO::FETCH_ASSOC);
+    }
 }

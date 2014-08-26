@@ -92,6 +92,17 @@ $config = array(
              )
         
         ),
+        '5' =>array(
+            'calculation_id' => '5',
+            'purchase_limit' => PHP_INT_MAX,
+            'payment_method' => array(
+                'promo'=>'Promo'
+            ),
+            'banner' => '',
+            'is_buyable_outside_promo' => true,
+            'cart_solo_restriction' => false,
+            'option' => array(),
+        ),
     )
 );
 

@@ -1,0 +1,141 @@
+.scratch-win-form span,
+.scratch-win-form input,
+.scratch-win-form button,
+#scratch-win-error h2,
+#scratch-win-error p,
+#scratch-win-claim h2,
+#scratch-win-claim,
+.scratch-congrats,
+.head-cngrts{
+    display: block;
+    float: none !important;
+    width: 40%;
+    margin: 0 auto !important;
+    position: relative;
+    margin-top: 1% !important;
+}
+.scratch-congrats{
+    width: 61%;
+}
+.head-cngrts{
+    width: 27%;
+}
+#scratch-win-claim{
+    width: 60%;
+}
+#scratch-win-claim h2{
+    padding: 1% 0 3% 0;
+    width: 35%;
+}
+#scratch-win-error p{
+    width: 65%;
+}
+.scratch-win-form span{
+    width: 15%;
+}
+.scratch-win-form{
+    width: 100%;
+}
+.promo-wrapper{
+    margin: 0 auto;
+    max-width: 980px;
+    position: relative;
+    width: 100%;
+}
+.easy-treats.banner{
+    margin:100%;
+}
+.bottom-border{
+    border-bottom: 1px solid #D9D9D9;
+    font-size: 12px;
+    margin-top: 5px;
+    padding: 20px;
+    text-align: center;
+}
+.scratch-win-form > h3
+{
+    margin: 2% auto;
+    max-width: 980px;
+    position: relative;
+    width: 83%;
+}
+.scratch-win-form > ol{
+    margin: 0 auto;
+    max-width: 980px;
+    position: relative;
+    width: 79%;
+}
+.scratch-win-form > ol > li {
+    padding: 1%;
+}
+.scratch-win-form > input {
+    padding: 1%;
+}
+.scratch-win-form > button {
+    background-color: #F48000 !important;
+    border: medium none;
+    color: #FFFFFF;
+    cursor: pointer;
+    font-weight: bold;
+    height: 41px !important;
+    margin-left: -5px;
+    max-width: 100px;
+    vertical-align: middle;
+    width: 30% !important;
+}
+#prod_image > img{
+    height: 211px;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 211px;
+}
+#prod_image{
+    background-color: #ffffff;
+    left: 2%;
+    padding: 105.4px;
+    position: relative;
+    top: 5%;
+    width: 35%;
+    float: left;
+    max-height: 212px;
+}
+.claim-bg{
+    background-color: #F5F5F5;
+    height: 235px;
+    left: 0;
+    position: relative;
+    top: 0;
+    width: 100%;
+}
+.claim-details{
+    padding-left: 40%;
+    padding-top: 1%;
+    width: 100%;
+}
+.claim-details p{
+    font-size: 12px;
+}
+.claim-details a{
+    background-color: #3dc6b2;
+    color: #ffffff;
+    font-size: 19px;
+    font-weight: bold;
+    height: 15px;
+    left: 18%;
+    padding: 4% 10%;
+    position: relative;
+    top: 30px;
+    width: 20%;
+}
+.scratch-win-btn{
+
+}
+.easytreats_banner {
+    background: url("../../assets/images/img_easy_treat_v1.jpg") no-repeat scroll center top #FFFFFF;
+    height: 205px;
+    margin-bottom: 3%;
+    margin-top: 2%;
+    position: relative;
+    width: 980px;
+ }
