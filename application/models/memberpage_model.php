@@ -1473,7 +1473,7 @@ class memberpage_model extends CI_Model
             if( !isset($data[$vendorCategory['parent_cat']]) ){
                 $catImgTest = "assets/" . substr($vendorCategory['p_cat_img'],0,strrpos($vendorCategory['p_cat_img'],'.')) . "_small.png";
                 if( $vendorCategory['p_cat_img'] !== "" && file_exists($catImgTest)){
-                    $catImg = "assets/" . substr($vendorCategory['p_cat_img'],0,strrpos($vendorCategory['p_cat_img'],'.')) . "_small.png";
+                    $catImg = $catImgTest;
                 }
                 else{
                     $catImg = $defaultCatImg;
