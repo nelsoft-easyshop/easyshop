@@ -326,8 +326,8 @@
                                             <div class="col-xs-12 col-sm-2 col-md-2 pd-tb-8">Brand:</div> 
                                             <div class="col-xs-12 col-sm-10 col-md-10">
                                                 <input type = "hidden" id="prod_brand" name="prod_brand" value="<?php echo isset($product_details['brand_id'])?$product_details['brand_id']:0?>"/>
-                                                <input class="width-50p ui-form-control" type = "text" id="brand_sch" name="brand_sch" autocomplete="off" placeholder="Search for your brand" value="<?php echo isset($product_details['brandname'])?$product_details['brandname']:''?>"/>
-                                                <!-- <div class="brand_sch_loading"></div> -->
+                                                <input class="width-50p ui-form-control" type = "text" id="brand_sch" name="brand_sch" autocomplete="off" placeholder="Search for your brand" value="<?php echo isset($product_details['brandname'])?trim($product_details['brandname']):''?>"/>
+                                                <div class="brand_sch_loading"></div>
                                                 <div id="brand_search_drop_content" class="brand_sch_drop_content"></div>
                                             </div>
                                             <div class="clear"></div>
@@ -490,7 +490,6 @@
                     </div>
                 </form>
             </div>
-
             <div id="question"></div>
             <div style="display:none" id="pop-image" class="simplemodal-container">
                 <h3>Add or remove image</h3>
@@ -499,6 +498,9 @@
                 </div>
                 <div class="pop-image-container">
                     <a href="javascript:void(0)" class="attr-image"><img  src=""></a>
+                </div>
+                <div class="pd-tb-15 text-center">
+                    <a class="simplemodal-close" title="Close"><span class="orange_btn3 width-30p img-upload-save">Save</span></a>
                 </div>
             </div>
         </div>

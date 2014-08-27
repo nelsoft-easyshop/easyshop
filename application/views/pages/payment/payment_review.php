@@ -9,9 +9,8 @@
 
 /* Container */
 #simplemodal-container {
-  height: auto !important;
-  width: auto !important; 
-  background-color:#0000;
+  height: 480px !important;
+  background-color:#fff;
   padding: 5px;
 }
 </style>

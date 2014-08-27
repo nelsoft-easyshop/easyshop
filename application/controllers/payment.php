@@ -151,7 +151,8 @@ class Payment extends MY_Controller{
             $data = array_merge($data,$address);
 
             $this->load->view('templates/header', $header);
-            $this->load->view('pages/payment/payment_review' ,$data);  
+            // $this->load->view('pages/payment/payment_review' ,$data);  
+            $this->load->view('pages/payment/payment_review_responsive' ,$data);  
             $this->load->view('templates/footer');  
         }else{
            redirect('/cart/', 'refresh'); 
@@ -848,23 +849,33 @@ class Payment extends MY_Controller{
     }
 
 
-    #PAYMENT PAGE SUCCESS/ERROR
-    function paymentSuccess($mode = "easyshop")
-    {       
- 
+    /** 
+     * Generates the payment succes or error view
+     * 
+     * @param string $mode
+     */
+    public function paymentSuccess($mode = "easyshop")
+    {   
         if(strtolower($mode) == 'cashondelivery'){
             $paymentType = $this->PayMentCashOnDelivery;
-        }elseif (strtolower($mode) == 'debitcreditcard') {
+        }
+        elseif (strtolower($mode) == 'debitcreditcard') {
             $paymentType = $this->PayMentPesoPayCC;
-        }elseif (strtolower($mode) == 'dragonpay') {
+        }
+        elseif (strtolower($mode) == 'dragonpay') {
             $paymentType = $this->PayMentDragonPay;
-        }elseif (strtolower($mode) == 'PayMentDirectBankDeposit') {
-            $esAccountNumber = $this->xmlmap->getFilenameID('page/content_files','bank-account-number');
-            $esBank = $this->xmlmap->getFilenameID('page/content_files','bank-name');
+        }
+        elseif (strtolower($mode) == 'PayMentDirectBankDeposit') {
+            $xmlResourceService = $this->serviceContainer['xml_resource'];
+            $xmlfile =  $xmlResourceService->getContentXMLfile();
+            $esAccountNumber = $this->xmlmap->getFilenameID($xmlfile,'bank-account-number');
+//             $esBank = $this->xmlmap->getFilenameID($xmlfile,'bank-name');
             $paymentType = $this->PayMentPayPal;
-        }elseif (strtolower($mode) == 'paypal') {
+        }
+        elseif (strtolower($mode) == 'paypal') {
             $paymentType = $this->PayMentPayPal;
-        }else{
+        }
+        else{
             $paymentType = $this->PayMentCashOnDelivery;
         }
 
@@ -892,7 +903,8 @@ class Payment extends MY_Controller{
             $response['available'] = false;
             $response['message'] = 'This section is not available.';
             $analytics = array();
-        }else{
+        }
+        else{
             #google analytics data
             $analytics = $this->ganalytics($response['itemList'],$payDetails['id_order']);
             #end of google analytics data
@@ -907,7 +919,8 @@ class Payment extends MY_Controller{
         $data = array_merge($data,$this->fill_header());
 
         $this->load->view('templates/header', $data);
-        $this->load->view('pages/payment/payment_response' ,$response);  
+        // $this->load->view('pages/payment/payment_response' ,$response);  
+        $this->load->view('pages/payment/payment_response_responsive' ,$response);  
         $this->load->view('templates/footer_full'); 
  
    }
@@ -938,55 +951,50 @@ class Payment extends MY_Controller{
         $this->session->unset_userdata('choosen_items');
     }
 
-	/*
-	 *	Function called upon purchasing an item. Sends notification to both buyer and seller
-	 *
-	 *  $data = array(
-	 *		'member_id' => Member ID who made the purchase (buyerID)
-	 *		'order_id'	=> Transaction Number
-	 *		'invoice_no' => Invoice number
-	 *	)
-	 */
+    /**
+     *   Function called upon purchasing an item. Sends notification to both buyer and seller
+     *
+     *   @param $data = array(
+     *   'member_id' => Member ID who made the purchase (buyerID)
+     *   'order_id' => Transaction Number
+     *   'invoice_no' => Invoice number)
+     */
     function sendNotification($data) 
     {
-        //devcode
-		/*$data['member_id'] = 74;
-		$data['order_id'] = 102;
-		$data['invoice_no']= 3;
-		$data['member_id'] = 56;
-		$data['order_id'] = 156;
-		$data['invoice_no']= '156-2014061247';*/
-        $sender = intval($this->payment_model->get_contentFile('message-sender-id'));
+        $xmlResourceService = $this->serviceContainer['xml_resource'];
+        $xmlfile =  $xmlResourceService->getContentXMLfile();
+
+        $sender = intval($this->xmlmap->getFilenameID($xmlfile,'message-sender-id'));
         $transactionData = $this->payment_model->getPurchaseTransactionDetails($data);
 
         #get payment method instructions
         switch($transactionData['payment_method']){
             case 1:
-				$transactionData['payment_msg_buyer'] = $this->lang->line('payment_paypal_buyer');
-				$transactionData['payment_msg_seller'] = $this->lang->line('payment_ppdp_seller');
-				$transactionData['payment_method_name'] = "PayPal";
-				break;
+                $transactionData['payment_msg_buyer'] = $this->lang->line('payment_paypal_buyer');
+                $transactionData['payment_msg_seller'] = $this->lang->line('payment_ppdp_seller');
+                $transactionData['payment_method_name'] = "PayPal";
+                break;
             case 2:
             //case 4:
-				$transactionData['payment_msg_buyer'] = $this->lang->line('payment_dp_buyer');
-				$transactionData['payment_msg_seller'] = $this->lang->line('payment_ppdp_seller');
-				$transactionData['payment_method_name'] = "DragonPay";
-				break;
+                $transactionData['payment_msg_buyer'] = $this->lang->line('payment_dp_buyer');
+                $transactionData['payment_msg_seller'] = $this->lang->line('payment_ppdp_seller');
+                $transactionData['payment_method_name'] = "DragonPay";
+                break;
             case 3:
-				$transactionData['payment_msg_buyer'] = $this->lang->line('payment_cod_buyer');
-				$transactionData['payment_msg_seller'] = $this->lang->line('payment_cod_seller');
-				$transactionData['payment_method_name'] = "Cash on Delivery";
-				break;
+                $transactionData['payment_msg_buyer'] = $this->lang->line('payment_cod_buyer');
+                $transactionData['payment_msg_seller'] = $this->lang->line('payment_cod_seller');
+                $transactionData['payment_method_name'] = "Cash on Delivery";
+                break;
             case 5:
-				$this->load->library('parser');
-				$paymentMsg = $this->lang->line('payment_bd_buyer');
-				$bankparse['bank_name'] = $this->xmlmap->getFilenameID('page/content_files','bank-name');
-				$bankparse['bank_accname'] = $this->xmlmap->getFilenameID('page/content_files','bank-account-name');
-				$bankparse['bank_accnum'] = $this->xmlmap->getFilenameID('page/content_files','bank-account-number');
-				$transactionData['payment_msg_buyer'] = $this->parser->parse_string($paymentMsg, $bankparse, true);
-				$transactionData['payment_msg_seller'] = '';
-				$transactionData['payment_method_name'] = "Bank Deposit";
-				break;
+                $this->load->library('parser');
+                $paymentMsg = $this->lang->line('payment_bd_buyer');
+                $bankparse['bank_name'] = $this->xmlmap->getFilenameID($xmlfile,'bank-name');
+                $bankparse['bank_accname'] = $this->xmlmap->getFilenameID($xmlfile,'bank-account-name');
+                $bankparse['bank_accnum'] = $this->xmlmap->getFilenameID($xmlfile,'bank-account-number');
+                $transactionData['payment_msg_buyer'] = $this->parser->parse_string($paymentMsg, $bankparse, true);
+                $transactionData['payment_msg_seller'] = '';
+                $transactionData['payment_method_name'] = "Bank Deposit";
+                break;
         }
 
         //Send email to buyer
@@ -1003,7 +1011,7 @@ class Payment extends MY_Controller{
         }while(!$buyerEmailResult && $emailcounter<3);
 
  
-	//Send text msg to buyer if mobile provided
+        //Send text msg to buyer if mobile provided
         $buyerMobile = ltrim($buyerData['buyer_contactno'], '0');
         if( is_numeric($buyerMobile) && $buyerMobile != 0 ){
            $buyerMsg = $buyerData['buyer_name'] . $this->lang->line('notification_txtmsg_buyer');
@@ -1012,7 +1020,7 @@ class Payment extends MY_Controller{
 
         #Send message via easyshop_messaging to buyer
         if($this->user_model->getUserById($sender)){    
-	    $this->messages_model->send_message($sender,$data['member_id'],$this->lang->line('message_to_buyer'));
+            $this->messages_model->send_message($sender,$data['member_id'],$this->lang->line('message_to_buyer'));
         }
 
 
@@ -1023,8 +1031,8 @@ class Payment extends MY_Controller{
             'buyer_name' => $transactionData['buyer_name'],
             'invoice_no' => $transactionData['invoice_no'],
             'payment_msg_seller' => $transactionData['payment_msg_seller'],
-			'payment_method_name' => $transactionData['payment_method_name']
-            );
+            'payment_method_name' => $transactionData['payment_method_name']
+        );
 
  
         foreach($transactionData['seller'] as $seller_id => $seller){
@@ -1035,7 +1043,7 @@ class Payment extends MY_Controller{
 
             #Send message via easyshop_messaging to seller
             if($this->user_model->getUserById($sender)){        
-		$this->messages_model->send_message($sender,$seller_id,$this->lang->line('message_to_seller'));
+                $this->messages_model->send_message($sender,$seller_id,$this->lang->line('message_to_seller'));
             }
 
 

@@ -50,18 +50,25 @@
     </section>
     <div class="clear"></div>
     <section>
+    
+    
         <div class="wrapper quickheader quickheader_css" style="display:<?php echo $hide_quickheader ? "none":""?>;">
-            <span>Store URL: </span>
+            
+            <span><strong>Link to your store:</strong></span>
             <div class="disp_vendor_url">
                 <a href="<?php echo base_url() . $userslug?>" target="_blank">
-                <strong><?php echo base_url()?><span class="disp_userslug"><?php echo $userslug?></span></strong>
+                    <?php echo base_url()?><span class="disp_userslug"><?php echo $userslug?></span>
                 </a>
                 <?php if( $render_userslug_edit ):?>
-                    <span class="edit_userslug edit_userslug_css" style="display:none;">Edit</span>
+                    <span class="edit_userslug edit_userslug_css" style="display:none;"><span class="span_bg edit-lnk"> Edit </span></span>
                 <?php endif;?>
             </div>
+            
             <span class="quickheader_close" style="cursor:pointer;border:medium 1px;">X</span>
         </div>
+        
+        
+        
         
         <div class="clear"></div>
         
@@ -251,8 +258,9 @@
             <p class="post_item_product_title fm1"><a href="<?=base_url();?>item/<?php echo $active_product['slug'];?>"><?php echo html_escape($active_product['name']);?></a></p>
             
             <div class="post_item_button">
-                <?php echo form_open('sell/edit/step2'); ?>
+                <?php echo form_open('sell/edit/step2'); ?> 
                 <input type="hidden" name="p_id" value ="<?php echo $active_product['id_product'];?>" /> 
+                <input type="hidden" name="othernamecategory" value ="<?php echo $active_product['cat_other_name'];?>" /> 
                 <input class="manage_lnk edit_lnk span_bg" type = "submit" value="Edit Item"> </input>
                 <?php echo form_close(); ?> 
                 <span class="border_white">|</span>
@@ -562,6 +570,7 @@
             <div class="post_item_button">
                 <?php echo form_open('sell/edit/step2'); ?>
                 <input type="hidden" name="p_id" value ="<?php echo $draft_product['id_product'];?>" /> 
+                <input type="hidden" name="othernamecategory" value ="<?php echo $draft_product['cat_other_name'];?>" /> 
                 <input class="manage_lnk edit_lnk span_bg" type = "submit" value="Edit Item"> </input>
                 <?php echo form_close(); ?> 
                 <span class="border_white">|</span>
@@ -2671,31 +2680,33 @@
                 
                     <div class="disp_vendor_url settings_vendordiv_css">
                         <a href="<?php echo base_url() . $userslug?>" target="_blank">
-                        <strong><?php echo base_url()?><span class="disp_userslug"><?php echo $userslug?></span></strong>
+                            <?php echo base_url()?><span class="disp_userslug"><?php echo $userslug?></span>
                         </a>
                         <?php if( $render_userslug_edit ):?>
-                            <span class="edit_userslug edit_userslug_css">Edit</span>
+       
+                            <span class="span_bg edit_userslug edit-lnk">Edit </span>
+                            
                         <?php endif;?>
                     </div>
                     
                     <?php if( $render_userslug_edit ):?>
                     <div class="datafield settings_vendordiv_css" style="display:none;">
                         <?php echo form_open('',array('id'=>'form_userslug'));?>
-                            <strong><?php echo base_url()?></strong><input type="text" name="userslug" value="<?php echo html_escape($userslug)?>">
+                            <?php echo base_url()?><input type="text" name="userslug" value="<?php echo html_escape($userslug)?>">
                             <input type="submit" class="save_userslug editslug_btn_css" name="userslug_save" value="Save">
                             <input type="button" class="cancel_userslug editslug_btn_css" value="Cancel">
                         <?php echo form_close();?>
                     </div>
                     <?php endif;?>
                     
-                    <p>
-                        NOTE: You can change your store URL only once! <br>
-                        Visit your store and use the editable fields to advertise your products!
+                    <p style='font-size: 13px; width: 95%;'>
+                        Take note that you can only change your easyshop store URL once. 
+                        Visit your store and use the available to features to connect with your buyers.
                     </p>
                     
                 </div>
             </div>
-            
+            <br/>
             <div class="profile_fields">
 
                         <p>Login password</p>

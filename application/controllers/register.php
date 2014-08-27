@@ -215,49 +215,52 @@ class Register extends MY_Controller
 
 	}
     
-
-    
-    public function changepass(){
-		$data = array(
-			'title' => 'Change Password | Easyshop.com',
+    /**
+     * Renders change password view
+     *
+     */
+    public function changepass()
+    {
+        $data = array(
+            'title' => 'Change Password | Easyshop.com',
             'render_searchbar' => false,
-		);
-		$data = array_merge($data, $this->fill_header());
-		
-		$this->load->view('templates/header', $data);
-		$temp['toggle_view'] = "1";
-		$temp['err'] = "";
+        );
+        $data = array_merge($data, $this->fill_header());
+        
+        $this->load->view('templates/header', $data);
+        $temp['toggle_view'] = "1";
+        $temp['err'] = "";
         $result = true;
 
-		$username = $this->input->post('wsx');
-		$cur_password = $this->input->post('cur_password');
-		$password = $this->input->post('password');			
-		
-		if(($username) && ($this->form_validation->run('changepass'))){  
-		
-			$dataval = array('login_username' => $username, 'login_password' => $cur_password);
-			$row = $this->user_model->verify_member($dataval);
+        $username = $this->input->post('wsx');
+        $cur_password = $this->input->post('cur_password');
+        $password = $this->input->post('password');			
+        
+        if(($username) && ($this->form_validation->run('changepass'))){  
+        
+            $dataval = array('login_username' => $username, 'login_password' => $cur_password);
+            $row = $this->user_model->verify_member($dataval);
 
-			if ($row['o_success'] >= 1){
-				$data = array(
-					'username' => $username,
-					'cur_password' => $cur_password,
-					'password' => $password
-				);
-				
-				$result = $this->register_model->changepass($data);       
-				if($result){
-					$temp['toggle_view'] = "";
-				}
-			}else{
-				$temp['toggle_view'] = "1";
-				$temp['err'] = "69";
-			}
-		}
-		
+            if ($row['o_success'] >= 1){
+                $data = array(
+                    'username' => $username,
+                    'cur_password' => $cur_password,
+                    'password' => $password
+                );
+                
+                $result = $this->register_model->changepass($data);       
+                if($result){
+                    $temp['toggle_view'] = "";
+                }
+            }else{
+                $temp['toggle_view'] = "1";
+                $temp['err'] = "69";
+            }
+        }
+        
         $temp['result'] = $result;
-		$this->load->view('pages/user/changepassword', $temp);
-		$this->load->view('templates/footer_full');		
+        $this->load->view('pages/user/changepassword', $temp);
+        $this->load->view('templates/footer');		
 		
 	}
     
