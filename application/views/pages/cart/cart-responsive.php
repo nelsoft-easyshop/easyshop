@@ -81,8 +81,8 @@
 	<div class="display-when-mobile-536">
 		<table width="100%" class="table table-responsive font-roboto" style="border:0px;">
 			<tr class="tr-header-cart">
-				<td style="vertical-align: middle;" width="5%"><input type="checkbox" id="checkAll" checked="checked"/></td>
-				<td align="left" colspan="2" width="35%">Item List</td>
+				<td style="vertical-align: middle;" width="20px"><input type="checkbox" id="checkAll" checked="checked"/></td>
+				<td align="left" colspan="2" width="95%">Item List</td>
 			</tr>
 			 <?php foreach ($cart_items as $row ): ?>
 			<tr id="row<?php echo $row['rowid']; ?>" class="tr-cart-content" >
@@ -96,7 +96,6 @@
 							
 							<table width="100%">
 								<tr>
-									
 									<td width="50%">
 										<a href="<?=base_url().'item/'.$row['slug'];?>" class="has-tooltip" data-image="<?=base_url()?><?php echo $row['img'][0]['path']; ?>categoryview/<?php echo $row['img'][0]['file']; ?>">
 											<img class="img-responsive thumbnail no-border thumbnail-item" src="<?=base_url()?><?php echo $row['img'][0]['path']; ?>categoryview/<?php echo $row['img'][0]['file']; ?>">
@@ -116,16 +115,15 @@
 									</td>
 								</tr>
 							</table>
-							
 						</div>
 						<div class="col-sm-1">
 							
-							<table style="margin-top: -15px;">
+							<table style="margin-top: -15px; margin-left: -30px;">
 								<tr>
-									<td>
+									<td >
 										<b class="b-label">Price: </b>
 									</td>
-									<td style="padding: 0px 0px 3px 35px;">
+									<td style="padding: 0px 0px 3px 45px;">
 										<span class="span-price">
 										<span class="p-price">&#8369; <?php echo number_format($row['price'],2,'.',','); ?></span>
 										 <?php if($row['is_promote'] === "1"): ?>
@@ -139,7 +137,7 @@
 									<td>
 										<b class="b-label">Quantity: </b> 
 									</td>
-									<td style="padding: 3px 0px 3px 35px;">
+									<td style="padding: 3px 0px 3px 45px;">
 										<input id="<?php echo $row['rowid']; ?>" onkeypress="return isNumberKey(event);" type="text" class="inpt_qty" mx="<?php echo $row['maxqty'];?>" onchange="sum(this);" maxlength="3" value="<?php echo $row['qty']; ?>" style="height: 30px !important; width: 100%"  >
 									</td>
 								</tr>
@@ -147,9 +145,10 @@
 									<td>
 										<b class="b-label">Availability: </b>
 									</td>
-									<td style="padding: 3px 0px 3px 35px; margin-top: 5px; font-size: 12px;">
-										
-										<?php echo $row['maxqty']; ?>
+									<td style="padding: 3px 0px 3px 45px; margin-top: 5px; font-size: 12px;">
+										<span class="p-price">
+											<?php echo $row['maxqty']; ?>
+										</span>
 									</td>
 								</tr>
 								<br/>
@@ -162,7 +161,7 @@
 										$attr=$key[$a];
 										$attr_value=$row['options'][$key[$a]];
 										$attr_value2 = explode('~', $attr_value);
-										echo  '<tr><td><span class="attr b-label"><b>'.html_escape($attr).':</b></span></td><td style="padding: 3px 0px 3px 35px !important;">'.html_escape($attr_value2[0]).'</td></tr>';
+										echo  '<tr><td><span class="attr b-label"><b>'.html_escape($attr).':</b></span></td><td style="padding: 3px 0px 3px 45px !important;">'.html_escape($attr_value2[0]).'</td></tr>';
 									}
 									}
 								?>
@@ -171,6 +170,7 @@
 					</div>
 				</td>
 			</tr>
+			
 			<?php endforeach; ?>
 		</table>
 	</div>
