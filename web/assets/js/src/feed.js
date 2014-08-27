@@ -29,9 +29,9 @@
             }
 
             else{
-               leftpanel.removeClass('feed-left-panel-fix');
-               midpanel.removeClass('feed-middle-panel-fix');
-               rightpanel.removeClass('feed-right-panel-fix');
+               leftpanel.removeClass('feed-left-panel-fix feed-pos-ab-bttm');
+               midpanel.removeClass('feed-middle-panel-fix feed-pos-ab-bttm');
+               rightpanel.removeClass('feed-right-panel-fix feed-pos-ab-bttm');
 
             }
         });
