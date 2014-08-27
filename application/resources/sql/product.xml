@@ -1040,6 +1040,10 @@ FROM
                 , b.slug
                 , b.createddate
                 , b.condition
+                , b.startdate
+                , b.enddate
+                , b.is_promote
+                , b.discount
                 , FORMAT(b.price,2) as price
                 , d.product_image_path
             FROM
@@ -1073,6 +1077,10 @@ FROM
                 , b.slug
                 , b.createddate
                 , b.condition
+                , b.startdate
+                , b.enddate
+                , b.is_promote
+                , b.discount
                 , FORMAT(b.price,2) as price
                 , c.product_image_path
             FROM
@@ -1109,6 +1117,10 @@ FROM
         , p.createddate
         , p.condition
         , FORMAT(p.price,2) as price
+        , p.startdate
+        , p.enddate
+        , p.is_promote
+        , p.discount
         , pi.product_image_path
     FROM es_product p
     INNER JOIN es_member m
