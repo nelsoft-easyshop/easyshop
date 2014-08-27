@@ -7274,12 +7274,17 @@ margin-right: 10px;
     .feeds-cont{
         font-size: 0.8em;
     }
-}
-@media (min-width:768px) and (max-width: 991px){
-    .feeds-cont{
-        font-size: 0.9em;
+    .feeds-cont .media-btn-panel > .feed-price{
+        font-size:1.5em;
     }
-    
+    .feeds-cont .media-btn-panel > p:first-child{
+        font-size:1.2em;
+        line-height:1.2em;
+        height:1.2em;
+    }
+    .feeds-cont .media-btn-panel .orig-price{
+        display:none !important;
+    }
 }
 
 .l-screen, .m-screen{
@@ -7289,9 +7294,6 @@ margin-right: 10px;
 .s-screen{
     display:block;
 }
-
-
-
 
 .feeds-cont > .row{
     margin-right: -5px !important;
@@ -7364,12 +7366,9 @@ margin-right: 10px;
 }
 
 @media (max-width: 445px){
-
     #m_follow_seller .col-xs-6{
         width: 100%;
     }
-    
-    
     
 }
 
@@ -7597,7 +7596,7 @@ margin-right: 10px;
 }
 
 .media-btn-panel .orange-btn{
-    margin-top:1.3em;
+    margin-top:0.8em;
 }
 
 .feeds-cont .media.product.feature{
@@ -7676,21 +7675,9 @@ margin-right: 10px;
     }
 }
 
-.inbox-view-content .img-wrapper-div{
-    border: 1px solid #ddd;
-    height: 62px;
 
+.feeds-cont .orig-price{
+    height:1em;
+    font-size:0.85em;
+    text-decoration: line-through;
 }
-
-.inbox-view-content .img-wrapper-span{
-    display:table-cell !important;
-    vertical-align:middle;
-    height: 62px;
-    width: 62px;
-}
-
-.inbox-view-content .img-wrapper-span img{
-    width: auto !important;
-    height: auto !important;
-}
-
