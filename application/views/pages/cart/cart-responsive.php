@@ -79,13 +79,13 @@
 		<?php endforeach; ?>
 	</table>
 	<div class="display-when-mobile-536">
-		<table width="100%" class="table table-responsive font-roboto">
+		<table width="100%" class="table table-responsive font-roboto" style="border:0px;">
 			<tr class="tr-header-cart">
 				<td style="vertical-align: middle;" width="5%"><input type="checkbox" id="checkAll" checked="checked"/></td>
 				<td align="left" colspan="2" width="35%">Item List</td>
 			</tr>
 			 <?php foreach ($cart_items as $row ): ?>
-			<tr id="row<?php echo $row['rowid']; ?>" class="tr-cart-content">
+			<tr id="row<?php echo $row['rowid']; ?>" class="tr-cart-content" >
 				<td>
 					<input type="checkbox" class="rad" id="rad_<?php echo $row['rowid'] ?>" value="<?php echo number_format($row['price'] * $row['qty'],2,'.',','); ?>" checked="checked" data="<?php echo $row['rowid'] ?>" name="checkbx[]">
 				</td>
@@ -99,11 +99,11 @@
 									
 									<td width="50%">
 										<a href="<?=base_url().'item/'.$row['slug'];?>" class="has-tooltip" data-image="<?=base_url()?><?php echo $row['img'][0]['path']; ?>categoryview/<?php echo $row['img'][0]['file']; ?>">
-											<img class="img-responsive thumbnail no-border thumbnail-item" src="<?=base_url()?><?php echo $row['img'][0]['path']; ?>thumbnail/<?php echo $row['img'][0]['file']; ?>">
+											<img class="img-responsive thumbnail no-border thumbnail-item" src="<?=base_url()?><?php echo $row['img'][0]['path']; ?>categoryview/<?php echo $row['img'][0]['file']; ?>">
 										</a>
 									</td>
 									<td style="vertical-align: top; text-align:right;" align="right"  width="50%">
-										<p style="margin-top:-15px;">
+										<p style="margin-top:10px;">
 											<?php
 												$totalprice = $row['price'] * $row['qty'];
 											?>
@@ -125,7 +125,7 @@
 									<td>
 										<b class="b-label">Price: </b>
 									</td>
-									<td style="padding-left: 5px;">
+									<td style="padding: 0px 0px 3px 35px;">
 										<span class="span-price">
 										<span class="p-price">&#8369; <?php echo number_format($row['price'],2,'.',','); ?></span>
 										 <?php if($row['is_promote'] === "1"): ?>
@@ -139,15 +139,15 @@
 									<td>
 										<b class="b-label">Quantity: </b> 
 									</td>
-									<td style="padding-left: 5px;">
-										<input id="<?php echo $row['rowid']; ?>" onkeypress="return isNumberKey(event);" type="text" class="inpt_qty" mx="<?php echo $row['maxqty'];?>" onchange="sum(this);" maxlength="3" value="<?php echo $row['qty']; ?>" style="height: 25px !important;">
+									<td style="padding: 3px 0px 3px 35px;">
+										<input id="<?php echo $row['rowid']; ?>" onkeypress="return isNumberKey(event);" type="text" class="inpt_qty" mx="<?php echo $row['maxqty'];?>" onchange="sum(this);" maxlength="3" value="<?php echo $row['qty']; ?>" style="height: 30px !important; width: 100%"  >
 									</td>
 								</tr>
 								<tr>
 									<td>
 										<b class="b-label">Availability: </b>
 									</td>
-									<td style="padding-left: 5px; margin-top: 5px; font-size: 12px;">
+									<td style="padding: 3px 0px 3px 35px; margin-top: 5px; font-size: 12px;">
 										
 										<?php echo $row['maxqty']; ?>
 									</td>
@@ -155,14 +155,14 @@
 								<br/>
 								 <?php 
 									if(!array_filter($row['options'])){
-										echo  '<tr><td colspan=\'2\'><span class="attr b-label">No additional details</span></td></tr>';
+										echo  '<tr><td colspan=\'2\' style=\"padding: 5px 0px 5px 35px;\"><span class="attr b-label" ><br/>No additional details</span></td></tr>';
 									}else{                                    
 									$key =  array_keys($row['options']); //get the key of options,used in checking the product in the database
 									for($a=0;$a < sizeof($key);$a++){
 										$attr=$key[$a];
 										$attr_value=$row['options'][$key[$a]];
 										$attr_value2 = explode('~', $attr_value);
-										echo  '<tr><td><span class="attr b-label"><b>'.html_escape($attr).':</b></span></td><td style="padding-left: 5px;"><span class="font-12">'.html_escape($attr_value2[0]).'</span></td></tr>';
+										echo  '<tr><td><span class="attr b-label"><b>'.html_escape($attr).':</b></span></td><td style="padding: 3px 0px 3px 35px !important;">'.html_escape($attr_value2[0]).'</td></tr>';
 									}
 									}
 								?>
