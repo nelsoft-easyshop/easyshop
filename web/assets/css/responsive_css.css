@@ -2006,19 +2006,24 @@ box-shadow:         0px 1px 5px 0px rgba(50, 50, 50, 0.75);
     min-height: 767px;
 }
 
-.feed-right-panel-fix.feed-pos-ab-bttm {
+/*.feed-right-panel-fix.feed-pos-ab-bttm {
     top: 4px;
     margin-top: 0;
-}
+}*/
 
 .feed-middle-panel-fix {
-    margin-left: 244px;
+    margin-left: 245px;
+}
+
+.feed-middle-panel,
+.feed-right-panel {
+    min-height: 767px;
 }
 
 .feed-right-panel-fix {
     margin-top: -125px;
     margin-left: 735px;
-    position: fixed !important;
+    position: fixed;
     width: 244px !important;
 }
 
