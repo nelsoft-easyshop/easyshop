@@ -2584,6 +2584,7 @@ class product_model extends CI_Model
         explodeImagePath($row);
         
         foreach($row as $k=>$r){
+            applyPriceDiscount($row[$k]);
             if($r['imgurl'] === ""){
                 $row[$k]['imgurl'] = "assets/user/default/60x60.png";
             }
@@ -2614,6 +2615,7 @@ class product_model extends CI_Model
         explodeImagePath($row);
         
         foreach($row as $k=>$r){
+            applyPriceDiscount($row[$k]);
             if($r['imgurl'] === ""){
                 $row[$k]['imgurl'] = "assets/user/default/60x60.png";
             }
@@ -2650,8 +2652,6 @@ class product_model extends CI_Model
         
         foreach( $products as $p ){
             $item = $this->getProductBySlug($p->slug, false);
-            $temp = array($item);
-            explodeImagePath($temp);
             $data[]= $item;
         }
         
