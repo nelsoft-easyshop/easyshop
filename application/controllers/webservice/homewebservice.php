@@ -477,7 +477,7 @@ class Homewebservice extends MY_Controller
         $index = (int)$index;
         $productindex = (int)$productindex;
 
-            if($index > count($map->section) || $productindex > count($map->section[$index]->product_panel_main) || $index < 0 || $productindex < 0) {
+            if(!is_numeric($index) || !is_numeric($productindex) || $index > count($map->section) || $productindex > count($map->section[$index]->product_panel_main) || $index < 0 || $productindex < 0) {
                 exit("Index out of bounds");
             } 
             else {
@@ -680,7 +680,7 @@ class Homewebservice extends MY_Controller
         $nodeName = "product_panel";
         $map = simplexml_load_file($file);   
         
-        if($index > count($map->section) - 1 || $productindex > count($map->section[$index]->product_panel) - 1 || $index < 0 || $productindex < 0) {
+        if(!is_numeric($index) || !is_numeric($productindex) || $index > count($map->section) - 1 || $productindex > count($map->section[$index]->product_panel) - 1 || $index < 0 || $productindex < 0) {
             exit("Parameter out of bounds");
         } 
         else {
