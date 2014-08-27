@@ -153,7 +153,7 @@
                             <p><strong><?php echo $this->lang->line('rating')[0].':'; ?></strong> 
                             <span>
                             <?php if($allfeedbacks['rating1'] === 0 ):?>
-                                Not yet rated
+                                This user is not yet rated
                             <?php else:?>
                                 <?php for($i = 0; $i < $allfeedbacks['rating1']; $i++):?>
                                     <span class="span_bg star_on"></span>
@@ -166,7 +166,7 @@
                             </p>
                             <p><strong><?php echo $this->lang->line('rating')[1].':'; ?></strong> 
                             <span><?php if($allfeedbacks['rating2'] === 0 ):?>
-                                Not yet rated
+                                This user is not yet rated
                             <?php else:?>
                                 <?php for($i = 0; $i < $allfeedbacks['rating2']; $i++):?>
                                     <span class="span_bg star_on"></span>
@@ -180,7 +180,7 @@
                             <p><strong><?php echo $this->lang->line('rating')[2].':'; ?></strong> 
                             <span>
                             <?php if($allfeedbacks['rating3'] === 0 ):?>
-                                Not yet rated
+                                This user is not yet rated
                             <?php else:?>
                                 <?php for($i = 0; $i < $allfeedbacks['rating3']; $i++):?>
                                     <span class="span_bg star_on"></span>
