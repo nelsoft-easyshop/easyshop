@@ -143,7 +143,7 @@
                             </div>
                             <div class="col-md-3 col-sm-3 media-sub media-btn-panel">
                                 <p>PHP</p>
-                                <p class="feed-price"><?php echo html_escape(number_format($p['original_price'], 2, '.', ','))?></p>
+                                <p class="feed-price"><?php echo $p['price']?></p>
                                 <div class="orange-btn"><a target="_blank" href="<?php echo base_url() . "item/" . $p['slug']?>">Buy Now</a></div>
                             </div>
                         </div>
@@ -314,7 +314,7 @@
                                     </div>
                                     <div class="col-md-3 col-sm-3 media-sub media-btn-panel">
                                         <p>PHP</p>
-                                        <p class="feed-price"><?php echo html_escape(number_format($p['original_price'], 2, '.', ','))?></p>
+                                        <p class="feed-price"><?php echo $prod['price']?></p>
                                         <div class="orange-btn"><a target="_blank" href="<?php echo base_url() . "item/" . $prod['slug']?>">Buy Now</a></div>
                                     </div>
                                 </div>
@@ -352,7 +352,7 @@
                                     </div>
                                     <div class="media-body">
                                         <h5 class="title"><a target="_blank" href="<?php echo base_url() . "item/" . $p['slug']?>"><?php echo html_escape($p['product_name'])?></a></h5>
-                                        <span class="sub-title">PHP <?php echo html_escape(number_format($p['original_price'], 2, '.', ','))?></span>
+                                        <span class="sub-title">PHP <?php echo $p['price']?></span>
                                     </div>
                                 </div>
                             <?php endforeach;?>
@@ -379,7 +379,7 @@
                                     </div>
                                     <div class="media-body">
                                         <h5 class="title"><a target="_blank" href="<?php echo base_url() . "item/" . $p['slug']?>"><?php echo html_escape($p['product_name'])?></a></h5>
-                                        <span class="sub-title">PHP <?php echo html_escape(number_format($p['original_price'], 2, '.', ','))?></span>
+                                        <span class="sub-title">PHP <?php echo $p['price'] ?></span>
                                     </div>
                                 </div>
                             <?php endforeach;?>

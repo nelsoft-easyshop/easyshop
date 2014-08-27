@@ -2652,8 +2652,6 @@ class product_model extends CI_Model
         
         foreach( $products as $p ){
             $item = $this->getProductBySlug($p->slug, false);
-            $temp = array($item);
-            explodeImagePath($temp);
             $data[]= $item;
         }
         
