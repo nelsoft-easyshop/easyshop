@@ -1044,7 +1044,7 @@ FROM
                 , b.enddate
                 , b.is_promote
                 , b.discount
-                , FORMAT(b.price,2) as price
+                , b.price
                 , d.product_image_path
             FROM
                 `es_vendor_subscribe` a
@@ -1081,7 +1081,7 @@ FROM
                 , b.enddate
                 , b.is_promote
                 , b.discount
-                , FORMAT(b.price,2) as price
+                , b.price
                 , c.product_image_path
             FROM
                 es_product b
@@ -1116,7 +1116,7 @@ FROM
         , p.slug
         , p.createddate
         , p.condition
-        , FORMAT(p.price,2) as price
+        , p.price
         , p.startdate
         , p.enddate
         , p.is_promote
