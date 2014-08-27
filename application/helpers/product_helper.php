@@ -8,8 +8,7 @@
 *
 */ 
 
-
-/*
+/**
  *  Separates img path and img file from product_image_path
  *  Result is stored back to the original array by reference
  *  Arguments: @$array: 1D array data from database fetch
@@ -31,8 +30,6 @@ if ( ! function_exists('explodeImagePath')){
             }
             else{
                 if(file_exists($row['product_image_path'])){
-                    #$row['product_image_path'] = ($row['product_image_path'][0]=='.')?substr($row['product_image_path'],1,strlen($row['product_image_path'])):$row['product_image_path'];
-                    #$row['product_image_path'] = ($row['product_image_path'][0]=='/')?substr($row['product_image_path'],1,strlen($row['product_image_path'])):$row['product_image_path'];
                     $rev_url = strrev($row['product_image_path']);
                     $row['path'] = substr($row['product_image_path'],0,strlen($rev_url)-strpos($rev_url,'/'));
                     $row['file'] = substr($row['product_image_path'],strlen($rev_url)-strpos($rev_url,'/'),strlen($rev_url));
@@ -41,13 +38,13 @@ if ( ! function_exists('explodeImagePath')){
                     $row['file'] = 'unavailable_product_img.jpg';
                 }
             }
-            #unset($row['product_image_path']);
+
             $array[$key] = $row;
         }
     }
 }
 
-/*
+/**
  *    Applies discount to a product
  *
  *    Requires product array with the following indexes:
@@ -62,7 +59,7 @@ if ( ! function_exists('explodeImagePath')){
  *    @start_promo - boolean, whether the promo is valid
  *    @percentage - the percentage of the discount
  *    @can_purchase - boolean, whether user can buy the item or not
- */
+ **/
 
 if ( ! function_exists('applyPriceDiscount')){
     function applyPriceDiscount(&$product = array()){
@@ -72,19 +69,38 @@ if ( ! function_exists('applyPriceDiscount')){
         $product['start_promo'] = false;
         $product['end_promo'] = false;
         if(intval($product['is_promote']) === 1){
-            $promo = $CI->product_model->GetPromoPrice($product['price'],$product['startdate'],$product['enddate'],$product['is_promote'],$product['promo_type'], $product['discount']);
+            $promo = $CI->product_model
+                ->GetPromoPrice(
+                    $product['price'],
+                    $product['startdate'],
+                    $product['enddate'],
+                    $product['is_promote'],
+                    $product['promo_type'],
+                    $product['discount']
+                );
             $product['start_promo'] = $promo['start_promo'];   
-            $product['end_promo'] = $promo['end_promo'];  
+            $product['end_promo'] = $promo['end_promo'];
             $product['original_price'] = $product['price'];    
-            $product['can_purchase'] =  $CI->product_model->is_purchase_allowed($buyer_id,$product['promo_type'],$product['start_promo']);
-            $product['sold_price'] = $CI->product_model->get_sold_price($product['id_product'], date('Y-m-d',strtotime($product['startdate'])), date('Y-m-d',strtotime($product['enddate'])));
+            $product['can_purchase'] =  $CI->product_model
+                ->is_purchase_allowed(
+                    $buyer_id,$product['promo_type'],
+                    $product['start_promo']
+                );
+            $product['sold_price'] = $CI->product_model
+                ->get_sold_price(
+                    $product['id_product'],
+                    date('Y-m-d',strtotime($product['startdate'])),
+                    date('Y-m-d',strtotime($product['enddate']))
+                );
             if($product['is_sold_out']){
                 $product['price'] = $product['sold_price'];
-            }else{
+            }
+            else{
                 $product['price'] = $promo['price'];
             }            
             $product['percentage'] = ($product['original_price'] - $product['price'])/$product['original_price'] * 100.00;
-        }else{
+        }
+        else{
             $product['original_price'] = $product['price']; 
             $product['can_purchase'] = true;
             if(intval($product['discount']) > 0){
@@ -97,6 +113,3 @@ if ( ! function_exists('applyPriceDiscount')){
         
    }
 }
-
-
-

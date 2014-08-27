@@ -43,12 +43,6 @@ class promo extends MY_Controller
     }
 
     /**
-     * Renders page for post and win promo
-     *
-     * @return View
-     */
-
-    /**
      * Checks the status of a particular user for the post and win promo
      *
      * @return JSON
@@ -66,6 +60,11 @@ class promo extends MY_Controller
         }
     }
 
+    /**
+     * Promo page for scratch card promo
+     *
+     * @return array
+     */
     public function scratchCardPromo()
     {
         $data = $this->fill_header();
@@ -78,6 +77,12 @@ class promo extends MY_Controller
         $this->load->view('templates/footer');
     }
 
+    /**
+     * checks if the code exist in DB
+     *
+     * @param code
+     * @return json
+     */
     public function validateScratchCardCode()
     {
         $result = $this->product_model->validateCode($this->input->post('code'));
@@ -89,6 +94,11 @@ class promo extends MY_Controller
         echo json_encode(!$result[0] ? false : $result[0]);
     }
 
+    /**
+     * Renders page for claiming item
+     *
+     * @return view
+     */
     public function claim()
     {
         if(!$this->session->userdata('usersession') && !$this->check_cookie()){
@@ -104,4 +114,22 @@ class promo extends MY_Controller
         $this->load->view('pages/promo/scratch_to_win', $viewData);
         $this->load->view('templates/footer');
     }
+
+    /**
+     * Register user in buy at zero promo
+     *
+     * @param product_id
+     * @param member_id
+     * @return boolean
+     */
+    public function buyAtZeroRegistration()
+    {
+        $data = $this->product_model->buyAtZeroRegistration(
+            $this->input->post('id'),
+            $this->session->userdata('member_id')
+        );
+
+        echo json_encode($data);
+    }
+
 }

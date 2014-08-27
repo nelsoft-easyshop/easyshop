@@ -2371,6 +2371,12 @@ class product_model extends CI_Model
                         $bool_start_promo = true;
                     }
                     break;
+                case 6 :
+                    $PromoPrice = $baseprice;
+                    if(!( ($today < $startdate) || ($enddate < $startdate) || ($today > $enddate))){
+                        $bool_start_promo = true;
+                    }
+                    break;
                 default :
                     $PromoPrice = $baseprice;
                     break;
@@ -2683,5 +2689,31 @@ class product_model extends CI_Model
         $sth->execute();
 
         return $sth->fetchAll(PDO::FETCH_ASSOC);
+    }
+    public function buyAtZeroAuthenticate($productId, $memberId)
+    {
+        $query = $this->xmlmap->getFilenameID('sql/product', 'buyAtZeroAuthenticate');
+        $sth = $this->db->conn_id->prepare($query);
+        $sth->bindParam(':productId', $productId);
+        $sth->bindParam(':memberId', $memberId);
+        $sth->execute();
+
+        return $sth->fetchAll(PDO::FETCH_ASSOC)[0]['cnt'];
+    }
+    public function buyAtZeroRegistration($productId, $memberId)
+    {
+        $auth = $this->buyAtZeroAuthenticate($productId, $memberId);
+
+        if(intval($auth) >= 1)
+        {
+            return false;
+        }
+        $query = $this->xmlmap->getFilenameID('sql/product', 'buyAtZeroRegistration');
+        $sth = $this->db->conn_id->prepare($query);
+        $sth->bindParam(':productId', $productId);
+        $sth->bindParam(':memberId', $memberId);
+        $sth->execute();
+
+        return true;
     }
 }
