@@ -7268,7 +7268,7 @@ box-shadow:         inset 0px -10px 12px -8px rgba(255, 255, 255, 0.75);
 
 
 .feeds-cont .condition{
-    font-size: 12px;
+    font-size: 10px;
 }
 
 .feeds-cont .content{
@@ -7555,16 +7555,21 @@ box-shadow:         inset 0px -10px 12px -8px rgba(255, 255, 255, 0.75);
 }
 
 .feeds-cont .media-sub .content{
-    height: 70%;
+    height: 78.5%;
     overflow:hidden;
 }
 
 .feeds-cont .media-sub .condition{
-    padding: 5px;
+    padding: 2px 5px;
+    line-height: 2em;
     background-color: #EEEEEE;
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow:hidden;
+}
+
+.feeds-cont .media-sub .condition span.img_free_shipping{
+    float:right;
 }
 
 .feeds-cont .media .media-object{
@@ -7624,7 +7629,7 @@ box-shadow:         inset 0px -10px 12px -8px rgba(255, 255, 255, 0.75);
 }
 
 .media-btn-panel .orange-btn{
-    margin-top:0.8em;
+    margin-top:1.3em;
 }
 
 .feeds-cont .media.product.feature{
