@@ -6952,6 +6952,7 @@ box-shadow:         inset 0px -10px 12px -8px rgba(255, 255, 255, 0.75);
     max-width: 65px;
     width: auto;
 }
+
 .img-wrapper-span {
     display: table-cell;
     width: 65px;
@@ -7262,7 +7263,7 @@ box-shadow:         inset 0px -10px 12px -8px rgba(255, 255, 255, 0.75);
 
 
 .feeds-cont .condition{
-    font-size: 12px;
+    font-size: 10px;
 }
 
 .feeds-cont .content{
@@ -7296,12 +7297,17 @@ box-shadow:         inset 0px -10px 12px -8px rgba(255, 255, 255, 0.75);
     .feeds-cont{
         font-size: 0.8em;
     }
-}
-@media (min-width:768px) and (max-width: 991px){
-    .feeds-cont{
-        font-size: 0.9em;
+    .feeds-cont .media-btn-panel > .feed-price{
+        font-size:1.5em;
     }
-    
+    .feeds-cont .media-btn-panel > p:first-child{
+        font-size:1.2em;
+        line-height:1.2em;
+        height:1.2em;
+    }
+    .feeds-cont .media-btn-panel .orig-price{
+        display:none !important;
+    }
 }
 
 .l-screen, .m-screen{
@@ -7311,9 +7317,6 @@ box-shadow:         inset 0px -10px 12px -8px rgba(255, 255, 255, 0.75);
 .s-screen{
     display:block;
 }
-
-
-
 
 .feeds-cont > .row{
     margin-right: -5px !important;
@@ -7386,12 +7389,9 @@ box-shadow:         inset 0px -10px 12px -8px rgba(255, 255, 255, 0.75);
 }
 
 @media (max-width: 445px){
-
     #m_follow_seller .col-xs-6{
         width: 100%;
     }
-    
-    
     
 }
 
@@ -7550,16 +7550,21 @@ box-shadow:         inset 0px -10px 12px -8px rgba(255, 255, 255, 0.75);
 }
 
 .feeds-cont .media-sub .content{
-    height: 70%;
+    height: 78.5%;
     overflow:hidden;
 }
 
 .feeds-cont .media-sub .condition{
-    padding: 5px;
+    padding: 2px 5px;
+    line-height: 2em;
     background-color: #EEEEEE;
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow:hidden;
+}
+
+.feeds-cont .media-sub .condition span.img_free_shipping{
+    float:right;
 }
 
 .feeds-cont .media .media-object{
@@ -7698,7 +7703,8 @@ box-shadow:         inset 0px -10px 12px -8px rgba(255, 255, 255, 0.75);
     }
 }
 
-
-
-
-
+.feeds-cont .orig-price{
+    height:1em;
+    font-size:0.85em;
+    text-decoration: line-through;
+}

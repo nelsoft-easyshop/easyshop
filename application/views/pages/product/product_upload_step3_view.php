@@ -288,13 +288,14 @@
                                     <input type="text" class="shipprice form-control" name="shipprice[<?php echo $sgCounter?>][<?php echo $siCounter?>]" value="<?php echo html_escape($price);?>">
                                 </div>
                                 <div class="col-xs-6 col-sm-6 col-md-7 upload_chosen">
-                                    <label for="location">Select Location</label><select class="shiploc form-control" name="shiploc[<?php echo $sgCounter?>][<?php echo $siCounter?>][]" multiple data-placeholder="Select location(s)">
+                                    <label for="location">Select Location</label>
+                                    <select class="shiploc form-control" name="shiploc[<?php echo $sgCounter?>][<?php echo $siCounter?>][]" multiple data-placeholder="Select location(s)">
                                         <?php foreach($shiploc['area'] as $island=>$loc):?>
                                             <option value="<?php echo $shiploc['islandkey'][$island];?>" <?php echo in_array($shiploc['islandkey'][$island],$locarr) ? 'selected':''?> <?php echo in_array($shiploc['islandkey'][$island],$shiparr['disable_lookup']) && !in_array($shiploc['islandkey'][$island],$locarr) ? 'disabled':''?>><?php echo $island;?></option>
                                                 <?php foreach($loc as $region=>$subloc):?>
-                                                    <option value="<?php echo $shiploc['regionkey'][$region];?>" style="margin-left:15px;" <?php echo in_array($shiploc['regionkey'][$region],$locarr) ? 'selected':''?>  <?php echo in_array($shiploc['regionkey'][$region],$shiparr['disable_lookup']) && !in_array($shiploc['regionkey'][$region],$locarr) ? 'disabled':''?> >&nbsp;&nbsp;&nbsp;<?php echo $region;?></option>
+                                                    <option value="<?php echo $shiploc['regionkey'][$region];?>" style="margin-left:15px;" <?php echo in_array($shiploc['regionkey'][$region],$locarr) ? 'selected':''?>  <?php echo in_array($shiploc['regionkey'][$region],$shiparr['disable_lookup']) && !in_array($shiploc['regionkey'][$region],$locarr) ? 'disabled':''?> ><?php echo $region;?></option>
                                                         <?php foreach($subloc as $id_cityprov=>$cityprov):?>
-                                                            <option value="<?php echo $id_cityprov;?>" style="margin-left:30px;" <?php echo in_array($id_cityprov,$locarr) ? 'selected':''?>  <?php echo in_array($id_cityprov,$shiparr['disable_lookup']) && !in_array($id_cityprov,$locarr) ? 'disabled':''?> >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $cityprov;?></option>
+                                                            <option value="<?php echo $id_cityprov;?>" style="margin-left:30px;" <?php echo in_array($id_cityprov,$locarr) ? 'selected':''?>  <?php echo in_array($id_cityprov,$shiparr['disable_lookup']) && !in_array($id_cityprov,$locarr) ? 'disabled':''?> ><?php echo $cityprov;?></option>
                                                         <?php endforeach;?>
                                                 <?php endforeach;?>
                                         <?php endforeach;?>

@@ -17,6 +17,11 @@
         <div class="col-md-3 col-sm-3 media-sub media-btn-panel">
             <p>Php</p>
             <p class="feed-price"><?php echo $prod['price']?></p>
+            <div class="orig-price">
+                <?php if( $prod['discount']>0 ):?>
+                    <?php echo "Php " . number_format($prod['original_price'],2,'.',',')?>
+                <?php endif;?>
+            </div>
             <div class="orange-btn"><a target="_blank" href="<?php echo base_url() . "item/" . $prod['slug']?>">Buy Now</a></div>
         </div>
     </div>
