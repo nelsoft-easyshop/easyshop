@@ -1182,10 +1182,14 @@ input.cc_check {
 
 @media only screen and (max-width: 536px) {
 
-	.product_title, .p-availability{
+	 .p-availability{
 		font-size: 14px !important;
 	}
 	
+	.product_title{
+		font-weight: bold !important;
+		font-size: 16px !important;
+	}
 	
 
 	.thumbnail-item{
@@ -1203,9 +1207,11 @@ input.cc_check {
 
 		
 	.b-label{
-		font-size: 12px;
+		font-size: 14px;
 	}
-		
+	.p-price{
+		font-size: 14px;
+	}
 	.subtotal{
 		font-size: 18px;
 	}
