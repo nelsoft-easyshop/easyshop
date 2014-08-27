@@ -79,6 +79,7 @@
 <script>
     (function ($) {
         var code = $('#scratch_txt');
+        var paymentToken = "<?php echo md5(uniqid(mt_rand(), true)).'3';?>";
         $(document).ready(function () {
             $('#scratch-win-error , #scratch-win-claim').hide();
             var base_url = config.base_url;
@@ -157,7 +158,21 @@
                             alert("An error occured,Try refreshing the site.");
                         }
                     }
-
+                });
+                $.ajax({
+                    async:false,
+                    url: config.base_url + "payment/payCashOnDelivery",
+                    type:"POST",
+                    dataType:"JSON",
+                    data:{
+                        csrfname:csrftoken,
+                        paymentToken:paymentToken
+                    },
+                    success:function(data){
+                        if(data == "386f25bdf171542e69262bf316a8981d0ca571b8" ){
+                            alert("An error occured,Try refreshing the site.");
+                        }
+                    }
                 });
             }
 

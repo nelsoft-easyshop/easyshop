@@ -92,9 +92,16 @@ class Cart extends MY_Controller
                 #waiting for ryan..
                 #To be updated:
                 #Query that validate code's should be also checking if code is already used.
-                print "<pre>";
-                print_r($this->cart_items($this->cart->contents()));
-                print "</pre>";
+                $cartContent = $this->cart->contents();
+                $item = array();
+                foreach ($cartContent as $key => $value) {
+                    if($value['promo_type'] == 5){
+                        $item[$key] = $cartContent[$key];
+                    }
+                }
+
+                $cart_contentss=array('choosen_items'=> $item);
+                $this->session->set_userdata($cart_contentss); 
             }
         }
         $this->session->set_userdata('cart_total_perItem',$this->cart_size());
