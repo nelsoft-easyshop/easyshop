@@ -624,10 +624,7 @@ function processAttributes()
         });
     });
 
-    $("#discountedP").bind('change keyup',function(e){
-        if(e.which > 13 || e.which < 13){
-            return false;
-        }
+    $("#discountedP").bind('change',function(e){
 
         var $this = $(this);
         var discountPrice = parseFloat($this.val());
