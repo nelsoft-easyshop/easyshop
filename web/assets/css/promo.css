@@ -30,6 +30,9 @@
 #scratch-win-error p{
     width: 65%;
 }
+#scratch-win-error h2{
+    width: 8%;
+}
 .scratch-win-form span{
     width: 15%;
 }

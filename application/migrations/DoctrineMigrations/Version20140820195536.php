@@ -15,8 +15,9 @@ class Version20140820195536 extends AbstractMigration
         $this->addSql("
             CREATE TABLE `easyshop`.`es_promo` (
                 `id_promo` INT NOT NULL AUTO_INCREMENT,
-                `cat_id` INT NOT NULL,
-                `code` VARCHAR(45) NOT NULL,
+                `product_id` INT NULL DEFAULT 0,
+                `member_id` INT NULL DEFAULT 0,
+                `code` VARCHAR(45),
             PRIMARY KEY (`id_promo`))
         ");
     }

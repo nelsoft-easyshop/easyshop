@@ -30,7 +30,7 @@
             <div class="scratch-win-form">
                 <span>Enter your code here: </span>
 
-                <input type="text" id="scratch_txt" value="3217hdsgka2sdka">
+                <input type="text" id="scratch_txt" >
 
                 <button id="send_btn" class="scratch-win-btn">ENTER</button>
                 <div class="bottom-border"></div>

@@ -2197,9 +2197,9 @@ class product_model extends CI_Model
             
         } 
 
-        /*
-            *  If there is only one element, add it to its own array.
-            */
+        /**
+          *  If there is only one element, add it to its own array.
+          */
         if(isset($home_view_data['section']) && isset($home_view_data['section']['category_detail'])){
             $home_view_data['section'] = make_array($home_view_data['section']);            
         }
@@ -2211,9 +2211,6 @@ class product_model extends CI_Model
         return $home_view_data;
 
     }
-
-
-
 
     private function createHomeElement($element, $key){
         $home_view_data = array();
@@ -2285,7 +2282,7 @@ class product_model extends CI_Model
         return $home_view_data;
     }
 
-    /*  
+      /**
         *    Get the average price of all instances of a sold item between specified dates
         *   @id: product_id
         *   @datefrom: datelimit start
@@ -2306,7 +2303,7 @@ class product_model extends CI_Model
         return $price;
     }
 
-    /*
+    /**
      *  Calculate promo price. Add the different calculations here.
      *
      *  @baseprice: base price of the product
@@ -2315,7 +2312,8 @@ class product_model extends CI_Model
      *  @type: promo type
      *  @default_percentage: discount percentage during product upload
      */
-    public function GetPromoPrice($baseprice, $start, $end, $is_promo, $type, $discount_percentage = 0){
+    public function GetPromoPrice($baseprice, $start, $end, $is_promo, $type, $discount_percentage = 0)
+    {
         $today = strtotime( date("Y-m-d H:i:s"));
         $startdate = strtotime($start);
         $enddate = strtotime($end);
@@ -2371,6 +2369,12 @@ class product_model extends CI_Model
                         $bool_start_promo = true;
                     }
                     break;
+                case 5 :
+                    $PromoPrice = $baseprice;
+                    if(!( ($today < $startdate) || ($enddate < $startdate) || ($today > $enddate))){
+                        $bool_start_promo = true;
+                    }
+                    break;
                 case 6 :
                     $PromoPrice = $baseprice;
                     if(!( ($today < $startdate) || ($enddate < $startdate) || ($today > $enddate))){
@@ -2381,13 +2385,9 @@ class product_model extends CI_Model
                     $PromoPrice = $baseprice;
                     break;
             }
-
-            
-            
             if($today > $enddate){
                 $bool_end_promo= true;
             }
-            
             $result['price'] = $PromoPrice;
         }
         $result['price'] = (floatval($result['price'])>0)?$result['price']:0.01;
