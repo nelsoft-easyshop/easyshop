@@ -94,7 +94,7 @@ class PSR0Autoloader
             $namespacePath = str_replace('\\', DIRECTORY_SEPARATOR, substr($className, 0, $lastNsPos)) . DIRECTORY_SEPARATOR;
             $className = substr($className, $lastNsPos + 1);
         }
-  
+
         require $this->_includePath . $namespacePath . str_replace('_', DIRECTORY_SEPARATOR, $className) . '.php';
     }
 }

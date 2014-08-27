@@ -121,7 +121,11 @@
                             </p>
 
                             <div class="vendor-msg-modal">
-                                <p><a id="modal-launcher" href="javascript:void(0)" class="orange_btn3 modal-launcher2"><small class="span_bg prod_message"></small> Send a message</a></p> 
+                                <div>
+                                    <a id="modal-launcher" href="javascript:void(0)" class="orange_btn3 modal-launcher2">
+                                        <small class="span_bg prod_message"></small> Send a message
+                                    </a>
+                                </div> 
                             </div>
                             
                         </div>

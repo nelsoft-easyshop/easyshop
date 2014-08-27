@@ -2670,5 +2670,17 @@ class product_model extends CI_Model
         
         return $b;
     }
+
+    public function getProdCount($prodid){
+      
+        $query = $this->xmlmap->getFilenameID('sql/product','getProdCount');
+        $sth = $this->db->conn_id->prepare($query);
+        $sth->bindParam(':prodid',$prodid); 
+        $sth->execute(); 
+        $number_of_rows = $sth->fetchColumn(); 
+        return $number_of_rows;
+        
+    
+    }
     
 }
