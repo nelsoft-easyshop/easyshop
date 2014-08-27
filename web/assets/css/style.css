@@ -5124,6 +5124,7 @@ div.post_item_content_left {
 
 .vendor-msg-modal #modal-launcher {
     background-color: #fff;
+    border-bottom: 1px dotted #fff;
     color: #0191c8;
     display: inline-block;
     border-radius: 0;
@@ -6590,8 +6591,7 @@ box-shadow:         inset 0px -10px 12px -8px rgba(255, 255, 255, 0.75);
         border-radius: 3px;
         height: 10.2%;
 }
-#modal-launcher{
-    
+#modal-launcher{    
     background-color: #F48000;
     border-radius: 3px;
     border-style: none;
@@ -6604,11 +6604,7 @@ box-shadow:         inset 0px -10px 12px -8px rgba(255, 255, 255, 0.75);
     padding: 0 !important;
     
 }
-.modal-launcher2 {
-        width: 158px !important;
-        height: 24px !important;
-        font-size: 13px !important;
-}
+
 #modal-close {
     background-color: #FFFFFF;
     border-radius: 3px;
