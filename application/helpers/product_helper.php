@@ -88,6 +88,7 @@
                 $product['can_purchase'] = true;
                 if(intval($product['discount']) > 0){
                     $product['price'] = $product['price'] * (1.0-($product['discount']/100.0));
+                    $product['price'] = number_format($product['price'],2,'.',',');
                 }  
             }
             
