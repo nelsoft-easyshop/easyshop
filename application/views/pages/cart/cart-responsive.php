@@ -27,7 +27,6 @@
                         <img class="img-responsive thumbnail no-border thumbnail-item"
                              src="<?= base_url() ?><?php echo $row['img'][0]['path']; ?>thumbnail/<?php echo $row['img'][0]['file']; ?>">
                     </a>
-
                 </td>
                 <td style="align:left;">
                     <a class="product_title"

@@ -1182,16 +1182,19 @@ input.cc_check {
 
 @media only screen and (max-width: 536px) {
 
-	.product_title, .subtotal, .p-availability{
-		font-size: 12px;
+	.product_title, .p-availability{
+		font-size: 14px !important;
 	}
+	
+	
 
 	.thumbnail-item{
-		max-height: 70px;
-		max-width: 70px;
+		max-height: 100px;
+		max-width: 100px;
 		height:auto;
 		width: auto;
 		vertical-align: top;
+		margin-top: 15px;
 	}
 
 	.display-when-mobile-536{
@@ -1204,7 +1207,7 @@ input.cc_check {
 	}
 		
 	.subtotal{
-		font-size: 14px;
+		font-size: 18px;
 	}
 		
 	.hide-to-536{
