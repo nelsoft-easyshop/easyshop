@@ -104,7 +104,7 @@ class Kernel
 
         // Search product
         $container['search_product'] = function ($c) {
-            return new \EasyShop\SearchProduct\SearchProduct();
+            return new \EasyShop\Search\SearchProduct();
         };
 
         /* Register services END */

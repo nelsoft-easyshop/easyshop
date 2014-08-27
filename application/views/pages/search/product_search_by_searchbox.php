@@ -1,235 +1,110 @@
+
 <link rel="stylesheet" type="text/css" href="<?=base_url()?>assets/css/product_search_category.css?ver=<?=ES_FILE_VERSION?>"   media="screen"/>
 <link rel="stylesheet" type="text/css" href="<?=base_url()?>assets/css/style_new.css?ver=<?=ES_FILE_VERSION?>" media="screen"/>
 <div class="clear"></div>
 
 <section class="top_margin">
-	<div class="wrapper">
-		<div class="prod_categories">
-			<div class="nav_title">Categories <img src="<?=base_url()?>assets/images/img_arrow_down.png"></div>
-			<?php echo $category_navigation; ?> 
-		</div>
-		<div class="prob_cat_nav">
-			<div class="category_nav product_content">
-				<ul>
-				</ul>
-			</div>
-		</div>
-		<div class="clear"></div>
-		<div class="bread_crumbs"></div>
-	</div>
+    <div class="wrapper">
+        <div class="prod_categories">
+            <div class="nav_title">Categories <img src="<?=base_url()?>assets/images/img_arrow_down.png"></div>
+            <?php echo $category_navigation; ?> 
+        </div>
+        <div class="prob_cat_nav">
+            <div class="category_nav product_content">
+                <ul>
+                </ul>
+            </div>
+        </div>
+        <div class="clear"></div>
+        <div class="bread_crumbs"></div>
+    </div>
 </section>
 <div class="wrapper" id="main_search_container">
-
-  <div class="left_attribute">
-			<?php
-        if(!count($items) <= 0){
-       echo $category_cnt; 
-     }
-     ?>
-		 
-
-         <h3>Price</h3>
-        <?php
-        if(!isset($_GET['price']))
-            $pricelink = site_url(uri_string() . '?' . $_SERVER['QUERY_STRING']) . '&price=';
-        else
-            $pricelink = site_url(uri_string() . '?' . $_SERVER['QUERY_STRING']) ;
-        ?>
-        <input type="text" id="price1" maxlength=10 size=6>to<input type="text" id="price2" maxlength=10 size=6> <input class="price" data-url="<?php echo $pricelink ?>" type="button" value=">>"/>
-        <?php
-        if (isset($attributes)) {
-            foreach ($attributes as $keyparam => $value) {
-                    
-                    $decodeparam = urldecode($keyparam);
-                    $parameter = strtolower(str_replace(' ', '_', $decodeparam));
-
-                    echo '<h3 class="title">'.html_escape($decodeparam).' <br></h3>';
-                    
-                foreach ($value as $key2 => $attr_value) {
-                    $attr_value = ucfirst(strtolower($attr_value));
-                    # start if   
-                    if(count($_GET) <= 0){$finalurl = $_SERVER['REQUEST_URI'].'?';}
-                    else{$finalurl = $_SERVER['REQUEST_URI'].'&';}
-                    # end if
-
-
-                    $url = $finalurl;
-                    list($file, $parameters) = explode('?', $url);
-                    parse_str($parameters, $output);
-                    $checked = "";
-                    if(isset($_GET[$parameter])){
-                       $oldvalue = $output[$parameter];
-                       unset($output[$parameter]);
-                        if(strpos($_GET[$parameter], '-|-') !== false) {
-
-                            $var = explode('-|-',$_GET[$parameter]);
-                            $newvalue = "";
- 
-                                if (in_array($attr_value, $var)) {
-                                    $checked = "checked";
-                                    $key = array_search($attr_value, $var);
-                                    unset($var[$key]); 
-                                    $newvalue = implode("-|-", $var); 
-                                    $link = $file . '?' . http_build_query($output).'&'. $parameter.'='.$newvalue;
-                                }else{
-                                    $link = $file . '?' . http_build_query($output).'&'. $parameter.'='.$oldvalue.'-|-'.$attr_value;
-                                }
-
-                        } else {
-
-                            if($_GET[$parameter] == $attr_value){
-                                $checked = "checked";
-                                $link = $file . '?' . http_build_query($output); 
-                            }else{
-                                $link = $file . '?' . http_build_query($output).'&'. $parameter.'='.$oldvalue.'-|-'.$attr_value;
-                            }
-                        }
-                     
-                    }else{
-                        $link = $file . '?' . http_build_query($output).'&'. $parameter.'='.$attr_value; 
-                    }
-
-                    echo '<a href="'.$link.'"><input type="checkbox" '.$checked.' class="cbx" data-value="'.$link.'" > 
-                            <label for="cbx">'.ucfirst(strtolower($attr_value)).'</label><br>
-                        </a>';
-                }
-            }
-        }
-        ?> 
+    <div class="left_attribute">
+        <h3>Price</h3>
+        <input type="text" id="price1" maxlength=10 size=6>to<input type="text" id="price2" maxlength=10 size=6> 
+        <input class="price" type="button" value=">>"/>
         <p class="more_attr">More Filters</p>
         <p class="less_attr">Less Filters</p>
-	</div>
- 
-	<div class="right_product">
-	   <?php 
-      if(count($items) <= 0){
-        ?>
-        <div style='margin-bottom: 100px;'>
-         <span style='font-size:15px;'> Your search for <span style='font-weight:bold'><?php echo urldecode($string); ?></span> did not return any results. </span>
-        </div>
-        <?php
-      }else{
-        ?>
-  <?php 
-      $rec = 0;
-
-      if(!empty($cntr)):
-        $rec = $cntr;
-        if($rec > 0):
-          $s = "";
-          if($rec > 1){
-            $s = "s";
-          }
-    ?>
-          <div class="adv_ctr"><strong style="font-size:14px"><?php echo number_format($rec);?></strong> result<?php echo $s;?> found for <strong><?php echo html_escape($string);?></strong></div>
-    <?php   endif; 
-      endif;
-    ?>
-    <?php
-      $typeOfViewActive = '<div id="list" class="list "></div><div id="grid" class="grid grid-active"></div>';
-            if(isset($_COOKIE['view'])){
-
-              $typeOfViewActive = '<div id="list" class="list "></div><div id="grid" class="grid grid-active"></div>';
-                $cookieView = $_COOKIE['view'];
-                if($cookieView == "list"){
-                    $typeOfViewActive = '<div id="list" class="list list-active"></div><div id="grid" class="grid"></div>';
-                }else{
-                   $typeOfViewActive = '<div id="list" class="list "></div><div id="grid" class="grid grid-active"></div>';
-                }
-            }
-            echo $typeOfViewActive;
-    ?>
-    <div class="clear"></div>
-    <div id="product_content">
-    <?php
-          if(isset($items)):
-            for ($i=0; $i < sizeof($items); $i++): 
-                $typeOfView = "product";
-                if(isset($_COOKIE['view'])){
-                    $cookieView = $_COOKIE['view'];
-            if($cookieView == "list"){
-              $typeOfView = "product-list";
-            }else{
-               $typeOfView = "product";
-            }
-                }
-         ?>
-          <div class="<?php echo $typeOfView; ?>"> 
-            <a href="<?php echo base_url() . "item/" . $items[$i]['slug']; ?>">
-              <span class="prod_img_wrapper">
-              
-		<?php if((intval($items[$i]['is_promote']) == 1) && isset($items[$i]['percentage']) && $items[$i]['percentage'] > 0):?>					  
-		      <span class="cd_slide_discount">
-			      <span><?php echo number_format($items[$i]['percentage'],0,'.',',');?>%<br>OFF</span>
-		      </span>
-		<?php endif; ?>
-              
-                <span class="prod_img_container">
-                  <img alt="<?php echo html_escape($items[$i]['name']); ?>" src="<?php echo base_url() . $items[$i]['path'] . "categoryview/" . $items[$i]['file']; ?>">
-                </span>
-              </span> 
-            </a>
-            <h3>
-              <a href="<?php echo base_url() . "item/" . $items[$i]['slug']; ?>">
-                <?php echo html_escape($items[$i]['name']); ?>
-              </a>
-            </h3>
-            <div class="price-cnt">
-              <div class="price"> 
-                <span>&#8369;</span> <?php echo number_format($items[$i]['price'], 2);?>
-              </div>
-              
-              	<?php if(isset($items[$i]['percentage']) && $items[$i]['percentage'] > 0):?>		
-		    <div>
-		      <span class="original_price">
-			      &#8369; <?PHP echo number_format($items[$i]['original_price'],2,'.',','); ?>
-		      </span>	
-		      <span style="height: 20px;">
-			|&nbsp; <strong> <?PHP echo number_format($items[$i]['percentage'],0,'.',',');?>%OFF</strong>
-		      </span>
-		    </div>
-		<?php endif; ?>
-              
-            </div>
-            <div class="product_info_bottom">
-
-              <div>Condition: <strong><?php echo ($items[$i]['is_free_shipping'])? es_string_limit(html_escape($items[$i]['condition']),15) : html_escape($items[$i]['condition']);?></strong></div>
-	      <?PHP if($items[$i]['is_free_shipping']): ?>
-		<span style="float:right;"><span class="span_bg img_free_shipping"></span>
-	      <?PHP endif; ?>	
-              
-            </div>
-            <p><?php echo html_escape($items[$i]['brief']); ?></p>
-          </div>
-    <?php
-        endfor;
-      endif;
-    ?>
     </div>
+ 
+    <div class="right_product">
+        <?php if(count($products) <= 0): ?>
+            <div style='margin-bottom: 100px;'>
+             <span style='font-size:15px;'> Your search for <span style='font-weight:bold'><?php echo urldecode($string); ?></span> did not return any results. </span>
+            </div>
+        <?php else: ?>
+            <div class="adv_ctr">
+                <strong style="font-size:14px"><?php echo number_format(count($products));?></strong> result found for <strong><?php echo html_escape($string);?></strong>
+            </div>
+            <div id="list" class="list "></div>
+            <div id="grid" class="grid grid-active"></div>
+            <div class="clear"></div>
 
-      <?php }
-     ?>
-	</div>
+            <div id="product_content">
+            <?php
+ 
+            foreach ($products as $key => $value):
+                  $typeOfView = "product";
+                  if(isset($_COOKIE['view'])){ 
+                      $typeOfView = ($_COOKIE['view'] == "list") ? "product-list" : "product";
+                  }
+            ?> 
+                <div class="<?php echo $typeOfView; ?>"> 
+                    <a href="<?php echo base_url() . "item/" . $value->getSlug(); ?>">
+<!--                         <span class="prod_img_wrapper">
+                            <?php if((intval($items[$i]['is_promote']) == 1) && isset($items[$i]['percentage']) && $items[$i]['percentage'] > 0):?>
+                                <span class="cd_slide_discount">
+                                    <span><?php echo number_format($items[$i]['percentage'],0,'.',',');?>%<br>OFF</span>
+                                </span>
+                            <?php endif; ?>
+                        
+                            <span class="prod_img_container">
+                              <img alt="<?php echo html_escape($items[$i]['name']); ?>" src="<?php echo base_url() . $items[$i]['path'] . "categoryview/" . $items[$i]['file']; ?>">
+                            </span>
+                        </span>  -->
+                    </a>
+                    <h3>
+                        <a href="<?php echo base_url() . "item/" . $value->getSlug(); ?>">
+                            <?php echo html_escape($value->getName()); ?>
+                        </a>
+                    </h3>
+                    <div class="price-cnt">
+                        <div class="price"> 
+                            <span>&#8369;</span> <?php echo number_format($value->getPrice(), 2);?>
+                        </div>
+                      
+                        <?php if(isset($items[$i]['percentage']) && $items[$i]['percentage'] > 0):?>
+                        <div>
+                            <span class="original_price">
+                                &#8369; <?php echo number_format($items[$i]['original_price'],2,'.',','); ?>
+                            </span>
+                            <span style="height: 20px;">
+                                |&nbsp; <strong><?PHP echo number_format($items[$i]['percentage'],0,'.',',');?>%OFF</strong>
+                            </span>
+                        </div>
+                        <?php endif; ?>
+                    </div>
+                   <div class="product_info_bottom">
+                        <div>
+                            Condition:
+                            <strong>
+                               <?php echo ($items[$i]['is_free_shipping'])? es_string_limit(html_escape($value->getCondition()),15) : html_escape($value->getCondition());?>
+                            </strong>
+                        </div>
+                        <?php if($items[$i]['is_free_shipping']): ?>
+                            <span style="float:right;"><span class="span_bg img_free_shipping"></span></span>
+                        <?php endif; ?>
+                    </div>
+                    <p><?php echo html_escape($value->getBrief()); ?></p>
+                </div>
+            <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
+    </div>
 </div>
 
-
-<?php
-$price1= "";
-$price2 = "";
-
-if(isset($_GET['price'])){
-    if(strpos($_GET['price'], 'to') !== false)
-    {
-        $price = explode('to',  $_GET['price']);
-        $price1 = str_replace( ',', '', $price[0]);
-        $price2 = str_replace( ',', '', $price[1]);          
-       
-    } else {
-       $price1= "";
-       $price2 = "";
-   }
-}
-?>
+ 
 <script type="text/javascript">
 
 $(document).ready(function () {

@@ -4,14 +4,19 @@ if (!defined('BASEPATH'))
     exit('No direct script access allowed');
     
 
+use EasyShop\Entities\EsProduct;
+
 class product_search extends MY_Controller {
 	
     function __construct()  
     { 
-      parent::__construct(); 
-      $this->load->helper('htmlpurifier');
-      $this->load->model("product_model");
-      $this->load->model("search_model");
+        parent::__construct(); 
+        $this->load->helper('htmlpurifier');
+        $this->load->model("product_model");
+        $this->load->model("search_model");
+
+
+        $this->em = get_instance()->kernel->serviceContainer['entity_manager'];
     }
   
     /*   
@@ -340,12 +345,34 @@ class product_search extends MY_Controller {
     function searchfaster()
     { 
         $searchProductService = $this->serviceContainer['search_product']; 
-        // $product = $searchProductService->filterByCategory(array('459',458)); 
-        // foreach ($product as $key => $value) {
-        //     echo $value->getName();
-        // }
         $string = $this->input->get('q_str');
-        $product = $searchProductService->filterBySearchString($string); 
+        $category = $this->input->get('q_cat');
+        $brand = $this->input->get('brand');
+        $condition = $this->input->get('condition');
+        $startPrice = $this->input->get('startprice');
+        $endPrice = $this->input->get('endprice');
+ 
+        $productIds = $searchProductService->filterBySearchString($string);
+        $productIds = ($category) ? $searchProductService->filterByCategory(array($category),$productIds) : $productIds;
+        $productIds = ($brand) ? $searchProductService->filterByBrand($brand,$productIds) : $productIds;
+        $productIds = ($condition) ? $searchProductService->filterByCondition($condition,$productIds) : $productIds;
+        $productIds = ($startPrice) ? $searchProductService->filterByPrice($startPrice,$endPrice,$productIds) : $productIds;
+        $response['products'] = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                                            ->getDetails($productIds);
+ 
+        $response['string'] = $string;
+         $data = array(
+            'title' => ($string==='')?'Search | Easyshop.ph':$string.' | Easyshop.ph',
+            );
+
+        $data = array_merge($data, $this->fill_header());
+        $response['category_navigation'] = $this->load->view('templates/category_navigation',array('cat_items' =>  $this->getcat(),), TRUE );
+        // $attributes = $this->product_model->getProductAttributesByCategory($ids);
+        // $itemCondition = $this->product_model->getProductConditionByCategory($ids);
+        // $brand = $this->product_model->getProductBrandsByCategory($ids); 
+        $this->load->view('templates/header', $data); 
+        $this->load->view('pages/search/product_search_by_searchbox',$response);
+        $this->load->view('templates/footer'); 
     }
     
     /**
