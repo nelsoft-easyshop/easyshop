@@ -1045,6 +1045,8 @@ FROM
                 , b.is_promote
                 , b.discount
                 , b.price
+                , b.promo_type
+                , b.is_sold_out
                 , d.product_image_path
             FROM
                 `es_vendor_subscribe` a
@@ -1082,6 +1084,8 @@ FROM
                 , b.is_promote
                 , b.discount
                 , b.price
+                , b.promo_type
+                , b.is_sold_out
                 , c.product_image_path
             FROM
                 es_product b
@@ -1121,6 +1125,8 @@ FROM
         , p.enddate
         , p.is_promote
         , p.discount
+        , p.promo_type
+        , p.is_sold_out
         , pi.product_image_path
     FROM es_product p
     INNER JOIN es_member m
