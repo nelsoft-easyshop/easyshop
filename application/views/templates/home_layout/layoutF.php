@@ -137,9 +137,19 @@
                                         <h5 class="title"><a target="_blank" href="<?php echo base_url() . "item/" . $prod['slug']?>"><?php echo $prod['product_name']?></a></h5>
                                         <?php echo $prod['brief']?>
                                     </div>
-                                    <div class="condition m-screen l-screen">Condition: <?php echo $prod['condition']?></div>
+                                    <div class="condition m-screen l-screen">
+                                        Condition: <?php echo $prod['condition']?>
+                                        <?php if( intval($prod['is_free_shipping'])===1 ):?>
+                                            <span class="span_bg img_free_shipping"></span>
+                                        <?php endif;?>
+                                    </div>
                                 </div>
-                                <div class="condition s-screen">Condition: <?php echo $prod['condition']?></div>
+                                <div class="condition s-screen">
+                                    <?php if( intval($prod['is_free_shipping'])===1 ):?>
+                                        <span class="span_bg img_free_shipping"></span>
+                                    <?php endif;?>
+                                    Condition: <?php echo $prod['condition']?>
+                                </div>
                             </div>
                             <div class="col-md-3 col-sm-3 media-sub media-btn-panel">
                                 <p>PHP</p>
@@ -176,10 +186,10 @@
                                         </div>
                                     </div>
                                     <div class="condition s-screen">
-                                        Condition: <?php echo $prod['condition']?>
                                         <?php if( intval($prod['is_free_shipping'])===1 ):?>
                                             <span class="span_bg img_free_shipping"></span>
                                         <?php endif;?>
+                                        Condition: <?php echo $prod['condition']?>
                                     </div>
                                 </div>
                                 <div class="col-md-3 col-sm-3 media-sub media-btn-panel">
@@ -228,10 +238,10 @@
                                         </div>
                                     </div>
                                     <div class="condition s-screen">
-                                        Condition: <?php echo $prod['condition']?>
                                         <?php if( intval($prod['is_free_shipping'])===1 ):?>
                                             <span class="span_bg img_free_shipping"></span>
                                         <?php endif;?>
+                                        Condition: <?php echo $prod['condition']?>
                                     </div>
                                 </div>
                                 <div class="col-md-3 col-sm-3 media-sub media-btn-panel">
@@ -273,17 +283,17 @@
                                             <?php echo $prod['brief']?>
                                         </div>
                                         <div class="condition m-screen l-screen">
-                                            Condition: <?php echo $prod['condition']?>
                                             <?php if( intval($prod['is_free_shipping'])===1 ):?>
                                                 <span class="span_bg img_free_shipping"></span>
                                             <?php endif;?>
+                                            Condition: <?php echo $prod['condition']?>
                                         </div>
                                     </div>
                                     <div class="condition s-screen">
-                                        Condition: <?php echo $prod['condition']?>
                                         <?php if( intval($prod['is_free_shipping'])===1 ):?>
                                             <span class="span_bg img_free_shipping"></span>
                                         <?php endif;?>
+                                        Condition: <?php echo $prod['condition']?>
                                     </div>
                                 </div>
                                 <div class="col-md-3 col-sm-3 media-sub media-btn-panel">
@@ -359,17 +369,17 @@
                                                 <?php echo $prod['brief']?>
                                             </div>
                                             <div class="condition m-screen l-screen">
-                                                Condition: <?php echo $prod['condition']?>
                                                 <?php if( intval($prod['is_free_shipping'])===1 ):?>
                                                     <span class="span_bg img_free_shipping"></span>
                                                 <?php endif;?>
+                                                Condition: <?php echo $prod['condition']?>
                                             </div>
                                         </div>
                                         <div class="condition s-screen">
-                                            Condition: <?php echo $prod['condition']?>
                                             <?php if( intval($prod['is_free_shipping'])===1 ):?>
                                                 <span class="span_bg img_free_shipping"></span>
                                             <?php endif;?>
+                                            Condition: <?php echo $prod['condition']?>
                                         </div>
                                     </div>
                                     <div class="col-md-3 col-sm-3 media-sub media-btn-panel">
