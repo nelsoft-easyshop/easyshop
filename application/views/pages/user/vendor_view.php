@@ -153,7 +153,7 @@
                             <p><strong><?php echo $this->lang->line('rating')[0].':'; ?></strong> 
                             <span>
                             <?php if($allfeedbacks['rating1'] === 0 ):?>
-                                <?php echo $vendordetails['username'];?> has not received any ratings yet.
+                                Not yet rated
                             <?php else:?>
                                 <?php for($i = 0; $i < $allfeedbacks['rating1']; $i++):?>
                                     <span class="span_bg star_on"></span>
@@ -166,7 +166,7 @@
                             </p>
                             <p><strong><?php echo $this->lang->line('rating')[1].':'; ?></strong> 
                             <span><?php if($allfeedbacks['rating2'] === 0 ):?>
-                                <?php echo $vendordetails['username'];?> has not received any ratings yet.
+                                Not yet rated
                             <?php else:?>
                                 <?php for($i = 0; $i < $allfeedbacks['rating2']; $i++):?>
                                     <span class="span_bg star_on"></span>
@@ -180,7 +180,7 @@
                             <p><strong><?php echo $this->lang->line('rating')[2].':'; ?></strong> 
                             <span>
                             <?php if($allfeedbacks['rating3'] === 0 ):?>
-                                <?php echo $vendordetails['username'];?> has not received any ratings yet.
+                                Not yet rated
                             <?php else:?>
                                 <?php for($i = 0; $i < $allfeedbacks['rating3']; $i++):?>
                                     <span class="span_bg star_on"></span>
@@ -388,7 +388,7 @@
                                 <div class="default_empty_feedback">
                                     <p>
                                         <img src="<?=base_url()?>assets/images/img_default_feedback.png">
-                                        <strong><?php echo $vendordetails['username'];?> have not yet received any feedbacks for this category.</strong>
+                                        <strong><?php echo $vendordetails['username'];?> have not yet posted any feedbacks for this category.</strong>
                                     </p>
                                 </div>	
                                 
@@ -476,7 +476,7 @@
                                 <div class="default_empty_feedback">
                                     <p>
                                         <img src="<?=base_url()?>assets/images/img_default_feedback.png">
-                                        <strong><?php echo $vendordetails['username'];?> have not yet received any feedbacks for this category.</strong>
+                                        <strong><?php echo $vendordetails['username'];?> have not yet posted any feedbacks for this category.</strong>
                                     </p>
                                 </div>	
                             <?php else:?>
