@@ -1,6 +1,6 @@
 <?php 
 
-class Homewebservice extends MY_Controller 
+class HomeWebService extends MY_Controller 
 {
 
     /**
@@ -178,7 +178,7 @@ class Homewebservice extends MY_Controller
                         $plusin = $two;
                         $plusor = $two;
 
-                        $this->xmlCmsService->swapXmlForSetMainSlide($file, $orindex,$ororder, $plusin, $plusor, $value,$type,$coordinate,$target);
+                        $this->swapXmlForSetMainSlide($file, $orindex,$ororder, $plusin, $plusor, $value,$type,$coordinate,$target);
                     } 
                     else {
                 
@@ -257,7 +257,7 @@ class Homewebservice extends MY_Controller
 
                 if($orindex == 0) {
                     $this->xmlCmsService->addXml($file,$string,'/map/mainSlide['.$index.']');
-                    $this->xmlCmsService->swapXmlForAddMainSlide($file, $orindex, $index,$value,$type,$coordinate,$target);
+                    $this->swapXmlForAddMainSlide($file, $orindex, $index,$value,$type,$coordinate,$target);
                 
                 } 
                 else {
@@ -298,7 +298,7 @@ class Homewebservice extends MY_Controller
 
         if($orindex == 0) {
             $this->xmlCmsService->addXml($file,$string,'/map/productSlide[last()]');
-            $this->xmlCmsService->swapXmlForAddProductSlide($file,$orindex, $index,$value);
+            $this->swapXmlForAddProductSlide($file,$orindex, $index,$value);
             return $this->output
                         ->set_content_type('application/json')
                         ->set_output($jsonFile);
@@ -494,7 +494,7 @@ class Homewebservice extends MY_Controller
                             $string = $this->xmlCmsService->getString($nodeName, $value, $type, $coordinate, $target);
 
                             $this->xmlCmsService->addXmlChild($file,$string,'/map/section['.$newindex.']/product_panel_main['.$newprodindex.']');
-                            $this->xmlCmsService->swapXmlForAddSectionMainSlide_notimage2($file, $newprodindex,$newindex,$index,$productindex,$value,$type,$coordinate,$target);
+                            $this->swapXmlForAddSectionMainSlide_notimage2($file, $newprodindex,$newindex,$index,$productindex,$value,$type,$coordinate,$target);
                             return $this->output
                                     ->set_content_type('application/json')
                                     ->set_output($jsonFile);
@@ -504,7 +504,7 @@ class Homewebservice extends MY_Controller
                             $newindex = ($index == 0 ? 1 : $index);
                             $newprodindex = ($productindex == 0 ? 1 : $productindex);
                     
-                            $this->xmlCmsService->swapXmlForAddSectionMainSlide_image($file, $newprodindex,$newindex,$index,$productindex,$value,$type,$coordinate,$target);
+                            $this->swapXmlForAddSectionMainSlide_image($file, $newprodindex,$newindex,$index,$productindex,$value,$type,$coordinate,$target);
                             return $this->output
                                     ->set_content_type('application/json')
                                     ->set_output($jsonFile);
@@ -543,7 +543,7 @@ class Homewebservice extends MY_Controller
 
                                 $string = $this->xmlCmsService->getString($nodeName, $value, $type, "", "");
                                 $this->xmlCmsService->addXmlChild($file,$string,'/map/section['.$newindex.']/product_panel_main['.$newprodindex.']');     
-                                $this->xmlCmsService->swapXmlForAddSectionMainSlide_notimage1($file, $newprodindex,$newindex,$index,$productindex,$value,$type);     
+                                $this->swapXmlForAddSectionMainSlide_notimage1($file, $newprodindex,$newindex,$index,$productindex,$value,$type);     
                                 return $this->output
                                     ->set_content_type('application/json')
                                     ->set_output($jsonFile);
@@ -556,7 +556,7 @@ class Homewebservice extends MY_Controller
                                 $string = $this->xmlCmsService->getString($nodeName, $value, $type, $coordinate, $target);
 
                                 $this->xmlCmsService->addXmlChild($file,$string,'/map/section['.$newindex.']/product_panel_main['.$newprodindex.']');
-                                $this->xmlCmsService->swapXmlForAddSectionMainSlide_notimage2($file,$newprodindex,$newindex,$index,$productindex,$value,$type,$coordinate,$target);
+                                $this->swapXmlForAddSectionMainSlide_notimage2($file,$newprodindex,$newindex,$index,$productindex,$value,$type,$coordinate,$target);
                                 return $this->output
                                     ->set_content_type('application/json')
                                     ->set_output($jsonFile);
@@ -636,7 +636,7 @@ class Homewebservice extends MY_Controller
                                 $this->xmlCmsService->removeXML($file,$nodeName,$index);
                                 $order = ($order == 0 ? 1 : $order);
                                 $this->xmlCmsService->addXml($file,$string,'/map/productSlide['.$order.']');
-                                $this->xmlCmsService->swapXmlForSetProductSlide($file,$orindex,$ororder,$value);
+                                $this->swapXmlForSetProductSlide($file,$orindex,$ororder,$value);
                             } 
                             else {
                                  $value = ($value == "" ? $map->productSlide[$index]->value : $value);
@@ -698,7 +698,7 @@ class Homewebservice extends MY_Controller
                     $newindex += 1;
                     $this->xmlCmsService->addXmlChild($file,$string,'/map/section['.$newindex.']/product_panel['.$newprodindex.']');
                     if($productindex == 0) {
-                        $this->xmlCmsService->swapXmlForSectionProduct($file, $newprodindex,$newindex,$value,$type,$index,$productindex);
+                        $this->swapXmlForSectionProduct($file, $newprodindex,$newindex,$value,$type,$index,$productindex);
                     }
                     return $this->output
                         ->set_content_type('application/json')
@@ -706,7 +706,7 @@ class Homewebservice extends MY_Controller
                 } 
                 else {
                     $this->xmlCmsService->addXmlChild($file,$string,'/map/section['.$newindex.']/product_panel['.$newprodindex.']');
-                    $this->xmlCmsService->swapXmlForSectionProduct($newprodindex,$newindex,$value,$type,$index,$productindex);
+                    $this->swapXmlForSectionProduct($newprodindex,$newindex,$value,$type,$index,$productindex);
                     return $this->output
                         ->set_content_type('application/json')
                         ->set_output($jsonFile);
@@ -758,6 +758,236 @@ class Homewebservice extends MY_Controller
                             ->set_content_type('application/json')
                             ->set_output($jsonFile);
             }
+    }
+    /**
+     *  Method used to swap xml contents for setMainSlide method, user for re-ordering nodes
+     *
+     *  @param string $file
+     *  @param integer $orindex
+     *  @param integer $ororder
+     *  @param integer $plusin
+     *  @param integer $plusor
+     *  @param string $value
+     *  @param string $type
+     *  @param string $coordinate
+     *  @param string $target  
+     */
+    private function swapXmlForSetMainSlide($file, $orindex,$ororder, $plusin, $plusor, $value,$type,$coordinate,$target) 
+    {
+        $orindex =  (int) $orindex;
+        $ororder =  (int) $ororder;
+        $plusor =  (int) $plusor;
+    
+        $map = simplexml_load_file($file);
+ 
+        $map->mainSlide[$plusor]->value = $map->mainSlide[$ororder]->value;
+        $map->mainSlide[$plusor]->type = $map->mainSlide[$ororder]->type;
+        $map->mainSlide[$plusor]->imagemap->coordinate = $map->mainSlide[$ororder]->imagemap->coordinate;
+        $map->mainSlide[$plusor]->imagemap->target = $map->mainSlide[$ororder]->imagemap->target;
+
+        $map->mainSlide[$ororder]->value = $value;
+        $map->mainSlide[$ororder]->type = $type;
+        $map->mainSlide[$ororder]->imagemap->coordinate = $coordinate;
+        $map->mainSlide[$ororder]->imagemap->target = $target;
+
+        $map->asXML($file);
+    }
+
+    /**
+     *  Method used to swap xml contents for addMainSlide method, user for re-ordering nodes
+     *
+     *  @param string $file
+     *  @param integer $orindex
+     *  @param integer $neworindex
+     *  @param string $value
+     *  @param string $type
+     *  @param string $coordinate
+     *  @param string $target
+     */
+    private function swapXmlForAddMainSlide($file, $orindex,$neworindex,$value,$type,$coordinate,$target) 
+    {
+        $orindex = (int) $orindex;
+        $neworindex = (int) $neworindex;
+
+        $map = simplexml_load_file($file);
+
+        $map->mainSlide[$neworindex]->value = $map->mainSlide[$orindex]->value;
+        $map->mainSlide[$neworindex]->type = $map->mainSlide[$orindex]->type;
+        $map->mainSlide[$neworindex]->imagemap->coordinate = $map->mainSlide[$orindex]->imagemap->coordinate;
+        $map->mainSlide[$neworindex]->imagemap->target = $map->mainSlide[$orindex]->imagemap->target;
+         
+        $map->mainSlide[$orindex]->value = $value;
+        $map->mainSlide[$orindex]->type = $type;
+        $map->mainSlide[$orindex]->imagemap->coordinate = $coordinate;
+        $map->mainSlide[$orindex]->imagemap->target = $target;
+
+        $map->asXML($file);
+    }
+    /**
+     *  Method used to swap xml contents for addProductSlide method, user for re-ordering nodes
+     *
+     *  @param string $file
+     *  @param integer $orindex
+     *  @param integer $neworindex
+     *  @param string $value
+     */
+    private function swapXmlForAddProductSlide($file, $orindex,$neworindex,$value) 
+    {
+
+        $orindex = (int) $orindex;
+        $neworindex = (int) $neworindex;
+
+        $map = simplexml_load_file($this->file);
+        $map->productSlide[$neworindex]->value = $map->productSlide[$orindex]->value;        
+        $map->productSlide[$orindex]->value = $value;
+
+        $map->asXML($this->file);
+        
+    }
+
+    /**
+     *  Method used to swap xml contents for product_panel_main nodes for not image types under home_files.xml
+     *
+     *  @param string $file
+     *  @param string $newprodindex
+     *  @param string $newindex
+     *  @param string $index
+     *  @param string $productindex  
+     *  @param string $value  
+     *  @param string $type  
+     *  @param string $coordinate  
+     *  @param string $target  
+     */
+    private function swapXmlForAddSectionMainSlide_notimage2($file, $newprodindex,$newindex,$index,$productindex,$value,$type,$coordinate,$target) 
+    {
+
+        $newprodindex = (int) $newprodindex;
+        $newindex = (int) $newindex;
+
+        $map = simplexml_load_file($file);
+     
+        $map->section[$index]->product_panel_main[$newprodindex]->value = $map->section[$index]->product_panel_main[$productindex]->value;
+        $map->section[$index]->product_panel_main[$newprodindex]->type = $map->section[$index]->product_panel_main[$productindex]->type;
+        $map->section[$index]->product_panel_main[$newprodindex]->coordinate = $map->section[$index]->product_panel_main[$productindex]->coordinate;
+        $map->section[$index]->product_panel_main[$newprodindex]->target = $map->section[$index]->product_panel_main[$productindex]->target;
+
+        $map->section[$index]->product_panel_main[$productindex]->value = $value;
+        $map->section[$index]->product_panel_main[$productindex]->type = $value;
+        $map->section[$index]->product_panel_main[$productindex]->coordinate = $coordinate;
+        $map->section[$index]->product_panel_main[$productindex]->target = $target;
+        
+        $map->asXML($file);
+        
+    }
+
+    /**
+     *  Method used to swap xml contents for product_panel_main nodes for image types under home_files.xml
+     *
+     *  @param string $file
+     *  @param string $newprodindex
+     *  @param string $newindex
+     *  @param string $index
+     *  @param string $productindex  
+     *  @param string $value  
+     *  @param string $type  
+     *  @param string $coordinate  
+     *  @param string $target  
+     */
+    private function swapXmlForAddSectionMainSlide_image($file, $newprodindex,$newindex,$index,$productindex,$value,$type,$coordinate,$target) 
+    {
+
+        $newprodindex = (int) $newprodindex;
+        $newindex = (int) $newindex;
+
+        $map = simplexml_load_file($file);
+
+        $map->section[$index]->product_panel_main[$newprodindex]->value = $map->section[$index]->product_panel_main[$productindex]->value;
+        $map->section[$index]->product_panel_main[$newprodindex]->type = $map->section[$index]->product_panel_main[$productindex]->type;
+        $map->section[$index]->product_panel_main[$newprodindex]->imagemap->coordinate = $map->section[$index]->product_panel_main[$productindex]->imagemap->coordinate;
+        $map->section[$index]->product_panel_main[$newprodindex]->imagemap->target = $map->section[$index]->product_panel_main[$productindex]->imagemap->target;
+
+        $map->section[$index]->product_panel_main[$productindex]->value = $value;
+        $map->section[$index]->product_panel_main[$productindex]->type = $value;
+        $map->section[$index]->product_panel_main[$productindex]->imagemap->coordinate = $coordinate;
+        $map->section[$index]->product_panel_main[$productindex]->imagemap->target = $target;
+
+        $map->asXML($file);
+        
+    }
+
+    /**
+     *  Method used to swap xml contents for product_panel_main nodes for image types under home_files.xml
+     *
+     *  @param string $file
+     *  @param string $newprodindex
+     *  @param string $newindex
+     *  @param string $index
+     *  @param string $value  
+     *  @param string $type  
+     */
+    private function swapXmlForAddSectionMainSlide_notimage1($file, $newprodindex,$newindex,$index,$productindex,$value,$type) 
+    {
+    
+        $newprodindex = (int) $newprodindex;
+        $newindex = (int) $newindex;
+
+        $map = simplexml_load_file($file);
+    
+        $map->section[$index]->product_panel_main[$newprodindex]->value = $map->section[$index]->product_panel_main[$productindex]->value;
+        $map->section[$index]->product_panel_main[$newprodindex]->type = $map->section[$index]->product_panel_main[$productindex]->type;
+        
+        $map->section[$index]->product_panel_main[$productindex]->value = $value;
+        $map->section[$index]->product_panel_main[$productindex]->type = $type;
+
+        $map->asXML($file);
+        
+    }
+
+    /**
+     *  Method used to swap xml contents for product_panel nodes under home_files.xml, user for re-ordering
+     *
+     *  @param string $file
+     *  @param string $newprodindex
+     *  @param string $newindex
+     *  @param string $value
+     *  @param string $type
+     *  @param string $index
+     *  @param string $productindex
+     */
+    private function swapXmlForSectionProduct($file,$newprodindex,$newindex,$value,$type,$index,$productindex) 
+    {
+        $map = simplexml_load_file($file);
+            
+        $map->section[$index]->product_panel[$newprodindex]->value = $map->section[$index]->product_panel[$productindex]->value;
+        $map->section[$index]->product_panel[$newprodindex]->type = $map->section[$index]->product_panel[$productindex]->type;
+    
+        $map->section[$index]->product_panel[$productindex]->value = $value;
+        $map->section[$index]->product_panel[$productindex]->type = $type;
+        $map->asXML($file);
+        
+    }
+
+    /**
+     *  Method used to swap xml contents for productSlide nodes under home_files.xml
+     *  @param string $file
+     *  @param string $orindex
+     *  @param string $ororder
+     *  @param string $value  
+     */
+    private function swapXmlForSetProductSlide($file,$orindex,$ororder,$value)
+    {
+        
+        $orindex = (int) $orindex;
+        $ororder = (int) $ororder;
+        if($orindex > 1) {
+            $orindex = $orindex - 1;            
+        }
+
+        $map = simplexml_load_file($file);
+        $map->productSlide[$orindex]->value = $map->productSlide[$ororder]->value;
+        $map->productSlide[$ororder]->value = $value;
+        $map->asXML($file);
+        
     }
 
 
