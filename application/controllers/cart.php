@@ -226,9 +226,6 @@ class Cart extends MY_Controller
             'promo_type' => $product['promo_type'],
             'start_promo' => $product['start_promo'],
         );
-        if($this->input->post('promo_code') !== FALSE && $data['promo_type'] == 5){
-            $data['code'] = $this->input->post('promo_code');
-        }
         $result['data'] = $data;
         $result['delete_to_cart'] = ($product['sellerid'] == $member_id || $useraccessdetails['is_email_verify'] != 1 || $product['is_draft'] == "1" || $product['is_delete'] == "1" || $product['can_purchase'] === false);
 
