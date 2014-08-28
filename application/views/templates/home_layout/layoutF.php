@@ -138,10 +138,10 @@
                                         <?php echo $prod['brief']?>
                                     </div>
                                     <div class="condition m-screen l-screen">
-                                        Condition: <?php echo $prod['condition']?>
                                         <?php if( intval($prod['is_free_shipping'])===1 ):?>
                                             <span class="span_bg img_free_shipping"></span>
                                         <?php endif;?>
+                                        Condition: <?php echo $prod['condition']?>
                                     </div>
                                 </div>
                                 <div class="condition s-screen">
@@ -179,10 +179,10 @@
                                             <?php echo $prod['brief']?>
                                         </div>
                                         <div class="condition m-screen l-screen">
-                                            Condition: <?php echo $prod['condition']?>
                                             <?php if( intval($prod['is_free_shipping'])===1 ):?>
                                                 <span class="span_bg img_free_shipping"></span>
                                             <?php endif;?>
+                                            Condition: <?php echo $prod['condition']?>
                                         </div>
                                     </div>
                                     <div class="condition s-screen">
