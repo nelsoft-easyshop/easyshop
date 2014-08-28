@@ -5,7 +5,7 @@
 	  
 <div class="container container-cart-responsive">
     <h2 class="my_cart_title">My Cart</h2>
-    <table width="100%" class="table table-responsive font-roboto hide-to-536">
+    <table width="100%" class="table table-responsive font-roboto hide-to-536 tbl_deskptop">
         <tr class="tr-header-cart">
             <td style="vertical-align: middle;" width="5%"><input type="checkbox" onclick="selectAll(this)" data_id="checkAll_desktop" class ="checkAll" checked="checked"/></td>
             <td align="left" colspan="2" width="35%">Item List</td>
@@ -180,9 +180,9 @@
                                             <b class="b-label">Availability: </b>
                                         </td>
                                         <td style="padding: 5px 0px 3px 45px; margin-top: 5px; font-size: 12px;">
-											<span class="p-price">
-												<?php echo $row['maxqty']; ?>
-											</span>
+                                            <span class="p-price">
+                                                <?php echo $row['maxqty']; ?>
+                                            </span>
                                         </td>
                                     </tr>
                                     <br/>
@@ -218,7 +218,7 @@
             <a href="<?php echo isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : base_url() . 'product/categories_all'; ?>"
                class="continue">Continue Shopping</a>
             <?php if (!count($cart_items) <= 0) { ?>
-                <a class="btn payment" id="proceed_payment">Proceed to Payment<span></span></a>
+                <a class="btn payment" id="proceed_payment_desktop" onclick="proceedPayment(this)" child="single1_checkAll_desktop">Proceed to Payment<span></span></a>
             <?php } ?>
 
         </div>
@@ -232,7 +232,7 @@
             </center>
 
             <?php if (!count($cart_items) <= 0) { ?>
-                <a class="btn payment btn-lg btn-block" id="proceed_payment">Proceed to Payment<span></span></a>
+                <a class="btn payment btn-lg btn-block" id="proceed_payment_tablet" onclick="proceedPayment(this)" child="single1_checkAll_tablet">Proceed to Payment<span></span></a>
             <?php } ?>
 
         </div>

@@ -1,44 +1,5 @@
 (function($){
     $(document).ready(function () {
-
-        $("#proceed_payment").click(function (event) {
-            event.preventDefault();
-            var csrftoken = $("meta[name='csrf-token']").attr('content');
-            var csrfname = $("meta[name='csrf-name']").attr('content');
-
-            var data1 = $(".wrapper input:checkbox:not(:checked)").map(function () {
-                return $(this).attr('data');
-            }).toArray();
-
-            var a = parseInt(0);
-            var b = parseInt(0);
-            $(".wrapper").find(".single_checkAll_desktop").each(function () {
-                if ($(this).prop('checked') == false) {
-                    a++;
-                }
-                b++;
-            });
-            if (a == b) {
-                alert("You must select at least one item to proceed with your payment");
-            }
-            else {
-                $.ajax({
-                    async: true,
-                    url: "<?=base_url()?>payment/cart_items",
-                    type: "POST",
-                    dataType: "json",
-                    data: {itm: data1, csrfname: csrftoken},
-                    success: function (data) {
-                        if (data == true) {
-                            window.location.replace("<?=base_url()?>payment/review");
-                        } else {
-                            alert(data, 'Remove these items from your cart to proceed with your checkout.');
-                        }
-                    }
-                });
-            }
-        });
-
         $('.has-tooltip').hover(function () {
             var tooltip = $(this).find('.tooltip');
             tooltip.html('<img src="' + $(this).data('image') + '" >').fadeIn();
@@ -48,6 +9,45 @@
 
     });
 })(jQuery)
+
+function proceedPayment(obj){
+    var className = '.' + $(obj).attr('child');
+    var csrftoken = $("meta[name='csrf-token']").attr('content');
+
+    var data1 = $("input:checkbox:not(:checked)").map(function () {
+        return $(this).attr('data');
+    }).toArray();
+    var a = parseInt(0);
+    var b = parseInt(0);
+    if(className == ".single1_checkAll_tablet" && $('.single1_checkAll_desktop').is(':visible') ){
+        className = ".single1_checkAll_desktop";
+    }
+    $(document).find(className).each(function () {
+        if ($(this).prop('checked') == false) {
+            a++;
+        }
+        b++;
+    });
+    if (a == b) {
+        alert("You must select at least one item to proceed with your payment");
+    }
+    else {
+        $.ajax({
+            async: true,
+            url: "/payment/cart_items",
+            type: "POST",
+            dataType: "json",
+            data: {itm: data1, csrfname: csrftoken},
+            success: function (data) {
+                if (data == true) {
+                    window.location.replace("/payment/review");
+                } else {
+                    alert(data, 'Remove these items from your cart to proceed with your checkout.');
+                }
+            }
+        });
+    }
+}
 
 function sum(obj)
 {
