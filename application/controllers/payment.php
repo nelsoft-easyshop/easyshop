@@ -57,6 +57,19 @@ class Payment extends MY_Controller{
         exit();
     }
 
+    public function promoPayment()
+    {
+        $cartContent = $this->cart->contents();
+        $item = array();
+        foreach ($cartContent as $key => $value) {
+            if($value['promo_type'] == 5){
+                $item[$key] = $cartContent[$key];
+            }
+        }
+
+        $cart_contentss=array('choosen_items'=> $item);
+        $this->session->set_userdata($cart_contentss);
+    }
     
     function review()
     {
@@ -529,6 +542,10 @@ class Payment extends MY_Controller{
     #START OF CASH ON DELIVERY, DIRECT BANK DEPOSIT PAYMENT
     function payCashOnDelivery()
     {
+        if($this->input->post('promo_type') !== FALSE )
+        {
+            $this->promoPayment();
+        }
         if(!$this->session->userdata('member_id') || !$this->input->post('paymentToken') || !$this->session->userdata('choosen_items')){
             redirect(base_url().'home', 'refresh');
         }

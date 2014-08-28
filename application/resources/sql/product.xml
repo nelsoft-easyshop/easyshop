@@ -1193,6 +1193,10 @@ FROM
         where code = :code AND es_promo.member_id = 0;
     </select>
 
+    <select id="tieUpMemberToCode">
+        UPDATE `easyshop`.`es_promo` SET `member_id`=:member_id WHERE `code`=:code;
+    </select>
+
     <select id="buyAtZeroAuthenticate">
         SELECT count(*) as `cnt`
         FROM easyshop.es_promo

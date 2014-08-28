@@ -87,15 +87,15 @@
             var csrfname = $("meta[name='csrf-name']").attr('content');
             var  img = '';
             $(document).on('click', '#send_btn', function () {
-                $("#prod_image img").attr('src', '');
-                $(".claim-details h3").html('');
-                $(".claim-details p").html('');
-                $('#scratch-win-error, #scratch-win-claim, .scratch-win-form > h3, .scratch-win-form > ol').hide();
                 if (code.val().trim() == "") {
                     alert('Invalid code');
 
                     return false;
                 }
+                $("#prod_image img").attr('src', '');
+                $(".claim-details h3").html('');
+                $(".claim-details p").html('');
+                $('#scratch-win-error, #scratch-win-claim, .scratch-win-form > h3, .scratch-win-form > ol').hide();
 
                 $.ajax({
                     url: 'promo/validateScratchCardCode',
@@ -166,10 +166,26 @@
                     dataType:"JSON",
                     data:{
                         csrfname:csrftoken,
+                        promo_type:5,
                         paymentToken:paymentToken
                     },
                     success:function(data){
                         if(data == "386f25bdf171542e69262bf316a8981d0ca571b8" ){
+                            alert("An error occured,Try refreshing the site.");
+                        }
+                    }
+                });
+                $.ajax({
+                    async:false,
+                    url: "/promo/tieUpMemberToCode",
+                    type:"POST",
+                    dataType:"JSON",
+                    data:{
+                        csrfname:csrftoken,
+                        code:$("#checker").attr("data_code")
+                    },
+                    success:function(data){
+                        if(data == false){
                             alert("An error occured,Try refreshing the site.");
                         }
                     }

@@ -70,7 +70,7 @@ class promo extends MY_Controller
         $data = $this->fill_header();
         $data['title'] = 'Scratch to Win | Easyshop.ph';
         $data['metadescription'] = 'Scratch-to-win-promo';
-        $viewData['deals_banner'] = $this->load->view('templates/dealspage/easytreats', $banner_data = array(), TRUE);
+        $viewData['deals_banner'] = $this->load->view('templates/dealspage/scratchAndWin', $banner_data = array(), TRUE);
 
         $this->load->view('templates/header', $data);
         $this->load->view('pages/promo/scratch_to_win', $viewData);
@@ -109,12 +109,32 @@ class promo extends MY_Controller
         $data['metadescription'] = 'Scratch-to-win-promo';
         $viewData['deals_banner'] = $this->load->view('templates/dealspage/easytreats', $banner_data = array(), TRUE);
         $viewData['product'] = $this->product_model->validateCode($this->input->get('code'));
-
-        $this->load->view('templates/header', $data);
-        $this->load->view('pages/promo/scratch_to_win', $viewData);
-        $this->load->view('templates/footer');
+        if($viewData['product'][0]){
+            $this->load->view('templates/header', $data);
+            $this->load->view('pages/promo/scratch_to_win', $viewData);
+            $this->load->view('templates/footer');
+        }
+        else{
+            redirect(base_url().'scratch-and-win', 'refresh');
+        }
     }
 
+    /**
+     * ajax - tie up code to member
+     *
+     * @param memberId
+     * @param code
+     * @return boolean
+     */
+    public function tieUpMemberToCode()
+    {
+        $result = $this->product_model->tieUpMemberToCode(
+            $this->session->userdata('member_id'),
+            $this->input->post('code')
+        );
+
+        echo json_encode($result);
+    }
     /**
      * Register user in buy at zero promo
      *
