@@ -13,6 +13,7 @@ class promo extends MY_Controller
         $this->load->helper('htmlpurifier');
         $this->load->model("product_model");
         $this->load->model("messages_model");
+        $this->load->library('session');
     }
 
     /**
@@ -42,12 +43,6 @@ class promo extends MY_Controller
     }
 
     /**
-     * Renders page for post and win promo
-     *
-     * @return View
-     */
-
-    /**
      * Checks the status of a particular user for the post and win promo
      *
      * @return JSON
@@ -59,19 +54,22 @@ class promo extends MY_Controller
         $query_result = $this->user_model->getUserByUsername($username);
         if(isset($query_result['is_promo_valid'])){
             echo json_encode(intval($query_result['is_promo_valid']));
-        }else{
+        }
+        else{
             echo json_encode(3);
         }
-        #return 1 if account has promo = true (QUALIFIED)
-        #return 2 if account has promo = false (PENDING)
-        #return 3 if username doesnt exist (NOT-QUALIFIED)
     }
 
+    /**
+     * Promo page for scratch card promo
+     *
+     * @return array
+     */
     public function scratchCardPromo()
     {
         $data = $this->fill_header();
         $data['title'] = 'Scratch to Win | Easyshop.ph';
-        $data['metadescription'] = ''; //<-------------------------NOTE : Add description once banner recieved
+        $data['metadescription'] = 'Scratch-to-win-promo';
         $viewData['deals_banner'] = $this->load->view('templates/dealspage/easytreats', $banner_data = array(), TRUE);
 
         $this->load->view('templates/header', $data);
@@ -79,13 +77,59 @@ class promo extends MY_Controller
         $this->load->view('templates/footer');
     }
 
+    /**
+     * checks if the code exist in DB
+     *
+     * @param code
+     * @return json
+     */
     public function validateScratchCardCode()
     {
-        $this->load->config('protected_category', TRUE);
-        $code = $this->config->item('protected_category');
-        print "<pre>";
-        print_r($code);
-        print "</pre>";
-        #waiting for mock up
+        $result = $this->product_model->validateBuyAtZeroCode($this->input->post('code'));
+        $result[0]['logged_in'] = true;
+        if(!$this->session->userdata('usersession') && !$this->check_cookie()){
+            $result[0]['logged_in'] = false;
+        }
+
+        echo json_encode(!$result[0] ? false : $result[0]);
     }
+
+    /**
+     * Renders page for claiming item
+     *
+     * @return view
+     */
+    public function claimScratchCardPrize()
+    {
+        if(!$this->session->userdata('usersession') && !$this->check_cookie()){
+            redirect(base_url().'login', 'refresh');
+        }
+        $data = $this->fill_header();
+        $data['title'] = 'Scratch to Win | Easyshop.ph';
+        $data['metadescription'] = 'Scratch-to-win-promo';
+        $viewData['deals_banner'] = $this->load->view('templates/dealspage/easytreats', $banner_data = array(), TRUE);
+        $viewData['product'] = $this->product_model->validateCode($this->input->get('code'));
+
+        $this->load->view('templates/header', $data);
+        $this->load->view('pages/promo/scratch_to_win', $viewData);
+        $this->load->view('templates/footer');
+    }
+
+    /**
+     * Register user in buy at zero promo
+     *
+     * @param product_id
+     * @param member_id
+     * @return boolean
+     */
+    public function buyAtZeroRegistration()
+    {
+        $data = $this->product_model->registerMemberForBuyAtZeroPromo(
+            $this->input->post('id'),
+            $this->session->userdata('member_id')
+        );
+
+        echo json_encode($data);
+    }
+
 }

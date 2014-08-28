@@ -6,8 +6,7 @@
     *    
     *     Added here to make functions accessible to multiple models    
     *
-    */ 
-
+    */
 
     /**
     *  Separates img path and img file from product_image_path
@@ -102,6 +101,3 @@
             
         }
     }
-
-
-
