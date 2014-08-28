@@ -2680,6 +2680,7 @@ class product_model extends CI_Model
     /**
      *  Check if code exist
      *
+     * @param $code
      * @return boolean
      */
     public function validateCode($code)
@@ -2691,6 +2692,14 @@ class product_model extends CI_Model
 
         return $sth->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    /**
+     * Check if member already joined the promo
+     *
+     * @Param $productId
+     * @Param $memberId
+     * @Return integer
+     */
     public function buyAtZeroAuthenticate($productId, $memberId)
     {
         $query = $this->xmlmap->getFilenameID('sql/product', 'buyAtZeroAuthenticate');
@@ -2701,6 +2710,14 @@ class product_model extends CI_Model
 
         return $sth->fetchAll(PDO::FETCH_ASSOC)[0]['cnt'];
     }
+
+    /**
+     * Join member to buyAtZero php promo
+     *
+     * @Param $productId
+     * @Param $memberId
+     * @Return boolean
+     */
     public function buyAtZeroRegistration($productId, $memberId)
     {
         $auth = $this->buyAtZeroAuthenticate($productId, $memberId);

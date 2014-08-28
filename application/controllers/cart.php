@@ -88,15 +88,6 @@ class Cart extends MY_Controller
                 }
                 $result= sha1(md5("tanggap"));
             }
-            if($this->input->POST('promo_code') !== FALSE && $data['promo_type'] == 5){
-                #Proceed to payment..
-                #waiting for ryan..
-                #To be updated:
-                #Query that validate code's should be also checking if code is already used.
-                print "<pre>";
-                print_r($this->cart_items($this->cart->contents()));
-                print "</pre>";
-            }
         }
         $this->session->set_userdata('cart_total_perItem',$this->cart_size());
 
@@ -219,9 +210,6 @@ class Cart extends MY_Controller
             'promo_type' => $product['promo_type'],
             'start_promo' => $product['start_promo'] ,
         );
-        if($this->input->post('promo_code') !== FALSE && $data['promo_type'] == 5){
-            $data['code'] = $this->input->post('promo_code');
-        }
         $result['data'] = $data;
         $result['delete_to_cart'] =
             (
