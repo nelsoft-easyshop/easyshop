@@ -1040,7 +1040,13 @@ FROM
                 , b.slug
                 , b.createddate
                 , b.condition
-                , FORMAT(b.price,2) as price
+                , b.startdate
+                , b.enddate
+                , b.is_promote
+                , b.discount
+                , b.price
+                , b.promo_type
+                , b.is_sold_out
                 , d.product_image_path
             FROM
                 `es_vendor_subscribe` a
@@ -1073,7 +1079,13 @@ FROM
                 , b.slug
                 , b.createddate
                 , b.condition
-                , FORMAT(b.price,2) as price
+                , b.startdate
+                , b.enddate
+                , b.is_promote
+                , b.discount
+                , b.price
+                , b.promo_type
+                , b.is_sold_out
                 , c.product_image_path
             FROM
                 es_product b
@@ -1108,7 +1120,13 @@ FROM
         , p.slug
         , p.createddate
         , p.condition
-        , FORMAT(p.price,2) as price
+        , p.price
+        , p.startdate
+        , p.enddate
+        , p.is_promote
+        , p.discount
+        , p.promo_type
+        , p.is_sold_out
         , pi.product_image_path
     FROM es_product p
     INNER JOIN es_member m
