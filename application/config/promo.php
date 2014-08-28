@@ -100,9 +100,7 @@ $config = array(
         '5' =>array(
             'calculation_id' => '5',
             'purchase_limit' => PHP_INT_MAX,
-            'payment_method' => array(
-                'promo'=>'Promo'
-            ),
+            'payment_method' => array(),
             'banner' => 'generic',
             'is_buyable_outside_promo' => true,
             'cart_solo_restriction' => false,
@@ -112,9 +110,7 @@ $config = array(
         '6' =>array(
             'calculation_id' => '6',
             'purchase_limit' => PHP_INT_MAX,
-            'payment_method' => array(
-                'promo'=>'Promo'
-            ),
+            'payment_method' => array(),
             'banner' => 'genericWithCountdown',
             'is_buyable_outside_promo' => true,
             'cart_solo_restriction' => false,

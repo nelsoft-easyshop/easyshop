@@ -10,10 +10,10 @@
             rules: {
                 login_username: {
                     required: true
-                    },
+                },
                 login_password: {
                     required: true
-                    }
+                }
             },
             messages: {
                 login_username: {
@@ -35,7 +35,7 @@
             submitHandler: function(form) {
                 $('#loading_img').show();
                 $('#login').hide();
-                
+
                 $.ajax({
                     type: "POST",
                     dataType: "JSON",
@@ -51,6 +51,7 @@
                         }
                         else {
                             var curl = $.cookie('rn');
+
                             $('.error_cont').text('');
                             $('#login_error').text('');
                             $('#loading_img').hide();
@@ -68,7 +69,7 @@
                             }
                             else if (first_uri_segment == 'promo') {
                                 var code = url.split("/");
-                                window.location = config.base_url + first_uri_segment + '/claim?code=' + code[2];
+                                window.location = config.base_url + first_uri_segment + '/ScratchCard/claimScratchCardPrize?code=' + code[2];
                             }
                             else {
                                 window.location = config.base_url;

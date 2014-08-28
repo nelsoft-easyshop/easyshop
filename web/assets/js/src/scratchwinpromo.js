@@ -19,7 +19,7 @@
             $('#scratch-win-error, #scratch-win-claim, .scratch-win-form > h3, .scratch-win-form > ol').hide();
 
             $.ajax({
-                url: 'promo/validateScratchCardCode',
+                url: '/promo/ScratchCard/validateScratchCardCode',
                 type: 'POST',
                 dataType: 'json',
                 data: {
@@ -34,7 +34,7 @@
                         $(".claim-details p").html(data.brief);
                         $("#prod_image img").attr('src', 'https://local.easyshop/' + data.path);
                         if(data.logged_in){
-                            $('#scratch-win-claim-link').attr('href', '/promo/claim?code=' + code.val().trim());
+                            $('#scratch-win-claim-link').attr('href', '/promo/ScratchCard/claimScratchCardPrize?code=' + code.val().trim());
                         }
                         else{
                             $('#scratch-win-claim-link').attr('href', '/promo/claim/' + code.val().trim());
@@ -98,7 +98,7 @@
             });
             $.ajax({
                 async:false,
-                url: "/promo/tieUpMemberToCode",
+                url: "/promo/ScratchCard/tieUpMemberToCode",
                 type:"POST",
                 dataType:"JSON",
                 data:{

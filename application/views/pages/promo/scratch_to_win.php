@@ -1,6 +1,7 @@
 <link rel="stylesheet" href="/assets/css/jquery.bxslider.css?ver=<?= ES_FILE_VERSION ?>" type="text/css" media="screen"/>
 <link rel="stylesheet" href="/assets/css/promo.css?ver=<?= ES_FILE_VERSION ?>" type="text/css" media="screen"/>
 <link type="text/css" href="/assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet" />
+
 <div class="clear"></div>
 
 <div class="promo-wrapper" id="main_search_container">
@@ -77,3 +78,4 @@
 <script src="/assets/js/src/vendor/jquery.plugin.min.js" type="text/javascript"></script>
 <script src="/assets/js/src/vendor/jquery.countdown.min.js" type="text/javascript"></script>
 <script src="/assets/js/src/scratchwinpromo.js" type="text/javascript"></script>
+

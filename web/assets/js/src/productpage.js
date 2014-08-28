@@ -693,7 +693,7 @@ $(function(){
         var i_id = $(".id-class").attr("id");
         var csrftoken = $("meta[name='csrf-token']").attr('content');
         $.ajax({
-            url : '/promo/buyAtZeroRegistration',
+            url : '/promo/BuyAtZero/buyAtZeroRegistration',
             type : 'post',
             dataType : 'JSON',
             data : {
@@ -704,7 +704,9 @@ $(function(){
                 $('#loading_img').hide();
                 $('#send_registration').css('display', 'inline-block');
                 if(data){
-                    alert('Successfully registered in the promo');
+                    alert("Congratulations! You have now the chance to win LG G Pro Lite D686! " +
+                        "The lucky winner will be announced on September 15, 2014. " +
+                        "Stay tuned for more EasyShop.ph promotions. Check your email for further information.");
                 }
                 else{
                     alert('You are already registered in this promo');

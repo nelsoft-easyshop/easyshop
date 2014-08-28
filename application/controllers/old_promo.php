@@ -85,7 +85,7 @@ class promo extends MY_Controller
      */
     public function validateScratchCardCode()
     {
-        $result = $this->product_model->validateCode($this->input->post('code'));
+        $result = $this->product_model->validateBuyAtZeroCode($this->input->post('code'));
         $result[0]['logged_in'] = true;
         if(!$this->session->userdata('usersession') && !$this->check_cookie()){
             $result[0]['logged_in'] = false;
@@ -99,7 +99,7 @@ class promo extends MY_Controller
      *
      * @return view
      */
-    public function claim()
+    public function claimScratchCardPrize()
     {
         if(!$this->session->userdata('usersession') && !$this->check_cookie()){
             redirect('/login', 'refresh');
@@ -144,7 +144,7 @@ class promo extends MY_Controller
      */
     public function buyAtZeroRegistration()
     {
-        $data = $this->product_model->buyAtZeroRegistration(
+        $data = $this->product_model->registerMemberForBuyAtZeroPromo(
             $this->input->post('id'),
             $this->session->userdata('member_id')
         );

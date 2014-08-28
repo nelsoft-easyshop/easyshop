@@ -2679,12 +2679,13 @@ class product_model extends CI_Model
 
     /**
      *  Check if code exist
+     *
      * @param $code
      * @return boolean
      */
-    public function validateCode($code)
+    public function validateScratchCardCode($code)
     {
-        $query = $this->xmlmap->getFilenameID('sql/product', 'validateCode');
+        $query = $this->xmlmap->getFilenameID('sql/product', 'validateScratchCardCode');
         $sth = $this->db->conn_id->prepare($query);
         $sth->bindParam(':code', $code);
         $sth->execute();
@@ -2710,37 +2711,40 @@ class product_model extends CI_Model
         return $sth->rowCount();
     }
 
-    /**
-     * Check if productID and memberID exists in promo DB
+    /** Check if member already joined the promo
      *
-     * @param $productId
-     * @param $memberId
-     * @return integer
+     * @Param $productId
+     * @Param $memberId
+     * @Return boolean
      */
-    public function buyAtZeroAuthenticate($productId, $memberId)
+    public function validateMemberForBuyAtZeroPromo($productId, $memberId)
     {
         $query = $this->xmlmap->getFilenameID('sql/product', 'buyAtZeroAuthenticate');
         $sth = $this->db->conn_id->prepare($query);
         $sth->bindParam(':productId', $productId);
         $sth->bindParam(':memberId', $memberId);
         $sth->execute();
+        $cnt = $sth->fetchAll(PDO::FETCH_ASSOC)[0]['cnt'];
+        $result = true;
+        if($cnt >= 1){
+            $result = false;
+        }
 
-        return $sth->fetchAll(PDO::FETCH_ASSOC)[0]['cnt'];
+        return $result;
     }
 
     /**
-     * Register ProductID and MemberID in promo
+     * Join member to buyAtZero php promo
      *
-     * @param $productId
-     * @param $memberId
-     * @return bool
+     * @Param $productId
+     * @Param $memberId
+     * @Return boolean
      */
-    public function buyAtZeroRegistration($productId, $memberId)
+    public function registerMemberForBuyAtZeroPromo($productId, $memberId)
     {
-        $auth = $this->buyAtZeroAuthenticate($productId, $memberId);
+        $auth = $this->validateMemberForBuyAtZeroPromo($productId, $memberId);
 
-        if(intval($auth) >= 1)
-        {
+        if($auth == false){
             return false;
         }
         $query = $this->xmlmap->getFilenameID('sql/product', 'buyAtZeroRegistration');

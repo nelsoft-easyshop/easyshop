@@ -647,10 +647,6 @@ class product extends MY_Controller
             $data['metadescription'] = es_string_limit(html_escape($product_row['brief']), 155);
             $this->load->view('templates/header', $data); 
             $this->load->view('pages/product/productpage_view', $data);
-            print "<pre>";
-            print_r($product_row);
-            print "</pre>";
-
         }
         else{
             $data['title'] =  'Easyshop.ph | Page Not Found';
