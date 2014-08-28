@@ -319,6 +319,10 @@ textarea:focus {
     border:1px solid #ff4400;
 }
 
+input[type=text]::-ms-clear {
+    display: none;
+}
+
 input[type="button"] {
       cursor:pointer;
 }
