@@ -1,44 +1,49 @@
-(function ($) {
-    $(document).ready(function () {
-        $(".search_box").css('display', 'none');
 
+(function($){    
+
+    $(document).ready(function(){
+        $(".search_box").css('display','none');
+    });
+
+    $(document).ready(function(){
         $("#login_form").validate({
             rules: {
                 login_username: {
                     required: true
-                },
+                    },
                 login_password: {
                     required: true
-                }
+                    }
             },
             messages: {
                 login_username: {
                     required: 'Username is required.'
-                },
+                    },
                 login_password: {
                     required: 'Password is required.'
-                }
+                    }
             },
             errorElement: "span",
-            errorPlacement: function (error, element) {
-                if (element.attr('name') === 'login_username') {
+            errorPlacement: function(error, element) {
+                if(element.attr('name') === 'login_username'){
                     error.appendTo($('#username_error'));
                 }
-                else {
+                else{
                     error.appendTo($('#passw_error'));
                 }
             },
-            submitHandler: function (form) {
+            submitHandler: function(form) {
                 $('#loading_img').show();
                 $('#login').hide();
-
+                
                 $.ajax({
                     type: "POST",
                     dataType: "JSON",
                     url: config.base_url + "login/authenticate",
                     data: $(form).serializeArray(),
-                    success: function (data) {
-                        if (data.o_success <= 0) {
+
+                    success:function(data){
+                        if(data.o_success <= 0){
                             $("#login_error").empty();
                             $("#login_error").html(data[3]);
                             $('#loading_img').hide();

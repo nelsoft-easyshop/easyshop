@@ -53,16 +53,30 @@
             <?php echo form_close();?>
             
             <div class="product_upload_success pd-top-30">
-                <p>
-                    <img src="<?=base_url()?>assets/images/img_success.png">
+                <div class='row'>
+                    <div class='text-center'>
+                        <img src="/assets/images/img_success.png">
                         <?php if(!isset($is_edit)): ?>
-                            You have <strong>successfully</strong> uploaded <span>1 new item</span>
+                            You have <strong>successfully</strong> uploaded <span>1 new item.</span>
                         <?php else: ?>   
                             You have <strong>successfully</strong> edited your listing for <span><?php echo html_escape($product['product_name']);?></span>. 
                         <?php endif; ?>  
+                        <a class='desktop-item-lnk' href="<?php echo '/item/'.$product['slug']; ?>" class="blue">Click here to view your listing.</a>
+                    </div>
                     
-                    <a href="<?php echo base_url().'item/'.$product['slug']; ?>" class="blue">Click here to view</a>
+                    <div class='col-sm-6 text-center item-lnk'>
+                        <a href="<?php echo '/item/'.$product['slug']; ?>" class="blue">Click here to view your listing.</a>
+                    </div>
+
+                </div>
+                
+                <br/>
+                <p style='font-size: 13px;'>
+                    Congratulations, your item has just been uploaded as an ad-listing on the site. Complete the shipment details of your item so that
+                    other users may be able to purchase your item through Easyshop.ph. Once complete, other users can purchase your listing via the 
+                    different available payment options.
                 </p>
+                <hr/>
             </div>
         </div>
     </div>
@@ -274,13 +288,14 @@
                                     <input type="text" class="shipprice form-control" name="shipprice[<?php echo $sgCounter?>][<?php echo $siCounter?>]" value="<?php echo html_escape($price);?>">
                                 </div>
                                 <div class="col-xs-6 col-sm-6 col-md-7 upload_chosen">
-                                    <label for="location">Select Location</label><select class="shiploc form-control" name="shiploc[<?php echo $sgCounter?>][<?php echo $siCounter?>][]" multiple data-placeholder="Select location(s)">
+                                    <label for="location">Select Location</label>
+                                    <select class="shiploc form-control" name="shiploc[<?php echo $sgCounter?>][<?php echo $siCounter?>][]" multiple data-placeholder="Select location(s)">
                                         <?php foreach($shiploc['area'] as $island=>$loc):?>
                                             <option value="<?php echo $shiploc['islandkey'][$island];?>" <?php echo in_array($shiploc['islandkey'][$island],$locarr) ? 'selected':''?> <?php echo in_array($shiploc['islandkey'][$island],$shiparr['disable_lookup']) && !in_array($shiploc['islandkey'][$island],$locarr) ? 'disabled':''?>><?php echo $island;?></option>
                                                 <?php foreach($loc as $region=>$subloc):?>
-                                                    <option value="<?php echo $shiploc['regionkey'][$region];?>" style="margin-left:15px;" <?php echo in_array($shiploc['regionkey'][$region],$locarr) ? 'selected':''?>  <?php echo in_array($shiploc['regionkey'][$region],$shiparr['disable_lookup']) && !in_array($shiploc['regionkey'][$region],$locarr) ? 'disabled':''?> >&nbsp;&nbsp;&nbsp;<?php echo $region;?></option>
+                                                    <option value="<?php echo $shiploc['regionkey'][$region];?>" style="margin-left:15px;" <?php echo in_array($shiploc['regionkey'][$region],$locarr) ? 'selected':''?>  <?php echo in_array($shiploc['regionkey'][$region],$shiparr['disable_lookup']) && !in_array($shiploc['regionkey'][$region],$locarr) ? 'disabled':''?> ><?php echo $region;?></option>
                                                         <?php foreach($subloc as $id_cityprov=>$cityprov):?>
-                                                            <option value="<?php echo $id_cityprov;?>" style="margin-left:30px;" <?php echo in_array($id_cityprov,$locarr) ? 'selected':''?>  <?php echo in_array($id_cityprov,$shiparr['disable_lookup']) && !in_array($id_cityprov,$locarr) ? 'disabled':''?> >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $cityprov;?></option>
+                                                            <option value="<?php echo $id_cityprov;?>" style="margin-left:30px;" <?php echo in_array($id_cityprov,$locarr) ? 'selected':''?>  <?php echo in_array($id_cityprov,$shiparr['disable_lookup']) && !in_array($id_cityprov,$locarr) ? 'disabled':''?> ><?php echo $cityprov;?></option>
                                                         <?php endforeach;?>
                                                 <?php endforeach;?>
                                         <?php endforeach;?>

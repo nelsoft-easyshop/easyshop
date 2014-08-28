@@ -6,7 +6,7 @@ if (!defined('BASEPATH'))
 class Home extends MY_Controller 
 {
 
-    public $feedsProdPerPage = 15;
+    public $feedsProdPerPage = 7;
 
     
     /**
@@ -29,14 +29,9 @@ class Home extends MY_Controller
     public function index() 
     {
             
-        $configurationService = $this->serviceContainer['local_configuration'];
-        if($configurationService->isConfigFileExists() && strlen(trim($xmlfile = $configurationService->getConfigValue('XML_home'))) > 0){
-            $home_content = $this->product_model->getHomeContent($xmlfile);
-        }
-        else{           
-            $home_content = $this->product_model->getHomeContent();
-        }
-            
+        $xmlResourceService = $this->serviceContainer['xml_resource'];
+        $home_content = $this->product_model->getHomeContent($xmlResourceService->getHomeXMLfile());
+
         $layout_arr = array();
         if(!$this->session->userdata('member_id')){
             foreach($home_content['section'] as $section){
@@ -56,14 +51,14 @@ class Home extends MY_Controller
         $this->load->view('templates/header', $data);
         
         if( $data['logged_in'] ){
-            $data = array_merge($data, $this->getFeed());
+            $data = array_merge($data, $this->getFeed());            
             $this->load->view("templates/home_layout/layoutF",$data);
+            $this->load->view('templates/footer', array('minborder' => true));
         }
         else{
             $this->load->view('pages/home_view', $data);
+            $this->load->view('templates/footer_full');
         }
-                
-        $this->load->view('templates/footer_full');
 
     }
     
@@ -89,6 +84,9 @@ class Home extends MY_Controller
      */
     public function pagenotfound()
     {
+        $this->output->set_status_header('404'); 
+        $page = $_SERVER['REQUEST_URI'];
+        log_message('error', '404 Page Not Found --> '.$page);
         $data = array('title' => 'Page Not Found | Easyshop.ph',);
         $data = array_merge($data, $this->fill_header());
         $this->load->view('templates/header', $data);
@@ -228,6 +226,7 @@ class Home extends MY_Controller
     /**
      * Renders memberpage
      *
+     * @param string $tab
      * @return View
      */
     public function userprofile()
@@ -235,10 +234,10 @@ class Home extends MY_Controller
         $this->load->model('memberpage_model');
 
         $sellerslug = $this->uri->segment(1);
-    
+        $tab = $this->input->get('tab') ? $this->input->get('tab') : '';
         $session_data = $this->session->all_userdata();
         $vendordetails = $this->memberpage_model->getVendorDetails($sellerslug);
-    
+            
         if($vendordetails){
             $data['title'] = 'Vendor Profile | Easyshop.ph';
             $data['my_id'] = (empty($session_data['member_id']) ? 0 : $session_data['member_id']);
@@ -247,15 +246,20 @@ class Home extends MY_Controller
             $data['render_searchbar'] = false;
             $this->load->view('templates/header', $data);
             $sellerid = $vendordetails['id_member'];
+            $usersFollowing = $this->user_model->getFollowing($sellerid);
+            $usersFollower = $this->user_model->getFollowers($sellerid);
             $user_product_count = $this->memberpage_model->getUserItemCount($sellerid);
             $data = array_merge($data,array(
                     'vendordetails' => $vendordetails,
                     'image_profile' => $this->memberpage_model->get_Image($sellerid),
                     'banner' => $this->memberpage_model->get_Image($sellerid,'vendor'),
-                    'products' => $this->memberpage_model->getVendorCatItems($sellerid,$sellerslug),
+                    'products' => $this->memberpage_model->getVendorCatItems($sellerid,$vendordetails['username']),
                     'active_count' => intval($user_product_count['active']),
                     'deleted_count' => intval($user_product_count['deleted']),
                     'sold_count' => intval($user_product_count['sold']),
+                    'followers' =>  $usersFollower,
+                    'following' =>  $usersFollowing,
+                    'tab' => $tab,
                     ));
             $data['allfeedbacks'] = $this->memberpage_model->getFeedback($sellerid);
 
@@ -264,44 +268,53 @@ class Home extends MY_Controller
             $data['renderEdit'] = (int)$sellerid === (int)$data['my_id'] ? true : false;
             #if 0 : no entry - unfollowed, hence display follow
             #if 1 : has entry - followed, hence display unfollow
-            $data['subscribe_status'] = $this->memberpage_model->checkVendorSubscription($data['my_id'],$sellerslug)['stat'];
-            $data['subscribe_count'] = (int)$this->memberpage_model->countVendorSubscription($data['my_id'], $sellerslug)['subscription_count'];
-            
+            $data['subscribe_status'] = $this->memberpage_model->checkVendorSubscription($data['my_id'],$sellerslug)['stat'];   
             $this->load->view('pages/user/vendor_view', $data);
             $this->load->view('templates/footer');
         }
         else{
-            $data = array('title' => 'Page Not Found | Easyshop.ph',);
-            $data = array_merge($data, $this->fill_header());
-            $this->load->view('templates/header', $data);
-            $this->load->view('pages/general_error');
-            $this->load->view('templates/footer_full');
+            $this->pagenotfound();
         }
     }
 
-    
-    
+    /**
+     *  Fetch information to be display in feeds page
+     *
+     *  @return array
+     */
     public function getFeed()
     {
+        $xmlResourceService = $this->serviceContainer['xml_resource'];
+        $xmlfile =  $xmlResourceService->getContentXMLfile();
+
         $perPage = $this->feedsProdPerPage;
         $memberId = $this->session->userdata('member_id');
-        $easyshopId = trim($this->xmlmap->getFilenameID('page/content_files','easyshop-member-id'));
-        $partnersId = explode(',',trim($this->xmlmap->getFilenameID('page/content_files','partners-member-id')));
-        array_push($partnersId, $easyshopId);
+        $userdata = $this->user_model->getUserById($memberId);
 
+        $easyshopId = trim($this->xmlmap->getFilenameID($xmlfile,'easyshop-member-id'));
+        $partnersId = explode(',',trim($this->xmlmap->getFilenameID($xmlfile,'partners-member-id')));
+        
+        array_push($partnersId, $easyshopId);
         $prodId = ($this->input->post('ids')) ? $this->input->post('ids') : 0; 
+        $followedSellers = $this->user_model->getFollowing($memberId);
+        
+        $this->load->config('protected_category', TRUE);
+        $categoryId = $this->config->item('promo', 'protected_category');
 
         $data = array(
-            'featured_prod' => $this->product_model->getProductFeed($memberId,$partnersId,$prodId,$perPage),
+            'featured_prod' => $this->product_model->getFeaturedProductFeed($memberId,$partnersId,$prodId,$perPage),
             'new_prod' => $this->product_model->getNewProducts($perPage),
-            'followed_users' => $this->user_model->getVendorSubscription($memberId),
-            'banners' => $this->product_model->getStaticBannerFeed(),
-            'promo_items' => $this->product_model->getStaticProductFeed('promo'),
-            'popular_items' => $this->product_model->getStaticProductFeed('popular'),
-            'featured_product' => $this->product_model->getStaticProductFeed('featured'),
-            'category_navigation' => $this->load->view('templates/category_navigation',array('cat_items' =>  $this->getcat(),), TRUE ),
+            'easytreats_prod' => $this->product_model->getProductsByCategory($categoryId,array(),0,"<",0,$perPage),
+            'followed_users' =>  $followedSellers,
+            'banners' => $this->product_model->getStaticBannerFeed($xmlfile),
+            'promo_items' => $this->product_model->getStaticProductFeed('promo', $xmlfile),
+            'popular_items' => $this->product_model->getStaticProductFeed('popular', $xmlfile),
+            'featured_product' => $this->product_model->getStaticProductFeed('featured', $xmlfile),
+            'isCollapseCategories' => count($followedSellers) > 2,
+            'userslug' => $userdata['slug'],
+            'maxDisplayableSellers' => 7
         );
-        
+
         #Assemble featured product ID array for exclusion on LOAD MORE request
         $fpID = array();
         foreach( $data['featured_prod'] as $fp ){
@@ -309,29 +322,40 @@ class Home extends MY_Controller
                 $fpID[] = $fp['id_product'];
             }
         }
+        
         $data['fpID'] = json_encode($fpID);
         
         return $data;
     }
     
+    /**
+     *  Used by AJAX Requests to fetch for products in Feeds page
+     *
+     *  @return JSON
+     */
     public function getMoreFeeds()
     {
         if( $this->input->post("feed_page") && $this->input->post("feed_set") ){
             $perPage = $this->feedsProdPerPage;
             $memberId = $this->session->userdata('member_id');
             
-            $page = $this->input->post("feed_page") * 10 - $perPage;
-            $productFeedSet = $this->input->post("feed_set");
-            
+            $page = ((int)$this->input->post("feed_page") + 1) * $perPage - $perPage;
+            $productFeedSet = (int)$this->input->post("feed_set");
+
             switch( (int)$productFeedSet ){
                 case 1: #Featured Tab
-                    $easyshopId = trim($this->xmlmap->getFilenameID('page/content_files','easyshop-member-id'));
-                    $partnersId = explode(',',trim($this->xmlmap->getFilenameID('page/content_files','partners-member-id')));
+
+                    $xmlResourceService = $this->serviceContainer['xml_resource'];
+                    $xmlfile =  $xmlResourceService->getContentXMLfile();
+
+                    $easyshopId = trim($this->xmlmap->getFilenameID($xmlfile,'easyshop-member-id'));
+                    $partnersId = explode(',',trim($this->xmlmap->getFilenameID($xmlfile,'partners-member-id')));
+
                     array_push($partnersId, $easyshopId);
                     $prodIdRaw = ($this->input->post('ids')) ? json_decode($this->input->post('ids')) : array(0); 
                     $prodId = implode(",",$prodIdRaw);
                     
-                    $products = $this->product_model->getProductFeed($memberId,$partnersId,$prodId,$perPage,$page);
+                    $products = $this->product_model->getFeaturedProductFeed($memberId,$partnersId,$prodId,$perPage,$page);
                     
                     #Assemble featured product ID array for exclusion on LOAD MORE request
                     $fpID = array();
@@ -347,6 +371,16 @@ class Home extends MY_Controller
                     break;
                 case 2: #New Products Tab
                     $products = $this->product_model->getNewProducts($perPage,$page);
+                    break;
+                case 3: #EasyTreats Products Tab
+                    $this->load->config('protected_category', TRUE);
+                    $categoryId = $this->config->item('promo', 'protected_category');
+                    $products = $this->product_model->getProductsByCategory($categoryId,array(),0,"<",$page,$perPage);
+                    break;
+                default:
+                    $data['error'] = "Unable to load prouct list.";
+                    echo json_encode($data);
+                    exit();
                     break;
             }
             

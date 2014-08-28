@@ -208,9 +208,9 @@ class product_model extends CI_Model
     function getProductBySlug($slug, $add_click_count = true)
     {
         if($add_click_count){
-        $query = $this->xmlmap->getFilenameID('sql/product', 'getProductBySlug');
+            $query = $this->xmlmap->getFilenameID('sql/product', 'getProductBySlug');
         }else{
-        $query = $this->xmlmap->getFilenameID('sql/product', 'getProductBySlugNoIncrement');
+            $query = $this->xmlmap->getFilenameID('sql/product', 'getProductBySlugNoIncrement');
         }
         $sth = $this->db->conn_id->prepare($query);
         $sth->bindParam(':slug',$slug);
@@ -2179,7 +2179,7 @@ class product_model extends CI_Model
         return $return;  
     }
         
-    public function getHomeContent($file = 'page/home_files')
+    public function getHomeContent($file)
     { 
         $xml_content = $this->xmlmap->getFilename($file);
         $home_view_data = array();
@@ -2454,7 +2454,7 @@ class product_model extends CI_Model
             $sth->bindParam(':memberid',$memberid,PDO::PARAM_INT);
             $sth->bindParam(':cod', $cod, PDO::PARAM_INT);
             $sth->execute();
-            return true;
+            return $slug;
         }
         else{
             return false;
@@ -2566,14 +2566,14 @@ class product_model extends CI_Model
      *
      *  @return array
      */
-    public function getProductFeed($member_id,$partners_id,$product_ids,$per_page,$page=0)
+    public function getFeaturedProductFeed($member_id,$partners_id,$product_ids,$per_page,$page=0)
     { 
         $this->load->library('parser');
         
         $parseData['partners_id'] = implode(',',$partners_id);
         $parseData['product_ids'] = $product_ids;
         $parseData['limit'] = implode(",", array($page,$per_page));
-        $query = $this->xmlmap->getFilenameID('sql/product','getProductFeed'); 
+        $query = $this->xmlmap->getFilenameID('sql/product','getFeaturedProductFeed'); 
         $query = $this->parser->parse_string($query, $parseData, true);
     
         $seta = $this->db->conn_id->prepare('SET @a = -1');
@@ -2590,6 +2590,7 @@ class product_model extends CI_Model
         explodeImagePath($row);
         
         foreach($row as $k=>$r){
+            applyPriceDiscount($row[$k]);
             if($r['imgurl'] === ""){
                 $row[$k]['imgurl'] = "assets/user/default/60x60.png";
             }
@@ -2620,6 +2621,7 @@ class product_model extends CI_Model
         explodeImagePath($row);
         
         foreach($row as $k=>$r){
+            applyPriceDiscount($row[$k]);
             if($r['imgurl'] === ""){
                 $row[$k]['imgurl'] = "assets/user/default/60x60.png";
             }
@@ -2636,7 +2638,7 @@ class product_model extends CI_Model
      *
      *  @return array
      */
-    public function getStaticProductFeed($string)
+    public function getStaticProductFeed($string, $xmlfile)
     {
         switch($string){
             case "popular":
@@ -2649,14 +2651,13 @@ class product_model extends CI_Model
                 $node = "feedFeaturedProduct";
                 break;
         }
-        
-        $products = $this->xmlmap->getFilenameNode('page/content_files', $node);
+
+        $products = $this->xmlmap->getFilenameNode($xmlfile, $node);
+
         $data = array();
         
         foreach( $products as $p ){
             $item = $this->getProductBySlug($p->slug, false);
-            $temp = array($item);
-            explodeImagePath($temp);
             $data[]= $item;
         }
         
@@ -2668,9 +2669,9 @@ class product_model extends CI_Model
      *
      *  @return array
      */
-    public function getStaticBannerFeed()
-    {
-        $banner = $this->xmlmap->getFilenameNode('page/content_files', 'feedBanner');
+    public function getStaticBannerFeed($xmlfile)
+    {    
+        $banner = $this->xmlmap->getFilenameNode($xmlfile, 'feedBanner');
         $b = json_decode(json_encode($banner),true);
         
         return $b;
@@ -2749,5 +2750,17 @@ class product_model extends CI_Model
         $sth->execute();
 
         return true;
+    }
+
+    public function getProdCount($prodid){
+      
+        $query = $this->xmlmap->getFilenameID('sql/product','getProdCount');
+        $sth = $this->db->conn_id->prepare($query);
+        $sth->bindParam(':prodid',$prodid); 
+        $sth->execute(); 
+        $number_of_rows = $sth->fetchColumn(); 
+        return $number_of_rows;
+        
+    
     }
 }

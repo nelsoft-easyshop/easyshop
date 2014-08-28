@@ -15,6 +15,13 @@ class Memberpage extends MY_Controller
 {
 
     /**
+     * Content xml file location within resource
+     *
+     * @var string
+     */
+    private $contentXmlFile;
+
+    /**
      *  Class Constructor
      */
     public function __construct()
@@ -25,6 +32,9 @@ class Memberpage extends MY_Controller
         $this->load->model('product_model');
         $this->load->model('payment_model');
         $this->form_validation->set_error_delimiters('', '');
+        
+        $xmlResourceService = $this->serviceContainer['xml_resource'];
+        $this->contentXmlFile =  $xmlResourceService->getContentXMLfile();
     }
     
     /**
@@ -41,7 +51,7 @@ class Memberpage extends MY_Controller
         $data['render_logo'] = false;
         $data['render_searchbar'] = false;
         
-        $data['render_userslug_edit'] = $data['username'] === $data['userslug'] ? true:false;
+        $data['render_userslug_edit'] = strtolower($data['username']) === strtolower($data['userslug']) ? true:false;
         $data['hide_quickheader'] = get_cookie('es_qh') ? true:false;
         
         $this->load->view('templates/header', $data);
@@ -235,11 +245,11 @@ class Memberpage extends MY_Controller
             'image_profile' => $this->memberpage_model->get_image($uid),
             'active_products' => $this->memberpage_model->getUserItems($uid,0),
             'deleted_products' => $this->memberpage_model->getUserItems($uid,1),
-                'draft_products' => $this->memberpage_model->getUserItems($uid,0,1),
+            'draft_products' => $this->memberpage_model->getUserItems($uid,0,1),
             'active_count' => intval($user_product_count['active']),
             'deleted_count' => intval($user_product_count['deleted']),
-                'sold_count' => intval($user_product_count['sold']),
-                'draft_count' => intval($user_product_count['draft'])
+            'sold_count' => intval($user_product_count['sold']),
+            'draft_count' => intval($user_product_count['draft'])
         );
         $data = array_merge($data, $this->memberpage_model->getLocationLookup());
         $data = array_merge($data,$this->memberpage_model->get_member_by_id($uid));
@@ -247,10 +257,10 @@ class Memberpage extends MY_Controller
         $data =  array_merge($data,$this->memberpage_model->get_school_by_id($uid));
         $data['bill'] =  $this->memberpage_model->get_billing_info($uid);
         $data['transaction'] = array(
-            'buy' => $this->memberpage_model->getBuyTransactionDetails($uid, 0),
+            'buy' => $this->memberpage_model->getBuyTransactionDetails($this->contentXmlFile, $uid, 0),
             'sell' => $this->memberpage_model->getSellTransactionDetails($uid, 0),
             'complete' => array(
-                'buy' => $this->memberpage_model->getBuyTransactionDetails($uid, 1),
+                'buy' => $this->memberpage_model->getBuyTransactionDetails($this->contentXmlFile, $uid, 1),
                 'sell' => $this->memberpage_model->getSellTransactionDetails($uid, 1)
             )
         );
@@ -458,13 +468,14 @@ class Memberpage extends MY_Controller
         echo json_encode($data);
     }
 
-    /*
+    /**
      *  Used to add feedback to SELLER or BUYER under Transactions Tab
      *  Returns 1 on success, 0 otherwise
      *
      *  @return integer
      */
-    public function addFeedback(){
+    public function addFeedback()
+    {
         if($this->input->post('order_id') && $this->input->post('feedback-field') && $this->form_validation->run('add_feedback_transaction')){
             $result = false;
             $data = array(
@@ -757,13 +768,13 @@ class Memberpage extends MY_Controller
         switch( $checkData['stat'] ){
             case 'unfollowed':
             case 'followed':
-            $boolResult = $this->memberpage_model->setVendorSubscription($memberID,$checkData['vendor_id'], $checkData['stat']);
-            $serverResponse['result'] = $boolResult ? 'success' : 'fail';
-            $serverResponse['error'] = $boolResult ? '' : 'Failed to update database.';
-            break;
+                $boolResult = $this->memberpage_model->setVendorSubscription($memberID,$checkData['vendor_id'], $checkData['stat']);
+                $serverResponse['result'] = $boolResult ? 'success' : 'fail';
+                $serverResponse['error'] = $boolResult ? '' : 'Failed to update database.';
+                break;
             case 'error':
-            $serverResponse['result'] = 'fail';
-            $serverResponse['error'] = 'Incorrect data submitted to server. Please try again later.';
+                $serverResponse['result'] = 'fail';
+                $serverResponse['error'] = 'Incorrect data submitted to server. Please try again later.';
             break;
         }
         
@@ -1243,7 +1254,7 @@ class Memberpage extends MY_Controller
         
         switch($k){
             case 'buy':
-            $data['transaction']['buy'] = $this->memberpage_model->getBuyTransactionDetails($member_id,$completeStatus,$start,$nf,$myof,$myosf);;
+            $data['transaction']['buy'] = $this->memberpage_model->getBuyTransactionDetails($this->contentXmlFile, $member_id,$completeStatus,$start,$nf,$myof,$myosf);;
             $view = 'memberpage_tx_buy_view';
             $querySelect = 'buy';
             break;
@@ -1253,7 +1264,7 @@ class Memberpage extends MY_Controller
             $querySelect = 'sell';
             break;
             case 'cbuy':
-            $data['transaction']['complete']['buy'] = $this->memberpage_model->getBuyTransactionDetails($member_id,$completeStatus,$start,$nf,$myof,$myosf);;
+            $data['transaction']['complete']['buy'] = $this->memberpage_model->getBuyTransactionDetails($this->contentXmlFile, $member_id,$completeStatus,$start,$nf,$myof,$myosf);;
             $view = 'memberpage_tx_cbuy_view';
             $querySelect = 'buy';
             break;

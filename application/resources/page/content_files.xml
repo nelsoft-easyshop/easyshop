@@ -9,7 +9,7 @@
     </select>
 
     <select id="bank-account-name">
-	Easyshop Inc
+        Easyshop Inc
     </select>
 
     <select id="message-sender-id">
@@ -17,45 +17,54 @@
     </select>
 
     <select id="easyshop-member-id">
-        56
+        5408
     </select>
 
     <select id="partners-member-id">
-        <!-- eg: if only 1 (1) -->
-        <!-- eg: if more than 1 (1,2,3,4,5) -->
-        57,74
+        830,11225,11355,11141,133,246,120,188,11165,11077,11396
     </select>
-	
-	<feedBanner>
-		<left>assets/user/default/banner.png</left>
-		<mid>assets/user/default/banner.png</mid>
-		<right>assets/user/default/banner.png</right>
-	</feedBanner>
-	
-	<feedFeaturedProduct>
-		<product>
-			<slug>qtqwsad</slug>
-		</product>
-	</feedFeaturedProduct>
-	
-	<feedPopularItems>
-		<product>
-			<slug>qtqwsad</slug>
-		</product>
-		<product>
-			<slug>qtqwsad</slug>
-		</product>
-		<product>
-			<slug>qtqwsad</slug>
-		</product>
-	</feedPopularItems>
-	
-	<feedPromoItems>
-		<product>
-			<slug>qtqwsad</slug>
-		</product>
-		<product>
-			<slug>qtqwsad</slug>
-		</product>
-	</feedPromoItems>
+
+    <feedBanner>
+        <left>
+            <img>assets/images/feed/side-banner-2.jpg</img>
+            <target>https://www.facebook.com/EasyShopPhilippines/photos/a.214678272075103.1073741828.211771799032417/256405824569014</target>
+        </left>
+        <mid>
+            <img>assets/images/feed/home-banner-1.jpg</img>
+            <target>https://www.facebook.com/EasyShopPhilippines/photos/a.214678272075103.1073741828.211771799032417/257938951082368</target>
+        </mid>
+        <right>
+            <img>assets/images/feed/side-banner-1.jpg</img>
+            <target>deals</target>
+        </right>
+    </feedBanner>
+
+    <feedFeaturedProduct>
+        <product>
+            <slug>action-camcorder-hd-720p</slug>
+        </product>
+    </feedFeaturedProduct>
+
+    <feedPopularItems>
+        <product>
+            <slug>kj-star-wireless-mobile-phone-monopod</slug>
+        </product>
+        <product>
+            <slug>n9-super-smart-watch-phone</slug>
+        </product>
+        <product>
+            <slug>sports-cam</slug>
+        </product>
+    </feedPopularItems>
+
+    <feedPromoItems>
+        <product>
+            <slug>bavin-ipower-13800mah-pc228</slug>
+        </product>
+        <product>
+            <slug>bavin-ipower-pc226</slug>
+        </product>
+    </feedPromoItems>
+    
 </map>
+
