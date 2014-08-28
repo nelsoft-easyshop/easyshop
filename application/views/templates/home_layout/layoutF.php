@@ -123,27 +123,42 @@
                                 </div>
                             </div>
                         </div>
-                        <?php foreach($featured_product as $p):?>
+                        <?php foreach($featured_product as $prod):?>
                         <div class="media table-bordered mrgn-bttm-8 product feature">
                             <div class="col-md-9 col-sm-9 media-sub media-content">
                                 <div class="pull-left media-image">
-                                    <a target="_blank" href="<?php echo base_url() . "item/" . $p['slug']?>">
-                                        <img class="media-object" src="<?=base_url()?><?php echo $p['path'] . "categoryview/" . $p['file']?>">
+                                    <a target="_blank" href="<?php echo base_url() . "item/" . $prod['slug']?>">
+                                        <img class="media-object" src="<?=base_url()?><?php echo $prod['path'] . "categoryview/" . $prod['file']?>">
                                     </a>
                                 </div>
                                 <div class="media-body">
                                     <div class="content">
-                                        <h5 class="title"><a target="_blank" href="<?php echo base_url() . "item/" . $p['slug']?>"><?php echo $p['product_name']?></a></h5>
-                                        <?php echo $p['brief']?>
+                                        <h5 class="title"><a target="_blank" href="<?php echo base_url() . "item/" . $prod['slug']?>"><?php echo $prod['product_name']?></a></h5>
+                                        <?php echo $prod['brief']?>
                                     </div>
-                                    <div class="condition m-screen l-screen">Condition: <?php echo $p['condition']?></div>
+                                    <div class="condition m-screen l-screen">
+                                        Condition: <?php echo $prod['condition']?>
+                                        <?php if( intval($prod['is_free_shipping'])===1 ):?>
+                                            <span class="span_bg img_free_shipping"></span>
+                                        <?php endif;?>
+                                    </div>
                                 </div>
-                                <div class="condition s-screen">Condition: <?php echo $p['condition']?></div>
+                                <div class="condition s-screen">
+                                    <?php if( intval($prod['is_free_shipping'])===1 ):?>
+                                        <span class="span_bg img_free_shipping"></span>
+                                    <?php endif;?>
+                                    Condition: <?php echo $prod['condition']?>
+                                </div>
                             </div>
                             <div class="col-md-3 col-sm-3 media-sub media-btn-panel">
                                 <p>PHP</p>
-                                <p class="feed-price"><?php echo html_escape(number_format($p['original_price'], 2, '.', ','))?></p>
-                                <div class="orange-btn"><a target="_blank" href="<?php echo base_url() . "item/" . $p['slug']?>">Buy Now</a></div>
+                                <p class="feed-price"><?php echo number_format($prod['price'],2,'.',',')?></p>
+                                <div class="orig-price">
+                                    <?php if( $prod['discount']>0 ):?>
+                                        <?php echo "Php " . number_format($prod['original_price'],2,'.',',')?>
+                                    <?php endif;?>
+                                </div>
+                                <div class="orange-btn"><a target="_blank" href="<?php echo base_url() . "item/" . $prod['slug']?>">Buy Now</a></div>
                             </div>
                         </div>
                         <?php endforeach;?>
@@ -162,13 +177,28 @@
                                             <h5 class="title"><a target="_blank" href="<?php echo base_url() . "item/" . $prod['slug']?>"><?php echo $prod['name']?></a></h5>
                                             <?php echo $prod['brief']?>
                                         </div>
-                                        <div class="condition m-screen l-screen">Condition: <?php echo $prod['condition']?></div>
+                                        <div class="condition m-screen l-screen">
+                                            Condition: <?php echo $prod['condition']?>
+                                            <?php if( intval($prod['is_free_shipping'])===1 ):?>
+                                                <span class="span_bg img_free_shipping"></span>
+                                            <?php endif;?>
+                                        </div>
                                     </div>
-                                    <div class="condition s-screen">Condition: <?php echo $prod['condition']?></div>
+                                    <div class="condition s-screen">
+                                        <?php if( intval($prod['is_free_shipping'])===1 ):?>
+                                            <span class="span_bg img_free_shipping"></span>
+                                        <?php endif;?>
+                                        Condition: <?php echo $prod['condition']?>
+                                    </div>
                                 </div>
                                 <div class="col-md-3 col-sm-3 media-sub media-btn-panel">
                                     <p>PHP</p>
-                                    <p class="feed-price"><?php echo $prod['price']?></p>
+                                    <p class="feed-price"><?php echo number_format($prod['price'],2,'.',',')?></p>
+                                    <div class="orig-price">
+                                        <?php if( $prod['discount']>0 ):?>
+                                            <?php echo "Php " . number_format($prod['original_price'],2,'.',',')?>
+                                        <?php endif;?>
+                                    </div>
                                     <div class="orange-btn"><a target="_blank" href="<?php echo base_url() . "item/" . $prod['slug']?>">Buy Now</a></div>
                                 </div>
                             </div>
@@ -199,13 +229,28 @@
                                             <h5 class="title"><a target="_blank" href="<?php echo base_url() . "item/" . $prod['slug']?>"><?php echo $prod['name']?></a></h5>
                                             <?php echo $prod['brief']?>
                                         </div>
-                                        <div class="condition m-screen l-screen">Condition: <?php echo $prod['condition']?></div>
+                                        <div class="condition m-screen l-screen">
+                                            <?php if( intval($prod['is_free_shipping'])===1 ):?>
+                                                <span class="span_bg img_free_shipping" style="float:right;"></span>
+                                            <?php endif;?>
+                                            Condition: <?php echo $prod['condition']?>
+                                        </div>
                                     </div>
-                                    <div class="condition s-screen">Condition: <?php echo $prod['condition']?></div>
+                                    <div class="condition s-screen">
+                                        <?php if( intval($prod['is_free_shipping'])===1 ):?>
+                                            <span class="span_bg img_free_shipping"></span>
+                                        <?php endif;?>
+                                        Condition: <?php echo $prod['condition']?>
+                                    </div>
                                 </div>
                                 <div class="col-md-3 col-sm-3 media-sub media-btn-panel">
                                     <p>PHP</p>
-                                    <p class="feed-price"><?php echo $prod['price']?></p>
+                                    <p class="feed-price"><?php echo number_format($prod['price'],2,'.',',')?></p>
+                                    <div class="orig-price">
+                                        <?php if( $prod['discount']>0 ):?>
+                                            <?php echo "Php " . number_format($prod['original_price'],2,'.',',')?>
+                                        <?php endif;?>
+                                    </div>
                                     <div class="orange-btn"><a target="_blank" href="<?php echo base_url() . "item/" . $prod['slug']?>">Buy Now</a></div>
                                 </div>
                             </div>
@@ -236,13 +281,28 @@
                                             <h5 class="title"><a target="_blank" href="<?php echo base_url() . "item/" . $prod['slug']?>"><?php echo $prod['name']?></a></h5>
                                             <?php echo $prod['brief']?>
                                         </div>
-                                        <div class="condition m-screen l-screen">Condition: <?php echo $prod['condition']?></div>
+                                        <div class="condition m-screen l-screen">
+                                            <?php if( intval($prod['is_free_shipping'])===1 ):?>
+                                                <span class="span_bg img_free_shipping"></span>
+                                            <?php endif;?>
+                                            Condition: <?php echo $prod['condition']?>
+                                        </div>
                                     </div>
-                                    <div class="condition s-screen">Condition: <?php echo $prod['condition']?></div>
+                                    <div class="condition s-screen">
+                                        <?php if( intval($prod['is_free_shipping'])===1 ):?>
+                                            <span class="span_bg img_free_shipping"></span>
+                                        <?php endif;?>
+                                        Condition: <?php echo $prod['condition']?>
+                                    </div>
                                 </div>
                                 <div class="col-md-3 col-sm-3 media-sub media-btn-panel">
                                     <p>PHP</p>
-                                    <p class="feed-price"><?php echo $prod['price']?></p>
+                                    <p class="feed-price"><?php echo number_format($prod['price'],2,'.',',')?></p>
+                                    <div class="orig-price">
+                                        <?php if( $prod['discount']>0 ):?>
+                                            <?php echo "Php " . number_format($prod['original_price'],2,'.',',')?>
+                                        <?php endif;?>
+                                    </div>
                                     <div class="orange-btn"><a target="_blank" href="<?php echo base_url() . "item/" . $prod['slug']?>">Buy Now</a></div>
                                 </div>
                             </div>
@@ -308,13 +368,28 @@
                                                 <h5 class="title"><a target="_blank" href="<?php echo base_url() . "item/" . $prod['slug']?>"><?php echo html_escape($prod['product_name'])?></a></h5>
                                                 <?php echo $prod['brief']?>
                                             </div>
-                                            <div class="condition m-screen l-screen">Condition: <?php echo $prod['condition']?></div>
+                                            <div class="condition m-screen l-screen">
+                                                <?php if( intval($prod['is_free_shipping'])===1 ):?>
+                                                    <span class="span_bg img_free_shipping"></span>
+                                                <?php endif;?>
+                                                Condition: <?php echo $prod['condition']?>
+                                            </div>
                                         </div>
-                                        <div class="condition s-screen">Condition: <?php echo $prod['condition']?></div>
+                                        <div class="condition s-screen">
+                                            <?php if( intval($prod['is_free_shipping'])===1 ):?>
+                                                <span class="span_bg img_free_shipping"></span>
+                                            <?php endif;?>
+                                            Condition: <?php echo $prod['condition']?>
+                                        </div>
                                     </div>
                                     <div class="col-md-3 col-sm-3 media-sub media-btn-panel">
                                         <p>PHP</p>
-                                        <p class="feed-price"><?php echo html_escape(number_format($p['original_price'], 2, '.', ','))?></p>
+                                        <p class="feed-price"><?php echo number_format($prod['price'],2,'.',',')?></p>
+                                        <div class="orig-price">
+                                            <?php if( $prod['discount']>0 ):?>
+                                                <?php echo "Php " . number_format($prod['original_price'],2,'.',',')?>
+                                            <?php endif;?>
+                                        </div>
                                         <div class="orange-btn"><a target="_blank" href="<?php echo base_url() . "item/" . $prod['slug']?>">Buy Now</a></div>
                                     </div>
                                 </div>
@@ -343,16 +418,16 @@
                     <div class="row">
                         <div class="table-bordered">
                             <div class="border-bottom pd-8-12 title">Popular Items</div>
-                            <?php foreach($popular_items as $p):?>
+                            <?php foreach($popular_items as $prod):?>
                                 <div class="media pd-8-12 side-panel">
                                     <div class="pull-left media-image">
-                                        <a target="_blank" href="<?php echo base_url() . "item/" . $p['slug']?>">
-                                            <img class="media-object" src="<?=base_url()?><?php echo $p['path'] . "thumbnail/" . $p['file']?>">
+                                        <a target="_blank" href="<?php echo base_url() . "item/" . $prod['slug']?>">
+                                            <img class="media-object" src="<?=base_url()?><?php echo $prod['path'] . "thumbnail/" . $prod['file']?>">
                                         </a>
                                     </div>
                                     <div class="media-body">
-                                        <h5 class="title"><a target="_blank" href="<?php echo base_url() . "item/" . $p['slug']?>"><?php echo html_escape($p['product_name'])?></a></h5>
-                                        <span class="sub-title">PHP <?php echo html_escape(number_format($p['original_price'], 2, '.', ','))?></span>
+                                        <h5 class="title"><a target="_blank" href="<?php echo base_url() . "item/" . $prod['slug']?>"><?php echo html_escape($prod['product_name'])?></a></h5>
+                                        <span class="sub-title">PHP <?php echo number_format($prod['price'],2,'.',',')?></span>
                                     </div>
                                 </div>
                             <?php endforeach;?>
@@ -370,16 +445,16 @@
                     <div class="row">
                         <div class="table-bordered">
                             <div class="border-bottom pd-8-12 title">Promo Items</div>
-                            <?php foreach($promo_items as $p):?>
+                            <?php foreach($promo_items as $prod):?>
                                 <div class="media pd-8-12 side-panel">
                                     <div class="pull-left media-image">
-                                        <a target="_blank" href="<?php echo base_url() . "item/" . $p['slug']?>">
-                                            <img class="media-object" src="<?=base_url()?><?php echo $p['path'] . "thumbnail/" . $p['file']?>">
+                                        <a target="_blank" href="<?php echo base_url() . "item/" . $prod['slug']?>">
+                                            <img class="media-object" src="<?=base_url()?><?php echo $prod['path'] . "thumbnail/" . $prod['file']?>">
                                         </a>
                                     </div>
                                     <div class="media-body">
-                                        <h5 class="title"><a target="_blank" href="<?php echo base_url() . "item/" . $p['slug']?>"><?php echo html_escape($p['product_name'])?></a></h5>
-                                        <span class="sub-title">PHP <?php echo html_escape(number_format($p['original_price'], 2, '.', ','))?></span>
+                                        <h5 class="title"><a target="_blank" href="<?php echo base_url() . "item/" . $prod['slug']?>"><?php echo html_escape($prod['product_name'])?></a></h5>
+                                        <span class="sub-title">PHP <?php echo number_format($prod['price'],2,'.',',') ?></span>
                                     </div>
                                 </div>
                             <?php endforeach;?>

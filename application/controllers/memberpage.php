@@ -51,7 +51,7 @@ class Memberpage extends MY_Controller
         $data['render_logo'] = false;
         $data['render_searchbar'] = false;
         
-        $data['render_userslug_edit'] = $data['username'] === $data['userslug'] ? true:false;
+        $data['render_userslug_edit'] = strtolower($data['username']) === strtolower($data['userslug']) ? true:false;
         $data['hide_quickheader'] = get_cookie('es_qh') ? true:false;
         
         $this->load->view('templates/header', $data);
