@@ -4185,20 +4185,20 @@ a:hover.tooltips span {
 }
 
 .ui-datepicker-prev {
-    background-position: -2px -3px;
+    background-position: -4px -3px;
 }
 
 .ui-datepicker-prev:hover {
-    background-position: -2px -33px;	
+    background-position: -4px -33px;	
 }
 
 .ui-datepicker-next {
     right: -116px;
-    background-position: -32px -3px;
+    background-position: -35px -3px;
 }
 
 .ui-datepicker-next:hover {
-    background-position: -32px -33px;	
+    background-position: -35px -33px;	
 }
 
 .ui-datepicker-current-day {
