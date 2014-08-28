@@ -693,7 +693,7 @@ $(function(){
         var i_id = $(".id-class").attr("id");
         var csrftoken = $("meta[name='csrf-token']").attr('content');
         $.ajax({
-            url : '/promo/buyAtZeroRegistration',
+            url : '/promo/BuyAtZero/buyAtZeroRegistration',
             type : 'post',
             dataType : 'JSON',
             data : {
