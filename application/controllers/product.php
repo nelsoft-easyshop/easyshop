@@ -613,7 +613,6 @@ class product extends MY_Controller
             $product_catid = $product_row['cat_id'];
             
             $banner_view = '';
-            $product_row['viewable_buy_button'] = true;
             $payment_method_array = $this->config->item('Promo')[0]['payment_method'];
 
             if(intval($product_row['is_promote']) === 1 && (!$product_row['end_promo']) ){
@@ -622,7 +621,6 @@ class product extends MY_Controller
                     $banner_view = $this->load->view('templates/promo_banners/'.$bannerfile, $product_row, TRUE); 
                 }
                 $payment_method_array = $this->config->item('Promo')[$product_row['promo_type']]['payment_method'];
-                $product_row['viewable_buy_button'] = $this->config->item('Promo')[$product_row['promo_type']]['viewable_buy_button'];
             }
             
             $data = array_merge($data,array( 
@@ -649,6 +647,10 @@ class product extends MY_Controller
             $data['metadescription'] = es_string_limit(html_escape($product_row['brief']), 155);
             $this->load->view('templates/header', $data); 
             $this->load->view('pages/product/productpage_view', $data);
+            print "<pre>";
+            print_r($product_row);
+            print "</pre>";
+
         }
         else{
             $data['title'] =  'Easyshop.ph | Page Not Found';

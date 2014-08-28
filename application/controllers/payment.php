@@ -57,7 +57,11 @@ class Payment extends MY_Controller{
         exit();
     }
 
-    public function promoPayment()
+    /**
+     * Get items in cart if promo type = 5
+     * and push data to choosen_items
+     */
+    public function setPromoItemsToPayment()
     {
         $cartContent = $this->cart->contents();
         $item = array();
@@ -545,7 +549,7 @@ class Payment extends MY_Controller{
     {
         if($this->input->post('promo_type') !== FALSE )
         {
-            $this->promoPayment();
+            $this->setPromoItemsToPayment();
         }
         if(!$this->session->userdata('member_id') || !$this->input->post('paymentToken') || !$this->session->userdata('choosen_items')){
             redirect(base_url().'home', 'refresh');
@@ -1012,9 +1016,9 @@ class Payment extends MY_Controller{
             case 5:
                 $this->load->library('parser');
                 $paymentMsg = $this->lang->line('payment_bd_buyer');
-                $bankparse['bank_name'] = $this->xmlmap->getFilenameID('page/content_files','bank-name');
-                $bankparse['bank_accname'] = $this->xmlmap->getFilenameID('page/content_files','bank-account-name');
-                $bankparse['bank_accnum'] = $this->xmlmap->getFilenameID('page/content_files','bank-account-number');
+                $bankparse['bank_name'] = $this->xmlmap->getFilenameID($xmlfile,'bank-name');
+                $bankparse['bank_accname'] = $this->xmlmap->getFilenameID($xmlfile,'bank-account-name');
+                $bankparse['bank_accnum'] = $this->xmlmap->getFilenameID($xmlfile,'bank-account-number');
                 $transactionData['payment_msg_buyer'] = $this->parser->parse_string($paymentMsg, $bankparse, true);
                 $transactionData['payment_msg_seller'] = '';
                 $transactionData['payment_method_name'] = "Bank Deposit";
@@ -1094,9 +1098,9 @@ class Payment extends MY_Controller{
         }//close foreach seller loop
     }
 
-	/*
-	 *	Function to generate google analytics data
-	 */
+    /*
+     *	Function to generate google analytics data
+     */
     function ganalytics($itemList,$v_order_id)
     {
         $analytics = array(); 

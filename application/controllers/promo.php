@@ -102,7 +102,7 @@ class promo extends MY_Controller
     public function claim()
     {
         if(!$this->session->userdata('usersession') && !$this->check_cookie()){
-            redirect(base_url().'login', 'refresh');
+            redirect('/login', 'refresh');
         }
         $data = $this->fill_header();
         $data['title'] = 'Scratch to Win | Easyshop.ph';
@@ -115,7 +115,7 @@ class promo extends MY_Controller
             $this->load->view('templates/footer');
         }
         else{
-            redirect(base_url().'scratch-and-win', 'refresh');
+            redirect('/scratch-and-win', 'refresh');
         }
     }
 
