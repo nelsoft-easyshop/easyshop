@@ -139,7 +139,7 @@
                 var max_qty = 1;
                 $.ajax({
                     async:false,
-                    url: config.base_url + "cart/add_item",
+                    url: "/cart/add_item",
                     type:"POST",
                     dataType:"JSON",
                     data:{
@@ -161,7 +161,7 @@
                 });
                 $.ajax({
                     async:false,
-                    url: config.base_url + "payment/payCashOnDelivery",
+                    url: "/payment/payCashOnDelivery",
                     type:"POST",
                     dataType:"JSON",
                     data:{
