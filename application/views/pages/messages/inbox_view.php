@@ -313,11 +313,11 @@ $("#table_id tbody").on("click",".btn_each_msg",function()
         else {
             html += '<span class="float_right">';
         }
-        html += '<img src="'+val.sender_img+'/60x60.png">';
-        html += '<div></div>';
+        html += '<span class="chat-img-con"><span class="chat-img-con2"><img src="'+val.sender_img+'/60x60.png"></span></span>';
+        html += '<div class="chat-container"><div></div>';
         html += '<input type="checkbox" class="d_all" value="'+val.id_msg+'">';
         html += '<p>'+escapeHtml(val.message)+'</p>';
-        html += '<span>'+escapeHtml(val.time_sent)+'</span></span>';
+        html += '<span class="msg-date">'+escapeHtml(val.time_sent)+'</span></span></div>';
         if(/^((?!chrome).)*safari/i.test(navigator.userAgent)){ //if safari
             $("#msg_field").prepend(html);
         }else{
