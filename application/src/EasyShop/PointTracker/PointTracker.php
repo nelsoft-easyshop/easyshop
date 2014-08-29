@@ -132,7 +132,7 @@ class PointTracker
 
             $this->em->persist($pointHistory);
             $this->em->flush();
-            return $pointHistory->getId();
+            return $pointHistory;
         }
     }
 
