@@ -107,6 +107,21 @@ class Kernel
             return new \EasyShop\Search\SearchProduct();
         };
 
+        // Promo
+        $container['promo_manager'] = function ($c) {
+            return new \EasyShop\Promo\PromoManager();
+        };
+
+        // Product Manager
+        $container['product_manager'] = function ($c) {
+            return new \EasyShop\Product\ProductManager();
+        };
+
+        // Collection Helper
+        $container['collection_helper'] = function ($c) {
+            return new \EasyShop\CollectionHelper\CollectionHelper();
+        };
+
         /* Register services END */
         $this->serviceContainer = $container;
     }
