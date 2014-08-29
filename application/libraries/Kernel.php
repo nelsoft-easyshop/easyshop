@@ -102,6 +102,11 @@ class Kernel
             return new \EasyShop\PointTracker\PointTracker();
         };
 
+        // Payment Service
+        $container['payment_service'] = function ($c) {
+            return new \EasyShop\PaymentService\PaymentService();
+        };
+
         /* Register services END */
         $this->serviceContainer = $container;
     }

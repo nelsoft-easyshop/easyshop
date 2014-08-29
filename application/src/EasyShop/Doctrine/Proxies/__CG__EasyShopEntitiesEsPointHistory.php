@@ -64,10 +64,10 @@ class EsPointHistory extends \EasyShop\Entities\EsPointHistory implements \Doctr
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', '' . "\0" . 'EasyShop\\Entities\\EsPointHistory' . "\0" . 'id', '' . "\0" . 'EasyShop\\Entities\\EsPointHistory' . "\0" . 'dateAdded', '' . "\0" . 'EasyShop\\Entities\\EsPointHistory' . "\0" . 'point', '' . "\0" . 'EasyShop\\Entities\\EsPointHistory' . "\0" . 'm', '' . "\0" . 'EasyShop\\Entities\\EsPointHistory' . "\0" . 'type');
+            return array('__isInitialized__', '' . "\0" . 'EasyShop\\Entities\\EsPointHistory' . "\0" . 'id', '' . "\0" . 'EasyShop\\Entities\\EsPointHistory' . "\0" . 'dateAdded', '' . "\0" . 'EasyShop\\Entities\\EsPointHistory' . "\0" . 'point', '' . "\0" . 'EasyShop\\Entities\\EsPointHistory' . "\0" . 'data', '' . "\0" . 'EasyShop\\Entities\\EsPointHistory' . "\0" . 'm', '' . "\0" . 'EasyShop\\Entities\\EsPointHistory' . "\0" . 'type');
         }
 
-        return array('__isInitialized__', '' . "\0" . 'EasyShop\\Entities\\EsPointHistory' . "\0" . 'id', '' . "\0" . 'EasyShop\\Entities\\EsPointHistory' . "\0" . 'dateAdded', '' . "\0" . 'EasyShop\\Entities\\EsPointHistory' . "\0" . 'point', '' . "\0" . 'EasyShop\\Entities\\EsPointHistory' . "\0" . 'm', '' . "\0" . 'EasyShop\\Entities\\EsPointHistory' . "\0" . 'type');
+        return array('__isInitialized__', '' . "\0" . 'EasyShop\\Entities\\EsPointHistory' . "\0" . 'id', '' . "\0" . 'EasyShop\\Entities\\EsPointHistory' . "\0" . 'dateAdded', '' . "\0" . 'EasyShop\\Entities\\EsPointHistory' . "\0" . 'point', '' . "\0" . 'EasyShop\\Entities\\EsPointHistory' . "\0" . 'data', '' . "\0" . 'EasyShop\\Entities\\EsPointHistory' . "\0" . 'm', '' . "\0" . 'EasyShop\\Entities\\EsPointHistory' . "\0" . 'type');
     }
 
     /**
@@ -230,6 +230,28 @@ class EsPointHistory extends \EasyShop\Entities\EsPointHistory implements \Doctr
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getPoint', array());
 
         return parent::getPoint();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setData($data)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setData', array($data));
+
+        return parent::setData($data);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getData()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getData', array());
+
+        return parent::getData();
     }
 
     /**

@@ -36,6 +36,13 @@ class EsPointHistory
     private $point = '0';
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="data", type="string", length=1024, nullable=false)
+     */
+    private $data = '';
+
+    /**
      * @var \EasyShop\Entities\EsMember
      *
      * @ORM\ManyToOne(targetEntity="EasyShop\Entities\EsMember")
@@ -111,6 +118,29 @@ class EsPointHistory
     public function getPoint()
     {
         return $this->point;
+    }
+
+    /**
+     * Set data
+     *
+     * @param string $data
+     * @return EsPointHistory
+     */
+    public function setData($data)
+    {
+        $this->data = $data;
+
+        return $this;
+    }
+
+    /**
+     * Get data
+     *
+     * @return string 
+     */
+    public function getData()
+    {
+        return $this->data;
     }
 
     /**
