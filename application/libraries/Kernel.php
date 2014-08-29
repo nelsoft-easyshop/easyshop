@@ -90,7 +90,6 @@ class Kernel
             return new \EasyShop\XML\CMS();
         };
         
-        
         //XML Resource accessor
         $container['xml_resource'] = function ($c) {
             $configurationService = new \EasyShop\Core\Configuration\Configuration();
@@ -101,6 +100,15 @@ class Kernel
         $container['point_tracker'] = function ($c) {
             return new \EasyShop\PointTracker\PointTracker();
         };
+        
+        //Cart Manager
+        $container['cart_manager'] = function ($c) {
+            $promoManager = new \EasyShop\Promo\PromoManager();
+            $productManager = new \EasyShop\Product\ProductManager();
+            $cart = new \EasyShop\Cart\CodeigniterCart();
+            return new \EasyShop\Cart\CartManager($cart, $productManager, $promoManager);
+        };
+
 
         /* Register services END */
         $this->serviceContainer = $container;
