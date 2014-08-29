@@ -2,20 +2,40 @@
 
 namespace EasyShop\PaymentGateways;
 
+
+/**
+ * Base payment gateway class
+ *
+ * @author LA roberto <la.roberto@easyshop.ph>
+ */
 abstract class AbstractGateway implements GatewayInterface
 {
-    // amount to be paid with this method gateway
+    /**
+     * @var int
+     */
     protected $amountAllocated;
 
-    // payment method name
+    /**
+     * @var string
+     */
     protected $paymentMethodName;
 
-    // parameters related to this payment gateway
+    /**
+     * @var mixed
+     */
     protected $parameters;
 
-    // entity manager instance
+    /**
+     * Entity Manager instance
+     *
+     * @var Doctrine\ORM\EntityManager
+     */
     protected $em;
 
+    /**
+     * Constructor
+     * 
+     */
     protected function __construct($params = [])
     {
         $this->em = get_instance()->kernel->serviceContainer['entity_manager'];
@@ -24,10 +44,10 @@ abstract class AbstractGateway implements GatewayInterface
         $this->amountAllocated = $this->parameters['amount'];
     }
 
-    // force child classes to implement this method
+    /**
+     * Pay Method
+     */
     abstract public function pay();
-
-    // Getters and Setters
 
     public function getPaymentMethodName()
     {

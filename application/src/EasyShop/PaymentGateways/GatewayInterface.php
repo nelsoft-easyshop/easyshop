@@ -2,6 +2,12 @@
 
 namespace EasyShop\PaymentGateways;
 
+
+/**
+ * Payment gateway interface
+ *
+ * @author LA roberto <la.roberto@easyshop.ph>
+ */
 interface GatewayInterface
 {
     public function pay();
@@ -11,7 +17,6 @@ interface GatewayInterface
     public function getAmountAllocated();
 
     public function setAmountAllocated($newAmount);
-
 
     /*
         Breakdown = [$param_arr1, $param_arr2 ...]
@@ -24,6 +29,8 @@ interface GatewayInterface
                     'param1' => param,
                     'param2' => param
                     ]
+        Only the first three params are required, the rest are
+        specific to each gateway
     */
 
     public function setParameters($param = []);

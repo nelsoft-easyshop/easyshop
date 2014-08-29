@@ -5,25 +5,42 @@ namespace EasyShop\PaymentGateways;
 use EasyShop\Entities\EsPointHistory;
 use EasyShop\Entities\EsOrderProduct;
 
+/**
+ * Point Gateway Class
+ *
+ * @author LA roberto <la.roberto@easyshop.ph>
+ */
 class PointGateway extends AbstractGateway
 {
 
+    /**
+     * Point Tracker instance
+     *
+     * @var EasyShop\PointTracker\PointTracker
+     */
     private $pointTracker;
 
+    /**
+     * Constructor
+     * 
+     */
     public function __construct($params = [])
     {
         parent::__construct($params);
         $this->pointTracker = get_instance()->kernel->serviceContainer['point_tracker'];
-        echo "<pre>"; print_r($this->parameters); echo "</pre>";
     }
 
+    /**
+     * Pay method for Point Gateway Class
+     * 
+     */
     public function pay()
     {
         // get id of action
         $actionId = $this->pointTracker->getActionId($this->parameters['pointtype']);
 
         // update user points!
-        $history_id = $this->pointTracker->spendUserPoint(
+        $history_obj = $this->pointTracker->spendUserPoint(
             $this->parameters['member_id'],
             $actionId,
             $this->parameters['amount']
@@ -50,13 +67,20 @@ class PointGateway extends AbstractGateway
 
             $json_data = json_encode($breakdown);
             
-            // history object
-            $history = $this->em->getRepository('EasyShop\Entities\EsPointHistory')
-                        ->find($history_id);
-
             // update history data field
-            $history->setData($json_data);
+            $history_obj->setData($json_data);
             $this->em->flush();
         }
     }
 }
+
+/*
+    Params needed
+        'name' => unique string for referencing this gateway,
+        'method' => 'Point', 
+        'amount' => amount allocated,
+        'member_id' => id of member
+        'pointtype' => type of point used
+        'products' => ['prod_id' => point, 'prod_id' => point]
+        'order_id' => order id of purchase 
+*/
