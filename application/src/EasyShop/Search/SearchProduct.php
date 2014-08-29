@@ -37,7 +37,7 @@ class SearchProduct
     {
         $stringCollection = array();
         $ids = array();
-        $explodedString = explode(' ', $string);
+        $explodedString = explode(' ', trim($string));
         $stringCollection[0] = '+'.implode(' +', $explodedString);
         $stringCollection[1] = implode(' ', $explodedString);
         $stringCollection[2] = '"'.implode(' ', $explodedString).'"';

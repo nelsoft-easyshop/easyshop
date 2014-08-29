@@ -345,21 +345,27 @@ class product_search extends MY_Controller {
     function searchfaster()
     { 
         $searchProductService = $this->serviceContainer['search_product']; 
+        $productManager = $this->serviceContainer['product_manager']; 
         $string = $this->input->get('q_str');
         $category = $this->input->get('q_cat');
         $brand = $this->input->get('brand');
         $condition = $this->input->get('condition');
         $startPrice = $this->input->get('startprice');
         $endPrice = $this->input->get('endprice');
+        $memberId = $this->session->userdata('member_id');
  
         $productIds = $searchProductService->filterBySearchString($string);
         $productIds = ($category) ? $searchProductService->filterByCategory(array($category),$productIds) : $productIds;
         $productIds = ($brand) ? $searchProductService->filterByBrand($brand,$productIds) : $productIds;
         $productIds = ($condition) ? $searchProductService->filterByCondition($condition,$productIds) : $productIds;
         $productIds = ($startPrice) ? $searchProductService->filterByPrice($startPrice,$endPrice,$productIds) : $productIds;
-        $response['products'] = $this->em->getRepository('EasyShop\Entities\EsProduct')
+        $filteredProduct = $this->em->getRepository('EasyShop\Entities\EsProduct')
                                             ->getDetails($productIds);
- 
+
+        $attributes = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                                            ->getAttributes($productIds);
+                                                             
+        $response['products'] = $productManager->getDiscountedPrice($filteredProduct,$memberId);
         $response['string'] = $string;
          $data = array(
             'title' => ($string==='')?'Search | Easyshop.ph':$string.' | Easyshop.ph',
@@ -368,6 +374,17 @@ class product_search extends MY_Controller {
         $data = array_merge($data, $this->fill_header());
         $response['category_navigation'] = $this->load->view('templates/category_navigation',array('cat_items' =>  $this->getcat(),), TRUE );
         // $attributes = $this->product_model->getProductAttributesByCategory($ids);
+        // 
+            //         for ($i=0; $i < sizeof($attributes) ; $i++) { 
+            //     $head = urlencode($attributes[$i]['attr_name']);
+            //     if(!array_key_exists($head,$organizedAttribute)){
+            //         $organizedAttribute[$head] = array();   
+            //     }
+            //     array_push($organizedAttribute[$head],  $attributes[$i]['attr_value']);
+            // }
+
+            // $response['attributes'] = $organizedAttribute;
+        // 
         // $itemCondition = $this->product_model->getProductConditionByCategory($ids);
         // $brand = $this->product_model->getProductBrandsByCategory($ids); 
         $this->load->view('templates/header', $data); 
