@@ -5,7 +5,9 @@
 
     <div class="res_wrapper login_content">
 
-        <div class="login_left_content col-sm-7 col-md-7 text-center hidden-xs"><img src="/assets/images/img_login_banner.jpg" alt="banner"></div>
+        <div class="login_left_content col-sm-7 col-md-7 text-center hidden-xs">
+            <img src="/assets/images/img_login_banner.jpg" alt="banner">
+        </div>
         <?php if($logged_in): ?>
         
             <div class="col-sm-5 col-md-5">
@@ -39,8 +41,8 @@
                             <div class="col-xs-12 col-sm-12 col-md-9">
                             <input type="password" id="login_password" name="login_password" class="ui-form-control"> 
                                 <span id="passw_error" class="red error_cont" style="font-weight:bold;display:block;margin:5px 0px 0px 93px;"> </span>
-                                <span id="login_error" class="red" style="font-weight:bold;display:block;margin:5px 0px 0px 93px;"><?php echo (isset($form_error)?$form_error:'');?>  </span>
-                                <p><a href="/login/identify">Forgot your password?</a></p>
+                                <span id="login_error" class="red" style="font-weight:bold;display:block"><?php echo (isset($form_error)?$form_error:'');?>  </span>
+                                <p class="text-right"><a href="/login/identify">Forgot your password?</a></p>
                             </div>
                         </div>
                         

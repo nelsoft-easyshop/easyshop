@@ -1,3 +1,4 @@
+
 (function($){    
 
     $(document).ready(function(){
@@ -9,32 +10,31 @@
             rules: {
                 login_username: {
                     required: true
-                    },
+                },
                 login_password: {
                     required: true
-                    }
+                }
             },
             messages: {
                 login_username: {
                     required: 'Username is required.'
-                    },
+                },
                 login_password: {
                     required: 'Password is required.'
-                    }
+                }
             },
             errorElement: "span",
-            errorPlacement: function(error, element) {
-                if(element.attr('name') === 'login_username'){
+            errorPlacement: function (error, element) {
+                if (element.attr('name') === 'login_username') {
                     error.appendTo($('#username_error'));
                 }
-                else{
+                else {
                     error.appendTo($('#passw_error'));
                 }
             },
-            submitHandler: function(form) {
+            submitHandler: function (form) {
                 $('#loading_img').show();
                 $('#login').hide();
-                
                 $.ajax({
                     type: "POST",
                     dataType: "JSON",
@@ -79,5 +79,5 @@
         });
     });
     
-})(jQuery);  
+})(jQuery);
 
