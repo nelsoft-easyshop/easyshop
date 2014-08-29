@@ -58,15 +58,17 @@ class Payment extends MY_Controller{
     }
 
     /**
-     * Get items in cart if promo type = 5
+     * Get items in cart depending on the promo type
      * and push data to choosen_items
+     *
+     * @param $promoType
      */
-    public function setPromoItemsToPayment()
+    public function setPromoItemsToPayment($promoType)
     {
         $cartContent = $this->cart->contents();
         $item = array();
         foreach ($cartContent as $key => $value) {
-            if($value['promo_type'] == 5){
+            if($value['promo_type'] == $promoType){
                 $item[$key] = $cartContent[$key];
             }
         }
@@ -549,7 +551,7 @@ class Payment extends MY_Controller{
     {
         if($this->input->post('promo_type') !== FALSE )
         {
-            $this->setPromoItemsToPayment();
+            $this->setPromoItemsToPayment($this->input->post('promo_type'));
         }
         if(!$this->session->userdata('member_id') || !$this->input->post('paymentToken') || !$this->session->userdata('choosen_items')){
             redirect(base_url().'home', 'refresh');

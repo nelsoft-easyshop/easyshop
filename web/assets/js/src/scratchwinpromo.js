@@ -37,7 +37,7 @@
                             $('#scratch-win-claim-link').attr('href', '/promo/ScratchCard/claimScratchCardPrize?code=' + code.val().trim());
                         }
                         else{
-                            $('#scratch-win-claim-link').attr('href', '/promo/claim/' + code.val().trim());
+                            $('#scratch-win-claim-link').attr('href', '/promo/ScratchCard/claimScratchCardPrize/claim/' + code.val().trim());
                         }
                     }
                     else {
