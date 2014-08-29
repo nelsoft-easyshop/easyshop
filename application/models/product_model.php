@@ -2251,7 +2251,7 @@ class product_model extends CI_Model
             else if($element['type'] === 'custom'){
                 $home_view_data['category_detail']['imagepath'] = '';
                 $home_view_data['category_detail']['name'] = isset($element['title'])?$element['title']:$element['value'];
-                $home_view_data['category_detail']['url'] = 'vendor/'.$element['value'];
+                $home_view_data['category_detail']['url'] = $element['value'];
             }
             $home_view_data['category_detail']['css_class'] = $element['css_class'];
             $home_view_data['category_detail']['subcategory'] = $this->getDownLevelNode($element['value']);
