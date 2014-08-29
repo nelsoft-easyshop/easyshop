@@ -40,7 +40,7 @@ class PointGateway extends AbstractGateway
         $actionId = $this->pointTracker->getActionId($this->parameters['pointtype']);
 
         // update user points!
-        $history_obj = $this->pointTracker->spendUserPoint(
+        $historyObj = $this->pointTracker->spendUserPoint(
             $this->parameters['member_id'],
             $actionId,
             $this->parameters['amount']
@@ -50,25 +50,25 @@ class PointGateway extends AbstractGateway
         if($this->parameters['pointtype'] == 'purchase'){ 
 
             // order products
-            $order_products = $this->em->getRepository('EasyShop\Entities\EsOrderProduct')
+            $orderProducts = $this->em->getRepository('EasyShop\Entities\EsOrderProduct')
                         ->findBy([
                             'order' => $this->parameters['order_id'],
                             'product' => array_keys($this->parameters['products'])
                             ]);
 
             $breakdown = [];
-            $temp_arr = $this->parameters['products'];
-            foreach($order_products as $prods){
+            $tempArray = $this->parameters['products'];
+            foreach($orderProducts as $prods){
                 $data['order_product_id'] = $prods->getIdOrderProduct();
-                $data['points'] = $temp_arr[$prods->getProduct()->getIdProduct()];
-                unset($temp_arr[$prods->getProduct()->getIdProduct()]);
+                $data['points'] = $tempArray[$prods->getProduct()->getIdProduct()];
+                unset($tempArray[$prods->getProduct()->getIdProduct()]);
                 $breakdown[] = $data;
             }
 
-            $json_data = json_encode($breakdown);
+            $jsonData = json_encode($breakdown);
             
             // update history data field
-            $history_obj->setData($json_data);
+            $historyObj->setData($jsonData);
             $this->em->flush();
         }
     }
@@ -84,4 +84,4 @@ class PointGateway extends AbstractGateway
         'products' => ['prod_id' => point, 'prod_id' => point]
         'order_id' => order id of purchase 
 */
-        
+
