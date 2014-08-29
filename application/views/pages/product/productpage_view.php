@@ -334,7 +334,7 @@
                                     <label>Rating</label>
                                     <div id="star"></div>
                                 </div>
-                                <div>
+                                <div class="review-con-comment">
                                     <label>Comment *</label>
                                     <textarea name="comment" class="ui-form-control"></textarea>
                                 </div>
