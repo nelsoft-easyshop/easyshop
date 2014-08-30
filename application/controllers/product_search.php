@@ -346,6 +346,9 @@ class product_search extends MY_Controller {
     { 
         $searchProductService = $this->serviceContainer['search_product']; 
         $productManager = $this->serviceContainer['product_manager']; 
+        $collectionHelper = $this->serviceContainer['collection_helper']; 
+        $EsProductRepository = $this->em->getRepository('EasyShop\Entities\EsProduct');
+
         $string = $this->input->get('q_str');
         $category = $this->input->get('q_cat');
         $brand = $this->input->get('brand');
@@ -354,39 +357,44 @@ class product_search extends MY_Controller {
         $endPrice = $this->input->get('endprice');
         $memberId = $this->session->userdata('member_id');
  
-        $productIds = $searchProductService->filterBySearchString($string);
+        $productIds = $originalOrder = $searchProductService->filterBySearchString($string);
         $productIds = ($category) ? $searchProductService->filterByCategory(array($category),$productIds) : $productIds;
         $productIds = ($brand) ? $searchProductService->filterByBrand($brand,$productIds) : $productIds;
-        $productIds = ($condition) ? $searchProductService->filterByCondition($condition,$productIds) : $productIds;
-        $productIds = ($startPrice) ? $searchProductService->filterByPrice($startPrice,$endPrice,$productIds) : $productIds;
-        $filteredProduct = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                                            ->getDetails($productIds);
+        $productIds = ($condition) ? $searchProductService->filterByCondition($condition,$productIds) : $productIds; 
+        $productIds = $searchProductService->filterByOtherParameter($this->input->get(),$productIds);
+        $filteredProduct = $EsProductRepository->getDetails($productIds);
 
-        $attributes = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                                            ->getAttributes($productIds);
-                                                             
-        $response['products'] = $productManager->getDiscountedPrice($filteredProduct,$memberId);
+        $finalOrder = array_intersect($originalOrder, $productIds);
+
+        $arrangeProduct = $collectionHelper->sortArrayByArrangement($filteredProduct,$finalOrder,'idProduct');
+        $discountedProduct = $productManager->getDiscountedPrice($arrangeProduct,$memberId);
+
+        $response['products'] = ($startPrice) ? $searchProductService->filterByPrice($startPrice,$endPrice,$discountedProduct) : $discountedProduct;
+        
+        $finalizedProductId = array();
+        foreach ($response['products'] as $key => $value) {
+            array_push($finalizedProductId, $value['idProduct']);
+        }
+
+        $organizedAttribute = array();
+        if($filteredProduct){
+            $brands = $EsProductRepository->getBrands($finalizedProductId);
+            $attributes = $EsProductRepository->getAttributes($finalizedProductId);
+            $brands = $EsProductRepository->getBrands($finalizedProductId);
+            $organizedAttribute = $collectionHelper->organizeArray($attributes);
+            $organizedAttribute['Brand'] = $brands;
+            ksort($organizedAttribute);
+        }
+
+        $response['attributes'] = $organizedAttribute;
         $response['string'] = $string;
-         $data = array(
-            'title' => ($string==='')?'Search | Easyshop.ph':$string.' | Easyshop.ph',
-            );
-
-        $data = array_merge($data, $this->fill_header());
         $response['category_navigation'] = $this->load->view('templates/category_navigation',array('cat_items' =>  $this->getcat(),), TRUE );
-        // $attributes = $this->product_model->getProductAttributesByCategory($ids);
-        // 
-            //         for ($i=0; $i < sizeof($attributes) ; $i++) { 
-            //     $head = urlencode($attributes[$i]['attr_name']);
-            //     if(!array_key_exists($head,$organizedAttribute)){
-            //         $organizedAttribute[$head] = array();   
-            //     }
-            //     array_push($organizedAttribute[$head],  $attributes[$i]['attr_value']);
-            // }
-
-            // $response['attributes'] = $organizedAttribute;
-        // 
-        // $itemCondition = $this->product_model->getProductConditionByCategory($ids);
-        // $brand = $this->product_model->getProductBrandsByCategory($ids); 
+        
+        $data = array(
+                'title' => ($string==='')?'Search | Easyshop.ph':$string.' | Easyshop.ph',
+                );
+        
+        $data = array_merge($data, $this->fill_header());
         $this->load->view('templates/header', $data); 
         $this->load->view('pages/search/product_search_by_searchbox',$response);
         $this->load->view('templates/footer'); 

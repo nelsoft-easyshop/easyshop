@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\ResultSetMapping;
 use EasyShop\Entities\EsProduct; 
 use EasyShop\Entities\EsProductImage;
+use EasyShop\Entities\EsBrand;
 
 class EsProductRepository extends EntityRepository
 {
@@ -68,39 +69,6 @@ class EsProductRepository extends EntityRepository
         return $results;
     }
 
-    public function findByPrice($startPrice = 0 ,$endPrice = 0,$ids = array())
-    {
-        $this->em =  $this->_em;
-        
-        if(count($ids) > 0){
-            $qb = $this->em->createQueryBuilder()
-                            ->select('u')
-                            ->from('EasyShop\Entities\EsProduct','u')
-                            ->where('u.price >= :startPrice')
-                            ->andWhere('u.price <= :endPrice')
-                            ->andWhere('u.idProduct IN (:ids)')
-                            ->setParameter('ids', $ids)
-                            ->setParameter('startPrice', $startPrice)
-                            ->setParameter('endPrice', $endPrice)
-                            ->getQuery();
-        }
-        else{
-            $qb = $this->em->createQueryBuilder()
-                            ->select('u')
-                            ->from('EasyShop\Entities\EsProduct','u')
-                            ->where('u.price >= :startPrice')
-                            ->andWhere('u.price <= :endPrice')
-                            ->andWhere('u.idProduct IN (:ids)')
-                            ->setParameter('ids', $ids)
-                            ->setParameter('startPrice', $startPrice)
-                            ->setParameter('endPrice', $endPrice)
-                            ->getQuery();
-        }
-        $result = $qb->getResult();
-
-        return $result;
-    }
-
     /**
      * Get all product details with given product id
      * @param  array  $productId
@@ -108,46 +76,57 @@ class EsProductRepository extends EntityRepository
      */
     public function getDetails($productId = array())
     {
-        $this->em =  $this->_em;                       
-        $qb = $this->em->createQueryBuilder();
-        $qbResult = $qb->select(array('p.idProduct'
-                                        ,'p.name'
-                                        ,'p.price'  
-                                        ,'p.brief' 
-                                        ,'p.slug'
-                                        ,'p.condition' 
-                                        ,'p.startdate'
-                                        ,'p.enddate'
-                                        ,'p.isPromote'
-                                        ,'p.promoType'
-                                        ,'p.discount'
-                                        ,'p.isSoldOut'
-                                        ,'i.productImagePath'))
-                                ->from('EasyShop\Entities\EsProduct','p')
-                                ->leftJoin('EasyShop\Entities\EsProductImage','i','WITH','p.idProduct = i.product AND i.isPrimary = 1')
-                                ->where(
-                                        $qb->expr()->in('p.idProduct', $productId)
-                                    )
-                                ->getQuery();
-        $result = $qbResult->getResult();
+        if(count($productId) > 0){
+            $this->em =  $this->_em;
+            $qb = $this->em->createQueryBuilder();
+            $qbResult = $qb->select(array('p.idProduct'
+                                            ,'p.name'
+                                            ,'p.price'  
+                                            ,'p.brief' 
+                                            ,'p.slug'
+                                            ,'p.condition' 
+                                            ,'p.startdate'
+                                            ,'p.enddate'
+                                            ,'p.isPromote'
+                                            ,'p.promoType'
+                                            ,'p.discount'
+                                            ,'p.isSoldOut'
+                                            ,'i.productImagePath'))
+                                    ->from('EasyShop\Entities\EsProduct','p')
+                                    ->leftJoin('EasyShop\Entities\EsProductImage','i','WITH','p.idProduct = i.product AND i.isPrimary = 1')
+                                    ->where( 
+                                            $qb->expr()->in('p.idProduct', $productId)
+                                        )
+                                    ->getQuery();
+            $result = $qbResult->getResult();
 
-        return $result;
+            return $result;
+        }
+        return false;
     }
 
     /**
-     * Get All attributes of given product
+     * Get All attributes of given productid
      * @param  array  $productId
      * @return array
      */
-    public function getAttributes($productId = array()){
+    public function getAttributes($productId = array(),$filter = false,$additionalString = "",$parameters = array())
+    {
         $this->em =  $this->_em;
-        $rsm = new ResultSetMapping();
-        $rsm->addScalarResult('product_id', 'product_id'); 
-        $rsm->addScalarResult('name', 'name');
-        $rsm->addScalarResult('attr_value', 'attr_value');
+        $rsm = new ResultSetMapping(); 
+        $rsm->addScalarResult('product_id', 'product_id');
+
+        if($filter){
+            $selectString = 'COUNT(*) as cnt,product_id';
+        }
+        else{
+            $selectString = 'name,attr_value';
+            $rsm->addScalarResult('name', 'head');
+            $rsm->addScalarResult('attr_value', 'value');
+        }
 
         $query = $this->em->createNativeQuery("
-            SELECT product_id,name,attr_value FROM (
+            SELECT ".$selectString." FROM (
                 SELECT 
                     a.product_id as product_id
                     , b.name AS name
@@ -173,14 +152,44 @@ class EsProductRepository extends EntityRepository
                     , field_name
                     , value_name
             ) a
-            WHERE product_id IN (:ids)
-        ", $rsm);
+            WHERE product_id IN (:ids) " . $additionalString, $rsm);
 
         $query->setParameter('ids', $productId); 
+        if($filter){
+            $counter = 0;
+            foreach ($parameters as $paramKey => $paramValue) {
+                $query->setParameter('head'.$counter, $paramKey);
+                foreach ($paramValue as $key => $value) {
+                    $valueName = 'headValue'.$counter.$key;
+                    $query->setParameter($valueName, $value);
+                }
+                $counter++;
+            } 
+        }
         $results = $query->getResult();
 
         return $results;
     }
-}
 
-                // 
+    /**
+     * Get All available brands in given products
+     * @param  array  $productId [description]
+     * @return [type]            [description]
+     */
+    public function getBrands($productId = array())
+    {
+        $this->em =  $this->_em;                       
+        $qb = $this->em->createQueryBuilder();
+        $qbResult = $qb->select('DISTINCT(b.name) as brand')
+                                ->from('EasyShop\Entities\EsProduct','p')
+                                ->leftJoin('EasyShop\Entities\EsBrand','b','WITH','b.idBrand = p.brand')
+                                ->where(
+                                        $qb->expr()->in('p.idProduct', $productId)
+                                    )
+                                ->getQuery();
+        $result = $qbResult->getResult();
+        $resultNeeded = array_map(function($value) { return $value['brand']; }, $result);
+
+        return $resultNeeded;
+    }
+}
