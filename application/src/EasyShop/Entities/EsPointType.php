@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * EsPointType
  *
  * @ORM\Table(name="es_point_type")
- * @ORM\Entity(repositoryClass="EasyShop\Repositories\EsPointTypeRepository")
+ * @ORM\Entity
  */
 class EsPointType
 {

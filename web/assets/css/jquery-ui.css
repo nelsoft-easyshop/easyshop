@@ -238,7 +238,7 @@ button.ui-button::-moz-focus-inner {
 	position: absolute;
 	top: 2px;
 	width: 1.8em;
-	height: 1em;
+	height: 14px;
 }
 .ui-datepicker .ui-datepicker-prev-hover,
 .ui-datepicker .ui-datepicker-next-hover {
@@ -272,7 +272,7 @@ button.ui-button::-moz-focus-inner {
 }
 .ui-datepicker .ui-datepicker-title select {
 	font-size: 1em;
-	margin: 1px 0;
+/*	margin: 1px 0;*/
 }
 .ui-datepicker select.ui-datepicker-month-year {
 	width: 100%;
@@ -280,6 +280,7 @@ button.ui-button::-moz-focus-inner {
 .ui-datepicker select.ui-datepicker-month,
 .ui-datepicker select.ui-datepicker-year {
 	width: 49%;
+	height: 22px;
 }
 .ui-datepicker table {
 	width: 100%;
@@ -301,7 +302,7 @@ button.ui-button::-moz-focus-inner {
 .ui-datepicker td a {
 	display: block;
 	padding: .2em;
-	text-align: right;
+	text-align: center;
 	text-decoration: none;
 }
 .ui-datepicker .ui-datepicker-buttonpane {
@@ -786,8 +787,8 @@ body .ui-tooltip {
 /* Component containers
 ----------------------------------*/
 .ui-widget {
-	font-family: Verdana,Arial,sans-serif;
-	font-size: 1.1em;
+	font-family: Arial,sans-serif;
+/*	font-size: 1.1em;*/
 }
 .ui-widget .ui-widget {
 	font-size: 1em;
@@ -796,7 +797,7 @@ body .ui-tooltip {
 .ui-widget select,
 .ui-widget textarea,
 .ui-widget button {
-	font-family: Verdana,Arial,sans-serif;
+	font-family: Arial,sans-serif;
 	font-size: 1em;
 }
 .ui-widget-content {
@@ -913,13 +914,13 @@ body .ui-tooltip {
 	filter:Alpha(Opacity=70);
 	font-weight: normal;
 }
-.ui-state-disabled,
+/*.ui-state-disabled,
 .ui-widget-content .ui-state-disabled,
 .ui-widget-header .ui-state-disabled {
 	opacity: .35;
 	filter:Alpha(Opacity=35);
 	background-image: none;
-}
+}*/
 .ui-state-disabled .ui-icon {
 	filter:Alpha(Opacity=35); /* For IE8 - See #6059 */
 }
