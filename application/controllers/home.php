@@ -19,6 +19,9 @@ class Home extends MY_Controller
         $this->load->library('xmlmap');
         $this->load->model('product_model');
         $this->load->model('user_model');
+        
+        $cm = $this->serviceContainer['cart_manager'];
+        $cm->validateCartContents(1);
     }
 
     /**
