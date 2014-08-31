@@ -75,6 +75,7 @@ $config = array(
              ),
             'viewable_button_product_page' =>true,
         ),
+        /* ListingPromo */
         '4' => array(
             'calculation_id' => '4',
             'purchase_limit' => PHP_INT_MAX,
@@ -108,7 +109,7 @@ $config = array(
             'viewable_button_product_page' =>false,
         ),
         '6' =>array(
-            'calculation_id' => '6',
+            'calculation_id' => '4',
             'purchase_limit' => PHP_INT_MAX,
             'payment_method' => array(),
             'banner' => 'genericWithCountdown',
