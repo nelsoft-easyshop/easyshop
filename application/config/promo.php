@@ -109,11 +109,11 @@ $config = array(
             'viewable_button_product_page' =>false,
         ),
         '6' =>array(
-            'calculation_id' => '4',
+            'calculation_id' => '6',
             'purchase_limit' => PHP_INT_MAX,
             'payment_method' => array(),
             'banner' => 'genericWithCountdown',
-            'is_buyable_outside_promo' => true,
+            'is_buyable_outside_promo' => false,
             'cart_solo_restriction' => false,
             'option' => array(),
             'viewable_button_product_page' =>true,
