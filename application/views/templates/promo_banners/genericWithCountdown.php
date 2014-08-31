@@ -1,9 +1,9 @@
+<div class="genericWithCountdown_prod_alert_box" style="float:right; width: 545px;">
+    <span class="span_bg icon_info"></span> <strong>This product is for promo use only. For more information, visit our
+        <a href="https://www.facebook.com/EasyShopPhilippines">Facebook page</a></strong>
+</div>
+
 <?php if($start_promo): ?>
-    <div class="genericWithCountdown_prod_alert_box" style="float:right; width: 545px;">
-        <span class="span_bg icon_info"></span> <strong>This product is for promo use only. For more information, visit our
-            <a href="https://www.facebook.com/EasyShopPhilippines">Facebook page</a></strong>
-    </div>
-    
     <div class="right_header_discount">
         <div id="dsc_cont">
             <span class="genericWithCountdown_dsc_prp_txt3">TIME REMAINING</span>
