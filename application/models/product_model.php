@@ -2371,6 +2371,13 @@ class product_model extends CI_Model
                         $bool_start_promo = true;
                     }
                     break;
+                case 6 :
+                    $PromoPrice = $baseprice;
+                    if(!( ($today < $startdate) || ($enddate < $startdate) || ($today > $enddate))){
+                        $PromoPrice = 0;
+                        $bool_start_promo = true;
+                    }
+                    break;
                 default :
                     $PromoPrice = $baseprice;
                     break;
@@ -2390,7 +2397,7 @@ class product_model extends CI_Model
 
         return $result;
     }
-
+ 
     /**
      *   Check if an item can be purchased based on the purchase limit
      *   @param int $buyer_id: id of the user
@@ -2406,7 +2413,7 @@ class product_model extends CI_Model
         $sth = $this->db->conn_id->prepare($query);
         $sth->bindParam(':buyer_id',$buyer_id, PDO::PARAM_INT);
         $sth->bindParam(':type',$type, PDO::PARAM_INT);
-    $sth->closeCursor();
+        $sth->closeCursor();
         $sth->execute();
         $result = $sth->fetchAll(PDO::FETCH_ASSOC);
         $promo = $this->config->item('Promo')[$type];      
@@ -2671,4 +2678,71 @@ class product_model extends CI_Model
         return $b;
     }
     
+    /**
+     *  Check if code exists
+     *
+     * @param $code
+     * @return boolean
+     */
+    public function validateBuyAtZeroCode($code)
+    {
+        $query = $this->xmlmap->getFilenameID('sql/product', 'validateBuyAtZeroCode');
+        $sth = $this->db->conn_id->prepare($query);
+        $sth->bindParam(':code', $code);
+        $sth->execute();
+
+        return $sth->fetchAll(PDO::FETCH_ASSOC);
+    }
+    
+    
+    /**
+     * Check if member already joined the promo
+     *
+     * @Param $productId
+     * @Param $memberId
+     * @Return boolean
+     */
+    public function validateMemberForBuyAtZeroPromo($productId, $memberId)
+    {
+        $query = $this->xmlmap->getFilenameID('sql/product', 'buyAtZeroAuthenticate');
+        $sth = $this->db->conn_id->prepare($query);
+        $sth->bindParam(':productId', $productId);
+        $sth->bindParam(':memberId', $memberId);
+        $sth->execute();
+        $cnt = $sth->fetchAll(PDO::FETCH_ASSOC)[0]['cnt'];
+        $result = true;
+        if($cnt >= 1){
+            $result = false;
+        }
+
+        return $result;
+    }
+    
+    /**
+     * Join member to buyAtZero php promo
+     *
+     * @Param $productId
+     * @Param $memberId
+     * @Return boolean
+     */
+    public function registerMemberForBuyAtZeroPromo($productId, $memberId)
+    {
+        $auth = $this->validateMemberForBuyAtZeroPromo($productId, $memberId);
+
+        if($auth == false){
+            return false;
+        }
+        $query = $this->xmlmap->getFilenameID('sql/product', 'buyAtZeroRegistration');
+        $sth = $this->db->conn_id->prepare($query);
+        $sth->bindParam(':productId', $productId);
+        $sth->bindParam(':memberId', $memberId);
+        $sth->execute();
+
+        return true;
+    }
+    
 }
+
+/* End of file product_model.php */
+/* Location: ./application/models/product_model.php */
+

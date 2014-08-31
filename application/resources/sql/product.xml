@@ -1184,6 +1184,29 @@ FROM
     WHERE `product_id_item` = :itemId
 </select>
 
+    <select id="validateBuyAtZeroCode">
+        SELECT es_product.*, es_product_image.product_image_path as `path` from es_promo
+        left join es_product on es_product.id_product = es_promo.product_id
+        left join es_product_image on es_product_image.product_id = es_product.id_product
+        where code = :code;
+    </select>
+
+    <select id="buyAtZeroAuthenticate">
+        SELECT count(*) as `cnt`
+        FROM easyshop.es_promo
+        left join es_product on es_product.id_product = es_promo.product_id
+        where
+        es_promo.product_id = :productId AND
+        es_promo.member_id = :memberId AND
+        es_product.promo_type = 6;
+    </select>
+
+    <select id="buyAtZeroRegistration">
+        INSERT INTO `es_promo`
+        (`product_id`, `member_id`)
+        VALUES
+        (:productId, :memberId);
+    </select>
 
 
 </map>
