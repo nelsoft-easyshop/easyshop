@@ -188,6 +188,10 @@
                             <?php if(count($shipment_information) === 0 && intval($product['is_meetup']) === 1): ?>
                                  <a href="javascript:void(0)" class="btn-meet-up modal_msg_launcher" title="Send <?=html_escape($product['sellerusername'])?> a message">Contact Seller</a> <br/>
                                 <span>Item is listed as an ad only. *</span>
+                            <?php elseif($product['promo_type'] == 6): ?>
+                                <img src="<?=base_url()?>assets/images/orange_loader_small.gif" id="loading_img" class="login_loading_img" style="display:none"/>
+                                <a href="javascript:void(0)" id='<?php echo $product['can_purchase']?'send':'' ?>_registration' class="fm1 orange_btn3 disabled">Buy</a> <br/>
+                                <span>Register to Buy Item at Zero Promo*</span>    
                             <?php else: ?>
                                  <a href="javascript:void(0)" id='<?php echo $product['can_purchase']?'send':'' ?>' class="fm1 orange_btn3 disabled">Buy Now</a> <br/>
                                 <span>Delivers upon seller confirmation*</span>
