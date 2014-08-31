@@ -28,14 +28,15 @@ class cart_model extends CI_Model
             }
             else{
                 foreach($rows as $row){
-		    $index = $row['name'];
-		    if(!array_key_exists($index, $data))
-		    $data[$index] =$row['attr_value']; 
-		    $data['price'] = $row['attr_price'];
-		    $data['result'] = true;
-		    $data['attr_id'] = $row['id_optional_attrdetail'];
+                    $index = $row['name'];
+                    if(!array_key_exists($index, $data))
+                        $data[$index] =$row['attr_value']; 
+                    $data['price'] = $row['attr_price'];
+                    $data['result'] = true;
+                    $data['attr_id'] = $row['id_optional_attrdetail'];
                 }
             }
+
             return $data;
 	}
         
