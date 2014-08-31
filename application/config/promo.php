@@ -122,5 +122,6 @@ $config = array(
 );
 
 
-/* End of file oromo.php */
+/* End of file promo.php */
 /* Location: ./application/config/promo.php */
+
