@@ -7,7 +7,7 @@ if (!defined('BASEPATH')){
 class promo extends MY_Controller
 {
 
-    public function __construct()
+    private function __construct()
     {
         parent::__construct();
         $this->load->helper('htmlpurifier');
@@ -20,7 +20,7 @@ class promo extends MY_Controller
      *
      * @return View
      */
-    public function category_promo()
+    private function category_promo()
     {
         $this->load->config('protected_category', TRUE);
         $categoryId = $this->config->item('promo', 'protected_category');
@@ -41,18 +41,13 @@ class promo extends MY_Controller
         $this->load->view('templates/footer');
     }
 
-    /**
-     * Renders page for post and win promo
-     *
-     * @return View
-     */
 
     /**
      * Checks the status of a particular user for the post and win promo
      *
      * @return JSON
      */
-    public function PromoStatusCheck()
+    private function PromoStatusCheck()
     {
         $this->load->model('user_model');
         $username = $this->input->post('username');
@@ -67,7 +62,7 @@ class promo extends MY_Controller
         #return 3 if username doesnt exist (NOT-QUALIFIED)
     }
 
-    public function scratchCardPromo()
+    private function scratchCardPromo()
     {
         $data = $this->fill_header();
         $data['title'] = 'Scratch to Win | Easyshop.ph';
@@ -79,7 +74,7 @@ class promo extends MY_Controller
         $this->load->view('templates/footer');
     }
 
-    public function validateScratchCardCode()
+    private function validateScratchCardCode()
     {
         $this->load->config('protected_category', TRUE);
         $code = $this->config->item('protected_category');

@@ -7,19 +7,19 @@ class Ios extends MY_Controller {
 
     public $per_page;
 
-    function __construct() {
+    private function __construct() {
         parent::__construct();
 		$this->load->helper('htmlpurifier');
 		$this->load->model('product_model');
         $this->per_page = 20;
     }
 
-    public function home(){
+    private public function home(){
         $items =  $this->product_model->getHomeContent();
         echo json_encode($items,JSON_PRETTY_PRINT);
     }
 
-    public function authenticate() {
+    private public function authenticate() {
 
         $uname = $this->input->get('uname');
         $pass = $this->input->get('upwd');   
@@ -45,12 +45,12 @@ class Ios extends MY_Controller {
 
     }
     
-    function getMainCategories(){
+    private function getMainCategories(){
         $categories = $this->product_model->getCatItemsWithImage(1);
         echo json_encode($categories,JSON_PRETTY_PRINT);
     }
     
-    public function getProduct(){
+    private function getProduct(){
         $id = $this->input->get('p_id');   
         $width = $this->input->get('width');   
 		$uid = $this->session->userdata('member_id');
@@ -85,7 +85,7 @@ class Ios extends MY_Controller {
     }
     
 
-	public function searchbycategory()
+	private function searchbycategory()
 	{
 		$categoryId = $this->input->get('id_cat');		 
 		$start = 0;
@@ -136,7 +136,7 @@ class Ios extends MY_Controller {
 
 	}
 	
-	public function load_product() 
+	private function load_product() 
 	{
 		$categoryId = $this->input->get('id_cat');		 
 		$count = 0;
@@ -182,7 +182,7 @@ class Ios extends MY_Controller {
 	
 	# Accepts product review data from post method and writes to es_product_review table.
 	# Arguments: subject, comment, score
-	function submit_review()
+	private function submit_review()
 	{
 
            
@@ -202,7 +202,7 @@ class Ios extends MY_Controller {
 			}
 	}
 	#new query for getting reviews (top5 Main reviews) - Janz
-	function getReviews($product_id, $sellerid)
+	private function getReviews($product_id, $sellerid)
 	{
 		$recent = array();
 		$recent = $this->product_model->getProductReview($product_id);
@@ -242,7 +242,7 @@ class Ios extends MY_Controller {
 	# Arguments: last_id = id of the latest loaded review
 	#			 product_id = product id
 	#			 member_id = id of logged in user
-	function get_more_reviews()
+	private function get_more_reviews()
 	{	
 		$reviews = $replies = array();
 		$lastreview_id = $this->input->get('last_id');
@@ -299,7 +299,7 @@ class Ios extends MY_Controller {
 	
 	# Submit reply
 	# Arguments: reply, p_reviewid, id_product
-	function submit_reply()
+	private function submit_reply()
 	{
 		$reply = html_purify($this->input->get('reply'));
 		if($this->input->get('p_reviewid') && trim($reply) !== ''){
@@ -317,7 +317,7 @@ class Ios extends MY_Controller {
 	}
 	
     
-    function sch_onpress()
+    private function sch_onpress()
 	{  
        $this->load->model('search_model');
        if($this->input->get('q')){
@@ -335,12 +335,12 @@ class Ios extends MY_Controller {
 
 	}
     
-	function displaycategory()
+	private function displaycategory()
 	{
         echo json_encode($this->product_model->getFirstLevelNode(), JSON_PRETTY_PRINT);exit();
 	}
         
-	function search()
+	private function search()
 	{   
         $this->load->model('search_model');
 		$values = array();
@@ -382,13 +382,13 @@ class Ios extends MY_Controller {
         echo json_encode($response['items']);    
 	}
 
-    public function version(){
+    private public function version(){
         $this->load->library("xmlmap");
         $xml_element = $this->xmlmap->getFilenameID('page/mobile_files','version');
         echo $xml_element;
     }
     
-    public function getKeywords(){
+    private public function getKeywords(){
         $this->load->model('search_model');
         echo json_encode($this->search_model->getAllKeywords(), JSON_PRETTY_PRINT);
         exit();
