@@ -612,9 +612,9 @@ class product extends MY_Controller
             $this->session->set_userdata('product_id', $id);
             $product_catid = $product_row['cat_id'];
             
-            $banner_view = '';  
+            $banner_view = '';
             $payment_method_array = $this->config->item('Promo')[0]['payment_method'];
-            
+
             if(intval($product_row['is_promote']) === 1 && (!$product_row['end_promo']) ){
                 $bannerfile = $this->config->item('Promo')[$product_row['promo_type']]['banner'];
                 if(strlen(trim($bannerfile)) > 0){
@@ -633,7 +633,6 @@ class product extends MY_Controller
                 'uid' => $uid,
                 'recommended_items'=> $this->product_model->getRecommendeditem($product_catid,5,$id),
                 'allowed_reviewers' => $this->product_model->getAllowedReviewers($id),
-                //userdetails --- email/mobile verification info
                 'userdetails' => $this->user_model->getUserById($uid),
                 'product_quantity' => $this->product_model->getProductQuantity($id, false, false, $product_row['start_promo']),
                 'shipment_information' => $this->product_model->getShipmentInformation($id),

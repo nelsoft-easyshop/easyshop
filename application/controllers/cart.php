@@ -144,7 +144,6 @@ class Cart extends MY_Controller
     {
         $member_id = $this->session->userdata('member_id');
         $useraccessdetails = $this->user_model->getUserById($member_id);
-
         $product = $this->product_model->getProductById($id);
         $final_price = $product['price'];
         $product_attr_id = "0";

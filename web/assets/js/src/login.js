@@ -18,28 +18,30 @@
             messages: {
                 login_username: {
                     required: 'Username is required.'
-                },
+                    },
                 login_password: {
                     required: 'Password is required.'
-                }
+                    }
             },
             errorElement: "span",
-            errorPlacement: function (error, element) {
-                if (element.attr('name') === 'login_username') {
+            errorPlacement: function(error, element) {
+                if(element.attr('name') === 'login_username'){
                     error.appendTo($('#username_error'));
                 }
-                else {
+                else{
                     error.appendTo($('#passw_error'));
                 }
             },
-            submitHandler: function (form) {
+            submitHandler: function(form) {
                 $('#loading_img').show();
                 $('#login').hide();
+
                 $.ajax({
                     type: "POST",
                     dataType: "JSON",
                     url: config.base_url + "login/authenticate",
                     data: $(form).serializeArray(),
+
                     success:function(data){
                         if(data.o_success <= 0){
                             $("#login_error").empty();
@@ -47,7 +49,9 @@
                             $('#loading_img').hide();
                             $('#login').show();
                         }
-                        else{
+                        else {
+                            var curl = $.cookie('rn');
+
                             $('.error_cont').text('');
                             $('#login_error').text('');
                             $('#loading_img').hide();
@@ -57,27 +61,30 @@
 
                             var url = $('#redirect_url').val();
                             var first_uri_segment = url.substring(0, url.indexOf('/'));
-                            
-                            if((url == 'sell/step1')||(first_uri_segment == 'item')|| (url == 'cart')){
-                                window.location = config.base_url+ url;
+                            if ((url == 'sell/step1') || (first_uri_segment == 'item') || (url == 'cart')) {
+                                window.location = config.base_url + url;
                             }
-                            else if(first_uri_segment == 'cart'){
+                            else if (first_uri_segment == 'cart') {
                                 window.location = config.base_url + first_uri_segment;
                             }
-                            else{
+                            else if (first_uri_segment == 'promo') {
+                                var code = url.split("/");
+                                window.location = config.base_url + first_uri_segment + '/ScratchCard/claimScratchCardPrize?code=' + code[2];
+                            }
+                            else {
                                 window.location = config.base_url;
-                            }                        
+                            }
                         }
                     }
                 });
+
                 return false;
             }
         });
-        
-        $('.login_box input').on('focus', function(){
+
+        $('.login_box input').on('focus', function () {
             $('#login_error').text('');
         });
-    });
-    
-})(jQuery);
 
+    });
+})(jQuery);

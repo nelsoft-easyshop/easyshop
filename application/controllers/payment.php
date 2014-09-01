@@ -57,6 +57,25 @@ class Payment extends MY_Controller{
         exit();
     }
 
+    /**
+     * Get items in cart depending on the promo type
+     * and push data to choosen_items
+     *
+     * @param $promoType
+     */
+    public function setPromoItemsToPayment($promoType)
+    {
+        $cartContent = $this->cart->contents();
+        $item = array();
+        foreach ($cartContent as $key => $value) {
+            if($value['promo_type'] == $promoType){
+                $item[$key] = $cartContent[$key];
+            }
+        }
+
+        $cart_contentss=array('choosen_items'=> $item);
+        $this->session->set_userdata($cart_contentss);
+    }
     
     function review()
     {
@@ -530,6 +549,10 @@ class Payment extends MY_Controller{
     #START OF CASH ON DELIVERY, DIRECT BANK DEPOSIT PAYMENT
     function payCashOnDelivery()
     {
+        if($this->input->post('promo_type') !== FALSE )
+        {
+            $this->setPromoItemsToPayment($this->input->post('promo_type'));
+        }
         if(!$this->session->userdata('member_id') || !$this->input->post('paymentToken') || !$this->session->userdata('choosen_items')){
             redirect(base_url().'home', 'refresh');
         }
@@ -542,12 +565,19 @@ class Payment extends MY_Controller{
             $textType = 'cashondelivery';
             $message = 'Your payment has been completed through Cash on Delivery.';
 
-        }elseif($lastDigit == 2) {
+        }
+        elseif($lastDigit == 2) {
             $paymentType = $this->PayMentDirectBankDeposit;
             $textType = 'directbankdeposit';
             $message = 'Your payment has been completed through Direct Bank Deposit.';
 
-        }else{
+        }
+        elseif($lastDigit == 3) {
+            $paymentType = 6;
+            $textType = 'promo';
+            $message = 'Your payment has been completed through Promo';
+        }
+        else{
             $paymentType = $this->PayMentCashOnDelivery;  
             $textType = 'cashondelivery';
             $message = 'Your payment has been completed through Cash on Delivery.';
@@ -995,6 +1025,11 @@ class Payment extends MY_Controller{
                 $transactionData['payment_msg_seller'] = '';
                 $transactionData['payment_method_name'] = "Bank Deposit";
                 break;
+            default:
+                $transactionData['payment_msg_buyer'] = $this->lang->line('payment_cod_buyer');
+                $transactionData['payment_msg_seller'] = $this->lang->line('payment_cod_seller');
+                $transactionData['payment_method_name'] = "Cash on Delivery";
+                break;
         }
 
         //Send email to buyer
@@ -1065,9 +1100,9 @@ class Payment extends MY_Controller{
         }//close foreach seller loop
     }
 
-	/*
-	 *	Function to generate google analytics data
-	 */
+    /*
+     *	Function to generate google analytics data
+     */
     function ganalytics($itemList,$v_order_id)
     {
         $analytics = array(); 
@@ -1097,9 +1132,9 @@ class Payment extends MY_Controller{
         return $analytics;
     }
 
-    function processData($itemList,$address)
+    function processData($itemList,$address = array())
     {
-        $city = ($address['c_stateregionID'] > 0 ? $address['c_stateregionID'] :  0);
+        $city = ($address['c_stateregionID']) > 0 ? $address['c_stateregionID'] :  27;
         $cityDetails = $this->payment_model->getCityOrRegionOrMajorIsland($city); 
         $region = $cityDetails['parent_id'];
         $cityDetails = $this->payment_model->getCityOrRegionOrMajorIsland($region);

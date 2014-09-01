@@ -30,6 +30,9 @@
 #scratch-win-error p{
     width: 65%;
 }
+#scratch-win-error h2{
+    width: 8%;
+}
 .scratch-win-form span{
     width: 15%;
 }
@@ -131,11 +134,11 @@
 .scratch-win-btn{
 
 }
-.easytreats_banner {
-    background: url("../../assets/images/img_easy_treat_v1.jpg") no-repeat scroll center top #FFFFFF;
-    height: 205px;
+.scratchAndWinBanner {
+    background:url("../images/abcde.jpg") no-repeat scroll center top / 100% 100% #ffffff;
+    height: 365px;
     margin-bottom: 3%;
     margin-top: 2%;
     position: relative;
-    width: 980px;
- }
+    width: 100%;
+}
