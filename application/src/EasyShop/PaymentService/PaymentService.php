@@ -49,12 +49,21 @@ class PaymentService
     private $em;
 
     /**
+     * Http foundation Request instance
+     *
+     * @var Symfony\Component\HttpFoundation\Request
+     */
+    private $request;
+
+
+    /**
      * Constructor
      * 
      */
     public function __construct()
     {
         $this->em = get_instance()->kernel->serviceContainer['entity_manager'];
+        $this->request = get_instance()->kernel->serviceContainer['http_foundation'];
     }
 
 
@@ -120,13 +129,22 @@ class PaymentService
    
     /**
      * Payment Order
+     * 
+     * @param int $paymentType Specifies payment method
+     * @param double $ItemTotalPrice Contains total price of items
+     * @param string $member_id Contains member id
+     * @param string $productstring Contains product descriptions
+     * @param int $productCount Contains total count of products
+     * @param string $apiResponse Contains response of api
+     * @param string $tid Transaction id
+     *
      */
-    public function paymentOrder($paymentType,$ItemTotalPrice,$member_id,$productstring,$productCount,$apiResponse,$tid){
+    public function persistPayment($paymentType,$ItemTotalPrice,$member_id,$productstring,$productCount,$apiResponse,$tid){
 
         // remap variables
         $invoiceNo = $member_id.'-'.date('ymdhs');
         $totalAmount = $ItemTotalPrice;
-        $ip = $this->getRealIpAddr();
+        $ip = $this->request->getClientIp();
         $memberId = $member_id;
         $productString = $productstring;
         $productCount = $productCount;
@@ -340,16 +358,6 @@ class PaymentService
             $this->em->getConnection()->rollback();
         }
         return $response;
-    }
-
-    public function getRealIpAddr() {
-        if (!empty($_SERVER['HTTP_CLIENT_IP'])) //check ip from share internet 
-        $ip = $_SERVER['HTTP_CLIENT_IP'];
-        elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) //to check ip if pass from proxy 
-        $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
-        else
-        $ip = $_SERVER['REMOTE_ADDR'];
-        return $ip;
     }
 }
 
