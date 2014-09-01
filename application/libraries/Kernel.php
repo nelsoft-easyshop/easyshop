@@ -107,6 +107,11 @@ class Kernel
             return new \EasyShop\PaymentService\PaymentService();
         };
 
+        // Http foundation
+        $container['http_foundation'] = function ($c) {
+            return \Symfony\Component\HttpFoundation\Request::createFromGlobals();
+        };
+
         /* Register services END */
         $this->serviceContainer = $container;
     }
