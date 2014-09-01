@@ -18,10 +18,15 @@ class BuyAtZero extends MY_Controller
      */
     public function buyAtZeroRegistration()
     {
-        $data = $this->product_model->registerMemberForBuyAtZeroPromo(
-            $this->input->post('id'),
-            $this->session->userdata('member_id')
-        );
+        if(!$this->session->userdata('usersession') && !$this->check_cookie()){
+            $data = 'Not logged in';
+        }
+        else{
+            $data = $this->product_model->registerMemberForBuyAtZeroPromo(
+                $this->input->post('id'),
+                $this->session->userdata('member_id')
+            );
+        }
 
         echo json_encode($data);
     }
