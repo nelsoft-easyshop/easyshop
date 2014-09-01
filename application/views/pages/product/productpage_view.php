@@ -159,9 +159,13 @@
                 <div class="price_details">
                     <div class="price_box">
                         <div class="pbt pbt1">Price</div>
-                        <div>PHP 
+                        <div>
+                            <?php if(floatval($product['price']) !== 0.01): ?>
+                                PHP 
+                            <?php endif; ?>
+                            
                             <span class="current_price fm1" data-baseprice="<?php echo $product['price']?>"> 
-                                <?php echo number_format($product['price'],2,'.',',');?> 
+                                <?php echo (floatval($product['price']) !== 0.01) ? number_format($product['price'],2,'.',',') : 'FREE';?> 
                             </span> 
                         </div>
                         <?PHP if( ((intval($product['is_promote']) === 1) && $product['start_promo'] && !$product['end_promo'] && $product['percentage'] > 0)
