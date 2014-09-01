@@ -404,8 +404,16 @@ function attrClick(target, $this){
         var freeRowIndex = inArray(sel_id_ordered[0], sel_id);
         freeRowIndex = (freeRowIndex<=-1)?0:freeRowIndex;
         
-        $('.current_price')[0].innerHTML = price.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-
+        
+        if(price == 0.01){
+            $('.current_price')[0].innerHTML = 'FREE';
+            $('.currency').hide();
+        }
+        else{
+            $('.currency').show();
+            $('.current_price')[0].innerHTML = price.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+        
         /*
          *  If only the default quantity is set, skip attribute checking and quantity recalculation
          *  Enable buy button if an attribute is selected in all the rows.
