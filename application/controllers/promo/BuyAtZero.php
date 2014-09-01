@@ -19,7 +19,7 @@ class BuyAtZero extends MY_Controller
     public function buyAtZeroRegistration()
     {
         $productId = $this->input->post('id');
-        if(empty($this->session->userdata('member_id'))){
+        if($this->session->userdata('member_id')){
             $slug = $this->product_model->getSlug($productId);
             $this->session->set_userdata('uri_string', 'item/'.$slug);
             $data = 'not-logged-in';
