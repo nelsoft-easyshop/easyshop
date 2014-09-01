@@ -152,7 +152,7 @@ class SearchProduct
         $end = (is_numeric($end)) ? $end : PHP_INT_MAX;
    
         foreach ($arrayItem as $key => $value) {
-            $price = $value['price'];
+            $price = round(floatval($value['price']),2); 
             if(!($price >= $start && $price <= $end)){
                 unset($arrayItem[$key]);
             }
@@ -183,12 +183,14 @@ class SearchProduct
         $finalizedParamter = array();
         $addtionString = "";
         $counter = 0;
+        $havingCounter = 0;
         foreach ($parameter as $key => $value) {
             if(!in_array(strtolower($key), $unsetParam)){
                 $finalizedParamter[$key] = explode(',', $value);
                 $valueString = "";
                 foreach ($finalizedParamter[$key] as $paramKey => $paramValue) {
                     $valueString .= ":headValue{$counter}{$paramKey},";
+                    $havingCounter++;
                 }
                 $addtionString .= " OR (name = :head".$counter." AND attr_value IN (".substr($valueString, 0,-1)."))";
                 $counter++;
@@ -199,7 +201,7 @@ class SearchProduct
         }
 
         if(count($parameter) > 0){
-            $addtionString = ' AND ('.substr_replace($addtionString," ",1,3).') GROUP BY product_id HAVING COUNT(*) = '. count($finalizedParamter); 
+            $addtionString = ' AND ('.substr_replace($addtionString," ",1,3).') GROUP BY product_id HAVING COUNT(*) = '. $havingCounter; 
             $result = $this->em->getRepository('EasyShop\Entities\EsProduct')
                                         ->getAttributes($productIds,TRUE,$addtionString,$finalizedParamter);
             $resultNeeded = array_map(function($value) { return $value['product_id']; }, $result);
