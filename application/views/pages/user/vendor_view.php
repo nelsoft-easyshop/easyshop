@@ -54,7 +54,7 @@
                 <img src="<?php echo $banner;?>">
             </div>
             <div class="vendor_info_wrapper">
-                <div class="vendor-avatar vendor_avatar_wrapper">
+                <div class="vendor_avatar_wrapper">
                     <?php if($renderEdit):?>
                     <div id="avatar_edit" class="vendor_edit_avatar border_radius1 img_edit"><small class="span_bg edit_btn"></small> Edit</div>
                     <?php 
@@ -69,9 +69,11 @@
                         <input type="hidden" name="vendor" value="vendor">
                     <?php echo form_close();?>
                     <?php endif;?>
-                    <span>
-                        <?php echo $image_profile?>	
-                    </span>
+                    <div class="vendor-avatar">
+                        <span>
+                            <?php echo $image_profile?>	
+                        </span>
+                    </div>
                     
 
                     <p class='follow-cnt'>
@@ -81,11 +83,11 @@
      
                     <?php if( !$renderEdit && $logged_in ):?>
                         <?php echo form_open('');?>
-                        <p class="subscription_btn" style="text-align:center; display:<?php echo $subscribe_status==='unfollowed'?'':'none'?>">
-                            <small class="span_bg plus_btn"></small> Follow
+                        <p class="subscription_btn btn2 btn-follow" style="text-align:center; display:<?php echo $subscribe_status==='unfollowed'?'':'none'?>">
+                            <small class="sprite-bg follow-icon"></small> Follow
                         </p>
-                        <p class="subscription_btn" style="text-align:center; display:<?php echo $subscribe_status==='followed'?'':'none'?>">
-                            <small class="span_bg minus_btn"></small> Unfollow
+                        <p class="subscription_btn btn2 btn-unfollow" style="text-align:center; display:<?php echo $subscribe_status==='followed'?'':'none'?>">
+                            <small class="sprite-bg unfollow-icon"></small> Unfollow
                         </p>
                         <input type="hidden" value="<?php echo $vendordetails['username']?>" name="name">
                         <?php echo form_close();?>
@@ -204,6 +206,7 @@
 
                     </div>	
                 </div>
+                <div class="clear"></div>
             </div>
 
             <?php $items_per_page = 10;?>
