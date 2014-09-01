@@ -115,7 +115,13 @@ $config = array(
             'banner' => 'genericWithCountdown',
             'is_buyable_outside_promo' => false,
             'cart_solo_restriction' => false,
-            'option' => array(),
+            'option' => array(
+                0 => array(
+                    'start' => '00:00:00',
+                    'end' => '23:59:59',
+                    'purchase_limit' => 1
+                ),
+             ),
             'viewable_button_product_page' =>true,
         ),
     )
