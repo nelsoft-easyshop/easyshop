@@ -160,9 +160,8 @@
                     <div class="price_box">
                         <div class="pbt pbt1">Price</div>
                         <div>
-                            <?php if(floatval($product['price']) !== 0.01): ?>
-                                PHP 
-                            <?php endif; ?>
+                      
+                            <span class='currency' style ='display: <?php echo (floatval($product['price']) !== 0.01) ? 'inline':'none';  ?> '> PHP </span> 
                             
                             <span class="current_price fm1" data-baseprice="<?php echo $product['price']?>"> 
                                 <?php echo (floatval($product['price']) !== 0.01) ? number_format($product['price'],2,'.',',') : 'FREE';?> 
