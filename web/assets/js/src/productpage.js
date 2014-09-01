@@ -703,10 +703,13 @@ $(function(){
             success : function(data){
                 $('#loading_img').hide();
                 $('#send_registration').css('display', 'inline-block');
-                if(data){
+                if(data == "Not logged in"){
+                    alert('You must Login first to register in this promo.');
+                }
+                else if(data){
                     alert("Congratulations! You have now the chance to win LG G Pro Lite D686! " +
                         "The lucky winner will be announced on September 15, 2014. " +
-                        "Stay tuned for more EasyShop.ph promotions. Check your email for further information.");
+                        "Stay tuned for more EasyShop.ph promotions.");
                 }
                 else{
                     alert('You are already registered in this promo');
