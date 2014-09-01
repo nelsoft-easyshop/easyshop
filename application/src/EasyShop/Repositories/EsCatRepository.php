@@ -8,8 +8,12 @@ use Doctrine\ORM\Query\ResultSetMapping;
 
 class EsCatRepository extends EntityRepository
 {
-
-    public function getChildCategoryRecursive($categoryId)
+    /**
+     * Get all children category recursively up to last category of the selected category
+     * @param  integer $categoryId
+     * @return array
+     */
+    public function getChildCategoryRecursive($categoryId = 1)
     {
         $this->em =  $this->_em;
         $rsm = new ResultSetMapping(); 
