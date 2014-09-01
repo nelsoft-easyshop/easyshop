@@ -70,7 +70,7 @@ class ProductManager
                 $soldPrice = $this->em->getRepository('EasyShop\Entities\EsOrderProduct')
                                             ->getSoldPrice($productId, date('Y-m-d',strtotime($startDate)), $dateToParam);
                                             
-                $price = ($isSoldOut) ? $soldPrice[0]['soldPrice'] : $promo['price']; 
+                $price = ($isSoldOut) ? $soldPrice : $promo['price']; 
             }
             else{
                 $product[$key]['originalPrice'] = $originalPrice = $price;
