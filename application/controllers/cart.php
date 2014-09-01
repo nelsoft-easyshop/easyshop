@@ -196,7 +196,7 @@ class Cart extends MY_Controller{
             'qty' => $d_quantity,
             'price'   => $final_price,
             'original_price' => $product['original_price'],
-            'name'    => es_url_clean($product['product']),
+            'name'    => stripslashes($product['product']),
             'options' => $opt,
             'img'     => $this->product_model->getProductImages($product['id_product']),
             'member_id'  => $product['sellerid'],
