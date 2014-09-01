@@ -59,7 +59,7 @@ class EsProductRepository extends EntityRepository
                 FROM es_product
                 WHERE is_delete = 0 AND is_draft = 0 ) AS score_tbl
         HAVING weight > 0
-        ORDER BY weight   DESC 
+        ORDER BY weight DESC,name ASC 
         ", $rsm);
         $query->setParameter('param0', $stringCollection[0]);
         $query->setParameter('param1', $stringCollection[1]); 
@@ -178,7 +178,7 @@ class EsProductRepository extends EntityRepository
      */
     public function getBrands($productId = array())
     {
-        $this->em =  $this->_em;                       
+        $this->em =  $this->_em;
         $qb = $this->em->createQueryBuilder();
         $qbResult = $qb->select('DISTINCT(b.name) as brand')
                                 ->from('EasyShop\Entities\EsProduct','p')
