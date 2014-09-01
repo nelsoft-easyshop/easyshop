@@ -22,9 +22,9 @@
 <div class="wrapper" id="main_search_container">
     <div class="left_attribute">
         <h3>Price</h3>
-        <input type="text" id="price1" maxlength=10 size=6>
+        <input type="text" id="price1" value="<?=($this->input->get('startprice')?$this->input->get('startprice'):'')?>" maxlength=9 size=6>
         to
-        <input type="text" id="price2" maxlength=10 size=6> 
+        <input type="text" id="price2" value="<?=($this->input->get('startprice')?$this->input->get('endprice'):'')?>" maxlength=9 size=6> 
         <input class="price" type="button" value=">>"/>
 
         <?php foreach ($attributes as $attrName => $attrListValue):?>
@@ -32,8 +32,8 @@
             <ul>
             <?php foreach ($attrListValue as $key => $value):?>
                 <li style="border:0px">
-                    <a class="cbx" data-head="<?=$attrName?>" data-value="<?=$value?>" >
-                        <input type="checkbox" <?=($this->input->get(strtolower($attrName)))?'checked':'';?> class="cbx" data-head="<?=$attrName?>" data-value="<?=$value?>" >
+                    <a class="cbx" data-head="<?=strtolower($attrName)?>" data-value="<?=strtolower($value)?>" >
+                        <input type="checkbox" <?=(strpos($this->input->get(strtolower($attrName)),strtolower($value)) !== false)?'checked':'';?> class="cbx checkBox" data-head="<?=strtolower($attrName)?>" data-value="<?=strtolower($value)?>" >
                         <label for="cbx"><?=ucfirst($value);?></label>
                     </a>
                 </li>
@@ -197,6 +197,14 @@ function checkIfUrlParamExist(field,url)
     return false
 }
 
+function getParameterByName(name)
+{
+    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+        results = regex.exec(location.search);
+    return results == null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+}
+
 (function($) {
 
     $( "#price1 , #price2" ).keypress(function(evt) {
@@ -209,7 +217,6 @@ function checkIfUrlParamExist(field,url)
 
         return true;
     });
-
 
     $('.nav_title').mouseover(function(e) {
         $("nav").show();
@@ -231,7 +238,7 @@ function checkIfUrlParamExist(field,url)
         var tempval;
         if (isNaN(v)) {
             this.value = '';
-        } 
+        }
         else {
             tempval = Math.abs(v);
             this.value = tempval.toFixed(2);
@@ -265,6 +272,11 @@ function checkIfUrlParamExist(field,url)
         }
     });
 
+    $(".checkBox").click(function(){
+        var $this = $(this);
+        $this.parent('a').trigger('click');
+    });
+
     $(".cbx").click(function(){
         var $this = $(this);
         var head = $this.data('head').toLowerCase();
@@ -272,6 +284,19 @@ function checkIfUrlParamExist(field,url)
         var check = checkIfUrlParamExist(head,currentUrl); 
         if(check){
             currentUrl = removeParam(head, currentUrl);
+            var paramValue = getParameterByName(head);
+            if (paramValue.toLowerCase().indexOf(value) >= 0){ 
+                var newValue = paramValue.replace(value,'').replace(/^,|,$/g,'');
+                if(newValue == ""){
+                    currentUrl = currentUrl;
+                }
+                else{
+                    currentUrl = currentUrl +'&'+head+'='+ newValue;
+                }
+            }
+            else{
+                currentUrl = currentUrl +'&'+head+'='+ paramValue+','+value; 
+            }
         }
         else{
             currentUrl = currentUrl +'&'+head+'='+ value;

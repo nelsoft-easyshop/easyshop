@@ -338,16 +338,22 @@ class product_search extends MY_Controller {
     	}
     }
 
+    public function advance()
+    {
+        
+    }
+
     /*   
      *   Returns results of searching products through the search bar
      *   Route: search/(:any)
      */
-    function searchfaster()
+    public function searchfaster()
     { 
         $searchProductService = $this->serviceContainer['search_product']; 
         $productManager = $this->serviceContainer['product_manager']; 
         $collectionHelper = $this->serviceContainer['collection_helper']; 
         $EsProductRepository = $this->em->getRepository('EasyShop\Entities\EsProduct');
+        $EsCatRepository = $this->em->getRepository('EasyShop\Entities\EsCat');
 
         $string = $this->input->get('q_str');
         $category = $this->input->get('q_cat');
@@ -356,9 +362,10 @@ class product_search extends MY_Controller {
         $startPrice = $this->input->get('startprice');
         $endPrice = $this->input->get('endprice');
         $memberId = $this->session->userdata('member_id');
- 
+        $category = ($category > 1) ? $EsCatRepository->getChildCategoryRecursive($category):array('1');
+
         $productIds = $originalOrder = $searchProductService->filterBySearchString($string);
-        $productIds = ($category) ? $searchProductService->filterByCategory(array($category),$productIds) : $productIds;
+        $productIds = ($category) ? $searchProductService->filterByCategory($category,$productIds) : $productIds;
         $productIds = ($brand) ? $searchProductService->filterByBrand($brand,$productIds) : $productIds;
         $productIds = ($condition) ? $searchProductService->filterByCondition($condition,$productIds) : $productIds; 
         $productIds = $searchProductService->filterByOtherParameter($this->input->get(),$productIds);
@@ -377,7 +384,7 @@ class product_search extends MY_Controller {
         }
 
         $organizedAttribute = array();
-        if($filteredProduct){
+        if(!count($finalizedProductId)<= 0){
             $brands = $EsProductRepository->getBrands($finalizedProductId);
             $attributes = $EsProductRepository->getAttributes($finalizedProductId);
             $brands = $EsProductRepository->getBrands($finalizedProductId);
