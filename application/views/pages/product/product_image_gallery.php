@@ -48,7 +48,7 @@
 		<div id="owl-demo" class="owl-carousel" >
 		  <?php foreach($product_images as $image): ?>
 			
-			<div> <img src='<?=base_url()?><?php echo $image['path']; ?>/<?php echo $image['file']; ?>' style="min-width: 400px !important; min-height: 400px !important;" /></div>
+			<div> <img class="img-slide" src='<?=base_url()?><?php echo $image['path']; ?>/<?php echo $image['file']; ?>'  /></div>
 			
 		  <?php endforeach;?>
 		</div>
