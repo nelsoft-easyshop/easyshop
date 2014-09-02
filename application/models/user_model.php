@@ -139,7 +139,7 @@ class user_model extends CI_Model {
      */
     public function getAdminUser($userid)
     {
-        $query = "SELECT * FROM es_admin_member WHERE id_admin = :userid";
+        $query = "SELECT * FROM es_admin_member WHERE id_admin_member = :userid";
         $sth = $this->db->conn_id->prepare($query);
         $sth->bindParam(':userid',$userid); 
         $sth->execute();
