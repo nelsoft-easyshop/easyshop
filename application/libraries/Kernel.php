@@ -126,6 +126,11 @@ class Kernel
         $container['collection_helper'] = function ($c) {
             return new \EasyShop\CollectionHelper\CollectionHelper();
         };
+        
+        // Http foundation
+        $container['http_foundation'] = function ($c) {
+            return \Symfony\Component\HttpFoundation\Request::createFromGlobals();
+        };
 
         /* Register services END */
         $this->serviceContainer = $container;
