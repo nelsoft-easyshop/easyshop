@@ -1208,4 +1208,10 @@ FROM
         (:productId, :memberId);
     </select>
 
+   <select id="getProdCountBySlug">
+      SELECT COUNT(*)
+      FROM es_product
+      WHERE slug = :slug
+   </select>    
+
 </map>

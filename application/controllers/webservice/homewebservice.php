@@ -295,6 +295,13 @@ class HomeWebService extends MY_Controller
         $string = $this->xmlCmsService->getString($nodeName, $value, $type, $coordinate, $target);
         $orindex = $index;
         $index = ($index == 0 ? 1 : $index);
+        $this->load->model("product_model");
+
+        $count = $this->product_model->getProdCountBySlug($value);
+
+        if($count < 1) {
+            exit("Product slug does not exist");
+        }
 
         if($orindex == 0) {
             $this->xmlCmsService->addXml($file,$string,'/map/productSlide[last()]');
@@ -598,7 +605,13 @@ class HomeWebService extends MY_Controller
         $nodeName =  $this->input->get("nodename");
         $index = (int)$index;
         $string = $this->xmlCmsService->getString($nodeName, $value, $type, "", "");
+        $this->load->model("product_model");
 
+        $count = $this->product_model->getProdCountBySlug($value);
+
+        if($count < 1) {
+            exit("Product slug does not exist");
+        }
             if($index > count($map->productSlide) - 1    || $order > count($map->productSlide) - 1 || $index < 0 || $order < 0) {
                 exit("Index out of bounds");
             }
