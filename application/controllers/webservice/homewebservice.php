@@ -10,12 +10,13 @@ class HomeWebService extends MY_Controller
      *  $xmlFileService used for accessing Resource class
      */
     private $xmlCmsService;
-    public $xmlFileService;
+    private $xmlFileService;
 
     public function __construct() 
     {
         parent::__construct();
-        $this->load->model('user_model');
+
+        $this->em = get_instance()->kernel->serviceContainer['entity_manager'];
 
         $this->xmlCmsService = $this->serviceContainer['xml_cms'];
         $this->xmlFileService = $this->serviceContainer['xml_resource'];
@@ -295,9 +296,10 @@ class HomeWebService extends MY_Controller
         $string = $this->xmlCmsService->getString($nodeName, $value, $type, $coordinate, $target);
         $orindex = $index;
         $index = ($index == 0 ? 1 : $index);
-        $this->load->model("product_model");
 
-        $count = $this->product_model->getProdCountBySlug($value);
+
+        $EsProductRepository = $this->em->getRepository('EasyShop\Entities\EsProduct');
+        $count = $EsProductRepository->getProdCountBySlug($value);
 
         if($count < 1) {
             exit("Product slug does not exist");
@@ -605,9 +607,8 @@ class HomeWebService extends MY_Controller
         $nodeName =  $this->input->get("nodename");
         $index = (int)$index;
         $string = $this->xmlCmsService->getString($nodeName, $value, $type, "", "");
-        $this->load->model("product_model");
-
-        $count = $this->product_model->getProdCountBySlug($value);
+        $EsProductRepository = $this->em->getRepository('EasyShop\Entities\EsProduct');
+        $count = $EsProductRepository->getProdCountBySlug($value);
 
         if($count < 1) {
             exit("Product slug does not exist");
