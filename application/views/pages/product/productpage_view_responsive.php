@@ -82,24 +82,29 @@
 						<br/>
 						<br/>
 				</section>
-				<div>
+				<div class="display-when-mobile-833">
 					<div class="panel-group " id="categories">
-					  <div class="panel panel-default no-border border-0">
+					  <div class="panel panel-default panel-category no-border border-0">
 						<div class="panel-heading panel-category-heading no-border">
-						  <h4 class="panel-title">
+						  <h4 class="panel-title panel-title-category">
+							Categories
 							<a data-toggle="collapse" data-parent="#categories" href="#categories-body">
-							  Categories
+								<img class="pull-right" src="<?=base_url()?>assets/images/img_arrow_down.png">
 							</a>
 						  </h4>
 						</div>
 						<div id="categories-body" class="panel-collapse collapse in">
-						  <div class="panel-body">
-							Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+						  <div class="panel-body-category">
+								<ul class="list-unstyled">
+									<li class="list-category">Category 1</li>
+									<li class="list-category">Category 2</li>
+								</ul>
 						  </div>
 						</div>
 					  </div>
 					  
 					</div>
+					
 					<div class="bread_crumbs_m">
 							<ul style="margin-bottom: 10px;">
 								<li class="" ><a href="<?=base_url()?>home">Home</a></li>
