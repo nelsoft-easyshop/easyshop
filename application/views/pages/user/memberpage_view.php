@@ -60,7 +60,7 @@
                     <?php echo base_url()?><span class="disp_userslug"><?php echo $userslug?></span>
                 </a>
                 <?php if( $render_userslug_edit ):?>
-                    <span class="edit_userslug edit_userslug_css" style="display:none;"><span class="span_bg edit-lnk"> Edit </span></span>
+                    <span class="edit_userslug edit_userslug_css"><span class="span_bg edit-lnk"> Edit </span></span>
                 <?php endif;?>
             </div>
             
@@ -110,7 +110,7 @@
                         <li><a href="#payment" class="<?php echo ($tab=='pmnt')?'selected':'';?>">Payment Accounts</a></li>
                         <li><a href="#transactions" class="<?php echo ($tab=='pending')?'selected':'';?>">On-going Transactions</a></li>
                         <li><a href="#complete_transactions">Completed Transactions</a></li>
-                        <li><a href="#security_settings">Settings</a></li>
+                        <li><a href="#security_settings" class="<?php echo ($tab=='settings')?'selected':'';?>">Settings</a></li>
                     </ul> 
                 </div>	
             </div>

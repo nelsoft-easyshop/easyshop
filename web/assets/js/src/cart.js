@@ -135,6 +135,10 @@ function del(data)
                     $(".row_" + prod_id).remove();
                     $("#total").text(data['total']);
                     $(".cart_no").text(data['total_items']);
+                    if(parseInt(data['total_items']) === 0){
+                        $('.cart_no').hide();
+                        $('.cart').css('width','28');
+                    }
                 }
                 else {
                     alert("Sorry, we are having a problem right now.");

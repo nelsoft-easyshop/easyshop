@@ -11,26 +11,26 @@ use Doctrine\DBAL\Migrations\Version;
  */
 class Version20140611103914 extends AbstractMigration
 {
-     /*
+    /**
      *   Schema tables array
      * 
-     *   @array('stable_name' => array('create' => "" , 'insert' => ""))
+     *   @var array('stable_name' => array('create' => "" , 'insert' => ""))
      */
 
     private $tables;
     
-    /*
+    /**
      *   Database functions
      * 
-     *   @array('fx_name' => "")
+     *   @var array('fx_name' => "")
      */
     
     private $functions;
     
-    /*
+    /**
      *   Database stored procedures
      * 
-     *   @array('sp_name' => "")
+     *   @var array('sp_name' => "")
      */
     
     private $procedure;
@@ -60,7 +60,7 @@ class Version20140611103914 extends AbstractMigration
             }
         }
         
-        /*
+        /**
          *   Generate stored procedures
          */
         
@@ -70,7 +70,7 @@ class Version20140611103914 extends AbstractMigration
             }
         }
         
-        /*
+        /**
          *   Generate functions
          */
         

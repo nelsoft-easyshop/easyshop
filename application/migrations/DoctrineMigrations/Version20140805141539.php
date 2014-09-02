@@ -421,7 +421,7 @@ class Version20140805141539 extends AbstractMigration
                             WHEN v_billing_info_id = 0 THEN
                                 BEGIN END;
                             ELSE
-                               INSERT INTO `easyshop`.`es_order_billing_info` (
+                               INSERT INTO `es_order_billing_info` (
                                   `order_id`
                                   , `order_product_id`
                                   , `bank_name`

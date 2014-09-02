@@ -91,6 +91,16 @@ class Kernel
         };
         
         
+        //CMS Service
+        $container['xml_cms'] = function ($c) {
+            return new \EasyShop\XML\CMS();
+        };
+        
+        //XML Resource Service
+        $container['xml_resource'] = function ($c) use ($container) {
+            return new \EasyShop\XML\Resource($container['local_configuration']);
+        };
+        
         //XML Resource accessor
         $container['xml_resource'] = function ($c) {
             $configurationService = new \EasyShop\Core\Configuration\Configuration();

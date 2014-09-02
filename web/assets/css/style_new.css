@@ -80,7 +80,7 @@ ul.slides_prod li a:hover {
 	margin-bottom: 12px;
 }
 
-.prod_alert_box a {
+.prod_alert_box a, .genericWithCountdown_prod_alert_box a {
 	color: #fff;
 	border-bottom: 1px dotted #fff;
 }

@@ -143,9 +143,9 @@ else {
     $route['(?i)contact'] = 'home/contact';
     $route['(?i)guide/buy'] = 'home/guide_buy';
     $route['(?i)guide/sell'] = 'home/guide_sell';
-
+    $route['(?i)report'] = 'home/bugReport';
     $route['(?i)subscribe'] = 'register/subscribe';
-    
+
     #WEBSERVICE
     $route['homewebservice'] = 'webservice/homewebservice';
     $route['accountservice'] = 'webservice/accountservice';
