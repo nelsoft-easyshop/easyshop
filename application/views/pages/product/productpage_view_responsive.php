@@ -153,9 +153,9 @@
 												<?php if(($vendorrating['rate_count'] <=0)):?>
 												<p><span style="font-size:10px; margin-left:8px;">No ratings received yet.</span></p>
 												<?php else:?>
-													<p><span class="rating_criteria"><?php echo $this->lang->line('rating')[0].':';?></span><span class="rating_value"><?php echo number_format($vendorrating['rating1'],2,'.',',');?></span> <img src="<?=base_url()?>assets/images/star-on.png" alt="*" title=""></p>
-													<p><span class="rating_criteria"><?php echo $this->lang->line('rating')[1].':';?></span><span class="rating_value" > <?php echo number_format($vendorrating['rating2'],2,'.',',');?> </span> <img src="<?=base_url()?>assets/images/star-on.png" alt="*" title=""></p>
-													<p><span class="rating_criteria"><?php echo $this->lang->line('rating')[2].':';?></span><span class="rating_value"> <?php echo number_format($vendorrating['rating3'],2,'.',',');?></span> <img src="<?=base_url()?>assets/images/star-on.png" alt="*" title=""></p>
+													<p class="p-rating-seller"><span class="rating_criteria"><?php echo $this->lang->line('rating')[0].':';?></span><span class="pull-right"><span class="rating_value"><?php echo number_format($vendorrating['rating1'],2,'.',',');?></span> <img src="<?=base_url()?>assets/images/star-on.png" alt="*" title=""></span></p>
+													<p class="p-rating-seller"><span class="rating_criteria"><?php echo $this->lang->line('rating')[1].':';?></span><span class="pull-right"><span class="rating_value" > <?php echo number_format($vendorrating['rating2'],2,'.',',');?> </span> <img src="<?=base_url()?>assets/images/star-on.png" alt="*" title=""></span></p>
+													<p class="p-rating-seller"><span class="rating_criteria"><?php echo $this->lang->line('rating')[2].':';?></span><span class="pull-right"><span class="rating_value"> <?php echo number_format($vendorrating['rating3'],2,'.',',');?></span> <img src="<?=base_url()?>assets/images/star-on.png" alt="*" title=""></span></p>
 												<?php endif;?>
 											</a>            
 										</span> 
@@ -206,7 +206,7 @@
 								<!-- Quantity -->
 								<div class="product_option"> <span class="label-option">Quantity</span>
 									<div class="">
-										<input type="text" value ="0" class="product_quantity form-control no-border" />
+										<input type="text" value ="0" class="product_quantity no-border" />
 									</div>
 								</div>
 							</div>
@@ -373,9 +373,9 @@
 						</div>
 						<div id="seller" class="panel-collapse collapse">
 							<div class="panel-body panel-seller-body">
-								<table>
+								<table width="100%" class="font-12">
 									<tr>
-										<td class="v-align-top">
+										<td class="v-align-top" width="10%">
 											<a href="<?php echo base_url() . $product['sellerusername'];?>"> 
 												<img class=" seller-img" src="<?php echo base_url() . $product['userpic']?>/60x60.png?<?php echo time();?>"><br />
 											</a>
@@ -388,16 +388,40 @@
 												<span>
 													<span class="span_bg prod_message"></span> 
 												</span>
-											
+											</a> 
 												<br/>
 												<?php if(($vendorrating['rate_count'] <=0)):?>
 												<p><span style="font-size:11px; margin-left:0px;">No ratings received yet.</span></p>
 												<?php else:?>
-													<p><span class="rating_criteria"><?php echo $this->lang->line('rating')[0].':';?></span><span class="rating_value"><?php echo number_format($vendorrating['rating1'],2,'.',',');?></span> <img src="<?=base_url()?>assets/images/star-on.png" alt="*" title=""></p>
-													<p><span class="rating_criteria"><?php echo $this->lang->line('rating')[1].':';?></span><span class="rating_value" > <?php echo number_format($vendorrating['rating2'],2,'.',',');?> </span> <img src="<?=base_url()?>assets/images/star-on.png" alt="*" title=""></p>
-													<p><span class="rating_criteria"><?php echo $this->lang->line('rating')[2].':';?></span><span class="rating_value"> <?php echo number_format($vendorrating['rating3'],2,'.',',');?></span> <img src="<?=base_url()?>assets/images/star-on.png" alt="*" title=""></p>
+													
+													<table width="70%">
+														<tr>
+															<td>
+																<span class="rating_criteria"><?php echo $this->lang->line('rating')[0].':';?></span>
+															</td>
+															<td style="td-rating">
+																<span class="rating_value"><?php echo number_format($vendorrating['rating1'],2,'.',',');?></span> <img src="<?=base_url()?>assets/images/star-on.png" alt="*" title="">
+															</td>
+														</tr>
+														<tr>
+															<td>
+																<span class="rating_criteria"><?php echo $this->lang->line('rating')[1].':';?></span>
+															</td>
+															<td style="td-rating">
+																<span class="rating_value" > <?php echo number_format($vendorrating['rating2'],2,'.',',');?> </span> <img src="<?=base_url()?>assets/images/star-on.png" alt="*" title="">
+															</td>
+														</tr>
+														<tr>
+															<td>
+																<span class="rating_criteria"><?php echo $this->lang->line('rating')[2].':';?></span>
+															</td>
+															<td style="td-rating">
+																<span class="rating_value"> <?php echo number_format($vendorrating['rating3'],2,'.',',');?></span> <img src="<?=base_url()?>assets/images/star-on.png" alt="*" title="">
+															</td>
+														</tr>
+													</table>
 												<?php endif;?>
-											</a>      
+											     
 										</td>
 									</tr>
 								</table>
@@ -935,7 +959,8 @@
 				</div>
 			</div>
 			<div class="col-md-2">
-				<div class="div-recommend">
+				<div class="div-recommend display-when-mobile-833">
+					<br/>
 					<p class="p-panel-head-recom" style="margin-top: ">Recommended</p>
 					
 					<table>
@@ -959,6 +984,28 @@
 						</tr>
 						<?PHP endforeach; ?>
 					</table>
+				</div>
+				
+				<div class="recommendation_list display-when-desktop">
+					
+					<h4>Recommended</h4>
+					<ul>
+						<?PHP foreach ($recommended_items as $row): ?>                
+						<li>
+							<span class="rec_item_container">
+							<a href="<?=base_url()."item/".$row['slug'];?>" class="lnk_rec_item">
+								<img class="rec_item_img" src="<?=base_url().$row['path'].'categoryview/'.$row['file']?>">
+							</a>
+							</span>
+							<p>
+								<a href="<?=base_url()."item/".$row['slug'];?>">
+									<span class="prod_rec_item"><?php echo html_escape($row['product']);?></span>
+								</a><br />
+								<span class="price"> PHP <?=number_format($row['price'],2,'.',',');?></span>
+							</p>
+						</li>
+						<?PHP endforeach; ?>
+					</ul>
 				</div>
 			</div>
 		</div>
