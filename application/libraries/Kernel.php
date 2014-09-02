@@ -102,14 +102,18 @@ class Kernel
             return new \EasyShop\PointTracker\PointTracker();
         };
 
-        // Payment Service
-        $container['payment_service'] = function ($c) {
-            return new \EasyShop\PaymentService\PaymentService();
-        };
-
         // Http foundation
         $container['http_foundation'] = function ($c) {
             return \Symfony\Component\HttpFoundation\Request::createFromGlobals();
+        };
+
+        // Payment Service
+        $container['payment_service'] = function ($c) use ($container) {
+            return new \EasyShop\PaymentService\PaymentService(
+                            $container['entity_manager'],
+                            $container['http_foundation'],
+                            $container['point_tracker']
+                            );
         };
 
         /* Register services END */
