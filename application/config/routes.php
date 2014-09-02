@@ -88,7 +88,7 @@ else {
     $route['search/suggest'] = 'product_search/sch_onpress'; # ryan vasquez
 
     #ADVANCE SEARCH
-    $route['(?i)advsrch'] = 'product_search/advance_search'; # new search - rain jorque
+    $route['(?i)advsrch'] = 'product_search/advance'; # new search - rain jorque
     $route['(?i)advsrch/more'] = 'product_search/advance_search_more'; # new search - rain jorque
 
     #PASSWORD
