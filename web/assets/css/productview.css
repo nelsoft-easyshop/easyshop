@@ -14,15 +14,36 @@
     position: relative;
     width: 287px;
 }
+.genericWithCountdown_dsc_tmr{
+    bottom: 47px;
+    left: 242px;
+    position: relative;
+    width: 287px;
+}
+.genericWithCountdown_dsc_prp_txt3 {
+    display: block;
+    font-size: 22px;
+    left: 30px;
+    position: relative;
+    top: 11px;
+}
+.genericWithCountdown_prod_alert_box{
+    background-color: #e42626;
+    border: 1px solid #c52020;
+    border-radius: 3px;
+    color: #fff;
+    margin-bottom: -1px;
+    padding: 8px 12px;
+}
 .right_header_discount{
     border : 1px #dd0000 solid;
     float: left;
     height: 53px;
     margin-bottom: 10px;
-    margin-left: 10px;
+    margin-left: 9px;
     min-height: 53px;
     padding: 10px;
-    width: 548px;
+    width: 549px;
 }
 .dsc_header_txt{
     color: #f70000;
@@ -105,7 +126,6 @@
     color: #FFFFFF;
 
 }
-
 /**RESPONSIVE**/
 
 .font-roboto{
@@ -646,5 +666,6 @@ nav{
 .border-0{
 	border: 0px !important;
 }
+
 }
 
