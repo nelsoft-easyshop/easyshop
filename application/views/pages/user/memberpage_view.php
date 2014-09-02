@@ -110,7 +110,7 @@
                         <li><a href="#payment" class="<?php echo ($tab=='pmnt')?'selected':'';?>">Payment Accounts</a></li>
                         <li><a href="#transactions" class="<?php echo ($tab=='pending')?'selected':'';?>">On-going Transactions</a></li>
                         <li><a href="#complete_transactions">Completed Transactions</a></li>
-                        <li><a href="#security_settings">Settings</a></li>
+                        <li><a href="#security_settings" class="<?php echo ($tab=='settings')?'selected':'';?>">Settings</a></li>
                     </ul> 
                 </div>	
             </div>

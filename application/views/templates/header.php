@@ -132,19 +132,16 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                             <div><span class="user-nav-dropdown">Account Settings</span></div>
                             <ul class="nav-dropdown">
                                 <li>
-                                    <a href="<?=base_url()?>me">Dashboard</a>
+                                    <a href="/me">Dashboard</a>
                                 </li>
                                 <li>
-                                    <a href="<?=base_url()?>me#transactions">On-going Transactions</a>
+                                    <a href="/me?me=pending">On-going Transactions</a>
                                 </li>
                                 <li class="nav-dropdown-border">
-                                    <a href="<?=base_url()?>me#security_settings">Settings</a>
+                                    <a href="/me?me=settings">Settings</a>
                                 </li>
                                 <li class="nav-dropdown-border">
-                                    <a href="">Report a Problem</a>
-                                </li>
-                                <li class="nav-dropdown-border">
-                                    <a class="prevent" href="<?=base_url()?>login/logout">Logout</a>
+                                    <a class="prevent" href="/login/logout">Logout</a>
                                 </li>
                             </ul>
                             
