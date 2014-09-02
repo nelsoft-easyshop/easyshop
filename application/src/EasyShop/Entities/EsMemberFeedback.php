@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * EsMemberFeedback
  *
  * @ORM\Table(name="es_member_feedback", uniqueConstraints={@ORM\UniqueConstraint(name="UNIQUE  order and for", columns={"order_id", "for_memberid"})}, indexes={@ORM\Index(name="id_member_idx", columns={"member_id"}), @ORM\Index(name="fk_es_member_feedback_es_member2_idx", columns={"for_memberid"}), @ORM\Index(name="fk_es_member_feedback_es_order_idx", columns={"order_id"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="EasyShop\Repositories\EsMemberFeedbackRepository")
  */
 class EsMemberFeedback
 {

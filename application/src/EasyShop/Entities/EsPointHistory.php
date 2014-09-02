@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * EsPointHistory
  *
  * @ORM\Table(name="es_point_history", indexes={@ORM\Index(name="fk_es_point_history_m_id_idx", columns={"m_id"}), @ORM\Index(name="fk_es_point_history_pt_id_idx", columns={"type"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="EasyShop\Repositories\EsPointHistoryRepository")
  */
 class EsPointHistory
 {
