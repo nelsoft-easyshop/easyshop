@@ -603,7 +603,7 @@
                             </div>
                         <?php endforeach;?>
                     </div>
-                    <div class="txt_load_more_con">
+                    <div class="txt_load_more_con v_loadmore">
                         <a target="_blank" href="<?php echo $p['loadmore_link']?>" class="grey_btn">LOAD MORE ITEMS</a>
                     </div>
                     <?php endforeach;?>
