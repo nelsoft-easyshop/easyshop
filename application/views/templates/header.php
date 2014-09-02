@@ -118,7 +118,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                 <span>How to Shop</span>
                             </a>
                         </li>
-                        <li class="txt_res_hide">
+                        <li class="txt_res_hide nav-menu-border">
                             <a class="prevent" href="<?=base_url()?>guide/sell">
                                 <img src="<?=base_url()?>/assets/images/img_icon_sell.png">
                                 <span>How to Sell</span>
