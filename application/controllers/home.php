@@ -390,6 +390,18 @@ class Home extends MY_Controller
         }
     }
     
+    public function bugReport()
+    {
+        $data = array(
+            'title' => 'Report a Problem | Easyshop.ph',
+            'metadescription' => 'Found a bug? Let us know so we can work on it.',
+        );
+        $data = array_merge($data, $this->fill_header());
+        $this->load->view('templates/header', $data);
+        //LOAD YOUR VIEW HERE
+        //$this->load->view('pages/web/faq');
+        $this->load->view('templates/footer_full');
+    }
 
 }
 
