@@ -320,4 +320,44 @@ class EsProductRepository extends EntityRepository
         
         return $result;
     }
+
+    /**
+     * Find product by using start price and endprice
+     * @param  integer $startPrice
+     * @param  integer $endPrice
+     * @return object
+     */
+    public function findByPrice($startPrice=0,$endPrice=0)
+    {
+        $this->em =  $this->_em;
+        $qb = $this->em->createQueryBuilder();
+        $qbResult = $qb->select('p.idProduct')
+                        ->from('EasyShop\Entities\EsProduct','p')
+                        ->where('p.isDraft = 0')
+                        ->andWhere('p.isDelete = 0')
+                        ->andWhere(
+                                $qb->expr()->between('p.price',$startPrice,$endPrice)
+                            ) 
+                        ->getQuery();
+
+        $result = $qbResult->getResult();
+
+        return $result;
+    }
 }
+
+            ->from('EasyShop\Entities\EsOrder','o')
+            ->innerJoin('EasyShop\Entities\EsOrderProduct', 'op','WITH','o.idOrder = op.order')
+            ->innerJoin('EasyShop\Entities\EsProduct', 'p','WITH','p.idProduct = op.product AND p.promoType = :promoType')
+            ->where(
+                    $qb->expr()->not(
+                        $qb->expr()->andX(
+                            $qb->expr()->eq('o.orderStatus', '99')
+                            ,$qb->expr()->eq('o.paymentMethod', '1')
+                        )
+                    )
+                )
+            ->andWhere('o.buyer = :buyer_id') 
+            ->setParameter('buyer_id', $buyerId)
+            ->setParameter('promoType', $promoType) 
+            ->getQuery();
