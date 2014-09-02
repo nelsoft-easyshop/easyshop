@@ -484,7 +484,18 @@ a.msgs_link:hover {
 .cart_no {
     margin-right: 5px;
 }
-
+.cart_zero {
+    background-position: -9px -260px !important;
+}
+.cart_icon_hide {
+    display: none !important;
+}
+.unread-messages-count-hide{
+    display: none !important;
+}
+.msg_icon_zero{
+    background-position: -511px -261px !important;
+}
 .cart_no,
 .msg_countr {
     background-color: #F18200;

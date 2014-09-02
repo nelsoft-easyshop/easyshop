@@ -2753,7 +2753,8 @@ class product_model extends CI_Model
     }
 
 
-    public function getProdCountBySlug($slug){
+    public function getProdCountBySlug($slug)
+    {
       
         $query = $this->xmlmap->getFilenameID('sql/product','getProdCountBySlug');
         $sth = $this->db->conn_id->prepare($query);
@@ -2763,8 +2764,6 @@ class product_model extends CI_Model
         return $number_of_rows;
     }        
         
-
-    
 
 }
 
