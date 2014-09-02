@@ -12,10 +12,11 @@ class AccountService extends MY_Controller
      *  2. Authentication method is located under MY_Controller.php
      *  @return boolean
      */
+    private $em;    
     public function __construct()
     {   
         parent::__construct();
-        $this->em = get_instance()->kernel->serviceContainer['entity_manager'];                
+        $this->em = $this->serviceContainer['entity_manager'];             
         if($this->input->post()){
             $this->authentication($this->input->post(), $this->input->post('hash'));
         }  
@@ -33,8 +34,7 @@ class AccountService extends MY_Controller
         
 
         $id = $this->input->post("id");
-        $EsProductRepository = $this->em->getRepository('EasyShop\Entities\EsProduct');
-        $count  = $EsProductRepository->getProdCountById($id);
+        $count  = $this->em->getRepository('EasyShop\Entities\EsProduct')->getProdCountById($id);
         return count($count);
     }
 
@@ -46,8 +46,7 @@ class AccountService extends MY_Controller
     public function getUserCount() 
     {
 
-        $EsMemberRepository = $this->em->getRepository('EasyShop\Entities\EsMember');
-        $result  = $EsMemberRepository->getUserCount();
+        $result  = $this->em->getRepository('EasyShop\Entities\EsMember')->getUserCount();
         return $result;
     }
 
