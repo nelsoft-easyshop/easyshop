@@ -269,8 +269,8 @@ span.seller-name .rating_criteria{
 }
 
 .product_quantity {
-	height: 25px;
-	width: 30px;
+	height: 38px;
+	width: 43px;
 	border:1px solid #DBD8D7;
 	padding-left: 5px;
 }
@@ -328,7 +328,7 @@ span.seller-name .rating_criteria{
 .pbt {
 	width: auto;
 	text-align: center;
-	font-size: 14px;
+	font-size: 12px;
 }
 
 /*.pbt1 {
@@ -593,6 +593,8 @@ span.free_shipping_logo {
 
 .html_description div {
     height: auto !important;
+	width: 100% !important;
+	word-wrap: break-word !important;
 }
 
 div.html_description img {
@@ -617,7 +619,7 @@ div.html_description img {
 .recommendation_list h4 {
 	font-weight: normal;
     border-bottom: 1px dotted #CECECE;
-	padding:8px 0;
+	padding:0px 0;
 	margin-bottom: 5px;
 }
 
@@ -645,11 +647,12 @@ div.html_description img {
     display: inline-block;
     font-size: 11px;
     width: 95px;
+	color: #000000;
 }
 
 .recommendation_list img {
-    max-width:85px;
-    max-height:85px;
+    max-width:70px;
+    max-height:70px;
     width: auto;
     height: auto;
 }
@@ -676,6 +679,7 @@ div.html_description img {
 
 .price {
 	color: #f18200;
+	font-size: 12px;
 }
 
 
@@ -830,10 +834,14 @@ div.html_description {
 
 #write_review_content textarea {
 	width: 96%;
-    max-width: 400px;
+    max-width: 96%;
 	height: 100px;	
 }
 
+ 
+.textarea-message{
+	width: 50% !important;
+ }
 .review-con-comment span {
     display: block;
     margin: 5px 0px 0px 110px;
