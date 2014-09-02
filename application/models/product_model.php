@@ -2761,6 +2761,7 @@ class product_model extends CI_Model
         $sth->execute(); 
         $number_of_rows = $sth->fetchColumn(); 
         return $number_of_rows;
+    }        
         
 
     
