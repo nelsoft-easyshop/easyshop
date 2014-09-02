@@ -236,7 +236,7 @@ class Home extends MY_Controller
         $tab = $this->input->get('tab') ? $this->input->get('tab') : '';
         $session_data = $this->session->all_userdata();
         $vendordetails = $this->memberpage_model->getVendorDetails($sellerslug);
-            
+
         if($vendordetails){
             $data['title'] = 'Vendor Profile | Easyshop.ph';
             $data['my_id'] = (empty($session_data['member_id']) ? 0 : $session_data['member_id']);
@@ -267,7 +267,7 @@ class Home extends MY_Controller
             $data['renderEdit'] = (int)$sellerid === (int)$data['my_id'] ? true : false;
             #if 0 : no entry - unfollowed, hence display follow
             #if 1 : has entry - followed, hence display unfollow
-            $data['subscribe_status'] = $this->memberpage_model->checkVendorSubscription($data['my_id'],$sellerslug)['stat'];   
+            $data['subscribe_status'] = $this->memberpage_model->checkVendorSubscription($data['my_id'],$vendordetails['username'])['stat'];   
             $this->load->view('pages/user/vendor_view', $data);
             $this->load->view('templates/footer');
         }
@@ -390,6 +390,18 @@ class Home extends MY_Controller
         }
     }
     
+    public function bugReport()
+    {
+        $data = array(
+            'title' => 'Report a Problem | Easyshop.ph',
+            'metadescription' => 'Found a bug? Let us know so we can work on it.',
+        );
+        $data = array_merge($data, $this->fill_header());
+        $this->load->view('templates/header', $data);
+        //LOAD YOUR VIEW HERE
+        //$this->load->view('pages/web/faq');
+        $this->load->view('templates/footer_full');
+    }
 
 }
 

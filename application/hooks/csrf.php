@@ -75,9 +75,7 @@ class CSRF_Protection
 
 
             if(empty($_POST) && empty($_FILES) && $_SERVER['CONTENT_LENGTH'] > 0){
-
                 show_error('Request was invalid. Selected file was too large. 1001', 400);
-
             }
             elseif($_SERVER['REQUEST_URI'] === '/payment/dragonPayPostBack'){
                 return true;
@@ -86,6 +84,9 @@ class CSRF_Protection
                 return true;
             }
             elseif($_SERVER['REQUEST_URI'] === '/payment/pesoPayDataFeed'){
+                return true;
+            }
+            elseif(strpos($_SERVER['REQUEST_URI'], 'webservice')){
                 return true;
             }
             else{

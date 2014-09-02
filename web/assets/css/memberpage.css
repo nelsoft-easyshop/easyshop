@@ -1,6 +1,79 @@
-<!--Member page CSS Janz-->
+/** <!--Member page CSS Janz--> **/
 
+.btn2 {
+  padding: 6px 12px;
+  margin-bottom: 0;
+  font-size: 14px;
+  font-weight: normal;
+  line-height: 1.42857143;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  cursor: pointer;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  background-image: none;
+  border: 1px solid transparent;
+  border-radius: 4px;
+}
 
+.btn:hover,
+.btn:focus {
+  color: #333;
+  text-decoration: none;
+}
+
+.btn-follow {
+    color: #fff;
+    background-color: #6dabe1;
+    border: 1px solid #428bca;
+}
+
+.btn-unfollow {
+  color: #fff;
+  background-color: #428bca;
+  border-color: #357ebd;
+}
+
+.btn-follow:hover {
+  color: #fff;
+  background-color: #3071a9;
+  border-color: #285e8e;
+}
+
+.btn-unfollow:hover {
+    color: #fff;
+    background-color: #cb3e3e;
+    border-color: #972222; 
+}
+
+.sprite-bg {
+    background-image: url('../images/landingpage/glyphicons-halflings-white.png');
+    background-repeat: no-repeat;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.sprite-bg2 {
+    background-image: url('../images/landingpage/glyphicons-halflings.png');
+    background-repeat: no-repeat;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.follow-icon {
+    width: 20px;
+    height: 20px;
+    background-position: 3px -94px;
+}
+
+.unfollow-icon {
+    width: 20px;
+    height: 20px;
+    background-position: -21px -94px;
+}
 
 /* Overlay */
 #simplemodal-overlay {
