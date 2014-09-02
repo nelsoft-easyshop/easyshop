@@ -305,6 +305,7 @@ class HomeWebService extends MY_Controller
             exit("Product slug does not exist");
         }
 
+
         if($orindex == 0) {
             $this->xmlCmsService->addXml($file,$string,'/map/productSlide[last()]');
             $this->swapXmlForAddProductSlide($file,$orindex, $index,$value);
@@ -613,6 +614,7 @@ class HomeWebService extends MY_Controller
         if($count < 1) {
             exit("Product slug does not exist");
         }
+
             if($index > count($map->productSlide) - 1    || $order > count($map->productSlide) - 1 || $index < 0 || $order < 0) {
                 exit("Index out of bounds");
             }

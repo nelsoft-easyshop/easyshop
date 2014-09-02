@@ -194,7 +194,10 @@ function Reload()
         data : {csrfname:csrftoken,todo:todo},
         success : function(d)
         {
-            $(".msg_countr").html(d.unread_msgs);
+            $(".msg_countr").show().html(d.unread_msgs);
+            if(parseInt(d.unread_msgs) === 0 ){
+                $('#unread-messages-count').hide();
+            }
             document.title = (d.unread_msgs == 0 ? "Message | Easyshop.ph" : "Message (" + d.unread_msgs + ") | Easyshop.ph");
 
             if (d.unread_msgs != 0) {
@@ -348,11 +351,11 @@ function specific_msgs()
         } else {
             html += '<span class="float_right">';
         }
-        html += '<img src="'+val.sender_img+'/60x60.png">';
-        html += '<div></div>';
+        html += '<span class="chat-img-con"><span class="chat-img-con2"><img src="'+val.sender_img+'/60x60.png"></span></span>';
+        html += '<div class="chat-container"><div></div>';
         html += '<input type="checkbox" class="d_all" value="'+val.id_msg+'">';
         html += '<p>'+escapeHtml(val.message)+'</p>';
-        html += '<span>'+escapeHtml(val.time_sent)+'</span></span>';
+        html += '<span class="msg-date">'+escapeHtml(val.time_sent)+'</span></span></div>';
 
         if(/^((?!chrome).)*safari/i.test(navigator.userAgent)){ //if safari
             $("#msg_field").prepend(html);
