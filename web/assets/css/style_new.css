@@ -154,7 +154,11 @@ span.seller-name .seller-img {
     
     width: 30px;
 	height: 30px;
-	vertical-align: middle;
+	vertical-align: bottom;
+}
+
+.img-seller{
+	vertical-align: bottom !important;
 }
 
 span.seller-name .name {
@@ -162,6 +166,25 @@ span.seller-name .name {
 	width: 110px;
 	margin-top: 10px;
 	word-wrap: break-word;
+}
+
+.td-img-seller{
+	vertical-align:bottom !important;
+}
+
+.td-name{
+	vertical-align:bottom !important;
+	padding-left: 5px;
+
+}
+
+.name-m{
+	margin-top: 0px !important;
+	vertical-align:bottom !important;
+}
+
+.v-align-top{
+	vertical-align: top;
 }
 
 span.seller-name .name:hover {
@@ -294,6 +317,7 @@ span.seller-name .rating_criteria{
     font-size: 11px;
     height: 24px;
     margin: 5px;
+	
 }
 
 .availability span {
@@ -743,7 +767,7 @@ div.html_description {
 
 .right_left_content {
 	float: left;
-	width: 530px;
+	width: 490px;
 	border-top: 1px solid #DBD8D7;	
 }
 
@@ -885,6 +909,27 @@ div.html_description {
 	margin: 10px 0;
 }
 
+.reply_btn_m {
+	font-weight: bold;
+    background-color: #838383;
+    border-radius: 2px;
+    color: #FFFFFF;
+    cursor: pointer;
+    display: inline-block;
+    margin: 20px 0;
+    padding: 5px 25px;
+}
+
+.reply_btn_m:hover {
+    background-color: #4C4C4C;
+    color: #FFFFFF;	
+}
+
+.reply_area_m{
+	display: none;
+	margin: 10px 0;
+}
+
 .reply_save, .reply_cancel {
 	cursor: pointer;
 }
@@ -894,6 +939,18 @@ div.html_description {
 }
 
 .reply_save:hover {
+    background-color: #ff8800;	
+}
+
+.reply_save_m, .reply_cancel_m {
+	cursor: pointer;
+}
+
+.reply_save_m {
+    margin-top: 10px;
+}
+
+.reply_save_m:hover {
     background-color: #ff8800;	
 }
 
@@ -916,11 +973,23 @@ div.html_description {
 	text-decoration: underline;
 }
 
+
+
 .reply_content, .hide_replies{
 	display: none;
 }
 
 .hide_replies, .show_replies{
+	cursor: pointer;
+	color: #0072FF;
+	text-decoration: underline;
+}
+
+.reply_content_m, .hide_replies_m{
+	display: none;
+}
+
+.hide_replies_m, .show_replies_m{
 	cursor: pointer;
 	color: #0072FF;
 	text-decoration: underline;
@@ -942,6 +1011,17 @@ div.html_description {
     font-size: 12px;
     width: 98%;
     padding:5px;
+}
+
+.reply_field_m{
+    border: 1px solid #B3B3B3;
+    color: #494949;
+    font-family: arial;
+    font-size: 12px;
+    width: 98%;
+    padding:5px;
+	margin-bottom: -5px;
+	resize: none;
 }
 
 .reply_content > *, 
@@ -1015,7 +1095,7 @@ div.reply_content_shown > p {
 	height: 65px;
 	left: 5px;
 	position: absolute;
-	top: -2px;
+	top: -13px;
 	z-index: 9;
 	padding-top: 5px;
 }
@@ -1029,7 +1109,8 @@ div.reply_content_shown > p {
 .cd_soldout_product_page {
     left: 265px;
     position: absolute;
-    top: -6px;
+    top: 0 px;
+	z-index:9999999;
 }
 
 

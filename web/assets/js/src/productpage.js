@@ -290,11 +290,21 @@ $(function(){
         $(this).siblings('.reply_area').fadeIn(300);
         $(this).fadeOut();
     });
+	$('.media-body').on('click','.reply_btn_m', function(event){
+        $(this).siblings('.reply_area_m').fadeIn(300);
+        $(this).fadeOut();
+    });
 
     $('.reviews_content').on('click','.reply_cancel', function(event){
         $(this).closest('div.reply_area').fadeOut();
         $(this).siblings('.reply_field').val('');
         $(this).closest('div.reply_area').siblings('.reply_btn').fadeIn(300);
+    });
+	
+	$('.media-body').on('click','.reply_cancel_m', function(event){
+        $(this).closest('div.reply_area_m').fadeOut();
+        $(this).siblings('.reply_field_m').val('');
+        $(this).closest('div.reply_area_m').siblings('.reply_btn_m').fadeIn(300);
     });
 
     $('.reviews_content').on('click','.reply_save', function(event){
@@ -324,15 +334,55 @@ $(function(){
 
     });
 
+	$('.media-body').on('click','.reply_save_m', function(event){
+        var form = $(this).parent('form');
+        var replyfield = $(this).siblings('.reply_field_m');
+        var loadingimg = $(this).siblings('#savereply_loadingimg_m');
+		var replydiv = $(this).closest('div.reply_area_m');
+		var thisbtn = $(this);
+        var cancelbtn = $('.reply_cancel_m');
+        if($.trim(replyfield.val()).length < 1)
+            replyfield.effect('pulsate',{times:5},500);
+        else{
+            thisbtn.hide();
+            cancelbtn.hide();
+            loadingimg.show();
+            $.post(config.base_url+'product/submit_reply',form.serialize(),function(data){
+				replydiv.fadeOut();
+				thisbtn.show();
+				loadingimg.hide();
+                if(data == 1){
+                    location.reload(true);
+                }
+                else
+                    alert('Sorry, your reply was not posted.');
+            });
+        }
+        
+    });
+	
     $('.reviews_content').on('click','.show_replies',function(){
         $(this).fadeOut();
         $(this).siblings('.reply_content, .hide_replies').fadeIn(300);
     });
 
+	//For mobile
+	$('.media-body').on('click','.show_replies_m',function(){
+        $(this).fadeOut();
+        $(this).siblings('.reply_content_m, .hide_replies_m').fadeIn(300);
+    });
+	
     $('.reviews_content').on('click','.hide_replies',function(){
         $(this).fadeOut();
         $(this).siblings('.reply_content').fadeOut(300);
         $(this).siblings('.show_replies').fadeIn(300);
+    });
+	
+	//For Mobile
+	 $('.media-body').on('click','.hide_replies_m',function(){
+        $(this).fadeOut();
+        $(this).siblings('.reply_content_m').fadeOut(300);
+        $(this).siblings('.show_replies_m').fadeIn(300);
     });
 });
 
