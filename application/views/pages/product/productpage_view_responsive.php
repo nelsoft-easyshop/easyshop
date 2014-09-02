@@ -93,7 +93,7 @@
 							</a>
 						  </h4>
 						</div>
-						<div id="categories-body" class="panel-collapse collapse in">
+						<div id="categories-body" class="panel-collapse collapse">
 						  <div class="panel-body-category">
 								<ul class="list-unstyled">
 									<li class="list-category">Category 1</li>
