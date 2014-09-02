@@ -324,31 +324,6 @@ class EsProductRepository extends EntityRepository
     }
 
     /**
-     * Find product by using start price and endprice
-     * @param  integer $startPrice
-     * @param  integer $endPrice
-     * @return object
-     */
-    public function findByPrice($startPrice=0,$endPrice=0)
-    {
-        $this->em =  $this->_em;
-        $qb = $this->em->createQueryBuilder();
-        $qbResult = $qb->select('p.idProduct')
-                        ->from('EasyShop\Entities\EsProduct','p')
-                        ->where('p.isDraft = 0')
-                        ->andWhere('p.isDelete = 0')
-                        ->andWhere(
-                                $qb->expr()->between('p.price',$startPrice,$endPrice)
-                            ) 
-                        ->getQuery();
-
-        $result = $qbResult->getResult();
-        $resultNeeded = array_map(function($value) { return $value['idProduct']; }, $result);
-
-        return $resultNeeded; 
-    }
-
-    /**
      * Find Product By seller
      * @return [type] [description]
      */
@@ -362,7 +337,7 @@ class EsProductRepository extends EntityRepository
                                 ->where('p.isDraft = 0')
                                 ->andWhere('p.isDelete = 0')
                                 ->andWhere('m.username LIKE :username')
-                                ->setParameter('username', $seller)
+                                ->setParameter('username', '%'.$seller.'%')
                                 ->getQuery();
         $result = $qbResult->getResult(); 
         $resultNeeded = array_map(function($value) { return $value['idProduct']; }, $result);
