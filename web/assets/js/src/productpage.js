@@ -725,7 +725,7 @@ $(function(){
                 }
                 else if(data){
                     msg = "Congratulations! You now have the chance to win this  " + 
-                        $('#pname').html()  + " item! The lucky winner will be " +
+                        escapeHtml($('#pname').html())  + " item! The lucky winner will be " +
                         "announced on September 15, 2014. Stay tuned for more EasyShop.ph " +
                         "promotions. ";
                 }
