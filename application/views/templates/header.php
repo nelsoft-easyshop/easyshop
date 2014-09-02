@@ -71,8 +71,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                     </li>
                     <li class="top_nav_main">
                         <a class="prevent" href="<?php echo base_url()."cart/"; ?>">
-                            <span class="span_bg big_cart cart"></span>
-                            <span class="cart_no"><?PHP echo ($total_items) &&  ($logged_in)?$total_items:0; ?></span>
+                            <?PHP if(!($total_items) &&  !($logged_in)): ?>
+                                <span class="span_bg big_cart cart cart_zero"></span>
+                            <?PHP else: ?>
+                                <span class="span_bg big_cart cart <?PHP echo (intval($total_items) === 0) ? 'cart_zero' : ''; ?>"></span>
+                                <span class="cart_no <?PHP echo (intval($total_items) === 0) ? 'cart_icon_hide' : ''; ?>"><?PHP echo $total_items; ?></span>
+                            <?PHP endif;?>
                             <span class="txt_hide">View my Cart</span>
                         </a>
                     </li>
@@ -103,8 +107,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                     <?php else: ?>
                         <li>
                             <a href="<?=base_url()?>messages" class="msgs_link prevent">
-                                <span class="span_bg img_msgs_cntr"></span>
-                                <span id="unread-messages-count" class="msg_countr">
+                                <span class="span_bg img_msgs_cntr <?PHP echo (intval($msgs['unread_msgs']) === 0) ? 'msg_icon_zero' : '';?>"></span>
+                                <span id="unread-messages-count" class="msg_countr <?PHP echo (intval($msgs['unread_msgs']) === 0) ? 'unread-messages-count-hide' : '';?>">
                                     <?PHP echo $msgs['unread_msgs'];?>
                                 </span>
                             </a>
@@ -128,19 +132,16 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                             <div><span class="user-nav-dropdown">Account Settings</span></div>
                             <ul class="nav-dropdown">
                                 <li>
-                                    <a href="<?=base_url()?>me">Dashboard</a>
+                                    <a href="/me">Dashboard</a>
                                 </li>
                                 <li>
-                                    <a href="<?=base_url()?>me#transactions">On-going Transactions</a>
+                                    <a href="/me?me=pending">On-going Transactions</a>
                                 </li>
                                 <li class="nav-dropdown-border">
-                                    <a href="<?=base_url()?>me#security_settings">Settings</a>
+                                    <a href="/me?me=settings">Settings</a>
                                 </li>
                                 <li class="nav-dropdown-border">
-                                    <a href="">Report a Problem</a>
-                                </li>
-                                <li class="nav-dropdown-border">
-                                    <a class="prevent" href="<?=base_url()?>login/logout">Logout</a>
+                                    <a class="prevent" href="/login/logout">Logout</a>
                                 </li>
                             </ul>
                             
@@ -232,16 +233,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         
         $(document).ready(function(){
 
-            if(parseInt($('#unread-messages-count').html()) === 0 ){
-                $('#unread-messages-count').hide();
-            }
             var $user_nav_dropdown = $(".user-nav-dropdown");
             var $nav_dropdown = $("ul.nav-dropdown");
-
-            if(parseInt($('.cart_no').html()) === 0){
-                $('.cart_no').hide();
-                $('.cart').css('width','28');
-            }
 
             $(document).mouseup(function (e) {
 

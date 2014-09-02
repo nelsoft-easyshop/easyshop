@@ -461,6 +461,7 @@ header {
 .top_link_name {
     display: inline-block;
     height: 30px;
+    margin-left: 10px;
     overflow: hidden;
     text-overflow: ellipsis;
     margin-right: 20px;
@@ -484,7 +485,18 @@ a.msgs_link:hover {
 .cart_no {
     margin-right: 5px;
 }
-
+.cart_zero {
+    background-position: -9px -260px !important;
+}
+.cart_icon_hide {
+    display: none !important;
+}
+.unread-messages-count-hide{
+    display: none !important;
+}
+.msg_icon_zero{
+    background-position: -511px -261px !important;
+}
 .cart_no,
 .msg_countr {
     background-color: #F18200;
@@ -2227,7 +2239,9 @@ box-shadow:         0px 1px 5px 0px rgba(50, 50, 50, 0.75);
         height: 35px;
         width: 32px;    
     }
-
+    .cart_zero {
+        background-position:-623px -246px !important;
+    }
     .icon_sell {
         background-position: -672px -246px;
         height: 35px;
@@ -2297,6 +2311,9 @@ box-shadow:         0px 1px 5px 0px rgba(50, 50, 50, 0.75);
         background-position: -813px -258px;
         width: 27px;
         height: 17px;
+    }
+    .msg_icon_zero{
+        background-position:  -813px -258px !important;
     }
      .user-nav-dropdown:after,
     .nav-dropdown:after,
