@@ -351,7 +351,7 @@ class EsProductRepository extends EntityRepository
      * Find Product By seller
      * @return [type] [description]
      */
-    public function findBySeller($seller,$productId,$filter=false)
+    public function findBySeller($seller)
     {
         $this->em =  $this->_em;
         $qb = $this->em->createQueryBuilder();
@@ -359,7 +359,7 @@ class EsProductRepository extends EntityRepository
                                 ->from('EasyShop\Entities\EsProduct','p')
                                 ->leftJoin('EasyShop\Entities\EsMember','m','WITH','p.member = m.idMember')
                                 ->where('m.username LIKE :username')
-                                ->setParameter('username', '%'.$seller.'%');
+                                ->setParameter('username', '%'.$seller.'%')
                                 ->getQuery();
         $result = $qbResult->getResult();
         $resultNeeded = array_map(function($value) { return $value['idProduct']; }, $result);
