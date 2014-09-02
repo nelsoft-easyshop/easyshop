@@ -15,6 +15,7 @@ class AccountService extends MY_Controller
     public function __construct()
     {   
         parent::__construct();
+        $this->em = get_instance()->kernel->serviceContainer['entity_manager'];                
         if($this->input->post()){
             $this->authentication($this->input->post(), $this->input->post('hash'));
         }  
@@ -30,11 +31,11 @@ class AccountService extends MY_Controller
     public function getProductCount() 
     {   
         
-        $this->load->model("product_model");
-        $id = $this->input->post("id");
-        $count = $this->product_model->getProdCount($id);
 
-        return $count;
+        $id = $this->input->post("id");
+        $EsProductRepository = $this->em->getRepository('EasyShop\Entities\EsProduct');
+        $count  = $EsProductRepository->getProdCountById($id);
+        return count($count);
     }
 
     /**
@@ -45,9 +46,9 @@ class AccountService extends MY_Controller
     public function getUserCount() 
     {
 
-        $this->load->model("user_model");
-        $count = $this->user_model->CountUsers();
-        return $count;
+        $EsMemberRepository = $this->em->getRepository('EasyShop\Entities\EsMember');
+        $result  = $EsMemberRepository->getUserCount();
+        return $result;
     }
 
 }
