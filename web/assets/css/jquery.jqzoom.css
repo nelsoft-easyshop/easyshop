@@ -15,7 +15,7 @@
 
 .prod_con_gal {
     border: 1px solid #CECECE;
-    max-height: 400px;
+    height: 400px;
     width: 100%;
 	text-align: center;
     vertical-align: middle;
