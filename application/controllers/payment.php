@@ -530,6 +530,9 @@ class Payment extends MY_Controller{
     #START OF CASH ON DELIVERY, DIRECT BANK DEPOSIT PAYMENT
     function payCashOnDelivery()
     {
+        $method = [['name' => 'cod', 'method' => 'CashOnDelivery', 'amount' => 100]];
+        $this->pay($method);
+
         if(!$this->session->userdata('member_id') || !$this->input->post('paymentToken') || !$this->session->userdata('choosen_items')){
             redirect(base_url().'home', 'refresh');
         }
@@ -1287,6 +1290,66 @@ class Payment extends MY_Controller{
 
     }
 
+    // the generic pay function
+    // [ ['name' => name, 'method' => method, 'amount' => amount], . . . ]
+    function pay($methods)
+    {
+        if(!$this->session->userdata('member_id') || !$this->session->userdata('choosen_items')){
+            redirect(base_url().'home', 'refresh');
+        }
+
+        // holds the breakdown param arrays
+        $methods_arr = [];
+        $payment_service = $this->serviceContainer['payment_service'];
+
+        // do common functions here
+        $member_id =  $this->session->userdata('member_id'); 
+        $itemList =  $this->session->userdata('choosen_items');    
+        $productCount = count($itemList);
+        $address = $this->memberpage_model->get_member_by_id($member_id);
+        $prepareData = $this->processData($itemList,$address);
+
+        $commonParams = [
+            'member_id' => $member_id,
+            'productCount' => $productCount,
+            'prepareData' => $prepareData
+        ];
+
+        // prep specific parameter arrays for each methods
+        foreach ($methods as $methodParams) {
+            $prepName = 'prep' . $methodParams['method'] . 'Gateway';
+            $methods_arr[] = $this->$prepName(array_merge($methodParams, $commonParams));
+        }
+
+        // more common functions here
+
+        // apply breakdown
+        $payment_service->setBreakdown($methods_arr);
+        $payment_service->pay();
+
+        // extract correct gateway return value
+        extract($payment_service->getReturnValue('cod'));
+
+        $this->generateFlash($txnid,$message,$status);
+        redirect(base_url().'payment/success/'.$textType.'?txnid='.$txnid.'&msg='.$message.'&status='.$status, 'refresh');
+    }
+
+
+    function prepCashOnDeliveryGateway($defaultParam)
+    {
+        $cod_param = $defaultParam;
+        $cod_param['lastDigit'] = substr($this->input->post('paymentToken'), -1);
+        return $cod_param;
+    }
+
+    function prepPointGateway($defaultParam)
+    {
+        $point_param = $defaultParam;
+        //$point_param['pointtype']
+        //$point_param['products']
+        //$point_param['order_id']
+        return $point_param;
+    }
 }
 
 
