@@ -341,7 +341,8 @@ class EsProductRepository extends EntityRepository
                         ->getQuery();
 
         $result = $qbResult->getResult();
+        $resultNeeded = array_map(function($value) { return $value['idProduct']; }, $result);
 
-        return $result;
+        return $resultNeeded; 
     }
 }
