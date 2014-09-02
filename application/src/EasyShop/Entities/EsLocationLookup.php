@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * EsLocationLookup
  *
  * @ORM\Table(name="es_location_lookup", indexes={@ORM\Index(name="fk_es_location_lookup_es_location_lookup_idx", columns={"parent_id"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="EasyShop\Repositories\EsLocationLookupRepository")
  */
 class EsLocationLookup
 {

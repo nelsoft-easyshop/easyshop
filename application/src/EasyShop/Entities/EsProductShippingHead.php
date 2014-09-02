@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * EsProductShippingHead
  *
  * @ORM\Table(name="es_product_shipping_head", indexes={@ORM\Index(name="location_id", columns={"location_id"}), @ORM\Index(name="fk_es_product_shiiping_head_es_product_idx", columns={"product_id"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="EasyShop\Repositories\EsProductShippingHeadRepository")
  */
 class EsProductShippingHead
 {

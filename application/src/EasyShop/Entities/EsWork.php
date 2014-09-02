@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * EsWork
  *
  * @ORM\Table(name="es_work", uniqueConstraints={@ORM\UniqueConstraint(name="UNIQUE PAIR", columns={"id_member", "count"})}, indexes={@ORM\Index(name="fk_es_work_es_member_idx", columns={"id_member"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="EasyShop\Repositories\EsWorkRepository")
  */
 class EsWork
 {

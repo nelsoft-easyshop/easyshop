@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * EsBankInfo
  *
  * @ORM\Table(name="es_bank_info")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="EasyShop\Repositories\EsBankInfoRepository")
  */
 class EsBankInfo
 {
