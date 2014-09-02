@@ -1,9 +1,13 @@
 @import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300,300italic,600);
 @import url(https://fonts.googleapis.com/css?family=Roboto:400,300);
+
 .col-zoom{
 	position: 999999999999999;
 	position: relative;
 
+}
+sub, sup{
+	line-height: 20px !important; 
 }
 .cd_timer_container{;
     margin-top: 15px !important; 
@@ -293,8 +297,9 @@
 
 
 #modal-container{
-	height: auto !important;
+	
 	border-radius: 0px !important;
+	width: 100% !important;
 }
 #modal-div-header{
 	margin-top: -20px !important;
@@ -303,11 +308,17 @@
 	padding-top: 0px;
 }
 
+#modal-container textarea{
+	width: 95% !important;
+}
+
+
 .modal-header-h3{
 	padding-top: 10px;
 	margin-left: 5px;
 	color: #ffffff;
 	font-size: 18px;
+	text-align: left;
 }
 
 #modal-close{
@@ -315,6 +326,8 @@
 	font-size: 20px;
 	color: #f18200 !important;
 	font-weight: 100;
+	width: 25px;
+	height: 25px;
 }
 
 #msg_name{
@@ -362,7 +375,10 @@
 .ui-dialog-content{
 	font-family: 'Roboto' !important;
 }
+.p-desc-label{
+	font-weight: 600;
 
+}
 @media only screen and (max-width: 1024px) {
 
 .display-when-mobile-833{
@@ -550,92 +566,7 @@ nav{
 .list-category:hover{
 	background: #e6e6e6;
 }
-#modal-container{
-	width: 98%% !important;
-	font-size: 15px;
-	color: #494949;
-	box-shadow: 0 0 20px 0 #222;
-	-webkit-box-shadow: 0 0 20px 0 #222;
-	-moz-box-shadow: 0 0 20px 0 #222;
-	display: none;
-	height: 355px;
-	margin: 0px 0 0 0px !important;
-	padding: 2px;
-	padding-bottom: 10px;
-	position: fixed;
-	left: 1%;
-	top: 10% !important;
-	z-index: 5001 !important;
-	border-radius: 0px !important;
-	font-family: 'Roboto';
-}
 
-#modal-div-header{
-	margin-top: -20px !important;
-	background-color: #f18200 !important;
-	border-radius: 0px !important;
-	padding-top: 0px;
-}
-
-.modal-header-h3{
-	padding-top: 10px;
-	margin-left: 5px;
-	color: #ffffff;
-	font-size: 18px;
-}
-
-#modal-close{
-	margin-top: -33px;
-	font-size: 20px;
-	color: #f18200 !important;
-	font-weight: 100;
-}
-
-#msg_name{
-	margin-left: 50px !important;
-	height: 40px !important;
-}
-
-#modal_send_btn{
-	float: none;
-	margin-bottom: 20px !important;
-
-}
-
-.ui-dialog-titlebar, .ui-dialog-title{
-	background-color: #f18200 !important;
-	color: #ffffff !important;
-	font-family: 'Roboto'
-}
-.ui-dialog-title{
-	margin-top: 6px !important;
-	margin-left: 6px !important;
-}
-
-.ui-dialog-titlebar-close{
-	float: right !important;
-	margin-top: -28px !important;
-	background: #fff !important;
-	background-color: #fff !important;
-	border: 0px !important;
-	padding: 0px !important;
-	margin-right: 6px !important;
-	border-radius: 3px !important;
-	
-}
-
-.ui-dialog-buttonset > button{
-	border-radius: 4px !important;
-	background-color: #f18200 !important;
-	color: #fff !important;
-	border: 0px !important; 
-	padding: 4px 8px!important;
-	font-size: 14px !important;
-}
-
-.ui-dialog-content{
-	font-family: 'Roboto' !important;
-}
 
 .navbar, .navbar-header{
 	background: #f18200 !important;
@@ -681,6 +612,24 @@ nav{
 .td-rating{
 	padding-left: 15px !important;
 }
+ 
+.textarea-message{
+	width: 90% !important;
+ }
+.input-name-rate{
+	width: 78% !important;
 
+}
+ #modal-container{
+	max-width: 96% !important;
+ 
+ }
+ 
+ #modal_send_btn{
+	width: 100%;
+	padding-bottom: 9px;
+	height: auto;
+ }
+ 
 }
 
