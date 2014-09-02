@@ -51,11 +51,11 @@ class EsProductRepository extends EntityRepository
             FROM (
                 SELECT 
                     MATCH (`name`) AGAINST (:param0 IN BOOLEAN MODE) * 3 AS ftscore_name,
-                    MATCH (`search_keyword`) AGAINST (:param0 IN BOOLEAN MODE) * 1.5 AS ftscore,
+                    MATCH (`search_keyword`) AGAINST (:param0 IN BOOLEAN MODE) * 1 AS ftscore,
                     MATCH (`name`) AGAINST (:param1 IN BOOLEAN MODE) * 2 AS ftscore2_name,
-                    MATCH (`search_keyword`) AGAINST (:param1 IN BOOLEAN MODE) * 1 AS ftscore2, 
+                    MATCH (`search_keyword`) AGAINST (:param1 IN BOOLEAN MODE) * 0.5 AS ftscore2, 
                     MATCH (`name`) AGAINST (:param2 IN BOOLEAN MODE) * 5 AS ftscore3_name,
-                    MATCH (`search_keyword`) AGAINST (:param2 IN BOOLEAN MODE) * 2.5 AS ftscore3, 
+                    MATCH (`search_keyword`) AGAINST (:param2 IN BOOLEAN MODE) * 2 AS ftscore3, 
                     id_product,`name`,price,brief,slug,`condition`,startdate, enddate,is_promote,promo_type,discount
                     ,`is_sold_out`
                 FROM es_product
@@ -163,7 +163,7 @@ class EsProductRepository extends EntityRepository
         if($filter){
             $counter = 0;
             foreach ($parameters as $paramKey => $paramValue) {
-                $query->setParameter('head'.$counter, $paramKey);
+                $query->setParameter('head'.$counter, str_replace('_', ' ', $paramKey));
                 foreach ($paramValue as $key => $value) {
                     $valueName = 'headValue'.$counter.$key;
                     $query->setParameter($valueName, $value);
