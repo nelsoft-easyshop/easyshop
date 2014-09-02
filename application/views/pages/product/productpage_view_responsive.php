@@ -151,7 +151,7 @@
 											
 												<br/>
 												<?php if(($vendorrating['rate_count'] <=0)):?>
-												<p><span style="font-size:10px; margin-left:8px;">No ratings received yet.</span></p>
+												<center><p style="margin-left: 13px;">No ratings received yet.</p></center>
 												<?php else:?>
 													<p class="p-rating-seller"><span class="rating_criteria"><?php echo $this->lang->line('rating')[0].':';?></span><span class="pull-right"><span class="rating_value"><?php echo number_format($vendorrating['rating1'],2,'.',',');?></span> <img src="<?=base_url()?>assets/images/star-on.png" alt="*" title=""></span></p>
 													<p class="p-rating-seller"><span class="rating_criteria"><?php echo $this->lang->line('rating')[1].':';?></span><span class="pull-right"><span class="rating_value" > <?php echo number_format($vendorrating['rating2'],2,'.',',');?> </span> <img src="<?=base_url()?>assets/images/star-on.png" alt="*" title=""></span></p>
@@ -248,8 +248,8 @@
 											<p class="buy_btn_sub"> This is your own listing </p>
 										<?php else: ?>
 											<?php if(count($shipment_information) === 0 && intval($product['is_meetup']) === 1): ?>
-												 <a href="javascript:void(0)" class="btn-meet-up modal_msg_launcher" title="Send <?=html_escape($product['sellerusername'])?> a message">Contact Seller</a> <br/>
-												<span>Item is listed as an ad only. *</span>
+												 <a href="javascript:void(0)" class="btn-meet-up modal_msg_launcher font-10" title="Send <?=html_escape($product['sellerusername'])?> a message" >Contact Seller</a> <br/>
+												<span class="font-10" width="100%">Item is listed as an ad only. *</span>
 											<?php else: ?>
 												 <a href="javascript:void(0)" id='<?php echo $product['can_purchase']?'send':'' ?>' class="fm1 orange_btn3 disabled">Buy Now</a> <br/>
 												<span class="font-10" width="100%">Delivers upon seller confirmation*</span>
@@ -579,13 +579,13 @@
 								</div>
 							</p>
 							<p>
-								<strong>Brand: </strong><?php echo html_escape(ucfirst(strtolower($product['brand_name'])));?>
+								<span class="p-desc-label">Brand: </span><?php echo html_escape(ucfirst(strtolower($product['brand_name'])));?>
 							</p>
 							<p>
-								<strong>Condition: </strong><?php echo html_escape($product['condition']);?>
+								<span class="p-desc-label">Condition: </span><?php echo html_escape($product['condition']);?>
 							</p>
 							<p>
-								<strong>Additional description: </strong><?php echo html_escape($product['brief']);?>
+								<span class="p-desc-label">Additional description: </span><?php echo html_escape($product['brief']);?>
 							</p>
 							
 					</div>
@@ -629,15 +629,15 @@
 								<?php echo form_open('',$attr); ?>
 									<table width="100%" style="margin-left:-10px; margin-top:-10px;" class="font-roboto">
 										<tr>
-											<td style="padding: 5px 0px 5px 0px;">
+											<td style="padding: 15px 0px 5px 10px;">
 												<label>Subject *</label>
 											</td>
-											<td style="padding: 5px 0px 5px 0px;">
+											<td style="padding: 15px 0px 5px 0px;">
 												<input type="text" class="form-control no-border" style="width: 100% !important; height: 40px; !important;" name="subject" maxlength="150">
 											</td>
 										</tr>
 										<tr>
-											<td style="padding: 10px 0px 5px 0px;">
+											<td style="padding: 10px 0px 5px 10px;">
 												<label>Rating</label>
 											</td>
 											<td style="padding: 10px 0px 5px 0px;">
@@ -645,7 +645,7 @@
 											</td>
 										</tr>
 										<tr>
-											<td style="padding: 5px 0px 5px 0px;" colspan="2">
+											<td style="padding: 5px 0px 5px 10px;" colspan="2">
 												<label>Comment *</label>
 											</td>
 										</tr>
@@ -959,45 +959,20 @@
 				</div>
 			</div>
 			<div class="col-md-2">
-				<div class="div-recommend display-when-mobile-833">
-					<br/>
-					<p class="p-panel-head-recom" style="margin-top: ">Recommended</p>
-					
-					<table>
-						<?PHP foreach ($recommended_items as $row): ?>   
-						<tr>
-							<td style="padding: 0px 0px 8px 8px;">
-								<span class="rec_item_container">
-								<a href="<?=base_url()."item/".$row['slug'];?>" class="lnk_rec_item">
-									<img class="recom_img" src="<?=base_url().$row['path'].'small/'.$row['file']?>">
-								</a>
-								</span>
-							</td>
-							<td style="padding: 0px 0px 8px 8px; vertical-align: top;">
-								<p>
-								<a href="<?=base_url()."item/".$row['slug'];?>">
-									<span class="prod_rec_item"><?php echo html_escape($row['product']);?></span>
-								</a><br />
-								<span class="price"> PHP <?=number_format($row['price'],2,'.',',');?></span>
-								</p>
-							</td>
-						</tr>
-						<?PHP endforeach; ?>
-					</table>
-				</div>
+				
 				
 				<div class="recommendation_list display-when-desktop">
 					
 					<h4>Recommended</h4>
 					<ul>
 						<?PHP foreach ($recommended_items as $row): ?>                
-						<li>
+						<li style="display: inline-block;">
 							<span class="rec_item_container">
 							<a href="<?=base_url()."item/".$row['slug'];?>" class="lnk_rec_item">
 								<img class="rec_item_img" src="<?=base_url().$row['path'].'categoryview/'.$row['file']?>">
 							</a>
 							</span>
-							<p>
+							<p style="vertical-align: top; margin-top: 5px;">
 								<a href="<?=base_url()."item/".$row['slug'];?>">
 									<span class="prod_rec_item"><?php echo html_escape($row['product']);?></span>
 								</a><br />
@@ -1014,30 +989,35 @@
 	<div class="clear"></div>
     
     <div id="modal-background"> </div>
-    
-    <div id="modal-container">
+    <center>
+    <div id="modal-container" class="font-roboto">
         <div id="modal-div-header">
 			<h3 class="modal-header-h3">Send Message</h3>
             <button id="modal-close">&times;</button>        
         </div>
         <div id="modal-inside-container">
-            <div>
-                <label>To : </label>
-                <input type="text" value="<?=$product['sellerusername'];?>" disabled id="msg_name" name="msg_name" >
-            </div>
-            <div>
-                <label>Message : </label>
-                <textarea cols="40" rows="5" name="msg-message" id="msg-message" placeholder="Say something.."></textarea>		
-            </div>	   
+            
+			<table style="margin-left: 10px; margin-top: 10px;" width="100%">
+				<tr>
+					<td width="10%" ><label>To : </label></td>
+					<td width="90%"><input class="input-name-rate" width="100%" type="text" value="<?=$product['sellerusername'];?>" disabled id="msg_name" name="msg_name" ></td>
+				</tr>
+				<tr>
+					<td colspan="2" style="padding-top: 10px;"><label>Message : </label></td>
+				</tr>
+				<tr>
+					<td colspan="2"> <textarea width="100%" rows="5" class="no-border textarea-message" name="msg-message" id="msg-message" placeholder="Say something.."></textarea></td>
+				</tr>
+			</table>
         </div>
       
 		<center>
-			  <button id="modal_send_btn">Send</button>
+			  <button class="btn btn-lg btn-block" id="modal_send_btn">Send</button>
 		</center>
-		<br/>
-		<br/>
+		
     </div>
-    
+	
+    </center>
     <input id='p_qty' type='hidden' value=' <?php echo json_encode($product_quantity);?>'>
     <input id='p_shipment' type='hidden' value='<?php echo json_encode($shipment_information);?>'>
     <input id='p_itemid' type='hidden' value='0'/>
