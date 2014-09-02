@@ -189,7 +189,9 @@ class MY_Controller extends CI_Controller
         }
         $this->load->model("user_model");
         $password = $this->user_model->getAdminUser($postedData["userid"]);
+
         $hash = $evaluate.$password["password"];
+
         if(sha1($hash) != $postedHash){
             $error = json_encode("error");
                     exit($error);
