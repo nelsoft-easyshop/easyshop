@@ -96,6 +96,7 @@ class EsProductRepository extends EntityRepository
                                             ,'i.productImagePath'))
                                     ->from('EasyShop\Entities\EsProduct','p')
                                     ->leftJoin('EasyShop\Entities\EsProductImage','i','WITH','p.idProduct = i.product AND i.isPrimary = 1')
+                                    ->leftJoin('EasyShop\Entities\EsMember','m','WITH','m.idMember = p.member')
                                     ->where( 
                                             $qb->expr()->in('p.idProduct', $productId)
                                         )
@@ -344,5 +345,25 @@ class EsProductRepository extends EntityRepository
         $resultNeeded = array_map(function($value) { return $value['idProduct']; }, $result);
 
         return $resultNeeded; 
+    }
+
+    /**
+     * Find Product By seller
+     * @return [type] [description]
+     */
+    public function findBySeller($seller,$productId,$filter=false)
+    {
+        $this->em =  $this->_em;
+        $qb = $this->em->createQueryBuilder();
+        $qbResult = $qb->select('p.idProduct')
+                                ->from('EasyShop\Entities\EsProduct','p')
+                                ->leftJoin('EasyShop\Entities\EsMember','m','WITH','p.member = m.idMember')
+                                ->where('m.username LIKE :username')
+                                ->setParameter('username', '%'.$seller.'%');
+                                ->getQuery();
+        $result = $qbResult->getResult();
+        $resultNeeded = array_map(function($value) { return $value['idProduct']; }, $result);
+
+        return $resultNeeded;
     }
 }
