@@ -199,33 +199,6 @@ class MY_Controller extends CI_Controller
     }
 
 
-    /**
-     *  Authentication method for webservice
-     *
-     *  @param string $postedData
-     *  @param string $postedHash
-     *  @param string $evaluate
-     */
-    public function authentication($postedData, $postedHash, $evaluate = "")
-    {
-        foreach ($postedData as $data => $value) {
-            
-            if($data == "hash" || $data == "_token" || $data == "csrfname" || $data == "callback" || $data == "password" || $data == "_") {
-                 continue;               
-            }
-
-            else
-                $evaluate .= $value;
-        }
-        $this->load->model("user_model");
-        $password = $this->user_model->getAdminUser($postedData["userid"]);
-        $hash = $evaluate.$password["password"];
-        if(sha1($hash) != $postedHash){
-            $error = json_encode("error");
-                    exit($error);
-        }   
-    }
-
 
 
 }
