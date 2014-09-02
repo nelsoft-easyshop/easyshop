@@ -460,6 +460,7 @@ header {
 
 .top_link_name {
     display: inline-block;
+    height: 30px;
     overflow: hidden;
     text-overflow: ellipsis;
     margin-right: 20px;
@@ -2171,7 +2172,7 @@ box-shadow:         0px 1px 5px 0px rgba(50, 50, 50, 0.75);
 
     .js .nav-collapse {
         /*float: inherit;*/
-        z-index: 2;     
+        z-index: 999999;     
         position: absolute !important;
     }
 
@@ -2187,15 +2188,33 @@ box-shadow:         0px 1px 5px 0px rgba(50, 50, 50, 0.75);
 
     .nav-collapse ul li {
         display: block;
-        border-bottom: 1px dotted #cecece;
         float: none;
+    }
+
+    .nav-collapse ul li:hover {
+        background-color: #0354c0;
+        color: #fff;
+    }
+
+    .nav-collapse ul li:hover a {
+        color: #fff;
     }
 
     .nav-collapse {
         max-width: 24em;
-        min-width: 19em;
+        min-width: 18.11em;
         padding:10px;
         width: 60%;
+    }
+
+    .top_link_name {
+        max-width: 75%;
+        margin-right: 0px;
+        width: 100%;
+    }
+
+    .nav-menu-border {
+        border-bottom: 1px solid #e7e7e7;
     }
 
     /*.msgs_link {
@@ -2215,7 +2234,6 @@ box-shadow:         0px 1px 5px 0px rgba(50, 50, 50, 0.75);
         width: 32px;    
     }
 
-
     .top_links_right a {
         color: #494949;
     }
@@ -2231,6 +2249,14 @@ box-shadow:         0px 1px 5px 0px rgba(50, 50, 50, 0.75);
     .txt_res_hide img {
         max-width: 3em;
         width: 100%;
+    }
+    .txt_res_hide a {
+        display: block;
+    }
+
+    .top_links_right img {
+        margin:0;
+        vertical-align: middle;
     }
     /**** end header ****/
     
@@ -2249,56 +2275,66 @@ box-shadow:         0px 1px 5px 0px rgba(50, 50, 50, 0.75);
 }
 
 @media only screen and (max-width : 979px) { 
- .top_links_left {
-    float: right;
- }
- .pos-rtl {
-    left: 0;
-    right: auto;
- }
-
- .cart_no {
-    margin-left: -6px;
-    top: -9px;
-    position: relative;
- }
- .img_msgs_cntr {
-    background-position: -813px -258px;
-    width: 27px;
-    height: 17px;
- }
+    .top_links_left {
+        float: right;
+    }
+    .pos-rtl {
+        left: 0;
+        right: auto;
+    }
+    .msgs_link {
+        margin-right: 0px;
+    }
+    .cart_no {
+        margin-left: -6px;
+        top: -9px;
+        position: relative;
+    }
+    .msg_countr {
+        margin-left: -12px;
+    }
+    .img_msgs_cntr {
+        background-position: -813px -258px;
+        width: 27px;
+        height: 17px;
+    }
      .user-nav-dropdown:after,
     .nav-dropdown:after,
     .user-nav-dropdown,
     .user-nav-dropdown {
       display: none;
     }
-
     ul.nav-dropdown {
-      display: block !important;
-      width: auto;
-      border:none;
-      border-radius: 0px;
-      box-shadow: none;
-      left: auto;
-      top: auto;
-      padding: 0px;
-      position: relative;
+        display: block !important;
+        width: auto;
+        border:none;
+        border-radius: 0px;
+        box-shadow: none;
+        left: auto;
+        right: auto;
+        top: auto;
+        padding: 0px;
+        position: relative;
     }
-
+    .nav-collapse ul li:hover .nav-dropdown li a {
+        color: #494949;
+    }
+    .nav-collapse ul li:hover .nav-dropdown li a:hover {
+        color: #fff;
+    }
     .nav-dropdown li:last-child {
         border: none;
     }
 
-    .nav-dropdown li a:hover {
+    /*.nav-dropdown li a:hover {
         color: #494949;
         background-color: #fff;
+    }*/
+/*** step 4 product preview ***/
+    .step4_prod_preview .row  #product_content_gallery {
+        float: none;
+        width: auto;
     }
- /*** step 4 product preview ***/
- .step4_prod_preview .row  #product_content_gallery {
-    float: none;
-    width: auto;
- }
 }
 
 @media screen and (max-width: 56em) { /*** 848px ****/
@@ -2365,7 +2401,7 @@ box-shadow:         0px 1px 5px 0px rgba(50, 50, 50, 0.75);
 
 @media screen and (min-width: 61.1em) { /*** 960px ***/
   .js .nav-collapse {
-    position: relative;
+    position: relative !important;
   }
   .js .nav-collapse.closed {
     max-height: none;
