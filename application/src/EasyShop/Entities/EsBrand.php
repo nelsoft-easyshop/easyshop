@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * EsBrand
  *
  * @ORM\Table(name="es_brand", uniqueConstraints={@ORM\UniqueConstraint(name="name_UNIQUE", columns={"name"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="EasyShop\Repositories\EsBrandRepository")
  */
 class EsBrand
 {

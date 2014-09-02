@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * EsProductItemLock
  *
  * @ORM\Table(name="es_product_item_lock", indexes={@ORM\Index(name="fk_es_product_item_idx", columns={"product_item_id"}), @ORM\Index(name="fk_esPorudct_item_lock_es_order_idx", columns={"order_id"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="EasyShop\Repositories\EsProductItemLockRepository")
  */
 class EsProductItemLock
 {

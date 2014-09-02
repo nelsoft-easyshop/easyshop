@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * EsMessages
  *
  * @ORM\Table(name="es_messages", indexes={@ORM\Index(name="fk_es_member_es_messages_idx", columns={"to_id"}), @ORM\Index(name="fk_sender_idx", columns={"from_id"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="EasyShop\Repositories\EsMessagesRepository")
  */
 class EsMessages
 {
