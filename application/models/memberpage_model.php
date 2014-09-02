@@ -1499,7 +1499,7 @@ class memberpage_model extends CI_Model
         $otherCount = 0;
         
         foreach($data as $k=>$d){
-            #If category has 4 or more products - to be displayed as specific category
+            #If category has more or equal to categoryProductCount - to be displayed as specific category
             if( (int)$d['count'] >= $categoryProductCount && (int)$k !== 1){
                 $parseData['in_condition'] = implode(',',$d['child_cat']);
                 
@@ -1520,7 +1520,7 @@ class memberpage_model extends CI_Model
                 
                     array_push( $data[$k]['products'], $p );
                 }
-            #If less than catItemCount, push all child cat into temp array
+            #If less than categoryProductCount, push all child cat into temp array
             }
             else{
                 $temp = array_merge($temp, $d['child_cat']);
