@@ -139,7 +139,7 @@ ul.slides_prod li a:hover {
 	text-align: center;
 	padding:6px;
 	margin-bottom: 10px;
-	width: 135px;
+	width: 165px;
 
 	-webkit-border-radius: 5px;
 	-moz-border-radius: 5px;
@@ -328,6 +328,7 @@ span.seller-name .rating_criteria{
 .pbt {
 	width: auto;
 	text-align: center;
+	font-size: 14px;
 }
 
 /*.pbt1 {
@@ -607,6 +608,13 @@ div.html_description img {
 }
 
 .recommendation_list h3 {
+	font-weight: normal;
+    border-bottom: 1px dotted #CECECE;
+	padding:8px 0;
+	margin-bottom: 5px;
+}
+
+.recommendation_list h4 {
 	font-weight: normal;
     border-bottom: 1px dotted #CECECE;
 	padding:8px 0;
