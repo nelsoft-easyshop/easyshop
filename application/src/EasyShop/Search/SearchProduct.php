@@ -3,6 +3,7 @@
 namespace EasyShop\Search;
 
 use EasyShop\Entities\EsProduct;
+use EasyShop\Entities\EsProductShippingHead;
 
 /**
  * Search Product Class
@@ -56,20 +57,25 @@ class SearchProduct
      * @param  array $catId  
      * @return array;
      */
-    public function filterByCategory($catId = array(),$pids = array())
+    public function filterByCategory($catId = array(),$pids = array(),$filter=false)
     {
         $ids = array();
         $products = $this->em->getRepository('EasyShop\Entities\EsProduct');
-        if(count($pids) > 0){ 
+        if($filter){ 
             if(count($catId) == 1 && $catId[0] == 1){ 
                 return $pids;
             }
             else{
-                $object = $products->findBy(['cat' => $catId,'idProduct' => $pids]); 
+                $object = $products->findBy(['cat' => $catId,'idProduct' => $pids,'isDraft' => 0,'isDelete' => 0]); 
             }
         } 
         else{
-            $object = $products->findBy(['cat' => $catId]); 
+            if(count($catId) == 1 && $catId[0] == 1){ 
+                $object = $products->findBy(['isDraft' => 0,'isDelete' => 0]); 
+            }
+            else{
+                $object = $products->findBy(['cat' => $catId,'isDraft' => 0,'isDelete' => 0]); 
+            }
         }
 
         foreach ($object as $key => $value) {
@@ -85,7 +91,7 @@ class SearchProduct
      * @param  array  $pids  
      * @return array
      */
-    public function filterByBrand($brands = "",$pids = array())
+    public function filterByBrand($brands = "",$pids = array(),$filter=false)
     {
         $brandNames = explode(',', $brands);
         $ids = array();
@@ -99,11 +105,11 @@ class SearchProduct
 
         $products = $this->em->getRepository('EasyShop\Entities\EsProduct');
 
-        if(count($pids) > 0){  
-            $object = $products->findBy(['brand' => $brandIds,'idProduct' => $pids]); 
+        if($filter){  
+            $object = $products->findBy(['brand' => $brandIds,'idProduct' => $pids,'isDraft' => 0,'isDelete' => 0]); 
         } 
         else{
-            $object = $products->findBy(['brand' => $brandIds]); 
+            $object = $products->findBy(['brand' => $brandIds,'isDraft' => 0,'isDelete' => 0]); 
         }
 
         foreach ($object as $key => $value) {
@@ -119,17 +125,17 @@ class SearchProduct
      * @param  array  $pids 
      * @return array
      */
-    public function filterByCondition($condition = "",$pids = array())
+    public function filterByCondition($condition = "",$pids = array(),$filter=false)
     {
         $conditions = explode(',', $condition);
         $ids = array();
         $products = $this->em->getRepository('EasyShop\Entities\EsProduct');
 
-        if(count($pids) > 0){  
-            $object = $products->findBy(['condition' => $conditions,'idProduct' => $pids]); 
+        if($filter){  
+            $object = $products->findBy(['condition' => $conditions,'idProduct' => $pids,'isDraft' => 0,'isDelete' => 0]); 
         } 
         else{
-            $object = $products->findBy(['condition' => $conditions]); 
+            $object = $products->findBy(['condition' => $conditions,'isDraft' => 0,'isDelete' => 0]); 
         }
 
         foreach ($object as $key => $value) {
@@ -162,9 +168,9 @@ class SearchProduct
     }
 
     /**
-     * [filterByOtherParameter description]
-     * @param  array  $productIds [description]
-     * @return [type]             [description]
+     * Filter product by parameters attributes
+     * @param  array  $productIds
+     * @return array
      */
     public function filterByOtherParameter($parameter = array(),$productIds = array())
     {
@@ -210,5 +216,52 @@ class SearchProduct
         }
 
         return $productIds;
+    }
+
+    /**
+     * Filter array by seller if exist
+     * @param  string $seller    [description]
+     * @param  array  $arrayItem [description]
+     * @return array
+     */
+    public function filterBySeller($seller = "", $arrayItem = array())
+    {
+        $seller = trim($seller); 
+   
+        foreach ($arrayItem as $key => $value) {
+            $username = $value['username']; 
+            if (strpos($username, $seller) === false) { 
+                unset($arrayItem[$key]);
+            }
+        }
+    
+        return $arrayItem; 
+    }
+
+    /**
+     * Filter product by given location
+     * @param  array   $productIds [description]
+     * @param  integer $location   [description]
+     * @param  boolean $filter     [description]
+     * @return array
+     */
+    public function filterByLocation($location = 0, $pids = array(), $filter = FALSE)
+    {
+        $ids = array();
+        $products = $this->em->getRepository('EasyShop\Entities\EsProductShippingHead');
+        $object = $products->findBy(['location' => $location]); 
+
+        if($filter){  
+            $object = $products->findBy(['location' => $location,'product' => $pids]); 
+        } 
+        else{
+            $object = $products->findBy(['location' => $location]);
+        }
+
+        foreach ($object as $key => $value) {  
+            array_push($ids, $value->getProduct()->getIdProduct());
+        }
+
+        return $ids; 
     }
 }

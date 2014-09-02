@@ -132,6 +132,11 @@ class Kernel
             return \Symfony\Component\HttpFoundation\Request::createFromGlobals();
         };
 
+        // Category Manager
+        $container['category_manager'] = function ($c) {
+            return new \EasyShop\Category\CategoryManager();
+        };
+
         /* Register services END */
         $this->serviceContainer = $container;
     }

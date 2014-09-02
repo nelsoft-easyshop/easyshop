@@ -33,7 +33,7 @@
             <?php foreach ($attrListValue as $key => $value):?>
                 <li style="border:0px">
                     <a class="cbx" data-head="<?=strtolower($attrName)?>" data-value="<?=strtolower($value)?>" >
-                        <input type="checkbox" <?=(strpos($this->input->get(strtolower($attrName)),strtolower($value)) !== false)?'checked':'';?> class="cbx checkBox" data-head="<?=strtolower($attrName)?>" data-value="<?=strtolower($value)?>" >
+                        <input type="checkbox" <?=(strpos($this->input->get(strtolower($attrName)),strtolower($value)) !== false)?'checked':'';?> class="checkBox" data-head="<?=strtolower($attrName)?>" data-value="<?=strtolower($value)?>" >
                         <label for="cbx"><?=ucfirst($value);?></label>
                     </a>
                 </li>
@@ -270,12 +270,7 @@ function getParameterByName(name)
             validateWhiteTextBox("#price2,#price1"); 
             document.location.href=currentUrl;
         }
-    });
-
-    $(".checkBox").click(function(){
-        var $this = $(this);
-        $this.parent('a').trigger('click');
-    });
+    }); 
 
     $(".cbx").click(function(){
         var $this = $(this);
@@ -350,70 +345,5 @@ function getParameterByName(name)
     });
 
 })( jQuery );
-
-
- 
-
-$(document).ready(function(){
- 
-
-
-  // START OF INFINITE SCROLLING FUNCTION
-
-  var base_url = config.base_url;
-  var offset = 1;
-  var request_ajax = true;
-  var ajax_is_on = false; 
-  var objHeight=$(window).height()-50;  
-  var last_scroll_top = 0;
-  <?php 
-   $type = 0;
-   if(isset($_COOKIE['view']))
-    {
-        $cookieView = $_COOKIE['view'];
-        $type = 0;
-        if($cookieView == "list"){
-            $type = "1";
-        }else{
-           $type = "0";
-        }
-    }
- ?>
-  var type = '<?php echo $type ?>';
-  var csrftoken = $("meta[name='csrf-token']").attr('content');
-  var csrfname = $("meta[name='csrf-name']").attr('content');
-  // $(window).scroll(function(event) {
-  //   var st = $(this).scrollTop();
-
-  //   if(st > last_scroll_top){
-  //     if ($(window).scrollTop() + 400 > $(document).height() - $(window).height()) {
-  //       if (request_ajax === true && ajax_is_on === false) {
-  //         ajax_is_on = true;
-  //         $.ajax({
-  //           url: base_url + 'search_more',
-  //           data:{page_number:offset,id_cat:,type:type,parameters:, csrfname : csrftoken},
-  //           type: 'post',
-  //           async: false,
-  //           dataType: 'json',
-  //           success: function(d) {
-  //              if(d == "0"){
-  //                ajax_is_on = true;
-  //              }else{
-  //               $($.parseHTML(d.trim())).appendTo($('#product_content'));
-  //               ajax_is_on = false;
-  //               offset += 1;
-  //           }
-  //         }
-  //       });
-  //       }
-  //     }
-  //   }
-  //   last_scroll_top = st;
-  // });
-
-  // END OF INFINITE SCROLLING FUNCTION
- 
-
-  });
 </script>
  
