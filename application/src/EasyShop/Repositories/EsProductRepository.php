@@ -345,19 +345,3 @@ class EsProductRepository extends EntityRepository
         return $result;
     }
 }
-
-            ->from('EasyShop\Entities\EsOrder','o')
-            ->innerJoin('EasyShop\Entities\EsOrderProduct', 'op','WITH','o.idOrder = op.order')
-            ->innerJoin('EasyShop\Entities\EsProduct', 'p','WITH','p.idProduct = op.product AND p.promoType = :promoType')
-            ->where(
-                    $qb->expr()->not(
-                        $qb->expr()->andX(
-                            $qb->expr()->eq('o.orderStatus', '99')
-                            ,$qb->expr()->eq('o.paymentMethod', '1')
-                        )
-                    )
-                )
-            ->andWhere('o.buyer = :buyer_id') 
-            ->setParameter('buyer_id', $buyerId)
-            ->setParameter('promoType', $promoType) 
-            ->getQuery();
