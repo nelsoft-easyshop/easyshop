@@ -72,7 +72,7 @@
                     <li class="top_nav_main">
                     <a class="prevent" href="<?php echo base_url()."cart/"; ?>">
                         <span class="span_bg big_cart cart"></span>
-                        <span class="cart_no"><?PHP echo ($total_items) &&  ($logged_in)?$total_items:0; ?></span>
+                        <span class="cart_no"><?PHP echo ($total_items) &&  ($logged_in) ? $total_items : 0; ?></span>
                         <span class="txt_hide">View my Cart</span>
                     </a>
                     </li>         
@@ -195,7 +195,12 @@
             (function ($) { 
                 
                 $(document).ready(function(){
-                
+
+                    if(parseInt($('.cart_no').html()) === 0){
+                        $('.cart_no').hide();
+                        $('.cart').css('width','28');
+                    }
+
                     var navigation = responsiveNav(".nav-collapse");
                     var srchdropcontent= $('#main_search_drop_content');
                     
@@ -230,7 +235,7 @@
                         }
 
                     });
-                    
+
                 });
                 
             })(jQuery);
