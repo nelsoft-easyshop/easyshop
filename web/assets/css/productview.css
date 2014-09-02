@@ -132,6 +132,9 @@
 	font-family:'Roboto';
 }
 
+.font-12{
+	font-size: 12px !important;
+}
 .display-when-mobile-833{
 	display: none;
 }
@@ -258,7 +261,7 @@
 }
 .p-prod-label-availability{
 	margin-left:-30px;
-
+	font-size: 12px;
 }
 .product-name{
 	font-size: 18px !important;
@@ -269,7 +272,10 @@
     word-wrap: break-word !important;
 	margin: 0px !important;
 }
-
+.p-rating-seller{
+	line-height: 14px !important;
+	
+}
 .row-prod-info{
 	padding-left: 13px;
 }
@@ -665,6 +671,15 @@ nav{
 }
 .border-0{
 	border: 0px !important;
+}
+
+.img-slide{
+	min-width: 100% !important;
+	min-height: auto !important;
+}
+
+.td-rating{
+	padding-left: 15px !important;
 }
 
 }
