@@ -194,7 +194,10 @@ function Reload()
         data : {csrfname:csrftoken,todo:todo},
         success : function(d)
         {
-            $(".msg_countr").html(d.unread_msgs);
+            $(".msg_countr").show().html(d.unread_msgs);
+            if(parseInt(d.unread_msgs) === 0 ){
+                $('#unread-messages-count').hide();
+            }
             document.title = (d.unread_msgs == 0 ? "Message | Easyshop.ph" : "Message (" + d.unread_msgs + ") | Easyshop.ph");
 
             if (d.unread_msgs != 0) {

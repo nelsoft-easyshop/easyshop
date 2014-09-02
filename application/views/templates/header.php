@@ -232,6 +232,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         
         $(document).ready(function(){
 
+            if(parseInt($('#unread-messages-count').html()) === 0 ){
+                $('#unread-messages-count').hide();
+            }
             var $user_nav_dropdown = $(".user-nav-dropdown");
             var $nav_dropdown = $("ul.nav-dropdown");
 
