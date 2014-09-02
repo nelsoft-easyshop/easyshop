@@ -41,10 +41,12 @@
     
     <typeNode>
         <value>image</value>
+        <type>annotation</type>
     </typeNode>
     
     <typeNode>
         <value>product</value>
+        <type>annotation</type>
     </typeNode>
 
 
