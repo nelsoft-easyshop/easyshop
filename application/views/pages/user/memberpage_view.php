@@ -60,7 +60,7 @@
                     <?php echo base_url()?><span class="disp_userslug"><?php echo $userslug?></span>
                 </a>
                 <?php if( $render_userslug_edit ):?>
-                    <span class="edit_userslug edit_userslug_css" style="display:none;"><span class="span_bg edit-lnk"> Edit </span></span>
+                    <span class="edit_userslug edit_userslug_css"><span class="span_bg edit-lnk"> Edit </span></span>
                 <?php endif;?>
             </div>
             
