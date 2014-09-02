@@ -2,7 +2,7 @@
 
 $config = array(
     'Promo' => array(
-	/* Default, non-promo */ 
+        /* Default, non-promo */ 
         '0' =>array(
             'calculation_id' => '0',
             'purchase_limit' => PHP_INT_MAX,
@@ -75,6 +75,7 @@ $config = array(
              ),
             'viewable_button_product_page' =>true,
         ),
+        /* ListingPromo */
         '4' => array(
             'calculation_id' => '4',
             'purchase_limit' => PHP_INT_MAX,
@@ -112,9 +113,15 @@ $config = array(
             'purchase_limit' => PHP_INT_MAX,
             'payment_method' => array(),
             'banner' => 'genericWithCountdown',
-            'is_buyable_outside_promo' => true,
+            'is_buyable_outside_promo' => false,
             'cart_solo_restriction' => false,
-            'option' => array(),
+            'option' => array(
+                0 => array(
+                    'start' => '00:00:00',
+                    'end' => '23:59:59',
+                    'purchase_limit' => 1
+                ),
+             ),
             'viewable_button_product_page' =>true,
         ),
     )
