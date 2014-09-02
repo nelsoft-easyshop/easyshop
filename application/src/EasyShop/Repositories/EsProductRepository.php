@@ -93,7 +93,8 @@ class EsProductRepository extends EntityRepository
                                             ,'p.promoType'
                                             ,'p.discount'
                                             ,'p.isSoldOut'
-                                            ,'i.productImagePath'))
+                                            ,'i.productImagePath'
+                                            ,'m.username'))
                                     ->from('EasyShop\Entities\EsProduct','p')
                                     ->leftJoin('EasyShop\Entities\EsProductImage','i','WITH','p.idProduct = i.product AND i.isPrimary = 1')
                                     ->leftJoin('EasyShop\Entities\EsMember','m','WITH','m.idMember = p.member')
