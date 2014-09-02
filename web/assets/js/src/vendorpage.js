@@ -57,6 +57,16 @@ function htmlDecode(value) {
                 break;
         }
     });
+
+    $(document).ready(function(){
+        $('.v_loadmore').on('click',function(){
+            var cookie = $.cookie("grd");
+            if(cookie != null){
+                $.removeCookie("grd");
+            }
+            $.cookie("grd", "grid", {path: "/", secure: false});    
+        });
+    });
     
 })(jQuery);
 
