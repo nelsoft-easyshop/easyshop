@@ -1365,6 +1365,7 @@ nav ul > li:hover > div {
 
 .follow-cnt{
     font-size: 11px;
+    text-align: center;
 }
 .follow-cnt .span-cont{
     display: block;
