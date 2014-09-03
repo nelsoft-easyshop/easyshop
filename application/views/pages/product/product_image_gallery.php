@@ -34,7 +34,7 @@
 <div id="demo"  class="display-when-mobile-833">
 	
 	<?php if($product['is_sold_out']): ?>
-		<span class="cd_soldout_product_page_m">
+		<span class="cd_soldout_product_page_m pull-right">
 			<img class="img-responsive_soldout" src="<?=base_url()?>assets/images/img_cd_soldout.png" alt="Sold Out" />
 		</span>
 	<?php endif; ?>
