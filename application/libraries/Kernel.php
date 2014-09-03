@@ -113,7 +113,7 @@ class Kernel
         };
 
         // Http foundation
-        $container['http_foundation'] = function ($c) {
+        $container['request'] = function ($c) {
             return \Symfony\Component\HttpFoundation\Request::createFromGlobals();
         };
 
@@ -121,7 +121,7 @@ class Kernel
         $container['payment_service'] = function ($c) use ($container) {
             return new \EasyShop\PaymentService\PaymentService(
                             $container['entity_manager'],
-                            $container['http_foundation'],
+                            $container['request'],
                             $container['point_tracker']
                             );
         };

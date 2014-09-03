@@ -530,9 +530,6 @@ class Payment extends MY_Controller{
     #START OF CASH ON DELIVERY, DIRECT BANK DEPOSIT PAYMENT
     function payCashOnDelivery()
     {
-        $method = [['name' => 'cod', 'method' => 'CashOnDelivery', 'amount' => 100]];
-        $this->pay($method);
-
         if(!$this->session->userdata('member_id') || !$this->input->post('paymentToken') || !$this->session->userdata('choosen_items')){
             redirect(base_url().'home', 'refresh');
         }
@@ -1229,7 +1226,7 @@ class Payment extends MY_Controller{
             $itemId = $value['product_itemID']; 
             
             $product_array =  $this->product_model->getProductById($productId);
-  
+            
             /** NEW QUANTITY **/
             $newQty = $this->product_model->getProductQuantity($productId, FALSE, $condition, $product_array['start_promo']);
             $maxqty = $newQty[$itemId]['quantity'];
@@ -1329,6 +1326,8 @@ class Payment extends MY_Controller{
 
         // extract correct gateway return value
         extract($payment_service->getReturnValue('cod'));
+
+        //die();
 
         $this->generateFlash($txnid,$message,$status);
         redirect(base_url().'payment/success/'.$textType.'?txnid='.$txnid.'&msg='.$message.'&status='.$status, 'refresh');
