@@ -450,44 +450,49 @@
 							<?php endforeach;?>
 						
 							<!-- Quantity -->
-							<div class="product_option product_option_quantity"><td> <span class="label-option">Quantity</span></td>
-								<td>
-									<input type="text" value ="0" class="product_quantity form-control no-border" style="width: 90% !important;"/>
+							<div class="product_option product_option_quantity" style="width: 100% !important;">
+								<table width="100%" >
+								<tr>
+								<td style="width: 100px !important;"> 
+								<span class="label-option">Quantity</span>
 								</td>
-							</div>
-							
-							
-							<div class="prod_loc_areas">
-								<p>
-									<strong class="location_message">Shipment Fee</strong>
-									<select class="shiploc" id="shipment_locations" style="width: 60% !important;">
-										<option class="default" selected="" value="0">Select Location</option>
-										<?php foreach($shiploc['area'] as $island=>$loc):?>
-											<option data-price="0" data-type="1" id="<?php echo 'locationID_'.$shiploc['islandkey'][$island];?>" value="<?php echo $shiploc['islandkey'][$island];?>" disabled><?php echo $island;?></option>
-											<?php foreach($loc as $region=>$subloc):?>
-												<option data-price="0" data-type="2" id="<?php echo 'locationID_'.$shiploc['regionkey'][$region];?>" value="<?php echo $shiploc['regionkey'][$region];?>" style="margin-left:15px;" disabled>&nbsp;&nbsp;&nbsp;<?php echo $region;?></option>
-												<?php foreach($subloc as $id_cityprov=>$cityprov):?>
-													<option data-price="0" data-type="3" id="<?php echo 'locationID_'.$id_cityprov;?>" value="<?php echo $id_cityprov;?>" style="margin-left:30px;" disabled>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $cityprov;?></option>
+								<td style="padding-top: 5px !important;">
+								<input type="text" value ="0" class="product_quantity no-border" style="width: 100% !important;"/>
+								</td>
+								</tr>
+								<tr>
+									<td style="width: 100px !important; padding-top: 20px !important;" class="v-align-top">
+										<strong class="">Shipment Fee</strong>
+									</td>
+									<td style="padding-top: 20px !important;">
+										<select class="shiploc" id="shipment_locations" style="width: 100%">
+											<option class="default" selected="" value="0">Select Location</option>
+											<?php foreach($shiploc['area'] as $island=>$loc):?>
+												<option data-price="0" data-type="1" id="<?php echo 'locationID_'.$shiploc['islandkey'][$island];?>" value="<?php echo $shiploc['islandkey'][$island];?>" disabled><?php echo $island;?></option>
+												<?php foreach($loc as $region=>$subloc):?>
+													<option data-price="0" data-type="2" id="<?php echo 'locationID_'.$shiploc['regionkey'][$region];?>" value="<?php echo $shiploc['regionkey'][$region];?>" style="margin-left:15px;" disabled>&nbsp;&nbsp;&nbsp;<?php echo $region;?></option>
+													<?php foreach($subloc as $id_cityprov=>$cityprov):?>
+														<option data-price="0" data-type="3" id="<?php echo 'locationID_'.$id_cityprov;?>" value="<?php echo $id_cityprov;?>" style="margin-left:30px;" disabled>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $cityprov;?></option>
+													<?php endforeach;?>
 												<?php endforeach;?>
 											<?php endforeach;?>
-										<?php endforeach;?>
-									</select>
-									<br/>
-									<p class="p-ship-validation">
-										<?php if($product['is_meetup'] && count($shipment_information) === 0):  ?>
-											<span class="shipping_fee"> <span class="loc_invalid"> Contact the seller * </span></span
-										<?php else:?>
-											<?PHP if($product['is_free_shipping']):  ?>
-												<span style="margin-left: 15px;"><span class="span_bg img_free_shipping"></span></span>
-											<?PHP else: ?>
-												<span class="shipping_fee"> <span class="loc_invalid"> Select location* </span></span>
-											<?PHP endif; ?>
-										<?php endif; ?>
-										
-									</p>
-								</p>
+										</select>
+										<br/>
+										<p class="p-ship-validation">
+											<?php if($product['is_meetup'] && count($shipment_information) === 0):  ?>
+												<span class="shipping_fee"> <span class="loc_invalid"> Contact the seller * </span></span>
+											<?php else:?>
+												<?PHP if($product['is_free_shipping']):  ?>
+													<span style="margin-left: 15px;"><span class="span_bg img_free_shipping"></span></span>
+												<?PHP else: ?>
+													<span class="shipping_fee"> <span class="loc_invalid"> Select location* </span></span>
+												<?PHP endif; ?>
+											<?php endif; ?>
+										</p>
+									</td>
+								</tr>
+								</table>
 							</div>
-							
 							<p class="product_content_payment"> 
 								<strong>Payment:</strong><br />
 								<?php if(isset($payment_method['cdb'])): ?>
