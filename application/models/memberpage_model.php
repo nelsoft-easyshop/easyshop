@@ -1458,8 +1458,9 @@ class memberpage_model extends CI_Model
      */
     public function getVendorCatItems($member_id, $username)
     {
-        $categoryItemCount = 4;
-        $otherItemCount = 4;
+        $categoryItemCount = 12;
+        $otherItemCount = 12;
+        $categoryProductCount = 4;
         $defaultCatImg = "assets/images/default_icon_small.png";
     
         $query = $this->xmlmap->getFilenameID('sql/product','getVendorProdCatDetails');
@@ -1498,8 +1499,8 @@ class memberpage_model extends CI_Model
         $otherCount = 0;
         
         foreach($data as $k=>$d){
-            #If category has 4 or more products - to be displayed as specific category
-            if( (int)$d['count'] >=4 && (int)$k !== 1){
+            #If category has more or equal to categoryProductCount - to be displayed as specific category
+            if( (int)$d['count'] >= $categoryProductCount && (int)$k !== 1){
                 $parseData['in_condition'] = implode(',',$d['child_cat']);
                 
                 $query = $this->xmlmap->getFilenameID('sql/product','getTopXCatItems');
@@ -1519,7 +1520,7 @@ class memberpage_model extends CI_Model
                 
                     array_push( $data[$k]['products'], $p );
                 }
-            #If less than 4, push all child cat into temp array
+            #If less than categoryProductCount, push all child cat into temp array
             }
             else{
                 $temp = array_merge($temp, $d['child_cat']);
@@ -1550,7 +1551,7 @@ class memberpage_model extends CI_Model
             $query = $this->parser->parse_string($query, $parseData, true);
             $sth = $this->db->conn_id->prepare($query);
             $sth->bindParam(':member_id', $member_id, PDO::PARAM_INT);
-            $sth->bindParam(':item_count', $categoryItemCount, PDO::PARAM_INT);
+            $sth->bindParam(':item_count', $otherItemCount, PDO::PARAM_INT);
             $sth->execute();
             $products = $sth->fetchAll(PDO::FETCH_ASSOC);
             

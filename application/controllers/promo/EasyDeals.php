@@ -35,3 +35,9 @@ class EasyDeals extends MY_Controller
     }
 
 }
+
+
+/* End of file EasyDeals.php */
+/* Location: ./application/controllers/promo/EasyDeals.php */
+
+

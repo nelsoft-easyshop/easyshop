@@ -295,6 +295,13 @@ class HomeWebService extends MY_Controller
         $string = $this->xmlCmsService->getString($nodeName, $value, $type, $coordinate, $target);
         $orindex = $index;
         $index = ($index == 0 ? 1 : $index);
+        $this->load->model("product_model");
+
+        $count = $this->product_model->getProdCountBySlug($value);
+
+        if($count < 1) {
+            exit("Product slug does not exist");
+        }
 
         if($orindex == 0) {
             $this->xmlCmsService->addXml($file,$string,'/map/productSlide[last()]');
@@ -598,63 +605,76 @@ class HomeWebService extends MY_Controller
         $nodeName =  $this->input->get("nodename");
         $index = (int)$index;
         $string = $this->xmlCmsService->getString($nodeName, $value, $type, "", "");
+        $this->load->model("product_model");
 
-            if($index > count($map->productSlide) - 1    || $order > count($map->productSlide) - 1 || $index < 0 || $order < 0) {
-                exit("Index out of bounds");
-            }
-            else {
-                $file = $this->file;
-                $value = ($value == "" ? $map->productSlide[$index]->value : $value);
+        $count = $this->product_model->getProdCountBySlug($value);
+
+        if($count < 1) {
+            exit("Product slug does not exist");
+        }
+
+        $this->load->model("product_model");
+        $count = $this->product_model->getProdCountBySlug($value);
+        if($count < 1) {
+            exit("Product slug does not exist");
+        }
         
-                if($order == "") {
-                        $map->productSlide[$index]->value = $value;
-                        $type->productSlide[$index]->type = $type;
-                        if($map->asXML($this->file)) {
-                            return true;
-                        } 
-                        else {
-                            return false;
-                        }
+        if($index > count($map->productSlide) - 1    || $order > count($map->productSlide) - 1 || $index < 0 || $order < 0) {
+            exit("Index out of bounds");
+        }
+        else {
+            $file = $this->file;
+            $value = ($value == "" ? $map->productSlide[$index]->value : $value);
+    
+            if($order == "") {
+                    $map->productSlide[$index]->value = $value;
+                    $type->productSlide[$index]->type = $type;
+                    if($map->asXML($this->file)) {
+                        return true;
                     } 
                     else {
-                         
-                        if($index <= $order) {
-                            $index = ($index == 0 ? 1 : $index + 1);
-                            $order = ($order == 0 ? 1 : $order + 1);
+                        return false;
+                    }
+                } 
+                else {
+                        
+                    if($index <= $order) {
+                        $index = ($index == 0 ? 1 : $index + 1);
+                        $order = ($order == 0 ? 1 : $order + 1);
 
-                            $this->xmlCmsService->addXml($file,$string,'/map/productSlide['.$order.']');
+                        $this->xmlCmsService->addXml($file,$string,'/map/productSlide['.$order.']');
+                        $this->xmlCmsService->removeXML($file,$nodeName,$index);
+                    } 
+                    else {
+
+                        if($order == 0) {
+                            $value = ($value == "" ? $map->productSlide[$index]->value : $value);
+                            
+                            $orindex = $index;
+                            $ororder = $order;
+                            $index = ($index == 0 ? 1 : $index + 1);
                             $this->xmlCmsService->removeXML($file,$nodeName,$index);
+                            $order = ($order == 0 ? 1 : $order);
+                            $this->xmlCmsService->addXml($file,$string,'/map/productSlide['.$order.']');
+                            $this->swapXmlForSetProductSlide($file,$orindex,$ororder,$value);
                         } 
                         else {
-
-                            if($order == 0) {
                                 $value = ($value == "" ? $map->productSlide[$index]->value : $value);
-                               
-                                $orindex = $index;
-                                $ororder = $order;
-                                $index = ($index == 0 ? 1 : $index + 1);
-                                $this->xmlCmsService->removeXML($file,$nodeName,$index);
-                                $order = ($order == 0 ? 1 : $order);
-                                $this->xmlCmsService->addXml($file,$string,'/map/productSlide['.$order.']');
-                                $this->swapXmlForSetProductSlide($file,$orindex,$ororder,$value);
-                            } 
-                            else {
-                                 $value = ($value == "" ? $map->productSlide[$index]->value : $value);
-                    
-        
-                                $index = ($index == 0 ? 1 : $index + 1);
-                                $this->xmlCmsService->removeXML($file,$nodeName,$index);
-                                $order = ($order == 0 ? 1 : $order);
-                                $this->xmlCmsService->addXml($file,$string,'/map/productSlide['.$order.']');
-                             
-                            }
+                
+    
+                            $index = ($index == 0 ? 1 : $index + 1);
+                            $this->xmlCmsService->removeXML($file,$nodeName,$index);
+                            $order = ($order == 0 ? 1 : $order);
+                            $this->xmlCmsService->addXml($file,$string,'/map/productSlide['.$order.']');
+                            
                         }
                     }
+                }
 
-            return $this->output
-                    ->set_content_type('application/json')
-                    ->set_output($jsonFile);
-            }
+        return $this->output
+                ->set_content_type('application/json')
+                ->set_output($jsonFile);
+        }
     }
 
     /**

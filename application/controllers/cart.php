@@ -35,6 +35,7 @@ class Cart extends MY_Controller
         }
     }
 
+
     /**
      * Add item to Cart
      *
@@ -79,7 +80,7 @@ class Cart extends MY_Controller
                     if ($opt == $opt_user && $row['id'] == $data['id']) {
                         $data2 = array(
                             'rowid' => $id,
-                            'qty' => ($_POST['qty'] + $row['qty'] > $_POST['max_qty'] ? $_POST['max_qty'] : $_POST['qty'] + $row['qty'])
+                            'qty'   => ($_POST['qty'] + $row['qty'] > $_POST['max_qty'] ? $_POST['max_qty'] : $_POST['qty'] + $row['qty'] )
                         );
                         $to_transact = 'update';
                         break;
@@ -95,9 +96,10 @@ class Cart extends MY_Controller
                     $this->cart->insert($data);
                 }
                 $result = sha1(md5("tanggap"));
+
             }
         }
-        $this->session->set_userdata('cart_total_perItem', $this->cart_size());
+        $this->session->set_userdata('cart_total_perItem',$this->cart_size());
 
         if (!($this->session->userdata('usersession'))) {
             $result = "login_to_add_item2cart";
@@ -105,23 +107,21 @@ class Cart extends MY_Controller
 
         echo json_encode($result);
     }
-    /**
-     * Get all cart items, save cart to db
-     *
-     * @Return array
-     */
+
     public function cart_items($carts)
     {
-        foreach ($carts as $row) {
-            $data = $this->check_prod($row['id'], $row['options'], $row['qty']);
+        foreach ($carts as $row){
+            $data = $this->check_prod($row['id'],$row['options'],$row['qty']);
             $id = $row['id'];
-            $opt = serialize($this->cart->product_options($row['rowid']));
-            $opt_user = serialize($data['data']['options']);
-            if ($opt == $opt_user && $id == $data['data']['id']) {
-                $data['data']['rowid'] = $row['rowid'];
+            $opt =  serialize($this->cart->product_options($row['rowid']));
+            $opt_user =  serialize($data['data']['options']);
+            if($opt == $opt_user && $id == $data['data']['id']){ //if product exist in cart , check if qty exceeds the maximum qty, if exceed get qty = max qty else qty + cart product qty
+                $data['data']['rowid']= $row['rowid'];
+
                 $this->cart->insert($data['data']);
-                if ($data['data']['qty'] == "0" || $data['delete_to_cart'] === true) {
-                    $data_remove = array('rowid' => $data['data']['rowid'], 'qty' => 0);
+
+                if($data['data']['qty'] == "0" || $data['delete_to_cart'] === true){
+                    $data_remove = array('rowid'=>$data['data']['rowid'],'qty'=> 0);
                     $this->cart->update($data_remove);
                 }
                 break;
@@ -146,21 +146,23 @@ class Cart extends MY_Controller
         $useraccessdetails = $this->user_model->getUserById($member_id);
 
         $product = $this->product_model->getProductById($id);
+        
         $final_price = $product['price'];
         $product_attr_id = "0";
         $add_price = 0;
         if (!empty($opt)) {
             $product_attr_id = "";
-            $key = array_keys($opt);
-            for ($a = 0; $a < sizeof($key); $a++) {
-                $attr = $key[$a];
-                $attr_value = $opt[$key[$a]];
-                $attr_value = (strpos($attr_value, "~")) ? explode("~", $attr_value)[0] : $attr_value;
-                $sum = $this->cart_model->checkProductAttributes($id, $attr, $attr_value);
-                if ($sum['result'] == true) {
-                    $add_price += $sum['price'];
-                    $opt[$attr] = $attr_value . '~' . $sum['price'];
-                } else {
+            $key =  array_keys($opt);
+            for($a=0;$a < sizeof($key);$a++){
+                $attr=$key[$a];
+                $attr_value=$opt[$key[$a]];
+                $attr_value = (strpos($attr_value, "~"))? explode("~", $attr_value)[0]:$attr_value;
+                $sum = $this->cart_model->checkProductAttributes($id,$attr,$attr_value);
+                if($sum['result']== true){
+                    $add_price +=  $sum['price'];
+                    $opt[$attr] = $attr_value.'~'.$sum['price'];
+                }
+                else{
                     return false;
                 }
                 $product_attr_id .= ($a === sizeof($key) - 1 ? $sum['attr_id'] : $sum['attr_id'] . ",");
@@ -173,7 +175,11 @@ class Cart extends MY_Controller
         $ff = $qty[$ss[0]];
         $attr = explode(",", $product_attr_id);
         $productItemId = 0;
-        if (sizeof($qty) == 1 && $ff['product_attribute_ids'][0]['id'] == 0 && $ff['product_attribute_ids'][0]['is_other'] == 0) {
+        if(
+            sizeof($qty) == 1 &&
+            $ff['product_attribute_ids'][0]['id'] == 0 &&
+            $ff['product_attribute_ids'][0]['is_other'] == 0
+        ){
             $max_qty = $ff['quantity'];
             $productItemId = $ss[0];
         }
@@ -201,11 +207,11 @@ class Cart extends MY_Controller
         if (($product['is_promote'] == 1 && intval($userQTY) >= intval($PurchaseLimit)) && $max_qty != 0) {
             $d_quantity = $PurchaseLimit;
         }
-        else {
-            if ($userQTY > $max_qty || $max_qty == 0) {
+        else{
+            if($userQTY > $max_qty || $max_qty == 0){
                 $d_quantity = $max_qty;
             }
-            else {
+            else{
                 $d_quantity = $userQTY;
             }
         }
@@ -214,7 +220,7 @@ class Cart extends MY_Controller
             'qty' => $d_quantity,
             'price' => $final_price,
             'original_price' => $product['original_price'],
-            'name' => $product['product'],
+            'name'    => stripslashes($product['product']),
             'options' => $opt,
             'img' => $this->product_model->getProductImages($product['id_product']),
             'member_id' => $product['sellerid'],
@@ -225,10 +231,16 @@ class Cart extends MY_Controller
             'is_promote' => $product['is_promote'],
             'additional_fee' => $add_price,
             'promo_type' => $product['promo_type'],
-            'start_promo' => $product['start_promo'],
+            'start_promo' => $product['start_promo'] ,
         );
         $result['data'] = $data;
-        $result['delete_to_cart'] = ($product['sellerid'] == $member_id || $useraccessdetails['is_email_verify'] != 1 || $product['is_draft'] == "1" || $product['is_delete'] == "1" || $product['can_purchase'] === false);
+        $result['delete_to_cart'] = (
+            $product['sellerid'] == $member_id ||
+            $useraccessdetails['is_email_verify'] != 1  ||
+            $product['is_draft'] == "1" ||
+            $product['is_delete'] == "1" ||
+            $product['can_purchase'] === false
+        );
 
         return $result;
     }
@@ -240,8 +252,9 @@ class Cart extends MY_Controller
      */
     function cart_size()
     {
-        $carts = $this->cart->contents();
-        $cart_size = sizeof($carts);
+        $carts=$this->cart->contents();
+        $cart_size =sizeof($carts);
+
 
         return $cart_size;
     }
@@ -253,17 +266,17 @@ class Cart extends MY_Controller
      */
     function remove_item()
     {
-        $MemberId = $this->session->userdata('member_id');
+        $MemberId =  $this->session->userdata('member_id');
         $data = array(
             'rowid' => $this->input->post('id'),
-            'qty' => 0
+            'qty'   => 0
         );
-        $result = false;
-        if ($this->cart->update($data)) {
-            $result = array(
-                'result' => true,
-                'total' => $this->get_total_price(),
-                'total_items' => $this->cart_size());
+        $result=false;
+        if($this->cart->update($data)){
+            $result=array(
+                'result'=>true,
+                'total'=>  $this->get_total_price(),
+                'total_items'=>  $this->cart_size());
             $Cart = $this->cart_items($this->cart->contents());
             $this->cart_model->save_cartitems(serialize($Cart), $MemberId);
         }
@@ -284,8 +297,7 @@ class Cart extends MY_Controller
         $qty = intval($this->input->post("qty"));
         $id = $this->input->post("id");
         $cart = $this->cart_items($this->cart->contents());
-        $result2 = $this->change_quantity($id, $cart[$id], $qty);
-
+        $result2 = $this->change_quantity($id,$cart[$id],$qty);
         echo json_encode($result2);
     }
 
@@ -310,21 +322,24 @@ class Cart extends MY_Controller
 
         if (is_string($PurchaseLimit)) {
             $PurchaseLimit = $this->config->item('Promo')[$cart_item['promo_type']][$PurchaseLimit];
-            foreach ($PurchaseLimit as $items) {
-                if ((strtotime(date('H:i:s')) > strtotime($items['start'])) && (strtotime(date('H:i:s')) < strtotime($items['end']))) {
+            foreach($PurchaseLimit as $items){
+                if(
+                    (strtotime(date('H:i:s')) > strtotime($items['start'])) &&
+                    (strtotime(date('H:i:s')) < strtotime($items['end']))
+                ){
                     $PurchaseLimit = $max_qty;
                 }
-                else {
+                else{
                     $PurchaseLimit = 0;
                 }
             }
         }
 
         $result = false;
-        if ($cart_item['is_promote'] == "1" && $qty > $PurchaseLimit) {
+        if($cart_item['is_promote'] == "1" && $qty > $PurchaseLimit){
             $data['qty'] = $PurchaseLimit;
         }
-        else if ($qty > $max_qty) {
+        else if ($qty > $max_qty ){
             $data['qty'] = $max_qty;
         }
         $this->cart->update($data);
@@ -354,8 +369,7 @@ class Cart extends MY_Controller
         foreach ($cart as $key => $row) {
             $total += $row['price'] * $row['qty'];
         }
-
-        return number_format($total, 2, '.', ',');
+        return number_format($total,2,'.',',');
     }
 
     /**

@@ -1365,7 +1365,7 @@ nav ul > li:hover > div {
 
 .follow-cnt{
     font-size: 11px;
-    border-bottom: 1px dashed #ddd;
+    text-align: center;
 }
 .follow-cnt .span-cont{
     display: block;
@@ -5178,7 +5178,7 @@ div.post_item_content_left {
 }
 
 .vendor-avatar{
-    float: left;
+    display: block;
     text-align: center;
     height: 150px;
     width: 150px;
