@@ -2,6 +2,8 @@
 
 namespace EasyShop\PaymentGateways;
 
+use EasyShop\Entities\EsPaymentGateway;
+
 /**
  * Cash On Delivery Gateway Class
  *
@@ -76,7 +78,10 @@ class CashOnDeliveryGateway extends AbstractGateway
                 //$this->sendNotification();
 
                 // update payment gateway DB here
-                
+                $paymentHistory = new EsPaymentGateway();
+                $paymentHistory->
+
+                //$this->em->getRepository('EasyShop\Entities\EsPaymentGateway');
             }
         }
         else{

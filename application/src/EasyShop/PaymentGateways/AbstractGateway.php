@@ -111,6 +111,10 @@ abstract class AbstractGateway implements GatewayInterface
      */
     abstract public function pay();
 
+
+    /**
+     * Getters and Setters
+     */
     public function getPaymentMethodName()
     {
         return $this->paymentMethodName;
@@ -149,6 +153,7 @@ abstract class AbstractGateway implements GatewayInterface
      * @param string $apiResponse Contains response of api
      * @param string $tid Transaction id
      *
+     * @return mixed
      */
     public function persistPayment($paymentType,$ItemTotalPrice,$member_id,$productstring,$productCount,$apiResponse,$tid)
     {
@@ -371,6 +376,11 @@ abstract class AbstractGateway implements GatewayInterface
         return $response;
     }
 
+
+    /**
+     * Generate Reference Number
+     * 
+     */
     public function validateCheckoutItems()
     {
         return true;
@@ -393,19 +403,17 @@ abstract class AbstractGateway implements GatewayInterface
 
             echo "<pre>"; var_dump($users); echo "</pre>";
 
-
-            // $rsm = new ResultSetMapping();
-            // $rsm->addEntityResult('EasyShop\Entities\EsProduct','u');
-            // $rsm->addFieldResult('u','id_product','idProduct');
-
-            // $query = $this->em->createNativeQuery('SELECT id_product FROM `es_product` WHERE id_product = 1',$rsm);
-
-            // $users = $query->getResult();
-
-            // echo "<pre>"; var_dump($users); echo "</pre>";
-
-
             /*
+            $rsm = new ResultSetMapping();
+            $rsm->addEntityResult('EasyShop\Entities\EsProduct','u');
+            $rsm->addFieldResult('u','id_product','idProduct');
+
+            $query = $this->em->createNativeQuery('SELECT id_product FROM `es_product` WHERE id_product = 1',$rsm);
+
+            $users = $query->getResult();
+
+            echo "<pre>"; var_dump($users); echo "</pre>";
+
             <select id="getProductById">
             SELECT a.`name` AS `product`, a.`slug` AS slug, a.is_sold_out, a.`discount`, a.`brief`,a.`id_product`,`cat_id`, b.`product_image_path`, a.`price`, a.`member_id` as sellerid , a.`is_promote`,a.`startdate`,a.`enddate`, a.`promo_type`,a.`is_draft`,a.`is_delete`
             FROM `es_product` a
@@ -413,22 +421,18 @@ abstract class AbstractGateway implements GatewayInterface
             WHERE `id_product` = :id
             </select>
             */
-
-            /*
-            $qb = $this->em->createQueryBuilder();
-
-            $qb->select('a')
-                ->from('EasyShop\Entities\EsProduct','a')
-                ->leftjoin('EasyShop\Entities\EsProductImage',b)
-
-
-            $productArray = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                                        ->find($productId);
-            */
-            /* NEW QUANTITY */
         }
     }
 
+
+    /**
+     * Generate Reference Number
+     * 
+     * @param int $paymentType Specifies payment method
+     * @param string $member_id Contains member id
+     *
+     * @return string
+     */
     public function generateReferenceNumber($paymentType,$member_id){
     
         switch($paymentType)
