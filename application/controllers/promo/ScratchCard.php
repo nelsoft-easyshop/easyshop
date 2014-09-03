@@ -21,7 +21,7 @@ class ScratchCard extends MY_Controller
         $data = $this->fill_header();
         $data['title'] = 'Scratch to Win | Easyshop.ph';
         $data['metadescription'] = 'Scratch-to-win-promo';
-        $viewData['deals_banner'] = $this->load->view('templates/dealspage/easytreats', $banner_data = array(), TRUE);
+        $viewData['deals_banner'] = $this->load->view('templates/dealspage/scratchAndWin', $banner_data = array(), TRUE);
 
         $this->load->view('templates/header', $data);
         $this->load->view('pages/promo/scratch_to_win', $viewData);

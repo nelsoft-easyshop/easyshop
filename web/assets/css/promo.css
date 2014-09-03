@@ -135,9 +135,8 @@
 
 }
 .scratchAndWinBanner {
-    background:url("../images/abcde.jpg") no-repeat scroll center top / 100% 100% #ffffff;
+    background:url("../images/Scratch-and-win-baner.jpg") no-repeat scroll center top / 100% 83% #ffffff;
     height: 365px;
-    margin-bottom: 3%;
     margin-top: 2%;
     position: relative;
     width: 100%;
