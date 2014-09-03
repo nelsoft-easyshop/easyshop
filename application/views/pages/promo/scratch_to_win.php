@@ -42,6 +42,19 @@
                     <li>Got to easyshop.ph and click the Scratch Card link.</li>
                     <li>If your code matches one of the items, click on the item and fill out the registration form.</li>
                 </ol>
+                <br>
+                <p>
+                    To redeem the prize, present the winning scratch<br>
+                    card and bring two (2) valid ID's at Easyshop.ph office<br>
+                    located at 8th flr. Marc 2000 Tower, 1973 Tacft Ave.,<br>
+                    Malate, Manila. You may claim your prizes until <br>
+                    December 31, 2014.
+                </p>
+                <p>
+                    Visit <a href="<?=base_url()?>">www.Easyshop.ph</a> for more details or you may <br>
+                    call our customer service at (02)353-0062 or <br>
+                    (02)353-8337.
+                </p>
             </div>
 
             <div id="scratch-win-error">

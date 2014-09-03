@@ -71,6 +71,12 @@
     position: relative;
     width: 79%;
 }
+.scratch-win-form p{
+    margin: 0 auto;
+    max-width: 980px;
+    position: relative;
+    width: 83%;
+}
 .scratch-win-form > ol > li {
     padding: 1%;
 }
