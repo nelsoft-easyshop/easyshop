@@ -15,13 +15,16 @@
     margin-top: 1% !important;
 }
 .scratch-congrats{
-    width: 61%;
+    width: 80%;
 }
 .head-cngrts{
     width: 27%;
 }
 #scratch-win-claim{
     width: 60%;
+}
+.margin-top-10{
+    margin: 5% auto 0 !important;
 }
 #scratch-win-claim h2{
     padding: 1% 0 3% 0;

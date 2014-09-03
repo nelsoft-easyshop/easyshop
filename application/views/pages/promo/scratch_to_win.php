@@ -4,9 +4,9 @@
 
 <div class="clear"></div>
 
-<div class="promo-wrapper" id="main_search_container">
     <?PHP if (isset($product)) : ?>
-    <h2 class="head-cngrts">CONGRATULATION</h2>
+<div class="promo-wrapper margin-top-10" id="main_search_container">
+    <h2 class="head-cngrts">CONGRATULATIONS!</h2>
     <div class="scratch-congrats">
         <span id="checker" data_id="<?=$product[0]['id_product']?>" data_name="<?=$product[0]['name']?>"
               data_price="<?=$product[0]['price']?>" data_code="<?PHP echo $_GET['code'];?>">
@@ -26,6 +26,7 @@
         </div>
     </div>
     <?PHP else: ?>
+    <div class="promo-wrapper" id="main_search_container">
         <?php echo $deals_banner; ?>
         <div id="scratch-win">
             <div class="scratch-win-form">
