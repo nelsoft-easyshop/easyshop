@@ -77,36 +77,56 @@ class EsProductRepository extends EntityRepository
      * @return array
      */
     public function getDetails($productId = array())
-    {
+    {   
         if(count($productId) > 0){
             $this->em =  $this->_em;
-            $qb = $this->em->createQueryBuilder();
-            $qbResult = $qb->select(array('p.idProduct'
-                                            ,'p.name'
-                                            ,'p.price'  
-                                            ,'p.brief' 
-                                            ,'p.slug'
-                                            ,'p.condition' 
-                                            ,'p.startdate'
-                                            ,'p.enddate'
-                                            ,'p.isPromote'
-                                            ,'p.promoType'
-                                            ,'p.discount'
-                                            ,'p.isSoldOut'
-                                            ,'i.productImagePath'
-                                            ,'m.username'))
-                                    ->from('EasyShop\Entities\EsProduct','p')
-                                    ->leftJoin('EasyShop\Entities\EsProductImage','i','WITH','p.idProduct = i.product AND i.isPrimary = 1')
-                                    ->leftJoin('EasyShop\Entities\EsMember','m','WITH','m.idMember = p.member')
-                                    ->where( 
-                                            $qb->expr()->in('p.idProduct', $productId)
-                                        )
-                                    ->getQuery();
-            $result = $qbResult->getResult();
+            $rsm = new ResultSetMapping(); 
+                $rsm->addScalarResult('idProduct', 'idProduct');
+                $rsm->addScalarResult('name', 'name');
+                $rsm->addScalarResult('brief', 'brief');
+                $rsm->addScalarResult('price', 'price');
+                $rsm->addScalarResult('slug', 'slug');
+                $rsm->addScalarResult('condition', 'condition');
+                $rsm->addScalarResult('startdate', 'startdate');
+                $rsm->addScalarResult('enddate', 'enddate');
+                $rsm->addScalarResult('isPromote', 'isPromote');
+                $rsm->addScalarResult('promoType', 'promoType');
+                $rsm->addScalarResult('discount', 'discount');
+                $rsm->addScalarResult('isSoldOut', 'isSoldOut');
+                $rsm->addScalarResult('productImagePath', 'productImagePath');
+                $rsm->addScalarResult('username', 'username');
 
-            return $result;
-        }
-        
+                $query = $this->em->createNativeQuery("
+                    SELECT 
+                        p.id_product as idProduct
+                        , p.name as name
+                        , p.brief as brief
+                        , p.price as price
+                        , p.slug as slug
+                        , p.condition
+                        , p.startdate as startdate
+                        , p.enddate as enddate
+                        , p.is_promote as isPromote
+                        , p.promo_type as promoType
+                        , p.discount as discount
+                        , p.is_sold_out as isSoldOut
+                        , i.product_image_path as productImagePath
+                        , m.username as username
+                    FROM 
+                        es_product p
+                        LEFT JOIN es_product_image i ON p.id_product = i.product_id AND i.is_primary = 1
+                        LEFT JOIN es_member m ON m.id_member = p.member_id
+                    WHERE p.id_product IN (:ids)
+                    ORDER BY FIELD(p.id_product,:ids)
+                    LIMIT :offset, :page ", $rsm);
+                $query->setParameter('ids', $productId);
+                $query->setParameter('offset', $offset * $perPage);
+                $query->setParameter('page', $perPage);
+                $results = $query->execute();
+
+                return $results;
+            }
+            
         return false;
     }
 
