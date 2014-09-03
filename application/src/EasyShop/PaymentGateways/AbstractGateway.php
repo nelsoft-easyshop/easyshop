@@ -150,8 +150,8 @@ abstract class AbstractGateway implements GatewayInterface
      * @param string $tid Transaction id
      *
      */
-    public function persistPayment($paymentType,$ItemTotalPrice,$member_id,$productstring,$productCount,$apiResponse,$tid){
-
+    public function persistPayment($paymentType,$ItemTotalPrice,$member_id,$productstring,$productCount,$apiResponse,$tid)
+    {
         // remap variables
         $invoiceNo = $member_id.'-'.date('ymdhs');
         $totalAmount = $ItemTotalPrice;
@@ -455,5 +455,5 @@ abstract class AbstractGateway implements GatewayInterface
        return $paycode.'-'.date('ymdhs').'-'.$member_id;
     }
 
-    
+
 }
