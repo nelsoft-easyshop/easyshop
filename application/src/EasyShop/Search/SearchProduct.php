@@ -36,7 +36,7 @@ class SearchProduct
      */
     public function filterBySearchString($string = "")
     {
-        $clearString = preg_replace('/\s+/', ' ',preg_replace('/[^A-Za-z0-9\-]/', ' ', $string)); 
+        $clearString = preg_replace('/\s+/', ' ',preg_replace('/[^A-Za-z0-9]/', ' ', $string));  
         $stringCollection = array();
         $ids = array(); 
         $explodedString = explode(' ', trim($clearString)); 
