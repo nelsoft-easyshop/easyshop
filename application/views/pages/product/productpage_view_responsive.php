@@ -99,9 +99,9 @@
 					</div>
 					<div class="bread_crumbs_m">
 						<ul style="margin-bottom: 10px;">
-							<li class="" ><a href="<?=base_url()?>home">Home</a></li>
+							<li class="" ><a href="<?=base_url()?>home" style="color: #f18200;">Home</a></li>
 							<?php foreach($breadcrumbs as $crumbs): ?>
-							<li> <a href="<?=base_url()?>category/<?php echo $crumbs['slug']?>"> <?php echo html_escape($crumbs['name']);?> </a> </li>
+							<li> <a href="<?=base_url()?>category/<?php echo $crumbs['slug']?>" style="color: #f18200;"> <?php echo html_escape($crumbs['name']);?> </a> </li>
 							<?php endforeach;?>
 							<li class="bread_crumbs_last_child" style="font-size:11px !important;"><?php echo html_escape($product['product_name']);?></li>
 						</ul>
@@ -333,7 +333,7 @@
 					 <div class="panel panel-default no-border">
 						<div class="panel-heading panel-seller-header">
 							<a data-toggle="collapse" data-parent="#seller-accordion" href="#seller" class="a-accordion-header">
-							  Seller: <span class="name name-m" ><?php echo html_escape($product['sellerusername']);?></span> 
+							  Seller: <?php echo html_escape($product['sellerusername']);?>
 							  <i class="glyphicon glyphicon-chevron-down pull-right"></i>
 							</a>
 							<script>
@@ -357,7 +357,7 @@
 									<tr>
 										<td class="v-align-top" width="10%">
 											<a href="<?php echo base_url() . $product['sellerusername'];?>"> 
-												<img class=" seller-img" src="<?php echo base_url() . $product['userpic']?>/60x60.png?<?php echo time();?>"><br />
+												<img class="seller-img seller-img-m" src="<?php echo base_url() . $product['userpic']?>/60x60.png?<?php echo time();?>"><br />
 											</a>
 										</td>
 										<td class="v-align-top td-seller-info">
@@ -366,10 +366,12 @@
 											</a>
 											<a class="modal_msg_launcher" href="javascript:void(0)" title="Send <?=html_escape($product['sellerusername'])?> a message">
 												<span>
-													<span class="span_bg prod_message"></span> 
+													<span class="span_bg prod_message" width="100px" height="100px"></span> 
 												</span>
-											
+												
 												<br/>
+												<div  width="100%" style="border-top: solid #fff 1px; height: 1px;">
+												</div>
 												<?php if(($vendorrating['rate_count'] <=0)):?>
 												<p><span style="font-size:11px; margin-left:0px;">No ratings received yet.</span></p>
 												<?php else:?>
@@ -380,7 +382,7 @@
 																<span class="rating_criteria"><?php echo $this->lang->line('rating')[0].':';?></span>
 															</td>
 															<td style="td-rating">
-																<span class="rating_value"><?php echo number_format($vendorrating['rating1'],2,'.',',');?></span> <img src="<?=base_url()?>assets/images/star-on.png" alt="*" title="">
+																<span class="rating_value rating_value_m"><?php echo number_format($vendorrating['rating1'],2,'.',',');?></span> <img src="<?=base_url()?>assets/images/star-on.png" alt="*" title="">
 															</td>
 														</tr>
 														<tr>
@@ -388,7 +390,7 @@
 																<span class="rating_criteria"><?php echo $this->lang->line('rating')[1].':';?></span>
 															</td>
 															<td style="td-rating">
-																<span class="rating_value" > <?php echo number_format($vendorrating['rating2'],2,'.',',');?> </span> <img src="<?=base_url()?>assets/images/star-on.png" alt="*" title="">
+																<span class="rating_value rating_value_m"> <?php echo number_format($vendorrating['rating2'],2,'.',',');?> </span> <img src="<?=base_url()?>assets/images/star-on.png" alt="*" title="">
 															</td>
 														</tr>
 														<tr>
@@ -396,7 +398,7 @@
 																<span class="rating_criteria"><?php echo $this->lang->line('rating')[2].':';?></span>
 															</td>
 															<td style="td-rating">
-																<span class="rating_value"> <?php echo number_format($vendorrating['rating3'],2,'.',',');?></span> <img src="<?=base_url()?>assets/images/star-on.png" alt="*" title="">
+																<span class="rating_value rating_value_m"> <?php echo number_format($vendorrating['rating3'],2,'.',',');?></span> <img src="<?=base_url()?>assets/images/star-on.png" alt="*" title="">
 															</td>
 														</tr>
 													</table>
@@ -483,7 +485,7 @@
 												<span class="shipping_fee"> <span class="loc_invalid"> Contact the seller * </span></span>
 											<?php else:?>
 												<?PHP if($product['is_free_shipping']):  ?>
-													<span style="margin-left: 15px;"><span class="span_bg img_free_shipping"></span></span>
+													<div class="clear"></div><span style="margin-left: 15px;"><span class="span_bg img_free_shipping"></span></span>
 												<?PHP else: ?>
 													<span class="shipping_fee"> <span class="loc_invalid"> Select location* </span></span>
 												<?PHP endif; ?>
@@ -517,9 +519,9 @@
 					<div width="100%">
 						<center>
 							<?php if($logged_in && intval($userdetails['is_email_verify']) !== 1): ?>
-								<div class="alert alert-danger no-border"> <i class="glyphicon glyphicon-warning-sign"></i> Verify your email </div>
+								<div class="alert alert-danger no-border"> Verify your email </div>
 							<?php elseif($logged_in && $uid == $product['sellerid']): ?>
-								<div class="alert alert-danger no-border"> <i class="glyphicon glyphicon-warning-sign"></i> This is your own listing </div>
+								<div class="alert alert-danger no-border">  This is your own listing </div>
 							<?php else: ?>
 								<?php if(count($shipment_information) === 0 && intval($product['is_meetup']) === 1): ?>
 									 <a href="javascript:void(0)" class="btn-meet-up modal_msg_launcher" title="Send <?=html_escape($product['sellerusername'])?> a message">Contact Seller</a> <br/>
@@ -723,8 +725,10 @@
 												<textarea class="reply_field" name="reply_field" cols=50 rows=4></textarea>
 												<br>
 												<span class="reply_save orange_btn3">Save</span> 
-												<img src="<?=base_url()?>assets/images/orange_loader_small.gif" id="savereply_loadingimg" style="position: relative; top:12px; left:15px; display:none"/>
+												
 												<span class="reply_cancel">Cancel</span>
+												<img src="<?=base_url()?>assets/images/orange_loader_small.gif" id="savereply_loadingimg" style="position: relative; top:12px; left:45%; margin-bottom: 15px; display:none"/>
+												<div class="clear"></div>
 												<?php echo form_close();?>
 											</div>
 										<?php endif;?>
