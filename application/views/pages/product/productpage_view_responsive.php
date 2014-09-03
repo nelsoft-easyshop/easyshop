@@ -12,41 +12,36 @@
 <link rel="stylesheet" href="<?=base_url()?>assets/owl-carousel/owl.transitions.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
 
     
- <!-- Demo -->
+<style>
+.panel-heading .accordion-toggle:after {
+	/* symbol for "opening" panels */
+	font-family: 'Glyphicons Halflings';  /* essential for enabling glyphicon */
+	content: "\e114";    /* adjust as needed, taken from bootstrap.css */
+	float: right;        /* adjust as needed */
+	color: grey;         /* adjust as needed */
+}
+.panel-heading .accordion-toggle.collapsed:after {
+	/* symbol for "collapsed" panels */
+	content: "\e080";    /* adjust as needed, taken from bootstrap.css */
+}
 
-    <style>
-	
-	.panel-heading .accordion-toggle:after {
-		/* symbol for "opening" panels */
-		font-family: 'Glyphicons Halflings';  /* essential for enabling glyphicon */
-		content: "\e114";    /* adjust as needed, taken from bootstrap.css */
-		float: right;        /* adjust as needed */
-		color: grey;         /* adjust as needed */
-	}
-	.panel-heading .accordion-toggle.collapsed:after {
-		/* symbol for "collapsed" panels */
-		content: "\e080";    /* adjust as needed, taken from bootstrap.css */
-	}
-	
-	
-    #owl-demo .owl-item div{
-      padding:5px;
-    }
-    #owl-demo .owl-item img{
-      display: block;
-      width: 100%;
-      height: auto;
-      min-height: auto;
-      -webkit-border-radius: 0px;
-      -moz-border-radius: 0px;
-      border-radius: 0px;
-    }
-	
-	.owl-buttons{
-		display: none !important;
-	}
-	
-    </style>
+#owl-demo .owl-item div{
+  padding:5px;
+}
+#owl-demo .owl-item img{
+  display: block;
+  width: 100%;
+  height: auto;
+  min-height: auto;
+  -webkit-border-radius: 0px;
+  -moz-border-radius: 0px;
+  border-radius: 0px;
+}
+
+.owl-buttons{
+	display: none !important;
+}
+</style>
 
 <section style="color-gray">
 	<div class="container font-roboto" style="max-width:980px; margin-top: 15px;">	
@@ -101,9 +96,7 @@
 						  </div>
 						</div>
 					  </div>
-					  
 					</div>
-					
 					<div class="bread_crumbs_m">
 						<ul style="margin-bottom: 10px;">
 							<li class="" ><a href="<?=base_url()?>home">Home</a></li>
@@ -142,12 +135,10 @@
 												<span class="name"><?php echo html_escape($product['sellerusername']);?></span> 
 											</a>
 											<br/>
-										
 											<a class="modal_msg_launcher" href="javascript:void(0)" title="Send <?=html_escape($product['sellerusername'])?> a message">
 												<span>
 													<span class="span_bg prod_message"></span> 
 												</span>
-											
 												<br/>
 												<?php if(($vendorrating['rate_count'] <=0)):?>
 												<center><p style="margin-left: 13px;">No ratings received yet.</p></center>
@@ -165,7 +156,6 @@
 						<div class="clear prod_inner_border"></div>
 						<div class="row">
 							<div class="col-md-12">
-								
 								<?php foreach($product_options as $key=>$product_option):?>
 									<?php if(count($product_option)>1): ?>
 										<div class="product_option"> 
@@ -185,8 +175,6 @@
 												</ul>
 											</div>
 										</div>
-										
-										
 									<!-- Only echo a hidden attribute if the attribute datatype is a checkbox or an optional attribute -->
 									<?php elseif((count($product_option) === 1)&&(($product_option[0]['datatype'] === '5'))||($product_option[0]['type'] === 'option')):  ?>
 									
@@ -199,9 +187,7 @@
 										</div>
 
 									<?php endif; ?>
-									
 								<?php endforeach;?>
-							
 								<!-- Quantity -->
 								<div class="product_option"> <span class="label-option">Quantity</span>
 									<div class="">
@@ -287,9 +273,6 @@
 											<span class="shipping_fee"> <span class="loc_invalid"> Select location* </span></span>
 										<?PHP endif; ?>
 									<?php endif; ?>
-									
-									
-								  
 								</p>
 							</div>
 							<p class="product_content_payment"> 
@@ -349,11 +332,9 @@
 					<div class="panel-group panel-seller" id="seller-accordion">
 					 <div class="panel panel-default no-border">
 						<div class="panel-heading panel-seller-header">
-						 
 							<a data-toggle="collapse" data-parent="#seller-accordion" href="#seller" class="a-accordion-header">
 							  Seller: <span class="name name-m" ><?php echo html_escape($product['sellerusername']);?></span> 
 							  <i class="glyphicon glyphicon-chevron-down pull-right"></i>
-							  
 							</a>
 							<script>
 									    $("#seller-accordion").on('click','.a-accordion-header',function() {
@@ -950,8 +931,6 @@
 										</center>
 									</div>
 								<?php endif; ?>
-								
-								
 							</div>
 						</div>
 					</div>
