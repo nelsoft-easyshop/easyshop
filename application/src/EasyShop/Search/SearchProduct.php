@@ -36,14 +36,22 @@ class SearchProduct
      */
     public function filterBySearchString($string = "")
     {
+        $clearString = preg_replace('/\s+/', ' ',preg_replace('/[^A-Za-z0-9\-]/', ' ', $string)); 
         $stringCollection = array();
-        $ids = array();
-        $explodedString = explode(' ', trim($string));
-        $stringCollection[0] = '+'.implode(' +', $explodedString) .'*';
+        $ids = array(); 
+        $explodedString = explode(' ', trim($clearString)); 
+        $stringCollection[0] = '+'.implode('* +', $explodedString) .'*';
         $stringCollection[1] = implode(' ', $explodedString);
         $stringCollection[2] = '"'.implode(' ', $explodedString).'"';
-        $products = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                                ->findByKeyword($stringCollection);
+        
+        if($string == ""){
+            $products = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                                            ->findAll();
+        }
+        else{
+            $products = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                                            ->findByKeyword($stringCollection);
+        }
 
         foreach ($products as $key => $value) {
             array_push($ids, $value->getIdProduct());

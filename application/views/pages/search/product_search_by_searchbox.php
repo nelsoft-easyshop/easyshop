@@ -49,7 +49,7 @@
     <div class="right_product">
         <?php if(count($products) <= 0): ?>
             <div style='margin-bottom: 100px;'>
-             <span style='font-size:15px;'> Your search for <span style='font-weight:bold'><?php echo urldecode($string); ?></span> did not return any results. </span>
+             <span style='font-size:15px;'> Your search for <span style='font-weight:bold'><?php echo html_escape($string);?></span> did not return any results. </span>
             </div>
         <?php else: ?>
             <div class="adv_ctr">
