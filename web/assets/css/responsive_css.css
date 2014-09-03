@@ -465,6 +465,7 @@ header {
 .top_link_name {
     display: inline-block;
     height: 30px;
+    margin-left: 10px;
     overflow: hidden;
     text-overflow: ellipsis;
     margin-right: 20px;
@@ -488,7 +489,18 @@ a.msgs_link:hover {
 .cart_no {
     margin-right: 5px;
 }
-
+.cart_zero {
+    background-position: -9px -260px !important;
+}
+.cart_icon_hide {
+    display: none !important;
+}
+.unread-messages-count-hide{
+    display: none !important;
+}
+.msg_icon_zero{
+    background-position: -511px -261px !important;
+}
 .cart_no,
 .msg_countr {
     background-color: #F18200;
@@ -2249,7 +2261,7 @@ box-shadow:         0px 1px 5px 0px rgba(50, 50, 50, 0.75);
 
     .top_link_name {
         max-width: 75%;
-        margin-right: 0px;
+        margin-left: 0px;
         width: 100%;
     }
 
@@ -2267,7 +2279,9 @@ box-shadow:         0px 1px 5px 0px rgba(50, 50, 50, 0.75);
         height: 35px;
         width: 32px;    
     }
-
+    .cart_zero {
+        background-position:-623px -246px !important;
+    }
     .icon_sell {
         background-position: -672px -246px;
         height: 35px;
@@ -2335,16 +2349,21 @@ box-shadow:         0px 1px 5px 0px rgba(50, 50, 50, 0.75);
         top: -7px;
     }
     .img_msgs_cntr {
-        background-position: -810px -258px;
         width: 3em;
         height: 24px;
     }
+
+    .msg_icon_zero{
+        background-position:  -810px -258px !important;
+    }
+
     .user-nav-dropdown:after,
     .nav-dropdown:after,
     .user-nav-dropdown,
     .user-nav-dropdown {
       display: none;
     }
+
     ul.nav-dropdown {
         display: block !important;
         width: auto;
@@ -2483,6 +2502,10 @@ box-shadow:         0px 1px 5px 0px rgba(50, 50, 50, 0.75);
 }
 
 @media only screen and (max-width : 30em) { /**** 480px ***/
+    /*** report a problem ***/
+        .feedback-img-wrapper + input[type="file"] {
+        width: 87px;
+    }
     .img_sell {
         display: inline-block;
         vertical-align: middle;
@@ -2841,10 +2864,6 @@ box-shadow:         0px 1px 5px 0px rgba(50, 50, 50, 0.75);
 }   
 
 @media only screen and (max-width : 20em) {
-    /*** report a problem ***/
-   .feedback-img-wrapper + input[type="file"] {
-    width: 87px;
-    }
     /*** step 1 ***/
     #cl_div_container .selected_category {
         width: 100%;
