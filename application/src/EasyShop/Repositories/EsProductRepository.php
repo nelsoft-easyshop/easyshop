@@ -76,7 +76,7 @@ class EsProductRepository extends EntityRepository
      * @param  array  $productId
      * @return array
      */
-    public function getDetails($productId = array())
+    public function getDetails($productId = array(),$offset,$perPage)
     {   
         if(count($productId) > 0){
             $this->em =  $this->_em;
