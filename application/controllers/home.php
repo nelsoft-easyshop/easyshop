@@ -399,7 +399,7 @@ class Home extends MY_Controller
         $data = array_merge($data, $this->fill_header());
         $this->load->view('templates/header', $data);
         //LOAD YOUR VIEW HERE
-        //$this->load->view('pages/web/faq');
+        $this->load->view('pages/web/report-a-problem');
         $this->load->view('templates/footer_full');
     }
 
