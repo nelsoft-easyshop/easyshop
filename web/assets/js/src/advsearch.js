@@ -185,8 +185,8 @@ function getParameterByName(name)
     });
 
     $('#list').click(function(){
-        type = 1;
-        createCookie("view ", "list", 30); 
+        typeView = 'product-list';
+        createCookie("view ", "product-list", 30); 
         $('.product').animate({opacity:0},function(){
             $('.grid').removeClass('grid-active');
             $('.list').addClass('list-active');
@@ -196,8 +196,8 @@ function getParameterByName(name)
     });
 
     $('#grid').click(function(){
-        type = 0;
-        createCookie("view ", "grid", 30);  
+        typeView = 'product';
+        createCookie("view ", "product", 30);  
         $('.product-list').animate({opacity:0},function(){
             $('.list').removeClass('list-active');
             $('.grid').addClass('grid-active');
@@ -227,5 +227,42 @@ function getParameterByName(name)
         $(this).siblings('.more_attr').show();
         $(this).hide();
     });
+
+
+     // START OF INFINITE SCROLLING FUNCTION 
+    var offset = 1;
+    var request_ajax = true;
+    var ajax_is_on = false;
+    var objHeight=$(window).height()-50;
+    var last_scroll_top = 0;
+ 
+    var type = 1;
+    var csrftoken = $("meta[name='csrf-token']").attr('content');
+    var csrfname = $("meta[name='csrf-name']").attr('content');
+    $(window).scroll(function(event) {
+        var st = $(this).scrollTop();
+        if(st > last_scroll_top){
+            if ($(window).scrollTop() + 400 > $(document).height() - $(window).height()) {
+                if (request_ajax === true && ajax_is_on === false) {
+                    ajax_is_on = true;
+                    $.ajax({
+                        url: loadUrl + offset +'?'+ currentQueryString+'&typeview='+typeView,
+                        type: 'get',
+                        async: false,
+                        dataType: 'json',
+                        success: function(response) {
+                            if(response.count > 0){
+                                $('#product_content').append(response.view);
+                                offset++;
+                                ajax_is_on = false;
+                            }
+                        }
+                    });
+                }
+            }
+        }
+        last_scroll_top = st;
+    });
+    // END OF INFINITE SCROLLING FUNCTION
 
 })( jQuery );

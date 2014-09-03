@@ -192,6 +192,7 @@ class SearchProduct
                             ,'seller'
                             ,'location'
                             ,'sort'
+                            ,'typeview'
                         );
 
         $finalizedParamter = array();

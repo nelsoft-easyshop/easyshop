@@ -37,8 +37,8 @@ class ProductManager
             $productId =$value['idProduct'];
             $isPromote =  $value['isPromote'];
             $price =  $value['price'];  
-            $startDate = $value['startdate']->format('Y-m-d H:i:s'); 
-            $endDate = $value['enddate']->format('Y-m-d H:i:s');
+            $startDate = $value['startdate']; 
+            $endDate = $value['enddate'];
             $promoType = $value['promoType'];
             $discount = $value['discount'];
             $isSoldOut = $value['isSoldOut'];
