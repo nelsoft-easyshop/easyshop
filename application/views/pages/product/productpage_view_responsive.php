@@ -48,17 +48,17 @@
 	
     </style>
 
-<section>
+<section style="color-gray">
 	<div class="container font-roboto" style="max-width:980px; margin-top: 15px;">	
 		<div class="row">
 			<div class="col-md-12">
-				<section class="top_margin  display-when-desktop">
-					
+				<section class="top_margin product-page-section display-when-desktop">
+					<div class="wrapper">
 						<div class="prod_categories">
-							<div class="nav_title">Categories <img src="<?=base_url()?>assets/images/img_arrow_down.png"></div>
+							<div class="nav_title">Categories <img src="/assets/images/img_arrow_down.png"></div>
 							<?php echo $category_navigation; ?>
 						</div> 
-						<div class="prob_cat_nav">
+						<div class="prod_cat_nav">
 							<div class="category_nav product_content">
 								<ul>
 								<?php foreach($main_categories as $category): ?>
@@ -69,18 +69,17 @@
 							</div>
 						</div>
 						<div class="clear"></div>
-						
 						<div class="bread_crumbs">
-							<ul style="margin-bottom: 10px;">
-								<li class="" ><a href="<?=base_url()?>home">Home</a></li>
+							<ul>
+								<li class=""><a href="<?=base_url()?>home">Home</a></li>
 								<?php foreach($breadcrumbs as $crumbs): ?>
 								<li> <a href="<?=base_url()?>category/<?php echo $crumbs['slug']?>"> <?php echo html_escape($crumbs['name']);?> </a> </li>
 								<?php endforeach;?>
 								<li class="bread_crumbs_last_child"><?php echo html_escape($product['product_name']);?></li>
 							</ul>
 						</div>
-						<br/>
-						<br/>
+					</div>
+					<br/>
 				</section>
 				<div class="display-when-mobile-833">
 					<div class="panel-group " id="categories">
@@ -106,14 +105,14 @@
 					</div>
 					
 					<div class="bread_crumbs_m">
-							<ul style="margin-bottom: 10px;">
-								<li class="" ><a href="<?=base_url()?>home">Home</a></li>
-								<?php foreach($breadcrumbs as $crumbs): ?>
-								<li> <a href="<?=base_url()?>category/<?php echo $crumbs['slug']?>"> <?php echo html_escape($crumbs['name']);?> </a> </li>
-								<?php endforeach;?>
-								<li class="bread_crumbs_last_child"><?php echo html_escape($product['product_name']);?></li>
-							</ul>
-						</div>
+						<ul style="margin-bottom: 10px;">
+							<li class="" ><a href="<?=base_url()?>home">Home</a></li>
+							<?php foreach($breadcrumbs as $crumbs): ?>
+							<li> <a href="<?=base_url()?>category/<?php echo $crumbs['slug']?>"> <?php echo html_escape($crumbs['name']);?> </a> </li>
+							<?php endforeach;?>
+							<li class="bread_crumbs_last_child" style="font-size:11px !important;"><?php echo html_escape($product['product_name']);?></li>
+						</ul>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -388,7 +387,7 @@
 												<span>
 													<span class="span_bg prod_message"></span> 
 												</span>
-											</a> 
+											
 												<br/>
 												<?php if(($vendorrating['rate_count'] <=0)):?>
 												<p><span style="font-size:11px; margin-left:0px;">No ratings received yet.</span></p>
@@ -421,10 +420,11 @@
 														</tr>
 													</table>
 												<?php endif;?>
-											     
+											     </a> 
 										</td>
 									</tr>
 								</table>
+								
 							</div>
 								
 						</div>
@@ -627,17 +627,17 @@
 							<div id="review_container">
 								<?php $attr = array('id'=>'review_form'); ?>
 								<?php echo form_open('',$attr); ?>
-									<table width="100%" style="margin-left:-10px; margin-top:-10px;" class="font-roboto">
+									<table width="100%" style="margin-left:-10px;" class="font-roboto table-write-review">
 										<tr>
-											<td style="padding: 15px 0px 5px 10px;">
-												<label>Subject *</label>
+											<td style="padding: 15px 0px 5px 0px;" width="10%" ]>
+												<label>Subject:*</label>
 											</td>
-											<td style="padding: 15px 0px 5px 0px;">
+											<td style="padding: 15px 0px 5px 0px;" width="70%">
 												<input type="text" class="form-control no-border" style="width: 100% !important; height: 40px; !important;" name="subject" maxlength="150">
 											</td>
 										</tr>
 										<tr>
-											<td style="padding: 10px 0px 5px 10px;">
+											<td style="padding: 10px 0px 5px 0px;">
 												<label>Rating</label>
 											</td>
 											<td style="padding: 10px 0px 5px 0px;">
@@ -645,12 +645,12 @@
 											</td>
 										</tr>
 										<tr>
-											<td style="padding: 5px 0px 5px 10px;" colspan="2">
+											<td style="padding: 5px 0px 5px 0px;" colspan="2">
 												<label>Comment *</label>
 											</td>
 										</tr>
 										<tr>
-											<td style="padding: 0px 0px 0px 20px;" colspan="2">
+											<td style="padding: 0px 0px 0px 27px;" colspan="2">
 												<textarea class="form-control no-border" style="width: 100% !important;" name="comment"></textarea>
 											</td>
 										</tr>
@@ -876,7 +876,8 @@
 									<?php elseif($uid == $product['sellerid']): ?>
 									<p class=""><!-- Unable to review own product --></p>
 									<?php else: ?>
-									<p class="pull-left font-10" style="color:#f18200; margin-top: 40px;"><strong>Sign-in & purchase item to write a review</strong></p>
+								
+									<p class="pull-left font-10 p-sign-in" >Sign-in & purchase item to write a review</p>
 									<?php endif; ?>
 								</div>
 								
@@ -972,7 +973,7 @@
 								<img class="rec_item_img" src="<?=base_url().$row['path'].'categoryview/'.$row['file']?>">
 							</a>
 							</span>
-							<p style="vertical-align: top; margin-top: 5px;">
+							<p style="vertical-align: middle; margin-top: 5px;">
 								<a href="<?=base_url()."item/".$row['slug'];?>">
 									<span class="prod_rec_item"><?php echo html_escape($row['product']);?></span>
 								</a><br />
@@ -988,8 +989,8 @@
 	
 	<div class="clear"></div>
     
-    <div id="modal-background"> </div>
-    <center>
+    <div id="modal-background"></div>
+   
     <div id="modal-container" class="font-roboto">
         <div id="modal-div-header">
 			<h3 class="modal-header-h3">Send Message</h3>
@@ -997,9 +998,9 @@
         </div>
         <div id="modal-inside-container">
             
-			<table style="margin-left: 10px; margin-top: 10px;" width="100%">
+			<table style="margin-top: 10px;" width="100%">
 				<tr>
-					<td width="10%" ><label>To : </label></td>
+					<td width="15%" ><label>To : </label></td>
 					<td width="90%"><input class="input-name-rate" width="100%" type="text" value="<?=$product['sellerusername'];?>" disabled id="msg_name" name="msg_name" ></td>
 				</tr>
 				<tr>
@@ -1017,7 +1018,7 @@
 		
     </div>
 	
-    </center>
+   
     <input id='p_qty' type='hidden' value=' <?php echo json_encode($product_quantity);?>'>
     <input id='p_shipment' type='hidden' value='<?php echo json_encode($shipment_information);?>'>
     <input id='p_itemid' type='hidden' value='0'/>
