@@ -30,26 +30,4 @@ class CollectionHelper
 
         return $organizeArray;
     }
-
-    /**
-     * Sort array by given arrangement
-     * @param  array  $array
-     * @param  array  $arrangement
-     * @param  string $field
-     * @return array
-     */
-    public function sortArrayByArrangement($arrayList = array(),$arrangement = array(),$field = "")
-    {
-        $arrangeArray = array(); ;
-        foreach ($arrangement as $arrangementKey) {
-            foreach ($arrayList as $key => $value) {
-                if($value[$field] == $arrangementKey)
-                {
-                    array_push($arrangeArray, $value);
-                }
-            }
-        }
-
-        return $arrangeArray;
-    }
 }
