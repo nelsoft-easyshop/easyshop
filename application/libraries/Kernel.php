@@ -101,6 +101,26 @@ class Kernel
             $configurationService = new \EasyShop\Core\Configuration\Configuration();
             return new \EasyShop\XML\Resource($configurationService);
         };
+
+        //Form Service
+        $container['http_foundation'] = function ($c) {
+            // CSRF Setup
+            $csrfSecret = 'TempOraRy_KeY_12272013_bY_Sam*?!';
+            $session = new \Symfony\Component\HttpFoundation\Session\Session();
+            $csrfProvider = new \Symfony\Component\Form\Extension\Csrf\CsrfProvider\SessionCsrfProvider($session, $csrfSecret);
+
+            // Validator Setup
+            $validator = \Symfony\Component\Validator\Validation::createValidator();
+
+            // Create factory
+            $formFactory = \Symfony\Component\Form\Forms::createFormFactoryBuilder()
+                ->addExtension(new \Symfony\Component\Form\Extension\Csrf\CsrfExtension($csrfProvider))
+                ->addExtension(new \Symfony\Component\Form\Extension\HttpFoundation\HttpFoundationExtension())
+                ->addExtension(new \Symfony\Component\Form\Extension\Validator\ValidatorExtension($validator))
+                ->getFormFactory();
+
+            return $formFactory;
+        };
         
         /* Register services END */
         $this->serviceContainer = $container;
