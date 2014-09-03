@@ -470,11 +470,12 @@ line-height: 30px !important;
 }
 
 .product_quantity{
-	margin-left: 23px !important; 
+	margin-left: 0px !important; 
 }
 
 .p-ship-validation{
-	margin-left: 88px !important;
+	margin-left: 0px !important;
+	margin-top: 0px !important;
 }
 
 .label-option{
@@ -672,6 +673,25 @@ line-height: 30px !important;
 	float: none !important;
 	margin-top: 10px;
 }
+
+.shiploc {
+	border: 1px solid #cecece;
+	padding:8px 2px;
+    margin-left: 0px !important;
+}
+
+.v-align-middle{
+	vertical-align:bottom;
+}
+
+.td-ship{
+	padding: 5px 2px;
+}
+
+.product_content_payment{
+	margin-top: -10px;
+}
+
 }
 @media only screen and (max-width: 480px) {
 .table-write-review{
