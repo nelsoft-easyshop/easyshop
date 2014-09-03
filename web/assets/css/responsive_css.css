@@ -2331,14 +2331,15 @@ box-shadow:         0px 1px 5px 0px rgba(50, 50, 50, 0.75);
         position: relative;
     }
     .msg_countr {
-        margin-left: -12px;
+        margin-left: -16px;
+        top: -7px;
     }
     .img_msgs_cntr {
-        background-position: -813px -258px;
-        width: 27px;
-        height: 17px;
+        background-position: -810px -258px;
+        width: 3em;
+        height: 24px;
     }
-     .user-nav-dropdown:after,
+    .user-nav-dropdown:after,
     .nav-dropdown:after,
     .user-nav-dropdown,
     .user-nav-dropdown {
