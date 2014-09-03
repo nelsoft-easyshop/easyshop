@@ -21,27 +21,29 @@
 </section>
 <div class="wrapper" id="main_search_container">
     <div class="left_attribute">
-        <h3>Price</h3>
-        <input type="text" id="price1" value="<?=($this->input->get('startprice')?$this->input->get('startprice'):'')?>" maxlength=9 size=6>
-        to
-        <input type="text" id="price2" value="<?=($this->input->get('startprice')?$this->input->get('endprice'):'')?>" maxlength=9 size=6> 
-        <input class="price" type="button" value=">>"/>
+        <?php if(count($products) > 0): ?>
+            <h3>Price</h3>
+            <input type="text" id="price1" value="<?=($this->input->get('startprice')?$this->input->get('startprice'):'')?>" maxlength=9 size=6>
+            to
+            <input type="text" id="price2" value="<?=($this->input->get('startprice')?$this->input->get('endprice'):'')?>" maxlength=9 size=6> 
+            <input class="price" type="button" value=">>"/>
 
-        <?php foreach ($attributes as $attrName => $attrListValue):?>
-        <h3><?=$attrName?></h3>
-            <ul>
-            <?php foreach ($attrListValue as $key => $value):?>
-                <li style="border:0px">
-                    <a class="cbx" data-head="<?=strtolower($attrName)?>" data-value="<?=strtolower($value)?>" >
-                        <input type="checkbox" <?=(strpos($this->input->get(strtolower($attrName)),strtolower($value)) !== false)?'checked':'';?> class="checkBox" data-head="<?=strtolower($attrName)?>" data-value="<?=strtolower($value)?>" >
-                        <label for="cbx"><?=ucfirst($value);?></label>
-                    </a>
-                </li>
+            <?php foreach ($attributes as $attrName => $attrListValue):?>
+            <h3><?=$attrName?></h3>
+                <ul>
+                <?php foreach ($attrListValue as $key => $value):?>
+                    <li style="border:0px">
+                        <a class="cbx" data-head="<?=strtolower($attrName)?>" data-value="<?=strtolower($value)?>" >
+                            <input type="checkbox" <?=(strpos($this->input->get(strtolower($attrName)),strtolower($value)) !== false)?'checked':'';?> class="checkBox" data-head="<?=strtolower($attrName)?>" data-value="<?=strtolower($value)?>" >
+                            <label for="cbx"><?=ucfirst($value);?></label>
+                        </a>
+                    </li>
+                <?php endforeach; ?>
+                </ul>
             <?php endforeach; ?>
-            </ul>
-        <?php endforeach; ?>
-        <p class="more_attr">More Filters</p>
-        <p class="less_attr">Less Filters</p>
+            <p class="more_attr">More Filters</p>
+            <p class="less_attr">Less Filters</p>
+        <?php endif; ?>
     </div>
  
     <div class="right_product">
