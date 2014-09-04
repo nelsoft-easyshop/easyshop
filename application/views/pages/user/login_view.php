@@ -1,7 +1,7 @@
 <link type="text/css" href="<?=base_url()?>assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet" />
 <link rel="canonical" href="<?php echo base_url()?>login"/>
 
-<div class="clear mrgn-top-35"></div>
+<div class="clear mrgn-top-35 display-ib"></div>
 
 <div class="res_wrapper login_content">
     <div class="border-all border-rad-3">
@@ -107,7 +107,7 @@
                         <div class="clear"></div>
                         <div class="row mrgn-bttm-20 mrgn-top-40">
                             <div class="col-sm-10 col-sm-pull-1 col-md-10 col-md-pull-1 col-sm-offset-1 col-md-offset-1 text-center">
-                                Don’t have an account yet?
+                                Don't have an account yet?
                             </div>
                         </div>
                         <div class="row mrgn-bttm-10">
