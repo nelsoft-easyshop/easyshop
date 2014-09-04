@@ -60,8 +60,8 @@ class EsCatRepository extends EntityRepository
                     T2.name,
                     T2.slug,
                     T2.keywords,
-                    T2.description
-                    T2.parent_id as parent
+                    T2.description,
+                    T2.parent_id as parent,
                     T2.sort_order,
                     T2.is_main
                 FROM (
