@@ -1205,7 +1205,7 @@ FROM
         INSERT INTO `es_promo`
         (`product_id`, `member_id`, `created_at`, `promo_type`)
         VALUES
-        (:productId, :memberId, NOW(), 6);
+        (:productId, :memberId, :date, 6);
     </select>
 
     <select id="getProdCountBySlug">
