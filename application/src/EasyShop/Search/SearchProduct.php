@@ -182,6 +182,7 @@ class SearchProduct
      */
     public function filterByOtherParameter($parameter = array(),$productIds = array())
     {
+        // array of parameters that will disregard on filtering
         $unsetParam = array(
                             'q_str'
                             ,'q_cat'
@@ -193,6 +194,7 @@ class SearchProduct
                             ,'location'
                             ,'sort'
                             ,'typeview'
+                            ,'page'
                         );
 
         $finalizedParamter = array();
