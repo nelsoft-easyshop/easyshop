@@ -3,6 +3,7 @@
 namespace EasyShop\Repositories;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Query\ResultSetMapping;
 use EasyShop\Entities\EsMember as EsMember; 
 
 
@@ -23,8 +24,33 @@ class EsMemberRepository extends EntityRepository
                         ->getQuery();
                     
         $result = $qb->getResult();
-        return count($result);
-             
+        return $result;             
     }    
+
+    /**
+     * Checks if the userId exists
+     *
+     * @param int $id_member
+     * @return int
+     */
+    public function getUserCountById($id_member)
+    {
+        $this->em = $this->_em;
+        $rsm = new ResultSetMapping(); 
+        $rsm->addScalarResult('id_member', 'id_member');
+
+        $sql = " 
+          SELECT *
+          FROM es_member
+          WHERE id_member = :id_member
+        ";
+        
+        $query = $this->em->createNativeQuery($sql, $rsm);
+        $query->setParameter('id_member', $id_member);
+        
+        $result = $query->getResult();
+        return count($result);        
+             
+    }     
 
 }
