@@ -7,7 +7,7 @@ if (!defined('BASEPATH'))
 use EasyShop\Entities\EsProduct;
 
 class product_search extends MY_Controller {
-	
+    
     function __construct()  
     { 
         parent::__construct(); 
@@ -29,29 +29,29 @@ class product_search extends MY_Controller {
      */
     function sch_onpress()
     {  
-    	header('Content-Type: text/plain'); 
-    	if($this->input->get('q')){
+        header('Content-Type: text/plain'); 
+        if($this->input->get('q')){
 
-    		$html = "";
-    		$stringData =  $this->input->get('q'); 
-    		$string = ltrim($stringData);  
-    		$words = explode(" ",trim($string)); 
-    		$keywords = $this->search_model->itemKeySearch($words);
+            $html = "";
+            $stringData =  $this->input->get('q'); 
+            $string = ltrim($stringData);  
+            $words = explode(" ",trim($string)); 
+            $keywords = $this->search_model->itemKeySearch($words);
            
-    		if(count($keywords) <= 0){
-    			$html = 0;
-    		}else{
-    			$html .= "<ul>";
-    			foreach ($keywords as $value) {
-    				$showValue = $this->highlights($value,$stringData);
-    				$html .= "<li><a href='".base_url()."search/search.html?q_str=".urlencode($value)."&q_cat=1'>".$showValue."</a></li>";
+            if(count($keywords) <= 0){
+                $html = 0;
+            }else{
+                $html .= "<ul>";
+                foreach ($keywords as $value) {
+                    $showValue = $this->highlights($value,$stringData);
+                    $html .= "<li><a href='".base_url()."search/search.html?q_str=".urlencode($value)."&q_cat=1'>".$showValue."</a></li>";
 
-    			}
-    			$html .= "</ul>";
-    		}
+                }
+                $html .= "</ul>";
+            }
 
-    		echo $html;
-    	}
+            echo $html;
+        }
     }
 
     /**
@@ -78,6 +78,7 @@ class product_search extends MY_Controller {
         $startPrice = $this->input->get('startprice');
         $endPrice = $this->input->get('endprice');
         $memberId = $this->session->userdata('member_id');
+        $page = ($this->input->get('page')) ? $this->input->get('page') : 0;
         $category = ($category > 1) ? $EsCatRepository->getChildCategoryRecursive($category):array('1');
         if(count($_GET)>0){
             $productIds = $originalOrder = ($string != "")?$searchProductService->filterBySearchString($string):array();
@@ -117,12 +118,18 @@ class product_search extends MY_Controller {
             $productIds = ($brand) ? $searchProductService->filterByBrand($brand,$productIds,TRUE) : $productIds;
             $productIds = $searchProductService->filterByOtherParameter($this->input->get(),$productIds); 
 
-            $filteredProduct = $EsProductRepository->getDetails($productIds,0,$this->per_page);
- 
+            $filteredProduct = $EsProductRepository->getDetails($productIds,$page,$this->per_page);
             $discountedProduct = ($filteredProduct > 0) ? $productManager->getDiscountedPrice($filteredProduct,$memberId) : array();
-
             $filterSellerProduct = ($seller != "")?$searchProductService->filterBySeller($seller,$discountedProduct):$discountedProduct;
             $response['products'] = ($startPrice) ? $searchProductService->filterByPrice($startPrice,$endPrice,$filterSellerProduct) : $filterSellerProduct;
+
+            // if ajax request display json data of products
+            if($this->input->get('page')){
+                $response['typeview'] = $this->input->get('typeview');
+                $data['view'] = $this->load->view('pages/search/product_search_by_searchbox_more',$response,TRUE);
+                $data['count'] = count($response['products']);
+                die(json_encode($data));
+            }
 
             $finalizedProductId = array();
             foreach ($response['products'] as $key => $value) {
@@ -168,75 +175,6 @@ class product_search extends MY_Controller {
         $this->load->view('templates/footer');
     }
 
-    public function advanceMore($pageNumber)
-    {
-        $searchProductService = $this->serviceContainer['search_product']; 
-        $productManager = $this->serviceContainer['product_manager']; 
-        $collectionHelper = $this->serviceContainer['collection_helper']; 
-        $categoryManager = $this->serviceContainer['category_manager']; 
-
-        $EsProductRepository = $this->em->getRepository('EasyShop\Entities\EsProduct');
-        $EsCatRepository = $this->em->getRepository('EasyShop\Entities\EsCat');
-        $EsLocationLookupRepository = $this->em->getRepository('EasyShop\Entities\EsLocationLookup');
-
-        $string = $this->input->get('q_str');
-        $category = $getParamCategory = $this->input->get('q_cat');
-        $brand = $this->input->get('brand');
-        $condition = $this->input->get('condition');
-        $seller = $this->input->get('seller');
-        $location = $this->input->get('location');
-        $startPrice = $this->input->get('startprice');
-        $endPrice = $this->input->get('endprice');
-        $memberId = $this->session->userdata('member_id');
-        $category = ($category > 1) ? $EsCatRepository->getChildCategoryRecursive($category):array('1');
-        $productIds = $originalOrder = ($string != "")?$searchProductService->filterBySearchString($string):array();
-
-        if($string == "" && $condition == "" && $seller == "" && $location == ""){ 
-            $productIds = $searchProductService->filterByCategory($category,$productIds,FALSE);
-        }
-        else{
-            $boolean = ($string == "")?FALSE:TRUE; 
-            $productIds = $searchProductService->filterByCategory($category,$productIds,$boolean);
-        }  
-        
-        if($condition!= ""){
-            if($string == "" && $seller == "" && $location == "" && $getParamCategory == 1){ 
-                $productIds = $searchProductService->filterByCondition($condition,$productIds,FALSE);
-            }
-            else{
-                $productIds = ($condition != "")?$searchProductService->filterByCondition($condition,$productIds,TRUE):$productIds;
-            }
-        }
-
-        if($seller!= ""){
-            if($string == "" && $condition == "" && $seller != "" && $location == "" && $getParamCategory == 1){
-                $productIds = $EsProductRepository->findBySeller($seller);
-            }
-        }
-
-        if($location!= ""){
-            if($string == "" && $condition == "" && $seller == "" && $location != "" && $getParamCategory == 1){
-                $productIds = $searchProductService->filterByLocation($location,$productIds,FALSE);
-            }
-            else{
-                $productIds = ($location != "")?$searchProductService->filterByLocation($location,$productIds,TRUE):$productIds;
-            }
-        }
-
-        $productIds = ($brand) ? $searchProductService->filterByBrand($brand,$productIds,TRUE) : $productIds;
-        $productIds = $searchProductService->filterByOtherParameter($this->input->get(),$productIds); 
-
-        $filteredProduct = $EsProductRepository->getDetails($productIds,$pageNumber,$this->per_page);
-        $discountedProduct = ($filteredProduct > 0) ? $productManager->getDiscountedPrice($filteredProduct,$memberId) : array();
-
-        $response['typeview'] = $this->input->get('typeview');
-        $filterSellerProduct = ($seller != "")?$searchProductService->filterBySeller($seller,$discountedProduct):$discountedProduct;
-        $response['products'] = ($startPrice) ? $searchProductService->filterByPrice($startPrice,$endPrice,$filterSellerProduct) : $filterSellerProduct;
-        $data['view'] = $this->load->view('pages/search/product_search_by_searchbox_more',$response,TRUE);
-        $data['count'] = count($response['products']);
-        die(json_encode($data));
-    }
-
     /*   
      *   Returns results of searching products through the search bar
      *   Route: search/(:any)
@@ -256,6 +194,7 @@ class product_search extends MY_Controller {
         $startPrice = $this->input->get('startprice');
         $endPrice = $this->input->get('endprice');
         $memberId = $this->session->userdata('member_id');
+        $page = ($this->input->get('page')) ? $this->input->get('page') : 0;
         $category = ($category > 1) ? $EsCatRepository->getChildCategoryRecursive($category):array('1');
 
         $productIds = $searchProductService->filterBySearchString($string);
@@ -263,11 +202,19 @@ class product_search extends MY_Controller {
         $productIds = ($brand) ? $searchProductService->filterByBrand($brand,$productIds,TRUE) : $productIds;
         $productIds = ($condition) ? $searchProductService->filterByCondition($condition,$productIds,TRUE) : $productIds; 
         $productIds = $searchProductService->filterByOtherParameter($this->input->get(),$productIds);
-        $filteredProduct = $EsProductRepository->getDetails($productIds,0,$this->per_page);
+        $filteredProduct = (count($productIds)>0)?$EsProductRepository->getDetails($productIds,$page,$this->per_page):array();
         $discountedProduct = $productManager->getDiscountedPrice($filteredProduct,$memberId);
 
         $response['products'] = ($startPrice) ? $searchProductService->filterByPrice($startPrice,$endPrice,$discountedProduct) : $discountedProduct;
         
+        // if ajax request display json data of products
+        if($this->input->get('page')){
+            $response['typeview'] = $this->input->get('typeview');
+            $data['view'] = $this->load->view('pages/search/product_search_by_searchbox_more',$response,TRUE);
+            $data['count'] = count($response['products']);
+            die(json_encode($data));
+        }
+
         $finalizedProductId = array();
         foreach ($response['products'] as $key => $value) {
             array_push($finalizedProductId, $value['idProduct']);
@@ -295,38 +242,6 @@ class product_search extends MY_Controller {
         $this->load->view('templates/header', $data); 
         $this->load->view('pages/search/product_search_by_searchbox',$response);
         $this->load->view('templates/footer'); 
-    }
-
-    public function searchMore($pageNumber)
-    {
-        $searchProductService = $this->serviceContainer['search_product']; 
-        $productManager = $this->serviceContainer['product_manager']; 
-        $collectionHelper = $this->serviceContainer['collection_helper']; 
-        $EsProductRepository = $this->em->getRepository('EasyShop\Entities\EsProduct');
-        $EsCatRepository = $this->em->getRepository('EasyShop\Entities\EsCat');
-
-        $string = $this->input->get('q_str');
-        $category = $this->input->get('q_cat');
-        $brand = $this->input->get('brand');
-        $condition = $this->input->get('condition');
-        $startPrice = $this->input->get('startprice');
-        $endPrice = $this->input->get('endprice');
-        $memberId = $this->session->userdata('member_id');
-        $category = ($category > 1) ? $EsCatRepository->getChildCategoryRecursive($category):array('1');
-
-        $productIds = $searchProductService->filterBySearchString($string);
-        $productIds = ($category) ? $searchProductService->filterByCategory($category,$productIds,TRUE) : $productIds;
-        $productIds = ($brand) ? $searchProductService->filterByBrand($brand,$productIds,TRUE) : $productIds;
-        $productIds = ($condition) ? $searchProductService->filterByCondition($condition,$productIds,TRUE) : $productIds; 
-        $productIds = $searchProductService->filterByOtherParameter($this->input->get(),$productIds);
-        $filteredProduct = $EsProductRepository->getDetails($productIds,$pageNumber,$this->per_page);
-        $discountedProduct = $productManager->getDiscountedPrice($filteredProduct,$memberId);
-
-        $response['typeview'] = $this->input->get('typeview');
-        $response['products'] = ($startPrice) ? $searchProductService->filterByPrice($startPrice,$endPrice,$discountedProduct) : $discountedProduct;
-        $data['view'] = $this->load->view('pages/search/product_search_by_searchbox_more',$response,TRUE);
-        $data['count'] = count($response['products']);
-        die(json_encode($data));
     }
     
     /**
@@ -370,11 +285,11 @@ class product_search extends MY_Controller {
      */
     public function searchBrand()
     {
-	    $string = $this->input->get('data');
+        $string = $this->input->get('data');
         $explodString = explode(' ', trim($string));
         $newString = '+'.implode('* +', $explodString).'*';  
-	    $rows = $this->search_model->searchBrand($newString);
-	    echo json_encode($rows);
+        $rows = $this->search_model->searchBrand($newString);
+        echo json_encode($rows);
     }
 
     /**
@@ -412,7 +327,7 @@ class product_search extends MY_Controller {
 
         $html .= '</ul>' . PHP_EOL;
 
-	    return $html;
+        return $html;
     }
 
 

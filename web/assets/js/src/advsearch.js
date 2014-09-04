@@ -246,7 +246,7 @@ function getParameterByName(name)
                 if (request_ajax === true && ajax_is_on === false) {
                     ajax_is_on = true;
                     $.ajax({
-                        url: loadUrl + offset +'?'+ currentQueryString+'&typeview='+typeView,
+                        url: currentUrl+'&typeview='+typeView+'&page='+offset,
                         type: 'get',
                         async: false,
                         dataType: 'json',
