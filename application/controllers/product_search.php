@@ -188,7 +188,7 @@ class product_search extends MY_Controller {
         $EsProductRepository = $this->em->getRepository('EasyShop\Entities\EsProduct');
         $EsCatRepository = $this->em->getRepository('EasyShop\Entities\EsCat');
 
-        $string = $this->input->get('q_str');
+        $string = ($this->input->get('q_str')) ? $this->input->get('q_str') : "";
         $category = $this->input->get('q_cat');
         $brand = $this->input->get('brand');
         $condition = $this->input->get('condition');
