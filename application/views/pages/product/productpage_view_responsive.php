@@ -321,7 +321,7 @@
 										<?PHP endif;?>
 									</td>
 									<td width="40%" class="v-align-top td-price">
-										Availability: <span class="quantity" data-qty="" data-default="false"></span>
+										Availability: <span class="quantity quantity_m" data-qty="" data-default="false"></span>
 									</td>
 								</tr>
 							</table>
