@@ -17,10 +17,10 @@ class AccountService extends MY_Controller
     {   
         parent::__construct();
         $this->em = $this->serviceContainer['entity_manager'];             
-        if($this->input->post()){
+/*        if($this->input->post()){
             $this->authentication($this->input->post(), $this->input->post('hash'));
         }  
-
+*/
     }
 
 
@@ -47,7 +47,7 @@ class AccountService extends MY_Controller
     {
 
         $result  = $this->em->getRepository('EasyShop\Entities\EsMember')->getUserCount();
-        return $result;
+        return count($result);
     }
 
 }
