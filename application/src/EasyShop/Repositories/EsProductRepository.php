@@ -35,33 +35,35 @@ class EsProductRepository extends EntityRepository
         $rsm->addFieldResult('u', 'discount', 'discount');
         $rsm->addFieldResult('u', 'isSoldOut', 'isSoldOut');
         $query = $this->em->createNativeQuery("
-        SELECT `id_product` as idProduct
-            , `name`
-            , `price`
-            , `slug`
-            , `brief`
-            , `condition`
-            , `startdate`
-            , `enddate`
-            , `is_promote` as isPromote
-            , `promo_type` as promoType
-            , `discount`
-            , `is_sold_out` as isSoldOut
-            , (ftscore_name + ftscore2_name + ftscore3_name + ftscore + ftscore2 + ftscore3 ) AS weight 
+            SELECT `id_product` as idProduct
+                , `name`
+                , `price`
+                , `slug`
+                , `brief`
+                , `condition`
+                , `startdate`
+                , `enddate`
+                , `is_promote` as isPromote
+                , `promo_type` as promoType
+                , `discount`
+                , `is_sold_out` as isSoldOut
+                , `weight`
             FROM (
-                SELECT 
-                    MATCH (`name`) AGAINST (:param0 IN BOOLEAN MODE) * 3 AS ftscore_name,
-                    MATCH (`search_keyword`) AGAINST (:param0 IN BOOLEAN MODE) * 1.5 AS ftscore,
-                    MATCH (`name`) AGAINST (:param1 IN BOOLEAN MODE) * 2 AS ftscore2_name,
-                    MATCH (`search_keyword`) AGAINST (:param1 IN BOOLEAN MODE) * 1 AS ftscore2, 
-                    MATCH (`name`) AGAINST (:param2 IN BOOLEAN MODE) * 5 AS ftscore3_name,
-                    MATCH (`search_keyword`) AGAINST (:param2 IN BOOLEAN MODE) * 2.5 AS ftscore3, 
-                    id_product,`name`,price,brief,slug,`condition`,startdate, enddate,is_promote,promo_type,discount
-                    ,`is_sold_out`
-                FROM es_product
-                WHERE is_delete = 0 AND is_draft = 0 ) AS score_tbl
-        HAVING weight > 0
-        ORDER BY weight DESC,name ASC 
+                    SELECT 
+                        (MATCH (`name`) AGAINST (:param0 IN BOOLEAN MODE) * 3) +
+                        (MATCH (`search_keyword`) AGAINST (:param0 IN BOOLEAN MODE) * 1.5) +
+                        MATCH (`name`) AGAINST (:param1 IN BOOLEAN MODE) +
+                        (MATCH (`search_keyword`) AGAINST (:param1 IN BOOLEAN MODE) * 0.5) +
+                        (MATCH (`name`) AGAINST (:param2 IN BOOLEAN MODE) * 5) +
+                        (MATCH (`search_keyword`) AGAINST (:param2 IN BOOLEAN MODE) * 2) AS weight,
+                        id_product,`name`,price,brief,slug,`condition`,startdate, enddate,is_promote,promo_type,discount
+                        ,`is_sold_out`
+                    FROM es_product
+                    WHERE is_delete = 0 AND is_draft = 0 
+                    AND MATCH (`search_keyword`) AGAINST (:param1 IN BOOLEAN MODE)
+                ) as score_table
+            HAVING weight > 0
+            ORDER BY weight DESC,name ASC
         ", $rsm);
         $query->setParameter('param0', $stringCollection[0]);
         $query->setParameter('param1', $stringCollection[1]); 
