@@ -2736,6 +2736,7 @@ class product_model extends CI_Model
         $sth = $this->db->conn_id->prepare($query);
         $sth->bindParam(':productId', $productId);
         $sth->bindParam(':memberId', $memberId);
+        $sth->bindParam(':date', date('Y-m-d H:i:s'));
         $sth->execute();
 
         return true;
