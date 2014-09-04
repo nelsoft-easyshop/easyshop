@@ -16,7 +16,7 @@
             $("#prod_image img").attr('src', '');
             $(".claim-details h3").html('');
             $(".claim-details p").html('');
-            $('#scratch-win-error, #scratch-win-claim, .scratch-win-form > h3, .scratch-win-form > ol').hide();
+            $('#scratch-win-error, #scratch-win-claim, .scratch-win-form > h3, .scratch-win-form > ol, .scratch-win-form > p').hide();
 
             $.ajax({
                 url: '/promo/ScratchCard/validateScratchCardCode',
