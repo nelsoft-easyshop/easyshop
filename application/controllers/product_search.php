@@ -116,7 +116,8 @@ class product_search extends MY_Controller {
             }
 
             $productIds = ($brand) ? $searchProductService->filterByBrand($brand,$productIds,TRUE) : $productIds;
-            $productIds = $searchProductService->filterByOtherParameter($this->input->get(),$productIds); 
+            $productIds = $searchProductService->filterByOtherParameter($this->input->get(),$productIds);  
+            $productIds = (count($originalOrder)>0) ? array_intersect($originalOrder, $productIds) : $productIds; 
 
             $filteredProduct = $EsProductRepository->getDetails($productIds,$page,$this->per_page);
             $discountedProduct = ($filteredProduct > 0) ? $productManager->getDiscountedPrice($filteredProduct,$memberId) : array();
@@ -197,11 +198,13 @@ class product_search extends MY_Controller {
         $page = ($this->input->get('page')) ? $this->input->get('page') : 0;
         $category = ($category > 1) ? $EsCatRepository->getChildCategoryRecursive($category):array('1');
 
-        $productIds = $searchProductService->filterBySearchString($string);
-        $productIds = ($category) ? $searchProductService->filterByCategory($category,$productIds,TRUE) : $productIds;
-        $productIds = ($brand) ? $searchProductService->filterByBrand($brand,$productIds,TRUE) : $productIds;
+        $productIds = $originalOrder = $searchProductService->filterBySearchString($string); 
+        $productIds = ($category) ? $searchProductService->filterByCategory($category,$productIds,TRUE) : $productIds; 
+        $productIds = ($brand) ? $searchProductService->filterByBrand($brand,$productIds,TRUE) : $productIds; 
         $productIds = ($condition) ? $searchProductService->filterByCondition($condition,$productIds,TRUE) : $productIds; 
         $productIds = $searchProductService->filterByOtherParameter($this->input->get(),$productIds);
+        $productIds = array_intersect($originalOrder, $productIds);
+
         $filteredProduct = (count($productIds)>0)?$EsProductRepository->getDetails($productIds,$page,$this->per_page):array();
         $discountedProduct = $productManager->getDiscountedPrice($filteredProduct,$memberId);
 
@@ -216,8 +219,10 @@ class product_search extends MY_Controller {
         }
 
         $finalizedProductId = array();
+        $availableCondition = array();
         foreach ($response['products'] as $key => $value) {
             array_push($finalizedProductId, $value['idProduct']);
+            array_push($availableCondition, $value['condition']);
         }
 
         $organizedAttribute = array();
@@ -227,6 +232,7 @@ class product_search extends MY_Controller {
             $brands = $EsProductRepository->getBrands($finalizedProductId);
             $organizedAttribute = $collectionHelper->organizeArray($attributes);
             $organizedAttribute['Brand'] = $brands;
+            $organizedAttribute['Condition'] = array_unique($availableCondition);
             ksort($organizedAttribute);
         }
 
