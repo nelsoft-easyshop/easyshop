@@ -2689,8 +2689,15 @@ class product_model extends CI_Model
         $sth = $this->db->conn_id->prepare($query);
         $sth->bindParam(':code', $code);
         $sth->execute();
-
-        return $sth->fetchAll(PDO::FETCH_ASSOC);
+        $product = $sth->fetchAll(PDO::FETCH_ASSOC);
+        if($product){
+            $quantity = $this->getProductQuantity($product[0]['id_product'], false, false, true);
+            $product[0]['quantity'] = reset($quantity)['quantity'];
+            if(intval($product[0]['quantity']) === 0){
+                $product = false;
+            }
+        }
+        return $product;
     }
 
     /**
