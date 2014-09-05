@@ -5113,7 +5113,8 @@ div.post_item_content_left {
 
 .edit_vendor_cover,
 .vendor_edit_avatar,
-#store_desc_edit {
+#store_desc_edit,
+#store_name_edit {
     -webkit-transition: all 0.3s ease-in-out;
     -moz-transition:    all 0.3s ease-in-out;
     -o-transition:      all 0.3s ease-in-out;
@@ -5122,7 +5123,8 @@ div.post_item_content_left {
 
 .edit_vendor_cover:hover,
 .vendor_edit_avatar:hover,
-#store_desc_edit:hover {
+#store_desc_edit:hover,
+#store_name_edit:hover {
     background-color: #cecece;
 }
 

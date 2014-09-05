@@ -102,6 +102,11 @@ class Kernel
             return new \EasyShop\XML\Resource($configurationService);
         };
         
+        //User Manager
+        $container['user_manager'] = function ($c) {
+            return new \EasyShop\User\UserManager();
+        }
+
         /* Register services END */
         $this->serviceContainer = $container;
     }

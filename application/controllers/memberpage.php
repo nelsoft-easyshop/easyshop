@@ -806,6 +806,32 @@ class Memberpage extends MY_Controller
         echo json_encode($serverResponse);
     }
     
+    public function vendorStoreName()
+    {
+        $serverResponse = array(
+            'result' => 'fail',
+            'error' => 'Failed to submit form'
+        );
+
+        if($this->input->post('store_name_hidden')){
+            $storeName = trim($this->input->post('store_name'));
+            $memberId = $this->session->userdata('member_id');
+
+            if( $this->memberpage_model->checkStoreName($memberId, $storeName) ){
+                $boolResult = $this->memberpage_model->updateStoreName($memberId, $storeName);
+                
+                $serverResponse['result'] = $boolResult ? 'success':'fail';
+                $serverResponse['error'] = $boolResult ? '' : 'Failed to update database.';
+            }
+            else{
+                $serverResponse['error'] = "Store Name already used !";
+            }
+        }
+
+        echo json_encode($serverResponse);
+    }
+
+
     /**
      *  Used for uploading banner in vendor page. 
      */

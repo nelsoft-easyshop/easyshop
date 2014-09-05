@@ -370,6 +370,54 @@ $(function(){
 	});
 });
 
+(function(){
+    $(function(){
+
+        $('#store_name_edit').on('click',function(){
+            $('#user_store_echo').hide();
+            $('#user_store_edit').show();
+        });
+
+        $('#store_name_cancel').on('click',function(){
+            var textarea = $(this).siblings('input[name="store_name"]');
+            var origName = textarea.data('origname');
+
+            $('#user_store_echo').show();
+            $('#user_store_edit').hide();
+            textarea.val(origName);
+        });
+
+        $('#store_name_submit').on('click',function(){
+            var form = $(this).closest('form');
+            var thisbtn = $(this);
+            var btnSet = $('#store_name_cancel, #store_name_submit');
+
+            thisbtn.val('Saving...');
+            btnSet.attr('disabled', true);
+
+            $.post(config.base_url+'memberpage/vendorStoreName', $(form).serializeArray(), function(data){
+                try{
+                    var obj = jQuery.parseJSON(data);
+                }
+                catch(e){
+                    alert('There was an error while processing your request. Please try again later.');
+                    return false;
+                }
+
+                if(obj.result === 'success'){
+                    location.reload(true);
+                }
+                else{
+                    thisbtn.val('Save');
+                    btnSet.attr('disabled', false);
+                    alert(obj.error);
+                }
+            });
+        });
+
+    })
+})(jQuery);
+
 
 function ItemListAjax(ItemDiv,start,pageindex,count_i){
 
