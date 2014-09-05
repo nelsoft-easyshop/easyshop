@@ -99,9 +99,9 @@ class Login extends MY_Controller
              */
             
             $em = $this->serviceContainer['entity_manager'];
-            $user = $em->find('\EasyShop\Entities\User', ['id' => $row['o_memberid']]);
-            $session = $em->find('\EasyShop\Entities\Session', ['id' => $this->session->userdata('session_id')]);
-            $authenticatedSession = new \EasyShop\Entities\AuthenticatedSession();
+            $user = $em->find('\EasyShop\Entities\EsMember', ['id' => $row['o_memberid']]);
+            $session = $em->find('\EasyShop\Entities\CiSessions', ['id' => $this->session->userdata('session_id')]);
+            $authenticatedSession = new \EasyShop\Entities\EsAuthenticatedSession();
             $authenticatedSession->setUser($user)
                                  ->setSession($session);
             $em->persist($authenticatedSession);
