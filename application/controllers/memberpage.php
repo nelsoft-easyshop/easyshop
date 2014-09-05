@@ -806,25 +806,33 @@ class Memberpage extends MY_Controller
         echo json_encode($serverResponse);
     }
     
+    /**
+     *  Used to modify store name in vendor page
+     *
+     *  @return JSON
+     */
     public function vendorStoreName()
     {
         $serverResponse = array(
-            'result' => 'fail',
+            'result' => false,
             'error' => 'Failed to submit form'
         );
 
         if($this->input->post('store_name_hidden')){
-            $storeName = trim($this->input->post('store_name'));
+            $storeName = $this->input->post('store_name');
             $memberId = $this->session->userdata('member_id');
+            $userMgr = $this->serviceContainer['user_manager'];
 
-            if( $this->memberpage_model->checkStoreName($memberId, $storeName) ){
-                $boolResult = $this->memberpage_model->updateStoreName($memberId, $storeName);
-                
-                $serverResponse['result'] = $boolResult ? 'success':'fail';
-                $serverResponse['error'] = $boolResult ? '' : 'Failed to update database.';
-            }
-            else{
-                $serverResponse['error'] = "Store Name already used !";
+            $boolResult = $userMgr->setStoreName($memberId, $storeName);
+
+            $serverResponse['result'] = $boolResult;
+            $serverResponse['error'] = $boolResult ? '' : 'Store name already used!';
+
+            if($boolResult){
+                $em = $this->serviceContainer['entity_manager'];
+                $currUser = $em->find('EasyShop\Entities\EsMember',$memberId);
+                $serverResponse['username'] = $currUser->getUsername();
+                $serverResponse['storename'] = $currUser->getStoreName();
             }
         }
 

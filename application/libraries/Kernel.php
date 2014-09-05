@@ -110,7 +110,7 @@ class Kernel
         //User Manager
         $container['user_manager'] = function ($c) {
             return new \EasyShop\User\UserManager();
-        }
+        };
 
         // Point Tracker
         $container['point_tracker'] = function ($c) {
