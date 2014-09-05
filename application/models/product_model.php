@@ -225,9 +225,9 @@ class product_model extends CI_Model
     function getProductBySlug($slug, $add_click_count = true)
     {
         if($add_click_count){
-        $query = $this->xmlmap->getFilenameID('sql/product', 'getProductBySlug');
+            $query = $this->xmlmap->getFilenameID('sql/product', 'getProductBySlug');
         }else{
-        $query = $this->xmlmap->getFilenameID('sql/product', 'getProductBySlugNoIncrement');
+            $query = $this->xmlmap->getFilenameID('sql/product', 'getProductBySlugNoIncrement');
         }
         $sth = $this->db->conn_id->prepare($query);
         $sth->bindParam(':slug',$slug);
@@ -2268,7 +2268,7 @@ class product_model extends CI_Model
             else if($element['type'] === 'custom'){
                 $home_view_data['category_detail']['imagepath'] = '';
                 $home_view_data['category_detail']['name'] = isset($element['title'])?$element['title']:$element['value'];
-                $home_view_data['category_detail']['url'] = 'vendor/'.$element['value'];
+                $home_view_data['category_detail']['url'] = $element['value'];
             }
             $home_view_data['category_detail']['css_class'] = $element['css_class'];
             $home_view_data['category_detail']['subcategory'] = $this->getDownLevelNode($element['value']);
@@ -2388,6 +2388,13 @@ class product_model extends CI_Model
                         $bool_start_promo = true;
                     }
                     break;
+                case 6 :
+                    $PromoPrice = $baseprice;
+                    if(!( ($today < $startdate) || ($enddate < $startdate) || ($today > $enddate))){
+                        $PromoPrice = 0;
+                        $bool_start_promo = true;
+                    }
+                    break;
                 default :
                     $PromoPrice = $baseprice;
                     break;
@@ -2407,7 +2414,7 @@ class product_model extends CI_Model
 
         return $result;
     }
-
+ 
     /**
      *   Check if an item can be purchased based on the purchase limit
      *   @param int $buyer_id: id of the user
@@ -2423,7 +2430,7 @@ class product_model extends CI_Model
         $sth = $this->db->conn_id->prepare($query);
         $sth->bindParam(':buyer_id',$buyer_id, PDO::PARAM_INT);
         $sth->bindParam(':type',$type, PDO::PARAM_INT);
-    $sth->closeCursor();
+        $sth->closeCursor();
         $sth->execute();
         $result = $sth->fetchAll(PDO::FETCH_ASSOC);
         $promo = $this->config->item('Promo')[$type];      
@@ -2465,7 +2472,7 @@ class product_model extends CI_Model
             $sth->bindParam(':memberid',$memberid,PDO::PARAM_INT);
             $sth->bindParam(':cod', $cod, PDO::PARAM_INT);
             $sth->execute();
-            return true;
+            return $slug;
         }
         else{
             return false;
@@ -2577,14 +2584,14 @@ class product_model extends CI_Model
      *
      *  @return array
      */
-    public function getProductFeed($member_id,$partners_id,$product_ids,$per_page,$page=0)
+    public function getFeaturedProductFeed($member_id,$partners_id,$product_ids,$per_page,$page=0)
     { 
         $this->load->library('parser');
         
         $parseData['partners_id'] = implode(',',$partners_id);
         $parseData['product_ids'] = $product_ids;
         $parseData['limit'] = implode(",", array($page,$per_page));
-        $query = $this->xmlmap->getFilenameID('sql/product','getProductFeed'); 
+        $query = $this->xmlmap->getFilenameID('sql/product','getFeaturedProductFeed'); 
         $query = $this->parser->parse_string($query, $parseData, true);
     
         $seta = $this->db->conn_id->prepare('SET @a = -1');
@@ -2601,6 +2608,7 @@ class product_model extends CI_Model
         explodeImagePath($row);
         
         foreach($row as $k=>$r){
+            applyPriceDiscount($row[$k]);
             if($r['imgurl'] === ""){
                 $row[$k]['imgurl'] = "assets/user/default/60x60.png";
             }
@@ -2631,6 +2639,7 @@ class product_model extends CI_Model
         explodeImagePath($row);
         
         foreach($row as $k=>$r){
+            applyPriceDiscount($row[$k]);
             if($r['imgurl'] === ""){
                 $row[$k]['imgurl'] = "assets/user/default/60x60.png";
             }
@@ -2667,8 +2676,6 @@ class product_model extends CI_Model
         
         foreach( $products as $p ){
             $item = $this->getProductBySlug($p->slug, false);
-            $temp = array($item);
-            explodeImagePath($temp);
             $data[]= $item;
         }
         
@@ -2700,4 +2707,83 @@ class product_model extends CI_Model
     
     }
     
+    /**
+     *  Check if code exists
+     *
+     * @param $code
+     * @return boolean
+     */
+    public function validateBuyAtZeroCode($code)
+    {
+        $query = $this->xmlmap->getFilenameID('sql/product', 'validateBuyAtZeroCode');
+        $sth = $this->db->conn_id->prepare($query);
+        $sth->bindParam(':code', $code);
+        $sth->execute();
+
+        return $sth->fetchAll(PDO::FETCH_ASSOC);
+    }
+    
+    
+    /**
+     * Check if member already joined the promo
+     *
+     * @Param $productId
+     * @Param $memberId
+     * @Return boolean
+     */
+    public function validateMemberForBuyAtZeroPromo($productId, $memberId)
+    {
+        $query = $this->xmlmap->getFilenameID('sql/product', 'buyAtZeroAuthenticate');
+        $sth = $this->db->conn_id->prepare($query);
+        $sth->bindParam(':productId', $productId);
+        $sth->bindParam(':memberId', $memberId);
+        $sth->execute();
+        $cnt = $sth->fetchAll(PDO::FETCH_ASSOC)[0]['cnt'];
+        $result = true;
+        if($cnt >= 1){
+            $result = false;
+        }
+
+        return $result;
+    }
+    
+    /**
+     * Join member to buyAtZero php promo
+     *
+     * @Param $productId
+     * @Param $memberId
+     * @Return boolean
+     */
+    public function registerMemberForBuyAtZeroPromo($productId, $memberId)
+    {
+        $auth = $this->validateMemberForBuyAtZeroPromo($productId, $memberId);
+
+        if($auth == false){
+            return false;
+        }
+        $query = $this->xmlmap->getFilenameID('sql/product', 'buyAtZeroRegistration');
+        $sth = $this->db->conn_id->prepare($query);
+        $sth->bindParam(':productId', $productId);
+        $sth->bindParam(':memberId', $memberId);
+        $sth->bindParam(':date', date('Y-m-d H:i:s'));
+        $sth->execute();
+
+        return true;
+    }
+    
+    public function getProdCountBySlug($slug)
+    {  
+        $query = $this->xmlmap->getFilenameID('sql/product','getProdCountBySlug');
+        $sth = $this->db->conn_id->prepare($query);
+        $sth->bindParam(':slug',$slug); 
+        $sth->execute(); 
+        $number_of_rows = $sth->fetchColumn(); 
+        return $number_of_rows;
+    }        
+        
+    
 }
+
+/* End of file product_model.php */
+/* Location: ./application/models/product_model.php */
+

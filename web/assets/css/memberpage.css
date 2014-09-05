@@ -1,6 +1,79 @@
-<!--Member page CSS Janz-->
+/** <!--Member page CSS Janz--> **/
 
+.btn2 {
+  padding: 6px 12px;
+  margin-bottom: 0;
+  font-size: 14px;
+  font-weight: normal;
+  line-height: 1.42857143;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  cursor: pointer;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  background-image: none;
+  border: 1px solid transparent;
+  border-radius: 4px;
+}
 
+.btn:hover,
+.btn:focus {
+  color: #333;
+  text-decoration: none;
+}
+
+.btn-follow {
+    color: #fff;
+    background-color: #6dabe1;
+    border: 1px solid #428bca;
+}
+
+.btn-unfollow {
+  color: #fff;
+  background-color: #428bca;
+  border-color: #357ebd;
+}
+
+.btn-follow:hover {
+  color: #fff;
+  background-color: #3071a9;
+  border-color: #285e8e;
+}
+
+.btn-unfollow:hover {
+    color: #fff;
+    background-color: #cb3e3e;
+    border-color: #972222; 
+}
+
+.sprite-bg {
+    background-image: url('../images/landingpage/glyphicons-halflings-white.png');
+    background-repeat: no-repeat;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.sprite-bg2 {
+    background-image: url('../images/landingpage/glyphicons-halflings.png');
+    background-repeat: no-repeat;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.follow-icon {
+    width: 20px;
+    height: 20px;
+    background-position: 3px -94px;
+}
+
+.unfollow-icon {
+    width: 20px;
+    height: 20px;
+    background-position: -21px -94px;
+}
 
 /* Overlay */
 #simplemodal-overlay {
@@ -10,19 +83,21 @@
 /* Container */
 #simplemodal-container {
     font-size: 12px;
-	height: auto !important;
+    height: auto !important;
     max-height: 415px !important;
-	width: 1005px !important; 
-	background-color:#0000;
-	padding: 5px;
-	-webkit-box-shadow: 0px 0px 10px 0px rgba(50, 50, 50, 0.75);
--moz-box-shadow:    0px 0px 10px 0px rgba(50, 50, 50, 0.75);
-box-shadow:         0px 0px 10px 0px rgba(50, 50, 50, 0.75);
+    width: 1005px !important; 
+    background-color:#fff;
+    padding: 5px;
+    overflow: auto;
+
+    -webkit-box-shadow: 0px 0px 10px 0px rgba(50, 50, 50, 0.75);
+    -moz-box-shadow:    0px 0px 10px 0px rgba(50, 50, 50, 0.75);
+    box-shadow:         0px 0px 10px 0px rgba(50, 50, 50, 0.75);
 }
 
-/*#simplemodal-container .simplemodal-wrap {
-    overflow: hidden !important;
-}*/
+#simplemodal-container .simplemodal-wrap {
+    overflow: inherit !important;
+}
 
 .jcrop-holder{
 	margin: auto !important;
@@ -324,32 +399,56 @@ table.sales_summary tr.sales_info:hover td.amount{
 /* MINI TOP HEADER */
 
 .quickheader_css{
-	margin-bottom:10px;
-	height: 35px;
-	line-height: 35px;
-	background-color:#E9E9E9;
-	vertical-align: middle;
+    padding: 15px 8px 15px 8px;
+    margin-bottom: 18px;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+    background-color: #fcf8e3;
+    border: 1px solid #fbeed5;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+
+    font-size: 14px;
+    color:#c09853;
 }
 
 .quickheader_css > *{
-	margin-left: 5px;
+    margin-left: 5px;
 }
 
 .quickheader_css > div{
-	display: inline-block;
-	width: 90%;
+    display:inline-block;
+    width: 83%;
 }
 
-.edit_userslug_css{
-	color: #06F;
-	cursor: pointer;
-	font-size: 10px;
-	margin-left: 5px;
+.quickheader_css a{
+    font-size: 14px;
+    color:#c09853;
 }
 
-.editslug_btn_css{
-	cursor:pointer;
-	width: 50px;
+.edit_userslug_css .edit-lnk {
+    background-position: -257px -57px !important;
+    background-color: #fcf8e3;
+    font-size: 13px;
+    color: #c09853;
+    padding-left: 20px;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+#security_settings .edit-lnk{
+    background-position: -257px -48px !important;
+    background-color: white;
+    font-size: 13px;
+    color: #0191C8;
+    padding-left: 20px;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+
+#security_settings{
+    font-size: 13px;
 }
 
 /**	Security Settings VENDOR URL CSS **/
@@ -360,7 +459,7 @@ table.sales_summary tr.sales_info:hover td.amount{
 }
 
 #security_settings .settings_vendordiv_css > a{
-	font-size: 12px ;
+	font-size: 14px ;
 	color: #494949 ;
 	margin: 0px 0px 0px 0px ; 
 	padding: 0px 0px 0px 0px ;
@@ -371,11 +470,11 @@ table.sales_summary tr.sales_info:hover td.amount{
 }
 
 #security_settings .editslug_btn_css{
-	width: 55px;
-	border: none;
-	border-radius: 3px;
-	height: 30px;
-	padding: 5px 10px;
-	margin-left: 5px;
-	margin-right: 0px;
+    width: 60px;
+    border: none;
+    border-radius: 3px;
+    height: 30px;
+    padding: 5px 10px;
+    margin-left: 5px;
+    margin-right: 0px;
 }

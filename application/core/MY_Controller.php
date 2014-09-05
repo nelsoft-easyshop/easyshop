@@ -19,10 +19,10 @@ class MY_Controller extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-        //$this->config->set_item('base_url',"https://".$_SERVER["SERVER_NAME"].":".$_SERVER["SERVER_PORT"]."/");
         $this->config->set_item('base_url',"https://".$_SERVER["SERVER_NAME"]."/");
 
         $url = uri_string();
+        
         if($url !== 'login'){
             $this->session->set_userdata('uri_string', $url);
         }
@@ -168,6 +168,36 @@ class MY_Controller extends CI_Controller
         }
         $array = $temp; 
     }
+    
+    /**
+     *  Authentication method for webservice
+     *
+     *  @param string $postedData
+     *  @param string $postedHash
+     *  @param string $evaluate
+     */
+    public function authentication($postedData, $postedHash, $evaluate = "")
+    {
+        foreach ($postedData as $data => $value) {
+            
+            if($data == "hash" || $data == "_token" || $data == "csrfname" || $data == "callback" || $data == "password" || $data == "_") {
+                 continue;               
+            }
+
+            else
+                $evaluate .= $value;
+        }
+        $this->load->model("user_model");
+        $password = $this->user_model->getAdminUser($postedData["userid"]);
+
+        $hash = $evaluate.$password["password"];
+
+        if(sha1($hash) != $postedHash){
+            $error = json_encode("error");
+                    exit($error);
+        }   
+    }
+
 
     #new query for getting reviews (top5 Main reviews) - Janz
     function getReviews($product_id, $sellerid)

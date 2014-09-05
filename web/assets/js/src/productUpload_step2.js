@@ -94,20 +94,20 @@ function askDraft(location)
             open: function() {
             },
             buttons: {
-                "Yes Save as Draft and Leave": function() {
+                "Save as draft": function() {
                     $(".ui-dialog-title").text('Please wait while saving your data...'); 
                     saveAsDraftProceed();
                     window.location = location;
                 },
-                "Dont save as draft just leave": function() {
+                "Don't save as draft": function() {
                     $(".ui-dialog-title").text('Please wait...'); 
                     window.location = location;
                 },
-                "Dont leave": function() { 
+                "Cancel": function() { 
                     $(this).dialog("close");
                 }
             },
-            "title": "Your about to leave this page without saving. Do you want this to save as draft?"
+            "title": "You are about to leave the page without completing the process. Save this listing in your drafts?"
         });   
     }
     else{ 
@@ -119,13 +119,13 @@ function askDraft(location)
             open: function() {
             },
             buttons: {
-                "Ok I understand": function() {
+                "Proceed": function() {
                     $(".ui-dialog-title").text('Please wait while saving your data...'); 
                     saveAsDraftProceed();
                     window.location = location;
                 }
             },
-            "title": "Remember this item is in your draft you can edit this in step1 page."
+            "title": "This listing is about to be saved in your drafts."
         });
     }
 }
@@ -399,9 +399,9 @@ function proceedStep3(url)
             $('.percentage').empty();
             response = request.responseText;
             if (response.toLowerCase().indexOf("1001") >= 0){
-                alert('Something Went Wrong. The images you are uploading in [OTHER ATTRIBUTES] are too large.');
+                alert('Something went wrong. Some of the images you are trying to upload for this listing are too large.');
             }else{
-                alert('Something Went Wrong. Please try again.');
+                alert('Something went wrong. Please try again.');
             }
         } 
     }); 
@@ -624,10 +624,7 @@ function processAttributes()
         });
     });
 
-    $("#discountedP").bind('change keyup',function(e){
-        if(e.which > 13 || e.which < 13){
-            return false;
-        }
+    $("#discountedP").bind('change',function(e){
 
         var $this = $(this);
         var discountPrice = parseFloat($this.val());
@@ -642,14 +639,14 @@ function processAttributes()
         validateWhiteTextBox("#discountedP");
 
         if(discountPrice > basePrice){
-            alert("Discount Price cannot be greater than base price.");
+            alert("Discounted price cannot be greater than base price.");
             $this.val("0.00");
             validateRedTextBox("#discountedP");
             return false;
         }
 
         if(discountPrice <= 0){
-            alert("Discount Price cannot be equal or less than 0.");
+            alert("Discounted price cannot be equal or less than 0.");
             $this.val("0.00");
             $( "span#discounted_price_con" ).text( "0.00" );
             validateRedTextBox("#discountedP");
@@ -753,7 +750,7 @@ var previous,editSelectedValue,editSelectedId;
         else{
             if(length > 0 && editSelectedValue != selectedValue){
                 $('#head-data').val(previous).trigger("liszt:updated");
-                alert(selectedValue +' already exist in the selection');
+                alert(selectedValue +' already exists in the selection.');
             }
             else{
                 $('.value-data option').not(':selected').remove();
@@ -919,7 +916,7 @@ var previous,editSelectedValue,editSelectedId;
 
         var checkIfExist = checkCombination(currentStringId);
         if(checkIfExist == false){
-            alert('Combination Already Exist!');
+            alert('<span style="font-size:13px;">The quantity for this combination has already been assigned.</span>');
             return false;
         }
         var combinationQuantity = parseInt($('.select-control-panel-option > .div1 > .qty').val());
@@ -1067,7 +1064,7 @@ var currentRequest = null;
                         $.each(obj,function(){
                             html += '<li class="brand_result" data-brandid="'+(this.id_brand) +'">'+(this.name)+'</li>';
                         });
-                        html += '<li class="add_brand blue">Use "<span style="color:red">'+searchQuery+'</span>"" as your own brand name</li>';
+                        html += '<li class="add_brand blue">Use <span style="font-style:italics;">'+searchQuery+'</span> as the brand of your listing</li>';
                         $(".brand_sch_loading").hide();
                     }
                     else{
@@ -1265,7 +1262,7 @@ var pictureCountOther  = 0; var primaryPicture = 0;
                     $('.filescnt'+filescnt+' > .removepic').hide(); 
                 break;
                 default:
-                    alert('Invalid file type. Please choose another.');
+                    alert('Invalid file type. Please choose another image.');
                     removeThisPictures.push(pictureCount); 
                     return false;
                 break;
@@ -1307,7 +1304,7 @@ var pictureCountOther  = 0; var primaryPicture = 0;
                 $('.filescnt'+filescnt+' > .removepic').show(); 
                 canProceed = true; 
                 if(d.err == '1'){ 
-                    alert(d.msg, "The Following cannot be upload <br>" + errorValues);
+                    alert(d.msg, "The following images cannot be uploaded: <br>" + errorValues);
                     $.each( arrayUpload, function( key, value ) {
                         removeThisPictures.push(value); 
                         $('#previewList'+value).remove();
@@ -1315,7 +1312,7 @@ var pictureCountOther  = 0; var primaryPicture = 0;
                 }
                 else{
                     if(errorValues != ""){
-                        alert("The Following cannot be upload" ,errorValues);
+                        alert("The following images cannot be upload: " ,errorValues);
                     }
                 }
                 if(badIE == true){
@@ -1329,11 +1326,9 @@ var pictureCountOther  = 0; var primaryPicture = 0;
                 }
             },
             error: function (request, status, error) {
-                response = request.responseText;
-                var msg = (response.toLowerCase().indexOf("1001") >= 0) ? 'Sorry, the images you are uploading are too large.' : 'Sorry, we have encountered a problem.\nPlease try again after a few minutes.';
-                
-                alert(msg,"The Following cannot be upload",errorValues);
 
+                alert('Sorry, we have encountered a problem.\nPlease try again after a few minutes.');
+                
                 $.each( arrayUpload, function( key, value ) {
                     removeThisPictures.push(value); 
                     $('#previewList'+value).remove();
@@ -1381,15 +1376,22 @@ var pictureCountOther  = 0; var primaryPicture = 0;
     $(document).on('change',".attr-image-input",function (e){
  
         var val = $(this).val();
+        var size = this.files[0].size;
+
         extension = val.substring(val.lastIndexOf('.') + 1).toLowerCase();
 
         switch(extension){
             case 'gif': case 'jpg': case 'png': case 'jpeg':             
             break;
             default:
-                alert('Invalid file type. Please choose another.');
+                alert('Invalid file type. Please choose another image.');
                 return false;
             break;
+        }
+
+        if(size > 5*1024*1024){
+            alert('Invalid file size. Please select an image that is not larger than 5 mB in size.');
+            return false;
         }
  
         picName = tempId+'_'+memberId+'_'+fulldate+pictureCountOther+'o.'+extension;
@@ -1416,10 +1418,12 @@ var pictureCountOther  = 0; var primaryPicture = 0;
                 }
                 else{
                     alert(d.msg);
+                    $('.image'+currentCnt+' > img,.pop-image-container > a > img').attr("src",config.base_url+'assets/images/img_upload_photo.jpg');
                 }
             },
             error: function (request, status, error) {
                 alert('Sorry, we have encountered a problem.','Please try again after a few minutes.');
+                $('.image'+currentCnt+' > img,.pop-image-container > a > img').attr("src",config.base_url+'assets/images/img_upload_photo.jpg');
                 canProceed = true;
             }
         }).submit();

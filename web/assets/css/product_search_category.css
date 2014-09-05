@@ -919,6 +919,12 @@ Advanced Search Filters
     width: auto;
 }
 
+.cd_link_con h3 {
+    font-size: 12px;
+    font-weight: normal;
+    height: 30px;
+}
+
 .cd_product h3 a {
     color: #888888;
     display: inline-block;

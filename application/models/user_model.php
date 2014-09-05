@@ -164,22 +164,60 @@ class user_model extends CI_Model {
     }
     
     /**
+     * Returns the admin member by id
+     *
+     * @param  integer $userid
+     * @return mixed
+     */
+    public function getAdminUser($userid)
+    {
+        $query = "SELECT * FROM es_admin_member WHERE id_admin_member = :userid";
+        $sth = $this->db->conn_id->prepare($query);
+        $sth->bindParam(':userid',$userid); 
+        $sth->execute();
+        $row = $sth->fetch(PDO::FETCH_ASSOC);
+        $row = (!empty($row))?$row:false;
+        
+        return $row;
+    }
+
+       
+    /**
+     * Returns the number of registered users
+     *
+     * @return integer
+     */
+    public function CountUsers()
+    {
+        $query = $this->xmlmap->getFilenameID('sql/users','getUserCount');
+        $sth = $this->db->conn_id->prepare($query);
+        $sth->execute(); 
+        $number_of_rows = $sth->fetchColumn(); 
+        
+        return $number_of_rows;
+    }
+    
+    /**
      *  Fetch users $member_id is subscribed to.
      *
-     *  @param integer $memberID
-     *
+     *  @param integer $memberId
+     *  @param inetger $limit
      *  @return array
      */
-    function getVendorSubscription($memberID)
+    function getFollowing($memberId, $limit = null)
     {
-        $query = $this->xmlmap->getFilenameID('sql/users','getVendorSubscription'); 
+        $query = $this->xmlmap->getFilenameID('sql/users','getFollowing'); 
+        $query .=  $limit === null ? '' : 'limit :limit';
         $sth = $this->db->conn_id->prepare($query);
-        $sth->bindParam(':member_id',$memberID, PDO::PARAM_INT);
+        $sth->bindParam(':member_id',$memberId, PDO::PARAM_INT);
+        if($limit !== null){
+            $sth->bindParam(':limit',$limit, PDO::PARAM_INT);
+        }
         $sth->execute();
         $row = $sth->fetchAll(PDO::FETCH_ASSOC);
         
         foreach($row as $k=>$r){
-            if($r['imgurl'] === ""){
+            if(($r['imgurl'] === "") || (!file_exists($r['imgurl']))){
                 $row[$k]['imgurl'] = "assets/user/default/60x60.png";
             }
             else{
@@ -215,7 +253,32 @@ class user_model extends CI_Model {
     
     
 
-
+    /**
+     * Return list of users following a certain user
+     *
+     * @param integer $memberId
+     * @return array
+     *
+     */
+    public function getFollowers($memberId)
+    {
+        $query = $this->xmlmap->getFilenameID('sql/users','getFollowers'); 
+        $sth = $this->db->conn_id->prepare($query);
+        $sth->bindParam(':member_id',$memberId, PDO::PARAM_INT);
+        $sth->execute();
+        $row = $sth->fetchAll(PDO::FETCH_ASSOC);
+        
+        foreach($row as $k=>$r){
+            if(($r['imgurl'] === "") || (!file_exists($r['imgurl']))){
+                $row[$k]['imgurl'] = "assets/user/default/60x60.png";
+            }
+            else{
+                $row[$k]['imgurl'] = $r['imgurl'] . "/60x60.png";
+            }
+        }
+        
+        return $row;
+    }
     
 }
 

@@ -8,7 +8,7 @@ class product extends MY_Controller
 { 
 
     public $feeds_prodperpage = 5;
-    public $per_page = 2;
+    public $per_page = 15;
     public $start_irrelevant = 0;
 
     public function __construct()  
