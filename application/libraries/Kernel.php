@@ -153,8 +153,7 @@ class Kernel
 
             return $formFactory;
         };
-<<<<<<< Updated upstream
-        
+
         // Point Tracker
         $container['point_tracker'] = function ($c) {
             return new \EasyShop\PointTracker\PointTracker();
@@ -167,7 +166,6 @@ class Kernel
 
         // Http foundation
         $container['http_foundation'] = function ($c) {
-=======
 
         //Validation Rules Service
         $container['form_validation'] = function ($c) {
@@ -176,7 +174,6 @@ class Kernel
 
         //Request Service
         $container['http_request'] = function ($c) {
->>>>>>> Stashed changes
             return \Symfony\Component\HttpFoundation\Request::createFromGlobals();
         };
 

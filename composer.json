@@ -8,19 +8,11 @@
         "doctrine/migrations": "dev-master",
         "ezyang/htmlpurifier": "dev-master",
         "symfony/yaml": "dev-master",
-<<<<<<< HEAD
         "symfony/form": "2.6.*@dev",
         "symfony/http-foundation": "2.6.*@dev",
-<<<<<<< Updated upstream
-        "symfony/validator": "2.6.*@dev"
-=======
-        "symfony/http-foundation": "2.6.*@dev"
->>>>>>> dev
-=======
         "symfony/validator": "2.6.*@dev",
         "symfony/security": "2.6.*@dev",
         "symfony/twig-bridge": "2.6.*@dev",
         "symfony/config": "2.6.*@dev"
->>>>>>> Stashed changes
     }
 }

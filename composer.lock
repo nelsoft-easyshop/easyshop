@@ -4,15 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-<<<<<<< Updated upstream
-<<<<<<< HEAD
-    "hash": "82ade19de08a31b0ff2e918525d3f3b8",
-=======
-    "hash": "00d793260e0ff7912c027d57080757b8",
->>>>>>> dev
-=======
     "hash": "51f4e4cc8ed22f27d95a6941dbfad2cc",
->>>>>>> Stashed changes
     "packages": [
         {
             "name": "cboden/ratchet",
@@ -1638,7 +1630,6 @@
                     "email": "fabien@symfony.com",
                     "homepage": "http://fabien.potencier.org",
                     "role": "Lead Developer"
-<<<<<<< HEAD
                 },
                 {
                     "name": "Symfony Community",
@@ -1880,17 +1871,14 @@
                 {
                     "name": "Symfony Community",
                     "homepage": "http://symfony.com/contributors"
-=======
->>>>>>> dev
                 },
                 {
-                    "name": "Symfony Community",
-                    "homepage": "http://symfony.com/contributors"
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
                 }
             ],
             "description": "Symfony OptionsResolver Component",
             "homepage": "http://symfony.com",
-<<<<<<< HEAD
             "keywords": [
                 "config",
                 "configuration",
@@ -1955,9 +1943,6 @@
                 "reflection"
             ],
             "time": "2014-08-06 06:44:37"
-=======
-            "time": "2014-05-26 19:02:51"
->>>>>>> dev
         },
         {
             "name": "symfony/routing",
@@ -2414,20 +2399,12 @@
         "doctrine/migrations": 20,
         "ezyang/htmlpurifier": 20,
         "symfony/yaml": 20,
-<<<<<<< HEAD
         "symfony/form": 20,
         "symfony/http-foundation": 20,
-<<<<<<< Updated upstream
-        "symfony/validator": 20
-=======
-        "symfony/http-foundation": 20
->>>>>>> dev
-=======
         "symfony/validator": 20,
         "symfony/security": 20,
         "symfony/twig-bridge": 20,
         "symfony/config": 20
->>>>>>> Stashed changes
     },
     "prefer-stable": false,
     "platform": [
