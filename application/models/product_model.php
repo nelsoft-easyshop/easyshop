@@ -2677,6 +2677,79 @@ class product_model extends CI_Model
         
         return $b;
     }
+
+    /**
+     *  Check if code exist
+     *
+     * @param $code
+     * @return boolean
+     */
+    public function validateBuyAtZeroCode($code)
+    {
+        $query = $this->xmlmap->getFilenameID('sql/product', 'validateBuyAtZeroCode');
+        $sth = $this->db->conn_id->prepare($query);
+        $sth->bindParam(':code', $code);
+        $sth->execute();
+
+        return $sth->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Check if member already joined the promo
+     *
+     * @Param $productId
+     * @Param $memberId
+     * @Return boolean
+     */
+    public function validateMemberForBuyAtZeroPromo($productId, $memberId)
+    {
+        $query = $this->xmlmap->getFilenameID('sql/product', 'buyAtZeroAuthenticate');
+        $sth = $this->db->conn_id->prepare($query);
+        $sth->bindParam(':productId', $productId);
+        $sth->bindParam(':memberId', $memberId);
+        $sth->execute();
+        $cnt = $sth->fetchAll(PDO::FETCH_ASSOC)[0]['cnt'];
+        $result = true;
+        if($cnt >= 1){
+            $result = false;
+        }
+
+        return $result;
+    }
+
+    /**
+     * Join member to buyAtZero php promo
+     *
+     * @Param $productId
+     * @Param $memberId
+     * @Return boolean
+     */
+    public function registerMemberForBuyAtZeroPromo($productId, $memberId)
+    {
+        $auth = $this->validateMemberForBuyAtZeroPromo($productId, $memberId);
+
+        if($auth == false){
+            return false;
+        }
+        $query = $this->xmlmap->getFilenameID('sql/product', 'buyAtZeroRegistration');
+        $sth = $this->db->conn_id->prepare($query);
+        $sth->bindParam(':productId', $productId);
+        $sth->bindParam(':memberId', $memberId);
+        $sth->execute();
+
+        return true;
+    }
+
+    public function getProdCount($prodid){
+      
+        $query = $this->xmlmap->getFilenameID('sql/product','getProdCount');
+        $sth = $this->db->conn_id->prepare($query);
+        $sth->bindParam(':prodid',$prodid); 
+        $sth->execute(); 
+        $number_of_rows = $sth->fetchColumn(); 
+        
+        return $number_of_rows;
+    }
     
     /**
      *  Check if code exists
@@ -2752,7 +2825,6 @@ class product_model extends CI_Model
         return $number_of_rows;
     }        
         
-    
 }
 
 /* End of file product_model.php */

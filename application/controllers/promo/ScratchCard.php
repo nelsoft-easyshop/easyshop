@@ -67,7 +67,10 @@ class ScratchCard extends MY_Controller
     }
 
 }
+<<<<<<< HEAD
 
 /* End of file ScratchCard.php */
 /* Location: ./application/controllers/promo/ScratchCard.php */
 
+=======
+>>>>>>> issue-269

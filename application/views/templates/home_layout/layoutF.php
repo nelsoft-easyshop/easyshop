@@ -80,7 +80,6 @@
                     </div>
                 </div>
             </div>
-            
             <?php if($isCollapseCategories): ?>
                 <div class="row mrgn-bttm-8">
                     <div class="col-md-12">
@@ -316,6 +315,7 @@
                                     <input type="hidden" name="feed_set" value="3">
                                     <?php echo form_close();?>
                                     <input type="button" class="orange-btn load-more feed_load_more" value="Load More">
+                                    
                                 </div>
                             </div>
                         </div>
