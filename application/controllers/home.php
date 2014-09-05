@@ -391,6 +391,10 @@ class Home extends MY_Controller
         }
     }
     
+    /**
+     *  Handles bug report form
+     *
+     */
     public function bugReport()
     {
         $flash = false;

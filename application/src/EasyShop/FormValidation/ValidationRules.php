@@ -9,16 +9,32 @@ use Symfony\Component\Validator\Constraints as Assert;
         http://symfony.com/doc/current/reference/constraints.html
 */
 
+/**
+ * Validation Rules Class
+ *
+ * @author LA Roberto
+ */
 class ValidationRules
 {
 
+    /**
+     * Rules holder
+     * 
+     * @var mixed
+     */
     private $rules = [];
 
+    /**
+     * Constructor.
+     */
     public function __construct()
     {   
         $this->initValidationRules();
     }
 
+    /**
+     * Populates $rules
+     */
     public function initValidationRules()
     {
         $this->rules = array(
@@ -42,6 +58,13 @@ class ValidationRules
         );
     }
 
+    /**
+     * Returns rules for a specific form
+     *
+     * @param string $formName Name of the form
+     *
+     * @return mixed
+     */
     public function getRules($formName)
     {
         return $this->rules[$formName];

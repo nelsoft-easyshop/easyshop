@@ -107,6 +107,7 @@ class Kernel
             return new \EasyShop\XML\Resource($configurationService);
         };
 
+        // Paths
         $vendorDir = __DIR__ . '/../../vendor';
         $viewsDir = __DIR__ . '/../views';
         $vendorFormDir = $vendorDir . '/symfony/form/Symfony/Component/Form';
@@ -126,7 +127,7 @@ class Kernel
 
         //Twig Service
         $container['twig'] = function ($c) use ($translator, $viewsDir, $vendorTwigBridgeDir, $csrfProvider) {
-            // Create twig service
+            // Create twig
             $twig = new Twig_Environment(new Twig_Loader_Filesystem(array(
                 $viewsDir,
                 $vendorTwigBridgeDir . '/Resources/views/Form',
