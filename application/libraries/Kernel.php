@@ -60,7 +60,7 @@ class Kernel
 
         $dbConfig = require APPPATH . '/config/param/database.php';
 
-        $config = Doctrine\ORM\Tools\Setup::createAnnotationMetadataConfiguration($paths, $isDevMode);
+        $config = Doctrine\ORM\Tools\Setup::createAnnotationMetadataConfiguration($paths, $isDevMode, null, null, false);
         $config->setProxyDir(APPPATH . '/src/EasyShop/Doctrine/Proxies');
         $config->setProxyNamespace('EasyShop\Doctrine\Proxies');
         
@@ -86,11 +86,6 @@ class Kernel
             return new \EasyShop\Core\Configuration\Configuration();
         };
 
-        $container['xml_cms'] = function ($c) {
-            return new \EasyShop\XML\CMS();
-        };
-        
-        
         //CMS Service
         $container['xml_cms'] = function ($c) {
             return new \EasyShop\XML\CMS();
@@ -101,10 +96,9 @@ class Kernel
             return new \EasyShop\XML\Resource($container['local_configuration']);
         };
         
-        //XML Resource accessor
-        $container['xml_resource'] = function ($c) {
-            $configurationService = new \EasyShop\Core\Configuration\Configuration();
-            return new \EasyShop\XML\Resource($configurationService);
+        //Authentication Manager
+        $container['account_manager'] = function ($c) {
+            return new \EasyShop\Account\AccountManager();
         };
         
         /* Register services END */
