@@ -34,7 +34,7 @@ class MY_Controller extends CI_Controller
             $this->load->helper('view_helper');
         }
         /*  Load custom common functions */
-        $this->load->helper('common_helper');
+        $this->load->helper('common_helper');        
     }
     
     #fill_header is not run in the constructor of MY_Controller despite that fact that all pages need it
@@ -168,35 +168,7 @@ class MY_Controller extends CI_Controller
         }
         $array = $temp; 
     }
-    
-    /**
-     *  Authentication method for webservice
-     *
-     *  @param string $postedData
-     *  @param string $postedHash
-     *  @param string $evaluate
-     */
-    public function authentication($postedData, $postedHash, $evaluate = "")
-    {
-        foreach ($postedData as $data => $value) {
-            
-            if($data == "hash" || $data == "_token" || $data == "csrfname" || $data == "callback" || $data == "password" || $data == "_") {
-                 continue;               
-            }
 
-            else
-                $evaluate .= $value;
-        }
-        $this->load->model("user_model");
-        $password = $this->user_model->getAdminUser($postedData["userid"]);
-
-        $hash = $evaluate.$password["password"];
-
-        if(sha1($hash) != $postedHash){
-            $error = json_encode("error");
-                    exit($error);
-        }   
-    }
 
 
     #new query for getting reviews (top5 Main reviews) - Janz
