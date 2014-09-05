@@ -3786,13 +3786,12 @@ padding: 8px 0;
     color:#0191C8;
 }
 /*** Log in style ***/
-.login_left_content {
-    float: left;
+.login_left_content img {
+    max-width: 550px;
+    width: 100%;
 }
 
 .login_box {
-    float: right;
-    width: 330px;
     border:1px solid #cecece;
     padding:20px 10px;
 }
@@ -3801,9 +3800,13 @@ padding: 8px 0;
     margin:10px 0;
 }
 
+.login_box .col-xs-12.col-sm-12.col-md-3 {
+    line-height: 35px;
+    vertical-align: middle;
+}
+
 .login_box label {
     font-weight: bold;
-    width: 90px;
     padding-right: 10px;
     display: inline-block;
     text-align: right;
@@ -3813,28 +3816,20 @@ padding: 8px 0;
 .login_box input {
     border: 1px solid #B3B3B3;
     color: #494949;
-    height: 25px;
-    line-height: 25px;
-    width: 200px;
+    width: 100%;
     padding-left:3px;
     vertical-align: middle;
-}
-
-.login_box input:focus {
-    border: 1px solid #ff4400;
 }
 
 .login_box input[type="checkbox"] {
     border:none;
     height: 15px;
-    width: auto;	
+    width: auto;
     vertical-align: middle;
-/*   	margin-left: 100px;*/
 }
 
 .login_box div + div p {
     font-size: 11px;
-    margin-left: 190px;
 }
 
 .login_box div + div + div > input {
@@ -3862,6 +3857,14 @@ padding: 8px 0;
     border-bottom: 1px dotted  #0191C8;
 }
 
+.login_box .checkbox {
+    font-size: 12px;
+    line-height: 24px;
+    margin: 0;
+    padding-left: 15px;
+    vertical-align: middle;
+}
+
 .login_box input[type="submit"] {
     font-weight: bold;
     border-radius: 2px;
@@ -3869,12 +3872,10 @@ padding: 8px 0;
     color: #fff;
     cursor: pointer;
     background-color: #f18200;
-/*	display: block;*/
     height: inherit;
-/*	line-height: 22px;*/
     margin: 10px auto;
-/*	padding:5px 10px;*/
-    width: 240px;
+    width: 100%;
+    max-width: 60%;
     text-align: center;
     -webkit-transition: all 0.2s ease-in-out;
     -moz-transition: 	all 0.2s ease-in-out;
@@ -5113,7 +5114,8 @@ div.post_item_content_left {
 
 .edit_vendor_cover,
 .vendor_edit_avatar,
-#store_desc_edit {
+#store_desc_edit,
+#store_name_edit {
     -webkit-transition: all 0.3s ease-in-out;
     -moz-transition:    all 0.3s ease-in-out;
     -o-transition:      all 0.3s ease-in-out;
@@ -5122,7 +5124,8 @@ div.post_item_content_left {
 
 .edit_vendor_cover:hover,
 .vendor_edit_avatar:hover,
-#store_desc_edit:hover {
+#store_desc_edit:hover,
+#store_name_edit:hover {
     background-color: #cecece;
 }
 
@@ -6960,6 +6963,7 @@ box-shadow:         inset 0px -10px 12px -8px rgba(255, 255, 255, 0.75);
     max-width: 65px;
     width: auto;
 }
+
 .img-wrapper-span {
     display: table-cell;
     width: 65px;

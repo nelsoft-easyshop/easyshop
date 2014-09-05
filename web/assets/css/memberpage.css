@@ -478,3 +478,37 @@ table.sales_summary tr.sales_info:hover td.amount{
     margin-left: 5px;
     margin-right: 0px;
 }
+
+#user_store_name{
+    height: 2em;
+}
+
+#user_store_name h2{
+    display: inline-block;
+}
+
+#store_name_edit{
+    position: relative;
+    left: 0.3em;
+    bottom: 0.2em;
+    display: inline-block;
+    border-radius: 3px;
+    background-color: #FFFFFF;
+    line-height: 1.5em;
+    height: 1.5em;
+    width: 4em;
+    box-shadow: 0 0 5px 0 rgba(50, 50, 50, 0.75);
+    cursor:pointer;
+    text-align: center;
+}
+
+#user_store_edit input[type="button"]{
+    border: none;
+    background-color: transparent;
+    width: 4em;
+    padding:0;
+}
+
+#user_store_edit input[type="button"]:hover{
+    color: #f48000;
+}

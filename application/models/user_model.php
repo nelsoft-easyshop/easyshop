@@ -148,22 +148,6 @@ class user_model extends CI_Model {
         
         return $row;
     }
-
-       
-    /**
-     * Returns the number of registered users
-     *
-     * @return integer
-     */
-    public function CountUsers()
-    {
-        $query = $this->xmlmap->getFilenameID('sql/users','getUserCount');
-        $sth = $this->db->conn_id->prepare($query);
-        $sth->execute(); 
-        $number_of_rows = $sth->fetchColumn(); 
-        
-        return $number_of_rows;
-    }
     
     /**
      *  Fetch users $member_id is subscribed to.
@@ -195,6 +179,17 @@ class user_model extends CI_Model {
         
         return $row;
     }
+
+    public function CountUsers()
+    {
+        $query = $this->xmlmap->getFilenameID('sql/users','getUserCount');
+        $sth = $this->db->conn_id->prepare($query);
+        $sth->execute(); 
+        $number_of_rows = $sth->fetchColumn(); 
+        
+        return $number_of_rows;
+    }
+    
     
 
     /**

@@ -59,6 +59,7 @@ class Home extends MY_Controller
             $this->load->view('pages/home_view', $data);
             $this->load->view('templates/footer_full');
         }
+
     }
     
     
@@ -261,13 +262,16 @@ class Home extends MY_Controller
                     'tab' => $tab,
                     ));
             $data['allfeedbacks'] = $this->memberpage_model->getFeedback($sellerid);
-
             $data['hasStoreDesc'] = (string)$data['vendordetails']['store_desc'] !== '' ? true : false;
             $data['product_count'] = count($data['products']);
             $data['renderEdit'] = (int)$sellerid === (int)$data['my_id'] ? true : false;
             #if 0 : no entry - unfollowed, hence display follow
             #if 1 : has entry - followed, hence display unfollow
             $data['subscribe_status'] = $this->memberpage_model->checkVendorSubscription($data['my_id'],$vendordetails['username'])['stat'];   
+
+            $data['store_name'] = strlen(trim($vendordetails['store_name'])) > 0 ? $vendordetails['store_name'] : $vendordetails['username'];
+            $data['hasStoreName'] = strlen(trim($vendordetails['store_name'])) > 0 ? TRUE : FALSE;
+
             $this->load->view('pages/user/vendor_view', $data);
             $this->load->view('templates/footer');
         }
@@ -285,7 +289,7 @@ class Home extends MY_Controller
     {
         $xmlResourceService = $this->serviceContainer['xml_resource'];
         $xmlfile =  $xmlResourceService->getContentXMLfile();
-    
+
         $perPage = $this->feedsProdPerPage;
         $memberId = $this->session->userdata('member_id');
         $userdata = $this->user_model->getUserById($memberId);

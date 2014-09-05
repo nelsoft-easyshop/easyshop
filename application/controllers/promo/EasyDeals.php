@@ -35,7 +35,10 @@ class EasyDeals extends MY_Controller
     }
 
 }
+<<<<<<< HEAD
 
 /* End of file EasyDeals.php */
 /* Location: ./application/controllers/promo/EasyDeals.php */
 
+=======
+>>>>>>> issue-269

@@ -370,6 +370,83 @@ $(function(){
 	});
 });
 
+/**
+ *  Store Name Functions
+ */
+(function(){
+    $(function(){
+
+        $('#store_name_edit').on('click',function(){
+            $('#user_store_echo').hide();
+            $('#user_store_edit').show();
+        });
+
+        $('#store_name_cancel').on('click',function(){
+            var textarea = $(this).siblings('input[name="store_name"]');
+            var origName = textarea.attr('data-origname');
+
+            $('#user_store_echo').show();
+            $('#user_store_edit').hide();
+            textarea.val(origName);
+        });
+
+        $('#store_name_submit').on('click',function(){
+            var form = $(this).closest('form');
+            var thisbtn = $(this);
+            var btnSet = $('#store_name_cancel, #store_name_submit');
+
+            var storeNameTextBox = form.find('input[name="store_name"]');
+
+            var editStoreNameField = $('#user_store_edit');
+            var echoStoreNameField = $('#user_store_echo');
+            var echoUserName = $('#username_echo');
+            var echoStoreName = echoStoreNameField.find('h2');
+            
+            thisbtn.val('Saving...');
+            btnSet.attr('disabled', true);
+
+            $.post(config.base_url+'memberpage/vendorStoreName', $(form).serializeArray(), function(data){
+                thisbtn.val('Save');
+                btnSet.attr('disabled', false);
+                
+                try{
+                    var obj = jQuery.parseJSON(data);
+                }
+                catch(e){
+                    alert('There was an error while processing your request. Please try again later.');
+                    return false;
+                }
+
+                if(obj.result === true){
+                    var hasStoreName = obj.username.toLowerCase() !== obj.storename.toLowerCase() &&
+                        obj.storename.length > 0 ? true:false;
+
+                    if(hasStoreName){
+                        echoUserName.show();
+                        var newStoreName = htmlDecode(obj.storename);
+                        var textboxVal = htmlDecode(obj.storename);    
+                    }
+                    else{
+                        echoUserName.hide();
+                        var newStoreName = obj.username;
+                        var textboxVal = '';
+                    }
+
+                    editStoreNameField.hide();
+                    echoStoreNameField.show();
+                    echoStoreName.text(newStoreName);
+                    storeNameTextBox.val(textboxVal);
+                    storeNameTextBox.attr('data-origname', textboxVal);
+                }
+                else{
+                    alert(obj.error);
+                }
+            });
+        });
+
+    })
+})(jQuery);
+
 
 function ItemListAjax(ItemDiv,start,pageindex,count_i){
 
