@@ -148,22 +148,6 @@ class user_model extends CI_Model {
         
         return $row;
     }
-
-       
-    /**
-     * Returns the number of registered users
-     *
-     * @return integer
-     */
-    public function CountUsers()
-    {
-        $query = $this->xmlmap->getFilenameID('sql/users','getUserCount');
-        $sth = $this->db->conn_id->prepare($query);
-        $sth->execute(); 
-        $number_of_rows = $sth->fetchColumn(); 
-        
-        return $number_of_rows;
-    }
     
     /**
      *  Fetch users $member_id is subscribed to.
@@ -192,18 +176,6 @@ class user_model extends CI_Model {
                 $row[$k]['imgurl'] = $r['imgurl'] . "/60x60.png";
             }
         }
-        
-        return $row;
-    }
-
-    public function getAdminUser($userid)
-    {
-        $query = "SELECT * FROM es_admin_member WHERE id_admin = :userid";
-        $sth = $this->db->conn_id->prepare($query);
-        $sth->bindParam(':userid',$userid); 
-        $sth->execute();
-        $row = $sth->fetch(PDO::FETCH_ASSOC);
-        $row = (!empty($row))?$row:false;
         
         return $row;
     }
