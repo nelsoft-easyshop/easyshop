@@ -8,8 +8,12 @@
         "doctrine/migrations": "dev-master",
         "ezyang/htmlpurifier": "dev-master",
         "symfony/yaml": "dev-master",
+<<<<<<< HEAD
         "symfony/form": "2.6.*@dev",
         "symfony/http-foundation": "2.6.*@dev",
         "symfony/validator": "2.6.*@dev"
+=======
+        "symfony/http-foundation": "2.6.*@dev"
+>>>>>>> dev
     }
 }

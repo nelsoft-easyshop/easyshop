@@ -31,8 +31,8 @@ class Kernel
     private function _bootstrap()
     {
         /* We register the application class autoloader */
-        require_once APPPATH . '/src/EasyShop/Core/ClassAutoloader/PSR0Autoloader.php';
-        $psr0Autoloader = new PSR0Autoloader(APPPATH . "/src/");
+        require_once APPPATH . 'src/EasyShop/Core/ClassAutoloader/PSR0Autoloader.php';
+        $psr0Autoloader = new PSR0Autoloader(APPPATH . "src/");
         $psr0Autoloader->register();
 
         /* We register 3rd party autoloader */
@@ -60,14 +60,14 @@ class Kernel
 
         $dbConfig = require APPPATH . '/config/param/database.php';
 
-        $config = Doctrine\ORM\Tools\Setup::createAnnotationMetadataConfiguration($paths, $isDevMode);
-        $config->setProxyDir(APPPATH . '/src/EasyShop/Doctrine/Proxies');
+        $config = Doctrine\ORM\Tools\Setup::createAnnotationMetadataConfiguration($paths, $isDevMode, null, null, false);
+        $config->setProxyDir(APPPATH . 'src/EasyShop/Doctrine/Proxies');
         $config->setProxyNamespace('EasyShop\Doctrine\Proxies');
         
         $container['entity_manager'] = function ($c) use ($dbConfig, $config){
             return Doctrine\ORM\EntityManager::create($dbConfig, $config);
         };
-        
+
         // ZeroMQ pusher
         $container['user_pusher'] = function ($c) {
             $wsConfig = require APPPATH . '/config/param/websocket.php';
@@ -85,6 +85,11 @@ class Kernel
         $container['local_configuration'] = function ($c) {
             return new \EasyShop\Core\Configuration\Configuration();
         };
+
+        $container['xml_cms'] = function ($c) {
+            return new \EasyShop\XML\CMS();
+        };
+        
         
         //CMS Service
         $container['xml_cms'] = function ($c) {
@@ -122,7 +127,23 @@ class Kernel
             return $formFactory;
         };
         
+        // Point Tracker
+        $container['point_tracker'] = function ($c) {
+            return new \EasyShop\PointTracker\PointTracker();
+        };
+
+        // Payment Service
+        $container['payment_service'] = function ($c) {
+            return new \EasyShop\PaymentService\PaymentService();
+        };
+
+        // Http foundation
+        $container['http_foundation'] = function ($c) {
+            return \Symfony\Component\HttpFoundation\Request::createFromGlobals();
+        };
+
         /* Register services END */
         $this->serviceContainer = $container;
     }
+
 }

@@ -4,7 +4,11 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
+<<<<<<< HEAD
     "hash": "82ade19de08a31b0ff2e918525d3f3b8",
+=======
+    "hash": "00d793260e0ff7912c027d57080757b8",
+>>>>>>> dev
     "packages": [
         {
             "name": "cboden/ratchet",
@@ -1442,6 +1446,7 @@
                     "email": "fabien@symfony.com",
                     "homepage": "http://fabien.potencier.org",
                     "role": "Lead Developer"
+<<<<<<< HEAD
                 },
                 {
                     "name": "Symfony Community",
@@ -1612,14 +1617,17 @@
                 {
                     "name": "Symfony Community",
                     "homepage": "http://symfony.com/contributors"
+=======
+>>>>>>> dev
                 },
                 {
-                    "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com"
+                    "name": "Symfony Community",
+                    "homepage": "http://symfony.com/contributors"
                 }
             ],
             "description": "Symfony OptionsResolver Component",
             "homepage": "http://symfony.com",
+<<<<<<< HEAD
             "keywords": [
                 "config",
                 "configuration",
@@ -1684,6 +1692,9 @@
                 "reflection"
             ],
             "time": "2014-08-06 06:44:37"
+=======
+            "time": "2014-05-26 19:02:51"
+>>>>>>> dev
         },
         {
             "name": "symfony/routing",
@@ -1937,9 +1948,13 @@
         "doctrine/migrations": 20,
         "ezyang/htmlpurifier": 20,
         "symfony/yaml": 20,
+<<<<<<< HEAD
         "symfony/form": 20,
         "symfony/http-foundation": 20,
         "symfony/validator": 20
+=======
+        "symfony/http-foundation": 20
+>>>>>>> dev
     },
     "prefer-stable": false,
     "platform": [

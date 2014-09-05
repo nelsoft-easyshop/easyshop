@@ -94,21 +94,20 @@
                         <span class="name"><?php echo html_escape($product['sellerusername']);?></span> 
                     </a>
                     <br/>
-                
                     <a class="modal_msg_launcher" href="javascript:void(0)" title="Send <?=html_escape($product['sellerusername'])?> a message">
                         <span>
-                            <span class="span_bg prod_message"></span> 
+                            <span class="span_bg prod_message"></span>
                         </span>
-                    
+
                         <br/>
                         <?php if(($vendorrating['rate_count'] <=0)):?>
-                        <p><span style="font-size:11px; margin-left:8px;">No ratings received yet.</span></p>
+                            <p><span style="font-size:11px; margin-left:8px;">No ratings received yet.</span></p>
                         <?php else:?>
                             <p><span class="rating_criteria"><?php echo $this->lang->line('rating')[0].':';?></span><span class="rating_value"><?php echo number_format($vendorrating['rating1'],2,'.',',');?></span> <img src="<?=base_url()?>assets/images/star-on.png" alt="*" title=""></p>
                             <p><span class="rating_criteria"><?php echo $this->lang->line('rating')[1].':';?></span><span class="rating_value" > <?php echo number_format($vendorrating['rating2'],2,'.',',');?> </span> <img src="<?=base_url()?>assets/images/star-on.png" alt="*" title=""></p>
                             <p><span class="rating_criteria"><?php echo $this->lang->line('rating')[2].':';?></span><span class="rating_value"> <?php echo number_format($vendorrating['rating3'],2,'.',',');?></span> <img src="<?=base_url()?>assets/images/star-on.png" alt="*" title=""></p>
                         <?php endif;?>
-                    </a>            
+                    </a>
                 </span> 
             
                 <div class="clear prod_inner_border"></div>

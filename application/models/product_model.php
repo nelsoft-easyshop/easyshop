@@ -2677,7 +2677,18 @@ class product_model extends CI_Model
         
         return $b;
     }
-    
+
+ 
+    public function getProdCount($prodid){
+      
+        $query = $this->xmlmap->getFilenameID('sql/product','getProdCount');
+        $sth = $this->db->conn_id->prepare($query);
+        $sth->bindParam(':prodid',$prodid); 
+        $sth->execute(); 
+        $number_of_rows = $sth->fetchColumn(); 
+        return $number_of_rows;
+    }
+
     /**
      *  Check if code exists
      *
@@ -2736,13 +2747,16 @@ class product_model extends CI_Model
         $sth = $this->db->conn_id->prepare($query);
         $sth->bindParam(':productId', $productId);
         $sth->bindParam(':memberId', $memberId);
+        $sth->bindParam(':date', date('Y-m-d H:i:s'));
         $sth->execute();
 
         return true;
     }
-    
+
+
     public function getProdCountBySlug($slug)
-    {  
+    {
+      
         $query = $this->xmlmap->getFilenameID('sql/product','getProdCountBySlug');
         $sth = $this->db->conn_id->prepare($query);
         $sth->bindParam(':slug',$slug); 
@@ -2751,7 +2765,7 @@ class product_model extends CI_Model
         return $number_of_rows;
     }        
         
-    
+
 }
 
 /* End of file product_model.php */
