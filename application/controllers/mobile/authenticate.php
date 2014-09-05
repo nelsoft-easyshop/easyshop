@@ -5,22 +5,60 @@ if (!defined('BASEPATH'))
 
 class Authenticate extends MY_Controller {
 
-    public $per_page;
 
-    function __construct() {
+    /**
+     * Authentication constructor
+     *
+     */
+    function __construct() 
+    {
         parent::__construct();
-        $this->load->helper('htmlpurifier');
-        $this->load->model("register_model");
-        $this->load->model("user_model");
         header('Content-type: application/json');
     }
 
     /**
-     * [index description]
+     * Registers a user
+     * 
      * @return JSON
      */
     public function register()
     {
+        #$formValidation = $this->serviceContainer['form_validation'];
+        #$formFactory = $this->serviceContainer['form_factory'];
+        $request = $this->serviceContainer['http_request'];
+        
+        
+        $request->getMethod();
+        exit();
+        
+        $accountManager = $this->kernel->serviceContainer['account_manager']; 
+        $isAuthenticated = $accountManager->authenticateWebServiceClient('mobile', $this->input->post('skey'));
+
+        $errors = array();
+        $isSuccessful = false;
+
+        if($isAuthenticated){
+            
+            $rules = $formValidation->getRules('register');
+
+            $form = $formFactory->createBuilder()
+            ->setMethod('POST')
+            ->add('username', array('constraints' => $rules['username']))
+            ->add('password', array('constraints' => $rules['password']))
+            ->add('contactno', array('constraints' => $rules['contactno']))
+            ->add('email', array('constraints' => $rules['email']))
+            ->getForm();
+                
+        }
+        else{
+            array_push($errors, "Invalid key");
+        }
+        
+        $response['errors'] = $errors;
+        $response['isSuccessful'] = $isSuccessful;
+        die(json_encode($response,JSON_PRETTY_PRINT));
+    
+        /*
         $data['username'] = $username = $this->input->get('username');
         $data['password'] = $password = $this->input->get('password');
         $data['email'] = $email = $this->input->get('email');
@@ -86,6 +124,7 @@ class Authenticate extends MY_Controller {
         $display['passed'] = $passed;
         $display['error'] = $error;
         die(json_encode($display,JSON_PRETTY_PRINT));
+        */
     }
 
 }
