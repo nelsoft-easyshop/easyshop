@@ -1213,6 +1213,5 @@ FROM
        FROM es_product
        WHERE slug = :slug
     </select>    
-    
 
 </map>

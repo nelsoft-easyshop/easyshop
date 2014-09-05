@@ -36,7 +36,7 @@ class MY_Controller extends CI_Controller
         /*  Load custom common functions */
         $this->load->helper('common_helper');
     }
-	
+    
     #fill_header is not run in the constructor of MY_Controller despite that fact that all pages need it
     #because it would add unnecessary overhead for all ajax calls. Instead it is called only in the 
     #controller functions that need it
@@ -45,19 +45,19 @@ class MY_Controller extends CI_Controller
         $this->load->model("user_model");
         $this->load->model("product_model");
         $this->load->model("messages_model");
-	$usersession = $this->session->userdata('usersession');
-	if(!empty($usersession) || $this->check_cookie()){
-	    $uid = $this->session->userdata('member_id'); 
-	    $row = $this->user_model->getUserById($uid);
+        $usersession = $this->session->userdata('usersession');
+        if(!empty($usersession) || $this->check_cookie()){
+            $uid = $this->session->userdata('member_id'); 
+            $row = $this->user_model->getUserById($uid);
 
-	    $logged_in = true;
-	    $uname = $row['username'];
-	}
-	else{
-	    $logged_in = false;
-	    $uname = '';
-	}
-	$carts=$this->session->userdata('cart_contents');
+            $logged_in = true;
+            $uname = $row['username'];
+        }
+        else{
+            $logged_in = false;
+            $uname = '';
+        }
+        $carts=$this->session->userdata('cart_contents');
         $sizecart = 0;
         if(!empty($carts)){
             if(isset($carts['total_items'])){
@@ -66,43 +66,43 @@ class MY_Controller extends CI_Controller
                 $sizecart = sizeof($carts);
             }
         }
-	$unread = $this->messages_model->get_all_messages($this->session->userdata('member_id'),"Get_UnreadMsgs");
-	$msgs['unread_msgs'] = (isset($unread['unread_msgs']) ?$unread['unread_msgs'] : 0);
-	$msgs['msgs'] = (isset($unread['unread_msgs']) ? ($unread['unread_msgs'] != 0 ? reset($unread['messages']) : ""):0);		
-	$data = array(
-		'logged_in' => $logged_in,
-		'uname' => $uname,
-		'total_items'=> $sizecart,
-		'msgs'=> $msgs,
-		'category_search' => $this->product_model->getFirstLevelNode(),
-		);
-	return $data;
+        $unread = $this->messages_model->get_all_messages($this->session->userdata('member_id'),"Get_UnreadMsgs");
+        $msgs['unread_msgs'] = (isset($unread['unread_msgs']) ?$unread['unread_msgs'] : 0);
+        $msgs['msgs'] = (isset($unread['unread_msgs']) ? ($unread['unread_msgs'] != 0 ? reset($unread['messages']) : ""):0);        
+        $data = array(
+            'logged_in' => $logged_in,
+            'uname' => $uname,
+            'total_items'=> $sizecart,
+            'msgs'=> $msgs,
+            'category_search' => $this->product_model->getFirstLevelNode(),
+            );
+        return $data;
     }
-	
+    
     function check_cookie(){
         $this->load->model("cart_model");
         $this->load->model("user_model");
-		$cookieval = get_cookie('es_usr');
-		if($cookieval != ''){
-			$data = array(
-				'userip' => $this->session->userdata('ip_address'),
-				'useragent' => $this->session->userdata('user_agent'),
-				'token' => $cookieval,
-				'usersession' => $this->session->userdata('session_id')
-				);
-			$cookielogin = $this->user_model->cookie_login($data);
-			if($cookielogin['o_success'] >= 1){
-				$this->session->set_userdata('member_id', $cookielogin['o_memberid']);
-				$this->session->set_userdata('usersession', $cookielogin['o_usersession']);
-				$this->session->set_userdata('cart_contents', $this->cart_model->cartdata($cookielogin['o_memberid']));
-				$this->user_model->create_cookie($cookielogin['o_token']);
-				return true;
-			}
-			else
-				return false;
-		}
-		else
-			return false;
+        $cookieval = get_cookie('es_usr');
+        if($cookieval != ''){
+            $data = array(
+                'userip' => $this->session->userdata('ip_address'),
+                'useragent' => $this->session->userdata('user_agent'),
+                'token' => $cookieval,
+                'usersession' => $this->session->userdata('session_id')
+                );
+            $cookielogin = $this->user_model->cookie_login($data);
+            if($cookielogin['o_success'] >= 1){
+                $this->session->set_userdata('member_id', $cookielogin['o_memberid']);
+                $this->session->set_userdata('usersession', $cookielogin['o_usersession']);
+                $this->session->set_userdata('cart_contents', $this->cart_model->cartdata($cookielogin['o_memberid']));
+                $this->user_model->create_cookie($cookielogin['o_token']);
+                return true;
+            }
+            else
+                return false;
+        }
+        else
+            return false;
     }
     
 
@@ -128,11 +128,11 @@ class MY_Controller extends CI_Controller
             }
             if((strlen(trim($row['level2_id']) > 0))&&(!array_key_exists($row['level2_id'], $data[$idx_lvl1][0]))){
                 //start popular items : this is the slowest part of this function
-                $down_cat = $this->product_model->selectChild($row['level2_id']);	
-				if((count($down_cat) === 1)&&(trim($down_cat[0]) === ''))
-					$down_cat = array();
-				array_push($down_cat, $row['level2_id']);
-				$pitem = $this->product_model->getPopularitem($down_cat,6);		
+                $down_cat = $this->product_model->selectChild($row['level2_id']);   
+                if((count($down_cat) === 1)&&(trim($down_cat[0]) === ''))
+                    $down_cat = array();
+                array_push($down_cat, $row['level2_id']);
+                $pitem = $this->product_model->getPopularitem($down_cat,6);     
                 //end popular items                
              
                 $data[$idx_lvl1][0][$row['level2_id']] =  array(
@@ -201,9 +201,9 @@ class MY_Controller extends CI_Controller
 
 
 
-
 }
 
 
 /* End of file MY_Controller.php */
 /* Location: ./application/core/MY_Controller.php */
+

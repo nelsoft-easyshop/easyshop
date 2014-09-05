@@ -59,6 +59,7 @@ class Home extends MY_Controller
             $this->load->view('pages/home_view', $data);
             $this->load->view('templates/footer_full');
         }
+
     }
     
     
@@ -285,7 +286,7 @@ class Home extends MY_Controller
     {
         $xmlResourceService = $this->serviceContainer['xml_resource'];
         $xmlfile =  $xmlResourceService->getContentXMLfile();
-    
+
         $perPage = $this->feedsProdPerPage;
         $memberId = $this->session->userdata('member_id');
         $userdata = $this->user_model->getUserById($memberId);
@@ -390,16 +391,56 @@ class Home extends MY_Controller
         }
     }
     
+    /**
+     *  Handles bug report form
+     *
+     */
     public function bugReport()
     {
+        $flash = false;
+        $formValidation = $this->serviceContainer['form_validation'];
+        $formFactory = $this->serviceContainer['form_factory'];
+        $request = $this->serviceContainer['http_request'];
+        $twig = $this->serviceContainer['twig'];
+
+        $rules = $formValidation->getRules('bug_report');
+
+        $form = $formFactory->createBuilder()
+        //->setAction('target_route')
+        ->setMethod('POST')
+        ->add('title', 'text', array('required' => false, 'label' => false, 'constraints' => $rules['title']))
+        ->add('description', 'textarea', array('required' => false, 'label' => false, 'constraints' => $rules['description']))
+        ->add('file', 'file', array('label' => false, 'required' => false, 'constraints' => $rules['file']))
+        ->add('submit', 'submit', array('label' => 'SEND'))
+        ->getForm();
+
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+            $bug = $this->serviceContainer['bug_reporter'];
+            $bug->createReport($form->getData());
+            $flash = true;
+        }
+        
         $data = array(
             'title' => 'Report a Problem | Easyshop.ph',
             'metadescription' => 'Found a bug? Let us know so we can work on it.',
         );
         $data = array_merge($data, $this->fill_header());
+
         $this->load->view('templates/header', $data);
-        //LOAD YOUR VIEW HERE
-        //$this->load->view('pages/web/faq');
+       
+        $formData =  $twig->render('pages/web/report-a-problem.html.twig', array(
+            'form' => $form->createView(), 
+            'ES_FILE_VERSION' => ES_FILE_VERSION,
+            'flash' => $flash
+            ));
+
+        if($flash == true){
+            $flash = false;
+        }
+
+        $this->output->append_output($formData);
         $this->load->view('templates/footer_full');
     }
 

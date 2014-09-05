@@ -128,6 +128,6 @@ $config = array(
 );
 
 
-/* End of file promo.php */
-/* Location: ./application/config/promo.php */
+/* End of file old_promo.php */
+/* Location: ./application/config/old_promo.php */
 
