@@ -393,6 +393,36 @@ class Home extends MY_Controller
     
     public function bugReport()
     {
+        $formValidation = $this->serviceContainer['form_validation'];
+        $formFactory = $this->serviceContainer['form_factory'];
+
+        $rules = $formValidation->getRules('bug_report');
+
+        $form = $formFactory->createBuilder()
+        ->add('title', 'text', array('required' => false, 'label' => false, 'constraints' => $rules['title']))
+        ->add('description', 'textarea', array('required' => false, 'label' => false, 'constraints' => $rules['description']))
+        ->add('file', 'file', array('label' => false, 'required' => false, 'constraints' => $rules['file']))
+        ->add('submit', 'submit', array('label' => 'SEND'))
+        ->getForm();
+
+        $request = $this->serviceContainer['http_request'];
+
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+            $validForm = $form->getData();
+            $newName = sha1($validForm['file']->getClientOriginalName().(string)time());
+            $uploaded->move('./assets/images/reports',$newName);
+
+            
+            die();
+
+            //var_dump('VALID', $form->getData());
+            //die;
+        }
+        
+        $twig = $this->serviceContainer['twig'];
+
         $data = array(
             'title' => 'Report a Problem | Easyshop.ph',
             'metadescription' => 'Found a bug? Let us know so we can work on it.',
@@ -400,8 +430,46 @@ class Home extends MY_Controller
         $data = array_merge($data, $this->fill_header());
         $this->load->view('templates/header', $data);
         //LOAD YOUR VIEW HERE
-        $this->load->view('pages/web/report-a-problem');
+        //$this->load->view('pages/web/report-a-problem');
+
+        $formData =  $twig->render('test.html.twig', array(
+            'form' => $form->createView(), 'ES_FILE_VERSION' => ES_FILE_VERSION
+            ));
+
+        $this->output->append_output($formData);
+
         $this->load->view('templates/footer_full');
+    }
+
+    public function symfonytest()
+    {
+
+        // echo "derp";
+        // die();
+
+        // $formFactory = $this->serviceContainer['form_factory'];
+        // $form = $formFactory->createBuilder()
+        // ->add('title', 'text')
+        // ->add('description', 'textarea')
+        // ->add('file', 'file')
+        // ->add('save', 'submit', array('label' => 'Submit Report'))
+        // ->getForm();
+
+        // $twig = $this->serviceContainer['twig'];
+
+        // $data = array(
+        //     'title' => 'Report a Problem | Easyshop.ph',
+        //     'metadescription' => 'Found a bug? Let us know so we can work on it.',
+        // );
+
+        // $data = array_merge($data, $this->fill_header());
+        // $this->load->view('templates/header', $data,true);
+        // $this->load->view('templates/footer_full');
+
+        // echo $twig->render('test.html.twig', array(
+        //     'form' => $form->createView(),
+        // ));
+        
     }
 
 }

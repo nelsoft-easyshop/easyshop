@@ -107,16 +107,43 @@ class Kernel
             return new \EasyShop\XML\Resource($configurationService);
         };
 
-        //Form Service
-        $container['http_foundation'] = function ($c) {
-            // CSRF Setup
-            $csrfSecret = 'TempOraRy_KeY_12272013_bY_Sam*?!';
-            $session = new \Symfony\Component\HttpFoundation\Session\Session();
-            $csrfProvider = new \Symfony\Component\Form\Extension\Csrf\CsrfProvider\SessionCsrfProvider($session, $csrfSecret);
+        $vendorDir = __DIR__ . '/../../vendor';
+        $viewsDir = __DIR__ . '/../views';
+        $vendorFormDir = $vendorDir . '/symfony/form/Symfony/Component/Form';
+        $vendorValidatorDir = $vendorDir . '/symfony/validator/Symfony/Component/Validator';
+        $vendorTwigBridgeDir = $vendorDir . '/symfony/twig-bridge/Symfony/Bridge/Twig';
 
-            // Validator Setup
-            $validator = \Symfony\Component\Validator\Validation::createValidator();
+        // CSRF Setup
+        $csrfSecret = 'TempOraRy_KeY_12272013_bY_Sam*?!';
+        $session = new \Symfony\Component\HttpFoundation\Session\Session();
+        $csrfProvider = new \Symfony\Component\Form\Extension\Csrf\CsrfProvider\SessionCsrfProvider($session, $csrfSecret);
 
+        // Twig setup
+        $translator = new \Symfony\Component\Translation\Translator('en');
+        $translator->addLoader('xlf', new \Symfony\Component\Translation\Loader\XliffFileLoader());
+        $translator->addResource('xlf', $vendorFormDir . '/Resources/translations/validators.en.xlf', 'en', 'validators');
+        $translator->addResource('xlf', $vendorValidatorDir . '/Resources/translations/validators.en.xlf', 'en', 'validators');
+
+        //Twig Service
+        $container['twig'] = function ($c) use ($translator, $viewsDir, $vendorTwigBridgeDir, $csrfProvider) {
+            // Create twig service
+            $twig = new Twig_Environment(new Twig_Loader_Filesystem(array(
+                $viewsDir,
+                $vendorTwigBridgeDir . '/Resources/views/Form',
+            )));
+
+            $formEngine = new Symfony\Bridge\Twig\Form\TwigRendererEngine(array('form_div_layout.html.twig'));
+            $formEngine->setEnvironment($twig);
+            $twig->addExtension(new \Symfony\Bridge\Twig\Extension\TranslationExtension($translator));
+            $twig->addExtension(new \Symfony\Bridge\Twig\Extension\FormExtension(new \Symfony\Bridge\Twig\Form\TwigRenderer($formEngine, $csrfProvider)));
+            return $twig;
+        };
+
+        // Validator Setup
+        $validator = \Symfony\Component\Validator\Validation::createValidator();
+
+        //Form Factory Service
+        $container['form_factory'] = function ($c) use ($csrfProvider, $validator) {
             // Create factory
             $formFactory = \Symfony\Component\Form\Forms::createFormFactoryBuilder()
                 ->addExtension(new \Symfony\Component\Form\Extension\Csrf\CsrfExtension($csrfProvider))
@@ -126,6 +153,7 @@ class Kernel
 
             return $formFactory;
         };
+<<<<<<< Updated upstream
         
         // Point Tracker
         $container['point_tracker'] = function ($c) {
@@ -139,6 +167,16 @@ class Kernel
 
         // Http foundation
         $container['http_foundation'] = function ($c) {
+=======
+
+        //Validation Rules Service
+        $container['form_validation'] = function ($c) {
+            return new \EasyShop\FormValidation\ValidationRules();
+        };
+
+        //Request Service
+        $container['http_request'] = function ($c) {
+>>>>>>> Stashed changes
             return \Symfony\Component\HttpFoundation\Request::createFromGlobals();
         };
 
