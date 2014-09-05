@@ -164,9 +164,6 @@ class Kernel
             return new \EasyShop\PaymentService\PaymentService();
         };
 
-        // Http foundation
-        $container['http_foundation'] = function ($c) {
-
         //Validation Rules Service
         $container['form_validation'] = function ($c) {
             return new \EasyShop\FormValidation\ValidationRules();
@@ -175,6 +172,11 @@ class Kernel
         //Request Service
         $container['http_request'] = function ($c) {
             return \Symfony\Component\HttpFoundation\Request::createFromGlobals();
+        };
+
+        //Bug Reporter Service
+        $container['bug_reporter'] = function ($c) use($container) {
+            return new \EasyShop\BugReporter\BugReporter($container['entity_manager']);
         };
 
         /* Register services END */
