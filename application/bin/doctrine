@@ -41,7 +41,7 @@ if($configService->isConfigFileExists()){
     }
 }
 
-$doctrineConfig = Doctrine\ORM\Tools\Setup::createAnnotationMetadataConfiguration([__DIR__ . '/../src/EasyShop/Entities'], false);
+$doctrineConfig = Doctrine\ORM\Tools\Setup::createAnnotationMetadataConfiguration([__DIR__ . '/../src/EasyShop/Entities'], false, null, null, false);
 $doctrineConfig->setProxyDir(__DIR__ . '/../src/EasyShop/Doctrine/Proxies');
 $doctrineConfig->setProxyNamespace('EasyShop\Doctrine\Proxies');
 
