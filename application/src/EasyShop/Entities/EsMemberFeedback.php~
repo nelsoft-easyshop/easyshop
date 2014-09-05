@@ -1,0 +1,97 @@
+<?php
+
+namespace EasyShop\Entities;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * EsMemberFeedback
+ *
+ * @ORM\Table(name="es_member_feedback", uniqueConstraints={@ORM\UniqueConstraint(name="UNIQUE  order and for", columns={"order_id", "for_memberid"})}, indexes={@ORM\Index(name="id_member_idx", columns={"member_id"}), @ORM\Index(name="fk_es_member_feedback_es_member2_idx", columns={"for_memberid"}), @ORM\Index(name="fk_es_member_feedback_es_order_idx", columns={"order_id"})})
+ * @ORM\Entity
+ */
+class EsMemberFeedback
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id_feedback", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $idFeedback;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="feedb_msg", type="string", length=45, nullable=false)
+     */
+    private $feedbMsg;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="feedb_kind", type="boolean", nullable=false)
+     */
+    private $feedbKind;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="dateadded", type="datetime", nullable=false)
+     */
+    private $dateadded = 'CURRENT_TIMESTAMP';
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="rating1", type="integer", nullable=false)
+     */
+    private $rating1 = '0';
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="rating2", type="integer", nullable=false)
+     */
+    private $rating2 = '0';
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="rating3", type="integer", nullable=false)
+     */
+    private $rating3 = '0';
+
+    /**
+     * @var \EasyShop\Entities\EsMember
+     *
+     * @ORM\ManyToOne(targetEntity="EasyShop\Entities\EsMember")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="member_id", referencedColumnName="id_member")
+     * })
+     */
+    private $member;
+
+    /**
+     * @var \EasyShop\Entities\EsMember
+     *
+     * @ORM\ManyToOne(targetEntity="EasyShop\Entities\EsMember")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="for_memberid", referencedColumnName="id_member")
+     * })
+     */
+    private $forMemberid;
+
+    /**
+     * @var \EasyShop\Entities\EsOrder
+     *
+     * @ORM\ManyToOne(targetEntity="EasyShop\Entities\EsOrder")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="order_id", referencedColumnName="id_order")
+     * })
+     */
+    private $order;
+
+
+}

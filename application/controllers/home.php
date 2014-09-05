@@ -268,6 +268,8 @@ class Home extends MY_Controller
             #if 0 : no entry - unfollowed, hence display follow
             #if 1 : has entry - followed, hence display unfollow
             $data['subscribe_status'] = $this->memberpage_model->checkVendorSubscription($data['my_id'],$vendordetails['username'])['stat'];   
+            $data['store_name'] = strlen(trim($vendordetails['store_name'])) > 0 ? $vendordetails['store_name'] : $vendordetails['username'];
+            $data['hasStoreName'] = strlen(trim($vendordetails['store_name'])) > 0 ? TRUE : FALSE;
             $this->load->view('pages/user/vendor_view', $data);
             $this->load->view('templates/footer');
         }

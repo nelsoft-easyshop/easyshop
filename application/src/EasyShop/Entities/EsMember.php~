@@ -1,0 +1,215 @@
+<?php
+
+namespace EasyShop\Entities;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * EsMember
+ *
+ * @ORM\Table(name="es_member", indexes={@ORM\Index(name="username_idx", columns={"username"})})
+ * @ORM\Entity
+ */
+class EsMember
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id_member", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $idMember;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="username", type="string", length=255, nullable=false)
+     */
+    private $username = '';
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="usersession", type="string", length=255, nullable=true)
+     */
+    private $usersession;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="password", type="string", length=255, nullable=false)
+     */
+    private $password = '';
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="contactno", type="string", length=45, nullable=false)
+     */
+    private $contactno = '';
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="is_contactno_verify", type="boolean", nullable=false)
+     */
+    private $isContactnoVerify = '0';
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="email", type="string", length=255, nullable=false)
+     */
+    private $email = '';
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="is_email_verify", type="boolean", nullable=false)
+     */
+    private $isEmailVerify = '0';
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="gender", type="string", length=1, nullable=false)
+     */
+    private $gender = '0';
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="birthday", type="date", nullable=false)
+     */
+    private $birthday = '0001-01-01';
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="datecreated", type="datetime", nullable=false)
+     */
+    private $datecreated = 'CURRENT_TIMESTAMP';
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="lastmodifieddate", type="datetime", nullable=false)
+     */
+    private $lastmodifieddate = 'CURRENT_TIMESTAMP';
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="last_login_datetime", type="datetime", nullable=false)
+     */
+    private $lastLoginDatetime = 'CURRENT_TIMESTAMP';
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="last_login_ip", type="string", length=45, nullable=false)
+     */
+    private $lastLoginIp = '';
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="login_count", type="integer", nullable=false)
+     */
+    private $loginCount = '0';
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="fullname", type="string", length=255, nullable=true)
+     */
+    private $fullname = '';
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="nickname", type="string", length=255, nullable=true)
+     */
+    private $nickname = '';
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="imgurl", type="string", length=255, nullable=true)
+     */
+    private $imgurl = '';
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="userdata", type="text", nullable=true)
+     */
+    private $userdata;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="remarks", type="string", length=255, nullable=true)
+     */
+    private $remarks = '';
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="is_admin", type="boolean", nullable=false)
+     */
+    private $isAdmin = '0';
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="store_desc", type="string", length=1024, nullable=true)
+     */
+    private $storeDesc = '';
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="is_promo_valid", type="boolean", nullable=false)
+     */
+    private $isPromoValid = '0';
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="slug", type="string", length=255, nullable=false)
+     */
+    private $slug;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="store_name", type="string", length=1024, nullable=true)
+     */
+    private $storeName;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="EasyShop\Entities\CiSessions", inversedBy="member")
+     * @ORM\JoinTable(name="es_authenticated_session",
+     *   joinColumns={
+     *     @ORM\JoinColumn(name="member_id", referencedColumnName="id_member")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="session_id", referencedColumnName="session_id")
+     *   }
+     * )
+     */
+    private $session;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->session = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+}
