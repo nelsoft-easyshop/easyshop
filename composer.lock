@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "abc91ca4ba9a88ce5b502381e9ed7f85",
+    "hash": "102836f67572769d44eec6848ef39dac",
     "packages": [
         {
             "name": "cboden/ratchet",
@@ -1744,17 +1744,17 @@
         },
         {
             "name": "symfony/http-foundation",
-            "version": "v2.5.4",
+            "version": "dev-master",
             "target-dir": "Symfony/Component/HttpFoundation",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/HttpFoundation.git",
-                "reference": "cec87359655f901a11de336576851d3957449947"
+                "reference": "d17938f07e168c4e5bb35c209d3c289ccff15d80"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/HttpFoundation/zipball/cec87359655f901a11de336576851d3957449947",
-                "reference": "cec87359655f901a11de336576851d3957449947",
+                "url": "https://api.github.com/repos/symfony/HttpFoundation/zipball/d17938f07e168c4e5bb35c209d3c289ccff15d80",
+                "reference": "d17938f07e168c4e5bb35c209d3c289ccff15d80",
                 "shasum": ""
             },
             "require": {
@@ -1766,7 +1766,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.5-dev"
+                    "dev-master": "2.6-dev"
                 }
             },
             "autoload": {
@@ -1783,17 +1783,19 @@
             ],
             "authors": [
                 {
-                    "name": "Symfony Community",
-                    "homepage": "http://symfony.com/contributors"
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com",
+                    "homepage": "http://fabien.potencier.org",
+                    "role": "Lead Developer"
                 },
                 {
-                    "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com"
+                    "name": "Symfony Community",
+                    "homepage": "http://symfony.com/contributors"
                 }
             ],
             "description": "Symfony HttpFoundation Component",
             "homepage": "http://symfony.com",
-            "time": "2014-09-03 09:00:14"
+            "time": "2014-05-26 19:02:51"
         },
         {
             "name": "symfony/http-kernel",
@@ -2277,7 +2279,8 @@
         "swiftmailer/swiftmailer": 0,
         "doctrine/migrations": 20,
         "ezyang/htmlpurifier": 20,
-        "symfony/yaml": 20
+        "symfony/yaml": 20,
+        "symfony/http-foundation": 20
     },
     "platform": [
 

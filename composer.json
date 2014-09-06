@@ -8,6 +8,7 @@
         "doctrine/migrations": "dev-master",
         "ezyang/htmlpurifier": "dev-master",
         "symfony/yaml": "dev-master",
-        "elnur/blowfish-password-encoder-bundle": "~0.5"
+        "elnur/blowfish-password-encoder-bundle": "~0.5",
+        "symfony/http-foundation": "2.6.*@dev"
     }
 }

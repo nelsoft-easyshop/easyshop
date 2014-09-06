@@ -8,16 +8,19 @@ class HomeWebService extends MY_Controller
      *
      *  $xmlCmsService used for accessing functions under application/src/Easyshop/XML/CMS.php
      *  $xmlFileService used for accessing Resource class
+     *  $em entity manager injection
      */
     private $xmlCmsService;
-    public $xmlFileService;
-    
+    private $xmlFileService;
+    private $em;
+
     public function __construct() 
     {
         parent::__construct();
-        $this->load->model('user_model');
+
         $this->xmlCmsService = $this->serviceContainer['xml_cms'];
         $this->xmlFileService = $this->serviceContainer['xml_resource'];
+        $this->em = $this->serviceContainer['entity_manager'];
         $this->declareEnvironment();
 
         if($this->input->get()) {
@@ -33,11 +36,35 @@ class HomeWebService extends MY_Controller
      */
     public function declareEnvironment()
     {
+
         $env = strtolower(ENVIRONMENT);
         $this->file  = APPPATH . "resources/". $this->xmlFileService->getHomeXMLfile().".xml"; 
         $this->json = file_get_contents(APPPATH . "resources/json/jsonp.json");
+        $this->slugerrorjson = file_get_contents(APPPATH . "resources/json/slugerrorjson.json");
+        $this->boundsjson = file_get_contents(APPPATH . "resources/json/boundsjson.json");
     }
 
+    /**
+     *  Removes mainSlides/productSlides
+     *
+     *  @return JSON
+     */
+
+    public function removeContent() {
+
+        $map = simplexml_load_file($this->file);        
+        $index =  $this->input->get("index");
+        $nodeName =  $this->input->get("nodename");        
+        $file = $this->file;
+        $jsonFile = $this->json;        
+        if(count($map->mainSlide) > 1 || count($map->productSlide) > 1) {
+            $this->xmlCmsService->removeXML($file,$nodeName,$index);
+            return $this->output
+                        ->set_content_type('application/json')
+                        ->set_output($jsonFile);             
+        }
+      
+    }
 
     /**
      *  Method to display the contents of the home_files.xml from the function call from Easyshop.ph.admin
@@ -175,6 +202,7 @@ class HomeWebService extends MY_Controller
                         $two = 1;
                         $plusin = $two;
                         $plusor = $two;
+
                         $this->swapXmlForSetMainSlide($file, $orindex,$ororder, $plusin, $plusor, $value,$type,$coordinate,$target);
                     } 
                     else {
@@ -242,7 +270,7 @@ class HomeWebService extends MY_Controller
             $error = array('error' => $this->upload->display_errors());
                      return $this->output
                             ->set_content_type('application/json')
-                            ->set_output($jsonFile);
+                            ->set_output($error);
         } 
         else {
                 $data = array('upload_data' => $this->upload->data());
@@ -255,6 +283,7 @@ class HomeWebService extends MY_Controller
                 if($orindex == 0) {
                     $this->xmlCmsService->addXml($file,$string,'/map/mainSlide['.$index.']');
                     $this->swapXmlForAddMainSlide($file, $orindex, $index,$value,$type,$coordinate,$target);
+                
                 } 
                 else {
                     $this->xmlCmsService->addXml($file,$string,'/map/mainSlide['.$index.']');
@@ -273,6 +302,8 @@ class HomeWebService extends MY_Controller
     public function addProductSlide() 
     {
         $jsonFile = $this->json;
+        $slugerrorjson = $this->slugerrorjson;
+        $boundsjson = $this->boundsjson;
         $file = $this->file;
         $map = simplexml_load_file($this->file);  
         $count = count($map->productSlide) - 1;
@@ -291,14 +322,16 @@ class HomeWebService extends MY_Controller
         $string = $this->xmlCmsService->getString($nodeName, $value, $type, $coordinate, $target);
         $orindex = $index;
         $index = ($index == 0 ? 1 : $index);
-        $this->load->model("product_model");
 
-        $count = $this->product_model->getProdCountBySlug($value);
-
-        if($count < 1) {
-            exit("Product slug does not exist");
-        }
-
+        $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                        ->findBy(['slug' => $value]);
+                        
+        if($product){
+                    return $this->output
+                        ->set_content_type('application/json')
+                        ->set_output($slugerrorjson);
+        }  
+        
         if($orindex == 0) {
             $this->xmlCmsService->addXml($file,$string,'/map/productSlide[last()]');
             $this->swapXmlForAddProductSlide($file,$orindex, $index,$value);
@@ -368,6 +401,8 @@ class HomeWebService extends MY_Controller
     public function setSectionProduct()
     {
         $jsonFile = $this->json;
+        $slugerrorjson = $this->slugerrorjson;
+        $boundsjson = $this->boundsjson;
         $map = simplexml_load_file($this->file);   
                 
         $index = $this->input->get("index");
@@ -382,12 +417,22 @@ class HomeWebService extends MY_Controller
 
         $map->section[$index]->product_panel[$productindex]->value = $value;
         $map->section[$index]->product_panel[$productindex]->type = $type;
-
-        if($map->asXML($this->file)) {
-            return $this->output
-                ->set_content_type('application/json')
-                ->set_output($jsonFile);
+        $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                        ->findBy(['slug' => $value]);
+                        
+        if($product){
+                    return $this->output
+                        ->set_content_type('application/json')
+                        ->set_output($slugerrorjson);
+        }  
+        else {
+            if($map->asXML($this->file)) {
+                return $this->output
+                    ->set_content_type('application/json')
+                    ->set_output($jsonFile);
+            }
         }
+
     }
 
     /**
@@ -399,6 +444,8 @@ class HomeWebService extends MY_Controller
     {
         $file = $this->file;
         $jsonFile = $this->json;
+        $slugerrorjson = $this->slugerrorjson;
+        $boundsjson = $this->boundsjson;
 
         $index = $this->input->get("index");
         $userid = $this->input->get("userid");
@@ -414,7 +461,16 @@ class HomeWebService extends MY_Controller
         
         $index = (int)$index;
         $productindex = (int)$productindex;
-
+      
+        $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                        ->findBy(['slug' => $value]);
+                        
+        if($product){
+            return $this->output
+                ->set_content_type('application/json')
+                ->set_output($slugerrorjson);
+                exit();
+        }  
 
                 if(strtolower($type) == "image") {
                     if($coordinate != "" && $target != "") {
@@ -464,7 +520,10 @@ class HomeWebService extends MY_Controller
      */
     public function addSectionMainPanel() 
     {
+
         $jsonFile = $this->json;
+        $slugerrorjson = $this->slugerrorjson;
+        $boundsjson = $this->boundsjson;
         $file = $this->file;
         $map = simplexml_load_file($file);   
         $index = $this->input->get("index");
@@ -478,12 +537,22 @@ class HomeWebService extends MY_Controller
         $nodeName = "product_panel_main";
         
         $index = (int)$index;
-        $productindex = (int)$productindex;
-
             if(!is_numeric($index) || !is_numeric($productindex) || $index > count($map->section) || $productindex > count($map->section[$index]->product_panel_main) || $index < 0 || $productindex < 0) {
-                exit("Index out of bounds");
+                return $this->output
+                        ->set_content_type('application/json')
+                        ->set_output($boundsjson);
             } 
+            $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                        ->findBy(['slug' => $value]);
+                        
+            if($product){
+
+                return $this->output
+                        ->set_content_type('application/json')
+                        ->set_output($slugerrorjson);
+            }             
             else {
+                $productindex = (int)$productindex;                
                 if(strtolower($type) == "image" && isset($coordinate) && isset($target)) {           
                     $coordinate = $coordinate == "" ? "0,0,0,0" : $coordinate;
                     $target = $target == "" ? "" : $target;
@@ -506,6 +575,7 @@ class HomeWebService extends MY_Controller
                             $string = $this->xmlCmsService->getString($nodeName, $value, $type, $coordinate, $target);
                             $newindex = ($index == 0 ? 1 : $index);
                             $newprodindex = ($productindex == 0 ? 1 : $productindex);
+                    
                             $this->swapXmlForAddSectionMainSlide_image($file, $newprodindex,$newindex,$index,$productindex,$value,$type,$coordinate,$target);
                             return $this->output
                                     ->set_content_type('application/json')
@@ -588,6 +658,9 @@ class HomeWebService extends MY_Controller
     public function setProductSlide() 
     {
         $jsonFile = $this->json;
+        $slugerrorjson = $this->slugerrorjson;
+        $boundsjson = $this->boundsjson;
+
         $map = simplexml_load_file($this->file);   
 
         $index = $this->input->get("index");
@@ -601,9 +674,18 @@ class HomeWebService extends MY_Controller
         $index = (int)$index;
         $string = $this->xmlCmsService->getString($nodeName, $value, $type, "", "");
 
-        $this->load->model("product_model");
-        $count = $this->product_model->getProdCountBySlug($value);
-        if($count < 1) {
+        $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                        ->findBy(['slug' => $value]);
+                        
+        if($product){
+                    return $this->output
+                        ->set_content_type('application/json')
+                        ->set_output($slugerrorjson);
+        }
+
+        $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                        ->findBy(['slug' => $value]);    
+        if($product){
             exit("Product slug does not exist");
         }
         
@@ -673,6 +755,8 @@ class HomeWebService extends MY_Controller
     public function addSectionProduct()
     {
         $jsonFile = $this->json;
+        $slugerrorjson = $this->slugerrorjson;
+        $boundsjson = $this->boundsjson;
         $file = $this->file;
         $index = $this->input->get("index");
         $userid = $this->input->get("userid");
@@ -684,14 +768,26 @@ class HomeWebService extends MY_Controller
         $type = ($type == "") ? "product" : $type;
 
         $index = (int)$index;
-        $productindex = (int)$productindex;
+
         $nodeName = "product_panel";
         $map = simplexml_load_file($file);   
         
         if(!is_numeric($index) || !is_numeric($productindex) || $index > count($map->section) - 1 || $productindex > count($map->section[$index]->product_panel) - 1 || $index < 0 || $productindex < 0) {
-            exit("Parameter out of bounds");
+                    return $this->output
+                        ->set_content_type('application/json')
+                        ->set_output($boundsjson);
         } 
+
+        $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                        ->findBy(['slug' => $value]);
+                        
+        if($product){
+                    return $this->output
+                        ->set_content_type('application/json')
+                        ->set_output($slugerrorjson);
+        }        
         else {
+            $productindex = (int)$productindex;            
             $node = $map->section[$index]->product_panel[$productindex];
     
             $string = $this->xmlCmsService->getString($nodeName,$value,$type, "", "");
@@ -714,7 +810,7 @@ class HomeWebService extends MY_Controller
                 } 
                 else {
                     $this->xmlCmsService->addXmlChild($file,$string,'/map/section['.$newindex.']/product_panel['.$newprodindex.']');
-                    $this->swapXmlForSectionProduct($newprodindex,$newindex,$value,$type,$index,$productindex);
+                    $this->swapXmlForSectionProduct($file, $newprodindex,$newindex,$value,$type,$index,$productindex);
                     return $this->output
                         ->set_content_type('application/json')
                         ->set_output($jsonFile);
@@ -722,7 +818,6 @@ class HomeWebService extends MY_Controller
         }
 
     }
-
     /**
      *  Method used to add xml contents for typeNodes under home_files.xml
      *
@@ -767,7 +862,6 @@ class HomeWebService extends MY_Controller
                             ->set_output($jsonFile);
             }
     }
-
     /**
      *  Method used to swap xml contents for setMainSlide method, user for re-ordering nodes
      *

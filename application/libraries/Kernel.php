@@ -31,8 +31,8 @@ class Kernel
     private function _bootstrap()
     {
         /* We register the application class autoloader */
-        require_once APPPATH . '/src/EasyShop/Core/ClassAutoloader/PSR0Autoloader.php';
-        $psr0Autoloader = new PSR0Autoloader(APPPATH . "/src/");
+        require_once APPPATH . 'src/EasyShop/Core/ClassAutoloader/PSR0Autoloader.php';
+        $psr0Autoloader = new PSR0Autoloader(APPPATH . "src/");
         $psr0Autoloader->register();
 
         /* We register 3rd party autoloader */
@@ -67,7 +67,7 @@ class Kernel
         $container['entity_manager'] = function ($c) use ($dbConfig, $config){
             return Doctrine\ORM\EntityManager::create($dbConfig, $config);
         };
-        
+
         // ZeroMQ pusher
         $container['user_pusher'] = function ($c) {
             $wsConfig = require APPPATH . '/config/param/websocket.php';
@@ -85,7 +85,7 @@ class Kernel
         $container['local_configuration'] = function ($c) {
             return new \EasyShop\Core\Configuration\Configuration();
         };
-
+        
         //CMS Service
         $container['xml_cms'] = function ($c) {
             return new \EasyShop\XML\CMS();
@@ -99,9 +99,34 @@ class Kernel
         //Authentication Manager
         $container['account_manager'] = function ($c) {
             return new \EasyShop\Account\AccountManager();
+
+        // Point Tracker
+        $container['point_tracker'] = function ($c) {
+            return new \EasyShop\PointTracker\PointTracker();
         };
-        
+
+        // Payment Service
+        $container['payment_service'] = function ($c) {
+            return new \EasyShop\PaymentService\PaymentService();
+        };
+
+        // Http foundation
+        $container['http_foundation'] = function ($c) {
+            return \Symfony\Component\HttpFoundation\Request::createFromGlobals();
+        };
+
+          // Product Manager
+        $container['product_manager'] = function ($c) {
+            return new \EasyShop\Product\ProductManager();
+        };
+
+        // Collection Helper
+        $container['collection_helper'] = function ($c) {
+            return new \EasyShop\CollectionHelper\CollectionHelper();
+        };
+
         /* Register services END */
         $this->serviceContainer = $container;
     }
+
 }
