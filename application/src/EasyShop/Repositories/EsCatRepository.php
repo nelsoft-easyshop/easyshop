@@ -37,3 +37,4 @@ class EsCatRepository extends EntityRepository
         return explode(',', $results['categoryList']);
     }
 }
+

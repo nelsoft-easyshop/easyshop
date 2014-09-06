@@ -345,3 +345,4 @@ class EsProductRepository extends EntityRepository
         return $result['count'];
     }    
 }
+
