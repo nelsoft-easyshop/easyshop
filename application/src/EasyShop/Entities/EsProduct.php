@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * EsProduct
  *
- * @ORM\Table(name="es_product", indexes={@ORM\Index(name="fk_es_product_es_cat1_idx", columns={"cat_id"}), @ORM\Index(name="fk_es_product_es_brand1_idx", columns={"brand_id"}), @ORM\Index(name="fk_es_product_es_style1_idx", columns={"style_id"}), @ORM\Index(name="fk_es_product_es_member1_idx", columns={"member_id"}), @ORM\Index(name="fk_es_product_es_billing_info_idx", columns={"billing_info_id"}), @ORM\Index(name="slug", columns={"slug"}), @ORM\Index(name="fk_es_product_es_keywords1_idx", columns={"name", "keywords"})})
+ * @ORM\Table(name="es_product", indexes={@ORM\Index(name="fk_es_product_es_cat1_idx", columns={"cat_id"}), @ORM\Index(name="fk_es_product_es_brand1_idx", columns={"brand_id"}), @ORM\Index(name="fk_es_product_es_style1_idx", columns={"style_id"}), @ORM\Index(name="fk_es_product_es_member1_idx", columns={"member_id"}), @ORM\Index(name="fk_es_product_es_billing_info_idx", columns={"billing_info_id"}), @ORM\Index(name="slug", columns={"slug"}), @ORM\Index(name="fk_es_product_es_keywords1_idx", columns={"name", "keywords"}), @ORM\Index(name="fulltext_search_keyword", columns={"search_keyword"})})
  * @ORM\Entity
  */
 class EsProduct
@@ -62,13 +62,6 @@ class EsProduct
      * @ORM\Column(name="keywords", type="string", length=1024, nullable=false)
      */
     private $keywords = '';
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="search_keyword", type="string", length=1024, nullable=true)
-     */
-    private $searchKeyword = '';
 
     /**
      * @var string
@@ -216,6 +209,13 @@ class EsProduct
      * @ORM\Column(name="is_sold_out", type="boolean", nullable=false)
      */
     private $isSoldOut = '0';
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="search_keyword", type="string", length=1024, nullable=true)
+     */
+    private $searchKeyword = '';
 
     /**
      * @var boolean
@@ -412,29 +412,6 @@ class EsProduct
     public function getKeywords()
     {
         return $this->keywords;
-    }
-
-    /**
-     * Set searchKeyword
-     *
-     * @param string $searchKeyword
-     * @return EsProduct
-     */
-    public function setSearchKeyword($searchKeyword)
-    {
-        $this->searchKeyword = $searchKeyword;
-
-        return $this;
-    }
-
-    /**
-     * Get searchKeyword
-     *
-     * @return string 
-     */
-    public function getSearchKeyword()
-    {
-        return $this->searchKeyword;
     }
 
     /**
@@ -918,6 +895,29 @@ class EsProduct
     public function getIsSoldOut()
     {
         return $this->isSoldOut;
+    }
+
+    /**
+     * Set searchKeyword
+     *
+     * @param string $searchKeyword
+     * @return EsProduct
+     */
+    public function setSearchKeyword($searchKeyword)
+    {
+        $this->searchKeyword = $searchKeyword;
+
+        return $this;
+    }
+
+    /**
+     * Get searchKeyword
+     *
+     * @return string 
+     */
+    public function getSearchKeyword()
+    {
+        return $this->searchKeyword;
     }
 
     /**
