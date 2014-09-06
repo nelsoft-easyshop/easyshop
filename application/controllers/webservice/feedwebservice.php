@@ -3,14 +3,31 @@
 class FeedWebService extends MY_Controller 
 {
 
+
+    private $map, $targetNode;
+    
+    /**
+     * The XML service
+     */
+    private $xmlFileService;
+    
+    /**
+     * The CMS Service
+     *
+     */
+    private $xmlCmsService;
+    
+    /**
+     * The entity manager
+     *
+     */
+    
+    private $em;    
+    
     /**
      *  Constructor call for Administrator's authentication. Authentication method is located in MY_Controller.php
-     *
      *  
      */
-    private $map, $targetNode, $xmlCmsService;
-    public $xmlFileService;
-    private $em;    
     public function __construct()
     {
         parent::__construct();
