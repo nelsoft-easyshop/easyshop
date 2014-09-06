@@ -326,7 +326,7 @@ class HomeWebService extends MY_Controller
         $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
                         ->findBy(['slug' => $value]);
                         
-        if($product){
+        if(!$product){
                     return $this->output
                         ->set_content_type('application/json')
                         ->set_output($slugerrorjson);
@@ -420,7 +420,7 @@ class HomeWebService extends MY_Controller
         $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
                         ->findBy(['slug' => $value]);
                         
-        if($product){
+        if(!$product){
                     return $this->output
                         ->set_content_type('application/json')
                         ->set_output($slugerrorjson);
@@ -465,7 +465,7 @@ class HomeWebService extends MY_Controller
         $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
                         ->findBy(['slug' => $value]);
                         
-        if($product){
+        if(!$product){
             return $this->output
                 ->set_content_type('application/json')
                 ->set_output($slugerrorjson);
@@ -545,7 +545,7 @@ class HomeWebService extends MY_Controller
             $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
                         ->findBy(['slug' => $value]);
                         
-            if($product){
+            if(!$product){
 
                 return $this->output
                         ->set_content_type('application/json')
@@ -677,7 +677,7 @@ class HomeWebService extends MY_Controller
         $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
                         ->findBy(['slug' => $value]);
                         
-        if($product){
+        if(!$product){
                     return $this->output
                         ->set_content_type('application/json')
                         ->set_output($slugerrorjson);
@@ -685,7 +685,7 @@ class HomeWebService extends MY_Controller
 
         $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
                         ->findBy(['slug' => $value]);    
-        if($product){
+        if(!$product){
             exit("Product slug does not exist");
         }
         
@@ -781,7 +781,7 @@ class HomeWebService extends MY_Controller
         $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
                         ->findBy(['slug' => $value]);
                         
-        if($product){
+        if(!$product){
                     return $this->output
                         ->set_content_type('application/json')
                         ->set_output($slugerrorjson);

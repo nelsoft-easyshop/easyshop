@@ -160,7 +160,7 @@ class FeedWebService extends MY_Controller
         $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
                         ->findBy(['slug' => $this->input->get("slug")]);
                         
-        if($product) {
+        if(!$product) {
                     return $this->output
                         ->set_content_type('application/json')
                         ->set_output($slugerrorjson);
@@ -197,7 +197,7 @@ class FeedWebService extends MY_Controller
         $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
                         ->findBy(['slug' => $this->input->get("slug")]);
                         
-        if($product){
+        if(!$product){
                     return $this->output
                         ->set_content_type('application/json')
                         ->set_output($slugerrorjson);
@@ -249,7 +249,7 @@ class FeedWebService extends MY_Controller
         $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
                         ->findBy(['slug' => $this->input->get("slug")]);
                         
-        if($product){
+        if(!$product){
                     return $this->output
                         ->set_content_type('application/json')
                         ->set_output($slugerrorjson);
@@ -289,7 +289,7 @@ class FeedWebService extends MY_Controller
         $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
                         ->findBy(['slug' => $this->input->get("slug")]);
                         
-        if($product){
+        if(!$product){
                     return $this->output
                         ->set_content_type('application/json')
                         ->set_output($slugerrorjson);
@@ -346,7 +346,7 @@ class FeedWebService extends MY_Controller
         $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
                         ->findBy(['slug' => $this->input->get("slug")]);
                         
-        if($product){
+        if(!$product){
                     return $this->output
                         ->set_content_type('application/json')
                         ->set_output($slugerrorjson);
@@ -384,7 +384,7 @@ class FeedWebService extends MY_Controller
         $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
                         ->findBy(['slug' => $this->input->get("slug")]);
                         
-        if($product){
+        if(!$product){
                     return $this->output
                         ->set_content_type('application/json')
                         ->set_output($slugerrorjson);
@@ -502,7 +502,7 @@ class FeedWebService extends MY_Controller
                     $user = $this->em->getRepository('EasyShop\Entities\EsMember')
                                                     ->findBy(['idMember' => $ids]);
                         
-                    if($user){
+                    if(!$user){
                         $valid = 0;
                         return $this->output
                             ->set_content_type('application/json')
@@ -518,7 +518,7 @@ class FeedWebService extends MY_Controller
                 $user = $this->em->getRepository('EasyShop\Entities\EsMember')
                                   ->findBy(['idMember' => $this->input->get("value")]);
                         
-                if($user){
+                if(!$user){
                         return $this->output
                             ->set_content_type('application/json')
                             ->set_output($this->usererror);
