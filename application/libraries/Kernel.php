@@ -95,7 +95,6 @@ class Kernel
         $container['xml_resource'] = function ($c) use ($container) {
             return new \EasyShop\XML\Resource($container['local_configuration']);
         };
- 
         
         // Point Tracker
         $container['point_tracker'] = function ($c) {

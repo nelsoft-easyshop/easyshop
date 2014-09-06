@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * EsKeeplogin
  *
  * @ORM\Table(name="es_keeplogin", uniqueConstraints={@ORM\UniqueConstraint(name="token_UNIQUE", columns={"token"}), @ORM\UniqueConstraint(name="UNIQUE PAIR", columns={"id_member", "last_ip", "useragent"})}, indexes={@ORM\Index(name="fk_es_keeplogin_es_member_idx", columns={"id_member"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="EasyShop\Repositories\EsKeeploginRepository")
  */
 class EsKeeplogin
 {
