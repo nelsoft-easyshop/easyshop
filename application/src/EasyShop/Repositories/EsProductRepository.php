@@ -366,4 +366,30 @@ class EsProductRepository extends EntityRepository
 
         return $resultNeeded;
     }
+
+    /**
+     * Returns the number of active products
+     * 
+     * @return int
+     *
+     */
+    public function getActiveProductCount()
+    {
+        $this->em = $this->_em;
+        $rsm = new ResultSetMapping(); 
+        $rsm->addScalarResult('count', 'count');
+
+        $sql = " 
+          SELECT COUNT(*) as count
+          FROM es_product
+          WHERE is_draft = 0 AND is_delete = 0
+        ";
+        
+        $query = $this->em->createNativeQuery($sql, $rsm);
+        $result = $query->getOneOrNullResult();
+
+        return $result['count'];
+    }    
 }
+
+

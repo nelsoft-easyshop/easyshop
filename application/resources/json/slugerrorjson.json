@@ -1,0 +1,11 @@
+jsonCallback(
+    {
+        "sites":
+        [
+            {
+                "slugerror": "Product Slug does not exist",   
+            },
+        ]
+    }
+);
+
