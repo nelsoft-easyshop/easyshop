@@ -322,54 +322,26 @@ class EsProductRepository extends EntityRepository
     }
 
     /**
-     * Returns the count of a product based on a slug
+     * Returns the number of active products
      * 
-     * @param string $slug
      * @return int
      *
      */
-    public function getProdCountBySlug($slug)
+    public function getActiveProductCount()
     {
         $this->em = $this->_em;
         $rsm = new ResultSetMapping(); 
-        $rsm->addScalarResult('slug', 'slug');
+        $rsm->addScalarResult('count', 'count');
 
         $sql = " 
-          SELECT *
+          SELECT COUNT(*) as count
           FROM es_product
-          WHERE slug = :slug
+          WHERE is_draft = 0 AND is_delete = 0
         ";
         
         $query = $this->em->createNativeQuery($sql, $rsm);
-        $query->setParameter('slug', $slug);
-        
-        $result = $query->getResult();
-        return count($result);              
-    }
+        $result = $query->getOneOrNullResult();
 
-    /**
-     * Returns the count of a product based on ID
-     * 
-     * @param int $id
-     * @return int
-     *
-     */
-    public function getProdCountById($id)
-    {
-        $this->em = $this->_em;
-        $rsm = new ResultSetMapping(); 
-        $rsm->addScalarResult('id_product', 'id_product');
-
-        $sql = " 
-          SELECT *
-          FROM es_product
-          WHERE id_product = :id_product
-        ";
-        
-        $query = $this->em->createNativeQuery($sql, $rsm);
-        $query->setParameter('id_product', $id);
-        
-        $result = $query->getResult();
-        return count($result);
+        return $result['count'];
     }    
 }
