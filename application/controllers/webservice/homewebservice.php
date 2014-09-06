@@ -323,10 +323,10 @@ class HomeWebService extends MY_Controller
         $orindex = $index;
         $index = ($index == 0 ? 1 : $index);
 
-
-        $count = $this->em->getRepository('EasyShop\Entities\EsProduct')->getProdCountBySlug($value);
-
-        if($count < 1) {
+        $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                        ->findBy(['slug' => $value]);
+                        
+        if($product){
                     return $this->output
                         ->set_content_type('application/json')
                         ->set_output($slugerrorjson);
@@ -417,9 +417,10 @@ class HomeWebService extends MY_Controller
 
         $map->section[$index]->product_panel[$productindex]->value = $value;
         $map->section[$index]->product_panel[$productindex]->type = $type;
-        $count = $this->em->getRepository('EasyShop\Entities\EsProduct')->getProdCountBySlug($value);
-
-        if($count < 1) {
+        $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                        ->findBy(['slug' => $value]);
+                        
+        if($product){
                     return $this->output
                         ->set_content_type('application/json')
                         ->set_output($slugerrorjson);
@@ -460,11 +461,11 @@ class HomeWebService extends MY_Controller
         
         $index = (int)$index;
         $productindex = (int)$productindex;
-
+      
+        $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                        ->findBy(['slug' => $value]);
                         
-        $count = $this->em->getRepository('EasyShop\Entities\EsProduct')->getProdCountBySlug($value);
-
-        if($count < 1) {
+        if($product){
             return $this->output
                 ->set_content_type('application/json')
                 ->set_output($slugerrorjson);
@@ -541,9 +542,10 @@ class HomeWebService extends MY_Controller
                         ->set_content_type('application/json')
                         ->set_output($boundsjson);
             } 
-            $count =  $this->em->getRepository('EasyShop\Entities\EsProduct')->getProdCountBySlug($value);
-
-            if($count < 1) {
+            $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                        ->findBy(['slug' => $value]);
+                        
+            if($product){
 
                 return $this->output
                         ->set_content_type('application/json')
@@ -672,17 +674,18 @@ class HomeWebService extends MY_Controller
         $index = (int)$index;
         $string = $this->xmlCmsService->getString($nodeName, $value, $type, "", "");
 
-        $count =  $this->em->getRepository('EasyShop\Entities\EsProduct')->getProdCountBySlug($value);
-
-        if($count < 1) {
+        $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                        ->findBy(['slug' => $value]);
+                        
+        if($product){
                     return $this->output
                         ->set_content_type('application/json')
                         ->set_output($slugerrorjson);
         }
 
-        $this->load->model("product_model");
-        $count = $this->product_model->getProdCountBySlug($value);
-        if($count < 1) {
+        $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                        ->findBy(['slug' => $value]);    
+        if($product){
             exit("Product slug does not exist");
         }
         
@@ -775,9 +778,10 @@ class HomeWebService extends MY_Controller
                         ->set_output($boundsjson);
         } 
 
-        $count = $this->em->getRepository('EasyShop\Entities\EsProduct')->getProdCountBySlug($value);
-
-        if($count < 1) {
+        $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                        ->findBy(['slug' => $value]);
+                        
+        if($product){
                     return $this->output
                         ->set_content_type('application/json')
                         ->set_output($slugerrorjson);
