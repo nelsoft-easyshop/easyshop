@@ -43,7 +43,7 @@ class UserPusher
     public function push($userId, DataContainer $dataContainer)
     {
         $authenticatedSessions = $this->em->getRepository('\EasyShop\Entities\EsAuthenticatedSession')
-                                          ->findBy(['user' => $userId]);
+                                          ->findBy(['member' => $userId]);
         $data = $dataContainer->getData();
         foreach ($authenticatedSessions as $authenticatedSession) {
             $data['session_id'] = $authenticatedSession->getSession()->getId();
