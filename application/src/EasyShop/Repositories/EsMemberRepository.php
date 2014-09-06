@@ -9,7 +9,6 @@ use EasyShop\Entities\EsMember as EsMember;
 
 class EsMemberRepository extends EntityRepository
 {
-
     /**
      * Returns the count of a all users
      *
@@ -30,4 +29,3 @@ class EsMemberRepository extends EntityRepository
 
 
 }
-

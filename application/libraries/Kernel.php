@@ -111,6 +111,16 @@ class Kernel
             return \Symfony\Component\HttpFoundation\Request::createFromGlobals();
         };
 
+          // Product Manager
+        $container['product_manager'] = function ($c) {
+            return new \EasyShop\Product\ProductManager();
+        };
+
+        // Collection Helper
+        $container['collection_helper'] = function ($c) {
+            return new \EasyShop\CollectionHelper\CollectionHelper();
+        };
+
         /* Register services END */
         $this->serviceContainer = $container;
     }

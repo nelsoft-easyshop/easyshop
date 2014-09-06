@@ -35,33 +35,35 @@ class EsProductRepository extends EntityRepository
         $rsm->addFieldResult('u', 'discount', 'discount');
         $rsm->addFieldResult('u', 'isSoldOut', 'isSoldOut');
         $query = $this->em->createNativeQuery("
-        SELECT `id_product` as idProduct
-            , `name`
-            , `price`
-            , `slug`
-            , `brief`
-            , `condition`
-            , `startdate`
-            , `enddate`
-            , `is_promote` as isPromote
-            , `promo_type` as promoType
-            , `discount`
-            , `is_sold_out` as isSoldOut
-            , (ftscore_name + ftscore2_name + ftscore3_name + ftscore + ftscore2 + ftscore3 ) AS weight 
+            SELECT `id_product` as idProduct
+                , `name`
+                , `price`
+                , `slug`
+                , `brief`
+                , `condition`
+                , `startdate`
+                , `enddate`
+                , `is_promote` as isPromote
+                , `promo_type` as promoType
+                , `discount`
+                , `is_sold_out` as isSoldOut
+                , `weight`
             FROM (
-                SELECT 
-                    MATCH (`name`) AGAINST (:param0 IN BOOLEAN MODE) * 3 AS ftscore_name,
-                    MATCH (`search_keyword`) AGAINST (:param0 IN BOOLEAN MODE) * 1.5 AS ftscore,
-                    MATCH (`name`) AGAINST (:param1 IN BOOLEAN MODE) * 2 AS ftscore2_name,
-                    MATCH (`search_keyword`) AGAINST (:param1 IN BOOLEAN MODE) * 1 AS ftscore2, 
-                    MATCH (`name`) AGAINST (:param2 IN BOOLEAN MODE) * 5 AS ftscore3_name,
-                    MATCH (`search_keyword`) AGAINST (:param2 IN BOOLEAN MODE) * 2.5 AS ftscore3, 
-                    id_product,`name`,price,brief,slug,`condition`,startdate, enddate,is_promote,promo_type,discount
-                    ,`is_sold_out`
-                FROM es_product
-                WHERE is_delete = 0 AND is_draft = 0 ) AS score_tbl
-        HAVING weight > 0
-        ORDER BY weight DESC,name ASC 
+                    SELECT 
+                        (MATCH (`name`) AGAINST (:param0 IN BOOLEAN MODE) * 3) +
+                        (MATCH (`search_keyword`) AGAINST (:param0 IN BOOLEAN MODE) * 1.5) +
+                        MATCH (`name`) AGAINST (:param1 IN BOOLEAN MODE) +
+                        (MATCH (`search_keyword`) AGAINST (:param1 IN BOOLEAN MODE) * 0.5) +
+                        (MATCH (`name`) AGAINST (:param2 IN BOOLEAN MODE) * 5) +
+                        (MATCH (`search_keyword`) AGAINST (:param2 IN BOOLEAN MODE) * 2) AS weight,
+                        id_product,`name`,price,brief,slug,`condition`,startdate, enddate,is_promote,promo_type,discount
+                        ,`is_sold_out`
+                    FROM es_product
+                    WHERE is_delete = 0 AND is_draft = 0 
+                    AND MATCH (`search_keyword`) AGAINST (:param1 IN BOOLEAN MODE)
+                ) as score_table
+            HAVING weight > 0
+            ORDER BY weight DESC,name ASC
         ", $rsm);
         $query->setParameter('param0', $stringCollection[0]);
         $query->setParameter('param1', $stringCollection[1]); 
@@ -76,35 +78,57 @@ class EsProductRepository extends EntityRepository
      * @param  array  $productId
      * @return array
      */
-    public function getDetails($productId = array())
-    {
+    public function getDetails($productId = array(),$offset,$perPage)
+    {   
         if(count($productId) > 0){
             $this->em =  $this->_em;
-            $qb = $this->em->createQueryBuilder();
-            $qbResult = $qb->select(array('p.idProduct'
-                                            ,'p.name'
-                                            ,'p.price'  
-                                            ,'p.brief' 
-                                            ,'p.slug'
-                                            ,'p.condition' 
-                                            ,'p.startdate'
-                                            ,'p.enddate'
-                                            ,'p.isPromote'
-                                            ,'p.promoType'
-                                            ,'p.discount'
-                                            ,'p.isSoldOut'
-                                            ,'i.productImagePath'))
-                                    ->from('EasyShop\Entities\EsProduct','p')
-                                    ->leftJoin('EasyShop\Entities\EsProductImage','i','WITH','p.idProduct = i.product AND i.isPrimary = 1')
-                                    ->where( 
-                                            $qb->expr()->in('p.idProduct', $productId)
-                                        )
-                                    ->getQuery();
-            $result = $qbResult->getResult();
+            $rsm = new ResultSetMapping(); 
+                $rsm->addScalarResult('idProduct', 'idProduct');
+                $rsm->addScalarResult('name', 'name');
+                $rsm->addScalarResult('brief', 'brief');
+                $rsm->addScalarResult('price', 'price');
+                $rsm->addScalarResult('slug', 'slug');
+                $rsm->addScalarResult('condition', 'condition');
+                $rsm->addScalarResult('startdate', 'startdate');
+                $rsm->addScalarResult('enddate', 'enddate');
+                $rsm->addScalarResult('isPromote', 'isPromote');
+                $rsm->addScalarResult('promoType', 'promoType');
+                $rsm->addScalarResult('discount', 'discount');
+                $rsm->addScalarResult('isSoldOut', 'isSoldOut');
+                $rsm->addScalarResult('productImagePath', 'productImagePath');
+                $rsm->addScalarResult('username', 'username');
 
-            return $result;
-        }
-        
+                $query = $this->em->createNativeQuery("
+                    SELECT 
+                        p.id_product as idProduct
+                        , p.name as name
+                        , p.brief as brief
+                        , p.price as price
+                        , p.slug as slug
+                        , p.condition
+                        , p.startdate as startdate
+                        , p.enddate as enddate
+                        , p.is_promote as isPromote
+                        , p.promo_type as promoType
+                        , p.discount as discount
+                        , p.is_sold_out as isSoldOut
+                        , i.product_image_path as productImagePath
+                        , m.username as username
+                    FROM 
+                        es_product p
+                        LEFT JOIN es_product_image i ON p.id_product = i.product_id AND i.is_primary = 1
+                        LEFT JOIN es_member m ON m.id_member = p.member_id
+                    WHERE p.id_product IN (:ids)
+                    ORDER BY FIELD(p.id_product,:ids)
+                    LIMIT :offset, :page ", $rsm);
+                $query->setParameter('ids', $productId);
+                $query->setParameter('offset', $offset * $perPage);
+                $query->setParameter('page', $perPage);
+                $results = $query->execute();
+
+                return $results;
+            }
+            
         return false;
     }
 
@@ -322,6 +346,28 @@ class EsProductRepository extends EntityRepository
     }
 
     /**
+     * Find Product By seller
+     * @return [type] [description]
+     */
+    public function findBySeller($seller)
+    {
+        $this->em =  $this->_em;
+        $qb = $this->em->createQueryBuilder();
+        $qbResult = $qb->select('p.idProduct')
+                                ->from('EasyShop\Entities\EsProduct','p')
+                                ->leftJoin('EasyShop\Entities\EsMember','m','WITH','p.member = m.idMember')
+                                ->where('p.isDraft = 0')
+                                ->andWhere('p.isDelete = 0')
+                                ->andWhere('m.username LIKE :username')
+                                ->setParameter('username', '%'.$seller.'%')
+                                ->getQuery();
+        $result = $qbResult->getResult(); 
+        $resultNeeded = array_map(function($value) { return $value['idProduct']; }, $result);
+
+        return $resultNeeded;
+    }
+
+    /**
      * Returns the number of active products
      * 
      * @return int
@@ -345,4 +391,5 @@ class EsProductRepository extends EntityRepository
         return $result['count'];
     }    
 }
+
 
