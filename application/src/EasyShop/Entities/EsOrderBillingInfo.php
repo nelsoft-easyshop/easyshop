@@ -15,11 +15,33 @@ class EsOrderBillingInfo
     /**
      * @var integer
      *
+<<<<<<< HEAD
+     * @ORM\Column(name="id_es_order_billing_info", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $idEsOrderBillingInfo;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="order_id", type="integer", nullable=true)
+     */
+    private $orderId = '0';
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="order_product_id", type="integer", nullable=true)
+     */
+    private $orderProductId = '0';
+=======
      * @ORM\Column(name="id_order_billing_info", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $idOrderBillingInfo;
+>>>>>>> b198a01854f99d407559580ab11477812edeb08f
 
     /**
      * @var string
@@ -45,6 +67,61 @@ class EsOrderBillingInfo
 
 
     /**
+<<<<<<< HEAD
+     * Get idEsOrderBillingInfo
+     *
+     * @return integer 
+     */
+    public function getIdEsOrderBillingInfo()
+    {
+        return $this->idEsOrderBillingInfo;
+    }
+
+    /**
+     * Set orderId
+     *
+     * @param integer $orderId
+     * @return EsOrderBillingInfo
+     */
+    public function setOrderId($orderId)
+    {
+        $this->orderId = $orderId;
+
+        return $this;
+    }
+
+    /**
+     * Get orderId
+     *
+     * @return integer 
+     */
+    public function getOrderId()
+    {
+        return $this->orderId;
+    }
+
+    /**
+     * Set orderProductId
+     *
+     * @param integer $orderProductId
+     * @return EsOrderBillingInfo
+     */
+    public function setOrderProductId($orderProductId)
+    {
+        $this->orderProductId = $orderProductId;
+
+        return $this;
+    }
+
+    /**
+     * Get orderProductId
+     *
+     * @return integer 
+     */
+    public function getOrderProductId()
+    {
+        return $this->orderProductId;
+=======
      * Get idOrderBillingInfo
      *
      * @return integer 
@@ -52,6 +129,7 @@ class EsOrderBillingInfo
     public function getIdOrderBillingInfo()
     {
         return $this->idOrderBillingInfo;
+>>>>>>> b198a01854f99d407559580ab11477812edeb08f
     }
 
     /**

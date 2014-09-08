@@ -7,7 +7,11 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * EsProduct
  *
+<<<<<<< HEAD
+ * @ORM\Table(name="es_product", indexes={@ORM\Index(name="fk_es_product_es_cat1_idx", columns={"cat_id"}), @ORM\Index(name="fk_es_product_es_brand1_idx", columns={"brand_id"}), @ORM\Index(name="fk_es_product_es_style1_idx", columns={"style_id"}), @ORM\Index(name="fk_es_product_es_member1_idx", columns={"member_id"}), @ORM\Index(name="fk_es_product_es_billing_info_idx", columns={"billing_info_id"}), @ORM\Index(name="slug", columns={"slug"}), @ORM\Index(name="fk_es_product_es_keywords1_idx", columns={"name", "keywords"})})
+=======
  * @ORM\Table(name="es_product", indexes={@ORM\Index(name="fk_es_product_es_cat1_idx", columns={"cat_id"}), @ORM\Index(name="fk_es_product_es_brand1_idx", columns={"brand_id"}), @ORM\Index(name="fk_es_product_es_style1_idx", columns={"style_id"}), @ORM\Index(name="fk_es_product_es_member1_idx", columns={"member_id"}), @ORM\Index(name="fk_es_product_es_billing_info_idx", columns={"billing_info_id"}), @ORM\Index(name="slug", columns={"slug"}), @ORM\Index(name="fk_es_product_es_keywords1_idx", columns={"name", "keywords"}), @ORM\Index(name="fulltext_search_keyword", columns={"search_keyword"})})
+>>>>>>> b198a01854f99d407559580ab11477812edeb08f
  * @ORM\Entity
  */
 class EsProduct
@@ -66,6 +70,16 @@ class EsProduct
     /**
      * @var string
      *
+<<<<<<< HEAD
+     * @ORM\Column(name="search_keyword", type="string", length=1024, nullable=true)
+     */
+    private $searchKeyword = '';
+
+    /**
+     * @var string
+     *
+=======
+>>>>>>> b198a01854f99d407559580ab11477812edeb08f
      * @ORM\Column(name="price", type="decimal", precision=15, scale=4, nullable=false)
      */
     private $price = '0.0000';
@@ -211,6 +225,8 @@ class EsProduct
     private $isSoldOut = '0';
 
     /**
+<<<<<<< HEAD
+=======
      * @var string
      *
      * @ORM\Column(name="search_keyword", type="string", length=1024, nullable=true)
@@ -218,6 +234,7 @@ class EsProduct
     private $searchKeyword = '';
 
     /**
+>>>>>>> b198a01854f99d407559580ab11477812edeb08f
      * @var boolean
      *
      * @ORM\Column(name="is_meetup", type="boolean", nullable=false)
@@ -415,6 +432,32 @@ class EsProduct
     }
 
     /**
+<<<<<<< HEAD
+     * Set searchKeyword
+     *
+     * @param string $searchKeyword
+     * @return EsProduct
+     */
+    public function setSearchKeyword($searchKeyword)
+    {
+        $this->searchKeyword = $searchKeyword;
+
+        return $this;
+    }
+
+    /**
+     * Get searchKeyword
+     *
+     * @return string 
+     */
+    public function getSearchKeyword()
+    {
+        return $this->searchKeyword;
+    }
+
+    /**
+=======
+>>>>>>> b198a01854f99d407559580ab11477812edeb08f
      * Set price
      *
      * @param string $price
@@ -898,6 +941,8 @@ class EsProduct
     }
 
     /**
+<<<<<<< HEAD
+=======
      * Set searchKeyword
      *
      * @param string $searchKeyword
@@ -921,6 +966,7 @@ class EsProduct
     }
 
     /**
+>>>>>>> b198a01854f99d407559580ab11477812edeb08f
      * Set isMeetup
      *
      * @param boolean $isMeetup

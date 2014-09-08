@@ -417,6 +417,18 @@ input[type="checkbox"] {
     color: #fff;
 }
 
+.btn-orange {
+  color: #fff;
+  background-color: #f18200;
+  border-color: #f18200;
+}
+
+.btn.btn-orange:hover {
+  color: #fff;
+  background-color: #ff4400;
+  border-color: #e23c00;
+}
+
 /*** header ***/
 
 header {
@@ -2033,6 +2045,7 @@ box-shadow:         0px 1px 5px 0px rgba(50, 50, 50, 0.75);
     color: #494949;
 }
 
+
 /*** Message Page ****/
 /*** mail inbox ***/
 #table_id_filter > label {
@@ -2127,6 +2140,11 @@ box-shadow:         0px 1px 5px 0px rgba(50, 50, 50, 0.75);
 
 .product_upload_success .item-lnk{
     display: none;
+}
+
+/**** Log in *****/
+.login-tli-con {
+    min-height: 400px
 }
 
 @media screen and (max-width : 895px){
@@ -2816,6 +2834,11 @@ box-shadow:         0px 1px 5px 0px rgba(50, 50, 50, 0.75);
 }   
 
 @media only screen and (max-width : 20em) {
+    /*** log in ***/
+    .login-btn-con a {
+        width: 100%;
+        margin-bottom: 15px;
+    }
     /*** step 1 ***/
     #cl_div_container .selected_category {
         width: 100%;

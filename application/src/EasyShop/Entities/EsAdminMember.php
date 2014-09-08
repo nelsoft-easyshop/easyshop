@@ -15,11 +15,19 @@ class EsAdminMember
     /**
      * @var integer
      *
+<<<<<<< HEAD
+     * @ORM\Column(name="id_admin", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $idAdmin;
+=======
      * @ORM\Column(name="id_admin_member", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $idAdminMember;
+>>>>>>> b198a01854f99d407559580ab11477812edeb08f
 
     /**
      * @var string
@@ -42,6 +50,18 @@ class EsAdminMember
      */
     private $fullname = '';
 
+<<<<<<< HEAD
+
+
+    /**
+     * Get idAdmin
+     *
+     * @return integer 
+     */
+    public function getIdAdmin()
+    {
+        return $this->idAdmin;
+=======
     /**
      * @var \DateTime
      *
@@ -94,6 +114,7 @@ class EsAdminMember
     public function getIdAdminMember()
     {
         return $this->idAdminMember;
+>>>>>>> b198a01854f99d407559580ab11477812edeb08f
     }
 
     /**
@@ -164,6 +185,8 @@ class EsAdminMember
     {
         return $this->fullname;
     }
+<<<<<<< HEAD
+=======
 
     /**
      * Set createdAt
@@ -302,4 +325,5 @@ class EsAdminMember
     {
         return $this->isActive;
     }
+>>>>>>> b198a01854f99d407559580ab11477812edeb08f
 }
