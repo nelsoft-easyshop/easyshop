@@ -421,24 +421,20 @@ class Home extends MY_Controller
             $isValid = true;
         }
         
-        $data = array(
-            'title' => 'Report a Problem | Easyshop.ph',
-            'metadescription' => 'Found a bug? Let us know so we can work on it.',
-        );
-        $data = array_merge($data, $this->fill_header());
-
-        $this->load->view('templates/header', $data);
-       
         $formData =  $twig->render('pages/web/report-a-problem.html.twig', array(
             'form' => $form->createView(), 
             'ES_FILE_VERSION' => ES_FILE_VERSION,
             'isValid' => $isValid
             ));
 
-        if($isValid == true){
-            $isValid = false;
-        }
+        $data = array(
+            'title' => 'Report a Problem | Easyshop.ph',
+            'metadescription' => 'Found a bug? Let us know so we can work on it.',
+        );
 
+        $data = array_merge($data, $this->fill_header());
+
+        $this->load->view('templates/header', $data);
         $this->output->append_output($formData);
         $this->load->view('templates/footer_full');
     }
