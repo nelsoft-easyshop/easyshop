@@ -823,12 +823,12 @@ class Memberpage extends MY_Controller
             $memberId = $this->session->userdata('member_id');
             $userMgr = $this->serviceContainer['user_manager'];
 
-            $boolResult = $userMgr->setStoreName($memberId, $storeName);
+            $isStorenameAvailable = $userMgr->setStoreName($memberId, $storeName);
 
-            $serverResponse['result'] = $boolResult;
-            $serverResponse['error'] = $boolResult ? '' : 'Store name already used!';
+            $serverResponse['result'] = $isStorenameAvailable;
+            $serverResponse['error'] = $isStorenameAvailable ? '' : 'Store name already used!';
 
-            if($boolResult){
+            if($isStorenameAvailable){
                 $em = $this->serviceContainer['entity_manager'];
                 $currUser = $em->find('EasyShop\Entities\EsMember',$memberId);
                 $serverResponse['username'] = $currUser->getUsername();

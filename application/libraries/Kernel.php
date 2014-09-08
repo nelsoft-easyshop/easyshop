@@ -97,8 +97,8 @@ class Kernel
         };
  
         //User Manager
-        $container['user_manager'] = function ($c) {
-            return new \EasyShop\User\UserManager();
+        $container['user_manager'] = function ($c) use ($container) {
+            return new \EasyShop\User\UserManager($container['entity_manager']);
         };
         
         /* Register services END */
