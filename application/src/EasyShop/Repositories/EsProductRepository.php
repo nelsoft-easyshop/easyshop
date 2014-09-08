@@ -392,30 +392,30 @@ class EsProductRepository extends EntityRepository
     }    
 
     /**
-     * Returns the count of a product based on ID
+     * Returns the count of a product based on a slug
      * 
-     * @param int $id
+     * @param string $slug
      * @return int
      *
      */
-    public function getProdCountById($id)
+    public function getProductBySlug($slug)
     {
         $this->em = $this->_em;
         $rsm = new ResultSetMapping(); 
-        $rsm->addScalarResult('id_product', 'id_product');
+        $rsm->addScalarResult('slug', 'slug');
 
         $sql = " 
           SELECT *
           FROM es_product
-          WHERE id_product = :id_product AND is_draft = 0 AND is_delete = 0
+          WHERE slug = :slug
         ";
         
         $query = $this->em->createNativeQuery($sql, $rsm);
-        $query->setParameter('id_product', $id);
+        $query->setParameter('slug', $slug);
         
         $result = $query->getResult();
-        return count($result);
-    }         
+        return count($result);              
+    }    
 }
 
 
