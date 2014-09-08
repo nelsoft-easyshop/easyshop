@@ -32,6 +32,4 @@ class EsProductImageRepository extends EntityRepository
         return $result;
     }
     
-
-
 }

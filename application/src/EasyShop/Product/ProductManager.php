@@ -19,8 +19,7 @@ class ProductManager
      */
     public function __construct()
     {
-        $this->em = get_instance()->kernel->serviceContainer['entity_manager'];
-        $this->promoManager = get_instance()->kernel->serviceContainer['promo_manager']; 
+        $this->em = get_instance()->kernel->serviceContainer['entity_manager']; 
     }
 
     /**
@@ -30,7 +29,8 @@ class ProductManager
      */
     public function getDiscountedPrice($product = array(),$memberId)
     { 
-        $CI = get_instance(); 
+        $CI = get_instance();  
+        $this->promoManager = $CI->kernel->serviceContainer['promo_manager'];
 
         foreach ($product as $key => $value) {
             $buyerId = $memberId;
@@ -95,4 +95,58 @@ class ProductManager
         return $product;
     }
 
+    /**
+     * function that will get all possible keyword tied on selected product
+     * @return [type] [description]
+     */
+    public function generateSearchKeywords($productId)
+    { 
+        $CI = get_instance(); 
+        $collectionHelper = $CI->kernel->serviceContainer['collection_helper']; 
+        
+        $products = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                                            ->find($productId);
+        
+        $category = $products->getCat()->getIdCat();
+        $brand = $products->getBrand()->getName();
+        $username = $products->getMember()->getUsername();
+
+        $categoryParent = $this->em->getRepository('EasyShop\Entities\EsCat')
+                                            ->getParentCategoryRecursive($category);
+
+        $attributes = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                                            ->getAttributes($productId);
+
+        $organizedAttributes = $collectionHelper->organizeArray($attributes);
+
+        $attributesString = "";
+        foreach ($organizedAttributes as $key => $value) {
+            $attributesString .= $key.' ';
+            foreach ($value as $attrValue) {
+                $attributesString .= $attrValue.' ';
+            }
+        }
+
+        $categoryString = "";
+        foreach ($categoryParent as $key => $value) {
+            $categoryString .= $value['name'].' ';
+        }
+
+        $arrayKeyword = array(
+                        $products->getName(),
+                        $products->getKeywords(),
+                        $products->getCatOtherName(),
+                        $brand,
+                        $username,
+                        $attributesString,
+                        $categoryString
+                    );
+
+        $finalSearchKeyword = preg_replace('/\s+/', ' ',implode(' ', $arrayKeyword));
+
+        $products->setSearchKeyword($finalSearchKeyword); 
+        $this->em->flush();
+
+        return true;
+    }
 }
