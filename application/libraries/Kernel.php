@@ -174,7 +174,6 @@ class Kernel
             return \Symfony\Component\HttpFoundation\Request::createFromGlobals();
         };
 
-<<<<<<< HEAD
         // Payment Service
         $container['payment_service'] = function ($c) use ($container) {
             return new \EasyShop\PaymentService\PaymentService(
@@ -182,7 +181,7 @@ class Kernel
                             $container['request'],
                             $container['point_tracker']
                             );
-=======
+
           // Product Manager
         $container['product_manager'] = function ($c) {
             return new \EasyShop\Product\ProductManager();
@@ -191,7 +190,6 @@ class Kernel
         // Collection Helper
         $container['collection_helper'] = function ($c) {
             return new \EasyShop\CollectionHelper\CollectionHelper();
->>>>>>> dev
         };
 
         /* Register services END */

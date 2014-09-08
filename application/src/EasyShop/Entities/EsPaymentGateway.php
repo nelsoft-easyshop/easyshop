@@ -99,10 +99,6 @@ class EsPaymentGateway
     public function setDateAdded($dateAdded)
     {
         $this->dateAdded = $dateAdded;
-<<<<<<< HEAD
-
-=======
->>>>>>> dev
         return $this;
     }
 
@@ -113,10 +109,7 @@ class EsPaymentGateway
      */
     public function getDateAdded()
     {
-<<<<<<< HEAD
         return $this->dateAdded;
-=======
->>>>>>> dev
     }
 
     /**
@@ -128,7 +121,6 @@ class EsPaymentGateway
     public function setOrder(\EasyShop\Entities\EsOrder $order = null)
     {
         $this->order = $order;
-
         return $this;
     }
 
@@ -142,10 +134,6 @@ class EsPaymentGateway
         return $this->order;
     }
 
-<<<<<<< HEAD
-=======
-
->>>>>>> dev
     /**
      * Set paymentMethod
      *
