@@ -25,7 +25,33 @@ class EsMemberRepository extends EntityRepository
         $result = $qb->getOneOrNullResult();
 
         return $result['userCount'];             
-    }    
+    }   
+
+    /**
+     * Checks if the userId exists
+     *
+     * @param int $id_member
+     * @return int
+     */
+    public function getUserCountById($id_member)
+    {
+        $this->em = $this->_em;
+        $rsm = new ResultSetMapping(); 
+        $rsm->addScalarResult('id_member', 'id_member');
+
+        $sql = " 
+          SELECT *
+          FROM es_member
+          WHERE id_member = :id_member
+        ";
+        
+        $query = $this->em->createNativeQuery($sql, $rsm);
+        $query->setParameter('id_member', $id_member);
+        
+        $result = $query->getResult();
+        return count($result);        
+             
+    }          
 
 
 }
