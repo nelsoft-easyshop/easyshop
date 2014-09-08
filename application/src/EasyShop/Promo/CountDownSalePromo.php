@@ -1,0 +1,43 @@
+<?php
+
+namespace EasyShop\Promo;
+
+class CountDownSalePromo extends AbstractPromo
+{
+
+
+    /**
+     * Applies the count down sale calculations
+     *
+     * @return EasyShop\Entities\Product
+     */
+    public function apply()
+    {
+        if(!isset($this->product)){
+            return null;
+        }
+        
+        if(($this->dateToday < $this->startDateTime) || ($this->endDateTime < $this->dateToday)) {
+            $diffHours = 0;
+        }
+        else if($this->dateToday > $this->endDateTime){
+            $diffHours = 49.5;
+            $this->isStartPromo = true;
+        }
+        else{
+            $diffHours = floor(($this->dateToday->getTimestamp() - $this->startDateTime->getTimestamp()) / 3600.0);
+            $this->isStartPromo = true;
+        }
+        
+        $this->promoPrice = $this->product->getPrice() - (($diffHours * 0.02) * $this->product->getPrice());
+        $this->promoPrice = ($this->promoPrice <= 0) ? 0.01 : $this->promoPrice;
+        $this->isEndPromo = ($this->dateToday > $this->endDateTime) ? true : false;
+        
+        $this->persist();        
+        
+        return $this->product;
+    }
+
+    
+}
+
