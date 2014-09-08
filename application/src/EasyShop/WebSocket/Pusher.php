@@ -40,10 +40,10 @@ class Pusher
     {
         if (false) {
             // push notif TODO: abstract
-            $result2 = $this->messages_model->get_all_messages($q_result, "Get_UnreadMsgs");
+            $result2 = $this->messages_model->get_all_messages($userId, "Get_UnreadMsgs");
             $em = $this->serviceContainer['entity_manager'];
-            $authenticatedSessions = $em->getRepository('\EasyShop\Entities\AuthenticatedSession')
-                                          ->findBy(['user' => $q_result]);
+            $authenticatedSessions = $em->getRepository('\EasyShop\Entities\EsAuthenticatedSession')
+                                          ->findBy(['member' => $userId]);
             $pusher = $this->serviceContainer['pusher'];
             $pusher->addData('messageCount', $result2['unread_msgs']);
             foreach ($authenticatedSessions as $authenticatedSession) {

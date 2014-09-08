@@ -15,6 +15,7 @@ class EsOrderBillingInfo
     /**
      * @var integer
      *
+<<<<<<< HEAD
      * @ORM\Column(name="id_es_order_billing_info", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -34,6 +35,13 @@ class EsOrderBillingInfo
      * @ORM\Column(name="order_product_id", type="integer", nullable=true)
      */
     private $orderProductId = '0';
+=======
+     * @ORM\Column(name="id_order_billing_info", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $idOrderBillingInfo;
+>>>>>>> b198a01854f99d407559580ab11477812edeb08f
 
     /**
      * @var string
@@ -59,6 +67,7 @@ class EsOrderBillingInfo
 
 
     /**
+<<<<<<< HEAD
      * Get idEsOrderBillingInfo
      *
      * @return integer 
@@ -112,6 +121,15 @@ class EsOrderBillingInfo
     public function getOrderProductId()
     {
         return $this->orderProductId;
+=======
+     * Get idOrderBillingInfo
+     *
+     * @return integer 
+     */
+    public function getIdOrderBillingInfo()
+    {
+        return $this->idOrderBillingInfo;
+>>>>>>> b198a01854f99d407559580ab11477812edeb08f
     }
 
     /**

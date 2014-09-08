@@ -61,7 +61,9 @@ class Kernel
         $dbConfig = require APPPATH . '/config/param/database.php';
 
         $config = Doctrine\ORM\Tools\Setup::createAnnotationMetadataConfiguration($paths, $isDevMode, null, null, false);
-        $config->setProxyDir(APPPATH . 'src/EasyShop/Doctrine/Proxies');
+
+        $config->setProxyDir(APPPATH . '/src/EasyShop/Doctrine/Proxies');
+
         $config->setProxyNamespace('EasyShop\Doctrine\Proxies');
         
         $container['entity_manager'] = function ($c) use ($dbConfig, $config){
@@ -100,11 +102,10 @@ class Kernel
         $container['xml_resource'] = function ($c) use ($container) {
             return new \EasyShop\XML\Resource($container['local_configuration']);
         };
-        
-        //XML Resource accessor
-        $container['xml_resource'] = function ($c) {
-            $configurationService = new \EasyShop\Core\Configuration\Configuration();
-            return new \EasyShop\XML\Resource($configurationService);
+ 
+        //User Manager
+        $container['user_manager'] = function ($c) use ($container) {
+            return new \EasyShop\User\UserManager($container['entity_manager']);
         };
         
         // Point Tracker

@@ -8,7 +8,11 @@ use Doctrine\ORM\Mapping as ORM;
  * EsMember
  *
  * @ORM\Table(name="es_member", indexes={@ORM\Index(name="username_idx", columns={"username"})})
+<<<<<<< HEAD
  * @ORM\Entity
+=======
+ * @ORM\Entity(repositoryClass="EasyShop\Repositories\EsMemberRepository")
+>>>>>>> b198a01854f99d407559580ab11477812edeb08f
  */
 class EsMember
 {
@@ -183,6 +187,16 @@ class EsMember
     private $slug;
 
     /**
+<<<<<<< HEAD
+=======
+     * @var string
+     *
+     * @ORM\Column(name="store_name", type="string", length=1024, nullable=true)
+     */
+    private $storeName;
+
+    /**
+>>>>>>> b198a01854f99d407559580ab11477812edeb08f
      * @var \Doctrine\Common\Collections\Collection
      *
      * @ORM\ManyToMany(targetEntity="EasyShop\Entities\CiSessions", inversedBy="member")
@@ -746,6 +760,32 @@ class EsMember
     }
 
     /**
+<<<<<<< HEAD
+=======
+     * Set storeName
+     *
+     * @param string $storeName
+     * @return EsMember
+     */
+    public function setStoreName($storeName)
+    {
+        $this->storeName = $storeName;
+
+        return $this;
+    }
+
+    /**
+     * Get storeName
+     *
+     * @return string 
+     */
+    public function getStoreName()
+    {
+        return $this->storeName;
+    }
+
+    /**
+>>>>>>> b198a01854f99d407559580ab11477812edeb08f
      * Add session
      *
      * @param \EasyShop\Entities\CiSessions $session

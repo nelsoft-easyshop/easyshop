@@ -15,11 +15,19 @@ class EsAdminMember
     /**
      * @var integer
      *
+<<<<<<< HEAD
      * @ORM\Column(name="id_admin", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $idAdmin;
+=======
+     * @ORM\Column(name="id_admin_member", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $idAdminMember;
+>>>>>>> b198a01854f99d407559580ab11477812edeb08f
 
     /**
      * @var string
@@ -42,6 +50,7 @@ class EsAdminMember
      */
     private $fullname = '';
 
+<<<<<<< HEAD
 
 
     /**
@@ -52,6 +61,60 @@ class EsAdminMember
     public function getIdAdmin()
     {
         return $this->idAdmin;
+=======
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="created_at", type="datetime", nullable=false)
+     */
+    private $createdAt = '0000-00-00 00:00:00';
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="updated_at", type="datetime", nullable=false)
+     */
+    private $updatedAt = '0000-00-00 00:00:00';
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="remember_token", type="string", length=100, nullable=true)
+     */
+    private $rememberToken;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="role_id", type="integer", nullable=true)
+     */
+    private $roleId = '1';
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="is_promo_valid", type="boolean", nullable=true)
+     */
+    private $isPromoValid = '0';
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="is_active", type="boolean", nullable=true)
+     */
+    private $isActive = '0';
+
+
+
+    /**
+     * Get idAdminMember
+     *
+     * @return integer 
+     */
+    public function getIdAdminMember()
+    {
+        return $this->idAdminMember;
+>>>>>>> b198a01854f99d407559580ab11477812edeb08f
     }
 
     /**
@@ -122,4 +185,145 @@ class EsAdminMember
     {
         return $this->fullname;
     }
+<<<<<<< HEAD
+=======
+
+    /**
+     * Set createdAt
+     *
+     * @param \DateTime $createdAt
+     * @return EsAdminMember
+     */
+    public function setCreatedAt($createdAt)
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    /**
+     * Get createdAt
+     *
+     * @return \DateTime 
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * Set updatedAt
+     *
+     * @param \DateTime $updatedAt
+     * @return EsAdminMember
+     */
+    public function setUpdatedAt($updatedAt)
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    /**
+     * Get updatedAt
+     *
+     * @return \DateTime 
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
+    }
+
+    /**
+     * Set rememberToken
+     *
+     * @param string $rememberToken
+     * @return EsAdminMember
+     */
+    public function setRememberToken($rememberToken)
+    {
+        $this->rememberToken = $rememberToken;
+
+        return $this;
+    }
+
+    /**
+     * Get rememberToken
+     *
+     * @return string 
+     */
+    public function getRememberToken()
+    {
+        return $this->rememberToken;
+    }
+
+    /**
+     * Set roleId
+     *
+     * @param integer $roleId
+     * @return EsAdminMember
+     */
+    public function setRoleId($roleId)
+    {
+        $this->roleId = $roleId;
+
+        return $this;
+    }
+
+    /**
+     * Get roleId
+     *
+     * @return integer 
+     */
+    public function getRoleId()
+    {
+        return $this->roleId;
+    }
+
+    /**
+     * Set isPromoValid
+     *
+     * @param boolean $isPromoValid
+     * @return EsAdminMember
+     */
+    public function setIsPromoValid($isPromoValid)
+    {
+        $this->isPromoValid = $isPromoValid;
+
+        return $this;
+    }
+
+    /**
+     * Get isPromoValid
+     *
+     * @return boolean 
+     */
+    public function getIsPromoValid()
+    {
+        return $this->isPromoValid;
+    }
+
+    /**
+     * Set isActive
+     *
+     * @param boolean $isActive
+     * @return EsAdminMember
+     */
+    public function setIsActive($isActive)
+    {
+        $this->isActive = $isActive;
+
+        return $this;
+    }
+
+    /**
+     * Get isActive
+     *
+     * @return boolean 
+     */
+    public function getIsActive()
+    {
+        return $this->isActive;
+    }
+>>>>>>> b198a01854f99d407559580ab11477812edeb08f
 }
