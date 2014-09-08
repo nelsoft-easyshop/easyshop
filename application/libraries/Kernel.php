@@ -96,6 +96,10 @@ class Kernel
             return new \EasyShop\XML\Resource($container['local_configuration']);
         };
         
+        //User Manager
+        $container['user_manager'] = function ($c) use ($container) {
+            return new \EasyShop\User\UserManager($container['entity_manager']);
+        };
 
         //Authentication Manager
         $container['account_manager'] = function ($c) use ($container) {
@@ -105,10 +109,6 @@ class Kernel
             return new \EasyShop\Account\AccountManager($em, $brcyptEncoder, $userManager);        
         };
 
-        //User Manager
-        $container['user_manager'] = function ($c) use ($container) {
-            return new \EasyShop\User\UserManager($container['entity_manager']);
-        };
 
         // Paths
         $vendorDir = __DIR__ . '/../../vendor';
@@ -118,10 +118,14 @@ class Kernel
         $vendorTwigBridgeDir = $vendorDir . '/symfony/twig-bridge/Symfony/Bridge/Twig';
 
         // CSRF Setup
-        $csrfSecret = 'TempOraRy_KeY_12272013_bY_Sam*?!';
-        $session = new \Symfony\Component\HttpFoundation\Session\Session();
-        $csrfProvider = new \Symfony\Component\Form\Extension\Csrf\CsrfProvider\SessionCsrfProvider($session, $csrfSecret);
-
+        $container['csrf_provider'] = function ($c){
+            $csrfSecret = 'TempOraRy_KeY_12272013_bY_Sam*?!';
+            $session = new \Symfony\Component\HttpFoundation\Session\Session();
+            $csrfProvider = new \Symfony\Component\Form\Extension\Csrf\CsrfProvider\SessionCsrfProvider($session, $csrfSecret);
+            return $csrfProvider;
+        };
+        
+        
         // Twig setup
         $translator = new \Symfony\Component\Translation\Translator('en');
         $translator->addLoader('xlf', new \Symfony\Component\Translation\Loader\XliffFileLoader());
@@ -129,7 +133,7 @@ class Kernel
         $translator->addResource('xlf', $vendorValidatorDir . '/Resources/translations/validators.en.xlf', 'en', 'validators');
 
         //Twig Service
-        $container['twig'] = function ($c) use ($translator, $viewsDir, $vendorTwigBridgeDir, $csrfProvider) {
+        $container['twig'] = function ($c) use ($translator, $viewsDir, $vendorTwigBridgeDir, $container) {
             // Create twig
             $twig = new Twig_Environment(new Twig_Loader_Filesystem(array(
                 $viewsDir,
@@ -139,7 +143,7 @@ class Kernel
             $formEngine = new Symfony\Bridge\Twig\Form\TwigRendererEngine(array('form_div_layout.html.twig'));
             $formEngine->setEnvironment($twig);
             $twig->addExtension(new \Symfony\Bridge\Twig\Extension\TranslationExtension($translator));
-            $twig->addExtension(new \Symfony\Bridge\Twig\Extension\FormExtension(new \Symfony\Bridge\Twig\Form\TwigRenderer($formEngine, $csrfProvider)));
+            $twig->addExtension(new \Symfony\Bridge\Twig\Extension\FormExtension(new \Symfony\Bridge\Twig\Form\TwigRenderer($formEngine, $container['csrf_provider'])));
             return $twig;
         };
 
@@ -147,10 +151,10 @@ class Kernel
         $validator = \Symfony\Component\Validator\Validation::createValidator();
 
         //Form Factory Service
-        $container['form_factory'] = function ($c) use ($csrfProvider, $validator) {
+        $container['form_factory'] = function ($c) use ($container, $validator) {
             // Create factory
             $formFactory = \Symfony\Component\Form\Forms::createFormFactoryBuilder()
-                ->addExtension(new \Symfony\Component\Form\Extension\Csrf\CsrfExtension($csrfProvider))
+                ->addExtension(new \Symfony\Component\Form\Extension\Csrf\CsrfExtension($container['csrf_provider']))
                 ->addExtension(new \Symfony\Component\Form\Extension\HttpFoundation\HttpFoundationExtension())
                 ->addExtension(new \Symfony\Component\Form\Extension\Validator\ValidatorExtension($validator))
                 ->getFormFactory();
