@@ -20,7 +20,7 @@ class EsMemberRepository extends EntityRepository
      *
      *  @return boolean
      */
-    public function validStoreName($memberId, $storeName)
+    public function getMemberStoreName($memberId, $storeName)
     {
         $em = $this->_em;
 
@@ -38,6 +38,6 @@ class EsMemberRepository extends EntityRepository
         $query->setParameter(1,$memberId);
         $query->setParameter(2,$storeName);
 
-        return count($query->getResult()) === 0 ? true:false;
+        return $query->getResult();
     }
 }

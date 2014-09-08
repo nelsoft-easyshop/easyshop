@@ -42,10 +42,10 @@ class UserManager
         }
 
         $checkStoreName = $this->em->getRepository('EasyShop\Entities\EsMember')
-            ->validStoreName($memberId,$storeName);
+                                   ->getMemberStoreName($memberId,$storeName);
 
         // If store name is not yet used, set user's storename to $storeName
-        if($checkStoreName){
+        if( empty($checkStoreName) ){
             $user->setStoreName($storeName);
             $this->em->persist($user);
             $this->em->flush();
@@ -55,7 +55,6 @@ class UserManager
         else{
             return false;
         }
-
     }
-
+    
 }
