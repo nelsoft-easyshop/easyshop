@@ -2,8 +2,8 @@
 
 namespace EasyShop\Account;
 
-use Elnur\BlowfishPasswordEncoderBundle\Security\Encoder\BlowfishPasswordEncoder as BlowfishPasswordEncoder;
 use EasyShop\Entities\EsWebserviceUser;
+use Easyshop\Entities\EsMember;
 
 
 class AccountManager
@@ -15,14 +15,7 @@ class AccountManager
      * @var Doctrine\ORM\EntityManager
      */
     private $em;
-    
-    /**
-     * bcyript cost factor
-     *
-     *
-     */
-    private $costFactor = 5;
-    
+        
     /**
      * Blowfish Encoder
      *
@@ -32,17 +25,24 @@ class AccountManager
     
     
     /**
+     * The user manager
+     *
+     */
+    private $userManager;
+    
+    
+    /**
      * Intialize dependencies
      *
      */
-    public function __construct()
+    public function __construct($em, $bcryptEncoder, $userManager)
     {
-        $this->bcryptEncoder = new BlowfishPasswordEncoder($this->costFactor);
-        $this->em = get_instance()->kernel->serviceContainer['entity_manager']; 
+        $this->em = $em;
+        $this->brcyptEncoder = $bcryptEncoder
+        $this->userManager = $userManager;
     }
 
 
-    
     /**
      * Authenticate a web service client
      * 
@@ -75,9 +75,19 @@ class AccountManager
      * @param string $contactno
      * @return EasyShop\Entities\EsMember
      */
-    public function registerNewMember($username, $password, $email, $contactno)
+    public function registerMember($username, $password, $email, $contactno)
     {
+        $member = new EsMember();
+        $member->setUsername($username);
+        $member->setPassword($password);
+        $member->setEmail($email);
+        $member->setContactno($contactno);
+        $member->setDatecreated(date('Y-m-d H:i:s'));
+        $member->setSlug($this->userManager->generateSlug($username));   
+        $this->em->persist($member);
+        $this->em->flush();
         
+        return $member;
     }
     
     
