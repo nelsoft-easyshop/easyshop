@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * EsKeywordsTemp
  *
  * @ORM\Table(name="es_keywords_temp")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="EasyShop\Repositories\EsKeywordsTempRepository")
  */
 class EsKeywordsTemp
 {

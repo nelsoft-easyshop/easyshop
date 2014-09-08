@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * EsProductImage
  *
  * @ORM\Table(name="es_product_image", indexes={@ORM\Index(name="fk_es_product_es_product1", columns={"product_id"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="EasyShop\Repositories\EsProductImageRepository")
  */
 class EsProductImage
 {

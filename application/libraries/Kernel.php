@@ -61,7 +61,7 @@ class Kernel
         $dbConfig = require APPPATH . '/config/param/database.php';
 
         $config = Doctrine\ORM\Tools\Setup::createAnnotationMetadataConfiguration($paths, $isDevMode, null, null, false);
-        $config->setProxyDir(APPPATH . 'src/EasyShop/Doctrine/Proxies');
+        $config->setProxyDir(APPPATH . '/src/EasyShop/Doctrine/Proxies');
         $config->setProxyNamespace('EasyShop\Doctrine\Proxies');
         
         $container['entity_manager'] = function ($c) use ($dbConfig, $config){
@@ -85,11 +85,6 @@ class Kernel
         $container['local_configuration'] = function ($c) {
             return new \EasyShop\Core\Configuration\Configuration();
         };
-
-        $container['xml_cms'] = function ($c) {
-            return new \EasyShop\XML\CMS();
-        };
-        
         
         //CMS Service
         $container['xml_cms'] = function ($c) {
@@ -99,12 +94,6 @@ class Kernel
         //XML Resource Service
         $container['xml_resource'] = function ($c) use ($container) {
             return new \EasyShop\XML\Resource($container['local_configuration']);
-        };
-        
-        //XML Resource accessor
-        $container['xml_resource'] = function ($c) {
-            $configurationService = new \EasyShop\Core\Configuration\Configuration();
-            return new \EasyShop\XML\Resource($configurationService);
         };
         
         // Point Tracker
@@ -120,6 +109,16 @@ class Kernel
         // Http foundation
         $container['http_foundation'] = function ($c) {
             return \Symfony\Component\HttpFoundation\Request::createFromGlobals();
+        };
+
+          // Product Manager
+        $container['product_manager'] = function ($c) {
+            return new \EasyShop\Product\ProductManager();
+        };
+
+        // Collection Helper
+        $container['collection_helper'] = function ($c) {
+            return new \EasyShop\CollectionHelper\CollectionHelper();
         };
 
         /* Register services END */

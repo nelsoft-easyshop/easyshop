@@ -180,7 +180,7 @@ class MY_Controller extends CI_Controller
     {
         foreach ($postedData as $data => $value) {
             
-            if($data == "hash" || $data == "_token" || $data == "csrfname" || $data == "callback" || $data == "password" || $data == "_") {
+            if($data == "hash" || $data == "_token" || $data == "csrfname" || $data == "callback" || $data == "password" || $data == "_" || $data == "checkuser") {
                  continue;               
             }
 
