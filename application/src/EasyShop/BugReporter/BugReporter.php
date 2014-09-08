@@ -2,6 +2,8 @@
 
 namespace EasyShop\BugReporter;
 
+use \DateTime;
+
 /**
  * BugReporter Class
  *
@@ -37,6 +39,7 @@ class BugReporter
         $problem = new \EasyShop\Entities\EsProblemReport();
         $problem->setProblemTitle($formData['title']);
         $problem->setProblemDescription($formData['description']);
+        $problem->setDateAdded(date_create(date("Y-m-d H:i:s")));
 
         if($formData['file'] !== NULL){
             $newName = sha1($formData['file']->getClientOriginalName().(string)time());
