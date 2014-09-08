@@ -390,6 +390,32 @@ class EsProductRepository extends EntityRepository
 
         return $result['count'];
     }    
+
+    /**
+     * Returns the count of a product based on ID
+     * 
+     * @param int $id
+     * @return int
+     *
+     */
+    public function getProdCountById($id)
+    {
+        $this->em = $this->_em;
+        $rsm = new ResultSetMapping(); 
+        $rsm->addScalarResult('id_product', 'id_product');
+
+        $sql = " 
+          SELECT *
+          FROM es_product
+          WHERE id_product = :id_product AND is_draft = 0 AND is_delete = 0
+        ";
+        
+        $query = $this->em->createNativeQuery($sql, $rsm);
+        $query->setParameter('id_product', $id);
+        
+        $result = $query->getResult();
+        return count($result);
+    }         
 }
 
 
