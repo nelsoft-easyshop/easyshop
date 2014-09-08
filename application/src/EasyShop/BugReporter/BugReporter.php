@@ -34,14 +34,18 @@ class BugReporter
      */
     public function createReport($formData)
     {
-        $newName = sha1($formData['file']->getClientOriginalName().(string)time());
-        $formData['file']->move('./assets/images/reports',$newName);
-
         $problem = new \EasyShop\Entities\EsProblemReport();
-
         $problem->setProblemTitle($formData['title']);
         $problem->setProblemDescription($formData['description']);
-        $problem->setProblemImagePath('./assets/images/reports/'.$newName);
+
+        if($formData['file'] !== NULL){
+            $newName = sha1($formData['file']->getClientOriginalName().(string)time());
+            $formData['file']->move('./assets/images/reports',$newName);
+            $problem->setProblemImagePath('./assets/images/reports/'.$newName);
+        }
+        else{
+            $problem->setProblemImagePath('');
+        }
         
         $this->em->persist($problem);
         $this->em->flush();
