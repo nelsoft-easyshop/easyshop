@@ -59,7 +59,7 @@ class PointTracker
 
         // Get Point object
         $userPoint = $this->em->getRepository('EasyShop\Entities\EsPoint')
-                                ->findOneBy(['m' => $userId]);
+                                ->findOneBy(['member' => $userId]);
 
         // Insert to point history
         $pointHistory = new EsPointHistory();
@@ -179,7 +179,7 @@ class PointTracker
     public function getUserPoint($userId)
     {
         $user = $this->em->getRepository('EasyShop\Entities\EsPoint')
-                            ->findOneBy(['m' => $userId]);
+                            ->findOneBy(['member' => $userId]);
 
         return $user === null? false : $user->getPoint();
     }        
