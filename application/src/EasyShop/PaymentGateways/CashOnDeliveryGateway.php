@@ -3,6 +3,8 @@
 namespace EasyShop\PaymentGateways;
 
 use EasyShop\Entities\EsPaymentGateway;
+use EasyShop\Entities\EsOrder;
+use EasyShop\Entities\EsPaymentMethod;
 
 /**
  * Cash On Delivery Gateway Class
@@ -49,6 +51,7 @@ class CashOnDeliveryGateway extends AbstractGateway
         $itemList = $this->parameters['prepareData']['newItemList']; 
         $txnid = $this->generateReferenceNumber($paymentType, $this->parameters['member_id']);
         
+        // stub functions
         //if($this->parameters['qtysuccess'] == $this->parameters['productCount']){
         if(true){
             $return = $this->persistPayment(
@@ -61,13 +64,12 @@ class CashOnDeliveryGateway extends AbstractGateway
                 $response['message'] = $return['o_message'];
             }
             else{
-
                 $v_order_id = $return['v_order_id'];
                 $invoice = $return['invoice_no'];
                 $status = 's';
 
                 foreach ($itemList as $key => $value) {
-                    // do something
+                    // stub functions
                     //$itemComplete = $this->deductQuantity($value['id'],$value['product_itemID'],$value['qty']);
                     //$this->updateSoldoutStatus($value['id']);
                 }
@@ -77,11 +79,22 @@ class CashOnDeliveryGateway extends AbstractGateway
                 //$this->sendNotification(array('member_id'=>$member_id, 'order_id'=>$v_order_id, 'invoice_no'=>$invoice));
                 //$this->sendNotification();
 
+                // Retrieve order
+                $order = $this->em->getRepository('EasyShop\Entities\EsOrder')
+                                        ->find($v_order_id);
+
+                // payment method
+                $paymentMethod = $this->em->getRepository('EasyShop\Entities\EsPaymentMethod')
+                                        ->find(3);
+
                 // update payment gateway DB here
                 $paymentHistory = new EsPaymentGateway();
-                $paymentHistory->
-
-                //$this->em->getRepository('EasyShop\Entities\EsPaymentGateway');
+                $paymentHistory->setAmount($grandTotal);
+                $paymentHistory->setDateAdded(date_create(date("Y-m-d H:i:s")));
+                $paymentHistory->setOrder($order);
+                $paymentHistory->setPaymentMethod($paymentMethod);
+                $this->em->persist($paymentHistory);
+                $this->em->flush();
             }
         }
         else{
@@ -91,5 +104,4 @@ class CashOnDeliveryGateway extends AbstractGateway
         $response['txnid'] = $txnid;
         return $response;
     }
-
 }
