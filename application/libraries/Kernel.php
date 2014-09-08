@@ -96,6 +96,10 @@ class Kernel
             return new \EasyShop\XML\Resource($container['local_configuration']);
         };
  
+        //User Manager
+        $container['user_manager'] = function ($c) use ($container) {
+            return new \EasyShop\User\UserManager($container['entity_manager']);
+        };
         
         /* Register services END */
         $this->serviceContainer = $container;
