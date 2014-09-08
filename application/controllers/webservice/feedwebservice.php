@@ -3,31 +3,14 @@
 class FeedWebService extends MY_Controller 
 {
 
-
-    private $map, $targetNode;
-    
-    /**
-     * The XML service
-     */
-    private $xmlFileService;
-    
-    /**
-     * The CMS Service
-     *
-     */
-    private $xmlCmsService;
-    
-    /**
-     * The entity manager
-     *
-     */
-    
-    private $em;    
-    
     /**
      *  Constructor call for Administrator's authentication. Authentication method is located in MY_Controller.php
+     *
      *  
      */
+    private $map, $targetNode, $xmlCmsService;
+    public $xmlFileService;
+    private $em;    
     public function __construct()
     {
         parent::__construct();
@@ -62,13 +45,15 @@ class FeedWebService extends MY_Controller
      */
     public function removeContent() 
     {
+
         $index =  $this->input->get("index");
         $nodeName =  $this->input->get("nodename");    
 
-        $doc = new \SimpleXMLElement(file_get_contents($this->file));
+        $doc = new SimpleXMLElement(file_get_contents($this->file));
         $count =  count(current($doc->xpath($nodeName)));
-        
+        echo $nodeName;
         if($count > 1){
+      
             $file = $this->file;
             $jsonFile = $this->json;
             $this->xmlCmsService->removeXML($file,$nodeName,$index);
@@ -157,10 +142,9 @@ class FeedWebService extends MY_Controller
     {
         $slugerrorjson = $this->slugerrorjson;
 
-        $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                        ->findBy(['slug' => $this->input->get("slug")]);
-                        
-        if(!$product) {
+        $count = $this->em->getRepository('EasyShop\Entities\EsProduct')->getProductBySlug($this->input->get("slug"));
+
+        if($count < 1) {
                     return $this->output
                         ->set_content_type('application/json')
                         ->set_output($slugerrorjson);
@@ -194,10 +178,9 @@ class FeedWebService extends MY_Controller
         if($index > count($map->feedPromoItems->product) - 1    || $order > count($map->feedPromoItems->product) - 1 || $index < 0 || $order < 0) {
                exit("Parameters out of bounds");
         }
-        $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                        ->findBy(['slug' => $this->input->get("slug")]);
-                        
-        if(!$product){
+        $count = $this->em->getRepository('EasyShop\Entities\EsProduct')->getProductBySlug($this->input->get("slug"));
+
+        if($count < 1) {
                     return $this->output
                         ->set_content_type('application/json')
                         ->set_output($slugerrorjson);
@@ -246,10 +229,9 @@ class FeedWebService extends MY_Controller
     {
         $slugerrorjson = $this->slugerrorjson;
         $boundsjson = $this->boundsjson;
-        $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                        ->findBy(['slug' => $this->input->get("slug")]);
-                        
-        if(!$product){
+        $count = $this->em->getRepository('EasyShop\Entities\EsProduct')->getProductBySlug($this->input->get("slug"));
+
+        if($count < 1) {
                     return $this->output
                         ->set_content_type('application/json')
                         ->set_output($slugerrorjson);
@@ -286,10 +268,9 @@ class FeedWebService extends MY_Controller
                 exit("Parameters out of bounds");
         }
 
-        $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                        ->findBy(['slug' => $this->input->get("slug")]);
-                        
-        if(!$product){
+        $count = $this->em->getRepository('EasyShop\Entities\EsProduct')->getProductBySlug($this->input->get("slug"));
+
+        if($count < 1) {
                     return $this->output
                         ->set_content_type('application/json')
                         ->set_output($slugerrorjson);
@@ -343,10 +324,9 @@ class FeedWebService extends MY_Controller
     {
         $slugerrorjson = $this->slugerrorjson;
 
-        $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                        ->findBy(['slug' => $this->input->get("slug")]);
-                        
-        if(!$product){
+        $count = $this->em->getRepository('EasyShop\Entities\EsProduct')->getProductBySlug($this->input->get("slug"));
+
+        if($count < 1) {
                     return $this->output
                         ->set_content_type('application/json')
                         ->set_output($slugerrorjson);
@@ -381,10 +361,9 @@ class FeedWebService extends MY_Controller
         if($index > count($map->feedFeaturedProduct->product) - 1    || $order > count($map->feedFeaturedProduct->product) - 1 || $index < 0 || $order < 0) {
                 exit("Parameters out of bounds");
         }
-        $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                        ->findBy(['slug' => $this->input->get("slug")]);
-                        
-        if(!$product){
+        $count = $this->em->getRepository('EasyShop\Entities\EsProduct')->getProductBySlug($this->input->get("slug"));
+
+        if($count < 1) {
                     return $this->output
                         ->set_content_type('application/json')
                         ->set_output($slugerrorjson);
@@ -499,10 +478,8 @@ class FeedWebService extends MY_Controller
                     if(!is_numeric($ids)) {
                         exit();
                     }
-                    $user = $this->em->getRepository('EasyShop\Entities\EsMember')
-                                                    ->findBy(['idMember' => $ids]);
-                        
-                    if(!$user){
+                    $result  = $this->em->getRepository('EasyShop\Entities\EsMember')->getUserCountById($ids);
+                    if($result < 1) {
                         $valid = 0;
                         return $this->output
                             ->set_content_type('application/json')
@@ -514,11 +491,8 @@ class FeedWebService extends MY_Controller
                 if(!is_numeric($value)) {
                     exit();
                 }
-                
-                $user = $this->em->getRepository('EasyShop\Entities\EsMember')
-                                  ->findBy(['idMember' => $this->input->get("value")]);
-                        
-                if(!$user){
+                $result  = $this->em->getRepository('EasyShop\Entities\EsMember')->getUserCountById($this->input->get("value"));
+                if($result < 1) {
                         return $this->output
                             ->set_content_type('application/json')
                             ->set_output($this->usererror);
