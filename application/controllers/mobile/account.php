@@ -41,7 +41,7 @@ class Account extends MY_Controller {
             
             $rules = $formValidation->getRules('register');
 
-            $form = $formFactory->createBuilder()
+            $form = $formFactory->createBuilder('form', array('csrf_protection' => false))
                 ->setMethod('POST')
                 ->add('username', 'text', array('constraints' => $rules['username']))
                 #->add('password', array('constraints' => $rules['password']))
@@ -49,7 +49,8 @@ class Account extends MY_Controller {
                 #->add('email', array('constraints' => $rules['email']))
                 ->getForm();
                 
-            $form->handleRequest($request);
+            $form->bind($request);
+            
             if ($form->isValid()) {
                 $username =  $this->input->post('username');
                 $password = $this->input->post('password');
@@ -63,8 +64,7 @@ class Account extends MY_Controller {
                     $isSuccessful = true;
                 }
             }
-            else{
-                print_r($form->getErrors());
+            else{            
                 foreach($form->getErrors() as $error){
                     array_push($errors, $error);
                 }
