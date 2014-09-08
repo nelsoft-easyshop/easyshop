@@ -8,32 +8,19 @@ use Doctrine\ORM\Mapping as ORM;
  * EsOrderBillingInfo
  *
  * @ORM\Table(name="es_order_billing_info")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="EasyShop\Repositories\EsOrderBillingInfoRepository")
  */
 class EsOrderBillingInfo
 {
     /**
      * @var integer
      *
-     * @ORM\Column(name="id_es_order_billing_info", type="integer", nullable=false)
+     * @ORM\Column(name="id_order_billing_info", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $idEsOrderBillingInfo;
+    private $idOrderBillingInfo;
 
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="order_id", type="integer", nullable=true)
-     */
-    private $orderId = '0';
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="order_product_id", type="integer", nullable=true)
-     */
-    private $orderProductId = '0';
 
     /**
      * @var string
@@ -59,59 +46,13 @@ class EsOrderBillingInfo
 
 
     /**
-     * Get idEsOrderBillingInfo
+     * Get idOrderBillingInfo
      *
      * @return integer 
      */
-    public function getIdEsOrderBillingInfo()
+    public function getIdOrderBillingInfo()
     {
-        return $this->idEsOrderBillingInfo;
-    }
-
-    /**
-     * Set orderId
-     *
-     * @param integer $orderId
-     * @return EsOrderBillingInfo
-     */
-    public function setOrderId($orderId)
-    {
-        $this->orderId = $orderId;
-
-        return $this;
-    }
-
-    /**
-     * Get orderId
-     *
-     * @return integer 
-     */
-    public function getOrderId()
-    {
-        return $this->orderId;
-    }
-
-    /**
-     * Set orderProductId
-     *
-     * @param integer $orderProductId
-     * @return EsOrderBillingInfo
-     */
-    public function setOrderProductId($orderProductId)
-    {
-        $this->orderProductId = $orderProductId;
-
-        return $this;
-    }
-
-    /**
-     * Get orderProductId
-     *
-     * @return integer 
-     */
-    public function getOrderProductId()
-    {
-        return $this->orderProductId;
+        return $this->idOrderBillingInfo;
     }
 
     /**

@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * EsHolidaytype
  *
  * @ORM\Table(name="es_holidaytype")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="EasyShop\Repositories\EsHolidaytypeRepository")
  */
 class EsHolidaytype
 {
