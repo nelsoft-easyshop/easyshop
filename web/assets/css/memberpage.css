@@ -512,3 +512,8 @@ table.sales_summary tr.sales_info:hover td.amount{
 #user_store_edit input[type="button"]:hover{
     color: #f48000;
 }
+
+#username_echo{
+    font-size:1em;
+    padding: 0px 5px;
+}
