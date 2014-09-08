@@ -15,7 +15,7 @@ class Version20140826122321 extends AbstractMigration
     {
         // this up() migration is auto-generated, please modify it to your needs
         $this->addSql("
-            ALTER TABLE `easyshop`.`es_point_history` 
+            ALTER TABLE `es_point_history` 
             CHANGE COLUMN `point` `point` INT(10) NOT NULL DEFAULT '0' ;");
     }
 
@@ -23,7 +23,7 @@ class Version20140826122321 extends AbstractMigration
     {
         // this down() migration is auto-generated, please modify it to your needs
         $this->addSql("
-            ALTER TABLE `easyshop`.`es_point_history` 
+            ALTER TABLE `es_point_history` 
             CHANGE COLUMN `point` `point` INT(10) UNSIGNED NOT NULL DEFAULT '0' ;");
     }
 }
