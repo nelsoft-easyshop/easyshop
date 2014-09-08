@@ -3,7 +3,7 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
-class Authenticate extends MY_Controller {
+class Account extends MY_Controller {
 
 
     /**
@@ -23,40 +23,54 @@ class Authenticate extends MY_Controller {
      */
     public function register()
     {
-        #$formValidation = $this->serviceContainer['form_validation'];
-        #$formFactory = $this->serviceContainer['form_factory'];
+        $formValidation = $this->serviceContainer['form_validation'];
+        $formFactory = $this->serviceContainer['form_factory'];
         $request = $this->serviceContainer['http_request'];
+        $accountManager = $this->serviceContainer['account_manager']; 
         
-        
-        $request->getMethod();
-        exit();
-        
-        $accountManager = $this->kernel->serviceContainer['account_manager']; 
-        $isAuthenticated = $accountManager->authenticateWebServiceClient('mobile', $this->input->post('skey'));
-
         $errors = array();
         $isSuccessful = false;
-
+        $isAuthenticated = $accountManager->authenticateWebServiceClient('mobile', $this->input->post('skey'));
+        
         if($isAuthenticated){
             
             $rules = $formValidation->getRules('register');
 
             $form = $formFactory->createBuilder()
-            ->setMethod('POST')
-            ->add('username', array('constraints' => $rules['username']))
-            ->add('password', array('constraints' => $rules['password']))
-            ->add('contactno', array('constraints' => $rules['contactno']))
-            ->add('email', array('constraints' => $rules['email']))
-            ->getForm();
+                ->setMethod('POST')
+                ->add('username', array('constraints' => $rules['username']))
+                ->add('password', array('constraints' => $rules['password']))
+                ->add('contactno', array('constraints' => $rules['contactno']))
+                ->add('email', array('constraints' => $rules['email']))
+                ->getForm();
                 
+            $form->handleRequest($request);
+            if ($form->isValid()) {
+                $username =  $this->input->post('username');
+                $password = $this->input->post('password');
+                $email = $this->input->post('email');
+                $contactno = substr($this->input->post('mobile'),1); 
+                $accountManager = $accountManager->registerMember($username, $password, $email, $contactno);
+                if(!$accountManager){
+                    array_push($errors, "Database registration failed.");
+                }
+                else{
+                    $isSuccessful = true;
+                }
+            }
+            else{
+                foreach($form->getErrors() as $error){
+                    array_push($errors, $error);
+                }
+            }  
         }
         else{
-            array_push($errors, "Invalid key");
+            array_push($errors, "Invalid webservice key");
         }
         
         $response['errors'] = $errors;
         $response['isSuccessful'] = $isSuccessful;
-        die(json_encode($response,JSON_PRETTY_PRINT));
+        print(json_encode($response,JSON_PRETTY_PRINT));
     
         /*
         $data['username'] = $username = $this->input->get('username');
