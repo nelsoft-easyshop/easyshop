@@ -36,13 +36,16 @@ class UserManager
     {
         $user = $this->em->find('EasyShop\Entities\EsMember', $memberId);
         $storeName = trim($storeName);
+        $checkStoreName = array();
 
         if($user === null){
             return false;
         }
 
-        $checkStoreName = $this->em->getRepository('EasyShop\Entities\EsMember')
-                                   ->getMemberStoreName($memberId,$storeName);
+        if( strlen($storeName) > 0 ){
+            $checkStoreName = $this->em->getRepository('EasyShop\Entities\EsMember')
+                                       ->getMemberStoreName($memberId,$storeName);
+        }
 
         // If store name is not yet used, set user's storename to $storeName
         if( empty($checkStoreName) ){

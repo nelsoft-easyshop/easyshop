@@ -439,7 +439,7 @@ $(function(){
                 }
 
                 if(obj.result === true){
-                    var hasStoreName = obj.username.toLowerCase() !== obj.storename.toLowerCase() &&
+                    var hasStoreName = obj.username !== obj.storename &&
                         obj.storename.length > 0 ? true:false;
 
                     if(hasStoreName){
@@ -450,7 +450,7 @@ $(function(){
                     else{
                         echoUserName.hide();
                         var newStoreName = obj.username;
-                        var textboxVal = '';
+                        var textboxVal = obj.username;
                     }
 
                     editStoreNameField.hide();
