@@ -1,86 +1,87 @@
 
-function validateRedTextBox(idclass)
-{
-    $(idclass).css({"-webkit-box-shadow": "0px 0px 2px 2px #FF0000",
-                "-moz-box-shadow": "0px 0px 2px 2px #FF0000",
-                "box-shadow": "0px 0px 2px 2px #FF0000"});
-    $(idclass).focus();
-} 
-
-function validateWhiteTextBox(idclass)
-{
-    $(idclass).css({"-webkit-box-shadow": "0px 0px 2px 2px #FFFFFF",
-                "-moz-box-shadow": "0px 0px 2px 2px #FFFFFF",
-                "box-shadow": "0px 0px 2px 2px #FFFFFF"});
-}
-
-function removeParam(key, sourceURL)
-{
-    var rtn = sourceURL.split("?")[0],
-    param,
-    params_arr = [],
-    queryString = (sourceURL.indexOf("?") !== -1) ? sourceURL.split("?")[1] : "";
-    if (queryString !== "") {
-        params_arr = queryString.split("&");
-        for (var i = params_arr.length - 1; i >= 0; i -= 1) {
-            param = params_arr[i].split("=")[0];
-            if (param === key) {
-                params_arr.splice(i, 1);
-            }
-        }
-        rtn = rtn + "?" + params_arr.join("&");
-    }
-    return rtn;
-}
-
-function getCookie(name)
-{
-    var regexp = new RegExp("(?:^" + name + "|;\s*"+ name + ")=(.*?)(?:;|$)", "g");
-    var result = regexp.exec(document.cookie);
-
-    return (result === null) ? null : result[1];
-}
-
-function createCookie(name, value, expires, path, domain)
-{
-    var cookie = name + "=" + escape(value) + ";";
-
-    if (expires) { 
-        if(expires instanceof Date) { 
-            if (isNaN(expires.getTime()))
-                expires = new Date();
-        }
-        else
-            expires = new Date(new Date().getTime() + parseInt(expires) * 1000 * 60 * 60 * 24);
-        cookie += "expires=" + expires.toGMTString() + ";";
-    }
-    if (path){
-        cookie += "path=" + path + ";";
-    }
-    if (domain){
-        cookie += "domain=" + domain + ";";
-    }
-    document.cookie = cookie;
-}
-
-function checkIfUrlParamExist(field,url)
-{
-    if(url.indexOf('?' + field + '=') != -1)
-        return true;
-    else if(url.indexOf('&' + field + '=') != -1)
-        return true;
-    return false
-}
-
-function getParameterByName(name)
-{
-    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
-    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
-        results = regex.exec(location.search);
-    return results == null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
-}
 
 (function($) {
+
+    var validateRedTextBox = function(idclass)
+    {
+        $(idclass).css({"-webkit-box-shadow": "0px 0px 2px 2px #FF0000",
+                    "-moz-box-shadow": "0px 0px 2px 2px #FF0000",
+                    "box-shadow": "0px 0px 2px 2px #FF0000"});
+        $(idclass).focus();
+    } 
+
+    var validateWhiteTextBox = function(idclass)
+    {
+        $(idclass).css({"-webkit-box-shadow": "0px 0px 2px 2px #FFFFFF",
+                    "-moz-box-shadow": "0px 0px 2px 2px #FFFFFF",
+                    "box-shadow": "0px 0px 2px 2px #FFFFFF"});
+    }
+
+    var removeParam = function(key, sourceURL)
+    {
+        var rtn = sourceURL.split("?")[0],
+        param,
+        params_arr = [],
+        queryString = (sourceURL.indexOf("?") !== -1) ? sourceURL.split("?")[1] : "";
+        if (queryString !== "") {
+            params_arr = queryString.split("&");
+            for (var i = params_arr.length - 1; i >= 0; i -= 1) {
+                param = params_arr[i].split("=")[0];
+                if (param === key) {
+                    params_arr.splice(i, 1);
+                }
+            }
+            rtn = rtn + "?" + params_arr.join("&");
+        }
+        return rtn;
+    }
+
+    var getCookie = function(name)
+    {
+        var regexp = new RegExp("(?:^" + name + "|;\s*"+ name + ")=(.*?)(?:;|$)", "g");
+        var result = regexp.exec(document.cookie);
+
+        return (result === null) ? null : result[1];
+    }
+
+    var createCookie = function(name, value, expires, path, domain)
+    {
+        var cookie = name + "=" + escape(value) + ";";
+
+        if (expires) { 
+            if(expires instanceof Date) { 
+                if (isNaN(expires.getTime()))
+                    expires = new Date();
+            }
+            else
+                expires = new Date(new Date().getTime() + parseInt(expires) * 1000 * 60 * 60 * 24);
+            cookie += "expires=" + expires.toGMTString() + ";";
+        }
+        if (path){
+            cookie += "path=" + path + ";";
+        }
+        if (domain){
+            cookie += "domain=" + domain + ";";
+        }
+        document.cookie = cookie;
+    }
+
+    var checkIfUrlParamExist = function(field,url)
+    {
+        if(url.indexOf('?' + field + '=') != -1)
+            return true;
+        else if(url.indexOf('&' + field + '=') != -1)
+            return true;
+        return false
+    }
+
+    var getParameterByName = function(name)
+    {
+        name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+        var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+            results = regex.exec(location.search);
+        return results == null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+    }
 
     $( "#price1 , #price2" ).keypress(function(evt) {
         var charCode = (evt.which) ? evt.which : event.keyCode;

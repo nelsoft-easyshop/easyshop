@@ -9,10 +9,16 @@ namespace EasyShop\Category;
  */
 class CategoryManager
 {
+
     /**
-     * [__construct description]
+     * Constructor.
      */
-    public function __construct() {}
+    public function __construct()
+    {          
+        $this->ci = get_instance();  
+        $this->ci->config->load('protected_category', TRUE);
+        $this->protectedCategories = $this->ci->config->item('protected_category');  
+    }
 
     /**
      * Applies if protectedCategory will show or not
@@ -22,14 +28,11 @@ class CategoryManager
      */
     public function applyProtectedCategory($categoryList,$isAdmin = FALSE)
     {
-        $CI = get_instance();  
-        $CI->config->load('protected_category', TRUE);
-        $protectedCategories = $CI->config->item('protected_category');  
+        $protectedCategories =  $this->protectedCategories; 
         if(!$isAdmin){
-            foreach($categoryList as $key => $value){ 
+            foreach($categoryList as $key => $value){  
                 if((in_array($value->getIdCat(),$protectedCategories) || $value->getIdCat() == 1) && !$isAdmin){
                     unset($categoryList[$key]);
-                    continue;
                 } 
             }
         } 

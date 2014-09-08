@@ -9,10 +9,15 @@ namespace EasyShop\Promo;
  */
 class PromoManager
 {
+
     /**
-     * [__construct description]
+     * Constructor.
      */
-    public function __construct() {}
+    public function __construct()
+    {          
+        $this->ci = get_instance();  
+        $this->promoArray = $this->ci->config->item('Promo');
+    }
 
     /**
      * Applies discount to a product
@@ -26,16 +31,15 @@ class PromoManager
      */
     public function applyDiscount($basePrice = 0.00, $startDate, $endDate, $isPromo = 0, $promoType = 0, $discountPercent = 0)
     {
+        $promoArray = $this->promoArray[$promoType];
         $today = strtotime( date("Y-m-d H:i:s"));
         $startDate = strtotime($startDate);
         $endDate = strtotime($endDate);
         $discountMultiplier = $discountPercent / 100;
         $booleanStartPromo = false;
         $return['endPromo'] = ($today > $endDate) ? true : false;
-        $return['price'] = $basePrice;
-        $CI = get_instance();
+        $return['price'] = $basePrice; 
         if(intval($isPromo) === 1){
-            $promoArray = $CI->config->item('Promo')[$promoType];
             $option = isset($promoArray['option'])?$promoArray['option']:array();
             $calculationId = $promoArray['calculation_id'];
             switch ($calculationId) {

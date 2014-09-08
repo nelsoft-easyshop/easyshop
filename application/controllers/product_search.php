@@ -69,49 +69,50 @@ class product_search extends MY_Controller {
         $EsCatRepository = $this->em->getRepository('EasyShop\Entities\EsCat');
         $EsLocationLookupRepository = $this->em->getRepository('EasyShop\Entities\EsLocationLookup');
 
-        $string = $this->input->get('q_str');
-        $category = $getParamCategory = $this->input->get('q_cat');
-        $brand = $this->input->get('brand');
-        $condition = $this->input->get('condition');
-        $seller = $this->input->get('seller');
-        $location = $this->input->get('location');
-        $startPrice = $this->input->get('startprice');
-        $endPrice = $this->input->get('endprice');
+        $queryString = trim($this->input->get('q_str'));
+        $category = $getParamCategory = trim($this->input->get('q_cat'));
+        $brand = trim($this->input->get('brand'));
+        $condition = trim($this->input->get('condition'));
+        $seller = trim($this->input->get('seller'));
+        $location = trim($this->input->get('location'));
+        $startPrice = trim($this->input->get('startprice'));
+        $endPrice = trim($this->input->get('endprice'));
         $memberId = $this->session->userdata('member_id');
-        $page = ($this->input->get('page')) ? $this->input->get('page') : 0;
+        $page = (trim($this->input->get('page'))) ? trim($this->input->get('page')) : 0;
         $category = ($category > 1) ? $EsCatRepository->getChildCategoryRecursive($category):array('1');
-        if(count($_GET)>0){
-            $productIds = $originalOrder = ($string != "")?$searchProductService->filterBySearchString($string):array();
 
-            if($string == "" && $condition == "" && $seller == "" && $location == ""){ 
+        if(count($_GET)>0){
+            $productIds = $originalOrder = ($queryString)?$searchProductService->filterBySearchString($queryString):array();
+
+            if($queryString == "" && $condition == "" && $seller == "" && $location == ""){ 
                 $productIds = $searchProductService->filterByCategory($category,$productIds,FALSE);
             }
             else{
-                $boolean = ($string == "")?FALSE:TRUE; 
-                $productIds = $searchProductService->filterByCategory($category,$productIds,$boolean);
+                $hasQueryString = (!$queryString) ? FALSE : TRUE; 
+                $productIds = $searchProductService->filterByCategory($category, $productIds, $hasQueryString);
             }  
             
-            if($condition!= ""){
-                if($string == "" && $seller == "" && $location == "" && $getParamCategory == 1){ 
-                    $productIds = $searchProductService->filterByCondition($condition,$productIds,FALSE);
+            if($condition){ 
+                if($queryString == "" && $seller == "" && $location == "" && $getParamCategory == 1){ 
+                    $productIds = $searchProductService->filterByCondition($condition, $productIds, FALSE);
                 }
                 else{
-                    $productIds = ($condition != "")?$searchProductService->filterByCondition($condition,$productIds,TRUE):$productIds;
+                    $productIds = ($condition)?$searchProductService->filterByCondition($condition,$productIds,TRUE):$productIds;
                 }
             }
 
-            if($seller!= ""){
-                if($string == "" && $condition == "" && $seller != "" && $location == "" && $getParamCategory == 1){
+            if($seller){
+                if($queryString == "" && $condition == "" && $seller != "" && $location == "" && $getParamCategory == 1){
                     $productIds = $EsProductRepository->findBySeller($seller);
                 }
             }
 
-            if($location!= ""){
-                if($string == "" && $condition == "" && $seller == "" && $location != "" && $getParamCategory == 1){
+            if($location){
+                if($queryString == "" && $condition == "" && $seller == "" && $location != "" && $getParamCategory == 1){
                     $productIds = $searchProductService->filterByLocation($location,$productIds,FALSE);
                 }
                 else{
-                    $productIds = ($location != "")?$searchProductService->filterByLocation($location,$productIds,TRUE):$productIds;
+                    $productIds = ($location)?$searchProductService->filterByLocation($location,$productIds,TRUE):$productIds;
                 }
             }
 
@@ -120,15 +121,16 @@ class product_search extends MY_Controller {
             $productIds = (count($originalOrder)>0) ? array_intersect($originalOrder, $productIds) : $productIds; 
 
             $filteredProduct = $EsProductRepository->getDetails($productIds,$page,$this->per_page);
-            $discountedProduct = ($filteredProduct > 0) ? $productManager->getDiscountedPrice($filteredProduct,$memberId) : array();
-            $filterSellerProduct = ($seller != "")?$searchProductService->filterBySeller($seller,$discountedProduct):$discountedProduct;
+            $discountedProduct = ($filteredProduct > 0) ? $productManager->getDiscountedPrice($memberId,$filteredProduct) : array();
+            $filterSellerProduct = ($seller)?$searchProductService->filterBySeller($seller,$discountedProduct):$discountedProduct;
             $response['products'] = ($startPrice) ? $searchProductService->filterByPrice($startPrice,$endPrice,$filterSellerProduct) : $filterSellerProduct;
 
             // if ajax request display json data of products
-            if($this->input->get('page')){
-                $response['typeview'] = $this->input->get('typeview');
+            if($page){
+                $response['typeview'] = trim($this->input->get('typeview'));
                 $data['view'] = $this->load->view('pages/search/product_search_by_searchbox_more',$response,TRUE);
                 $data['count'] = count($response['products']);
+
                 die(json_encode($data));
             }
 
@@ -138,7 +140,7 @@ class product_search extends MY_Controller {
             }
 
             $organizedAttribute = array();
-            if(!count($finalizedProductId)<= 0){
+            if(count($finalizedProductId)>0){
                 $brands = $EsProductRepository->getBrands($finalizedProductId);
                 $attributes = $EsProductRepository->getAttributes($finalizedProductId);
                 $brands = $EsProductRepository->getBrands($finalizedProductId);
@@ -148,7 +150,7 @@ class product_search extends MY_Controller {
             }
 
             $response['attributes'] = $organizedAttribute;
-            $response['string'] = $string;
+            $response['string'] = $queryString;
             $subCategory = $this->em->getRepository('EasyShop\Entities\EsCat')
                                                     ->findBy(['parent' => $getParamCategory]);
                                                     
@@ -160,8 +162,10 @@ class product_search extends MY_Controller {
             $response['subCategory'] = $categoryManager->applyProtectedCategory($subCategory,FALSE);
         }
         
-        $response['parentCategory'] = $this->em->getRepository('EasyShop\Entities\EsCat')
+        $parentCategory = $this->em->getRepository('EasyShop\Entities\EsCat')
                                                     ->findBy(['parent' => 1]);
+
+        $response['parentCategory'] = $categoryManager->applyProtectedCategory($parentCategory, FALSE);
         $response['locatioList'] = $EsLocationLookupRepository->getLocation();
         $response['defaultCondition'] = $this->lang->line('product_condition');
 
@@ -188,17 +192,17 @@ class product_search extends MY_Controller {
         $EsProductRepository = $this->em->getRepository('EasyShop\Entities\EsProduct');
         $EsCatRepository = $this->em->getRepository('EasyShop\Entities\EsCat');
 
-        $string = ($this->input->get('q_str')) ? $this->input->get('q_str') : "";
-        $category = $this->input->get('q_cat');
-        $brand = $this->input->get('brand');
-        $condition = $this->input->get('condition');
-        $startPrice = $this->input->get('startprice');
-        $endPrice = $this->input->get('endprice');
+        $queryString = (trim($this->input->get('q_str'))) ? trim($this->input->get('q_str')) : "";
+        $category = trim($this->input->get('q_cat'));
+        $brand = trim($this->input->get('brand'));
+        $condition = trim($this->input->get('condition'));
+        $startPrice = trim($this->input->get('startprice'));
+        $endPrice = trim($this->input->get('endprice'));
         $memberId = $this->session->userdata('member_id');
-        $page = ($this->input->get('page')) ? $this->input->get('page') : 0;
+        $page = (trim($this->input->get('page'))) ? trim($this->input->get('page')) : 0;
         $category = ($category > 1) ? $EsCatRepository->getChildCategoryRecursive($category):array('1');
 
-        $productIds = $originalOrder = $searchProductService->filterBySearchString($string); 
+        $productIds = $originalOrder = $searchProductService->filterBySearchString($queryString); 
         $productIds = ($category) ? $searchProductService->filterByCategory($category,$productIds,TRUE) : $productIds; 
         $productIds = ($brand) ? $searchProductService->filterByBrand($brand,$productIds,TRUE) : $productIds; 
         $productIds = ($condition) ? $searchProductService->filterByCondition($condition,$productIds,TRUE) : $productIds; 
@@ -206,13 +210,13 @@ class product_search extends MY_Controller {
         $productIds = array_intersect($originalOrder, $productIds);
 
         $filteredProduct = (count($productIds)>0)?$EsProductRepository->getDetails($productIds,$page,$this->per_page):array();
-        $discountedProduct = $productManager->getDiscountedPrice($filteredProduct,$memberId);
+        $discountedProduct = $productManager->getDiscountedPrice($memberId,$filteredProduct);
 
         $response['products'] = ($startPrice) ? $searchProductService->filterByPrice($startPrice,$endPrice,$discountedProduct) : $discountedProduct;
         
         // if ajax request display json data of products
-        if($this->input->get('page')){
-            $response['typeview'] = $this->input->get('typeview');
+        if($page){
+            $response['typeview'] = trim($this->input->get('typeview'));
             $data['view'] = $this->load->view('pages/search/product_search_by_searchbox_more',$response,TRUE);
             $data['count'] = count($response['products']);
             die(json_encode($data));
@@ -226,7 +230,7 @@ class product_search extends MY_Controller {
         }
 
         $organizedAttribute = array();
-        if(!count($finalizedProductId)<= 0){
+        if(count($finalizedProductId)>0){
             $brands = $EsProductRepository->getBrands($finalizedProductId);
             $attributes = $EsProductRepository->getAttributes($finalizedProductId);
             $brands = $EsProductRepository->getBrands($finalizedProductId);
@@ -237,11 +241,11 @@ class product_search extends MY_Controller {
         }
 
         $response['attributes'] = $organizedAttribute;
-        $response['string'] = $string;
+        $response['string'] = $queryString;
         $response['category_navigation'] = $this->load->view('templates/category_navigation',array('cat_items' =>  $this->getcat(),), TRUE );
         
         $data = array(
-                'title' => ($string==='')?'Search | Easyshop.ph':$string.' | Easyshop.ph',
+                'title' => ($queryString==='')?'Search | Easyshop.ph':$queryString.' | Easyshop.ph',
                 );
 
         $data = array_merge($data, $this->fill_header());

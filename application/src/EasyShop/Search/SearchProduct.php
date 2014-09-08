@@ -24,9 +24,9 @@ class SearchProduct
      * Constructor. Retrieves Entity Manager instance
      * 
      */
-    public function __construct()
+    public function __construct($em)
     {
-        $this->em = get_instance()->kernel->serviceContainer['entity_manager'];
+        $this->em = $em;
     }
 
     /**
@@ -41,7 +41,7 @@ class SearchProduct
         $ids = array(); 
         $explodedString = explode(' ', trim($clearString)); 
         $stringCollection[0] = '+'.implode('* +', $explodedString) .'*';
-        $stringCollection[1] = implode(' ', $explodedString);
+        $stringCollection[1] = trim($clearString);
         $stringCollection[2] = '"'.implode(' ', $explodedString).'"';
         
         if($string == ""){
@@ -155,24 +155,24 @@ class SearchProduct
 
     /**
      * Search all product id within price given in parameter
-     * @param  integer $start 
-     * @param  integer $end
-     * @param  array   $pids
+     * @param  integer $minPrice 
+     * @param  integer $maxPrice
+     * @param  array   $arrayItems
      * @return array
      */
-    public function filterByPrice($start = 0,$end = 0,$arrayItem = array())
+    public function filterByPrice($minPrice = 0,$maxPrice = 0,$arrayItems = array())
     {
-        $start = (is_numeric($start)) ? $start : 0;
-        $end = (is_numeric($end)) ? $end : PHP_INT_MAX;
+        $minPrice = (is_numeric($minPrice)) ? $minPrice : 0;
+        $maxPrice = (is_numeric($maxPrice)) ? $maxPrice : PHP_INT_MAX;
    
-        foreach ($arrayItem as $key => $value) {
+        foreach ($arrayItems as $key => $value) {
             $price = round(floatval($value['price']),2); 
-            if(!($price >= $start && $price <= $end)){
-                unset($arrayItem[$key]);
+            if($price < $minPrice || $price > $maxPrice){
+                unset($arrayItems[$key]);
             }
         }
     
-        return $arrayItem; 
+        return $arrayItems; 
     }
 
     /**
@@ -235,21 +235,21 @@ class SearchProduct
     /**
      * Filter array by seller if exist
      * @param  string $seller    [description]
-     * @param  array  $arrayItem [description]
+     * @param  array  $arrayItems [description]
      * @return array
      */
-    public function filterBySeller($seller = "", $arrayItem = array())
+    public function filterBySeller($seller = "", $arrayItems = array())
     {
         $seller = trim($seller); 
    
-        foreach ($arrayItem as $key => $value) {
+        foreach ($arrayItems as $key => $value) {
             $username = $value['username']; 
             if (strpos($username, $seller) === false) { 
-                unset($arrayItem[$key]);
+                unset($arrayItems[$key]);
             }
         }
     
-        return $arrayItem; 
+        return $arrayItems; 
     }
 
     /**
