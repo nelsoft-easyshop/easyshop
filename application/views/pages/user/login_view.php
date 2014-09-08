@@ -4,7 +4,25 @@
 <div class="clear mrgn-top-35"></div>
 
     <div class="res_wrapper login_content">
-
+        <div class="login-tli-con">
+            <div class="border-all border-rad-3">
+                <div class="col-md-12">
+                    <div class="row border-bottom bg-cl-f7f7f7">
+                        <div class="col-md-12">
+                            <h5><strong>Trouble Logging In?</strong></h5>
+                        </div>
+                    </div>
+                    <div class="text-center pd-tb-20">
+                        <p><strong>"loremipsum@dolor.com"</strong> is not associated with any easyshop.ph account.</p>
+                    </div>
+                    <div class="text-right pd-tb-20 login-btn-con">
+                        <a href="" class="btn btn-orange">Try again</a>
+                        <a href="" class="btn btn-default">Help me locate my account</a>
+                    </div>
+                </div>
+                <div class="clear"></div>
+            </div>
+        </div>
         <div class="login_left_content col-sm-7 col-md-7 text-center hidden-xs">
             <img src="/assets/images/img_login_banner.jpg" alt="banner">
         </div>
