@@ -236,8 +236,31 @@ class Home extends MY_Controller
         $tab = $this->input->get('tab') ? $this->input->get('tab') : '';
         $session_data = $this->session->all_userdata();
         $vendordetails = $this->memberpage_model->getVendorDetails($sellerslug);
+        delete_cookie('es_subscribe_result');
 
         if($vendordetails){
+            // Logic for processing "follow" request while logged out
+            if( get_cookie('es_vendor_subscribe') ){
+                delete_cookie('es_vendor_subscribe');
+                $subscribeInfo = $this->memberpage_model->checkVendorSubscription($session_data['member_id'],$vendordetails['username']);
+                if( $subscribeInfo['stat'] === "unfollowed" ){
+                    $subscribeBool = $this->memberpage_model->setVendorSubscription($session_data['member_id'], $subscribeInfo['vendor_id'], $subscribeInfo['stat']);
+                    $subscribeResponse = $subscribeBool ? "You are now following " . $vendordetails['username'] : "Error subscribing to user.";
+                }
+                else if( $subscribeInfo['stat'] === "followed" ){
+                    $subscribeResponse = "You are already following " . $vendordetails['username'];
+                }
+                else{
+                    $subscribeResponse = "User does not exist.";   
+                }
+                $cookieVal = array(
+                    'name' => 'es_subscribe_result',
+                    'value' => $subscribeResponse,
+                    'expire' => '0'
+                );
+                set_cookie($cookieVal);
+            }
+
             $data['title'] = 'Vendor Profile | Easyshop.ph';
             $data['my_id'] = (empty($session_data['member_id']) ? 0 : $session_data['member_id']);
             $data = array_merge($data, $this->fill_header());

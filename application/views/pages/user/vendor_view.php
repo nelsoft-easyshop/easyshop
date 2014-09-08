@@ -81,7 +81,7 @@
                         <span class='span-cont' id='following-lnk'><?php echo count($following)?> <label>following</label></span>
                     </p>
      
-                    <?php if( !$renderEdit && $logged_in ):?>
+                    <?php if( !$renderEdit ):?>
                         <?php echo form_open('');?>
                         <p class="subscription_btn btn2 btn-follow" style="text-align:center; display:<?php echo $subscribe_status==='unfollowed'?'':'none'?>">
                             <small class="sprite-bg follow-icon"></small> Follow
@@ -90,6 +90,7 @@
                             <small class="sprite-bg unfollow-icon"></small> Unfollow
                         </p>
                         <input type="hidden" value="<?php echo $vendordetails['username']?>" name="name">
+                        <input type="hidden" value="<?php echo $vendordetails['userslug']?>" name="userlink">
                         <?php echo form_close();?>
                     <?php endif;?>
 

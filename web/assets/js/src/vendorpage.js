@@ -296,26 +296,47 @@ function resetCoords(){
         var form = $(this).closest('form');
         var $this = $(this);
         var sibling = $(this).siblings('.subscription_btn');
-        $.post(config.base_url+'memberpage/vendorSubscription', $(form).serializeArray(), function(data){
-            try{
-                var obj = jQuery.parseJSON(data);
-            }
-            catch(e){
-                alert('There was an error while processing your request. Please try again later.');
-                return false;
-            }
-            
-            if(obj.result === 'success'){
-                $this.hide();
-                sibling.show();
-            }
-            else{
-                alert(obj.error);
-            }
-        });
+        
+        var logInStatus = $('input[name="is-logged-in"]').val().toString();
+        var vendorLink = form.find('input[name="userlink"]').val();
+        
+        if( logInStatus === 'true' ){
+            $.post(config.base_url+'memberpage/vendorSubscription', $(form).serializeArray(), function(data){
+                try{
+                    var obj = jQuery.parseJSON(data);
+                }
+                catch(e){
+                    alert('There was an error while processing your request. Please try again later.');
+                    return false;
+                }
+                
+                if(obj.result === 'success'){
+                    $this.hide();
+                    sibling.show();
+                }
+                else{
+                    alert(obj.error);
+                }
+            });    
+        }
+        else{
+            $.removeCookie('es_vendor_subscribe');
+            $.cookie('es_vendor_subscribe', vendorLink, {path: '/'});
+            window.location.href = config.base_url + 'login';
+        }
+        
         return false;
     });
     
+    $(document).ready(function(){
+        var subscribeResult = $.cookie('es_subscribe_result');
+        var logInStatus = $('input[name="is-logged-in"]').val().toString();
+        if( typeof subscribeResult !== "undefined" && logInStatus === "true"){
+            alert(subscribeResult);
+            $.removeCookie('es_subscribe_result');
+        }
+    });
+
 })(jQuery);
 
 /*****************	STORE DESCRIPTION	******************************/
