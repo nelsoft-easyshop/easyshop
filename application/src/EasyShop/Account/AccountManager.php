@@ -4,7 +4,7 @@ namespace EasyShop\Account;
 
 use EasyShop\Entities\EsWebserviceUser;
 use Easyshop\Entities\EsMember;
-
+use Elnur\BlowfishPasswordEncoderBundle\Security\Encoder\BlowfishPasswordEncoder as BlowfishPasswordEncoder;
 
 class AccountManager
 {
@@ -35,10 +35,10 @@ class AccountManager
      * Intialize dependencies
      *
      */
-    public function __construct($em, $bcryptEncoder, $userManager)
+    public function __construct($em, BlowfishPasswordEncoder $bcryptEncoder, $userManager)
     {
         $this->em = $em;
-        $this->brcyptEncoder = $bcryptEncoder
+        $this->bcryptEncoder = $bcryptEncoder;
         $this->userManager = $userManager;
     }
 
