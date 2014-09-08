@@ -15,7 +15,7 @@ class Version20140830143329 extends AbstractMigration
     {
         // this up() migration is auto-generated, please modify it to your needs
         $this->addSql("
-        ALTER TABLE `easyshop`.`es_order_billing_info` 
+        ALTER TABLE `es_order_billing_info` 
             DROP COLUMN `order_product_id`,
             DROP COLUMN `order_id`;
         ");
@@ -256,7 +256,7 @@ class Version20140830143329 extends AbstractMigration
         // this down() migration is auto-generated, please modify it to your needs
         
         $this->addSql("
-        ALTER TABLE `easyshop`.`es_order_billing_info` 
+        ALTER TABLE `es_order_billing_info` 
             ADD COLUMN `order_product_id` INT(10) NOT NULL AFTER `id_es_order_billing_info`,
             ADD COLUMN `order_id` INT(10) NOT NULL AFTER `order_product_id`;
         ");
