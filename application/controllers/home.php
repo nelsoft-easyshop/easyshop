@@ -396,7 +396,7 @@ class Home extends MY_Controller
      */
     public function bugReport()
     {
-        $flash = false;
+        $isValid = false;
         $formValidation = $this->serviceContainer['form_validation'];
         $formFactory = $this->serviceContainer['form_factory'];
         $request = $this->serviceContainer['http_request'];
@@ -416,9 +416,9 @@ class Home extends MY_Controller
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $bug = $this->serviceContainer['bug_reporter'];
-            $bug->createReport($form->getData());
-            $flash = true;
+            $bugReporter = $this->serviceContainer['bug_reporter'];
+            $bugReporter->createReport($form->getData());
+            $isValid = true;
         }
         
         $data = array(
@@ -432,11 +432,11 @@ class Home extends MY_Controller
         $formData =  $twig->render('pages/web/report-a-problem.html.twig', array(
             'form' => $form->createView(), 
             'ES_FILE_VERSION' => ES_FILE_VERSION,
-            'flash' => $flash
+            'isValid' => $isValid
             ));
 
-        if($flash == true){
-            $flash = false;
+        if($isValid == true){
+            $isValid = false;
         }
 
         $this->output->append_output($formData);

@@ -29,6 +29,8 @@ class BugReporter
      * Constructor.
      *
      * @param mixed $formData Contains value of the form
+     *
+     * @return \EasyShop\Entities
      */
     public function createReport($formData)
     {
@@ -43,5 +45,7 @@ class BugReporter
         
         $this->em->persist($problem);
         $this->em->flush();
+
+        return $problem;
     }
 }
