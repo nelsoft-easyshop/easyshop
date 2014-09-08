@@ -102,8 +102,8 @@ class Kernel
             $brcyptEncoder = new \Elnur\BlowfishPasswordEncoderBundle\Security\Encoder\BlowfishPasswordEncoder(5);
             $em = $container['entity_manager'];
             $userManager = $container['user_manager'];
-            return new \EasyShop\Account\AccountManager(new BlowfishPasswordEncoder($brcyptEncoder, $em, $userManager);        
-        }
+            return new \EasyShop\Account\AccountManager(new BlowfishPasswordEncoder($brcyptEncoder, $em, $userManager));        
+        };
 
         //User Manager
         $container['user_manager'] = function ($c) use ($container) {
