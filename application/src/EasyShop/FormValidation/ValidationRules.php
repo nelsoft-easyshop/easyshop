@@ -4,15 +4,12 @@ namespace EasyShop\FormValidation;
 
 use Symfony\Component\Validator\Constraints as Assert;
 
-/*
-    Constraint List can be found here:
-        http://symfony.com/doc/current/reference/constraints.html
-*/
 
 /**
  * Validation Rules Class
  *
- * @author LA Roberto
+ * refer to: http://symfony.com/doc/current/reference/constraints.html
+ * for the complete constraint list
  */
 class ValidationRules
 {
@@ -50,11 +47,13 @@ class ValidationRules
                                 )
                             )
                 ),
-            'dummy' => array(
-                    'field 1' => array(), // field 1
-                    'field 2' => array(), // field 2
-                    'field 3' => array() // field 3
-                )
+            'register' => array(
+                    'username' => array(
+                                new Assert\NotBlank(),
+                                #new Assert\Min(5),
+                               # new Assert\Max(25),
+                    ),
+                ),
         );
     }
 

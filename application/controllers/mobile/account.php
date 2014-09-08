@@ -13,7 +13,12 @@ class Account extends MY_Controller {
     function __construct() 
     {
         parent::__construct();
-        header('Content-type: application/json');
+       # header('Content-type: application/json');
+    }
+    
+    public function test()
+    {
+        $this->load->view('pages/test');
     }
 
     /**
@@ -38,10 +43,10 @@ class Account extends MY_Controller {
 
             $form = $formFactory->createBuilder()
                 ->setMethod('POST')
-                ->add('username', array('constraints' => $rules['username']))
-                ->add('password', array('constraints' => $rules['password']))
-                ->add('contactno', array('constraints' => $rules['contactno']))
-                ->add('email', array('constraints' => $rules['email']))
+                ->add('username', 'text', array('constraints' => $rules['username']))
+                #->add('password', array('constraints' => $rules['password']))
+                #->add('contactno', array('constraints' => $rules['contactno']))
+                #->add('email', array('constraints' => $rules['email']))
                 ->getForm();
                 
             $form->handleRequest($request);
@@ -59,6 +64,7 @@ class Account extends MY_Controller {
                 }
             }
             else{
+                print_r($form->getErrors());
                 foreach($form->getErrors() as $error){
                     array_push($errors, $error);
                 }
