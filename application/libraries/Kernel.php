@@ -97,8 +97,12 @@ class Kernel
         };
         
         //Authentication Manager
-        $container['account_manager'] = function ($c) {
-            return new \EasyShop\Account\AccountManager();
+        $container['account_manager'] = function ($c) use ($container) {
+            $brcyptEncoder = new \Elnur\BlowfishPasswordEncoderBundle\Security\Encoder\BlowfishPasswordEncoder(5);
+            $em = $container['entity_manager'];
+            $userManager = $container['user_manager'];
+            return new \EasyShop\Account\AccountManager(new BlowfishPasswordEncoder($brcyptEncoder, $em, $userManager);        
+        }
 
         // Point Tracker
         $container['point_tracker'] = function ($c) {
@@ -124,6 +128,7 @@ class Kernel
         $container['collection_helper'] = function ($c) {
             return new \EasyShop\CollectionHelper\CollectionHelper();
         };
+
 
         /* Register services END */
         $this->serviceContainer = $container;
