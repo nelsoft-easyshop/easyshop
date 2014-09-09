@@ -32,8 +32,9 @@
                 }
             }
             rtn = rtn + "?" + params_arr.join("&");
+            return rtn;
         }
-        return rtn;
+        return sourceURL;
     }
 
     var getCookie = function(name)
@@ -124,12 +125,12 @@
     $('.price').click(function() {
         var price1 = $('#price1').val();
         var price2 = $('#price2').val();
-
+console.log(currentUrl);
         currentUrl = removeParam("startprice", currentUrl);
+        console.log(currentUrl);
         currentUrl = removeParam("endprice", currentUrl);
-
-        if(price1 != "" && price2 != ""){
-            currentUrl = removeParam("price", currentUrl);
+        console.log(currentUrl);
+        if(price1 != "" && price2 != ""){ 
             currentUrl = currentUrl +'&startprice='+ price1 +'&endprice='+price2;
         }
 
@@ -155,8 +156,7 @@
         currentUrl = removeParam("startprice", currentUrl);
         currentUrl = removeParam("endprice", currentUrl);
 
-        if(price1 != "" && price2 != ""){
-            currentUrl = removeParam("price", currentUrl);
+        if(price1 != "" && price2 != ""){ 
             currentUrl = currentUrl +'&startprice='+ price1 +'&endprice='+price2;
         }
 

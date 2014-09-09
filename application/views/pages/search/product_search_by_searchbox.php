@@ -8,7 +8,6 @@
 
     <section style="color-gray display-when-desktop">
         <div class="container container-responsive">
-
             <div class="row">
                 <div class="col-md-12">
                     <section class="top_margin product-page-section display-when-desktop">
@@ -133,10 +132,8 @@
                         </div>
                     </div>
                 </div>
-
-                 <div class="loading_products" style="display: inline-block;text-align: center;width: 100%;">asd</div>
+                <div class="loading_products" style="display: inline-block;text-align: center;width: 100%;">asd</div>
             </div>
-
         </div>
     </section>
 
@@ -253,13 +250,12 @@
                     </h4>
                 </div>
                 <div class="modal-body no-border">
+                    <h3>Price</h3>
+                    <input type="text" id="rprice1" class="priceField" value="<?=($this->input->get('startprice')?$this->input->get('startprice'):'')?>" maxlength=9 size=6>
+                    to
+                    <input type="text" id="rprice2" class="priceField" value="<?=($this->input->get('startprice')?$this->input->get('endprice'):'')?>" maxlength=9 size=6> 
+                    <input class="rprice" type="button" value=">>"/>
                     <?php if(count($products) > 0): ?>
-                        <h3>Price</h3>
-                        <input type="text" id="rprice1" class="priceField" value="<?=($this->input->get('startprice')?$this->input->get('startprice'):'')?>" maxlength=9 size=6>
-                        to
-                        <input type="text" id="rprice2" class="priceField" value="<?=($this->input->get('startprice')?$this->input->get('endprice'):'')?>" maxlength=9 size=6> 
-                        <input class="rprice" type="button" value=">>"/>
-
                         <?php foreach ($attributes as $attrName => $attrListValue):?>
                         <h3 class="title h3-filter"><?=$attrName?></h3> 
                             <?php foreach ($attrListValue as $key => $value):?>
@@ -284,7 +280,6 @@
 <script src="<?= base_url() ?>assets/js/src/vendor/jquery.scrollUp.min.js" type="text/javascript"></script>
 <script type="text/javascript">
     var currentUrl = "<?=site_url(uri_string() . '?' . $_SERVER['QUERY_STRING']); ?>"; 
-    var loadUrl = "<?=base_url() . 'search_more/'; ?>"; 
     var currentQueryString = "<?=$_SERVER['QUERY_STRING']; ?>"; 
     var typeView = "<?=$_COOKIE['view']?>";
 </script>
