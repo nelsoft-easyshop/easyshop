@@ -15,8 +15,8 @@ class product_search extends MY_Controller {
         $this->load->model("product_model");
         $this->load->model("search_model");
 
-
-        $this->em = get_instance()->kernel->serviceContainer['entity_manager'];
+        // Loading entity manager 
+        $this->em = $this->serviceContainer['entity_manager'];
     }
   
     /*   
