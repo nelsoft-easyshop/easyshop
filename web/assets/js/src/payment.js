@@ -2,8 +2,7 @@ $(document).ready(function(){
 
     $('.paypal_loader').hide();
     $('.div_change_addree').hide();
-    $('.paypal_button').show(); 
-    $('.div_view_avail_location').hide();
+    $('.paypal_button').show();  
     $('#c_mobile').numeric({negative : false});
 
     var cityFilter = function(stateregionselect,cityselect){
@@ -331,16 +330,6 @@ $(document).ready(function(){
  
     $(document).on('click','.view_location_item',function () {
 
-        $('.div_view_avail_location').modal({
-            escClose: true,
-            draggable: true,
-            containerCss:{
-                maxWidth: '90%',
-                minWidth: '50%',
-                maxHeight: 'auto',
-                minHeight: '50%',
-            }
-        }); 
         var csrftoken = $("meta[name='csrf-token']").attr('content');
         var csrfname = $("meta[name='csrf-name']").attr('content');
         var slug = $(this).data('slug');
@@ -354,7 +343,7 @@ $(document).ready(function(){
                 data: csrfname+"="+csrftoken+"&sid="+slug+"&iid="+iid+"&name="+pname, 
                 success: function(d) {
                     $('.div_view_avail_location').empty();
-                    $('.div_view_avail_location').html(d);
+                    $('.div_view_avail_location').append(d);
                 },       
                 error: function (request, status, error) {
                     alert(error);
