@@ -177,7 +177,7 @@ class product_search extends MY_Controller {
         $response['default'] = true;
         $data['render_searchbar'] = false;
         $this->load->view('templates/header', $data); 
-        $this->load->view('pages/search/advance_search_main',$response);
+        $this->load->view('pages/search/advance_search_main_responsive',$response);
         $this->load->view('templates/footer');		
     }
 
