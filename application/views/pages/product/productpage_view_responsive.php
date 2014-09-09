@@ -53,16 +53,31 @@
 							<div class="nav_title">Categories <img src="/assets/images/img_arrow_down.png"></div>
 							<?php echo $category_navigation; ?>
 						</div> 
-						<div class="prod_cat_nav">
+						<div class="prod_cat_nav" id="prod_drop_nav">
 							<div class="category_nav product_content">
 								<ul>
 								<?php foreach($main_categories as $category): ?>
 									<li class = <?php echo ((isset($breadcrumbs[0]['id_cat']) &&  $category['id_cat'] === $breadcrumbs[0]['id_cat'])?"active":"");?>> <a href="<?=base_url()?>category/<?php echo $category['slug']?>"> <?php echo html_escape($category['name']);?> </a> </li>
 								<?php endforeach;?>
 								</ul>
-								<span class="span_bg prod_cat_drop"></span>
+								<span class="span_drop span_bg prod_cat_drop"></span>
 							</div>
 						</div>
+						<script>
+								$("#prod_drop_nav").on('click','.prod_cat_drop',function() {
+									
+									var drop = $("div.category_nav").attr("class");
+
+									if(drop == "category_nav product_content")
+									{
+										$('.category_nav').removeClass("category_nav product_content").addClass("category_nav product_content category_nav_plus");
+										$('.span_drop').removeClass("mehh span_bg prod_cat_drop").addClass("span_drop span_bg prod_cat_drop active_prod_cat_drop_arrow");
+									}else{
+										$('.category_nav').removeClass("category_nav product_content category_nav_plus").addClass("category_nav product_content");
+										$('.span_drop').removeClass("mehh span_bg prod_cat_drop active_prod_cat_drop_arrow").addClass("span_drop span_bg prod_cat_drop");
+									}
+								});
+					  </script>
 						<div class="clear"></div>
 						<div class="bread_crumbs">
 							<ul>
