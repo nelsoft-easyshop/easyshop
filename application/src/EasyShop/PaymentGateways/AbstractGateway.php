@@ -206,34 +206,34 @@ abstract class AbstractGateway implements GatewayInterface
 
             switch ($paymentType) {
                 case '1':
-                    $orderStatus = 99;
-                    $orderProductStatus = 0;
+                    $orderStatus = EsOrderStatus::STATUS_DRAFT;
+                    $orderProductStatus = EsOrderStatus::STATUS_PAID;
                     $externalCharge = ($totalAmount * 0.044) + 15;
                     break;
                 case '2':
-                    $orderStatus = 99;
-                    $orderProductStatus = 0;
-                    $externalCharge = 20;
+                    $orderStatus = EsOrderStatus::STATUS_DRAFT;
+                    $orderProductStatus = EsOrderStatus::STATUS_PAID;
+                    $externalCharge = EsOrderStatus::STATUS_VOID;
                     break;
                 case '3':
-                    $orderStatus = 0;
-                    $orderProductStatus = 0;
-                    $externalCharge = 0;
+                    $orderStatus = EsOrderStatus::STATUS_PAID;
+                    $orderProductStatus = EsOrderStatus::STATUS_PAID;
+                    $externalCharge = EsOrderStatus::STATUS_PAID;
                     break;
                 case '4':
-                    $orderStatus = 99;
-                    $orderProductStatus = 0;
-                    $externalCharge = 20;
+                    $orderStatus = EsOrderStatus::STATUS_DRAFT;
+                    $orderProductStatus = EsOrderStatus::STATUS_PAID;
+                    $externalCharge = EsOrderStatus::STATUS_VOID;
                     break;
                 case '5':
-                    $orderStatus = 99;
-                    $orderProductStatus = 0;
-                    $externalCharge = 0;
+                    $orderStatus = EsOrderStatus::STATUS_DRAFT;
+                    $orderProductStatus = EsOrderStatus::STATUS_PAID;
+                    $externalCharge = EsOrderStatus::STATUS_PAID;
                     break;
                 default:
-                    $orderStatus = 0;
-                    $orderProductStatus = 0;
-                    $externalCharge = 0;
+                    $orderStatus = EsOrderStatus::STATUS_PAID;
+                    $orderProductStatus = EsOrderStatus::STATUS_PAID;
+                    $externalCharge = EsOrderStatus::STATUS_PAID;
                     break;
             }
             $response['o_message'] = 'Error Code: Payment002.1';

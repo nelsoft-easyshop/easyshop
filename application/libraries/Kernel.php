@@ -181,7 +181,8 @@ class Kernel
                             $container['request'],
                             $container['point_tracker']
                             );
-
+        };
+        
           // Product Manager
         $container['product_manager'] = function ($c) {
             return new \EasyShop\Product\ProductManager();
