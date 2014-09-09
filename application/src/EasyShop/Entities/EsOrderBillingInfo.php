@@ -21,6 +21,7 @@ class EsOrderBillingInfo
      */
     private $idOrderBillingInfo;
 
+
     /**
      * @var string
      *
