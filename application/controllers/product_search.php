@@ -191,6 +191,7 @@ class product_search extends MY_Controller {
         $collectionHelper = $this->serviceContainer['collection_helper']; 
         $EsProductRepository = $this->em->getRepository('EasyShop\Entities\EsProduct');
         $EsCatRepository = $this->em->getRepository('EasyShop\Entities\EsCat');
+        $categoryManager = $this->serviceContainer['category_manager']; 
 
         $queryString = (trim($this->input->get('q_str'))) ? trim($this->input->get('q_str')) : "";
         $category = trim($this->input->get('q_cat'));
@@ -243,6 +244,9 @@ class product_search extends MY_Controller {
         $response['attributes'] = $organizedAttribute;
         $response['string'] = $queryString;
         $response['category_navigation'] = $this->load->view('templates/category_navigation',array('cat_items' =>  $this->getcat(),), TRUE );
+        $parentCategory = $this->em->getRepository('EasyShop\Entities\EsCat')
+                                            ->findBy(['parent' => 1]);
+        $response['parentCategory'] = $categoryManager->applyProtectedCategory($parentCategory, FALSE); 
         
         $data = array(
                 'title' => ($queryString==='')?'Search | Easyshop.ph':$queryString.' | Easyshop.ph',

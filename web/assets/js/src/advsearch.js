@@ -83,17 +83,6 @@
         return results == null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
     }
 
-    $( "#price1 , #price2" ).keypress(function(evt) {
-        var charCode = (evt.which) ? evt.which : event.keyCode;
-        if (charCode != 46 && charCode > 31
-        && (charCode < 48 || charCode > 57)){
-            return false;
-        }
-        validateWhiteTextBox(this);
-
-        return true;
-    });
-
     $('.nav_title').mouseover(function(e) {
         $("nav").show();
     });
@@ -108,7 +97,18 @@
         $(this).hide();
     });
 
-    $(document).on('change',"#price2,#price1",function () {
+    $( ".priceField" ).keypress(function(evt) {
+        var charCode = (evt.which) ? evt.which : event.keyCode;
+        if (charCode != 46 && charCode > 31
+        && (charCode < 48 || charCode > 57)){
+            return false;
+        }
+        validateWhiteTextBox(this);
+
+        return true;
+    });
+
+    $(document).on('change',".priceField",function () {
         var priceval = this.value.replace(new RegExp(",", "g"), '');
         var v = parseFloat(priceval);
         var tempval;
@@ -144,6 +144,33 @@
         }
         else{
             validateWhiteTextBox("#price2,#price1"); 
+            document.location.href=currentUrl;
+        }
+    }); 
+
+    $('.rprice').click(function() {
+        var price1 = $('#rprice1').val();
+        var price2 = $('#rprice2').val();
+
+        currentUrl = removeParam("startprice", currentUrl);
+        currentUrl = removeParam("endprice", currentUrl);
+
+        if(price1 != "" && price2 != ""){
+            currentUrl = removeParam("price", currentUrl);
+            currentUrl = currentUrl +'&startprice='+ price1 +'&endprice='+price2;
+        }
+
+        if(price1 == "" && price2 != ""){ 
+            validateRedTextBox("#rprice1");
+        }
+        else if(price1 != "" && price2 == ""){
+            validateRedTextBox("#rprice2"); 
+        }
+        else if(price1 > price2){
+            validateRedTextBox("#rprice2,#rprice1");  
+        }
+        else{
+            validateWhiteTextBox("#rprice2,#rprice1"); 
             document.location.href=currentUrl;
         }
     }); 
@@ -251,12 +278,16 @@
                         type: 'get',
                         async: false,
                         dataType: 'json',
+                        onLoading:$(".loading_products").html('<img src="'+config.base_url+'assets/images/orange_loader.gif" />').show(),
                         success: function(response) {
                             if(response.count > 0){
                                 $('#product_content').append(response.view);
+                                $('#move-product').detach().appendTo('#paste-product');
                                 offset++;
                                 ajax_is_on = false;
                             }
+
+                           $(".loading_products").fadeOut();
                         }
                     });
                 }
@@ -265,5 +296,23 @@
         last_scroll_top = st;
     });
     // END OF INFINITE SCROLLING FUNCTION
+    // 
+    $(function () {
+        $.scrollUp({
+                    scrollName: 'scrollUp', // Element ID
+                    scrollDistance: 300, // Distance from top/bottom before showing element (px)
+                    scrollFrom: 'top', // 'top' or 'bottom'
+                    scrollSpeed: 300, // Speed back to top (ms)
+                    easingType: 'linear', // Scroll to top easing (see http://easings.net/)
+                    animation: 'fade', // Fade, slide, none
+                    animationInSpeed: 200, // Animation in speed (ms)
+                    animationOutSpeed: 200, // Animation out speed (ms)
+                    scrollText: 'Scroll to top', // Text for element, can contain HTML
+                    scrollTitle: false, // Set a custom <a> title if required. Defaults to scrollText
+                    scrollImg: false, // Set true to use image
+                    activeOverlay: false, // Set CSS color to display scrollUp active point, e.g '#00FFFF'
+                    zIndex: 2147483647 // Z-Index for the overlay
+                });
+    });
 
 })( jQuery );
