@@ -417,12 +417,15 @@ class Home extends MY_Controller
         ->add('submit', 'submit', array('label' => 'SEND'))
         ->getForm();
 
+        $emptyForm = clone $form;
+
         $form->handleRequest($request);
 
         if ($form->isValid()) {
             $bugReporter = $this->serviceContainer['bug_reporter'];
             $bugReporter->createReport($form->getData());
             $isValid = true;
+            $form = $emptyForm;
         }
         
         $formData =  $twig->render('pages/web/report-a-problem.html.twig', array(
