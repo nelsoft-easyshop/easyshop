@@ -21,8 +21,15 @@ $_SESSION['start'] = "0";
 				<section class="top_margin product-page-section display-when-desktop">
 					<div class="wrapper">
 						<div class="prod_categories">
-							<div class="nav_title">Categories <img src="/assets/images/img_arrow_down.png"></div>
+							<div class="nav_title">Categories <img src="/assets/images/img_arrow_down.png" class="drop-arrow"></div>
 							<?php echo $category_navigation; ?>
+							<script>
+								$(".drop-arrow").hover(function(){
+								  $("nav").css("display","inline");
+								  },function(){
+								  $("nav").css("display","none");
+								});
+							</script>
 						</div> 
 						<div class="prod_cat_nav">
 							<div class="category_nav product_content">
