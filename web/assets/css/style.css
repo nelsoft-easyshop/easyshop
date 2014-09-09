@@ -3786,6 +3786,63 @@ padding: 8px 0;
     color:#0191C8;
 }
 /*** Log in style ***/
+.btn {
+  display: inline-block;
+  padding: 6px 12px;
+  margin-bottom: 0;
+  font-size: 14px;
+  font-weight: normal;
+  line-height: 1.42857143;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  cursor: pointer;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  background-image: none;
+  border: 1px solid transparent;
+  border-radius: 4px;
+}
+.btn:hover,
+.btn:focus {
+  color: #333;
+  text-decoration: none;
+}
+.btn-default {
+  color: #333;
+  background-color: #fff;
+  border-color: #ccc;
+}
+
+.btn-default:hover {
+  color: #333;
+  background-color: #e6e6e6;
+  border-color: #adadad;
+}
+.btn-primarybtn {
+    color:#fff;
+    background-color: #f48000;
+    border-color:#f48000;
+}
+
+.btn.btn-primarybtn:hover {
+    color:#fff;  
+    background-color: #ff4400;
+    border-color:#ff4400;
+}
+.login-tli-con .text-center {
+    text-align: center;
+}
+
+.login-tli-con .text-right {
+text-align: right;
+}
+
+.login-tli-con {
+    min-height: 400px
+}
 .login_left_content {
     float: left;
 }
