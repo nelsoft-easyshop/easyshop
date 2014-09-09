@@ -389,7 +389,52 @@ class EsProductRepository extends EntityRepository
         $result = $query->getOneOrNullResult();
 
         return $result['count'];
-    }    
+    }
+
+    /**
+     * Get popular items by seller or category based on click count
+     * @param  $offset   [description]
+     * @param  $perPage  [description]
+     * @param  integer $seller   [description]
+     * @param  integer $category [description]
+     * @return mixed
+     */
+    public function getPopularItem($offset,$perPage,$memberId=0,$categoryId=array())
+    {
+        $this->em =  $this->_em;
+        $qb = $this->em->createQueryBuilder();
+        $query = $qb->select('p.idProduct')
+                    ->from('EasyShop\Entities\EsProduct','p') 
+                    ->where('p.isDraft = 0')
+                    ->andWhere('p.isDelete = 0');
+
+        if($memberId != 0 && count($categoryId) != 0){
+            $query = $query->andWhere(
+                                    $qb->expr()->in('p.cat', $categoryId)
+                                )
+                        ->andWhere('p.member = :member') 
+                        ->setParameter('member', $memberId);
+        }
+        elseif($memberId != 0){
+            $query = $query->andWhere('p.member = :member')
+                            ->setParameter('member', $memberId);
+        }
+        elseif (count($categoryId) != 0) { 
+            $query = $query->andWhere(
+                                    $qb->expr()->in('p.cat', $categoryId)
+                                );
+        }
+
+        $qbResult = $query->orderBy('p.clickcount', 'DESC')
+                            ->getQuery()
+                            ->setMaxResults($offset)
+                            ->setFirstResult($perPage);
+
+        $result = $qbResult->getResult(); 
+        $resultNeeded = array_map(function($value) { return $value['idProduct']; }, $result);
+
+        return $resultNeeded;
+    }
 }
 
 
