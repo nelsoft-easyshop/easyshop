@@ -19,7 +19,6 @@ class Cart extends MY_Controller{
         $data = $this->fill_header();
         if($this->session->userdata('usersession')){
             $cart = $this->cart_items($this->cart->contents());
-            $id = $this->session->userdata('usersession');
             $member_id =  $this->session->userdata('member_id');
             $this->cart_model->save_cartitems(serialize($cart),$member_id);
             $data['title'] = 'Cart | Easyshop.ph';
