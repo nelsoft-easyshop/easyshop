@@ -34,9 +34,9 @@ class SearchProduct
      * @param  string $string
      * @return array;
      */
-    public function filterBySearchString($string = "")
+    public function filterBySearchString($queryString = "")
     {
-        $clearString = preg_replace('/\s+/', ' ',preg_replace('/[^A-Za-z0-9]/', ' ', $string));  
+        $clearString = preg_replace('/[^A-Za-z0-9]+/', ' ', $queryString);  
         $stringCollection = array();
         $ids = array(); 
         $explodedString = explode(' ', trim($clearString)); 
@@ -44,7 +44,7 @@ class SearchProduct
         $stringCollection[1] = trim($clearString);
         $stringCollection[2] = '"'.implode(' ', $explodedString).'"';
         
-        if($string == ""){
+        if($queryString == ""){
             $products = $this->em->getRepository('EasyShop\Entities\EsProduct')
                                             ->findBy(['isDraft' => 0,'isDelete' => 0]);
         }
