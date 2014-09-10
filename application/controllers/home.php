@@ -402,6 +402,41 @@ class Home extends MY_Controller
         //$this->load->view('pages/web/faq');
         $this->load->view('templates/footer_full');
     }
+    
+    
+    /**
+     * This is the test code for the pagination-scroller
+     * This will be removed as soon as it is has served its
+     * purpose.
+     */
+    public function scrollTest()
+    {  
+        $twig = $this->serviceContainer['twig'];
+            $data = array(
+            'title' => 'TESTING',
+        );
+        $data = array_merge($data, $this->fill_header());
+       
+        $page = $this->input->get('page');
+        $page = $page ? $page : 0;
+       
+        if ($this->input->is_ajax_request()) {
+            $items = $this->product_model->getNewProducts(10, $page);
+            $view =  $twig->render('pages/scroll-more.twig.html', 
+                ['items' => $items,
+                 'currentPage' => $page]);
+            echo $view;
+        }
+        else{
+            $items = $this->product_model->getNewProducts(10, $page);
+            $view =  $twig->render('pages/scroll.twig.html', 
+                ['items' => $items,
+                 'currentPage' => $page]);
+                 $this->load->view('templates/header', $data);
+
+            $this->output->append_output($view);
+        }
+    }
 
 }
 
