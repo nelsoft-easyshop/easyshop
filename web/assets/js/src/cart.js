@@ -70,6 +70,7 @@ function del(id){
                     if(parseInt(data['total_items']) === 0){
                         $('.cart_no').hide();
                         $('.cart').css('width','28');
+                        $('.big_cart').addClass('cart_zero');
                     }
                 }
                 else{
