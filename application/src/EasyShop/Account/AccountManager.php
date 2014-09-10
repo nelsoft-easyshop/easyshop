@@ -2,6 +2,7 @@
 
 namespace EasyShop\Account;
 
+use \DateTime;
 use EasyShop\Entities\EsWebserviceUser;
 use Easyshop\Entities\EsMember;
 use Elnur\BlowfishPasswordEncoderBundle\Security\Encoder\BlowfishPasswordEncoder as BlowfishPasswordEncoder;
@@ -30,16 +31,49 @@ class AccountManager
      */
     private $userManager;
     
+    /**
+     * Form factory
+     *
+     */
+    private $formFactory;
+    
+    /**
+     * Form validation
+     *
+     */
+    private $formValidation;
+    
+    /**
+     * Form error helper
+     *
+     */
+    private $formErrorHelper;
+    
+    /**
+     * String utility helper
+     *
+     */
+    private $stringUtility;
     
     /**
      * Intialize dependencies
      *
      */
-    public function __construct($em, BlowfishPasswordEncoder $bcryptEncoder, $userManager)
+    public function __construct($em, 
+                                BlowfishPasswordEncoder $bcryptEncoder, 
+                                $userManager, 
+                                $formFactory, 
+                                $formValidation,
+                                $formErrorHelper, 
+                                $stringUtility)
     {
         $this->em = $em;
         $this->bcryptEncoder = $bcryptEncoder;
         $this->userManager = $userManager;
+        $this->formFactory = $formFactory;
+        $this->formValidation = $formValidation;
+        $this->formErrorHelper = $formErrorHelper;
+        $this->stringUtility = $stringUtility;
     }
 
 
@@ -73,21 +107,51 @@ class AccountManager
      * @param string $password
      * @param string $email
      * @param string $contactno
-     * @return EasyShop\Entities\EsMember
+     * @return mixed Returns an array of the error and the member entity
      */
     public function registerMember($username, $password, $email, $contactno)
     {
-        $member = new EsMember();
-        $member->setUsername($username);
-        $member->setPassword($password);
-        $member->setEmail($email);
-        $member->setContactno($contactno);
-        $member->setDatecreated(date('Y-m-d H:i:s'));
-        $member->setSlug($this->userManager->generateSlug($username));   
-        $this->em->persist($member);
-        $this->em->flush();
-        
-        return $member;
+        $member = null;
+        $rules = $this->formValidation->getRules('register');
+        $form = $this->formFactory->createBuilder('form', null, array('csrf_protection' => false))
+                ->setMethod('POST')
+                ->add('username', 'text', array('constraints' => $rules['username']))
+                ->add('password', 'text', array('constraints' => $rules['password']))
+                ->add('contactno', 'text', array('constraints' => $rules['contactno']))
+                ->add('email','text' ,array('constraints' => $rules['email']))
+                ->getForm();
+
+        $form->submit([ 'username' => $username,
+                        'password' => $password,
+                        'contactno' => $contactno,
+                        'email' => $email,
+                    ]);
+                    
+        if ($form->isValid()) {
+            $formData = $form->getData();
+            $validatedUsername =  $formData['username'];
+            $validatedPassword = $formData['password'];
+            $validatedEmail = $formData['email'];
+            $validateContactno = substr($formData['contactno'],1); 
+            
+            $member = new EsMember();
+            $member->setUsername($validatedUsername);
+            $member->setPassword($validatedPassword);
+            $member->setEmail($validatedEmail);
+            $member->setContactno($validateContactno);
+            $member->setDatecreated(new DateTime('now'));
+            $member->setLastmodifieddate(new DateTime('now'));
+            $member->setLastLoginDatetime(new DateTime('now'));
+            $member->setBirthday(new DateTime(date('0001-01-01 00:00:00')));
+            $member->setSlug($this->stringUtility->cleanString($username));   
+            
+            $this->em->persist($member);
+            $this->em->flush();
+            
+        }
+    
+        return ['errors' => $this->formErrorHelper->getFormErrors($form),
+                'member' => $member];
     }
     
     
