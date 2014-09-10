@@ -3,6 +3,7 @@
 namespace EasyShop\FormValidation;
 
 use Symfony\Component\Validator\Constraints as Assert;
+use EasyShop\FormValidation\Constraints as CustomAssert;
 
 
 /**
@@ -20,12 +21,20 @@ class ValidationRules
      * @var mixed
      */
     private $rules = [];
-
+    
+    /**
+     * The entity manager
+     *
+     */
+    private $em;
+     
+     
     /**
      * Constructor.
      */
-    public function __construct()
+    public function __construct($em)
     {   
+        $this->em = $em;
         $this->initValidationRules();
     }
 
@@ -50,9 +59,28 @@ class ValidationRules
             'register' => array(
                     'username' => array(
                                 new Assert\NotBlank(),
-                                #new Assert\Min(5),
-                               # new Assert\Max(25),
+                                new Assert\Length(['min' => '5', 
+                                                   'max' => '25']),
+                                new CustomAssert\ContainsAlphanumericUnderscore(),
+                                new CustomAssert\IsUsernameUnique(),
                     ),
+                    'password' => array(
+                                new Assert\NotBlank(),
+                                new Assert\Length(['min' => '6',]),
+                                new CustomAssert\IsValidPassword(),
+                    ),
+                    'contactno' => array(
+                                new Assert\Length(['min' => '11',
+                                                     'max' => '11']),
+                                new CustomAssert\IsMobileUnique(),
+                                new CustomAssert\IsValidMobile(),
+                    ),
+                    'email' => array(
+                                new Assert\NotBlank(),
+                                new Assert\Email(),
+                                new CustomAssert\IsEmailUnique(),
+                    ),
+                    
                 ),
         );
     }
