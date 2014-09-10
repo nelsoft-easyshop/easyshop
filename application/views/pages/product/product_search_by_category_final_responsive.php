@@ -241,7 +241,9 @@
                             <tr>
                                 <td width="90px" class="v-align-top">
                                     <span class="prod_img_container">
-                                        <img alt="<?php echo html_escape($value['name']); ?>" src="<?php echo base_url() . $value['productImagePath']; ?>">
+										 <a class="a-item-name" href="<?php echo base_url() . "item/" . $value['slug']; ?>"> 
+											<img alt="<?php echo html_escape($value['name']); ?>" src="<?php echo base_url() . $value['productImagePath']; ?>">
+										</a>
                                     </span>
                                 </td>
                                 <td class="v-align-top">
