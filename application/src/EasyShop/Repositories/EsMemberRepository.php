@@ -13,14 +13,14 @@ use Doctrine\ORM\Query\ResultSetMapping;
 class EsMemberRepository extends EntityRepository
 {
     /**
-     *  Fetch entries in es_member with exact storeName excluding memberId
+     *  Fetch entries in es_member with exact storeName excluding excludeMemberId
      *
-     *  @param integer $memberId
+     *  @param integer $excludeMemberId
      *  @param string $storeName
      *
      *  @return boolean
      */
-    public function getMemberStoreName($memberId, $storeName)
+    public function getUsedStoreName($excludeMemberId, $storeName)
     {
         $em = $this->_em;
 
@@ -35,7 +35,7 @@ class EsMemberRepository extends EntityRepository
             WHERE id_member != ? AND store_name LIKE ?'
         , $rsm);
 
-        $query->setParameter(1,$memberId);
+        $query->setParameter(1,$excludeMemberId);
         $query->setParameter(2,$storeName);
 
         return $query->getResult();
