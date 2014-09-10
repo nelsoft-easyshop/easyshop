@@ -39,12 +39,12 @@ define('FOPEN_READ_WRITE_CREATE_STRICT',		'x+b');
 /*   
  *  EASYSHOP CUSTOM CONSTANTS
  */
- 
+
 if(ENVIRONMENT == 'development'){
     $fileVersion = date('Ymdhis');
 }
 else{
-    $fileVersion = '5.0.8';
+    $fileVersion = '5.1.0';
 }
 define('ES_FILE_VERSION',$fileVersion);
 
