@@ -210,7 +210,7 @@
                             <div class="panel-body-category">
                                 <ul class="list-unstyled">
                                     <?php foreach ($parentCategory as $key => $value): ?>
-                                    <li class="list-category"><a href="<?=base_url().'category/'.$value->getSlug(); ?>"><?=$value->getName();?></a></li> 
+                                    <a href="<?=base_url().'category/'.$value->getSlug(); ?>"><li class="list-category"><?=$value->getName();?></li></a>
                                     <?php endforeach; ?>
                                 </ul>
                             </div>
