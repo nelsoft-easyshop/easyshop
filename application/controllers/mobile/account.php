@@ -28,50 +28,27 @@ class Account extends MY_Controller {
      */
     public function register()
     {
-        $formValidation = $this->serviceContainer['form_validation'];
-        $formFactory = $this->serviceContainer['form_factory'];
-        $request = $this->serviceContainer['http_request'];
         $accountManager = $this->serviceContainer['account_manager']; 
-        
+
         $errors = array();
         $isSuccessful = false;
         $isAuthenticated = $accountManager->authenticateWebServiceClient('mobile', $this->input->post('skey'));
-        
-        if($isAuthenticated){
-            
-            $rules = $formValidation->getRules('register');
 
-            $form = $formFactory->createBuilder('form', array('csrf_protection' => false))
-                ->setMethod('POST')
-                ->add('username', 'text', array('constraints' => $rules['username']))
-                #->add('password', array('constraints' => $rules['password']))
-                #->add('contactno', array('constraints' => $rules['contactno']))
-                #->add('email', array('constraints' => $rules['email']))
-                ->getForm();
-                
-            $form->bind($request);
-            
-            if ($form->isValid()) {
-                $username =  $this->input->post('username');
-                $password = $this->input->post('password');
-                $email = $this->input->post('email');
-                $contactno = substr($this->input->post('mobile'),1); 
-                $accountManager = $accountManager->registerMember($username, $password, $email, $contactno);
-                if(!$accountManager){
-                    array_push($errors, "Database registration failed.");
-                }
-                else{
-                    $isSuccessful = true;
-                }
+        if($isAuthenticated){
+            $username =  $this->input->post('username');
+            $password = $this->input->post('password');
+            $email = $this->input->post('email');
+            $contactno = $this->input->post('mobile');
+            $registrationResult = $accountManager->registerMember($username, $password, $email, $contactno);
+            if(empty($registrationResult['errors'])){
+                $isSuccessful = true;
             }
-            else{            
-                foreach($form->getErrors() as $error){
-                    array_push($errors, $error);
-                }
-            }  
+            else{
+                $errors = array_merge($errors, $registrationResult['errors']);
+            }
         }
         else{
-            array_push($errors, "Invalid webservice key");
+            array_push($errors, ['Web service error' => 'Invalid webservice key']);
         }
         
         $response['errors'] = $errors;
