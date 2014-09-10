@@ -42,7 +42,8 @@ class SearchProduct
         $explodedString = explode(' ', trim($clearString)); 
         $stringCollection[0] = '+'.implode('* +', $explodedString) .'*';
         $stringCollection[1] = trim($clearString);
-        $stringCollection[2] = '"'.implode(' ', $explodedString).'"';
+        $stringCollection[2] = '"'.trim($clearString).'"';
+        $stringCollection[3] = str_replace(' ', '', trim($clearString));
         
         if($queryString == ""){
             $products = $this->em->getRepository('EasyShop\Entities\EsProduct')
