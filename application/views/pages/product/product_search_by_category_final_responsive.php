@@ -18,7 +18,7 @@
                             <div class="nav_title">Categories <img src="/assets/images/img_arrow_down.png" class="drop-arrow"></div>
                             <?php echo $category_navigation; ?> 
                         </div> 
-                        <div class="prod_cat_nav">
+                        <div class="prod_cat_nav" id="prod_drop_nav">
                             <div class="category_nav">
                                 <ul>
                                 <?php foreach($parentCategory as $catKey => $catValue): ?>
@@ -32,6 +32,23 @@
                                 <span class="span_bg prod_cat_drop"></span>
                             </div>
                         </div>
+						<script>
+							
+								$("#prod_drop_nav").on('click','.prod_cat_drop',function() {
+									
+									var drop = $("div.category_nav").attr("class");
+
+									if(drop == "category_nav")
+									{
+										$('.category_nav').removeClass("category_nav").addClass("category_nav category_nav_plus");
+										$('.span_drop').removeClass("mehh span_bg prod_cat_drop").addClass("span_drop span_bg prod_cat_drop active_prod_cat_drop_arrow");
+									}else{
+										$('.category_nav').removeClass("category_nav category_nav_plus").addClass("category_nav");
+										$('.span_drop').removeClass("mehh span_bg prod_cat_drop active_prod_cat_drop_arrow").addClass("span_drop span_bg prod_cat_drop");
+									}
+								});
+					  
+						</script>
                         <div class="clear"></div>
                         <div class="bread_crumbs">
                             <ul>
