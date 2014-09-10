@@ -106,7 +106,16 @@ class Kernel
             $brcyptEncoder = new \Elnur\BlowfishPasswordEncoderBundle\Security\Encoder\BlowfishPasswordEncoder(5);
             $em = $container['entity_manager'];
             $userManager = $container['user_manager'];
-            return new \EasyShop\Account\AccountManager($em, $brcyptEncoder, $userManager);        
+            $formFactory = $container['form_factory'];
+            $formValidation = $container['form_validation'];
+            $formErrorHelper = $container['form_error_helper'];
+            $stringHelper = $container['string_utility'];
+            return new \EasyShop\Account\AccountManager($em, $brcyptEncoder, 
+                                                        $userManager, 
+                                                        $formFactory, 
+                                                        $formValidation, 
+                                                        $formErrorHelper,
+                                                        $stringHelper);        
         };
 
 
@@ -163,8 +172,8 @@ class Kernel
         };
 
         //Validation Rules Service
-        $container['form_validation'] = function ($c) {
-            return new \EasyShop\FormValidation\ValidationRules();
+        $container['form_validation'] = function ($c) use ($container){
+            return new \EasyShop\FormValidation\ValidationRules($container['entity_manager']);
         };
 
         //Request Service
@@ -202,6 +211,14 @@ class Kernel
             return new \EasyShop\CollectionHelper\CollectionHelper();
         };
 
+        $container['string_utility'] = function ($c) {
+            return new \EasyShop\Utility\StringUtility();
+        };
+        
+        // Form Helper
+        $container['form_error_helper'] = function ($c) {
+            return new \EasyShop\FormValidation\FormHelpers\FormErrorHelper();
+        };
 
         /* Register services END */
         $this->serviceContainer = $container;
