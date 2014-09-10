@@ -14,7 +14,7 @@
         <div class="pd-tb-45">
             <?php if($logged_in): ?>
             
-                <div class="col-sm-5 col-md-5">
+                <div class="col-sm-12 col-md-12">
                     <div class="login_box ">
                         <div style="text-align:center;">
                             <p>You are currently signed-in as <b><?php echo $uname; ?></b>. </p>

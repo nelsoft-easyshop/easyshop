@@ -42,6 +42,13 @@ class EsProblemReport
      */
     private $problemDescription = '';
 
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="date_added", type="datetime", nullable=false)
+     */
+    private $dateAdded = 'CURRENT_TIMESTAMP';
+
 
 
     /**
@@ -121,5 +128,28 @@ class EsProblemReport
     public function getProblemDescription()
     {
         return $this->problemDescription;
+    }
+
+    /**
+     * Set dateAdded
+     *
+     * @param \DateTime $dateAdded
+     * @return EsProblemReport
+     */
+    public function setDateAdded($dateAdded)
+    {
+        $this->dateAdded = $dateAdded;
+
+        return $this;
+    }
+
+    /**
+     * Get dateAdded
+     *
+     * @return \DateTime 
+     */
+    public function getDateAdded()
+    {
+        return $this->dateAdded;
     }
 }
