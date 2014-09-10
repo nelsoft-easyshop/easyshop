@@ -54,7 +54,8 @@ class product extends MY_Controller
             $categoryId = $categoryDetails->getIdCat(); 
             $categoryDescription = $categoryDetails->getDescription();
             
-            $productIds = $searchProductService->filterByCategory(array($categoryId),array(),FALSE);
+            $categoryList = $EsCatRepository->getChildCategoryRecursive($categoryId);
+            $productIds = $searchProductService->filterByCategory($categoryList,array(),FALSE);
             $productIds = ($brand) ? $searchProductService->filterByBrand($brand,$productIds,TRUE) : $productIds;
             $productIds = $searchProductService->filterByOtherParameter($this->input->get(),$productIds);  
             

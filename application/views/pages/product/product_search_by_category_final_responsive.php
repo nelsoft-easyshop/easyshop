@@ -378,16 +378,21 @@ $(function () {
 </script>
 <script src="<?= base_url() ?>assets/js/src/vendor/jquery.bxslider.min.js" type="text/javascript"></script>
 <script src="<?= base_url() ?>assets/js/src/categorynavigation.js?ver=<?=ES_FILE_VERSION?>" type="text/javascript"></script>
-
 <script src="<?= base_url() ?>assets/js/src/advsearch.js?ver=<?=ES_FILE_VERSION?>" type="text/javascript"></script>
 <script type="text/javascript">
     var currentUrl = "<?=site_url(uri_string() . '?' . $_SERVER['QUERY_STRING']); ?>";  
     var currentQueryString = "<?=$_SERVER['QUERY_STRING']; ?>"; 
-    var typeView = "<?=$_COOKIE['view']?>";
-</script>
- 
-<script type="text/javascript">
+    var typeView = "<?=(isset($_COOKIE['view']))?$_COOKIE['view']:'product'?>";
+    
     (function($) {
+        var p = $('.cc2_prod_name span');
+        var divh = $('.cc2_prod_name').height();
+        while ($(p).outerHeight()>divh) {
+            $(p).text(function (index, text) {
+                return text.replace(/\W*\s(\S)*$/, '...');
+            });
+        } 
+
         $(function() {
             $('.jcarousel').jcarousel();
 
@@ -423,14 +428,4 @@ $(function () {
             .jcarouselPagination();
         });
     })(jQuery);
-</script>
-
-<script type="text/javascript">
-    var p = $('.cc2_prod_name span');
-    var divh = $('.cc2_prod_name').height();
-    while ($(p).outerHeight()>divh) {
-        $(p).text(function (index, text) {
-            return text.replace(/\W*\s(\S)*$/, '...');
-        });
-    }
-</script>
+</script> 
