@@ -380,10 +380,9 @@ $(function () {
 <script src="<?= base_url() ?>assets/js/src/categorynavigation.js?ver=<?=ES_FILE_VERSION?>" type="text/javascript"></script>
 <script src="<?= base_url() ?>assets/js/src/advsearch.js?ver=<?=ES_FILE_VERSION?>" type="text/javascript"></script>
 <script type="text/javascript">
-    var currentUrl = "<?=site_url(uri_string() . '?' . $_SERVER['QUERY_STRING']); ?>";  
-    var currentQueryString = "<?=$_SERVER['QUERY_STRING']; ?>"; 
+    var currentUrl = "<?=site_url(uri_string() . '?' . $_SERVER['QUERY_STRING']); ?>";
     var typeView = "<?=(isset($_COOKIE['view']))?$_COOKIE['view']:'product'?>";
-    
+
     (function($) {
         var p = $('.cc2_prod_name span');
         var divh = $('.cc2_prod_name').height();
