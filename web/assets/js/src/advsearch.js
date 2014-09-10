@@ -122,8 +122,8 @@
     });
 
     $('.price').click(function() {
-        var price1 = $('#price1').val();
-        var price2 = $('#price2').val();
+        var price1 = parseFloat($('#price1').val());
+        var price2 = parseFloat($('#price2').val());
 
         currentUrl = removeParam("startprice", currentUrl);
         currentUrl = removeParam("endprice", currentUrl);
@@ -149,8 +149,8 @@
     }); 
 
     $('.rprice').click(function() {
-        var price1 = $('#rprice1').val();
-        var price2 = $('#rprice2').val();
+        var price1 = parseFloat($('#rprice1').val());
+        var price2 = parseFloat($('#rprice2').val());
 
         currentUrl = removeParam("startprice", currentUrl);
         currentUrl = removeParam("endprice", currentUrl);
