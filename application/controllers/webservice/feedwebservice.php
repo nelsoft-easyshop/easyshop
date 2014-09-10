@@ -1,16 +1,35 @@
 <?php 
 
+use EasyShop\Entities\EsMember; 
+use EasyShop\Entities\EsProduct;
+
 class FeedWebService extends MY_Controller 
 {
 
+    private $map, $targetNode;
+    
+    /**
+     * The XML service
+     */
+    private $xmlFileService;
+    
+    /**
+     * The CMS Service
+     *
+     */
+    private $xmlCmsService;
+    
+    /**
+     * The entity manager
+     *
+     */
+    
+    private $em;    
+    
     /**
      *  Constructor call for Administrator's authentication. Authentication method is located in MY_Controller.php
-     *
      *  
      */
-    private $map, $targetNode, $xmlCmsService;
-    public $xmlFileService;
-    private $em;    
     public function __construct()
     {
         parent::__construct();
@@ -51,7 +70,6 @@ class FeedWebService extends MY_Controller
 
         $doc = new SimpleXMLElement(file_get_contents($this->file));
         $count =  count(current($doc->xpath($nodeName)));
-        echo $nodeName;
         if($count > 1){
       
             $file = $this->file;
@@ -142,13 +160,14 @@ class FeedWebService extends MY_Controller
     {
         $slugerrorjson = $this->slugerrorjson;
 
-        $count = $this->em->getRepository('EasyShop\Entities\EsProduct')->getProductBySlug($this->input->get("slug"));
-
-        if($count < 1) {
+        $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                        ->findBy(['slug' => $this->input->get("slug")]);
+                        
+        if(!$product) {
                     return $this->output
                         ->set_content_type('application/json')
                         ->set_output($slugerrorjson);
-        }  
+        }
         else {
             $string = $this->xmlCmsService->getString("feedPromoItems",$this->input->get("slug"), "", "", "");
             $addXml = $this->xmlCmsService->addXml($this->file,$string,'/map/feedPromoItems/product[last()]');
@@ -178,13 +197,14 @@ class FeedWebService extends MY_Controller
         if($index > count($map->feedPromoItems->product) - 1    || $order > count($map->feedPromoItems->product) - 1 || $index < 0 || $order < 0) {
                exit("Parameters out of bounds");
         }
-        $count = $this->em->getRepository('EasyShop\Entities\EsProduct')->getProductBySlug($this->input->get("slug"));
-
-        if($count < 1) {
+        $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                        ->findBy(['slug' => $this->input->get("slug")]);
+                        
+        if(!$product){
                     return $this->output
                         ->set_content_type('application/json')
                         ->set_output($slugerrorjson);
-        }          
+        }         
         else {
             if(!isset($order)) {
                 $map->feedPromoItems->product[$index]->slug = $slug;
@@ -229,14 +249,15 @@ class FeedWebService extends MY_Controller
     {
         $slugerrorjson = $this->slugerrorjson;
         $boundsjson = $this->boundsjson;
-        $count = $this->em->getRepository('EasyShop\Entities\EsProduct')->getProductBySlug($this->input->get("slug"));
-
-        if($count < 1) {
+        $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                        ->findBy(['slug' => $this->input->get("slug")]);
+                        
+        if(!$product){
                     return $this->output
                         ->set_content_type('application/json')
                         ->set_output($slugerrorjson);
                         exit();
-        }
+        }        
         else {
             $string = $this->xmlCmsService->getString("feedPopularItems",$this->input->get("slug"), "", "", "");
             $addXml = $this->xmlCmsService->addXml($this->file,$string,'/map/feedPopularItems/product[last()]');
@@ -268,14 +289,15 @@ class FeedWebService extends MY_Controller
                 exit("Parameters out of bounds");
         }
 
-        $count = $this->em->getRepository('EasyShop\Entities\EsProduct')->getProductBySlug($this->input->get("slug"));
-
-        if($count < 1) {
+        $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                        ->findBy(['slug' => $this->input->get("slug")]);
+                        
+        if(!$product){
                     return $this->output
                         ->set_content_type('application/json')
                         ->set_output($slugerrorjson);
                         exit();
-        }        
+        }       
         else {
             if(!isset($order)) {
                 $map->feedPopularItems->product[$index]->slug = $slug;
@@ -324,9 +346,10 @@ class FeedWebService extends MY_Controller
     {
         $slugerrorjson = $this->slugerrorjson;
 
-        $count = $this->em->getRepository('EasyShop\Entities\EsProduct')->getProductBySlug($this->input->get("slug"));
-
-        if($count < 1) {
+        $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                        ->findBy(['slug' => $this->input->get("slug")]);
+                        
+        if(!$product){
                     return $this->output
                         ->set_content_type('application/json')
                         ->set_output($slugerrorjson);
@@ -361,13 +384,14 @@ class FeedWebService extends MY_Controller
         if($index > count($map->feedFeaturedProduct->product) - 1    || $order > count($map->feedFeaturedProduct->product) - 1 || $index < 0 || $order < 0) {
                 exit("Parameters out of bounds");
         }
-        $count = $this->em->getRepository('EasyShop\Entities\EsProduct')->getProductBySlug($this->input->get("slug"));
-
-        if($count < 1) {
+        $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                        ->findBy(['slug' => $this->input->get("slug")]);
+                        
+        if(!$product){
                     return $this->output
                         ->set_content_type('application/json')
                         ->set_output($slugerrorjson);
-        }          
+        }           
         else {
             if(!isset($order)) {
                 $map->feedFeaturedProduct->product[$index]->slug = $slug;
@@ -462,7 +486,7 @@ class FeedWebService extends MY_Controller
     }
 
     /**
-     *  Sets xml node under sekect nodes
+     *  Sets xml node under select nodes
      */
     public function setSelect()
     {
@@ -472,32 +496,38 @@ class FeedWebService extends MY_Controller
         $xPath = "/map/select[@id='".$id."']";
 
         if($this->input->get("checkuser") == 1) {
+
             if (strpos($value ,',') == true) {
                 $idArr = explode(",", $value);
                  foreach($idArr as $ids) {
                     if(!is_numeric($ids)) {
                         exit();
                     }
-                    $result  = $this->em->getRepository('EasyShop\Entities\EsMember')->getUserCountById($ids);
-                    if($result < 1) {
-                        $valid = 0;
-                        return $this->output
-                            ->set_content_type('application/json')
-                            ->set_output($this->usererror);
-                    }
+
+                    $product = $this->em->getRepository('EasyShop\Entities\EsMember')
+                                    ->findBy(['idMember' => $ids]);
+                                    
+                    if(!$product){
+                                return $this->output
+                                    ->set_content_type('application/json')
+                                    ->set_output($this->usererror);
+                    } 
                 }
             }
             else {
                 if(!is_numeric($value)) {
                     exit();
                 }
-                $result  = $this->em->getRepository('EasyShop\Entities\EsMember')->getUserCountById($this->input->get("value"));
-                if($result < 1) {
-                        return $this->output
-                            ->set_content_type('application/json')
-                            ->set_output($this->usererror);
-                            $valid = 0;
-                }
+
+                $result = $this->em->getRepository('EasyShop\Entities\EsMember')
+                                ->findBy(['id_member' => $this->input->get("value")]);
+
+                if(!$result) {
+                    $valid = 0;
+                    return $this->output
+                        ->set_content_type('application/json')
+                        ->set_output($this->usererror);
+                }                
             }
             if($valid == 1) {
                 $target = current($this->map->xpath($xPath)); 
