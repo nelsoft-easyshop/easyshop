@@ -44,7 +44,7 @@
 </style>
 
 <section style="color-gray">
-	<div class="container font-roboto" style="max-width:980px; margin-top: -15px; padding: 0px !important;">	
+	<div class="container font-roboto" style="max-width:980px;">	
 		<div class="row">
 			<div class="col-md-12">
 				<section class="top_margin product-page-section display-when-desktop">
