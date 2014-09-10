@@ -323,23 +323,28 @@
                 <h4 class="modal-title color-white" id="Filter"><i class="glyphicon glyphicon-filter"></i> Filter</h4>
             </div>
             <div class="modal-body no-border">
-                <h3>Price</h3>
-                <input type="text" id="rprice1" class="priceField" value="<?=($this->input->get('startprice')?$this->input->get('startprice'):'')?>" maxlength=9 size=6>
+                <h3 class="h3-filter-price">Price</h3>
+                <input type="text" id="rprice1" class="priceField" placeholder="Min" value="<?=($this->input->get('startprice')?$this->input->get('startprice'):'')?>" maxlength=9 size=6>
                 to
-                <input type="text" id="rprice2" class="priceField" value="<?=($this->input->get('startprice')?$this->input->get('endprice'):'')?>" maxlength=9 size=6> 
+                <input type="text" id="rprice2" class="priceField" placeholder="Max" value="<?=($this->input->get('startprice')?$this->input->get('endprice'):'')?>" maxlength=9 size=6> 
                 <input class="rprice" type="button" value=">>"/>
 
                 <?php if(count($products) > 0): ?>
                     <?php foreach ($attributes as $attrName => $attrListValue):?>
                     <h3 class="title h3-filter"><?=$attrName?></h3> 
+					 <ul class="list-unstyled">
                         <?php foreach ($attrListValue as $key => $value):?>
-                            <div class="span-filter pull-left">
+                           
+								<li>
                                 <a class="cbx" data-head="<?=strtolower($attrName)?>" data-value="<?=strtolower($value)?>" >
                                     <input type="checkbox" <?=(strpos($this->input->get(strtolower($attrName)),strtolower($value)) !== false)?'checked':'';?> class="checkBox" data-head="<?=strtolower($attrName)?>" data-value="<?=strtolower($value)?>" >
-                                    <label for="cbx"><?=ucfirst($value);?></label>
+                                    <label class="cbx-label" for="cbx"><?=ucfirst($value);?></label>
                                 </a>
-                            </div>
+								</li>
+                           
+						  
                         <?php endforeach; ?>
+						</ul>
                         <div class="clear"></div> 
                     <?php endforeach; ?>  
                 <?php endif; ?>
