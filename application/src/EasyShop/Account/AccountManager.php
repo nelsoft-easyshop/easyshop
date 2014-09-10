@@ -5,6 +5,7 @@ namespace EasyShop\Account;
 use \DateTime;
 use EasyShop\Entities\EsWebserviceUser;
 use Easyshop\Entities\EsMember;
+use Doctrine\ORM\Query\ResultSetMapping;
 use Elnur\BlowfishPasswordEncoderBundle\Security\Encoder\BlowfishPasswordEncoder as BlowfishPasswordEncoder;
 
 class AccountManager
@@ -133,10 +134,11 @@ class AccountManager
             $validatedPassword = $formData['password'];
             $validatedEmail = $formData['email'];
             $validateContactno = substr($formData['contactno'],1); 
+            $hashedPassword = $this->hashMemberPassword($validatedUsername,$validatedPassword);
             
             $member = new EsMember();
             $member->setUsername($validatedUsername);
-            $member->setPassword($validatedPassword);
+            $member->setPassword($hashedPassword);
             $member->setEmail($validatedEmail);
             $member->setContactno($validateContactno);
             $member->setDatecreated(new DateTime('now'));
@@ -154,6 +156,27 @@ class AccountManager
                 'member' => $member];
     }
     
-    
+    /**
+     * Hashes the user password, previously implemented in a stored procedure
+     * BCrypt the password later on as it is much more secure
+     * $hash = $this->bcryptEncoder->encodePassword($password);
+     *
+     * @param string $username
+     * @param string $password
+     * @return string
+     */
+    public function hashMemberPassword($username, $password)
+    {
+        $rsm = new ResultSetMapping(); 
+        $rsm->addScalarResult('hash', 'hash');
+        $sql = "SELECT reverse(PASSWORD(concat(md5(:username),sha1(:password)))) as hash";
+        $query = $this->em->createNativeQuery($sql, $rsm);
+        $query->setParameter('username', $username);
+        $query->setParameter('password', $password); 
+        $result = $query->getOneOrNullResult();
 
+        return $result['hash'];
+    }
+    
+        
 }
