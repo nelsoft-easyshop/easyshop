@@ -126,17 +126,18 @@
         var price1 = parseFloat($('#price1').val());
         var price2 = parseFloat($('#price2').val()); 
 
-        currentUrl = removeParam("startprice", currentUrl); 
-        currentUrl = removeParam("endprice", currentUrl); 
-        
-        if(price1 != "" && price2 != ""){ 
+        currentUrl = removeParam("startprice", currentUrl);
+        currentUrl = removeParam("endprice", currentUrl);
+
+        if(!isNaN(price1) && !isNaN(price2)){
+            currentUrl = removeParam("price", currentUrl);
             currentUrl = currentUrl +'&startprice='+ price1 +'&endprice='+price2;
         }
 
-        if(price1 == "" && price2 != ""){ 
+        if(isNaN(price1) && !isNaN(price2)){ 
             validateRedTextBox("#price1");
         }
-        else if(price1 != "" && price2 == ""){
+        else if(!isNaN(price1) && isNaN(price2)){
             validateRedTextBox("#price2"); 
         }
         else if(price1 > price2){
@@ -155,21 +156,22 @@
         currentUrl = removeParam("startprice", currentUrl);
         currentUrl = removeParam("endprice", currentUrl);
 
-        if(price1 != "" && price2 != ""){ 
+        if(!isNaN(price1) && !isNaN(price2)){
+            currentUrl = removeParam("price", currentUrl);
             currentUrl = currentUrl +'&startprice='+ price1 +'&endprice='+price2;
         }
 
-        if(price1 == "" && price2 != ""){ 
-            validateRedTextBox("#rprice1");
+        if(isNaN(price1) && !isNaN(price2)){ 
+            validateRedTextBox("#price1");
         }
-        else if(price1 != "" && price2 == ""){
-            validateRedTextBox("#rprice2"); 
+        else if(!isNaN(price1) && isNaN(price2)){
+            validateRedTextBox("#price2"); 
         }
         else if(price1 > price2){
-            validateRedTextBox("#rprice2,#rprice1");  
+            validateRedTextBox("#price2,#price1");  
         }
         else{
-            validateWhiteTextBox("#rprice2,#rprice1"); 
+            validateWhiteTextBox("#price2,#price1"); 
             document.location.href=currentUrl;
         }
     }); 
