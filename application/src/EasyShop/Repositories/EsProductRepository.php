@@ -390,32 +390,7 @@ class EsProductRepository extends EntityRepository
 
         return $result['count'];
     }    
-
-    /**
-     * Returns the count of a product based on a slug
-     * 
-     * @param string $slug
-     * @return int
-     *
-     */
-    public function getProductBySlug($slug)
-    {
-        $this->em = $this->_em;
-        $rsm = new ResultSetMapping(); 
-        $rsm->addScalarResult('slug', 'slug');
-
-        $sql = " 
-          SELECT *
-          FROM es_product
-          WHERE slug = :slug
-        ";
-        
-        $query = $this->em->createNativeQuery($sql, $rsm);
-        $query->setParameter('slug', $slug);
-        
-        $result = $query->getResult();
-        return count($result);              
-    }    
+    
 }
 
 
