@@ -403,6 +403,12 @@ class Home extends MY_Controller
         $this->load->view('templates/footer_full');
     }
     
+    
+    /**
+     * This is the test code for the pagination-scroller
+     * This will be removed as soon as it is has served its
+     * purpose.
+     */
     public function scrollTest()
     {  
         $twig = $this->serviceContainer['twig'];
