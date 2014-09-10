@@ -79,10 +79,11 @@ class product_search extends MY_Controller {
         $endPrice = trim($this->input->get('endprice'));
         $memberId = $this->session->userdata('member_id');
         $page = (trim($this->input->get('page'))) ? trim($this->input->get('page')) : 0;
+        $storeKeyword = (trim($this->input->get('page'))) ? FALSE:TRUE;
         $category = ($category > 1) ? $EsCatRepository->getChildCategoryRecursive($category):array('1');
 
         if(count($_GET)>0){
-            $productIds = $originalOrder = ($queryString)?$searchProductService->filterBySearchString($queryString):array();
+            $productIds = $originalOrder = ($queryString)?$searchProductService->filterBySearchString($queryString,$storeKeyword):array();
 
             if($queryString == "" && $condition == "" && $seller == "" && $location == ""){ 
                 $productIds = $searchProductService->filterByCategory($category,$productIds,FALSE);
@@ -202,8 +203,9 @@ class product_search extends MY_Controller {
         $memberId = $this->session->userdata('member_id');
         $page = (trim($this->input->get('page'))) ? trim($this->input->get('page')) : 0;
         $category = ($category > 1) ? $EsCatRepository->getChildCategoryRecursive($category):array('1');
+        $storeKeyword = (trim($this->input->get('page'))) ? FALSE:TRUE;
 
-        $productIds = $originalOrder = $searchProductService->filterBySearchString($queryString); 
+        $productIds = $originalOrder = $searchProductService->filterBySearchString($queryString,$storeKeyword); 
         $productIds = ($category) ? $searchProductService->filterByCategory($category,$productIds,TRUE) : $productIds; 
         $productIds = ($brand) ? $searchProductService->filterByBrand($brand,$productIds,TRUE) : $productIds; 
         $productIds = ($condition) ? $searchProductService->filterByCondition($condition,$productIds,TRUE) : $productIds; 
