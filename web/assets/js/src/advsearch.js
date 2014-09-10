@@ -122,14 +122,13 @@
         }
     });
 
-    $('.price').click(function() {
-        var price1 = $('#price1').val();
-        var price2 = $('#price2').val();
-console.log(currentUrl);
-        currentUrl = removeParam("startprice", currentUrl);
-        console.log(currentUrl);
-        currentUrl = removeParam("endprice", currentUrl);
-        console.log(currentUrl);
+    $('.price').click(function() { 
+        var price1 = parseFloat($('#price1').val());
+        var price2 = parseFloat($('#price2').val()); 
+
+        currentUrl = removeParam("startprice", currentUrl); 
+        currentUrl = removeParam("endprice", currentUrl); 
+        
         if(price1 != "" && price2 != ""){ 
             currentUrl = currentUrl +'&startprice='+ price1 +'&endprice='+price2;
         }
@@ -150,8 +149,8 @@ console.log(currentUrl);
     }); 
 
     $('.rprice').click(function() {
-        var price1 = $('#rprice1').val();
-        var price2 = $('#rprice2').val();
+        var price1 = parseFloat($('#rprice1').val());
+        var price2 = parseFloat($('#rprice2').val());
 
         currentUrl = removeParam("startprice", currentUrl);
         currentUrl = removeParam("endprice", currentUrl);
