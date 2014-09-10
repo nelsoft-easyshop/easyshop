@@ -96,7 +96,27 @@
                 </div>
                 <div class="vendor_info_con">
                     <div class="vendor_info_con_left">
-                        <h2><?php echo $vendordetails['username'];?></h2>
+                        <div id="user_store_name"> 
+                            <div id="user_store_echo">
+                                <h2><?php echo html_escape($store_name);?></h2>
+                                <small id="username_echo" style="display: <?php echo $hasStoreName ? '' : 'none' ?>">by <?php echo $vendordetails['username']?></small>
+                                
+                                <?php if($renderEdit):?>
+                                    <div id="store_name_edit"><small class="span_bg edit_btn"></small> Edit</div>
+                                <?php endif;?>
+                            </div>
+                            <?php if($renderEdit):?>
+                            <div id="user_store_edit" style="display:none;">
+                                <?php echo form_open('');?>
+                                    <input type="text" data-origname="<?php echo $hasStoreName ? html_escape($store_name) : '' ?>" name="store_name" value="<?php echo $hasStoreName ? html_escape($store_name) : '' ?>">
+                                    <input type="hidden" name="store_name_hidden" value="1">
+                                    <input id="store_name_submit" type="button" value="Save">
+                                    <input id="store_name_cancel" type="button" value="Cancel">
+                                <?php echo form_close();?>
+                            </div>
+                            <?php endif;?>
+                        </div>
+                        
                         <div class="vendor_store_desc">
                             <div id="store_desc_echo" style="display:<?php echo $hasStoreDesc ? '' : 'none'?>;" class="vendor_desc_dis_con">
                                 <p><?php echo html_escape($vendordetails['store_desc']);?></p>

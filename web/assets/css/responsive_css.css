@@ -207,7 +207,11 @@
 }
 
 .mrgn-bttm-15 { /*** 15px **/
-    margin-bottom: 1.25em;
+    margin-bottom: 1.25em
+}
+
+.mrgn-bttm-25 { 
+    margin-bottom: 25px;
 }
 
 .mrgn-bttm-20 {
@@ -2338,6 +2342,44 @@ box-shadow:         0px 1px 5px 0px rgba(50, 50, 50, 0.75);
 .log-in-register .text-center {
     width: 100%;
 }
+    
+
+/*** Feedback ***/
+.feedback-container {
+    padding:20px 0;
+}
+
+.feedback-container input[type="file"] {
+    color: #494949;
+    width: auto;
+}
+
+.feedback-textarea {
+    min-height: 10em;
+}
+
+.feedback-img-con {
+    border:2px dashed #cecece;
+    display: table-cell;
+    height: 50px;
+    text-align: center;
+    vertical-align: middle;
+    width: 50px;
+}
+
+.feedback-img-wrapper + input[type="file"] {
+    display: inline-block;
+}
+
+.feedback-img-wrapper.display-ib {
+    vertical-align: middle;
+}
+
+.send-btn-con input[type="submit"] {
+    font-weight: bold;
+    min-width: 200px;
+    text-transform: uppercase;
+}
 
 @media screen and (max-width : 895px){
         
@@ -2515,21 +2557,25 @@ box-shadow:         0px 1px 5px 0px rgba(50, 50, 50, 0.75);
     }
     .msg_countr {
         margin-left: -12px;
+        top: -7px;
     }
     .img_msgs_cntr {
         background-position: -813px -258px;
         width: 27px;
         height: 17px;
     }
+
     .msg_icon_zero{
         background-position:  -813px -258px !important;
     }
-     .user-nav-dropdown:after,
+
+    .user-nav-dropdown:after,
     .nav-dropdown:after,
     .user-nav-dropdown,
     .user-nav-dropdown {
       display: none;
     }
+
     ul.nav-dropdown {
         display: block !important;
         width: auto;
@@ -2668,6 +2714,10 @@ box-shadow:         0px 1px 5px 0px rgba(50, 50, 50, 0.75);
 }
 
 @media only screen and (max-width : 30em) { /**** 480px ***/
+    /*** report a problem ***/
+        .feedback-img-wrapper + input[type="file"] {
+        width: 87px;
+    }
     .img_sell {
         display: inline-block;
         vertical-align: middle;
@@ -3164,6 +3214,13 @@ box-shadow:         0px 1px 5px 0px rgba(50, 50, 50, 0.75);
     .log-in-border {
         margin-bottom: 40px;
         margin-top: 25px;
+    }
+    /*** Report a problem ***/
+    .feedback-container .border-right {
+        border-right: 0px;
+    }
+    .feedback-upload-photo-wrapper {
+        margin-bottom: 30px;
     }
     /*** step 1 ***/
     #cat_search_drop_content {

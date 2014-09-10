@@ -183,6 +183,13 @@ class EsMember
     private $slug;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="store_name", type="string", length=1024, nullable=true)
+     */
+    private $storeName;
+
+    /**
      * @var \Doctrine\Common\Collections\Collection
      *
      * @ORM\ManyToMany(targetEntity="EasyShop\Entities\CiSessions", inversedBy="member")
@@ -743,6 +750,29 @@ class EsMember
     public function getSlug()
     {
         return $this->slug;
+    }
+
+    /**
+     * Set storeName
+     *
+     * @param string $storeName
+     * @return EsMember
+     */
+    public function setStoreName($storeName)
+    {
+        $this->storeName = $storeName;
+
+        return $this;
+    }
+
+    /**
+     * Get storeName
+     *
+     * @return string 
+     */
+    public function getStoreName()
+    {
+        return $this->storeName;
     }
 
     /**

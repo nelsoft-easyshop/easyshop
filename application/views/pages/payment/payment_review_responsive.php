@@ -624,7 +624,7 @@
   <div class="modal-dialog no-border font-roboto ">
     <div class="modal-content no-border">
       <div class="modal-header no-border bg-orange">
-        <a href="review"><span aria-hidden="true" style="color: #ffffff;" class="pull-right">&times;</span><span class="sr-only">Close</span></a>
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true" style="color: #ffffff;">&times;</span><span class="sr-only">Close</span></button>
         <h4 class="modal-title" id="myModalLabel">Available Location</h4>
       </div>
 	  
