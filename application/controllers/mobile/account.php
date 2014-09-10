@@ -28,13 +28,13 @@ class Account extends MY_Controller {
 
         $errors = array();
         $isSuccessful = false;
-        $isAuthenticated = $accountManager->authenticateWebServiceClient('mobile', $this->input->post('skey'));
+        $isAuthenticated = $accountManager->authenticateWebServiceClient('mobile', trim($this->input->post('skey')));
 
         if($isAuthenticated){
-            $username =  $this->input->post('username');
-            $password = $this->input->post('password');
-            $email = $this->input->post('email');
-            $contactno = $this->input->post('mobile');
+            $username =  trim($this->input->post('username'));
+            $password = trim($this->input->post('password'));
+            $email = trim($this->input->post('email'));
+            $contactno = trim($this->input->post('mobile'));
             $registrationResult = $accountManager->registerMember($username, $password, $email, $contactno);
             if(empty($registrationResult['errors'])){
                 $isSuccessful = true;
