@@ -190,8 +190,29 @@ div.product-list{
 .h3-filter{
 	font-size: 15px !important;
 	font-weight: bold;
+	margin: 0px;
+	margin-top: 10px;
+	margin-bottom: 5px;
+	border-bottom: solid #e6e6e6 1px;
+}
+.h3-filter-price{
+	font-size: 15px !important;
+	font-weight: bold;
+	margin: 0px;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	border-bottom: solid #e6e6e6 1px;
+	
+}
+.rprice{
+ width: 30px !important;
+ height: 30px !important;
 }
 
+.cbx-label{
+	font-weight: normal !important;
+
+}
 .span-filter{
 	width: 30% !important;
 }
@@ -221,6 +242,9 @@ div.product-list{
 	font-weight: 700;
 	
 }
+
+
+
 @media only screen and (max-width: 1024px) {
 
 .display-when-desktop{
