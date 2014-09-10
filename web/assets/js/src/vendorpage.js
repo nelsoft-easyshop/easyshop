@@ -327,13 +327,17 @@ function resetCoords(){
         
         return false;
     });
-    
+
     $(document).ready(function(){
-        var subscribeResult = $.cookie('es_subscribe_result');
+        var vendorLink = $.cookie('es_vendor_subscribe');
         var logInStatus = $('input[name="is-logged-in"]').val().toString();
-        if( typeof subscribeResult !== "undefined" && logInStatus === "true"){
-            alert(subscribeResult);
-            $.removeCookie('es_subscribe_result');
+        var subscribeStatus = $('#subscribe_status').val();
+        var vendorName = $('#vendor_name').val();
+
+        if( typeof vendorLink !== "undefined" && logInStatus === "true" && subscribeStatus === "unfollowed"){
+            $('#follow_btn').trigger('click');
+            alert("You are now following " + vendorName + "'s store!");
+            $.removeCookie('es_vendor_subscribe');
         }
     });
 

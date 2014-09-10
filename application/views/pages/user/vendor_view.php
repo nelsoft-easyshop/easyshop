@@ -82,14 +82,15 @@
                     </p>
      
                     <?php if( !$renderEdit ):?>
+                        <input id="subscribe_status" type="hidden" value="<?php echo $subscribe_status?>">
                         <?php echo form_open('');?>
-                        <p class="subscription_btn btn2 btn-follow" style="text-align:center; display:<?php echo $subscribe_status==='unfollowed'?'':'none'?>">
+                        <p id="follow_btn" class="subscription_btn btn2 btn-follow" style="text-align:center; display:<?php echo $subscribe_status==='unfollowed'?'':'none'?>">
                             <small class="sprite-bg follow-icon"></small> Follow
                         </p>
                         <p class="subscription_btn btn2 btn-unfollow" style="text-align:center; display:<?php echo $subscribe_status==='followed'?'':'none'?>">
                             <small class="sprite-bg unfollow-icon"></small> Unfollow
                         </p>
-                        <input type="hidden" value="<?php echo $vendordetails['username']?>" name="name">
+                        <input id="vendor_name" type="hidden" value="<?php echo $vendordetails['username']?>" name="name">
                         <input type="hidden" value="<?php echo $vendordetails['userslug']?>" name="userlink">
                         <?php echo form_close();?>
                     <?php endif;?>
