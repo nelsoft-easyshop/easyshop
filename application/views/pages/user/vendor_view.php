@@ -234,10 +234,10 @@
             <div class="dashboard_table vendor_feedbacks_table user-tab" id="dashboard-feedbacks">
                     <h2>Feedbacks</h2><a href="javascript:void(0)" class="hide_all_feedbacks blue"><span class="span_bg minus_btn"></span> Hide All Feedbacks</a>
                         <ul class="idTabs">
-                            <li><a href="#op_buyer">Feedbacks as a Buyer</a></li>
-                            <li><a href="#op_seller">Feedbacks as a Seller</a></li>
-                            <li><a href="#yp_buyer">Feedbacks for others - Buyer</a></li>
-                            <li><a href="#yp_seller">Feedbacks for others - Seller</a></li>
+                            <li><a href="#op_buyer">Feedbacks from Sellers</a></li>
+                            <li><a href="#op_seller">Feedbacks from Buyers</a></li>
+                            <li><a href="#yp_buyer">Feedbacks to Sellers</a></li>
+                            <li><a href="#yp_seller">Feedbacks to Buyers</a></li>
                         </ul>
 
                         <div class="clear"></div>
