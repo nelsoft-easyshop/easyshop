@@ -105,7 +105,6 @@ $string = '<typeNode>
             return $string;
     }
 
-    
     /**
      *  Method used to remove xml contents for product_panel_main nodes under home_files.xml, user for re-ordering
      *
