@@ -415,6 +415,15 @@ $(function(){
             textarea.val(origName);
         });
 
+        // Trigger store name submit on "enter" keypress
+        $('#user_store_edit input[name="store_name"]').on('keypress',function(e){
+            var code = e.keyCode || e.which;
+            if(code===13){
+                $('#store_name_submit').trigger('click');
+                return false;
+            }
+        });
+
         $('#store_name_submit').on('click',function(){
             var form = $(this).closest('form');
             var thisbtn = $(this);
