@@ -1,5 +1,9 @@
 <?php 
 
+use EasyShop\Entities\EsProduct; 
+
+
+
 class HomeWebService extends MY_Controller 
 {
 
@@ -49,8 +53,8 @@ class HomeWebService extends MY_Controller
      *
      *  @return JSON
      */
-
-    public function removeContent() {
+    public function removeContent() 
+    {
         $map = simplexml_load_file($this->file);        
         $index =  $this->input->get("index");
         $nodeName =  $this->input->get("nodename");        
@@ -382,14 +386,14 @@ class HomeWebService extends MY_Controller
         $index = ($index == 0 ? 1 : $index);
 
 
-        $count = $this->em->getRepository('EasyShop\Entities\EsProduct')->getProductBySlug($value);
-
-        if($count < 1) {
+        $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                        ->findBy(['slug' => $value]);
+                        
+        if(!$product){
                     return $this->output
                         ->set_content_type('application/json')
                         ->set_output($slugerrorjson);
-        }  
-        
+        }
         if($orindex == 0) {
             $this->xmlCmsService->addXml($file,$string,'/map/productSlide[last()]');
             $this->swapXmlForAddProductSlide($file,$orindex, $index,$value);
@@ -472,15 +476,14 @@ class HomeWebService extends MY_Controller
 
         $index = (int)$index;
         $productindex = (int)$productindex;
-
-        $count = $this->em->getRepository('EasyShop\Entities\EsProduct')->getProductBySlug($value);
-
-        if($count < 1 && $type == "product") {
-            return $this->output
-                ->set_content_type('application/json')
-                ->set_output($slugerrorjson);
-
-        }  
+        $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                        ->findBy(['slug' => $value]);
+                        
+        if(!$product){
+                    return $this->output
+                        ->set_content_type('application/json')
+                        ->set_output($slugerrorjson);
+        } 
         else {
             if(strtolower($type) == "image") {
 
@@ -560,13 +563,14 @@ class HomeWebService extends MY_Controller
         $index = (int)$index;
         $productindex = (int)$productindex;
         $value = !empty($_FILES['myfile']['name']) ? $value :  $map->section[$index]->product_panel_main[$productindex]->value;
-        $count = $this->em->getRepository('EasyShop\Entities\EsProduct')->getProductBySlug($value);
-
-        if($count < 1 && $type == "product") {
+        $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                        ->findBy(['slug' => $value]);
+                        
+        if(!$product){
             return $this->output
                 ->set_content_type('application/json')
                 ->set_output($slugerrorjson);
-
+                exit();
         }  
 
                 if(strtolower($type) == "image") {
@@ -668,9 +672,9 @@ class HomeWebService extends MY_Controller
                         ->set_content_type('application/json')
                         ->set_output($boundsjson);
             } 
-            $count =  $this->em->getRepository('EasyShop\Entities\EsProduct')->getProductBySlug($value);
-
-            if($count < 1 && $type != "image") {
+            $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                        ->findBy(['slug' => $value]);
+            if(!$product && $type != "image") {
 
                 return $this->output
                         ->set_content_type('application/json')
@@ -823,9 +827,10 @@ class HomeWebService extends MY_Controller
         $index = (int)$index;
         $string = $this->xmlCmsService->getString($nodeName, $value, $type, "", "");
 
-        $count =  $this->em->getRepository('EasyShop\Entities\EsProduct')->getProductBySlug($value);
-
-        if($count < 1) {
+        $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                        ->findBy(['slug' => $value]);
+                        
+        if(!$product){
                     return $this->output
                         ->set_content_type('application/json')
                         ->set_output($slugerrorjson);
@@ -922,8 +927,10 @@ class HomeWebService extends MY_Controller
                         ->set_output($boundsjson);
         } 
 
-        $count = $this->em->getRepository('EasyShop\Entities\EsProduct')->getProductBySlug($value);
-        if($count < 1 && $type == "product") {
+
+        $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                        ->findBy(['slug' => $value]); 
+        if(!$product && $type == "product") {
 
             return $this->output
                     ->set_content_type('application/json')
