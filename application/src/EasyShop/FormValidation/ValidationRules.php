@@ -46,8 +46,10 @@ class ValidationRules
                             new Assert\NotNull()
                         ),
                     'file' => array(
-                            new Assert\File(['maxSize' => '5M']
-                                )
+                            new Assert\File([
+                                'maxSize' => '5M',
+                                'uploadIniSizeErrorMessage' => 'The file is too large. Allowed maximum size is 5 MB.'
+                                ])
                             )
                 ),
             'dummy' => array(
