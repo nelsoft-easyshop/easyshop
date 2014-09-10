@@ -3,18 +3,40 @@
 
 <div class="clear mrgn-top-35 display-ib"></div>
 
+
 <div class="res_wrapper login_content">
+
+    <div class="login-tli-con">
+        <div class="border-all border-rad-3">
+            <div class="col-md-12 border-bottom bg-cl-f7f7f7">
+                <div class="pd-tb-8">
+                    <h5><strong>Trouble Logging In?</strong></h5>
+
+                </div>
+            </div>               
+            <div class="col-md-12 text-center pd-top-30 pd-bttm-30">
+                <p><strong>"loremipsum.dolor@yahoo.com"</strong> is not associated with any easyshop.ph account.</p>
+            </div>
+            <div class="pd-tb-20 pd-lr-20 text-right login-btn-con">
+                <a href="" class="btn btn-primarybtn">Try again</a>
+                <a href="" class="btn btn-default">Help me locate my account</a>
+            </div>
+            <div class="clear"></div>
+        </div>
+    </div>
+        
     <div class="border-all border-rad-3">
         <div class="col-md-12 border-bottom bg-cl-f7f7f7">
             <div class="pd-tb-8">
                  <h5><strong>Log In</strong></h5>
+
             </div>
         </div>
         <div class="clear"></div>
         <div class="pd-tb-45">
             <?php if($logged_in): ?>
             
-                <div class="col-sm-5 col-md-5">
+                <div class="col-sm-12 col-md-12">
                     <div class="login_box ">
                         <div style="text-align:center;">
                             <p>You are currently signed-in as <b><?php echo $uname; ?></b>. </p>

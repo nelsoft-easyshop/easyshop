@@ -296,26 +296,51 @@ function resetCoords(){
         var form = $(this).closest('form');
         var $this = $(this);
         var sibling = $(this).siblings('.subscription_btn');
-        $.post(config.base_url+'memberpage/vendorSubscription', $(form).serializeArray(), function(data){
-            try{
-                var obj = jQuery.parseJSON(data);
-            }
-            catch(e){
-                alert('There was an error while processing your request. Please try again later.');
-                return false;
-            }
-            
-            if(obj.result === 'success'){
-                $this.hide();
-                sibling.show();
-            }
-            else{
-                alert(obj.error);
-            }
-        });
+        
+        var logInStatus = $('input[name="is-logged-in"]').val().toString();
+        var vendorLink = form.find('input[name="userlink"]').val();
+        
+        if( logInStatus === 'true' ){
+            $.post(config.base_url+'memberpage/vendorSubscription', $(form).serializeArray(), function(data){
+                try{
+                    var obj = jQuery.parseJSON(data);
+                }
+                catch(e){
+                    alert('There was an error while processing your request. Please try again later.');
+                    return false;
+                }
+                
+                if(obj.result === 'success'){
+                    $this.hide();
+                    sibling.show();
+                }
+                else{
+                    alert(obj.error);
+                }
+            });    
+        }
+        else{
+            $.removeCookie('es_vendor_subscribe');
+            $.cookie('es_vendor_subscribe', vendorLink, {path: '/'});
+            window.location.href = config.base_url + 'login';
+        }
+        
         return false;
     });
-    
+
+    $(document).ready(function(){
+        var vendorLink = $.cookie('es_vendor_subscribe');
+        var logInStatus = $('input[name="is-logged-in"]').val().toString();
+        var subscribeStatus = $('#subscribe_status').val();
+        var vendorName = $('#vendor_name').val();
+
+        if( typeof vendorLink !== "undefined" && logInStatus === "true" && subscribeStatus === "unfollowed"){
+            $('#follow_btn').trigger('click');
+            alert("You are now following " + vendorName + "'s store!");
+            $.removeCookie('es_vendor_subscribe');
+        }
+    });
+
 })(jQuery);
 
 /*****************	STORE DESCRIPTION	******************************/
@@ -390,6 +415,15 @@ $(function(){
             textarea.val(origName);
         });
 
+        // Trigger store name submit on "enter" keypress
+        $('#user_store_edit input[name="store_name"]').on('keypress',function(e){
+            var code = e.keyCode || e.which;
+            if(code===13){
+                $('#store_name_submit').trigger('click');
+                return false;
+            }
+        });
+
         $('#store_name_submit').on('click',function(){
             var form = $(this).closest('form');
             var thisbtn = $(this);
@@ -418,7 +452,7 @@ $(function(){
                 }
 
                 if(obj.result === true){
-                    var hasStoreName = obj.username.toLowerCase() !== obj.storename.toLowerCase() &&
+                    var hasStoreName = obj.username !== obj.storename &&
                         obj.storename.length > 0 ? true:false;
 
                     if(hasStoreName){
@@ -429,7 +463,7 @@ $(function(){
                     else{
                         echoUserName.hide();
                         var newStoreName = obj.username;
-                        var textboxVal = '';
+                        var textboxVal = obj.username;
                     }
 
                     editStoreNameField.hide();
