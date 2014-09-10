@@ -68,7 +68,7 @@
             </div>
         </div>
         <div class="row display-when-desktop">
-            <div class="col-md-2 row-main">
+            <div class="col-md-2 row-main row-left">
                 <div class="left_attribute"> 
                     <h3>Price</h3>
                     <input type="text" id="price1" class="priceField" value="<?=($this->input->get('startprice')?$this->input->get('startprice'):'')?>" maxlength=9 size=6>
@@ -93,7 +93,7 @@
                     <p class="less_attr">Less Filters</p> 
                 </div>
             </div>
-            <div class="col-md-10 row-main" style="border: transparent #fff 1px; padding: 0px !important;">
+            <div class="col-md-10 row-main row-right" style="border: transparent #fff 1px; padding: 0px !important;">
                 <?php if(count($subCategoryList) !== 0):?>
                     <div class="filters">           
                         <h2 class="margin-0">Categories:</h2>    
