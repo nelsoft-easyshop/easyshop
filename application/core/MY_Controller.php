@@ -45,19 +45,19 @@ class MY_Controller extends CI_Controller
         $this->load->model("user_model");
         $this->load->model("product_model");
         $this->load->model("messages_model");
-    $usersession = $this->session->userdata('usersession');
-    if(!empty($usersession) || $this->check_cookie()){
-        $uid = $this->session->userdata('member_id'); 
-        $row = $this->user_model->getUserById($uid);
+        $usersession = $this->session->userdata('usersession');
+        if(!empty($usersession) || $this->check_cookie()){
+            $uid = $this->session->userdata('member_id'); 
+            $row = $this->user_model->getUserById($uid);
 
-        $logged_in = true;
-        $uname = $row['username'];
-    }
-    else{
-        $logged_in = false;
-        $uname = '';
-    }
-    $carts=$this->session->userdata('cart_contents');
+            $logged_in = true;
+            $uname = $row['username'];
+        }
+        else{
+            $logged_in = false;
+            $uname = '';
+        }
+        $carts=$this->session->userdata('cart_contents');
         $sizecart = 0;
         if(!empty($carts)){
             if(isset($carts['total_items'])){
@@ -66,17 +66,17 @@ class MY_Controller extends CI_Controller
                 $sizecart = sizeof($carts);
             }
         }
-    $unread = $this->messages_model->get_all_messages($this->session->userdata('member_id'),"Get_UnreadMsgs");
-    $msgs['unread_msgs'] = (isset($unread['unread_msgs']) ?$unread['unread_msgs'] : 0);
-    $msgs['msgs'] = (isset($unread['unread_msgs']) ? ($unread['unread_msgs'] != 0 ? reset($unread['messages']) : ""):0);        
-    $data = array(
-        'logged_in' => $logged_in,
-        'uname' => $uname,
-        'total_items'=> $sizecart,
-        'msgs'=> $msgs,
-        'category_search' => $this->product_model->getFirstLevelNode(),
-        );
-    return $data;
+        $unread = $this->messages_model->get_all_messages($this->session->userdata('member_id'),"Get_UnreadMsgs");
+        $msgs['unread_msgs'] = (isset($unread['unread_msgs']) ?$unread['unread_msgs'] : 0);
+        $msgs['msgs'] = (isset($unread['unread_msgs']) ? ($unread['unread_msgs'] != 0 ? reset($unread['messages']) : ""):0);        
+        $data = array(
+            'logged_in' => $logged_in,
+            'uname' => $uname,
+            'total_items'=> $sizecart,
+            'msgs'=> $msgs,
+            'category_search' => $this->product_model->getFirstLevelNode(),
+            );
+        return $data;
     }
     
     function check_cookie(){
@@ -180,7 +180,7 @@ class MY_Controller extends CI_Controller
     {
         foreach ($postedData as $data => $value) {
             
-            if($data == "hash" || $data == "_token" || $data == "csrfname" || $data == "callback" || $data == "password" || $data == "_") {
+            if($data == "hash" || $data == "_token" || $data == "csrfname" || $data == "callback" || $data == "password" || $data == "_" || $data == "checkuser") {
                  continue;               
             }
 
@@ -199,70 +199,7 @@ class MY_Controller extends CI_Controller
     }
 
 
-    #new query for getting reviews (top5 Main reviews) - Janz
-    function getReviews($product_id, $sellerid)
-    {
-        $this->load->model("product_model");
-        $recent = array();
-        $recent = $this->product_model->getProductReview($product_id);
-        
-        if(count($recent)>0){
-            $retrieve = array();
-            foreach($recent as $data){
-                array_push($retrieve, $data['id_review']);
-            }
-            $replies = $this->product_model->getReviewReplies($retrieve, $product_id);
-            foreach($replies as $key=>$temp){
-                $temp['review'] = html_escape($temp['review']);
-            }
-            $i = 0;
-            $userid = $this->session->userdata('member_id');
-            foreach($recent as $review){
-                $recent[$i]['replies'] = array();
-                $recent[$i]['reply_count'] = 0;
-                if($userid === $review['reviewerid'])
-                    $recent[$i]['is_reviewer'] = 1;
-                else
-                    $recent[$i]['is_reviewer'] = 0;
-                foreach($replies as $reply){
-                    if($review['id_review'] == $reply['replyto']){
-                        array_push($recent[$i]['replies'], $reply);
-                        $recent[$i]['reply_count']++;
-                    }
-                }
-                $i++;
-            }
-        }
-        
-        return $recent;
-    }
 
-    /**
-     *  Authentication method for webservice
-     *
-     *  @param string $postedData
-     *  @param string $postedHash
-     *  @param string $evaluate
-     */
-    public function authentication($postedData, $postedHash, $evaluate = "")
-    {
-        foreach ($postedData as $data => $value) {
-            
-            if($data == "hash" || $data == "_token" || $data == "csrfname" || $data == "callback" || $data == "password" || $data == "_") {
-                 continue;               
-            }
-
-            else
-                $evaluate .= $value;
-        }
-        $this->load->model("user_model");
-        $password = $this->user_model->getAdminUser($postedData["userid"]);
-        $hash = $evaluate.$password["password"];
-        if(sha1($hash) != $postedHash){
-            $error = json_encode("error");
-                    exit($error);
-        }   
-    }
 
 }
 

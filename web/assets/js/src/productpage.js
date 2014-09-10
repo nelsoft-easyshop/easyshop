@@ -1,4 +1,3 @@
-
 (function($) {
     $(function() {
         $('.jcarousel').jcarousel();
@@ -301,8 +300,8 @@ $(function(){
         var form = $(this).parent('form');
         var replyfield = $(this).siblings('.reply_field');
         var loadingimg = $(this).siblings('#savereply_loadingimg');
-		var replydiv = $(this).closest('div.reply_area');
-		var thisbtn = $(this);
+        var replydiv = $(this).closest('div.reply_area');
+        var thisbtn = $(this);
         var cancelbtn = $('.reply_cancel');
         if($.trim(replyfield.val()).length < 1)
             replyfield.effect('pulsate',{times:5},500);
@@ -311,9 +310,9 @@ $(function(){
             cancelbtn.hide();
             loadingimg.show();
             $.post(config.base_url+'product/submit_reply',form.serialize(),function(data){
-				replydiv.fadeOut();
-				thisbtn.show();
-				loadingimg.hide();
+                replydiv.fadeOut();
+                thisbtn.show();
+                loadingimg.hide();
                 if(data == 1){
                     location.reload(true);
                 }
@@ -387,7 +386,7 @@ function attrClick(target, $this){
         var sel_id = new Array();
         
         var price = parseFloat($('.current_price').attr('data-baseprice'));
-        $('.product_option').find('ul.options').each(function(){	
+        $('.product_option').find('ul.options').each(function(){    
             var actv = $(this).find("li.active");
             if(actv[0] === undefined){
                 price += 0;
@@ -539,7 +538,7 @@ function attrClick(target, $this){
                 });
             }
         });
-		
+        
         /*
          * @Step 2: Get ids of PROBABLE attributes based on available combinations, selected attributes, and
          * currently enabled attributes.
@@ -606,7 +605,7 @@ function attrClick(target, $this){
 $(function(){
     $('.options, .options a').on('click', function(event){
         var $this = $(this);
-		if(attrClick($(event.target), $this)){
+        if(attrClick($(event.target), $this)){
             var active = new Array();
             $('.product_option li').each(function(){
                 if($(this).hasClass('active')){
@@ -650,11 +649,11 @@ $(function(){
             if(($('.product_option').find('ul.options')[0] === undefined) && (parseInt(value.quantity,10) > 0))  {
                  $('.fm1.orange_btn3').removeClass("disabled").addClass("enabled");
             }else {
-		//Else click a default value
-		$('.product_option:visible').find('ul.options').each(function(){
-		    $(this).find('li:first').trigger('click');
-		});
-	    }
+        //Else click a default value
+        $('.product_option:visible').find('ul.options').each(function(){
+            $(this).find('li:first').trigger('click');
+        });
+        }
             return false;
         }
     });  
@@ -784,7 +783,7 @@ $(function(){
     $('.reviews_content').on('click','#see_more_reviews', function(event){
         $('#more_review_loading_img').show();
         $('#see_more_reviews').hide();
-		var csrftoken = $("meta[name='csrf-token']").attr('content');
+        var csrftoken = $("meta[name='csrf-token']").attr('content');
         var csrfname = $("meta[name='csrf-name']").attr('content');
         $.post(config.base_url+'product/get_more_reviews',{last_id:$('#lastreview').prop('value'), csrfname : csrftoken}, 
             function(data){

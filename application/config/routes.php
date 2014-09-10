@@ -146,7 +146,6 @@ else {
     $route['(?i)report'] = 'home/bugReport';
     $route['(?i)subscribe'] = 'register/subscribe';
 
-
     #WEBSERVICE
     $route['homewebservice'] = 'webservice/homewebservice';
     $route['accountservice'] = 'webservice/accountservice';

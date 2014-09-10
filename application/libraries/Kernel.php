@@ -31,8 +31,8 @@ class Kernel
     private function _bootstrap()
     {
         /* We register the application class autoloader */
-        require_once APPPATH . '/src/EasyShop/Core/ClassAutoloader/PSR0Autoloader.php';
-        $psr0Autoloader = new PSR0Autoloader(APPPATH . "/src/");
+        require_once APPPATH . 'src/EasyShop/Core/ClassAutoloader/PSR0Autoloader.php';
+        $psr0Autoloader = new PSR0Autoloader(APPPATH . "src/");
         $psr0Autoloader->register();
 
         /* We register 3rd party autoloader */
@@ -60,14 +60,14 @@ class Kernel
 
         $dbConfig = require APPPATH . '/config/param/database.php';
 
-        $config = Doctrine\ORM\Tools\Setup::createAnnotationMetadataConfiguration($paths, $isDevMode);
+        $config = Doctrine\ORM\Tools\Setup::createAnnotationMetadataConfiguration($paths, $isDevMode, null, null, false);
         $config->setProxyDir(APPPATH . '/src/EasyShop/Doctrine/Proxies');
         $config->setProxyNamespace('EasyShop\Doctrine\Proxies');
         
         $container['entity_manager'] = function ($c) use ($dbConfig, $config){
             return Doctrine\ORM\EntityManager::create($dbConfig, $config);
         };
-        
+
         // ZeroMQ pusher
         $container['user_pusher'] = function ($c) {
             $wsConfig = require APPPATH . '/config/param/websocket.php';
@@ -85,11 +85,6 @@ class Kernel
         $container['local_configuration'] = function ($c) {
             return new \EasyShop\Core\Configuration\Configuration();
         };
-
-        $container['xml_cms'] = function ($c) {
-            return new \EasyShop\XML\CMS();
-        };
-        
         
         //CMS Service
         $container['xml_cms'] = function ($c) {
@@ -101,13 +96,101 @@ class Kernel
             return new \EasyShop\XML\Resource($container['local_configuration']);
         };
         
-        //XML Resource accessor
-        $container['xml_resource'] = function ($c) {
-            $configurationService = new \EasyShop\Core\Configuration\Configuration();
-            return new \EasyShop\XML\Resource($configurationService);
+        //User Manager
+        $container['user_manager'] = function ($c) use ($container) {
+            return new \EasyShop\User\UserManager($container['entity_manager']);
+        };
+
+        // Paths
+        $vendorDir = __DIR__ . '/../../vendor';
+        $viewsDir = __DIR__ . '/../views';
+        $vendorFormDir = $vendorDir . '/symfony/form/Symfony/Component/Form';
+        $vendorValidatorDir = $vendorDir . '/symfony/validator/Symfony/Component/Validator';
+        $vendorTwigBridgeDir = $vendorDir . '/symfony/twig-bridge/Symfony/Bridge/Twig';
+
+        // CSRF Setup
+        $csrfSecret = 'TempOraRy_KeY_12272013_bY_Sam*?!';
+        $session = new \Symfony\Component\HttpFoundation\Session\Session();
+        $csrfProvider = new \Symfony\Component\Form\Extension\Csrf\CsrfProvider\SessionCsrfProvider($session, $csrfSecret);
+
+        // Twig setup
+        $translator = new \Symfony\Component\Translation\Translator('en');
+        $translator->addLoader('xlf', new \Symfony\Component\Translation\Loader\XliffFileLoader());
+        $translator->addResource('xlf', $vendorFormDir . '/Resources/translations/validators.en.xlf', 'en', 'validators');
+        $translator->addResource('xlf', $vendorValidatorDir . '/Resources/translations/validators.en.xlf', 'en', 'validators');
+
+        //Twig Service
+        $container['twig'] = function ($c) use ($translator, $viewsDir, $vendorTwigBridgeDir, $csrfProvider) {
+            // Create twig
+            $twig = new Twig_Environment(new Twig_Loader_Filesystem(array(
+                $viewsDir,
+                $vendorTwigBridgeDir . '/Resources/views/Form',
+            )));
+
+            $formEngine = new Symfony\Bridge\Twig\Form\TwigRendererEngine(array('form_div_layout.html.twig'));
+            $formEngine->setEnvironment($twig);
+            $twig->addExtension(new \Symfony\Bridge\Twig\Extension\TranslationExtension($translator));
+            $twig->addExtension(new \Symfony\Bridge\Twig\Extension\FormExtension(new \Symfony\Bridge\Twig\Form\TwigRenderer($formEngine, $csrfProvider)));
+            return $twig;
+        };
+
+        // Validator Setup
+        $validator = \Symfony\Component\Validator\Validation::createValidator();
+
+        //Form Factory Service
+        $container['form_factory'] = function ($c) use ($csrfProvider, $validator) {
+            // Create factory
+            $formFactory = \Symfony\Component\Form\Forms::createFormFactoryBuilder()
+                ->addExtension(new \Symfony\Component\Form\Extension\Csrf\CsrfExtension($csrfProvider))
+                ->addExtension(new \Symfony\Component\Form\Extension\HttpFoundation\HttpFoundationExtension())
+                ->addExtension(new \Symfony\Component\Form\Extension\Validator\ValidatorExtension($validator))
+                ->getFormFactory();
+
+            return $formFactory;
+        };
+
+        //Validation Rules Service
+        $container['form_validation'] = function ($c) {
+            return new \EasyShop\FormValidation\ValidationRules();
+        };
+
+        //Request Service
+        $container['http_request'] = function ($c) {
+            return \Symfony\Component\HttpFoundation\Request::createFromGlobals();
+        };
+
+        //Bug Reporter Service
+        $container['bug_reporter'] = function ($c) use($container) {
+            return new \EasyShop\BugReporter\BugReporter($container['entity_manager']);
         };
         
+        // Point Tracker
+        $container['point_tracker'] = function ($c) {
+            return new \EasyShop\PointTracker\PointTracker();
+        };
+
+        // Payment Service
+        $container['payment_service'] = function ($c) {
+            return new \EasyShop\PaymentService\PaymentService();
+        };
+
+        // Http foundation
+        $container['http_foundation'] = function ($c) {
+            return \Symfony\Component\HttpFoundation\Request::createFromGlobals();
+        };
+
+          // Product Manager
+        $container['product_manager'] = function ($c) {
+            return new \EasyShop\Product\ProductManager();
+        };
+
+        // Collection Helper
+        $container['collection_helper'] = function ($c) {
+            return new \EasyShop\CollectionHelper\CollectionHelper();
+        };
+
         /* Register services END */
         $this->serviceContainer = $container;
     }
+
 }
