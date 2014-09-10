@@ -13,13 +13,9 @@ class Account extends MY_Controller {
     function __construct() 
     {
         parent::__construct();
-       # header('Content-type: application/json');
+        header('Content-type: application/json');
     }
-    
-    public function test()
-    {
-        $this->load->view('pages/test');
-    }
+
 
     /**
      * Registers a user
