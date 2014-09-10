@@ -402,6 +402,16 @@ class Home extends MY_Controller
         //$this->load->view('pages/web/faq');
         $this->load->view('templates/footer_full');
     }
+    
+    public function scrollTest()
+    {
+        $twig = $this->serviceContainer['twig'];
+        $items = array();
+        $view =  $twig->render('pages/scroll.twig.html', 
+                ['items' => $items]);
+                
+        $this->output->append_output($view);
+    }
 
 }
 
