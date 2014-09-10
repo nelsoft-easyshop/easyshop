@@ -440,10 +440,9 @@ class Home extends MY_Controller
             'metadescription' => 'Found a bug? Let us know so we can work on it.',
         );
 
-        $data = array_merge($data, $this->fill_header());
-
+        $data = array_merge($data, $this->fill_header()); 
         $this->load->view('templates/header', $data);
-        $this->output->append_output($formData);
+        $this->output->append_output($formData); 
         $this->load->view('templates/footer_full');
     }
 

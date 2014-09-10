@@ -13,13 +13,40 @@ use EasyShop\Entities\EsProductShippingHead;
  */
 class ProductManager
 {
+
+    /**
+     * Entity Manager instance
+     *
+     * @var Doctrine\ORM\EntityManager
+     */
+    private $em;
+
+    /**
+     * Promo Manager instance
+     *
+     * @var \EasyShop\Promo\PromoManager
+     */
+    private $promoManager;
+
+    /**
+     * Collection instance
+     *
+     * @var EasyShop\CollectionHelper\CollectionHelper
+     */
+    private $collectionHelper;
+
     /**
      * Constructor. Retrieves Entity Manager instance
      * 
      */
-    public function __construct()
+    public function __construct($em,$promoManager,$collectionHelper)
     {
-        $this->em = get_instance()->kernel->serviceContainer['entity_manager'];
+        $this->em = $em; 
+        $this->promoManager = $promoManager;
+        $this->collectionHelper = $collectionHelper;
+
+        $this->ci = get_instance();  
+        $this->promoArray = $this->ci->config->item('Promo');
     }
 
     /**
@@ -27,11 +54,8 @@ class ProductManager
      * @param  array  $products [description]
      * @return [type]           [description]
      */
-    public function getDiscountedPrice($product = array(),$memberId)
+    public function getDiscountedPrice($memberId,$product = array())
     { 
-        $CI = get_instance(); 
-        $this->promoManager = $CI->kernel->serviceContainer['promo_manager'];
-
         foreach ($product as $key => $value) {
             $buyerId = $memberId;
             $productId =$value['idProduct'];
@@ -45,6 +69,8 @@ class ProductManager
             $startPromo = false;
             $endPromo = false;
 
+            $promoArray = $this->promoArray[$promoType]; 
+
             if(intval($isPromote) === 1){
                 $promo = $this->promoManager->applyDiscount($price, $startDate,$endDate,$isPromote,$promoType, $discount);
                 $startPromo = $promo['startPromo'];
@@ -53,7 +79,6 @@ class ProductManager
                 $userPurchaseCount = $this->em->getRepository('EasyShop\Entities\EsOrder')
                                             ->getUserPurchaseCountByPromo($buyerId,$promoType);
                 
-                $promoArray = $CI->config->item('Promo')[$promoType]; 
                 if(($userPurchaseCount[0]['cnt'] >= $promoArray['purchase_limit']) || 
                 (!$promoArray['is_buyable_outside_promo'] && !$startPromo)){
                     $product[$key]['canPurchase'] =  false;
@@ -100,10 +125,7 @@ class ProductManager
      * @return [type] [description]
      */
     public function generateSearchKeywords($productId)
-    { 
-        $CI = get_instance(); 
-        $collectionHelper = $CI->kernel->serviceContainer['collection_helper']; 
-        
+    {
         $products = $this->em->getRepository('EasyShop\Entities\EsProduct')
                                             ->find($productId);
         
@@ -117,7 +139,7 @@ class ProductManager
         $attributes = $this->em->getRepository('EasyShop\Entities\EsProduct')
                                             ->getAttributes($productId);
 
-        $organizedAttributes = $collectionHelper->organizeArray($attributes);
+        $organizedAttributes = $this->collectionHelper->organizeArray($attributes);
 
         $attributesString = "";
         foreach ($organizedAttributes as $key => $value) {

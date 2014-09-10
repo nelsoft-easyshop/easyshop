@@ -174,19 +174,38 @@ class Kernel
             return new \EasyShop\PaymentService\PaymentService();
         };
 
-        // Http foundation
-        $container['http_foundation'] = function ($c) {
-            return \Symfony\Component\HttpFoundation\Request::createFromGlobals();
+        // Search product
+        $container['search_product'] = function ($c) use($container) {
+            return new \EasyShop\Search\SearchProduct($container['entity_manager']);
         };
 
-          // Product Manager
-        $container['product_manager'] = function ($c) {
-            return new \EasyShop\Product\ProductManager();
+        // Promo
+        $container['promo_manager'] = function ($c) {
+            return new \EasyShop\Promo\PromoManager();
+        };
+
+        // Product Manager
+        $container['product_manager'] = function ($c) use($container) {
+            $em = $container['entity_manager'];
+            $promoManager = $container['promo_manager'];
+            $collectionHelper = $container['collection_helper'];
+
+            return new \EasyShop\Product\ProductManager($em,$promoManager,$collectionHelper);
         };
 
         // Collection Helper
         $container['collection_helper'] = function ($c) {
             return new \EasyShop\CollectionHelper\CollectionHelper();
+        };
+        
+        // Http foundation
+        $container['http_foundation'] = function ($c) {
+            return \Symfony\Component\HttpFoundation\Request::createFromGlobals();
+        };
+
+        // Category Manager
+        $container['category_manager'] = function ($c) {
+            return new \EasyShop\Category\CategoryManager();
         };
 
         /* Register services END */
