@@ -22,7 +22,7 @@ class product_search extends MY_Controller {
     /*   
      *   Number of returned products per request
      */
-    public $per_page = 15; 
+    public $per_page = 4; 
 
      /**
      *   Returns recommended keywords for search bar

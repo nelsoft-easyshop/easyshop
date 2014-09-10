@@ -260,7 +260,7 @@
      // START OF INFINITE SCROLLING FUNCTION 
     var offset = 1;
     var request_ajax = true;
-    var ajax_is_on = false;
+    var ajax_is_on = (typeof(emptySearch) != "undefined")?emptySearch:false;
     var objHeight=$(window).height()-50;
     var last_scroll_top = 0;
  
