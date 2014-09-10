@@ -413,7 +413,7 @@ class Home extends MY_Controller
         ->setMethod('POST')
         ->add('title', 'text', array('required' => false, 'label' => false, 'constraints' => $rules['title']))
         ->add('description', 'textarea', array('required' => false, 'label' => false, 'constraints' => $rules['description']))
-        ->add('file', 'file', array('label' => false, 'required' => false, 'constraints' => $rules['file']))
+        ->add('file', 'file', array('label' => false, 'required' => false, 'constraints' => $rules['image']))
         ->add('submit', 'submit', array('label' => 'SEND'))
         ->getForm();
 
