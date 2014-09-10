@@ -1,5 +1,16 @@
 @import url(https://fonts.googleapis.com/css?family=Roboto:400,300);
+.row-left{
+	z-index: 2;
+}
 
+.row-right{
+	z-index: 1;
+}
+
+.jcarousel-control-prev, .jcarousel-control-next{
+	width: 37px !important;
+	margin-left: 3px !important;
+}
 .container-responsive{
 	max-width: 980px;
 	margin-top: -10px !important;
