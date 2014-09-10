@@ -404,13 +404,32 @@ class Home extends MY_Controller
     }
     
     public function scrollTest()
-    {
+    {  
         $twig = $this->serviceContainer['twig'];
-        $items = array();
-        $view =  $twig->render('pages/scroll.twig.html', 
-                ['items' => $items]);
-                
-        $this->output->append_output($view);
+            $data = array(
+            'title' => 'TESTING',
+        );
+        $data = array_merge($data, $this->fill_header());
+       
+        $page = $this->input->get('page');
+        $page = $page ? $page : 0;
+       
+        if ($this->input->is_ajax_request()) {
+            $items = $this->product_model->getNewProducts(10, $page);
+            $view =  $twig->render('pages/scroll-more.twig.html', 
+                ['items' => $items,
+                 'currentPage' => $page]);
+            echo $view;
+        }
+        else{
+            $items = $this->product_model->getNewProducts(10, $page);
+            $view =  $twig->render('pages/scroll.twig.html', 
+                ['items' => $items,
+                 'currentPage' => $page]);
+                 $this->load->view('templates/header', $data);
+
+            $this->output->append_output($view);
+        }
     }
 
 }
