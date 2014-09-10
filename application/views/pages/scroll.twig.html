@@ -1,0 +1,97 @@
+
+<style>
+.active{
+    font-weight:bold;
+}
+</style>
+
+
+<div class='cont' style ='text-align:center; background-color: #eee'>
+
+    <p><h1>SCROLL TEST</h1></p>
+
+    {% for item in items %}
+        <div style='margin: 10px; '>
+            <div style='font-size: 14px; font-weight: bold'>{{ item['name'] }}</div>
+            <img src ="/{{ item['path'] }}small/{{ item['file'] }}" />
+        </div>
+        <hr/>
+        
+    {% endfor %}
+</div>
+
+
+<div style='position: fixed;
+    bottom: 0;
+    width: 100%;
+    border-top: 1px solid #000;
+    padding-bottom: 1em;
+    padding-top: 1em;
+    background-color: #eee;
+    text-align:center;'
+>
+    <span class='prev' style='display:none'>[ Previous ]</span>
+    <span class='next'>[ Next ] </span>
+    
+    {% for i in 0..15 %}
+       <a class="page page{{i}}" href="/home/scrollTest?page={{ i }}"> {{ i }}</a>
+    {% endfor %}
+    
+    <input type='hidden' id='currentPage' value="{{ currentPage }}"/>
+  
+<div>
+
+</html>
+
+
+<script type='text/javascript'>
+
+var requestPage = parseInt($('#currentPage').val(),10);
+$('.page' + (requestPage)).addClass('active');
+
+var nextPage = requestPage + 1;
+
+
+$('.next').html(' [<a href="/home/scrollTest?page='+(nextPage)+'">Next</a>]');
+if(requestPage  > 0){
+    $('.prev').html(' [<a href="/home/scrollTest?page='+(requestPage-1)+'">Previous</a>]');
+    $('.prev').show();
+}
+
+
+
+
+var page = requestPage + 1;
+    
+$(window).scroll(function()
+{
+
+    
+
+    if($(window).scrollTop() == $(document).height() - $(window).height())
+    {
+        $.ajax({
+            url: "/home/scrollTest?page="+page,
+            success: function(html)
+            {
+                if(html){
+                    $('.prev').html(' [<a href="/home/scrollTest?page='+(page-1)+'">Previous</a>]');
+                    $('.next').html(' [<a href="/home/scrollTest?page='+(page+1)+'">Next</a>]');
+                    page = page + 1;
+                    
+                    if(page  > 0){
+                        $('.prev').show();
+                    }
+                    
+                    $('.page').removeClass('active');
+                    $('.page' + (page-1)).addClass('active');
+                    
+                    $('.cont').append(html);
+                }
+            }
+        });
+    }
+
+    
+});
+</script>
