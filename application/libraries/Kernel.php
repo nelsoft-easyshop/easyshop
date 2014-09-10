@@ -81,30 +81,6 @@ class Kernel
             return new EasyShop\WebSocket\Pusher\UserPusher($socket, $c['entity_manager']);
         };
         
-        //Configuration Setter
-        $container['local_configuration'] = function ($c) {
-            return new \EasyShop\Core\Configuration\Configuration();
-        };
-        
-        //CMS Service
-        $container['xml_cms'] = function ($c) {
-            return new \EasyShop\XML\CMS();
-        };
-        
-        //XML Resource Service
-        $container['xml_resource'] = function ($c) use ($container) {
-            return new \EasyShop\XML\Resource($container['local_configuration']);
-        };
-        
-        //XML Resource accessor
-        $container['xml_resource'] = function ($c) {
-            $configurationService = new \EasyShop\Core\Configuration\Configuration();
-            return new \EasyShop\XML\Resource($configurationService);
-        };
-        
-        
-        
-        
         
         // Paths
         $vendorDir = __DIR__ . '/../../vendor';
@@ -139,6 +115,29 @@ class Kernel
             return $twig;
         };
         
+        
+        //Configuration Setter
+        $container['local_configuration'] = function ($c) {
+            return new \EasyShop\Core\Configuration\Configuration();
+        };
+        
+        //CMS Service
+        $container['xml_cms'] = function ($c) {
+            return new \EasyShop\XML\CMS();
+        };
+        
+        //XML Resource Service
+        $container['xml_resource'] = function ($c) use ($container) {
+            return new \EasyShop\XML\Resource($container['local_configuration']);
+        };
+        
+        //XML Resource accessor
+        $container['xml_resource'] = function ($c) {
+            $configurationService = new \EasyShop\Core\Configuration\Configuration();
+            return new \EasyShop\XML\Resource($configurationService);
+        };
+        
+
         /* Register services END */
         $this->serviceContainer = $container;
     }
