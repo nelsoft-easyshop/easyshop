@@ -292,4 +292,5 @@
 <script type="text/javascript">
     var currentUrl = "<?=site_url(uri_string() . '?' . $_SERVER['QUERY_STRING']); ?>"; 
     var typeView = "<?=(isset($_COOKIE['view']))?$_COOKIE['view']:'product'?>";
+    var loadUrl = "<?=base_url().'search/more?'. $_SERVER['QUERY_STRING']?>";
 </script>

@@ -274,7 +274,7 @@
                 if (request_ajax === true && ajax_is_on === false) {
                     ajax_is_on = true;
                     $.ajax({
-                        url: currentUrl+'&typeview='+typeView+'&page='+offset,
+                        url: loadUrl+'&typeview='+typeView+'&page='+offset,
                         type: 'get',
                         async: false,
                         dataType: 'json',
