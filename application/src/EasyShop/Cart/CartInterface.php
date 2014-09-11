@@ -16,6 +16,10 @@ interface CartInterface
     
     public function removeContent($cartId);
     
+    public function updateContent($cartId, $cartData);
+    
     public function getIndexName();
+    
+    public function getSingleItem($cartId);
 
 }
