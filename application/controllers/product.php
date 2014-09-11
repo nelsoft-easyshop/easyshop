@@ -17,6 +17,18 @@ class product extends MY_Controller
         $this->load->helper('htmlpurifier');
         $this->load->model("product_model");
         $this->load->model("messages_model");
+        
+        $promoManager = $this->serviceContainer['promo_manager'];
+        $entityManager = $this->serviceContainer['entity_manager'];
+
+        $product =  $entityManager->getRepository('EasyShop\Entities\EsProduct')
+                                  ->findOneBy(['idProduct' => '1']);
+
+        
+        $promoManager->hydratePromoData($product);
+        
+        var_dump($product->getOriginalPrice());
+        
     }
 
 
