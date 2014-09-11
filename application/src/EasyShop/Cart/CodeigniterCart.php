@@ -120,7 +120,7 @@ class CodeigniterCart implements CartInterface
     }
     
     /**
-     * Updates the content of the cart
+     * Updates cart with id $cartId with data $cartData
      *
      * @param string $cartId
      * @param array $cartData
@@ -157,6 +157,23 @@ class CodeigniterCart implements CartInterface
     {
         return $this->indexName;
     }
+      
+    /**
+     * Returns a single entry in the cart
+     *
+     * @param string $cartId
+     * @return mixed
+     */
+    public function getSingleItem($cartId)
+    {
+        $cartContents = $this->getContents();
+        foreach($cartContents as $cartContent){
+            if($cartContent[$this->indexName] === $cartId){
+                return $cartContent;
+            }
+        }
+        return false;
+    }  
       
 }
 
