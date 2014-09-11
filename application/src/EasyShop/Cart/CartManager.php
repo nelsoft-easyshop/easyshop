@@ -72,7 +72,7 @@ class CartManager
      */
     public function validateSingleCartContent($productId, $options, $quantity)
     {
-        $product = $this->productManager->getProductWithPromoDetails($productId);
+        $product = $this->productManager->getProductDetails($productId);
 
         $cartProductAttributes = array();
         $validatedCartOptions = array();
@@ -235,7 +235,7 @@ class CartManager
      * @param integer $optionLength
      * @return bool
      */
-    public function doAddItem($productId, $quantity = 1, $maxAvailability, $option = array(), $optionLength)
+    public function addItem($productId, $quantity = 1, $maxAvailability, $option = array(), $optionLength)
     {
         $cartContents = $this->cart->getContents(); 
         
@@ -265,10 +265,10 @@ class CartManager
                     }
                 }
                 if($isUpdate){
-                    $this->cart->updateContent($itemData);
+                    $this->cart->updateContent($cartRow[$indexName],$itemData);
                 }
                 else{
-                    $this->cart->addContent($cartRow[$indexName],$itemData);
+                    $this->cart->addContent($itemData);
                 }
             }
             
@@ -285,14 +285,15 @@ class CartManager
      * @param integer $memberId
      * @param inetger $cartRowId
      */
-    public function doRemoveItem($memberId, $cartRowId)
+    public function removeItem($memberId, $cartRowId)
     {
         if($this->cart->removeContent($cartRowId)){ 
             $result=array(
                 'isSuccess'=>true,
                 'totalPrice'=>  $this->cart->getTotalPrice(),
                 'numberOfItems'=> $this->cart->getSize()
-            );            $this->validateCartContents();
+            );            
+            $this->validateCartContents();
             $this->cart->persist($memberId);
             return true;
         }
@@ -307,48 +308,27 @@ class CartManager
      *
      * @Return bool
      */
-    public function doChangeItemQuantity($cartRowId, $quantity)
+    public function changeItemQuantity($cartRowId, $quantity)
     {
-        $cartContents = $this->cart->getContents();
-        $cartItem = $cartContents[$cartRowId];
-        
-        $promoConfig = $this->promoManager->getPromoConfig($cartItem['promo_type']);
-        $maxAvailability = $cartItem['maxqty'];
+        $cartItem = $this->cart->getSingleItem($cartRowId);
+        $itemAvailability = $cartItem['maxqty'];
+        $product = $this->productManager->getProductDetails($cartItem);
+        $cartItem['qty'] = $quantity;
 
-        $purchaseLimit = $promoConfig['purchase_limit'];
-
-        if (is_string($PurchaseLimit)) {
-            $PurchaseLimit = $this->config->item('Promo')[$cart_item['promo_type']][$PurchaseLimit];
-            foreach ($PurchaseLimit as $items) {
-                if ((strtotime(date('H:i:s')) > strtotime($items['start'])) && (strtotime(date('H:i:s')) < strtotime($items['end']))) {
-                    $PurchaseLimit = $max_qty;
-                }
-                else {
-                    $PurchaseLimit = 0;
-                }
+        if (intval($product->getIsPromote()) === 1){
+            $promoQuantityLimit = $this->promoManager->getPromoQuantityLimit($product->getIdProduct());
+            if($quantity > $promoQuantityLimit){
+                $cartItem['qty'] = $promoQuantityLimit;
             }
         }
-
-        $result = false;
-        if ($cart_item['is_promote'] == "1" && $qty > $PurchaseLimit) {
-            $data['qty'] = $PurchaseLimit;
+        else{
+            if($quantity > $itemAvailability){
+                $cartItem['qty'] = $itemAvailability;
+            }
         }
-        else if ($qty > $max_qty) {
-            $data['qty'] = $max_qty;
-        }
-        $this->cart->update($data);
-        if ($qty != 0) {
-            $cart = $this->cart->contents();
-            $totalprice = ($cart[$id]['price']) * $cart[$id]['qty'];
-            $result = array(
-                'subtotal' => number_format($totalprice, 2, '.', ','),
-                'total' => $this->get_total_price(),
-                'result' => true,
-                'qty' => $cart[$id]['qty'],
-                'maxqty' => $max_qty);
-        }
-
-        return $result;
+        
+        return $this->cart->update($cartRowId, $cartItem);
+        
     }
 
 
