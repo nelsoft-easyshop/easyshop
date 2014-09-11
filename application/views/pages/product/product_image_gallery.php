@@ -1,3 +1,4 @@
+
 <div class="display-when-desktop" style="position: relative; z-index: 2;">
 	<div class="cd_promo_badge_con">
 		<?php if($product['is_sold_out']): ?>
@@ -31,8 +32,7 @@
 		<a href="javascript:void(0)" class="jcarousel-control-next inactive">&rsaquo;</a>
 	</div>
 </div>
-<div id="demo"  class="display-when-mobile-833">
-	
+<div class="display-when-mobile-833">
 	<?php if($product['is_sold_out']): ?>
 		<span class="cd_soldout_product_page_m pull-right">
 			<img class="img-responsive_soldout" src="<?=base_url()?>assets/images/img_cd_soldout.png" alt="Sold Out" />
@@ -43,15 +43,31 @@
 			<span><?php echo  number_format( $product['percentage'],0,'.',',');?>%<br>OFF</span>
 		</span>
 	<?php endif; ?>
-	<div class="row">
-	  <div class="col-md-12">
-		<div id="owl-demo" class="owl-carousel" >
-		  <?php foreach($product_images as $image): ?>
-			<div > <img class="img-slide" src='<?=base_url()?><?php echo $image['path']; ?>/<?php echo $image['file']; ?>'  /></div>
+	<div id='myCarousel' class='carousel slide' style='' style="padding: 0px !important">
+		<div class='carousel-inner' style="text-align: center; padding: 0px !important">
+			<?php foreach($product_images as $image): ?>
+			<!--SLIDE NON-ACTIVE CLASS-->
+			<div class='item <?php echo (intval($image['is_primary']) === 1) ? 'active' : ''; ?>' >
+				<span class="span-container"><center><span class="span-container-img"><img src='<?=base_url()?><?php echo $image['path']; ?>/<?php echo $image['file']; ?>' alt='Beach' class='img-responsive img-slider-2' /></span></center></span>
+			</div>
 			<?php endforeach;?>
-		</div>
-	  </div>
+		</div>	
+		<a class='carousel-control left' href='#myCarousel' data-slide='prev'>
+			<span class='glyphicon glyphicon-chevron-left'></span>
+		</a>
+		<a class='carousel-control right' href='#myCarousel' data-slide='next'>
+			<span class='glyphicon glyphicon-chevron-right'></span>
+		</a>
 	</div>
-
+	<script>  
+$(document).ready(function() {  
+   $("#myCarousel").swiperight(function() {  
+      $("#myCarousel").carousel('prev');  
+    });  
+   $("#myCarousel").swipeleft(function() {  
+      $("#myCarousel").carousel('next');  
+   });  
+});  
+</script>  
 </div>
 <br/>
