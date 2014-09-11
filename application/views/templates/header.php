@@ -112,8 +112,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                     <?PHP echo $msgs['unread_msgs'];?>
                                 </span>
                             </a>
-                            <a href="<?=base_url()?>me" class="top_link_name prevent">
-                                <?php echo $uname; ?>
+                            <a href="/<?php echo html_escape($user['slug']); ?>" class="top_link_name prevent">
+                                <?php echo html_escape($user['username']); ?>
                             </a>
                         </li>
                         <li class="txt_res_hide">
