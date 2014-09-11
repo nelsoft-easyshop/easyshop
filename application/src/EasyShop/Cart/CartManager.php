@@ -38,15 +38,26 @@ class CartManager
 
 
     /**
-     * Constructor
-     * 
+     * Promo Config Array
+     *
+     * @var  mixed
      */
-    public function __construct(CartInterface $cart, ProductManager $productManager, PromoManager $promoManager)
+    private $promoConfiguration;
+    
+    /**
+     * Constructor
+     * @param EntityManager $em
+     * @param Easyshop\Cart\CartInterface $cart
+     * @param Easyshop\Product\ProductManager $productManager
+     * @param Easyshop\Cart\CartInterface PromoManager
+     *
+     */
+    public function __construct($em, CartInterface $cart, ProductManager $productManager, PromoManager $promoManager)
     {
         $this->productManager = $productManager;
         $this->promoManager = $promoManager;
         $this->cart = $cart;
-        $this->em = get_instance()->kernel->serviceContainer['entity_manager']; 
+        $this->em = $em;
     }
     
 
@@ -298,13 +309,13 @@ class CartManager
      */
     public function doChangeItemQuantity($cartRowId, $quantity)
     {
-        $data['rowid'] = $id;
-        $data['qty'] = $qty;
-        $PurchaseLimit = $this->config->item('Promo')[$cart_item['promo_type']];
+        $cartContents = $this->cart->getContents();
+        $cartItem = $cartContents[$cartRowId];
+        
+        $promoConfig = $this->promoManager->getPromoConfig($cartItem['promo_type']);
+        $maxAvailability = $cartItem['maxqty'];
 
-        $max_qty = $cart_item['maxqty'];
-
-        $PurchaseLimit = $PurchaseLimit['purchase_limit'];
+        $purchaseLimit = $promoConfig['purchase_limit'];
 
         if (is_string($PurchaseLimit)) {
             $PurchaseLimit = $this->config->item('Promo')[$cart_item['promo_type']][$PurchaseLimit];
@@ -340,14 +351,6 @@ class CartManager
         return $result;
     }
 
-    
-    
-    
-    
-    
-    
-    
 
-    
 
 }
