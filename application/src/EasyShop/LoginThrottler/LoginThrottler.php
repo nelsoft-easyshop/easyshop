@@ -53,27 +53,6 @@ class LoginThrottler
     }
 
     /**
-     * Finds a member by username/email
-     *
-     * @param string $username Username/email of member
-     *
-     * @return EasyShop\Entities\EsMember
-     */
-    public function getUser($username)
-    {
-        // check if username is in DB
-        $user = $this->em->getRepository('EasyShop\Entities\EsMember')
-                            ->findOneBy(['username' => $username]);
-
-        if($user === NULL){
-             $user = $this->em->getRepository('EasyShop\Entities\EsMember')
-                            ->findOneBy(['email' => $username]);
-        }
-
-        return $user;
-    }
-
-    /**
      * Logs failed attempt site-wide
      *
      * @param string $username Username/email of member
@@ -102,7 +81,8 @@ class LoginThrottler
      */
     public function updateMemberAttempt($username)
     {
-        $user = $this->getUser($username);
+        $user = $this->em->getRepository('EasyShop\Entities\EsMember')
+                            ->getUser($username);
 
         if($user !== NULL){            
             $user->setFailedLoginCount($user->getFailedLoginCount()+1);
@@ -114,7 +94,7 @@ class LoginThrottler
     }
 
     /**
-     * Returns total timeout left
+     * Returns total timeout left in seconds
      *
      * @param string $username Username/email of member
      *
@@ -122,7 +102,8 @@ class LoginThrottler
      */
     public function getTimeoutLeft($username)
     {
-        $user = $this->getUser($username);
+        $user = $this->em->getRepository('EasyShop\Entities\EsMember')
+                            ->getUser($username);
 
         if($user !== NULL && $user->getFailedLoginCount() > 0){
             $timeout = $user->getLastFailedLoginDatetime()->getTimeStamp(); 
@@ -130,10 +111,10 @@ class LoginThrottler
             $throttle = 0;
 
             if($loginAttemptCount <= count($this->throttleTime)-1){
-                $throttle += $this->throttleTime[$loginAttemptCount];
+                $throttle = $this->throttleTime[$loginAttemptCount];
             }
             else{
-                $throttle += $this->throttleTime[count($this->throttleTime)-1];
+                $throttle = $this->throttleTime[count($this->throttleTime)-1];
             }
             return ($timeout + $throttle) - time();   
         }
