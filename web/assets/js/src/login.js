@@ -69,7 +69,7 @@
                             }
                             else if (first_uri_segment == 'promo') {
                                 var code = url.split("/");
-                                window.location = config.base_url + first_uri_segment + '/ScratchCard/claimScratchCardPrize?code=' + code[2];
+                                window.location = config.base_url + first_uri_segment + '/ScratchCard/claimScratchCardPrize?code=' + code[4];
                             }
                             else {
                                 window.location = config.base_url;

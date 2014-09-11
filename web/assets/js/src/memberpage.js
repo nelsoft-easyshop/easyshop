@@ -141,12 +141,7 @@ var memconf = {
 
 /******************	EDIT USER SLUG	******************************/
 (function($){
-    $('div.quickheader').on('mouseover','div.disp_vendor_url',function(){
-        $(this).children('span.edit_userslug').show();
-    }).on('mouseleave','div.disp_vendor_url', function(){
-        $(this).children('span.edit_userslug').hide();
-    });
-
+    
     $('div.quickheader').on('click', '.edit_userslug', function(){
         $('a[href="#security_settings"]').trigger('click');
         $('#security_settings .edit_userslug').trigger('click');
@@ -747,6 +742,10 @@ $(document).ready(function(){
                             parentdiv.find('span.doneverify span:nth-child(2)').html('An email has been sent. Please check your e-mail.');
                             errorspan.html('');
                             contdiv.hide();
+
+                            $('.cart_no').hide();
+                            $('.cart').css('width','28');
+                            $('.big_cart').addClass('cart_zero');
                         }
                         else if(obj ==='error'){
                             $thisspan.show();

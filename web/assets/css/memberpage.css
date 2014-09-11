@@ -1,6 +1,79 @@
-<!--Member page CSS Janz-->
+/** <!--Member page CSS Janz--> **/
 
+.btn2 {
+  padding: 6px 12px;
+  margin-bottom: 0;
+  font-size: 14px;
+  font-weight: normal;
+  line-height: 1.42857143;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  cursor: pointer;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  background-image: none;
+  border: 1px solid transparent;
+  border-radius: 4px;
+}
 
+.btn:hover,
+.btn:focus {
+  color: #333;
+  text-decoration: none;
+}
+
+.btn-follow {
+    color: #fff;
+    background-color: #6dabe1;
+    border: 1px solid #428bca;
+}
+
+.btn-unfollow {
+  color: #fff;
+  background-color: #428bca;
+  border-color: #357ebd;
+}
+
+.btn-follow:hover {
+  color: #fff;
+  background-color: #3071a9;
+  border-color: #285e8e;
+}
+
+.btn-unfollow:hover {
+    color: #fff;
+    background-color: #cb3e3e;
+    border-color: #972222; 
+}
+
+.sprite-bg {
+    background-image: url('../images/landingpage/glyphicons-halflings-white.png');
+    background-repeat: no-repeat;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.sprite-bg2 {
+    background-image: url('../images/landingpage/glyphicons-halflings.png');
+    background-repeat: no-repeat;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.follow-icon {
+    width: 20px;
+    height: 20px;
+    background-position: 3px -94px;
+}
+
+.unfollow-icon {
+    width: 20px;
+    height: 20px;
+    background-position: -21px -94px;
+}
 
 /* Overlay */
 #simplemodal-overlay {
@@ -10,19 +83,21 @@
 /* Container */
 #simplemodal-container {
     font-size: 12px;
-	height: auto !important;
+    height: auto !important;
     max-height: 415px !important;
-	width: 1005px !important; 
-	background-color:#0000;
-	padding: 5px;
-	-webkit-box-shadow: 0px 0px 10px 0px rgba(50, 50, 50, 0.75);
--moz-box-shadow:    0px 0px 10px 0px rgba(50, 50, 50, 0.75);
-box-shadow:         0px 0px 10px 0px rgba(50, 50, 50, 0.75);
+    width: 1005px !important; 
+    background-color:#fff;
+    padding: 5px;
+    overflow: auto;
+
+    -webkit-box-shadow: 0px 0px 10px 0px rgba(50, 50, 50, 0.75);
+    -moz-box-shadow:    0px 0px 10px 0px rgba(50, 50, 50, 0.75);
+    box-shadow:         0px 0px 10px 0px rgba(50, 50, 50, 0.75);
 }
 
-/*#simplemodal-container .simplemodal-wrap {
-    overflow: hidden !important;
-}*/
+#simplemodal-container .simplemodal-wrap {
+    overflow: inherit !important;
+}
 
 .jcrop-holder{
 	margin: auto !important;
@@ -402,4 +477,43 @@ table.sales_summary tr.sales_info:hover td.amount{
     padding: 5px 10px;
     margin-left: 5px;
     margin-right: 0px;
+}
+
+#user_store_name{
+    height: 2em;
+}
+
+#user_store_name h2{
+    display: inline-block;
+}
+
+#store_name_edit{
+    position: relative;
+    left: 0.3em;
+    bottom: 0.2em;
+    display: inline-block;
+    border-radius: 3px;
+    background-color: #FFFFFF;
+    line-height: 1.5em;
+    height: 1.5em;
+    width: 4em;
+    box-shadow: 0 0 5px 0 rgba(50, 50, 50, 0.75);
+    cursor:pointer;
+    text-align: center;
+}
+
+#user_store_edit input[type="button"]{
+    border: none;
+    background-color: transparent;
+    width: 4em;
+    padding:0;
+}
+
+#user_store_edit input[type="button"]:hover{
+    color: #f48000;
+}
+
+#username_echo{
+    font-size:1em;
+    padding: 0px 5px;
 }

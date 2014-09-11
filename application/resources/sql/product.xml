@@ -1197,7 +1197,7 @@ FROM
 
     <select id="buyAtZeroAuthenticate">
         SELECT count(*) as `cnt`
-        FROM easyshop.es_promo
+        FROM es_promo
         left join es_product on es_product.id_product = es_promo.product_id
         where
         es_promo.product_id = :productId AND
@@ -1207,9 +1207,15 @@ FROM
 
     <select id="buyAtZeroRegistration">
         INSERT INTO `es_promo`
-        (`product_id`, `member_id`)
+        (`product_id`, `member_id`, `created_at`, `promo_type`)
         VALUES
-        (:productId, :memberId);
+        (:productId, :memberId, :date, 6);
     </select>
 
+    <select id="getProdCountBySlug">
+       SELECT COUNT(*)
+       FROM es_product
+       WHERE slug = :slug
+    </select>    
+    
 </map>

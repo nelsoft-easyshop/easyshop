@@ -6,7 +6,7 @@ if (!defined('BASEPATH'))
 class Register extends MY_Controller
 {
 	var $vals;
-	function __construct() 
+	private function __construct() 
 	{
 		parent::__construct();
 		$this->load->model("register_model");
@@ -26,7 +26,7 @@ class Register extends MY_Controller
 		$this->form_validation->set_error_delimiters('', '');
 	}
 	
-	function index()
+	private function index()
 	{
 		$data = array(
 				'title' => 'Easyshop.ph - Account Registration',
@@ -55,7 +55,7 @@ class Register extends MY_Controller
 		$this->load->view('templates/footer');
 	}
 	
-	public function external_callbacks( $postdata, $param )
+	private public function external_callbacks( $postdata, $param )
 	{
 		 $param_values = explode( ',', $param ); 
 		 $model = $param_values[0];
@@ -89,7 +89,7 @@ class Register extends MY_Controller
 		 return $callback_result;
 	}
 	
-	function recreate_captcha()
+	private function recreate_captcha()
 	{
 		$cap = create_captcha($this->vals);
 		$this->session->set_userdata('captcha_word', $cap['word']);
@@ -98,7 +98,7 @@ class Register extends MY_Controller
 		echo $filename;
 	}
 		
-	function sendVerificationCode($data)
+	private function sendVerificationCode($data)
 	{
 		//GENERATE MOBILE CONFIRMATION CODE
 		$temp['mobilecode'] = $this->register_model->rand_alphanumeric(6);
@@ -267,7 +267,7 @@ class Register extends MY_Controller
 	}
 	*/
 	
-	function email_verification(){
+	private function email_verification(){
 	
 		$this->load->library('encrypt');
 
@@ -334,7 +334,7 @@ class Register extends MY_Controller
 		}
 	}
 
-	function username_check()
+	private function username_check()
 	{
 		if($this->input->post('username')){
 			//$username = htmlspecialchars($this->input->post('username'));
@@ -346,7 +346,7 @@ class Register extends MY_Controller
 		}
 	}
 	
-	function email_check()
+	private function email_check()
 	{
 		if($this->input->post('email')){
 			$email = $this->input->post('email');
@@ -361,7 +361,7 @@ class Register extends MY_Controller
     
   
 
-	function changepass(){
+	private function changepass(){
 		$data = array(
 			'title' => 'Change Password | Easyshop.com',
             'render_searchbar' => false,

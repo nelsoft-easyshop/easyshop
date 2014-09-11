@@ -8,7 +8,7 @@
 <div class="promo-wrapper margin-top-10" id="main_search_container">
     <h2 class="head-cngrts">CONGRATULATIONS!</h2>
     <div class="scratch-congrats">
-        <span id="checker" data_id="<?=$product[0]['id_product']?>" data_name="<?=$product[0]['name']?>"
+        <span id="checker" data_id="<?=$product[0]['id_product']?>" data_name="<? echo html_escape($product[0]['name'])?>"
               data_price="<?=$product[0]['price']?>" data_code="<?PHP echo $_GET['code'];?>">
         </span>
         <div class="claim-bg">
@@ -83,7 +83,7 @@
 
                 <div class="claim-bg">
                     <div id="prod_image">
-                        <img src="<?PHP echo base_url()?>./assets/product/3_2_20140820/3_2_201408201818000.png">
+                        <img src="/assets/product/3_2_20140820/3_2_201408201818000.png">
                     </div>
                     <div class="claim-details">
                         <h3></h3>
@@ -100,4 +100,3 @@
 <script src="/assets/js/src/vendor/jquery.plugin.min.js" type="text/javascript"></script>
 <script src="/assets/js/src/vendor/jquery.countdown.min.js" type="text/javascript"></script>
 <script src="/assets/js/src/scratchwinpromo.js" type="text/javascript"></script>
-

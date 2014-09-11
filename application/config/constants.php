@@ -39,9 +39,14 @@ define('FOPEN_READ_WRITE_CREATE_STRICT',		'x+b');
 /*   
  *  EASYSHOP CUSTOM CONSTANTS
  */
-define('ES_FILE_VERSION','5.0.8');
-// define('ES_PRODUCTION',FALSE);
 
+if(ENVIRONMENT == 'development'){
+    $fileVersion = date('Ymdhis');
+}
+else{
+    $fileVersion = '5.1.0';
+}
+define('ES_FILE_VERSION',$fileVersion);
 
 
 /* End of file constants.php */

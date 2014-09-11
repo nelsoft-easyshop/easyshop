@@ -319,6 +319,10 @@ textarea:focus {
     border:1px solid #ff4400;
 }
 
+input[type=text]::-ms-clear {
+    display: none;
+}
+
 input[type="button"] {
       cursor:pointer;
 }
@@ -1361,7 +1365,7 @@ nav ul > li:hover > div {
 
 .follow-cnt{
     font-size: 11px;
-    border-bottom: 1px dashed #ddd;
+    text-align: center;
 }
 .follow-cnt .span-cont{
     display: block;
@@ -3782,9 +3786,65 @@ padding: 8px 0;
     color:#0191C8;
 }
 /*** Log in style ***/
-.login_left_content img {
-    max-width: 550px;
-    width: 100%;
+.btn {
+  display: inline-block;
+  padding: 6px 12px;
+  margin-bottom: 0;
+  font-size: 14px;
+  font-weight: normal;
+  line-height: 1.42857143;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  cursor: pointer;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  background-image: none;
+  border: 1px solid transparent;
+  border-radius: 4px;
+}
+.btn:hover,
+.btn:focus {
+  color: #333;
+  text-decoration: none;
+}
+.btn-default {
+  color: #333;
+  background-color: #fff;
+  border-color: #ccc;
+}
+
+.btn-default:hover {
+  color: #333;
+  background-color: #e6e6e6;
+  border-color: #adadad;
+}
+.btn-primarybtn {
+    color:#fff;
+    background-color: #f48000;
+    border-color:#f48000;
+}
+
+.btn.btn-primarybtn:hover {
+    color:#fff;  
+    background-color: #ff4400;
+    border-color:#ff4400;
+}
+.login-tli-con .text-center {
+    text-align: center;
+}
+
+.login-tli-con .text-right {
+text-align: right;
+}
+
+.login-tli-con {
+    min-height: 400px
+}
+.login_left_content {
+    float: left;
 }
 
 .login_box {
@@ -4186,20 +4246,20 @@ a:hover.tooltips span {
 }
 
 .ui-datepicker-prev {
-    background-position: -2px -3px;
+    background-position: -4px -3px;
 }
 
 .ui-datepicker-prev:hover {
-    background-position: -2px -33px;	
+    background-position: -4px -33px;	
 }
 
 .ui-datepicker-next {
     right: -116px;
-    background-position: -32px -3px;
+    background-position: -35px -3px;
 }
 
 .ui-datepicker-next:hover {
-    background-position: -32px -33px;	
+    background-position: -35px -33px;	
 }
 
 .ui-datepicker-current-day {
@@ -5125,14 +5185,16 @@ div.post_item_content_left {
 
 .vendor-msg-modal #modal-launcher {
     background-color: #fff;
+    border-bottom: 1px dotted #fff;
     color: #0191c8;
     display: inline-block;
     border-radius: 0;
-    font-size: 11px !important;
+    font-size: 11px;
     height: auto;
     margin-right: 0px;
     margin-top: 5px;
-    width: auto !important;
+    padding: 0;
+    width: auto;
 }
 
 .vendor-msg-modal #modal-launcher:hover {
@@ -5172,7 +5234,7 @@ div.post_item_content_left {
 }
 
 .vendor-avatar{
-    float: left;
+    display: block;
     text-align: center;
     height: 150px;
     width: 150px;
@@ -6602,11 +6664,7 @@ box-shadow:         inset 0px -10px 12px -8px rgba(255, 255, 255, 0.75);
     padding: 6px 12px;
     
 }
-.modal-launcher2 {
-        width: 158px !important;
-        height: 24px !important;
-        font-size: 13px !important;
-}
+
 #modal-close {
     background-color: #FFFFFF;
     border-radius: 3px;

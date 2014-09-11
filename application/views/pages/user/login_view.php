@@ -1,13 +1,27 @@
 <link type="text/css" href="<?=base_url()?>assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet" />
 <link rel="canonical" href="<?php echo base_url()?>login"/>
 
+<div class="clear"></div>
 <div class="clear mrgn-top-35"></div>
-
-    <div class="res_wrapper login_content">
-
-        <div class="login_left_content col-sm-7 col-md-7 text-center hidden-xs">
-            <img src="/assets/images/img_login_banner.jpg" alt="banner">
+    <div class="wrapper login_content">
+        <div class="login-tli-con">
+            <div class="border-all border-rad-3">
+                <div class="border-bottom bg-cl-f7f7f7">
+                    <div class="pd-tb-20 pd-lr-20">
+                        <h3><strong>Trouble Logging In?</strong></h3>
+                    </div>
+                </div>
+                <div class="text-center pd-top-30 pd-bttm-30">
+                    <p><strong>"loremipsum.dolor@yahoo.com"</strong> is not associated with any easyshop.ph account.</p>
+                </div>
+                <div class="pd-tb-20 pd-lr-20 text-right login-btn-con">
+                    <a href="" class="btn btn-primarybtn">Try again</a>
+                    <a href="" class="btn btn-default">Help me locate my account</a>
+                </div>
+                <div class="clear"></div>
+            </div>
         </div>
+        <div class="login_left_content"><img src="/assets/images/img_login_banner.jpg" alt="banner"></div>
         <?php if($logged_in): ?>
         
             <div class="col-sm-5 col-md-5">

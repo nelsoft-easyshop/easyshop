@@ -807,6 +807,39 @@ class Memberpage extends MY_Controller
     }
     
     /**
+     *  Used to modify store name in vendor page
+     *
+     *  @return JSON
+     */
+    public function vendorStoreName()
+    {
+        $serverResponse = array(
+            'result' => false,
+            'error' => 'Failed to submit form'
+        );
+
+        if($this->input->post('store_name_hidden')){
+            $storeName = $this->input->post('store_name');
+            $memberId = $this->session->userdata('member_id');
+            $userMgr = $this->serviceContainer['user_manager'];
+
+            $isStorenameAvailable = $userMgr->setStoreName($memberId, $storeName);
+
+            $serverResponse['result'] = $isStorenameAvailable;
+            $serverResponse['error'] = $isStorenameAvailable ? '' : 'Store name already used!';
+
+            if($isStorenameAvailable){
+                $em = $this->serviceContainer['entity_manager'];
+                $currUser = $em->find('EasyShop\Entities\EsMember',$memberId);
+                $serverResponse['username'] = $currUser->getUsername();
+                $serverResponse['storename'] = $currUser->getStoreName();
+            }
+        }
+
+        echo json_encode($serverResponse);
+    }
+
+    /**
      *  Used for uploading banner in vendor page. 
      */
     public function banner_upload()
@@ -947,6 +980,7 @@ class Memberpage extends MY_Controller
                     if($result === 'success'){
                         $temp['email'] = 1;
                     }
+                    $this->session->set_userdata('cart_contents', array());
                 }
                 else{
                     $result = 'exceed';

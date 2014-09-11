@@ -2,7 +2,7 @@
 
 $config = array(
     'Promo' => array(
-        /* Default, non-promo */
+        /* Default, non-promo */ 
         '0' =>array(
             'calculation_id' => '0',
             'purchase_limit' => PHP_INT_MAX,
@@ -18,7 +18,7 @@ $config = array(
             'is_buyable_outside_promo' => true,
             'cart_solo_restriction' => false,
             'option' => array(),
-            'viewable_buy_button' =>true,
+            'viewable_button_product_page' =>true,
         ),
         /* Countdown Sale */ 
         '1' => array(
@@ -32,7 +32,7 @@ $config = array(
             'is_buyable_outside_promo' => false,
             'cart_solo_restriction' => true,
             'option' => array(),
-            'viewable_buy_button' =>true,
+            'viewable_button_product_page' =>true,
         ),
         /* Fix discount sale */ 
         '2' => array(
@@ -48,7 +48,7 @@ $config = array(
             'is_buyable_outside_promo' => true,
             'cart_solo_restriction' => false,
             'option' => array(),
-            'viewable_buy_button' =>true,
+            'viewable_button_product_page' =>true,
         ),
         /* Peak time sale */ 
         '3' => array(
@@ -73,8 +73,9 @@ $config = array(
                     'end' => '23:59:59',
                     'purchase_limit' => 15)
              ),
-            'viewable_buy_button' =>true,
+            'viewable_button_product_page' =>true,
         ),
+        /* ListingPromo */
         '4' => array(
             'calculation_id' => '4',
             'purchase_limit' => PHP_INT_MAX,
@@ -94,7 +95,7 @@ $config = array(
                     'purchase_limit' => 0
                 ),
              ),
-            'viewable_buy_button' =>true,
+            'viewable_button_product_page' =>true,
         
         ),
         '5' =>array(
@@ -105,17 +106,28 @@ $config = array(
             'is_buyable_outside_promo' => true,
             'cart_solo_restriction' => false,
             'option' => array(),
-            'viewable_buy_button' =>false,
+            'viewable_button_product_page' =>false,
         ),
         '6' =>array(
             'calculation_id' => '6',
             'purchase_limit' => PHP_INT_MAX,
             'payment_method' => array(),
             'banner' => 'genericWithCountdown',
-            'is_buyable_outside_promo' => true,
+            'is_buyable_outside_promo' => false,
             'cart_solo_restriction' => false,
-            'option' => array(),
-            'viewable_buy_button' =>true,
+            'option' => array(
+                0 => array(
+                    'start' => '00:00:00',
+                    'end' => '23:59:59',
+                    'purchase_limit' => 1
+                ),
+             ),
+            'viewable_button_product_page' =>true,
         ),
     )
 );
+
+
+/* End of file promo.php */
+/* Location: ./application/config/promo.php */
+

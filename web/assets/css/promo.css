@@ -21,7 +21,7 @@
     width: 27%;
 }
 #scratch-win-claim{
-    width: 60%;
+    width: 71%;
 }
 .margin-top-10{
     margin: 5% auto 0 !important;
@@ -96,11 +96,11 @@
     width: 30% !important;
 }
 #prod_image > img{
-    height: 211px;
+    height: 240px;
     left: 0;
     position: absolute;
     top: 0;
-    width: 211px;
+    width: 275px;
 }
 #prod_image{
     background-color: #ffffff;
@@ -108,25 +108,25 @@
     padding: 105.4px;
     position: relative;
     top: 5%;
-    width: 35%;
+    width: 40%;
     float: left;
     max-height: 212px;
 }
 .claim-bg{
     background-color: #F5F5F5;
-    height: 235px;
+    height: 270px;
     left: 0;
     position: relative;
     top: 0;
     width: 100%;
 }
 .claim-details{
-    padding-left: 40%;
+    padding-left: 43%;
     padding-top: 1%;
     width: 100%;
 }
 .claim-details p{
-    font-size: 12px;
+    font-size: 17px;
 }
 .claim-details a{
     background-color: #3dc6b2;

@@ -2248,7 +2248,7 @@ class product_model extends CI_Model
             else if($element['type'] === 'custom'){
                 $home_view_data['category_detail']['imagepath'] = '';
                 $home_view_data['category_detail']['name'] = isset($element['title'])?$element['title']:$element['value'];
-                $home_view_data['category_detail']['url'] = 'vendor/'.$element['value'];
+                $home_view_data['category_detail']['url'] = $element['value'];
             }
             $home_view_data['category_detail']['css_class'] = $element['css_class'];
             $home_view_data['category_detail']['subcategory'] = $this->getDownLevelNode($element['value']);
@@ -2378,6 +2378,7 @@ class product_model extends CI_Model
                 case 6 :
                     $PromoPrice = $baseprice;
                     if(!( ($today < $startdate) || ($enddate < $startdate) || ($today > $enddate))){
+                        $PromoPrice = 0;
                         $bool_start_promo = true;
                     }
                     break;
@@ -2396,7 +2397,7 @@ class product_model extends CI_Model
 
         return $result;
     }
-
+ 
     /**
      *   Check if an item can be purchased based on the purchase limit
      *   @param int $buyer_id: id of the user
@@ -2412,7 +2413,7 @@ class product_model extends CI_Model
         $sth = $this->db->conn_id->prepare($query);
         $sth->bindParam(':buyer_id',$buyer_id, PDO::PARAM_INT);
         $sth->bindParam(':type',$type, PDO::PARAM_INT);
-    $sth->closeCursor();
+        $sth->closeCursor();
         $sth->execute();
         $result = $sth->fetchAll(PDO::FETCH_ASSOC);
         $promo = $this->config->item('Promo')[$type];      
@@ -2740,6 +2741,34 @@ class product_model extends CI_Model
         return $result;
     }
 
+    public function getProdCount($prodid){
+      
+        $query = $this->xmlmap->getFilenameID('sql/product','getProdCount');
+        $sth = $this->db->conn_id->prepare($query);
+        $sth->bindParam(':prodid',$prodid); 
+        $sth->execute(); 
+        $number_of_rows = $sth->fetchColumn(); 
+        return $number_of_rows;
+        
+    
+    }
+    /**
+     *  Check if code exists
+     *
+     * @param $code
+     * @return boolean
+     */
+    public function validateBuyAtZeroCode($code)
+    {
+        $query = $this->xmlmap->getFilenameID('sql/product', 'validateBuyAtZeroCode');
+        $sth = $this->db->conn_id->prepare($query);
+        $sth->bindParam(':code', $code);
+        $sth->execute();
+
+        return $sth->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    
     /**
      * Join member to buyAtZero php promo
      *
@@ -2758,20 +2787,25 @@ class product_model extends CI_Model
         $sth = $this->db->conn_id->prepare($query);
         $sth->bindParam(':productId', $productId);
         $sth->bindParam(':memberId', $memberId);
+        $sth->bindParam(':date', date('Y-m-d H:i:s'));
         $sth->execute();
 
         return true;
     }
-
-    public function getProdCount($prodid){
-      
-        $query = $this->xmlmap->getFilenameID('sql/product','getProdCount');
+    
+    public function getProdCountBySlug($slug)
+    {  
+        $query = $this->xmlmap->getFilenameID('sql/product','getProdCountBySlug');
         $sth = $this->db->conn_id->prepare($query);
-        $sth->bindParam(':prodid',$prodid); 
+        $sth->bindParam(':slug',$slug); 
         $sth->execute(); 
         $number_of_rows = $sth->fetchColumn(); 
         return $number_of_rows;
+    }        
         
     
-    }
 }
+
+/* End of file product_model.php */
+/* Location: ./application/models/product_model.php */
+

@@ -470,7 +470,7 @@
 </select>
 
 <select id="getVendorDetails">
-    SELECT m.id_member, m.username, m.contactno, m.email, a.stateregion, a.city, l1.location as stateregionname, l2.location as cityname, DATE_FORMAT(datecreated, "%M %Y") as datecreated, store_desc
+    SELECT m.id_member, m.username, m.contactno, m.email, a.stateregion, a.city, l1.location as stateregionname, l2.location as cityname, DATE_FORMAT(datecreated, "%M %Y") as datecreated, store_desc, store_name, slug as userslug
     FROM es_member m
     LEFT JOIN es_address a on m.id_member = a.id_member AND a.type=0
     LEFT JOIN es_location_lookup l1 ON a.stateregion =  l1.id_location
