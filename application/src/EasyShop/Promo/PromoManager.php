@@ -9,14 +9,19 @@ namespace EasyShop\Promo;
  */
 class PromoManager
 {
+    /**
+     * Codeigniter Config Loader
+     *
+     * @var EasyShop\CollectionHelper\CollectionHelper
+     */
+    private $configLoader;
 
     /**
      * Constructor.
      */
-    public function __construct()
+    public function __construct($configLoader)
     {          
-        $this->ci = get_instance();  
-        $this->promoArray = $this->ci->config->item('Promo');
+        $this->configLoader = $configLoader;
     }
 
     /**
@@ -31,7 +36,7 @@ class PromoManager
      */
     public function applyDiscount($basePrice = 0.00, $startDate, $endDate, $isPromo = 0, $promoType = 0, $discountPercent = 0)
     {
-        $promoArray = $this->promoArray[$promoType];
+        $promoArray = $this->configLoader->getItem('promo','Promo')[$promoType];
         $today = strtotime( date("Y-m-d H:i:s"));
         $startDate = strtotime($startDate);
         $endDate = strtotime($endDate);

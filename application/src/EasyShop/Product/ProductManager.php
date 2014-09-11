@@ -36,17 +36,22 @@ class ProductManager
     private $collectionHelper;
 
     /**
+     * Codeigniter Config Loader
+     *
+     * @var EasyShop\CollectionHelper\CollectionHelper
+     */
+    private $configLoader;
+
+    /**
      * Constructor. Retrieves Entity Manager instance
      * 
      */
-    public function __construct($em,$promoManager,$collectionHelper)
+    public function __construct($em,$promoManager,$collectionHelper,$configLoader)
     {
         $this->em = $em; 
         $this->promoManager = $promoManager;
         $this->collectionHelper = $collectionHelper;
-
-        $this->ci = get_instance();  
-        $this->promoArray = $this->ci->config->item('Promo');
+        $this->configLoader = $configLoader;
     }
 
     /**
@@ -69,7 +74,7 @@ class ProductManager
             $startPromo = false;
             $endPromo = false;
 
-            $promoArray = $this->promoArray[$promoType]; 
+            $promoArray = $this->configLoader->getItem('promo','Promo')[$promoType];
 
             if(intval($isPromote) === 1){
                 $promo = $this->promoManager->applyDiscount($price, $startDate,$endDate,$isPromote,$promoType, $discount);
