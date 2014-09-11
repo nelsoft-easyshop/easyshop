@@ -1,5 +1,5 @@
  <link type="text/css" href="assets/css/bootstrap.css?ver={{ ES_FILE_VERSION }}" rel="stylesheet" />
- <section>
+ <section id="bug-report">
      <div class="mrgn-top-35"></div>
      <div class="res_wrapper">
           <div class="border-all border-rad-3">
@@ -9,11 +9,13 @@
                     </div>
                </div>
                <div class="clear"></div>
-               {% if isValid == true %}
-                         <div class="alert alert-success">
-                              <strong>Success!</strong> Your report has been sent successfully.
-                         </div>
-               {% endif %}
+
+               <input type="hidden" id="validFlag" val="{{ isValid|escape('js') }}"/>
+
+               <div class="alert alert-success" id="success-alert">
+                   <strong>Success!</strong> Your report has been sent successfully.
+               </div>
+
                <div class="form-horizontal feedback-container">
                     <p class="col-md-12 mrgn-bttm-15">Let us know how we can improve your experience with Easyshop.ph</p>
 
@@ -85,3 +87,4 @@
           </div>
      </div>
 </section>
+<script type="text/javascript" src="assets/js/src/bug-report.js"></script>

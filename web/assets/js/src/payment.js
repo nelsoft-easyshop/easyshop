@@ -1,26 +1,33 @@
 $(document).ready(function(){
 
- 
     $('.paypal_loader').hide();
     $('.div_change_addree').hide();
-    $('.paypal_button').show(); 
-    $('.div_view_avail_location').hide();
-    
+    $('.paypal_button').show();  
     $('#c_mobile').numeric({negative : false});
-    
 
-    function cityFilter(stateregionselect,cityselect){
-        var stateregionID = stateregionselect.find('option:selected').attr('value');
-        var optionclone = cityselect.find('option.optionclone').clone();
-        optionclone.removeClass('optionclone').addClass('echo').attr('disabled', false);
+    var cityFilter = function(stateregionselect,cityselect){
+        var stateregionID = stateregionselect.find('option:selected').attr('value'); 
         cityselect.find('option.echo').remove();
-        if(stateregionID in jsonCity){
+        if(stateregionID in jsonCity){ 
+            $('.cityselect').empty();
             jQuery.each(jsonCity[stateregionID], function(k,v){
-                optionclone.attr('value', k).html(v).css('display', 'block');
-                cityselect.append(optionclone.clone());
+                $('.cityselect').append('<option value="'+k+'">'+v+'</option>'); 
             });
-        } 
-        cityselect.trigger('chosen:updated');
+        }
+    }
+
+    var validateRedTextBox = function (idclass)
+    {
+      $(idclass).css({"-webkit-box-shadow": "0px 0px 2px 2px #FF0000",
+        "-moz-box-shadow": "0px 0px 2px 2px #FF0000",
+        "box-shadow": "0px 0px 2px 2px #FF0000"});
+    } 
+    
+    var validateWhiteTextBox = function (idclass)
+    {
+      $(idclass).css({"-webkit-box-shadow": "0px 0px 2px 2px #FFFFFF",
+        "-moz-box-shadow": "0px 0px 2px 2px #FFFFFF",
+        "box-shadow": "0px 0px 2px 2px #FFFFFF"});
     }
 
     $('.stateregionselect').on('change', function(){
@@ -29,6 +36,9 @@ $(document).ready(function(){
         cityFilter( $(this), cityselect );
     });
 
+    $('.cityselect').empty().append('<option value="0">--- Select City ---</option>');
+    $('.stateregionselect').trigger('change');
+    
 
 // -- PAYPAL PROCESS PAYMENT SECTION -- // 
 
@@ -236,21 +246,6 @@ $(document).ready(function(){
         $('#simplemodal-container').addClass('div_change_addree');
     });
 
-    function validateRedTextBox(idclass)
-    {
-      $(idclass).css({"-webkit-box-shadow": "0px 0px 2px 2px #FF0000",
-        "-moz-box-shadow": "0px 0px 2px 2px #FF0000",
-        "box-shadow": "0px 0px 2px 2px #FF0000"});
-    } 
-    
-    function validateWhiteTextBox(idclass)
-    {
-      $(idclass).css({"-webkit-box-shadow": "0px 0px 2px 2px #FFFFFF",
-        "-moz-box-shadow": "0px 0px 2px 2px #FFFFFF",
-        "box-shadow": "0px 0px 2px 2px #FFFFFF"});
-    }
-
-
     $(document).on('click','.changeAddressBtn',function () {
         var action = config.base_url + "payment/changeAddress";
         var csrftoken = $("meta[name='csrf-token']").attr('content');
@@ -335,16 +330,6 @@ $(document).ready(function(){
  
     $(document).on('click','.view_location_item',function () {
 
-        $('.div_view_avail_location').modal({
-            escClose: true,
-            draggable: true,
-            containerCss:{
-                maxWidth: '90%',
-                minWidth: '50%',
-                maxHeight: 'auto',
-                minHeight: '50%',
-            }
-        }); 
         var csrftoken = $("meta[name='csrf-token']").attr('content');
         var csrfname = $("meta[name='csrf-name']").attr('content');
         var slug = $(this).data('slug');
@@ -358,7 +343,7 @@ $(document).ready(function(){
                 data: csrfname+"="+csrftoken+"&sid="+slug+"&iid="+iid+"&name="+pname, 
                 success: function(d) {
                     $('.div_view_avail_location').empty();
-                    $('.div_view_avail_location').html(d);
+                    $('.div_view_avail_location').append(d);
                 },       
                 error: function (request, status, error) {
                     alert(error);

@@ -1,5 +1,9 @@
 <?php 
 
+use EasyShop\Entities\EsProduct; 
+
+
+
 class HomeWebService extends MY_Controller 
 {
 
@@ -49,21 +53,40 @@ class HomeWebService extends MY_Controller
      *
      *  @return JSON
      */
-
-    public function removeContent() {
-
+    public function removeContent() 
+    {
         $map = simplexml_load_file($this->file);        
         $index =  $this->input->get("index");
         $nodeName =  $this->input->get("nodename");        
+        $productindex =  $this->input->get("productindex");        
         $file = $this->file;
         $jsonFile = $this->json;        
-        if(count($map->mainSlide) > 1 || count($map->productSlide) > 1) {
-            $this->xmlCmsService->removeXML($file,$nodeName,$index);
-            return $this->output
+        if($nodeName == "mainSlide") {
+            if(count($map->mainSlide) > 1){
+                $this->xmlCmsService->removeXML($file,$nodeName,$index);
+                return $this->output
                         ->set_content_type('application/json')
-                        ->set_output($jsonFile);             
+                        ->set_output($jsonFile);                  
+            }
+         
         }
-      
+        else if($nodeName == "product_panel_main" || $nodeName == "product_panel") {
+            if(count($map->mainSlide) > 1){
+                $this->xmlCmsService->removeXMLForSetSectionMainPanel($file,$nodeName,$index,$productindex);
+                return $this->output
+                        ->set_content_type('application/json')
+                        ->set_output($jsonFile);                  
+            }
+        }
+        else {
+            if(count($map->productSlide) > 1){
+
+                $this->xmlCmsService->removeXML($file,$nodeName,$index);
+                return $this->output
+                        ->set_content_type('application/json')
+                        ->set_output($jsonFile);                  
+            }
+        }
     }
 
     /**
@@ -125,104 +148,6 @@ class HomeWebService extends MY_Controller
             return $this->output
                     ->set_content_type('application/json')
                     ->set_output($jsonFile);
-        }
-    }
-
-    /**
-     *  Method used to change the contents of mainSlide node under home_files.xml
-     *
-     *  @return JSONP
-     */
-    public function setMainSlide() 
-    {
-
-        $jsonFile = $this->json;
-        $file = $this->file;
-        $map = simplexml_load_file($file);  
-        $index = $this->input->get("index");
-        $userid =  $this->input->get("userid");
-        $hash =  $this->input->get("hash");
-        $value =  $this->input->get("value");
-        $coordinate =  $this->input->get("coordinate");
-        $target =  $this->input->get("target");
-        $order =  $this->input->get("order");
-        $nodeName =  $this->input->get("nodename");
-        $type = "image";
-        $coordinate = ($coordinate == "") ? "0,0,0,0" : $coordinate;
-        $string = $this->xmlCmsService->getString($nodeName, $value, $type, $coordinate, $target);
-
-        if($index > count($map->mainSlide) - 1 || $order > count($map->mainSlide) - 1 || $index < 0 || $order < 0) {
-            exit("error");
-        } 
-        else {
-
-            $index = (int)($index); 
-            
-            if($order == "") {
-                
-                $sxe = new SimpleXMLElement(file_get_contents($file));
-                $map->mainSlide[$index]->value = $value;
-                $map->mainSlide[$index]->imagemap->coordinate = $coordinate;
-                $map->mainSlide[$index]->imagemap->target = $target;
-                
-                if($map->asXML($file)) {
-                    return $this->output
-                        ->set_content_type('application/json')
-                        ->set_output($jsonFile);
-                } 
-                    
-            } 
-            else {
-                if($index <= $order) {
-                    
-                    $value = ($value == "" ? $map->mainSlide[$index]->value : $value);
-                    $type = ($type == "" ? $map->mainSlide[$index]->type : $type);
-                    $coordinate = ($coordinate == "" ? $map->mainSlide[$index]->imagemap->coordinate : $coordinate);
-                    $target = ($target == "" ? $map->mainSlide[$index]->imagemap->target : $target);
-
-                    $index = ($index == 0 ? 1 : $index + 1);
-                    $order = ($order == 0 ? 1 : $order + 1);
-                    $this->xmlCmsService->addXml($file,$string,'/map/mainSlide['.$order.']');
-                    $this->xmlCmsService->removeXML($file,$nodeName,$index);
-                } 
-                else  {
-                    if($order == 0) {
-                       
-                        $value = ($value == "" ? $map->mainSlide[$index]->value : $value);
-                        $type = ($type == "" ? $map->mainSlide[$index]->type : $type);
-                        $coordinate = ($coordinate == "" ? $map->mainSlide[$index]->imagemap->coordinate : $coordinate);
-                        $target = ($target == "" ? $map->mainSlide[$index]->imagemap->target : $target);
-
-                        $orindex = $index;
-                        $ororder = $order;
-                        $index = ($index == 0 ? 1 : $index + 1);
-                        $this->xmlCmsService->removeXML($file,$nodeName,$index);
-                        $order = ($order == 0 ? 1 : $order);
-                        $this->xmlCmsService->addXml($file,$string,'/map/mainSlide['.$order.']');
-                        $two = 1;
-                        $plusin = $two;
-                        $plusor = $two;
-
-                        $this->swapXmlForSetMainSlide($file, $orindex,$ororder, $plusin, $plusor, $value,$type,$coordinate,$target);
-                    } 
-                    else {
-                
-                        $value = ($value == "" ? $map->mainSlide[$index]->value : $value);
-                        $type = ($type == "" ? $map->mainSlide[$index]->type : $type);
-                        $coordinate = ($coordinate == "" ? $map->mainSlide[$index]->imagemap->coordinate : $coordinate);
-                        $target = ($target == "" ? $map->mainSlide[$index]->imagemap->target : $target);
-
-
-                            $index = ($index == 0 ? 1 : $index + 1);
-                            $this->xmlCmsService->removeXML($file,$nodeName,$index);
-                            $order = ($order == 0 ? 1 : $order);
-                            $this->xmlCmsService->addXml($file,$string,'/map/mainSlide['.$order.']');                 
-                    }
-                }
-                            return $this->output
-                            ->set_content_type('application/json')
-                            ->set_output($jsonFile);
-            }   
         }
     }
 
@@ -294,6 +219,143 @@ class HomeWebService extends MY_Controller
         }
     }
 
+
+    /**
+     *  Method used to change the contents of mainSlide node under home_files.xml
+     *
+     *  @return JSONP
+     */
+    public function setMainSlide() 
+    {
+
+        $filename = date('yhmdhs');
+        $jsonFile = $this->json;
+        $file = $this->file;
+        $map = simplexml_load_file($file);  
+        $index = $this->input->get("index");
+        $userid =  $this->input->get("userid");
+        $hash =  $this->input->get("hash");
+        $value =  $this->input->get("value");
+        $coordinate =  $this->input->get("coordinate");
+        $target =  $this->input->get("target");
+        $order =  $this->input->get("order");
+        $nodeName =  "mainSlide";
+        $type = "image";
+        $coordinate = ($coordinate == "") ? "0,0,0,0" : $coordinate;
+        $index = (int)($index); 
+        $value = !empty($_FILES['myfile']['name']) ? $value : $map->mainSlide[$index]->value;
+        if(!empty($_FILES['myfile']['name'])){
+
+            $file_ext = explode('.', $_FILES['myfile']['name']);
+            $file_ext = strtolower(end($file_ext));  
+            $path_directory = 'assets/images/mainslide';
+            $value = $path_directory."/".$filename.".".$file_ext;
+            $this->upload->initialize(array( 
+                "upload_path" => $path_directory,
+                "overwrite" => FALSE, 
+                "encrypt_name" => FALSE,
+                "file_name" => $filename,
+                "remove_spaces" => TRUE,
+                "allowed_types" => "jpg|jpeg|png|gif", 
+                "xss_clean" => FALSE
+            ));        
+            $string = $this->xmlCmsService->getString($nodeName, $value, $type, $coordinate, $target);
+            if ( ! $this->upload->do_upload("myfile")) {
+                $error = array('error' => $this->upload->display_errors());
+                         return $this->output
+                                ->set_content_type('application/json')
+                                ->set_output($error);
+            }  
+            else {
+                $map->mainSlide[$index]->value = $value;
+                $map->mainSlide[$index]->imagemap->coordinate = $coordinate;
+                $map->mainSlide[$index]->imagemap->target = $target;
+                
+                if($map->asXML($file)) {
+                    return $this->output
+                        ->set_content_type('application/json')
+                        ->set_output($jsonFile);
+                } 
+            }
+        }
+        else {
+            $string = $this->xmlCmsService->getString($nodeName, $value, $type, $coordinate, $target);
+
+            if($index > count($map->mainSlide) - 1 || $order > count($map->mainSlide) - 1 || $index < 0 || $order < 0) {
+                exit("error");
+            } 
+            else {
+                if($order == "") {
+                    
+                    $sxe = new SimpleXMLElement(file_get_contents($file));
+                    $map->mainSlide[$index]->value = $value;
+                    $map->mainSlide[$index]->imagemap->coordinate = $coordinate;
+                    $map->mainSlide[$index]->imagemap->target = $target;
+                    
+                    if($map->asXML($file)) {
+                        return $this->output
+                            ->set_content_type('application/json')
+                            ->set_output($jsonFile);
+                    } 
+                        
+                } 
+                else {
+                    if($index <= $order) {
+                        
+                        $value = ($value == "" ? $map->mainSlide[$index]->value : $value);
+                        $type = ($type == "" ? $map->mainSlide[$index]->type : $type);
+                        $coordinate = ($coordinate == "" ? $map->mainSlide[$index]->imagemap->coordinate : $coordinate);
+                        $target = ($target == "" ? $map->mainSlide[$index]->imagemap->target : $target);
+
+                        $index = ($index == 0 ? 1 : $index + 1);
+                        $order = ($order == 0 ? 1 : $order + 1);
+                        $this->xmlCmsService->addXml($file,$string,'/map/mainSlide['.$order.']');
+                        $this->xmlCmsService->removeXML($file,$nodeName,$index);
+                    } 
+                    else  {
+                        if($order == 0) {
+                           
+                            $value = ($value == "" ? $map->mainSlide[$index]->value : $value);
+                            $type = ($type == "" ? $map->mainSlide[$index]->type : $type);
+                            $coordinate = ($coordinate == "" ? $map->mainSlide[$index]->imagemap->coordinate : $coordinate);
+                            $target = ($target == "" ? $map->mainSlide[$index]->imagemap->target : $target);
+
+                            $orindex = $index;
+                            $ororder = $order;
+                            $index = ($index == 0 ? 1 : $index + 1);
+                            $this->xmlCmsService->removeXML($file,$nodeName,$index);
+                            $order = ($order == 0 ? 1 : $order);
+                            $this->xmlCmsService->addXml($file,$string,'/map/mainSlide['.$order.']');
+                            $two = 1;
+                            $plusin = $two;
+                            $plusor = $two;
+
+                            $this->swapXmlForSetMainSlide($file, $orindex,$ororder, $plusin, $plusor, $value,$type,$coordinate,$target);
+                        } 
+                        else {
+                    
+                            $value = ($value == "" ? $map->mainSlide[$index]->value : $value);
+                            $type = ($type == "" ? $map->mainSlide[$index]->type : $type);
+                            $coordinate = ($coordinate == "" ? $map->mainSlide[$index]->imagemap->coordinate : $coordinate);
+                            $target = ($target == "" ? $map->mainSlide[$index]->imagemap->target : $target);
+
+
+                                $index = ($index == 0 ? 1 : $index + 1);
+                                $this->xmlCmsService->removeXML($file,$nodeName,$index);
+                                $order = ($order == 0 ? 1 : $order);
+                                $this->xmlCmsService->addXml($file,$string,'/map/mainSlide['.$order.']');                 
+                        }
+                    }
+                                return $this->output
+                                ->set_content_type('application/json')
+                                ->set_output($jsonFile);
+                }   
+            }            
+        }        
+
+
+    }
+
     /**
      *  Method used to add contents to productSlide node under home_files.xml
      *
@@ -323,6 +385,7 @@ class HomeWebService extends MY_Controller
         $orindex = $index;
         $index = ($index == 0 ? 1 : $index);
 
+
         $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
                         ->findBy(['slug' => $value]);
                         
@@ -330,8 +393,7 @@ class HomeWebService extends MY_Controller
                     return $this->output
                         ->set_content_type('application/json')
                         ->set_output($slugerrorjson);
-        }  
-        
+        }
         if($orindex == 0) {
             $this->xmlCmsService->addXml($file,$string,'/map/productSlide[last()]');
             $this->swapXmlForAddProductSlide($file,$orindex, $index,$value);
@@ -410,13 +472,10 @@ class HomeWebService extends MY_Controller
         $hash = $this->input->get("hash");
         $productindex = $this->input->get("productindex");
         $type = $this->input->get("type");
-        $value =  $this->input->get("value");
+        $value =  $this->input->get("myfile");
 
         $index = (int)$index;
         $productindex = (int)$productindex;
-
-        $map->section[$index]->product_panel[$productindex]->value = $value;
-        $map->section[$index]->product_panel[$productindex]->type = $type;
         $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
                         ->findBy(['slug' => $value]);
                         
@@ -424,13 +483,55 @@ class HomeWebService extends MY_Controller
                     return $this->output
                         ->set_content_type('application/json')
                         ->set_output($slugerrorjson);
-        }  
+        } 
         else {
-            if($map->asXML($this->file)) {
-                return $this->output
-                    ->set_content_type('application/json')
-                    ->set_output($jsonFile);
+            if(strtolower($type) == "image") {
+
+                $filename = date('yhmdhs');
+                $file_ext = explode('.', $_FILES['myfile']['name']);
+                $file_ext = strtolower(end($file_ext));  
+                $path_directory = 'assets/product/';   
+                $value = $path_directory.$filename.'.'.$file_ext;    
+
+
+                $this->upload->initialize(array( 
+                    "upload_path" => $path_directory,
+                    "overwrite" => FALSE, 
+                    "encrypt_name" => FALSE,
+                    "file_name" => $filename,
+                    "remove_spaces" => TRUE,
+                    "allowed_types" => "jpg|jpeg|png|gif", 
+                    "xss_clean" => FALSE
+                )); 
+
+                if ( ! $this->upload->do_upload("myfile") && !empty($_FILES['myfile']['name'])) {
+                    $error = array('error' => $this->upload->display_errors());
+                             return $this->output
+                                    ->set_content_type('application/json')
+                                    ->set_output($error);
+                }
+                else {
+                    $map->section[$index]->product_panel[$productindex]->value = $value;
+                    $map->section[$index]->product_panel[$productindex]->type = $type;
+                    if($map->asXML($this->file)) {
+                        return $this->output
+                            ->set_content_type('application/json')
+                            ->set_output($jsonFile);
+                    }                       
+                }               
+
             }
+            else {
+                    $map->section[$index]->product_panel[$productindex]->value = $value;
+                    $map->section[$index]->product_panel[$productindex]->type = $type;
+                    if($map->asXML($this->file)) {
+                        return $this->output
+                            ->set_content_type('application/json')
+                            ->set_output($jsonFile);
+                    }                 
+
+            }
+
         }
 
     }
@@ -451,8 +552,8 @@ class HomeWebService extends MY_Controller
         $userid = $this->input->get("userid");
         $hash = $this->input->get("hash");
         $productindex = $this->input->get("productindex");
-        $type = $this->input->get("type");
-        $value =  $this->input->get("value");
+        $type = strtolower($this->input->get("type"));
+        $value =  $this->input->get("myfile");
         $coordinate =  $this->input->get("coordinate");
         $target =  $this->input->get("target");
         $nodeName = "product_panel_main";
@@ -461,7 +562,7 @@ class HomeWebService extends MY_Controller
         
         $index = (int)$index;
         $productindex = (int)$productindex;
-      
+        $value = !empty($_FILES['myfile']['name']) ? $value :  $map->section[$index]->product_panel_main[$productindex]->value;
         $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
                         ->findBy(['slug' => $value]);
                         
@@ -473,26 +574,55 @@ class HomeWebService extends MY_Controller
         }  
 
                 if(strtolower($type) == "image") {
-                    if($coordinate != "" && $target != "") {
-                        
-                        $coordinate = $coordinate == "" ? "0,0,0,0" : $coordinate;
-                        $target = $target == "" ? "" : $target;
 
-                        $q = $this->xmlCmsService->getString($nodeName,$value,$type,$coordinate,$target);
-                        $index = ($index == 0 ? 1 : $index + 1);
-                        $productindex = ($productindex == 0 ? 1 : $productindex + 1);
-                        $this->xmlCmsService->addXmlChild($file,$q,'/map/section['.$index.']/product_panel_main['.$productindex.']');
-                        $this->xmlCmsService->removeXMLForSetSectionMainPanel($file,$nodeName,$index,$productindex);
-                        return $this->output
-                                    ->set_content_type('application/json')
-                                    ->set_output($jsonFile);
-                            
-                    } 
+                    $filename = date('yhmdhs');
+                    $file_ext = explode('.', $_FILES['myfile']['name']);
+                    $file_ext = strtolower(end($file_ext));  
+                    $path_directory = 'assets/images/';   
+                    $value = $path_directory.$filename.'.'.$file_ext;   
+                    $value = !empty($_FILES['myfile']['name']) ? $valueForImage :  $map->section[$index]->product_panel[$productindex]->value;         
+
+                    $this->upload->initialize(array( 
+                        "upload_path" => $path_directory,
+                        "overwrite" => FALSE, 
+                        "encrypt_name" => FALSE,
+                        "file_name" => $filename,
+                        "remove_spaces" => TRUE,
+                        "allowed_types" => "jpg|jpeg|png|gif", 
+                        "xss_clean" => FALSE
+                    )); 
+
+                    if ( ! $this->upload->do_upload("myfile") && !empty($_FILES['myfile']['name']) ) {
+                        $error = array('error' => $this->upload->display_errors());
+                                 return $this->output
+                                        ->set_content_type('application/json')
+                                        ->set_output($error);
+                    }   
                     else {
+                        if($coordinate != "" && $target != "") {
+                            
+                            $coordinate = $coordinate == "" ? "0,0,0,0" : $coordinate;
+                            $target = $target == "" ? "" : $target;
+
+                            $q = $this->xmlCmsService->getString($nodeName,$value,$type,$coordinate,$target);
+                            $index = ($index == 0 ? 1 : $index + 1);
+                            $productindex = ($productindex == 0 ? 1 : $productindex + 1);
+                            $this->xmlCmsService->addXmlChild($file,$q,'/map/section['.$index.']/product_panel_main['.$productindex.']');
+                            $this->xmlCmsService->removeXMLForSetSectionMainPanel($file,$nodeName,$index,$productindex);
                             return $this->output
-                                ->set_content_type('application/json')
-                                ->set_output(json_encode("error"));
-                    }
+                                        ->set_content_type('application/json')
+                                        ->set_output($jsonFile);
+                                
+                        } 
+                        else {
+                                return $this->output
+                                    ->set_content_type('application/json')
+                                    ->set_output(json_encode("error"));
+                        }
+
+                    }                    
+
+
                         
                 } 
                 else {    
@@ -531,11 +661,11 @@ class HomeWebService extends MY_Controller
         $hash = $this->input->get("hash");
         $productindex = $this->input->get("productindex");
         $type = strtolower($this->input->get("type"));
-        $value =  $this->input->get("value");
+        $value =  $this->input->get("myfile");
         $coordinate =  $this->input->get("coordinate");
         $target =  $this->input->get("target");
         $nodeName = "product_panel_main";
-        
+        $type = strtolower($type);
         $index = (int)$index;
             if(!is_numeric($index) || !is_numeric($productindex) || $index > count($map->section) || $productindex > count($map->section[$index]->product_panel_main) || $index < 0 || $productindex < 0) {
                 return $this->output
@@ -544,108 +674,131 @@ class HomeWebService extends MY_Controller
             } 
             $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
                         ->findBy(['slug' => $value]);
-                        
-            if(!$product){
+            if(!$product && $type != "image") {
 
                 return $this->output
                         ->set_content_type('application/json')
                         ->set_output($slugerrorjson);
             }             
             else {
-                $productindex = (int)$productindex;                
-                if(strtolower($type) == "image" && isset($coordinate) && isset($target)) {           
-                    $coordinate = $coordinate == "" ? "0,0,0,0" : $coordinate;
-                    $target = $target == "" ? "" : $target;
+                $productindex = (int)$productindex;
+                if(strtolower($type) == "image" && isset($coordinate) && isset($target)) {  
+                    $filename = date('yhmdhs');
+                    $file_ext = explode('.', $_FILES['myfile']['name']);
+                    $file_ext = strtolower(end($file_ext));  
+                    $path_directory = 'assets/images/';   
+                    $value = $path_directory.$filename.'.'.$file_ext;
 
-                    if($productindex == 0) {
-                        if(isset($map->section[$index]->product_panel_main[$productindex]->coordinate) && isset($map->section[$index]->product_panel_main[$productindex]->target)) {   
-                        
-                            $newindex = ($index == 0 ? 1 : $index);
-                            $newprodindex = ($productindex == 0 ? 1 : $productindex);
+                    $this->upload->initialize(array( 
+                        "upload_path" => $path_directory,
+                        "overwrite" => FALSE, 
+                        "encrypt_name" => FALSE,
+                        "file_name" => $filename,
+                        "remove_spaces" => TRUE,
+                        "allowed_types" => "jpg|jpeg|png|gif", 
+                        "xss_clean" => FALSE
+                    )); 
 
-                            $string = $this->xmlCmsService->getString($nodeName, $value, $type, $coordinate, $target);
 
-                            $this->xmlCmsService->addXmlChild($file,$string,'/map/section['.$newindex.']/product_panel_main['.$newprodindex.']');
-                            $this->swapXmlForAddSectionMainSlide_notimage2($file, $newprodindex,$newindex,$index,$productindex,$value,$type,$coordinate,$target);
-                            return $this->output
-                                    ->set_content_type('application/json')
-                                    ->set_output($jsonFile);
-                        } 
-                        else {
-                            $string = $this->xmlCmsService->getString($nodeName, $value, $type, $coordinate, $target);
-                            $newindex = ($index == 0 ? 1 : $index);
-                            $newprodindex = ($productindex == 0 ? 1 : $productindex);
-                    
-                            $this->swapXmlForAddSectionMainSlide_image($file, $newprodindex,$newindex,$index,$productindex,$value,$type,$coordinate,$target);
-                            return $this->output
-                                    ->set_content_type('application/json')
-                                    ->set_output($jsonFile);
-                        }  
-                    } 
+                    if ( ! $this->upload->do_upload("myfile")) {
+                        $error = array('error' => $this->upload->display_errors());
+                                 return $this->output
+                                        ->set_content_type('application/json')
+                                        ->set_output($error);
+                    }                     
                     else {
-                        
-                        $index = ($index == 0 ? 1 : $index + 1);
-                        $productindex = ($productindex == 0 ? 1 : $productindex);
-                            
-                        $string = $this->xmlCmsService->getString($nodeName, $value, $type, $coordinate, $target);
+                                       
+                        $coordinate = $coordinate == "" ? "0,0,0,0" : $coordinate;
+                        $target = $target == "" ? "" : $target;
 
-                        $index = ($index == 0 ? 1 : $index);
-                        $productindex = ($productindex == 0 ? 1 : $productindex);
-                
-                        $this->xmlCmsService->addXmlChild($file,$string,'/map/section['.$index.']/product_panel_main['.$productindex.']');
-                        return $this->output
-                                ->set_content_type('application/json')
-                                ->set_output($jsonFile);
-                            
-                    }       
-                }
-                
-                else if(strtolower($type) != "image") {   
-                        
-                    if($coordinate != "" || $target != "") {
-                        echo "Only Image";
-                    } 
-                    else {    
 
                         if($productindex == 0) {
-                            if(!isset($map->section[$index]->product_panel_main[$productindex]->coordinate) && !isset($map->section[$index]->product_panel_main[$productindex]->target)) {
 
-                                $newindex = ($index == 0 ? 1 : $index + 1);
-                                $newprodindex = ($productindex == 0 ? 1 : $productindex);
-
-                                $string = $this->xmlCmsService->getString($nodeName, $value, $type, "", "");
-                                $this->xmlCmsService->addXmlChild($file,$string,'/map/section['.$newindex.']/product_panel_main['.$newprodindex.']');     
-                                $this->swapXmlForAddSectionMainSlide_notimage1($file, $newprodindex,$newindex,$index,$productindex,$value,$type);     
-                                return $this->output
-                                    ->set_content_type('application/json')
-                                    ->set_output($jsonFile);
-                            } 
-                            else {
-
+                            if(isset($map->section[$index]->product_panel_main[$productindex]->coordinate) && isset($map->section[$index]->product_panel_main[$productindex]->target)) {   
+                             
                                 $newindex = ($index == 0 ? 1 : $index);
                                 $newprodindex = ($productindex == 0 ? 1 : $productindex);
 
                                 $string = $this->xmlCmsService->getString($nodeName, $value, $type, $coordinate, $target);
 
                                 $this->xmlCmsService->addXmlChild($file,$string,'/map/section['.$newindex.']/product_panel_main['.$newprodindex.']');
-                                $this->swapXmlForAddSectionMainSlide_notimage2($file,$newprodindex,$newindex,$index,$productindex,$value,$type,$coordinate,$target);
+                                $this->swapXmlForAddSectionMainSlide_notimage2($file, $newprodindex,$newindex,$index,$productindex,$value,$type,$coordinate,$target);
                                 return $this->output
+                                        ->set_content_type('application/json')
+                                        ->set_output($jsonFile);
+                            } 
+                            else {
+
+                                $string = $this->xmlCmsService->getString($nodeName, $value, $type, $coordinate, $target);
+                                $newindex = ($index == 0 ? 1 : $index);
+                                $newprodindex = ($productindex == 0 ? 1 : $productindex);
+                        
+                                $this->swapXmlForAddSectionMainSlide_image($file, $newprodindex,$newindex,$index,$productindex,$value,$type,$coordinate,$target);
+                                return $this->output
+                                        ->set_content_type('application/json')
+                                        ->set_output($jsonFile);
+                            }  
+                        } 
+                        else {
+                            
+                            $index = ($index == 0 ? 1 : $index + 1);
+                            $productindex = ($productindex == 0 ? 1 : $productindex);
+                                
+                            $string = $this->xmlCmsService->getString($nodeName, $value, $type, $coordinate, $target);
+
+                            $index = ($index == 0 ? 1 : $index);
+                            $productindex = ($productindex == 0 ? 1 : $productindex);
+                    
+                            $this->xmlCmsService->addXmlChild($file,$string,'/map/section['.$index.']/product_panel_main['.$productindex.']');
+                            return $this->output
                                     ->set_content_type('application/json')
                                     ->set_output($jsonFile);
-                            }
-                            
+                                
+                        }                           
+                    }    
+                }
+                
+                else if(strtolower($type) != "image") {   
+                        
+                    if($productindex == 0) {
+                        if(!isset($map->section[$index]->product_panel_main[$productindex]->coordinate) && !isset($map->section[$index]->product_panel_main[$productindex]->target)) {
+
+                            $newindex = ($index == 0 ? 1 : $index + 1);
+                            $newprodindex = ($productindex == 0 ? 1 : $productindex);
+
+                            $string = $this->xmlCmsService->getString($nodeName, $value, $type, "", "");
+                            $this->xmlCmsService->addXmlChild($file,$string,'/map/section['.$newindex.']/product_panel_main['.$newprodindex.']');     
+                            $this->swapXmlForAddSectionMainSlide_notimage1($file, $newprodindex,$newindex,$index,$productindex,$value,$type);     
+                            return $this->output
+                                ->set_content_type('application/json')
+                                ->set_output($jsonFile);
                         } 
                         else {
 
-                                $newindex = ($index == 0 ? 1 : $index + 1);
-                                $newprodindex = ($productindex == 0 ? 1 : $productindex);
-                                $string = $this->xmlCmsService->getString($nodeName, $value, $type, "", "");
-                                $this->xmlCmsService->addXmlChild($file,$string,'/map/section['.$newindex.']/product_panel_main['.$newprodindex.']');
-                                return $this->output
-                                    ->set_content_type('application/json')
-                                    ->set_output($jsonFile);                        
-                        }       
-                    }
+                            $newindex = ($index == 0 ? 1 : $index);
+                            $newprodindex = ($productindex == 0 ? 1 : $productindex);
+
+                            $string = $this->xmlCmsService->getString($nodeName, $value, $type, $coordinate, $target);
+
+                            $this->xmlCmsService->addXmlChild($file,$string,'/map/section['.$newindex.']/product_panel_main['.$newprodindex.']');
+                            $this->swapXmlForAddSectionMainSlide_notimage2($file,$newprodindex,$newindex,$index,$productindex,$value,$type,$coordinate,$target);
+                            return $this->output
+                                ->set_content_type('application/json')
+                                ->set_output($jsonFile);
+                        }
+                        
+                    } 
+                    else {
+
+                            $newindex = ($index == 0 ? 1 : $index + 1);
+                            $newprodindex = ($productindex == 0 ? 1 : $productindex);
+                            $string = $this->xmlCmsService->getString($nodeName, $value, $type, "", "");
+                            $this->xmlCmsService->addXmlChild($file,$string,'/map/section['.$newindex.']/product_panel_main['.$newprodindex.']');
+                            return $this->output
+                                ->set_content_type('application/json')
+                                ->set_output($jsonFile);                        
+                    }       
+                    
                 }
             }
     }
@@ -683,14 +836,10 @@ class HomeWebService extends MY_Controller
                         ->set_output($slugerrorjson);
         }
 
-        $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                        ->findBy(['slug' => $value]);    
-        if(!$product){
-            exit("Product slug does not exist");
-        }
-        
         if($index > count($map->productSlide) - 1    || $order > count($map->productSlide) - 1 || $index < 0 || $order < 0) {
-            exit("Index out of bounds");
+                    return $this->output
+                        ->set_content_type('application/json')
+                        ->set_output($boundsjson);
         }
         else {
             $file = $this->file;
@@ -763,10 +912,10 @@ class HomeWebService extends MY_Controller
         $hash = $this->input->get("hash");
         $productindex = $this->input->get("productindex");
         $type = strtolower($this->input->get("type"));
-        $value =  $this->input->get("value");
+        $value =  $this->input->get("myfile");
         
         $type = ($type == "") ? "product" : $type;
-
+        $type = strtolower($type);
         $index = (int)$index;
 
         $nodeName = "product_panel";
@@ -778,43 +927,103 @@ class HomeWebService extends MY_Controller
                         ->set_output($boundsjson);
         } 
 
+
         $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                        ->findBy(['slug' => $value]);
-                        
-        if(!$product){
-                    return $this->output
-                        ->set_content_type('application/json')
-                        ->set_output($slugerrorjson);
-        }        
+                        ->findBy(['slug' => $value]); 
+        if(!$product && $type == "product") {
+
+            return $this->output
+                    ->set_content_type('application/json')
+                    ->set_output($slugerrorjson);
+        }       
         else {
-            $productindex = (int)$productindex;            
-            $node = $map->section[$index]->product_panel[$productindex];
-    
-            $string = $this->xmlCmsService->getString($nodeName,$value,$type, "", "");
 
-            
-            $newprodindex = ($productindex == 0 ? 1 : $productindex);
-            $newindex = ($index == 0 ? 1 : $index);
-            
-            
-                if($index > 0) {
+            if($type == "product") {
 
-                    $newindex += 1;
-                    $this->xmlCmsService->addXmlChild($file,$string,'/map/section['.$newindex.']/product_panel['.$newprodindex.']');
-                    if($productindex == 0) {
+                $productindex = (int)$productindex;            
+                $node = $map->section[$index]->product_panel[$productindex];
+        
+                $string = $this->xmlCmsService->getString($nodeName,$value,$type, "", "");
+
+                
+                $newprodindex = ($productindex == 0 ? 1 : $productindex);
+                $newindex = ($index == 0 ? 1 : $index);
+                
+                
+                    if($index > 0) {
+
+                        $newindex += 1;
+                        $this->xmlCmsService->addXmlChild($file,$string,'/map/section['.$newindex.']/product_panel['.$newprodindex.']');
+                        if($productindex == 0) {
+                            $this->swapXmlForSectionProduct($file, $newprodindex,$newindex,$value,$type,$index,$productindex);
+                        }
+                        return $this->output
+                            ->set_content_type('application/json')
+                            ->set_output($jsonFile);
+                    } 
+                    else {
+
+                        $this->xmlCmsService->addXmlChild($file,$string,'/map/section['.$newindex.']/product_panel['.$newprodindex.']');
                         $this->swapXmlForSectionProduct($file, $newprodindex,$newindex,$value,$type,$index,$productindex);
-                    }
-                    return $this->output
-                        ->set_content_type('application/json')
-                        ->set_output($jsonFile);
-                } 
+                        return $this->output
+                            ->set_content_type('application/json')
+                            ->set_output($jsonFile);
+                    } 
+
+            }
+            else {
+                $productindex = (int)$productindex;            
+                $node = $map->section[$index]->product_panel[$productindex];
+        
+                $string = $this->xmlCmsService->getString($nodeName,$value,$type, "", "");
+
+                
+                $newprodindex = ($productindex == 0 ? 1 : $productindex);
+                $newindex = ($index == 0 ? 1 : $index);
+                $filename = date('yhmdhs');
+                $file_ext = explode('.', $_FILES['myfile']['name']);
+                $file_ext = strtolower(end($file_ext));  
+                $path_directory = 'assets/product/';   
+                $value = $path_directory.$filename.'.'.$file_ext;
+
+                $this->upload->initialize(array( 
+                    "upload_path" => $path_directory,
+                    "overwrite" => FALSE, 
+                    "encrypt_name" => FALSE,
+                    "file_name" => $filename,
+                    "remove_spaces" => TRUE,
+                    "allowed_types" => "jpg|jpeg|png|gif", 
+                    "xss_clean" => FALSE
+                ));    
+                if ( ! $this->upload->do_upload("myfile")) {
+                    $error = array('error' => $this->upload->display_errors());
+                             return $this->output
+                                    ->set_content_type('application/json')
+                                    ->set_output($error);
+                }                              
                 else {
-                    $this->xmlCmsService->addXmlChild($file,$string,'/map/section['.$newindex.']/product_panel['.$newprodindex.']');
-                    $this->swapXmlForSectionProduct($file, $newprodindex,$newindex,$value,$type,$index,$productindex);
-                    return $this->output
-                        ->set_content_type('application/json')
-                        ->set_output($jsonFile);
-                }   
+                    if($index > 0) {
+
+                        $newindex += 1;
+                        $this->xmlCmsService->addXmlChild($file,$string,'/map/section['.$newindex.']/product_panel['.$newprodindex.']');
+                        if($productindex == 0) {
+                            $this->swapXmlForSectionProduct($file, $newprodindex,$newindex,$value,$type,$index,$productindex);
+                        }
+                        return $this->output
+                            ->set_content_type('application/json')
+                            ->set_output($jsonFile);
+                    } 
+                    else {
+                        $this->xmlCmsService->addXmlChild($file,$string,'/map/section['.$newindex.']/product_panel['.$newprodindex.']');
+                        $this->swapXmlForSectionProduct($file, $newprodindex,$newindex,$value,$type,$index,$productindex);
+                        return $this->output
+                            ->set_content_type('application/json')
+                            ->set_output($jsonFile);
+                    } 
+                }
+
+            }
+  
         }
 
     }
@@ -1010,7 +1219,7 @@ class HomeWebService extends MY_Controller
         $map->section[$index]->product_panel_main[$newprodindex]->imagemap->target = $map->section[$index]->product_panel_main[$productindex]->imagemap->target;
 
         $map->section[$index]->product_panel_main[$productindex]->value = $value;
-        $map->section[$index]->product_panel_main[$productindex]->type = $value;
+        $map->section[$index]->product_panel_main[$productindex]->type = $type;
         $map->section[$index]->product_panel_main[$productindex]->imagemap->coordinate = $coordinate;
         $map->section[$index]->product_panel_main[$productindex]->imagemap->target = $target;
 

@@ -1,5 +1,7 @@
 <?php 
 
+use EasyShop\Entities\EsProduct; 
+
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
@@ -33,11 +35,11 @@ class AccountService extends MY_Controller
      *
      *  @return integer $count
      */
-    public function getUserCount() 
+    public function getUserCount()  
     {
         $count  = $this->em->getRepository('EasyShop\Entities\EsMember')->getUserCount();
         print($count);
-    }
+    }           
 
 }
 

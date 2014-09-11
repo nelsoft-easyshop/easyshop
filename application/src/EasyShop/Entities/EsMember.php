@@ -190,6 +190,20 @@ class EsMember
     private $storeName;
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="failed_login_count", type="integer", nullable=true)
+     */
+    private $failedLoginCount = '0';
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="last_failed_login_datetime", type="datetime", nullable=true)
+     */
+    private $lastFailedLoginDatetime = 'CURRENT_TIMESTAMP';
+
+    /**
      * @var \Doctrine\Common\Collections\Collection
      *
      * @ORM\ManyToMany(targetEntity="EasyShop\Entities\CiSessions", inversedBy="member")
@@ -774,6 +788,53 @@ class EsMember
     {
         return $this->storeName;
     }
+
+    /**
+     * Set failedLoginCount
+     *
+     * @param integer $failedLoginCount
+     * @return EsMember
+     */
+    public function setFailedLoginCount($failedLoginCount)
+    {
+        $this->failedLoginCount = $failedLoginCount;
+
+        return $this;
+    }
+
+    /**
+     * Get failedLoginCount
+     *
+     * @return integer 
+     */
+    public function getFailedLoginCount()
+    {
+        return $this->failedLoginCount;
+    }
+
+    /**
+     * Set lastFailedLoginDatetime
+     *
+     * @param \DateTime $lastFailedLoginDatetime
+     * @return EsMember
+     */
+    public function setLastFailedLoginDatetime($lastFailedLoginDatetime)
+    {
+        $this->lastFailedLoginDatetime = $lastFailedLoginDatetime;
+
+        return $this;
+    }
+
+    /**
+     * Get lastFailedLoginDatetime
+     *
+     * @return \DateTime 
+     */
+    public function getLastFailedLoginDatetime()
+    {
+        return $this->lastFailedLoginDatetime;
+    }
+
 
     /**
      * Add session

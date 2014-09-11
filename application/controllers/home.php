@@ -237,6 +237,7 @@ class Home extends MY_Controller
         $tab = $this->input->get('tab') ? $this->input->get('tab') : '';
         $session_data = $this->session->all_userdata();
         $vendordetails = $this->memberpage_model->getVendorDetails($sellerslug);
+        delete_cookie('es_subscribe_result');
 
         if($vendordetails){
             $data['title'] = 'Vendor Profile | Easyshop.ph';
@@ -269,8 +270,7 @@ class Home extends MY_Controller
             #if 0 : no entry - unfollowed, hence display follow
             #if 1 : has entry - followed, hence display unfollow
             $data['subscribe_status'] = $this->memberpage_model->checkVendorSubscription($data['my_id'],$vendordetails['username'])['stat'];   
-
-            $data['hasStoreName'] = strlen(trim($vendordetails['store_name'])) > 0 ? TRUE : FALSE;
+            $data['hasStoreName'] = strlen(trim($vendordetails['store_name'])) > 0 && $vendordetails['store_name'] !== $vendordetails['username'] ? TRUE : FALSE;
             $data['store_name'] = $data['hasStoreName'] ? $vendordetails['store_name'] : $vendordetails['username'];
 
             $this->load->view('pages/user/vendor_view', $data);
@@ -414,9 +414,11 @@ class Home extends MY_Controller
         ->setMethod('POST')
         ->add('title', 'text', array('required' => false, 'label' => false, 'constraints' => $rules['title']))
         ->add('description', 'textarea', array('required' => false, 'label' => false, 'constraints' => $rules['description']))
-        ->add('file', 'file', array('label' => false, 'required' => false, 'constraints' => $rules['file']))
+        ->add('file', 'file', array('label' => false, 'required' => false, 'constraints' => $rules['image']))
         ->add('submit', 'submit', array('label' => 'SEND'))
         ->getForm();
+
+        $emptyForm = clone $form;
 
         $form->handleRequest($request);
 
@@ -424,6 +426,7 @@ class Home extends MY_Controller
             $bugReporter = $this->serviceContainer['bug_reporter'];
             $bugReporter->createReport($form->getData());
             $isValid = true;
+            $form = $emptyForm;
         }
         
         $formData =  $twig->render('pages/web/report-a-problem.html.twig', array(
@@ -437,13 +440,12 @@ class Home extends MY_Controller
             'metadescription' => 'Found a bug? Let us know so we can work on it.',
         );
 
-        $data = array_merge($data, $this->fill_header());
-
+        $data = array_merge($data, $this->fill_header()); 
         $this->load->view('templates/header', $data);
-        $this->output->append_output($formData);
+        $this->output->append_output($formData); 
         $this->load->view('templates/footer_full');
     }
-
+    
 }
 
 /* End of file home.php */

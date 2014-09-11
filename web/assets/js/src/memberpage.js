@@ -742,6 +742,10 @@ $(document).ready(function(){
                             parentdiv.find('span.doneverify span:nth-child(2)').html('An email has been sent. Please check your e-mail.');
                             errorspan.html('');
                             contdiv.hide();
+
+                            $('.cart_no').hide();
+                            $('.cart').css('width','28');
+                            $('.big_cart').addClass('cart_zero');
                         }
                         else if(obj ==='error'){
                             $thisspan.show();
