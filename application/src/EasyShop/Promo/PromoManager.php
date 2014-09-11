@@ -5,31 +5,24 @@ namespace EasyShop\Promo;
 /**
  * PromoManager Class
  *
- * @author Ryan Vasquez
- * @author Sam Gavinio
  */
 class PromoManager
 {  
-    
     /**
-     * The CI singleton
+     * Promo config
      *
+     * @var mixed
      */
-    private $CI;
-    
-    
-    /**
-     * Map of promo types to promo implementations
-     *
-     * @var string[]
-     */
-    private $promoMap = array();
+    private $promoConfig = array();
 
-    public function __construct()
+    /**
+     * Constructor
+     *
+     * @param mixed $promoConfig
+     */
+    public function __construct($promoConfig)
     {
-        $this->CI =& get_instance();
-        $this->CI->config->load('promo', true);
-        $this->promoConfig = $this->CI->config->item('Promo');
+        $this->promoConfig = $promoConfig;
     }
     
     /**
