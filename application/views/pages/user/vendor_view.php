@@ -32,6 +32,50 @@
                     </a>
                 </div>
             </div>
+
+            <div class="vendor_products_wrapper user-tab">
+                <?php if($product_count > 0):?>
+                    <?php foreach($products as $catID=>$p):?>
+                    <div class="vendor_txt_prod_header" class="<?php echo $p['slug']?>">
+                        <div class="home_cat_product_title" style="background-color:#0078d5;">
+                            <a target="_blank" href="<?php echo $p['cat_link']?>" <?php echo $p['cat_link']==="" ? 'onclick="return false"':""?> >
+                                <img src="<?=base_url()?><?php echo $p['cat_img']?>">
+                                <h2><?php echo $p['name']?></h2> 
+                            </a>   
+                        </div>
+                    </div>
+                    <div class="vendor_prod_items">
+                        <?php foreach($p['products'] as $prod):?>
+                            <div class="product vendor_product">
+                                <a target="_blank" href="<?php echo base_url() . 'item/' . $prod['slug']?>">
+                                    <span class="prod_img_wrapper">
+                                        <span class="prod_img_container">
+                                           <img src="<?=base_url()?><?php echo $prod['product_image_path']?>">
+                                        </span>
+                                    </span>
+                                </a>    
+                                <h3>
+                                    <a target="_blank" href="<?php echo base_url() . 'item/' . $prod['slug']?>">
+                                       <?php echo html_escape($prod['name'])?>
+                                    </a>
+                                </h3>
+                                 <div class="price-cnt">
+                                    <div class="price">
+                                        Php <?php echo html_escape($prod['price'])?>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php endforeach;?>
+                    </div>
+                    <div class="txt_load_more_con v_loadmore">
+                        <a target="_blank" href="<?php echo $p['loadmore_link']?>" class="grey_btn">LOAD MORE ITEMS</a>
+                    </div>
+                    <?php endforeach;?>
+                <?php endif;?>
+                </div>
+
+
+
         </div>
     </div>
     
