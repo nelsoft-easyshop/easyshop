@@ -196,7 +196,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 <span class="main_srch_img_con"></span>
                 <input name="q_str" type="text" id="main_search" placeholder="Search..." value="<?php if(isset($_GET['q_str'])) echo str_replace('-', ' ', html_escape($_GET['q_str'])); ?>" autocomplete="off">
                 
-                <select name="category" id="q_cat">
+                <select name="category" id="category">
                     <option value="1">All Categories</option>
                     <?php
                         foreach ($category_search as $keyrow):

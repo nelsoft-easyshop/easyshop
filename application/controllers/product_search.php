@@ -71,18 +71,20 @@ class product_search extends MY_Controller {
         $categoryId = ($this->input->get('category') && count($this->input->get())>0)?trim($this->input->get('category')):1;
         $memberId = $this->session->userdata('member_id');
 
-        // getting all products
-        $response['products'] = $searchProductService->getProductBySearch($this->input->get(),$memberId); 
-        
-        // get all attributes to by products
-        $finalizedProductIds = array_map(function($value) { return $value['idProduct']; }, $response['products']);
-        $availableAttributes = $searchProductService->getProductAttributesByProductIds($finalizedProductIds);
-        // Get all condition and distinct same data
-        $availableCondition = array_map(function($value) { return $value['condition']; }, $response['products']);
-        $availableAttributes['Condition'] = array_unique($availableCondition);
-        // sort attributes alphabetical order
-        ksort($availableAttributes);
-        $response['attributes'] = $availableAttributes;
+        if(count($_GET)>0){ 
+            // getting all products
+            $response['products'] = $searchProductService->getProductBySearch($this->input->get(),$memberId); 
+            
+            // get all attributes to by products
+            $finalizedProductIds = array_map(function($value) { return $value['idProduct']; }, $response['products']);
+            $availableAttributes = $searchProductService->getProductAttributesByProductIds($finalizedProductIds);
+            // Get all condition and distinct same data
+            $availableCondition = array_map(function($value) { return $value['condition']; }, $response['products']);
+            $availableAttributes['Condition'] = array_unique($availableCondition);
+            // sort attributes alphabetical order
+            ksort($availableAttributes);
+            $response['attributes'] = $availableAttributes;
+        }
 
         // Load sub category to display
         $subCategory = $EsCatRepository->findBy(['parent' => $categoryId]);

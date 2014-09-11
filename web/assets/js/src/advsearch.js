@@ -191,12 +191,12 @@
                 else{
                     currentUrl = currentUrl +'&'+head+'='+ newValue;
                 }
-                if(head == "q_cat"){
+                if(head == "category"){
                     currentUrl = currentUrl +'&'+head+'='+ value;
                 }
             }
             else{
-                if(head == "q_cat"){
+                if(head == "category"){
                     currentUrl = currentUrl +'&'+head+'='+ value;
                 }
                 else{
