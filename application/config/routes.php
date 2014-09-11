@@ -84,12 +84,12 @@ else {
 
     #SEARCHING
     $route['(?i)search/(:any)'] = 'product_search/searchfaster/$1'; # ryan vasquez
-    $route['search_more/(:any)'] = 'product_search/searchMore/$1'; # ryan vasquez
+    $route['search/more'] = 'product_search/loadMoreProduct'; # ryan vasquez
     $route['search/suggest'] = 'product_search/sch_onpress'; # ryan vasquez
 
     #ADVANCE SEARCH
     $route['(?i)advsrch'] = 'product_search/advance'; # new search - rain jorque
-    $route['(?i)advsrch/more/(:any)'] = 'product_search/advanceMore/$1'; # new search - rain jorque
+    $route['(?i)advsrch/more'] = 'product_search/loadMoreProduct'; # new search - rain jorque
 
     #PASSWORD
     $route['(?i)chngepaswd'] = 'register/changepass'; # rain jorque 
