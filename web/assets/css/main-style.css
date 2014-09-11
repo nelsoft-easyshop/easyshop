@@ -1,0 +1,126 @@
+
+/*** global style ***/
+
+.main-container {
+    font-size: 1.125em;
+    margin: 0 auto;
+    max-width: 1190px;
+    width: 100%;
+}
+
+.cl-1 {
+    color: #426fcc;
+}
+
+.btn.btn-default-1 {
+    border: 2px solid #585a59;
+    background-color: #fff;
+    color: #565656;
+}
+
+.btn.btn-default-1:hover {
+    background-color: #585a59;
+    color: #fff;
+}
+
+.btn.btn-default-2 {
+    border-bottom: 2px solid #355ba9;
+    background-color: #4370cd;
+    color: #fff;
+}
+
+.btn.btn-default-2:hover {
+    border-bottom: 2px solid #2d4d8e;
+    background-color: #355ba9;
+    color: #fff;
+}
+
+/*** end global style ***/
+
+/*** Vendor style ***/
+.vendor-main {
+    left: 0;
+    right: 0;
+    top: 42px;
+}
+
+.vendor-main-bg {
+    background-color: #cecece;
+    height: 365px;
+    text-align: center;
+    width: 100%;
+}
+
+.vendor-main-bg img {
+    margin:0 auto;
+}
+
+.vendor-profile-content {
+    background-color: rgba(255,255,255,0.9);
+    min-height: 365px;
+    max-width: 326px;
+    padding:43px 0px;
+    text-align: center;
+    width: 100%;
+}
+
+.vendor-profile-img {
+    display: block;
+    margin: auto;
+    width: 110px;
+}
+
+.vendor-profile-img-con {
+    background-color: #fff;
+    border: 2px solid #fff;
+    border-radius: 5px;
+    display: table-cell;
+    height: 110px;
+    vertical-align: middle;
+    width: 104px;
+}
+
+.vendor-profile-img-con img {
+    height: auto;
+    max-width: 104px;
+    max-height: 110px;
+    width: auto;
+}
+
+.vendor-profile-content h4 {
+    font-size: 1.5em;
+    font-weight: bold;
+    overflow: hidden;
+    padding: 0 20px;
+    text-overflow: ellipsis;
+}
+
+.vendor-profile-content p {
+    font-size: 0.75em;
+    margin-bottom: 0;
+}
+
+.vendor-profile-btn {
+    margin-top: 43px;
+    padding: 0 20px;
+}
+
+.vendor-profile-btn a {
+    font-weight: bold;
+    max-width: 133px;
+    width: 47%;
+}
+
+.vendor-profile-btn a:first-child {
+    margin-right: 4%;
+}
+
+/*** end of Vendor style ***/
+
+@media only screen and (max-width : 979px) { 
+    .main-container {
+            padding-left: 5px;
+            padding-right: 5px;
+            width: 97%;
+    }
+}
