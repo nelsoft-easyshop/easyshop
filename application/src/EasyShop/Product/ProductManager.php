@@ -48,7 +48,7 @@ class ProductManager
      * Constructor.
      * 
      */
-    public function __construct, ($em, PromoManager $promoManager, $collectionHelper)
+    public function __construct($em, PromoManager $promoManager, $collectionHelper)
     {
         $this->em = $em; 
         $this->promoManager = $promoManager;

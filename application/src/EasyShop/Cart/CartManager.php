@@ -165,7 +165,7 @@ class CartManager
      * @param integer $memberId
      * @return mixed
      */
-    public function getValidateCartContents($memberId)
+    public function getValidatedCartContents($memberId)
     {
         $member = $this->em->getRepository('EasyShop\Entities\EsMember')->find($memberId);
         if(!$member->getIsEmailVerify()){
@@ -176,7 +176,7 @@ class CartManager
         $cartContents = $this->cart->getContents();        
         foreach($cartContents as $cartItem){
         
-            $validationResult = $this->getValidatedCartContent($cartItem['id'], $cartItem['options'],  $cartItem['qty']);
+            $validationResult = $this->validateSingleCartContent($cartItem['id'], $cartItem['options'],  $cartItem['qty']);
             $itemData = $validationResult['itemData'];
             $product = $validationResult['product'];
         
@@ -240,7 +240,7 @@ class CartManager
     {
         $cartContents = $this->cart->getContents(); 
         
-        if($optionLength !== count($option);){
+        if($optionLength !== count($option)){
             $response = false;
         }
         else{
@@ -259,7 +259,7 @@ class CartManager
                     $opttionNew =  serialize($itemData['options']);
                     if($optionCart == $optionNew && $cartRow['id'] == $itemData['id']){
                         $quantityToInsert = $quantityToInsert + $cartRow['qty'];
-                        $quantityToInsert =  $quantityToInsert > $maxAvailability ? $maxAvailability : $quantityToInsert
+                        $quantityToInsert =  $quantityToInsert > $maxAvailability ? $maxAvailability : $quantityToInsert;
                         $itemData['qty'] = $quantityToInsert;
                         $isUpdate = true;
                         break;     
