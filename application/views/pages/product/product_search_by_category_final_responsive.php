@@ -32,23 +32,6 @@
                                 <span class="span_bg prod_cat_drop"></span>
                             </div>
                         </div>
-						<script>
-							
-								$("#prod_drop_nav").on('click','.prod_cat_drop',function() {
-									
-									var drop = $("div.category_nav").attr("class");
-
-									if(drop == "category_nav")
-									{
-										$('.category_nav').removeClass("category_nav").addClass("category_nav category_nav_plus");
-										$('.span_drop').removeClass("mehh span_bg prod_cat_drop").addClass("span_drop span_bg prod_cat_drop active_prod_cat_drop_arrow");
-									}else{
-										$('.category_nav').removeClass("category_nav category_nav_plus").addClass("category_nav");
-										$('.span_drop').removeClass("mehh span_bg prod_cat_drop active_prod_cat_drop_arrow").addClass("span_drop span_bg prod_cat_drop");
-									}
-								});
-					  
-						</script>
                         <div class="clear"></div>
                         <div class="bread_crumbs">
                             <ul>
@@ -350,20 +333,17 @@
 
                 <?php if(count($products) > 0): ?>
                     <?php foreach ($attributes as $attrName => $attrListValue):?>
-                    <h3 class="title h3-filter"><?=$attrName?></h3> 
-					 <ul class="list-unstyled">
-                        <?php foreach ($attrListValue as $key => $value):?>
-                           
-								<li>
-                                <a class="cbx" data-head="<?=strtolower($attrName)?>" data-value="<?=strtolower($value)?>" >
-                                    <input type="checkbox" <?=(strpos($this->input->get(strtolower($attrName)),strtolower($value)) !== false)?'checked':'';?> class="checkBox" data-head="<?=strtolower($attrName)?>" data-value="<?=strtolower($value)?>" >
-                                    <label class="cbx-label" for="cbx"><?=ucfirst($value);?></label>
-                                </a>
-								</li>
-                           
-						  
-                        <?php endforeach; ?>
-						</ul>
+                        <h3 class="title h3-filter"><?=$attrName?></h3> 
+                        <ul class="list-unstyled">
+                            <?php foreach ($attrListValue as $key => $value):?>
+                                <li>
+                                    <a class="cbx" data-head="<?=strtolower($attrName)?>" data-value="<?=strtolower($value)?>" >
+                                        <input type="checkbox" <?=(strpos($this->input->get(strtolower($attrName)),strtolower($value)) !== false)?'checked':'';?> class="checkBox" data-head="<?=strtolower($attrName)?>" data-value="<?=strtolower($value)?>" >
+                                        <label class="cbx-label" for="cbx"><?=ucfirst($value);?></label>
+                                    </a>
+                                </li>
+                            <?php endforeach; ?>
+                        </ul>
                         <div class="clear"></div> 
                     <?php endforeach; ?>  
                 <?php endif; ?>
@@ -375,26 +355,6 @@
 <script src="<?= base_url() ?>assets/js/src/bootstrap.js" type="text/javascript"></script>
 <script src="<?= base_url() ?>assets/js/src/vendor/jquery.easing.min.js" type="text/javascript"></script>
 <script src="<?= base_url() ?>assets/js/src/vendor/jquery.scrollUp.min.js" type="text/javascript"></script>
-<script type="text/javascript">
-$(function () {
-    $.scrollUp({
-                scrollName: 'scrollUp', // Element ID
-                scrollDistance: 300, // Distance from top/bottom before showing element (px)
-                scrollFrom: 'top', // 'top' or 'bottom'
-                scrollSpeed: 300, // Speed back to top (ms)
-                easingType: 'linear', // Scroll to top easing (see http://easings.net/)
-                animation: 'fade', // Fade, slide, none
-                animationInSpeed: 200, // Animation in speed (ms)
-                animationOutSpeed: 200, // Animation out speed (ms)
-                scrollText: 'Scroll to top', // Text for element, can contain HTML
-                scrollTitle: false, // Set a custom <a> title if required. Defaults to scrollText
-                scrollImg: false, // Set true to use image
-                activeOverlay: false, // Set CSS color to display scrollUp active point, e.g '#00FFFF'
-                zIndex: 2147483647 // Z-Index for the overlay
-            });
-});
-
-</script>
 <script src="<?= base_url() ?>assets/js/src/vendor/jquery.bxslider.min.js" type="text/javascript"></script>
 <script src="<?= base_url() ?>assets/js/src/categorynavigation.js?ver=<?=ES_FILE_VERSION?>" type="text/javascript"></script>
 <script src="<?= base_url() ?>assets/js/src/advsearch.js?ver=<?=ES_FILE_VERSION?>" type="text/javascript"></script>
@@ -410,6 +370,18 @@ $(function () {
                 return text.replace(/\W*\s(\S)*$/, '...');
             });
         } 
+
+        $("#prod_drop_nav").on('click','.prod_cat_drop',function() {
+            var drop = $("div.category_nav").attr("class");
+            if(drop == "category_nav"){
+                $('.category_nav').removeClass("category_nav").addClass("category_nav category_nav_plus");
+                $('.span_drop').removeClass("mehh span_bg prod_cat_drop").addClass("span_drop span_bg prod_cat_drop active_prod_cat_drop_arrow");
+            }
+            else{
+                $('.category_nav').removeClass("category_nav category_nav_plus").addClass("category_nav");
+                $('.span_drop').removeClass("mehh span_bg prod_cat_drop active_prod_cat_drop_arrow").addClass("span_drop span_bg prod_cat_drop");
+            }
+        }); 
 
         $(function() {
             $('.jcarousel').jcarousel();
