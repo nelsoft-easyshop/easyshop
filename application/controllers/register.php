@@ -11,15 +11,23 @@ class Register extends MY_Controller
 		parent::__construct();
 		$this->load->model("register_model");
 		$this->load->library('encrypt');
+        $this->load->library('session');
 		$this->form_validation->set_error_delimiters('', '');
 	}
 	
 	public function index()
 	{
+        $url = 'landingpage';
+        if(strpos($this->session->userdata('uri_string'), 'ScratchCard') !== FALSE){
+            $code = trim($this->session->userdata('uri_string'), 'promo/ScratchCard/claimScratchCardPrize/claim/');
+            $url = 'promo/ScratchCard/claimScratchCardPrize/claim/'.$code;
+        }
 		$data = array(
 			'title' => 'Easyshop.ph - Welcome to Easyshop.ph',
             'metadescription' => 'Register now at Easyshop.ph to start your buying and selling experience',
+            'redirect_url' => $url
 		);
+
         $data = array_merge($data, $this->fill_header());
 		$this->load->view('pages/user/register', $data);
 	}
@@ -176,17 +184,23 @@ class Register extends MY_Controller
     public function success($action = ''){
         $data['title'] = 'Easyshop.ph - Thank You';
         $referrer = ($this->input->post('referrer'))?$this->input->post('referrer'):'';
-        if($referrer != 'landingpage'){
+        if(!($referrer)){
 		    $data['title'] = 'Page not found';
             $data = array_merge($data,$this->fill_header());
             $this->load->view('templates/header', $data); 
-            $this->load->view('pages/general_error'); 		
+            $this->load->view('pages/general_error');
             $this->load->view('templates/footer_full');
         }
         else{
-            $data['content'] = 'You have successfully registered!';
-            $data['sub_content'] =  'You have successfully registered with Easyshop.ph. Verify your e-mail to begin selling your products online.';
-            $this->load->view('pages/user/register_subscribe_success', $data);
+            if($referrer === 'landingpage'){
+                $data['content'] = 'You have successfully registered!';
+                $data['sub_content'] =  'You have successfully registered with Easyshop.ph. Verify your e-mail to begin selling your products online.';
+                $this->load->view('pages/user/register_subscribe_success', $data);
+            }else{
+                $this->session->set_userdata('uri_string', $referrer);
+                header("Location: /login");
+                die();
+            }
         }
     } 
     

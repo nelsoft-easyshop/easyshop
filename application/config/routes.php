@@ -135,7 +135,7 @@ else {
 
     #PROMO CATEGORY PAGE
     $route['(?i)deals'] = 'promo/EasyDeals/category_promo';
-    $route['(?i)scratch-and-win'] = 'promo/ScratchCard/scratchCardPromo';
+    $route['(?i)ScratchAndWin'] = 'promo/ScratchCard/scratchCardPromo';
 
     $route['(?i)policy'] = 'home/policy';
     $route['(?i)terms'] = 'home/terms';

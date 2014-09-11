@@ -59,6 +59,7 @@ class Home extends MY_Controller
             $this->load->view('pages/home_view', $data);
             $this->load->view('templates/footer_full');
         }
+
     }
     
     
@@ -289,7 +290,7 @@ class Home extends MY_Controller
     {
         $xmlResourceService = $this->serviceContainer['xml_resource'];
         $xmlfile =  $xmlResourceService->getContentXMLfile();
-    
+
         $perPage = $this->feedsProdPerPage;
         $memberId = $this->session->userdata('member_id');
         $userdata = $this->user_model->getUserById($memberId);

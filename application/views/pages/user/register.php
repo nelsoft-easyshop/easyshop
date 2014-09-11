@@ -399,7 +399,7 @@
 
 </body>
 <?php echo form_open('registration/success', array('id'=>'success_register'));?>
-		  <input type="hidden" name="referrer" class="referrer" value="landingpage"/>
+		  <input type="hidden" name="referrer" class="referrer" value="<?=$redirect_url ?>"/>
 <?php echo form_close();?>
 
 

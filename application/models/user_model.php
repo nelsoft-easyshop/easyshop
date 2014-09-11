@@ -196,7 +196,6 @@ class user_model extends CI_Model {
         return $row;
     }
     
-
     /**
      * Return list of users following a certain user
      *

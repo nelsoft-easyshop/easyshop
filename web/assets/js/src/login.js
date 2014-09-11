@@ -1,3 +1,4 @@
+
 (function($){    
 
     $(document).ready(function(){
@@ -9,10 +10,10 @@
             rules: {
                 login_username: {
                     required: true
-                    },
+                },
                 login_password: {
                     required: true
-                    }
+                }
             },
             messages: {
                 login_username: {
@@ -34,12 +35,13 @@
             submitHandler: function(form) {
                 $('#loading_img').show();
                 $('#login').hide();
-                
+
                 $.ajax({
                     type: "POST",
                     dataType: "JSON",
                     url: config.base_url + "login/authenticate",
                     data: $(form).serializeArray(),
+
                     success:function(data){
                         if(data.o_success <= 0){
                             $("#login_error").empty();
@@ -47,7 +49,9 @@
                             $('#loading_img').hide();
                             $('#login').show();
                         }
-                        else{
+                        else {
+                            var curl = $.cookie('rn');
+
                             $('.error_cont').text('');
                             $('#login_error').text('');
                             $('#loading_img').hide();
@@ -57,33 +61,30 @@
 
                             var url = $('#redirect_url').val();
                             var first_uri_segment = url.substring(0, url.indexOf('/'));
-                            var vendorSubscriptionUri = $.cookie('es_vendor_subscribe');
-
-                            if( typeof vendorSubscriptionUri !== "undefined" ){
-                                window.location = config.base_url + vendorSubscriptionUri;
+                            if ((url == 'sell/step1') || (first_uri_segment == 'item') || (url == 'cart')) {
+                                window.location = config.base_url + url;
                             }
-                            else{
-                                if((url == 'sell/step1')||(first_uri_segment == 'item')|| (url == 'cart')){
-                                    window.location = config.base_url+ url;
-                                }
-                                else if(first_uri_segment == 'cart'){
-                                    window.location = config.base_url + first_uri_segment;
-                                }
-                                else{
-                                    window.location = config.base_url;
-                                }                            
+                            else if (first_uri_segment == 'cart') {
+                                window.location = config.base_url + first_uri_segment;
+                            }
+                            else if (first_uri_segment == 'promo') {
+                                var code = url.split("/");
+                                window.location = config.base_url + first_uri_segment + '/ScratchCard/claimScratchCardPrize?code=' + code[4];
+                            }
+                            else {
+                                window.location = config.base_url;
                             }
                         }
                     }
                 });
+
                 return false;
             }
         });
-        
-        $('.login_box input').on('focus', function(){
+
+        $('.login_box input').on('focus', function () {
             $('#login_error').text('');
         });
-    });
-    
-})(jQuery);  
 
+    });
+})(jQuery);

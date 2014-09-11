@@ -35,7 +35,3 @@ class BuyAtZero extends MY_Controller
     }
 
 }
-
-/* End of file BuyAtZero.php */
-/* Location: ./application/controllers/promo/BuyAtZero.php */
-
