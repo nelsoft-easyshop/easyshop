@@ -16,7 +16,7 @@ class product extends MY_Controller
         parent::__construct(); 
         $this->load->helper('htmlpurifier');
         $this->load->model("product_model");
-        $this->load->model("messages_model");
+        $this->load->model("messages_model");        
     }
 
 
