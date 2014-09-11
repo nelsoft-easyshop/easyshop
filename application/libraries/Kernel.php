@@ -207,6 +207,12 @@ class Kernel
         $container['category_manager'] = function ($c) {
             return new \EasyShop\Category\CategoryManager();
         };
+        
+        $container['config_loader'] = function ($c) {
+            $configImplementation = new \EasyShop\ConfigLoader\CodeigniterConfig();
+            return new \EasyShop\ConfigLoader\ConfigLoader($configImplementation);
+        };
+         
 
 
         /* Register services END */
