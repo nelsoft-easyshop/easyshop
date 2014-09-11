@@ -179,10 +179,30 @@ class Kernel
             return \Symfony\Component\HttpFoundation\Request::createFromGlobals();
         };
 
-          // Product Manager
-        $container['product_manager'] = function ($c) {
-            return new \EasyShop\Product\ProductManager();
+        
+
+        
+        //Promo Manager
+        $container['promo_manager'] = function ($c){
+            return new \EasyShop\Promo\PromoManager();
         };
+        
+        // Product Manager
+        $container['product_manager'] = function ($c) use ($container){
+            return new \EasyShop\Product\ProductManager(
+                            $container['entity_manager'],
+                            $container['promo_manager']
+            ]);
+        };
+        
+        // Promo Manager
+        $container['product_manager'] = function ($c) use ($container){
+            return new \EasyShop\Product\ProductManager(
+                            $container['entity_manager'],
+                            $container['promo_manager']
+            ]);
+        };
+
 
         // Collection Helper
         $container['collection_helper'] = function ($c) {
