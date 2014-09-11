@@ -42,7 +42,7 @@ class CountDownSalePromo extends AbstractPromo
             $this->isStartPromo = true;
         }
         
-        $this->promoPrice = $this->product->getPrice() - (($diffHours * $percentagePerHour / 100.0) * $this->product->getPrice());
+        $this->promoPrice = $this->product->getPrice() - (($diffHours * $this->percentagePerHour / 100.0) * $this->product->getPrice());
         $this->promoPrice = ($this->promoPrice <= 0) ? 0.01 : $this->promoPrice;
         $this->isEndPromo = ($this->dateToday > $this->endDateTime) ? true : false;
         
