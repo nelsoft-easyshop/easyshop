@@ -1,7 +1,7 @@
 <?php 
 
-use EasyShop\Entities\EsMember; 
 use EasyShop\Entities\EsProduct;
+use EasyShop\Entities\EsMember; 
 
 class FeedWebService extends MY_Controller 
 {
@@ -504,29 +504,28 @@ class FeedWebService extends MY_Controller
                         exit();
                     }
 
-                    $product = $this->em->getRepository('EasyShop\Entities\EsMember')
-                                    ->findBy(['idMember' => $ids]);
-                                    
-                    if(!$product){
-                                return $this->output
-                                    ->set_content_type('application/json')
-                                    ->set_output($this->usererror);
-                    } 
+                    $userTest = $this->em->find('EasyShop\Entities\EsMember',$ids);                              
+                    if(!$userTest){
+                        $valid = 0;
+                        return $this->output
+                            ->set_content_type('application/json')
+                            ->set_output($this->usererror);
+                    }
                 }
             }
             else {
+              
                 if(!is_numeric($value)) {
                     exit();
                 }
 
-                $result = $this->em->getRepository('EasyShop\Entities\EsMember')
-                                ->findBy(['id_member' => $this->input->get("value")]);
+                $exist =  $userTest = $this->em->find('EasyShop\Entities\EsMember',$this->input->get("value`")); 
 
-                if(!$result) {
-                    $valid = 0;
-                    return $this->output
-                        ->set_content_type('application/json')
-                        ->set_output($this->usererror);
+                if(!$exist) {
+                        return $this->output
+                            ->set_content_type('application/json')
+                            ->set_output($this->usererror);
+                            $valid = 0;
                 }                
             }
             if($valid == 1) {
