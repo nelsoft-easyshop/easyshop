@@ -54,13 +54,17 @@ class PromoManager
         $product->setOriginalPrice($product->getPrice());
         if(intval($product->getIsPromote()) === 1){
             $promoType = $product->getPromoType();
-
             if(isset($this->promoConfig[$promoType])){
-                $promoImplementation = $this->promoConfig[$promoType]['implementation'];
-                $promoOptions = $this->promoConfig[$promoType]['option'];
-                $promoObject = new $promoImplementation($product);
-                $promoObject->setOptions($promoOptions);
-                $product = $promoObject->apply();
+                if(isset($this->promoConfig[$promoType]['implementation']) &&
+                   trim($this->promoConfig[$promoType]['implementation']) !== ''
+                ){
+                    $promoImplementation = $this->promoConfig[$promoType]['implementation'];
+                    $promoOptions = $this->promoConfig[$promoType]['option'];
+                    $promoObject = new $promoImplementation($product);
+                    $promoObject->setOptions($promoOptions);
+                    $product = $promoObject->apply();
+                }
+              
             }
         }
         else{
