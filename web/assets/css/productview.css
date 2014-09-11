@@ -428,6 +428,48 @@ line-height: 30px !important;
 .cd_slide_discount > span{
 	padding-top: 5px !important;
 }
+
+.span-container-img{
+	height: 300px !important;
+	width: 100% !important;
+	display: table-cell !important;
+	vertical-align: middle;
+	text-align: center !important
+	border: transparent red 1px;
+}
+.img-slider-2{
+	max-height: 300px !important;
+	max-width: 100% !important;
+	width: auto !important;
+	height: auto !important;
+	text-align: center !important;
+	vertical-align: middle;
+	border: transparent red 1px;
+}
+
+.span-container{
+	text-align: center !important;
+	height: 300px !important;
+	width: 100% !important;
+	display: inline-block;
+	text-align: center !important;
+	margin: 0px auto;
+	border: transparent red 1px;
+}
+.carousel-control.left, .carousel-control.right{
+	background-image: none !important;
+}
+.carousel{
+	margin-top: 5px;
+	margin-bottom: -10px;
+}
+.carousel:hover{
+	cursor: pointer;
+}
+.carousel-inner{
+	border: solid #e6e6e6 1px;
+	
+}
 @media only screen and (max-width: 1024px) {
 
 .display-when-mobile-833{
@@ -546,14 +588,14 @@ line-height: 30px !important;
     right: 0;
 	left: 10;
     position: absolute;
-    top: 2px;
-	z-index:5000;
+    top: -4px;
+	z-index:5000999999;
 	float: right;
 }
 
 .cd_slide_discount_m{
-	left: 20px;
 	position: absolute;
+	left: 20px;
 	top: 7px;
 	z-index:4999;
 	color: #ba0000;
