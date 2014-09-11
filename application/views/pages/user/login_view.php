@@ -6,7 +6,7 @@
 
 <div class="res_wrapper login_content">
 
-    <div class="login-tli-con">
+    <div class="login-tli-con" id="failed-login">
         <div class="border-all border-rad-3">
             <div class="col-md-12 border-bottom bg-cl-f7f7f7">
                 <div class="pd-tb-8">
@@ -15,17 +15,19 @@
                 </div>
             </div>               
             <div class="col-md-12 text-center pd-top-30 pd-bttm-30">
-                <p><strong>"loremipsum.dolor@yahoo.com"</strong> is not associated with any easyshop.ph account.</p>
+                <!--<p><strong>"loremipsum.dolor@yahoo.com"</strong> is not associated with any easyshop.ph account.</p>-->
+                Too many failed login attempts.
+                <strong><p id="lockoutDuration"></p></strong>
             </div>
             <div class="pd-tb-20 pd-lr-20 text-right login-btn-con">
-                <a href="" class="btn btn-primarybtn">Try again</a>
+                <a href="login" class="btn btn-primarybtn">Try again</a>
                 <a href="" class="btn btn-default">Help me locate my account</a>
             </div>
             <div class="clear"></div>
         </div>
     </div>
         
-    <div class="border-all border-rad-3">
+    <div class="border-all border-rad-3" id="login-form">
         <div class="col-md-12 border-bottom bg-cl-f7f7f7">
             <div class="pd-tb-8">
                  <h5><strong>Log In</strong></h5>

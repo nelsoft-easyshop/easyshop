@@ -209,6 +209,14 @@ class Kernel
         };
 
 
+        //Login Throttler Service
+        $container['login_throttler'] = function ($c) use($container) {
+            return new \EasyShop\LoginThrottler\LoginThrottler(
+                $container['entity_manager'],
+                $container['http_request']
+                );
+        };
+
         /* Register services END */
         $this->serviceContainer = $container;
     }
