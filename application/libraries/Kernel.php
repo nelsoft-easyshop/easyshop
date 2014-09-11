@@ -177,8 +177,8 @@ class Kernel
         // Search product
         $container['search_product'] = function ($c) use($container) {
             $em = $container['entity_manager'];
-            $stringUtility = $container['string_utility'];
-            return new \EasyShop\Search\SearchProduct($em,$stringUtility);
+            $collectionHelper = $container['collection_helper'];
+            return new \EasyShop\Search\SearchProduct($em,$collectionHelper);
         };
 
         // Promo
