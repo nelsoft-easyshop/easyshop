@@ -165,7 +165,7 @@ class Kernel
         };
         
         // Point Tracker
-        $container['point_tracker'] = function ($c) {
+        $container['point_tracker'] = function ($c) use($container) {
             return new \EasyShop\PointTracker\PointTracker($container['entity_manager']);
         };
 
@@ -186,6 +186,7 @@ class Kernel
           // Product Manager
         $container['product_manager'] = function ($c) {
             return new \EasyShop\Product\ProductManager();
+        };
 
         // Search product
         $container['search_product'] = function ($c) use($container) {

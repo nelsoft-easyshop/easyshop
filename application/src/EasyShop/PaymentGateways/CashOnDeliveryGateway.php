@@ -5,6 +5,7 @@ namespace EasyShop\PaymentGateways;
 use EasyShop\Entities\EsPaymentGateway;
 use EasyShop\Entities\EsOrder;
 use EasyShop\Entities\EsPaymentMethod;
+use EasyShop\Entities\EsOrderStatus;
 
 /**
  * Cash On Delivery Gateway Class
@@ -49,15 +50,15 @@ class CashOnDeliveryGateway extends AbstractGateway
 
         $productstring = $this->parameters['prepareData']['productstring'];
         $itemList = $this->parameters['prepareData']['newItemList']; 
-        $txnid = $this->generateReferenceNumber($paymentType, $this->parameters['member_id']);
+        $txnid = $this->generateReferenceNumber($this->parameters['member_id']);
         
         // stub functions
         //if($this->parameters['qtysuccess'] == $this->parameters['productCount']){
         if(true){
-            $return = $this->persistPayment(
+            $return = $this->paymentService->persistPayment(
                     $paymentType, $grandTotal, $this->parameters['member_id'],
                     $productstring, $this->parameters['productCount'],
-                    json_encode($itemList), $txnid
+                    json_encode($itemList), $txnid, $this
                     );
 
             if($return['o_success'] <= 0){
@@ -103,5 +104,25 @@ class CashOnDeliveryGateway extends AbstractGateway
         $response['status'] = $status;
         $response['txnid'] = $txnid;
         return $response;
+    }
+
+    public function getExternalCharge()
+    {
+        return 0;
+    }
+
+    private function generateReferenceNumber($member_id)
+    {
+        return 'COD-'.date('ymdhs').'-'.$member_id;
+    }
+
+    public function getOrderStatus()
+    {
+        return EsOrderStatus::STATUS_PAID;
+    }
+
+    public function getOrderProductStatus()
+    {
+        return EsOrderStatus::STATUS_PAID;
     }
 }
