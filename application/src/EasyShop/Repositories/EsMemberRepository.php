@@ -27,7 +27,7 @@ class EsMemberRepository extends EntityRepository
         $result = $qb->getOneOrNullResult();
 
         return $result['userCount'];             
-    }    
+    }             
 
     /**
      *  Fetch entries in es_member with exact storeName excluding excludeMemberId
