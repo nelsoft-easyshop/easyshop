@@ -13,6 +13,10 @@ use EasyShop\Entities\EsKeywordsTemp;
  */
 class SearchProduct
 {
+    /**
+     * Number of product display per page
+     */
+    const PER_PAGE = 15;
 
     /**
      * Entity Manager instance
@@ -22,18 +26,42 @@ class SearchProduct
     private $em;
 
     /**
+     * Collection Helper instance
+     *
+     * @var EasyShop\CollectionHelper
+     */
+    private $collectionHelper;
+
+    /**
+     * Product Manager instance
+     *
+     * @var EasyShop\ProductManager
+     */
+    private $productManager;
+
+    /**
+     * Category Manager instance
+     *
+     * @var EasyShop\CategoryManager
+     */
+    private $categoryManager;
+
+    /**
      * Constructor. Retrieves Entity Manager instance
      * 
      */
-    public function __construct($em)
+    public function __construct($em,$collectionHelper,$productManager,$categoryManager)
     {
         $this->em = $em;
+        $this->collectionHelper = $collectionHelper;
+        $this->productManager = $productManager;
+        $this->categoryManager = $categoryManager;
     }
 
     /**
      * Search all product id using string given in parameter
      * @param  string $string
-     * @return array;
+     * @return array
      */
     public function filterBySearchString($queryString = "",$storeKeyword = TRUE)
     {
@@ -71,106 +99,13 @@ class SearchProduct
     }
 
     /**
-     * Search all product id within category given in parameter
-     * @param  array $catId  
-     * @return array;
-     */
-    public function filterByCategory($catId = array(),$pids = array(),$filter=false)
-    {
-        $ids = array();
-        $products = $this->em->getRepository('EasyShop\Entities\EsProduct');
-        if($filter){ 
-            if(count($catId) == 1 && $catId[0] == 1){ 
-                return $pids;
-            }
-            else{
-                $object = $products->findBy(['cat' => $catId,'idProduct' => $pids,'isDraft' => 0,'isDelete' => 0]); 
-            }
-        } 
-        else{
-            if(count($catId) == 1 && $catId[0] == 1){ 
-                $object = $products->findBy(['isDraft' => 0,'isDelete' => 0]); 
-            }
-            else{
-                $object = $products->findBy(['cat' => $catId,'isDraft' => 0,'isDelete' => 0]); 
-            }
-        }
-
-        foreach ($object as $key => $value) {
-            array_push($ids, $value->getIdProduct());
-        }
-
-        return $ids;
-    }
-
-    /**
-     * Search all product id within brands given in parameter
-     * @param  array  $brands  
-     * @param  array  $pids  
-     * @return array
-     */
-    public function filterByBrand($brands = "",$pids = array(),$filter=false)
-    {
-        $brandNames = explode(',', $brands);
-        $ids = array();
-        $brandIds = array();
-        $brandObject = $this->em->getRepository('EasyShop\Entities\EsBrand')
-                                    ->findBy(['name' => $brandNames]);
-
-        foreach ($brandObject as $key => $value) {
-            array_push($brandIds, $value->getIdBrand());
-        }
-
-        $products = $this->em->getRepository('EasyShop\Entities\EsProduct');
-
-        if($filter){  
-            $object = $products->findBy(['brand' => $brandIds,'idProduct' => $pids,'isDraft' => 0,'isDelete' => 0]); 
-        } 
-        else{
-            $object = $products->findBy(['brand' => $brandIds,'isDraft' => 0,'isDelete' => 0]); 
-        }
-
-        foreach ($object as $key => $value) {
-            array_push($ids, $value->getIdProduct());
-        }
-
-        return $ids; 
-    }
-
-    /**
-     * Search all product id within condition given in parameter
-     * @param  string $condition 
-     * @param  array  $pids 
-     * @return array
-     */
-    public function filterByCondition($condition = "",$pids = array(),$filter=false)
-    {
-        $conditions = explode(',', $condition);
-        $ids = array();
-        $products = $this->em->getRepository('EasyShop\Entities\EsProduct');
-
-        if($filter){  
-            $object = $products->findBy(['condition' => $conditions,'idProduct' => $pids,'isDraft' => 0,'isDelete' => 0]); 
-        } 
-        else{
-            $object = $products->findBy(['condition' => $conditions,'isDraft' => 0,'isDelete' => 0]); 
-        }
-
-        foreach ($object as $key => $value) {
-            array_push($ids, $value->getIdProduct());
-        }
-
-        return $ids; 
-    }
-
-    /**
      * Search all product id within price given in parameter
      * @param  integer $minPrice 
      * @param  integer $maxPrice
      * @param  array   $arrayItems
      * @return array
      */
-    public function filterByPrice($minPrice = 0,$maxPrice = 0,$arrayItems = array())
+    public function filterProductByPrice($minPrice = 0,$maxPrice = 0,$arrayItems = array())
     {
         $minPrice = (is_numeric($minPrice)) ? $minPrice : 0;
         $maxPrice = (is_numeric($maxPrice)) ? $maxPrice : PHP_INT_MAX;
@@ -186,16 +121,17 @@ class SearchProduct
     }
 
     /**
-     * Filter product by parameters attributes
+     * Filter product by attributes parameter
      * @param  array  $productIds
      * @return array
      */
-    public function filterByOtherParameter($parameter = array(),$productIds = array())
+    public function filterProductByAttributesParameter($parameter = array()
+                                                        ,$productIds = array())
     {
         // array of parameters that will disregard on filtering
         $unsetParam = array(
                             'q_str'
-                            ,'q_cat'
+                            ,'category'
                             ,'condition'
                             ,'startprice'
                             ,'endprice'
@@ -241,51 +177,86 @@ class SearchProduct
 
         return $productIds;
     }
-
+ 
     /**
-     * Filter array by seller if exist
-     * @param  string $seller    [description]
-     * @param  array  $arrayItems [description]
-     * @return array
+     * filter product by default filter parameter
+     * @param  array $filterParameter 
+     * @param  array  $productIds 
+     * @return integer[]
      */
-    public function filterBySeller($seller = "", $arrayItems = array())
-    {
-        $seller = trim($seller); 
-   
-        foreach ($arrayItems as $key => $value) {
-            $username = $value['username']; 
-            if (strpos($username, $seller) === false) { 
-                unset($arrayItems[$key]);
-            }
-        }
-    
-        return $arrayItems; 
+    public function filterProductByDefaultParameter($filterParameter,$productIds = array())
+    { 
+        $acceptableFilter = array(
+                                'seller',
+                                'category',
+                                'brand',
+                                'condition',
+                                'location' 
+                            ); 
+        $notExplodableFilter = array(
+                                'seller'
+                                ,'category'
+                            );
+
+        $filteredArray = $this->collectionHelper->removeArrayToArray($filterParameter,$acceptableFilter,FALSE);
+        $filteredArray = $this->collectionHelper->explodeUrlValueConvertToArray($filterParameter,$notExplodableFilter);
+        $productIds = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                                        ->getProductByParameterFiltering($filteredArray,$productIds); 
+
+        return $productIds;
     }
 
     /**
-     * Filter product by given location
-     * @param  array   $productIds [description]
-     * @param  integer $location   [description]
-     * @param  boolean $filter     [description]
-     * @return array
+     * Get the available attribute of the product by the given product IDs
+     * @param  integer[] $productIds
+     * @return mixed
      */
-    public function filterByLocation($location = 0, $pids = array(), $filter = FALSE)
-    {
-        $ids = array();
-        $products = $this->em->getRepository('EasyShop\Entities\EsProductShippingHead');
-        $object = $products->findBy(['location' => $location]); 
-
-        if($filter){  
-            $object = $products->findBy(['location' => $location,'product' => $pids]); 
-        } 
-        else{
-            $object = $products->findBy(['location' => $location]);
+    public function getAttributesByProducts($productIds = array())
+    {   
+        $EsProductRepository = $this->em->getRepository('EasyShop\Entities\EsProduct');
+        $organizedAttribute = array();
+        if(count($productIds)>0){
+            $attributes = $EsProductRepository->getAttributes($productIds); 
+            $organizedAttribute = $this->collectionHelper->organizeArray($attributes);
+            $organizedAttribute['Brand'] = $EsProductRepository->getProductBrandsByProductIds($productIds); 
         }
 
-        foreach ($object as $key => $value) {  
-            array_push($ids, $value->getProduct()->getIdProduct());
-        }
-
-        return $ids; 
+        return $organizedAttribute;
     }
+
+    /**
+     * Return all product processed by all filters
+     * @param  mixed $parameters
+     * @param  integer $memberId
+     * @return mixed
+     */
+    public function getProductBySearch($parameters,$memberId = 0)
+    {    
+        $searchProductService = $this;
+        $productManager = $this->productManager;
+        $categoryManager = $this->categoryManager;
+
+        $EsProductRepository = $this->em->getRepository('EasyShop\Entities\EsProduct');
+        $EsCatRepository = $this->em->getRepository('EasyShop\Entities\EsCat'); 
+
+
+        $queryString = (isset($parameters['q_str']) && $parameters['q_str'])?trim($parameters['q_str']):FALSE;
+        $parameterCategory = (isset($parameters['category']) && $parameters['category'])?trim($parameters['category']):FALSE;
+        $startPrice = (isset($parameters['startprice']) && $parameters['startprice'])?trim($parameters['startprice']):FALSE;
+        $endPrice = (isset($parameters['endprice']) && $parameters['endprice'])?trim($parameters['endprice']):FALSE; 
+        $pageNumber = (isset($parameters['page']) && $parameters['page'])?trim($parameters['page']):FALSE;  
+        $storeKeyword = ($pageNumber) ? FALSE:TRUE;
+
+        $productIds = $originalOrder = ($queryString)?$searchProductService->filterBySearchString($queryString,$storeKeyword):array();
+        $productIds = $searchProductService->filterProductByDefaultParameter($parameters,$productIds); 
+        $productIds = $searchProductService->filterProductByAttributesParameter($parameters,$productIds);
+
+        $productIds = (count($originalOrder)>0) ? array_intersect($originalOrder, $productIds) : $productIds; 
+        $filteredProducts = $EsProductRepository->getProductDetailsByIds($productIds,$pageNumber,self::PER_PAGE);
+        $discountedProduct = ($filteredProducts > 0) ? $productManager->getDiscountedPrice($memberId,$filteredProducts) : array(); 
+        $productsResult = ($startPrice) ? $searchProductService->filterProductByPrice($startPrice,$endPrice,$discountedProduct) : $discountedProduct;
+
+        return $productsResult;
+    }
+
 }
