@@ -168,7 +168,7 @@ class SearchProduct
             if(!empty($parameter)){
                 $addtionString = ' AND ('.substr_replace($addtionString," ",1,3).') GROUP BY product_id HAVING COUNT(*) = '. $havingCounter; 
                 $result = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                                            ->getAttributes($productIds,TRUE,$addtionString,$finalizedParamter);
+                                            ->getAttributesByProductIds($productIds,TRUE,$addtionString,$finalizedParamter);
                 $resultNeeded = array_map(function($value) { return $value['product_id']; }, $result);
 
                 return $resultNeeded;
@@ -211,12 +211,12 @@ class SearchProduct
      * @param  integer[] $productIds
      * @return mixed
      */
-    public function getAttributesByProducts($productIds = array())
+    public function getProductAttributesByProductIds($productIds = array())
     {   
         $EsProductRepository = $this->em->getRepository('EasyShop\Entities\EsProduct');
         $organizedAttribute = array();
         if(count($productIds)>0){
-            $attributes = $EsProductRepository->getAttributes($productIds); 
+            $attributes = $EsProductRepository->getAttributesByProductIds($productIds); 
             $organizedAttribute = $this->collectionHelper->organizeArray($attributes);
             $organizedAttribute['Brand'] = $EsProductRepository->getProductBrandsByProductIds($productIds); 
         }

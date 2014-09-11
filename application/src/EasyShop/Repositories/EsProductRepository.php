@@ -82,14 +82,14 @@ class EsProductRepository extends EntityRepository
 
     /**
      * Get all product details with given product id
-     * @param  array   $productId
+     * @param  array   $productIds
      * @param  integer $offset
      * @param  integer $perPage
      * @return mixed
      */
-    public function getProductDetailsByIds($productId = array(),$offset = 0,$perPage = 1)
+    public function getProductDetailsByIds($productIds = array(),$offset = 0,$perPage = 1)
     {   
-        if(count($productId) > 0){
+        if(count($productIds) > 0){
             $this->em =  $this->_em;
             $rsm = new ResultSetMapping(); 
                 $rsm->addScalarResult('idProduct', 'idProduct');
@@ -130,7 +130,7 @@ class EsProductRepository extends EntityRepository
                     WHERE p.id_product IN (:ids)
                     ORDER BY FIELD(p.id_product,:ids)
                     LIMIT :offset, :page ", $rsm);
-                $query->setParameter('ids', $productId);
+                $query->setParameter('ids', $productIds);
                 $query->setParameter('offset', $offset * $perPage);
                 $query->setParameter('page', $perPage);
                 $results = $query->execute();
@@ -142,11 +142,11 @@ class EsProductRepository extends EntityRepository
     }
 
     /**
-     * Get All attributes of given productid
-     * @param  array  $productId
+     * Get all attributes of given productids
+     * @param  array  $productIds
      * @return array
      */
-    public function getAttributes($productId = array(),$filter = false,$additionalString = "",$parameters = array())
+    public function getAttributesByProductIds($productIds = array(),$filter = false,$additionalString = "",$parameters = array())
     {
         $this->em =  $this->_em;
         $rsm = new ResultSetMapping(); 
@@ -190,7 +190,7 @@ class EsProductRepository extends EntityRepository
             ) a
             WHERE product_id IN (:ids) " . $additionalString, $rsm);
 
-        $query->setParameter('ids', $productId); 
+        $query->setParameter('ids', $productIds); 
         if($filter){
             $counter = 0;
             foreach ($parameters as $paramKey => $paramValue) {
@@ -209,10 +209,10 @@ class EsProductRepository extends EntityRepository
 
     /**
      * Get All available brands in given products
-     * @param  array  $productId [description]
-     * @return [type]            [description]
+     * @param  array  $productIds
+     * @return mixed
      */
-    public function getProductBrandsByProductIds($productId = array())
+    public function getProductBrandsByProductIds($productIds = array())
     {
         $this->em =  $this->_em;
         $qb = $this->em->createQueryBuilder();
@@ -220,7 +220,7 @@ class EsProductRepository extends EntityRepository
                                 ->from('EasyShop\Entities\EsProduct','p')
                                 ->leftJoin('EasyShop\Entities\EsBrand','b','WITH','b.idBrand = p.brand')
                                 ->where(
-                                        $qb->expr()->in('p.idProduct', $productId)
+                                        $qb->expr()->in('p.idProduct', $productIds)
                                     )
                                 ->getQuery();
         $result = $qbResult->getResult();
@@ -378,7 +378,13 @@ class EsProductRepository extends EntityRepository
         return $result['count'];
     }
 
-    public function getProductByParameterFiltering($filteredArray,$productIds = array())
+    /**
+     * Get product by default parameters
+     * @param  array $filterArray
+     * @param  array  $productIds
+     * @return array
+     */
+    public function getProductByParameterFiltering($filterArray,$productIds = array())
     {
         $this->em =  $this->_em;
         $qb = $this->em->createQueryBuilder();
@@ -391,35 +397,35 @@ class EsProductRepository extends EntityRepository
                                 ->where('p.isDraft = 0')
                                 ->andWhere('p.isDelete = 0');
  
-        if(isset($filteredArray['condition']) && $filteredArray['condition'][0]){ 
+        if(isset($filterArray['condition']) && $filterArray['condition'][0]){ 
             $qbResult = $qbResult->andWhere(
-                                        $qb->expr()->in('p.condition', $filteredArray['condition'])
+                                        $qb->expr()->in('p.condition', $filterArray['condition'])
                                     );
         }
  
-        if(isset($filteredArray['seller']) && $filteredArray['seller']){
+        if(isset($filterArray['seller']) && $filterArray['seller']){
             $qbResult = $qbResult->andWhere('m.username LIKE :username')
-                                ->setParameter('username', '%'.$filteredArray['seller'].'%');
+                                ->setParameter('username', '%'.$filterArray['seller'].'%');
         }
 
-        if(isset($filteredArray['category']) 
-                && $filteredArray['category'] > 1){ 
+        if(isset($filterArray['category']) 
+                && $filterArray['category'] > 1){ 
             $categoryList = $this->em->getRepository('EasyShop\Entities\EsCat')
-                                        ->getChildCategoryRecursive($filteredArray['category']);
+                                        ->getChildCategoryRecursive($filterArray['category']);
             $qbResult = $qbResult->andWhere(
                                         $qb->expr()->in('p.cat', $categoryList)
                                     );
         }
 
-        if(isset($filteredArray['brand']) && $filteredArray['brand'][0]){
+        if(isset($filterArray['brand']) && $filterArray['brand'][0]){
             $qbResult = $qbResult->andWhere(
-                                        $qb->expr()->in('p.brand', $filteredArray['brand'])
+                                        $qb->expr()->in('p.brand', $filterArray['brand'])
                                     );
         }
 
-        if(isset($filteredArray['location']) && $filteredArray['location'][0]){ 
+        if(isset($filterArray['location']) && $filterArray['location'][0]){ 
             $qbResult = $qbResult->andWhere(
-                                        $qb->expr()->in('sph.location', $filteredArray['location'])
+                                        $qb->expr()->in('sph.location', $filterArray['location'])
                                     );
         }
 

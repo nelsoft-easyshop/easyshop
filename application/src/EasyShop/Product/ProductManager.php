@@ -137,7 +137,7 @@ class ProductManager
                                             ->getParentCategoryRecursive($category);
 
         $attributes = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                                            ->getAttributes($productId);
+                                            ->getAttributesByProductIds($productId);
 
         $organizedAttributes = $this->collectionHelper->organizeArray($attributes);
 

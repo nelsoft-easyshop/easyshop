@@ -76,7 +76,7 @@ class product_search extends MY_Controller {
         
         // get all attributes to by products
         $finalizedProductIds = array_map(function($value) { return $value['idProduct']; }, $response['products']);
-        $availableAttributes = $searchProductService->getAttributesByProducts($finalizedProductIds);
+        $availableAttributes = $searchProductService->getProductAttributesByProductIds($finalizedProductIds);
         // Get all condition and distinct same data
         $availableCondition = array_map(function($value) { return $value['condition']; }, $response['products']);
         $availableAttributes['Condition'] = array_unique($availableCondition);
@@ -155,7 +155,7 @@ class product_search extends MY_Controller {
         
         // get all attributes to by products
         $finalizedProductIds = array_map(function($value) { return $value['idProduct']; }, $response['products']);
-        $availableAttributes = $searchProductService->getAttributesByProducts($finalizedProductIds);
+        $availableAttributes = $searchProductService->getProductAttributesByProductIds($finalizedProductIds);
         // Get all condition and distinct same data
         $availableCondition = array_map(function($value) { return $value['condition']; }, $response['products']);
         $availableAttributes['Condition'] = array_unique($availableCondition);
