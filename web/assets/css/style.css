@@ -3785,6 +3785,30 @@ padding: 8px 0;
     font-size: 11px;
     color:#0191C8;
 }
+
+/*** Log in style ***/
+.btn-primarybtn {
+    color:#fff;
+    background-color: #f48000;
+    border-color:#f48000;
+}
+
+.btn.btn-primarybtn:hover {
+    color:#fff;  
+    background-color: #ff4400;
+    border-color:#ff4400;
+}
+.login-tli-con .text-center {
+    text-align: center;
+}
+
+.login-tli-con .text-right {
+text-align: right;
+}
+
+.login-tli-con {
+    min-height: 400px
+}
 /**** Reset Password ****/
 .reset_pword_btn_con {
     display: block;
