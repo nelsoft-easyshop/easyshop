@@ -57,16 +57,22 @@
 
                             var url = $('#redirect_url').val();
                             var first_uri_segment = url.substring(0, url.indexOf('/'));
-                            
-                            if((url == 'sell/step1')||(first_uri_segment == 'item')|| (url == 'cart')){
-                                window.location = config.base_url+ url;
-                            }
-                            else if(first_uri_segment == 'cart'){
-                                window.location = config.base_url + first_uri_segment;
+                            var vendorSubscriptionUri = $.cookie('es_vendor_subscribe');
+
+                            if( typeof vendorSubscriptionUri !== "undefined" ){
+                                window.location = config.base_url + vendorSubscriptionUri;
                             }
                             else{
-                                window.location = config.base_url;
-                            }                        
+                                if((url == 'sell/step1')||(first_uri_segment == 'item')|| (url == 'cart')){
+                                    window.location = config.base_url+ url;
+                                }
+                                else if(first_uri_segment == 'cart'){
+                                    window.location = config.base_url + first_uri_segment;
+                                }
+                                else{
+                                    window.location = config.base_url;
+                                }                            
+                            }
                         }
                     }
                 });

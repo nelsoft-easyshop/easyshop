@@ -4,6 +4,7 @@ namespace EasyShop\Search;
 
 use EasyShop\Entities\EsProduct;
 use EasyShop\Entities\EsProductShippingHead;
+use EasyShop\Entities\EsKeywordsTemp;
 
 /**
  * Search Product Class
@@ -34,8 +35,16 @@ class SearchProduct
      * @param  string $string
      * @return array;
      */
-    public function filterBySearchString($queryString = "")
+    public function filterBySearchString($queryString = "",$storeKeyword = TRUE)
     {
+        if($storeKeyword){
+            // Insert into search keyword temp 
+            $keywordTemp = new EsKeywordsTemp();
+            $keywordTemp->setKeywords($queryString); 
+            $this->em->persist($keywordTemp);
+            $this->em->flush();
+        }
+
         $clearString = preg_replace('/[^A-Za-z0-9]+/', ' ', $queryString);  
         $stringCollection = array();
         $ids = array(); 
