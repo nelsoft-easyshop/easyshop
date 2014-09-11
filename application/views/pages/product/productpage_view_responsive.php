@@ -7,11 +7,7 @@
 <link rel="stylesheet" href="<?=base_url()?>assets/css/style_new.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
 <link rel="stylesheet" href="<?=base_url()?>assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
 <link rel="stylesheet" href="<?=base_url()?>assets/css/jquery.bxslider.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
-<link rel="stylesheet" href="<?=base_url()?>assets/owl-carousel/owl.carousel.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
-<link rel="stylesheet" href="<?=base_url()?>assets/owl-carousel/owl.theme.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
-<link rel="stylesheet" href="<?=base_url()?>assets/owl-carousel/owl.transitions.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
 
-    
 <style>
 .panel-heading .accordion-toggle:after {
 	/* symbol for "opening" panels */
@@ -25,22 +21,6 @@
 	content: "\e080";    /* adjust as needed, taken from bootstrap.css */
 }
 
-#owl-demo .owl-item div{
-  padding:5px;
-}
-#owl-demo .owl-item img{
-  display: block;
-  width: 100%;
-  height: auto;
-  min-height: auto;
-  -webkit-border-radius: 0px;
-  -moz-border-radius: 0px;
-  border-radius: 0px;
-}
-
-.owl-buttons{
-	display: none !important;
-}
 </style>
 
 <section style="color-gray">
@@ -1038,11 +1018,11 @@
 <script type='text/javascript' src='<?=base_url()?>assets/js/src/vendor/jquery.numeric.js'></script>
 <script type='text/javascript' src='<?=base_url()?>assets/js/src/vendor/jquery.simplemodal.js'></script>
 <script type='text/javascript' src='<?=base_url()?>assets/js/src/vendor/jquery.validate.js'></script>
-<script src="<?=base_url()?>assets/js/src/productpage.js?ver=<?=ES_FILE_VERSION?>" type="text/javascript"></script>
 
-<script src="<?=base_url()?>assets/owl-carousel/owl.carousel.js" type="text/javascript"></script>
+<script src="<?=base_url()?>assets/js/src/productpage.js?ver=<?=ES_FILE_VERSION?>" type="text/javascript"></script>
 <script src="<?=base_url()?>assets/js/src/vendor/jquery.plugin.min.js" type="text/javascript"></script>
 <script src="<?=base_url()?>assets/js/src/vendor/jquery.countdown.min.js" type="text/javascript"></script>
+<script src="<?=base_url()?>assets/js/src/jquery.mobile.custom.min.js" type="text/javascript"></script>
 
 <style type="text/css">
     nav {
@@ -1165,21 +1145,6 @@
     $('.prod_cat_drop').removeClass('active_prod_cat_drop_arrow');
 </script>
 
-
-<script>
-$(document).ready(function() {
-  $("#owl-demo").owlCarousel({
-	autoPlay : false,
-	stopOnHover : true,
-	navigation:true,
-	paginationSpeed : 1000,
-	goToFirstSpeed : 2000,
-	singleItem : true,
-	autoHeight : true,
-	transitionStyle:"fade"
-  });
-});
-</script>
 <script>
     
     $(document).ready(function(){
