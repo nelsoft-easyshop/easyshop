@@ -5,7 +5,20 @@ namespace EasyShop\Promo;
 class CountDownSalePromo extends AbstractPromo
 {
 
+    /**
+     * Maximum hour differential for the promo
+     * @var float
+     *
+     */
+    private $maxHourDifferential = 49.5;
 
+    /**
+     * The percentage discount per hour
+     * @var float
+     *
+     */
+    private $percentagePerHour = 2.00;
+    
     /**
      * Applies the count down sale calculations
      *
@@ -21,7 +34,7 @@ class CountDownSalePromo extends AbstractPromo
             $diffHours = 0;
         }
         else if($this->dateToday > $this->endDateTime){
-            $diffHours = 49.5;
+            $diffHours = $this->maxHourDifferential;
             $this->isStartPromo = true;
         }
         else{
@@ -29,7 +42,7 @@ class CountDownSalePromo extends AbstractPromo
             $this->isStartPromo = true;
         }
         
-        $this->promoPrice = $this->product->getPrice() - (($diffHours * 0.02) * $this->product->getPrice());
+        $this->promoPrice = $this->product->getPrice() - (($diffHours * $percentagePerHour / 100.0) * $this->product->getPrice());
         $this->promoPrice = ($this->promoPrice <= 0) ? 0.01 : $this->promoPrice;
         $this->isEndPromo = ($this->dateToday > $this->endDateTime) ? true : false;
         
