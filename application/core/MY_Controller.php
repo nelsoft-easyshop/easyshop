@@ -45,6 +45,7 @@ class MY_Controller extends CI_Controller
         $this->load->model("user_model");
         $this->load->model("product_model");
         $this->load->model("messages_model");
+        $user = array();
         $usersession = $this->session->userdata('usersession');
         if(!empty($usersession) || $this->check_cookie()){
             $uid = $this->session->userdata('member_id'); 
