@@ -51,12 +51,12 @@ class ProductManager
     
     
     /**
-     * Returns the product object with the promo fields set
+     * Returns the product object
      *
      * @param integer $productId
      * @return Product
      */
-    public function getProductWithPromoDetails($productId)
+    public function getProductDetails($productId)
     {
         $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
                             ->find($productId);
