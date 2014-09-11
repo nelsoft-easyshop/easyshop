@@ -160,11 +160,12 @@ class CartManager
 
     
     /**
-     * Validates the contents of the cart
+     * Returns the validated contents of the cart
      *
-     *  @param integer $memberId
+     * @param integer $memberId
+     * @return mixed
      */
-    public function validateCartContents($memberId)
+    public function getValidateCartContents($memberId)
     {
         $member = $this->em->getRepository('EasyShop\Entities\EsMember')->find($memberId);
         if(!$member->getIsEmailVerify()){
@@ -196,7 +197,7 @@ class CartManager
             }
 
         }
-        return true;
+        return  $this->cart->getContents();
             
     }
     
@@ -329,6 +330,16 @@ class CartManager
         
         return $this->cart->update($cartRowId, $cartItem);
         
+    }
+    
+    /**
+     * Returns the cart object
+     *
+     * @return EasyShop\Cart\CartInterface
+     */
+    public function getCartObject()
+    {
+        return $this->cart;
     }
 
 
