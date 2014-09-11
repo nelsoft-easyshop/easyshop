@@ -6,26 +6,39 @@ if (!defined('BASEPATH'))
 class Cart extends MY_Controller
 {
 
+    /**
+     * The cartManager
+     *
+     * @var EasyShop\Cart\CartManager
+     */
+    private $cartManager;
+    
+    /**
+     * The cart object
+     * 
+     * @var EasyShop\Cart\CartInterface
+     */
+    private $cartImplementation;
+
     function __construct()
     {
         parent::__construct();
         $this->load->library('session');
-        $this->load->library('cart');
-        $this->load->model('product_model');
-        $this->load->model('user_model');
-        $this->load->model('cart_model');
+        $this->cartManager = $this->serviceContainer['cart_manager'];
+        $this->cartImplementation = $this->cartManager->getCartObject();
     }
 
     function index()
     {
         $data = $this->fill_header();
         if ($this->session->userdata('usersession')) {
-            $cart = $this->cart_items($this->cart->contents());
-            $member_id = $this->session->userdata('member_id');
-            $this->cart_model->save_cartitems(serialize($cart), $member_id);
+            $memberId = $this->session->userdata('member_id');
+            
+            $cartContents = $this->cartManager->getValidatedCartContents($memberId);
+            $this->cartImplementation->persist($memberId);
             $data['title'] = 'Cart | Easyshop.ph';
-            $data['cart_items'] = $cart;
-            $data['total'] = $this->get_total_price();
+            $data['cart_items'] = $cartContents;
+            $data['total'] = $this->cartImplementation->getTotalPrice();
 
             $this->load->view('templates/header', $data);
             $this->load->view('templates/checkout_progressbar', $data);
