@@ -45,17 +45,15 @@ class MY_Controller extends CI_Controller
         $this->load->model("user_model");
         $this->load->model("product_model");
         $this->load->model("messages_model");
+        $user = array();
         $usersession = $this->session->userdata('usersession');
         if(!empty($usersession) || $this->check_cookie()){
             $uid = $this->session->userdata('member_id'); 
-            $row = $this->user_model->getUserById($uid);
-
+            $user = $this->user_model->getUserById($uid);
             $logged_in = true;
-            $uname = $row['username'];
         }
         else{
             $logged_in = false;
-            $uname = '';
         }
         $carts=$this->session->userdata('cart_contents');
         $sizecart = 0;
@@ -68,10 +66,10 @@ class MY_Controller extends CI_Controller
         }
         $unread = $this->messages_model->get_all_messages($this->session->userdata('member_id'),"Get_UnreadMsgs");
         $msgs['unread_msgs'] = (isset($unread['unread_msgs']) ?$unread['unread_msgs'] : 0);
-        $msgs['msgs'] = (isset($unread['unread_msgs']) ? ($unread['unread_msgs'] != 0 ? reset($unread['messages']) : ""):0);        
+        $msgs['msgs'] = (isset($unread['unread_msgs']) ? ($unread['unread_msgs'] != 0 ? reset($unread['messages']) : ""):0);		
         $data = array(
             'logged_in' => $logged_in,
-            'uname' => $uname,
+            'user' => $user,
             'total_items'=> $sizecart,
             'msgs'=> $msgs,
             'category_search' => $this->product_model->getFirstLevelNode(),

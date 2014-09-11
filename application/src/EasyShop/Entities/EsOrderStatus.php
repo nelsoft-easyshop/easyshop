@@ -42,7 +42,7 @@ class EsOrderStatus
     /**
      * @var integer
      */
-    const STATUS_VOID = 20;
+    const STATUS_VOID = 2;
     
     /**
      * @var integer
