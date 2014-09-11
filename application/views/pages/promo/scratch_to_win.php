@@ -36,20 +36,28 @@
 
                 <button id="send_btn" class="scratch-win-btn">ENTER</button>
                 <div class="bottom-border"></div>
-                <h3>Mechanics</h3>
+                <h3>Mechanics: </h3>
                 <ol>
-                    <li>Scratch the card.</li>
-                    <li>Got to easyshop.ph and click the Scratch Card link.</li>
-                    <li>If your code matches one of the items, click on the item and fill out the registration form.</li>
+                    <li>Participants must obtain a scratch card distributed in the following areas: Manila, Makati, and Ortigas from September 1-December 31, 2014 for a chance to win HOT items from EasyShop.ph.</li>
+                    <li>Participants must scratch the card to reveal a special code.</li>
+                    <li>Participants should visit www.easyshop.ph/scratchcard to enter the code. They automatically get an item for FREE if they have the winning code.</li>
+                    <li>Participants need to click on “CLAIM ITEM” and fill out the registration form or login to their accounts.</li>
+                    <li>To claim the prizes, participants must present their winning scratch card and bring 2 valid IDs at the EasyShop Main Office located at 8th flr. Marc 2000 Tower, 1973 Taft Ave., Malate, Manila.</li>
+                    <li>Redemption of prizes is until December 31, 2014.</li>
+                    <li>For more details, visit the EasyShop website at www.easyshop.ph or call customer service at (02) 354-5973.</li>
                 </ol>
                 <br>
-                <p>
-                    To redeem the prize, present the winning scratch<br>
-                    card and bring two (2) valid ID's at Easyshop.ph office<br>
-                    located at 8th flr. Marc 2000 Tower, 1973 Tacft Ave.,<br>
-                    Malate, Manila. You may claim your prizes until <br>
-                    December 31, 2014.
-                </p>
+                <h3>Terms and Conditions: </h3>
+                <ol>
+                    <li>The contest is open to all individuals aged 21 years and above.</li>
+                    <li>By registering to EasyShop.ph, individuals agree, warrant, and represent that all personal information provided is true, correct, and complete.</li>
+                    <li>By participating in this promo, the participant voluntarily provides information that may be used for market research.</li>
+                    <li>Prizes given are not convertible to cash.</li>
+                    <li>The scratch card cannot be used in conjunction with other on-going promotions unless specifically stated in the scratch card mechanics.</li>
+                    <li>EasyShop.ph reserves the right to amend the terms and conditions without prior notice.</li>
+                    <li>Only residents of the Republic of the Philippines are eligible to participate in this promotion.</li>
+                </ol>
+                <br>
                 <p>
                     Visit <a href="<?=base_url()?>">www.Easyshop.ph</a> for more details or you may <br>
                     call our customer service at (02)353-0062 or <br>
