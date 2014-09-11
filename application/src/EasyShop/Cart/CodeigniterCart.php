@@ -37,13 +37,14 @@ class CodeigniterCart implements CartInterface
     /**
      * Constructor
      * 
+     * @param Doctrine\ORM\EntityManager $em
      */
-    public function __construct()
+    public function __construct($em)
     {
         $this->CI =& get_instance();
         $this->CI->load->library('cart');
         $this->cart = new $this->CI->cart();
-        $this->em = get_instance()->kernel->serviceContainer['entity_manager'];     
+        $this->em = $em;    
     }
     
     /**

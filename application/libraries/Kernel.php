@@ -115,7 +115,7 @@ class Kernel
         $container['cart_manager'] = function ($c) use ($container) {
             $productManager = $container['product_manager'];
             $promoManager = $container['promo_manager'];
-            $cart = new \EasyShop\Cart\CodeigniterCart();
+            $cart = new \EasyShop\Cart\CodeigniterCart($container['entity_manager']);
             return new \EasyShop\Cart\CartManager($cart, $productManager, $promoManager);
         };
 
