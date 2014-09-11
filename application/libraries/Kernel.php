@@ -176,7 +176,9 @@ class Kernel
 
         // Search product
         $container['search_product'] = function ($c) use($container) {
-            return new \EasyShop\Search\SearchProduct($container['entity_manager']);
+            $em = $container['entity_manager'];
+            $stringUtility = $container['string_utility'];
+            return new \EasyShop\Search\SearchProduct($em,$stringUtility);
         };
 
         // Promo
@@ -206,6 +208,11 @@ class Kernel
         // Category Manager
         $container['category_manager'] = function ($c) {
             return new \EasyShop\Category\CategoryManager();
+        };
+
+        // String Utility
+        $container['string_utility'] = function($c) {
+            return new EasyShop\Utility\StringUtility();
         };
 
         /* Register services END */
