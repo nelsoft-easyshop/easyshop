@@ -7,8 +7,8 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * EsPointHistory
  *
- * @ORM\Table(name="es_point_history", indexes={@ORM\Index(name="fk_es_point_history_m_id_idx", columns={"m_id"}), @ORM\Index(name="fk_es_point_history_pt_id_idx", columns={"type"})})
- * @ORM\Entity
+ * @ORM\Table(name="es_point_history", indexes={@ORM\Index(name="fk_es_point_history_m_id_idx", columns={"member_id"}), @ORM\Index(name="fk_es_point_history_pt_id_idx", columns={"type"})})
+ * @ORM\Entity(repositoryClass="EasyShop\Repositories\EsPointHistoryRepository")
  */
 class EsPointHistory
 {
@@ -47,10 +47,10 @@ class EsPointHistory
      *
      * @ORM\ManyToOne(targetEntity="EasyShop\Entities\EsMember")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="m_id", referencedColumnName="id_member")
+     *   @ORM\JoinColumn(name="member_id", referencedColumnName="id_member")
      * })
      */
-    private $m;
+    private $member;
 
     /**
      * @var \EasyShop\Entities\EsPointType
@@ -144,26 +144,26 @@ class EsPointHistory
     }
 
     /**
-     * Set m
+     * Set member
      *
-     * @param \EasyShop\Entities\EsMember $m
+     * @param \EasyShop\Entities\EsMember $member
      * @return EsPointHistory
      */
-    public function setM(\EasyShop\Entities\EsMember $m = null)
+    public function setMember(\EasyShop\Entities\EsMember $member = null)
     {
-        $this->m = $m;
+        $this->member = $member;
 
         return $this;
     }
 
     /**
-     * Get m
+     * Get member
      *
      * @return \EasyShop\Entities\EsMember 
      */
-    public function getM()
+    public function getMember()
     {
-        return $this->m;
+        return $this->member;
     }
 
     /**

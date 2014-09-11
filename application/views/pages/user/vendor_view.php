@@ -54,7 +54,7 @@
                 <img src="<?php echo $banner;?>">
             </div>
             <div class="vendor_info_wrapper">
-                <div class="vendor-avatar vendor_avatar_wrapper">
+                <div class="vendor_avatar_wrapper">
                     <?php if($renderEdit):?>
                     <div id="avatar_edit" class="vendor_edit_avatar border_radius1 img_edit"><small class="span_bg edit_btn"></small> Edit</div>
                     <?php 
@@ -69,9 +69,11 @@
                         <input type="hidden" name="vendor" value="vendor">
                     <?php echo form_close();?>
                     <?php endif;?>
-                    <span>
-                        <?php echo $image_profile?>	
-                    </span>
+                    <div class="vendor-avatar">
+                        <span>
+                            <?php echo $image_profile?>	
+                        </span>
+                    </div>
                     
 
                     <p class='follow-cnt'>
@@ -79,22 +81,44 @@
                         <span class='span-cont' id='following-lnk'><?php echo count($following)?> <label>following</label></span>
                     </p>
      
-                    <?php if( !$renderEdit && $logged_in ):?>
+                    <?php if( !$renderEdit ):?>
+                        <input id="subscribe_status" type="hidden" value="<?php echo $subscribe_status?>">
                         <?php echo form_open('');?>
-                        <p class="subscription_btn" style="text-align:center; display:<?php echo $subscribe_status==='unfollowed'?'':'none'?>">
-                            <small class="span_bg plus_btn"></small> Follow
+                        <p id="follow_btn" class="subscription_btn btn2 btn-follow" style="text-align:center; display:<?php echo $subscribe_status==='unfollowed'?'':'none'?>">
+                            <small class="sprite-bg follow-icon"></small> Follow
                         </p>
-                        <p class="subscription_btn" style="text-align:center; display:<?php echo $subscribe_status==='followed'?'':'none'?>">
-                            <small class="span_bg minus_btn"></small> Unfollow
+                        <p class="subscription_btn btn2 btn-unfollow" style="text-align:center; display:<?php echo $subscribe_status==='followed'?'':'none'?>">
+                            <small class="sprite-bg unfollow-icon"></small> Unfollow
                         </p>
-                        <input type="hidden" value="<?php echo $vendordetails['username']?>" name="name">
+                        <input id="vendor_name" type="hidden" value="<?php echo $vendordetails['username']?>" name="name">
+                        <input type="hidden" value="<?php echo $vendordetails['userslug']?>" name="userlink">
                         <?php echo form_close();?>
                     <?php endif;?>
 
                 </div>
                 <div class="vendor_info_con">
                     <div class="vendor_info_con_left">
-                        <h2><?php echo $vendordetails['username'];?></h2>
+                        <div id="user_store_name"> 
+                            <div id="user_store_echo">
+                                <h2><?php echo html_escape($store_name);?></h2>
+                                <small id="username_echo" style="display: <?php echo $hasStoreName ? '' : 'none' ?>">by <?php echo $vendordetails['username']?></small>
+                                
+                                <?php if($renderEdit):?>
+                                    <div id="store_name_edit"><small class="span_bg edit_btn"></small> Edit</div>
+                                <?php endif;?>
+                            </div>
+                            <?php if($renderEdit):?>
+                            <div id="user_store_edit" style="display:none;">
+                                <?php echo form_open('');?>
+                                    <input type="text" data-origname="<?php echo $hasStoreName ? html_escape($store_name) : $vendordetails['username'] ?>" name="store_name" value="<?php echo $hasStoreName ? html_escape($store_name) : $vendordetails['username'] ?>">
+                                    <input type="hidden" name="store_name_hidden" value="1">
+                                    <input id="store_name_submit" type="button" value="Save">
+                                    <input id="store_name_cancel" type="button" value="Cancel">
+                                <?php echo form_close();?>
+                            </div>
+                            <?php endif;?>
+                        </div>
+                        
                         <div class="vendor_store_desc">
                             <div id="store_desc_echo" style="display:<?php echo $hasStoreDesc ? '' : 'none'?>;" class="vendor_desc_dis_con">
                                 <p><?php echo html_escape($vendordetails['store_desc']);?></p>
@@ -204,6 +228,7 @@
 
                     </div>	
                 </div>
+                <div class="clear"></div>
             </div>
 
             <?php $items_per_page = 10;?>
@@ -211,10 +236,10 @@
             <div class="dashboard_table vendor_feedbacks_table user-tab" id="dashboard-feedbacks">
                     <h2>Feedbacks</h2><a href="javascript:void(0)" class="hide_all_feedbacks blue"><span class="span_bg minus_btn"></span> Hide All Feedbacks</a>
                         <ul class="idTabs">
-                            <li><a href="#op_buyer">Feedbacks as a Buyer</a></li>
-                            <li><a href="#op_seller">Feedbacks as a Seller</a></li>
-                            <li><a href="#yp_buyer">Feedbacks for others - Buyer</a></li>
-                            <li><a href="#yp_seller">Feedbacks for others - Seller</a></li>
+                            <li><a href="#op_buyer">Feedbacks from Sellers</a></li>
+                            <li><a href="#op_seller">Feedbacks from Buyers</a></li>
+                            <li><a href="#yp_buyer">Feedbacks to Sellers</a></li>
+                            <li><a href="#yp_seller">Feedbacks to Buyers</a></li>
                         </ul>
 
                         <div class="clear"></div>
@@ -600,7 +625,7 @@
                             </div>
                         <?php endforeach;?>
                     </div>
-                    <div class="txt_load_more_con">
+                    <div class="txt_load_more_con v_loadmore">
                         <a target="_blank" href="<?php echo $p['loadmore_link']?>" class="grey_btn">LOAD MORE ITEMS</a>
                     </div>
                     <?php endforeach;?>

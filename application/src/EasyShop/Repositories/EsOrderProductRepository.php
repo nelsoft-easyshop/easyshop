@@ -4,7 +4,6 @@ namespace EasyShop\Repositories;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\ResultSetMapping;
-
 use EasyShop\Entities\EsOrderProduct;
 use EasyShop\Entities\EsOrder;
 use EasyShop\Entities\EsProduct;

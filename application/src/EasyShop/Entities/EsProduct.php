@@ -7,12 +7,11 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * EsProduct
  *
- * @ORM\Table(name="es_product", indexes={@ORM\Index(name="fk_es_product_es_cat1_idx", columns={"cat_id"}), @ORM\Index(name="fk_es_product_es_brand1_idx", columns={"brand_id"}), @ORM\Index(name="fk_es_product_es_style1_idx", columns={"style_id"}), @ORM\Index(name="fk_es_product_es_member1_idx", columns={"member_id"}), @ORM\Index(name="fk_es_product_es_billing_info_idx", columns={"billing_info_id"}), @ORM\Index(name="slug", columns={"slug"}), @ORM\Index(name="fk_es_product_es_keywords1_idx", columns={"name", "keywords"})})
+ * @ORM\Table(name="es_product", indexes={@ORM\Index(name="fk_es_product_es_cat1_idx", columns={"cat_id"}), @ORM\Index(name="fk_es_product_es_brand1_idx", columns={"brand_id"}), @ORM\Index(name="fk_es_product_es_style1_idx", columns={"style_id"}), @ORM\Index(name="fk_es_product_es_member1_idx", columns={"member_id"}), @ORM\Index(name="fk_es_product_es_billing_info_idx", columns={"billing_info_id"}), @ORM\Index(name="slug", columns={"slug"}), @ORM\Index(name="fk_es_product_es_keywords1_idx", columns={"name", "keywords"}), @ORM\Index(name="fulltext_search_keyword", columns={"search_keyword"})})
  * @ORM\Entity(repositoryClass="EasyShop\Repositories\EsProductRepository")
  */
 class EsProduct
 {
-
     /**
      * @var integer
      *
@@ -63,13 +62,6 @@ class EsProduct
      * @ORM\Column(name="keywords", type="string", length=1024, nullable=false)
      */
     private $keywords = '';
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="search_keyword", type="string", length=1024, nullable=true)
-     */
-    private $searchKeyword = '';
 
     /**
      * @var string
@@ -205,9 +197,9 @@ class EsProduct
     private $enddate = 'CURRENT_TIMESTAMP';
 
     /**
-     * @var integer
+     * @var boolean
      *
-     * @ORM\Column(name="promo_type", type="smallint", nullable=false)
+     * @ORM\Column(name="promo_type", type="boolean", nullable=false)
      */
     private $promoType = '0';
 
@@ -219,55 +211,19 @@ class EsProduct
     private $isSoldOut = '0';
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="search_keyword", type="string", length=1024, nullable=true)
+     */
+    private $searchKeyword = '';
+
+    /**
      * @var boolean
      *
      * @ORM\Column(name="is_meetup", type="boolean", nullable=false)
      */
     private $isMeetup = '1';
 
-    
-    /**
-     * @var boolean
-     *
-     */
-    private $startPromo = '0';
-    
-        
-    /**
-     * @var boolean
-     *
-     */
-    private $endPromo = '0';
-    
-    
-    /**
-     * @var string
-     *
-     */
-    private $originalPrice = '0.0000';
-    
-     
-    /**
-     * @var string
-     *
-     */
-    private $discountPercentage = '0.0000';
-
-    
-    /**
-     *
-     * @var bool
-     *
-     */
-    private $isFreeShipping = false;
-    
-    /**
-     * @var string
-     *
-     */
-    private $soldPrice = '0.0000';
-
-    
     /**
      * @var \EasyShop\Entities\EsBrand
      *
@@ -308,7 +264,46 @@ class EsProduct
      */
     private $style;
 
+    /**
+     * @var boolean
+     *
+     */
+    private $startPromo = '0';
+    
+        
+    /**
+     * @var boolean
+     *
+     */
+    private $endPromo = '0';
+    
+    
+    /**
+     * @var string
+     *
+     */
+    private $originalPrice = '0.0000';
+    
+     
+    /**
+     * @var string
+     *
+     */
+    private $discountPercentage = '0.0000';
 
+    
+    /**
+     *
+     * @var bool
+     *
+     */
+    private $isFreeShipping = false;
+    
+    /**
+     * @var string
+     *
+     */
+    private $soldPrice = '0.0000';
 
     /**
      * Get idProduct
@@ -456,29 +451,6 @@ class EsProduct
     public function getKeywords()
     {
         return $this->keywords;
-    }
-
-    /**
-     * Set searchKeyword
-     *
-     * @param string $searchKeyword
-     * @return EsProduct
-     */
-    public function setSearchKeyword($searchKeyword)
-    {
-        $this->searchKeyword = $searchKeyword;
-
-        return $this;
-    }
-
-    /**
-     * Get searchKeyword
-     *
-     * @return string 
-     */
-    public function getSearchKeyword()
-    {
-        return $this->searchKeyword;
     }
 
     /**
@@ -965,6 +937,29 @@ class EsProduct
     }
 
     /**
+     * Set searchKeyword
+     *
+     * @param string $searchKeyword
+     * @return EsProduct
+     */
+    public function setSearchKeyword($searchKeyword)
+    {
+        $this->searchKeyword = $searchKeyword;
+
+        return $this;
+    }
+
+    /**
+     * Get searchKeyword
+     *
+     * @return string 
+     */
+    public function getSearchKeyword()
+    {
+        return $this->searchKeyword;
+    }
+
+    /**
      * Set isMeetup
      *
      * @param boolean $isMeetup
@@ -1068,8 +1063,7 @@ class EsProduct
 
         return $this;
     }
-    
-    
+
     /**
      * Get style
      *
@@ -1079,7 +1073,6 @@ class EsProduct
     {
         return $this->style;
     }
-
     
     /**
      * Set isStartPromo
@@ -1183,8 +1176,6 @@ class EsProduct
         return $this->isFreeShipping;
     }
     
-
-
     /**
      *  Set $soldPrice
      *
@@ -1205,6 +1196,4 @@ class EsProduct
         return $this->soldPrice;
     }
     
-
-
 }

@@ -28,8 +28,4 @@ class EsProductItemLockRepository extends EntityRepository
 
              
     }
- 
-
-
-    
 }

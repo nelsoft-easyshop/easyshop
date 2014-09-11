@@ -1,6 +1,61 @@
 @import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300,300italic,600);
 @import url(https://fonts.googleapis.com/css?family=Roboto:400,300);
 
+/*** checkout progress bar ***/
+.chk-wrapper {
+	background-color: #f3f3f3;
+	text-align: center;
+}
+.chk-wrapper h1 {
+	color: #6b6b6b;
+	font-size: 24px;
+}
+.chk-border-bottom {
+    border-bottom: 3px solid #cecece;
+    margin:auto;
+    width: 45%;
+}
+.chk-steps-wrapper {
+	margin-top: -20px;
+	text-align: center;
+}
+.chk-steps-con {
+	color: #a9a9a9;
+	display: inline-block;
+	font-size: 18px;
+	text-align: center;
+	width: 21.66666667%;
+}
+.chk-steps-bg {
+    background-color: #f3f3f3;
+    display: block;
+    margin: auto;
+    text-align: center;
+    width: 50px;
+}
+.chk-steps {
+	background-color: #a9a9a9;
+	color: #fff;
+	border-radius: 90px;
+	display: block;
+	font-size: 18px;
+	font-weight: bold;
+	height: 35px;
+	line-height: 35px;
+	margin:auto;
+	margin-bottom: 10px;
+	text-align: center;
+	width: 35px;
+}
+.chk-active .chk-steps {
+	background-color: #42db67;
+}
+.chk-active .chk-text {
+	color: #636363;
+}
+
+/*** end of checkout progress bar ***/
+
 .my_cart_title,
 .checkout_title {
 	font-size: 30px;

@@ -16,7 +16,7 @@ class product extends MY_Controller
         parent::__construct(); 
         $this->load->helper('htmlpurifier');
         $this->load->model("product_model");
-        $this->load->model("messages_model");
+        $this->load->model("messages_model");        
     }
 
 
@@ -190,7 +190,7 @@ class product extends MY_Controller
         $response['category_slug'] = $category_array['slug'];
         
         $this->load->view('templates/header', $data); 
-        $this->load->view('pages/product/product_search_by_category_final',$response);
+        $this->load->view('pages/product/product_search_by_category_final_responsive',$response);
         $this->load->view('templates/footer'); 
 
     }

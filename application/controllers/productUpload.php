@@ -741,6 +741,11 @@ class productUpload extends MY_Controller
                     }
                 }
                 #end of saving combination
+
+                //update search keywords
+                $productManager = $this->serviceContainer['product_manager'];
+                $productManager->generateSearchKeywords($product_id);
+
                 $this->session->set_userdata('originalPath',  $path_directory);
                 die('{"e":"1","d":"'.$product_id.'"}'); 
             }else{
@@ -979,7 +984,12 @@ class productUpload extends MY_Controller
                         $this->product_model->addNewCombinationAttribute($idProductItem,$productAttributeId,1);
                     }
                 }
-            } 
+            }
+
+            //update search keywords
+            $productManager = $this->serviceContainer['product_manager'];
+            $productManager->generateSearchKeywords($product_id);
+
             die('{"e":"1","d":"'.$product_id.'"}'); 
         }
     }
@@ -1185,8 +1195,7 @@ class productUpload extends MY_Controller
             }
             else{
                 #Update product entry in es_product to be ready for purchase
-                $product['slug'] = $this->product_model->finalizeProduct($productID , $memberId, 1);
-                $product['is_cod'] = 1;
+                $product['slug'] = $this->product_model->finalizeProduct($productID , $memberId, $product['is_cod']);
             }
             
             $data = array(

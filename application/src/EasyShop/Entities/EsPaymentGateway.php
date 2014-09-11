@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * EsPaymentGateway
  *
  * @ORM\Table(name="es_payment_gateway", indexes={@ORM\Index(name="fk_es_point_gateway_order_id_idx", columns={"order_id"}), @ORM\Index(name="fk_es_point_gateway_payment_method_idx", columns={"payment_method_id"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="EasyShop\Repositories\EsPaymentGatewayRepository")
  */
 class EsPaymentGateway
 {
@@ -29,14 +29,11 @@ class EsPaymentGateway
     private $amount = '0.0000';
 
     /**
-     * @var \EasyShop\Entities\EsPaymentMethod
+     * @var \DateTime
      *
-     * @ORM\ManyToOne(targetEntity="EasyShop\Entities\EsPaymentMethod")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="payment_method_id", referencedColumnName="id_payment_method")
-     * })
+     * @ORM\Column(name="date_added", type="datetime", nullable=false)
      */
-    private $paymentMethod;
+    private $dateAdded = 'CURRENT_TIMESTAMP';
 
     /**
      * @var \EasyShop\Entities\EsOrder
@@ -47,6 +44,16 @@ class EsPaymentGateway
      * })
      */
     private $order;
+
+    /**
+     * @var \EasyShop\Entities\EsPaymentMethod
+     *
+     * @ORM\ManyToOne(targetEntity="EasyShop\Entities\EsPaymentMethod")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="payment_method_id", referencedColumnName="id_payment_method")
+     * })
+     */
+    private $paymentMethod;
 
 
 
@@ -84,26 +91,24 @@ class EsPaymentGateway
     }
 
     /**
-     * Set paymentMethod
+     * Set dateAdded
      *
-     * @param \EasyShop\Entities\EsPaymentMethod $paymentMethod
+     * @param \DateTime $dateAdded
      * @return EsPaymentGateway
      */
-    public function setPaymentMethod(\EasyShop\Entities\EsPaymentMethod $paymentMethod = null)
+    public function setDateAdded($dateAdded)
     {
-        $this->paymentMethod = $paymentMethod;
-
+        $this->dateAdded = $dateAdded;
         return $this;
     }
 
     /**
-     * Get paymentMethod
+     * Get dateAdded
      *
-     * @return \EasyShop\Entities\EsPaymentMethod 
+     * @return \DateTime 
      */
-    public function getPaymentMethod()
+    public function getDateAdded()
     {
-        return $this->paymentMethod;
     }
 
     /**
@@ -127,5 +132,29 @@ class EsPaymentGateway
     public function getOrder()
     {
         return $this->order;
+    }
+
+
+    /**
+     * Set paymentMethod
+     *
+     * @param \EasyShop\Entities\EsPaymentMethod $paymentMethod
+     * @return EsPaymentGateway
+     */
+    public function setPaymentMethod(\EasyShop\Entities\EsPaymentMethod $paymentMethod = null)
+    {
+        $this->paymentMethod = $paymentMethod;
+
+        return $this;
+    }
+
+    /**
+     * Get paymentMethod
+     *
+     * @return \EasyShop\Entities\EsPaymentMethod 
+     */
+    public function getPaymentMethod()
+    {
+        return $this->paymentMethod;
     }
 }

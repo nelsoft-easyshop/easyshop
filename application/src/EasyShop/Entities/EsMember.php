@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * EsMember
  *
  * @ORM\Table(name="es_member", indexes={@ORM\Index(name="username_idx", columns={"username"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="EasyShop\Repositories\EsMemberRepository")
  */
 class EsMember
 {
@@ -181,6 +181,27 @@ class EsMember
      * @ORM\Column(name="slug", type="string", length=255, nullable=false)
      */
     private $slug;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="store_name", type="string", length=1024, nullable=true)
+     */
+    private $storeName;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="failed_login_count", type="integer", nullable=true)
+     */
+    private $failedLoginCount = '0';
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="last_failed_login_datetime", type="datetime", nullable=true)
+     */
+    private $lastFailedLoginDatetime = 'CURRENT_TIMESTAMP';
 
     /**
      * @var \Doctrine\Common\Collections\Collection
@@ -744,6 +765,76 @@ class EsMember
     {
         return $this->slug;
     }
+
+    /**
+     * Set storeName
+     *
+     * @param string $storeName
+     * @return EsMember
+     */
+    public function setStoreName($storeName)
+    {
+        $this->storeName = $storeName;
+
+        return $this;
+    }
+
+    /**
+     * Get storeName
+     *
+     * @return string 
+     */
+    public function getStoreName()
+    {
+        return $this->storeName;
+    }
+
+    /**
+     * Set failedLoginCount
+     *
+     * @param integer $failedLoginCount
+     * @return EsMember
+     */
+    public function setFailedLoginCount($failedLoginCount)
+    {
+        $this->failedLoginCount = $failedLoginCount;
+
+        return $this;
+    }
+
+    /**
+     * Get failedLoginCount
+     *
+     * @return integer 
+     */
+    public function getFailedLoginCount()
+    {
+        return $this->failedLoginCount;
+    }
+
+    /**
+     * Set lastFailedLoginDatetime
+     *
+     * @param \DateTime $lastFailedLoginDatetime
+     * @return EsMember
+     */
+    public function setLastFailedLoginDatetime($lastFailedLoginDatetime)
+    {
+        $this->lastFailedLoginDatetime = $lastFailedLoginDatetime;
+
+        return $this;
+    }
+
+    /**
+     * Get lastFailedLoginDatetime
+     *
+     * @return \DateTime 
+     */
+    public function getLastFailedLoginDatetime()
+    {
+        return $this->lastFailedLoginDatetime;
+    }
+
 
     /**
      * Add session

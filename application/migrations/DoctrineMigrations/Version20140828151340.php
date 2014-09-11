@@ -14,7 +14,7 @@ class Version20140828151340 extends AbstractMigration
     public function up(Schema $schema)
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('CREATE TABLE `easyshop`.`es_promo` (
+        $this->addSql('CREATE TABLE `es_promo` (
                   `id_promo` INT NOT NULL AUTO_INCREMENT,
                   `member_id` INT NULL DEFAULT 0,
                   `product_id` INT NULL DEFAULT 0,

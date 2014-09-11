@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * EsAttrLookuplistItem
  *
  * @ORM\Table(name="es_attr_lookuplist_item", indexes={@ORM\Index(name="fk_es_attr_lookuplist_item_es_attr_lookuplist1_idx", columns={"attr_lookuplist_id"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="EasyShop\Repositories\EsAttrLookuplistItemRepository")
  */
 class EsAttrLookuplistItem
 {
