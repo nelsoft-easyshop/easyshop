@@ -470,5 +470,5 @@
 </div>
 
 
-<script type="text/javascript" src="<?=base_url()?>assets/js/src/feed.js"></script>
+<script type="text/javascript" src="/assets/js/src/feed.js?ver=<?=ES_FILE_VERSION?>"></script>
 
