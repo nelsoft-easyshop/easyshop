@@ -174,7 +174,7 @@ class Kernel
             $productManager = $container['product_manager'];
             $promoManager = $container['promo_manager'];
             $cart = new \EasyShop\Cart\CodeigniterCart($container['entity_manager']);
-            return new \EasyShop\Cart\CartManager($cart, $productManager, $promoManager);
+            return new \EasyShop\Cart\CartManager($container['entity_manager'], $cart, $productManager, $promoManager);
         };
 
         // Payment Service
