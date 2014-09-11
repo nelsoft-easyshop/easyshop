@@ -41,7 +41,7 @@ class product extends MY_Controller
         $categoryDetails = $EsCatRepository->findOneBy(['slug' => $categorySlug]);
 
         $brand = trim($this->input->get('brand'));
-        $page = (trim($this->input->get('page'))) ? trim($this->input->get('page')) : 0;
+        $page = ($this->input->get('page')) ? trim($this->input->get('page')) : 0;
         $startPrice = trim($this->input->get('startprice'));
         $endPrice = trim($this->input->get('endprice'));
         $memberId = $this->session->userdata('member_id');
@@ -59,9 +59,9 @@ class product extends MY_Controller
             $productIds = ($brand) ? $searchProductService->filterByBrand($brand,$productIds,TRUE) : $productIds;
             $productIds = $searchProductService->filterByOtherParameter($this->input->get(),$productIds);  
             
-            $filteredProduct = $EsProductRepository->getDetails($productIds,$page,$this->per_page);
-            $discountedProduct = ($filteredProduct > 0) ? $productManager->getDiscountedPrice($memberId,$filteredProduct) : array();
-            $response['products'] = ($startPrice) ? $searchProductService->filterByPrice($startPrice,$endPrice,$discountedProduct) : $discountedProduct;
+            $filteredProducts = $EsProductRepository->getDetails($productIds,$page,$this->per_page);
+            $discountedProducts = ($filteredProducts > 0) ? $productManager->getDiscountedPrice($memberId,$filteredProducts) : array();
+            $response['products'] = ($startPrice) ? $searchProductService->filterByPrice($startPrice,$endPrice,$discountedProducts) : $discountedProducts;
           
             if($page){
                 $response['typeview'] = trim($this->input->get('typeview'));

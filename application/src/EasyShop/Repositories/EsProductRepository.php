@@ -403,10 +403,10 @@ class EsProductRepository extends EntityRepository
      * @param  $offset   [description]
      * @param  $perPage  [description]
      * @param  integer $seller   [description]
-     * @param  integer $category [description]
+     * @param  integer[] $category [description]
      * @return mixed
      */
-    public function getPopularItem($offset,$perPage,$memberId=0,$categoryId=array())
+    public function getPopularItem($offset,$perPage,$sellerId=0,$categoryId=array())
     {
         $this->em =  $this->_em;
         $qb = $this->em->createQueryBuilder();
@@ -415,18 +415,12 @@ class EsProductRepository extends EntityRepository
                     ->where('p.isDraft = 0')
                     ->andWhere('p.isDelete = 0');
 
-        if($memberId != 0 && count($categoryId) != 0){
-            $query = $query->andWhere(
-                                    $qb->expr()->in('p.cat', $categoryId)
-                                )
-                        ->andWhere('p.member = :member') 
-                        ->setParameter('member', $memberId);
-        }
-        elseif($memberId != 0){
+        if($sellerId != 0){
             $query = $query->andWhere('p.member = :member')
-                            ->setParameter('member', $memberId);
+                            ->setParameter('member', $sellerId);
         }
-        elseif (count($categoryId) != 0) { 
+
+        if (count($categoryId) != 0) { 
             $query = $query->andWhere(
                                     $qb->expr()->in('p.cat', $categoryId)
                                 );
