@@ -164,6 +164,7 @@ class Kernel
             return new \EasyShop\BugReporter\BugReporter($container['entity_manager']);
         };
         
+
         /* Register services END */
         $this->serviceContainer = $container;
     }
