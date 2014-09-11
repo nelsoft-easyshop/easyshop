@@ -27,7 +27,7 @@ class EsMemberRepository extends EntityRepository
         $result = $qb->getOneOrNullResult();
 
         return $result['userCount'];             
-    }    
+    }             
 
     /**
      *  Fetch entries in es_member with exact storeName excluding excludeMemberId
@@ -56,6 +56,27 @@ class EsMemberRepository extends EntityRepository
         $query->setParameter(2,$storeName);
 
         return $query->getResult();
+    }
+
+    /**
+     * Finds a member by username/email
+     *
+     * @param string $username Username/email of member
+     *
+     * @return EasyShop\Entities\EsMember
+     */
+    public function getUser($username)
+    {
+        // check if username is in DB
+        $user = $this->_em->getRepository('EasyShop\Entities\EsMember')
+                            ->findOneBy(['username' => $username]);
+
+        if($user === NULL){
+             $user = $this->_em->getRepository('EasyShop\Entities\EsMember')
+                            ->findOneBy(['email' => $username]);
+        }
+
+        return $user;
     }
 
 }

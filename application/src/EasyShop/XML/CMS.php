@@ -121,8 +121,12 @@ $string = '<typeNode>
         
         $index = (int)$index;
         $productindex = (int)$productindex;
-
-        $referred = "/map/section[".$index.']/product_panel_main['.$productindex.']';
+        if($nodeName == "product_panel_main") {
+            $referred = "/map/section[".$index.']/product_panel_main['.$productindex.']';            
+        }
+        else {
+            $referred = "/map/section[".$index.']/product_panel['.$productindex.']';            
+        }
         $doc = new \SimpleXMLElement(file_get_contents($file));
         if($target = current($doc->xpath($referred))) {
             $dom = dom_import_simplexml($target);

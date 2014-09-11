@@ -207,6 +207,21 @@ class Kernel
         $container['category_manager'] = function ($c) {
             return new \EasyShop\Category\CategoryManager();
         };
+        
+        $container['config_loader'] = function ($c) {
+            $configImplementation = new \EasyShop\ConfigLoader\CodeigniterConfig();
+            return new \EasyShop\ConfigLoader\ConfigLoader($configImplementation);
+        };
+         
+
+
+        //Login Throttler Service
+        $container['login_throttler'] = function ($c) use($container) {
+            return new \EasyShop\LoginThrottler\LoginThrottler(
+                $container['entity_manager'],
+                $container['http_request']
+                );
+        };
 
         /* Register services END */
         $this->serviceContainer = $container;
