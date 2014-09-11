@@ -208,6 +208,7 @@ class Kernel
             return new \EasyShop\Category\CategoryManager();
         };
 
+
         /* Register services END */
         $this->serviceContainer = $container;
     }
