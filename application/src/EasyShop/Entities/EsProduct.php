@@ -264,7 +264,46 @@ class EsProduct
      */
     private $style;
 
+    /**
+     * @var boolean
+     *
+     */
+    private $startPromo = '0';
+    
+        
+    /**
+     * @var boolean
+     *
+     */
+    private $endPromo = '0';
+    
+    
+    /**
+     * @var string
+     *
+     */
+    private $originalPrice = '0.0000';
+    
+     
+    /**
+     * @var string
+     *
+     */
+    private $discountPercentage = '0.0000';
 
+    
+    /**
+     *
+     * @var bool
+     *
+     */
+    private $isFreeShipping = false;
+    
+    /**
+     * @var string
+     *
+     */
+    private $soldPrice = '0.0000';
 
     /**
      * Get idProduct
@@ -1034,4 +1073,127 @@ class EsProduct
     {
         return $this->style;
     }
+    
+    /**
+     * Set isStartPromo
+     *
+     * @param bool $isStart
+     */
+    public function setStartPromo($isStart)
+    {
+        $this->startPromo = $isStart;
+    }
+    
+    /**
+     * Get isStartPromo
+     *
+     * @return bool
+     */
+    public function getStartPromo()
+    {
+        return $this->startPromo;
+    }
+    
+    /**
+     * Set isEndPromo
+     *
+     * @param bool $isStart
+     */
+    public function setEndPromo($isEnd)
+    {
+        $this->endPromo = $isEnd;
+    }
+    
+    /**
+     * Get isEndPromo
+     *
+     * @return bool
+     */
+    public function getEndPromo()
+    {
+        return $this->endPromo;
+    }
+    
+    /**
+     *  Set $originalPrice
+     *
+     *  @param string $originalPrice
+     */
+    public function setOriginalPrice($originalPrice)
+    {
+        $this->originalPrice = $originalPrice;
+    }
+    
+    /**
+     *  Get $originalPrice
+     *
+     *  @return string
+     */
+    public function getOriginalPrice()
+    {
+        return $this->originalPrice;
+    }
+    
+    
+    /**
+     *  Set $discountPercentage
+     *
+     *  @param string $discountPercentage
+     */
+    public function setDiscountPercentage($discountPercentage)
+    {
+        $this->discountPercentage = $discountPercentage;
+    }
+    
+    /**
+     *  Get $discountPercentage
+     *
+     *  @return string
+     */
+    public function getDiscountPercentage()
+    {
+        return $this->discountPercentage;
+    }
+    
+    
+    /**
+     *  Set $isFreeShipping
+     *
+     *  @param bool $isFreeShipping
+     */
+    public function setIsFreeShipping($isFreeShipping)
+    {
+        $this->isFreeShipping = $isFreeShipping;
+    }
+    
+    /**
+     *  Get $isFreeShipping
+     *
+     *  @return bool
+     */
+    public function getIsFreeShipping()
+    {
+        return $this->isFreeShipping;
+    }
+    
+    /**
+     *  Set $soldPrice
+     *
+     *  @param string $soldPrice
+     */
+    public function setSoldPrice($soldPrice)
+    {
+        $this->soldPrice = $soldPrice;
+    }
+    
+    /**
+     *  Get $soldPrice
+     *
+     *  @return string
+     */
+    public function getSoldPrice()
+    {
+        return $this->soldPrice;
+    }
+    
 }
