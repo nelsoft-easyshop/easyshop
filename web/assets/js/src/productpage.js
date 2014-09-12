@@ -739,31 +739,28 @@ $(function(){
     })
     
     
-    jQuery(document).on('click', '#send.enabled', function(){
-            var i_id = $(".id-class").attr("id");
-            var i_name =  $("#pname").text().trim();
-            var i_qty =  $(".product_quantity").val();
-            var i_price =  $(".current_price").text().trim();
-            var i_opt = {};
-            var length = parseInt($('.product_option').length) - 1;
+    $(document).on('click', '#send.enabled', function(){
+        
+            var productId = $(".id-class").attr("id");
+            var quantity = $(".product_quantity").val();
             var csrftoken = $("meta[name='csrf-token']").attr('content');
             var csrfname = $("meta[name='csrf-name']").attr('content');
-            var max_qty = $(".quantity").html();
+            var optionsObject = {};
             $(".options").each(function() {
-                var parent = $(this).parent();
-                var id = $(this).attr("name");
-                var attr= parent.find(".active").attr("id");
-                i_opt[id] =attr;
-                
+                var $activeOption = $(this).find(".active");
+                var attrKey = $(this).attr("name");
+                var attrValue = $activeOption.attr("id");
+                var attrPrice = $activeOption.data("price");
+                optionsObject[attrKey] = attrValue + '~' + attrPrice;
             });
+
             $.ajax({
-                async:false,
-                url: config.base_url + "cart/add_item",
+                url: "/cart/doAddItem",
                 type:"POST",
                 dataType:"JSON",
-                data:{id:i_id,qty:i_qty,price:i_price,opt:i_opt,name:i_name,length:length,csrfname:csrftoken,max_qty:max_qty},
-
+                data:{productId:productId,quantity:quantity,options:optionsObject,csrfname:csrftoken},
                 success:function(data){
+                    /*
                     if(data == "386f25bdf171542e69262bf316a8981d0ca571b8" ){
                         alert("An error occured,Try refreshing the site.");
                     }else if(data == "d3d34a1c4cb94f516ae916e4b8b4be80d50c8f7a"){
@@ -771,6 +768,7 @@ $(function(){
                     }else if(data = "login_to_add_item2cart"){
                        window.location.replace(config.base_url + "login");
                     }
+                    */
                 }
 
             });
