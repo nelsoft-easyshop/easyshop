@@ -24,7 +24,7 @@ class PromoManager
      */
     public function __construct(ConfigLoader $configLoader)
     {
-        $this->promoConfig = $configLoader->getItem('promo', 'Promo');
+        $this->promoConfig = $configLoader->getItem('promo')['Promo'];
     }
     
     /**
