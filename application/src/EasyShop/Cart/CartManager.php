@@ -73,18 +73,25 @@ class CartManager
     public function validateSingleCartContent($productId, $options, $quantity)
     {
         $product = $this->productManager->getProductDetails($productId);
-
+        
+        if(!$product){
+            return false;
+        }
+        
         $cartProductAttributes = array();
         $validatedCartOptions = array();
         $finalPrice = $product->getPrice();
         $totalOptionPrice = 0;
         $options  = empty($options) ? array() : $options;
-        
+
         foreach($options as $key => $option){
-            $attrValue =  (strpos($option, "~")) ? explode("~", $option)[0] : $option;
+            $explodedOption = explode("~", $option);
+            $attrValue =  (strpos($option, "~")) ? $explodedOption[0] : $option;
+            $attrPrice = isset($explodedOption[1]) ? $explodedOption[1] : null;
             $attrName = $key;
             $productAttribute = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                            ->getProductAttributeDetailByName($product->getIdProduct(), $attrName, $attrValue);
+                            ->getProductAttributeDetailByName($product->getIdProduct(), $attrName, $attrValue,$attrPrice);
+
             if(empty($productAttribute)){
                 return false;
             }
@@ -93,14 +100,14 @@ class CartManager
             array_push($cartProductAttributes, array('id' => $productAttribute['attr_id'], 'is_other' => $productAttribute['is_other']));
         }
         $finalPrice += $totalOptionPrice;
-
+        
         /**
          * Validate attributes in the cart with the attributes in the database
          */
         $inventoryDetails = $this->productManager->getProductInventory($product, false, false, $product->getStartPromo());
         $areAllAttributesMatched = false;
         $productItemId = null;
-
+        
         if (count($inventoryDetails) === 1 && reset($inventoryDetails)['is_default']) {
             $itemAvailability = reset($inventoryDetails)['quantity'];
             $productItemId = reset(array_keys($inventoryDetails));
@@ -129,7 +136,7 @@ class CartManager
         if(!$areAllAttributesMatched){
             return false;
         }
-        
+
         $cartItemQuantity = ($quantity > $itemAvailability) ? $itemAvailability : $quantity;
 
         $productImage = $this->em->getRepository('EasyShop\Entities\EsProductImage')
@@ -177,18 +184,20 @@ class CartManager
         foreach($cartContents as $cartItem){
         
             $validationResult = $this->validateSingleCartContent($cartItem['id'], $cartItem['options'],  $cartItem['qty']);
+            
             $itemData = $validationResult['itemData'];
             $product = $validationResult['product'];
-        
+
             $serialRawOptions = serialize($cartItem['options']);
             $serialValidatedOptions = serialize($itemData['options']);
-            $canBuyerDoPurchase = $this->canBuyerPurchaseProduct($product, $memberId);
+            $canBuyerDoPurchase = $product ? $this->canBuyerPurchaseProduct($product, $memberId) : false;
+            
             $cartIndexName = $this->cart->getIndexName();
-           
-            if( !$canBuyerDoPurchase || $cartItem['id'] !=  $itemData['id'] || 
-                $serialRawOptions != $serialValidatedOptions ||
-                $itemData['member_id'] == $memberId || $product->getIsDraft() != 0 ||
-                $product->getIsDelete() != 0 || $cartItemQuantity == 0)
+
+            if( !$canBuyerDoPurchase || $cartItem['id'] !==  $itemData['id'] || 
+                $serialRawOptions !== $serialValidatedOptions ||
+                $itemData['member_id'] === $memberId || $product->getIsDraft() ||
+                $product->getIsDelete() || $itemData['qty'] === 0)
             {
                 $this->cart->removeContent($cartItem[$cartIndexName]);
             }
@@ -211,10 +220,10 @@ class CartManager
      */
     public function canBuyerPurchaseProduct($product, $memberId)
     {
-
         $promoBoughtCount = $this->em->getRepository('EasyShop\Entities\EsOrderProduct')
                                 ->getPromoPurchaseCountForMember($memberId, $product->getPromoType());
         $promoConfig = $this->promoManager->getPromoConfig($product->getPromoType());
+        
         if(($promoBoughtCount >= $promoConfig['purchase_limit']) || 
            ($product->getIsPromote() && !$promoConfig['is_buyable_outside_promo'] && !$product->getStartPromo())
         ){
@@ -231,51 +240,47 @@ class CartManager
      *
      * @param integer $productId
      * @param integer $quantity
-     * @param integer $maxAvailability
      * @param array $option
-     * @param integer $optionLength
      * @return bool
      */
-    public function addItem($productId, $quantity = 1, $maxAvailability, $option = array(), $optionLength)
+    public function addItem($productId, $quantity = 1, $option = array())
     {
+        $isSuccessful = false;
+        $quantityToInsert = $quantity;
         $cartContents = $this->cart->getContents(); 
+        $validationResult = $this->validateSingleCartContent($productId,$option,$quantityToInsert);
         
-        if($optionLength !== count($option)){
-            $response = false;
+        if(!$validationResult){
+            return false;
+        }
+        
+        $itemData = $validationResult['itemData'];
+        if(empty($cartContents) || !is_array($option)){
+            $this->cart->addContent($itemData);
         }
         else{
-            $quantityToInsert = $quantity;
-            $validationResult = $this->validateSingleCartContent($productId,$option,$quantityToInsert);
-            $itemData = $validationResult['itemData'];
-            $response = true;
-            if(empty($cartContents) || !is_array($option)){
-                $this->cart->addContent($itemData);
+            $indexName = $this->cart->getIndexName();
+            $isUpdate = false;
+            foreach($cartContents as $cartRow){
+                $optionCart =  serialize($cartRow['options']);
+                $optionNew =  serialize($itemData['options']);
+                if($optionCart == $optionNew && $cartRow['id'] == $itemData['id']){
+                    $quantityToInsert = $quantityToInsert + $cartRow['qty'];
+                    $quantityToInsert =  $quantityToInsert > $itemData['maxqty'] ?  $itemData['maxqty'] : $quantityToInsert;
+                    $itemData['qty'] = $quantityToInsert;
+                    $isUpdate = true;
+                    break;     
+                }
+            }
+            if($isUpdate){
+                $this->cart->updateContent($cartRow[$indexName],$itemData);
             }
             else{
-                $indexName = $this->cart->getIndexName();
-                $isUpdate = false;
-                foreach($cartContents as $cartRow){
-                    $optionCart =  serialize($cartRow['options']);
-                    $opttionNew =  serialize($itemData['options']);
-                    if($optionCart == $optionNew && $cartRow['id'] == $itemData['id']){
-                        $quantityToInsert = $quantityToInsert + $cartRow['qty'];
-                        $quantityToInsert =  $quantityToInsert > $maxAvailability ? $maxAvailability : $quantityToInsert;
-                        $itemData['qty'] = $quantityToInsert;
-                        $isUpdate = true;
-                        break;     
-                    }
-                }
-                if($isUpdate){
-                    $this->cart->updateContent($cartRow[$indexName],$itemData);
-                }
-                else{
-                    $this->cart->addContent($itemData);
-                }
+                $this->cart->addContent($itemData);
             }
-            
         }
-        
-        return $response;
+            
+        return true;
     }
     
     
