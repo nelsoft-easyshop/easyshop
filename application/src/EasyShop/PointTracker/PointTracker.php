@@ -25,9 +25,9 @@ class PointTracker
      * Constructor. Retrieves Entity Manager instance
      * 
      */
-    public function __construct()
+    public function __construct($em)
     {
-        $this->em = get_instance()->kernel->serviceContainer['entity_manager'];
+        $this->em = $em;
     }
 
 

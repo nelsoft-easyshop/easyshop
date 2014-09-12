@@ -12,14 +12,6 @@ use EasyShop\Entities\EsOrderProduct;
  */
 class PointGateway extends AbstractGateway
 {
-
-    /**
-     * Point Tracker instance
-     *
-     * @var EasyShop\PointTracker\PointTracker
-     */
-    private $pointTracker;
-
     /**
      * Constructor
      * 
@@ -27,7 +19,6 @@ class PointGateway extends AbstractGateway
     public function __construct($params = [])
     {
         parent::__construct($params);
-        $this->pointTracker = get_instance()->kernel->serviceContainer['point_tracker'];
     }
 
     /**
