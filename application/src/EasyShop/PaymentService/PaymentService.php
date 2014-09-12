@@ -72,13 +72,9 @@ class PaymentService
      */
     public function setBreakdown($breakdown)
     {
-        $services['em'] =  $this->em;
-        $services['request'] =  $this->request;
-        $services['pointTracker'] =  $this->pointTracker;
-        $services['paymentService'] =  $this;
         foreach($breakdown as $breakdown){
             $path = $this->gatewayPath . "\\" . $breakdown["method"] . "Gateway";
-            $obj = new $path(array_merge($breakdown,$services));
+            $obj = new $path($this->em, $this->request, $this->pointTracker, $this, $breakdown);
             $this->gateways[$breakdown["name"]] = $obj; 
             $this->returnValue[$breakdown["name"]] = NULL;
         }

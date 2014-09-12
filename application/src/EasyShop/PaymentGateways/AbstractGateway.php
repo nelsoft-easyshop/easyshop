@@ -73,41 +73,15 @@ abstract class AbstractGateway implements GatewayInterface
     protected $paymentService
 
     /**
-     * @var int
-     */
-    protected $PayMentPayPal = 1;
-
-
-    /**
-     * @var int
-     */
-    protected $PayMentDragonPay = 2;
-
-    /**
-     * @var int
-     */
-    protected $PayMentCashOnDelivery = 3;
-
-    /**
-     * @var int
-     */
-    protected $PayMentPesoPayCC = 4;
-
-    /**
-     * @var int
-     */
-    protected $PayMentDirectBankDeposit = 5;
-
-    /**
      * Constructor
      * 
      */
-    protected function __construct($params = [])
+    protected function __construct($em, $request, $pointTracker, $paymentService, $params=[])
     {
-        $this->em = $params['em'];
-        $this->request = $params['request'];
-        $this->pointTracker = $params['pointTracker'];
-        $this->paymentService = $params['paymentService'];
+        $this->em = $em;
+        $this->request = $request;
+        $this->pointTracker = $pointTracker;
+        $this->paymentService = $paymentService;
         $this->setParameters($params);
         $this->paymentMethodName = $this->parameters['method'];
         $this->amountAllocated = $this->parameters['amount'];
