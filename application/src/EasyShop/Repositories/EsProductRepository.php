@@ -55,12 +55,18 @@ class EsProductRepository extends EntityRepository
                         MATCH (`name`) AGAINST (:param1 IN BOOLEAN MODE) +
                         (MATCH (`search_keyword`) AGAINST (:param1 IN BOOLEAN MODE) * 0.5) +
                         (MATCH (`name`) AGAINST (:param2 IN BOOLEAN MODE) * 5) +
-                        (MATCH (`search_keyword`) AGAINST (:param2 IN BOOLEAN MODE) * 2) AS weight,
+                        (MATCH (`search_keyword`) AGAINST (:param2 IN BOOLEAN MODE) * 2) +
+                        ((REPLACE (`search_keyword`, ' ', '') LIKE :param3 )  * 0.005)
+                         AS weight,
                         id_product,`name`,price,brief,slug,`condition`,startdate, enddate,is_promote,promo_type,discount
                         ,`is_sold_out`
                     FROM es_product
                     WHERE is_delete = 0 AND is_draft = 0 
-                    AND MATCH (`search_keyword`) AGAINST (:param1 IN BOOLEAN MODE)
+                    AND (
+                        MATCH (`search_keyword`) AGAINST (:param1 IN BOOLEAN MODE)
+                        OR 
+                        REPLACE (`search_keyword`, ' ', '') LIKE :param3
+                    )
                 ) as score_table
             HAVING weight > 0
             ORDER BY weight DESC,name ASC
@@ -68,6 +74,7 @@ class EsProductRepository extends EntityRepository
         $query->setParameter('param0', $stringCollection[0]);
         $query->setParameter('param1', $stringCollection[1]); 
         $query->setParameter('param2', $stringCollection[2]); 
+        $query->setParameter('param3', "%".$stringCollection[3]."%"); 
         $results = $query->execute();  
 
         return $results;
@@ -185,7 +192,7 @@ class EsProductRepository extends EntityRepository
         if($filter){
             $counter = 0;
             foreach ($parameters as $paramKey => $paramValue) {
-                $query->setParameter('head'.$counter, $paramKey);
+                $query->setParameter('head'.$counter, str_replace('_', ' ', $paramKey));
                 foreach ($paramValue as $key => $value) {
                     $valueName = 'headValue'.$counter.$key;
                     $query->setParameter($valueName, $value);
@@ -229,7 +236,7 @@ class EsProductRepository extends EntityRepository
      * @return mixed
      *
      */
-    public function getProductAttributeDetailByName($productId, $fieldName, $fieldValue)
+    public function getProductAttributeDetailByName($productId, $fieldName, $fieldValue, $fieldPrice = null)
     {
     
         $this->em =  $this->_em;
@@ -240,28 +247,39 @@ class EsProductRepository extends EntityRepository
         $rsm->addScalarResult('attr_id', 'attr_id');
         $rsm->addScalarResult('image_path', 'image_path');
         $rsm->addScalarResult('is_other', 'is_other');
-    
-    
-        $sql = " 
+            
+        $sql1 = "     
             SELECT h.field_name AS `name`, d.value_name AS attr_value, d.value_price AS attr_price,d.id_optional_attrdetail as attr_id, COALESCE(i.product_image_path,'') AS image_path, '1' as is_other 
             FROM es_optional_attrhead h 
             LEFT JOIN es_optional_attrdetail d ON h.id_optional_attrhead = d.head_id
             LEFT JOIN es_product_image i ON d.product_img_id = i.id_product_image
             WHERE h.product_id=:id AND h.`field_name`= :attr  AND d.`value_name` = :attr_value
-            
-            UNION
-            
+        ";
+        
+        $sql2 = "
             SELECT  b.name, a.attr_value, a.attr_price,a.id_product_attr, '', '0'
             FROM es_product_attr a 
             LEFT JOIN  es_attr b ON a.attr_id = b.id_attr
             WHERE a.product_id =:id AND b.`name`= :attr  AND a.`attr_value` = :attr_value;
         ";
         
+        if($fieldPrice !== null){
+            $fieldPriceFilter = " AND d.value_price = :attr_price";
+            $sql1 .= $fieldPriceFilter;
+            $sql2 .= $fieldPriceFilter;
+        }
+        
+        $sql = $sql1." UNION ".$sql2;
+        
         $query = $this->em->createNativeQuery($sql,$rsm);
         $query->setParameter('id', $productId);
         $query->setParameter('attr', $fieldName);
         $query->setParameter('attr_value', $fieldValue);
 
+        if($fieldPrice !== null){
+            $query->setParameter('attr_price', $fieldPrice);
+        }
+        
         return $query->getOneOrNullResult();
     }
 
@@ -390,6 +408,7 @@ class EsProductRepository extends EntityRepository
 
         return $result['count'];
     }    
+    
 }
 
 

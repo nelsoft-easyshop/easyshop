@@ -1,8 +1,6 @@
-<link rel="stylesheet" href="<?= base_url() ?>assets/css/bootstrap.css?ver=<?= ES_FILE_VERSION ?>" type="text/css"
-      media="screen"/>
-<link rel="stylesheet" href="<?= base_url() ?>assets/css/my_cart_css.css?ver=<?= ES_FILE_VERSION ?>" type="text/css"
-      media="screen"/>
-	  
+<link rel="stylesheet" href="/assets/css/bootstrap.css?ver=<?= ES_FILE_VERSION ?>" type="text/css" media="screen"/>
+<link rel="stylesheet" href="/assets/css/my_cart_css.css?ver=<?= ES_FILE_VERSION ?>" type="text/css" media="screen"/>
+
 <div class="container container-cart-responsive">
     <h2 class="my_cart_title">My Cart</h2>
     <table width="100%" class="table table-responsive font-roboto hide-to-536 tbl_deskptop">
@@ -25,7 +23,7 @@
                     <a href="<?= base_url() . 'item/' . $row['slug']; ?>" class="has-tooltip"
                        data-image="<?= base_url() ?><?php echo $row['img'][0]['path']; ?>categoryview/<?php echo $row['img'][0]['file']; ?>">
                         <img class="img-responsive thumbnail no-border thumbnail-item"
-                             src="<?= base_url() ?><?php echo $row['img'][0]['path']; ?>thumbnail/<?php echo $row['img'][0]['file']; ?>">
+                             src="/<?php echo $row['img'][0]['path']; ?>thumbnail/<?php echo $row['img'][0]['file']; ?>">
                     </a>
                 </td>
                 <td style="align:left;">
