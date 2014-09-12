@@ -293,13 +293,8 @@ class CartManager
      */
     public function removeItem($memberId, $cartRowId)
     {
-        if($this->cart->removeContent($cartRowId)){ 
-            $result=array(
-                'isSuccess'=>true,
-                'totalPrice'=>  $this->cart->getTotalPrice(),
-                'numberOfItems'=> $this->cart->getSize()
-            );            
-            $this->validateCartContents();
+        if($this->cart->removeContent($cartRowId)){        
+            $this->getValidatedCartContents($memberId);
             $this->cart->persist($memberId);
             return true;
         }
