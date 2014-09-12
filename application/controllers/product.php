@@ -28,7 +28,7 @@ class product extends MY_Controller
      *
      *  @return View
      */
-    public function category_page($categorySlug)
+    public function categoryPage($categorySlug)
     {
 
         $searchProductService = $this->serviceContainer['search_product']; 
