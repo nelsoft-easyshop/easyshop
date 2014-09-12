@@ -81,10 +81,20 @@ class Cart extends MY_Controller
     {
         $memberId =  $this->session->userdata('member_id');
         $rowId = $this->input->post('id');
-        $result = $this->cartManager->removeItem($memberId, $rowId);
-        echo json_encode($result);
+        $isRemoveSuccesful = $this->cartManager->removeItem($memberId, $rowId);
+        
+        $response = 
+        [
+            'isSuccess' => $isRemoveSuccesful,
+            'totalPrice' => $this->cartImplementation->getTotalPrice(),
+            'numberOfItems' => $this->cartImplementation->getSize(true),
+        ];
+
+        echo json_encode($response);
     }
 
+    
+    
     /**
      * ajax - Change quantity
      *
