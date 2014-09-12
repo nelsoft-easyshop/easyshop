@@ -121,29 +121,33 @@ function del(data)
 {
     var prod_id = $(data).attr('val');
     var csrftoken = $("meta[name='csrf-token']").attr('content');
-    var r = confirm("Are you sure you like to remove this item from the shopping cart?");
-    if (r == true) {
+    var isConfirmed = confirm("Are you sure you would like to remove this item from the shopping cart?");
+    
+    if (isConfirmed) {
         $.ajax({
-            async: false,
-            url: config.base_url + "cart/remove_item",
+            url: "/cart/doRemoveItem",
             type: "POST",
             dataType: "JSON",
             data: {id: prod_id, csrfname: csrftoken},
             success: function (data) {
-                if (data['result'] == true) {
+                
+                if(data.isSuccess){
                     $(".checkAll").trigger('click').trigger('click');
                     $(".row_" + prod_id).remove();
-                    $("#total").text(data['total']);
-                    $(".cart_no").text(data['total_items']);
-                    if(parseInt(data['total_items']) === 0){
+                    $("#total").text(data.totalPrice);
+                    $(".cart_no").text(data.numberOfItems);
+                    if(parseInt(data.numberOfItems) === 0){
                         $('.cart_no').hide();
                         $('.cart').css('width','28');
                         $('.big_cart').addClass('cart_zero');
                     }
                 }
-                else {
-                    alert("Sorry, we are having a problem right now.");
+                else{
+                    alert('Sorry, we are having a problem right now.');
+                    
                 }
+    
+
             }
         });
     }
