@@ -112,7 +112,7 @@ class CodeigniterCart implements CartInterface
      * Removes an item from the cart
      *
      * @param string $cartId
-     * @return bool
+     * @return string CartId of the inserted item
      */
     public function removeContent($cartId)
     {   
