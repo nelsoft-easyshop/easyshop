@@ -122,7 +122,7 @@ class product extends MY_Controller
             $data = array_merge($data, $this->fill_header());
 
             $this->load->view('templates/header', $data); 
-            $this->load->view('pages/product/product_search_by_category_final_responsive',$response);
+            $this->load->view('pages/product/product_search_by_category_final_responsive', $response);
             $this->load->view('templates/footer'); 
         }
         else{ 

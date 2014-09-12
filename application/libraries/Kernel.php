@@ -182,11 +182,6 @@ class Kernel
                             $container['point_tracker']
                             );
         };
-        
-          // Product Manager
-        $container['product_manager'] = function ($c) {
-            return new \EasyShop\Product\ProductManager();
-        };
 
         // Search product
         $container['search_product'] = function ($c) use($container) {
@@ -205,7 +200,10 @@ class Kernel
             $collectionHelper = $container['collection_helper'];
             $configLoader = $container['config_loader'];
 
-            return new \EasyShop\Product\ProductManager($em,$promoManager,$collectionHelper,$configLoader);
+            return new \EasyShop\Product\ProductManager($em, 
+                                                        $promoManager, 
+                                                        $collectionHelper, 
+                                                        $configLoader);
         };
 
 

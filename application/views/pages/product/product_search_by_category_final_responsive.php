@@ -1,12 +1,12 @@
 <meta name="viewport" content="width=device-width, maximum-scale=1.0">
-<link rel="stylesheet" href="<?= base_url() ?>assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
-<link rel="stylesheet" href="<?= base_url() ?>assets/css/product_search_category.css?ver=<?=ES_FILE_VERSION?>" type="text/css"  media="screen"/> 
-<link rel="stylesheet" href="<?= base_url() ?>assets/css/product_search_category_responsive.css?ver=<?=ES_FILE_VERSION?>" type="text/css"  media="screen"/> 
-<link rel="stylesheet" href="<?= base_url() ?>assets/css/style_new.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
+<link rel="stylesheet" href="/assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
+<link rel="stylesheet" href="/assets/css/product_search_category.css?ver=<?=ES_FILE_VERSION?>" type="text/css"  media="screen"/> 
+<link rel="stylesheet" href="/assets/css/product_search_category_responsive.css?ver=<?=ES_FILE_VERSION?>" type="text/css"  media="screen"/> 
+<link rel="stylesheet" href="/assets/css/style_new.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
 
-<link rel="stylesheet" href="<?= base_url() ?>assets/css/jquery.bxslider.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/> 
+<link rel="stylesheet" href="/assets/css/jquery.bxslider.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/> 
 
-<link rel="canonical" href="<?php echo base_url()?>category/<?=$categorySlug?>"/>
+<link rel="canonical" href="/category/<?=$categorySlug?>"/>
 
 <section style="color-gray display-when-desktop">
     <div class="container container-responsive">
@@ -23,7 +23,7 @@
                                 <ul>
                                 <?php foreach($parentCategory as $catKey => $catValue): ?>
                                     <li class="<?=($catValue->getIdCat() == $breadcrumbs[0]['idCat'])?'active':'';?>">
-                                        <a href="<?=base_url()?>category/<?=$catValue->getSlug();?>">
+                                        <a href="/category/<?=$catValue->getSlug();?>">
                                             <?=html_escape($catValue->getName());?>
                                         </a>
                                     </li>
@@ -35,10 +35,10 @@
                         <div class="clear"></div>
                         <div class="bread_crumbs">
                             <ul>
-                                <li class=""><a href="<?= base_url() ?>home">Home</a></li>
+                                <li class=""><a href="/home">Home</a></li>
                                 <?php foreach ($breadcrumbs as $crumbs): ?>
                                 <li>
-                                    <a href="<?= base_url() ?>category/<?php echo $crumbs['slug'] ?>">
+                                    <a href="/category/<?php echo $crumbs['slug'] ?>">
                                         <?php echo html_escape($crumbs['name']); ?>
                                     </a>
                                 </li> 
@@ -91,13 +91,13 @@
                                     }
                                 ?>
                                 <div>
-                                    <a class="cc2_title color-gray" href="<?=base_url()?>category/<?=$subCatValue['slug'];?>">
+                                    <a class="cc2_title color-gray" href="/category/<?=$subCatValue['slug'];?>">
                                         <span><?php echo html_escape($subCatKey);?></span>
                                     </a>
                                     <?php if(count($subCatValue['item'])>0): ?>
-                                    <span class="cat_carousel_img_con"><span class="cat_carousel_img"><img src="<?= base_url().$popularProductImage; ?>"></span></span><br />
+                                    <span class="cat_carousel_img_con"><span class="cat_carousel_img"><img src="/<?=$popularProductImage; ?>"></span></span><br />
                                     <div class="cc2_prod_name">
-                                        <a href="<?php echo base_url()."item/".$popularProductSlug; ?>" title="<?PHP echo $popularProductName; ?>">
+                                        <a href="/item/<?=$popularProductSlug; ?>" title="<?PHP echo $popularProductName; ?>">
                                             <span class="color-gray font-12">
                                             <?php echo $popularProductName; ?>
                                             </span>
@@ -121,72 +121,79 @@
                 </div>
                 <div class="clear"></div>
                 <div id="product_content" class="margin-left-42">
-                    <?php 
-                    foreach ($products as $key => $value):
-                        $productEntity = $value->getProduct();
-                        $productName = html_escape($productEntity->getName());
-                        $productSlug = $productEntity->getSlug();
-                        $productPrice = number_format($productEntity->getPrice(), 2,'.',',');
-                        $productCondition = html_escape($productEntity->getCondition());
-                        $originalPrice = number_format($productEntity->getOriginalPrice(),2,'.',',');
-                        $percentage = $productEntity->getDiscountPercentage();
-                        $isPromote = intval($productEntity->getIsPromote());
-                        $isFreeShipping = $productEntity->getIsFreeShipping(); 
-                        $productImagePath = $value->getProductImagePath();
+                    <?php if(count($products) > 0): ?>
+                        <?php 
+                        foreach ($products as $key => $value):
+                            $productEntity = $value->getProduct();
+                            $productName = html_escape($productEntity->getName());
+                            $productSlug = $productEntity->getSlug();
+                            $productPrice = number_format($productEntity->getPrice(), 2,'.',',');
+                            $productCondition = html_escape($productEntity->getCondition());
+                            $originalPrice = number_format($productEntity->getOriginalPrice(),2,'.',',');
+                            $percentage = $productEntity->getDiscountPercentage();
+                            $isPromote = intval($productEntity->getIsPromote());
+                            $isFreeShipping = $productEntity->getIsFreeShipping(); 
+                            $productImagePath = $value->getProductImagePath();
 
-                        $typeOfView = "product";
-                        if(isset($_COOKIE['view'])){ 
-                            $typeOfView = ($_COOKIE['view'] == "product-list") ? "product-list" : "product";
-                        }
-                    ?> 
-                        <div class="<?php echo $typeOfView; ?>"> 
-                            <a href="<?php echo base_url() . "item/" . $productSlug; ?>">
-                                <span class="prod_img_wrapper">
-                                    <?php if(($isPromote == 1) && $isFreeShipping):?>
-                                        <span class="cd_slide_discount">
-                                            <span><?php echo number_format($percentage,0,'.',',');?>%<br>OFF</span>
+                            $typeOfView = "product";
+                            if(isset($_COOKIE['view'])){ 
+                                $typeOfView = ($_COOKIE['view'] == "product-list") ? "product-list" : "product";
+                            }
+                        ?> 
+                            <div class="<?php echo $typeOfView; ?>"> 
+                                <a href="/item/<?=$productSlug; ?>">
+                                    <span class="prod_img_wrapper">
+                                        <?php if(($isPromote == 1) && $isFreeShipping):?>
+                                            <span class="cd_slide_discount">
+                                                <span><?php echo number_format($percentage,0,'.',',');?>%<br>OFF</span>
+                                            </span>
+                                        <?php endif; ?>
+                                    
+                                        <span class="prod_img_container">
+                                                <img alt="<?php echo $productName; ?>" src="/<?=$productImagePath; ?>">
                                         </span>
-                                    <?php endif; ?>
-                                
-                                    <span class="prod_img_container">
-                                            <img alt="<?php echo $productName; ?>" src="<?php echo base_url() . $productImagePath; ?>">
                                     </span>
-                                </span>
-                            </a>
-                            <h3>
-                                <a href="<?php echo base_url() . "item/" . $productSlug; ?>">
-                                    <?php echo $productName; ?>
                                 </a>
-                            </h3>
-                            <div class="price-cnt">
-                                <div class="price"> 
-                                    <span>&#8369;</span> <?php echo $productPrice;?>
+                                <h3>
+                                    <a href="/item/<?=$productSlug; ?>">
+                                        <?php echo $productName; ?>
+                                    </a>
+                                </h3>
+                                <div class="price-cnt">
+                                    <div class="price"> 
+                                        <span>&#8369;</span> <?php echo $productPrice;?>
+                                    </div>
+                                  
+                                    <?php if($percentage && $percentage > 0):?>
+                                    <div>
+                                        <span class="original_price">
+                                            &#8369; <?php echo $originalPrice; ?>
+                                        </span>
+                                        <span style="height: 20px;">
+                                            |&nbsp; <strong><?PHP echo number_format($percentage,0,'.',',');?>%OFF</strong>
+                                        </span>
+                                    </div>
+                                    <?php endif; ?>
                                 </div>
-                              
-                                <?php if($percentage && $percentage > 0):?>
-                                <div>
-                                    <span class="original_price">
-                                        &#8369; <?php echo $originalPrice; ?>
-                                    </span>
-                                    <span style="height: 20px;">
-                                        |&nbsp; <strong><?PHP echo number_format($percentage,0,'.',',');?>%OFF</strong>
-                                    </span>
+                               <div class="product_info_bottom">
+                                    <div>
+                                        Condition:
+                                        <strong>
+                                           <?php echo ($isFreeShipping)? es_string_limit($productCondition,15) : $productCondition;?>
+                                        </strong>
+                                    </div>
+                                    <?php if($isFreeShipping): ?>
+                                        <span style="float:right;"><span class="span_bg img_free_shipping"></span></span>
+                                    <?php endif; ?>
                                 </div>
-                                <?php endif; ?>
                             </div>
-                           <div class="product_info_bottom">
-                                <div>
-                                    Condition:
-                                    <strong>
-                                       <?php echo ($isFreeShipping)? es_string_limit($productCondition,15) : $productCondition;?>
-                                    </strong>
-                                </div>
-                                <?php if($isFreeShipping): ?>
-                                    <span style="float:right;"><span class="span_bg img_free_shipping"></span></span>
-                                <?php endif; ?>
-                            </div>
+                        <?php endforeach; ?>
+                    <?php else: ?> 
+                        <br />
+                        <div style="text-align:center;font-weight:bold">
+                            <span style='font-size:15px;'> No available products to display in this category </span>
                         </div>
-                    <?php endforeach; ?>
+                    <?php endif;?>
                 </div> 
                  <div class="loading_products" style="display: inline-block;text-align: center;width: 100%;"></div>
             </div>
@@ -203,7 +210,7 @@
                             <h4 class="panel-title panel-title-category">
                                 Categories
                                 <a data-toggle="collapse" data-parent="#categories" href="#categories-body">
-                                    <img class="pull-right" src="<?=base_url()?>assets/images/img_arrow_down.png">
+                                    <img class="pull-right" src="/assets/images/img_arrow_down.png">
                                 </a>
                             </h4>
                         </div>
@@ -211,7 +218,7 @@
                             <div class="panel-body-category">
                                 <ul class="list-unstyled">
                                     <?php foreach ($parentCategory as $key => $value): ?>
-                                    <a href="<?=base_url().'category/'.$value->getSlug(); ?>"><li class="list-category"><?=$value->getName();?></li></a>
+                                    <a href="/category/<?=$value->getSlug(); ?>"><li class="list-category"><?=$value->getName();?></li></a>
                                     <?php endforeach; ?>
                                 </ul>
                             </div>
@@ -220,9 +227,9 @@
                 </div>
                 <div class="bread_crumbs_m">
                     <ul style="margin-bottom: 10px;">
-                        <li class="li_home" ><a href="<?=base_url()?>home" style="color: #f18200;">Home</a></li>
+                        <li class="li_home" ><a href="/home" style="color: #f18200;">Home</a></li>
                         <?php foreach($breadcrumbs as $crumbs): ?>
-                        <li> <a href="<?=base_url()?>category/<?php echo $crumbs['slug']?>" style="color: #f18200;"> <?php echo html_escape($crumbs['name']);?> </a> </li>
+                        <li> <a href="/category/<?php echo $crumbs['slug']?>" style="color: #f18200;"> <?php echo html_escape($crumbs['name']);?> </a> </li>
                         <?php endforeach;?>
                         
                     </ul>
@@ -235,66 +242,73 @@
                    <p class="search_result "> </p>
                 </div>
                 <div id="paste-product">
-                    <?php foreach ($products as $key => $value): ?>
-                    <?php
-                        $productEntity = $value->getProduct();
-                        $productName = html_escape($productEntity->getName());
-                        $productSlug = $productEntity->getSlug();
-                        $productPrice = number_format($productEntity->getPrice(), 2,'.',',');
-                        $productCondition = html_escape($productEntity->getCondition());
-                        $originalPrice = number_format($productEntity->getOriginalPrice(),2,'.',',');
-                        $percentage = $productEntity->getDiscountPercentage();
-                        $isPromote = intval($productEntity->getIsPromote());
-                        $isFreeShipping = $productEntity->getIsFreeShipping();
-                        $productImagePath = $value->getProductImagePath();
-                    ?>
-                    <h3></h3>
-                    <div class="responsive-product panel panel-default no-border panel-items">
-                        <table width="100%" class="">
-                            <tr>
-                                <td width="90px" class="v-align-top">
-                                    <span class="prod_img_container">
-                                         <a class="a-item-name" href="<?php echo base_url() . "item/" . $productSlug; ?>"> 
-                                            <img alt="<?php echo $productName; ?>" src="<?php echo base_url() . $productImagePath; ?>">
-                                        </a>
-                                    </span>
-                                </td>
-                                <td class="v-align-top">
-                                    <p class="p-item-name"> 
-                                        <a class="a-item-name" href="<?php echo base_url() . "item/" . $productSlug; ?>"> 
-                                            <?=(strlen($productName)>35)?substr_replace($productName, "...", 35):$productName;?>
-                                        </a>
-                                    </p>
-                                    <p class="p-item-price"> 
-                                        PHP <?php echo $productPrice;?>
-                                    </p>
-                                    <?php if($percentage && $percentage > 0):?>
-                                        <p class="p-item-discount">
-                                            <span class="original_price">
-                                                &#8369; <?php echo $originalPrice; ?>
-                                            </span>
-                                            <span style="height: 20px;">
-                                                |&nbsp; <strong><?PHP echo $percentage;?>%OFF</strong>
-                                            </span>
+                    <?php if(count($products) > 0): ?>
+                        <?php foreach ($products as $key => $value): ?>
+                        <?php
+                            $productEntity = $value->getProduct();
+                            $productName = html_escape($productEntity->getName());
+                            $productSlug = $productEntity->getSlug();
+                            $productPrice = number_format($productEntity->getPrice(), 2,'.',',');
+                            $productCondition = html_escape($productEntity->getCondition());
+                            $originalPrice = number_format($productEntity->getOriginalPrice(),2,'.',',');
+                            $percentage = $productEntity->getDiscountPercentage();
+                            $isPromote = intval($productEntity->getIsPromote());
+                            $isFreeShipping = $productEntity->getIsFreeShipping();
+                            $productImagePath = $value->getProductImagePath();
+                        ?>
+                        <h3></h3>
+                        <div class="responsive-product panel panel-default no-border panel-items">
+                            <table width="100%" class="">
+                                <tr>
+                                    <td width="90px" class="v-align-top">
+                                        <span class="prod_img_container">
+                                             <a class="a-item-name" href="/item/<?=$productSlug; ?>"> 
+                                                <img alt="<?php echo $productName; ?>" src="/<?=$productImagePath; ?>">
+                                            </a>
+                                        </span>
+                                    </td>
+                                    <td class="v-align-top">
+                                        <p class="p-item-name"> 
+                                            <a class="a-item-name" href="/item/<?=$productSlug; ?>"> 
+                                                <?=(strlen($productName)>35)?substr_replace($productName, "...", 35):$productName;?>
+                                            </a>
                                         </p>
-                                    <?php endif; ?>
-                                        
-                                    <p class="p-item-condition">
-                                        Condition:
-                                        <strong>
-                                           <?php echo ($isFreeShipping)? es_string_limit($productCondition,15) : $productCondition;?>
-                                        </strong>
-                                    </p> 
-                                </td>
-                                <td width="30px" class=" v-align-top">
-                                    <?php if($isFreeShipping <= 0): ?>
-                                        <span style="float:right;"><span class="span_bg img_free_shipping"></span></span>
-                                    <?php endif; ?>
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
-                    <?php endforeach; ?>
+                                        <p class="p-item-price"> 
+                                            PHP <?php echo $productPrice;?>
+                                        </p>
+                                        <?php if($percentage && $percentage > 0):?>
+                                            <p class="p-item-discount">
+                                                <span class="original_price">
+                                                    &#8369; <?php echo $originalPrice; ?>
+                                                </span>
+                                                <span style="height: 20px;">
+                                                    |&nbsp; <strong><?PHP echo $percentage;?>%OFF</strong>
+                                                </span>
+                                            </p>
+                                        <?php endif; ?>
+                                            
+                                        <p class="p-item-condition">
+                                            Condition:
+                                            <strong>
+                                               <?php echo ($isFreeShipping)? es_string_limit($productCondition,15) : $productCondition;?>
+                                            </strong>
+                                        </p> 
+                                    </td>
+                                    <td width="30px" class=" v-align-top">
+                                        <?php if($isFreeShipping <= 0): ?>
+                                            <span style="float:right;"><span class="span_bg img_free_shipping"></span></span>
+                                        <?php endif; ?>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <?php endforeach; ?>
+                    <?php else: ?> 
+                        <br />
+                        <div style="text-align:center;font-weight:bold">
+                            <span style='font-size:15px;'> No available products to display in this category </span>
+                        </div>
+                    <?php endif;?>
                 </div> 
                 <div class="loading_products" style="display: inline-block;text-align: center;width: 100%;"></div>
             </div>
@@ -336,7 +350,7 @@
             <div class="modal-body no-border no-padding">
                 <ul class="list-unstyled ul-sub">
                     <?php foreach ($subCategoryList as $subCatKey => $subCatValue): ?>
-                        <a href="<?php echo base_url()."category/".$subCatValue['slug']; ?>">
+                        <a href="/category/<?=$subCatValue['slug']; ?>">
                           <li><?php echo html_escape($subCatKey); ?></li>
                         </a>
                     <?php endforeach;?>
@@ -382,12 +396,12 @@
     </div>
 </div> 
 
-<script src="<?= base_url() ?>assets/js/src/bootstrap.js" type="text/javascript"></script>
-<script src="<?= base_url() ?>assets/js/src/vendor/jquery.easing.min.js" type="text/javascript"></script>
-<script src="<?= base_url() ?>assets/js/src/vendor/jquery.scrollUp.min.js" type="text/javascript"></script>
-<script src="<?= base_url() ?>assets/js/src/vendor/jquery.bxslider.min.js" type="text/javascript"></script>
-<script src="<?= base_url() ?>assets/js/src/categorynavigation.js?ver=<?=ES_FILE_VERSION?>" type="text/javascript"></script>
-<script src="<?= base_url() ?>assets/js/src/advsearch.js?ver=<?=ES_FILE_VERSION?>" type="text/javascript"></script>
+<script src="/assets/js/src/bootstrap.js" type="text/javascript"></script>
+<script src="/assets/js/src/vendor/jquery.easing.min.js" type="text/javascript"></script>
+<script src="/assets/js/src/vendor/jquery.scrollUp.min.js" type="text/javascript"></script>
+<script src="/assets/js/src/vendor/jquery.bxslider.min.js" type="text/javascript"></script>
+<script src="/assets/js/src/categorynavigation.js?ver=<?=ES_FILE_VERSION?>" type="text/javascript"></script>
+<script src="/assets/js/src/advsearch.js?ver=<?=ES_FILE_VERSION?>" type="text/javascript"></script>
 <script type="text/javascript">
     var currentUrl = "<?=site_url(uri_string() . '?' . $_SERVER['QUERY_STRING']); ?>";
     var typeView = "<?=(isset($_COOKIE['view']))?$_COOKIE['view']:'product'?>";
