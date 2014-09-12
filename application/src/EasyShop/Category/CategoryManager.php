@@ -35,7 +35,7 @@ class CategoryManager
         $protectedCategories =  $this->configLoader->getItem('protected_category');
         if(!$isAdmin){
             foreach($categoryList as $key => $value){  
-                if((in_array($value->getIdCat(),$protectedCategories) || $value->getIdCat() == 1) && !$isAdmin){
+                if((in_array($value->getIdCat(),$protectedCategories) || intval($value->getIdCat()) === 1) && !$isAdmin){
                     unset($categoryList[$key]);
                 } 
             }
