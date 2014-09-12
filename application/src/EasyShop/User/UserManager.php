@@ -3,9 +3,13 @@
 namespace EasyShop\User;
 
 use EasyShop\Entities\EsMember;
+use EasyShop\Entities\EsMemberCat;
+use EasyShop\Entities\EsMemberProdcat;
+use EasyShop\Entities\EsProduct;
 
 /**
  *  User Manager Class
+ *  Manage everything specific to a user
  *
  *  @author stephenjanz
  */
@@ -20,11 +24,34 @@ class UserManager
     private $em;
 
     /**
+     *  Member ID
+     */
+    private $memberId;
+
+    /**
+     *  EasyShop\Entities\EsMember entity object
+     */
+    private $memberObj;
+
+    /**
      *  Constructor. Retrieves Entity Manager instance
      */
     public function __construct($em)
     {
         $this->em = $em;
+    }
+
+    /**
+     *  REQUIRED! Identify User to work on
+     *
+     *  @return object $this
+     */
+    public function setUser($memberId)
+    {
+        $this->memberId = $memberId;
+        $this->memberObj = $this->em->find('EasyShop\Entities\EsMember', $memberId);
+
+        return $this;
     }
 
     /**

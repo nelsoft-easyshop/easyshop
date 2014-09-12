@@ -10,6 +10,8 @@ use EasyShop\Entities\EsBrand;
 use EasyShop\Entities\EsProductItem;
 use EasyShop\Entities\EsProductItemAttr;
 
+use Doctrine\ORM\Tools\Pagination\Paginator;
+
 class EsProductRepository extends EntityRepository
 {
     /**
@@ -390,6 +392,65 @@ class EsProductRepository extends EntityRepository
 
         return $result['count'];
     }    
+
+    /**
+     *  Get parent categories(default) of products uploaded by a specific user
+     *
+     *  @return array
+     */
+    public function getUserProductParentCategories($memberId)
+    {
+        $em = $this->_em;
+        $rsm = new ResultSetMapping();
+        $rsm->addScalarResult('parent_cat','parent_cat');
+        $rsm->addScalarResult('cat_id','cat_id');
+        $rsm->addScalarResult('prd_count','prd_count');
+        $rsm->addScalarResult('p_cat_name','p_cat_name');
+        $rsm->addScalarResult('p_cat_slug','p_cat_slug');
+        $rsm->addScalarResult('p_cat_img','p_cat_img');
+
+        $sql = "call `es_sp_vendorProdCatDetails`(:member_id)";
+        $query = $em->createNativeQuery($sql, $rsm);
+        $query->setParameter('member_id', $memberId);
+
+        return $query->getResult();
+    }
+
+    /**
+     *  Get user products that have no assigned custom category
+     *
+     *  @param integer $memberId
+     *  @param integer $catId
+     */
+    public function getNotCustomCategorizedProducts($memberId, $catId, $prodLimit, $page = 0, $orderBy = "p.idProduct DESC")
+    {
+        $em = $this->_em;
+        $page = intval($page) <= 0 ? 0 : (intval($page)-1) * $prodLimit;
+
+        $dql = "
+            SELECT p
+            FROM EasyShop\Entities\EsProduct p
+            WHERE p.idProduct NOT IN (
+                    SELECT p2.idProduct
+                    FROM EasyShop\Entities\EsMemberProdcat pc
+                    JOIN pc.memcat mc
+                    JOIN pc.product p2
+                    WHERE mc.member = :member_id
+                )
+                AND p.member = :member_id
+                AND p.cat = :cat_id
+        ORDER BY" . $orderBy;
+
+        $query = $em->createQuery($dql)
+                    ->setParameter('member_id', $memberId)
+                    ->setParameter('cat_id', $catId)
+                    ->setFirstResult($page)
+                    ->setMaxResults($prodLimit);
+
+        $paginator = new Paginator($query, $fetchJoinCollection = true);
+
+        return $paginator;
+    }
 }
 
 

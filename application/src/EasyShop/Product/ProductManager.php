@@ -5,11 +5,16 @@ namespace EasyShop\Product;
 use EasyShop\Entities\EsOrderProduct;
 use EasyShop\Entities\EsOrder; 
 use EasyShop\Entities\EsProductShippingHead; 
+use EasyShop\Entities\EsMemberProdcat;
+
+use Doctrine\Common\Collections\Criteria;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Product Manager Class
  *
  * @author Ryan Vasquez
+ * @author stephenjanz
  */
 class ProductManager
 {
@@ -149,4 +154,93 @@ class ProductManager
 
         return true;
     }
+
+    /**
+     *  Classify product under custom category
+     *  Pass an array of productIDs for batch updating.
+     *
+     *  @param array $prodId
+     *  @param integer $catId
+     */
+    public function setProductCustomCategory($prodId, $catId, $memberId)
+    {
+        $memberObj = $this->em->find('EasyShop\Entities\EsMember', $memberId);
+        $category = $this->em->getRepository('EasyShop\Entities\EsMemberCat')
+                            ->findOneBy(array(
+                                            'idMemcat' => $catId,
+                                            'member' => $memberObj
+                                        ));
+        if( !is_array($prodId) ){
+            $prodId = array($prodId);
+        }
+
+        foreach($prodId as $productId){
+            $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                                ->findOneBy(array(
+                                                'idProduct' => $productId,
+                                                'member' => $memberObj
+                                            ));
+            $memProd = new EsMemberProdcat();
+            $memProd->setMemcat($category)
+                    ->setProduct($product);
+            $this->em->persist($memProd);
+        }
+
+        $this->em->flush();
+    }
+
+    /**
+     *  Get parent category of products uploaded by user
+     *
+     *  @param integer $memberId
+     *
+     *  @return array
+     */
+    public function getAllUserProductParentCategory($memberId)
+    {
+        $defaultCatImg = "assets/images/default_icon_small.png";
+        $vendorCategories = array();
+
+        $rawVendorCategories = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                                    ->getUserProductParentCategories($memberId);
+
+        foreach( $rawVendorCategories as $vendorCategory ){
+            if( !isset($vendorCategories[$vendorCategory['parent_cat']]) && intval($vendorCategory['parent_cat']) !== 1 ){
+                $catImg = "assets/" . substr($vendorCategory['p_cat_img'],0,strrpos($vendorCategory['p_cat_img'],'.')) . "_small.png";
+                if( $vendorCategory['p_cat_img'] !== "" && file_exists($catImg)){
+                    $categoryImage = $catImg;
+                }
+                else{
+                    $categoryImage = $defaultCatImg;
+                }
+                
+                $vendorCategories[$vendorCategory['parent_cat']] = array(
+                    'name' => $vendorCategory['p_cat_name'],
+                    'slug' => $vendorCategory['p_cat_slug'],
+                    'child_cat' => array(),
+                    'products' => array(),
+                    'product_count' => 0,
+                    'cat_link' => base_url(). 'category/' . $vendorCategory['p_cat_slug'],
+                    'cat_img' => $categoryImage
+                );
+            }
+            // For products whose parent is 'PARENT'
+            else if( !isset($vendorCategories[$vendorCategory['parent_cat']]) && intval($vendorCategory['parent_cat']) === 1 ) {
+                $vendorCategories[$vendorCategory['parent_cat']] = array(
+                    'name' => 'Others',
+                    'slug' => '',
+                    'child_cat' => array(),
+                    'products' => array(),
+                    'product_count' => 0,
+                    'cat_link' => '',
+                    'cat_img' => $defaultCatImg
+                );
+            }
+            $vendorCategories[$vendorCategory['parent_cat']]['child_cat'][] = $vendorCategory['cat_id'];
+            $vendorCategories[$vendorCategory['parent_cat']]['product_count'] += $vendorCategory['prd_count'];
+        }
+
+        return $vendorCategories;
+    }
+
 }
