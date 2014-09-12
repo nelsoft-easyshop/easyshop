@@ -138,7 +138,7 @@ class ProductManager
         $productItemLocks = $this->em->getRepository('EasyShop\Entities\EsProductItemLock')
                                         ->getProductItemLockByProductId($productId);
         foreach($productItemLocks as $idx => $lock){
-            $elapsedMinutes = round((strtotime(date('Y-m-d H:i:s')) - $lock['timestamp']->getTimestamp())/60);
+            $elapsedMinutes = round((time() - $lock['timestamp']->getTimestamp())/60);
             if($elapsedMinutes > $this->lockLifeSpan){
                 $lockEntity =  $this->em->getRepository('EasyShop\Entities\EsProductItemLock')
                                         ->find($lock['idItemLock']);
