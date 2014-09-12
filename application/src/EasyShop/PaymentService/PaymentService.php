@@ -354,7 +354,14 @@ class PaymentService
         return $response;
     }
     
-
+    /**
+     * Reset Price and Quantity
+     * 
+     * @param mixed $carts User Session data
+     * @param bool $condition Used for lock-related processing
+     *
+     * @return mixed
+     */
     function resetPriceAndQty($carts,$condition = FALSE)
     {
         $itemArray = $carts['choosen_items'];
