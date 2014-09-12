@@ -2,23 +2,6 @@
 
 namespace EasyShop\PaymentService;
 
-use EasyShop\Entities\EsAddress;
-use EasyShop\Entities\EsOrderShippingAddress;
-use EasyShop\Entities\EsLocationLookup;
-use EasyShop\Entities\EsOrder;
-use EasyShop\Entities\EsMember;
-use EasyShop\Entities\EsPaymentMethod;
-use EasyShop\Entities\EsOrderStatus;
-use EasyShop\Entities\EsOrderHistory;
-use EasyShop\Entities\EsOrderProduct;
-use EasyShop\Entities\EsProduct;
-use EasyShop\Entities\EsOrderProductStatus;
-use EasyShop\Entities\EsOrderBillingInfo;
-use EasyShop\Entities\EsBillingInfo;
-use EasyShop\Entities\EsBankInfo;
-use EasyShop\Entities\EsOrderProductAttr;
-use EasyShop\Entities\EsOrderProductHistory;
-use \DateTime;
 /**
  * Payment Service Class
  *
@@ -39,7 +22,14 @@ class PaymentService
      *
      * @var mixed
      */
-    private $gateways = [];
+
+    /**
+     * Gateway return value holder
+     * ['name' => returnval]
+     *
+     * @var mixed
+     */
+    private $returnValue = [];
 
     /**
      * Entity Manager instance
@@ -55,15 +45,23 @@ class PaymentService
      */
     private $request;
 
+    /**
+     * PointTracker instance
+     *
+     * @var EasyShop\PointTracker\PointTracker
+     */
+    private $pointTracker;
+
 
     /**
      * Constructor
      * 
      */
-    public function __construct()
+    public function __construct($em, $request, $pointTracker)
     {
-        $this->em = get_instance()->kernel->serviceContainer['entity_manager'];
-        $this->request = get_instance()->kernel->serviceContainer['http_foundation'];
+        $this->em = $em;
+        $this->request = $request;
+        $this->pointTracker = $pointTracker;
     }
 
 
@@ -76,8 +74,9 @@ class PaymentService
     {
         foreach($breakdown as $breakdown){
             $path = $this->gatewayPath . "\\" . $breakdown["method"] . "Gateway";
-            $obj = new $path($breakdown);
+            $obj = new $path($this->em, $this->request, $this->pointTracker, $this, $breakdown);
             $this->gateways[$breakdown["name"]] = $obj; 
+            $this->returnValue[$breakdown["name"]] = NULL;
         }
     }
 
@@ -115,18 +114,23 @@ class PaymentService
         unset($this->gateways[$name]);
     }
 
+    public function getReturnValue($name)
+    {
+        return $this->returnValue[$name];
+    }
 
     /**
      * Executes payment transaction for all registered gateways
      */
     public function pay()
     {
+
         foreach ($this->gateways as $gateway) {
-            $gateway->pay();
+            $this->returnValue[array_search($gateway, $this->gateways)] = $gateway->pay();
         }
+
     }
 
-   
     /**
      * Payment Order
      * 
@@ -138,9 +142,10 @@ class PaymentService
      * @param string $apiResponse Contains response of api
      * @param string $tid Transaction id
      *
+     * @return mixed
      */
-    public function persistPayment($paymentType,$ItemTotalPrice,$member_id,$productstring,$productCount,$apiResponse,$tid){
-
+    public function persistPayment($paymentType,$ItemTotalPrice,$member_id,$productstring,$productCount,$apiResponse,$tid, $gatewayReference)
+    {
         // remap variables
         $invoiceNo = $member_id.'-'.date('ymdhs');
         $totalAmount = $ItemTotalPrice;
@@ -188,38 +193,10 @@ class PaymentService
             $addrId = $shipOrderAddr->getIdOrderShippingAddress();
             $response['o_message'] = 'Error Code: Payment002';
 
-            switch ($paymentType) {
-                case '1':
-                    $orderStatus = 99;
-                    $orderProductStatus = 0;
-                    $externalCharge = ($totalAmount * 0.044) + 15;
-                    break;
-                case '2':
-                    $orderStatus = 99;
-                    $orderProductStatus = 0;
-                    $externalCharge = 20;
-                    break;
-                case '3':
-                    $orderStatus = 0;
-                    $orderProductStatus = 0;
-                    $externalCharge = 0;
-                    break;
-                case '4':
-                    $orderStatus = 99;
-                    $orderProductStatus = 0;
-                    $externalCharge = 20;
-                    break;
-                case '5':
-                    $orderStatus = 99;
-                    $orderProductStatus = 0;
-                    $externalCharge = 0;
-                    break;
-                default:
-                    $orderStatus = 0;
-                    $orderProductStatus = 0;
-                    $externalCharge = 0;
-                    break;
-            }
+            $orderStatus = $gatewayReference->getOrderStatus();
+            $orderProductStatus = $gatewayReference->getOrderProductStatus();
+            $externalCharge = $gatewayReference->getExternalCharge();
+
             $response['o_message'] = 'Error Code: Payment002.1';
             $net = $totalAmount - $externalCharge;
 
@@ -359,5 +336,6 @@ class PaymentService
         }
         return $response;
     }
+    
 }
 

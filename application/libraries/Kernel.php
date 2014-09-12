@@ -165,13 +165,27 @@ class Kernel
         };
         
         // Point Tracker
-        $container['point_tracker'] = function ($c) {
-            return new \EasyShop\PointTracker\PointTracker();
+        $container['point_tracker'] = function ($c) use($container) {
+            return new \EasyShop\PointTracker\PointTracker($container['entity_manager']);
+        };
+
+        // Http foundation
+        $container['request'] = function ($c) use($container) {
+            return \Symfony\Component\HttpFoundation\Request::createFromGlobals();
         };
 
         // Payment Service
-        $container['payment_service'] = function ($c) {
-            return new \EasyShop\PaymentService\PaymentService();
+        $container['payment_service'] = function ($c) use ($container) {
+            return new \EasyShop\PaymentService\PaymentService(
+                            $container['entity_manager'],
+                            $container['request'],
+                            $container['point_tracker']
+                            );
+        };
+        
+          // Product Manager
+        $container['product_manager'] = function ($c) {
+            return new \EasyShop\Product\ProductManager();
         };
 
         // Search product
@@ -197,12 +211,7 @@ class Kernel
         $container['collection_helper'] = function ($c) {
             return new \EasyShop\CollectionHelper\CollectionHelper();
         };
-        
-        // Http foundation
-        $container['http_foundation'] = function ($c) {
-            return \Symfony\Component\HttpFoundation\Request::createFromGlobals();
-        };
-
+ 
         // Category Manager
         $container['category_manager'] = function ($c) {
             return new \EasyShop\Category\CategoryManager();
