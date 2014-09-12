@@ -2,6 +2,8 @@
 
 namespace EasyShop\PaymentService;
 
+use EasyShop\Entities\EsProduct;
+
 /**
  * Payment Service Class
  *
@@ -52,16 +54,31 @@ class PaymentService
      */
     private $pointTracker;
 
+    /**
+     * Promo Manager instance
+     *
+     * @var EasyShop\Promo\PromoManager
+     */
+    private $promoManager;
+
+    /**
+     * Product Manager instance
+     *
+     * @var EasyShop\Product\ProductManager
+     */
+    private $productManager;
 
     /**
      * Constructor
      * 
      */
-    public function __construct($em, $request, $pointTracker)
+    public function __construct($em, $request, $pointTracker, $promoManager, $productManager)
     {
         $this->em = $em;
         $this->request = $request;
         $this->pointTracker = $pointTracker;
+        $this->promoManager = $promoManager;
+        $this->productManager = $productManager;
     }
 
 
@@ -337,5 +354,47 @@ class PaymentService
         return $response;
     }
     
+
+    function resetPriceAndQty($carts,$condition = FALSE)
+    {
+        $itemArray = $carts['choosen_items'];
+        $qtySuccess = 0;
+
+        foreach($itemArray as $key => $value){
+
+            $productId = $value['id'];
+            $itemId = $value['product_itemID'];
+
+            /* Start product_model->getProductById */
+
+            $product_array = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                                            ->getDetails($productId);
+
+            /* Get actual price, apply any promo calculation */
+            $this->promoManager->hydratePromoData($product_array);
+            
+            /* End product_model->getProductById */
+
+            $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                                            ->find($productId);
+
+            /** NEW QUANTITY **/
+            $newQty = $this->productManager->getProductInventory($product, false, $conditon);
+            $maxQty = $newQty[$itemId]['quantity'];
+            $qty = $value['qty'];
+            $itemArray[$value['rowid']]['maxqty'] = $maxqty;
+            $qtysuccess = ($maxqty >= $qty ? $qtysuccess + 1: $qtysuccess + 0);
+
+            /** NEW PRICE **/
+            $promoPrice = $product_array->getPrice(); 
+            $additionalPrice = $value['additional_fee'];
+            $finalPromoPrice = $promoPrice + $additionalPrice;
+            $itemArray[$value['rowid']]['price'] = $finalPromoPrice;
+            $subtotal = $finalPromoPrice * $qty;
+            $itemArray[$value['rowid']]['subtotal'] = $subtotal;
+        }
+         
+        return [$qtysuccess, $itemArray];
+    }
 }
 
