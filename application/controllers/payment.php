@@ -1065,9 +1065,9 @@ class Payment extends MY_Controller{
         }//close foreach seller loop
     }
 
-	/*
-	 *	Function to generate google analytics data
-	 */
+    /*
+     *  Function to generate google analytics data
+     */
     function ganalytics($itemList,$v_order_id)
     {
         $analytics = array(); 
