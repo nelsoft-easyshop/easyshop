@@ -760,15 +760,17 @@ $(function(){
                 dataType:"JSON",
                 data:{productId:productId,quantity:quantity,options:optionsObject,csrfname:csrftoken},
                 success:function(data){
-                    /*
-                    if(data == "386f25bdf171542e69262bf316a8981d0ca571b8" ){
-                        alert("An error occured,Try refreshing the site.");
-                    }else if(data == "d3d34a1c4cb94f516ae916e4b8b4be80d50c8f7a"){
-                       window.location.replace(config.base_url + "cart");
-                    }else if(data = "login_to_add_item2cart"){
-                       window.location.replace(config.base_url + "login");
+
+                    if(!data.isLoggedIn){
+                        window.location.replace("/login");
                     }
-                    */
+                    
+                    if(data.isSuccessful){
+                        window.location.replace("/cart");
+                    }
+                    else{
+                        alert("We cannot process your request at this time. Please try again in a few moment");
+                    }
                 }
 
             });
