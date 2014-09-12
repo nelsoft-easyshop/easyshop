@@ -61,6 +61,7 @@ class product extends MY_Controller
             
             $filteredProducts = $EsProductRepository->getDetails($productIds,$page,$this->per_page);
             $discountedProducts = ($filteredProducts > 0) ? $productManager->getDiscountedPrice($memberId,$filteredProducts) : array();
+
             $response['products'] = ($startPrice) ? $searchProductService->filterByPrice($startPrice,$endPrice,$discountedProducts) : $discountedProducts;
           
             if($page){
@@ -81,16 +82,15 @@ class product extends MY_Controller
                 $subCategoryList[$value->getName()]['item'] = ($popularProduct)?$popularProduct:array(); 
                 $subCategoryList[$value->getName()]['slug'] = $value->getSlug(); 
             }
- 
-
+  
             $breadcrumbs = $this->em->getRepository('EasyShop\Entities\EsCat')
                                         ->getParentCategoryRecursive($categoryId);
 
             $finalizedProductId = array();
             $availableCondition = array();
             foreach ($response['products'] as $key => $value) {
-                array_push($finalizedProductId, $value['idProduct']);
-                array_push($availableCondition, $value['condition']);
+                array_push($finalizedProductId, $value->getProduct()->getIdProduct());
+                array_push($availableCondition, $value->getProduct()->getCondition());
             }
 
             $organizedAttribute = array();

@@ -85,54 +85,26 @@ class EsProductRepository extends EntityRepository
      * @param  array  $productId
      * @return array
      */
-    public function getDetails($productId = array(),$offset,$perPage)
+    public function getDetails($productIds = array(),$offset=0,$perPage=1)
     {   
-        if(count($productId) > 0){
+        if(count($productIds) > 0){
             $this->em =  $this->_em;
-            $rsm = new ResultSetMapping(); 
-                $rsm->addScalarResult('idProduct', 'idProduct');
-                $rsm->addScalarResult('name', 'name');
-                $rsm->addScalarResult('brief', 'brief');
-                $rsm->addScalarResult('price', 'price');
-                $rsm->addScalarResult('slug', 'slug');
-                $rsm->addScalarResult('condition', 'condition');
-                $rsm->addScalarResult('startdate', 'startdate');
-                $rsm->addScalarResult('enddate', 'enddate');
-                $rsm->addScalarResult('isPromote', 'isPromote');
-                $rsm->addScalarResult('promoType', 'promoType');
-                $rsm->addScalarResult('discount', 'discount');
-                $rsm->addScalarResult('isSoldOut', 'isSoldOut');
-                $rsm->addScalarResult('productImagePath', 'productImagePath');
-                $rsm->addScalarResult('username', 'username');
 
-                $query = $this->em->createNativeQuery("
+                $sql = "
                     SELECT 
-                        p.id_product as idProduct
-                        , p.name as name
-                        , p.brief as brief
-                        , p.price as price
-                        , p.slug as slug
-                        , p.condition
-                        , p.startdate as startdate
-                        , p.enddate as enddate
-                        , p.is_promote as isPromote
-                        , p.promo_type as promoType
-                        , p.discount as discount
-                        , p.is_sold_out as isSoldOut
-                        , i.product_image_path as productImagePath
-                        , m.username as username
+                        i,p,m
                     FROM 
-                        es_product p
-                        LEFT JOIN es_product_image i ON p.id_product = i.product_id AND i.is_primary = 1
-                        LEFT JOIN es_member m ON m.id_member = p.member_id
-                    WHERE p.id_product IN (:ids)
-                    ORDER BY FIELD(p.id_product,:ids)
-                    LIMIT :offset, :page ", $rsm);
-                $query->setParameter('ids', $productId);
-                $query->setParameter('offset', $offset * $perPage);
-                $query->setParameter('page', $perPage);
-                $results = $query->execute();
-
+                        EasyShop\Entities\EsProductImage i
+                        JOIN i.product p
+                        JOIN p.member m
+                    WHERE p.idProduct IN (:ids)
+                    AND i.isPrimary = 1
+                ";
+                $query = $this->em->createQuery($sql)
+                                    ->setParameter('ids', $productIds)
+                                    ->setFirstResult($offset*$perPage)
+                                    ->setMaxResults($perPage);
+                $results = $query->getResult();
                 return $results;
             }
             

@@ -176,7 +176,7 @@ class SearchProduct
         $maxPrice = (is_numeric($maxPrice)) ? $maxPrice : PHP_INT_MAX;
    
         foreach ($arrayItems as $key => $value) {
-            $price = round(floatval($value['price']),2); 
+            $price = round(floatval($value->getProduct()->getPrice()),2); 
             if($price < $minPrice || $price > $maxPrice){
                 unset($arrayItems[$key]);
             }
@@ -253,7 +253,7 @@ class SearchProduct
         $seller = trim($seller); 
    
         foreach ($arrayItems as $key => $value) {
-            $username = $value['username']; 
+            $username = $value->getProduct()->getMember()->getUsername(); 
             if (strpos($username, $seller) === false) { 
                 unset($arrayItems[$key]);
             }
