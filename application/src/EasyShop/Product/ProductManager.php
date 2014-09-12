@@ -56,6 +56,7 @@ class ProductManager
 
     /**
      * Applies discount to a product
+     * This has been refactored with hydrate promo data
      * @param  array  $products [description]
      * @return [type]           [description]
      */

@@ -15,11 +15,11 @@ class product extends MY_Controller
     { 
         parent::__construct(); 
         $this->load->helper('htmlpurifier');
-        $this->load->model("product_model");
+        $this->load->model("product_model"); 
         $this->load->model("messages_model");
 
         // Loading entity manager 
-        $this->em = $this->serviceContainer['entity_manager'];
+        $this->em = $this->serviceContainer['entity_manager']; 
     }
 
 
