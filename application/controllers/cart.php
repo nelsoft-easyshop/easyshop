@@ -39,11 +39,7 @@ class Cart extends MY_Controller
         $data = $this->fill_header();
         if ($this->session->userdata('usersession')) {
             $memberId = $this->session->userdata('member_id');
-            
             $cartContents = $this->cartManager->getValidatedCartContents($memberId);
-            
-            print_r($cartContents);
-            
             $this->cartImplementation->persist($memberId);
             $data['title'] = 'Cart | Easyshop.ph';
             $data['cart_items'] = $cartContents;
@@ -53,7 +49,8 @@ class Cart extends MY_Controller
             $this->load->view('templates/checkout_progressbar', $data);
             $this->load->view('pages/cart/cart-responsive', $data);
             $this->load->view('templates/footer_full');
-        } else {
+        } 
+        else {
             redirect('/login', 'refresh');
         }
     }
@@ -62,6 +59,7 @@ class Cart extends MY_Controller
     /**
      * Action for adding an item into the cart
      *
+     * @return mixed
      */
     public function doAddItem()
     {
@@ -69,24 +67,10 @@ class Cart extends MY_Controller
         $options = $this->input->post('options');
         $quantity = $this->input->post('quantity');        
         $isSuccesful = $this->cartManager->addItem($productId, $quantity, $options);
-        print json_encode($isSuccesful);
+        $isLoggedIn = $this->session->userdata('usersession') ? true : false;
+        print json_encode(['isSuccessful' => $isSuccesful, 'isLoggedIn' => $isLoggedIn]);
     }
     
-
-
-    function __OLD_add_item()
-    {
-        /*
-        $this->session->set_userdata('cart_total_perItem',$this->cart_size());
-
-        if (!($this->session->userdata('usersession'))) {
-            $result = "login_to_add_item2cart";
-        }
-
-        echo json_encode($result);
-        */
-    }
-
 
     /**
      * Remove item to cart
