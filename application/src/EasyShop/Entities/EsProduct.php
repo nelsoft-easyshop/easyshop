@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * EsProduct
  *
- * @ORM\Table(name="es_product", indexes={@ORM\Index(name="fk_es_product_es_cat1_idx", columns={"cat_id"}), @ORM\Index(name="fk_es_product_es_brand1_idx", columns={"brand_id"}), @ORM\Index(name="fk_es_product_es_style1_idx", columns={"style_id"}), @ORM\Index(name="fk_es_product_es_member1_idx", columns={"member_id"}), @ORM\Index(name="fk_es_product_es_billing_info_idx", columns={"billing_info_id"}), @ORM\Index(name="slug", columns={"slug"}), @ORM\Index(name="fk_es_product_es_keywords1_idx", columns={"name", "keywords"})})
+ * @ORM\Table(name="es_product", indexes={@ORM\Index(name="fk_es_product_es_cat1_idx", columns={"cat_id"}), @ORM\Index(name="fk_es_product_es_brand1_idx", columns={"brand_id"}), @ORM\Index(name="fk_es_product_es_style1_idx", columns={"style_id"}), @ORM\Index(name="fk_es_product_es_member1_idx", columns={"member_id"}), @ORM\Index(name="fk_es_product_es_billing_info_idx", columns={"billing_info_id"}), @ORM\Index(name="slug", columns={"slug"}), @ORM\Index(name="fk_es_product_es_keywords1_idx", columns={"name", "keywords"}), @ORM\Index(name="fulltext_search_keyword", columns={"search_keyword"})})
  * @ORM\Entity(repositoryClass="EasyShop\Repositories\EsProductRepository")
  */
 class EsProduct
@@ -264,7 +264,46 @@ class EsProduct
      */
     private $style;
 
+    /**
+     * @var boolean
+     *
+     */
+    private $startPromo = '0';
+    
+        
+    /**
+     * @var boolean
+     *
+     */
+    private $endPromo = '0';
+    
+    
+    /**
+     * @var string
+     *
+     */
+    private $originalPrice = '0.0000';
+    
+     
+    /**
+     * @var string
+     *
+     */
+    private $discountPercentage = '0.0000';
 
+    
+    /**
+     *
+     * @var bool
+     *
+     */
+    private $isFreeShipping = false;
+    
+    /**
+     * @var string
+     *
+     */
+    private $soldPrice = '0.0000';
 
     /**
      * Get idProduct
@@ -1034,4 +1073,127 @@ class EsProduct
     {
         return $this->style;
     }
+    
+    /**
+     * Set isStartPromo
+     *
+     * @param bool $isStart
+     */
+    public function setStartPromo($isStart)
+    {
+        $this->startPromo = $isStart;
+    }
+    
+    /**
+     * Get isStartPromo
+     *
+     * @return bool
+     */
+    public function getStartPromo()
+    {
+        return $this->startPromo;
+    }
+    
+    /**
+     * Set isEndPromo
+     *
+     * @param bool $isStart
+     */
+    public function setEndPromo($isEnd)
+    {
+        $this->endPromo = $isEnd;
+    }
+    
+    /**
+     * Get isEndPromo
+     *
+     * @return bool
+     */
+    public function getEndPromo()
+    {
+        return $this->endPromo;
+    }
+    
+    /**
+     *  Set $originalPrice
+     *
+     *  @param string $originalPrice
+     */
+    public function setOriginalPrice($originalPrice)
+    {
+        $this->originalPrice = $originalPrice;
+    }
+    
+    /**
+     *  Get $originalPrice
+     *
+     *  @return string
+     */
+    public function getOriginalPrice()
+    {
+        return $this->originalPrice;
+    }
+    
+    
+    /**
+     *  Set $discountPercentage
+     *
+     *  @param string $discountPercentage
+     */
+    public function setDiscountPercentage($discountPercentage)
+    {
+        $this->discountPercentage = $discountPercentage;
+    }
+    
+    /**
+     *  Get $discountPercentage
+     *
+     *  @return string
+     */
+    public function getDiscountPercentage()
+    {
+        return $this->discountPercentage;
+    }
+    
+    
+    /**
+     *  Set $isFreeShipping
+     *
+     *  @param bool $isFreeShipping
+     */
+    public function setIsFreeShipping($isFreeShipping)
+    {
+        $this->isFreeShipping = $isFreeShipping;
+    }
+    
+    /**
+     *  Get $isFreeShipping
+     *
+     *  @return bool
+     */
+    public function getIsFreeShipping()
+    {
+        return $this->isFreeShipping;
+    }
+    
+    /**
+     *  Set $soldPrice
+     *
+     *  @param string $soldPrice
+     */
+    public function setSoldPrice($soldPrice)
+    {
+        $this->soldPrice = $soldPrice;
+    }
+    
+    /**
+     *  Get $soldPrice
+     *
+     *  @return string
+     */
+    public function getSoldPrice()
+    {
+        return $this->soldPrice;
+    }
+    
 }

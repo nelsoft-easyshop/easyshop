@@ -81,15 +81,17 @@
                         <span class='span-cont' id='following-lnk'><?php echo count($following)?> <label>following</label></span>
                     </p>
      
-                    <?php if( !$renderEdit && $logged_in ):?>
+                    <?php if( !$renderEdit ):?>
+                        <input id="subscribe_status" type="hidden" value="<?php echo $subscribe_status?>">
                         <?php echo form_open('');?>
-                        <p class="subscription_btn btn2 btn-follow" style="text-align:center; display:<?php echo $subscribe_status==='unfollowed'?'':'none'?>">
+                        <p id="follow_btn" class="subscription_btn btn2 btn-follow" style="text-align:center; display:<?php echo $subscribe_status==='unfollowed'?'':'none'?>">
                             <small class="sprite-bg follow-icon"></small> Follow
                         </p>
                         <p class="subscription_btn btn2 btn-unfollow" style="text-align:center; display:<?php echo $subscribe_status==='followed'?'':'none'?>">
                             <small class="sprite-bg unfollow-icon"></small> Unfollow
                         </p>
-                        <input type="hidden" value="<?php echo $vendordetails['username']?>" name="name">
+                        <input id="vendor_name" type="hidden" value="<?php echo $vendordetails['username']?>" name="name">
+                        <input type="hidden" value="<?php echo $vendordetails['userslug']?>" name="userlink">
                         <?php echo form_close();?>
                     <?php endif;?>
 
@@ -108,7 +110,7 @@
                             <?php if($renderEdit):?>
                             <div id="user_store_edit" style="display:none;">
                                 <?php echo form_open('');?>
-                                    <input type="text" data-origname="<?php echo $hasStoreName ? html_escape($store_name) : '' ?>" name="store_name" value="<?php echo $hasStoreName ? html_escape($store_name) : '' ?>">
+                                    <input type="text" data-origname="<?php echo $hasStoreName ? html_escape($store_name) : $vendordetails['username'] ?>" name="store_name" value="<?php echo $hasStoreName ? html_escape($store_name) : $vendordetails['username'] ?>">
                                     <input type="hidden" name="store_name_hidden" value="1">
                                     <input id="store_name_submit" type="button" value="Save">
                                     <input id="store_name_cancel" type="button" value="Cancel">
@@ -234,10 +236,10 @@
             <div class="dashboard_table vendor_feedbacks_table user-tab" id="dashboard-feedbacks">
                     <h2>Feedbacks</h2><a href="javascript:void(0)" class="hide_all_feedbacks blue"><span class="span_bg minus_btn"></span> Hide All Feedbacks</a>
                         <ul class="idTabs">
-                            <li><a href="#op_buyer">Feedbacks as a Buyer</a></li>
-                            <li><a href="#op_seller">Feedbacks as a Seller</a></li>
-                            <li><a href="#yp_buyer">Feedbacks for others - Buyer</a></li>
-                            <li><a href="#yp_seller">Feedbacks for others - Seller</a></li>
+                            <li><a href="#op_buyer">Feedbacks from Sellers</a></li>
+                            <li><a href="#op_seller">Feedbacks from Buyers</a></li>
+                            <li><a href="#yp_buyer">Feedbacks to Sellers</a></li>
+                            <li><a href="#yp_seller">Feedbacks to Buyers</a></li>
                         </ul>
 
                         <div class="clear"></div>
