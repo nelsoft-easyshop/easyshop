@@ -73,27 +73,15 @@ class Cart extends MY_Controller
     
 
     /**
-     * Remove item to cart
+     * Remove an item from the cart
      *
-     * @Return array
+     * @return mixed
      */
-    function remove_item()
+    function doRemoveItem()
     {
-        $MemberId =  $this->session->userdata('member_id');
-        $data = array(
-            'rowid' => $this->input->post('id'),
-            'qty'   => 0
-        );
-        $result=false;
-        if($this->cart->update($data)){
-            $result=array(
-                'result'=>true,
-                'total'=>  $this->get_total_price(),
-                'total_items'=>  $this->cart_size());
-            $Cart = $this->cart_items($this->cart->contents());
-            $this->cart_model->save_cartitems(serialize($Cart), $MemberId);
-        }
-
+        $memberId =  $this->session->userdata('member_id');
+        $rowId = $this->input->post('id');
+        $result = $this->cartManager->removeItem($memberId, $rowId);
         echo json_encode($result);
     }
 
