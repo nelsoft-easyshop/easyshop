@@ -25,7 +25,22 @@ class CSRF_Protection
        */
       private static $token;
      
-      // -----------------------------------------------------------------------------------
+      
+      
+      /**
+       * list of URLs to bypass
+       *
+       * @var string[]
+       */
+      private $bypassUrls = array("/payment/dragonPayPostBack", "/payment/ipn2", "/payment/pesoPayDataFeed");
+      
+      /**
+       * List of first segment URLs to bypass
+       *
+       * @var string[]
+       */
+      private $bypassFirstSegments = array("webservice", "mobile");
+      
      
       public function __construct()
       {
@@ -72,23 +87,18 @@ class CSRF_Protection
         // Is this a post request?
         if ($_SERVER['REQUEST_METHOD'] == 'POST')
         {
-
-
+            $firstUrlSegment = reset($this->CI->uri->segment_array());
+            
             if(empty($_POST) && empty($_FILES) && $_SERVER['CONTENT_LENGTH'] > 0){
                 show_error('Request was invalid. Selected file was too large. 1001', 400);
-            }
-            elseif($_SERVER['REQUEST_URI'] === '/payment/dragonPayPostBack'){
-                return true;
-            } 
-            elseif($_SERVER['REQUEST_URI'] === '/payment/ipn2'){
+            }            
+            else if(in_array($_SERVER['REQUEST_URI'], $this->bypassUrls)){
                 return true;
             }
-            elseif($_SERVER['REQUEST_URI'] === '/payment/pesoPayDataFeed'){
+            elseif(in_array($firstUrlSegment, $this->bypassFirstSegments)){
                 return true;
             }
-            elseif(strpos($_SERVER['REQUEST_URI'], 'webservice')){
-                return true;
-            }
+            
             else{
                  // Is the token field set and valid?
                 $posted_token = $this->CI->input->post(self::$token_name);
