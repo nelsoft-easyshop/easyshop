@@ -98,4 +98,4 @@ class Category extends MY_Controller {
 }
 
 /* End of file category.php */
-/* Location: ./application/controllers/category.php */
+/* Location: ./application/controllers/mobile/category.php */

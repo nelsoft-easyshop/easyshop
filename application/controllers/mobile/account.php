@@ -7,7 +7,7 @@ class Account extends MY_Controller {
 
 
     /**
-     * Authentication constructor
+     * Account constructor
      *
      */
     function __construct() 
@@ -54,5 +54,5 @@ class Account extends MY_Controller {
 
 }
 
-/* End of file Register.php */
-/* Location: ./application/controllers/Register.php */
+/* End of file account.php */
+/* Location: ./application/controllers/mobile/account.php */
