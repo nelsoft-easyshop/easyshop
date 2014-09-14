@@ -175,7 +175,8 @@ class CartManager
     public function getValidatedCartContents($memberId)
     {
         $member = $this->em->getRepository('EasyShop\Entities\EsMember')->find($memberId);
-        if(!$member->getIsEmailVerify()){
+
+        if(!$member || !$member->getIsEmailVerify()){
             $this->cart->destroy();
             return false;
         }
@@ -206,6 +207,8 @@ class CartManager
             }
 
         }
+                    
+        $this->cart->persist($memberId);
         return  $this->cart->getContents();
             
     }

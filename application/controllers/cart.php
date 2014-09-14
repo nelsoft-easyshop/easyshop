@@ -40,7 +40,7 @@ class Cart extends MY_Controller
         if ($this->session->userdata('usersession')) {
             $memberId = $this->session->userdata('member_id');
             $cartContents = $this->cartManager->getValidatedCartContents($memberId);
-            $this->cartImplementation->persist($memberId);
+
             $data['title'] = 'Cart | Easyshop.ph';
             $data['cart_items'] = $cartContents;
             $data['total'] = $this->cartImplementation->getTotalPrice();
