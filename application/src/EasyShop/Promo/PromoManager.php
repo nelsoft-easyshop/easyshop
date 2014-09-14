@@ -31,7 +31,7 @@ class PromoManager
      */
     public function __construct(ConfigLoader $configLoader)
     {
-        $this->promoConfig = $configLoader->getItem('promo', 'Promo');
+        $this->promoConfig = $configLoader->getItem('promo')['Promo'];
     }
     
     /**
@@ -77,7 +77,7 @@ class PromoManager
         else{
             if(intval($product->getDiscount('discount')) > 0){
                 $regularDiscountPrice = $product->getPrice() * (1.0-($product->getDiscount()/100.0));
-                $product->setPrice( (floatval($regularDiscountPrice)>0) ? $regularDiscountPrice : 0.01 );
+                $product->setFinalPrice( (floatval($regularDiscountPrice)>0) ? $regularDiscountPrice : 0.01 );
             }  
         }
  
