@@ -49,38 +49,39 @@ function proceedPayment(obj){
     }
 }
 
-function sum(obj)
+function changeQuantity(inputField)
 {
+
     var csrftoken = $("meta[name='csrf-token']").attr('content');
-    var value = $(obj).val();
-    var id = $(obj).attr("id");
-    var mx = $(obj).attr("mx");
-    if (parseInt(value) > parseInt(mx)) {
-        $(obj).val(mx);
-        value = mx;
+    var desiredQuantity = parseInt($(inputField).val(),10);
+    var maxQuantity = parseInt($(inputField).attr("max-quantity"),10);
+    var cartRowId = $(inputField).attr("id");
+    if (desiredQuantity > maxQuantity) {
+        desiredQuantity = maxQuantity;
     }
 
     $.ajax({
-        async: false,
-        url: config.base_url + "cart/fnc_qty",
+        url: "/cart/doChangeQuantity",
         type: "POST",
         dataType: "JSON",
-        data: {id: id, qty: value, csrfname: csrftoken},
+        data: {id: cartRowId, qty: desiredQuantity, csrfname: csrftoken},
         success: function (data) {
-            if (data == false) {
-                location.reload();
+            if (data.isSuccessful === false) {
+               // location.reload();
             }
             else {
-                $(".subtotal" + id).text(data['subtotal']);
-                $("#total").text(data['total']);
-                $(obj).val(data.qty);
-                $('#rad_' + id).val(data.subtotal);
+                $(".subtotal" + cartRowId).text(data.itemSubtotal);
+                $('#rad_' + cartRowId).val(data.itemSubtotal);
+                $("#total").text(data.cartTotal);
+                $(inputField).val(data.qty);
             }
-            $(obj).attr("mx", data['maxqty']);
+            $(inputField).attr("max-quantity", data.maxqty);
         }
     });
     $(".checkAll").trigger('click').trigger('click');
 }
+
+
 
 function selectAll(obj) {
     $(".single1_" + $(obj).attr('data_id')).prop('checked', obj.checked);
