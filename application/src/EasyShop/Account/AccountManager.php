@@ -89,10 +89,10 @@ class AccountManager
     {    
         $response = false;
         
-        $member = $this->em->getRepository('EasyShop\Entities\EsWebserviceUser')
+        $webServiceUser = $this->em->getRepository('EasyShop\Entities\EsWebserviceUser')
                            ->findOneBy(array('username' => $clientUsername));
-        if($member){
-             if($this->bcryptEncoder->isPasswordValid($member->getPassword(), $clientPassword)){
+        if($webServiceUser){
+             if($this->bcryptEncoder->isPasswordValid($webServiceUser->getPassword(), $clientPassword)){
                 $response = true;
             }
         }
