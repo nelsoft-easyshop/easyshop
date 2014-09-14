@@ -70,7 +70,7 @@ class PromoManager
         else{
             if(intval($product->getDiscount('discount')) > 0){
                 $regularDiscountPrice = $product->getPrice() * (1.0-($product->getDiscount()/100.0));
-                $product->setPrice( (floatval($regularDiscountPrice)>0) ? $regularDiscountPrice : 0.01 );
+                $product->setFinalPrice( (floatval($regularDiscountPrice)>0) ? $regularDiscountPrice : 0.01 );
             }  
         }
  
