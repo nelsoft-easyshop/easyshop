@@ -129,7 +129,13 @@ class CodeigniterCart implements CartInterface
      */
     public function updateContent($cartId, $cartData)
     {   
-        $cartData[$this->indexName] = $cartId;
+        if(isset($cartData[$this->indexName])){
+            $cartData[$this->indexName] = $cartId;
+        }
+        else{
+            $cartData = array_merge($cartData, [$this->indexName => $cartId]);
+        }
+        
         return $this->cart->update($cartData);
     }
     
