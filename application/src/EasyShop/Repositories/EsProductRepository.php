@@ -375,7 +375,7 @@ class EsProductRepository extends EntityRepository
         $query = $this->em->createNativeQuery($sql, $rsm);
         $result = $query->getOneOrNullResult();
 
-        return $result['count'];
+        return $result['count']; 
     }
 
     /**
@@ -440,7 +440,7 @@ class EsProductRepository extends EntityRepository
         $resultNeeded = array_map(function($value) { return $value['idProduct']; }, $result);
 
         return $resultNeeded;
-    }
+    } 
 }
 
 

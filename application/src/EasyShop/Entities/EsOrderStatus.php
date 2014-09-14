@@ -29,6 +29,26 @@ class EsOrderStatus
     private $name = '';
 
 
+    /**
+     * @var integer
+     */
+    const STATUS_PAID = 0;
+    
+    /**
+     * @var integer
+     */
+    const STATUS_COMPLETED = 1;
+    
+    /**
+     * @var integer
+     */
+    const STATUS_VOID = 2;
+    
+    /**
+     * @var integer
+     */
+    const STATUS_DRAFT = 99;
+
 
     /**
      * Get orderStatus

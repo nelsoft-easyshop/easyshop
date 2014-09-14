@@ -3,6 +3,7 @@
 
     $(document).ready(function(){
         $(".search_box").css('display','none');
+        $("#failed-login").hide();
     });
 
     $(document).ready(function(){
@@ -41,37 +42,44 @@
                     url: config.base_url + "login/authenticate",
                     data: $(form).serializeArray(),
                     success:function(data){
-                        if(data.o_success <= 0){
-                            $("#login_error").empty();
-                            $("#login_error").html(data[3]);
-                            $('#loading_img').hide();
-                            $('#login').show();
+                        if(data.timeoutLeft >= 1){
+                            $("p#lockoutDuration").html("Timeout Remaining: " + data.timeoutLeft);
+                            $("#failed-login").show();
+                            $("#login-form").hide();
                         }
                         else{
-                            $('.error_cont').text('');
-                            $('#login_error').text('');
-                            $('#loading_img').hide();
-                            $('#login').val('Redirecting...');
-                            $('#login')[0].disabled = true;
-                            $('#login').show();
-
-                            var url = $('#redirect_url').val();
-                            var first_uri_segment = url.substring(0, url.indexOf('/'));
-                            var vendorSubscriptionUri = $.cookie('es_vendor_subscribe');
-
-                            if( typeof vendorSubscriptionUri !== "undefined" ){
-                                window.location = config.base_url + vendorSubscriptionUri;
+                            if(data.o_success <= 0){
+                                $("#login_error").empty();
+                                $("#login_error").html(data[3]);
+                                $('#loading_img').hide();
+                                $('#login').show();
                             }
                             else{
-                                if((url == 'sell/step1')||(first_uri_segment == 'item')|| (url == 'cart')){
-                                    window.location = config.base_url+ url;
-                                }
-                                else if(first_uri_segment == 'cart'){
-                                    window.location = config.base_url + first_uri_segment;
+                                $('.error_cont').text('');
+                                $('#login_error').text('');
+                                $('#loading_img').hide();
+                                $('#login').val('Redirecting...');
+                                $('#login')[0].disabled = true;
+                                $('#login').show();
+
+                                var url = $('#redirect_url').val();
+                                var first_uri_segment = url.substring(0, url.indexOf('/'));
+                                var vendorSubscriptionUri = $.cookie('es_vendor_subscribe');
+
+                                if( typeof vendorSubscriptionUri !== "undefined" ){
+                                    window.location = config.base_url + vendorSubscriptionUri;
                                 }
                                 else{
-                                    window.location = config.base_url;
-                                }                            
+                                    if((url == 'sell/step1')||(first_uri_segment == 'item')|| (url == 'cart')){
+                                        window.location = config.base_url+ url;
+                                    }
+                                    else if(first_uri_segment == 'cart'){
+                                        window.location = config.base_url + first_uri_segment;
+                                    }
+                                    else{
+                                        window.location = config.base_url;
+                                    }                            
+                                }
                             }
                         }
                     }
