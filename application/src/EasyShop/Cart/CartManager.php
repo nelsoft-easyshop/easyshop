@@ -138,7 +138,7 @@ class CartManager
         }
 
         $cartItemQuantity = ($quantity > $itemAvailability) ? $itemAvailability : $quantity;
-
+        $cartIndexName = $this->cart->getIndexName();
         $productImage = $this->em->getRepository('EasyShop\Entities\EsProductImage')
                         ->getDefaultImage($product->getIdProduct());
         
@@ -149,7 +149,8 @@ class CartManager
             'original_price' => $product->getOriginalPrice(),
             'name' => $product->getName(),
             'options' => $validatedCartOptions,
-            'img' => $productImage->getProductImagePath(),
+            'imagePath' => $productImage->getDirectory(),
+            'imageFile' =>  $productImage->getFilename(),
             'member_id' => $product->getMember()->getIdMember(),
             'brief' => $product->getBrief(),
             'product_itemID' => $productItemId, 
@@ -315,8 +316,9 @@ class CartManager
     public function changeItemQuantity($cartRowId, $quantity)
     {
         $cartItem = $this->cart->getSingleItem($cartRowId);
+        
         $itemAvailability = $cartItem['maxqty'];
-        $product = $this->productManager->getProductDetails($cartItem);
+        $product = $this->productManager->getProductDetails($cartItem['id']);
         $cartItem['qty'] = $quantity;
 
         if (intval($product->getIsPromote()) === 1){
@@ -331,8 +333,9 @@ class CartManager
             }
         }
         
-        return $this->cart->update($cartRowId, $cartItem);
+        $this->cart->updateContent($cartRowId, $cartItem);
         
+        return true;
     }
     
     /**
