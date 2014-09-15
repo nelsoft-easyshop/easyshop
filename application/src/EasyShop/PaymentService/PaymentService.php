@@ -408,7 +408,7 @@ class PaymentService
             $productstring .= '<||>'.$sellerId."{+}".$productId."{+}".$orderQuantity."{+}".$price."{+}".$otherFee."{+}".$total."{+}".$productItem."{+}".$optionCount."{+}".$optionString;
             $itemList[$key]['otherFee'] = $otherFee;
             $sellerDetails = $this->em->getRepository('EasyShop\Entities\EsMember')
-                                        ->getMemberById($sellerId);
+                                        ->find($sellerId);
             $itemList[$key]['seller_username'] = $sellerDetails->getUsername();
             $grandTotal += $total;
             $name .= " ".$value['name'];

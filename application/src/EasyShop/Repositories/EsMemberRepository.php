@@ -78,20 +78,4 @@ class EsMemberRepository extends EntityRepository
 
         return $user;
     }
-
-    /**
-     * Finds a member by username/email
-     *
-     * @param string $username Username/email of member
-     *
-     * @return EasyShop\Entities\EsMember
-     */
-    public function getMemberById($id)
-    {
-        // check if username is in DB
-        $user = $this->_em->getRepository('EasyShop\Entities\EsMember')
-                            ->find($id);
-        return $user;
-    }
-
 }
