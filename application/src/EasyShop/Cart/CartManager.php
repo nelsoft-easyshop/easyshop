@@ -80,7 +80,7 @@ class CartManager
         
         $cartProductAttributes = array();
         $validatedCartOptions = array();
-        $finalPrice = $product->getPrice();
+        $finalPrice = $product->getFinalPrice();
         $totalOptionPrice = 0;
         $options  = empty($options) ? array() : $options;
 
