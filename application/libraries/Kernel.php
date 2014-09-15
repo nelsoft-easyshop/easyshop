@@ -174,20 +174,6 @@ class Kernel
             return \Symfony\Component\HttpFoundation\Request::createFromGlobals();
         };
 
-        // Payment Service
-        $container['payment_service'] = function ($c) use ($container) {
-            return new \EasyShop\PaymentService\PaymentService(
-                            $container['entity_manager'],
-                            $container['request'],
-                            $container['point_tracker']
-                            );
-        };
-        
-          // Product Manager
-        $container['product_manager'] = function ($c) {
-            return new \EasyShop\Product\ProductManager();
-        };
-
         // Search product
         $container['search_product'] = function ($c) use($container) {
             return new \EasyShop\Search\SearchProduct($container['entity_manager']);
@@ -203,7 +189,12 @@ class Kernel
             $em = $container['entity_manager'];
             $promoManager = $container['promo_manager'];
             $collectionHelper = $container['collection_helper'];
-            return new \EasyShop\Product\ProductManager($em,$promoManager,$collectionHelper);
+            $configLoader = $container['config_loader'];
+
+            return new \EasyShop\Product\ProductManager($em, 
+                                                        $promoManager, 
+                                                        $collectionHelper, 
+                                                        $configLoader);
         };
 
 
@@ -213,8 +204,10 @@ class Kernel
         };
  
         // Category Manager
-        $container['category_manager'] = function ($c) {
-            return new \EasyShop\Category\CategoryManager();
+        $container['category_manager'] = function ($c) use($container) {
+            $configLoader = $container['config_loader'];
+
+            return new \EasyShop\Category\CategoryManager($configLoader);
         };
         
         $container['config_loader'] = function ($c) {
@@ -222,7 +215,16 @@ class Kernel
             return new \EasyShop\ConfigLoader\ConfigLoader($configImplementation);
         };
          
-
+        // Payment Service
+        $container['payment_service'] = function ($c) use ($container) {
+            return new \EasyShop\PaymentService\PaymentService(
+                            $container['entity_manager'],
+                            $container['request'],
+                            $container['point_tracker'],
+                            $container['promo_manager'],
+                            $container['product_manager']
+                            );
+        };
 
         //Login Throttler Service
         $container['login_throttler'] = function ($c) use($container) {

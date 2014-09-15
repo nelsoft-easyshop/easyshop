@@ -32,8 +32,9 @@
                 }
             }
             rtn = rtn + "?" + params_arr.join("&");
+            return rtn;
         }
-        return rtn;
+        return sourceURL;
     }
 
     var getCookie = function(name)
@@ -121,9 +122,9 @@
         }
     });
 
-    $('.price').click(function() {
+    $('.price').click(function() { 
         var price1 = parseFloat($('#price1').val());
-        var price2 = parseFloat($('#price2').val());
+        var price2 = parseFloat($('#price2').val()); 
 
         currentUrl = removeParam("startprice", currentUrl);
         currentUrl = removeParam("endprice", currentUrl);

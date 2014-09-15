@@ -137,9 +137,9 @@ class product_search extends MY_Controller {
 
             $finalizedProductId = array();
             foreach ($response['products'] as $key => $value) {
-                array_push($finalizedProductId, $value['idProduct']);
-            }
-
+                array_push($finalizedProductId, $value->getProduct()->getIdProduct());
+            } 
+            
             $organizedAttribute = array();
             if(count($finalizedProductId)>0){
                 $brands = $EsProductRepository->getBrands($finalizedProductId);
@@ -228,8 +228,8 @@ class product_search extends MY_Controller {
         $finalizedProductId = array();
         $availableCondition = array();
         foreach ($response['products'] as $key => $value) {
-            array_push($finalizedProductId, $value['idProduct']);
-            array_push($availableCondition, $value['condition']);
+            array_push($finalizedProductId, $value->getProduct()->getIdProduct());
+            array_push($availableCondition, $value->getProduct()->getCondition());
         }
 
         $organizedAttribute = array();
