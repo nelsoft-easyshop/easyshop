@@ -60,6 +60,14 @@ class ValidationRules
                                 ])
                             )
                 ),
+            'login' => array(
+                    'username' => array(
+                                new Assert\NotBlank(),
+                    ),
+                    'password' => array(
+                                new Assert\NotBlank(),
+                    ),
+                ),
             'register' => array(
                     'username' => array(
                                 new Assert\NotBlank(),

@@ -436,7 +436,7 @@ class Home extends MY_Controller
             ));
 
         $data = array(
-            'title' => 'Report a Problem | Easyshop.ph',
+            'title' => 'Report a Problem git statu| Easyshop.ph',
             'metadescription' => 'Found a bug? Let us know so we can work on it.',
         );
 
@@ -444,6 +444,12 @@ class Home extends MY_Controller
         $this->load->view('templates/header', $data);
         $this->output->append_output($formData); 
         $this->load->view('templates/footer_full');
+    }
+    
+    public function auth()
+    {
+        $server = $this->serviceContainer['oauth_server'];
+        $server->handleTokenRequest(OAuth2\Request::createFromGlobals())->send();
     }
     
 }

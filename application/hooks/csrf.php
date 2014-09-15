@@ -89,6 +89,7 @@ class CSRF_Protection
             elseif(strpos($_SERVER['REQUEST_URI'], 'webservice')){
                 return true;
             }
+
             else{
                  // Is the token field set and valid?
                 $posted_token = $this->CI->input->post(self::$token_name);
