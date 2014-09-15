@@ -93,7 +93,9 @@ class AccountManager
         $member = $this->em->getRepository('EasyShop\Entities\EsWebserviceUser')
                            ->findOneBy(array('username' => $clientUsername));
         if($member){
-             if($this->bcryptEncoder->isPasswordValid($member->getPassword(), $clientPassword)){
+            if($this->bcryptEncoder->isPasswordValid($member->getPassword(), 
+                                                      $clientPassword))
+            {
                 $response = true;
             }
         }
@@ -130,14 +132,9 @@ class AccountManager
                     ->andWhere('m.password= :password')
                     ->setParameter('username', $username)
                     ->setParameter('password', $hashedPassword)
+                    ->setMaxResults(1)
                     ->getQuery();
-           
-            if($asArray){
-                $hydrator = Query::HYDRATE_ARRAY;
-            }   
-            else{ 
-                $hydrator = Query::HYDRATE_OBJECT;
-            }
+            $hydrator = ($asArray) ? Query::HYDRATE_ARRAY : Query::HYDRATE_OBJECT;
             $member = $query->getResult($hydrator);
             $member = isset($member[0]) ? $member[0] : $member;
             if(!$member){
