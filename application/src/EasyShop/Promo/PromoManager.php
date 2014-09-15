@@ -59,6 +59,7 @@ class PromoManager
     public function hydratePromoData(&$product)
     {
         $product->setOriginalPrice($product->getPrice());
+        $product->setFinalPrice($product->getPrice());
         if(intval($product->getIsPromote()) === 1){
             $promoType = $product->getPromoType();
             if(isset($this->promoConfig[$promoType])){
