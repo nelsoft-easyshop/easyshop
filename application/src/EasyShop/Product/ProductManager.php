@@ -3,11 +3,13 @@
 namespace EasyShop\Product;
 
 use Easyshop\Promo\PromoManager as PromoManager;
+use EasyShop\ConfigLoader\ConfigLoader as ConfigLoader;
 use EasyShop\Entities\EsOrderProduct;
 use EasyShop\Entities\EsOrder; 
 use EasyShop\Entities\EsProduct; 
 use EasyShop\Entities\EsProductShippingHead; 
 use Easyshop\Entities\EsProducItemLock;
+
 
 /**
  * Product Manager Class
@@ -43,19 +45,27 @@ class ProductManager
      * @var EasyShop\CollectionHelper\CollectionHelper
      */
     private $collectionHelper;
+    
+    /**
+     * Promo config
+     *
+     * @var mixed
+     */
+    private $promoConfig = array();
+
+
 
     /**
      * Constructor.
      * 
      */
-    public function __construct($em, PromoManager $promoManager, $collectionHelper)
+    public function __construct($em, PromoManager $promoManager, $collectionHelper, ConfigLoader $configLoader)
     {
         $this->em = $em; 
         $this->promoManager = $promoManager;
         $this->collectionHelper = $collectionHelper;
-        
-        $this->ci = get_instance();  
-        $this->promoArray = $this->ci->config->item('Promo');
+
+        $this->promoConfig = $configLoader->getItem('promo')['Promo'];
     }
 
     /**
@@ -184,7 +194,7 @@ class ProductManager
             $startPromo = false;
             $endPromo = false;
 
-            $promoArray = $this->promoArray[$promoType]; 
+            $promoArray = $this->promoConfig[$promoType]; 
 
             if(intval($isPromote) === 1){
                 $promo = $this->promoManager->applyDiscount($price, $startDate,$endDate,$isPromote,$promoType, $discount);

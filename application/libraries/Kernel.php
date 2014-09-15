@@ -201,8 +201,9 @@ class Kernel
         $container['product_manager'] = function ($c) use ($container) {
             $em = $container['entity_manager'];
             $promoManager = $container['promo_manager'];
+            $configLoader = $container['config_loader'];
             $collectionHelper = $container['collection_helper'];
-            return new \EasyShop\Product\ProductManager($em,$promoManager,$collectionHelper);
+            return new \EasyShop\Product\ProductManager($em, $promoManager,$collectionHelper, $configLoader);
         };
 
 
