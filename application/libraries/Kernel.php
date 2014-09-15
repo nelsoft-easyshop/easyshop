@@ -255,12 +255,13 @@ class Kernel
         };
 
 
-        $container['oauth_server'] = function ($c) use ($dbConfig) {
+        $container['oauth_server'] = function ($c) use ($dbConfig, $container) {
             $dsn = 'mysql:dbname='.$dbConfig['dbname'].';host='.$dbConfig['host'].';';
-            $config['user_table'] = 'es_member'; 
-            $storage = new OAuth2\Storage\Pdo(array('dsn' => $dsn, 'username' => $dbConfig['user'], 'password' => $dbConfig['password']), $config);
+            $storage = new OAuth2\Storage\Pdo(array('dsn' => $dsn, 'username' => $dbConfig['user'], 'password' => $dbConfig['password']), ['user_table' => 'es_member']);
+            
+            $userCredentialStorage = new EasyShop\OAuth\Storage\UserCredentials($container['account_manager']);
             $server = new OAuth2\Server($storage);
-            $server->addGrantType(new OAuth2\GrantType\UserCredentials($storage));
+            $server->addGrantType(new OAuth2\GrantType\UserCredentials($userCredentialStorage));
             return $server;
         };
 
