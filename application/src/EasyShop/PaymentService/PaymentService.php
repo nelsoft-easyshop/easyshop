@@ -355,24 +355,22 @@ class PaymentService
     }
     
     /**
-     * Reset Price and Quantity
+     * Validate Cart Data
      * 
      * @param mixed $carts User Session data
      * @param bool $condition Used for lock-related processing
      *
      * @return mixed
      */
-    function resetPriceAndQty($carts,$condition = FALSE)
+    function validateCartData($carts,$condition = FALSE)
     {
         $itemArray = $carts['choosen_items'];
-        $qtySuccess = 0;
+        $availableItemCount = 0;
 
         foreach($itemArray as $key => $value){
 
             $productId = $value['id'];
             $itemId = $value['product_itemID'];
-
-            /* Start product_model->getProductById */
 
             $productArray = $this->em->getRepository('EasyShop\Entities\EsProduct')
                                             ->find($productId);
@@ -381,11 +379,11 @@ class PaymentService
             $this->promoManager->hydratePromoData($productArray);
 
             /** NEW QUANTITY **/
-            $newQty = $this->productManager->getProductInventory($productArray, false, $condition);
-            $maxQty = $newQty[$itemId]['quantity'];
+            $productInventoryDetail = $this->productManager->getProductInventory($productArray, false, $condition);
+            $maxQty = $productInventoryDetail[$itemId]['quantity'];
             $qty = $value['qty'];
             $itemArray[$value['rowid']]['maxqty'] = $maxQty;
-            $qtySuccess = ($maxQty >= $qty ? $qtySuccess + 1: $qtySuccess + 0);
+            $availableItemCount = ($maxQty >= $qty ? $availableItemCount + 1: $availableItemCount + 0);
 
             /** NEW PRICE **/
             $promoPrice = $productArray->getFinalPrice(); 
@@ -396,7 +394,7 @@ class PaymentService
             $itemArray[$value['rowid']]['subtotal'] = $subtotal;
         }
 
-        return [$qtySuccess, $itemArray];
+        return [$availableItemCount, $itemArray];
     }
 }
 
