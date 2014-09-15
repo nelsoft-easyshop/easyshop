@@ -74,7 +74,8 @@ class ProductManager
                                             ->getShippingTotalPrice($productId);
         $product->setSoldPrice($soldPrice);
         $product->setIsFreeShipping($totalShippingFee === 0);
-
+        $this->promoManager->hydratePromoData($product);
+        
         return $product;
     }
 
