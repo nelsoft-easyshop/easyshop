@@ -446,6 +446,12 @@ class Home extends MY_Controller
         $this->load->view('templates/footer_full');
     }
     
+    public function auth()
+    {
+        $server = $this->serviceContainer['oauth_server'];
+        $server->handleTokenRequest(OAuth2\Request::createFromGlobals())->send();
+    }
+    
 }
 
 /* End of file home.php */
