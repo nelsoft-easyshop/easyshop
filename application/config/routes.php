@@ -78,7 +78,7 @@ else {
     $route['404_override'] = 'home/userprofile';
     
     # CATEGORY
-    $route['(?i)category/(:any)'] = 'product/category_page/$1'; # janz serafico
+    $route['(?i)category/(:any)'] = 'product/categoryPage/$1'; # janz serafico
     $route['(?i)category_more'] = 'product/category_page_more'; # ryan vasquez
     $route['(?i)cat/all'] = 'product/categories_all'; # ryan vasquez
 
