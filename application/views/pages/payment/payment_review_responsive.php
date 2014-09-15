@@ -129,7 +129,7 @@
 								<span>
 									This item is not available in your location. 
 									<a style="color:#0654BA" href="javascript:{}" data-slug="<?= $value['id'] ?>" data-name="<?= $value['name'] ?>" data-iid="<?= $value['product_itemID']; ?>" class="view_location_item" data-toggle="modal" data-target="#avail_loc" >See the item location availability here.</a>
-                                        or <a href="javascript:void(0);" class="removeitem" data-slug="<?= $value['slug'] ?>" style="color:red">Remove</a> this item from your cart checkout to proceed.
+                                        or <a href="javascript:void(0);" class="removeitem" data-cart-id="<?php echo $value["rowid"] ?>" data-slug="<?= $value['slug'] ?>" style="color:red">Remove</a> this item from your cart checkout to proceed.
 							</div>
 						</td>
 					</tr>

@@ -2,14 +2,18 @@
 
 namespace EasyShop\Product;
 
+use Easyshop\Promo\PromoManager as PromoManager;
+use EasyShop\ConfigLoader\ConfigLoader as ConfigLoader;
 use EasyShop\Entities\EsOrderProduct;
 use EasyShop\Entities\EsOrder; 
+use EasyShop\Entities\EsProduct; 
 use EasyShop\Entities\EsProductShippingHead; 
+use Easyshop\Entities\EsProducItemLock;
+
 
 /**
  * Product Manager Class
  *
- * @author Ryan Vasquez
  */
 class ProductManager
 {
@@ -20,6 +24,13 @@ class ProductManager
      * @var Doctrine\ORM\EntityManager
      */
     private $em;
+
+    /**
+     * Product Item Lock life time in minutes
+     *
+     * @var integer
+     */
+    private $lockLifeSpan = 10;
 
     /**
      * Promo Manager instance
@@ -34,6 +45,7 @@ class ProductManager
      * @var EasyShop\CollectionHelper\CollectionHelper
      */
     private $collectionHelper;
+    
 
     /**
      * Codeigniter Config Loader
@@ -53,7 +65,7 @@ class ProductManager
         $this->collectionHelper = $collectionHelper;
         $this->configLoader = $configLoader;
     }
-    
+
     /**
      * Returns the product object with hydrated virtual fields
      *
@@ -70,7 +82,8 @@ class ProductManager
                                             ->getShippingTotalPrice($productId);
         $product->setSoldPrice($soldPrice);
         $product->setIsFreeShipping($totalShippingFee === 0);
-
+        $this->promoManager->hydratePromoData($product);
+        
         return $product;
     }
 
@@ -156,6 +169,8 @@ class ProductManager
         return $productItemLocks;
     }
 
+    
+    
     /**
      * Applies discount to a product
      * This has been refactored with hydrate promo data
@@ -223,4 +238,6 @@ class ProductManager
 
         return true;
     }
+
 }
+
