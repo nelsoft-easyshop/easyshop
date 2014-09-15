@@ -259,21 +259,21 @@
 
 
      // START OF INFINITE SCROLLING FUNCTION 
-    var offset = 1;
-    var request_ajax = true;
-    var ajax_is_on = (typeof(emptySearch) != "undefined")?emptySearch:false;
+    var offset = 1; 
+    var canRequestAjax = true;
+    var isEmptySearch = typeof(emptySearch) != "undefined" ? emptySearch : false;
     var objHeight=$(window).height()-50;
-    var last_scroll_top = 0;
+    var lastScroll = 0;
  
     var type = 1;
     var csrftoken = $("meta[name='csrf-token']").attr('content');
     var csrfname = $("meta[name='csrf-name']").attr('content');
     $(window).scroll(function(event) {
         var st = $(this).scrollTop();
-        if(st > last_scroll_top){
+        if(st > lastScroll){
             if ($(window).scrollTop() + 400 > $(document).height() - $(window).height()) {
-                if (request_ajax === true && ajax_is_on === false) {
-                    ajax_is_on = true;
+                if (canRequestAjax === true && isEmptySearch === false) {
+                    isEmptySearch = true;
                     $.ajax({
                         url: currentUrl+'&typeview='+typeView+'&page='+offset,
                         type: 'get',
@@ -285,7 +285,7 @@
                                 $('#product_content').append(response.view);
                                 $('#move-product').detach().appendTo('#paste-product');
                                 offset++;
-                                ajax_is_on = false;
+                                isEmptySearch = false;
                             }
 
                            $(".loading_products").fadeOut();
@@ -294,7 +294,7 @@
                 }
             }
         }
-        last_scroll_top = st;
+        lastScroll = st;
     });
     // END OF INFINITE SCROLLING FUNCTION
     // 

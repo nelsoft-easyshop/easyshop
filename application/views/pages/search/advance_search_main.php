@@ -1,17 +1,12 @@
 
-<link rel="stylesheet" href="<?=base_url()?>assets/css/product_search_category.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
+<link rel="stylesheet" href="/assets/css/product_search_category.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
 
-<link rel="stylesheet" href="<?=base_url()?>assets/css/product_advance_search.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
-<link rel="stylesheet" href="<?=base_url()?>assets/css/style_new.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
-<link rel="stylesheet" href="<?=base_url()?>assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/> 
+<link rel="stylesheet" href="/assets/css/product_advance_search.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
+<link rel="stylesheet" href="/assets/css/style_new.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
+<link rel="stylesheet" href="/assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/> 
 
-<link rel="stylesheet" href="<?=base_url()?>assets/css/product_search_category_responsive.css?ver=<?=ES_FILE_VERSION?>" type="text/css"  media="screen"/> 
-<style type="text/css">
- 
-#btn_srch{
-    width:65px;
-}
-</style>
+<link rel="stylesheet" href="/assets/css/product_search_category_responsive.css?ver=<?=ES_FILE_VERSION?>" type="text/css"  media="screen"/> 
+
 <?php
     $attr = array('id'=>'advsrch', 'autocomplete'=>'off', 'method'=>'get');
     echo form_open('',$attr);
@@ -139,7 +134,7 @@
                         }
                     ?> 
                         <div class="<?php echo $typeOfView; ?>"> 
-                            <a href="<?php echo base_url() . "item/" . $productSlug; ?>">
+                            <a href="/item/<?=$productSlug; ?>">
                                 <span class="prod_img_wrapper">
                                     <?php if(($isPromote == 1) && $isFreeShipping):?>
                                         <span class="cd_slide_discount">
@@ -148,12 +143,12 @@
                                     <?php endif; ?>
                                 
                                     <span class="prod_img_container">
-                                            <img alt="<?php echo $productName; ?>" src="<?php echo base_url() . $productImagePath; ?>">
+                                            <img alt="<?php echo $productName; ?>" src="/<?=$productImagePath; ?>">
                                     </span>
                                 </span>
                             </a>
                             <h3>
-                                <a href="<?php echo base_url() . "item/" . $productSlug; ?>">
+                                <a href="/item/<?=$productSlug; ?>">
                                     <?php echo $productName; ?>
                                 </a>
                             </h3>
@@ -314,14 +309,14 @@
                                             <tr>
                                                 <td width="90px" class="v-align-top">
                                                     <span class="prod_img_container">
-                                                         <a class="a-item-name" href="<?php echo base_url() . "item/" . $productSlug; ?>"> 
-                                                            <img alt="<?php echo $productName; ?>" src="<?php echo base_url() . $productImagePath; ?>">
+                                                         <a class="a-item-name" href="/item/<?=$productSlug; ?>"> 
+                                                            <img alt="<?php echo $productName; ?>" src="/<?=$productImagePath; ?>">
                                                         </a>
                                                     </span>
                                                 </td>
                                                 <td class="v-align-top">
                                                     <p class="p-item-name"> 
-                                                        <a class="a-item-name" href="<?php echo base_url() . "item/" . $productSlug; ?>"> 
+                                                        <a class="a-item-name" href="/item/<?=$productSlug; ?>"> 
                                                             <?=(strlen($productName)>35)?substr_replace($productName, "...", 35):$productName;?>
                                                         </a>
                                                     </p>
@@ -416,9 +411,9 @@
 </div>
 
 
-<script src="<?= base_url() ?>assets/js/src/bootstrap.js" type="text/javascript"></script> 
-<script src="<?= base_url() ?>assets/js/src/vendor/jquery.easing.min.js" type="text/javascript"></script> 
-<script src="<?= base_url() ?>assets/js/src/vendor/jquery.scrollUp.min.js" type="text/javascript"></script>
+<script src="/assets/js/src/bootstrap.js" type="text/javascript"></script> 
+<script src="/assets/js/src/vendor/jquery.easing.min.js" type="text/javascript"></script> 
+<script src="/assets/js/src/vendor/jquery.scrollUp.min.js" type="text/javascript"></script>
 
 <script type="text/javascript">
     var currentUrl = "<?=site_url(uri_string() . '?' . $_SERVER['QUERY_STRING']); ?>";
@@ -426,7 +421,7 @@
     var currentQueryString = "<?=$_SERVER['QUERY_STRING']; ?>";  
     var emptySearch = <?php echo (isset($products))?"false":"true";?>;
 </script>
-<script src="<?= base_url() ?>assets/js/src/advsearch.js?ver=<?=ES_FILE_VERSION?>" type="text/javascript"></script>
+<script src="/assets/js/src/advsearch.js?ver=<?=ES_FILE_VERSION?>" type="text/javascript"></script>
 <script>
         $("#accordion").on('click','.a-accordion-header',function() {
             var attr = $("i.glyphicon").attr("class");
