@@ -6,6 +6,8 @@ if (!defined('BASEPATH'))
 class Login extends MY_Controller 
 {
 
+    private $throttleService;
+
     /**
      * Inject dependencies
      *
@@ -15,7 +17,8 @@ class Login extends MY_Controller
         $this->load->model('register_model');
         $this->load->model('user_model');
         $this->load->model('cart_model');
-        $this->load->library('encrypt');	
+        $this->load->library('encrypt');
+        $this->throttleService = $this->serviceContainer['login_throttler'];	
     }
     
     /**
@@ -75,44 +78,60 @@ class Login extends MY_Controller
      */
 
     private function login($uname, $pass){
-        $dataval = array('login_username' => $uname, 'login_password' => $pass);
-        $row = $this->user_model->verify_member($dataval);               
-        #if user is valid: member i, usersession and cart_contents will be set in the session
-        if ($row['o_success'] >= 1) {
-            $this->session->set_userdata('member_id', $row['o_memberid']);
-            $this->session->set_userdata('usersession', $row['o_session']);
-            $this->session->set_userdata('cart_contents', $this->cart_model->cartdata($row['o_memberid'],$this->session->userdata('cart_contents')));
 
-            if($this->input->post('keepmeloggedin') == 'on'){ //create cookie bound to memberid||ip||browser 
-                $temp = array(
-                    'member_id' => $this->session->userdata('member_id'),
-                    'ip' => $this->session->userdata('ip_address'),
-                    'useragent' => $this->session->userdata('user_agent'),
-                    'session' => $this->session->userdata('session_id'),
-                );
-                $cookieval = $this->user_model->dbsave_cookie_keeplogin($temp)['o_token'];
-                $this->user_model->create_cookie($cookieval);
+        // if user still has timeout left, do not process this login attempt
+        if($this->throttleService->getTimeoutLeft($uname) >= 1){
+            $row['o_success'] = 0;
+            $row['timeoutLeft'] = $this->throttleService->getTimeoutLeft($uname);
+        }
+        else{
+            $dataval = array('login_username' => $uname, 'login_password' => $pass);
+            $row = $this->user_model->verify_member($dataval);                 
+            #if user is valid: member i, usersession and cart_contents will be set in the session
+            if ($row['o_success'] >= 1) {
+                $this->session->set_userdata('member_id', $row['o_memberid']);
+                $this->session->set_userdata('usersession', $row['o_session']);
+                $this->session->set_userdata('cart_contents', $this->cart_model->cartdata($row['o_memberid'],$this->session->userdata('cart_contents')));
+
+                if($this->input->post('keepmeloggedin') == 'on'){ //create cookie bound to memberid||ip||browser 
+                    $temp = array(
+                        'member_id' => $this->session->userdata('member_id'),
+                        'ip' => $this->session->userdata('ip_address'),
+                        'useragent' => $this->session->userdata('user_agent'),
+                        'session' => $this->session->userdata('session_id'),
+                    );
+                    $cookieval = $this->user_model->dbsave_cookie_keeplogin($temp)['o_token'];
+                    $this->user_model->create_cookie($cookieval);
+                }
+                
+                /*
+                 * Register authenticated session
+                 */
+                
+                $em = $this->serviceContainer['entity_manager'];
+                $user = $em->find('\EasyShop\Entities\EsMember', ['idMember' => $row['o_memberid']]);
+                $session = $em->find('\EasyShop\Entities\CiSessions', ['sessionId' => $this->session->userdata('session_id')]);
+
+                $user->setFailedLoginCount(0);
+                $authenticatedSession = new \EasyShop\Entities\EsAuthenticatedSession();
+                $authenticatedSession->setMember($user)
+                                     ->setSession($session);
+                $em->persist($authenticatedSession);
+                $em->flush();
             }
-            
-            /*
-             * Register authenticated session
-             */
-            
-            $em = $this->serviceContainer['entity_manager'];
-            $user = $em->find('\EasyShop\Entities\EsMember', ['idMember' => $row['o_memberid']]);
-            $session = $em->find('\EasyShop\Entities\CiSessions', ['sessionId' => $this->session->userdata('session_id')]);
+            else{ 
+                // log failed attempt
+                $this->throttleService->logFailedAttempt($uname);
 
-            $authenticatedSession = new \EasyShop\Entities\EsAuthenticatedSession();
-            $authenticatedSession->setMember($user)
-                                 ->setSession($session);
-            $em->persist($authenticatedSession);
-            $em->flush();
+                // set new timeout
+                $this->throttleService->updateMemberAttempt($uname);
+                $row['timeoutLeft'] = $this->throttleService->getTimeoutLeft($uname);
+            }
         }
         return $row;
     }
     
     
-
     function logout() {
         
         $cart_items = serialize($this->session->userdata('cart_contents'));

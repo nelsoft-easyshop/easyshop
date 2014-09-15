@@ -46,13 +46,15 @@ class ValidationRules
         $this->rules = array(
             'bug_report' => array(
                     'title' => array(
-                            new Assert\NotNull()
+                            new Assert\NotNull(["message" => "This field is required."])
                         ),
                     'description' => array(
-                            new Assert\NotNull()
+                            new Assert\NotNull(["message" => "This field is required."])
                         ),
-                    'file' => array(
-                            new Assert\File([
+                    'image' => array(
+                            new Assert\Image([
+                                'mimeTypes' => array('image/png','image/jpg','image/jpeg','image/gif'),
+                                'mimeTypesMessage' => 'This file is not a valid image. Accepted extensions are .png, .jpg, .jpeg and .gif only.',
                                 'maxSize' => '5M',
                                 'uploadIniSizeErrorMessage' => 'The file is too large. Allowed maximum size is 5 MB.'
                                 ])

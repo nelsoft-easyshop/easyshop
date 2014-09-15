@@ -980,6 +980,7 @@ class Memberpage extends MY_Controller
                     if($result === 'success'){
                         $temp['email'] = 1;
                     }
+                    $this->session->set_userdata('cart_contents', array());
                 }
                 else{
                     $result = 'exceed';

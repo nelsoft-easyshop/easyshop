@@ -52,7 +52,15 @@ class EsProductImage
      */
     private $product;
 
-
+    /**
+     * @var string
+     */
+    private $directory = '';
+    
+    /**
+     * @var string
+     */
+    private $filename = '';
 
     /**
      * Get idProductImage
@@ -155,4 +163,53 @@ class EsProductImage
     {
         return $this->product;
     }
+
+    /**
+     * Returns the path of the image
+     *
+     * @return string
+     */
+    public function getDirectory()
+    {
+        $this->explodeImagePath();
+        return $this->directory;
+    }
+    
+    /**
+     * Returns the filename of the image
+     *
+     * @return string
+     */
+    public function getFilename()
+    {
+        $this->explodeImagePath();
+        return $this->filename;
+    }
+    
+    /**
+     * Separates the image directory and file name
+     *
+     */
+    private function explodeImagePath()
+    {
+        if($this->directory === '' && $this->filename === ''){
+            if(trim($this->productImagePath) === ''){
+                $this->directory = 'assets/product/default/';
+                $this->filename = 'default_product_img.jpg';
+            }
+            else{
+                if(file_exists($this->productImagePath)){
+                    $reversedPath = strrev($this->productImagePath);
+                    $this->directory = substr($this->productImagePath,0,strlen($reversedPath)-strpos($reversedPath,'/'));
+                    $this->filename  = substr($this->productImagePath,strlen($reversedPath)-strpos($reversedPath,'/'),strlen($reversedPath));
+                }
+                else{
+                    $this->directory = 'assets/product/unavailable/';
+                    $this->filename = 'unavailable_product_img.jpg';
+                }
+            }                
+        }
+    }
+    
+    
 }

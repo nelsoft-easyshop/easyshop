@@ -666,10 +666,10 @@
 <div class="dashboard_table" id="dashboard-feedbacks">
     <h2>Feedbacks</h2>
     <ul class="idTabs feedbacks_tabs">
-        <li><a href="#op_buyer">Feedbacks as a Buyer</a></li>
-        <li><a href="#op_seller">Feedbacks as a Seller</a></li>
-        <li><a href="#yp_buyer">Feedbacks for others - Buyer</a></li>
-        <li><a href="#yp_seller">Feedbacks for others - Seller</a></li>
+        <li><a href="#op_buyer">Feedbacks from Sellers</a></li>
+        <li><a href="#op_seller">Feedbacks from Buyers</a></li>
+        <li><a href="#yp_buyer">Feedbacks to Sellers</a></li>
+        <li><a href="#yp_seller">Feedbacks to Buyers</a></li>
     </ul>
 
     <div class="clear"></div>
@@ -2743,7 +2743,7 @@
                                        
                     var jsonCity = <?php echo $json_city;?>;
                     var tx = {
-                        u:'<?php echo $uname;?>',
+                        u:'<?php echo $username;?>',
                         p:''
                     };
 

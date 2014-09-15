@@ -4,6 +4,7 @@ $config = array(
     'Promo' => array(
         /* Default, non-promo */ 
         '0' =>array(
+            'implementation' => '',
             'calculation_id' => '0',
             'purchase_limit' => PHP_INT_MAX,
             'payment_method' => array(
@@ -22,6 +23,7 @@ $config = array(
         ),
         /* Countdown Sale */ 
         '1' => array(
+            'implementation' => 'EasyShop\Promo\CountDownSalePromo',
             'calculation_id' => '1',
             'purchase_limit' => 1,
             'payment_method' => array(
@@ -36,6 +38,7 @@ $config = array(
         ),
         /* Fix discount sale */ 
         '2' => array(
+            'implementation' => 'EasyShop\Promo\FixDiscountPromo',
             'calculation_id' => '2',
             'purchase_limit' => PHP_INT_MAX,
             'payment_method' =>  array(
@@ -52,6 +55,7 @@ $config = array(
         ),
         /* Peak time sale */ 
         '3' => array(
+            'implementation' => 'EasyShop\Promo\PeakHourSalePromo',
             'calculation_id' => '3',
             'purchase_limit' => PHP_INT_MAX,
             'payment_method' =>  array(
@@ -77,6 +81,7 @@ $config = array(
         ),
         /* ListingPromo */
         '4' => array(
+            'implementation' => 'EasyShop\Promo\ListingPromo',
             'calculation_id' => '4',
             'purchase_limit' => PHP_INT_MAX,
             'payment_method' =>  array(
@@ -99,6 +104,7 @@ $config = array(
         
         ),
         '5' =>array(
+            'implementation' => '',
             'calculation_id' => '5',
             'purchase_limit' => PHP_INT_MAX,
             'payment_method' => array(),
@@ -109,6 +115,7 @@ $config = array(
             'viewable_button_product_page' =>false,
         ),
         '6' =>array(
+            'implementation' => '',
             'calculation_id' => '6',
             'purchase_limit' => PHP_INT_MAX,
             'payment_method' => array(),
