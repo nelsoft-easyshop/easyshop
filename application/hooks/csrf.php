@@ -83,7 +83,7 @@ class CSRF_Protection
             else if(in_array($_SERVER['REQUEST_URI'], $csrfConfig['bypassURI'])){
                 return true;
             }
-            elseif(in_array($firstUrlSegment,  $csrfConfig['bypassFirstSegment'])){
+            else if(in_array($firstUrlSegment,  $csrfConfig['bypassFirstSegment'])){
                 return true;
             }       
             else{
