@@ -268,7 +268,7 @@ class CartManager
             foreach($cartContents as $cartRow){
                 $optionCart =  serialize($cartRow['options']);
                 $optionNew =  serialize($itemData['options']);
-                if($optionCart == $optionNew && $cartRow['id'] == $itemData['id']){
+                if($optionCart === $optionNew && $cartRow['id'] === $itemData['id']){
                     $quantityToInsert = $quantityToInsert + $cartRow['qty'];
                     $quantityToInsert =  $quantityToInsert > $itemData['maxqty'] ?  $itemData['maxqty'] : $quantityToInsert;
                     $itemData['qty'] = $quantityToInsert;
