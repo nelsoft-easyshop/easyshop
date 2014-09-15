@@ -113,34 +113,25 @@ class Cart extends MY_Controller
         print json_encode($result);
 
     }
-    
-    
-    
-    
-    
-    
-    
-    
 
     /**
-     * Remove selected item in cart
+     * Removes selected item from the chosen item session
      *
      * @return array
      */
-    function removeselected()
+    function doRemoveSelected()
     {
-        $userdata = $this->session->all_userdata();
-        $itemList = $userdata['choosen_items'];
-        $slug = $this->input->post('slug');
+        $itemList = $this->session->userdata['choosen_items'];
+        $removeRowId = $this->input->post('rowid');
 
-        $key = "";
-        foreach ($itemList as $key => $value) {
-            if ($value['slug'] == $slug) {
-                unset($itemList[$key]);
+        foreach ($itemList as $rowId => $cartRow) {
+            if ($rowId == $removeRowId) {
+                unset($itemList[$rowId]);
+                break;
             }
         }
         $this->session->set_userdata('choosen_items', $itemList);
 
-        echo '{"e":"0"}';
+        print json_encode(['isSuccessful' => true]);
     }
 }
