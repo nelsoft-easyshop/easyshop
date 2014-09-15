@@ -2743,7 +2743,7 @@
                                        
                     var jsonCity = <?php echo $json_city;?>;
                     var tx = {
-                        u:'<?php echo $uname;?>',
+                        u:'<?php echo $username;?>',
                         p:''
                     };
 
