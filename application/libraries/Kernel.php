@@ -232,6 +232,16 @@ class Kernel
                 );
         };
 
+
+        $container['oauth_server'] = function ($c) use ($dbConfig) {
+            $dsn = 'mysql:dbname='.$dbConfig['dbname'].';host='.$dbConfig['host'].';';
+            $config['user_table'] = 'es_member'; 
+            $storage = new OAuth2\Storage\Pdo(array('dsn' => $dsn, 'username' => $dbConfig['user'], 'password' => $dbConfig['password']), $config);
+            $server = new OAuth2\Server($storage);
+            $server->addGrantType(new OAuth2\GrantType\UserCredentials($storage));
+            return $server;
+        };
+
         /* Register services END */
         $this->serviceContainer = $container;
     }
