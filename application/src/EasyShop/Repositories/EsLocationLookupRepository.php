@@ -42,17 +42,14 @@ class EsLocationLookupRepository extends EntityRepository
     /**
      * Retrieves Parent Location of a specific location
      */
-    public function getCityOrRegionOrMajorIsland($id_location)
+    public function getParentLocation($id_location)
     {
         $this->em = $this->_em;
 
         $locationLookup = $this->em->getRepository('EasyShop\Entities\EsLocationLookup')
                                 ->find($id_location);
 
-        $location = $this->em->getRepository('EasyShop\Entities\EsLocationLookup')
-                                ->find($locationLookup->getParent());
-
-        return $location;
+        return $locationLookup->getParent();
     }
 }
 

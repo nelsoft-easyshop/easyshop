@@ -369,18 +369,18 @@ class PaymentService
     {
         $city = ($address['c_stateregionID'] > 0 ? $address['c_stateregionID'] :  0);
         $cityDetails = $this->em->getRepository('EasyShop\Entities\EsLocationLookup')
-                                    ->getCityOrRegionOrMajorIsland($city);
+                                    ->getParentLocation($city);
         $region = $cityDetails->getParent();
         $cityDetails = $this->em->getRepository('EasyShop\Entities\EsLocationLookup')
-                                    ->getCityOrRegionOrMajorIsland($region);
+                                    ->getParentLocation($region);
         $majorIsland = $cityDetails->getParent();
 
         $grandTotal = 0;
         $productstring = "";
         $name = "";
-        $othersumfee = 0;
+        $totalAdditionalFee = 0;
         $toBeLocked = array();
-        $isPromote = 0;
+        $promoItemCount = 0;
 
         foreach ($itemList as $key => $value) {
             $sellerId = $value['member_id'];
@@ -388,14 +388,14 @@ class PaymentService
             $orderQuantity = $value['qty'];
             $price = $value['price'];
             $tax_amt = 0;
-            $isPromote = ($value['is_promote'] == 1) ? $isPromote += 1 : $isPromote += 0;
+            $promoItemCount = ($value['is_promote'] == 1) ? $promoItemCount += 1 : $promoItemCount += 0;
             $productItem =  $value['product_itemID'];
             /* TO BE IMPLEMENTED*/
             //$details = $this->payment_model->getShippingDetails($productId,$productItem,$city,$region,$majorIsland);
             //$shipping_amt = $details[0]['price'];
             $shipping_amt = 0.00;
             $otherFee = ($tax_amt + $shipping_amt) * $orderQuantity;
-            $othersumfee += $otherFee;
+            $totalAdditionalFee += $otherFee;
             $total =  $value['subtotal'] + $otherFee;
             $optionCount = count($value['options']);
             $optionString = '';
@@ -422,8 +422,8 @@ class PaymentService
             'productstring' => $productstring,
             'productName' => $name,
             'toBeLocked' => $toBeLocked,
-            'othersumfee' => round(floatval($othersumfee),2), 
-            'thereIsPromote' => $isPromote
+            'othersumfee' => round(floatval($totalAdditionalFee),2), 
+            'thereIsPromote' => $promoItemCount
             );
     }
 
