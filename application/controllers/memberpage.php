@@ -1318,6 +1318,25 @@ class Memberpage extends MY_Controller
         echo json_encode($jsonData);
     }
     
+
+    public function vendorDetailController()
+    {
+        $um = $this->serviceContainer['user_manager'];
+
+        $boolResult = $um->setUser(128)
+                        ->setPersonalMobile("09177050442")
+                        ->flush();
+
+        if($boolResult){
+            echo $um->showDetails();
+            print('<br>Chain completed.');
+        }
+        else{
+            $um->errorInfo();
+            print('<br>Chain disrupted.');
+        }
+    }
+
 }
 
 /* End of file memberpage.php */

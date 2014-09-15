@@ -24,12 +24,96 @@ class UserManager
     private $em;
 
     /**
+     *  Member id
+     */
+    private $memberId;
+
+    /**
+     *  Member entity
+     *
+     *  @var EasyShope\Entities\EsMember
+     */
+    private $memberEntity;
+
+    private $valid;
+
+    private $err;
+
+    private $mobile;
+
+    /**
      *  Constructor. Retrieves Entity Manager instance
      */
     public function __construct($em)
     {
         $this->em = $em;
+        $this->valid = true;
     }
+
+    public function __call($name, $args)
+    {
+        if($this->valid){
+            $this->valid = call_user_func_array(array($this,$name), $args);
+        }
+        return $this;
+    }
+
+    public function errorInfo()
+    {
+        print($this->err);
+    }
+
+    public function showDetails()
+    {
+        print($this->memberId);
+        print($this->mobile);
+    }
+
+    private function setUser($memberId)
+    {
+        $memberEntity = $this->em->find('EasyShop\Entities\EsMember', $memberId);
+
+        if( $memberEntity !== null ){
+            $this->memberId = $memberId;
+            $this->memberEntity = $memberEntity;
+            return true;
+        }
+        else{
+            $this->err = "User does not exist.";
+            return false;
+        }
+    }
+
+    private function setPersonalMobile($mobileNum)
+    {
+        //$mobileNum = ltrim($mobileNum,'0');
+
+        $isAvailable = $mobileNum === "09177050441" ? true:false;
+
+        if($isAvailable){
+            $this->mobile = "09177050441 stored.";
+            return true;
+        }
+        else{
+            $this->err = "Mobile number already in use";
+            return false;
+        }
+
+    }
+
+    public function flush()
+    {
+        return $this->valid;
+    }
+
+
+
+
+
+
+
+
+
 
     /**
      *  Set member's store name.
@@ -59,5 +143,7 @@ class UserManager
             return false;
         }
     }
+
+    
 
 }

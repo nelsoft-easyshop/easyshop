@@ -58,6 +58,11 @@ class EsMemberRepository extends EntityRepository
         return $query->getResult();
     }
 
+    public function getUsedMobile()
+    {
+        $em = $this->_em;
+    }
+
     /**
      * Finds a member by username/email
      *
