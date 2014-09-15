@@ -87,7 +87,7 @@
                                         $popularProductName = html_escape($value->getProduct()->getName());
                                         $popularProductSlug = html_escape($value->getProduct()->getSlug());
                                         $popularProductImage = $value->getProductImagePath();
-                                        $popularProductPrice = number_format($value->getProduct()->getPrice(),2,'.',',');
+                                        $popularProductPrice = number_format($value->getProduct()->getFinalPrice(),2,'.',',');
                                     }
                                 ?>
                                 <div>
@@ -127,12 +127,12 @@
                             $productEntity = $value->getProduct();
                             $productName = html_escape($productEntity->getName());
                             $productSlug = $productEntity->getSlug();
-                            $productPrice = number_format($productEntity->getPrice(), 2,'.',',');
+                            $productPrice = number_format($productEntity->getFinalPrice(), 2,'.',',');
                             $productCondition = html_escape($productEntity->getCondition());
                             $originalPrice = number_format($productEntity->getOriginalPrice(),2,'.',',');
                             $percentage = $productEntity->getDiscountPercentage();
                             $isPromote = intval($productEntity->getIsPromote());
-                            $isFreeShipping = $productEntity->getIsFreeShipping(); 
+                            $isFreeShipping = ($productEntity->getIsFreeShipping())?TRUE:FALSE;
                             $productImagePath = $value->getProductImagePath();
 
                             $typeOfView = "product";
@@ -248,12 +248,12 @@
                             $productEntity = $value->getProduct();
                             $productName = html_escape($productEntity->getName());
                             $productSlug = $productEntity->getSlug();
-                            $productPrice = number_format($productEntity->getPrice(), 2,'.',',');
+                            $productPrice = number_format($productEntity->getFinalPrice(), 2,'.',',');
                             $productCondition = html_escape($productEntity->getCondition());
                             $originalPrice = number_format($productEntity->getOriginalPrice(),2,'.',',');
                             $percentage = $productEntity->getDiscountPercentage();
                             $isPromote = intval($productEntity->getIsPromote());
-                            $isFreeShipping = $productEntity->getIsFreeShipping();
+                            $isFreeShipping = ($productEntity->getIsFreeShipping())?TRUE:FALSE;
                             $productImagePath = $value->getProductImagePath();
                         ?>
                         <h3></h3>

@@ -77,7 +77,7 @@
                                         $productEntity = $value->getProduct();
                                         $productName = html_escape($productEntity->getName());
                                         $productSlug = $productEntity->getSlug();
-                                        $productPrice = number_format($productEntity->getPrice(), 2,'.',',');
+                                        $productPrice = number_format($productEntity->getFinalPrice(), 2,'.',',');
                                         $productCondition = html_escape($productEntity->getCondition());
                                         $originalPrice = number_format($productEntity->getOriginalPrice(),2,'.',',');
                                         $percentage = $productEntity->getDiscountPercentage();
@@ -188,7 +188,7 @@
                                 $productEntity = $value->getProduct();
                                 $productName = html_escape($productEntity->getName());
                                 $productSlug = $productEntity->getSlug();
-                                $productPrice = number_format($productEntity->getPrice(), 2,'.',',');
+                                $productPrice = number_format($productEntity->getFinalPrice(), 2,'.',',');
                                 $productCondition = html_escape($productEntity->getCondition());
                                 $originalPrice = number_format($productEntity->getOriginalPrice(),2,'.',',');
                                 $percentage = $productEntity->getDiscountPercentage();
