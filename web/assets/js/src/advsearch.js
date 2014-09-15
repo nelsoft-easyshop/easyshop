@@ -259,9 +259,14 @@
 
 
      // START OF INFINITE SCROLLING FUNCTION 
+    
+    var currentUrl = $('#hidden-currentUrl').val();
+    var typeView = $('#hidden-typeView').val(); 
+    var emptySearch = $('#hidden-emptySearch').val();
+
     var offset = 1; 
     var canRequestAjax = true;
-    var isEmptySearch = typeof(emptySearch) != "undefined" ? emptySearch : false;
+    var isEmptySearch = emptySearch != "" ? false : true;
     var objHeight=$(window).height()-50;
     var lastScroll = 0;
  
@@ -297,7 +302,16 @@
         lastScroll = st;
     });
     // END OF INFINITE SCROLLING FUNCTION
-    // 
+
+    $("#accordion").on('click','.a-accordion-header',function() {
+        var attr = $("i.glyphicon").attr("class");
+        if(attr == "glyphicon glyphicon-chevron-down pull-right"){
+            $('.glyphicon').removeClass("glyphicon glyphicon-chevron-down pull-right").addClass("glyphicon glyphicon-chevron-up pull-right");
+        }else if(attr == "glyphicon glyphicon-chevron-up pull-right"){
+            $('.glyphicon').removeClass("glyphicon glyphicon-chevron-up pull-right").addClass("glyphicon glyphicon-chevron-down pull-right");
+        }
+    });
+
     $(function () {
         $.scrollUp({
                     scrollName: 'scrollUp', // Element ID
