@@ -182,11 +182,6 @@ class Kernel
             return new \EasyShop\Cart\CartManager($container['entity_manager'], $cart, $productManager, $promoManager);
         };
 
-          // Product Manager
-        $container['product_manager'] = function ($c) {
-            return new \EasyShop\Product\ProductManager();
-        };
-
         // Search product
         $container['search_product'] = function ($c) use($container) {
             return new \EasyShop\Search\SearchProduct($container['entity_manager']);
@@ -203,7 +198,10 @@ class Kernel
             $promoManager = $container['promo_manager'];
             $configLoader = $container['config_loader'];
             $collectionHelper = $container['collection_helper'];
-            return new \EasyShop\Product\ProductManager($em, $promoManager,$collectionHelper, $configLoader);
+            return new \EasyShop\Product\ProductManager($em, 
+                                                        $promoManager, 
+                                                        $collectionHelper, 
+                                                        $configLoader);
         };
 
 
@@ -213,8 +211,10 @@ class Kernel
         };
  
         // Category Manager
-        $container['category_manager'] = function ($c) {
-            return new \EasyShop\Category\CategoryManager();
+        $container['category_manager'] = function ($c) use($container) {
+            $configLoader = $container['config_loader'];
+
+            return new \EasyShop\Category\CategoryManager($configLoader);
         };
         
         $container['config_loader'] = function ($c) {
