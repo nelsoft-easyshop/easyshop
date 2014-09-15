@@ -125,7 +125,7 @@ class Cart extends MY_Controller
         $removeRowId = $this->input->post('rowid');
 
         foreach ($itemList as $rowId => $cartRow) {
-            if ($rowId == $removeRowId) {
+            if ($rowId === $removeRowId) {
                 unset($itemList[$rowId]);
                 break;
             }
