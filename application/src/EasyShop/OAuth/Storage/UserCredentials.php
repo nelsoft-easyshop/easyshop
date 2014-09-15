@@ -51,7 +51,7 @@ class UserCredentials implements \OAuth2\Storage\UserCredentialsInterface
     public function getUserDetails($username)
     {
         $this->user = array_merge($this->user, ['user_id' => $this->user['idMember']]);
-        return $this->user;;
+        return $this->user;
     }
     
 }
