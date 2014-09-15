@@ -182,7 +182,9 @@ class CartManager
             return false;
         }
     
-        $cartContents = $this->cart->getContents();        
+        $cartContents = $this->cart->getContents();       
+        $cartIndexName = $this->cart->getIndexName();
+        
         foreach($cartContents as $cartItem){
         
             $validationResult = $this->validateSingleCartContent($cartItem['id'], $cartItem['options'],  $cartItem['qty']);
@@ -193,8 +195,6 @@ class CartManager
             $serialRawOptions = serialize($cartItem['options']);
             $serialValidatedOptions = serialize($itemData['options']);
             $canBuyerDoPurchase = $product ? $this->canBuyerPurchaseProduct($product, $memberId) : false;
-            
-            $cartIndexName = $this->cart->getIndexName();
 
             if( !$canBuyerDoPurchase || $cartItem['id'] !==  $itemData['id'] || 
                 $serialRawOptions !== $serialValidatedOptions ||
