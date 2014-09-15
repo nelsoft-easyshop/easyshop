@@ -284,6 +284,12 @@ class EsProduct
      */
     private $originalPrice = '0.0000';
     
+    
+    /**
+     * @var string
+     *
+     */
+    private $finalPrice = '0.0000';
      
     /**
      * @var string
@@ -1132,6 +1138,26 @@ class EsProduct
     public function getOriginalPrice()
     {
         return $this->originalPrice;
+    }
+    
+    /**
+     *  Set the final price
+     *
+     *  @param string $finalPrice
+     */
+    public function setFinalPrice($finalPrice)
+    {
+        $this->finalPrice = $finalPrice;
+    }
+    
+    /**
+     *  Get finalPrice
+     *
+     *  @return string
+     */
+    public function getFinalPrice()
+    {
+        return $this->finalPrice;
     }
     
     

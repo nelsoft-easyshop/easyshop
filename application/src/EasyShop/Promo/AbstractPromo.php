@@ -86,7 +86,7 @@ abstract class AbstractPromo
         
     public function persist()
     {
-        $this->product->setPrice($this->promoPrice);
+        $this->product->setFinalPrice($this->promoPrice);
         $this->product->setStartPromo($this->isStartPromo);
         $this->product->setEndPromo($this->isEndPromo);
     }
