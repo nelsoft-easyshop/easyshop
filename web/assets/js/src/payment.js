@@ -357,20 +357,18 @@ $(document).ready(function(){
 // -- START REMOVE ITEM FROM SELECTED CART --//
 
     $(document).on('click','.removeitem',function () {
+        
+        var csrftoken = $("meta[name='csrf-token']").attr('content');
+        var csrfname = $("meta[name='csrf-name']").attr('content'); 
+        var rowid = $(this).data('cart-id'); 
 
-
-    var csrftoken = $("meta[name='csrf-token']").attr('content');
-    var csrfname = $("meta[name='csrf-name']").attr('content'); 
-    var slug = $(this).data('slug'); 
-
-    var action = config.base_url + "cart/removeselected"; 
         $.ajax({
             type: "POST",
-            url:  action, 
+            url:  "/cart/doRemoveSelected",
             dataType: "json",
-            data: csrfname+"="+csrftoken+"&slug="+slug, 
+            data: csrfname+"="+csrftoken+"&rowid="+rowid, 
             success: function(d) {
-                if(d.e == 0)
+                if(d.isSuccessful)
                 {
                     location.reload();
                 }else{
