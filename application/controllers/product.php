@@ -192,7 +192,6 @@ class product extends MY_Controller
         $this->load->view('templates/header', $data); 
         $this->load->view('pages/product/product_search_by_category_final_responsive',$response);
         $this->load->view('templates/footer'); 
-
     }
 
     /**     

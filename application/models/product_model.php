@@ -4,6 +4,8 @@ if (!defined('BASEPATH'))
 
 class product_model extends CI_Model
 {
+	# the queries directory -- application/resources/sql/product.xml
+
     function __construct() 
     {
         parent::__construct();  
@@ -17,6 +19,21 @@ class product_model extends CI_Model
     # the queries directory -- application/resources/sql/product.xml
 
     /**
+     * Get all category available in database
+     * @return array
+     */
+    public function selectAllCategory()
+    {
+        $query = 'SELECT id_cat,parent_id,slug,name,description FROM es_cat where id_cat not in (1)';
+        $sth = $this->db->conn_id->prepare($query);
+        $sth->bindParam(':id_cat', $id);
+        $sth->execute();
+        $row = $sth->fetchAll(PDO::FETCH_ASSOC);
+
+        return $row;
+    }
+
+    /**
      *  Get category details by using category ID 
      *  @param integer $id
      */
@@ -27,7 +44,7 @@ class product_model extends CI_Model
         $sth->bindParam(':id_cat', $id);
         $sth->execute();
         $row = $sth->fetchAll(PDO::FETCH_ASSOC);
-    
+
         return $row[0];
     }
 
@@ -2164,11 +2181,11 @@ class product_model extends CI_Model
 
     public function getCategoryBySlug($slug)
     {
-    $query = "SELECT id_cat, name, description, slug FROM es_cat WHERE slug = :slug";
-        $sth = $this->db->conn_id->prepare($query);
-        $sth->bindParam(':slug', $slug, PDO::PARAM_STR);
-        $result = $sth->execute();
-        $rows = $sth->fetchAll(PDO::FETCH_ASSOC);
+		$query = "SELECT id_cat, name, description, slug,parent_id FROM es_cat WHERE slug = :slug";
+    	$sth = $this->db->conn_id->prepare($query);
+    	$sth->bindParam(':slug', $slug, PDO::PARAM_STR);
+    	$result = $sth->execute();
+		$rows = $sth->fetchAll(PDO::FETCH_ASSOC);
         $return  = array();
         if( count($rows) != 1 ){
             $return['id_cat'] = 0; $return['name'] = ''; $return['description'] = '';
