@@ -357,6 +357,14 @@ class PaymentService
         return $response;
     }
 
+    /**
+     * Computes Shipping Fee and Reorganizes Data
+     * 
+     * @param mixed $itemList List of items to compute shipping fee
+     * @param string $address Used for shipping fee calcl
+     *
+     * @return mixed
+     */
     public function computeFeeAndParseData($itemList,$address)
     {
         $city = ($address['c_stateregionID'] > 0 ? $address['c_stateregionID'] :  0);
