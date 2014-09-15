@@ -446,6 +446,8 @@ class Home extends MY_Controller
         $this->load->view('templates/footer_full');
     }
     
+
+    
 }
 
 /* End of file home.php */
