@@ -14,3 +14,4 @@ $config = array(
         
 /* End of file csrf.php */
 /* Location: ./application/config/csrf.php */
+
