@@ -196,15 +196,6 @@ class Kernel
             return \Symfony\Component\HttpFoundation\Request::createFromGlobals();
         };
 
-        // Payment Service
-        $container['payment_service'] = function ($c) use ($container) {
-            return new \EasyShop\PaymentService\PaymentService(
-                            $container['entity_manager'],
-                            $container['request'],
-                            $container['point_tracker']
-                            );
-        };
-        
           // Product Manager
         $container['product_manager'] = function ($c) {
             return new \EasyShop\Product\ProductManager();
@@ -244,7 +235,16 @@ class Kernel
             return new \EasyShop\ConfigLoader\ConfigLoader($configImplementation);
         };
          
-
+        // Payment Service
+        $container['payment_service'] = function ($c) use ($container) {
+            return new \EasyShop\PaymentService\PaymentService(
+                            $container['entity_manager'],
+                            $container['request'],
+                            $container['point_tracker'],
+                            $container['promo_manager'],
+                            $container['product_manager']
+                            );
+        };
 
         //Login Throttler Service
         $container['login_throttler'] = function ($c) use($container) {
