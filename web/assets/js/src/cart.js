@@ -67,7 +67,7 @@ function changeQuantity(inputField)
         data: {id: cartRowId, qty: desiredQuantity, csrfname: csrftoken},
         success: function (data) {
             if (data.isSuccessful === false) {
-               // location.reload();
+                location.reload();
             }
             else {
                 $(".subtotal" + cartRowId).text(data.itemSubtotal);
