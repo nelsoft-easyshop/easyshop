@@ -58,9 +58,20 @@ class EsMemberRepository extends EntityRepository
         return $query->getResult();
     }
 
-    public function getUsedMobile()
+    public function getUsedMobile($memberId, $mobileNum)
     {
         $em = $this->_em;
+        $dql = "
+            SELECT m
+            FROM EasyShop\Entities\EsMember m
+            WHERE m.idMember != :member_id
+                AND m.contactno = :contact_no
+        ";
+        $query = $em->createQuery($dql)
+                    ->setParameter('member_id', $memberId)
+                    ->setParameter('contact_no', $mobileNum);
+
+        return $query->getResult();
     }
 
     /**

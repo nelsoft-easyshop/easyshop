@@ -38,5 +38,24 @@ class EsLocationLookupRepository extends EntityRepository
         
         return $data;
     }
+
+    public function verifyLocationCombination($stateRegionId, $cityId)
+    {
+        $em = $this->_em;
+        $dql = "
+            SELECT loc, p
+            FROM EasyShop\Entities\EsLocationLookup loc
+            JOIN loc.parent p
+            WHERE loc.idLocation = :city_id
+                AND loc.parent = :stateregion_id
+        ";
+
+        $query = $em->createQuery($dql)
+                    ->setParameter('city_id', $cityId)
+                    ->setParameter('stateregion_id', $stateRegionId);
+
+        return $query->getResult();
+    }
+
 }
 

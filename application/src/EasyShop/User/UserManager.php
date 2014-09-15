@@ -7,6 +7,9 @@ use EasyShop\Entities\EsMemberCat;
 use EasyShop\Entities\EsMemberProdcat;
 use EasyShop\Entities\EsProduct;
 
+use EasyShop\Entities\EsAddress;
+use EasyShop\Entities\EsLocationLookup;
+
 /**
  *  User Manager Class
  *  Manage everything specific to a user
@@ -39,8 +42,6 @@ class UserManager
 
     private $err;
 
-    private $mobile;
-
     /**
      *  Constructor. Retrieves Entity Manager instance
      */
@@ -65,8 +66,7 @@ class UserManager
 
     public function showDetails()
     {
-        print($this->memberId);
-        print($this->mobile);
+        print("Member ID: ". $this->memberId . "<br>");
     }
 
     private function setUser($memberId)
@@ -84,59 +84,50 @@ class UserManager
         }
     }
 
-    private function setPersonalMobile($mobileNum)
+    private function setMobile($mobileNum)
     {
-        //$mobileNum = ltrim($mobileNum,'0');
+        $isValidMobile = $this->isValidMobile($mobileNum);
 
-        $isAvailable = $mobileNum === "09177050441" ? true:false;
+        $thisMember = array();
 
-        if($isAvailable){
-            $this->mobile = "09177050441 stored.";
-            return true;
+        if( $isValidMobile || $mobileNum === "" ){
+            if( $mobileNum !== "" ){
+                $thisMember = $this->em->getRepository('EasyShop\Entities\EsMember')
+                                    ->getUsedMobile($this->memberId, $mobileNum);
+            }
+
+            // If mobile not used
+            if( empty($thisMember) ){
+                $this->memberEntity->setContactno($mobileNum);
+                $this->em->persist($this->memberEntity);
+                return true;
+            }
+            else{
+                $this->err = "Mobile number already used.";
+            }
         }
         else{
-            $this->err = "Mobile number already in use";
-            return false;
+            $this->err = "Invalid mobile number.";
+            
         }
 
+        return false;
     }
 
-    public function flush()
+    private function setStoreName($storeName)
     {
-        return $this->valid;
-    }
-
-
-
-
-
-
-
-
-
-
-    /**
-     *  Set member's store name.
-     *
-     *  @return boolean
-     */
-    public function setStoreName($memberId, $storeName)
-    {
-        $user = $this->em->find('EasyShop\Entities\EsMember', $memberId);
         $storeName = trim($storeName);
         $objUsedStoreName = array();
 
         if( strlen($storeName) > 0 ){
             $objUsedStoreName = $this->em->getRepository('EasyShop\Entities\EsMember')
-                                       ->getUsedStoreName($memberId,$storeName);
+                                       ->getUsedStoreName($this->memberId,$storeName);
         }
         
         // If store name is not yet used, set user's storename to $storeName
         if( empty($objUsedStoreName) ){
-            $user->setStoreName($storeName);
-            $this->em->persist($user);
-            $this->em->flush();
-
+            $this->memberEntity->setStoreName($storeName);
+            $this->em->persist($this->memberEntity);
             return true;
         }
         else{
@@ -144,6 +135,97 @@ class UserManager
         }
     }
 
-    
+    private function setAddressTable($stateRegionId, $cityId, $strAddress, $type, $lat=0, $lng=0, $consignee="", $mobileNum="", $telephone="", $country=1)
+    {
+        // Verify location validity
+        $locationEntity = $this->em->getRepository("EasyShop\Entities\EsLocationLookup")
+                                    ->verifyLocationCombination($stateRegionId, $cityId);
+        $isValidLocation = !empty($locationEntity);
+
+        // Verify mobile format
+        $validMobile = preg_match('/^(08|09)[0-9]{9}/', $mobileNum);
+
+        if( $isValidLocation ){
+
+            $arrAddressEntity = $this->em->getRepository('EasyShop\Entities\EsAddress')
+                                    ->getAddressDetails($this->memberId, $type);
+            
+            if( !empty($arrAddressEntity) ){
+                $address = $arrAddressEntity[0];
+                /*
+                $dbStateRegionId = $address->getStateregion()->getIdLocation();
+                $dbCityId = $address->getCity()->getIdLocation();
+                $dbAddressString = $address->getAddress();
+                $dbLat = $address->getLat();
+                $dbLng = $address->getLng();
+                
+                $isNotEqualStateRegion = (string)$stateRegionId !== (string)$dbStateRegionId ? TRUE:FALSE;
+                $isNotEqualCity = (string)$cityId !== (string)$dbCityId ? TRUE:FALSE;
+                $isNotEqualAddressString = (string)$strAddress !== (string)$dbAddressString ? TRUE:FALSE;
+                $isNotEqualLat = (string)$lat !== (string)$dbLat ? TRUE:FALSE;
+                $isNotEqualLng = (string)$lng !== (string)$dbLng ? TRUE:FALSE;
+
+                if( $isNotEqualStateRegion || $isNotEqualCity || $isNotEqualAddressString || $isNotEqualLat || $isNotEqualLng){
+                    $localLat = $lat;
+                    $localLng = $lng;
+                }
+                else{
+                    $localLat = $dbLat;
+                    $localLng = $dbLng;
+                }*/
+            }
+            else{
+                $address = new EsAddress();
+                $address->setIdMember($this->memberEntity);
+            }                
+
+                $stateRegionEntity = $this->em->find('EasyShop\Entities\EsLocationLookup', $stateRegionId);
+                $cityEntity = $this->em->find('EasyShop\Entities\EsLocationLookup', $cityId);
+                $countryEntity = $this->em->find('EasyShop\Entities\EsLocationLookup', $country);
+                
+                $address->setStateregion($stateRegionEntity)
+                        ->setCity($cityEntity)
+                        ->setAddress($strAddress)
+                        ->setType($type)
+                        ->setLat($lat)
+                        ->setLng($lng)
+                        ->setTelephone($telephone)
+                        ->setMobile($mobileNum)
+                        ->setConsignee($consignee)
+                        ->setCountry($countryEntity);
+
+                $this->em->persist($address);
+            
+
+            return true;
+        }
+        else{
+            $this->err = "Invalid location combination";
+        }
+
+        return false;
+    }
+
+    public function save()
+    {
+        $this->em->flush();
+
+        return $this->valid;
+    }
+
+    /****************** UTILITY FUNCTIONS *******************/
+
+    private function isValidMobile(&$mobileNum)
+    {
+        $isValidMobile = preg_match('/^(08|09)[0-9]{9}/', $mobileNum);
+
+        if($isValidMobile){
+            $mobileNum = ltrim($mobileNum,"0");
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
 
 }

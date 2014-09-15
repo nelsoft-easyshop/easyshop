@@ -1324,8 +1324,10 @@ class Memberpage extends MY_Controller
         $um = $this->serviceContainer['user_manager'];
 
         $boolResult = $um->setUser(128)
-                        ->setPersonalMobile("09177050442")
-                        ->flush();
+                        //->setStoreName("EasyShopINC.")
+                        //->setMobile("09177050443")
+                        ->setAddressTable(5,22, "", 0, "3.123123123", "5.123123123")
+                        ->save();
 
         if($boolResult){
             echo $um->showDetails();
