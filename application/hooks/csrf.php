@@ -86,9 +86,6 @@ class CSRF_Protection
             elseif($_SERVER['REQUEST_URI'] === '/payment/pesoPayDataFeed'){
                 return true;
             }
-            elseif($_SERVER['REQUEST_URI'] === '/home/auth'){
-                return true;
-            }
             elseif(strpos($_SERVER['REQUEST_URI'], 'webservice')){
                 return true;
             }
