@@ -296,51 +296,64 @@
                             <?php if(isset($products)): ?>
                                 <?php if(count($products)>0): ?>
                                     <?php foreach ($products as $key => $value): ?>  
-                                        <h3></h3>
-                                        
-                                        <div class="responsive-product panel panel-default no-border panel-items">
-                                            <table width="100%" class="">
-                                                <tr>
-                                                    <td width="90px" class="v-align-top">
-                                                        <span class="prod_img_container">
-                                                            <img alt="<?php echo html_escape($value['name']); ?>" src="<?php echo base_url() . $value['productImagePath']; ?>">
-                                                        </span>
-                                                    </td>
-                                                    <td class="v-align-top">
-                                                        <p class="p-item-name"> 
-                                                            <a class="a-item-name" href="<?php echo base_url() . "item/" . $value['slug']; ?>"> 
-                                                                <?=(strlen(html_escape($value['name'])>35))?substr_replace(html_escape($value['name']), "...", 35):html_escape($value['name']);?>
-                                                            </a>
+                                    <?php
+                                        $productEntity = $value->getProduct();
+                                        $productName = html_escape($productEntity->getName());
+                                        $productSlug = $productEntity->getSlug();
+                                        $productPrice = number_format($productEntity->getFinalPrice(), 2,'.',',');
+                                        $productCondition = html_escape($productEntity->getCondition());
+                                        $originalPrice = number_format($productEntity->getOriginalPrice(),2,'.',',');
+                                        $percentage = $productEntity->getDiscountPercentage();
+                                        $isPromote = intval($productEntity->getIsPromote());
+                                        $isFreeShipping = $productEntity->getIsFreeShipping();
+                                        $productImagePath = $value->getProductImagePath();
+                                    ?>
+                                    <h3></h3>
+                                    <div class="responsive-product panel panel-default no-border panel-items">
+                                        <table width="100%" class="">
+                                            <tr>
+                                                <td width="90px" class="v-align-top">
+                                                    <span class="prod_img_container">
+                                                         <a class="a-item-name" href="<?php echo base_url() . "item/" . $productSlug; ?>"> 
+                                                            <img alt="<?php echo $productName; ?>" src="<?php echo base_url() . $productImagePath; ?>">
+                                                        </a>
+                                                    </span>
+                                                </td>
+                                                <td class="v-align-top">
+                                                    <p class="p-item-name"> 
+                                                        <a class="a-item-name" href="<?php echo base_url() . "item/" . $productSlug; ?>"> 
+                                                            <?=(strlen($productName)>35)?substr_replace($productName, "...", 35):$productName;?>
+                                                        </a>
+                                                    </p>
+                                                    <p class="p-item-price"> 
+                                                        PHP <?php echo $productPrice;?>
+                                                    </p>
+                                                    <?php if($percentage && $percentage > 0):?>
+                                                        <p class="p-item-discount">
+                                                            <span class="original_price">
+                                                                &#8369; <?php echo $originalPrice; ?>
+                                                            </span>
+                                                            <span style="height: 20px;">
+                                                                |&nbsp; <strong><?PHP echo $percentage;?>%OFF</strong>
+                                                            </span>
                                                         </p>
-                                                        <p class="p-item-price"> 
-                                                            PHP <?php echo number_format($value['price'], 2);?>
-                                                        </p>
-                                                        <?php if(isset($value['percentage']) && $value['percentage'] > 0):?>
-                                                            <p class="p-item-discount">
-                                                                <span class="original_price">
-                                                                    &#8369; <?php echo number_format($value['originalPrice'],2,'.',','); ?>
-                                                                </span>
-                                                                <span style="height: 20px;">
-                                                                    |&nbsp; <strong><?PHP echo number_format($value['percentage'],0,'.',',');?>%OFF</strong>
-                                                                </span>
-                                                            </p>
-                                                        <?php endif; ?>
-                                                            
-                                                        <p class="p-item-condition">
-                                                            Condition:
-                                                            <strong>
-                                                               <?php echo ($value['isFreeShipping'])? es_string_limit(html_escape($value['condition']),15) : html_escape($value['condition']);?>
-                                                            </strong>
-                                                        </p> 
-                                                    </td>
-                                                    <td width="30px" class=" v-align-top">
-                                                        <?php if($value['isFreeShipping'] <= 0): ?>
-                                                            <span style="float:right;"><span class="span_bg img_free_shipping"></span></span>
-                                                        <?php endif; ?>
-                                                    </td>
-                                                </tr>
-                                            </table>
-                                        </div>
+                                                    <?php endif; ?>
+                                                        
+                                                    <p class="p-item-condition">
+                                                        Condition:
+                                                        <strong>
+                                                           <?php echo ($isFreeShipping)? es_string_limit($productCondition,15) : $productCondition;?>
+                                                        </strong>
+                                                    </p> 
+                                                </td>
+                                                <td width="30px" class=" v-align-top">
+                                                    <?php if($isFreeShipping <= 0): ?>
+                                                        <span style="float:right;"><span class="span_bg img_free_shipping"></span></span>
+                                                    <?php endif; ?>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
                                     <?php endforeach; ?>
                                 <?php else: ?>
                                     <div class="responsive-product panel panel-default no-border panel-items">
@@ -397,7 +410,7 @@
                         <div class="clear"></div> 
                     <?php endforeach; ?>
                 <?php endif; ?>
-            </div>
+            </div> 
         </div>
     </div>
 </div>
@@ -406,17 +419,21 @@
 <script src="<?= base_url() ?>assets/js/src/bootstrap.js" type="text/javascript"></script> 
 <script src="<?= base_url() ?>assets/js/src/vendor/jquery.easing.min.js" type="text/javascript"></script> 
 <script src="<?= base_url() ?>assets/js/src/vendor/jquery.scrollUp.min.js" type="text/javascript"></script>
-<script type="text/javascript"> 
+
+<script type="text/javascript">
     var currentUrl = "<?=site_url(uri_string() . '?' . $_SERVER['QUERY_STRING']); ?>";
     var typeView = "<?=(isset($_COOKIE['view']))?$_COOKIE['view']:'product'?>";
-
-    $("#accordion").on('click','.a-accordion-header',function() {
-        var attr = $("i.glyphicon").attr("class");
-        if(attr == "glyphicon glyphicon-chevron-down pull-right"){
-            $('.glyphicon').removeClass("glyphicon glyphicon-chevron-down pull-right").addClass("glyphicon glyphicon-chevron-up pull-right");
-        }else if(attr == "glyphicon glyphicon-chevron-up pull-right"){
-            $('.glyphicon').removeClass("glyphicon glyphicon-chevron-up pull-right").addClass("glyphicon glyphicon-chevron-down pull-right");
-        }
-    });
+    var currentQueryString = "<?=$_SERVER['QUERY_STRING']; ?>";  
+    var emptySearch = <?php echo (isset($products))?"false":"true";?>;
 </script>
 <script src="<?= base_url() ?>assets/js/src/advsearch.js?ver=<?=ES_FILE_VERSION?>" type="text/javascript"></script>
+<script>
+        $("#accordion").on('click','.a-accordion-header',function() {
+            var attr = $("i.glyphicon").attr("class");
+            if(attr == "glyphicon glyphicon-chevron-down pull-right"){
+                $('.glyphicon').removeClass("glyphicon glyphicon-chevron-down pull-right").addClass("glyphicon glyphicon-chevron-up pull-right");
+            }else if(attr == "glyphicon glyphicon-chevron-up pull-right"){
+                $('.glyphicon').removeClass("glyphicon glyphicon-chevron-up pull-right").addClass("glyphicon glyphicon-chevron-down pull-right");
+            }
+        });
+</script> 

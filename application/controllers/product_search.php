@@ -22,7 +22,7 @@ class product_search extends MY_Controller {
     /*   
      *   Number of returned products per request
      */
-    public $per_page = 4; 
+    public $per_page = 15; 
 
      /**
      *   Returns recommended keywords for search bar
@@ -128,7 +128,7 @@ class product_search extends MY_Controller {
 
             // if ajax request display json data of products
             if($page){
-                $response['typeview'] = trim($this->input->get('typeview'));
+                $response['typeOfView'] = trim($this->input->get('typeview'));
                 $data['view'] = $this->load->view('pages/search/product_search_by_searchbox_more',$response,TRUE);
                 $data['count'] = count($response['products']);
 
@@ -219,7 +219,7 @@ class product_search extends MY_Controller {
         
         // if ajax request display json data of products
         if($page){
-            $response['typeview'] = trim($this->input->get('typeview'));
+            $response['typeOfView'] = trim($this->input->get('typeview'));
             $data['view'] = $this->load->view('pages/search/product_search_by_searchbox_more',$response,TRUE);
             $data['count'] = count($response['products']);
             die(json_encode($data));
