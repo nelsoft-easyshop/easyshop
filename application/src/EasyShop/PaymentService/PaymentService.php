@@ -377,24 +377,18 @@ class PaymentService
             $productArray = $this->em->getRepository('EasyShop\Entities\EsProduct')
                                             ->find($productId);
 
-           
             /* Get actual price, apply any promo calculation */
             $this->promoManager->hydratePromoData($productArray);
-            
-            /* End product_model->getProductById */
-
-            $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                                            ->find($productId);
 
             /** NEW QUANTITY **/
-            $newQty = $this->productManager->getProductInventory($product, false, $condition);
+            $newQty = $this->productManager->getProductInventory($productArray, false, $condition);
             $maxQty = $newQty[$itemId]['quantity'];
             $qty = $value['qty'];
             $itemArray[$value['rowid']]['maxqty'] = $maxQty;
             $qtySuccess = ($maxQty >= $qty ? $qtySuccess + 1: $qtySuccess + 0);
 
             /** NEW PRICE **/
-            $promoPrice = $productArray->getPrice(); 
+            $promoPrice = $productArray->getFinalPrice(); 
             $additionalPrice = $value['additional_fee'];
             $finalPromoPrice = $promoPrice + $additionalPrice;
             $itemArray[$value['rowid']]['price'] = $finalPromoPrice;
