@@ -87,18 +87,20 @@ class CSRF_Protection
         // Is this a post request?
         if ($_SERVER['REQUEST_METHOD'] == 'POST')
         {
-            $firstUrlSegment = reset($this->CI->uri->segment_array());
+            $this->CI->config->load('csrf', TRUE);
+            $csrfConfig = $this->config->item('csrf');
             
+            $firstUrlSegment = reset($this->CI->uri->segment_array())
+
             if(empty($_POST) && empty($_FILES) && $_SERVER['CONTENT_LENGTH'] > 0){
                 show_error('Request was invalid. Selected file was too large. 1001', 400);
-            }            
-            else if(in_array($_SERVER['REQUEST_URI'], $this->bypassUrls)){
+            }
+            else if(in_array($_SERVER['REQUEST_URI'], $csrfConfig['bypassURI'])){
                 return true;
             }
-            elseif(in_array($firstUrlSegment, $this->bypassFirstSegments)){
+            else if(in_array($firstUrlSegment,  $csrfConfig['bypassFirstSegment'])){
                 return true;
-            }
-            
+            }       
             else{
                  // Is the token field set and valid?
                 $posted_token = $this->CI->input->post(self::$token_name);

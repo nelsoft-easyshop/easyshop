@@ -6,6 +6,7 @@ use \DateTime;
 use EasyShop\Entities\EsWebserviceUser;
 use Easyshop\Entities\EsMember;
 use Doctrine\ORM\Query\ResultSetMapping;
+use Doctrine\ORM\Query as Query;
 use Elnur\BlowfishPasswordEncoderBundle\Security\Encoder\BlowfishPasswordEncoder as BlowfishPasswordEncoder;
 
 class AccountManager
@@ -91,13 +92,59 @@ class AccountManager
         
         $webServiceUser = $this->em->getRepository('EasyShop\Entities\EsWebserviceUser')
                            ->findOneBy(array('username' => $clientUsername));
-        if($webServiceUser){
-             if($this->bcryptEncoder->isPasswordValid($webServiceUser->getPassword(), $clientPassword)){
+        if($member){
+            if($this->bcryptEncoder->isPasswordValid($member->getPassword(), 
+                                                      $clientPassword))
+            {
                 $response = true;
             }
         }
         
         return $response;
+    }
+    
+    
+    public function authenticateMember($username, $password, $asArray = false)
+    {
+        $errors = array();
+        $member = null;
+        
+        $rules = $this->formValidation->getRules('login');
+        $form = $this->formFactory->createBuilder('form', null, array('csrf_protection' => false))
+                        ->setMethod('POST')
+                        ->add('username', 'text', array('constraints' => $rules['username']))
+                        ->add('password', 'text', array('constraints' => $rules['password']))
+                        ->getForm();;
+        
+        $form->submit([ 'username' => $username,
+                        'password' => $password
+                    ]);
+        if ($form->isValid()) {
+            $formData = $form->getData();
+            $validatedUsername = $formData['username'];
+            $validatedPassword = $formData['password'];
+            $hashedPassword = $this->hashMemberPassword($username,$password);
+            
+            $query =  $this->em->createQueryBuilder()
+                    ->select('m')
+                    ->from('EasyShop\Entities\EsMember', 'm')
+                    ->where('m.username= :username')
+                    ->andWhere('m.password= :password')
+                    ->setParameter('username', $username)
+                    ->setParameter('password', $hashedPassword)
+                    ->setMaxResults(1)
+                    ->getQuery();
+            $hydrator = ($asArray) ? Query::HYDRATE_ARRAY : Query::HYDRATE_OBJECT;
+            $member = $query->getResult($hydrator);
+            $member = isset($member[0]) ? $member[0] : $member;
+            if(!$member){
+                array_push($errors, ['login' => 'invalid username/password']);
+            }
+        }
+
+         return ['errors' => array_merge($errors, $this->formErrorHelper->getFormErrors($form)),
+                 'member' => $member];
+    
     }
     
     /**

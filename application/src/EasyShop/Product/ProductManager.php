@@ -57,9 +57,9 @@ class ProductManager
         $this->ci = get_instance();  
         $this->promoArray = $this->ci->config->item('Promo');
     }
-  
+
     /**
-     * Returns the product object
+     * Returns the product object with hydrated virtual fields
      *
      * @param integer $productId
      * @return Product
@@ -108,8 +108,8 @@ class ProductManager
             array_push($data[$inventoryDetail['id_product_item']]['product_attribute_ids'], array('id'=> $inventoryDetail['product_attr_id'], 'is_other'=> $inventoryDetail['is_other']));
   
             if(count($data[$inventoryDetail['id_product_item']]['product_attribute_ids']) > 1   
-                || $inventoryDetail['product_attr_id'] != 0
-                || $inventoryDetail['is_other'] != 0)
+                || intval($inventoryDetail['product_attr_id']) !== 0
+                || intval($inventoryDetail['is_other']) !== 0)
             {
                 $data[$inventoryDetail['id_product_item']]['is_default'] = false;
             }
@@ -130,7 +130,6 @@ class ProductManager
                 }
             }
         }
-
         return $data;
     }
     
@@ -147,7 +146,7 @@ class ProductManager
         $productItemLocks = $this->em->getRepository('EasyShop\Entities\EsProductItemLock')
                                         ->getProductItemLockByProductId($productId);
         foreach($productItemLocks as $idx => $lock){
-            $elapsedMinutes = round((strtotime(date('Y-m-d H:i:s')) - $lock['timestamp']->getTimestamp())/60);
+            $elapsedMinutes = round((time() - $lock['timestamp']->getTimestamp())/60);
             if($elapsedMinutes > $this->lockLifeSpan){
                 $lockEntity =  $this->em->getRepository('EasyShop\Entities\EsProductItemLock')
                                         ->find($lock['idItemLock']);
@@ -159,6 +158,9 @@ class ProductManager
         
         return $productItemLocks;
     }
+
+    
+
     
     /**
      * Applies discount to a product

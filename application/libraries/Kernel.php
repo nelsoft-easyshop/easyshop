@@ -204,15 +204,6 @@ class Kernel
             return new \EasyShop\Cart\CartManager($container['entity_manager'], $cart, $productManager, $promoManager);
         };
 
-        // Payment Service
-        $container['payment_service'] = function ($c) use ($container) {
-            return new \EasyShop\PaymentService\PaymentService(
-                            $container['entity_manager'],
-                            $container['request'],
-                            $container['point_tracker']
-                            );
-        };
-        
           // Product Manager
         $container['product_manager'] = function ($c) {
             return new \EasyShop\Product\ProductManager();
@@ -252,12 +243,36 @@ class Kernel
             return new \EasyShop\ConfigLoader\ConfigLoader($configImplementation);
         };
          
+         
+        // Payment Service
+        $container['payment_service'] = function ($c) use ($container) {
+            return new \EasyShop\PaymentService\PaymentService(
+                            $container['entity_manager'],
+                            $container['request'],
+                            $container['point_tracker'],
+                            $container['promo_manager'],
+                            $container['product_manager']
+                            );
+        };
+
+
         //Login Throttler Service
         $container['login_throttler'] = function ($c) use($container) {
             return new \EasyShop\LoginThrottler\LoginThrottler(
                 $container['entity_manager'],
                 $container['http_request']
                 );
+        };
+
+
+        $container['oauth_server'] = function ($c) use ($dbConfig, $container) {
+            $dsn = 'mysql:dbname='.$dbConfig['dbname'].';host='.$dbConfig['host'].';';
+            $storage = new OAuth2\Storage\Pdo(array('dsn' => $dsn, 'username' => $dbConfig['user'], 'password' => $dbConfig['password']), ['user_table' => 'es_member']);
+            
+            $userCredentialStorage = new EasyShop\OAuth\Storage\UserCredentials($container['account_manager']);
+            $server = new OAuth2\Server($storage);
+            $server->addGrantType(new OAuth2\GrantType\UserCredentials($userCredentialStorage));
+            return $server;
         };
 
         $container['string_utility'] = function ($c) {
