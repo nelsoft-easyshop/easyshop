@@ -75,7 +75,7 @@ class CSRF_Protection
             $this->CI->config->load('csrf', TRUE);
             $csrfConfig = $this->config->item('csrf');
             
-            $firstUrlSegment = reset($this->CI->uri->segment_array())
+            $firstUrlSegment = reset($this->CI->uri->segment_array());
 
             if(empty($_POST) && empty($_FILES) && $_SERVER['CONTENT_LENGTH'] > 0){
                 show_error('Request was invalid. Selected file was too large. 1001', 400);
