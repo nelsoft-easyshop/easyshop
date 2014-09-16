@@ -51,7 +51,7 @@
         <?php else: ?>
             <div style="margin-left:50px;">
                 <br/><br/>
-                <p>You are currently signed-in as <b><?php echo $uname; ?></b>. </p>
+                <p>You are currently signed-in as <b><?php echo $user["username"]; ?></b>. </p>
                 <p>If you wish to continue, sign-out first by <a href='<?=base_url()?>login/logout' class="orange2">clicking here.</a> </p>
                 <br/><br/><br/>
             </div>
