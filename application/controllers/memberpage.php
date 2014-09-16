@@ -1318,15 +1318,98 @@ class Memberpage extends MY_Controller
         echo json_encode($jsonData);
     }
     
+    /**
+     *  Handles details in vendorpage
+     *
+     *  @return JSON
+     */
+    public function vendorDetails()
+    {
+        $serverResponse = array(
+            "result" => FALSE,
+            "error" => ""
+        );
 
+        if( $this->input->post("vendor_details") ){
+            $memberId = $this->session->userdata("member_id");
+            $storeName = strval($this->input->post("store_name"));
+            $mobileNum = strval($this->input->post("mobile"));
+            $stateRegionId = $this->input->post("stateregion");
+            $cityId = $this->input->post("city");
+
+            $um = $this->serviceContainer['user_manager'];
+            $boolResult = $um->setUser($memberId)
+                            ->setStoreName($storeName)
+                            ->setMobile($mobileNum)
+                            ->setAddressTable($stateRegionId, $cityId, "", 0)
+                            ->save();
+
+            $serverResponse["result"] = $boolResult;
+            $serverResponse["error"] = $boolResult ? "" : $um->errorInfo();
+
+        }
+
+        echo json_encode($serverResponse);
+    }
+
+
+    public function simDefCat()
+    {
+        $prodLimit = 12;
+        $memberId = $this->session->userdata("member_id");
+        $pm = $this->serviceContainer['product_manager'];
+        $em = $this->serviceContainer['entity_manager'];
+
+        $parentCat = $pm->getAllUserProductParentCategory($memberId);
+
+        print("<pre>");
+
+        // Append non categorized products to parent category
+        foreach($parentCat as $idCat=>$category){
+            $parentCat[$idCat]['non_categorized_count'] = 0;
+            foreach($category['child_cat'] as $childCat){
+                $categoryProducts = $em->getRepository("EasyShop\Entities\EsProduct")
+                                ->getNotCustomCategorizedProducts($memberId, $childCat, $prodLimit);
+                $parentCat[$idCat]["products"] = array_merge($parentCat[$idCat]["products"], $categoryProducts);
+            }
+        }
+
+        // Display Test
+        foreach($parentCat as $catkey=>$cat){
+            print("<br><br>");
+            foreach($cat as $label => $val){
+                if($label === "products"){
+                    print("products" . "  : <br>");
+                    foreach($val as $product){
+                        print($product->getName() . "<br>");
+                    }
+                }
+                else{
+                    print($label . "  : ");
+                    if(is_array($val)){
+                        print_r($val);
+                    }
+                    else{
+                        print($val . "<br>");
+                    }
+                    
+                }
+            }
+        }
+
+        //print_r($parentCat);
+        die();
+    }
+
+    //DEV
     public function vendorDetailController()
     {
         $um = $this->serviceContainer['user_manager'];
 
         $boolResult = $um->setUser(128)
                         //->setStoreName("EasyShopINC.")
-                        //->setMobile("09177050443")
-                        ->setAddressTable(5,22, "", 0, "3.123123123", "5.123123123")
+                        //->setMobile("")
+                        ->setAddressTable(5,22, "", 0, "3.123123123", "5.123123123","Stephen", 9177050441)
                         ->save();
 
         if($boolResult){
@@ -1334,7 +1417,7 @@ class Memberpage extends MY_Controller
             print('<br>Chain completed.');
         }
         else{
-            $um->errorInfo();
+            print($um->errorInfo());
             print('<br>Chain disrupted.');
         }
     }

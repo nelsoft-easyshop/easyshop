@@ -57,7 +57,7 @@ class CategoryManager
      */
     public function createCustomCategory($catName, $memberId)
     {
-        $memberOb = $this->em->find('EasyShop\Entities\EsMember', $memberId);
+        $memberObj = $this->em->find('EasyShop\Entities\EsMember', $memberId);
         $category = new EsMemberCat();
         $category->setCatName($catName)
                  ->setMember($memberObj);

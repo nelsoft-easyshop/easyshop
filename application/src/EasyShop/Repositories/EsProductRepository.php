@@ -433,6 +433,7 @@ class EsProductRepository extends EntityRepository
     {
         $em = $this->_em;
         $page = intval($page) <= 0 ? 0 : (intval($page)-1) * $prodLimit;
+        $result = array();
 
         $dql = "
             SELECT p
@@ -446,7 +447,7 @@ class EsProductRepository extends EntityRepository
                 )
                 AND p.member = :member_id
                 AND p.cat = :cat_id
-        ORDER BY" . $orderBy;
+        ORDER BY " . $orderBy;
 
         $query = $em->createQuery($dql)
                     ->setParameter('member_id', $memberId)
@@ -456,7 +457,11 @@ class EsProductRepository extends EntityRepository
 
         $paginator = new Paginator($query, $fetchJoinCollection = true);
 
-        return $paginator;
+        foreach($paginator as $product){
+            $result[] = $product;
+        }
+
+        return $result;
     }
 
 }
