@@ -1,3 +1,4 @@
+<meta http-equiv="X-UA-Compatible" content="IE=9; IE=8; IE=7; IE=EDGE; Safari; Mozilla" />
 <link type="text/css" href='<?=base_url()?>assets/css/main-style.css' rel="stylesheet" media='screen'/>
 <link type="text/css" href='<?=base_url()?>assets/css/bootstrap.css' rel="stylesheet" media='screen'/>
 <link type="text/css" href='<?=base_url()?>assets/css/font-awesome/css/font-awesome.min.css' rel="stylesheet" media='screen'/>
@@ -201,20 +202,111 @@
 </section>
 
 <div class="clear"></div>
-
 <section class="bg-product-section color-default">
-    <div class="container">
+    <div class="container-non-responsive bg-product-section">
     <div class="row row-products">
-        <div class="col-md-3 border-1">
-            das
+        <div class="col-xs-3 no-padding col-left-wing">
+			<div class="left-wing">
+			
+				<div class="panel-group panel-category border-0" id="category">
+					<div class="panel panel-default  border-0 no-padding">
+						<div class="panel-heading border-0 panel-category-heading" id="cat-header">
+							<h4 class="panel-title">
+								<a data-toggle="collapse" class="a-category" data-parent="#category" href="#category-list">
+									CATEGORIES <b class="cat fa fa-minus-square-o pull-right"></b>
+								</a>
+							</h4>
+						</div>
+						<div id="category-list" class="panel-collapse collapse in">
+							<div class="panel-body border-0 no-padding">
+								<ul class="list-unstyled list-category">
+									<a href="#" class="color-default"><li>Imaging Products</li></a>
+									<a href="#" class="color-default"><li>Camera Unit</li></a>
+									<a href="#" class="color-default"><li>Lens</li></a>
+									<a href="#" class="color-default"><li>Accessories</li></a>
+									<a href="#" class="color-default"><li>Sport Optics</li></a>
+									<a href="#" class="color-default"><li>Digital/Film</li></a>
+									<a href="#" class="color-default"><li>Precision Equipment</li></a>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+				<script>
+				 $("#cat-header").on('click','.a-category',function() {
+											
+					var attr = $("b.cat").attr("class");
+
+					if(attr == "cat fa fa-minus-square-o pull-right")
+					{
+						$('b.cat').removeClass("cat fa fa-minus-square-o pull-right").addClass("cat fa fa-plus-square-o pull-right");
+						
+					}
+					else if(attr == "cat fa fa-plus-square-o pull-right"){
+						$('b.cat').removeClass("cat fa fa-plus-square-o pull-right").addClass("cat fa fa-minus-square-o pull-right");
+						
+					}
+				});
+				</script>
+				<div class="panel-group panel-category border-0" id="filter">
+					<div class="panel panel-default  border-0 no-padding" id="filter-header">
+						<div class="panel-heading border-0 panel-category-heading">
+							<h4 class="panel-title">
+								<a data-toggle="collapse" class="a-filter" data-parent="#filter" href="#filter-list">
+									FILTER PRODUCTS <b class="fil fa fa-minus-square-o pull-right"></b>
+								</a>
+							</h4>
+						</div>
+						<div id="filter-list" class="panel-collapse collapse in">
+							<div class="panel-body border-0 no-padding">
+								<ul class="list-unstyled list-filter">
+									<li>
+										<p class="p-filter-name">By Condition</p>
+										<select class="select-filter">
+											<option>New</option>
+											<option>Used</option>
+											<option>New</option>
+										</select>
+									</li>
+									<li>
+										<p class="p-filter-name">By Condition</p>
+										from <input type="text" class="input-filter-price"/> to <input type="text" class="input-filter-price"/>
+									</li>
+									<li>
+										<center>
+											<input type="submit" class="btn-filter" value="filter"/>
+										</center>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+					<script>
+					 $("#filter-header").on('click','.a-filter',function() {
+												
+						var attr = $("b.fil").attr("class");
+
+						if(attr == "fil fa fa-minus-square-o pull-right")
+						{
+							$('b.fil').removeClass("fil fa fa-minus-square-o pull-right").addClass("fil fa fa-plus-square-o pull-right");
+						}
+						else if(attr == "fil fa fa-plus-square-o pull-right"){
+							$('b.fil').removeClass("fil fa fa-plus-square-o pull-right").addClass("fil fa fa-minus-square-o pull-right");
+						
+						}
+					});
+					</script>
+				</div>
+			</div>
+			
         </div>
-        <div class="col-md-9 col-products">
+        <div class="col-xs-9 col-products">
             <div class="div-products">
                 <div class="div-product-view-option">
                     <table class="p-view color-default pull-left">
                         <tr>
                             <td class="td-view p-view color-default">VIEW STYLE:</td>
-                            <td class="td-view" style="padding-top: 3px;"><span class="fa fa-th-large fa-2x icon-view icon-grid"></span> <span class="fa fa-th-list fa-2x icon-view icon-list"></span></td>
+                            <td class="td-view" style="padding-top: 3px;"><span class="gv fa fa-th-large fa-2x icon-view icon-grid active-view"></span> <span class="lv fa fa-th-list fa-2x icon-view icon-list"></span></td>
                         </tr>
                     </table>
                     
@@ -224,45 +316,56 @@
                         <option>Hot</option>
                     </select>
                 </div>
+
                 <div class="clear"></div>
                 <div class="view row row-items grid" id="fuck">
                     <?php if($product_count > 0):?>
                         <?php foreach($products as $catID=>$p):?>
                             <?php foreach($p['products'] as $prod):?>
-                                <div class="col-lg-3 col-md-4 col-xs-6 thumb">
+                                <div class="col-xs-3 thumb">
                                     <div class="panel-item">
                                         <a class="color-default" target="_blank" href="<?php echo base_url() . 'item/' . $prod['slug']?>">
                                             <div class="div-item">
                                                 <span class="span-img-wrapper" style="background: url(<?=base_url()?><?php echo $prod['product_image_path']?>) center no-repeat; background-cover: cover;">
-                                                    <center>
-                                                        <div class="span-img-container">
-                                                            
-                                                        </div>
-                                                    </center>
+                                                     <span class="grid-span-discount-pin">10% OFF</span>
                                                 </span>
                                             </div>
                                         </a>
                                         <div class="div-item-info">
                                             <p class="p-item-name">
-                                                <a class="color-default" target="_blank" href="<?php echo base_url() . 'item/' . $prod['slug']?>">
+                                                <a class="color-default" rel="tooltip" id="tooltip-name" data-toggle="tooltip" data-original-title="<?php echo html_escape($prod['name']);?>" target="_blank" href="<?php echo base_url() . 'item/' . $prod['slug']?>" >
                                                     <?php 
-                                                        $prod_name = html_escape($prod['name']);
-                                                        if(strlen($prod_name)>17){
-                                                            
-                                                            echo substr_replace( $prod_name, "...", 17);
-                                                        
-                                                        }else{
-                                                            echo $prod_name;
-                                                        }
-                                                    ?>
+														$prod_name = html_escape($prod['name']);
+														if(strlen($prod_name)>17){
+													?>
+														<a class="color-default" rel="tooltip" target="_blank" href="<?php echo base_url() . 'item/' . $prod['slug']?>" data-toggle="tooltip" data-placement="bottom"  title="<?php echo html_escape($prod['name']);?>">
+															<?php echo substr_replace( $prod_name, "...", 17);?>
+														</a>
+													<?php  
+														}else{
+													?>
+														<a class="color-default" target="_blank" href="<?php echo base_url() . 'item/' . $prod['slug']?>">
+															<?php echo $prod_name;?>
+														</a>
+													<?php
+														}
+													?>
                                                 </a>
+												<script>
+													$(document).ready(function(){
+														$("[rel=tooltip]").tooltip({
+															placement : 'top'
+														});
+													});
+												</script>
                                             </p>
+											
                                             <p class="p-category">
                                                 Clothes and Accessories
                                             </p>
                                             <div class="div-amount">
                                                 <p class="p-price">
-                                                    <span><s>  </s></span> P <?php echo html_escape($prod['price'])?>
+                                                    <span><s> 1,200 </s></span> P <?php echo html_escape($prod['price'])?>
                                                 </p>
                                                 <p class="p-discount">
                                                     <span><s> P 1200.00 </s></span>
@@ -277,8 +380,11 @@
                                         </div>
                                     </div>
                                 </div>
+								
                             <?php endforeach;?>
+							
                         <?php endforeach;?>
+						
                     <?php endif;?>
                     <?php if($product_count > 0):?>
                         <?php foreach($products as $catID=>$p):?>
@@ -286,27 +392,42 @@
                                 <div class="panel panel-default panel-list-item">
                                     <table width="100%">
                                         <tr>
-                                            <td width="20%" class="td-list-image">
-                                                <span class="span-discount-pin">10% OFF</span>
-                                                <span class="span-list-img">
-                                                    
-                                                    <img class=" img-item" src="<?=base_url()?><?php echo $prod['product_image_path']?>">
-                                                </span>
+											
+                                            <td width="20%" class="td-list-image" style="background: url(<?=base_url()?><?php echo $prod['product_image_path']?>) center no-repeat; background-cover: cover;">
+                                                <a href="<?php echo base_url() . 'item/' . $prod['slug']?>">
+												<div class="span-space">
+													<span class="span-discount-pin">10% OFF</span>
+                                                </div>
+												</a>
                                             </td>
+											
                                             <td width="55%" class="td-list-item-info">
                                                 <p class="p-list-item-name">
-                                                    <a class="color-default" target="_blank" href="<?php echo base_url() . 'item/' . $prod['slug']?>">
+                                                    
                                                         <?php 
                                                             $prod_name = html_escape($prod['name']);
-                                                            if(strlen($prod_name)>17){
-                                                                
-                                                                echo substr_replace( $prod_name, "...", 17);
-                                                            
-                                                            }else{
-                                                                echo $prod_name;
-                                                            }
+                                                            if(strlen($prod_name)>35){
                                                         ?>
-                                                    </a>
+															<a class="color-default" rel="tooltiplist" target="_blank" href="<?php echo base_url() . 'item/' . $prod['slug']?>" data-toggle="tooltip" data-placement="bottom"  title="<?php echo html_escape($prod['name']);?>">
+                                                                <?php echo substr_replace( $prod_name, "...", 35);?>
+															</a>
+														<?php  
+                                                            }else{
+														?>
+															<a class="color-default" target="_blank" href="<?php echo base_url() . 'item/' . $prod['slug']?>">
+                                                                <?php echo $prod_name;?>
+															</a>
+														<?php
+															}
+                                                        ?>
+                                                    
+													<script>
+														$(document).ready(function(){
+															$('[rel=tooltiplist]').tooltip({
+																placement : 'top'
+															});
+														});														
+													</script>
                                                 </p>
                                                 <p class="p-list-item-category">
                                                     Electronics and Gadgets
@@ -321,7 +442,7 @@
                                                 </p>
                                                 <div class="clear"></div>
                                                 <p class="p-list-discount">
-                                                    <s>  </s>
+                                                    <s> P 1,200.00 </s>
                                                 </p>
                                                 <div class="clear"></div>
                                                 <p class="p-list-availability">
@@ -338,13 +459,27 @@
                         <?php endforeach;?>
                     <?php endif;?>
                 </div>
+				<center>
+					<ul class="pagination pagination-items">
+						<li class="disabled"><a href="#"><span>&laquo;</span></a></li>
+						<li class="active"><a href="#"><span>1</span></a></li>
+						<li><a href="#"><span>2</span></a></li>
+						<li><a href="#"><span>3</span></a></li>
+						<li><a href="#"><span>4</span></a></li>
+						<li><a href="#"><span>5</span></a></li>
+						<li><a href="#"><span>6</span></a></li>
+						<li><a href="#"><span>7</span></a></li>
+						<li><a href="#"><span>&raquo;</span></a></li>
+					</ul>
+				</center>
             </div>
         </div>
         
     </div>
     </div>
 </section>
-
+<script src="<?= base_url() ?>assets/js/src/jquery-1.8.2.js" type="text/javascript"></script>
+<script src="<?= base_url() ?>assets/js/src/bootstrap.js" type="text/javascript"></script>
 <script type="text/javascript">
 (function ($) {
 
@@ -402,20 +537,34 @@
 			if(view == "view row row-items list")
 			{
 				$('div.view').removeClass("view row row-items list").addClass("view row row-items grid");
-				$('div.col-md-12').removeClass("col-md-12 thumb").addClass("col-lg-3 col-md-4 col-xs-6 thumb");
+				$('div.col-md-12').removeClass("col-md-12 thumb").addClass("col-xs-3 thumb");
+				$('span.lv').removeClass("lv fa fa-th-list fa-2x icon-view icon-list active-view").addClass("lv fa fa-th-list fa-2x icon-view icon-list");
+				$('span.gv').removeClass("gv fa fa-th-large fa-2x icon-view icon-grid").addClass("gv fa fa-th-large fa-2x icon-view icon-grid active-view");
 			}
 			
 			
 		});
-	 $(document).on('click','.icon-list',function() {	
+	$(document).on('click','.icon-list',function() {	
 			
 			var view = $("div.view").attr("class");
 			if(view == "view row row-items grid")
 			{
 				
 				$('div.view').removeClass("view row row-items grid").addClass("view row row-items list");
-				$('div.col-lg-3').removeClass("col-lg-3 col-md-4 col-xs-6 thumb").addClass("col-md-12 thumb");
+				$('div.col-lg-3').removeClass("col-xs-3").addClass("col-md-12 thumb");
+				$('span.gv').removeClass("gv fa fa-th-large fa-2x icon-view icon-grid active-view").addClass("gv fa fa-th-large fa-2x icon-view icon-grid");
+				$('span.lv').removeClass("lv fa fa-th-list fa-2x icon-view icon-list").addClass("lv fa fa-th-list fa-2x icon-view icon-list active-view");
 			};
 	});
+	
+	
+	
+	var $window = $(window),
+       $stickyLeft = $('#the-sticky-div'),
+       leftTop = $stickyLeft.offset().top;
 
+	   $window.scroll(function() {
+			$stickyLeft.toggleClass('sticky', $window.scrollTop() > leftTop);
+		});
+	
 </script>
