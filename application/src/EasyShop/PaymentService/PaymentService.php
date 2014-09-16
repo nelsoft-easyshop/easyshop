@@ -277,6 +277,26 @@ class PaymentService
 
                 $billingInfoId = $prod->getBillingInfoId();
 
+                $response['o_message'] = 'Error Code: Payment008c';
+                if($billingInfoId != 0){
+                    
+                    $billingInfo = $this->em->getRepository('EasyShop\Entities\EsBillingInfo')
+                                                ->find($prod->getBillingInfoId());
+
+                    $bankInfo = $this->em->getRepository('EasyShop\Entities\EsBankInfo')
+                                                ->find($billingInfo->getBankId());
+                    
+                    $orderBillingInfo = new EsOrderBillingInfo();
+                    $orderBillingInfo->setOrderId($order->getIdOrder());
+                    $orderBillingInfo->setorderProductId($orderProduct->getIdOrderProduct());
+                    $orderBillingInfo->setBankName($bankInfo->getBankName());
+                    $orderBillingInfo->setAccountName($billingInfo->getBankAccountName());
+                    $orderBillingInfo->setAccountNumber($billingInfo->getBankAccountNumber());
+                    $this->em->persist($orderBillingInfo);
+                    $this->em->flush();                    
+                }
+
+                $response['o_message'] = 'Error Code: Payment007b';
                 $net = floatval($details[5]) - $productExternalCharge;
 
                 $seller = $this->em->getRepository('EasyShop\Entities\EsMember')
@@ -301,26 +321,7 @@ class PaymentService
                 $orderProduct->setSellerBillingId($billingInfoId);
                 $this->em->persist($orderProduct);
                 $this->em->flush();
-                $response['o_message'] = 'Error Code: Payment008c';
-
-                if($billingInfoId != 0){
-                    
-                    $billingInfo = $this->em->getRepository('EasyShop\Entities\EsBillingInfo')
-                                                ->find($prod->getBillingInfoId());
-
-                    $bankInfo = $this->em->getRepository('EasyShop\Entities\EsBankInfo')
-                                                ->find($billingInfo->getBankId());
-                    
-                    $orderBillingInfo = new EsOrderBillingInfo();
-                    $orderBillingInfo->setOrderId($order->getIdOrder());
-                    $orderBillingInfo->setorderProductId($orderProduct->getIdOrderProduct());
-                    $orderBillingInfo->setBankName($bankInfo->getBankName());
-                    $orderBillingInfo->setAccountName($billingInfo->getBankAccountName());
-                    $orderBillingInfo->setAccountNumber($billingInfo->getBankAccountNumber());
-                    $this->em->persist($orderBillingInfo);
-                    $this->em->flush();                    
-                }
-
+                
                 $response['o_message'] = 'Error Code: Payment008a';
 
                 if((int)$details[7] > 0){
