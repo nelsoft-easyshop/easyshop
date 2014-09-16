@@ -2,6 +2,41 @@
 <link type="text/css" href='<?=base_url()?>assets/css/bootstrap.css' rel="stylesheet" media='screen'/>
 <link type="text/css" href='<?=base_url()?>assets/css/font-awesome/css/font-awesome.min.css' rel="stylesheet" media='screen'/>
 
+<header class="new-header-con">
+    <div class="main-container">
+        <div>
+            <a href="<?=base_url()?>">
+                <img src="<?=base_url()?>assets/images/img_logo.png" alt="Easyshop.ph Logo">
+            </a>
+        </div>
+        <div class="search-container">
+            <select class="ui-form-control">
+                <option>On Seller's Page</option>
+                <option>Main Page</option>
+                <option>Other Page</option>
+            </select>
+            <input type="text" class="ui-form-control">
+            <input type="submit" value="" class="span_bg">
+        </div>
+        <div>
+            <div>
+                <span class="cart-items-con">
+                    <span class="cart-item">2 item(s)</span> in your cart
+                </span>
+                <span class="cart-icon-con fa fa-shopping-cart"></span>
+            </div>
+        </div>
+        <div>
+            <div class="vendor-login-con">
+                <img src="<?=base_url()?>assets/images/img-default-icon-user.jpg"> 
+                <a href=""><strong>login</strong></a>  or 
+                <a href=""><strong>Create and account</strong></a>
+            </div>
+        </div>
+        <div class="clear"></div>
+    </div>
+</header>
+
 <section>
     <div class="pos-rel">
         <div class="vendor-main-bg">
@@ -35,6 +70,36 @@
             </div>
         </div>
     </div>
+
+    <div class="pos-rel">
+        <div class="vendor-main-bg">
+            <img src="<?=base_url()?>assets/images/sample-vendor-img.jpg">
+        </div>
+        <div class="main-container vendor-main pos-ab">
+            <div class="vendor-profile-content">
+                <div class="pd-lr-20">
+                    <div class="vendor-profile-img">
+                        <div class="vendor-profile-img-con">
+                            <img src="<?=base_url()?>assets/images/img-default-vendor-profile-photo.jpg">
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <h4>Air 21</h4>
+                    <p><strong>Contact No. :</strong>09171234567</p>
+                    <p>
+                        <span class="glyphicon glyphicon-map-marker"></span>
+                        <span class="cl-1"><strong>Location not set</strong></span>
+                    </p>
+                    <div class="vendor-profile-btn">
+                        <a href="" class="btn btn-default-3">
+                            <img src="<?=base_url()?>assets/images/img-vendor-icon-edit.jpg"> Edit Profile
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="pos-rel">
         <div class="vendor-main-bg">
             <div class="edit-cover-photo">
@@ -57,15 +122,15 @@
                                 </div>
                             </div>
                             <div class="edit-profile-photo-menu">
-                                <div>Upload Photo</div>
-                                <div>Remove Photo</div>
+                                <div><a href="">Upload Photo</a></div>
+                                <div><a href="">Remove Photo</a></div>
                             </div>
-                            <img src="<?=base_url()?>assets/images/mg-default-cover-photo.jpg" alt="Profile Photo">
+                            <img src="<?=base_url()?>assets/images/img-default-vendor-profile-photo.jpg" alt="Profile Photo">
                         </div>
                     </div>
                 </div>
                 <div class="pd-lr-20">
-                    <input type="text" class="form-control mrgn-bttm-8 mrgn-top-10" placeholder="Seller Name">
+                    <input type="text" class="form-control mrgn-bttm-8 seller-name" placeholder="Seller Name">
                     <input type="text" class="form-control mrgn-bttm-8" placeholder="Contact No.">
                     <div class="mrgn-bttm-8 edit-vendor-location">
                         <input type="text" class="ui-form-control">
@@ -81,7 +146,7 @@
     </div>
 </section>
 
-<section>
+<section class="sticky-nav-bg">
     <div class="vendor-sticky-nav">
         <div class="main-container">
             <ul class="vendor-nav">
@@ -113,20 +178,20 @@
                     <a href=""><img src="<?=base_url()?>assets/images/img-vendor-icon-contact.jpg"></a>
                 </li>
                 <li>
-                    <select>
+                    <select class="ui-form-control">
                         <option>On Seller's Page</option>
                         <option>Main Page</option>
                         <option>Other Page</option>
                     </select>
-                    <input type="text">
+                    <input type="text" class="ui-form-control">
                     <input type="submit" value="" class="span_bg">
                 </li>
                 <li>
                     <div>
-                        <span class="cart-items">
-                            2 item(s) in your cart
+                        <span class="cart-items-con">
+                            <span class="cart-item">2 item(s)</span> in your cart
                         </span>
-                        <span class="cart-icon-con glyphicon glyphicon-shopping-cart"></span>
+                        <span class="cart-icon-con fa fa-shopping-cart"></span>
                     </div>
                 </li>
             </ul>
@@ -307,6 +372,23 @@
                 $('.vendor-content-wrapper').removeClass('fixed-vendor-content');
             }
 
+    });
+
+    var $edit_profile_photo = $(".edit-profile-photo");
+    var $edit_profile_photo_menu = $(".edit-profile-photo-menu");
+
+    $(document).mouseup(function (e) {
+
+        if (!$edit_profile_photo_menu.is(e.target) // if the target of the click isn't the container...
+            && $edit_profile_photo_menu.has(e.target).length === 0) // ... nor a descendant of the container
+        {
+           $edit_profile_photo_menu.hide(1);
+        }
+
+    });
+
+    $edit_profile_photo.click(function() {
+        $edit_profile_photo_menu.show();
     });
 
     
