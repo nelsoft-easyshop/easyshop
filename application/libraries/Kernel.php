@@ -265,7 +265,7 @@ class Kernel
         };
 
 
-        $container['oauth_server'] = function ($c) use ($dbConfig, $container) {
+        $container['oauth2_server'] = function ($c) use ($dbConfig, $container) {
             $dsn = 'mysql:dbname='.$dbConfig['dbname'].';host='.$dbConfig['host'].';';
             $storage = new OAuth2\Storage\Pdo(array('dsn' => $dsn, 'username' => $dbConfig['user'], 'password' => $dbConfig['password']), ['user_table' => 'es_member']);
             
