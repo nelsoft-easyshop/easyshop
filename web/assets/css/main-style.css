@@ -185,7 +185,6 @@ section {
     display: table-cell;
     height: 110px;
     position: relative;
-    vertical-align: middle;
     width: 109px;
 }
 
@@ -199,6 +198,8 @@ section {
 .vendor-profile-content h4 {
     font-size: 1.5em;
     font-weight: bold;
+    height: 24px;
+    line-height: 22px;
     margin-bottom: 2px;
     overflow: hidden;
     padding: 0 20px;
@@ -477,6 +478,8 @@ section {
 
 .sticky-nav h4 {
     display: inline-block;
+    height: 22px;
+    line-height: 22px;
     overflow: hidden;
     padding: 0 10px;
     text-overflow: ellipsis;
