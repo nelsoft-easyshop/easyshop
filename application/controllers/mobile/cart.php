@@ -61,6 +61,7 @@ class cart extends MY_Controller
         $this->em = $this->serviceContainer['entity_manager'];
         header('Content-type: application/json');
         
+ 
         // Handle a request for an OAuth2.0 Access Token and send the response to the client
         if (! $this->oauthServer->verifyResourceRequest(OAuth2\Request::createFromGlobals())) {
             $this->oauthServer->getResponse()->send();
@@ -83,29 +84,28 @@ class cart extends MY_Controller
         $response = array();
         
         $mobileCartContents = json_decode($this->input->post('cartData'));
-        
-        $cartContents = $this->cartData;
-        
-        foreach($mobileCartContents as $mobileCartContent){
 
+        foreach($mobileCartContents as $mobileCartContent){
+                              
+            $options = array();
+            foreach($mobileCartContent->details->mapAttributes as $attribute => $attributeArray){
+                if(intval($attributeArray['isSelected']) === 1){
+                    $options[$key] = $attributeArray['value'].'~';
+                }
+               
+            }
+                  
             $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
                                 ->findOneBy(['slug' => $mobileCartContent->id]);
-                                
-            $options = array();
-            foreach($mobileCartContent->details->mapAttributes as $key => $attribute){
-              #  $options[$key] = 
-            }
-                                
-            /*
+     
             if($product){
-                $this->cartManager->addItem($product->getIdProduct(), $mobileCartContent->quantity:, $option = array())
+                $this->cartManager->addItem($product->getIdProduct(), $mobileCartContent->quantity, $options);
             }
-            */
-            
-
-            #$mobileCartContent
+            else{
+                array_push($response, [$mobileCartContent->id => 'Item does not exist']);
+            }
         }
-
+        $this->cartImplementation->persist($this->member->getIdMember());
 
         print(json_encode($response,JSON_PRETTY_PRINT));
     }
