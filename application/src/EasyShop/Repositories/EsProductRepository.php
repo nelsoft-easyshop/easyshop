@@ -428,6 +428,8 @@ class EsProductRepository extends EntityRepository
      *
      *  @param integer $memberId
      *  @param integer $catId
+     *
+     *  @return array
      */
     public function getNotCustomCategorizedProducts($memberId, $catId, $prodLimit, $page = 0, $orderBy = "p.idProduct DESC")
     {

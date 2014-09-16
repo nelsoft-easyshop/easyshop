@@ -1353,16 +1353,18 @@ class Memberpage extends MY_Controller
     }
 
 
+    /**
+     *  DEV Generates Default categories with uncategorized products appended
+     */
     public function simDefCat()
     {
         $prodLimit = 12;
-        $memberId = $this->session->userdata("member_id");
+        // MemberID = vendor ID
+        //$memberId = $this->session->userdata("member_id"); // EXAMPLE ONLY
         $pm = $this->serviceContainer['product_manager'];
         $em = $this->serviceContainer['entity_manager'];
 
         $parentCat = $pm->getAllUserProductParentCategory($memberId);
-
-        print("<pre>");
 
         // Append non categorized products to parent category
         foreach($parentCat as $idCat=>$category){
@@ -1371,6 +1373,7 @@ class Memberpage extends MY_Controller
                 $categoryProducts = $em->getRepository("EasyShop\Entities\EsProduct")
                                 ->getNotCustomCategorizedProducts($memberId, $childCat, $prodLimit);
                 $parentCat[$idCat]["products"] = array_merge($parentCat[$idCat]["products"], $categoryProducts);
+                $parentCat[$idCat]['non_categorized_count'] += count($categoryProducts);
             }
         }
 
@@ -1396,12 +1399,57 @@ class Memberpage extends MY_Controller
                 }
             }
         }
-
-        //print_r($parentCat);
         die();
     }
 
-    //DEV
+    /**
+     *  DEV Generate custom categories with products appended
+     */
+    public function simCustomCat()
+    {
+        $prodLimit = 12;
+        // MemberID = vendor ID
+        //$memberId = $this->session->userdata("member_id"); // EXAMPLE ONLY
+        $em = $this->serviceContainer["entity_manager"];
+        $result = array();
+
+        $customCat = $em->getRepository("EasyShop\Entities\EsMemberCat")
+                        ->getCustomCategoriesArray($memberId);
+
+        foreach( $customCat as $category ){
+            $result[$category["id_memcat"]] = array(
+                "name" => $category["cat_name"],
+                "is_featured" => $category["is_featured"],
+                "products" => $em->getRepository("EasyShop\Entities\EsMemberProdcat")
+                                ->getCustomCategoryProduct($memberId, $category["id_memcat"], $prodLimit)
+            );
+            
+        }
+
+        print("<pre>");
+
+        //DISPLAY
+        foreach($result as $id=>$category){
+            print("<br><br>Cat ID: " . $id . "<br>");
+            print("Name: " . $category["name"] . "<br>");
+            foreach($category["products"] as $prod){
+                print($prod->getName() . "<br>");
+            }
+        }
+        die();
+    }
+
+    /**
+     *  DEV AJAX REQUEST HANDLER FOR LOADING PRODUCTS W/O FILTER
+     */
+    public function vendorLoadProducts()
+    {
+
+        $categoryType = $this->input->get('ctype');
+
+    }
+
+    //DEV FUNCTION HANDLES EDIT PROFILE
     public function vendorDetailController()
     {
         $um = $this->serviceContainer['user_manager'];
