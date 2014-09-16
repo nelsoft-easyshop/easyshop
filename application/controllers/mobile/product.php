@@ -208,4 +208,4 @@ class Product extends MY_Controller {
 }
 
 /* End of file product.php */
-/* Location: ./application/controllers/product.php */
+/* Location: ./application/controllers/mobile/product.php */

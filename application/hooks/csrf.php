@@ -25,7 +25,22 @@ class CSRF_Protection
        */
       private static $token;
      
-      // -----------------------------------------------------------------------------------
+      
+      
+      /**
+       * list of URLs to bypass
+       *
+       * @var string[]
+       */
+      private $bypassUrls = array("/payment/dragonPayPostBack", "/payment/ipn2", "/payment/pesoPayDataFeed");
+      
+      /**
+       * List of first segment URLs to bypass
+       *
+       * @var string[]
+       */
+      private $bypassFirstSegments = array("webservice", "mobile");
+      
      
       public function __construct()
       {
@@ -74,7 +89,7 @@ class CSRF_Protection
         {
             $this->CI->config->load('csrf', TRUE);
             $csrfConfig = $this->CI->config->item('csrf');
-
+            
             $firstUrlSegment = reset($this->CI->uri->segment_array());
 
             if(empty($_POST) && empty($_FILES) && $_SERVER['CONTENT_LENGTH'] > 0){

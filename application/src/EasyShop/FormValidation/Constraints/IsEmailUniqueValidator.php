@@ -15,7 +15,7 @@ class IsEmailUniqueValidator extends ConstraintValidator
 
     public function __construct()
     {
-        $this->em = get_instance()->serviceContainer['entity_manager'];
+        $this->em = get_instance()->kernel->serviceContainer['entity_manager'];
     }
 
     public function validate($value, Constraint $constraint)

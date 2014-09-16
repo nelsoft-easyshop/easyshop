@@ -169,8 +169,6 @@ class ProductManager
         return $productItemLocks;
     }
 
-    
-    
     /**
      * Applies discount to a product
      * This has been refactored with hydrate promo data

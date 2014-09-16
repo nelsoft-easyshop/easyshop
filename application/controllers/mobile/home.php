@@ -24,5 +24,5 @@ class Home extends MY_Controller {
 
 }
 
-/* End of file Home.php */
-/* Location: ./application/controllers/Home.php */
+/* End of file home.php */
+/* Location: ./application/controllers/mpobile/home.php */
