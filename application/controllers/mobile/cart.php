@@ -21,11 +21,11 @@ class cart extends MY_Controller
     private $cartImplementation;
 
     /**
-     * AccountManager
+     * Oauth2 server
      *
-     * @var EasyShop\Account\AccountManager
+     * @var Oauth\Server
      */
-    private $accountManager;
+    private $oauthServer;
 
     /**
      * Entity Manager instance
@@ -35,6 +35,20 @@ class cart extends MY_Controller
     private $em;
     
     /**
+     * The authenticated member
+     *
+     * @var EasyShop\Entities\EsMember
+     */
+    private $member;
+    
+    /**
+     * Cart Data
+     *
+     * @var mixed
+     */
+    private $cartData;
+    
+    /**
      * Mobile Cart constructor
      *
      */
@@ -42,20 +56,20 @@ class cart extends MY_Controller
     {
         parent::__construct();
         $this->cartManager = $this->serviceContainer['cart_manager'];
+        $this->oauthServer =  $this->serviceContainer['oauth2_server'];
         $this->cartImplementation = $this->cartManager->getCartObject();
-        $this->accountManager = $this->serviceContainer['account_manager'];
         $this->em = $this->serviceContainer['entity_manager'];
         header('Content-type: application/json');
         
-        $isAuthenticated = $this->accountManager->authenticateWebServiceClient('mobile', trim($this->input->post('skey')));
-
-        if(!$isAuthenticated){
-            $response = ['Web service error' => 'Invalid webservice key'];
-            print(json_encode($response,JSON_PRETTY_PRINT));
-            exit();
+        // Handle a request for an OAuth2.0 Access Token and send the response to the client
+        if (! $this->oauthServer->verifyResourceRequest(OAuth2\Request::createFromGlobals())) {
+            $this->oauthServer->getResponse()->send();
+            die;
         }
         
-        
+        $oauthToken = $this->oauthServer->getAccessTokenData(OAuth2\Request::createFromGlobals());
+        $this->member = $this->em->getRepository('EasyShop\Entities\EsMember')->find($oauthToken['user_id']);
+        $this->cartData = unserialize($this->member->getUserdata());
     }
 
 
@@ -69,9 +83,8 @@ class cart extends MY_Controller
         $response = array();
         
         $mobileCartContents = json_decode($this->input->post('cartData'));
-        $memberId = $this->input->post('memberId');
         
-        $cartContents = $this->cartManager->getValidatedCartContents($memberId);
+        $cartContents = $this->cartData;
         
         foreach($mobileCartContents as $mobileCartContent){
 
@@ -100,13 +113,7 @@ class cart extends MY_Controller
     
     public function getCartData()
     {
-        $memberId = $this->input->post('memberId');
-        $cartContents = $this->cartManager->getValidatedCartContents($memberId);
-        
-        print('<pre>');
-        print_r($cartContents);
-        
-        print(json_encode($cartContents));
+        print(json_encode($this->cartData));
     }
 
 }
