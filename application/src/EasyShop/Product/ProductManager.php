@@ -268,12 +268,12 @@ class ProductManager
                                 ->where('p.product = :productId')
                                 ->setParameter('productId',$productId)
                                 ->getQuery()
-                                ->getResult();
+                                ->getOneOrNullResult();
 
         $item = $this->em->getRepository('EasyShop\Entities\EsProduct')
                                 ->find($productId);
 
-        $isSoldOut = intval($quantity[0]['soldout']) <= 0 ? true : false;
+        $isSoldOut = intval($quantity['soldout']) <= 0 ? true : false;
 
         $item->setIsSoldOut($isSoldOut);
         $this->em->flush();
