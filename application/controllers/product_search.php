@@ -122,7 +122,7 @@ class product_search extends MY_Controller {
             $productIds = (count($originalOrder)>0) ? array_intersect($originalOrder, $productIds) : $productIds; 
 
             $filteredProduct = $EsProductRepository->getDetails($productIds,$page,$this->per_page);
-            $discountedProduct = ($filteredProduct > 0) ? $productManager->getDiscountedPrice($memberId,$filteredProduct) : array();
+            $discountedProduct = ($filteredProduct > 0) ? $productManager->discountProducts($filteredProduct) : array();
             $filterSellerProduct = ($seller)?$searchProductService->filterBySeller($seller,$discountedProduct):$discountedProduct;
             $response['products'] = ($startPrice) ? $searchProductService->filterByPrice($startPrice,$endPrice,$filterSellerProduct) : $filterSellerProduct;
 
@@ -213,7 +213,7 @@ class product_search extends MY_Controller {
         $productIds = array_intersect($originalOrder, $productIds);
 
         $filteredProduct = (count($productIds)>0)?$EsProductRepository->getDetails($productIds,$page,$this->per_page):array();
-        $discountedProduct = $productManager->getDiscountedPrice($memberId,$filteredProduct);
+        $discountedProduct = $productManager->discountProducts($filteredProduct);
 
         $response['products'] = ($startPrice) ? $searchProductService->filterByPrice($startPrice,$endPrice,$discountedProduct) : $discountedProduct;
         
