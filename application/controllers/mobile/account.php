@@ -2,9 +2,15 @@
 
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
-
+    
 class Account extends MY_Controller {
 
+
+    /**
+     * The oauth2 server
+     *
+     */
+    private $oauthServer;
 
     /**
      * Account constructor
@@ -13,10 +19,19 @@ class Account extends MY_Controller {
     function __construct() 
     {
         parent::__construct();
+        $this->oauthServer = $this->serviceContainer['oauth2_server'];
         header('Content-type: application/json');
     }
 
-
+    /**
+     * Create the token
+     *
+     */
+    public function doCreateToken()
+    {
+        $this->oauthServer->handleTokenRequest(OAuth2\Request::createFromGlobals())->send();
+    }
+    
     /**
      * Registers a user
      * 
@@ -28,25 +43,19 @@ class Account extends MY_Controller {
 
         $errors = array();
         $isSuccessful = false;
-        $isAuthenticated = $accountManager->authenticateWebServiceClient('mobile', trim($this->input->post('skey')));
 
-        if($isAuthenticated){
-            $username =  trim($this->input->post('username'));
-            $password = trim($this->input->post('password'));
-            $email = trim($this->input->post('email'));
-            $contactno = trim($this->input->post('mobile'));
-            $registrationResult = $accountManager->registerMember($username, $password, $email, $contactno);
-            if(empty($registrationResult['errors'])){
-                $isSuccessful = true;
-            }
-            else{
-                $errors = array_merge($errors, $registrationResult['errors']);
-            }
+        $username =  trim($this->input->post('username'));
+        $password = trim($this->input->post('password'));
+        $email = trim($this->input->post('email'));
+        $contactno = trim($this->input->post('mobile'));
+        $registrationResult = $accountManager->registerMember($username, $password, $email, $contactno);
+        if(empty($registrationResult['errors'])){
+            $isSuccessful = true;
         }
         else{
-            array_push($errors, ['Web service error' => 'Invalid webservice key']);
+            $errors = array_merge($errors, $registrationResult['errors']);
         }
-        
+
         $response['errors'] = $errors;
         $response['isSuccessful'] = $isSuccessful;
         print(json_encode($response,JSON_PRETTY_PRINT));
