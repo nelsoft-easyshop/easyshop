@@ -669,8 +669,21 @@ $(function(){
 
     
     //Loads the default shipment locations
-
+          
+            
     $.each(shipment, function(index, value){
+        
+        if(value.location_id == 1 && value.location_type == 0){
+            var firstOption = $('.shiploc option:not(.default)').first();
+            firstOption.data('price',value.price);
+            firstOption.prop('disabled', false);
+            $.each(firstOption.nextAll(), function(){
+                $(this).prop('disabled', false);
+                $(this).data('price',value.price);
+            });
+            return false;
+        }
+
         var option =  $('#locationID_' + value.location_id);
         option.data('price',value.price);
         option.prop('disabled', false);
