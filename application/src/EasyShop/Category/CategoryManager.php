@@ -9,15 +9,19 @@ namespace EasyShop\Category;
  */
 class CategoryManager
 {
+    /**
+     * Codeigniter Config Loader
+     *
+     * @var EasyShop\CollectionHelper\CollectionHelper
+     */
+    private $configLoader;
 
     /**
      * Constructor.
      */
-    public function __construct()
-    {          
-        $this->ci = get_instance();  
-        $this->ci->config->load('protected_category', TRUE);
-        $this->protectedCategories = $this->ci->config->item('protected_category');  
+    public function __construct($configLoader)
+    {
+        $this->configLoader = $configLoader;
     }
 
     /**
@@ -28,10 +32,10 @@ class CategoryManager
      */
     public function applyProtectedCategory($categoryList,$isAdmin = FALSE)
     {
-        $protectedCategories =  $this->protectedCategories; 
+        $protectedCategories =  $this->configLoader->getItem('protected_category');
         if(!$isAdmin){
             foreach($categoryList as $key => $value){  
-                if((in_array($value->getIdCat(),$protectedCategories) || $value->getIdCat() == 1) && !$isAdmin){
+                if((in_array($value->getIdCat(),$protectedCategories) || intval($value->getIdCat()) === 1) && !$isAdmin){
                     unset($categoryList[$key]);
                 } 
             }

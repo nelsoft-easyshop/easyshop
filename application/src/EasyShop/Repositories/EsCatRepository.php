@@ -22,7 +22,7 @@ class EsCatRepository extends EntityRepository
                      SELECT 
                      CASE
                         WHEN `GetFamilyTree` (id_cat) = '' 
-                     THEN '0,0' 
+                     THEN :categoryId
                         ELSE CONCAT(:categoryId,',',`GetFamilyTree` (id_cat))
                      END as categoryList
                      FROM

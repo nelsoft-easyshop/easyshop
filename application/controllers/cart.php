@@ -40,7 +40,7 @@ class Cart extends MY_Controller
         if ($this->session->userdata('usersession')) {
             $memberId = $this->session->userdata('member_id');
             $cartContents = $this->cartManager->getValidatedCartContents($memberId);
-            $this->cartImplementation->persist($memberId);
+
             $data['title'] = 'Cart | Easyshop.ph';
             $data['cart_items'] = $cartContents;
             $data['total'] = $this->cartImplementation->getTotalPrice();
@@ -93,115 +93,45 @@ class Cart extends MY_Controller
         echo json_encode($response);
     }
 
-    
-    
-    /**
-     * ajax - Change quantity
-     *
-     * @Param id
-     * @Param qty
-     *
-     * @Return ajax
-     */
-    function fnc_qty()
+    public function doChangeQuantity()
     {
-        $qty = intval($this->input->post("qty"));
-        $id = $this->input->post("id");
-        $cart = $this->cart_items($this->cart->contents());
-        $result2 = $this->change_quantity($id,$cart[$id],$qty);
-        echo json_encode($result2);
+        $cartId = $this->input->post("id");
+        $quantity = $this->input->post("qty");
+        $memberId = $this->session->userdata('member_id');
+        $isSuccessful = $this->cartManager->changeItemQuantity($cartId, $quantity);
+
+        $cartItem = $this->cartManager->getValidatedCartContents($memberId)[$cartId];
+        $itemSubtotal = ($cartItem['price']) * $cartItem['qty'];
+        
+        $result = array(
+                'itemSubtotal' => number_format($itemSubtotal, 2, '.', ','),
+                'cartTotal' => $this->cartImplementation->getTotalPrice(),
+                'isSuccessful' => $isSuccessful,
+                'qty' =>  $cartItem['qty'],
+                'maxqty' => $cartItem['maxqty']);
+                
+        print json_encode($result);
+
     }
 
     /**
-     * Change quantity
-     *
-     * @Param id
-     * @Param cart
-     * @Param qty
-     *
-     * @Return array
-     */
-    public function change_quantity($id, $cart_item, $qty)
-    {
-        $data['rowid'] = $id;
-        $data['qty'] = $qty;
-        $PurchaseLimit = $this->config->item('Promo')[$cart_item['promo_type']];
-
-        $max_qty = $cart_item['maxqty'];
-
-        $PurchaseLimit = $PurchaseLimit['purchase_limit'];
-
-        if (is_string($PurchaseLimit)) {
-            $PurchaseLimit = $this->config->item('Promo')[$cart_item['promo_type']][$PurchaseLimit];
-            foreach($PurchaseLimit as $items){
-                if(
-                    (strtotime(date('H:i:s')) > strtotime($items['start'])) &&
-                    (strtotime(date('H:i:s')) < strtotime($items['end']))
-                ){
-                    $PurchaseLimit = $max_qty;
-                }
-                else{
-                    $PurchaseLimit = 0;
-                }
-            }
-        }
-
-        $result = false;
-        if($cart_item['is_promote'] == "1" && $qty > $PurchaseLimit){
-            $data['qty'] = $PurchaseLimit;
-        }
-        else if ($qty > $max_qty ){
-            $data['qty'] = $max_qty;
-        }
-        $this->cart->update($data);
-        if ($qty != 0) {
-            $cart = $this->cart->contents();
-            $totalprice = ($cart[$id]['price']) * $cart[$id]['qty'];
-            $result = array(
-                'subtotal' => number_format($totalprice, 2, '.', ','),
-                'total' => $this->get_total_price(),
-                'result' => true,
-                'qty' => $cart[$id]['qty'],
-                'maxqty' => $max_qty);
-        }
-
-        return $result;
-    }
-
-    /**
-     * Retrieve total price
-     *
-     * @return integer
-     */
-    function get_total_price()
-    {
-        $cart = $this->cart->contents();
-        $total = 0;
-        foreach ($cart as $key => $row) {
-            $total += $row['price'] * $row['qty'];
-        }
-        return number_format($total,2,'.',',');
-    }
-
-    /**
-     * Remove selected item in cart
+     * Removes selected item from the chosen item session
      *
      * @return array
      */
-    function removeselected()
+    function doRemoveSelected()
     {
-        $userdata = $this->session->all_userdata();
-        $itemList = $userdata['choosen_items'];
-        $slug = $this->input->post('slug');
+        $itemList = $this->session->userdata['choosen_items'];
+        $removeRowId = $this->input->post('rowid');
 
-        $key = "";
-        foreach ($itemList as $key => $value) {
-            if ($value['slug'] == $slug) {
-                unset($itemList[$key]);
+        foreach ($itemList as $rowId => $cartRow) {
+            if ($rowId === $removeRowId) {
+                unset($itemList[$rowId]);
+                break;
             }
         }
         $this->session->set_userdata('choosen_items', $itemList);
 
-        echo '{"e":"0"}';
+        print json_encode(['isSuccessful' => true]);
     }
 }
