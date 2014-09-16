@@ -73,8 +73,8 @@ class CSRF_Protection
         if ($_SERVER['REQUEST_METHOD'] == 'POST')
         {
             $this->CI->config->load('csrf', TRUE);
-            $csrfConfig = $this->config->item('csrf');
-            
+            $csrfConfig = $this->CI->config->item('csrf');
+
             $firstUrlSegment = reset($this->CI->uri->segment_array());
 
             if(empty($_POST) && empty($_FILES) && $_SERVER['CONTENT_LENGTH'] > 0){
