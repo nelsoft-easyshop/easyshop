@@ -95,9 +95,13 @@
                         </div>
                         <div class="row">
                             <div class="col-xs-12">
-                                <input type="text" class="input-lg input-message" placeholder="EMAIL ADDRESS..."/>
-                                <textarea class=""></textarea>
+                                <textarea class="input-lg input-message" rows="6" placeholder="MESSAGE..."></textarea>
                             </div>
+                        </div>
+                        <div class="row">
+                            <center>
+                                <input type="submit" class="btn btn-send" value="SEND MESSAGE">
+                            </center>
                         </div>
                     </div>
                 </div>
