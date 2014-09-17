@@ -210,7 +210,9 @@
 	width: 90px;
 }
 
-
+.ui-dialog-content.ui-widget-content {
+    text-align: center;
+}
 
 .shipping_comment_cont label, .payment_details_cont label{
 	width: 30%;
