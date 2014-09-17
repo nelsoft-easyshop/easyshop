@@ -1,15 +1,9 @@
 
-<!-- ProgressBar / Widget CSS file TEMPORARY-->
-<link type="text/css" href="<?=base_url()?>assets/css/jquery-ui.css" rel="stylesheet" />
-
-<!--Memberpage Modal custom CSS-->
-<link type="text/css" href="<?=base_url()?>assets/css/memberpage.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet" media='screen'/>
-<!--Pagination CSS-->
-<link  type="text/css"  href='<?=base_url()?>assets/css/jqpagination.css' rel="stylesheet" media='screen'/>
-<!--Jcrop CSS-->
-<link type="text/css" href="<?=base_url()?>assets/css/jquery.Jcrop.min.css" rel="stylesheet" media='screen'/>
-<!--Chosen CSS-->
-<link rel="stylesheet" href="<?=base_url()?>assets/css/chosen.min.css" type="text/css" media="screen"/>
+<link type="text/css" href="/assets/css/jquery-ui.css" rel="stylesheet" />
+<link type="text/css" href="/assets/css/memberpage.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet" media='screen'/>
+<link type="text/css"  href='/assets/css/jqpagination.css' rel="stylesheet" media='screen'/>
+<link type="text/css" href="/assets/css/jquery.Jcrop.min.css" rel="stylesheet" media='screen'/>
+<link type="text/css"  rel="stylesheet" href="/assets/css/chosen.min.css" media="screen"/>
 
 
 <div id = "member_page_body">
@@ -2732,17 +2726,16 @@
         </div>
 
 
-        <script type='text/javascript' src='<?=base_url()?>assets/js/src/vendor/jquery.simplemodal.js'></script>
-        <script type='text/javascript' src='<?=base_url()?>assets/js/src/vendor/jquery.numeric.js'></script>
-        <script type='text/javascript' src='<?=base_url()?>assets/js/src/vendor/jquery.validate.js'></script>
-        <script type='text/javascript' src='<?=base_url()?>assets/js/src/vendor/jquery.Jcrop.min.js'></script>
-        <script src="<?=base_url()?>assets/js/src/vendor/jquery.raty.min.js" type="text/javascript"></script>
-        <script type='text/javascript' src='<?=base_url()?>assets/js/src/vendor/jquery.jqpagination.min.js'></script>
-        <script src="<?=base_url()?>assets/js/src/vendor/jquery.idTabs.min.js" type="text/javascript"></script>
-        <script src="<?=base_url()?>assets/js/src/vendor/chosen.jquery.min.js" type="text/javascript"></script>
-        <script src="<?=base_url()?>assets/js/src/vendor/jquery.cookie.js" type="text/javascript"></script>
-        <!-- MEMBERPAGE JS-->
-        <script type="text/javascript" src="<?=base_url()?>assets/js/src/memberpage.js?ver=<?=ES_FILE_VERSION?>"></script>
+        <script type='text/javascript' src='/assets/js/src/vendor/jquery.simplemodal.js?ver=<?=ES_FILE_VERSION?>'></script>
+        <script type='text/javascript' src='/assets/js/src/vendor/jquery.numeric.js'></script>
+        <script type='text/javascript' src='/assets/js/src/vendor/jquery.validate.js'></script>
+        <script type='text/javascript' src='/assets/js/src/vendor/jquery.Jcrop.min.js'></script>
+        <script type="text/javascript" src="/assets/js/src/vendor/jquery.raty.min.js"></script>
+        <script type='text/javascript' src='/assets/js/src/vendor/jquery.jqpagination.min.js'></script>
+        <script type="text/javascript" src="/assets/js/src/vendor/jquery.idTabs.min.js" ></script>
+        <script type="text/javascript" src="/assets/js/src/vendor/chosen.jquery.min.js" ></script>
+        <script type="text/javascript" src="/assets/js/src/vendor/jquery.cookie.js" ></script>
+        <script type="text/javascript" src="/assets/js/src/memberpage.js?ver=<?=ES_FILE_VERSION?>"></script>
         <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=&sensor=false"></script>
 
         <script type="text/javascript">
@@ -2822,8 +2815,8 @@
                     
 
 </script>
-<script src="<?= base_url() ?>assets/js/src/vendor/jquery.easing.min.js" type="text/javascript"></script>
-<script src="<?= base_url() ?>assets/js/src/vendor/jquery.scrollUp.min.js" type="text/javascript"></script>
+<script src="/assets/js/src/vendor/jquery.easing.min.js" type="text/javascript"></script>
+<script src="/assets/js/src/vendor/jquery.scrollUp.min.js" type="text/javascript"></script>
 <script type="text/javascript">
 $(function () {
     $.scrollUp({
