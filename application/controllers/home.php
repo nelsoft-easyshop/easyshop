@@ -231,6 +231,52 @@ class Home extends MY_Controller
      */
     public function userprofile()
     {
+        $this->load->model("memberpage_model");
+        $em = $this->serviceContainer["entity_manager"];
+        $vendorSlug = $this->uri->segment(1);
+        $session_data = $this->session->all_userdata();
+
+        $objVendorDetails = $em->getRepository("EasyShop\Entities\EsMember")
+                            ->findOneBy(array("slug"=>$vendorSlug));
+
+        // User found - valid slug
+        if( !empty($vendorDetails) ){
+            $headerData = $this->fill_header();
+            $headerData = array_merge($headerData, array(
+                "title" => "Vendor Profile | Easyshop.ph",
+                "my_id" => (empty($session_data['member_id']) ? 0 : $session_data['member_id']),
+                "render_logo" => false,
+                "render_searchbar" => false
+            ));
+            $this->load->view('templates/header', $headerData);
+
+            $data = array(
+                "objVendorDetails" => $objVendorDetails
+                , "arrLocation" => $em->getRepository("EasyShop\Entities\EsLocationLookup")->getLocation()
+                , 
+
+            );
+            
+            print("<pre>");
+            print_r($data['location']);
+            die();
+
+
+            $this->load->view('pages/user/vendor_view', $data);
+            $this->load->view('templates/footer');
+        }
+        // Load invalid link error page
+        else{
+            $this->pagenotfound();
+        }
+
+        //die();
+        //print(count($vendorDetails));
+        //print($vendorDetails->getUsername());
+
+    }
+    /*public function userprofile()
+    {
         $this->load->model('memberpage_model');
 
         $sellerslug = $this->uri->segment(1);
@@ -279,7 +325,7 @@ class Home extends MY_Controller
         else{
             $this->pagenotfound();
         }
-    }
+    }*/
 
     /**
      *  Fetch information to be display in feeds page
