@@ -64,7 +64,7 @@
 }
 
 .div-message-form > .row{
-    margin-top: 10px;
+    margin-top: 15px;
 }
 
 .col-message-1{
@@ -84,14 +84,29 @@
     -webkit-transition: all 0.5s ease;
     -moz-transition: all 0.5s ease;
     -o-transition: all 0.5s ease;
-}
-
-.input-message:placeholder{
-    font-style: italic;
-    color: red;
+    resize:none;
 }
 
 .input-message:focus{
     border: solid #565656 1px;
     background: #ffffff;
+}
+
+.btn-send{
+    border-bottom: 2px solid #007c67;
+    background-color: #00a388;
+    color: #fff;
+    transition: all 0.5s ease;
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    font-weight: bold;
+    padding: 10px 20px;
+}
+
+.btn-send:hover, .btn-send:focus{
+    border-bottom: 2px solid #006655;
+    background-color: #02846f;
+    color: #fff;
+    outline: none;
 }
