@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * EsPaymentGateway
  *
  * @ORM\Table(name="es_payment_gateway", indexes={@ORM\Index(name="fk_es_point_gateway_order_id_idx", columns={"order_id"}), @ORM\Index(name="fk_es_point_gateway_payment_method_idx", columns={"payment_method_id"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="EasyShop\Repositories\EsPaymentGatewayRepository")
  */
 class EsPaymentGateway
 {
@@ -29,14 +29,11 @@ class EsPaymentGateway
     private $amount = '0.0000';
 
     /**
-     * @var \EasyShop\Entities\EsPaymentMethod
+     * @var \DateTime
      *
-     * @ORM\ManyToOne(targetEntity="EasyShop\Entities\EsPaymentMethod")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="payment_method_id", referencedColumnName="id_payment_method")
-     * })
+     * @ORM\Column(name="date_added", type="datetime", nullable=false)
      */
-    private $paymentMethod;
+    private $dateAdded = 'CURRENT_TIMESTAMP';
 
     /**
      * @var \EasyShop\Entities\EsOrder
@@ -47,6 +44,16 @@ class EsPaymentGateway
      * })
      */
     private $order;
+
+    /**
+     * @var \EasyShop\Entities\EsPaymentMethod
+     *
+     * @ORM\ManyToOne(targetEntity="EasyShop\Entities\EsPaymentMethod")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="payment_method_id", referencedColumnName="id_payment_method")
+     * })
+     */
+    private $paymentMethod;
 
 
 
@@ -84,6 +91,50 @@ class EsPaymentGateway
     }
 
     /**
+     * Set dateAdded
+     *
+     * @param \DateTime $dateAdded
+     * @return EsPaymentGateway
+     */
+    public function setDateAdded($dateAdded)
+    {
+        $this->dateAdded = $dateAdded;
+        return $this;
+    }
+
+    /**
+     * Get dateAdded
+     *
+     * @return \DateTime 
+     */
+    public function getDateAdded()
+    {
+        return $this->dateAdded;
+    }
+
+    /**
+     * Set order
+     *
+     * @param \EasyShop\Entities\EsOrder $order
+     * @return EsPaymentGateway
+     */
+    public function setOrder(\EasyShop\Entities\EsOrder $order = null)
+    {
+        $this->order = $order;
+        return $this;
+    }
+
+    /**
+     * Get order
+     *
+     * @return \EasyShop\Entities\EsOrder 
+     */
+    public function getOrder()
+    {
+        return $this->order;
+    }
+
+    /**
      * Set paymentMethod
      *
      * @param \EasyShop\Entities\EsPaymentMethod $paymentMethod
@@ -104,28 +155,5 @@ class EsPaymentGateway
     public function getPaymentMethod()
     {
         return $this->paymentMethod;
-    }
-
-    /**
-     * Set order
-     *
-     * @param \EasyShop\Entities\EsOrder $order
-     * @return EsPaymentGateway
-     */
-    public function setOrder(\EasyShop\Entities\EsOrder $order = null)
-    {
-        $this->order = $order;
-
-        return $this;
-    }
-
-    /**
-     * Get order
-     *
-     * @return \EasyShop\Entities\EsOrder 
-     */
-    public function getOrder()
-    {
-        return $this->order;
     }
 }

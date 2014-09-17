@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * EsCat
  *
  * @ORM\Table(name="es_cat", indexes={@ORM\Index(name="fk_es_cat_es_cat1_idx", columns={"parent_id"}), @ORM\Index(name="ft_es_cat", columns={"name"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="EasyShop\Repositories\EsCatRepository")
  */
 class EsCat
 {

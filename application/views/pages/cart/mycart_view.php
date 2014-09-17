@@ -22,10 +22,10 @@
                     <div>
                         <input type="checkbox" class="rad" id="rad_<?PHP echo $row['rowid'] ?>" value="<?PHP echo number_format($row['price'] * $row['qty'],2,'.',','); ?>" checked="checked" data="<?PHP echo $row['rowid'] ?>" name="checkbx[]">
 
-                        <a href="<?=base_url().'item/'.$row['slug'];?>" class="has-tooltip" data-image="<?=base_url()?><?php echo $row['img'][0]['path']; ?>categoryview/<?php echo $row['img'][0]['file']; ?>"> 
+                        <a href="<?=base_url().'item/'.$row['slug'];?>" class="has-tooltip" data-image="<?=base_url()?><?php echo $row['imagePath']; ?>categoryview/<?php echo $row['imageFile']; ?>"> 
                             <span style='background-color: #FFFFFF; border: 1px solid #E5E5E5; display: inline-block;'>
                                 <span style=' display: table-cell; width: 60px; height: 60px; vertical-align: middle; text-align: center;'>
-                                    <img style="max-height: 60px; max-width: 60px; height:auto;width: auto; vertical-align: middle;" src="<?=base_url()?><?php echo $row['img'][0]['path']; ?>thumbnail/<?php echo $row['img'][0]['file']; ?>">
+                                    <img style="max-height: 60px; max-width: 60px; height:auto;width: auto; vertical-align: middle;" src="<?=base_url()?><?php echo $row['imagePath']; ?>thumbnail/<?php echo $row['imageFile'] ?>">
                                 </span>
                             </span>
                         </a>

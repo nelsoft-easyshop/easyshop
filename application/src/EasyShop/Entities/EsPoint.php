@@ -7,8 +7,8 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * EsPoint
  *
- * @ORM\Table(name="es_point", indexes={@ORM\Index(name="fk_es_point_m_id_idx", columns={"m_id"})})
- * @ORM\Entity
+ * @ORM\Table(name="es_point", indexes={@ORM\Index(name="fk_es_point_m_id_idx", columns={"member_id"})})
+ * @ORM\Entity(repositoryClass="EasyShop\Repositories\EsPointRepository")
  */
 class EsPoint
 {
@@ -33,10 +33,10 @@ class EsPoint
      *
      * @ORM\ManyToOne(targetEntity="EasyShop\Entities\EsMember")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="m_id", referencedColumnName="id_member")
+     *   @ORM\JoinColumn(name="member_id", referencedColumnName="id_member")
      * })
      */
-    private $m;
+    private $member;
 
 
 
@@ -74,25 +74,25 @@ class EsPoint
     }
 
     /**
-     * Set m
+     * Set member
      *
-     * @param \EasyShop\Entities\EsMember $m
+     * @param \EasyShop\Entities\EsMember $member
      * @return EsPoint
      */
-    public function setM(\EasyShop\Entities\EsMember $m = null)
+    public function setMember(\EasyShop\Entities\EsMember $member = null)
     {
-        $this->m = $m;
+        $this->member = $member;
 
         return $this;
     }
 
     /**
-     * Get m
+     * Get member
      *
      * @return \EasyShop\Entities\EsMember 
      */
-    public function getM()
+    public function getMember()
     {
-        return $this->m;
+        return $this->member;
     }
 }

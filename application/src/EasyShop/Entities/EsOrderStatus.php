@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * EsOrderStatus
  *
  * @ORM\Table(name="es_order_status")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="EasyShop\Repositories\EsOrderStatusRepository")
  */
 class EsOrderStatus
 {
@@ -28,6 +28,26 @@ class EsOrderStatus
      */
     private $name = '';
 
+
+    /**
+     * @var integer
+     */
+    const STATUS_PAID = 0;
+    
+    /**
+     * @var integer
+     */
+    const STATUS_COMPLETED = 1;
+    
+    /**
+     * @var integer
+     */
+    const STATUS_VOID = 2;
+    
+    /**
+     * @var integer
+     */
+    const STATUS_DRAFT = 99;
 
 
     /**
