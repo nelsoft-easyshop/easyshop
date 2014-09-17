@@ -95,7 +95,7 @@ class product_search extends MY_Controller {
         // Load header data
         $data = array(
             'title' => 'Easyshop.com - Advanced Search',
-            'render_searchbar' = false
+            'render_searchbar' => false
         );
         $data = array_merge($data, $this->fill_header()); 
 
