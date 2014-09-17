@@ -14,9 +14,9 @@ use EasyShop\Entities\EsKeywordsTemp;
 class SearchProduct
 {
     /**
-     * Number of product display per page
+     * Number of product to display per request
      */
-    const PER_PAGE = 15;
+    const PER_PAGE = 4;
 
     /**
      * Entity Manager instance
@@ -111,7 +111,7 @@ class SearchProduct
         $maxPrice = (is_numeric($maxPrice)) ? $maxPrice : PHP_INT_MAX;
    
         foreach ($arrayItems as $key => $value) {
-            $price = round(floatval($value['price']),2); 
+            $price = round(floatval($value->getProduct()->getPrice()),2); 
             if($price < $minPrice || $price > $maxPrice){
                 unset($arrayItems[$key]);
             }
@@ -191,11 +191,12 @@ class SearchProduct
                                 'category',
                                 'brand',
                                 'condition',
-                                'location' 
+                                'location', 
                             ); 
         $notExplodableFilter = array(
                                 'seller'
                                 ,'category'
+                                ,'q_str'
                             );
 
         $filteredArray = $this->collectionHelper->removeArrayToArray($filterParameter,$acceptableFilter,FALSE);
@@ -211,16 +212,26 @@ class SearchProduct
      * @param  integer[] $productIds
      * @return mixed
      */
-    public function getProductAttributesByProductIds($productIds = array())
+    public function getProductAttributesByProductIds($products = array())
     {   
         $EsProductRepository = $this->em->getRepository('EasyShop\Entities\EsProduct');
+        $finalizedProductIds = array();
+        $availableCondition = array();
         $organizedAttribute = array();
-        if(count($productIds)>0){
-            $attributes = $EsProductRepository->getAttributesByProductIds($productIds); 
-            $organizedAttribute = $this->collectionHelper->organizeArray($attributes);
-            $organizedAttribute['Brand'] = $EsProductRepository->getProductBrandsByProductIds($productIds); 
+
+        foreach ($products as $key => $value) {
+            array_push($finalizedProductIds, $value->getProduct()->getIdProduct());
+            array_push($availableCondition, $value->getProduct()->getCondition());
         }
 
+        if(count($finalizedProductIds)>0){
+            $attributes = $EsProductRepository->getAttributesByProductIds($finalizedProductIds); 
+            $organizedAttribute = $this->collectionHelper->organizeArray($attributes);
+            $organizedAttribute['Brand'] = $EsProductRepository->getProductBrandsByProductIds($finalizedProductIds); 
+            $organizedAttribute['Condition'] =  array_unique($availableCondition);
+            ksort($organizedAttribute);
+        }
+    
         return $organizedAttribute;
     }
 
@@ -230,7 +241,7 @@ class SearchProduct
      * @param  integer $memberId
      * @return mixed
      */
-    public function getProductBySearch($parameters,$memberId = 0)
+    public function getProductBySearch($parameters)
     {    
         $searchProductService = $this;
         $productManager = $this->productManager;
@@ -238,7 +249,6 @@ class SearchProduct
 
         $EsProductRepository = $this->em->getRepository('EasyShop\Entities\EsProduct');
         $EsCatRepository = $this->em->getRepository('EasyShop\Entities\EsCat'); 
-
 
         $queryString = (isset($parameters['q_str']) && $parameters['q_str'])?trim($parameters['q_str']):FALSE;
         $parameterCategory = (isset($parameters['category']) && $parameters['category'])?trim($parameters['category']):FALSE;
@@ -250,13 +260,35 @@ class SearchProduct
         $productIds = $originalOrder = ($queryString)?$searchProductService->filterBySearchString($queryString,$storeKeyword):array();
         $productIds = $searchProductService->filterProductByDefaultParameter($parameters,$productIds); 
         $productIds = $searchProductService->filterProductByAttributesParameter($parameters,$productIds);
-
         $productIds = (count($originalOrder)>0) ? array_intersect($originalOrder, $productIds) : $productIds; 
+
         $filteredProducts = $EsProductRepository->getProductDetailsByIds($productIds,$pageNumber,self::PER_PAGE);
-        $discountedProduct = ($filteredProducts > 0) ? $productManager->getDiscountedPrice($memberId,$filteredProducts) : array(); 
+        $discountedProduct = ($filteredProducts > 0) ? $productManager->discountProducts($filteredProducts) : array(); 
         $productsResult = ($startPrice) ? $searchProductService->filterProductByPrice($startPrice,$endPrice,$discountedProduct) : $discountedProduct;
 
         return $productsResult;
+    }
+
+    /**
+     * Get popular product of the given category
+     * @param  array $subCategory
+     * @return array $subCategoryList
+     */
+    public function getPopularProductOfCategory($subCategory)
+    {
+        $EsProductRepository = $this->em->getRepository('EasyShop\Entities\EsProduct');
+        $EsCatRepository = $this->em->getRepository('EasyShop\Entities\EsCat'); 
+        $subCategoryList = array();
+           
+        foreach ($subCategory as $key => $value) { 
+            $subCategoryIds = $EsCatRepository->getChildCategoryRecursive($value->getIdCat());
+            $popularProductId = $EsProductRepository->getPopularItem(count($subCategoryIds),0,0,$subCategoryIds);
+            $popularProduct = $EsProductRepository->getProductDetailsByIds($popularProductId,0,1);
+            $subCategoryList[$value->getName()]['item'] = ($popularProduct)?$popularProduct:array(); 
+            $subCategoryList[$value->getName()]['slug'] = $value->getSlug(); 
+        }
+
+        return $subCategoryList;
     }
 
 }

@@ -8,8 +8,15 @@ use EasyShop\ConfigLoader\ConfigLoader as ConfigLoader;
  * PromoManager Class
  *
  */
-class PromoManager
-{  
+class PromoManager 
+{
+    /**
+     * Codeigniter Config Loader
+     *
+     * @var EasyShop\CollectionHelper\CollectionHelper
+     */
+    private $configLoader;
+
     /**
      * Promo config
      *
@@ -52,6 +59,7 @@ class PromoManager
     public function hydratePromoData(&$product)
     {
         $product->setOriginalPrice($product->getPrice());
+        $product->setFinalPrice($product->getPrice());
         if(intval($product->getIsPromote()) === 1){
             $promoType = $product->getPromoType();
             if(isset($this->promoConfig[$promoType])){
@@ -140,7 +148,8 @@ class PromoManager
      */
     public function applyDiscount($basePrice = 0.00, $startDate, $endDate, $isPromo = 0, $promoType = 0, $discountPercent = 0)
     {
-        $promoArray = $this->promoConfig[$promoType];
+
+        $promoArray = $this->promoConfig[$promoType]; 
         $today = strtotime( date("Y-m-d H:i:s"));
         $startDate = strtotime($startDate);
         $endDate = strtotime($endDate);

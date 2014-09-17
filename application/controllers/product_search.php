@@ -73,17 +73,9 @@ class product_search extends MY_Controller {
 
         if(count($_GET)>0){ 
             // getting all products
-            $response['products'] = $searchProductService->getProductBySearch($this->input->get(),$memberId); 
-            
+            $response['products'] = $searchProductService->getProductBySearch($this->input->get());
             // get all attributes to by products
-            $finalizedProductIds = array_map(function($value) { return $value['idProduct']; }, $response['products']);
-            $availableAttributes = $searchProductService->getProductAttributesByProductIds($finalizedProductIds);
-            // Get all condition and distinct same data
-            $availableCondition = array_map(function($value) { return $value['condition']; }, $response['products']);
-            $availableAttributes['Condition'] = array_unique($availableCondition);
-            // sort attributes alphabetical order
-            ksort($availableAttributes);
-            $response['attributes'] = $availableAttributes;
+            $response['attributes'] = $searchProductService->getProductAttributesByProductIds($response['products']);
         }
 
         // Load sub category to display
@@ -102,10 +94,10 @@ class product_search extends MY_Controller {
 
         // Load header data
         $data = array(
-            'title' => 'Easyshop.com - Advanced Search'
+            'title' => 'Easyshop.com - Advanced Search',
+            'render_searchbar' = false
         );
-        $data = array_merge($data, $this->fill_header());
-        $data['render_searchbar'] = false;
+        $data = array_merge($data, $this->fill_header()); 
 
         $this->load->view('templates/header', $data); 
         $this->load->view('pages/search/advance_search_main',$response);
@@ -126,9 +118,9 @@ class product_search extends MY_Controller {
         $memberId = $this->session->userdata('member_id');
 
         // getting all products
-        $response['products'] = $searchProductService->getProductBySearch($this->input->get(),$memberId); 
+        $response['products'] = $searchProductService->getProductBySearch($this->input->get()); 
 
-        $response['typeview'] = trim($this->input->get('typeview'));
+        $response['typeOfView'] = trim($this->input->get('typeview'));
         $data['view'] = $this->load->view('pages/search/product_search_by_searchbox_more',$response,TRUE);
         $data['count'] = count($response['products']);
         echo json_encode($data);
@@ -150,20 +142,11 @@ class product_search extends MY_Controller {
 
         $response['string'] = ($this->input->get('q_str')) ? trim($this->input->get('q_str')) : "";
         $categoryId = ($this->input->get('category') && count($this->input->get())>0)?trim($this->input->get('category')):1;
-        $memberId = $this->session->userdata('member_id');
 
         // getting all products
-        $response['products'] = $searchProductService->getProductBySearch($this->input->get(),$memberId); 
-        
+        $response['products'] = $searchProductService->getProductBySearch($this->input->get()); 
         // get all attributes to by products
-        $finalizedProductIds = array_map(function($value) { return $value['idProduct']; }, $response['products']);
-        $availableAttributes = $searchProductService->getProductAttributesByProductIds($finalizedProductIds);
-        // Get all condition and distinct same data
-        $availableCondition = array_map(function($value) { return $value['condition']; }, $response['products']);
-        $availableAttributes['Condition'] = array_unique($availableCondition);
-        // sort attributes alphabetical order
-        ksort($availableAttributes);
-        $response['attributes'] = $availableAttributes;
+        $response['attributes'] = $searchProductService->getProductAttributesByProductIds($response['products']);
 
         $response['category_navigation'] = $this->load->view('templates/category_navigation',array('cat_items' =>  $this->getcat(),), TRUE );
         $parentCategory = $this->em->getRepository('EasyShop\Entities\EsCat')

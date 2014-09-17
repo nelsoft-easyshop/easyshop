@@ -2,14 +2,19 @@
 
 namespace EasyShop\Product;
 
+use Easyshop\Promo\PromoManager as PromoManager;
+use EasyShop\ConfigLoader\ConfigLoader as ConfigLoader;
 use EasyShop\Entities\EsOrderProduct;
 use EasyShop\Entities\EsOrder; 
+use EasyShop\Entities\EsProduct; 
 use EasyShop\Entities\EsProductShippingHead; 
+use Easyshop\Entities\EsProducItemLock;
+use Easyshop\Entities\EsProductItem;
+
 
 /**
  * Product Manager Class
  *
- * @author Ryan Vasquez
  */
 class ProductManager
 {
@@ -20,6 +25,13 @@ class ProductManager
      * @var Doctrine\ORM\EntityManager
      */
     private $em;
+
+    /**
+     * Product Item Lock life time in minutes
+     *
+     * @var integer
+     */
+    private $lockLifeSpan = 10;
 
     /**
      * Promo Manager instance
@@ -34,21 +46,27 @@ class ProductManager
      * @var EasyShop\CollectionHelper\CollectionHelper
      */
     private $collectionHelper;
+    
+
+    /**
+     * Codeigniter Config Loader
+     *
+     * @var EasyShop\CollectionHelper\CollectionHelper
+     */
+    private $configLoader;
 
     /**
      * Constructor. Retrieves Entity Manager instance
      * 
      */
-    public function __construct($em,$promoManager,$collectionHelper)
+    public function __construct($em,$promoManager,$collectionHelper,$configLoader)
     {
         $this->em = $em; 
         $this->promoManager = $promoManager;
         $this->collectionHelper = $collectionHelper;
-
-        $this->ci = get_instance();  
-        $this->promoArray = $this->ci->config->item('Promo');
+        $this->configLoader = $configLoader;
     }
-    
+
     /**
      * Returns the product object with hydrated virtual fields
      *
@@ -65,7 +83,8 @@ class ProductManager
                                             ->getShippingTotalPrice($productId);
         $product->setSoldPrice($soldPrice);
         $product->setIsFreeShipping($totalShippingFee === 0);
-
+        $this->promoManager->hydratePromoData($product);
+        
         return $product;
     }
 
@@ -151,81 +170,27 @@ class ProductManager
         return $productItemLocks;
     }
 
+    
+    
     /**
-     * Applies discount to a product
+     * Apply discounted price to product
      * This has been refactored with hydrate promo data
      * @param  array  $products [description]
-     * @return [type]           [description]
+     * @return mixed
      */
-    public function getDiscountedPrice($memberId,$product = array())
+    public function discountProducts($products)
     { 
-        foreach ($product as $key => $value) {
-            $buyerId = $memberId;
-            $productId =$value['idProduct'];
-            $isPromote =  $value['isPromote'];
-            $price =  $value['price'];  
-            $startDate = $value['startdate']; 
-            $endDate = $value['enddate'];
-            $promoType = $value['promoType'];
-            $discount = $value['discount'];
-            $isSoldOut = $value['isSoldOut'];
-            $startPromo = false;
-            $endPromo = false;
-
-            $promoArray = $this->promoArray[$promoType]; 
-
-            if(intval($isPromote) === 1){
-                $promo = $this->promoManager->applyDiscount($price, $startDate,$endDate,$isPromote,$promoType, $discount);
-                $startPromo = $promo['startPromo'];
-                $endPromo = $promo['endPromo'];
-                $product[$key]['originalPrice'] = $originalPrice = $price;
-                $userPurchaseCount = $this->em->getRepository('EasyShop\Entities\EsOrder')
-                                            ->getUserPurchaseCountByPromo($buyerId,$promoType);
-                
-                if(($userPurchaseCount[0]['cnt'] >= $promoArray['purchase_limit']) || 
-                (!$promoArray['is_buyable_outside_promo'] && !$startPromo)){
-                    $product[$key]['canPurchase'] =  false;
-                }
-                else{
-                    $product[$key]['canPurchase']   = true;
-                }
+        foreach ($products as $key => $value) { 
+            $productObject = $value->getProduct();
+            $resultObject = $this->promoManager->hydratePromoData($productObject);
+        } 
         
-                $dateToParam = date('Y-m-d',strtotime($endDate));
-                if($dateToParam === '0001-01-01' ){
-                    $dateToParam = date('Y-m-d');
-                }
-
-                $soldPrice = $this->em->getRepository('EasyShop\Entities\EsOrderProduct')
-                                            ->getSoldPrice($productId, date('Y-m-d',strtotime($startDate)), $dateToParam);
-                                            
-                $price = ($isSoldOut) ? $soldPrice : $promo['price']; 
-            }
-            else{
-                $product[$key]['originalPrice'] = $originalPrice = $price;
-                $product[$key]['canPurchase'] = true;
-                if(intval($discount) > 0){
-                    $price = $price * (1.0-($discount/100.0));
-                }  
-            }
-            
-            if($originalPrice <= 0){
-                $product[$key]['percentage'] = 0;
-            }
-            else{
-                $product[$key]['percentage'] = ($originalPrice - $price)/$originalPrice * 100.00;
-            }
-
-            $product[$key]['price'] = $price;
-            $product[$key]['isFreeShipping'] = $this->em->getRepository('EasyShop\Entities\EsProductShippingHead')
-                            ->getShippingTotalPrice($productId);
-        }
-
-        return $product;
+        return $products;
     }
 
     /**
      * function that will get all possible keyword tied on selected product
-     * @return [type] [description]
+     * @return boolean
      */
     public function generateSearchKeywords($productId)
     {
@@ -274,4 +239,45 @@ class ProductManager
 
         return true;
     }
+
+    /**
+     * Updates quantity of a particular product
+     * @return bool True on successful update
+     */
+    public function deductProductQuantity($productId,$itemId,$qty)
+    {
+
+        $item = $this->em->getRepository('EasyShop\Entities\EsProductItem')
+                            ->findOneBy(['product' => $productId,'idProductItem' => $itemId]);
+
+        $item->setQuantity($item->getQuantity() - $qty);
+        $this->em->flush();
+        return true;
+    }
+
+    /**
+     * Updates soldout status of a particular product
+     * @return bool True on successful update
+     */
+    public function updateSoldoutStatus($productId)
+    {
+
+        $quantity = $this->em->getRepository('EasyShop\Entities\EsProductItem')
+                                ->createQueryBuilder('p')
+                                ->select("SUM(p.quantity) AS soldout")
+                                ->where('p.product = :productId')
+                                ->setParameter('productId',$productId)
+                                ->getQuery()
+                                ->getOneOrNullResult();
+
+        $item = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                                ->find($productId);
+
+        $isSoldOut = intval($quantity['soldout']) <= 0 ? true : false;
+
+        $item->setIsSoldOut($isSoldOut);
+        $this->em->flush();
+        return true;
+    }
 }
+

@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "51f4e4cc8ed22f27d95a6941dbfad2cc",
+    "hash": "a100e00757989a7dc9b24501e93a04c9",
     "packages": [
         {
             "name": "cboden/ratchet",
@@ -2146,12 +2146,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/TwigBridge.git",
-                "reference": "960d523bde1ac05eaef556b2e13aa5c9d4a042ac"
+                "reference": "48b867f7600807a7c0afe1c00c7bc04c4eecc088"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/TwigBridge/zipball/960d523bde1ac05eaef556b2e13aa5c9d4a042ac",
-                "reference": "960d523bde1ac05eaef556b2e13aa5c9d4a042ac",
+                "url": "https://api.github.com/repos/symfony/TwigBridge/zipball/48b867f7600807a7c0afe1c00c7bc04c4eecc088",
+                "reference": "48b867f7600807a7c0afe1c00c7bc04c4eecc088",
                 "shasum": ""
             },
             "require": {
@@ -2209,7 +2209,7 @@
             ],
             "description": "Symfony Twig Bridge",
             "homepage": "http://symfony.com",
-            "time": "2014-08-03 19:03:03"
+            "time": "2014-09-10 13:16:43"
         },
         {
             "name": "symfony/validator",
@@ -2406,6 +2406,7 @@
         "symfony/twig-bridge": 20,
         "symfony/config": 20
     },
+    "prefer-stable": false,
     "platform": [
 
     ],

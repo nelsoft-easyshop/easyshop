@@ -2,6 +2,11 @@
 
 namespace EasyShop\PaymentService;
 
+
+use EasyShop\Entities\EsLocationLookup;
+use EasyShop\Entities\EsMember;
+use EasyShop\Entities\EsProduct;
+
 /**
  * Payment Service Class
  *
@@ -52,16 +57,31 @@ class PaymentService
      */
     private $pointTracker;
 
+    /**
+     * Promo Manager instance
+     *
+     * @var EasyShop\Promo\PromoManager
+     */
+    private $promoManager;
+
+    /**
+     * Product Manager instance
+     *
+     * @var EasyShop\Product\ProductManager
+     */
+    private $productManager;
 
     /**
      * Constructor
      * 
      */
-    public function __construct($em, $request, $pointTracker)
+    public function __construct($em, $request, $pointTracker, $promoManager, $productManager)
     {
         $this->em = $em;
         $this->request = $request;
         $this->pointTracker = $pointTracker;
+        $this->promoManager = $promoManager;
+        $this->productManager = $productManager;
     }
 
 
@@ -257,6 +277,26 @@ class PaymentService
 
                 $billingInfoId = $prod->getBillingInfoId();
 
+                $response['o_message'] = 'Error Code: Payment008c';
+                if($billingInfoId != 0){
+                    
+                    $billingInfo = $this->em->getRepository('EasyShop\Entities\EsBillingInfo')
+                                                ->find($prod->getBillingInfoId());
+
+                    $bankInfo = $this->em->getRepository('EasyShop\Entities\EsBankInfo')
+                                                ->find($billingInfo->getBankId());
+                    
+                    $orderBillingInfo = new EsOrderBillingInfo();
+                    $orderBillingInfo->setOrderId($order->getIdOrder());
+                    $orderBillingInfo->setorderProductId($orderProduct->getIdOrderProduct());
+                    $orderBillingInfo->setBankName($bankInfo->getBankName());
+                    $orderBillingInfo->setAccountName($billingInfo->getBankAccountName());
+                    $orderBillingInfo->setAccountNumber($billingInfo->getBankAccountNumber());
+                    $this->em->persist($orderBillingInfo);
+                    $this->em->flush();                    
+                }
+
+                $response['o_message'] = 'Error Code: Payment007b';
                 $net = floatval($details[5]) - $productExternalCharge;
 
                 $seller = $this->em->getRepository('EasyShop\Entities\EsMember')
@@ -281,26 +321,7 @@ class PaymentService
                 $orderProduct->setSellerBillingId($billingInfoId);
                 $this->em->persist($orderProduct);
                 $this->em->flush();
-                $response['o_message'] = 'Error Code: Payment008c';
-
-                if($billingInfoId != 0){
-                    
-                    $billingInfo = $this->em->getRepository('EasyShop\Entities\EsBillingInfo')
-                                                ->find($prod->getBillingInfoId());
-
-                    $bankInfo = $this->em->getRepository('EasyShop\Entities\EsBankInfo')
-                                                ->find($billingInfo->getBankId());
-                    
-                    $orderBillingInfo = new EsOrderBillingInfo();
-                    $orderBillingInfo->setOrderId($order->getIdOrder());
-                    $orderBillingInfo->setorderProductId($orderProduct->getIdOrderProduct());
-                    $orderBillingInfo->setBankName($bankInfo->getBankName());
-                    $orderBillingInfo->setAccountName($billingInfo->getBankAccountName());
-                    $orderBillingInfo->setAccountNumber($billingInfo->getBankAccountNumber());
-                    $this->em->persist($orderBillingInfo);
-                    $this->em->flush();                    
-                }
-
+                
                 $response['o_message'] = 'Error Code: Payment008a';
 
                 if((int)$details[7] > 0){
@@ -336,6 +357,118 @@ class PaymentService
         }
         return $response;
     }
-    
+
+    /**
+     * Computes Shipping Fee and Reorganizes Data
+     * 
+     * @param mixed $itemList List of items to compute shipping fee
+     * @param string $address Used for shipping fee calcl
+     *
+     * @return mixed
+     */
+    public function computeFeeAndParseData($itemList,$address)
+    {
+        $city = ($address['c_stateregionID'] > 0 ? $address['c_stateregionID'] :  0);
+        $cityDetails = $this->em->getRepository('EasyShop\Entities\EsLocationLookup')
+                                    ->getParentLocation($city);
+        $region = $cityDetails->getParent();
+        $cityDetails = $this->em->getRepository('EasyShop\Entities\EsLocationLookup')
+                                    ->getParentLocation($region);
+        $majorIsland = $cityDetails->getParent();
+
+        $grandTotal = 0;
+        $productstring = "";
+        $name = "";
+        $totalAdditionalFee = 0;
+        $toBeLocked = array();
+        $promoItemCount = 0;
+
+        foreach ($itemList as $key => $value) {
+            $sellerId = $value['member_id'];
+            $productId = $value['id'];
+            $orderQuantity = $value['qty'];
+            $price = $value['price'];
+            $tax_amt = 0;
+            $promoItemCount = ($value['is_promote'] == 1) ? $promoItemCount += 1 : $promoItemCount += 0;
+            $productItem =  $value['product_itemID'];
+            /* TO BE IMPLEMENTED*/
+            //$details = $this->payment_model->getShippingDetails($productId,$productItem,$city,$region,$majorIsland);
+            //$shipping_amt = $details[0]['price'];
+            $shipping_amt = 0.00;
+            $otherFee = ($tax_amt + $shipping_amt) * $orderQuantity;
+            $totalAdditionalFee += $otherFee;
+            $total =  $value['subtotal'] + $otherFee;
+            $optionCount = count($value['options']);
+            $optionString = '';
+            foreach ($value['options'] as $keyopt => $valopt) {
+                $optValueandPrice = explode('~', $valopt);
+                $optionString .= '(-)'.$keyopt.'[]'.$optValueandPrice[0].'[]'.$optValueandPrice[1];
+            }
+
+            $optionString = ($optionCount <= 0) ? '0[]0[]0' : substr($optionString,3); 
+            $productstring .= '<||>'.$sellerId."{+}".$productId."{+}".$orderQuantity."{+}".$price."{+}".$otherFee."{+}".$total."{+}".$productItem."{+}".$optionCount."{+}".$optionString;
+            $itemList[$key]['otherFee'] = $otherFee;
+            $sellerDetails = $this->em->getRepository('EasyShop\Entities\EsMember')
+                                        ->find($sellerId);
+            $itemList[$key]['seller_username'] = $sellerDetails->getUsername();
+            $grandTotal += $total;
+            $name .= " ".$value['name'];
+            $toBeLocked[$productItem] = $orderQuantity;
+        }
+
+        $productstring = substr($productstring,4);
+        return array(
+            'totalPrice' => round(floatval($grandTotal),2), 
+            'newItemList' => $itemList,
+            'productstring' => $productstring,
+            'productName' => $name,
+            'toBeLocked' => $toBeLocked,
+            'othersumfee' => round(floatval($totalAdditionalFee),2), 
+            'thereIsPromote' => $promoItemCount
+            );
+    }
+
+    /**
+     * Validate Cart Data
+     * 
+     * @param mixed $carts User Session data
+     * @param bool $condition Used for lock-related processing
+     *
+     * @return mixed
+     */
+    function validateCartData($carts,$condition = FALSE)
+    {
+        $itemArray = $carts['choosen_items'];
+        $availableItemCount = 0;
+
+        foreach($itemArray as $key => $value){
+
+            $productId = $value['id'];
+            $itemId = $value['product_itemID'];
+
+            $productArray = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                                            ->find($productId);
+
+            /* Get actual price, apply any promo calculation */
+            $this->promoManager->hydratePromoData($productArray);
+
+            /** NEW QUANTITY **/
+            $productInventoryDetail = $this->productManager->getProductInventory($productArray, false, $condition);
+            $maxQty = $productInventoryDetail[$itemId]['quantity'];
+            $qty = $value['qty'];
+            $itemArray[$value['rowid']]['maxqty'] = $maxQty;
+            $availableItemCount = ($maxQty >= $qty ? $availableItemCount + 1: $availableItemCount + 0);
+
+            /** NEW PRICE **/
+            $promoPrice = $productArray->getFinalPrice(); 
+            $additionalPrice = $value['additional_fee'];
+            $finalPromoPrice = $promoPrice + $additionalPrice;
+            $itemArray[$value['rowid']]['price'] = $finalPromoPrice;
+            $subtotal = $finalPromoPrice * $qty;
+            $itemArray[$value['rowid']]['subtotal'] = $subtotal;
+        }
+
+        return [$availableItemCount, $itemArray];
+    }
 }
 

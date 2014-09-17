@@ -15,331 +15,91 @@ class product extends MY_Controller
     { 
         parent::__construct(); 
         $this->load->helper('htmlpurifier');
-        $this->load->model("product_model");
-        $this->load->model("messages_model");        
+        $this->load->model("product_model"); 
+        $this->load->model("messages_model");
+
+        // Loading entity manager 
+        $this->em = $this->serviceContainer['entity_manager']; 
     }
 
+    public function loadMoreProductInCategory($categorySlug)
+    {
+        // Loading Services
+        $searchProductService = $this->serviceContainer['search_product'];
+
+        // Loading Repositories
+        $EsCatRepository = $this->em->getRepository('EasyShop\Entities\EsCat');
+
+        // Getting category details by slug
+        $categoryDetails = $EsCatRepository->findOneBy(['slug' => $categorySlug]);
+        $categoryId = $categoryDetails->getIdCat(); 
+        $getParameter = (!empty($this->input->get())) ? $this->input->get() : array();
+        $getParameter['category'] = $EsCatRepository->getChildCategoryRecursive($categoryId,TRUE);
+        $response['products'] = $searchProductService->getProductBySearch($getParameter);
+
+        $response['typeOfView'] = trim($this->input->get('typeview'));
+        $data['view'] = $this->load->view('pages/search/product_search_by_searchbox_more',$response,TRUE);
+        $data['count'] = count($response['products']);
+        echo json_encode($data);
+    }
 
     /**     
      *  Displays products in each category
      *
      *  @return View
      */
-    public function category_page($url_string="")
+    public function categoryPage($categorySlug)
     {
-        $start = 0;
-        $count = 0;
-        $perPage = $this->per_page;
-        $operator = " = ";
-        $data =  $this->fill_header();	
-        $category_array = $this->product_model->getCategoryBySlug($url_string);
+        $searchProductService = $this->serviceContainer['search_product'];
+        $categoryManager = $this->serviceContainer['category_manager'];
         
-        $categoryId = $category_array['id_cat'];
-        $categoryName = $category_array['name'];
-        $categoryDescription = $category_array['description'];
+        $EsProductRepository = $this->em->getRepository('EasyShop\Entities\EsProduct');
+        $EsCatRepository = $this->em->getRepository('EasyShop\Entities\EsCat');
+        $categoryDetails = $EsCatRepository->findOneBy(['slug' => $categorySlug]);
 
-        $this->load->config('protected_category', TRUE);
-        $protected_categories = $this->config->config['protected_category'];
-        
-        if(in_array(intval($categoryId,10), $protected_categories)){
-            if(intval($categoryId) === $protected_categories['promo']){
-                redirect('/deals', 'refresh');
-            }else{          
-                redirect('/cat/all', 'refresh');
-            }
+        if($categoryDetails){
+            $categoryName = $categoryDetails->getName(); 
+            $categoryId = $categoryDetails->getIdCat(); 
+            $categoryDescription = $categoryDetails->getDescription();
+            
+            $getParameter = (!empty($this->input->get())) ? $this->input->get() : array();
+            $getParameter['category'] = $EsCatRepository->getChildCategoryRecursive($categoryId,TRUE);
+            $subCategory = $this->em->getRepository('EasyShop\Entities\EsCat')
+                                            ->findBy(['parent' => $categoryId]);
+
+            $subCategoryList = $searchProductService->getPopularProductOfCategory($subCategory);
+
+            // get all product available
+            $response['products'] = $searchProductService->getProductBySearch($getParameter);
+            
+            // get all attributes to by products
+            $response['attributes'] = $searchProductService->getProductAttributesByProductIds($response['products']);
+
+            $parentCategory = $this->em->getRepository('EasyShop\Entities\EsCat')
+                                ->findBy(['parent' => 1]);
+ 
+            $response['subCategoryList'] = $subCategoryList;
+            $response['categorySlug'] = $categorySlug;
+            $response['category_navigation'] = $this->load->view('templates/category_navigation',array('cat_items' =>  $this->getcat(),), TRUE );
+            $response['parentCategory'] = $categoryManager->applyProtectedCategory($parentCategory, FALSE); 
+            $response['breadcrumbs'] = $this->em->getRepository('EasyShop\Entities\EsCat')
+                                        ->getParentCategoryRecursive($categoryId);
+
+            $data = array( 
+                'title' => es_string_limit(html_escape($categoryName), 60, '...', ' | Easyshop.ph'),
+                'metadescription' => es_string_limit(html_escape($categoryDescription), 60),
+                ); 
+            $data = array_merge($data, $this->fill_header());
+
+            $this->load->view('templates/header', $data); 
+            $this->load->view('pages/product/product_search_by_category_final_responsive', $response);
+            $this->load->view('templates/footer'); 
         }
-
-        $sortString = ""; 
-        $conditionArray = array(); 
-        
-        if(count($_GET) > 0){
-            foreach ($_GET as $key => $value) {
-
-                if(ucfirst(strtolower($key)) == "Brand"){
-
-                    if(strpos($_GET[$key], '-|-') !== false) {
-                        $var = explode('-|-',$_GET[$key]);
-                        $needString = array();
-                        foreach ($var as $varkey => $varvalue) {
-                            array_push($needString, "'$varvalue'");
-                        } 
-                        $conditionArray['brand'] = array(
-                            'value' => $var,
-                            'count' => count($var)
-                            );
-                    }else{ 
-                        $conditionArray['brand'] = array(
-                            'value' => $value,
-                            'count' => 1
-                            );
-                    }
-                }
-                elseif (ucfirst(strtolower($key)) == "Condition") { 
-
-                    $conditionArray['condition'] = array(
-                        'value' => $value,
-                        );
-
-                }elseif (ucfirst(strtolower($key)) == "Sop") { 
-
-                    $sortValue = ucfirst(strtolower($_GET[$key]));
-                    if($sortValue == ucfirst(strtolower('hot'))){
-                        $sortString = " is_hot DESC , ";
-                    }elseif ($sortValue == ucfirst(strtolower('new'))) {
-                        $sortString = " is_new DESC , ";
-                    }elseif ($sortValue == ucfirst(strtolower('popular'))) {
-                        $sortString = " clickcount DESC , ";
-                    }else{
-                        $sortString = "";
-                    } 
-
-                }elseif (ucfirst(strtolower($key)) == "Price") { 
-
-                    if(strpos($_GET[$key], 'to') !== false) {	
-
-                        $price = explode('to', $_GET[$key]);
-                    }else{
-
-                        $price = explode('to', '0.00to99999999.99');
-                    }
-                    $a = str_replace( ',', '', $price[0]);
-                    $b = str_replace( ',', '', $price[1]);
-                    if(is_numeric($a) && is_numeric($b)){
-
-                        $conditionArray['price'] = array(
-                            'start' => $a,
-                            'end'=> $b
-                            );
-                    }
-
-                }else{
-
-                    $count++; 
-                    if(!isset($conditionArray['attributes'])){
-                        $conditionArray['attributes'] = array();
-                    }
-
-                    if(strpos($_GET[$key], '-|-') !== false) {
-                        $var = explode('-|-',$_GET[$key]);		
-                        $key = strtolower(str_replace("_", " ", $key));
-                        foreach ($var as $varkey => $varvalue) {
-                            $conditionArray['attributes'][$key] = $var;
-                        }
-                    }else{
-                        $key = strtolower(str_replace("_", " ", $key)); 
-                        $conditionArray['attributes'][$key] = $value; 
-                    }
-                }
-            }
-        }    
-
-        $downCategory = $this->product_model->selectChild($categoryId);
-        if(empty($downCategory)){
-            $downCategory = array();
+        else{ 
+            redirect('cat/all', 'refresh');
         }
-        array_push($downCategory, $categoryId);
-        $categories = implode(",", $downCategory);
-        $items = $this->product_model->getProductsByCategory($categories,$conditionArray,$count,$operator,$start,$perPage,$sortString);
-        
-        $ids = array();
-        foreach ($items as $key) {
-            array_push($ids, $key['product_id']);
-        }
-        $ids = implode(',',$ids);
-        $attributes = $this->product_model->getProductAttributesByCategory($ids);
-        $itemCondition = $this->product_model->getProductConditionByCategory($ids);
-        $brand = $this->product_model->getProductBrandsByCategory($ids); 
-
-        $organizedAttribute = array();
-        $organizedAttribute['Brand'] = $brand;
-        $organizedAttribute['Condition'] = $itemCondition;
-        for ($i=0; $i < sizeof($attributes) ; $i++) { 
-            $head = urlencode($attributes[$i]['attr_name']);
-            if(!array_key_exists($head,$organizedAttribute)){
-                $organizedAttribute[$head] = array();	
-            }
-            array_push($organizedAttribute[$head],  $attributes[$i]['attr_value']);
-        }
-        $subcategories = $this->product_model->getDownLevelNode($categoryId);
-        $breadcrumbs = $this->product_model->getParentId($categoryId);
-        
-        $data = array( 
-            'title' => es_string_limit(html_escape($categoryName), 60, '...', ' | Easyshop.ph'),
-            'metadescription' => es_string_limit(html_escape($categoryDescription), 60),
-            ); 
-        $data = array_merge($data, $this->fill_header());
-
-        $response['main_categories'] = $this->product_model->getFirstLevelNode(true);
-        $response['breadcrumbs'] = $breadcrumbs;
-        $response['subcategories'] = $subcategories;
-        for($x=0; $x <= sizeof($response['subcategories']) -1 ; $x++){
-            $id = $response['subcategories'][$x][3]; //id_cat
-            $down_cat = $this->product_model->selectChild($id);
-            if((count($down_cat) === 1)&&(trim($down_cat[0]) === '')){
-                $down_cat = array();
-            }
-            array_push($down_cat, $id);
-            $db_cat_item = $this->product_model->getPopularitem($down_cat,1);
-            $response['subcategories'][$x]['popular'] = $db_cat_item;
-        }
-        
-        $response['items'] = $items;
-        $response['attributes'] = $organizedAttribute;
-        $response['id_cat'] = $categoryId;
-        $response['category_navigation'] = $this->load->view('templates/category_navigation',array('cat_items' =>  $this->getcat(),), TRUE );
-        $response['category_slug'] = $category_array['slug'];
-        
-        $this->load->view('templates/header', $data); 
-        $this->load->view('pages/product/product_search_by_category_final_responsive',$response);
-        $this->load->view('templates/footer'); 
 
     }
-
-    /**     
-     * Returns more products as user scrolls down the page  
-     *
-     * @return JSON 
-     */
-    public function category_page_more()
-    {
-
-        $categoryId = $this->input->post('id_cat');
-
-        $this->load->config('protected_category',TRUE);
-        $promo_category_id = $this->config->item('promo');
-        
-        if(intval($categoryId) === intval($promo_category_id)){
-            exit();
-        }
-
-        $perPage = $this->per_page;
-        $start = $this->input->post('page_number') * $perPage;
-        $count = 0;
-        $parameter = $this->input->post('parameters');
-        $get = json_decode($parameter,true);
-        $operator = ' = ';
-        $type = $this->input->post('type');
-        $condition = "";
-        $notIrrelivant = false;
-        $haveSort = false;
-        $sortString = "";
-        $tempcondition = "";
-
-        $conditionArray = array();
-
-        if(!count($get) <= 0){
-            foreach ($get as $key => $value) {
-
-                if(ucfirst(strtolower($key)) == "Brand"){
-        
-                    if(strpos($get[$key], '-|-') !== false) {
-                        $var = explode('-|-',$get[$key]);
-                        $needString = array();
-                        foreach ($var as $varkey => $varvalue) {
-                            array_push($needString, "'$varvalue'");
-                        } 
-                        $conditionArray['brand'] = array(
-                            'value' => $var,
-                            'count' => count($var)
-                            );
-                    }else{ 
-                        $conditionArray['brand'] = array(
-                            'value' => $value,
-                            'count' => 1
-                            );
-                    }
-
-                }elseif (ucfirst(strtolower($key)) == "Condition") { 
-
-                    $conditionArray['condition'] = array(
-                        'value' => $value,
-                    );
-                }elseif (ucfirst(strtolower($key)) == "Sop") { 
-                    $haveSort = true;
-                    $sortValue = ucfirst(strtolower($get[$key]));
-                    if($sortValue == ucfirst(strtolower('hot'))){
-                        $sortString = " is_hot DESC , ";
-                    }elseif ($sortValue == ucfirst(strtolower('new'))) {
-                        $sortString = " is_new DESC , ";
-                    }elseif ($sortValue == ucfirst(strtolower('popular'))) {
-                        $sortString = " clickcount DESC , ";
-                    }else{
-                        $sortString = "";
-                    } 
-
-                }elseif (ucfirst(strtolower($key)) == "Price") { 
-
-                    if(strpos($get[$key], 'to') !== false) {	
-
-                        $price = explode('to', $get[$key]);
-                    }else{
-
-                        $price = explode('to', '0.00to99999999.99');
-                    } 
-                    if(is_numeric($price[0]) && is_numeric($price[1])){
-                        $conditionArray['price'] = array(
-                            'start' => $price[0],
-                            'end'=> $price[1]
-                            );
-                    }
-
-                }else{
-
-                    if(strpos($get[$key], '-|-') !== false) {
-                        $var = explode('-|-',$get[$key]);		
-                        $key = strtolower(str_replace("_", " ", $key));
-                        if(!isset($conditionArray['attributes'])){
-                            $conditionArray['attributes'] = array();
-                        } 
-                        $count++; 
-                        foreach ($var as $varkey => $varvalue) {
-                            $conditionArray['attributes'][$key] = $var;
-                        }
-                    }else{
-                        $key = strtolower(str_replace("_", " ", $key)); 
-                        $count++;
-                        if(!isset($conditionArray['attributes'])){
-                            $conditionArray['attributes'] = array();
-                        } 
-                        $conditionArray['attributes'][$key] = $value; 
-                    }
-                }
-            }
-        }
-
-        if($categoryId == 1 || $categoryId == 0){
-            $categories = "SELECT cat_id FROM es_product WHERE is_delete = 0 AND is_draft = 0";
-        }else{
-            $downCategory = $this->product_model->selectChild($categoryId);
-            array_push($downCategory, $categoryId);
-            $categories = implode(",", $downCategory);
-        }
-
-        session_start();
-        
-        $items = $this->product_model->getProductsByCategory($categories,$conditionArray,$count,$operator,$start,$perPage,$sortString);
-
-        $response['items'] = $items; 
-        $response['id_cat'] = $categoryId;
-        $response['typeofview'] = $type;
-
-        if(count($items) <= 0){ 
-            $data = json_encode('0');
-            echo $data;
-            exit();
-        }else{
-
-            $response['irrelivant'] = false;
-            $data = json_encode($this->load->view('pages/product/product_search_by_category2_final',$response,TRUE));
-            echo $data;
-            exit();
-        }
-
-        echo $data;
-        exit();
-    }
-
-
 
     /**
      * Assemble SEO Review tags
