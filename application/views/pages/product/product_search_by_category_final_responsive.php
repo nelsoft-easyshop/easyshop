@@ -400,6 +400,7 @@
     <input type="hidden" id="hidden-currentUrl" value="<?=site_url(uri_string() . '?' . $_SERVER['QUERY_STRING']); ?>" />
     <input type="hidden" id="hidden-typeView" value="<?=(isset($_COOKIE['view']))?$_COOKIE['view']:'product'?>" />
     <input type="hidden" id="hidden-emptySearch" value="<?=(isset($products))?"false":"";?>" />
+    <input type="hidden" id="hidden-loadUrl" value="/cat/more/<?=$categorySlug .'?'. $_SERVER['QUERY_STRING']; ?>" />
 </div>
 
 <script src="/assets/js/src/bootstrap.js" type="text/javascript"></script>

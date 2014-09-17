@@ -311,7 +311,8 @@
     <input type="hidden" id="hidden-currentUrl" value="<?=site_url(uri_string() . '?' . $_SERVER['QUERY_STRING']); ?>" />
     <input type="hidden" id="hidden-typeView" value="<?=(isset($_COOKIE['view']))?$_COOKIE['view']:'product'?>" />
     <input type="hidden" id="hidden-emptySearch" value="<?=(isset($products))?"false":"";?>" />
-</div>
+    <input type="hidden" id="hidden-loadUrl" value="/search/more?<?=$_SERVER['QUERY_STRING']; ?>" />
+</div> 
 
 <script src="<?= base_url() ?>assets/js/src/bootstrap.js" type="text/javascript"></script>
 <script src="<?= base_url() ?>assets/js/src/advsearch.js?ver=<?=ES_FILE_VERSION?>" type="text/javascript"></script>

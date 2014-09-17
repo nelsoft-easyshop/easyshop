@@ -204,7 +204,17 @@ class Kernel
 
         // Search product
         $container['search_product'] = function ($c) use($container) {
-            return new \EasyShop\Search\SearchProduct($container['entity_manager']);
+            $em = $container['entity_manager'];
+            $collectionHelper = $container['collection_helper'];
+            $productManager = $container['product_manager'];
+            $categoryManager = $container['category_manager'];
+
+            return new \EasyShop\Search\SearchProduct(
+                                                        $em
+                                                        ,$collectionHelper
+                                                        ,$productManager
+                                                        ,$categoryManager
+                                                    );
         };
 
         //Promo Manager
@@ -272,6 +282,11 @@ class Kernel
             return new \EasyShop\FormValidation\FormHelpers\FormErrorHelper();
         };
 
+
+        // String Utility
+        $container['string_utility'] = function($c) {
+            return new EasyShop\Utility\StringUtility();
+        };
 
         /* Register services END */
         $this->serviceContainer = $container;
