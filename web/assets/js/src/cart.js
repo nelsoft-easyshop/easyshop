@@ -49,38 +49,39 @@ function proceedPayment(obj){
     }
 }
 
-function sum(obj)
+function changeQuantity(inputField)
 {
+
     var csrftoken = $("meta[name='csrf-token']").attr('content');
-    var value = $(obj).val();
-    var id = $(obj).attr("id");
-    var mx = $(obj).attr("mx");
-    if (parseInt(value) > parseInt(mx)) {
-        $(obj).val(mx);
-        value = mx;
+    var desiredQuantity = parseInt($(inputField).val(),10);
+    var maxQuantity = parseInt($(inputField).attr("max-quantity"),10);
+    var cartRowId = $(inputField).attr("id");
+    if (desiredQuantity > maxQuantity) {
+        desiredQuantity = maxQuantity;
     }
 
     $.ajax({
-        async: false,
-        url: config.base_url + "cart/fnc_qty",
+        url: "/cart/doChangeQuantity",
         type: "POST",
         dataType: "JSON",
-        data: {id: id, qty: value, csrfname: csrftoken},
+        data: {id: cartRowId, qty: desiredQuantity, csrfname: csrftoken},
         success: function (data) {
-            if (data == false) {
+            if (data.isSuccessful === false) {
                 location.reload();
             }
             else {
-                $(".subtotal" + id).text(data['subtotal']);
-                $("#total").text(data['total']);
-                $(obj).val(data.qty);
-                $('#rad_' + id).val(data.subtotal);
+                $(".subtotal" + cartRowId).text(data.itemSubtotal);
+                $('#rad_' + cartRowId).val(data.itemSubtotal);
+                $("#total").text(data.cartTotal);
+                $(inputField).val(data.qty);
             }
-            $(obj).attr("mx", data['maxqty']);
+            $(inputField).attr("max-quantity", data.maxqty);
         }
     });
     $(".checkAll").trigger('click').trigger('click');
 }
+
+
 
 function selectAll(obj) {
     $(".single1_" + $(obj).attr('data_id')).prop('checked', obj.checked);
@@ -121,29 +122,33 @@ function del(data)
 {
     var prod_id = $(data).attr('val');
     var csrftoken = $("meta[name='csrf-token']").attr('content');
-    var r = confirm("Are you sure you like to remove this item from the shopping cart?");
-    if (r == true) {
+    var isConfirmed = confirm("Are you sure you would like to remove this item from the shopping cart?");
+    
+    if (isConfirmed) {
         $.ajax({
-            async: false,
-            url: config.base_url + "cart/remove_item",
+            url: "/cart/doRemoveItem",
             type: "POST",
             dataType: "JSON",
             data: {id: prod_id, csrfname: csrftoken},
             success: function (data) {
-                if (data['result'] == true) {
+                
+                if(data.isSuccess){
                     $(".checkAll").trigger('click').trigger('click');
                     $(".row_" + prod_id).remove();
-                    $("#total").text(data['total']);
-                    $(".cart_no").text(data['total_items']);
-                    if(parseInt(data['total_items']) === 0){
+                    $("#total").text(data.totalPrice);
+                    $(".cart_no").text(data.numberOfItems);
+                    if(parseInt(data.numberOfItems) === 0){
                         $('.cart_no').hide();
                         $('.cart').css('width','28');
                         $('.big_cart').addClass('cart_zero');
                     }
                 }
-                else {
-                    alert("Sorry, we are having a problem right now.");
+                else{
+                    alert('Sorry, we are having a problem right now.');
+                    
                 }
+    
+
             }
         });
     }

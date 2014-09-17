@@ -94,5 +94,4 @@ class EsMemberRepository extends EntityRepository
 
         return $user;
     }
-
 }

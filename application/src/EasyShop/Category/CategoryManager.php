@@ -18,14 +18,19 @@ class CategoryManager
     private $em;
 
     /**
+     * Codeigniter Config Loader
+     *
+     * @var EasyShop\CollectionHelper\CollectionHelper
+     */
+    private $configLoader;
+
+    /**
      *  Constructor. Retrieves Entity Manager instance
      */
-    public function __construct($em)
+    public function __construct($configLoader, $em)
     {
+        $this->configLoader = $configLoader;
         $this->em = $em;
-        $this->ci = get_instance();  
-        $this->ci->config->load('protected_category', TRUE);
-        $this->protectedCategories = $this->ci->config->item('protected_category');  
     }
 
     /**
@@ -36,10 +41,10 @@ class CategoryManager
      */
     public function applyProtectedCategory($categoryList,$isAdmin = FALSE)
     {
-        $protectedCategories =  $this->protectedCategories; 
+        $protectedCategories =  $this->configLoader->getItem('protected_category');
         if(!$isAdmin){
             foreach($categoryList as $key => $value){  
-                if((in_array($value->getIdCat(),$protectedCategories) || $value->getIdCat() == 1) && !$isAdmin){
+                if((in_array($value->getIdCat(),$protectedCategories) || intval($value->getIdCat()) === 1) && !$isAdmin){
                     unset($categoryList[$key]);
                 } 
             }
