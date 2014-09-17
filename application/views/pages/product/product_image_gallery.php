@@ -51,12 +51,7 @@
 				<span class="span-container"><center><span class="span-container-img"><img src='<?=base_url()?><?php echo $image['path']; ?>/<?php echo $image['file']; ?>' alt='Beach' class='img-responsive img-slider-2' /></span></center></span>
 			</div>
 			<?php endforeach;?>
-            <a class='carousel-control left' href='#myCarousel' data-slide='prev'>
-                <span class='glyphicon glyphicon-chevron-left'></span>
-            </a>
-            <a class='carousel-control right' href='#myCarousel' data-slide='next'>
-                <span class='glyphicon glyphicon-chevron-right'></span>
-            </a>
+            
 		</div>	
 		
 	</div>
