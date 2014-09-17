@@ -214,6 +214,16 @@
     font-size: 16px;
 }
 
+.shipping_comment_cont input{
+    width: 300px;
+    border-radius: 3px;
+}
+
+.shipping_comment_cont textarea{
+    border-radius: 3px;
+}
+
+
 .shipping_comment_cont input, .shipping_comment_cont label,
 .payment_details_cont input, .payment_details_cont label{
 	display:inline-block;
