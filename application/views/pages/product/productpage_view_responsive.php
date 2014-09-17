@@ -185,15 +185,22 @@
                                 <div class="div-box-price">
                                     <center>
                                         <div class="pbt pbt1">Price</div>
-                                        <div>PHP 
-                                            <span class="current_price fm1" data-baseprice="<?php echo $product['price']?>"> 
-                                                <?php echo number_format($product['price'],2,'.',',');?> 
-                                            </span> 
+
+                                        <div>
+                                        
+                                            <div>
+                                                <span class='currency' style ='display: <?php echo (floatval($product['price']) !== 0.01) ? 'inline':'none';  ?> '> PHP </span> 
+                                                <span class="current_price fm1" data-baseprice="<?php echo $product['price']?>"> 
+                                                    <?php echo (floatval($product['price']) !== 0.01) ? number_format($product['price'],2,'.',',') : 'FREE';?> 
+                                                </span> 
+                                            </div>
+                                            <?PHP if( ((intval($product['is_promote']) === 1) && $product['start_promo'] && !$product['end_promo'] && $product['percentage'] > 0)
+                                                    || ((intval($product['is_promote']) === 0) && $product['discount'] > 0)): ?>   
+                                                <div><span class="recent_price"> PHP <?php echo number_format($product['original_price'],2,'.',','); ?></span> | <strong> <?php echo number_format( $product['percentage'],0,'.',',');?> % OFF  </strong></div>          
+                                            <?PHP endif;?>
+                      
                                         </div>
-                                        <?PHP if( ((intval($product['is_promote']) === 1) && $product['start_promo'] && !$product['end_promo'] && $product['percentage'] > 0)
-                                                || ((intval($product['is_promote']) === 0) && $product['discount'] > 0)): ?>   
-                                            <div ><span class="recent_price font-10"> PHP <?php echo number_format($product['original_price'],2,'.',','); ?></span> | <strong class="font-10"> <?php echo number_format( $product['percentage'],0,'.',',');?> % OFF  </strong></div>          
-                                        <?PHP endif;?>
+
                                     </center>
                                 </div>
                             </div>
