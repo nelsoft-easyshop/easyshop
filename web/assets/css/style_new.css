@@ -307,7 +307,7 @@ span.seller-name .rating_criteria{
 }
 
 .buy_box {
-	width: 248px;
+    width: 248px;
 }
 
 .buy_btn_sub {
@@ -315,11 +315,26 @@ span.seller-name .rating_criteria{
     border: 1px solid #FF0000;
     color: #FF0000;
     font-size: 11px;
-    height: 24px;
+    padding: 3px;
     margin: 5px;
-	
 }
 
+.col-price{
+    width: 210px !important;
+}
+
+.col-availability{
+    padding-right: 0px !important;
+    padding-left: 0px !important;
+    width: 100px !important;
+}
+.col-buy{
+    padding-left: 0px !important;
+}
+
+.div-box-price, .div-buy-now{
+    min-height: 87px !important;
+}
 .availability span {
 	font-family: 'Roboto', sans-serif;
 	font-size: 30px;
@@ -411,7 +426,12 @@ span.seller-name .rating_criteria{
     margin-left: 10px;
 }
 
-
+.shiploc:enabled{
+    color: #000000;
+}
+.shiploc > option:disabled{
+    color: #d4d4d4;
+}
 .shipping_fee_price{
     color: #F18200;
     font-weight: 300;
