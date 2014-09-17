@@ -190,6 +190,18 @@ class EsMember
     private $storeName;
 
     /**
+     * @var integer
+     * @ORM\Column(name="oauth_id", type="integer", length=11, nullable=false)
+     */
+    private $oauthId;
+
+    /**
+     * @var string
+     * @ORM\Column(name="oauth_provider", type="string", length=45, nullable=false)
+     */
+    private $oauthProvider;
+
+    /**
      * @var \Doctrine\Common\Collections\Collection
      *
      * @ORM\ManyToMany(targetEntity="EasyShop\Entities\CiSessions", inversedBy="member")
@@ -773,6 +785,52 @@ class EsMember
     public function getStoreName()
     {
         return $this->storeName;
+    }
+
+    /**
+     * Set OauthId
+     *
+     * @param string $oauthId
+     * @return EsMember
+     */
+    public function setOauthId($oauthId)
+    {
+        $this->oauthId = $oauthId;
+
+        return $this;
+    }
+
+    /**
+     * Get OauthId
+     *
+     * @return string
+     */
+    public function getOauthId()
+    {
+        return $this->oauthId;
+    }
+
+    /**
+     * Set OauthProvider
+     *
+     * @param string $oauthProvider
+     * @return string
+     */
+    public function setOauthProvider($oauthProvider)
+    {
+        $this->oauthProvider = $oauthProvider;
+
+        return $this;
+    }
+
+    /**
+     * Get getOauthProvider
+     *
+     * @return string
+     */
+    public function getOauthProvider()
+    {
+        return $this->oauthProvider;
     }
 
     /**
