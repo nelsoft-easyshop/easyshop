@@ -85,7 +85,8 @@
     font-size: 12px;
     height: auto !important;
     max-height: 415px !important;
-    width: 1005px !important; 
+    max-width: 1005px;
+    min-width: 600px !important;
     background-color:#fff;
     padding: 5px;
     overflow: auto;
@@ -167,6 +168,14 @@
 	/*width: auto !important;*/
 }
 
+.transac-feedback-container {
+    width: auto;
+}
+
+.transac-feedback-container form {
+    margin-top: 20px;
+}
+
 .transac_orange_btn{
 	background-color: #F48000 !important;
 	display: inline-block;
@@ -177,10 +186,6 @@
 	background-color: #FF4400 !important;
 	box-shadow: inset 0px -10px 12px -8px rgba(255, 255, 255, 0.75);
 	transition: all linear 0.2s;
-}
-
-.shipping_comment_cont{
-	width: 500px;
 }
 
 .shipping_comment_cont h2{
