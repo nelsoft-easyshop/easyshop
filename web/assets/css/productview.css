@@ -288,7 +288,7 @@ sub, sup{
 	text-transform: capitalize !important;
 }
 
-.div-box-price .currency{
+.div-box-price{
     font-size: 12px;
 }
 
