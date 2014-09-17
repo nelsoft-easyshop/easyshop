@@ -122,13 +122,13 @@ class product_search extends MY_Controller {
             $productIds = (count($originalOrder)>0) ? array_intersect($originalOrder, $productIds) : $productIds; 
 
             $filteredProduct = $EsProductRepository->getDetails($productIds,$page,$this->per_page);
-            $discountedProduct = ($filteredProduct > 0) ? $productManager->getDiscountedPrice($memberId,$filteredProduct) : array();
+            $discountedProduct = ($filteredProduct > 0) ? $productManager->discountProducts($filteredProduct) : array();
             $filterSellerProduct = ($seller)?$searchProductService->filterBySeller($seller,$discountedProduct):$discountedProduct;
             $response['products'] = ($startPrice) ? $searchProductService->filterByPrice($startPrice,$endPrice,$filterSellerProduct) : $filterSellerProduct;
 
             // if ajax request display json data of products
             if($page){
-                $response['typeview'] = trim($this->input->get('typeview'));
+                $response['typeOfView'] = trim($this->input->get('typeview'));
                 $data['view'] = $this->load->view('pages/search/product_search_by_searchbox_more',$response,TRUE);
                 $data['count'] = count($response['products']);
 
@@ -213,13 +213,13 @@ class product_search extends MY_Controller {
         $productIds = array_intersect($originalOrder, $productIds);
 
         $filteredProduct = (count($productIds)>0)?$EsProductRepository->getDetails($productIds,$page,$this->per_page):array();
-        $discountedProduct = $productManager->getDiscountedPrice($memberId,$filteredProduct);
+        $discountedProduct = $productManager->discountProducts($filteredProduct);
 
         $response['products'] = ($startPrice) ? $searchProductService->filterByPrice($startPrice,$endPrice,$discountedProduct) : $discountedProduct;
         
         // if ajax request display json data of products
         if($page){
-            $response['typeview'] = trim($this->input->get('typeview'));
+            $response['typeOfView'] = trim($this->input->get('typeview'));
             $data['view'] = $this->load->view('pages/search/product_search_by_searchbox_more',$response,TRUE);
             $data['count'] = count($response['products']);
             die(json_encode($data));

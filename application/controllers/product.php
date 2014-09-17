@@ -60,7 +60,7 @@ class product extends MY_Controller
             $productIds = $searchProductService->filterByOtherParameter($this->input->get(),$productIds);  
             
             $filteredProducts = $EsProductRepository->getDetails($productIds,$page,$this->per_page);
-            $discountedProducts = ($filteredProducts > 0) ? $productManager->getDiscountedPrice($memberId,$filteredProducts) : array();
+            $discountedProducts = ($filteredProducts > 0) ? $productManager->discountProducts($filteredProducts) : array();
 
             $response['products'] = ($startPrice) ? $searchProductService->filterByPrice($startPrice,$endPrice,$discountedProducts) : $discountedProducts;
           

@@ -173,12 +173,12 @@ class ProductManager
     
     
     /**
-     * Applies discount to a product
+     * Apply discounted price to product
      * This has been refactored with hydrate promo data
      * @param  array  $products [description]
-     * @return [type]           [description]
+     * @return mixed
      */
-    public function getDiscountedPrice($memberId,$products = array())
+    public function discountProducts($products)
     { 
         foreach ($products as $key => $value) { 
             $productObject = $value->getProduct();
@@ -190,7 +190,7 @@ class ProductManager
 
     /**
      * function that will get all possible keyword tied on selected product
-     * @return [type] [description]
+     * @return boolean
      */
     public function generateSearchKeywords($productId)
     {
