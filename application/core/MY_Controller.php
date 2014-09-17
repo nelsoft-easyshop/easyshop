@@ -19,10 +19,10 @@ class MY_Controller extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-        //$this->config->set_item('base_url',"https://".$_SERVER["SERVER_NAME"].":".$_SERVER["SERVER_PORT"]."/");
         $this->config->set_item('base_url',"https://".$_SERVER["SERVER_NAME"]."/");
 
         $url = uri_string();
+        
         if($url !== 'login'){
             $this->session->set_userdata('uri_string', $url);
         }
@@ -45,19 +45,17 @@ class MY_Controller extends CI_Controller
         $this->load->model("user_model");
         $this->load->model("product_model");
         $this->load->model("messages_model");
-    $usersession = $this->session->userdata('usersession');
-    if(!empty($usersession) || $this->check_cookie()){
-        $uid = $this->session->userdata('member_id'); 
-        $row = $this->user_model->getUserById($uid);
-
-        $logged_in = true;
-        $uname = $row['username'];
-    }
-    else{
-        $logged_in = false;
-        $uname = '';
-    }
-    $carts=$this->session->userdata('cart_contents');
+        $user = array();
+        $usersession = $this->session->userdata('usersession');
+        if(!empty($usersession) || $this->check_cookie()){
+            $uid = $this->session->userdata('member_id'); 
+            $user = $this->user_model->getUserById($uid);
+            $logged_in = true;
+        }
+        else{
+            $logged_in = false;
+        }
+        $carts=$this->session->userdata('cart_contents');
         $sizecart = 0;
         if(!empty($carts)){
             if(isset($carts['total_items'])){
@@ -66,17 +64,17 @@ class MY_Controller extends CI_Controller
                 $sizecart = sizeof($carts);
             }
         }
-    $unread = $this->messages_model->get_all_messages($this->session->userdata('member_id'),"Get_UnreadMsgs");
-    $msgs['unread_msgs'] = (isset($unread['unread_msgs']) ?$unread['unread_msgs'] : 0);
-    $msgs['msgs'] = (isset($unread['unread_msgs']) ? ($unread['unread_msgs'] != 0 ? reset($unread['messages']) : ""):0);        
-    $data = array(
-        'logged_in' => $logged_in,
-        'uname' => $uname,
-        'total_items'=> $sizecart,
-        'msgs'=> $msgs,
-        'category_search' => $this->product_model->getFirstLevelNode(),
-        );
-    return $data;
+        $unread = $this->messages_model->get_all_messages($this->session->userdata('member_id'),"Get_UnreadMsgs");
+        $msgs['unread_msgs'] = (isset($unread['unread_msgs']) ?$unread['unread_msgs'] : 0);
+        $msgs['msgs'] = (isset($unread['unread_msgs']) ? ($unread['unread_msgs'] != 0 ? reset($unread['messages']) : ""):0);		
+        $data = array(
+            'logged_in' => $logged_in,
+            'user' => $user,
+            'total_items'=> $sizecart,
+            'msgs'=> $msgs,
+            'category_search' => $this->product_model->getFirstLevelNode(),
+            );
+        return $data;
     }
     
     function check_cookie(){
@@ -168,7 +166,7 @@ class MY_Controller extends CI_Controller
         }
         $array = $temp; 
     }
-
+    
     /**
      *  Authentication method for webservice
      *
@@ -180,7 +178,7 @@ class MY_Controller extends CI_Controller
     {
         foreach ($postedData as $data => $value) {
             
-            if($data == "hash" || $data == "_token" || $data == "csrfname" || $data == "callback" || $data == "password" || $data == "_") {
+            if($data == "hash" || $data == "_token" || $data == "csrfname" || $data == "callback" || $data == "password" || $data == "_" || $data == "checkuser") {
                  continue;               
             }
 
@@ -189,12 +187,15 @@ class MY_Controller extends CI_Controller
         }
         $this->load->model("user_model");
         $password = $this->user_model->getAdminUser($postedData["userid"]);
+
         $hash = $evaluate.$password["password"];
+
         if(sha1($hash) != $postedHash){
             $error = json_encode("error");
                     exit($error);
         }   
     }
+
 
 
 

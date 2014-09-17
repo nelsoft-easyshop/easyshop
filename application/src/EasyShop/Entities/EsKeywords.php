@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * EsKeywords
  *
  * @ORM\Table(name="es_keywords", indexes={@ORM\Index(name="fulltext", columns={"keywords"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="EasyShop\Repositories\EsKeywordsRepository")
  */
 class EsKeywords
 {

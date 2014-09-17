@@ -23,3 +23,4 @@ class Version20140829100700 extends AbstractMigration
         $this->addSql("ALTER TABLE es_promo DROP COLUMN `promo_type`");
     }
 }
+

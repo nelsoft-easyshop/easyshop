@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * EsProductShippingPreferenceDetail
  *
  * @ORM\Table(name="es_product_shipping_preference_detail", indexes={@ORM\Index(name="edasd_idx", columns={"location_id"}), @ORM\Index(name="es_sp_head_idx", columns={"shipping_pref_head_id"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="EasyShop\Repositories\EsProductShippingPreferenceDetailRepository")
  */
 class EsProductShippingPreferenceDetail
 {

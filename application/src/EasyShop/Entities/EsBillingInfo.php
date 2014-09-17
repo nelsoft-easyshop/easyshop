@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * EsBillingInfo
  *
  * @ORM\Table(name="es_billing_info", indexes={@ORM\Index(name="fk_es_product_es_member_idx", columns={"member_id"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="EasyShop\Repositories\EsBillingInfoRepository")
  */
 class EsBillingInfo
 {

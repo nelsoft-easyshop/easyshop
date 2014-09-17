@@ -25,9 +25,9 @@ class PointTracker
      * Constructor. Retrieves Entity Manager instance
      * 
      */
-    public function __construct()
+    public function __construct($em)
     {
-        $this->em = get_instance()->kernel->serviceContainer['entity_manager'];
+        $this->em = $em;
     }
 
 
@@ -59,7 +59,7 @@ class PointTracker
 
         // Get Point object
         $userPoint = $this->em->getRepository('EasyShop\Entities\EsPoint')
-                                ->findOneBy(['m' => $userId]);
+                                ->findOneBy(['member' => $userId]);
 
         // Insert to point history
         $pointHistory = new EsPointHistory();
@@ -179,7 +179,7 @@ class PointTracker
     public function getUserPoint($userId)
     {
         $user = $this->em->getRepository('EasyShop\Entities\EsPoint')
-                            ->findOneBy(['m' => $userId]);
+                            ->findOneBy(['member' => $userId]);
 
         return $user === null? false : $user->getPoint();
     }        
