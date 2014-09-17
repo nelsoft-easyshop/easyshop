@@ -29,6 +29,7 @@ class EsMemberCatRepository extends EntityRepository
                     , is_featured
                 FROM es_member_cat
                 WHERE member_id = :member_id
+                ORDER BY id_memcat DESC
                 ';
 
         $query = $em->createNativeQuery($sql,$rsm)

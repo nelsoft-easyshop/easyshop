@@ -1423,7 +1423,6 @@ class Memberpage extends MY_Controller
                 "products" => $em->getRepository("EasyShop\Entities\EsMemberProdcat")
                                 ->getCustomCategoryProduct($memberId, $category["id_memcat"], $prodLimit)
             );
-            
         }
 
         print("<pre>");
@@ -1444,9 +1443,61 @@ class Memberpage extends MY_Controller
      */
     public function vendorLoadProducts()
     {
+        $prodLimit = 12;
+        $vendorId = $this->input->get('vid');
+        $vendorName = $this->input->get('vn');
+        $catId = $this->input->get('cid');
+        $catType = $this->input->get('ct');
+        $page = $this->input->get('p');
+        $oBy = $this->input->get('ob');
+        $o = $this->input->get('o');
 
-        $categoryType = $this->input->get('ctype');
+        $em = $this->serviceContainer["entity_manager"];
 
+        switch($o){
+            case 1:
+                $order = "DESC";
+                break;
+            case 2:
+                $order = "ASC";
+                break;
+            default:
+                $order = "DESC";
+                break;
+        }
+
+        switch($oBy){
+            case 1:
+                $orderBy = "p.idProduct";
+                break;
+            default:
+                $orderBy = "p.idProduct";
+                break;
+        }
+
+        $orderStr = $orderBy . $order;
+
+        switch($catType){
+            // Custom
+            case 1:
+                $products = $em->getRepository("EasyShop\Entities\EsMemberProdcat")
+                                ->getCustomCategoryProduct($vendorId, $catId, $prodLimit, $page, $orderStr);
+                break;
+            // Default
+            case 2:
+                $products = $em->getRepository("EasyShop\Entities\EsProduct")
+                                ->getNotCustomCategorizedProducts($vendorId, $catId, $prodLimit, $page, $orderStr);
+                break;
+            // Default Cat
+            default:
+                $products = $em->getRepository("EasyShop\Entities\EsProduct")
+                                ->getNotCustomCategorizedProducts($vendorId, $catId, $prodLimit, $page, $orderStr);
+                break;
+        }
+
+        $htmlData = $this->load->view("pages/product/test1", $products, true);
+
+        echo json_encode($htmlData);
     }
 
     //DEV FUNCTION HANDLES EDIT PROFILE
