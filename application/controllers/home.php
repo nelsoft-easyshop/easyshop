@@ -297,8 +297,11 @@ class Home extends MY_Controller
 	 */
 	private function aboutuser()
 	{
-		
-		$this->load->view('templates/footer');
+        $data['title'] = 'Vendor Information | Easyshop.ph';
+        $data = array_merge($data, $this->fill_header());                
+        $this->load->view('templates/header_new', $data);
+        $this->load->view('templates/header_vendor');
+        $this->load->view('templates/footer');
 	}
 
 	/**
@@ -307,8 +310,13 @@ class Home extends MY_Controller
 	 */
 	private function contactuser()
 	{
-		$this->load->view('templates/footer');
-	}
+        $data['title'] = 'Vendor Contact | Easyshop.ph';
+        $data = array_merge($data, $this->fill_header());                
+        $this->load->view('templates/header_new', $data);
+        $this->load->view('templates/header_vendor');
+        $this->load->view('pages/user/contact');
+        $this->load->view('templates/footer');
+    }
 	
     /**
      *  Fetch information to be display in feeds page
