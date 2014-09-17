@@ -2595,21 +2595,21 @@ div.electronics_product_sides {
 }
 
 .prod_cat_drop {
-  background-position: -406px -297px;
-  cursor: pointer;
-  height: 35px;
-  position: absolute;
-  right: 0;
-  width: 25px;
+background-position: -407px -307px;
+cursor: pointer;
+height: 35px;
+position: absolute;
+right: 0;
+width: 23px;
 }
 
 .active_prod_cat_drop_arrow {
-  background-position: -511px -297px; 
-  cursor: pointer;
-  height: 35px;
-  position: absolute;
-  right: 0;
-  width: 25px;
+background-position: -511px -307px;
+cursor: pointer;
+height: 35px;
+position: absolute;
+right: 0;
+width: 25px;
 }
 
 .prod_cat_drop_arrow:hover {
