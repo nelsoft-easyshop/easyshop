@@ -1,5 +1,19 @@
 /** <!--Member page CSS Janz--> **/
 
+#tx_dialog_pass_cont input{
+    width: 240px;
+    line-height: 18px;
+    margin-left: 5px;
+}
+
+#tx_dialog_pass_cont lbl-tx-password{
+    width: 140px;
+}
+
+#tx_dialog{
+    font-size: 12px;
+}
+
 .btn2 {
   padding: 6px 12px;
   margin-bottom: 0;
@@ -211,7 +225,7 @@
 }
 
 .ui-dialog-content.ui-widget-content {
-    text-align: center;
+    text-align: left;
 }
 
 .shipping_comment_cont label, .payment_details_cont label{
