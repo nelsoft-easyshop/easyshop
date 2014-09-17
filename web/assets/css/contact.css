@@ -1,0 +1,97 @@
+.row-contact{
+    min-height: 560px;
+}
+
+.panel-contact-details{
+    min-height: 500px;
+    width: 100%;
+    background: #ffffff;
+    border-radius: 4px;
+    padding: 25px 25px;
+}
+
+.panel-title-contact{
+    text-transform:uppercase;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.table-contact-details{
+    margin-top: 25px;
+    border-bottom: solid #e2e2e2 1px;
+}
+
+.td-contact-icon{
+    vertical-align: top;
+    padding-right: 15px;
+    padding-bottom: 25px;
+    text-align: center;
+}
+
+.td-contact-detail{
+    vertical-align: top;  
+}
+
+.span-social-media{
+    margin-right: 5px;
+    padding-top: 15px;
+    background-color: white;
+}
+.span-social-media > a{
+    text-decoration: none;
+}
+.span-social-media > a > img:hover{
+    background-color: white;
+    opacity: 0.8;
+    border-radius: 50%;
+    transition: all 0.5s ease;
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+}
+.panel-contact-message{
+    width: 100%;
+    min-height: 500px;
+    background: #ffffff;
+    border-radius: 4px;
+    padding: 25px 25px;
+    margin-top: 10px;
+    margin-left: 30px;
+}
+
+.div-message-form{
+    margin-top: 20px;
+}
+
+.div-message-form > .row{
+    margin-top: 10px;
+}
+
+.col-message-1{
+    padding-right: 5px !important;
+}
+
+.col-message-2{
+    padding-left: 5px;
+}
+
+.input-message{
+    width: 100%;
+    border: solid #ececec 1px;
+    border-radius: 4px;
+    background: #ececec;
+    transition: all 0.5s ease;
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+}
+
+.input-message:placeholder{
+    font-style: italic;
+    color: red;
+}
+
+.input-message:focus{
+    border: solid #565656 1px;
+    background: #ffffff;
+}
