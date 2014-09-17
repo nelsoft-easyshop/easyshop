@@ -152,27 +152,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
-                    <div class="panel-group " id="categories">
-                      <div class="panel panel-default panel-category no-border border-0">
-                        <div class="panel-heading panel-category-heading no-border">
-                            <h4 class="panel-title panel-title-category">
-                                Categories
-                                <a data-toggle="collapse" data-parent="#categories" href="#categories-body">
-                                    <img class="pull-right" src="<?=base_url()?>assets/images/img_arrow_down.png">
-                                </a>
-                            </h4>
-                        </div>
-                        <div id="categories-body" class="panel-collapse collapse">
-                            <div class="panel-body-category">
-                                <ul class="list-unstyled">
-                                    <?php foreach ($parentCategory as $key => $value): ?>
-                                        <li class="list-category"><a href="<?=base_url().'category/'.$value->getSlug(); ?>"><?=$value->getName();?></a></li> 
-                                    <?php endforeach; ?>
-                                </ul>
-                            </div>
-                        </div>
-                      </div>
-                    </div> 
+                    <?=$category_navigation_mobile;?>
                 </div>
             </div>
 

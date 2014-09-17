@@ -248,8 +248,9 @@ class product_search extends MY_Controller {
         $response['category_navigation'] = $this->load->view('templates/category_navigation',array('cat_items' =>  $this->getcat(),), TRUE );
         $parentCategory = $this->em->getRepository('EasyShop\Entities\EsCat')
                                             ->findBy(['parent' => 1]);
-        $response['parentCategory'] = $categoryManager->applyProtectedCategory($parentCategory, FALSE); 
-        
+        $parentCategory = $categoryManager->applyProtectedCategory($parentCategory, FALSE); 
+        $response['category_navigation_mobile'] = $this->load->view('templates/category_navigation_mobile',array('parentCategory' =>  $parentCategory,), TRUE );
+
         $data = array(
                 'title' => ($queryString==='')?'Search | Easyshop.ph':$queryString.' | Easyshop.ph',
                 );

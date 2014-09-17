@@ -114,6 +114,7 @@ class product extends MY_Controller
             $response['categorySlug'] = $categorySlug;
             $response['category_navigation'] = $this->load->view('templates/category_navigation',array('cat_items' =>  $this->getcat(),), TRUE );
             $response['parentCategory'] = $categoryManager->applyProtectedCategory($parentCategory, FALSE); 
+            $response['category_navigation_mobile'] = $this->load->view('templates/category_navigation_mobile',array('parentCategory' =>  $response['parentCategory'],), TRUE );
 
             $data = array( 
                 'title' => es_string_limit(html_escape($categoryName), 60, '...', ' | Easyshop.ph'),
