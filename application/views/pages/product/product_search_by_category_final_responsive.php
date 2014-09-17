@@ -14,10 +14,7 @@
             <div class="col-md-12">
                 <section class="top_margin product-page-section display-when-desktop">
                     <div class="wrapper">
-                        <div class="prod_categories">
-                            <div class="nav_title">Categories <img src="/assets/images/img_arrow_down.png" class="drop-arrow"></div>
-                            <?php echo $category_navigation; ?> 
-                        </div> 
+                        <?php echo $category_navigation_desktop; ?>  
                         <div class="prod_cat_nav" id="prod_drop_nav">
                             <div class="category_nav">
                                 <ul>

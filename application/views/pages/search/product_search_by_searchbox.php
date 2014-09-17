@@ -12,10 +12,7 @@
                 <div class="col-md-12">
                     <section class="top_margin product-page-section display-when-desktop">
                         <div class="wrapper">
-                            <div class="prod_categories">
-                                <div class="nav_title">Categories <img src="<?=base_url()?>assets/images/img_arrow_down.png"></div>
-                                <?php echo $category_navigation; ?> 
-                            </div>
+                            <?php echo $category_navigation_desktop; ?>  
                             <div class="prob_cat_nav">
                                 <div class="category_nav product_content">
                                     <ul>
