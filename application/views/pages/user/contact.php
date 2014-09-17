@@ -95,7 +95,7 @@
                         </div>
                         <div class="row">
                             <div class="col-xs-12">
-                                <textarea class="input-lg input-message" rows="6" placeholder="MESSAGE..."></textarea>
+                                <textarea class="input-lg input-message" rows="7" placeholder="MESSAGE..."></textarea>
                             </div>
                         </div>
                         <div class="row">
@@ -110,16 +110,3 @@
         </div>
     </div>
 </section>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
