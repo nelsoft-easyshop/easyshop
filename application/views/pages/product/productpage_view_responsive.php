@@ -519,7 +519,7 @@
 								<div class="alert alert-danger no-border">  This is your own listing </div>
 							<?php else: ?>
 								<?php if(count($shipment_information) === 0 && intval($product['is_meetup']) === 1): ?>
-									 <a href="javascript:void(0)" class="btn-meet-up modal_msg_launcher" title="Send <?=html_escape($product['sellerusername'])?> a message">Contact Seller</a> <br/>
+									 <br/><a href="javascript:void(0)" class="btn btn-block btn-lg btn-meet-up modal_msg_launcher" title="Send <?=html_escape($product['sellerusername'])?> a message">Contact Seller</a> <br/>
 									<div class="alert alert-danger no-border"> <i class="glyphicon glyphicon-warning-sign"></i>Item is listed as an ad only. *</div>
 								<?php else: ?>
 									 <a href="javascript:void(0)" id='<?php echo $product['can_purchase']?'send':'' ?>' class="fm1 orange_btn3 disabled btn-lg btn-block" >Buy Now</a> <br/>
