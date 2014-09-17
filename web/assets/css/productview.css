@@ -1,8 +1,39 @@
 @import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300,300italic,600);
 @import url(https://fonts.googleapis.com/css?family=Roboto:400,300);
+    
+.panel-heading .accordion-toggle:after {
+        /* symbol for "opening" panels */
+        font-family: 'Glyphicons Halflings';  /* essential for enabling glyphicon */
+        content: "\e114";    /* adjust as needed, taken from bootstrap.css */
+        float: right;        /* adjust as needed */
+        color: grey;         /* adjust as needed */
+}
+.panel-heading .accordion-toggle.collapsed:after {
+    /* symbol for "collapsed" panels */
+    content: "\e080";    /* adjust as needed, taken from bootstrap.css */
+}
+
+.product-page-section nav {
+    display: none;
+    position: absolute;
+    z-index: 9999;
+    background-color: #fff;
+}
+.product-page-section .slide_arrows {
+    max-width: none !important;
+}
+
+.product-page-section #simplemodal-container {
+    height: 390px !important;
+}
+.product-page-section .bread_crumbs {
+    margin-left: 195px;
+    margin-top: 10px;
+}
+
 
 a{
-	color: #494949;
+    color: #494949;
 }
 .nav_title, .prod_categories{
 	width: 186px !important;
