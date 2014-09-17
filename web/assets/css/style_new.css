@@ -613,6 +613,15 @@ div.html_description img {
     width: 190px;
 }
 
+
+.prod_loc_areas, .product_content_payment{
+    font-size: 12px;
+}
+
+.prod_loc_areas .shiploc{
+    font-size: 13px;
+}
+
 .recommendation_list h3 {
 	font-weight: normal;
     border-bottom: 1px dotted #CECECE;
@@ -620,7 +629,7 @@ div.html_description img {
 	margin-bottom: 5px;
 }
 
-.recommendation_list h4 {
+.recommendation_list h5, .recommendation_list h4 {
 	font-weight: normal;
     border-bottom: 1px dotted #CECECE;
 	padding:0px 0;

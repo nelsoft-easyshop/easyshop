@@ -942,7 +942,7 @@
                 
                 <div class="recommendation_list display-when-desktop">
                     
-                    <h4>Recommended</h4>
+                    <h5>Recommended</h5>
                     <ul>
                         <?PHP foreach ($recommended_items as $row): ?>                
                         <li style="display: inline-block;">
