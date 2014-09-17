@@ -86,7 +86,7 @@
     height: auto !important;
     max-height: 415px !important;
     max-width: 1005px;
-    min-width: 600px !important;
+    min-width: 506px !important;
     background-color:#fff;
     padding: 5px;
     overflow: auto;
@@ -98,6 +98,10 @@
 
 #simplemodal-container .simplemodal-wrap {
     overflow: inherit !important;
+}
+
+.feedback-modal-container {
+    width: 506px !important;
 }
 
 .jcrop-holder{

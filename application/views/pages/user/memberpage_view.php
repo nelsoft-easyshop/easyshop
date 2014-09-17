@@ -2809,13 +2809,12 @@
 
                     $(document).ready(function() { 
                         var shipping_comment_container= $('.shipping_comment_cont');
-                        $(shipping_comment_container).parents('#simplemodal-container').css('width','auto');
-           
+                        $(shipping_comment_container).parents('#simplemodal-container').css('width','506px');
                     });
                     
                     
 
-                    </script>
+</script>
 <script src="<?= base_url() ?>assets/js/src/vendor/jquery.easing.min.js" type="text/javascript"></script>
 <script src="<?= base_url() ?>assets/js/src/vendor/jquery.scrollUp.min.js" type="text/javascript"></script>
 <script type="text/javascript">
