@@ -17,8 +17,8 @@
                     </div>
                 </div>
                 <div>
-                    <h4>Air 21</h4>
-                    <p><strong>Contact No. :</strong>09171234567</p>
+                    <h4><?php echo $storeNameDisplay;?></h4>
+                    <p><strong>Contact No. :</strong><?php echo $arrVendorDetails['contactno'];?></p>
                     <p>
                         <span class="glyphicon glyphicon-map-marker"></span>
                         <span class="cl-1"><strong>Location not set</strong></span>
@@ -35,7 +35,7 @@
             </div>
         </div>
     </div>
-    <div class="pos-rel">
+    <div class="pos-rel" style="display:none;">
         <div class="vendor-main-bg">
             <div class="edit-cover-photo">
                 <a href="">

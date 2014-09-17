@@ -94,4 +94,55 @@ class EsMemberRepository extends EntityRepository
 
         return $user;
     }
+
+    /**
+     *  Fetch vendor details
+     */
+    public function getVendorDetails($vendorSlug)
+    {
+        $em = $this->_em;
+        $rsm = new ResultSetMapping();
+
+        $rsm->addScalarResult('id_member', 'id_member');
+        $rsm->addScalarResult('username', 'username');
+        $rsm->addScalarResult('contactno', 'contactno');
+        $rsm->addScalarResult('email', 'email');
+        $rsm->addScalarResult('stateregion', 'stateregion');
+        $rsm->addScalarResult('city', 'city');
+        $rsm->addScalarResult('id_member', 'id_member');
+        $rsm->addScalarResult('stateregionname', 'stateregionname');
+        $rsm->addScalarResult('cityname', 'cityname');
+        $rsm->addScalarResult('datecreated', 'datecreated');
+        $rsm->addScalarResult('imgurl', 'imgurl');
+        $rsm->addScalarResult('store_desc', 'store_desc');
+        $rsm->addScalarResult('store_name', 'store_name');
+        $rsm->addScalarResult('userslug', 'userslug');
+
+        $sql = "
+            SELECT m.id_member
+                , m.username
+                , IF(m.contactno != '', CONCAT('0',m.contactno), '') as contactno
+                , m.email
+                , a.stateregion
+                , a.city
+                , l1.location as stateregionname
+                , l2.location as cityname
+                , DATE_FORMAT(datecreated, '%M %Y') as datecreated
+                , imgurl
+                , store_desc
+                , store_name
+                , slug as userslug
+            FROM es_member m
+            LEFT JOIN es_address a on m.id_member = a.id_member AND a.type=0
+            LEFT JOIN es_location_lookup l1 ON a.stateregion =  l1.id_location
+            LEFT JOIN es_location_lookup l2 ON a.city = l2.id_location
+            WHERE m.slug=:vendorslug
+            LIMIT 1
+        ";
+
+        $query = $em->createNativeQuery($sql, $rsm)
+            ->setParameter('vendorslug', $vendorSlug);
+
+        return $query->getResult()[0];
+    }
 }
