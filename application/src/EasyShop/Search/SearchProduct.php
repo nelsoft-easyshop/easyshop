@@ -5,7 +5,7 @@ namespace EasyShop\Search;
 use EasyShop\Entities\EsProduct;
 use EasyShop\Entities\EsProductShippingHead;
 use EasyShop\Entities\EsKeywordsTemp;
-
+use Doctrine\Common\Collections\ArrayCollection;
 /**
  * Search Product Class
  *
@@ -263,7 +263,18 @@ class SearchProduct
         $productIds = (count($originalOrder)>0) ? array_intersect($originalOrder, $productIds) : $productIds; 
 
         $filteredProducts = $EsProductRepository->getProductDetailsByIds($productIds,$pageNumber,self::PER_PAGE);
-        $discountedProduct = ($filteredProducts > 0) ? $productManager->discountProducts($filteredProducts) : array(); 
+        
+        // Sort object by original order of product id to retain weight order
+        $data = new ArrayCollection($filteredProducts);
+        $iterator = $data->getIterator();
+        $iterator->uasort(function ($a, $b) use($productIds) {
+            $position1 = array_search($a->getProduct()->getIdProduct(), $productIds);
+            $position2 = array_search($b->getProduct()->getIdProduct(), $productIds);
+            return $position1 - $position2;
+        });
+        $collection = new ArrayCollection(iterator_to_array($iterator));
+
+        $discountedProduct = (count($collection) > 0) ? $productManager->discountProducts($collection) : array(); 
         $productsResult = ($startPrice) ? $searchProductService->filterProductByPrice($startPrice,$endPrice,$discountedProduct) : $discountedProduct;
 
         return $productsResult;
