@@ -2806,6 +2806,12 @@
                         $('#search_content').hide();
            
                     });
+
+                    $(document).ready(function() { 
+                        var shipping_comment_container= $('.shipping_comment_cont');
+                        $(shipping_comment_container).parents('#simplemodal-container').css('width','auto');
+           
+                    });
                     
                     
 
