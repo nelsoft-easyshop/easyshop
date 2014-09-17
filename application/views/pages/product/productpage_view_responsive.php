@@ -193,7 +193,7 @@
 						</div>
 						<div class="clear prod_inner_border"></div>
 						<div class="row">
-							<div class="col-md-4">
+							<div class="col-md-4 col-price">
 								<div class="div-box-price">
 									<center>
 										<div class="pbt pbt1">Price</div>
@@ -209,7 +209,7 @@
 									</center>
 								</div>
 							</div>
-							<div class="col-md-3">
+							<div class="col-md-3 col-availability">
 								<div class="div-box-price">
 									<center>
 										<p class="p-prod-label-availability">Availability</p>
@@ -219,7 +219,7 @@
 									</center>
 								</div>
 							</div>
-							<div class="col-md-5">
+							<div class="col-md-5 col-buy">
 								<div width="100%" class="div-buy-now">
 									<center>
 										<?php if($logged_in && intval($userdetails['is_email_verify']) !== 1): ?>
