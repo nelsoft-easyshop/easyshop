@@ -11,9 +11,10 @@ class EsCatRepository extends EntityRepository
     /**
      * Get all children category recursively up to last category of the selected category
      * @param  integer $categoryId
-     * @return array
+     * @param  boolean $returnAsString
+     * @return mixed
      */
-    public function getChildCategoryRecursive($categoryId = 1)
+    public function getChildCategoryRecursive($categoryId = 1,$returnAsString = false)
     {
         $this->em =  $this->_em;
         $rsm = new ResultSetMapping(); 
@@ -34,6 +35,10 @@ class EsCatRepository extends EntityRepository
         $query->setParameter('categoryId', $categoryId); 
         $results = $query->getOneOrNullResult();
         
+        if($returnAsString){
+            return $results['categoryList'];
+        }
+
         return explode(',', $results['categoryList']);
     }
 

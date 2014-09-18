@@ -1535,7 +1535,7 @@ var pictureCountOther  = 0; var primaryPicture = 0;
         validateWhiteTextBox('.mce-tinymce');
         
         if(canProceed == false){
-            alert('Please wait while you image is uploading.');
+            alert('Please wait while your images are uploading.');
             return false;
         }
 
