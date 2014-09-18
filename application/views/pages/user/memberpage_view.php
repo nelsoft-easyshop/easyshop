@@ -1598,11 +1598,11 @@
                         <select name="c_city" id="delivery_city" class="address_dropdown cityselect" data-status="<?php echo $c_cityID?>">
                             <option value="0">--- Select City ---</option>
                             <option class="optionclone" value="" style="display:none;" disabled></option>
-                            <?php foreach($city_lookup as $parentkey=>$arr):?>
-                                <?php foreach($arr as $lockey=>$city):?>
-                                    <option class="echo" value="<?php echo $lockey?>" data-parent="<?php echo $parentkey?>" <?php echo $c_cityID == $lockey ? "selected":"" ?> ><?php echo $city?></option>
+                            <?php if($c_cityID != '' && $c_stateregionID != ''):?>
+                                <?php foreach($city_lookup[$c_stateregionID] as $lockey=>$city):?>
+                                    <option class="echo" value="<?php echo $lockey?>" <?php echo $c_cityID == $lockey ? "selected":"" ?> ><?php echo $city?></option>
                                 <?php endforeach;?>
-                            <?php endforeach;?>
+                            <?php endif;?>
                         </select>
                         <input type="hidden" name="ccity_orig" value="<?php echo $c_cityID?>">
                         <p>City</p>
