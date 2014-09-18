@@ -82,7 +82,7 @@ class PromoManager
             }  
         }
  
-        $percentage = 100.00 * ($product->getOriginalPrice() - $product->getPrice())/$product->getOriginalPrice();
+        $percentage = 100.00 * ($product->getOriginalPrice() - $product->getFinalPrice())/$product->getOriginalPrice();
         $product->setDiscountPercentage($percentage); 
     }
     
